@@ -1,0 +1,110 @@
+{
+  "schema": "CLAY_TRIGGER2_NODE_MEMBERSHIP_CAUSAL_IDENTITY_GAP/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "NONCANONICAL_RESEARCH_DELTA_CANDIDATE_EVAL_ONLY",
+  "observed_main_before_write": "2eaf04f8fcf6a25c8e44777355a5d44fe3bb1ff7",
+  "authority": {
+    "inbox_schema": "8.81",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "training_execution_authorized": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "finding": {
+    "title": "Runtime node membership is outside the causal S1 snapshot identity and NODE_RESULT source membership is not authenticated at coordinator admission",
+    "classification": "SOURCE_DIRECT_STATIC_PROOF_GAP",
+    "severity": "P0_BEFORE_PHYSICAL_GRID10_OR_RESULT_FLOW_PROMOTION",
+    "evidence": [
+      {
+        "path": "tools/xeno_self_organizing_fabric_acceptance_v1.py::runtime_register_node",
+        "observation": "runtime_register_node INSERT OR REPLACEs the nodes table but does not bump meta.epoch."
+      },
+      {
+        "path": "tools/xeno_self_organizing_fabric_acceptance_v1.py::snapshot",
+        "observation": "state_digest is computed from epoch, generation, tasks, scopes and leases; nodes/membership/health are omitted."
+      },
+      {
+        "path": "tools/xeno_self_organizing_fabric_acceptance_v1.py::coordinator_commit",
+        "observation": "RESULT_SCHEMA validates source_kind, packet digest, lease/CAS/generation and duplicate status but does not require packet.source_node_id to exist in nodes or be healthy/runtime-admitted before INSERT into admitted_results."
+      },
+      {
+        "path": "tools/xeno_physical_grid10_acceptance_v2.py::child_node",
+        "observation": "source_node_id is derived from the caller-supplied --node argument; the child does not read/authenticate the nodes table before producing NODE_RESULT/v1."
+      }
+    ]
+  },
+  "static_counterexample": {
+    "preconditions": [
+      "A valid scoped coordinator lease/token exists.",
+      "A current exact snapshot identity exists.",
+      "No node named ghost is required to exist in the nodes registry."
+    ],
+    "construction": [
+      "Construct Xeno('ghost','reason').result(current_snapshot, valid_scope, payload).",
+      "Use the valid coordinator lease/token and exact current expected_epoch/expected_digest.",
+      "The ExactSnapshotFabric wrapper checks generation/epoch/digest but does not authenticate source membership.",
+      "The inherited Fabric.coordinator_commit accepts the packet schema/source_kind/digest and inserts packet.source_node_id into admitted_results without a nodes-table membership check."
+    ],
+    "predicted_result_from_current_source": "UNREGISTERED_GHOST_SOURCE_CAN_BE_ADMITTED_IF_ALL_OTHER_PACKET_AND_COORDINATOR_GATES_PASS",
+    "epistemic_status": "STATIC_CONTROL_FLOW_DERIVATION_NOT_YET_EXECUTED_AS_A_REPOSITORY_BOUND_RUNTIME_NEGATIVE"
+  },
+  "why_it_matters": [
+    "The architecture claims deterministic runtime/fabric authority for membership, but membership is not part of the replay/state identity used by node observations.",
+    "A packet can claim a source_node_id that is not demonstrably the runtime-admitted process/node that produced the payload.",
+    "Because runtime_register_node does not advance epoch and nodes are omitted from state_digest, membership changes can occur without changing the causal snapshot identity seen by ordinary nodes.",
+    "Physical GRID10 PID overlap proves ten OS processes existed, but by itself does not close runtime membership/source-authentication provenance for later NODE_RESULT admission."
+  ],
+  "counterhypothesis": {
+    "claim": "The harness controls --node values and pre-registers x01..x10, so explicit membership authentication is unnecessary for the bounded happy-path fixture.",
+    "response": "That may preserve a narrow fixture demonstration, but it does not justify a general physical GRID10/result-flow or causal-source provenance claim. Promotion must either narrow the claim to trusted-harness-controlled identity or add a deterministic membership/source-authentication gate."
+  },
+  "cheapest_high_information_discriminator": {
+    "name": "UNREGISTERED_SOURCE_NEGATIVE",
+    "ordinary": true,
+    "unusual_experiment": false,
+    "steps": [
+      "Add a negative test using an exact-current NODE_RESULT/v1 whose source_node_id is an unregistered ghost node.",
+      "Require fail-closed RESULT_SOURCE_NODE_UNREGISTERED before admitted_results mutation.",
+      "Add a second negative for a registered-but-unhealthy node and require RESULT_SOURCE_NODE_UNHEALTHY unless an explicit historical-result policy is separately defined.",
+      "Bind node membership/health or an immutable membership admission identity into the observation/provenance envelope; do not silently overload state_digest if membership is intentionally a distinct deterministic authority domain.",
+      "If membership remains outside S1 digest by design, add a separate membership_generation/admission_id and bind it into NODE_RESULT plus coordinator admission."
+    ]
+  },
+  "recommended_design_direction": {
+    "preferred": "SEPARATE_MEMBERSHIP_ADMISSION_IDENTITY_BOUND_INTO_NODE_RESULT",
+    "reason": "Typed Entry/causal provenance law favors explicit authority identities. A dedicated membership_generation or admission_id avoids conflating cognitive S1 content with runtime membership while still making source authority replay-stable and fail-closed.",
+    "minimum_patch": [
+      "Authenticate RESULT_SCHEMA source_node_id against deterministic nodes authority at commit.",
+      "Reject missing/unhealthy source identities according to an explicit policy.",
+      "Make membership changes causally visible through epoch/digest or a distinct monotonic membership identity bound into the packet."
+    ]
+  },
+  "training_relevance": {
+    "direct_training_eligible": false,
+    "use": "HARD_NEGATIVE_AND_CAUSAL_PROVENANCE_EVAL_DESIGN_ONLY",
+    "candidate_negative_concepts": [
+      "self_asserted_node_identity_is_not_membership_authority",
+      "valid_packet_digest_is_not_source_authentication",
+      "pid_overlap_is_not_runtime_membership_provenance",
+      "state_digest_without_membership_cannot_prove_membership_state"
+    ]
+  },
+  "credit_boundary": {
+    "source_research_delta": 1,
+    "runtime_negative_observed": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_gate": "Implement and execute UNREGISTERED_SOURCE_NEGATIVE plus membership-causal-identity binding at exact current source identity before promoting physical GRID10 result-flow provenance."
+}

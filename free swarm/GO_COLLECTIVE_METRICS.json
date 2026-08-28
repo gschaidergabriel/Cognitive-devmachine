@@ -1,0 +1,136 @@
+{
+  "schema": "CLAY_GO_COLLECTIVE_METRICS/v1",
+  "generated_at": "2026-08-24T13:58:54Z",
+  "generation_class": "SOURCE_DERIVED_END_OF_GO_SNAPSHOT_NOT_AGGREGATOR_RUNTIME",
+  "canonical_main_observed_before_write": "ad93ef044a6e000c74cefa900597990a59bc3b30",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "macrocycle_identity": "MACROCYCLE_ID_UNRESOLVED",
+  "macrocycle_identity_note": "No shared immutable request/macrocycle id is exposed on the connected surface. Minute-precision trigger time is insufficient for canonical grouping, so parallel records are not silently counted as one independent evidence family.",
+  "selection_policy": "PARETO_WITH_HARD_GATES_NO_SINGLE_SCALAR",
+  "source_metrics": {
+    "free_swarm_live_metrics_generated_at": "2026-08-24T13:58:53.436433+00:00",
+    "worker_records": 7430,
+    "exact_usage_rows": 1001,
+    "input_tokens": 5896911,
+    "output_tokens": 1405949,
+    "total_tokens": 7302860,
+    "previous_snapshot_total_tokens": 3187935,
+    "tokens_since_previous_snapshot": 4114925,
+    "token_growth_fraction": 1.290780709142439,
+    "forge_generated_at": "2026-08-24T13:58:50.706410+00:00",
+    "forge_discovery_hits": 1768,
+    "forge_evaluations": 104,
+    "forge_accepted_deltas": 0,
+    "distillery_generated_at": "2026-08-24T13:58:54.511571+00:00",
+    "distillery_collected_source_tokens": 11621,
+    "distillery_collected_chunks": 48,
+    "distillery_accepted_packets": 0,
+    "distillery_accepted_dataset_tokens": 0
+  },
+  "observed_durable_deltas_since_previous_snapshot": {
+    "classification": "SOURCE_OR_TEST_DELTAS_NOT_CANONICALLY_GROUPED_AS_ONE_MACROCYCLE",
+    "items": [
+      {
+        "delta": "distillery add_question INSERT cardinality repair present on current main",
+        "evidence_scope": "SOURCE_PLUS_REGRESSION_DEFINITION",
+        "runtime_credit": 0
+      },
+      {
+        "delta": "retained HCU donor causal-family v2 binds predeclared and observed exact model_input_sha256 with corrupted-base control topology",
+        "evidence_scope": "SOURCE_PLUS_REGRESSION_DEFINITION",
+        "runtime_credit": 0
+      },
+      {
+        "delta": "NVIDIA free-lane entitlement source hardening binds structured credential-fingerprint evidence",
+        "evidence_scope": "SOURCE_CONTROL_PLANE_ONLY",
+        "runtime_credit": 0
+      },
+      {
+        "delta": "Xeno active-build worker authority bound successor-dynamically to current FREE provider admission",
+        "evidence_scope": "SOURCE_CONTROL_PLANE_ONLY",
+        "runtime_credit": 0
+      }
+    ]
+  },
+  "aggregate": {
+    "token_quality_efficiency_per_1k_tokens": 0.0,
+    "token_quality_status": "MEASURED_ZERO_VERIFIED_UTILITY",
+    "token_quality_note": "7,302,860 exact cumulative tokens are visible while the canonical Forge still reports zero accepted deltas and Distillery reports zero accepted dataset tokens. Source/test progress is real but does not satisfy verified-utility promotion, so TQE remains 0 rather than granting proxy credit from token volume.",
+    "code_quality_score": null,
+    "code_quality_status": "UNKNOWN_EVIDENCE_COVERAGE_BELOW_60_PERCENT_NO_EXACT_HEAD_TEST_EXECUTION",
+    "verified_innovation_score": null,
+    "verified_innovation_status": "UNKNOWN_CANDIDATE_INNOVATION_WITHOUT_MEASURED_ACCEPTED_EFFECT",
+    "performance_index": null,
+    "p95_information_latency_seconds": null,
+    "capability_information_latency_ratio": null,
+    "latency_status": "UNKNOWN_DOWNSTREAM_CONSUMPTION_ACK_NOT_INSTRUMENTED",
+    "hcu_confidence": {
+      "event": "HCU_TARGET_100_GO",
+      "forecast_probability": 0.4305,
+      "wide_uncertainty_interval": [0.20, 0.65],
+      "classification": "UNCALIBRATED_FORECAST_HELD_NO_RUNTIME_MILESTONE_RESOLUTION",
+      "milestone_probabilities": {
+        "authority_truth_effect_invariants": 0.90,
+        "typed_entry_causal_identity": 0.75,
+        "provider_runtime_effect_boundaries": 0.35,
+        "engine_loader_consumed_identity": 0.45,
+        "grid10_inference_receipt_closure": 0.55,
+        "canonical_local_model_execution": 0.40,
+        "jspace_model_specific_observation": 0.45,
+        "jspace_causal_intervention_controls": 0.25,
+        "dataset_training_readiness": 0.35,
+        "recovery_replay_fail_closed": 0.55,
+        "performance_latency_scale": 0.20,
+        "integration_independent_reproducibility": 0.40
+      },
+      "calibration_state": "UNCALIBRATED_NO_NEW_BINARY_MILESTONE_RESOLUTION",
+      "brier_score": null,
+      "log_loss": null
+    }
+  },
+  "per_worker_table": {
+    "status": "UNAVAILABLE_ON_CONNECTED_GITHUB_SURFACE",
+    "reason": "The canonical protocol requires worker records from the artifact-bearing runtime and exact shared macrocycle identity. Neither is exposed here, so workers are not silently grouped and self-reported scores are not substituted.",
+    "required_columns": [
+      "worker",
+      "tokens",
+      "TQE",
+      "CQS",
+      "VIS",
+      "performance_index",
+      "information_latency",
+      "CILR",
+      "evidence_lineage",
+      "HCU_forecast_contribution",
+      "status"
+    ]
+  },
+  "anti_goodhart_audit": {
+    "status": "WARNING_TOKEN_VOLUME_OUTRUNS_VERIFIED_DELTA_CONVERSION",
+    "single_scalar_selection_forbidden": true,
+    "raw_measurements_append_only": true,
+    "evidence_lineage_collapse": true,
+    "same_orchestration_worker_count_not_independent_evidence": true,
+    "metric_weights_frozen_for_macrocycles": 10,
+    "metric_changes_shadow_macrocycles": 3,
+    "score_can_decrease": true,
+    "holdout_or_countermetric_required_when_practical": true,
+    "latency_cannot_skip_verification": true,
+    "token_efficiency_cannot_skip_required_evidence": true,
+    "confidence_is_not_optimization_target": true,
+    "primary_observed_warning": "Cumulative exact tokens increased by 4,114,925 (+129.078%) from the prior metrics snapshot while Forge accepted deltas and Distillery accepted dataset tokens remain zero. Do not scale token/worker volume as the next optimization target until exact executable-delta conversion improves."
+  },
+  "pareto_bottlenecks_next": [
+    "EXECUTE_EXACT_CURRENT_SOURCE_REGRESSIONS_ON_AN_ADMITTED_ARTIFACT_BEARING_SURFACE",
+    "INSTRUMENT_EVIDENCE_EMITTED_TO_FIRST_DOWNSTREAM_CONSUMPTION_ACK_TIMESTAMPS",
+    "CONVERT_SOURCE_TEST_CANDIDATES_INTO_REPRODUCIBLE_ACCEPTED_DELTAS_BEFORE_MORE_WORKER_OR_TOKEN_SCALING"
+  ],
+  "runtime_credit_added": 0,
+  "whole_entityos_hcu_runtime_credit_added": 0,
+  "hcu_full_runtime_credit_added": 0,
+  "jspace_model_runtime_credit_added": 0,
+  "training_credit_added": 0
+}

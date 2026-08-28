@@ -1,0 +1,27 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "delta": "9.13Y_NON_AUTHORITY",
+  "timestamp_local": "2026-08-28T07:46:25+07:00",
+  "program": "ENTITYOS_HCU",
+  "go_target": "autonomously self-organizing shared-state Xeno/HCU fabric",
+  "material_finding": "The prior real SIGKILL acceptance still had a replacement proof-splice: coord-old was registered with a synthetic PID and the parent manually revoked its lease after SIGKILL. A stronger v2 source now makes coord-old a real child process that runtime_join()s with its actual PID, durably admits exactly one NODE_RESULT, signals POST_ADMISSION_PRE_ACK, and is killed with real SIGKILL. The parent does not call revoke_lease(). Replacement election must be blocked before the retained LEASE_TTL_SECONDS expires and must become possible only through retained elect_coordinator() expiry handling afterwards. DecodeSafeFabric recovery must then repair only outbox consumed state, keep exactly one admission, preserve S1 epoch/digest, and identical replay must be +0.",
+  "source_commits": {
+    "acceptance_v2": "51914c30d6323185de4a574c04ae100d4b1e3841",
+    "test_v2": "b2f425d800d3f7c3a1ac91a851e6a5c78bb1434d"
+  },
+  "evidence_boundary": {
+    "source_candidate_present": true,
+    "repository_bound_execution_pass": false,
+    "runtime_credit_delta": 0,
+    "physical_grid10_credit_delta": 0,
+    "whole_hcu_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_focus": [
+    "P0 retain FREE_ONLY/HARD_OFF and complete clean-current non-provider control-sync/quiescence requirements before any provider path",
+    "P1 repository-bound execute grid10_real_sigkill_automatic_replacement_acceptance_v2 on a clean current non-provider checkout",
+    "P1 require real child PID binding, real SIGKILL, admitted_count=1 consumed=0 crash residue, no manual revoke, replacement blocked before TTL, automatic replacement after TTL, consumed=1 after recovery, unchanged S1 and replay +0",
+    "P1 if PASS, repeat under normal decode-safe node loops with heartbeat, then worker crash/rejoin and recursive coordinator levels",
+    "P1 only after those passes evaluate faster crash-triggered lease invalidation versus TTL-only replacement; do not weaken evidence law"
+  ]
+}

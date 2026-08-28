@@ -1,0 +1,94 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "date": "2026-08-27",
+  "delta_id": "9.13B_NON_AUTHORITY",
+  "supervisor_authority_epoch": "9.13",
+  "organ": "GPT-5.6 Sol",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "authority_change": false,
+  "observed_main_before_write": "2df1e4744d9e351cea33c04f677526acb18f013d",
+  "material_findings": [
+    {
+      "id": "PR_RUNTIME_RECONCILE_MUTATION_PATH_SOURCE_CLOSED_RUNTIME_UNVERIFIED",
+      "status": "SOURCE_CLOSED_RUNTIME_UNVERIFIED",
+      "source_fix_commit": "e0dbcf5b773e5df5da3b9fc1a4b70cd47ff15382",
+      "source_receipt_commit": "7c7ba23e24ea2dee0e32eaabe3f0a4d1c25136fa",
+      "finding": "The retained self-hosted pull_request runtime-reconcile observable workflow could still invoke activate_6000_free_swarm.sh and free swarm/update_root_results.py and consume SYSTEM_ANALYSIS_LIVE.json directly under HARD_OFF. Current source removes those mutation paths and converts the workflow into a read-only authority audit using canonical provider admission, restart-authority-v4, the authority-consumer audit and verified CURRENT-pointer readback.",
+      "evidence_boundary": "No repository-bound execution PASS of the hardened workflow has been observed; source hardening cannot mint runtime, HCU, training, BASE or canonical-semantics credit."
+    },
+    {
+      "id": "CLAY_DIRECT_DEV_QUIESCENCE_CURRENTLY_FALSE_BY_PROCESS_OBSERVATION",
+      "status": "HOST_LOCAL_RUNTIME_QUIESCENCE_FAIL",
+      "telemetry_commit": "9edd4a549f4d0cc06ddc90a37fca53f4c90c017f",
+      "observed_at_utc": "2026-08-27T05:45:35.070072+00:00",
+      "sandbox": "clay-direct-dev",
+      "active_clay_process_classes": [
+        "tools/run_free_evidence_forge.py",
+        "tools/run_research_distillery_local.py",
+        "free swarm/evaluate.py --watch",
+        "free swarm/update_fabric_live.py --watch",
+        "tools/run_6000_free_swarm_supervisor.sh"
+      ],
+      "interpretation": "This is direct host-local evidence that the known Clay legacy runtime is not quiescent. It is not by itself evidence of provider calls or provider-counter attribution."
+    },
+    {
+      "id": "UTILITY_PATH_STILL_ZERO",
+      "status": "UNCHANGED_ZERO_YIELD",
+      "latest_metrics_commit": "41747fba786c05b9bf6cdc35e8537d409a2bbdcd",
+      "collected_source_tokens": 88774,
+      "accepted_dataset_tokens": 0,
+      "source_to_go_pass_through_percent": 0.0,
+      "training_credit_added": 0
+    }
+  ],
+  "steering_decision": [
+    "Keep FREE_PROVIDER_ADMISSION authority epoch 9.13 unchanged and explicit HARD_OFF; do not create a provider-authority epoch merely for this non-authority steering delta.",
+    "Do not restore or invoke the removed PR runtime activation/update paths while HARD_OFF is current. The pull_request self-hosted observable lane is read-only authority inspection only.",
+    "P0 execute the hardened read-only runtime-authority workflow on a clean current self-hosted/non-provider checkout and bind HEAD, tree, source hashes, dirty=false, canonical provider-admission result, restart-authority-v4 output, authority-consumer audit and verified CURRENT-pointer readback.",
+    "P0 do not infer provider activity from active Clay processes alone. Provider-call attribution remains a separate executable evidence question.",
+    "P0 after repository-bound read-only attribution identifies one exact root-specific restart authority, disable or terminate only that bound legacy authority under the existing owner HARD_OFF, then prove zero matching survivors, zero descendants and zero restarts for at least 90 seconds.",
+    "Do not grant runtime-quiescence, provider-path, Physical-GRID10, whole-HCU or whole-EntityOS credit before that proof.",
+    "Preserve the 9.13 quarantine of paid Together runs and holdout-derived V2 artifacts; no run3 and no paid fallback.",
+    "Keep the exact holdout row-ID contamination-union audit and retained Josiefied tokenizer/renderer/46-atom ABI work behind the runtime P0 and provenance gates; no canonical dataset admission from contaminated or training_eligible=false rows.",
+    "Do not change BASE_CLAYCODE_RELEASE status from model consensus or component-source work. Preserve WP01/WP02 PASS only and WP03-WP14/general-purpose/release gates open unless exact target evidence independently closes them.",
+    "Do not modify Frank's Harness. Ubuntu-only Frank v0.1 remains the target."
+  ],
+  "external_method_basis": [
+    {
+      "source": "GitHub Docs - Self-hosted runners reference",
+      "url": "https://docs.github.com/en/actions/reference/runners/self-hosted-runners",
+      "use": "GitHub recommends ephemeral self-hosted runners for autoscaling and notes clean one-job environments reduce exposure from previous jobs; this supports keeping the persistent retained PR lane observation-only under HARD_OFF."
+    },
+    {
+      "source": "GitHub Docs - Compromised runners",
+      "url": "https://docs.github.com/en/actions/concepts/security/compromised-runners",
+      "use": "A runner executing arbitrary workflow commands can expose repository data or credentials, so a HARD_OFF authority-audit workflow should minimize mutation and provider-capable execution. Method guidance only, not project runtime evidence."
+    }
+  ],
+  "evidence_law": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "SOURCE_TESTS_WITHOUT_EXECUTION_ARE_NOT_RUNTIME_PASS",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "credit_change": {
+    "runtime_quiescence_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "base_work_package_promotion": 0,
+    "canonical_semantics_credit": 0
+  }
+}

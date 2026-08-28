@@ -1,0 +1,637 @@
+{
+  "api": {
+    "anzahl": 28,
+    "eintraege": [
+      {
+        "anbieter": "GROQ",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": 60,
+            "modell": "llama-3.1-8b-instant",
+            "tag_limit": 28800,
+            "token_minute_limit": 12000,
+            "token_tag_limit": 1000000,
+            "zugang": "groq_llama31_8b"
+          },
+          {
+            "minute_limit": 60,
+            "modell": "openai/gpt-oss-20b",
+            "tag_limit": 2000,
+            "token_minute_limit": 16000,
+            "token_tag_limit": 400000,
+            "zugang": "groq_gptoss_20b"
+          },
+          {
+            "minute_limit": 60,
+            "modell": "openai/gpt-oss-120b",
+            "tag_limit": 2000,
+            "token_minute_limit": 16000,
+            "token_tag_limit": 400000,
+            "zugang": "groq_gptoss_120b"
+          },
+          {
+            "minute_limit": 60,
+            "modell": "llama-3.3-70b-versatile",
+            "tag_limit": 2000,
+            "token_minute_limit": 24000,
+            "token_tag_limit": 200000,
+            "zugang": "groq_llama33_70b"
+          },
+          {
+            "minute_limit": 60,
+            "modell": "qwen/qwen3.6-27b",
+            "tag_limit": 2000,
+            "token_minute_limit": 16000,
+            "token_tag_limit": 400000,
+            "zugang": "groq_qwen3_6_27b"
+          },
+          {
+            "minute_limit": 60,
+            "modell": "groq/compound",
+            "tag_limit": 500,
+            "token_minute_limit": 140000,
+            "token_tag_limit": null,
+            "zugang": "groq_compound"
+          },
+          {
+            "minute_limit": 40,
+            "modell": "whisper-large-v3",
+            "tag_limit": 4000,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "groq_whisper_v3"
+          }
+        ],
+        "kennung": "GROQ_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "schnelle Modelle, Schema-Antwort und Kondensieren"
+      },
+      {
+        "anbieter": "GEMINI",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": null,
+            "modell": "gemini-flash-lite-latest",
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "gemini_flash_lite_latest"
+          },
+          {
+            "minute_limit": null,
+            "modell": "gemini-flash-latest",
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "gemini_flash_latest"
+          },
+          {
+            "minute_limit": null,
+            "modell": "gemini-embedding-001",
+            "tag_limit": 1500,
+            "token_minute_limit": 10000000,
+            "token_tag_limit": null,
+            "zugang": "gemini_embedding_001"
+          }
+        ],
+        "kennung": "GEMINI_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "langer Kontext"
+      },
+      {
+        "anbieter": "GEMINI2",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "GEMINI2_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "unbekannt -- nicht geraten"
+      },
+      {
+        "anbieter": "DEEPSEEK",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": null,
+            "modell": "deepseek-chat",
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "deepseek_chat"
+          }
+        ],
+        "kennung": "DEEPSEEK_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Zweitmeinung"
+      },
+      {
+        "anbieter": "OPENROUTER",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": 40,
+            "modell": null,
+            "tag_limit": 100,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "openrouter_frei"
+          }
+        ],
+        "kennung": "OPENROUTER_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Sammelzugang zu vielen Modellen"
+      },
+      {
+        "anbieter": "NVIDIA",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": 40,
+            "modell": null,
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "nvidia_nim"
+          }
+        ],
+        "kennung": "NVIDIA_NIM_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Einbettungen und Umsortieren"
+      },
+      {
+        "anbieter": "CLOUDFLARE",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": 3000,
+            "modell": null,
+            "tag_limit": 10000,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "cloudflare_workers_ai"
+          }
+        ],
+        "kennung": "CLOUDFLARE_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Randbetrieb"
+      },
+      {
+        "anbieter": "HF",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": null,
+            "modell": null,
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "hf_inference"
+          }
+        ],
+        "kennung": "HF_TOKEN",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Modelle und Datensaetze"
+      },
+      {
+        "anbieter": "MISTRAL",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": null,
+            "modell": "mistral-small-latest",
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "mistral_small"
+          }
+        ],
+        "kennung": "MISTRAL_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Vorstufe und Uebersetzer -- der meistgenutzte Zugang"
+      },
+      {
+        "anbieter": "GROQ2",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "GROQ2_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "unbekannt -- nicht geraten"
+      },
+      {
+        "anbieter": "MISTRAL2",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "MISTRAL2_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "unbekannt -- nicht geraten"
+      },
+      {
+        "anbieter": "MISTRAL3",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "MISTRAL3_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "unbekannt -- nicht geraten"
+      },
+      {
+        "anbieter": "NVIDIA2",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "NVIDIA2_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "unbekannt -- nicht geraten"
+      },
+      {
+        "anbieter": "TAVILY",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": null,
+            "modell": null,
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "tavily"
+          }
+        ],
+        "kennung": "TAVILY_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Websuche zur Erdung"
+      },
+      {
+        "anbieter": "EXA",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": null,
+            "modell": null,
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "exa"
+          }
+        ],
+        "kennung": "EXA_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Websuche, semantisch"
+      },
+      {
+        "anbieter": "E2B",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": null,
+            "modell": null,
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "e2b"
+          }
+        ],
+        "kennung": "E2B_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "unbekannt -- nicht geraten"
+      },
+      {
+        "anbieter": "OPENALEX",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": null,
+            "modell": null,
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "openalex"
+          }
+        ],
+        "kennung": "OPENALEX_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "wissenschaftliche Literatur"
+      },
+      {
+        "anbieter": "RAPIDAPI",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "minute_limit": null,
+            "modell": null,
+            "tag_limit": null,
+            "token_minute_limit": null,
+            "token_tag_limit": null,
+            "zugang": "rapidapi"
+          }
+        ],
+        "kennung": "RAPIDAPI_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Sammelzugang zu Fremd-APIs"
+      },
+      {
+        "anbieter": "NVIDIA3",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "NVIDIA3_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "unbekannt -- nicht geraten"
+      },
+      {
+        "anbieter": "OPENROUTER2",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "OPENROUTER2_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "unbekannt -- nicht geraten"
+      },
+      {
+        "anbieter": "GROQ3",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "GROQ3_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "unbekannt -- nicht geraten"
+      },
+      {
+        "anbieter": "CLERK",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "CLERK_SECRET_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Anmeldung serverseitig -- KEIN Modellzugang"
+      },
+      {
+        "anbieter": "CLERK",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "CLERK_PUBLISHABLE_KEY",
+        "oeffentlich": true,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Anmeldung im Browser (oeffentlich)"
+      },
+      {
+        "anbieter": "CLERK",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "CLERK_JWKS_URL",
+        "oeffentlich": true,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Schluesselverzeichnis der Anmeldung (oeffentlich)"
+      },
+      {
+        "anbieter": "CLERK",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "CLERK_WEBHOOK_SECRET",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Rueckrufe der Anmeldung pruefen"
+      },
+      {
+        "anbieter": "GLM",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "GLM_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "Modellzugang"
+      },
+      {
+        "anbieter": "NEUROPEDIA",
+        "art": "api-token",
+        "faehigkeiten": "keine Bahnangabe vorhanden",
+        "kennung": "NEUROPEDIA_API_KEY",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/freie-zugaenge.env",
+        "zweck": "oeffentliche Forschungsmodelle"
+      },
+      {
+        "anbieter": "GITHUB",
+        "art": "api-token",
+        "faehigkeiten": [
+          {
+            "modell": null,
+            "zugang": "github-api"
+          }
+        ],
+        "kennung": "GH_TOKEN",
+        "oeffentlich": false,
+        "quelle": "/etc/clayverse/github-token.env",
+        "zweck": "GitHub nutzerweit -- kann Repos auflisten, anders als der Deploy-Key"
+      }
+    ],
+    "geschrieben_vor_s": 367185,
+    "hinweis": "Katalog, kein Inhalt: hier steht, WAS es gibt und was es kann. Die Schluessel selbst verlassen den Serverteil nie -- ein Geheimnis, das durch ein Sprachmodell laeuft, ist keines mehr.",
+    "tresor": "api"
+  },
+  "zugaenge": {
+    "anzahl": 30,
+    "eintraege": [
+      {
+        "art": "postfach",
+        "geheim": false,
+        "kennung": "ENTITYOS_POSTFACH_GABRIEL_ADRESSE",
+        "quelle": "/etc/entityos/postfach.env"
+      },
+      {
+        "art": "postfach",
+        "geheim": true,
+        "kennung": "ENTITYOS_POSTFACH_GABRIEL_PASSWORT",
+        "quelle": "/etc/entityos/postfach.env"
+      },
+      {
+        "art": "postfach",
+        "geheim": false,
+        "kennung": "ENTITYOS_POSTFACH_ANDREAS_ADRESSE",
+        "quelle": "/etc/entityos/postfach.env"
+      },
+      {
+        "art": "postfach",
+        "geheim": true,
+        "kennung": "ENTITYOS_POSTFACH_ANDREAS_PASSWORT",
+        "quelle": "/etc/entityos/postfach.env"
+      },
+      {
+        "art": "postfach",
+        "geheim": false,
+        "kennung": "ENTITYOS_IMAP_HOST",
+        "quelle": "/etc/entityos/postfach.env"
+      },
+      {
+        "art": "postfach",
+        "geheim": false,
+        "kennung": "ENTITYOS_IMAP_PORT",
+        "quelle": "/etc/entityos/postfach.env"
+      },
+      {
+        "art": "postfach",
+        "geheim": false,
+        "kennung": "ENTITYOS_SMTP_HOST",
+        "quelle": "/etc/entityos/postfach.env"
+      },
+      {
+        "art": "postfach",
+        "geheim": false,
+        "kennung": "ENTITYOS_SMTP_PORT",
+        "quelle": "/etc/entityos/postfach.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": false,
+        "kennung": "CLERK_ISSUER",
+        "quelle": "/etc/clayverse/entityos-deploy.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": false,
+        "kennung": "CLERK_JWKS_URL",
+        "quelle": "/etc/clayverse/entityos-deploy.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": false,
+        "kennung": "CLERK_FRONTEND_API_URL",
+        "quelle": "/etc/clayverse/entityos-deploy.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": false,
+        "kennung": "CLERK_AUTHORIZED_PARTIES",
+        "quelle": "/etc/clayverse/entityos-deploy.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": false,
+        "kennung": "CLAYVERSE_CLERK_MAP_JSON",
+        "quelle": "/etc/clayverse/entityos-deploy.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "CLERK_PUBLISHABLE_KEY",
+        "quelle": "/etc/clayverse/entityos-deploy.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "CLAYVERSE_ENTITYOS_SHA256",
+        "quelle": "/etc/clayverse/entityos-deploy.env"
+      },
+      {
+        "art": "anmeldung",
+        "geheim": false,
+        "kennung": "CLERK_ISSUER",
+        "quelle": "/etc/clayverse/entityos-clerk.env"
+      },
+      {
+        "art": "anmeldung",
+        "geheim": false,
+        "kennung": "CLERK_JWKS_URL",
+        "quelle": "/etc/clayverse/entityos-clerk.env"
+      },
+      {
+        "art": "anmeldung",
+        "geheim": false,
+        "kennung": "CLERK_FRONTEND_API_URL",
+        "quelle": "/etc/clayverse/entityos-clerk.env"
+      },
+      {
+        "art": "anmeldung",
+        "geheim": false,
+        "kennung": "CLERK_AUTHORIZED_PARTIES",
+        "quelle": "/etc/clayverse/entityos-clerk.env"
+      },
+      {
+        "art": "anmeldung",
+        "geheim": false,
+        "kennung": "CLAYVERSE_CLERK_MAP_JSON",
+        "quelle": "/etc/clayverse/entityos-clerk.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "CLOUDFLARE_API_KEY",
+        "quelle": "/etc/clayverse/keys.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "DEEPSEEK_API_KEY",
+        "quelle": "/etc/clayverse/keys.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "GEMINI_API_KEY",
+        "quelle": "/etc/clayverse/keys.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "GEMINI2_API_KEY",
+        "quelle": "/etc/clayverse/keys.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "GROQ_API_KEY",
+        "quelle": "/etc/clayverse/keys.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "HF_API_KEY",
+        "quelle": "/etc/clayverse/keys.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "MISTRAL_API_KEY",
+        "quelle": "/etc/clayverse/keys.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "NVIDIA_NIM_API_KEY",
+        "quelle": "/etc/clayverse/keys.env"
+      },
+      {
+        "art": "betrieb",
+        "geheim": true,
+        "kennung": "OPENROUTER_API_KEY",
+        "quelle": "/etc/clayverse/keys.env"
+      },
+      {
+        "art": "zugangsroute",
+        "geheim": true,
+        "kennung": "SEIMENSCH_REPO_REMOTE",
+        "quelle": "eigner:CLAUDE.md",
+        "zweck": "Git-Remote des SeiMensch-Repos; keyless SSH ist eingerichtet"
+      }
+    ],
+    "geschrieben_vor_s": 365434,
+    "hinweis": "Katalog, kein Inhalt: hier steht, WAS es gibt und was es kann. Die Schluessel selbst verlassen den Serverteil nie -- ein Geheimnis, das durch ein Sprachmodell laeuft, ist keines mehr.",
+    "tresor": "zugaenge"
+  }
+}

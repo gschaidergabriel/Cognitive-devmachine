@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.1",
+  "task_id": "task-GWT-20260820T133200Z-STABLE-IDENTITY-OUTCOME-CREDIT",
+  "room_id": "gwt",
+  "title": "Remove positional GWT learning IDs and separate uptake from outcome credit",
+  "goal_clay": "record Goal {origin:CHATGPT;authority:PROPOSAL_ONLY;room:GWT;kind:REMEDIATION;action:STABILIZE_CANDIDATE_IDENTITY_AND_GROUND_FEEDBACK}",
+  "status": "OPEN",
+  "dependencies": [
+    "agentzeroforschung/analysen/2026-08-20T133200Z_GWT_STABILE_IDENTITAET_UND_OUTCOME_CREDIT.md",
+    "agentZero/code/produkt/mistral_prestage/wettbewerb.py",
+    "agentZero/code/produkt/hyperposition.py",
+    "agentZero/code/produkt/store.py",
+    "agentZero/code/produkt/turn_lifecycle.py"
+  ],
+  "completion_test_clay": "record Completion {explicit_test:true;evidence_file_required:true;no_authority_semantic_drift:true;falsifier_stated:true;owner_decision_required:false}",
+  "created_by": "chatgpt-gpt-5.6-sol",
+  "stack_epoch": 24,
+  "created_at": "2026-08-20T13:32:00Z",
+  "completion_test_prose": "Use durable_memory.memory_id, turns.turn_id and Hyperposition relation_id as persistent candidate identities; never use a positional slot as a learning key. Add fail-closed nonlearnable fallback when stable identity is absent. Pass per-source permutation tests proving boosts follow objects rather than slots. Split immediate citation/uptake evidence from strong persistent outcome credit and run the four-arm correct/cited, correct/uncited, wrong/cited, forced-ID falsifier. Do not award whole-loop learning credit until wrong or forced citations fail to earn strong persistent reward.",
+  "rationale_prose": "The schema and projector already contain stable identities, so positional aliasing is an adapter defect rather than a missing ontology. The current learning call also runs before lifecycle completion and derives reward from the same answer that consumed the broadcast; citation is therefore useful uptake evidence but not independent outcome evidence."
+}

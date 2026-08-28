@@ -1,0 +1,68 @@
+{
+  "schema": "TRIGGER4_FRANKENSTEIN2_WP103_DELIVERY_STORE_ACCEPTANCE/v1",
+  "observed_at_local": "2026-08-29T01:50:39+07:00",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "canonical_research_main_before_write": "900202cb455ef95f0c3673980caa28f361e1a9ea",
+  "frankenstein2_repository": "gschaidergabriel/frankenstein-2.0",
+  "donor_repository": "gschaidergabriel/frankenstein",
+  "donor_frozen_main": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "workpackage": {
+    "id": "F2-WP-103",
+    "generation": 1,
+    "claim_id": "F2-WP-103-G1-GPT56SOL-delivery-lifecycle",
+    "generation_advanced": false,
+    "terminal_status": "ACCEPTED_AT_SCOPE",
+    "acceptance_scope": "RECIPIENT_DELIVERY_LIFECYCLE_CANONICAL_UNIFIEDDB_STORE_SOURCE_AND_REPOSITORY_CI_ONLY"
+  },
+  "writes": {
+    "active_pointer_create_commit": "11832b273468d170349570a520dac50f6c4445bb",
+    "delivery_store_source_commit": "2af4b81b71852154e0d96f8b19ee21be1f7c5819",
+    "delivery_store_test_commit": "124b3b1fa5af6003b302084c8cfd0fdef9ecd8d0",
+    "delivery_store_ci_commit": "95a1d427b9dc82d28ca41cb00731c6a23e30e43d",
+    "acceptance_receipt_commit": "b40233c5879912c94d1e837dd14ac128e3707e17",
+    "active_pointer_terminal_commit": "9e96c7fb982e130b2dba7e77ebdde66840e5d7fc",
+    "acceptance_receipt": "workpackages/receipts/F2-WP-103_G1_DELIVERY_STORE_CI_ACCEPTANCE.json"
+  },
+  "exact_source": {
+    "delivery_lifecycle_blob": "0f43d6b0a26dfafe15bdb4b915171f03d9603f1b",
+    "delivery_store_blob": "c49df878c0c129387e74d82536cacf3f8b035f15",
+    "delivery_store_test_blob": "3f1f4e542f8a1f3ea996ac7bd8a10aa69a734c10",
+    "workflow_blob": "6c7c2759cf1ae15160973f79e298cadeecec3dd1"
+  },
+  "repository_ci": {
+    "run_id": 33200977958,
+    "job_id": 98950062511,
+    "head_sha": "95a1d427b9dc82d28ca41cb00731c6a23e30e43d",
+    "runner_id": 1000045675,
+    "runner_label": "ubuntu-latest",
+    "python": "3.13.15",
+    "test_count": 16,
+    "duration_seconds": 0.542,
+    "conclusion": "success",
+    "steps_reached": true
+  },
+  "delta": [
+    "WP-103 recipient delivery persistence now consumes F2-WP-100 UnifiedDBResolution and UnifiedDBFingerprint instead of inventing a durable-state path.",
+    "The opened SQLite main file must match the fingerprinted real device/inode/path identity before mutation.",
+    "Delivery mutation is bound to exact F2-WP-101 CausalIdentity and serialized with BEGIN IMMEDIATE plus revision checks.",
+    "Exact replay across two spawned processes converges to one transition.",
+    "A spawned retry-vs-ACK race cannot silently lose ACK; retry-after-ACK fails closed and retry-before-ACK remains represented as a transport attempt."
+  ],
+  "negative_evidence": [
+    "The historical WP-103 MANIFEST.json package remains noncanonical under the accepted F2-WP-004 run-package ABI and was not relabeled.",
+    "The local container could not resolve github.com; this was tool transport failure only. Acceptance is grounded in repository-bound hosted CI.",
+    "Clay research-repo GRID10 singleton workflows remain a separate P0 transport/control-plane issue and receive no credit from this F2 component CI."
+  ],
+  "credit_boundary": {
+    "component_test_execution_observed": true,
+    "runtime_execution_observed": false,
+    "vps_runtime_credit": 0,
+    "effect_execution_credit": 0,
+    "grid10_runtime_credit": 0,
+    "whole_frankenstein2_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Do not reopen WP-103 or mint a duplicate generation. Consume its accepted typed delivery store through the already-active WP-104/WP-105 lanes and close the first integrated delivery -> deferred causal return -> typed execution/completion slice with the canonical F2-WP-004 immutable run-package ABI. In parallel, preserve the Clay GRID10 singleton dispatches until terminal executed evidence exists."
+}

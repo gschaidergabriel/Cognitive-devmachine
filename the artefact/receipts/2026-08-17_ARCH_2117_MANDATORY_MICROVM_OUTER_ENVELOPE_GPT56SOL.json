@@ -1,0 +1,52 @@
+{
+  "schema": "ClayVerseArchitectureReceipt/v1",
+  "local_time": "2026-08-17T21:17:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "decision": "MANDATORY_MICROVM_OUTER_ENVELOPE_FOR_FINAL_PASS",
+  "product_artifact": "one exact immutable ClayVerse OCI image digest",
+  "final_topology": "HOST -> KVM/equivalent -> VM/microVM guest kernel -> OCI runtime -> exact accepted ClayVerse image -> sealed ClayVerse continuum",
+  "preferred_runtime_family": "Kata Containers runtime-rs or equivalent OCI-compatible VM/microVM runtime",
+  "source_changes": {
+    "global_directive_commit": "32ccd88ff57d3ff1eacc4ccbf6b321c342ce4610",
+    "deployment_contract_commit": "9f2b551af46fd1a7cd1a263f6828af8d32e827fe",
+    "kata_template_commit": "57326a2f949d2bfc6e06a99a6e5205d036861396",
+    "deployment_contract_test_commit": "15fdc74b8000510dce2a3db1db5bd82a0ff719de",
+    "living_readme_commit": "2578fbd5a2736296f0548d57f0dc0e50f8fe8af7",
+    "manifest_commit": "de9ba4f9a72a2a35e1fbc90c5a2ff37acbc61930",
+    "testing_strategy_commit": "7865f00d431667f41a678e8e707e017a1f8f0e4c"
+  },
+  "llm_provider_law": {
+    "claude_code": "direct managed terminal login/runtime inside ClayVerse PTY/tmux",
+    "glm": "token/API inference only; no terminal/filesystem/EntityOS/effect authority"
+  },
+  "recovery_law": {
+    "tier_1": "reconstruct failed internal components from immutable image bytes under generation fencing",
+    "tier_2": "discard/recreate full workload/microVM from same accepted image digest then recover UnifiedDB/WAL/known-good logical snapshot under a new generation",
+    "blind_external_effect_replay": false
+  },
+  "final_acceptance_requires": [
+    "same exact accepted OCI image digest inside VM/microVM",
+    "independent guest-kernel boundary",
+    "read-only root filesystem and declared writable surfaces only",
+    "complete accepted EntityOS inside image",
+    "UnifiedDB sole state authority",
+    "managed PTY/tmux execution inside guest",
+    "Claude direct terminal-login path",
+    "GLM inference-only secret boundary",
+    "Tier-1 recovery",
+    "Tier-2 full microVM/workload recreation",
+    "WAL/snapshot/new-generation recovery",
+    "no blind external effect replay"
+  ],
+  "execution_evidence": {
+    "exact_microvm_run_observed": false,
+    "whole_product_pass": false,
+    "classification": "ARCHITECTURE_AND_DEPLOYMENT_SOURCE_CONTRACT_ONLY"
+  },
+  "safety": {
+    "secret_persisted": false,
+    "vps_or_production_test": false,
+    "together_api": false,
+    "paid_or_final_training": false
+  }
+}

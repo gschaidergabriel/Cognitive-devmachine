@@ -1,0 +1,123 @@
+{
+  "schema": "CLAY_TRIGGER2_PARALLEL_AUDIT_FUSION/v1",
+  "created_utc": "2026-08-25T17:01:00Z",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "mode": "FREE_ONLY",
+  "reentry_head_before_write": "b70ab391a4a698a4d0da55bf353e30d351181937",
+  "fuses": [
+    "f83c4234e9a3c646a1a86b48770170d1cc4cbb66",
+    "035f3f82a270d6415b2410992729471b82455053",
+    "b70ab391a4a698a4d0da55bf353e30d351181937"
+  ],
+  "authority_refresh": {
+    "source": "research_entity/continuity/BOOTSTRAP_MINIMAL.json@b70ab391a4a698a4d0da55bf353e30d351181937",
+    "schema_version": "8.78",
+    "current_execution_law": "FREE_ONLY; zero-monetary-cost normal-user local Linux and clay-direct-dev VPS sandbox execution are permitted under current owner/supervisor guards; paid/subscription/unknown-cost routes fail closed; Together forbidden.",
+    "old_2026_08_24_epoch_8_63_bootstrap": "SUPERSEDED_FOR_CURRENT_AUTHORITY_RETAINED_AS_PROVENANCE"
+  },
+  "fusion_decision": "NO_NEW_POSITIVE_TRAINING_ROWS. Preserve all three audits as provenance, but use this fusion as the current compact ordering delta until newer executable evidence or supervisor authority supersedes it.",
+  "shared_consensus_evidence_not_independent_replication": [
+    "OBSERVED producer authentication is P0 and executably open",
+    "nonempty ordered-history producer authority is open",
+    "three Qwen3.5-0.8B candidates have exact checkpoint/loader identity but no winner",
+    "8-case TARGET_MEASURED pilot is diagnostic only and exposed abstain_unknown failures",
+    "causal J-Space and multi-seed/variable-N phases remain unexecuted",
+    "positive_rows_admitted=0, accepted_dataset_tokens=0, training_credit=0"
+  ],
+  "unique_findings_fused": [
+    {
+      "source_commit": "b70ab391a4a698a4d0da55bf353e30d351181937",
+      "finding": "Reference-labeler v3 exact semantic merge has a post-merge validation contradiction: _merge_exact_equivalents may correctly reduce equivalent branches to one, then project_state invokes the generic state validator that requires >=2 branches. This is a stage-invariant mismatch, not evidence that exact merge itself is wrong.",
+      "status": "NEEDS_REVISION_P1_5"
+    },
+    {
+      "source_commit": "f83c4234e9a3c646a1a86b48770170d1cc4cbb66",
+      "finding": "TARGET_MEASURED pilot also exposed structured-output exactness failure (extra Markdown fence), one-sentence compliance failure in a Hyperposition case, and confused/inaccurate lock/rekey language, while database-vs-simulation preference and exact-three-apples instruction behavior showed useful positives.",
+      "status": "CURRENT_DIAGNOSTIC_NONPROMOTING"
+    },
+    {
+      "source_commit": "035f3f82a270d6415b2410992729471b82455053",
+      "finding": "Producer-attestation design should separate authenticated envelope bytes from trust/key policy. A DSSE-style envelope can authenticate payload+payloadType, but keyid is only an unauthenticated hint and key management/trust binding is external; therefore self-declared producer/key identifiers must never become authority.",
+      "status": "DESIGN_INPUT_NONCANONICAL"
+    },
+    {
+      "source": "https://arxiv.org/abs/2606.27510",
+      "finding": "2026 activation-patching research shows natural indirect effects can contain mediator interaction effects; large single-site effects can be prompt/context dependent or inflated. J-Space promotion therefore needs interaction diagnostics for top sites/layers, not only independent single-site interventions.",
+      "status": "EXTERNAL_RESEARCH_INPUT_NONCANONICAL"
+    }
+  ],
+  "final_order": [
+    {
+      "priority": "P0",
+      "gate": "OBSERVED_PRODUCER_AUTH",
+      "action": "Implement one deterministic producer allowlist/authority plus instance envelope binding producer identity/version, event semantic digest, causal_event_id, admission_id, generation, source-payload digest, invocation/context digest, policy digest, subject digest and replay identity. Preserve the pre-repair forged receipt as a must-fail counterexample.",
+      "must_fail": [
+        "arbitrary producer_id",
+        "forged source/provenance/receipt_id",
+        "event/subject/source-payload digest substitution",
+        "wrong admission_id/generation/policy",
+        "stale/revoked producer epoch",
+        "cross-producer substitution",
+        "replay under changed admission/generation",
+        "same replay identity with changed subject",
+        "missing required parent receipt",
+        "source-code-valid but runtime-instance-forged receipt"
+      ]
+    },
+    {
+      "priority": "P1",
+      "gate": "GENESIS_AND_ORDERED_HISTORY_PRODUCER_AUTHORITY",
+      "action": "Bind immutable genesis and the full ordered nonempty event history to producer-authorized event envelopes plus a deterministic history-root/prefix identity; execute deletion/insertion/reorder/id-conflict/cross-history-splice/prefix/genesis/stale-producer negatives and a clean idempotent-repeat control."
+    },
+    {
+      "priority": "P1.5",
+      "gate": "REFERENCE_LABELER_V3_GLOBAL_REGRESSION_CLOSURE",
+      "action": "Repair or explicitly supersede the exact-semantic-merge singleton contradiction with stage-aware validation. Initial/pre-update Hyperposition still requires >=2 branches; post-declared-exact-merge singleton is accepted only with exact merge provenance representing >=2 source branches. Add fake-singleton and merge-policy-NONE negatives and rerun the entire v3 suite."
+    },
+    {
+      "priority": "P2",
+      "gate": "FULL_MATCHED_QWEN35_08B_BASELINE",
+      "action": "Run BASE, POSTTRAINED and TARGET_MEASURED at their exact pinned identities with the same case families, rendering, decoding and runtime contract. Separate calibration from untouched holdout and report per-axis worst buckets before any winner.",
+      "mandatory_axes": [
+        "abstain_unknown",
+        "factuality_nonfabrication",
+        "structured_output_exactness",
+        "instruction_following_retention",
+        "canonical_db_vs_simulation_discrimination",
+        "hyperposition_unresolved_alternatives",
+        "low_unnecessary_refusal",
+        "Clay_EntityOS_protocol_retention"
+      ]
+    },
+    {
+      "priority": "P3",
+      "gate": "CAUSAL_GLOBAL_JSPACE",
+      "action": "Only after P2 selection rules are frozen/completed: sign-flip, exact-null, norm-matched orthogonal, permuted, distance-matched perturbation, off-site/layer injection, magnitude ladder, lesion/rescue, fresh holdout and cross-task replication. For top effects add pairwise site/layer mediator interaction checks and report prompt/task dependence; activation transport or output shift alone is zero semantic-causality credit."
+    },
+    {
+      "priority": "P4",
+      "gate": "TRAINING_DATA_ADMISSION",
+      "action": "Only after executable P0/P1/P1.5 closure, generate a small diagnostic ordered-history positive/negative pilot and pass deterministic admission. Keep trigger2_binding_router_factorial_generator_v3 quarantined until an explicit successor audit changes its status."
+    }
+  ],
+  "xeno_functional_training_implication": {
+    "unknown_is_not_style": "UNKNOWN/abstention must be a semantically enforced state/update capability, not merely a text refusal style. The final Xeno must preserve FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT through J-Space/HCU control.",
+    "surface_contract_is_not_trivial": "Exact structured output and instruction constraints are part of harness interoperability. A model that has useful semantic state but leaks wrappers/code fences or misses compact output contracts can still fail EntityOS module coupling.",
+    "jspace_is_not_any_steering": "The target is causal, direction-specific, context-robust semantic control with explicit null/orthogonal/permuted/interaction controls, not generic activation disturbance.",
+    "hcu_training_target": "Checkpoint choice and later specialization must optimize cross-module deterministic protocol behavior plus semantic Hyperposition/J-Space control, not conventional chat quality alone."
+  },
+  "credits": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_jspace_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Claude Code/VPS lane should implement and adversarially execute P0 OBSERVED producer authority first. Do not spend the next cycle generating positive rows or running causal J-Space before that closure."
+}

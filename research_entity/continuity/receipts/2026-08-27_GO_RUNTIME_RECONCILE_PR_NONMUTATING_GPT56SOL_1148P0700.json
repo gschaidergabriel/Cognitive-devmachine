@@ -1,0 +1,38 @@
+{
+  "schema": "ENTITYOS_GO_RUNTIME_RECONCILE_PR_NONMUTATING/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "AUTONOMOUS_SELF_ORGANIZING_XENO_HCU_FABRIC",
+  "observed_supervisor_epoch": "9.13",
+  "source_head_before_change": "3e9fcc1fb6364822b25352417f08ac702ebc129a",
+  "source_head_after_change": "e0dbcf5b773e5df5da3b9fc1a4b70cd47ff15382",
+  "source_tree_after_change": "4713653fab8b9fa51aa1a9e3fcceb5fdc7f6856a",
+  "finding": "The retained self-hosted pull_request runtime-reconcile observable workflow still invoked activate_6000_free_swarm.sh and free swarm/update_root_results.py, then read SYSTEM_ANALYSIS_LIVE.json directly. Under current HARD_OFF and monitoring-v6 CURRENT-pointer evidence law this path could mutate runtime state and consume a non-authoritative compatibility mirror.",
+  "change": {
+    "path": ".github/workflows/runtime-reconcile-pr-observable.yml",
+    "commit": "e0dbcf5b773e5df5da3b9fc1a4b70cd47ff15382",
+    "new_behavior": [
+      "no activator invocation",
+      "no update_root_results invocation",
+      "no legacy system-analysis publisher invocation",
+      "no process termination or restart",
+      "no provider-capable code",
+      "read-only canonical provider admission",
+      "read-only restart-authority-v4 attribution",
+      "authority-consumer audit",
+      "verified CURRENT publication readback",
+      "HEAD/tree/source-hash binding",
+      "explicit zero runtime/HCU/training credit"
+    ]
+  },
+  "evidence_boundary": "SOURCE_HARDENING_ONLY; WORKFLOW_HAS_NOT_YET_PRODUCED_A_REPOSITORY_BOUND RUNTIME PASS",
+  "credit_change": {
+    "runtime_quiescence_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Execute the revised read-only self-hosted workflow on a clean current checkout; inspect authority-consumer violations and restart-authority-v4 output. Only after a verified non-mutating readback and safe root-specific restart authority may quiescence actions proceed, followed by provider-guard runtime proof and return to Physical GRID10 recursive coordinator scaling."
+}

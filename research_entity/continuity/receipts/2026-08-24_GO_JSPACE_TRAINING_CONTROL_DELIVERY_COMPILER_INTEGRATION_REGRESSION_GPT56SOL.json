@@ -1,0 +1,70 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EVIDENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt_attempt": "1638c428bacbd6ed1a25c3b42b92f9318ade1f54",
+  "retained_donor": {
+    "qualified_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "head_after_delta": "73f0fc3a5ebe9df7616caae47123bbc43a63c023"
+  },
+  "retained_executor": {
+    "qualified_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "rebound_by_this_organ": false,
+    "reason": "The executor remains an immutable pinned runtime candidate; newer donor source/test semantics must not be projected without an explicit exact-source rebind and admitted FREE_ONLY discriminator."
+  },
+  "observation": "The existing serious compile_admitted_jspace_training_dataset_v1.py path had already been wired to ENTITYOS_HCU_JSPACE_TRAINING_CONTROL_DELIVERY_GATE/v1. The integration performs the non-BASELINE model-input-control closure check, includes the closure digest in PipelineEvidence, includes it in duplicate ancestry identity, and emits it in row metadata. The older compiler regression file predated this integration and did not exercise the single-path boundary.",
+  "hypothesis": "The gate-level unit tests alone are sufficient evidence that the serious compiler cannot bypass model-input control delivery for non-BASELINE training rows.",
+  "counterhypothesis": "Without a compiler-level regression, a later call-site or registry-key regression could bypass or detach the gate while the gate's own unit tests remain green.",
+  "discriminator": "Add one focused integration regression on the retained donor lane that invokes compile_admitted_records through its actual gate lookup boundary rather than testing a second compiler or duplicating gate logic.",
+  "result": "COUNTERHYPOTHESIS_SUPPORTED_AS_A_TEST_COVERAGE_GAP_AND_CLOSED_AT_SOURCE_REGRESSION_DEFINITION_SCOPE",
+  "delta": {
+    "commit": "73f0fc3a5ebe9df7616caae47123bbc43a63c023",
+    "path": "the artefact/MicroEntity/hcu/test_compile_admitted_jspace_training_control_delivery_integration_v1.py",
+    "regressions_added": [
+      "non-BASELINE trace without admitted model-input-control closure fails before lower-level compilation",
+      "exact non-BASELINE closure keyed to the exact JSpaceInferenceBinding reaches the existing single compiler and its closure digest is emitted in row metadata",
+      "a valid closure stored under a different binding-registry key cannot be laundered into the compiler path",
+      "BASELINE remains explicitly non-intervention and emits a null control-closure digest"
+    ],
+    "second_compiler_created": false,
+    "second_state_or_effect_authority_created": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_TEST_CONVERGENCE_ON_SINGLE_RETAINED_DONOR_WITHOUT_CHURNING_THE_PINNED_EXECUTOR",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_CROSS_LAYER_CAUSAL_IDENTITY_REGRESSION_FROM_JSPACE_BINDING_TO_MODEL_INPUT_CONTROL_DELIVERY_TO_DATASET_ROW_METADATA",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_COMPILER_LEVEL_FAIL_CLOSED_REGRESSION_FOR_NONBASELINE_CAUSAL_CONTROL_DELIVERY"
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "atomic_lease_acquired": false,
+    "new_unusual_intervention_count": 0,
+    "work_class": "ORDINARY_DETERMINISTIC_SOURCE_REVIEW_AND_REGRESSION_DEFINITION"
+  },
+  "verification": {
+    "github_commit_observed": true,
+    "live_pr_head_after_write_matches_commit": true,
+    "authorized_free_sandbox_execution": "NOT_RUN",
+    "real_model_execution": "NOT_RUN",
+    "training_execution": "NOT_RUN",
+    "scope": "SOURCE_AND_REGRESSION_DEFINITION_ONLY"
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Canonical main is moving under multiple concurrent go organs; current README commit dd808c5a09d92bd2d6f69be8542d13cd797dabb6 already names this exact compiler-level integration regression as the next gate. This receipt records that gate's source/test completion without risking a stale full-file README overwrite."
+  },
+  "next_exact_gate": "Re-enter live PR1263 and PR810 plus current FREE_ONLY quota/deployment authority. If this test file remains in the retained donor, include its exact blob together with gate/compiler bytes only in a future immutable successor executor rebind. Do not execute while remaining Hobby quota is unobserved or an upgrade/charge path is possible. Before any training promotion, require real zero-cost local approximately-0.8B loader/model-executor I/O, verified loader consumption, canonical atomic ModelExecution admission, exact J-Space control delivery closure, leak-resistant family split and frozen evaluation evidence."
+}

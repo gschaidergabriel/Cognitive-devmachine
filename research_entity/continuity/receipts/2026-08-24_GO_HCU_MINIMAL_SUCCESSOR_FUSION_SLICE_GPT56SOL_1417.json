@@ -1,0 +1,149 @@
+{
+  "schema": "ENTITYOS_HCU_GO_MINIMAL_SUCCESSOR_FUSION_SLICE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "reentry": {
+    "canonical_main_observed": "f11b30617ea0438cf02039af025c7623e55e0a3c",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_observed": "3373a1209d6d600f96124b40437f46af15debe1a",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "2da99e0458809988190c129b04cae913d1f15d92"
+  },
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "work_class": "ORDINARY_READ_ONLY_SOURCE_DEPENDENCY_FUSION_ANALYSIS"
+  },
+  "scope_boundary": {
+    "runtime_invocation_performed": false,
+    "sandbox_create_performed": false,
+    "paid_or_unknown_provider_action_performed": false,
+    "together_attempted": false,
+    "vps_or_production_test_attempted": false,
+    "claim": "SOURCE_DEPENDENCY_AND_PATH_FUSION_MAP_ONLY"
+  },
+  "observed_main_baseline": {
+    "present": [
+      {
+        "path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+        "blob_sha": "55f461a56ef08537238eeff91fe379da2adb20a1",
+        "role": "selected RFC8785/JCS causal identity canonicalizer"
+      },
+      {
+        "path": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+        "role": "Typed Entry Fabric compatibility-path implementation"
+      }
+    ],
+    "exact_paths_not_found_at_observed_main": [
+      "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
+      "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py",
+      "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+      "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+      "the artefact/MicroEntity/hcu/model_execution_receipt_v1.py",
+      "the artefact/MicroEntity/hcu/typed_entry_canonical_v1.py",
+      "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
+      "the artefact/MicroEntity/hcu/engine_load_lease_v1.py",
+      "the artefact/MicroEntity/hcu/outcome_receipt_content_key_v1.py"
+    ],
+    "important_limit": "404 at the exact donor path proves path absence only. It does not by itself prove no semantically equivalent implementation exists elsewhere on main. Semantic-equivalence search remains a prerequisite before code promotion."
+  },
+  "donor_dependency_observations": {
+    "jspace_vector_control_v1.py": [
+      "entry_canonicalization_v1.py"
+    ],
+    "global_jspace_gwt_v1.py": [
+      "entry_canonicalization_v1.py",
+      "jspace_vector_control_v1.py"
+    ],
+    "grid10_scheduler_v1.py": [
+      "entry_canonicalization_v1.py",
+      "reactive_event_router_v1.py",
+      "xeno_entry_fabric_v1.py"
+    ],
+    "model_execution_receipt_v1.py": [
+      "entry_canonicalization_v1.py",
+      "engine_load_lease_v1.py",
+      "grid10_scheduler_v1.py"
+    ],
+    "jspace_dataset_admission_gate_v1.py": [
+      "entry_canonicalization_v1.py",
+      "jspace_vector_control_v1.py",
+      "outcome_receipt_content_key_v1.py"
+    ],
+    "typed_entry_canonical_v1.py": []
+  },
+  "fusion_slices": [
+    {
+      "id": "SLICE_A_JSPACE_OBSERVABLE_CORE",
+      "priority": 1,
+      "new_donor_paths": [
+        "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+        "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py"
+      ],
+      "main_dependency_already_present": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+      "why_minimal": "This is the smallest observed donor slice that yields the versioned JSPACE_VECTOR_CONTROL_ABI/v1 plus observable Global J-Space/GWT trace producer without first requiring route, GRID, loader or model-execution plumbing.",
+      "promotion_rule": "Do not copy blindly. First prove no current-main semantic equivalent, then port exact tests/provenance under successor 8.65. Source promotion still grants zero model/J-Space causal runtime credit."
+    },
+    {
+      "id": "SLICE_B_TYPED_ENTRY_ROUTE_GRID",
+      "priority": 2,
+      "new_donor_paths": [
+        "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
+        "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py"
+      ],
+      "main_dependency_already_present": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+      "why": "GRID10 imports the route-decision authority and the already-present Typed Entry Fabric; scheduler promotion without the route binding would be incomplete."
+    },
+    {
+      "id": "SLICE_C_ENGINE_LOAD_MODEL_EXECUTION",
+      "priority": 3,
+      "new_donor_paths": [
+        "the artefact/MicroEntity/hcu/engine_load_lease_v1.py",
+        "the artefact/MicroEntity/hcu/model_execution_receipt_v1.py"
+      ],
+      "depends_on_slice": "SLICE_B_TYPED_ENTRY_ROUTE_GRID",
+      "why": "Verified model-execution evidence imports both exact loader-consumption evidence and the scheduler-owned GridPlan identity."
+    },
+    {
+      "id": "SLICE_D_CAUSAL_DATASET_ADMISSION",
+      "priority": 4,
+      "new_donor_paths": [
+        "the artefact/MicroEntity/hcu/outcome_receipt_content_key_v1.py",
+        "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py"
+      ],
+      "depends_on_slice": "SLICE_A_JSPACE_OBSERVABLE_CORE",
+      "why": "Dataset admission consumes the canonical vector-control packet preimage and the acyclic outcome content key; it should follow observable J-Space identity rather than precede it."
+    }
+  ],
+  "deferred_donor_path": {
+    "path": "the artefact/MicroEntity/hcu/typed_entry_canonical_v1.py",
+    "status": "DEFER_PENDING_CANONICALIZATION_AUTHORITY_REVIEW",
+    "reason": "The observed active HCU chain already selects RFC8785/JCS through entry_canonicalization_v1.py. The standalone Typed Entry CBOR subset is not imported by the four minimal slices above. Promoting it without an explicit wire/identity role could create an avoidable second causal canonicalization surface. Absence from the first fusion slice is deliberate, not a rejection of CBOR as a future transport/identity profile."
+  },
+  "hypothesis": "The 623-ahead/652-behind PR1263 donor can be made mergeable only by treating it as a dependency-ordered donor set and selecting small successor-dynamic slices instead of rebasing or merging the entire historical branch.",
+  "counterhypothesis": "The six representative donor files are independent enough to copy individually, or the whole PR can be promoted as one coherent patch.",
+  "discriminator_result": "COUNTERHYPOTHESIS_REJECTED_AT_SOURCE_DEPENDENCY_SCOPE: observed imports form explicit chains, while exact-path checks show several required dependencies are absent at the observed main. Wholesale promotion remains inadmissible; independent copying would create broken or ambiguous authority edges.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: converted quantified donor/main divergence into a dependency-ordered selective fusion strategy and explicitly excluded blind wholesale merge/rebase.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_AT_SOURCE_FUSION_SCOPE: identified the smallest observable J-Space core and the separate Typed Entry->Route->GRID slice while preserving one state/effect authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_AT_SOURCE_READINESS_SCOPE: isolated a two-file J-Space/vector-control source candidate, but model-specific causal runtime and training credit remain zero behind the FREE_ONLY runtime gate."
+  },
+  "credits_after": {
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Keep the runtime-first gate primary: obtain a directly authoritative remaining included Vercel Sandbox quota signal. For source fusion, first search current main for semantic equivalents of SLICE_A symbols/ABIs and exact tests; only if none exist, port the two-file J-Space observable core plus its tests as a successor-8.65 donor slice. Do not promote typed_entry_canonical_v1.py until its canonicalization authority role is explicit.",
+  "acceptance": "IN_PROGRESS"
+}

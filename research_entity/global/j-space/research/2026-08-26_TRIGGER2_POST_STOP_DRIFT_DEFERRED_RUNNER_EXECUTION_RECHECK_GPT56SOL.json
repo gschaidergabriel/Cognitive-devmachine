@@ -1,0 +1,106 @@
+{
+  "schema": "CLAY_TRIGGER2_POST_STOP_DRIFT_DEFERRED_RUNNER_EXECUTION_RECHECK/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch_observed": "8.82_DELTA",
+  "mode": "FREE_ONLY",
+  "observed_main_before_write": "1dc4585ed38fcc3f147f913d534a809a92d98669",
+  "status": "NONPROMOTING_NEGATIVE_RUNTIME_AND_TRANSPORT_EVIDENCE",
+  "observations": {
+    "owner_emergency_stop_commit": "34cde26849a31b852b677a38f2c426c75d881bcf",
+    "owner_emergency_stop_local_time": "2026-08-26T02:13:49+07:00",
+    "latest_metrics_commit": "1dc4585ed38fcc3f147f913d534a809a92d98669",
+    "latest_metrics_generated_at_utc": "2026-08-25T20:57:30.040985+00:00",
+    "openrouter_latest": {
+      "total_requests": 3606,
+      "total_success": 134,
+      "total_429": 3471,
+      "last_status": "429",
+      "last_observed_at_utc": "2026-08-25T20:57:30.034313+00:00"
+    },
+    "prior_surface_observation": {
+      "total_requests": 3426,
+      "total_success": 134,
+      "delta_to_latest_requests": 180,
+      "delta_to_latest_success": 0,
+      "interpretation": "Additional post-stop provider attempts were recorded after the already-persisted runtime-drift observation."
+    },
+    "trigger2_run": {
+      "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+      "run_id": 32897114111,
+      "job_id": 97962221463,
+      "workflow": ".github/workflows/clay-trigger2-qwen35-input-identity-v1.yml",
+      "status": "queued",
+      "runner_id": 0,
+      "runner_name": "",
+      "required_labels": ["self-hosted", "Linux", "X64"],
+      "execution_observed": false,
+      "runner_assignment_observed": false
+    },
+    "older_self_hosted_probe": {
+      "run_id": 32815473976,
+      "job_id": 97702719398,
+      "status": "queued",
+      "runner_id": 0,
+      "runner_name": "",
+      "required_labels": ["self-hosted"],
+      "execution_observed": false,
+      "runner_assignment_observed": false
+    }
+  },
+  "external_primary_reference": {
+    "source": "GitHub Docs / self-hosted runner routing precedence",
+    "url": "https://docs.github.com/en/actions/reference/runners/self-hosted-runners",
+    "relevant_rule": "A job remains queued when GitHub cannot find an online and idle self-hosted runner matching the required labels/groups; matching jobs may be assigned later when a runner becomes available.",
+    "classification": "SOURCE_DIRECT_SOFTWARE_BEHAVIOR_REFERENCE"
+  },
+  "analysis": {
+    "runtime_quiescence": "NEGATIVE_CURRENT_EVIDENCE",
+    "why": "OpenRouter request telemetry increased by another 180 after the prior post-stop observation, with success unchanged. The emergency stop therefore has not produced observed provider-attempt quiescence at this snapshot.",
+    "runner_transport": "UNASSIGNED_QUEUED",
+    "why_runner": "Both the Trigger-2 job and the older self-hosted probe remain queued with runner_id=0 and empty runner_name. This is compatible with no currently eligible online idle matching runner, but repository-level evidence cannot distinguish offline runner, label mismatch, access/group policy, or scheduling-service causes.",
+    "deferred_execution_hazard": "The queued Trigger-2 run is latent execution debt: because it remains queued rather than cancelled, it can become executable later if an eligible runner appears. Its workflow snapshot uses an older fixed CLAY_SHA and therefore must not be treated as current-source acceptance even if it later runs.",
+    "push_fanout": "No additional controller push was issued in this recheck. Historical controller push fanout remains a coordination hazard; this recheck does not create another fanout event."
+  },
+  "hypotheses": [
+    {
+      "id": "H1_ORPHAN_PROVIDER_LOOP",
+      "claim": "A pre-stop or independently supervised OpenRouter-capable process continues attempting requests despite source-level admission shutdown.",
+      "support": "Post-stop request and 429 counters continue increasing while success remains fixed."
+    },
+    {
+      "id": "H2_TELEMETRY_REPLAY_OR_DELAY",
+      "claim": "The apparent counter growth is delayed/replayed metrics publication rather than new live provider attempts.",
+      "support": "Metrics are emitted by a separate publisher and repository telemetry alone does not expose the responsible live PID.",
+      "falsifier": "Live host process/socket evidence plus bounded no-restart interval showing zero new provider attempts, or proof that last_observed_at is generated from delayed historical events rather than request time."
+    },
+    {
+      "id": "H3_RUNNER_OFFLINE_OR_INELIGIBLE",
+      "claim": "No eligible online idle self-hosted runner currently matches the queued jobs.",
+      "support": "Persistent queued state with runner_id=0 and empty runner_name across two independent self-hosted jobs.",
+      "counterhypothesis": "A runner may be healthy but blocked by label/group/repository access or scheduling policy."
+    }
+  ],
+  "promotion_and_credit_boundary": {
+    "runtime_quiescence_pass": false,
+    "trigger2_model_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_actions": [
+    "Use the existing owner-authorized live-host quiescence bridge to identify exact PID/PPID/ARGV and network/socket ownership for any OpenRouter-capable process; stop/disable only the responsible FreeSwarm/provider-capable process tree and persist before/after process evidence.",
+    "Observe a bounded no-restart interval with zero provider-usage delta before reopening any execution gate.",
+    "Inspect self-hosted runner service status and effective labels/group/repository access without another controller push. Do not infer runner health from queue state alone.",
+    "Cancel or supersede stale queued Trigger-2 execution before restoring runner liveness if an available control surface permits, then re-enter current supervisor authority and dispatch at most one current-SHA deduplicated workflow_dispatch run only after quiescence PASS."
+  ],
+  "research_delta": "This recheck upgrades the FreeSwarm emergency-stop frontier from merely unproven quiescence to direct current negative evidence at the observed metrics snapshot, and identifies the still-queued unassigned Trigger-2 job as deferred stale-execution risk."
+}

@@ -1,0 +1,83 @@
+{
+  "schema": "ClayGoReceipt/v1",
+  "date": "2026-08-18",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_HARDENING_PLUS_EXECUTION_ADMISSION_EVIDENCE",
+  "canonical_main_observed_before_write": "2d33f05eb7794bf0b7690bf05bdd8f71e0c3a943",
+  "immutable_runtime_candidate": {
+    "pull_request": 686,
+    "head_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree_sha": "47c09ff6d661b3da02743435dd8a343ddef85efd"
+  },
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "observed_head_after_parallel_fusion": "9367d587984bffedaddc0b49f4313abee2e32541",
+    "tier1_script_blob": "2b83b6b527bcdad896d8db83f52b304b44a6dc00",
+    "tier1_handler_blob": "05311ceae7f7db466f12625ffa23f14b0bdf6b78",
+    "phase_identity_guard_blob": "2c515c39a64bb251f58928554a003c12df5fab60"
+  },
+  "tier1_delta": {
+    "status": "SOURCE_CANDIDATE_NOT_RUNTIME_VERIFIED",
+    "previous_false_credit_shape": "clean recovery only: active_before == 0",
+    "new_required_shape": [
+      "start from active_pre_injection == 0",
+      "create exactly one canonical TurnLifecycle no-effect active turn",
+      "observe active_before == 1 before recovery",
+      "recover_incomplete_episodes closes exactly one active turn",
+      "recovery.aborted_no_effect == 1",
+      "recovery.active_turns_closed == 1",
+      "global entity generation advances exactly once",
+      "interrupted episode contains zero effects before and after recovery",
+      "total effect cardinality is unchanged",
+      "the previously VERIFIED entityos.exec effect row has identical persisted identity before/after",
+      "the existing entityos.exec causal re-entry remains exactly once",
+      "interrupted turn receives exactly one zero-credit no-effect causal re-entry",
+      "interrupted workspace closes as RECOVERY_ABORTED_INCOMPLETE_TURN",
+      "exactly one container-recovery TURN_ABORTED system record matches the interrupted causal id",
+      "checkpoint/state_hash is persisted for downstream Tier-2"
+    ],
+    "handler_gate": "tier1_recovery_pass cannot be set unless the stronger interrupted-no-effect receipt satisfies the above invariants",
+    "source_guard": "build-time phase guard now requires the stronger Tier-1 script and handler markers and rejects regression to active_before == 0 credit"
+  },
+  "tier2_frontier_refresh": {
+    "status": "SOURCE_PLATFORM_LIFECYCLE_CANDIDATE_NOT_RUNTIME_VERIFIED",
+    "current_direction": "two-stage Vercel Sandbox snapshot carrier with distinct carrier sandbox and distinct persistent:false replacement after source deletion",
+    "supersedes_this_organs_earlier_generated_option": "A separate long-lived storage-only carrier sandbox is no longer the preferred frontier because current canonical main records Vercel snapshot lifetime semantics as sufficient to make the snapshot a post-delete durable-carrier candidate. That remains runtime-unverified."
+  },
+  "execution_attempt": {
+    "trigger_commit": "aae330f119273c3b5157bc3b984e2e119b100df7",
+    "purpose": "force current PR810 Vercel preview/source-guard evaluation after Tier-1 hardening",
+    "vercel_combined_status": "failure",
+    "vercel_target_classification": "BUILD_RATE_LIMIT",
+    "runtime_steps_started": false,
+    "test_failure": false,
+    "runtime_credit": 0,
+    "whole_product_credit": 0,
+    "interpretation": "execution-admission blocker only; do not infer ClayVerse or Tier-1 semantic failure"
+  },
+  "prior_visible_preview_evidence": {
+    "deployment": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
+    "commit": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
+    "state": "ERROR",
+    "classification": "STALE_SOURCE_GUARD_FAILURE_BEFORE_RUNTIME",
+    "note": "This older preview failed on a source-binding guard and does not transfer evidence to the current PR810 head."
+  },
+  "experiment_accounting": {
+    "unusual_experiment_count_added": 0,
+    "global_go_slot_already_consumed": true,
+    "consumed_experiment": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED"
+  },
+  "epistemic_status": {
+    "tier1_source_mechanism_strengthened": true,
+    "tier1_runtime_verified": false,
+    "tier2_runtime_verified": false,
+    "exact_oci_runtime_verified_for_current_freeze": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "When authorized isolated execution admission returns (Vercel deploy capacity or already-authorized Daytona surface), run the exact current PR810 source guards first, then execute PR686 exact private source -> OCI -> provider/effect -> strengthened interrupted Tier-1 recovery -> two-stage Tier-2 snapshot carrier/delete/recreate -> exact identity restore -> fresh provider cognition. Do not spend owner credentials on stale READY deployments."
+}

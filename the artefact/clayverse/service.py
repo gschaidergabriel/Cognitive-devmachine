@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+import base64
+import binascii
 import json
 import os
 import sys
+from urllib.parse import urlsplit
 
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
+from .final_acceptance_probe import run_mistral_acceptance_probe
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
@@ -37,14 +41,56 @@ def _clerk_map() -> dict[str, str]:
     return mapping
 
 
-def _web_config() -> tuple[str, str]:
+def _clerk_frontend_api_from_publishable_key(publishable_key: str) -> str:
+    """Derive the direct Clerk FAPI URL encoded by a publishable key or fail closed."""
+    encoded = ""
+    for prefix in ("pk_test_", "pk_live_"):
+        if publishable_key.startswith(prefix):
+            encoded = publishable_key[len(prefix):]
+            break
+    if not encoded:
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY must be a Clerk test/live publishable key")
+    try:
+        padded = encoded + "=" * (-len(encoded) % 4)
+        decoded = base64.b64decode(padded, validate=True).decode("ascii")
+    except (binascii.Error, UnicodeDecodeError) as exc:
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY contains invalid FAPI encoding") from exc
+    if not decoded.endswith("$"):
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY FAPI encoding is malformed")
+    domain = decoded[:-1]
+    if not domain or not domain.isascii() or any(char.isspace() for char in domain):
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY FAPI domain is invalid")
+    try:
+        parsed = urlsplit(f"https://{domain}")
+        port = parsed.port
+    except ValueError as exc:
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY FAPI domain is invalid") from exc
+    if (
+        parsed.scheme != "https"
+        or not parsed.hostname
+        or parsed.hostname != domain.lower()
+        or parsed.username is not None
+        or parsed.password is not None
+        or port is not None
+        or parsed.path
+        or parsed.query
+        or parsed.fragment
+    ):
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY FAPI domain is invalid")
+    return f"https://{domain}"
+
+
+def _web_config(issuer: str) -> tuple[str, str]:
     publishable_key = os.environ.get("CLERK_PUBLISHABLE_KEY", "").strip()
     frontend_api = os.environ.get("CLERK_FRONTEND_API_URL", "").strip().rstrip("/")
     if not publishable_key or not frontend_api:
         raise RuntimeError("CLERK_PUBLISHABLE_KEY and CLERK_FRONTEND_API_URL are required")
-    if not frontend_api.startswith("https://"):
-        raise RuntimeError("CLERK_FRONTEND_API_URL must use https")
-    return publishable_key, frontend_api
+    expected_frontend_api = _clerk_frontend_api_from_publishable_key(publishable_key)
+    if frontend_api != expected_frontend_api:
+        raise RuntimeError("CLERK_FRONTEND_API_URL must match the publishable-key Clerk instance")
+    if issuer.strip().rstrip("/") != expected_frontend_api:
+        raise RuntimeError("CLERK_ISSUER must match the publishable-key Clerk instance")
+    return publishable_key, expected_frontend_api
 
 
 def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
@@ -81,6 +127,53 @@ def _state_probe_payload(checkpoint: str, state_hash: str) -> dict[str, object]:
     }
 
 
+def _acceptance_bool(name: str, default: str = "0") -> bool:
+    raw = os.environ.get(name, default)
+    if raw not in {"0", "1"}:
+        raise RuntimeError(f"{name} must be 0 or 1")
+    return raw == "1"
+
+
+def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
+    """Run the internal canonical Mistral turn used by the final sandbox controller.
+
+    This mode intentionally receives no Clerk auth credit. It proves the cognition /
+    re-ingest / EffectGate causal spine inside the exact product image; the final
+    browser/JWT/PTTY gate remains a separate mandatory acceptance assertion.
+    """
+
+    recovery = recover_incomplete_episodes(db)
+    ClayGraphProjection(db).rebuild()
+    clerk_map = _clerk_map()
+    clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
+    prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
+    require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
+    entityos_bridge, entityos_status = _entityos_config()
+
+    payload = run_mistral_acceptance_probe(
+        db,
+        clerk_map,
+        clerk_subject,
+        prompt,
+        entityos_bridge=entityos_bridge,
+        require_effect=require_effect,
+    )
+    checkpoint_id, state_hash = db.checkpoint("mistral-final-sandbox-probe")
+    payload.update(
+        {
+            "checkpoint": checkpoint_id,
+            "state_hash": state_hash,
+            "recovery": recovery,
+            "entityos": {
+                "verified": bool(entityos_status.get("verified")),
+                "execution_enabled": bool(entityos_status.get("execution_enabled")),
+                "sha256": entityos_status.get("sha256"),
+            },
+        }
+    )
+    return payload
+
+
 def main():
     import uvicorn
 
@@ -96,13 +189,22 @@ def main():
         db.close()
         return 0
 
+    if "--mistral-once" in sys.argv:
+        try:
+            payload = _run_mistral_once(db)
+            print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
+        finally:
+            db.close()
+        return 0
+
     recovery = recover_incomplete_episodes(db)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 
     clerk_map = _clerk_map()
-    publishable_key, frontend_api = _web_config()
-    verifier = ClerkTokenVerifier(ClerkConfig.from_env())
+    clerk_config = ClerkConfig.from_env()
+    publishable_key, frontend_api = _web_config(clerk_config.issuer)
+    verifier = ClerkTokenVerifier(clerk_config)
     require_claude = os.environ.get("CLAYVERSE_REQUIRE_CLAUDE", "1") == "1"
     try:
         claude_status = claude_readiness(required=require_claude)

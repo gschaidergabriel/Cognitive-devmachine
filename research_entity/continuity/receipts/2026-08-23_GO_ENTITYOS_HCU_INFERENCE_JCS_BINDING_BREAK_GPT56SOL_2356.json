@@ -1,0 +1,69 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "EntityOS + HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "base_main_observed": "ec8fc043c68318c68140a06759aa225195704d19",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_observed": "a71d4d5c77b6f2394caade62dcdf3cc3ca84dd70",
+  "review_id": 5002912845,
+  "classification": "SOURCE_INTERFACE_INTEGRATION_BREAK",
+  "prior_scoped_receipt": "research_entity/continuity/receipts/2026-08-23_GO_ENTITYOS_HCU_JCS_ROUTER_DOWNGRADE_SEAM_GPT56SOL_2356.json",
+  "prior_finding_reentry": "The prior b02059a-scoped router downgrade seam was repaired on the retained donor by a71d4d5: router now selects RFC8785/JCS, versions route/policy/engine identities, and requires typed versioned Entry admission bindings. The prior receipt remains valid only at its exact observed head.",
+  "observed": {
+    "router": {
+      "path": "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
+      "hash_serialization_schema": "RFC8785_JCS_IJSON/v1",
+      "route_identity_schema": "HCU_CAUSAL_ROUTE_IDENTITY/v4",
+      "router_policy_schema": "HCU_REACTIVE_ROUTER_POLICY/v2",
+      "engine_identity_schema": "HCU_INTERNAL_ENGINE_IDENTITY/v2",
+      "entry_binding_schema": "ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2",
+      "entry_binding_value_shape": ["schema", "canonicalization_schema", "event_sha256"]
+    },
+    "inference_receipt": {
+      "path": "the artefact/MicroEntity/hcu/inference_receipt_v1.py",
+      "schema": "HCU_INFERENCE_RECEIPT/v1",
+      "imports_router_hash_serialization_schema": true,
+      "local_hash_implementation": "python json.dumps(sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False)",
+      "entry_binding_value_expectation": "bare sha256 string"
+    }
+  },
+  "finding": "At the exact a71d4d5 donor head, router and inference receipt cannot consume one common current Entry-binding registry representation. Router requires a typed ENTITYOS_HCU_ENTRY_ADMISSION_BINDING/v2 mapping, while inference passes the same registry value directly to a SHA-string validator. In addition, inference now inherits/echoes the router's RFC8785_JCS_IJSON/v1 serializer label while computing receipt_sha256 with its still-local Python sort-keys JSON encoder. This creates a serializer-label/actual-byte mismatch and blocks a truthful single JCS Entry->Route->Inference identity chain.",
+  "counterhypotheses": [
+    {
+      "hypothesis": "The router v2 binding mapping can transparently satisfy inference because only event_sha256 matters.",
+      "status": "REJECTED_AT_SOURCE_INTERFACE_SCOPE",
+      "reason": "Inference validates the entire registry value as a lowercase SHA-256 string instead of extracting/validating the typed mapping."
+    },
+    {
+      "hypothesis": "Importing HASH_SERIALIZATION_SCHEMA from the JCS router is sufficient to make inference receipt identity JCS.",
+      "status": "REJECTED_AT_SOURCE_IMPLEMENTATION_SCOPE",
+      "reason": "Receipt identity bytes are still produced by the local Python json.dumps canonicalizer before SHA-256. Serializer identity is determined by bytes, not by the imported label."
+    }
+  ],
+  "required_repair_order": [
+    "Reuse the router's one versioned Entry-binding resolver, or a single shared non-authority resolver, in inference; do not retain two registry schemas.",
+    "Introduce a new versioned inference-receipt identity for the JCS path; preserve HCU_INFERENCE_RECEIPT/v1 historical bytes without silent reinterpretation.",
+    "Compute new inference receipt identity with the selected entry_canonicalization_v1 canonicalize implementation and explicitly echo the selected canonicalization schema.",
+    "Reject missing, legacy, unknown or downgraded route/Entry canonicalization at the inference boundary.",
+    "Run deterministic regressions for one valid v2 Entry binding through route and receipt plus bare-binding, wrong-schema and Python-JSON-vs-JCS poison cases.",
+    "Only after source convergence, execute the exact combined Entry -> route -> inference -> GRID10 path in an authorized isolated executor."
+  ],
+  "coordination": {
+    "new_unusual_experiments_by_this_organ": 0,
+    "macrocycle_id": null,
+    "global_unusual_experiment_count": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID",
+    "note": "This is deterministic source/interface analysis only."
+  },
+  "execution": {
+    "authorized_isolated_runtime_started_by_this_organ": false,
+    "vps_self_hosted_or_production_testing": false,
+    "together_used": false,
+    "paid_fallback_used": false,
+    "runtime_credit": 0,
+    "whole_entityos_hcu_pass": false
+  },
+  "next_exact_gate": "Fuse the inference producer onto the same versioned JCS Entry-binding and canonicalization path already used by the current router, then run exact combined Entry/route/inference/GRID10 regressions on an actually-started authorized isolated executor before physical loader-lease runtime promotion."
+}

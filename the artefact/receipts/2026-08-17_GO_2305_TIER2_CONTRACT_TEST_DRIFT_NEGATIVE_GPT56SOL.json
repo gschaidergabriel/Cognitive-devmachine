@@ -1,0 +1,49 @@
+{
+  "schema": "ClayVerseBoundedNegativeEvidenceReceipt/v1",
+  "timestamp_local": "2026-08-17T23:05:35+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / OpenAI isolated non-production container",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "main",
+  "classification": "TRANSIENT_EXACT_SOURCE_CONTRACT_TEST_DRIFT_SUPERSEDED_BY_PARALLEL_MAIN",
+  "purpose": "Preserve a real negative exact-blob observation encountered while main was concurrently converging, without misclassifying the later canonical source as failed.",
+  "observed_exact_blobs": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "629f7bbb7627e997839597edd499ce008c569a0f",
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "afff2c3f66961316f6ad554c3aaebd21973481be",
+    "the artefact/tests/test_microvm_deployment_contract.py": "2f232cf99af59749658d1b222356c77fbbea5750"
+  },
+  "isolated_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "FAIL",
+    "passed": 8,
+    "failed": 1,
+    "failure": "test_tier2_requires_full_kata_sandbox_replacement_not_container_restart expected the literal phrase 'new Kata sandbox/VM identity' while the exact contract blob stated 'new sandbox/VM identity'.",
+    "scope": "Exact three-file source-contract regression only; no OCI/Kubernetes/Kata/CNI runtime was executed."
+  },
+  "repair_attempt": {
+    "candidate": "Minimal contract wording strengthening toward explicit Kata sandbox identity; test unchanged.",
+    "write_result": "CAS_REJECTED_409",
+    "meaning": "Concurrent main changed the same canonical contract after this organ read it. No stale overwrite occurred."
+  },
+  "reentry": {
+    "later_observation": "After the 409, main was refreshed and the contract/test path had already advanced in parallel, including explicit Kata sandbox wording and additional rolling-release/runtime-security gates.",
+    "current_failure_claim": false,
+    "reason": "This receipt is scoped only to the exact listed blobs. It does not claim the later current main still fails."
+  },
+  "evidence_value": "Preserves a falsified transient source state and demonstrates fail-safe CAS coordination under overlapping workers.",
+  "runtime_credit": 0,
+  "whole_clayverse_pass": false,
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable request/turn id was exposed and the immutable trigger time available to this organ was only minute precision, insufficient for the atomic lease fallback."
+  },
+  "safety": {
+    "vps_or_self_hosted_test": false,
+    "production_test": false,
+    "together_api": false,
+    "paid_or_final_training": false,
+    "secrets_persisted": false
+  }
+}

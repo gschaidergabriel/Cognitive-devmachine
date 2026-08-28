@@ -1,0 +1,98 @@
+{
+  "schema": "CLAY_GO_872_JSPACE_ABI_DONOR_COLLISION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.72",
+  "mode": "FREE_ONLY",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "observed_main_before_initial_write": "00088faba2f3b937a2d3e1ee21623651813c34f4",
+  "reentry_main_after_initial_write": "f191091087dfc0fbca776fa6189170793df0131b",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_observed": "35d3cda9f98e69c3eac3905658e48e8154bb2c57",
+  "coordination": {
+    "shared_reproducible_macrocycle_request_id": null,
+    "visible_user_trigger_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "work_class": "ORDINARY_SOURCE_AUTHORITY_FUSION_ANALYSIS"
+  },
+  "observed": {
+    "current_main_trigger1_bridge_path": "tools/trigger1_intermediate_promotion_bridge.py",
+    "current_main_trigger1_bridge_blob_sha": "eae50e4881655d3f2316328f694952960af452e3",
+    "current_main_source_descriptor_schema_literal": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "current_main_source_descriptor_shape": [
+      "schema",
+      "model",
+      "revision",
+      "derivation_family_id",
+      "selected_layer",
+      "selected_gain",
+      "metric_definition"
+    ],
+    "donor_vector_codec_path": "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+    "donor_vector_codec_blob_sha": "64674660fd65453cacd5364f77fe726a7110a9d0",
+    "donor_vector_codec_abi_schema_literal": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "donor_vector_codec_semantics": "RFC8785/JCS-bound deterministic finite-binary64 to symmetric-q8 packet codec with basis/generation/role/control condition/source-vector identity and exact rational scale",
+    "donor_global_jspace_path": "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
+    "donor_global_jspace_blob_sha": "aa87a61aaedde3452e63f2851f0c07508ebda753",
+    "donor_global_jspace_semantics": "candidate-measurement-only GWT/Hyperposition coalition selection plus digest-bound global-vector/control-packet trace and explicit lesion producer",
+    "exact_donor_global_jspace_path_present_on_observed_main": false,
+    "overlapping_open_pr_search": "Only retained donor PR1263 was found as an open J-Space observable-core/ABI donor lane; no second dedicated implementation lane was created by this organ."
+  },
+  "material_finding": {
+    "classification": "SCHEMA_NAME_COLLISION_ACROSS_AUTHORITY_LEVELS",
+    "statement": "Current canonical main and retained donor PR1263 use the same schema identifier JSPACE_VECTOR_CONTROL_ABI/v1 for materially different preimages and semantics. Main uses it as a model-specific Trigger-1 intervention/derivation source descriptor, while PR1263 uses it as a deterministic q8 vector wire-codec ABI. Because canonical main outranks the donor branch, the donor codec must not be promoted under that existing identifier without an explicit successor compatibility/versioning decision.",
+    "risk": "Blind donor fusion could create two incompatible packet languages under one ABI name, making hashes, provenance, replay, training rows, and downstream admission ambiguous even if both implementations are locally self-consistent."
+  },
+  "hypothesis": "The PR1263 Global J-Space/GWT coalition-and-trace primitive remains potentially reusable, but its dependency on the donor q8 codec cannot be fused safely until the ABI namespace collision is resolved explicitly.",
+  "counterhypothesis": "The two uses are merely complementary views of one ABI and can coexist under the same schema identifier without ambiguity.",
+  "counterhypothesis_adjudication": "REJECTED_AT_SOURCE_SHAPE_SCOPE: the observed preimages are structurally and semantically different, so schema-name equality alone cannot establish wire compatibility. No claim is made that either implementation is scientifically or operationally invalid.",
+  "fusion_decision": {
+    "blind_port_pr1263_vector_codec_to_main": "BLOCKED",
+    "blind_port_pr1263_global_jspace_with_colliding_codec_dependency": "BLOCKED",
+    "change_current_main_trigger1_schema_to_fit_donor": "REJECTED_AUTHORITY_DIRECTION",
+    "preserve_pr1263_as_single_donor_lane": true,
+    "recommended_successor": "Define an explicit non-colliding donor q8 wire schema or an authoritative adapter/version contract, then test exact packet identity/provenance boundaries before selectively promoting the reusable GWT/Hyperposition trace primitive."
+  },
+  "go_tracks": {
+    "track_a": {
+      "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "status": "ADVANCED",
+      "delta": "Preserved one canonical causal lane and re-entered the newer Forge-to-live-Distillery promotion frontier instead of treating the older queued witness as sufficient for current runtime acceptance."
+    },
+    "track_b": {
+      "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+      "status": "ADVANCED_AT_SOURCE_AUTHORITY_SCOPE",
+      "delta": "Separated reusable PR1263 GWT/Hyperposition semantics from its currently unsafe ABI-name dependency and established the exact fusion precondition instead of creating a second packet authority."
+    },
+    "track_c": {
+      "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY",
+      "status": "ADVANCED_AT_TRACE_SCHEMA_READINESS_SCOPE",
+      "delta": "Identified and quarantined an ABI namespace ambiguity that could otherwise contaminate model-specific J-Space traces and future training-row provenance; no model intervention was executed."
+    }
+  },
+  "runtime_state": {
+    "older_forge_distillery_run_id": 32742535392,
+    "older_forge_distillery_job_id": 97480167751,
+    "older_run_last_observed_status": "queued",
+    "older_run_current_scope_status": "INSUFFICIENT_FOR_CURRENT_LIVE_PROMOTION_SCOPE",
+    "current_main_live_promotion_path": "tools/promote_forge_distillery_runtime_gate.py",
+    "current_workflow_requires_live_distillery_promotion": true,
+    "repository_bound_current_live_promotion_terminal_witness_observed": false,
+    "qwen_successor_unusual_experiment_dispatched": false
+  },
+  "credits_after": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "First re-enter newest main. Track A: execute/observe the current Forge-to-Distillery workflow revision that includes live_distillery_promotion; acceptance requires disposable exact-current witness PASS plus exactly one live packet and positive live accepted_dataset_tokens delta on first promotion, then identical replay +0. The older queued run 32742535392 is insufficient for this newer scope and must not be mistaken for current acceptance. Track B/C: resolve JSPACE_VECTOR_CONTROL_ABI/v1 as one authoritative packet language by renaming/versioning the PR1263 q8 wire codec before fusion or by defining a tested adapter that keeps the two identities explicitly distinct; only then selectively promote the reusable GWT/Hyperposition trace primitive. Do not dispatch a new Qwen unusual intervention without a canonical atomic lease.",
+  "evidence_boundary": "Source inspection, authority/fusion analysis, and current-facing reentry only. No runtime invocation, provider call, unusual experiment, model execution, training, canonical state promotion, or real effect was performed by this organ."
+}

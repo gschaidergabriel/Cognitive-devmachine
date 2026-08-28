@@ -1,0 +1,37 @@
+{
+  "schema": "clay-go-experiment-result/v1",
+  "trigger_key": "ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
+  "claim_path": "research_entity/continuity/go_experiment_claims/ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+  "claim_blob_sha": "15b3fcaff97a030909f5c5902d14dec846ee57b4",
+  "experiment_name": "tmux_3_6a_idempotent_diagnostic_mutation_fence",
+  "recorded_at": "2026-08-17T10:39:55Z",
+  "source_identity": {
+    "retained_pr": 611,
+    "retained_terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "predicate_basis": "patch-extracted exact PR611 allowlist predicate",
+    "canonical_main_at_claim": "97d4401ba3f2235860c27bb59c555e8f7d00d05c"
+  },
+  "execution_surface": {
+    "class": "AUTHORIZED_ISOLATED_NON_PRODUCTION_CONTROLLER",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "network_used": false,
+    "tmux_binary_executed": false,
+    "harness_sha256": "4ce554e0577cfe4d3ef4cb557f726eb7b20b3d0813665492d35c4e5867fecdb5"
+  },
+  "observed_result": {
+    "total_cases": 277,
+    "positive_controls": 19,
+    "negative_mutation_cases": 258,
+    "unexpected_acceptances": 0,
+    "unexpected_rejections": 0,
+    "classification": "PASS"
+  },
+  "falsifier": "Any materially non-exact diagnostic is accepted by the PR611 idempotent-diagnostic predicate.",
+  "falsifier_observed": false,
+  "evidence_class": "MECHANISM_SUPPORTED_MUTATION_FENCE_ONLY",
+  "whole_product_evidence_established": false,
+  "runtime_credit": "ZERO_FOR_REAL_TMUX_OCI_NATIVE_CLAUDE",
+  "durable_receipt": "the artefact/receipts/2026-08-17_GO_1736_TMUX_DIAGNOSTIC_MUTATION_FENCE_GPT56SOL.json",
+  "status": "PASS"
+}

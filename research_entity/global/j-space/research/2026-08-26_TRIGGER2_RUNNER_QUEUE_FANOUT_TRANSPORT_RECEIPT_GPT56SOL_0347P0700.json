@@ -1,0 +1,81 @@
+{
+  "schema": "CLAY_TRIGGER2_RUNNER_QUEUE_FANOUT_TRANSPORT_RECEIPT/v1",
+  "date": "2026-08-26",
+  "local_time_context": "Asia/Phnom_Penh",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "observed_supervisor_epoch": "8.81_DELTA",
+  "status": "NEGATIVE_TRANSPORT_AND_COORDINATION_EVIDENCE_NO_MODEL_NEGATIVE",
+  "source_context": {
+    "trigger2_parent_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V49_GPT56SOL.json",
+    "checkpoint_input_identity_probe": "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+    "checkpoint_candidate_registry": "research_entity/global/j-space/research/trigger2_qwen35_08b_checkpoint_candidates_v4.json",
+    "current_runtime_quiescence_frontier_receipt": "research_entity/continuity/receipts/2026-08-26_GO_RUNTIME_QUIESCENCE_FRONTIER_GPT56SOL_0344P0700.json"
+  },
+  "bounded_executor_attempt": {
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "workflow": ".github/workflows/clay-trigger2-qwen35-input-identity-v1.yml",
+    "controller_commit": "83303043831230bc9a7ddc8817eaec7e09c1a916",
+    "run_id": 32897114111,
+    "job_id": 97962221463,
+    "run_status_observed": "queued",
+    "job_status_observed": "queued",
+    "execution_observed": false,
+    "design": {
+      "source_sha_bound": "5cf690be978ee8ce98b819e6004478f39c68d6b8",
+      "sandbox": "clay-direct-dev",
+      "candidate_count": 3,
+      "candidate_ids": [
+        "QWEN35_08B_BASE",
+        "QWEN35_08B_POSTTRAINED",
+        "QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED"
+      ],
+      "provider_api_calls": false,
+      "downloads": false,
+      "concurrency_group": "clay-trigger2-qwen35-input-identity-v1",
+      "fail_closed_on_missing_local_cache_or_strace": true
+    }
+  },
+  "runner_liveness_evidence": {
+    "repository_in_progress_runs_observed": 0,
+    "previous_self_hosted_probe_run_id": 32815473976,
+    "previous_self_hosted_probe_created_at_utc": "2026-08-25T06:05:40Z",
+    "previous_self_hosted_probe_status_observed": "queued",
+    "interpretation": "The self-hosted execution transport is not currently demonstrated live. A queued state is not runtime evidence and does not distinguish runner offline from scheduling/label/backlog causes."
+  },
+  "fanout_evidence": {
+    "controller_head_sha": "83303043831230bc9a7ddc8817eaec7e09c1a916",
+    "workflow_runs_observed_for_same_head_sha": 5,
+    "intended_trigger2_runs": 1,
+    "unrelated_push_listener_runs": 4,
+    "classification": "CONTROLLER_PUSH_FANOUT_COORDINATION_HAZARD",
+    "rule": "DO_NOT_RETRY_TRIGGER2_BY_REPEATED_CONTROLLER_PUSH",
+    "note": "This is narrower than the historical issue-trigger stampede but demonstrates that a purpose-specific controller push still fans out into unrelated workflows."
+  },
+  "authority_and_quiescence_boundary": {
+    "owner_vps_sandbox_authority_documented": true,
+    "designated_sandbox": "clay-direct-dev",
+    "paid_provider_authority_from_vps_document": false,
+    "newer_runtime_quiescence_gate_observed_after_executor_dispatch": true,
+    "live_execution_policy": "FAIL_CLOSED_UNTIL_RUNTIME_QUIESCENCE_AND_EXECUTOR_LIVENESS_ARE_CURRENTLY_PROVEN",
+    "queued_trigger2_run_has_execution_credit": false
+  },
+  "hypothesis": "The self-hosted runner is offline or degraded, causing both the older liveness probe and the new Trigger-2 job to remain queued.",
+  "counterhypothesis": "The VPS and clay-direct-dev may be healthy while GitHub Actions scheduling, runner labels, repository-level queueing or another controller condition prevents job assignment.",
+  "cheapest_high_information_discriminator": "Without another repository push, use the established owner-authorized bridge to prove FreeSwarm runtime quiescence and inspect/restore runner liveness. Then re-enter current authority and dispatch at most one exact bounded Trigger-2 run through workflow_dispatch or another deduplicated non-push transport.",
+  "credits": {
+    "runtime_execution": 0,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Prove current live-host runtime quiescence and self-hosted runner liveness without another controller push. If both PASS and current authority still admits the non-provider sandbox, execute exactly one current-SHA CHECKPOINT_INPUT_IDENTITY_ABI/v1 run for BASE, POSTTRAINED and TARGET_MEASURED. Preserve zero promotion credit until receipts exist."
+}

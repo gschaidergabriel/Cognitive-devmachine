@@ -1,0 +1,83 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:34+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_basis": "d1b14548b94b0fd0a7e9a635303714c32e5c5a64",
+  "frontier": "Current main attests the complete tmux transport-only v3 policy, but an already-running per-user tmux server is not re-sourced with the current immutable policy before attach; has-session and new-session control calls are also unbounded.",
+  "fusion": {
+    "current_main": "preserve merged PR #569 direct multi-argv launch + immutable managed policy and merged PR #571 v3 full transport attestation",
+    "donor_pr_528": "reapply managed tmux policy to persistent and newly-created servers before admission",
+    "donor_pr_567": "bound has-session/source-file/new-session control operations and translate timeout/OSError fail closed",
+    "canonical_path": "single TerminalSessionManager path; no second terminal or effect authority"
+  },
+  "exact_source_identity": {
+    "predecessor_terminal_sessions_git_blob": "f1a62169f9f181abfdd503fdcd77714c127d6382",
+    "predecessor_reconstruction_git_blob": "f1a62169f9f181abfdd503fdcd77714c127d6382",
+    "candidate_terminal_sessions_git_blob": "185a748f80011b324b2c4786644ad42ff369203e",
+    "candidate_terminal_sessions_sha256": "a194d61de582168595420a380b33ef226e3f14c7dcabd2a1d05b1ff21e738773",
+    "focused_test_git_blob": "51ffb18b701a6e0bf0d4c18d37dfc185ddc343d3",
+    "focused_test_sha256": "9a823dfba158ae526be204392486a37f486f0f8f4e94bd4705a492ccbc17099f",
+    "managed_tmux_v3_git_blob": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d"
+  },
+  "delta": [
+    "centralize existing policy-attestation timeout into TMUX_CONTROL_TIMEOUT_SECONDS=2.0",
+    "bound has-session and fail closed on OSError/TimeoutExpired",
+    "source the immutable current v3 managed tmux policy into an already-running user server before attestation/return",
+    "bound source-file and fail closed on OSError/TimeoutExpired/non-zero status",
+    "preserve current direct multi-argv env -i Claude launch while bounding new-session",
+    "after successful new-session, source the current v3 policy and then attest the full live transport surface before admission"
+  ],
+  "ordinary_isolated_source_regression": {
+    "surface": "OpenAI isolated non-production container source slice",
+    "network_used": false,
+    "predecessor_byte_binding": "reverse-reconstructed current predecessor hashes exactly to GitHub blob f1a62169f9f181abfdd503fdcd77714c127d6382",
+    "commands": [
+      "python -m py_compile clayverse/terminal_sessions.py",
+      "PYTHONPATH=. pytest -q tests/test_terminal_tmux_control_timeouts.py"
+    ],
+    "observed": [
+      "py_compile PASS",
+      "6 passed in 0.03s"
+    ],
+    "covered": [
+      "bounded has-session healthy path",
+      "has-session timeout fail closed",
+      "existing-session enforce then attest order",
+      "source-file timeout fail closed",
+      "new-session preserves direct argv then enforce+attest",
+      "new-session timeout prevents policy/PTY admission continuation"
+    ],
+    "real_tmux_binary_executed": false,
+    "real_claude_executed": false,
+    "real_clerk_browser_ws_executed": false,
+    "exact_oci_executed": false,
+    "classification": "EXACT_CURRENT_SOURCE_DERIVED_MECHANISM_PASS_NOT_REAL_TMUX_OR_OCI"
+  },
+  "counterhypothesis": "The exact packaged tmux runtime may apply source-file or control timeouts differently under resource pressure; the fixed 2-second bound may be too strict or too loose; this delta also does not prove the forked attach-session client cannot wedge after admission.",
+  "next_runtime_falsifier": "On the first actually-started authorized Vercel or Daytona isolated runtime with real tmux and exact then-current source/image, keep a pre-policy server alive across the upgrade, require source-file to install v3 before full attestation, force slow has-session/source-file/new-session and require fail-closed behavior without PTY admission, then prove healthy attach remains functional; continue into exact OCI build/start/readiness/restart/concurrency gates.",
+  "execution_admission": {
+    "vercel": "FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_ACTIVE_BEFORE_NEW_SANDBOX_START",
+    "daytona": "AUTHORIZED_FALLBACK; LAST CURRENT ORCHESTRATION PATH DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "runtime_credit": 0,
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN"
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "shared exact-go trigger metadata provides minute precision only and no immutable shared request/turn identifier; no seconds were invented"
+  },
+  "claims": {
+    "source_mechanism_supported": true,
+    "real_tmux_runtime_verified": false,
+    "exact_oci_verified": false,
+    "whole_clayverse_pass": false
+  }
+}

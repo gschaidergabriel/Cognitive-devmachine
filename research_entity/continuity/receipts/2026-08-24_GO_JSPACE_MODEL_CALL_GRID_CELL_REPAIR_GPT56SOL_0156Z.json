@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_ENTITYOS_HCU_GO_JSPACE_MODEL_CALL_GRID_CELL_REPAIR/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_before_receipt": "e7e597cf749ba1c890be2329efaa756869d0ceb4",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_available": false,
+    "canonical_atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed_by_this_organ": false,
+    "classification": "SOURCE_REPAIR_PLUS_DETERMINISTIC_REGRESSION_AND_EXECUTOR_FUSION",
+    "note": "Supervisor 8.63 leaves unusual interventions coordination-blocked without an atomic lease; this work repaired and regressed an already-identified causal-binding seam only."
+  },
+  "mechanism_finding": {
+    "retained_donor_pr": 1263,
+    "finding": "J-Space inference binding v2 validated the exact GRID10 plan, single model cell and role, but model_call_id was previously accepted as arbitrary nonempty text and therefore did not itself bind the output-producing call to that exact plan/cell/role identity.",
+    "counterexample_class": "MODEL_CALL_ID_RELABEL_TO_OTHER_GRID_CELL",
+    "repair_contract": "model_call_id MUST equal grid10:<plan_sha256>:<cell_id>:<role> after the exact single-model-cell and role checks."
+  },
+  "donor_delta": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "repair_commit": "c60d5441ebab030703489a0ddcb577f4fb404c87",
+    "binder_blob": "9830a6833922b05d84e2863bfbdfb8dfff2c06cf",
+    "focused_regression_commit": "da5bf06f909242cea9f97923ce2d5ee24ea166f9",
+    "legacy_fixture_alignment_commit": "da3ced824196933101f3549040f6680edbe7a8b9",
+    "observed_pr_head_after_parallel_fusion": "bac97195420f7789769150b4b8124c8246c53690",
+    "classification": "SOURCE_MECHANISM_CANDIDATE_UNTIL_BOUND_EXECUTION"
+  },
+  "single_executor_fusion": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "exact_entry_jcs_blob": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "exact_grid10_scheduler_blob": "22d7407dd87b38f9ae53c2ef8bdff3383110875c",
+    "exact_repaired_binder_blob": "9830a6833922b05d84e2863bfbdfb8dfff2c06cf",
+    "deterministic_regression_blob": "2a9cba2c9d25ecc40acc7f891c4b44de9b529456",
+    "handler_blob_observed_at_d595": "6f51d5eb4c27fda8049fb9964469943abcad3a49",
+    "deterministic_markers": [
+      "BINDER_V2_BASELINE=PASS",
+      "EXACT_GRID10_PLAN_CELL_TYPES=PASS",
+      "BINDER_V2_MODEL_CALL_GRID_CELL_FAIL_CLOSED=PASS",
+      "BINDER_V2_MULTILANE_FAIL_CLOSED=PASS",
+      "BINDER_V2_RECEIPT_DIGEST_FAIL_CLOSED=PASS",
+      "BINDER_V2_GRID_DIGEST_FAIL_CLOSED=PASS",
+      "BINDER_V2_ROLE_LANE_FAIL_CLOSED=PASS",
+      "BINDER_V2_DETERMINISTIC_REGRESSIONS=6_OF_6_PASS"
+    ],
+    "unusual_experiment_count_added": 0
+  },
+  "runtime_observation": {
+    "deployment_id": "dpl_7Le8masacNa2Ga9FdKSPjAUXoRy9",
+    "deployment_commit": "d595a19ea323f14ca09d8d717f5b5cf770508db7",
+    "deployment_state": "READY",
+    "route": "GET /api/hcu-jspace-binding-v2-capsule",
+    "vercel_runtime_log_observations": [
+      "2026-08-23T18:56:19Z HTTP_200 CACHE_MISS SERVERLESS",
+      "2026-08-23T18:56:48Z HTTP_200 CACHE_MISS SERVERLESS"
+    ],
+    "handler_semantics": "HTTP 200 is returned only when closurePassed is true and sandbox cleanup succeeded; closurePassed requires subprocess exit 0 and all deterministic expected markers.",
+    "this_organ_direct_fetch": "HTTP_302_VERCEL_SSO_BEFORE_FUNCTION",
+    "response_body_captured_by_this_organ": false,
+    "sandbox_id_captured_by_this_organ": false,
+    "result_log_sha256_captured_by_this_organ": false,
+    "interpretation": "Exact deployment execution reached the function successfully according to runtime logs, but this organ did not capture the response body. Therefore the repaired 6/6 path is mechanism-runtime-supported by exact handler control flow, while the stronger immutable exact-result receipt remains incomplete.",
+    "test_failure": false
+  },
+  "prior_bounded_runtime_evidence": {
+    "entry_canonicalization_manifest_v2": "7_OF_7_PASS_SECRET_FENCE_PASS_CLEANUP_PASS",
+    "older_jspace_binder_v2_component_replication": "5_OF_5_PASS_ON_OLDER_BINDER_WITH_BOUNDED_GRID_DATACLASS_DOUBLES",
+    "credit_warning": "Neither prior component pass nor the current HTTP-200 control-flow evidence implies full HCU, model, training, or whole EntityOS PASS."
+  },
+  "credit": {
+    "source_mechanism_delta": "SUPPORTED",
+    "exact_deployment_function_execution": "OBSERVED_HTTP_200",
+    "immutable_exact_result_body_receipt": "INCOMPLETE",
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Capture the protected-preview response body for the exact repaired binder + exact GRID10 capsule without weakening Vercel protection, binding sandbox id, source manifest, exit code, result digest, secret fence and cleanup. Then extend the same single executor to real Typed Entry -> route -> verified engine-load consumption -> inference receipt -> GRID10 -> Global J-Space/GWT causal closure."
+}

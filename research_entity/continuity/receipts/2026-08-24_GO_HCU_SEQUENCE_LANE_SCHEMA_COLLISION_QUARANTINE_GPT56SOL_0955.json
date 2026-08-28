@@ -1,0 +1,60 @@
+{
+  "schema": "ENTITYOS_HCU_GO_SEQUENCE_LANE_SCHEMA_COLLISION_QUARANTINE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "8.63",
+    "mode": "FREE_ONLY",
+    "research_main_observed_before_write": "6d7bef97dd13692c59bb6bdf8238e3d7d9173de4"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions": 0
+  },
+  "donor_observation": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "observed_head": "9fac7979adb2e15034b029f347f86ff20fa0d546",
+    "provider_a": "the artefact/MicroEntity/hcu/executor_sequence_lane_binding_v1.py",
+    "provider_b": "the artefact/MicroEntity/hcu/executor_sequence_lane_v1.py",
+    "colliding_schema": "HCU_EXECUTOR_SEQUENCE_LANE_BINDING/v1",
+    "provider_a_and_b_have_distinct_record_shapes": true,
+    "hcu_data_index_path": "the artefact/MicroEntity/hcu/HCU_DATA_INDEX.json",
+    "hcu_data_index_schema_observed": "HCU_DATA_INDEX/v15",
+    "neither_colliding_provider_selected_as_current_release_path_in_observed_index": true
+  },
+  "hypothesis": "Multiple source modules may safely emit the same HCU_EXECUTOR_SEQUENCE_LANE_BINDING/v1 schema while convergence is in progress.",
+  "counterhypothesis": "Two structurally different producers for the same schema create ambiguous decoding, validation and authority semantics and therefore cannot both be promoted as current HCU sequence-lane authority.",
+  "discriminator": "Compare the exact schema constants and dataclass/material fields of the two observed providers, then check whether canonical HCU_DATA_INDEX/v15 selects one of them as the current release authority.",
+  "result": "COUNTERHYPOTHESIS_SUPPORTED",
+  "quarantine": {
+    "rule": "Until one successor is explicitly selected and the other is removed/superseded or renamed to a non-colliding schema, HCU_EXECUTOR_SEQUENCE_LANE_BINDING/v1 receives no current release-authority credit from these donor files.",
+    "current_safe_state": "SOURCE_DONOR_QUARANTINE_ONLY",
+    "runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "related_upstream_gate": {
+    "stream_authority": "NOT_ESTABLISHED",
+    "cross_event_lane_use": "PROJECTION_ONLY",
+    "reason": "Typed Entry stream_id is hash-bound but not yet independently admitted against a canonical external stream authority. Schema convergence must not bypass that trust-boundary fence."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_CONVERGENCE_FENCE: prevented unindexed duplicate sequence-lane donor producers from being mistaken for executable/current EntityOS authority while runtime remains FREE_ONLY blocked at the existing exact executor gates.",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_SCHEMA_AUTHORITY_QUARANTINE: same-schema structurally distinct sequence-lane producers are fenced; independent stream admission remains required before cross-event lane promotion.",
+    "track_c_global_jspace_gwt_training_readiness": "ADVANCED_BY_CAUSAL_SCHEMA_FENCE: recurrent t->t+1 labels cannot inherit authority from an ambiguous sequence-lane schema provider; J-Space model/training credit remains zero."
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving shared current-facing surface under parallel writes; this append-only narrow collision receipt avoids clobbering fresher whole-system state."
+  },
+  "next_exact_action": "In retained PR1263, explicitly select one successor sequence-lane source/schema after the independent stream-authority repair, update HCU_DATA_INDEX/PACKAGE_MANIFEST successor-dynamically, remove or rename the competing same-schema provider, and add a regression that fails when more than one current provider claims HCU_EXECUTOR_SEQUENCE_LANE_BINDING/v1. Only then compose that authority-backed lane with the single retained preinvocation control store and later actual executor-owned adjacency."
+}

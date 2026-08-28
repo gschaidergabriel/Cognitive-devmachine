@@ -1,0 +1,70 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "mode": "FREE_ONLY",
+  "canonical_main_before_receipt": "9fd1c8fd6b74450d3aeebf95268628f1109ec6b0",
+  "writes": {
+    "promoter_workflow_context_binding_commit": "d78b1f67f1d99aedbc1ff4b3c37c19b758f71823",
+    "promotion_regression_definition_commit": "0b65e63ff5d1835be613084c76e8a30ac914cd95",
+    "workflow_publication_binding_commit": "9fd1c8fd6b74450d3aeebf95268628f1109ec6b0",
+    "corrected_flawed_unmerged_prs": [1696, 1705]
+  },
+  "observed": [
+    "The canonical Forge runtime workflow performs live Distillery promotion from a freshly generated /tmp gate witness before publishing its sanitized repository receipt.",
+    "Therefore a precondition that the gate witness already be tracked at HEAD is self-blocking and was rejected after exact-current workflow inspection; PRs 1696 and 1705 were closed unmerged.",
+    "The exact-current runtime witness emits source_tree derived from the requested source commit, so source-tree binding is an existing executable identity rather than a newly invented metadata field.",
+    "The corrected promoter now requires exact GitHub Actions run id, allowed event class, canonical-main source selection, execution source SHA and execution source tree before any live Distillery write through its CLI path.",
+    "The corrected promoter records SHA-256 over the exact pre-publication gate witness bytes in its live-promotion output.",
+    "The corrected workflow publisher independently hashes those same raw gate bytes and refuses publication of a PASS promotion when run id, event, source SHA, source tree, source selection or gate-byte SHA-256 diverges.",
+    "No research_entity/runtime/go871_forge_distillery_results directory was present on final read and no selfhosted_health/OBSERVER_LATEST.json was present on final read; no terminal runtime evidence was therefore observed."
+  ],
+  "hypothesis": "Binding the live mutation to workflow-minted execution context before the DB write and then binding the repository publication to the exact promoted gate-byte digest closes the provenance gap without invalidating the canonical pre-publication /tmp execution design.",
+  "counterhypothesis": "Requiring repository tracking before promotion appears stronger, but is causally misordered because repository publication intentionally occurs after live promotion; that design would convert every legitimate current workflow run into a false negative.",
+  "discriminator": "Observe a terminal repository-bound result from the workflow revision containing commits d78b1f67, 0b65e63f and 9fd1c8fd. Require exact run/event/source SHA/source tree/source-selection equality, pre_publish_gate_sha256 == nested live_distillery_promotion.gate_result_sha256, disposable gate PASS, live promotion PASS, one positive-token first promotion or exact same-digest idempotence, and replay packet/token delta zero.",
+  "go_tracks": {
+    "track_a": {
+      "status": "ADVANCED_SOURCE_AND_EFFECT_PROVENANCE_RUNTIME_PENDING",
+      "delta": "Closed the pre-publication live-Distillery provenance gap with exact workflow-context and gate-byte digest binding while preserving the canonical /tmp-before-publication execution order."
+    },
+    "track_b": {
+      "status": "ADVANCED_BY_CAUSAL_PROVENANCE_BOUNDARY",
+      "delta": "Strengthened the execution-to-dataset causal identity chain at run/event/source-SHA/source-tree/byte-digest scope without introducing a second HCU, state store, Forge ledger or effect authority. No duplicate HCU semantic implementation lane was opened."
+    },
+    "track_c": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "Dataset admission provenance is stronger, but no lease-admitted model-specific J-Space runtime receipt was observed and this organ has no reproducible shared immutable macrocycle/request identity for an unusual Trigger1 intervention.",
+      "next_discriminator": "Keep Trigger1 unusual intervention atomic-lease blocked until a reproducible canonical trigger identity and create-only claim exist; then require the current six controls plus label-independence, modality, wrong-layer and lesion/rescue conditions."
+    }
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_request_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "execution_evidence": {
+    "source_and_regression_definitions": "COMMITTED",
+    "exact_current_promotion_test_execution": "NOT_OBSERVED",
+    "terminal_forge_live_promotion_receipt": "NOT_OBSERVED",
+    "selfhosted_health_observer_receipt": "NOT_OBSERVED",
+    "provider_calls_from_this_organ": 0,
+    "paid_fallback_attempts_from_this_organ": 0,
+    "together_calls_from_this_organ": 0
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Do not create another duplicate runtime request. Consume the next terminal repository-bound current Forge workflow result and/or self-hosted health observer. Promote only the exact measured scope if the workflow-context/hash chain and 1 -> 1 -> positive tokens -> replay +0 witness all pass; otherwise repair only the measured blocker."
+}

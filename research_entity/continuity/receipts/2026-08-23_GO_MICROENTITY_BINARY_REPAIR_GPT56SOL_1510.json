@@ -1,0 +1,84 @@
+{
+  "schema": "MICROENTITY_PACKAGE_BINARY_REPAIR_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT package-repair organ",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "source_commit": "31b8edecc06af26653961ba097a9b7cb60fcb721",
+  "source_tree": "222da7ec9a6b3a74981fce6ec946c374afadae33",
+  "source_continuity": {
+    "microentity_source_base": "25a8cd0d5009933c5735786df0afbfea3ac48c0a",
+    "compare_to_source_commit": "23 commits ahead; no archive member path changed",
+    "manifest_blob": "1f592c019b0961b51d9827a7fa72a5110fc36bec"
+  },
+  "archive": {
+    "path": "the artefact/MicroEntity/MICROENTITY_CURRENT.zip",
+    "member_count": 12,
+    "member_order": [
+      "CURRENT_PRODUCT_CONSOLIDATED.md",
+      "PACKAGE_MANIFEST.json",
+      "README.md",
+      "ZERO_LINK.md",
+      "hcu/README.md",
+      "hcu/HCU_ARCHITECTURE.md",
+      "hcu/topology.kvm4.json",
+      "hcu/FREE_LLM_FEED_CONTRACT.json",
+      "hcu/HCU_DATA_INDEX.json",
+      "hcu/capacity_guard_v1.py",
+      "hcu/test_capacity_guard_v1.py",
+      "hcu/receipts/2026-08-23_GO_HCU_CAPACITY_GUARD_GPT56SOL.json"
+    ],
+    "size_bytes": 19256,
+    "sha256": "da1e374f9bf55fbe0e59b160c447f79358de4f64d742fe76291dc90b159fc637",
+    "git_blob_sha": "12c2c53eeb72ea6075aa9dc09ca888341f008feb",
+    "crc_test": "PASS",
+    "member_order_test": "PASS",
+    "byte_equality_to_versioned_sources": "PASS_12_OF_12",
+    "determinism_profile": {
+      "format": "ZIP_DEFLATED",
+      "compresslevel": 9,
+      "timestamp": "2026-08-23T00:00:00",
+      "external_mode": "0100644"
+    },
+    "prior_documented_local_sha256": "6aa96f23c1d0874b8cc2c6012a5bad3a59a5428af7660e184cf91d47db968bf0",
+    "prior_sha_match": false,
+    "prior_sha_mismatch_classification": "CONTAINER_COMPRESSION_METADATA_IMPLEMENTATION_DIFFERENCE_POSSIBLE; NOT USED AS SOURCE-EQUALITY AUTHORITY"
+  },
+  "exact_member_git_blobs": {
+    "CURRENT_PRODUCT_CONSOLIDATED.md": "9e859009571c3d51ff904413cd51e6da491ec7c5",
+    "README.md": "0848cdbc48c9d2b650ce6fe9e0bdf23abfb16165",
+    "ZERO_LINK.md": "cb81c858aeb9f36c51ca5230e61f93c14efab24c",
+    "PACKAGE_MANIFEST.json": "1f592c019b0961b51d9827a7fa72a5110fc36bec",
+    "hcu/README.md": "622d9f89c57b0eeb5b8023a876cd844cf11babd3",
+    "hcu/HCU_ARCHITECTURE.md": "c57317279954668c9096d82f5f19f0fa35a6336c",
+    "hcu/topology.kvm4.json": "bf1e1929b03c616aee968e4252acad222dbf9e3c",
+    "hcu/FREE_LLM_FEED_CONTRACT.json": "1378769f6fd2eaa0f68739ec756e2d7bd4532215",
+    "hcu/HCU_DATA_INDEX.json": "5066fc8b001bbbe73a926723a196252a38fcd35f",
+    "hcu/capacity_guard_v1.py": "a17ebcc0717f4b186bdbdb11fd3ab4c94d7d81af",
+    "hcu/test_capacity_guard_v1.py": "f828126a207783028c1fba6250ebf2f90230cac3",
+    "hcu/receipts/2026-08-23_GO_HCU_CAPACITY_GUARD_GPT56SOL.json": "3c5b364bc50076799ba6434d4e740398c283e667"
+  },
+  "unusual_experiment": {
+    "macrocycle_id": null,
+    "local_intervention_count": 1,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "id": "MICROENTITY_ZIP_PREFIX_TRUNCATION_POISON",
+    "intervention": "truncate the exact rebuilt archive to 7515 bytes, matching the known defective artifact size",
+    "observed": "zipfile.BadZipFile: File is not a zip file",
+    "purpose": "falsify acceptance of a plausible-looking prefix/truncated binary"
+  },
+  "credit": {
+    "artifact_integrity": "SUPPORTED_AT_EXACT_RECONSTRUCTED_BYTES",
+    "runtime": 0,
+    "bundled_08b": 0,
+    "hcu_capacity": 0,
+    "jspace_gwt": 0,
+    "whole_mini_entity": 0
+  },
+  "policy": {
+    "vps_test": false,
+    "paid_provider_execution": false,
+    "together_execution": false
+  },
+  "next_gate": "Commit the exact ZIP Git blob on a fresh branch from current main, re-fetch by GitHub blob SHA, verify size/SHA256/member/order/CRC/source-byte equality, then merge artifact-only repair."
+}

@@ -1,0 +1,62 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:38:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "CONTRADICTS_SUPERSEDES_TIER2_SNAPSHOT_DELETE_SURVIVAL_INFERENCE",
+  "canonical_main_observed_before_write": "9f82d363236e930242c998b4aeeeee053d803c47",
+  "immutable_runtime_freeze": {
+    "pull_request": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "superseded_inference": {
+    "receipt_commit": "9f82d363236e930242c998b4aeeeee053d803c47",
+    "claim": "A manual Vercel Sandbox snapshot survives deletion of the named source sandbox and is therefore an admissible independent Tier-2 durable carrier candidate.",
+    "reason_rejected": "Separate Snapshot.get/delete APIs and the ability to create multiple sandboxes from a snapshot do not establish non-cascading sandbox deletion. Current first-party lifecycle documentation explicitly states the opposite."
+  },
+  "primary_source_adjudication": {
+    "current_vercel_sandbox_repo_skill": "The current official vercel/sandbox repository skill states that Sandbox.delete permanently removes a sandbox and all its snapshots, and the CLI remove command likewise deletes the sandbox and all its snapshots.",
+    "current_vercel_drives_guide": "Vercel's June 29 2026 Drives guide states that snapshots belong to the sandbox that produced them, deleting that sandbox also deletes its snapshots, while Drives have an independent lifecycle.",
+    "older_snapshot_docs": "The January 30 2026 snapshot page documents snapshot creation, reuse, lookup and separate deletion but does not say a snapshot survives deletion of its owning sandbox.",
+    "evidence_precedence": "Use the explicit current lifecycle statements over an inference from API shape. Runtime can detect provider drift, but source acceptance must not deliberately depend on behavior contradicted by current provider contract."
+  },
+  "controller_observation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "latest_observed_head_before_this_receipt": "54a3a9dd3d6e652a83bf9dad52b37d98f9aced79",
+    "current_tier2_sequence": "source.snapshot -> source.delete -> Sandbox.create(source snapshotId, persistent:false)",
+    "classification": "SOURCE_CONTRACT_CONTRADICTED_FAIL_CLOSED_REQUIRED",
+    "runtime_credit": 0
+  },
+  "tier1": {
+    "source_delta_observed": "PR810 now contains an interrupted no-effect canonical turn recovery discriminator requiring one abort/re-entry, one generation advance, preservation of the prior VERIFIED entityos.exec effect and no effect replay.",
+    "runtime_credit": 0
+  },
+  "carrier_frontier": {
+    "vercel_drive": "LIFECYCLE_FIT_BUT_PRIVATE_BETA_ACCESS_AND_OWNER_ADMISSION_NOT_PROVEN",
+    "separate_storage_only_persistent_sandbox": "GENERATED_CANDIDATE_OUTSIDE_SOURCE_SANDBOX_LIFECYCLE; requires bounded chunk/integrity transfer, cleanup and authorization/cost adjudication",
+    "manual_source_snapshot": "REJECTED_BY_CURRENT_PROVIDER_LIFECYCLE_CONTRACT_FOR_POST_DELETE_TRANSFER"
+  },
+  "write_evidence": {
+    "attempted_pr810_guard_patch": "NOT_COMMITTED; GitHub contents write and later commit creation both returned connector 502 before confirmed commit",
+    "prepared_guard_tree_sha": "e43f2b8f0926ca4346719c7505f6060374041621",
+    "prepared_guard_blob_sha": "15d7f225cbf8898853437b8ec393ad8bad4f8ba8",
+    "branch_ref_moved": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "Shared go unusual-experiment slot was already consumed; this was primary-source adjudication and normal source hardening only."
+  },
+  "epistemic_status": {
+    "source_contract_contradiction_verified": true,
+    "exact_pr810_runtime_verified": false,
+    "tier2_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Keep PR686 immutable at 9dd7da1c/47c09ff6. In the single retained PR810 path, remove or fail-close the sandbox-owned snapshot-after-delete transport and bind an explicitly admitted independent durable carrier before source deletion. Then run current source guards and the exact isolated Tier1/Tier2 acceptance sequence; no runtime or whole-product credit before that evidence."
+}

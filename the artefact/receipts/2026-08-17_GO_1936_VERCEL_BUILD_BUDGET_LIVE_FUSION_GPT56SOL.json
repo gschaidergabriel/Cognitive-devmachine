@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "recorded_at": "2026-08-17T19:36:06+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT connected GitHub+Vercel organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "ac29b2d6b506583b5d523e18cad920d9ab039f78",
+  "classification": "REFINES",
+  "product_bytes_delta": "NO_CHANGE",
+  "research_delta": "VERCEL_BUILD_GLOBAL_BUDGET_AUDIT_PLUS_LIVE_PR622_PR810_REJOIN",
+  "live_fusion": {
+    "pr622": {
+      "role": "single retained Python hash-lock generator lane",
+      "current_head_observed": "44ec5e109d40304b152c2fa05ba3e42e690f2820",
+      "state": "DRAFT_SOURCE_CANDIDATE_UNEXECUTED",
+      "delta": "complete declared eight-package Linux/Python-3.13 pip-tools bootstrap wheel set source-hashed; hash-checked download followed by offline --no-index --require-hashes install; deterministic double product-lock compilation remains an execution gate"
+    },
+    "pr810": {
+      "role": "single retained OCI/Vercel controller",
+      "current_head_observed": "78d92753d9442c66c3ffcff127c31faa98ffd622",
+      "target_patch_schema": "ClayVerseCurrentTargetPatch/v6",
+      "provider_identity_contract": "sandbox.name plus sandbox.currentSession().sessionId fail-closed",
+      "runtime_credit": 0,
+      "retriggered": false
+    },
+    "prepared_oci_closure": {
+      "commit": "218b51cad87e3907d1dd45adc7998c736be23cdb",
+      "tree": "f16c87737cf74ef0703a1fc0a51fd99298450cd1",
+      "status": "STALE_FOR_NEXT_COMPUTE_AFTER_PR622_ADVANCED"
+    }
+  },
+  "vercel_budget_audit": {
+    "retained_runner_blob": "1298ca8002704414f86cd0c036d44e5b32be2918",
+    "explicit_sequential_step_timeouts_ms": [120000, 120000, 180000, 180000, 420000, 120000, 360000, 90000, 480000, 120000, 120000, 180000],
+    "explicit_step_timeout_sum_ms": 2490000,
+    "wrapper_declared_explicit_step_ceiling_ms": 2490000,
+    "sandbox_timeout_ms": 2700000,
+    "nominal_non_step_margin_ms": 210000,
+    "vercel_build_step_max_ms": 2700000,
+    "external_primary_evidence_observed": "Current Vercel limits documentation states the Build Step maximum is 45 minutes; current Sandbox documentation states timeout governs one uninterrupted session and Hobby Sandbox maximum is 45 minutes while Pro/Enterprise can be longer.",
+    "result": "NO_STATIC_UNDERFLOW_FOUND_BUT_GLOBAL_BUILD_MARGIN_IS_TIGHT_AND_UNEXECUTED",
+    "counterhypothesis": "Even when every individual command stays within its local timeout, private archive fetch/verification, filesystem transfer, controller work, npm/build setup and other non-step overhead could consume the remaining 210 seconds and cause the Vercel Build Step to terminate before the admitted batch completes.",
+    "next_falsifier": "On the first approved credential-capable exact run, capture monotonic elapsed/remaining-budget evidence across source staging, every Sandbox step and final cleanup. Do not interpret a Build-Step timeout as a ClayVerse semantic test failure. If measured overhead makes the envelope unsafe, harden orchestration before retrying rather than increasing timeout beyond the platform build limit."
+  },
+  "strongest_executable_evidence": {
+    "deployment": "dpl_7BkVnngPJUPiVyrqwFarGFZDevAG",
+    "sandbox_admission": "PASS_CREATED",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "classification": "CREDENTIAL_PREREQUISITE_NOT_TEST_FAIL"
+  },
+  "primary_blocker": "GITHUB_READ_TOKEN remains absent from the approved sensitive Vercel Preview host build environment; the connected Vercel surface exposes no secret/environment write action. The token must remain host-side and must not be forwarded into Sandbox.",
+  "action": "No PR810 source commit or retry-only deployment was created. Adopt current PR622/PR810 source candidates, refresh/rebind the single controller once only after approved credential provisioning, and include elapsed-budget observation in that exact run.",
+  "unusual_experiment": {
+    "executed": false,
+    "valid_credit": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No safely shared immutable request/turn identity is available for the atomic one-experiment lease."
+  },
+  "security": {
+    "secret_exposed": false,
+    "vps_used": false,
+    "self_hosted_or_production_test_used": false,
+    "together_used": false,
+    "paid_or_final_training_started": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

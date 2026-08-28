@@ -1,0 +1,283 @@
+{
+  "schema": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1",
+  "status": "CURRENT_OWNER_ALIGNED_SOURCE_CONTRACT_NOT_RUNTIME_CREDIT",
+  "authority": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "base_main_sha": "08ac607b528257a2ffaac49387f3277479cb9e61",
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "owner_target": "VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "priority_chain": [
+      "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS",
+      "COGNITIVE_PROCESS_ABI",
+      "DB_VS_SIMULATION_BOUNDARY",
+      "VARIABLE_GRID_RUNTIME",
+      "CLAYCODE_COGNITIVE_PROTOCOL",
+      "GLOBAL_WORKSPACE",
+      "CLAUDE_CODE_BRIDGE",
+      "GLOBAL_JSPACE_REENTRY_EVIDENCE",
+      "END_TO_END_ZERO_EQUIVALENCE",
+      "VPS_SCALE_TESTS_N_VARIABLE",
+      "FINISHED_MODULE"
+    ]
+  },
+  "laws": {
+    "process_identity": "FUNCTION_STABLE_NOT_NODE_PERSONALITY_STABLE",
+    "grid_size": "N_IS_RUNTIME_PARAMETER_GRID10_ONLY_OPTIONAL_BENCHMARK",
+    "durability": "SIMULATE_COGNITION_STORE_DURABLE_DATA",
+    "truth": "MODEL_GRID_WORKSPACE_JSPACE_OUTPUTS_ARE_CANDIDATE_PROJECTION_MEASUREMENT_ONLY",
+    "effects": "EFFECTGATE_EFFECTJOURNAL_SOLE_REAL_EFFECT_AUTHORITY",
+    "claude_code": "STRONG_MODEL_TOOL_CODE_PARTNER_NOT_REPLACED_BY_SMALL_GRID",
+    "jspace": "CLAIMS_BOUNDED_TO_STRONGEST_ACTUALLY_EXPOSED_CAUSAL_INTERFACE",
+    "training": "QWEN3_5_08B_CLASS_LOW_REFUSAL_PATH_REQUIRES_CAPABILITY_RETENTION_EVIDENCE"
+  },
+  "acceptance_dimensions": {
+    "1": "variable_grid_reproduces_required_zero_entityos_cognitive_loop",
+    "2": "module_count_varies_without_changing_process_identity",
+    "3": "durable_non_simulatable_data_lives_in_database",
+    "4": "grid_uses_database_state_without_confusing_fact_and_hypothesis",
+    "5": "claude_code_remains_strong_model_tool_code_partner",
+    "6": "grid_claude_code_communication_is_compact_reliable_measurably_useful",
+    "7": "shared_workspace_supports_causal_reentry_at_strongest_exposed_interface",
+    "8": "global_jspace_claims_do_not_exceed_exposed_interface_evidence",
+    "9": "end_to_end_agent_loop_no_longer_requires_old_monolithic_cognitive_stack",
+    "10": "small_module_specialization_low_refusal_retains_required_cognition"
+  },
+  "implementation_classes": {
+    "SIMULATE_ON_GRID": "cognitive function executed by one or more interchangeable small-model modules",
+    "STORE_IN_DB": "durable exact queryable state is canonical outside simulation",
+    "DETERMINISTIC_BOUNDARY": "non-model authority/control logic; may route/admit/commit but does not become a cognitive agent",
+    "EXTERNAL_STRONG_MODEL_BRIDGE": "observable bridge to Claude Code strong-model/tool/code surface",
+    "OPTIONAL_CAUSAL_RESEARCH": "model-specific causal research path; absence or uncertainty yields no claim"
+  },
+  "processes": [
+    {
+      "id": "ZECP01",
+      "name": "TASK_CONTEXT_ADMISSION",
+      "implementation_class": "DETERMINISTIC_BOUNDARY",
+      "role": "Admit user/environment/autonomous input into replay-stable causal task/context identity before cognition.",
+      "inputs": ["task_payload", "source_provenance", "generation", "resource_budget"],
+      "outputs": ["causal_event_id", "admission_id", "bounded_task_context"],
+      "acceptance_dimensions": [1, 4, 9],
+      "authority": "DETERMINISTIC_CONTROL_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP02",
+      "name": "DURABLE_STATE_RETRIEVAL",
+      "implementation_class": "STORE_IN_DB",
+      "role": "Retrieve exact durable memory/task/evidence/configuration state with provenance; retrieval never upgrades generated content to fact.",
+      "inputs": ["causal_event_id", "query", "database_snapshot_ref"],
+      "outputs": ["evidence_projection", "state_refs", "retrieval_receipt"],
+      "acceptance_dimensions": [3, 4],
+      "authority": "CANONICAL_STATE_READ_BOUNDARY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP03",
+      "name": "WORKING_STATE_RECONSTRUCTION",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Reconstruct current working state from admitted task plus bounded durable-state projections.",
+      "inputs": ["bounded_task_context", "evidence_projection", "workspace_state"],
+      "outputs": ["working_state_candidate", "missing_state_questions"],
+      "acceptance_dimensions": [1, 4],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP04",
+      "name": "ATTENTION_RELEVANCE_SELECTION",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Select relevant state/evidence/work units under bounded capacity without discarding unresolved alternatives as false.",
+      "inputs": ["working_state_candidate", "evidence_projection", "resource_budget"],
+      "outputs": ["attention_slice", "deferred_refs", "uncertainty_set"],
+      "acceptance_dimensions": [1, 4],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP05",
+      "name": "GOAL_STATE_MAINTENANCE",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Maintain current goals, subgoals, completion conditions and state transitions as cognitive candidates bound to durable goal/config state.",
+      "inputs": ["working_state_candidate", "durable_goals", "outcome_refs"],
+      "outputs": ["goal_state_candidate", "completion_tests"],
+      "acceptance_dimensions": [1, 3, 4],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP06",
+      "name": "PLANNING_DECOMPOSITION_REPLANNING",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Generate and revise ordered/dependency-bound cognitive work units with explicit preconditions and falsifiers.",
+      "inputs": ["goal_state_candidate", "attention_slice", "evidence_projection"],
+      "outputs": ["work_graph_candidate", "work_units", "replan_conditions"],
+      "acceptance_dimensions": [1, 9],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP07",
+      "name": "ALTERNATIVES_HYPERPOSITION",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Preserve competing hypotheses/continuations with uncertainty and discriminators; recurrence or majority cannot mint truth.",
+      "inputs": ["working_state_candidate", "evidence_projection", "work_unit"],
+      "outputs": ["alternative_set", "uncertainty_readout", "discriminator_candidates"],
+      "acceptance_dimensions": [1, 4],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP08",
+      "name": "COGNITIVE_INFERENCE",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Perform bounded small-model cognitive transforms for a typed work unit; outputs are candidates only.",
+      "inputs": ["typed_work_unit", "attention_slice", "state_refs"],
+      "outputs": ["candidate_result", "candidate_action", "confidence_readout"],
+      "acceptance_dimensions": [1, 10],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP09",
+      "name": "SELF_EVALUATION_CONTRADICTION",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Critique candidate outputs for contradiction, evidence coverage, stale state, unsupported authority, and UNKNOWN/negative-evidence confusion.",
+      "inputs": ["candidate_result", "evidence_projection", "process_trace"],
+      "outputs": ["quality_readout", "contradiction_flags", "revision_request"],
+      "acceptance_dimensions": [1, 4, 10],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP10",
+      "name": "GLOBAL_WORKSPACE_COMPETITION_BROADCAST_REENTRY",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Compete/select/broadcast cognitive content and causally re-enter selected state across modules without creating canonical truth.",
+      "inputs": ["candidate_results", "salience_inputs", "workspace_epoch"],
+      "outputs": ["workspace_selection", "broadcast_packet", "reentry_refs"],
+      "acceptance_dimensions": [1, 7, 9],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP11",
+      "name": "VARIABLE_GRID_ROUTING_SCHEDULING",
+      "implementation_class": "DETERMINISTIC_BOUNDARY",
+      "role": "Route typed cognitive work across runtime-variable N using capability/resource evidence; no fixed personality or node identity defines a process.",
+      "inputs": ["ready_work_units", "node_capabilities", "resource_snapshot", "policy_binding"],
+      "outputs": ["route_decisions", "executor_leases", "scheduling_receipt"],
+      "acceptance_dimensions": [1, 2, 9],
+      "authority": "DETERMINISTIC_CONTROL_ONLY",
+      "falsifier": "Fails if the process changes semantic identity solely because N or physical executor identity changes."
+    },
+    {
+      "id": "ZECP12",
+      "name": "GRID_STATE_TRANSFER_COMPRESSION",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Compress/translate reusable cognitive state for transfer across modules while preserving causal/provenance bindings and explicit loss markers.",
+      "inputs": ["workspace_selection", "state_refs", "target_budget"],
+      "outputs": ["compressed_state_packet", "loss_manifest", "reentry_binding"],
+      "acceptance_dimensions": [2, 6, 7],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP13",
+      "name": "CLAUDE_CODE_HANDOFF",
+      "implementation_class": "EXTERNAL_STRONG_MODEL_BRIDGE",
+      "role": "Prepare compact typed/structured state for Claude Code at its actually exposed interface; never claim hidden activation access.",
+      "inputs": ["typed_work_unit", "workspace_selection", "state_refs", "tool_scope"],
+      "outputs": ["claude_handoff_packet", "bridge_request_receipt"],
+      "acceptance_dimensions": [5, 6, 8],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP14",
+      "name": "CLAUDE_CODE_RESULT_RECONCILIATION",
+      "implementation_class": "EXTERNAL_STRONG_MODEL_BRIDGE",
+      "role": "Re-admit Claude Code text/tool/code/results into the shared cognitive substrate with provenance and distinguish result evidence from model assertions.",
+      "inputs": ["claude_result", "bridge_request_receipt", "tool_result_refs"],
+      "outputs": ["bridge_return_packet", "evidence_candidates", "workspace_reentry_candidate"],
+      "acceptance_dimensions": [5, 6, 7, 8],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP15",
+      "name": "MEMORY_UPDATE_PROPOSAL",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Propose durable memory/state changes from outcomes but never commit canonical state directly.",
+      "inputs": ["outcome_refs", "candidate_result", "current_state_refs"],
+      "outputs": ["state_update_proposal", "memory_update_proposal", "provenance_refs"],
+      "acceptance_dimensions": [3, 4, 9],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP16",
+      "name": "TOOL_EFFECT_PROPOSAL",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Translate selected cognitive intent into a typed effect/tool request candidate with capability/resource bounds.",
+      "inputs": ["workspace_selection", "candidate_action", "capability_view"],
+      "outputs": ["effect_request_candidate", "precondition_refs"],
+      "acceptance_dimensions": [1, 9],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP17",
+      "name": "EFFECTGATE_JOURNAL_COMMIT",
+      "implementation_class": "DETERMINISTIC_BOUNDARY",
+      "role": "Validate, execute or reject real effects through the sole deterministic effect authority; unknown outcome remains UNKNOWN and is not blindly replayed.",
+      "inputs": ["effect_request_candidate", "canonical_capability_authority", "effect_preconditions"],
+      "outputs": ["effect_receipt", "journal_entry", "verified_or_unknown_outcome"],
+      "acceptance_dimensions": [3, 4, 9],
+      "authority": "REAL_EFFECT_AUTHORITY_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP18",
+      "name": "OUTCOME_RECONCILIATION_CONTINUATION_RECOVERY",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Reconcile outcomes, decide retry/recovery/rejoin/continuation, and restore process semantics after module or grid-size changes.",
+      "inputs": ["effect_receipt", "tool_result_refs", "workspace_state", "checkpoint_refs"],
+      "outputs": ["reconciled_state_candidate", "next_work_units", "rejoin_plan"],
+      "acceptance_dimensions": [1, 2, 4, 9],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP19",
+      "name": "CLAYCODE_COGNITIVE_TRANSFORM",
+      "implementation_class": "SIMULATE_ON_GRID",
+      "role": "Represent/transform cognitive packets compactly in ClayCode-native form where useful without making representation syntax an authority.",
+      "inputs": ["typed_cognitive_packet", "transform_spec"],
+      "outputs": ["claycode_packet", "transform_receipt"],
+      "acceptance_dimensions": [1, 6, 10],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    },
+    {
+      "id": "ZECP20",
+      "name": "JSPACE_OBSERVATION_CONTROL_RESEARCH",
+      "implementation_class": "OPTIONAL_CAUSAL_RESEARCH",
+      "role": "Measure/control model-specific J-Space only at exact exposed/causally evidenced interfaces; Claude Code hidden-state access is UNKNOWN unless actually exposed.",
+      "inputs": ["exact_model_runtime_identity", "observable_bridge_state", "causal_probe_design"],
+      "outputs": ["jspace_measurement", "causal_probe_receipt", "credit_scope"],
+      "acceptance_dimensions": [7, 8, 10],
+      "authority": "CANDIDATE_ONLY",
+      "falsifier": "Fails if generated/model/workspace content is promoted to canonical fact or real effect without the deterministic authority boundary."
+    }
+  ],
+  "credit_boundary": {
+    "census_source_contract": 1,
+    "cognitive_process_abi_runtime": 0,
+    "variable_grid_runtime": 0,
+    "claude_code_bridge_runtime": 0,
+    "global_jspace_causal_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0
+  }
+}

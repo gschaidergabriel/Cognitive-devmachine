@@ -1,0 +1,62 @@
+{
+  "schema": "CLAY_FORGE_EVIDENCE_CREDIT_HARDENING_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "created_date": "2026-08-24",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "owner blocker-removal request; not exact go",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_after_writes": "3056c02a85d1ae3b82360a861d9c60feae71cb55",
+  "problem": "Forge evidence credit could rely on aggregate all_commands_admitted without proving any nonempty per-command admission decisions, and central credit did not bind execution_admission.evaluation_checkout_head to evaluation_repo_head. The exact-current synthetic Forge-to-Distillery witness also lacked these stricter producer-shaped fields.",
+  "counterhypothesis": "The live evaluator checkout may normally remain stable and the current nominal ACCEPT may still fail for another reason, so this hardening is not claimed to explain the zero-yield funnel by itself.",
+  "durable_writes": [
+    {
+      "commit": "94167db9f5021a96be4acbe9c745c1d3edf4b1dc",
+      "scope": "runtime witness producer-shaped admission",
+      "effect": "bind evaluation checkout head/tree and a nonempty admitted command decision before the stricter central guard"
+    },
+    {
+      "commit": "ebaa3cb30bdce7e886d0731ba4ad62b56cddec2c",
+      "scope": "focused negative regressions",
+      "effect": "cover missing/mismatched evaluator checkout, empty decisions, rejected decision, and positive exact row"
+    },
+    {
+      "commit": "361b9e4e13ee0e9784816d42d3d56343c8276f97",
+      "scope": "single central Forge evidence-credit discriminator",
+      "effect": "require evaluation_checkout_head == evaluation_repo_head; require nonempty decisions; reject any non-admitted decision"
+    }
+  ],
+  "parallel_fusion": {
+    "safe_wrapper_evaluator_binding_and_drift_guard": "already landed independently on current main and was not duplicated",
+    "closed_stale_prs": [1611, 1630],
+    "reason": "avoid force-merging divergent/stale authority and duplicate implementation lanes"
+  },
+  "live_funnel_observed_before_receipt": {
+    "free_swarm_tokens": 13587261,
+    "machine_readable_delta_records": 292,
+    "forge_nominal_accepted_deltas": 1,
+    "distillery_accepted_dataset_tokens": 0,
+    "distillery_accepted_packets": 0
+  },
+  "evidence_scope": "SOURCE_AND_REGRESSION_DEFINITION_ONLY_UNTIL_SELF_HOSTED_RUNTIME_RECEIPT",
+  "runtime_result_observed": false,
+  "runtime_credit": {
+    "forge_distillery_exact_current": 0,
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "external_provider_calls_by_this_work": 0,
+  "paid_fallback_attempt_count": 0,
+  "together_used": false,
+  "canonical_truth_minted": false,
+  "next_exact_gate": "Observe a repository-bound self-hosted exact-current Forge-to-Distillery result under the hardened guard. Acceptance requires one evidence-qualified Forge ACCEPT to exactly one new Distillery packet, accepted_dataset_tokens > 0, then identical replay with packet delta 0 and token delta 0. If no evidence-qualified ACCEPT exists, inspect the terminal rejection reason instead of granting credit.",
+  "notes": [
+    "Historical nominal ACCEPT remains append-only evidence but cannot mint current dataset credit without the strengthened exact evaluator/execution admission chain.",
+    "Source presence and workflow presence are not runtime execution evidence.",
+    "No model-specific J-Space or training credit follows from this repair."
+  ]
+}

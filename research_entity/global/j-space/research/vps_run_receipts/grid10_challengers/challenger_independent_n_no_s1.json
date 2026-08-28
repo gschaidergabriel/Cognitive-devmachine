@@ -1,0 +1,22 @@
+{
+  "config": "independent_n_no_s1",
+  "physical_processes": 10,
+  "wallclock_s": 41.38,
+  "total_model_generations_performed": 40,
+  "unique_task_generations_needed": 4,
+  "wasted_duplicate_generations": 36,
+  "waste_ratio": 0.9,
+  "per_process_correct_of_4": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "consistency_note": "no shared state exists to prevent it, so every node redoes every task independently -- with GRID10's claim-awareness the same 4 tasks require exactly 4 generations total, not up to 40"
+}

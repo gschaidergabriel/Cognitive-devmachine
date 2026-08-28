@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "reentry": {
+    "research_main_observed_before_receipt": "90306aa3d40fcd96d03ca4ab6995e1f4c0af1a95",
+    "retained_hcu_donor_pr": 1263,
+    "retained_executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_executor_pr": 810,
+    "retained_executor_head_before_delta": "51b0baf7cc60660ec23c26614af42a2109715849",
+    "retained_executor_commit_by_this_organ": "d2bb2812345fe1d7fe7034a9222b0db6d9932249"
+  },
+  "observation": {
+    "problem": "The quarantined PR810 route and ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v2 both encoded the required successor Research-main and donor snapshots. Because parallel work moves both repositories rapidly, the two copies can disagree even while each file is internally valid.",
+    "observed_route_required_main_before_delta": "dd8297e99cbf53afa14c0927b138cc900a72a129",
+    "observed_route_required_donor_before_delta": "1b8294d9c0d12258cffc2a8a47413a32635aeaca",
+    "observed_contract_main_before_delta": "61cc8ff449a7641fc0c6624f0f2bb81da1c8fd95",
+    "observed_contract_donor_before_delta": "57bc0acfc23bd58261746c7253529a79adc6c70a",
+    "significance": "The HTTP 409 quarantine response previously returned the route-local copy, so an otherwise correct rebind worker could be directed toward a different snapshot than the dependency contract. This is authority drift inside the single retained executor, not merely stale prose."
+  },
+  "counterhypothesis": {
+    "claim": "Duplicating successor snapshot constants in the route is harmless because SOURCE_REBIND_REQUIRED prevents execution anyway.",
+    "falsifier": "The quarantine response is itself a coordination interface: it exposes required_source_main_context and required_source_pr_commit. Divergence therefore changes which immutable bytes a worker is instructed to vendor, even though Sandbox.create remains blocked."
+  },
+  "delta": {
+    "executor_commit": "d2bb2812345fe1d7fe7034a9222b0db6d9932249",
+    "route": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js",
+    "single_target_authority": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-v4-v3-current-rebind-contract.json",
+    "behavior": [
+      "The quarantined route loads the deployment-carried rebind contract before returning its required successor identities.",
+      "The contract must match ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v2, SOURCE_REBIND_REQUIRED, SUPERVISOR_STEERING_8_63, FREE_ONLY, the Research repository, donor PR1263 and executor PR810.",
+      "Research-main and donor identities must be exact lowercase 40-hex Git commit identities.",
+      "Runtime/full-HCU/J-Space-model/training/whole-product credits in the contract must remain zero/false while quarantined.",
+      "Malformed or authority-incompatible contract data returns SOURCE_REBIND_CONTRACT_INVALID before cost admission or Sandbox.create.",
+      "The 409 response now exposes the contract schema, SHA-256 and required candidate chain together with target identities.",
+      "Legacy SUPERSEDED_BY_* names remain only as non-authoritative build-guard markers and no longer supply the required target values."
+    ],
+    "source_rebind_required": true,
+    "sandbox_create_permitted_by_this_delta": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: the single retained executor now has one fail-closed rebind target authority instead of two independently drifting target copies.",
+    "track_b_hcu_and_typed_entry_fabric": "ADVANCED: the exact Typed Entry -> route -> verified load -> GRID10 -> atomic model-execution admission target chain is now selected by one deployment-carried contract during quarantine.",
+    "track_c_global_jspace_gwt_and_training_readiness_free_only": "ADVANCED: the same single contract carries the Global J-Space/GWT -> TrainingTrace -> JSpaceBinding/v3 target and remains zero-credit until exact execution."
+  },
+  "execution_evidence": {
+    "source_write": "COMMITTED",
+    "post_write_pr810_head_observed": "d2bb2812345fe1d7fe7034a9222b0db6d9932249",
+    "new_vercel_deployment_observed_immediately_after_write": false,
+    "protected_preview_access_observation_during_macrocycle": "HTTP_302_SSO_BEFORE_FUNCTION",
+    "function_executed_for_this_delta": false,
+    "sandbox_executed_for_this_delta": false,
+    "runtime_credit": 0,
+    "interpretation": "SOURCE_CONVERGENCE_ONLY_NOT_RUNTIME_EVIDENCE"
+  },
+  "coordination": {
+    "unusual_experiment_performed": false,
+    "unusual_experiment_count_added": 0,
+    "atomic_lease": "NOT_CLAIMED_NO_UNUSUAL_INTERVENTION",
+    "duplicate_executor_created": false,
+    "parallel_work_policy": "Re-entered moving PR1263/PR810 heads repeatedly and abandoned a duplicate integrated-chain test after a parallel worker supplied it."
+  },
+  "credit": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Continue only on retained PR810: vendor every source/regression/transitive-fixture required by the single v2 rebind contract byte-identically from one immutable retained donor snapshot, bind every Git blob in the fixed route manifest, remove SOURCE_REBIND_REQUIRED only in that same coherent change, then execute the fixed deterministic regressions only when the FREE_ONLY Vercel Hobby build and protected-function admission are actually available."
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "ENTITYOS_HCU_GO_LOADER_ADMISSION_AUTHORITY_GAP/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "main_observed_before_write": "d2a44f9eef93181fe6a9538f6025a419fa711f40",
+    "supervisor": "SUPERVISOR_STEERING_8_62",
+    "mode": "FREE_ONLY",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_head_observed": "912746256999f4663bd6f3817e065d070a410b27"
+  },
+  "observed_source": {
+    "implementation_commit": "953b8bac79417e31db2581f79012bf930261e82b",
+    "test_commit": "912746256999f4663bd6f3817e065d070a410b27",
+    "implementation_path": "the artefact/MicroEntity/hcu/engine_load_lease_v1.py",
+    "test_path": "the artefact/MicroEntity/hcu/test_engine_load_lease_v1.py",
+    "positive_test_helper": "admitted(c) = {loader_consumption_record_sha256(c): loader_consumption_record(c)}"
+  },
+  "finding": {
+    "classification": "ARCHITECTURE_SECURITY_GAP_CANDIDATE",
+    "mechanism": "verify_loader_consumption requires an admitted_loader_consumptions mapping, but the API type does not itself establish that the mapping came from a separate canonical authority. The current positive test derives the accepted registry entry directly from the same LoaderConsumption under verification.",
+    "strong_counterhypothesis": "The real integration boundary may supply the mapping only from a separately authenticated, generation-fenced canonical state/control-plane authority, in which case the core API shape is acceptable despite the synthetic unit-test helper.",
+    "falsifier": "Construct a forged LoaderConsumption carrying the accepted ACTUAL_LOADER_READ_PATH label, locally derive its record and digest, and pass that matching mapping. Acceptance without a separately authenticated canonical admission receipt/lookup demonstrates self-authorization at the integration boundary.",
+    "required_repair_or_evidence": "Bind loader-consumption admission to a trusted canonical lookup/receipt capability with generation and provenance, and make positive integration evidence obtain admission independently of the observation under test. Serialization/hash helpers remain identity mechanisms, not authority."
+  },
+  "durable_coordination": {
+    "pr_comment_id": 5387798341,
+    "pr_comment_scope": "adversarial review on retained PR1263; no duplicate implementation path introduced"
+  },
+  "credit": {
+    "source_architecture_delta": "DURABLE_GAP_AND_FALSIFIER_RECORDED",
+    "runtime_pass_claimed": false,
+    "runtime_fail_claimed": false,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  },
+  "next_exact_gate": "Resolve the external loader-consumption authority boundary on the single retained HCU path, then include that exact source in the fixed manifest/hash-bound FREE Sandbox full-spine capsule before any verified-engine-load or full-HCU runtime promotion."
+}

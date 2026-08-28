@@ -1,0 +1,79 @@
+{
+  "schema": "CLAY_TRIGGER2_OBSERVED_OUTER_ENTRY_AUTH_DISCRIMINATOR/v1",
+  "date": "2026-08-25",
+  "local_trigger_time": "23:58+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "authority_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "main",
+  "declared_observed_main_before_initial_write": "554468ec7a7ecb06880bbda14bd2b776391e9951",
+  "actual_parent_of_initial_commit_after_parallel_race": "96bca90341fae79f94f453452c1acf41845d968e",
+  "parallel_successor_ledger": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V30_GPT56SOL.json",
+  "parallel_successor_ledger_commit": "96bca90341fae79f94f453452c1acf41845d968e",
+  "parallel_stronger_design_commit": "6bc355ff185a618e0d241359f559af605b0cd848",
+  "status": "SUPERSEDED_AS_CURRENT_DECISION_BY_V30_RETAINED_AS_CORROBORATING_DISCRIMINATOR",
+  "provenance_correction": "The initial write raced with moving main. Its declared observed head 554468... was already stale by commit time; GitHub committed it on parent 96bca903..., which already contained V30 and the stronger independent-admission-witness design. This revision explicitly records that race and prevents this artifact from becoming a competing current authority.",
+  "question": "Is there already a mandatory immutable Typed Entry/admission envelope on every retained OBSERVED path before state-history proof admission that authenticates producer identity and exact instance payload?",
+  "decision": "CORROBORATES_V30_EXISTING_TYPED_ENTRY_IDENTITY_IS_NECESSARY_NOT_SUFFICIENT_AND_NO_MANDATORY_AUTHENTICATING_OUTER_ENVELOPE_WAS_PROVEN",
+  "decision_scope": "CURRENT_REPOSITORY_SOURCE_AND_CALL_PATH_CORROBORATION_ONLY_NOT_RUNTIME_OR_TRAINING_CREDIT",
+  "evidence": [
+    {
+      "artifact": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+      "finding": "Typed Entry deterministically separates causal event identity from concrete admission identity and binds generation, ingress, provenance digest, payload digest, capability binding and budget into event/admission hashes. These identities should be reused rather than replaced."
+    },
+    {
+      "artifact": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py::admit_entry",
+      "finding": "current_generation, expected_capability_binding_sha256, admitted_capabilities and admitted_budget are external authority inputs. source_id, provenance_ref, provenance_sha256, payload_ref and payload_sha256 are caller/Entry supplied values that are validated and identity-bound but are not by themselves a trusted OBSERVED producer witness."
+    },
+    {
+      "artifact": "repository code-search for admit_entry( and EntryPacket",
+      "finding": "No mandatory current call chain was found that proves an independently controlled Typed Entry admission witness is mechanically composed into the retained OBSERVED state-history validation path. Absence from search is not universal proof, but it is insufficient to promote the outer-envelope counterhypothesis."
+    },
+    {
+      "artifact": "research_entity/continuity/receipts/2026-08-24_GO_STREAM_AUTHORITY_BOUND_LANE_GPT56SOL_0955.json",
+      "finding": "Existing EntityOS/HCU design already records the analogous rule that packet-carried stream identity is data, not authority, and that an independently sourced external authority binding is required."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_POST_VPS_TYPED_ENTRY_JSPACE_FUSION_GPT56SOL.json",
+      "finding": "Parallel stronger work independently reached the more precise closure design: recomputing Entry identity from candidate-supplied fields remains co-mutation-forgeable; an independently controlled or canonically persisted witness must bind the exact admission_sha256."
+    }
+  ],
+  "resolved_counterhypothesis": {
+    "counterhypothesis": "A mandatory outer Typed Entry/admission envelope already authenticates OBSERVED producer identity, so no additional witness is needed.",
+    "result": "NOT_SUPPORTED_BY_CURRENT_SOURCE_EVIDENCE",
+    "reason": "Typed Entry provides deterministic content/admission identity, but identity recomputed only from caller-controlled material cannot prove traversal of an authorized OBSERVED producer/admission instance. V30 therefore correctly requires an independent admission witness."
+  },
+  "architecture_fusion": {
+    "current_design_authority": "DEFER_TO_V30_AND_6BC355FF_SOURCE_DESIGN",
+    "reuse_not_duplicate": "Reuse Entry event_sha256/admission_sha256, generation, payload and provenance identities. Do not create a second causal-event/admission identity scheme or a parallel truth store.",
+    "required_independence": "The admission witness or controller authority input must be independently controlled or canonically persisted and must not be derived solely from the candidate row/receipt/Entry fields being evaluated.",
+    "truth_boundary": "Producer/admission authentication proves origin and exact-instance binding only. It does not mint canonical truth, evidence independence, J-Space causality, real effects or training credit.",
+    "effect_boundary": "EffectGate/EffectJournal authority is unchanged."
+  },
+  "training_impact": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "decision": "NO_NEW_POSITIVE_ROWS",
+    "reason": "P0 remains implementation/execution blocked under V30 until the Typed-Entry-linked independent admission witness rejects coherent co-mutation forgery and passes repository-bound execution."
+  },
+  "relationship_to_current_work": {
+    "worker_package": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2356_POST_VPS_NEXT_WORK_PACKAGE_V1_GPT56SOL.json",
+    "resolves_or_corroborates": "phase_p0_observed_producer_auth.first_discriminator",
+    "superseded_by": "T2-LEDGER-V30 plus 6bc355ff185a618e0d241359f559af605b0cd848",
+    "do_not_duplicate": [
+      "V30 OBSERVED-to-Typed-Entry bridge with independent admission witness",
+      "A02 retained-v4 repository-bound producer-auth lane",
+      "A03 generation-authority replay-root",
+      "Typed Entry causal/admission identity implementation",
+      "state-history semantic labelers"
+    ]
+  },
+  "next_exact_action": "Follow V30: implement/execute the single retained OBSERVED-to-Typed-Entry bridge with an independently controlled or canonically persisted admission witness binding exact admission_sha256; preserve the forged-receipt and coherent Entry+receipt co-mutation negatives; do not create a second producer authority lane."
+}

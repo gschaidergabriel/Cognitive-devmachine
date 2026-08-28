@@ -1,0 +1,139 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v63",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V62_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V62",
+  "observed_main_before_write": "b8e0f7a98a9aeafbf9a14f87797351b996c92044",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V63 records closure of the remaining V62 membership-incarnation uniqueness source gap under Supervisor 8.84 without reviving the falsified call-content injectivity hypothesis. Current main now rejects reuse of one source_node_admission_id across independently attributed cohort members, and the former strict xfail has been promoted to an ordinary regression expectation. A duplicate parallel PR was closed unmerged to preserve one implementation lane. The stronger next discriminator is cross-validation of admission identity/revision, node, process and generation against the existing proof-carrying membership envelope before fused GRID10 persistence.",
+  "membership_incarnation_closure": {
+    "source_commit": "1d9f5abfd032b01d5296f2d9a1ec68c669e981e1",
+    "source": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "rule": "source_node_admission_id is injective across independently attributed members of one authority cohort unless a future explicit multiplexing/fanout contract defines otherwise",
+    "error": "AUTHORITY_COHORT_NODE_ADMISSION_DUPLICATE",
+    "regression_commit": "b8e0f7a98a9aeafbf9a14f87797351b996c92044",
+    "regression": "tests/test_trigger2_two_phase_call_content_vs_invocation_semantics_v1.py::test_one_node_admission_identity_cannot_be_projected_onto_two_nodes",
+    "former_status": "STRICT_XFAIL_EXPECTED_SOURCE_GAP",
+    "current_status": "SOURCE_RULE_AND_REGRESSION_PRESENT",
+    "exact_test_execution_observed_for_new_commits": false,
+    "repository_ci_statuses_observed": 0,
+    "runtime_credit": 0
+  },
+  "identity_semantics_preserved": {
+    "source_bound_model_call_identity_sha256": "MODEL_CALL_CONTENT_EVIDENCE_IDENTITY_NOT_UNIQUE_INVOCATION_ID",
+    "invocation_authority": "PHASE_SEPARATED_LAUNCH_DESCRIPTOR_PLUS_EXECUTOR_OBSERVATION",
+    "equal_call_content_across_distinct_invocations": "ALLOWED",
+    "equal_model_output_across_distinct_invocations": "ALLOWED",
+    "duplicate_launch_descriptor_across_cells": "REJECT",
+    "duplicate_executor_observation_across_cells": "REJECT",
+    "duplicate_node_admission_across_independent_nodes": "REJECT",
+    "intentional_one_invocation_fanout": "REQUIRES_EXPLICIT_CONSUMER_FANOUT_IDENTITY_AND_MUST_NOT_MINT_MULTIPLE_EXECUTION_CREDIT"
+  },
+  "coordination": {
+    "duplicate_pr": 2039,
+    "state": "CLOSED_UNMERGED_SUPERSEDED",
+    "reason": "Current main independently landed the same minimal membership-incarnation closure and regression; merging the PR would duplicate the current authority lane."
+  },
+  "p0_runtime_quiescence": {
+    "telemetry_source": "free swarm/SYSTEM_ANALYSIS_LIVE.json",
+    "telemetry_generated_at": "2026-08-25T22:28:09.891741+00:00",
+    "supervisor": "STOPPED/QUARANTINED",
+    "go_swarm": "RUNNING",
+    "embedded_provider_admission_epoch": "8.78",
+    "openrouter_total_requests": 4140,
+    "openrouter_total_429": 4005,
+    "openrouter_total_success": 134,
+    "delta_vs_supervisor_8_83_requests": 357,
+    "delta_vs_supervisor_8_83_429": 357,
+    "status": "ACTIVE_FAIL",
+    "closure_required": "On the owning live host identify and terminate/quarantine every provider-capable survivor without issuing a provider probe; prove zero survivors and a bounded no-restart interval with zero provider-counter delta; only then re-enter current FREE non-provider execution authority."
+  },
+  "next_source_frontier": {
+    "id": "FUSED_GRID10_PROOF_CARRYING_MEMBERSHIP_TO_TWO_PHASE_INVOCATION_AUTHORITY",
+    "required_chain": [
+      "existing proof-carrying membership/admission incarnation",
+      "pre-call launch descriptor",
+      "model-call content/evidence receipt",
+      "post-call executor observation",
+      "immutable authority-free NODE_RESULT",
+      "two-phase authority envelope",
+      "cohort reducer",
+      "atomic fused GRID10 coordinator persistence"
+    ],
+    "required_cross_checks": [
+      "authority source_node_admission_id equals proof source_membership_id",
+      "authority source_node_admission_revision matches the admitted membership incarnation revision/serial",
+      "authority controller_observed_node_id equals proof membership node_id and raw NODE_RESULT source_node_id",
+      "authority controller_observed_pid equals proof producer_pid and raw NODE_RESULT process_pid",
+      "authority source_runtime_generation matches proof membership/current runtime generation",
+      "authority raw_node_result_packet_digest equals proof node_result_digest",
+      "whole cohort fails closed if any one mapping is stale, transplanted, duplicated or inconsistent"
+    ],
+    "anti_duplication": "Do not create another peer NODE_RESULT/model-call authority schema; compose the retained two-phase authority with the existing PROOF_CARRYING_NODE_RESULT/v1 membership evidence."
+  },
+  "training_jspace_feedback": {
+    "event_attribution": "USE_INVOCATION_AUTHORITY",
+    "content_equivalence_and_dedup": "USE_SOURCE_BOUND_MODEL_CALL_CONTENT_IDENTITY",
+    "membership_attribution": "USE_ADMITTED_MEMBERSHIP_INCARNATION_BOUND_TO_NODE_AND_RUNTIME_GENERATION",
+    "new_positive_rows": 0,
+    "accepted_dataset_tokens_added": 0,
+    "training_credit_added": 0
+  },
+  "execution": {
+    "provider_called_this_cycle": false,
+    "model_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "vps_execution_performed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "work_class": "SOURCE_ONLY_REENTRY_COORDINATION_AND_RESEARCH_FUSION"
+  },
+  "credits": {
+    "research_delta": 1,
+    "membership_incarnation_source_closure_credit": 1,
+    "duplicate_lane_closure_credit": 1,
+    "repository_ci_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 owning live host: prove FreeSwarm provider quiescence with zero provider-capable survivors and bounded zero provider-counter delta without provider probing",
+    "P1 source-only: cross-validate the retained two-phase authority envelope against existing PROOF_CARRYING_NODE_RESULT/v1 membership evidence for admission id/revision, node, PID, generation and raw packet identity",
+    "P1 source-only: feed the verified composed member identity into fused GRID10 cohort_id, persistence and replay checks without altering raw model cognition",
+    "P1 source-only: reject the whole cohort when one composed member has stale/transplanted membership or invocation provenance",
+    "P1 after quiescence PASS: re-enter newest explicit FREE non-provider execution authority before any model or physical GRID10 promotion",
+    "P2 keep blinded checkpoint evaluation and training materialization closed until separately admitted executable evidence",
+    "P3 keep Forge-to-Distillery positive admission closed until accepted_dataset_tokens > 0 from an exact accepted witness and exact replay adds +0"
+  ],
+  "next_exact_action": "Compose the retained two-phase invocation authority with PROOF_CARRYING_NODE_RESULT/v1 membership evidence and make admission id/revision, node, PID, generation and raw packet identity mutually cross-validated before fused GRID10 cohort persistence. P0 runtime quiescence remains externally blocking for all model/provider/training promotion."
+}

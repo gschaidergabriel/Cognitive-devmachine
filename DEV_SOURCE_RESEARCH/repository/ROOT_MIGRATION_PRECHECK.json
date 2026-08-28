@@ -1,0 +1,101 @@
+{
+  "schema": "FRANKENSTEIN_ROOT_MIGRATION_PRECHECK/v2",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed": "7d4f54abe40c5037e127ba735d2f97e86b64fd68",
+  "canonical_root_tree_observed": "d0514843d790f333ea4f3cd9f2381ddfb8f12d78",
+  "previous_incomplete_snapshot": {
+    "main": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
+    "reason": "Earlier connector display truncation prevented proving the complete unknown-name root enumeration."
+  },
+  "target_public_root_from_trigger3": [
+    "README.md",
+    "HUMAN_READ_THIS/",
+    "DEV_SOURCE_RESEARCH/",
+    "AI_START_HERE_DO_NOT_SCAN_REPO/"
+  ],
+  "complete_root_enumeration": true,
+  "root_entry_count": 46,
+  "enumeration_evidence": {
+    "endpoint": "GitHub Git Trees API at exact root tree identity",
+    "tree_sha": "d0514843d790f333ea4f3cd9f2381ddfb8f12d78",
+    "server_truncated": false,
+    "note": "The connector's initial visible rendering was clipped for display size, but searching the preserved response resource exposed the complete tree payload ending in truncated=false."
+  },
+  "migration_executed": false,
+  "authority_conflict": {
+    "status": "BLOCKING_FOR_CANONICAL_PATH_MOVES",
+    "details": [
+      "BOOTSTRAP_MINIMAL.json names canonical_workspace as `the artefact/`, which is a root directory.",
+      "Current authority and project tooling use `research_entity/` as the canonical authority/evidence tree at repository root.",
+      "A literal four-entry filesystem root cannot be reached by moving either canonical path without explicit authority/path migration and deterministic consumer rewrites.",
+      "Repository-control/tool discovery files such as `.github`, `.gitignore`, `AGENTS.md`, and `CLAUDE.md` may also have host-defined root semantics and cannot be moved merely for cosmetic cleanliness.",
+      "Therefore the four-entry shape remains the public/human topology target, while canonical/control paths require a separately evidenced migration."
+    ]
+  },
+  "observed_root_entries": [
+    {"path":".claude","type":"tree","sha":"7890caac0300e4f2e8154b2adda82230b310ada8","class":"PLATFORM_TOOL_METADATA"},
+    {"path":".env.example","type":"blob","sha":"e90caed851675521be825266c8bc74c4448c0363","size":596,"class":"CONFIG_TEMPLATE"},
+    {"path":".github","type":"tree","sha":"91e59fd7f4078675288b430e1a4829aefe81533a","class":"REPOSITORY_CONTROL"},
+    {"path":".gitignore","type":"blob","sha":"5bca2e8cff217eda443b9a753d79e3a173a1d030","size":336,"class":"REPOSITORY_CONTROL"},
+    {"path":"000_CLAY_CURRENT.md","type":"blob","sha":"9e56e5645d891e62390af1932ed0dde927b0a737","size":369,"class":"CURRENT_FACING_COMPATIBILITY"},
+    {"path":"000_FRANK_GLOBAL_RESEARCH_ENTITY_AUTOBOOT.txt","type":"blob","sha":"8e410008101df606f43980171323120604212995","size":6333,"class":"HISTORICAL_BOOTSTRAP"},
+    {"path":"000_FREE_SWARM_LIVE_DASHBOARD.md","type":"blob","sha":"47bdfd6d8c0e30c3bb06a7e8151a77ce291c64dc","size":28552,"class":"TECHNICAL_DASHBOARD"},
+    {"path":"AGENTS.md","type":"blob","sha":"872b1d7bc4ade211dd519379a9e3f4a566582107","size":5952,"class":"AGENT_CONTROL_ROOT"},
+    {"path":"AI_START_HERE_DO_NOT_SCAN_REPO","type":"tree","sha":"9dedccc58818827911605be0763ab110e5e50e0a","class":"KEEP_PUBLIC_ROOT"},
+    {"path":"AUTHORITATIVE_STATE_RESOLUTION.md","type":"blob","sha":"250519e571ac51de55ac2d90e230c8ef2262c5a3","size":4430,"class":"AUTHORITY_COMPATIBILITY_ROOT"},
+    {"path":"CLAUDE.md","type":"blob","sha":"673d4ed3a86aaba4ee7fdb1ee303325bac995071","size":9710,"class":"AGENT_CONTROL_ROOT"},
+    {"path":"CLAUDE_CODE_INTRODUCTION.md","type":"blob","sha":"61ccccb65d3ccd723d546f56ab62de0a90e236ee","size":9523,"class":"LEGACY_INSTALLER_ROOT"},
+    {"path":"CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json","type":"blob","sha":"3515b0a98a22f06509f7a3aa1e3d7b08f68ba962","size":11156,"class":"TECHNICAL_MANIFEST_ROOT"},
+    {"path":"CLAYVERSE_CANONICAL_DIRECTIVE.md","type":"blob","sha":"d43564747872b305d5073aa72f99ff5d52473b13","size":359,"class":"HISTORICAL_COMPATIBILITY_ROOT"},
+    {"path":"CLAY_EXECUTION_AUTHORITY.md","type":"blob","sha":"b850dbdf0ec5b4c04aa0c7f6e6a98a07f6f9d2f9","size":2114,"class":"OWNER_AUTHORITY_POINTER_ROOT"},
+    {"path":"DEV_SOURCE_RESEARCH","type":"tree","sha":"1fec536bbdaedfcc7c73586ca3340affb2b0935e","class":"KEEP_PUBLIC_ROOT"},
+    {"path":"HUMAN_READ_THIS","type":"tree","sha":"5ea033568ab119f97c67edf4be667cf55a03885d","class":"KEEP_PUBLIC_ROOT"},
+    {"path":"JOIN_RAE_CLAUDE_CODE.txt","type":"blob","sha":"2cd0fc1f6049a069282808ca9b47a1c67ace6e48","size":1405,"class":"LEGACY_INSTALLER_ROOT"},
+    {"path":"PROJECT_AUTO_BOOT_KERNEL_FINAL.txt","type":"blob","sha":"09d9a5f9903dbfafb8614a10a4464b2846d768b6","size":12757,"class":"LEGACY_BOOTSTRAP_ROOT"},
+    {"path":"PROJECT_SOURCE_SINGLE_BOOTSTRAP.txt","type":"blob","sha":"2a64bd2dc8aa84e2fdc7a1e77fdf587aa216bccd","size":22532,"class":"LEGACY_BOOTSTRAP_ROOT"},
+    {"path":"PROJECT_SOURCE_SINGLE_BOOTSTRAP_V2.txt","type":"blob","sha":"f201f1b2c573b1ff98369f0918584744bc7941bb","size":9454,"class":"LEGACY_BOOTSTRAP_ROOT"},
+    {"path":"RAE_VNEXT_RUNTIME.md","type":"blob","sha":"2530568588f5096d5de1032dfff79a2c2c2e71d7","size":5365,"class":"TECHNICAL_RUNTIME_ROOT"},
+    {"path":"README.md","type":"blob","sha":"4d39dbfaeace5843d4bfc6901e3ea3d8b566ec84","size":3744,"class":"KEEP_PUBLIC_ROOT"},
+    {"path":"ZZZ_FREE_SWARM_RESULTS.md","type":"blob","sha":"285c5a723c10b121c4fe6149ee286c65f3006c14","size":3952,"class":"TECHNICAL_RESULTS_ROOT"},
+    {"path":"agentZero","type":"tree","sha":"971baa0b3bfb52390d89f1172313b4e6325af0ef","class":"HISTORICAL_OR_DONOR_TREE"},
+    {"path":"agentzeroforschung","type":"tree","sha":"a5ac23ce8a55b83da076949007fcedd3e8a47819","class":"HISTORICAL_RESEARCH_TREE"},
+    {"path":"benchmarks","type":"tree","sha":"9d56b998907cd06c6fd7f535df9147c0fdf1df87","class":"TECHNICAL_TREE"},
+    {"path":"dump archive","type":"tree","sha":"5cc32a9c74f1babbd859e34920712928633f9aef","class":"ARCHIVE_TREE"},
+    {"path":"dump","type":"tree","sha":"0133673973e6fb77df118b7e4e9c7977a6a9dd14","class":"ARCHIVE_OR_TECHNICAL_TREE"},
+    {"path":"frank_reference","type":"tree","sha":"246762198fc82664c46aa95523cdc243d3e22b7c","class":"HISTORICAL_REFERENCE_TREE"},
+    {"path":"free swarm","type":"tree","sha":"86c5f818aef80fb36529d32a02c6147bab86e70c","class":"TECHNICAL_RESEARCH_TREE"},
+    {"path":"gemeinsamer State)","type":"blob","sha":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","size":0,"class":"ORPHAN_ROOT_CANDIDATE"},
+    {"path":"governance","type":"tree","sha":"639bead5067286b407a8fe54777594144ed6260b","class":"AUTHORITY_GOVERNANCE_TREE"},
+    {"path":"libc.malloc_trim(0)","type":"blob","sha":"56449f7a37c0593798d05e67687af3ed244ef058","size":1637,"class":"ORPHAN_OR_TECHNICAL_ROOT_CANDIDATE"},
+    {"path":"madvise(ptr, length, MADV_FREE);","type":"blob","sha":"d4b4da997a55a9567842f2a182f7cc6046b708d8","size":469,"class":"ORPHAN_OR_TECHNICAL_ROOT_CANDIDATE"},
+    {"path":"rae.py","type":"blob","sha":"e911bc9cf3253c08fb82194053920568bd82a456","size":163,"class":"TECHNICAL_RUNTIME_ENTRY"},
+    {"path":"rae_core","type":"tree","sha":"493d5ddd66d2722d2daaa0873428fc0db103fc2c","class":"TECHNICAL_RUNTIME_TREE"},
+    {"path":"receipts","type":"tree","sha":"f24092a102d5767f64f70be1dd8ef1818ea04260","class":"EVIDENCE_TREE"},
+    {"path":"research_entity","type":"tree","sha":"2e065d46625a87e7d30a3013f78ae4c243200f3e","class":"CANONICAL_AUTHORITY_EVIDENCE_TREE_DO_NOT_MOVE_WITHOUT_MIGRATION_AUTHORITY"},
+    {"path":"research_sources","type":"tree","sha":"bd6a6770a6f39013268a47931d7e1db8cdcb6d13","class":"RESEARCH_SOURCE_TREE"},
+    {"path":"runtime_checks","type":"tree","sha":"467188c0fa1c8ad68e5e6ef8e35d4d40125db877","class":"TECHNICAL_TREE"},
+    {"path":"schemas","type":"tree","sha":"565e271b6681bdd0490f48ee928382ea6049714c","class":"TECHNICAL_TREE"},
+    {"path":"tests","type":"tree","sha":"b0a1057d7a8e3f6ad6621a5e54c3bacc2a5ce2f4","class":"TECHNICAL_TREE"},
+    {"path":"the artefact","type":"tree","sha":"130dacf6202b6b8ea660637d029cd502f4977371","class":"CANONICAL_PRODUCT_WORKSPACE_DO_NOT_MOVE_WITHOUT_MIGRATION_AUTHORITY"},
+    {"path":"tools","type":"tree","sha":"065f3dd03a7a3faf4f8234cb1b337acc68c224ff","class":"EXECUTABLE_TOOL_TREE"},
+    {"path":"vps_bridge","type":"tree","sha":"553c0d2424160829dcec80b8ffcd41082e6c9f6f","class":"EXECUTION_BRIDGE_TREE"}
+  ],
+  "closed_gates": [
+    "COMPLETE_EXACT_ROOT_ENUMERATION"
+  ],
+  "open_gates": [
+    "REPOSITORY_WIDE_REFERENCE_AUDIT_PER_PROPOSED_MOVE",
+    "CANONICAL_RESEARCH_ENTITY_PATH_MIGRATION_AUTHORITY",
+    "CANONICAL_THE_ARTEFACT_PATH_MIGRATION_AUTHORITY",
+    "PLATFORM_AND_AGENT_ROOT_DISCOVERY_SEMANTICS",
+    "BYTE_IDENTITY_AND_DETERMINISTIC_REFERENCE_REWRITE_FOR_EACH_MOVE_BATCH"
+  ],
+  "safe_next_actions": [
+    "build incoming-reference counts for the three orphan-looking root blobs first",
+    "separate repository-control/tool-discovery files from ordinary documentation cleanup",
+    "measure repository-wide reference counts for each low-risk move candidate before relocation",
+    "resolve canonical research_entity/ and the artefact/ path authority before attempting a literal four-entry filesystem root",
+    "move only byte-identical low-risk candidates with deterministic reference rewrites and post-move checks"
+  ],
+  "move_gate": "PARTIALLY_CLOSED_ROOT_ENUMERATION_PASS_REFERENCE_AND_CANONICAL_PATH_GATES_STILL_BLOCKING"
+}

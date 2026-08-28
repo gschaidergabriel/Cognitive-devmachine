@@ -1,0 +1,75 @@
+{
+  "schema": "TRIGGERWORD4_ACTIONS_CONTROL_PLANE_DIAGNOSTIC_RECEIPT/v1",
+  "status": "READ_ONLY_DIAGNOSTIC_EVIDENCE_NONPROMOTING",
+  "created_local": "2026-08-29T02:15:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "4",
+  "routing_self_test": "PASS",
+  "authority": {
+    "canonical_main_observed_prewrite": "5638204026468b631de5e774e8403d7a6334021e",
+    "supervisor_inbox_schema": "9.13",
+    "selected_delta_observed": "9.13AJ_NON_AUTHORITY",
+    "provider_execution": "HARD_OFF",
+    "free_only": true,
+    "no_duplicate_dispatch": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "triggerword4_directive_blobs": {
+    "grid10_runtime": "9469f0a6be99c2af2dfad25386c4196ffc9101a4",
+    "frankenstein2_assembly": "94cc8b6c3f1f03bfacb48d4a24d11429d0bad6cb",
+    "sparse_world_substrate": "d0e6b698193f75099df57d4db31c22c5fb90589b"
+  },
+  "canonical_singleton_gates": {
+    "issue_2122": "OPEN_NO_TERMINAL_RUNTIME_RECEIPT",
+    "issue_2121": "OPEN_NO_TERMINAL_RUNTIME_RECEIPT"
+  },
+  "observation": {
+    "workflow_run_id": 33202601067,
+    "event": "push",
+    "head_branch": "chatgpt-vps-results",
+    "head_sha": "aa7e253e47fc1f7ca2580c38c4c6f3cf06722770",
+    "workflow_path": ".github/workflows/database-pulse-rank-index-output-exclusion-repair.yml",
+    "run_status": "completed",
+    "run_conclusion": "failure",
+    "jobs": [],
+    "runner_assignment_observed": false,
+    "workflow_at_exact_head": {
+      "push_branches": ["main"],
+      "push_paths": [".github/workflows/database-pulse-rank-index-output-exclusion-repair.yml"],
+      "job_runner": ["self-hosted", "Linux", "X64"]
+    },
+    "commit_changed_files_observed": ["vps_bridge/results/LIVE.json"],
+    "workflow_file_changed_by_head_commit": false
+  },
+  "external_primary_corroboration": {
+    "github_docs_troubleshooting": "GitHub documents that workflow-run creation is skipped when branch/path filters filter out the workflow.",
+    "github_docs_workflow_model": "GitHub documents that workflow matching is evaluated against the event-associated commit/ref and each run uses the workflow version present at that associated commit/ref.",
+    "github_status_context": "Actions is currently reported operational; recent Aug-24/Aug-26/Aug-27 incidents demonstrate that trigger/runner-assignment infrastructure can fail independently of repository code, but no public incident is being claimed as the cause of this exact run."
+  },
+  "inference": {
+    "level": "R1_INFERRED",
+    "finding": "The observed run is inconsistent with the normal documented branch+path trigger semantics of the exact workflow at the event head and additionally never materialized a job. This strengthens P0 localization to workflow registration/event evaluation/Actions pre-job control-plane behavior rather than GRID10 code or the VPS runner process.",
+    "not_proven": [
+      "A GitHub service incident caused this exact run.",
+      "Repository Actions settings are misconfigured.",
+      "The self-hosted runner service is defective.",
+      "Any GRID10/Frankenstein code path executed."
+    ]
+  },
+  "counterhypotheses": [
+    "GitHub may have evaluated a different registered workflow revision than the exact head file despite run metadata binding the event head; this requires workflow-registration history evidence.",
+    "A repository/account Actions policy or workflow-state transition may create a failed run record before normal filter/job materialization.",
+    "The REST representation may expose a run object for an internal pre-job failure class not documented by normal workflow-filter semantics."
+  ],
+  "next_high_information_read_only_discriminator": "Inspect workflow registration/state/history and repository/account Actions policy surfaces if exposed by available read-only APIs; compare run 33202601067 with the nearest prior successful run of workflow_id 330749463. Do not dispatch/retry/restart while issues 2121/2122 remain nonterminal.",
+  "credit": {
+    "actions_transport_runtime": 0,
+    "runtime_quiescence": 0,
+    "grid10_crash_replacement": 0,
+    "physical_grid10": 0,
+    "frankenstein2_runtime": 0,
+    "whole_hcu": 0,
+    "entityos_whole": 0,
+    "training": 0
+  }
+}

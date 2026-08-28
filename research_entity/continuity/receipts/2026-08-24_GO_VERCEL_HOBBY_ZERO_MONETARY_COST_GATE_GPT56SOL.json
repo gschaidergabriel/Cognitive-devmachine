@@ -1,0 +1,72 @@
+{
+  "schema": "ENTITYOS_HCU_GO_VERCEL_HOBBY_ZERO_MONETARY_COST_GATE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "together_allowed": false,
+    "paid_fallback_allowed": false
+  },
+  "observed_account_state": {
+    "provider": "Vercel",
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "team_plan": "hobby",
+    "observation_source": "authorized Vercel connector list_teams",
+    "observed_at_utc": "2026-08-23T18:03:00Z"
+  },
+  "primary_current_external_evidence": [
+    {
+      "url": "https://vercel.com/docs/plans",
+      "retrieved_on": "2026-08-24",
+      "claim": "Hobby is free; Hobby plans are paused when they exceed included free-tier usage, while Pro/Enterprise can incur on-demand usage."
+    },
+    {
+      "url": "https://vercel.com/pricing",
+      "retrieved_on": "2026-08-24",
+      "claim": "Hobby is $0/month and free Hobby accounts are limited to usage caps and cannot purchase additional usage."
+    }
+  ],
+  "cost_gate_interpretation": {
+    "zero_monetary_cost_boundary": "SUPPORTED_FOR_CURRENT_HOBBY_TEAM",
+    "reason": "Current authoritative provider documentation describes Hobby as free and cap-limited rather than pay-as-you-go; exceeding included usage can pause availability but does not create an on-demand usage purchase path on Hobby.",
+    "remaining_quota_known": false,
+    "remaining_quota_consequence": "AVAILABILITY_ONLY_NOT_MONETARY_COST",
+    "scope": "Vercel platform usage under the currently observed Hobby team only; no paid plan, add-on, provider, domain purchase, or upgrade is admitted by this receipt."
+  },
+  "prior_quarantined_run": {
+    "receipt": "research_entity/continuity/receipts/2026-08-24_GO_JCS_CAPSULE_REPAIR_STALE_AUTHORITY_200_GPT56SOL.json",
+    "technical_http_200_result_preserved": true,
+    "retroactive_whole_hcu_credit": false,
+    "retroactive_model_or_training_credit": false,
+    "note": "This receipt resolves the monetary-cost uncertainty that caused quarantine; it does not promote the bounded older-donor JCS component result into current-main or whole-HCU acceptance."
+  },
+  "admission_consequence": {
+    "future_fixed_bounded_vercel_sandbox_regressions_under_same_hobby_team": "MONETARY_COST_GATE_SATISFIED",
+    "must_remain": [
+      "authorized isolated Sandbox only",
+      "fixed allowlisted regression commands",
+      "exact source/capsule identity",
+      "no caller-supplied generic command executor",
+      "no Together",
+      "no paid fallback",
+      "no effect-authority widening",
+      "fail closed if team plan is no longer Hobby"
+    ],
+    "runtime_credit_still_requires_execution": true
+  },
+  "credit": {
+    "cost_gate_credit": "VERIFIED_CURRENT_HOBBY_ZERO_MONETARY_COST_BOUNDARY",
+    "entityos_hcu_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  },
+  "next_exact_discriminator": "Execute only the next already-staged fixed SHA-bound deterministic HCU/J-Space regression capsule; preserve component-only scope until the full exact-current closure is executed."
+}

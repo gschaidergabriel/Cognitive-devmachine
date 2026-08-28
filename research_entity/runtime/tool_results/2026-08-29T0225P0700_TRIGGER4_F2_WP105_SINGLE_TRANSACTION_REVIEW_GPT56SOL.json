@@ -1,0 +1,30 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_MIRROR/v1",
+  "trigger": "4",
+  "classification": "REVIEW_ONLY_PRODUCT_CONVERGENCE_EVIDENCE",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "source_commit": "02938cb1e23fb1a9728bf80cd2545a37eccc54cc",
+  "source_path": "workpackages/reviews/F2-WP-105/TRIGGER4_SINGLE_CANONICAL_EFFECT_TRANSACTION_CANDIDATE_GPT56SOL_20260829T0224P0700.json",
+  "research_main_observed_before_write": "a88b143df7f7068812ca9da82aa124ef72baabe2",
+  "finding": "The current Stage-1 effect bridge has two coupled gaps that should be closed together: semantic effect-request identity must be immutable across authorization and correlation, and the admitted canonical EffectGate already owns the action transaction so wiring it as a mere authorize callback before a second F2 executor risks duplicate dispatch.",
+  "candidate": "Use one canonical EffectGate-owned transaction in canonical-effect mode. Bind a deterministic typed effect_request_sha256 plus the F2 call-correlation identity before authority entry; require the canonical result/journal lineage to bind or independently prove the same request identity; let F2 consume that evidence for correlation/completion rather than owning a second real action dispatch.",
+  "counterhypotheses": [
+    "A proven immutable resolver from an existing F2 correlation identifier to the complete canonical EffectRequest could remove the need for a new explicit request digest field.",
+    "A future EntityOS-owned prepare/dispatch/finalize authority API could preserve a two-stage shape only if canonical authority itself owns lease custody, policy, journaling and recovery across the split."
+  ],
+  "next_discriminator": "Inside the existing F2-WP-105 mutation lane, run a deterministic no-real-effect/noop matrix proving exactly one canonical action invocation, semantic request digest equality across policy and F2 correlation, zero action on every pre-dispatch mismatch/non-ALLOW decision, and UNKNOWN/no automatic replay after ambiguous post-dispatch failure.",
+  "credits": {
+    "review_scope": "PASS",
+    "runtime_credit_added": 0,
+    "provider_runtime_credit_added": 0,
+    "vps_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_frankenstein2_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "whole_system_acceptance": false
+}

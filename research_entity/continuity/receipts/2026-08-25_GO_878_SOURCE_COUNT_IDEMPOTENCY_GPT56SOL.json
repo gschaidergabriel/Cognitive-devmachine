@@ -1,0 +1,45 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "generated_at": "2026-08-25T03:38:00Z",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "observed_main_before_fix": "cbe1fed983b5747244d6057bcc139d1d19213048",
+  "reentered_main_after_fix": "0c9c6ce00eeefd2a8b51fcdc68d3b23163e30634",
+  "finding": "Historical Forge candidate source_count incremented before candidate_sources INSERT OR IGNORE, so exact replay of an already-admitted provenance tuple could inflate scheduling weight without creating a new canonical provenance link.",
+  "hypothesis": "If source_count is incremented only when candidate_sources admits a new primary-key tuple, identical replay becomes +0 while genuinely distinct provenance remains +1.",
+  "counterhypothesis": "source_count may intentionally count processing attempts rather than admitted provenance observations.",
+  "counterhypothesis_resolution": "Rejected for the active evidence path because candidate_sources is the durable provenance relation, Supervisor 8.78 forbids historical replay from creating independent evidence by repackaging the same execution, and ready-candidate ordering uses source_count as a scheduling signal.",
+  "bounded_delta": {
+    "source_commit": "e89abd132938faae48659361c83a95a6c61717bd",
+    "test_commit": "df9f8f76347113d0b23e09e3cb20076558359a07",
+    "source_path": "tools/free_swarm_historical_backfill.py",
+    "test_path": "tests/test_free_swarm_source_count_idempotency_878.py",
+    "behavior": "candidate_sources is attempted first; existing candidates increment source_count by exactly int(new_provenance_link_admitted). Identical provenance replay therefore adds zero scheduling weight."
+  },
+  "test_design": {
+    "identical_replay": "same variant + same source_event_id + same chunk_id + same extractor_worker_sha + same extraction_mode => source_count remains 1 and candidate_sources remains 1",
+    "distinct_provenance": "same variant + distinct source_event_id => source_count becomes 2; replay of that second link remains +0",
+    "execution_status": "SOURCE_PRESENT_NOT_EXECUTED_BY_THIS_ORGAN"
+  },
+  "track_a": "ADVANCED_SOURCE_SCOPE: prevents replay-amplified Forge scheduling weight on the historical conversion path.",
+  "track_b": "ADVANCED_CAUSAL_PROVENANCE_SCOPE: source_count now tracks admission of the canonical provenance relation rather than processing attempts, strengthening Typed Entry / causal identity reuse semantics without adding a second authority.",
+  "track_c": "ADVANCED_TRAINING_READINESS_SOURCE_SCOPE: historical replay cannot inflate candidate prioritization merely by reprocessing one provenance tuple, reducing a leakage/pseudo-evidence path before Distillery/J-Space dataset promotion.",
+  "unusual_experiment": "NOT_USED_ORDINARY_DETERMINISTIC_SOURCE_FIX",
+  "provider_model_network_io": false,
+  "paid_execution": false,
+  "runtime_credit": {
+    "historical_backfill_runtime": 0,
+    "entityos_whole": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "provider": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute tests/test_free_swarm_source_count_idempotency_878.py together with the existing historical-backfill suite on exact-current main inside the authorized zero-cost runtime, then run the singleton full-history saturation dispatch and verify second-pass replay adds zero source_count scheduling weight and zero duplicate provenance links."
+}

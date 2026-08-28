@@ -1,0 +1,40 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_CLAIM/v1",
+  "dispatch_class": "free-swarm-historical-backfill-v1",
+  "dispatch_key": "free-swarm-historical-backfill-v1-g0000",
+  "retry_generation": 0,
+  "claim_kind": "LEGACY_FANOUT_QUARANTINE",
+  "canonical_spec": "research_entity/continuity/ordinary_dispatch_specs/free-swarm-historical-backfill-v1.json",
+  "canonical_workflow": ".github/workflows/go878-historical-backfill-runtime.yml",
+  "canonical_workflow_state": "RETIRED_FOR_GENERATION_0; CURRENT_WORKFLOW_IS_FUTURE_ADMITTED_GENERATIONS_ONLY",
+  "legacy_workflow_retirement_commit": "481772fd6dccc91aeefe8193e99857e53d23b687",
+  "future_generation_workflow_reintroduced_commit": "9e9818aee8c63de19ada063dadb087bfc24d8631",
+  "canonical_capsule": "tools/run_free_swarm_historical_backfill_capsule_878.py",
+  "legacy_trigger_issues_observed": [
+    1845,
+    1849,
+    1857,
+    1858
+  ],
+  "related_duplicate_saturation_issues_observed": [
+    1839,
+    1846
+  ],
+  "execution_claim": false,
+  "runtime_pass_claim": false,
+  "terminal_canonical_result_observed": false,
+  "active_trigger_authorized": false,
+  "independent_replication_credit": 0,
+  "rule": "NO_FURTHER_TRIGGER_FOR_THIS_GENERATION; ANY ALREADY-QUEUED EQUIVALENT RUN IS GENEALOGICALLY IDENTICAL SCHEDULER EVIDENCE ONLY. GENERATION 0 MUST NOT BE RETRIGGERED EVEN THOUGH A TYPED WORKFLOW NOW EXISTS FOR FUTURE ADMITTED GENERATIONS.",
+  "result_path": "research_entity/continuity/ordinary_dispatch_results/free-swarm-historical-backfill-v1-g0000.json",
+  "next_retry_generation_candidate": 1,
+  "next_retry_reason": "EXPLICIT_INFRASTRUCTURE_AND_PROBE_SEMANTIC_CHANGE_PRESENT_BUT_EXACT_CURRENT_REGRESSION_EXECUTION_STILL_REQUIRED_BEFORE_SUCCESSOR_TRIGGER",
+  "next_retry_blockers": [
+    "EXECUTE_EXACT_CURRENT_HISTORICAL_SATURATION_AND_LIVENESS_REGRESSIONS",
+    "VERIFY_SHARED_FAIL_CLOSED_COMPLETION_POLICY_IN_SCHEDULER_ACTIVE_FORGE_AND_PROVIDER_FREE_CAPSULE",
+    "VERIFY_MAX_PASSES_REACHED_IS_NON_PASS_AND_TWO_EXPLICIT_EXHAUSTIVE_ZERO_NOVEL_CONFIRMATIONS_ARE_REQUIRED",
+    "CREATE_ONLY_GENERATION_1_CLAIM_BEFORE_TRIGGER",
+    "USE_EXACTLY_ONE_TYPED_SINGLETON_GENERATION_1_TRIGGER_WITH_STABLE_CONCURRENCY_AND_SEMANTIC_RESULT_DEDUPE"
+  ],
+  "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md"
+}

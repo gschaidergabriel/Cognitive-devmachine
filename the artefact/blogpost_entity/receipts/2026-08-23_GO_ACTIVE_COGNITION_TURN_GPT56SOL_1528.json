@@ -1,0 +1,88 @@
+{
+  "schema": "CLAY_GO_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated component organ",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main": "90a54a0795f861fc78398778380de49467c881b9",
+  "branch": "gpt56sol/go-mini-active-turn-pointer-20260823-1528",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "problem": "The real pipeline_cognitive_fabric_admit handler requires a pre-existing MiniUnifiedDB-bound causal_turn_id/task/workspace prepare identity, but the canonical .clay run interface does not carry a turn id and the handler is forbidden to invent one from generation/hash/time/random/profile/prompt material.",
+  "delta": {
+    "module": "tools/miniunifieddb_active_turn_v1.py",
+    "tests": "tests/test_miniunifieddb_active_turn_v1.py",
+    "contract": "the artefact/blogpost_entity/jspace_gwt/ACTIVE_COGNITION_TURN_V1.md",
+    "mechanism": "one generation-scoped active pointer over an already-existing mini_cognition_turn_bindings row inside the same MiniUnifiedDB",
+    "authority_change": "NONE",
+    "second_turn_ledger_created": false,
+    "causal_turn_id_generated": false,
+    "truth_or_effect_authority_created": false
+  },
+  "exact_source": {
+    "tools/miniunifieddb_active_turn_v1.py": {
+      "git_blob_sha1": "803536f2554818418889731e34e543a90657395f",
+      "sha256": "423effe5ed4795bdb250c2f78273edf5d8cf547fee593cadd3c09b99a0f5d771",
+      "bytes": 9587
+    },
+    "tests/test_miniunifieddb_active_turn_v1.py": {
+      "git_blob_sha1": "c77d28d53559933599a42888cf2b2827e32bec39",
+      "sha256": "6aaf35b04f0d620a862c46614de934aea7243ad25816d15ed98f7f17a204cf19",
+      "bytes": 6365
+    },
+    "the artefact/blogpost_entity/jspace_gwt/ACTIVE_COGNITION_TURN_V1.md": {
+      "git_blob_sha1": "1ebee96f8f93f83d964f032fc5f14c9f124a673b"
+    }
+  },
+  "bounded_isolated_component_evidence": {
+    "surface": "ChatGPT isolated Linux/Python component container",
+    "layout": "repo-like tools/ plus tests/ mirror",
+    "commands": [
+      "python -m py_compile tools/miniunifieddb_active_turn_v1.py tests/test_miniunifieddb_active_turn_v1.py",
+      "python -m unittest -v tests/test_miniunifieddb_active_turn_v1.py"
+    ],
+    "py_compile": "PASS",
+    "tests_run": 7,
+    "failures": 0,
+    "errors": 0,
+    "result": "PASS",
+    "covered": [
+      "refuse database without existing cognition turn-binding store",
+      "exact active-turn activation and prepare resolution",
+      "task text must match pre-existing bound task hash",
+      "stale generation rejected",
+      "second different active turn in same generation rejected",
+      "post-activation task-text tamper rejected",
+      "canonical cognition resolver returning a different turn binding rejected"
+    ]
+  },
+  "unusual_experiment": {
+    "new_count": 0,
+    "reason": "The macrocycle unusual intervention is already the merged PR #1240 DOWNSTREAM_CONTEXT_SWAP_AFTER_ADMISSION experiment; this delta used only deterministic component regressions."
+  },
+  "hcu_parallel": {
+    "package_state": "BYTE_COMPLETE_12_MEMBER_MICROENTITY_CURRENT_ZIP_LANDED_VIA_PR_1244",
+    "runtime_capacity": "UNVERIFIED",
+    "delta_this_component": "NO_CHANGE_NON_DUPLICATE"
+  },
+  "evidence_credit": {
+    "active_turn_selection_mechanism": "SUPPORTED_EXACT_BLOB_BOUNDED_COMPONENT",
+    "pipeline_cognitive_fabric_admit_runtime_handler": 0,
+    "bundled_08b_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_gwt_runtime": 0,
+    "claude_adapter_runtime": 0,
+    "hcu_capacity": 0,
+    "whole_mini_entity": 0
+  },
+  "next_gate": "Connect an admitted upstream causal-turn creator/binder to activate_bound_turn, then make the retained ProfilePipelineRuntime pipeline_cognitive_fabric_admit handler resolve the active prepare material from the same MiniUnifiedDB before compiling ZERO_WORKSPACE_CAPSULE/v1 and ZERO_INFERENCE_PACKET/v2. Preserve post-gate/CAS final UCF receipt ordering and obtain actually-started authorized exact-source isolated execution.",
+  "safety": {
+    "free_only": true,
+    "together_used": false,
+    "paid_execution": false,
+    "provider_network_execution": false,
+    "vps_or_self_hosted_or_production_testing": false,
+    "model_execution": false,
+    "training": false
+  }
+}

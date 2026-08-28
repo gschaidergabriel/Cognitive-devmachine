@@ -1,0 +1,60 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "observed_at": "2026-08-25T10:35:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.78",
+    "mode": "FREE_ONLY",
+    "program_state_schema": "8.78"
+  },
+  "reentry_main_before_delta": "9239370999c192328f33eb47fa3bbb7e88ab39a7",
+  "source_delta_commit": "4b32da9340a07d514eacd23c1fb76be09ff1daf0",
+  "finding": "The process-level go878 raw-generation backpressure patch is liveness-unsafe on the exact current architecture because tools/run_6000_free_swarm_fast.py installs free_swarm_backfill_scheduler into the same 6000 fabric. pending_extraction is included in the pressure term used by the patcher, so stopping the 6000 process under high pending-extraction pressure can stop the only observed historical extraction transport that would drain that pressure.",
+  "observed": {
+    "fabric_path": "tools/run_6000_free_swarm_fast.py",
+    "fabric_blob": "b9d24b3bf063210626869222f14787b170a2d38a",
+    "fabric_imports_historical_backfill_scheduler": true,
+    "fabric_installs_historical_backfill_scheduler": true,
+    "backfill_scheduler_path": "tools/free_swarm_backfill_scheduler.py",
+    "backfill_scheduler_blob": "08ab932003d907709f44cd964f45c4334aadf589",
+    "backfill_current_raw_fraction_when_packets_exist": "approximately_25_percent",
+    "unsafe_patcher_path": "tools/apply_go878_raw_generation_backpressure.py",
+    "unsafe_patcher_original_blob": "d2dfcfe62daa0a50ac4f3dcad0290bd468d20e91",
+    "unsafe_control_action": "stop_6000_on_ready_plus_implementation_plus_pending_extraction_pressure_gte_threshold",
+    "fail_closed_guard_added": true
+  },
+  "hypothesis": "A liveness-preserving conversion controller should separate raw-generation admission from historical-conversion transport. While pending extraction exists, the fabric must remain alive and raw-only slots should be reduced or eliminated at prompt/scheduler level; process-level stop may be considered only when the remaining pressure is not carried by that process.",
+  "counterhypothesis": "A separate independently active historical extraction transport could make process-level stop safe, but no such active extraction transport was observed in the inspected supervisor/fabric chain. Exact runtime process inventory is still required before promoting the stronger claim that the 6000 fabric is the sole extractor.",
+  "implemented": {
+    "path": "tools/apply_go878_raw_generation_backpressure.py",
+    "behavior": "FAIL_CLOSED_IF_CURRENT_6000_FABRIC_CARRIES_HISTORICAL_BACKFILL",
+    "fabric_blob_binding": "b9d24b3bf063210626869222f14787b170a2d38a",
+    "supervisor_blob_binding": "cdbe6a4da423b2fb35fe988adc04397407360c3f",
+    "provider_network_io_added": false,
+    "credentials_read_added": false,
+    "provider_concurrency_increased": false
+  },
+  "go_tracks": {
+    "A": "ADVANCED: prevented a source-ready control-plane patch from freezing historical conversion liveness; narrowed the successor design to split/prompt-level raw-generation gating.",
+    "B": "HCU_NO_CHANGE_WITH_REASON: current highest-information blocker is conversion-control liveness, not a missing HCU/Typed Entry primitive; retained HCU donor lane remains nonduplicated.",
+    "C": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: Qwen3-0.6B model-specific causal lane still lacks terminal exact-source runtime evidence and this turn has no reproducible atomic unusual-experiment identity."
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "reason": "No shared immutable reproducible macrocycle/request identity exposed to this organ."
+  },
+  "credit": {
+    "whole_entityos_hcu": 0,
+    "full_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "provider_runtime_added": 0,
+    "backpressure_runtime_added": 0,
+    "source_safety_delta": true
+  },
+  "next_exact_action": "Replace process-level stop with a liveness-preserving conversion controller: preserve the 6000 fabric while pending_extraction > 0 and drive raw-only prompt slots toward zero under high pressure; separately route NEEDS_IMPLEMENTATION backlog before allowing new raw research scale. Add a regression that high pending-extraction pressure cannot stop the active extraction transport."
+}

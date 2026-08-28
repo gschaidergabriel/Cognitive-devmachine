@@ -1,0 +1,40 @@
+{
+  "schema": "blogpost-entity-native-sandbox-receipt/v2",
+  "date": "2026-08-22",
+  "program": "BLOGPOST_ENTITY_ALL_IN_ONE",
+  "runtime_entity_count": 1,
+  "release_shape": [
+    "blogpost_entity.clay Linux x86_64 ELF executable",
+    "blogpost_entity.db SQLite MiniUnifiedDB"
+  ],
+  "native_version": "mini-entity/0.2.0",
+  "binary_sha256": "18bb19fe3aa6028afa04a1f76a3eb1fb559bda83458511cc7c31335de72cd2ff",
+  "fresh_db_sha256": "db9d633ea96518d24e379bce12a7720b53fbd089a1b7e40919b93ba064777b22",
+  "native_source_sha256": "7693447b083d0c6bb689ad80a565f98af0415951dba8e5563ba95ce7c1f46dc1",
+  "selftest_sha256": "e4cbace2d50079e2349dc52f299644c9774f00c28b10ed76aa317d69a227597b",
+  "sandbox_result": "PASS",
+  "tested_behaviors": [
+    "fresh SQLite MiniUnifiedDB initialization",
+    "evidence ingest and persistent generation state",
+    "runtime-editable system/personality prompt beneath immutable architecture guard",
+    "OpenAI-style provider A request/response path",
+    "provider B swap using a different request template and JSON response pointer without identity/state reset",
+    "API token entry through stdin and redaction from config/status output",
+    "failed provider call leaves source events unconsumed and generation unchanged",
+    "successful call consumes source events exactly once and persists output/state atomically",
+    "verified empty second run produces a quiet output without invented events",
+    "secret value appearing in model output is rejected without consuming the packet",
+    "unsupported first-person Bare-Metal/local-model self claim is rejected while corresponding personality state is UNKNOWN",
+    "non-loopback plaintext HTTP endpoint is rejected so a bearer token is not sent cleartext",
+    "two concurrent runs over the same event are fenced by generation/event CAS: exactly one succeeds",
+    "database PRAGMA integrity_check returns ok"
+  ],
+  "transport_evidence": {
+    "loopback_http": "PASS",
+    "two_distinct_provider_contracts": "PASS",
+    "real_external_provider": "NOT_RUN"
+  },
+  "real_provider_blocker": "No Mistral or other external API secret is mounted in the current chat sandbox environment. No live-provider PASS is claimed.",
+  "known_gap": "The canonical structured BLOGPOST_ENTITY.clay source still contains Mistral-specific request naming/default wiring and must converge with the provider-neutral native reference semantics.",
+  "acceptance": "IN_PROGRESS"
+}

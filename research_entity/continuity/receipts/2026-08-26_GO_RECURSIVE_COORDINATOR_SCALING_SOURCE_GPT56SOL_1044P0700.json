@@ -1,0 +1,36 @@
+{
+  "schema": "CLAY_GO_RECURSIVE_COORDINATOR_SCALING_SOURCE/v1",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "owner_scope": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+  "trigger_scope": "GO_MACHINE_ARCHITECTURE_ONLY_NOT_TRIGGER2_TRAINING",
+  "finding": "Current supervisor 8.89 is centered on Trigger-2 training admission, but the current owner directive explicitly separates go=build/test the machine from 2=build training. This GO cycle therefore did not spend GO credit on dataset admission work.",
+  "new_source": [
+    "tools/xeno_recursive_coordinator_scaling_acceptance_v1.py",
+    "tests/test_xeno_recursive_coordinator_scaling_acceptance_v1.py"
+  ],
+  "source_commits": [
+    "f46e8a240e1baa5dd6ba3763926d27f5f172308f",
+    "5372400bd6b43cf80876876e2133145dd992be3d"
+  ],
+  "architecture_target": "ordinary read-only Xenos -> dynamically leased local coordinators -> compressed summaries -> higher-scope coordinators -> bounded-fanin recursive shared-state publication",
+  "deterministic_scale_matrix": [10, 100, 1000, 10000],
+  "max_fanin_default": 8,
+  "hard_invariants": [
+    "ordinary nodes never emit S1 write intent",
+    "only valid coordinator leases may emit summary writes",
+    "per-coordinator fan-in remains bounded",
+    "all leaf evidence ancestry remains digest-accounted at root",
+    "higher levels carry compact digest/count summaries rather than raw leaf payload concatenation",
+    "invalid lease fails closed"
+  ],
+  "credit_boundary": {
+    "source_progress": true,
+    "repository_bound_test_execution_observed_this_cycle": false,
+    "physical_scale_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_go_frontier": "Execute this scaling harness repository-bound, then bind it to the real physical GRID10 fabric so measured fan-in, compression ratio, state-update latency, contention, coordinator crash/replacement and evidence ancestry are observed with real processes instead of only deterministic topology simulation."
+}

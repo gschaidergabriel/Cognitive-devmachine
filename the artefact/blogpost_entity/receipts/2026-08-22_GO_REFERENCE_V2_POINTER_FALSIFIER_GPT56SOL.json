@@ -1,0 +1,83 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "timestamp_local": "2026-08-22T19:49:00+07:00",
+  "macrocycle_id": "go-20260822T1949+07-gpt56sol-mini-reference",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "execution_policy": {
+    "free_only": true,
+    "provider_network_execution": "NOT_ATTEMPTED",
+    "secrets": "NOT_READ",
+    "paid_create": false,
+    "spend_usd": 0
+  },
+  "source_binding": {
+    "main_sha_at_discriminator": "ed58970b66fb37243d1d5aff8a8de11b30b38714",
+    "canonical_pipeline_path": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "canonical_pipeline_blob_sha": "66898a4980a51e17ba2717e97352403164b4bdf8",
+    "reference_runtime_path": "tools/clay_profile_pipeline_runtime.py",
+    "reference_runtime_blob_sha": "fa3031ac7bf4cea6a12c57f781c29c9c3650ebef",
+    "shipped_profile_path": "the artefact/blogpost_entity/presets/zero_blog.json",
+    "shipped_profile_blob_sha": "f99433df7151338442e5d8e392c63c683e3d1d26"
+  },
+  "anchors": [
+    "The current canonical Clay pipeline uses pipeline_profile_read and inference_generate.",
+    "The exact bound reference runtime still authorizes profile_load and provider_chat_json and therefore remains outside the current required effect surface.",
+    "The shipped profile is clay-pipeline-profile/v2 and stores inference configuration under inference rather than provider.",
+    "The shipped v2 inference response_pointer is /choices/0/message/content.",
+    "The exact bound reference runtime _pointer implementation splits only on '.' and therefore interprets /choices/0/message/content as one dictionary key rather than RFC-6901 path segments.",
+    "The merged fresh-DB boot-order repair at ed58970 initializes pipeline_init before pipeline_profile_read but does not change the reference runtime blob."
+  ],
+  "unusual_experiment": {
+    "ordinal_in_macrocycle": 1,
+    "id": "RFC6901_RESPONSE_POINTER_REAL_PROFILE_FALSIFIER",
+    "class": "SOURCE_MECHANISM_DISCRIMINATOR",
+    "question": "Would a narrow stale-effect rename alone make the structured reference executable against the shipped v2 inference profile?",
+    "preferred_hypothesis": "YES_EFFECT_SURFACE_RENAME_IS_SUFFICIENT",
+    "counterhypothesis": "NO_SHIPPED_V2_RESPONSE_EXTRACTION_HAS_AN_INDEPENDENT_POINTER_SEMANTICS_MISMATCH",
+    "intervention": "Bind the exact shipped zero_blog v2 response_pointer literal to the exact current _pointer parser semantics rather than to its legacy dot-path default.",
+    "prediction_preferred": "The shipped pointer is consumed into choices -> 0 -> message -> content without another mechanism change.",
+    "prediction_counter": "The parser treats the entire slash pointer as one map key and cannot extract the shipped provider response.",
+    "observed": "COUNTERHYPOTHESIS_RETAINED_AT_SOURCE_MECHANISM_SCOPE",
+    "result": "A rename-only repair is insufficient; response-pointer parsing must converge with the shipped v2 contract in the same reference-runtime repair.",
+    "runtime_execution_credit": 0
+  },
+  "architecture_delta": {
+    "required_reference_repair": [
+      "Expose exactly pipeline_init, pipeline_profile_read, pipeline_state_read, pipeline_collect, pipeline_compile, pipeline_build_prompt, inference_generate, pipeline_gate and pipeline_commit.",
+      "Deauthorize profile_load and provider_chat_json as alternate canonical effects.",
+      "Read the active application/personality/inference profile from MiniUnifiedDB with integrity binding; external preset JSON remains import/configuration only.",
+      "Make inference_generate consume profile.inference and retain one generic inference responsibility for admitted API/loopback/local_exec backends.",
+      "Parse the shipped RFC-6901-style response_pointer /choices/0/message/content (including ~0/~1 decoding if JSON Pointer is admitted) or explicitly change the canonical profile contract and all profiles together; do not silently keep incompatible mixed syntax.",
+      "Preserve the already-merged recursive persisted-string leak/active-secret gate and generation/atomicity semantics.",
+      "Do not remove the profile-v2 native fail-closed guard until full parity and exact isolated runtime evidence exist."
+    ],
+    "required_regressions": [
+      "Exact effect-surface equality with no stale legacy aliases.",
+      "Fresh DB initializes before DB-resident profile read and missing active profile fails closed.",
+      "Shipped zero_blog v2 profile can be imported/read without binding application semantics into executable identity.",
+      "RFC-6901 response pointer extracts a nested list/object response exactly.",
+      "Malformed/missing pointer path fails closed.",
+      "Provider override/no-network fixture still reaches the same inference_generate responsibility.",
+      "Recursive persisted output leak and active-secret rejection remain intact.",
+      "No state reset when inference backend/profile configuration changes under admitted rules."
+    ]
+  },
+  "evidence_boundary": {
+    "claim_class": "SOURCE_MECHANISM_FALSIFIED_AND_REPAIR_CONTRACT_BOUND",
+    "exact_runtime": "UNOBSERVED_EXECUTION_SURFACE_UNAVAILABLE",
+    "test_pass": "NOT_CLAIMED",
+    "test_fail": "NOT_CLAIMED",
+    "native_profile_v2_parity": "NOT_PROMOTED",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_isolated_executable_step": "After one fresh-main narrow reference-runtime implementation converges the current effect surface, DB profile authority, generic inference_generate and shipped response-pointer semantics without regressing recursive leak/CAS gates, execute focused reference/profile-v2 regressions on an actually-started authorized isolated runner; only then continue native-v2 parity execution.",
+  "notes": [
+    "No VPS, self-hosted runner, provider request, Together credentialed preflight, upload, billed create or training was used.",
+    "The older broad structured-runtime PRs remain donor material only; this receipt does not authorize merging their unrelated state-box/schema changes wholesale.",
+    "The one unusual-experiment slot for this macrocycle is consumed by RFC6901_RESPONSE_POINTER_REAL_PROFILE_FALSIFIER."
+  ]
+}

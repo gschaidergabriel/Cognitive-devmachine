@@ -1,0 +1,125 @@
+{
+  "erfolge": [
+    {
+      "art": "erfolg",
+      "beleg": "Gemessen: 0 Namenskollisionen, Schema idempotent, Herz waehrend der Operation weiter gewachsen (+543 Kanten).",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "Ein Gefaess statt zwei Datenbanken",
+      "wirkung": "87 Clay-Korpustabellen und 19 Laufzeitobjekte in EINER Datei, kollisionsfrei."
+    },
+    {
+      "art": "erfolg",
+      "beleg": "docker ps: entityos up, healthy. Bereitschaftspruefung gruen.",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "EntityOS laeuft im Container auf dem VPS",
+      "wirkung": "Ohne nested Virtualisierung, ohne Anruf bei Hostinger."
+    },
+    {
+      "art": "erfolg",
+      "beleg": "clayverse/bahnen.py, leere Antwort zaehlt als Ausfall und schaltet weiter.",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "Bahnenrouter: Faehigkeit statt Anbieter",
+      "wirkung": "Das Modell fragt nach einer Faehigkeit, der Code waehlt den Anbieter. Anteilsgrenzen erzwungen, erschoepft = Absage statt stiller Verschlechterung."
+    },
+    {
+      "art": "erfolg",
+      "beleg": "Gegen einen absichtlich luegenden Extraktor geprueft: 1 genommen, 2 verworfen. 'Kubernetes' und '12 Server' kamen nie ins Gedaechtnis.",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "Gedaechtnis mit Woertlichkeitspruefung",
+      "wirkung": "Ein Beleg muss zeichengenau im Quelltext stehen, sonst wird der Eintrag verworfen."
+    },
+    {
+      "art": "erfolg",
+      "beleg": "Gegenprobe: 0 Artikel aus projekt=Dr.-Unterweger landeten woanders als bei andreas.",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "14.284 Wiki-Artikel den Menschen zugeordnet",
+      "wirkung": "gemeinsam 11.543, gabriel 1.633, andreas 1.092, unbekannt 16."
+    },
+    {
+      "art": "erfolg",
+      "beleg": "Generation 36, 45 Dateien, Lecksuche nach Adressen leer.",
+      "datum": "2026-08-18",
+      "gehoert": "gabriel",
+      "seit_zero": 1,
+      "titel": "agentZero-Ordner autonom auf GitHub",
+      "wirkung": "Code, Schema, leere UnifiedDB, Profile, Bauverlauf -- jede Datei mit Metadaten."
+    }
+  ],
+  "fehlschlaege": [
+    {
+      "art": "fehlschlag",
+      "beleg": "Gemessen im Testlauf. Ursache: memory_tabelle hatte weder user_id noch session_id -- sie KONNTE strukturell nicht trennen. Behoben: Spalte ergaenzt, Bestand zugeordnet statt geraten, user_id ohne Vorgabewert.",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "Gedaechtnis konnte die zwei Menschen nicht trennen",
+      "wirkung": "Andreas bekam in SEINER Sitzung Gabriels private Eintraege woertlich zurueck."
+    },
+    {
+      "art": "fehlschlag",
+      "beleg": "Gefunden beim Nachzaehlen, nicht durch eine Fehlermeldung.",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "Schatten-Datenbank: Zuege gingen in eine zweite Datei",
+      "wirkung": "env -i loeschte CLAYVERSE_DB_PATH, die Zuege landeten woanders."
+    },
+    {
+      "art": "fehlschlag",
+      "beleg": "77 rote Tests, 'cannot commit - no transaction is active'. Heute per Test reproduziert: der Rollback-Pfad wirft dann selbst.",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "Schemaanlage in einer Lesefunktion riss 77 Tests ein",
+      "wirkung": "executescript() committet implizit und zerlegte die laufende Transaktion."
+    },
+    {
+      "art": "fehlschlag",
+      "beleg": "Beim Nachmessen der Verdichtung aufgefallen, nicht im Betrieb.",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "Ein falscher Spaltenname, zweimal, beide Male verdeckt",
+      "wirkung": "gehoert statt gehoert_zu. Einmal warf die Abfrage und ein except schluckte es ('nichts gemessen' bei voller Tabelle), einmal gab .get() klaglos None -- die Vorstufe haette gelesen: kein Rechner gehoert dir."
+    },
+    {
+      "art": "fehlschlag",
+      "beleg": "Gemessener Testlauf, Zeros Antwort woertlich protokolliert. Behoben mit menschen_profil() und wiki_zuordnung().",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "Zero war blind fuer die Menschen, obwohl die Daten dalagen",
+      "wirkung": "Auf 'wem gehoert <GESCHWAERZT: Rechnername>?' kam korrekt UNBEKANNT -- es gab keinen Weg zu den Tabellen. Die Weigerung war richtig, die Blindheit war der Baufehler."
+    },
+    {
+      "art": "fehlschlag",
+      "beleg": "Nachgemessen: active_turns leer, Doppel liegen 49 s bis 8 min auseinander (wiederholte Testeingaben, keine Doppelaufnahme). Veraltete Dokumentation verbrennt die Aufmerksamkeit, die ein echter Fehler braucht.",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "Ein veralteter Docstring erzeugte einen Fehlalarm",
+      "wirkung": "Ein Pruefer meldete den Live-Chat-Pfad als unsicher -- gestuetzt auf einen Kommentar, den die Reparatur schon ueberholt hatte."
+    },
+    {
+      "art": "fehlschlag",
+      "beleg": "Live-Aufruf. Zeigt, dass ein Eichwert von vorgestern kein Betriebszustand ist.",
+      "datum": "2026-08-18",
+      "gehoert": "gemeinsam",
+      "seit_zero": 1,
+      "titel": "Zwei Groq-Modelle sind ohne Ankuendigung verschwunden",
+      "wirkung": "llama-3.1-8b-instant und llama-3.3-70b-versatile: am 15.08. gemessen in Ordnung, am 18.08. beide 404."
+    }
+  ],
+  "warum_fehlschlaege": "Jeder Fehlschlag hier hat im Betrieb NICHTS geworfen. Die Liste ist das genaueste Bild davon, wie dieses System kaputtgeht: still.",
+  "zeitraum": "Zero ist seit 2026-08-18 in Benutzung -- einem Tag. Alles mit seit_zero=1 stammt aus diesem Tag. Das ist kein Makel, aber es zu verschweigen waere einer."
+}

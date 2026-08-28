@@ -1,0 +1,88 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_EXECUTOR_READY_BUILD_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "authority_reentry": {
+    "research_main_observed_before_write": "325ebf75821888319fa9ac965f7fb650dac397ae",
+    "bootstrap_cache_noncanonical": true,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0
+  },
+  "predecessor_negative_evidence": {
+    "executor_commit": "588315b63f4f4255f6e73bd604cbc1789cbe12c9",
+    "deployment_id": "dpl_3brnpJBb1jq9mQE9yGuHx1ahVM6m",
+    "deployment_state": "ERROR",
+    "error": "ENTITYOS_HCU_PREVERCEL_SUCCESSOR_GUARD_CHAIN_DRIFT",
+    "classification": "SOURCE_GUARD_SYNC_FAILURE_ONLY",
+    "sandbox_execution_observed": false,
+    "runtime_credit_added": 0
+  },
+  "repair_observed": {
+    "executor_commit": "bdb1d5116ba3243841c263cc30eb6620e4da3f2c",
+    "message": "fix(hcu): sync exclusive guard with carrier donor path guard",
+    "scope": "EXISTING_PR810_SINGLE_EXECUTOR_LANE_ONLY",
+    "exclusive_guard_now_requires_carrier_donor_path_guard": true,
+    "exclusive_guard_replays_carrier_donor_path_guard": true,
+    "new_executor_lane_created": false,
+    "new_state_or_effect_authority_created": false
+  },
+  "exact_head_build_evidence": {
+    "deployment_id": "dpl_7u6VPVhzXpGTWmmDA2PochdG2DCq",
+    "deployment_git_sha": "bdb1d5116ba3243841c263cc30eb6620e4da3f2c",
+    "deployment_state": "READY",
+    "build_completed": true,
+    "carrier_donor_path_identity": "PASS",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "manifest_carrier": "jspace-v4-v3-required-blobs-511d5689.json",
+    "source_carrier": "jspace-execution-store-511d5689",
+    "manifest_contract_identity": "PASS",
+    "historical_5c59891b_carrier_immutable": "PASS",
+    "exact_blobs_checked": 17,
+    "upstream_trust_construction": "PRODUCTION_DERIVED",
+    "promotion_guard": "SOURCE_REBOUND_READY_SUCCESSOR_DYNAMIC_17_BLOB_EXACT_14_RESULT_FENCE_PASS",
+    "permission_guard": "SOURCE_REBOUND_READY_SOURCE_VERIFY_PERMISSION_FENCE_PASS",
+    "qualified_executor_identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "exclusive_executor_guard": "CURRENT_EXECUTOR_FREE_ONLY_JSPACE_V4_V3_SOURCE_REBOUND_READY_SUCCESSOR_DYNAMIC_GUARDED",
+    "fixed_result_fence": "EXACT_14_VERBOSE_TEST_IDENTITIES_PLUS_EXACT_COUNT_PLUS_STANDALONE_OK_PLUS_FAILURE_SUMMARY_REJECTS",
+    "evidence_scope": "BUILD_AND_SOURCE_GUARDS_ONLY"
+  },
+  "free_only_runtime_boundary": {
+    "remaining_sandbox_quota_directly_observed": false,
+    "remaining_quota_assumption_forbidden": true,
+    "sandbox_runtime_admitted": false,
+    "sandbox_create_observed": false,
+    "function_result_observed": false,
+    "protected_access_transport_previously_blocked": true,
+    "transport_or_auth_failure_is_product_failure": false,
+    "ready_deployment_is_runtime_execution": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BUILD_CONVERGENCE: the exact repaired PR810 head progressed from predecessor build failure to READY while carrier, 17-blob closure, promotion, permission and exclusive-executor guards all emitted PASS at build/source scope.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_PROVENANCE_INTEGRITY: carrier path identity is now bound to retained donor 511d5689 and replayed inside the exclusive executor guard, reducing stale-carrier ambiguity across the existing Typed Entry -> route -> engine/load -> GRID10 -> execution-store chain.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_BUILD_READINESS_ONLY: the exact J-Space 17-blob/14-result promotion fences are build-green on the repaired exact head; no Sandbox/model/J-Space runtime or training credit is promoted because remaining included quota and Function execution are unobserved."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a moving current-facing surface under parallel writes; this append-only exact receipt records the post-repair READY transition without overwriting fresher whole-system state."
+  },
+  "next_exact_gate": "Do not invoke Sandbox while remaining included Vercel Sandbox quota is unobserved. First obtain directly observed non-charging FREE_ONLY quota authority through an admitted read-only provider/account surface and a protected Function access path that yields a real Function response without billing/protection changes. Then re-enter exact main, PR1263, PR810 and deployment identities; only if all remain exact may the fixed 17-blob/14-test route progress toward Sandbox.create. Separately, J-Space model credit still requires a real zero-cost local approximately-0.8B loader/model-executor I/O boundary bound to verified loader consumption and canonical ModelExecution admission."
+}

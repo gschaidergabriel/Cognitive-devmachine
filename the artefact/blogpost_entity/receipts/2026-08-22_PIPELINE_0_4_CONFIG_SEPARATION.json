@@ -1,0 +1,42 @@
+{
+  "schema": "mini-entity-sandbox-receipt/v2",
+  "date": "2026-08-22",
+  "program": "BLOGPOST_ENTITY_ALL_IN_ONE",
+  "design_delta": "application/personality removed from native binary and moved to SQLite configuration; Zero blog is shipped DB preset only",
+  "native_pipeline": {
+    "version": "mini-entity/0.4.0",
+    "form": "Linux x86-64 ELF executable with .clay filename",
+    "sha256": "b14844811f64e9bc81115eb7a9aac15f4cc5019acc81283854b85f2bbf85d32b",
+    "neutral_fresh_db": true,
+    "application_string_audit": "PASS: no zero_blog, Gasthaus, Bare Metal, local-model or T_Omega application strings found in ELF"
+  },
+  "shipped_default_db": {
+    "sha256": "64c3089d7c1c99d682df00c29803ecad62f15665ec114e5e7d1fb6a9394e28f2",
+    "integrity_check": "ok",
+    "preset": "zero_blog",
+    "token_present": false
+  },
+  "runtime_configurable": [
+    "all profile.* fields",
+    "full application_config blob",
+    "full system prompt",
+    "provider endpoint",
+    "model",
+    "API token",
+    "auth header/prefix",
+    "request template",
+    "response pointer",
+    "temperature",
+    "max tokens",
+    "configured semantic gate phrase sets"
+  ],
+  "sandbox_tests": {
+    "persona_replacement_without_rebuild": "PASS: Zero/Gasthaus preset replaced by Mara English dry lab-report application using same ELF",
+    "identity_state_continuity": "PASS: generation advanced without DB reset",
+    "exactly_once": "PASS",
+    "verified_quiet_second_run": "PASS",
+    "database_integrity": "PASS"
+  },
+  "architecture_rule": "binary owns only evidence preprocessing, canonical envelope, provider transport, generic truth/secret gates, exactly-once consumption, concurrency CAS and atomic SQLite persistence; application semantics belong to DB configuration",
+  "real_provider": "NOT_CREDITED_IN_THIS_RECEIPT; no authorized API secret was mounted in the current chat sandbox"
+}

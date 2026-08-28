@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_GO_FOLLOWUP_REPLICATION_RECEIPT",
+  "trigger": "go",
+  "parent_macrocycle_receipt": "research_entity/trigger_runs/go/20260823T2357p0700-gpt56sol-entityos-hcu-authority-fusion/RUN_RECEIPT.json",
+  "parent_macrocycle_commit": "2216866cc75f8bf48542cb6fb55b62df21ef1c0a",
+  "persistent_research_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "main_observed_before_followup": "592c098a41fd475f5e610de2a858faeb89d1b4ca",
+  "coordination": {
+    "accepted_macrocycle_unusual_experiment": "AUTHORITY_CONSTANT_TRANSPLANT",
+    "accepted_macrocycle_unusual_experiment_count": 1,
+    "local_boundary_discriminator_status": "UNINTENDED_DUPLICATE_INDEPENDENT_REPLICATION_NO_EXPERIMENT_CREDIT",
+    "local_boundary_discriminator_name": "HOST_TYPE_NUMERIC_BOUNDARY_ALIAS",
+    "reason": "The parent macrocycle receipt already recorded the single allowed unusual experiment. The local numeric-boundary discriminator was executed before that global receipt was discovered during concurrent rejoin; it is preserved as negative coordination evidence and receives no additional experiment or promotion credit.",
+    "second_unusual_experiment_authorized": false,
+    "second_canonicalizer_created": false,
+    "duplicate_source_write_performed": false
+  },
+  "finding": {
+    "pre_repair_exact_source_blob": "7e1be2cead9e069d5192c6e430a2abba7de0412b",
+    "observed_pre_repair_behavior": "Python ENTITYOS_HCU_TYPED_CANONICAL/v1 accepted integer-valued float 2^53 and 1e20 while the branch Node reference rejected integer-valued Numbers outside Number.MAX_SAFE_INTEGER.",
+    "classification": "CROSS_LANGUAGE_ADMISSION_DOMAIN_DIVERGENCE_AT_SOURCE_MECHANISM_SCOPE",
+    "parallel_fusion": "Before a non-stale write could be applied, PR1263 advanced and independently landed the same fail-closed integral-float repair plus a regression. GitHub blob fencing rejected two stale writes with HTTP 409, preventing overwrite of newer shared state."
+  },
+  "retained_lane": {
+    "pr": 1263,
+    "head_exactly_replicated": "9a647d6376adf580ac8ca063454de32630dc6a3c",
+    "source_path": "the artefact/MicroEntity/hcu/hcu_causal_canonical_v1.py",
+    "source_blob": "fe75658b68134303e51b723280d42104575eacd7",
+    "test_path": "the artefact/MicroEntity/hcu/test_hcu_causal_canonical_v1.py",
+    "test_blob": "07ecaa3d5415f86f8e2c6ac999ba9f3d4aa14060",
+    "selected_canonicalization_authority": "ENTITYOS_HCU_TYPED_CANONICAL/v1"
+  },
+  "exact_component_replication": {
+    "environment": "isolated ChatGPT Linux tool container",
+    "source_git_blob_reconstructed": true,
+    "test_git_blob_reconstructed": true,
+    "tests_run": 10,
+    "tests_passed": 10,
+    "tests_failed": 0,
+    "node_cross_language_reference_executed": true,
+    "integral_float_boundary_regression_passed": true,
+    "classification": "EXACT_BLOB_COMPONENT_REGRESSION_ONLY",
+    "runtime_credit_change": 0,
+    "whole_product_credit_change": 0
+  },
+  "current_architecture_delta": {
+    "canonicalization_selection": "ENTITYOS_HCU_TYPED_CANONICAL/v1 selected as the sole new Entry+HCU causal identity authority on retained PR1263",
+    "remaining_blocker": "The active source path is still mixed-schema until new-version Typed Entry event/admission, router policy/EngineAdmission/route and inference receipt identities are wired end-to-end to the selected schema and mixed/unknown/downgrade replay fails closed.",
+    "readme": "NO_CHANGE_CURRENT_MAIN_ALREADY_RECORDS_CURRENT_FRONTIER"
+  },
+  "execution_boundary": {
+    "authorized_product_runtime_started": false,
+    "vercel_sandbox_create_start_exec_exposed_to_this_organ": false,
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_used": false,
+    "secrets_used": false,
+    "entityos_hcu_whole_runtime_credit": 0
+  },
+  "next_exact_gate": [
+    "wire ENTITYOS_HCU_TYPED_CANONICAL/v1 through new-version Typed Entry event/admission identity production",
+    "wire the same schema/version through router policy, EngineAdmission, RouteDecision and inference receipt hashing/echo",
+    "reject mixed, unknown and downgrade canonicalization versions fail-closed while preserving historical hash scope",
+    "run exact-current combined Entry + route + inference producer + canonicalizer + GRID10 regressions on an actually-started authorized isolated executor",
+    "only then bind exact local checkpoint/tokenizer/runtime/build bytes and measured capacity evidence before runtime promotion"
+  ],
+  "acceptance": "IN_PROGRESS"
+}

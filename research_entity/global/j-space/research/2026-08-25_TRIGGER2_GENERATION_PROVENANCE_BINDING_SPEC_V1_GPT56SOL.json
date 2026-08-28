@@ -1,0 +1,183 @@
+{
+  "schema": "CLAY_TRIGGER2_GENERATION_PROVENANCE_BINDING_SPEC/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CURRENT_RESEARCH_SPEC_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "b0ca0439be4a310db9fd9cc2237c730a71953df4",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "research_delta": {
+    "id": "SOURCE_HASH_IS_NOT_GENERATION_PROOF",
+    "classification": "P0_PROVENANCE_ROOT_GAP",
+    "finding": "The current derivation-bound gate v2 verifies the bytes of a row-declared generator path and independently validates a row-supplied formal world/event dependence registry, but it does not prove that the verified generator invocation produced those exact evaluator objects. A legitimate source hash therefore cannot by itself authenticate an arbitrary internally consistent world/registry/event supplied alongside the row.",
+    "consequence": "Without output-to-invocation binding, the positive-label authority root can move from caller independence_qualified to caller-controlled evaluator state. Positive D/E/Epistemic admission must remain blocked.",
+    "counterhypothesis": "Hashing the named generator plus checking world/registry internal consistency is sufficient because the generator is trusted source.",
+    "counterhypothesis_status": "REJECTED_FOR_TRAINING_PROMOTION",
+    "reason": "Trust in source identity does not establish that a particular output was produced by that source, with the claimed inputs, under the claimed invocation. The output identity must be bound to the generator definition and materials or deterministically recomputed inside the gate."
+  },
+  "current_artifact_disposition": [
+    {
+      "artifact": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+      "version": "v2",
+      "status": "CURRENT_PARTIAL_P0_REPAIR_NEEDS_GENERATION_BINDING",
+      "predecessor": "semantic Hyperposition gate v3 / derivation-bound gate v1 family",
+      "successor": "same retained gate lane with XENO_SYNTHETIC_GENERATION_RECEIPT/v1 verification",
+      "revision_reason": "Derived independence is a real improvement, but generator source hash and evaluator output origin remain separable."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "version": "v2",
+      "status": "NEEDS_REVISION_STALE_GATE_AND_NO_GENERATION_RECEIPT",
+      "predecessor": "earlier owner-target Hyperposition seed donors",
+      "successor": "one rebound successor after retained gate closes generation provenance",
+      "revision_reason": "The seed still uses the older semantic gate and carries evaluator objects without a generation receipt accepted by the retained derivation-bound path."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_DERIVED_INDEPENDENCE_PROVENANCE_HARDNEGATIVE_BLUEPRINTS_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_NONPROMOTING_DONOR",
+      "predecessor": "post-derived-independence audit",
+      "successor": "executable gate mutation tests after receipt implementation",
+      "revision_reason": "Family T2_DI_03 already captures legitimate-generator/world-swap failure; no duplicate training rows are needed."
+    }
+  ],
+  "proposed_receipt": {
+    "schema": "XENO_SYNTHETIC_GENERATION_RECEIPT/v1",
+    "purpose": "Bind one exact deterministic synthetic generation invocation to the evaluator-only semantic objects consumed by the Hyperposition reference gate without granting canonical truth, effect, runtime or training authority.",
+    "required_fields": {
+      "generator": [
+        "repo_path",
+        "source_sha256",
+        "git_commit_sha",
+        "generator_schema_or_version"
+      ],
+      "invocation": [
+        "invocation_id",
+        "deterministic_parameters_jcs_sha256",
+        "materials_manifest_jcs_sha256"
+      ],
+      "subjects": [
+        "formal_world_jcs_sha256",
+        "event_dependence_registry_jcs_sha256",
+        "event_jcs_sha256",
+        "state_before_jcs_sha256"
+      ],
+      "semantic_scope": [
+        "world_id",
+        "query_id",
+        "event_id"
+      ],
+      "authority_fences": [
+        "canonical_truth_allowed=false",
+        "direct_effect_authority=false",
+        "training_eligible=false",
+        "accepted_dataset_tokens_minted=0",
+        "training_credit_minted=0"
+      ]
+    },
+    "canonicalization": "RFC8785_JCS_OR_EXACT_PROJECT_EQUIVALENT_ALREADY_ADMITTED_BY_CURRENT_AUTHORITY",
+    "digest": "SHA256",
+    "producer_rule": "The trusted deterministic generator emits or enables deterministic reconstruction of the receipt and subjects from pinned inputs. The candidate row may carry a receipt for transport, but it may not choose the trusted generator identity or redefine the digest procedure.",
+    "consumer_rule": "The retained gate resolves the expected generator identity from current gate/manifest authority, verifies exact generator bytes and commit identity, canonicalizes the supplied evaluator subjects, recomputes their digests, verifies invocation/material digests, and rejects any mismatch before deriving independence or relations.",
+    "stronger_preference": "Where cheap and deterministic, reconstruct formal world + dependence registry from pinned generator inputs inside the gate and compare exact JCS digests rather than trusting an externally assembled receipt alone."
+  },
+  "fail_closed_rules": [
+    "ROW_DECLARED_GENERATOR_PATH_IS_INPUT_NOT_AUTHORITY",
+    "ANY_EXISTING_REPO_FILE_IS_NOT_AN_ACCEPTABLE_GENERATOR_BY_EXISTENCE_ALONE",
+    "LEGITIMATE_GENERATOR_HASH_PLUS_SWAPPED_WORLD_MUST_FAIL",
+    "LEGITIMATE_GENERATOR_HASH_PLUS_SWAPPED_REGISTRY_MUST_FAIL",
+    "LEGITIMATE_GENERATOR_HASH_PLUS_MUTATED_EVENT_MUST_FAIL",
+    "SAME_EVENT_ID_PLUS_DIFFERENT_BOUND_EVENT_DIGEST_MUST_FAIL_IDENTITY_CONFLICT",
+    "DEPENDENCE_EDGE_REMOVAL_OR_REWRITE_AFTER_GENERATION_MUST_FAIL",
+    "WORLD_TEST_OR_BRANCH_PREDICTION_MUTATION_AFTER_GENERATION_MUST_FAIL",
+    "UNKNOWN_OR_MISSING_INVOCATION_OR_MATERIAL_IDENTITY_FAILS_CLOSED_FOR_POSITIVE_LABELS",
+    "RECEIPT_PASS_DOES_NOT_MINT_CANONICAL_TRUTH_EFFECT_RUNTIME_JSPACE_HCU_ENTITYOS_OR_TRAINING_CREDIT"
+  ],
+  "required_property_tests": [
+    {
+      "id": "T2_GP_01_ANY_REPO_FILE_PATH_SWAP",
+      "mutation": "Change generator repo_path to another existing repository file and recompute the row-declared source hash.",
+      "expected": "REJECT_EXPECTED_GENERATOR_IDENTITY_MISMATCH"
+    },
+    {
+      "id": "T2_GP_02_LEGIT_GENERATOR_WORLD_SWAP",
+      "mutation": "Keep exact legitimate generator identity but replace formal world + dependence registry with a different internally self-consistent pair.",
+      "expected": "REJECT_SUBJECT_DIGEST_OR_RECONSTRUCTION_MISMATCH"
+    },
+    {
+      "id": "T2_GP_03_REGISTRY_DEPENDENCE_ERASURE",
+      "mutation": "Remove a dependency edge from the event registry while keeping event metadata fresh-looking and internally valid.",
+      "expected": "REJECT_REGISTRY_DIGEST_MISMATCH"
+    },
+    {
+      "id": "T2_GP_04_EVENT_MUTATION_SAME_ID",
+      "mutation": "Reuse event_id while changing outcome, payload identity, provenance, test id or another bound semantic field.",
+      "expected": "REJECT_EVENT_IDENTITY_CONFLICT"
+    },
+    {
+      "id": "T2_GP_05_JCS_KEY_ORDER_INVARIANCE",
+      "mutation": "Reorder JSON object keys without changing values.",
+      "expected": "SAME_CANONICAL_DIGEST"
+    },
+    {
+      "id": "T2_GP_06_INVOCATION_PARAMETER_MUTATION",
+      "mutation": "Change a deterministic generator parameter while retaining old subject receipt digests.",
+      "expected": "REJECT_INVOCATION_BINDING_MISMATCH"
+    },
+    {
+      "id": "T2_GP_07_MATERIAL_MANIFEST_MUTATION",
+      "mutation": "Change a referenced generator material or formal-world template identity while retaining old output digests.",
+      "expected": "REJECT_MATERIAL_BINDING_MISMATCH"
+    },
+    {
+      "id": "T2_GP_08_PROMPT_PARAPHRASE_SEMANTIC_INVARIANCE",
+      "mutation": "Paraphrase only the model-visible prompt while preserving exact evaluator subjects and semantic target.",
+      "expected": "REFERENCE_TRANSITION_UNCHANGED; prompt/content split leakage checks remain separate"
+    }
+  ],
+  "external_method_inputs": [
+    {
+      "source": "SLSA Build Provenance",
+      "authority": "EXTERNAL_METHOD_INPUT_ONLY",
+      "use": "Model the distinction between build/generator definition and parameters/dependencies versus produced artifact subjects; do not import software-supply-chain authority claims into Clay canonical truth."
+    },
+    {
+      "source": "RFC 8785 JSON Canonicalization Scheme",
+      "authority": "EXTERNAL_METHOD_INPUT_ONLY",
+      "use": "Provide invariant JSON serialization suitable for reproducible subject hashing."
+    }
+  ],
+  "training_generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "The failure family is already represented in current hard-negative blueprints. Highest information gain comes from closing the executable provenance root rather than adding semantically redundant examples."
+  },
+  "acceptance_gate": {
+    "promotion_requires": [
+      "one retained gate lane implements generation-receipt verification or deterministic evaluator reconstruction",
+      "all T2_GP_01..08 mutation/property tests exist and pass at exact current source identity",
+      "derived-independence tests remain green after the receipt boundary is inserted",
+      "typed discriminator admissibility/execution/coverage remains separately closed",
+      "typed GRF OBSERVED evidence promotion remains separately closed",
+      "seed generator is rebound to the retained gate successor",
+      "model-visible nuisance/full-cross/conditional-MI and family/provenance split gates pass on exact rendered pilot bytes",
+      "accepted dataset tokens remain zero until canonical Distillery/Forge admission independently succeeds"
+    ],
+    "pass_scope": "GENERATION_PROVENANCE_COMPONENT_ONLY",
+    "whole_product_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Implement XENO_SYNTHETIC_GENERATION_RECEIPT/v1 in the single retained derivation-bound gate lane, deriving expected generator identity from current authority rather than a free row path; add T2_GP_01..08 tests; then rebind the 11 native-seed scenarios through that gate before considering any positive D/E pilot."
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "schema_version": "9.11",
+  "date": "2026-08-27T07:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "active_program": "ENTITYOS_HCU",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "scope": "GO_RUNTIME_FRONTIER",
+  "source_head_observed": "642d69ae2aa06f03a306466bd1fba8fa969e6ded",
+  "material_finding": "Supervisor 9.10 is fail-closed but control-plane-incoherent for canonical provider admission: FREE_PROVIDER_ADMISSION remains authority_epoch 9.09 while SUPERVISOR_INBOX is 9.10, and the 9.10 steering document omits integrated_cognition_compute_architecture required by tools/free_provider_admission.py. Therefore current provider resolution cannot return a coherent explicit HARD_OFF snapshot. Monitoring v6 is a valid source candidate for publication-set generation coherence, but repository search found SYSTEM_ANALYSIS_CURRENT.json only in the v6 publisher, its receipt, and tests; no production authority-consuming reader was found. Thus the statement that mixed-generation readers cannot mint authority is not yet enforced outside the test helper. No provider execution evidence, runtime quiescence, Physical GRID10, Whole-HCU, canonical semantics, BASE, or training promotion follows.",
+  "frontier_changes": {
+    "provider_control_plane": "REBOUND_9_11_EXPLICIT_HARD_OFF_ALL_PROVIDERS_FALSE",
+    "monitoring_truth_source": "CANDIDATE_V6_PUBLICATION_PROTOCOL_READER_ENFORCEMENT_OPEN",
+    "monitoring_truth_runtime_credit": 0,
+    "restart_authority_v4_source": "CANDIDATE_RUNTIME_UNVERIFIED",
+    "runtime_quiescence": "P0_OPEN",
+    "physical_grid10_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_focus": [
+    "P0 execute canonical provider-admission resolver against 9.11 on one clean current non-provider checkout and receipt explicit HARD_OFF, all providers false, zero secret lookups and zero provider calls",
+    "P0 execute restart-authority v3/v4 and monitoring v4/v5/v6 tests together on one clean current non-provider checkout; bind HEAD, tree, dirty=false, source hashes, stdout and stderr",
+    "P0 implement one production fail-closed authoritative monitoring reader that resolves SYSTEM_ANALYSIS_CURRENT.json, verifies manifest digest, generation identity and every per-file hash, rejects path escape/missing/tampered generations, and migrate every authority/runtime-credit consumer away from compatibility mirrors",
+    "P0 switch retained monitoring publisher to v6 only after reader enforcement exists, then prove CURRENT pointer, generation manifest, per-file hashes and consumer readback from one live publication",
+    "P0 after repository-bound restart-authority PASS run v4 read-only on the live Clay host; fail closed on any root/cgroup/owner-object/command-path ambiguity",
+    "P0 only after live attribution revalidate restart authority immediately before disabling the exact restart object and terminate only bound Clay descendants",
+    "P0 require >=90 seconds zero survivors, descendants and restarts before any new provider-capable runtime path",
+    "P1 retain Trigger2 B3 closure; execute B2 nuisance-only/conditioned leakage regression and exact retained Qwen3.5-0.8B tokenizer/renderer ABI gates before any dataset admission",
+    "P3 after quiescence/provider-path closure resume physical GRID10 recursive bridge and bound fan-in/compression/latency/contention measurements"
+  ],
+  "evidence_law": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "evidence_boundary": "CONTROL_PLANE_REPAIR_AND_SOURCE_REVIEW_ONLY_NO_RUNTIME_PROMOTION"
+}

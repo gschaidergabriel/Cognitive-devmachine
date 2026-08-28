@@ -1,0 +1,144 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_LAST_TOKEN_POSITION_LENGTH_ADDENDUM/v2",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_initially_observed": "188a22fe505919149a98cf1e29adc87a20ada7de",
+  "canonical_main_reentered_after_parallel_movement": "6746eab691d2e7c566bcb97c05c1f7053f07591b",
+  "scope": "STATIC_LAST_TOKEN_POSITION_AND_SURFACE_LENGTH_AUDIT_OF_THE_FROZEN_V1_AND_CURRENT_EXACT_BALANCED_V2_STRUCTURAL_CASESETS",
+  "execution": {
+    "new_model_intervention_executed": false,
+    "queued_structural_run_id": 32810213066,
+    "queued_structural_status_observed": "queued",
+    "frozen_v1_scientific_source_modified": false,
+    "scientific_negative_inferred_from_queue": false
+  },
+  "observed_source": {
+    "frozen_v1_case_generator_path": "tools/trigger1_structural_label_free_cases.py",
+    "frozen_v1_case_generator_blob_sha": "66bb2f5cfccad602ee9c759961a369ab2c61be41",
+    "v2_case_generator_path": "tools/trigger1_structural_label_free_cases_v2.py",
+    "v2_introduced_on_main_commit": "83fca9efa6a128effc53a5d52eca6ed230125764",
+    "capture_harness_path": "tools/trigger1_native_llamacpp_layer_capture.cpp",
+    "capture_harness_blob_sha": "bfe014a67e6c5420c1e20a94f2da37616dcf94ed",
+    "nuisance_residualizer_path": "tools/trigger1_nuisance_residualize.py",
+    "nuisance_residualizer_blob_sha": "aeec098dfa26b93d3edc376ec69fd846220184d7",
+    "capture_endpoint": "LAST_TOKEN_ROW_AT_LAYER_INPUT_21_AND_24",
+    "capture_reports_prompt_tokens": true,
+    "required_nuisance_families": [
+      "CANONICAL_LABEL_LEXEME",
+      "SEMANTIC_SYNONYM_LEXICON",
+      "GENERIC_INSTRUCTION_COMPLIANCE",
+      "OUTPUT_CODE_IDENTITY"
+    ]
+  },
+  "deterministic_source_audit_v1": {
+    "method": "Reconstruct the frozen generator exactly from source without model execution and count UTF-8 bytes/characters. All generated prompts are ASCII, so byte count equals character count.",
+    "calibration_prompt_lengths_by_target": {
+      "AFFIRMATIVE": [227, 226, 227],
+      "NEGATIVE": [212, 225, 212],
+      "NEUTRAL": [227, 241, 227]
+    },
+    "holdout_prompt_lengths_by_target": {
+      "AFFIRMATIVE": [227, 226, 227],
+      "NEGATIVE": [212, 225, 212],
+      "NEUTRAL": [227, 241, 227]
+    },
+    "length_signature_repeats_exactly_across_lexically_disjoint_splits": true,
+    "best_target_accuracy_using_exact_prompt_length_alone": 0.7777777777777778,
+    "balanced_target_prior_accuracy": 0.3333333333333333,
+    "target_prompt_length_mutual_information_bits": 1.1405180562767117,
+    "probe_length_best_target_accuracy": 0.7777777777777778,
+    "probe_length_mutual_information_bits": 1.1405180562767117
+  },
+  "parallel_reentry_v2": {
+    "status": "POLARITY_CONFOUND_CLOSED_BY_PARALLEL_SUCCESSOR_BUT_LENGTH_POSITION_CONFOUND_PERSISTS",
+    "v2_design_delta": "Six scenarios implement the exact target x opaque-code x query-polarity 3x3x2 factorial and share probe lexical identities across targets within each scenario.",
+    "calibration_prompt_lengths_by_target": {
+      "AFFIRMATIVE": [227, 226, 227, 226, 227, 226],
+      "NEGATIVE": [212, 225, 212, 225, 212, 225],
+      "NEUTRAL": [227, 241, 227, 241, 227, 241]
+    },
+    "holdout_prompt_lengths_by_target": {
+      "AFFIRMATIVE": [227, 226, 227, 226, 227, 226],
+      "NEGATIVE": [212, 225, 212, 225, 212, 225],
+      "NEUTRAL": [227, 241, 227, 241, 227, 241]
+    },
+    "length_signature_repeats_exactly_across_splits": true,
+    "best_target_accuracy_using_exact_prompt_length_alone": 0.8333333333333334,
+    "balanced_target_prior_accuracy": 0.3333333333333333,
+    "target_prompt_length_mutual_information_bits": 1.2516291673878226,
+    "probe_length_best_target_accuracy": 0.8333333333333334,
+    "probe_length_mutual_information_bits": 1.2516291673878226,
+    "interpretation": "The v2 polarity repair does not orthogonalize target from prompt/probe length. In this source-level proxy the simple length classifier becomes more predictive, 15/18 rather than 7/9, because the six-scenario exact factorial repeats the same target-specific length patterns. This is not tokenizer evidence and does not negate the value of the v2 polarity repair."
+  },
+  "measurement_limit": "Source-level byte/character length is not exact tokenizer token count. Exact Qwen tokenizer lengths must be read from the native harness prompt_tokens field at runtime or computed with the pinned tokenizer identity before holdout. The static finding is a design-confound warning, not a model-runtime result.",
+  "finding": {
+    "id": "R2_B9_LAST_TOKEN_POSITION_AND_SURFACE_LENGTH_CONFOUND",
+    "severity": "MATERIAL_FOR_ABSTRACT_STATE_PROMOTION",
+    "observation": "The semantic basis is estimated from the last-token layer-input activation while both v1 and the new exact-balanced v2 give semantic targets a highly predictive surface-length signature that repeats exactly across lexically disjoint calibration and holdout splits. The nuisance residualizer contains no prompt-length, token-position, probe-length or structural-shape family.",
+    "mechanistic_relevance": "The native capture harness tokenizes each prompt and indexes the captured layer-input row at n_tokens-1. Therefore any target-correlated tokenizer length changes the absolute sequence index of the measured state. Qwen3-0.6B exposes rotary-position parameters in its primary model configuration, so position participates explicitly in model computation.",
+    "claim_boundary": "This does not prove that the steering direction is a positional feature or that either runtime result must fail. It does show that label removal, lexical disjointness, opaque-code counterbalancing and exact query-polarity balance are still insufficient to identify an abstract semantic coordinate unless target is also separated from sequence length/position or the causal effect survives an exact matched-position analysis."
+  },
+  "counterhypotheses": [
+    {
+      "id": "H0_POSITION_LENGTH_FEATURE",
+      "statement": "Calibration class means partly encode prompt/probe length and the resulting last-token position, and the cvec exploits this correlated positional/surface feature rather than a reusable abstract relation state."
+    },
+    {
+      "id": "H0_SURFACE_STRUCTURAL_COMPLEXITY",
+      "statement": "Counts and arrangement of punctuation/rule/fact syntax create a task-specific structural-complexity direction that transfers because calibration and holdout preserve the same target-specific grammar shape."
+    }
+  ],
+  "successor_discriminator_delta": {
+    "name": "POSITION_LENGTH_ORTHOGONALIZED_STRUCTURAL_GATE",
+    "required_changes": [
+      "Do not alter or redispatch the frozen v1 run 32810213066; preserve it as the preregistered bounded discriminator.",
+      "Keep the v2 exact 3x3x2 target x code x query-polarity balance, but add exact tokenizer-count/last-token-position orthogonality by construction.",
+      "Bind tokenizer IDs and token counts from the pinned Qwen3 tokenizer/runtime before any successor holdout execution and fail closed if target-token-count mutual information violates the preregistered exact null criterion.",
+      "Prefer design orthogonalization over post-hoc residualization; add prompt-token-count, probe-token-count and structural-shape nuisance contrasts only as defense in depth.",
+      "Evaluate matched-position causal effects or leave-one-length-stratum-out transfer so the semantic effect cannot be supported only by the original target-specific length strata.",
+      "Retain frozen/preregistered gain, geometry-null, per-target positivity, true sign-flip reversal, off-target regression, cross-task-family transfer and replicated factorial requirements from the parent Run-2 audit."
+    ],
+    "acceptance_rule": "No abstract-state or canonical semantic J-Space promotion if exact tokenizer token count or last-token position predicts target above the preregistered null in calibration or holdout, unless the claimed semantic effect survives an exact position-matched causal analysis with the confound orthogonalized by design."
+  },
+  "external_research_context": [
+    {
+      "source": "Qwen3 Technical Report",
+      "arxiv": "2505.09388",
+      "use": "Primary model-family context; confirms Qwen3 and the 0.6B model scale."
+    },
+    {
+      "source": "Qwen/Qwen3-0.6B config.json",
+      "use": "Primary model configuration exposes max_position_embeddings and rope_theta=1000000 under Qwen3ForCausalLM."
+    },
+    {
+      "source": "Activation Scaling for Steering and Interpreting Language Models",
+      "arxiv": "2410.04962",
+      "use": "Methodological context: steering evaluation distinguishes effectiveness and faithfulness and explicitly studies generalization over varying-length prompts; contextual evidence only."
+    }
+  ],
+  "integration_with_existing_run2": {
+    "parent_structural_promotion_audit": "research_entity/global/j-space/research/2026-08-25_FORSCHUNGSRUN_2_STRUCTURAL_PROMOTION_GATE_AUDIT_GPT56SOL.json",
+    "polarity_addendum": "research_entity/global/j-space/research/2026-08-25_FORSCHUNGSRUN_2_POLARITY_FACTORIAL_ADDENDUM_GPT56SOL.json",
+    "v2_polarity_successor_commit": "83fca9efa6a128effc53a5d52eca6ed230125764",
+    "frozen_source_boundary_receipt": "research_entity/research/receipts/FORSCHUNGSRUN2_2026-08-25_FROZEN_STRUCTURAL_SOURCE_AND_PROMOTION_AUDIT.md",
+    "promotion_rule": "R2_B9 remains additive after v2. A PASS from queued v1 run 32810213066 or a future v2 runtime result remains below canonical semantic J-Space promotion unless sequence-length/last-token-position leakage is either eliminated by design or defeated by exact matched-position causal evidence."
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_runtime_credit": 1,
+    "structural_label_free_native_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Keep frozen v1 run 32810213066 unchanged. Treat current v2 as a valid polarity deconfound but not a promotion-ready semantic discriminator. Before any v2/successor model run, add an execution-free tokenizer/position admission audit against the pinned Qwen tokenizer/runtime identity and redesign only the successor case family until target x code x polarity is also orthogonal to exact token count/last-token position; then re-run the strict causal/generalization gates."
+}

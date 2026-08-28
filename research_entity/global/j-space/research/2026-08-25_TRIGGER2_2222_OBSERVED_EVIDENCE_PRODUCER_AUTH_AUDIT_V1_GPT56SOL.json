@@ -1,0 +1,141 @@
+{
+  "schema": "CLAY_TRIGGER2_OBSERVED_EVIDENCE_PRODUCER_AUTH_AUDIT/v1",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:22+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING_NEEDS_LEDGER_REENTRY",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "source_audit_head": "7d1600474a4cab4cf64e48777fcf70b4113052b4",
+    "moving_main_reentry_before_retry": "a1c3999291348d56c8e3f1c46f27f33cdcf68486",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "audit_basis": [
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V20_GPT56SOL.json",
+    "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py@7d1600474a4cab4cf64e48777fcf70b4113052b4",
+    "tools/trigger2_hyperposition_epistemic_preupdate_guard_v1.py@7d1600474a4cab4cf64e48777fcf70b4113052b4",
+    "tools/trigger2_hyperposition_state_history_proof_gate_v1.py@7d1600474a4cab4cf64e48777fcf70b4113052b4",
+    "tools/trigger2_generation_provenance_gate_v1.py@7d1600474a4cab4cf64e48777fcf70b4113052b4",
+    "uploaded XENO Trainingsumfang/Sprachspezifikation/Messwerte 2026-08-25 as measurement donor, noncanonical where current GitHub differs"
+  ],
+  "cycle_audit": {
+    "training_examples_audited": true,
+    "measurements_audited": true,
+    "evidence_audited": true,
+    "hypotheses_audited": true,
+    "target_architecture_audited": true,
+    "open_parallel_work_audited": true,
+    "positive_data_gate": "CLOSED",
+    "reason": "Exact-current A02 repository-bound execution is still unobserved and OBSERVED evidence receipts are shape-bound but not producer-authenticated at the retained state-history gate."
+  },
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "uploaded XENO claim that GRF operators U and D are names without implementations",
+      "status": "SUPERSEDED",
+      "successor": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "revision_reason": "Current main contains deterministic u_state, d_resolve, u_test_order and f_salience_order source semantics. Their presence does not itself mint evidence/training authority."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "CURRENT_DETERMINISTIC_SEMANTIC_REFERENCE_NOT_EVIDENCE_AUTHORITY",
+      "revision_reason": "Deterministic transition/order semantics are necessary and current, but evidence authenticity, source provenance, generation identity and exact execution remain separate gates."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_proof_gate_v1.py::_validate_observation_receipt",
+      "status": "NEEDS_REVISION_OBSERVED_PRODUCER_AUTHENTICATION",
+      "revision_reason": "The validator checks receipt schema, event semantic digest, no-truth/no-effect fences, and nonempty source/provenance/observed_time/receipt_id strings, but it does not authenticate which deterministic/typed admission producer minted the receipt or bind the receipt to exact admitted source payload/admission/generation identity."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_epistemic_preupdate_guard_v1.py",
+      "status": "CURRENT_PARTIAL_FAIL_CLOSED_GUARD",
+      "revision_reason": "It correctly blocks non-evidence epistemic types before u_state, but delegates OBSERVED authenticity to the base state-history gate and therefore does not close producer authentication."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py",
+      "status": "CURRENT_RETAINED_COMPOSITION_RUNTIME_PENDING_WITH_EXPLICIT_OBSERVED_AUTH_P0",
+      "revision_reason": "The retained gate itself lists OBSERVED evidence producer authentication as remaining P0; this audit narrows that P0 to a concrete source-level authentication gap."
+    },
+    {
+      "artifact": "T2-LEDGER-V20 and later moving-main successor ledgers",
+      "status": "REENTRY_REQUIRED",
+      "revision_reason": "This append-only research delta must be fused only by the newest successor-dynamic ledger; it does not self-promote by filename or commit recency."
+    }
+  ],
+  "finding": {
+    "id": "T2_A04_OBSERVED_RECEIPT_PRODUCER_AUTHENTICATION",
+    "reality_level": "R0_SOURCE_OBSERVATION_PLUS_R1_FORGEABILITY_INFERENCE",
+    "source_observation": [
+      "The retained state-history gate accepts typed_observation_evidence_receipts_evaluator_only from the candidate row.",
+      "For OBSERVED events it requires exactly one receipt matching event_id.",
+      "It verifies schema, event_semantic_sha256, canonical_truth_allowed=false, direct_effect_authority=false, and that source/provenance/observed_time/receipt_id are nonempty strings.",
+      "No verified producer identity, producer source hash, producer policy digest, causal_event_id, admission_id, generation, source-payload digest, or immutable admission receipt is required by _validate_observation_receipt at exact audited source identity.",
+      "The event semantic digest itself covers caller-visible semantic event fields and therefore cannot by itself prove an external observation occurred or that a trusted admission path produced the receipt."
+    ],
+    "inference": "A caller that can construct a semantically self-consistent OBSERVED event can also construct a syntactically valid matching observation receipt using arbitrary nonempty provenance strings. The current source shape therefore distinguishes typed-looking evidence from non-evidence types but does not yet establish evidence producer authenticity.",
+    "not_claimed": [
+      "No runtime exploit was executed.",
+      "No current real observation is claimed false.",
+      "No canonical truth or training credit is revoked beyond the already-zero promotion state.",
+      "This does not reopen deterministic U/D/f semantics or the separately hardened A02 producer-auth source contract."
+    ]
+  },
+  "hypothesis": "Binding OBSERVED receipts to one deterministic typed-admission producer authority plus exact causal-event/admission/generation/source-payload identity will close caller-forged observation evidence without changing valid retained Hyperposition semantics.",
+  "counterhypothesis": "OBSERVED receipt producer authentication may already be guaranteed by a mandatory outer admission envelope that the retained Trigger-2 row gate never sees; adding a second inner producer authority would duplicate an existing trusted boundary.",
+  "resolution_rule": "Prove the outer envelope is mandatory, immutable, replay-verifiable and mechanically checked before this gate, or add one explicit OBSERVED producer-auth gate. Do not accept narrative provenance strings as a substitute for either proof.",
+  "cheapest_high_information_discriminator": {
+    "id": "T2_A04_CALLER_FORGED_OBSERVED_RECEIPT_MUTATION",
+    "type": "DETERMINISTIC_NONPROMOTING_MUTATION_TEST",
+    "setup": "Start from a structurally valid candidate fixture and replace the OBSERVED evidence receipt with a caller-minted receipt that preserves schema/event digest/fences while changing producer/admission/source identity to untrusted arbitrary values.",
+    "current_source_prediction": "The observation-receipt subcheck has no producer-auth predicate capable of rejecting solely on producer authenticity.",
+    "required_successor_result": "Reject before u_state unless a mandatory verified outer admission envelope or an authenticated producer authority binds exact producer bytes/policy plus causal_event_id, admission_id, generation and source-payload digest.",
+    "followup_mutations": [
+      "PRODUCER_SOURCE_SWAP",
+      "UNKNOWN_PRODUCER_POLICY",
+      "SOURCE_PAYLOAD_MUTATION_WITH_SAME_NARRATIVE_PROVENANCE",
+      "ADMISSION_ID_SWAP",
+      "GENERATION_STALE_REPLAY",
+      "RECEIPT_ID_REUSE_ACROSS_DISTINCT_EVENTS",
+      "POST_MINT_RECEIPT_MUTATION"
+    ],
+    "unusual_experiment": false,
+    "provider_execution": false,
+    "training_execution": false
+  },
+  "target_architecture_effect": {
+    "finished_xeno_priority": "GLOBAL_SYSTEM_FUNCTION_OVER_LOCAL_EXAMPLE_QUALITY",
+    "why_material": "Hyperposition/GRF update quality depends on whether evidence is real/admitted, not merely whether U/D/f are deterministic. A small Xeno trained on forged or provenance-ambiguous OBSERVED targets could learn locally consistent transitions that violate EntityOS evidence authority and corrupt J-Space/HCU decision behavior.",
+    "required_chain": "Typed Entry/admission identity -> authenticated observation producer -> epistemic pre-update guard -> deterministic U/D/f semantics -> state-history replay -> causal actionability/J-Space evaluation -> dataset admission",
+    "anti_goal": "Do not scale positive D/E/GRF rows merely because labeler source exists or local candidate tests pass."
+  },
+  "training_generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "The finished-Xeno evidence/update path still lacks authenticated OBSERVED evidence producer proof and exact-current A02 repository-bound execution; more candidate volume would increase ambiguity rather than trustworthy training readiness."
+  },
+  "credits": {
+    "research_delta": 1,
+    "artifact_reclassification_delta": 1,
+    "source_gap_candidate_delta": 1,
+    "runtime_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Do not duplicate the already closed A02 source design. First execute the exact-current A02/v4 repository-bound suite as supervisor 8.78 directs. In parallel source work, prove a mandatory outer typed-admission envelope authenticates OBSERVED producer identity; if not, implement one retained OBSERVED producer-auth gate and the T2_A04 mutation family before any OBSERVED positive rows."
+}

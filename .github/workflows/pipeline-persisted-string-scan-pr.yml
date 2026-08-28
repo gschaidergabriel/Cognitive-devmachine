@@ -1,0 +1,38 @@
+name: pipeline-persisted-string-scan-pr
+
+on:
+  pull_request:
+    paths:
+      - 'tools/clay_profile_pipeline_runtime.py'
+      - 'tools/test_clay_profile_pipeline_persisted_string_scan.py'
+      - '.github/workflows/pipeline-persisted-string-scan-pr.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+      - name: Bind exact source identity
+        run: |
+          set -euo pipefail
+          printf 'sha=%s\n' "$GITHUB_SHA"
+          git rev-parse HEAD
+          git status --short
+          git hash-object tools/clay_profile_pipeline_runtime.py
+          git hash-object tools/test_clay_profile_pipeline_persisted_string_scan.py
+      - name: Compile focused gate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            tools/clay_profile_pipeline_runtime.py \
+            tools/test_clay_profile_pipeline_persisted_string_scan.py
+      - name: Run persisted-string leak regressions
+        run: |
+          set -euo pipefail
+          PYTHONPATH=tools python3 tools/test_clay_profile_pipeline_persisted_string_scan.py

@@ -1,0 +1,73 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:24+07:00",
+  "trigger_time_precision": "minute",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "join": {
+    "initial_main": "c4eb17d034f3451b44ab505c5d02593a414ca641",
+    "latest_main_observed_before_this_receipt": "dcdcbb5f02b5f4ac1cb2f51c35616715593f3c0b"
+  },
+  "artifact_improvement": {
+    "kind": "RECOVERY_CAUSAL_PREFLIGHT_FUSED_TO_MAIN",
+    "source_pr": 562,
+    "merge_commit": "9e272ca5655ef5962e6a8b1040ce67d2dda0f882",
+    "recovery_blob": "a7aecd25573c5827470310f8389e6efdca12d14f",
+    "effect": "recover_incomplete_episodes now validates the active causal spine before recover_pending can mutate PENDING effects, rechecks at the mutation transaction boundary, and binds active causal lookup to exact episode_id + causal_id",
+    "authority_preserved": "UnifiedDB remains sole durable causal/state authority; no external effect replay; missing causal authority cannot mint positive recovery credit"
+  },
+  "fusion_evidence": {
+    "premerge_nonoverlap_check": "PR562 base-to-current-main delta before merge touched only the EntityOS boundary test/receipt; current main recovery.py remained the exact baseline blob 66540a9d2d20860fed015033da8013965ef830be",
+    "source_slice_surface": "OpenAI isolated non-production container",
+    "source_slice_identity_bound": true,
+    "source_slice_tests": [
+      "test_recovery_causal_preflight.py",
+      "test_restart_recovery.py",
+      "test_recovery_effect_receipt_identity.py"
+    ],
+    "source_slice_result": "11 passed in 0.33s",
+    "source_slice_exit_code": 0,
+    "classification": "EXACT_RECOVERY_SOURCE_SLICE_PASS_FUSED_TO_CURRENT_MAIN_NOT_OCI_PASS"
+  },
+  "execution_surfaces": {
+    "vercel": {
+      "deployment": "dpl_7H6XmBbeCzqXeLBEH6fD9vYc47uG",
+      "observed_real_sandbox_start": true,
+      "observed_blob_bind": true,
+      "observed_sandbox_stop": true,
+      "product_assertions_reached": false,
+      "blocking_error": "ModuleNotFoundError: No module named '_sqlite3' in selected Vercel Python 3.13 runtime",
+      "classification": "RUNTIME_DEPENDENCY_FAILURE_BEFORE_PRODUCT_ASSERTIONS_ZERO_SEMANTIC_TEST_CREDIT",
+      "fresh_preview_retried_in_this_go": false
+    },
+    "daytona": {
+      "owner_directive_commit": "62279c408afef0d5b8d47c71ff484ace6a28517a",
+      "execution_status_path": "research_entity/continuity/DAYTONA_SANDBOX_EXECUTION_PATH_CURRENT.md",
+      "bounded_runner_commit": "dcdcbb5f02b5f4ac1cb2f51c35616715593f3c0b",
+      "current_worker_provider_contact": false,
+      "current_worker_observation": "orchestration container DNS/network blocked before Daytona SDK/provider contact and no Daytona lifecycle connector/plugin is exposed",
+      "credential_disclosure": false,
+      "sandbox_started": false,
+      "runtime_test_credit": 0,
+      "classification": "CURRENT_WORKER_EXECUTION_SURFACE_BLOCKED_NOT_DAYTONA_SERVICE_FAILURE"
+    }
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "shared exact user-message timestamp is minute-precision only; GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL forbids minting a fallback trigger key",
+    "unusual_experiment_count_added": 0
+  },
+  "nonclaims": {
+    "full_current_main_regression_pass": false,
+    "exact_oci_build_started": false,
+    "exact_oci_digest_captured": false,
+    "packaged_runtime_restart_pass": false,
+    "clerk_browser_pty_pass": false,
+    "whole_clayverse_pass": false
+  },
+  "next_gate": "Use the first credential-safe actually-connected Daytona lifecycle surface, or a newly admitted SQLite-capable Vercel Sandbox, to bind exact then-current main/target heads and run the coordinated focused recovery/effect/MicroClay regressions plus adjacent lifecycle/generation gates; if green continue to broader suite and exact OCI build/start/readiness/restart/concurrency evidence, then stop/delete the sandbox and persist exact identities."
+}

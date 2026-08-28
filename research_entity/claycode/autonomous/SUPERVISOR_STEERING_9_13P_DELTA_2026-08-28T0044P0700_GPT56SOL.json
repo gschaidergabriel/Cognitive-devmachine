@@ -1,0 +1,66 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "delta": "9.13P_NON_AUTHORITY",
+  "timestamp_local": "2026-08-28T00:44:13+07:00",
+  "decision": "STEER_FAIL_CLOSED",
+  "material_new_evidence": [
+    {
+      "type": "CONTROL_PLANE_SPLIT_BRAIN",
+      "inbox_mutation_commit": "c155ba8d2a699a587262b36e2818cd53730baa57",
+      "finding": "SUPERVISOR_INBOX was changed to provider_routes_admitted=true, emergency_stop=false, together_forbidden=false and one Together allowance while FREE_PROVIDER_ADMISSION remained authority_epoch 9.13 FREE_ONLY/HARD_OFF with all named providers admitted=false and zero paid fallback authority."
+    },
+    {
+      "type": "EXECUTABLE_PROVIDER_BYPASS_EVIDENCE",
+      "evidence_commit": "2f0e30204071e84fb5611adc6d6fb19883a91177",
+      "finding": "Fresh NVIDIA-Nemotron fallback provenance landed after the invalid Inbox relaxation, proving the provider-backed path was actually exercised rather than merely described."
+    },
+    {
+      "type": "GATE_SOUNDNESS_GAP",
+      "finding": "frankenstein_authority_gate_v1 resolved only SUPERVISOR_INBOX, so an Inbox-only mutation could load the quarantined provider donor even when canonical FREE_PROVIDER_ADMISSION denied every provider."
+    },
+    {
+      "type": "LIVE_VPS_ENGINEERING_RESULT",
+      "evidence_commit": "8525230cbc6a66bb58aaf6fb7443d3aa04b83b2f",
+      "finding": "A live VPS smoke test found two concrete Frankenstein execution bugs: prose acceptance criteria were not executable commands and verification inherited the wrong Python PATH. The fixes report 68/68 Frankenstein tests green, but they occurred on the invalid provider-open lineage and therefore require independent clean non-provider review before retained runtime credit."
+    }
+  ],
+  "authority_resolution": {
+    "current_explicit_policy": "FREE_ONLY_NO_PAID_FALLBACK",
+    "canonical_provider_authority": "FREE_PROVIDER_ADMISSION_9.13_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "remaining_paid_runs_authorized": 0,
+    "stale_relayed_owner_text": "QUARANTINED_NON_OPERATIVE",
+    "frankenstein_72h_provider_orchestration": "NO_EXECUTION_AUTHORITY"
+  },
+  "source_intervention": {
+    "frankenstein_authority_gate_v1": "REQUIRE_BOTH_SUPERVISOR_INBOX_AND_FREE_PROVIDER_ADMISSION; MISSING_MALFORMED_HARD_OFF_OR_SPLIT_BRAIN_FAILS_CLOSED_BEFORE_SECRET_IMPORT_NETWORK_AIDER_FALLBACK",
+    "regression_suite": "ADD_INBOX_OPEN_CANONICAL_CLOSED_AND_CANONICAL_OPEN_INBOX_CLOSED_TRANSPLANT_CASES; TOGETHER_CANNOT_BE_MINTED_BY_INBOX_ONLY",
+    "frank_harness_modified": false
+  },
+  "next_cycle_order": [
+    "Execute the dual-artifact Frankenstein authority-gate regressions repository-bound on a clean current non-provider checkout; bind HEAD, tree, dirty=false, source hashes, stdout and stderr.",
+    "Under current HARD_OFF execute canonical orchestrator and bugfix entrypoints in adversarial mode and prove provider_calls=0, secret_lookups=0, and quarantined donor never loads.",
+    "Independently review and re-execute provider-authored core changes landed after the invalid Inbox relaxation before granting retained runtime credit.",
+    "Continue the existing Bootstrap-v2 -> control-sync -> restart-authority-v4 read-only -> exact ownership -> >=90 s zero-survivor/zero-descendant/zero-restart chain.",
+    "Do not promote BASE, canonical semantics, training, Physical-GRID10 or Whole-HCU from provider/model consensus or source-only fixes."
+  ],
+  "invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_ANTI_ECHO_AND_FAMILY_DISJOINT_PROVENANCE",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "promotion_delta": {
+    "training_credit": 0,
+    "base_credit": 0,
+    "canonical_semantics_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "provider_runtime_credit": 0
+  }
+}

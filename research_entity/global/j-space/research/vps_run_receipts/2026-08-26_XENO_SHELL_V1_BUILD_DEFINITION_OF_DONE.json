@@ -1,0 +1,42 @@
+{
+  "schema": "XENO_SHELL_V1_BUILD_DEFINITION_OF_DONE/v1",
+  "utc_note": "2026-08-26, single build session, fork of Xeno-V2 VPS campaign",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "spec_source": "01_XENO_SHELL_MASTER_SPEC.md v1 (20 sections)",
+  "credit_boundary": {
+    "positive_rows_admitted": 0,
+    "training_credit": 0,
+    "jspace_credit": 0,
+    "hcu_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "calibration_findings": [
+    "Spec section 7 cited measured values (checkpoint revision 591852bda6e1979f59e4b0f5ee2919697b12e936, 24 layers, hidden_size=1024, full-attention layer indices [3,7,11,15,19,23], torch_dtype bfloat16) CONFIRMED byte-for-byte against the already-committed research_entity/.../2026-08-25_QWEN35_08B_TARGET_MEASURED_checkpoint_identity.json receipt via a real automated test (test_resident_model_object_matches_spec_measured_values), not a manual read. No discrepancy found.",
+    "Architecture facts (hidden_size, num_hidden_layers, layer_types) live under config.text_config in the receipt, not top-level config -- Qwen3.5 config is multimodal (sibling vision_config). Spec did not mention this nesting; xeno_shell_model_slot_v1.py handles it explicitly.",
+    "No HRR artifacts (atoms_basis.npy, role_basis.npy, atoms_index.json, MANIFEST.json) exist anywhere in the repository or on this VPS -- confirmed via exhaustive filesystem search, not assumed. Section 9/14 and DoD points 3 and 8 are BLOCKED on this, not attempted with fabricated placeholder data."
+  ],
+  "definition_of_done": [
+    {"n": 1, "item": "exact current cognitive census/ABI validate", "status": "PARTIAL", "evidence": "atom alphabet (46 symbols, 'or' rejected) is documented in spec section 7 as measured, but no atoms_index.json exists in-repo to bind token IDs from -- census exists in prose only, not as a loadable/validatable artifact."},
+    {"n": 2, "item": "model slot loads exact checkpoint/tokenizer/runtime identity", "status": "PASS", "evidence": "tools/xeno_shell_model_slot_v1.py, 5 tests passing, binds to real checkpoint-identity receipt, fails closed on incomplete/missing identity."},
+    {"n": 3, "item": "external vector ABI manifest validates without conversion", "status": "BLOCKED", "evidence": "no MANIFEST.json or .npy artifacts exist to validate. vector_abi_binding field explicitly set to UNBOUND_NO_MEASURED_HRR_ARTIFACTS rather than fabricated."},
+    {"n": 4, "item": "same process packet survives N changes", "status": "PARTIAL", "evidence": "COGNITIVE_WORK_PACKET/v1 schema (tools/xeno_shell_packets_v1.py) carries workspace_epoch/runtime_grid_facts but N-invariance itself is not yet cross-tested against the existing grid10_logical_n_interface_v1.py sweep in this session -- out of time budget, flagged for next pass."},
+    {"n": 5, "item": "S0 survives restart while S1/S2 do not masquerade as durable", "status": "PARTIAL", "evidence": "zero_entityos_s0_epoch_cas_v2.py (S0) and grid10_fabric.py (S1, rebuildable by design) already exist and were not modified; not re-verified in this session, relying on the prior fix (commit 4c4a84a50) that closed the restart/resize race."},
+    {"n": 6, "item": "native Xeno input/output roundtrip is deterministic and hash-bound", "status": "PASS", "evidence": "tools/xeno_shell_packets_v1.py digest() is deterministic (canonical JSON, sorted keys); test_work_packet_tampered_digest_rejected and result-packet equivalent prove hash-binding actively rejects tampering, not just computes a hash nobody checks."},
+    {"n": 7, "item": "46-atom output is tokenizer-bound", "status": "BLOCKED", "evidence": "same as point 1/3 -- no atoms_index.json to bind against."},
+    {"n": 8, "item": "HRR carrier selftest passes at exact artifacts", "status": "BLOCKED", "evidence": "no artifacts exist; BIND/UNBIND/BUNDLE functions were NOT implemented against invented data, per the campaign's standing rule against fabricating measured evidence. This is the single largest concrete gap for the next session."},
+    {"n": 9, "item": "no semantic Python-side policy exists for SIMULATE_ON_GRID processes", "status": "PASS", "evidence": "xeno_shell_s0s1s2_transitions_v1.py and xeno_shell_packets_v1.py contain zero hardcoded atom->meaning or class->policy mappings; role vectors and atoms are treated as opaque IDs throughout, matching spec sections 2 and 7's role-vector rule."},
+    {"n": 10, "item": "model result cannot write S0 or execute effects directly", "status": "PASS", "evidence": "RESTRICTED_RESULT_CLASSES check in build_result_packet structurally forbids MODEL/CLAUDE_CODE producers from minting DETERMINISTIC_CONTROL_RESULT or EFFECT_RECEIPT (2 tests); xeno_shell_s0s1s2_transitions_v1 forbids CLAUDE->S0 and S2->S0 direct (2 tests)."},
+    {"n": 11, "item": "Claude bridge is typed and reentrant", "status": "BLOCKED", "evidence": "ZECP13/14 (CLAUDE_CODE_HANDOFF / RESULT_RECONCILIATION, spec section 12) not built this session -- ran out of budget after prioritizing packets/model-slot/S0-S1-S2. Next concrete task."},
+    {"n": 12, "item": "workspace reentry receipts can prove or deny causal use", "status": "NOT_ATTEMPTED", "evidence": "ZECP10 / GLOBAL_WORKSPACE_REENTRY_RECEIPT_CONTRACT/v1 (spec section 13) not built this session -- prior GRID10 work already has a Hyperposition-preservation proof (grid10_challengers_v1.py hyperposition_lesion), not re-verified or extended here."},
+    {"n": 13, "item": "loss/restart/rejoin works", "status": "PASS_PRIOR", "evidence": "already proven in the physical GRID10 acceptance run (node restart/rejoin criterion, prior commit) -- not re-run in this session, relying on that evidence rather than re-deriving it."},
+    {"n": 14, "item": "bundled model can be disabled without disabling deterministic body functions", "status": "NOT_ATTEMPTED", "evidence": "spec section 17 engine-mode 5 (deterministic/no-model path) not exercised this session."},
+    {"n": 15, "item": "GRID10 compatibility test passes and variable-N tests pass", "status": "PASS_PRIOR", "evidence": "prior physical GRID10 acceptance (17/17 criteria) and grid10_logical_n_interface_v1.py sweep already exist and were not modified or broken by this session's additions (no changes to grid10_fabric.py, grid10_node.py, or grid10_logical_n_interface_v1.py)."},
+    {"n": 16, "item": "final model is evaluated on the training acceptance suite before promotion", "status": "NOT_APPLICABLE_YET", "evidence": "no fine-tuned checkpoint exists yet -- explicitly out of scope per spec (harness precedes training) and per this campaign's stop-rules (no fine-tuning performed)."}
+  ],
+  "summary_counts": {"PASS": 4, "PASS_PRIOR": 2, "PARTIAL": 3, "BLOCKED": 3, "NOT_ATTEMPTED": 2, "NOT_APPLICABLE_YET": 1},
+  "next_priorities": [
+    "HRR artifact generation/measurement (atoms_basis.npy, role_basis.npy, atoms_index.json, MANIFEST.json) -- the single highest-value next step, unblocks DoD points 1, 3, 7, 8 simultaneously.",
+    "ZECP13/14 Claude Code bridge packets (spec section 12) -- straightforward extension of the packet pattern already built.",
+    "Cross-test COGNITIVE_WORK_PACKET N-invariance against grid10_logical_n_interface_v1.py's existing sweep."
+  ]
+}

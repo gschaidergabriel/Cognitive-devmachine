@@ -1,0 +1,52 @@
+{
+  "schema": "ClayVerseGoEvidenceSupersessionReceipt/v1",
+  "date_local": "2026-08-18",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "SOURCE_AND_DEPENDENCY_REVIEW_ONLY_ZERO_RUNTIME_CREDIT",
+  "supersedes_in_part": "the artefact/receipts/2026-08-18_GO_PR810_TIER2_SNAPSHOT_RETENTION_ADVERSARIAL_REVIEW_GPT56SOL.json",
+  "supersession_reason": "Current official Vercel sources are not sufficiently consistent to promote snapshot survival across named-sandbox deletion from documentation to observed dependency fact. Treat that lifecycle property as UNKNOWN until direct authorized provider execution observes it.",
+  "canonical_research_main_observed_before_write": "a95d360c57fd72472106949ca8617ad6639544bf",
+  "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+  "controller_pr": 810,
+  "controller_head_observed": "4f77bdfbb75feda92e6e6a7dcf1c0d718a0855d4",
+  "research_candidate_pr": 686,
+  "research_candidate_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+  "research_candidate_tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+  "current_tier2_handler_observed": {
+    "path": "mcp/vercel-sandbox-mcp/lib/tier2-recreate-handler.js",
+    "blob": "63fe1cd915ce546a68451e7ba20edc80ff5769cc",
+    "mechanism": "distinct clayverse-transfer carrier sandbox; chunked SHA-256-bound declared transfer; carrier snapshot; Snapshot.get status attestation; source sandbox deletion; distinct persistent:false replacement; later carrier sandbox cleanup",
+    "runtime_credit": 0
+  },
+  "current_source_guard_observed": {
+    "path": "mcp/vercel-sandbox-mcp/scripts/guard-clayverse-vcr-source.mjs",
+    "blob": "a365aee5611a708cd3c27be7cf8bcc633a1e8cb2",
+    "schema": "ClayVerseCurrentOCISourceGuard/v11",
+    "pins_tier2_handler_blob": "f18c428ee4788f1136408e5b351fbf1b81ba22c4",
+    "requires_stale_marker": "await source.snapshot({",
+    "exact_current_handler_contains_stale_marker": false,
+    "classification": "DETERMINISTIC_SOURCE_GUARD_DRIFT_EXPECTED_TO_FAIL_CLOSED_IF_BUILD_GUARD_EXECUTES"
+  },
+  "durable_pr_comment_id": 5318736809,
+  "snapshot_lifecycle_epistemic_state": "UNKNOWN_PROVIDER_DEPENDENCY_BEHAVIOR_DIRECT_DISCRIMINATOR_REQUIRED",
+  "required_next_sequence": [
+    "Rebind the retained source guard to the exact settled current Tier-2 handler bytes and current mechanism markers without weakening fail-closed checks.",
+    "When authorized isolated Vercel execution admission is available, run the bounded dependency discriminator: create sentinel state; create/record manual snapshot; delete named source sandbox; query/use exact snapshot to create a distinct persistent:false sandbox; verify sentinel and distinct identity; record SDK/API identity; cleanup.",
+    "Only if the dependency discriminator succeeds may the snapshot carrier receive mechanism credit; whole-product credit still requires exact OCI/state/recovery/provider/auth gates.",
+    "Explicitly delete the carrier snapshot after successful final restore or define a bounded admitted retention authority; cleanup uncertainty must not silently promote Tier-2."
+  ],
+  "execution_admission": {
+    "current_observed_vercel_class": "BUILD_RATE_LIMITED",
+    "classification": "CONTROL_PLANE_ADMISSION_BLOCKER_NOT_CLAYVERSE_TEST_FAILURE"
+  },
+  "unusual_experiment": "NONE_EXECUTED_BY_THIS_ORGAN",
+  "runtime_credit": 0,
+  "tier2_runtime_pass": false,
+  "whole_product_pass": false,
+  "safety": {
+    "vps_or_self_hosted_execution_used": false,
+    "together_used": false,
+    "secret_material_used": false
+  }
+}

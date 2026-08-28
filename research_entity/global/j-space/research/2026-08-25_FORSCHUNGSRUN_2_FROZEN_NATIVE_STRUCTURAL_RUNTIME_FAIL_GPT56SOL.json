@@ -1,0 +1,132 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_FROZEN_NATIVE_STRUCTURAL_RUNTIME/v1",
+  "recorded_at_utc": "2026-08-25T06:18:00Z",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "c5e72161c114fca657684dbedb6568f2f3c0d25a",
+  "experiment_identity": {
+    "scientific_design": "TRIGGER1_STRUCTURAL_NATIVE_ABSTRACT_FROZEN_V1",
+    "source_head": "8e370c819d687bdba39345be384359f49bc605fb",
+    "vps_command_id": "fr2-structural-native-execute-builddir-20260825-1314",
+    "vps_command_sha256": "e538730383a4639ac09ef80b137def834f6bc3786315ff93db0139722f9dccf2",
+    "result_sha256": "1486f27de96fa2aeb6c0b52800fdf9852a0b9e50761b17ba38c647d424d82532",
+    "gguf_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "llama_cpp_commit": "bb4caa7540188872173c44d161602d9271386413",
+    "carrier": "Qwen3-0.6B Q8_0",
+    "native_api": "llama_set_adapter_cvec",
+    "token_scope": "ALL_PROMPT_TOKENS",
+    "injection_layer": 20,
+    "downstream_layer_input": 24,
+    "external_provider_used": false
+  },
+  "transport_recovery": {
+    "self_hosted_actions_lane": "BLOCKED_UNASSIGNED_QUEUE",
+    "direct_vps_mailbox_used": true,
+    "exact_paths_resolved": {
+      "python": "/cache/clay-qwen06/venv/bin/python",
+      "llama_source": "/cache/clay-qwen06-native/llama.cpp",
+      "llama_build_bin": "/cache/clay-qwen06-native/build/bin",
+      "gguf": "/cache/clay-qwen06-native/models/Qwen3-0.6B-Q8_0.gguf"
+    },
+    "pre_science_failures_repaired": [
+      "stale GGUF/source build path",
+      "process-guard self-match",
+      "missing llama.cpp src include path for llama-ext.h",
+      "wrong assumed link library directory"
+    ],
+    "terminal_transport_status": "PASS",
+    "canonical_credit_minted_by_bridge": 0
+  },
+  "runtime_result": {
+    "abstract_native_discriminator_pass": false,
+    "downstream_transport_pass": true,
+    "behavior_pass": false,
+    "calibration_case_count": 9,
+    "behavior": {
+      "baseline_hit_rate": 0.3333333333333333,
+      "matched_hit_rate": 0.3333333333333333,
+      "matched_mean_delta": -0.05239439010620117,
+      "matched_median_delta": -0.044203758239746094,
+      "signflip_mean_delta": 0.023727999793158636,
+      "nuisance_mean_abs_delta": 0.15475596321953666,
+      "orthogonal_mean_abs_delta": 0.05602190229627821,
+      "permuted_mean_abs_delta": 0.050500075022379555,
+      "null_mean_abs_delta": 0.0
+    },
+    "behavioral_causal_matrix": {
+      "diagonal_mean": -0.05239439010620117,
+      "off_diagonal_mean": -0.0014125770992702907,
+      "diagonal_advantage": -0.05098181300693088,
+      "diagonal_each_positive": false,
+      "mean_delta_matrix_intervention_x_requested_target": {
+        "AFFIRMATIVE": {
+          "AFFIRMATIVE": -0.035849412282307945,
+          "NEGATIVE": -0.04583930969238281,
+          "NEUTRAL": 0.013754685719807943
+        },
+        "NEGATIVE": {
+          "AFFIRMATIVE": 0.03700685501098633,
+          "NEGATIVE": -0.02981726328531901,
+          "NEUTRAL": -0.04833682378133138
+        },
+        "NEUTRAL": {
+          "AFFIRMATIVE": 0.02088642120361328,
+          "NEGATIVE": 0.014052708943684896,
+          "NEUTRAL": -0.09151649475097656
+        }
+      }
+    },
+    "downstream_transport": {
+      "matched_target_coordinate_mean": 4.247913097378004,
+      "matched_target_coordinate_median": 4.229854116295517,
+      "signflip_target_coordinate_mean": -4.173776259142458,
+      "control_target_coordinate_abs_mean": 0.2542696726289941,
+      "matched_offaxis_abs_mean": 2.1243034394154026
+    }
+  },
+  "scientific_interpretation": {
+    "observed": "The frozen native cvec intervention produced a large signed downstream layer-24 alignment displacement but did not improve the label-free structural target behavior; the behavioral diagonal was negative and matched hit rate remained at chance-like 1/3.",
+    "strongest_supported_claim": "NATIVE_INTERNAL_STATE_TRANSPORT_WITHOUT_DEMONSTRATED_ABSTRACT_BEHAVIORAL_CONTROL_AT_THIS_FROZEN_IDENTITY",
+    "falsified_or_weakened_claim": "The current frozen v1 semantic vectors are sufficient to causally steer Qwen3-0.6B toward the requested abstract structural state in behavior.",
+    "not_falsified": [
+      "native llama.cpp cvec can causally perturb the internal state",
+      "a different rank-aware/cross-task/evidence-bound successor construction could establish a stronger semantic controller",
+      "a local task-specific actuator may exist under a better preregistered coordinate construction"
+    ],
+    "do_not_overinterpret": "The frozen v1 source has Run-2-documented polarity, position/length, geometry-estimator, gain-selection, replication, task-family, and evidence-authenticity limitations. Therefore this FAIL is decisive counterevidence for the frozen controller/design, not a proof that semantic J-Space control is impossible in Qwen3-0.6B."
+  },
+  "run2_successor_requirements": [
+    "exact target x opaque-code x query-polarity factorialization",
+    "exact tokenizer count and last-token-position matching, not only source byte-length matching",
+    "rank-aware 1D/2D semantic-simplex reconstruction with shared geometry scale",
+    "fixed preregistered gain before holdout",
+    "strict per-state diagonal positivity and full intervention-state x evaluator-state matrix",
+    "true sign reversal or rank-2 target-to-target displacement predictions",
+    "rank-complete nuisance-axis causal controls",
+    "within-cell topology/context/token-position matching",
+    "cross-task calibration and unseen holdout families with replication",
+    "off-target unrelated-task regression bounds",
+    "exact prompt/vector/cvec/runtime receipt binding before any promotion gate can count as authenticated runtime evidence"
+  ],
+  "coordination": {
+    "post_result_rerun_started_by_this_organ": false,
+    "redundant_pending_retry_deleted_after_terminal_result": true,
+    "holdout_retuning_after_failure": false
+  },
+  "credit_delta": {
+    "new_native_internal_transport_counterevidence": 1,
+    "structural_label_free_native_runtime_pass_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_gate": "Do not rerun or tune frozen v1 on its holdout. Treat its large internal-transport / failed-behavior dissociation as negative evidence. Continue only with the separately versioned successor that closes target/code/polarity, exact tokenizer-position, rank-aware geometry, rank-complete nuisance, full state-specific causal matrix, cross-task replication, off-target regression, and immutable runtime evidence binding before opening a fresh holdout."
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger_local_time": "2026-08-17T22:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "REFINES",
+  "scope": "PR622_PYTHON_HASH_LOCK_GENERATOR_SUPPORTING_ISOLATED_PROBE",
+  "research_pr": 622,
+  "research_pr_head": "3b47c65dfbf97e15c50f9c49272d73a082f2bfcf",
+  "bound_inputs": {
+    "workflow_blob": "394c086b9c8e38876a2ff28b0fc62624cba5663a",
+    "source_lock_blob": "5f68dbd63cf5a134ed7fd90fb88d213e33515804",
+    "requirements_blob": "b275b62bc008e32b56610753cc5178c28deb73b1",
+    "dockerfile_blob": "f573055d34aef3c983135eddc00cb908cf9fd997",
+    "source_binding_test_blob": "53b0263e49a6e1bd0319f1e48d29ef67c48d3aca"
+  },
+  "target_product_base": "python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91",
+  "supporting_isolated_environment": {
+    "python": "3.13.5",
+    "docker_available": false,
+    "network_observation": "pip download reached no package bytes; DNS resolution for PyPI/files.pythonhosted failed with Temporary failure in name resolution",
+    "classification": "EXECUTION_NETWORK_ADMISSION_BLOCKED_BEFORE_BOOTSTRAP_DOWNLOAD"
+  },
+  "primary_metadata_confirmation": {
+    "source": "PyPI JSON release metadata",
+    "status": "CONFIRMED_SOURCE_IDENTITY_ONLY",
+    "entries": [
+      ["pip-tools==7.5.3", "pip_tools-7.5.3-py3-none-any.whl", "3aac0c473240ae90db7213c033401f345b05197293ccbdd2704e52e7a783785e"],
+      ["build==1.2.2.post1", "build-1.2.2.post1-py3-none-any.whl", "1d61c0887fa860c01971625baae8bdd338e517b836a2f70dd1f7aa3a6b2fc5b5"],
+      ["click==8.3.3", "click-8.3.3-py3-none-any.whl", "a2bf429bb3033c89fa4936ffb35d5cb471e3719e1f3c8a7c3fff0b8314305613"],
+      ["packaging==24.2", "packaging-24.2-py3-none-any.whl", "09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759"],
+      ["pip==26.1.2", "pip-26.1.2-py3-none-any.whl", "382ff9f685ee3bc25864f820aa50505825f10f5458ffff07e30a6d96e5715cab"],
+      ["pyproject-hooks==1.2.0", "pyproject_hooks-1.2.0-py3-none-any.whl", "9e5c6bfa8dcc30091c74b0cf803c81fdd29d94f01992a7707bc97babb1141913"],
+      ["setuptools==83.0.0", "setuptools-83.0.0-py3-none-any.whl", "29b23c360f22f414dc7336bb39178cc7bcbf6021ed2733cde173f09dba19abb3"],
+      ["wheel==0.46.2", "wheel-0.46.2-py3-none-any.whl", "33ae60725d69eaa249bc1982e739943c23b34b58d51f1cb6253453773aca6e65"]
+    ]
+  },
+  "observed": [
+    "Current PR622 head metadata is newer than the stale head named in its PR body; execution must bind 3b47c65d... or later current head at admission.",
+    "The source lock's eight declared bootstrap wheel filenames and SHA-256 values match current primary PyPI release metadata.",
+    "The available supporting isolated Python 3.13.5 runtime could not download any bootstrap wheel because DNS/network resolution failed before package retrieval.",
+    "No offline install, pip-tools runtime compatibility, stable-path double compile, product hash lock, product wheelhouse, Docker build or OCI runtime behavior was executed by this probe."
+  ],
+  "evidence_class": "SOURCE_IDENTITY_CONFIRMED_PLUS_SUPPORTING_EXECUTION_ADMISSION_NEGATIVE",
+  "not_claimed": [
+    "PR622_TEST_FAIL",
+    "PR622_PASS",
+    "PYTHON_3_13_14_COMPATIBILITY",
+    "OFFLINE_BOOTSTRAP_INSTALL_PASS",
+    "LOCK_REPRODUCIBILITY_PASS",
+    "CANONICAL_REQUIREMENTS_LOCK",
+    "OCI_RUNTIME_CREDIT",
+    "WHOLE_CLAYVERSE_PASS"
+  ],
+  "strongest_counterhypothesis": "The eight-wheel set may still fail to install or pip-compile may behave differently on the exact digest-pinned Python 3.13.14 product base even though release metadata and source-level closure match.",
+  "next_discriminator": "Run the retained PR622 workflow semantics on an actually network-capable authorized isolated execution surface using the exact digest-pinned Python 3.13.14 base: hash-checked bootstrap download -> exact wheel verification -> offline install -> pip/pip-tools assertions -> same-output-path double compile -> hash-enforced product wheelhouse. Do not mint requirements.lock.txt before that run.",
+  "unusual_experiment": {
+    "executed": false,
+    "reason": "COORDINATION_BLOCKED_NO_SHARED_IMMUTABLE_REQUEST_OR_TURN_ID_AND_ONLY_MINUTE_PRECISION_TRIGGER_TIME"
+  },
+  "execution_policy": {
+    "vps": "NOT_USED_FORBIDDEN",
+    "self_hosted": "NOT_USED_FORBIDDEN",
+    "production_host": "NOT_USED_FORBIDDEN",
+    "together": "NOT_USED_FORBIDDEN"
+  }
+}

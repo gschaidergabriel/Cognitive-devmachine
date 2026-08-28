@@ -1,0 +1,98 @@
+{
+  "schema": "GLOBAL_WORKSPACE_REENTRY_RECEIPT_CONTRACT/v1",
+  "status": "CURRENT_OWNER_ALIGNED_SOURCE_CONTRACT_NOT_RUNTIME_CREDIT",
+  "authority": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "base_main_sha": "a6d44b6a39ecb531cc210a1be3513ac82d4ec9fe",
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "census_schema": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1",
+    "abi_schema": "COGNITIVE_PROCESS_ABI/v1",
+    "workspace_process": "ZECP10",
+    "claude_handoff_process": "ZECP13",
+    "claude_return_process": "ZECP14",
+    "jspace_research_process": "ZECP20",
+    "free_only": true
+  },
+  "receipt_schema": "GLOBAL_WORKSPACE_REENTRY_RECEIPT/v1",
+  "required_identity": [
+    "receipt_id", "causal_event_id", "admission_id", "generation", "work_id",
+    "workspace_episode_id", "from_workspace_epoch", "to_workspace_epoch", "transfer_id",
+    "reentry_test_id", "source_process_id", "target_process_id", "source_result_id",
+    "bridge_request_id", "bridge_return_id"
+  ],
+  "required_state_binding": [
+    "pre_transfer_workspace_digest", "transferred_state_digest", "claude_interface_class",
+    "claude_request_digest", "claude_return_digest", "post_return_workspace_digest",
+    "downstream_decision_or_work_ref"
+  ],
+  "required_control_binding": [
+    "preregistration_ref", "matched_control_ref", "treatment_execution_ref", "control_execution_ref",
+    "comparison_metric", "comparison_direction", "measured_treatment_value", "measured_control_value",
+    "measured_delta", "off_target_regression", "control_match_manifest"
+  ],
+  "control_match_manifest_required": [
+    "same_task_family", "same_generation", "same_source_state_class", "same_interface_class",
+    "same_tool_scope", "same_resource_budget_class", "difference_is_declared_transfer_intervention"
+  ],
+  "allowed_causal_credit": ["NONE", "OBSERVABLE_WORKSPACE_REENTRY"],
+  "causal_credit_pass_conditions": [
+    "all required identity and state bindings are present",
+    "generation and workspace epochs are current and non-stale",
+    "treatment and matched control identities are immutable and distinct",
+    "transfer intervention is preregistered before treatment/control outcomes are opened",
+    "comparison metric and direction are preregistered",
+    "control_match_manifest isolates the declared transfer intervention",
+    "observed_downstream_change is TRUE",
+    "measured_delta satisfies the preregistered acceptance rule",
+    "off_target_regression satisfies the preregistered regression rule",
+    "Claude/model assertions remain candidate evidence",
+    "no real effect bypasses EffectGate/EffectJournal",
+    "negative and UNKNOWN outcomes remain preserved"
+  ],
+  "automatic_zero_credit_conditions": [
+    "matched_control_ref missing",
+    "preregistration_ref missing or created after outcome exposure",
+    "comparison metric selected after outcome exposure",
+    "stale generation or stale workspace epoch",
+    "treatment/control differ in an unaccounted material factor",
+    "transfer presence or text similarity used as sole evidence",
+    "observed_downstream_change is FALSE or UNKNOWN",
+    "model self-report used as sole causal evidence",
+    "majority or recurrence used as truth/causal authority",
+    "activation-level or hidden-state access claimed for Claude Code without an exact exposed interface",
+    "canonical state/effect authority bypassed",
+    "negative evidence discarded or relabeled"
+  ],
+  "jspace_claim_ceiling": {
+    "receipt_maximum": "OBSERVABLE_WORKSPACE_REENTRY",
+    "model_specific_causal_jspace": "REQUIRES_SEPARATE_EXACT_MODEL_RUNTIME_INTERVENTION_RECEIPT",
+    "claude_hidden_activation_access": "UNKNOWN_UNLESS_EXACTLY_EXPOSED_AND_OBSERVED",
+    "frozen_v1_negative_evidence": "MUST_REMAIN_PRESERVED",
+    "successor_research": "SEPARATELY_VERSIONED_AND_PREREGISTERED_BEFORE_FRESH_HOLDOUT"
+  },
+  "authority_fences": {
+    "canonical_database_write": "DETERMINISTIC_ADMISSION_ONLY",
+    "real_effect_path": "EffectGate+EffectJournal_ONLY",
+    "capability_self_grant": "FORBIDDEN",
+    "model_grid_claude_outputs": "CANDIDATE_PROJECTION_MEASUREMENT_ONLY",
+    "unknown_outcome": "UNKNOWN_NOT_FALSE_NOT_SUCCESS"
+  },
+  "acceptance_discriminators": [
+    {"id": "GWR-D1-MATCHED-CONTROL-REQUIRED", "pass": "missing matched control forces causal_credit NONE"},
+    {"id": "GWR-D2-PREDECLARED-METRIC", "pass": "post-outcome metric selection forces causal_credit NONE"},
+    {"id": "GWR-D3-STALE-REENTRY", "pass": "stale generation/workspace epoch rejects re-entry credit"},
+    {"id": "GWR-D4-CLAUDE-CLAIM-CEILING", "pass": "observable bridge cannot mint hidden-state causality"},
+    {"id": "GWR-D5-OFF-TARGET-REGRESSION", "pass": "unacceptable off-target regression blocks credit"},
+    {"id": "GWR-D6-NEGATIVE-EVIDENCE", "pass": "FALSE/UNKNOWN/negative evidence remains preserved"}
+  ],
+  "credit_boundary": {
+    "contract_source_credit": 1,
+    "observable_workspace_reentry_runtime_credit": 0,
+    "claude_bridge_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "EMIT_ONE_TREATMENT_PLUS_MATCHED_CONTROL_RECEIPT_FIXTURE_THROUGH_MINIMAL_VARIABLE_GRID_RUNTIME_WITH_CAUSAL_CREDIT_NONE_UNTIL_REAL_PREDECLARED_DOWNSTREAM_MEASUREMENT_EXECUTES"
+}

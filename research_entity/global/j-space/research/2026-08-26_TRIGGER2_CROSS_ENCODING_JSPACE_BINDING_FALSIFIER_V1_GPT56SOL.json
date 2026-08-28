@@ -1,0 +1,137 @@
+{
+  "schema": "CLAY_TRIGGER2_CROSS_ENCODING_JSPACE_BINDING_FALSIFIER/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "NONCANONICAL_RESEARCH_DELTA_CANDIDATE_EVAL_ONLY",
+  "authority": {
+    "supervisor_epoch_observed": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "training_eligible": false,
+    "accepted_dataset_tokens_added": 0,
+    "training_credit_added": 0,
+    "jspace_model_credit_added": 0
+  },
+  "observed_project_context": {
+    "current_ledger_at_research_start": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V37_GPT56SOL.json",
+    "current_problem": "Episode-local codebook / dynamic-binding correctness and J-Space causal-semantic promotion can be confounded by output/extraction-index following even when an intervention changes behavior.",
+    "related_current_donors": [
+      "PR1995_S3_BINDING_EQUIVARIANCE",
+      "PR2005_NUISANCE_SEMANTIC_ABLATION",
+      "PR2006_VISIBLE_CODEBOOK_METADATA_INTEGRITY",
+      "PR2007_MODEL_VISIBLE_SEMANTIC_ABLATION"
+    ]
+  },
+  "external_research": [
+    {
+      "source": "Gao, Peng, Wakamiya, Aramaki (2026), What Does Activation Steering Control? Attribution Across Answer Encodings and Output-Sensitive Subspaces, arXiv:2608.22985",
+      "url": "https://arxiv.org/abs/2608.22985",
+      "classification": "EXTERNAL_PRIMARY_RESEARCH_METHOD_EVIDENCE",
+      "publication_date": "2026-08-24",
+      "finding": "Cross-Encoding Steering Evaluation freezes an intervention while changing answer encodings. In the reported experiments, a steering effect can track extraction identifiers rather than the intended semantic labels; later-layer and low-rank output-sensitive structure can retain most of that index-following effect.",
+      "project_implication": "A positive behavioral steering delta under one Xeno atom/codebook encoding is insufficient to identify semantic J-Space control. The intervention must follow the semantic role under remapping rather than a fixed output/extraction index."
+    },
+    {
+      "source": "Srivastav (2026), Steering the Language Axis: From Linear Decodability to Causal Control, arXiv:2608.12334",
+      "url": "https://arxiv.org/abs/2608.12334",
+      "classification": "EXTERNAL_PRIMARY_RESEARCH_METHOD_EVIDENCE",
+      "finding": "Causal steering effects in Qwen3.5-2B and Llama-3.2-1B are reported as strongly layer- and target-dependent, while equal-magnitude random perturbations provide a matched control with little effect in that setting.",
+      "project_implication": "Layer/site identity and same-norm controls must remain explicit; one successful layer or direction cannot be generalized into a model-wide J-Space claim."
+    },
+    {
+      "source": "Wu, Geiger, Milliere (2025), How Do Transformers Learn Variable Binding in Symbolic Programs?, arXiv:2505.20896",
+      "url": "https://arxiv.org/abs/2505.20896",
+      "classification": "EXTERNAL_PRIMARY_RESEARCH_METHOD_EVIDENCE",
+      "finding": "The studied transformer passed through a shallow heuristic phase before developing systematic variable dereferencing; causal intervention isolated a routing mechanism only later.",
+      "project_implication": "Aggregate balance or high accuracy is not sufficient evidence for episode-local binding; permutation/OOD and causal discrimination should explicitly detect heuristic/index-based phases."
+    },
+    {
+      "source": "Qwen/Qwen3.5-0.8B official model config/model card",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json",
+      "classification": "OFFICIAL_MODEL_ARCHITECTURE_REFERENCE",
+      "finding": "The official current configuration reports hidden_size=1024, 24 text layers, vocab_size=248320 and full-attention layers interleaved at indices 3,7,11,15,19,23 among linear-attention layers.",
+      "project_implication": "Post-training J-Space metrology should preregister exact model revision and named layer/site instead of treating prior L19/L23 observations as timeless or architecture-independent."
+    }
+  ],
+  "core_hypothesis": {
+    "id": "H38_CROSS_ENCODING_SEMANTIC_CAUSALITY",
+    "hypothesis": "A genuinely semantic Xeno J-Space/binding control should follow the episode-local semantic role when the visible codebook is permuted, while the selected ABI atom/extraction index changes equivariantly with that mapping.",
+    "counterhypothesis": "The apparent steering/binding effect is primarily an output-sensitive extraction-index or fixed-atom effect; changing the codebook leaves the intervention coupled to the old identifier instead of the semantic role.",
+    "strong_alternative": "Some fixed-index behavior could be intentionally functional if the ABI globally fixes role semantics. This alternative is not sufficient for the current Trigger-2 dynamic-binding target because current training design explicitly requires episode-local remapping and prohibits a global class-to-atom semantic shortcut."
+  },
+  "cheapest_high_information_discriminator": {
+    "name": "CROSS_ENCODING_S3_STEERING_EQUIVARIANCE",
+    "preconditions": [
+      "freeze exact checkpoint/tokenizer/runtime/build and loader-consumption identity",
+      "freeze exact intervention vector, magnitude, activation site and decoding configuration",
+      "use family-disjoint semantic items not used to construct the vector",
+      "bind exact rendered prompt bytes and token tensor identity",
+      "use only currently admitted zero-cost execution and required experiment coordination/lease law"
+    ],
+    "design": [
+      "Choose a three-way semantic decision family already represented by the dynamic binder/evaluator.",
+      "Construct all six S3 episode-local mappings from semantic classes to three accepted ABI output atoms or an exact non-training proxy if atom materialization is still blocked.",
+      "For each held-out semantic item, keep underlying semantics fixed while permuting only the visible codebook/answer encoding and required rendering order under an immutable manifest.",
+      "Run BASELINE_NO_INTERVENTION and the frozen target intervention under every mapping.",
+      "Run matched SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM or PERMUTED_SAME_NORM controls where the current intervention protocol admits them.",
+      "Include at least one wrong-layer/off-target-site control and preserve exact layer identity.",
+      "Score semantic role and extraction/atom index separately rather than collapsing them into one accuracy number."
+    ],
+    "primary_metrics": [
+      "semantic_follow_rate_under_remap",
+      "extraction_index_follow_rate_under_remap",
+      "S3_equivariance_violation_rate",
+      "worst_permutation_semantic_accuracy",
+      "intervention_delta_over_no_intervention",
+      "target_delta_minus_same_norm_control_delta",
+      "off_target_cross_effect"
+    ],
+    "promotion_rule": "Do not promote a semantic J-Space causal-control claim if the intervention follows fixed extraction/atom identity materially more than the remapped semantic role, if S3 equivariance fails, or if the effect is not specific relative to matched same-norm/off-target controls.",
+    "bounded_positive_interpretation": "A pass may support model/revision/site-specific semantic-control evidence at the measured scope only. It still does not mint canonical truth, whole-HCU, whole-EntityOS or training PASS."
+  },
+  "training_and_eval_feedback": {
+    "direct_training_decision": "NO_NEW_POSITIVE_ROWS",
+    "candidate_eval_seed_allowed": true,
+    "required_future_eval_families": [
+      "same_semantics_different_codebook",
+      "same_codebook_different_semantics",
+      "unseen_mapping_holdout",
+      "unseen_atom_or_proxy_holdout",
+      "answer_encoding_vocabulary_swap",
+      "display_order_permutation",
+      "semantic_ablation_without_hidden_audit_metadata",
+      "index_following_hard_negative"
+    ],
+    "model_target_boundary": "Train/score semantic binding and candidate cognition only. Deterministic ABI validity, exact identity, authority, lease, provenance and canonical-state admission remain external oracle/gate responsibilities.",
+    "shortcut_warning": "A model can improve apparent symbol accuracy by learning stable output positions/indices without learning the episode-local mapping. Full S3 crossing is necessary but final rendered-byte and intervention-level cross-encoding tests remain required."
+  },
+  "jspace_metrology_feedback": {
+    "prior_representation_numbers": "REMAIN_STALE_MEASUREMENT_ERROR_UNTIL_REMEASURED",
+    "posttraining_requirement": "Re-identify behaviorally relevant layer/site after checkpoint freeze; do not assume pre-FT L19/L23 remains optimal or causal after training.",
+    "semantic_vs_readout_boundary": "A direction that changes the expected output atom can still be output-sensitive/readout control rather than a semantic internal workspace representation. Cross-encoding is a direct falsifier for that confound."
+  },
+  "worker_fusion_targets": [
+    "Fuse this discriminator into the single retained dynamic-binding/J-Space evaluation path rather than creating a second binder generator.",
+    "PR1995 can supply S3 orbit metrics; PR2006 can supply visible-codebook integrity; PR2005/PR2007 can supply rendered semantic-ablation logic. Rebind all mechanisms to exact current source before fusion.",
+    "Keep PR2009/PR1956 owner-target wording under revision where it conflicts with current Supervisor 8.81 physical-GRID10-first concrete acceptance semantics.",
+    "Do not use this research delta to reopen positive training admission while accepted_dataset_tokens remains zero and upstream proof/identity gates are blocked."
+  ],
+  "credits": {
+    "research_delta": 1,
+    "training_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "After current P0 GRID10/consumed-snapshot proof closure and checkpoint-registry reconciliation, bind this cross-encoding discriminator to one exact frozen checkpoint/site and the single retained serialized dynamic-binding evaluator; keep it eval-only until measured evidence justifies any curriculum promotion."
+}

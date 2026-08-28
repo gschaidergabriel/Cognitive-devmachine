@@ -1,0 +1,61 @@
+{
+  "schema": "CLAYVERSE_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "e72e7101753fb8d2d7bc54bf5abcd86d709416f4",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_IDENTITY_BOUNDARY_HARDENING_ONLY",
+  "observed": {
+    "defect": "terminal_hooks._runtime accepted missing or blank CLAYVERSE_SESSION_ID and silently derived the canonical session from CLAYVERSE_USER_ID",
+    "managed_runtime_supplies_session_binding": true,
+    "candidate_head_before_receipt": "6dd25d25e7b4d86e5ad544d6ef74541ffe81a780",
+    "candidate_terminal_hooks_blob": "a38d64eba47cc087e508b1b48f811848ef73fbc7",
+    "candidate_test_blob": "66e485588d50a181ee64860e0bf6a5b386525f80",
+    "exact_runtime_credit": 0,
+    "vercel_sandbox_start_exec_exposed": false,
+    "github_workflow_run_id": 32617461881,
+    "github_workflow_job_id": 97140395618,
+    "github_workflow_conclusion": "failure",
+    "github_workflow_steps": null,
+    "github_workflow_classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_NOT_TEST_FAILURE"
+  },
+  "unusual_experiment": {
+    "local_intervention_count": 0,
+    "macrocycle_id": null,
+    "global_uniqueness": "UNRESOLVED_NO_SHARED_IMMUTABLE_TRIGGER_ID",
+    "reason": "ordinary deterministic security regression only; do not risk consuming a duplicate global unusual-experiment slot"
+  },
+  "delta": {
+    "runtime": {
+      "path": "the artefact/clayverse/terminal_hooks.py",
+      "change": "require non-empty CLAYVERSE_SESSION_ID before opening UnifiedDB and compare it unconditionally to the canonical ensured session"
+    },
+    "test": {
+      "path": "the artefact/tests/test_terminal_hook_session_binding.py",
+      "change": "reject absent, empty, and whitespace-only managed session bindings and require rejection before unified.db creation"
+    },
+    "pull_request": 1193
+  },
+  "preserved": {
+    "unifieddb_sole_durable_authority": true,
+    "managed_hook_turn_lifecycle_only": true,
+    "second_identity_authority_created": false,
+    "second_state_authority_created": false,
+    "second_effect_path_created": false,
+    "free_only": true,
+    "together_forbidden": true,
+    "vps_testing_forbidden": true,
+    "paid_or_model_training": false,
+    "secrets_accessed": false
+  },
+  "evidence_boundary": {
+    "source_candidate": true,
+    "focused_test_source_present": true,
+    "exact_branch_test_execution_observed": false,
+    "exact_oci_build_observed": false,
+    "whole_clayverse_runtime_credit": 0,
+    "next_gate": "actually-started authorized isolated executor runs the focused hook-session regression plus adjacent terminal hook/lifecycle tests on exact PR head, then full exact-current ClayVerse regression and OCI build/startup"
+  }
+}

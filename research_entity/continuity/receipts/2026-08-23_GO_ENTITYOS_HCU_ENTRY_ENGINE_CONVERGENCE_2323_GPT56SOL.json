@@ -1,0 +1,89 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_CONVERGENCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_observed": {
+    "main_before_write": "47be0dbf69ac8ab319a590b1b1ecaf819d2bf53a",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_head_observed": "f38d91e847496d9d132567b0db86e0b4f884bb56",
+    "retained_route_blob": "b890b6cf0210f7af42bf7e95d6b0652297087c91",
+    "effect_authority": "EffectGate+EffectJournal",
+    "durable_state_authority": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB_CANONICAL_STATE_EVIDENCE_SUBSTRATE"
+  },
+  "coordination": {
+    "single_retained_lane": "PR1263",
+    "dependent_engine_admission_candidate": "PR1368 mechanism has been fused into current PR1263 source rather than creating a second permanent router",
+    "stale_donor_branch": "gpt56sol/go-xeno-entry-fabric-v1-20260823-2323",
+    "stale_donor_disposition": "ABANDONED_DONOR_ONLY_DO_NOT_MERGE_OR_PROMOTE",
+    "stale_write_guard": "PASS: an attempted write against an obsolete PR1263 blob was rejected with HTTP 409 and was not forced"
+  },
+  "observed_retained_mechanisms": [
+    "typed Entry causal-event identity separated from transport/admission identity",
+    "versioned deterministic Entry canonicalization with independent second-implementation regression in retained lane",
+    "untrusted Entry capability claims checked against separately supplied authority and cannot self-grant",
+    "Entry admission-to-event binding required independently at router boundary",
+    "EngineAdmission separated from causal event and reserved event authority fields fail closed",
+    "engine identity/class/artifact still require positive registry and exact artifact digest",
+    "requested provider must agree with control-plane EngineAdmission when both are present",
+    "model lanes require control-plane EngineAdmission; script-only routes reject one",
+    "live entity generation is rechecked at route/cognition boundary",
+    "route identity binds causal event, router policy, admitted engine identity and routing result",
+    "inference receipt echo binds concrete Entry admission plus event/route/engine/artifact/serializer identity"
+  ],
+  "go_unusual_experiment_accounting": {
+    "canonical_shared_experiment_receipt": "the artefact/MicroEntity/hcu/receipts/2026-08-23_GO_CAUSAL_ROUTE_ALIAS_STRESS_GPT56SOL.json",
+    "canonical_shared_experiment": "same-route causal-alias stress",
+    "additional_experiment_credit_from_this_organ": 0,
+    "generation_rollover_check": "REGRESSION_ONLY_NO_EXPERIMENT_CREDIT",
+    "reason": "the macrocycle experiment was already consumed in the retained lane; admission-to-dispatch generation rollover was used only to verify the required stale-generation fence and must not create a second unusual-experiment claim",
+    "stale_donor_receipt_experiment_accounting": "SUPERSEDED_ZERO_PROMOTION_CREDIT"
+  },
+  "evidence_boundary": {
+    "source_mechanism": "SUPPORTED_ON_RETAINED_PR1263_HEAD_OBSERVED",
+    "github_workflow_run": 32652556239,
+    "github_workflow_conclusion": "failure",
+    "semantic_test_execution_from_available_metadata": "UNPROVEN",
+    "classification": "EXECUTION_ADMISSION_OR_CI_BLOCKER_NOT_SEMANTIC_HCU_TEST_FAILURE",
+    "authorized_exact_source_full_runtime_executed_by_this_organ": false,
+    "entityos_hcu_runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "current_material_blocker": "The retained source defines a separate EngineAdmission trust domain, but whole-runtime promotion still requires the real EntityOS/HCU control plane to construct that admission from verified loaded local checkpoint/tokenizer/runtime/build bytes and to produce a bound downstream inference receipt in authorized exact-source isolated execution.",
+  "next_exact_gate": {
+    "receipt_schema": "HCU_ENGINE_ADMISSION_CAUSAL_BINDING_RECEIPT/v1",
+    "required_path": "canonical Typed Entry -> canonical admission/event binding -> deterministic control-plane EngineAdmission from exact loaded local engine bytes -> HCU route -> real inference producer -> exact inference echo",
+    "must_bind": [
+      "exact source commit/tree and dirty state",
+      "authorized isolated executor identity",
+      "Entry canonicalization schema",
+      "entry_event_sha256",
+      "entry_admission_sha256",
+      "engine admission source authority",
+      "checkpoint/tokenizer/runtime/build byte identities",
+      "engine identity/class/artifact sha256",
+      "router policy sha256",
+      "route decision sha256",
+      "downstream inference echo",
+      "secret lookup count",
+      "network attempt count",
+      "result digest"
+    ]
+  },
+  "package_gate": "MICROENTITY_CURRENT.zip and compatibility manifest must not be promoted until the retained source semantics settle and the archive is rebuilt/digest-bound from the exact retained source; current compatibility PACKAGE_MANIFEST still carries a generic ~0.8B cognition-core description rather than an admitted exact checkpoint/tokenizer/runtime lock.",
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "new_state_authority_added": false,
+    "new_effect_path_added": false
+  },
+  "promotion_credit": 0
+}

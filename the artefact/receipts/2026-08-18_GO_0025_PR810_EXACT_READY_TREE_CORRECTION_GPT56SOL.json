@@ -1,0 +1,64 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:25+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "EXECUTION_ADMISSION_PROGRESS_AND_SOURCE_IDENTITY_CORRECTION",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_before_write": "f818ea8f19ce154719a187e7c5ec6bbf324b970a",
+  "frontier": {
+    "research_base_sha": "958e3c5fa2406b42d187727e2adb6099b6ed0aa2",
+    "frozen_research_candidate_sha": "37bfaac92158168fff16e20ed29a1fe208429720",
+    "actual_frozen_research_tree": "99041e4e5641f99b03fb304712220fb90390b246",
+    "previous_incorrect_tree_binding_observed": "9904de551443129417631335132506707dd9aa15",
+    "correction_rule": "exact Git commit object tree identity is authoritative; stale receipt/controller metadata receives no source provenance credit"
+  },
+  "vercel_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "exact_head": "860c421e3c69830948e872e05bd32bf341318906",
+    "head_message": "fix(clayverse): bind one-shot controller to actual frozen research tree",
+    "deployment_id": "dpl_CAtTZvDnMWMDyPATWsWWxoicqibF",
+    "deployment_state": "READY",
+    "deployed_head_matches_pr_head": true,
+    "endpoint": "POST /api/go-cycle-v2",
+    "endpoint_bound_research_sha": "37bfaac92158168fff16e20ed29a1fe208429720",
+    "endpoint_bound_research_tree": "99041e4e5641f99b03fb304712220fb90390b246",
+    "endpoint_bound_entityos_sha": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+    "endpoint_bound_entityos_tree": "d55d9d41f5a294a4a692cdee6fa46750652a390d",
+    "runtime_logs_after_ready": "no logs observed in fresh one-hour query",
+    "credential_bearing_post_observed": false
+  },
+  "evidence_interpretation": {
+    "exact_controller_preview_ready": true,
+    "exact_private_source_fetch": false,
+    "sandbox_create_for_this_exact_head": false,
+    "exact_oci_build": false,
+    "exact_oci_digest_runtime": false,
+    "approved_vault_mistral_secret": false,
+    "real_mistral_cognition": false,
+    "entityos_effect_roundtrip": false,
+    "tier2_full_recreation": false,
+    "whole_product_pass": false
+  },
+  "counterhypotheses": [
+    {
+      "hypothesis": "The earlier 9904de... tree value is close enough to identify the frozen candidate.",
+      "status": "REJECTED",
+      "falsifier": "Git commit 37bfaac... directly identifies tree 99041e4e...; exact provenance is byte identity, not approximate textual similarity."
+    },
+    {
+      "hypothesis": "READY exact controller deployment establishes ClayVerse OCI runtime readiness.",
+      "status": "REJECTED",
+      "falsifier": "No credential-bearing POST, exact private fetch, Sandbox.create, OCI build or product assertion executed on this exact deployment."
+    }
+  ],
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "no shared immutable request/turn identity exposed for the global one-experiment lease"
+  },
+  "next_exact_step": "Issue one explicit owner-authorized credential-bearing POST to the exact READY deployment dpl_CAtTZvDnMWMDyPATWsWWxoicqibF using the scoped read-only GITHUB_READ_TOKEN. Require exact Research/EntityOS identity verification, Sandbox.create, private source staging and post-fetch secret absence before full regressions and exact OCI build/digest; only then continue to approved Vault Mistral, canonical re-ingest-before-effect, EntityOS/EffectGate, Tier-1/Tier-2 same-digest recreation, secret reacquisition and post-recovery cognition."
+}

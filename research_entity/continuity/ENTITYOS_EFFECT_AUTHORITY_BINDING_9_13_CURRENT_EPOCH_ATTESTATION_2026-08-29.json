@@ -1,0 +1,62 @@
+{
+  "schema": "ENTITYOS_EFFECT_AUTHORITY_CURRENT_EPOCH_ATTESTATION/v1",
+  "trigger": "4",
+  "status": "CURRENT_EPOCH_COMPATIBILITY_ATTESTED_NO_AUTHORITY_CHANGE",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed_before_write": "ff6005fa35d3e8aa3684a78fef7eeac02b6f5c94",
+  "attested_binding": {
+    "path": "research_entity/continuity/ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_V1.json",
+    "blob_sha": "b4d91a0dd233c9dc15ff8218feea9248ac1c13c5",
+    "binding_commit": "5638204026468b631de5e774e8403d7a6334021e",
+    "implementation_bound_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+    "effect_gate_path": "the artefact/clayverse/effects.py",
+    "effect_gate_blob_sha": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+    "effect_journal_path": "the artefact/clayverse/effect_journal.py",
+    "effect_journal_blob_sha": "cda63471f1467481f2ff79032d3931730a334a20",
+    "unifieddb_path": "the artefact/clayverse/store.py",
+    "unifieddb_blob_sha": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "unifieddb_schema_version": "6",
+    "api_version": "ENTITYOS_EFFECT_AUTHORITY_PY_API/v1"
+  },
+  "current_epoch_basis": {
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "b8681e633a3a94f5e8ab00472ec4c3e321a2dcc1",
+    "schema_version": "9.13",
+    "selected_delta": "9.13AJ_NON_AUTHORITY",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AJ_DELTA_2026-08-29T0038P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "9ae9dd8e0c21d1171e0d986ee6a4e901d1dc40c4",
+    "authority_change": false,
+    "effect_authority_current_manifest_value": "EffectGate+EffectJournal",
+    "artifact_manifest_path": "the artefact/manifest.json",
+    "artifact_manifest_blob_sha": "c1969463d378f828bac7bbb44c55a2851b61c273",
+    "owner_authority_pointer_path": "CLAY_EXECUTION_AUTHORITY.md",
+    "owner_authority_pointer_blob_sha": "b850dbdf0ec5b4c04aa0c7f6e6a98a07f6f9d2f9"
+  },
+  "resolution": {
+    "current_epoch_authority_binding_verified": true,
+    "implementation_tuple_changed": false,
+    "new_effect_authority_created": false,
+    "authority_broadened": false,
+    "historical_8_78_basis_reclassified": "SOURCE_PROVENANCE_ONLY_FOR_BINDING_CREATION; CURRENT_CONSUMPTION_IS_GOVERNED_BY_9_13AJ_NON_AUTHORITY_WITH_AUTHORITY_CHANGE_FALSE",
+    "rule": "This attestation does not create or promote an effect authority. It establishes that the exact previously bound EffectGate+EffectJournal+UnifiedDB source tuple remains compatible with the current inbox-selected 9.13AJ NON_AUTHORITY surface because that surface explicitly declares authority_change=false and the current artifact manifest still names EffectGate+EffectJournal as effect authority. Any later authority-changing owner/supervisor record invalidates current consumption until re-attested."
+  },
+  "frankenstein2_consumption": {
+    "target_workpackage": "F2-WP-105",
+    "active_lane_only": true,
+    "rule": "The already-active F2-WP-105 lane may consume the exact attested tuple as external canonical authority identity. Frankenstein remains adapter/executor lineage only and may not self-authorize, substitute another source tuple, mint caller-authored effect_id values, or promote executor success directly to verified world completion."
+  },
+  "credit_boundary": {
+    "current_epoch_authority_binding_verified": true,
+    "effectgate_runtime_credit_added": 0,
+    "effectjournal_runtime_credit_added": 0,
+    "real_effect_runtime_credit_added": 0,
+    "external_world_verification_runtime_credit_added": 0,
+    "completion_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_frankenstein2_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "next_exact_gate": "In the already-active F2-WP-105 generation-1 lane, bind the canonical-effect-authority bridge to this current-epoch-attested tuple and execute the deterministic no-real-effect matrix: exact intent -> bound authority -> canonical PENDING -> executor stub or zero-dispatch -> VERIFIED/UNKNOWN lifecycle observation -> separate completion verification. Prove DENY/REQUIRE_CONFIRMATION/DEGRADE/UNKNOWN, authority/blob/API/call mismatches and restart uncertainty cannot dispatch or blindly replay."
+}

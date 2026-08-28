@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "cycle": "go-20260823-1744-entityos-hcu-authority-rebase",
+  "bound_main": "99a065294eea9a6e51f05dd7cf357ec87c70eb33",
+  "current_program": "ENTITYOS_HCU_ONLY",
+  "authority": {
+    "entityos": "SOLE_CURRENT_PRODUCT_AND_RUNTIME_SYSTEM_AUTHORITY",
+    "hcu": "SOLE_CURRENT_INTEGRATED_COGNITION_COMPUTE_ARCHITECTURE_WITHIN_ENTITYOS",
+    "legacy_clayverse": "DONOR_OR_HISTORICAL_PROVENANCE_ONLY",
+    "legacy_mini_entity": "DONOR_OR_HISTORICAL_PROVENANCE_ONLY",
+    "legacy_frank": "HISTORICAL_PROVENANCE_ONLY"
+  },
+  "observed_authority_drift": [
+    {
+      "pr": 1352,
+      "observed_active_language": "CLAYVERSE_SINGLE_CONTAINER / CLAYVERSE_ARTIFACT",
+      "classification": "CURRENT_AUTHORITY_STALE_DO_NOT_MERGE_AS_PRODUCT_AUTHORITY",
+      "action": "commented with EntityOS+HCU re-entry instruction"
+    },
+    {
+      "pr": 1295,
+      "observed_active_language": "Mini Entity product/package authority with HCU",
+      "classification": "HCU_MECHANISM_RETAINABLE_PRODUCT_IDENTITY_STALE",
+      "action": "commented to preserve HCU Reality Field as EntityOS/HCU component only"
+    }
+  ],
+  "new_invariant": {
+    "name": "ACTIVE_AUTHORITY_REBASE_GUARD/v1",
+    "rule": "No open or merged candidate may mint current product/runtime credit from ClayVerse, Mini Entity, Frank, or any second product identity after authority correction. Useful mechanisms must be re-derived under EntityOS+HCU and must preserve current state/effect/execution fences.",
+    "fail_closed_on": [
+      "current-product wording names ClayVerse as authority",
+      "current-product wording names Mini Entity as authority",
+      "status footer names retired product as active target",
+      "runtime receipt grants credit to retired product identity",
+      "worker steering can route back to retired product authority",
+      "HCU package or receipt is bound to a non-EntityOS product authority"
+    ]
+  },
+  "execution_boundary": {
+    "free_only": true,
+    "together_allowed": false,
+    "paid_fallback": false,
+    "runtime_credit_requires_exact_executable_entityos_hcu_receipt": true
+  },
+  "credit": {
+    "authority_correction": "CURRENT_OWNER_DIRECTIVE",
+    "this_cycle": "CONTROL_PLANE_REBASE_AND_QUARANTINE_ONLY",
+    "entityos_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_gate": [
+    "inventory active/open lanes for retired product authority wording",
+    "retain only non-duplicate mechanisms as donors",
+    "rebase one canonical execution lane to EntityOS+HCU names and authority",
+    "run exact-source authorized isolated execution naming EntityOS+HCU as target",
+    "bind source/tree/environment/HCU/runtime/result receipts before promotion"
+  ]
+}

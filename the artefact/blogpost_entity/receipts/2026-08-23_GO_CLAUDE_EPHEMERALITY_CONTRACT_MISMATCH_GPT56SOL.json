@@ -1,0 +1,61 @@
+{
+  "schema": "GO_CLAUDE_EPHEMERALITY_CONTRACT_MISMATCH/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "observed_main_before_write": "698c3c63b4c7b501540ac01d4ced3f76ccea38f4",
+  "status": "MECHANISM_CONTRADICTION_BOUND_RUNTIME_UNVERIFIED",
+  "scope": "Claude Code adapter ephemerality and evidence contract only",
+  "source_identity": {
+    "adapter_path": "the artefact/clayverse/adapters.py",
+    "adapter_blob": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507",
+    "runtime_test_path": "the artefact/tests/test_runtime_adapters.py",
+    "runtime_test_blob": "0cf1f06ed02d795c53e11497d145ec9ff750b4c3",
+    "boundary_validator_path": "agentzeroforschung/instrumente/validate_claude_adapter_boundary_receipt_v1.py",
+    "boundary_validator_blob": "a6f68b7f4e7c9ccce2090c37e0e198d8ffe09fa8"
+  },
+  "observations": [
+    "CLAUDE_ADAPTER_BOUNDARY_RECEIPT/v1 requires EPHEMERAL PASS to attest temporary_home_created=true and temporary_home_removed=true.",
+    "ClaudeCodeInference._subprocess_env preserves the caller HOME explicitly so Claude subscription/OAuth credentials remain usable; it does not create or remove an invocation-specific HOME.",
+    "test_claude_code_adapter_ephemeral_receipt_v1 binds HOME to pytest tmp_path but does not establish that product code created a temporary HOME or removed it after the invocation.",
+    "The boundary validator can validate claimed temporary_home_created/removed booleans but does not derive them from filesystem evidence or adapter behavior.",
+    "Therefore current source can make the split regression green without supplying the measurement required for an honest EPHEMERAL_RECEIPT/v1 PASS."
+  ],
+  "external_primary_evidence": [
+    {
+      "source": "Claude Code official environment-variable documentation",
+      "claim": "CLAUDE_CONFIG_DIR overrides ~/.claude and contains settings, credentials, session history and plugins."
+    },
+    {
+      "source": "Claude Code official CLI reference",
+      "claim": "--no-session-persistence disables session persistence in print mode; --setting-sources controls user/project/local settings sources."
+    },
+    {
+      "source": "Claude Code official SDK/feature documentation",
+      "claim": "settingSources alone does not isolate ~/.claude.json or auto-memory; multi-tenant isolation requires explicit filesystem/config isolation and auto-memory disablement."
+    }
+  ],
+  "strongest_counterhypothesis": "The receipt's temporary HOME fields could be interpreted as test-harness-only metadata rather than product behavior. Rejected for acceptance use because the contract explicitly defines those fields as required measured evidence for EPHEMERAL PASS, while the current product adapter intentionally preserves HOME.",
+  "architectural_consequence": "Do not grant EPHEMERAL_RECEIPT/v1 PASS from the current split test alone. Reconcile credential access and ephemeral Claude state before exact Ubuntu adapter promotion.",
+  "recommended_next_gate": [
+    "Choose one canonical isolation design: invocation-specific CLAUDE_CONFIG_DIR / copy-on-write credential staging, or revise the receipt schema to measure actual persistent-config read/write boundaries instead of claiming temporary HOME.",
+    "Add --setting-sources with an explicitly admitted source set and disable auto-memory through a documented control if compatible with owner policy.",
+    "Instrument before/after filesystem state for the exact Claude config/session roots and derive ephemerality fields from observations rather than constants.",
+    "Run the four boundary nodes plus cross-binder on one exact clean Ubuntu source/runtime and retain measured FAIL diagnostics if any persistence surface remains."
+  ],
+  "execution": {
+    "vercel_sandbox_exec_surface": "UNAVAILABLE_IN_CURRENT_CONNECTOR",
+    "isolated_container_claude_binary": "ABSENT",
+    "live_claude_invocation": false,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_CLAIM",
+    "reason": "No shared macrocycle id or second-resolution trigger identity was available to this organ; no unusual experiment credit is claimed."
+  },
+  "acceptance": "IN_PROGRESS"
+}

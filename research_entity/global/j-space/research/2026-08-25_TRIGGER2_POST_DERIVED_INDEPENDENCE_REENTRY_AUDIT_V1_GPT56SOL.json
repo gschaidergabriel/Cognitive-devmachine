@@ -1,0 +1,187 @@
+{
+  "schema": "CLAY_TRIGGER2_POST_DERIVED_INDEPENDENCE_REENTRY_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "authority_snapshot": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "main_observed_before_write": "29fec78107b7a485483e98b090d05d297f77f02c",
+    "bootstrap_schema": "8.78",
+    "training_credit": 0,
+    "accepted_dataset_tokens": 0
+  },
+  "research_question": "After the v7 artifact ledger and the later derived-independence gate commit, is the current positive Hyperposition-native seed actually bound to deterministic independence/event provenance strongly enough for training promotion?",
+  "observed": [
+    {
+      "id": "T2-R8-O1",
+      "status": "current",
+      "finding": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py derives independence from a formal event-dependence registry plus prior event history and does not treat the caller boolean as authoritative.",
+      "provenance": [
+        "commit c5d772219c8e9bc8761b7c5c1f5c7f15b31bd7c9",
+        "tools/trigger2_hyperposition_derivation_bound_gate_v2.py"
+      ],
+      "scope": "SOURCE_COMPONENT_ONLY"
+    },
+    {
+      "id": "T2-R8-O2",
+      "status": "needs_revision",
+      "finding": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py imports trigger2_semantic_hyperposition_gate_v3.py, not trigger2_hyperposition_derivation_bound_gate_v2.py. Its self_check calls gate.adjudicate(row) on that older semantic gate path.",
+      "provenance": [
+        "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+        "tests/test_trigger2_semantic_hyperposition_native_seed_generator_v2.py"
+      ],
+      "revision_reason": "The artifact name/docstring says derivation-bound, but the actual self-check does not exercise the later registry-derived independence gate."
+    },
+    {
+      "id": "T2-R8-O3",
+      "status": "needs_revision",
+      "finding": "tools/trigger2_semantic_hyperposition_gate_v3.py recomputes relation/update/resolution with trigger2_hyperposition_reference_labelers_v3.py, but that labeler still includes independence_qualified in the event schema and _novelty rejects or credits evidence partly from that boolean.",
+      "provenance": [
+        "tools/trigger2_semantic_hyperposition_gate_v3.py",
+        "tools/trigger2_hyperposition_reference_labelers_v3.py"
+      ],
+      "revision_reason": "Formal relation derivation is deterministic, but positive independent-evidence qualification remains caller-influenced on this path."
+    },
+    {
+      "id": "T2-R8-O4",
+      "status": "blocked",
+      "finding": "The current native seed v2 positive rows commonly create fresh events with qualified=true by default; absent a dependence registry on the gate path, fresh event/ancestry/group/payload identities can receive independent-evidence credit from caller-supplied qualification.",
+      "provenance": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py:event(... qualified=True) -> make_row -> lab.u_state -> semantic_hyperposition_gate_v3 self_check",
+      "training_effect": "BLOCK_POSITIVE_D_E_PROMOTION_FROM_NATIVE_SEED_V2"
+    },
+    {
+      "id": "T2-R8-O5",
+      "status": "needs_revision",
+      "finding": "The later derivation-bound gate v2 binds labeler and generator bytes, but current_source_binding does not bind the supplied formal world/event-dependence registry to an immutable generator-produced manifest or independently recompute that world from the generator. A self-consistent substituted evaluator-only world can therefore be a distinct unresolved provenance root even when generator bytes are legitimate.",
+      "provenance": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py:current_source_binding + derive_independence",
+      "revision_reason": "Generator-byte identity is necessary but not sufficient if the evaluator-only world/registry is supplied independently of those bytes."
+    },
+    {
+      "id": "T2-R8-O6",
+      "status": "current",
+      "finding": "tools/trigger2_context_binding_generator_v2.py is a METHOD_ONLY source blueprint whose own contract keeps all rows non-training-eligible and fully crosses principal visible nuisance factors. It is a stronger current binder donor than quarantined binding-router factorial v3, but final ABI-rendered bytes still require exact split/shortcut gates.",
+      "provenance": "tools/trigger2_context_binding_generator_v2.py",
+      "scope": "SOURCE_BLUEPRINT_ONLY"
+    },
+    {
+      "id": "T2-R8-O7",
+      "status": "blocked",
+      "finding": "tools/trigger2_binding_router_factorial_generator_v3.py remains blocked from direct training under supervisor 8.78 because higher-order model-visible nuisance signatures leak target class despite marginal balance/randomization.",
+      "provenance": "SUPERVISOR_STEERING_8_78",
+      "training_effect": "ZERO_DIRECT_TRAINING_CREDIT"
+    }
+  ],
+  "artifact_lifecycle": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V7_GPT56SOL.json",
+      "previous_status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL",
+      "new_status": "superseded",
+      "successor": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V8_GPT56SOL.json",
+      "revision_reason": "V7 predates the later derived-independence gate commit and does not classify the native-seed gate-path mismatch or evaluator-world provenance root."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CURRENT_PROTOCOL_V3_GPT56SOL.json",
+      "new_status": "stale",
+      "revision_reason": "Its current_protocol_inputs still point at ledger v4 and it predates the later v7/derived-independence/native-seed state. Preserve as protocol provenance, not current training truth."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "new_status": "needs_revision",
+      "revision_reason": "Retained deterministic relation/update donor, but direct event path still accepts caller independence_qualified."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_gate_v3.py",
+      "new_status": "needs_revision",
+      "revision_reason": "Does not use the later registry-derived independence gate before lab.u_state."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+      "new_status": "current",
+      "substatus": "CURRENT_CANDIDATE_NEEDS_WORLD_REGISTRY_SOURCE_BINDING_AND_EXECUTION",
+      "revision_reason": "Closes caller independence boolean at source level but still requires immutable world/registry origin binding plus exact-source execution evidence."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "new_status": "blocked",
+      "substatus": "BLOCKED_POSITIVE_TRAINING_NEEDS_DERIVED_INDEPENDENCE_REBIND",
+      "revision_reason": "Self-check uses semantic_hyperposition_gate_v3 rather than the later derivation-bound independence path. Preserve scenarios as donors."
+    },
+    {
+      "artifact": "tools/trigger2_context_binding_generator_v2.py",
+      "new_status": "current",
+      "substatus": "CURRENT_NONTRAINABLE_BINDER_BLUEPRINT",
+      "revision_reason": "Full-cross source design is current; exact ABI atom materialization, visible semantic-ablation/nuisance checks and split isolation remain prerequisites."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "new_status": "blocked",
+      "substatus": "QUARANTINE_UNCHANGED",
+      "revision_reason": "Conditional nuisance leakage remains dispositive."
+    }
+  ],
+  "parallel_worker_coordination": {
+    "open_noncanonical_donor_lanes_observed": [
+      "PR1956 Qwen3.5-0.8B variable-grid Trigger-2 research lane",
+      "PR2005 nuisance-only semantic-ablation gate",
+      "PR2006 prompt/metadata binding gate",
+      "PR2007 model-visible semantic-ablation binder validation",
+      "PR2011 context-conditioned J-Space reliability curriculum"
+    ],
+    "decision": "Do not create a duplicate binder/J-Space implementation lane in this cycle. Preserve this cycle as a source-audit plus hard-negative/versioning delta on canonical main."
+  },
+  "external_method_inputs_noncanonical": [
+    {
+      "source": "arXiv:2505.20896, How Do Transformers Learn Variable Binding in Symbolic Programs?",
+      "classification": "METHOD_INPUT",
+      "relevance": "Reports a training trajectory from shallow heuristic to systematic variable binding and uses causal interventions; supports keeping shortcut diagnostics and mechanistic evaluation separate from apparent task accuracy."
+    },
+    {
+      "source": "arXiv:2604.24693, Contextual Linear Activation Steering of Language Models",
+      "classification": "METHOD_INPUT",
+      "relevance": "Context-dependent steering strength can outperform one fixed global gain; motivates a preregistered context/layer-conditioned J-Space control test rather than changing the current ABI from literature alone."
+    },
+    {
+      "source": "arXiv:2607.25270, Where Steering Signals Come From: Activation Source Selection in Activation Steering",
+      "classification": "METHOD_INPUT",
+      "relevance": "Source activation choice materially changes steering success; strengthens exact activation-source/layer/context identity requirements for J-Space causal promotion."
+    },
+    {
+      "source": "arXiv:2607.05790, Controlling Tool Use with Heading-Specific Activation Steering",
+      "classification": "METHOD_INPUT",
+      "relevance": "Causal steering can exist without a clean globally linear representation; supports separating behavioral causal control evidence from claims of simple global geometry."
+    }
+  ],
+  "hypothesis": "A single deterministic Hyperposition supervision root can be made promotion-safe if evaluator world/event registry bytes are generated from and cryptographically bound to one immutable generator/manifest, independence is recomputed from prior causal/dependence history, and the final model-visible rows pass family-disjoint full-cross nuisance gates.",
+  "counterhypothesis": "Even with deterministic labelers and source binding, the curriculum can still teach shortcuts if rendered prompt structure, split-specific atoms/templates, target-slot/codebook order or world-construction artifacts predict labels. Therefore source-level label correctness alone cannot establish training suitability.",
+  "next_discriminator": {
+    "name": "T2_DERIVED_INDEPENDENCE_WORLD_BINDING_AND_SEED_REBIND",
+    "required": [
+      "one retained positive-seed gate path only",
+      "native seed v2-or-successor must call the derived-independence gate rather than semantic gate v3 directly",
+      "formal world/event-dependence registry must be deterministically reconstructed from or hash-bound to the exact generator/manifest bytes",
+      "caller independence_qualified mutation must never change accepted positive reference semantics except by causing rejection",
+      "same event id with mutated payload/provenance/test/outcome must reject",
+      "fresh-looking repackaging with shared causal/dependence ancestry must receive zero independent credit",
+      "exact-source tests must be observed before positive D/E promotion",
+      "final rendered rows must pass model-visible nuisance-only/semantic-ablation, split-family/provenance and conditional-MI gates"
+    ]
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_delta": 1,
+    "new_hard_negative_blueprint_delta": 1,
+    "new_positive_training_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

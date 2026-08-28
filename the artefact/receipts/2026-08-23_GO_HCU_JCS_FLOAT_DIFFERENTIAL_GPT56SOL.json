@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.2",
+  "record_type": "ENTITYOS_HCU_GO_REGRESSION_RECEIPT",
+  "recorded_at_local": "2026-08-23T23:59:00+07:00",
+  "reclassified_at_local": "2026-08-24T00:03:00+07:00",
+  "authority_rebound_at_local": "2026-08-24T00:04:00+07:00",
+  "persistent_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_at_measurement": "b41afec49bd6384680d001395177c3f274b9be5e",
+  "target_at_measurement": {
+    "path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "git_blob_sha": "0f51451786dcd21a5e58e4bf7dd8a650761d55d4",
+    "schema": "RFC8785_JCS_IJSON/v1"
+  },
+  "bounded_regression": {
+    "name": "JCS_BINARY64_V8_DIFFERENTIAL_50014",
+    "purpose": "compare the exact then-current HCU JCS float serializer against V8 JSON.stringify over deterministic edge cases plus random finite IEEE-754 bit patterns",
+    "seed_decimal": 3248996574,
+    "cases": 50014,
+    "edge_cases_included": 14,
+    "random_finite_binary64_cases": 50000,
+    "independent_runtime": "Node v22.16.0 / V8 JSON.stringify(Number(...))",
+    "environment": "isolated ChatGPT Linux tool container",
+    "source_blob_reproduction": "PASS_EXACT_GIT_BLOB",
+    "observed_mismatches": 0,
+    "process_result": "PASS",
+    "classification": "BOUNDED_REPLICATION_REGRESSION_ONLY_NOT_AN_ADDITIONAL_UNUSUAL_EXPERIMENT"
+  },
+  "macrocycle_reconciliation": {
+    "canonical_macrocycle_receipt_commit": "2216866cc75f8bf48542cb6fb55b62df21ef1c0a",
+    "canonical_registered_unusual_experiment": "AUTHORITY_CONSTANT_TRANSPLANT",
+    "additional_unusual_experiment_credit": 0,
+    "observed_measurements_retracted": false
+  },
+  "current_authority_reconciliation": {
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "authority_commit": "5d99c6c37fc9dbecaa557f6091de06f703e9a412",
+    "reentry_correction_commit": "847cce80b5c52f7d9ceb47c43acc3c184ad2c87d",
+    "latest_append_only_correction_observed": "f6066c126b67699983842c0549378806d5f4c405",
+    "typed_canonical_v1_status": "RESEARCH_PROVENANCE_AND_FALSIFIER_EVIDENCE_ONLY_NOT_CURRENT_SELECTED_AUTHORITY"
+  },
+  "interpretation": {
+    "supported": "For the tested finite binary64 corpus, the exact measured JCS candidate float serializer matched V8 JSON number serialization byte-for-byte.",
+    "not_supported": [
+      "full RFC8785 conformance",
+      "end-to-end Entry/router/inference JCS migration",
+      "mixed-schema or downgrade rejection",
+      "EntityOS/HCU runtime acceptance",
+      "real model or J-Space causality",
+      "whole-product PASS"
+    ],
+    "promotion": "MECHANISM_SUPPORTED_BOUNDED_SELECTED_JCS_FLOAT_SERIALIZATION_ONLY"
+  },
+  "current_migration_gap": {
+    "typed_entry_current_encoder": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1",
+    "router_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "inference_receipt_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "target_encoder": "RFC8785_JCS_IJSON/v1",
+    "cross_language_end_to_end_identity_claim": false
+  },
+  "coordination": {
+    "second_canonicalizer_created": false,
+    "canonicalizer_promotion_performed": false,
+    "artefact_readme": {
+      "status": "NO_CHANGE",
+      "reason": "Current README already states canonicalization convergence and the exact combined Entry+route+inference+GRID10 execution frontier."
+    }
+  },
+  "execution_boundary": {
+    "authorized_product_runtime_started": false,
+    "runtime_credit": 0,
+    "whole_product_credit": 0,
+    "vps_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_used": false,
+    "secrets_used": false
+  },
+  "next_discriminator": "Wire RFC8785_JCS_IJSON/v1 end-to-end through new-version Typed Entry event/admission, router policy/EngineAdmission/route and inference receipt identities; reject mixed/unknown/downgrade schemas; then run the combined path in actually-started authorized isolated execution."
+}

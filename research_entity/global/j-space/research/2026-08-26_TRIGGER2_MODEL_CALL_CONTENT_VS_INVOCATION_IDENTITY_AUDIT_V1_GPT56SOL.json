@@ -1,0 +1,103 @@
+{
+  "schema": "CLAY_TRIGGER2_MODEL_CALL_CONTENT_VS_INVOCATION_IDENTITY_AUDIT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.83_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "SOURCE_ONLY_AUDIT_NONPROMOTING",
+  "observed_main_before_write": "624ad6dcc04ed0d4b62239adc079b133d911be0d",
+  "authority_state": {
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_model_runtime_admitted": false,
+    "training_execution_admitted": false,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "basis": {
+    "abi_v2_source": "tools/trigger2_qwen35_checkpoint_model_state_consumption_probe_v2.py",
+    "repository_bound_call_gate": "tools/trigger2_model_call_repository_bound_gate_v1.py",
+    "two_phase_source": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "exact_call_uniqueness_audit": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TWO_PHASE_COHORT_EXACT_CALL_UNIQUENESS_AUDIT_V1_GPT56SOL.json"
+  },
+  "observed_source_facts": [
+    {
+      "id": "ABI_V2_CALL_BINDING_HAS_NO_HCU_INVOCATION_EVENT_IDENTITY",
+      "detail": "CLAY_TRIGGER2_MODEL_CALL_BINDING/v2 hashes candidate_id, checkpoint manifest/state, loaded-state digest, rendered input, input tensors, runtime identity and forward output. It does not include causal_event_id, GRID cell, node admission, process-instance/PID, launch descriptor, or another invocation nonce/event identity."
+    },
+    {
+      "id": "SOURCE_BOUND_CALL_ADDS_REPOSITORY_EVIDENCE_NOT_HCU_INVOCATION_IDENTITY",
+      "detail": "The repository-bound gate derives source_bound_model_call_identity_sha256 from the ABI-v2 receipt digest, ABI-v2 call binding, model-output identity, repository/source identity, candidate, checkpoint manifest and rendered input. It still has no explicit HCU launch/cell/event identity."
+    },
+    {
+      "id": "PARENT_ABI_RECEIPT_HAS_NO_EXPLICIT_UNIQUE_INVOCATION_ID",
+      "detail": "The parent receipt records candidate/local paths, identity-receipt path/hash, render/backend policy, child return code/stderr tail, child evidence, manifest/opened-shard evidence and component status. No explicit invocation UUID, causal event, GRID cell, node membership or child PID is committed as a dedicated causal invocation identifier."
+    }
+  ],
+  "adjudication": {
+    "claim": "source_bound_model_call_identity_sha256 is proven to be injective over independently executed HCU invocations",
+    "status": "NOT_ESTABLISHED_BY_CURRENT_SOURCE",
+    "reason": "Current source establishes an exact content/evidence digest for model state/input/output/source, but does not encode the HCU invocation event. Two independently executed deterministic invocations can therefore not be assumed to yield distinct source-bound call digests solely from the current schema.",
+    "important_nonclaim": "This audit does not prove that two real executions WILL collide. Incidental receipt differences such as paths or stderr could make digests differ. The point is that causal uniqueness is not guaranteed by schema and must not be inferred from accidental variability."
+  },
+  "conflict_with_prior_audit": {
+    "prior_audit": "CLAY_TRIGGER2_TWO_PHASE_COHORT_EXACT_CALL_UNIQUENESS_AUDIT/v1",
+    "prior_hypothesis": "source_bound_model_call_identity_sha256 must be injective across independently attributed GRID10 members",
+    "new_counterhypothesis": "The source-bound call digest is a content/evidence identity, while invocation uniqueness belongs to the independently frozen launch descriptor plus executor observation. Distinct invocations may validly reference equal call-content identity if the model/input/runtime/output/source evidence is identical.",
+    "resolution": "Do not add a uniqueness gate on source_bound_model_call_identity_sha256 until the intended semantics are explicitly frozen. First run a source-level semantic discriminator that separates call-content equality from invocation-event equality."
+  },
+  "recommended_identity_model": {
+    "model_call_content_identity": "source_bound_model_call_identity_sha256",
+    "invocation_precommit_identity": "launch_descriptor_sha256",
+    "invocation_postcall_observation_identity": "executor_observation_sha256",
+    "invocation_authority_identity": "hash/composition over exact launch descriptor + exact executor observation + exact immutable NODE_RESULT packet/evidence",
+    "fanout_rule": "If one actual model invocation intentionally feeds multiple logical consumers, represent one invocation authority with explicit consumer/fanout identities. Do not count it as multiple executed calls.",
+    "independent_repeat_rule": "If two independently launched invocations happen to have identical model-call content identity, their distinct launch/observation identities must preserve two causal invocations without requiring artificial mutation of the content digest."
+  },
+  "cheapest_discriminator": {
+    "type": "SOURCE_ONLY_SEMANTIC_FIXTURE",
+    "cases": [
+      "A: one launch L1 + one observation O1 + call-content C consumed by two cells via copied O1 => reject as one invocation replay/fanout ambiguity unless explicit fanout schema",
+      "B: distinct launch L1/O1 and L2/O2, both independently bound to identical call-content C and identical model-output identity => acceptance depends on frozen semantics; recommended PASS as two invocations with identical content evidence",
+      "C: distinct launch records but same executor observation reused => reject",
+      "D: same launch reused with two incompatible post-call observations => reject unless explicitly modeled retry/successor lineage",
+      "E: top-level call reference differs from the committed post-call observation/envelope => reject"
+    ],
+    "decision_metric": "Can the schema distinguish execution multiplicity from content equality without relying on accidental nondeterminism or a second model-call identity?"
+  },
+  "training_jspace_implication": {
+    "new_positive_rows": 0,
+    "accepted_dataset_tokens_added": 0,
+    "training_credit_added": 0,
+    "principle": "Training/J-Space traces should use causal invocation authority for event attribution and may use model-call content identity for deduplication/equality analysis. Do not conflate the two axes."
+  },
+  "execution": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "vps_execution_performed": false,
+    "training_executed": false,
+    "unusual_experiment_executed": false,
+    "source_only_audit": true
+  },
+  "credits": {
+    "research_delta": 1,
+    "identity_semantics_audit_credit": 1,
+    "runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Before hardening cohort call-ID injectivity, freeze the semantics of source_bound_model_call_identity_sha256 as either content/evidence identity or invocation identity. Current source supports the former more directly. Add a fixture with two independent launch/observation chains referencing identical call-content identity and compare it against a replayed single observation; preserve invocation multiplicity through phase-separated authority, not accidental call-digest inequality."
+}

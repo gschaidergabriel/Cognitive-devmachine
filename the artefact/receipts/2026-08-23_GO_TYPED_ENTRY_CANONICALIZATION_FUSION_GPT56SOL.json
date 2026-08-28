@@ -1,0 +1,100 @@
+{
+  "schema": "GO_TYPED_ENTRY_CANONICALIZATION_FUSION/v2",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_first_write": "ca0076d54c64996bc028746f4ad9d084ede28676",
+  "donor_pr": 1263,
+  "donor_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+  "latest_donor_head_observed_for_coordination": "ef51d15f5d14efda528c24cbbfc03af2e985281f",
+  "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+  "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+  "fusion_history": [
+    "retained the existing single EntityOS/HCU route lane rather than creating a second router/admission authority",
+    "adopted the stronger concurrent replay-stable event_sha256 versus admission_sha256 split instead of overwriting it",
+    "implemented and exactly component-tested ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1 as one bounded Entry-only interoperability hypothesis",
+    "independent Python and Node parity supported that CBOR subset at the tested component scope",
+    "later current branch adjudication selected RFC8785_JCS_IJSON/v1 as the one target Entry+HCU canonicalization path and explicitly demoted both CBOR and custom typed-binary alternatives to research provenance",
+    "therefore the CBOR implementation is retained as alternative evidence only and receives no current canonicalization authority or runtime credit"
+  ],
+  "tested_cbor_candidate_exact_scope": {
+    "typed_entry_canonical_v1.py_git_blob": "2bcd576003ac58cec07e026a5105bc0a0b3413bb",
+    "xeno_entry_fabric_v1.py_git_blob": "cdc0bc44edecbf4758bce0152cdab87f26a81efe",
+    "test_typed_entry_canonical_v1.py_git_blob": "1cc073260bd0bcea0832e0c1087a151cf5b47600",
+    "surface": "ChatGPT isolated container",
+    "python": "3.13.5",
+    "node": "v22.16.0",
+    "pytest": "9.0.2",
+    "result": "8/8 PASS COMPONENT_SCOPE",
+    "not_current_donor_head_claim": true
+  },
+  "prior_exact_entry_replication_on_main": {
+    "source_receipt_commit": "ca0076d54c64996bc028746f4ad9d084ede28676",
+    "entry_blob": "0f4d39159be77bace7ee95397b744c781e8f8599",
+    "tests": "15/15 PASS exact source component scope",
+    "status": "supports capability repair and replay-stable event/admission identity split at its historical exact blob scope"
+  },
+  "current_canonicalization_adjudication": {
+    "source_contract": "the artefact/MicroEntity/hcu/ENTRY_CANONICALIZATION_CONTRACT.json",
+    "selected_target": "RFC8785_JCS_IJSON/v1",
+    "selected_implementation": "entry_canonicalization_v1.py",
+    "cbOR_alternative": "RESEARCH_PROVENANCE_ONLY_NOT_ADMITTED",
+    "custom_typed_binary_alternative": "RESEARCH_PROVENANCE_ONLY_NOT_ADMITTED",
+    "migration_law": "NEW_VERSIONED_IDENTITIES_REQUIRED; OLD_HASHES_KEEP_ORIGINAL_SCOPE; MIXED_OR_UNKNOWN_CANONICALIZER_REPLAY_REJECTED"
+  },
+  "additional_current_mechanisms_observed_on_same_donor_lane": {
+    "route": "admission->event binding is independently admitted; concrete entry admission remains outside stable route identity but is echoed downstream",
+    "engine": "separate deterministic EngineAdmission plus positive artifact registry; event cannot mint engine authority",
+    "inference_receipt": "candidate-only producer rechecks generation, admission->event, engine artifact, output digest/size and route echo",
+    "grid10": "10 logical cells are separated from model-call count and physical decoder concurrency; Entry budget and runtime-capacity receipt are independent authority inputs",
+    "runtime_credit": 0
+  },
+  "primary_external_evidence_used": [
+    "RFC 8785 JSON Canonicalization Scheme",
+    "RFC 8949 deterministic CBOR core requirements"
+  ],
+  "github_actions": {
+    "latest_checked_identity_guard_run": 32652556239,
+    "job": 97226308792,
+    "conclusion": "failure",
+    "executed_steps": 0,
+    "classification": "EXECUTION_ADMISSION_OR_RUNNER_FAILURE_BEFORE_STEPS_NOT_SEMANTIC_TEST_FAIL"
+  },
+  "local_full_checkout_attempt": {
+    "result": "BLOCKED_BEFORE_SOURCE_DOWNLOAD",
+    "reason": "isolated container DNS could not resolve github.com",
+    "test_credit": 0
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "the user-triggered go unusual experiment was already consumed by the causal/provenance same-route alias discriminator; canonicalization work after that is deterministic replication/adjudication"
+  },
+  "evidence_boundary": {
+    "exact_historical_entry_component_replication": true,
+    "exact_cbor_candidate_component_replication": true,
+    "selected_rfc8785_target_wired_end_to_end": false,
+    "combined_exact_current_pr_entry_route_inference_grid10_suite_executed": false,
+    "real_local_08b_engine_artifact_bound_and_executed": false,
+    "jspace_causal_use_verified": false,
+    "entityos_hcu_whole_runtime_accepted": false
+  },
+  "current_blockers": [
+    "wire selected RFC8785_JCS_IJSON/v1 under new versioned Entry event/admission, router policy/engine/route and inference receipt identities without reinterpreting historical hashes",
+    "wire HCU_REACTIVE_EVENT/v1 into GRID10 mode selection/plan compilation while preserving independent Entry budget and runtime-capacity authority",
+    "obtain an actually-started authorized isolated executor for exact-current combined Entry + route + inference + canonicalization + GRID10 regressions",
+    "rebase/fuse retained donor mechanisms onto current EntityOS/HCU main without duplicate authority",
+    "bind real local ~0.8B checkpoint/tokenizer/runtime bytes, capability record and measured capacity receipt to physical model leases",
+    "rebuild/digest-bind the legacy compatibility ZIP only after source identities settle"
+  ],
+  "security": {
+    "vps_self_hosted_or_production_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "promotion": "ALTERNATIVE_CANONICALIZATION_EVIDENCE_RETAINED; RFC8785_SELECTED_FOR_FUSION_NOT_RUNTIME_PROMOTED"
+}

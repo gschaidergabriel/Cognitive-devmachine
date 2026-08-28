@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_EVIDENCE_CORRECTION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger_context": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "research_main_observed_before_correction": "cf258187c23ced50a7a1f81e9ea5ab25abbaee56"
+  },
+  "correction_of": {
+    "research_commit": "8c16cb75c20363bd6065f6f1e7961ecea24a7827",
+    "path": "research_entity/continuity/receipts/2026-08-24_GO_PR810_EXACT_DONOR_BLOB_MAP_SCHEMA_SYNC_GPT56SOL.json",
+    "field": "observed_frontier.route_accepts_current_contract_schema",
+    "recorded_value": true,
+    "correct_value_at_exact_executor_commit": false
+  },
+  "exact_immutable_evidence": {
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "executor_commit": "51db450b02f9a97e93d1ad14f2bb5f53f8f47ed6",
+    "route_path": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js",
+    "route_blob": "b8057c22bcd2122796f79e6e0557620f82a8667b",
+    "route_accepted_contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+    "contract_path": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-v4-v3-current-rebind-contract.json",
+    "contract_blob": "7050f66961c9fd2f244cf045875ef18aebbd0748",
+    "contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v3",
+    "successor_dynamic_checker_path": "mcp/vercel-sandbox-mcp/scripts/check-hcu-jspace-rebind-contract-sync.mjs",
+    "successor_dynamic_checker_blob": "1bd9a7d310c6e273a05b9d46417facbb8216207f",
+    "checker_semantics": "Derive expectedSchema from the current contract and require the route's accepted schemas to include that exact schema.",
+    "exact_commit_result": "SOURCE_SCHEMA_SYNC_MISMATCH_FAIL_CLOSED"
+  },
+  "interpretation": {
+    "historical_receipt_claim": "At PR810@51db450b02f9a97e93d1ad14f2bb5f53f8f47ed6 the route was recorded as accepting the current v3 rebind contract.",
+    "observed_reality": "At that exact immutable commit the route accepted v4 while the contract declared v3, so the successor-dynamic sync check would reject the pair.",
+    "cause_class": "PARALLEL_WRITE_SNAPSHOT_RACE_OR_STALE_RECEIPT_OBSERVATION",
+    "product_failure": false,
+    "runtime_failure": false,
+    "evidence_quality_issue": true,
+    "history_policy": "APPEND_ONLY_CORRECTION_DO_NOT_REWRITE_PRIOR_RECEIPT"
+  },
+  "current_state_reentry": {
+    "executor_head_observed_after_historical_mismatch": "9fecea461eb004f4444a7c4c5904f4b1476d32a5",
+    "current_route_blob_observed": "d5444f09c8b3c6165df4a3b4dbf8e5055e66a50a",
+    "current_contract_blob_observed": "da1640b853671ed958f1988b975f162693f1a86e",
+    "current_route_contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+    "current_contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+    "historical_schema_mismatch_currently_repaired": true,
+    "source_rebind_required": true,
+    "sandbox_create_before_coherent_rebind": false
+  },
+  "go_track_effect": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_CORRECTING_A_FALSE_SOURCE_SYNC_CLAIM_AND_PRESERVING_FAIL_CLOSED_QUARANTINE_SEMANTICS",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "NO_NEW_MECHANISM_DELTA_IN_THIS_CORRECTION; PRIOR_TRANSITIVE_AND_ATOMIC_ADMISSION_DELTAS_REMAIN",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_EVIDENCE_DISCIPLINE_BY_REQUIRING_SUCCESSOR_DYNAMIC_SCHEMA_SYNC_BEFORE_JSPACE_EXECUTOR_PROMOTION"
+  },
+  "execution_evidence": {
+    "new_build_executed": false,
+    "new_test_executed": false,
+    "new_sandbox_executed": false,
+    "unusual_experiment_performed": false,
+    "unusual_experiment_count_added": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_ADDITIONAL_CHANGE_REQUIRED",
+    "reason": "the artefact/README.md was already updated during this same go macrocycle to the transitive J-Space executor closure and remains correct at product/frontier level; this receipt corrects an immutable historical evidence claim only."
+  },
+  "next_exact_action": "Re-enter current Research main, PR1263 and PR810; require the current successor-dynamic schema checker plus exact donor blob-map equality to pass before removing SOURCE_REBIND_REQUIRED, and execute the fixed closure only when the FREE_ONLY Vercel Hobby build/function admission surface permits it."
+}

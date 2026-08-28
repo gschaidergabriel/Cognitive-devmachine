@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_DELTA_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "1",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "62e52ac6545c594c0ea178f90e83079cab453df7",
+  "owner_directive": "research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json",
+  "work_completed": {
+    "retained_donor_pr": 1263,
+    "orthogonal_same_norm_control_commit": "1a954ff64ea1839f6aef4d9220ca66421d7c89dd",
+    "orthogonal_permuted_integration_commit": "d3f262eb82bd74ce3dd524264264e30ae35529fc",
+    "donor_regression_definition_commit": "35d3cda9f98e69c3eac3905658e48e8154bb2c57",
+    "hosted_route_evidence_binding_commit": "6b616fe06548eae5d46979e70d60e145a6717857",
+    "hosted_route_regression_definition_commit": "7db29cb2a7b514793a421b93ec6b158cb39b440e"
+  },
+  "donor_finding": {
+    "prior_gap_correction": "PERMUTED control already existed on retained donor as jspace_activation_steering_matched_permuted_v1.py and canonical ABI condition PERMUTED; the remaining source gap was explicit orthogonal same-norm integration plus holdout separation.",
+    "dead_end_found": "The existing matched-permuted wrapper called search_activation_steering without any equal-norm random control while base SearchResult.success requires at least one, making the wrapper's success path structurally unreachable under the reviewed source.",
+    "delta": "Add deterministic ORTHOGONAL_SAME_NORM generation and a Trigger-1 wrapper that supplies that exact control to the base search, then executes canonical PERMUTED controls at the same selected layer/alpha.",
+    "remaining_gate": "DISJOINT_CALIBRATION_TO_FROZEN_HOLDOUT plus canonical corrupted/sham/off-target family and exact runtime/intervention receipts."
+  },
+  "hosted_qwen_route": {
+    "model": "qwen/qwen3-0.6b-04-28:free",
+    "economic_authority_commit": "7df4c908f8dbf1da713ad1ea8d382c85b25d444c",
+    "weights_repository": "Qwen/Qwen3-0.6B",
+    "weights_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "tokenizer_json_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "route_gate_hardening": "Hosted request builder now requires route-specific FREE/zero-token-price evidence, exact_model_identity=true, weights repository/revision, exact tokenizer digest, tokenizer-id match, require_parameters=true and allow_fallbacks=false.",
+    "credit_scope": "OUTPUT_LOGIT_VECTOR_CONTROL_COMPONENT_ONLY"
+  },
+  "real_execution_dispatch": {
+    "github_issue": 1553,
+    "issue_title": "[CLAY-DISPATCH] Trigger1 Qwen3 0.6B logit vector",
+    "dispatch_created_by_authenticated_owner": true,
+    "workflow": ".github/workflows/trigger1-openrouter-qwen06-logit-vector.yml",
+    "executor": "tools/trigger1_openrouter_qwen06_logit_vector_execute.py",
+    "vault_child_required": true,
+    "free_lane_current_binding_required_before_each_call": true,
+    "shared_quota_gate": true,
+    "six_controls": ["BASELINE", "+VECTOR", "SIGN_FLIP", "NULL_VECTOR", "ORTHOGONAL_SAME_NORM", "PERMUTED_SAME_NORM"],
+    "calibration_holdout_separation": true,
+    "paid_fallback": false,
+    "together": "FORBIDDEN",
+    "runtime_result_commit_observed_before_receipt": false,
+    "classification": "DISPATCHED_REAL_FREE_PROVIDER_EXPERIMENT_RESULT_NOT_YET_OBSERVED"
+  },
+  "new_runtime_identity_gap": {
+    "source_receipt_commit": "62e52ac6545c594c0ea178f90e83079cab453df7",
+    "finding": "Concrete OpenRouter model slug and upstream HF identity still do not bind the exact routed provider endpoint/variant/quantization across matched calls.",
+    "next_discriminator": "Persist OpenRouter router metadata and require invariant observed provider/runtime-route identity across all six controls before output-logit causal attribution."
+  },
+  "verification": {
+    "donor_head_workflow_runs_for_35d3cda": 0,
+    "main_test_commit_workflow_runs_for_7db29cb": 0,
+    "exact_provider_runtime_result_observed": false,
+    "provider_credentials_read_by_this_chatgpt_organ": false,
+    "provider_network_io_performed_directly_by_this_chatgpt_tool_surface": false,
+    "github_issue_dispatch_effect_performed": true
+  },
+  "credits_after": {
+    "forge_accepted_component_deltas_observed": 1,
+    "external_provider_trigger1_runtime": 0,
+    "output_logit_vector_control_runtime": 0,
+    "direct_free_api_hidden_state_vector_steering": 0,
+    "mechanism_runtime_vector_steering": 0,
+    "jspace_model_runtime": 0,
+    "hcu_full_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

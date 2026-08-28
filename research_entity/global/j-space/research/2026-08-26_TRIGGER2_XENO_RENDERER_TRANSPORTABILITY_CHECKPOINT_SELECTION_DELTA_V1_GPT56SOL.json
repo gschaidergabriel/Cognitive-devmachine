@@ -1,0 +1,165 @@
+{
+  "schema": "CLAY_TRIGGER2_XENO_RENDERER_TRANSPORTABILITY_CHECKPOINT_SELECTION_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONCANONICAL_RESEARCH_DELTA_EVAL_ONLY",
+  "observed_main_before_write": "9ef02572ce3fbbc86970bf6e3f02c5eb4c318c00",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm_emergency_stop": true,
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0
+  },
+  "existing_nonduplicate_basis": {
+    "current_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V48_GPT56SOL.json",
+    "matched_baseline_preregistration": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_QWEN35_08B_FULL_MATCHED_BASELINE_PREREGISTRATION_V1_GPT56SOL.json",
+    "checkpoint_input_identity_probe": "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+    "existing_primary_render": "COMMON_CANONICAL_EVAL_RENDER/v1",
+    "existing_primary_render_status": "EVALUATION_ONLY_NOT_FINAL_XENO_ABI",
+    "nonduplication_note": "The matched-baseline preregistration already separates a common canonical primary arm from candidate-native template sensitivity. This delta does not create another baseline protocol. It closes the remaining transport gap from that evaluation-only renderer to the actual future Xeno/ClayCode model-facing renderer required by the finished runtime."
+  },
+  "observed_gap": {
+    "classification": "R1_INFERENCE_FROM_CURRENT_REPOSITORY_AND_EXTERNAL_METHOD_EVIDENCE",
+    "finding": "A checkpoint can rank well under COMMON_CANONICAL_EVAL_RENDER/v1 yet regress or reorder under the final Xeno/ClayCode renderer. Therefore a matched-baseline winner is at most provisional until renderer transportability is checked at exact renderer/tokenizer/input identity.",
+    "why_material": [
+      "The current architecture requires Xeno/ClayCode to be the sole addressable model-facing cognitive semantics.",
+      "The current common canonical evaluation renderer is explicitly not the final Xeno ABI.",
+      "Qwen3.5-0.8B and Qwen3.5-0.8B-Base carry materially different native chat-template behavior, demonstrating that formatting/control-token semantics are not a neutral implementation detail.",
+      "Dynamic-binding training is specifically vulnerable to stable renderer-position, field-name and control-token shortcuts."
+    ]
+  },
+  "external_method_evidence": [
+    {
+      "source": "Hugging Face Transformers chat templating documentation",
+      "classification": "EXTERNAL_OFFICIAL_METHOD_EVIDENCE",
+      "finding": "Chat models are trained on model-specific token/control-token formats; using the wrong template can materially degrade performance.",
+      "project_implication": "Renderer identity must be treated as an execution/evaluation factor, not hidden behind semantic prompt equivalence."
+    },
+    {
+      "source": "Qwen/Qwen3.5-0.8B tokenizer configuration",
+      "classification": "EXTERNAL_OFFICIAL_MODEL_EVIDENCE",
+      "finding": "The post-trained 0.8B tokenizer carries a role-aware chat template with explicit system/user/assistant control structure and generation-prompt behavior.",
+      "project_implication": "Native-template performance is a bundle property of model plus tokenizer plus renderer."
+    },
+    {
+      "source": "Qwen/Qwen3.5-0.8B-Base tokenizer configuration",
+      "classification": "EXTERNAL_OFFICIAL_MODEL_EVIDENCE",
+      "finding": "The base 0.8B tokenizer template is much simpler and primarily renders the supplied message content rather than the post-trained role/control structure.",
+      "project_implication": "Native-template arms are not a weight-only comparison and cannot silently determine the checkpoint winner."
+    },
+    {
+      "source": "Voronov, Wolf, Ryabinin (2024), Mind Your Format: Towards Consistent Evaluation of In-Context Learning Improvements",
+      "classification": "EXTERNAL_PRIMARY_METHOD_EVIDENCE",
+      "finding": "Prompt/template format can materially alter measured performance and can change which setup appears strongest.",
+      "project_implication": "Checkpoint ranking must be tested for renderer transport rather than assumed invariant."
+    },
+    {
+      "source": "Wu, Geiger, Milliere (2025), How Do Transformers Learn Variable Binding in Symbolic Programs?",
+      "classification": "EXTERNAL_PRIMARY_MECHANISM_INPUT",
+      "finding": "Transformers can pass through shallow heuristic phases before systematic variable-binding mechanisms emerge.",
+      "project_implication": "A renderer that exposes stable nuisance structure can reward shallow binding shortcuts even when semantic binding is the intended capability."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H_RENDER_TRANSPORT_1",
+      "hypothesis": "Checkpoint ordering and hard-axis eligibility under COMMON_CANONICAL_EVAL_RENDER/v1 will mostly transport to the frozen Xeno/ClayCode renderer once semantic task content is preserved and exact consumed-input identity is bound.",
+      "counterhypothesis": "At least one candidate will change rank or hard-axis eligibility because renderer/control-token structure interacts strongly with its pre/post-training history.",
+      "discriminator": "After the Xeno/ClayCode renderer ABI is frozen, rerun a paired preregistered subset of the same family-disjoint logical cases for all ABI-eligible candidates under both COMMON_CANONICAL_EVAL_RENDER/v1 and the exact Xeno/ClayCode renderer. Bind renderer digest, rendered UTF-8 digest, tokenizer digest, input tensor identity, decoding parameters and evaluator digest per call."
+    },
+    {
+      "id": "H_RENDER_TRANSPORT_2",
+      "hypothesis": "Dynamic episode-local binding competence will remain above nuisance challengers under the final Xeno/ClayCode renderer.",
+      "counterhypothesis": "Stable ClayCode field positions, control tokens, delimiters or atom presentation create a new shortcut that restores apparent accuracy without semantic-case dependence.",
+      "discriminator": "For the frozen renderer, require semantic ablation with renderer structure preserved, S3 mapping equivariance, field/order perturbations where semantically legal, atom/symbol counterbalance, tokenizer-level target leakage scans and shallow renderer-only nuisance challengers. Semantic ablation or renderer-only predictors must remain near chance while full semantic cases retain the required capability."
+    },
+    {
+      "id": "H_RENDER_TRANSPORT_3",
+      "hypothesis": "Training examples materialized through the exact future Xeno/ClayCode renderer will reduce interface mismatch compared with training on evaluation-only canonical scaffolds.",
+      "counterhypothesis": "Renderer-specific training will overfit interface syntax and harm transfer/retention, while semantic normalization is sufficient.",
+      "discriminator": "Only after positive data admission and training authority open, compare matched adaptation schedules that differ only in renderer exposure. Evaluate frozen semantic binding transfer, exact Xeno packet compliance, abstention/epistemics, general reasoning retention and renderer perturbation robustness."
+    }
+  ],
+  "transportability_gate_v1": {
+    "position_in_course": "AFTER_CHECKPOINT_INPUT_IDENTITY_ABI_AND_MATCHED_BASELINE_ELIGIBILITY_BEFORE_FINAL_CHECKPOINT_FREEZE_OR_TRAINING_SUBSTRATE_PROMOTION",
+    "required_inputs": [
+      "ABI-eligible frozen checkpoint candidates",
+      "frozen Xeno/ClayCode renderer version and digest",
+      "frozen COMMON_CANONICAL_EVAL_RENDER/v1 digest",
+      "frozen tokenizer/config/runtime identities",
+      "family-disjoint paired logical-case subset not used for prompt tuning",
+      "frozen deterministic evaluators and catastrophic-error taxonomy"
+    ],
+    "paired_arms": [
+      {
+        "arm": "A_COMMON_CANONICAL",
+        "purpose": "retain comparability with the existing preregistered checkpoint baseline",
+        "winner_credit": "PROVISIONAL_ONLY"
+      },
+      {
+        "arm": "B_XENO_CLAYCODE_TARGET_RENDERER",
+        "purpose": "measure transport into the actual intended model-facing runtime language",
+        "winner_credit": "REQUIRED_FOR_FINAL_RENDERER_COMPATIBILITY"
+      },
+      {
+        "arm": "C_CANDIDATE_NATIVE_TEMPLATE",
+        "purpose": "diagnostic capability-ceiling/sensitivity arm already anticipated by the baseline preregistration",
+        "winner_credit": "SENSITIVITY_ONLY_NOT_PRIMARY"
+      }
+    ],
+    "report_per_candidate": [
+      "per-axis paired delta B-A",
+      "hard-axis minimum under A and B",
+      "overall worst-axis under A and B",
+      "catastrophic error count under A and B",
+      "parse/format failure delta",
+      "renderer-only nuisance challenger score",
+      "semantic-ablation score",
+      "S3 mapping/permutation equivariance score",
+      "exact rendered-byte and token-tensor identity receipts"
+    ],
+    "fail_closed_rules": [
+      "Do not call a checkpoint final if it is eligible under A but fails a required hard axis under B.",
+      "Any new catastrophic epistemic/authority error under B blocks final renderer compatibility for that candidate.",
+      "If candidate ranking materially changes between A and B, preserve NO_FINAL_WINNER and report renderer dependence instead of averaging the arms.",
+      "Do not repair a losing candidate with candidate-specific prompt edits after the paired renderer subset is opened.",
+      "Do not promote renderer-only or semantic-ablation performance as evidence of true dynamic binding.",
+      "Do not admit training rows merely because renderer transport testing exists."
+    ]
+  },
+  "architecture_to_training_reinjection": {
+    "runtime_change": "Final Xeno/ClayCode renderer ABI is part of the executable Xeno shell/interface, not cosmetic prompt text.",
+    "required_trigger2_delta": "Whenever the renderer ABI materially changes, invalidate or version the renderer-transport receipt and rerun the paired transport subset before claiming final checkpoint/training-substrate compatibility.",
+    "dataset_rule": "Future admitted SFT examples must record the exact renderer version/digest used for model-visible materialization. Evaluation-only canonical scaffolds must not silently become production-training format.",
+    "jspace_rule": "Any post-FT J-Space/vector result is additionally bound to the exact renderer/input identity because control effects may be input-distribution dependent."
+  },
+  "execution_decision": {
+    "model_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "provider_called_this_cycle": false,
+    "reason": "Current authority keeps provider routes hard-off and does not admit training/model execution in this cycle. This delta is source/research only."
+  },
+  "credits": {
+    "research_delta": 1,
+    "new_positive_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Keep the current V48 P0 unchanged: execute the existing CHECKPOINT_INPUT_IDENTITY_ABI/v1 on BASE, POSTTRAINED and TARGET_MEASURED only under separately admitted current FREE execution authority. After ABI eligibility and the existing matched baseline, freeze the actual Xeno/ClayCode renderer ABI and run the paired renderer-transport subset before any final checkpoint/training-substrate freeze."
+}

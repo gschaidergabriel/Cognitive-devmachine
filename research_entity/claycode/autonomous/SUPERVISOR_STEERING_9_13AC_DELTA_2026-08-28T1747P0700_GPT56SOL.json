@@ -1,0 +1,51 @@
+{
+  "schema_version": "SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_delta": "9.13AC_NON_AUTHORITY",
+  "created_at": "2026-08-28T10:47:00Z",
+  "authority_epoch": "9.13",
+  "mode": "FREE_ONLY",
+  "authority_change": false,
+  "source_head_reviewed": "4792b1ba4186e21b60c6eb051a6d47b6510a31f6",
+  "cross_branch_evidence": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "head": "62e10c43a20b4eb3db943d6868d8d846f5df154d",
+    "artifact": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1042Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+    "classification": "SOURCE_FORENSICS_ONLY_RUNTIME_CREDIT_ZERO"
+  },
+  "material_finding": "Current Frankenstein donor source contains an unresolved Stop-hook contract contradiction: a top-level invariant says no LLM call in hooks, while the live Stop path synchronously calls local Ollama qwen2.5:0.5b and then applies model-derived retrieval relevance credit before later Stop bookkeeping. The model result remains candidate evidence, but the inference is live hook work. This changes the architecture/evidence frontier but does not establish runtime failure or success.",
+  "evidence_boundary": {
+    "executable_runtime_pass": false,
+    "provider_execution_credit": 0,
+    "training_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "base_promotion": false,
+    "canonical_semantics_promotion": false,
+    "frank_harness_modified": false
+  },
+  "steering": [
+    "P0 remains Bootstrap-v2/control-sync then repository-bound Quiescence-v2 and >=90s read-only stable observation on the clean current owning VPS.",
+    "P1 add STOP_HOOK_LLM_BOUNDARY: do not carry both 'no hook LLM' and synchronous Stop inference as simultaneously canonical. Treat the current donor implementation as source-grounded contradictory semantics until discriminated.",
+    "P1 first discriminator must be non-provider/local and source/build-bound where possible: measure Stop substep timing and ordering with cognition disabled, warm local Ollama, slow/cold local Ollama, and unreachable local Ollama; bind exact build/source/runtime identity and preserve runtime credit at zero unless the run is repository/host bound.",
+    "P1 separately execute an interleaving/identity test for two same-session retrieval episodes so modell:relevanz cannot attach to the wrong retrieval/turn when processing is reordered. Bind exact retrieval_id/turn_id/generation identity rather than newest-session-row selection.",
+    "Do not modify Frank's own Harness to obtain this evidence. Use external probes/test lanes or donor-side source tests only.",
+    "Do not infer containment or canonical semantics from local model agreement; Goodman anti-echo, explicit model-family/checkpoint ancestry, and executable counterevidence remain mandatory.",
+    "Keep BASE_CLAYCODE_RELEASE unchanged: WP01/WP02 PASS only; WP03-WP14 and general-purpose/release gates remain open/not-pass unless their existing executable target gates pass."
+  ],
+  "free_only": {
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "provider_routes_admitted": false,
+    "owner_emergency_stop": true,
+    "remaining_paid_runs_authorized": 0
+  },
+  "evidence_law": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

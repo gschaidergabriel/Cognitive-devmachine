@@ -1,0 +1,3323 @@
+{
+  "summary": {
+    "resolver": {
+      "n": 292,
+      "n_correct": 292,
+      "per_family": {
+        "B0_READ_BASELINE": {
+          "n": 12,
+          "correct": 12
+        },
+        "B4_CAPACITY_INTERFERENCE": {
+          "n": 20,
+          "correct": 20
+        },
+        "B2_PRIOR_OVERRIDE": {
+          "n": 20,
+          "correct": 20
+        },
+        "B3_MULTI_HOP_DEREF": {
+          "n": 20,
+          "correct": 20
+        },
+        "B6_CLAUDE_HANDOFF_REENTRY": {
+          "n": 20,
+          "correct": 20
+        },
+        "B0_WRITE_BASELINE": {
+          "n": 20,
+          "correct": 20
+        },
+        "B2_MID_EPISODE_REMAP": {
+          "n": 20,
+          "correct": 20
+        },
+        "B6_DB_VS_SIM": {
+          "n": 20,
+          "correct": 20
+        },
+        "B2_STALE_BINDING_REJECTION": {
+          "n": 20,
+          "correct": 20
+        },
+        "B5_VARIABLE_N_EQUIVARIANCE": {
+          "n": 20,
+          "correct": 20
+        },
+        "B6_GWT_UPTAKE": {
+          "n": 20,
+          "correct": 20
+        },
+        "B6_GWT_COMPETITION_BROADCAST": {
+          "n": 20,
+          "correct": 20
+        },
+        "B1_TRAIN_BALANCED_2ORDER": {
+          "n": 20,
+          "correct": 20
+        },
+        "B3_UNRESOLVABLE_CHAIN_REJECTION": {
+          "n": 20,
+          "correct": 20
+        },
+        "B6_GWT_CAUSAL_REENTRY": {
+          "n": 20,
+          "correct": 20
+        }
+      }
+    },
+    "model_hyperposition": {
+      "n": 120,
+      "n_validated": 120,
+      "n_correct": 103
+    }
+  },
+  "resolver_results": [
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_ALLOW_POS_EVIDENCE_THEN_QUERY",
+      "expected": "ALLOW",
+      "got": "ALLOW",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K08_D04_LOOKALIKE_R0_cell_19",
+      "expected": "ABI_ACCEPTED_ORDINAL:72",
+      "got": "ABI_ACCEPTED_ORDINAL:72",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M4_D4_A_FIRST_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M0_D3-1-2_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_DENY_NEG_EVIDENCE_THEN_QUERY",
+      "expected": "DENY",
+      "got": "DENY",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CLAUDE_ASSERTION_NEG_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "CLAUDE_ASSERTION",
+      "got": "CLAUDE_ASSERTION",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M0_D4_A_FIRST_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K08_D02_LOOKALIKE_R0_cell_03",
+      "expected": "ABI_ACCEPTED_ORDINAL:68",
+      "got": "ABI_ACCEPTED_ORDINAL:68",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D08_NEUTRAL_R0_cell_17",
+      "expected": "ABI_ACCEPTED_ORDINAL:66",
+      "got": "ABI_ACCEPTED_ORDINAL:66",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M0_O0_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CANONICAL_LEDGER_EVIDENCE_POS_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "CANONICAL_LEDGER_EVIDENCE",
+      "got": "CANONICAL_LEDGER_EVIDENCE",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M5_UDENY_SABSTAIN_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_STALE_REBASE_REQUIRED_NEG_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "STALE_REBASE_REQUIRED",
+      "got": "STALE_REBASE_REQUIRED",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M5_STALE_ALLOW",
+      "expected": "STALE_REJECTED",
+      "got": "STALE_REJECTED",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N03_E4_ORD27f64ef5_unit_h02",
+      "expected": "ABI_ACCEPTED_ORDINAL:268",
+      "got": "ABI_ACCEPTED_ORDINAL:268",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M5_D1-3-2_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CLAUDE_ASSERTION_POS_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "CLAUDE_ASSERTION",
+      "got": "CLAUDE_ASSERTION",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h1_WQ_Palphagammabeta_STATEMENT_THEN_QUESTION",
+      "expected": "gamma",
+      "got": "gamma",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M3_STALE_DENY",
+      "expected": "STALE_REJECTED",
+      "got": "STALE_REJECTED",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M1_O5_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M5_O1_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_STALE_REBASE_REQUIRED_POS_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "STALE_REBASE_REQUIRED",
+      "got": "STALE_REBASE_REQUIRED",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M5_VALID_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_SIMULATED_HYPOTHESIS_POS_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "SIMULATED_HYPOTHESIS",
+      "got": "SIMULATED_HYPOTHESIS",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M5_D2-3-1_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_DENY_POS_QUERY_THEN_EVIDENCE",
+      "expected": "DENY",
+      "got": "DENY",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h2_S795_C2106_QUESTION_THEN_STATEMENT",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M2_O1_L1_ABSTAIN_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M1_O0_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M2_D3-1-2_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E5_ORDd3e90d22_unit_h05",
+      "expected": "ABI_ACCEPTED_ORDINAL:269",
+      "got": "ABI_ACCEPTED_ORDINAL:269",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D04_LOOKALIKE_R0_cell_10",
+      "expected": "ABI_ACCEPTED_ORDINAL:61",
+      "got": "ABI_ACCEPTED_ORDINAL:61",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M0_STALE_ABSTAIN",
+      "expected": "STALE_REJECTED",
+      "got": "STALE_REJECTED",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M5_D3-1-2_BALLOW_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_ABSTAIN_POS_QUERY_THEN_EVIDENCE",
+      "expected": "ABSTAIN",
+      "got": "ABSTAIN",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h2_S597_C1026_QUESTION_THEN_STATEMENT",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M1_D2-1-3_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h1_WR_Pbetagammaalpha_QUESTION_THEN_STATEMENT",
+      "expected": "alpha",
+      "got": "alpha",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M4_D2-3-1_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_STALE_REBASE_REQUIRED_POS_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "STALE_REBASE_REQUIRED",
+      "got": "STALE_REBASE_REQUIRED",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M1_D3-2-1_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_ABSTAIN_NEG_EVIDENCE_THEN_QUERY",
+      "expected": "ABSTAIN",
+      "got": "ABSTAIN",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M0_D5_A_FIRST_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h1_S759_C6210_STATEMENT_THEN_QUESTION",
+      "expected": "R",
+      "got": "R",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M5_D2-1-3_BDENY_QDENY",
+      "expected": "UNRESOLVABLE",
+      "got": "UNRESOLVABLE",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M3_O2_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M0_O0_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h1_WP_Palphagammabeta_QUESTION_THEN_STATEMENT",
+      "expected": "alpha",
+      "got": "alpha",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M5_D3-2-1_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M3_UDENY_SALLOW_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M5_UDENY_SALLOW_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M0_UDENY_SALLOW_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M2_O2_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h0_S957_C6210_STATEMENT_THEN_QUESTION",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M5_D4_B_FIRST_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E5_ORD5d9897aa_unit_h05",
+      "expected": "ABI_ACCEPTED_ORDINAL:269",
+      "got": "ABI_ACCEPTED_ORDINAL:269",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h0_S597_C6102_QUESTION_THEN_STATEMENT",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M5_STALE_DENY",
+      "expected": "STALE_REJECTED",
+      "got": "STALE_REJECTED",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CANONICAL_LEDGER_EVIDENCE_POS_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "CANONICAL_LEDGER_EVIDENCE",
+      "got": "CANONICAL_LEDGER_EVIDENCE",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M1_UDENY_SALLOW_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N03_E3_ORDf40968ef_unit_h02",
+      "expected": "ABI_ACCEPTED_ORDINAL:263",
+      "got": "ABI_ACCEPTED_ORDINAL:263",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CANONICAL_LEDGER_EVIDENCE_POS_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "CANONICAL_LEDGER_EVIDENCE",
+      "got": "CANONICAL_LEDGER_EVIDENCE",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_STALE_MISMATCHED_HANDOFF_POS_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "STALE_MISMATCHED_HANDOFF",
+      "got": "STALE_MISMATCHED_HANDOFF",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M3_O1_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_STALE_REBASE_REQUIRED_NEG_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "STALE_REBASE_REQUIRED",
+      "got": "STALE_REBASE_REQUIRED",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_SIMULATED_HYPOTHESIS_POS_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "SIMULATED_HYPOTHESIS",
+      "got": "SIMULATED_HYPOTHESIS",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M4_O5_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D08_LOOKALIKE_R0_cell_00",
+      "expected": "ABI_ACCEPTED_ORDINAL:70",
+      "got": "ABI_ACCEPTED_ORDINAL:70",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_SIMULATED_HYPOTHESIS_NEG_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "SIMULATED_HYPOTHESIS",
+      "got": "SIMULATED_HYPOTHESIS",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h2_S579_C2610_QUESTION_THEN_STATEMENT",
+      "expected": "R",
+      "got": "R",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M0_D3-2-1_BALLOW_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D04_NEUTRAL_R0_cell_06",
+      "expected": "ABI_ACCEPTED_ORDINAL:79",
+      "got": "ABI_ACCEPTED_ORDINAL:79",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M1_D1-3-2_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M1_D3-1-2_BABSTAIN_QABSTAIN",
+      "expected": "UNRESOLVABLE",
+      "got": "UNRESOLVABLE",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M1_O1_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h2_S597_C6210_STATEMENT_THEN_QUESTION",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D08_LOOKALIKE_R0_cell_08",
+      "expected": "ABI_ACCEPTED_ORDINAL:66",
+      "got": "ABI_ACCEPTED_ORDINAL:66",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_CANONICAL_DB_NEG_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "CANONICAL_DB",
+      "got": "CANONICAL_DB",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M5_O0_L0_ALLOW_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E2_ORD45e4e90a_unit_h03",
+      "expected": "ABI_ACCEPTED_ORDINAL:281",
+      "got": "ABI_ACCEPTED_ORDINAL:281",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_CANONICAL_DB_NEG_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "CANONICAL_DB",
+      "got": "CANONICAL_DB",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h1_WP_Palphabetagamma_QUESTION_THEN_STATEMENT",
+      "expected": "alpha",
+      "got": "alpha",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h1_S975_C6102_STATEMENT_THEN_QUESTION",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h1_S795_C6210_STATEMENT_THEN_QUESTION",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_ALLOW_NEG_EVIDENCE_THEN_QUERY",
+      "expected": "ALLOW",
+      "got": "ALLOW",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N03_E1_ORDa5a6b4bb_unit_h01",
+      "expected": "ABI_ACCEPTED_ORDINAL:269",
+      "got": "ABI_ACCEPTED_ORDINAL:269",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_EXTERNAL_TOOL_RECEIPT_POS_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "EXTERNAL_TOOL_RECEIPT",
+      "got": "EXTERNAL_TOOL_RECEIPT",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h1_S795_C1062_QUESTION_THEN_STATEMENT",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M5_O4_L0_DENY_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M2_D2-1-3_BABSTAIN_QABSTAIN",
+      "expected": "UNRESOLVABLE",
+      "got": "UNRESOLVABLE",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M3_O5_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M2_O2_L1_ABSTAIN_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N03_E2_ORD7286e942_unit_h02",
+      "expected": "ABI_ACCEPTED_ORDINAL:293",
+      "got": "ABI_ACCEPTED_ORDINAL:293",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M3_O0_L1_DENY_POS",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M2_D3-2-1_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M2_D1-3-2_BABSTAIN_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_SIMULATED_HYPOTHESIS_NEG_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "SIMULATED_HYPOTHESIS",
+      "got": "SIMULATED_HYPOTHESIS",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h0_S957_C2106_QUESTION_THEN_STATEMENT",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M3_UABSTAIN_SALLOW_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h0_S795_C1026_STATEMENT_THEN_QUESTION",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h2_S975_C6102_STATEMENT_THEN_QUESTION",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M2_O2_L0_ALLOW_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M5_D1-3-2_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M3_D3_A_FIRST_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K08_D02_NEUTRAL_R0_cell_12",
+      "expected": "ABI_ACCEPTED_ORDINAL:61",
+      "got": "ABI_ACCEPTED_ORDINAL:61",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M5_D2-3-1_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M4_D5_A_FIRST_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D04_LOOKALIKE_R0_cell_13",
+      "expected": "ABI_ACCEPTED_ORDINAL:77",
+      "got": "ABI_ACCEPTED_ORDINAL:77",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M2_STALE_DENY",
+      "expected": "STALE_REJECTED",
+      "got": "STALE_REJECTED",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M5_O4_L0_ALLOW_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_CANONICAL_DB_POS_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "CANONICAL_DB",
+      "got": "CANONICAL_DB",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_SIMULATED_HYPOTHESIS_POS_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "SIMULATED_HYPOTHESIS",
+      "got": "SIMULATED_HYPOTHESIS",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M5_O2_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M1_VALID_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M5_O1_L0_ALLOW_POS",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M0_D1-3-2_BABSTAIN_QABSTAIN",
+      "expected": "UNRESOLVABLE",
+      "got": "UNRESOLVABLE",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M5_VALID_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M4_D3-2-1_BABSTAIN_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M2_STALE_ABSTAIN",
+      "expected": "STALE_REJECTED",
+      "got": "STALE_REJECTED",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M3_UALLOW_SABSTAIN_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_ABSTAIN_NEG_QUERY_THEN_EVIDENCE",
+      "expected": "ABSTAIN",
+      "got": "ABSTAIN",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M2_D2_A_FIRST_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h1_S795_C6210_QUESTION_THEN_STATEMENT",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h1_S975_C2106_STATEMENT_THEN_QUESTION",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h2_WQ_Palphagammabeta_QUESTION_THEN_STATEMENT",
+      "expected": "gamma",
+      "got": "gamma",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M1_UABSTAIN_SALLOW_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K08_D00_NONE_R0_cell_07",
+      "expected": "ABI_ACCEPTED_ORDINAL:61",
+      "got": "ABI_ACCEPTED_ORDINAL:61",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h1_WR_Pgammabetaalpha_QUESTION_THEN_STATEMENT",
+      "expected": "alpha",
+      "got": "alpha",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M0_D1_B_FIRST_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h0_WR_Pbetagammaalpha_QUESTION_THEN_STATEMENT",
+      "expected": "alpha",
+      "got": "alpha",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M5_D4_A_FIRST_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CLAUDE_ASSERTION_POS_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "CLAUDE_ASSERTION",
+      "got": "CLAUDE_ASSERTION",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h0_S579_C6210_STATEMENT_THEN_QUESTION",
+      "expected": "R",
+      "got": "R",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M0_O3_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M1_O1_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h1_S795_C2106_QUESTION_THEN_STATEMENT",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D02_LOOKALIKE_R0_cell_16",
+      "expected": "ABI_ACCEPTED_ORDINAL:62",
+      "got": "ABI_ACCEPTED_ORDINAL:62",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M4_UDENY_SABSTAIN_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M2_O4_L1_ABSTAIN_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M4_STALE_ABSTAIN",
+      "expected": "STALE_REJECTED",
+      "got": "STALE_REJECTED",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_ALLOW_NEG_QUERY_THEN_EVIDENCE",
+      "expected": "ALLOW",
+      "got": "ALLOW",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M0_VALID_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M0_D1-3-2_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N12_E0_ORD29bf0a19_unit_h08",
+      "expected": "ABI_ACCEPTED_ORDINAL:272",
+      "got": "ABI_ACCEPTED_ORDINAL:272",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h0_WR_Palphabetagamma_QUESTION_THEN_STATEMENT",
+      "expected": "gamma",
+      "got": "gamma",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h1_S795_C1062_STATEMENT_THEN_QUESTION",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M4_O5_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M4_UABSTAIN_SALLOW_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_CANONICAL_DB_POS_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "CANONICAL_DB",
+      "got": "CANONICAL_DB",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CANONICAL_LEDGER_EVIDENCE_NEG_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "CANONICAL_LEDGER_EVIDENCE",
+      "got": "CANONICAL_LEDGER_EVIDENCE",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h2_S597_C6210_QUESTION_THEN_STATEMENT",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M1_VALID_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_CANONICAL_DB_POS_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "CANONICAL_DB",
+      "got": "CANONICAL_DB",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M0_D3-1-2_BALLOW_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M0_D3-2-1_BALLOW_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h2_S597_C6102_QUESTION_THEN_STATEMENT",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M1_STALE_ABSTAIN",
+      "expected": "STALE_REJECTED",
+      "got": "STALE_REJECTED",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M4_D1_B_FIRST_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M1_VALID_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M0_UDENY_SABSTAIN_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M3_O5_L1_DENY_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M2_VALID_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M1_D3-2-1_BALLOW_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M0_UABSTAIN_SDENY_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M4_VALID_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h2_WQ_Palphabetagamma_QUESTION_THEN_STATEMENT",
+      "expected": "beta",
+      "got": "beta",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M4_D3-2-1_BALLOW_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M2_VALID_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h1_S957_C6210_QUESTION_THEN_STATEMENT",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h0_WP_Palphagammabeta_STATEMENT_THEN_QUESTION",
+      "expected": "alpha",
+      "got": "alpha",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_STALE_MISMATCHED_HANDOFF_NEG_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "STALE_MISMATCHED_HANDOFF",
+      "got": "STALE_MISMATCHED_HANDOFF",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M3_UDENY_SABSTAIN_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D08_NEUTRAL_R0_cell_12",
+      "expected": "ABI_ACCEPTED_ORDINAL:64",
+      "got": "ABI_ACCEPTED_ORDINAL:64",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M1_D0_B_FIRST_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h2_S579_C6102_QUESTION_THEN_STATEMENT",
+      "expected": "R",
+      "got": "R",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D08_NEUTRAL_R0_cell_03",
+      "expected": "ABI_ACCEPTED_ORDINAL:79",
+      "got": "ABI_ACCEPTED_ORDINAL:79",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M0_UALLOW_SDENY_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M2_O1_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M1_O0_L1_ABSTAIN_POS",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M1_O1_L1_ABSTAIN_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M0_STALE_DENY",
+      "expected": "STALE_REJECTED",
+      "got": "STALE_REJECTED",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h0_S597_C1026_QUESTION_THEN_STATEMENT",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N12_E2_ORD62891bdd_unit_h03",
+      "expected": "ABI_ACCEPTED_ORDINAL:262",
+      "got": "ABI_ACCEPTED_ORDINAL:262",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h2_WR_Pgammaalphabeta_QUESTION_THEN_STATEMENT",
+      "expected": "beta",
+      "got": "beta",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M4_D2-1-3_BABSTAIN_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M5_D3-1-2_BDENY_QDENY",
+      "expected": "UNRESOLVABLE",
+      "got": "UNRESOLVABLE",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CANONICAL_LEDGER_EVIDENCE_NEG_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "CANONICAL_LEDGER_EVIDENCE",
+      "got": "CANONICAL_LEDGER_EVIDENCE",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h2_WR_Pgammaalphabeta_STATEMENT_THEN_QUESTION",
+      "expected": "beta",
+      "got": "beta",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_STALE_MISMATCHED_HANDOFF_NEG_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "STALE_MISMATCHED_HANDOFF",
+      "got": "STALE_MISMATCHED_HANDOFF",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M1_D1-3-2_BALLOW_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M1_D3_B_FIRST_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h2_S759_C6102_STATEMENT_THEN_QUESTION",
+      "expected": "R",
+      "got": "R",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_STALE_REBASE_REQUIRED_POS_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "STALE_REBASE_REQUIRED",
+      "got": "STALE_REBASE_REQUIRED",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M1_O0_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M5_UALLOW_SABSTAIN_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h0_S957_C1062_QUESTION_THEN_STATEMENT",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M1_D1_A_FIRST_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M3_UDENY_SABSTAIN_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M4_D3-2-1_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h0_S957_C6210_STATEMENT_THEN_QUESTION",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M0_O2_L0_ABSTAIN_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E2_ORD5d9897aa_unit_h03",
+      "expected": "ABI_ACCEPTED_ORDINAL:281",
+      "got": "ABI_ACCEPTED_ORDINAL:281",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N03_E0_ORD8cfa3931_unit_h00",
+      "expected": "ABI_ACCEPTED_ORDINAL:267",
+      "got": "ABI_ACCEPTED_ORDINAL:267",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_STALE_MISMATCHED_HANDOFF_POS_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "STALE_MISMATCHED_HANDOFF",
+      "got": "STALE_MISMATCHED_HANDOFF",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M1_D1-3-2_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M2_D3_A_FIRST_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M2_D2-1-3_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M2_D3-1-2_BALLOW_QALLOW",
+      "expected": "UNRESOLVABLE",
+      "got": "UNRESOLVABLE",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h0_S597_C1026_STATEMENT_THEN_QUESTION",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h1_WR_Pbetagammaalpha_STATEMENT_THEN_QUESTION",
+      "expected": "alpha",
+      "got": "alpha",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M3_O3_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_EXTERNAL_TOOL_RECEIPT_NEG_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "EXTERNAL_TOOL_RECEIPT",
+      "got": "EXTERNAL_TOOL_RECEIPT",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M5_O1_L0_ALLOW_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_EXTERNAL_TOOL_RECEIPT_NEG_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "EXTERNAL_TOOL_RECEIPT",
+      "got": "EXTERNAL_TOOL_RECEIPT",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CANONICAL_LEDGER_EVIDENCE_NEG_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "CANONICAL_LEDGER_EVIDENCE",
+      "got": "CANONICAL_LEDGER_EVIDENCE",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E0_ORD1653dd69_unit_h04",
+      "expected": "ABI_ACCEPTED_ORDINAL:283",
+      "got": "ABI_ACCEPTED_ORDINAL:283",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h2_S579_C6210_QUESTION_THEN_STATEMENT",
+      "expected": "R",
+      "got": "R",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D04_LOOKALIKE_R0_cell_07",
+      "expected": "ABI_ACCEPTED_ORDINAL:76",
+      "got": "ABI_ACCEPTED_ORDINAL:76",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h0_WQ_Palphabetagamma_QUESTION_THEN_STATEMENT",
+      "expected": "beta",
+      "got": "beta",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M0_VALID_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M1_D3-2-1_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_SIMULATED_HYPOTHESIS_NEG_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "SIMULATED_HYPOTHESIS",
+      "got": "SIMULATED_HYPOTHESIS",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M4_O5_L0_ALLOW_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_STALE_MISMATCHED_HANDOFF_POS_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "STALE_MISMATCHED_HANDOFF",
+      "got": "STALE_MISMATCHED_HANDOFF",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h2_WQ_Pgammaalphabeta_STATEMENT_THEN_QUESTION",
+      "expected": "alpha",
+      "got": "alpha",
+      "correct": true
+    },
+    {
+      "family": "B2_STALE_BINDING_REJECTION",
+      "id": "B2_STALE_T12_M4_VALID_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h0_WR_Palphabetagamma_STATEMENT_THEN_QUESTION",
+      "expected": "gamma",
+      "got": "gamma",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_SIMULATED_HYPOTHESIS_NEG_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "SIMULATED_HYPOTHESIS",
+      "got": "SIMULATED_HYPOTHESIS",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E1_ORD36091879_unit_h04",
+      "expected": "ABI_ACCEPTED_ORDINAL:277",
+      "got": "ABI_ACCEPTED_ORDINAL:277",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K08_D02_NEUTRAL_R0_cell_10",
+      "expected": "ABI_ACCEPTED_ORDINAL:75",
+      "got": "ABI_ACCEPTED_ORDINAL:75",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h0_S579_C6210_QUESTION_THEN_STATEMENT",
+      "expected": "R",
+      "got": "R",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_CANONICAL_DB_NEG_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "CANONICAL_DB",
+      "got": "CANONICAL_DB",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M2_UABSTAIN_SALLOW_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M4_D1-2-3_BALLOW_QALLOW",
+      "expected": "UNRESOLVABLE",
+      "got": "UNRESOLVABLE",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K08_D02_NEUTRAL_R0_cell_18",
+      "expected": "ABI_ACCEPTED_ORDINAL:67",
+      "got": "ABI_ACCEPTED_ORDINAL:67",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M4_D1_A_FIRST_ALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M1_UABSTAIN_SALLOW_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D00_NONE_R0_cell_19",
+      "expected": "ABI_ACCEPTED_ORDINAL:73",
+      "got": "ABI_ACCEPTED_ORDINAL:73",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M1_O0_L0_ABSTAIN_POS",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K08_D02_NEUTRAL_R0_cell_16",
+      "expected": "ABI_ACCEPTED_ORDINAL:60",
+      "got": "ABI_ACCEPTED_ORDINAL:60",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M3_O0_L0_DENY_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_DENY_NEG_QUERY_THEN_EVIDENCE",
+      "expected": "DENY",
+      "got": "DENY",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D02_LOOKALIKE_R0_cell_12",
+      "expected": "ABI_ACCEPTED_ORDINAL:66",
+      "got": "ABI_ACCEPTED_ORDINAL:66",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E4_ORD4e6f5fc2_unit_h03",
+      "expected": "ABI_ACCEPTED_ORDINAL:275",
+      "got": "ABI_ACCEPTED_ORDINAL:275",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_DENY_POS_EVIDENCE_THEN_QUERY",
+      "expected": "DENY",
+      "got": "DENY",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h1_S759_C1062_QUESTION_THEN_STATEMENT",
+      "expected": "R",
+      "got": "R",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_SIMULATED_HYPOTHESIS_POS_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "SIMULATED_HYPOTHESIS",
+      "got": "SIMULATED_HYPOTHESIS",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h0_WQ_Pbetagammaalpha_QUESTION_THEN_STATEMENT",
+      "expected": "gamma",
+      "got": "gamma",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M1_D5_A_FIRST_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h1_S597_C1062_QUESTION_THEN_STATEMENT",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M2_D3-1-2_BABSTAIN_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M2_O2_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M0_D1_B_FIRST_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h1_WP_Pgammaalphabeta_QUESTION_THEN_STATEMENT",
+      "expected": "gamma",
+      "got": "gamma",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h1_S597_C6210_STATEMENT_THEN_QUESTION",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N12_E2_ORD29bf0a19_unit_h06",
+      "expected": "ABI_ACCEPTED_ORDINAL:299",
+      "got": "ABI_ACCEPTED_ORDINAL:299",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M3_D3-2-1_BALLOW_QALLOW",
+      "expected": "UNRESOLVABLE",
+      "got": "UNRESOLVABLE",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M3_D0_A_FIRST_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h1_WQ_Pbetagammaalpha_QUESTION_THEN_STATEMENT",
+      "expected": "gamma",
+      "got": "gamma",
+      "correct": true
+    },
+    {
+      "family": "B6_DB_VS_SIM",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_SIMULATED_HYPOTHESIS_NEG_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "SIMULATED_HYPOTHESIS",
+      "got": "SIMULATED_HYPOTHESIS",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E5_ORD255d4692_unit_h02",
+      "expected": "ABI_ACCEPTED_ORDINAL:290",
+      "got": "ABI_ACCEPTED_ORDINAL:290",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M3_D4_A_FIRST_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h1_S975_C2106_QUESTION_THEN_STATEMENT",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M2_O3_L0_ABSTAIN_POS",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N03_E3_ORDa5a6b4bb_unit_h01",
+      "expected": "ABI_ACCEPTED_ORDINAL:266",
+      "got": "ABI_ACCEPTED_ORDINAL:266",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h1_S975_C1062_QUESTION_THEN_STATEMENT",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CLAUDE_ASSERTION_POS_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "CLAUDE_ASSERTION",
+      "got": "CLAUDE_ASSERTION",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M1_UABSTAIN_SALLOW_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E1_ORDa36b70eb_unit_h02",
+      "expected": "ABI_ACCEPTED_ORDINAL:261",
+      "got": "ABI_ACCEPTED_ORDINAL:261",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_ALLOW_POS_QUERY_THEN_EVIDENCE",
+      "expected": "ALLOW",
+      "got": "ALLOW",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_UPTAKE",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h1_WQ_Pbetagammaalpha_STATEMENT_THEN_QUESTION",
+      "expected": "gamma",
+      "got": "gamma",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_EXTERNAL_TOOL_RECEIPT_POS_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "EXTERNAL_TOOL_RECEIPT",
+      "got": "EXTERNAL_TOOL_RECEIPT",
+      "correct": true
+    },
+    {
+      "family": "B6_CLAUDE_HANDOFF_REENTRY",
+      "id": "B6_HANDOFF_S6_INCIDENT_REPORT_CLAUDE_ASSERTION_NEG_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "CLAUDE_ASSERTION",
+      "got": "CLAUDE_ASSERTION",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M2_D3-2-1_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B0_WRITE_BASELINE",
+      "id": "B0_WRITE_T12_M4_O2_ABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h2_S975_C1026_QUESTION_THEN_STATEMENT",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B4_CAPACITY_INTERFERENCE",
+      "id": "B4_HOLDOUT_FROZEN_K16_D02_NEUTRAL_R0_cell_05",
+      "expected": "ABI_ACCEPTED_ORDINAL:79",
+      "got": "ABI_ACCEPTED_ORDINAL:79",
+      "correct": true
+    },
+    {
+      "family": "B0_READ_BASELINE",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_ABSTAIN_POS_EVIDENCE_THEN_QUERY",
+      "expected": "ABSTAIN",
+      "got": "ABSTAIN",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E5_ORD7ef939aa_unit_h05",
+      "expected": "ABI_ACCEPTED_ORDINAL:269",
+      "got": "ABI_ACCEPTED_ORDINAL:269",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h1_S579_C1026_STATEMENT_THEN_QUESTION",
+      "expected": "R",
+      "got": "R",
+      "correct": true
+    },
+    {
+      "family": "B2_MID_EPISODE_REMAP",
+      "id": "B2_REMAP_T12_M0_UDENY_SALLOW_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B5_VARIABLE_N_EQUIVARIANCE",
+      "id": "B5_HOLDOUT_FROZEN_N06_E1_ORD4bb8bf03_unit_h02",
+      "expected": "ABI_ACCEPTED_ORDINAL:261",
+      "got": "ABI_ACCEPTED_ORDINAL:261",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M1_D3-1-2_QDENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "ABI_ACCEPTED_ORDINAL:14",
+      "correct": true
+    },
+    {
+      "family": "B3_UNRESOLVABLE_CHAIN_REJECTION",
+      "id": "B3_UNRES_T12_M1_D1-2-3_BABSTAIN_QALLOW",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h0_S975_C1026_QUESTION_THEN_STATEMENT",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h2_S795_C6102_STATEMENT_THEN_QUESTION",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B2_PRIOR_OVERRIDE",
+      "id": "B2_PRIOR_T12_M0_D3_B_FIRST_DENY",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_CAUSAL_REENTRY",
+      "id": "B6_GWT_REENTRY_ep_gwt_h1_S975_C1062_STATEMENT_THEN_QUESTION",
+      "expected": "Q",
+      "got": "Q",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M1_O2_L0_ALLOW_POS",
+      "expected": "ABI_ACCEPTED_ORDINAL:12",
+      "got": "ABI_ACCEPTED_ORDINAL:12",
+      "correct": true
+    },
+    {
+      "family": "B1_TRAIN_BALANCED_2ORDER",
+      "id": "T6_PARITY_HOLDOUT_S12_M0_O3_L0_DENY_NEG",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    },
+    {
+      "family": "B6_GWT_COMPETITION_BROADCAST",
+      "id": "B6_GWT_COMP_ep_gwt_h2_S975_C1062_STATEMENT_THEN_QUESTION",
+      "expected": "P",
+      "got": "P",
+      "correct": true
+    },
+    {
+      "family": "B3_MULTI_HOP_DEREF",
+      "id": "B3_DEREF_T12_M4_D1-3-2_QABSTAIN",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "ABI_ACCEPTED_ORDINAL:13",
+      "correct": true
+    }
+  ],
+  "model_results": [
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_MAJORITY_VOTE_N2_WA_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_NEG_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_POS_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_NEG_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_STRONG_N4_EXCLA_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_MAJORITY_VOTE_STRONG_N2_node_elm9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_NEG_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_POS_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_NEG_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_MAJORITY_VOTE_N2_WA_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_SURFACE_FLUENCY_STRONG_N3_node_elm9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_POS_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_MAJORITY_VOTE_N4_WC_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_POS_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_NEG_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_POS_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_NEG_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_POS_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_POS_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_NEG_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_NEG_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_NEG_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_NEG_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_COORDINATOR_PREFERENCE_N2_WA_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_POS_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_MAJORITY_VOTE_N2_WB_node_elm9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_NEG_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_MAJORITY_VOTE_STRONG_N2_node_gum9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_REPEATED_AGREEMENT_N4_WC_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_MAJORITY_VOTE_WEAK_N3_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_REPEATED_AGREEMENT_N4_WD_node_elm9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_REPEATED_AGREEMENT_N2_WA_node_elm9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_REPEATED_AGREEMENT_N4_WA_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_POS_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_REPEATED_AGREEMENT_N2_WB_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_POS_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_NEG_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_SURFACE_FLUENCY_N4_WB_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_MAJORITY_VOTE_STRONG_N3_node_gum9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_POS_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_COORDINATOR_PREFERENCE_N3_WB_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_STRONG_N3_EXCLA_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_COORDINATOR_PREFERENCE_N2_WB_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_STRONG_N3_EXCLAB_node_elm9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_SURFACE_FLUENCY_N2_WB_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_NEG_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_POS_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_NEG_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_SURFACE_FLUENCY_WEAK_N2_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_STRONG_N3_EXCLA_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_POS_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_MAJORITY_VOTE_WEAK_N2_node_elm9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_POS_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_COORDINATOR_PREFERENCE_N3_WB_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_REPEATED_AGREEMENT_N3_WC_node_elm9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_WEAK_N2_EXCLA_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_STRONG_N4_EXCLABC_node_elm9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_COORDINATOR_PREFERENCE_N3_WA_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_SURFACE_FLUENCY_WEAK_N2_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_NEG_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_POS_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_STRONG_N2_EXCLA_node_gum9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_SURFACE_FLUENCY_WEAK_N3_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_SURFACE_FLUENCY_WEAK_N3_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_WEAK_N2_EXCLB_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_POS_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_POS_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_REPEATED_AGREEMENT_N4_WA_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_STRONG_N4_EXCLA_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_COORDINATOR_PREFERENCE_N4_WD_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_NEG_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_NEG_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_NEG_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_NEG_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_NEG_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_POS_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_NEG_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_SURFACE_FLUENCY_N3_WC_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_SURFACE_FLUENCY_STRONG_N2_node_hazel9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_POS_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_NEG_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_WEAK_N4_EXCLA_node_gum9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_MAJORITY_VOTE_N3_WB_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_POS_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_MAJORITY_VOTE_WEAK_N3_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_SURFACE_FLUENCY_N4_WC_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_NEG_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_NEG_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_MAJORITY_VOTE_N3_WB_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_POS_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_POS_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_POS_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_POS_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_POS_CONTEXT_THEN_QUESTION_node_lynx4",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_SURFACE_FLUENCY_STRONG_N3_node_fir9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_NEG_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_MAJORITY_VOTE_N3_WC_node_elm9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_REPEATED_AGREEMENT_N2_WA_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_NEG_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_COORDINATOR_PREFERENCE_N4_WB_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_SURFACE_FLUENCY_WEAK_N2_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_STRONG_N4_EXCLABC_node_fir9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_SURFACE_FLUENCY_STRONG_N3_node_hazel9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_POS_QUESTION_THEN_CONTEXT_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_SURFACE_FLUENCY_N4_WC_node_elm9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_NEG_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_NEG_QUESTION_THEN_CONTEXT_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_POS_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_SOCIAL_REPEATED_AGREEMENT_N2_WB_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_MAJORITY_VOTE_WEAK_N2_node_hazel9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_SURFACE_FLUENCY_WEAK_N3_node_elm9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_DISCRIM_WEAK_N4_EXCLD_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_MAJORITY_VOTE_WEAK_N3_node_fir9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_POS_CONTEXT_THEN_QUESTION_node_juno0",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_COORDINATOR_PREFERENCE_NEG_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_REPEATED_AGREEMENT_POS_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_MAJORITY_VOTE_NEG_CONTEXT_THEN_QUESTION_node_kite2",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_MAJORITY_VOTE_WEAK_N3_node_elm9",
+      "expected": "PRESERVE_BRANCHES",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EXPANSION_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_EXP_CHAIN_MAJORITY_VOTE_STRONG_N2_node_hazel9",
+      "expected": "COLLAPSE_VALID",
+      "raw": "COLLAPSE_VALID",
+      "validated": true,
+      "atom": "COLLAPSE_VALID",
+      "reason": null,
+      "correct": true
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_EXPLICIT_DISCRIMINATOR_TEST_POS_QUESTION_THEN_CONTEXT_node_lynx4",
+      "expected": "COLLAPSE_VALID",
+      "raw": "PRESERVE_BRANCHES",
+      "validated": true,
+      "atom": "PRESERVE_BRANCHES",
+      "reason": null,
+      "correct": false
+    }
+  ]
+}

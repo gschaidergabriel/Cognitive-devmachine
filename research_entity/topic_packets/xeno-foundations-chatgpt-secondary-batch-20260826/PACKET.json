@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "packet_id": "xeno-foundations-chatgpt-secondary-batch-20260826",
+  "title": "Xeno/HCU Foundations -- chatgpt-secondary independent batch research (2026-08-26)",
+  "status": "OPEN",
+  "primary_domain": "hyperposition",
+  "domains": [
+    "hyperposition",
+    "gwt",
+    "claycode",
+    "coordination",
+    "unifieddb",
+    "architecture_archaeology"
+  ],
+  "owner_actor": "chatgpt-secondary",
+  "reviewed_by": "claude-code-lead",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "run_context": {
+    "mechanism": "real multi-prompt batch via stern.py chatgpt-senden --prompts (6 distinct research questions, one sequential run each), NOT the standard triggerwort2 -- first real use of this batch capability",
+    "trigger_source": "arbeitspaket paket-1787760949594-574df5, second parallel group alongside the large training-data review",
+    "questions_asked": 6,
+    "questions_answered": 6,
+    "note_on_recovery": "chatgpt_burst_worker_v2.sh --harvest writes to result_<worker_id>.txt; because each of the 6 sends used --num-workers 1, every harvested answer collided on result_1.txt and 5 of 6 were overwritten by the last one processed. Recovered manually by re-navigating each conversation URL directly via the browse daemon ($B goto/text) and re-extracting. All 6 answers recovered and verified against their source URLs. This overwrite bug should be fixed in chatgpt_burst_worker_v2.sh before the next multi-question batch run (harvest should key result files by URL/conversation id, not by reused sequential worker_id)."
+  },
+  "topics": [
+    {
+      "curriculum_family": "A",
+      "question_summary": "Post-2023 developments in TPR/HRR/VSA relevant to a 1024-dim whitened-HRR, 64-role, K<=16 binding scheme",
+      "chatgpt_finding": "K<=16 is a defensible engineering safety envelope but not an intrinsic capacity number; capacity is query/error/codebook-dependent (Clarkson/Ubaru/Yang 2023-24 capacity bounds). Strongest transferable results: Soft TPR (NeurIPS 2024, orthogonality-regularized/dual-vector role recovery), resonator-network cleanup/factorization as a bigger capacity lever than better binding (Karunaratne 2024, reported >=50x gains in their regime), THDC (2026 preprint, trainable HDC vectors), and a caution against unconstrained learned roles (may destroy algebraic unbinding assumptions -- recommends Stiefel/orthogonality-constrained learned roles instead). Proposes a concrete 6-variant x 9-K-value capacity-matrix ablation."
+    },
+    {
+      "curriculum_family": "H (GWT)",
+      "question_summary": "How to operationalize/test GWT uptake vs mere reception, and causal vs correlational re-entry",
+      "chatgpt_finding": "Distinguishes a hierarchy: routed < decodable < covaries-with < causally-depends-on < content-sensitive-use. Argues attention weight / connectivity / decodability are NOT uptake. Cites Butlin et al. 2023 GWT indicator framework, Dossa et al. 2024 embodied-GWT-agent ablations, and (most relevant) 2026 Anthropic J-Space interchange-intervention work (swap one intermediate representation for another, e.g. spider->ant, and require task-specific not merely token-copying downstream changes) as the strongest current uptake-test template. Recommends formalizing uptake as a counterfactual/do() property with content-sensitivity, tied to Geiger et al. 2022 Interchange Intervention Training / causal abstraction."
+    },
+    {
+      "curriculum_family": "H (Hyperposition)",
+      "question_summary": "Dempster-Shafer / possible-worlds / BMA / recent ML vs a non-collapsing multi-hypothesis Hyperposition design",
+      "chatgpt_finding": "Ranks transferability: (1) credal/set-valued representation + conformal calibration as strongest practical transfer for token-generation models, (2) BMA for genuine calibrated-likelihood evidence updates, (3) Dempster-Shafer for explicit ignorance/conflict semantics (caution on naive full DS combination), (4) possible-worlds/miniworlds for compatibility/exclusion structure (use sparse partial worlds, not full enumeration), (5) semantic entropy as a detector not a state representation, (6) Tree-of-Thought as proposal machinery needing a separate epistemic ledger. Proposes a formal synthesis: sparse credal hypothesis graph H=(V,E,P,Evidence,sigma) with sigma in {UNKNOWN,UNRESOLVED,SUPPORTED,CONFLICTED,FALSIFIED}; core law 'absence of discriminator => permission to collapse'."
+    },
+    {
+      "curriculum_family": "D",
+      "question_summary": "Lease-based/auction-based temporary coordinator authority in multi-agent LLM/swarm/distributed systems 2023-2026",
+      "chatgpt_finding": "LLM-MAS literature (Dynamic Role Assignment 2026, Agora 2026, AutoGen dynamic group-chat, OpenAI handoff pattern) gives good *selection* mechanisms but none provide distributed-systems-grade exclusivity/fencing. Distributed-systems literature (Kubernetes Lease/LeaseCandidate + optimistic concurrency, etcd named elections + ownership revision, Consul Session/LockIndex sequencer, LeaseGuard 2025 TLA+-verified Raft leases) supplies the actual safety mechanisms: selection != authority; authority = externally committed scoped lease; safety = lease + monotonic fencing epoch + receiver-side enforcement. Recommends nested-scope delegation algebra (disjoint/identical/ancestor-descendant/unknown) and explicitly states it knows of no existing LLM-MAS paper combining capability-based election + expiring scoped leases + fencing-token enforcement across nested coordinators -- calls this 'a genuine design opportunity.'"
+    },
+    {
+      "curriculum_family": "B",
+      "question_summary": "S0 (canonical) / S1 (shared workspace) / S2 (node-local scratch) vs CQRS / event sourcing failure modes",
+      "chatgpt_finding": "Confirms the 3-tier design is structurally sound but not novel per se (combines CQRS + materialized views + event sourcing + blackboard architecture); the genuinely stronger part is the epistemic invariant that S1/S2 computation never becomes truth by persistence/consensus/confidence. Enumerates 13 concrete known CQRS/event-sourcing failure modes with established mitigations directly applicable to S0/S1 sync: stale-projection reasoning (needs based_on_s0_revision + optimistic concurrency), replay!=cognitive-reconstruction, duplicate delivery (needs stable causal_event_id + idempotent admission), the dual-write problem (needs transactional outbox, S0 journal itself as outbox), snapshot staleness (must bind projection_schema_version + source_s0_sequence), projection-logic-changes-history, non-idempotent reducers, out-of-order events (per-stream sequencing not global order), read-your-own-write anomalies, S1-becomes-shadow-authority (recommends 'destroy S1 and rebuild from S0 with no information loss' as an acceptance test), event-vs-fact conflation (recommends S0 = canonical re: what was admitted/observed, not omniscient external truth), replaying external effects (endorses existing EffectGate/EffectJournal separation), and compensation-not-rollback (recommends CORRECTION_OF(E) events, never erasing history)."
+    },
+    {
+      "curriculum_family": "K/L",
+      "question_summary": "Training curriculum design for genuine dynamic binding-router generalization vs shallow lexical shortcuts in a 0.8B-class model",
+      "chatgpt_finding": "Warns that scale studies give legitimate reason for skepticism about a 0.8B model learning robust arbitrary in-context remapping at all. Recommends making the unit of dataset design/splitting/evaluation an independently-generated binding episode (not a row), with per-episode fresh role/filler permutations, family-disjoint OOD splits, semantic-prior-conflicting cases (50%), mid-episode remaps, and counterbalancing every marginal. Proposes 'counterfactual permutation equivariance' as the key acceptance metric (does the model's computation change when the arbitrary local binding changes, despite global learned associations suggesting otherwise) plus a long explicit checklist of what would NOT constitute valid evidence (shared atom IDs across train/test, template overlap, family-ID leakage, token-length-correlates-with-role, etc.)."
+    }
+  ],
+  "quality_assessment": {
+    "reviewer": "claude-code-lead",
+    "verdict": "SUBSTANTIVE, NOT GENERIC -- all 6 answers cite specific, checkable sources (arXiv IDs/venues, named papers/systems: Clarkson-Ubaru-Yang, Soft TPR NeurIPS 2024, Karunaratne 2024, Butlin et al. 2023, Dossa et al. 2024, Anthropic 2026 J-Space interchange-intervention, Kubernetes Lease/LeaseCandidate, etcd elections, Consul sessions, LeaseGuard 2025, Microsoft/AWS CQRS-event-sourcing guidance, Geiger et al. 2022 IIT), draw an explicit line between well-established and speculative claims where asked, and are actively critical of the project's own design choices (flags K<=16 as an unjustified folklore number, flags unconstrained learned HRR roles as dangerous, flags 'ground truth' terminology for S0 as epistemically overclaiming, states plainly it knows of no LLM-MAS paper solving the coordinator-lease problem at distributed-systems rigor) rather than agreeing with the framing. NOT independently re-verified against the primary literature by claude-code-lead in this pass (citations plausible and internally consistent but not individually fetched/confirmed) -- treat as a strong secondary-researcher literature synthesis requiring citation spot-checks before any claim here is promoted to CURRENT/canonical."
+  },
+  "evidence_refs": [
+    "research_entity/topic_packets/xeno-foundations-chatgpt-secondary-batch-20260826/RAW_ANSWERS.md",
+    "research_entity/global/TRIGGERWORT_2_CURRENT_TRAINING_COURSE_XENO_HARNESS_2026-08-26.md"
+  ],
+  "promotion": "NONE",
+  "next_step": "Spot-check the highest-leverage citations (Anthropic 2026 J-Space interchange-intervention paper for GWT uptake-testing; Soft TPR NeurIPS 2024; LeaseGuard 2025) against primary sources, then feed the coordinator-lease fencing-epoch design and the S0/S1 CQRS failure-mode checklist into the D and B training-curriculum families as concrete hard-negative/test-case sources."
+}

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import shlex
 import subprocess
 
 from clayverse.terminal_sessions import TerminalSessionManager
@@ -25,8 +24,11 @@ def test_claude_terminal_starts_from_empty_allowlisted_environment(tmp_path, mon
     monkeypatch.setattr(subprocess, "run", fake_run)
     manager.ensure("gabriel")
 
-    command = calls[-1][-1]
-    argv = shlex.split(command)
+    new_session_calls = [call for call in calls if "new-session" in call]
+    assert len(new_session_calls) == 1
+    command = new_session_calls[0]
+    env_index = command.index("env")
+    argv = command[env_index:]
     assert argv[:2] == ["env", "-i"]
     assert "PATH=/usr/local/bin:/usr/bin:/bin" in argv
     assert "HOME=" + str(tmp_path / "state" / "users" / "gabriel" / "home") in argv
@@ -35,6 +37,21 @@ def test_claude_terminal_starts_from_empty_allowlisted_environment(tmp_path, mon
     assert "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1" in argv
     assert "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1" in argv
     assert "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1" in argv
-    assert not any(item.startswith("ANTHROPIC_API_KEY=") for item in argv)
-    assert not any(item.startswith("ANTHROPIC_AUTH_TOKEN=") for item in argv)
+
+    # Provider/auth/build-orchestration secrets belong to the ClayVerse supervisor
+    # or its external orchestration boundary, never to the interactive Claude process.
+    forbidden_secret_env = (
+        "ANTHROPIC_API_KEY=",
+        "ANTHROPIC_AUTH_TOKEN=",
+        "CLAUDE_API_KEY=",
+        "GLM_API_TOKEN=",
+        "CLERK_ISSUER=",
+        "CLERK_JWKS_URL=",
+        "CLERK_AUDIENCE=",
+        "CLERK_AUTHORIZED_PARTIES=",
+        "CLERK_PUBLISHABLE_KEY=",
+        "CLERK_FRONTEND_API_URL=",
+        "GITHUB_READ_TOKEN=",
+    )
+    assert not any(item.startswith(forbidden_secret_env) for item in argv)
     assert argv[-1] == "/opt/clayverse/runtime/CLAUDE.md"

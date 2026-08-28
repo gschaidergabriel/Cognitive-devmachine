@@ -1,0 +1,85 @@
+{
+  "schema": "ClayGoReceipt/v1",
+  "date": "2026-08-18",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "observed_canonical_main_before_write": "f224be9818c90df716b0edc32fcc4e4ffef9ac9a",
+  "research_freeze": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pull_request": 686,
+    "base_sha": "6d04a8ac293a164ea5a12b10d99960c9155f09bf",
+    "head_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree_sha": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "role": "immutable runtime candidate freeze",
+    "runtime_credit_added": 0
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "observed_head": "8aeec51d413db963d311009fe343d993e09b0d0c",
+    "observed_change": "Tier2 guard v11 restores fail-closed requirement for an independently durable carrier and forbids source/carrier snapshots, snapshot-derived Sandbox.create, Sandbox.fork and persistent:true for Tier2 credit",
+    "source_only": true
+  },
+  "primary_provider_evidence": {
+    "provider": "Vercel",
+    "checked_at": "2026-08-18T01:46+07:00",
+    "sources": [
+      {
+        "url": "https://vercel.com/kb/guide/vercel-sandbox-duration-and-persistence",
+        "last_updated_reported_by_provider": "2026-06-29",
+        "finding": "sandbox snapshots are tied to the lifecycle of the sandbox that created them; sandbox-independent persistence should use a Vercel Drive"
+      },
+      {
+        "url": "https://vercel.com/kb/guide/vercel-drives",
+        "last_updated_reported_by_provider": "2026-06-29",
+        "finding": "Vercel Drive has a lifecycle independent from any sandbox, remains after sandbox deletion, and can be mounted by a later sandbox; Drives are private beta and require an enabled Pro/Enterprise project plus the beta Sandbox SDK/CLI"
+      },
+      {
+        "url": "https://vercel.com/changelog/drives-for-vercel-sandbox-in-private-beta",
+        "published": "2026-06-05",
+        "finding": "Drive.getOrCreate plus Sandbox.create mounts are the provider-supported independent-storage mechanism in the beta SDK"
+      }
+    ]
+  },
+  "adjudication": {
+    "source_or_carrier_snapshot_as_tier2_durable_carrier": "REJECT_FOR_FULL_TIER2_CREDIT",
+    "reason": "deleting the old Sandbox must not delete the only recovery carrier; provider primary sources state snapshots belong to the producing Sandbox lifecycle",
+    "vercel_drive_as_architecture_candidate": "RETAIN",
+    "drive_reason": "provider documents Drive as storage whose lifecycle is independent of any Sandbox and mountable by a later Sandbox",
+    "drive_enabled_for_current_project": "UNVERIFIED",
+    "drive_beta_authorization": "UNVERIFIED_NOT_ASSUMED",
+    "current_controller_sdk": "@vercel/sandbox@2.9.2 stable",
+    "beta_sdk_migration_admitted": false,
+    "runtime_drive_probe_executed": false,
+    "tier2_runtime_credit_added": 0,
+    "whole_product_credit_added": 0
+  },
+  "vercel_control_plane_observation": {
+    "latest_deployment_visible_during_check": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
+    "latest_visible_deployment_commit": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
+    "latest_visible_deployment_state": "ERROR",
+    "exact_controller_head_deployment_visible": false,
+    "note": "No runtime or build credit transfers from older deployments to controller head 8aeec51d."
+  },
+  "coordination": {
+    "attempted_stale_controller_writes": 2,
+    "both_rejected_by_github_contents_sha_fence": true,
+    "stale_overwrite_performed": false,
+    "parallel_worker_changes_preserved": true
+  },
+  "experiment_accounting": {
+    "unusual_experiment_count_added": 0,
+    "global_go_slot_already_consumed": true,
+    "consumed_experiment": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED"
+  },
+  "epistemic_status": {
+    "source_candidate": true,
+    "external_primary_mechanism_support": true,
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_isolated_step": "Do not weaken the Tier2 guard. First establish whether Vercel Drives beta is enabled/authorized for the current project and whether the retained controller may move to the beta SDK. If admitted, use one temporary integrity-bound Drive as declared transfer carrier: source Sandbox exports only the logical state/workspace/exact OCI transfer bundle to the Drive, unmounts, source Sandbox is deleted, a genuinely new persistent:false Sandbox mounts the same Drive, verifies hashes/manifest/exact OCI identity, restores under a new generation, then the Drive is deleted after a bounded recovery receipt. If Drives are unavailable, select another already-authorized sandbox-independent durable store with equivalent lifecycle and integrity properties."
+}

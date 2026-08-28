@@ -1,0 +1,71 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "local_time": "23:12+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "NEW_PRODUCT_CONVERGENT_TIER2_FALSE_POSITIVE_FENCE",
+  "scope": "Kubernetes v1.36 RestartAllContainers / PodRestartInPlace versus ClayVerse Tier-2 full Kata sandbox replacement",
+  "observed_problem": {
+    "description": "Kubernetes v1.36 documents RestartAllContainers as beta and enabled by default. It restarts all containers in place while preserving Pod UID, IP/network namespace, Pod sandbox, attached devices and volumes. That behavior can look like whole-Pod recovery but intentionally retains the sandbox identity, so it cannot satisfy ClayVerse Tier-2 full-appliance replacement.",
+    "strongest_counterhypothesis": "Restarting every container and rerunning init containers might be sufficient to count as full appliance reconstruction.",
+    "falsifier": "If Kubernetes preserves Pod UID and Pod sandbox across RestartAllContainers, then the old Kata sandbox/VM has not been proven terminal and a fresh guest-kernel boundary has not been created.",
+    "primary_source": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
+    "source_review_date": "2026-08-17",
+    "source_observation": "Current Kubernetes documentation marks Restart All Containers as v1.36 beta/default-enabled and states that the in-place restart preserves Pod UID and Pod sandbox."
+  },
+  "canonical_delta": {
+    "contract_commit": "3760b45bb48f821a5018a095838be3ff80010e98",
+    "contract_blob": "3e6dcf417e7b9dbd83aae9cda75e9c2cb54a4e1b",
+    "contract_change": "MICROVM_DEPLOYMENT_CONTRACT now explicitly classifies RestartAllContainers, PodRestartInPlace and equivalent in-place Pod reset as Tier-1/component evidence only and requires old sandbox destruction plus new Pod/sandbox identity for Tier-2.",
+    "regression_commit": "95676ac49311c43e533a691ca6ac286de4ec0dd3",
+    "regression_path": "the artefact/tests/test_microvm_tier2_inplace_restart_fence.py",
+    "regression_change": "Focused deterministic source fence requires the in-place-restart exclusion and the new-Pod/new-sandbox Tier-2 identity law."
+  },
+  "concurrency_fence": {
+    "same_file_update_conflicts": 2,
+    "status": "FAIL_CLOSED_NO_STALE_OVERWRITE",
+    "action": "Two attempts to amend the already-hot aggregate microVM test file were rejected by GitHub blob-SHA 409 fences after parallel main updates. The worker did not force or overwrite them; a separate focused regression file was created instead."
+  },
+  "evidence_class": "PRIMARY_SOURCE_PLUS_CANONICAL_SOURCE_CONTRACT_AND_REGRESSION_PLUS_EXACT_BOUND_CONTRACT_EXECUTION",
+  "exact_bound_source_reentry": {
+    "receipt_commit": "2f9ee5fd6a5a34075a72307d6da15252e9b6695b",
+    "environment": "authorized isolated OpenAI container",
+    "executed_contract_blob": "3e6dcf417e7b9dbd83aae9cda75e9c2cb54a4e1b",
+    "identity_check": "6/6 captured git hash-object values matched GitHub blobs before execution",
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "17 passed in 0.06s",
+    "scope_note": "This exact 17/17 run included the new contract blob and the existing aggregate Tier-2 replacement regression. It did not execute the separately added test_microvm_tier2_inplace_restart_fence.py, so that focused test remains source-only until separately run."
+  },
+  "runtime_credit": {
+    "exact_bound_contract_source_regression": "PASS_17_OF_17_AT_CAPTURED_BLOBS",
+    "focused_k8s136_regression_file_execution": "UNOBSERVED",
+    "exact_current_whole_source_regression": 0,
+    "exact_final_oci": 0,
+    "kubernetes_api_admission": 0,
+    "kata_microvm": 0,
+    "tier2_replacement": 0,
+    "whole_product": 0
+  },
+  "execution_state": {
+    "vercel_sandbox_admission": "PASS_FROM_FRESH_BOUND_RUN",
+    "guest_kernel_identity_observed": "Linux 6.12.76 x86_64",
+    "private_source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "note": "The exact source-regression credit above is bounded to captured repository blobs in an authorized isolated OpenAI container. The retained Vercel product path still fails closed before private Research/EntityOS source staging, so no exact OCI/product-runtime credit is transferred."
+  },
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0,
+    "reason": "No safely shared immutable request/turn id and only minute-precision trigger timing are exposed under the current atomic lease protocol. The Kubernetes source falsifier and deterministic regression are ordinary research/source work, not a consumed unusual experiment."
+  },
+  "safety_and_authority": {
+    "vps_self_hosted_production_test": false,
+    "together_api_used": false,
+    "secret_exposed_or_forwarded_to_sandbox": false,
+    "paid_or_final_training_started": false,
+    "whole_product_pass_claimed": false
+  },
+  "next_high_information_step": "Provision approved host-side Vercel Preview GITHUB_READ_TOKEN without forwarding it into Sandbox; refresh/rebind then-current Research and retained lanes once; run exact isolated source/OCI closure; capture the accepted OCI digest; then execute that exact digest on the admitted Kata/equivalent target and prove actual Tier-2 deletion/replacement changes both Pod UID and sandbox/VM identity rather than using RestartAllContainers or another in-place reset."
+}

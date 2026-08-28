@@ -1,0 +1,113 @@
+{
+  "schema": "CLAY_TRIGGER2_FREE_SWARM_PROVIDER_USAGE_PLATEAU_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "APPEND_ONLY_RESEARCH_DELTA_NONPROMOTING",
+  "observed_main_before_write": "d6ea399d43f5506988b839c0c7c16a3a0125eb30",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "runtime_quiescence": "OS_PROCESS_QUIESCENCE_UNPROVEN",
+    "provider_execution_authorized": false,
+    "training_execution_authorized": false
+  },
+  "purpose": "Preserve a bounded observed distinction between provider-traffic quiescence evidence and OS-process quiescence evidence after the owner FreeSwarm emergency stop. This artifact does not claim host shutdown, provider-runtime acceptance, GRID10 credit, checkpoint credit, J-Space credit or training credit.",
+  "evidence": [
+    {
+      "kind": "OWNER_EMERGENCY_STOP_SOURCE",
+      "ref": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+      "finding": "Groq, Mistral, NVIDIA and OpenRouter autonomous provider admission are disabled. The canonical source explicitly states that already-running external OS processes on an unsynchronized execution host must be killed separately."
+    },
+    {
+      "kind": "HOST_PROCESS_TELEMETRY",
+      "ref": "commit 3cf7fc57c0a3871af8b8fa1cce54942d6af753a8 / vps_bridge/results/LIVE.json",
+      "observed_at": "2026-08-25T19:49:43.899176Z",
+      "finding": "After the emergency-stop source commit, the host snapshot still contained FreeSwarm supervisor, Forge, Distillery, evaluator and fabric-update process classes. Therefore OS-process quiescence was not established by the source stop alone."
+    },
+    {
+      "kind": "RECORDED_PROVIDER_USAGE_SNAPSHOT",
+      "commit": "387d6d549f59612d041129e0dd1538ddb9eaaae6",
+      "generated_at": "2026-08-25T19:41:59.170265Z",
+      "exact_usage_rows": 5555,
+      "input_tokens": 31313649,
+      "output_tokens": 8618788,
+      "total_tokens": 39932437
+    },
+    {
+      "kind": "RECORDED_PROVIDER_USAGE_SNAPSHOT",
+      "commit": "11c941f1066219c2bbb1234c07168047a7c4e24a",
+      "generated_at": "2026-08-25T19:57:06.721608Z",
+      "exact_usage_rows": 5555,
+      "input_tokens": 31313649,
+      "output_tokens": 8618788,
+      "total_tokens": 39932437
+    },
+    {
+      "kind": "RECORDED_PROVIDER_USAGE_SNAPSHOT",
+      "commit": "5cf690be978ee8ce98b819e6004478f39c68d6b8",
+      "generated_at": "2026-08-25T20:27:18.837525Z",
+      "exact_usage_rows": 5555,
+      "input_tokens": 31313649,
+      "output_tokens": 8618788,
+      "total_tokens": 39932437
+    }
+  ],
+  "measured_delta": {
+    "first_snapshot": "2026-08-25T19:41:59.170265Z",
+    "last_snapshot": "2026-08-25T20:27:18.837525Z",
+    "observed_window_seconds": 2719.66726,
+    "exact_usage_rows_delta": 0,
+    "input_tokens_delta": 0,
+    "output_tokens_delta": 0,
+    "total_tokens_delta": 0,
+    "classification": "BOUNDED_RECORDED_PROVIDER_USAGE_PLATEAU_COMPONENT_EVIDENCE"
+  },
+  "epistemic_boundary": [
+    "A flat recorded usage counter is evidence that the inspected telemetry did not record new provider usage during the bounded window.",
+    "It is not proof that all relevant OS processes were terminated.",
+    "It is not proof that no unrecorded or telemetry-blind provider traffic occurred.",
+    "It does not authorize a provider request as a test.",
+    "It does not promote whole-HCU, whole-EntityOS, checkpoint, J-Space, dataset or training credit."
+  ],
+  "hypothesis": "The owner emergency-stop admission fence prevented new recorded provider work while stale long-lived FreeSwarm-family process shells remained alive.",
+  "counterhypothesis": "The apparent plateau reflects stale or incomplete telemetry; surviving process shells may still be capable of provider traffic or of resuming it, so direct host-process quiescence remains required.",
+  "highest_information_discriminator": {
+    "action": "Use the existing current kill-only emergency-stop path on every provider-capable FreeSwarm execution host without issuing any provider call.",
+    "required_receipt": [
+      "exact host identity and timestamp",
+      "current repository HEAD/source identity used for the stop",
+      "pre-stop matching process list",
+      "post-stop matching process list with zero survivors",
+      "OWNER_EMERGENCY_STOP.json state=OFF",
+      "bounded before/after provider-usage observation with exactly zero new usage",
+      "no paid fallback and no provider probe"
+    ],
+    "promotion_if_pass": "HOST_PROCESS_QUIESCENCE_COMPONENT_EVIDENCE_ONLY; then re-enter current execution authority before any separately pinned GRID10 or checkpoint-input-identity execution."
+  },
+  "training_reinjection": {
+    "runtime_architecture_changed": false,
+    "new_training_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "lesson": "Runtime-control evidence must distinguish process liveness, provider traffic, telemetry freshness and authority. Absence of recorded traffic is not equivalent to process termination."
+  },
+  "credits": {
+    "research_delta": 1,
+    "recorded_provider_usage_plateau_component_evidence": 1,
+    "host_process_quiescence_credit": 0,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Obtain a current host-process quiescence receipt using the kill-only stop path plus a bounded zero-provider-usage delta. Until then do not invoke providers, do not claim runtime quiescence, and do not promote downstream GRID10/checkpoint/J-Space/training gates."
+}

@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_GO_JSPACE_SOURCE_REHYDRATION_REVALIDATION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_reentry": {
+    "research_main_observed_before_receipt": "e54f0a2701208cca3314034c098e33dde850dd18",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_live_head_observed_before_receipt": "b17737e3318a6b0ffc040ddafb247a202c45f18a",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_live_head_observed_before_receipt": "588315b63f4f4255f6e73bd604cbc1789cbe12c9"
+  },
+  "observation": {
+    "binding_schema": "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3",
+    "flat_validator_scope": "validate_binding proves schema, field forms, digest identity and internal pairwise cell-role-invocation equality but cannot by itself prove that multiple correlated flat summary fields were not consistently relabeled and rehashed after rehydration.",
+    "serious_training_pipeline_scope": "compile_admitted_jspace_training_dataset_v1 already cross-binds TrainingTrace plus DatasetAdmission and delegates exact admitted InferenceReceipt parent validation to jspace_inference_parent_admission_v1, which mirrors every execution-critical receipt field. Therefore the serious training path already has stronger external-parent evidence than flat binding validation alone.",
+    "design_conclusion": "Add a narrow source-aware rehydration integrity helper for contexts that possess the exact TrainingTrace, InferenceReceipt and scheduler GridPlan sources; do not promote it into a second training-admission or canonical-state authority."
+  },
+  "durable_donor_writes": [
+    {
+      "commit": "714e4d6325b713cf9c6552861761734b3bb2d0bf",
+      "path": "the artefact/MicroEntity/hcu/jspace_inference_binding_revalidation_v1.py",
+      "delta": "Adds revalidate_binding_against_sources(), which validates a persisted binding, deterministically rebuilds the expected binding through the existing producer from exact TrainingTrace + InferenceReceipt + GridPlan, validates the rebuilt binding and requires exact dataclass equality."
+    },
+    {
+      "commit": "87f2a59c0f227d54b815ad7d47ca7339816e99a4",
+      "path": "the artefact/MicroEntity/hcu/test_jspace_inference_binding_source_revalidation_v1.py",
+      "delta": "Adds one exact-source positive case and four digest-valid negative cases for correlated cell, role, invocation and engine-summary relabeling. Tests are source-present only; no CI or admitted Sandbox execution was observed for these new tests."
+    },
+    {
+      "commit": "31c9e42603e62f1bca45dce977e98620665a3529",
+      "path": "the artefact/MicroEntity/hcu/HCU_DATA_INDEX.json",
+      "delta": "Advances HCU_DATA_INDEX to v14 and explicitly indexes the source-aware rehydration helper and tests as SOURCE_PRESENT_UNEXECUTED_AT_EXACT_FREE_SCOPE, with zero runtime/model/training credit."
+    }
+  ],
+  "counterhypothesis_and_resolution": {
+    "counterhypothesis": "The serious admitted training compiler may already make the new helper unnecessary by independently requiring exact admitted parent evidence.",
+    "result": "SUPPORTED_FOR_THE_SERIOUS_TRAINING_PATH: the compiler cross-binds trace/admission/binding identities and requires the externally admitted InferenceReceipt through jspace_inference_parent_admission_v1; that parent guard canonicalizes the receipt and checks every mirrored execution-critical field. The new helper is therefore classified as a narrow persisted-binding rehydration integrity primitive, not mandatory duplicate authority inside the serious compiler."
+  },
+  "runtime_coordination": {
+    "latest_main_runtime_gate_receipt_observed": "research_entity/continuity/receipts/2026-08-24_GO_PR810_AUTHENTICATED_FUNCTION_QUOTA_BLOCK_GPT56SOL_0955p0700.json",
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "action_by_this_organ": "NO_DUPLICATE_SANDBOX_INVOCATION",
+    "reason": "A parallel exact-head Function gate already directly observed the FREE_ONLY quota precondition and preserved no-Sandbox/no-credit evidence. Duplicating the execution would add cost/risk without new information."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_FUSION: the future exact-source J-Space acceptance path now has an indexed persisted-binding source-revalidation primitive while the already-observed runtime gate remains fail-closed on unobserved remaining included Sandbox quota.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: J-Space inference-binding provenance is hardened against correlated flat-field relabeling without creating a competing state/effect/executor authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_READINESS_ONLY: persisted causal binding rehydration can be rederived from exact sources; the serious compiler's existing external parent/admission guards remain the training authority. No model-runtime or training credit added."
+  },
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_run": 0
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving whole-system surface under parallel writes; this append-only receipt plus HCU_DATA_INDEX/v14 preserves the nonduplicate delta without overwriting fresher current-facing state."
+  },
+  "next_exact_action": "Preserve BLOCKED_QUOTA_UNOBSERVED until remaining included Vercel Sandbox quota is directly observed through an admitted non-charging surface. In parallel source work, keep the new source-revalidation helper narrow and nonauthoritative; before any future executor rebind, choose one immutable donor snapshot and include the helper/tests only if the acceptance claim actually requires persisted-binding source rehydration. Do not silently project donor-head source changes into the currently pinned executor capsule."
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RUNTIME_FIRST_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.64",
+  "canonical_main_before_write": "074980123c3b47295ea1ecc32d51b46203ba2347",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_64.json",
+    "runtime_first": true,
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN",
+    "unknown_paid_or_subscription_lanes": "FAIL_CLOSED"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_RUNTIME_ADMISSION_REENTRY_AND_FIXED_PROBE_ATTEMPT"
+  },
+  "retained_lanes": {
+    "hcu_donor": {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "pr": 1263,
+      "live_head_observed": "ba0ce949cf7176c921ac67760ea22c260b3337f3",
+      "state": "OPEN_DRAFT_DONOR_ONLY"
+    },
+    "execution_controller": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 810,
+      "live_head_observed": "6a15601183f9bb61d445368e4d239e90a47b300c",
+      "state": "OPEN_DRAFT_SINGLE_RETAINED_EXECUTOR"
+    }
+  },
+  "vercel_observation": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "team_plan": "hobby",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+    "deployment_state": "READY",
+    "deployment_git_sha": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "deployment_exactly_matches_live_pr810_head": true,
+    "deployment_url": "dr-unterweger-8ut0r6w3o-gabriel-gschaiders-projects.vercel.app",
+    "important_boundary": "READY plus exact Git SHA is deployment identity evidence only; it is not Sandbox or EntityOS/HCU runtime evidence."
+  },
+  "executor_source_observation": {
+    "file": "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+    "blob_sha": "de6007fe152c3114e03d0578866a83355ef157a7",
+    "remaining_sandbox_quota_directly_observed": false,
+    "remaining_quota_assumption_forbidden": true,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_create_condition": "remaining_sandbox_quota_directly_observed === true AND runtime_gate === OPEN_DIRECT_QUOTA_OBSERVED",
+    "sandbox_create_permitted_now": false
+  },
+  "fixed_probe_attempt": {
+    "route": "/api/sandbox-probe?case=selftest",
+    "method": "GET",
+    "deployment_bound": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+    "observed_http_status": 302,
+    "observed_result": "VERCEL_SSO_REDIRECT_BEFORE_FUNCTION_RESULT",
+    "function_result_observed": false,
+    "sandbox_create_observed": false,
+    "environment_capability_probe_executed": false,
+    "sqlite3_or__sqlite3_observed": false,
+    "classification": "ACCESS_CONTROL_BLOCKER_PLUS_QUOTA_GATE; NOT_PRODUCT_NEGATIVE; NOT_RUNTIME_PASS"
+  },
+  "hypothesis": "An exact-head READY preview removes stale-deployment identity as the immediate blocker, but execution remains closed because remaining included Sandbox quota is unobserved and the protected preview cannot be driven through the connected fetch surface to a function result.",
+  "counterhypothesis": "READY exact-head deployment alone could be mistaken for executable evidence or Hobby plan identity could be mistaken for remaining Sandbox quota.",
+  "discriminator_result": "COUNTERHYPOTHESIS_REJECTED_FOR_CREDIT: source gate explicitly blocks on unobserved remaining quota, and the attempted protected GET returned only SSO redirect evidence rather than a function/Sandbox result.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BLOCKER_PRECISION: exact-head deployment now exists; stale-deployment blocker removed, direct quota observation/access remains blocking runtime-first probe",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "HCU_NO_CHANGE_WITH_REASON: supervisor 8.64 pauses source-guard proliferation; no admitted Sandbox execution reached HCU code, so no product-source churn is justified by this discriminator",
+    "C_GLOBAL_JSPACE_GWT_AND_FREE_LOCAL_08B_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no real model execution or J-Space intervention executed; preserve source-only readiness and zero training credit"
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Obtain a directly observed, admitted remaining included Vercel Sandbox quota signal without paid upgrade, paid fallback, credential-provider preflight, or assumption from Hobby plan identity.",
+    "Only if that signal opens the FREE_ONLY runtime gate, invoke the exact-head fixed selftest/environment probe and bind executor identity, Python version, sqlite3/_sqlite3 availability, source commit/tree, secret fence, result digest and cleanup.",
+    "If sqlite3 is unavailable, classify the execution surface as capability-blocked and do not weaken SQLite-dependent HCU invariants.",
+    "After environment PASS, execute the retained canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> J-Space/GWT observation path before granting any model/J-Space credit."
+  ],
+  "evidence_boundary": "This receipt advances exact blocker knowledge and deployment/source identity only. It grants no Sandbox execution, EntityOS/HCU runtime, J-Space model, or training credit."
+}

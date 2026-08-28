@@ -1,0 +1,81 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_canonical_main_before_write": "3e5e80864f8c7e946966d8139dd16815068bd3e8",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "python_dependency_hash_lock_execution_admission_and_vercel_bridge_recheck",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "available exact user go metadata is minute-precision only; no shared immutable request/turn id was exposed",
+    "new_unusual_experiment_count": 0
+  },
+  "canonical_lane": {
+    "pull_request": 379,
+    "title": "build: close ClayVerse Python dependency hash gate",
+    "head_at_observation": "52069110f9b2e15e570cfcba4b26c723ff860065",
+    "decision": "REUSE_EXISTING_LANE_DO_NOT_DUPLICATE"
+  },
+  "bound_product_input": {
+    "research_head_initial_observation": "83c171c6881c7790904f1af955850341e69127f4",
+    "requirements_path": "the artefact/requirements.txt",
+    "requirements_git_blob": "b275b62bc008e32b56610753cc5178c28deb73b1",
+    "requirements_sha256": "a4fd78c980413ab0fced7c49845155bdbd4e994d5959acd018dbe75253a483b0",
+    "requirements": [
+      "PyJWT[crypto]==2.13.0",
+      "fastapi==0.139.2",
+      "uvicorn[standard]==0.51.0",
+      "mcp==2.0.0"
+    ],
+    "observed_docker_install_contract": "pip install --no-cache-dir -r requirements.txt",
+    "open_gate": "fully pinned transitive requirements lock plus --require-hashes consumption"
+  },
+  "vercel_bridge": {
+    "classification": "EXECUTION_PATH_CONFIRMED_CURRENT_ATTEMPT_ADMISSION_BLOCKED",
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "sandbox_sdk": "@vercel/sandbox 2.9.2",
+    "known_actual_execution_deployment": "dpl_HU8CECeN9KdYBSUcd5GVzSjApPtR",
+    "latest_ready_control_deployment_observed": "dpl_FwTbHw7uiqEZQiR1akhVZdcyrmCL",
+    "latest_ready_control_result": "SKIP_NON_TARGET_PREVIEW",
+    "bounded_hash_lock_staging_pr": 840,
+    "bounded_hash_lock_staging_head": "81724f0c84fe1b64188bf1d16d0cefc563fccc28",
+    "bounded_hash_lock_status": "Deployment rate limited — retry in 24 hours.",
+    "bounded_hash_lock_classification": "ADMISSION_BLOCKED_BEFORE_BUILD_AND_SANDBOX_START",
+    "runtime_credit": false
+  },
+  "independent_isolated_attempt": {
+    "surface": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "pip": "25.1.1",
+    "uv": "0.10.0",
+    "input_sha256_match": true,
+    "command": "uv pip compile --python-version 3.13 --generate-hashes --no-header --no-annotate requirements.in -o requirements.lock",
+    "result": "FAILED_BEFORE_DEPENDENCY_RESOLUTION",
+    "failure": "DNS lookup failure for pypi.org",
+    "classification": "ISOLATED_NETWORK_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAIL",
+    "lock_generated": false
+  },
+  "oci_surface_context": {
+    "previous_vercel_sandbox_observation": "podman/buildah provisioning unavailable from Amazon Linux 2023 repositories in the tested Sandbox",
+    "classification": "VERCEL_SANDBOX_NOT_CURRENTLY_PROVEN_AS_NESTED_OCI_BUILD_SURFACE",
+    "implication": "hash-lock generation can use the bridge when admitted; final exact OCI build still requires an authorized isolated OCI-capable execution surface"
+  },
+  "result": {
+    "research_delta": "current execution-path correction propagated to PR379; bounded Vercel hash-lock bridge staged in Dr.-Unterweger PR840; admission evidence captured",
+    "product_code_delta": false,
+    "python_lock_generated": false,
+    "test_fail": false,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "when preview admission is available, execute the existing source-bound PR379 Python lock generator through an actually-started isolated Sandbox",
+    "bind the then-current research head, Dockerfile base-image digest and requirements bytes",
+    "require two byte-identical generated locks plus pip download/install verification with --require-hashes",
+    "commit the generated lock into the single canonical PR379 lane and switch Docker consumption to --require-hashes",
+    "then run the exact ClayVerse image build/start on an authorized isolated OCI-capable surface and capture image digest/readiness/restart evidence"
+  ]
+}

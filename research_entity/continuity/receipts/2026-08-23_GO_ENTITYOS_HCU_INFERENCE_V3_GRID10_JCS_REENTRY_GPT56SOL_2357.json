@@ -1,0 +1,51 @@
+{
+  "schema": "GO_ENTITYOS_HCU_INFERENCE_V3_GRID10_JCS_REENTRY/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "correction_to": "research_entity/continuity/receipts/2026-08-23_GO_ENTITYOS_HCU_INFERENCE_V2_TYPED_BINDING_FUSION_GPT56SOL_2357.json",
+  "why_correction_needed": "The retained PR advanced after that bounded receipt: the temporary inference_receipt_v2 path was removed after fusion and the canonical inference_receipt_v1 path advanced to HCU_INFERENCE_RECEIPT/v3. Historical receipt remains valid for the exact head it observed but must not be read as current donor topology.",
+  "current_retained_path_observed": {
+    "inference": "the artefact/MicroEntity/hcu/inference_receipt_v1.py -> HCU_INFERENCE_RECEIPT/v3",
+    "inference_contract": "RFC8785/JCS + typed ENTRY_ADMISSION_BINDING/v2 + exact VerifiedEngineAdmission + HCU_VERIFIED_ENGINE_LOAD/v1 actual-loader evidence",
+    "inference_component_receipt": "the artefact/MicroEntity/hcu/receipts/2026-08-23_GO_INFERENCE_VERIFIED_LOAD_FUSION_GPT56SOL.json",
+    "grid10": "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py -> ENTITYOS_HCU_GRID_PLAN/v2",
+    "grid10_contract": "RFC8785/JCS plan identity + shared typed Entry-binding resolver + route canonicalizer downgrade rejection + external capacity authority",
+    "temporary_duplicate_inference_v2": "REMOVED_AFTER_CANONICAL_FUSION"
+  },
+  "evidence": {
+    "inference_component_regression": "6/6 PASS with exact authored inference blob plus narrow adjacent-contract stubs; component-mechanism scope only",
+    "grid10_source_and_regression_contract": "JCS/typed-binding migration and downgrade tests present on retained donor lane",
+    "authorized_product_executor_started": false,
+    "whole_runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "execution_frontier": {
+    "ready_controller": "retained PR810 Vercel atomic current-main + PR1263 snapshot executor is READY",
+    "blocker": "owner-held scoped read-only GitHub token and callable authorized transient POST are not available to this worker",
+    "next_gate": "actual Sandbox.create and exact-current combined Entry -> route -> VerifiedEngineAdmission -> EngineLoadLease/LoaderConsumption -> VerifiedEngineLoad -> inference v3 -> GRID10 v2 regressions"
+  },
+  "training_reentry": {
+    "owner_directive": "672265ff8ab1aa282e6fc17293bba97dc659f604",
+    "together_exception": "ONE_BOUNDED_08B_JSPACE_GWT_FINE_TUNE_ONLY",
+    "one_shot_consumed": false,
+    "status": "READY_NOT_STARTED",
+    "reason": "Required Global J-Space/GWT prototype, causal traces/lesions, versioned Vector Control ABI, dataset compiler/splits and frozen pre-train baseline are not yet admitted; no transient TOGETHER_API_KEY surface is available to this worker."
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "global_2357_macrocycle_exactly_one_law_preserved": true
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "general_together_inference_used": false,
+    "together_training_job_created": false,
+    "secrets_accessed_or_persisted": false
+  }
+}

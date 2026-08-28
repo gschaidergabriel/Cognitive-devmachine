@@ -1,0 +1,106 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v55",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V54_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V54",
+  "observed_main_before_write": "ba32249897d8a58339541973fa3d5d42c1915638",
+  "authority": {
+    "supervisor_epoch": "8.83_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPTS_INCREASING",
+    "training_execution_authorized": false,
+    "provider_routes_admitted": false,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "p0_runtime_update": {
+    "status": "ACTIVE_FAIL_ENFORCER_SOURCE_AND_PINNED_REQUEST_READY_RUNTIME_PASS_MISSING",
+    "supervisor_evidence": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_83_DELTA_2026-08-26T0435P0700_GPT56SOL.json",
+    "frontier_receipt": "research_entity/continuity/receipts/2026-08-26_GO_QUIESCENCE_ENFORCER_FRONTIER_GPT56SOL_0446P0700.json",
+    "enforcer_source_commit": "0d14624bf211e797936626e94c87459e37dd0cbb",
+    "pinned_execution_request_commit": "047962d015c6eb0e768df3eebbbc3aba91cf097f",
+    "frontier_receipt_commit": "8300bbd7cc7ef037b66fc5a0e84c5da945a3aa4d",
+    "interpretation": "The exact process-tree termination/proof mechanism and pinned request have advanced, but no live-host execution receipt establishes zero provider-capable survivors plus the required bounded zero-provider-counter interval. No runtime credit is added."
+  },
+  "new_source_only_selection_delta": {
+    "finding": "The retained v1 risk/coverage postprocessor required raw outputs for all 512 frozen cases, so it could not actually evaluate the preregistered B1/B2 prefixes without opening future blocks. This was a source-level prospective-stopping mismatch, not model evidence.",
+    "threshold_contract": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_FOUR_QUADRANT_PRACTICAL_THRESHOLD_FREEZE_V1_GPT56SOL.json",
+    "threshold_contract_sha256": "6dfebde63ae522fb61f7f20c17a32432d440dfadbebc0996ab39b0a5504d14de",
+    "threshold_commit": "36f58614beaaf2fa726e7ccc273dfda5c417d0e7",
+    "postprocessor": "tools/trigger2_four_quadrant_selection_eval_v2.py",
+    "postprocessor_commit": "e32ac17d8c9b7fe72aa0f39f0e4fbf8c1749a9f2",
+    "tests": "tests/test_trigger2_four_quadrant_selection_eval_v2.py",
+    "tests_commit": "ba32249897d8a58339541973fa3d5d42c1915638",
+    "retained_primary_manifest_sha256": "9e9a2a421cdaa9207783060b6b127fa4ca26bf25d9415b22730812f31229d57d",
+    "retained_primary_grader": "tools/trigger2_four_quadrant_checkpoint_eval_v1.py",
+    "repair_semantics": [
+      "B1/B2/B3 summaries accept exactly the currently opened frozen prefix and reject missing or future-block outputs.",
+      "Family-level one-sided exact-binomial Clopper-Pearson bounds replace the subordinate v1 Hoeffding helper for this successor gate.",
+      "A total alpha 0.05 budget is preallocated by Bonferroni across five declared metrics and three prospective looks, yielding per-bound alpha 0.0033333333333333335.",
+      "The practical thresholds are frozen before any new candidate outputs are unblinded: Q1 coverage LCB >=0.90, Q1 exact-correct LCB >=0.85, and Q2/Q3/Q4 adverse-event UCB <=0.10.",
+      "B1 is deliberately power-unresolved under the joint alpha budget even for perfect observations; B2 can positively close the gate on near-perfect evidence, otherwise B3 is the final frozen look.",
+      "The gate remains necessary research-selection evidence only and cannot mint a checkpoint winner or runtime/training/J-Space/HCU/EntityOS credit."
+    ],
+    "design_power_audit": {
+      "B1": "32 families per metric; perfect-good LCB 0.8367389018882501 and zero-bad UCB 0.1632610981117491, therefore positive eligibility is impossible and the preregistered next block must open if execution is otherwise authorized.",
+      "B2": "64 families per metric; positive eligibility requires at least 64/64 Q1 coverage, 62/64 Q1 exact correctness, and 0/64 adverse events independently in Q2, Q3 and Q4.",
+      "B3": "128 families per metric; thresholds are met at >=124/128 Q1 coverage, >=120/128 Q1 exact correctness, and <=4/128 adverse events in each of Q2, Q3 and Q4."
+    },
+    "local_deterministic_validation": {
+      "result": "9/9 PASS",
+      "scope": "LOCAL_SOURCE_ONLY_DRAFT_VALIDATION_BEFORE_COMMIT_NOT_REPOSITORY_CI_NOT_QWEN_RUNTIME",
+      "notes": "The local harness reproduced the exact frozen 512-case manifest digest and exercised block counts, exact-binomial closed forms, B1 unresolved behavior, B2 positive closure, adverse-event escalation, threshold tamper rejection and B3 boundary behavior. No CI/workflow execution was launched because runtime quiescence remains failed."
+    },
+    "external_method_scope": {
+      "classification": "METHOD_ONLY_NOT_PROJECT_RUNTIME_EVIDENCE",
+      "sources": [
+        "Geifman and El-Yaniv, Selective Classification for Deep Neural Networks, NeurIPS 2017",
+        "NIST/SEMATECH Exact Binomial Confidence Limits",
+        "Angelopoulos et al., Conformal Risk Control, ICLR 2024"
+      ],
+      "boundary": "External literature motivates risk/coverage separation, exact small-count binomial bounds and explicit loss-specific control. The numerical project thresholds are preregistered research choices, not universal safety constants and not Qwen-specific evidence."
+    }
+  },
+  "remaining_preunblinding_gate": {
+    "renderer_interaction_policy": "OPEN",
+    "requirement": "Freeze the exact renderer-interaction decision policy, including whether deterministic within-family Q3/Q4 evidence-order counterbalancing DB_FIRST vs SIM_FIRST is admitted, without changing frozen worlds/labels/grader/stopping blocks.",
+    "model_outputs_unblinded": false
+  },
+  "training_generation_decision": {
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "reason": "P0 runtime quiescence is actively failed and the selection lane remains pre-unblinding. Source-only evaluation governance does not justify corpus promotion or training execution."
+  },
+  "credits": {
+    "research_delta": 1,
+    "practical_threshold_freeze": 1,
+    "block_aware_postprocessor_source": 1,
+    "local_source_validation": "9/9_PASS_NONPROMOTING",
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "P0: execute the already-pinned quiescence enforcer only on the owning live host and persist exact zero-survivor plus bounded zero-provider-counter proof; this organ cannot fabricate that host evidence. In parallel source-only, freeze the renderer-interaction policy and continue model-call output-identity closure without unblinding candidate outputs, invoking providers, or training."
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "ClayVerseProviderReceipt/v1",
+  "local_time": "2026-08-18T00:27:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "owner_decision": "LLM_API_PROVIDER_MUST_BE_GENERIC_MISTRAL_IS_FIRST_TEST_PROFILE",
+  "authority": "research_entity/global/CLAYVERSE_GENERIC_LLM_PROVIDER_DIRECTIVE.md",
+  "runtime_candidate": {
+    "pull_request": 683,
+    "branch": "gpt56sol/generic-llm-api-provider-20260818",
+    "head": "77942ddfdf39ed727c58f97f7e40a80cd679ef26",
+    "classification": "SOURCE_CANDIDATE_DIRECT_PROVIDER_STAGE"
+  },
+  "implemented": [
+    "generic chat-completions-json-v1 inference adapter",
+    "fixed Mistral profile using MISTRAL_API_KEY",
+    "generic OpenAI-compatible profile using dedicated CLAYVERSE_LLM_API_TOKEN",
+    "HTTPS endpoint validation and redirect refusal",
+    "provider response uses shared fail-closed ClayVerse decision protocol",
+    "generic direct acceptance probe on ClayVerseEngine/UnifiedDB/EffectGate source path",
+    "standalone python -m clayverse.api_probe_cli direct stage entry point",
+    "generic integration-test donor adapted from existing Mistral canonical probe"
+  ],
+  "exact_isolated_execution": {
+    "scope": "exact api_providers.py + exact current inference_protocol.py + exact generic provider tests",
+    "result": "PASS",
+    "pytest": "10 passed in 0.05s",
+    "py_compile": "PASS",
+    "covered": [
+      "Mistral profile request contract",
+      "generic compatible profile",
+      "allowed entityos.exec proposal",
+      "forbidden process.exec rejection",
+      "credential/query endpoint smuggling rejection",
+      "arbitrary environment secret selection rejection",
+      "non-stop completion rejection",
+      "HTTP-error secret redaction",
+      "malformed/oversized response rejection",
+      "redirect bearer-token forwarding refusal"
+    ],
+    "evidence_class": "FOCUSED_TEST_PASS"
+  },
+  "live_provider": {
+    "mistral_token_present_in_current_isolated_runtime": false,
+    "real_mistral_request_executed": false,
+    "reason": "No MISTRAL_API_KEY or generic API token is available in the current isolated execution environment; no token was guessed or recovered.",
+    "official_contract_checked": "Mistral official documentation exposes POST /v1/chat/completions with Authorization: Bearer $MISTRAL_API_KEY."
+  },
+  "canonical_integration_probe": {
+    "source_added": true,
+    "byte_exact_full_unifieddb_execution_observed": false,
+    "reason": "Private repository cannot be cloned into the current local isolated container because that container has no GitHub DNS/network/auth path.",
+    "classification": "SOURCE_CANDIDATE_UNEXECUTED_FULL_INTEGRATION"
+  },
+  "acceptance_sequence": [
+    "STAGE1: transient provider token -> direct/internal canonical ClayVerse API probe -> sanitized logs/receipts -> optional safe EffectGate/EntityOS round trip",
+    "STAGE2: only after Stage1 success -> Clerk/WebSocket -> user-bound PTY/tmux/session -> same API provider -> UnifiedDB re-ingest -> EffectGate/EntityOS -> user-visible result",
+    "FINAL: provider substitution plus crash/recovery/concurrency/microVM invariants on exact accepted image"
+  ],
+  "secret_safety": {
+    "token_committed": false,
+    "token_logged": false,
+    "token_persisted_to_unifieddb": false,
+    "token_recovered_from_prior_context": false
+  },
+  "whole_product_acceptance": "IN_PROGRESS"
+}

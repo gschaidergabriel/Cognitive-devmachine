@@ -1,0 +1,66 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_basis": "2a3f0646e38c5e275ce99bcdac77c4ddbc74e2b5",
+  "candidate_branch": "go/terminal-auth-lease-post-attach-fence-20260817",
+  "scope": "Clerk authenticated WebSocket PTY lease boundary",
+  "finding": {
+    "class": "AUTH_LEASE_TOCTOU",
+    "description": "Current main verified the Clerk JWT expiration before potentially blocking PTY/tmux attachment but did not re-check the lease before publishing ready. PTY output was also not re-checked after blocking os.read before WebSocket send.",
+    "counterhypothesis": "pump_in already times out at the JWT deadline and cancels pump_out, so no expired-lease output can escape",
+    "falsifier": "Advance the verified clock past exp during attach or during a blocking PTY read and observe whether ready or PTY bytes cross the WebSocket boundary."
+  },
+  "source_identity": {
+    "predecessor_terminal_gateway_git_blob": "2f2421fe61fa57637a5ee2e381bba44554189a20",
+    "candidate_terminal_gateway_git_blob": "3b1aa61ea54409d545f13cdc0ff019f6e8f7cec9",
+    "candidate_terminal_gateway_sha256": "45ec35ff91392141788dd4713bb222862b6055e0530031794964a46ff3685772",
+    "new_regression_git_blob": "e3f03f80be65c57456cf719c560145de2572503d",
+    "new_regression_sha256": "929a50402e9af7aeb1e0ef8d4d6ee82aa93d22c3d836d9c80ce5523f9b74895a",
+    "adjacent_existing_test_blobs": {
+      "test_terminal_ws_auth_lease.py": "3e427c8f1c513e5236b8a45a066ad96d400ec682",
+      "test_terminal_ws_auth_lease_protocol.py": "90f1f81280add9817f50e5f4fbaf561a24da93a8"
+    }
+  },
+  "delta": [
+    "centralize finite/future lease re-check in _require_auth_lease_live",
+    "re-check verified Clerk lease after PTY/tmux attach and resize before ready",
+    "re-check current lease after blocking PTY read and after acquiring the WebSocket send lock before PTY bytes are sent",
+    "add deterministic regressions for expiry during attach and expiry during PTY output read"
+  ],
+  "isolated_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "environment": {
+      "python": "3.13.5",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "fastapi": "0.128.2",
+      "starlette": "0.50.0",
+      "pytest": "9.0.2"
+    },
+    "exact_source_slice_binding": "The local predecessor terminal_gateway.py was reconstructed byte-exact and its computed Git blob matched 2f2421fe61fa57637a5ee2e381bba44554189a20. The patched local file and new regression computed Git blobs match the GitHub candidate blobs above. The two adjacent existing tests were also byte-exact to their current GitHub blobs.",
+    "dependency_boundary": "Non-exercised ClayVerse module imports were minimal local stubs; gateway behavior under test used FastAPI TestClient plus monkeypatched identity/terminal/verifier doubles. Therefore this is exact source-slice mechanism evidence, not a full repository/runtime/OCI receipt.",
+    "red_predecessor": {
+      "command": "PYTHONPATH=. pytest -q tests/test_post_attach_expiry.py",
+      "result": "FAIL 1/1 as expected: first server message was ready with auth_expires_at=110 after clock advanced to 111 during attach",
+      "classification": "DEFECT_REPRODUCED"
+    },
+    "green_candidate": {
+      "command": "PYTHONPATH=. pytest -q tests/test_terminal_ws_auth_lease.py tests/test_terminal_ws_auth_lease_protocol.py tests/test_terminal_ws_auth_post_attach.py",
+      "result": "PASS 9/9",
+      "py_compile": "PASS"
+    }
+  },
+  "provider_state": {
+    "vercel": "BLOCKED_BY_FREE_DAILY_DEPLOYMENT_CAP",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_NO_DIRECT_PLUGIN_AVAILABLE_AND_CURRENT_ORCHESTRATION_PATH_RECORDED_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "runtime_credit": "NO_OCI_OR_REAL_CLERK_RUNTIME_CREDIT"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Shared user-trigger timestamp is minute precision only; canonical atomic lease protocol forbids synthesizing second-level identity. The regression work is ordinary deterministic falsification, not an unusual experiment."
+  },
+  "acceptance": "SOURCE_SLICE_MECHANISM_SUPPORTED_ONLY",
+  "whole_product_pass": false,
+  "next_gate": "Rebase/fuse onto then-current main if non-conflicting; run exact branch/current-head focused terminal/auth regressions in an actually-started authorized isolated sandbox, then exact OCI build/start and real Clerk browser/WebSocket PTY validation."
+}

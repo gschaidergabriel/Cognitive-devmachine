@@ -14,7 +14,7 @@ class EntityOSIntegrityError(PermissionError):
 
 
 class EntityOSOutcomeUnknown(RuntimeError):
-    """The EntityOS child started, but ClayVerse did not obtain a verified outcome."""
+    """The EntityOS child started, but no verified outcome was returned."""
 
 
 @dataclass(frozen=True)
@@ -30,6 +30,7 @@ class EntityOSBridge:
     # vm.memfd_noexec hardening is enabled; old kernels reject the unknown flag
     # with EINVAL, where the historical executable default is safe to retry.
     _MFD_EXEC = 0x0010
+    _EXEC_PATH = "/usr/bin:/bin"
 
     @staticmethod
     def _write_all(fd: int, data: bytes) -> None:
@@ -148,12 +149,12 @@ class EntityOSBridge:
                     capture_output=True,
                     text=False,
                     timeout=self.timeout,
-                    env={"PATH": os.environ.get("PATH", "/usr/bin:/bin")},
+                    env={"PATH": self._EXEC_PATH},
                 )
             except subprocess.TimeoutExpired as exc:
-                # subprocess.run only raises TimeoutExpired after the child has
-                # been started. The child may therefore have produced a real
-                # external effect before ClayVerse lost outcome certainty.
+                # subprocess.run raises TimeoutExpired only after the child has
+                # been created. The child may therefore already have produced
+                # a real external effect even though its outcome was lost.
                 raise EntityOSOutcomeUnknown("EntityOS timed out after launch") from exc
         finally:
             os.close(fd)

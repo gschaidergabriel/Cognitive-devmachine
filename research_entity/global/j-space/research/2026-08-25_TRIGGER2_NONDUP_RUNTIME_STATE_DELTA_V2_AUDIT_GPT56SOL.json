@@ -1,0 +1,39 @@
+{
+  "schema": "CLAY_TRIGGER2_NONDUP_RUNTIME_STATE_DELTA_AUDIT/v2",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "supervisor_epoch_basis": "8.78",
+  "canonical_main_basis_initial": "9b1ac0282e68468b5294e2c473667334887e7456",
+  "parallel_reentry_head": "eab1b8f48e0c4f3646aa76cc50afd248304c4e0a",
+  "rows_total": 4,
+  "families_total": 2,
+  "pass": true,
+  "failures": [],
+  "dedup_decision": {
+    "pruned_after_parallel_reentry": [
+      "ZERO_STEP_INFRA_F02",
+      "S0_EPOCH_CAS_F02",
+      "FORGE_DISTILLERY_WITNESS_F02"
+    ],
+    "retained_unique_families": [
+      "FREE_ROUTE_PROVENANCE_F02",
+      "PENDING_EXTRACTION_F02"
+    ],
+    "reason": "A later current-main parallel Trigger-2 evidence-safety seed materialized stronger SOURCE_OBSERVED+method+hard-negative coverage for zero-step infrastructure, S0 source/runtime scope, and Forge/Distillery utility. This file was pruned to avoid duplicate causal weighting."
+  },
+  "swarm_review": {
+    "generator": "PASS: retained 2 causal families, each with method + hard-negative twin.",
+    "parallel_dedup_reviewer": "PASS: removed three families after exact current-main reentry detected stronger overlap.",
+    "evidence_scope_reviewer": "PASS: no row mints runtime/training/J-Space/HCU/EntityOS credit.",
+    "leakage_reviewer": "PASS: every retained family and ancestry remains in one split.",
+    "shortcut_reviewer": "PASS_AT_THIS_SCOPE: protocol-decision rows only; no opaque-code class/symbol shortcut claim."
+  },
+  "credits": {
+    "source_candidate_validation": 1,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

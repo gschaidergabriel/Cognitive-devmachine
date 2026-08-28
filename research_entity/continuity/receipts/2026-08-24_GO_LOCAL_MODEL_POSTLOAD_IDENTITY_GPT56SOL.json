@@ -1,0 +1,51 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "source_delta": {
+    "commit": "966ba598cdbba1642ab005ef3343b294cde2a8c7",
+    "path": "tools/local_research_model_server.sh",
+    "github_content_blob_sha": "25cd47e06c3bf09099ee8524c864e195c0968d04",
+    "source_sha256": "aa865b376e8c9f8ef8f629f8c55737585d30034468e09dc541316b524fb359b5",
+    "change": "After server readiness, capture llama-server /props, bind the started process executable path/hash, resolve the server-reported model_path, hash the post-load GGUF path, and write CLAY_LOCAL_RESEARCH_MODEL/v2 state. Existing already-running processes are explicitly recorded as identity-partial rather than silently treated as bound."
+  },
+  "problem_observed": "The first local Qwen3-4B/llama.cpp launcher wrote STARTING state before exec and then never produced a post-load exact runtime/model identity record. That left model/runtime reproducibility weaker than the current HCU J-Space intervention gate requires.",
+  "external_donor_observation": {
+    "llama_cpp_models": "llama.cpp documents -hf <user>/<model>[:quant] as a supported Hugging Face load path.",
+    "llama_cpp_props": "llama-server documents GET /props as exposing model_path and build_info for the running server.",
+    "qwen_selector": "Qwen/Qwen3-4B-GGUF documents the Q4_K_M llama.cpp selector used by the local launcher."
+  },
+  "diagnostics": {
+    "bash_n": {
+      "result": "PASS",
+      "surface": "CHATGPT_CONTAINER_DIAGNOSTIC_ONLY",
+      "runtime_credit": false
+    },
+    "canonical_execution": "NOT_EXECUTED_BY_THIS_ORGAN_BECAUSE_THE_AUTHORIZED_LOCAL_OR_CLAY_DIRECT_DEV_BRIDGE_IS_NOT_EXPOSED_IN_THIS_CHAT_TOOLSET"
+  },
+  "evidence_scope": {
+    "classification": "SOURCE_DELTA_PLUS_NONCANONICAL_SYNTAX_DIAGNOSTIC",
+    "post_load_model_path_hash": "PREREQUISITE_IDENTITY_EVIDENCE_ONLY",
+    "loader_consumption_attestation": false,
+    "loader_consumption_note": "A model_path observed from /props after load plus a post-load file hash is stronger than a pre-load hash, but it is not proof of the exact bytes consumed by the loader and does not close post-load mutation risk.",
+    "jspace_intervention_capable": false,
+    "external_provider_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_CONVERGENCE: local provider-independent inference now has a stronger post-load identity record suitable for downstream exact execution receipts.",
+    "track_b": "ADVANCED_REUSABLE_HCU_IDENTITY_PRIMITIVE: runtime binary identity and post-load model-path identity are now emitted explicitly without creating a second truth authority.",
+    "track_c": "ADVANCED_TRAINING_READINESS_PREREQUISITE_ONLY: the local Qwen lane now emits checkpoint/runtime identity evidence needed before any model-specific J-Space intervention receipt, while remaining explicitly noncausal and nontraining evidence."
+  },
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT: no shared reproducible immutable macrocycle identity is exposed to this organ, so no new unusual intervention was attempted.",
+  "next_exact_action": "On an authorized exposed local normal-user or clay-direct-dev bridge, run the committed launcher, verify CLAY_LOCAL_RESEARCH_MODEL/v2 reaches READY_IDENTITY_OBSERVED with non-null runtime binary and GGUF hashes, then continue to the smallest clean/corrupted/target/sham J-Space intervention family while preserving loader-consumption as UNKNOWN until separately attested."
+}

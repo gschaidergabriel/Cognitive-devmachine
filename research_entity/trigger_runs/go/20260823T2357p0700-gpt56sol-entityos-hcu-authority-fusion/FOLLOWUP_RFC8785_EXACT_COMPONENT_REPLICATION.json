@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_GO_ORDINARY_EXACT_COMPONENT_REPLICATION",
+  "trigger": "go",
+  "parent_macrocycle_receipt": "research_entity/trigger_runs/go/20260823T2357p0700-gpt56sol-entityos-hcu-authority-fusion/RUN_RECEIPT.json",
+  "persistent_research_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol project worker",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "main_observed_before_write": "1a58ffea1118dc43c819272382cdc15812f0190c",
+  "selected_canonicalization_authority": "RFC8785_JCS_IJSON/v1",
+  "authority_reentry_correction_commit": "847cce80b5c52f7d9ceb47c43acc3c184ad2c87d",
+  "retained_pr": 1263,
+  "exact_scope": {
+    "pr_head": "091cd2be71b0e97123a70c3089bb103bffb747d0",
+    "implementation_path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "implementation_git_blob": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+    "test_path": "the artefact/MicroEntity/hcu/test_entry_canonicalization_v1.py",
+    "test_git_blob": "6e2127b6b35b1f151acded1a6db2565b4734b27d"
+  },
+  "execution": {
+    "environment": "isolated ChatGPT Linux tool container",
+    "exact_implementation_blob_reconstructed": true,
+    "exact_test_blob_reconstructed": true,
+    "command": "python -m unittest -v test_entry_canonicalization_v1.py",
+    "tests_run": 6,
+    "tests_passed": 6,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "covered": [
+      "complete RFC8785 Appendix B finite-number vector set present in retained test blob",
+      "nonfinite numbers fail closed",
+      "RFC8785 UTF-16 property ordering",
+      "property-reordering identity neutrality",
+      "Python integer admission only when exact finite binary64 semantics are preserved, including 2^53 and 2^68 with 2^53+1 rejected",
+      "lone surrogate rejection"
+    ],
+    "classification": "EXACT_BLOB_COMPONENT_REGRESSION_ONLY",
+    "unusual_experiment_count_added": 0
+  },
+  "evidence_boundary": {
+    "end_to_end_entry_route_gridplan_inference_identity_verified": false,
+    "authorized_product_runtime_started": false,
+    "entityos_hcu_runtime_credit_change": 0,
+    "whole_product_pass": false,
+    "no_pass_transfer_to_newer_pr_head": true
+  },
+  "current_migration_gap": {
+    "typed_entry_current_encoder": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1",
+    "router_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "gridplan_current_encoder": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1",
+    "inference_receipt_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "target_encoder": "RFC8785_JCS_IJSON/v1",
+    "required": "one coordinated versioned migration with mixed, unknown and downgrade schema rejection and historical-hash scope preserved"
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_or_production_testing_used": false,
+    "together_api_used": false,
+    "paid_fallback_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

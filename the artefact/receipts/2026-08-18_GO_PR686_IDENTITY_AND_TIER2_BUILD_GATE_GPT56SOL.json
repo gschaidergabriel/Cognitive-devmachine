@@ -1,0 +1,61 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:21:28+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "EXACT_PR686_IDENTITY_CORRECTION_AND_TIER2_BUILD_ADMISSION_GATE",
+  "immutable_runtime_freeze": {
+    "pull_request": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head_observed_at_final_rejoin": "c1b8e1a61b74bfc263fb59165df30e28b46d87d8",
+    "draft": true,
+    "mergeable": false,
+    "runtime_credit": 0
+  },
+  "identity_findings": {
+    "invalid_intermediate_binding": "9dd7be2133dd54d92ae3f17ce0e3a53d3cc7ed02",
+    "invalid_commit_lookup": "NO_COMMIT_FOUND",
+    "required_identity": "9dd7da1c7f1d2acf29142a74effd2b51282661f7 / 47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "phase_identity_guard_commit": "efbca72919c30b6fd977f871d8190f636f29110f",
+    "source_guard_identity_correction_commit": "0f35c4ffbffc061da1022a753e12d4113d64f744"
+  },
+  "vercel_build_evidence": {
+    "deployment_id": "dpl_DbEBWHhGSpyCnEvx15fBYq1S7QiT",
+    "controller_commit": "56bc53e24733e6c9203d3dfde58035f70d7f3a89",
+    "state": "ERROR",
+    "failure": "CURRENT_OCI_RETAINED_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED",
+    "interpretation": "controller guard drift before sandbox/private-source/OCI execution; zero ClayVerse test credit",
+    "sandbox_runtime_started": false,
+    "oci_runtime_credit": 0
+  },
+  "tier2": {
+    "identity_rebound_to_pr686": true,
+    "mechanism_status": "REJECTED",
+    "rejected_mechanism": "Sandbox.fork with persistent snapshot semantics before source deletion",
+    "required_mechanism": "declared transfer outside old guest -> delete old sandbox -> independent Sandbox.create -> restore only declared state and same exact OCI artifact -> newer generation recovery",
+    "tier2_credit": 0
+  },
+  "guards": {
+    "fork_snapshot_guard_commit": "a670096a529ddef7355eb71abb6e3aa089e96286",
+    "phase_identity_guard_commit": "efbca72919c30b6fd977f871d8190f636f29110f",
+    "source_guard_identity_correction_commit": "0f35c4ffbffc061da1022a753e12d4113d64f744",
+    "guard_relaxation_authorized": false
+  },
+  "transport_frontier": {
+    "vercel_sandbox_drive": "STRUCTURALLY_STRONG_CANDIDATE_BUT_PRIVATE_BETA_ACCESS_NOT_PROVEN",
+    "vercel_container_registry": "OCI_TRANSPORT_CANDIDATE_NOT_YET_ADMITTED_BY_EXACT_RUNTIME_EVIDENCE"
+  },
+  "unusual_experiment": {"status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT", "count": 0},
+  "constraints": {"vps_self_hosted_production_testing": false, "together_api": false, "owner_credentials_used": false},
+  "next_exact_step": "Keep PR686 immutable. Converge PR810 onto exact PR686, replace fork with true independent appliance replacement using only an explicitly admitted declared transfer, close stale runtime-relevant guard proxies, obtain exact-head Vercel build PASS, then perform the owner-credential one-shot runtime sequence.",
+  "acceptance": "IN_PROGRESS"
+}

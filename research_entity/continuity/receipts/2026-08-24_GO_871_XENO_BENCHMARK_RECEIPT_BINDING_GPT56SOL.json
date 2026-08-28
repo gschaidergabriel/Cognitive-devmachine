@@ -1,0 +1,61 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "base_main": "6ba01dea5e0978248cb3a856fdec6ade73ef4081",
+  "candidate_commit": "41a6daec85c8fe1dd711f49dd87b32e6aa390fdd",
+  "candidate_tree": "8a6d989ca94a0764c7aad2f1027547243d5572eb",
+  "finding": "XENO_PROMOTION_GATE/v2 stated that promotion inputs must come from bound executable benchmark receipts, but the executable CLI still accepted arbitrary raw JSON metric objects. A model/worker could therefore satisfy the mathematical anti-Goodhart comparison with unbound fabricated measurements.",
+  "hypothesis": "Requiring a typed, digest-bound baseline/candidate XENO_BENCHMARK_RECEIPT/v1 pair before the existing epsilon-Pareto comparison closes the self-promotion gap without weakening the current cross-group anti-Goodhart semantics.",
+  "counterhypothesis": "Receipt wrapping alone could become ceremonial provenance if the runner is not itself admitted. Therefore receipt integrity is explicitly classified as a deterministic provenance boundary only, not proof of runner trust, model causality, or whole-product runtime acceptance.",
+  "delta": [
+    "preserve XENO_PROMOTION_GATE/v2 epsilon-Pareto, practical-significance floors, hard no-regression metrics, and cross-group progress",
+    "reject free-form legacy metric JSON at the CLI boundary",
+    "require XENO_BENCHMARK_RECEIPT/v1 with PASS, promotion_eligible=true, model_generated=false and exact role",
+    "bind source commit/tree, benchmark suite, runner, environment, benchmark-command digest, metric-contract digest and harness-contract digest",
+    "require candidate receipt to reference the exact baseline measurement and baseline source commit",
+    "recompute a canonical SHA-256 result digest and reject post-receipt metric mutation",
+    "reject cross-environment/cross-runner/cross-contract pair substitution",
+    "emit evidence_binding in the promotion decision"
+  ],
+  "source_identity": {
+    "tools/xeno_build_gate.py": {
+      "git_blob": "ad0b391a2edb4a359c8cc8d0cafecf844bb48b9b",
+      "sha256": "c3bb95847eba6d79896f4cce4b02e178e04f62b4a8198639685b4d6e2a8a5dbe"
+    },
+    "tests/test_xeno_build_gate.py": {
+      "git_blob": "10275be3a70061a7594f9593cb3acd66c114b1b3",
+      "sha256": "a3b8da9dee24c8772e476b8d3ed7bf4b708691d7e6b37bd28a17d37d768a6c23"
+    }
+  },
+  "deterministic_local_mechanism_evidence": {
+    "unit_tests": "13/13 PASS",
+    "py_compile": "PASS",
+    "scope": "NONCANONICAL_LOCAL_SOURCE_MECHANISM_ONLY"
+  },
+  "negative_evidence": [
+    "Two attempted direct-main fast-forward writes were rejected because main advanced concurrently; no force push or stale overwrite was used.",
+    "No exact admitted canonical-checkout benchmark runtime was executed by this organ.",
+    "No external LLM provider call or provider credential lookup was performed by this organ.",
+    "No unusual experiment was performed because no shared reproducible immutable macrocycle identity suitable for the canonical atomic lease was exposed."
+  ],
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_CONTROL_PLANE: recursive Xeno promotion can no longer consume arbitrary raw metric JSON through its CLI.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "ADVANCED_REUSABLE_PROVENANCE_BOUNDARY: measurement admission now uses typed role/source/runner/environment/contract identity rather than narrative trust.",
+    "C_GLOBAL_JSPACE_GWT_AND_08B_READINESS": "ADVANCED_EVIDENCE_INTEGRITY_ONLY: jspace_causal_gain_score remains under the existing anti-Goodhart rule but cannot be promoted from an unbound/model-generated receipt. No J-Space model-runtime or training credit."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Implement or bind the executable benchmark runner that emits XENO_BENCHMARK_RECEIPT/v1 on an authorized zero-cost local/clay-direct-dev surface, execute the 13-test gate suite plus a baseline/candidate roundtrip at exact source identity, and only then grant component benchmark-promotion runtime credit."
+}

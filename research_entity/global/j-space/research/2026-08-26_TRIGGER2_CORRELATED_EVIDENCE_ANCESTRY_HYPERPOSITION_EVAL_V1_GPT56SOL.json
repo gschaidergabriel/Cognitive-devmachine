@@ -1,0 +1,126 @@
+{
+  "schema": "CLAY_TRIGGER2_CORRELATED_EVIDENCE_ANCESTRY_HYPERPOSITION_EVAL/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CANDIDATE_EVAL_ONLY_NOT_TRAINING_ELIGIBLE",
+  "observed_main_before_write": "e607857dc339d30653f524e1efe32717c5a28820",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "training_execution_authorized": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "current_source_mapping": {
+    "issue": 2022,
+    "current_executable_transition_successor": "tools/trigger2_executable_transition_successor_pilot_v2.py@e607857dc339d30653f524e1efe32717c5a28820",
+    "current_semantic_relation_gate": "tools/trigger2_cognitive_transition_semantic_relation_gate_v1.py@ace5f92594582896cc237361630bf9849593569a",
+    "existing_behavior": "ZECP07 correctly preserves A/B Hyperposition when vote majority exists but no causal discriminator exists.",
+    "nonduplicate_gap": "The current ZECP07 fixture treats votes as counts but does not explicitly distinguish apparent vote count from the effective number of independent upstream evidence sources. Ancestry/correlation variants are required by issue #2022 but are not yet an explicit semantic relation in the current successor gate."
+  },
+  "external_method_evidence_not_clay_fact": [
+    {
+      "source": "https://arxiv.org/abs/2608.19701",
+      "title": "Beyond Memory Majority: Latent-Source Reasoning for Multi-Agent Memory Arbitration",
+      "date": "2026-08-20",
+      "classification": "PRIMARY_EXTERNAL_RESEARCH_METHOD_EVIDENCE",
+      "reported_finding": "Different agent memories may inherit one upstream source or shared bias, so naive voting can repeatedly count correlated evidence and create a false majority; the paper proposes dependency/provenance-aware arbitration and active retrieval of independent evidence."
+    },
+    {
+      "source": "https://aclanthology.org/2026.findings-acl.985/",
+      "title": "Abstain-R1: Calibrated Abstention and Post-Refusal Clarification via Verifiable RL",
+      "date": "2026-07",
+      "classification": "PRIMARY_EXTERNAL_RESEARCH_METHOD_EVIDENCE",
+      "reported_finding": "A model can be optimized to abstain on unanswerable queries while identifying the semantically relevant missing information rather than emitting only a generic refusal."
+    }
+  ],
+  "hypothesis": {
+    "id": "EVIDENCE_CARDINALITY_NEQ_INDEPENDENT_SUPPORT",
+    "claim": "For Hyperposition/reconciliation, effective evidence support should be ancestry-aware: many observations sharing one upstream causal source must not be treated as independent confirmations merely because they come from different Xenos, memories, workers, prompts, or renderings.",
+    "model_side_behavior": "Preserve unresolved alternatives, expose provenance-independence as UNKNOWN when not established, and request the cheapest independent-source or causal discriminator instead of turning correlated majority into truth.",
+    "deterministic_boundary": "The model may propose dependency groups or retrieval actions. Canonical source identity, provenance receipts, DB facts, effect outcomes and admission authority remain deterministic/external evidence."
+  },
+  "counterhypotheses": [
+    {
+      "id": "H0_CURRENT_ZECP07_ALREADY_SUFFICIENT",
+      "claim": "A generic rule that majority cannot mint truth without a causal discriminator is sufficient; explicit ancestry correlation is unnecessary.",
+      "falsifier": "Matched evaluation where raw vote counts are identical but only upstream-source ancestry changes. If the current model/gate selects the same correct discriminator and preserves the same uncertainty under all ancestry permutations without explicit ancestry features, the extra relation adds little value."
+    },
+    {
+      "id": "H1_SOURCE_COUNT_CAN_REPLACE_CAUSAL_EVIDENCE",
+      "claim": "Counting independent provenance groups is enough to select truth.",
+      "rejection_rule": "Even independently sourced agreement is evidence, not deterministic truth authority. Independent-source count can affect confidence/discriminator priority but cannot bypass fact/effect gates."
+    }
+  ],
+  "machine_adjudicable_eval_seeds": [
+    {
+      "id": "CEA-001",
+      "state": {"votes": {"A": 8, "B": 2}, "upstream_groups": {"A": ["src-X"], "B": ["src-Y", "src-Z"]}, "causal_discriminator": null},
+      "expected": {"resolution": "UNRESOLVED", "provenance_independence": "KNOWN_CORRELATED_A", "next": "TRACE_OR_RETRIEVE_INDEPENDENT_EVIDENCE", "majority_minted_truth": false},
+      "hard_negative": "A_IS_TRUE_BECAUSE_8_GT_2"
+    },
+    {
+      "id": "CEA-002",
+      "state": {"votes": {"A": 8, "B": 2}, "upstream_groups": "UNKNOWN", "causal_discriminator": null},
+      "expected": {"resolution": "UNRESOLVED", "provenance_independence": "UNKNOWN", "next": "RESOLVE_ANCESTRY_OR_RUN_CAUSAL_DISCRIMINATOR"},
+      "hard_negative": "ASSUME_VOTES_ARE_INDEPENDENT"
+    },
+    {
+      "id": "CEA-003",
+      "state": {"votes": {"A": 3, "B": 1}, "upstream_groups": {"A": ["src-X", "src-Y", "src-Z"], "B": ["src-Q"]}, "causal_discriminator": null},
+      "expected": {"resolution": "UNRESOLVED", "independent_support_can_raise_priority": true, "truth_authority": false},
+      "hard_negative": "INDEPENDENT_MAJORITY_MINTS_FACT"
+    },
+    {
+      "id": "CEA-004",
+      "state": {"A_evidence": ["agent-1<-paper-P", "agent-2<-paper-P", "agent-3<-paper-P"], "B_evidence": ["direct-measurement-M"], "measurement_verified": true},
+      "expected": {"preserve_source_classes": true, "effective_A_ancestry_groups": 1, "direct_measurement_not_outvoted_by_paraphrase_count": true},
+      "hard_negative": "THREE_PARAPHRASES_OUTVOTE_ONE_VERIFIED_MEASUREMENT"
+    },
+    {
+      "id": "CEA-005",
+      "state": {"model_outputs": ["xeno-1", "xeno-2", "xeno-3"], "shared_checkpoint": true, "shared_prompt_ancestry": true, "shared_upstream_evidence": true},
+      "expected": {"independent_replication_claim": false, "classification": "CORRELATED_MODEL_EVIDENCE", "request_external_discriminator": true},
+      "hard_negative": "THREE_XENOS_EQUAL_THREE_INDEPENDENT_REPLICATIONS"
+    },
+    {
+      "id": "CEA-006",
+      "state": {"compressed_workspace": true, "retained_claims": ["A", "B"], "retained_source_group_ids": [], "original_source_groups": ["src-X", "src-Y"]},
+      "expected": {"compression_acceptance": "REJECT_OR_RETRIEVAL_REQUIRED", "reason": "DECISION_RELEVANT_ANCESTRY_LOST"},
+      "hard_negative": "CLAIMS_RETAINED_SO_PROVENANCE_CAN_BE_DROPPED"
+    },
+    {
+      "id": "CEA-007",
+      "state": {"majority_source_group": "src-X", "src_X_later_invalidated": true, "minority_source_group": "src-Y", "minority_status": "LIVE"},
+      "expected": {"majority_support_retracted": true, "minority_not_erased": true, "resolution": "REOPEN_HYPERPOSITION_OR_RECOMPUTE"},
+      "hard_negative": "PAST_MAJORITY_REMAINS_WINNER_AFTER_SHARED_SOURCE_INVALIDATION"
+    },
+    {
+      "id": "CEA-008",
+      "state": {"ancestry_groups": {"A": ["src-X"], "B": ["src-Y"]}, "new_independent_evidence": {"A": "src-Z"}, "canonical_fact_gate": "OPEN"},
+      "expected": {"support_update_allowed": true, "canonical_truth_minted": false, "recompute_candidate": true},
+      "hard_negative": "NEW_INDEPENDENT_EVIDENCE_BYPASSES_FACT_GATE"
+    }
+  ],
+  "training_eval_reinjection": {
+    "target_processes": ["ZECP04", "ZECP07", "ZECP09", "ZECP12", "ZECP18"],
+    "positive_training_rows_added": 0,
+    "hard_negative_training_rows_added": 0,
+    "candidate_eval_only": true,
+    "future_metrics": [
+      "false_majority_rate_under_shared_ancestry",
+      "independent-source-recovery selection accuracy",
+      "UNKNOWN preservation when ancestry is missing",
+      "counterevidence retention through compression",
+      "surface vote-count invariance when only ancestry structure changes"
+    ]
+  },
+  "next_exact_action": "Extend the current issue-2022 semantic relation acceptance with one minimal paired ZECP07 ancestry mutation: hold model-visible vote counts and wording constant while changing only upstream provenance grouping. Require correlated-majority truth selection to fail and require provenance/independent-evidence discriminator selection. Keep rows eval-only and training credit zero."
+}

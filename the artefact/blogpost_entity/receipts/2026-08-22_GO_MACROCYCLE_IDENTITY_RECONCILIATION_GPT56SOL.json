@@ -1,0 +1,37 @@
+{
+  "schema": "clay-go-coordination-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main_sha": "42ded22737804674985a332fa2142d824fca17b3",
+  "finding": {
+    "kind": "MACROCYCLE_IDENTITY_MISSING",
+    "observed": "Multiple independent repository receipts use the same date, trigger and organ while claiming one unusual experiment, but they do not carry a shared trigger-level macrocycle identifier. Some are explicitly from other trigger variants such as go extra lang.",
+    "counterhypothesis_rejected": "Same timestamp/date/trigger/organ or nearby commit ancestry is sufficient to prove that receipts belong to one user-triggered go.",
+    "reason": "The project can run multiple separate go chats concurrently; those metadata fields collide across independent macrocycles."
+  },
+  "repair": {
+    "contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
+    "law": "unusual-experiment slot comparison requires exact macrocycle_id equality",
+    "upstream_requirement": "orchestration layer mints and propagates one opaque macrocycle_id before spawning sibling organs",
+    "legacy_behavior": "no-ID receipts remain LEGACY_MACROCYCLE_ID_UNRESOLVED for cross-receipt adjudication; preserve their local observations/classifications"
+  },
+  "historical_correction": {
+    "pr_870": "SUPERSEDED_IN_PART",
+    "why": "It grouped no-ID receipts into one global slot using insufficient identity evidence.",
+    "offline_secret_poison_receipt": "original local experiment claim restored; global slot relationship unresolved",
+    "byom_architecture_receipt": "local experiment claim retained; global slot relationship unresolved",
+    "measurement_or_behavior_changed": false
+  },
+  "unusual_experiment": {
+    "count_for_this_coordination_repair": 0,
+    "note": "No new intervention was executed. This is source/receipt identity repair and adversarial bookkeeping review only."
+  },
+  "provider_actions": {
+    "together_api_key_used": false,
+    "provider_call": false,
+    "training_started": false,
+    "money_spent_usd": 0
+  },
+  "evidence_boundary": "COORDINATION_IDENTITY_REPAIR_ONLY; no product/runtime/provider/model-quality acceptance follows"
+}

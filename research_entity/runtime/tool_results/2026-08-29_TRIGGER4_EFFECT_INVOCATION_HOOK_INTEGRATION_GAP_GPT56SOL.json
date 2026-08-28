@@ -1,0 +1,79 @@
+{
+  "schema": "TRIGGER4_EFFECT_INVOCATION_HOOK_INTEGRATION_GAP/v1",
+  "date_local": "2026-08-29",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "canonical_main_before_write": "78cc94fc6d69e6395788e85ec2a1246db8d3c567",
+  "mode": "FREE_ONLY",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein",
+    "branch": "frankenstein-2.0",
+    "head_observed": "bf0178fcb1b50217daec321ddb3646da754e3b00",
+    "effect_binding_primitive": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/effect_invocation_v2.py",
+      "blob_sha": "7afd2dd39026cfcdb97ce4907a7b72a7ebe6b7c2",
+      "source_claim": "invocation-scoped tool_use_id/effect_id binding exists as additive source scaffolding",
+      "explicit_boundary": "source itself says stern.py PreToolUse/PostToolUse are not yet wired and target-runtime evidence does not exist"
+    },
+    "effect_binding_test": {
+      "path": "DEV_SOURCE_RESEARCH/repository/tests/test_effect_invocation_v2.py",
+      "blob_sha": "aa576f2e2d31453084aa974f1e73488fefc41907",
+      "contains_same_session_two_call_interleaving_falsifier": true,
+      "runtime_credit": 0
+    },
+    "active_hook_core": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "head": "bf0178fcb1b50217daec321ddb3646da754e3b00",
+      "effect_invocation_v2_import_observed": false,
+      "legacy_mutable_session_pointer_observed": "UPDATE active_turns SET effect_id=? WHERE session_id=?",
+      "posttooluse_resolution_documented_in_source": "merken() resolves the prior PreToolUse effect through active_turns.effect_id"
+    },
+    "hooks_config": {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "registered_events_observed": ["SessionStart", "UserPromptSubmit", "PreToolUse", "PostToolUse", "Stop", "SessionEnd", "PreCompact"],
+      "stage1_lifecycle_events_not_registered": ["SubagentStart", "SubagentStop", "TaskCreated", "TaskCompleted"]
+    }
+  },
+  "external_primary": {
+    "source": "https://code.claude.com/docs/en/hooks",
+    "accessed_date": "2026-08-29",
+    "observed_facts": [
+      "PreToolUse carries tool_use_id.",
+      "tool hooks fired inside subagents carry agent_id and agent_type.",
+      "SubagentStart and SubagentStop provide exact agent_id.",
+      "TaskCreated and TaskCompleted are supported lifecycle events; TaskCreated provides task_id."
+    ]
+  },
+  "finding": {
+    "classification": "P1_SOURCE_PRIMITIVE_PRESENT_ACTIVE_HOOK_INTEGRATION_OPEN",
+    "same_session_overlapping_effect_misattribution_risk": "NOT_CLOSED_ON_ACTIVE_STERN_PATH",
+    "host_identity_availability": "SUPPORTED_BY_CURRENT_CLAUDE_CODE_HOOK_SCHEMA",
+    "runtime_product_failure": "NOT_OBSERVED",
+    "counterhypothesis": "The invocation primitive may be correct in isolation, but until the active hook path binds PreToolUse/PostToolUse through tool_use_id, it cannot prevent the donor session-singleton race."
+  },
+  "p0": {
+    "actions_prestep_blocker": "UNCHANGED",
+    "duplicate_dispatch_performed": false,
+    "generation_advance_performed": false,
+    "workflow_rerun_performed": false,
+    "vps_telemetry_bridge_modified": false
+  },
+  "next_exact_gate": "Fuse one Stage-1 coordination authority, then migrate the active Frankenstein-2.0 hook path so PreToolUse and PostToolUse resolve effects by exact tool_use_id plus session/agent/task/turn/causal/generation envelope and register supported SubagentStart/SubagentStop/TaskCreated/TaskCompleted lifecycle identifiers. Retire the mutable active_turns.effect_id lookup as effect-resolution authority only after compatibility migration and deterministic regressions. Execute the exact-source integration falsifier on the authorized target only after the P0 Actions execution surface actually runs steps.",
+  "credit_boundary": {
+    "frankenstein2_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "prohibitions_respected": [
+    "no provider/model call",
+    "no paid fallback",
+    "no Together API",
+    "no workflow dispatch or rerun",
+    "no VPS process mutation",
+    "no Frank Harness modification",
+    "no runtime PASS inferred from source"
+  ]
+}

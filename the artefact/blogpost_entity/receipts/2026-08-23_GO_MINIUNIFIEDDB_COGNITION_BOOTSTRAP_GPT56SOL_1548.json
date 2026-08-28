@@ -1,0 +1,79 @@
+{
+  "schema": "GO_MINIUNIFIEDDB_COGNITION_BOOTSTRAP/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "Mini Entity / EntityOS integrated cognitive architecture",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main_sha": "083c1c4a57651a4db234bd42d19bbfd2b8926063",
+  "fresh_main_recheck_sha": "01ffde1159c8ac1e34308b7424f5fa5113f46d88",
+  "branch": "gpt56sol/go-cognition-bootstrap-atomic-20260823-1548",
+  "pull_request": 1290,
+  "finding": {
+    "current_reference_runtime_gap": "ProfilePipelineRuntime.pipeline_init creates profile/pipeline tables but does not install mini_cognition_* store or active-turn schemas, while the current .clay pre-inference path requires an already-bound active cognition turn.",
+    "consequence": "A fresh MiniUnifiedDB cannot satisfy the current pre-inference Cognitive Fabric contract merely by adding a handler; cognition schema bootstrap must converge first.",
+    "fresh_main_recheck": "The commits from 083c1c4a57651a4db234bd42d19bbfd2b8926063 to 01ffde1159c8ac1e34308b7424f5fa5113f46d88 modify only the inference capability binding tests/module/receipt and do not change ProfilePipelineRuntime.pipeline_init, so the measured source gap remains present.",
+    "authority": "MiniUnifiedDB remains the sole canonical durable state authority."
+  },
+  "delta": {
+    "module": "tools/miniunifieddb_cognition_bootstrap_v1.py",
+    "test": "tests/test_miniunifieddb_cognition_bootstrap_v1.py",
+    "purpose": "Prepare SQLite FK enforcement before BEGIN and install the already-canonical cognition store plus active-turn schema inside one caller-owned bootstrap transaction without committing or rolling back independently.",
+    "creates_second_state_authority": false,
+    "creates_effect_authority": false,
+    "creates_turn_identity": false,
+    "commits_caller_transaction": false
+  },
+  "regression_obligations": [
+    "real cognition-store plus active-turn schemas install while caller transaction remains open",
+    "rollback removes the cognition schema delta atomically",
+    "commit persists one same-MiniUnifiedDB cognition schema set",
+    "foreign-key enforcement missing fails closed",
+    "foreign-key enablement after transaction start and schema install without caller transaction both fail closed"
+  ],
+  "execution_evidence": {
+    "exact_branch_runtime_execution": false,
+    "classification": "SOURCE_DELTA_PLUS_PRE_STEP_EXECUTION_ADMISSION_FAILURE",
+    "runtime_credit": 0,
+    "github_actions": [
+      {
+        "run_id": 32629262431,
+        "workflow": "Research Entity Verify",
+        "job_id": 97169371761,
+        "job": "verify",
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "PRE_STEP_EXECUTION_ADMISSION_FAILURE",
+        "test_credit": 0
+      },
+      {
+        "run_id": 32629262437,
+        "workflow": "Research Entity Identity Guard",
+        "job_id": 97169371650,
+        "job": "identity-guard",
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "PRE_STEP_EXECUTION_ADMISSION_FAILURE",
+        "test_credit": 0
+      }
+    ],
+    "reason": "Both GitHub jobs failed before any visible steps, which is execution-admission failure rather than semantic test failure. The exposed Vercel connector has no Sandbox create/start/exec action."
+  },
+  "coordination": {
+    "pre_inference_compositor": "PR #1275 remains the canonical draft lane; not duplicated.",
+    "duplicate_materializer": "PR #1284 is already closed as superseded/duplicate; no second pre-inference path retained.",
+    "capability_binding": "Merged PR #1279 plus current-main ancestry fusion reused; not duplicated.",
+    "downstream_identity_guard": "Merged PR #1277 reused; not duplicated.",
+    "hcu": "NO_CHANGE_NON_DUPLICATE: active HCU lanes own that surface; exact KVM4-equivalent runtime capacity remains unverified.",
+    "unusual_experiment": "NO_NEW_UNUSUAL_EXPERIMENT_BY_THIS_ORGAN; cross-organ macrocycle uniqueness remains UNRESOLVED_NO_UPSTREAM_ID."
+  },
+  "next_gate": "Fresh-main integrate this bootstrap helper into ProfilePipelineRuntime._db/pipeline_init, then wire exactly one pipeline_cognitive_fabric_admit handler through the current active-turn + capability-binding + PR #1275 compositor path and execute exact integrated bytes in an authorized isolated executor.",
+  "safety": {
+    "free_only": true,
+    "together_used": false,
+    "paid_execution": false,
+    "training": false,
+    "vps_or_self_hosted_testing": false,
+    "secrets_persisted": false
+  }
+}

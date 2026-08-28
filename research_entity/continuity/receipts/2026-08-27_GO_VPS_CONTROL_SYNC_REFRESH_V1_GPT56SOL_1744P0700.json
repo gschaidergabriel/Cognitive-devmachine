@@ -1,0 +1,38 @@
+{
+  "schema": "GO_VPS_CONTROL_SYNC_REFRESH_RECEIPT/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "trigger": "go",
+  "target_architecture": "autonomous self-organizing Xeno/HCU shared-state fabric",
+  "observed_supervisor_epoch_before_change": "9.13",
+  "observed_frontier": "P0_DEGRADED_VPS_CONTROL_SYNC_MUST_BE_REESTABLISHED_BEFORE_ANY_RUNTIME_MUTATION",
+  "source_change": {
+    "path": "tools/vps_control_sync_refresh_v1.py",
+    "commit": "ed247bc6837ebfa206000ad52e915994d782ec5f",
+    "purpose": "Safely recover a stale clean VPS checkout using explicit GitHub HTTPS control transport, validate current FREE_ONLY/HARD_OFF authority from the fetched remote commit before checkout mutation, and permit only a clean fast-forward."
+  },
+  "safety_properties": [
+    "explicit HTTPS Git transport; checkout configured SSH remote is not trusted",
+    "dirty checkout fails closed",
+    "diverged/non-fast-forward checkout fails closed",
+    "remote Supervisor/Provider Admission epoch coherence required before refresh",
+    "all provider admissions must be false",
+    "Together forbidden and no paid fallback required",
+    "critical quiescence/monitoring/GRID10 source hashes bound",
+    "no runtime process mutation",
+    "no provider calls",
+    "no provider secret lookup",
+    "--apply required for the fast-forward itself"
+  ],
+  "credit": {
+    "source_progress": true,
+    "repository_bound_runtime_pass": false,
+    "runtime_control_transport_pass": false,
+    "runtime_quiescence_pass": false,
+    "physical_grid10_credit": 0,
+    "hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "On the owning VPS, run vps_control_sync_refresh_v1.py without --apply first. If it reports only stale_clean_checkout_safe_fast_forward_available and the remote authority is coherent HARD_OFF, rerun with --apply. Only after CONTROL_SYNC_REFRESH_PASS run restart-authority-v4 read-only; do not kill or restart anything from this receipt alone."
+}

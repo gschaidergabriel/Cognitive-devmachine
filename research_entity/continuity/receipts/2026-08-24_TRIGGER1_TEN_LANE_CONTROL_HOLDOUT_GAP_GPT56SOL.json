@@ -1,0 +1,132 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "forschungsbefehl_1",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_write": "7d265254eb08dd3501bc3de3925fe62dd7265a49",
+  "owner_trigger_contract": {
+    "directive": "research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json",
+    "contract": "research_entity/continuity/TRIGGER_ONE_JSPACE_STEERING_CONTRACT.md",
+    "parallel_lanes": 10,
+    "go_atomic_lease_repurposed": false,
+    "required_controls": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM"
+    ],
+    "calibration_holdout_disjoint_required": true
+  },
+  "execution_attempt": {
+    "exact_trigger_launcher": "bash tools/trigger1_jspace_research.sh",
+    "local_git_clone": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "provider_model_network_io": false,
+    "provider_credential_read": false,
+    "real_activation_or_cvec_intervention": false,
+    "classification": "TOOL_INFRASTRUCTURE_SURFACE_UNAVAILABLE_NOT_PRODUCT_FAILURE"
+  },
+  "retained_donor": {
+    "pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "head": "4a63e5c61371665947da3142209d5a3737cee003",
+    "comment_id": 5396448931,
+    "bridge": "the artefact/MicroEntity/hcu/jspace_llamacpp_cvec_bridge_v1.py",
+    "search_harness": "the artefact/MicroEntity/hcu/jspace_activation_steering_search_v1.py"
+  },
+  "ten_lane_results": [
+    {
+      "lane": "runtime_surface",
+      "result": "LOCAL_LLAMA_CPP_CVEC_REMAINS_STRONGEST_DIRECT_INTERVENTION_TARGET",
+      "evidence": "The retained donor has a deterministic JSPACE_VECTOR_CONTROL_ABI/v1 to llama.cpp cvec bridge; current llama.cpp exposes actual control-vector CLI/C API surfaces. Hosted text-completion APIs are not treated as hidden-state steering."
+    },
+    {
+      "lane": "adapter_identity",
+      "result": "SOURCE_BINDING_STRONG_RUNTIME_CONSUMPTION_STILL_UNPROVEN",
+      "evidence": "Bridge binds packet/basis/role/checkpoint/llama.cpp source/model dimensions/layer range/strength/raw cvec digest; model-runtime consumption and invocation-owned application identity remain separate executable gates."
+    },
+    {
+      "lane": "layer_localization",
+      "result": "CALIBRATION_ONLY_SELECTION_REQUIRED",
+      "delta": "Select layer/range only on a declared calibration split and freeze it before holdout."
+    },
+    {
+      "lane": "gain_calibration",
+      "result": "CALIBRATION_ONLY_SIGNED_GAIN_REQUIRED",
+      "delta": "Use a bounded sign-paired gain grid on calibration only; freeze gain before holdout and preserve off-target measurements."
+    },
+    {
+      "lane": "sign_flip_control",
+      "result": "ALREADY_PRESENT_IN_REVIEWED_DONOR_HARNESS",
+      "evidence": "The harness requires a sign-paired alpha grid and compares the selected direction to the opposite signed alpha."
+    },
+    {
+      "lane": "null_control",
+      "result": "ALREADY_PRESENT_IN_REVIEWED_DONOR_HARNESS",
+      "evidence": "The exact zero vector is applied at the selected coordinate and the hook receipt must show no activation change for the physical no-op control."
+    },
+    {
+      "lane": "orthogonal_control",
+      "result": "OWNER_REQUIRED_CONTROL_NOT_ESTABLISHED_BY_CURRENT_RANDOM_CONTROL_NORMALIZER",
+      "evidence": "Reviewed source enforces equal L2 norm, dimension, uniqueness and target/sign non-aliasing for random controls but does not require target dot control approximately zero.",
+      "delta": "Add deterministic orthogonal-same-norm construction/validation with fixed identity, dot-product tolerance, equal-norm check and exact digest."
+    },
+    {
+      "lane": "permuted_control",
+      "result": "EXPLICIT_OWNER_REQUIRED_CONTROL_PATH_NOT_OBSERVED",
+      "delta": "Add deterministic coordinate-permuted same-norm control with permutation identity/digest and identity/target/sign alias rejection."
+    },
+    {
+      "lane": "seed_holdout_reproduction",
+      "result": "CALIBRATION_HOLDOUT_BOUNDARY_GAP",
+      "evidence": "Reviewed search selects best layer/alpha and evaluates search success on the same prompt/seed evaluation surface; no explicit disjoint calibration-to-frozen-holdout promotion boundary was observed.",
+      "delta": "Split calibration search from frozen holdout evaluation; no layer/range/gain changes after holdout begins; report fixed-seed replication rate and strongest counterexample."
+    },
+    {
+      "lane": "receipt_chain_and_delta_forge",
+      "result": "NONCOMPETING_DONOR_DELTA_RECORDED",
+      "delta": "Extend the retained search harness/tests rather than create a second J-Space executor or state authority; preserve exact control identities and later bind native cvec application to invocation/ModelExecution/InferenceReceipt/J-Space receipts."
+    }
+  ],
+  "external_research": [
+    {
+      "source": "https://github.com/ggml-org/llama.cpp/blob/master/tools/cli/README.md",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "llama.cpp documents control-vector, scaled-control-vector and layer-range runtime arguments."
+    },
+    {
+      "source": "https://github.com/ggml-org/llama.cpp/blob/master/include/llama.h",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "llama.cpp exposes llama_set_adapter_cvec with explicit embedding dimension and layer range, providing a real model-runtime intervention surface."
+    },
+    {
+      "source": "https://huggingface.co/Qwen/Qwen3-0.6B-GGUF",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "The official Qwen3-0.6B GGUF repository remains a small local candidate compatible with llama.cpp; the donor pins its exact Q8_0 checkpoint identity separately."
+    }
+  ],
+  "coordination": {
+    "closed_unmerged_conflicting_pr": "gschaidergabriel/clay-global-research-entity#1536",
+    "classification": "NO_ACTIVE_GO_LEASE_OVERRIDE_FOR_TRIGGER_1",
+    "reason": "The current owner directive states Trigger-1 is distinct from go and uses its own batch/lane identity; PR1536 that attempted to repurpose the go lease is closed unmerged."
+  },
+  "scientific_result": {
+    "status": "EXECUTABLE_SOURCE_DELTA_IDENTIFIED_REAL_MODEL_INTERVENTION_BLOCKED",
+    "strongest_new_finding": "The retained donor search harness is already stronger than the old sign/null-only version, but still does not establish the owner-required ORTHOGONAL_SAME_NORM, explicit PERMUTED_SAME_NORM and disjoint calibration-to-holdout boundaries needed for Trigger-1 promotion.",
+    "counterhypothesis": "A newer unreviewed donor/executor primitive may already implement these controls; if discovered, treat this as an indexing/discovery gap and fuse rather than duplicate.",
+    "next_exact_discriminator": "On the retained donor, add/fuse the missing control/holdout semantics and execute them at exact source. Then, on the first exposed authorized zero-cost instrumentable runtime, bind the exact J-Space packet through the cvec bridge into an invocation-owned native cvec application receipt and run frozen holdout across BASELINE/+VECTOR/SIGN_FLIP/NULL/ORTHOGONAL/PERMUTED with fixed seeds."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "direct_hidden_state_steering": false
+  }
+}

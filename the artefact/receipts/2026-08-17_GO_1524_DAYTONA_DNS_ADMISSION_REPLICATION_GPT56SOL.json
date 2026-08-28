@@ -1,0 +1,52 @@
+{
+  "schema": "clayverse.execution-admission-receipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:24:00+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "owner_daytona_directive_observed": "62279c408afef0d5b8d47c71ff484ace6a28517a",
+  "main_observed_before_probe": "62279c408afef0d5b8d47c71ff484ace6a28517a",
+  "main_observed_before_receipt_write": "19ffa340fde331174a923ba07487857892c55d9b",
+  "provider": "Daytona",
+  "purpose": "deterministic fallback admission/connectivity replication before any product assertion",
+  "execution": {
+    "orchestration_surface": "current ChatGPT isolated non-production container",
+    "dns_probe_hosts": ["app.daytona.io", "proxy.app.daytona.io"],
+    "app_daytona_io_dns": "TEMPORARY_FAILURE_IN_NAME_RESOLUTION",
+    "proxy_app_daytona_io_dns": "TEMPORARY_FAILURE_IN_NAME_RESOLUTION",
+    "https_probe": {
+      "target": "https://app.daytona.io/api",
+      "http_status": 0,
+      "curl_error": "Could not resolve host: app.daytona.io"
+    },
+    "provider_contact_reached": false,
+    "authentication_attempted": false,
+    "api_key_sent": false,
+    "sandbox_create_attempted": false,
+    "sandbox_started": false,
+    "product_assertions_reached": false,
+    "product_runtime_credit": 0
+  },
+  "classification": "ORCHESTRATION_NETWORK_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT",
+  "claims": {
+    "daytona_unavailable": false,
+    "clayverse_test_fail": false,
+    "clayverse_runtime_pass": false,
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "unusual_experiment": false,
+    "reason": "ordinary deterministic provider-admission replication; current go lacks a uniquely resolvable unusual-experiment lease identity"
+  },
+  "security": {
+    "secret_value_recorded": false,
+    "secret_value_echoed": false,
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_host_testing": false,
+    "together_api": false
+  },
+  "next_gate": "Use a worker/tool with outbound DNS/provider egress or a future direct Daytona connector; create one ephemeral Daytona Sandbox, verify python/_sqlite3/git, bind exact then-current GitHub source bytes, run focused deterministic regressions, capture stdout/stderr/exit/runtime identity, then stop/delete and persist a bounded receipt."
+}

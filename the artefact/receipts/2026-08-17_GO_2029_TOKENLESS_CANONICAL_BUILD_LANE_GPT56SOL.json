@@ -1,0 +1,51 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "local_time": "2026-08-17T20:29:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_at_cycle_start": "ccfb71b973e8312fc20b027fdd37941e48a50a7b",
+  "decision": "ABANDON_GITHUB_READ_TOKEN_AS_PRIMARY_BASELINE_PATH",
+  "source_candidate": {
+    "pull_request": 625,
+    "branch": "gpt56sol/go-tokenless-canonical-build-20260817",
+    "head": "d1aeff9034395a53526453037a0da10f05b094c8",
+    "classification": "SOURCE_CANDIDATE_UNEXECUTED"
+  },
+  "changes": [
+    "baseline ClayVerse Dockerfile no longer requires EntityOS bytes when CLAYVERSE_ENABLE_ENTITYOS_EXEC=0",
+    "optional EntityOS bytes stage under ignored build-assets/entityos and remain digest/size/lock bound when supplied",
+    "staged EntityOS without explicit ENTITYOS_SHA256 fails closed",
+    "default-deny OCI build context remains allowlisted",
+    "static packaging/build-context contract tests added without claiming runtime evidence"
+  ],
+  "vercel": {
+    "team": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "projects_observed": ["dr-unterweger"],
+    "canonical_research_project_present": false,
+    "primary_blocker": "VERCEL_CANONICAL_RESEARCH_PROJECT_NOT_CONNECTED",
+    "connector_can_create_or_relink_git_project": false
+  },
+  "retained_lanes": {
+    "611": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "622": "84f0f17b42b31bb64ad902e619dd4d26894dcead",
+    "623": "daf48f2ccf7b07cb10ea4d397b34b44a4c6895e5",
+    "602": "d6f2f40af2e4ff8bc413df139895dd5f2935cb50",
+    "dr_unterweger_810": "78d92753d9442c66c3ffcff127c31faa98ffd622"
+  },
+  "old_credential_controller": {
+    "status": "RETAINED_LEGACY_CONTROLLER_EVIDENCE_NOT_PRIMARY",
+    "last_observed_vercel_deployment": "dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "next_discriminator": "Connect gschaidergabriel/clay-global-research-entity directly as a Vercel Git project/rooted at the artefact build path, then execute PR625 baseline in authorized Vercel Sandbox/OCI flow without GITHUB_READ_TOKEN; after baseline OCI identity is captured, rejoin #611/#622/#623 and continue exact product gates.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT",
+  "safety": {
+    "vps_or_self_hosted_test": false,
+    "production_host_test": false,
+    "together_api": false,
+    "paid_or_final_training": false,
+    "secret_persisted": false
+  },
+  "whole_product_acceptance": "IN_PROGRESS"
+}

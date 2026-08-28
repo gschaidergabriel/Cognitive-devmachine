@@ -1,0 +1,143 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_SEMANTIC_SIMPLEX_SUBSPACE/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "e2fe24ff7b346cc17310be9f8c74fcc512fcc82a",
+  "scope": "QWEN3_0_6B_JSPACE_SEMANTIC_DIMENSIONALITY_AND_CLASS_SPECIFIC_CAUSALITY",
+  "observed_parent_evidence": {
+    "native_component_pass_commit": "46cd012d079b36e501b1262fda52911a99839674",
+    "native_component_status": "NATIVE_LLAMA_CPP_CVEC_MODEL_SPECIFIC_NONTERMINAL_CAUSAL_COMPONENT_PASS_ONLY",
+    "semantic_target_guard_commit": "ba543040700a06efb9a537380c453eee0c30f3b8",
+    "semantic_target_guard_test_commit": "e2fe24ff7b346cc17310be9f8c74fcc512fcc82a",
+    "lexical_deconfound_research_commit": "25907c4413c264d40067f56bc1b5417341b80a76",
+    "current_one_dimensional_semantic_contrast": "AFFIRMATIVE - 0.5*(NEGATIVE + NEUTRAL)",
+    "credit_boundary": "No J-Space model, full-HCU, whole-EntityOS, training or canonical-semantics credit is implied."
+  },
+  "new_counterhypothesis": {
+    "id": "H0_ONE_DIMENSIONAL_COLLAPSE_OF_A_MULTI_DIMENSIONAL_SEMANTIC_STATE_SPACE",
+    "statement": "AFFIRMATIVE, NEGATIVE and NEUTRAL need not lie on one latent line. Collapsing NEGATIVE and NEUTRAL into one averaged opposite pole can produce a reproducible AFFIRMATIVE steering effect while hiding a second independent semantic degree of freedom.",
+    "why_material": "Three distinguishable semantic states generically require up to two independent centered contrasts. A single AFFIRMATIVE-versus-rest vector can establish one causal contrast without establishing that the reusable J-Space control geometry is one-dimensional.",
+    "falsifier": "Across lexically disjoint label-free families, the centered class-centroid geometry is rank-1 within a preregistered permutation/noise tolerance and class-specific intervention effects are explained by one signed axis on fresh holdout."
+  },
+  "primary_hypothesis": {
+    "id": "H1_LOW_DIMENSIONAL_SEMANTIC_SIMPLEX",
+    "statement": "The three semantic decision states occupy a stable low-dimensional class-selective subspace at the retained nonterminal site, with one or two causal dimensions that generalize across lexical families.",
+    "prediction": "Centered class centroids form a reproducible subspace whose singular spectrum exceeds a class-permutation null, and native interventions derived from class-centroid directions produce a class-selective treatment matrix rather than uniform requested-code uplift."
+  },
+  "proposed_discriminator": {
+    "name": "LABEL_FREE_THREE_STATE_SEMANTIC_SIMPLEX_NATIVE_CVEC",
+    "phase_0_freeze": [
+      "Keep the exact evidenced Qwen3-0.6B Q8_0 GGUF and pinned llama.cpp build/runtime identity.",
+      "Keep layer 20 as the preregistered first site unless a separate calibration-only successor law explicitly changes it.",
+      "Do not select dimensionality, gain, thresholds or metric after opening fresh holdout."
+    ],
+    "phase_1_label_free_family_centroids": [
+      "Use at least three lexically disjoint scenario families per semantic class with class identity stored in experiment metadata, not model-facing pole labels.",
+      "Compute one activation centroid per class and family at the same named nonterminal site.",
+      "Preserve exact prompt, activation, checkpoint, tokenizer, layer and runtime identities."
+    ],
+    "phase_2_rank_test": {
+      "centered_vectors": "For global class means mu_A, mu_N, mu_U, define c=(mu_A+mu_N+mu_U)/3 and class displacements s_i=mu_i-c. These sum to zero and span at most two dimensions.",
+      "orthogonal_parameterization": "Equivalent preregistered Helmert-like basis: h1=normalize(mu_A-0.5*(mu_N+mu_U)); h2=normalize(project_perpendicular_to_h1(mu_N-mu_U)).",
+      "rank_statistic": "Compare singular values sigma1 and sigma2 of family-centered class contrasts against a deterministic class-assignment permutation null and leave-one-family-out stability.",
+      "decision": "If sigma2 is not distinguishable from null, retain a one-dimensional model. If sigma2 is reproducibly above null, require a two-dimensional semantic subspace for promotion claims."
+    },
+    "phase_3_class_specific_native_interventions": {
+      "directions": "Use equal-norm class-centroid displacements s_A, s_N, s_U, or their exactly equivalent coordinates in the frozen orthonormal basis; no output-label-derived direction is allowed.",
+      "runtime": "Serialize each selected direction through the same pinned native llama.cpp cvec path with exact bytes and successful llama_set_adapter_cvec receipt before decode.",
+      "controls": [
+        "BASELINE",
+        "CLASS_DIRECTION",
+        "SIGN_FLIP",
+        "NULL_VECTOR",
+        "ORTHOGONAL_SAME_NORM",
+        "PERMUTED_SAME_NORM",
+        "LABEL_ONLY_NUISANCE_VECTOR"
+      ]
+    },
+    "phase_4_independent_evaluation_counterbalance": {
+      "layout": "Cross three requested semantic targets with independently rotated A/B/C output-code mappings inside each fresh lexical family.",
+      "freshness": "Evaluation families are disjoint from basis and calibration families and remain unopened until all calibration/rank decisions are frozen.",
+      "metric": "For each case use mapped-target logit margin versus the mean of the other two code logits."
+    },
+    "phase_5_primary_causal_matrix": {
+      "definition": "D[i,j] = mean(margin under class-direction intervention i for requested class j - matched baseline margin for class j).",
+      "generic_compliance_signature": "Rows of D show broadly positive uplift across requested classes with weak diagonal selectivity.",
+      "class_specific_signature": "For every intervention i, D[i,i] exceeds the mean off-diagonal effect by a preregistered calibration-derived margin, and nuisance controls do not reproduce this diagonal advantage.",
+      "rank_check": "After removing row/column nuisance means, compare the effective rank of D with the representation-space rank decision; disagreement is negative evidence against a simple shared semantic control geometry."
+    },
+    "phase_6_sign_and_off_target_checks": [
+      "SIGN_FLIP must change the preregistered class-selectivity pattern rather than merely lower all logits.",
+      "NULL_VECTOR remains baseline-like.",
+      "Orthogonal/permuted same-norm controls must not reproduce class-selective diagonal structure.",
+      "Label-only nuisance control must not reproduce the semantic matrix.",
+      "Run structurally matched nonsemantic codebook tasks to bound generic code-emission/instruction-following drift."
+    ]
+  },
+  "scientific_advantage_over_single_axis": [
+    "Directly tests whether NEGATIVE and NEUTRAL are genuinely one opposite pole or separable latent states.",
+    "Rejects generic compliance using a full intervention-by-target matrix instead of one pooled affirmative contrast.",
+    "Provides an empirical criterion for whether J-Space control should remain a single vector or graduate to a small subspace without assuming dimensionality in advance.",
+    "Aligns representation geometry with causal behavior: a representation-only second dimension receives no causal credit unless its intervention effect survives fresh holdout and nuisance controls."
+  ],
+  "external_primary_inputs": [
+    {
+      "source": "Turner et al., Steering Language Models With Activation Engineering",
+      "arxiv": "2308.10248",
+      "use": "Supports direct residual-stream activation intervention as a causal steering mechanism."
+    },
+    {
+      "source": "Panickssery et al., Steering Llama 2 via Contrastive Activation Addition",
+      "arxiv": "2312.06681",
+      "use": "Supports contrastive activation directions and signed inference-time intervention."
+    },
+    {
+      "source": "Stolfo et al., Improving Instruction-Following in Language Models through Activation Steering",
+      "arxiv": "2410.12877",
+      "use": "Demonstrates that activation steering can enhance generic instruction adherence, keeping compliance as a live counterhypothesis."
+    },
+    {
+      "source": "Braun et al., Understanding (Un)Reliability of Steering Vectors in Language Models",
+      "arxiv": "2505.22637",
+      "use": "Supports cross-family direction-coherence and per-example sign/reliability checks rather than mean-only conclusions."
+    },
+    {
+      "source": "Torop et al., Inverted Detection and Control in Steering Vectors",
+      "arxiv": "2608.02957",
+      "use": "Supports explicit separation of representation discrimination from causal control and sign validation."
+    },
+    {
+      "source": "SteerFair / latent-space debiasing work",
+      "arxiv": "2406.03631",
+      "use": "Provides precedent for combining multiple representation directions with an orthonormalized subspace rather than blindly summing correlated directions."
+    }
+  ],
+  "hcu_jspace_implication_if_verified": {
+    "current_abi": "Do not change canonical JSPACE_VECTOR_CONTROL_ABI/v1 from research alone.",
+    "possible_successor": "If rank-2 causal evidence is verified, consider an additive successor packet carrying an orthonormal basis plus bounded coefficient vector and exact basis/runtime receipts, while keeping canonical truth/effect authority unchanged.",
+    "promotion_boundary": "Subspace geometry is a candidate/measurement until exact native causal evidence passes; no model-generated geometry mints truth."
+  },
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No canonical shared immutable macrocycle/request identity plus create-only unusual-experiment lease was available for a new native intervention in this standalone research run."
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "existing_native_llamacpp_cvec_component_credit_preserved": true,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Adds a dimensionality falsifier above the current compliance and lexical-confound gates: test whether the three semantic decision states are genuinely one-dimensional or require a two-dimensional causal subspace, using label-free cross-family centroids, a permutation-null rank decision and a class-intervention-by-target matrix.",
+  "next_exact_action": "Implement a deterministic source-only simplex/rank analysis capsule over label-free calibration activations first. It must decide ONE_DIMENSIONAL_SUPPORTED vs TWO_DIMENSIONAL_REQUIRED vs UNRESOLVED without opening fresh holdout. Only after that, and only with canonical unusual-experiment coordination, execute the corresponding native cvec class-selectivity matrix."
+}

@@ -1,0 +1,53 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "executor": {
+    "identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "head_observed_after_delta": "f516753f5478ef52120336633ac8606999d30142",
+    "commits": [
+      "8f9452979b1cdd0e1f4f488e4dba314dcaf706ac",
+      "66bb5c5152cd4ea96c2e16466f3673897f13ca81",
+      "229e7063da48d67baf3d9140524a1b9e2d477488",
+      "683b84f0ae9bbf6593189d9dc40cf617de65dfe8"
+    ]
+  },
+  "delta": {
+    "permission_guard": "pre-rebind Sandbox permission is immutable false; ready state must use separate source_rebind_complete=true and sandbox_create_permitted_after_source_rebind=true",
+    "promotion_guard_v2": "binds donor 511d, exact 17 source/test/transitive blobs, exact fixed command, all 14 verbose regression identities, SECRET_FENCE, no failure/skip/expected-failure markers, and FREE_ONLY cost-gate-before-Sandbox ordering",
+    "prevercel_build": "exact donor guard -> successor promotion guard v2 -> pre/post permission guard -> exclusive executor guard",
+    "route_unquarantined": false,
+    "sandbox_runtime_executed": false,
+    "runtime_credit_change": 0
+  },
+  "remaining_gate": "The global executor guard still intentionally rejects the non-quarantine branch. Update that branch to the same successor-ready semantics, then atomically promote contract+route only if the full static gate remains coherent. Execution afterward remains conditional on admitted FREE_ONLY Vercel Hobby included-tier availability.",
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "force_push_used": false,
+    "duplicate_executor_lane_created": false
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED"
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Append-only receipt avoids clobbering high-churn parallel current-facing state."
+  }
+}

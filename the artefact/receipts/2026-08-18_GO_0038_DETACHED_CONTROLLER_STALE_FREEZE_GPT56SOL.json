@@ -1,0 +1,80 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "user_trigger_local_minute": "2026-08-18T00:19+07:00",
+  "observed_at_local": "2026-08-18T00:38+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "6ade26c1cd89360f3caa3ef994b14a581a916a46",
+  "classification": "CONTROLLER_REPAIRED_RUNTIME_STILL_BLOCKED_BY_OWNER_CREDENTIAL_AND_MOVING_FREEZE",
+  "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+  "controller_pr": 810,
+  "observed_control_plane_failure": {
+    "commit": "60515cf1c8a321ec4da0ea5216208bc0c10582ce",
+    "classification": "VERCEL_CONTROL_PLANE_ADMISSION_FAILURE_NOT_CLAYVERSE_TEST_FAILURE",
+    "detail": "Preview rejected maxDuration 1800 as invalid for the current plan"
+  },
+  "controller_repairs_fused": [
+    "Vercel function budget reduced to an admitted 300-second control-plane envelope",
+    "long source/regression/EntityOS/OCI work moved to a detached command inside one named Vercel Sandbox Firecracker guest instead of one long serverless HTTP request",
+    "owner-held scoped GitHub read token is forwarded only to the one private-source fetch command and a fresh process asserts post-fetch GITHUB_READ_TOKEN absence",
+    "detached command lifetime is explicitly bounded independently of the 300-second function lifetime",
+    "failure cleanup is destructive; OCI-stage PASS intentionally retains the same appliance for downstream Vault/Mistral/effect/recovery gates",
+    "status route distinguishes RUNNING_OR_STARTING, OCI_STAGE_PASS and TERMINAL_FAIL and never promotes OCI-stage PASS to final_test_of_tests_pass or whole_product_pass",
+    "duplicate local adapter lane was removed in favor of the single retained detached-batch path",
+    "source guard binds exact controller/status/batch bytes and fail-closes on drift"
+  ],
+  "controller_commits_observed_in_this_cycle": {
+    "plan_budget": "0442c4260462c947a004715e5cdb0df62ba5d46f",
+    "plan_budget_parallel_fusion": "b50b27516dd79949167daea3842fbe78eecbc0a6",
+    "detached_batch_lane": "71c44fc782fa9fc343d3de350b5ea2c30e8649ae",
+    "detached_timeout_and_cleanup": "5986dcbfe290f3c2f444aaa0a1cfdca3c7fcfc10",
+    "guard_reentry_by_this_organ": "40de2743b9c5b823dc567e6e04abb2d582337ce9",
+    "latest_controller_head_observed": "99c55e5b7f553e59fcf4cd4d5af34db9759e2ad0"
+  },
+  "deployment_evidence": {
+    "latest_exact_ready_observed_commit": "5986dcbfe290f3c2f444aaa0a1cfdca3c7fcfc10",
+    "deployment_id": "dpl_37KaiTaCCj2hFVSHYcCqWCpskfde",
+    "state": "READY",
+    "scope": "controller/source deployment admission only",
+    "newer_exact_head_runtime_credit": 0,
+    "protected_fetch_observation": "exact READY URL remained behind Vercel SSO; no bypass or credential synthesis was attempted"
+  },
+  "current_freeze_problem": {
+    "controller_guard_labels_candidate_pr": 682,
+    "controller_bound_candidate_sha": "6e8838651e39e181321e71a9a0b5b0f2bdfc5df1",
+    "controller_bound_candidate_tree": "dbc4c97c578a8b06782936fe2658f7a56bca8dc0",
+    "pr682_live_head_observed": "10b06407e5d7528c8244ea40965c554ec052f4fb",
+    "pr682_live_head_contains_new_product_test_bytes": true,
+    "new_product_test_examples": [
+      "turn_lifecycle Stop generation fence",
+      "Mistral final-provider manifest repair and coherence regression"
+    ],
+    "consequence": "The one-shot candidate-head verifier must fail closed against the stale bound SHA. Do not spend owner credentials until overlapping fusion settles and PR810 is rebound once to the explicitly adjudicated final product/test-byte closure."
+  },
+  "execution_evidence_added": {
+    "private_source_runtime": 0,
+    "full_regression_runtime": 0,
+    "exact_oci_build_digest": 0,
+    "in_image_final_probe": 0,
+    "real_mistral_vault": 0,
+    "effect_entityos_round_trip": 0,
+    "tier1_recovery": 0,
+    "tier2_recreation": 0,
+    "whole_clayverse": 0
+  },
+  "credential_boundary": {
+    "owner_scoped_github_read_token_available_to_this_organ": false,
+    "token_synthesized_or_searched_in_logs_source": false,
+    "required_next_credential_action": "Owner supplies the scoped read-only GitHub token only through the exact deployed runtime POST after final source freeze/rebind."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable go-request identifier is exposed for the exact user-triggered macro-cycle; ordinary deterministic controller/source work continued instead."
+  },
+  "next_exact_step": "Settle the retained product/test fusion, identify the final exact PR682 or successor head/tree, rebind the single PR810 detached controller and source guard exactly once, obtain READY on that exact controller, then use the owner-held scoped GitHub token for the private source fetch and execute the detached Firecracker source/regression/EntityOS/OCI stage. Preserve the OCI-stage appliance for the remaining approved Vault-backed Mistral, EffectGate/EntityOS, Tier-1/Tier-2 recreation, auth/PTY/dual-user and recovery gates only if the prior stage is green.",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

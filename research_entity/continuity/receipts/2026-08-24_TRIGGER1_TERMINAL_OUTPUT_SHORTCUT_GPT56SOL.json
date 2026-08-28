@@ -1,0 +1,54 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_DELTA_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "1",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_at_discovery": "5a664b024452106b55ffa9bee97598d0e8ebd19f",
+  "research_question": "Can the new provider-independent Qwen3-0.6B local activation fastpath establish J-Space causal mechanism credit rather than only an actuator/output projection effect?",
+  "runtime_execution": {
+    "executed_by_this_organ": false,
+    "reason": "CURRENT_CHAT_CONTAINER_CANNOT_RESOLVE_GITHUB_OR_HUGGINGFACE_NETWORK; NO_SEPARATE_ADMITTED_ZERO_COST_LOCAL_MODEL_RUNTIME_BRIDGE_EXPOSED",
+    "classification": "INFRASTRUCTURE_TOOL_SURFACE_UNAVAILABLE_NOT_SCIENTIFIC_NEGATIVE",
+    "provider_model_network_io": false,
+    "provider_credentials_read": false,
+    "paid_or_unknown_cost_execution": false
+  },
+  "source_observation": {
+    "executor": "tools/trigger1_local_qwen06_activation_api_execute.py",
+    "model": "Qwen/Qwen3-0.6B",
+    "model_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "activation_site": "model.model.norm:output:last_token",
+    "vector_construction": "lm_head(A)-0.5*(lm_head(B)+lm_head(C)), normalized",
+    "target_score": "logit(A)-0.5*(logit(B)+logit(C))",
+    "classification": "TERMINAL_OUTPUT_PROJECTION_SHORTCUT"
+  },
+  "causal_analysis": {
+    "observed_code_relation": "The intervention is applied to the final normalized hidden state immediately before the linear output projection, and the steering vector is constructed from that same output projection's A/B/C weight rows.",
+    "derived_identity": "Let u=w_A-0.5*(w_B+w_C), v=u/||u||, h'=h+g*v, and s(h)=u dot h + constant. Then s(h')-s(h)=g*u dot v=g*||u||. Positive gain therefore raises the declared target score by construction and sign flip lowers it by construction, without requiring any downstream transformer computation or workspace mechanism.",
+    "matched_control_implication": "ORTHOGONAL_SAME_NORM is explicitly constructed orthogonal to the target vector and therefore is expected not to reproduce the target-score increase at this terminal site. PERMUTED_SAME_NORM also does not provide an independent mechanistic falsifier. The six-control family can therefore pass while the only causal fact established is terminal output steering.",
+    "counterhypothesis": "A positive Trigger-1 fastpath result can be fully explained by direct output-head geometry rather than HCU/Global-J-Space causal computation.",
+    "verdict": "HARD_CONFOUND_FOUND"
+  },
+  "repair": {
+    "branch": "trigger1/output-head-shortcut-guard-20260824",
+    "promotion_gate_commit": "1a3d48a5825e60a798f76a50e03b6d9ee7692dbf",
+    "regression_commit": "7a673ec7aa3e71d5d17494ee8cc73065fa3e2820",
+    "policy": "Terminal lm_head/output-head/final-norm-output intervention sites remain valid technical positive controls but fail closed for mechanism and Trigger-1 goal promotion credit.",
+    "next_experiment": "Move the intervention to a non-terminal internal transformer site with substantive downstream model computation; freeze site/gain on calibration only; then rerun BASELINE, +VECTOR, SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM and PERMUTED_SAME_NORM on disjoint holdout. Prefer a vector basis not algebraically identical to the scored output-head contrast, or explicitly add an independent-basis/control family."
+  },
+  "evidence_scope": "SOURCE_LEVEL_CAUSAL_DISCRIMINATOR_AND_FAIL_CLOSED_GATE_REPAIR_ONLY",
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "ClayExternalSecurityReview/v1",
+  "trigger": "go",
+  "reviewed_at": "2026-08-17T22:50:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "subject": "Kata runtime-rs final MicroVM security floor",
+  "upstream_evidence": [
+    {
+      "source": "kata-containers/kata-containers GHSA-2gv2-cffp-j227",
+      "finding": "Critical guest-root to host-root escape via virtiofs; runtime-rs <= 3.30.0 affected; 3.31.0 patched."
+    },
+    {
+      "source": "kata-containers/kata-containers SECURITY.md",
+      "finding": "Kata is rolling-release; only the latest monthly release series receives security fixes and prior releases are unsupported."
+    }
+  ],
+  "current_contract_blob": "afff2c3f66961316f6ad554c3aaebd21973481be",
+  "contract_assessment": "NO_CHANGE",
+  "reason": "Current main already forbids runtime-rs <= 3.30.0, explicitly treats 3.31.0 only as a historical minimum rather than a permanent safety claim, and requires fresh upstream advisory/release review plus exact runtime/configuration/guest-kernel attestation immediately before final acceptance.",
+  "acceptance_warning": "Do not infer that 3.31.0 is sufficient for a future deployment merely because it patched this advisory; final acceptance must use then-current supported upstream state and verify the exact installed configuration.",
+  "runtime_credit": 0,
+  "whole_product_pass": false
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_after_merge": "67416a37ad2f745584e33c694fa765fb3f85588c",
+  "merged_pr": 1765,
+  "merged_commit": "67416a37ad2f745584e33c694fa765fb3f85588c",
+  "delta": {
+    "layer": "DATASET_CONTROL_PLANE",
+    "description": "Serialize Forge->Distillery replay lookup, measured-evidence conflict classification, packet insertion and counters as one per-evaluation SQLite write transaction by acquiring BEGIN IMMEDIATE before replay lookup.",
+    "files": [
+      "tools/ingest_forge_accepts_into_distillery.py",
+      "tests/test_forge_distillery_concurrent_replay_873.py",
+      ".github/workflows/go873-distillery-selfhosted-main-regression.yml"
+    ],
+    "regression_cases": [
+      "same stable execution plus envelope-only mutation => one admission plus one DUPLICATE",
+      "same stable execution plus changed measured evidence => one admission plus one REPLAY_IDENTITY_CONFLICT",
+      "distinct execution identities => both remain admissible",
+      "admit_one is entered only with an active write transaction"
+    ]
+  },
+  "evidence": {
+    "generic_sqlite_discriminator": "9ce8221be615858dbb2607a47b496578c3cc8c64",
+    "predecessor_exact_blob_distillery_component_receipt": "research_entity/continuity/receipts/2026-08-25_GO873_DISTILLERY_EXACT_SOURCE_LOCAL_REGRESSION_GPT56SOL.json",
+    "predecessor_component_tests": "17/17 PASS on the pre-atomic-replay exact blob set",
+    "new_atomic_replay_exact_source_runtime": "UNOBSERVED_AT_RECEIPT_WRITE",
+    "selfhosted_terminal_receipt_for_merge_sha": "NOT_OBSERVED_AT_RECEIPT_WRITE",
+    "classification": "SOURCE_AND_REGRESSION_DEFINITION_COMMITTED; NEW_CONCURRENCY_RUNTIME_CREDIT_ZERO_UNTIL_EXACT_SOURCE_EXECUTION"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: PR1765 merged the atomic concurrent replay admission repair into canonical main.",
+    "track_b": "ADVANCED_BY_FUSION: the same macrocycle retained one replay/provenance authority while current main also fused J-Space execution/replay/measured/envelope identity separation; no second HCU or Typed Entry truth/effect path was created.",
+    "track_c": "ADVANCED_AT_SOURCE_AND_DETERMINISTIC_REGRESSION_SCOPE: current main fused JSPACE_TRACE_ABI/v1 replay-safe execution identity instrumentation and 7/7 exact-blob deterministic trace regressions; model-specific causal runtime and training remain uncredited."
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0,
+    "duplicate_avoidance": "A separate local J-Space trace design was abandoned after current retained/main trace authorities were discovered; PR1765 modifies the existing Distillery admission authority only."
+  },
+  "artifact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md moved repeatedly in parallel during the macrocycle; whole-file connector replacement would risk clobbering newer concurrent content. Durable merge plus this append-only receipt preserve the delta without stale README overwrite."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Observe the exact-source self-hosted regression receipt for merge 67416a37ad2f745584e33c694fa765fb3f85588c and require concurrent_replay=success together with the existing replay/rebuild/live-promotion guards. Then close the repository-bound real Safe-Forge ACCEPT -> exactly one Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0 -> measured conflict +0 gate. Model-specific Qwen intervention remains atomic-lease gated."
+}

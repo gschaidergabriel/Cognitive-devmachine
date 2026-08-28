@@ -1,0 +1,81 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T22:54:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "scope": "microvm_networkpolicy_cni_enforcement_and_additive_policy_fence",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "live_fusion": {
+    "parallel_default_deny_repair": "CONFIRMS_DUPLICATE_NO_SECOND_PATH_CREATED",
+    "this_delta": "REFINES",
+    "reason": "the parallel repair added the default-deny NetworkPolicy; this delta closes the remaining enforcement-evidence gap by requiring an actually enforcing CNI/network plugin and complete additive selecting-policy inventory"
+  },
+  "source_writes": {
+    "contract_commit": "01b8360cb23135c29134b425121d9726cbc60893",
+    "test_commit": "43b0381861599446284432e3789b73530571c7cd"
+  },
+  "exact_git_blobs": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "2608f5ca9c18ff2682d137a099c7047966fb872c",
+    "the artefact/tests/test_microvm_deployment_contract.py": "5c2f48f7f97a2ef6d3ac1e5357a828ec4562ee3d"
+  },
+  "blob_reconstruction": {
+    "method": "reconstructed exact current GitHub file bytes in an isolated non-production container and verified Git blob SHA-1 before execution",
+    "all_three_blobs_match_github": true
+  },
+  "deterministic_regression": {
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "exit_code": 0,
+    "result": "6 passed in 0.11s",
+    "py_compile": "PASS"
+  },
+  "execution_environment": {
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "kernel": "Linux 6.18.35",
+    "arch": "x86_64",
+    "evidence_class": "authorized isolated non-production supporting exact-file mechanism execution"
+  },
+  "external_primary_evidence": {
+    "source": "official Kubernetes NetworkPolicy API/concept documentation",
+    "findings": [
+      "a default-deny policy with Ingress and Egress selects/isolate pods only when a network plugin implements NetworkPolicy enforcement",
+      "matching NetworkPolicies combine additively, so an additional broad allow policy can expand the effective allowed union",
+      "default-deny egress also blocks DNS unless an explicit egress allowance is added"
+    ]
+  },
+  "adversarial_result": {
+    "counterhypothesis": "the YAML can look fail-closed while the admitted cluster silently ignores NetworkPolicy or another selecting policy broadly re-opens traffic",
+    "source_repair": "final acceptance must identify the CNI/network-plugin identity/version, prove real default-deny behavior before allow policies, enumerate every selecting NetworkPolicy, bind reviewed allow-policy bytes, and prove representative undeclared ingress/egress remains denied",
+    "falsifier_still_required": "live target-cluster/Kata execution demonstrating enforcement and effective policy union"
+  },
+  "runtime_credit": {
+    "exact_oci": 0,
+    "kubernetes": 0,
+    "kata_microvm": 0,
+    "cni_networkpolicy_enforcement": 0,
+    "whole_clayverse": 0
+  },
+  "execution_frontier": {
+    "current_blocker": "retained Vercel Sandbox path has proven Sandbox.create, but exact private Research/EntityOS source staging remains blocked by absent host-side sensitive GITHUB_READ_TOKEN",
+    "credential_rule": "GITHUB_READ_TOKEN must remain in host-side Vercel Preview orchestration and must never be committed, logged, or forwarded into the disposable Sandbox",
+    "next_exact_gate": "after safe credential provisioning, refresh/rebind exact source once; run retained exact OCI build/runtime batch; capture accepted image digest; then execute the same digest under Kata/equivalent and prove NetworkPolicy-enforcing CNI identity, default-deny behavior, exact additive allow-policy inventory, required flows and denied undeclared flows"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "the exact user go trigger exposes only minute-precision immutable message time and no shared immutable request/turn id; deterministic regression and source review remain allowed",
+    "count_executed": 0
+  },
+  "non_claims": [
+    "no exact current-main full checkout PASS",
+    "no exact OCI image build or image digest",
+    "no live Kubernetes NetworkPolicy enforcement",
+    "no live Kata/microVM guest-kernel evidence",
+    "no Clerk/browser/PTY runtime evidence",
+    "no whole-product PASS"
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "schema": "mini-entity-native-profile-v2-parity-contract/v5",
+  "canonical_profile_schema": "clay-pipeline-profile/v2",
+  "canonical_pipeline": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+  "canonical_reference_runtime": "tools/clay_profile_pipeline_runtime.py",
+  "canonical_shipped_profile": "the artefact/blogpost_entity/presets/zero_blog.json",
+  "required_pipeline_phases": [
+    "pipeline_init",
+    "pipeline_profile_read",
+    "pipeline_state_read",
+    "pipeline_collect",
+    "pipeline_compile",
+    "pipeline_build_prompt",
+    "pipeline_cognitive_fabric_admit",
+    "inference_generate",
+    "pipeline_gate",
+    "pipeline_commit"
+  ],
+  "required_reference_effect_surface": [
+    "pipeline_init",
+    "pipeline_profile_read",
+    "pipeline_state_read",
+    "pipeline_collect",
+    "pipeline_compile",
+    "pipeline_build_prompt",
+    "pipeline_cognitive_fabric_admit",
+    "inference_generate",
+    "pipeline_gate",
+    "pipeline_commit"
+  ],
+  "legacy_reference_effects_to_deauthorize": [
+    "profile_load",
+    "provider_chat_json"
+  ],
+  "legacy_reference_methods_to_deauthorize": [
+    "_profile_load",
+    "_provider_chat_json"
+  ],
+  "required_reference_effect_semantics": {
+    "pipeline_profile_read": {
+      "method": "_pipeline_profile_read",
+      "required_method_body_tokens": [
+        "p[\"entity_db\"]",
+        "profile_hash",
+        "PROFILE_HASH_MISMATCH"
+      ],
+      "responsibility": "Read exactly one active runtime profile from MiniUnifiedDB, bind the read to entity_db, and fail closed on persisted profile-integrity mismatch."
+    },
+    "pipeline_cognitive_fabric_admit": {
+      "method": "_pipeline_cognitive_fabric_admit",
+      "required_method_body_tokens": [
+        "p[\"entity_db\"]",
+        "p[\"data\"]",
+        "inference_packet_digest",
+        "cognitive_fabric_receipt_digest"
+      ],
+      "responsibility": "Admit exactly one candidate-inference envelope through the single Zero workspace capsule -> InferencePacket -> Unified Cognitive Fabric chain, bound to current MiniUnifiedDB generation/turn/workspace provenance; missing, stale, abstained, or invalid admission fails closed and cannot mint truth/state/effect authority."
+    },
+    "inference_generate": {
+      "method": "_inference_generate",
+      "required_method_body_tokens": [
+        "p[\"inference\"]",
+        "UNKNOWN_INFERENCE_KIND"
+      ],
+      "responsibility": "Dispatch only the runtime-configured generic inference contract from the already-admitted Cognitive Fabric envelope and fail closed on an unadmitted inference kind; no provider-specific alternate effect path and no raw profile/prompt bypass."
+    }
+  },
+  "reference_runtime_effect_surface": {
+    "status": "FAIL_CLOSED_MISMATCH",
+    "missing_current_effects": [
+      "pipeline_profile_read",
+      "pipeline_cognitive_fabric_admit",
+      "inference_generate"
+    ],
+    "stale_current_effects": [
+      "profile_load",
+      "provider_chat_json"
+    ],
+    "missing_semantic_requirements": {
+      "pipeline_profile_read": [
+        "missing_method:_pipeline_profile_read"
+      ],
+      "pipeline_cognitive_fabric_admit": [
+        "missing_method:_pipeline_cognitive_fabric_admit"
+      ],
+      "inference_generate": [
+        "missing_method:_inference_generate"
+      ]
+    },
+    "stale_legacy_methods": [
+      "_profile_load",
+      "_provider_chat_json"
+    ],
+    "promotion_requires": "The canonical reference runtime must expose all current effect names, including pipeline_cognitive_fabric_admit, and implement their current state/payload responsibilities. Name-only aliases, sidecar UCF receipts, raw prompt/profile inference bypass, missing required method-body semantics, retained legacy alternate methods, or stale legacy effects keep admission fail-closed."
+  },
+  "reference_runtime_fresh_main_fusion": {
+    "status": "NARROW_FRESH_MAIN_EXTRACTION_REQUIRED",
+    "donor_policy": "Mechanisms may be extracted only onto freshly rebound current main. No stale donor branch is a whole-runtime promotion candidate.",
+    "donors": [
+      {
+        "pull_request": 727,
+        "role": "PREFERRED_MECHANISM_DONOR_ONLY",
+        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED",
+        "reusable_mechanisms": [
+          "db_resident_profile_read_with_integrity_check",
+          "generic_inference_generate",
+          "rfc6901_or_dotted_response_pointer_decoder",
+          "embedded_profile_secret_rejection",
+          "read_only_evidence_queries",
+          "local_exec_parent_environment_isolation"
+        ]
+      },
+      {
+        "pull_request": 728,
+        "role": "SECONDARY_MECHANISM_DONOR_ONLY",
+        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED",
+        "reusable_mechanisms": [
+          "db_resident_profile_shape",
+          "generic_inference_dispatch_shape"
+        ],
+        "do_not_copy_verbatim": [
+          "local_exec subprocess without an explicit child env",
+          "any response-pointer decoder that does not satisfy shipped /choices/0/message/content semantics"
+        ]
+      },
+      {
+        "pull_request": 1152,
+        "role": "COGNITIVE_FABRIC_CAUSAL_PATH_DONOR_ONLY",
+        "whole_branch_merge": "FORBIDDEN_STALE_AUTHORITY_CONTEXT",
+        "reusable_mechanisms": [
+          "zero_workspace_capsule_to_inference_packet_binding",
+          "strict_existing_ucf_ancestry_binding",
+          "pipeline_cognitive_fabric_admit_before_inference",
+          "packet_and_fabric_digest_reentry_into_gate_and_commit"
+        ]
+      }
+    ],
+    "preservation_matrix": [
+      {
+        "invariant": "neutral_db_init_before_profile_read",
+        "bound_source": "the artefact/blogpost_entity/test_clay_boot_order.py"
+      },
+      {
+        "invariant": "syntax_bound_effect_surface_admission",
+        "bound_source": "the artefact/blogpost_entity/check_structured_contract_sync.py"
+      },
+      {
+        "invariant": "effect_responsibility_semantics",
+        "bound_source": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json#required_reference_effect_semantics"
+      },
+      {
+        "invariant": "canonical_cognitive_fabric_before_inference_no_raw_bypass",
+        "bound_source": "the artefact/blogpost_entity/test_canonical_cognitive_fabric_path.py"
+      },
+      {
+        "invariant": "rfc6901_response_pointer_semantics",
+        "bound_source": "the artefact/blogpost_entity/presets/zero_blog.json#inference.response_pointer"
+      },
+      {
+        "invariant": "shipped_derived_expression_inputs_and_recursive_value_only_leak_gate",
+        "bound_source": "the artefact/blogpost_entity/test_reference_convergence_invariants.py"
+      },
+      {
+        "invariant": "local_exec_parent_environment_isolation",
+        "bound_source": "the artefact/blogpost_entity/test_reference_local_exec_security_invariant.py"
+      },
+      {
+        "invariant": "profile_integrity_and_active_secret_rejection",
+        "bound_source": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json#required_reference_effect_semantics"
+      },
+      {
+        "invariant": "exactly_once_generation_cas_atomic_commit",
+        "bound_source": "tools/clay_profile_pipeline_runtime.py"
+      },
+      {
+        "invariant": "single_canonical_runtime_no_v2_or_legacy_side_module",
+        "bound_source": "the artefact/blogpost_entity/test_reference_convergence_invariants.py"
+      },
+      {
+        "invariant": "fail_closed_native_v2_until_exact_runtime_receipt",
+        "bound_source": "the artefact/blogpost_entity/native/test_native_v2_parity_contract.py"
+      }
+    ],
+    "must_not_introduce": [
+      "second_profile_state_authority",
+      "second_cognitive_fabric_or_ucf_authority",
+      "external_profile_file_as_mandatory_runtime_state",
+      "provider_or_application_identity_in_executable",
+      "generic_host_shell_effect_path",
+      "study_or_presentation_side_path_required_for_reference_convergence"
+    ],
+    "promotion_requires": "Implement only the missing current responsibilities on freshly rebound current main, reuse the single existing UCF/InferencePacket authority chain, preserve every bound invariant, align the structured regression adapter to the three-argument DB-resident profile boundary, and obtain exact-source authorized isolated execution before reference/native parity promotion."
+  },
+  "required_source_adapters_from_shipped_v2": [
+    "json_snapshot",
+    "jsonl_cursor",
+    "sqlite_query"
+  ],
+  "required_probe_adapters_from_shipped_v2": [
+    "sqlite_catalog",
+    "sqlite_query"
+  ],
+  "required_expression_ops_from_shipped_v2": [
+    "add",
+    "clamp01",
+    "div",
+    "eq",
+    "if",
+    "not",
+    "or"
+  ],
+  "required_expression_aggregates_from_shipped_v2": [
+    "count_where",
+    "sum_where"
+  ],
+  "required_expression_ref_namespaces_from_shipped_v2": [
+    "derived",
+    "probes",
+    "sensors",
+    "sources"
+  ],
+  "required_gate_contract": [
+    "dynamic_output_contract",
+    "hash_echo",
+    "evidence_per_section",
+    "allowed_evidence_refs_only",
+    "known_state_claim_only",
+    "verified_state_claim_only",
+    "claim_overshoot_limit",
+    "metric_evidence_required",
+    "leak_pattern_rejection",
+    "active_secret_rejection",
+    "gate_before_commit"
+  ],
+  "required_compile_contract": [
+    "profile_driven_collection",
+    "profile_driven_canonical_probes",
+    "profile_driven_state_metrics",
+    "canonical_state_hash",
+    "packet_hash",
+    "allowed_evidence_refs",
+    "verified_quiet_only_when_required_sources_healthy",
+    "previous_continuity_in_prompt"
+  ],
+  "admission": {
+    "status": "FAIL_CLOSED_UNTIL_EXACT_PARITY",
+    "blocker": "CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY",
+    "runtime_receipt": null,
+    "promotion_requires": [
+      "canonical_reference_runtime_effect_names_and_semantics_match current pipeline including pipeline_cognitive_fabric_admit before reference-equivalent claims",
+      "cognitive_fabric_admission_reuses_single_existing_UCF_and_InferencePacket_chain_and_cannot_be_bypassed_by_raw_profile_or_prompt_inference",
+      "fresh-main reference convergence preserves the reference_runtime_fresh_main_fusion preservation_matrix",
+      "all_required_contracts_implemented_on_one_native_path",
+      "exact_source_bound_build_of_candidate",
+      "shipped_v2_profile_executes_with_reference-equivalent_compile_and_gate_semantics",
+      "adversarial_hash_evidence_claim_leak_secret_and_atomicity_matrix_passes",
+      "count_where_sum_where_and_sources_sensors_probes_refs_are_executed_not_degraded_to_unknown",
+      "profile_source_and_probe_adapters_are_executed_not_replaced_by_mini_entity_events_only",
+      "guard_removed_only_in_same_exact_candidate_that_has_parity_evidence"
+    ]
+  },
+  "known_rejected_partial_candidate": {
+    "pull_request": 851,
+    "reason": "Candidate removed the v2 blocker while its expression evaluator explicitly left count_where/sum_where and general sources/sensors/probes references unsupported and its collector/probe topology did not match the canonical profile-driven reference.",
+    "reuse_policy": "Gate/leak mechanisms may be extracted narrowly; whole-branch v2 admission must not be revived."
+  }
+}

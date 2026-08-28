@@ -1,0 +1,49 @@
+{
+  "schema": "CLAY_TRIGGER2_VPS_TRACK_B_STATUS_SUMMARY/v1",
+  "date": "2026-08-25",
+  "vps": "frank-api (31.97.117.141)",
+  "phases": {
+    "phase7_checkpoint_identity": {
+      "status": "PASS_PARTIAL",
+      "reason": "3 of 4 registry candidates (BASE, POSTTRAINED, JOSIEFIED_GABLITERATED_MEASURED) downloaded at pinned revisions, file-manifest+config+tokenizer SHA-256 computed, loaded via transformers with network disabled equivalent (HF_HUB_OFFLINE=1), architecture recorded. LEW_ABLITERATED_EXTERNAL (TARGET_EXTERNAL_UNMEASURED) intentionally untouched per PDF selection rule (do not select from model-card claims). No checkpoint winner declared."
+    },
+    "phase8_matched_baselines": {
+      "status": "PARTIAL",
+      "reason": "Only a MINIMAL 8-case single-candidate single-seed pilot run (JOSIEFIED_GABLITERATED_MEASURED only), NOT the full matched cross-candidate/calibration-holdout/worst-bucket contract in doc section 11. Notable honest finding: model FAILED both abstain_unknown cases (fabricated a precise stock price for an admittedly fictional company; gave a non-abstaining rambling answer instead of stating no information exists) rather than abstaining - flagged as genuine observed evidence, not fabricated."
+    },
+    "phase9_jspace_causal": {
+      "status": "NOT_ATTEMPTED",
+      "reason": "Requires a dedicated hidden-state-hook + causal-intervention framework with preregistered site bank, magnitude ladder, lesion/rescue, cross-encoding tests (doc section 12) - substantial engineering effort beyond this session's scope. Attempting a shallow version would risk producing misleading pseudo-evidence, contrary to the document's own zero-credit-until-proven doctrine. Left for dedicated follow-up."
+    },
+    "phase10_multiseed": {
+      "status": "NOT_ATTEMPTED",
+      "reason": "Formal 5-seed + numerical-environment-sensitivity protocol (doc section 13) not run; only single-seed deterministic (greedy) generation used throughout this session."
+    },
+    "phase11_hcu_variable_n": {
+      "status": "NOT_ATTEMPTED",
+      "reason": "Logical-N sweep / module-order permutation / DB-vs-simulation conflict / Claude-handoff-perturbation tests (doc section 14) not run in this session."
+    },
+    "phase12_resource_benchmarks": {
+      "status": "PASS_PARTIAL",
+      "reason": "Model load wall-time+peak RSS captured for all 3 loaded candidates. Context sweep (64/128/256/512 tokens, first-token latency, tokens/s, peak RSS) run for JOSIEFIED_GABLITERATED_MEASURED only - not repeated for BASE/POSTTRAINED. First-context-64 run showed a warmup artifact (17.4s first-token latency vs <10s on subsequent contexts) - noted as infra evidence, not model behavior. CPU-only, 4 cores, no GPU, no swap observed, peak RSS stayed under 2.4GB (well under 12GB budget)."
+    }
+  },
+  "resource_envelope_observed": {
+    "peak_disk_used_after_downloads_gb_approx": 143,
+    "disk_free_after_gb_approx": 51,
+    "peak_ram_used_gb_approx": 3.7,
+    "swap_used": "0 (none configured, no thrash observed)",
+    "vcpus": 4
+  },
+  "stop_rules_honored": [
+    "no full fine-tuning attempted",
+    "no paid/hosted inference providers used - all inference local CPU via transformers, FREE_ONLY",
+    "no checkpoint winner declared without matched pilot contract",
+    "model-card claims not used as selection evidence - only self-measured data recorded",
+    "no probe-accuracy promoted to J-Space causal credit (no causal work attempted)",
+    "no component PASS promoted to HCU/EntityOS/training PASS",
+    "no logical grid N reported (Phase 11 not attempted)",
+    "no model weights or raw tensors committed to git - only manifests/hashes/aggregated JSON",
+    "phase 16 (first positive pilot) explicitly not attempted - reserved for coordinator after both tracks reviewed"
+  ]
+}

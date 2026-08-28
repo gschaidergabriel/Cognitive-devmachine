@@ -1,0 +1,65 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_delta": "3b3deaf9dc55a525509b30be3f73f1f563adf941",
+  "finding": {
+    "classification": "HISTORICAL_BACKFILL_SINGLETON_COMPLETION_PATH_DEAD_END",
+    "statement": "Generation 0 was correctly quarantined against duplicate issue fan-out, but its canonical spec and claim still named a workflow that had been removed from main before a canonical semantic result was published. The canonical generation-0 result path remained absent. In parallel, current historical extraction completion semantics still permit premature closure because MAX_PASSES is 3 and SATURATED can occur after one zero-novel confirmation when exhaustive=true.",
+    "workflow_retirement_commit": "481772fd6dccc91aeefe8193e99857e53d23b687",
+    "generation_0_result_observed": false,
+    "generation_0_retrigger_authorized": false,
+    "active_saturation_hardening_donor": "gschaidergabriel/clay-global-research-entity#1879"
+  },
+  "hypothesis": "The safe re-entry is not another generation-0 dispatch. First harden historical saturation semantics on exact-current main; then treat the deleted completion transport as an explicit infrastructure/probe-semantic change and advance exactly once to generation 1 with create-only singleton admission.",
+  "counterhypothesis": "Restoring the removed generation-0 workflow is sufficient because the old issue fan-out may still contain a usable run.",
+  "counterhypothesis_disposition": "REJECTED_AS_CANONICAL_REENTRY: generation 0 is a legacy fan-out quarantine with no canonical result, restoring its trigger would violate ordinary-dispatch singleton semantics, and current saturation logic could still falsely certify historical completion.",
+  "delta": {
+    "spec": "research_entity/continuity/ordinary_dispatch_specs/free-swarm-historical-backfill-v1.json",
+    "spec_commit": "535588b167e74610a25dfa7b2fd20e26efe9b339",
+    "claim": "research_entity/continuity/ordinary_dispatch_claims/free-swarm-historical-backfill-v1-g0000.json",
+    "claim_commit": "b675e7eab33f97c774aaab5218d8e845a0ca572a",
+    "pr1879_coordination_comment_id": 5404755123,
+    "dispatch_state": "LEGACY_FANOUT_QUARANTINED_NO_CANONICAL_RESULT",
+    "canonical_workflow_state": "RETIRED_FROM_MAIN_AS_DUPLICATE_BEFORE_TERMINAL_CANONICAL_RESULT",
+    "next_retry_generation_candidate": 1,
+    "active_trigger_authorized": false
+  },
+  "observed_source_boundary": {
+    "scheduler_adaptive_exhaustive_prompt_present": true,
+    "historical_core_max_passes_observed": 3,
+    "historical_core_single_zero_exhaustive_saturation_observed": true,
+    "pr1879_addresses_remaining_completion_semantics": true,
+    "pr1879_exact_current_runtime_pass_observed": false,
+    "historical_backfill_terminal_runtime_receipt_observed": false,
+    "distillery_positive_dataset_conversion_observed": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: removed an ambiguous/dead canonical completion pointer as active authority by fail-closing generation 0, preserved provenance, and established the exact generation-1 re-entry gate without creating another runner trigger or Forge authority",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: the highest-information nonduplicate blocker is historical evidence conversion/completion semantics; retained HCU/Typed Entry donor authority already exists and a new HCU primitive would not close this gate",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: historical conversion, replay-v2 exact-current execution and Forge-to-Distillery positive-token conversion remain upstream gates; no reproducible shared unusual-experiment lease identity was available and no model/J-Space intervention was executed"
+  },
+  "execution_boundary": {
+    "ordinary_runtime_trigger_created": false,
+    "unusual_experiment": false,
+    "provider_or_model_network_io": false,
+    "paid_or_together_execution": false,
+    "canonical_effect_outside_github_coordination_writes": false
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "historical_backfill_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse or independently reproduce the exact-current fail-closed historical saturation semantics: explicit exhaustive=true plus two consecutive zero-novel confirmations before SATURATED, and no semantic PASS from the old three-pass ceiling. Execute focused regressions on exact-current source. Only then advance the ordinary dispatch spec/claim exactly once to generation 1, create one typed singleton trigger, execute the existing provider-free historical capsule in the authorized clay-direct-dev surface, publish the semantic generation-1 result, and proceed to replay-v2 plus Forge ACCEPT -> exactly one Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0.",
+  "evidence_boundary": "Coordination and exact-source inspection evidence only. No runtime/model/J-Space/training/whole-product promotion."
+}

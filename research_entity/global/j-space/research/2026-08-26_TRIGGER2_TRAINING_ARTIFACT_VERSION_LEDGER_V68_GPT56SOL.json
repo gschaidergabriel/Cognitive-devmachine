@@ -1,0 +1,87 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v68",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "PHYSICAL_WITNESS_CAPABILITY_SOURCE_CANDIDATE_COMMITTED_NOT_INTEGRATED",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V67_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V67",
+  "observed_main_before_ledger_write": "b1687e5239437eafeb19e95002c256047eb73826",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "parallel_main_reentry": {
+    "v67_strict_xfail": "retained proof-origin regression exists; duplicate xfail was removed on main",
+    "quiescence_probe": "shared provider-budget cumulative counters and unexpired leases are now read directly in addition to LIVE_METRICS and /proc process samples; no owning-host PASS observed",
+    "two_phase_adapter": "main@b1687e5239437eafeb19e95002c256047eb73826 deep-copies the fused envelope sequence once before validation and delegation, closing mutable-sequence validation/use drift at source level"
+  },
+  "durable_delta": {
+    "source": "tools/trigger2_physical_witness_capability_v1.py",
+    "source_commit": "8691392d071e345c9388431e26e46ec49df8e339",
+    "tests": "tests/test_trigger2_physical_witness_capability_v1.py",
+    "test_commit": "6e3ce8b701b9acdd73f9ec068f86e8adbe2d360f",
+    "primitive": [
+      "non-serializable PhysicalCohortWitness capability",
+      "module-owned mint sentinel so a plain dict cannot satisfy the witness type boundary",
+      "ten pidfd handles opened for the observed process identities",
+      "per-node read-only S1 fd binding carrying fd flags mnt_id and inode",
+      "exact S1 device/inode identity in the sealed witness evidence",
+      "explicit rejection of synthetic_source_fixture_only before pidfd minting",
+      "SOURCE_FIXTURE_ONLY receipt type with physical/model/training credits hard-coded to zero"
+    ]
+  },
+  "external_primary_research": {
+    "linux_pidfd": "pidfd is the selected process-identity primitive because it refers to a task by file descriptor and is designed to avoid PID-reuse races that arise from numeric PIDs alone",
+    "proc_fdinfo": "fdinfo flags/mnt_id/inode are selected to bind the observed read-only descriptor to the concrete S1 file identity",
+    "boundary": "external OS documentation is design input only; it does not provide EntityOS/HCU executable credit"
+  },
+  "local_deterministic_evidence": {
+    "scope": "PRECOMMIT_STANDALONE_CANDIDATE_BYTES_ONLY_NOT_EXACT_CURRENT_REPOSITORY_INTEGRATION",
+    "py_compile": "PASS",
+    "pytest": "5 passed in 0.03s",
+    "repository_ci_observed": false,
+    "exact_current_full_repo_test_observed": false,
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid10_executed": false,
+    "training_executed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false
+  },
+  "hypothesis": "Keeping live pidfds plus exact S1 fdinfo identity in a process-local nonserializable witness makes raw JSON proof structurally insufficient for physical GRID10 admission while retaining deterministic source-fixture composition as a separate zero-credit lane.",
+  "counterhypothesis": "The candidate remains cosmetic until the retained spawn_held_cohort barrier observer actually mints it while children are live and FusedFabric.atomic_fused_cohort_commit requires it before any mutation. Same-interpreter Python code is not treated as a cryptographic trust boundary.",
+  "adjudication": "Candidate source is useful but physical_proof_boundary_closed remains zero. Do not promote until the retained physical path mints the witness before release/reap, the physical commit rejects raw/synthetic mappings before state mutation, and source-fixture tests use an explicitly nonphysical persistence path.",
+  "credit_boundary": {
+    "new_source_research_delta": 1,
+    "physical_witness_candidate_committed": 1,
+    "physical_proof_boundary_closed": 0,
+    "runtime_quiescence_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 owning live host: execute the current quiescence probe/enforcer chain without provider probing and require zero provider-capable survivors, zero unexpired provider-budget leases and bounded zero counter delta",
+    "P1 source-only: collect pidfd handles and fdinfo inode/mnt_id/flags inside spawn_held_cohort while the ten children are still live at the barrier",
+    "P1 source-only: require PhysicalCohortWitness at the retained FusedFabric physical mutation boundary before any cohort/admitted_results/epoch mutation",
+    "P1 source-only: preserve a distinct SOURCE_FIXTURE_ONLY persistence/replay path and make the retained raw-proof strict xfail become a real fail-before-mutation PASS",
+    "P1 after quiescence PASS: re-enter newest explicit FREE non-provider execution authority before physical GRID10/model promotion",
+    "P2 keep frozen checkpoint outputs blinded and training materialization closed",
+    "P3 keep accepted_dataset_tokens and training credit zero until one exact accepted witness yields tokens and exact replay adds zero"
+  ],
+  "next_exact_action": "Integrate the committed pidfd witness candidate into the retained barrier observer and FusedFabric physical commit boundary without changing the deterministic source-fixture lane into physical evidence."
+}

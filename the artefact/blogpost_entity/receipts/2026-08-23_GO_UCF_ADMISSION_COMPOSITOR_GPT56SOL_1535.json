@@ -1,0 +1,95 @@
+{
+  "schema": "GO_UCF_ADMISSION_COMPOSITOR/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "Mini Entity / EntityOS integrated cognitive architecture",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main_sha": "41a74acbff00b3ddf4d4db98ebe6f24b3cf695ce",
+  "branch": "gpt56sol/go-ucf-admission-compositor-20260823-1535",
+  "pull_request": 1275,
+  "delta": {
+    "module": "tools/pipeline_cognitive_fabric_admission_v1.py",
+    "module_git_blob": "31c9f249bb98b90adaec17799e37e4af751e4617",
+    "test": "tests/test_pipeline_cognitive_fabric_admission_v1.py",
+    "test_git_blob": "b35476a114e39a3c3a3c437ea6b1e6188d43b603",
+    "purpose": "Resolve an already-active same-MiniUnifiedDB cognition turn, compile the existing ZERO_WORKSPACE_CAPSULE/v1 and ZERO_INFERENCE_PACKET/v2 admission chain, and emit only MINI_ENTITY_COGNITIVE_FABRIC_ADMISSION/v1 before inference.",
+    "authority": "CANDIDATE_INFERENCE_ONLY",
+    "creates_turn_identity": false,
+    "creates_second_state_authority": false,
+    "creates_effect_authority": false,
+    "emits_final_ucf_runtime_receipt": false
+  },
+  "component_execution": {
+    "environment": "isolated ChatGPT Linux/Python component container",
+    "full_repository_checkout": false,
+    "py_compile": "PASS",
+    "focused_unittest": {
+      "result": "PASS",
+      "passed": 6,
+      "failed": 0
+    },
+    "tests": [
+      "candidate-only success envelope and absence of final UCF runtime receipt",
+      "downstream context mutation changes packet and admission identities",
+      "placeholder canonical digest fails closed",
+      "wrong active-turn activation digest fails closed",
+      "prepare authority escalation fails closed",
+      "task-text/hash drift fails closed"
+    ],
+    "dependency_scope": "The focused tests use deterministic doubles for active-turn, capsule and packet dependencies; exact repository dependency composition remains unverified."
+  },
+  "execution_admission": {
+    "github_checkout_attempt": "BLOCKED_BEFORE_CHECKOUT_BY_DNS_RESOLUTION",
+    "classification": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAIL",
+    "vercel_connector": "NO_SANDBOX_CREATE_OR_EXEC_ACTION_EXPOSED_TO_THIS_ORGAN",
+    "exact_integrated_runtime_execution": false,
+    "pr_head_sha_at_workflow_trigger": "f691756754e5d07c81c433a322a9a3173dd34518",
+    "github_actions": [
+      {
+        "run_id": 32628820703,
+        "name": "Research Entity Verify",
+        "conclusion": "failure",
+        "job_id": 97168293990,
+        "job": "verify",
+        "steps": null,
+        "credit": 0,
+        "classification": "PRE_STEP_EXECUTION_ADMISSION_FAILURE"
+      },
+      {
+        "run_id": 32628820691,
+        "name": "Research Entity Identity Guard",
+        "conclusion": "failure",
+        "job_id": 97168293713,
+        "job": "identity-guard",
+        "steps": null,
+        "credit": 0,
+        "classification": "PRE_STEP_EXECUTION_ADMISSION_FAILURE"
+      }
+    ]
+  },
+  "coordination": {
+    "active_turn_pointer": "already merged through PR #1262; reused, not duplicated",
+    "causal_turn_identity": "parallel PR #1267 owns a candidate deterministic causal-turn-id contract; this delta neither derives nor allocates causal_turn_id",
+    "hcu": "parallel HCU lane #1263 untouched",
+    "unusual_experiment": "NO_NEW_UNUSUAL_EXPERIMENT; macrocycle intervention already consumed by the previously recorded packet-v2 downstream-context swap falsifier associated with PR #1240"
+  },
+  "evidence_class": "EXACT_BRANCH_BLOB_COMPONENT_MECHANISM_ONLY",
+  "runtime_credit": {
+    "whole_mini_entity": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu": 0
+  },
+  "remaining_gate": "Wire this compositor into the single retained ProfilePipelineRuntime pipeline_cognitive_fabric_admit effect using canonical admitted engine/J-Space routing and an already-bound active cognition turn; then execute exact repository dependencies and the full pre-inference path on an actually-started authorized isolated executor. Keep post-turn UCF finalization separate and terminal-state-bound.",
+  "safety": {
+    "free_only": true,
+    "together_used": false,
+    "paid_execution": false,
+    "training": false,
+    "vps_or_self_hosted_testing": false,
+    "secrets_persisted": false
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T125041Z-gen197-feedback-channel-path-split",
+  "created_at": "2026-08-20T12:50:41Z",
+  "target_room": "center",
+  "targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_receipt": "5e8cf3cd469ac6c348094706d6c24f2adb187751",
+    "agentzero_previous_export": "7eaccd4b20d511ca1c8824698f38f19b5a6041f6",
+    "agentzero_intermediate_export": "a9c90c9bae8e4b87013aa3bce8564ca4861516db",
+    "agentzero_latest_export": "2b969fdfdc60f3830eb2d19218520670665967b1",
+    "agentzero_generation": 197,
+    "latest_reported_source_short": "6b9048c7a",
+    "exact_source_commit_tree_bound": false,
+    "atomic_test_export_receipt_present": false,
+    "code_sources": [
+      "https://github.com/gschaidergabriel/clay-global-research-entity/blob/2b969fdfdc60f3830eb2d19218520670665967b1/agentZero/code/produkt/mistral_prestage/pipeline.py",
+      "https://github.com/gschaidergabriel/clay-global-research-entity/blob/2b969fdfdc60f3830eb2d19218520670665967b1/agentZero/code/produkt/mistral_prestage/wettbewerb.py",
+      "https://github.com/gschaidergabriel/clay-global-research-entity/blob/2b969fdfdc60f3830eb2d19218520670665967b1/agentZero/tests/letzter-lauf.json",
+      "https://github.com/gschaidergabriel/clay-global-research-entity/blob/2b969fdfdc60f3830eb2d19218520670665967b1/agentZero/ZIELE.md"
+    ],
+    "external_primary_sources": [
+      {
+        "url": "https://aclanthology.org/2026.findings-acl.1419/",
+        "date": "2026-07",
+        "claim_scope": "Feedback adaptation should be measured by correction lag and post-feedback performance on semantically related queries; static aggregate accuracy does not establish adaptation."
+      },
+      {
+        "url": "https://aclanthology.org/2025.findings-acl.919/",
+        "date": "2025-07",
+        "claim_scope": "Citation trustworthiness is distinct from answer helpfulness and citation faithfulness and depends on retrieval quality, question type and model knowledge; identifier mention alone is not established as evidence of usefulness."
+      },
+      {
+        "url": "https://arxiv.org/abs/2204.00718",
+        "date": "2022-04-01",
+        "claim_scope": "Implicit retrieval feedback is exposure/position biased and requires counterfactual correction before causal credit."
+      },
+      {
+        "url": "https://arxiv.org/abs/2007.13019",
+        "date": "2020-07-25",
+        "claim_scope": "Closed recommendation-feedback loops can amplify popularity bias, reduce diversity and homogenize outputs."
+      }
+    ]
+  },
+  "substantive_delta": [
+    {
+      "id": "D197-PERSISTENT-GWT-LEARNING",
+      "status": "CODE_PRESENT_EXECUTION_UNPROVEN",
+      "evidence": [
+        "Gen197 adds persistent gw_lernen rows keyed by question word and artikel_id, a learned score share up to 0.20, global decay, positive update on identifier mention and negative update on non-mention.",
+        "Gen197 also adds a CLAYVERSE_ARBEITSRAUM=alles arm in which corpus, durable memory, recent turns, collisions and hyperposition readings compete for the same broadcast slots.",
+        "The lexical admission firewall remains: rel > 0.0 and score >= threshold, so learning can reorder only candidates with literal question overlap."
+      ],
+      "credit_boundary": "This is a code delta, not a demonstrated adaptive effect. No correction-lag, held-out post-feedback, counterfactual exposure or answer-quality receipt was found."
+    },
+    {
+      "id": "D197-LEARNER-PATH-SPLIT",
+      "status": "STATIC-CODE-PATH-CONTRADICTION",
+      "evidence": [
+        "_gather_world_safe loads _gw_haeufigkeiten, _gw_idf, _gw_kandidaten, _gw_volltexte and _gw_gelernte only on the non-admitting path.",
+        "run_chat_turn bypasses _gather_world_safe when record_via_turnlifecycle=True and takes world directly from lifecycle.begin(message).",
+        "Learning writes are guarded by record_via_turnlifecycle=True, while that same path has no visible initialization of the _gw reader keys in this pipeline.",
+        "Therefore the default non-recording path can read learned boosts but intentionally does not write them; the recording path can write rows but, absent an external hidden initializer, cannot consume them or construct the global candidate pool."
+      ],
+      "credit_boundary": "This is a source-level reachability finding. It is falsified if an execution trace proves lifecycle.begin returns the private _gw_* fields with their expected digests."
+    },
+    {
+      "id": "D197-CITATION-AS-REWARD",
+      "status": "ENDOGENOUS-PROXY-RISK",
+      "evidence": [
+        "lernen() rewards a selected article when its identifier substring occurs anywhere in Zero's raw answer.",
+        "Only selected/exposed identifiers are updated; unselected candidates receive neither positive nor explicit counterfactual evaluation.",
+        "The selection may be mechanically filled when the prestage returns no broadcast_ids, but learning records only selected IDs and does not preserve selection origin in gw_lernen."
+      ],
+      "credit_boundary": "Identifier mention proves mention, not factual support, necessity or answer improvement. It must not be promoted to evidential usefulness without an independent judge or controlled ablation."
+    },
+    {
+      "id": "D197-TEST-CONSUMERS-REALIGNED",
+      "status": "CURRENTLY_CONSISTENT_NOT_ATOMIC",
+      "evidence": [
+        "The 12:11 Gen197 export reports 622 green / 1 red and ZIELE matches 622/1.",
+        "The 12:41 Gen197 export reports 631 green / 1 red and ZIELE matches 631/1.",
+        "The remaining red is the persistent Claude-Code adapter isolation test; the prior PTY failure is green in these observations."
+      ],
+      "credit_boundary": "Current agreement resolves the observed stale-status symptom only. It does not prove an atomic shared run receipt, and the PTY outcome remains one unstable family until exact-source repeated traces exist."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H197-ADAPTIVE-EVIDENCE-ROUTING",
+      "claim": "When a truly useful candidate is independently confirmed, a scoped learned boost reduces correction lag and improves held-out semantically related answers without reducing source diversity.",
+      "falsifier": "No rank or answer-quality change occurs after confirmed feedback, or gains disappear under exact-query holdout, shuffled IDs and position-balanced exposure."
+    },
+    {
+      "id": "CH197-READ-WRITE-DISJOINT-LOOP",
+      "claim": "The current production topology is not a feedback loop: the writer path does not load its prior state and the reader path does not create new state.",
+      "falsifier": "A single immutable turn trace shows pre-turn learned-state digest -> score contribution -> broadcast decision -> post-turn state mutation on record_via_turnlifecycle=True."
+    },
+    {
+      "id": "CH197-CITATION-CAUSED-REWARD",
+      "claim": "The system can increase boost merely because an exposed identifier is easy or instructed to cite, even when the passage is incorrect, redundant or unnecessary.",
+      "falsifier": "In blinded passage swaps, decoy IDs and citation-format perturbations, rewards track independently judged factual contribution rather than identifier visibility."
+    },
+    {
+      "id": "CH197-MECHANICAL-WINNER-SELF-REINFORCEMENT",
+      "claim": "Mechanically filled broadcast IDs can be cited and rewarded, causing the lexical scorer to certify its own fallback choices.",
+      "falsifier": "Selection-origin-stratified trials show mechanical selections receive no learning credit absent an independent usefulness receipt."
+    },
+    {
+      "id": "CH197-EXPOSURE-LOCKED-EVIDENCE",
+      "claim": "Because only exposed candidates can be rewarded and boosts affect future exposure, early winners become path-dependent winners while unseen alternatives cannot accumulate credit.",
+      "falsifier": "Position-balanced exploration and counterfactual candidate evaluation show equal discovery opportunity and no diversity collapse over repeated related queries."
+    },
+    {
+      "id": "CH197-LEARNING-INSIDE-LEXICAL-CAGE",
+      "claim": "The hard rel > 0 gate prevents semantically useful paraphrases from ever entering, so the learner optimizes ordering inside a lexically selected subset rather than learning semantic relevance.",
+      "falsifier": "Held-out synonym/paraphrase queries admit and reward zero-overlap but semantically sufficient passages without weakening the null-output state."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Read-Write Disjoint Feedback Loop",
+      "definition": "A purported adaptive cycle whose state reader and state writer are reachable on mutually exclusive execution paths."
+    },
+    {
+      "name": "Citation-Caused Reward",
+      "definition": "An endogenous reward where exposure makes an identifier mention likely and that mention is then treated as proof that the exposure was useful."
+    },
+    {
+      "name": "Mechanical Winner Self-Reinforcement",
+      "definition": "A fallback selector supplies a winner that the same system later rewards without preserving that the choice was mechanical."
+    },
+    {
+      "name": "Learning Inside a Lexical Cage",
+      "definition": "Adaptation reorders only literal-overlap candidates and cannot discover semantically relevant zero-overlap evidence."
+    },
+    {
+      "name": "Counterfactual Candidate Credit",
+      "definition": "Usefulness credit estimated against what would have happened with unexposed alternatives, not from the selected output alone."
+    }
+  ],
+  "worker_impulses": [
+    {
+      "route": "gwt+claycode+unifieddb",
+      "priority": "BLOCKING",
+      "task": "Run GWT_FEEDBACK_REACHABILITY/v1 with record_via_turnlifecycle=True. Emit one immutable trace containing input world keys, pre-state gw_lernen digest, per-candidate lexical/novelty/learned terms, selection origin (model/mechanical), broadcast IDs, raw-answer citation spans, independent support verdict and post-state digest. Test both CLAYVERSE_ARBEITSRAUM arms. Do not grant adaptive credit from table writes alone."
+    },
+    {
+      "route": "clayresearch+gwt+emergenz",
+      "priority": "HIGH",
+      "task": "Run a position-balanced, ID-shuffled factorial: correct support, incorrect but citeable decoy, redundant support and unexposed sufficient candidate. Measure correction lag, held-out paraphrase performance, citation faithfulness, necessity under leave-one-out ablation and source diversity over at least 20 feedback cycles."
+    },
+    {
+      "route": "claygraph+hyperposition+unifieddb",
+      "priority": "HIGH",
+      "task": "Extend provenance edges with query fingerprint, candidate source, exposure position, selection origin, answer claim span, citation span, independent support verdict and counterfactual arm. Keep mention, faithfulness, usefulness and correctness as separate predicates."
+    },
+    {
+      "route": "frank+claycode+unifieddb",
+      "priority": "PRESERVE",
+      "task": "Continue PTY_LEASE_TRACE and TEST_EXPORT_ATOMIC_RECEIPT from the prior receipt. Treat the two current green PTY observations as recovery observations, not fix evidence; keep the persistent adapter red open."
+    },
+    {
+      "route": "harness",
+      "priority": "GUARD",
+      "task": "Receipt inspection only. Do not modify Frank's Harness, do not train and do not promote BASE."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "No live trace proves that a recording turn reads prior gw_lernen state or that CLAYVERSE_ARBEITSRAUM=alles has a non-empty candidate pool on that path.",
+    "No independent evaluation proves that identifier mention means citation faithfulness, factual usefulness, necessity or answer improvement.",
+    "No counterfactual exposure correction, shuffled-ID control, held-out paraphrase adaptation or diversity trajectory was found.",
+    "The lexical rel > 0 gate still excludes zero-overlap semantic evidence.",
+    "The two current PTY greens do not erase the prior same-source red/green family; no exact-source causal fix receipt exists.",
+    "The persistent Claude-Code adapter test remains red.",
+    "The test counts now agree across letzter-lauf and ZIELE, but no immutable atomic run_id/result digest links them.",
+    "Target main is unchanged; no new target runtime, training, Harness mutation, promotion or canonical PASS occurred."
+  ],
+  "admission_rule": "Treat Gen197 as a substantive candidate implementation with a source-level read/write reachability defect and endogenous reward risk. Admit adaptive-learning credit only after one recording-path trace closes the cycle and blinded counterfactual tests show independent factual improvement without exposure-driven diversity collapse."
+}

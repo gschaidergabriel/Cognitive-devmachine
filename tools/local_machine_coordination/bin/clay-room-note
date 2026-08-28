@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+"""
+clay-room-note — add a freetext entry to the room bulletin, visible to all
+other sessions via `clay-room-status` (e.g. "ledger jetzt V71", "chatgpt tab
+1 von session X belegt", "blocker: ...").
+
+Usage:
+  clay-room-note --note "<text>"
+
+Also refreshes this session's heartbeat (auto-joins if needed).
+"""
+import sys
+import os
+import argparse
+
+sys.path.insert(0, os.path.expanduser("~/.claude/room"))
+import roomlib  # noqa: E402
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--note", required=True)
+    args = ap.parse_args()
+
+    session_id = roomlib.resolve_session_id()
+    pid = os.getppid()
+    hostname = os.uname().nodename
+
+    with roomlib.Guard():
+        state = roomlib.load_state()
+        roomlib.prune_dead_sessions(state)
+
+        now = roomlib.now_iso()
+        entry = state["sessions"].get(session_id)
+        if entry is None:
+            entry = {
+                "pid": pid,
+                "joined_at": now,
+                "last_heartbeat": now,
+                "lane": "unspecified",
+                "role": "WORKER",
+                "hostname": hostname,
+            }
+            state["sessions"][session_id] = entry
+        else:
+            entry["last_heartbeat"] = now
+            entry["pid"] = pid
+
+        roomlib.add_note(state, session_id, args.note)
+        roomlib.ensure_chief(state)
+        roomlib.save_state(state)
+
+    print(f"noted ({session_id}): {args.note}")
+
+
+if __name__ == "__main__":
+    main()

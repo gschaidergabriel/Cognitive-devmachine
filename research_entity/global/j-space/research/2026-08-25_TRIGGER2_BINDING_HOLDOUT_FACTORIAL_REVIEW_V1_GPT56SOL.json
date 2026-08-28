@@ -1,0 +1,125 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_HOLDOUT_FACTORIAL_REVIEW/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_basis": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed": "87e26efbc290112e56410c81707663bb3edafbe8",
+  "review_target": {
+    "path": "tools/trigger2_dynamic_binding_blueprint_v2.py",
+    "blob_sha": "c131a0dd344bdb4c66f8c458c4f2c4e6b323fd21",
+    "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_EPISODE_BLUEPRINT/v2.1",
+    "training_eligible": false,
+    "observed_row_topology": {
+      "train": 6912,
+      "validation": 1728,
+      "holdout_frozen": 432,
+      "train_templates": 4,
+      "validation_template": "T5_BOOLEAN_XOR_VALIDATION",
+      "holdout_template": "T6_PARITY_HOLDOUT",
+      "train_symbol_ordinals": "00..11",
+      "holdout_symbol_ordinals": "12..14"
+    }
+  },
+  "new_nonduplicate_finding": {
+    "id": "HOLDOUT_FACTOR_CONFOUND_TEMPLATE_X_SYMBOL",
+    "reality_level": "R1_INFERRED_FROM_CURRENT_SOURCE",
+    "claim": "The current frozen holdout changes semantic template family and symbol pool simultaneously. A final joint-OOD PASS is strong, but a FAIL is mechanistically underdetermined: the source topology alone cannot distinguish context/template transfer failure from unseen-symbol binding failure or their interaction.",
+    "source_reason": [
+      "TRAIN uses T1-T4 with TRAIN_TRIPLETS 00..11.",
+      "VALIDATION uses T5 with the same TRAIN_TRIPLETS 00..11.",
+      "HOLDOUT_FROZEN uses T6 only with HOLDOUT_TRIPLET 12..14.",
+      "Therefore no frozen arm independently tests unseen template with seen symbols, and no frozen arm independently tests seen template with unseen symbols."
+    ],
+    "credit_effect": "NONE. This is an evaluator-design discriminator, not model/runtime/training evidence."
+  },
+  "swarm_review": [
+    {
+      "role": "DATASET_ARCHITECT",
+      "verdict": "PASS_WITH_SUCCESSOR_DELTA",
+      "finding": "Retain v2.1 as the single current donor. Add diagnostic holdout arms rather than another parallel binder generator."
+    },
+    {
+      "role": "SHORTCUT_LEAK_HUNTER",
+      "verdict": "PASS",
+      "finding": "Current full-factorial S3 mapping, codebook-order, layout, class and polarity crossing strongly reduces simple target-symbol shortcuts at source level. The new finding is not a shortcut leak; it is a generalization-factor confound."
+    },
+    {
+      "role": "STATISTICAL_REVIEWER",
+      "verdict": "REQUIRE_FACTORIAL_OOD_DIAGNOSTICS",
+      "finding": "A 2x2 template-seen/unseen by symbol-seen/unseen evaluation supports separate main effects and interaction instead of one joint score. Report worst-family accuracy and uncertainty; do not average away a failed arm."
+    },
+    {
+      "role": "MECHANISTIC_REVIEWER",
+      "verdict": "PASS_AS_HIGH_INFORMATION_DISCRIMINATOR",
+      "finding": "The decomposition directly separates two live hypotheses: context-invariant semantic routing versus episode-local symbol dereference/generalization."
+    },
+    {
+      "role": "HOLDOUT_STEWARD",
+      "verdict": "PASS_IF_PRECOMMITTED",
+      "finding": "Do not open the final joint unseen-template+unseen-symbol arm during training or hyperparameter selection. Diagnostic arms must be frozen before tuning, with a separate selection-only validation surface."
+    },
+    {
+      "role": "EPISTEMIC_CREDIT_REVIEWER",
+      "verdict": "PASS_ZERO_CREDIT",
+      "finding": "No positive Qwen3.5 J-Space label, accepted dataset token, training credit, HCU runtime credit or EntityOS credit is minted."
+    }
+  ],
+  "proposed_evaluation_matrix": {
+    "A_seen_template_seen_symbols": {
+      "purpose": "selection/calibration sanity, not final OOD credit",
+      "template_source": "T5 or a dedicated validation-only family",
+      "symbol_pool": "seen/train-compatible verified ABI partition"
+    },
+    "B_unseen_template_seen_symbols": {
+      "purpose": "isolate context/template transfer",
+      "template_source": "frozen unseen semantic family",
+      "symbol_pool": "seen/train-compatible verified ABI partition"
+    },
+    "C_seen_template_unseen_symbols": {
+      "purpose": "isolate symbol-binding/dereference transfer",
+      "template_source": "frozen copy of a seen-structure family with no training examples from its exact causal ancestry",
+      "symbol_pool": "frozen unseen verified ABI partition"
+    },
+    "D_unseen_template_unseen_symbols": {
+      "purpose": "final joint-OOD challenger",
+      "template_source": "frozen unseen semantic family",
+      "symbol_pool": "frozen unseen verified ABI partition",
+      "selection_rule": "never use for tuning/model selection"
+    },
+    "diagnostic_contrasts": [
+      "template_OOD_delta = score(B) - score(A)",
+      "symbol_OOD_delta = score(C) - score(A)",
+      "joint_interaction = score(D) - score(B) - score(C) + score(A)"
+    ],
+    "acceptance_law": "Keep the existing joint OOD requirement, but diagnose B/C/D separately. A high aggregate score cannot compensate for a preregistered failed arm."
+  },
+  "training_example_delta": {
+    "status": "BLUEPRINT_ONLY_NOT_TRAINING_ADMISSION",
+    "instruction": "Do not add more materialized train rows before exact ABI/tokenizer binding. When materialization is unblocked, add paired counterfactual episodes so the same semantic case is exercised across independent symbol mappings and the same symbol pool is exercised across distinct semantic templates.",
+    "recommended_future_families": [
+      "BIND_TEMPLATE_OOD_SEEN_SYMBOL",
+      "BIND_SYMBOL_OOD_SEEN_TEMPLATE",
+      "BIND_TEMPLATE_X_SYMBOL_JOINT_OOD",
+      "BIND_EPISODE_RESET_MAPPING_SWAP"
+    ],
+    "multi_hop_note": "Depth-2..4 dereference with distractors remains a useful later challenger, but should not obscure the first one-hop causal blocker. Add only after one-hop template-vs-symbol generalization is measurable."
+  },
+  "counterhypothesis": {
+    "claim": "A single joint unseen-template+unseen-symbol holdout is intentionally stricter and sufficient for final acceptance; factor decomposition adds test complexity without improving the final pass/fail decision.",
+    "adjudication": "Partly true for final acceptance. Keep the joint arm. The 2x2 diagnostics are still higher-information because current training decisions differ depending on whether template transfer, symbol transfer, or their interaction is the actual failure mode. They should be diagnostic and preregistered, not a replacement for the joint holdout."
+  },
+  "next_exact_action": "Resolve the exact verified 46-atom ABI/tokenizer materialization gate first. Then version the retained v2.1 donor with orthogonal B/C/D evaluation arms while preserving one sealed joint holdout and zero holdout-guided tuning. Do not create a second binder authority.",
+  "credits": {
+    "source_research_delta": 1,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

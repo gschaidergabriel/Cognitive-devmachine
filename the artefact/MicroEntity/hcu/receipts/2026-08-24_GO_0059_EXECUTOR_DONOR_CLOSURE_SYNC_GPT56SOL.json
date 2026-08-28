@@ -1,0 +1,90 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXECUTOR_DONOR_CLOSURE_SYNC/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "together_general_inference": "FORBIDDEN",
+    "together_training": "FORBIDDEN_IN_CURRENT_SUPERVISOR_MODE",
+    "paid_preflight_or_credential_lookup_performed": false,
+    "together_job_created": false
+  },
+  "observed_identity": {
+    "canonical_main_before_receipt": "5ec96315ea1c87e28ba7087f29f3bbc56fc65a56",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_head": "476b3104c30635795c250b359459fa11f3452305",
+    "retained_execution_pr": 810,
+    "execution_repo": "gschaidergabriel/Dr.-Unterweger",
+    "execution_branch": "clay/fusion-vcr-native-20260817",
+    "final_executor_sync_commit": "50a8341cecb948407082a84743c1dae3998824a6"
+  },
+  "finding": {
+    "class": "DETERMINISTIC_SOURCE_CLOSURE_DRIFT",
+    "detail": "The retained full-spine Sandbox batch still referenced J-Space modules/tests that had been removed by donor consolidation, including the deleted duplicate compile_jspace_training_dataset_v1 path and stale causal/inference-trace/admission-bridge side modules. At the exact retained donor head, serious dataset admission is concentrated in jspace_training_trace_v1 + jspace_dataset_admission_gate_v1 + jspace_inference_binding_v1 + compile_admitted_jspace_training_dataset_v1, with step-trace binding tested directly.",
+    "runtime_test_failure": false,
+    "reason": "No exact full-spine Sandbox run was started in this correction cycle. This is source-coherence evidence only."
+  },
+  "action": {
+    "executor_commit": "50a8341cecb948407082a84743c1dae3998824a6",
+    "removed_stale_executor_dependencies": [
+      "jspace_causal_training_binding_v1.py",
+      "jspace_inference_trace_binding_v1.py",
+      "jspace_training_dataset_admission_bridge_v1.py",
+      "compile_jspace_training_dataset_v1.py",
+      "test_jspace_causal_training_binding_v1",
+      "test_jspace_inference_trace_binding_v1",
+      "test_jspace_training_dataset_admission_bridge_v1",
+      "test_compile_jspace_training_dataset_v1"
+    ],
+    "current_jspace_regression_closure": [
+      "test_jspace_vector_control_v1",
+      "test_jspace_vector_control_abi_v1",
+      "test_global_jspace_gwt_v1",
+      "test_jspace_step_trace_binding_v1",
+      "test_jspace_gwt_prototype_v1",
+      "test_jspace_gwt_trace_validation_v1",
+      "test_jspace_training_trace_v1",
+      "test_jspace_inference_binding_v1",
+      "test_jspace_dataset_admission_gate_v1",
+      "test_jspace_dataset_family_split_v1",
+      "test_compile_jspace_bootstrap_dataset_v1",
+      "test_compile_admitted_jspace_training_dataset_v1"
+    ],
+    "parallel_authority_created": false,
+    "semantic_scope": "EXECUTOR_SOURCE_SYNC_ONLY"
+  },
+  "evidence": {
+    "exact_donor_directory_inspected": true,
+    "deleted_duplicate_compiler_absent_at_donor_head": true,
+    "admitted_compiler_present_at_donor_head": true,
+    "admitted_pipeline_schema": "ENTITYOS_HCU_ADMITTED_JSPACE_TRAINING_PIPELINE/v1",
+    "executor_old_stale_names_absent_after_sync": true,
+    "full_spine_sandbox_execution_observed_after_sync": false
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_count_by_this_organ": 0,
+    "reason": "Shared active go macrocycle already records its bounded unusual experiment; this correction is deterministic fusion/provenance work."
+  },
+  "acceptance": {
+    "vercel_sandbox_infrastructure_callability": "VERIFIED_BY_EXISTING_BOUND_RECEIPT",
+    "entityos_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false,
+    "retained_hcu_pr_merge_as_is": false
+  },
+  "next_discriminator": {
+    "source": "Continue selective HCU/J-Space rejoin onto exact current FREE_ONLY main without restoring duplicate side authorities.",
+    "execution": "Use the fixed hash-verified tokenless capsule pattern through the protected-preview Vercel Sandbox bridge only after FREE_ONLY monetary-cost admission is explicit; bind exact Research main + retained donor identities and run the synchronized regression closure.",
+    "after_exact_pass": "Bind a real zero-cost local approximately 0.8B checkpoint/tokenizer/runtime through verified loader consumption and emit request-scoped baseline/lesion/shuffle/rescue J-Space traces.",
+    "paid_training": "NOT_ACTIVE_UNDER_SUPERVISOR_8_61"
+  },
+  "claim_class": "DURABLE_EXECUTOR_SOURCE_COHERENCE_EVIDENCE",
+  "status": "IN_PROGRESS"
+}

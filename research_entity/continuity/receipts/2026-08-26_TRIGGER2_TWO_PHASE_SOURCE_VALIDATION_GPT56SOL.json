@@ -1,0 +1,67 @@
+{
+  "schema": "CLAY_TRIGGER2_TWO_PHASE_SOURCE_VALIDATION_RECEIPT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.83_DELTA",
+  "mode": "FREE_ONLY",
+  "claim_scope": "EXACT_COMMITTED_BYTES_LOCAL_DETERMINISTIC_SOURCE_FIXTURE_ONLY",
+  "source": {
+    "path": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "introducing_commit": "56e8cc09f0c1b8e1fd99ab091154c3f3a6382b17",
+    "git_blob_sha1": "26756e6912c89be625a498534c44befecb1f21b2",
+    "sha256": "a6427e43188c2991ead7de3a8888540c8cdd4202ed1c49a39d93088201e8d7fb",
+    "bytes": 16205
+  },
+  "tests": {
+    "path": "tests/test_trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "exact_bytes_commit": "8f9789e49d6806d8d508233712fec3aa85d4e620",
+    "git_blob_sha1": "0baaa1a20c8b944af557260b00d3a3dde14061db",
+    "sha256": "971482db3db904227c36aaf6f2b135533ba668ee3bcdfcb24ced035219d2eb7b",
+    "bytes": 11259
+  },
+  "execution": {
+    "surface": "LOCAL_CHATGPT_CONTAINER_DETERMINISTIC_SOURCE_FIXTURE",
+    "repository_runtime": false,
+    "provider_or_model_runtime": false,
+    "vps_runtime": false,
+    "network_provider_execution": false,
+    "python": "Python 3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "py_compile": "PASS",
+    "pytest_command": "pytest -q tests/test_trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "pytest_result": "9 passed in 0.03s",
+    "pytest_pass_count": 9,
+    "pytest_fail_count": 0
+  },
+  "validated_properties": [
+    "positive two-phase authority envelope and ten-member cohort construction",
+    "same semantic raw packet from distinct exact calls remains non-interchangeable",
+    "call/cell transplant fails closed against frozen launch/executor commitments",
+    "model-output identity mismatch fails closed",
+    "source identity drift requires distinct call and launch commitments",
+    "authority-call reference mutation changes final envelope digest",
+    "model/child self-minted authority fields are rejected",
+    "one invalid authority member rejects the whole cohort",
+    "one executor observation cannot be reused across two cells"
+  ],
+  "epistemic_boundary": {
+    "exact_source_bytes_tested": true,
+    "exact_test_bytes_tested": true,
+    "git_blob_identity_matched_to_committed_bytes": true,
+    "repository_ci_observed": false,
+    "admitted_entityos_runtime_observed": false,
+    "actual_pre_call_freeze_timing_attested": false,
+    "actual_post_call_executor_observation_attested": false,
+    "producer_authentication_proven": false,
+    "physical_grid10_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_gate": "Integrate the retained two-phase authority envelope into the fused GRID10 membership/cohort source path so cohort admission derives from exact phase-separated authority-envelope identities, while keeping raw model cognition unchanged. Runtime promotion remains blocked by P0 FreeSwarm quiescence."
+}

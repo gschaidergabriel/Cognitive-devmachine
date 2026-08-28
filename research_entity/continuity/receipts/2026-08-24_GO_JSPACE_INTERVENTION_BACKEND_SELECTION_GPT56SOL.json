@@ -1,0 +1,144 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_before_organ_delta": "0b897c8b87500ffe89f113be1162f784612b29bf",
+    "initial_backend_selection_commit": "07f131884ebd408c08ac72ef5554a1453b7e7614",
+    "initial_readme_sync_commit": "9e4722e589a0cee4d6e7521235d609a652e27685",
+    "exact_target_donor_fusion_commit": "ea64d4dad651db5dcb57d31726250d93ebfd5fc4",
+    "parallel_observation_first_probe_v2_commit": "052b861f1930167e232ad3e57f2a2d9eeeb325d2",
+    "selection_convergence_commit": "5f95f873e605dc5a91207dcf7166e668e579e5d4",
+    "current_facing_readme_fusion_commit": "dbac4ce63c1491353ad29725595ec1e6b924c8d3",
+    "authority_source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "observation_only_probe_requires_unusual_lease": false,
+    "duplicate_branch_created_before_parallel_reentry": "gpt56sol/free-swarm-admission-receipt-v1-20260824",
+    "duplicate_branch_commits": [
+      "5f2d4d804ebf5232824f7b19e2b48ab42575cc81",
+      "90da6b6cdefed6fde2a813957f0826281a943a5f"
+    ],
+    "duplicate_branch_merge_or_pr": false,
+    "duplicate_avoidance_reason": "Parallel canonical main landed a stronger admission receipt runner and malformed/socket tripwire coverage first; the duplicate lane was intentionally not promoted."
+  },
+  "observed": {
+    "external_llm_provider_execution": "QUARANTINED",
+    "providers_currently_typed_free_admitted": [],
+    "local_normal_user_execution_authorized": true,
+    "clay_direct_dev_execution_authorized": true,
+    "local_or_vps_execution_bridge_exposed_to_this_organ": false,
+    "provider_secret_lookup_performed_by_this_organ": false,
+    "provider_network_execution_performed_by_this_organ": false,
+    "paid_or_subscription_execution_performed": false,
+    "together_used": false,
+    "runtime_experiment_performed": false
+  },
+  "parallel_main_findings": {
+    "free_admission_receipt_runner": "LANDED_STRONGER_ON_MAIN_BEFORE_OR_DURING_REENTRY",
+    "free_admission_outer_socket_hardening": "LANDED_ON_MAIN_BY_PARALLEL_WORK",
+    "malformed_and_socket_tripwires": "LANDED_ON_MAIN",
+    "local_model_postload_identity": "CLAY_LOCAL_RESEARCH_MODEL/v2_SOURCE_DELTA_PRESENT",
+    "local_jspace_gate": "HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1_PRESENT",
+    "local_jspace_activation_probe_v2": {
+      "path": "tools/hcu_jspace_local_activation_probe.py",
+      "commit": "052b861f1930167e232ad3e57f2a2d9eeeb325d2",
+      "observation_mode": "NO_HIDDEN_STATE_MODIFICATION_NO_UNUSUAL_LEASE_REQUIRED",
+      "intervention_mode": "CLEAN_CORRUPTED_TARGET_SHAM_OFF_TARGET_AND_CANONICAL_ATOMIC_LEASE_REQUIRED",
+      "runtime_credit_observed": false
+    },
+    "credits_promoted": false
+  },
+  "external_solution_harvest": {
+    "status": "SOURCE_CORROBORATED_MECHANISM_RESEARCH",
+    "sources": [
+      {
+        "name": "NNsight Quick Start",
+        "url": "https://nnsight.net/getting-started/quickstart/",
+        "principle": "Local PyTorch models can expose and modify named intermediate activations inside trace contexts; retained as fallback/donor corroboration because the canonical repo now has its own direct PyTorch hook probe."
+      },
+      {
+        "name": "NNsight vLLM integration / nnsight-serve",
+        "url": "https://github.com/ndif-team/nnsight/releases",
+        "principle": "A local persistent vLLM-backed server can retain activation intervention semantics if resource/throughput constraints later justify worker-process complexity."
+      },
+      {
+        "name": "TransformerLens activation patching",
+        "url": "https://transformerlensorg.github.io/TransformerLens/generated/code/transformer_lens.patching.html",
+        "principle": "Clean/corrupted activation patching is a causal intervention template with explicit output recovery measurement."
+      },
+      {
+        "name": "Qwen/Qwen3.5-0.8B official checkpoint",
+        "url": "https://huggingface.co/Qwen/Qwen3.5-0.8B",
+        "principle": "An exact approximately-0.8B official Transformers checkpoint exists; local exact-runtime compatibility and resource fit remain unknown until observed."
+      }
+    ],
+    "promotion": "MECHANISM_CORROBORATION_AND_EXACT_TARGET_SELECTION_ONLY"
+  },
+  "hypothesis": "The cheapest current causal path is to keep llama.cpp for local inference, reuse exact Qwen3.5-0.8B jlens observation/Jacobian donor work, and converge J-Space runtime instrumentation on the already-landed in-repo offline PyTorch activation probe, using observation mode before any lease-gated intervention.",
+  "counterhypothesis": "A new NNsight primary runtime is still required before any useful model-specific J-Space observation can be made.",
+  "counterhypothesis_adjudication": "REJECTED_AT_SOURCE-SCOPE: canonical main now contains tools/hcu_jspace_local_activation_probe.py v2, which performs an offline observation-only forward probe with named layer/position activation and output digests and also contains a separately lease-gated clean/corrupted/target/sham/off-target intervention mode. NNsight therefore remains a justified fallback if the direct hook path fails exact architecture semantics, not the primary next step.",
+  "bounded_delta": {
+    "backend_selection_contract": {
+      "path": "research_entity/claycode/HCU_JSPACE_INTERVENTION_BACKEND_SELECTION_V1.md",
+      "latest_organ_commit": "5f95f873e605dc5a91207dcf7166e668e579e5d4",
+      "classification": "CURRENT_FACING_SOURCE_RESEARCH_CONTRACT_ONLY"
+    },
+    "artifact_readme": {
+      "path": "the artefact/README.md",
+      "latest_organ_commit": "dbac4ce63c1491353ad29725595ec1e6b924c8d3",
+      "classification": "CURRENT_FACING_FRONTIER_SYNC"
+    },
+    "exact_target_donor": {
+      "path": "the artefact/blogpost_entity/mini_cognition/check_qwen35_jlens_admission.py",
+      "model": "Qwen/Qwen3.5-0.8B",
+      "observed_source_capabilities": [
+        "CONFIG_LAYOUT_GATE",
+        "WEIGHTED_FORWARD_ACTIVATION_RECORDER",
+        "BOUNDED_JACOBIAN"
+      ],
+      "target_or_sham_activation_manipulation_present": false,
+      "classification": "DONOR_OBSERVATION_AND_SENSITIVITY_LANE_ONLY_UNTIL_EXECUTED_AND_BOUND"
+    },
+    "selected_first_observation_backend": "CANONICAL_IN_REPO_OFFLINE_PYTORCH_ACTIVATION_PROBE_V2",
+    "selected_exact_target": "Qwen/Qwen3.5-0.8B_IF_LOCAL_SNAPSHOT_AVAILABLE_AND_RESOURCE_COMPATIBLE",
+    "selected_intervention_backend": "SAME_CANONICAL_IN_REPO_PYTORCH_PROBE_V2_WITH_VALID_ATOMIC_LEASE",
+    "selected_fallback_backend": "DIRECT_LOCAL_NNSIGHT_PYTORCH_THEN_LOCAL_NNSIGHT_VLLM_ONLY_IF_DIRECT_HOOK_OR_RESOURCE_DISCRIMINATOR_JUSTIFIES",
+    "mechanism_debug_fallback_model": "Qwen/Qwen3-0.6B_OR_SMALLER_ALREADY_AVAILABLE_MODEL_WITH_NO_EXACT_08B_CREDIT",
+    "llama_cpp_role": "LOCAL_INFERENCE_CAPABLE_ONLY_UNTIL_INDEPENDENT_INTERVENTION_GATE_PASS",
+    "jlens_role": "EXACT_TARGET_LAYOUT_FORWARD_ACTIVATION_OBSERVATION_AND_JACOBIAN_DONOR",
+    "remote_ndif_role": "NOT_SELECTED_CURRENT_PROVIDER_QUARANTINE_APPLIES"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: stable local inference remains separated from J-Space instrumentation, while the instrumented lane converged on an already-landed canonical in-repo probe rather than another runtime dependency.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_AT_HCU_INTERFACE_AND_EVIDENCE_CONTRACT_LEVEL: explicit inference/observation/intervention capability classes plus model-tree/post-load/activation/output/causal-ID evidence boundaries are current-facing.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_AT_SOURCE_PROTOTYPE_LEVEL: exact Qwen3.5-0.8B jlens donor is fused with the observation-first/intervention probe; the next executable discriminator is ordinary observation mode on an authorized local surface, while intervention remains lease-gated."
+  },
+  "execution_evidence": {
+    "local_or_vps_runtime_execution_observed_by_this_organ": false,
+    "reason": "NO_EXPOSED_AUTHORIZED_LOCAL_OR_CLAY_DIRECT_DEV_EXECUTION_BRIDGE_IN_CURRENT_TOOL_SET",
+    "classification": "SOURCE_RESEARCH_AND_PROTOTYPE_CONVERGENCE_ONLY",
+    "not_product_failure": true
+  },
+  "credits": {
+    "external_provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On an exposed authorized zero-cost local normal-user or clay-direct-dev surface, re-enter exact current main; execute the hardened FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 path where nonduplicate; resolve an exact local Qwen/Qwen3.5-0.8B snapshot without network; run tools/hcu_jspace_local_activation_probe.py --mode observation at one fixed layer/position with exact causal IDs; where nonduplicate run the existing jlens layout/forward gate on the same snapshot; preserve loader-consumed bytes as UNKNOWN. Do not run intervention for this macrocycle without a reproducible canonical atomic lease. A future valid lease may admit the five-run intervention family and bounded receipt before any J-Space/model/training promotion.",
+  "acceptance": "IN_PROGRESS"
+}

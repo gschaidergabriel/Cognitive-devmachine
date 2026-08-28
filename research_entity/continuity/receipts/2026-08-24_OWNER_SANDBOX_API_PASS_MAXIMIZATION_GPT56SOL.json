@@ -1,0 +1,101 @@
+{
+  "schema": "ENTITYOS_HCU_OWNER_SANDBOX_API_PASS_MAXIMIZATION/v1",
+  "date": "2026-08-24",
+  "owner_directive": "Inspect the sandbox APIs and tools actually available to each worker and use them as far as safely possible to achieve real PASS evidence; propagate this to all workers.",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_worker_directive_commit": "35c97f311a8aec009535613ac9f5c8813f679928",
+  "platform_capability_discovery": {
+    "vercel_sandbox": [
+      "Sandbox.create",
+      "sandbox.runCommand",
+      "CLI sandbox run",
+      "CLI sandbox exec",
+      "REST POST /v2/sandboxes/sessions/{sessionId}/cmd",
+      "sandbox snapshot",
+      "sandbox fork",
+      "sandbox lifecycle create/list/stop/remove"
+    ],
+    "source": "current connected Vercel documentation search",
+    "evidence_scope": "PLATFORM_CAPABILITY_NOT_PER_WORKER_CALLABILITY"
+  },
+  "current_worker_surface": {
+    "vercel_connector_callable": [
+      "documentation search",
+      "deploy current project",
+      "list/get projects",
+      "list/get deployments",
+      "deployment build logs",
+      "runtime logs/errors",
+      "agent-run observation",
+      "protected deployment URL access/fetch",
+      "team discovery"
+    ],
+    "vercel_connector_missing_direct_actions": [
+      "Sandbox.create",
+      "Sandbox.runCommand",
+      "sandbox session command POST",
+      "arbitrary authenticated HTTP POST to deployed controller"
+    ],
+    "local_chatgpt_component_container": {
+      "vercel_cli_present": false,
+      "sandbox_cli_present": false,
+      "vercel_python_module_present": false,
+      "sandbox_python_module_present": false,
+      "vercel_or_sandbox_auth_env_names_present": false
+    }
+  },
+  "live_vercel_observation": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "project": "dr-unterweger",
+    "retained_controller_pr": 810,
+    "latest_ready_deployment_id_observed": "dpl_FfJ4ZGgPnZxHVdrjYyfuwtLgEyhP",
+    "deployment_git_sha": "84838e74335a638c15328d6f8f2c9222ab0635ae",
+    "deployment_state": "READY",
+    "endpoint_probe": "GET /api/go-cycle-v2 through connected protected-fetch surface returned Vercel SSO redirect; connector exposes no arbitrary POST action",
+    "runtime_credit": 0
+  },
+  "adjudication": {
+    "sandbox_platform_unavailable": false,
+    "direct_sandbox_exec_available_to_this_worker": false,
+    "deployment_inspection_available": true,
+    "retained_controller_bridge_exists": true,
+    "controller_current_authority_problem": "PR810 remains ClayVerse-semantic and must be atomically rebound to exact current EntityOS+HCU source/acceptance semantics before it can create current runtime credit",
+    "credential_problem": "the retained controller's exact private-source run requires an owner-held scoped read-only GitHub token through transient runtime POST ingress; this worker has no such token and no callable POST action",
+    "classification": "EXECUTION_BRIDGE_PRESENT_BUT_CURRENT_WORKER_LACKS_DIRECT_EXEC_OR_POST_INGRESS"
+  },
+  "mandatory_all_worker_behavior": [
+    "Discover sandbox/API/SDK/CLI/connector actions before declaring execution blocked.",
+    "Separate platform capability from current-surface callability.",
+    "Use direct authorized Sandbox create/exec when exposed.",
+    "If direct exec is absent, inspect and safely use the single retained controller/deployment bridge when exact-current bound.",
+    "Use logs, deployment identity and protected fetch to falsify stale blockers.",
+    "Never use VPS/self-hosted/production fallback for current test credit.",
+    "Never fabricate secrets, Sandbox starts, executions or PASS.",
+    "Never persist owner credentials in source, prompts, receipts, images, DB, logs or Sandbox state.",
+    "Pursue exact-source regressions -> OCI build/start -> HCU Entry/route/engine lease/inference/GRID10 -> recovery/effect gates as far as the actual callable surface permits.",
+    "Report discovered surfaces, callable surfaces, executed evidence and the next executable PASS gate in every handoff."
+  ],
+  "next_best_pass_sequence": [
+    "Semantically rebind the single retained PR810 controller from historical ClayVerse batch semantics to exact current EntityOS+HCU main/retained-lane acceptance semantics without creating a second executor.",
+    "Deploy and verify one exact READY controller closure.",
+    "Use owner-held scoped read-only GitHub credential only through transient admitted runtime POST ingress when an authorized client capable of POST is available.",
+    "Inside Vercel Sandbox verify exact private source/tree and credential absence after fetch.",
+    "Run exact-current combined EntityOS/HCU regressions including RFC8785 Entry -> route -> engine/load lease -> inference -> GRID10 causal identity path.",
+    "Build/start exact admitted OCI image or current EntityOS executable packaging as required by current authority, bind artifact/runtime identity, then run restart/recovery/effect and stale-generation falsifiers.",
+    "Promote PASS only at exact evidence scope; whole-product PASS remains false until the full current acceptance vector executes."
+  ],
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "together_used": false,
+    "paid_fallback_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "whole_runtime_credit_change": 0,
+  "whole_product_pass": false
+}

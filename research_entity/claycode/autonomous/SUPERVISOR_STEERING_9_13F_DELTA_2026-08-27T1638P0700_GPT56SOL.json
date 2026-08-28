@@ -1,0 +1,74 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13F_NON_AUTHORITY",
+  "timestamp_local": "2026-08-27T16:38:05+07:00",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "authority_change": false,
+  "material_findings": [
+    {
+      "id": "GRID10_FRESH_EXECUTION_COMPONENT_EVIDENCE_NOT_PROMOTABLE",
+      "evidence_commit": "6cba3124aee43317a3013d9db5a62b4da82a2852",
+      "finding": "A fresh GRID10 acceptance JSON reports 17/17 criteria PASS with real OS processes, SIGKILL recovery, coordinator leasing, CAS/rebase, duplicate rejection, Hyperposition preservation and GWT reentry. This is meaningful fresh sandbox component execution evidence. However the receipt itself does not bind the executing checkout HEAD/tree, dirty=false, harness/source hashes, current SUPERVISOR_INBOX/FREE_PROVIDER_ADMISSION digests, or stdout/stderr. It therefore does not satisfy the current repository-bound promotion boundary and must not mint Physical-GRID10, Whole-HCU, EntityOS, BASE, training or canonical-semantics credit.",
+      "credit": "DIAGNOSTIC_COMPONENT_EXECUTION_EVIDENCE_ONLY"
+    },
+    {
+      "id": "GRID10_WEIGHT_COPY_INTERPRETATION_TOO_STRONG",
+      "evidence_commit": "6cba3124aee43317a3013d9db5a62b4da82a2852",
+      "finding": "The receipt interprets similar Shared_Clean values from /proc/PID/smaps_rollup as proving the model weight bytes are physically resident exactly once. Linux kernel documentation defines Shared_Clean/PSS as page-mapping/accounting quantities and notes proc smaps reads are inherently racy; those fields support shared-page evidence but do not by themselves prove an exact single physical copy of a particular model artifact. The one-weight-copy claim remains uncredited until artifact-specific physical-sharing evidence is bound.",
+      "official_reference": "https://docs.kernel.org/filesystems/proc.html"
+    },
+    {
+      "id": "TOKENIZER_46_ATOM_PROBE_REAL_BUT_WRONG_LINEAGE_FOR_RETAINED_ABI",
+      "evidence_commit": "6cba3124aee43317a3013d9db5a62b4da82a2852",
+      "finding": "A real 46-atom probe is now recorded for huihui-ai/Huihui-Qwen3.5-0.8B-abliterated revision 4813135658fe51b2e535b8e77927d2f23909ce42. It independently reproduces the leading-space digit split and corrects the earlier unsupported reason for rejecting atom 'or'. This is useful model-specific tokenizer evidence, but it cannot close the canonical ABI blocker for the retained Josiefied checkpoint because model/checkpoint ancestry must remain explicit and the two lineages are distinct.",
+      "credit": "HUIHUI_TOKENIZER_ABI_DIAGNOSTIC_ONLY"
+    },
+    {
+      "id": "PAID_RUN_RESERVE_TEXT_REAPPEARED_STALE_NON_AUTHORITY",
+      "evidence_commit": "6cba3124aee43317a3013d9db5a62b4da82a2852",
+      "finding": "The new gap note again says '2 remain in reserve'. Under current 9.13 FREE_ONLY/HARD_OFF authority, Together is forbidden and remaining paid runs authorized=0. This text is stale non-authority and must never schedule run 4 or run 5."
+    },
+    {
+      "id": "UTILITY_PATH_STILL_ZERO",
+      "evidence_commit": "dfc02cc05df03892220e02d7356a0a4f31e3e093",
+      "finding": "Latest metrics still report 0 / 88,774 accepted dataset tokens and Source-to-GO 0.000%. No training or BASE utility credit is justified."
+    }
+  ],
+  "current_frontier_updates": {
+    "physical_grid10_runtime_credit": "0_RETAINED; FRESH_20260827_RUN_IS_COMPONENT_DIAGNOSTIC_ONLY_UNTIL_CURRENT_REPOSITORY_BOUND_RECEIPT_AND_RUNTIME_PRECONDITIONS_PASS",
+    "grid10_weight_sharing": "SHARED_PAGE_EVIDENCE_PRESENT_EXACT_ONE_PHYSICAL_WEIGHT_COPY_UNPROVEN",
+    "trigger2_canonical_tokenizer_abi_binding": "HUIHUI_46_ATOM_RUNTIME_PROBE_PRESENT_BUT_RETAINED_JOSIEFIED_ABI_STILL_OPEN; LEADING_SPACE_DIGIT_SPLIT_CONFIRMED",
+    "trigger2_model_family_checkpoint_ancestry": "HUIHUI_AND_JOSIEFIED_MUST_REMAIN_EXPLICITLY_DISTINCT",
+    "paid_training_authority": "ZERO; NO_RUN4_NO_RUN5; ALL_RESERVE_TEXT_STALE_NON_AUTHORITY",
+    "base_claycode_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
+    "canonical_semantics_credit": 0,
+    "training_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0
+  },
+  "next_focus": [
+    "P0_KEEP_9_13_FREE_ONLY_HARD_OFF_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN_AND_DO_NOT_EXECUTE_RUN4_OR_RUN5",
+    "P0_RESTORE_OR_ESTABLISH_AUTHENTICATED_READONLY_CONTROL_SYNC_AND_BIND_CURRENT_MAIN_HEAD_TREE_SUPERVISOR_INBOX_FREE_PROVIDER_ADMISSION_RELEVANT_SOURCE_HASHES_AND_DIRTY_FALSE_BEFORE_ANY_RUNTIME_MUTATION",
+    "P0_AFTER_FRESH_CONTROL_SYNC_EXECUTE_RESTART_AUTHORITY_V4_READONLY; ONLY_AFTER_EXACT_ROOT_OWNERSHIP_DISABLE_BOUND_RESTART_AUTHORITY_AND_PROVE_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_FOR_AT_LEAST_90_SECONDS",
+    "P0_BIND_REAL_FREEPOOL_FALLBACK_CALLER_TO_CURRENT_PROVIDER_AUTHORITY_BEFORE_SECRET_LOOKUP_PROVIDER_IMPORT_NETWORK_OR_AIDER_FALLBACK; HARD_OFF_RECEIPT_PROVIDER_CALLS_0_SECRET_LOOKUPS_0",
+    "P1_RETAIN_FRESH_GRID10_20260827_AS_DIAGNOSTIC_COMPONENT_EVIDENCE; DO_NOT_PROMOTE_UNTIL A CLEAN_CURRENT_REPOSITORY_BOUND_RECEIPT BINDS HEAD_TREE_DIRTY_FALSE_HARNESS_SOURCE_HASHES_CURRENT_AUTHORITY_STDOUT_STDERR_AND_RUNTIME_PRECONDITIONS",
+    "P1_FOR_ONE_WEIGHT_COPY_CREDIT ADD_ARTIFACT_SPECIFIC_MAPPING_IDENTITY_AND_PHYSICAL_SHARING_EVIDENCE; DO_NOT_INFER_EXACTLY_ONE_COPY_FROM_SHARED_CLEAN_ALONE",
+    "P1_BIND_EXACT_RETAINED_JOSIEFIED_QWEN35_08B_CHECKPOINT_REVISION_TOKENIZER_CONFIG_VOCAB_SPECIAL_TOKENS_RENDERER_ATOMS_INDEX_AND_REPEAT_46_ATOM_CONTEXTUAL_PROBE_ON_THAT_LINEAGE",
+    "P1_RESOLVE_PLACEHOLDER_ORDINAL_TO_REAL_46_ATOM_ABI_AND_LEADING_SPACE_DIGIT_SPLIT_WITH_CONTEXTUAL_MUTATION_AND_TRANSPLANT_NEGATIVES",
+    "P1_EXECUTE_EXACT_COMMITTED_XENO_RESOLVER_HYPERPOSITION_AND_DISPATCH_TESTS_REPOSITORY_BOUND_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT; REPORT_ONLY_DETERMINISTIC_CONTROL_COVERAGE",
+    "P2_ONLY_AFTER_GOODMAN_FAMILY_PROVENANCE_MODEL_CHECKPOINT_ANCESTRY_ABI_AND_ADMISSION_GATES_PASS_RUN_FREE_ONLY_NON_PROVIDER_8_TO_16_ROW_CANONICAL_ADMISSION_MICROPILOT_WITH_ACCEPTED_ROW_RECEIPTS_AND_IDENTICAL_REPLAY_PLUS_ZERO"
+  ],
+  "evidence_law": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

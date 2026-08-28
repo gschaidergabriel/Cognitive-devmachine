@@ -1,0 +1,69 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_STREAM_LANE_AUTHORITY_GAP/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "8.63",
+    "mode": "FREE_ONLY",
+    "research_main_observed_before_write": "fef851726903408d1df170bdf6f1c844450be2d0"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions": 0
+  },
+  "retained_lanes": {
+    "hcu_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_live_head_observed": "a8815aab5b0737ef4c121e961538795b9d46eaa7",
+    "sequence_lane_test_snapshot": "cfbd80c280045120c1aa217cb89545325cc0d5c2",
+    "bounded_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_live_head_observed": "6a15601183f9bb61d445368e4d239e90a47b300c"
+  },
+  "observation": {
+    "typed_entry_source": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+    "sequence_lane_source": "the artefact/MicroEntity/hcu/executor_sequence_lane_binding_v1.py",
+    "sequence_lane_tests": "the artefact/MicroEntity/hcu/test_executor_sequence_lane_binding_v1.py",
+    "typed_entry_stream_id_is_part_of_event_identity": true,
+    "typed_entry_stream_id_is_independently_admitted_against_external_stream_authority": false,
+    "sequence_lane_revalidation_reconstructs_entry_using_packet_stream_id_itself": true,
+    "sequence_lane_identity_uses_stream_id": true,
+    "current_tests_prove_hash_binding_against_post_admission_relabel": true,
+    "current_tests_do_not_prove_original_stream_label_was_authoritatively_assigned": true
+  },
+  "hypothesis": "A hash-bound Typed Entry stream_id is sufficient to serve as executor-owned sequence-lane authority across distinct events.",
+  "counterhypothesis": "The current lane is deterministic but not yet executor-owned authority because stream_id originates as Entry data and no independent control-plane/transport stream-admission binding is revalidated before lane derivation.",
+  "discriminator": "Trace stream_id from raw Typed Entry admission through executor_sequence_lane_binding_v1 and distinguish integrity binding from authority admission. Require an authority source that is not reconstructed from the same packet field under test.",
+  "result": "COUNTERHYPOTHESIS_SUPPORTED_AT_SOURCE_TRUST_BOUNDARY",
+  "result_detail": "The current implementation proves that stream_id cannot be changed after Entry identity is formed without changing the Entry hash. It does not prove that the original stream_id was assigned by an independent deterministic transport/control-plane authority. Re-running admit_entry with packet.stream_id and packet-derived admission inputs is integrity reconstruction, not independent stream authorization. Therefore sequence_lane_sha256 is currently a deterministic stream-labelled grouping key, not yet positive executor-owned t->t+1 lane authority.",
+  "credit_boundary": {
+    "deterministic_lane_binding_source_credit": "SUPPORTED",
+    "independent_stream_authority_credit": "NOT_ESTABLISHED",
+    "executor_owned_temporal_adjacency_credit": "NOT_ESTABLISHED",
+    "jspace_hidden_state_causality_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "required_repair": {
+    "rule": "Do not use the current stream-derived lane as positive recurrent temporal evidence until stream identity is independently admitted.",
+    "preferred_shape": "Introduce one deterministic external stream-admission binding in the existing canonical control/state substrate, binding generation + source/transport identity + stream identity, then require executor_sequence_lane_binding_v1 to consume/read back that independent admission rather than self-reconstructing authority from packet.stream_id.",
+    "fail_closed_code": "EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE",
+    "cross_event_lane_use_before_repair": "PROJECTION_ONLY"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "NO_NEW_SANDBOX_EXECUTION: current executor remains fail-closed on unobserved remaining included Sandbox quota; earlier exact runtime evidence exposed a Python-3.13/_sqlite3 environment precondition rather than an HCU logic failure.",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_TRUST_BOUNDARY_DISCRIMINATOR: separated replay-stable Entry integrity from independent stream authority and prevented a deterministic-but-self-authorized stream label from becoming control-plane sequence authority.",
+    "track_c_global_jspace_gwt_training_readiness": "ADVANCED_BY_CAUSAL_LABEL_FENCE: stream-derived lane identity remains useful as a projection/grouping key, but recurrent t->t+1 training/causal labels are fenced until independent stream admission plus actual executor-owned atomic adjacency exist."
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving shared current-facing surface under parallel writes; this append-only source-trust receipt records a narrow falsifier without overwriting fresher whole-system state."
+  },
+  "next_exact_action": "In retained PR1263, add or reuse a canonical external stream-admission authority and make executor_sequence_lane_binding_v1 require/read it before cross-event lane equivalence. Add a negative test where an otherwise valid Entry is initially admitted with an attacker-chosen stream_id that has no external stream admission; it must fail with EXECUTOR_SEQUENCE_STREAM_AUTHORITY_UNAVAILABLE. Only after that source gate should an atomic actual-executor sequence-position/adjacency store be implemented. Runtime work remains blocked until remaining included Vercel Sandbox quota is directly observed; do not bypass the quota gate."
+}

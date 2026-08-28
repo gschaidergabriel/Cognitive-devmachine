@@ -1,0 +1,9 @@
+{
+  "config": "compression_lesion",
+  "physical_processes": 1,
+  "scope_level_work_committed": true,
+  "global_scope_exists_and_has_content": false,
+  "branch_a_content_present": true,
+  "cross_scope_visibility": false,
+  "note": "branch:a and branch:b both accumulate real committed results, but with recursive compression skipped there is no GLOBAL view at all -- a consumer asking 'what has the whole fabric learned' gets nothing, even though the per-scope work genuinely happened; this is the direct contrast to GRID10's recursive_global_compression=PASS criterion"
+}

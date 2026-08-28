@@ -1,0 +1,65 @@
+{
+  "schema": "ClayVerseGoExecutionReceipt/v1",
+  "timestamp_local": "2026-08-17T19:24:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_observed_before_receipt": "de8f14c1ccf6ab113c6775156f0450ca142d33b2",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "acceptance": "IN_PROGRESS",
+  "execution_policy": "AUTHORIZED_ISOLATED_SANDBOX_ONLY",
+  "execution_surface": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head": "5d89ebb4d7a15c679a6c37861fb3a1352cc812df",
+    "deployment_id": "dpl_21efibLYnww6hhrEMp5SAh6enCsQ"
+  },
+  "research_execution_closure": {
+    "base_main": "f7eb4df7600b0f4de1a6381a04acf5d1057d8f9b",
+    "head": "5e5adce0591058608bbd7381ecf570a39b282f0d",
+    "tree": "1e02285d77b08e6edd86f9017d0ceac5db262cf2",
+    "composition": "CURRENT_MAIN_PLUS_PR611_PLUS_FUSED_PR622_EXECUTION_RELEVANT_GENERATOR_TEST",
+    "pr611_terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "pr611_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "pr622_workflow_blob": "ad34476c0092b7e724240c927a7cb14858d1a8dc",
+    "pr622_test_blob": "ed77f5c9446295fa973512ddf7e9d11ea3292010"
+  },
+  "observed_execution": {
+    "vercel_build_started": true,
+    "guard_status": "EXACT_RETAINED_RUNNER_SOURCE_BINDING_ADMITTED",
+    "target_patch_schema": "ClayVerseCurrentTargetPatch/v4",
+    "sandbox_admission": "PASS_CREATED",
+    "private_source_fetch_started": false,
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "error": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "sandbox_stopped": true,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "classification": "SANDBOX_ADMITTED_PRIVATE_SOURCE_CREDENTIAL_BLOCKED_BEFORE_SOURCE_FETCH",
+  "epistemic_boundary": {
+    "clayverse_test_fail": false,
+    "source_regression_observed": false,
+    "entityos_reproduction_observed": false,
+    "oci_build_observed": false,
+    "image_digest_observed": false,
+    "in_image_tmux_observed": false,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Provision GITHUB_READ_TOKEN as a sensitive Preview credential for the retained PR810 execution branch without exposing or forwarding it into the Sandbox; then execute the same retained controller. After host-side exact private-source verification, continue EntityOS reproduction/staging, full exact source regression, OCI build/image identity, in-image PR611/service checks, and PR622 lock materialization.",
+  "coordination": {
+    "parallel_duplicate_controller_created": false,
+    "canonical_product_bytes_changed_by_this_receipt": false,
+    "unusual_experiment_count_added": 0,
+    "unusual_experiment_state": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn identity was available for a unique atomic unusual-experiment lease."
+  },
+  "forbidden_paths_used": {
+    "vps": false,
+    "self_hosted_runner": false,
+    "production_host": false,
+    "together_api": false
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v58",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V57_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V57",
+  "observed_main_before_write": "296177af63a378f5bb5fcda4f56ce9e8aae413cc",
+  "authority": {
+    "supervisor_epoch": "8.83_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V57 identified the exact source gap from repository-bound model-call identity into NODE_RESULT/HCU lineage. Parallel source work then produced two overlapping successor gates. V58 performs the required coordination/fusion adjudication: retain the lineage gate that composes with the pre-existing PROOF_CARRYING_NODE_RESULT authority envelope and cohort semantics; treat the simpler raw-packet authority-envelope gate as donor-only rather than a second semantic authority. No provider/model/training execution is performed and no promotion credit is minted.",
+  "source_progress": {
+    "existing_call_identity_source": "tools/trigger2_model_call_repository_bound_gate_v1.py",
+    "retained_lineage_gate": {
+      "source": "tools/trigger2_node_result_model_call_lineage_gate_v1.py",
+      "source_commit": "f859f9a9f25f3eefa562fcf62c5b49a5d7ade92d",
+      "tests": "tests/test_trigger2_node_result_model_call_lineage_gate_v1.py",
+      "tests_commit": "296177af63a378f5bb5fcda4f56ce9e8aae413cc",
+      "status": "RETAINED_SOURCE_LANE",
+      "mechanism": [
+        "reuses the existing source_bound_model_call_identity_sha256 rather than creating a second model-call identifier",
+        "validates the existing repository-bound call receipt by recomputing its source-bound call envelope",
+        "consumes the pre-existing PROOF_CARRYING_NODE_RESULT/v1 envelope instead of inventing a parallel raw-packet provenance authority",
+        "binds causal event, admission, route decision, resolved engine, GRID plan/cell, node membership, process identity, runtime generation, raw packet, node authority envelope, source-bound model call, model output, and source HEAD/tree into one controller-owned lineage reference",
+        "rejects model/process-minted authority fields in the raw cognitive NODE_RESULT body",
+        "supports deterministic lineage-bound cohort validation and whole-cohort rejection on invalid authority members"
+      ],
+      "exact_committed_test_execution_observed": false,
+      "ci_status_observed": "NO_COMMIT_STATUSES_RETURNED",
+      "runtime_credit": 0
+    },
+    "parallel_donor_gate": {
+      "source": "tools/trigger2_node_result_model_call_authority_envelope_v1.py",
+      "source_commit": "2d7f69f3175d13b8cae139f4c0275ea3ba2d9a27",
+      "tests": "tests/test_trigger2_node_result_model_call_authority_envelope_v1.py",
+      "tests_commit": "163afb499dcafd8839ed68a14de24fc7b1cd76b0",
+      "status": "DONOR_ONLY_SUPERSEDED_FOR_CANONICAL_SOURCE_DIRECTION",
+      "reason": "It independently constructs NODE_RESULT_AUTHORITY_ENVELOPE/v2 directly from a raw packet plus controller binding. That overlaps the already-admitted proof-carrying NODE_RESULT authority-envelope direction and risks a second semantic provenance authority. Preserve unique negative-test ideas as donors, but do not advance both gates as peer authorities."
+    }
+  },
+  "source_fusion_decision": {
+    "selected_pattern": "EXISTING_PROOF_CARRYING_NODE_RESULT_ENVELOPE_TO_EXISTING_SOURCE_BOUND_MODEL_CALL_REFERENCE",
+    "anti_duplication_rule": "One model-call identity authority and one NODE_RESULT provenance lineage. The retained lineage gate may create a lineage-envelope digest, but that digest is a controller provenance identity, never a competing model-call identity.",
+    "unique_donor_tests_to_preserve_or_confirm_in_retained_lane": [
+      "MODEL_CALL_REFERENCE_TRANSPLANTED_TO_DIFFERENT_PROCESS_REJECTED",
+      "SOURCE_IDENTITY_REFERENCE_TRANSPLANT_REJECTED",
+      "RAW_PACKET_TAMPER_REJECTED_WITHOUT_RESEAL",
+      "COHORT_DUPLICATE_MEMBERSHIP_OR_PROCESS_IDENTITY_REJECTED"
+    ]
+  },
+  "new_primary_source_gaps": [
+    "The retained lineage gate is still a source/component gate; the current physical GRID10/fused executor is not yet observed consuming this exact lineage gate under an admitted runtime authority chain.",
+    "Route, engine and GRID plan/cell identities are validated as precommitted controller lineage fields, but exact executor-owned attestation of those identities remains a separate integration requirement.",
+    "The donor gate and donor test still exist in main source; semantic supersession is recorded here, but physical cleanup should wait until unique negative coverage is verified/salvaged into the retained lane.",
+    "P0 FreeSwarm runtime quiescence remains actively failed, so no provider/model/training or physical GRID10 promotion may be inferred from this source progress."
+  ],
+  "hypothesis": {
+    "H58_1": "Reusing the existing proof-carrying NODE_RESULT envelope and existing source-bound model-call identity inside one controller lineage produces a cleaner single-authority causal chain than maintaining two parallel NODE_RESULT model-call envelope schemes.",
+    "counterhypothesis": "The simpler raw-packet envelope gate is easier to integrate and can coexist as a separate validation layer without becoming a competing authority.",
+    "discriminator": "Wire only the retained lineage gate into the existing atomic/fused cohort source path and show that all useful donor negatives can be expressed without requiring the second envelope schema; then remove or archive the donor executable path while preserving evidence provenance."
+  },
+  "runtime_and_training_decision": {
+    "providers": "DO_NOT_INVOKE",
+    "together": "FORBIDDEN",
+    "model_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "reason": "Supervisor 8.83 P0 runtime quiescence remains actively failed. Source integration and fusion cannot mint execution, selection or training authority."
+  },
+  "credits": {
+    "research_delta": 1,
+    "source_lineage_integration_candidate_credit": 1,
+    "duplicate_lane_fusion_decision_credit": 1,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 on the owning live host execute only the already-pinned FreeSwarm quiescence enforcer and prove zero provider-capable survivors plus bounded zero provider-counter delta without provider probing",
+    "P0 after quiescence PASS re-enter newest explicit FREE non-provider execution authority",
+    "P1 source-only: wire the retained trigger2_node_result_model_call_lineage_gate_v1 into the existing atomic/fused cohort source path without changing the raw model-generated semantic payload",
+    "P1 salvage/confirm unique process/source/cohort transplant negatives from the donor gate tests in the retained lineage test suite, then archive/remove the donor executable path so only one semantic source authority remains",
+    "P1 only after separately admitted FREE non-provider model execution run CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI/v2 on frozen BASE and preserve fail-closed result",
+    "P3 keep Forge->Distillery positive admission closed until exact accepted witness yields accepted_dataset_tokens>0 and replay +0"
+  ],
+  "next_exact_action": "P0 remains owning-live-host FreeSwarm quiescence and cannot be fabricated through GitHub. The next non-provider source delta is to integrate only the retained lineage gate into the current atomic/fused NODE_RESULT cohort path, preserve donor-only unique negative coverage, and collapse the duplicate gate into a single provenance authority before any runtime promotion."
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "FINAL_VPS_TRAINING_READINESS_REPORT/v1",
+  "campaign": "CLAY_TRIGGER2_VPS_TRAINING_RESEARCH_EXECUTION_PACKAGE_2026-08-25",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "coordinator": "Claude Code (ai-core-node)",
+  "credit_boundary_campaign_wide": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "positive_jspace_causal_credit": 0,
+    "trigger2_a02_runtime_credit": "component_scope_only",
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "gates": [
+    {"gate": "A02 repository-bound execution", "required": "PASS at requested immutable head", "result": "PASS"},
+    {"gate": "A03 authority replay root", "required": "PASS / mechanically bound", "result": "PASS", "note": "OUTER_REPLAY_ROOT_SUFFICIENT"},
+    {"gate": "Immutable genesis/history authority (nonempty history)", "required": "PASS", "result": "PASS", "note": "closed this campaign, commits 64ec0cedc/ab59e4ed5"},
+    {"gate": "OBSERVED evidence producer auth", "required": "PASS", "result": "PASS", "note": "closed this campaign, commits c55c77d02/c2a1104a0"},
+    {"gate": "IN / NOT_IN fail-closed", "required": "PASS", "result": "PASS", "note": "already fixed on main pre-campaign"},
+    {"gate": "Branch-birth evidence", "required": "RESOLVED + tests", "result": "PASS", "note": "commit f20c024a5"},
+    {"gate": "Successor-dynamic ancestry lint", "required": "PASS / one current head", "result": "PASS_STALE", "note": "verified against ledger V26; ledger now V33, not re-verified"},
+    {"gate": "Rendered family/provenance/tokenizer ABI + nuisance audit", "required": "PASS", "result": "NOT_ATTEMPTED", "note": "correctly blocked: requires quarantined trigger2_binding_router_factorial_generator_v3.py"},
+    {"gate": "Ordered-history diagnostic dataset", "required": "scored", "result": "NOT_ATTEMPTED", "note": "unblocked but not built, time prioritization"},
+    {"gate": "Checkpoint identity (Qwen3.5-0.8B family)", "required": "COMPLETE for measured candidates", "result": "PASS", "note": "BASE, POSTTRAINED, TARGET_MEASURED all identity_complete+loader_consumption_observed"},
+    {"gate": "Matched baselines", "required": "scored", "result": "PASS_PARTIAL_N", "note": "24-case + 6-case cross-candidate + 5-seed; see findings"},
+    {"gate": "J-Space causal metrology", "required": "C3 at declared scopes only", "result": "PARTIAL", "note": "behavioral effect real+reproducible; representation-divergence submetric has a known instrumentation bug, do not cite"},
+    {"gate": "Multi-seed reproducibility", "required": "run", "result": "PASS", "note": "5 seeds"},
+    {"gate": "HCU / variable-N system measurements", "required": "run", "result": "BLOCKED", "note": "no sweepable logical-N interface exists in repo as scoped; live production EntityOS stack deliberately not touched"},
+    {"gate": "Cross-encoding semantic causality", "required": "tested", "result": "NOT_ATTEMPTED"},
+    {"gate": "Resource/throughput envelope", "required": "measured", "result": "PASS", "note": "~2GB peak RSS all candidates, ~5-8 tok/s, no swap"},
+    {"gate": "Forge->Distillery first positive pilot (Phase 16)", "required": "1 packet, >0 tokens, replay +0/+0", "result": "NOT_ATTEMPTED", "note": "correctly withheld, multiple upstream prerequisites still open"}
+  ],
+  "key_findings": [
+    "Finding 1: TARGET_MEASURED (abliterated) checkpoint fabricates a fictional stock price instead of abstaining (4/5 seeds fail); BASE and POSTTRAINED both correctly abstain.",
+    "Finding 2: POSTTRAINED (official, non-abliterated) fails DB-vs-simulation discrimination, the project's most structurally important axis; BASE and TARGET_MEASURED both pass.",
+    "Finding 3: all failures across 24 extended-pilot cases cluster on unknowable-fact fabrication and epistemic-label imprecision (MEASUREMENT_ERROR collapsed into HYPOTHESIS, 0/5 seeds), not structural/procedural reasoning, which was 100% correct.",
+    "Finding 4: instruction-following exactness is 100% under greedy decoding but drops to 40% under temperature=0.7 sampling (formatting drift, not semantic failure).",
+    "Finding 5: causal steering probe (layer 11) shows a real, reproducible behavioral effect (sign-flip/lesion/permute behave as predicted); the representation-divergence submetric is broken due to a suspected hook/output_hidden_states instrumentation mismatch on this architecture -- documented as known_issue, not used as evidence.",
+    "Finding 6: resource envelope is uniform across all 3 candidates (~2GB RSS, ~5-8 tok/s CPU-only); not a discriminating factor for checkpoint choice."
+  ],
+  "coordinator_hypothesis": "Neither the abliterated nor the official checkpoint is a clean choice on current evidence -- each fails a different axis this project cares about, each on n=1. Enlarging Finding 1 and Finding 2's sample size is a higher-value next step than Phase 11 (HCU/variable-N) or cross-encoding.",
+  "coordinator_recommendation_next": [
+    "Enlarge matched-baseline sample size on the abstain-calibration axis (Finding 1) and DB-vs-simulation axis (Finding 2) beyond n=1 per candidate before any checkpoint selection.",
+    "Fix the representation-divergence instrumentation bug (capture hidden state inside the forward hook, not via output_hidden_states) before citing any J-Space representation-level number.",
+    "Design Phase 11 (HCU/variable-N) as its own scoping task -- define a concrete, testable logical-N interface before attempting to measure it; do not build a sweep target under time pressure.",
+    "Re-verify successor-dynamic ancestry lint against the now-current ledger V33 (was verified against V26).",
+    "Nuisance/tokenizer ABI audit (Phase 6.2 / P2) remains correctly blocked behind the quarantined factorial generator -- do not unquarantine it to unblock this."
+  ],
+  "operational_note": "Target repo runs its own live autonomous process; ledger advanced V24->V33 during this campaign, largely reacting to evidence this campaign pushed. All writes used fetch+ff+retry; separate git worktrees per parallel track after a near-miss stash collision in round 1."
+}

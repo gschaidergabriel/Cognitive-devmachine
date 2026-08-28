@@ -1,0 +1,68 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "authority": "NON_AUTHORITY_STEERING_ONLY",
+  "date": "2026-08-27T20:54:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT research supervisor",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "base_authority_epoch": "9.13",
+  "material_findings": [
+    {
+      "id": "GRID10_SUSTAINED_LEASE_EXPIRY_BUG",
+      "evidence_commits": ["e6fe6bf4f4a1a143d7b114a26d84a1a7271c2fd7", "89a671a16f4d709f8cbe3440851b7936b08ef326"],
+      "finding": "A sustained multi-tick GRID10 run exposed a real coordinator lease-TTL failure that the short acceptance harness did not reach: after the original lease exceeded its TTL, later packets could remain uncommitted while the node kept polling. The committed fix revokes a lease after commit_error and permits re-election; a real sqlite-backed regression test was added and the operation report states pre-fix failure/post-fix pass plus a fresh 17/17 acceptance regression.",
+      "credit": "DIAGNOSTIC_EXECUTABLE_COMPONENT_EVIDENCE_ONLY_NO_PHYSICAL_GRID10_PROMOTION",
+      "reason": "The run/report is materially stronger than model consensus, but the sustained execution is not bound to the current canonical control-transport/quiescence authority with clean HEAD/tree/source-hash/dirty=false runtime evidence."
+    },
+    {
+      "id": "POST_HARD_OFF_FREEPOOL_PROVIDER_EXECUTION",
+      "evidence_commits": ["035c5e23a45d651bcadd903e89a156a1348f5296", "e0c376ec5a5ab18acc248a34d5fb070d9e4ec10d", "e4655842d1a2cffc52ce81b8bee13e2daa837d78"],
+      "finding": "Fresh fallback provenance and the GRID10 operation report explicitly record a real NVIDIA Nemotron free-pool call after canonical authority 9.13 already set all autonomous provider routes false under OWNER_EMERGENCY_STOP/HARD_OFF. The report says it fell back 'per standing instruction'; that standing instruction is stale non-authority under current FREE_ONLY/HARD_OFF.",
+      "credit": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE_ZERO_PROVIDER_RUNTIME_CREDIT",
+      "required_closure": "The actual stern.py -> harness_aider.py -> external last-resort caller path must execute the canonical fail-closed provider gate before secret lookup/provider import/network/Aider fallback. Under 9.13 HARD_OFF the real caller must be repository/runtime receipted with provider_calls=0 and secret_lookups=0. A standalone gate file is insufficient."
+    },
+    {
+      "id": "SUSTAINED_GRID10_LEFT_RUNNING_DURING_OPEN_QUIESCENCE_FRONTIER",
+      "evidence_commit": "89a671a16f4d709f8cbe3440851b7936b08ef326",
+      "finding": "The operation report states ten node processes were deliberately left alive with roughly 50 minutes of remaining polling capacity while runtime control transport/quiescence remained unresolved in the current supervisor. This is useful bounded diagnostic operation but cannot mint current Physical-GRID10/HCU runtime credit or supersede the quiescence/control-sync P0.",
+      "credit": "DIAGNOSTIC_ONLY_NO_PROMOTION"
+    },
+    {
+      "id": "WORLD_MODEL_LINE_CLOSURE_SCOPE",
+      "evidence_commit": "b0aafc4678b21a255bef66968054ca9ef99641bd",
+      "finding": "The research line was redirected away from calling the current driver/model combination a world model. This conclusion is acceptable as non-authority research prioritization because the executable sustained-run evidence shows the driver, not the small model, computes the key collapse/preserve rule. Nemotron agreement adds no independence or canonical-semantics credit and must not be counted under Goodman anti-echo.",
+      "credit": "RESEARCH_DIRECTION_ONLY"
+    }
+  ],
+  "control_effect": {
+    "provider_authority_epoch_changed": false,
+    "provider_routes_admitted": false,
+    "free_only": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "training_credit_added": 0,
+    "base_credit_added": 0,
+    "canonical_semantics_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0
+  },
+  "next_focus": [
+    "P0_CLOSE_REAL_FREEPOOL_CALLER_BOUNDARY: bind the executable stern.py/harness_aider.py/last-resort path to current canonical provider admission before any secret lookup/import/network/fallback; under HARD_OFF require provider_calls=0 and secret_lookups=0.",
+    "P0_RESUME_EXISTING_CONTROL_TRANSPORT_FRONTIER: repository-bound bootstrap-v2/refresh tests, owning-VPS clean/current authority binding, then restart-authority-v4 read-only and at least 90 seconds zero survivors/descendants/restarts before runtime promotion.",
+    "P1_KEEP_GRID10_LEASE_FIX: run the new lease-renewal regression repository-bound on a clean current non-provider checkout and bind HEAD/tree/source hashes/stdout/stderr; then include sustained >TTL behavior in future GRID10 acceptance so one-shot 17/17 cannot mask lease expiry.",
+    "P1_DO_NOT_USE_NEMOTRON_CONSENSUS_AS_GOODMAN_INDEPENDENCE: provider/model critique may motivate tests but cannot promote canonical semantics, BASE, model selection or HCU claims.",
+    "P2_ONLY_AFTER_CONTROL_AND_QUIESCENCE_CLOSURE: execute concrete GRID10 application workloads with repository-bound receipts and explicit component-only credit boundaries."
+  ],
+  "invariants": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

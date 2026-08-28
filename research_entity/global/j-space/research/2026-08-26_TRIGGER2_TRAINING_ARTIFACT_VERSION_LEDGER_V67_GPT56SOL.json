@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v67",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "STRICT_XFAIL_PROVENANCE_GAP_ENCODED",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V66_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V66",
+  "observed_main_before_write": "bcc8fce0400e5d290b1fd96969775fb6b4a4fdcb",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "revision_reason": "V67 converts the V66 caller-forgeable physical proof finding into a durable strict-xfail regression on current main. No claim of closure is made. The test imports the retained real-FusedFabric source fixture, snapshots state, then requires a future physical admission boundary to reject the all-true synthetic proof before fused_cohort_admissions, admitted_results, or epoch can mutate.",
+  "durable_delta": {
+    "test": "tests/test_trigger2_physical_proof_provenance_gap_v1.py",
+    "commit": "bcc8fce0400e5d290b1fd96969775fb6b4a4fdcb",
+    "test_class": "STRICT_XFAIL_SOURCE_GAP",
+    "required_future_error": [
+      "PHYSICAL_COHORT_WITNESS_REQUIRED",
+      "PHYSICAL_COHORT_PROVENANCE_INVALID"
+    ],
+    "mutation_fence": [
+      "epoch unchanged",
+      "fused_cohort_admissions count unchanged",
+      "admitted_results count unchanged"
+    ],
+    "expected_current_behavior": "XFAIL because the current physical coordinator still accepts the synthetic proof dictionary",
+    "promotion_behavior": "Once a source-enforced physical witness boundary is implemented, the test should XPASS under strict mode; remove xfail only in the same reviewed closure that demonstrates fail-before-mutation and preserves a separately explicit source-fixture-only path."
+  },
+  "hypothesis": "A typed/opaque witness minted only by the retained physical observation path can separate physical evidence admission from deterministic source-fixture composition without creating a second truth/effect authority.",
+  "counterhypothesis": "A Python-level typed witness alone is cosmetic if callers can construct or mint it from arbitrary booleans; source closure therefore requires binding witness issuance to exact observed node/PID/read-receipt/snapshot/barrier data and ensuring the physical commit path rejects raw dictionaries.",
+  "adjudication": "Do not count a mere class/type wrapper as closure. The future implementation must prove fail-before-mutation for raw/synthetic proof data and keep source-fixture receipts structurally incapable of physical runtime credit.",
+  "execution_evidence": {
+    "repository_ci_observed": false,
+    "exact_current_pytest_executed": false,
+    "source_write_observed": true,
+    "source_write_commit": "bcc8fce0400e5d290b1fd96969775fb6b4a4fdcb",
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid10_executed": false,
+    "training_executed": false,
+    "vps_execution_performed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false
+  },
+  "credit_boundary": {
+    "new_source_research_delta": 1,
+    "physical_proof_boundary_closed": 0,
+    "repository_ci_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 owning live host: prove FreeSwarm quiescence with zero provider-capable survivors plus bounded zero provider-counter delta without provider probing",
+    "P1 source-only: replace raw-dict physical admission with an observed/minted witness provenance boundary and a separate explicitly nonphysical source-fixture composition path",
+    "P1 source-only: make tests/test_trigger2_physical_proof_provenance_gap_v1.py pass by rejection before any physical-cohort mutation, then remove strict xfail in the same reviewed closure",
+    "P1 after quiescence PASS: re-enter newest explicit FREE non-provider execution authority before model/provider/physical GRID10 promotion",
+    "P2 keep checkpoint selection blinded and training materialization closed until separately admitted executable evidence",
+    "P3 keep accepted_dataset_tokens and training credit at zero until one exact positive admission produces tokens and identical replay adds zero"
+  ],
+  "next_exact_action": "Implement the physical witness provenance boundary in the retained FusedFabric path: reject dict/synthetic proofs at atomic_fused_cohort_commit, bind a witness to exact physical observations minted by spawn_held_cohort, and preserve an explicitly SOURCE_FIXTURE_ONLY adapter persistence path with zero physical credit."
+}

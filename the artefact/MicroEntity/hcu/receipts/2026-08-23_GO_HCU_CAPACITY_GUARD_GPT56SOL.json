@@ -1,0 +1,57 @@
+{
+  "schema": "HCU_CAPACITY_GUARD_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated component organ",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "main_base_sha": "77582d2f78b4907f8f1249621ad2fe4725014ba7",
+  "branch": "gpt56sol/go-hcu-capacity-guard-fusion-20260823",
+  "source_head_before_receipt": "3b74948df72179695ca97a9e05442308fadf8094",
+  "classification": "EXACT_BRANCH_COMPONENT_MECHANISM_SUPPORT_ONLY",
+  "exact_git_blobs": {
+    "hcu/capacity_guard_v1.py": "a17ebcc0717f4b186bdbdb11fd3ab4c94d7d81af",
+    "hcu/test_capacity_guard_v1.py": "f828126a207783028c1fba6250ebf2f90230cac3",
+    "hcu/topology.kvm4.json": "bf1e1929b03c616aee968e4252acad222dbf9e3c"
+  },
+  "exact_content_sha256": {
+    "hcu/capacity_guard_v1.py": "404ea02966a044b5241a59844b6280be617bd40a2a20a58715b53fecae22150b",
+    "hcu/test_capacity_guard_v1.py": "87e06d9c0eac362c94891fe97d43f98d49e6d6006bc8c81f090bc16c8228e5da",
+    "hcu/topology.kvm4.json": "72ecd145ee13c4259fb803b87d8764b4f2d25505a81b829b396502eac44553a3"
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Linux component container",
+    "commands": [
+      "python -m py_compile capacity_guard_v1.py test_capacity_guard_v1.py",
+      "python -m unittest -v test_capacity_guard_v1.py"
+    ],
+    "tests_run": 7,
+    "tests_passed": 7,
+    "result": "PASS_COMPONENT_MECHANISM_ONLY"
+  },
+  "guarded_invariants": [
+    "source topology planning numbers do not mint runtime capacity",
+    "MiniUnifiedDB remains canonical persistence authority",
+    "EffectGate remains the only admitted effect authority",
+    "logical lane sum remains structurally coherent",
+    "capacity measurements require AUTHORIZED_ISOLATED_SANDBOX",
+    "measured slot count cannot exceed RAM-derived bound",
+    "physical decode concurrency cannot exceed host CPU/resident bounds"
+  ],
+  "unusual_experiment": {
+    "macro_cycle_count": 1,
+    "id": "HCU_FALSE_CAPACITY_POISON",
+    "status": "REGRESSION_RERUN_AFTER_PARALLEL_FUSION",
+    "intervention": "attempt a numeric 32-slot safe runtime claim from the unverified KVM4 source profile",
+    "observed": "SOURCE_TOPOLOGY_CANNOT_MINT_RUNTIME_CLAIM",
+    "note": "This reruns the same intervention already consumed earlier in this user-triggered go; it is not a second unusual experiment."
+  },
+  "runtime_credit": {
+    "hcu_runtime_fit": 0,
+    "bundled_08b": 0,
+    "jspace_gwt": 0,
+    "target_vps": 0,
+    "whole_mini_entity": 0
+  },
+  "next_exact_gate": "Bind exact bundled ~0.8B checkpoint/tokenizer/runtime bytes on an authorized isolated surface and produce an HCU_CAPACITY_MEASUREMENT/v1 receipt with shared-weight RSS, incremental logical-slot/KV RSS, safe resident workers, safe physical decode concurrency, throughput and latency evidence.",
+  "evidence_note": "This receipt proves only deterministic capacity-claim gating at the exact branch source. It does not prove model fit, throughput, J-Space/GWT causality, VPS behavior or whole-product acceptance."
+}

@@ -1,0 +1,118 @@
+{
+  "base_model": "huihui-ai/Huihui-Qwen3.5-0.8B-abliterated",
+  "base_model_revision": "4813135658fe51b2e535b8e77927d2f23909ce42",
+  "adapter_dir": "/workspace/trigger2_diag_adapter",
+  "n_rows": 12,
+  "n_correct_exact_or_prefix": 2,
+  "accuracy": 0.16666666666666666,
+  "results": [
+    {
+      "source_file": "TRIGGER2_B0_READ_BASELINE_CANDIDATE_V1.jsonl",
+      "id": "B0_READ_T6_PARITY_HOLDOUT_ABSTAIN_NEG_EVIDENCE_THEN_QUERY",
+      "prompt": "EVIDENCE: No integer value is recorded.\nQUERY: The recorded integer is not even.\nRespond with exactly one word: ALLOW, DENY, or ABSTAIN.",
+      "expected_target": "ABSTAIN",
+      "generated": "DENY",
+      "exact_or_prefix_match": false,
+      "gen_seconds": 1.6
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "id": "B0_WRITE_T12_M0_O4_ABSTAIN",
+      "prompt": "CODEBOOK: ABSTAIN=>ABI_ACCEPTED_ORDINAL:14 | ALLOW=>ABI_ACCEPTED_ORDINAL:12 | DENY=>ABI_ACCEPTED_ORDINAL:13\nSTATE: the current class is ABSTAIN, given directly (not derived from evidence).\nReturn exactly one bound symbol.",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "generated": "ABI_ACCEPTED_ORDINAL:14",
+      "exact_or_prefix_match": true,
+      "gen_seconds": 2.8
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "id": "T6_PARITY_HOLDOUT_S12_M0_O1_L0_ALLOW_POS",
+      "prompt": "CODEBOOK: ALLOW=>ABI_ACCEPTED_ORDINAL:12 | ABSTAIN=>ABI_ACCEPTED_ORDINAL:14 | DENY=>ABI_ACCEPTED_ORDINAL:13\nEVIDENCE: The recorded integer is 14.\nQUERY: The recorded integer is even.\nAnswer with exactly one bound symbol.",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "generated": "E",
+      "exact_or_prefix_match": false,
+      "gen_seconds": 1.5
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "id": "B2_PRIOR_T12_M5_D1_B_FIRST_ALLOW",
+      "prompt": "CODEBOOK (current, authoritative): ALLOW=>ABI_ACCEPTED_ORDINAL:14 | DENY=>ABI_ACCEPTED_ORDINAL:13 | ABSTAIN=>ABI_ACCEPTED_ORDINAL:12\nNOTE (reference only, from a DIFFERENT past episode, NOT current): ALLOW=>ABI_ACCEPTED_ORDINAL:12 | DENY=>ABI_ACCEPTED_ORDINAL:14 | ABSTAIN=>ABI_ACCEPTED_ORDINAL:13\nSTATE: the current class is ALLOW, given directly.\nReturn exactly one bound symbol, using ONLY the CURRENT codebook.",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "generated": "ALLOW",
+      "exact_or_prefix_match": false,
+      "gen_seconds": 1.6
+    },
+    {
+      "source_file": "TRIGGER2_B2_STALE_BINDING_REJECTION_CANDIDATE_V1.jsonl",
+      "id": "B2_STALE_T12_M2_VALID_ABSTAIN",
+      "prompt": "NOTICE: the codebook below is marked CURRENT. It may be used.\nCODEBOOK: ALLOW=>ABI_ACCEPTED_ORDINAL:13 | DENY=>ABI_ACCEPTED_ORDINAL:12 | ABSTAIN=>ABI_ACCEPTED_ORDINAL:14\nSTATE: the current class is ABSTAIN, given directly.\nReturn exactly one bound symbol, or the token STALE_REJECTED if the binding cannot be used.",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "generated": "STALE_REJECTED",
+      "exact_or_prefix_match": false,
+      "gen_seconds": 2.1
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "id": "B3_DEREF_T12_M1_D3-1-2_QDENY",
+      "prompt": "CODEBOOK (entry points): ALLOW=>PTR_T12_C0_H1 | DENY=>ABI_ACCEPTED_ORDINAL:14 | ABSTAIN=>PTR_T12_C2_H1\nCHAIN (pointer definitions): PTR_T12_C0_H1 => PTR_T12_C0_H2 | PTR_T12_C0_H2 => ABI_ACCEPTED_ORDINAL:12 | PTR_T12_C2_H1 => ABI_ACCEPTED_ORDINAL:13\nSTATE: the current class is DENY, given directly.\nDereference the full chain and return exactly the FINAL resolved symbol atom -- never an intermediate pointer token.",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "generated": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include",
+      "exact_or_prefix_match": false,
+      "gen_seconds": 4.9
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "id": "B3_UNRES_T12_M2_D1-2-3_BABSTAIN_QALLOW",
+      "prompt": "CODEBOOK (entry points): ALLOW=>ABI_ACCEPTED_ORDINAL:13 | DENY=>PTR_T12_C1_H1 | ABSTAIN=>PTR_T12_C2_H1\nCHAIN (pointer definitions): PTR_T12_C1_H1 => ABI_ACCEPTED_ORDINAL:12 | PTR_T12_C2_H1 => PTR_T12_C2_H2 | PTR_T12_C2_H2 => UNDEFINED_PTR_T12_C2_H3\nSTATE: the current class is ALLOW, given directly.\nDereference the full chain and return exactly the FINAL resolved symbol atom, or the token UNRESOLVABLE if the chain does not terminate in a defined symbol atom.",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "generated": "```python\nfrom typing import Optional, Union\n\n# Define the entry points\nALLOW = \"ALLOW\"\nDENY",
+      "exact_or_prefix_match": false,
+      "gen_seconds": 5.7
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "id": "B4_HOLDOUT_FROZEN_K08_D02_LOOKALIKE_R0_cell_16",
+      "prompt": "CODEBOOK: cell_10=>ABI_ACCEPTED_ORDINAL:64 | cell_09=>ABI_ACCEPTED_ORDINAL:70 | cell_11=>ABI_ACCEPTED_ORDINAL:63 | cell_16=>ABI_ACCEPTED_ORDINAL:65 | cell_17=>ABI_ACCEPTED_ORDINAL:77 | cell_03=>ABI_ACCEPTED_ORDINAL:68 | cell_07=>ABI_ACCEPTED_ORDINAL:71 | cell_18=>ABI_ACCEPTED_ORDINAL:78\nINTERVENING:\nshadow_07=>ABI_ACCEPTED_ORDINAL:92\nshadow_15=>ABI_ACCEPTED_ORDINAL:98\nQUERY: Which atom is bound to cell_16?\nAnswer with exactly one bound atom.",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:65",
+      "generated": "cell_16",
+      "exact_or_prefix_match": false,
+      "gen_seconds": 2.2
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "id": "B5_HOLDOUT_FROZEN_N03_E2_ORD8cfa3931_unit_h02",
+      "prompt": "CODEBOOK: unit_h02=>ABI_ACCEPTED_ORDINAL:293 | unit_h01=>ABI_ACCEPTED_ORDINAL:297 | unit_h00=>ABI_ACCEPTED_ORDINAL:292\nQUERY: Which atom is bound to unit_h02?\nAnswer with exactly one bound atom.",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:293",
+      "generated": "C",
+      "exact_or_prefix_match": false,
+      "gen_seconds": 1.5
+    },
+    {
+      "source_file": "TRIGGER2_B6_DB_VS_SIM_CANDIDATE_V1.jsonl",
+      "id": "B6_DBVSSIM_S6_INCIDENT_REPORT_STALE_REBASE_REQUIRED_NEG_QUESTION_THEN_CONTEXT_node_kite2",
+      "prompt": "Report body: What authority does this claim about the entity's state have: CANONICAL_DB, SIMULATED_HYPOTHESIS, or STALE_REBASE_REQUIRED?\nReport question: Claim under review: node_kite2.status=BLOCKED was read from the ledger at epoch 41; the canonical epoch has since advanced to 44 (with 44 greater than 41) and no rebase or re-read has happened since that earlier read. This is not an unconfirmed simulated guess and not a confirmed same-epoch canonical ledger read.\nRespond with exactly one label: CANONICAL_DB, SIMULATED_HYPOTHESIS, or STALE_REBASE_REQUIRED.",
+      "expected_target": "STALE_REBASE_REQUIRED",
+      "generated": "SIMULATED_HYPOTHESIS",
+      "exact_or_prefix_match": false,
+      "gen_seconds": 2.9
+    },
+    {
+      "source_file": "TRIGGER2_B6_GWT_UPTAKE_CANDIDATE_V1.jsonl",
+      "id": "B6_GWT_UPTAKE_ep_gwt_h0_WP_Pgammabetaalpha_QUESTION_THEN_STATEMENT",
+      "prompt": "A downstream process reads only the CURRENT broadcast content from the shared workspace and asks for its property value. What property value does it read?\nEpisode ep_gwt_h0: candidate P won the discriminator-score competition in the prior round and is now the broadcast content in the shared workspace. Each candidate separately carries its own property value: P.property=gamma, Q.property=beta, R.property=alpha.\nRespond with exactly one property value: alpha, beta, or gamma.",
+      "expected_target": "gamma",
+      "generated": "alpha",
+      "exact_or_prefix_match": false,
+      "gen_seconds": 1.7
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "id": "B6_HYPERPOS_S6_INCIDENT_REPORT_SURFACE_FLUENCY_POS_CONTEXT_THEN_QUESTION_node_kite2",
+      "prompt": "Report body: Two Hyperposition branches for node_kite2 remain open: branch A and branch B, each still holding supporting evidence with neither branch falsified. Branch A's write-up reads more fluently and confidently than branch B's, though the underlying evidence is unchanged.\nReport question: Should the two open branches be preserved or may they be validly collapsed: PRESERVE_BRANCHES or COLLAPSE_VALID?\nRespond with exactly one label: PRESERVE_BRANCHES or COLLAPSE_VALID.",
+      "expected_target": "PRESERVE_BRANCHES",
+      "generated": "PRESERVE_BRANCHES",
+      "exact_or_prefix_match": true,
+      "gen_seconds": 1.9
+    }
+  ]
+}

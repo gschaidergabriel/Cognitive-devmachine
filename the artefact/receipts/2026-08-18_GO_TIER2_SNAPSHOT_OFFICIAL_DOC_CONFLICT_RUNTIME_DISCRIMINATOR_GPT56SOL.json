@@ -1,0 +1,86 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:39:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "OFFICIAL_VERCEL_DOC_CONFLICT_REQUIRES_EXACT_RUNTIME_DISCRIMINATOR",
+  "canonical_main_observed_before_write": "2d33f05eb7794bf0b7690bf05bdd8f71e0c3a943",
+  "scope": "Correct the epistemic status of the Tier-2 Vercel manual-snapshot carrier without modifying the actively changing retained PR810 controller lane.",
+  "current_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_observed": "ba78e1624e299c7ed8e7f202c66fdae0c8db3009",
+    "state": "DRAFT_MERGEABLE_HOT_LANE",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "official_documentation_conflict": {
+    "source_a": {
+      "publisher": "Vercel",
+      "surface": "current Sandbox persistent-sandboxes documentation and Sandbox API/CLI documentation",
+      "observation": "The current documentation surfaced by the connected Vercel documentation index says sandbox.delete permanently removes the named sandbox and sessions while snapshots remain until expiration or explicit snapshot deletion; snapshot deletion is separately addressable and Sandbox.create from an explicit snapshotId is documented."
+    },
+    "source_b": {
+      "publisher": "Vercel",
+      "surface": "Knowledge Base guides updated 2026-06-29: How Vercel Sandbox duration and persistence work; The Complete Guide to Vercel Drives",
+      "observation": "The duration/persistence guide says snapshots are tied to the sandbox lifecycle, and the Drives guide explicitly says deleting the producing sandbox also deletes its snapshots; it recommends a Drive when data must outlive the sandbox entirely."
+    },
+    "possible_reconciliation_not_promoted": "The conflict may reflect a distinction between manual snapshots and automatic persistent-sandbox snapshots or documentation drift, but this is only a hypothesis and is not treated as product truth.",
+    "epistemic_result": "DOC_CONFLICT_UNRESOLVED",
+    "promotion_rule": "Neither categorical snapshot-survives-delete nor categorical snapshot-dies-with-delete receives canonical Tier-2 carrier truth from documentation alone. Exact authorized isolated runtime evidence decides the current SDK/API behavior."
+  },
+  "latest_execution_admission_observation": {
+    "vercel_project": "dr-unterweger",
+    "deployment": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
+    "deployed_commit": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
+    "state": "ERROR",
+    "failure_class": "SOURCE_GUARD_BINDING_FAIL_CLOSED_BEFORE_CLAYVERSE_TEST_EXECUTION",
+    "observed_error": "CURRENT_OCI_RETAINED_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED",
+    "clayverse_test_executed": false,
+    "tier2_executed": false,
+    "runtime_credit": 0
+  },
+  "cheapest_exact_runtime_discriminator": {
+    "classification": "ORDINARY_PROVIDER_CONTRACT_ACCEPTANCE_TEST",
+    "precondition": "Use an authorized disposable Vercel Sandbox path bound to the exact controller/provider version; do not use VPS/self-hosted/production-host substitutes.",
+    "sequence": [
+      "create a disposable source sandbox and record sandbox/session identity",
+      "write a non-secret random sentinel plus SHA-256 receipt in the declared transfer surface",
+      "create an explicit manual snapshot and record snapshot identity/status",
+      "delete the named source sandbox and confirm source identity is no longer retrievable/rejoinable",
+      "retrieve the exact snapshotId after source deletion and record its status",
+      "attempt Sandbox.create with source type snapshot, exact snapshotId, a distinct name/session and persistent:false",
+      "if creation succeeds, verify sentinel bytes/hash and prove replacement identity differs from source",
+      "delete the disposable replacement and explicitly delete the snapshot if it still exists"
+    ],
+    "pass_for_lifecycle_only": "The exact post-delete snapshot remains retrievable and creates a distinct replacement containing the exact sentinel bytes/hash.",
+    "fail_for_lifecycle_only": "The snapshot is deleted/unavailable after source deletion or cannot instantiate the distinct replacement.",
+    "tier2_credit": "ZERO unless the later full declared-transfer, exact OCI identity, generation fencing, stale-writer rejection, effect no-replay, fresh secret reacquisition and second cognition gates also pass."
+  },
+  "alternatives_if_snapshot_fails": {
+    "vercel_drive": "Architecturally provides an independent lifecycle according to current Vercel guidance, but is Private Beta and Vercel advises against production data use during beta; therefore it is not silently promoted as the canonical ClayVerse state carrier.",
+    "external_durable_store": "Requires separate explicit security, provenance, lifecycle, cost and owner-policy admission; it must remain a data carrier rather than a second ClayVerse state authority."
+  },
+  "coordination": {
+    "parallel_pr810_writes_observed": true,
+    "pr810_code_write_by_this_organ": false,
+    "duplicate_controller_path_added": false,
+    "research_product_bytes_changed": false,
+    "research_evidence_receipt_only": true,
+    "owner_credentials_used": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "The shared go macro-cycle already has conflicting/consumed experiment accounting and no immutable shared experiment lease was exposed to this organ; no duplicate unusual intervention was created. This receipt defines the ordinary acceptance discriminator only."
+  },
+  "epistemic_status": {
+    "snapshot_carrier_source_candidate": true,
+    "official_documentation_consistent": false,
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "After an exact-current PR810 deployment passes source guards, execute the bounded manual-snapshot lifecycle discriminator before spending the full Tier-2/Mistral recovery path. If lifecycle passes, continue exact declared-transfer/OCI/generation/effect/provider gates; if it fails, reject the snapshot carrier and evaluate only explicitly admitted independent durable carriers."
+}

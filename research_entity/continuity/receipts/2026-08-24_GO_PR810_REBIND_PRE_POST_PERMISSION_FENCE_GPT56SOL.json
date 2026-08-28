@@ -1,0 +1,65 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "e58582b676d6c11d3ab1b85b64a1a5915e360718",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed_after_write": "bfc42e9c7b496059a599b64fad12e71d15deb844",
+    "force_push_used": false,
+    "duplicate_executor_lane_created": false
+  },
+  "durable_executor_delta": {
+    "permission_guard_commit": "8f9452979b1cdd0e1f4f488e4dba314dcaf706ac",
+    "prevercel_build_integration_commit": "66bb5c5152cd4ea96c2e16466f3673897f13ca81",
+    "guard_path": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-rebind-permission-semantics.mjs",
+    "package_path": "mcp/vercel-sandbox-mcp/package.json",
+    "invariant": "sandbox_create_permitted_before_source_rebind remains false forever as causal evidence; an admitted successor ready state must instead assert source_rebind_complete=true and sandbox_create_permitted_after_source_rebind=true while retaining the FREE_ONLY cost gate before Sandbox.create",
+    "quarantined_state": "SOURCE_REBIND_REQUIRED requires the route fail closed and forbids post-rebind permission",
+    "ready_state": "SOURCE_REBOUND_READY requires quarantine removed, source_rebind_complete=true, post-rebind permission=true, and FREE_ONLY cost gate ordering"
+  },
+  "observed_successor_state": {
+    "exact_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "exact_blob_count": 17,
+    "exact_verbose_regression_count": 14,
+    "route_exact_result_fence_present": true,
+    "route_still_source_rebind_required": true,
+    "global_executor_guard_nonquarantine_branch": "FAILS_CLOSED_WITH_ENTITYOS_HCU_JSPACE_SUCCESSOR_PROMOTION_CONTRACT_NOT_ADMITTED",
+    "existing_promotion_guard_ready_semantic_conflict": "requires sandbox_create_permitted_before_source_rebind=true",
+    "new_permission_guard_rejects_that_history-rewriting transition": true
+  },
+  "negative_evidence": {
+    "sandbox_runtime_executed_by_this_organ": false,
+    "paid_provider_or_upgrade_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "runtime_credit_change": 0,
+    "attempted_successor_guard_v2_write": "BLOCKED_BY_CONCURRENT_BRANCH_MOVEMENT_HTTP_409_AND_NOT_FORCED"
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: promotion now has a build-time pre/post permission invariant that prevents historical pre-rebind denial from being rewritten as execution permission.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the permission fence is bound to the same exact 17-blob Typed Entry -> route -> engine/load -> GRID10 -> execution/inference closure and preserves zero runtime credit while quarantined.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: successor readiness remains tied to the exact 14-test J-Space/Inference v4/Binding v3 result fence, with model/training credit held at zero."
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Append-only receipt used because current-facing README and PR810 are moving rapidly under parallel organs; avoid overwriting concurrent state."
+  },
+  "next_exact_gate": "Repair the existing promotion guard so SOURCE_REBOUND_READY preserves sandbox_create_permitted_before_source_rebind=false and requires separate sandbox_create_permitted_after_source_rebind=true plus source_rebind_complete=true; then replace the global executor guard's deliberate nonquarantine throw with an equally strict successor-ready branch in the same coherent change. Only after those source guards are coherent may the route quarantine be removed. Runtime execution remains subject to FREE_ONLY Vercel Hobby cost/admission fences."
+}

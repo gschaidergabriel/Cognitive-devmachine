@@ -1,0 +1,56 @@
+{
+  "schema": "CLAY_GO_SOURCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "branch_base": "f303060b1ab79cd113f1308221a3e95f784eeab4",
+  "latest_main_observed_before_receipt_repair": "14744411b7c7f4bdeaac647168a7d5e9c1fd4569",
+  "branch": "agent/go-clayverse-entityos-kata-default-off-20260823",
+  "classification": "SOURCE_AUTHORITY_DRIFT_REPAIR_COMPONENT_EVIDENCE_ONLY",
+  "finding": "The current ClayVerse owner directive and manifest make EntityOS execution conditional and disabled by default, while the canonical Kata deployment template still set CLAYVERSE_ENABLE_ENTITYOS_EXEC to 1. The existing optionality authority regression did not inspect the deployment template.",
+  "delta": {
+    "deployment_template": "the artefact/deployment/clayverse-kata-statefulset.template.yaml",
+    "deployment_blob": "2132630ed6ec8c89280248b7b9a0b660303896bc",
+    "deployment_default": "CLAYVERSE_ENABLE_ENTITYOS_EXEC=0",
+    "regression": "the artefact/tests/test_entityos_deployment_admission_default.py",
+    "regression_blob": "24d9a6f3a41a10ff52d1cab217748b3cd0c57330",
+    "authority_preserved": "UnifiedDB + EffectGate/EffectJournal; EntityOS remains optional internal substrate",
+    "second_effect_or_state_authority_created": false
+  },
+  "coordination": {
+    "open_overlapping_pr_found_before_branch_write": false,
+    "main_advanced_after_branch_base": true,
+    "intervening_commits_checked": 10,
+    "intervening_paths_overlap_delta": false,
+    "pull_request": 1320,
+    "mergeability_observed_after_drift": true,
+    "rejoin_requirement": "merge only after fresh main/PR mergeability verification"
+  },
+  "isolated_component_evidence": {
+    "surface": "ChatGPT isolated Linux/Python 3.13.5 / pytest 9.0.2",
+    "exact_test_blob_reconstructed_and_verified": "24d9a6f3a41a10ff52d1cab217748b3cd0c57330",
+    "py_compile": "PASS",
+    "fixture_regressions": "2/2 PASS",
+    "fixture_scope": "synthetic minimal fixtures using the real Compose mapping shape plus current fail-closed Manifest/Dockerfile/Kata contracts",
+    "initial_fixture_false_green_discarded": true,
+    "initial_fixture_issue": "The first test version modeled Compose with Kubernetes name/value syntax; review caught this before merge, the test was corrected, and only the corrected blob/evidence is retained here.",
+    "exact_repository_full_suite_executed": false,
+    "exact_oci_build_or_start_executed": false
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment_in_this_delta": false,
+    "reason": "The single unusual experiment for this user-triggered macrocycle was already consumed earlier before the current owner-authority re-entry; no second intervention was started.",
+    "clayverse_runtime_credit_from_that_prior_experiment": 0
+  },
+  "current_execution_frontier": {
+    "status": "BLOCKED_ON_OWNER_ONE_SHOT_GITHUB_TOKEN_INGRESS",
+    "next": "owner-start the retained Vercel Sandbox one-shot with a scoped read-only GitHub source token, then execute exact-current ClayVerse regressions and exact OCI build/bind/start",
+    "vps_testing_used": false,
+    "together_used": false,
+    "paid_execution_used": false,
+    "training_started": false
+  },
+  "evidence_boundary": "This repair removes a source-level fail-open deployment default. It does not prove EntityOS execution, Kata isolation, OCI runtime behavior, Clerk/PTY/Claude, recovery, or whole ClayVerse acceptance."
+}

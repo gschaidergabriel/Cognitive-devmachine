@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "e6b60a280d1a0a5da4d03844b3243cb95ff5b66d",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "force_push_used": false,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "executor_delta": {
+    "active_guard_commit": "6811e432324fbb89e81ff41c388c768736cd3562",
+    "active_guard_path": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-rebind-permission-semantics.mjs",
+    "active_guard_blob": "aeff4ed127af8ac114861fd6b7963f01947e8b7e",
+    "active_guard_schema": "ENTITYOS_HCU_JSPACE_REBIND_PERMISSION_GUARD/v3",
+    "earlier_compatibility_guard_commit": "0e7380b39d6f7ddf7ba7f06bc45609ce7659caeb",
+    "earlier_compatibility_guard_path": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-v4-v3-promotion-contract.mjs",
+    "parallel_route_terminal_head_observed": "72daa7cbaad35cfef42093b8cf9f48a4b47bd6e8",
+    "parallel_route_terminal_blob": "c709f6ea2f4f38083ff13b7eefcdfc5853cdf771"
+  },
+  "finding": {
+    "classification": "READY_PATH_SOURCE_AUTHORITY_SKIP_FENCE",
+    "observed": "The successor-ready guards permitted a future transition that removed the true SOURCE_REBIND_REQUIRED flag while the current route still constructed authority and verified deployment-carried bytes only inside the old rebind block. A flag-only transition could therefore skip source authority construction and exact deployment verification, leaving authority/verifiedFiles unresolved before the cost path.",
+    "counterhypothesis": "SOURCE_REBOUND_READY contract fields alone are sufficient proof that the previously verified source may be reused without a current request-path source load/verification step.",
+    "counterhypothesis_rejection": "Current EntityOS/HCU execution evidence law requires exact deployment-carried source identity and verification at the executable boundary; contract state cannot substitute for actual source-authority construction and byte verification on the promoted route."
+  },
+  "delta": {
+    "ready_path_invariant": "SOURCE_REBOUND_READY now requires at least one ordered loadReboundSourceAuthority() -> verifyDeploymentCarriedSource(authority) pair before the FREE_ONLY cost gate and outside the old SOURCE_REBIND_REQUIRED block.",
+    "quarantined_path_invariant": "SOURCE_REBIND_REQUIRED remains hard-terminal after exact source verification as SOURCE_REBIND_VERIFIED_AWAITING_PROMOTION with sandbox_create_attempted=false and zero runtime/model/training/product credit.",
+    "pre_rebind_permission_history": "sandbox_create_permitted_before_source_rebind remains false and cannot be rewritten during promotion.",
+    "post_rebind_permission": "READY still requires source_rebind_complete=true and sandbox_create_permitted_after_source_rebind=true.",
+    "runtime_executed": false,
+    "runtime_credit_change": 0
+  },
+  "parallel_coordination": {
+    "attempted_route_write": "HTTP_409_CONCURRENT_FILE_MOVEMENT",
+    "response": "NO_FORCE; REENTERED_CURRENT_HEAD",
+    "observed_parallel_resolution": "A parallel organ had already landed the required terminal SOURCE_REBIND_VERIFIED_AWAITING_PROMOTION return before FREE_ONLY cost admission, so no duplicate route patch was created."
+  },
+  "negative_evidence": {
+    "exact_executor_head_after_guard_write": "6811e432324fbb89e81ff41c388c768736cd3562",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT_UPGRADE_PATH",
+    "classification": "INFRASTRUCTURE_QUOTA_ADMISSION_FAILURE_NOT_HCU_RUNTIME_FAILURE",
+    "sandbox_runtime_executed_by_this_organ": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the source-rebind state machine now blocks both premature quarantined execution and a future READY transition that would skip exact source authority construction/verification.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the retained exact 17-blob Typed Entry -> route -> engine/load -> GRID10 -> atomic ModelExecution -> Inference/v4 chain must remain byte-verified on the actual promoted request path rather than receiving credit from contract state alone.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: J-Space/TrainingTrace/Binding execution readiness is now causally downstream of verified promoted-source loading; J-Space model/training credit remains zero."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "PR810 and Research main are moving rapidly under parallel organs; append-only exact-identity receipt preserves this active guard invariant without clobbering current-facing state."
+  },
+  "next_exact_gate": "Re-enter current PR810 and preserve the stronger exact 14-result observation fence. Before any SOURCE_REBOUND_READY promotion, restructure the route so source authority construction plus exact deployment-carried byte verification occurs on the READY request path outside the old quarantine block, while retaining the FREE_ONLY cost gate before Sandbox.create. Only after all successor guards agree and an exact-current READY included-tier Vercel deployment exists may the component route be invoked."
+}

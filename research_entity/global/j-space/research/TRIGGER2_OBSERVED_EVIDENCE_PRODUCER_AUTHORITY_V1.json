@@ -1,0 +1,28 @@
+{
+  "schema": "CLAY_TRIGGER2_OBSERVED_EVIDENCE_PRODUCER_AUTHORITY/v1",
+  "status": "CURRENT_SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING",
+  "purpose": "Pin one deterministic OBSERVED-evidence producer/policy/admission scope so a runtime OBSERVED evidence receipt can be authenticated instead of trusted as an arbitrary caller-typed string bundle. Closes the confirmed gap where a fully forged OBSERVED receipt (fabricated source/provenance/receipt_id, otherwise schema-valid) was accepted with zero producer authentication.",
+  "producer": {
+    "repo_path": "tools/trigger2_observed_evidence_producer_v1.py",
+    "source_sha256": "a894b00f6f6167d0ead4e0ba1946dc444e6f572a74ca05e97cb27833615c6e67",
+    "producer_schema_or_version": "CLAY_TRIGGER2_OBSERVED_EVIDENCE_PRODUCER/v1"
+  },
+  "policy": {
+    "policy_id": "T2_OBS_PINNED_SYNTHETIC_PILOT_POLICY_V1",
+    "policy_version": "1",
+    "allowed_admission_id": "T2_OBS_ADMISSION_SYNTHETIC_PILOT_V1",
+    "allowed_admission_generation": 1
+  },
+  "policy_jcs_sha256": "8ab148cba2d8faf19cc6c5e4a51bd9d12becca629b767c8088b5239f8afc1ed9",
+  "authority_fences": {
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "training_eligible": false,
+    "accepted_dataset_tokens_minted": 0,
+    "training_credit_minted": 0,
+    "runtime_credit_minted": 0,
+    "jspace_runtime_credit_minted": 0,
+    "hcu_runtime_credit_minted": 0,
+    "entityos_runtime_credit_minted": 0
+  }
+}

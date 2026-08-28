@@ -1,0 +1,88 @@
+{
+  "schema": "CLAY_GO_872_FORGE_DISTILLERY_RETRIGGER_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.72",
+  "mode": "FREE_ONLY",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "observed_main_before_retrigger": "0b3495aed89a86b3b626642aa202367862d0b489",
+  "retrigger_commit": "79b5aca60729040f1be6a47b4081ed24fd56a274",
+  "observed_main_after_parallel_reentry": "b56767eadce2f12fe05b39176a4eef4f7a80c821",
+  "retrigger_scope": {
+    "workflow": ".github/workflows/go871-forge-distillery-runtime-gate.yml",
+    "semantic_change": false,
+    "change": "comment-only push retrigger; canonical source is selected by the existing workflow at execution time",
+    "provider_model_network_io": 0,
+    "paid_fallback_attempts": 0,
+    "unusual_experiment": false
+  },
+  "observed": {
+    "program_state_epoch": "8.72",
+    "free_swarm_tokens": 13587261,
+    "machine_readable_delta_records": 292,
+    "forge_accepted_deltas": 1,
+    "distillery_accepted_dataset_tokens": 0,
+    "forge_distillery_result_directory_present_after_retrigger_check": false,
+    "repository_bound_terminal_witness_observed": false,
+    "qwen_model_runtime_terminal_receipt_observed_by_this_organ": false
+  },
+  "source_analysis": {
+    "forge_distillery_bridge": "Evidence-qualified admission inserts exactly one measured packet, increments accepted_dataset_tokens by a positive approx-token count, and deduplicates identical evaluation_sha256 on replay.",
+    "runtime_gate": "Acceptance requires current deterministic regression 2/2, ablation 0/2, evidence-qualified ACCEPT, nominal-without-execution-admission rejection, exactly one first packet, accepted_dataset_tokens > 0, and replay admitted +0 with one duplicate and unchanged token counter.",
+    "inference": "The current 1 nominal Forge ACCEPT with 0 Distillery dataset tokens is consistent with missing evidence-qualified terminal execution rather than an obvious source-level Distillery token-counter defect.",
+    "inference_level": "R1_INFERRED_NOT_RUNTIME_VERIFIED"
+  },
+  "external_primary_research": {
+    "purpose": "Check the strongest infrastructure hypothesis for a self-hosted workflow with no repository-bound terminal result.",
+    "sources": [
+      "https://docs.github.com/en/enterprise-cloud@latest/actions/reference/runners/self-hosted-runners",
+      "https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/monitor-and-troubleshoot"
+    ],
+    "finding": "GitHub documents that if no matching online and idle self-hosted runner exists, the job remains queued until a runner comes online and fails only after more than 24 hours; runner status can be Idle, Active, or Offline.",
+    "application": "Runner liveness / bridge availability is therefore the strongest current infrastructure hypothesis, but it remains unproven because this organ has no exposed runner-status or SSH/VPS bridge action."
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_request_id": null,
+    "visible_trigger_timestamp_precision": "minute_only",
+    "atomic_unusual_experiment_claim": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_hidden_state_intervention_executed": false,
+    "overlap_fusion": [
+      "Canonical main concurrently synchronized BOOTSTRAP_MINIMAL to supervisor 8.72.",
+      "Canonical main concurrently added fail-closed Forge-Distillery promotion guards.",
+      "Canonical main concurrently added exact-source binding for the local Qwen intermediate path.",
+      "No duplicate Qwen executor or competing HCU/Typed Entry authority was created by this organ."
+    ]
+  },
+  "go_tracks": {
+    "track_a": {
+      "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "status": "ADVANCED",
+      "delta": "Retriggered the exact-current deterministic Forge-to-Distillery runtime witness on main and independently re-established the exact source acceptance semantics."
+    },
+    "track_b": {
+      "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Current main and retained donor lanes already contain overlapping exact-source HCU/Qwen and promotion-boundary work; a new implementation lane would duplicate active convergence. The next HCU discriminator is exact runtime evidence on the already-fused causal path, not another source abstraction."
+    },
+    "track_c": {
+      "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "The stronger intermediate/midlayer Qwen causal intervention is an unusual experiment and no shared reproducible macrocycle identity/create-only atomic lease is exposed to this organ. Current exact-source envelope work was fused from main; zero new intervention was executed."
+    }
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Observe a repository-bound terminal result from the retriggered self-hosted Forge-Distillery witness. PASS requires 1 evidence-qualified ACCEPT -> exactly 1 Distillery packet -> accepted_dataset_tokens > 0 -> identical replay +0. If no terminal record appears, inspect/repair the authorized self-hosted runner/bridge liveness and perform the required real roundtrip before changing Forge/Distillery semantics.",
+  "evidence_boundary": "Source inspection, GitHub durable retrigger, repository-state observation, and external primary documentation. No self-hosted runtime terminal result was observed by this organ at receipt creation; no broader runtime/model/training credit is minted."
+}

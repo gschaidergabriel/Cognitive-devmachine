@@ -1,0 +1,137 @@
+{
+  "schema": "CLAY_TRIGGER2_TWO_PHASE_MODEL_CALL_AUTHORITY_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.83_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "SOURCE_ONLY_SUCCESSOR_NONPROMOTING",
+  "observed_main_before_delta": "e287fcc5e73277dd8bc5119c11f2b97b5dde9616",
+  "authority_state": {
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASED",
+    "provider_model_runtime_admitted": false,
+    "training_execution_admitted": false,
+    "accepted_dataset_tokens": 0,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "parallel_reentry": {
+    "finding": "Parallel work landed before this delta and already closed the basic deterministic NODE_RESULT-to-existing-model-call equality/transplant gap.",
+    "retained_existing_source": [
+      "tools/trigger2_node_result_model_call_authority_envelope_v1.py",
+      "tools/trigger2_node_result_model_call_lineage_gate_v1.py"
+    ],
+    "anti_duplication_decision": "DO_NOT_REIMPLEMENT_THE_EXISTING_SINGLE_ENVELOPE_GATES. RETAIN_THEM_AS_SOURCE_DONORS_AND_ADD_ONLY_THE_PHASE_ORDER_DISCRIMINATOR."
+  },
+  "new_gap": {
+    "id": "TRIGGER2_MODEL_CALL_AUTHORITY_TEMPORAL_PHASE_AMBIGUITY",
+    "reality_level": "R0_SOURCE_OBSERVED_PLUS_R1_CAUSAL_PROTOCOL_INFERENCE",
+    "source_observation": "The current single-envelope controller bindings include expected source-bound model_call identity and model_output identity. Those values are products of the call and therefore cannot literally be known in an independently frozen pre-call invocation commitment.",
+    "consequence": "A frozen digest over a post-call binding proves deterministic equality and rejects later mutation relative to that digest, but by itself does not prove that cell/node/membership/candidate/input/source were committed before the model outcome existed.",
+    "scope_boundary": "This is not evidence that the current gates are incorrect as post-call integrity gates. It means they cannot alone mint stronger pre-call causal invocation provenance."
+  },
+  "hypothesis": {
+    "H1": "A two-phase authority contract closes the temporal ambiguity without creating a second model-call identity: phase A freezes a pre-call launch descriptor over outcome-independent invocation facts; phase B records a post-call executor observation that references phase A and the already-existing exact source-bound model-call/output/ABI identities.",
+    "counterhypothesis": "One trusted post-call controller binding is sufficient because the deterministic controller can faithfully record all fields after execution.",
+    "counterassessment": "That can support a narrower trusted post-call integrity claim. It does not independently demonstrate that route/cell/node/candidate/input/source assignment was fixed before outcome observation, so it is weaker for checkpoint-selection, causal J-Space attribution and anti-transplant provenance.",
+    "cheapest_discriminator": "Source-only phase split with frozen launch_descriptor_sha256 and executor_observation_sha256, plus call/cell/output/source/self-mint/cohort negative controls. Runtime promotion remains blocked until an admitted executor proves actual phase timing and producer authenticity."
+  },
+  "new_source_delta": {
+    "source": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "source_commit": "56e8cc09f0c1b8e1fd99ab091154c3f3a6382b17",
+    "source_sha256": "a6427e43188c2991ead7de3a8888540c8cdd4202ed1c49a39d93088201e8d7fb",
+    "tests": "tests/test_trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "tests_commit": "e287fcc5e73277dd8bc5119c11f2b97b5dde9616",
+    "tests_sha256": "971482db3db904227c36aaf6f2b135533ba668ee3bcdfcb24ced035219d2eb7b",
+    "phase_a": {
+      "schema": "CLAY_TRIGGER2_MODEL_CALL_LAUNCH_DESCRIPTOR/v1",
+      "must_be_freezable_before_model_output_exists": true,
+      "binds": [
+        "cohort_plan_id",
+        "grid_cell_id",
+        "node_id",
+        "node_admission_id",
+        "node_admission_revision",
+        "runtime_generation",
+        "controller_observed_pid",
+        "candidate_id",
+        "rendered_utf8_sha256",
+        "source_identity_sha256"
+      ]
+    },
+    "phase_b": {
+      "schema": "CLAY_TRIGGER2_MODEL_CALL_EXECUTOR_OBSERVATION/v1",
+      "created_only_after_call_result_exists": true,
+      "binds": [
+        "exact launch_descriptor_sha256",
+        "existing source_bound_model_call_identity_sha256",
+        "model_output_identity_sha256",
+        "abi_v2_receipt_sha256",
+        "executor_observed_pid"
+      ]
+    },
+    "authority_envelope": "Deterministically composes immutable raw NODE_RESULT packet digest + phase A + phase B + existing exact model-call identity. It is a provenance envelope identity, not a competing model-call identity.",
+    "cohort_rule": "Ten-member authority cohort requires one plan and unique cell/node/PID/launch/executor-observation/raw-packet identities; a malformed member fails the whole cohort.",
+    "self_authentication_boundary": "Neither expected commitment is self-authenticating. An admitted executor must independently attest and freeze phase A before the call and phase B after the call. Source-only equality is zero runtime credit."
+  },
+  "local_deterministic_validation": {
+    "py_compile": "PASS",
+    "pytest": "9/9 PASS",
+    "scope": "LOCAL_SOURCE_ONLY_DETERMINISTIC_FIXTURE_NOT_REPOSITORY_CI_NOT_MODEL_RUNTIME",
+    "negative_families": [
+      "SAME_SEMANTIC_PACKET_DIFFERENT_EXACT_CALL_NOT_INTERCHANGEABLE",
+      "MODEL_CALL_REFERENCE_TRANSPLANT_TO_OTHER_CELL_REJECTED",
+      "MODEL_OUTPUT_IDENTITY_MISMATCH_REJECTED",
+      "SOURCE_DRIFT_REQUIRES_DISTINCT_CALL_AND_LAUNCH_COMMITMENTS",
+      "AUTHORITY_CALL_REFERENCE_CHANGE_CHANGES_ENVELOPE_DIGEST",
+      "MODEL_OR_CHILD_SELF_MINTED_AUTHORITY_REJECTED",
+      "INVALID_MEMBER_REJECTS_WHOLE_COHORT",
+      "EXECUTOR_OBSERVATION_REUSE_ACROSS_CELLS_REJECTED"
+    ]
+  },
+  "external_research_context": {
+    "source": "SLSA Provenance v1.2 and build provenance model",
+    "classification": "EXTERNAL_DESIGN_SUPPORT_NOT_PROJECT_EXECUTABLE_EVIDENCE",
+    "relevance": "Modern provenance models separate the definition/input side of an invocation from run/output details and treat provenance as verifiable information about where, when and how an artifact was produced. This supports keeping pre-execution invocation commitments distinct from post-execution observations rather than collapsing both into one post-hoc record.",
+    "nonclaim": "SLSA does not prove this Trigger-2 implementation and does not mint any EntityOS/HCU runtime credit."
+  },
+  "execution": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "vps_execution_performed": false,
+    "training_executed": false,
+    "unusual_experiment_executed": false,
+    "ordinary_source_only_work": true
+  },
+  "credits": {
+    "research_delta": 1,
+    "two_phase_authority_source_credit": 1,
+    "local_source_fixture_credit": 1,
+    "model_call_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 on the owning live host execute only the already-pinned FreeSwarm quiescence enforcer; identify/terminate the provider-capable process tree without issuing a provider probe; prove zero survivors, bounded no-restart and zero provider-counter delta.",
+    "P0 after quiescence PASS re-enter the newest explicit FREE non-provider execution authority before any model or GRID10 rerun.",
+    "P1 source/runtime integration: have the admitted controller freeze phase-A launch_descriptor_sha256 before model execution and only then admit phase-B executor observation over the resulting exact existing call identity; preserve independent producer/phase evidence.",
+    "P1 integrate the retained atomic GRID10 cohort path around two-phase authority-envelope digests rather than raw logical node ids or a post-hoc copied call id; retain stale-membership, packet/call/cell/source and phase-transplant negatives.",
+    "P2 only after runtime identity eligibility continue the frozen family-disjoint checkpoint evaluation; no unblinding, winner or causal J-Space promotion from source-only gates.",
+    "P3 keep Forge-to-Distillery positive admission closed until one evidence-qualified ACCEPT maps to exactly one packet, accepted_dataset_tokens becomes greater than zero, and exact semantic replay adds zero."
+  ],
+  "next_exact_action": "P0 remains owning-host quiescence. The next safe non-provider source/runtime gate after P0 is a repository-bound executor receipt proving phase-A commitment existed before the exact model call and phase-B observation was created after it, then atomic-cohort admission over those envelope identities."
+}

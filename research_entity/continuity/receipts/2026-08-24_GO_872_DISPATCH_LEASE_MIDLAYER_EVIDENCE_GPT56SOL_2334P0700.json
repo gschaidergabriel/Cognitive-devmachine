@@ -1,0 +1,133 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "canonical_main_observed_during_reentry_via_retained_pr_base": "ac3789d31668d5a1860d0eb4488eefcb2271530e"
+  },
+  "coordination": {
+    "shared_immutable_request_id_exposed_to_this_organ": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires a shared immutable request id or immutable user-message timestamp with at least whole-second precision; neither is exposed here.",
+    "new_unusual_interventions_executed": 0
+  },
+  "observations": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_execution_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "current_midlayer_executor": {
+      "path": "tools/trigger1_local_qwen06_midlayer_causal_execute.py",
+      "git_blob_sha1": "213a4551cde23762412fb30043118745e448ea34",
+      "model": "Qwen/Qwen3-0.6B",
+      "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+      "mechanism": "activation-only contrastive basis at a fixed nonterminal middle transformer layer with downstream transformer computation",
+      "controls": [
+        "BASELINE",
+        "+VECTOR",
+        "SIGN_FLIP",
+        "NULL_VECTOR",
+        "ORTHOGONAL_SAME_NORM",
+        "PERMUTED_SAME_NORM"
+      ],
+      "source_result_binds_repo_dirty_porcelain_sha256": true,
+      "source_result_binds_executor_sha256": true,
+      "promotion_candidate_source_identity_carries_repo_dirty_porcelain_sha256": false,
+      "promotion_candidate_source_identity_carries_executor_sha256": false
+    },
+    "promotion_gate": {
+      "path": "tools/trigger1_jspace_promotion_gate.py",
+      "git_blob_sha1": "6485bc9533eeb9cd72c7ccb30863023c5a58b0b4",
+      "already_rejects_terminal_output_projection_shortcuts": true,
+      "already_requires_non_output-head_vector_derivation_for_owner_goal_credit": true,
+      "candidate_identity_does_not_yet_require_executor_or_dirty_state_digest": true
+    },
+    "self_hosted_dispatch_workflow": {
+      "path": ".github/workflows/trigger1-v2-local-fastpath-selfhosted.yml",
+      "exact_admitted_issue_title": "[CLAY-DISPATCH] Trigger1 V2 local vector fastpath",
+      "requires_atomic_lease_gate": true,
+      "requires_issue_body_exactly_one_trigger_key": true,
+      "scrubs_external_llm_provider_credential_environment_before_child": true,
+      "checks_clean_checkout_before_intervention": true
+    },
+    "dispatch_issue_1640": {
+      "state_observed": "OPEN",
+      "title": "[CLAY-DISPATCH] Trigger1 V2 internal-layer vector fastpath",
+      "classification": "INERT_TITLE_MISMATCH_PREDECESSOR",
+      "durable_comment_added": true,
+      "close_attempt": "CONNECTOR_POLICY_BLOCKED_NOT_PRODUCT_FAILURE"
+    },
+    "dispatch_issue_1643": {
+      "state_observed": "CLOSED_DUPLICATE",
+      "classification": "PROVENANCE_ONLY"
+    },
+    "dispatch_issue_1647": {
+      "state_before_cleanup": "OPEN",
+      "title_matches_current_workflow": true,
+      "trigger_key_lines_in_body": 0,
+      "classification": "DETERMINISTIC_LEASE_GATE_FAILURE_ISSUE_BODY_REQUIRES_EXACTLY_ONE_TRIGGER_KEY",
+      "durable_comment_added": true,
+      "state_after_cleanup": "CLOSED_NOT_PLANNED"
+    }
+  },
+  "external_solution_harvest": {
+    "sources": [
+      {
+        "title": "Steering Llama 2 via Contrastive Activation Addition",
+        "url": "https://arxiv.org/abs/2312.06681",
+        "relevance": "supports activation-derived residual-stream steering rather than output-head-derived vectors"
+      },
+      {
+        "title": "Patterns and Mechanisms of Contrastive Activation Engineering",
+        "url": "https://arxiv.org/abs/2505.03189",
+        "relevance": "reports in-distribution dependence, adversarial reversal, capability/perplexity tradeoffs and diminishing returns with larger steering-vector sample sets"
+      },
+      {
+        "title": "Hugging Face Transformers Qwen3 documentation",
+        "url": "https://huggingface.co/docs/transformers/en/model_doc/qwen3",
+        "relevance": "confirms layer-wise hidden-state exposure for Qwen3 and supports exact model-specific internal-state instrumentation"
+      }
+    ],
+    "new_research_implication": "The current six narrow A/B/C basis prompts are adequate for a bounded mechanism discriminator but are not sufficient evidence of a generalizable semantic/global J-Space direction. A later admitted successor experiment should add broader contrastive basis families, disjoint semantic/OOD transfer, off-target capability or perplexity checks, and adversarial reversal probes before any stronger representation claim."
+  },
+  "three_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_COORDINATION_AND_EXECUTION_ADMISSION",
+      "delta": "Removed one malformed current-title self-hosted dispatch (#1647) from the active frontier and recorded why it could never pass the current atomic lease gate; preserved predecessor #1640 as explicitly inert provenance after a close mutation was connector-policy blocked.",
+      "runtime_credit_minted": false
+    },
+    "track_b_hcu_and_typed_entry": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Current main already contains the stronger nonterminal activation-only HCU/J-Space primitive; creating another HCU/Entry implementation lane would duplicate the retained donor. The highest-information blocker is executable lease-bound runtime evidence, not a missing Typed Entry or HCU source primitive.",
+      "next_discriminator": "After a valid lease-bound run exists, bind the measured ModelExecution/InferenceReceipt path to the existing Typed Entry -> verified engine/load -> GRID10 causal chain rather than creating a second ingress authority."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "ADVANCED_RESEARCH_ACCEPTANCE_BOUNDARY_NO_NEW_EXPERIMENT",
+      "delta": "Reclassified the current midlayer path as a narrow mechanism discriminator until semantic/OOD transfer and off-target degradation controls exist; identified a candidate-level provenance hardening gap (executor/dirty-state digests live in source result but not promotion-candidate source_identity).",
+      "new_unusual_experiment": false,
+      "training_credit_minted": false
+    }
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_actions": [
+    "Keep current go unusual-experiment count at zero because coordination identity is blocked.",
+    "Do not create another Trigger1 dispatch until an already-created canonical atomic claim can be referenced by an exact trigger_key line.",
+    "Harden promotion-candidate source_identity to carry executor_sha256 and dirty-state digest or require the enclosing self-hosted runtime receipt to bind them before any mechanism-credit promotion.",
+    "For the next admitted midlayer experiment, extend evaluation beyond the narrow A/B/C family with semantic/OOD transfer, adversarial reversal and off-target/perplexity controls while keeping the six matched causal controls.",
+    "Continue observing the exact-current Forge->Distillery terminal witness independently of the blocked unusual-experiment lane."
+  ],
+  "evidence_boundary": "Source inspection, issue/workflow state, comments and this receipt are coordination/research evidence only. No model invocation or unusual intervention was executed in this cycle, so no model, J-Space, HCU-full, training or whole-product runtime credit is minted."
+}

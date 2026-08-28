@@ -1,0 +1,54 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.71",
+  "mode": "FREE_ONLY",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "trigger": "go",
+  "canonical_main_before_receipt": "bcbd779348eb3a3536292852cca0f9026dd10456",
+  "merged_pr": 1561,
+  "merged_commit": "60e65e9743617a680d55a9285643f4de9ca31fc7",
+  "classification": "SOURCE_PLUS_DETERMINISTIC_COMPONENT_TEST_TYPED_INGRESS",
+  "finding": {
+    "baseline_metrics": {
+      "exact_swarm_tokens": 7302860,
+      "forge_evaluations": 104,
+      "forge_accepted_deltas": 0,
+      "distillery_accepted_dataset_tokens": 0
+    },
+    "mechanism": "Prompt-level Forge-ready fixes were already merged, but the prior typed-ingress donor PR1512 remained unmerged. Raw worker JSON therefore lacked a canonical deterministic pre-Forge classification primitive capable of separating malformed, schema-invalid, valid-not-ready and syntactically Forge-ready candidates before Evidence Forge clone/evaluation work.",
+    "delta": "Merged a bounded typed candidate ingress that preserves model output as noncanonical, validates safe paths and commands, validates unified-diff file headers and hunk counts, requires patch-header paths to match declared target_files, emits explicit admission states, and can bind producer repo_head_at_prompt plus worker_sha256. Evidence Forge retains exact-source git-apply/test/negative/static/benchmark authority.",
+    "counterhypothesis": "The zero-acceptance funnel may primarily be caused by candidate semantics or tests rather than malformed ingress. This delta therefore does not claim causal resolution until post-merge VALID_READY-to-Forge acceptance distribution improves."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: PR1561 merged; malformed/non-ready architecture deltas can now be rejected deterministically before Forge evaluation.",
+    "B_HCU_TYPED_ENTRY": "ADVANCED: reusable typed candidate admission surface with explicit status/provenance and fail-closed patch grammar.",
+    "C_GLOBAL_JSPACE_GWT_TRAINING_READINESS": "ADVANCED_BOUNDED: HCU/J-Space worker deltas can reuse the same deterministic candidate/provenance representation for later trace/dataset admission; no model-specific causal or training credit granted."
+  },
+  "coordination": {
+    "macrocycle_identity": "MACROCYCLE_ID_UNRESOLVED",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed": false,
+    "donor_pr": 1512,
+    "already_merged_prompt_fixes": [1525, 1526],
+    "parallel_funnel_work_observed": [1558, 1562, 1563, 1543]
+  },
+  "evidence": {
+    "deterministic_component_test": "10/10 PASS",
+    "github_workflow_jobs": "FAILED_BEFORE_EXPOSING_ANY_STEPS",
+    "workflow_failure_classification": "INFRASTRUCTURE_OR_RUNNER_FAILURE_NOT_SEMANTIC_NEGATIVE",
+    "scope": "COMPONENT_ONLY",
+    "runtime_funnel_improvement_observed": false
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Wire CLAY_ARCHITECTURE_DELTA_INGRESS/v1 into the active v3 worker materialization and Evidence Forge intake, then measure MISSING/MALFORMED/SCHEMA_INVALID/VALID_NOT_READY/VALID_READY -> evaluated -> evidence-qualified accepted -> Distillery admitted ratios on exact current source. Do not scale token/worker volume until verified conversion improves."
+}

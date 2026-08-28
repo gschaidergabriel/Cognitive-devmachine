@@ -1,0 +1,234 @@
+{
+  "schema": "CLAY_TRIGGER2_EXACT_CURRENT_TRAINING_REVISION_AUDIT/v1",
+  "version": "1.0.0",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "status": "CURRENT_RESEARCH_AUDIT_NONCANONICAL",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "training_target": "Qwen3.5-0.8B-class cognitive-process substrate for variable cognitive grid + persistent database + Claude Code + shared Global J-Space/workspace bridge",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "ccfda671d85b768197f9d9bbd022657bf0de1efd",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "crosscutting_hyperposition_contract": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json"
+  },
+  "research_method_inputs": [
+    {
+      "source": "Wei et al., Symbol tuning improves in-context learning in language models, EMNLP 2023, DOI 10.18653/v1/2023.emnlp-main.61",
+      "classification": "EXTERNAL_METHOD_INPUT",
+      "implication": "Arbitrary-symbol supervision can strengthen use of episode-local input-label mappings; this supports dynamic codebook training as a method direction but is not Qwen3.5-0.8B-specific evidence."
+    },
+    {
+      "source": "Wu, Geiger, Milliere, How Do Transformers Learn Variable Binding in Symbolic Programs?, ICML 2025 / PMLR 267",
+      "classification": "EXTERNAL_METHOD_INPUT",
+      "implication": "Variable binding can pass through a shallow shortcut phase before systematic routing emerges; checkpoint evaluation must distinguish shortcut success from systematic unseen-symbol/depth/N transfer."
+    },
+    {
+      "source": "Sharma, Dawes, Raval, Dissociating Decodability and Causal Use in Bracket-Sequence Transformers, arXiv:2604.22128",
+      "classification": "EXTERNAL_METHOD_INPUT",
+      "implication": "Decodability is not sufficient evidence of causal use; Hyperposition/J-Space promotion needs matched behavioral and causal tests."
+    },
+    {
+      "source": "Makelov, Lange, Geiger, Nanda, Is This the Subspace You Are Looking for?, ICLR 2024",
+      "classification": "EXTERNAL_METHOD_CAUTION",
+      "implication": "Successful subspace patching can activate a dormant parallel path; causal promotion requires anti-illusion controls, not patching alone."
+    },
+    {
+      "source": "Xue et al., Why Supervised Fine-Tuning Fails to Learn, ACL 2026, DOI 10.18653/v1/2026.acl-long.1393",
+      "classification": "EXTERNAL_METHOD_INPUT",
+      "implication": "Aggregate convergence can hide systematically unlearned subsets; freeze capability-family checkpoint curves and retention diagnostics."
+    },
+    {
+      "source": "Jin et al., CoBA: Counterbias Text Augmentation for Mitigating Various Spurious Correlations via Semantic Triples, EMNLP 2025, DOI 10.18653/v1/2025.emnlp-main.520",
+      "classification": "EXTERNAL_METHOD_INPUT",
+      "implication": "Counterfactual/counterbias augmentation supports crossing multiple nuisance factors rather than trusting marginal balance."
+    }
+  ],
+  "exact_current_findings": [
+    {
+      "id": "T2R-A01",
+      "severity": "P0",
+      "finding": "Current main contains multiple Hyperposition reference-schema/labeler generations that are not yet one explicit semantic authority.",
+      "evidence": [
+        "tools/trigger2_semantic_hyperposition_reference_labelers_v1.py",
+        "tools/trigger2_hyperposition_reference_labelers_v1.py",
+        "tools/trigger2_hyperposition_reference_labelers_v2.py",
+        "tests/test_trigger2_hyperposition_reference_labelers_v2.py"
+      ],
+      "revision_consequence": "Registry and gates must select one current latent contract and mark compatibility modules as SUPERSEDED_DONOR or explicit adapters; no peer second authority."
+    },
+    {
+      "id": "T2R-A02",
+      "severity": "P0",
+      "finding": "Semantic Hyperposition gate v2 and the immediately preceding D/E seed generator are not bound to the same latent branch schema/labeler path.",
+      "evidence": [
+        "tools/trigger2_semantic_hyperposition_gate_v2.py imports trigger2_semantic_hyperposition_reference_labelers_v1.py and validates value/context_predicate/evidence_for/evidence_against/falsifier/provenance/epistemic_status",
+        "tools/trigger2_hyperposition_reference_seed_v1.py imports trigger2_hyperposition_reference_labelers_v1.py and emits v_semantic_value/K_context_predicate/E_plus/E_minus/F_falsifier/T_validity_scope/A_origin_provenance/sigma_epistemic_status",
+        "the crosscutting contract mandates the latter full branch-local ontology"
+      ],
+      "status_change": "GATE_V2_REVIEW_REQUIRED_INCOMPATIBLE_WITH_CURRENT_CROSSCUTTING_SCHEMA",
+      "training_consequence": "Fail closed; a generated candidate must not pass a different self-consistent ontology."
+    },
+    {
+      "id": "T2R-A03",
+      "severity": "P0",
+      "finding": "The newest Hyperposition reference labeler v2 correctly separates exact replay identity from correlation ancestry, preserving distinct same-ancestry events as auditable correlated observations without independent-evidence credit.",
+      "evidence": [
+        "commit 83bd939d2d0adfb49d7625ed4bc9427b414edbe3",
+        "commit 7acdddcfa8f3e793244df25a7f78757ebda2a1d9",
+        "commit ccfda671d85b768197f9d9bbd022657bf0de1efd"
+      ],
+      "status_change": "LABELER_V2_CURRENT_CANDIDATE_SOURCE_REFERENCE",
+      "nonclaim": "Source/tests do not mint canonical dataset or model credit."
+    },
+    {
+      "id": "T2R-A04",
+      "severity": "P0",
+      "finding": "The current training artifact ledger v2 is already stale in at least one current-facing statement: it records trigger2_semantic_hyperposition_reference_labelers_v1.py as removed/superseded, while the later semantic Hyperposition gate v2 imports that path as an active dependency.",
+      "evidence": [
+        "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V2_GPT56SOL.json",
+        "tools/trigger2_semantic_hyperposition_gate_v2.py"
+      ],
+      "status_change": "T2_LEDGER_V2_RECHECK_REQUIRED",
+      "successor_requirement": "Ledger v3 must derive dependency status from exact-current graph/hash identities and propagate stale/revision states automatically."
+    },
+    {
+      "id": "T2R-A05",
+      "severity": "P0",
+      "finding": "The 208-row census-derived cognitive-process trajectory generator is structurally useful but not a complete current-census Hyperposition-native training family.",
+      "evidence": [
+        "tools/trigger2_cognitive_process_trajectory_generator_v1.py has 13 blueprints covering ZECP01..ZECP18",
+        "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS_v1 includes ZECP19 CLAYCODE_COGNITIVE_TRANSFORM and ZECP20 JSPACE_OBSERVATION_CONTROL_RESEARCH",
+        "the 208-row generator does not emit the mandatory semantic Hyperposition carrier"
+      ],
+      "status_change": "RETROFIT_REQUIRED_PARTIAL_CENSUS_COVERAGE",
+      "successor_requirement": "Add ZECP19/20 semantics, retain ZECP20 causal claims behind model-specific evidence, and regenerate inside the canonical Hyperposition latent frame."
+    },
+    {
+      "id": "T2R-A06",
+      "severity": "P1",
+      "finding": "Visible variable-N training currently crosses N={10,20}, but the owner target defines N as runtime-variable rather than a two-value classifier feature.",
+      "training_consequence": "Freeze unseen-N OOD evaluation families before materialization; require transfer to at least one smaller and one larger N not present in training. Exact N values belong in the frozen split manifest."
+    },
+    {
+      "id": "T2R-A07",
+      "severity": "P0",
+      "finding": "Supervisor 8.78 rejection of binding-router factorial v3 remains binding because higher-order nuisance combinations leak target identity despite superficial balance.",
+      "status_change": "QUARANTINE_NO_DIRECT_TRAINING",
+      "successor_requirement": "Full-cross or preregistered conditional-independence construction plus nuisance-only decoder/conditional-MI checks."
+    },
+    {
+      "id": "T2R-A08",
+      "severity": "P1",
+      "finding": "Representation quality and causal use must remain separate acceptance axes for semantic Hyperposition and J-Space carriers.",
+      "training_consequence": "Use R1 representation readout, R2 held-out behavior, R3 selective causal lesion/shuffle/rescue or equally strong intervention, and R4 exact mechanism-scope claim. Never promote from decodability alone."
+    }
+  ],
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json",
+      "state": "CURRENT",
+      "reason": "Still the explicit cross-cutting training ontology and curriculum contract."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "state": "CURRENT_CANDIDATE",
+      "predecessor": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "reason": "Adds exact-event versus correlation-ancestry semantics and tested anti-collapse behavior.",
+      "review_required": "Canonical field naming/schema identity must still converge with the crosscutting contract/gate."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "state": "SUPERSEDED_DONOR_PENDING_EXPLICIT_REGISTRY_UPDATE",
+      "successor": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "reason": "v2 carries stronger evidence-identity semantics."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_reference_labelers_v1.py",
+      "state": "CONFLICTING_ACTIVE_DEPENDENCY_REVIEW_REQUIRED",
+      "reason": "Previously marked removed/superseded but later gate-v2 imports it; this is an exact-current dependency contradiction."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_gate_v2.py",
+      "state": "REVIEW_REQUIRED",
+      "reason": "Validates a branch ontology different from the D/E seed and crosscutting contract."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_seed_v1.py",
+      "state": "STALE_DEPENDENCY_REBIND_REQUIRED",
+      "reason": "Generated against labeler v1 while labeler v2 is now current candidate; exact labeler/generator identity must freeze before admission."
+    },
+    {
+      "artifact": "2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V2_GPT56SOL.json",
+      "state": "RECHECK_REQUIRED",
+      "successor": "TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V3",
+      "reason": "Rapid main movement invalidated at least one dependency disposition."
+    },
+    {
+      "artifact": "tools/trigger2_cognitive_process_trajectory_generator_v1.py",
+      "state": "RETROFIT_REQUIRED_PARTIAL_CENSUS",
+      "reason": "ZECP01..18 only and pre-crosscutting Hyperposition carrier."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py and direct derivatives",
+      "state": "QUARANTINE",
+      "reason": "Supervisor 8.78 conditional nuisance leakage rejection."
+    },
+    {
+      "artifact": "PR #2009 trigger2/research-audit-versioning-v1",
+      "state": "OPEN_CONVERGENCE_DONOR",
+      "reason": "Contains useful owner-target, evidence-identity, J-Space causal-method and revision-lifecycle work but must rebase against rapidly advancing main and must not be merged wholesale if it resurrects stale schema/labeler authority."
+    }
+  ],
+  "training_revision_rules_added_by_this_cycle": [
+    "ONE_CANONICAL_HYPERPOSITION_LATENT_SCHEMA_OR_ONE_EXPLICIT_LOSSLESS_COMPATIBILITY_BOUNDARY",
+    "GATE_EXPECTATIONS_MUST_BE_SUCCESSOR_DYNAMIC_NOT_SELF_SEEDED_FROM_STALE_CONSTANTS",
+    "EXACT_EVENT_IDENTITY_DISTINCT_FROM_CORRELATION_ANCESTRY_AND_INDEPENDENCE_CREDIT",
+    "UNSEEN_N_OOD_TRANSFER_REQUIRED_FOR_VARIABLE_GRID_IDENTITY",
+    "FULL_CURRENT_CENSUS_INCLUDES_ZECP19_CLAYCODE_AND_ZECP20_JSPACE_RESEARCH_BOUNDARY",
+    "POSITIVE_D_E_ROWS_REBIND_AFTER_LABELER_GATE_FREEZE; PRIOR_ROWS_BECOME_STALE_DEPENDENCY",
+    "DECODED_REPRESENTATION_DOES_NOT_EQUAL_CAUSALLY_USED_REPRESENTATION",
+    "CAPABILITY_FAMILY_CHECKPOINT_CURVES_REQUIRED; AGGREGATE_CONVERGENCE_IS_INSUFFICIENT"
+  ],
+  "coordination_writes": [
+    {
+      "surface": "PR #2009",
+      "comment_id": 5410344618,
+      "purpose": "flag labeler API/hash drift, duplicate authority, ZECP19/20 omission, and unseen-N requirement"
+    },
+    {
+      "surface": "PR #2009",
+      "comment_id": 5410368790,
+      "purpose": "flag exact-current gate-v2 versus seed/crosscutting-schema incompatibility and successor-dynamic regression requirement"
+    }
+  ],
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "acceptance": "BLOCKED_PENDING_SCHEMA_AND_DEPENDENCY_CONVERGENCE",
+  "next_exact_actions": [
+    "Converge one canonical Hyperposition branch schema across crosscutting contract, retained v2 labeler, seed generator and semantic gate; if a compatibility adapter is unavoidable, prove lossless round-trip semantic equivalence and permutation/projection invariants.",
+    "Publish Trigger-2 training artifact ledger v3 from the exact dependency graph, marking the older semantic labeler active-dependency contradiction and seed-v1 dependency staleness explicitly.",
+    "Regenerate deterministic D/E rows only after retained labeler+gate identities freeze and rerun model-visible leakage, family/provenance split and anti-collapse gates.",
+    "Build Hyperposition-native census trajectory successor covering ZECP01..ZECP20, with ZECP20 positive causal promotion blocked to exact model-specific evidence.",
+    "Freeze unseen-N and unseen codebook/surface/generator evaluation families before mixed-corpus materialization.",
+    "At training checkpoints, measure capability-family learning/retention separately and pair representation probes with held-out behavioral and causal-use tests."
+  ],
+  "nonclaims": [
+    "No paid or provider training was executed.",
+    "No canonical dataset row was admitted by this audit.",
+    "No accepted dataset tokens were minted.",
+    "No Qwen3.5-0.8B Hyperposition/J-Space causal behavior was observed in this cycle.",
+    "Source and unit-test convergence do not imply full EntityOS/HCU runtime acceptance."
+  ]
+}

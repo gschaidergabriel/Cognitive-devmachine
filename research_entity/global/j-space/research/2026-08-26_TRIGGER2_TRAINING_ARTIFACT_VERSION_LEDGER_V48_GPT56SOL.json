@@ -1,0 +1,154 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v48",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V47_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V47",
+  "observed_main_before_write": "b252344afa47e9b4df5979dde2ecf8c783864a83",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "freeswarm_provider_admission": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "free_provider_admission_source": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V47 correctly moved the frontier to exact Qwen3.5 model-visible/checkpoint consumed identity but phrased the next action as build-or-audit. Reentry shows the required selection-grade source already exists: tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py. It was previously committed and deterministically unit-tested, and it already binds full checkpoint manifest, actually opened local weight files via Linux strace open/openat, rendered UTF-8, input tensor identity, runtime identity and one observed forward pass. Repository search on current main found no durable PASS receipt for CHECKPOINT_INPUT_IDENTITY_ABI/v1 for BASE, POSTTRAINED or TARGET_MEASURED. Historical V33 explicitly classified this source as execution pending. V48 therefore eliminates duplicate source work and narrows P0 to exact current-authority execution evidence only; it does not authorize execution.",
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V47_GPT56SOL.json",
+      "status": "SUPERSEDED_WITH_DEDUPLICATION_CORRECTION",
+      "successor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V48_GPT56SOL.json",
+      "reason": "selection-grade checkpoint/input identity ABI source already existed before V47"
+    },
+    {
+      "artifact": "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+      "status": "EXISTING_SELECTION_GRADE_SOURCE_COMPONENT_EXECUTION_RECEIPT_NOT_FOUND",
+      "historical_source_commit": "0e70070c8b300703fbd043e37c29e2e34ddfdabb",
+      "blob_sha1": "960783307dd2fe696f55884278715442624480d3",
+      "source_properties": [
+        "HF_HUB_OFFLINE=1 and TRANSFORMERS_OFFLINE=1 with local_files_only=True",
+        "complete pre-load checkpoint-manifest hashing",
+        "Linux strace -f open/openat observation of actual local snapshot member files opened by the loader",
+        "every expected weight shard must be observed opened",
+        "every observed local bundle file must be manifest-bound and hash-equal",
+        "post-load manifest recheck detects mutation",
+        "resolved chat-template identity is recorded",
+        "rendered UTF-8 identity is recorded",
+        "input_ids and attention-mask tensor content/order/dtype/shape identity is recorded",
+        "one torch.no_grad forward is observed and output-side logits/top1 metadata is recorded",
+        "Python/Torch/Transformers/model/tokenizer/config/device/dtype runtime identity is recorded"
+      ],
+      "pass_fields": [
+        "consumed_identity_match=true",
+        "prompt_input_identity_complete=true",
+        "selection_identity_abi_component_status=PASS_COMPONENT_ONLY"
+      ],
+      "credit_boundary": "SOURCE_AND_HISTORICAL_UNIT_TEST_MECHANISM_ONLY_UNTIL_EXACT_REPOSITORY_BOUND_MODEL_RUNTIME_RECEIPT"
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V33_GPT56SOL.json",
+      "status": "HISTORICAL_EVIDENCE_OF_EXECUTION_PENDING_STATE",
+      "finding": "V33 recorded the probe source plus 6/6 deterministic unit tests and py_compile, explicitly not repository-bound/VPS model-runtime credit, and required executing the ABI for BASE, POSTTRAINED and TARGET_MEASURED next."
+    },
+    {
+      "artifact": "tools/trigger2_qwen35_checkpoint_candidates_gate_v4.py",
+      "status": "CURRENT_GATE_STILL_FAIL_CLOSED_ON_OLDER_LOADER_ONLY_EVIDENCE",
+      "finding": "loader probe v1 activity alone yields consumed_identity_match=UNPROVEN_BY_LOADER_PROBE_V1; checkpoint winner remains unresolved/null until selection-grade consumed identity plus matched evaluation close."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/vps_run_receipts/2026-08-25_QWEN35_08B_TARGET_MEASURED_minimal_baseline_pilot.json",
+      "status": "HISTORICAL_SINGLE_CANDIDATE_DIAGNOSTIC_NOT_SELECTION_IDENTITY_RECEIPT",
+      "finding": "Eight-case TARGET_MEASURED pilot exists but explicitly lacks cross-candidate matching/calibration/holdout and grants zero selection/checkpoint credit. It cannot substitute for CHECKPOINT_INPUT_IDENTITY_ABI/v1."
+    }
+  ],
+  "receipt_search": {
+    "queries": [
+      "selection_identity_abi_component_status",
+      "consumed_identity_match prompt_input_identity_complete QWEN35_08B_BASE",
+      "CHECKPOINT_INPUT_IDENTITY_ABI QWEN35_08B_POSTTRAINED QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED",
+      "vps_run_receipts checkpoint input identity Qwen3.5",
+      "checkpoint_input_identity_runtime_credit"
+    ],
+    "result": "NO_EXACT_PASS_RECEIPT_FOUND_FOR_ANY_OF_THE_THREE_REQUIRED_CANDIDATES",
+    "epistemic_boundary": "Repository search absence is not proof that no off-repository execution ever occurred; it is sufficient to withhold durable repository-bound credit because no admitted exact receipt was found."
+  },
+  "current_p0": {
+    "id": "EXECUTE_EXISTING_CHECKPOINT_INPUT_IDENTITY_ABI_ON_THREE_FROZEN_CANDIDATES_UNDER_SEPARATE_CURRENT_AUTHORITY",
+    "candidate_set": [
+      "QWEN35_08B_BASE",
+      "QWEN35_08B_POSTTRAINED",
+      "QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED"
+    ],
+    "required_result_per_candidate": [
+      "exact identity receipt and local snapshot revision match",
+      "preload_manifest_match=true",
+      "all required weight shards observed opened and hash-bound",
+      "no unknown opened local bundle files",
+      "postload_manifest_match=true",
+      "forward_observed=true",
+      "rendered_utf8 and token tensor identity complete",
+      "consumed_identity_match=true",
+      "prompt_input_identity_complete=true",
+      "selection_identity_abi_component_status=PASS_COMPONENT_ONLY",
+      "clean repository/source/runtime binding in durable receipt"
+    ],
+    "authority_boundary": "THIS LEDGER DOES NOT AUTHORIZE VPS OR MODEL EXECUTION. FreeSwarm provider routes are owner-emergency-stop HARD OFF. Any non-provider free VPS/model runtime use requires then-current explicit execution authority and an exact source-bound request/receipt path; fail closed if that authority is ambiguous."
+  },
+  "after_p0_only_if_pass": [
+    "Run the preregistered matched pre-training baseline under identical renderer/evaluator/decoding/resource semantics for only ABI-eligible candidates.",
+    "Keep the eight inspected TARGET_MEASURED pilot and close lexical paraphrases excluded from winner holdout.",
+    "Treat any winner only as PRETRAIN_BASELINE/ELIGIBILITY winner, not proven final fine-tuning substrate.",
+    "Do not begin matched micro-adaptation until a trustworthy admitted corpus exists and training authority is explicitly open."
+  ],
+  "training_eval_course_delta": {
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null,
+    "lesson": "When the exact high-information gate already exists as source, Trigger-2 must spend effort on missing executable evidence rather than creating a duplicate source implementation."
+  },
+  "execution_decision": {
+    "freeswarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "groq": "DO_NOT_INVOKE",
+    "mistral": "DO_NOT_INVOKE",
+    "nvidia": "DO_NOT_INVOKE",
+    "openrouter": "DO_NOT_INVOKE",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "model_runtime_executed_this_cycle": false,
+    "vps_execution_executed_this_cycle": false,
+    "reason": "No exact admitted current execution request/receipt authority was established for the three-candidate checkpoint ABI during this trigger; source work and repository writes remain safe/non-provider."
+  },
+  "credits": {
+    "research_delta": 1,
+    "duplicate_source_work_avoided": 1,
+    "checkpoint_input_identity_source_ready": 1,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Re-enter current authority immediately before any execution. If and only if a separately admitted non-provider FREE execution surface is explicitly authorized and the three frozen local checkpoint snapshots plus strace are present, execute the already-existing CHECKPOINT_INPUT_IDENTITY_ABI/v1 for BASE, POSTTRAINED and TARGET_MEASURED and persist exact repository-bound receipts. Otherwise preserve the blocked state. Do not create duplicate ABI source, do not use FreeSwarm providers, do not select a checkpoint winner, and do not admit training rows."
+}

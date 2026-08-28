@@ -1,0 +1,88 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "61f634f54df7a18f458eeb9a2814132be8fde950",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed": "48d1bcb8357df0cf90d99133027f88ab67361a3f",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed_after_write": "1e8c4b31d363124ce54c15b195c32e14a12709cb",
+    "executor_delta_commit": "4b298e16556c06c8b41652ff21539031ecee6ee4",
+    "executor_delta_is_ancestor_of_observed_head": true,
+    "duplicate_lane_created": false,
+    "unusual_experiment_performed": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "work_class": "ORDINARY_DETERMINISTIC_EXECUTOR_FUSION"
+  },
+  "delta": {
+    "file": "mcp/vercel-sandbox-mcp/scripts/run-entityos-hcu-insandbox-batch.sh",
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "clay/fusion-vcr-native-20260817",
+    "commit": "4b298e16556c06c8b41652ff21539031ecee6ee4",
+    "changes": [
+      "require current donor model_execution_admission_store_v1.py",
+      "require and execute test_model_execution_admission_store_v1.py",
+      "require and execute test_execution_store_inference_jspace_chain_v1.py",
+      "require HCU_MODEL_EXECUTION_ADMISSION_STORE/v1 schema",
+      "fail closed if BEGIN IMMEDIATE, verify_model_execution, rollback, or replay-divergence fences disappear",
+      "bind the detached deterministic batch through atomic MiniUnifiedDB model-execution admission -> VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3",
+      "preserve runtime/model/training/whole-product credit as false"
+    ],
+    "source_selection": "SUCCESSOR_DYNAMIC_CURRENT_RESEARCH_MAIN_PLUS_CURRENT_PR1263_DONOR_ARCHIVE",
+    "fixed_historical_binder_route_unquarantined": false
+  },
+  "observed_after_delta": {
+    "latest_executor_head_checked": "1e8c4b31d363124ce54c15b195c32e14a12709cb",
+    "delta_commit_retained_in_head": true,
+    "executor_guard_schema_observed": "EntityOSHCUCurrentExecutorGuard/v9",
+    "executor_fixed_route_status": "SOURCE_REBIND_REQUIRED",
+    "latest_vercel_head_build_status": "HOBBY_BUILD_RATE_LIMIT_FAILURE",
+    "latest_ready_deployment_commit_observed": "e09d5edcaeb6f03a98945c70087b76627da3c53c",
+    "ready_deployment_is_current_executor_head": false,
+    "ready_deployment_commits_behind_observed_head": 26,
+    "new_admitted_sandbox_execution_observed": false
+  },
+  "scientific_interpretation": {
+    "hypothesis": "Running the atomic admission-store and integrated execution-store-to-J-Space regression inside the successor-dynamic detached exact-current batch closes a missing executable regression obligation without creating a second state authority.",
+    "counterhypothesis": "A green detached batch could still be misleading if its fetched donor snapshot and the fixed serverless route are treated as one immutable source closure despite different carried bytes.",
+    "discriminator": "Keep the historical fixed route quarantined until one immutable exact-donor fixture/manifest carries every required current blob; use the successor-dynamic detached batch only as exact-current deterministic regression evidence at its own resolved snapshot.",
+    "result": "SOURCE_EXECUTOR_CLOSURE_ADVANCED_RUNTIME_UNOBSERVED",
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_EXECUTING_ATOMIC_MODEL_ADMISSION_AND_CROSS_LAYER_JSPACE_REGRESSIONS_IN_THE_SINGLE_SUCCESSOR_DYNAMIC_DETACHED_EXECUTOR_BATCH",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_ENFORCING_MINIUNIFIEDDB_ATOMIC_INVOCATION_ADMISSION_REPLAY_AND_ROLLBACK_FENCES_INSIDE_THE_CURRENT_HCU_EXECUTION_CHAIN",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_MAKING_THE_EXECUTION_STORE_TO_GLOBAL_JSPACE_GWT_TO_TRAINING_TRACE_TO_JSPACE_V3_REGRESSION_A_REQUIRED_DETACHED_BATCH_TEST"
+  },
+  "evidence_boundary": {
+    "source_write_observed": true,
+    "executor_ancestry_verified": true,
+    "current_vercel_build_admission_observed": false,
+    "new_regression_execution_observed": false,
+    "actual_model_executor_io_observed": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current README already states the same one-lane exact-blob rebind frontier. This receipt records the narrower executor-batch implementation delta and its evidence boundary without duplicating or replacing that frontier."
+  },
+  "next_exact_gate": [
+    "Re-enter current Research main, PR1263 and PR810 because parallel fusion remains active.",
+    "Complete one immutable fixed-route source closure from one admitted donor snapshot including current Entry/JCS, atomic MiniUnifiedDB admission, VerifiedModelExecution/v1, InferenceReceipt/v4, Global J-Space/GWT, TrainingTrace/v1, JSpaceBinding/v3 and all transitive tests.",
+    "Bind every carried Git blob plus fixed command/result assertions before removing SOURCE_REBIND_REQUIRED.",
+    "When FREE_ONLY Vercel build/function admission permits, execute the current exact-source deterministic closure and capture source/result digests, sandbox identity, exit code, secret fence and cleanup.",
+    "Grant no J-Space model-runtime or training credit until a real zero-cost local model-executor I/O path uses the canonical MiniUnifiedDB atomic admission path."
+  ]
+}

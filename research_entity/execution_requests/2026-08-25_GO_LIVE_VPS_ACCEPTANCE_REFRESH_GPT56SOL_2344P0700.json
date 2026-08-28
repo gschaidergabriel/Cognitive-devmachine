@@ -1,0 +1,65 @@
+{
+  "schema": "GO_LIVE_VPS_REPOSITORY_BOUND_ACCEPTANCE_REFRESH/v1",
+  "created_local": "2026-08-25T23:44:12+07:00",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "AUTONOMOUS_XENO_SHARED_STATE_DYNAMIC_COORDINATOR_ONLY_WRITES_RECURSIVE_COMPRESSION",
+  "priority": "P0",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "execution_surface": "clay-direct-dev",
+  "why_now": "The same live VPS has just produced repository-bound Trigger-2 runtime receipts and Qwen3.5-0.8B resource/baseline measurements, so the prior GO execution-surface uncertainty is no longer a reason to defer the existing Xeno fabric acceptance bundle.",
+  "exact_source": {
+    "head": "c6c416207354f1e5d60924535357ed91c20365c5",
+    "dirty_required": false,
+    "tree_must_be_recomputed_and_bound_before_execution": true
+  },
+  "execute": [
+    "fetch repository",
+    "checkout --detach c6c416207354f1e5d60924535357ed91c20365c5",
+    "record git rev-parse HEAD and HEAD^{tree}",
+    "require git status --porcelain empty",
+    "sha256sum tools/run_go_repository_bound_acceptance_bundle_v1.py tools/zero_entityos_restart_resize_db_smoke_v1.py tools/xeno_self_organizing_fabric_acceptance_v1.py",
+    "python3 tools/run_go_repository_bound_acceptance_bundle_v1.py"
+  ],
+  "must_prove": [
+    "canonical S0 expected_s0_epoch compare-and-admit rejects stale same-generation write",
+    "fresh explicit rebase can subsequently commit",
+    "Xeno autonomously joins/reads state/selects work without fixed role",
+    "ordinary Xeno cannot write S1",
+    "ordinary Xeno emits only ephemeral NODE_RESULT toward a coordinator",
+    "only a currently valid coordinator lease can cause S1 mutation",
+    "coordinator write is epoch/digest/generation bound and CAS protected",
+    "coordinator revocation removes write authority immediately",
+    "failed coordinator can be replaced",
+    "recursive coordinator compression path executes without giving ordinary modules S1 write authority"
+  ],
+  "required_receipt": {
+    "schema": "GO_REPOSITORY_BOUND_ACCEPTANCE_RECEIPT/v1",
+    "fields": [
+      "requested_head",
+      "executed_head",
+      "executed_tree",
+      "dirty_before",
+      "dirty_after",
+      "python_platform_runtime",
+      "source_sha256",
+      "stdout_sha256",
+      "stderr_sha256",
+      "exit_code",
+      "per_component_verdicts"
+    ]
+  },
+  "stop_rules": [
+    "Do not patch or redesign the already-closed S0 source gap during this execution request.",
+    "Do not use GitHub Actions as fallback.",
+    "Do not use paid providers or Together.",
+    "Do not mint physical GRID10, whole-HCU, J-Space or training credit from component acceptance alone.",
+    "If a component fails, preserve the exact failing receipt and classify runtime/scientific vs infrastructure failure before any successor patch."
+  ],
+  "on_pass": "Advance GO immediately to physical GRID10: ten physical identical Xeno processes, measured coordinator fan-in/compression, dynamic coordinator count, failure/replacement under load, recursive compression scaling and matched-budget challengers.",
+  "on_fail": "Keep GO at the failing component and repair only the demonstrated failure.",
+  "credit_before_execution": {
+    "whole_entityos": 0,
+    "whole_hcu": 0,
+    "physical_grid10": 0
+  }
+}

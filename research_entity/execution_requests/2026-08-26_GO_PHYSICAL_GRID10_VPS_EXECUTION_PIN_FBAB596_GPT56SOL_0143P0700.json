@@ -1,0 +1,78 @@
+{
+  "schema": "GO_PHYSICAL_GRID10_VPS_EXECUTION_REQUEST/v1",
+  "date": "2026-08-26",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "autonomous self-organizing Xeno/HCU shared-state fabric",
+  "priority": "P0_AFTER_XENO_FABRIC_COMPONENT_PASS",
+  "execution_surface": "live free clay-direct-dev VPS sandbox",
+  "free_only": true,
+  "paid_provider_forbidden": true,
+  "pinned_repository": "gschaidergabriel/clay-global-research-entity",
+  "pinned_head": "fbab5960980166f51047264775f102f2df22b292",
+  "required_clean_checkout": true,
+  "required_command": "python3 tools/xeno_physical_grid10_acceptance_v1.py",
+  "source_paths_to_hash": [
+    "tools/xeno_physical_grid10_acceptance_v1.py",
+    "tools/xeno_self_organizing_fabric_acceptance_v1.py"
+  ],
+  "prerequisite_evidence": {
+    "xeno_fabric_bundle_fix_head": "6463e4b12ae142e4479e0764a8923f0fe2e70386",
+    "xeno_fabric_bundle_result": "PASS",
+    "canonical_s0_pass": true,
+    "xeno_self_organizing_fabric_pass": true,
+    "receipt": "research_entity/global/j-space/research/vps_run_receipts/2026-08-26_TRIGGER2_P0_GO_BUNDLE_FIXED_FINAL_STATUS.json"
+  },
+  "acceptance_must_bind": [
+    "exact HEAD",
+    "exact tree",
+    "dirty=false",
+    "python/runtime identity",
+    "sha256 of both exact source files",
+    "stdout sha256",
+    "stderr sha256",
+    "exit code",
+    "full parsed JSON result"
+  ],
+  "required_properties": [
+    "exactly 10 independent Xeno node processes",
+    "all ordinary nodes attach read-only to one isolated shared S1 substrate",
+    "ordinary node direct S1 write rejected",
+    "ordinary node output is NODE_RESULT/v1 with s1_write_intent=false",
+    "two or more dynamically leased scoped coordinators",
+    "coordinator compression smaller than raw result payload",
+    "only valid coordinator leases apply S1 writes",
+    "revoked coordinator write rejected",
+    "deterministic coordinator replacement succeeds",
+    "recursive branch-summary compression into higher GLOBAL scope succeeds",
+    "no S0 truth/effect authority minted"
+  ],
+  "metrics_required": [
+    "node_processes",
+    "ordinary_results",
+    "coordinator_count_peak",
+    "raw_result_bytes",
+    "compressed_summary_bytes",
+    "compression_ratio",
+    "elapsed_ms"
+  ],
+  "fail_closed": [
+    "do not patch around a failing test in the execution checkout without producing a separate fix commit and rerunning pinned to that fix",
+    "do not grant whole-HCU credit from this component test",
+    "do not grant training/J-Space credit",
+    "do not substitute threads or logical cells for 10 subprocesses",
+    "do not execute against live production EntityOS state; use the harness isolated temporary database only"
+  ],
+  "on_pass_next": [
+    "repeat under controlled load with dynamic coordinator K and measured fan-in/contention",
+    "coordinator crash/replacement during active result flow",
+    "restart/rejoin of ordinary nodes",
+    "matched-budget challengers: single Xeno, 10 independent no-state, naive vote, fixed/random coordinator",
+    "Hyperposition/GWT re-entry on the physical-process fabric"
+  ],
+  "credit_boundary": {
+    "physical_grid10_component_credit": "eligible only after exact clean runtime PASS",
+    "whole_hcu_runtime_credit": 0,
+    "training_credit": 0,
+    "semantic_jspace_credit": 0
+  }
+}

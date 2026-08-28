@@ -1,0 +1,79 @@
+{
+  "schema": "claycog-05b-together-create-safety/v1",
+  "date": "2026-08-22",
+  "executor": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main": "62b292a8097c5b53731ef6804704cf9938872616",
+  "branch": "go/claycog-05b-create-idempotency-gpt56sol-20260822",
+  "scope": "0.5B ClayCode cognition Together BYOM paid-create boundary only",
+  "problem": {
+    "preflight_semantics": "model_limits plus estimate_price validate the selected Together template and corpus pricing/admission but do not validate the from_hf_model checkpoint/template pair; BYOM compatibility must remain OPEN until create accepts the exact pair and the job reaches training",
+    "duplicate_create_risk": "the previous --create path had no campaign identity or account-side duplicate guard, so an accepted remote create followed by an ambiguous client transport failure could invite a blind retry and a second paid job"
+  },
+  "mechanism": {
+    "campaign_identity": "SHA-256 over exact train/validation digests and full training configuration including from_hf_model/template",
+    "operator_gate": "CLAYCOG_CREATE_FINGERPRINT must equal the complete deterministic preflight fingerprint before --create proceeds",
+    "account_duplicate_guard": "deterministic campaign suffix is searched in Together fine-tuning job listings before remote file allocation and again immediately before billed create",
+    "ambiguous_outcome_rule": "never blind-retry create; list/retrieve account jobs and resolve the deterministic campaign suffix first",
+    "compatibility_reporting": "template full-FT admission is separated from BYOM checkpoint compatibility"
+  },
+  "source_identity": {
+    "launcher_repository_commit": "1394a7a11a48be4e10e29923befe4944b9f95ca9",
+    "launcher_repository_blob": "0eb7fcd4c7bcca6ca59294c2bffc6c665569b29c",
+    "launcher_isolated_sha256": "b1a7bb0c3909f31c8618dd6bf84d7a68530627c233c7618fbc5be21fdff405e0",
+    "test_repository_commit": "7ca8347aed817eac06dff9e249f3d356aa1858a3",
+    "test_isolated_sha256": "63966bb04721b66b77ef443e3d0872726d92172a6246eb2d7ba8085c600d304d"
+  },
+  "isolated_regression": {
+    "python_compile": "PASS",
+    "tests_total": 4,
+    "tests_passed": 4,
+    "tests_failed": 0,
+    "classification": "BOUNDED_DETERMINISTIC_ISOLATED_TEST",
+    "notes": "No provider network call and no secret required by these safety tests."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "ambiguous_create_timeout_retry",
+    "intervention": "simulate remote fine-tune create being durably registered as pending while the local client observes only a TimeoutError",
+    "falsifier": "a second launch is unsafe if it can pass duplicate admission and create a second campaign job",
+    "result": "PASS",
+    "observed_guard": "DUPLICATE_CREATE_ABORT",
+    "final_simulated_job_count": 1,
+    "new_unusual_experiments_after_this": 0
+  },
+  "external_primary_evidence": [
+    "https://docs.together.ai/docs/fine-tuning/quickstart",
+    "https://docs.together.ai/reference/create-fine-tune",
+    "https://docs.together.ai/reference/list-fine-tunes",
+    "https://docs.together.ai/docs/fine-tuning/byom",
+    "https://www.together.ai/pricing"
+  ],
+  "pricing_snapshot": {
+    "standard_full_sft_up_to_16b_usd_per_million_processed_tokens": 0.54,
+    "documented_minimum_job_charge_usd": 4.0,
+    "owner_single_job_gate_usd": 18.0,
+    "server_estimate_executed_in_this_go": false
+  },
+  "together_execution": {
+    "api_secret_present_in_this_execution": false,
+    "real_file_upload": false,
+    "real_preflight": false,
+    "real_create": false,
+    "paid_job_started": false,
+    "byom_compatibility": "OPEN_UNTIL_API_CREATE_ACCEPTS_EXACT_FROM_HF_MODEL_TEMPLATE_PAIR_AND_JOB_REACHES_TRAINING"
+  },
+  "scientific_boundary": {
+    "training_quality": "UNMEASURED",
+    "ood_superiority": "UNMEASURED",
+    "quantized_rss_under_1gib": "UNMEASURED",
+    "acceptance_class": "MECHANISM_SUPPORTED_ISOLATED_FAULT_INJECTION",
+    "not_claimed": [
+      "Together BYOM compatibility",
+      "successful fine-tuning",
+      "0.5B cognition superiority",
+      "whole Mini Entity acceptance"
+    ]
+  },
+  "next_exact_step": "With TOGETHER_API_KEY mounted only in an authorized execution environment: run preflight, capture the exact campaign fingerprint and server estimate, verify the account has no matching suffix, bind CLAYCOG_CREATE_FINGERPRINT to that exact fingerprint, create exactly one job if the <=USD18 gate and API admission pass, then retrieve that exact job and observe its training/error state. On any ambiguous create transport result, resolve the account-side suffix before any retry."
+}

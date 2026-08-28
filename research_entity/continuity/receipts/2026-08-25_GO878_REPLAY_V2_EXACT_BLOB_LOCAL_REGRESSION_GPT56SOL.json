@@ -1,0 +1,65 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_reentered_before_branch": "cbbff3b197fdcbf9be50f1738e45fdedd63e544a",
+  "finding": {
+    "classification": "EXACT_CURRENT_BLOB_LOCAL_DETERMINISTIC_COMPONENT_REGRESSION_PASS",
+    "statement": "Supervisor-8.78 replay-v2 migration regression executed locally against byte-identical current GitHub blobs and passed 3/3 tests. Envelope-only delta_id/timestamp/narration replay remains duplicate after reopen, measured-evidence mutation fails closed as REPLAY_IDENTITY_CONFLICT, and possible pre-v2 overlap fails closed as LEGACY_REPLAY_IDENTITY_UNRESOLVED.",
+    "scope": "FORGE_TO_DISTILLERY_REPLAY_V2_MIGRATION_COMPONENT_ONLY"
+  },
+  "source_identity": {
+    "tools/ingest_forge_accepts_into_distillery.py": "a2810529f6260573e3a198aeb94fad1ea07edfc5",
+    "tools/forge_evidence_credit_871.py": "d99567577890d885c8d32840dfe4afc04cbaade1",
+    "tests/test_forge_distillery_replay_identity_v2_migration_873.py": "48731c2e54f53d544f742cc09205f0e8520cf9ab",
+    "identity_method": "git hash-object local reconstruction equals GitHub blob SHA for all three files",
+    "current_main_blob_recheck_at_3b3deaf9": true
+  },
+  "execution": {
+    "surface": "LOCAL_NORMAL_USER_CONTAINER",
+    "network_io": false,
+    "provider_calls": 0,
+    "credentials_read": false,
+    "paid_execution": false,
+    "together_execution": false,
+    "command": "PYTHONPATH=tools python3 -m unittest -v tests.test_forge_distillery_replay_identity_v2_migration_873",
+    "tests_run": 3,
+    "tests_passed": 3,
+    "tests_failed": 0
+  },
+  "observed_cases": [
+    "delta_id/timestamp/narration-only replay after process reopen -> DUPLICATE, zero added packet/token credit",
+    "same execution replay identity with changed measured evidence -> REPLAY_IDENTITY_CONFLICT fail-closed",
+    "pre-v2 row with unresolved v2 identity and envelope-renamed replay -> LEGACY_REPLAY_IDENTITY_UNRESOLVED fail-closed"
+  ],
+  "counterhypothesis": "The v2 migration source could still fail when integrated with the full live Forge/Distillery state, concurrent external process topology, or a real evidence-qualified Forge ACCEPT even though the focused exact-blob component regression passes.",
+  "go_tracks": {
+    "A": "ADVANCED: exact-current replay-v2 migration component gate moved from source-only to executed deterministic 3/3 PASS evidence",
+    "B": "HCU_NO_CHANGE_WITH_REASON: this discriminator is a Distillery causal-evidence identity migration gate; current HCU/Typed Entry implementation lanes were not modified to avoid duplicate authority while the supervisor conversion funnel is the higher-information blocker",
+    "C": "ADVANCED_AT_DATASET_SAFETY_SCOPE: replay-v2 dataset idempotence/migration safety is now executed at exact-current blob identity; J-Space model and training runtime credit remain zero"
+  },
+  "coordination": {
+    "unusual_experiment": "NOT_EXECUTED",
+    "reason": "Focused deterministic regression is ordinary validation; no unusual intervention was required and no shared immutable macrocycle identity was available to justify one.",
+    "parallel_reentry": "Main moved repeatedly during the cycle; re-entry and blob rechecks were performed before the evidence write."
+  },
+  "credits": {
+    "replay_v2_component_regression_pass": true,
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current main was moving rapidly across multiple GO878 organs; replacing the shared README from a stale read risked clobbering newer current-facing state. This exact append-only receipt preserves the nonduplicate evidence and re-entry identity instead."
+  },
+  "next_exact_gate": "Run one real evidence-qualified Forge ACCEPT through the exact-current live Distillery bridge and prove exactly one persistent packet, accepted_dataset_tokens > 0, then semantic envelope replay adds +0 packets and +0 tokens; bind source/runtime identities in a repository receipt before any training promotion."
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:27:30+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "b9086dd234ce7b0a98359adf02e0fe2baa30db77",
+  "classification": "RETAINED_CONTROLLER_READY_BUT_FINAL_TEST_SEQUENCE_NOT_IMPLEMENTED",
+  "observations": {
+    "pr810_head": "b50b27516dd79949167daea3842fbe78eecbc0a6",
+    "pr810_state": "OPEN_DRAFT_MERGEABLE",
+    "exact_head_vercel_deployment": "dpl_6acj6pKQ9Zo1ocbdQ5UH3gn8fiu3",
+    "exact_head_vercel_state": "READY_CONTROLLER_ONLY",
+    "endpoint_function_max_duration_seconds": 300,
+    "endpoint_controller_timeout_ms": 285000,
+    "controller_bound_research_commit": "37bfaac92158168fff16e20ed29a1fe208429720",
+    "controller_bound_research_tree": "99041e4e5641f99b03fb304712220fb90390b246",
+    "pr680_current_head": "215a52d0a0b862ec3e80a817cb6c8ee9ab75cd16",
+    "pr680_current_tree": "cf846436450bd3627947e27294f08b76dd383a74",
+    "credential_bearing_post_observed": false,
+    "secret_value_observed_or_recorded": false
+  },
+  "structural_falsifier": {
+    "claim_tested": "A successful POST to the current retained PR810 one-shot is sufficient to execute the owner-mandated final ClayVerse test-of-tests.",
+    "result": "REJECTED_BY_EXACT_SOURCE_INSPECTION",
+    "runner_end_state": "After exact source regression and OCI build, runner sets Sandbox networkPolicy=deny-all, runs tmux probe plus python -m clayverse.service --once, records OCI runtime component credit, stops the Sandbox, and exits.",
+    "mandatory_gates_absent_from_runner": [
+      "runtime approved Vault acquisition of MISTRAL_API_KEY",
+      "canonical in-image python -m clayverse.service --mistral-once real provider turn",
+      "required verified EffectGate/EntityOS round-trip",
+      "Tier-1 recovery validation",
+      "full Tier-2 Sandbox/appliance destruction and recreation from the SAME accepted OCI digest",
+      "post-recreation Mistral secret reacquisition",
+      "stale-result/no-blind-replay verification across the replacement boundary",
+      "second real post-recovery Mistral cognition turn"
+    ]
+  },
+  "evidence_boundary": {
+    "controller_ready_is_product_runtime_pass": false,
+    "current_one_shot_success_may_add_private_source_or_oci_component_evidence": true,
+    "current_one_shot_success_may_add_final_sandbox_test_of_tests_pass": false,
+    "current_one_shot_success_may_add_whole_clayverse_pass": false,
+    "current_endpoint_status_CLAYVERSE_ONE_SHOT_COMPLETED_is_final_acceptance_safe_without_extra_scope_fields": false
+  },
+  "coordination_delta": {
+    "dr_unterweger_pr810_comment_id": 5318180328,
+    "action": "Routed exact structural blocker and non-duplicate repair direction into the retained controller lane instead of creating a second controller.",
+    "recommended_immediate_guard": "Expose explicit whole_product_pass=false and final_test_of_tests_pass=false or a scoped component completion status until the missing gates are implemented.",
+    "recommended_budget_repair": "Use bounded Vercel Function phases around a named/persistent Vercel Sandbox with reconnect plus detached long-running in-sandbox work so the 300-second Function wall-clock does not truncate the exact OCI/final-probe sequence.",
+    "tier2_hard_requirement": "External orchestration must destroy/recreate the whole Sandbox/appliance and preserve exact accepted image identity plus admitted canonical state; an in-place container restart is not Tier-2."
+  },
+  "vault_contract": {
+    "known_project_contract": "Vercel Sensitive Environment Variables or equivalent encrypted deployment secret store are the approved runtime secret boundary; no secret value is committed, logged, persisted, baked into OCI, UnifiedDB or receipts.",
+    "mistral_runtime_config": "MISTRAL_API_KEY plus a fixed non-latest CLAYVERSE_MISTRAL_MODEL are required by the final acceptance probe.",
+    "model_id_value": "UNRESOLVED_DO_NOT_INVENT"
+  },
+  "current_frontier": "First settle/freeze exact PR680; then rebind PR810. In parallel, repair PR810 so its 300-second Function budget can orchestrate the actual Vault-Mistral-Effect-Tier1-Tier2-second-Mistral sequence. Do not spend the owner GitHub token under the assumption that the present runner is already the final test-of-tests.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable go-request identity was exposed; ordinary source/control-plane falsification does not consume the unusual-experiment slot."
+  },
+  "runtime_credit_added": {
+    "private_source": 0,
+    "exact_oci": 0,
+    "real_mistral": 0,
+    "tier2_replacement": 0,
+    "whole_product": 0
+  },
+  "acceptance": "IN_PROGRESS"
+}

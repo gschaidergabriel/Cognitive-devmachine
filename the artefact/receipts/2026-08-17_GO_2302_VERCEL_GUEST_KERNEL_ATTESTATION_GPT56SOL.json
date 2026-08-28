@@ -1,0 +1,74 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T23:02+07:00",
+  "timestamp_precision": "minute_from_bound_vercel_build_log",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "bounded Vercel Sandbox outer guest-kernel identity attestation before the private-source credential gate",
+  "coordination": {
+    "parallel_work_refreshed": true,
+    "duplicate_product_path_created": false,
+    "existing_source_authority_lane": "PR632 retains the Fast-Boot EntityOS/microVM authority-drift repair; this receipt does not duplicate that source lane",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0,
+    "reason": "The exact user go exposes no shared immutable request/turn id and only minute-precision immutable message time, so GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md fails closed."
+  },
+  "execution_surface": {
+    "provider": "Vercel Sandbox",
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "controller_pr": 810,
+    "controller_commit": "d01d6218491edf468573c17f9d8c01f3803fa210",
+    "deployment_id": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "provider_surface_label": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
+    "sandbox_id": "tomato-weary-porpoise-K4wNz6",
+    "sandbox_session_id": "sbx_JiOY9Ys4YJcCZAgzle0wTfi7aGaI",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_stopped": true
+  },
+  "observed_guest_kernel": {
+    "step": "outer_microvm_guest_kernel_identity",
+    "exit_code": 0,
+    "system": "Linux",
+    "release": "6.12.76",
+    "machine": "x86_64",
+    "classification": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY",
+    "primary_provider_contract": "Current Vercel Sandbox SDK documentation describes Sandbox.create as creating an isolated microVM environment."
+  },
+  "source_and_product_binding": {
+    "controller_guard_research_base_sha": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+    "controller_guard_research_sha": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
+    "controller_guard_research_tree_sha": "a012708e469de32615ea9933371a13795669db5a",
+    "target_patch_research_base_sha": "f7eb4df7600b0f4de1a6381a04acf5d1057d8f9b",
+    "target_patch_research_sha": "5e5adce0591058608bbd7381ecf570a39b282f0d",
+    "target_patch_research_tree_sha": "1e02285d77b08e6edd86f9017d0ceac5db262cf2",
+    "exact_current_research_main_bound": false,
+    "exact_final_clayverse_oci_digest_built": false,
+    "same_final_oci_digest_executed_inside_guest_kernel": false
+  },
+  "credential_boundary": {
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "error": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "github_secret_forwarded_to_sandbox": false,
+    "required_rule": "GITHUB_READ_TOKEN must remain a sensitive host-side Vercel Preview orchestration credential; only host-verified source archive bytes may cross into Sandbox."
+  },
+  "evidence_credit": {
+    "outer_microvm_mechanism": "SUPPORTED_AT_PROVIDER_SANDBOX_BOUNDARY",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "final_microvm_wrapped_oci_credit": 0,
+    "networkpolicy_enforcement_credit": 0,
+    "whole_product_credit": 0,
+    "classification": "BOUNDED_OUTER_GUEST_KERNEL_MECHANISM_EVIDENCE_ONLY"
+  },
+  "strongest_counterhypothesis": "The observed Vercel Sandbox guest kernel is real isolation for the controller sandbox but says nothing yet about the final accepted ClayVerse OCI bytes, Kata/equivalent deployment configuration, persistent-volume behavior, CNI enforcement or same-digest final deployment because private product source staging never began.",
+  "next_high_information_step": "Provision the approved host-side sensitive GITHUB_READ_TOKEN without forwarding/logging it; refresh and rebind the retained PR810 execution closure once to then-current admitted Research/PR611/PR622/selected PR623 bytes; run source verification, exact OCI build/digest and product assertions inside Sandbox; later execute that same accepted OCI digest behind the mandatory final Kata/equivalent guest-kernel boundary and test CNI/default-deny plus reviewed allow-policy behavior.",
+  "prohibitions_observed": {
+    "vps_or_self_hosted_or_production_testing": false,
+    "together_api_used": false,
+    "secret_exposed": false,
+    "paid_or_final_training_started": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

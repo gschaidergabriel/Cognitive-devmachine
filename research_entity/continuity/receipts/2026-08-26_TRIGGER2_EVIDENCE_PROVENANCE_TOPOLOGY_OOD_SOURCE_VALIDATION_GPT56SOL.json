@@ -1,0 +1,89 @@
+{
+  "schema": "TRIGGER2_EVIDENCE_PROVENANCE_TOPOLOGY_OOD_SOURCE_VALIDATION/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch_observed": "8.84",
+  "mode": "FREE_ONLY",
+  "scope": "EXACT_COMMITTED_BYTES_LOCAL_DETERMINISTIC_METHOD_ONLY_PROBE",
+  "research_question": "Can an evidence-provenance counterfactual remain solvable from relational structure while making paired lexical bag-of-visible-token shortcuts exactly non-informative and holding out an opaque carrier vocabulary?",
+  "hypothesis": "If opposite-label pairs contain the same visible token multiset and differ only in graph connectivity, a bag-of-visible-tokens shortcut has pairwise upper bound 0.5 while an evaluator using the observation-to-receipt-to-claim topology can remain perfect across disjoint DEVELOPMENT and OOD_HOLDOUT carrier vocabularies.",
+  "counterhypothesis": "Apparent provenance success in the v1 probe may be driven mainly by lexical markers such as mint-event or producer-surface words; removing pairwise lexical information could make the intended distinction unsolvable even at the deterministic specification level.",
+  "adjudication": "The counterhypothesis is rejected only at METHOD_ONLY specification scope: the frozen topology probe has identical lexical bags within every opposite-label pair, disjoint opaque DEV/OOD carrier vocabularies, nuisance-only majority accuracy 0.5, and deterministic structural-reference accuracy 1.0. This does not establish model OOD generalization, learned causal representation, dataset admission, or training efficacy.",
+  "source_files": [
+    {
+      "path": "tools/trigger2_evidence_provenance_topology_ood_probe_v1.py",
+      "final_binding_commit": "a8ce559a18b980d6d1390de5f9cb53698e6a9693",
+      "git_blob_sha1": "1fb760d6cfae88541f41e913325792b23b2cda04",
+      "sha256": "47d9934491c78c9d7475ff41d06bf85dec59a919800345e42d86f05f489c525b"
+    },
+    {
+      "path": "tests/test_trigger2_evidence_provenance_topology_ood_probe_v1.py",
+      "create_commit": "0638403de9850c732be3050b1add6c0abe85554f",
+      "git_blob_sha1": "46dca2fc107dd7e33149026f460c4ccf5849e2a7",
+      "sha256": "a6ea8834e80886b30b285865ffcc97212b766145fa0c55129979f115b1c32214"
+    }
+  ],
+  "exact_byte_identity": {
+    "github_blob_matches_locally_validated_tool": true,
+    "github_blob_matches_locally_validated_test": true
+  },
+  "execution": {
+    "py_compile": "PASS",
+    "pytest": "7 passed in 0.09s",
+    "probe_result": {
+      "pass": true,
+      "rows": 64,
+      "families": 4,
+      "counterfactual_pairs": 32,
+      "outcome_counts": {
+        "BOUND_EVIDENCE_CANDIDATE": 32,
+        "CLAIM_ONLY_NO_PROMOTION": 32
+      },
+      "pairwise_visible_lexical_bag_upper_bound": 0.5,
+      "every_counterfactual_pair_has_identical_visible_lexical_bag": true,
+      "development_ood_opaque_carrier_vocab_disjoint": true,
+      "nuisance_only_majority_accuracy": 0.5,
+      "semantic_topology_reference_accuracy": 1.0,
+      "target_and_split_hidden_from_model_visible_input": true,
+      "training_eligible_rows": 0,
+      "accepted_dataset_tokens_delta": 0
+    },
+    "repository_ci_observed": false,
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid_executed": false,
+    "vps_executed": false,
+    "training_executed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false
+  },
+  "negative_evidence_preserved": "The first local test collection failed because an installed Python package named tools shadowed the scratch repository namespace. The test was changed to import the exact probe file by path. That infrastructure/import-resolution failure is not counted as a scientific negative. A first GitHub source transfer also differed from the locally validated tool blob; the source was rebound to the exact locally validated bytes in commit a8ce559a18b980d6d1390de5f9cb53698e6a9693 before this receipt was written.",
+  "method_research_basis": [
+    {
+      "source": "Wei et al., Symbol tuning improves in-context learning in language models, EMNLP 2023",
+      "relevance": "Arbitrary-symbol training can reduce dependence on natural-language label semantics and improve flipped-label following; supports deliberately removing label/verbalizer shortcuts from the probe."
+    },
+    {
+      "source": "Fei et al., Mitigating Label Biases for In-context Learning, ACL 2023",
+      "relevance": "Label and domain biases can materially change ICL predictions; supports explicit nuisance baselines rather than assuming counterbalancing alone removes shortcut use."
+    },
+    {
+      "source": "Si et al., Measuring Inductive Biases of In-Context Learning with Underspecified Demonstrations, ACL 2023",
+      "relevance": "Models can prefer one predictive feature over another under underspecification; motivates a counterfactual where lexical features are made exactly non-discriminative and structural provenance is the intended discriminator."
+    }
+  ],
+  "promotion_fence": {
+    "evidence_class": "METHOD_ONLY",
+    "training_eligible": false,
+    "accepted_dataset_tokens_delta": 0,
+    "model_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "physical_grid_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_discriminator": "Keep the 64-row topology OOD set frozen. After runtime quiescence PASS and a separately admitted exact checkpoint/tokenizer/renderer path, evaluate a preregistered model on DEVELOPMENT versus OOD_HOLDOUT without changing carrier vocabularies or graph templates from holdout results. Compare against bag-of-token and graph-structure baselines; no model-level promotion is allowed from the current deterministic reference alone."
+}

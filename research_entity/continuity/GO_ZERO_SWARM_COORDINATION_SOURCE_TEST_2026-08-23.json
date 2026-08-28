@@ -1,0 +1,39 @@
+{
+  "schema": "CLAY_TRIGGER_SWARM_SOURCE_TEST/v1",
+  "date": "2026-08-23",
+  "tested_source_path": "tools/run_go_zero_swarm.py",
+  "tested_source_blob_sha": "2169bdf044573f072049675f42b1775d798b3260",
+  "evidence_class": "LOCAL_SOURCE_AND_COORDINATION_MECHANISM_ONLY",
+  "tests": [
+    {
+      "name": "python_compile",
+      "result": "PASS",
+      "detail": "python -m py_compile completed successfully on the authored controller source before repository write"
+    },
+    {
+      "name": "cli_parse",
+      "result": "PASS",
+      "detail": "help parser accepted parent trigger choices go|zero and exposed coordination/runtime options"
+    },
+    {
+      "name": "concurrent_atomic_lane_claim",
+      "result": "PASS",
+      "detail": "20 concurrent local threads claimed 20 leases from one SharedCoordinator state; all 20 lane ids were unique"
+    },
+    {
+      "name": "parent_identity_propagation",
+      "result": "PASS",
+      "detail": "all tested leases retained the same upstream macrocycle_id and parent trigger zero while child_trigger remained go"
+    }
+  ],
+  "not_tested": [
+    "real Groq provider calls",
+    "real Mistral provider calls",
+    "real NVIDIA/Nemotron provider calls",
+    "vault/secret mounting",
+    "24-hour liveness",
+    "provider TPM/RPM accuracy without configured limits",
+    "multi-host distributed locking"
+  ],
+  "truth_boundary": "This receipt proves source syntax and bounded single-host coordination behavior only. It does not prove provider execution, token entitlement, 24h runtime, whole Mini Entity PASS, or zero-cost operation on a specific host."
+}

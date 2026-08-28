@@ -1,0 +1,107 @@
+{
+  "schema": "ENTITYOS_HCU_TYPED_CANONICAL_2P53_COUNTEREXAMPLE/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "1a58ffea1118dc43c819272382cdc15812f0190c",
+  "current_authority": {
+    "selected_causal_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "selection_commit": "5d99c6c37fc9dbecaa557f6091de06f703e9a412",
+    "retained_donor_pr": 1263,
+    "typed_binary_candidate": "RESEARCH_PROVENANCE_ONLY_NOT_CURRENT_AUTHORITY"
+  },
+  "unusual_experiment": {
+    "local_count_for_this_organ": 1,
+    "id": "HOST_NUMERIC_TYPE_ALIAS_2P53",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "law": "No shared macrocycle_id was supplied. This receipt makes no cross-receipt uniqueness claim and performs no second local unusual intervention."
+  },
+  "exact_counterexample_scope": {
+    "donor_pr_head_observed_at_materialization": "b41afec49bd6384680d001395177c3f274b9be5e",
+    "source_path": "the artefact/MicroEntity/hcu/hcu_causal_canonical_v1.py",
+    "source_git_blob": "7e1be2cead9e069d5192c6e430a2abba7de0412b",
+    "test_path": "the artefact/MicroEntity/hcu/test_hcu_causal_canonical_v1.py",
+    "test_git_blob": "af143853208c92c24b0040ddf995a33f29eeb7b8",
+    "materialization": "EXACT_GIT_BLOB_RECONSTRUCTED_IN_ISOLATED_CHATGPT_LINUX_CONTAINER",
+    "source_blob_identity_recomputed": true
+  },
+  "hypothesis": "ENTITYOS_HCU_TYPED_CANONICAL/v1 has one cross-language admitted JSON-number domain independent of whether an exactly equal value arrived as Python int, Python float, or JavaScript Number.",
+  "counterhypothesis": "The custom typed-binary candidate leaks host numeric type semantics at the I-JSON safe-integer boundary, so equal JSON numeric values can be accepted on one implementation path and rejected on another.",
+  "observed_discriminator": {
+    "value": "2^53 = 9007199254740992",
+    "python_int": "REJECT INTEGER_OUTSIDE_IJSON_SAFE_RANGE",
+    "python_float": "ACCEPT AND ENCODE AS IEEE754_BINARY64_HEX_4340000000000000",
+    "python_float_json_text": "{\"n\":9007199254740992.0}",
+    "bundled_node_reference": "REJECT INTEGER_OUTSIDE_IJSON_SAFE_RANGE",
+    "result": "COUNTERHYPOTHESIS_SUPPORTED_FOR_EXACT_TYPED_BINARY_BLOB",
+    "interpretation": "The alternative custom typed-binary candidate did not have a single cross-language admission domain at the 2^53 host-type alias boundary."
+  },
+  "bounded_diagnostic_repair": {
+    "action": "Locally reject integral Python floats outside the safe I-JSON integer range so Python and the bundled Node reference agree for this candidate.",
+    "py_compile": "PASS",
+    "unittest": "10_OF_10_PASS",
+    "patched_source_sha256": "2127820167e14978aac455ad6be24c452186c14a1d4af6a1f126d6ebd4eaacd1",
+    "patched_source_git_blob": "f40f23166ad80633aac660bcdec31736eb3b0a8e",
+    "patched_test_sha256": "d3c5cdad6a43dc83d3ea7a229023b1bc55a543376958961bce1d255261654c27",
+    "patched_test_git_blob": "0f9eb5f2df13f0b5834ea7f051d13e67cabeada7",
+    "promotion": "NOT_WRITTEN_NOT_PROMOTED_DIAGNOSTIC_ONLY",
+    "reason": "Current main later/independently adjudicated RFC8785_JCS_IJSON/v1 as the single target canonicalization authority; promoting a repaired custom typed-binary encoder would recreate canonicalization multipath."
+  },
+  "fusion": {
+    "architecture_delta": "PRESERVE_TYPED_BINARY_2P53_CASE_AS_COUNTEREXAMPLE_ONLY",
+    "new_canonicalizer_added": false,
+    "new_state_authority_added": false,
+    "new_route_authority_added": false,
+    "new_effect_or_recovery_authority_added": false,
+    "selected_rfc8785_path_changed": false,
+    "value": "Prevents later re-admission of the alternative typed encoder on the basis of earlier 9/9 parity evidence without covering the host numeric alias boundary."
+  },
+  "current_active_gap": {
+    "typed_entry_current_encoder": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1",
+    "router_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "inference_receipt_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "target_encoder": "RFC8785_JCS_IJSON/v1",
+    "end_to_end_cross_language_identity": "UNPROVEN",
+    "runtime_credit": 0
+  },
+  "execution_boundary": {
+    "vercel_connector_sandbox_create_start_exec_exposed_to_this_organ": false,
+    "live_ready_controller_ingress_observed_on_current_main_receipt": true,
+    "current_controller_semantics_match_entityos_hcu": false,
+    "full_checkout_in_local_isolated_container": "BLOCKED_BY_GITHUB_DNS_RESOLUTION",
+    "semantic_full_suite_execution": false,
+    "entityos_hcu_runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "wire RFC8785_JCS_IJSON/v1 into new-version Typed Entry event/admission identities without reinterpreting historical hashes",
+    "wire the same selected schema into router policy, EngineAdmission identity and route identity",
+    "wire the same selected schema into inference receipt hashing and echo validation",
+    "reject mixed, unknown and downgrade canonicalizer replay fail-closed",
+    "wire HCU_REACTIVE_EVENT/v1 into GRID10 plan compilation with independent Entry-budget and runtime-capacity authority",
+    "execute exact-current combined Entry+route+inference+canonicalizer+GRID10 regressions on an actually-started authorized isolated executor",
+    "then bind exact local checkpoint/tokenizer/runtime/build identities to positive EngineAdmission before runtime promotion"
+  ],
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "credit": {
+    "research_counterexample": "COMMITTED",
+    "product_code_delta": "NO_CHANGE_BY_AUTHORITY_CONVERGENCE",
+    "component_diagnostic_execution": "OBSERVED_EXACT_BLOB_PLUS_LOCAL_PATCH_REGRESSION",
+    "runtime_credit_change": 0,
+    "acceptance": "IN_PROGRESS"
+  }
+}

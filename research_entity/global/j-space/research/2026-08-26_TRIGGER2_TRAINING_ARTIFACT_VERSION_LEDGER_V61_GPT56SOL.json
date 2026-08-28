@@ -1,0 +1,129 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v61",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V60_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V60",
+  "observed_main_before_write": "8f9789e49d6806d8d508233712fec3aa85d4e620",
+  "authority": {
+    "supervisor_epoch": "8.83_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V60 proposed making source_bound_model_call_identity_sha256 injective across independently attributed cohort members. Direct inspection of the ABI-v2 model-call schema provides material counterevidence: the digest does not contain HCU causal-event, cell, membership-incarnation, process-instance, or launch identity. V61 therefore blocks blind call-digest injectivity and separates model-call content/evidence identity from invocation-event authority until an explicit contract is frozen.",
+  "new_audit": {
+    "path": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_MODEL_CALL_CONTENT_VS_INVOCATION_IDENTITY_AUDIT_V1_GPT56SOL.json",
+    "commit": "71b7b10dafc715930948cc12cbc5f39277fdc322",
+    "status": "SOURCE_ONLY_AUDIT_NONPROMOTING"
+  },
+  "direct_source_evidence": {
+    "abi_v2_source": "tools/trigger2_qwen35_checkpoint_model_state_consumption_probe_v2.py",
+    "model_call_binding_fields": [
+      "candidate_id",
+      "checkpoint_manifest_sha256",
+      "checkpoint_state_digest",
+      "loaded_state_digest",
+      "rendered_utf8_sha256",
+      "input_ids",
+      "attention_mask",
+      "runtime",
+      "forward_output"
+    ],
+    "explicit_hcu_invocation_fields_absent_from_call_binding": [
+      "causal_event_id",
+      "grid_cell_id",
+      "node_admission_id",
+      "node_admission_revision",
+      "launch_descriptor_sha256",
+      "executor_observation_sha256",
+      "process_instance_identity"
+    ],
+    "parent_receipt_note": "The ABI-v2 parent result carries component paths/evidence and child returncode/stderr but no dedicated causal invocation UUID/event/cell/membership/PID identity. Therefore invocation uniqueness is not guaranteed by schema."
+  },
+  "semantic_adjudication": {
+    "source_bound_model_call_identity_sha256": "MODEL_CALL_CONTENT_AND_EVIDENCE_IDENTITY_NOT_YET_PROVEN_INVOCATION_UNIQUE",
+    "launch_descriptor_sha256": "PRE_CALL_INVOCATION_PRECOMMIT_IDENTITY",
+    "executor_observation_sha256": "POST_CALL_INVOCATION_OBSERVATION_IDENTITY",
+    "authority_envelope_sha256": "DERIVED_INVOCATION_PROVENANCE_COMPOSITION",
+    "safe_invariant": "One launch descriptor or one executor observation cannot be silently counted as multiple independent executions. Equal call-content identity alone neither proves replay nor proves separate invocation.",
+    "do_not_infer": "Do not infer independent model-execution multiplicity merely from distinct wrapper records; do not infer same invocation merely from equal call-content digest."
+  },
+  "v60_conflict": {
+    "v60_hypothesis": "Exact model-call identity must be injective across a cohort whenever members claim independent cell executions.",
+    "status": "COUNTEREVIDENCE_MATERIAL_UNRESOLVED_DO_NOT_PATCH_BLINDLY",
+    "risk_of_v60_patch": "If two genuinely independent deterministic invocations produce identical state/input/runtime/output/source evidence, forcing call-content digest uniqueness would reject valid causal repeats or encourage artificial nonce pollution of a content digest.",
+    "retained_v60_positive": "The node_admission_id injectivity gap remains independently valid for a cohort claiming distinct membership incarnations, unless an explicit multiplexing contract is introduced."
+  },
+  "paired_discriminator": {
+    "case_A_replay_or_alias": {
+      "construction": "Two cohort members reuse one exact launch descriptor or one exact executor observation while claiming distinct cells/nodes.",
+      "required_result": "FAIL_CLOSED",
+      "reason": "One invocation authority cannot be multiplied into independent execution credit."
+    },
+    "case_B_independent_repeat_equal_content": {
+      "construction": "Two members have independently frozen distinct launch descriptors, distinct executor observations, distinct cell/node/membership/process attribution, but identical source_bound_model_call_identity_sha256 and identical model_output_identity_sha256 because the deterministic model evidence is equal.",
+      "recommended_result": "PASS_AS_TWO_INVOCATIONS_WITH_EQUAL_CONTENT_IDENTITY",
+      "reason": "Execution multiplicity is carried by invocation authority; content equality remains usable for dedup/equivalence analysis."
+    },
+    "case_C_one_call_explicit_fanout": {
+      "construction": "One invocation intentionally supplies several logical consumers.",
+      "required_result": "ONE_INVOCATION_PLUS_EXPLICIT_CONSUMER_FANOUT_IDENTITIES_NOT_MULTIPLE_CALL_CREDIT"
+    }
+  },
+  "training_jspace_feedback": {
+    "event_attribution_field": "INVOCATION_AUTHORITY_IDENTITY",
+    "content_equivalence_field": "source_bound_model_call_identity_sha256",
+    "new_positive_rows": 0,
+    "accepted_dataset_tokens_added": 0,
+    "training_credit_added": 0,
+    "principle": "Keep event provenance and content equality separate in training/J-Space traces."
+  },
+  "execution": {
+    "provider_called_this_cycle": false,
+    "model_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "vps_execution_performed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "work_class": "SOURCE_ONLY_SEMANTIC_ADJUDICATION"
+  },
+  "credits": {
+    "research_delta": 1,
+    "identity_semantics_audit_credit": 1,
+    "repository_ci_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 owning live host: prove FreeSwarm quiescence with zero provider-capable survivors and bounded zero provider-counter delta without provider probing",
+    "P1 source-only: freeze an explicit MODEL_CALL_CONTENT_IDENTITY versus INVOCATION_AUTHORITY contract",
+    "P1 replace blind call-digest-injectivity with paired replay-versus-independent-repeat fixtures and explicit fanout semantics",
+    "P1 add node-admission/membership-incarnation injectivity or explicit multiplexing semantics",
+    "P1 integrate phase-separated invocation authority with PROOF_CARRYING_NODE_RESULT/v1 and fused GRID10 cohort source",
+    "P2 keep checkpoint selection/training blocked until separately admitted executable evidence exists",
+    "P3 keep Forge-to-Distillery positive admission closed until accepted_dataset_tokens > 0 from exact accepted witness and replay +0"
+  ],
+  "next_exact_action": "Do not harden source_bound_model_call_identity_sha256 injectivity yet. Add paired source fixtures that distinguish replayed invocation authority from independently committed repeated invocations with equal call-content evidence; freeze the resulting semantic contract before modifying the cohort reducer."
+}

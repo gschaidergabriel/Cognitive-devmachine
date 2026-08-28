@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_receipt": "3cf759fc500565b93d59a33dcd512147f8369283",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_ZERO_NEW_UNUSUAL_EXPERIMENTS",
+    "reason": "No upstream shared immutable request/macrocycle id is exposed to this organ and available user-message timing is not a reproducible high-precision canonical atomic-lease fallback identity.",
+    "unusual_experiment_count_added": 0,
+    "retained_hcu_donor_pr": 1263,
+    "retained_hcu_donor_head_observed": "5c59891b208d245b4b445772c70da5108447d794",
+    "retained_executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_executor_pr": 810,
+    "retained_executor_head_observed": "879bbeafe6e36fb043b00fed6e074925d604d1d5",
+    "duplicate_executor_created": false,
+    "second_truth_state_or_effect_authority_created": false
+  },
+  "observation": {
+    "class": "JSPACE_BINDING_DIGEST_VALID_SEMANTIC_TRANSPLANT_GAP",
+    "source_path": "the artefact/MicroEntity/hcu/jspace_inference_binding_v1.py",
+    "pre_delta_behavior": "bind_training_trace_to_inference enforced executor cell/role/invocation cross-binds at construction time, but validate_binding primarily rechecked binding schema/canonicalization and the recomputed binding digest. A separately deserialized or manually constructed binding could therefore be internally hash-consistent while carrying top-level trace cell/role/model-call fields divergent from embedded model-execution provenance.",
+    "risk_scope": "training/dataset provenance could treat a self-consistent hash as sufficient even when execution-critical semantic cross-binds were transplanted; no runtime exploit, truth minting, EffectGate bypass, or model success was observed."
+  },
+  "hypothesis": "Independent semantic revalidation at the JSpaceBinding/v3 validation boundary closes the provenance-transplant class without adding another state, truth, effect, registry, or executor authority.",
+  "counterhypothesis": "Digest identity alone is sufficient because every valid JSpaceBinding/v3 is guaranteed to originate from bind_training_trace_to_inference and cannot be reconstructed or deserialized elsewhere.",
+  "deterministic_discriminator": "Construct an otherwise schema-valid JSpaceBinding/v3, mutate one execution-critical semantic relation, recompute its RFC8785/JCS binding digest, and require validate_binding to reject the digest-valid transplant before downstream DatasetAdmission/training use.",
+  "donor_delta": {
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "semantic_revalidation_commit": "1caae62a09ebb95acdf499684fabd641710e6429",
+    "semantic_revalidation_path": "the artefact/MicroEntity/hcu/jspace_inference_binding_v1.py",
+    "semantic_revalidation_blob": "43fc2df1201fd5fe0d91e8c32ec27f45b5d636d7",
+    "regression_commit": "5c59891b208d245b4b445772c70da5108447d794",
+    "regression_path": "the artefact/MicroEntity/hcu/test_jspace_inference_binding_revalidation_v3.py",
+    "regression_blob": "d1747852272d06b917704c1ce1fd465c9dde900e",
+    "new_validation_invariants": [
+      "training_trace_schema must equal the current TrainingTrace/v1 schema",
+      "inference_receipt_schema must equal current HCU_INFERENCE_RECEIPT/v4",
+      "execution-critical SHA/text/integer fields are structurally revalidated",
+      "output_producing_cell_id must equal top-level trace cell_id",
+      "model_execution_role must equal top-level trace role",
+      "model_execution_invocation_id must equal model_call_id",
+      "binding digest must still exactly match RFC8785/JCS material"
+    ],
+    "regression_obligations_encoded": [
+      "exact rehydrated binding passes",
+      "digest-valid output-cell transplant fails closed",
+      "digest-valid model-execution-role transplant fails closed",
+      "digest-valid invocation/model-call relabel fails closed",
+      "digest-valid stale InferenceReceipt/v3 schema fails closed"
+    ]
+  },
+  "executor_convergence": {
+    "contract_path": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-v4-v3-current-rebind-contract.json",
+    "contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v3",
+    "contract_commit_by_this_organ": "4d6637143730b74a3cdf7df4f7d969146c9ef778",
+    "contract_blob_observed_on_parallel_head": "1f0b4f0d30f6ea309382970e32253b7419365660",
+    "status": "SOURCE_REBIND_REQUIRED",
+    "retained_executor_head_after_parallel_preservation": "879bbeafe6e36fb043b00fed6e074925d604d1d5",
+    "required_fixed_command": "python3 -m unittest -v test_model_execution_admission_store_v1.py test_execution_store_inference_jspace_chain_v1.py test_jspace_inference_binding_revalidation_v3.py",
+    "semantic_revalidation_required_before_downstream_dataset_use": true,
+    "sandbox_create_permitted_before_coherent_source_rebind": false
+  },
+  "execution_evidence": {
+    "new_donor_regressions_executed": false,
+    "new_exact_source_sandbox_execution": false,
+    "current_executor_route_status": "SOURCE_REBIND_REQUIRED",
+    "observed_parallel_execution_admission_blocker": "VERCEL_HOBBY_BUILD_RATE_LIMIT",
+    "blocker_interpretation": "INFRASTRUCTURE_EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_OR_REGRESSION_FAILURE",
+    "local_or_vps_testing_used": false,
+    "paid_provider_used": false,
+    "together_used": false,
+    "classification": "SOURCE_ONLY_UNEXECUTED",
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the single retained PR810 executor contract now targets donor 5c59891b and requires semantic J-Space revalidation while remaining fail-closed SOURCE_REBIND_REQUIRED.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the HCU J-Space inference boundary now revalidates executor-owned GRID cell, role and invocation semantics rather than trusting digest identity alone; Typed Entry/route/load/GRID ancestry remains the same single causal chain.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: training/dataset provenance now has a deterministic guard against digest-valid model-execution semantic transplantation, and the fixed FREE executor regression closure explicitly includes that guard."
+  },
+  "credit": {
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Keep PR1263 as the single donor and PR810 as the single executor. Vendor every exact source/regression/transitive fixture required by executor rebind contract v3 from donor 5c59891b208d245b4b445772c70da5108447d794, bind every Git blob in one immutable fixed-route manifest, remove SOURCE_REBIND_REQUIRED only in that same coherent change, then run the three fixed deterministic regressions only when admitted FREE_ONLY Vercel Hobby build/function admission is actually available. After exact execution closure, continue DatasetAdmission/family-split provenance and zero-cost local approximately-0.8B readiness without granting model/training credit early."
+}

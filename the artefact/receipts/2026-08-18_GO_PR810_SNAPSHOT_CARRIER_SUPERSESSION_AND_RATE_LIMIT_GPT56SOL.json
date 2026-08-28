@@ -1,0 +1,85 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:38:20+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SUPERSEDES_LATER_STALE_TIER2_SNAPSHOT_LIFECYCLE_CLAIM_AND_BINDS_CURRENT_ADMISSION_BLOCKER",
+  "canonical_main_observed_before_write": "0a00b6e0d4a5e5de429c7164edb3c0b7e872db77",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "supersession": {
+    "superseded_later_receipt": "the artefact/receipts/2026-08-18_GO_PR810_SHA_GUARD_AND_TIER2_CARRIER_FENCE_GPT56SOL.json",
+    "superseded_claim": "Sandbox snapshots are necessarily destroyed when the producing named sandbox is deleted.",
+    "primary_vercel_docs_observed": [
+      "Current Vercel persistent-sandbox documentation states deleting a sandbox permanently removes the sandbox and sessions while snapshots remain until expiration or explicit deletion.",
+      "Current Vercel CLI/API documentation exposes snapshot deletion as a separate operation.",
+      "Current Vercel documentation supports creating a sandbox from an explicit snapshotId."
+    ],
+    "result": "MANUAL_VERCEL_SANDBOX_SNAPSHOT_IS_ADMISSIBLE_AS_A_TIER2_CARRIER_CANDIDATE_ONLY; EXACT_RUNTIME_MUST_DISCRIMINATE",
+    "runtime_credit": 0
+  },
+  "current_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_observed": "bf3312c7c07437e33716111ba2ad7bb2632637fb",
+    "head_message": "test(clayverse): admit verified two-stage snapshot carrier source path",
+    "tier2_restore_schema": "ClayVerseTier2GuestReplacement/v2",
+    "source_contract_observation": "Current restore path verifies v2 replacement receipt, snapshotId shape, VERCEL_SANDBOX_SNAPSHOT carrier, source deletion before recreate and non-persistent replacement.",
+    "source_candidate": true,
+    "runtime_credit": 0
+  },
+  "carrier_hygiene": {
+    "observed_prepare_contract": "Before outer snapshot, the retained prepare path creates integrity-bound logical state/workspace/OCI transfer artifacts, kills Docker daemons, removes Docker/containerd storage and removes all /vercel/sandbox top-level entries except tier2-transfer.",
+    "remaining_runtime_falsifiers": [
+      "snapshot survives source sandbox deletion and is reusable by a distinct replacement sandbox",
+      "replacement sandbox/guest identity is distinct and stale source identity cannot rejoin",
+      "only declared transfer artifacts become canonical authority after recreate",
+      "no secret environment or secret file survives through the snapshot carrier",
+      "replacement starts with no undeclared Docker image and restores the exact same accepted OCI identity",
+      "UnifiedDB logical snapshot restores under a newly advanced global generation",
+      "stale writers/results fail closed and verified effects are not blindly replayed",
+      "fresh provider secret is reacquired and a second canonical provider turn succeeds"
+    ]
+  },
+  "execution_admission": {
+    "vercel_project": "dr-unterweger",
+    "latest_deployment_observed": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
+    "latest_deployed_commit_observed": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
+    "latest_deployment_state": "ERROR",
+    "latest_deployment_failure": "stale pre-repair retained-runner SHA marker guard",
+    "exact_current_controller_head_deployed": false,
+    "current_head_vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "current_head_vercel_status_target": "upgradeToPro=build-rate-limit",
+    "authorized_direct_sandbox_exec_surface_exposed_to_this_organ": false,
+    "exact_oci_runtime_credit": 0,
+    "mistral_runtime_credit": 0,
+    "tier2_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "coordination": {
+    "parallel_pr810_writes_observed": true,
+    "duplicate_controller_path_added": false,
+    "controller_schema_bug_found_then_parallel_fixed_before_this_organ_wrote": true,
+    "research_product_bytes_changed_by_this_organ": false,
+    "owner_secrets_or_credentials_used": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "The global go unusual-experiment slot was already consumed before this organ joined the macro-cycle."
+  },
+  "epistemic_status": {
+    "source_candidate": true,
+    "mechanism_supported_by_primary_docs": true,
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "When Vercel admits an exact-current PR810 preview, require the current source guards to pass, then execute the normal isolated snapshot-delete-recreate acceptance path against immutable PR686: sanitized snapshot -> delete source sandbox -> distinct persistent:false replacement from exact snapshotId -> exact OCI restore -> generation/replay/secret fences -> second provider turn. Promote no Tier2 or whole-product credit unless those exact runtime observations pass."
+}

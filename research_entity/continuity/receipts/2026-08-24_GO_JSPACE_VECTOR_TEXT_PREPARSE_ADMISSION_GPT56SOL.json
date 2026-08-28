@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "observed_canonical_main_before_receipt": "840e8655dadce85fe188caa1123c3d604eb42eca"
+  },
+  "coordination": {
+    "macrocycle_id": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID_EXPOSED_TO_THIS_ORGAN; ordinary deterministic source review and fusion only",
+    "unusual_experiment_count_added": 0
+  },
+  "track_a_entityos_executable_convergence": {
+    "status": "NO_NEW_RUNTIME_CREDIT_EXACT_HEAD_DEPLOYMENT_NOT_READY",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "observed_executor_head": "8822b9ff8c9c4156bac3a904e49352a839ef6cd0",
+    "vercel_observation": "Newest observed deployments were ERROR at aa80683e8b3cbc0eb9b0fced784820005b0d55d6 and 926c22dd57ef82447787e24c7412548c3ed2b890; newest observed READY remained 2dfa1edcab41fba34282b34956716e7c222ee517. No deployment matched observed executor head, so no function or Sandbox invocation was attempted.",
+    "runtime_credit_added": 0
+  },
+  "track_b_hcu_and_typed_entry_co_development": {
+    "status": "SOURCE_DELTA_COMMITTED_IN_RETAINED_PR1263",
+    "finding": "The sole JSPACE_VECTOR_CONTROL_ABI/v1 text parser checked only string/nonempty before json.loads, leaving no pre-JSON resource fence for an untrusted text ingress path.",
+    "source_commits": [
+      "2f4bbe5c0fd6af4fe9bc6cfe404a5b1b7d8dd3cc",
+      "0b7d5c1baac94181af9908509683dd5fd41f4d31",
+      "5537671fea43ef6555a7f8c783f89a4061dbb9c0"
+    ],
+    "files": [
+      "the artefact/MicroEntity/hcu/jspace_vector_control_text_admission_v1.py",
+      "the artefact/MicroEntity/hcu/test_jspace_vector_control_text_admission_v1.py",
+      "the artefact/MicroEntity/hcu/JSPACE_VECTOR_CONTROL_TEXT_ADMISSION_CONTRACT.json"
+    ],
+    "mechanism": "Bound untrusted text by character and strict UTF-8 byte budgets before delegating to the sole existing canonical parse_packet_text implementation; create no second wire, canonicalizer, truth store, state authority or effect path.",
+    "observed_successor_head_after_source_delta": "bd9d9a22bc4d69ebfb88f2271161d35fe9ed723a",
+    "source_delta_ancestor_of_observed_successor": true
+  },
+  "track_c_global_jspace_gwt_training_readiness": {
+    "status": "SOURCE_CANDIDATE_UNEXECUTED",
+    "abi": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "admission_schema": "JSPACE_VECTOR_CONTROL_TEXT_ADMISSION/v1",
+    "contract_schema": "JSPACE_VECTOR_CONTROL_TEXT_ADMISSION_CONTRACT/v1",
+    "regression_obligations": [
+      "canonical packet delegates without wire change",
+      "oversized text rejected before canonical JSON parser",
+      "non-UTF8 scalar rejected before canonical JSON parser",
+      "empty/non-text ingress rejected fail-closed"
+    ],
+    "falsifier": "AN_UNTRUSTED_TEXT_INGRESS_PATH_CAN_REACH_THE_CANONICAL_VECTOR_CONTROL_JSON_PARSER_WITHOUT_AN_EQUIVALENT_PRE_PARSE_RESOURCE_BOUND",
+    "tests_executed_by_this_organ": false,
+    "training_credit_added": 0
+  },
+  "evidence_boundary": {
+    "source_only": true,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Keep the new text-admission primitive source-only until its exact regression executes on an admitted deterministic surface; separately wait for a naturally available FREE_ONLY Vercel deployment exactly matching the live PR810 head before invoking that fixed executor capsule. Do not project newer PR1263 source into the older executor donor snapshot without an explicit immutable rebind."
+}

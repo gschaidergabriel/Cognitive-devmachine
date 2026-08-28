@@ -1,0 +1,2322 @@
+{
+  "summary": {
+    "n_rows": 125,
+    "per_family": {
+      "B2_PRIOR_OVERRIDE": {
+        "n": 15,
+        "v1_valid": 15,
+        "v1_correct": 0,
+        "v2_valid": 0,
+        "v2_correct": 0
+      },
+      "B4_CAPACITY_INTERFERENCE": {
+        "n": 15,
+        "v1_valid": 0,
+        "v1_correct": 0,
+        "v2_valid": 15,
+        "v2_correct": 13
+      },
+      "B3_UNRESOLVABLE_CHAIN_REJECTION": {
+        "n": 15,
+        "v1_valid": 0,
+        "v1_correct": 0,
+        "v2_valid": 12,
+        "v2_correct": 4
+      },
+      "B3_MULTI_HOP_DEREF": {
+        "n": 15,
+        "v1_valid": 0,
+        "v1_correct": 0,
+        "v2_valid": 15,
+        "v2_correct": 2
+      },
+      "B5_VARIABLE_N_EQUIVARIANCE": {
+        "n": 15,
+        "v1_valid": 0,
+        "v1_correct": 0,
+        "v2_valid": 0,
+        "v2_correct": 0
+      },
+      "B2_MID_EPISODE_REMAP": {
+        "n": 15,
+        "v1_valid": 3,
+        "v1_correct": 0,
+        "v2_valid": 15,
+        "v2_correct": 0
+      },
+      "B6_HYPERPOSITION_EVIDENCE_AUTHORITY": {
+        "n": 10,
+        "v1_valid": 10,
+        "v1_correct": 5,
+        "v2_valid": 10,
+        "v2_correct": 5
+      },
+      "B1_TRAIN_BALANCED_2ORDER_V1.jsonl": {
+        "n": 15,
+        "v1_valid": 7,
+        "v1_correct": 0,
+        "v2_valid": 6,
+        "v2_correct": 0
+      },
+      "B0_WRITE_BASELINE": {
+        "n": 10,
+        "v1_valid": 9,
+        "v1_correct": 4,
+        "v2_valid": 9,
+        "v2_correct": 4
+      }
+    }
+  },
+  "results": [
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "12",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:71",
+      "v1": {
+        "raw": "cell_05",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:71",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:71",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Define the entry points and chain structure\nENTRY_POINTS = {",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <unordered_map>",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:265",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "265",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```text\nALLOW=>ABI_ACCEPTED_ORDINAL:13\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Entry points (ALLOW, DENY, ABSTAIN)",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "13",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Define the entry points and chain structure\nENTRY_POINTS = {",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:267",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "267",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "UNRESOLVABLE",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Define the entry points\nALLOW = \"ALLOW\"\nDENY",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Define the entry points and chain structure\nENTRY_POINTS = {",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:73",
+      "v1": {
+        "raw": "shadow_06",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:73",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:73",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:284",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "284",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "expected_target": "COLLAPSE_VALID",
+      "v1": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "14",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "```text\nALLOW=>ABI_ACCEPTED_ORDINAL:13\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "D",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:295",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "295",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "EVIDENCE",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "E",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```text\nALLOW\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n\n//",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:77",
+      "v1": {
+        "raw": "shadow_07",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:93",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:93",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "expected_target": "PRESERVE_BRANCHES",
+      "v1": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": true
+      },
+      "v2": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:295",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "295",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```text\nALLOW\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "14",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <unordered_map>",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "ABI_ACCEPTED_ORDINAL:14",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:14",
+        "reason": null,
+        "correct": true
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:14",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:14",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "expected_target": "COLLAPSE_VALID",
+      "v1": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "EVIDENCE: No integer value is recorded.\nQUERY: The recorded integer is even.\nAnswer with exactly one",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "EVIDENCE: No integer value is recorded.",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "13",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```text\nALLOW\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:12",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:12",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "12",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Define the entry points and chain structure\nENTRY_POINTS = {",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "expected_target": "COLLAPSE_VALID",
+      "v1": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "EVIDENCE: No integer value is recorded.\nAnswer: DENY",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "D",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:76",
+      "v1": {
+        "raw": "N",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:76",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:76",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:61",
+      "v1": {
+        "raw": "cell_07",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:61",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:61",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "13",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "EVIDENCE: The recorded integer is 14.\nQUERY: The recorded integer is not even.\nAnswer",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "E",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "expected_target": "PRESERVE_BRANCHES",
+      "v1": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": true
+      },
+      "v2": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "ABI_ACCEPTED_ORDINAL:13",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:13",
+        "reason": null,
+        "correct": true
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:13",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:13",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:70",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:70",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:70",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "13",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:76",
+      "v1": {
+        "raw": "shadow_19",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:76",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:76",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "UNRESOLVABLE",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Define the entry points and chain structure\nENTRY_POINTS = {",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\nclass Codebook:\n    def __init__(self):",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "13",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:65",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:65",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:65",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "EVIDENCE",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "12",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "EVIDENCE: No integer value is recorded.\nQUERY: The recorded integer is even.\nAnswer with exactly one",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "E",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "expected_target": "COLLAPSE_VALID",
+      "v1": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:289",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "289",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "ABI_ACCEPTED_ORDINAL:13",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:13",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:13",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:13",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```text\nALLOW\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "UNRESOLVABLE",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Define the entry points and chain structure\nENTRY_POINTS = {",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "EVIDENCE: No integer value is recorded.\nAnswer: DENY",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "EVIDENCE: No integer value is recorded.\nAnswer: EVIDENCE",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:60",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:60",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:60",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:267",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "267",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "expected_target": "COLLAPSE_VALID",
+      "v1": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:72",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:72",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:72",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "DENY",
+        "validated": true,
+        "atom": "DENY",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Define the entry points and chain structure\nENTRY_POINTS = {",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:268",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "268",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:298",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "287",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "13",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "ABI_ACCEPTED_ORDINAL:13",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:13",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:13",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:13",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <unordered_map>",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "ABI_ACCEPTED_ORDINAL:13",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:13",
+        "reason": null,
+        "correct": true
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:13",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:13",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```text\nALLOW\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "14",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:266",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "266",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:299",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "299",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```text\nABSTAIN\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "UNRESOLVABLE",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\nclass SymbolResolver:\n    \"\"\"\n    A class to resolve symbol",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNDEFINED_PTR_T12_C0_H3",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:71",
+      "v1": {
+        "raw": "N",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:71",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:71",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```cpp\n#include <iostream>\n#include <string>\n\n// Helper to resolve a chain of pointers\nstd::",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "UNRESOLVABLE",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\nclass SymbolResolver:\n    def __init__(self):",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNDEFINED_PTR_T12_C0_H3",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "UNRESOLVABLE",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Define the entry points\nALLOW = \"ALLOW\"\nDENY",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNDEFINED_PTR_T12_C2_H2",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "12",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "12",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "expected_target": "PRESERVE_BRANCHES",
+      "v1": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": true
+      },
+      "v2": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:67",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:67",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:67",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:268",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "260",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "expected_target": "PRESERVE_BRANCHES",
+      "v1": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": true
+      },
+      "v2": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+      "expected_target": "PRESERVE_BRANCHES",
+      "v1": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": true
+      },
+      "v2": {
+        "raw": "PRESERVE_BRANCHES",
+        "validated": true,
+        "atom": "PRESERVE_BRANCHES",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:263",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "263",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <unordered_map>",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:14",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:14",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "13",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "14",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "14",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```text\nALLOW\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\nclass SymbolResolver:\n    def __init__(self):",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "13",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "E",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "E",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:289",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "289",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+      "v1": {
+        "raw": "```text\nABSTAIN\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABSTAIN",
+        "validated": true,
+        "atom": "ABSTAIN",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "ABI_ACCEPTED_ORDINAL:14",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:14",
+        "reason": null,
+        "correct": true
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:14",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:14",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:79",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:79",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:79",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:297",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "297",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <unordered_map>",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:14",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:14",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```text\nALLOW\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+      "v1": {
+        "raw": "```text\nALLOW\n```",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ALLOW",
+        "validated": true,
+        "atom": "ALLOW",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "expected_target": "UNRESOLVABLE",
+      "v1": {
+        "raw": "```python\nfrom typing import Optional, Union\n\n# Entry points (ALLOW, DENY, ABSTAIN)",
+        "validated": false,
+        "atom": null,
+        "reason": "CODE_BLOCK_DERAILMENT",
+        "correct": false
+      },
+      "v2": {
+        "raw": "UNRESOLVABLE",
+        "validated": true,
+        "atom": "UNRESOLVABLE",
+        "reason": null,
+        "correct": true
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:68",
+      "v1": {
+        "raw": "cell_13",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:76",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:76",
+        "reason": null,
+        "correct": false
+      }
+    },
+    {
+      "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "expected_target": "ABI_ACCEPTED_ORDINAL:61",
+      "v1": {
+        "raw": "C",
+        "validated": false,
+        "atom": null,
+        "reason": "NOT_IN_TRAINED_VOCABULARY",
+        "correct": false
+      },
+      "v2": {
+        "raw": "ABI_ACCEPTED_ORDINAL:61",
+        "validated": true,
+        "atom": "ABI_ACCEPTED_ORDINAL:61",
+        "reason": null,
+        "correct": true
+      }
+    }
+  ]
+}

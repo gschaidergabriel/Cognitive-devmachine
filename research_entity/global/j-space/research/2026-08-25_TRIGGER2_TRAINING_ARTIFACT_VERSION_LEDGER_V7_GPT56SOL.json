@@ -1,0 +1,119 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v7",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V6_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V6",
+  "revision_reason": "After v6, semantic-Hyperposition gate v3 and its mutation-test source landed, then an adversarial audit exposed P0 independence/event-replay/discriminator blockers. V7 therefore promotes the gate only to current source candidate, downgrades the converged v3 chain from promotion-ready to P0-hardening-required, and registers adversarial hard-negative blueprints instead of generating false positive D/E labels.",
+  "authority": {
+    "observed_main_before_v7_writes": "a16a64c7aaae0126f3b2bf044818ee050ddee1a6",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "finished_training_target": "QWEN3.5-0.8B_CLASS_COGNITIVE_PROCESS_SUBSTRATE_FOR_VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "artifact_overrides_and_additions": [
+    {
+      "artifact_id": "T2-LEDGER-V6",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V6_GPT56SOL.json",
+      "version": "v6",
+      "status": "SUPERSEDED",
+      "predecessor": "T2-LEDGER-V5",
+      "successor": "T2-LEDGER-V7",
+      "revision_reason": "Predates gate-v3 materialization and the v3 adversarial P0 negative delta."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-LABELER-V3-CONVERGED",
+      "path": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "version": "v3",
+      "status": "CURRENT_CONVERGED_SOURCE_P0_HARDENING_REQUIRED",
+      "predecessor": "dual v2 labeler/formal-world donor family",
+      "successor": "hardened v3.x or semantically compatible successor without a second authority lane",
+      "provenance": ["commit 2247a67f9ddcae78791cebefce38a18ee76400b0", "adversarial audit bdde0ef5078c627f9fc805941a50c132ae9d43cb"],
+      "target_architecture": "formal-world semantic Hyperposition U/D/GRF reference root",
+      "revision_reason": "Source-level caller relation/target/winner circularity is closed, but independent evidence credit still depends partly on caller independence_qualified; replay does not yet bind event_id to immutable event digest; discriminator admissibility/execution is not explicit; GRF observed promotion still admits a naked qualification boolean."
+    },
+    {
+      "artifact_id": "T2-SEMANTIC-HYPERPOSITION-GATE-V3",
+      "path": "tools/trigger2_semantic_hyperposition_gate_v3.py",
+      "version": "v3",
+      "status": "CURRENT_EXACT_SOURCE_CANDIDATE_BLOCKED_BY_LABELER_P0",
+      "predecessor": ["tools/trigger2_semantic_hyperposition_gate_v2.py", "tools/trigger2_hyperposition_derivation_bound_gate_v1.py"],
+      "successor": "same gate family rebound to hardened v3 semantics plus P0 mutation checks",
+      "provenance": ["commit 112d4a7c9d990b791b29e7ca085f9bb26e5f9d5d"],
+      "target_architecture": "formal-world -> v3 derived relations/update -> synthetic task-local resolution candidate pre-admission",
+      "revision_reason": "Gate hashes actual labeler bytes and world, recomputes relations/update/resolution, forbids legacy causal hyperposition field on synthetic episodes, hides audit hashes/branch IDs from model-visible labels and checks permutation groups. It cannot promote D/E while the referenced v3 independence/replay/discriminator semantics retain P0 blockers."
+    },
+    {
+      "artifact_id": "T2-SEMANTIC-HYPERPOSITION-GATE-V3-TESTS",
+      "path": "tests/test_trigger2_semantic_hyperposition_gate_v3.py",
+      "version": "v1-for-gate-v3",
+      "status": "CURRENT_TEST_SOURCE_EXECUTION_UNOBSERVED",
+      "predecessor": "gate-v1/v2 donor tests",
+      "successor": "P0 mutation expansion + observed exact-source test receipt",
+      "provenance": ["commit a16a64c7aaae0126f3b2bf044818ee050ddee1a6"],
+      "target_architecture": "source-bound semantic-Hyperposition candidate gate",
+      "revision_reason": "Current source covers tampered relation/state/source binding, causal-type smuggling, model-visible audit hashes and permutation target invariance, but the adversarial P0 cases must be added before promotion."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-V3-ADVERSARIAL-AUDIT-V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_HYPERPOSITION_LABELER_V3_ADVERSARIAL_AUDIT_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_NEGATIVE_DELTA_BLOCKING_PROMOTION",
+      "predecessor": "v3 convergence/source tests",
+      "successor": "hardened v3 reference semantics",
+      "provenance": ["commit bdde0ef5078c627f9fc805941a50c132ae9d43cb"],
+      "target_architecture": "fail-closed positive D/E/GRF reference root",
+      "revision_reason": "P0: caller-controlled independence qualification; same-event/different-payload replay corruption; missing explicit discriminator admissibility/execution. P1: generic mismatch_effect decisiveness and naked GRF observation-qualification boolean."
+    },
+    {
+      "artifact_id": "T2-V3-P0-HARD-NEGATIVE-BLUEPRINTS-V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_V3_P0_HARD_NEGATIVE_BLUEPRINTS_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_NONPROMOTING_TRAINING_BLUEPRINT",
+      "predecessor": "v3 adversarial audit",
+      "successor": "family-disjoint generated hard negatives after hardened deterministic reference closure",
+      "provenance": ["commit 5216b836c0337a85437fa407552b7be9fe8fbadd"],
+      "target_architecture": "robust Hyperposition/GRF event/evidence/discriminator semantics inside the final variable-grid Xeno/HCU module",
+      "revision_reason": "Turns P0/P1 research findings into paired training/evaluation families without inventing positive labels: exact replay vs event mutation, forged independence, inadmissible/unexecuted/partial discriminators, decisiveness ontology, and GRF observed-promotion receipts."
+    },
+    {
+      "artifact_id": "T2-BINDING-ROUTER-V3",
+      "path": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "version": "v3",
+      "status": "QUARANTINE_UNCHANGED",
+      "predecessor": "context-binder donor",
+      "successor": "full-cross or preregistered conditional-independence successor",
+      "revision_reason": "Nuisance shortcut leakage remains fatal for direct training: empirical nuisance lookup accuracy 0.881944 and conditional MI 1.348851 bits in the audited reconstructed blueprint."
+    }
+  ],
+  "current_frontier": {
+    "closed_or_advanced_this_cycle": [
+      "semantic Hyperposition remains cross-cutting from the first integrated trainable episode",
+      "one v3 formal-world reference source now exists",
+      "one v3 source-bound synthetic candidate gate now exists",
+      "gate-v3 mutation-test source now exists",
+      "adversarial audit found and preserved new P0/P1 negative evidence",
+      "P0/P1 findings are now represented as versioned nonpromoting hard-negative blueprints"
+    ],
+    "highest_value_training_blocker": "Positive D/E/Epistemic promotion is blocked until event identity is digest-bound, independence is derived/verified rather than caller-asserted, discriminator admissibility/execution/coverage is explicit, and GRF OBSERVED promotion uses typed evidence receipts.",
+    "next_exact_action": "Harden the existing v3 lane in-place or by one explicitly versioned successor; add P0 mutation tests; execute an exact-source test capsule; then regenerate family-disjoint positive D/E candidates under gate-v3-or-successor and rerun model-visible nuisance/conditional-MI gates before any canonical dataset admission."
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_delta": 1,
+    "hard_negative_blueprint_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

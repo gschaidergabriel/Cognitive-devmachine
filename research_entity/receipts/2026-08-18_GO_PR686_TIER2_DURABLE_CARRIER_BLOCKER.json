@@ -1,0 +1,77 @@
+{
+  "schema": "ClayGoReceipt/v1",
+  "date": "2026-08-18",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "research_freeze": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pull_request": 686,
+    "base_main_sha": "6d04a8ac293a164ea5a12b10d99960c9155f09bf",
+    "head_sha": "9dd7be2133dd54d92ae3f17ce0e3a53d3cc7ed02",
+    "tree_sha": "47c09cf7c7d00b1c372454389509c8f4115c4b91",
+    "role": "immutable runtime candidate freeze",
+    "runtime_credit": "NONE_CURRENT_HEAD_UNOBSERVED"
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "observed_head": "e878e93e887ab5cd8bd7043ae275dc6a4e4a7795",
+    "bound_research_pr": 686,
+    "bound_research_sha": "9dd7be2133dd54d92ae3f17ce0e3a53d3cc7ed02",
+    "bound_research_tree": "47c09cf7c7d00b1c372454389509c8f4115c4b91",
+    "starter_sandbox_persistent": false,
+    "direct_vercel_mistral_secret": "FORBIDDEN",
+    "mistral_secret_path": "VERCEL_OIDC -> HCP WIF inside sandbox -> HCP Vault Secrets open -> one bounded OCI probe process",
+    "source_sandbox_after_tier1": "RUNNING_STATE_HELD_FOR_TIER2_TRANSPORT"
+  },
+  "source_convergence": {
+    "runtime_identity": "FUSED",
+    "logical_snapshot": "FUSED",
+    "workspace_checkpoint_binding": "FUSED",
+    "generic_provider_effect_capability_fence": "FUSED",
+    "fresh_root_restore": "FUSED",
+    "unknown_after_restart_no_blind_replay": "FUSED",
+    "tests_present": true,
+    "tests_executed_on_pr686": false
+  },
+  "vercel_build_evidence": {
+    "deployment_id": "dpl_ArBcPsZPu8TnSxJ6uLvkTa7HUeCJ",
+    "scope": "BUILD_TIME_SOURCE_GUARDS_ONLY",
+    "source_guard": "PASS_EXACT_PR686_HCP_WIF_CONTROLLER_BYTES",
+    "tier1_effect_source_guard": "PASS",
+    "tier2_recreate_source_guard": "FAIL_CLOSED_EXPECTED_CURRENT_BLOCKER",
+    "missing_contract": "durable export outside old guest -> delete full source sandbox -> create genuinely new persistent:false sandbox -> restore exact declared state/workspace and same OCI identity -> generation-fenced recovery -> fresh secret reacquisition -> second cognition",
+    "product_runtime_test_executed": false,
+    "mistral_runtime_test_executed": false,
+    "whole_product_pass": false
+  },
+  "tier2_transport": {
+    "current_status": "BLOCKED_NO_AUTHORIZED_DURABLE_CARRIER_BOUND_TO_CONTROLLER",
+    "existing_controller_blob_path_found": false,
+    "vercel_drive_assumed_available": false,
+    "new_paid_or_beta_storage_assumed_authorized": false,
+    "function_memory_accepted_as_durable_transport": false,
+    "required_property": "artifacts must exist outside the old guest before full source-sandbox deletion and remain independently retrievable by the new sandbox",
+    "declared_artifacts": [
+      "runtime-bound logical UnifiedDB snapshot",
+      "declared workspace state",
+      "exact OCI bytes or independently reproducible exact OCI identity plus binding evidence"
+    ]
+  },
+  "experiment_accounting": {
+    "unusual_experiment_count_added": 0,
+    "global_go_slot_already_consumed": true,
+    "consumed_experiment": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED"
+  },
+  "epistemic_status": {
+    "source_candidate": true,
+    "mechanism_supported": true,
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false,
+    "note": "Source/build-guard PASS does not imply ClayVerse runtime PASS. Tier2 durable transport remains unresolved and no current-head Mistral test-of-tests has executed."
+  },
+  "next_exact_isolated_step": "Bind an already-authorized durable carrier (or explicitly authorize one), implement integrity-bound export/delete/new-sandbox/restore in the retained PR810 recreate path, then rerun Vercel source guards and the exact PR686 isolated acceptance sequence."
+}

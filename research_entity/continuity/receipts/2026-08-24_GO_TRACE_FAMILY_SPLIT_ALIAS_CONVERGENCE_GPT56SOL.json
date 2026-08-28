@@ -1,0 +1,49 @@
+{
+  "schema": "CLAY_ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_main_before_write": "fbc605b3d99328d71b72440b52ade09fd988ceeb",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor_authority": "SUPERVISOR_STEERING_8_61_FREE_ONLY",
+  "unusual_experiment": {
+    "name": "TRACE_FAMILY_SPLIT_ALIAS",
+    "count": 1,
+    "hypothesis": "A split keyed by individual trace SHA can leak two traces from one causal trace family across train and holdout.",
+    "synthetic_counterexample": {
+      "trace_family_id": "episode:shared-family",
+      "individual_trace_sha_prefixes": ["00", "ff"],
+      "old_rule_outputs": ["train", "holdout"],
+      "leak_possible": true
+    },
+    "classification": "MECHANISM_SUPPORTED_SYNTHETIC_ALGORITHM_REPRODUCTION_NOT_EXACT_PR_RUNTIME"
+  },
+  "source_convergence": {
+    "retained_hcu_pr": 1263,
+    "stale_source_write": "REJECTED_409_FAIL_CLOSED",
+    "parallel_fix_observed": true,
+    "parallel_fix_head_observed": "fece0c9f52e9ca7f0358641b05ef06c2a1fd373e",
+    "compiler_state": "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3 consumes bound TrainingTrace and chooses split from canonical trace_family_id hash",
+    "regression_state": "two distinct traces with trace_family_id episode:shared are asserted to have one split owner",
+    "duplicate_path_created": false
+  },
+  "execution_evidence": {
+    "github_actions_for_parallel_fix_head": 0,
+    "exact_current_free_sandbox_run_observed": false,
+    "connected_vercel_surface_can_arbitrary_post_or_start_sandbox": false,
+    "runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "training_authority": {
+    "owner_paid_one_shot_provenance_present": true,
+    "current_free_only_supervisor_quarantine": true,
+    "together_general_inference": "FORBIDDEN",
+    "together_preflight": "FORBIDDEN_IN_CURRENT_MODE",
+    "together_job_created": false
+  },
+  "result": "TRACE_FAMILY_SPLIT_DEFECT_FALSIFIED_AND_SOURCE_FIX_OBSERVED_BY_PARALLEL_FUSION",
+  "next_exact_gate": "Actually start an authorized FREE isolated run binding current Research main plus current PR1263 head and execute JCS -> Typed Entry -> route -> verified engine admission/load -> inference v3 -> GRID10 v2 -> Global J-Space/GWT -> training-trace/dataset-compiler regressions with exact receipt.",
+  "acceptance": "IN_PROGRESS"
+}

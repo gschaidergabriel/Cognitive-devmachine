@@ -1,0 +1,39 @@
+{
+  "schema": "GO_BOUND_90S_QUIESCENCE_EXECUTION_REQUEST/v1",
+  "date": "2026-08-28",
+  "objective": "Close the current runtime-quiescence evidence gap without any provider/model/process mutation.",
+  "required_source_commit": "3867c05cdeac1d7cdd9a2ec2d629e168abdd106e",
+  "required_source_tree": "9d8716b9fc75e1b0b17c665b43d780c684dffbd9",
+  "target_environment": "owning clay-direct-dev/VPS after bootstrap-v2/control-sync has made the checkout current and clean",
+  "authority": {
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "hard_off_required": true
+  },
+  "commands": [
+    "python3 -m pytest -q tests/test_free_swarm_runtime_quiescence_probe_v2.py tests/test_vps_control_sync_bootstrap_v2.py",
+    "python3 tools/free_swarm_runtime_quiescence_probe_v2.py --repo . --window-seconds 90 --sample-interval-seconds 2 --receipt /tmp/GO_BOUND_90S_QUIESCENCE_V2.json"
+  ],
+  "pass_requires": [
+    "pre-observation vps_control_sync_guard_v1 PASS",
+    "local HEAD equals current remote main and dirty=false",
+    "SUPERVISOR_INBOX and FREE_PROVIDER_ADMISSION epoch-coherent FREE_ONLY/HARD_OFF",
+    "all provider routes false and Together forbidden",
+    "at least 90 seconds actual observation",
+    "zero live forbidden Clay worker roots in every sample",
+    "zero shared provider-budget counter movement",
+    "zero unexpired shared provider-budget leases",
+    "zero derived provider-usage movement",
+    "post-observation control-sync PASS",
+    "same remote main/local HEAD/tree/authority epoch/source hashes before and after"
+  ],
+  "forbidden": [
+    "provider/model calls",
+    "secret lookup",
+    "process kill/restart",
+    "checkout/reset/pull/ref mutation inside the quiescence probe",
+    "GRID10/HCU/training promotion from this receipt alone"
+  ],
+  "credit_boundary": "PASS may close only the scoped runtime-quiescence prerequisite. Physical GRID10, HCU and training credit remain separate executable gates."
+}

@@ -1,0 +1,114 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_PROOF_TOPOLOGY_CONFOUND_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "03d6a60e524aebffbcfb2d21902e0d8205216d34",
+  "scope": "STATIC_NONINTERVENTIONAL_AUDIT_OF_FROZEN_STRUCTURAL_LABEL_FREE_QWEN3_0_6B_NATIVE_CVEC_DISCRIMINATOR",
+  "execution": {
+    "new_model_intervention_executed": false,
+    "duplicate_dispatch_created": false,
+    "structural_run_id": 32810213066,
+    "structural_run_status_observed": "queued",
+    "scientific_negative_inferred_from_queue": false
+  },
+  "observed_source": {
+    "dispatch_head": "77f30f11b0102a2f1fd279edfafccf2bfcb22679",
+    "case_generator_path": "tools/trigger1_structural_label_free_cases.py",
+    "case_generator_blob_sha": "66bb2f5cfccad602ee9c759961a369ab2c61be41",
+    "nuisance_residualizer_path": "tools/trigger1_nuisance_residualize.py",
+    "executor_path": "tools/trigger1_structural_native_abstract_execute.py",
+    "executor_blob_sha": "0711e07609c2f402db9762cf9495c31cae7888e8"
+  },
+  "new_material_finding": {
+    "id": "R2_PROOF_TOPOLOGY_NOT_ORTHOGONAL_TO_EVALUATOR_STATE",
+    "classification": "PROMOTION_CRITICAL_TASK_STRUCTURE_CONFOUND",
+    "statement": "Removing semantic labels and rotating A/B/C output codes does not make the frozen structural generator state-structure-orthogonal. Evaluator-side AFFIRMATIVE, NEGATIVE and NEUTRAL are implemented by systematically different proof/syntax topologies. A learned or intervened direction can therefore track proof topology or local structural features rather than a reusable abstract semantic decision state.",
+    "exact_topology_by_target_and_polarity": {
+      "AFFIRMATIVE_NONNEGATED": "F:p(a,b); R:p(v,w)>r(w,v); Q:r(b,a) => one-hop support with nonempty rule",
+      "AFFIRMATIVE_NEGATED": "F:!r(b,a); R:-; Q:!r(b,a) => direct fact-query identity with empty rule",
+      "NEGATIVE_NONNEGATED": "F:!r(b,a); R:-; Q:r(b,a) => direct opposite with empty rule",
+      "NEGATIVE_NEGATED": "F:r(b,a); R:-; Q:!r(b,a) => direct opposite with empty rule",
+      "NEUTRAL_NONNEGATED": "F:p(a,b); R:p(v,w)>s(w,v); Q:r(b,a) => unrelated one-hop rule with nonempty rule",
+      "NEUTRAL_NEGATED": "F:p(a,b); R:p(v,w)>s(w,v); Q:!r(b,a) => unrelated one-hop rule with nonempty rule"
+    },
+    "deterministic_marginals": {
+      "AFFIRMATIVE_rule_present": "2/3",
+      "NEGATIVE_rule_present": "0/3",
+      "NEUTRAL_rule_present": "3/3",
+      "AFFIRMATIVE_topology": ["ONE_HOP_SUPPORT", "DIRECT_MATCH"],
+      "NEGATIVE_topology": ["DIRECT_OPPOSITE"],
+      "NEUTRAL_topology": ["UNRELATED_RULE"]
+    },
+    "strongest_exact_confound": "The proof-topology category is sufficient to identify evaluator-side class in this generator: NEGATIVE is always DIRECT_OPPOSITE with R:-; NEUTRAL is always an unrelated nonempty-rule construction; AFFIRMATIVE is either ONE_HOP_SUPPORT or DIRECT_MATCH. This classification is available from model-facing structure without any banned semantic lexeme.",
+    "nuisance_gap": "The frozen residualizer admits exactly CANONICAL_LABEL_LEXEME, SEMANTIC_SYNONYM_LEXICON, GENERIC_INSTRUCTION_COMPLIANCE and OUTPUT_CODE_IDENTITY. It has no explicit proof-topology, rule-presence, fact-query-overlap, inference-depth or query-polarity nuisance family."
+  },
+  "why_it_matters": [
+    "A causal cvec effect can be real yet still be causal control of a task-specific proof-state feature rather than an abstract semantic state.",
+    "Lexical disjointness does not remove this confound because calibration and holdout preserve the same F/R/Q grammar and the same target-to-proof-topology mapping.",
+    "Output-code counterbalancing does not remove this confound because proof topology is independent of the A/B/C rotation and remains target-linked.",
+    "The current matched/null/orthogonal/permuted/nuisance controls can reject several actuator artifacts while leaving a task-structural latent feature fully intact.",
+    "This finding strengthens the existing Run-2 conclusion that a PASS is bounded structural-native component evidence only and cannot promote canonical semantic J-Space."
+  ],
+  "successor_source_reentry": {
+    "structural_v2_commit": "83fca9efa6a128effc53a5d52eca6ed230125764",
+    "structural_v2_path": "tools/trigger1_structural_label_free_cases_v2.py",
+    "structural_v2_delta": "Closes the query-polarity imbalance at source level with exact 3x3x2 target x code x polarity coverage and target-neutral probe lexical identity, but retains the same target-specific _relation_fragment proof structures. Therefore polarity is improved while proof-topology orthogonality remains unproven.",
+    "cross_task_v3_commit": "d7c39e21c427a40ad879fc2c4c4c110f3f3cd268",
+    "cross_task_v3_path": "tools/trigger1_cross_task_factorial_cases_v3.py",
+    "cross_task_v3_delta": "Adds three calibration task grammars and three distinct holdout task grammars with exact target x code x polarity factorialization and replication. This materially strengthens cross-task source design, but it is execution-free and does not by itself demonstrate matching over inference depth, rule presence, fact-query overlap, token position/length or proof-topology family within each evaluator state.",
+    "runtime_credit_from_successors": 0,
+    "promotion_effect": "SOURCE_DESIGN_PROGRESS_ONLY_CANONICAL_SEMANTIC_PROMOTION_REMAINS_BLOCKED"
+  },
+  "successor_gate_delta": {
+    "name": "PROOF_TOPOLOGY_MATCHED_CROSS_TASK_ABSTRACT_CONTROL_GATE",
+    "required_design": [
+      "Factor semantic target independently from query polarity, output code and proof topology.",
+      "For every target, include matched direct-fact, one-hop, multi-hop and structurally irrelevant/underdetermined forms where logically valid, with equal counts and matched token/grammar budgets.",
+      "Pair cases so rule count, rule-presence marker, query polarity, fact-query lexical overlap, graph degree and inference depth cannot predict evaluator-side target above the preregistered null.",
+      "Add explicit nuisance contrasts for query polarity, rule presence, fact-query identity/opposition, inference depth and proof-topology family, fit on calibration only and freeze before holdout.",
+      "Require the semantic direction to retain geometry and causal specificity after residualization or stratified adjustment for these structural nuisance factors.",
+      "Use genuinely different task grammars for holdout transfer; a shared F/R/Q template family remains insufficient for domain-general semantic promotion.",
+      "Require per-target and per-task-family positive matched effects, true sign-flip reversal, off-target preservation, and deterministic uncertainty/permutation analysis."
+    ],
+    "minimum_claim_on_pass": "QWEN3_0_6B_PROOF_TOPOLOGY_MATCHED_CROSS_TASK_ABSTRACT_NATIVE_CONTROL_COMPONENT",
+    "still_not_sufficient_for": "GLOBAL_SEMANTIC_JSPACE_OR_WHOLE_HCU_ENTITYOS_PROMOTION"
+  },
+  "external_research_context": [
+    {
+      "source": "Braun et al., Understanding (Un)Reliability of Steering Vectors in Language Models, arXiv:2505.22637",
+      "use": "Directional coherence and prompt-dependent activation geometry predict steering reliability; supports treating proof/prompt structure as a causal nuisance rather than assuming semantic invariance."
+    },
+    {
+      "source": "Zhao et al., Beyond Single Concept Vector: Modeling Concept Subspace in LLMs with Gaussian Distribution, arXiv:2410.00153 / ICLR 2025",
+      "use": "Single concept vectors vary with data/training; supports subspace/robustness checks rather than interpreting one direction as a universal semantic coordinate."
+    },
+    {
+      "source": "Agarwal, Cross-Architecture Steering Transfer in Language Models: A Systematic Empirical Study, arXiv:2608.05164",
+      "use": "Functional steering transfer is scale- and model-dependent, especially weak at very small scales; reinforces exact Qwen3-0.6B model-specific claim scope."
+    }
+  ],
+  "queued_run_interpretation": {
+    "if_pass": "REAL_BOUNDED_CAUSAL_COMPONENT_EVIDENCE_COMPATIBLE_WITH_TASK_SPECIFIC_PROOF_TOPOLOGY_CONTROL; NO_ABSTRACT_SEMANTIC_PROMOTION",
+    "if_fail": "PRESERVE_AS_FALSIFYING_EVIDENCE_AT_FROZEN_IDENTITY",
+    "if_queued": "TRANSPORT_BLOCKER_ONLY_NO_SCIENTIFIC_CREDIT"
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_runtime_credit": 1,
+    "structural_label_free_native_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Forschungsrun 2 now identifies an additional nonlexical confound beneath the queued structural discriminator: evaluator-side classes are not orthogonal to proof topology. NEGATIVE is always a direct-opposition/no-rule form, NEUTRAL always an unrelated-rule form, and AFFIRMATIVE a support/direct-match form. The current nuisance basis does not remove these factors. V2 closes polarity only; V3 adds cross-task factorial source diversity but still requires proof-topology/position/nuisance-complete runtime adjudication.",
+  "next_exact_action": "Do not alter or duplicate the already-frozen queued run. Restore the retained self-hosted runner transport and preserve its result at bounded scope. For promotion, execute a proof-topology-matched, polarity-factorial, cross-task-family discriminator with structural nuisance controls, rank-complete nuisance causal coverage, exact token-position matching and true bidirectional sign-flip criteria before reopening any semantic J-Space claim."
+}

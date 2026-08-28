@@ -1,0 +1,174 @@
+{
+  "schema": "CLAY_TRIGGER2_CONTROLLED_LOAD_ARRIVAL_ORDER_CAUSALITY_EVAL/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONCANONICAL_RESEARCH_DELTA_CANDIDATE_EVAL_ONLY",
+  "observed_main_before_write": "d7d43699998ea10e536b1e67abaa8a4499799cec",
+  "authority": {
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0150P0700_GPT56SOL.json",
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "together_authorized": false
+  },
+  "nonduplicate_check": {
+    "queries": [
+      "trigger2 fan-in contention coordinator failure rejoin controlled load",
+      "arrival order permutation invariance fan-in coordinator rejoin",
+      "order invariant evidence aggregation duplicate replay coordinator replacement",
+      "PURE_ARRIVAL_PERMUTATION causal_order_sensitivity correlated_majority coordinator replacement"
+    ],
+    "result_at_write": "NO_MATCHING_CURRENT_REPOSITORY_ARTIFACT_FOUND",
+    "interpretation": "This delta targets semantic behavior under controlled concurrent fan-in and failure/rejoin; it does not duplicate the existing physical-liveness, consumed-snapshot, checkpoint-integrity, cross-encoding J-Space, or temporal-retention deltas."
+  },
+  "current_course_basis": [
+    "research_entity/global/TRIGGERWORT_2_TRAINING_COURSE_DELTA_V36_PHYSICAL_GRID10_V2_2026-08-26.md",
+    "tools/xeno_physical_grid10_proof_v2.py",
+    "research_entity/global/j-space/research/2026-08-26_TRIGGER2_GRID10_V2_CONSUMED_SNAPSHOT_ATTESTATION_DELTA_GPT56SOL_0205P0700.json",
+    "tools/trigger2_qwen35_checkpoint_candidates_gate_v3.py",
+    "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CROSS_ENCODING_JSPACE_BINDING_FALSIFIER_V1_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TEMPORAL_CHECKPOINT_RETENTION_RESEARCH_DELTA_GPT56SOL.json"
+  ],
+  "problem": {
+    "name": "TRANSPORT_ARRIVAL_ORDER_CAN_MASQUERADE_AS_CAUSAL_EVIDENCE_ORDER",
+    "finding": "The next post-liveness Trigger-2 gate requires simultaneous result flow, fan-in/contention and coordinator failure/rejoin. A training or evaluation path that serializes packets in observed arrival order can accidentally teach the 0.8B module that transport scheduling order is semantic or evidential authority, even when the same causally unordered evidence set should yield the same state. Conversely, blindly enforcing order invariance can erase real causal order encoded by parentage, generation, observed time, or admitted state transitions.",
+    "classification": "R2_GENERATED_MECHANISM_HYPOTHESIS"
+  },
+  "central_hypothesis": {
+    "id": "H_T2_CONTROLLED_LOAD_ORDER_CAUSALITY_1",
+    "hypothesis": "For a fixed admitted evidence multiset whose causal identities, parent edges, generations, observation times, provenance and payloads are unchanged, the cognitive semantic result should be invariant to transport arrival permutation. When causal metadata itself changes, the result may and sometimes must change. Coordinator crash/replacement and replay should therefore preserve semantic convergence from the same admitted causal evidence while duplicates, stale generations and correlated same-provenance majorities remain non-authoritative.",
+    "counterhypothesis": "Arrival order contains useful implicit recency, scheduling or confidence information and forcing invariance will remove signal needed by the cognitive grid.",
+    "stronger_counterexample": "If arrival order is itself explicitly admitted as a causal event or is the only observable representation of a real temporal dependency, changing it is not a pure transport permutation. Such cases belong in the causal-order-sensitive control family, not the invariance family.",
+    "falsifier": "Hold exact packet contents and causal metadata fixed while permuting only transport arrival. If a frozen evaluator/model reliably improves on task correctness by using arrival order without creating replay/rejoin inconsistency, the pure-order-invariance requirement is too strong for that declared packet family. Otherwise persistent order sensitivity is evidence of a shortcut or serialization leak."
+  },
+  "external_method_evidence": [
+    {
+      "source": "Zhang (2026), Reinforcement Learning for LLM-based Multi-Agent Systems through Orchestration Traces, arXiv:2605.02801",
+      "classification": "EXTERNAL_PRIMARY_RESEARCH_METHOD_EVIDENCE",
+      "finding": "Treats spawning, delegation, communication, aggregation and stopping as explicit temporal orchestration events and advocates replayable orchestration traces.",
+      "project_implication": "Trigger-2 controlled-load evaluation should receipt temporal orchestration events explicitly instead of inferring semantics from log/arrival position."
+    },
+    {
+      "source": "Ai et al. (2025), Beyond Majority Voting: LLM Aggregation by Leveraging Higher-Order Information, arXiv:2510.01499",
+      "classification": "EXTERNAL_PRIMARY_RESEARCH_METHOD_EVIDENCE",
+      "finding": "Shows standard majority voting ignores latent heterogeneity and correlation and proposes aggregation using higher-order information.",
+      "project_implication": "Correlated same-provenance Xeno outputs must not gain truth weight merely by count; provenance/correlation remains a separate aggregation variable."
+    },
+    {
+      "source": "Yang et al. (2026), Auditing Multi-Agent LLM Reasoning Trees Outperforms Majority Vote and LLM-as-Judge, arXiv:2602.09341",
+      "classification": "EXTERNAL_PRIMARY_RESEARCH_METHOD_EVIDENCE",
+      "finding": "Reports brittleness of majority voting under correlated confabulation consensus and resolves conflicts using structured reasoning-tree evidence.",
+      "project_implication": "Coordinator replacement should preserve branch/evidence structure and disagreements rather than collapse repeated agreement into truth."
+    },
+    {
+      "source": "Permutation-invariant set aggregation literature including Set Transformer",
+      "classification": "GENERAL_METHOD_ANALOGY_ONLY",
+      "finding": "Set-valued inputs without meaningful order admit permutation-invariant aggregation operators.",
+      "project_implication": "Use permutation invariance only for packet families whose causal contract declares order irrelevant; do not universalize it to causally ordered event streams."
+    }
+  ],
+  "eval_families": [
+    {
+      "id": "A_PURE_ARRIVAL_PERMUTATION",
+      "construction": "Freeze one admitted packet/evidence set, exact causal IDs, parents, generation, timestamps, provenance and payload bytes; vary only transport arrival permutation and rendering order.",
+      "expected": "SAME_SEMANTIC_STATE_AND_DECISION_MODULO_DECLARED_NONSEMANTIC_SERIALIZATION",
+      "hard_negative": "FIRST_PACKET_OR_LAST_PACKET_WINS_WITHOUT_CAUSAL_BASIS"
+    },
+    {
+      "id": "B_CAUSAL_ORDER_CHANGE",
+      "construction": "Keep surface payloads similar but change admitted parentage, generation, observed-time relation or state-transition dependency so causal order actually differs.",
+      "expected": "ORDER_SENSITIVITY_ALLOWED_OR_REQUIRED_WHERE_CAUSAL_CONTRACT_DIFFERS",
+      "hard_negative": "BLIND_SET_POOLING_ERASES_REAL_CAUSAL_DEPENDENCY"
+    },
+    {
+      "id": "C_DUPLICATE_REPLAY",
+      "construction": "Replay an already admitted packet/result with identical causal identity during fan-in and after coordinator replacement.",
+      "expected": "IDEMPOTENT_NO_NEW_EVIDENCE_WEIGHT_NO_TRUTH_PROMOTION",
+      "hard_negative": "DUPLICATE_COUNTS_AS_INDEPENDENT_SUPPORT"
+    },
+    {
+      "id": "D_STALE_REJOIN",
+      "construction": "After generation/state advancement and coordinator replacement, inject a packet produced from the old generation/snapshot alongside current packets.",
+      "expected": "STALE_REJECT_OR_TYPED_REREAD_RECOMPUTE_PATH_NO_SILENT_REBASE",
+      "hard_negative": "OLD_PACKET_REGAINS_WEIGHT_BECAUSE_NODE_REJOINED"
+    },
+    {
+      "id": "E_COORDINATOR_REPLACEMENT_CONVERGENCE",
+      "construction": "Compare no-crash baseline with coordinator crash after a controlled subset of packets, deterministic replacement, DB-backed reconstruction and replay/idempotent continuation using the same final admitted causal evidence set.",
+      "expected": "SAME_FINAL_SEMANTIC_EVIDENCE_STATE_AT_DECLARED_SCOPE",
+      "hard_negative": "COORDINATOR_PROCESS_HISTORY_BECOMES_HIDDEN_SECOND_TRUTH"
+    },
+    {
+      "id": "F_CORRELATED_MAJORITY",
+      "construction": "Provide many mutually similar outputs sharing one provenance/model-family/derived source plus a smaller independent contradictory evidence branch.",
+      "expected": "NO_MAJORITY_AS_TRUTH; PRESERVE_PROVENANCE_CORRELATION_AND_HYPERPOSITION_UNTIL_DISCRIMINATED",
+      "hard_negative": "COUNT_CORRELATED_CLONES_AS_INDEPENDENT_CONFIRMATION"
+    },
+    {
+      "id": "G_VARIABLE_N_EQUIVALENCE",
+      "construction": "Hold the useful admitted causal evidence set fixed while varying redundant/noncontributing module count and scheduling across N where runtime contract permits.",
+      "expected": "COGNITIVE_PROCESS_IDENTITY_NOT_DEFINED_BY_FIXED_N_OR_SLOT_ROLE",
+      "hard_negative": "GRID10_POSITION_OR_NODE_COUNT_BECOMES_SEMANTIC_LABEL"
+    }
+  ],
+  "metrics": [
+    "pure_transport_order_invariance_rate",
+    "causal_order_sensitivity_rate",
+    "duplicate_idempotence_rate",
+    "stale_rejoin_rejection_or_recompute_rate",
+    "coordinator_replacement_convergence_rate",
+    "correlated_majority_false_promotion_rate",
+    "hyperposition_branch_preservation_rate",
+    "variable_n_semantic_equivalence_rate",
+    "authority_scope_error_rate",
+    "answerability_accuracy_separated_from_candidate_correctness"
+  ],
+  "model_vs_runtime_boundary": {
+    "deterministic_runtime_authority": [
+      "causal/admission identity",
+      "generation and snapshot freshness",
+      "duplicate detection",
+      "lease issuance/revocation",
+      "CAS/write authority",
+      "EffectGate/effect authority"
+    ],
+    "model_cognitive_target": [
+      "interpret typed runtime outcomes",
+      "reconstruct useful cognitive state from admitted evidence",
+      "preserve alternatives/Hyperposition when evidence remains unresolved",
+      "replan after stale/rejoin/failure signals",
+      "avoid treating transport order, node count or correlated majority as truth",
+      "produce compact NODE_RESULT/cognitive-transition proposals under variable N"
+    ],
+    "law": "The 0.8B model learns the cognitive response to typed evidence; it does not learn to self-grant deterministic authority."
+  },
+  "training_decision": {
+    "new_positive_rows_generated": 0,
+    "new_positive_rows_admitted": 0,
+    "accepted_dataset_tokens_delta": 0,
+    "direct_training_status": "BLOCKED",
+    "candidate_eval_materialization_allowed": true,
+    "reason": "The discriminator should first be executable/eval-only and reinjected from measured controlled-load failures/successes; positive labels must not outrun runtime causal semantics."
+  },
+  "promotion_rule": "A future model/evaluator may receive bounded semantic-order robustness evidence only if it is invariant under pure transport permutations, sensitive when causal metadata truly changes, idempotent under duplicate replay, convergent under coordinator replacement at the same admitted evidence set, and does not promote correlated majority or stale rejoin packets. No such pass mints canonical truth, HCU/EntityOS whole-runtime, J-Space causal, checkpoint-winner, training or effect-authority credit by itself.",
+  "next_exact_action": "After the exact current physical-grid proof/receipt lane is adjudicated at bounded scope, implement the smallest controlled-load fixture that produces one immutable causal packet manifest and replays it through pure arrival permutations, duplicate replay, one coordinator crash/replacement, and one stale-rejoin injection. Bind exact orchestration trace identities and compare final semantic/evidence state. In parallel, materialize only eval-only paired cases for the 0.8B training program; do not admit positive SFT rows until current checkpoint/input/lineage/nuisance gates reopen training admission.",
+  "credits": {
+    "research_delta": 1,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_winner_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_truth_credit": 0,
+    "effect_authority_credit": 0
+  }
+}

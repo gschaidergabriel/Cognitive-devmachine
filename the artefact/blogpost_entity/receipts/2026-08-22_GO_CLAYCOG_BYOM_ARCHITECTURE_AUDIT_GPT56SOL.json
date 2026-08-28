@@ -1,0 +1,87 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "base_main_sha": "659cc2471b73bcefebb6a57694e6737cc2107cc5",
+  "branch": "gpt56sol/go-byom-architecture-audit-20260822-1512",
+  "scope": "bounded static Together BYOM template architecture discriminator; no provider create and no training",
+  "external_primary_evidence": [
+    {
+      "source": "https://docs.together.ai/docs/fine-tuning/byom",
+      "observed": "BYOM requires a Together base template whose architecture matches the custom checkpoint; CausalLM-only custom models; choose the closest-size matching architecture."
+    },
+    {
+      "source": "https://docs.together.ai/docs/fine-tuning/supported-models",
+      "observed": "Current Full fine-tuning table lists Qwen/Qwen3.5-0.8B as the smallest Qwen entry and lists no Qwen2/Qwen2.5 full-FT base."
+    },
+    {
+      "source": "https://huggingface.co/Qwen/Qwen2.5-0.5B/blob/060db6499f32faf8b98477b0a26969ef7d8b9987/config.json",
+      "observed": "architectures=[Qwen2ForCausalLM], model_type=qwen2, max_position_embeddings=32768"
+    },
+    {
+      "source": "https://huggingface.co/Qwen/Qwen3.5-0.8B/raw/main/config.json",
+      "observed": "architectures=[Qwen3_5ForConditionalGeneration], model_type=qwen3_5; text_config model_type=qwen3_5_text"
+    }
+  ],
+  "unusual_experiment": {
+    "count_for_local_receipt": 1,
+    "id": "QWEN25_05B_VS_SMALLEST_CURRENT_TOGETHER_QWEN_FULLFT_TEMPLATE_ARCHITECTURE_FALSIFIER",
+    "hypothesis": "The smallest current Together Qwen full-FT template might be a usable BYOM template for owner-locked Qwen2.5-0.5B.",
+    "counterhypothesis": "The pair is structurally incompatible before provider admission because the exact HF model architecture classes/model types differ and the current template is not a CausalLM class.",
+    "result": "REJECT_CURRENT_QWEN35_08B_TEMPLATE_CANDIDATE",
+    "observed_reasons": [
+      "TEMPLATE_NOT_CAUSAL_LM",
+      "ARCHITECTURE_CLASS_MISMATCH",
+      "MODEL_TYPE_MISMATCH"
+    ],
+    "evidence_boundary": "Static pre-provider falsifier only; this does not prove Together would reject every possible future Qwen2-compatible template.",
+    "global_slot_adjudication": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID"
+  },
+  "implementation": {
+    "audit_path": "the artefact/blogpost_entity/mini_cognition/audit_together_byom_template_v1.py",
+    "audit_git_blob": "54d5a5176c9fcbd412b2e3a8ca35fa200f8d2872",
+    "audit_sha256": "633a3da88f078359461499e36a154649b715de8bc669576cba5fe1576a3f6745",
+    "test_path": "the artefact/blogpost_entity/mini_cognition/test_audit_together_byom_template_v1.py",
+    "test_git_blob": "976aae169b7d6ead96e3708d93f5d6907bc7805e",
+    "test_sha256": "4b5949f0549b428c8e2aa217143537f775dc49fcfe77a3d4a92c639760ab8fb2"
+  },
+  "execution": {
+    "environment": "isolated OpenAI Linux container",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "python": "3.13.5",
+    "py_compile": "PASS",
+    "unittest": "4/4 PASS",
+    "exact_blob_binding": "PASS: executed local file Git blob ids equal branch Git blob ids after upload"
+  },
+  "provider_actions": {
+    "together_api_key_used": false,
+    "dataset_uploaded": false,
+    "price_preflight_called": false,
+    "billed_create_called": false,
+    "training_job_started": false,
+    "money_spent_usd": 0
+  },
+  "fusion": {
+    "current_launcher_state": "main already removed the stale implicit 7B template and binds exact HF revision; that prior PROGRAM_STATE wording is stale after current main launcher repair",
+    "new_frontier": "Obtain an actually Qwen2-compatible Full-FT template/runner or owner-admitted alternate training runner; do not substitute Qwen3.5-0.8B merely because it is the smallest listed Qwen full-FT model.",
+    "native_parallel_state": "main advanced during this go by merging PR #769 fail-closed profile-v2 semantic admission; native #756 and #764 remain separate parallel convergence work at this observation."
+  },
+  "coordination_history": {
+    "pr_870_global_slot_claim": "SUPERSEDED_AS_UNPROVABLE_WITHOUT_SHARED_MACROCYCLE_ID",
+    "evidence_changed": false,
+    "behavioral_result_changed": false,
+    "law": "compare unusual-experiment slot claims only under an exact shared macrocycle_id"
+  },
+  "claims_not_made": [
+    "Together BYOM acceptance",
+    "paid training",
+    "checkpoint quality",
+    "Q4_K_M result",
+    "<1 GiB RSS",
+    "whole Mini Entity PASS"
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v64",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V63_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V63",
+  "observed_main_before_write": "7511499f4895a7407ea1edf815f21a466cc33256",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V64 records that the V63 proof-carrying membership to two-phase invocation cross-binding source gap is now materially implemented. Two overlapping implementations landed; comparison shows the resealed-envelope adapter is the stronger persistence-compatible lane because it embeds the validated invocation authority inside the existing PROOF_CARRYING_NODE_RESULT/v1 envelope and therefore makes the sole fused cohort id/persisted envelope digests transitively commit to that authority. The parallel non-resealing cross-binding wrapper remains useful donor/test provenance but does not by itself atomically persist its validation digest with the existing fused cohort state.",
+  "p0_runtime_quiescence": {
+    "telemetry_source": "free swarm/SYSTEM_ANALYSIS_LIVE.json",
+    "telemetry_generated_at": "2026-08-25T22:43:16.216858+00:00",
+    "supervisor": "STOPPED/QUARANTINED",
+    "go_swarm": "RUNNING",
+    "embedded_provider_admission_epoch": "8.78",
+    "openrouter_total_requests": 4230,
+    "openrouter_total_429": 4095,
+    "openrouter_total_success": 134,
+    "delta_vs_supervisor_8_83_counter_snapshot_requests": 447,
+    "delta_vs_supervisor_8_83_counter_snapshot_429": 447,
+    "status": "ACTIVE_FAIL_STRENGTHENED",
+    "closure_required": "On the owning live host identify and terminate/quarantine every provider-capable survivor without issuing a provider probe; prove zero survivors and a bounded no-restart interval with zero provider-counter delta; only then re-enter current FREE non-provider execution authority."
+  },
+  "membership_incarnation_closure": {
+    "source_commit": "1d9f5abfd032b01d5296f2d9a1ec68c669e981e1",
+    "regression_commit": "b8e0f7a98a9aeafbf9a14f87797351b996c92044",
+    "rule": "source_node_admission_id is unique across independently attributed cohort members unless an explicit future multiplexing/fanout contract exists",
+    "status": "SOURCE_RULE_AND_REGRESSION_PRESENT",
+    "runtime_credit": 0
+  },
+  "retained_fusion_lane": {
+    "source": "tools/trigger2_fused_membership_two_phase_adapter_v1.py",
+    "source_commit": "925f1a70a538a834becedf9c11c7902d47f7ccc7",
+    "tests": "tests/test_trigger2_fused_membership_two_phase_adapter_v1.py",
+    "tests_commit": "49c24d7bf116e4363db168a0f4fb78673c96a45e",
+    "repository_ci_statuses_observed": 0,
+    "exact_test_execution_observed": false,
+    "source_properties": [
+      "validates immutable NODE_RESULT and existing proof-envelope digest",
+      "cross-validates membership id and serial against source_node_admission_id and revision",
+      "cross-validates node, producer PID, runtime generation, raw generation, state epoch/state digest and raw packet digest",
+      "preserves source_bound_model_call_identity_sha256 as content/evidence identity rather than invocation-event identity",
+      "embeds the retained two-phase authority in controller-owned authority_extensions",
+      "reseals the existing proof-envelope digest instead of minting a peer proof or cohort authority",
+      "validates the ten-member phase authority cohort before delegation",
+      "delegates state mutation only to the existing FusedFabric.atomic_fused_cohort_commit path",
+      "existing fused cohort id and persisted envelope digest arrays transitively commit to the embedded two-phase authority because they commit to each resealed proof-envelope digest",
+      "keeps canonical_truth=false, effect_authority=false and all promotion credits zero"
+    ]
+  },
+  "parallel_donor_lane": {
+    "source": "tools/trigger2_grid10_two_phase_membership_fusion_v1.py",
+    "tests": "tests/test_trigger2_grid10_two_phase_membership_fusion_v1.py",
+    "status": "DONOR_TEST_PROVENANCE_NOT_STRONGER_PERSISTENCE_AUTHORITY",
+    "useful_properties": [
+      "direct pairwise proof-membership to invocation-authority cross-binding",
+      "explicit fail-before-delegate tests",
+      "preserves equal call-content/output across distinct invocations",
+      "rejects membership, revision, generation, PID, node, packet, launch and executor-observation transplants"
+    ],
+    "limitation": "commit_cross_bound_cohort delegates the original proof_envelopes unchanged and returns cross_binding_validation_digest separately; the existing fused database therefore does not, from this wrapper alone, atomically persist that validation digest or invocation-authority digest with the cohort state.",
+    "fusion_policy": "Salvage unique negative coverage into the retained resealed-envelope adapter before deleting/archiving this duplicate executable lane. Do not keep two peer fusion authorities."
+  },
+  "persistence_analysis": {
+    "existing_fused_source": "tools/trigger2_grid10_fused_physical_membership_cohort_acceptance_v1.py",
+    "observed_mechanism": [
+      "derive_cohort_id commits to canonical members containing source_node_id, source_membership_id, producer_pid, node_result_digest and envelope_digest",
+      "atomic_fused_cohort_commit persists ordered envelope_digests_json and includes ordered_envelope_digests in summary_payload",
+      "replay checks require persisted envelope digest arrays to match exactly"
+    ],
+    "inference": "When the retained adapter reseals each existing proof envelope after embedding the validated two-phase authority, the existing fused cohort id, summary digest and replay boundary transitively bind the invocation authority without a second coordinator id.",
+    "boundary": "This remains source-level causal composition; no admitted real FusedFabric execution of the adapter path has yet been observed."
+  },
+  "next_source_discriminator": {
+    "id": "REAL_FUSEDFABRIC_RESEALED_TWO_PHASE_ADAPTER_ACCEPTANCE",
+    "goal": "Exercise the retained resealed-envelope adapter against the actual deterministic FusedFabric fixture rather than a fake delegate.",
+    "acceptance": [
+      "construct one ten-member proof-carrying membership/snapshot cohort from the actual fixture",
+      "attach ten valid phase-separated invocation authorities",
+      "derive expected fused cohort id from the resealed extended proof-envelope digests",
+      "call atomic_fused_two_phase_commit into actual FusedFabric.atomic_fused_cohort_commit",
+      "observe exactly one atomic source-fixture state_delta=1 and persisted extended envelope digests",
+      "replay the identical extended cohort and observe state_delta=0 with exact persisted envelope-digest equality",
+      "one stale/transplanted/tampered authority member must fail before any state mutation",
+      "transport order must not change the derived validation/cohort identities",
+      "all model/provider/physical-grid10/J-Space/training/HCU/EntityOS promotion credits remain zero"
+    ],
+    "anti_duplication": "Do not add a third fusion schema or second cohort id. Extend/test the retained resealed-envelope adapter and fold unique donor tests into it."
+  },
+  "training_jspace_feedback": {
+    "invocation_event_attribution": "launch_descriptor_sha256 plus executor_observation_sha256",
+    "content_equivalence_dedup": "source_bound_model_call_identity_sha256",
+    "membership_attribution": "current admitted membership incarnation bound to node, PID and runtime generation",
+    "durable_fused_trace_anchor": "resealed proof envelope digest transitively committed by fused cohort id/persistence",
+    "new_positive_rows": 0,
+    "accepted_dataset_tokens_added": 0,
+    "training_credit_added": 0
+  },
+  "execution": {
+    "provider_called_this_cycle": false,
+    "model_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "vps_execution_performed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "work_class": "SOURCE_ONLY_REENTRY_COORDINATION_AUTHORITY_ADJUDICATION_AND_RESEARCH_FUSION"
+  },
+  "credits": {
+    "research_delta": 1,
+    "membership_incarnation_source_closure_credit": 1,
+    "resealed_fusion_source_credit": 1,
+    "parallel_lane_adjudication_credit": 1,
+    "repository_ci_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 owning live host: prove FreeSwarm quiescence with zero provider-capable survivors plus bounded zero provider-counter delta without provider probing",
+    "P1 source-only: run/record exact-current deterministic real-FusedFabric acceptance for the retained resealed-envelope adapter",
+    "P1 source-only: fold unique donor-lane negative tests into the retained adapter and retire the duplicate executable fusion lane after coverage equivalence",
+    "P1 source-only: persist/verify the extended envelope-digest chain through cohort id, summary and replay receipts at exact committed bytes",
+    "P1 after quiescence PASS: re-enter newest explicit FREE non-provider execution authority before any model/provider/physical GRID10 promotion",
+    "P2 keep checkpoint selection blinded and training materialization closed until separately admitted executable evidence",
+    "P3 keep accepted_dataset_tokens and training credit at zero until exact positive admission plus replay +0"
+  ],
+  "next_exact_action": "Use the retained resealed-envelope adapter with the actual deterministic FusedFabric fixture and prove one atomic source-fixture commit, exact zero-delta replay, persisted extended envelope digests, and fail-before-mutation on one invalid member. Do not invoke providers/models and do not mint runtime/training promotion credit."
+}

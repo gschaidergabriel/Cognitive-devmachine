@@ -1,0 +1,206 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v8",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V7_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V7",
+  "revision_reason": "Re-entry after v7 found that main subsequently landed a derivation-bound gate v2 that partially repairs caller-controlled independence, while the previously generated native seed v2 and its tests still bind the older semantic Hyperposition gate v3. V8 therefore records the partial P0 repair, marks the seed/test surface needs_revision, preserves the unresolved immutable-event-digest/discriminator/GRF evidence blockers, and intentionally emits no new positive D/E rows.",
+  "authority": {
+    "observed_main_before_v8_write": "29fec78107b7a485483e98b090d05d297f77f02c",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "finished_training_target": "QWEN3.5-0.8B_CLASS_COGNITIVE_PROCESS_SUBSTRATE_FOR_VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audit_inputs": [
+    {
+      "kind": "CANONICAL_MAIN",
+      "identity": "29fec78107b7a485483e98b090d05d297f77f02c"
+    },
+    {
+      "kind": "SUPERVISOR_INBOX",
+      "path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "observed_schema": "8.78"
+    },
+    {
+      "kind": "OWNER_AUTHORITY",
+      "path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md"
+    },
+    {
+      "kind": "PREDECESSOR_LEDGER",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V7_GPT56SOL.json"
+    },
+    {
+      "kind": "SOURCE_COMMIT",
+      "identity": "c5d772219c8e9bc8761b7c5c1f5c7f15b31bd7c9",
+      "description": "derivation-bound Hyperposition gate v2"
+    },
+    {
+      "kind": "SOURCE_COMMIT",
+      "identity": "e8b49c53c5e7cede18c5162a251f80dbdd78d7dc",
+      "description": "Hyperposition-native seed generator v2"
+    },
+    {
+      "kind": "TEST_COMMIT",
+      "identity": "bad4ce53d3f63798a189e180b64dad7d20fedeb1",
+      "description": "native seed v2 tests"
+    }
+  ],
+  "artifact_overrides_and_additions": [
+    {
+      "artifact_id": "T2-LEDGER-V7",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V7_GPT56SOL.json",
+      "version": "v7",
+      "status": "SUPERSEDED",
+      "predecessor": "T2-LEDGER-V6",
+      "successor": "T2-LEDGER-V8",
+      "revision_reason": "Predates the subsequently landed derivation-bound gate v2 and therefore understates the independence-derivation repair while overstating the currency of the seed/test binding."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-LABELER-V3-CONVERGED",
+      "path": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "version": "v3",
+      "status": "CURRENT_NEEDS_REVISION_P0_REMAINS",
+      "predecessor": "v2 labeler/formal-world donor family",
+      "successor": "one hardened successor in the same authority lane",
+      "provenance": [
+        "commit 2247a67f9ddcae78791cebefce38a18ee76400b0",
+        "adversarial audit bdde0ef5078c627f9fc805941a50c132ae9d43cb"
+      ],
+      "target_architecture": "formal-world semantic Hyperposition U/D/GRF reference root",
+      "revision_reason": "Caller relation/target/winner circularity is already reduced, but positive promotion still requires immutable event-content identity, explicit discriminator admissibility/execution/coverage and typed evidence for any OBSERVED GRF promotion rather than a naked qualification flag."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-DERIVATION-BOUND-GATE-V2",
+      "path": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+      "version": "v2",
+      "status": "CURRENT_PARTIAL_P0_REPAIR_BLOCKED_FROM_POSITIVE_PROMOTION",
+      "predecessor": [
+        "tools/trigger2_semantic_hyperposition_gate_v3.py",
+        "tools/trigger2_hyperposition_derivation_bound_gate_v1.py"
+      ],
+      "successor": "same gate family with immutable event digest plus explicit discriminator and typed observation binding",
+      "provenance": [
+        "commit c5d772219c8e9bc8761b7c5c1f5c7f15b31bd7c9"
+      ],
+      "target_architecture": "formal-world -> derived independence -> v3 relation/update/resolution pre-admission",
+      "closed_since_v7": [
+        "caller independence_qualified is no longer accepted as authority",
+        "independence is derived from the formal event-dependence registry plus prior-state event identities",
+        "source binding includes exact current labeler and generator bytes",
+        "event registry binding checks ancestry/group/payload-key/provenance/test/outcome metadata"
+      ],
+      "remaining_blockers": [
+        "event_id is not yet cryptographically bound to an immutable canonical event-content digest, so same-id semantic mutation is not closed at the strongest provenance level",
+        "discriminator admissibility, actual execution identity and required coverage are not yet represented as an explicit typed proof boundary",
+        "positive GRF OBSERVED promotion remains downstream-dependent on stronger typed evidence semantics",
+        "exact-current repository-bound execution evidence is still unobserved"
+      ],
+      "revision_reason": "Material improvement over v7, but not sufficient to admit positive D/E/Epistemic labels or accepted dataset tokens."
+    },
+    {
+      "artifact_id": "T2-SEMANTIC-HYPERPOSITION-NATIVE-SEED-V2",
+      "path": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "version": "v2",
+      "status": "NEEDS_REVISION_STALE_GATE_BINDING",
+      "predecessor": "earlier owner-targeted Hyperposition process seed donors",
+      "successor": "seed v2.x rebound to the current derivation-bound gate successor without changing family identities unless semantics change",
+      "provenance": [
+        "commit e8b49c53c5e7cede18c5162a251f80dbdd78d7dc"
+      ],
+      "target_architecture": "variable-N cognitive substrate with DB-vs-simulation, uncertainty, evidence, Claude re-entry, GWT, ClayCode, low-refusal retention and J-Space boundaries",
+      "observed_candidate_row_count": 11,
+      "revision_reason": "The generator imports trigger2_semantic_hyperposition_gate_v3.py and computes positive formal transitions before the later derivation-bound gate v2 landed. The rows remain METHOD_ONLY/CANDIDATE_SOURCE_ONLY and must not be promoted by ancestry."
+    },
+    {
+      "artifact_id": "T2-SEMANTIC-HYPERPOSITION-NATIVE-SEED-V2-TESTS",
+      "path": "tests/test_trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "version": "v1-for-seed-v2",
+      "status": "NEEDS_REVISION_STALE_GATE_ASSERTIONS_EXECUTION_UNOBSERVED",
+      "predecessor": "none",
+      "successor": "tests rebound to derivation-bound gate successor plus event-digest/discriminator mutation controls",
+      "provenance": [
+        "commit bad4ce53d3f63798a189e180b64dad7d20fedeb1"
+      ],
+      "revision_reason": "The tests prove the seed's internal consistency against the older gate it imports, not closure of the newer P0 provenance blockers; exact repository-bound execution has not been observed here."
+    },
+    {
+      "artifact_id": "T2-BINDING-ROUTER-V3",
+      "path": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "version": "v3",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "predecessor": "context-binder donor family",
+      "successor": "full-cross or preregistered conditional-independence successor",
+      "revision_reason": "Supervisor 8.78 records conditional nuisance leakage: 0/127 nuisance signatures retain all three target classes, nuisance lookup accuracy 0.881944, conditional MI 1.348851 bits. Useful proof-topology donors may be salvaged but rendered rows remain non-admissible."
+    },
+    {
+      "artifact_id": "T2-V3-P0-HARD-NEGATIVE-BLUEPRINTS-V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_V3_P0_HARD_NEGATIVE_BLUEPRINTS_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_NONPROMOTING_DONOR_NO_DUPLICATE_ROWS_NEEDED_THIS_CYCLE",
+      "predecessor": "v3 adversarial audit",
+      "successor": "family-disjoint generated negatives only after exact hardened reference semantics are frozen",
+      "revision_reason": "Already covers forged independence, event replay/mutation, discriminator execution/admissibility, decisiveness and GRF evidence failure modes. Generating another semantically overlapping negative family now would add duplication rather than information."
+    }
+  ],
+  "external_method_input": {
+    "canonical_authority": false,
+    "model_availability": {
+      "status": "VERIFIED_AVAILABLE_AS_EXTERNAL_METHOD_INPUT",
+      "model": "Qwen/Qwen3.5-0.8B-Base",
+      "source": "https://huggingface.co/Qwen/Qwen3.5-0.8B-Base",
+      "observed_properties": [
+        "official Qwen namespace",
+        "0.8B-class base/pretrained artifact",
+        "model card explicitly identifies fine-tuning and research/development as intended uses",
+        "Transformers-format checkpoint and tokenizer artifacts are present"
+      ],
+      "project_binding_status": "EXACT_REVISION_CHECKPOINT_TOKENIZER_RUNTIME_BUILD_NOT_YET_BOUND_BY_THIS_LEDGER",
+      "training_credit": 0
+    }
+  },
+  "generation_decision": {
+    "new_positive_D_E_rows": 0,
+    "new_hard_negative_rows": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "Positive-label provenance remains P0-blocked and the already-versioned hard-negative blueprints cover the newly audited failure classes. The highest-information action is to repair and execute the reference/gate chain before generating more data."
+  },
+  "current_frontier": {
+    "closed_or_advanced_this_cycle": [
+      "refreshed canonical main and supervisor 8.78 before generation",
+      "reclassified v7 as superseded",
+      "recognized derivation-bound gate v2 as a real partial P0 repair",
+      "downgraded native seed v2 and its tests to needs_revision because they still bind the older gate",
+      "preserved binding-router v3 quarantine",
+      "verified that an official Qwen3.5-0.8B-Base artifact exists externally for future exact binding",
+      "avoided duplicate positive or hard-negative row generation"
+    ],
+    "highest_value_training_blocker": "No positive Hyperposition D/E/Epistemic candidate may be admitted until the current derivation-bound path binds immutable event content identity, explicit discriminator admissibility/execution/coverage, typed GRF observation evidence and exact-current test execution.",
+    "next_exact_actions": [
+      "bind event_id to an immutable event-content digest in the formal registry and reject same-id/different-content replay",
+      "represent discriminator admissibility, execution identity, coverage and result as typed evaluator-only evidence",
+      "replace naked GRF observation qualification with a typed evidence receipt or keep OBSERVED promotion blocked",
+      "rebind trigger2_semantic_hyperposition_native_seed_generator_v2.py to the hardened derivation-bound gate successor and add mutation tests",
+      "execute exact-current focused tests on an admitted FREE_ONLY surface with source/hash receipt binding",
+      "only after those gates pass, generate a small family-disjoint positive D/E pilot and rerun model-visible nuisance/conditional-MI plus split-leakage checks before any dataset admission"
+    ]
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_delta": 1,
+    "training_rows_added": 0,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

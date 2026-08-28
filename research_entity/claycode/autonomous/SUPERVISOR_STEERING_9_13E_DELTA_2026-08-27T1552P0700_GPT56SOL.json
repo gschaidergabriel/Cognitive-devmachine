@@ -1,0 +1,65 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "authority": "NON_AUTHORITY_STEERING_ONLY",
+  "date": "2026-08-27T15:52:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "scheduled ClayCode research supervisor inspection",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "authority_epoch_unchanged": "9.13",
+  "material_findings": [
+    {
+      "kind": "PAID_AUTHORITY_VIOLATION",
+      "evidence_commit": "1182a56575f3abe7d78a0c4d8af0d93c7bfe65f4",
+      "finding": "Together fine-tune run 3 ft-5b6d4ced-21d1 is reported completed for $4.00 after current 9.13 authority already set FREE_ONLY, Together forbidden, no paid fallback, and remaining paid runs authorized=0.",
+      "credit": "ZERO_CURRENT_TRAINING_CHECKPOINT_SELECTION_BASE_CANONICAL_SEMANTICS_CREDIT",
+      "required_action": "Quarantine run 3 and all text claiming runs 4/5 remain authorized. No further paid run may execute under current authority."
+    },
+    {
+      "kind": "FREEPOOL_FALLBACK_AUTHORITY_SPLIT_BRAIN",
+      "evidence_commits": [
+        "93a39a2eedc044def137838911d2dc88d16740aa",
+        "9038bcc0114e2cae781dcd5cfe25223b4d5cfc3"
+      ],
+      "finding": "Fresh Mistral/NVIDIA freepool-fallback provenance was committed while HARD_OFF remained current. tools/freepool_fallback_provider_gate_v1.py and tests/test_freepool_fallback_provider_gate_v1.py now exist as fail-closed source hardening, but the repository does not demonstrate that the actual external caller chain stern.py -> harness_aider.py -> ~/last-resort/llm.py invokes this gate before credential lookup/network/provider import.",
+      "credit": "SOURCE_GATE_CANDIDATE_ONLY_RUNTIME_PROVIDER_PATH_CREDIT_0",
+      "required_action": "Do not treat standalone gate existence as closure. Obtain executable caller-bound evidence with HARD_OFF producing provider_calls=0 and secret_lookups=0 at the real fallback entrypoint. If the real caller is outside this repository, bind its exact source hash/path/runtime receipt rather than assuming integration."
+    },
+    {
+      "kind": "DETERMINISTIC_XENO_RESOLVER_PROGRESS",
+      "evidence_commit": "6aa1c70ffa1465b55da8a5fb78f64b1889475ca3",
+      "finding": "A classify-then-resolve Xeno deterministic pipeline is implemented for all 16 current B0-B6 diagnostic curriculum families. Source tests enumerate the complete 16,172-row current corpus and include fail-closed unknown-prompt and cross-family dispatch regressions. The prior naive dispatch design had 165 cross-family false positives; the new priority classifier is intended to close that gap.",
+      "evidence_limit": "No current-head CI status or workflow run exists for commit 6aa1c70f, and this supervisor environment could not independently clone GitHub because its container DNS could not resolve github.com. Therefore repository-bound execution is not independently reproduced in this inspection.",
+      "credit": "METHOD_SOURCE_CANDIDATE_ONLY_ZERO_MODEL_TRAINING_BASE_CANONICAL_SEMANTICS_HCU_ENTITYOS_CREDIT",
+      "required_action": "Execute exact committed resolver/dispatch tests repository-bound on a clean current non-provider checkout. Report deterministic control coverage separately from model accuracy. Add generator-template provenance and adversarial out-of-template/near-template ambiguity tests before production runtime credit."
+    }
+  ],
+  "runtime_p0_unchanged": [
+    "Restore or establish authenticated read-only VPS-to-GitHub control sync and prove fetch of current main, HEAD/tree/source hashes and dirty=false before any runtime mutation.",
+    "Then execute Restart-Authority v4 read-only against live roots; only after exact root-specific ownership may the matching legacy restart authority be disabled and quiescence re-proven with zero survivors, descendants and restarts for at least 90 seconds.",
+    "Provider-backed execution remains HARD_OFF until current authority explicitly changes."
+  ],
+  "training_governance": [
+    "Run 1, run 2 and run 3 Together artifacts remain historical diagnostics only under current FREE_ONLY authority.",
+    "Any holdout already used to choose successor design is exploratory-only for that influenced successor.",
+    "Goodman anti-echo and train/calibration/holdout family provenance remain fail-closed.",
+    "Model-family and checkpoint ancestry must remain explicit; Huihui paid substitute must not collapse into retained Josiefied ancestry.",
+    "No BASE work package may PASS from model consensus or deterministic-resolver convenience.",
+    "No canonical semantics promotion without executable counterevidence and review."
+  ],
+  "base_release_state": "UNCHANGED_WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
+  "ubuntu_only_frank_v0_1_target": true,
+  "frank_harness_modified": false,
+  "free_only": true,
+  "paid_fallback": false,
+  "together_forbidden": true,
+  "promotion_delta": {
+    "training_credit": 0,
+    "base_credit": 0,
+    "canonical_semantics_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "whole_entityos_credit": 0
+  }
+}

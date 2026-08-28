@@ -1,0 +1,83 @@
+{
+  "schema": "ENTITYOS_HCU_GO_STREAM_AUTHORITY_DB_READBACK_LANE/v2",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "fe4a6d3ed057d2940be0872482c0a43154e0bfd8",
+  "coordination": {
+    "shared_immutable_macrocycle_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions": 0
+  },
+  "superseded_source_gap": {
+    "receipt": "research_entity/continuity/receipts/2026-08-24_GO_STREAM_AUTHORITY_BOUND_LANE_GPT56SOL_0955.json",
+    "v1_remaining_gap": "expected_stream_authority_binding_sha256 was still supplied by the caller and therefore was not independently self-authenticating.",
+    "resolution": "Source the expected authority identity only by canonical MiniUnifiedDB readback of an externally admitted stream-authority decision, then cross-bind authority kind, decision reference and decision digest before sequence-lane promotion."
+  },
+  "retained_donor": {
+    "pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "live_head_observed_after_v2": "3322f12ffc09222643aa1e7818a1f4745427817b",
+    "stream_authority_store_commit": "28441cd23f37ad04f3602031dae2c3cbf010d59f",
+    "stream_authority_store_test_commit": "2a67ffdc42aab921c29ad31e503301022a0883ec",
+    "lane_v2_commit": "a6fef16623882d876c5f928636e8b4407e9b533c",
+    "lane_v2_test_commit": "6e61e314d7b5d43e8004e740c89d077f69080ae2",
+    "v2_commits_confirmed_ancestor_of_live_head": true
+  },
+  "implemented_delta": {
+    "source": "the artefact/MicroEntity/hcu/authorized_executor_sequence_lane_binding_v2.py",
+    "schema": "HCU_AUTHORIZED_EXECUTOR_SEQUENCE_LANE_BINDING/v2",
+    "caller_expected_authority_hash_parameter_removed": true,
+    "canonical_authority_source": "HCU_ENTRY_STREAM_AUTHORITY_ADMISSION/v1 read from existing MiniUnifiedDB",
+    "required_cross_bindings": [
+      "packet generation/source_kind/source_id/stream_id -> canonical stream admission",
+      "authority_kind == CANONICAL_STREAM_REGISTRY",
+      "authority_ref == canonical authority_decision_id",
+      "authority_binding_sha256 == canonical decision_sha256",
+      "external authority-side binding -> exact Entry packet",
+      "lower executor sequence lane -> exact Entry/GRID/model-input/consumed bytes",
+      "v2 receipt -> canonical stream admission SHA + decision SHA + authority namespace/id"
+    ],
+    "test_source": "the artefact/MicroEntity/hcu/test_authorized_executor_sequence_lane_binding_v2.py",
+    "encoded_negatives": [
+      "self-consistent caller-minted authority hash without canonical DB admission fails",
+      "caller hash cannot override an existing canonical stream decision",
+      "wrong registry decision reference cannot reuse the canonical decision hash",
+      "non-registry authority kind cannot promote v2",
+      "outer v2 binding tamper fails digest validation"
+    ]
+  },
+  "scientific_result": {
+    "hypothesis": "Removing caller-supplied expected authority identity and deriving it from canonical DB readback eliminates the remaining self-authentication loophole in the promotable stream-authorized sequence lane.",
+    "counterhypothesis": "The v1 external binding plus a caller-provided expected hash is already sufficient authority closure.",
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_SOURCE_TRUST_BOUNDARY",
+    "boundary": "v2 establishes source-level authority provenance for lane grouping only. It still does not establish temporal adjacency, predecessor packet ancestry, model execution, hidden-state causal influence or training benefit."
+  },
+  "verification": {
+    "source_files_committed": true,
+    "new_regression_execution": "NOT_EXECUTED_ON_ADMITTED_EXACT_SOURCE_SURFACE",
+    "runtime_credit_added": 0
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_CONVERGENCE: one fewer caller-trust input remains in the causal evidence path; retained PR810 exact-head READY build remains runtime BLOCKED_QUOTA_UNOBSERVED and no current-head Function/Sandbox invocation is credited.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: Typed Entry stream authority now has an external-decision -> canonical MiniUnifiedDB admission -> DB-readback -> authorized executor-lane v2 chain without a caller-minted expected authority hash.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_LEVEL: the temporal control gate can now require v2 authority provenance before same-stream recurrent promotion; next closure still requires predecessor JSpace/TrainingTrace packet ancestry + canonical pre-invocation ordering + successor exact input/execution/inference/J-Space chain."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Shared README is rapidly moving under parallel organs; append-only successor receipt records the exact source trust repair without overwriting fresher whole-system state."
+  },
+  "next_exact_action": "Fuse HCU_AUTHORIZED_EXECUTOR_SEQUENCE_LANE_BINDING/v2 into the single HCU_JSPACE_CONTROL_TEMPORAL_CAUSALITY_GATE_V1 pre-invocation path and require the canonical pre-invocation ordering plus predecessor JSpaceInferenceBinding/v3/TrainingTrace packet ancestry. Add integrated negatives for cross-stream pairing, wrong canonical stream decision, same-invocation post-hoc packet rebinding, wrong predecessor trace/packet and successor input mutation. Execute only on an admitted exact-source FREE_ONLY surface; keep PR810 BLOCKED_QUOTA_UNOBSERVED until invocation-scoped remaining included quota and no-charge/no-upgrade/no-billing-path evidence are directly observed."
+}

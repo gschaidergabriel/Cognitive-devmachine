@@ -1,0 +1,164 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v45",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V44_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V44",
+  "observed_main_before_write": "773a8ab8328d986b7533e58b8732288451e844ea",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "implementation_compatibility_codename": "Xeno",
+    "freeswarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V44 correctly deduplicates the per-node membership concept but predates its concrete successor implementation on current main. Commit 773a8ab implements a deterministic per-node membership/revision-bound atomic cohort fan-in candidate with explicit same-state re-registration rejection, unrelated-node no-false-staleness control, admission transplant rejection, process-witness invalidation, ghost rejection and health rejection. Current main also contains an independent semantic-relation gate and executable transition successor pilot, plus an external-method-derived consumed-read attestation hypothesis. V45 records the per-node membership gap as SOURCE-IMPLEMENTED/CANDIDATE-TESTED-BY-CONSTRUCTION but not runtime-proven, and moves the next P0 to fusion with exact ten-Popen held-S1/consumed-input physical evidence.",
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V44_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V45_GPT56SOL.json",
+      "reason": "per-node membership atomic fan-in moved from research gap to exact source implementation candidate"
+    },
+    {
+      "artifact": "tools/trigger2_grid10_per_node_membership_fanin_acceptance_v2.py",
+      "source_commit": "773a8ab8328d986b7533e58b8732288451e844ea",
+      "status": "CURRENT_SOURCE_COMPONENT_CANDIDATE_NOT_REPOSITORY_RUNTIME_OBSERVED",
+      "properties_observed_in_source": [
+        "every registration/rejoin creates a successor per-node revision even when visible capability/health is unchanged",
+        "re-registration invalidates prior admission and prior process witness",
+        "NODE_RESULT deterministic wrapper binds source_node_admission_id + revision + optional process witness + exact snapshot + packet digest",
+        "coordinator verifies exact active admission/revision/generation/health/capability before mutation and rechecks authority under the writer lock",
+        "cohort authority vector uses node id + admission id + admission revision + process witness rather than a global membership generation",
+        "cohort ordering remains packet-digest canonical rather than transport-arrival authority",
+        "accepted cohort advances S1 once while preserving original packet digests"
+      ],
+      "declared_regressions_in_source": [
+        "same visible-state x01 re-registration increments only x01 admission revision and rejects old admission",
+        "unrelated x11 registration does not falsely stale x01/x02 cohort",
+        "logical-node/admission transplant rejects",
+        "process witness is invalidated with superseded admission",
+        "ghost source cannot self-mint membership authority",
+        "unhealthy source rejects before mutation"
+      ],
+      "credit": "SOURCE_COMPONENT_ONLY; source-declared pass logic is not an observed repository-bound runtime receipt"
+    },
+    {
+      "artifact": "tools/trigger2_cognitive_transition_semantic_relation_gate_v1.py",
+      "source_commit": "ace5f92594582896cc237361630bf9849593569a",
+      "status": "CURRENT_EVALUATOR_SOURCE_GATE_NONTRAINING",
+      "finding": "Independent process-specific semantic relations reject self-consistent-but-wrong target/oracle mutations, including majority-to-truth and blind-replay cases that can pass purely structural consistency.",
+      "credit": "EVALUATION_QUALITY_SOURCE_ONLY"
+    },
+    {
+      "artifact": "tools/trigger2_cognitive_process_executable_transition_pilot_v2.py",
+      "source_commit": "e607857dc339d30653f524e1efe32717c5a28820",
+      "status": "CURRENT_EXECUTABLE_TRANSITION_CANDIDATE_EVALUATOR_ONLY",
+      "finding": "Instantiated cognitive-transition candidates preserve answerability/unknown/candidate-only boundaries and exclude deterministic admission/DB/scheduler/EffectGate authority from learned targets.",
+      "credit": "ZERO_TRAINING_ELIGIBLE_ROWS_ZERO_ACCEPTED_TOKENS"
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_FABRIC_OBSERVED_READSET_ATTESTATION_SBUS_TRANSFER_GPT56SOL.json",
+      "source_commit": "a62ee0cdf535ed7a1c3949a4af7a1879d03af354",
+      "status": "METHOD_TRANSFER_CANDIDATE_NOT_CLAY_RUNTIME_EVIDENCE",
+      "finding": "A fabric-observed read-set/read-receipt can strengthen consumed-input identity beyond self-reported current metadata, but full coverage requires proving that cognition-relevant reads cannot bypass the observed ABI.",
+      "credit": "ZERO_CONSUMED_INPUT_ATTESTATION_CREDIT"
+    },
+    {
+      "artifact": "physical GRID10 v3 execution pin",
+      "status": "FAIL_CLOSED_NON_CREDIT_ELIGIBLE_PENDING_FUSED_CURRENT_SOURCE",
+      "audit_commit": "1fbd098e1f58d0eb7b9a701d3af8080351d24db3",
+      "reason": "held-S1 ten-process physical proof, per-node membership-bound atomic fan-in and consumed-input evidence remain separate executable donors; autonomous FreeSwarm is HARD OFF and no exact fused repository-bound receipt is observed"
+    }
+  ],
+  "closed_or_narrowed_gates": {
+    "atomic_replay_ordering_source_gap": "CLOSED_AT_SOURCE_CANDIDATE_A425F44_ZERO_RUNTIME_CREDIT",
+    "global_membership_clock_overbroad_undersensitive_design_gap": "REPLACED_BY_PER_NODE_REVISION_SOURCE_CANDIDATE_773A8AB",
+    "same_state_reregistration_source_negative": "PRESENT_IN_SOURCE_CANDIDATE_ZERO_RUNTIME_CREDIT",
+    "unrelated_node_false_staleness_control": "PRESENT_IN_SOURCE_CANDIDATE_ZERO_RUNTIME_CREDIT",
+    "semantic_self_consistency_only_eval_gap": "INDEPENDENT_SEMANTIC_RELATION_SOURCE_GATE_PRESENT_ZERO_TRAINING_ADMISSION"
+  },
+  "remaining_p0_chain": [
+    "Fuse exact ten simultaneously-live held-S1 process/barrier/PID evidence with the same exact immutable packets used by the per-node membership-bound atomic cohort admission.",
+    "Bind actual consumed-read/snapshot identity independently enough to reject a declared-current/consumed-stale bypass; if direct unobserved reads remain possible, introduce an observed read facade/ledger rather than trusting NODE_RESULT self-report.",
+    "Preserve exact per-node admission revision + process witness + raw packet digest + starting S1 identity through one cohort seal and one coordinator-authorized mutation.",
+    "Only after exact current source fusion and current authority reentry may a separately authorized non-provider repository-bound execution request be considered.",
+    "Keep checkpoint winner, positive training admission and J-Space model/causal credit at zero until their own exact consumed-input/model-specific gates close."
+  ],
+  "training_eval_course_delta": {
+    "model_target": "SEMANTIC_COGNITIVE_TRANSITION_CANDIDATE_ONLY",
+    "deterministic_not_model_authority": [
+      "node admission id/revision",
+      "process/PID witness",
+      "snapshot/read-delivery attestation",
+      "cohort sealing/replay identity",
+      "CAS/database mutation",
+      "EffectGate/EffectJournal",
+      "checkpoint consumed-input identity",
+      "provider admission"
+    ],
+    "required_future_row_gates": [
+      "independent semantic relation passes",
+      "source/evidence provenance exact",
+      "authority fields masked or evaluator-owned",
+      "answerability and UNKNOWN preserved",
+      "family split/leak controls preserved",
+      "runtime failure evidence reinjected without turning infrastructure failure into semantic labels"
+    ],
+    "new_positive_rows_generated": 0,
+    "new_positive_rows_admitted": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "hypothesis": "The per-node admission revision candidate closes the specific restart/rejoin ambiguity without globally staling unrelated nodes, and it aligns with the learned-target boundary by keeping membership/process authority deterministic. The next information gain is therefore cross-component causal fusion and consumed-input attestation, not more curriculum volume.",
+  "counterhypothesis": "Per-node admission revisions may add protocol complexity without improving a narrowly trusted GRID10 fixture. That narrower claim can remain possible, but reusable EntityOS/HCU source provenance requires restart/rejoin semantics; exact fused source and adversarial runtime evidence should decide whether the added identity layer is necessary for the promoted scope.",
+  "training_generation_decision": {
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null,
+    "reason": "Semantic evaluation quality improved and membership authority moved forward at source level, but integrated physical/consumed-input provenance remains open, provider execution is owner-stopped and training execution is unauthorized."
+  },
+  "execution_decision": {
+    "freeswarm": "HARD_OFF",
+    "provider_preflight": "DO_NOT_RUN",
+    "provider_execution": "DO_NOT_RUN",
+    "vps_execution": "NOT_PERFORMED_THIS_CYCLE",
+    "new_physical_grid_pin": "BLOCKED_PENDING_ONE_FUSED_EXACT_SOURCE_CONTRACT_AND_CURRENT_AUTHORITY_REENTRY",
+    "blocked_execution_interpretation": "NOT_SCIENTIFIC_NEGATIVE"
+  },
+  "credits": {
+    "research_delta": 1,
+    "per_node_membership_atomic_fanin_source_candidate": 1,
+    "semantic_relation_source_gate": 1,
+    "executable_transition_successor_source_candidate": 1,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "jspace_model_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Converge to one exact fused acceptance source that combines the 773a8ab per-node admission/revision authority vector with the exact ten-Popen held-S1 cohort/process/packet proof and consumed-snapshot/read identity. Add a declared-current/consumed-stale bypass negative. Re-enter current main afterward. Keep FreeSwarm HARD OFF, do not create a new physical pin until source fusion is exact, and admit no training rows meanwhile."
+}

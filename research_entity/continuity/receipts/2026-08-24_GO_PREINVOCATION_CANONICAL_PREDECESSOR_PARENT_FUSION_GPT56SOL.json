@@ -1,0 +1,79 @@
+{
+  "schema": "ENTITYOS_HCU_GO_PREINVOCATION_CANONICAL_PREDECESSOR_PARENT_FUSION/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "98cda1165529ca9cf0040c0ca1eeff0de71678a5",
+  "coordination": {
+    "shared_immutable_macrocycle_or_request_id_exposed": false,
+    "available_trigger_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_claim": "NOT_ATTEMPTED_FAIL_CLOSED",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments": 0
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed_before_receipt": "46b5f9175fcfecba40138849737ab95bd4efe18d",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "source_delta": {
+    "implementation_path": "the artefact/MicroEntity/hcu/preinvocation_control_admission_store_v1.py",
+    "existing_parent_guard_reused": "the artefact/MicroEntity/hcu/preinvocation_canonical_predecessor_guard_v1.py::require_canonical_predecessor_execution",
+    "implementation_commit": "725abe164de9c5cb5a8e57f8d727c975ec8a3486",
+    "test_commit": "f082ce921bea584195793d2c77fce8f3eabd4932",
+    "parent_authority_rule": "SELF_CONSISTENT_JSPACE_BINDING_IS_NOT_A_CANONICAL_PREDECESSOR_PARENT",
+    "transaction_rule": "CANONICAL_PREDECESSOR_MODEL_EXECUTION_CHECK_AND_CONTROLLED_INVOCATION_ABSENCE_CHECK_RUN_UNDER_THE_SAME_BEGIN_IMMEDIATE_TRANSACTION_AS_PREINVOCATION_PREPARATION_WRITE",
+    "positive_source_scope": [
+      "requires the exact predecessor ModelExecution observation referenced by JSpaceInferenceBinding/v3 to exist uniquely in the existing canonical MiniUnifiedDB ModelExecution store",
+      "revalidates canonical observation bytes, observation digest, invocation identity, generation and execution-critical fields through the already-existing single predecessor guard",
+      "requires the returned canonical predecessor observation identity to equal the JSpace binding parent identity",
+      "then requires the distinct controlled executor/invocation to remain absent before any preparation write",
+      "preserves the exact predecessor TrainingTrace/vector-control-packet to exact controlled input and GRID/model-cell cross-binding",
+      "creates no second truth/state/effect/parent-validation authority"
+    ],
+    "negative_regression_added": "A self-consistent predecessor JSpace binding with no canonically admitted ModelExecution parent fails with PREDECESSOR_CANONICAL_EXECUTION_REJECTED and creates zero preinvocation preparation tables/rows.",
+    "declared_preinvocation_regression_cases_after_update": 6
+  },
+  "parallel_fusion": {
+    "stream_authority": "The live donor now contains fail-closed HUMAN_PROMPT stream authority derived inside lane promotion from canonical session/generation state; caller-provided Entry stream labels or caller-constructed authority views are insufficient.",
+    "generic_stream_authority_store": "A parallel external decision plus canonical MiniUnifiedDB stream-authority admission path is also present; this receipt does not select it as a second temporal authority.",
+    "duplicate_temporal_lane_created_by_this_delta": false,
+    "caller_labelled_time_or_step_as_authority": false
+  },
+  "verification": {
+    "github_read_write": "VERIFIED",
+    "source_presence_reentered_after_write": true,
+    "updated_regression_execution": "NOT_EXECUTED",
+    "ci_runtime_credit": 0,
+    "sandbox_runtime_credit": 0,
+    "reason_no_runtime": "Current FREE_ONLY evidence does not directly establish remaining included Sandbox quota, and the latest predecessor exact-source Sandbox discriminator exposed Python 3.13 _sqlite3 unavailability before SQLite-dependent HCU logic acceptance. No quota bypass, paid upgrade, VPS/self-hosted runner, or weakened SQLite fence is authorized."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_CONVERGENCE: retained donor now requires canonical predecessor execution before the pre-invocation control preparation can become durable; runtime acceptance remains zero.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_FAIL_CLOSED_CAUSAL_PROVENANCE: canonical stream authority and canonical predecessor ModelExecution are no longer replaceable by self-consistent Entry/JSpace labels at the source promotion boundary.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_TRAINING_PROVENANCE: forward-control candidates can no longer promote a generated/self-consistent predecessor binding into a causal training parent without canonical execution evidence; hidden-state influence, model benefit and training benefit remain uncredited."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "execution_policy_observed": {
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "together": "FORBIDDEN_NOT_PREFLIGHTED_NOT_USED",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED",
+    "new_sandbox_invocation_by_this_organ": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving shared current-facing surface under concurrent go organs; append-only exact receipt plus retained donor source preserves this bounded delta without clobbering newer state"
+  },
+  "next_exact_action": "Re-enter the live retained donor before writing. If not already solved by a parallel organ, compose the authority-backed executor sequence lane and the parent-gated preinvocation preparation into the actual executor-owned atomic predecessor-to-controlled-invocation boundary, with explicit finalization against later canonical ModelExecution admission and zero-write rollback/replay/concurrency negatives. Do not grant t->t+1, hidden-state, model-runtime or training credit until executable model-specific evidence reaches that exact composed path. Rebind/run the retained executor only when FREE_ONLY included quota and the required SQLite interpreter capability are directly admitted."
+}

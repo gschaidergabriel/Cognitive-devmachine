@@ -1,0 +1,46 @@
+{
+  "schema": "PROJECT_FRANKENSTEIN_VERSION_EVIDENCE/v1",
+  "trigger": "triggerword 3",
+  "date": "2026-08-27",
+  "classification": [
+    "HISTORICAL_SOURCE",
+    "NEGATIVE_RESULT",
+    "SOURCE_IDENTITY_EVIDENCE"
+  ],
+  "question": "Trigger-3 requested coverage of 'current Frankenstein v0.7'. Is v0.7 a verified current Project-Frankenstein version label?",
+  "source_repository": "gschaidergabriel/Project-Frankenstein",
+  "observations": {
+    "exact_code_search_v0_7": "NO_MATCH",
+    "exact_code_search_frankenstein_v0_7": "NO_MATCH",
+    "git_refs_tags_observed": [
+      {
+        "ref": "refs/tags/v0.8.0",
+        "commit": "cd61158937004df6660ee8dafb2e195062b72bd7"
+      }
+    ],
+    "v0_7_tag_observed": false,
+    "release_observed": {
+      "tag_name": "v0.8.0",
+      "name": "F.R.A.N.K. v0.8.0",
+      "published_at": "2026-03-11T22:41:25Z",
+      "release_id": 295905148,
+      "release_body_self_description": "v0.8 pre-release"
+    },
+    "historical_archive_frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "source_repository_main_observed_after_trigger3_curation_merge": "d0e00b90eb8b5a486b67d89a3f233efd455b18cd",
+    "source_repository_main_note": "This 2026-08-27 head is a Trigger-3 curation merge on top of the historical source. It does not create a new F.R.A.N.K. product-version tag."
+  },
+  "resolution": {
+    "trigger_phrase_current_frankenstein_v0_7": "CONTRADICTED_AS_CURRENT_VERSION_REQUIREMENT",
+    "latest_verified_release_tag_observed": "v0.8.0",
+    "latest_verified_release_name_observed": "F.R.A.N.K. v0.8.0",
+    "do_not_claim": [
+      "that v0.8.0 is the current EntityOS/HCU product version",
+      "that the v0.8.0 release tag describes every later historical Project-Frankenstein commit",
+      "that absence of a v0.7 tag proves no internal development state was ever informally called 0.7"
+    ],
+    "current_product_identity_boundary": "Current Clay authority names EntityOS as the product/system and HCU as the integrated cognition/compute architecture; F.R.A.N.K./Project-Frankenstein remains historical/donor lineage unless explicitly re-admitted."
+  },
+  "chronicle_update_rule": "Replace UNRESOLVED wording for the requested current-v0.7 label with a bounded negative finding: exact source-repo tag/release evidence supports v0.8.0, while v0.7 was not found as a verified current tag/release. Preserve the distinction between historical Project-Frankenstein release versioning and current EntityOS/HCU authority.",
+  "evidence_scope": "GitHub source-repository code search + tag refs + release metadata observed during this Trigger-3 pass. This receipt is not runtime evidence and grants no EntityOS/HCU/J-Space/training credit."
+}

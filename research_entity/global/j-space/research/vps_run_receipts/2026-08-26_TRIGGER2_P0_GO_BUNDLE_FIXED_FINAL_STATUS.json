@@ -1,0 +1,22 @@
+{
+  "schema": "GO_REPOSITORY_BOUND_ACCEPTANCE_BUNDLE/v1_final_status",
+  "pre_fix_head": "d81327ea54d1401d46742a0231c47a056f90f943",
+  "pre_fix_result": "FAIL - canonical_s0 BoundaryError RACE_PROPOSALS_DID_NOT_BIND_SHARED_OBSERVED_EPOCH",
+  "fix_commit": "6463e4b12ae142e4479e0764a8923f0fe2e70386",
+  "root_cause": "attempt_direct_s0_write's failed INSERT (readonly connection) left an implicit sqlite3 read transaction open (python legacy transaction handling begins a BEGIN before any DML, even one that then raises); without an explicit rollback, the connection stayed pinned to its pre-attempt snapshot and stopped observing later committed writes on that object_key.",
+  "fix": "self.s0.rollback() added in the caught OperationalError branch of attempt_direct_s0_write, tools/zero_entityos_restart_resize_db_smoke_v1.py",
+  "regression_check": "targeted tests/ sweep: 98 failed/1302 passed before -> 97 failed/1304 passed after; one pre-existing failure fixed (the smoke test itself), zero new regressions, same 97 unrelated pre-existing failures",
+  "post_fix_verification_head": "6463e4b12ae142e4479e0764a8923f0fe2e70386",
+  "post_fix_result": "PASS - bundle_pass=true, canonical_s0.pass=true, xeno_self_organizing_fabric.pass=true, dirty=false",
+  "hypothesis_and_implications": {
+    "hypothesis": "This is a generic Python sqlite3 gotcha (legacy isolation_level='' begins implicit transactions before DML, not before SELECT), not specific to this project's design -- it likely would have surfaced in ANY future read-only-connection test that calls a rejected-write probe before doing epoch-sensitive reads on the same connection.",
+    "implication_for_grid10": "Gabriel's planned physical GRID10 work depends on solid S0 epoch/CAS guarantees under concurrent load. This exact bug pattern (a caught exception on a DML statement silently leaving an open read transaction) is worth grepping for elsewhere in the S0/S1 write-path code before trusting other CAS-adjacent modules under real concurrency -- this fork did not do that broader sweep, scope was limited to the one proven blocker per the fail-closed rule.",
+    "implication_for_read_only_connections": "Any code opening a sqlite3 connection with mode=ro and then deliberately probing it with a write attempt (as a boundary-enforcement test) must rollback after the expected failure, or risk silently stale reads for the connection's entire remaining lifetime -- this is easy to miss because the immediate assertion (write was rejected) still passes; only a LATER read reveals the staleness."
+  },
+  "credit_boundary": {
+    "positive_rows_admitted": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "GO_ZERO_UCF_CONTEXT_BINDING_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated component organ",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "main_base_sha": "9135850d1666f06658d5aa8dce0ebe351d4d237c",
+  "branch": "gpt56sol/go-zero-ucf-context-binding-v2-20260823-1511",
+  "source_head_before_receipt": "70b26dd4831e665aba86e707b8df27c4a73c0d22",
+  "classification": "EXACT_BRANCH_SOURCE_PLUS_BOUNDED_COMPONENT_MECHANISM_SUPPORT_ONLY",
+  "delta": {
+    "purpose": "Bind the existing ZERO_INFERENCE_PACKET/v2 downstream-context digests to the exact inference/system/user values presented for inference after canonical UCF+boot ancestry validation.",
+    "validator": "tools/validate_zero_ucf_capsule_chain_v2.py",
+    "tests": "tests/test_zero_ucf_capsule_chain_v2.py",
+    "authority_change": "NONE",
+    "second_packet_identity_created": false,
+    "packet_lineage_reused": "ZERO_INFERENCE_PACKET/v2",
+    "canonical_state_authority": "MiniUnifiedDB",
+    "effect_authority": "EffectGate"
+  },
+  "exact_git_blobs": {
+    "tools/validate_zero_ucf_capsule_chain_v2.py": "7d897c9b3b647505c3e75742bbc50349c7bd6c92",
+    "tests/test_zero_ucf_capsule_chain_v2.py": "3bd8ade5ff1e53374916c17e14bdc735a2354cad"
+  },
+  "exact_content_sha256": {
+    "tools/validate_zero_ucf_capsule_chain_v2.py": "81b9fc237ce6041e55426b6785a7e34ee8eba1366194196b609998098bc72c9d",
+    "tests/test_zero_ucf_capsule_chain_v2.py": "1fe52c0e716f697a2babd19a03d73655184f67e91b7c42bac006a6c9364f078f"
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Linux component container",
+    "layout": "repo-like tools/ plus tests/ mirror",
+    "commands": [
+      "python3 -m py_compile tools/validate_zero_ucf_capsule_chain_v2.py tests/test_zero_ucf_capsule_chain_v2.py",
+      "python3 -m unittest -v tests/test_zero_ucf_capsule_chain_v2.py"
+    ],
+    "tests_run": 6,
+    "tests_passed": 6,
+    "result": "PASS_BOUNDED_COMPONENT_MECHANISM_ONLY",
+    "dependency_scope": "Tests dependency-inject a bounded capsule validator, packet-v2 context-binding semantic and base-chain result. They do not constitute an exact full-repository integration run of the real canonical dependencies."
+  },
+  "unusual_experiment": {
+    "macro_cycle_count": 1,
+    "id": "DOWNSTREAM_CONTEXT_SWAP_AFTER_ADMISSION",
+    "intervention": "After packet admission, mutate only the downstream system context by appending -POISON while keeping packet/cycle identity otherwise fixed.",
+    "observed": "PACKET_VALIDATION_FAILED:ValueError:DOWNSTREAM_CONTEXT_DIGEST_MISMATCH",
+    "interpretation": "A packet-v2 context-bound validator can discriminate post-admission downstream-context substitution at this component boundary.",
+    "scope": "BOUNDED_COMPONENT_FALSIFIER_ONLY"
+  },
+  "ordinary_regressions": [
+    "exact downstream context accepted",
+    "downstream inference configuration substitution rejected",
+    "UCF inference packet digest mismatch rejected",
+    "generation/workspace mismatch rejected",
+    "base-chain errors preserved"
+  ],
+  "runtime_credit": {
+    "whole_mini_entity": 0,
+    "pipeline_cognitive_fabric_admit": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu": 0
+  },
+  "known_remaining_gates": [
+    "The retained reference runtime still needs one real pipeline_cognitive_fabric_admit producer/handler on the canonical path.",
+    "The producer must obtain current generation-bound cognition/boot/workspace identities from the single MiniUnifiedDB authority and fail closed when identities are unavailable or stale.",
+    "The exact branch must run against the real repository-owned capsule, packet-v2, UCF and boot validators on an actually-started authorized isolated executor.",
+    "The MicroEntity binary snapshot remains a separate artifact-integrity/repair gate until exact archive materialization is admitted."
+  ],
+  "hcu_parallel_pass": "NO_CHANGE_NON_DUPLICATE: current HCU source/package/capacity lanes already exist; runtime capacity remains unmeasured and requires authorized isolated KVM4-equivalent evidence.",
+  "safety": {
+    "free_only": true,
+    "together_api": "FORBIDDEN",
+    "provider_secret_lookup": false,
+    "network_inference": false,
+    "paid_execution": false,
+    "model_training": false,
+    "vps_testing": false,
+    "self_hosted_test_execution": false,
+    "production_host_testing": false
+  },
+  "next_exact_gate": "Fuse the current MiniUnifiedDB cognition-binding prerequisite with one real pipeline_cognitive_fabric_admit runtime handler that compiles ZERO_WORKSPACE_CAPSULE/v1 -> ZERO_INFERENCE_PACKET/v2, validates canonical UCF+boot ancestry, and hands the exact packet-bound inference/system/user bytes to inference_generate; then execute exact integrated bytes on an admitted isolated runtime."
+}

@@ -1,0 +1,192 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v37",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V36_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V36",
+  "observed_main_before_write": "2e532c8a7d088c899430e2771fdc7363875dd3d7",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "implementation_compatibility_codename": "Xeno",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "revision_reason": "Live reentry after V36 found four nonduplicate current deltas already committed by parallel Trigger-2 organs: the GRID10/stale-evidence eval seed was hardened to v2, a consumed-snapshot attestation gap was identified, recursive-compression evidence retrievability/Hyperposition preservation was identified, and a two-axis answerability/correctness eval design was added then append-only corrected to point at V36. This successor fuses those deltas, keeps issues #2021/#2022 open, audits deterministic Hyperposition labeler v3 as current source/curriculum logic only, and preserves zero positive-token/training/runtime promotion until executable gates close.",
+  "artifact_lifecycle": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V36_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V37_GPT56SOL.json",
+      "reason": "Parallel current-main deltas landed after V36 and materially advance its frontier."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_GRID10_STALE_EVIDENCE_HARD_NEGATIVE_EVAL_SEED_V2_GPT56SOL.jsonl",
+      "status": "CURRENT",
+      "scope": "CANDIDATE_EVAL_ONLY_NOT_TRAINING_ELIGIBLE",
+      "reason": "16 paired cases now cover process-overlap proof, same-snapshot identity, stale generation/digest, fake rebase authority, lease scope and credit-scope false promotion."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_GRID10_STALE_EVIDENCE_HARD_NEGATIVE_EVAL_SEED_V1_GPT56SOL.jsonl",
+      "status": "SUPERSEDED",
+      "successor": "...EVAL_SEED_V2_GPT56SOL.jsonl",
+      "reason": "v2 adds positive controls and stricter rebase-authority semantics."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CONSUMED_SNAPSHOT_ATTESTATION_EVAL_V1_GPT56SOL.json",
+      "status": "CURRENT",
+      "scope": "CANDIDATE_EVAL_ONLY_NOT_TRAINING_ELIGIBLE",
+      "reason": "Extends packet-field freshness to the stronger consumed-input proof question: declared epoch/digest is not itself evidence that those exact S1 bytes produced the payload."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_RECURSIVE_COMPRESSION_EVIDENCE_RETRIEVABILITY_DELTA_V1_GPT56SOL.json",
+      "status": "CURRENT",
+      "scope": "NONCANONICAL_RESEARCH_DELTA_CANDIDATE_EVAL_ONLY",
+      "reason": "Finds that current fixture does not prove digest dereference, original observation recovery, UNKNOWN preservation or Hyperposition branch-topology preservation across recursive compression."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TWO_AXIS_ANSWERABILITY_CORRECTNESS_RESEARCH_DELTA_GPT56SOL.json",
+      "status": "CURRENT_WITH_APPEND_ONLY_REENTRY_CORRECTION",
+      "successor_or_addendum": "2026-08-26_TRIGGER2_TWO_AXIS_ANSWERABILITY_CORRECTNESS_REENTRY_ADDENDUM_V1_GPT56SOL.json",
+      "reason": "Research hypothesis remains useful; stale V35-current pointer was corrected to V36 without rewriting history."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "CURRENT_COMPONENT_SOURCE_AND_CURRICULUM_REFERENCE",
+      "reason": "v3 derives applicability/relations from a formal synthetic task world, preserves replay/idempotence/ancestry and exact semantic merge semantics, and keeps salience separate from truth. Issue #2019 exact-merge singleton path was repaired in current ancestry. This is still synthetic/reference logic and does not mint training/J-Space/HCU/EntityOS runtime credit."
+    },
+    {
+      "artifact": "tools/xeno_physical_grid10_acceptance_v1.py",
+      "status": "NEEDS_REVISION",
+      "reason": "Current main still uses sequential subprocess.run for ordinary nodes and counts packets instead of observing overlapping OS-process liveness; current commit path also lacks a consumed-snapshot attestation binding."
+    },
+    {
+      "artifact": "tools/xeno_self_organizing_fabric_acceptance_v1.py::Fabric.coordinator_commit",
+      "status": "NEEDS_REVISION_OR_EXPLICIT_POLICY",
+      "reason": "Current gate checks expected CAS identity and generation but packet state_epoch may be older than current and packet state_digest is not directly compared to current snapshot; silent metadata rewrite/rebase must not substitute for proven revalidation."
+    },
+    {
+      "artifact": "physical GRID10 request pinned to fbab5960980166f51047264775f102f2df22b292",
+      "status": "STALE",
+      "scope": "DIAGNOSTIC_ONLY_ZERO_CREDIT",
+      "reason": "Known proof semantics are insufficient for the claimed simultaneous physical GRID10 property."
+    },
+    {
+      "artifact": "issue #2021 Qwen3.5 registry/gate contract",
+      "status": "BLOCKED_NEEDS_REVISION",
+      "reason": "Registry internal v3 semantics and gate v2 assumptions drift after loader measurements; selection winner remains NONE."
+    },
+    {
+      "artifact": "issue #2022 cognitive-process trajectory target semantics",
+      "status": "BLOCKED_NEEDS_REVISION",
+      "reason": "Current donor can supervise meta-rule narration without proving instantiated typed cognitive state transitions; direct positive SFT scaling remains closed."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED",
+      "reason": "Conditional/model-visible nuisance leakage remains unresolved for direct training."
+    }
+  ],
+  "external_research_delta": [
+    {
+      "source": "Python subprocess documentation",
+      "url": "https://docs.python.org/3/library/subprocess.html",
+      "classification": "OFFICIAL_RUNTIME_METHOD_REFERENCE",
+      "finding": "Popen exposes a live child process object with pid and poll(); subprocess.run waits for completion of the invoked command.",
+      "implication": "Physical GRID10 proof must measure ten simultaneously alive children, not ten completed invocations."
+    },
+    {
+      "source": "SQLite Isolation",
+      "url": "https://www.sqlite.org/isolation.html",
+      "classification": "OFFICIAL_STORAGE_SEMANTICS_REFERENCE",
+      "finding": "In WAL mode each read transaction observes a stable snapshot from its transaction start while later writer commits can remain invisible to that reader.",
+      "implication": "Same database path is weaker than same consumed snapshot identity; exact observation attestation or proven revalidation is required."
+    },
+    {
+      "source": "Wu, Geiger, Milliere (2025), How Do Transformers Learn Variable Binding in Symbolic Programs?, arXiv:2505.20896",
+      "url": "https://arxiv.org/abs/2505.20896",
+      "classification": "EXTERNAL_PRIMARY_RESEARCH_METHOD_EVIDENCE",
+      "finding": "The studied Transformer moved through shallow heuristic behavior before systematic variable binding; causal interventions localized a later routing mechanism.",
+      "implication": "Do not equate balanced aggregate accuracy with dynamic binding. Maintain full permutation/OOD and causal/mechanistic discriminators where executable evidence exists."
+    }
+  ],
+  "integrated_hypotheses": [
+    {
+      "id": "H37_1_CONSUMED_STATE_NOT_DECLARED_STATE",
+      "hypothesis": "A node result is current only if its exact consumed S1 snapshot is bound to the emitted result packet and producer identity; copied current epoch/digest fields are insufficient.",
+      "counterhypothesis": "The current trusted node producer path already makes packet metadata unforgeably equivalent to consumed bytes, so an extra attestation layer is redundant.",
+      "cheapest_discriminator": "Construct one deterministic adversarial producer/result fixture where payload derives from old S1 bytes but packet fields are rewritten to current epoch/digest. Currentness gate must reject unless a bound read->result attestation proves equality."
+    },
+    {
+      "id": "H37_2_TEMPORAL_GRID_PROOF",
+      "hypothesis": "Ten distinct PIDs plus an all-alive barrier interval and one exact shared observation identity are necessary proof objects for the current physical GRID10 claim.",
+      "counterhypothesis": "Distinct PIDs plus common database path are sufficient.",
+      "cheapest_discriminator": "Sequential ten-PID negative control versus overlapping Popen barrier positive control."
+    },
+    {
+      "id": "H37_3_LOSS_BOUNDED_RECURSIVE_COMPRESSION",
+      "hypothesis": "Recursive HCU coordinator compression can reduce hot context safely only if evidence refs remain deterministically resolvable and UNKNOWN/Hyperposition branch topology survive across levels.",
+      "counterhypothesis": "Digest lists and external receipts already make the current fixture sufficient; missing checks are fixture-only, not architecture-level.",
+      "cheapest_discriminator": "Two-level compression with exact digest->packet dereference, original observation recovery, UNKNOWN preservation, branch-preservation and tamper/missing-ref negatives."
+    },
+    {
+      "id": "H37_4_EXECUTABLE_TRANSITIONS_OVER_RULE_NARRATION",
+      "hypothesis": "Instantiated typed cognitive transitions will generalize better than meta-rule target prose for unseen process instances.",
+      "counterhypothesis": "A 0.8B model can infer concrete transition execution from rule narration with no measurable loss.",
+      "cheapest_discriminator": "Matched-token pilot comparing meta-rule donor vs instantiated-transition donor on exact state_after/ref/ClayCode ABI validity across family-disjoint unseen cases."
+    },
+    {
+      "id": "H37_5_TWO_AXIS_EPISTEMICS",
+      "hypothesis": "Answerability and candidate correctness should be evaluated as separate axes before action realization, especially for stale/missing/false-premise evidence.",
+      "counterhypothesis": "A single calibrated correctness/confidence target plus UNKNOWN examples is sufficient.",
+      "cheapest_discriminator": "Matched-budget one-axis vs two-axis eval on family-disjoint answerable, missing-fact, false-premise, stale-evidence and DB-vs-simulation cases with required retention floors."
+    }
+  ],
+  "training_state": {
+    "positive_training_admission": "BLOCKED",
+    "new_positive_rows_generated_this_cycle": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null,
+    "jspace_model_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "eval_only_research_delta_allowed": true,
+    "reason": "The highest-information current work is executable proof/identity/transition closure, not additional positive corpus growth."
+  },
+  "next_priority_order": [
+    "P0 repair physical GRID10 harness to overlapping Popen processes with observed distinct OS PIDs, start/stop times, all-alive barrier proof and exact shared consumed-snapshot identity",
+    "P0 add/repair deterministic currentness boundary so original observation identity cannot be silently rewritten; exact snapshot equality or a separately admitted provenance-preserving revalidation/rebase protocol is required",
+    "P0 bind result packet digest to consumed S1 read identity and producer source identity; add declared-current/consumed-stale adversarial regression",
+    "P0 extend recursive compression acceptance to prove digest dereference plus UNKNOWN/Hyperposition branch-topology preservation across at least two levels",
+    "P0.5 close issue #2021 with one reconciled Qwen3.5 registry/gate contract while keeping checkpoint_winner NONE",
+    "P1 close issue #2022 with a small executable-transition donor spanning trainable process classes and deterministic JSON/ClayCode semantic adjudication",
+    "P1 converge one dynamic-binding successor from donor PRs using exact visible-codebook integrity, semantic ablation and S3 equivariance on serialized bytes",
+    "P1 execute frozen eval-only epistemic/scope families against BASE/POSTTRAINED/TARGET_MEASURED before deciding whether any become training material",
+    "P2 only after all admission gates are current reopen one positive Forge->Distillery witness proving accepted_dataset_tokens>0 and idempotent replay"
+  ],
+  "next_exact_action": "Implement and test the smallest exact-current proof closure that simultaneously rejects sequential-PID fake GRID10, declared-current/consumed-stale NODE_RESULT, and silent observation-identity rewrite; do not repin runtime or admit positive training rows until those regressions pass on committed source.",
+  "credits": {
+    "research_delta": 1,
+    "training_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

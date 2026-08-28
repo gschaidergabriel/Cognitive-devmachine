@@ -1,0 +1,247 @@
+#!/usr/bin/env python3
+"""Together BYOM launcher for the 0.5B ClayCode cognition campaign.
+
+Uses leakage-free SFT v2. Billed create is bound to exact dataset bytes, training config,
+HF model and exact HF revision; create is zero-retry and protected by the existing local
+intent ledger.
+
+Provider admission is additionally fail-closed. Together BYOM requires `model` to be a
+base from its fine-tuning catalog whose architecture matches `from_hf_model`. The
+owner-locked Qwen/Qwen2.5-0.5B checkpoint is Qwen2ForCausalLM. At the 2026-08-22 public
+Full-FT catalog snapshot no Qwen2/Qwen2.5 base is listed, so this launcher has no guessed
+template default. A current architecture-compatible template must be supplied explicitly.
+Together BYOM compatibility remains open until the exact pair is accepted and the job
+reaches training.
+"""
+import argparse, hashlib, json, os, re, subprocess, sys, time
+from pathlib import Path
+
+import audit_together_byom_template_v1 as byom_audit
+
+HERE=Path(__file__).resolve().parent
+TRAIN=HERE/"train_v2.jsonl"
+VALID=HERE/"validation_v2.jsonl"
+PRIMARY_HF_MODEL="Qwen/Qwen2.5-0.5B"
+PRIMARY_HF_REVISION="060db6499f32faf8b98477b0a26969ef7d8b9987"
+INSTRUCT_HF_MODEL="Qwen/Qwen2.5-0.5B-Instruct"
+INSTRUCT_HF_REVISION="7ae557604adf67be50417f59c2c2f167def9a775"
+TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE") or None
+TEMPLATE_HF_MODEL_ENV="CLAYCOG_TEMPLATE_HF_MODEL"; TEMPLATE_HF_REVISION_ENV="CLAYCOG_TEMPLATE_HF_REVISION"
+EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
+LEARNING_RATE=float(os.environ.get("CLAYCOG_LEARNING_RATE","1e-5")); WARMUP_RATIO=float(os.environ.get("CLAYCOG_WARMUP_RATIO","0.03")); RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","20260822"))
+MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00"))
+FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
+CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
+ACTIVE_OR_SPENT_STATUSES={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
+
+def run_local_checks():
+    subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
+    subprocess.run([sys.executable,str(HERE/"validate_corpus_v2.py"),str(TRAIN),str(VALID)],check=True)
+
+def require_explicit_template(template):
+    if not template:
+        raise SystemExit(
+            "NO_COMPATIBLE_TOGETHER_TEMPLATE_CONFIGURED: current 2026-08-22 public Together Full-FT catalog "
+            "has no verified Qwen2/Qwen2.5 base for Qwen2ForCausalLM. Refresh provider admission and set "
+            "CLAYCOG_TOGETHER_TEMPLATE only after an architecture-compatible base is available."
+        )
+    return template
+
+def get_full_training_limits(client,template):
+    fine_tuning=client.fine_tuning
+    get_limits=getattr(fine_tuning,"get_model_limits",None)
+    if get_limits is None:
+        raise SystemExit("TOGETHER_SDK_V2_REQUIRED: fine_tuning.get_model_limits(model=...) unavailable")
+    limits=get_limits(model=template)
+    if getattr(limits,"full_training",None) is None:
+        raise SystemExit(f"Template is not full-FT capable: {template}")
+    return limits
+
+def wait_file(client,file_id,timeout_seconds=FILE_WAIT_SECONDS):
+    deadline=time.monotonic()+timeout_seconds
+    while True:
+        meta=client.files.retrieve(file_id)
+        if getattr(meta,"processed",None) is True: return meta
+        status=str(getattr(meta,"processing_status","") or "").upper()
+        if status=="COMPLETED": return meta
+        if status in ("INVALID_FORMAT","FAILED","ERROR"):
+            raise RuntimeError(f"Together rejected {file_id}: {status} {getattr(meta,'validation_report',None)}")
+        if time.monotonic()>=deadline:
+            raise TimeoutError(f"Timed out waiting for Together file processing: {file_id}")
+        time.sleep(5)
+
+def estimate_full_sft_price(client,train_file_id,valid_file_id,template):
+    return client.fine_tuning.estimate_price(
+        training_file=train_file_id,
+        validation_file=valid_file_id,
+        model=template,
+        n_epochs=EPOCHS,
+        n_evals=EVALS,
+        training_method="sft",
+        training_type="full",
+    )
+
+def objdict(x):
+    if hasattr(x,"model_dump"): return x.model_dump()
+    if hasattr(x,"dict"): return x.dict()
+    if isinstance(x,dict): return x
+    return str(x)
+
+def exact_revision(model,revision_env,default_model,default_revision):
+    revision=os.environ.get(revision_env,"").strip()
+    if not revision:
+        if model!=default_model: raise SystemExit(f"{revision_env} is required when overriding {default_model} with {model}")
+        revision=default_revision
+    if not re.fullmatch(r"[0-9a-fA-F]{40}",revision): raise SystemExit(f"{revision_env} must be an exact 40-hex Hugging Face commit SHA")
+    return revision.lower()
+
+def resolve_hf_source(instruct_ablation):
+    if instruct_ablation:
+        model=os.environ.get("CLAYCOG_INSTRUCT_HF_MODEL",INSTRUCT_HF_MODEL)
+        return model,exact_revision(model,"CLAYCOG_INSTRUCT_HF_REVISION",INSTRUCT_HF_MODEL,INSTRUCT_HF_REVISION)
+    model=os.environ.get("CLAYCOG_HF_MODEL",PRIMARY_HF_MODEL)
+    return model,exact_revision(model,"CLAYCOG_HF_REVISION",PRIMARY_HF_MODEL,PRIMARY_HF_REVISION)
+
+def resolve_template_hf_identity(template):
+    model=os.environ.get(TEMPLATE_HF_MODEL_ENV,template or "").strip()
+    revision=os.environ.get(TEMPLATE_HF_REVISION_ENV,"").strip()
+    if not model: raise SystemExit(f"{TEMPLATE_HF_MODEL_ENV} or an owner/name Together template is required")
+    if not re.fullmatch(r"[0-9a-fA-F]{40}",revision): raise SystemExit(f"{TEMPLATE_HF_REVISION_ENV} must be an exact 40-hex Hugging Face commit SHA")
+    return model,revision.lower()
+
+def architecture_identity_from_result(result):
+    if not isinstance(result,dict) or not result.get("compatible"):
+        reasons=result.get("reasons") if isinstance(result,dict) else None
+        raise SystemExit("BYOM_ARCHITECTURE_AUDIT_REJECTED: "+",".join(str(x) for x in (reasons or ["UNKNOWN"])))
+    provenance=result.get("exact_hf_provenance")
+    if not isinstance(provenance,dict) or not isinstance(provenance.get("custom"),dict) or not isinstance(provenance.get("template"),dict):
+        raise SystemExit("BYOM_ARCHITECTURE_PROVENANCE_REQUIRED")
+    custom=result.get("custom") or {}; template=result.get("template") or {}
+    if custom.get("architecture")!=template.get("architecture") or custom.get("model_type")!=template.get("model_type"):
+        raise SystemExit("BYOM_ARCHITECTURE_IDENTITY_INCONSISTENT")
+    return {"schema":"claycog-byom-architecture-identity/v1","custom":dict(provenance["custom"]),"template":dict(provenance["template"]),"architecture":custom.get("architecture"),"model_type":custom.get("model_type")}
+
+def run_byom_architecture_audit(hf_model,hf_revision,template):
+    template_hf_model,template_hf_revision=resolve_template_hf_identity(template)
+    try:
+        custom_cfg=byom_audit.fetch_exact_config(hf_model,hf_revision)
+        template_cfg=byom_audit.fetch_exact_config(template_hf_model,template_hf_revision)
+        result=byom_audit.assess_pair(custom_cfg,template_cfg)
+    except (OSError,ValueError) as exc:
+        raise SystemExit(f"BYOM_ARCHITECTURE_AUDIT_UNAVAILABLE: {type(exc).__name__}: {exc}") from exc
+    return architecture_identity_from_result(result)
+
+def sha256_file(path):
+    h=hashlib.sha256()
+    with open(path,"rb") as f:
+        for chunk in iter(lambda:f.read(1024*1024),b""): h.update(chunk)
+    return h.hexdigest()
+
+def campaign_descriptor(hf_model,hf_revision,byom_architecture=None):
+    out={"schema":"claycog-05b-together-campaign/v3","from_hf_model":hf_model,"hf_model_revision":hf_revision,"template_model":TEMPLATE,"training_sha256":sha256_file(TRAIN),"validation_sha256":sha256_file(VALID),"epochs":EPOCHS,"evals":EVALS,"training_method":"sft","training_type":"Full","train_on_inputs":"auto","learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"random_seed":RANDOM_SEED,"n_checkpoints":1}
+    if byom_architecture is not None: out["byom_architecture"]=byom_architecture
+    return out
+
+def campaign_fingerprint(hf_model,hf_revision,byom_architecture=None):
+    raw=json.dumps(campaign_descriptor(hf_model,hf_revision,byom_architecture),sort_keys=True,separators=(",",":"),ensure_ascii=True).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
+def campaign_suffix(fingerprint): return "claycog05b-"+fingerprint[:24]
+def _items(x):
+    if x is None:return []
+    if hasattr(x,"data"):return list(x.data or [])
+    if isinstance(x,dict):return list(x.get("data") or [])
+    return list(x) if isinstance(x,(list,tuple)) else []
+def _field(x,name,default=None): return x.get(name,default) if isinstance(x,dict) else getattr(x,name,default)
+def matching_campaign_jobs(client,hf_model,template,suffix):
+    matches=[]
+    for job in _items(client.fine_tuning.list()):
+        status=str(_field(job,"status","")).lower(); output_name=str(_field(job,"model_output_name","") or "")
+        if status and status not in ACTIVE_OR_SPENT_STATUSES: continue
+        if suffix not in output_name: continue
+        if _field(job,"model",None) not in (None,"",template): continue
+        if _field(job,"from_hf_model",None) not in (None,"",hf_model): continue
+        matches.append(job)
+    return matches
+def assert_no_duplicate_campaign(client,hf_model,template,suffix):
+    matches=matching_campaign_jobs(client,hf_model,template,suffix)
+    if matches: raise SystemExit("DUPLICATE_CREATE_ABORT existing campaign job(s): "+",".join(str(_field(x,"id","UNKNOWN")) for x in matches))
+def require_create_confirmation(fingerprint):
+    if os.environ.get(CREATE_CONFIRM_ENV,"")!=fingerprint: raise SystemExit(f"CREATE_CONFIRMATION_REQUIRED set {CREATE_CONFIRM_ENV} to the exact preflight fingerprint {fingerprint}")
+def create_ledger_dir(): return Path(os.environ[CREATE_LEDGER_DIR_ENV]).expanduser() if os.environ.get(CREATE_LEDGER_DIR_ENV) else Path.home()/".local"/"state"/"claycog"/"training"
+def create_ledger_path(fingerprint): return create_ledger_dir()/(fingerprint+".json")
+def read_create_ledger(fingerprint):
+    path=create_ledger_path(fingerprint)
+    if not path.exists(): return None
+    try:return json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc: raise SystemExit(f"CREATE_LEDGER_UNREADABLE {path}: {exc}")
+def assert_no_local_create_intent(fingerprint):
+    existing=read_create_ledger(fingerprint)
+    if existing is None:return
+    status=str(existing.get("status","UNKNOWN")); job_id=existing.get("job_id"); suffix=f" job_id={job_id}" if job_id else ""
+    raise SystemExit(f"LOCAL_CREATE_INTENT_ABORT fingerprint={fingerprint} status={status}{suffix}; reconcile exact provider state before any new billed create")
+def _fsync_dir(path):
+    fd=os.open(str(path),os.O_RDONLY)
+    try:os.fsync(fd)
+    finally:os.close(fd)
+def arm_create_intent(fingerprint,hf_model,hf_revision,suffix,byom_architecture=None):
+    directory=create_ledger_dir(); directory.mkdir(parents=True,exist_ok=True,mode=0o700)
+    try:os.chmod(directory,0o700)
+    except OSError:pass
+    path=create_ledger_path(fingerprint); payload={"schema":"claycog-together-create-intent/v3","fingerprint":fingerprint,"campaign_suffix":suffix,"status":"CREATE_ARMED","campaign":campaign_descriptor(hf_model,hf_revision,byom_architecture),"created_unix":int(time.time())}; data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode()
+    try:fd=os.open(str(path),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+    except FileExistsError: assert_no_local_create_intent(fingerprint); raise
+    try:
+        with os.fdopen(fd,"wb",closefd=True) as f:f.write(data);f.flush();os.fsync(f.fileno())
+        _fsync_dir(directory)
+    except BaseException:
+        try:os.unlink(path)
+        except OSError:pass
+        raise
+    return path
+def update_create_intent(path,status,job_id=None,error_class=None):
+    payload=json.loads(Path(path).read_text()); payload["status"]=status; payload["updated_unix"]=int(time.time())
+    if job_id is not None:payload["job_id"]=str(job_id)
+    if error_class is not None:payload["error_class"]=str(error_class)
+    tmp=Path(str(path)+f".tmp.{os.getpid()}"); fd=os.open(str(tmp),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+    try:
+        with os.fdopen(fd,"wb",closefd=True) as f:f.write((json.dumps(payload,sort_keys=True,indent=2)+"\n").encode());f.flush();os.fsync(f.fileno())
+        os.replace(tmp,path);_fsync_dir(Path(path).parent)
+    finally:
+        try:tmp.unlink()
+        except OSError:pass
+def new_zero_retry_create_client(together_cls): return together_cls(max_retries=0)
+def created_job_identity_mismatches(meta,expected):
+    mismatches={}
+    for key,want in expected.items():
+        got=_field(meta,key,None)
+        if got!=want:mismatches[key]={"expected":want,"observed":got}
+    return mismatches
+
+def main():
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");ap.add_argument("--instruct-ablation",action="store_true");ap.add_argument("--template",help="explicit current Together full-FT base; must match checkpoint architecture");args=ap.parse_args()
+    if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
+    global TEMPLATE
+    if args.template: TEMPLATE=args.template
+    require_explicit_template(TEMPLATE)
+    hf_model,hf_revision=resolve_hf_source(args.instruct_ablation);run_local_checks();byom_architecture=run_byom_architecture_audit(hf_model,hf_revision,TEMPLATE);fingerprint=campaign_fingerprint(hf_model,hf_revision,byom_architecture);suffix=campaign_suffix(fingerprint)
+    from together import Together
+    client=Together();get_full_training_limits(client,TEMPLATE)
+    if args.create:require_create_confirmation(fingerprint);assert_no_local_create_intent(fingerprint);assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
+    train_file=client.files.upload(file=str(TRAIN),purpose="fine-tune",check=True);valid_file=client.files.upload(file=str(VALID),purpose="fine-tune",check=True);wait_file(client,train_file.id);wait_file(client,valid_file.id)
+    estimate=estimate_full_sft_price(client,train_file.id,valid_file.id,TEMPLATE);price=float(estimate.estimated_total_price)
+    report={"schema":"CLAYCOG_05B_TOGETHER_PREFLIGHT/v4","mode":"preflight" if not args.create else "create","campaign_fingerprint":fingerprint,"campaign_suffix":suffix,"from_hf_model":hf_model,"hf_model_revision":hf_revision,"template_model":TEMPLATE,"byom_architecture":byom_architecture,"epochs":EPOCHS,"evals":EVALS,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"random_seed":RANDOM_SEED,"estimated_usd":price,"allowed_to_proceed":bool(estimate.allowed_to_proceed),"price_detail":objdict(estimate),"template_admission_status":"MODEL_LIMITS_FULL_FT_ACCEPTED","provider_catalog_boundary":"EXPLICIT_ARCHITECTURE_COMPATIBLE_TEMPLATE_REQUIRED","byom_compatibility_status":"UNPROVEN_UNTIL_CREATE_ACCEPTS_FROM_HF_MODEL_AND_TRAINING_STARTS"};print(json.dumps(report,indent=2,default=str))
+    if not estimate.allowed_to_proceed:raise SystemExit("Together price/admission endpoint does not allow this job")
+    if price>MAX_USD:raise SystemExit(f"BUDGET_ABORT estimated ${price:.2f} > ${MAX_USD:.2f}")
+    if not args.create:print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fingerprint} for the exact create");return
+    assert_no_local_create_intent(fingerprint);assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix);intent_path=arm_create_intent(fingerprint,hf_model,hf_revision,suffix,byom_architecture);create_client=new_zero_retry_create_client(Together)
+    try:job=create_client.fine_tuning.create(training_file=train_file.id,validation_file=valid_file.id,model=TEMPLATE,from_hf_model=hf_model,hf_model_revision=hf_revision,n_epochs=EPOCHS,n_evals=EVALS,n_checkpoints=1,learning_rate=LEARNING_RATE,warmup_ratio=WARMUP_RATIO,random_seed=RANDOM_SEED,train_on_inputs="auto",lora=False,suffix=suffix)
+    except Exception as exc:update_create_intent(intent_path,"UNKNOWN_REMOTE_CREATE",error_class=type(exc).__name__);raise SystemExit("CREATE_OUTCOME_UNKNOWN local intent retained; do not retry create until exact provider reconciliation: "+type(exc).__name__) from exc
+    update_create_intent(intent_path,"JOB_KNOWN",job_id=job.id)
+    expected={"training_file":train_file.id,"validation_file":valid_file.id,"model":TEMPLATE,"from_hf_model":hf_model,"hf_model_revision":hf_revision,"n_epochs":EPOCHS,"n_evals":EVALS,"random_seed":RANDOM_SEED}
+    try:meta=client.fine_tuning.retrieve(id=job.id)
+    except Exception as exc:raise SystemExit(f"JOB_CREATED_IDENTITY_VERIFY_UNAVAILABLE job_id={job.id}; inspect this exact job, do not create another: {type(exc).__name__}") from exc
+    mismatches=created_job_identity_mismatches(meta,expected)
+    print(json.dumps({"job_id":job.id,"campaign_fingerprint":fingerprint,"campaign_suffix":suffix,"from_hf_model":hf_model,"hf_model_revision":hf_revision,"template_model":TEMPLATE,"byom_architecture":byom_architecture,"full_fine_tune":True,"random_seed":RANDOM_SEED,"estimated_usd":price,"local_create_intent":str(intent_path),"created_job_identity_mismatches":mismatches,"byom_compatibility_status":"CREATE_ACCEPTED_TRAINING_START_STILL_REQUIRED_FOR_PROMOTION","next":"retrieve this exact job; never blind-retry create after an ambiguous transport outcome"},indent=2))
+    if mismatches:raise SystemExit(f"CREATED_JOB_IDENTITY_MISMATCH job_id={job.id}; inspect this exact job, do not create a replacement blindly")
+if __name__=="__main__":main()

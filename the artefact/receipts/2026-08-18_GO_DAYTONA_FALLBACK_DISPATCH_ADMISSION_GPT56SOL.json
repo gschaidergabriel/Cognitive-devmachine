@@ -1,0 +1,81 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_utc": "2026-08-17T18:00:55Z",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "ab4b9aed7c598f916708e746956059ff4e7a9ee5",
+  "classification": "DAYTONA_FALLBACK_EXISTS_CONTROL_PLANE_RUNNER_ADMISSION_BLOCKED_BEFORE_PROVIDER_CONTACT",
+  "scope": "control-plane/provider-admission evidence only; zero ClayVerse runtime promotion",
+  "owner_correction": "Vercel rate-limit does not end the go cycle because Daytona is the authorized fallback sandbox.",
+  "canonical_fallback": {
+    "directive": "research_entity/global/DAYTONA_SANDBOX_FALLBACK_DIRECTIVE.md",
+    "status": "AUTHORIZED_STANDARD_FALLBACK_AFTER_VERCEL_PRE_ASSERTION_BLOCK",
+    "provider": "Daytona",
+    "paid_fallback_authorized": false
+  },
+  "retained_daytona_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "merged_pr": 844,
+    "merge_commit": "03851eae330fc889d30d1d10bf68f029beb80381",
+    "workflow": ".github/workflows/entityos-sandbox-fallback.yml",
+    "controller": "tools/sandbox/daytona-fallback.mjs",
+    "sdk": "@daytona/sdk@0.198.0",
+    "required_secret_names": [
+      "DAYTONA_API_KEY",
+      "DAYTONA_FREE_CREDIT_ATTESTED_UNTIL"
+    ],
+    "eligible_vercel_class": "RATE_LIMIT",
+    "vercel_assertion_reached": false
+  },
+  "new_bounded_dispatch_bridge": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "4f027b9b13a6faad8c655c7a0c513fdc84540cd2",
+    "workflow": ".github/workflows/daytona-fallback-issue-dispatch.yml",
+    "purpose": "Bridge the connected GitHub issue-write surface to the already-retained workflow_dispatch-only Daytona fallback without creating a second sandbox/provider path.",
+    "trigger_issue": 850
+  },
+  "actual_execution_observation": {
+    "bridge_run_id": 32052820036,
+    "bridge_job_id": 95456079076,
+    "event": "issues",
+    "head_sha": "4f027b9b13a6faad8c655c7a0c513fdc84540cd2",
+    "status": "completed",
+    "conclusion": "failure",
+    "steps": [],
+    "runner_id": 0,
+    "runner_name": "",
+    "dispatch_step_executed": false,
+    "daytona_provider_contact": false,
+    "daytona_sandbox_created": false,
+    "daytona_runtime_credit": 0
+  },
+  "interpretation": {
+    "daytona_unavailable": false,
+    "daytona_test_failed": false,
+    "fallback_missing": false,
+    "precise_blocker": "The free GitHub-hosted control-plane bridge failed before Step 1 / runner assignment, so it never issued the workflow dispatch and never contacted Daytona. The current ChatGPT worker also lacks an injected Daytona credential/provider-DNS path, and no connected alternate controller with the existing secret was available.",
+    "must_not_substitute": [
+      "VPS",
+      "self-hosted production compute",
+      "paid Daytona fallback",
+      "another sandbox provider mislabeled as Daytona"
+    ]
+  },
+  "runtime_credit_added": {
+    "daytona_provider_contact": 0,
+    "daytona_sandbox": 0,
+    "private_source": 0,
+    "full_regression": 0,
+    "exact_oci": 0,
+    "api_provider": 0,
+    "whole_product": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0
+  },
+  "next_exact_step": "At the first free egress-capable control-plane execution with the existing Daytona secret and fresh FREE_ONLY attestation, invoke the retained Daytona fallback for RATE_LIMIT/assertion_reached=false. First prove provider contact and Sandbox.create; then bind and stage the admitted ClayVerse candidate rather than treating the retained EntityOS compileall probe as whole-product evidence.",
+  "acceptance": "IN_PROGRESS"
+}

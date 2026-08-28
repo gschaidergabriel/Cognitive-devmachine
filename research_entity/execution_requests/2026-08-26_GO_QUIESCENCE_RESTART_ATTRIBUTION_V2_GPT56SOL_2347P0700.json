@@ -1,0 +1,56 @@
+{
+  "schema": "GO_QUIESCENCE_RESTART_ATTRIBUTION_TOOL/v2",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "trigger": "go",
+  "priority": "P0_RUNTIME_QUIESCENCE",
+  "status": "QUARANTINED_DO_NOT_EXECUTE_FOR_KILL_AUTHORITY",
+  "source_commit": "3ad09d27a07c03de7b77e65c0c09055cbe31504a",
+  "entrypoint": "tools/free_swarm_restart_authority_attribution_v2.py",
+  "tests": "tests/test_free_swarm_restart_authority_attribution_v2.py",
+  "fresh_repository_liveness": {
+    "latest_metrics_commit_observed": "b86a776feacbebc1e7884fbc9e87f3e250ecb70c",
+    "committed_at_utc": "2026-08-26T16:46:06Z",
+    "meaning": "Legacy metrics/control-plane publication remains live after HARD_OFF; this is not itself proof of provider calls or host identity."
+  },
+  "blocking_review_finding": {
+    "status": "SOURCE_SOUNDNESS_BLOCKER",
+    "finding": "v2 currently treats systemd/cron evidence as bound when it contains any LEGACY_PATTERN, rather than proving that the owning object is bound to the concrete matched_patterns of the root being assessed. A unit or scheduler entry for one Clay legacy process can therefore be misapplied as authority for a different matched root.",
+    "required_fix": "Bind every actionable restart object to the exact root PID/cgroup/unit and that root's matched_patterns. Add adversarial cross-root tests where a forge-owned unit/cron entry must not authorize termination of a distillery/supervisor root. For systemd, prefer PID-to-unit/cgroup membership evidence in addition to unit ExecStart/cat content."
+  },
+  "authority": {
+    "free_only": true,
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true,
+    "non_provider_local_validation_allowed": true
+  },
+  "exact_action": [
+    "Do not use the current v2 receipt to disable, kill, or mutate any process/service/scheduler.",
+    "Patch v2 so SYSTEMD and CRON evidence is root-specific rather than any-legacy-pattern-specific.",
+    "Add cross-root transplant negatives: evidence for one legacy entrypoint must not authorize a different matched root.",
+    "For SYSTEMD, bind the observed root PID/cgroup to the exact unit and separately bind that unit's configuration to the same matched entrypoint.",
+    "Only after source patch plus adversarial tests, create a new separately pinned execution request and run read-only attribution on the live Clay host.",
+    "After a later unambiguous attribution, disable exact restart authority first, terminate only the bound Clay tree descendants-first, and require >=90 seconds zero survivors, descendants, and restarts."
+  ],
+  "forbidden": [
+    "NO_PROVIDER_OR_HOSTED_MODEL_CALLS",
+    "NO_TOGETHER",
+    "NO_SECRET_VALUE_EXPORT",
+    "NO_KILL_FROM_CURRENT_V2",
+    "NO_MEDIUM_CONFIDENCE_KILL_AUTHORITY",
+    "NO_CROSS_ROOT_RESTART_AUTHORITY_TRANSPLANT",
+    "NO_GLOBAL_PROVIDER_COUNTER_ONLY_ATTRIBUTION",
+    "NO_GRID10_BEFORE_QUIESCENCE_PASS"
+  ],
+  "credit_change": {
+    "source_tooling_progress": true,
+    "runtime_quiescence_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "schema": "clayverse.source-slice-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:34+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "candidate_branch": "go/claude-managed-policy-current-20260817-1534-sol",
+  "candidate_base": "0b10ddab6fe0c8bc54e03bb0de491f4969ecc8ce",
+  "tested_candidate_head_before_receipt": "8a59a2e8cae212d1af71c64e29b4e611fb75391e",
+  "problem": "Current main had two adjacent source-level authority gaps after the direct-tmux-argv merge: the managed Claude policy still left documented auxiliary surfaces such as auto permission mode, dynamic workflows, scheduled tasks, attachments, git workflow instructions, official marketplace autoinstall and cross-machine peer messaging less tightly fenced; and test_terminal_managed_authority.py still parsed the retired single shell command with shlex instead of asserting the current direct argv tmux launch contract.",
+  "repair": {
+    "managed_settings": [
+      "disableAutoMode=disable",
+      "disableWorkflows=true",
+      "isolatePeerMachines=true",
+      "CLAUDE_CODE_DISABLE_ATTACHMENTS=1",
+      "CLAUDE_CODE_DISABLE_CRON=1",
+      "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=1",
+      "CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL=1"
+    ],
+    "test_contract": "remove shlex assumption; find the tmux new-session subprocess argv, slice at the literal env token, require env -i as separate argv entries, preserve exact MCP allowlist and secret non-leakage checks, and bind isolatePeerMachines to the locked Claude Code version floor"
+  },
+  "upstream_primary_evidence": {
+    "settings": "https://code.claude.com/docs/en/settings",
+    "environment_variables": "https://code.claude.com/docs/en/env-vars",
+    "observed_contracts": [
+      "managed settings are the highest-precedence settings scope",
+      "disableAutoMode=disable prevents auto mode activation",
+      "disableWorkflows=true disables dynamic workflows",
+      "isolatePeerMachines=true requires explicit approval for cross-machine SendMessage and requires Claude Code >=2.1.224",
+      "CLAUDE_CODE_DISABLE_ATTACHMENTS=1 disables attachment processing",
+      "CLAUDE_CODE_DISABLE_CRON=1 disables scheduled tasks",
+      "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=1 removes built-in git workflow instructions and git status snapshot",
+      "CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL=1 skips automatic official plugin marketplace addition on first run"
+    ]
+  },
+  "source": {
+    "managed_settings_blob": "627887d5dc0c981bd3b6129ac946ded56f59b05e",
+    "managed_authority_test_blob": "f90d43fad69d9c6cc81325ef0dafbb266b53f0d5",
+    "terminal_sessions_blob": "f1a62169f9f181abfdd503fdcd77714c127d6382",
+    "managed_mcp_blob": "139aecb69513e91df56b3791c79405c79372112e",
+    "source_lock_blob": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+    "locked_claude_code_version": "2.1.233"
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "network_used": false,
+    "python": "3.13.5",
+    "git": "2.47.3",
+    "platform": "Linux x86_64",
+    "candidate_settings_git_blob_recomputed_exact": true,
+    "candidate_test_git_blob_recomputed_exact": true,
+    "managed_settings_json_parse": "PASS",
+    "managed_settings_fence_assertions": "PASS",
+    "managed_authority_test_py_compile": "PASS",
+    "managed_authority_test_ast_direct_argv_contract": "PASS",
+    "full_pytest_checkout_executed": false,
+    "native_claude_runtime_executed": false,
+    "oci_runtime_executed": false,
+    "classification": "EXACT_CANDIDATE_SOURCE_POLICY_MECHANISM_PASS_NO_CLAUDE_OR_OCI_RUNTIME_CREDIT"
+  },
+  "counterhypothesis": "The exact packaged native Claude Code v2.1.233 may reject, ignore or operationalize one of these managed settings differently from the documented contract, or a product session may expose an auxiliary surface through another admitted path. Only exact OCI startup plus live native Claude inspection can collapse that counterhypothesis.",
+  "execution_admission": {
+    "vercel": "CURRENT_FREE_DAILY_DEPLOYMENT_CAP_BLOCKS_FRESH_PREVIEW_SANDBOX_START",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_ORCHESTRATION_EGRESS_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN"
+  },
+  "coordination": {
+    "donor_pr": 510,
+    "donor_policy": "bounded verified controls only; stale donor is not merged wholesale",
+    "tmux_parallel_lane": "not modified; current terminal_sessions byte was read-only input",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "shared trigger timestamp is minute precision only, so the atomic unusual-experiment lease cannot be minted without inventing seconds or request identity"
+  },
+  "claims": {
+    "source_policy_mechanism_supported": true,
+    "direct_argv_test_contract_repaired": true,
+    "native_claude_runtime_verified": false,
+    "exact_oci_verified": false,
+    "whole_clayverse_pass": false
+  },
+  "next_gate": "On the next actually-started authorized exact-current OCI runtime, start the locked native Claude Code v2.1.233 with the root-owned managed settings and verify that auto mode, workflows, cron, attachments, built-in git workflow instructions, official marketplace autoinstall, remote/peer surfaces and unmanaged tools remain unavailable while the managed lifecycle hooks and exact ClayVerse MCP allowlist still function. Then continue full OCI readiness/restart/concurrency acceptance.",
+  "evidence_scope": "EXACT_CANDIDATE_SOURCE_POLICY_MECHANISM_PASS_NOT_NATIVE_CLAUDE_OR_OCI"
+}

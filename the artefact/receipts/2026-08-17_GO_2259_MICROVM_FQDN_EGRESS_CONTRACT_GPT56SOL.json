@@ -1,0 +1,71 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T22:59+07:00",
+  "timestamp_precision": "minute",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "MicroVM external egress policy boundary: preserve default-deny while supporting DNS/FQDN-based Clerk/Claude/optional-GLM connectivity without broad Internet escape",
+  "classification": "REFINES",
+  "source_basis": {
+    "bootstrap": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "program_state": "research_entity/rooms/PROGRAM_STATE.json",
+    "manifest": "the artefact/manifest.json",
+    "microvm_contract": "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md",
+    "kata_template": "the artefact/deployment/clayverse-kata-statefulset.template.yaml",
+    "prior_receipt": "the artefact/receipts/2026-08-17_GO_2250_MICROVM_NETWORK_DEFAULT_DENY_REENTRY_GPT56SOL.json"
+  },
+  "observed_frontier": {
+    "baseline_default_deny": "PRESENT_ON_MAIN_SOURCE",
+    "functional_external_allow_policy": "DEPLOYMENT_SPECIFIC_AND_UNBOUND",
+    "runtime_network_enforcement": "UNOBSERVED",
+    "primary_oci_execution_blocker": "VERCEL_SANDBOX_ADMISSION_PREVIOUSLY_PASS_BUT_PRIVATE_SOURCE_FETCH_BLOCKED_BY_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "whole_product_acceptance": "IN_PROGRESS"
+  },
+  "counterhypothesis": {
+    "claim": "A standard Kubernetes NetworkPolicy allow rule can safely restore all required external ClayVerse provider connectivity without an additional FQDN-aware or proxy boundary.",
+    "result": "REJECTED_AT_SOURCE_CONTRACT_LEVEL",
+    "reason": "The required providers are addressed by DNS/FQDN and may resolve to changing IPs. Restoring function through unrestricted HTTPS/DNS or broad public CIDRs would defeat the fail-closed baseline. Standard Kubernetes NetworkPolicy has no native FQDN destination selector; a deployment must instead bind an FQDN-capable CNI extension or a dedicated egress proxy/gateway."
+  },
+  "external_primary_evidence": {
+    "kubernetes": "Official Kubernetes NetworkPolicy semantics confirm additive policy behavior and deny-all behavior for selected pods when the network plugin enforces the policy.",
+    "cilium": "Official Cilium documentation describes DNS interception plus toFQDNs for DNS-derived external destination policy and warns that DNS policy depends on the trusted cluster DNS path.",
+    "kata": "Upstream GitHub releases/latest returned Kata Containers 4.0.0 on 2026-08-17; current upstream installation documentation recommends runtime-rs and exposes kata-qemu-runtime-rs as an example RuntimeClass."
+  },
+  "delta": {
+    "contract_file": "the artefact/deployment/EXTERNAL_EGRESS_POLICY_CONTRACT.md",
+    "contract_commit": "3e5ace889df1d5c55d140fc80b7da1bfe26a0560",
+    "test_file": "the artefact/tests/test_external_egress_policy_contract.py",
+    "test_commit": "a650f0b1e837075e8383eb3469d531569a3eb719",
+    "contract_effect": [
+      "keeps clayverse-default-deny as the non-functional baseline",
+      "forbids broad 0.0.0.0/0, ::/0, unrestricted HTTPS and unrestricted DNS recovery paths",
+      "requires exactly one deployment-specific external egress strategy: FQDN-capable CNI policy or dedicated egress proxy boundary",
+      "requires exact provider-domain policy bytes/configuration to be receipt-bound rather than guessed permanently in source",
+      "requires additive policy inventory, allowed-flow probes, denied-flow probes, DNS re-resolution probes and Tier-2 re-attestation before ingress reopens"
+    ]
+  },
+  "execution_evidence": {
+    "authorized_isolated_test_started": false,
+    "reason": "Current admitted Vercel product execution path remains blocked before private-source fetch by missing approved host-side GITHUB_READ_TOKEN; no VPS/self-hosted/production substitute is permitted.",
+    "static_tests_added_not_run": true,
+    "source_runtime_credit_added": 0,
+    "oci_runtime_credit_added": 0,
+    "microvm_runtime_credit_added": 0,
+    "whole_product_credit_added": 0
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn id is exposed and the exact user-message timestamp available to this organ has only minute precision, which is insufficient under GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_or_production_testing": false,
+    "together_api_used": false,
+    "secret_exposed": false,
+    "paid_or_final_training_started": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_high_information_runtime_step": "Provision the approved host-side GITHUB_READ_TOKEN on the retained Vercel Preview controller without forwarding it into Sandbox; rebind the then-current product source exactly once; run the exact isolated OCI closure; then execute the accepted digest under Kata/equivalent and prove the selected CNI/egress strategy enforces default-deny plus only the exact required Clerk/Claude/optional-GLM flows across DNS re-resolution and Tier-2 replacement."
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "CLAY_TRIGGER2_GRID10_EXECUTION_PIN_FUSION_HOLD/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "status": "NONCANONICAL_COORDINATION_DELTA_FAIL_CLOSED",
+  "observed_main_before_write": "4623f1dfe34feb93cfc4f20f53d0a153cad6bea3",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "paid_provider_execution_authorized": false,
+    "together_forbidden": true,
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "note": "The owner FreeSwarm emergency stop is preserved. This coordination delta does not authorize any provider route or runtime execution."
+  },
+  "parallel_fusion": [
+    {
+      "request": "research_entity/execution_requests/2026-08-26_TRIGGER2_PHYSICAL_GRID10_WRITER_FREE_VPS_EXECUTION_PIN_5BB015B_GPT56SOL.json",
+      "classification": "NARROW_DONOR_DO_NOT_EXECUTE_IN_PARALLEL_FOR_PROMOTION",
+      "reason": "Its observed writer-free negative control is useful, but parallel source 3ae859b closes a stronger consumed-snapshot/read-receipt boundary. Duplicate runtime would have lower information gain."
+    },
+    {
+      "request": "research_entity/execution_requests/2026-08-26_TRIGGER2_PHYSICAL_GRID10_PROOF_V2_VPS_EXECUTION_PIN_3AE859B_GPT56SOL_0208P0700.json",
+      "classification": "STRONGER_CURRENT_DONOR_REQUEST_BUT_PROMOTION_SCOPE_HOLD",
+      "reason": "It binds physical process, writer freeze and consumed-snapshot evidence more strongly than the 5bb supplement, but later exact-snapshot fan-in analysis exposes a contract ambiguity not resolved by source proof alone."
+    },
+    {
+      "research_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_GRID10_EXACT_SNAPSHOT_FANIN_IMPOSSIBILITY_V1_GPT56SOL.json",
+      "classification": "CURRENT_HIGHEST_INFORMATION_BLOCKER",
+      "reason": "Under EXACT_SNAPSHOT_ONLY plus one epoch advance per successful per-packet commit, only the first untouched packet from a shared snapshot can remain exact-current; subsequent same-cohort packets must become stale unless the architecture uses an explicit batch/evidence-summary/rebase protocol or narrows the claim to split component semantics."
+    }
+  ],
+  "decision_gate": {
+    "question": "What does PHYSICAL_GRID10_BOUNDED_COMPONENT credit mean?",
+    "option_a": {
+      "name": "INTEGRATED_SAME_COHORT_FANIN",
+      "requirement": "Add an explicit protocol such as atomic cohort batch commit or immutable same-snapshot observation-set -> current coordinator summary while preserving original observation identity. Then test the exact integrated path."
+    },
+    "option_b": {
+      "name": "SPLIT_COMPONENT_SEMANTICS",
+      "requirement": "State explicitly that physical concurrency/shared-snapshot evidence and sequential fresh-result admission are separate bounded component claims. Rename/narrow acceptance so no integrated same-cohort fan-in is implied."
+    },
+    "forbidden": "Do not silently splice P1 concurrent-cohort evidence to P4 sequential fresh-cohort admission and call that an integrated GRID10 path."
+  },
+  "runtime_policy_until_decision": {
+    "execute_5bb_for_promotion": false,
+    "execute_3ae_for_integrated_grid10_promotion": false,
+    "diagnostic_execution": "only if separately authorized and clearly zero-credit for unresolved integrated fan-in scope",
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Add FANIN-NEG-01 deterministic regression to current source and obtain an explicit supervisor/owner acceptance-contract choice between INTEGRATED_SAME_COHORT_FANIN and SPLIT_COMPONENT_SEMANTICS before any new promotion pin or runtime credit."
+}

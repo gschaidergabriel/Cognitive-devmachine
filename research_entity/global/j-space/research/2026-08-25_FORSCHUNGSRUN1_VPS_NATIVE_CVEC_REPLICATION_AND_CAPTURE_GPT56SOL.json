@@ -1,0 +1,94 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN1_VPS_NATIVE_CVEC_REPLICATION_AND_CAPTURE/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "scientific_goal": "Advance Qwen3-0.6B from a transferred single-axis native cvec actuator toward an independently reconstructed, label-free, multi-state native Q8 J-Space controller.",
+  "native_model_replication": {
+    "classification": "IDENTICAL_INTERVENTION_REPLICATION",
+    "status": "PASS",
+    "vps_receipt_branch": "chatgpt-vps-results",
+    "vps_receipt_path": "vps_bridge/results/receipts/fr1-jspace06-native-current-main.json",
+    "source_head": "a8aaa3858d4bddea26547834841731aeb7ea1951",
+    "source_tree": "36261763b8aacde9aa6a7da75778b1420edaf621",
+    "executor_sha256": "eabb6dd6f4287340b1aa3948a6c849fca1faedccf9abba13c8cd87caf86feea0",
+    "harness_source_sha256": "7bdd6e2a19d06c5479c5f42dbff98b6475b5de2b3765903076902dcf4d87c366",
+    "harness_binary_sha256": "faeacd6f5c3fbc7669921bc5f260c5014bdc1567ff1b366a8b2e2e89797c8ad7",
+    "result_file_sha256": "cabf22ec47d55a588c6070c2b4339313c1e9ef88df3a0ab2913e7782f77ae411",
+    "model": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+    "gguf_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "llama_cpp_commit": "bb4caa7540188872173c44d161602d9271386413",
+    "native_api": "llama_set_adapter_cvec",
+    "hidden_dimension": 1024,
+    "injection_layer": 20,
+    "interpretation": "The native model-specific actuator path is reproducible on the authorized VPS sandbox. This replication does not independently establish native Q8 semantic geometry or full multi-state J-Space control."
+  },
+  "native_layer_capture_build": {
+    "status": "PASS",
+    "vps_receipt_branch": "chatgpt-vps-results",
+    "vps_receipt_path": "vps_bridge/results/receipts/fr1-jspace06-native-capture-compile-v2.json",
+    "source_snapshot": "fbf5140fe0db284bc01f707c06ca47af86ac30f1",
+    "source_path": "tools/trigger1_native_llamacpp_layer_capture.cpp",
+    "source_sha256": "0af3078912e0d0f086b7d5337f2d49b178efab8cd1eb534f80843f8b2a757874",
+    "binary_sha256": "7fe6d139039eb3538b5063ccd778dfa1279a2d64fe573775328e7f17237015ad",
+    "llama_cpp_commit": "bb4caa7540188872173c44d161602d9271386413",
+    "capture_semantics": "Qwen3 cvec is applied after layer il; layer-input il+1 observes the immediate post-cvec carrier state, with later nonterminal layer-input capture available for downstream transport evidence.",
+    "runtime_model_measurement_executed_with_new_capture_harness": false
+  },
+  "final_frozen_source_gate_snapshot": {
+    "source_head": "cc2dd2d52c7fc41e5b25e5f54dfca57d2c8ccd19",
+    "sync_receipt": "vps_bridge/results/receipts/fr1-jspace06-final-sync-cc2d.json",
+    "test_receipt": "vps_bridge/results/receipts/fr1-jspace06-final-tests-cc2d.json",
+    "status": "PASS",
+    "tests_total": 42,
+    "tests_passed": 42,
+    "suites": {
+      "native_q8_jspace_basis_build": "5/5 PASS",
+      "label_free_factorial_case_evidence": "14/14 PASS",
+      "prereg_runtime_binding": "7/7 PASS",
+      "jspace_promotion_gate_v8": "4/4 PASS",
+      "semantic_simplex_rank": "7/7 PASS",
+      "dual_qwen06_jspace_search": "5/5 PASS"
+    },
+    "scope": "DETERMINISTIC_SOURCE_AND_GATE_RUNTIME_ON_VPS_ONLY; NOT_NEW_SEMANTIC_MODEL_INTERVENTION"
+  },
+  "current_source_convergence": {
+    "native_q8_basis_builder": "tools/trigger1_native_q8_jspace_basis_build.py",
+    "native_layer_capture": "tools/trigger1_native_llamacpp_layer_capture.cpp",
+    "label_free_factorial_rule": "model-facing semantic target labels are forbidden; externally frozen matched label-free case specs are required",
+    "promotion_chain": "v8 requires scientific evidence plus exact preregistration-to-runtime binding",
+    "adaptive_search_carrier": "tools/forschungsrun1_dual_qwen06_jspace_search.py",
+    "full_control_claim": false
+  },
+  "coordination": {
+    "new_unusual_intervention_executed_by_this_organ": false,
+    "new_holdout_opened": false,
+    "status": "COORDINATION_BLOCKED_NO_NEW_UNUSUAL_EXPERIMENT",
+    "reason": "The current trigger exposes no shared reproducible immutable macrocycle/request identity suitable for the canonical create-only unusual-experiment lease. The native decode performed here is an identical-intervention replication of already admitted cvec evidence."
+  },
+  "remaining_exact_gate": [
+    "Reconstruct the semantic basis independently from Q8_0 layer-input-21 calibration captures rather than importing full-precision basis bytes.",
+    "Resolve one-dimensional versus two-dimensional semantic simplex rank using six matched label-free families and freeze the result before holdout.",
+    "Select one common carrier-local cvec gain on calibration only.",
+    "On a fresh external label-free 3x3 semantic-target x output-code holdout, run target-specific cvec plus sign/null/orthogonal/permuted/nuisance controls.",
+    "Capture later nonterminal layer-input transport, context-valid likelihood margin, emitted decision agreement and class-selective causal matrix.",
+    "Bind every runtime row to the exact preregistered plan, checkpoint/tokenizer/GGUF/llama.cpp/harness/case-family identities and adjudicate through the current promotion successor."
+  ],
+  "credit": {
+    "native_llamacpp_cvec_component_runtime_credit": true,
+    "native_actuator_replication_credit": true,
+    "native_q8_geometry_credit": false,
+    "full_jspace_vector_control_credit": false,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  }
+}

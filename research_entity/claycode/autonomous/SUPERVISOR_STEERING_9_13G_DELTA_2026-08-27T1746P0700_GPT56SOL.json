@@ -1,0 +1,48 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_epoch": "9.13",
+  "delta": "9.13G_NON_AUTHORITY",
+  "date": "2026-08-27",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "authority_change": false,
+  "material_finding": "New commits ed247bc6/1863a662 add a fail-closed HTTPS VPS control-sync refresh source and a source receipt, but no CONTROL_SYNC_REFRESH_PASS or repository-bound execution receipt exists. The refresh is a mutating git reset --hard fast-forward tool and currently has no committed regression test. Its documented invocation is also not a complete bootstrap for a VPS checkout older than ed247bc6, because that stale checkout does not contain tools/vps_control_sync_refresh_v1.py; no separately pinned delivery/verification path for executing the exact refresh bytes outside that stale checkout was found. Therefore source progress is real but runtime-control-transport credit remains zero and --apply is not yet admitted by this steering delta.",
+  "evidence": {
+    "refresh_source_commit": "ed247bc6837ebfa206000ad52e915994d782ec5f",
+    "refresh_source_receipt_commit": "1863a662c8ba203b08b6090420e44f7f2c82025d",
+    "prior_readonly_guard_request_commit": "8c4517dfc819a4aa900827da2f1db4cbb741d696",
+    "latest_metrics_commit_observed": "2405600e9d4afde4aac54eaf844e7ded2616c648",
+    "latest_metrics": "0/88774 accepted dataset tokens; Source->GO 0%; retained SYSTEM_ANALYSIS_LIVE remains v3 and reports go_swarm/distillery/evidence_forge RUNNING while carrying stale provider authority 8.78, so it is not canonical provider authority evidence",
+    "current_provider_authority": "9.13 FREE_ONLY / OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF / all providers false / Together forbidden / no paid fallback"
+  },
+  "promotion_boundary": {
+    "runtime_control_transport_pass": false,
+    "runtime_quiescence_pass": false,
+    "provider_path_runtime_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "training_credit": 0,
+    "base_promotion": false,
+    "canonical_semantics_promotion": false
+  },
+  "required_next_sequence": [
+    "Add adversarial regression tests for vps_control_sync_refresh_v1 covering dirty checkout, diverged history, stale-but-fast-forwardable checkout, malformed/mismatched Supervisor and Provider Admission, provider admitted=true, Together/no-paid-fallback violations, remote-main change between discovery/fetch, post-reset validation failure, and no mutation without --apply.",
+    "Define a bootstrap-safe delivery path for a checkout that predates ed247bc6: the exact refresh program bytes must be obtained read-only from the current remote commit or another already-authorized control surface, SHA-256 bound to that commit before execution, and run from outside the stale worktree or otherwise without pretending the stale checkout already contains the tool.",
+    "Repository-bind execution of the refresh tests on a clean current non-provider checkout. Test PASS is source/tooling credit only.",
+    "On the owning VPS, execute the exact pinned refresh bytes first without --apply and receipt local HEAD/tree/dirty, remote HEAD, authority digests, refresh-source digest, stdout/stderr and host identity. Only a stale-clean-fast-forwardable result with coherent current 9.13 HARD_OFF may proceed to a separately admitted --apply invocation.",
+    "After CONTROL_SYNC_REFRESH_PASS, run restart-authority-v4 read-only. Only after exact root-specific ownership is bound may a separate least-privilege mutation disable the owning restart authority and prove >=90 seconds zero survivors/descendants/restarts.",
+    "Do not use retained SYSTEM_ANALYSIS_LIVE v3 provider_admission as authority; canonical FREE_PROVIDER_ADMISSION remains controlling."
+  ],
+  "invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

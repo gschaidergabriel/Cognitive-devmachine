@@ -1,0 +1,101 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:46:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "77ee472ba50a56133493a11ec85acaf2c28203b1",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_observed": "84fbaa8c765ceb872ab4747747cb4158d1a5512e",
+    "draft": true,
+    "mergeable": true,
+    "research_sha_bound": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "research_tree_bound": "47c09ff6d661b3da02743435dd8a343ddef85efd"
+  },
+  "tier2_source_candidate": {
+    "classification": "SOURCE_CANDIDATE_NOT_RUNTIME_VERIFIED",
+    "source_snapshot_forbidden": true,
+    "sandbox_fork_forbidden": true,
+    "persistent_true_forbidden": true,
+    "carrier_created_as_distinct_clean_sandbox": true,
+    "carrier_runtime": "node24",
+    "carrier_persistent": false,
+    "carrier_network_policy": "deny-all",
+    "declared_transfer_only": true,
+    "transfer_chunk_bytes": 33554432,
+    "transfer_max_chunks": 256,
+    "chunk_and_bundle_hashes_fenced": true,
+    "carrier_manifest_identity_fenced": true,
+    "carrier_snapshot_created_before_source_delete": true,
+    "carrier_is_snapshot_producer": true,
+    "source_is_not_carrier_snapshot_producer": true,
+    "source_deleted_before_replacement_create": true,
+    "replacement_from_carrier_snapshot": true,
+    "replacement_persistent": false,
+    "replacement_manifest_identity_fenced": true,
+    "carrier_deleted_only_after_replacement_restore": true,
+    "provider_lifecycle_interpretation": "Deleting the old source Sandbox does not by itself delete a snapshot produced by the distinct still-existing carrier Sandbox. This removes the direct source-snapshot lifecycle error but remains unverified until exact isolated execution.",
+    "tier2_runtime_credit": 0
+  },
+  "sdk_contract_repair": {
+    "vercel_sandbox_version": "2.9.2",
+    "public_network_policy_shape": "deny-all OR { allow: domains }",
+    "current_controller_shape": "domains.length ? { allow: domains } : deny-all",
+    "stale_mode_custom_allowedDomains_shape_present_in_current_head": false,
+    "runtime_credit": 0
+  },
+  "source_guard_reentry": {
+    "latest_head_commit": "84fbaa8c765ceb872ab4747747cb4158d1a5512e",
+    "change": "source guard rebound to current Tier1 recovery blob d4e2f647c486001b93a8ee9bd6e81fe47dad1b61",
+    "exact_guard_execution_verified": false
+  },
+  "execution_admission": {
+    "vercel_exact_head": "84fbaa8c765ceb872ab4747747cb4158d1a5512e",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "vercel_build_started": false,
+    "vercel_product_runtime_executed": false,
+    "daytona_issue_dispatch_issue": 850,
+    "daytona_dispatch_workflow_run": 32052820036,
+    "daytona_dispatch_attempts_observed": 3,
+    "daytona_dispatch_job": 95467609234,
+    "daytona_dispatch_steps": 0,
+    "daytona_dispatch_runner_id": 0,
+    "daytona_provider_contact_proven": false,
+    "classification": "DUAL_CONTROL_PLANE_EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE",
+    "source_guard_runtime_credit": 0,
+    "exact_oci_runtime_credit": 0,
+    "live_provider_credit": 0,
+    "tier2_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "coordination": {
+    "single_retained_controller_path_preserved": true,
+    "parallel_pr810_activity_observed": true,
+    "duplicate_controller_implementation_created_by_this_organ": false,
+    "owner_secrets_or_provider_credentials_used": false,
+    "together_api_used": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "The shared go unusual-experiment slot was already consumed before this organ joined; all work in this receipt is source adjudication, ordinary regression preparation and execution-admission checking."
+  },
+  "epistemic_status": {
+    "clean_carrier_mechanism_supported_by_source_and_platform_lifecycle_contract": true,
+    "clean_carrier_exact_runtime_verified": false,
+    "exact_current_preview_verified": false,
+    "daytona_fallback_executed": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Restore one authorized execution admission path. Prefer an exact-current PR810 Vercel preview; otherwise dispatch the already-authorized FREE_ONLY Daytona fallback through a control plane that actually starts. First run the exact current PR810 source guards, then execute the immutable PR686 private-source -> exact OCI build/digest -> provider Stage 1 -> EffectGate/EntityOS -> Tier1 recovery -> clean declared-transfer carrier -> delete old source -> fresh replacement -> exact identity restore -> fresh provider cognition sequence. No runtime credit is granted before those steps execute."
+}

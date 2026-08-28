@@ -1,0 +1,156 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v50",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V49_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V49",
+  "observed_main_before_write": "21921d298733f2b45209c3ec2a419b2b30878f6a",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "runtime_quiescence": "NOT_PROVEN",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "Trigger-2 reentry preserves V49's runtime-quiescence and checkpoint-identity gates, then adds a nonduplicate Qwen3.5 hybrid-architecture causal-metrology refinement. External primary evidence now makes the carrier mismatch explicit: Gated DeltaNet layers maintain a fixed-size recurrent state and native write/update structure that is not equivalent to a 1024-dimensional residual vector. Therefore a transient residual-vector intervention can be decodable or behaviorally active without proving that the persistent recurrent state carrying future computation was modified. No execution or training promotion is authorized by this research delta.",
+  "external_research_delta": [
+    {
+      "source": "Qwen/Qwen3.5-0.8B-Base official model card/config",
+      "classification": "SOURCE_DIRECT_MODEL_ARCHITECTURE",
+      "finding": "The 0.8B language stack has 24 layers in six repetitions of three Gated DeltaNet/FFN blocks followed by one full-attention/FFN block, hidden size 1024.",
+      "implication": "Eighteen of twenty-four language layers are recurrent linear-attention roles; layer index or shared residual width alone is insufficient site identity."
+    },
+    {
+      "source": "Yang, Kautz, Hatamizadeh, Gated Delta Networks: Improving Mamba2 with Delta Rule, arXiv:2412.06464",
+      "classification": "PRIMARY_RESEARCH_METHOD_AND_ARCHITECTURE_INPUT",
+      "finding": "Gated DeltaNet combines adaptive memory gating with delta-rule memory updates, giving a recurrent memory mechanism rather than a pure attention-only residual carrier.",
+      "implication": "J-Space persistence claims need state-update/commit evidence, not only residual readout or output steering."
+    },
+    {
+      "source": "Young, WriteSAE: Sparse Autoencoders for Recurrent State, arXiv:2605.12770",
+      "classification": "PRIMARY_RESEARCH_DIRECT_QWEN35_METHOD_INPUT",
+      "finding": "The paper explicitly targets recurrent-state cache writes unreachable by ordinary residual SAEs and reports native matrix-shaped write interventions on Qwen3.5-0.8B.",
+      "implication": "A generic vector atom is not automatically a faithful intervention primitive for the Gated DeltaNet recurrent write site; native state/write operators must be evaluated when persistent J-Space control is claimed."
+    },
+    {
+      "source": "Liang, Cheng, Wajid, Encoded but Not Actionable, arXiv:2608.17843",
+      "classification": "PRIMARY_RESEARCH_METHOD_INPUT_RECONFIRMED",
+      "finding": "Decodability, generation, activation-level influence and steerability can diverge in the reported frozen-LLM setting.",
+      "implication": "Residual decodability or one steering effect cannot substitute for state-commit causality."
+    }
+  ],
+  "deduplication": {
+    "existing_donors": [
+      "2026-08-25_TRIGGER2_2227_QWEN35_HYBRID_JSPACE_SITE_TYPING_DELTA_V1_GPT56SOL.json",
+      "2026-08-25_TRIGGER2_2220_INTERACTION_AWARE_JSPACE_CAUSAL_METROLOGY_V1_GPT56SOL.json"
+    ],
+    "new_delta": "Those donors distinguish hybrid site roles and mediator interactions. V50 adds the narrower persistent-carrier discriminator: transient residual output versus native Gated-DeltaNet recurrent-state write/commit at the same exact model/runtime/token/layer identity.",
+    "duplicate_source_implementation_created": false
+  },
+  "hypotheses": [
+    {
+      "id": "H50_1_GDN_PERSISTENT_STATE_CARRIER_DISSOCIATION",
+      "hypothesis": "For at least some READ/BIND_ROUTE/WRITE functions in Qwen3.5-0.8B, persistent causal information is carried by the Gated DeltaNet recurrent state/write update, while the shared residual stream is partly a transient readout/control surface. Residual-only steering can therefore produce immediate output effects without installing the intended state for later tokens or downstream recurrent computation.",
+      "counterhypothesis": "The shared residual stream is already a sufficient causal control interface: altering it at the correct token/layer deterministically induces the relevant recurrent update, so direct recurrent-state intervention adds no selective or durable effect beyond residual intervention.",
+      "promotion_boundary": "Neither hypothesis receives J-Space credit before exact checkpoint/input/runtime identity, repaired J-Space metrology, and controlled intervention evidence."
+    },
+    {
+      "id": "H50_2_VECTOR_TO_STATE_OPERATOR_REQUIRED_FOR_PERSISTENT_JSPACE",
+      "hypothesis": "A reusable persistent J-Space ABI for Gated DeltaNet sites may require a typed vector-to-native-state/write operator rather than treating a 1024D residual direction as the universal semantic object.",
+      "counterhypothesis": "A residual-vector ABI is sufficient and simpler; native matrix-write interventions are implementation detail with no additional predictive value for the target cognitive functions.",
+      "promotion_boundary": "Only a matched causal comparison can justify introducing a state/write operator into the ABI."
+    }
+  ],
+  "discriminator_candidate": {
+    "id": "JSPACE_GDN_STATE_COMMIT_DISSOCIATION/v1",
+    "status": "RESEARCH_DESIGN_ONLY_BLOCKED_BY_CURRENT_AUTHORITY_AND_UPSTREAM_IDENTITY_GATES",
+    "activation_order": [
+      "prove owner-emergency-stop runtime quiescence",
+      "re-enter exact execution authority",
+      "pass CHECKPOINT_INPUT_IDENTITY_ABI/v1 for an eligible frozen candidate",
+      "repair/freeze J-Space representation metrology",
+      "preregister exact Qwen3.5 runtime hooks/state tensor identities and holdout before intervention"
+    ],
+    "matched_arms": [
+      "RESIDUAL_ONLY: patch/steer the exact shared residual carrier while leaving the native recurrent-state write/commit path unmodified insofar as the runtime permits",
+      "STATE_WRITE_ONLY: intervene on the exact native Gated-DeltaNet recurrent write/state update while holding the residual carrier at the matched baseline insofar as technically isolatable",
+      "JOINT: matched residual plus state/write intervention",
+      "CONTROLS: null, same-norm orthogonal/random, wrong-site/layer, sign-flip and full-attention-role controls"
+    ],
+    "required_measurements": [
+      "immediate current-token behavioral effect",
+      "future-token persistence curve after intervention removal",
+      "per-prefix READ/BIND_ROUTE/WRITE behavior",
+      "recurrent-state delta norm and exact native state/write identity",
+      "residual-carrier delta norm",
+      "lesion/rescue or rollback where supported",
+      "off-target damage",
+      "family-disjoint fresh holdout and multi-seed/checkpoint replication where promotion scope requires"
+    ],
+    "high_information_outcomes": {
+      "residual_immediate_state_null": "Evidence for transient carrier control; blocks persistent-J-Space promotion from residual steering alone.",
+      "state_durable_residual_weaker": "Evidence that native recurrent state/write is a higher-value persistence carrier; motivates a typed vector-to-state/write ABI candidate.",
+      "residual_and_state_equivalent": "Supports the simpler residual control interface at the tested exact scope; native-state ABI may be unnecessary.",
+      "joint_superadditive": "Route to interaction-aware metrology; do not collapse to one universal vector/site."
+    }
+  },
+  "training_generation_decision": {
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null,
+    "reason": "Global runtime quiescence remains unproven; checkpoint consumed/input identity receipts remain missing; J-Space metrology is not selection-grade; this delta changes future causal measurement design, not data authority."
+  },
+  "execution_decision": {
+    "providers": "DO_NOT_INVOKE",
+    "free_swarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "model_runtime_executed_this_cycle": false,
+    "vps_execution_executed_this_cycle": false,
+    "unusual_experiment_executed_this_cycle": false,
+    "reason": "Supervisor 8.81 places runtime-quiescence ahead of new experiment/provider execution; no separately admitted exact runtime surface was established in this organ."
+  },
+  "credits": {
+    "research_delta": 1,
+    "external_primary_research_delta": 1,
+    "causal_metrology_delta": 1,
+    "duplicate_source_work_avoided": 1,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 prove and receipt runtime quiescence after the FreeSwarm emergency stop, with zero relevant live provider-capable processes and a bounded no-new-provider-usage window",
+    "P1 re-enter current execution authority and execute the already-existing CHECKPOINT_INPUT_IDENTITY_ABI/v1 for BASE, POSTTRAINED and TARGET_MEASURED only if a separately admitted free non-provider surface is explicit",
+    "P1 run matched family-disjoint dynamic binding/rebinding evaluation and nuisance-independence gates only for ABI-eligible candidates",
+    "P1 repair J-Space representation metrology before interpreting vector/activation differences",
+    "P2 preregister and execute JSPACE_GDN_STATE_COMMIT_DISSOCIATION/v1 for a selected/eligible candidate before calling a residual vector a persistent J-Space control primitive",
+    "P2 compose with interaction-aware multi-mediator tests when joint effects are material",
+    "P3 keep training rows closed until evidence-qualified admission gates reopen"
+  ],
+  "next_exact_action": "Do not execute or duplicate source while runtime quiescence is unresolved. Preserve V49's P0/P1. After quiescence and exact checkpoint/input identity, add a preregistered native Gated-DeltaNet state/write-versus-residual causal dissociation test before any persistent J-Space/CVEC carrier promotion."
+}

@@ -1,0 +1,173 @@
+{
+  "schema": "CLAY_TRIGGER2_CURRENT_TRAINING_AUDIT/v1",
+  "created_utc": "2026-08-25T16:56:00Z",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "triggerwort 2",
+  "program": "ENTITYOS_HCU",
+  "supervisor_epoch_observed": "8.78",
+  "mode": "FREE_ONLY",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_main_before_write": "2b1a80c03ead467e7ad360924c88fe117f6ae1f9",
+  "authority_note": "The uploaded 2026-08-24 fast-bootstrap cache is superseded for current execution/training ordering by current main and supervisor 8.78. It remains donor provenance only where consistent with newer authority.",
+  "primary_training_goal": "Optimize the final approximately-0.8B Xeno/HCU cognitive core for deterministic semantic Hyperposition, evidence/update behavior, Global J-Space vector control, and HCU coupling while preserving explicit UNKNOWN/OBSERVED/MEASUREMENT_ERROR distinctions and fail-closed canonical/effect boundaries. Local example quality is subordinate to whole-system functional transfer.",
+  "observed_evidence": {
+    "user_named_pushes": [
+      "f20c024a5a4a264ab44573a6698051a331f1faf9",
+      "90b7b7735f078a6cc10438b5d3d8f92f98df8db7",
+      "19d01875a513fa861bf35e3db84a61b827496725",
+      "c6c416207354f1e5d60924535357ed91c20365c5"
+    ],
+    "supervisor_reprioritization": "4f94188b8320de139f998d7a8ae6301cf08b3b56",
+    "a03_replay_root": "OUTER_REPLAY_ROOT_SUFFICIENT / component-only executable closure",
+    "history_replay": "Deletion, insertion, reorder in state-sensitive cases, and same-id/different-digest mutation fail closed. Full immutable genesis+ordered-history producer authority remains open for nonempty histories.",
+    "observed_receipt_auth": "EXECUTABLE_COUNTEREXAMPLE_CONFIRMED: caller-minted OBSERVED receipt with fabricated non-empty source/provenance/receipt_id can pass current _validate_observation_receipt if schema/event digest/fences are shaped correctly.",
+    "branch_birth_fix": "Nonempty E_plus/E_minus/F at branch birth now fails with BRANCH_BIRTH_EVIDENCE_MUST_BE_EMPTY; two regression tests added. This is a valid component pre-admission repair only.",
+    "qwen35_08b_identity": "BASE, POSTTRAINED, TARGET_MEASURED have pinned revision/file-manifest/config/tokenizer identities and loader-consumption observations. No checkpoint winner or training/J-Space credit.",
+    "minimal_target_pilot": "8-case, TARGET_MEASURED only, single seed, greedy decoding. Both abstain_unknown cases failed. This is observed candidate behavior, not a matched selection result.",
+    "jspace_causal": "NOT_ATTEMPTED",
+    "multi_seed": "NOT_ATTEMPTED",
+    "hcu_variable_n": "NOT_ATTEMPTED"
+  },
+  "new_audit_finding": {
+    "id": "T2_LABELER_V3_POST_MERGE_VALIDATION_CONTRADICTION",
+    "status": "NEEDS_REVISION",
+    "severity": "P1_LABELER_INTEGRITY",
+    "evidence": "tests/test_trigger2_hyperposition_reference_labelers_v3.py::test_exact_semantic_merge_uses_declared_policy_not_similarity expects EXACT_FORMAL_SEMANTIC_SIGNATURE to merge two formally equivalent branches to one. tools/trigger2_hyperposition_reference_labelers_v3.py applies _merge_exact_equivalents and then project_state; project_state calls _validate_state, whose current invariant requires at least two branches. Therefore a valid post-merge singleton is rejected by a pre-merge hyperposition cardinality invariant.",
+    "counterhypothesis": "The failing test is unrelated because singleton state is never valid.",
+    "counterhypothesis_assessment": "Rejected by the declared test contract and source docstring: exact declared semantic equivalence merging is explicitly intended. If singleton post-merge states are forbidden, then the merge policy/test itself must be superseded explicitly rather than left contradictory.",
+    "repair_direction": "Do not globally weaken initial-state validation. Introduce stage-aware validation: initial/pre-update hyperposition still requires >=2 branches; a post-declared-exact-merge singleton is valid only if it is provenance-bound to EXACT_FORMAL_SEMANTIC_SIGNATURE and demonstrably represents >=2 merged branch identities. Add negative tests against fake singleton merge metadata and merge-policy NONE.",
+    "training_effect": "Does not independently authorize positive rows. It blocks any claim that reference-labeler v3 is globally regression-closed until repaired or explicitly superseded."
+  },
+  "lifecycle_classification": [
+    {
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24_GPT56SOL_DEEPWORK_MAX_QUALITY_RATE_RESILIENT",
+      "status": "SUPERSEDED_FOR_CURRENT_AUTHORITY",
+      "successor": "supervisor 8.78 + current main",
+      "reason": "Cache states supervisor 8.63 and forbids VPS testing; current main contains admitted repository-bound FREE-VPS evidence and supervisor 8.78 reprioritization."
+    },
+    {
+      "artifact": "f20c024a5 branch-birth empty-evidence repair",
+      "status": "CURRENT_COMPONENT_REPAIR",
+      "predecessor": "v3 allow_empty_evidence path silently skipped record validation",
+      "reason": "Exact empty initial evidence is now enforced and regression-covered.",
+      "credit": "COMPONENT_PRE_ADMISSION_ONLY"
+    },
+    {
+      "artifact": "A03 generation-authority replay-root",
+      "status": "CURRENT_EXECUTABLY_CLOSED_FOR_DECLARED_GATE",
+      "successor": null,
+      "credit": "COMPONENT_ONLY"
+    },
+    {
+      "artifact": "OBSERVED evidence producer authentication",
+      "status": "BLOCKED_P0_NEEDS_REVISION",
+      "successor": "trusted producer authority + instance-level authority-bound admission envelope",
+      "reason": "Executable forged-receipt counterexample."
+    },
+    {
+      "artifact": "immutable genesis + complete ordered nonempty history producer authority",
+      "status": "BLOCKED_P1_NEEDS_REVISION",
+      "successor": "history-wide producer-authorized replay root",
+      "reason": "Structural replay integrity exists, but content provenance for full nonempty history is not authority-bound."
+    },
+    {
+      "artifact": "trigger2_hyperposition_reference_labelers_v3 exact semantic merge",
+      "status": "NEEDS_REVISION_P1",
+      "successor": "stage-aware post-merge singleton validation or explicit semantic-policy supersession",
+      "reason": "Declared exact merge conflicts with generic >=2-branch validation after merge."
+    },
+    {
+      "artifact": "trigger2_binding_router_factorial_generator_v3",
+      "status": "QUARANTINED_CURRENT",
+      "reason": "Not imported into retained code paths; do not re-admit until upstream gates close and a successor audit justifies it."
+    },
+    {
+      "artifact": "Qwen3.5-0.8B candidate registry v3",
+      "status": "CURRENT_SELECTION_READINESS_ONLY",
+      "reason": "Three exact checkpoint/loader identities are established, but matched baseline is incomplete.",
+      "credit": "NO_WINNER_NO_SELECTION_NO_JSPACE_NO_TRAINING"
+    },
+    {
+      "artifact": "TARGET_MEASURED 8-case minimal baseline pilot",
+      "status": "CURRENT_LIMITED_EVIDENCE",
+      "reason": "Useful for failure discovery only; single candidate/single seed/no matched controls/no holdout/worst-bucket statistics.",
+      "successor": "full preregistered matched baseline across all exact candidates"
+    },
+    {
+      "artifact": "positive training rows",
+      "status": "BLOCKED",
+      "reason": "P0 OBSERVED producer authentication and P1 history authority remain open.",
+      "count": 0
+    }
+  ],
+  "external_research_fusion": {
+    "sources": [
+      {
+        "url": "https://slsa.dev/spec/v1.2/",
+        "classification": "PRIMARY_STANDARD",
+        "finding": "SLSA 1.2 is current approved specification; provenance is intended as verifiable information connecting artifacts/revisions to production process and identities."
+      },
+      {
+        "url": "https://slsa.dev/spec/v1.2/source-requirements",
+        "classification": "PRIMARY_STANDARD",
+        "finding": "Source provenance emphasizes authenticated attribution/history and contemporaneous evidence; this supports, but does not itself prove, the project design requirement that source pinning alone cannot authenticate a runtime OBSERVED instance."
+      },
+      {
+        "url": "https://arxiv.org/abs/2309.16042",
+        "classification": "PRIMARY_RESEARCH_PAPER",
+        "finding": "Activation-patching conclusions can vary materially with corruption and metric choices; J-Space causal claims therefore need preregistered intervention metrics and controls rather than one steering success."
+      },
+      {
+        "url": "https://arxiv.org/abs/2604.13694",
+        "classification": "PRIMARY_RESEARCH_PAPER",
+        "finding": "Recent weight-patching work distinguishes source-side causal carriers from downstream aggregation/routing. For Xeno, activation transport alone should not be labeled as semantic source causality."
+      }
+    ],
+    "design_translation": [
+      "Producer authenticity must bind an authorized producer identity/version and the exact observation subject/context, not just a source-code hash.",
+      "J-Space tests must separate transport, routing, and semantic-source hypotheses using sign/null/orthogonal/permuted and preferably site/layer controls.",
+      "External standards/papers are design constraints only; they mint zero project runtime/training credit."
+    ]
+  },
+  "hypotheses_and_counterhypotheses": [
+    {
+      "hypothesis": "A deterministic trusted OBSERVED-producer registry plus authority-bound per-instance envelope can close the forged-receipt hole without becoming a second truth store.",
+      "counterhypothesis": "Any new registry duplicates canonical truth authority.",
+      "discriminator": "Registry may authorize producer identities/digests only; it must not assign factual truth. Validation must still return candidate evidence with canonical_truth_allowed=false and direct_effect_authority=false."
+    },
+    {
+      "hypothesis": "Full ordered-history provenance needs a history-root object that commits to genesis plus ordered event digests and producer envelopes.",
+      "counterhypothesis": "Per-current-event generation provenance is enough because replay reconstructs state.",
+      "discriminator": "Cross-history splice and prefix substitution can preserve local current-event validity while changing ancestry; reject unless complete ordered history root changes and is authority-bound."
+    },
+    {
+      "hypothesis": "TARGET_MEASURED has a real abstention/unknown weakness relevant to final Xeno epistemic discipline.",
+      "counterhypothesis": "The two failures are prompt-family or greedy-decoding artifacts rather than checkpoint-level weakness.",
+      "discriminator": "Matched candidate comparison using multiple paraphrase families, fixed prompt/rendering contract, calibration split, untouched holdout and multi-seed/stochastic sensitivity only after deterministic baseline."
+    },
+    {
+      "hypothesis": "A J-Space direction is semantically causal only if intervention effects are directional, site-specific, dose-responsive within a preregistered range, and fail under null/orthogonal/permuted controls while transferring across fresh task families.",
+      "counterhypothesis": "Observed behavior shift is generic activation magnitude/transport disruption.",
+      "discriminator": "sign inversion, zero vector, norm-matched orthogonal vector, coordinate permutation, off-site/layer injection, magnitude ladder, lesion/rescue, fresh holdout, cross-task replication."
+    }
+  ],
+  "next_cycle_order": [
+    "P0: implement deterministic OBSERVED producer authority and instance-level admission envelope; preserve the current forged-receipt counterexample as a must-fail regression before repair. Required negatives: arbitrary producer_id, forged provenance/receipt_id, subject-digest substitution, event-digest substitution, replay, stale producer epoch/version, cross-producer substitution, source-code-valid-but-instance-forged receipt, wrong admission_id/generation, wrong policy digest, missing parent receipt.",
+    "P1: extend authority over immutable genesis plus complete ordered nonempty event history; test deletion, insertion, reorder, duplicate-id/different-digest, cross-history splice, prefix substitution, and a clean idempotent identical-event-repeat fixture.",
+    "P1.5: repair/supersede the exact-semantic-merge post-merge singleton validation contradiction without weakening initial-state hyperposition cardinality. Run full v3 regression and classify every remaining failure.",
+    "P2: preregister and run FULL matched baseline across QWEN35_08B_BASE, QWEN35_08B_POSTTRAINED, and QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED at exact pinned identities. Include epistemic UNKNOWN/abstention as a dedicated scored bucket; no winner from the current 8-case pilot.",
+    "P3: only after P2 selection rules are frozen, execute causal Global J-Space interventions with sign/null/orthogonal/permuted/off-site controls, magnitude ladder, lesion/rescue, fresh holdout and cross-task replication.",
+    "P4: only after P0/P1/P1.5 executable closure and admitted provenance chain, generate diagnostic rows; keep factorial_generator_v3 quarantined until successor admission explicitly changes its status."
+  ],
+  "credit_boundary": {
+    "canonical_semantics_promoted": false,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_j_space_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "final_decision": "DO_NOT_GENERATE_POSITIVE_TRAINING_DATA_YET. The highest-information path is provenance closure first, then labeler regression closure, then matched checkpoint baseline, then causal J-Space. The newly observed abstain_unknown failures must become a dedicated evaluation/training invariant, but not be overgeneralized from two cases."
+}

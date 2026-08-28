@@ -1,0 +1,49 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:42:22+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "PYTHON_HASH_LOCK_FRONTIER_RECLASSIFIED_NO_PRODUCT_CODE_CHANGE",
+  "observed_canonical_main_before_write": "2b04cb83d7a83c17b589381f273ed7de6e3affce",
+  "source_observations": {
+    "dockerfile_blob": "f573055d34aef3c983135eddc00cb908cf9fd997",
+    "source_lock_blob": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+    "base_image_coherent": true,
+    "python_lock_generator_workflow_blob": "98c4d533a24114c3d78843be10fcffff0410de48",
+    "python_lock_generator_test_blob": "55eb1548dd314c5bcd042d5a8d7b4004c8d404eb",
+    "canonical_requirements_lock_present": false,
+    "docker_uses_require_hashes": false
+  },
+  "coordination_delta": {
+    "issue": 576,
+    "change": "Updated stale issue text so the existing source-bound generator is the single retained lane; remaining work is execution/materialization, canonical lock persistence, negative hash/artifact tests, Docker --require-hashes, and exact isolated OCI verification.",
+    "duplicate_generator_created": false
+  },
+  "generator_contract_observed": {
+    "derives_product_first_from": true,
+    "binds_requirements_sha256": true,
+    "double_pip_compile_generate_hashes": true,
+    "byte_diff_between_resolves": true,
+    "binary_only_require_hashes_download": true,
+    "runtime_execution_observed_this_cycle": false
+  },
+  "fusion_with_parallel_frontier": {
+    "receipt": "the artefact/receipts/2026-08-17_GO_1742_TMUX_OCI_VERSION_ALIGNMENT_GPT56SOL.json",
+    "result": "The Python lock gate and mutable APT/tmux gate converge on the same next high-information exact OCI build: bind actual dependency artifacts/versions and image digest instead of treating source or a proxy tmux version as runtime truth."
+  },
+  "execution_admission": {
+    "vercel": "CONFIRMED_AUTHORIZED_MECHANISM_CURRENT_FREE_PREVIEW_ADMISSION_BLOCKED_BEFORE_SANDBOX_START",
+    "daytona": "AUTHORIZED_FALLBACK_CURRENT_CONTROLLER_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "new_runtime_credit": 0,
+    "new_test_credit": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Exact 2026-08-17T17:35+07:00 user trigger is exposed only at minute precision and no shared immutable request id is available; protocol requires at least whole-second immutable message precision.",
+    "experiment_started_by_this_organ": false
+  },
+  "product_runtime_delta": "NO_CHANGE",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "next_exact_runtime_gate": "FIRST_ADMITTED_ISOLATED_OCI_RUNNER -> REFRESH_MAIN_AND_REJOIN_PR611_ONCE -> BUILD_EXACT_CLAYVERSE_OCI_CANDIDATE -> CAPTURE_IMAGE_DIGEST_PLUS_APT_AND_PYTHON_DEPENDENCY_IDENTITIES -> RUN PR611 AGAINST ACTUAL_IMAGE_TMUX -> FOCUSED_AND_ADJACENT_REGRESSIONS -> MATERIALIZE_AND_ENFORCE_CANONICAL_PYTHON_HASH_LOCK -> PR602_NATIVE_CLAUDE -> STARTUP_READINESS_RESTART_CONCURRENCY",
+  "truth_boundary": "No generated lock bytes, package version, runtime PASS, or whole-product PASS is inferred from source inspection or provider admission failure."
+}

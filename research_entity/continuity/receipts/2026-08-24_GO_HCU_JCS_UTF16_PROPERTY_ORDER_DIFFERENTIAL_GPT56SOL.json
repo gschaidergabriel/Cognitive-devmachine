@@ -1,0 +1,87 @@
+{
+  "schema": "ENTITYOS_HCU_GO_HCU_JCS_UTF16_PROPERTY_ORDER_DIFFERENTIAL/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "research_main_observed_immediately_before_write": "575ec8065fa054e42524f5fe7508a1e00b95e9ed",
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "coordination": {
+    "parallel_progress_observed": [
+      "6a499541c38910e2a062b3eef50b73266c70445a recorded exact-current HCU Entry component in free Vercel Sandbox",
+      "65bedfb5ff7b81aec5d989f662e9f8f2173aaf9d fused the executed RFC8785 Entry canonicalizer to main",
+      "2882c341ea260a77d035a0ee7c9eef6b908dd168 bound free HCU Entry capsule runtime evidence"
+    ],
+    "duplicate_entry_receipt_written_by_this_organ": false,
+    "reason": "parallel work already durably recorded and fused the same Entry component before this write"
+  },
+  "exact_source": {
+    "path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "git_blob_sha1": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "sha256": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f",
+    "test_path": "the artefact/MicroEntity/hcu/test_entry_canonicalization_v1.py",
+    "test_git_blob_sha1": "bc9262473f91dbd04ddaf647e667920664495f54",
+    "test_sha256": "b0b5f519c6c7b751d2ed388661bb617fc1a2ee73055faaab1208a47c6612891b"
+  },
+  "deterministic_replication": {
+    "surface": "isolated session tool container",
+    "uname": "Linux 6.18.35 x86_64 GNU/Linux",
+    "python": "Python 3.13.5",
+    "source_identity_check": "git hash-object matched exact source and test blobs before execution",
+    "command": "python3 -m unittest -v test_entry_canonicalization_v1.py",
+    "exit_code": 0,
+    "tests_run": 7,
+    "tests_passed": 7,
+    "tests_failed": 0,
+    "credit": "REPRODUCIBILITY_EVIDENCE_ONLY_ALREADY_FUSED_COMPONENT"
+  },
+  "unusual_experiment": {
+    "count_added_this_go": 1,
+    "name": "UTF16_PROPERTY_ORDER_V8_DIFFERENTIAL",
+    "hypothesis": "The Python HCU RFC8785 object-key ordering based on UTF-16BE bytes is observationally equivalent to ECMAScript/V8 UTF-16 code-unit lexicographic ordering over valid Unicode scalar strings.",
+    "counterhypothesis": "Astral, combining or mixed-BMP keys expose an ordering divergence that can fork causal hashes across implementations.",
+    "seed": "0x554E49434F4445",
+    "generated_unique_keys": 5000,
+    "key_domain": "valid Unicode scalar strings length 1..6 spanning ASCII, BMP, combining, punctuation and astral planes",
+    "reference_runtime": "Node v22.16.0 V8 Array.sort default string comparison",
+    "observed_mismatches": 0,
+    "result": "NO_DIVERGENCE_OBSERVED_IN_BOUNDED_SAMPLE",
+    "scope": "bounded falsifier only; not proof of universal RFC8785 correctness"
+  },
+  "supervisor_8_63_reentry": {
+    "superseding_authority": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "macrocycle_identity": "UNRESOLVED_NO_SHARED_IMMUTABLE_TRIGGER_ID_PROVEN",
+    "atomic_lease": "NOT_PROVEN_BEFORE_INTERVENTION",
+    "global_unusual_experiment_slot_claim": "RETRACTED_NOT_PROVABLE",
+    "interpretation_of_count_added_this_go": "LEGACY_LOCAL_ORGAN_ACCOUNTING_ONLY_NOT_GLOBAL_MACROCYCLE_UNIQUENESS",
+    "observation_preserved": true,
+    "observation_promotion": "BOUNDED_NO_DIVERGENCE_OBSERVED_ONLY",
+    "future_unusual_interventions": "FAIL_CLOSED_WITHOUT_CANONICAL_CREATE_ONLY_ATOMIC_LEASE",
+    "runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_credit_change": 0
+  },
+  "negative_evidence": {
+    "vercel_protected_preview_fetch": "HTTP 429 while creating protection bypass before route execution",
+    "sandbox_execution_credit_from_that_attempt": "NONE",
+    "current_blocker_inference": "NONE_FROM_THIS_429_BECAUSE_PARALLEL_FREE_SANDBOX_ENTRY_EXECUTION_ALREADY_SUCCEEDED_AND_WAS_FUSED"
+  },
+  "promotion_boundary": {
+    "entry_canonicalizer_component": "SUPPORTED_AND_ALREADY_FUSED_BY_PARALLEL_CURRENT_MAIN_WORK",
+    "hcu_full_runtime_pass": false,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "entityos_whole_runtime_pass": false,
+    "canonical_truth_or_effect_authority_change": false
+  },
+  "next_exact_gate": "Advance exact-current main from the now-fused Entry canonicalizer into the next nonduplicate Typed Entry -> route -> verified engine-load -> inference -> GRID10 -> J-Space/GWT closure, preserving FREE_ONLY execution, one canonical path, generation/provenance fences and zero semantic credit from model consensus alone."
+}

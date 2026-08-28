@@ -1,0 +1,103 @@
+{
+  "schema": "CLAY_GO_WORKER_METRICS/v1",
+  "macrocycle_identity": "MACROCYCLE_ID_UNRESOLVED",
+  "grouping_prohibited": true,
+  "trigger": "go",
+  "observed_user_time": "2026-08-24T23:33+07:00",
+  "timestamp_precision": "minute_only",
+  "worker": {
+    "organ": "GPT-5.6 Sol",
+    "source_class": "CHATGPT_ORGAN",
+    "persistent_entity": "Clay",
+    "product": "EntityOS",
+    "architecture": "HCU"
+  },
+  "authority": {
+    "supervisor": "8.72",
+    "execution_mode": "FREE_ONLY",
+    "program_state": "research_entity/rooms/PROGRAM_STATE.json",
+    "owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md"
+  },
+  "source_identity": {
+    "main_observed_at_final_reentry": "6a53c485cb085a802cc845af7f124a399875096b",
+    "merged_pr": 1709,
+    "merged_commit": "f2d2ccd1b856aebfc82bfd098e3c8ef50555d4cd",
+    "canonical_test_blob": "5c9997941415fd790bc7312db3c1fd66ba0d163e",
+    "test_path": "tests/test_trigger1_jspace_promotion_gate_metric_modality.py"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_id_available": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "model_interventions": 0
+  },
+  "delta": {
+    "initial_pr": 1702,
+    "initial_pr_disposition": "CLOSED_SEMANTIC_DUPLICATE_AFTER_MAIN_ALREADY_LANDED_GUARD",
+    "salvaged_pr": 1709,
+    "salvaged_pr_disposition": "MERGED_TEST_ONLY",
+    "scope": "SOURCE_AND_REGRESSION_DEFINITION_ONLY",
+    "negative_cases_added": [
+      "metric_uses_output_tokens missing",
+      "metric_uses_output_tokens null",
+      "metric_uses_output_tokens string",
+      "metric_uses_output_tokens integer",
+      "metric_uses_output_tokens list",
+      "metric_uses_output_tokens object",
+      "token metric without counterbalance"
+    ],
+    "positive_cases_locked": [
+      "explicit non-token metric false without counterbalance",
+      "token metric true with counterbalanced mapping"
+    ]
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_MERGING_NONLOSSY_FAIL_CLOSED_PROMOTION_REGRESSION_COVERAGE_INTO_CURRENT_ENTITYOS_CONTROL_PLANE",
+    "track_b": "ADVANCED_BY_TYPED_BOOLEAN_ADMISSION_REGRESSION_AT_HCU_JSPACE_EVIDENCE_BOUNDARY_WITHOUT_NEW_ENTRY_AUTHORITY",
+    "track_c": "ADVANCED_BY_LOCKING_JSPACE_HOLDOUT_METRIC_MODALITY_AND_COUNTERBALANCE_NEGATIVE_CONTROLS"
+  },
+  "raw_observables": {
+    "exact_input_tokens": "UNKNOWN",
+    "exact_output_tokens": "UNKNOWN",
+    "exact_total_tokens": "UNKNOWN",
+    "source_files_added": 1,
+    "source_files_modified_by_merged_salvage": 0,
+    "test_cases_added": 5,
+    "local_deterministic_logic_regression": "5_FAMILIES_PASS",
+    "exact_repo_test_execution_observed": false,
+    "github_ci_statuses_on_pre_pr_branch_head": 0,
+    "github_workflow_runs_observed_for_merge_commit": 0,
+    "duplicate_implementation_prs_closed": 1
+  },
+  "metrics": {
+    "TQE": "UNKNOWN",
+    "TQE_missing_discriminator": "EXACT_TOKEN_USAGE_AND_VERIFIED_RUNTIME_OR_EXACT_REPO_TEST_UTILITY_REQUIRED",
+    "CQS": "UNKNOWN",
+    "CQS_missing_discriminator": "EVIDENCE_COVERAGE_BELOW_60_PERCENT_WITHOUT_EXACT_REPO_TEST_STATIC_BENCHMARK_RUN",
+    "VIS": "UNKNOWN",
+    "VIS_note": "CORE_GUARD_WAS_PARALLEL_DUPLICATE; UNIQUE_VALUE_IS_ADDITIONAL_REGRESSION_COVERAGE_NOT_MECHANISM_NOVELTY",
+    "performance_index": "UNKNOWN",
+    "p95_information_latency_seconds": "UNKNOWN",
+    "CILR": "UNKNOWN",
+    "evidence_independence": "CORRELATED_WITH_EXISTING_2333_METRIC_MODALITY_CLOSURE",
+    "HAAC_contribution": "UNCALIBRATED_UNKNOWN"
+  },
+  "goodhart_audit": {
+    "duplicate_detection": "PASS_DUPLICATE_PR_1702_CLOSED_WITHOUT_MERGE",
+    "runtime_credit_inflation": "PASS_ZERO_RUNTIME_MODEL_TRAINING_CREDIT",
+    "missingness_preserved": true,
+    "force_push_used": false,
+    "failed_fast_forward_attempts_preserved_as_coordination_evidence": 2
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_metric_bottleneck": "MISSING_EXACT_CURRENT_REPOSITORY_BOUND_TEST_OR_SELFHOSTED_TERMINAL_RESULT",
+  "next_exact_action": "Observe an exact-current repository-bound deterministic test/self-hosted health result; keep Qwen unusual intervention blocked until a canonical create-only lease exists."
+}

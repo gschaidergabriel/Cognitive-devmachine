@@ -1,0 +1,134 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_MATERIALIZER_SWARM_REVIEW/v2.1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_for_review": "9253acc202df9dc326b13a1510491048e2cb8c8b",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false
+  },
+  "reviewed_delta": {
+    "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_DYNAMIC_CODEBOOK_BINDING_SWARM_DELTA_V2_GPT56SOL.json",
+    "commit": "9253acc202df9dc326b13a1510491048e2cb8c8b",
+    "verdict": "ACCEPT_WITH_MATERIALIZATION_AMENDMENTS",
+    "preserved_strengths": [
+      "full 4-template x 6-S3 x 3-class 72-row seed contract",
+      "codebook-only class-label policy",
+      "realized-mapping rather than metadata-only permutation requirement",
+      "exact slot-level counterbalancing and near-zero class-slot MI",
+      "counterfactual pair families",
+      "frozen unseen-template and unseen-symbol requirements",
+      "retention protection for already measured semantic-read/write/carrier functions"
+    ]
+  },
+  "swarm": {
+    "roles": [
+      "EVIDENCE_EXTRACTOR",
+      "DATASET_ARCHITECT",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "STATISTICAL_REVIEWER",
+      "ABI_PROVENANCE_REVIEWER",
+      "CAUSAL_PAIR_REVIEWER",
+      "RETENTION_REVIEWER",
+      "FINAL_ADJUDICATOR"
+    ],
+    "round_1_findings": [
+      {
+        "severity": "CRITICAL",
+        "id": "ATOM_SLOT_BALANCE_NOT_ATOM_BALANCE",
+        "finding": "Perfect balance over placeholder slots ATOM_A/B/C does not guarantee independence between semantic class and the actual 46 accepted ABI atom identities after materialization.",
+        "failure_mode": "A biased atom allocator can preserve zero class-slot MI while creating exploitable class-real-atom frequency leakage.",
+        "repair": "Freeze an exact atom partition/materialization schedule and validate class-real-atom contingency and MI on realized rows."
+      },
+      {
+        "severity": "CRITICAL",
+        "id": "COUNTERFACTUAL_TRIPLET_DRIFT",
+        "finding": "A CODEBOOK_FLIP pair is not a clean causal discriminator if the materializer redraws the real atom triplet while changing the class-symbol permutation.",
+        "failure_mode": "The pair simultaneously changes routing and symbol identity, so a behavioral difference cannot be attributed to mapping alone.",
+        "repair": "Hold semantic case, lexical realization, template, atom triplet and relevant presentation policy fixed; vary only the realized S3 class↔atom mapping."
+      },
+      {
+        "severity": "HIGH",
+        "id": "UNSEEN_SYMBOL_CONTEXT_CONTAMINATION",
+        "finding": "A symbol reserved for unseen-symbol evaluation is contaminated if it appears anywhere model-visible in training, even only as a non-target codebook entry.",
+        "repair": "Partition exact accepted atom identities and prohibit validation/holdout atoms from every model-visible training prompt and target."
+      },
+      {
+        "severity": "HIGH",
+        "id": "COUNTERFACTUAL_ANCESTRY_SPLIT",
+        "finding": "Counterfactual variants of one base episode can leak across splits if split logic keys on concrete prompt strings rather than shared causal/provenance ancestry.",
+        "repair": "Bind all variants to one counterfactual_family_id and provenance_ancestry_id; split at that family level."
+      },
+      {
+        "severity": "HIGH",
+        "id": "ACTUAL_ATOM_INJECTIVITY",
+        "finding": "Three codebook lines are insufficient unless the materialized mapping uses three distinct accepted atoms.",
+        "repair": "Reject any non-injective three-class codebook and exclude the measured rejected atom 'or'."
+      }
+    ],
+    "round_2_adjudication": "The existing v2 seed contract remains the correct base. Add atom-identity-level balancing, immutable symbol partitions and counterfactual-family materialization invariants before any 72-row materialization is admitted."
+  },
+  "supplemental_training_seed": {
+    "path": "research_entity/global/j-space/research/trigger2_dynamic_binding_materializer_swarm_seed_v21.jsonl",
+    "created_commit": "2df0e6089194df62ec74c703c7e320da7db66f7c",
+    "git_blob_sha": "4d9eef28b1da626989d5e597aaad78c342d53e45",
+    "content_sha256": "120028237dc299fb0ed054b958d4231c5f6114a57ee4ca3e9cb9a5ea8f8b8c8d",
+    "rows": 12,
+    "composition": {
+      "synthetic_hard_negative": 6,
+      "method_only": 6
+    },
+    "purpose": "Teach and test materialization invariants that slot-level seed balance alone does not cover."
+  },
+  "deterministic_validation": {
+    "gate_path": "tools/entityos_hcu_trainingtrace_candidate_gate_v1.py",
+    "gate_blob_sha_observed": "a51c7b8afc6a9ae5562e5ec647528960e812eba3",
+    "method": "Re-evaluated all 12 rows locally against the exact fetched v1 gate predicates; supplemental static audits then checked intended evidence class, fact-status boundary, family/provenance split unit and no positive J-Space targets.",
+    "rows_total": 12,
+    "rows_candidate_gate_pass": 12,
+    "rows_candidate_gate_fail": 0,
+    "accepted_dataset_tokens": 0,
+    "boundary": "Candidate-row source validation only; no canonical dataset admission or model/runtime/training credit."
+  },
+  "new_materialization_gates": [
+    "SYMBOL_PARTITION_MANIFEST: exact 46 accepted atom identities partitioned before tuning with source/ABI/tokenizer hashes.",
+    "NO_CROSS_PARTITION_VISIBILITY: validation/holdout atoms absent from every model-visible training position.",
+    "REAL_ATOM_COUNTERBALANCE: audit class↔actual-atom counts, target counts, codebook-position counts and class↔actual-atom MI.",
+    "COUNTERFACTUAL_FAMILY_CLOSURE: mapping/order/semantic/paraphrase variants from one base episode remain in one split and share family ancestry.",
+    "CODEBOOK_FLIP_ISOLATION: same atom triplet and semantic/lexical case; only realized S3 mapping changes.",
+    "ORDER_SHUFFLE_ISOLATION: same realized mapping and target; only display order changes.",
+    "INJECTIVE_CODEBOOK: three distinct accepted atom identities per three-class episode.",
+    "REJECTED_ATOM_EXCLUSION: measured rejected atom 'or' is never materialized."
+  ],
+  "research_feedback": {
+    "training_rule": "Counterfactual family design must extend through the physical symbol materialization layer; balancing abstract slots is not enough.",
+    "architecture_implication": "The proposed binder should be evaluated as a mapping operator invariant to symbol identity and codebook presentation, not merely as a classifier that happens to emit learned atoms.",
+    "statistical_implication": "The correct anti-shortcut statistic is multi-level: class↔slot and class↔real-atom independence, plus atom↔position and atom↔target frequency audits.",
+    "falsifier": "If performance collapses when atom identities are held out or remapped despite perfect slot-level training balance, the model learned symbol-specific shortcuts rather than a content-dependent binding operator.",
+    "harness_implication": "The future Xeno harness should preserve counterfactual_family_id, exact atom_triplet_id, realized_mapping_digest and output atom identity so mapping lesions/rescues can be attributed causally."
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "synthetic_candidate_rows": 12,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_actions": [
+    "Acquire or expose the exact 46 accepted ABI atom identities under the already bound source-package/manifest hashes.",
+    "Freeze a deterministic symbol-partition manifest before row materialization or pilot tuning.",
+    "Implement the 72-row materializer so counterfactual families hold real atom triplets constant where required and split by ancestry.",
+    "Run slot-level plus actual-atom-level counterbalance/MI/leakage validators before admitting any generated rows.",
+    "Only after those gates pass, expand lexical families and proceed to matched Base-vs-post-trained pilot evaluation without touching frozen holdouts."
+  ]
+}

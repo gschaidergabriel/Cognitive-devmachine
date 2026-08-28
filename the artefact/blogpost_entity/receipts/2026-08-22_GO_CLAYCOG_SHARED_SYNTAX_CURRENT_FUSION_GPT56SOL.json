@@ -1,0 +1,102 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "mini-entity-pipeline-all-in-one",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "branch_base_main_sha": "84c6c5f03c138f545f5ebd0fc9e9644fbe5464bc",
+  "main_sha_at_pr_creation": "caeeb1e31d385ef3c6e93e6b20afc3c7c0b7fca8",
+  "pr": 876,
+  "tested_source_head_before_receipt_only_commit": "f42c554ccb9b122da48b8754311f192e4403544c",
+  "claim_class": "SOURCE_PLUS_EXACT_CORE_BLOBS_AND_BOUNDED_ISOLATED_MECHANISM_SUPPORTED__GITHUB_ACTIONS_EXECUTION_ADMISSION_BLOCKED",
+  "finding": {
+    "authority_split": "Current main had already hardened validate_sft_v1.py to top-level exact admission while eval_outputs_v1.py still used a separate depth-blind call parser, leaving two semantic parser authorities.",
+    "regression_inconsistency": "Current test_eval_exact_vector_v1.py still asserted that comment-bearing candidates pass structural validation even though current validate_sft_v1.py now fails closed with comment_syntax_forbidden."
+  },
+  "repair": [
+    "add shared non-executing claycode_syntax_v1.py for quote/comment handling, statement depth and call extraction",
+    "refactor current top-level validator onto the shared lexical and call-count authority without weakening its exact error contracts",
+    "require function-like OOD markers and exact omega vector members to be real turn-body calls at brace depth 1",
+    "retain all-depth counts so hidden duplicate calls remain rejecting",
+    "reduce claycode_calls_v2.py to a compatibility re-export shim rather than a second parser",
+    "repair the stale comment-smuggling exact-vector regression",
+    "add shared quote/comment/dead-branch/top-level semantic regressions to the existing PR workflow"
+  ],
+  "isolated_execution": {
+    "surface": "OpenAI isolated Linux container",
+    "environment": {
+      "kernel": "Linux 6.18.35 x86_64",
+      "glibc": "2.41",
+      "python": "3.13.5"
+    },
+    "exact_git_blob_identity_verified_before_execution": {
+      "claycode_syntax_v1.py": "ca9612016a166da0ae3495e08d9f73ace9cb96af",
+      "claycode_calls_v2.py": "0f1b9084a7d4f9db3616472029d212d17e7d1d1b",
+      "eval_outputs_v1.py": "9a81882c211fcad62c366a084c53606317ddb3cd",
+      "validate_sft_v1.py": "fcec72dcca9bc57ae0937a3eb1629ccac7a3fab9",
+      "test_semantic_call_admission_v1.py": "0dcf2397ff58c56efb52a91c1b1da48e8088c74d"
+    },
+    "py_compile": "PASS",
+    "shared_semantic_tests": {
+      "passed": 16,
+      "failed": 0
+    },
+    "exact_ood_vector_regression_logic": {
+      "status": "PASS",
+      "attack_semantic_rate": 0.6,
+      "omega_valid_attack_semantic": 0.0,
+      "oracle_semantic_rate": 1.0,
+      "duplicate_id_rejected": true,
+      "unknown_id_rejected": true,
+      "comment_syntax_fail_closed": true,
+      "comment_only_calls_grant_zero_credit": true
+    },
+    "canonical_sft_v2_compatibility": {
+      "train_rows": 1485,
+      "validation_rows": 165,
+      "invalid_train": 0,
+      "invalid_validation": 0,
+      "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+      "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+      "hashes_match_canonical": true
+    },
+    "current_main_test_contradiction_reproduced": true,
+    "scope": "Exact core scanner/evaluator/validator/test blobs plus bounded isolated mechanism and full canonical-corpus compatibility; not a full repository runtime or provider/model acceptance run."
+  },
+  "github_actions": {
+    "workflow": "claycog-validator-pr",
+    "run_id": 32562629736,
+    "job_id": 97006476390,
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS__NOT_TEST_FAILURE"
+  },
+  "coordination": {
+    "donor_shared_parser_pr": 847,
+    "weaker_parallel_pr_superseded": 844,
+    "canonical_path_intent": "ONE_SHARED_SYNTAX_AUTHORITY",
+    "global_unusual_experiment_consumed_here": false,
+    "global_unusual_experiment_owner": "QWEN25_05B_VS_SMALLEST_CURRENT_TOGETHER_QWEN_FULLFT_TEMPLATE_ARCHITECTURE_FALSIFIER"
+  },
+  "together": {
+    "provider_call": false,
+    "secret_used": false,
+    "upload": false,
+    "price_preflight": false,
+    "paid_create": false,
+    "job_started": false,
+    "money_spent_usd": 0,
+    "current_blocker": "Owner-locked Qwen/Qwen2.5-0.5B still lacks a publicly admitted architecture-compatible qwen2 Full-FT template/path on Together; no silent Qwen3.5 substitution is permitted."
+  },
+  "nonclaims": [
+    "no GitHub Actions test PASS",
+    "no Together BYOM acceptance",
+    "no training",
+    "no tuned checkpoint quality",
+    "no Q4_K_M or RSS result",
+    "no superiority claim",
+    "no consciousness or mathematical-correctness claim",
+    "no whole Mini Entity PASS"
+  ]
+}

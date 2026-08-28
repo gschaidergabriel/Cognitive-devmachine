@@ -1,0 +1,46 @@
+name: claycog-08b-direct-admission
+on:
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/mini_cognition/**'
+      - 'research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md'
+      - '.github/workflows/claycog-08b-direct-admission-pr.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: claycog-08b-direct-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  direct-lane-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Exact source identity
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          echo "expected=$EXPECTED_SHA"
+          echo "actual=$actual"
+          test "$actual" = "$EXPECTED_SHA"
+      - name: Canonical SFT v2 regeneration and split gates
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_sft_v2.py
+          python3 validate_corpus_v2.py train_v2.jsonl validation_v2.jsonl
+          python3 test_corpus_model_neutrality_v2.py
+      - name: Direct 0.8B launcher deterministic regressions
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 -m py_compile launch_together_qwen35_08b_v1.py test_launch_together_qwen35_08b_v1.py test_corpus_model_neutrality_v2.py
+          python3 test_launch_together_qwen35_08b_v1.py
+
+# The model-identity amputation was the single unusual intervention for its user-triggered go.
+# This workflow only replays that intervention as a deterministic regression gate.

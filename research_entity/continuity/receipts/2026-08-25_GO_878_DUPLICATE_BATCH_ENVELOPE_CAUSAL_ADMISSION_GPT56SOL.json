@@ -1,0 +1,54 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "8.78",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_for_finding": "cbe1fed983b5747244d6057bcc139d1d19213048",
+  "source": {
+    "path": "tools/free_swarm_historical_backfill.py",
+    "blob_sha": "f095ec12ab28aa5df87b1762b2cc19afca592365"
+  },
+  "finding": {
+    "classification": "SOURCE_OBSERVED_CAUSAL_ADMISSION_GAP",
+    "summary": "Multiple ARCHITECTURE_DELTA_BATCH_JSON envelopes in one worker output can claim the same historical source/chunk/extraction_pass. All flattened proposals are checked and inserted before the first envelope advances historical_chunks.extraction_passes, so more than one same-pass envelope can admit candidates even though progress advances once.",
+    "impact": "Candidate/evidence-funnel inflation and ambiguous per-pass provenance; no canonical truth minting is claimed.",
+    "issue": 1887,
+    "hypothesis": "A versioned unique extraction-admission identity keyed by canonical chunk_id plus extraction_pass, with source_event_id binding and atomic envelope-plus-delta admission, will make one canonical extraction pass admit at most one envelope while preserving replay idempotence.",
+    "counterhypothesis": "The model-output contract requiring one envelope is sufficient and duplicate same-pass envelopes are harmless.",
+    "discriminator": "A deterministic fixture with two valid same-pass envelopes must currently be able to admit candidates from both while progress advances once; the repaired path must admit candidates from exactly one envelope and make replay plus zero.",
+    "external_prior_art": {
+      "source": "SQLite official documentation",
+      "principle": "UNIQUE/PRIMARY KEY conflict targets plus serialized writes can enforce deterministic one-row admission; this is a design input, not Clay runtime evidence."
+    }
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_FINDING_AND_REGRESSION_SPEC",
+    "track_b": "ADVANCED_CAUSAL_ADMISSION_INVARIANT",
+    "track_c": "ADVANCED_BY_CURRENT_MAIN_REENTRY_TO_MODEL_SPECIFIC_NONTERMINAL_QWEN06_HIDDEN_STATE_COMPONENT_EVIDENCE; NO_NEW_UNUSUAL_INTERVENTION_BY_THIS_ORGAN"
+  },
+  "coordination": {
+    "historical_backfill_saturation_dispatch": "SINGLETON_GENERATION_1_ALREADY_CLAIMED; NO_DUPLICATE_TRIGGER",
+    "line_identity_repair": "SINGLETON_DISPATCH_PRESENT_ON_CURRENT_MAIN; NO_DUPLICATE_IMPLEMENTATION_LANE_CREATED",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_REPRODUCIBLE_SHARED_TRIGGER_ID"
+  },
+  "execution": {
+    "vps_bridge_live_roundtrip_by_this_organ": false,
+    "reason": "No VPS/SSH bridge tool or installable SSH/terminal/VPS plugin is exposed in this ChatGPT session.",
+    "provider_model_network_io": false,
+    "paid_or_unknown_path": false,
+    "together": false
+  },
+  "credits": {
+    "this_finding_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_full_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Add a deterministic duplicate-same-pass-envelope regression and repair the existing historical backfill authority with additive transactionally unique extraction admission; preserve current singleton dispatches and re-enter current main before implementation."
+}

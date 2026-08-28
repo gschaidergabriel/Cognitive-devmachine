@@ -1,0 +1,48 @@
+{
+  "schema": "GO_TYPED_ENTRY_CAPABILITY_SELF_GRANT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_scope": "CURRENT_MAIN_PLUS_NEWEST_ENTITYOS_HCU_SUPERVISOR_AUTHORITY",
+  "canonical_main_observed": "59929b28f2e820cdbd474a58f0c8e930bf536ab9",
+  "source_candidate": {
+    "pr": 1263,
+    "head": "4bb4fc4c22cbea9e2a16430d5fc723f124bb5b7e",
+    "module": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+    "module_blob": "a30a51352e916523506e4e32dc371abc6fa058c3",
+    "test": "the artefact/MicroEntity/hcu/test_xeno_entry_fabric_v1.py",
+    "test_blob": "2d004de94be526b3640c687948a4ad017e4f8e38"
+  },
+  "finding": "TYPED_ENTRY_CAPABILITY_SELF_GRANT_GAP",
+  "observed_mechanism": "admit_entry() normalizes the untrusted entry.capabilities list and validates capability_binding_sha256 only as a syntactically valid lowercase SHA-256. It does not compare either value against a separately trusted capability snapshot or permission authority. A caller that controls the entry mapping can therefore submit arbitrary capability names together with an arbitrary well-formed 64-hex binding digest and receive an admitted EntryPacket whose admission_sha256 commits those self-supplied claims.",
+  "test_gap": "test_capability_binding_is_metadata_not_self_granted_freeform currently checks duplicate capability rejection and digest syntax only; it does not falsify arbitrary self-granted capability names paired with a syntactically valid digest.",
+  "risk": "Typed Entry can appear permission-bound while only being claim-bound. Downstream HCU routing that interprets packet.capabilities as authorization could convert untrusted ingress claims into cognition/effect-routing authority.",
+  "required_invariant": "Entry Fabric must receive or resolve the authoritative capability snapshot outside the untrusted entry payload, compare the claimed capabilities and binding identity against that trusted snapshot, and fail closed on mismatch before HCU cognition. Entry admission itself must not mint permissions.",
+  "preferred_nonduplicate_repair": "Reuse the existing canonical capability/permission authority where available; pass its exact normalized capability set plus binding/receipt identity into Entry admission as trusted arguments or a verified resolver result. Do not create a second capability authority inside HCU. Empty/unknown authority must fail closed for privileged capabilities.",
+  "counterhypothesis": "The field is intended only as opaque metadata and downstream consumers never authorize from it.",
+  "counterhypothesis_status": "NOT_SUFFICIENT_FOR_PROMOTION: current Entry Fabric policy and test naming explicitly describe capability binding before cognition, so source semantics currently overstate the guarantee unless the field is either renamed as untrusted claims or externally verified.",
+  "cheapest_discriminator": "Add a deterministic regression where an untrusted entry changes capabilities from an admitted set to a privileged new capability while keeping a valid 64-hex binding string; admission must reject unless a separately trusted capability snapshot authorizes the exact normalized set and binding.",
+  "unusual_experiment": {
+    "performed": false,
+    "reason": "The active PR lane already consumed the go macrocycle unusual experiment; this receipt records source inspection and a deterministic next falsifier only."
+  },
+  "execution": {
+    "exact_full_runtime_executed": false,
+    "vercel_sandbox_exec_exposed_to_this_organ": false,
+    "vps_or_self_hosted_testing_used": false,
+    "together_used": false,
+    "paid_execution_used": false
+  },
+  "credit": {
+    "source_finding": "SUPPORTED",
+    "repair_executed": false,
+    "hcu_runtime_credit": 0,
+    "entityos_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "coordination": "No competing Entry implementation was created. A stale branch manifest write during this go was rejected by GitHub with HTTP 409 and was not forced; current PR 1263 remains the single retained HCU/Typed-Entry lane.",
+  "next_gate": "Fuse an external-authority capability verification boundary into the retained Typed Entry module, add the self-grant poison regression, then run exact source in an authorized isolated executor. Separately standardize versioned cross-language canonicalization before claiming heterogeneous causal hash identity."
+}

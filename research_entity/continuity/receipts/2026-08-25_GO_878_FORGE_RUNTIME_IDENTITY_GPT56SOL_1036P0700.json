@@ -1,0 +1,71 @@
+{
+  "schema": "CLAY_GO_FORGE_RUNTIME_IDENTITY_FINDING/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "observed_main": "9239370999c192328f33eb47fa3bbb7e88ab39a7",
+  "finding": {
+    "classification": "SOURCE_RUNTIME_IDENTITY_GAP",
+    "supervisor_source": "tools/run_6000_free_swarm_supervisor.sh",
+    "expected_entrypoint": "tools/run_free_evidence_forge_backfill.py",
+    "expected_entrypoint_blob": "cafab46cb88fb341eae3b3fcda789d411c37aef7",
+    "live_status": "free swarm/FORGE_LIVE.json",
+    "live_status_blob": "cef307a1b548fe68e4acfe994b107bf48223ba40",
+    "live_status_generated_at": "2026-08-25T03:34:22.788539+00:00",
+    "observed_live_state": "LIVE",
+    "expected_backlog_fields": [
+      "historical_backfill",
+      "ready_backlog",
+      "implementation_backlog",
+      "deduplicated_backlog"
+    ],
+    "missing_expected_fields": [
+      "historical_backfill",
+      "ready_backlog",
+      "implementation_backlog",
+      "deduplicated_backlog"
+    ],
+    "inference": "The fresh live status is not sufficient evidence that the currently fused backlog-first entrypoint is the active writer. A stale or alternate writer remains plausible because status lacks exact runtime identity binding.",
+    "counterhypothesis": "A different current publisher path, rather than a stale pre-fusion Forge process, may be writing FORGE_LIVE.json. Explicit process/entrypoint identity is required to discriminate."
+  },
+  "architecture_delta": {
+    "issue": 1889,
+    "required_runtime_identity_envelope": [
+      "runtime_entrypoint_path",
+      "runtime_entrypoint_sha256",
+      "source_commit_or_tree_identity",
+      "process_generation_identity",
+      "supervisor_generation_or_start_nonce",
+      "status_writer_schema_version"
+    ],
+    "fail_closed_state": "RUNTIME_IDENTITY_UNVERIFIED",
+    "second_forge_authority_created": false
+  },
+  "coordination": {
+    "line_identity_singleton_dispatch_issue": 1874,
+    "source_count_donor_pr": 1851,
+    "new_duplicate_runtime_trigger_created": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_RUNTIME_OBSERVABILITY_GATE",
+    "B_HCU_TYPED_ENTRY": "ADVANCED_PROVENANCE_RUNTIME_IDENTITY_BOUNDARY",
+    "C_GLOBAL_JSPACE_GWT": "TRAINING_READINESS_NO_CHANGE_WITH_REASON_UPSTREAM_EXECUTABLE_AND_PROVENANCE_GATES_REMAIN_OPEN"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "historical_backfill_runtime": 0,
+    "distillery_replay_v2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "On the next authorized executable transport, reconcile/restart the single Forge authority and require a fresh FORGE_LIVE status whose exact runtime identity matches the backlog-first entrypoint before treating LIVE as current-runtime evidence; separately complete #1874 then validate #1851 before historical saturation credit.",
+  "evidence_boundary": "Repository source plus fresh repository-bound live status only. No provider/model call, no unusual experiment, no paid execution, and no runtime/model/training promotion."
+}

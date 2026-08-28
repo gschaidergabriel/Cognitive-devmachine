@@ -1,0 +1,66 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "EntityOS + HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "base_main_observed": "7f5c1f251dc1f899717713b65dcef524370dba9a",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_observed": "b02059a74a37bb2bf65b2c8ff1c3e220b804d74a",
+  "review_id": 5002910308,
+  "classification": "SOURCE_INTERFACE_BOUNDARY_AUDIT",
+  "observed": {
+    "entry": {
+      "path": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+      "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+      "event_identity_schema": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v2",
+      "admission_identity_schema": "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v2",
+      "reactive_event_emits_entry_canonicalization_schema": true
+    },
+    "router": {
+      "path": "the artefact/MicroEntity/hcu/reactive_event_router_v1.py",
+      "hash_serialization_schema": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+      "route_identity_schema": "HCU_CAUSAL_ROUTE_IDENTITY/v3",
+      "consumes_entry_canonicalization_schema": false,
+      "typed_entry_binding_checked_as": "entry_admission_sha256 -> entry_event_sha256 registry binding"
+    },
+    "inference_receipt": {
+      "path": "the artefact/MicroEntity/hcu/inference_receipt_v1.py",
+      "schema": "HCU_INFERENCE_RECEIPT/v1",
+      "inherits_router_hash_serialization_schema": true,
+      "receipt_hash_uses_python_sort_keys_json": true
+    }
+  },
+  "finding": "Typed Entry has already entered the selected RFC8785/JCS identity generation, but the same-head router neither consumes nor validates entry_canonicalization_schema and continues to use its implementation-scoped Python JSON identity. The current inference receipt inherits that router serializer. Therefore selected Entry canonicalization is only partially wired and the required mixed/unknown/downgrade canonicalization rejection is not yet enforced at the router/receipt boundary.",
+  "counterhypothesis": "The independent admission-to-event registry is sufficient to establish the canonicalizer version implicitly.",
+  "counterhypothesis_status": "NOT_ESTABLISHED_BY_CURRENT_INTERFACE",
+  "reason": "The observed router registry value is an admission digest mapped to an event digest; no canonicalization schema/version is carried in that authority value or checked by the router. Schema provenance therefore cannot be inferred solely from the two hashes without an independently typed/versioned registry contract.",
+  "required_repair_order": [
+    "Require selected entry_canonicalization_schema on the new current typed-entry route path; missing, unknown or legacy versions fail closed while historical identities remain explicitly historical/migration-scoped.",
+    "Migrate router policy, engine and route hashing to RFC8785/JCS under new versioned identity schemas; do not silently reinterpret HCU_CAUSAL_ROUTE_IDENTITY/v3 or other historical hashes.",
+    "Carry and echo the selected canonicalization schema through RouteDecision and migrate the single inference receipt producer to a new versioned receipt identity using the same selected JCS bytes.",
+    "Add deterministic regressions for missing schema, legacy schema, unknown schema, route/receipt downgrade and one valid Entry-v2 -> new-route -> new-receipt chain.",
+    "Then run the combined Entry -> route -> inference receipt -> GRID10 path on an actually-started authorized isolated executor before any runtime promotion."
+  ],
+  "coordination": {
+    "new_unusual_experiments_by_this_organ": 0,
+    "macrocycle_id": null,
+    "global_unusual_experiment_count": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID",
+    "note": "No unusual experiment is claimed by this source audit. No-ID nearby receipts are not treated as one shared macrocycle solely by timestamp proximity."
+  },
+  "execution": {
+    "authorized_isolated_runtime_started_by_this_organ": false,
+    "connected_vercel_surface": "DOCUMENTATION_SEARCH_ONLY_NO_SANDBOX_START_EXEC_ACTION_OBSERVED",
+    "vps_self_hosted_or_production_testing": false,
+    "together_used": false,
+    "paid_fallback_used": false,
+    "runtime_credit": 0,
+    "whole_entityos_hcu_pass": false
+  },
+  "related_current_main_evidence": {
+    "loader_consumed_byte_boundary_commit": "e7afa8c1f9253250ae98a662480d98dac47da23c",
+    "note": "Pre-load hashing alone is not loader attestation; physical loader lease/consumed-byte binding remains a downstream runtime gate after identity convergence."
+  },
+  "next_exact_gate": "Finish the single selected RFC8785/JCS identity path through router and inference receipt with versioned fail-closed downgrade checks, then execute the exact combined Entry/route/receipt/GRID10 chain on an authorized isolated executor and only afterward bind loader-consumed checkpoint/tokenizer/runtime bytes to physical engine leases."
+}

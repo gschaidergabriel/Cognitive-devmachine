@@ -1,0 +1,51 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "canonical_source_commit": "f943625197102622b54ee24674cfb42d6592077e",
+  "canonical_regression_commit": "a0d141b5a7951813442b1cd87e834e31727c8bc5",
+  "finding": {
+    "class": "SDK_CREATE_CONTRACT_MISMATCH",
+    "model": "Qwen/Qwen3.5-0.8B",
+    "official_sdk_repository": "togethercomputer/together-py",
+    "observed_sdk_version": "2.31.0",
+    "observed_sdk_source_revision": "0b51221b9c841064c736fcd50da1279a6fed65bf",
+    "defect": "The direct 0.8B launcher reused estimate/REST-shaped nested training_type and training_method objects for high-level fine_tuning.create(), whose observed official SDK signature has no training_type keyword.",
+    "repair": "Keep nested estimate/fingerprint Full-SFT semantics; high-level create now uses lora=false, training_method='sft', train_on_inputs='auto', and no direct training_type keyword."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "TOGETHER_SDK_V2_CREATE_SIGNATURE_COUNTEREXAMPLE",
+    "pre_fix_observation": "REJECT: unexpected keyword argument training_type",
+    "corrected_observation": "ACCEPT at bounded official-source signature scope",
+    "installed_package_runtime": "UNOBSERVED because isolated package installation could not reach PyPI due sandbox DNS/network resolution",
+    "provider_network_called": false
+  },
+  "canonical_fusion_preserved": [
+    "FREE_ONLY=true rejection before TOGETHER_API_KEY lookup, Together import and provider network",
+    "create-response random_seed identity fence",
+    "post-CREATE provider identity verification for files/model/suffix/epochs/evals/checkpoints/learning-rate/warmup/SFT/Full",
+    "canonical V2 corpus validation preflight"
+  ],
+  "regression_delta": "test_create_explicit_full_and_seed requires lora=false, string sft, train_on_inputs=auto and absence of training_type; test_create_payload_binds_sdk_v2_high_level_signature accepts corrected payload and rejects legacy training_type keyword.",
+  "exact_pr_execution_observed_before_direct_main_fusion": {
+    "head": "e9bfcc174dedac3a80e3558e039effb09ccaf425",
+    "workflow_runs": [32571227885,32571227902,32571227887,32571227930],
+    "all_jobs_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+  },
+  "evidence_scope": "CANONICAL_SOURCE_FIX_PLUS_BOUNDED_OFFICIAL_SDK_CONTRACT_MECHANISM; EXACT_CURRENT_MAIN_RUNTIME_TEST_UNVERIFIED",
+  "secret_used": false,
+  "provider_call": false,
+  "upload": false,
+  "price_request": false,
+  "billed_create": false,
+  "training": false,
+  "spend_usd": 0,
+  "current_execution_policy": "FREE_ONLY=true; paid Together preflight/create is fail-closed before secret/provider access",
+  "next_gate": "Obtain an exact-current visible-step runner execution of the canonical source/regression. Paid Together no-create preflight remains prohibited while FREE_ONLY=true. If a future verified policy explicitly opens paid execution, model_limits + server-side file validation + exact price preflight must precede any separately fingerprint-confirmed billed create."
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "ENTITYOS_HCU_GO_VERCEL_HOBBY_INCLUDED_SANDBOX_ADMISSION/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN_IN_CURRENT_SUPERVISOR_MODE",
+    "rule_applied": "Previously UNKNOWN-cost Vercel Sandbox may be classified FREE only to the bounded extent established by current primary Vercel included-tier documentation and the observed Hobby team plan."
+  },
+  "observed_account_scope": {
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "team_plan_observed": "hobby",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "remaining_monthly_sandbox_quota_directly_observed": false
+  },
+  "primary_pricing_evidence": {
+    "source_1": "https://vercel.com/pricing",
+    "source_1_observation": "Current Vercel pricing lists Sandbox included usage for the free/Hobby tier, including 5 Active CPU hours per month, 420 GB-hours provisioned memory, 5,000 creations, and 20 GB network transfer.",
+    "source_2": "https://vercel.com/kb/guide/what-is-vercel-sandbox",
+    "source_2_observation": "Current Vercel Sandbox guidance describes a recurring free tier with 5 Active CPU hours and 10 concurrent sandboxes.",
+    "source_3": "https://vercel.com/docs/plans/hobby",
+    "source_3_observation": "Current Vercel plan documentation identifies Hobby as the free plan and does not establish pay-as-you-go permission from this supervisor.",
+    "evidence_scope": "INCLUDED_ENTITLEMENT_VERIFIED; REMAINING_QUOTA_NOT_DIRECTLY_OBSERVED"
+  },
+  "admission": {
+    "bounded_included_tier_sandbox_execution": true,
+    "conditions": [
+      "Use only the currently observed Hobby team/project.",
+      "Use fixed, source-hash-bound regression capsules; no caller-supplied generic command or arbitrary URL-to-code execution.",
+      "Keep runs short and nonpersistent and stop/delete promptly.",
+      "Do not buy credits, upgrade plan, enable paid fallback, create paid provider jobs, or use Together.",
+      "Avoid exposed ports and avoid unnecessary external network egress/downloads from inside the Sandbox.",
+      "If Vercel reports quota exhaustion, billing requirement, upgrade requirement, plan mismatch, or any monetary charge path, fail closed before proceeding.",
+      "No run receives credit unless exact source/capsule identity, exit/result, secret fence and cleanup are observed."
+    ],
+    "blanket_metered_execution_permission": false,
+    "paid_execution_permission": false,
+    "remaining_quota_assumed": false
+  },
+  "prior_execution_quarantine": {
+    "receipts": [
+      "research_entity/continuity/receipts/2026-08-24_GO_JCS_CAPSULE_STALE_AUTHORITY_EXECUTION_GPT56SOL.json",
+      "research_entity/continuity/receipts/2026-08-24_GO_JCS_CAPSULE_REPAIR_STALE_AUTHORITY_200_GPT56SOL.json"
+    ],
+    "retroactive_acceptance_credit": 0,
+    "reason": "Those runs occurred in a policy race before this included-tier evidence was durably admitted. Preserve them as quarantined evidence; do not rewrite history."
+  },
+  "next_exact_gate": "Run one fixed exact-source repaired HCU capsule under the bounded included-tier conditions. If it passes with exact identity, secret fence and cleanup, extend the same mechanism toward the minimum full Typed Entry -> route -> engine-load -> inference -> GRID10 -> J-Space/GWT -> causal-training/dataset regression closure without adding a second execution authority.",
+  "credit": {
+    "execution_admission_change": "UNKNOWN_COST_TO_BOUNDED_FREE_INCLUDED_TIER",
+    "entityos_hcu_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "schema": "ENTITYOS_HCU_GO_VERCEL_SANDBOX_USAGE_SEMANTICS_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "75b2b58d780abd1d33455b89b6e8f49b3f4a4536",
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "6904f34387b084605dd5f2d5763482f9cdcf1b66",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "2da99e0458809988190c129b04cae913d1f15d92"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_OFFICIAL_DOCUMENTATION_RESEARCH_AND_RUNTIME_GATE_SEMANTIC_DISCRIMINATION"
+  },
+  "observed_provider_capability_surface": {
+    "connected_vercel_tool_has_remaining_sandbox_quota_action": false,
+    "connected_vercel_tool_has_billing_usage_action": false,
+    "connected_vercel_tool_has_list_sandboxes_action": false,
+    "connected_vercel_tool_has_official_documentation_search": true
+  },
+  "official_documentation_observations": {
+    "vercel_usage_cli": {
+      "source": "Vercel CLI usage documentation",
+      "documented_behavior": "vercel usage displays billing usage and costs for the current billing period and supports custom date ranges and breakdowns",
+      "account_specific_result_observed_in_this_macrocycle": false
+    },
+    "sandbox_list_rest_schema": {
+      "source": "Vercel REST API list sandboxes documentation",
+      "documented_cumulative_fields": [
+        "totalDurationMs",
+        "totalActiveCpuDurationMs",
+        "totalIngressBytes",
+        "totalEgressBytes"
+      ],
+      "remaining_included_plan_quota_field_documented_in_returned_sandbox_object": false
+    },
+    "sandbox_sdk_usage": {
+      "source": "Vercel Sandbox SDK reference",
+      "documented_behavior": "sandbox objects expose cumulative duration and network usage across sessions",
+      "remaining_current_billing_period_included_quota_observed": false
+    }
+  },
+  "hypothesis": "Per-sandbox cumulative usage metrics might be sufficient to open the FREE_ONLY Sandbox gate by subtracting them from a known Hobby included allowance.",
+  "counterhypothesis": "Per-sandbox cumulative metrics are not an account-authoritative current-billing-period remaining-quota signal and may omit other sandboxes, billing-period boundaries, aggregation rules, or the authoritative included-limit state.",
+  "discriminator": {
+    "result": "COUNTERHYPOTHESIS_WINS_FOR_CURRENT_AUTHORITY",
+    "reason": "Supervisor 8.65 requires directly authoritative remaining included Sandbox quota and forbids opening the gate from plan inference. The documented sandbox object reports cumulative resource usage, not authoritative account-wide remaining included allowance for the current billing period. No connected action currently returns the required account-specific billing/quota result.",
+    "forbidden_inference": "KNOWN_OR_ASSUMED_PLAN_LIMIT_MINUS_PER_SANDBOX_CUMULATIVE_USAGE_EQUALS_AUTHORIZED_REMAINING_QUOTA",
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED"
+  },
+  "minimal_future_signal_contract": {
+    "purpose": "Open FREE_ONLY Sandbox admission without plan inference or paid/provider preflight",
+    "must_be_read_only": true,
+    "must_be_account_authoritative": true,
+    "must_identify_current_billing_period": true,
+    "must_identify_relevant_sandbox_usage_metric_or_cost_basis": true,
+    "must_identify_included_limit_or_direct_remaining_allowance": true,
+    "must_allow_fail_closed_detection_of_charge_or_upgrade_path": true,
+    "acceptable_surface_examples": [
+      "connected equivalent of authenticated vercel usage output with Sandbox-specific current-period included/consumed/remaining information",
+      "official read-only billing/usage API exposed through the already-authorized connector that directly reports the relevant included allowance and current consumption"
+    ],
+    "insufficient_surfaces": [
+      "team plan identity alone",
+      "READY deployment state",
+      "function runtime HTTP 200",
+      "per-sandbox cumulative duration/CPU/network metrics alone",
+      "public documentation alone"
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the runtime-first blocker is now semantically narrower. A future list-sandboxes usage read cannot be mistaken for the direct remaining included quota authority required to admit Sandbox.create; the minimal acceptable quota-signal contract is explicit.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: no authoritative remaining included Sandbox quota is observable, so Sandbox.create and the fixed environment probe remain fail-closed; supervisor 8.65 pauses source-guard proliferation absent executable counterevidence.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no admitted Sandbox environment, loader-consumption evidence, real local model execution, ModelExecution, InferenceReceipt, J-Space/GWT causal trace, local approximately-0.8B runtime, or training evidence was created."
+  },
+  "credits": {
+    "function_runtime_diagnostic_exact_source": "PASS_AT_DECLARED_NO_SANDBOX_SCOPE_FROM_PRIOR_ADMITTED_EVIDENCE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Expose an already-authorized account-specific read-only Vercel billing/usage signal satisfying minimal_future_signal_contract. Only if it directly proves sufficient included Sandbox allowance with no charge/upgrade path may the fixed exact-head environment capability probe proceed.",
+  "evidence_boundary": "This receipt is official-documentation and connected-tool capability evidence only. It does not establish account usage, remaining quota, Sandbox creation, HCU/model/J-Space execution, or training."
+}

@@ -1,0 +1,71 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "observed_main_before_write": "d7d561232494687d5e88009089e240a4b2cb9ef5",
+  "owner_authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "finding": {
+    "package_source_status": "EXACT_12_MEMBER_SOURCE_RECONSTRUCTION_SUPPORTED",
+    "canonical_binary_status": "BLOCKED_NOT_PROMOTED",
+    "blocker": "No currently observed byte-preserving GitHub binary write surface completed successfully: GitHub Actions runner admission again failed before visible steps, while direct connector create_blob attempts produced Git blob identities different from the locally verified target bytes.",
+    "safety_action": "No mismatched binary blob was attached to a commit, tree or ref; PR #1232 remains unmerged."
+  },
+  "package_verification": {
+    "archive_members_required": 12,
+    "archive_members_observed": 12,
+    "ordered_member_set_exact": true,
+    "crc_clean": true,
+    "decompressed_members_byte_identical_to_versioned_sources": true,
+    "zip_size": 19256,
+    "zip_sha256": "da1e374f9bf55fbe0e59b160c447f79358de4f64d742fe76291dc90b159fc637",
+    "local_git_blob_sha1": "12c2c53eeb72ea6075aa9dc09ca888341f008feb",
+    "historical_claimed_zip_sha256": "6aa96f23c1d0874b8cc2c6012a5bad3a59a5428af7660e184cf91d47db968bf0",
+    "historical_digest_interpretation": "SAME_SIZE_DIFFERENT_ARCHIVE_BYTES; DO_NOT_PROMOTE_HISTORICAL_DIGEST_WITHOUT_ORIGINAL_BYTES_AND_ENVIRONMENT",
+    "package_manifest_sha256": "b5320e616273168ba394d32a46e4ab228e313cd7a21f9202aa47c92ea66b881d"
+  },
+  "component_regression": {
+    "surface": "isolated ChatGPT Linux component container",
+    "command": "python -m py_compile capacity_guard_v1.py test_capacity_guard_v1.py && python -m unittest -q test_capacity_guard_v1.py",
+    "tests_run": 7,
+    "tests_passed": 7,
+    "classification": "COMPONENT_MECHANISM_ONLY"
+  },
+  "github_actions_retry": {
+    "workflow_run_id": 32619882436,
+    "rerun_job_id": 97167025880,
+    "status": "completed",
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "RUNNER_OR_ADMISSION_PRESTEP_FAILURE_NOT_PACKAGE_TEST_FAILURE"
+  },
+  "direct_binary_write_falsifier": {
+    "target_local_git_blob_sha1": "12c2c53eeb72ea6075aa9dc09ca888341f008feb",
+    "observed_orphan_blob_sha1_attempt_1": "db1d21fe174b67f4bb505bc00b4dc3d7f0ca1f6a",
+    "observed_orphan_blob_sha1_attempt_2": "695e765519ac721be21d393d6e7e6ab346094ee4",
+    "accepted": false,
+    "reason": "GIT_BLOB_IDENTITY_MISMATCH_FAIL_CLOSED",
+    "attached_to_ref": false
+  },
+  "unusual_experiment": {
+    "consumed_here": false,
+    "reason": "No immutable shared macrocycle lease identity was exposed; these operations are deterministic repair/regression/admission checks and no cross-organ experiment claim is invented."
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "real_effects": "EffectGate",
+    "package_verifier_is_state_authority": false,
+    "package_repair_is_runtime_acceptance": false
+  },
+  "runtime_credit": {
+    "whole_mini_entity": 0,
+    "bundled_08b": 0,
+    "jspace_gwt": 0,
+    "claude_adapter": 0,
+    "hcu_capacity": 0,
+    "package_artifact": "LOCAL_EXACT_CONTENT_SUPPORTED_CANONICAL_BINARY_WRITE_BLOCKED"
+  },
+  "next_exact_gate": "Use an authorized byte-preserving execution/write surface to materialize the exact current 12-member MICROENTITY_CURRENT.zip on the rebased repair branch, run research_entity/continuity/tools/verify_microentity_package.py against that branch, bind PACKAGE_ARTIFACT_RECEIPT/v1 to the actual branch source commit/tree and ZIP Git blob, then merge only on exact verifier PASS."
+}

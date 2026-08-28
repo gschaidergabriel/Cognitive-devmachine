@@ -1,0 +1,66 @@
+{
+  "schema": "TRIGGER4_SELF_HOSTED_RUNNER_QUEUE_AUDIT/v1",
+  "observed_at_local": "2026-08-28T20:00:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT triggerword-4 continuation",
+  "trigger": "triggerwort 4",
+  "canonical_main_observed_before_write": "77a3abb3f8108b045a5933f771df0ef22a36194b",
+  "supervisor_epoch": "9.13",
+  "supervisor_delta": "9.13AF_NON_AUTHORITY",
+  "evidence_class": "GITHUB_ACTIONS_QUEUE_STATE_ONLY",
+  "finding": "Both currently authorized Triggerword-4 singleton runtime gates exist but have not begun execution. Each workflow job remains queued with no assigned runner and zero executed steps.",
+  "runs": [
+    {
+      "purpose": "GRID10 runtime quiescence v2",
+      "issue": 2122,
+      "dispatch_key": "grid10-runtime-quiescence-v2-g0000",
+      "workflow_run_id": 33170694983,
+      "job_id": 98846842202,
+      "status": "queued",
+      "conclusion": null,
+      "runner_labels": ["self-hosted", "Linux", "X64"],
+      "runner_id": 0,
+      "runner_name": "",
+      "steps_observed": 0,
+      "terminal_result_path": "research_entity/continuity/ordinary_dispatch_results/grid10-runtime-quiescence-v2-g0000.json",
+      "terminal_result_observed": false
+    },
+    {
+      "purpose": "GRID10 SIGKILL independent replacement v3",
+      "issue": 2121,
+      "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+      "workflow_run_id": 33168491753,
+      "job_id": 98839547140,
+      "status": "queued",
+      "conclusion": null,
+      "runner_labels": ["self-hosted", "Linux", "X64"],
+      "runner_id": 0,
+      "runner_name": "",
+      "steps_observed": 0,
+      "terminal_result_path": "research_entity/continuity/ordinary_dispatch_results/grid10-sigkill-independent-replacement-v3-g0000.json",
+      "terminal_result_observed": false
+    }
+  ],
+  "classification": {
+    "runtime_semantic_result": "NOT_OBSERVED",
+    "infrastructure_state": "SELF_HOSTED_RUNNER_UNASSIGNED_OR_UNAVAILABLE",
+    "runtime_failure_credit": 0,
+    "runtime_pass_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "whole_entityos_credit": 0,
+    "training_credit": 0
+  },
+  "coordination_law": {
+    "duplicate_trigger_authorized": false,
+    "retry_generation_advance_authorized": false,
+    "reason": "Supervisor 9.13AF requires terminal inspection and explicitly forbids duplicate trigger/generation advance while canonical results are absent. Queued runner state is not a terminal semantic result."
+  },
+  "next_exact_gate": "Restore or assign a matching self-hosted Linux/X64 runner through the existing authorized runner/bridge lifecycle, then allow the already queued singleton jobs to execute. Do not create replacement issues or new generations merely because they are queued.",
+  "evidence_boundaries": [
+    "issue existence is not runtime execution",
+    "queued workflow is not runtime execution",
+    "zero steps means no test semantics were exercised",
+    "runner_id=0 is infrastructure evidence, not GRID10 negative evidence",
+    "this receipt does not authorize provider/model calls or paid fallback"
+  ]
+}

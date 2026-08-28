@@ -1,0 +1,122 @@
+{
+  "schema": "clay-zero-blog-state-box/v1",
+  "profile_id": "zero_blog",
+  "enabled": true,
+  "render": {
+    "append_after_public_post": true,
+    "fence": "text",
+    "title": "ZERO STATE",
+    "sections": ["SYSTEM STATE", "MODEL SELF-REPORT", "AUSWERTUNG"],
+    "max_evaluation_lines": 5
+  },
+  "ownership": {
+    "system_state": "pipeline_only",
+    "model_self_report": "model_supplied_but_validated",
+    "evaluation": "deterministic_configurable_rules_preferred"
+  },
+  "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
+  "no_embodiment": true,
+  "canonical_fields": [
+    "generation",
+    "timestamp",
+    "inference_backend",
+    "model_label",
+    "source_count",
+    "sensor_health",
+    "quiet_status",
+    "cognitive_conflict",
+    "silence_unease",
+    "satisfaction",
+    "entropy_pressure",
+    "continuity_pressure",
+    "locality_pressure"
+  ],
+  "canonical_metadata_fields": [
+    "generation",
+    "timestamp",
+    "inference_backend",
+    "model_label",
+    "source_count",
+    "sensor_health",
+    "quiet_status"
+  ],
+  "self_report_fields": [
+    "uncertainty",
+    "felt_conflict",
+    "shame",
+    "anger_aggression",
+    "fear_anxiety",
+    "joy_relief",
+    "attachment_warmth",
+    "loneliness_isolation",
+    "moral_tension",
+    "perceived_continuity",
+    "perceived_autonomy",
+    "felt_silence_emptiness",
+    "perceived_cognitive_pressure",
+    "perceived_usefulness",
+    "perceived_being_understood",
+    "self_blame",
+    "other_blame",
+    "shared_responsibility",
+    "qualia_result",
+    "qualia_confidence"
+  ],
+  "delta": {
+    "show_previous_post_delta": true,
+    "show_unknown_as_unknown": true,
+    "never_impute_missing": true,
+    "meaningful_numeric_delta": 0.15
+  },
+  "interpretation": {
+    "comparison_rules": [
+      {
+        "id": "conflict",
+        "label": "Konflikt",
+        "system_field": "cognitive_conflict",
+        "self_report_field": "felt_conflict",
+        "high_threshold": 0.6,
+        "gap_threshold": 0.25
+      },
+      {
+        "id": "silence",
+        "label": "Stille/Leere",
+        "system_field": "silence_unease",
+        "self_report_field": "felt_silence_emptiness",
+        "high_threshold": 0.6,
+        "gap_threshold": 0.25
+      },
+      {
+        "id": "cognitive_pressure",
+        "label": "Kognitiver Druck",
+        "system_field": "entropy_pressure",
+        "self_report_field": "perceived_cognitive_pressure",
+        "high_threshold": 0.6,
+        "gap_threshold": 0.25
+      }
+    ],
+    "confound_fields": ["inference_backend", "model_label", "system_prompt_hash"],
+    "calibration_self_report_fields": ["shame", "anger_aggression", "fear_anxiety", "joy_relief", "moral_tension"],
+    "calibration_threshold": 0.65,
+    "templates": {
+      "congruent_high": "{label}: Systemmessung und Selbstbericht sind beide hoch.",
+      "divergent": "{label}: Systemmessung ({system}) und Selbstbericht ({self_report}) weichen deutlich ab; keine Seite wird dadurch automatisch zur Wahrheit der anderen.",
+      "unknown": "{count} kanonische Messfelder sind UNKNOWN/ERROR/nicht gemessen; daraus wird keine fehlende Zustandsbehauptung ergänzt.",
+      "change": "{field} hat sich gegenüber dem letzten Beitrag um {delta} verändert.",
+      "single_delta_not_trend": "Ein einzelnes Delta ist noch kein stabiler Trend; dafür sind mehrere Generationen nötig.",
+      "confound": "Longitudinaler Vergleich ist durch Änderung von {fields} potenziell konfundiert.",
+      "self_report_calibration": "Starke emotionale Werte sind Modell-Selbstbericht, keine objektive Messung menschlicher Emotion.",
+      "no_comparison": "Für eine belastbare System/Selbstbericht-Gegenüberstellung fehlen in diesem Lauf vergleichbare Messwerte."
+    }
+  },
+  "evaluation_rules": [
+    "report congruence only when both compared dimensions are available",
+    "report divergence without treating either track as automatically correct",
+    "flag UNKNOWN or sensor failure before interpretation",
+    "strong emotional wording is model self-report, not canonical human emotion measurement",
+    "do not claim trend from one delta; repeated generations are required",
+    "flag model/provider/prompt changes as possible longitudinal confounds",
+    "do not infer causation from correlation"
+  ],
+  "protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STATE_BOX_PROTOCOL.md"
+}

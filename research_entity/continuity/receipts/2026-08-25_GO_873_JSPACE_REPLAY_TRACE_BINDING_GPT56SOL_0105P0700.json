@@ -1,0 +1,103 @@
+{
+  "schema": "CLAY_GO_MACROCYCLE_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_successor_write": "91db73dade60d6bc33a900af55c8451a4753d400",
+  "macrocycle_identity": "UNAVAILABLE_SHARED_IMMUTABLE_REQUEST_ID",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "interventions_executed": 0,
+    "reason": "No shared immutable macrocycle/request identity was available; no post-hoc trigger identity was invented."
+  },
+  "reentry": {
+    "newly_landed_trace_schema": "research_entity/claycode/JSPACE_TRACE_ABI_V1.schema.json",
+    "newly_landed_replay_contract": "research_entity/claycode/HCU_JSPACE_REPLAY_IDENTITY_BINDING_V1.md",
+    "supersedes_local_design": "PR 1746 predated the explicit three-identity replay contract and was closed unmerged after PR 1763 was opened."
+  },
+  "observation": "The retained intermediate Qwen path has measured runtime receipt digests, but those digests include measured outputs. They therefore cannot alone be used as execution replay identity because changed measured evidence would also re-key the supposed replay identity and hide the mandated same-execution/different-measurement conflict.",
+  "hypothesis": "Add a measurement-independent per-invocation model_execution_id, then derive distinct execution-replay, measured-evidence and observation-envelope identities while grouping matched controls with a separate control-family identity.",
+  "counterhypothesis": "If model_execution_id depends on measured outputs, timestamps, post-hoc narration or control-family identity, replay deduplication becomes scientifically invalid by either hiding conflicts, minting duplicates, or collapsing distinct interventions.",
+  "discriminator": {
+    "same_execution_changed_envelope": "DUPLICATE_REEMISSION",
+    "same_execution_changed_measured_evidence": "JSPACE_REPLAY_IDENTITY_CONFLICT",
+    "new_runtime_session": "NEW_EXECUTION_IDENTITY",
+    "matched_controls": "DISTINCT_EXECUTION_REPLAY_IDENTITIES_WITH_SHARED_CONTROL_FAMILY_ID"
+  },
+  "delta": {
+    "layer": "DATASET",
+    "files": [
+      "tools/jspace_execution_identity_v1.py",
+      "tools/trigger1_local_qwen06_intermediate_trace_execute.py",
+      "tools/jspace_trace_abi_v1.py",
+      "tests/test_jspace_trace_replay_binding_v1.py",
+      "tools/trigger1_local_qwen06_intermediate.sh"
+    ],
+    "schemas": [
+      "JSPACE_MODEL_EXECUTION_ID/v1",
+      "JSPACE_EXECUTION_REPLAY_IDENTITY/v1",
+      "JSPACE_MEASURED_EVIDENCE_IDENTITY/v1",
+      "JSPACE_OBSERVATION_ENVELOPE_IDENTITY/v1",
+      "JSPACE_CONTROL_FAMILY_IDENTITY/v1",
+      "JSPACE_TRACE_ABI/v1"
+    ],
+    "dataset_admission_eligible": false,
+    "dataset_admission_blocker": "LOADER_CONSUMPTION_IDENTITY_UNKNOWN_AND_OFF_TARGET_METRICS_UNMEASURED",
+    "truth_status": "CANDIDATE_MEASUREMENT_ONLY"
+  },
+  "track_a": {
+    "status": "ADVANCED",
+    "delta": "The retained executable intermediate lane now routes through execution identity instrumentation and a fail-closed typed trace normalizer after measured execution."
+  },
+  "track_b": {
+    "status": "ADVANCED",
+    "delta": "HCU/Typed-Entry-adjacent causal identity is split into higher-level causal event, concrete admission, model execution, control-family and replay/evidence/envelope identities without creating a second truth/effect path."
+  },
+  "track_c": {
+    "status": "ADVANCED",
+    "delta": "Global J-Space/GWT readiness gains machine-readable replay-safe traces while explicitly blocking dataset/training admission until loader-consumption and off-target evidence are measured."
+  },
+  "verification": {
+    "environment": "ChatGPT isolated local container; deterministic source/regression only; no model/provider execution",
+    "commands": [
+      "python3 -m py_compile tools/jspace_execution_identity_v1.py tools/jspace_trace_abi_v1.py tools/trigger1_local_qwen06_intermediate_trace_execute.py",
+      "python3 -m pytest -q tests/test_jspace_trace_replay_binding_v1.py"
+    ],
+    "exact_git_blob_matches": {
+      "tools/jspace_execution_identity_v1.py": "4e035d374338024c604d7b03110362f325af3351",
+      "tools/jspace_trace_abi_v1.py": "a7ecc8ea4504c4fa5e701be3b2ab930c66d99389",
+      "tools/trigger1_local_qwen06_intermediate_trace_execute.py": "4f5745e1d7daeeeffbb366b3b22a464183c28b86",
+      "tests/test_jspace_trace_replay_binding_v1.py": "ad70128e3840358000f4a8e2196d611c8d9aa99a"
+    },
+    "local_result_on_exact_tested_blobs": "py_compile PASS; 7 passed",
+    "hosted_exact_pr_head_runs": [
+      {"run_id": 32761717124, "name": "Research Entity Identity Guard", "conclusion": "failure", "executed_steps": 0},
+      {"run_id": 32761716986, "name": "Research Entity Verify", "conclusion": "failure", "executed_steps": 0}
+    ],
+    "hosted_log_fetch": "BlobNotFound_404",
+    "hosted_failure_classification": "RUNNER_OR_WORKFLOW_INFRASTRUCTURE_NEGATIVE_EVIDENCE_NOT_SEMANTIC_PRODUCT_FAILURE",
+    "scope": "EXACT_BLOB_SOURCE_AND_DETERMINISTIC_REGRESSION_ONLY"
+  },
+  "coordination": {
+    "successor_pr": 1763,
+    "closed_superseded_pr": 1746,
+    "pr_base_moved_in_parallel": true,
+    "parallel_overlap_with_delta_files_at_reentry": false
+  },
+  "artifact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The large README moved in parallel on main. Available connector writes replace the whole file and current reads are truncated; unsafe stale whole-file replacement was rejected to avoid clobbering newer content."
+  },
+  "credit_boundary": {
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Re-enter current main and PR 1763. Because the branch diverged only through non-overlapping parallel files at the observed boundary, preserve it as the single successor implementation lane; fuse only after the current merge gate is clean. Any real local Qwen intervention remains atomic-lease gated."
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "ENTITYOS_HCU_GO_FINAL_REENTRY_TEXT_ALIAS_EXACT_READY_AUTH_BLOCK/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "1bb904621ce4dea2ff8a337ee9857afb7380449b",
+    "supervisor": "8.63",
+    "mode": "FREE_ONLY"
+  },
+  "retained_donor_reentry": {
+    "pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "live_head_observed": "299cbdc293244f15e5d75fdf90c13ccb63c29759",
+    "dataset_admission_path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "dataset_admission_blob_observed": "721b7eb3e906914007bb3ee34f19a04981cfad83",
+    "canonical_text_identity_alias_still_present": true,
+    "evidence": "_text still returns value.strip(); _sha256 and _sha256_ref still inherit that normalization",
+    "fusion_comment_id": 5390217458
+  },
+  "retained_executor_reentry": {
+    "pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "live_head_observed": "bdb1d5116ba3243841c263cc30eb6620e4da3f2c",
+    "exact_preview_deployment": "dpl_7u6VPVhzXpGTWmmDA2PochdG2DCq",
+    "exact_preview_state": "READY",
+    "predecessor_failed_deployment": "dpl_3brnpJBb1jq9mQE9yGuHx1ahVM6m",
+    "predecessor_failure": "ENTITYOS_HCU_PREVERCEL_SUCCESSOR_GUARD_CHAIN_DRIFT",
+    "successor_repair": "exclusive guard synchronized with carrier donor path guard",
+    "sandbox_cost_gate": {
+      "remaining_sandbox_quota_directly_observed": false,
+      "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+      "sandboxExecutionAdmitted_expected": false,
+      "route_order_observed": "SOURCE_VERIFICATION -> FREE_ONLY_COST_GATE -> Sandbox.create"
+    },
+    "protected_fetch_attempt": {
+      "result": "CONNECTOR_AUTH_ACCESS_FAILURE_BEFORE_FUNCTION_OBSERVATION",
+      "message": "Unable to create shareable URL for exact deployment route",
+      "runtime_logs_10m": "NO_LOGS_FOUND",
+      "sandbox_create_observed": false,
+      "product_runtime_result_observed": false
+    },
+    "fusion_comment_id": 5390243007
+  },
+  "parallel_track_c_fusion": {
+    "canonical_main_commit_observed": "1bb904621ce4dea2ff8a337ee9857afb7380449b",
+    "finding": "official Qwen3-0.6B Q8_0 GGUF runtime-carrier identity recorded as readiness candidate",
+    "artifact_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "scope": "RUNTIME_CARRIER_IDENTITY_ONLY_NO_BYTES_DOWNLOADED_OR_EXECUTED",
+    "model_equivalence": "UNKNOWN",
+    "model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: exact-head executor preview reached READY after fail-closed guard-chain repair; protected fetch remained blocked before Function observation, with no runtime logs and no Sandbox creation.",
+    "track_b_hcu_typed_entry": "ADVANCED: canonical-text identity alias at serious J-Space DatasetAdmission was discovered, statically reproduced, persisted and fused into the single donor lane; live reentry confirms it remains open.",
+    "track_c_global_jspace_training_readiness": "ADVANCED: canonical-text training-boundary hardening requirement was fused, and parallel canonical main additionally bound an exact Qwen3-0.6B Q8_0 local runtime-carrier identity candidate. No model or training execution occurred."
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_run": 0
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "First re-enter live PR1263 and close the canonical identity-text alias with fail-closed regressions in the existing DatasetAdmission authority. For Track A, re-enter exact PR810 head/deployment and use only a supported authenticated fetch surface; the route must continue to return before Sandbox.create while remaining Sandbox quota is unobserved. Separately preserve the Q8 GGUF carrier as readiness-only until exact bytes, pinned runtime/build, actual loader consumption and canonical ModelExecution evidence exist."
+}

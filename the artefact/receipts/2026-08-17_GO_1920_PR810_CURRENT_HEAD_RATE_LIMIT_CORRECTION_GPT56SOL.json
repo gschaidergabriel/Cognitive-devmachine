@@ -1,0 +1,64 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T19:20:00+07:00",
+  "trigger": "go",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "0e8101d83638bdabde8eb3831783e6b133512846",
+  "classification": "REFINES_ANTI_ENTROPY_CURRENT_HEAD_PROVIDER_ADMISSION_BLOCKED",
+  "product_runtime_delta": "NO_CHANGE",
+  "supersedes_or_refines": [
+    "the artefact/receipts/2026-08-17_GO_1920_PR810_CURRENT_HEAD_ANTI_ENTROPY_GPT56SOL.json",
+    "the artefact/README.md 19:20 anti-entropy wording that current-head deployment/admission was merely unobserved"
+  ],
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head": "1c96b76184d95a9357b24fde5dcb4c884319f19e",
+    "draft": true,
+    "single_lane": true
+  },
+  "exact_current_head_provider_evidence": {
+    "source": "GitHub combined commit status for exact PR810 head",
+    "context": "Vercel",
+    "state": "failure",
+    "target_classification": "upgradeToPro=build-rate-limit",
+    "deployment_object_for_exact_head_observed": false,
+    "classification": "VERCEL_PROVIDER_ADMISSION_BLOCKED_BEFORE_BUILD_OR_SANDBOX_CREATE",
+    "runtime_credit": 0
+  },
+  "bounded_older_build_evidence": {
+    "deployment": "dpl_6uKu7KsYM3XazJX4K4dwG7Rd5GqY",
+    "commit": "c98a68ff16794c086db7932744b9853ac53969fb",
+    "state": "ERROR",
+    "failure": "CURRENT_TARGET_PATCH_IDENTITY_MISMATCH:private_archive_signature",
+    "sandbox_create_reached": false,
+    "classification": "OLDER_CONTROLLER_PRE_SANDBOX_FAIL_CLOSED_NOT_CLAYVERSE_TEST_FAIL"
+  },
+  "hypofusion": {
+    "counterhypothesis": "The exact current PR810 head may already be admitted and the README may only be stale.",
+    "falsifier": "Read exact-head provider status rather than infer from deployment-list absence.",
+    "result": "FALSIFIED_BY_EXACT_HEAD_VERCEL_FAILURE_BUILD_RATE_LIMIT"
+  },
+  "non_duplication_decision": {
+    "retry_only_pr810_commit": false,
+    "parallel_oci_controller": false,
+    "parallel_entityos_stage_path": false,
+    "reason": "Current PR810 source is already repaired and the remaining exact-head blocker is provider admission; retry-only churn would not add product information."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "valid_count_added": 0,
+    "reason": "Shared trigger metadata is only minute precision and no immutable shared request/turn id is exposed."
+  },
+  "forbidden_paths_used": {
+    "vps": false,
+    "self_hosted": false,
+    "production_host": false,
+    "together_api": false
+  },
+  "next_discriminator": "Do not retry while exact-head Vercel admission is build-rate-limited. At the first naturally admitted authorized isolated executor, refresh and rebind the single PR810 lane once to then-current Research/#611/fused-#622 bytes, then require Sandbox.create -> exact private-source binding -> locked EntityOS reproduction/staging -> full source regression -> exact OCI build/image/dependency identities -> in-image #611/service evidence -> #622 lock materialization.",
+  "whole_product_acceptance": "IN_PROGRESS"
+}

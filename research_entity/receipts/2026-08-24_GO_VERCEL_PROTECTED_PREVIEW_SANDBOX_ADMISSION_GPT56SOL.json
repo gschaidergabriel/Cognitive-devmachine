@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_ENTITYOS_HCU_EXECUTION_ADMISSION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol / ChatGPT temporary organ",
+  "trigger": "go",
+  "authority": {
+    "observed_main_sha_before_receipt": "fbc605b3d99328d71b72440b52ade09fd988ceeb",
+    "program_state_schema": "8.61",
+    "supervisor_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "free_only": true,
+    "paid_together_training_allowed_now": false
+  },
+  "retained_execution_lane": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "observed_head_sha": "33cdfd2aecf820c9b48e7d47376f126d0e831bfd",
+    "protected_preview_selftest_deployment": "dpl_9vST7MFPJzdcHjw8s47MSHs4DbSM",
+    "protected_preview_selftest_deployment_state": "READY",
+    "full_jspace_training_spine_batch_commit": "50af5765124cc15c61084d6a63cce7239031f7b8",
+    "full_jspace_training_spine_deployment": "dpl_GinpbJA6DFBzS6kDnncT8YmZuaYg",
+    "full_jspace_training_spine_deployment_state": "READY"
+  },
+  "retained_hcu_lane": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "observed_head_sha": "c34169bcc0cdf89e8ba6b48d01a52fa64404bfda"
+  },
+  "observations": [
+    {
+      "surface": "Vercel connected protected-preview fetch",
+      "target": "/api/sandbox-probe",
+      "result": "HTTP_302_TO_VERCEL_SSO_BEFORE_FUNCTION",
+      "sandbox_execution_observed": false
+    },
+    {
+      "surface": "Vercel connected share-access generation then protected-preview fetch",
+      "target": "/api/sandbox-probe",
+      "result": "SHARE_URL_CREATED_BUT_FETCH_STILL_HTTP_302_TO_VERCEL_SSO_BEFORE_FUNCTION",
+      "share_secret_persisted": false,
+      "sandbox_execution_observed": false
+    },
+    {
+      "surface": "Vercel preview runtime logs",
+      "query": "sandbox-probe",
+      "result": "NO_FUNCTION_LOG_ENTRY_IN_ATTEMPT_WINDOW",
+      "sandbox_execution_observed": false
+    },
+    {
+      "surface": "local ChatGPT tool container HTTP fallback",
+      "result": "DNS_RESOLUTION_FAILED_BEFORE_HTTP",
+      "sandbox_execution_observed": false
+    },
+    {
+      "surface": "GitHub retained executor batch fusion",
+      "result": "ATTEMPTED_OVERLAPPING_BATCH_EDIT_REJECTED_409_STALE_CONTENT_SHA; PARALLEL_COMMIT_50af5765_ALREADY_FUSED_CAUSAL_JSPACE_TRANSITION_TRACE_VALIDATION_INFERENCE_BINDING_DATASET_ADMISSION_COMPILER_GATES",
+      "stale_overwrite_occurred": false
+    }
+  ],
+  "evidence_boundary": {
+    "vercel_ready_is_runtime_credit": false,
+    "sandbox_create_observed": false,
+    "sandbox_run_command_observed": false,
+    "entityos_hcu_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0,
+    "together_preflight_attempted": false,
+    "together_credentials_accessed": false,
+    "together_job_created": false
+  },
+  "outcome": "EXECUTION_ADMISSION_BLOCKED_AT_PROTECTED_PREVIEW_EDGE_FOR_THIS_WORKER",
+  "next_exact_gate": "Use an authorized FREE isolated execution surface that is actually callable by this worker, or repair protected-preview access without weakening security; then execute the retained exact-current Research main + PR1263 full J-Space/Entry/route/engine/load/inference/GRID10 batch and bind exact SHAs, trees, executor identity, result digest, cleanup and credential nonpersistence. Do not preflight or launch Together in FREE_ONLY steering 8.61."
+}

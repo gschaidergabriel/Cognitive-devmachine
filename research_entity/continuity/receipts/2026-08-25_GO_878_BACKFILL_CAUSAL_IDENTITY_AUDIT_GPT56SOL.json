@@ -1,0 +1,97 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch_observed": "8.78",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "main_observed_before_write": "597e09abe8815554e7372f05059528470b5d997c",
+    "backfill_source_blob_observed": "6c441c92024df8b0ff14c4246478523ae3d54266",
+    "free_only": true
+  },
+  "observed": {
+    "backlog_first_single_forge_wiring": "FUSED_ON_MAIN_SOURCE_LEVEL",
+    "historical_backfill_terminal_singleton_result": "NOT_OBSERVED",
+    "singleton_dispatch_key": "free-swarm-historical-backfill-saturation-g0001",
+    "singleton_dispatch_state": "LEGACY_FANOUT_QUARANTINED_NO_NEW_TRIGGER",
+    "whole_entityos_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "finding_1_batch_causal_binding": {
+    "severity": "BLOCKS_TRUSTED_HISTORICAL_SATURATION_CREDIT",
+    "source_observation": "Historical batch proposals/progress accept model-generated historical_chunk_id/source_event_id/extraction_pass without rebinding them to the canonical chunk/source/exact-next-pass tuple. _record_batch_progress uses max(current+1, claimed_pass), and saturation does not require an exhaustive envelope.",
+    "counterexample_classes": [
+      "foreign source_event_id attached to an existing chunk",
+      "future or replayed extraction_pass advancing progress",
+      "oversized/truncated batch progressing as if exhaustive",
+      "non-exhaustive zero-novel pass claiming SATURATED"
+    ],
+    "prepared_fail_closed_repair_commit": "c2f3f4e9d6f2b96644134a12d01e3a37b3242ca5",
+    "required_regressions": [
+      "foreign event cannot mutate chunk or ingest candidate",
+      "future/replayed pass cannot advance chunk",
+      "non-exhaustive zero-novel pass cannot claim saturation",
+      "oversized batch cannot advance progress"
+    ]
+  },
+  "finding_2_incremental_source_event_identity": {
+    "severity": "BLOCKS_REPLAY_STABLE_EXECUTION_PROVENANCE",
+    "source_observation": "ingest_artifact_history persists byte_offset but resets local_line to zero on every incremental invocation. source_event_identity includes line_no, therefore one physical workers.jsonl row can receive a different source_event_id depending on max_new_lines/resume chunking.",
+    "counterexample": "one-shot scan and three one-line resumed scans of the same file can assign different line_no/source_event_id pairs to physical rows after the first checkpoint",
+    "prepared_fail_closed_repair_commit": "055ed7f46be8d739e9bb599b6ba1e8253c409fca",
+    "prepared_sandbox_regression_gate_commit": "597e09abe8815554e7372f05059528470b5d997c",
+    "required_regressions": [
+      "one-shot vs incremental resume yields identical absolute line/source_event_id identities",
+      "legacy offset-only checkpoint deterministically reconstructs completed absolute line count",
+      "inode/truncation reset offset and line checkpoint together"
+    ]
+  },
+  "goodman_boundary": {
+    "statement": "Execution-variant dedupe is not independent-evidence ancestry collapse. Shared model-family/pipeline/orchestration ancestry must remain collapsed when evaluating scientific independence.",
+    "promotion_rule": "Backfill recovery may increase candidate/provenance coverage but must not manufacture independent evidence or canonical semantic truth."
+  },
+  "coordination": {
+    "new_unusual_experiments_executed_by_this_organ": 0,
+    "new_equivalent_backfill_dispatches_after_singleton_quarantine": 0,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "ordinary_dispatch_rule": "NO_NEW_TRIGGER_FOR_GENERATION_1"
+  },
+  "three_tracks": {
+    "track_a": {
+      "status": "ADVANCED_ROOT_CAUSE_AND_ACCEPTANCE_INTEGRITY",
+      "delta": "Backlog-first Forge wiring is source-fused; two exact historical-backfill identity blockers were isolated and bounded before runtime saturation can receive credit."
+    },
+    "track_b": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "No new HCU/Typed Entry primitive is higher-information than repairing the active historical evidence funnel; adding another HCU path would create duplication rather than executable convergence.",
+      "next_discriminator": "After exact-source conversion evidence exists, bind admitted ModelExecution/InferenceReceipt/J-Space traces into the existing Typed Entry -> verified engine/load -> GRID10 causal chain."
+    },
+    "track_c": {
+      "status": "ADVANCED_EVIDENCE_COORDINATION_INTEGRITY",
+      "delta": "Retain only the lease-gated Qwen/J-Space experimental lane; no new unusual intervention or model/J-Space/training credit is minted while the conversion evidence substrate is unresolved."
+    }
+  },
+  "acceptance_gate": [
+    "Fuse both replay-stable source-event identity and canonical batch binding/exhaustiveness repairs into the single backfill implementation.",
+    "Execute focused regressions on exact tested source in an admitted zero-cost sandbox.",
+    "Only then accept one terminal repository-bound free-swarm-historical-backfill-saturation-g0001 result reaching stable EOF/fixed point.",
+    "Then execute exact-current replay-v2 migration/concurrency/reopen regression.",
+    "Then prove one qualified Forge ACCEPT -> exactly one Distillery packet -> accepted_dataset_tokens > 0 -> identical semantic replay +0."
+  ],
+  "credit_boundary": {
+    "historical_39m_re_evaluated": false,
+    "historical_backfill_runtime_credit": 0,
+    "distillery_replay_v2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

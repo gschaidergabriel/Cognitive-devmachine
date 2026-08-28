@@ -1,0 +1,79 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "8e5d37f3177dc8af105d8afdd2a3a3237cef8d56",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; USER_MESSAGE_TIME_AVAILABLE_ONLY_AT_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "work_class": "ORDINARY_SOURCE_REVIEW_FAIL_CLOSED_FUSION_AND_REENTRY",
+    "duplicate_lane_created": false
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed_after_source_write": "72322b0d3f43cf12b93c6d11ff385543fdaf715c",
+    "sandbox_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed_at_final_runtime_reentry": "8822b9ff8c9c4156bac3a904e49352a839ef6cd0"
+  },
+  "durable_delta": {
+    "source_path": "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+    "source_commit": "ba96ed91bff901f0e33cd085eb2c6d824cf33643",
+    "source_blob_sha": "64674660fd65453cacd5364f77fe726a7110a9d0",
+    "test_path": "the artefact/MicroEntity/hcu/test_jspace_vector_control_canonical_wire_identity_v1.py",
+    "test_commit": "64859e36ce007467aea1526e25222147d8893c71",
+    "test_blob_sha": "ac5fe369fa9a30e46148bc3348ff016a44dfe233",
+    "finding": "validate_packet previously normalized basis_id, role and SHA fields for validation without requiring the stored wire value to equal the normalized value, allowing a caller to mint a self-consistent digest around whitespace-aliased packet fields that could validate yet diverge at later exact identity comparisons",
+    "fix": "fail closed unless basis_id, basis_sha256, role, source_vector_sha256 and packet_sha256 are already in their exact canonical representation; preserve encoder-side normalization while enforcing one admitted wire identity",
+    "regression_scope": [
+      "canonical encoder boundary normalization",
+      "self-consistent padded basis_id rejection",
+      "self-consistent padded role rejection",
+      "self-consistent padded basis digest rejection",
+      "self-consistent padded source digest rejection",
+      "padded packet digest alias rejection"
+    ],
+    "execution_evidence": "NOT_OBSERVED; SOURCE_AND_TEST_MECHANISM_ONLY"
+  },
+  "parallel_reentry": {
+    "vector_packet_preimage_gap": "CLOSED_IN_SUCCESSOR_DONOR_SOURCE: DatasetAdmission now requires an externally admitted canonical VectorControlPacket preimage, validates it through the sole ABI validator and cross-binds generation/basis/role/control-condition",
+    "model_input_control_binding": "HCU_MODEL_INPUT_CONTROL_BINDING/v1 EXISTS_IN_SUCCESSOR_DONOR_SOURCE",
+    "next_unclosed_source_gate": "MODEL_INPUT_CONTROL_BINDING_IDENTITY_NOT_YET_TRANSITIVE_THROUGH_VERIFIED_MODEL_EXECUTION_TO_INFERENCE_RECEIPT_V4_TO_JSPACE_BINDING_AT_LAST_INSPECTION",
+    "coordination_decision": "NO_COMPETING_CASCADE_PATCH_WHILE_RETAINED_DONOR_WAS_MOVING_ON_THE_SAME_FILES; preserve the delivered invariant fix and re-enter before transitive integration"
+  },
+  "executor_runtime_reentry": {
+    "executor_head": "8822b9ff8c9c4156bac3a904e49352a839ef6cd0",
+    "newest_visible_vercel_deployment": "dpl_26pNV41EYrvFuWKRBFCHUPjQN2Xk",
+    "newest_visible_deployment_git_sha": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+    "newest_visible_deployment_state": "ERROR",
+    "newest_visible_ready_git_sha": "2dfa1edcab41fba34282b34956716e7c222ee517",
+    "exact_head_ready_observed": false,
+    "sandbox_invocation_by_this_organ": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact current executor/Vercel freshness was re-entered; stale READY deployments were not invoked or credited, preserving the exact-source execution boundary",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: JSPACE_VECTOR_CONTROL_ABI/v1 now rejects wire-identity aliases that could validate under normalization but diverge at downstream exact identity checks; the source and dedicated regression were committed into the single retained donor lane",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: canonical Vector-Control packet identity is stronger and parallel successor source now also requires packet-preimage admission for dataset material; the next discriminator is transitive HCU_MODEL_INPUT_CONTROL_BINDING/v1 admission into ModelExecution/Inference/JSpace provenance"
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md and retained donor/executor lanes were moving concurrently throughout this macrocycle; replacing the large current-facing README from a transient snapshot would risk erasing newer parallel convergence, so this exact append-only receipt is the durable handoff for later README fusion"
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Refresh the live PR1263 head; if no parallel implementation already closes it, bind one admitted HCU_MODEL_INPUT_CONTROL_BINDING/v1 identity transitively through VerifiedModelExecution -> HCU_INFERENCE_RECEIPT/v4 -> JSpaceBinding with fail-closed missing/tampered/wrong-invocation/input/packet/generation/GRID/cell/role regressions. Independently, do not invoke PR810 unless a naturally available FREE_ONLY READY Vercel deployment exactly matches its then-current Git SHA."
+}

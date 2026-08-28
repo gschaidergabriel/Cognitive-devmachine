@@ -1,0 +1,124 @@
+{
+  "schema": "CLAY_TRIGGER2_GRID10_EXACT_SNAPSHOT_FANIN_IMPOSSIBILITY/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONCANONICAL_RESEARCH_DELTA_CANDIDATE_EVAL_ONLY",
+  "observed_main_before_write": "ff147a98982fdc34f6390bd62644307b6a5cc1d4",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "physical_grid10_runtime_credit_added": 0,
+    "jspace_model_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_hcu_runtime_credit_added": 0,
+    "whole_entityos_runtime_credit_added": 0
+  },
+  "relationship_to_parallel_work": {
+    "donor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_GRID10_COHORT_ADMISSION_IDENTITY_GAP_V1_GPT56SOL.json",
+    "donor_finding": "P1 concurrency and P4 admission are currently proven by disjoint process cohorts.",
+    "nonduplicate_extension": "This delta derives a stronger protocol-level result: with the current EXACT_SNAPSHOT_ONLY admission rule and one epoch advance per successful coordinator commit, direct same-snapshot fan-in of more than one concurrent cohort packet cannot succeed by repeated per-packet coordinator_commit calls. The splice is therefore not merely an incidental harness choice; it avoids a structural incompatibility that must be resolved explicitly."
+  },
+  "source_observations": [
+    {
+      "path": "tools/xeno_physical_grid10_acceptance_v2.py",
+      "observed_ref": "ff147a98982fdc34f6390bd62644307b6a5cc1d4",
+      "finding": "concurrent_probe emits ten packets from one shared read-only snapshot, but run() deliberately does not admit those packets after coordinator lease creation; P4 instead calls spawn_one sequentially and obtains a fresh packet immediately before each commit."
+    },
+    {
+      "path": "tools/xeno_physical_grid10_acceptance_v2.py",
+      "observed_ref": "ff147a98982fdc34f6390bd62644307b6a5cc1d4",
+      "finding": "ExactSnapshotFabric requires packet generation, state_epoch and state_digest to equal the current Fabric snapshot; stale epoch or digest is rejected and implicit rebase is forbidden."
+    },
+    {
+      "path": "tools/xeno_self_organizing_fabric_acceptance_v1.py",
+      "observed_ref": "0011673f34bc55b838f52420376df6d68e40d9be",
+      "finding": "Each successful coordinator_commit sets new_epoch = expected_epoch + 1 and stores that value as the new global epoch."
+    }
+  ],
+  "external_method_support": [
+    {
+      "source": "SQLite Isolation In SQLite",
+      "url": "https://www.sqlite.org/isolation.html",
+      "classification": "OFFICIAL_PRIMARY_DOCUMENTATION",
+      "finding": "A read transaction observes a stable snapshot; committed changes from another connection are not visible until the reader ends that transaction and starts another."
+    },
+    {
+      "source": "SQLite Transaction",
+      "url": "https://sqlite.org/lang_transaction.html",
+      "classification": "OFFICIAL_PRIMARY_DOCUMENTATION",
+      "finding": "SQLite permits multiple simultaneous read transactions but only one simultaneous write transaction; a reader continues to see its historical snapshot until its read transaction ends."
+    }
+  ],
+  "derived_result": {
+    "id": "GRID10_EXACT_SNAPSHOT_SEQUENTIAL_FANIN_IMPOSSIBILITY",
+    "reality_level": "R1_INFERRED_FROM_CURRENT_EXECUTABLE_SEMANTICS",
+    "premises": [
+      "Let cohort packets p1..pN be produced concurrently from one exact snapshot S_k with epoch k and digest d_k.",
+      "For admission, ExactSnapshotFabric requires each packet identity to equal the current snapshot identity.",
+      "A successful coordinator_commit of p1 advances the global epoch from k to k+1 and changes the covered snapshot identity.",
+      "Implicit rebase and relabeling of an old observation as current are forbidden."
+    ],
+    "conclusion": "For N > 1, repeated per-packet coordinator_commit cannot directly admit all packets from the original same-snapshot cohort: after the first successful commit, p2..pN carry epoch k/digest d_k while current S1 is k+1/new_digest and must fail stale checks. Therefore a same-cohort integrated GRID10 path needs a different explicit fan-in protocol or narrower acceptance semantics.",
+    "scope": "CURRENT EXACT_SNAPSHOT_ONLY PER_PACKET_COMMIT PROTOCOL ONLY; not a universal distributed-systems impossibility claim."
+  },
+  "hypothesis": {
+    "claim": "The intended physical GRID10 semantics require concurrent observations to survive into one coordinator-authorized fan-in object without silently becoming current-state observations after S1 advances.",
+    "counterhypothesis": "Physical GRID10 acceptance only needs two independent component properties: concurrent read-only physical liveness and separately proven sequential fresh-result admission. If so, same-cohort fan-in is not required and the current split proof can be valid at a deliberately narrower named scope.",
+    "decision_needed": "Choose and version the intended acceptance contract instead of letting the harness implicitly decide it."
+  },
+  "cheapest_high_information_discriminators": [
+    {
+      "id": "FANIN-NEG-01",
+      "test": "Attempt to admit two untouched packets from the exact same barrier cohort through the current per-packet ExactSnapshotFabric coordinator_commit path.",
+      "expected_under_current_semantics": "first may succeed if no prior S1 change; second must fail RESULT_STALE_EPOCH or RESULT_STALE_DIGEST after the first commit",
+      "value": "Executable confirmation that same-cohort direct fan-in is structurally incompatible with the current per-packet exact-current rule."
+    },
+    {
+      "id": "FANIN-CONTRACT-02",
+      "test": "If integrated GRID10 credit requires same-cohort flow, require one explicitly specified solution: atomic cohort batch commit, immutable cohort evidence plus a separately current derived coordinator summary, or a formally proven provenance-preserving rebase protocol.",
+      "expected": "No packet may have its original observation epoch/digest silently rewritten as current."
+    },
+    {
+      "id": "FANIN-SCOPE-03",
+      "test": "If same-cohort flow is explicitly not required, rename/narrow acceptance and runtime credit so P1 physical concurrency and P4 sequential admission are separate bounded component claims rather than one integrated-path claim.",
+      "expected": "No proof-splice inflation."
+    }
+  ],
+  "design_candidates_not_promoted": [
+    {
+      "name": "ATOMIC_COHORT_BATCH_COMMIT",
+      "idea": "Validate all cohort packet digests against one immutable starting snapshot and apply one deterministic coordinator-authorized transaction with one batch provenance identity and one resulting epoch transition.",
+      "risk": "Must define deterministic ordering/conflict semantics and cannot grant model/canonical/effect authority."
+    },
+    {
+      "name": "IMMUTABLE_OBSERVATION_SET_TO_CURRENT_SUMMARY",
+      "idea": "Keep all cohort packets permanently bound to S_k, then create a new current coordinator summary whose provenance names the immutable packet set and explicitly reasons about evidence age/currentness.",
+      "risk": "Summary must not relabel original observations as S_{k+m}; acceptance must distinguish observation validity from current-state equality."
+    }
+  ],
+  "training_eval_reinjection": {
+    "new_positive_rows": 0,
+    "accepted_dataset_tokens_added": 0,
+    "instruction": "Teach temporal provenance and current-vs-historical evidence handling only from deterministic typed outcomes. Do not train the model to self-declare rebase, currentness, batch validity, PID identity or canonical truth.",
+    "hard_negative_concept": "Ten concurrent observations from one old snapshot do not become ten current observations merely because a coordinator later accepts a related summary or because logical node IDs are reused."
+  },
+  "promotion_fence": {
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "canonical_truth_credit": 0,
+    "effect_authority_credit": 0
+  },
+  "next_exact_action": "Add FANIN-NEG-01 as a deterministic regression against current source, then obtain an explicit supervisor-level choice between same-cohort integrated fan-in and deliberately split component semantics before repinning any physical-GRID10 execution for promotion credit."
+}

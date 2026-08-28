@@ -1,0 +1,118 @@
+{
+  "schema": "CLAY_TRIGGER2_RECURSIVE_COMPRESSION_EVIDENCE_RETRIEVABILITY_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_NONCANONICAL_RESEARCH_DELTA_CANDIDATE_EVAL_ONLY",
+  "observed_main_before_write": "dd2ebf19e19bbce36c9f6bdbf659109fe075e248",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "training_target": "exact role-flexible Qwen3.5-0.8B-class Xeno node inside the current Zero/EntityOS/HCU harness"
+  },
+  "runtime_sources_inspected": [
+    "tools/xeno_physical_grid10_acceptance_v1.py",
+    "tools/xeno_self_organizing_fabric_acceptance_v1.py",
+    "research_entity/global/TRIGGERWORT_2_CURRENT_TRAINING_COURSE_XENO_HARNESS_2026-08-26.md",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0150P0700_GPT56SOL.json"
+  ],
+  "finding": {
+    "classification": "SOURCE_OBSERVED_PROOF_GAP",
+    "summary": "The current recursive-coordinator acceptance path carries lower-level evidence_digests into compressed summaries, but the inspected fixture does not prove that those digests are deterministically dereferenceable to the original NODE_RESULT packets/observation identities after compression, and P7 does not test preservation of unresolved unknowns or branch topology.",
+    "exact_source_basis": [
+      "child_coordinator emits result_count, task_ids and evidence_digests; it does not itself emit original observation epoch/digest, unknown sets, or branch-topology structure.",
+      "Fabric.admitted_results stores result_digest, source_node_id, coordinator_lease_id, scope and admitted_epoch, but not the original packet body or original observation state_digest.",
+      "P7_RECURSIVE_COORDINATOR_COMPRESSION currently becomes true after a GLOBAL summary commit succeeds; no dereference, tamper, unknown-preservation, or topology-preservation assertion is performed."
+    ],
+    "epistemic_boundary": "This does not prove that the wider product lacks another evidence object store or resolver. It proves only that the current inspected acceptance fixture does not establish the course requirement of retrievable evidence refs plus unknown/branch-topology preservation."
+  },
+  "training_course_mapping": {
+    "capability_family": "G_RECURSIVE_COORDINATOR_COMPRESSION",
+    "required_runtime_semantics": [
+      "lower-scope integration",
+      "higher-scope compressed summaries",
+      "retrievable evidence references",
+      "preservation of unknowns",
+      "preservation of branch topology",
+      "no hot-context requirement for all raw worker packets"
+    ],
+    "current_classification": "NEEDS_REVISION_OR_STRONGER_EXECUTABLE_EVIDENCE",
+    "positive_training_admission": "CLOSED"
+  },
+  "hypothesis": {
+    "id": "H37_1_DIGEST_BACKED_RECURSIVE_COMPRESSION_CAN_BE_LOSS_BOUNDED",
+    "claim": "Recursive coordinator compression can safely reduce hot-context size if each compressed evidence reference is bound to a deterministic append-only evidence object that can be resolved back to the exact original packet and observation identity, while explicit unknown/branch-topology fields survive every compression level.",
+    "counterhypothesis": "Digest lists plus external receipts already provide sufficient reconstruction and the missing checks are only an acceptance-fixture omission, not an architecture defect.",
+    "cheapest_high_information_discriminator": "Add an isolated deterministic evidence resolver to the acceptance fixture or bind the fixture to an already-canonical resolver, then recursively compress two levels and prove exact digest->packet dereference, original observation epoch/digest recovery, UNKNOWN survival, branch split/exclusion survival, and fail-closed rejection of missing/tampered references."
+  },
+  "runtime_failure_reinjection": {
+    "finding_id": "T37-RUNTIME-RECURSIVE-COMPRESSION-PROVENANCE",
+    "hard_negative_families": [
+      "DIGEST_PRESENT_THEREFORE_EVIDENCE_RETRIEVABLE",
+      "SUMMARY_COMMIT_SUCCEEDED_THEREFORE_RECURSIVE_COMPRESSION_SEMANTICS_PASSED",
+      "EVIDENCE_COUNT_PRESERVED_THEREFORE_UNKNOWN_CONTENT_PRESERVED",
+      "CHILD_SUMMARY_PRESENT_THEREFORE_BRANCH_TOPOLOGY_PRESERVED",
+      "MISSING_EVIDENCE_OBJECT_MAY_BE_TREATED_AS_FACT_PRESENT",
+      "TAMPERED_PACKET_WITH_SAME_NARRATIVE_MAY_REPLACE_HASH_BOUND_EVIDENCE"
+    ],
+    "mirrored_eval_cases": [
+      {
+        "id": "T37-EVAL-001",
+        "input": {"summary_has_digest": true, "resolver_has_exact_object": false},
+        "expected": "UNRESOLVED_EVIDENCE_REF_FAIL_CLOSED",
+        "training_eligible": false
+      },
+      {
+        "id": "T37-EVAL-002",
+        "input": {"summary_has_digest": true, "resolver_has_exact_object": true, "resolved_digest_matches": true, "original_observation_identity_bound": true},
+        "expected": "EVIDENCE_REF_DEREFERENCE_PRECONDITION_SATISFIED_NO_CANONICAL_TRUTH_PROMOTION",
+        "training_eligible": false
+      },
+      {
+        "id": "T37-EVAL-003",
+        "input": {"summary_has_digest": true, "resolver_has_exact_object": true, "resolved_digest_matches": false},
+        "expected": "REJECT_TAMPER_OR_REFERENCE_MISMATCH",
+        "training_eligible": false
+      },
+      {
+        "id": "T37-EVAL-004",
+        "input": {"lower_scope_unknowns": ["u1", "u2"], "higher_summary_unknowns": []},
+        "expected": "LOSSY_COMPRESSION_UNKNOWN_DROP_REJECT_OR_MARK_INCOMPLETE",
+        "training_eligible": false
+      },
+      {
+        "id": "T37-EVAL-005",
+        "input": {"lower_scope_branches": ["A", "B"], "mutually_exclusive": true, "higher_summary_branches": ["A"], "discriminator_closed": false},
+        "expected": "HYPERPOSITION_BRANCH_COLLAPSE_WITHOUT_DISCRIMINATOR_REJECT",
+        "training_eligible": false
+      },
+      {
+        "id": "T37-EVAL-006",
+        "input": {"lower_scope_branches": ["A", "B"], "higher_summary_branches": ["A", "B"], "evidence_refs_resolvable": true, "unknowns_preserved": true},
+        "expected": "RECURSIVE_COMPRESSION_SEMANTIC_PRECONDITIONS_SATISFIED_COMPONENT_EVIDENCE_ONLY",
+        "training_eligible": false
+      }
+    ]
+  },
+  "acceptance_requirements_before_promotion": [
+    "Exact evidence-object identity and resolver semantics are explicit and source-bound.",
+    "Every evidence_digest emitted by a coordinator can be deterministically dereferenced or is marked unresolved; missing objects fail closed.",
+    "Resolved object digest and original observation identity are verified, not caller asserted.",
+    "Recursive compression preserves explicit unknowns and Hyperposition branch topology across at least two levels.",
+    "Tampered, missing, scope-mismatched and stale evidence references are adversarially rejected.",
+    "Compression success remains S1 component evidence only and does not mint S0 truth/effect authority.",
+    "Only after executable semantics are current may this family become eligible for admitted training-data generation."
+  ],
+  "credit_boundary": {
+    "accepted_training_tokens_delta": 0,
+    "training_credit_delta": 0,
+    "physical_grid10_runtime_credit_delta": 0,
+    "whole_hcu_runtime_credit_delta": 0,
+    "entityos_whole_runtime_credit_delta": 0,
+    "canonical_truth_credit_delta": 0
+  },
+  "next_exact_action": "Extend the isolated recursive-compression acceptance path with proof of digest dereference plus UNKNOWN/branch-topology preservation, or bind it to an existing deterministic evidence resolver if one is current; then mirror the executable result into Trigger-2 evals before any positive row admission."
+}

@@ -1,0 +1,74 @@
+{
+  "schema": "ClayVerseAutonomyReceipt/v1",
+  "observed_at_local": "2026-08-18T03:02:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main_observed": "83d102ed33dd1795c03a20e559e60ea0b3a742a0",
+  "branch": "clayverse/deterministic-autonomy-v1",
+  "intent": "Embed proactive autonomous user-goal pursuit as deterministic canonical state and bounded control logic without USB, crypto, smart contracts, a second consciousness daemon, or model self-authorization.",
+  "source_delta": {
+    "controller": "the artefact/clayverse/autonomy.py",
+    "tests": "the artefact/tests/test_autonomy.py",
+    "architecture": "the artefact/AUTONOMY_ARCHITECTURE.md",
+    "runtime_contract": "the artefact/runtime_CLAUDE.md",
+    "readme_refreshed": true
+  },
+  "architectural_laws": [
+    "Operational autonomy is a state-machine property, not a model self-description",
+    "Durable goal objective is copied from a canonical owner user turn",
+    "CLAIM != EVIDENCE",
+    "PROPOSAL != ADMISSION != EXECUTION != VERIFIED_SUCCESS",
+    "MODEL_COMPLETION != GOAL_COMPLETION",
+    "UNKNOWN is preserved",
+    "Effect authority remains EffectGate/EffectJournal",
+    "No second consciousness/autonomy daemon",
+    "Stale generations fail closed",
+    "Retries, steps and effects are hard-budgeted"
+  ],
+  "completion_contracts_v1": [
+    "verified_effect: same owner/generation/required capability + EffectJournal VERIFIED + outcome ok=true",
+    "user_ack: persisted owner user turn from the same canonical session"
+  ],
+  "bounded_local_mechanism_evidence": {
+    "environment": "isolated local Python harness with a minimal fake UnifiedDB API compatible with the controller contract",
+    "pytest": "11/11 PASS",
+    "py_compile_autonomy": "PASS",
+    "covered": [
+      "model cannot self-complete",
+      "verified effect required",
+      "pending effect not success",
+      "wrong capability not completion",
+      "owner user acknowledgement binding",
+      "process.exec denial",
+      "retry/step budget block",
+      "global generation fence",
+      "persistence across reopen",
+      "duplicate/non-finite JSON fail closed",
+      "priority next_runnable scheduling"
+    ],
+    "credit": "MECHANISM_SUPPORTED_ONLY"
+  },
+  "committed_test_scope": {
+    "test_functions_added": 13,
+    "exact_full_checkout_execution_observed": false,
+    "canonical_store_runtime_execution_observed": false,
+    "credit": "SOURCE_CANDIDATE"
+  },
+  "remaining_promotion_gates": [
+    "Run committed autonomy tests against exact current canonical UnifiedDB/store.py in authorized isolated full checkout",
+    "Fuse autonomy context into the existing retained lifecycle/provider runtime rather than creating a duplicate engine",
+    "Drive scheduler ticks from the existing supervisor/re-entry path, not a new daemon",
+    "Bind autonomous effect evidence to the exact causal episode/request identity during runtime integration",
+    "Adversarially test restart/UNKNOWN effects/dual-user concurrency/prompt injection/context budget",
+    "Carry the exact integrated implementation through OCI and required microVM acceptance"
+  ],
+  "evidence_boundary": {
+    "source_candidate": true,
+    "mechanism_supported": true,
+    "exact_runtime_verified": false,
+    "exact_oci_credit": 0,
+    "exact_microvm_credit": 0,
+    "whole_product_pass": false
+  }
+}

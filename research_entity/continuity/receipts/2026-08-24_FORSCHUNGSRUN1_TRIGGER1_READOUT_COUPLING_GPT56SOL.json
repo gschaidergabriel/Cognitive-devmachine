@@ -1,0 +1,93 @@
+{
+  "schema": "CLAY_RESEARCH_FINDING_RECEIPT/v1",
+  "created_at": "2026-08-24T21:51:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch_observed": "8.72",
+  "canonical_main_observed_before_write": "a043095d791dca3e5f01e21c43c68c9ed49b032b",
+  "execution_mode": "FREE_ONLY",
+  "unusual_experiment_executed_by_this_organ": false,
+  "classification": "READOUT_COUPLED_STEERING_COMPONENT_NOT_JSPACE_REPRESENTATION_PROOF",
+  "observed_source": {
+    "executor_path": "tools/trigger1_local_qwen06_activation_api_execute.py",
+    "executor_blob_sha": "81a34cef3c53792edf6ef17a1f47a35cb6db590e",
+    "promotion_gate_path": "tools/trigger1_jspace_promotion_gate.py",
+    "promotion_gate_blob_sha": "5fea2958f536c2122fbd700d371743a26c3c3881",
+    "model": "Qwen/Qwen3-0.6B",
+    "model_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "activation_site": "model.model.norm:output:last_token",
+    "vector_construction": "normalize(lm_head[A] - 0.5*(lm_head[B] + lm_head[C]))",
+    "measured_target": "logit(A) - 0.5*(logit(B) + logit(C))",
+    "controls": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM"
+    ],
+    "promotion_gate_currently_withholds_jspace_model_runtime_credit": true,
+    "promotion_gate_can_still_emit_trigger1_goal_candidate_for_this_runtime_class": true
+  },
+  "direct_observation": [
+    "The current PyTorch fastpath adds its intervention to the final model.norm output at the last token.",
+    "The intervention direction is constructed directly from output-embedding/lm_head rows for the same A/B/C tokens used by the scoring function.",
+    "The result score is computed from those same A/B/C output logits.",
+    "The promotion gate keeps canonical, whole-EntityOS/HCU, J-Space model-runtime and training credit false, but can still mark mechanism/Trigger-1 goal candidate evidence when the current identity/control/split checks pass."
+  ],
+  "inference": {
+    "claim": "A PASS on the current final-norm experiment is expected to demonstrate runtime-observed readout steering, but it is insufficient by itself to establish a learned intermediate J-Space representation or broad semantic causal mechanism.",
+    "reason": "Because the intervention is inserted immediately before the language-model readout and is algebraically derived from the same readout weights and target logits, the directional effect can arise without any upstream/intermediate representation carrying the hypothesized semantic direction.",
+    "scope_if_positive": "READOUT_STEERING_COMPONENT_CANDIDATE_ONLY",
+    "jspace_model_credit_change": 0,
+    "whole_hcu_credit_change": 0,
+    "training_credit_change": 0
+  },
+  "counterhypothesis": {
+    "id": "H0_DIRECT_LINEAR_READOUT_MANIPULATION",
+    "statement": "The observed A-vs-B/C shift is fully explained by direct linear manipulation of the final readout coordinate and does not require a causally meaningful intermediate J-Space representation.",
+    "current_test_can_falsify": false
+  },
+  "highest_information_falsifier": {
+    "name": "INTERMEDIATE_LAYER_CONTRASTIVE_VECTOR_GENERALIZATION",
+    "requirements": [
+      "Choose one or more fixed intermediate decoder residual-stream activation sites strictly before final norm/lm_head; calibration may select among a predeclared layer set but holdout remains untouched.",
+      "Derive the steering vector from contrastive hidden activations on calibration examples, not from lm_head/output-embedding rows for the target tokens.",
+      "Use disjoint semantic holdout prompt families whose success criterion is not the same token triplet used to construct the vector.",
+      "Retain BASELINE, +VECTOR, SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM and PERMUTED_SAME_NORM, and add/align clean-corrupted, sham and off-target controls where compatible with the retained HCU donor causal-control law.",
+      "Require the earlier-layer intervention to propagate through downstream transformer blocks and produce reproducible directional holdout behavior while off-target controls remain bounded.",
+      "Bind exact repo head/tree/dirty state, executor bytes, Python/Torch/Transformers, checkpoint/tokenizer, activation site, applied vector and result digests in the runtime receipt.",
+      "Treat a final-norm/lm_head-derived PASS as a calibration/readout component result, not as the discriminator that closes J-Space causality."
+    ],
+    "promotion_condition": "Only a positive earlier-layer, representation-derived, disjoint-holdout result that survives matched nuisance/off-target controls should become a stronger model-specific J-Space causal promotion candidate."
+  },
+  "external_primary_research_inputs": [
+    {
+      "kind": "official_model_implementation",
+      "source": "Hugging Face Transformers Qwen2/Qwen3 causal-LM implementation",
+      "use": "Confirms the final normalized hidden state is mapped by lm_head to logits; Qwen3 causal-LM structure follows this family."
+    },
+    {
+      "kind": "activation_steering_research",
+      "source": "Activation Addition / Contrastive Activation Addition literature",
+      "use": "Motivates deriving steering directions from intermediate activation contrasts and testing generalization/off-target effects rather than constructing the direction from the terminal readout weights."
+    }
+  ],
+  "parallel_runtime_state": {
+    "self_hosted_qwen_runtime_workflow_present": true,
+    "exact_terminal_qwen_runtime_result_observed_by_this_organ_at_receipt_time": false,
+    "note": "Parallel commits added and retriggered an exact-current self-hosted local Qwen proof. This receipt does not reinterpret source/workflow presence as runtime success."
+  },
+  "credit_boundary": {
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "research_delta": "Separates terminal readout steering from evidence for an internal J-Space representation and specifies a stricter, earlier-layer contrastive causal discriminator without weakening the current fail-closed promotion boundary."
+}

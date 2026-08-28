@@ -1,0 +1,85 @@
+{
+  "schema": "TRIGGER4_ACTIONS_PRESTEP_ACCOUNT_SCOPE_DISCRIMINATOR/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "canonical_research_main_before_write": "5638204026468b631de5e774e8403d7a6334021e",
+  "routing": {
+    "normalized_user_message": "4",
+    "result": "TRIGGERWORD_4",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_branch_observed_head": "346e527e490ea815ed6e173296099c9d77819e6f",
+    "required_directives_fetched": true
+  },
+  "authority": {
+    "supervisor_inbox_schema": "9.13",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AJ_DELTA_2026-08-29T0038P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "observations": [
+    {
+      "repo": "gschaidergabriel/clay-global-research-entity",
+      "run_id": 33182697914,
+      "job_id": 98887677431,
+      "runner_label": "ubuntu-latest",
+      "conclusion": "failure",
+      "runner_id": 0,
+      "steps": [],
+      "job_log_fetch": "BlobNotFound",
+      "classification": "PRE_RUNNER_OR_PRE_STEP_FAILURE"
+    },
+    {
+      "repo": "gschaidergabriel/clay-global-research-entity",
+      "run_id": 32198250719,
+      "created_at": "2026-08-18T23:41:49Z",
+      "conclusion": "failure",
+      "job_id": 95906520426,
+      "steps": null,
+      "logs_url": null,
+      "classification": "PRE_STEP_FAILURE_PRESENT_BY_2026_08_18"
+    },
+    {
+      "repo": "gschaidergabriel/clay-global-research-entity",
+      "latest_observed_successful_run_id": 32061392029,
+      "latest_observed_success_created_at": "2026-08-17T19:37:36Z"
+    },
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "latest_observed_successful_run_id": 32058854197,
+      "latest_observed_success_created_at": "2026-08-17T19:10:16Z"
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "observed_actions_run_count": 0,
+      "classification": "NO_DISCRIMINATING_ACTIONS_HISTORY"
+    }
+  ],
+  "external_primary_context": {
+    "github_actions_billing_docs": "https://docs.github.com/en/billing/concepts/product-billing/github-actions",
+    "github_actions_billing_observation": "Standard GitHub-hosted runners in private repositories consume account quota; without a valid payment method usage is blocked after quota exhaustion. Self-hosted runners are documented as free.",
+    "inference_boundary": "Hosted quota exhaustion can explain GitHub-hosted blockage but is insufficient by itself to explain the already-observed self-hosted zero-step failure; a broader account/repository Actions admission, policy, suspension, or common pre-step control-plane condition remains better as the shared causal class."
+  },
+  "hypothesis": "A shared account/repository Actions admission or policy/control-plane condition became active between the last observed successes on 2026-08-17 and the observed zero-step failures by 2026-08-18; it affects both GitHub-hosted and self-hosted jobs before runner/step execution.",
+  "counterhypotheses": [
+    "Private-repository GitHub-hosted quota exhaustion explains only hosted-run failures and therefore cannot alone explain the self-hosted zero-step evidence.",
+    "A repository-local workflow syntax or GRID10 product defect is insufficient because the failure pattern crosses repositories and occurs before any workflow step.",
+    "A self-hosted runner label/service defect is insufficient because ubuntu-latest GitHub-hosted jobs show the same pre-step failure class."
+  ],
+  "promotion_credit": {
+    "actions_root_cause_proven": false,
+    "runtime_control_transport_pass": false,
+    "grid10_runtime_pass": false,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "execution_boundaries": {
+    "new_workflow_dispatches": 0,
+    "duplicate_issue_triggers": 0,
+    "provider_calls": 0,
+    "paid_actions": 0,
+    "vps_execution": 0,
+    "frank_harness_modified": false
+  },
+  "next_exact_action": "Read the GitHub account/repository Actions billing/usage and Actions-policy UI or an equivalent authorized API surface to distinguish account quota/payment/suspension from Actions policy/permission admission. Do not re-dispatch #2121/#2122 and do not restart the live VPS telemetry bridge."
+}

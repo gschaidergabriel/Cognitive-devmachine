@@ -6,6 +6,9 @@ on:
     paths:
       - 'research_entity/runtime/openrouter_requests/*.json'
       - 'tools/openrouter_inference.py'
+      - 'tools/trigger1_openrouter_qwen06_logit_vector_execute.py'
+      - 'tools/trigger1_openrouter_logit_bias_control.py'
+      - 'governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json'
       - 'research_entity/private/API_TOKENS.env'
       - '.github/workflows/openrouter-research.yml'
 
@@ -30,15 +33,43 @@ jobs:
 
       - name: Execute pending OpenRouter requests
         shell: bash
+        env:
+          CLAY_FREE_PROVIDER_BUDGET_DB: /tmp/clay-openrouter-research/provider_budget.sqlite3
+          CLAY_SWARM_ARTIFACT_ROOT: /tmp/clay-openrouter-research/free-lane
         run: |
+          set -euo pipefail
+          mkdir -p /tmp/clay-openrouter-research
           shopt -s nullglob
           for req in research_entity/runtime/openrouter_requests/*.json; do
             rid="$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["request_id"])' "$req")"
+            mode="$(python -c 'import json,sys; print(json.load(open(sys.argv[1])).get("mode","chat"))' "$req")"
             out="research_entity/runtime/tool_results/${rid}.json"
             if [ -f "$out" ]; then
               continue
             fi
-            python tools/openrouter_inference.py --request "$req" >/tmp/openrouter-last.json
+            if [ "$mode" = "trigger1_qwen06_logit_vector" ]; then
+              set +e
+              python3 tools/free_swarm_exec_with_vault.py \
+                python3 tools/trigger1_openrouter_qwen06_logit_vector_execute.py \
+                --output "$out" \
+                > /tmp/openrouter-last.json 2>&1
+              rc=$?
+              set -e
+              if [ ! -s "$out" ]; then
+                cat > "$out" <<EOF
+          {
+            "schema": "CLAY_TRIGGER1_OPENROUTER_QWEN06_LOGIT_VECTOR_EXPERIMENT/v1",
+            "status": "BLOCKED_BEFORE_RESULT",
+            "process_exit_code": ${rc},
+            "secret_exposed": false,
+            "paid_fallback_attempt_count": 0,
+            "credit_scope": "NONE"
+          }
+          EOF
+              fi
+            else
+              python tools/openrouter_inference.py --request "$req" >/tmp/openrouter-last.json
+            fi
           done
 
       - name: Commit sanitized OpenRouter results
@@ -48,7 +79,7 @@ jobs:
           git add research_entity/runtime/tool_results/
           git diff --cached --quiet && exit 0
           git commit -m 'Record OpenRouter research results'
-          for attempt in 1 2 3; do
+          for attempt in 1 2 3 4 5 6; do
             git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
             sleep $((attempt * 2))
           done

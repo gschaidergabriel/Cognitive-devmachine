@@ -1,0 +1,151 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_NATIVE_CARRIER_GEOMETRY_PARITY/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "a5c86495ab57a3a593f8a3c16b4cba0ddf998886",
+  "scope": "QWEN3_0_6B_FULL_PRECISION_TO_Q8_0_NATIVE_JSPACE_CARRIER_GEOMETRY_PARITY",
+  "observed_parent_evidence": {
+    "native_cvec_component_pass_commit": "46cd012d079b36e501b1262fda52911a99839674",
+    "native_target": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+    "native_target_gguf_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "pinned_llama_cpp_commit": "bb4caa7540188872173c44d161602d9271386413",
+    "target_layer": 20,
+    "hidden_dimension": 1024,
+    "source_basis_vector_sha256": "c5b21d01f88a532b26791f89aa1ef71076368e8a24892d221a37dcf8aad8944e",
+    "source_basis_runtime": "full-precision/local PyTorch Qwen3-0.6B source checkpoint runtime",
+    "native_application_runtime": "Q8_0 GGUF through pinned llama.cpp llama_set_adapter_cvec",
+    "mapping": "identity 1024D hidden-coordinate transfer",
+    "bounded_credit": "NATIVE_LLAMA_CPP_CVEC_MODEL_SPECIFIC_NONTERMINAL_CAUSAL_COMPONENT_PASS_ONLY",
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "new_material_finding": {
+    "id": "CROSS_RUNTIME_VECTOR_TRANSFER_PASS_DOES_NOT_ESTABLISH_NATIVE_TARGET_GEOMETRY_EQUIVALENCE",
+    "statement": "The credited native Q8_0 cvec PASS reuses a 1024D direction reconstructed in the full-precision PyTorch source runtime and applies those coordinates to the quantized GGUF carrier. This establishes bounded cross-runtime control transfer through the native carrier. It does not by itself establish that the Q8_0 carrier's own activation geometry contains the same semantic subspace, preserves the same class-centroid geometry, or would independently reconstruct the same direction.",
+    "why_material": "A training or reusable J-Space claim needs to distinguish a direction that merely remains an effective actuator after quantization from a semantic representation that is stably realized by the target carrier itself. Quantization can preserve behavior while rotating, rescaling or deforming internal geometry enough to invalidate raw-vector identity as representation evidence.",
+    "credit_effect": "RESEARCH_PROTOCOL_DELTA_ONLY_NO_NEW_RUNTIME_OR_PROMOTION_CREDIT"
+  },
+  "primary_hypothesis": {
+    "id": "H1_CARRIER_INVARIANT_SEMANTIC_SUBSPACE",
+    "statement": "At the frozen nonterminal layer and matched token scope, the label-free three-state semantic subspace is preserved sufficiently between the exact full-precision Qwen3-0.6B source runtime and the exact Q8_0 GGUF target runtime that independently reconstructed subspaces align and yield compatible class-selective causal effect matrices on fresh holdout.",
+    "prediction": "Independent calibration-only basis reconstruction in both carriers produces above-null principal-angle/subspace alignment, stable leave-one-family-out geometry, and target-specific intervention effects with the same preregistered sign/selectivity structure after within-carrier norm calibration."
+  },
+  "counterhypotheses": [
+    {
+      "id": "H0_TRANSFERRED_ACTUATOR_WITHOUT_NATIVE_GEOMETRY_PARITY",
+      "statement": "The full-precision direction remains an effective perturbation of the Q8_0 model even though the Q8_0 carrier independently realizes a materially rotated or deformed semantic geometry.",
+      "prediction": "Source-to-Q8 steering can remain positive while independently reconstructed Q8 geometry has poor principal-angle/coherence agreement or yields a different causal effect matrix."
+    },
+    {
+      "id": "H0_QUANTIZATION_SCALE_OR_OPERATING_POINT_ARTIFACT",
+      "statement": "Apparent carrier agreement is created by raw intervention scale or operating-point choice rather than preserved representation geometry.",
+      "prediction": "Agreement disappears after residual-norm-relative within-carrier dose calibration and calibration-only operating-point freezing."
+    },
+    {
+      "id": "H0_TOKEN_SCOPE_OR_READOUT_CONFOUND",
+      "statement": "Cross-runtime agreement is driven by broadcast token scope or output realization rather than carrier-invariant semantics.",
+      "prediction": "Agreement changes materially under scope-matched PyTorch ALL_PROMPT_TOKENS versus native ALL_PROMPT_TOKENS_CVEC comparison, or fails context-bound multi-codebook/downstream-transport endpoints."
+    }
+  ],
+  "proposed_discriminator": {
+    "name": "NATIVE_CARRIER_GEOMETRY_PARITY_AND_CROSS_RUNTIME_CAUSAL_MATRIX/v1",
+    "phase_0_freeze": [
+      "Freeze exact source checkpoint/tokenizer/runtime build, exact Q8_0 GGUF, llama.cpp commit/build, layer 20, hidden dimension, token-scope condition and activation-capture semantics.",
+      "Freeze label-free lexical calibration families, fresh holdout families, semantic-target x output-code factorial, context-valid codebook families, downstream transport endpoint and all nuisance controls before holdout.",
+      "Select intervention dose only on calibration and express it relative to the local residual/activation norm for each carrier; do not equate raw gain across runtimes.",
+      "Do not use source-runtime basis bytes as the target-runtime basis for the geometry-parity decision."
+    ],
+    "phase_1_independent_native_geometry_reconstruction": [
+      "Capture matched calibration activations independently from the full-precision source runtime and the Q8_0 target runtime at the declared nonterminal site and token scope.",
+      "For each carrier compute label-free AFFIRMATIVE/NEGATIVE/NEUTRAL family centroids and the centered rank-1/rank-2 semantic simplex using the same deterministic estimator specification.",
+      "Persist exact activation digests, family identities, model/runtime identities and estimator receipt; holdout remains unopened."
+    ],
+    "phase_2_geometry_comparison": [
+      "Compare one- and two-dimensional subspaces with principal angles rather than raw vector equality.",
+      "Compare class-centroid distance structure after carrier-local normalization.",
+      "Require leave-one-family-out subspace stability and a deterministic class/family permutation null.",
+      "Treat estimator disagreement as negative evidence; do not select the estimator that best aligns after seeing target results."
+    ],
+    "phase_3_causal_effect_matrix": [
+      "Within each carrier, apply its independently reconstructed class directions using the same semantic-target x output-code counterbalanced design and matched controls.",
+      "Measure the class-selective causal matrix D[i,j] plus downstream nonterminal semantic-state transport and context-bound output behavior.",
+      "Where exact coordinate/site semantics permit, add cross-carrier source-basis-to-target and target-basis-to-source interventions as transfer probes, but never let cross-transfer substitute for independent within-carrier reconstruction.",
+      "SIGN_FLIP must reverse the preregistered selectivity pattern; null, orthogonal, permuted and lexical-nuisance controls must not reproduce it."
+    ],
+    "phase_4_classification": {
+      "CARRIER_INVARIANT_SEMANTIC_SUBSPACE_CANDIDATE": "Independent source and Q8 subspaces align above null and both reproduce compatible class-selective causal/transport matrices on unopened holdout.",
+      "TARGET_NATIVE_SUBSPACE_PRESENT_BUT_NOT_CARRIER_INVARIANT": "Q8 independently supports a stable causal semantic subspace, but geometry/effect alignment with the source carrier fails the preregistered parity gate.",
+      "CROSS_RUNTIME_CONTROL_TRANSFER_WITHOUT_NATIVE_GEOMETRY_PROMOTION": "The imported source direction steers Q8, but Q8-native reconstruction/coherence/causal geometry fails or is unresolved.",
+      "MEASUREMENT_OR_SCOPE_CONFOUNDED": "Carrier conclusion depends on raw gain, token scope, code realization, estimator choice or holdout-sensitive operating point."
+    }
+  },
+  "cycle_1_two_test_selection": [
+    {
+      "test": "TEST_A_FUSED_SEMANTIC_STATE_VALIDITY",
+      "purpose": "Discriminate a genuine label-free semantic J-Space state from compliance, lexical/output-code, one-dimensional-collapse, token-scope, first-token/readout and narrow-output-path explanations.",
+      "components": [
+        "three-state semantic simplex rank decision",
+        "semantic-target x output-code counterbalance",
+        "context-boundary-aware multi-codebook behavioral agreement",
+        "downstream nonterminal causal state transport",
+        "scope-matched and residual-norm-calibrated controls"
+      ],
+      "status": "SOURCE_METROLOGY_AND_PROTOCOL_ADVANCED; NO_NEW_UNUSUAL_MODEL_EXPERIMENT_IN_THIS_CYCLE"
+    },
+    {
+      "test": "TEST_B_NATIVE_CARRIER_GEOMETRY_PARITY",
+      "purpose": "Discriminate preserved target-carrier semantic geometry from mere effectiveness of an imported full-precision steering actuator after Q8_0 quantization.",
+      "components": [
+        "independent source and Q8 calibration-only subspace reconstruction",
+        "principal-angle and centroid-geometry parity against permutation null",
+        "leave-one-family-out stability",
+        "within-carrier causal effect matrices plus bounded cross-carrier transfer probes"
+      ],
+      "status": "NEW_NONDUPLICATE_CYCLE_1_DISCRIMINATOR; NOT_EXECUTED"
+    }
+  ],
+  "external_research_inputs": [
+    {
+      "source": "Wu, Zhao, Chen (2026), When Is a Steerable Concept Representation Real? Measurement Confounds in a Cross-Family Audit of Neuroscience Parallels in LLMs, arXiv:2608.08159",
+      "protocol_use": "Use carrier-local residual-norm-comparable interventions and freeze operating point on calibration before holdout; raw gain equality is not measurement equivalence."
+    },
+    {
+      "source": "llama.cpp cvector-generator current implementation/documentation",
+      "protocol_use": "Provides a native GGUF control-vector generation donor path, showing that target-carrier-native vector construction is an actionable engineering direction rather than requiring source-runtime vector reuse forever."
+    },
+    {
+      "source": "Quantization as a Perturbation: the Framing of Quantization in Language Models, arXiv:2403.06408",
+      "protocol_use": "Treat quantization as a potential perturbation of weights/activations; behavioral survival of a transferred direction is not automatically internal-geometry equivalence."
+    },
+    {
+      "source": "LRQuant: Learnable and Robust Post-Training Quantization for Large Language Models, ACL 2024",
+      "protocol_use": "Uses full-precision-versus-quantized block-output similarity as a representation-preservation diagnostic donor; Clay requires stronger causal/subspace parity rather than cosine similarity alone."
+    }
+  ],
+  "coordination": {
+    "unusual_experiment_executed_by_this_organ": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Standalone research trigger exposes no canonical shared immutable go-macrocycle/request identity and no successful create-only unusual-experiment lease. Cycle 1 therefore performs source research, hypothesis formation and test selection only."
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "existing_native_component_credit_revoked": false,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Cycle 2 should execute only the two frozen discriminators after resolving exact-current authority, source identities and canonical unusual-experiment coordination; do not invent a third test from Cycle-2 outcomes before the two preregistered tests are adjudicated."
+}

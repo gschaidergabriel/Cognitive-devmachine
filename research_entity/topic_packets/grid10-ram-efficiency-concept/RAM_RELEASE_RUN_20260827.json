@@ -1,0 +1,199 @@
+{
+  "schema": "GRID10_RAM_RELEASE_EXPERIMENT/v1",
+  "model_load_time_s": 9.98,
+  "trimmed_group_private_dirty_kb": {
+    "before_trim": [
+      378888,
+      378844,
+      378860
+    ],
+    "after_trim_idle_window": [
+      279184,
+      279172,
+      279212
+    ]
+  },
+  "control_group_private_dirty_kb": {
+    "before": [
+      378852,
+      378852,
+      378788
+    ],
+    "after_idle_window_no_trim": [
+      378864,
+      378864,
+      378804
+    ]
+  },
+  "trimmed_group_avg_reduction_kb": 99674.7,
+  "control_group_avg_change_kb": -13.3,
+  "second_generate_latency_s": {
+    "trimmed": [
+      3.2131,
+      3.5198,
+      3.5414
+    ],
+    "control": [
+      3.1338,
+      3.2938,
+      3.6474
+    ]
+  },
+  "trimmed_group_avg_latency_s": 3.4248,
+  "control_group_avg_latency_s": 3.3583,
+  "private_dirty_after_second_generate_kb": {
+    "trimmed": [
+      306952,
+      306880,
+      306920
+    ],
+    "control": [
+      378892,
+      378888,
+      378972
+    ]
+  },
+  "child_reports": {
+    "trim-0": {
+      "node_id": "trim-0",
+      "group": "trimmed",
+      "pid": 750972,
+      "smaps_after_first_generate": {
+        "Rss": 2178144,
+        "Shared_Clean": 1515132,
+        "Private_Dirty": 378888
+      },
+      "release_result": {
+        "gc_collected": true,
+        "malloc_trim_called": true,
+        "malloc_trim_method": "ctypes_libc"
+      },
+      "smaps_after_idle_window": {
+        "Rss": 1991980,
+        "Shared_Clean": 1516156,
+        "Private_Dirty": 279184
+      },
+      "second_generate_latency_s": 3.2131,
+      "smaps_after_second_generate": {
+        "Rss": 2019684,
+        "Shared_Clean": 42588,
+        "Private_Dirty": 306952
+      }
+    },
+    "trim-1": {
+      "node_id": "trim-1",
+      "group": "trimmed",
+      "pid": 750973,
+      "smaps_after_first_generate": {
+        "Rss": 2178144,
+        "Shared_Clean": 1515132,
+        "Private_Dirty": 378844
+      },
+      "release_result": {
+        "gc_collected": true,
+        "malloc_trim_called": true,
+        "malloc_trim_method": "ctypes_libc"
+      },
+      "smaps_after_idle_window": {
+        "Rss": 1991980,
+        "Shared_Clean": 1516156,
+        "Private_Dirty": 279172
+      },
+      "second_generate_latency_s": 3.5198,
+      "smaps_after_second_generate": {
+        "Rss": 2019684,
+        "Shared_Clean": 1516156,
+        "Private_Dirty": 306880
+      }
+    },
+    "trim-2": {
+      "node_id": "trim-2",
+      "group": "trimmed",
+      "pid": 750974,
+      "smaps_after_first_generate": {
+        "Rss": 2178160,
+        "Shared_Clean": 1515132,
+        "Private_Dirty": 378860
+      },
+      "release_result": {
+        "gc_collected": true,
+        "malloc_trim_called": true,
+        "malloc_trim_method": "ctypes_libc"
+      },
+      "smaps_after_idle_window": {
+        "Rss": 1992000,
+        "Shared_Clean": 1516156,
+        "Private_Dirty": 279212
+      },
+      "second_generate_latency_s": 3.5414,
+      "smaps_after_second_generate": {
+        "Rss": 2019704,
+        "Shared_Clean": 1516156,
+        "Private_Dirty": 306920
+      }
+    },
+    "ctrl-0": {
+      "node_id": "ctrl-0",
+      "group": "control",
+      "pid": 750975,
+      "smaps_after_first_generate": {
+        "Rss": 2178160,
+        "Shared_Clean": 1515132,
+        "Private_Dirty": 378852
+      },
+      "smaps_after_idle_window": {
+        "Rss": 2178224,
+        "Shared_Clean": 1515196,
+        "Private_Dirty": 378864
+      },
+      "second_generate_latency_s": 3.1338,
+      "smaps_after_second_generate": {
+        "Rss": 2178224,
+        "Shared_Clean": 1515196,
+        "Private_Dirty": 378892
+      }
+    },
+    "ctrl-1": {
+      "node_id": "ctrl-1",
+      "group": "control",
+      "pid": 750976,
+      "smaps_after_first_generate": {
+        "Rss": 2178160,
+        "Shared_Clean": 1515132,
+        "Private_Dirty": 378852
+      },
+      "smaps_after_idle_window": {
+        "Rss": 2178224,
+        "Shared_Clean": 1515196,
+        "Private_Dirty": 378864
+      },
+      "second_generate_latency_s": 3.2938,
+      "smaps_after_second_generate": {
+        "Rss": 2178224,
+        "Shared_Clean": 1515196,
+        "Private_Dirty": 378888
+      }
+    },
+    "ctrl-2": {
+      "node_id": "ctrl-2",
+      "group": "control",
+      "pid": 750977,
+      "smaps_after_first_generate": {
+        "Rss": 2178160,
+        "Shared_Clean": 1515132,
+        "Private_Dirty": 378788
+      },
+      "smaps_after_idle_window": {
+        "Rss": 2178224,
+        "Shared_Clean": 1515196,
+        "Private_Dirty": 378804
+      },
+      "second_generate_latency_s": 3.6474,
+      "smaps_after_second_generate": {
+        "Rss": 2178224,
+        "Shared_Clean": 1515196,
+        "Private_Dirty": 378972
+      }
+    }
+  }
+}

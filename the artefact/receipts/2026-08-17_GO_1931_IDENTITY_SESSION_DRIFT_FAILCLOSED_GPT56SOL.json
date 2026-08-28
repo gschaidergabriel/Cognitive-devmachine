@@ -1,0 +1,65 @@
+{
+  "schema": "ClayVerseGoArchitectureCandidateReceipt/v1",
+  "timestamp_local": "2026-08-17T19:31:45+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "acceptance": "IN_PROGRESS",
+  "evidence_class": "SOURCE_CANDIDATE_UNEXECUTED",
+  "architecture_boundary": "Clerk authenticated identity -> canonical UnifiedDB session -> WebSocket PTY/tmux attach",
+  "observed_source_risk": {
+    "file": "the artefact/clayverse/identity.py",
+    "mechanism": "IdentityRouter.resolve() called UnifiedDB.ensure_session() during authenticated request resolution",
+    "counter_reality": "If a canonical permanent session disappeared after startup, authentication could recreate it instead of rejecting post-startup canonical-state drift",
+    "authority_concern": "Externally reachable auth resolution should validate existing UnifiedDB authority, not perform bootstrap repair"
+  },
+  "candidate": {
+    "pull_request": 623,
+    "branch": "clay/go-identity-session-drift-failclosed-20260817",
+    "head": "b519ee8b8f4ffa4fe35e7c921bbb314e877ac5a9",
+    "changes": [
+      "request-time resolve requires exactly one permanent session row",
+      "canonical terminal name is revalidated",
+      "session generation is checked against the one global live entity generation",
+      "authentication no longer recreates a missing session",
+      "focused regressions cover normal non-mutating resolution, deletion, duplicate rows and stale generation"
+    ],
+    "new_authority_created": false,
+    "unifieddb_remains_canonical": true
+  },
+  "source_review": {
+    "pr_mergeable_observed": true,
+    "changed_files": 2,
+    "runtime_gateway_readyz_duplicate_row_observation": "OPEN_SEPARATE_FOLLOWUP_NOT_CHANGED_IN_PR623"
+  },
+  "execution": {
+    "authorized_isolated_test_executed": false,
+    "github_workflow_run": 32030290699,
+    "github_job": 95388544711,
+    "github_job_conclusion": "failure",
+    "github_job_steps": 0,
+    "github_runner_id": 0,
+    "classification": "RUNNER_ADMISSION_FAILURE_BEFORE_STEPS_NOT_TEST_FAIL",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "primary_global_execution_blocker": {
+    "controller_pr": 810,
+    "sandbox_admission": "PASS_CREATED_ON_LATEST_ACTUALLY_STARTED_BOUND_RUN",
+    "blocker": "GITHUB_READ_TOKEN missing from host-side Vercel Preview build environment before private source fetch",
+    "secret_value_available_to_this_organ": false
+  },
+  "frontend_browser_test": {
+    "status": "BLOCKED_NOT_REACHED",
+    "reason": "The exact ClayVerse private source/OCI/service path is blocked before source staging, so no accepted current product frontend runtime exists to exercise in a browser. No controller/deployment proxy is counted as a ClayVerse frontend test."
+  },
+  "promotion": "DEFER_UNTIL_AUTHORIZED_ISOLATED_REGRESSION",
+  "unusual_experiment_count_added": 0,
+  "forbidden_paths_used": {
+    "vps": false,
+    "self_hosted_runner": false,
+    "production_host": false,
+    "together_api": false
+  }
+}

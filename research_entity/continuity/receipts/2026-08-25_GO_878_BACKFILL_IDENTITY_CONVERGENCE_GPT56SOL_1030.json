@@ -1,0 +1,59 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "newest_observed_supervisor": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "canonical_main_observed_before_receipt": "33aeb8a22034c61dfe1b85df93bfeb99b54375fb"
+  },
+  "observed_root_cause": {
+    "path": "tools/free_swarm_historical_backfill.py",
+    "source_blob": "f095ec12ab28aa5df87b1762b2cc19afca592365",
+    "finding": "incremental resume seeks to persisted byte_offset but resets local_line to zero while source_event_identity includes line_no; identical physical workers.jsonl rows can therefore receive different source_event_id values between one-shot and resumed scans",
+    "consequence": "historical replay provenance and deduplication can be split by scan chunking, corrupting evidence/support accounting"
+  },
+  "coordination_delta": {
+    "merged_followup_pr": 1877,
+    "merged_followup_role": "gated replay-idempotent source_count successor; waits for cumulative line identity predecessor",
+    "closed_duplicate_issue": 1869,
+    "retained_successor_issue": 1874,
+    "new_issue_dispatches_created_by_this_organ": 0,
+    "issue_trigger_fanout": "QUARANTINED_TOWARD_MANUAL_OR_GENERATION_GATED_RETRY",
+    "new_unusual_experiments": 0
+  },
+  "hypothesis": "The historical conversion deficit is partly amplified by unstable replay identity plus replay-inflated support accounting, not merely by low-value worker output.",
+  "counterhypothesis": "The identity defects affect bookkeeping but do not materially change recovered novel deltas; the 39M-token conversion deficit is mainly extraction/Forge selectivity.",
+  "cheapest_high_information_discriminator": "Land and execute the cumulative-line predecessor on exact source blob f095ec12..., require one-shot-vs-resumed source_event_id equality plus legacy offset migration PASS, then let the already-merged source_count followup run full historical-backfill tests before full-history replay saturation.",
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
+      "status": "ADVANCED",
+      "delta": "retired one duplicate dispatch lane, merged the dependent replay-idempotent support followup, and reduced the unresolved historical replay blocker to one exact source identity predecessor"
+    },
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "the highest-information current blocker is historical evidence identity/conversion; no second HCU or Typed Entry authority was created",
+      "next_discriminator": "after conversion identity is stable, bind recovered accepted evidence through the existing Typed Entry/HCU causal chain rather than adding a parallel ingress"
+    },
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "no model-specific unusual intervention was justified or lease-resolved while the upstream historical dataset/evidence conversion substrate remains unstable",
+      "next_discriminator": "after stable backfill and nonzero accepted dataset tokens, resume only the retained zero-cost model-specific J-Space lane with exact causal controls"
+    }
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Execute the already-existing exact-blob cumulative line checkpoint successor for issue 1874 without creating another issue-trigger generation; require full tests and bounded receipt. Then allow the merged PR1877 source-support followup to prove replay-idempotent support and continue to historical replay saturation plus Forge->Distillery accepted_dataset_tokens > 0 with semantic replay +0.",
+  "evidence_boundary": "source/coordination convergence only; no provider/model/J-Space/training/whole-product runtime promotion"
+}

@@ -1,0 +1,69 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_EVIDENCE/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "observed_research_main_before_receipt": "d32b808cb471327174a3f5f72b14aa5813607a01"
+  },
+  "coordination": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "observed_donor_head": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "observed_executor_head": "daa865951abd1293ee0fe16ce1a9d306a9cfda7d",
+    "upstream_shared_macrocycle_id": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0
+  },
+  "observation": {
+    "class": "PRE_RUNTIME_SOURCE_CARRIER_INCOMPLETE",
+    "rebind_contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+    "rebind_contract_status": "SOURCE_REBIND_REQUIRED",
+    "contract_retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "required_exact_blob_count": 17,
+    "required_current_chain_test_git_blob": "cd0abb3fe22d0fa015befe35c896f56fa006f08c",
+    "guard_target_directory": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-511d5689",
+    "direct_missing_path_observations": [
+      "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-511d5689/entry_canonicalization_v1.py",
+      "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-511d5689/test_execution_store_inference_jspace_chain_v1.py"
+    ],
+    "direct_observation_result": "GITHUB_CONTENTS_404_AT_OBSERVED_EXECUTOR_HEAD",
+    "interpretation": "The current exact-donor guard targets a 511d5689 carrier that is not yet materially present for directly sampled required files at the observed executor head. This is a source-closure/admission blocker before Sandbox execution, not a semantic regression failure and not runtime evidence."
+  },
+  "hypothesis": "PR810 is converging correctly on the producer-derived 511d5689 donor, but its declared exact 17-blob carrier/guard frontier is ahead of the materialized fixed-route carrier bytes.",
+  "counterhypothesis": "The required 511d5689 fixed carrier is already complete and only metadata is stale.",
+  "discriminator": {
+    "method": "Read exact required paths at the exact observed PR810 head before attempting any Sandbox call.",
+    "result": "COUNTERHYPOTHESIS_REJECTED_FOR_SAMPLED_REQUIRED_PATHS",
+    "scope": "SOURCE_PATH_PRESENCE_ONLY"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_BINDING_THE_NEXT_PRE_RUNTIME_EXECUTOR_BLOCKER_TO_EXACT_REPOSITORY_PR_HEAD_AND_CARRIER_PATH",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_PRESERVING_THE_511D_PRODUCER_DERIVED_TYPED_ENTRY_ROUTE_ENGINE_LOAD_GRID10_CHAIN_AS_THE_ONLY_CURRENT_DONOR_TARGET",
+    "track_c_jspace_gwt_free_only_readiness": "ADVANCED_BY_BINDING_THE_EXACT_17_BLOB_JSPACE_V4_V3_EXECUTION_CARRIER_GAP_WITHOUT_GRANTING_MODEL_OR_TRAINING_CREDIT"
+  },
+  "evidence_boundary": {
+    "source_review": true,
+    "exact_required_path_presence_observed": true,
+    "sandbox_execution_observed": false,
+    "runtime_credit_change": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "execution_policy": {
+    "paid_execution_used": false,
+    "together_used": false,
+    "vps_self_hosted_or_production_testing_used": false,
+    "secrets_used_or_persisted": false,
+    "sandbox_attempted": false,
+    "reason_no_sandbox_attempt": "SOURCE_REBIND_REQUIRED_AND_REQUIRED_FIXED_CARRIER_SAMPLED_PATHS_ABSENT"
+  },
+  "next_exact_gate": "Materialize all 17 exact donor-511d5689 production/regression/transitive blobs in the single retained PR810 fixed carrier, require the exact-blob guard and route manifest map to agree byte-for-byte, keep SOURCE_REBIND_REQUIRED until that closure is coherent, then execute the fixed FREE_ONLY Sandbox command only when included-tier admission permits."
+}

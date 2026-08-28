@@ -1,0 +1,102 @@
+{
+  "schema": "CLAY_GO_JSPACE_TRAINING_CONTROL_CANONICAL_SOURCE_REVALIDATION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_reentry": {
+    "research_main_observed_before_write": "4c64ca1fb97dddfc9305cc34ef91cf51c1700385",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_live_head_observed_before_write": "2a67ffdc42aab921c29ad31e503301022a0883ec",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "problem": {
+    "class": "SELF_CONSISTENT_CONTROL_DELIVERY_CLOSURE_PROVENANCE_LAUNDERING",
+    "observed_boundary": "The serious J-Space training compiler accepted a caller-supplied JSpaceModelInputControlClosure after self-hash validation and trace/inference cross-binding, but did not require the existing canonical-source closure revalidator before row promotion.",
+    "counterexample": "A caller can keep all TrainingTrace/JSpaceInferenceBinding-facing fields equal, replace a hidden canonical source identity such as control_admission_sha256 with another valid digest, recompute closure_sha256, and obtain a closure that passes digest-only validation. The existing canonical-source revalidator rejects this because it reconstructs the closure from the already-admitted MiniUnifiedDB control admission plus exact producer evidence."
+  },
+  "repair": {
+    "authority_design": "REUSE_EXISTING_CANONICAL_MINIUNIFIEDDB_AND_EXISTING_READ_ONLY_CLOSURE_REVALIDATOR_ONLY",
+    "new_second_store_or_truth_authority": false,
+    "new_effect_authority": false,
+    "new_training_authority": false,
+    "commits": [
+      {
+        "sha": "5825fbf4bdc1518b14c3088a5f132990791915de",
+        "path": "the artefact/MicroEntity/hcu/jspace_training_control_source_revalidation_v1.py",
+        "delta": "Adds a request-scoped TrainingControlSourceContext and a narrow adapter that requires exact source context by J-Space binding identity, generation equality, then delegates to revalidate_closure_against_canonical_sources()."
+      },
+      {
+        "sha": "f1b9dd625206e822b77da24596638d4d82308218",
+        "path": "the artefact/MicroEntity/hcu/test_jspace_training_control_source_revalidation_v1.py",
+        "delta": "Adds source regressions for exact revalidation, missing-context rejection, digest-valid forged control-admission rejection, generation mismatch rejection, and policy-neutral absence of a closure."
+      },
+      {
+        "sha": "dc0be31c8b098d569c46a5c6cd366137e2878c94",
+        "path": "the artefact/MicroEntity/hcu/compile_admitted_jspace_training_dataset_v1.py",
+        "delta": "Every actually supplied JSpaceModelInputControlClosure is now canonical-source revalidated before validate_pipeline_evidence() and before any lower-level row emission. BASELINE may still omit a closure; non-BASELINE remains subject to the existing delivery policy that requires one."
+      },
+      {
+        "sha": "58051d52f738d84c503ff9898c0bedee0dda4558",
+        "path": "the artefact/MicroEntity/hcu/test_compile_admitted_jspace_training_control_source_revalidation_v1.py",
+        "delta": "Compiler-bound regression specifies successful row promotion only with exact canonical context and fail-closed rejection before lower rows for a digest-valid forged control-admission identity or missing source context."
+      }
+    ],
+    "coordination_comment": {
+      "pr": 1263,
+      "comment_id": 5390224496,
+      "status": "UPDATED_FROM_FINDING_TO_SOURCE_REPAIR_IMPLEMENTED"
+    }
+  },
+  "verification": {
+    "source_presence_rechecked_at_live_donor_head": "2a67ffdc42aab921c29ad31e503301022a0883ec",
+    "compiler_repair_present": true,
+    "adapter_present": true,
+    "compiler_integration_test_present": true,
+    "github_combined_status_for_compiler_commit": "NO_STATUSES",
+    "github_workflow_runs_for_compiler_commit": 0,
+    "local_exact_commit_test_attempt": {
+      "status": "NOT_EXECUTED",
+      "reason": "The local container had no DNS/network access to materialize the exact GitHub commit. This is infrastructure/transport absence, not a product negative result."
+    },
+    "admitted_free_sandbox_execution": "NOT_RUN",
+    "runtime_gate_reason": "Remaining included Vercel Sandbox quota is not directly observed; an earlier exact-head Function gate preserved BLOCKED_QUOTA_UNOBSERVED, and newer executor heads must not inherit that result as positive runtime evidence.",
+    "evidence_class": "SOURCE_AND_TEST_SPECIFICATION_ONLY"
+  },
+  "parallel_reentry": {
+    "newer_main_frontier_observed": "Independent deterministic external stream authority and executor-owned temporal ordering remain separate higher-level causal gates; do not add another binder/admission authority.",
+    "compatibility": "This repair is orthogonal and compatible: it hardens serious training promotion of already-existing control-delivery closures and does not create a new temporal, state, effect, or stream authority."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_CONVERGENCE: a serious training promotion path now refuses supplied control-delivery evidence that cannot be re-derived from the canonical state/evidence substrate; executable runtime acceptance remains blocked by current FREE_ONLY quota observation/auth transport gates.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_HCU_CAUSAL_PROVENANCE: canonical MiniUnifiedDB control-admission evidence is now mandatory at the training-use boundary for every supplied model-input-control closure, without a competing store or effect path.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_TRAINING_READINESS: the identified closure-provenance laundering class is repaired in source and specified by focused plus compiler-bound regressions; exact authorized FREE execution and real model traces remain required before promotion."
+  },
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_run": 0
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md and HCU_DATA_INDEX are rapidly moving shared current-facing surfaces under parallel writes. Preserve the exact nonduplicate repair in code, tests, the retained PR coordination comment, and this append-only canonical receipt rather than overwriting fresher parallel convergence."
+  },
+  "next_exact_actions": [
+    "Keep this repair SOURCE_ONLY until the exact selected donor snapshot can run its focused and compiler-bound regressions on an admitted zero-cost isolated surface.",
+    "Do not create Sandbox work until remaining included quota is directly observed through an admitted non-charging surface; preserve fail-closed BLOCKED_QUOTA_UNOBSERVED where applicable.",
+    "Follow the newer main temporal frontier separately: establish deterministic external stream authority, revalidate that authority in the existing executor sequence lane, then prove actual executor-owned ordering without adding another state/effect/temporal authority.",
+    "Do not silently project newer PR1263 semantics into PR810's pinned donor snapshot; any executor rebind must select one immutable donor identity explicitly."
+  ]
+}

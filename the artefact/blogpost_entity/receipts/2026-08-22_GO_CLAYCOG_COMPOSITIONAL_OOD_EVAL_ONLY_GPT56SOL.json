@@ -1,0 +1,56 @@
+{
+  "schema": "claycog-compositional-ood-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "base_main_sha": "fc9f4ec86c137491ffc244596e49a9701ef0bdc0",
+  "branch": "gpt56sol/go-claycog-compositional-ood-eval-only-20260822-1429",
+  "rejected_candidate": {
+    "pr": 784,
+    "action": "CLOSED_UNMERGED",
+    "reason": "It retained historical duplicate-heavy v1 examples and would regress canonical leakage-free SFT v2 from PR 787.",
+    "training_credit": false
+  },
+  "canonical_training_input": {
+    "schema": "claycog-sft/v2",
+    "examples": 1650,
+    "train": 1485,
+    "validation": 165,
+    "policy": "NO_COMPOSITIONAL_OOD_ROWS_ADDED_TO_TRAINING"
+  },
+  "one_unusual_experiment": {
+    "id": "operation_vocabulary_lesion_for_compositional_ood",
+    "training_operation_vocabulary": ["artifact.write", "calendar.create", "db.lookup", "http.get", "mail.send", "queue.publish"],
+    "held_out_operation_vocabulary": ["blob.verify", "index.compact", "ledger.annotate", "route.reserve"],
+    "observed_overlap": [],
+    "observed_held_out_count": 4,
+    "result": "RETAIN_AS_EVALUATION_ONLY_FALSIFIER",
+    "interpretation": "Zero operation-vocabulary overlap strengthens later OOD discrimination but is not evidence that any model generalizes."
+  },
+  "evaluation_candidate": {
+    "generator": "the artefact/blogpost_entity/mini_cognition/generate_eval_compositional_ood_v1.py",
+    "declared_cases": 320,
+    "declared_families": 6,
+    "role": "EVALUATION_ONLY_NOT_TRAINING",
+    "model_execution": false,
+    "promotion_credit": false
+  },
+  "ci_delta": {
+    "workflow": ".github/workflows/claycog-validator-pr.yml",
+    "preserves": "canonical SFT-v2 reproducibility and exact-omega OOD regression from main",
+    "adds": ["test_launch_together_safety_v1.py", "compositional OOD materialization/cardinality/unique-id gate"],
+    "exact_runner_execution": "OPEN_UNTIL_GITHUB_ACTIONS_ACTUALLY_STARTS_STEPS"
+  },
+  "together": {
+    "secret_mounted": false,
+    "dataset_uploaded": false,
+    "authenticated_preflight_executed": false,
+    "create_executed": false,
+    "training_started": false,
+    "money_spent_usd": 0,
+    "public_current_blocker": "No publicly documented Qwen2/Qwen2.5 Full-FT training template; authenticated provider admission remains open."
+  },
+  "evidence_boundary": "Source/coordination receipt plus one local vocabulary-lesion result only. No Actions runtime PASS, Together BYOM admission, model-quality PASS, quantized RSS, tuned local_exec integration or finished Mini Entity acceptance is claimed."
+}

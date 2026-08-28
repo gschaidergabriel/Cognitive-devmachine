@@ -1,0 +1,71 @@
+{
+  "schema": "CLAY_GO_872_TRIGGER1_QUEUED_RUN_LEASE_FENCE/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_72",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "observed_current_main_after_fusion": "d78b1f67f1d99aedbc1ff4b3c37c19b758f71823",
+  "problem": {
+    "class": "PRE_LEASE_QUEUED_GITHUB_ACTIONS_COMPATIBILITY_RUN_CAN_REACH_CURRENT_LAUNCHER",
+    "summary": "An issue-event workflow run created before the workflow-level atomic-lease gate can retain its historical workflow definition while later checking out current main. A launcher-only compatibility path therefore needs its own fail-closed admission fence before cache/runtime/intervention setup.",
+    "scientific_result": false
+  },
+  "delta": {
+    "launcher_commit": "264629c9984a83efb13f9aebd697c046ab72021f",
+    "regression_commit": "a11e2fc0c0a85b7fcbdb049ef46023310a090f43",
+    "launcher_path": "tools/trigger1_local_qwen06_midlayer_causal.sh",
+    "test_path": "tests/test_trigger1_launcher_atomic_lease_fence.py",
+    "launcher_blob_sha": "cf2742841ee4be0d7c97c75ede009ca236e102ed",
+    "test_blob_sha": "c6d7708467e6fc4fdf42bdcc39e3ea65825e6608",
+    "guard": "GITHUB_ACTIONS=true requires TRIGGER1_LEASE_ADMITTED=true before runtime setup",
+    "blocked_status": "BLOCKED_CANONICAL_ATOMIC_LEASE_NOT_ADMITTED",
+    "blocked_exit_code": 42,
+    "blocked_credit_scope": "NONE",
+    "provider_network_calls": 0
+  },
+  "verification": {
+    "canonical_source_re_read": true,
+    "launcher_present_on_observed_current_main": true,
+    "regression_present_on_observed_current_main": true,
+    "regression_executed_by_this_organ": false,
+    "reason_not_executed": "No newly admitted repository execution surface was used; source/control-plane hardening must not be inflated into runtime PASS.",
+    "forge_distillery_run_id": 32742535392,
+    "forge_distillery_job_id": 97480167751,
+    "forge_distillery_job_status": "queued",
+    "forge_distillery_job_conclusion": null
+  },
+  "coordination": {
+    "new_unusual_experiment_executed": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared reproducible immutable macrocycle/request identity was available for canonical create-only lease derivation.",
+    "retained_hcu_typed_entry_lane": "PR1263",
+    "retained_hcu_typed_entry_lane_state": "open"
+  },
+  "go_tracks": {
+    "A": {
+      "status": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "delta": "Fail-closed execution boundary strengthened for historical queued Trigger1 Actions runs; Forge->Distillery exact runtime witness remains nonterminal."
+    },
+    "B": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "PR1263 remains the single retained HCU/Typed Entry/Global J-Space donor lane; duplicating that implementation while exact execution evidence remains pending would create unnecessary authority overlap."
+    },
+    "C": {
+      "status": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY",
+      "delta": "The retained local-Qwen compatibility execution path now fails closed at the launcher if workflow atomic-lease admission was not established, including historical queued runs. No model intervention or training was executed."
+    }
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Observe a terminal repository-bound exact-current Forge->Distillery runtime witness and, independently, execute the launcher lease regression only on an admitted zero-cost execution surface; do not dispatch a new unusual Qwen intervention without a canonical atomic lease."
+}

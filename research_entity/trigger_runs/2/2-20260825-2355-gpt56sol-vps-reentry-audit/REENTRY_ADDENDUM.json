@@ -1,0 +1,109 @@
+{
+  "schema": "CLAY_TRIGGER2_RUN_REENTRY_ADDENDUM/v1",
+  "run_id": "2-20260825-2355-gpt56sol-vps-reentry-audit",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "Claude Code (ai-core-node coordinator + VPS Track A/B forks)",
+  "status": "REENTERED_AFTER_VPS_TRACK_A_TRACK_B_CONTINUATION_NONPROMOTING",
+  "base_report": "research_entity/trigger_runs/2/2-20260825-2355-gpt56sol-vps-reentry-audit/FINAL_REPORT.md",
+  "base_report_commit": "6f7beedd6f4dd6e2241fbebb912e54a4203bf187",
+  "main_observed_before_addendum": "4c4a84a505329f5470fc81dd5e8713f2e275fb0c",
+  "ancestry_lint_reverification": {
+    "tool": "tools/trigger2_successor_dynamic_ancestry_admission_lint_v1.py",
+    "candidate_commit": "4c4a84a505329f5470fc81dd5e8713f2e275fb0c",
+    "declared_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V34_GPT56SOL.json",
+    "pass": true,
+    "classification": "ELIGIBLE_FOR_NEXT_GATE_NOT_ADMITTED",
+    "stale_on_arrival_currentness": false,
+    "reachable_ledger_count": 34,
+    "note": "V34 is the correctly resolved newest ledger reachable from the candidate's parent ancestry; no ambiguity, no staleness"
+  },
+  "reentry_delta": [
+    {
+      "artifact_row": "immutable genesis + ordered nonempty history producer authority",
+      "previous_status_in_base_report": "BLOCKED_P1",
+      "current_status": "CLOSED",
+      "closing_commits": ["64ec0cedc", "ab59e4ed5", "1b60b8224"],
+      "reason": "trigger2_generation_provenance_gate_v1.py now binds genesis_state and full ordered event_history to the same trusted-generator authority already used for single-event cases; 5/5 new tests, zero regressions (1276->1281 passing at the time)."
+    },
+    {
+      "artifact_row": "OBSERVED evidence producer authentication",
+      "previous_status_in_base_report": "NEEDS_REVISION_P0",
+      "current_status": "CLOSED",
+      "closing_commits": ["c55c77d02", "c2a1104a0", "fcc11790c"],
+      "reason": "New trigger2_observed_evidence_producer_auth_gate_v1.py authenticates producer/policy/admission identity before OBSERVED acceptance; all 7 negative controls required by source doc section 7.2 pass; zero regressions (1281->1289 passing at the time). The exact forged-receipt counterexample from the base report is now rejected."
+    },
+    {
+      "artifact_row": "causal J-Space phase",
+      "previous_status_in_base_report": "NOT_ATTEMPTED",
+      "current_status": "PARTIAL",
+      "closing_commits": ["2606d7a06"],
+      "reason": "Layer-11 forward-hook intervention with full control matrix (baseline/+vector/sign_flip/null/orthogonal/permuted/wrong_layer/lesion-rescue/off_target/magnitude_ladder) shows a real reproducible behavioral effect. representation_divergence submetric has a documented instrumentation bug (reads 0.0 for same-layer conditions) -- flagged known_issue, not cited as evidence. Still zero J-Space model credit per credit boundary."
+    },
+    {
+      "artifact_row": "multi-seed phase",
+      "previous_status_in_base_report": "NOT_ATTEMPTED",
+      "current_status": "CLOSED",
+      "closing_commits": ["2606d7a06"],
+      "reason": "5-seed reproducibility run across baseline pilot cases; success rate and variance reported; one numerical-sensitivity arm kept separate from the promotion set."
+    },
+    {
+      "artifact_row": "TARGET_MEASURED minimal 8-case pilot",
+      "previous_status_in_base_report": "CURRENT_NEGATIVE_BASELINE_EVIDENCE",
+      "current_status": "EXTENDED_STILL_NEGATIVE_ON_ABSTENTION",
+      "closing_commits": ["2606d7a06"],
+      "reason": "Extended to 24-case pilot on TARGET_MEASURED plus 6-case cross-candidate on BASE/POSTTRAINED. Same abstention failure reproduces (4/5 seeds fabricate on the fictional-company axis); new independent finding: POSTTRAINED fails DB-vs-simulation discrimination while BASE and TARGET_MEASURED pass it. No checkpoint winner declared -- sample remains n=1 per candidate per axis, explicitly flagged as insufficient for selection."
+    },
+    {
+      "artifact_row": "canonical S0 restart/resize race (not present in base report -- new finding)",
+      "previous_status_in_base_report": "NOT_PRESENT",
+      "current_status": "FOUND_AND_CLOSED",
+      "closing_commits": ["abfac263d", "6463e4b12", "4c4a84a50"],
+      "reason": "Pinned python3 tools/run_go_repository_bound_acceptance_bundle_v1.py execution on the campaign-close commit found canonical_s0 component failing (BoundaryError RACE_PROPOSALS_DID_NOT_BIND_SHARED_OBSERVED_EPOCH). Root cause: attempt_direct_s0_write's failed INSERT left an implicit sqlite3 read transaction open, pinning the read-only S0 connection to a stale pre-attempt snapshot. Fixed with an explicit rollback; re-verified PASS in a fresh clean detached worktree. Directly relevant to the planned physical GRID10 work's CAS/epoch guarantees."
+    },
+    {
+      "artifact_row": "trigger2_binding_router_factorial_generator_v3",
+      "previous_status_in_base_report": "BLOCKED_FROM_DIRECT_TRAINING",
+      "current_status": "UNCHANGED_STILL_BLOCKED",
+      "closing_commits": [],
+      "reason": "Quarantine verified intact, zero references anywhere in the repo. Not unquarantined."
+    },
+    {
+      "artifact_row": "HCU variable-N phase",
+      "previous_status_in_base_report": "NOT_ATTEMPTED",
+      "current_status": "UNCHANGED_STILL_NOT_ATTEMPTED_BLOCKED",
+      "closing_commits": [],
+      "reason": "No sweepable logical-N interface exists in the repo as scoped; the live production EntityOS/ClayVerse stack on this VPS was deliberately not touched (out of authorized scope). Owner has since specified this needs its own sandboxed isolated design (physical GRID10 on an isolated S1 test fabric) -- separate forthcoming work, not folded into this addendum."
+    },
+    {
+      "artifact_row": "exact-merge singleton validation defect (issue #2019)",
+      "previous_status_in_base_report": "NEEDS_REVISION",
+      "current_status": "UNCHANGED_DESIGN_SPECIFIED_IMPLEMENTATION_PENDING",
+      "closing_commits": [],
+      "reason": "Owner has now fully specified the proof-carrying fix (internally generated transition-witness binding >=2 validated predecessors, matching semantic signature, and pre/post-state; no caller-controlled allow_singleton). Implementation is separate forthcoming work in this same reentry cycle, not yet committed as of this addendum."
+    }
+  ],
+  "dedup_action": "NO_COMPETING_LEDGER_OR_ANCESTRY_LINT_TOOL_CREATED_AFTER_VERIFYING_EXISTING_V1_TOOL_STILL_CORRECT",
+  "execution_evidence": {
+    "successor_ancestry_lint_pass": true,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "remaining_frontier": [
+    "Implement the proof-carrying exact-merge singleton fix (issue #2019) per owner's finalized design.",
+    "Enlarge matched-baseline sample size (>=64 held-out cases per critical axis per candidate) on the abstain-calibration and DB-vs-simulation axes before any checkpoint selection.",
+    "Define a concrete sandboxed logical-N runtime interface, then measure physical GRID10 (ten Xeno processes) on an isolated S1 test fabric -- not against live production EntityOS.",
+    "Run matched-budget challenger comparisons (single Xeno, independent N, naive voting, fixed/random coordinator, hyperposition-lesion, compression-lesion) once GRID10 exists."
+  ],
+  "generation_decision": "NO_NEW_ROWS_WITH_REASON",
+  "generation_reason": "Multiple upstream gates closed this cycle (genesis/history authority, OBSERVED producer auth, canonical S0 race), but the merge-singleton fix, enlarged matched baselines, and HCU/variable-N measurement remain open. Positive-data admission remains upstream-blocked until those close.",
+  "hypothesis_and_implications": {
+    "why_the_md_json_discrepancy_existed": "research_entity/trigger_runs/2/*/FINAL_REPORT.md files are point-in-time audit snapshots, not live views -- they are never automatically re-synced when a later JSON receipt closes a row they described as open. This is not a bug in either artifact; it is a structural property of frozen markdown reports that this addendum-per-run-id convention (already established elsewhere in this repo, e.g. the a02-test-contract-repair run) exists specifically to reconcile.",
+    "implication": "Any future reader of a trigger_runs/*/FINAL_REPORT.md should check for a sibling REENTRY_ADDENDUM.json (or a later one in a different run_id directory, cross-referenced via main_observed_before_addendum) before treating its table as current -- this addendum is exactly that pointer for the 2355-vps-reentry-audit report."
+  }
+}

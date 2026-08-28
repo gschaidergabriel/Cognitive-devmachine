@@ -1,0 +1,122 @@
+{
+  "schema": "clayverse.source-slice-receipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:02:00+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_at_rejoin": "00391e228ef24c34506c1d0a2e22fb0fbe263108",
+  "branch": "go/current-main-effect-linearization-test-fusion-20260817-sol",
+  "branch_head_before_receipt": "52f5693b733d76a1cb2d3ae8c4c41fb76db6279f",
+  "delta_class": "TEST_ONLY_REJOIN_AFTER_STRONGER_EFFECT_LINEARIZATION",
+  "canonical_product_inputs": {
+    "recovery_blob": "a7aecd25573c5827470310f8389e6efdca12d14f",
+    "store_blob": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "identity_blob": "c3b8ecba0942c722d08efbf03e57d71c3a4f5cf3",
+    "workspace_blob": "2f3142a4f7695fa58521b27321e9759d314dd736",
+    "effect_journal_blob": "09c41aaa78b96b27d2ba1570f18c72a7d30afde8",
+    "effects_blob": "a9fbb88dbbae258680e6ed5e968bd502d5638d40",
+    "entityos_bridge_blob": "23441f3276d73e15ec0e32bbe8929534d131054f",
+    "turn_lifecycle_blob": "c484b9088d9f838e350a146c991e998c84e80332",
+    "memory_blob": "84e82ddde8a896ac0049840bf87d51e860d62d0b",
+    "retrieval_blob": "48b388be5ab0f7b5543d70f72e511dc3f740f6e4",
+    "microclay_retrieval_blob": "7fc7c7cdadf7bc606c091b977169051e9d767dd0",
+    "graph_blob": "d09bda21eabc04ad149ece4b1474b41119449363",
+    "hyperposition_blob": "bced03612a39f109b61f48f18a92e758025d4e34",
+    "needle_blob": "41a17c38b2afadab43306c782b5503be7ab96d64"
+  },
+  "tests": {
+    "recovery_preflight_blob": "463ec1c9404d02e884a6933871a373303fb2571f",
+    "restart_recovery_repaired_blob": "996727042c2903534f8c55c571bb544c7951f5bb",
+    "receipt_identity_blob": "8d130286581e33cd9b0e63c092225a3ea7f84bb1",
+    "global_generation_blob": "2b278e10a5eabdaecd1c09b41a8557af2ac63f0d",
+    "effect_replay_restart_repaired_blob": "b49e7010ac9870a8a71903bca75112b68f1223f1",
+    "active_turn_linearization_blob": "e873769fe77526a7c9df4127f15a50d18cccd400"
+  },
+  "rejoin_evidence": {
+    "prior_main_for_measured_current_product_slice": "2a3f0646e38c5e275ce99bcdac77c4ddbc74e2b5",
+    "latest_main": "00391e228ef24c34506c1d0a2e22fb0fbe263108",
+    "compare_status": "ahead",
+    "latest_main_commits_since_measured_product_slice": 11,
+    "overlap_with_recovery_effect_lifecycle_microclay_source_or_two_repaired_tests": false,
+    "changed_since_prior_main": [
+      "research_entity/continuity/DAYTONA_SANDBOX_EXECUTION_PATH_CURRENT.md",
+      "the artefact/clayverse/terminal_gateway.py",
+      "the artefact/clayverse/terminal_sessions.py",
+      "the artefact/policy/managed-tmux.conf",
+      "terminal/tmux/auth receipts and terminal tests"
+    ]
+  },
+  "observed_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "network_used_for_product_test": false,
+    "all_executed_source_and_test_files_bound_by_git_hash_object": true,
+    "first_current_main_linearization_slice": {
+      "passed": 17,
+      "failed": 2,
+      "elapsed_seconds_reported_by_pytest": 0.66,
+      "failures": [
+        "restart recovery test used a legacy non-active EffectJournal setup; current canonical EffectJournal correctly rejected it with StaleGeneration(effect_active_turn)",
+        "effect replay test expected legacy 'automatic replay denied' text while TurnLifecycle already rejected the mismatched persisted-effect retry earlier with 'different effect already persisted for active turn'"
+      ],
+      "classification": "STALE_TEST_DRIFT_AFTER_STRONGER_PRODUCT_LINEARIZATION_NOT_PRODUCT_SAFETY_FAILURE"
+    },
+    "repairs": {
+      "product_code_changed": false,
+      "test_files_changed": 2,
+      "restart_test_change": "construct canonical active TurnLifecycle episode, select request_effect and bind workspace_selected before direct EffectJournal receipt creation; preserve raw outcome identity, zero-credit recovery reconstruction, no replay and active-turn retirement assertions",
+      "replay_test_change": "expect the current earlier persisted-effect mismatch fence while retaining one-effect-only assertion"
+    },
+    "final_exact_source_slice": {
+      "test_files": [
+        "the artefact/tests/test_recovery_causal_preflight.py",
+        "the artefact/tests/test_restart_recovery.py",
+        "the artefact/tests/test_recovery_effect_receipt_identity.py",
+        "the artefact/tests/test_global_entity_generation.py",
+        "the artefact/tests/test_effect_replay_restart_fusion.py",
+        "the artefact/tests/test_effect_active_turn_linearization_current.py"
+      ],
+      "passed": 19,
+      "failed": 0,
+      "exit_code": 0,
+      "elapsed_seconds_reported_by_pytest": 0.57,
+      "classification": "EXACT_CURRENT_MAIN_RECOVERY_EFFECT_LINEARIZATION_LIFECYCLE_MICROCLAY_SOURCE_SLICE_PASS"
+    }
+  },
+  "execution_admission": {
+    "vercel": "BLOCKED_BY_FREE_DAILY_DEPLOYMENT_CAP",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_ORCHESTRATION_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "daytona_current_recheck": {
+      "credential_present": false,
+      "sdk_present": false,
+      "dns_pypi": false,
+      "dns_daytona_app": false,
+      "dns_daytona_api": false
+    },
+    "daytona_runtime_credit": 0,
+    "github_actions_recent_classification": "RUNNER_OR_PRE_STEP_ADMISSION_FAILURE_ZERO_TEST_CREDIT",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN"
+  },
+  "coordination": {
+    "new_unusual_experiment_in_this_residual_fusion": 0,
+    "go_unusual_experiment_budget_not_reopened_by_provider_or_test_rejoin": true,
+    "recovery_product_fix": "MERGED_PR_562",
+    "effect_active_turn_linearization": "MERGED_CURRENT_MAIN",
+    "this_branch": "TEST_ONLY_CONVERGENCE"
+  },
+  "claims": {
+    "exact_current_bounded_source_slice_pass": true,
+    "product_code_delta_in_this_branch": false,
+    "full_checkout_pass": false,
+    "exact_oci_build_pass": false,
+    "packaged_restart_pass": false,
+    "clerk_pty_claude_runtime_pass": false,
+    "whole_clayverse_pass": false
+  },
+  "next_gate": "Use the next actually-started authorized isolated full-checkout execution: Vercel if admitted and capable, otherwise Daytona when provider egress/credentials are available. Run broader current-main/PR regressions, then exact OCI build/image identity/start/readiness, packaged restart/recovery, dual-session concurrency/stale-generation, Clerk/WebSocket PTY/managed Claude hook lifecycle, EffectGate/EntityOS boundary and MicroClay effect-learning gates.",
+  "evidence_scope": "EXACT_CURRENT_BOUNDED_SOURCE_SLICE_PASS_NOT_FULL_CHECKOUT_OR_OCI"
+}

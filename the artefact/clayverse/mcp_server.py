@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
+
+from .autonomy import AUTONOMY_TURN_SOURCE, AutonomyController, CompletionNotVerified
+from .autonomy_context import bounded_autonomy_context
 
 
 class BridgeStateError(RuntimeError):
@@ -9,13 +13,14 @@ class BridgeStateError(RuntimeError):
 
 
 class ClayVerseEffectBridge:
-    """Stdio MCP for effects only; turns are owned deterministically by Claude hooks."""
+    """Stdio MCP for effects only; turns are owned deterministically by ClayVerse lifecycle."""
 
     def __init__(self, lifecycle):
         self.lifecycle = lifecycle
         self.db = lifecycle.db
         self.user_id = lifecycle.user_id
         self.session_id = lifecycle.session_id
+        self.autonomy = AutonomyController(self.db)
 
     @classmethod
     def from_env(cls):
@@ -42,7 +47,121 @@ class ClayVerseEffectBridge:
             entityos.verify()
         return cls(TurnLifecycle(db, user_id, session_id, entityos_bridge=entityos))
 
+    def _active_autonomy_identity(self) -> tuple[str, str] | None:
+        with self.db.tx() as db:
+            row = db.execute(
+                "SELECT t.provenance FROM active_turns a "
+                "JOIN turns t ON t.turn_id=a.turn_id "
+                "WHERE a.session_id=? AND a.user_id=?",
+                (self.session_id, self.user_id),
+            ).fetchone()
+            if row is None:
+                return None
+            try:
+                provenance = self.autonomy._loads(row["provenance"] or "{}")
+            except Exception as exc:
+                raise BridgeStateError("active turn provenance malformed") from exc
+            if provenance.get("source") != AUTONOMY_TURN_SOURCE:
+                return None
+            goal_id = provenance.get("goal_id")
+            step_id = provenance.get("autonomy_step_id")
+            if not isinstance(goal_id, str) or not goal_id or not isinstance(step_id, str) or not step_id:
+                raise BridgeStateError("autonomous active turn identity missing")
+            return goal_id, step_id
+
+    def _admitted_autonomy_effect(self, goal_id: str, step_id: str) -> tuple[dict, dict]:
+        goal_id = str(goal_id).strip()
+        step_id = str(step_id).strip()
+        if not goal_id or not step_id or len(goal_id) > 256 or len(step_id) > 256 or "\x00" in goal_id or "\x00" in step_id:
+            raise ValueError("invalid autonomy goal/step identity")
+        with self.db.tx() as db:
+            _state, goal = self.autonomy._goal(db, goal_id)
+            step = goal.get("current_step")
+            if (
+                not isinstance(step, dict)
+                or step.get("step_id") != step_id
+                or step.get("kind") != "effect"
+                or step.get("status") != "ADMITTED"
+                or not isinstance(step.get("effect"), dict)
+            ):
+                raise BridgeStateError("autonomy effect step is not exactly admitted")
+            row = db.execute(
+                "SELECT a.turn_id,a.episode_id,a.causal_id,a.generation,a.user_id,"
+                "t.session_id AS turn_session_id,t.user_id AS turn_user_id,t.provenance "
+                "FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id "
+                "WHERE a.session_id=? AND a.user_id=?",
+                (self.session_id, self.user_id),
+            ).fetchone()
+            if row is None:
+                raise BridgeStateError("no active autonomous turn")
+            try:
+                provenance = self.autonomy._loads(row["provenance"] or "{}")
+                entity_generation = int(provenance.get("entity_generation"))
+                session_generation = int(provenance.get("session_generation"))
+            except Exception as exc:
+                raise BridgeStateError("autonomous turn provenance malformed") from exc
+            if (
+                provenance.get("source") != AUTONOMY_TURN_SOURCE
+                or provenance.get("goal_id") != goal_id
+                or provenance.get("autonomy_step_id") != step_id
+                or provenance.get("causal_id") != row["causal_id"]
+                or row["turn_session_id"] != self.session_id
+                or row["turn_user_id"] != self.user_id
+                or int(row["generation"]) != int(goal["generation"])
+                or entity_generation != int(goal["generation"])
+                or session_generation != int(goal["generation"])
+            ):
+                raise PermissionError("active turn is not the exact admitted autonomy goal step")
+            return dict(step["effect"]), {
+                "turn_id": row["turn_id"],
+                "episode_id": row["episode_id"],
+                "causal_id": row["causal_id"],
+                "generation": int(row["generation"]),
+            }
+
+    def _prior_autonomy_effect(self, goal_id: str, step_id: str, current_episode_id: str):
+        """Find one exact prior effect for this durable goal/step, or fail closed.
+
+        The prior receipt remains owned by UnifiedDB/EffectJournal. This helper only finds
+        candidates; AutonomyController performs the authoritative target/argv/generation/
+        causal-provenance checks before the receipt can affect goal state.
+        """
+        rows = self.db.db.execute(
+            "SELECT e.effect_id,e.status,e.outcome,t.provenance "
+            "FROM effects e "
+            "JOIN workspace_episodes w ON w.episode_id=e.episode_id "
+            "JOIN turns t ON t.turn_id=w.observation_turn_id "
+            "WHERE w.session_id=? AND e.episode_id<>? AND t.provenance LIKE ? "
+            "ORDER BY e.ts,e.effect_id",
+            (self.session_id, current_episode_id, f"%{AUTONOMY_TURN_SOURCE}%"),
+        ).fetchall()
+        matches = []
+        for row in rows:
+            try:
+                provenance = self.autonomy._loads(row["provenance"] or "{}")
+            except Exception as exc:
+                raise BridgeStateError("prior autonomous effect provenance malformed") from exc
+            if provenance.get("source") != AUTONOMY_TURN_SOURCE:
+                continue
+            if provenance.get("goal_id") != goal_id or provenance.get("autonomy_step_id") != step_id:
+                continue
+            matches.append(row)
+        if len(matches) > 1:
+            raise BridgeStateError("multiple prior effects exist for one autonomous goal step")
+        return matches[0] if matches else None
+
+    def _maybe_complete_goal(self, goal_id: str, autonomy_result: dict) -> dict | None:
+        """Apply only the existing canonical completion contract immediately after verified effect evidence."""
+        if not bool(autonomy_result.get("verified")):
+            return None
+        try:
+            return self.autonomy.verify_completion(goal_id)
+        except CompletionNotVerified:
+            return None
+
     def request_effect(self, capability: str, target: str, argv: list[str] | None = None) -> dict:
+        if self._active_autonomy_identity() is not None:
+            raise PermissionError("autonomous turns must dispatch the exact admitted step through request_autonomy_effect")
         if capability not in {"entityos.exec", "state.noop"}:
             raise PermissionError("capability denied")
         if not isinstance(target, str) or not target or len(target) > 2048 or "\x00" in target:
@@ -60,6 +179,53 @@ class ClayVerseEffectBridge:
         result["boundary"] = "ClayVerse EffectGate -> EntityOS" if capability == "entityos.exec" else "ClayVerse EffectGate"
         return result
 
+    def request_autonomy_effect(self, goal_id: str, step_id: str) -> dict:
+        """Dispatch stored intent or reconcile exact prior evidence without re-execution."""
+        effect, binding = self._admitted_autonomy_effect(goal_id, step_id)
+        prior = self._prior_autonomy_effect(goal_id, step_id, binding["episode_id"])
+        if prior is not None:
+            if prior["status"] == "PENDING":
+                raise BridgeStateError("prior autonomous effect is pending; recovery required before retry")
+            autonomy_result = self.autonomy.record_effect_result(
+                goal_id,
+                step_id,
+                prior["effect_id"],
+                expected_generation=binding["generation"],
+            )
+            completion = self._maybe_complete_goal(goal_id, autonomy_result)
+            try:
+                outcome = self.autonomy._loads(prior["outcome"] or "{}")
+            except Exception as exc:
+                raise BridgeStateError("prior autonomous effect outcome malformed") from exc
+            return {
+                "effect_id": prior["effect_id"],
+                "causal_id": self.lifecycle.effects.causal_for_effect(prior["effect_id"]),
+                "verified": bool(autonomy_result["verified"]),
+                "outcome": outcome,
+                "autonomy": autonomy_result,
+                "autonomy_completion": completion,
+                "autonomy_binding": binding,
+                "reconciled_prior_effect": True,
+                "boundary": "AutonomyController -> existing EffectJournal receipt; no new effect execution",
+            }
+
+        result = self.lifecycle.request_effect(effect["capability"], effect["target"], effect.get("argv"))
+        effect_id = result.get("effect_id")
+        if not isinstance(effect_id, str) or not effect_id:
+            raise BridgeStateError("canonical lifecycle returned no effect identity")
+        autonomy_result = self.autonomy.record_effect_result(goal_id, step_id, effect_id)
+        completion = self._maybe_complete_goal(goal_id, autonomy_result)
+        result["autonomy"] = autonomy_result
+        result["autonomy_completion"] = completion
+        result["autonomy_binding"] = binding
+        result["reconciled_prior_effect"] = False
+        result["boundary"] = (
+            "AutonomyController -> ClayVerse EffectGate -> EntityOS"
+            if effect["capability"] == "entityos.exec"
+            else "AutonomyController -> ClayVerse EffectGate"
+        )
+        return result
+
     def session_state(self) -> dict:
         active = self.lifecycle.active()
         return {
@@ -73,6 +239,7 @@ class ClayVerseEffectBridge:
                 "generation": int(active["generation"]),
                 "effect_id": active["effect_id"],
             } if active else None,
+            "autonomy": bounded_autonomy_context(self.db, self.user_id),
             "capabilities": self.lifecycle.effects.available_capabilities(),
             "entityos_execution_enabled": self.lifecycle.effects.entityos_bridge is not None,
             "turn_ingestion": "automatic_claude_hooks",
@@ -87,8 +254,12 @@ def main() -> None:
     mcp = MCPServer(
         "ClayVerse",
         instructions=(
-            "UserPromptSubmit and Stop hooks own turn ingestion/context/completion automatically. "
-            "Use request_effect only for a real external/state-changing action; never bypass it with host execution."
+            "UserPromptSubmit and Stop hooks own interactive turn ingestion/context/completion automatically. "
+            "Use request_effect only for ordinary real/state-changing actions. "
+            "Use request_autonomy_effect only for an already-admitted durable autonomy effect step so exact goal/step/turn/episode/causal identity remains bound. "
+            "On retry, exact prior final evidence is reconciled instead of re-executed. "
+            "Verified autonomy effect evidence is immediately checked against the existing canonical completion contract before another planning step may replace the current effect binding. "
+            "Never bypass EffectGate with host execution and never claim success without a verified returned outcome."
         ),
     )
     ro = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
@@ -97,6 +268,10 @@ def main() -> None:
     @mcp.tool(annotations=effectful)
     def request_effect(capability: str, target: str, argv: list[str] | None = None) -> dict:
         return bridge.request_effect(capability, target, argv)
+
+    @mcp.tool(annotations=effectful)
+    def request_autonomy_effect(goal_id: str, step_id: str) -> dict:
+        return bridge.request_autonomy_effect(goal_id, step_id)
 
     @mcp.tool(annotations=ro)
     def session_state() -> dict:

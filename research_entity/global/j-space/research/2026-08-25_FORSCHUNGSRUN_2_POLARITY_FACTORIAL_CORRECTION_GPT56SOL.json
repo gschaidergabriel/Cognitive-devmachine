@@ -1,0 +1,100 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_POLARITY_FACTORIAL_CORRECTION/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "e787c13e8516023b3532ba70fc125ae4dae390e9",
+  "scope": "STATIC_FACTORIAL_AUDIT_OF_STRUCTURAL_LABEL_FREE_QWEN3_0_6B_NATIVE_CVEC_DISCRIMINATOR",
+  "observed_source": {
+    "case_generator_path": "tools/trigger1_structural_label_free_cases.py",
+    "case_generator_blob_sha": "66bb2f5cfccad602ee9c759961a369ab2c61be41",
+    "executor_path": "tools/trigger1_structural_native_abstract_execute.py",
+    "executor_blob_sha": "0711e07609c2f402db9762cf9495c31cae7888e8",
+    "generator_codebook_rule": "output_code_index=(target_index+scenario) mod 3",
+    "generator_probe_polarity_rule": "probe_query_negated=(target_index+scenario) mod 2",
+    "cases_per_split": 9
+  },
+  "new_material_finding": {
+    "id": "R2_POLARITY_NOT_ORTHOGONAL_TO_TARGET_OR_OUTPUT_CODE",
+    "classification": "PROMOTION_CRITICAL_STATIC_DESIGN_CONFOUND",
+    "statement": "The structural case generator is exactly counterbalanced for semantic-target x A/B/C output-code identity, but query polarity is not an independent counterbalanced factor. The same target_index+scenario quantity drives both code identity modulo 3 and query negation modulo 2.",
+    "exact_rows": [
+      {"scenario": 0, "target": "AFFIRMATIVE", "code": "A", "query_negated": false},
+      {"scenario": 0, "target": "NEGATIVE", "code": "B", "query_negated": true},
+      {"scenario": 0, "target": "NEUTRAL", "code": "C", "query_negated": false},
+      {"scenario": 1, "target": "AFFIRMATIVE", "code": "B", "query_negated": true},
+      {"scenario": 1, "target": "NEGATIVE", "code": "C", "query_negated": false},
+      {"scenario": 1, "target": "NEUTRAL", "code": "A", "query_negated": true},
+      {"scenario": 2, "target": "AFFIRMATIVE", "code": "C", "query_negated": false},
+      {"scenario": 2, "target": "NEGATIVE", "code": "A", "query_negated": true},
+      {"scenario": 2, "target": "NEUTRAL", "code": "B", "query_negated": false}
+    ],
+    "target_polarity_marginals": {
+      "AFFIRMATIVE": {"nonnegated": 2, "negated": 1},
+      "NEGATIVE": {"nonnegated": 1, "negated": 2},
+      "NEUTRAL": {"nonnegated": 2, "negated": 1}
+    },
+    "output_code_polarity_marginals": {
+      "A": {"nonnegated": 1, "negated": 2},
+      "B": {"nonnegated": 1, "negated": 2},
+      "C": {"nonnegated": 3, "negated": 0}
+    },
+    "strongest_exact_confound": "Every probe mapped to output code C is unnegated. No code-C probe is negated in either calibration or holdout because both splits reuse the same scenario/target design."
+  },
+  "why_it_matters": [
+    "The semantic basis is grouped by evaluator-side target. Because NEGATIVE has a different negation frequency from AFFIRMATIVE and NEUTRAL, a query-negation feature can contaminate a target direction even though canonical semantic labels are absent.",
+    "The primary behavioral metric is the mapped A/B/C target-code logit margin. Because code C is perfectly coupled to nonnegated probes, output-code effects and query-polarity effects are not fully separable in the 9-case design.",
+    "The current nuisance set covers canonical labels, semantic synonyms, generic instruction compliance and output-code identity, but it does not include an explicit query-negation/polarity nuisance axis. Therefore the existing residualization does not prove removal of this confound.",
+    "The generator comment that query polarity is counterbalanced is true only in the weak sense that each semantic class appears with both forms. It is not exact factorial counterbalance and is false as an orthogonality claim."
+  ],
+  "correction_to_existing_run2_receipts": {
+    "affected_statement": "query negation/polarity is counterbalanced",
+    "corrected_interpretation": "QUERY_POLARITY_HAS_COVERAGE_BUT_IS_NOT_ORTHOGONAL_OR_EXACTLY_COUNTERBALANCED_ACROSS_TARGET_X_OUTPUT_CODE",
+    "historical_receipts_modified": false,
+    "reason": "Preserve append-only research history; this receipt supplies the corrective counterevidence."
+  },
+  "successor_fix": {
+    "minimum_factorial": "SEMANTIC_TARGET_3 x OUTPUT_CODE_3 x QUERY_POLARITY_2",
+    "minimum_cases_per_split_without_replication": 18,
+    "preferred": "Repeat every target x code x polarity cell across multiple independent symbol/scenario and genuinely different task-grammar families.",
+    "required_generator_invariant": "For every semantic target and every output code, negated and nonnegated probes occur with identical counts.",
+    "required_demo_invariant": "Demonstration-block polarity must be independently balanced or held identical within matched probe pairs so demo polarity cannot substitute for probe relation state.",
+    "required_nuisance_extension": "Add an explicit query-negation/polarity nuisance direction/control and require the semantic candidate to remain after residualization or stratified adjustment.",
+    "required_statistic": "Estimate target-selective intervention effects stratified by query polarity and require the semantic interaction to retain sign and specificity in both polarity strata."
+  },
+  "queued_run_interpretation": {
+    "run_id": 32810213066,
+    "status_observed_before_this_research": "queued",
+    "if_pass": "May add strong bounded structural native component evidence, but cannot close abstract semantic J-Space promotion because polarity is not independently counterbalanced and the previously documented promotion-gate gaps remain.",
+    "if_fail": "Preserve as falsifying evidence at exact frozen identity.",
+    "duplicate_dispatch_created": false
+  },
+  "external_research_context": [
+    {
+      "source": "Braun et al., Understanding (Un)Reliability of Steering Vectors in Language Models, arXiv:2505.22637",
+      "relevance": "Prompt type and directional coherence materially affect steering reliability; this supports treating an unbalanced prompt-structure factor as a causal nuisance rather than harmless formatting."
+    },
+    {
+      "source": "Panickssery et al., Steering Llama 2 via Contrastive Activation Addition, arXiv:2312.06681",
+      "relevance": "Steering is an intervention whose token-position and prompt construction are part of the causal design; prompt-structure balance must therefore be bound rather than assumed irrelevant."
+    }
+  ],
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_runtime_credit": 1,
+    "structural_label_free_native_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Forschungsrun 2 independently falsifies the assumption that query polarity is fully counterbalanced in the frozen structural discriminator. Exact static enumeration shows polarity is coupled to both semantic target and output code, with code C always unnegated. This creates a remaining nonlexical structural nuisance that the current residualizer does not explicitly remove. The queued run remains useful bounded evidence, but a promotion-grade successor must use an exact target x code x polarity factorial and polarity-stratified controls.",
+  "next_exact_action": "Do not alter or duplicate the already queued frozen run. On its eventual result, keep claim scope bounded. For the successor promotion discriminator, freeze an exact 3x3x2 target-code-polarity factorial with replication and an explicit polarity nuisance/control before opening any new holdout."
+}

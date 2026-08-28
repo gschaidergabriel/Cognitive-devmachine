@@ -1,0 +1,109 @@
+{
+  "schema": "CLAY_OWNER_DIRECTIVE/v2",
+  "date": "2026-08-24",
+  "status": "ACTIVE_SUPERSEDES_OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "owner_intent": {
+    "trigger_literal": "1",
+    "purpose": "Converge as quickly and simply as possible on direct reproducible vector-based model control through the Global J-Space path. The trigger is goal-bound, not provider-bound: every removable blocker must be eliminated or routed around automatically until only scientifically meaningful negatives or genuinely unavailable external capabilities remain.",
+    "completion_target": "DIRECT_REPRODUCIBLE_GLOBAL_JSPACE_VECTOR_CONTROL_ON_EXACT_ZERO_COST_MODEL_RUNTIME_WITH_API_BOUNDARY",
+    "no_user_reconfirmation_for_authorized_repairs": true,
+    "delta_creation_required": true,
+    "swarm_logic_required": true
+  },
+  "success_semantics": {
+    "core_mechanism": "actual runtime consumption of a bound model-specific vector intervention",
+    "api_boundary": "The successful runtime must be callable through an exact API boundary. A loopback-only local API is valid and preferred when it removes hosted-provider blockers.",
+    "local_runtime_is_not_a_surrogate_when_it_is_the_exact_target_runtime": true,
+    "external_provider_required": false,
+    "hosted_provider_output_logit_control_is_component_evidence_only": true,
+    "required_controls": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM"
+    ],
+    "calibration_and_holdout_must_be_disjoint": true,
+    "fixed_seeds_required": true,
+    "reproducible_directional_holdout_effect_required": true,
+    "exact_runtime_model_tokenizer_intervention_receipts_required": true
+  },
+  "convergence_ladder": [
+    {
+      "priority": 1,
+      "path": "LOCAL_PYTORCH_QWEN3_06B_ACTIVATION_HOOK_API",
+      "reason": "Shortest already-implemented zero-provider-billing path to a runtime-observed hidden-state vector intervention with an exact loopback API boundary; removes provider billing, credential entitlement, route fallback, provider-runtime identity, rate-limit and hosted-parameter blockers without requiring native-cvec integration first.",
+      "target": "Qwen/Qwen3-0.6B exact revision on a loopback-only API with runtime-observed activation-vector consumption"
+    },
+    {
+      "priority": 2,
+      "path": "LOCAL_LLAMA_CPP_QWEN3_06B_CVEC_API",
+      "reason": "Native-cvec replication/strengthening path after first causal completion, or fallback if the PyTorch hook path is technically unavailable.",
+      "target": "Qwen/Qwen3-0.6B-GGUF on loopback llama-server with native control-vector controls"
+    },
+    {
+      "priority": 3,
+      "path": "EXACT_FREE_HOSTED_OUTPUT_LOGIT_VECTOR",
+      "reason": "Cheap independent component discriminator only. It may accelerate understanding but must never block completion of the local hidden-state path."
+    },
+    {
+      "priority": 4,
+      "path": "FREE_EXTERNAL_INTERNAL_VECTOR_API_IF_PROVIDER_EXPOSES_ONE",
+      "reason": "Optional replication path; absence is not a Trigger-1 blocker."
+    }
+  ],
+  "blocker_elimination_policy": {
+    "blocker_is_not_terminal_if_an_authorized_alternative_path_exists": true,
+    "classes": {
+      "REPAIR_NOW": "Implement/test the smallest local repair in the same trigger run.",
+      "ROUTE_AROUND": "Switch to the next convergence-ladder path without waiting.",
+      "EXTERNAL_TRANSIENT": "Continue the independent local path; external recovery may run in parallel but cannot gate completion.",
+      "SCIENTIFIC_NEGATIVE": "Preserve as evidence and change hypothesis/vector/layer/gain while keeping the success law unchanged.",
+      "HARD_AUTHORITY_BOUNDARY": "Fail closed only for the prohibited action; continue all remaining authorized local work."
+    },
+    "same_blocker_may_not_consume_multiple_trigger_cycles_without_new_information": true,
+    "blocked_lane_must_emit_next_executable_action_or_be_reallocated": true,
+    "provider_credentials_and_free_entitlements_cannot_gate_local_execution": true,
+    "hosted_parameter_support_cannot_gate_local_execution": true,
+    "provider_route_identity_cannot_gate_local_execution": true
+  },
+  "parallelism": {
+    "work_slots": 10,
+    "slots_are_dynamically_reallocatable": true,
+    "default_allocation": {
+      "local_runtime_and_model_materialization": 2,
+      "vector_and_adapter_materialization": 2,
+      "layer_gain_calibration": 2,
+      "matched_controls_and_holdout": 2,
+      "runtime_identity_receipts_and_promotion": 1,
+      "hosted_replication_and_blocker_killing": 1
+    },
+    "rule": "When one slot is blocked, it is immediately reassigned to the highest-information unblocked dependency on the primary path. Exactly ten fixed hypotheses are no longer an owner requirement."
+  },
+  "economic_and_secret_boundaries": {
+    "zero_provider_billing_required": true,
+    "local_normal_user_execution_authorized": true,
+    "loopback_api_authorized": true,
+    "owner_authorized_free_external_providers": ["groq", "mistral", "nvidia", "openrouter"],
+    "together_forbidden": true,
+    "paid_or_unknown_cost_forbidden": true,
+    "paid_fallback_forbidden": true,
+    "billing_upgrade_or_credit_purchase_forbidden": true,
+    "secret_values_must_never_be_logged_or_committed": true,
+    "external_provider_calls_still_require_typed_free_lane_and_route_economic_provenance": true,
+    "local_loopback_execution_does_not_require_external_provider_admission": true,
+    "credential_rotation_to_evade_provider_limits_forbidden": true
+  },
+  "coordination": {
+    "trigger_1_is_distinct_from_trigger_go": true,
+    "trigger_1_has_its_own_owner_authority": true,
+    "go_atomic_lease_is_not_required_for_trigger_1": true,
+    "historical_trigger1_receipts_are_append_only": true,
+    "latest_source_and_authority_must_be_reentered_before_promotion": true
+  },
+  "evidence_boundary": "Scientific rigor is not weakened by this directive. The optimization changes the route to the evidence, not the evidence threshold: no positive Trigger-1 completion without actual vector consumption, exact identities, six matched controls, disjoint holdout, fixed seeds and reproducible directional effect."
+}

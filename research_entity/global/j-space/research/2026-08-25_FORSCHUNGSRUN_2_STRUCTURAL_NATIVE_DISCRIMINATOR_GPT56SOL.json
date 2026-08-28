@@ -1,0 +1,117 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_STRUCTURAL_NATIVE_DISCRIMINATOR/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "2080a7b1229eed06335a303eb8ea1f5e937e9d68",
+  "goal": "Execute the already-frozen label-independent, structurally counterbalanced native Qwen3-0.6B discriminator and distinguish internal representational transport from behavioral semantic vector control.",
+  "exact_runtime_identity": {
+    "source_head": "8e370c819d687bdba39345be384359f49bc605fb",
+    "model": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+    "gguf_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "llama_cpp_commit": "bb4caa7540188872173c44d161602d9271386413",
+    "native_api": "llama_set_adapter_cvec",
+    "native_token_scope": "ALL_PROMPT_TOKENS",
+    "sandbox": "clay-direct-dev",
+    "external_provider_used": false
+  },
+  "transport_forensics": {
+    "initial_failure_scientific_negative": false,
+    "resolved_runtime_paths": {
+      "python": "/cache/clay-qwen06/venv/bin/python",
+      "llama_source": "/cache/clay-qwen06-native/llama.cpp",
+      "llama_build_libdir": "/cache/clay-qwen06-native/build/bin",
+      "gguf": "/cache/clay-qwen06-native/models/Qwen3-0.6B-Q8_0.gguf"
+    },
+    "resolved_wrapper_failures": [
+      "old GGUF and llama.cpp cache paths did not match the native cache namespace",
+      "pgrep-based liveness checks self-matched the wrapper command line",
+      "llama-ext.h required the pinned llama.cpp src include path",
+      "native shared libraries are in the split build directory rather than llama.cpp/build/bin"
+    ],
+    "diagnostic_receipts": [
+      "chatgpt-vps-results:vps_bridge/results/receipts/fr2-trigger1-path-diagnose-gpt56sol-20260825.json",
+      "chatgpt-vps-results:vps_bridge/results/receipts/fr2-native-cache-probe-20260825-1300.json",
+      "chatgpt-vps-results:vps_bridge/results/receipts/fr2-native-build-layout-probe-20260825-1312.json"
+    ],
+    "terminal_execution_receipt": "chatgpt-vps-results:vps_bridge/results/receipts/fr2-structural-native-execute-builddir-20260825-1314.json",
+    "terminal_transport_status": "PASS",
+    "terminal_command_sha256": "e538730383a4639ac09ef80b137def834f6bc3786315ff93db0139722f9dccf2"
+  },
+  "scientific_result": {
+    "status": "FAIL_ABSTRACT_NATIVE_DISCRIMINATOR",
+    "result_sha256": "1486f27de96fa2aeb6c0b52800fdf9852a0b9e50761b17ba38c647d424d82532",
+    "calibration_case_count": 9,
+    "holdout_case_count": 9,
+    "selected_gain_calibration_only": 4.0,
+    "behavior": {
+      "baseline_hit_rate": 0.3333333333333333,
+      "matched_hit_rate": 0.3333333333333333,
+      "matched_mean_delta": -0.05239439010620117,
+      "matched_median_delta": -0.044203758239746094,
+      "signflip_mean_delta": 0.023727999793158636,
+      "null_mean_abs_delta": 0.0,
+      "orthogonal_mean_abs_delta": 0.05602190229627821,
+      "permuted_mean_abs_delta": 0.050500075022379555,
+      "nuisance_mean_abs_delta": 0.15475596321953666
+    },
+    "behavioral_causal_matrix": {
+      "diagonal_mean": -0.05239439010620117,
+      "off_diagonal_mean": -0.0014125770992702907,
+      "diagonal_advantage": -0.05098181300693088,
+      "diagonal_each_positive": false
+    },
+    "downstream_transport": {
+      "matched_target_coordinate_mean": 4.247913097378004,
+      "matched_target_coordinate_median": 4.229854116295517,
+      "matched_offaxis_abs_mean": 2.1243034394154026,
+      "signflip_target_coordinate_mean": -4.173776259142458,
+      "control_target_coordinate_abs_mean": 0.2542696726289941
+    },
+    "behavior_pass": false,
+    "downstream_transport_pass": true,
+    "abstract_native_discriminator_pass": false
+  },
+  "observed": [
+    "The native cvec intervention produces strong sign-sensitive target-coordinate transport at the downstream nonterminal layer.",
+    "The same matched intervention does not improve target-code behavior; mean matched margin delta is negative and hit rate remains chance-level 1/3.",
+    "The class-selective behavioral causal matrix has a negative diagonal advantage.",
+    "The nuisance control causes a larger mean absolute behavioral delta than the matched semantic intervention.",
+    "Calibration and holdout use lexically disjoint content symbols and opaque A/B/C code identity is counterbalanced across all semantic targets."
+  ],
+  "inference": [
+    "The tested residualized internal direction is a transported representation but is not established as a sufficient behavioral semantic actuator under native ALL_PROMPT_TOKENS cvec broadcast.",
+    "This result is counterevidence against treating the earlier last-token witness and native broadcast cvec as causally identical interventions.",
+    "A strong internal coordinate displacement cannot by itself justify semantic J-Space promotion."
+  ],
+  "not_established": [
+    "No canonical semantic J-Space promotion.",
+    "No J-Space model runtime PASS.",
+    "No full HCU runtime PASS.",
+    "No whole EntityOS runtime PASS.",
+    "No training credit.",
+    "The result does not prove that no alternative layer, scope, vector orientation, subspace, or actuator can provide abstract semantic control."
+  ],
+  "method_quality_notes": [
+    "The semantic simplex is centered before nuisance projection, so common activation offset is not used as semantic geometry.",
+    "The current discriminator holdout is small (9 cases) and its PASS rule is inequality-based rather than confidence/permutation-test based; therefore even a hypothetical PASS would remain bounded component evidence.",
+    "The all-prompt-token native broadcast can perturb demonstration/codebook processing as well as the probe state, so scope-localization remains a key next discriminator rather than a solved equivalence."
+  ],
+  "credit_change": {
+    "new_structural_native_runtime_evidence": "TERMINAL_EXECUTED_FAIL_PRESERVED_AS_COUNTEREVIDENCE",
+    "native_cvec_mechanism_component_credit": "UNCHANGED_EXISTING_PASS",
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_discriminator": "Do not retune on the opened holdout. On a fresh preregistered family split, compare the same residualized semantic subspace under scope-localized native intervention (probe-boundary/late-token or other API-equivalent localization if technically available) versus ALL_PROMPT_TOKENS broadcast, with sign orientation frozen on calibration, full semantic-target x code-identity counterbalance, nuisance-matched controls, downstream transport, emitted-decision readout, and permutation/bootstrap uncertainty. The purpose is to test whether the observed representation/control dissociation is caused by broadcast scope or by the semantic direction itself.",
+  "canonical_credit_minted": false
+}

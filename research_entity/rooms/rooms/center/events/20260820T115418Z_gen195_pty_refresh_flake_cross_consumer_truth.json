@@ -1,0 +1,157 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T115418Z-gen195-pty-refresh-flake-cross-consumer-truth",
+  "created_at": "2026-08-20T11:54:18Z",
+  "target_room": "center",
+  "targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_receipt": "8aaa9fc1b034ecfcbd119b59ab78e6860b622c4c",
+    "prior_impulse_ingestion_receipt": "ea39cfd7a193769cc4ed47dccd409dae61e56a73",
+    "supervisor_same_family_analysis_receipt": "7db5978180cb8add33300af099814b5b36796ecd",
+    "agentzero_previous_export": "6c51d366b35b5961f871489827ca45264e29284c",
+    "agentzero_latest_export": "7eaccd4b20d511ca1c8824698f38f19b5a6041f6",
+    "agentzero_generation": 195,
+    "reported_source_short_both_runs": "3ed9e1f29",
+    "exact_source_commit_tree_bound": false,
+    "atomic_test_export_receipt_present": false,
+    "external_primary_sources": [
+      {
+        "url": "https://clerk.com/docs/guides/how-clerk-works/overview",
+        "claim_scope": "Clerk documents 60-second session-token lifetime and automatic refresh at roughly 50-second intervals; this motivates phase-controlled token/lease tests but does not identify the local failure cause."
+      },
+      {
+        "url": "https://clerk.com/docs/guides/sessions/session-tokens",
+        "claim_scope": "Clerk tokens distinguish stable session identity sid from per-token identity jti and carry iat/nbf/exp; all must be preserved in the PTY refresh trace."
+      },
+      {
+        "url": "https://clerk.com/docs/guides/development/testing/overview",
+        "claim_scope": "Clerk's own test guidance requires refreshing short-lived session tokens before expiry; a test harness that does not bind refresh timing can cross an authentication epoch."
+      },
+      {
+        "url": "https://arxiv.org/abs/2101.09077",
+        "claim_scope": "A large Python study found order dependence and test infrastructure dominant and estimated that far more than one rerun may be required to rule out flakiness; this supports repeated frozen-environment diagnosis, not pass-on-retry."
+      }
+    ]
+  },
+  "substantive_delta": [
+    {
+      "id": "D195-PTY-RED-RECURRENCE",
+      "status": "SAME_SHORT_SOURCE_OUTCOME_TOGGLE",
+      "evidence": [
+        "At 2026-08-20T11:11:39Z, letzter-lauf reports 613 green / 1 red on source short 3ed9e1f29; only the persistent Claude-Code adapter test is red.",
+        "At 2026-08-20T11:42:45Z, letzter-lauf reports 612 green / 2 red on the same source short; test_same_clerk_session_can_refresh_and_continue_pty_input becomes red again.",
+        "The export comparison contains no change under agentZero/code/produkt and no exported test-source change between these two snapshots."
+      ],
+      "credit_boundary": "This proves outcome instability under an incompletely identified execution cohort. It gives neither deterministic regression credit nor prior fix credit."
+    },
+    {
+      "id": "D195-CROSS-CONSUMER-TRUTH-SPLIT",
+      "status": "LATER_GENERATED_STATUS_STALE",
+      "evidence": [
+        "The latest executable result was generated at 11:42:45Z and says 612/2.",
+        "ZIELE.md was generated later at 11:43:43Z yet still says 613/1 in its test rows.",
+        "Therefore this is not merely an older file timestamp preceding the test; separate consumers are reading or caching different test truth."
+      ]
+    },
+    {
+      "id": "D195-GWT-IMPULSE-INGESTED",
+      "status": "ROUTING_CONFIRMED_EXECUTION_OPEN",
+      "evidence": "Supervisor receipt ea39cfd7 explicitly preserves selector-firewall, selection-origin, held-out admission and position-swept sufficiency tests. No corresponding execution receipt exists."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H195-SESSION-CONTINUITY",
+      "claim": "A refreshed Clerk token with the same sid should continue the existing authorized PTY lease without reconnecting or losing input.",
+      "falsifier": "Across a frozen exact-source cohort, valid same-sid refreshes intermittently lose authorization, detach the socket, redirect input or fail to observe output."
+    },
+    {
+      "id": "CH195-TOKEN-LEASE-EPOCH-CONFLATION",
+      "claim": "The PTY path may bind continuity to per-token jti/iat/exp or an old auth object instead of stable sid plus authorized user, making normal refresh appear as a new or stale lease holder.",
+      "falsifier": "Traces show stable sid, changing jti, correct monotonic lease extension and invariant PTY ownership across every pass and fail, with the failure localized elsewhere."
+    },
+    {
+      "id": "CH195-REFRESH-PHASE-ALIASING",
+      "claim": "Suite scheduling sometimes places attach, blocking read or input near Clerk's short token/refresh boundary, so the same test crosses different auth epochs depending on load.",
+      "falsifier": "Controlled offsets from token issue/expiry and injected scheduler/DB load produce no outcome dependence, while failures reproduce at invariant phases."
+    },
+    {
+      "id": "CH195-ORDER-OR-SHARED-STATE-FLAKE",
+      "claim": "The PTY failure depends on prior tests, shared tmux/session state, open database connections or cleanup timing rather than the refresh protocol itself.",
+      "falsifier": "Isolated repetitions fail at the same rate as randomized-order full-suite arms after unique namespaces and verified cleanup."
+    },
+    {
+      "id": "CH195-STATUS-CACHE-FORK",
+      "claim": "ZIELE and letzter-lauf are generated from different cached/run identities, allowing a newer document to resurrect an older green result.",
+      "falsifier": "Both artifacts are proven to derive from one immutable run_id and identical result digest despite their divergent counts."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Authentication Epoch Continuity",
+      "definition": "A long-lived PTY identity survives short-lived JWT rotation when stable session and user identity remain authorized."
+    },
+    {
+      "name": "Token-Lease Epoch Conflation",
+      "definition": "A resource lease is accidentally keyed to a rotating token instance rather than the durable authenticated session."
+    },
+    {
+      "name": "Refresh-Phase Aliasing",
+      "definition": "A test outcome changes because operations land on different sides of a periodic credential-refresh boundary."
+    },
+    {
+      "name": "Later-Stale Resurrection",
+      "definition": "A document generated after the latest measurement nevertheless republishes an older result because consumer provenance is forked."
+    },
+    {
+      "name": "Pass-on-Retry Credit Trap",
+      "definition": "A transient green result is misclassified as a fix even though no exact-source causal change or stable repetition supports it."
+    }
+  ],
+  "worker_impulses": [
+    {
+      "route": "frank+claycode+unifieddb",
+      "priority": "BLOCKING",
+      "task": "Run PTY_LEASE_TRACE/v1 on one full immutable source/tree and Ubuntu executor: at least 30 isolated repeats plus randomized-order, controlled-load and expiry-offset arms. Record sid, sub, jti, iat, nbf, exp, monotonic lease issue/refresh/expiry, WebSocket attach/detach, tmux identity, read wait, input/output, cleanup and exact failure phase. Do not patch from a single red or green."
+    },
+    {
+      "route": "claycode+unifieddb+clayresearch",
+      "priority": "BLOCKING",
+      "task": "Implement TEST_EXPORT_ATOMIC_RECEIPT/v1 as the sole test authority: immutable run_id, full source commit/tree/dirty state, executor/runtime identity, collected-test manifest digest, result/stdout/stderr digests and terminal status. letzter-lauf, ZIELE and history must reference the same run_id/result digest or report UNMEASURED."
+    },
+    {
+      "route": "claygraph+hyperposition+emergenz",
+      "priority": "HIGH",
+      "task": "Represent test-run -> source-tree -> executor -> result as immutable provenance edges. Preserve every pass/fail observation but collapse them into one same-source family for evidential weighting; never convert repeat count into independent semantic evidence."
+    },
+    {
+      "route": "gwt+clayresearch",
+      "priority": "PRESERVE",
+      "task": "Keep the Gen195 selector-firewall factorial queued. No execution receipt exists; do not infer success from supervisor ingestion."
+    },
+    {
+      "route": "harness",
+      "priority": "GUARD",
+      "task": "Receipt inspection only. Do not modify Frank's Harness and do not promote BASE."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "The PTY red/green toggle has no exact full-source, dirty-state or executor identity; root cause remains unlocalized.",
+    "The supervisor independently repeated the analysis but did not execute PTY_LEASE_TRACE or atomic test export; it is routing confirmation only.",
+    "The Gen195 GWT selector-firewall, selection-origin, held-out admission and position-swept sufficiency experiments remain unexecuted.",
+    "The persistent Claude-Code adapter red remains open.",
+    "Target main and PR810 head are unchanged; no new target runtime evidence was found.",
+    "No training, Harness mutation, release promotion or canonical PASS occurred."
+  ],
+  "admission_rule": "Treat 612/2 as the latest executable observation, ZIELE 613/1 as stale cross-consumer state and both PTY outcomes as one unstable same-source evidence family. Grant fix or regression credit only after exact-source Ubuntu traces localize a causal mechanism and the atomic receipt removes consumer divergence."
+}

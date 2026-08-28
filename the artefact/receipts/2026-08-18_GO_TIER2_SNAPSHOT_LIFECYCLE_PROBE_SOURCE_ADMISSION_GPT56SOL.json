@@ -1,0 +1,83 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:44:00+07:00",
+  "updated_at_local": "2026-08-18T01:47:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SUPERSEDED_DIRECT_SNAPSHOT_PROBE_REMOVED_CLEAN_CARRIER_RETAINS_FRONTIER",
+  "canonical_main_observed_before_write": "0a10fabf3216c5e26bbc486b9df6851a82b49f8a",
+  "superseding_canonical_main_observed": "91ffeb7b2c665d6a3b8b3b60c4700cc8568468ac",
+  "superseding_receipt": "the artefact/receipts/2026-08-18_GO_PR810_CLEAN_CARRIER_AND_DUAL_EXECUTION_ADMISSION_BLOCK_GPT56SOL.json",
+  "immutable_runtime_freeze": {
+    "pull_request": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "probe_history": {
+    "path": "mcp/vercel-sandbox-mcp/api/snapshot-lifecycle-probe.js",
+    "introduced_commit": "98e7447f1017364394fc8e940e5494cab0908367",
+    "preview_fence_hardening_commit": "62abc25a4d9bbb4e15592a82550b9667f8af8d1a",
+    "last_probe_blob": "d8c9d3cdb0cb5f842bdbe10a5820b4cd5f09c4e1",
+    "probe_executed": false,
+    "runtime_credit": 0,
+    "removal_commit": "43af5f4746c5fd9d36228c48ed9c49ebfdf3b8fa",
+    "removed_reason": "Latest canonical Research converged Tier2 onto a distinct clean carrier Sandbox. The old source Sandbox is not the snapshot producer, so deleting the source no longer depends on direct source-snapshot survival. Keeping the temporary direct-source lifecycle probe would add stale test infrastructure without advancing the retained product path."
+  },
+  "preview_trigger_history": {
+    "path": "mcp/vercel-sandbox-mcp/EXACT_CURRENT_PR810_DEPLOY_TRIGGER_20260818T0141p0700.txt",
+    "introduced_commit": "15510d1fe199991b1cc0174fbdaf199afcf18659",
+    "produced_exact_deployment_in_observed_window": false,
+    "removal_commit": "1b1a47d4a2d73ccad4625afc3f52edd38d8152a5"
+  },
+  "clean_carrier_reentry": {
+    "source_snapshot_forbidden": true,
+    "sandbox_fork_forbidden": true,
+    "carrier_is_distinct_clean_persistent_false_sandbox": true,
+    "declared_transfer_only": true,
+    "carrier_snapshot_created_before_source_delete": true,
+    "old_source_deleted_before_replacement_create": true,
+    "replacement_created_from_carrier_snapshot": true,
+    "replacement_persistent_false": true,
+    "carrier_deleted_only_after_replacement_restore": true,
+    "runtime_verified": false
+  },
+  "execution_admission": {
+    "vercel": {
+      "status": "FAILURE_BUILD_RATE_LIMIT",
+      "build_started": false,
+      "product_runtime_executed": false
+    },
+    "daytona_free_only_fallback": {
+      "authorized_by_current_research": true,
+      "dispatch_attempts_observed_by_superseding_receipt": 3,
+      "steps": 0,
+      "runner_id": 0,
+      "provider_contact_proven": false
+    },
+    "direct_daytona_plugin_available_in_this_session": false,
+    "classification": "DUAL_CONTROL_PLANE_EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE"
+  },
+  "coordination": {
+    "pr810_snapshot_comment_supersession_id": 5318763096,
+    "duplicate_controller_path_added": false,
+    "stale_probe_removed": true,
+    "research_product_bytes_changed": false,
+    "owner_credentials_used": false,
+    "paid_or_beta_storage_provisioned": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "No duplicate unusual intervention was created; the temporary source probe was never executed and was removed after canonical clean-carrier convergence."
+  },
+  "epistemic_status": {
+    "clean_carrier_source_candidate": true,
+    "clean_carrier_exact_runtime_verified": false,
+    "exact_oci_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Restore one authorized execution admission path. Prefer an exact-current PR810 Vercel Preview; otherwise use the already-authorized FREE_ONLY Daytona fallback through a control plane that actually starts. Execute exact source guards first, then the immutable PR686 private-source -> exact OCI build/digest -> provider Stage 1 -> EffectGate/EntityOS -> Tier1 recovery -> clean declared-transfer carrier -> delete old source -> fresh persistent:false replacement -> exact identity restore -> fresh provider cognition path. No runtime credit until those steps actually execute."
+}

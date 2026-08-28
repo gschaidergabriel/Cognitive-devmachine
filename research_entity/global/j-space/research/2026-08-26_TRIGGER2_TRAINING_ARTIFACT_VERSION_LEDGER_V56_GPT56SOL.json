@@ -1,0 +1,163 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v56",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V55_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V55",
+  "observed_main_before_write": "89c9a121d6664784cea063c11fc024479d39b4b7",
+  "authority": {
+    "supervisor_epoch": "8.83_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V55 froze the practical four-quadrant risk/coverage gate but still listed renderer interaction as the remaining pre-unblinding source gate. Current main now contains a Supervisor-8.83-bound renderer interaction policy freeze and a synchronized current cache. V56 fuses that closure, preserves the actively failed runtime-quiescence P0, and resolves an apparent model-call-identity ambiguity by separating Trigger-2 probe-source closure from the still-unpromoted canonical EntityOS/HCU call-lineage integration scope. No provider/model/training execution is performed or authorized by this ledger.",
+  "preunblinding_selection_governance": {
+    "status": "SOURCE_GOVERNANCE_FROZEN_MODEL_OUTPUTS_UNOPENED",
+    "logical_manifest": {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_FOUR_QUADRANT_CHECKPOINT_EVAL_FREEZE_V1_GPT56SOL.json",
+      "generator_grader": "tools/trigger2_four_quadrant_checkpoint_eval_v1.py",
+      "sha256": "9e9a2a421cdaa9207783060b6b127fa4ca26bf25d9415b22730812f31229d57d",
+      "shape": "512 cases / 256 matched families / 128 cases per quadrant / B1-B2-B3 prospective blocks"
+    },
+    "practical_thresholds": {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_FOUR_QUADRANT_PRACTICAL_THRESHOLD_FREEZE_V1_GPT56SOL.json",
+      "sha256": "6dfebde63ae522fb61f7f20c17a32432d440dfadbebc0996ab39b0a5504d14de",
+      "selection_metrics": "Q1 coverage LCB >=0.90; Q1 exact-correct LCB >=0.85; Q2/Q3/Q4 adverse UCB <=0.10",
+      "statistics": "family-level one-sided exact-binomial Clopper-Pearson; Bonferroni alpha 0.05 across 5 metrics x 3 prospective looks"
+    },
+    "block_aware_postprocessor": {
+      "source": "tools/trigger2_four_quadrant_selection_eval_v2.py",
+      "source_commit": "e32ac17d8c9b7fe72aa0f39f0e4fbf8c1749a9f2",
+      "tests": "tests/test_trigger2_four_quadrant_selection_eval_v2.py",
+      "tests_commit": "ba32249897d8a58339541973fa3d5d42c1915638",
+      "purpose": "Evaluate exactly the currently opened B1/B2/B3 prefix without requiring unopened future-block outputs.",
+      "credit": "SOURCE_EVAL_ONLY_ZERO_MODEL_OR_CHECKPOINT_SELECTION_CREDIT"
+    },
+    "renderer_interaction": {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_RENDERER_INTERACTION_POLICY_FREEZE_V1_GPT56SOL.json",
+      "commit": "fe0aede9afa5f776d30b825f4f0c1fc9b0372792",
+      "status": "FROZEN_PREUNBLINDING_SOURCE_ONLY",
+      "policy": "For B-axis family index parity, Q3/Q4 use opposite deterministic DB_FIRST/SIM_FIRST renderer-view arms; each quadrant is 64/64 balanced across 128 families. Logical worlds/model_input/gold/family/block/grader remain immutable.",
+      "interaction_screen": "Report Q3/Q4 by arm at every opened block. Absolute within-quadrant error-rate difference >0.10 raises RENDERER_INTERACTION_SIGNAL and keeps renderer transportability unresolved; absence of signal is not proof of invariance.",
+      "receipt_binding": "Future calls must bind case/family/policy/arm plus exact renderer digest, rendered UTF-8 digest, tokenizer/chat-template identity and input tensor identity."
+    },
+    "outputs_unblinded": false,
+    "rows_generated_by_this_delta": 0,
+    "rows_admitted_by_this_delta": 0
+  },
+  "model_call_identity_scope_split": {
+    "trigger2_probe_component": {
+      "status": "SOURCE_AND_DETERMINISTIC_TEST_CLOSURE_PRESENT_RUNTIME_UNEXECUTED",
+      "source_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI_V2_SOURCE_DELTA_GPT56SOL.json",
+      "negative_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_MODEL_CALL_OUTPUT_BINDING_NEGATIVE_FIXTURE_DELTA_GPT56SOL.json",
+      "source": "tools/trigger2_qwen35_checkpoint_model_state_consumption_probe_v2.py",
+      "closed_source_properties": [
+        "complete admitted checkpoint-state versus persistent loaded-state reconciliation",
+        "rendered/token/runtime/checkpoint/loaded-state binding",
+        "full last-token logits content identity rather than top1-only summary",
+        "model-call binding changes under SAME_TOP1_DIFFERENT_LOGITS",
+        "model-call binding changes under candidate/output transplant"
+      ],
+      "runtime_credit": 0
+    },
+    "canonical_entityos_hcu_chain": {
+      "status": "NOT_PROMOTED_KEEP_SUPERVISOR_8_83_GAP_FAIL_CLOSED",
+      "supervisor_frontier": "model_call_causal_identity=SOURCE_CONTRACT_GAP_OUTPUT_AND_CALL_IDENTITY_NOT_CLOSED",
+      "reason": "A Trigger-2 selection probe can close its own deterministic source contract without proving that the canonical Typed Entry -> route -> resolved engine -> loader lease/consumed bytes -> GRID10 cell -> model call -> NODE_RESULT/J-Space/eval path consumes and persists the same identity end-to-end.",
+      "required_integration_audit": [
+        "exact causal_event_id and admission_id",
+        "route decision identity",
+        "resolved engine/checkpoint/tokenizer/runtime identity",
+        "loader-consumption/state identity",
+        "GRID10 plan/cell or exact Xeno node identity where applicable",
+        "exact model_call_identity and model_output_digest",
+        "downstream NODE_RESULT/evaluation/J-Space receipt reference to that exact call identity",
+        "repository/source identity and generation/provenance binding"
+      ],
+      "promotion_rule": "Do not turn the Trigger-2 probe's source/test PASS into canonical HCU model-call runtime credit until one exact integrated path receipt proves the chain."
+    }
+  },
+  "runtime_and_grid10_reinjection": {
+    "runtime_quiescence": "ACTIVE_FAIL",
+    "quiescence_enforcer_commit": "0d14624bf211e797936626e94c87459e37dd0cbb",
+    "pinned_execution_request_commit": "047962d015c6eb0e768df3eebbbc3aba91cf097f",
+    "frontier_receipt_commit": "8300bbd7cc7ef037b66fc5a0e84c5da945a3aa4d",
+    "required_p0_proof": "On the owning live host: terminate/disable the exact provider-capable process tree, prove zero survivors, then observe a bounded no-restart interval with zero provider-usage counter delta without probing a provider.",
+    "grid10": "Physical GRID10 technical receipt remains 17/17 but promotion is quarantined because the required quiescence PASS -> fresh FREE non-provider authority re-entry predecessor chain is not bound to that run.",
+    "grid10_weight_copy_claim": "Shared_Clean/PSS supports shared mapping evidence only; exactly one physical weight copy remains unproven."
+  },
+  "hypotheses": [
+    {
+      "id": "H56_1_RENDERER_ORDER_NUISANCE",
+      "hypothesis": "Fixed evidence order can create a shortcut in Q3/Q4 authority resolution even when logical case order is randomized.",
+      "counterhypothesis": "The eventual admitted renderer is effectively order-invariant or enforces a semantically required canonical ordering, making the counterbalance unnecessary for runtime semantics.",
+      "discriminator": "Use the frozen parity assignment and stratified arm reports under exact renderer/input identity. Any >0.10 within-quadrant error-rate divergence keeps renderer transportability unresolved; do not rewrite the primary result."
+    },
+    {
+      "id": "H56_2_PROBE_CALL_BINDING_EQUALS_CANONICAL_CALL_BINDING",
+      "hypothesis": "The strict Trigger-2 v2 probe envelope can serve directly as the canonical call identity primitive once wired into the HCU path.",
+      "counterhypothesis": "The canonical path contains route/engine/loader/cell/generation identities not represented or enforced end-to-end by the selection probe, so direct reuse would create a provenance gap.",
+      "discriminator": "Perform a source-level field-by-field integration audit against the exact current HCU call path, then require one exact admitted integrated runtime receipt before promotion."
+    }
+  ],
+  "training_generation_decision": {
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null,
+    "reason": "Pre-unblinding evaluation governance is now materially stronger, but P0 runtime quiescence is actively failed and no exact Qwen runtime identity receipt or checkpoint winner exists. Source governance cannot mint data authority or training credit."
+  },
+  "execution_decision": {
+    "free_swarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "providers": "DO_NOT_INVOKE",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "model_runtime_executed_this_cycle": false,
+    "provider_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "unusual_experiment_executed_this_cycle": false,
+    "reason": "Current 8.83 authority requires quiescence before new execution; the safe useful delta is source/research fusion only."
+  },
+  "credits": {
+    "research_delta": 1,
+    "renderer_interaction_policy_fusion": 1,
+    "model_call_scope_resolution": 1,
+    "checkpoint_model_state_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 execute the already-pinned quiescence enforcer only on the owning live host and persist zero-survivor plus bounded zero-provider-counter proof; do not provider-probe",
+    "P0 after quiescence PASS re-enter the newest FREE non-provider execution authority before any model or GRID10 promotion",
+    "P1 under explicit admitted non-provider FREE model runtime, execute CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI/v2 on frozen BASE first and preserve fail-closed PASS/FAIL; only then extend identical semantics to POSTTRAINED and TARGET_MEASURED",
+    "P1 keep B1 unopened until runtime identity is eligible; then materialize only B1 through the frozen renderer policies with full raw-output/call identity receipts",
+    "P1 source-only while P0 is externally blocked: audit whether the Trigger-2 model_call_binding envelope can be wired without loss into the exact canonical HCU route/engine/loader/cell/NODE_RESULT lineage; do not create a second identity authority",
+    "P2 after exact call identity and repaired representation metrology, preserve persistent-carrier and forked-futures natural-consumer tests before any Global J-Space shared-interface promotion",
+    "P3 keep Forge->Distillery positive admission closed until an evidence-qualified exact ACCEPTED witness yields accepted_dataset_tokens>0 and replay adds zero"
+  ],
+  "next_exact_action": "P0 remains live-host runtime quiescence; no available GitHub-only operation can fabricate it. The highest-value non-provider source continuation is a deduplicated integration audit of the current canonical HCU call lineage against the already-existing Trigger-2 v2 model-call envelope, preserving one identity authority and zero runtime/training promotion until exact admitted execution exists."
+}

@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "cf258187c23ced50a7a1f81e9ea5ab25abbaee56",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "duplicate_lane_created": false
+  },
+  "reentry": {
+    "donor_head_observed": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "executor_head_observed": "3b174c0f7ce9d1bb6ae19395666dfcab0178abe2",
+    "executor_rebind_contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+    "executor_rebind_contract_status": "SOURCE_REBIND_REQUIRED",
+    "executor_rebind_contract_blob_count": 17,
+    "executor_rebind_contract_donor": "511d568932bf47828679e3ca6ba05650f18d284d"
+  },
+  "delta": {
+    "classification": "CURRENT_DONOR_EXACT_BLOB_PREFLIGHT_GUARD",
+    "historical_snapshot_guard_commits": [
+      "fcb94d6a111d7f18a7dd9a8ddcd1677fb3a2c0ad",
+      "1e8c4b31d363124ce54c15b195c32e14a12709cb",
+      "5325c490cc1d1857c51a5ac499355340d9e3d6f7",
+      "2b1913bb63376d32f6fbf2c3c0c0f854b09439f0"
+    ],
+    "successor_manifest_commit": "47a2a3d3a408a78291f42154728204da707289c1",
+    "successor_guard_commit": "033f047288c96e58c73e9cf17e3653969aa436ad",
+    "successor_manifest_path": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-v4-v3-required-blobs-511d5689.json",
+    "successor_manifest_schema": "ENTITYOS_HCU_JSPACE_V4_V3_REQUIRED_BLOBS/v3",
+    "successor_guard_path": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-v4-v3-current-donor-exact-blobs.mjs",
+    "successor_target_directory": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-511d5689",
+    "required_exact_blob_count": 17,
+    "production_blob_count": 13,
+    "regression_blob_count": 3,
+    "transitive_fixture_blob_count": 1,
+    "current_composite_regression_blob": "cd0abb3fe22d0fa015befe35c896f56fa006f08c",
+    "historical_composite_regression_blob_rejected_for_current_promotion": "3180a62c8d5d6d5a2777b1285169d548b9f2e58a",
+    "obsolete_inference_test_fixture_removed_from_current_import_graph": true,
+    "mixed_canonicalizer_fence": {
+      "historical_blob": "00d1d79cbb66a1956a278de4755cd8395e854199",
+      "required_current_blob": "55f461a56ef08537238eeff91fe379da2adb20a1"
+    },
+    "parallel_contract_alignment": "PR810 contract v4 independently carries the same 17-file exact_donor_git_blobs map and requires route manifest equality, so this guard is a preflight checker rather than a competing authority."
+  },
+  "current_source_state": {
+    "successor_target_directory_observed": "ABSENT",
+    "guard_expected_result": "JSPACE_V4_V3_CURRENT_SOURCE_REBIND_REQUIRED",
+    "reason": "The exact-current 511d5689 immutable fixture has not yet been materialized as one directory; SOURCE_REBIND_REQUIRED must remain."
+  },
+  "verification": {
+    "github_successor_manifest_persisted": true,
+    "github_successor_guard_persisted": true,
+    "local_node_syntax_check": "PASS",
+    "local_check_scope": "GUARD_SCRIPT_SYNTAX_ONLY_NOT_ENTITYOS_RUNTIME_EVIDENCE",
+    "new_ci_execution_observed": false,
+    "new_admitted_sandbox_execution_observed": false,
+    "paid_fallback_used": false,
+    "together_used": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_CURRENT_DONOR_17_BLOB_FAIL_CLOSED_PREFLIGHT_ALIGNED_WITH_SINGLE_PR810_ROUTE",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_REQUIRING_CURRENT_TYPED_ENTRY_JCS_PLUS_PRODUCTION_DERIVED_ROUTE_ENGINE_LOAD_GRID10_CHAIN_IN_THE_SAME_IMMUTABLE_FIXTURE",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_BINDING_CURRENT_VECTOR_ABI_GLOBAL_JSPACE_TRAINING_TRACE_JSPACE_V3_AND_SEMANTIC_REVALIDATION_BYTES_WITHOUT_STALE_TEST_FIXTURE_DEPENDENCY"
+  },
+  "evidence_boundary": {
+    "source_identity_only": true,
+    "actual_model_executor_io_observed": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current README and successor main receipts already preserve the single-executor SOURCE_REBIND_REQUIRED frontier. This cycle adds an executable preflight source-identity guard; replacing the README during rapid parallel writes would risk clobbering newer exact-current deltas."
+  },
+  "next_exact_gate": [
+    "Materialize jspace-execution-store-511d5689 with all 17 exact donor blobs and no obsolete test_inference_receipt_v1.py fixture.",
+    "Run guard-hcu-jspace-v4-v3-current-donor-exact-blobs.mjs and require 17/17 exact Git blob identities.",
+    "Require the fixed route manifest blob map to equal contract-v4 exact_donor_git_blobs, then remove SOURCE_REBIND_REQUIRED only in the same coherent change.",
+    "Execute the fixed three-test command only when FREE_ONLY Vercel Hobby build/function admission permits; preserve rate/quota blocking as infrastructure evidence and do not use paid fallback.",
+    "Do not grant J-Space/model/training credit until real zero-cost local model-executor I/O passes through canonical MiniUnifiedDB atomic admission."
+  ]
+}

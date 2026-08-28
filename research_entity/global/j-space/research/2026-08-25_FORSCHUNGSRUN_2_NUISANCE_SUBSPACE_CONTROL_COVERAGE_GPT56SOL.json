@@ -1,0 +1,100 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_NUISANCE_SUBSPACE_CONTROL_COVERAGE/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "2 / forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "c573e04432e5535124a49ddc15ac23a8ed2bd436",
+  "scope": "STATIC_NONINTERVENTIONAL_AUDIT_OF_NUISANCE_SUBSPACE_CAUSAL_CONTROL_COVERAGE_IN_QUEUED_AND_SUCCESSOR_TRIGGER1_GATES",
+  "execution": {
+    "new_model_intervention_executed": false,
+    "duplicate_dispatch_created": false,
+    "paid_or_external_provider_used": false,
+    "queued_structural_run_id": 32810213066,
+    "queued_structural_run_status_observed": "queued",
+    "scientific_negative_inferred_from_queue": false
+  },
+  "observed_source": {
+    "nuisance_residualizer": {
+      "path": "tools/trigger1_nuisance_residualize.py",
+      "blob_sha": "aeec098dfa26b93d3edc376ec69fd846220184d7",
+      "behavior": "Builds an orthonormal nuisance subspace by SVD over centered contrast rows from four required nuisance families, records nuisance_subspace_rank, and projects semantic class geometry against the full rank-r subspace."
+    },
+    "queued_structural_executor": {
+      "path": "tools/trigger1_structural_native_abstract_execute.py",
+      "blob_sha": "0711e07609c2f402db9762cf9495c31cae7888e8",
+      "behavior": "After full-subspace residualization, stacks all layer-21 nuisance rows, computes an SVD, selects only vh[0] as naxis, writes one holdout-nuisance cvec, and evaluates one nuisance_mean_abs_delta in the PASS logic."
+    },
+    "successor_cross_task_gate": {
+      "path": "tools/trigger1_cross_task_abstract_control_gate_v1.py",
+      "blob_sha": "ba294963548742b6000decba7c1fc36f1afab34e",
+      "behavior": "Defines a single NUISANCE control label. Causal rows are keyed per family/state/code/polarity/replicate and duplicate control labels fail, so the current evidence schema admits at most one NUISANCE row per causal cell."
+    }
+  },
+  "new_material_finding": {
+    "id": "R2_B10_FULL_NUISANCE_SUBSPACE_NOT_CAUSALLY_COVERED",
+    "classification": "PROMOTION_CRITICAL_CONTROL_COVERAGE_GAP",
+    "statement": "The calibration residualizer can remove a multi-dimensional nuisance subspace, but both the queued structural executor and the new cross-task successor gate causally test only one nuisance intervention per evaluation cell. Full nuisance-subspace residualization is therefore stronger than the causal nuisance-control coverage used for promotion adjudication.",
+    "exact_source_logic": [
+      "Residualizer: SVD nuisance matrix -> rank r -> q = vh[:r] -> semantic projection against all q rows.",
+      "Queued executor: SVD all nuisance rows -> naxis = vh[0] only -> one holdout-nuisance cvec.",
+      "Queued PASS: matched semantic effect is compared to one aggregate nuisance_mean_abs_delta, not the worst effect over every active nuisance basis direction or family-specific nuisance direction.",
+      "Cross-task gate: CONTROLS includes one literal NUISANCE; groups[key] rejects duplicate control labels, so multiple nuisance axes cannot be represented in one cell without schema/gate change."
+    ],
+    "logical_consequence": "If the admitted nuisance subspace has rank greater than one, an untested q[j>0] or family-specific nuisance direction could causally reproduce or exceed the target effect while the current successor evidence schema still has only one NUISANCE slot. A future PASS would therefore not, by itself, falsify all nuisance-direction explanations.",
+    "important_limit": "This audit does not assert that the exact executed nuisance rank is greater than one. If a future exact receipt proves rank=1, complete subspace coverage can be satisfied by one axis for that execution. The gate must either prove rank=1 or bind and test all active axes when rank>1.",
+    "relationship_to_current_runtime_result": "The independently reported T01 runtime already fails behavior and therefore blocks promotion regardless of this source-design gap. This finding matters chiefly so a repaired/successor discriminator cannot become falsely green after fixing the currently observed behavioral failure."
+  },
+  "counterhypotheses": [
+    {
+      "id": "H0_EFFECTIVE_NUISANCE_RANK_ONE",
+      "statement": "The exact model/runtime calibration nuisance matrix may collapse to rank 1, in which case a single causally tested nuisance axis could be complete for that exact execution.",
+      "falsifier": "Bind nuisance_subspace_rank and the exact orthonormal basis from the calibration receipt. If rank>1, one nuisance row is incomplete by construction."
+    },
+    {
+      "id": "H0_PC1_DOMINATES_ALL_OTHER_NUISANCE_DIRECTIONS",
+      "statement": "Even at rank>1, PC1 may dominate output behavior so strongly that other nuisance directions are irrelevant.",
+      "falsifier": "Execute every admitted nuisance basis direction at the same frozen gain and compare target-margin effects per family/cell. Do not infer dominance from singular value alone because activation variance is not causal output effect."
+    }
+  ],
+  "successor_fix": {
+    "name": "RANK_COMPLETE_NUISANCE_CAUSAL_CONTROL_BINDING",
+    "required_schema_changes": [
+      "Bind the calibration nuisance-subspace receipt/hash and exact nuisance_subspace_rank into the causal evidence candidate.",
+      "Add nuisance_axis_id or equivalent immutable direction identity to NUISANCE causal rows.",
+      "Permit and require one causal row for every admitted orthonormal nuisance basis axis q0..q(r-1) in each required evaluation cell when rank>1.",
+      "Optionally bind family-specific nuisance contrast directions as additional named controls where they are not exactly spanned or where nonlinear causal effects are a concern.",
+      "Reject missing, duplicated, unbound or post-holdout-selected nuisance axes."
+    ],
+    "required_pass_rule": [
+      "For every target x output-code x polarity x replicate cell, require TARGET to beat NULL by the preregistered effect margin.",
+      "Require true SIGN_FLIP reversal as already specified by the successor gate.",
+      "Require TARGET to beat the worst causal effect over every bound nuisance axis, not only one PC1 or an average nuisance control.",
+      "Report nuisance-axis effects by family/cell and preserve the maximum adverse control rather than averaging away one failing axis.",
+      "If nuisance_subspace_rank is missing or greater than the number of causally bound nuisance axes, fail closed."
+    ],
+    "integration_with_other_run2_findings": [
+      "Keep the exact target x output-code x query-polarity factorial introduced by the Run-2 polarity correction.",
+      "Keep proof-topology matching/stratification from the Run-2 proof-topology audit.",
+      "Keep token-position/length matching from the Run-2 last-token position-length audit.",
+      "Treat those newly identified structural factors as explicit nuisance families or design-orthogonalized factors rather than relying only on legacy lexical/code/compliance nuisance families."
+    ]
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_runtime_credit": 1,
+    "structural_label_free_native_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Forschungsrun 2 finds a nonduplicate promotion-control gap that survives the new cross-task gate: calibration removes an r-dimensional nuisance subspace, but causal adjudication exposes only one NUISANCE slot per cell. Promotion-grade evidence must either prove nuisance rank=1 or causally cover every bound nuisance axis and compare semantic steering against the worst nuisance effect.",
+  "next_exact_action": "Do not modify or duplicate the frozen queued run. Update only the successor evidence schema/gate so nuisance rank and axis identities are bound and rank-complete causal nuisance coverage is mandatory before any future cross-task abstract-control PASS can be promoted."
+}

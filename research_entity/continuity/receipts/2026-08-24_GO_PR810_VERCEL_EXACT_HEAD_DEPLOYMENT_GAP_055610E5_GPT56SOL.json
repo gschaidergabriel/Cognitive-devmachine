@@ -1,0 +1,70 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "3fdfb9b6325fe8b6c7c36fbcd47db5e2e5572c97",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "observed_executor": {
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head": "055610e541c0098d732c000cd2d24668174ece3a",
+    "head_commit_message": "fix(hcu): resync capsule identity with executor guards",
+    "route_capsule_identity": "HCU_EXECUTION_STORE_INFERENCE_V4_JSPACE_V3_PRODUCER_CLOSURE/v1"
+  },
+  "vercel_observation": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "project": "dr-unterweger",
+    "latest_ready_deployment_id": "dpl_4uHujQxJjS8AmPMZiJXfZMgXYNEC",
+    "latest_ready_deployment_commit": "2dfa1edcab41fba34282b34956716e7c222ee517",
+    "latest_ready_deployment_state": "READY",
+    "latest_ready_deployment_branch": "clay/fusion-vcr-native-20260817",
+    "deployments_observed_after_latest_ready_timestamp": 0,
+    "exact_current_head_ready_deployment_observed": false,
+    "exact_current_head_invocation_observed": false
+  },
+  "finding": {
+    "classification": "EXACT_DEPLOYMENT_IDENTITY_GAP",
+    "observed": "The newest Vercel READY preview is bound to executor commit 2dfa1edcab41fba34282b34956716e7c222ee517 while retained PR810 is at 055610e541c0098d732c000cd2d24668174ece3a. A second deployment query after the READY deployment timestamp returned zero newer deployments.",
+    "inference": "No current-head Sandbox runtime claim is admissible. Invoking the stale READY deployment would test older source bytes and cannot promote current EntityOS/HCU, J-Space model, or training credit.",
+    "counterhypothesis": "The branch alias may point to newer source even when the listed immutable deployment record is stale.",
+    "falsifier": "Runtime credit requires an immutable READY deployment whose githubCommitSha equals the exact current PR810 head; branch alias movement alone is insufficient source identity."
+  },
+  "negative_evidence": {
+    "sandbox_runtime_executed_by_this_organ": false,
+    "stale_deployment_invoked": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact Vercel deployment identity is now independently pinned; stale READY deployment 2dfa1edc is explicitly excluded from current-head acceptance and the required executable gate is immutable READY deployment commit == live PR810 head.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the 17-blob Typed Entry -> route -> engine/load -> GRID10 closure is already being modified in the single retained executor lane by parallel work; duplicating the route/promotion patch would violate the one-lane convergence law. Next discriminator is the successor-ready/terminal-quarantine source transition on the live head, followed by exact deployment identity.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no exact-current admitted runtime exists, so Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 receives no new runtime/model/training credit. Next discriminator is the same exact-head READY deployment and fixed 14-test component execution; real ~0.8B model-executor I/O remains a later separate gate."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "PR810 and current-facing executor prose are moving under parallel organs. Append-only exact deployment evidence avoids overwriting the artefact README with a transient head while preserving the externally observed blocker."
+  },
+  "next_exact_gate": "Re-enter PR810 and Vercel together. First require the current canonical quarantine/promotion source guards to be coherent on the live PR810 head. Then require a Vercel READY deployment whose immutable githubCommitSha equals that same live head. Only that exact deployment may be invoked under FREE_ONLY admission; record source/result digests, exact fixed 14-test result fence, secret fence, exit code and cleanup. Do not invoke 2dfa1edc for current-head credit and do not upgrade/pay around Vercel limits."
+}

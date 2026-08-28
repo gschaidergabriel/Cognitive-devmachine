@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_SELECTED_JCS_EXACT_COMPONENT_REPLICATION",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_execution": "f6066c126b67699983842c0549378806d5f4c405",
+  "canonical_main_observed_before_write": "7f5c1f251dc1f899717713b65dcef524370dba9a",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_observed": "3b2a41703136db7f4c679601ac9bdbae226ff2f4",
+  "authority": {
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "typed_binary_cbor_and_python_sort_keys_alternatives": "RESEARCH_OR_LEGACY_SCOPE_ONLY_NOT_ACTIVE_AUTHORITY",
+    "runtime_credit": 0
+  },
+  "exact_materialization": {
+    "source_path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "source_git_blob_expected": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+    "source_git_blob_recomputed": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+    "source_exact_match": true,
+    "test_path": "the artefact/MicroEntity/hcu/test_entry_canonicalization_v1.py",
+    "test_git_blob_expected": "6e2127b6b35b1f151acded1a6db2565b4734b27d",
+    "test_git_blob_recomputed": "6e2127b6b35b1f151acded1a6db2565b4734b27d",
+    "test_exact_match": true,
+    "surface": "isolated ChatGPT Linux container",
+    "linux": "6.18.35 x86_64",
+    "python": "3.13.5",
+    "node_present": "v22.16.0"
+  },
+  "execution": {
+    "command": "python3 -m unittest -v test_entry_canonicalization_v1.py",
+    "tests_run": 6,
+    "tests_passed": 6,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "covered": [
+      "complete stored RFC8785 Appendix-B finite-number vector set",
+      "nonfinite number rejection",
+      "RFC8785 UTF-16 property ordering",
+      "property-reordering identity neutrality",
+      "binary64-consistent integer handling including 2^53 and 2^68",
+      "precision-loss rejection for 2^53+1",
+      "lone-surrogate rejection"
+    ]
+  },
+  "interpretation": {
+    "supported": "The exact retained selected JCS component and exact focused test blob reproduce successfully at component scope in an independent isolated container.",
+    "not_supported": [
+      "Typed Entry end-to-end JCS migration",
+      "router policy/EngineAdmission/route JCS migration",
+      "inference receipt JCS migration",
+      "mixed/unknown/downgrade replay rejection across the combined path",
+      "GRID10 integrated exact-current execution",
+      "real local model execution",
+      "EntityOS/HCU whole runtime acceptance"
+    ]
+  },
+  "coordination": {
+    "product_source_write": "NO_CHANGE_TO_AVOID_DUPLICATING_OR_OVERWRITING_ACTIVE_RETAINED_PR_WORK",
+    "observed_parallel_state": "PR1263 and main changed repeatedly during this go; stale-head assumptions were discarded before durable write",
+    "duplicate_canonicalizer_created": false,
+    "new_state_route_effect_or_recovery_authority_created": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "This was exact deterministic replication of the currently selected JCS component and its existing focused tests, not a new unusual intervention. Existing go receipts already carry unusual-experiment accounting."
+  },
+  "current_blocker": "RFC8785_JCS_IJSON/v1 is component-supported but the active Entry/router/inference path remains mixed-schema and requires new-version end-to-end wiring plus exact combined isolated execution before runtime promotion.",
+  "next_exact_gate": "Wire RFC8785_JCS_IJSON/v1 through new-version Entry event/admission, router policy/EngineAdmission/route and inference receipt identities with mixed/unknown/downgrade rejection; then execute the exact-current combined Entry+route+inference+canonicalizer+GRID10 suite on an actually-started authorized isolated executor.",
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "credit": {
+    "research_write": "COMMITTED_RECEIPT",
+    "component_evidence": "EXACT_SOURCE_AND_TEST_BLOBS_6_OF_6_PASS",
+    "runtime_credit_change": 0,
+    "whole_product_pass": false,
+    "acceptance": "IN_PROGRESS"
+  }
+}

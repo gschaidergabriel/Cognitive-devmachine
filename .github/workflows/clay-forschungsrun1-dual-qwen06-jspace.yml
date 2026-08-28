@@ -1,0 +1,248 @@
+name: Forschungsrun1 dual Qwen0.6B J-Space search
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: clay-forschungsrun1-dual-qwen06-jspace-v1
+  cancel-in-progress: false
+
+jobs:
+  execute:
+    if: >-
+      github.repository == 'gschaidergabriel/clay-global-research-entity' &&
+      github.event.issue.title == '[CLAY-DISPATCH] Forschungsrun1 dual Qwen06 JSpace' &&
+      github.event.issue.user.login == 'gschaidergabriel' &&
+      contains(github.event.issue.body || '', 'dispatch_schema: CLAY_FORSCHUNGSRUN1_DUAL_QWEN06_JSPACE/v1') &&
+      contains(github.event.issue.body || '', 'owner_request_time: 2026-08-25T11:06:00+07:00')
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 180
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Validate source and deterministic contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain=v1)"
+          python3 -m py_compile tools/forschungsrun1_dual_qwen06_jspace_search.py
+          python3 -m unittest -v tests.test_forschungsrun1_dual_qwen06_jspace_search
+          git rev-parse HEAD > "${RUNNER_TEMP}/dual-source-head.txt"
+          git rev-parse 'HEAD^{tree}' > "${RUNNER_TEMP}/dual-source-tree.txt"
+
+      - name: Discover clay-direct-dev and execute bounded dual search
+        id: experiment
+        shell: bash
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          set -u
+          host_out="${RUNNER_TEMP}/forschungsrun1-dual-qwen06-${GITHUB_RUN_ID}"
+          mkdir -p "$host_out"
+          source_head="$(cat "${RUNNER_TEMP}/dual-source-head.txt")"
+          source_tree="$(cat "${RUNNER_TEMP}/dual-source-tree.txt")"
+
+          runtime=''
+          prefix=()
+          if command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='podman'; prefix=(podman)
+          elif command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='docker'; prefix=(docker)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='sudo-podman'; prefix=(sudo -n podman)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='sudo-docker'; prefix=(sudo -n docker)
+          fi
+
+          if [[ -z "$runtime" ]]; then
+            python3 - "$host_out/transport.json" "$source_head" "$source_tree" <<'PY'
+          import json, pathlib, sys
+          pathlib.Path(sys.argv[1]).write_text(json.dumps({
+            'schema':'CLAY_FORSCHUNGSRUN1_DUAL_QWEN06_VPS_TRANSPORT/v1',
+            'status':'BLOCKED_CLAY_DIRECT_DEV_NOT_DISCOVERED',
+            'source_head':sys.argv[2],
+            'source_tree':sys.argv[3],
+            'scientific_negative':False,
+            'runtime_credit':0,
+          },indent=2,sort_keys=True)+'\n')
+          PY
+            echo "status=BLOCKED_CLAY_DIRECT_DEV_NOT_DISCOVERED" >> "$GITHUB_OUTPUT"
+            echo "host_out=$host_out" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          remote="/tmp/clay-forschungsrun1-dual-qwen06-${GITHUB_RUN_ID}"
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$remote' && mkdir -p '$remote/repo' '$remote/out'"
+          "${prefix[@]}" cp "${GITHUB_WORKSPACE}/." "clay-direct-dev:${remote}/repo"
+
+          set +e
+          "${prefix[@]}" exec \
+            -e CLAY_DUAL_REMOTE="$remote" \
+            -e CLAY_DUAL_SOURCE_HEAD="$source_head" \
+            -e CLAY_DUAL_SOURCE_TREE="$source_tree" \
+            clay-direct-dev bash -lc '
+              set -euo pipefail
+              cd "$CLAY_DUAL_REMOTE/repo"
+
+              # Local-model experiment only.  Container defaults must not make external
+              # provider credentials visible to the experiment process.
+              unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS || true
+              unset GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY || true
+              unset MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY || true
+              unset NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY || true
+              unset OPENROUTER_API_KEY OPENROUTER_API_KEYS OPENROUTER2_API_KEY OPENROUTER3_API_KEY || true
+              unset TOGETHER_API_KEY TOGETHER_API_KEYS || true
+              export HF_HUB_DISABLE_IMPLICIT_TOKEN=1
+              unset HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true
+
+              residual=""
+              while IFS= read -r name; do
+                case "$name" in
+                  OPENAI*KEY*|ANTHROPIC*KEY*|GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*) residual="${residual}${name} " ;;
+                esac
+              done < <(compgen -v)
+              [[ -z "$residual" ]] || { echo "BLOCKED_PROVIDER_CREDENTIAL_ENV:$residual" >&2; exit 41; }
+
+              expected_llama=bb4caa7540188872173c44d161602d9271386413
+              expected_gguf=9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031
+              llama_root=""
+              for d in /workspace/llama.cpp /opt/llama.cpp /root/llama.cpp /tmp/llama.cpp /home/*/llama.cpp; do
+                [[ -d "$d/.git" ]] || continue
+                got="$(git -C "$d" rev-parse HEAD 2>/dev/null || true)"
+                if [[ "$got" == "$expected_llama" ]]; then llama_root="$d"; break; fi
+              done
+              if [[ -z "$llama_root" ]]; then
+                while IFS= read -r d; do
+                  got="$(git -C "$d" rev-parse HEAD 2>/dev/null || true)"
+                  if [[ "$got" == "$expected_llama" ]]; then llama_root="$d"; break; fi
+                done < <(find /root /workspace /opt /home /tmp -maxdepth 5 -type d -name llama.cpp 2>/dev/null | head -50)
+              fi
+              [[ -n "$llama_root" ]] || { echo BLOCKED_PINNED_LLAMA_CPP_NOT_FOUND >&2; exit 42; }
+
+              gguf=""
+              while IFS= read -r candidate; do
+                [[ -f "$candidate" ]] || continue
+                got="$(sha256sum "$candidate" | awk "{print \\$1}")"
+                if [[ "$got" == "$expected_gguf" ]]; then gguf="$candidate"; break; fi
+              done < <(find /root /workspace /opt /home /tmp -maxdepth 7 -type f -name "*.gguf" -size +500M -size -800M 2>/dev/null | head -80)
+              [[ -n "$gguf" ]] || { echo BLOCKED_PINNED_Q8_GGUF_NOT_FOUND >&2; exit 43; }
+
+              harness="$CLAY_DUAL_REMOTE/harness"
+              c++ -std=c++17 -O2 \
+                -I"$llama_root/include" -I"$llama_root/ggml/include" \
+                tools/trigger1_native_llamacpp_cvec_logits.cpp \
+                -L"$llama_root/build/bin" -Wl,-rpath,"$llama_root/build/bin" \
+                -lllama -lggml -lggml-base -lggml-cpu -pthread \
+                -o "$harness"
+
+              cache="${HF_HOME:-/root/.cache/huggingface}"
+              mkdir -p "$cache" "$CLAY_DUAL_REMOTE/out"
+              python3 tools/forschungsrun1_dual_qwen06_jspace_search.py \
+                --output-dir "$CLAY_DUAL_REMOTE/out" \
+                --cache-dir "$cache" \
+                --episodes 128 \
+                --turns 8 \
+                --native-top-k 6 \
+                --llama-root "$llama_root" \
+                --gguf "$gguf" \
+                --harness "$harness" \
+                > "$CLAY_DUAL_REMOTE/out/launcher.stdout.txt" \
+                2> "$CLAY_DUAL_REMOTE/out/launcher.stderr.txt"
+            '
+          rc=$?
+          set -e
+
+          "${prefix[@]}" cp "clay-direct-dev:${remote}/out/." "$host_out/" >/dev/null 2>&1 || true
+          python3 - "$host_out/transport.json" "$runtime" "$rc" "$source_head" "$source_tree" "$ISSUE_NUMBER" <<'PY'
+          import json, os, pathlib, sys
+          out=pathlib.Path(sys.argv[1])
+          result=out.parent/'forschungsrun1_dual_qwen06_jspace_result.json'
+          status='COMPLETE' if int(sys.argv[3]) == 0 and result.is_file() else f'BLOCKED_OR_FAILED_RC_{sys.argv[3]}'
+          payload={
+            'schema':'CLAY_FORSCHUNGSRUN1_DUAL_QWEN06_VPS_TRANSPORT/v1',
+            'status':status,
+            'container_runtime':sys.argv[2],
+            'process_exit_code':int(sys.argv[3]),
+            'source_head':sys.argv[4],
+            'source_tree':sys.argv[5],
+            'issue_number':int(sys.argv[6]),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+            'runner_name':os.environ.get('RUNNER_NAME'),
+            'runner_os':os.environ.get('RUNNER_OS'),
+            'sandbox':'clay-direct-dev',
+            'external_provider_credentials_required':False,
+            'zero_provider_billing':True,
+            'scientific_negative':False if status != 'COMPLETE' else None,
+            'whole_entityos_hcu_runtime_credit':0,
+          }
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          PY
+
+          echo "status=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["status"])' "$host_out/transport.json")" >> "$GITHUB_OUTPUT"
+          echo "host_out=$host_out" >> "$GITHUB_OUTPUT"
+
+      - name: Persist exact-source research result
+        if: always()
+        shell: bash
+        env:
+          HOST_OUT: ${{ steps.experiment.outputs.host_out }}
+          EXP_STATUS: ${{ steps.experiment.outputs.status }}
+        run: |
+          set -euo pipefail
+          [[ -n "${HOST_OUT:-}" && -d "$HOST_OUT" ]] || exit 0
+          issue="${{ github.event.issue.number }}"
+          run="$GITHUB_RUN_ID"
+          target="research_entity/runtime/tool_results/forschungsrun1-dual-qwen06-issue${issue}-run${run}"
+          mkdir -p "$target"
+          cp "$HOST_OUT/transport.json" "$target/transport.json"
+          if [[ -s "$HOST_OUT/forschungsrun1_dual_qwen06_jspace_result.json" ]]; then
+            cp "$HOST_OUT/forschungsrun1_dual_qwen06_jspace_result.json" "$target/result.json"
+          fi
+          if [[ -s "$HOST_OUT/dual_qwen06_dialogue.jsonl" ]]; then
+            gzip -9 -c "$HOST_OUT/dual_qwen06_dialogue.jsonl" > "$target/dialogue.jsonl.gz"
+            sha256sum "$HOST_OUT/dual_qwen06_dialogue.jsonl" > "$target/dialogue.jsonl.sha256"
+          fi
+          [[ ! -s "$HOST_OUT/launcher.stdout.txt" ]] || cp "$HOST_OUT/launcher.stdout.txt" "$target/launcher.stdout.txt"
+          [[ ! -s "$HOST_OUT/launcher.stderr.txt" ]] || cp "$HOST_OUT/launcher.stderr.txt" "$target/launcher.stderr.txt"
+
+          python3 - "$target/manifest.json" "$target" <<'PY'
+          import hashlib, json, os, pathlib, sys
+          out=pathlib.Path(sys.argv[1]); root=pathlib.Path(sys.argv[2])
+          files=[]
+          for p in sorted(root.iterdir()):
+            if not p.is_file() or p == out: continue
+            h=hashlib.sha256(p.read_bytes()).hexdigest()
+            files.append({'name':p.name,'bytes':p.stat().st_size,'sha256':h})
+          out.write_text(json.dumps({
+            'schema':'CLAY_FORSCHUNGSRUN1_DUAL_QWEN06_PERSISTED_MANIFEST/v1',
+            'status':os.environ.get('EXP_STATUS') or 'UNKNOWN',
+            'issue_number':int('${{ github.event.issue.number }}'),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+            'files':files,
+            'mistral_worker_analysis':'NOT_EXECUTED_CREDENTIAL_NOT_CONFIGURED',
+            'external_worker_analysis_ready':True,
+            'whole_entityos_hcu_runtime_credit':0,
+            'training_credit':0,
+          },indent=2,sort_keys=True)+'\n')
+          PY
+
+          git config user.name 'clay-forschungsrun1-vps-runner'
+          git config user.email 'clay-forschungsrun1-vps-runner@users.noreply.github.com'
+          git add "$target"
+          git commit -m "evidence(jspace): dual Qwen0.6B Forschungsrun1 ${run} [skip ci]" || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

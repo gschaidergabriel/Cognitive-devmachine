@@ -1,0 +1,108 @@
+{
+  "schema": "ENTITYOS_HCU_ENGINE_LOAD_TOCTOU_DISCRIMINATOR/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_experiment": "481752a56f33b3b53ba029d991e50b4c53e6939f",
+  "retained_hcu_lane": {
+    "pr": 1263,
+    "head_observed": "9a647d6376adf580ac8ca063454de32630dc6a3c",
+    "engine_admission_file": "the artefact/MicroEntity/hcu/engine_admission_v1.py",
+    "engine_admission_blob": "2bdd29db99fadec989d1fb2a6b5a1e3b0e9d5cb1",
+    "scope_limit_observed": "pre-load artifact hashing does not itself prove that a later model loader consumed the same bytes"
+  },
+  "track_a": {
+    "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+    "delta": "tighten runtime acceptance so positive EngineAdmission receives zero runtime credit unless actual loader consumption is bound to the admitted artifact identity"
+  },
+  "track_b": {
+    "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "delta": "define the physical HCU model lease boundary as loader-bound rather than pre-load-hash-bound; causal Entry/route identity remains separate from physical consumed-byte evidence"
+  },
+  "hypothesis": "A pre-load checkpoint/tokenizer/runtime/build digest is insufficient to establish the physical HCU engine actually consumed those admitted bytes because path contents can change after verification and before loading.",
+  "counterhypothesis": "Hashing exact local artifact bytes immediately before routing is operationally sufficient; later loader consumption can be treated as identical without another binding mechanism.",
+  "unusual_experiment": {
+    "count": 1,
+    "name": "PRELOAD_HASH_THEN_PATH_MUTATION_VS_VERIFIED_SNAPSHOT_LOAD",
+    "macrocycle_identity": "go-20260823-2357-gpt56sol-engine-load-toctou",
+    "global_uniqueness": "UNRESOLVED_NO_SHARED_MACROCYCLE_ID",
+    "environment": "isolated ChatGPT Linux/Python tool container",
+    "network_used": false,
+    "model_inference_used": false,
+    "real_effect_used": false,
+    "method": [
+      "construct one checkpoint directory containing model.safetensors=weights-A",
+      "compute the retained EngineAdmission tree-digest algorithm identity",
+      "condition A: mutate the original path to weights-B after admission and then simulate loader read from the original path",
+      "condition B: reset to weights-A, verify, copy to a separate staged snapshot, mutate only the original path to weights-B, then simulate loader read from the staged snapshot"
+    ],
+    "observed": {
+      "condition_a": {
+        "admitted_tree_sha256": "a2e89658f8ee1f20ecd6c2d0357a3c826cef764362b28e2c9d1e342c24c3fc71",
+        "admitted_file_sha256": "7a2cf92f089712051f6a1d5fc3493b9cc6dc3757cfac1a834fe553b19b6affaa",
+        "post_mutation_tree_sha256": "58de2d64f9af79f0d4fdb46fe6d509149282a95446e43988020e460db97e49e9",
+        "loaded_file_sha256": "a9e542d599be9357b404931da8db97a6a8441ccd038ea2d2943b49ffd6e6ce2b",
+        "admission_equals_loaded_bytes": false
+      },
+      "condition_b": {
+        "verified_original_tree_sha256": "a2e89658f8ee1f20ecd6c2d0357a3c826cef764362b28e2c9d1e342c24c3fc71",
+        "staged_tree_sha256": "a2e89658f8ee1f20ecd6c2d0357a3c826cef764362b28e2c9d1e342c24c3fc71",
+        "original_after_mutation_tree_sha256": "58de2d64f9af79f0d4fdb46fe6d509149282a95446e43988020e460db97e49e9",
+        "loaded_snapshot_file_sha256": "7a2cf92f089712051f6a1d5fc3493b9cc6dc3757cfac1a834fe553b19b6affaa",
+        "snapshot_tree_equals_verified_tree": true,
+        "loaded_snapshot_equals_verified_bytes": true
+      }
+    }
+  },
+  "result": {
+    "counterhypothesis": "REJECTED_AT_MECHANISM_SCOPE",
+    "classification": "MECHANISM_SUPPORTED_SYNTHETIC_TOCTOU_DISCRIMINATOR_ZERO_RUNTIME_CREDIT",
+    "finding": "pre-load admission identity and actual loader-consumed bytes are distinct evidence boundaries",
+    "counterfactual_support": "content-addressed staging prevents mutation of the original source path from silently changing bytes loaded from the staged copy",
+    "remaining_limit": "a normal writable staging directory is not itself an immutable loader attestation; same-user staging mutation or a loader choosing another path remains possible"
+  },
+  "architecture_delta": {
+    "new_acceptance_law": "ENGINE_ADMISSION_PRELOAD_HASH_ALONE_NEVER_GRANTS_HCU_RUNTIME_CREDIT",
+    "required_physical_engine_lease": [
+      "bind entity_generation and engine identity to a loader lease",
+      "bind checkpoint/tokenizer/runtime/build admitted identities to the lease",
+      "loader consumes only lease-bound resolved bytes or a separately enforced read-only content-addressed snapshot",
+      "downstream inference receipt echoes the exact loader lease/consumed-byte identity",
+      "generation mismatch, lease mismatch, consumed-byte mismatch, unknown loader source or post-crash ambiguity fails closed"
+    ],
+    "authority_preserved": "the lease is evidence about physical cognition input only; it grants no canonical truth, capability or effect authority"
+  },
+  "next_exact_gate": [
+    "on retained PR1263, add one non-duplicative physical EngineLoadLease/consumed-byte contract rather than a second EngineAdmission/router path",
+    "wire the selected ENTITYOS_HCU_TYPED_CANONICAL/v1 identity into the lease/receipt identity once end-to-end canonicalization migration is complete",
+    "make the actual local model loader consume only lease-bound artifacts and emit exact consumed checkpoint/tokenizer/runtime/build identity",
+    "bind that loader evidence into inference_receipt_v1 alongside Entry event/admission, route, engine and generation identities",
+    "falsify mutation-after-admission, wrong-path load, stale-generation lease reuse, restored-after-poison and crash/recovery ambiguity",
+    "run exact-current combined Entry+route+engine-lease+real-loader+inference+GRID10 evidence in an actually-started authorized isolated executor before any HCU runtime promotion"
+  ],
+  "coordination": {
+    "new_router_or_entry_authority_created": false,
+    "new_state_truth_effect_or_recovery_authority_created": false,
+    "retained_lane": "PR_1263_ONLY_FOR_HCU_SOURCE_CONVERGENCE",
+    "readme_action": "UPDATE_ONLY_IF_CURRENT_MAIN_STILL_LACKS_EXPLICIT_PRELOAD_HASH_ZERO_RUNTIME_CREDIT_RULE"
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "credit": {
+    "research_delta": "COMMITTED",
+    "source_runtime_credit_change": 0,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "whole_product_pass": false
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "bag_of_words_shortcut_probe": {
+    "accuracy": 0.1,
+    "accuracy_minus_mean_chance": -0.033333333333333326,
+    "folds": 5,
+    "mean_chance_accuracy": 0.13333333333333333,
+    "n": 420,
+    "note": "candidate set per row is restricted to that row's own K present atoms (chance = 1/K, varies by row -- mean_chance_accuracy is the per-row-weighted average, not a single fixed chance level, since K varies 2..16 across this family).",
+    "pass": true,
+    "per_fold_accuracy": [
+      0.10714285714285714,
+      0.11904761904761904,
+      0.08333333333333333,
+      0.07142857142857142,
+      0.11904761904761904
+    ]
+  },
+  "capacity_levels": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "delay_levels": [
+    0,
+    2,
+    4,
+    8
+  ],
+  "failures": [],
+  "grid_cells": 77,
+  "overall_pass": true,
+  "reason_training_eligible_false": "placeholder ABI_ACCEPTED_ORDINAL atoms, no real tokenizer/atom-manifest binding, no admission gate run -- candidate/quarantined only per TRIGGERWORT_2 course Step 6.",
+  "rows": 812,
+  "schema": "CLAY_TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE/v1",
+  "split_counts": {
+    "HOLDOUT_FROZEN": 182,
+    "TRAIN": 420,
+    "VALIDATION": 210
+  },
+  "training_eligible": false
+}

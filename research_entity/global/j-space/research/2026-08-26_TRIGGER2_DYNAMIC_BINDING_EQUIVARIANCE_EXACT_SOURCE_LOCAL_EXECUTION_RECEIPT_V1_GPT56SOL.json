@@ -1,0 +1,100 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_EQUIVARIANCE_EXACT_SOURCE_LOCAL_EXECUTION_RECEIPT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.82",
+    "mode": "FREE_ONLY",
+    "observed_main_before_receipt": "3b9c2c9759264d218aa4aeef262b768cfc96c731",
+    "runtime_quiescence": "NOT_PROVEN",
+    "provider_execution_authorized": false,
+    "training_execution_authorized": false
+  },
+  "scope": "DETERMINISTIC_LOCAL_SOURCE_EVAL_ONLY_NOT_ENTITYOS_HCU_MODEL_RUNTIME",
+  "exact_source_binding": {
+    "blueprint_path": "tools/trigger2_dynamic_binding_blueprint_v2.py",
+    "github_git_blob_sha1": "c131a0dd344bdb4c66f8c458c4f2c4e6b323fd21",
+    "local_recomputed_git_blob_sha1": "c131a0dd344bdb4c66f8c458c4f2c4e6b323fd21",
+    "blueprint_blob_match": true,
+    "gate_path": "tools/trigger2_dynamic_binding_equivariance_gate_v1.py",
+    "github_git_blob_sha1": "eff1063c19b59d9c0b6e770f9575218077969c43",
+    "local_recomputed_git_blob_sha1": "eff1063c19b59d9c0b6e770f9575218077969c43",
+    "gate_blob_match": true
+  },
+  "execution": {
+    "blueprint_selftest": {
+      "pass": true,
+      "rows": 9072,
+      "train": 6912,
+      "validation": 1728,
+      "holdout_frozen": 432,
+      "s3_mapping_permutations": 6,
+      "s3_codebook_orders": 6,
+      "layouts": 2,
+      "shortcut_mi_bits": {
+        "class__codebook_order": 0.0,
+        "class__target_symbol": 0.0,
+        "mapping__codebook_order": 0.0,
+        "target_symbol__codebook_order": 0.0,
+        "target_symbol__layout": 0.0,
+        "target_symbol__polarity": 0.0,
+        "target_symbol__template": 0.0
+      },
+      "training_eligible": false
+    },
+    "equivariance_gate": {
+      "pass": true,
+      "failure_count": 0,
+      "rows": 9072,
+      "ablation_groups": 3024,
+      "ablation_expected_group_size": 3,
+      "nuisance_lookup_accuracy": 0.3333333333333333,
+      "chance_accuracy": 0.3333333333333333,
+      "order_groups": 1512,
+      "mapping_equivariance_groups": 252,
+      "layout_groups": 4536,
+      "rendered_byte_gate_required": true,
+      "exact_abi_tokenizer_gate_required": true,
+      "training_eligible": false
+    }
+  },
+  "coordination": {
+    "parallel_reentry_finding": "A stronger fully-factorial v2.1 donor plus equivariance gate landed while this organ was preparing a smaller 2808-row successor.",
+    "duplicate_source_created_then_removed": "tools/trigger2_binding_router_full_cross_generator_v1.py",
+    "duplicate_test_created_then_removed": "tests/test_trigger2_binding_router_full_cross_generator_v1.py",
+    "duplicate_removal_commits": [
+      "297faea32dd3862941c022ad4aa9fe1630810960",
+      "94d7ce1bff66efe577927b8527911cc9131783ed"
+    ],
+    "retained_authority": "tools/trigger2_dynamic_binding_blueprint_v2.py + tools/trigger2_dynamic_binding_equivariance_gate_v1.py"
+  },
+  "epistemic_boundary": {
+    "what_this_closes": "Exact-current blueprint-scope deterministic nuisance/equivariance execution evidence for the retained source pair.",
+    "what_this_does_not_close": [
+      "final serialized Xeno/ClayCode production-byte leakage",
+      "accepted exact ABI atom strings",
+      "checkpoint-local tokenizer and token-position identity",
+      "model behavior or Qwen runtime evidence",
+      "J-Space causal evidence",
+      "training admission or training success",
+      "physical GRID10, HCU or EntityOS runtime acceptance"
+    ]
+  },
+  "credits": {
+    "exact_source_local_gate_execution_delta": 1,
+    "new_positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Control plane remains P0: obtain the supervisor-8.82 runtime-quiescence receipt before any new provider or GRID10 execution. In the binding research lane, preserve the retained v2.1+equivariance source pair and reproduce the same nuisance/equivariance invariants only after exact production renderer bytes, accepted ABI atoms, checkpoint-local tokenizer and input-tensor identity are fixed; do not train from v3 and do not mint accepted dataset tokens from blueprint-scope PASS."
+}

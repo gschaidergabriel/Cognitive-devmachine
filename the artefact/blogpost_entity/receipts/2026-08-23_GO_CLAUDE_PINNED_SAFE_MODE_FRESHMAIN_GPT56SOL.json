@@ -1,0 +1,57 @@
+{
+  "schema": "GO_CLAUDE_PINNED_SAFE_MODE_FRESHMAIN/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": {
+    "base_main_sha": "f2a55ccdc3a6d25842ee87b6bfa3a2b84fe3e033",
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false
+  },
+  "observed": {
+    "source_lock": "the artefact/SOURCE_LOCK.json",
+    "pinned_claude_code_version": "2.1.233",
+    "pinned_linux_x64_sha256": "23eec49e0453a3a7b9d933228cb09639fc0bcd962039258d8e4cde72fa5b8741",
+    "upstream_exact_tag": "anthropics/claude-code@v2.1.233",
+    "upstream_changelog_fact": "--safe-mode and CLAUDE_CODE_SAFE_MODE were added in 2.1.169 to disable Claude customizations including CLAUDE.md, plugins, skills, hooks and MCP servers.",
+    "current_owner_aligned_adapter_blob_before": "3b8d24607de42b305c522590be7e64b59d9c2e1f",
+    "side_memory_fences_on_main": [
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1",
+      "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1"
+    ],
+    "home_policy": "HOME remains intentionally preserved for subscription/OAuth; invocation-specific HOME creation/removal remains unresolved."
+  },
+  "delta": {
+    "adapter_path": "the artefact/clayverse/adapters.py",
+    "adapter_blob_after": "caba0a8ced3373b66ed173e20cfaf04c9c8d9cbb",
+    "change": "prepend --safe-mode to every ClaudeCodeInference reasoning invocation on top of the current owner-neutral targeted-inference prompt",
+    "focused_test": "the artefact/tests/test_claude_safe_mode_boundary.py",
+    "purpose": "defense-in-depth against Claude customization surfaces without replacing explicit tool/session/side-memory fences"
+  },
+  "grf": {
+    "R0_OBSERVE": "Pinned Claude Code 2.1.233 postdates the exact upstream 2.1.169 safe-mode introduction; current owner-aligned adapter did not pass the flag.",
+    "R1_INFER": "The current pinned runtime can admit safe-mode without relying on a newer unbound Claude version.",
+    "R2_GENERATE": ["add --safe-mode", "preserve current owner-neutral prompt and explicit authority fences"],
+    "R3_COUNTER": "Safe-mode does not establish invocation-specific HOME creation/removal and cannot collapse the current ephemerality contradiction.",
+    "R4_DISCRIMINATE": "Focused fake-child regression checks argv/environment shape; exact pinned Claude/Ubuntu execution remains separate.",
+    "R5_EMERGENT": "Customization isolation and credential-state isolation are distinct boundaries and must retain separate evidence credit.",
+    "R6_VERIFY": "SOURCE_COMPATIBILITY_BOUND; LIVE_CLAUDE_RUNTIME_UNOBSERVED"
+  },
+  "credit": {
+    "source_mechanism": "CANDIDATE",
+    "claude_adapter_live_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "coordination": {
+    "unusual_experiment": "NOT_CLAIMED_NO_SHARED_MACROCYCLE_ID",
+    "stale_branch_handling": "Earlier PR #1129 was closed unmerged after main changed the same prompt/identity contract; this branch reapplies only the safe-mode donor delta on fresh current main."
+  },
+  "next_gate": "Run exact branch focused and adjacent adapter regressions, then execute the pinned Claude 2.1.233 binary in an actually-started authorized isolated Ubuntu runtime and bind all canonical adapter boundary receipts. HOME ephemerality remains independently unresolved."
+}

@@ -1,0 +1,71 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.71",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry_after_commits": [
+    "08afa94d01d1588aa55111b7f52d0a5c46bd613c",
+    "cff3d205c138cbe02f4847efe6ad7b02296aa5c0",
+    "8a98bf30828bbecd625dba56a325c2adde59de34"
+  ],
+  "new_runtime_snapshot": {
+    "system_analysis_generated_at": "2026-08-24T14:14:00.324896+00:00",
+    "forge_generated_at": "2026-08-24T14:13:38.870119+00:00",
+    "conversion": {
+      "successful_worker_outputs": 1128,
+      "architecture_delta_records": 215,
+      "ready_for_forge": 141,
+      "delta_rate": 0.19060283687943264,
+      "ready_rate": 0.125
+    },
+    "forge": {
+      "evaluations": 141,
+      "accepted": 1,
+      "needs_implementation": 65,
+      "patch_rejected": 74,
+      "validated_not_better": 1,
+      "new": 74
+    },
+    "distillery": {
+      "collected_source_tokens": 11621,
+      "accepted_dataset_tokens": 0,
+      "accepted_packets": 0
+    }
+  },
+  "temporal_causality_boundary": {
+    "worker_source_grounding_merge": "caed18dbfce5646ff39ffc88cda9bed3a1c04575",
+    "worker_source_grounding_merge_time_utc": "2026-08-24T14:08:22Z",
+    "forge_first_acceptance_snapshot_time_utc": "2026-08-24T14:13:38.870119Z",
+    "forge_source_identity_merge": "08afa94d01d1588aa55111b7f52d0a5c46bd613c",
+    "forge_source_identity_merge_time_utc": "2026-08-24T14:13:42Z",
+    "conclusion": "The first observed ACCEPTED delta predates the Forge source-identity merge by about 3 seconds, therefore it MUST NOT be credited to #1544. It is temporally compatible with the earlier worker-side source-grounding change #1538, but exact causality is still unproven because the accepted evaluation record/source identity is not committed in the current repository snapshot."
+  },
+  "runtime_authority_mismatch": {
+    "dashboard_runtime_supervisor": "STOPPED/QUARANTINED",
+    "go_swarm": "RUNNING",
+    "evidence_forge": "RUNNING",
+    "runtime_provider_admission_epoch_reported": "8.69",
+    "current_canonical_supervisor_epoch": "8.71",
+    "interpretation": "Current source authority and the committed runtime snapshot are not successor-aligned. Provider counters cannot establish exact-current 8.71 runtime credit. No new provider runtime credit is granted."
+  },
+  "hypothesis_update": {
+    "supported": "Giving conversion-critical workers exact source context can produce at least some executable candidate conversion; one ACCEPTED delta now exists after source-grounding was fused.",
+    "not_yet_supported": "That source-grounding caused the acceptance, that #1544 improves live conversion, or that the accepted delta is current-main mergeable/useful without its exact evaluation record.",
+    "strong_counterhypothesis": "The single acceptance is an isolated candidate unrelated to source grounding, while the dominant 74 PATCH_REJECTED outcomes show patch synthesis remains the main bottleneck.",
+    "next_discriminator": "After the runtime is successor-aligned to current 8.71 source, observe a bounded new Forge batch and compare acceptance/apply rates against the pre-change 141-evaluation baseline. Preserve exact candidate source head and evaluation record."
+  },
+  "credits": {
+    "forge_component_acceptance_count_observed": 1,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Successor-align/restart the live Free Swarm/Forge runtime on current 8.71 source through an exposed authorized bridge, then capture the first bounded post-restart Forge batch with source-head-bound evaluation records and compare conversion classes."
+}

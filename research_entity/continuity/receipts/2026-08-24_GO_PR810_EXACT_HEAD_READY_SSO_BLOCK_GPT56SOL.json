@@ -1,0 +1,73 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_EXECUTOR_GATE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "observed_canonical_main_before_write": "85aa78f8e05a8372e803f9812152e3df29b6c01c",
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/macrocycle identifier was exposed to this organ and the available user-message metadata was minute-precision, below the whole-second fallback requirement. No unusual intervention was run."
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "bounded_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "bare_pr810_authority": "FORBIDDEN"
+  },
+  "executor_observation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "exact_head": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "head_message": "guard(hcu): bind repository-qualified executor identity",
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_team_plan_observed": "hobby",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_98ALxQrZppsRQUqSxCZZyKxTMpy2",
+    "deployment_git_sha": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "deployment_state_observed": "READY",
+    "deployment_source": "git",
+    "route": "/api/hcu-jspace-grid10-binding-capsule",
+    "route_source_scope": "Fixed GET-only FREE_ONLY route; validates rebind contract plus exact 17 deployment-carried Git blob identities before cost admission; Sandbox.create is downstream of source verification and FREE_ONLY admission.",
+    "runtime_access_attempt": {
+      "status": 302,
+      "classification": "VERCEL_SSO_AUTH_TRANSPORT_BLOCK",
+      "redirect_target_class": "vercel.com/sso-api",
+      "function_result_observed": false,
+      "sandbox_create_observed": false,
+      "sandbox_command_observed": false,
+      "component_runtime_result_observed": false
+    }
+  },
+  "hypothesis": "An exact-current READY preview should make the fixed J-Space/GRID10 component capsule callable without changing the retained executor architecture.",
+  "counterhypothesis": "Deployment readiness may still be insufficient because deployment protection can intercept the request before the serverless function and therefore before all source/cost/Sandbox gates.",
+  "discriminator": "Invoke only the exact-head protected deployment route through the connected Vercel fetch surface and classify whether a function response or an authentication-layer redirect is observed.",
+  "observed_result": "Counterhypothesis supported at the connected access surface: exact-head deployment is READY, but both protected-route access attempts returned HTTP 302 to Vercel SSO. No serverless function response or Sandbox execution was observed.",
+  "evidence_boundary": {
+    "auth_or_transport_failure_is_product_failure": false,
+    "deployment_ready_is_function_invocation_evidence": false,
+    "source_guard_is_runtime_pass": false,
+    "component_runtime_credit_added": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_GATE: exact repository-qualified PR810 head now has an observed exact-SHA READY Vercel preview; the previous no-exact-head-deployment blocker is narrowed to protected-function invocation access.",
+    "track_b_hcu_typed_entry": "ADVANCED_SOURCE_EVIDENCE_ONLY: exact executor source was verified to preserve fixed donor/contract/blob identity fences and repository-qualified executor identity before the runtime gate; no HCU runtime credit added.",
+    "track_c_jspace_gwt_training_readiness": "ADVANCED_EXECUTION_READINESS_ONLY: the fixed J-Space/GRID10 capsule reached exact-head READY deployment, but protected invocation was blocked before function execution; no new trace/model/training evidence added."
+  },
+  "negative_evidence": [
+    "Earlier deployment aa80683e8b3cbc0eb9b0fced784820005b0d55d6 failed at build time with JSPACE_V4_V3_CURRENT_SUCCESSOR_DONOR_DRIFT before Sandbox execution.",
+    "Exact-head deployment 81ce20e53e080af228b62f642eb29360ac9cecf0 reached READY, but the connected protected URL fetch returned HTTP 302 SSO redirects and did not expose a function result."
+  ],
+  "next_exact_action": "Use an admitted access surface that can complete Vercel deployment protection authentication for the exact then-current PR810 SHA, then invoke only the fixed /api/hcu-jspace-grid10-binding-capsule route. Require exact-SHA READY binding, pre-cost 17-blob verification, FREE_ONLY admission, in-Sandbox SHA-256 identities, the exact 14-result unittest fence, secret fence, exit 0 and cleanup. If authentication remains unavailable, preserve AUTH_TRANSPORT_BLOCK and do not infer runtime credit."
+}

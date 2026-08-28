@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "status": "TRIGGERWORD3_CONFORMANCE_GAP_FOUND_ADDITIVE_NO_OVERWRITE",
+  "date": "2026-08-28",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "basis_main": "615f84aa07a78b9116e74a4dcbed50d8211f2fe3",
+  "target": "research_entity/architecture_archaeology/EMERGENT_COUPLING_GRAPH.json",
+  "target_status_observed": "TRIGGERWORD3_GROUNDED_PARTIAL_GRAPH",
+  "contract": "research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md",
+  "purpose": "Audit the concurrently-created graph against the mandatory edge metadata contract without overwriting that worker's artifact. File-presence 11/11 is preserved, but conformance/completion credit remains open.",
+  "required_edge_fields_from_contract": [
+    "source mechanism/state",
+    "target mechanism/state",
+    "sign/type",
+    "functional equation or rule if known",
+    "timescale",
+    "delay",
+    "persistence",
+    "confidence/evidence class",
+    "first known version/commit",
+    "last known version/commit",
+    "historical failures affecting the edge",
+    "current FRANK/EntityOS equivalent",
+    "Harness intervention handle"
+  ],
+  "observed_target_search": {
+    "timescale_field_matches": 0,
+    "first_known_field_matches": 0,
+    "harness_intervention_field_matches": 0,
+    "interpretation": "The stored graph contains useful source/current role and causal-status fields, but at least these mandatory per-edge metadata dimensions are absent under the expected names/content search. This is a schema/completeness gap, not evidence that the encoded edges are wrong."
+  },
+  "high_value_edge_deltas": [
+    {
+      "edge": "historical perception/event state -> thalamic relevance/gain gate",
+      "type": "gating/modulatory",
+      "rule": "channel state is transformed by gain, habituation, salience override, cognitive-mode profile and prediction-error influence before scarce cognitive access",
+      "timescale": "FAST_ROUTE: sub-second to seconds",
+      "delay": "implementation/event-loop dependent",
+      "persistence": "input transient; gate baselines/profiles can persist",
+      "evidence_class": "HISTORICAL_SOURCE",
+      "first_known_commit": "UNKNOWN_NOT_RESOLVED",
+      "last_known_commit": "abba90a5767d85abc8a1ac340bae92842dab35c1 historical frozen head",
+      "historical_failures": [
+        "missing is_entity_active field previously killed a path with TypeError",
+        "documented entity_session mode previously lacked a profile"
+      ],
+      "current_equivalent": "Typed Entry relevance/admission + variable-grid attention candidate",
+      "harness_intervention": "clamp channel gain; shuffle channel identity; lesion salience override"
+    },
+    {
+      "edge": "workspace broadcast -> downstream cognition",
+      "type": "broadcast/delivery",
+      "rule": "selected salience-bearing workspace event becomes available to a downstream receiver; delivery alone does not prove uptake or causal use",
+      "timescale": "WORKSPACE: seconds to minutes",
+      "delay": "subscriber/event-loop dependent",
+      "persistence": "delivery transient; bounded workspace history may persist",
+      "evidence_class": "HISTORICAL_SOURCE_PRECURSOR",
+      "first_known_commit": "UNKNOWN_NOT_RESOLVED",
+      "last_known_commit": "abba90a5767d85abc8a1ac340bae92842dab35c1 historical frozen head",
+      "historical_failures": [
+        "historical bus source does not establish coalition competition, receiver uptake, behavior change or verified re-entry"
+      ],
+      "current_equivalent": "Global J-Space/GWT broadcast -> receiver reconstruction/uptake -> causal-use trace",
+      "harness_intervention": "truthful vs shuffled broadcast; delivery lesion; rescue truthful broadcast under fixed model/state budget"
+    },
+    {
+      "edge": "LCME/Titan memory retrieval -> cognition",
+      "type": "retrieval/modulatory",
+      "rule": "persistent claims/confidence/time/provenance/vector/graph state supplies query-scoped candidate context rather than automatic facts",
+      "timescale": "TURN to SHORT_MEMORY: seconds through hours",
+      "delay": "query and graph-expansion dependent",
+      "persistence": "claim memory persistent; retrieval projection per query",
+      "evidence_class": "HISTORICAL_SOURCE",
+      "first_known_commit": "UNKNOWN_NOT_RESOLVED",
+      "last_known_commit": "abba90a5767d85abc8a1ac340bae92842dab35c1 historical frozen head",
+      "historical_failures": [
+        "package/path shadowing broke LCME import",
+        "unbounded graph/retrieval expansion can contaminate model-facing context"
+      ],
+      "current_equivalent": "UnifiedDB Emergent Retrieval -> bounded typed model/grid projection",
+      "harness_intervention": "semantic-only baseline vs fused retrieval; shuffled provenance; graph-expansion lesion; equalized candidate budget"
+    },
+    {
+      "edge": "verified effect result -> later cognition/workspace re-entry",
+      "type": "recurrent/outcome re-entry",
+      "rule": "observed effect outcome is identity-bound, verified and re-admitted before later cognition may use it",
+      "timescale": "TURN to WORKSPACE",
+      "delay": "external effect/observation dependent",
+      "persistence": "outcome/effect journal durable where admitted",
+      "evidence_class": "CURRENT_ADOPTED_ACCEPTANCE_SHAPE_FROM_HISTORICAL_PRESSURE",
+      "first_known_commit": "HISTORICAL_ORIGIN_NOT_RESOLVED",
+      "last_known_commit": "CURRENT_ENTITYOS_AUTHORITY",
+      "historical_failures": [
+        "request/effect ambiguity",
+        "reflection can recurse without terminating into a measurable transition"
+      ],
+      "current_equivalent": "EffectJournal verified result -> Typed Entry -> HCU/workspace re-entry",
+      "harness_intervention": "lesion outcome re-entry; shuffled result; UNKNOWN result vs verified result; duplicate-effect replay"
+    },
+    {
+      "edge": "lifecycle intent <-> service-health/recovery observation",
+      "type": "recurrent recovery feedback",
+      "rule": "planned park/restart state changes interpretation of process absence; fault evidence may trigger recovery only after causal-origin and intent discrimination",
+      "timescale": "BOOT_RECOVERY",
+      "delay": "watchdog/health interval and service transition dependent",
+      "persistence": "transition/generation epoch plus recovery receipt",
+      "evidence_class": "HISTORICAL_NEGATIVE_RESULT_PLUS_SOURCE_REPAIR",
+      "first_known_commit": "791b7f87197ae9a35ba1e922be2dad328ab4e049 for explicit park coordination case",
+      "last_known_commit": "CURRENT_REUSE_PRINCIPLE",
+      "historical_failures": [
+        "recovery logic can fight an intentional model park",
+        "ASRS restart lifecycle logs re-entered detection and created restart -> error -> restart feedback"
+      ],
+      "current_equivalent": "typed lifecycle intent/generation + health evidence -> bounded quiescence/recovery controller",
+      "harness_intervention": "planned park without/with intent tag; self-generated log injection; stale health sample; restart-storm fault injection"
+    }
+  ],
+  "graph_level_conclusion": {
+    "required_output_presence": "PASS_FILE_PRESENT_ONLY",
+    "mandatory_edge_metadata_conformance": "PARTIAL_FAIL_OPEN_WORK_REMAINS",
+    "causal_edge_runtime_verification": 0,
+    "whole_graph_emergence_verification": 0,
+    "reason": "The graph is valuable but 11/11 filename presence must not Goodhart into completion while mandatory edge timescale/provenance/intervention fields are absent."
+  },
+  "next_exact_action": "Fuse required edge fields into the canonical graph with an exact-current preimage-bound edit, then validate every material edge against a schema that requires timescale/delay/persistence/provenance/history/failure/current-equivalent/intervention metadata. Do not grant causal or whole-graph credit from schema conformance alone."
+}

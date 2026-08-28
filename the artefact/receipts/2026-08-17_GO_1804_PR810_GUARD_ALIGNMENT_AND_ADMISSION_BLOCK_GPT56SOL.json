@@ -1,0 +1,97 @@
+{
+  "schema": "clayverse-go-cycle-receipt/v1",
+  "trigger": "go",
+  "trigger_time": "2026-08-17T18:01+07:00",
+  "trigger_time_precision": "minute",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "canonical_main_observed_before_delta": "3083f04553266996f3acd96b476702dfa2705968",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "acceptance": "IN_PROGRESS",
+  "product_runtime_code_delta_on_main": "NO_CHANGE",
+  "experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "valid_unusual_experiment_credit": 0,
+    "reason": "This exact go exposes minute-precision trigger time and no immutable shared request/turn id, so the atomic unusual-experiment lease fails closed. No unusual experiment was executed."
+  },
+  "frontier": {
+    "selected": "exact current OCI execution admission through the retained PR810 Vercel Sandbox controller",
+    "non_duplicate_lanes_preserved": [611, 622, 602, 810],
+    "reason": "Whole-product convergence is blocked before exact image build/runtime evidence; PR810 is already the retained OCI controller and must be repaired/falsified rather than duplicated."
+  },
+  "observations": {
+    "canonical_main_before_parallel_closure": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+    "current_exact_oci_source_closure": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
+    "source_closure_tree": "a012708e469de32615ea9933371a13795669db5a",
+    "retained_tmux_pr611_head": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "predecessor_vercel_deployment": {
+      "id": "dpl_BH8m9HTYUXWNSPQTDzURrJy5QmuE",
+      "commit": "fd12feb34caa10707e5c94f1c6dcf3d3a11fdce0",
+      "result": "ERROR",
+      "observed_error": "VCR_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED",
+      "classification": "CONTROLLER_GUARD_PREASSERTION_FAILURE_BEFORE_SANDBOX_CREATE_ZERO_PRODUCT_RUNTIME_CREDIT"
+    }
+  },
+  "repair": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "commit": "0edd4e6b6c262daa2c1af95d300f63855f73029e",
+    "file": "mcp/vercel-sandbox-mcp/scripts/guard-clayverse-vcr-source.mjs",
+    "blob": "fb9766042ff753881440cd33568a59d556e5bcaf",
+    "classification": "CONTROLLER_FAIL_CLOSED_BINDING_REPAIR_NO_PRODUCT_SEMANTIC_CHANGE",
+    "aligned_markers": {
+      "research_base_sha": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+      "research_sha": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
+      "research_tree_sha": "a012708e469de32615ea9933371a13795669db5a",
+      "pr611_terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+      "pr611_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+      "dockerfile_blob": "f573055d34aef3c983135eddc00cb908cf9fd997",
+      "dockerignore_blob": "74ab0a192ba32e26fa4cfdd5f970b97f725c864f",
+      "entityos_sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+      "entityos_size": 9181696
+    },
+    "security_properties_preserved": [
+      "fail-closed exact source marker validation",
+      "explicit execution-surface marker",
+      "GitHub secret must not be forwarded into Sandbox",
+      "unusual experiment count remains zero"
+    ]
+  },
+  "post_repair_execution_admission": {
+    "commit": "0edd4e6b6c262daa2c1af95d300f63855f73029e",
+    "github_vercel_status": "failure",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "deployment_build_started": false,
+    "sandbox_started": false,
+    "oci_build_started": false,
+    "product_assertion_started": false,
+    "runtime_credit": 0,
+    "classification": "VERCEL_DEPLOYMENT_ADMISSION_RATE_LIMIT_BEFORE_BUILD_AND_SANDBOX_NOT_TEST_FAIL"
+  },
+  "daytona_fallback": {
+    "policy": "AUTHORIZED_FREE_ONLY_FALLBACK_AFTER_VERCEL_PREASSERTION_BLOCK",
+    "current_controller_observation": "BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "reason": "Current documented controller state has no admitted DAYTONA_API_KEY path and no egress-capable direct provider controller in this worker; provider/account availability is therefore unobserved, not failed.",
+    "runtime_credit": 0
+  },
+  "counterhypothesis": {
+    "preferred": "The retained PR810 controller is now internally source-binding coherent and can reach Sandbox.create when deployment admission reopens.",
+    "strongest_counter": "After deployment admission, it may still fail at Sandbox creation, vault source staging, Docker-in-Sandbox, dependency resolution, image build, packaged Claude, tmux policy behavior or service startup; none of those current-image assertions has executed.",
+    "next_discriminator": "Run the same retained PR810 exact-source controller at the first admitted authorized isolated deployment; do not create a parallel OCI implementation."
+  },
+  "cycle_delta": {
+    "canonical_product_bytes": "NO_CHANGE",
+    "canonical_semantic_authority": "NO_CHANGE",
+    "controller_delta": "PR810 guard aligned to the exact fused current OCI runner",
+    "execution_delta": "predecessor guard failure localized; repaired head immediately rate-limited before deployment build",
+    "whole_product_acceptance": "IN_PROGRESS"
+  },
+  "prohibitions_observed": {
+    "vps_testing": true,
+    "self_hosted_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_final_training_without_owner_authorization": true
+  }
+}

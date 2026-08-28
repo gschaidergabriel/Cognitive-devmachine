@@ -1,0 +1,44 @@
+{
+  "schema": "clayverse-component-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "CURRENT_HARDENED_SOURCE_MECHANISM_SUPPORTED",
+  "product_scope": "canonical Mistral inference-only boundary for final Vercel Firecracker test-of-tests",
+  "source_identity": {
+    "adapters_blob": "566df232ada2d0f6dc5ed0b622408b1cd4e5bfdc",
+    "mistral_test_blob": "36dd02a13e69cbb9a7922d463f9fe1c225b3197d",
+    "inference_protocol_blob": "cd5856ac58f4e86c4c045fda8099b7783e6724cf"
+  },
+  "focused_execution": {
+    "surface": "authorized non-production local isolated container",
+    "scope": "current Mistral adapter/parser/test behavior reconstructed from the exact observed Git blobs; no external provider network call and not a full repository checkout",
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_mistral_current.py",
+    "result": "8 passed in 0.04s"
+  },
+  "covered_contracts": [
+    "explicit runtime model and MISTRAL_API_KEY required",
+    "fixed Mistral chat-completions endpoint",
+    "tool-less non-streaming JSON-object request",
+    "secret absent from request body, adapter persistent state and inference receipt",
+    "allowed entityos.exec remains only a schema-validated proposed effect intent",
+    "process.exec is rejected by the independent inference protocol before EffectGate",
+    "non-stop/partial provider completion fails closed",
+    "HTTP transport failure redacts secret/body and preserves only bounded status/type",
+    "malformed/oversized provider envelopes fail closed",
+    "provider response identity/model are required",
+    "non-secret inference receipt binds provider/model/response id plus request/response SHA-256"
+  ],
+  "supersedes_local_receipt_scope": "Earlier 6/6 focused evidence applied to predecessor adapters blob 53a33320...; it is not transferred to this hardened blob. This receipt is the current bounded focused evidence.",
+  "evidence_limits": {
+    "real_mistral_network_call": false,
+    "vault_secret_acquisition": false,
+    "full_repository_regression": false,
+    "exact_oci_runtime": false,
+    "vercel_firecracker_docker_runtime": false,
+    "full_canonical_turn_effect_reentry": false,
+    "tier2_appliance_recreation": false,
+    "whole_product": false
+  },
+  "next_discriminator": "Provision scoped GitHub read credential to the retained Vercel controller, fetch/verify exact private sources in Sandbox, build exact OCI, run same digest inside Firecracker guest, acquire Mistral token from approved Vault at runtime, execute real ClayVerse cognition/effect/reentry, recreate appliance, reacquire secret and repeat cognition.",
+  "acceptance": "IN_PROGRESS"
+}

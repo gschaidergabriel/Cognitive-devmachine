@@ -1,0 +1,281 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_SPLIT_METRIC_HARDENING/v3",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "e2c8e103be1910a7fb741d9e557479aada78e058",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "training_executed": false,
+    "paid_provider_or_training_call_executed": false,
+    "unusual_experiment": "NOT_USED_SOURCE_DATASET_REVIEW_ONLY"
+  },
+  "inputs": {
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "claude_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "claude_package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "measured_snapshot": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1@591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "context_binding_generator_source": "263030e5991a4323fbabedfb29d2ec34e8bbb115",
+    "context_binding_generator_test_source": "c1daa662baefac35dca49b77d62e92658432361f",
+    "second_order_display_leak_review": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SECOND_ORDER_DISPLAY_ORDER_LEAK_REVIEW_V1_GPT56SOL.json",
+    "evidence_boundary_seed": "research_entity/global/j-space/research/trigger2_qwen35_08b_evidence_boundary_seed_v2.jsonl"
+  },
+  "swarm_review": {
+    "roles": [
+      "EVIDENCE_EXTRACTOR",
+      "DATASET_ARCHITECT",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "STATISTICAL_REVIEWER",
+      "ABI_PROVENANCE_REVIEWER",
+      "RETENTION_REVIEWER",
+      "CAUSAL_INTERVENTION_REVIEWER",
+      "HARNESS_COMPATIBILITY_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "round_1_findings": [
+      {
+        "role": "EVIDENCE_EXTRACTOR",
+        "verdict": "KEEP_NARROW_BINDING_TARGET",
+        "reason": "The measured snapshot already has strong semantic readability, writable symbol axes, and carrier binding through k<=16, while dynamic codebook selection and cross-template transfer remain weak."
+      },
+      {
+        "role": "ADVERSARIAL_SHORTCUT_HUNTER",
+        "verdict": "REQUIRE_FACTORIAL_NUISANCE_REMOVAL",
+        "reason": "A second-order review found nonzero target information in display order despite marginal balance. Full display-order crossing and atom-triplet independence are required before causal-binding claims."
+      },
+      {
+        "role": "ABI_PROVENANCE_REVIEWER",
+        "verdict": "REJECT_CROSS_CHECKPOINT_ABI_INHERITANCE",
+        "reason": "The 46 accepted atoms, centered/orthogonalized geometry, and L19/L21/L23 observations were measured on one gabliterated Qwen3.5-0.8B snapshot. The source checkpoint for the intended full fine-tune is still selected separately; hidden-state and tokenizer/atom admission must therefore be re-established at the exact selected checkpoint identity."
+      },
+      {
+        "role": "STATISTICAL_REVIEWER",
+        "verdict": "REQUIRE_DISJOINT_ATOM_POOLS_AND_TARGET_BALANCE",
+        "reason": "An unseen-symbol holdout is not established by merely declaring one. Exact atom identities must be assigned to immutable split-specific pools before tuning, and both target-token frequency and codebook-presence frequency must be audited."
+      },
+      {
+        "role": "CAUSAL_INTERVENTION_REVIEWER",
+        "verdict": "DECOMPOSE_FAILURES_BEFORE_ROUTER_CREDIT",
+        "reason": "Aggregate symbol accuracy can fail because semantic inference is wrong, because the target atom cannot be emitted, or because the episode-local mapping is not followed. Those failure classes must be measured separately before assigning binding/router credit."
+      },
+      {
+        "role": "HARNESS_COMPATIBILITY_REVIEWER",
+        "verdict": "BIND_COUNTERFACTUAL_FAMILY_ID",
+        "reason": "All mapping-flip, semantic-flip, order-shuffle, polarity, lexical-paraphrase and nuisance variants derived from one latent case must carry one connected counterfactual family identity and remain atomic within a dataset split."
+      }
+    ],
+    "round_2_integrated_verdict": "ACCEPT_HARDENING_AS_SOURCE_DESIGN. MATERIALIZATION_AND_TRAINING_REMAIN_BLOCKED_ON_EXACT_CHECKPOINT_LOCAL_ABI_ADMISSION_AND FROZEN_SPLIT_MANIFESTS."
+  },
+  "new_hard_gates": {
+    "checkpoint_local_abi_gate": {
+      "rule": "Do not inherit the gabliterated snapshot's 46-atom admission, L19/L21 read references, L23 write hook, whitening basis, semantic subspace, or codec as positive labels for a different selected Qwen3.5-0.8B checkpoint.",
+      "required_after_checkpoint_selection": [
+        "pin exact model revision, weights digest, tokenizer and runtime/build identity",
+        "re-tokenize every candidate atom and require observed one-token identity where one-token output is part of the protocol",
+        "re-run atom self-separation/cross-talk admission on the exact selected checkpoint if hidden-state atom geometry will be used",
+        "re-run semantic read-layer and symbol write-layer calibration if J-Space hooks will be used",
+        "derive a new checkpoint-local whitening/subspace/codec identity rather than reusing the measured gabliterated basis",
+        "bind every positive J-Space row to same-model causal receipts under the candidate-row gate"
+      ],
+      "allowed_before_gate": "Logical opaque symbols may be used in METHOD_ONLY source-design rows and deterministic generator tests only."
+    },
+    "immutable_atom_pool_gate": {
+      "rule": "After checkpoint-local atom admission and before any tuning, freeze mutually disjoint TRAIN_ATOMS, VALIDATION_ATOMS, HOLDOUT_ATOMS and FINAL_UNTOUCHED_RESERVE pools by exact token/row identity and manifest digest.",
+      "constraints": [
+        "No atom may occur in more than one pool.",
+        "Every materialized codebook triplet must draw only from its row split's atom pool.",
+        "Target atom frequency must be exactly balanced within each complete factorial block where divisibility permits.",
+        "Codebook-presence frequency must be balanced independently of target frequency.",
+        "Atom-triplet identity must be independent of semantic class, mapping ID, display order, template, polarity and lexical family.",
+        "Pool assignment is frozen before validation/holdout observation and may not be repaired from holdout results."
+      ],
+      "conditional_example_if_exactly_46_atoms_survive_checkpoint_local_admission": {
+        "status": "DESIGN_EXAMPLE_NOT_PRECOMMITTED_FACT",
+        "TRAIN_ATOMS": 24,
+        "VALIDATION_ATOMS": 6,
+        "HOLDOUT_ATOMS": 9,
+        "FINAL_UNTOUCHED_RESERVE": 7,
+        "note": "24/6/9 are divisible into three-atom codebook blocks; seven remain untouched. Recompute rather than forcing these counts if checkpoint-local admission produces a different usable atom count."
+      }
+    },
+    "counterfactual_component_gate": {
+      "required_field": "counterfactual_family_id",
+      "atomic_members": [
+        "all six S3 mapping flips for the same latent semantic situation",
+        "all six codebook display-order variants when full order crossing is used",
+        "direct/inverted query variants",
+        "semantic-flip sibling cases derived from the same latent rule family",
+        "lexical paraphrases of the same latent case",
+        "protocol-neutral distractor variants",
+        "missing-evidence/minimal-change variants"
+      ],
+      "split_rule": "The connected component induced by counterfactual_family_id plus provenance ancestry must belong to exactly one of TRAIN, VALIDATION or HOLDOUT. No sibling may cross a split boundary."
+    },
+    "model_visible_redaction_gate": {
+      "forbidden_model_visible_fields": [
+        "hidden semantic class metadata",
+        "permutation ID",
+        "target slot ID",
+        "split label",
+        "counterfactual family ID",
+        "provenance/source annotation",
+        "expected target token ID"
+      ],
+      "audit": "Hash the final model-visible serialized prompt and target separately from evaluator metadata and verify that hidden metadata cannot be recovered from deterministic serializer ordering."
+    }
+  },
+  "factorized_evaluation": {
+    "purpose": "Prevent aggregate output accuracy from being misreported as evidence for the learned binding/router mechanism.",
+    "metrics": [
+      {
+        "id": "SEMANTIC_DECISION_ACCURACY",
+        "definition": "On a separately frozen evaluator, test whether the model resolves the latent semantic state correctly without requiring episode-local symbol lookup.",
+        "interpretation": "Failure here is semantic inference failure, not sufficient evidence of a router failure."
+      },
+      {
+        "id": "DIRECT_ATOM_WRITE_ACCURACY",
+        "definition": "For each admitted target atom, directly request that exact atom under a frozen minimal emission protocol and measure exact single-token output.",
+        "interpretation": "Failure here is symbol emission/write failure, not sufficient evidence of a mapping failure."
+      },
+      {
+        "id": "BINDING_ACCURACY_CONDITIONAL",
+        "definition": "Measure episode-local mapping accuracy on cases for which the corresponding semantic decision and direct target-atom write probes are both correct.",
+        "interpretation": "This is the primary behavioral router metric; report its denominator and do not hide exclusions."
+      },
+      {
+        "id": "CODEBOOK_FLIP_EXACTNESS",
+        "definition": "Hold semantic situation and surface form fixed while changing only the realized mapping; output must change exactly to the newly mapped atom across the full S3 family."
+      },
+      {
+        "id": "DISPLAY_ORDER_INVARIANCE",
+        "definition": "Hold mapping and case fixed across all six codebook presentation orders; target and output should remain invariant."
+      },
+      {
+        "id": "POLARITY_TRANSFORM_CONSISTENCY",
+        "definition": "For paired direct/inverted queries, known binary semantic states must transform as preregistered while unresolved state remains unresolved, then route through the same local mapping."
+      },
+      {
+        "id": "UNSEEN_SYMBOL_BINDING",
+        "definition": "Evaluate mapping using atoms from HOLDOUT_ATOMS never present in TRAIN_ATOMS, after exact checkpoint-local tokenizer/ABI admission.",
+        "interpretation": "Tests variable binding beyond memorized output atoms."
+      },
+      {
+        "id": "NUISANCE_EFFECT_CONTRAST",
+        "definition": "Compare effect of semantic/mapping changes against model-visible nuisance changes such as order, neutral separators and distractors. Nuisance perturbations must not carry more target information or behavioral effect than the intended semantic/mapping manipulation."
+      }
+    ],
+    "error_attribution": [
+      "SEMANTIC_FAIL: semantic decision probe wrong",
+      "WRITE_FAIL: semantic decision correct but target atom direct-write probe fails",
+      "ROUTER_FAIL: semantic decision and direct write correct but episode-local mapping output wrong",
+      "COMPOUND_FAIL: more than one prerequisite subsystem fails",
+      "PASS_BINDING: prerequisites pass and mapped output is correct"
+    ],
+    "promotion_rule": "No positive J-Space or narrow-router causal credit from aggregate symbol accuracy alone. Behavioral binding gains require factorized metrics; J-Space causal credit additionally requires exact same-model intervention/lesion/shuffle/rescue evidence."
+  },
+  "swarm_hardened_training_example_blueprints": [
+    {
+      "id": "BIND_CF_MAPPING_FLIP_A",
+      "status": "METHOD_ONLY_LOGICAL_ALIAS_NOT_TRAINING_READY",
+      "counterfactual_family_id": "CF_BIND_001",
+      "prompt": "CODEBOOK_BEGIN\nALLOW -> ATOM_A\nDENY -> ATOM_B\nABSTAIN -> ATOM_C\nCODEBOOK_END\nFacts: every required field is present and every required condition is satisfied. Return one mapped atom only.",
+      "target": "ATOM_A",
+      "review_intent": "Base member for exact mapping-flip family."
+    },
+    {
+      "id": "BIND_CF_MAPPING_FLIP_B",
+      "status": "METHOD_ONLY_LOGICAL_ALIAS_NOT_TRAINING_READY",
+      "counterfactual_family_id": "CF_BIND_001",
+      "prompt": "CODEBOOK_BEGIN\nALLOW -> ATOM_C\nDENY -> ATOM_A\nABSTAIN -> ATOM_B\nCODEBOOK_END\nFacts: every required field is present and every required condition is satisfied. Return one mapped atom only.",
+      "target": "ATOM_C",
+      "review_intent": "Same semantics; only mapping changes, therefore target must flip."
+    },
+    {
+      "id": "BIND_CF_ORDER_A",
+      "status": "METHOD_ONLY_LOGICAL_ALIAS_NOT_TRAINING_READY",
+      "counterfactual_family_id": "CF_BIND_002",
+      "prompt": "CODEBOOK_BEGIN\nALLOW -> ATOM_B\nDENY -> ATOM_C\nABSTAIN -> ATOM_A\nCODEBOOK_END\nFacts: a required observation is absent, so the case cannot be resolved. Return one mapped atom only.",
+      "target": "ATOM_A",
+      "review_intent": "Order-invariance member."
+    },
+    {
+      "id": "BIND_CF_ORDER_B",
+      "status": "METHOD_ONLY_LOGICAL_ALIAS_NOT_TRAINING_READY",
+      "counterfactual_family_id": "CF_BIND_002",
+      "prompt": "CODEBOOK_BEGIN\nDENY -> ATOM_C\nABSTAIN -> ATOM_A\nALLOW -> ATOM_B\nCODEBOOK_END\nFacts: a required observation is absent, so the case cannot be resolved. Return one mapped atom only.",
+      "target": "ATOM_A",
+      "review_intent": "Identical mapping/semantics with different display order; target must not change."
+    },
+    {
+      "id": "BIND_CF_MISSING_EVIDENCE_A",
+      "status": "METHOD_ONLY_LOGICAL_ALIAS_NOT_TRAINING_READY",
+      "counterfactual_family_id": "CF_BIND_003",
+      "prompt": "CODEBOOK_BEGIN\nALLOW -> ATOM_C\nDENY -> ATOM_B\nABSTAIN -> ATOM_A\nCODEBOOK_END\nFacts: p=true; q=true. Rule: p AND q. Return one mapped atom only.",
+      "target": "ATOM_C",
+      "review_intent": "Determinate member."
+    },
+    {
+      "id": "BIND_CF_MISSING_EVIDENCE_B",
+      "status": "METHOD_ONLY_LOGICAL_ALIAS_NOT_TRAINING_READY",
+      "counterfactual_family_id": "CF_BIND_003",
+      "prompt": "CODEBOOK_BEGIN\nALLOW -> ATOM_C\nDENY -> ATOM_B\nABSTAIN -> ATOM_A\nCODEBOOK_END\nFacts: p=true; q=UNKNOWN. Rule: p AND q. Return one mapped atom only.",
+      "target": "ATOM_A",
+      "review_intent": "Minimal evidence deletion changes semantic state and therefore target through the same mapping."
+    },
+    {
+      "id": "BIND_CF_NUISANCE_A",
+      "status": "METHOD_ONLY_LOGICAL_ALIAS_NOT_TRAINING_READY",
+      "counterfactual_family_id": "CF_BIND_004",
+      "prompt": "CODEBOOK_BEGIN\nALLOW -> ATOM_A\nDENY -> ATOM_C\nABSTAIN -> ATOM_B\nCODEBOOK_END\nObservation: the decisive hard constraint is violated. Output one atom.",
+      "target": "ATOM_C",
+      "review_intent": "Nuisance base."
+    },
+    {
+      "id": "BIND_CF_NUISANCE_B",
+      "status": "METHOD_ONLY_LOGICAL_ALIAS_NOT_TRAINING_READY",
+      "counterfactual_family_id": "CF_BIND_004",
+      "prompt": "CODEBOOK_BEGIN\nALLOW -> ATOM_A\nDENY -> ATOM_C\nABSTAIN -> ATOM_B\nCODEBOOK_END\nNote: packet formatting version=7. Observation: the decisive hard constraint is violated. Output one atom.",
+      "target": "ATOM_C",
+      "review_intent": "Protocol-neutral distractor must not change target."
+    }
+  ],
+  "research_return": {
+    "training_rule": "Treat dynamic binding examples as connected causal counterfactual components with checkpoint-local output vocabulary, not as IID prompt/answer rows.",
+    "architecture_implication": "The future Xeno harness should expose semantic decision, episode-local mapping lookup, and atom emission as separately auditable stages even if the deployed model implements them internally as one forward computation.",
+    "harness_required_trace_additions": [
+      "counterfactual_family_id",
+      "atom_pool_manifest_digest",
+      "checkpoint_local_abi_manifest_digest",
+      "semantic_probe_result",
+      "direct_atom_write_probe_result",
+      "binding_conditional_result",
+      "display_order_id",
+      "nuisance_condition_id"
+    ],
+    "strong_falsifier": "If semantic decisions and direct atom writes remain strong but conditional binding stays poor on unseen templates and unseen checkpoint-local atoms after fully factorial, leak-resistant training, the narrow-router hypothesis loses support. Broader contextual computation or architecture changes become more plausible.",
+    "anti_goodhart": "Do not optimize aggregate symbol accuracy while semantic/write prerequisites degrade or shortcut MI remains nonzero. A higher scalar score can represent a worse binder if it exploits order/token/lexical priors."
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "materialized_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_actions": [
+    "After exact checkpoint selection, perform checkpoint-local tokenizer/atom/J-Space admission instead of inheriting the gabliterated snapshot ABI.",
+    "Freeze disjoint atom pools and counterfactual component assignments before tuning.",
+    "Upgrade the successor generator to full display-order crossing and explicit counterfactual_family_id propagation.",
+    "Add factorized semantic/write/router metrics to the frozen single-node and physical-GRID10 evaluation harness.",
+    "Keep training/provider execution closed under FREE_ONLY until separately authorized and admitted."
+  ]
+}

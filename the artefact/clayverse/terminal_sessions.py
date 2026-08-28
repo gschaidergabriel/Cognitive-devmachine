@@ -3,18 +3,19 @@ from __future__ import annotations
 import json
 import os
 import pty
-import shlex
 import shutil
 import signal
 import struct
 import subprocess
 import termios
 import fcntl
+import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
 
 from .identity import CANONICAL_TERMINAL_NAMES
+from .terminal_activity import TerminalActivityRegistry
 
 CANONICAL_TERMINALS = CANONICAL_TERMINAL_NAMES
 
@@ -39,14 +40,25 @@ class TerminalSessionManager:
     MANAGED_SETTINGS = Path("/etc/claude-code/managed-settings.json")
     MANAGED_MCP = Path("/etc/claude-code/managed-mcp.json")
     MANAGED_TMUX = Path("/etc/clayverse/managed-tmux.conf")
-    MANAGED_TMUX_POLICY_ID = "clayverse-browser-transport-v1"
+    MANAGED_TMUX_POLICY_ID = "clayverse-browser-transport-v3"
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
     TMUX_SOCKET_PREFIX = "clayverse"
+    TMUX_CONTROL_TIMEOUT_SECONDS = 2.0
+    AUTONOMY_PROMPT_MAX_CHARS = 256
 
-    def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
+    def __init__(
+        self,
+        state_root: str | Path,
+        workspace: str | Path = "/workspace",
+        *,
+        activity: TerminalActivityRegistry | None = None,
+    ):
         self.state_root = Path(state_root)
         self.workspace = Path(workspace)
         self.runtime_prompt = Path("/opt/clayverse/runtime/CLAUDE.md")
+        self.activity = activity or TerminalActivityRegistry()
+        self._attach_lock = threading.RLock()
+        self._attach_users: dict[int, str] = {}
 
     def _require_programs(self) -> None:
         for program in ("tmux", "claude", "python3"):
@@ -58,8 +70,8 @@ class TerminalSessionManager:
             raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
         if not self.MANAGED_MCP.is_file():
             raise TerminalRuntimeError("exclusive managed ClayVerse MCP unavailable")
-        if not self.MANAGED_TMUX.is_file():
-            raise TerminalRuntimeError("managed tmux command-surface policy unavailable")
+        if not self.MANAGED_TMUX.is_file() or self.MANAGED_TMUX.stat().st_mode & 0o222:
+            raise TerminalRuntimeError("managed tmux command-surface policy unavailable or writable")
         if not self.DIRECT_SHELL_GUARD.is_file() or not os.access(self.DIRECT_SHELL_GUARD, os.X_OK):
             raise TerminalRuntimeError("direct-shell guard unavailable")
 
@@ -86,7 +98,7 @@ class TerminalSessionManager:
     @classmethod
     def _tmux_argv(cls, binding: TerminalBinding, *args: str) -> list[str]:
         # The browser is attached to tmux, so tmux itself is part of the effect boundary.
-        # Always select the root-owned policy that removes tmux's command prefix/keymap;
+        # Always select the root-owned policy that removes tmux's command keymaps;
         # never allow an invocation to fall back to user/default tmux configuration.
         return [
             "tmux",
@@ -95,13 +107,26 @@ class TerminalSessionManager:
             *args,
         ]
 
+    def _run_tmux(self, binding: TerminalBinding, *args: str) -> subprocess.CompletedProcess:
+        try:
+            return subprocess.run(
+                self._tmux_argv(binding, *args),
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise TerminalRuntimeError("tmux control operation unavailable") from exc
+
     def _assert_tmux_server_policy(self, binding: TerminalBinding) -> None:
-        """Fail closed unless the connected tmux server actually loaded our policy.
+        """Fail closed unless the connected tmux server is transport-only.
 
         tmux only reads `-f` when a server starts. An already-running server can therefore
-        ignore the `-f` supplied by a later client. The managed policy writes its marker
-        last, after removing the browser command surface; verify that marker plus the two
-        prefix options before an existing/new server is admitted for browser attachment.
+        ignore the `-f` supplied by a later client. The managed policy writes a versioned
+        marker last after removing all default key tables. Verify the marker, both prefix
+        options, inert status/mouse/default-shell settings, and the effective global key
+        binding list before admitting attachment.
         """
         checks = (
             (
@@ -111,18 +136,13 @@ class TerminalSessionManager:
             ),
             ("prefix", ("show-options", "-gqv", "prefix"), "None"),
             ("prefix2", ("show-options", "-gqv", "prefix2"), "None"),
+            ("status", ("show-options", "-gqv", "status"), "off"),
+            ("mouse", ("show-options", "-gqv", "mouse"), "off"),
+            ("default-shell", ("show-options", "-gqv", "default-shell"), str(self.DIRECT_SHELL_GUARD)),
+            ("keymap", ("list-keys",), ""),
         )
         for label, args, expected in checks:
-            try:
-                cp = subprocess.run(
-                    self._tmux_argv(binding, *args),
-                    capture_output=True,
-                    text=True,
-                    check=False,
-                    timeout=2.0,
-                )
-            except (OSError, subprocess.TimeoutExpired) as exc:
-                raise TerminalRuntimeError(f"tmux server policy attestation unavailable: {label}") from exc
+            cp = self._run_tmux(binding, *args)
             if cp.returncode != 0 or cp.stdout.strip() != expected:
                 raise TerminalRuntimeError(f"tmux server policy attestation failed: {label}")
 
@@ -165,13 +185,33 @@ class TerminalSessionManager:
         os.replace(tmp, binding.mcp_config)
 
     def _has_session(self, binding: TerminalBinding) -> bool:
-        cp = subprocess.run(
-            self._tmux_argv(binding, "has-session", "-t", binding.tmux_name),
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            check=False,
-        )
+        try:
+            cp = subprocess.run(
+                self._tmux_argv(binding, "has-session", "-t", binding.tmux_name),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False,
+                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise TerminalRuntimeError(
+                f"tmux session liveness probe unavailable for {binding.tmux_name}"
+            ) from exc
         return cp.returncode == 0
+
+    def _enforce_tmux_policy(self, binding: TerminalBinding) -> None:
+        """Reapply the immutable command-surface fence to a running tmux server.
+
+        tmux configuration is loaded when a server starts, not whenever a new session
+        or client is created. A persistent per-user server may therefore predate a
+        ClayVerse policy upgrade. Source the root-owned policy before every admitted
+        attach path and fail closed if the running server cannot accept it.
+        """
+        cp = self._run_tmux(binding, "source-file", str(self.MANAGED_TMUX))
+        if cp.returncode != 0:
+            raise TerminalRuntimeError(
+                f"failed to enforce tmux policy for {binding.tmux_name}: {cp.stderr[-1000:]}"
+            )
 
     def ensure(self, user_id: str) -> TerminalBinding:
         self._require_programs()
@@ -179,6 +219,7 @@ class TerminalSessionManager:
         binding.home.mkdir(parents=True, exist_ok=True)
         self.workspace.mkdir(parents=True, exist_ok=True)
         if self._has_session(binding):
+            self._enforce_tmux_policy(binding)
             self._assert_tmux_server_policy(binding)
             return binding
 
@@ -193,6 +234,7 @@ class TerminalSessionManager:
             "--allowedTools",
             "mcp__clayverse__session_state",
             "mcp__clayverse__request_effect",
+            "mcp__clayverse__request_autonomy_effect",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]
@@ -214,7 +256,7 @@ class TerminalSessionManager:
             f"CLAYVERSE_USER_ID={binding.user_id}",
             f"CLAYVERSE_SESSION_ID={binding.session_id}",
             *effect_env,
-            "DISABLE_AUTOUPDATER=1",
+            "DISABLE_UPDATES=1",
             "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1",
             "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1",
             "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1",
@@ -223,72 +265,147 @@ class TerminalSessionManager:
             f"CLAUDE_CODE_SHELL_PREFIX={self.DIRECT_SHELL_GUARD}",
             *claude_argv,
         ]
-        command = shlex.join(env_argv)
-        cp = subprocess.run(
-            self._tmux_argv(
-                binding,
-                "new-session", "-d", "-s", binding.tmux_name,
-                "-c", str(self.workspace), command,
-            ),
-            capture_output=True,
-            text=True,
-            check=False,
-        )
+        try:
+            cp = subprocess.run(
+                self._tmux_argv(
+                    binding,
+                    "new-session", "-d", "-s", binding.tmux_name,
+                    "-c", str(self.workspace), *env_argv,
+                ),
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise TerminalRuntimeError(
+                f"tmux session creation unavailable for {binding.tmux_name}"
+            ) from exc
         if cp.returncode != 0:
             raise TerminalRuntimeError(f"failed to create {binding.tmux_name}: {cp.stderr[-1000:]}")
+        self._enforce_tmux_policy(binding)
         self._assert_tmux_server_policy(binding)
         return binding
 
-    def attach_pty(self, user_id: str) -> tuple[int, int, TerminalBinding]:
+    def assert_detached_idle_claude(self, user_id: str) -> tuple[TerminalBinding, str]:
+        """Attest the only state in which synthetic autonomous terminal input is allowed."""
         binding = self.ensure(user_id)
-        pid, fd = pty.fork()
-        if pid == 0:
-            env = {
-                "HOME": str(binding.home),
-                "PATH": "/usr/local/bin:/usr/bin:/bin",
-                "TERM": os.environ.get("TERM", "xterm-256color"),
-                "LANG": "C.UTF-8",
-            }
-            os.execvpe(
-                "tmux",
-                self._tmux_argv(binding, "attach-session", "-t", binding.tmux_name),
-                env,
-            )
-        return pid, fd, binding
+        activity = self.activity.snapshot(user_id)
+        if activity.human_clients != 0 or not activity.autonomy_reserved:
+            raise TerminalRuntimeError("autonomy terminal input lacks exclusive activity reservation")
 
-    @staticmethod
-    def resize(fd: int, rows: int, cols: int) -> None:
+        clients = self._run_tmux(
+            binding,
+            "list-clients", "-t", binding.tmux_name, "-F", "#{client_name}",
+        )
+        if clients.returncode != 0:
+            raise TerminalRuntimeError("tmux client attestation unavailable")
+        if clients.stdout.strip():
+            raise TerminalRuntimeError("tmux session has an attached client")
+
+        panes = self._run_tmux(
+            binding,
+            "list-panes", "-t", binding.tmux_name,
+            "-F", "#{pane_id}\t#{pane_dead}\t#{pane_in_mode}\t#{pane_current_command}",
+        )
+        if panes.returncode != 0:
+            raise TerminalRuntimeError("tmux pane attestation unavailable")
+        lines = [line for line in panes.stdout.splitlines() if line]
+        if len(lines) != 1:
+            raise TerminalRuntimeError("autonomy dispatch requires exactly one tmux pane")
+        fields = lines[0].split("\t")
+        if len(fields) != 4:
+            raise TerminalRuntimeError("tmux pane attestation malformed")
+        pane_id, dead, in_mode, current_command = fields
+        if not pane_id.startswith("%") or dead != "0" or in_mode != "0" or current_command != "claude":
+            raise TerminalRuntimeError("tmux pane is not a detached idle managed Claude surface")
+        return binding, pane_id
+
+    def dispatch_autonomy_prompt(self, user_id: str, prompt: str) -> None:
+        """Inject only a bounded one-shot dispatch token into an exclusively reserved idle pane."""
+        if (
+            not isinstance(prompt, str)
+            or not prompt
+            or len(prompt) > self.AUTONOMY_PROMPT_MAX_CHARS
+            or any(ord(char) < 0x20 or ord(char) > 0x7E for char in prompt)
+        ):
+            raise ValueError("invalid autonomy terminal prompt")
+        binding, pane_id = self.assert_detached_idle_claude(user_id)
+        cp = self._run_tmux(
+            binding,
+            "send-keys", "-t", pane_id, "-l", prompt,
+            ";", "send-keys", "-t", pane_id, "Enter",
+        )
+        if cp.returncode != 0:
+            raise TerminalRuntimeError("tmux autonomy dispatch failed")
+
+    def attach_pty(self, user_id: str) -> tuple[int, int, TerminalBinding]:
+        if not self.activity.begin_human(user_id):
+            raise TerminalRuntimeError("terminal temporarily reserved for autonomy dispatch")
+        registered = False
+        try:
+            binding = self.ensure(user_id)
+            pid, fd = pty.fork()
+            if pid == 0:
+                env = {
+                    "HOME": str(binding.home),
+                    "PATH": "/usr/local/bin:/usr/bin:/bin",
+                    "TERM": os.environ.get("TERM", "xterm-256color"),
+                    "LANG": "C.UTF-8",
+                }
+                os.execvpe(
+                    "tmux",
+                    self._tmux_argv(binding, "attach-session", "-t", binding.tmux_name),
+                    env,
+                )
+            with self._attach_lock:
+                if pid in self._attach_users:
+                    raise TerminalRuntimeError("duplicate PTY attach pid")
+                self._attach_users[pid] = user_id
+                registered = True
+            return pid, fd, binding
+        except BaseException:
+            if not registered:
+                self.activity.end_human(user_id)
+            raise
+
+    def resize(self, fd: int, rows: int, cols: int) -> None:
         rows = max(2, min(int(rows), 500))
         cols = max(10, min(int(cols), 1000))
         fcntl.ioctl(fd, termios.TIOCSWINSZ, struct.pack("HHHH", rows, cols, 0, 0))
 
-    @staticmethod
-    def close_attach(pid: int, fd: int) -> None:
+    def close_attach(self, pid: int, fd: int) -> None:
+        with self._attach_lock:
+            user_id = self._attach_users.pop(pid, None)
         try:
-            os.close(fd)
-        except OSError:
-            pass
-        try:
-            os.kill(pid, signal.SIGHUP)
-        except ProcessLookupError:
-            return
-
-        deadline = time.monotonic() + 0.5
-        while True:
             try:
-                waited, _ = os.waitpid(pid, os.WNOHANG)
-            except ChildProcessError:
+                os.close(fd)
+            except OSError:
+                pass
+            try:
+                os.kill(pid, signal.SIGHUP)
+            except ProcessLookupError:
                 return
-            if waited == pid:
-                return
-            if time.monotonic() >= deadline:
+
+            deadline = time.monotonic() + 0.5
+            while True:
                 try:
-                    os.kill(pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass
-                try:
-                    os.waitpid(pid, 0)
+                    waited, _ = os.waitpid(pid, os.WNOHANG)
                 except ChildProcessError:
-                    pass
-                return
-            time.sleep(0.01)
+                    return
+                if waited == pid:
+                    return
+                if time.monotonic() >= deadline:
+                    try:
+                        os.kill(pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+                    try:
+                        os.waitpid(pid, 0)
+                    except ChildProcessError:
+                        pass
+                    return
+                time.sleep(0.01)
+        finally:
+            if user_id is not None:
+                self.activity.end_human(user_id)

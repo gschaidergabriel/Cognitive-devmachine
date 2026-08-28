@@ -1,0 +1,52 @@
+{
+  "schema": "mini-entity-native-semantic-admission-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "base_main_sha": "5b6ebca899f8692d767b17402fb83e664c9f0bfb",
+  "problem": "Native 0.7 can currently accept clay-pipeline-profile/v2 and commit model output even though it does not implement the canonical profile-driven collect/probe/compile envelope plus mandatory post-inference pipeline_gate semantics.",
+  "canonical_contract_evidence": {
+    "clay_pipeline": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "reference_runtime": "tools/clay_profile_pipeline_runtime.py",
+    "semantic_parity_audit": "the artefact/blogpost_entity/receipts/2026-08-22_GO_MINI_ENTITY_0_7_SEMANTIC_PARITY_AUDIT_GPT56SOL.json"
+  },
+  "repair_candidate": {
+    "branch": "gpt56sol/go-native-semantic-admission-20260822-1335",
+    "policy": "FAIL_CLOSED_BEFORE_COLLECTION_OR_INFERENCE",
+    "blocked_schema": "clay-pipeline-profile/v2",
+    "error": "CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY",
+    "status_surface": "native_semantic_admission",
+    "reason": "Do not let a weaker native pipeline impersonate the canonical v2 profile contract while hash echo, allowed evidence, canonical probes/state metrics and pipeline_gate parity remain absent."
+  },
+  "source_falsifiers": [
+    "shipped zero_blog profile is confirmed clay-pipeline-profile/v2 and requires hash echo, evidence-per-section, leak patterns, sources, canonical probes and state metrics",
+    "semantic admission check occurs before collect_packet",
+    "semantic admission check occurs before model_output",
+    "semantic admission check occurs before commit_run",
+    "status exposes the blocked semantic admission state"
+  ],
+  "evidence_class": "SOURCE_MECHANISM_CANDIDATE_EXECUTION_UNOBSERVED",
+  "runtime_credit": 0,
+  "test_credit": 0,
+  "unusual_experiment": {
+    "count": 0,
+    "note": "The single unusual experiment for this go was already consumed by the canonical transitive source-closure work on main. This is a deterministic safety repair and source falsifier only."
+  },
+  "next_gate": "Implement one canonical native v2 compile envelope and pipeline_gate as a coherent replacement path, then remove this admission block only when wrong hash echo, missing required output, leak pattern, missing/unknown evidence, unverified state claim, overshoot and missing metric evidence all fail before commit and a valid payload commits exactly once.",
+  "not_claimed": [
+    "canonical v2 native semantic parity",
+    "native 0.7 runtime PASS",
+    "native 0.7 exact ELF acceptance",
+    "real local model acceptance",
+    "real remote provider acceptance",
+    "whole Mini Entity final acceptance"
+  ],
+  "safety": {
+    "vps_or_self_hosted_testing": false,
+    "together_api": false,
+    "external_provider_call": false,
+    "secret_used": false,
+    "paid_or_final_model_training": false
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_BLUEPRINT_DURABILITY_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch_observed": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "unusual_experiment": "NOT_USED_SOURCE_REPRODUCIBILITY_AUDIT_ONLY"
+  },
+  "audited_receipt": {
+    "commit": "92a0737a72002f1782e20d382f786d5b693fb38f",
+    "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_BINDING_ROUTER_SWARM_REVIEW_V2_GPT56SOL.json",
+    "claimed_blueprint_path": "trigger2_qwen35_08b_xeno_binding_router_blueprint_v2.jsonl",
+    "claimed_blueprint_sha256": "43c834ee35fbb2d3c44e8c58f59788c55cc692799c2cc6b31b71e813de08574d",
+    "claimed_rows": 108,
+    "claimed_splits": {"TRAIN":72,"VALIDATION":18,"HOLDOUT":18}
+  },
+  "observations": [
+    "Repository search on the current canonical repository did not locate the claimed blueprint filename.",
+    "Direct raw fetch at the receipt commit for the claimed root-level blueprint path returned Not Found.",
+    "Direct raw fetch at canonical main 701ad966c7127bb9821b239cabbcb078363ee425 under research_entity/global/j-space/research/ for the claimed blueprint filename returned Not Found.",
+    "The receipt therefore records a blueprint audit claim but does not, by itself, establish that the audited 108-row payload is durably reconstructible from canonical source."
+  ],
+  "swarm_adjudication": {
+    "EVIDENCE_REVIEWER": "FAIL_CLOSED_PAYLOAD_NOT_OBSERVED",
+    "DATASET_ARCHITECT": "RETAIN_THE_DESIGN_RULES_BUT_NOT_THE_MISSING_PAYLOAD_AS_DATASET_ROWS",
+    "ADVERSARIAL_REVIEWER": "A receipt-only SHA can become an unverifiable green island if the payload/generator is absent.",
+    "PROVENANCE_REVIEWER": "Require exact path plus Git blob/content SHA or deterministic generator source plus frozen inputs.",
+    "FINAL_INTEGRATOR": "No duplicate dataset lane. Converge on the retained factorial binding generator and current split/materialization guards; treat the missing 108-row blueprint as noncanonical until reconstructed and re-audited."
+  },
+  "credit_boundary": {
+    "claimed_108_row_blueprint_payload_credit": 0,
+    "accepted_dataset_tokens_minted": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "required_repair": [
+    "Either persist the exact 108 JSONL rows at an explicit canonical path with Git blob SHA and content SHA-256, or persist a deterministic generator whose exact frozen inputs reproduce the claimed content SHA-256.",
+    "Re-run current row admission, cross-split leakage, S3/factorial nuisance, class/atom MI, checkpoint-local ABI, and holdout-isolation guards on the exact reconstructed payload.",
+    "Do not promote a receipt-reported row count, balance statistic, or SHA into dataset evidence if the underlying payload cannot be fetched or deterministically reconstructed."
+  ],
+  "interaction_with_newer_main": {
+    "note": "Newer Trigger-2 work has converged on a retained factorial binding generator and added cross-split/checkpoint-local ABI guards. This audit intentionally does not create a competing generator or dataset; it closes only the reproducibility boundary around the older receipt-reported 108-row payload.",
+    "preferred_lane": "RETAIN_CURRENT_FACTORIAL_BINDING_GENERATOR_AND_GUARDS"
+  },
+  "next_exact_action": "Make every dataset-review receipt source-complete: bind it to a canonical payload blob or a deterministic generator plus frozen inputs before granting row-level dataset design credit."
+}

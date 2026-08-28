@@ -1,0 +1,40 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_at": "2026-08-17T22:50:00+07:00",
+  "classification": "DUPLICATE_TO_CANONICAL_MAIN_THEN_LIVE_FUSION",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse image executed behind the mandatory VM/microVM guest-kernel envelope",
+  "source_join": {
+    "main_commit": "UNRESOLVED_BY_CONNECTOR_BEFORE_THIS_APPEND_ONLY_RECEIPT",
+    "bootstrap_blob": "fc283dfec338a3aaf9f0f6387563bfd76f281b19",
+    "manifest_blob": "e37462b099bba5b52d34d5df5a3af94acbc9521a",
+    "living_readme_blob": "10185329d472c711f3e7e28bc75b186e064d567b",
+    "microvm_template_blob": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "microvm_contract_blob": "2608f5ca9c18ff2682d137a099c7047966fb872c",
+    "microvm_regression_blob": "5c2f48f7f97a2ef6d3ac1e5357a828ec4562ee3d"
+  },
+  "observed": [
+    "Initial source inspection found the canonical Kata template lacked Kubernetes NetworkPolicy.",
+    "A guarded living-README write was rejected with HTTP 409 after a parallel worker advanced main; no stale content was overwritten.",
+    "After rejoin, canonical main already contained a fail-closed clayverse-default-deny NetworkPolicy with empty ingress and egress rules.",
+    "The current MicroVM contract requires actual CNI NetworkPolicy enforcement plus complete additive policy inventory and representative undeclared-flow denial before final acceptance.",
+    "The current static regression fences the deny-all policy and forbids broad 0.0.0.0/0 and ::/0 escapes in the source template."
+  ],
+  "fusion": {
+    "result": "ADOPT_MAIN_NO_SECOND_NETWORK_IMPLEMENTATION",
+    "targeted_reentry": "PR623 comment 5317447030",
+    "effect_on_pr623": "future rejoin must preserve newer canonical MicroVM/network invariants"
+  },
+  "execution_evidence": {
+    "source_contract_hardening": "OBSERVED_IN_CANONICAL_GITHUB_BYTES",
+    "kubernetes_kata_cni_runtime": "UNOBSERVED",
+    "network_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "reason": "The shared user-trigger metadata available to this organ is only minute precision and exposes no immutable shared request/turn identifier; deterministic source review, live fusion and ordinary regression work remain allowed.",
+  "next_frontier": "refresh from this append-only main join point, then choose the highest-information non-duplicate blocker; exact OCI/runtime remains credential-blocked on the retained Vercel controller until a host-side private-source read credential exists"
+}

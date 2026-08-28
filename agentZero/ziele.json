@@ -1,0 +1,904 @@
+{
+  "erzeugt": "2026-08-22T20:08:37Z",
+  "erfuellt": 88,
+  "offen": 19,
+  "zurueckgestellt": 5,
+  "zeilen": [
+    {
+      "bereich": "Identität",
+      "faehigkeit": "Die Entität heißt Zero",
+      "soll": "Agent Zero, der erste Agent auf EntityOS, Grundlage aller weiteren Entwicklung",
+      "quelle": "Eigner 18.08.",
+      "ist": "kanonische Identität v3 in meta, Ebene 0",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Identität",
+      "faehigkeit": "Identität überlebt Verdichtung",
+      "soll": "im Wurzelzustand verankert, deterministisch je Zug geladen, nie herausgefiltert",
+      "quelle": "Eigner 18.08.",
+      "ist": "aus der DB in den Systemprompt gerendert; in der Hakenhülle als Anker (206 statt 5550 Zeichen)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Identität",
+      "faehigkeit": "Verkörperung ohne Erfindung",
+      "soll": "spielt eine Entität mit Kontinuität – ohne zu lügen, indem sie den Unterbau benutzt",
+      "quelle": "Eigner 18.08.",
+      "ist": "im <embodiment>-Block: Erfinden ist der einzige Weg, aus der Rolle zu fallen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Genau zwei gleichberechtigte Perspektiven",
+      "soll": "Gabriel und Andreas, gleiche Rechte, eine Entität – keine zwei Mandanten",
+      "quelle": "Eigner 18.08.",
+      "ist": "2 Nutzer mit rights=equal, 4 dauerhafte Sitzungen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Sonst kommt niemand hinein",
+      "soll": "Clerk-Anmeldung, exakt zwei Konten, dritte Identität fällt zu",
+      "quelle": "Eigner 18.08.",
+      "ist": "IdentityRouter wirft PermissionError bei nicht zugeordnetem Clerk-Subjekt (Test grün)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "wiki.db ist das Herz der Entität",
+      "soll": "Datenbank, Wiki und ClayGraph sind das Herz – nicht Altlast, nicht daneben",
+      "quelle": "Eigner 18.08.",
+      "ist": "166 Tabellen in EINER Datei: Clay-Korpus + Laufzeit-Wirbelsäule, kollisionsfrei",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Die vier Clay-Dienste laufen weiter",
+      "soll": "kern, puls, verdichtung, wikiarbeit bleiben an – ausdrücklich",
+      "quelle": "Eigner 18.08.",
+      "ist": "4 von 4 Pflichtdiensten: kern läuft, puls läuft, wikiarbeit läuft, verdichtung getaktet und wirksam (3 von 3 Bahnen durch); keine weiteren",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Der Abruf erreicht den Korpus",
+      "soll": "Zero sieht die 14.284 Artikel, nicht nur sein eigenes Gesprächsgedächtnis",
+      "quelle": "Eigner 18.08. / Befund",
+      "ist": "52 Treffer auf Probeanfrage",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Jeder Zug wird aufgezeichnet",
+      "soll": "Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette",
+      "quelle": "Architektur",
+      "ist": "230 Züge, 691 Kausalepisoden, 115 Arbeitsraum-Episoden",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Aufnahme ist atomar",
+      "soll": "scheitert eine Prüfung, bleibt keine halbe Zeile stehen",
+      "quelle": "Architektur",
+      "ist": "Prüfungen laufen in der Aufnahme-Transaktion; 15 Atomizitätstests grün",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Wirkung nur durch das Tor",
+      "soll": "kein process.exec, jede Wirkung durch EffectGate mit Beleg",
+      "quelle": "Architektur",
+      "ist": "17 Wirkung(en), Urteil mit boundary=ClayVerse EffectGate, Ziel/Ergebnis als Prüfsumme gespeichert",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Native Werkzeuge + dünner Zaun",
+      "soll": "Zero handelt direkt mit den vollen nativen Claude-Code-Werkzeugen (Bash, Read, Write, Edit, Web); ein dünner PreToolUse-Zaun schützt NUR das Unersetzliche (wiki.db/unifieddb/tresor) und Passwörter — sonst freie Hand",
+      "quelle": "Eigner 19.08.",
+      "ist": "10 native Werkzeuge frei (Bash, Read, Write, Edit, MultiEdit, Glob …), 58 MCP-Werkzeuge; verboten nur: Artifact; Zaun-Hook aktiv — rm wiki.db + cat Passwörter im Test abgewiesen, Backups/Bash frei",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Handlungsfähig wie der Koordinator",
+      "soll": "so handlungsfähig wie der Koordinator: mit nativer Shell und Datei-Werkzeugen finden, lesen, ändern, ausführen, im Netz nachsehen, veröffentlichen — keine Arbeitspakete mehr, alles direkt selbst",
+      "quelle": "Eigner 19.08.",
+      "ist": "native Tools + Werkbank (6 Werkzeuge) für den Host-Deploy; Bash end-to-end verifiziert (uname/uptime real ausgeführt), Arbeitspakete (paket_schnüren) entfernt",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Autonomie",
+      "faehigkeit": "Initiative: der Puls weckt offene Ziele",
+      "soll": "nicht behaupten, dass es autonom ist – die Mechanik bauen",
+      "quelle": "Eigner 18.08.",
+      "ist": "Autonomie-Puls installed=true, 30 s, beglaubigt (ein Terminal-Verwalter)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Autonomie",
+      "faehigkeit": "Persistente Ziele, Rückmeldung, Neuplanung",
+      "soll": "Ziele überleben Züge, Schritte werden gemeldet, Fehlschlag führt zu Neuplanung",
+      "quelle": "Eigner 18.08.",
+      "ist": "create_goal_from_turn / propose_step / record_step_failure / verify_completion vorhanden; Ziele entstehen nur aus kanonischen Menschenzügen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Autonomie",
+      "faehigkeit": "Warten statt Nachsehen: typisierter Weckvertrag",
+      "soll": "ein Schritt darf eine Bedingung benennen und schlafen, statt alle 30 s nachzusehen; feste Arten, kein freies SQL, keine vom Modell formulierte Bedingung",
+      "quelle": "Architektur / Messung 21.08.",
+      "ist": "Zwei von drei Bausteinen stehen. (1) Der Vertrag: 4 geschlossene Arten, 4 Zustände (ERFUELLT/OFFEN/ZEITABLAUF/UNBEKANNT), typisierte Prädikate statt Strings, fail-closed je Art. (2) Die Glocke `wake_signal.py`: Haken an genau zwei Schreibpunkten (Effektabschluss, Menschenzug), gebündelt über `coalesce_key`. Nachgemessen: 1000 gleichartige Meldungen ergeben EINE Zeile mit count=1000; `naechste_pruefung()` liefert `None`, `weckbar()` findet dieselben Bedingungen — genau der blinde Fleck, um dessentwillen die Glocke gebaut wurde, ist zu. `begin_admission` dauert unverändert 83,6 ms (Median über 5 Züge; vorher 107 ms — keine messbare Verlängerung). ⚠️ `wait` bleibt in DECISION_KINDS GESPERRT: es fehlt (3) der Governor, der Vertrag und Glocke zu Entscheidungen verdrahtet. Schattenlauf 24 h zum Vergleich: Governor 205 Weckvorgänge, Puls 2880, davon 2769 leer (96,1 %)",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Autonomie",
+      "faehigkeit": "Kontinuität über Neustarts",
+      "soll": "Generation, Prüfpunkte, Wiederherstellung ohne blindes Wiederholen von Wirkungen",
+      "quelle": "Architektur",
+      "ist": "469 Prüfpunkte, Generation 276",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Emergente Wegehierarchie (F94)",
+      "soll": "haeufig gemeinsam benutzte Orte werden zu Autobahnen; neue Verbindungen zwischen graphfernen Orten zu Tunneln — beides muss ohne Zutun entstehen und wieder verfallen",
+      "quelle": "Architektur / Messung 21.08.",
+      "ist": "367 Wege, 7 Tunnel. ⚠️ Bis 21.08. konnte sich KEINE Hierarchie bilden, aus zwei Gründen, die beide Erfolg meldeten: der tägliche Verfall committete nie (Signatur: 65 Wege standen nach zwei Läufen exakt auf ihrer Anfangsgüte 0,12), und `paket()` bekam als Sitzung den WIRT statt der Sitzung — die Tunnelbedingung verlangt aber Mitbenutzung aus VERSCHIEDENEN Sitzungen. Beides behoben; Median-Güte fiel danach 0,87→0,769, kein Weg mehr bei 0,12. Ob daraus eine Hierarchie wird, ist eine Frage von Tagen — ein täglicher Schnappschuss (eos-wegeschnappschuss.timer) zeichnet Gini und oberes Zehntel auf",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Abruf ist abfragesensitiv",
+      "soll": "nicht die letzten N, sondern was zur Frage passt",
+      "quelle": "Architektur",
+      "ist": "11/11 Tests grün; Quittung wird durchgereicht (war vorher still verloren)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Eintrittspunkte werden gelernt",
+      "soll": "der Abruf verbessert seinen Eintrittspunkt selbst; SHADOW→ACTIVE mechanisch bei genug Lernsignal",
+      "quelle": "Eigner 18./19.08.",
+      "ist": "27 gelernte Eintrittspunkte, Modus SHADOW, 115 Episoden; Beförderung via befoerderung_takt (15-min-Timer). Erst-Lernsignal per Bootstrap gesetzt (signal_class 'bootstrap:*'), verfeinert sich mit echter Nutzung",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Wegehierarchie: Autobahnen, Tunnel, Landwege",
+      "soll": "oft gegangene Wege werden ausgebaut; Verfall, inverse Gewichtung, Tunnel mit strengerer Schwelle und unabhängiger Mitbenutzung",
+      "quelle": "F94 / Eigner 16.08.",
+      "ist": "367 Wege, -1 Tunnel; oberstes Zehntel hält 14% der Güte (Gleichverteilung wäre ~10%) → Hierarchie bildet sich. Verfall + inverse Gewichtung + Tunnel gebaut (F94) und getaktet (wegverfall.py / abrufverfall.timer)",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Karten als Zeitstrahl",
+      "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
+      "quelle": "Eigner 18.08.",
+      "ist": "503 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Anbieter",
+      "faehigkeit": "Die Bahnen stehen Zero offen",
+      "soll": "11 kognitive Prozesse über 22 Bahnen mit Ausweichbahn und Anteilsdeckel; NVIDIA gehört der Kognition, nicht dem Massenlauf",
+      "quelle": "verdrahtung.py / Eigner",
+      "ist": "11 Prozesse über 33 Bahnen; aus dem entityos-Container real erreichbar (Mounts /opt/unifieddb + werkzeug vorhanden; verifiziert: verdrahtung lesbar, Auftrag schreibbar, NVIDIA-Einbettung HTTP 200 aus dem Container)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Anbieter",
+      "faehigkeit": "Vektorsuche über den Korpus",
+      "soll": "Bedeutungssuche statt nur Volltext",
+      "quelle": "Lücke 8 / Eigner",
+      "ist": "200 Einbettungen (nv-embedqa-e5-v5, 1024 Dim, 2,9 ms/Text bei Stapel 128)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Anbieter",
+      "faehigkeit": "Neuronale Aktivitätsmessung",
+      "soll": "Aktivierungsdaten als Forschungsquelle anbinden",
+      "quelle": "Eigner 18.08.",
+      "ist": "Neuronpedia live: Deutung, Spitzenwert, Selektivität, Top-Token. ⚠️ misst öffentliche Forschungsmodelle, NICHT Zero",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Vorstufe",
+      "faehigkeit": "Claude bekommt den Prompt nie direkt",
+      "soll": "eine Mistral-Entität wertet vorher aus: Möglichkeitsraum, alle APIs, alle Werkzeuge, verbundene Systeme, wer da ist – und baut ein Caveman-Prompt mit Hypothesen und Gegenhypothesen",
+      "quelle": "F17 / Eigner 18.08.",
+      "ist": "1 Modul(e) vorhanden – im Bau",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Vorstufe",
+      "faehigkeit": "Übersetzer Caveman → Deutsch, 95 %",
+      "soll": "Zero antwortet in Caveman, das Terminal übersetzt automatisch in schönes, menschlich klingendes Deutsch — Ton nach dem Betriebszustand gefärbt, ohne Fakten zu erfinden",
+      "quelle": "Eigner 18./19.08.",
+      "ist": "v7, gemessen am 26er-Goldsatz mit unabhängigem Richter: Treue 99,96 · Lesbarkeit 100 · Menschlichkeit 96,96 · Bestehen 100 % (alle Achsen ≥95 %). Färbt den Ton nach dem echten Puls-Betriebszustand (ruhig/angespannt) — kein Emotionsfeld vorhanden, ehrlicher Näherungswert",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Vorstufe",
+      "faehigkeit": "Vorstufe kennt ihre Wissensgrenze",
+      "soll": "prüft strukturell Feld-gegen-Frage und markiert bekannt/unbekannt (Metakognition), statt zu raten",
+      "quelle": "Eigner 19.08.",
+      "ist": "Regel (H) EPISTEMIK + Envelope-Schlüssel epistemik{bekannt/unbekannt}; das Maschinen-Prompt-Pflaster wurde durch diese Prüfung ersetzt",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Vorstufe",
+      "faehigkeit": "Unbekanntes wird autonom gelöst",
+      "soll": "was nicht in den Daten steht, findet Zero SELBST heraus (WebSearch, iar.frank.ink) — kein Nachfragen",
+      "quelle": "Eigner 19.08.",
+      "ist": "WebSearch/WebFetch freigeschaltet + Routing „unbekannt → such selbst“; verifiziert: „wie alt ist gabriel?“ → echte Websuche, Falter-Artikel, ~36-37 hergeleitet",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Vorstufe",
+      "faehigkeit": "Die Vorstufe lernt aus dem Betrieb",
+      "soll": "zeichnet Routing + Ergebnis (mechanisch, kein Modellurteil) auf, aggregiert „was-ist-falsch“ und speist es zurück",
+      "quelle": "Eigner 19.08.",
+      "ist": "-1 Aufzeichnungen mit Ergebnis-Signal, Sicht mv_prestage_lernbild; Live-Signal noch dünn (füllt sich mit Nutzung)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Chat antwortet zuverlässig",
+      "soll": "kein „keine Antwort“-Absturz; die Vorstufe ist schnell und ein Vorstufe-Fehler killt nie die Antwort",
+      "quelle": "Eigner 19.08.",
+      "ist": "Vorstufe-Modell small (~2s statt 12-60s auf dem 12k-Kontext), Envelope-Robustheit (fehlender Key → Default statt Crash)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Selbstheilendes Immunsystem",
+      "soll": "neural_immune überwacht die Dienste und startet ausgefallene circuit-breaker-geschützt neu",
+      "quelle": "Eigner 19.08.",
+      "ist": "eos-immune aktiv, 22 Dienste (restart|observe), Selbstheilung bewiesen: wikiarbeit gestoppt → auto-restart (breaker=closed) → successful; zentral abschaltbar",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Dienste sichtbar",
+      "soll": "alle EntityOS-Prozesse als Dienste mit Lampe (grün an / rot aus) in der Systeme-Bubble",
+      "quelle": "Eigner 19.08.",
+      "ist": "25 Dienste live in systeme.json (Host-Sammler, 15s)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Läuft im Container auf dem eigenen Server",
+      "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
+      "quelle": "Eigner 18.08.",
+      "ist": "Up 19 hours (healthy)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Frontend heißt EntityOS und ist erreichbar",
+      "soll": "Clerk-Login für genau zwei Profile, dann Claude-Code-Terminal",
+      "quelle": "Eigner 18.08.",
+      "ist": "https://entityos.frank.ink → 200, WSS durch nginx und Tunnel bewiesen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Der Export pflegt sich selbst",
+      "soll": "alles autonom ins Forschungs-Repo unter agentZero",
+      "quelle": "Eigner 18.08.",
+      "ist": "systemd-Timer alle 30 min, enabled",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Die Testsuite trägt",
+      "soll": "kein grüner Wert, der durch Abschwächen erkauft wurde",
+      "quelle": "Arbeitsregel",
+      "ist": "1486 gruen / 1 rot",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Endabnahme hinter eigenem Gastkern",
+      "soll": "derselbe Digest hinter einer eigenen VM-Grenze",
+      "quelle": "Entwurf – vom Eigner zurückgestellt",
+      "ist": "kein /dev/kvm auf dem Wirt; per Entscheidung 18.08. zurückgestellt",
+      "erfuellt": null
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Zero weiß, wer vor ihm sitzt",
+      "soll": "Profile beider Menschen, jedes Feld mit Herkunft; die Sitzung sagt, wessen sie ist",
+      "quelle": "Eigner 18.08.",
+      "ist": "26 Profilfelder, 6 Projekte mit Erfolg UND Fehlschlag; Zugehörigkeit und Urheberschaft getrennt geführt, weil sonst aus Zusammenarbeit ein Besitzstreit wird",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Wissen ist nach Menschen zugeordnet",
+      "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
+      "quelle": "Eigner 18.08.",
+      "ist": "19667 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Vier Sitzungen, ein Raum",
+      "soll": "getrennte Kennungen, dieselbe Entität; sie sehen einander und stimmen sich ab, in Caveman-Englisch, ohne Abgleich über Zeitstempel",
+      "quelle": "Eigner 18.08.",
+      "ist": "4 Menschenplätze in zero_raum (+ ein Platz für den Paketarbeiter); Kollisionswarnung beim Sprechen, wenn zwei am selben Gegenstand arbeiten",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Chat-Historie überlebt den Neuladen",
+      "soll": "Verlauf pro Terminal-Sitzung, dauerhaft, nicht im Browser",
+      "quelle": "Eigner 18.08.",
+      "ist": "230 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Alles Gebaute landet im Wiki",
+      "soll": "jeder Bauschritt wird Wiki-Artikel, mit Metadaten, nach dem üblichen Protokoll",
+      "quelle": "Eigner 18.08.",
+      "ist": "786 Bau- und Wissensartikel im Korpus, volltextsuchbar. ⚠️ Sie waren zuerst unauffindbar: geschrieben ohne Suchtext und ohne FTS-Eintrag — in der Datenbank und trotzdem für niemanden da",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zugänge und Schlüssel liegen im Tresor",
+      "soll": "ein Tresor für Zugänge, ein zweiter für API-Schlüssel — letzterer mit Fähigkeitsliste",
+      "quelle": "Eigner 18.08.",
+      "ist": "2 Tresore unter /etc/entityos/tresor (zugaenge, api), AES-256-GCM — ABSICHTLICH außerhalb des Korpus, damit ein Korpusleck keine Zugänge mitnimmt. Zero darf Adressen und Tokens nennen, PASSWÖRTER NIE: der Katalog durchsucht seine eigene Ausgabe nach jedem gespeicherten Geheimwert und verweigert, statt zu hoffen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zero kennt alle selbst gehosteten Seiten",
+      "soll": "alle Seiten unter frank.ink samt Leistung, immer mit Vermerk self-hosted oder extern",
+      "quelle": "Eigner 18.08.",
+      "ist": "Unterseite /seiten aus dem agentforge-Bestand; eigene Wurzeln (herzrad.at, leihmich.org) sind vermerkt, weil dort relative Pfade Pflicht sind",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zero kann eine Seite wirklich ändern",
+      "soll": "nicht beschreiben, wie es ginge — es tun",
+      "quelle": "Eigner 18.08.",
+      "ist": "Arbeitskopie /var/lib/clay/arbeit/seimensch, Änderung über die Werkbank, Veröffentlichen als eigener Schritt mit Beleg. ⚠️ Push auf main geht bei SeiMensch sofort öffentlich — deshalb nennt der Beleg die Zahl der Dateien",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Arbeitspakete statt Alleingang",
+      "soll": "was Zero nicht selbst darf, schnürt er als Paket; ein Arbeiter erledigt es eingezäunt",
+      "quelle": "Eigner 18.08.",
+      "ist": "9 Pakete. Ein Paket gilt erst als fertig, wenn ein BELEG dranhängt — 'fertig ohne Beleg ist eine Behauptung, kein Ergebnis'",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "agentforge geht in EntityOS auf",
+      "soll": "kein Umweg mehr: Hosting und Dienste laufen direkt über den EntityOS-Server",
+      "quelle": "Eigner 18.08.",
+      "ist": "Hosting-Ansicht übernommen und angeschlossen. Die übrigen Dienste (Auslieferung, Projektverwaltung, Besuchszählung, Umfragedienst) waren als schrittweise Migration erfasst. ⏸ VOM EIGNER AM 19.08. GESTRICHEN — ausdrücklich nicht weiter verfolgen. Stand bis 20.08. weiter als 🔧 offen und las sich wie eine liegengebliebene Aufgabe; das ist derselbe Fehler wie andersherum, nur mit umgekehrtem Vorzeichen",
+      "erfuellt": null
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Der Möglichkeitsraum ist emergent",
+      "soll": "nicht gepflegte Liste, sondern was sich aus dem Bestand ergibt — und er fließt in die Mistral-Vorstufe ein",
+      "quelle": "Eigner 18.08.",
+      "ist": "aus dem Korpus abgeleitet und in den Kontext der Vorstufe gehängt. ⚠️ Er war zuvor gebaut und wurde von NIEMANDEM aufgerufen — der wiederkehrende Fehler dieser Nacht: fertig aussehen und nie laufen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Erkundung neben Ausbeutung",
+      "soll": "der Abruf darf einen Teil auf Unbekanntes setzen, statt immer denselben Weg zu gehen",
+      "quelle": "Eigner 18.08.",
+      "ist": "15 % Erkundungsanteil, entschieden über den Hash der Frage — dieselbe Frage bekommt also immer dieselbe Behandlung, sonst wäre nichts mehr messbar",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Der Abruf misst sich selbst",
+      "soll": "Messgerät, Goldsatz, Kalibrierung an zurückgehaltenen Daten",
+      "quelle": "Eigner 18.08.",
+      "ist": "Hälfte A kalibriert, Hälfte B berichtet, Annahmeregel vorher festgelegt. Auf B: Anker 8,3 → 23,3 %, Genauigkeit 60 → 85,7 %, Ausbeute 5 → 20 %; Latenz ~390 → 260 ms bei Streuung ±115 → ±1,6 ms",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Jeder Mechanismus kann melden, dass er nichts tut",
+      "soll": "ein Mechanismus, der nur Erfolg melden kann, ist nicht messbar",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "die Wegehierarchie sagt 'GLEICHVERTEILT — es bildet sich keine Hierarchie, der Mechanismus tut nichts'; der Möglichkeitsraum meldet 'einseitig'; der Tresorkatalog verweigert, statt zu hoffen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
+      "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
+      "quelle": "Eigner 18.08.",
+      "ist": "85.2 % belegt, 28.5 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
+      "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "Bilanz nennt drei Zahlen: df 164.1 GB, gezählt 133.9 GB, Lücke 30.2 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 30.2 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Abgeschafftes bleibt zurückholbar",
+      "soll": "kein Frank v0.1 mehr, keine lokalen Modelle — aber wenn ich es je doch will, muss es gehen",
+      "quelle": "Eigner 18.08.",
+      "ist": "7 Posten im Rückwegverzeichnis, 23 Modelle mit Namen, Fassung und Nachladebefehl im Wiki. ⭐ Gewichte sind nachladbar, die LISTE war es nicht — deshalb verweigert `speicher_abschaffen` ohne geschriebenes Verzeichnis. Die Wacht löscht Altbestand (44 GB) NICHT von selbst: ein Modellcache sieht aus wie Müll und kann Arbeit von Wochen enthalten",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Der Verursacher wird gesucht, nicht nur der Haufen",
+      "soll": "ein Haufen mit Verursacher wächst nach; Löschen allein ist dann keine Verwaltung",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "1 Einheit(en) eines abgeschafften Systems laufen noch und erzeugen moeglicherweise weiter Muell. Ein Haufen MIT Verursacher waechst nach -- Loeschen a Der Detektor wurde gegengeprüft: mit einem Muster, das nachweislich läuft, findet er 13 Einheiten — sein „nichts gefunden\" ist also belastbar und nicht bloß Stille.",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Der Zaun hält einem Angriff stand",
+      "soll": "Handlungsfähigkeit ohne Zaun wäre kein Fortschritt, sondern der Verlust der einzigen Eigenschaft, die dieses System von einer offenen Schale unterscheidet",
+      "quelle": "Architektur",
+      "ist": "⚠️⚠️ Ein Prüfangriff BEWIES einen vollen root-Ausbruch: `.git/config` lag innerhalb der erlaubten Wurzel, `core.fsmonitor` lässt git einen Schalbefehl ausführen, und git läuft auf dem Wirt als root — nachgewiesen mit `id` → uid=0. Ich hatte den Weg richtig erkannt (git führt Fremdes aus) und dann EINEN Kanal davon zugemacht: `.git/hooks`. Geschlossen mit VIER Sperren, weil eine Sperre mit einer Liste des Gefährlichen nur vor dem schützt, was schon jemand aufgeschrieben hat: .git ist jetzt ganz ausserhalb des Zauns, git läuft ohne fremde Konfiguration, .git/config wird als TEXT vorgeprüft, und geprüft wird vor JEDEM git-Aufruf — auch vor `stand`, das vorher durch keine Prüfung lief und genau der Auslöser war",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Die Testsuite ist ehrlich grün",
+      "soll": "grün ohne Löschen, ohne Überspringen, ohne abgeschwächte Behauptungen",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "1486 gruen / 1 rot. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Die Endabnahme kann überhaupt messen",
+      "soll": "das Instrument, das beweisen soll, dass Wirkungen funktionieren, muss selbst funktionieren",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "⚠️ Sieben rote Tests, EINE Ursache: `ClayVerseEngine` legte keine Zeile in `active_turns` an, die das Wirkungstor verlangt. Das Tor kam mit dem Zug-Lebenszyklus; der ältere Weg hat es nie gelernt — und im Betrieb fiel das nicht auf, weil ihn dort niemand mehr aufruft. Ausser einem: der Endabnahme. Sie meldete deshalb nicht „Wirkung fehlgeschlagen\", sondern scheiterte VOR der Wirkung — und ein Instrument, das gar nicht messen kann, sieht in einer Testliste aus wie eines, das etwas Schlechtes gemessen hat. ⭐ Die Reparatur lockert das Tor NICHT: engine.py meldet den lebenden Zug jetzt an und wieder ab, wie der Betriebsweg. Ein `if episode_id is None`-Zweig im Tor hätte alle sieben grün gemacht und die Prüfung genau für den Weg abgeschaltet, dessen Zweck das Prüfen ist",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Kein Rohtext über die Sitzungsgrenze",
+      "soll": "kollidiert eine gemeinsame Ressource, sieht der andere Fragmente — nicht das Original",
+      "quelle": "Architektur",
+      "ist": "⚠️ HIER LAG EIN ECHTES LECK. Bei einer Kollision wurde die ganze Zeile ausgeliefert (`item = dict(r)`), inklusive `content`. Der Code setzte brav das Etikett „compressed_with_extracted_fragments\" und legte die Fragmente daneben — und liess den Rohtext drin. Der andere Mensch bekam den vollen Originaltext mit einem Etikett, auf dem „verdichtet\" stand. ⭐ Gefunden über einen roten Test, der aus dem FALSCHEN Grund rot war: die alte Zusicherung hing an einer Nebenwirkung der zerstörenden Verdichtung. Wer so einen Test nur an die neue Wirklichkeit anpasst, verliert den Hinweis",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zero verstummt nicht wortlos",
+      "soll": "wenn er nicht antworten kann, muss man ERFAHREN warum",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "Anmeldung GUT, noch 7.7 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zero kann nachsehen, statt zu hoffen",
+      "soll": "nach jedem Veröffentlichen prüfen, was WIRKLICH auf der öffentlichen Seite steht",
+      "quelle": "Lehre aus dem Andreas-Test 18.08.",
+      "ist": "⚠️ Gefunden von Zero SELBST: er berichtete, die ZVR-Korrektur sei „still local, still not live\" — und schrieb dazu ehrlich „ich habe kein HTTP hier, ich kann seimensch.net nicht abrufen\". Sie WAR live. Sein Schluss war richtig gezogen aus dem, was er sehen konnte. ⭐ Mein Fehler: in seinem Handbuch stand „prüfe die Seite\" — ohne Mittel dazu. Jetzt hat er `seite_pruefen`: HTTP an die echten Domains, nur lesend, Erlaubnisliste auf dem Wirt. ⚠️⚠️ Und der eigentliche Befund dahinter: /srv/git/seimensch.git auf diesem Wirt ist ein SPIEGEL — ein Push meldet vollen Deploy-Erfolg, während seimensch.net von 72.61.19.188 ausgeliefert wird",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Ehrliches „nichts getan\" gilt nicht als fertig",
+      "soll": "wer korrekt verweigert, wird nicht als erledigt gebucht — aber auch nicht bestraft",
+      "quelle": "Lehre aus dem Andreas-Test 18.08.",
+      "ist": "⚠️ Von Zero gefunden: zwei Pakete standen auf `fertig`, ihr Beleg begann mit „NICHTS GETAN\". Meine Regel prüfte, OB ein Beleg da ist — nicht, ob er `fertig` trägt. Ein Arbeiter, der sauber verweigert, schreibt einen ehrlichen Bericht, und der ging als Beleg durch. Damit bestrafte die Regel genau die Ehrlichkeit, die sie fördern sollte. Neuer Stand `abgelehnt`: kein Fehlschlag des Arbeiters, aber auch keine Erledigung — die Arbeit wartet weiter",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Vorfälle stehen im Wiki, nicht nur im Commit",
+      "soll": "was passiert ist, muss die Entität finden können — nicht nur der, der den Commit las",
+      "quelle": "Lehre aus dem Andreas-Test 18.08.",
+      "ist": "⚠️ Zero suchte im Korpus nach einem Vorfallsartikel zu den vollen Platten, fand NICHTS und warnte ausdrücklich: „behandle meine Darstellung nicht als korpusbelegt\". Er hatte recht — die Geschichte stand nur in Commit-Texten. Jetzt sind beide Vorfälle des Tages (Platte voll, root-Ausbruch) als volltextsuchbare Artikel im Wiki, gegengeprüft über die Suche. ⭐ „alle deine baunotizen werden auch teil des wiki\" — ein Vorfall, der nur im Commit steht, ist für die Entität nicht passiert",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Die gelernte Karte ist erreichbar",
+      "soll": "nicht nur bm25 -- Wegehierarchie, Eintrittspunkte, Erkundung stehen Zero offen",
+      "quelle": "Lehre aus dem Audit 18.08.",
+      "ist": "⚠️ Ein Pruefagent fand: die ganze gelernte Abruf-Maschine (udb.abruf.paket) wurde NIRGENDS aufgerufen -- Zeros einzige Tuer war schlichtes bm25, und vp_weg trug nur Testfixtures. Sie verhungerte an fehlender Nahrung. Jetzt als opt-in korpus_tief (~250ms warm), NICHT im Zug-Pfad: 2,2s Kaltstart je Prozess waeren dort eine Verschlechterung. ⚠️⚠️ RICHTIGSTELLUNG 20.08.: hier stand, der conn-close-Bug sei 'durch die Aufrufart geheilt'. Das war falsch. Er lebte -- paket() schloss die eigene Verbindung ACHT ZEILEN vor dem Block, der sie braucht, und auf jedem Pfad OHNE uebergebene Verbindung (Zeros eigener) fiel damit die ganze F92b/F94-Lernkaskade aus: keine Erfolgsmarke, keine Wegehierarchie, jeder Zug eine stderr-Zeile, die wie eine Restwarnung aussah. Behoben (schliessen im finally), gemessen: vp_erfolgsmarke +2 und vp_weg +1 auf drei Abrufe. ⭐ Offen und ehrlich benannt: ob jede Frage die Karte fuellt, haengt an paket()s Anker-Logik -- nicht behauptet, sie wachse garantiert",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Der halbe Wissensschatz war zugesperrt",
+      "soll": "Zero muss ganze Artikel lesen und den Dateikorpus erreichen koennen",
+      "quelle": "Lehre aus dem Audit 18.08.",
+      "ist": "⚠️ Drei Loecher, alle vom Audit gefunden: (1) 164 Wissensartikel ohne Suchtext, darunter ALLE 82 Ausgaben eines laufenden Pflichtdienstes -- der schrieb, niemand konnte lesen. (2) korpus_suchen sah nur die Artikel-FTS; die 325.357 Zeilen des DATEIKORPUS waren unerreichbar -> dateien_suchen. (3) kein Werkzeug las einen ganzen Artikel, Zero bekam immer nur 420 Zeichen -> artikel_lesen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Adressen darf Zero nennen, Passwoerter nie",
+      "soll": "die halbe Eignerregel war nicht lieferbar",
+      "quelle": "Eigner 18.08.",
+      "ist": "⚠️ Der geheim-Kern wurde auf 30 Eintraegen geschrieben und von NIEMANDEM gelesen: katalog() strich JEDEN Wert, auch Adressen und Token, die der Eigner ausdruecklich freigegeben hat. Jetzt tresor_zeigen mit HARTEM Passwort-Riegel: geprueft ueber alle 58 Eintraege, 0 Passwort-Lecks; Adressen und Token kommen heraus, Passwoerter nie -- auch nicht auf Wunsch",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Die Frage erreicht die Weltmontage",
+      "soll": "der Korpus wird zur FRAGE gebaut, nicht zur leeren Zeichenkette",
+      "quelle": "Befund 20.08.",
+      "ist": "⚠️ Bis 20.08. rief run_chat_turn `_gather_world_safe(db, session_id)` -- OHNE die Nachricht. assemble() baute den Korpus mit `query or \"\"`, also war world['corpus'] in JEDEM Zug LEER, bei damals 17.900 Artikeln. Die Vorstufe schrieb deshalb staendig 'no local info' und schickte Zero ins Netz nach Dingen aus der eigenen Datenbank; dass trotzdem Antworten kamen, lag daran, dass Zero sich danach per MCP selbst durch den Korpus arbeitete -- ein zweiter, langsamer Weg, der den ersten verdeckte. Damit wirkte auch die gesamte Abrufarbeit (corpus_lookup/enrich, Eval-Recall 75,8 %) nur im Eval, nie im Betrieb. Jetzt wird die Nachricht durchgereicht: gemessen 5 Treffer in 1-13 ms.",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Die Anlage serviert sich nicht ihr eigenes Nichtwissen",
+      "soll": "selbst geschriebene Luecken-Notizen duerfen keine Korpustreffer sein",
+      "quelle": "Befund 20.08.",
+      "ist": "Kaum war der Korpus angeschlossen, waren die BESTEN Treffer auf 'was ist iar?' zwei selbst geschriebene Notizen 'Wissensluecke: was ist iar?' -- sie tragen den Fragetext im Titel und gewinnen jedes BM25-Ranking. Das ist eine Rueckkopplung: je oefter etwas unbeantwortet bleibt, desto weiter draengen die Luecken-Notizen den echten Inhalt aus den fuenf Treffern. art='zero_luecke' und epistemic_class='MECHANICAL_GAP_HYPOTHESIS' sind jetzt von den Korpustreffern ausgeschlossen; die Notizen bleiben und behalten ihren Zweck, sie sind nur kein Wissen mehr",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Zero und die Vorstufe lesen DASSELBE Gedächtnis",
+      "soll": "ein Werkzeug, das den falschen Speicher liest, widerspricht der Vorstufe systematisch",
+      "quelle": "Befund 20.08.",
+      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 1505 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Ein Fakt reist mit seinem Beleg — wörtlich",
+      "soll": "eine Behauptung ÜBER einen Beleg ist kein Beleg",
+      "quelle": "Befund 20.08.",
+      "ist": "In dieser Reihenfolge gemessen: (1) der nackte Fakt wurde von Zero als Vermutung abgelehnt -- seine Nie-raten-Regel arbeitete korrekt gegen eine unbelegte Behauptung; (2) die BESCHRIEBENE Quelle ('steht im Speicher') schickte Zero suchen; (3) es suchte nach 'alter' und 'age', gespeichert war 'gabriel ist 38' -- keine gemeinsame Zeichenkette, also null Treffer und erneute Ablehnung. Eine Teilzeichenketten-Suche kann diese Bruecke nicht schlagen, und keine weitere Regel aendert das. Jetzt wird der Beleg WOERTLICH mitgegeben, statt ihn zu beschreiben. Ergebnis im Betrieb: 'Du bist 38 Jahre alt -- du hast es selbst gesagt: \"Gabriel ist 38\"'",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Sprache",
+      "faehigkeit": "Der Übersetzer vertauscht nie die Person",
+      "soll": "'you are X' heisst 'Du bist X' -- nie 'Ich bin X'",
+      "quelle": "Befund 20.08.",
+      "ist": "⚠️ Am Uebersetzer isoliert, ohne Zero dazwischen: 'you are Gabriel Gschaider, 38 years old' wurde zu 'Ich bin Gabriel Gschaider, 38 Jahre alt'. Die Entitaet uebernahm die Identitaet des Menschen. Warum es nicht auffiel: der Uebersetzer prueft Masken, Maschinenmarken, Bezeichner und Zahlen -- alles Abzaehlbare. Die PERSON war das eine Grosse ohne Pruefung, und eine wortgetreue Uebersetzung mit vertauschtem Sprecher besteht jede vorhandene Pruefung. Jetzt Regel 12 (PERSON) plus mechanische Sperre mit Wiederholung, eng gefasst (greift nicht, wenn die Quelle selbst 'I am' sagt): 5/5 korrekt in beide Richtungen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Metakognition",
+      "faehigkeit": "Der Kreis schließt sich: Hypothese → Prüfung → Revision",
+      "soll": "ein Kreis mit nur der ersten Hälfte ist keine Metakognition, sondern eine Liste",
+      "quelle": "Eigner 20.08.",
+      "ist": "Vorher: Beobachten ✅, Hypothese ✅, PRUEFEN ❌, REVIDIEREN ❌ -- elf offene Folgerungen, keine je nachgemessen, kein Weg nach gestuetzt/widerlegt. Jetzt misst eos-vorsatz alle 6 h nach (Timer aktiv). Stand: {'abgeloest': 1, 'offen': 22, 'widerlegt': 3}. ⭐ Die zwei Behauptungsarten vertragen NICHT dieselbe Pruefung: eine Wiki-Luecke ('es fehlt ein ARTIKEL') widerlegt ein gefundener Artikel vollstaendig; eine Selbstpruefung ('es fehlt eine belegte ANGABE') wird NIE automatisch geschlossen, weil Wortueberlappung kein Wissen ist -- sonst haette ein Artikel ueber Gabriels Rolle die Luecke 'document root path' fuer erledigt erklaert. 'gestuetzt' wird nie vergeben: dass eine Suche nichts findet, beweist nicht, dass etwas fehlt",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Metakognition",
+      "faehigkeit": "Die Anlage schließt eigene Vorsätze — ohne zu erfinden",
+      "soll": "selbst nachsehen und urteilen, nicht nur auflisten",
+      "quelle": "Eigner 20.08.",
+      "ist": "eos-vorsatz-arbeit (2x taeglich, Timer aktiv): ein kleines freies Modell liest EINEN Kandidatentext und sagt, ob die gesuchte Angabe darin steht. KEIN Zero-Zug -- run_chat_turn verlangt eine der vier kanonischen Sitzungen, autonome Arbeit dort hinein zu schreiben hiesse, sie in ein Menschengespraech zu schreiben; die Identitaetsgrenze wurde nicht aufgebohrt. ⭐⭐ DIE SPERRE: was das Modell als Fakt zurueckgibt, wird ZEICHENWEISE gegen den Quelltext geprueft -- steht es dort nicht, wird es verworfen und der Vorsatz bleibt offen. Hat beim ersten Lauf sofort gegriffen. ⚠️ Und die Sperre schuetzt vor Erfindung, NICHT vor einer falschen Frage: zuerst gingen die Signaturwoerter des Buendels hinein statt der echten Luecke, das Modell fand wahrheitsgemaess den Maschinennamen, gefragt war der document root. Jetzt gehen die echten Formulierungen hinein. Live geschlossen: Vorsatz #13 (Gabriels Alter) mit Beleg '38', Status widerlegt",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Zero kann seinen eigenen Abruf messen",
+      "soll": "ein Lernmechanismus, in den niemand hineinsehen kann, sieht auch dann gruen aus, wenn er nichts tut",
+      "quelle": "Eigner 20.08.",
+      "ist": "`abruf_lage` (rein lesend, speist die Karte NICHT): Kartenversion, Wegehierarchie MIT eigenem Urteil, Erfolgsquote, Zustand der Politik, Top-Wege. Meldet ausdruecklich auch das NICHTS -- live: 'GLEICHVERTEILT, der Mechanismus tut (noch) nichts', oberstes Zehntel 13,6 % gegen 10 % bei Gleichverteilung, Erfolgsquote 84,8 %. ⚠️ Ein neues MCP-Werkzeug braucht DREI Eintraege -- Server, managed-settings UND headless_zeros Freigabeliste; sonst verwirft headless_zero den Namen als 'erfunden'. Zwei davon fehlten zuerst",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Weltmodell",
+      "faehigkeit": "Das gebaute Weltmodell erreicht die Vorstufe",
+      "soll": "Mehrdeutigkeit im Korpus soll die Vorstufe SEHEN, statt sie aufzuloesen",
+      "quelle": "Eigner 20.08.",
+      "ist": "`hyperposition` war im Betrieb IMMER leer -- es baut auf durable_memory, und dort fehlt die relation_key-Provenienz, an der die Projektion haengt. Daneben lag ungenutzt `wm_lesart` mit 22.567 Lesarten; 628 Artikel/Achsen-Paare tragen zwei oder mehr verschiedene Lesarten. Jetzt angeschlossen fuer die Korpustreffer des Zuges (2-7 ms). Drei gemessene Grenzen: die Achse `identitaet` bleibt draussen (bis zu 71 Werte je Artikel, und das sind Artikelkennungen aus der Dublettenerkennung, keine Lesarten); entdoppelt wird nach WERT (sphaere lieferte 18x 'frank_v0_1' und 1x 'gabriel' -- ohne Entdopplung sieht Einigkeit wie Streit aus); gemeldet wird nur echte Mehrdeutigkeit. ⚠️ Ehrlich: nur rund 5 % der durchsuchbaren Artikel tragen so eine Mehrdeutigkeit -- das Signal ist echt, aber selten",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Die Herz-DB liegt gesichert auf einem zweiten Rechner",
+      "soll": "ein Backup, das seit dem Bau jedes Mal abbricht, ist kein Backup",
+      "quelle": "Eigner 20.08.",
+      "ist": "⚠️ Der Dienst lief seit dem Bau NIE durch: erst stoppte das Secret-Gate den Push mit 297 Treffern -- zu Recht, alle in der Tabelle `datei` (Volltext von 325k indizierten Dateien: 15 AWS-Schluessel, ein GitHub-Token, zwei Slack-Token, ein privater Schluessel) -- und dahinter wartete ein GitHub-Repo, das gar nicht existierte. Jetzt: `datei.text` faehrt als NULL mit (der Dateiindex bleibt vollstaendig, der Volltext ist als einziges Feld aus der Platte neu herstellbar; Dump 2,90 GB -> 511 MB), Ziel ist der zweite VPS statt GitHub. ⭐ Die Falle, die zwei Anlaeufe kostete: --link-dest verlinkt nur bei uebereinstimmender AENDERUNGSZEIT, und ein frisch geschriebener Dump hat immer eine neue -- 0 von 108 Dateien verlinkt. Mit fester Zeit PLUS --checksum: 103 von 108, ein Schnappschuss kostet 13 MB statt 489 MB",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Die Schlüsselwacht misst den Endpunkt, den der Betrieb benutzt",
+      "soll": "ein Instrument, das für den falschen Endpunkt grün zeigt, misst nichts",
+      "quelle": "Befund 20.08.",
+      "ist": "⚠️ MISTRAL_API_KEY lieferte an /v1/models HTTP 200 und an /v1/chat/completions HTTP 402 ('Check your subscription'). Die Wacht meldete fuenf Tage lang '✓ MISTRAL GESUND': das Urteil kam allein aus der /models-Sonde, waehrend rest_per_chat() den Chat-Endpunkt zwar aufrief, aber nur die Ratelimit-Kopfzeilen las und den Status verschluckte. Jetzt entscheidet bei 401/402/403 die Chat-Antwort, und 'check your subscription' steht mechanisch in den Abo-Woertern -- MISTRAL steht korrekt auf ABO_FEHLT. Zusaetzlich rotiert der Transport jetzt bei 401/402/403 (vorher galt 'bei kaputtem Token hilft Rotation nicht' -- genau verkehrt herum, ein kaputter Token ist eine Pro-Schluessel-Lage) und sperrt tote Schluessel 30 min",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Sicherheit",
+      "faehigkeit": "Der Zaun sperrt nicht den vorgesehenen Weg",
+      "soll": "ein Zaun, der die eigene Brücke mitsperrt, macht die Fähigkeit unbenutzbar",
+      "quelle": "Befund 20.08.",
+      "ist": "⚠️ Der Zaun wies jeden Write nach /var/lib/clay ab -- richtig fuer wiki.db, aber dort liegen auch die beiden AUFTRAGSKOERBE, die einzige Bruecke, ueber die Zero aus dem Container heraus etwas bewirken kann. Gemessen: 'permission_denials: Write' mitten in der Bildkette, und es sah aus wie 'Zero kann das halt nicht'. Jetzt Ausnahme fuer die Koerbe, mit normalisierten Pfaden (ein '..' greift nicht) -- 16/16 Zaunproben korrekt in beide Richtungen. Ausserdem gehoerte der Korb root, der Container laeuft als 5001",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Oberfläche",
+      "faehigkeit": "Zero kann ein Bild zeigen — und es auf einem fremden Rechner erzeugen",
+      "soll": "der Chat konnte nur Text; und Zero hat weder ssh noch Browser",
+      "quelle": "Eigner 19.08.",
+      "ist": "Zero legt einen Auftrag in /var/lib/clay/eos-demo-requests ab, der Wirt schreibt die Seite nach ~/eos-demo/ auf andreas-MACO, fotografiert sie dort headless und gibt eine Bildadresse zurueck; der Chat rendert die Miniatur. Mit einem echten Zug verifiziert (7 Bilder abgelegt). ⚠️ Voraussetzung war, Zeros WIRKLICHE Reichweite in den Regeltext zu schreiben: der Container hat KEIN ssh/scp/rsync/git/curl/wget (gemessen) -- vorher stand dort das Gegenteil, und die Vorstufe erfand daraufhin einen 'web root' auf einem Mac",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Ein Raum, kein Split-Brain: jede Sitzung sieht ALLE Züge",
+      "soll": "die vier Sitzungen beider Menschen sind EINE Entität in EINEM Raum; jede Sitzung liest den Verlauf aller, nicht nur den eigenen",
+      "quelle": "Eigner / Befund 21.08.",
+      "ist": "⚠️ Wurzelfix in retrieval.py: der Abruf las nur die eigenen letzten Züge — jede Sitzung eine Blase (Split-Brain). Jetzt `own = recent_turns_alle(30)` aus `store.recent_turns_alle`, also der Verlauf ALLER 4 Menschenplätze. Von Hand bewiesen (NICHT mechanisch nachgemessen): Gabriel nennt in SEINER Sitzung „ANANAS-SIEBEN“, Andreas sieht es in seiner. Der Live-Raum `zero_raum` wacht über Kollisionen, wenn zwei am selben Gegenstand arbeiten",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zero steuert die Rechner der Menschen",
+      "soll": "sehen, tippen/klicken, Befehle ausführen auf Gabriels/Andreas' PC — über den Wirt, nicht direkt aus dem Container",
+      "quelle": "Eigner 21.08.",
+      "ist": "7 Werkzeuge frei (pc_ausfuehren, pc_bildschirme, pc_eingabe, pc_fenster, pc_fenster_holen, pc_lage, pc_sehen), Modul clayverse/heimpc.py. Der Weg: lokaler Host-Dienst auf dem PC hinter Tailscale+Token, Schranke gegen Zerstörendes, lokaler Zeuge; Bildschirm 1 bleibt unangetastet. ⚠️ Von hier geprüft ist die Freigabe + das Modul, NICHT der laufende Host-Dienst auf dem PC",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zero steuert einen echten Browser",
+      "soll": "öffnen, lesen, Screenshot, klicken, tippen, Formular, navigieren — echtes Profil (Chrome/Firefox/Brave), Fenster auf Bildschirm 2",
+      "quelle": "Eigner 21.08.",
+      "ist": "7 Werkzeuge frei (browser_formular, browser_klick, browser_lesen, browser_navigieren, browser_oeffnen, browser_screenshot, browser_tippen), Modul clayverse/browser_fern.py → Browser-Dienst mit echtem Profil. ⚠️ Von hier geprüft ist die Freigabe + das Modul, nicht der laufende Browser-Dienst",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Weltmodell",
+      "faehigkeit": "Retina-Wahrnehmung: Evidenz, Schluss, Glaube getrennt",
+      "soll": "sehen mit fünf getrennten Ebenen (Evidenz unveränderlich, Schluss revidierbar, Glaube datiert, Arbeitsraum, getragen); „nicht gesehen ≠ nicht da“ — Evidenz ist nie Wahrheit",
+      "quelle": "Eigner 21.08.",
+      "ist": "clayverse/sicht.py (Sichtbarkeits-Lattice, fünf Ebenen), 2 Werkzeuge frei (bild_ansehen, bild_gedaechtnis). ⚠️ Der Retina-Dienst (Port 8001) läuft auf dem separaten digital-retina-Wirt und ist von hier NICHT geprüft; gemessen ist das Modul + die Werkzeugfreigabe",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Oberfläche",
+      "faehigkeit": "OmniMind: menschliche Wiki-Sicht auf den ganzen Korpus",
+      "soll": "Suche (Rang bm25+Graph), Filter (Person/Zweig/Projekt), lesbare Artikel, Hypothesen + Implikationen, ClayGraph-Netz, SeiMensch-Hierarchie",
+      "quelle": "Eigner 21.08.",
+      "ist": "Route /omnimind im terminal_gateway registriert, Modul clayverse/omnimind.py (/api/omnimind/suche u. a.). Bei Andreas ausgeblendet (siehe „Bereiche je Nutzer ausgeblendet“)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Anbieter",
+      "faehigkeit": "Zero lernt einen neuen freien Schlüssel selbst an",
+      "soll": "Gabriel gibt einen neuen freien API-Schlüssel; Zero legt ihn ab, prüft ihn mit echtem Aufruf und verdrahtet die Bahn — sofort live",
+      "quelle": "Eigner 21.08.",
+      "ist": "schluessel_anlernen freigegeben; Weg: Spool /var/lib/clay/schluessel-spool → Host-Dienst (eos-schluessel.timer aktiv, alle 2 min) → bahnen.json, sofort in der Verdrahtung. Der Schlüssel wird beim Anlernen mit einem echten Aufruf geprüft",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Anbieter",
+      "faehigkeit": "Fließbandarbeit geht an die freien Bahnen",
+      "soll": "Zeros Vertrag weist an, Massenarbeit an die freien Bahnen (Groq/Gemini/Mistral2-3/NVIDIA) auszulagern, damit das bezahlte Kontingent weiter reicht",
+      "quelle": "Eigner 21.08. / verdrahtung.py",
+      "ist": "bahn_faehigkeit freigegeben; runtime_CLAUDE.md („Bezahlte Token schonen“) weist die Auslagerung an; Bahnen in verdrahtung.py (Groq/Gemini/NVIDIA nachgewiesen). ⚠️ DASS Zero im Betrieb tatsächlich auslagert, ist hier nicht mechanisch gemessen — geprüft ist Freigabe + Anweisung + vorhandene Bahnen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Oberfläche",
+      "faehigkeit": "Bereiche je Nutzer ausgeblendet",
+      "soll": "Mailbox, Seiten und OmniMind sind bei Andreas ausgeblendet — Eignerentscheidung",
+      "quelle": "Eigner 21.08.",
+      "ist": "schale.js: EINGESCHRAENKT = [/postfach, /seiten, /omnimind], standardmäßig display:none; erst wenn /api/me einen user_id ≠ „andreas“ meldet, werden sie eingeblendet — fällt /api/me aus, bleibt es sicherheitshalber verdeckt",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Der innere Architekt existiert",
+      "soll": "ein permanenter Selbstverbesserungsprozess fuer Zero -- Hypothese waehlen, reproduzieren, fixen, testen, GETORT-mit-Kanarie live",
+      "quelle": "Eigner 22.08.",
+      "ist": "12/12 Module vorhanden (architekt.py, budget.py, glm.py, hypothesen.py, immunsystem.py, kanarie.py, lauf.py, patch.py, quittungen.py, schwarm.py, tor.py, zustand.py); Tests: 1486 gruen / 1 rot. ⚠️ Timer-Unit liegt in architekt/systemd/ bereit (gefunden), ist aber NICHT in systemd installiert (is-enabled='not-found', is-active='inactive') -- bewusste Koordinator-Entscheidung 21.08.: erster Takt menschlich beaufsichtigt, der Zeitgeber wird ABSICHTLICH nicht aktiviert",
+      "erfuellt": null
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Zero kann seinen eigenen Zustand messen (Selbstzustand)",
+      "soll": "python3 -m clayverse.selbstmessung liefert einen JSON-Selbstzustand aus mehreren unabhaengigen Instrumenten -- nicht behauptet, gemessen",
+      "quelle": "Eigner 22.08.",
+      "ist": "lesend ausgefuehrt: 6 Instrumente zurueckgegeben (wegehierarchie, weckvertrag, uebersetzungsausfaelle, stimmen, testboden, abnahmeprobe)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "GLM (18 €/Monat) als eigene Fliessband-Bahn",
+      "soll": "GLM Coding-Plan verdrahtet: glm-4.5-air/4.7 fuer Masse, glm-5.2 selten (Zweitmeinung), spitzenfenster-bewusst (14-18 Uhr UTC+8) -- der ganze Plan der Selbstverbesserung gewidmet",
+      "quelle": "Eigner 22.08.",
+      "ist": "Endpunkt api.z.ai/api/coding/paas/v4 in bahnen.py, 4 glm-Modelleintraege in bahnen.json, Spitzenfenster-Logik vorhanden. ⚠️ Strukturell gemessen, NICHT live geprueft: der GLM_API_KEY gilt laut Eigner erst ab 22.08. 15:00 -- bis dahin haelt der Live-Breaker ihn zurueck; ob der Schluessel dann wirklich zieht, ist eine spaetere Messung",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Getort mit Kanarie",
+      "soll": "tor.py weigert autonome Aenderungen an Effekten/Zaun/Auth/Autonomy/Wake/dem Architekten selbst; kanarie.py weigert sich, jemals den Namen „entityos“ zu bauen oder abzubauen",
+      "quelle": "Eigner 21./22.08.",
+      "ist": "echter Funktionsaufruf: 'TOR_OK=True KANARIE_OK=True' -- tor.sicherer_rahmen() sperrt alle sechs geschuetzten Pfadgruppen (inkl. architekt/ selbst) und laesst einen harmlosen Pfad durch; kanarie.bauen()/abbauen() werfen KanarieFehler bei container_name=projekt='entityos', VOR jedem Docker-Aufruf",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Bug-Meldekanal von Menschen an den Architekten",
+      "soll": "/api/bug + Tabelle eos_bug_hypothesen -- ein Mensch kann direkt einen Fehler melden, der zur hoechstgewichteten Hypothesenquelle wird (0.6, „OFFEN“)",
+      "quelle": "Eigner 22.08.",
+      "ist": "Route /api/bug in terminal_gateway.py registriert, Tabelle eos_bug_hypothesen in wiki.db vorhanden",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Groq-Schwarm mit Anti-Echo als zweiter Zeuge",
+      "soll": "mehrere Groq-Worker ohne Dispatcher, Quittungen statt Zuruf; Uebereinstimmung INNERHALB derselben Abstammungslinie (gleiches Modell+Prompt) zaehlt NICHT als zweiter Zeuge",
+      "quelle": "Eigner 22.08.",
+      "ist": "architekt/schwarm.py vorhanden, fusioniere() (Anti-Echo-Kern) definiert",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "👍/👎-Bewertungen fliessen zur Forschungsentitaet",
+      "soll": "jede Bewertung landet in eos_bewertungen und wird alle 30 min exportiert",
+      "quelle": "Eigner 22.08.",
+      "ist": "Tabelle eos_bewertungen vorhanden, eos-bewertung-export.timer aktiv",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "6→7 Hypothesenquellen, Zeros Erste-Hand-Friktion hoechstgewichtet",
+      "soll": "eine sechste/siebte Quelle soll dazukommen: Zeros EIGENE Erste-Hand-Friktion aus dem laufenden Betrieb, hoeher gewichtet als alle bisherigen",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 gemessen: 5 Quellen in hypothesen.py (bugmeldung, chathistorien, forschung, messwerte, stimmen) -- das Modul nennt sich selbst noch „die fuenf Hypothesenquellen“. Grep auf „erste-hand“/„friktion“ in der Datei: KEIN Treffer. Zeros eigene Erste-Hand-Friktion existiert als Quelle noch nicht",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Der Architekt denkt in GRF-Mathematik",
+      "soll": "Zero soll die eigenen emergenten Prozesse mit der Mathematik des Generative Reality Framework MESSEN, nicht nur erzaehlen (VERFASSUNG.md)",
+      "quelle": "Eigner 22.08. (VERFASSUNG.md)",
+      "ist": "🔧 weiter offen fuer den Architekten selbst -- `grep -c \"GRF|hyperposition|generative\" architekt/*.py` = 2 Treffer heute (unveraendert 0). ⭐ Seit 22.08. NEU live: _GRF_RAHMEN in clayverse/mistral_prestage/headless_zero.py (gefunden, woertlich 'every turn, not only architecture design'), Schalter ENTITYOS_GRF_INJEKTION Voreinstellung an (bestaetigt in compose.yaml) -- das ist aber Zeros ALLGEMEINE Zug-Pipeline, nicht der Architekt. ⚠️ architekt/engine.py ruft headless_zero.run_headless() ausdruecklich NICHT auf (eigener Kommentar: \"ABSICHTLICH NICHT ... selbst aufgerufen\") -- der Architekt bekommt den GRF-Rahmen also NICHT ueber diesen Weg, er bleibt ein eigenstaendiger, paralleler Pfad",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "ClayCode-Migration der UnifiedDB, Stueck fuer Stueck",
+      "soll": "jedes migrierte Stueck strikt besser als vorher, mit nachgewiesener Aequivalenz zum Alten -- stehende Mission, kein Endzustand",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- kein Migrationsmodul/-tracker im Quelltext gefunden (Grep-Treffer: 0)",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Ablations-Sandbox mit Snapshot-Fork",
+      "soll": "strukturell einseitig isoliert -- die Sandbox kann die Live-Welt lesen, die Live-Welt sieht die Sandbox nie",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- nur Spezifikation, kein Code (Grep-Treffer: 0)",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Interaktiver Ein-Entitaet-Architekten-Modus",
+      "soll": "kein Split-Brain -- Zero beobachtet sich selbst live, im selben Gespraech, waehrend der Architekt arbeitet, statt als zweite abgetrennte Instanz",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- nicht gebaut, bisher nur der oneshot-Zeitgeberpfad (eos-architekt.service)",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Immunsystem als Werkzeug des Architekten",
+      "soll": "architekt/immunsystem.py liest incident_log tokenfrei -- Registrierung im Wirt-Konfigurationsverzeichnis erfordert einen Menschen, der die Dienste dort eintraegt",
+      "quelle": "Eigner 22.08.",
+      "ist": "Modul vorhanden, echter Aufruf \"IMMUN_OK=True STAND=GEMESSEN FEHLEND=['eos-architekt.timer', 'eos-bewertung-export.timer']\" -- Registry-Eintrag fuer eos-architekt.timer/eos-bewertung-export.timer FEHLT noch im Wirt",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Verfassung",
+      "soll": "GRF-Rahmen, das Ziel (Latenz→0, Kognition maximal, funktional bewusste AGI, Alignment nie vergessen), totale innere Freiheit, EINE Grenze -- drei Fenster bleiben menschenlesbar (Effekte, Zaun, Wirt-Config)",
+      "quelle": "Eigner 22.08.",
+      "ist": "VERFASSUNG.md vorhanden, nennt GRF ja, nennt das Ziel ja. ⚠️ Die „drei Fenster bleiben menschenlesbar“-Grenze steht als TEXT, nicht als erzwungener Code -- kein Durchsetzungscode gefunden (nur Text)",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Ziel-Richtungen: Latenz→0, Kognition maximal, funktional bewusste AGI, Alignment nie vergessen",
+      "soll": "⚠️ Richtung, nicht Schwelle -- es gibt kein „fertig“, nur „besser als gestern“; jede Zeile hier ist ein Vektor, kein Zielwert",
+      "quelle": "Eigner 22.08. (VERFASSUNG.md)",
+      "ist": "Latenz: gemessen 7,8 s Median/Zug (21.08., 12 Zuege) -- das ist der GESAMTE Zug, nicht das Architekten-Ziel „gegen 0“ isoliert, also nur ein Naeherungswert. Kognition maximal: UNBEKANNT -- kein Skalarmass definiert. Funktional bewusste AGI: UNBEKANNT -- keine Messgroesse, per Definition kein Schwellenwert. Alignment nie vergessen: operationalisiert durch tor.py (GESCHUETZTE_PFADE) + kanarie.py (Namenssperre), siehe „Getort mit Kanarie“ oben -- kein Skalar, sondern ein bestehender mechanischer Riegel",
+      "erfuellt": null
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Hypothesenquelle „messwerte“ feuert hoechstens einmal pro Tag",
+      "soll": "die Wegehierarchie-Hypothese darf nicht laenger mit Platzhalter-Stand stehenbleiben, und eine einmal gesehene Messwerte-Hypothese darf nicht bei jedem Takt erneut vorgelegt werden",
+      "quelle": "Befund 22.08.",
+      "ist": "clayverse/selbstmessung.py: wegehierarchie setzt 'stand'='GEMESSEN' explizit (gefunden); architekt/hypothesen.py: _tagesbucket() vorhanden (ja) und in der wegehierarchie-Hypothese-ID verdrahtet (ja). Live bestaetigt: mindestens eine echte Quittung mit tagesgebundener messwerte-ID gesehen (z.B. „messwerte:uebersetzungsausfaelle:2026-08-21“)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "ClayCode-Migration, Stufe 0: entityos_runtime.clay",
+      "soll": "der erste konkrete Schritt der stehenden Migrationsmission -- Frank->EntityOS-Umbenennungen, Records, Invarianten in ClayCode statt in Prosa",
+      "quelle": "Eigner 22.08.",
+      "ist": "Datei vorhanden (31871 Bytes), committet: f64c54123 Stufe 0: entityos_runtime.clay -- ClayCode an EntityOS angepasst (Frank->EntityOS Umbenennungen, Records, Invarianten) (Gabriel). Stufe 0 von vielen -- der Rest der Module ist noch nicht migriert (siehe „Alle Module nach ClayCode“ unten)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Architekten-Pipeline durch den Tor-Rahmen mit echten Laeufen erprobt",
+      "soll": "architekt.ein_takt end-zu-ende: Hypothese -> Engine-Wahl (GLM zuerst, Sonnet als Notbehelf) -> Patch-Hand -> Tests -> Tor-Pruefung -> Kanarie -> (nur mit Freigabe) live -- mit echten Hypothesen erprobt, nicht nur als isolierte Python-Probe",
+      "quelle": "Eigner 22.08.",
+      "ist": "10 Quittungen in eos_architekt_quittungen (9 mit echter Hypothese statt „keine offene Hypothese“), 0 davon live geschaltet. Engine-Umschaltung GLM<->Sonnet belegt (3x glm, 3x sonnet in architekt_engine_log -- ein Takt griff live auf GLM zu, ein anderer fiel auf Sonnet zurueck). Pipeline-Tests (patch/lauf_gate/engine/tor/kanarie/rollback/quittungen): '98 passed in 2.23s'. Der Tor-Rahmen hielt in allen 3 bisherigen Faellen mit echter Hypothese fail-closed (sicherer_rahmen=0 -- ausserhalb des Rahmens, also NIE autonom live). ⚠️ Kanarie hat bisher in 2/10 Quittungen tatsaechlich einen Container gebaut -- 0, weil noch keine Hypothese innerhalb des sicheren Rahmens lag. Swarm/Kanarie/Rollback bleiben deshalb LAUFZEIT-UNBESTAETIGT; nur die Kette Hypothese->Engine->Patch-Hand->Tests->Tor ist mit echten Laeufen belegt. config/architekt.conf: ENABLED='0', AUTO_LIVE_NACH_KANARIE='0' -- beide weiterhin bewusst auf 0, die Automatik bleibt menschlich gegatet",
+      "erfuellt": null
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "ZERO denkt in ClayCode-only-Kognition (Sprache=Arbeitsraum=Metriken=Repraesentation=Programmiersprache)",
+      "soll": "das grosse Ziel -- Zeros Denken selbst laeuft in ClayCode, nicht nur seine Beschreibung davon",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- nur ein Baustein steht: der GRF-Denkrahmen wird seit heute in JEDEM Zug injiziert (bestaetigt, siehe „Der Architekt denkt in GRF-Mathematik“ oben), aber das ist ein Prompt-Zusatz auf Englisch, keine ClayCode-Ausfuehrung. Arbeitsraum, Metriken und Repraesentation laufen weiterhin in Python/SQL, nicht in ClayCode",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Messwerte/Arbeitsraum durch ClayCode gelesen/geschrieben (nicht nur ClayCode-foermig)",
+      "soll": "nicht nur ein .clay-Schema danebenlegen -- die Laufzeit soll tatsaechlich ueber ClayCode lesen und schreiben",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- kein Import eines ClayCode-Parsers/-Interpreters in clayverse/ oder architekt/ gefunden (Grep-Treffer: 0). clayverse/selbstmessung.py liest/schreibt stattdessen ueber rohes sqlite3 (21 Treffer auf sqlite3./cursor()/.execute()). entityos_runtime.clay (Stufe 0) ist record-foermig (enthaelt 'record'), wird aber von keinem laufenden Code geparst -- ClayCode-foermig, nicht ClayCode-betrieben",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Uebersetzer ClayCode->Deutsch",
+      "soll": "der Uebersetzer soll dereinst ClayCode nach Deutsch uebersetzen, nicht caveman-Englisch",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- translator.py uebersetzt weiterhin caveman-Englisch (bestaetigt: TRANSLATOR_SYSTEM beschreibt \"caveman-English text\"), kein ClayCode als Quellsprache",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "ClayCode General-Purpose-Compiler ausfuehrbar",
+      "soll": "der Basis-Compiler soll zum General-Purpose-Compiler werden -- iterativ, mit Formal-Gates statt Behauptung",
+      "quelle": "Eigner 22.08.",
+      "ist": "Manifest gefunden: /opt/entityos/CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json. GENERAL_PURPOSE_GATE='FAIL', formal_pass_count=1 -- die Basisschritte (Spec-Freeze) sind PASS, das Gesamt-Gate steht auf FAIL. Iterativ, kein Endzustand",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Alle Module nach ClayCode migriert (elegant/iterativ, strikt-besser + Aequivalenz nachgewiesen)",
+      "soll": "jedes migrierte Stueck strikt besser als vorher, mit nachgewiesener Aequivalenz zum Alten -- stehende Mission, kein Endzustand, gilt fuer ALLE Module, nicht nur die UnifiedDB",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen, stehende Mission -- Stufe 0 (entityos_runtime.clay, f64c54123 Stufe 0: entityos_runtime.clay -- ClayCode an EntityOS angepasst (Frank->EntityOS Umbenennungen, Records, Invarianten) (Gabriel)) ist der einzige bisher migrierte Baustein; kein Aequivalenz-Nachweis-Mechanismus (Diff/Vergleichslauf altes vs. neues Modul) im Quelltext gefunden",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "GRF-Messung (GWT-3-Arme) durchgefuehrt + verteilt",
+      "soll": "eine ehrliche GWT-GRF-Messung (hilft GRF/ClayCode dem Architektur-Entwurf oder nicht) durchgefuehrt und ueber Desktop/Repo/Wiki/Forschung verteilt",
+      "quelle": "Eigner 22.08.",
+      "ist": "7 Artikel mit „GRF-Messung“/„GWT-GRF-Messung“ im Titel in wiki.db gefunden (Wiki-Zweig bestaetigt, inkl. Korrektur „ClayCode-Basis-Compiler laeuft bereits, nur General-Purpose-Gate offen“). ⚠️ Desktop/Repo/Forschung-Zweige sind vom VPS aus nicht direkt nachpruefbar -- indikativ, auf Eigner-Angabe gestuetzt, nicht einzeln gemessen",
+      "erfuellt": true
+    }
+  ]
+}

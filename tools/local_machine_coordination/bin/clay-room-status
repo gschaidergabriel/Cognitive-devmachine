@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+"""
+clay-room-status — human-readable snapshot of the room: who's chief, which
+sessions are active with which lane, last N bulletin notes. Prunes orphaned
+entries (stale heartbeat or dead pid) as a side effect, same as
+clay-browser-tab-status does for the tab registry.
+
+Usage:
+  clay-room-status [-n N]   # N = number of bulletin notes to show (default 10)
+"""
+import sys
+import os
+import argparse
+
+sys.path.insert(0, os.path.expanduser("~/.claude/room"))
+import roomlib  # noqa: E402
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-n", type=int, default=10, help="number of bulletin notes to show")
+    args = ap.parse_args()
+
+    with roomlib.Guard():
+        state = roomlib.load_state()
+        removed = roomlib.prune_dead_sessions(state)
+        chief = roomlib.ensure_chief(state)
+        roomlib.save_state(state)
+
+    for sid, entry in removed.items():
+        print(f"[cleanup] pruned stale session '{sid}' (lane: {entry.get('lane')})", file=sys.stderr)
+
+    print(f"room chief: {chief or '(none — no active sessions)'}")
+    print(f"active sessions: {len(state['sessions'])}")
+    for sid, entry in sorted(state["sessions"].items(), key=lambda kv: kv[1].get("joined_at") or ""):
+        role = entry.get("role", "WORKER")
+        marker = "*" if sid == chief else " "
+        age = int(roomlib.age_secs(entry.get("last_heartbeat")))
+        print(f"  {marker} [{role:6}] {sid}  pid={entry.get('pid')}  hb={age}s ago  lane: {entry.get('lane')}")
+
+    notes = state.get("bulletin", {}).get("notes", [])[: args.n]
+    print(f"bulletin (last {len(notes)}):")
+    if not notes:
+        print("  (empty)")
+    for note in notes:
+        print(f"  [{note.get('at')}] {note.get('session_id')}: {note.get('text')}")
+
+
+if __name__ == "__main__":
+    main()

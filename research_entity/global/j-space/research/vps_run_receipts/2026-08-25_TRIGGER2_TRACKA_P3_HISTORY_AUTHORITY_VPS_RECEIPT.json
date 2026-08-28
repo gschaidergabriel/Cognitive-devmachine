@@ -1,0 +1,30 @@
+{
+  "schema": "CLAY_TRIGGER2_IMMUTABLE_GENESIS_ORDERED_HISTORY_PRODUCER_AUTHORITY/v1",
+  "utc_note": "2026-08-25 VPS Track A Phase 3",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "executed_head": "19d01875a513fa861bf35e3db84a61b827496725",
+  "audited_tool": "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+  "prior_audit_referenced": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_STATE_HISTORY_PROOF_GATE_V1_ADVERSARIAL_AUDIT_GPT56SOL.json",
+  "status": "PARTIAL_STRUCTURAL_CLOSURE_CONTENT_PROVENANCE_BLOCKED",
+  "structural_replay_integrity_confirmed_empirically": {
+    "event_deletion_from_history": "FAIL_CLOSED (SUPPLIED_STATE_BEFORE_NOT_EXACT_REPLAY_OF_GENESIS_HISTORY)",
+    "event_insertion_into_history": "FAIL_CLOSED (SUPPLIED_STATE_BEFORE_NOT_EXACT_REPLAY_OF_GENESIS_HISTORY)",
+    "history_reordering_state_sensitive_case": "FAIL_CLOSED (order genuinely changes state; mismatched claim rejected)",
+    "same_event_id_different_semantic_digest": "FAIL_CLOSED (EVENT_ID_REUSED_WITH_DIFFERENT_SEMANTIC_DIGEST + EVENT_DIGEST_REGISTRY_MISMATCH)",
+    "idempotent_identical_event_repeat": "INCONCLUSIVE_BY_TEST_CONSTRUCTION (blocked by unrelated discriminator-receipt-list duplication artifact in my fixture, not a clean isolation of idempotency semantics; needs a cleaner follow-up test)",
+    "partial_replay_omitting_prefix": "EQUIVALENT_TO_event_deletion_test (same mechanism, same result)",
+    "co_mutation_of_row_and_carried_digest": "NOT_SEPARATELY_TESTABLE (digest is deterministically derived from event content by event_semantic_sha256; row+digest co-mutation collapses to either a legitimate-but-different event (Phase 2 provenance concern) or a digest mismatch, no third case exists)"
+  },
+  "genesis_content_provenance_for_nonempty_histories": {
+    "finding": "v4 composition gate (trigger2_hyperposition_state_history_generation_bound_gate_v4.py) self-documents this as an explicitly OPEN remaining_p0 item: immutable genesis/ordered-history producer authority is required before nonempty-history positives. It composes generation-provenance (Phase 2 gp) only for the CURRENT single event, not for full multi-event history content.",
+    "decision": "GENESIS_HISTORY_PRODUCER_AUTHORITY_SUCCESSOR_REQUIRED_FOR_NONEMPTY_HISTORIES",
+    "why_not_closed_here": "Closing this requires extending Phase-2-style deterministic-generator+authority-manifest binding across an entire ordered multi-event history (not just one event), which is new authority-chain design work, not a bounded repair. Per directive: documented as a precise blocker rather than improvised.",
+    "blocks": "nonempty-history positive rows only; empty/single-event histories are unaffected by this gap"
+  },
+  "evidence_scope": "immutable genesis/ordered-history producer authority component only",
+  "credit_boundary": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  }
+}

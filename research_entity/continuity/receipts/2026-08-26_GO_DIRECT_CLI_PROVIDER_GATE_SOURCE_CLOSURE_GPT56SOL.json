@@ -1,0 +1,29 @@
+{
+  "schema": "GO_DIRECT_CLI_PROVIDER_GATE_SOURCE_CLOSURE/v1",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / scheduled GO",
+  "program": "ENTITYOS_HCU",
+  "scope": "AUTONOMOUS_PROVIDER_AUTHORITY_DIRECT_CLI_BYPASS",
+  "starting_supervisor_schema": "8.93",
+  "finding": "The canonical workflow and guarded wrapper were source-gated, but tools/claycode_autonomous_cycle.py itself still imported secret/provider-capable modules before any current authority check.",
+  "change": {
+    "direct_entrypoint": "replaced by a standard-library-only fail-closed authority shim",
+    "legacy_implementation": "preserved byte-for-byte at tools/claycode_autonomous_cycle_legacy_impl.py",
+    "provider_boundary": "legacy implementation is executed only after claycode_autonomous_provider_gate.check_inbox() explicitly admits current provider authority",
+    "negative_regression": "tests/test_claycode_autonomous_cycle_direct_gate_v1.py"
+  },
+  "current_owner_authority": {
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true
+  },
+  "credit": {
+    "source_closure": true,
+    "runtime_pass": false,
+    "provider_execution_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Run provider gate, direct-entrypoint regression and guarded HARD_OFF path on a clean current FREE/non-provider checkout with bound HEAD/tree/source hashes, dirty=false, stdout/stderr and zero provider/secret boundary crossings; do not interpret zero-step GitHub Actions as a semantic failure."
+}

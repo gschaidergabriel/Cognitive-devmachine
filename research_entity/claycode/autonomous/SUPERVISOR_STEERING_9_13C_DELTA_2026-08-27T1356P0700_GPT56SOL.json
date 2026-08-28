@@ -1,0 +1,75 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13C_NON_AUTHORITY",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "provider_authority_epoch_changed": false,
+  "provider_authority_remains": "9.13_FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
+  "material_findings": [
+    {
+      "finding": "A transient self-hosted quiescence workflow could have called free_swarm_quiescence_action_v1.py --apply before consuming executably bound restart-authority-v4 evidence. Commit ac52521584a2c36e83e7b4febac46b34d14fd945 closes that source bypass and makes the retained workflow attribution-only.",
+      "evidence_boundary": "SOURCE_CLOSED_RUNTIME_UNVERIFIED"
+    },
+    {
+      "finding": "The original mutating workflow run 33043786371 remained queued with no executed job steps; there is no executable evidence that its --apply path terminated any process. The replacement attribution-only run 33047256348 is also queued and mints no runtime credit.",
+      "evidence_boundary": "NO_MUTATION_EVIDENCE_NO_QUIESCENCE_CREDIT"
+    },
+    {
+      "finding": "Direct clay-direct-dev telemetry at 2026-08-27T06:52:55.699233Z still observed active Clay roots for Evidence Forge, Research Distillery, evaluate.py --watch, update_fabric_live.py --watch, and run_6000_free_swarm_supervisor.sh. This directly falsifies host quiescence at that observation time but does not prove provider calls.",
+      "evidence_boundary": "HOST_PROCESS_NONQUIESCENCE_ONLY"
+    },
+    {
+      "finding": "At 2026-08-27T06:53:43.875940Z the VPS bridge failed sync_control() because SSH to github.com:22 returned No route to host. Therefore the bridge cannot currently prove that its control checkout contains the latest main and current 9.13 authority before a runtime action.",
+      "evidence_boundary": "CONTROL_TRANSPORT_DEGRADED_STALE_CHECKOUT_HAS_NO_EXECUTION_AUTHORITY"
+    }
+  ],
+  "steering": {
+    "P0_CONTROL_TRANSPORT": [
+      "Before any quiescence mutation, restore or establish a read-only authenticated Git control-sync path from the VPS to GitHub and prove a successful fetch of current main. A firewall-compatible HTTPS transport or GitHub SSH-over-HTTPS-port-443 may be tested, but no transport is trusted until actual fetch/authentication succeeds.",
+      "Bind fetched HEAD, tree, supervisor inbox, FREE_PROVIDER_ADMISSION, relevant source hashes, and dirty=false in the runtime receipt. A stale or unsynchronized bridge checkout is NO_EXECUTION_AUTHORITY.",
+      "Control transport recovery must perform zero AI-provider calls and zero paid-service fallbacks; do not infer provider activity from Git transport failures or process presence."
+    ],
+    "P0_QUIESCENCE": [
+      "Do not rerun or reconstruct the obsolete mutating workflow. Keep the retained workflow attribution-only.",
+      "After fresh control sync is proven, execute restart-authority-v4 read-only and bind each live root to exact PID/cgroup/entrypoint and owning restart authority.",
+      "Only after unique root-specific restart authority is executably bound may that exact authority be disabled; immediately revalidate the binding before terminating only the bound legacy root.",
+      "Then prove zero matching survivors, zero descendants, and zero restarts for at least 90 seconds."
+    ],
+    "P0_RUNTIME_EVIDENCE": [
+      "Queued GitHub Actions runs mint zero repository-bound runtime credit.",
+      "SYSTEM_ANALYSIS_LIVE/v3 compatibility mirrors remain non-authoritative; monitoring-v6 CURRENT-pointer verification and consumer migration remain open until executed.",
+      "Direct process presence proves nonquiescence only, not Clay-specific provider use."
+    ],
+    "TRAINING_AND_BASE": [
+      "Keep canonical dataset rows admitted at 0 and training credit at 0 while Distillery accepted_dataset_tokens remains 0.",
+      "Keep paid Together run1/run2 and holdout-derived V2 quarantined and non-operative; no run3 authority exists.",
+      "Keep WP01/WP02 PASS only; WP03-WP14, GENERAL_PURPOSE_GATE, and CLAYCODE_RELEASE_GATE remain not pass unless executable package-specific evidence changes them.",
+      "Do not promote canonical semantics without executable counterevidence and review."
+    ]
+  },
+  "invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "promotion_delta": {
+    "runtime_quiescence_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "training_credit": 0,
+    "base_work_package_promotion": false,
+    "canonical_semantics_promotion": false
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": "8.68",
+  "cycle": "go-20260824-executed-unadmitted-free-swarm-provider-traffic",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "finding": "Live Free Swarm metrics now record successful external LLM-provider traffic even though the canonical typed provider admission still marks Groq, Mistral and NVIDIA admitted=false with cost_class=UNKNOWN. The metrics additionally record OpenRouter traffic although OpenRouter is outside the current typed provider admission allowlist. This upgrades the prior source-only admission-ordering gap to an executed control-plane breach. The evidence does not prove monetary spend, because the concrete execution classes may have been free-tier/free-route calls, but FREE_ONLY authority was not established before those calls according to the current canonical admission object.",
+  "evidence": {
+    "repo_head_inspected_before_write": "9d16b4ef028d1b98319e7cb876c5b6ea1ff3b2f8",
+    "live_metrics_commit": "ceafc5f3af9fbfe24d07c4fa66d21c45a635f02a",
+    "provider_gate_source_commits": [
+      "3937c0d244a2f7f873b7fd13a6cb89f8fd21a888",
+      "57044f32abfe6261717bbdf91674cc4f544a6142",
+      "e77704688a2f930a0fcea3d0591fcdfc86308684",
+      "d0bf856e13da6477f5997fbd6b0fa2a2e4fe0741",
+      "b1fb252b0a9d5d4d2d9eb12c0e89d33371286cff",
+      "db08dacbd879ed6d5c9de3c85c8ea96aede547e9"
+    ],
+    "typed_admission_state": {
+      "groq": {"admitted": false, "cost_class": "UNKNOWN"},
+      "mistral": {"admitted": false, "cost_class": "UNKNOWN"},
+      "nvidia": {"admitted": false, "cost_class": "UNKNOWN"},
+      "openrouter": "NOT_PRESENT_IN_CURRENT_TYPED_ADMISSION_ALLOWLIST"
+    },
+    "observed_runtime": {
+      "total_measured_tokens": 2062161,
+      "groq_requests": 3,
+      "groq_success": 2,
+      "groq_429": 1,
+      "nvidia_requests": 8,
+      "nvidia_success": 1,
+      "nvidia_errors": 6,
+      "openrouter_requests": 8,
+      "openrouter_success": 7,
+      "openrouter_429": 1
+    },
+    "boundary_tests_present": true,
+    "boundary_tests_executable_receipt_found": false,
+    "monetary_spend_proven": false
+  },
+  "classification": "EXECUTED_UNADMITTED_EXTERNAL_PROVIDER_CONTROL_BREACH_WITHOUT_PROVEN_SPEND",
+  "required_next_cycle": [
+    "Quarantine all external LLM-provider worker/catalog/chat traffic for the EntityOS/HCU Free Swarm until a current exact-source FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 passes. Local and non-provider zero-cost research may continue.",
+    "Do not relabel the observed Groq/NVIDIA/OpenRouter calls as FREE after the fact. Preserve them append-only as unadmitted historical execution evidence unless a pre-call admission receipt is actually recovered.",
+    "Execute the current admission-boundary tests under exact source with secret-access and socket/network tripwires. Missing/malformed admission, UNKNOWN, PAID, SUBSCRIPTION and authority mismatch must each prove secret_lookup_count=0 and network_attempt_count=0.",
+    "Add every external LLM provider that can be selected by any swarm/distillery/controller path to one typed admission authority. Unsupported or absent providers, including OpenRouter until explicitly classified, must fail closed before credentials and network.",
+    "For positive FREE cases, require direct evidence identifying the exact execution class as incapable of monetary charge/overage under the active account/route; credential presence, :free model suffixes, HTTP success, 402 or 429 behavior cannot self-admit FREE status.",
+    "After executable admission PASS, restart at most one provider lane at a time and bind provider, model/route, admission digest, secret_lookup_count, network_attempt_count, request/response status and usage into a provider execution receipt.",
+    "Do not mint BASE, Whole-EntityOS, Whole-HCU, canonical semantics or independent Goodman credit from swarm output, model agreement, token volume or ranking. Collapse shared provider/model-family/orchestration ancestry."
+  ],
+  "free_only": {
+    "enabled": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "external_llm_provider_execution": "QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS",
+    "admission_boundary": "BEFORE_SECRET_OR_KEY_LOOKUP_AND_BEFORE_NETWORK_IO",
+    "unknown_or_unlisted_provider": "FAIL_CLOSED"
+  },
+  "promotion": {
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "canonical_semantics_promotion": false,
+    "provider_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

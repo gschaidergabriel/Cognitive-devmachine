@@ -1,0 +1,115 @@
+{
+  "schema": "JSPACE_STRUCTURAL_NATIVE_SUCCESSOR_PREREGISTRATION/v2",
+  "status": "PREREGISTERED_SOURCE_ONLY_NO_EXPERIMENT_EXECUTED",
+  "recorded_date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "go",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "canonical_main_before_write": "8b38537416c462121c59593be8a1caa77ca41b98",
+  "execution_mode": "FREE_ONLY",
+  "predecessor": {
+    "design": "TRIGGER1_STRUCTURAL_NATIVE_ABSTRACT_FROZEN_V1",
+    "result_sha256": "1486f27de96fa2aeb6c0b52800fdf9852a0b9e50761b17ba38c647d424d82532",
+    "outcome": "INTERNAL_STATE_TRANSPORT_PASS_BEHAVIORAL_CONTROL_FAIL",
+    "frozen_holdout_reuse_or_retune": "FORBIDDEN"
+  },
+  "scientific_hypothesis": "A separately constructed rank-aware structural controller can produce state-specific causal behavioral displacement on unseen families when semantic geometry, tokenizer position, nuisance rank and runtime identity are controlled independently of the frozen v1 holdout.",
+  "counterhypothesis": "Native cvec perturbation is a strong internal actuator but the measured abstract semantic states are not encoded in a stable low-rank controllable geometry at the selected layers; any apparent successor success would be nuisance, token-position, evaluator, family or calibration leakage unless it survives the preregistered controls.",
+  "design": {
+    "factorial_axes": [
+      "target_state",
+      "opaque_code",
+      "query_polarity"
+    ],
+    "target_states": ["AFFIRMATIVE", "NEGATIVE", "NEUTRAL"],
+    "tokenizer_matching": {
+      "exact_token_count": true,
+      "exact_last_token_position": true,
+      "byte_length_only": "INSUFFICIENT"
+    },
+    "geometry": {
+      "candidate_ranks": [1, 2],
+      "selection_data": "CALIBRATION_ONLY",
+      "shared_scale_across_states": true,
+      "holdout_rank_selection": "FORBIDDEN",
+      "rank2_requirement": "IF_RANK2_SELECTED_REQUIRE_TARGET_TO_TARGET_DIRECTIONAL_PREDICTIONS"
+    },
+    "gain": {
+      "selection": "CALIBRATION_ONLY",
+      "holdout_fixed": true,
+      "post_holdout_retuning": "FORBIDDEN"
+    },
+    "nuisance_controls": [
+      "NULL_VECTOR",
+      "SIGN_FLIP",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM",
+      "RANK_COMPLETE_NUISANCE_AXES",
+      "MATCHED_TOKEN_POSITION_AND_CONTEXT"
+    ],
+    "causal_matrix": "FULL_INTERVENTION_STATE_X_EVALUATOR_STATE_MATRIX",
+    "replication": {
+      "calibration_families": "DISJOINT_FROM_HOLDOUT",
+      "holdout_families": "FRESH_UNSEEN",
+      "cross_task_replication": true,
+      "model_family_provenance_split": "FAIL_CLOSED",
+      "goodman_shared_ancestry_collapse": true
+    },
+    "off_target_regression": {
+      "required": true,
+      "scope": "UNRELATED_TASKS_AND_NON_TARGET_STATES",
+      "promotion_if_regression_exceeds_bound": "REJECT"
+    }
+  },
+  "acceptance": {
+    "transport": "SIGNED_INTERNAL_TARGET_COORDINATE_DISPLACEMENT_WITH_MATCHED_CONTROLS",
+    "behavior": [
+      "PER_STATE_DIAGONAL_POSITIVE",
+      "DIAGONAL_ADVANTAGE_POSITIVE",
+      "MATCHED_INTERVENTION_OUTPERFORMS_BASELINE_ON_FRESH_HOLDOUT",
+      "TRUE_SIGN_REVERSAL_OR_PREREGISTERED_RANK2_TARGET_TO_TARGET_PREDICTION"
+    ],
+    "family_independence": "NO_TRAIN_CALIBRATION_HOLDOUT_MODEL_FAMILY_OR_DERIVATION_LEAKAGE",
+    "off_target": "WITHIN_PREREGISTERED_BOUND",
+    "all_conditions_required": true
+  },
+  "immutable_runtime_binding_required": [
+    "canonical_source_sha",
+    "experiment_source_digest",
+    "prompt_family_digest",
+    "vector_digest",
+    "cvec_adapter_configuration",
+    "checkpoint_gguf_sha256",
+    "tokenizer_identity",
+    "llama_cpp_commit_and_build_identity",
+    "injection_layer",
+    "measurement_layer",
+    "fixed_gain",
+    "result_digest",
+    "execution_environment_identity"
+  ],
+  "typed_causal_binding": {
+    "required_chain": "TypedEntry->route->VerifiedEngineAdmission->loader_consumption->GRID10_or_declared_mode->ModelExecution->InferenceReceipt->JSpaceTrace->TrainingTrace",
+    "ambiguous_generation_or_provenance": "FAIL_CLOSED",
+    "model_output_mints_canonical_truth": false,
+    "effect_authority": "EffectGate+EffectJournal"
+  },
+  "coordination": {
+    "unusual_experiment_executed_by_this_write": false,
+    "atomic_lease_required_before_future_intervention": true,
+    "no_reproducible_shared_trigger_identity": "COORDINATION_BLOCKED_ZERO_NEW_UNUSUAL_EXPERIMENTS"
+  },
+  "credits": {
+    "source_preregistration": 1,
+    "new_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Before any v2 intervention, resolve a reproducible canonical go macrocycle identity and create-only atomic lease; then freeze exact calibration-only rank/gain/orientation and immutable runtime identities before opening a fresh disjoint holdout."
+}

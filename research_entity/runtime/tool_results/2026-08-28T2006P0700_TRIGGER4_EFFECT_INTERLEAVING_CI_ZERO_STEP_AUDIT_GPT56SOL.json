@@ -1,0 +1,48 @@
+{
+  "schema": "TRIGGER4_EFFECT_INTERLEAVING_CI_ZERO_STEP_AUDIT/v1",
+  "observed_at_local": "2026-08-28T20:06:43+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT triggerword-4 continuation",
+  "trigger": "triggerwort 4",
+  "supervisor_epoch": "9.13",
+  "supervisor_delta": "9.13AF_NON_AUTHORITY",
+  "trigger_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "source_falsifier_commit": "b2de80412231cc9ac6c1031235e9e9032d4c2c80",
+  "source_falsifier_test": "tests/test_frankenstein2_effect_lifecycle_completion_v2.py::EffectLifecycleCompletionV2IntegrationTests::test_same_session_two_call_interleaving_rejects_cross_invocation_result_and_closes_independently",
+  "source_finding": "The branch now contains an explicit same-session two-invocation interleaving falsifier using distinct tool-use invocation identities. It deliberately attempts to re-enter result-B into tool-use-A and requires exact invocation/result separation before independent completion evidence can be minted.",
+  "ci_observation": {
+    "head_sha": "83e8cfeae78c68b56bf95a3c570808ff15b1c318",
+    "workflow": "GRID10 Cognitive Envelope CI",
+    "workflow_run_id": 33173741636,
+    "job_id": 98856962805,
+    "job_name": "deterministic",
+    "runner_label": "ubuntu-latest",
+    "runner_id": 0,
+    "runner_name": "",
+    "status": "completed",
+    "conclusion": "failure",
+    "steps_observed": 0
+  },
+  "classification": {
+    "source_falsifier_status": "SOURCE_READY",
+    "test_execution_status": "NOT_OBSERVED",
+    "ci_failure_class": "INFRASTRUCTURE_OR_RUNNER_PRE_STEP_FAILURE",
+    "logic_failure_credit": 0,
+    "runtime_causal_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "whole_entityos_credit": 0,
+    "training_credit": 0
+  },
+  "nonduplication": {
+    "rebuild_same_falsifier": false,
+    "reason": "The required same-session interleaving source test already exists at the cited commit; duplicate source work would add no discriminator value."
+  },
+  "next_exact_gate": "Execute the existing exact-source same-session two-call interleaving falsifier on an admitted functioning non-provider test surface, then classify the terminal result. Do not infer test failure from the zero-step GitHub Actions job.",
+  "evidence_boundaries": [
+    "source-ready test is not executed test evidence",
+    "workflow failure with zero executed steps is not a logic failure",
+    "runner_id=0 and empty runner_name are infrastructure evidence only",
+    "same-session source isolation is not Frankenstein donor-hook runtime causality until exercised at the real boundary",
+    "no provider/model call, paid fallback, physical GRID10, HCU, EntityOS, canonical semantics or training credit is minted by this audit"
+  ]
+}

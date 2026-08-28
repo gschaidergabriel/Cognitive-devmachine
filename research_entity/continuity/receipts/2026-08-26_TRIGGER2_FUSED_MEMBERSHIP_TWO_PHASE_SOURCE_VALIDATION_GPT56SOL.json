@@ -1,0 +1,121 @@
+{
+  "schema": "CLAY_TRIGGER2_FUSED_MEMBERSHIP_TWO_PHASE_SOURCE_VALIDATION_RECEIPT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.84_DELTA",
+  "mode": "FREE_ONLY",
+  "observed_main_before_receipt": "7511499f4895a7407ea1edf815f21a466cc33256",
+  "claim_scope": "EXACT_COMMITTED_BYTES_LOCAL_DETERMINISTIC_SOURCE_FIXTURE_ONLY",
+  "committed_bytes": [
+    {
+      "path": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+      "git_blob_sha1": "8fe4ddafcb25e830eb7b56836aa974f4ce415856",
+      "sha256": "71b93071f1181ed3d2f08af89a52359b0b9d23128109b1cbe5e54376cce5c47f",
+      "bytes": 16344,
+      "role": "retained two-phase invocation authority plus membership-incarnation cohort uniqueness"
+    },
+    {
+      "path": "tests/test_trigger2_node_result_model_call_two_phase_authority_v1.py",
+      "git_blob_sha1": "0baaa1a20c8b944af557260b00d3a3dde14061db",
+      "sha256": "971482db3db904227c36aaf6f2b135533ba668ee3bcdfcb24ced035219d2eb7b",
+      "bytes": 11259,
+      "role": "base two-phase deterministic regression suite"
+    },
+    {
+      "path": "tests/test_trigger2_two_phase_call_content_vs_invocation_semantics_v1.py",
+      "git_blob_sha1": "36e563024e08009062ca4c0c394aba61ce8d3649",
+      "sha256": "78f73b863c7781137bb08b5db705688e43d7aeca31a69a6d1a052a41b87e72cc",
+      "bytes": 4094,
+      "role": "call-content versus invocation semantics and membership-incarnation regression"
+    },
+    {
+      "path": "tools/trigger2_fused_membership_two_phase_adapter_v1.py",
+      "git_blob_sha1": "b822290c4565867f746b708308ca8ebf4cbbfe39",
+      "sha256": "676936cbd6f4d1a9a3ca15245dfb0a75069b847b33b2208a78c0fb2afb07cbcd",
+      "bytes": 11597,
+      "role": "non-competing adapter from PROOF_CARRYING_NODE_RESULT/v1 membership evidence to retained two-phase invocation authority and sole fused coordinator path"
+    },
+    {
+      "path": "tests/test_trigger2_fused_membership_two_phase_adapter_v1.py",
+      "git_blob_sha1": "de466de22c4e6995d343fc9a510fa29e1ff2606f",
+      "sha256": "5fa8669fbae96ae82b35a0df5f6db13e5757858b91735e1e679a7bcf5acf851e",
+      "bytes": 8415,
+      "role": "membership/admission/node/PID/generation/raw-packet cross-validation and coordinator-delegation regression suite"
+    }
+  ],
+  "git_identity_verification": {
+    "all_local_git_hash_object_values_equal_current_main_blob_sha1": true,
+    "verified_current_main_blob_sha1": [
+      "8fe4ddafcb25e830eb7b56836aa974f4ce415856",
+      "0baaa1a20c8b944af557260b00d3a3dde14061db",
+      "36e563024e08009062ca4c0c394aba61ce8d3649",
+      "b822290c4565867f746b708308ca8ebf4cbbfe39",
+      "de466de22c4e6995d343fc9a510fa29e1ff2606f"
+    ]
+  },
+  "local_execution": {
+    "surface": "LOCAL_CHATGPT_CONTAINER_DETERMINISTIC_SOURCE_FIXTURE",
+    "python_compile": "PASS",
+    "pytest_command": "PYTHONPATH=. pytest -q tests/test_trigger2_node_result_model_call_two_phase_authority_v1.py tests/test_trigger2_two_phase_call_content_vs_invocation_semantics_v1.py tests/test_trigger2_fused_membership_two_phase_adapter_v1.py",
+    "pytest_result": "24 passed in 0.06s",
+    "pytest_pass_count": 24,
+    "pytest_fail_count": 0,
+    "repository_ci_observed": false,
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid10_executed": false,
+    "vps_execution_performed": false,
+    "training_executed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false
+  },
+  "validated_properties": [
+    "call-content and deterministic output identities may repeat across independent invocations without collapsing invocation authority",
+    "pre-call launch descriptor and post-call executor observation remain distinct invocation-event authority surfaces",
+    "one source_node_admission_id cannot silently represent two independently attributed cohort members without an explicit fanout contract",
+    "two-phase source_node_admission_id equals proof source_membership_id",
+    "two-phase source_node_admission_revision equals proof membership receipt serial",
+    "controller-observed node equals proof membership node and raw NODE_RESULT source node",
+    "controller-observed PID equals proof producer PID and raw NODE_RESULT process PID",
+    "runtime generation equals proof membership generation and raw NODE_RESULT generation",
+    "raw NODE_RESULT packet digest equals the proof node_result_digest",
+    "tamper or transplant of proof/two-phase provenance fails closed before coordinator delegation",
+    "transport order does not change the deterministic validation digest",
+    "adapter reseals the existing proof envelope so the existing fused cohort commits to two-phase provenance through the existing envelope digest",
+    "adapter does not create a second coordinator cohort authority"
+  ],
+  "authority_boundary": {
+    "model_generated_authority": false,
+    "canonical_truth_minted": false,
+    "effect_authority_minted": false,
+    "actual_precall_freeze_timing_attested": false,
+    "actual_postcall_executor_observation_timing_attested": false,
+    "actual_membership_live_freshness_attested_by_this_local_fixture": false,
+    "model_call_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "p0_runtime_state": {
+    "status": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "latest_observed_telemetry_generated_at": "2026-08-25T22:43:16.216858+00:00",
+    "supervisor": "STOPPED/QUARANTINED",
+    "go_swarm": "RUNNING",
+    "openrouter_total_requests": 4230,
+    "openrouter_total_success": 134,
+    "openrouter_total_429": 4095,
+    "provider_admission_embedded_epoch": "8.78",
+    "current_authority_override": "8.84_DELTA_FREE_ONLY_EMERGENCY_QUARANTINE",
+    "runtime_promotion_allowed": false
+  },
+  "next_exact_gate": "P0 remains owning-host FreeSwarm quiescence with zero provider-capable survivors plus bounded zero provider-counter delta and no provider probe. After P0 PASS, re-enter the newest explicit FREE non-provider authority and execute the fused coordinator only through the retained proof-carrying membership plus two-phase invocation provenance path, with real phase-timing and live-membership attestation before any physical GRID10/model/J-Space/checkpoint credit."
+}

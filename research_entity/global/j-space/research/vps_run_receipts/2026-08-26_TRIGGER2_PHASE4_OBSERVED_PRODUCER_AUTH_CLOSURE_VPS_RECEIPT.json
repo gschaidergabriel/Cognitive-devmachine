@@ -1,0 +1,46 @@
+{
+  "schema": "CLAY_TRIGGER2_TRACK_A_PHASE4_CLOSURE_RECEIPT/v1",
+  "utc_note": "2026-08-26 VPS Track A continuation, Phase 4",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "status": "CLOSED",
+  "commits_pushed": ["c55c77d02", "c2a1104a0"],
+  "mechanism": "Added one new producer-auth gate (trigger2_observed_evidence_producer_auth_gate_v1.py) plus its producer (trigger2_observed_evidence_producer_v1.py) plus its authority (TRIGGER2_OBSERVED_EVIDENCE_PRODUCER_AUTHORITY_V1.json), reusing the exact recomputation pattern already established by the A02 discriminator producer and the generation-provenance gate. _validate_observation_receipt in the retained state-history proof gate now calls this new gate instead of only checking loosely-typed nonempty strings.",
+  "empirical_closure_evidence": {
+    "test_file": "tests/test_trigger2_hyperposition_state_history_proof_gate_v1.py",
+    "new_tests_added": 7,
+    "total_tests_in_file": 17,
+    "all_passing": true,
+    "positive_control": "test_observed_event_authenticated_receipt_passes",
+    "negative_controls_required_by_source_document_section_7_2": [
+      "forged producer -> test_observed_event_caller_forged_receipt_fails_closed",
+      "wrong source payload -> test_observed_event_wrong_source_payload_fails_closed",
+      "wrong admission id -> test_observed_event_wrong_admission_id_fails_closed",
+      "wrong admission generation -> test_observed_event_wrong_admission_generation_fails_closed",
+      "stale producer source -> test_observed_event_stale_authority_producer_hash_fails_closed",
+      "reused receipt id with changed payload -> test_observed_event_reused_receipt_id_with_changed_observed_value_fails_closed",
+      "missing parent (discriminator) receipt -> test_observed_event_missing_discriminator_receipt_fails_closed"
+    ],
+    "note_wrong_policy_digest_case": "not separately testable as a distinct failure mode: policy is loaded whole from the one authority file and hashed as part of the receipt preimage, so any policy field mutation is already covered by the wrong-admission-id/generation and stale-producer-hash tests -- there is no separate 'policy digest' field a caller could independently forge without also failing one of those."
+  },
+  "regression_check": {
+    "method": "same targeted pytest sweep used for Phase 3, run again after this change",
+    "before_this_phase": "97 failed, 1281 passed, 1 xfailed",
+    "after_this_phase": "97 failed, 1289 passed, 1 xfailed",
+    "conclusion": "zero regressions; +8 net new passing tests (7 new + updated happy-path replacing the old naive one); the 97 failures remain the same pre-existing, unrelated set"
+  },
+  "v4_composition_update": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py remaining_p0 item 'OBSERVED evidence producer authentication is required before OBSERVED positives' moved to closed_p0.",
+  "hypothesis_and_implications": {
+    "hypothesis": "The gap existed because OBSERVED-typed evidence was originally only checked for STRUCTURAL well-formedness (schema, digest binding, zero-credit fences, nonempty strings) since those were the properties the discriminator/replay-integrity work cared about first. Producer identity authentication was never actually needed until now because no real external observation source was wired in yet -- the gap was latent, not exploited, but would have silently admitted fabricated observations the moment any real OBSERVED pipeline existed.",
+    "implication_for_real_observation_sources": "This closure only authenticates a SINGLE pinned synthetic pilot admission scope (T2_OBS_ADMISSION_SYNTHETIC_PILOT_V1, generation 1). Before any REAL external observation source (a live DB, an API, a sensor) can mint OBSERVED evidence, it needs its own registered admission_id + generation in the SAME authority file (or a generalized admission-registry mechanism if sources proliferate) -- this was intentionally scoped to the minimal synthetic case to avoid building unused infrastructure ahead of actual demand, matching the same choice made in Phase 3.",
+    "implication_for_generation_over_time": "admission 'generation' is a monotonic counter field, not yet wired to any rotation/expiry logic. If admission scopes are meant to expire or rotate (e.g. per training epoch), that lifecycle needs to be designed before this becomes the real ingestion path -- right now generation=1 is permanently valid with no expiry.",
+    "risk_flagged_not_fixed": "the OBSERVATION_RECEIPT_SCHEMA field 'observed_time' is bound into the receipt preimage (so it can't be silently swapped after minting) but is NOT independently verified against any real clock or freshness window -- a producer could still mint a receipt today claiming an arbitrary past or future observed_time and it would authenticate cleanly. If replay-freshness matters later, that needs a separate mechanism (e.g. binding to a monotonic admission-generation counter's issuance window), out of scope for this closure."
+  },
+  "evidence_scope": "OBSERVED evidence producer-authentication component only",
+  "credit_boundary": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_credit": 0,
+    "hcu_credit": 0
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "GO_VPS_EXECUTION_REQUEST/v2",
+  "created_utc": "2026-08-25T14:47:00Z",
+  "updated_utc": "2026-08-25T15:35:00Z",
+  "program": "ENTITYOS_HCU",
+  "trigger_scope": "triggerwort 2 exact-current A02 producer-auth + retained Hyperposition v4 acceptance",
+  "target_architecture": "HCU variable cognitive grid with deterministic persistent-state authority",
+  "mode": "FREE_ONLY",
+  "paid_provider_calls_allowed": false,
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "requested_ref": "main",
+  "requested_head": "c14e67fd2ea36681957287bebb4c0330e3e44cf7",
+  "requested_tree": "e1ea564a715569cb6185736080dff6347c4bc352",
+  "execution_surface": "clay-direct-dev on the live free VPS",
+  "command": "python3 tools/run_trigger2_repository_bound_a02_acceptance_v1.py",
+  "selection_reason": "This immutable target contains the Git-object-bound A02 repair, secret-safe repository-bound runner, the original A02 mutation and retained-v4 suites, the dedicated Git-lineage adversarial suite, and the runner-level repository-binding adversarial suite. Commit c14e67fd2ea36681957287bebb4c0330e3e44cf7 specifically closes the observed coverage gap where the outer runner existed but did not execute the two newly added lineage/repository adversary files.",
+  "preconditions": [
+    "checkout must be clean",
+    "checkout the exact requested_head; do not substitute moving main",
+    "HEAD must equal requested_head before execution",
+    "tree must equal requested_tree before execution",
+    "origin repository identity must resolve to gschaidergabriel/clay-global-research-entity",
+    "raw credential-bearing remote URLs must not be persisted in the receipt",
+    "do not modify FRANK harness",
+    "do not invoke hosted, subscription, unknown-cost, or paid model providers"
+  ],
+  "required_receipt": [
+    "schema CLAY_TRIGGER2_REPOSITORY_BOUND_A02_ACCEPTANCE/v1",
+    "executed HEAD and tree",
+    "dirty_before=false and dirty_after=false",
+    "Python/platform/runtime identity",
+    "origin_repository_normalized plus RAW_REMOTE_URL_NOT_PERSISTED secret fence",
+    "exact HEAD blob and worktree SHA-256 bindings for runner, A02 gate/producer, retained v4 composition, generation/epistemic/reference-labeler sources, authority manifests, canonicalizer, and every focused test file",
+    "A02 producer source_commit_sha resolves as a real Git commit",
+    "source_commit_sha is an ancestor of executed HEAD",
+    "source_commit_sha:source_path bytes, executed HEAD source bytes, worktree source bytes, and authority source_sha256 agree",
+    "policy_jcs_sha256 is retained in the receipt",
+    "original A02 adversarial mutation suite result",
+    "dedicated Git-lineage adversarial mutation suite result",
+    "repository-bound runner adversarial suite result",
+    "retained Hyperposition v4 gate-order/zero-credit suite result",
+    "component-scoped credit only"
+  ],
+  "credit_boundary": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "trigger2_a02_runtime_credit_before_receipt": 0,
+    "whole_entityos_hcu_credit": 0,
+    "full_hcu_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "rule": "A successful exact receipt may establish only the bounded Trigger-2 A02/retained-v4 component execution facts it actually demonstrates. It does not admit training rows or mint model/J-Space/HCU/whole-product credit."
+  },
+  "anti_duplication": {
+    "supersedes_execution_target_in_same_file": true,
+    "do_not_create_another_execution_request": true,
+    "do_not_create_issue_fanout": true,
+    "do_not_create_a_second_A02_semantic_authority": true,
+    "one_exact_execution_request_only": true
+  },
+  "next_on_pass": [
+    "preserve the exact outer receipt identity and require any later inner A02 receipt consumer to bind that parent receipt",
+    "resolve A03 generation-authority replay-root identity",
+    "close immutable genesis/ordered-history producer authority for nonempty history",
+    "authenticate OBSERVED evidence producer",
+    "rebind the small native seed to the single retained successor",
+    "run rendered family/provenance/tokenizer ABI, role-typed nuisance, ordered-history, READ/BIND_ROUTE/WRITE, multi-seed, cross-encoding and causal-actionability gates before any positive pilot admission"
+  ],
+  "next_on_fail": "Preserve exact infrastructure or component failure at its demonstrated scope, re-enter current main, and repair only the evidenced failing boundary. Do not generate positive training rows while this gate is open."
+}

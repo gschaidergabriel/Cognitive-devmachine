@@ -1,0 +1,63 @@
+{
+  "schema": "ENTITYOS_HCU_GO_PR810_QUOTA_FAIL_CLOSED_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "d4363075548c52dc3d70f1aa288ff17b4e148ea9",
+  "coordination": {
+    "shared_immutable_macrocycle_or_request_id_available_to_this_organ": false,
+    "exact_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "atomic_unusual_experiment_claim": "NOT_ATTEMPTED_NO_REPRODUCIBLE_TRIGGER_KEY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "observations": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_donor_head_observed_after_executor_write": "824998ae4e15b23130c1b42d4a1563764551fa4a",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_before_fix": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "executor_head_after_fix": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "executor_fix_file": "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+    "executor_fix_commit_message": "guard(hcu): fail closed on unobserved Sandbox quota",
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_team_plan_observed": "hobby",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "exact_fix_deployment_id": "dpl_EtVgJ96pobVv3zqh9jozAKHgfNWa",
+    "exact_fix_deployment_git_sha": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "exact_fix_deployment_state": "READY",
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_capsule_invoked": false
+  },
+  "material_delta": {
+    "prior_runtime_admission_behavior": "sandboxExecutionAdmitted() accepted the historical static ADMITTED surface-class marker without a direct remaining-quota observation.",
+    "new_runtime_admission_behavior": "sandboxExecutionAdmitted() now additionally requires remaining_sandbox_quota_directly_observed === true and runtime_gate === OPEN_DIRECT_QUOTA_OBSERVED.",
+    "current_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "remaining_quota_assumption_forbidden": true,
+    "why": "Supervisor 8.63 explicitly forbids assuming remaining included Sandbox quota from Hobby plan identity and requires fail-closed quota/billing/upgrade/plan/charge boundaries.",
+    "build_source_result": "EXACT_EXECUTOR_FIX_SHA_DEPLOYMENT_READY",
+    "runtime_result": "NOT_RUN_FAIL_CLOSED_QUOTA_UNOBSERVED"
+  },
+  "hypothesis": "Separating historical surface-class admission from a successor runtime quota gate prevents a READY exact-head deployment from silently converting plan identity into spend authorization while preserving the single fixed executor lane.",
+  "counterhypothesis": "The historical ADMITTED marker plus Hobby plan identity is sufficient because provider enforcement would safely reject exhausted quota.",
+  "discriminator": "Obtain a direct current included-entitlement/remaining-Sandbox-quota observation or authoritative no-charge equivalent. Only then may a successor commit explicitly open the runtime gate and the exact-head fixed 17-blob/14-result capsule be invoked.",
+  "tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: retained executor now has a central fail-closed runtime admission gate at exact commit b7bd0076ccce593767c86ff0e026a09a8e88b67f, and that exact commit has a READY deployment.",
+    "track_b_hcu_typed_entry": "ADVANCED: the single HCU/Typed-Entry/J-Space executor path cannot reach Sandbox.create while quota authority is unresolved; the existing exact source and causal fences remain preserved.",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: the J-Space/GWT runtime discriminator remains blocked before Sandbox execution because remaining included quota is not directly observed; no model runtime or training evidence was created."
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Directly observe the current included Vercel Sandbox quota/entitlement or an authoritative equivalent that proves no charge/upgrade path. If and only if that evidence is positive, explicitly re-admit the central runtime gate in one successor executor commit, require READY at that exact SHA, then invoke only the fixed 17-blob/14-result route and keep any PASS component-scoped.",
+  "together": "FORBIDDEN_NO_PREFLIGHT_NO_KEY_LOOKUP_NO_JOB_CREATION",
+  "paid_fallback": "FORBIDDEN"
+}

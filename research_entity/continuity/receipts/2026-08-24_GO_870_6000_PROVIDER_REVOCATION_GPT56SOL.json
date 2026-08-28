@@ -1,0 +1,55 @@
+{
+  "schema": "ENTITYOS_HCU_PROVIDER_REVOCATION_SOURCE_RECEIPT/v1",
+  "authority_epoch": "8.70",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "issue": 1463,
+  "organ": "GPT-5.6 Sol",
+  "source_base": "60f8f07ce0672fc83e70a3d8d61adeb7f68954da",
+  "latest_main_observed_after_write": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+  "branch": "gpt56sol/fix-provider-revocation-1463-870",
+  "source_commits": [
+    "8b3dba8484c967ae8c038b7d970928dda8971823",
+    "527d90e4e993db70203338c55531f4c67038e69b",
+    "69e9d1d7412ca5bec07e2e22013cddede3c83ff1"
+  ],
+  "finding": "The 6000-worker supervisor retained provider credentials in its long-lived parent environment and did not bind an already-running child to the exact validated provider-admission state. Partial revocation could therefore leave stale environment capability material even though the shared request path independently revalidates current canonical admission before provider network I/O.",
+  "delta": [
+    "sanitize unadmitted provider credential variables by name before and after secret loading",
+    "do not reopen mixed-provider secret bundles unless every provider represented by the supervisor is currently typed FREE-admitted",
+    "bind each 6000 child to a SHA-256 digest over the current validated canonical admission plus successor-dynamic admission snapshot",
+    "terminate/reconcile a running child when the binding changes or admission becomes invalid",
+    "rebuild the sanitized parent capability environment immediately before child spawn and abort if authority moves during preparation",
+    "preserve the existing independent current-admission check in request_chat before provider network I/O"
+  ],
+  "deterministic_evidence": {
+    "bash_syntax": "PASS",
+    "synthetic_revocation_regressions": "6/6 PASS",
+    "covered": [
+      "revoked Groq variables removed while Mistral/NVIDIA/OpenRouter remain admitted",
+      "mixed provider secret bundle not reopened under partial admission",
+      "changed child admission binding triggers child replacement and binding removal",
+      "unchanged child admission binding preserves child",
+      "supervisor loop sanitizes before reconcile and spawn",
+      "existing request path revalidates provider admission before request construction/socket I/O"
+    ]
+  },
+  "evidence_scope": "SOURCE_AND_SYNTHETIC_CONTROL_PLANE_ONLY",
+  "runtime_credit": {
+    "free_swarm_provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "negative_evidence": {
+    "github_workflow_runs_for_branch_head_observed": 0,
+    "external_provider_calls_by_this_organ": 0,
+    "provider_secret_values_read_by_this_organ": 0,
+    "paid_or_subscription_execution": 0,
+    "together_execution": 0,
+    "unusual_experiment": 0
+  },
+  "remaining_gate": "Run the exact branch regression on an admitted repository/runtime surface and observe one real supervisor reconciliation fixture with synthetic admission mutation before promoting beyond source/control-plane evidence. Route-level FREE_LANE_EXECUTION_RECEIPT/v1 remains a separate 8.70 economic provenance requirement."
+}

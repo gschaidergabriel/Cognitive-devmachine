@@ -1,0 +1,66 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T14:26:45+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "3ffe58f5c55dc8512cc79a9c9067455564b629bb",
+  "current_main_observed_after_build": "6d80752c172c3a88727143e24ec092e57cd43cda",
+  "branch": "go/clerk-instance-provenance-20260817-1424",
+  "finding": {
+    "classification": "CLERK_BROWSER_TOKEN_INSTANCE_PROVENANCE_GAP",
+    "observed": "ClayVerse accepted CLERK_PUBLISHABLE_KEY, CLERK_FRONTEND_API_URL and CLERK_ISSUER as independent configuration values. The browser executes Clerk UI/JS from CLERK_FRONTEND_API_URL while backend JWT verification is bound to CLERK_ISSUER.",
+    "risk": "A misconfigured direct-FAPI baseline could execute Clerk browser code from a different origin/instance than the publishable key encodes or verify tokens against a different Clerk instance, breaking the intended single authentication provenance boundary.",
+    "counterhypothesis": "HTTPS validation of CLERK_FRONTEND_API_URL plus issuer verification is sufficient even when those values are unrelated.",
+    "counterhypothesis_result": "REJECTED_FOR_DIRECT_FAPI_BASELINE: Clerk documents that the publishable key encodes the Frontend API domain and that a session token issuer is the instance Frontend API URL. Proxy-FAPI is a separate explicit integration contract and is not implemented by the current ClayVerse browser path."
+  },
+  "repair": {
+    "service_git_blob": "f21f6b186f7db972f352426339f2ad9d9d54e337",
+    "test_git_blob": "5b3c38f5d098fb644cc8f8d74ed4a7aea3893606",
+    "contract": "decode direct FAPI domain from pk_test_/pk_live_ publishable key; require configured browser Frontend API URL and Clerk JWT issuer to equal that derived HTTPS URL; reject malformed/path/userinfo/port/non-publishable encodings",
+    "proxy_fapi_added": false,
+    "new_auth_authority": false,
+    "new_network_origin": false
+  },
+  "primary_dependency_evidence": {
+    "source": "Current official Clerk documentation fetched 2026-08-17",
+    "claims": [
+      "Clerk's JavaScript quickstart derives the Frontend API domain from the publishable key before loading Clerk UI/JS.",
+      "Clerk session-token iss is the Frontend API URL of the instance.",
+      "Proxying Clerk Frontend API is a distinct advanced configuration requiring explicit proxy setup; this delta does not add that mode."
+    ]
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "scope": "exact helper semantics reconstructed from branch source plus the same positive/negative cases as the branch test",
+    "command": "python -m pytest -q",
+    "result": "10 passed in 0.03s",
+    "classification": "SOURCE_MECHANISM_SUPPORTED_NOT_EXACT_BRANCH_OR_REAL_CLERK_RUNTIME_PASS",
+    "real_clerk_instance_used": false,
+    "real_browser_started": false,
+    "real_jwt_verified": false,
+    "oci_image_built": false,
+    "vps_self_hosted_production_testing": false
+  },
+  "parallel_state": {
+    "main_advanced_after_branch": true,
+    "intervening_current_main_files": [
+      "the artefact/clayverse/terminal_sessions.py",
+      "the artefact/policy/managed-tmux.conf",
+      "the artefact/receipts/2026-08-17_go_tmux_keymap_attestation_v2.md",
+      "the artefact/tests/test_tmux_command_surface_fence.py"
+    ],
+    "overlap_with_this_delta": false
+  },
+  "vercel": {
+    "new_attempt_started": false,
+    "reason": "Fresh Vercel Git-preview execution remains admission-blocked before build/Sandbox start by the already observed deployment rate limit; repeating the same admission path would add no discriminator."
+  },
+  "go_experiment_accounting": {
+    "unusual_experiment_added_by_this_lane": 0,
+    "note": "Ordinary deterministic auth provenance hardening only; the globally coordinated unusual-experiment slot for this user-triggered go was already consumed by parallel work."
+  },
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NOT_REAL_CLERK_RUNTIME_PASS",
+  "next_gate": "In the next actually-started authorized exact-current browser/container run, use one real Clerk instance and prove publishable-key/FAPI/issuer provenance agrees, valid sign-in reaches authenticated WebSocket PTY, deliberately mismatched FAPI or issuer fails before serving candidate-ready, and Clerk key-rotation behavior remains accepted."
+}

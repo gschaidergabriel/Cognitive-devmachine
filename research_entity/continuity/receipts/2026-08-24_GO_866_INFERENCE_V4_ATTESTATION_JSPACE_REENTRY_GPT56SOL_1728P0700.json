@@ -1,0 +1,125 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.66",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed_before_write": "6ad4d1bb1936a6c26ce036833e27c2a7ac11b1b4",
+    "active_owner_authority_pointer": "CLAY_EXECUTION_AUTHORITY.md",
+    "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "newest_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_66.json",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head": "0b205544fa262afeb714a697f29d3c891551c424",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head": "bb7324d2a21ffc143c241c652a31524c5be4c9d8"
+  },
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UPSTREAM_MACROCYCLE_ID",
+    "new_unusual_experiments_run": 0,
+    "work_class": "ORDINARY_AUTHORITY_REENTRY_SOURCE_REVIEW_EXTERNAL_SOLUTION_HARVEST_AND_FUSION"
+  },
+  "authority_reconciliation": {
+    "material_finding": "Supervisor 8.66 supersedes 8.65 and explicitly reconciles the active owner dual-machine authority: zero-cost development/test execution inside clay-direct-dev and the normal-user local workstation is authorized with evidence/resource guards. Current-facing 8.65 surfaces and retained PR descriptions that still blanket-forbid VPS/self-hosted testing are stale and subordinate to 8.66.",
+    "observed_stale_current_facing_surfaces": [
+      "research_entity/continuity/BOOTSTRAP_MINIMAL.json schema_version=8.65 and authority_correction=SUPERVISOR_STEERING_8_65.json",
+      "research_entity/rooms/PROGRAM_STATE.json schema_version=8.65 and vps_testing_forbidden=true",
+      "retained donor PR1263 description still names supervisor 8.65 and blanket-forbids VPS/self-hosted testing",
+      "retained executor PR810 description still names supervisor 8.65 and blanket-forbids VPS/self-hosted testing"
+    ],
+    "execution_boundary_now": "LOCAL_NORMAL_USER_AND_CLAY_DIRECT_DEV_VPS_SANDBOX_ZERO_MONETARY_COST_EXECUTION_ALLOWED_WITHIN_OWNER_AUTHORITY; unrelated host changes, production effects, paid/subscription/unknown providers, Together, and new root/sudo authority remain fail-closed unless separately authorized",
+    "evidence_boundary": "AUTHORIZED_LOCAL_OR_VPS_SANDBOX_SUCCESS_REMAINS_COMPONENT_OR_CANDIDATE_EVIDENCE_UNTIL_CANONICALLY_ADMITTED; it does not mint whole EntityOS/HCU runtime credit"
+  },
+  "track_a_entityos_executable_convergence": {
+    "status": "ADVANCED",
+    "delta": "Re-entered exact current authority and retained donor/executor identities under supervisor 8.66; isolated stale 8.65 execution wording as a current-facing coordination hazard instead of allowing it to suppress the active owner dual-machine authority.",
+    "executor_runtime_credit_preserved": "PASS_AT_EXACT_BB7324_DPL_EN62_NO_SANDBOX_DIAGNOSTIC_SCOPE_ONLY",
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "track_b_hcu_and_typed_entry": {
+    "status": "ADVANCED_SOURCE_TEST_REVIEW_NO_NEW_GUARD",
+    "donor_commit": "0b205544fa262afeb714a697f29d3c891551c424",
+    "donor_commit_message": "test(hcu): close inference v4 rejection-boundary gaps",
+    "test_file": "the artefact/MicroEntity/hcu/test_inference_v4_rejection_boundaries_v1.py",
+    "test_file_blob": "73cc8eedadc4a79b77b3d0710cf9d547b3179b0d",
+    "observed_test_structure": {
+      "top_level_test_methods": 10,
+      "negative_subcases_observed": 14,
+      "positive_replay_persistence_property": 1,
+      "covered_boundary_classes": [
+        "GRID route-decision cross-binding",
+        "entry event cross-binding",
+        "entry admission cross-binding",
+        "generation cross-binding",
+        "route canonicalization downgrade",
+        "verified-load engine identity cross-binding",
+        "post-admission checkpoint/tokenizer/runtime/build digest mutation",
+        "loader lease/consumption receipt mutation",
+        "missing model output_ref/output_sha256",
+        "SQLite connection restart exact replay persistence"
+      ]
+    },
+    "execution_observation": "NO_CI_STATUS_AND_NO_PULL_REQUEST_WORKFLOW_RUNS_OBSERVED_FOR_0b205_HEAD",
+    "claim_scope": "SOURCE_TEST_ONLY_NOT_EXECUTED_BY_THIS_ORGAN_AT_AUTHORIZED_EXACT_RUNTIME_IDENTITY",
+    "reason_no_additional_guard": "Supervisor 8.66 runtime-first gate pauses source-guard proliferation unless executable counterevidence requires a guard. The current donor already supplies direct deterministic boundary tests; the next discriminator is executing them at exact identity."
+  },
+  "external_solution_harvest": {
+    "sources_consulted": [
+      "in-toto Attestation Framework v1.2 Statement/Envelope",
+      "SLSA v1.2 provenance model",
+      "W3C Trace Context",
+      "IBM activation-steering / Conditional Activation Steering",
+      "Multi-component Causal Tracing in Large Language Models (arXiv:2606.03085)",
+      "Activation Steering Induces Emergent Misalignment (arXiv:2606.08682)"
+    ],
+    "principles_extracted": [
+      "Bind claims to immutable digest-identified subjects rather than names alone.",
+      "Separate untrusted external parameters/caller claims from trusted control-plane-generated execution metadata.",
+      "Represent executor/builder identity and invocation identity explicitly; provenance quality depends on the trust boundary of that identity.",
+      "Keep whole-trace causal identity distinct from per-operation parent/span identity; caller trace flags are not authority.",
+      "For J-Space/GWT causality, require controlled interventions and measured target effects rather than recurrence, textual coherence or self-report.",
+      "Activation steering can produce off-target behavioral changes; steering-readiness evaluation must include negative/off-target and broad-behavior regression checks, not only target-direction gain."
+    ],
+    "clay_native_fusion": "Adopt the identity and verification principles, not a second attestation truth store: existing EntityOS/HCU receipts should remain canonical candidates/measurements, with causal_event_id separated from admission/invocation identity and model/checkpoint/tokenizer/runtime/build resources digest-bound to the exact execution record. Any optional DSSE/in-toto-compatible export should be a projection over canonical receipts, never a competing authority."
+  },
+  "track_c_global_jspace_gwt_training_readiness": {
+    "status": "ADVANCED_RESEARCH_DESIGN_NO_MODEL_RUNTIME_CREDIT",
+    "delta": "External causal-intervention and activation-steering evidence strengthens the JSPACE_VECTOR_CONTROL_ABI/v1 evaluation requirement: every future steering/control experiment should bind intervention identity, model/runtime identity, target metric, negative/off-target metrics, and lesion/rescue or control condition into the same causal trace family.",
+    "hypothesis": "A J-Space trace family that couples exact intervention identity with target and off-target measurements will discriminate real model-specific causal control from prompt/schema recurrence more efficiently than adding more narrative workspace labels.",
+    "counterhypothesis": "The added causal metadata may only document correlations if the experiment lacks real hidden-state intervention, randomized/control conditions, or model-specific execution; metadata alone cannot create causality.",
+    "next_discriminator": "Run an exact model-specific baseline/control/intervention comparison under an authorized zero-cost local or clay-direct-dev sandbox after the executable chain reaches actual model invocation; require intervention/no-intervention pairing and off-target regressions before any J-Space causal promotion.",
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "execution_surface_status": {
+    "authorized_surfaces_by_owner_and_8_66": [
+      "clay-direct-dev VPS sandbox",
+      "local workstation as normal Linux development user"
+    ],
+    "surface_available_to_this_chatgpt_organ": "NO_DIRECT_LOCAL_OR_VPS_BRIDGE_TOOL_EXPOSED_IN_THIS_SESSION",
+    "classification": "TOOL_SURFACE_UNAVAILABLE_NOT_PRODUCT_FAILURE",
+    "prohibited_inferences": [
+      "do not treat ChatGPT container execution as canonical local/VPS runtime evidence",
+      "do not infer donor tests passed from source existence",
+      "do not infer runtime failure from absent CI/workflow runs"
+    ]
+  },
+  "credits": {
+    "preexisting_exact_executor_function_runtime_diagnostic": "PASS_AT_EXACT_BB7324_DPL_EN62_NO_SANDBOX_SCOPE",
+    "donor_0b205_inference_v4_source_tests": "PRESENT_UNEXECUTED_AT_BOUND_RUNTIME_SCOPE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On an exposed authorized local-workstation or clay-direct-dev bridge, checkout exact donor 0b205544fa262afeb714a697f29d3c891551c424 with clean-tree/source digest binding; record Ubuntu/Python/sqlite identities and secret/resource fences; execute test_inference_v4_rejection_boundaries_v1.py plus its required focused dependency tests; bind stdout/stderr, exit status, result digest and cleanup. Only on exact PASS should a successor executor rebind to donor 0b205 or later. Then advance actual model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific J-Space/GWT intervention/control trace. Do not restore synthetic EXACT_INFERENCE_V4 marker aliases.",
+  "acceptance": "IN_PROGRESS"
+}

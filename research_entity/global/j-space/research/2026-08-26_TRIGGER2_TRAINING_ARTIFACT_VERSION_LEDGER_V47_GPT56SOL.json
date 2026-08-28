@@ -1,0 +1,108 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v47",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V46_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V46",
+  "observed_main_before_write": "fd8c65d714fbe482ac6343229c2de67b71adedf2",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "freeswarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V46 promoted a generic declared-current/consumed-stale bypass to the next P0. Exact source audit of f30bf2c now narrows that concern: in the current no-model fixture, task selection consumes only snapshot['tasks'] from the same explicit held read-only SQLite transaction whose covered S1 fields produce state_digest, and the child has no second cognition-relevant input channel. Therefore a generic observed-read facade would duplicate the already source-bound task selection at this narrow scope. The stronger unresolved consumed-input boundary is now the real Qwen3.5 model call: exact rendered model-visible bytes/tokens plus exact tokenizer/template/runtime/checkpoint consumed identity remain unproven by the current loader probe v1.",
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V46_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V47_GPT56SOL.json",
+      "reason": "the consumed-input gap is narrowed from current deterministic fixture task selection to actual future model-visible/checkpoint consumption"
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_F30_CONSUMED_INPUT_SCOPE_AUDIT_V1_GPT56SOL.json",
+      "source_commit": "fd8c65d714fbe482ac6343229c2de67b71adedf2",
+      "status": "CURRENT_STATIC_SOURCE_SCOPE_AUDIT_NONPROMOTING",
+      "finding": "The exact f30 child task-selection control flow is bound to the held S1 snapshot; generic hidden/unobserved read claims remain unproven outside that exact no-model path.",
+      "credit": "ZERO_RUNTIME_ZERO_MODEL_ZERO_TRAINING_CREDIT"
+    },
+    {
+      "artifact": "tools/trigger2_grid10_atomic_membership_cohort_acceptance_v1.py",
+      "source_commit": "f30bf2c8dc21a4a8f2a8f68e7a68d980f5f03476",
+      "status": "CURRENT_FUSED_DETERMINISTIC_SOURCE_CANDIDATE_NOT_RUNTIME_OBSERVED",
+      "finding": "physical same-cohort + held S1 + packet/PID + monotonic membership + atomic fan-in source chain is present; no repository-bound runtime receipt observed"
+    },
+    {
+      "artifact": "tools/trigger2_qwen35_checkpoint_candidates_gate_v4.py",
+      "status": "CURRENT_CHECKPOINT_SOURCE_INTEGRITY_GATE_SELECTION_UNRESOLVED",
+      "finding": "The gate distinguishes loader activity from exact consumed checkpoint identity and explicitly returns consumed_identity_match=UNPROVEN_BY_LOADER_PROBE_V1; selected candidate remains null until matched evaluation and selection-grade consumed identity close.",
+      "credit": "ZERO_CHECKPOINT_WINNER_CREDIT"
+    }
+  ],
+  "next_p0_chain": {
+    "id": "QWEN35_MODEL_VISIBLE_AND_CHECKPOINT_CONSUMED_IDENTITY",
+    "required_bindings": [
+      "exact immutable checkpoint revision and complete file-manifest identity",
+      "exact tokenizer.json/config/chat-template identity used for the call",
+      "selection-grade evidence of weight/checkpoint bytes actually consumed by the loader/runtime, not only path-level loader activity",
+      "exact model-visible rendered input bytes and/or token-id sequence digest after template/tokenization",
+      "exact runtime/build/backend identity",
+      "model call identity bound to input digest + consumed checkpoint identity + output digest",
+      "downstream NODE_RESULT semantic body bound to that exact model output while deterministic membership/process/snapshot/cohort authority stays external"
+    ],
+    "fail_closed_negatives": [
+      "pinned path correct but consumed weight file differs",
+      "tokenizer or chat template drifts while checkpoint revision remains fixed",
+      "rendered prompt text differs but declared task/snapshot metadata remains the same",
+      "token-id sequence differs because of tokenizer/template drift",
+      "model output receipt is transplanted across checkpoint/input identities",
+      "loader activity exists but complete consumed identity cannot be attested"
+    ],
+    "promotion_rule": "No checkpoint winner, model runtime, J-Space model or training promotion from source integrity or loader activity alone."
+  },
+  "training_eval_course_delta": {
+    "positive_training_admission": "BLOCKED",
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "model_target": "semantic cognitive transition candidate only",
+    "new_hard_boundary": "declared prompt/checkpoint metadata is not evidence of what the model actually consumed"
+  },
+  "hypothesis": "Now that the deterministic GRID10 source chain is substantially fused, selection-grade model-visible/checkpoint consumed identity is a higher-information Trigger-2 gate than adding generic read instrumentation to a no-model fixture. Closing it will make subsequent matched checkpoint evaluation and model-specific J-Space claims causally interpretable.",
+  "counterhypothesis": "Path-bound immutable revision plus complete checkpoint manifest and deterministic prompt construction may be sufficient without byte-level loader/input attestation. The fail-closed transplantation/drift negatives should test this: if path-level evidence cannot distinguish changed consumed bytes or tokenization, stronger consumed identity is necessary before winner/model credit.",
+  "execution_decision": {
+    "freeswarm": "HARD_OFF",
+    "provider_preflight": "DO_NOT_RUN",
+    "provider_execution": "DO_NOT_RUN",
+    "vps_execution": "NOT_PERFORMED_THIS_CYCLE",
+    "training_execution": "NOT_AUTHORIZED",
+    "runtime_pin": "DO_NOT_CREATE_FROM_SOURCE-ONLY STATE"
+  },
+  "credits": {
+    "research_delta": 1,
+    "consumed_input_scope_narrowing": 1,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Build or audit a deterministic Qwen3.5 model-call receipt contract that binds complete checkpoint/tokenizer/template/runtime identity plus exact rendered model-visible input/token ids to the model output digest, and add drift/transplant negatives. Keep it source/eval-only under current FREE_ONLY/HARD_OFF authority; do not select a checkpoint winner or admit training rows until exact consumed identity and matched evaluation close."
+}

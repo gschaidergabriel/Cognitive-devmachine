@@ -1,0 +1,54 @@
+{
+  "schema": "ClayVerseVercelPythonRuntimeDiagnosis/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:02:00+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed": "3e5e80864f8c7e946966d8139dd16815068bd3e8",
+  "scope": "adjudication of already-started Vercel Sandbox PR501+PR499 v2 counterevidence; no product promotion",
+  "execution": {
+    "project": "dr-unterweger",
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "original_deployment": "dpl_CmQJ5bkaXf4GUxZKJgrMq9QSH3wo",
+    "original_staging_head": "dc2b524961137c40c427cc6d371d411ee6c4cfac",
+    "diagnostic_deployment": "dpl_7H6XmBbeCzqXeLBEH6fD9vYc47uG",
+    "diagnostic_staging_head": "e76a8fcf27653504eb9b53b6429832044b93b9bb",
+    "runtime": "python3.13",
+    "network_policy": "DENY_ALL",
+    "sandbox_started": true,
+    "sandbox_stopped": true,
+    "feedback_blob": "b293b8c2903eb01ce83523b0d483c3ebbdafee8c",
+    "retrieval_blob": "b264802d77917cd5c81ef091bc0a07cdf3b06393",
+    "blob_binding": "PASS",
+    "test_exit_code": 1,
+    "diagnostic_output": "Traceback reached Python import sqlite3; Vercel Python 3.13 runtime raised ModuleNotFoundError: No module named '_sqlite3'."
+  },
+  "adjudication": {
+    "classification": "EXECUTION_HARNESS_RUNTIME_DEPENDENCY_BLOCKER_MISSING_SQLITE3",
+    "microclay_semantic_fail": false,
+    "microclay_semantic_pass": false,
+    "whole_clayverse_pass": false,
+    "whole_clayverse_fail": false,
+    "reason": "The probe failed before MicroClay retrieval/feedback assertions executed. The observed exit=1 is caused by the Sandbox Python runtime lacking the _sqlite3 extension required by the probe's in-memory SQLite harness.",
+    "v2_to_v3_transfer": "FORBIDDEN",
+    "surviving_target": "PR484 schema-8 policy-v3 plus PR550 explicit-feedback stack requires its own exact execution"
+  },
+  "execution_surface_constraints": {
+    "current_free_preview_capacity": "BLOCKED_BY_API_DEPLOYMENTS_FREE_PER_DAY_CAP",
+    "additional_preview_for_this_lane": "NOT_STARTED",
+    "historical_nested_oci_probe": {
+      "deployment": "dpl_84M7gmb85kvx5KV4tG9ZqLL9oy4t",
+      "result": "BLOCKED_OCI_TOOLCHAIN_PROVISION",
+      "detail": "Amazon Linux 2023 repository exposed no podman/buildah package in that probe"
+    }
+  },
+  "coordination": {
+    "unusual_experiment_count_added": 0,
+    "shared_go_unusual_experiment_slot": "ALREADY_CLAIMED_ON_MAIN",
+    "duplicate_unusual_experiment": "FORBIDDEN"
+  },
+  "next_gate": "When Vercel free-preview admission returns, refresh current main and the surviving MicroClay v3 stack, then make SQLite capability an explicit Sandbox prerequisite (python3 import sqlite3 plus a real SQLite transaction must pass) before spending the same Sandbox on exact-source MicroClay/UnifiedDB regressions. If that prerequisite fails, classify the runtime surface as unsuitable for SQLite-backed ClayVerse tests and do not infer product failure. Do not rerun the superseded v2 composition merely to chase a green result.",
+  "evidence_scope": "EXACT EXECUTION-HARNESS DIAGNOSIS; NO PRODUCT SEMANTIC PROMOTION"
+}

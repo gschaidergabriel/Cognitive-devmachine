@@ -1,0 +1,13 @@
+{
+  "origin_actor": "freepool-fallback-secondary",
+  "actor_role": "FALLBACK_SYNTHESIS_RESEARCH_ORGAN",
+  "provider": "NVIDIA NIM / Mistral AI (free-tier pool)",
+  "runtime_model": "mistral-small",
+  "paket_id": "paket-1787850064289-324764",
+  "session_id": "harness-sess-1787850064289-4e0496",
+  "fallback_reason": "Gabriels Ablaufvorgabe Schritt 2: Aider-Schwarm soll das bereits lauffaehige Script vor dem 72h-Start noch haerten/perfektionieren, in kleinen abgegrenzten Paketen statt einem Monolith-Auftrag",
+  "auftrag": "In der Datei research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_packages_v1.py (bereits vollstaendig funktionsfaehig, 12/12 Tests gruen in tests/test_frankenstein_packages_v1.py) pruefe NUR die beiden Funktionen claim_next_package() und mark_package_done() auf zusaetzliche, bisher NICHT getestete Robustheitsluecken (z.B. gleichzeitiger Aufruf von mark_package_done() durch zwei Knoten fuer dasselbe Paket, oder claim_next_package() waehrend die SQLite-Datei kurzzeitig durch einen anderen Prozess gesperrt ist). Wenn du eine ECHTE Luecke findest: fuege 1-3 gezielte zusaetzliche Tests in tests/test_frankenstein_packages_v1.py hinzu (nicht die bestehenden 12 Tests aendern) und falls noetig einen kleinen, gezielten Fix in frankenstein_packages_v1.py. Wenn du KEINE echte Luecke findest: sag das ehrlich und aendere nichts. Fuehre die Tests selbst aus (python3 -m pytest tests/test_frankenstein_packages_v1.py -q) und bestaetige dass alle (alte + evtl neue) gruen sind, bevor du fertig bist.",
+  "task_classification": "L0_NO_RESEARCH_DELTA_oder_L1_ENGINEERING_DELTA (automatische Einstufung nicht vorgenommen -- menschliche/claude-code-lead-Pruefung empfohlen, decision_weight=0.5 siehe RESEARCH_ACTOR_REGISTRY.json)",
+  "erzeugt_am": "2026-08-27T17:03:19Z",
+  "geprueft_durch": "harness_audit.py (git-Verlauf <-> zero_raum_ruf, exakter Abgleich)"
+}

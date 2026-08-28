@@ -1,0 +1,118 @@
+{
+  "schema": "CLAY_TRIGGER2_TEMPORAL_CHECKPOINT_RETENTION_RESEARCH_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_DELTA_NONCANONICAL_EVAL_METHOD_ONLY",
+  "observed_main_before_write": "0011673f34bc55b838f52420376df6d68e40d9be",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "implementation_compatibility_codename": "Xeno",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false
+  },
+  "nonduplicate_check": {
+    "result": "NO_CURRENT_TRIGGER2_TEMPORAL_FORGETTING_OR_CHECKPOINT_TRAJECTORY_EVAL_ARTIFACT_FOUND_BEFORE_WRITE",
+    "scope": "repository search for temporal forgetting / checkpoint retention / training trajectory terms",
+    "note": "Historical Frank fine-tune planning is donor provenance only and is not a current Trigger-2 successor. This delta does not supersede the current Trigger-2 ledger or current GRID10/identity/transition blockers."
+  },
+  "project_basis": [
+    {
+      "source": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V37_GPT56SOL.json",
+      "status_at_observation": "CURRENT_LEDGER_BEFORE_LATER_MAIN_MOVEMENT",
+      "observed": "Positive training admission remains blocked; accepted_dataset_tokens=0; training_executed=false; checkpoint_winner=null; issue #2022 executable-transition supervision and issue #2021 checkpoint registry/gate contract remain open."
+    },
+    {
+      "source": "research_entity/global/j-space/research/vps_run_receipts/2026-08-26_TRIGGER2_FINAL_VPS_TRAINING_READINESS_REPORT.md",
+      "observed": "Checkpoint identity is available for BASE/POSTTRAINED/TARGET_MEASURED but no winner is declared; matched behavioral evidence is still partial and representation-level metrology contains a known instrumentation bug."
+    },
+    {
+      "source": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TWO_AXIS_ANSWERABILITY_CORRECTNESS_RESEARCH_DELTA_GPT56SOL.json",
+      "observed": "Current eval design already separates epistemic answerability from candidate correctness; this delta does not duplicate that axis and instead addresses time-local acquisition/forgetting during future fine-tuning."
+    }
+  ],
+  "external_method_research": [
+    {
+      "source": "Li et al. (2026), Temporal Sampling for Forgotten Reasoning in LLMs",
+      "url": "https://aclanthology.org/2026.acl-long.1305/",
+      "classification": "EXTERNAL_PRIMARY_RESEARCH_METHOD_ONLY",
+      "finding": "Across the paper's evaluated settings, models sometimes solved examples at intermediate checkpoints that they missed at the final checkpoint; more than 20% of final errors were once correct on average.",
+      "project_implication": "A future Xeno fine-tuning pilot should preserve checkpoint-trajectory observability instead of treating the final checkpoint as the only evidence of whether a family was learned. This does not establish temporal forgetting in the current Qwen3.5-0.8B target."
+    },
+    {
+      "source": "Xue et al. (2026), Why Supervised Fine-Tuning Fails to Learn: A Systematic Study of Incomplete Learning in Large Language Models",
+      "url": "https://aclanthology.org/2026.acl-long.1393/",
+      "classification": "EXTERNAL_PRIMARY_RESEARCH_METHOD_ONLY",
+      "finding": "The paper reports heterogeneous incomplete learning after SFT and shows that aggregate metrics can hide persistent unlearned subsets, including sequential-forgetting and rare/complex-pattern failure modes.",
+      "project_implication": "Trigger-2 evaluation should retain per-family acquisition and retention diagnostics rather than relying on one aggregate final score. This is method evidence, not current-Xeno evidence."
+    }
+  ],
+  "central_hypothesis": {
+    "id": "H_T2_TEMPORAL_RETENTION_1",
+    "hypothesis": "Final-checkpoint-only evaluation can misclassify a future small Xeno SFT run by hiding transiently learned then forgotten families or by hiding families that never become learned despite aggregate convergence. A preregistered checkpoint-trajectory protocol will expose acquisition, forgetting and interference before promotion.",
+    "counterhypothesis": "For the small curated Trigger-2 corpus and exact 0.8B-class target, required family performance will be approximately monotonic and final-checkpoint evaluation plus ordinary validation is sufficient.",
+    "falsifier": "Run one fixed-budget micro-FT only after current admission/source gates authorize it. Evaluate an immutable TRAIN_DIAGNOSTIC set and family-disjoint VALIDATION at preregistered checkpoints. Reject the added temporal protocol as unnecessary if required-family correctness/retention is monotonic within declared tolerance and final-checkpoint classification never differs materially from the preregistered best-validation checkpoint across repeated seeds."
+  },
+  "proposed_future_protocol": {
+    "training_data": "Only canonically admitted training rows when positive admission is reopened; this delta generates none.",
+    "train_diagnostic": "Immutable diagnostic subset selected before training, not used for gradient decisions except the preregistered analysis itself.",
+    "validation": "Family/provenance-disjoint from training and used for checkpoint selection under a frozen rule.",
+    "final_holdout": "Sealed until checkpoint-selection rule, evaluator, renderer, candidate identities and thresholds are frozen; never repeatedly sampled across checkpoints.",
+    "checkpoint_schedule": "Preregister by optimizer step or consumed-token count before the run; include initialization and final checkpoint plus enough intermediate points to detect non-monotonic acquisition.",
+    "per_family_fields": [
+      "family_id",
+      "provenance_ancestry_id",
+      "checkpoint_id",
+      "optimizer_step",
+      "consumed_training_tokens",
+      "exact_model_artifact_digest",
+      "exact_adapter_or_delta_digest_if_any",
+      "evaluator_digest",
+      "correct_count",
+      "total_count",
+      "required_axis_results",
+      "first_learned_checkpoint",
+      "best_validation_checkpoint",
+      "final_checkpoint_score",
+      "best_minus_final_forgetting_delta",
+      "ever_learned_then_forgotten",
+      "never_learned",
+      "retention_regression"
+    ],
+    "promotion_rule": "No aggregate score may hide a failed required family/authority/retention floor. Checkpoint selection uses the frozen validation rule only; final HOLDOUT is opened once after selection.",
+    "authority_boundary": "Checkpoint trajectories are model/evaluation evidence only. They do not mint S0 truth, admission authority, capability, effect authority, J-Space causality, HCU runtime credit or training credit by themselves."
+  },
+  "interaction_with_current_training_design": [
+    "Keep semantic decision, episode-local binding, executable cognitive transition and epistemic answerability/correctness as separately scored required axes where current project design already distinguishes them.",
+    "Track each required axis across checkpoints so a late binder gain cannot hide loss of authority integrity, abstention, state-transition correctness or exact-format behavior.",
+    "Do not use temporal sampling across the sealed final holdout; the purpose here is training-trajectory diagnosis and checkpoint selection under validation, not holdout maximization.",
+    "Do not interpret an intermediate-checkpoint success as proof that the final training recipe is acceptable if retention floors fail later.",
+    "Do not use this method delta to bypass issue #2021, issue #2022, positive-admission gates, physical GRID10 proof, J-Space metrology repair or exact checkpoint/input identity requirements."
+  ],
+  "candidate_eval_cases_not_training_rows": [
+    "FAMILY_CORRECT_AT_STEP_100_BUT_WRONG_AT_FINAL -> TEMPORAL_FORGETTING_SIGNAL_NOT_FINAL_PASS",
+    "FAMILY_NEVER_CORRECT_DESPITE_AGGREGATE_VALIDATION_GAIN -> INCOMPLETE_LEARNING_SIGNAL",
+    "BINDING_IMPROVES_WHILE_AUTHORITY_INTEGRITY_REGRESSES -> REJECT_PROMOTION",
+    "FINAL_AGGREGATE_BEST_BUT_REQUIRED_FAMILY_RETENTION_FLOOR_FAILS -> REJECT_PROMOTION",
+    "INTERMEDIATE_CHECKPOINT_BEST_ON_VALIDATION_AND_FROZEN_RULE_SELECTS_IT -> ELIGIBLE_FOR_ONE_FINAL_HOLDOUT_EVALUATION_ONLY",
+    "HOLDOUT_REPEATEDLY_OPENED_TO_PICK_TEMPORAL_CHECKPOINT -> LEAKAGE_FAIL"
+  ],
+  "artifact_lifecycle_effect": {
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "current_priority_change": "NONE; attach this as required eval instrumentation before the first future authorized micro-FT rather than displacing current proof/identity/transition blockers."
+  },
+  "next_discriminator": "When current positive-admission and checkpoint-contract gates eventually open a fixed-budget micro-FT, preregister checkpoint cadence and per-family validation/retention floors before the run. Until then, do not create training rows or training credit from this method delta."
+}

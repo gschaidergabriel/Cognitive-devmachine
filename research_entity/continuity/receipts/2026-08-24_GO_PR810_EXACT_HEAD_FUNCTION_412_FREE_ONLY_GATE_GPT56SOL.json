@@ -1,0 +1,97 @@
+{
+  "schema": "ENTITYOS_HCU_GO_FUNCTION_LEVEL_FREE_ONLY_GATE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "d2fe65e996041b271364ec41c9014674c1bf7bbf",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_64.json",
+    "runtime_first": true,
+    "source_guard_proliferation": "PAUSED_UNLESS_EXECUTABLE_COUNTEREVIDENCE_REQUIRES_GUARD",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_EXACT_SOURCE_RUNTIME_ADMISSION_OBSERVATION"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "head_sha_observed": "fb844d8bea0d6de3f304d3aa48114b735e0d0613",
+    "head_tree": "0917f768936d606b320ed62a90a111ce8d667bb7",
+    "deployment_id": "dpl_4dE6aHNYPqNZmrBd5U1WfboFX9Qk",
+    "deployment_state": "READY",
+    "deployment_git_sha": "fb844d8bea0d6de3f304d3aa48114b735e0d0613",
+    "deployment_url": "dr-unterweger-2cfopabip-gabriel-gschaiders-projects.vercel.app",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx"
+  },
+  "exact_deployed_source": {
+    "route": "/api/hcu-jspace-binding-v2-capsule",
+    "route_file": "mcp/vercel-sandbox-mcp/api/hcu-jspace-binding-v2-capsule.js",
+    "route_blob_sha": "4fc38065edf607e8fb0d8a22841dbf34fa13b0b8",
+    "admission_file": "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+    "admission_blob_sha": "de6007fe152c3114e03d0578866a83355ef157a7",
+    "admission_remaining_sandbox_quota_directly_observed": false,
+    "admission_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "admission_predicate_requires_direct_quota_observation": true,
+    "sandbox_create_is_downstream_of_admission": true,
+    "route_scope_warning": "This route is an older J-Space binding-v2 component route and is not promoted as the current v3 semantic target. Its function-level FREE_ONLY admission result is still valid at the exact deployed source identity because the shared cost gate executes before Sandbox.create."
+  },
+  "runtime_observation": {
+    "source": "Vercel runtime logs scoped to exact deployment",
+    "timestamp_utc": "2026-08-24T03:55:50Z",
+    "request": "GET /api/hcu-jspace-binding-v2-capsule",
+    "http_status": 412,
+    "runtime_class": "serverless",
+    "cache": "MISS",
+    "function_level_result_observed": true,
+    "response_body_observed": false,
+    "request_initiator_proven": false,
+    "interpretation": "At this exact deployment/source identity, a GET reached the serverless handler and returned 412. The deployed handler has no other 412 branch: after GET and preview authorization it returns denyUnadmittedSandbox when sandboxExecutionAdmitted() is false. The deployed admission predicate is false because remaining quota is not directly observed and runtime_gate is BLOCKED_QUOTA_UNOBSERVED. Therefore the observed function-level result verifies the fail-closed FREE_ONLY cost gate at this exact source identity, before Sandbox.create.",
+    "sandbox_create_performed": false,
+    "environment_capability_probe_executed": false,
+    "hcu_regression_executed": false,
+    "classification": "FUNCTION_LEVEL_FREE_ONLY_COST_GATE_PASS_AT_EXACT_DEPLOYED_SOURCE; NO_SANDBOX_OR_HCU_RUNTIME_CREDIT"
+  },
+  "protected_access_observation": {
+    "current_v3_grid10_route": "/api/hcu-jspace-grid10-binding-capsule",
+    "authenticated_fetch_observed_status": 302,
+    "authenticated_fetch_result": "VERCEL_SSO_REDIRECT_BEFORE_FUNCTION_RESULT",
+    "current_v3_grid10_serverless_result_observed": false,
+    "boundary": "The 412 observation must not be projected from the older binding-v2 route into a v3/GRID10 component runtime PASS. It proves only the shared fail-closed FREE_ONLY admission behavior at the exact deployed executor identity."
+  },
+  "hypothesis": "The immediate executable blocker is now split cleanly: Function-level execution can reach the shared FREE_ONLY gate on the exact successor deployment, but Sandbox execution remains intentionally closed because remaining included Sandbox quota is not directly observed. Protected access to the current v3/GRID10 route remains separately blocked before a function result.",
+  "counterhypothesis": "The observed 412 could be treated as HCU/J-Space component execution, or the exact READY deployment/Hobby plan could be treated as sufficient authority to proceed to Sandbox.create.",
+  "discriminator_result": "REJECTED: exact deployed source shows 412 occurs before Sandbox.create and only because direct remaining-quota authority is absent. READY/Hobby identity does not open the gate, and no downstream Python/SQLite/HCU/model/J-Space code executed.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact successor deployment now has function-level evidence that the shared FREE_ONLY cost gate executes and fails closed before Sandbox.create; blocker precision improved from deployment/protection-only evidence to exact handler-level admission evidence.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "HCU_NO_CHANGE_WITH_REASON: no Sandbox/HCU code executed; supervisor 8.64 pauses additional source-only guard proliferation absent executable counterevidence requiring a guard. Existing route/source boundaries were inspected only to scope the 412 correctly.",
+    "C_GLOBAL_JSPACE_GWT_AND_FREE_LOCAL_08B_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no real model invocation, loader-consumption observation, J-Space/GWT intervention, causal trace, or training run occurred. The v2 route result is not promoted to v3 or model runtime evidence."
+  },
+  "credits": {
+    "free_only_cost_gate_exact_source": "PASS_AT_DECLARED_FUNCTION_CONTROL_SCOPE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Re-enter current main and live PR1263/PR810 heads before execution.",
+    "Obtain a directly observed remaining included Vercel Sandbox quota/entitlement signal without inferring it from Hobby plan identity and without any paid/upgrade/fallback path.",
+    "Obtain function-level access on the exact current v3/GRID10 route; keep protected-access failures separate from product evidence.",
+    "Only when FREE_ONLY admission is genuinely open, run the supervisor-8.64 exact environment capability probe binding executor/source identity, Python version, sqlite3/_sqlite3 availability, secret fence, result digest and cleanup.",
+    "Only after environment PASS continue canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> J-Space/GWT observation with admitted null/sign-flipped controls where applicable."
+  ],
+  "evidence_boundary": "This receipt promotes only exact-source Function-level fail-closed cost-admission evidence. It does not establish Sandbox execution, Python/SQLite capability, HCU runtime, v3/GRID10 closure, model execution, J-Space causality, training benefit or whole EntityOS acceptance."
+}

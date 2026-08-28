@@ -11,7 +11,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     CLAYVERSE_ENTITYOS_PATH=/opt/entityos/EntityOS \
     CLAYVERSE_ENTITYOS_SHA256=${ENTITYOS_SHA256} \
     PORT=3000 \
-    DISABLE_AUTOUPDATER=1 \
+    DISABLE_UPDATES=1 \
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 
 # Keep the baseline OS package surface small. Browser xterm and native Claude Code
@@ -67,5 +67,7 @@ RUN useradd --system --uid 10001 --create-home --shell /opt/clayverse/runtime/de
 USER clayverse
 VOLUME ["/var/lib/clayverse", "/workspace"]
 EXPOSE 3000
+# Docker health follows product readiness so canonical state/policy loss fails closed.
+# /healthz remains a separate process-liveness surface for deployment-specific probes.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 CMD ["python","-c","import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:'+os.environ.get('PORT','3000')+'/readyz',timeout=3).read()"]
 ENTRYPOINT ["python","-m","clayverse.service"]

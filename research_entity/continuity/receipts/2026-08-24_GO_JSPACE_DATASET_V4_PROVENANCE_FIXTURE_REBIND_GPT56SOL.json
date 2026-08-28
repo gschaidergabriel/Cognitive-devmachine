@@ -1,0 +1,85 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_DATASET_V4_PROVENANCE_FIXTURE_REBIND/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "6f114740719208c8bb4ec908b7fb405dc7edec20",
+    "schema": "8.63",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_id": false,
+    "new_unusual_experiments": 0,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "ordinary_deterministic_source_fusion": "ALLOWED"
+  },
+  "retained_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "source_fix_commit": "707de21f1b0828ac72a858aa9c51825ffb4234a6",
+    "source_fix_blob": "13b91bee635de9beddfca712548083a4edee3877",
+    "current_head_observed_after_parallel_movement": "cd4c84badf45b723bce9ff33d1da4e3a2c0e25ad",
+    "source_fix_is_ancestor_of_current_head": true,
+    "commits_ahead_of_fix_at_reentry": 3
+  },
+  "finding": {
+    "path": "the artefact/MicroEntity/hcu/test_compile_admitted_jspace_training_dataset_v1.py",
+    "stale_fixture_before_fix": "The admitted-training pipeline test fixture still constructed JSpaceInferenceBinding with HCU_INFERENCE_RECEIPT/v3 and omitted the VerifiedModelExecution/v1 provenance fields required by the current JSpaceBinding/v3 implementation.",
+    "current_production_contract": "JSpaceBinding/v3 requires HCU_INFERENCE_RECEIPT/v4 plus model-execution receipt/observation/executor/invocation, output-producing cell, model-execution role, input digest/size, model call/output provenance, and semantic cross-binds.",
+    "impact": "The stale fixture could not faithfully exercise current admitted dataset pipeline semantics and risked leaving training-readiness regressions behind the production provenance boundary. This is a source/test fidelity defect, not observed runtime or training failure."
+  },
+  "repair": {
+    "inference_receipt_schema": "HCU_INFERENCE_RECEIPT/v4",
+    "added_fixture_fields": [
+      "model_execution_receipt_sha256",
+      "model_execution_observation_sha256",
+      "model_execution_executor_id",
+      "model_execution_invocation_id",
+      "output_producing_cell_id",
+      "model_execution_role",
+      "input_sha256",
+      "input_size"
+    ],
+    "semantic_binds": [
+      "model_execution_invocation_id == model_call_id",
+      "output_producing_cell_id == training trace cell_id",
+      "model_execution_role == training trace role"
+    ],
+    "new_regression": "stale HCU_INFERENCE_RECEIPT/v3 binding fixture fails closed as JSPACE_INFERENCE_BINDING_INFERENCE_SCHEMA_UNSUPPORTED"
+  },
+  "parallel_reentry": {
+    "source_fix_preserved_at_current_head": true,
+    "later_product_compiler_hardening_observed": "compile_admitted_jspace_training_dataset_v1.py now explicitly requires HCU_INFERENCE_RECEIPT/v4 and an external byte/field-consistent admitted inference-receipt registry, preventing binding-only evidence laundering.",
+    "readme_source_ready_boundary_repaired_by_parallel_main_commit": "66a4fe470e79268432c4dd5f91d9a7640d71d58a",
+    "duplicate_readme_write_avoided": true
+  },
+  "execution_evidence": {
+    "github_combined_statuses_for_fix_commit": [],
+    "github_workflow_runs_for_fix_commit": [],
+    "deterministic_test_execution_observed": false,
+    "sandbox_execution_observed": false,
+    "classification": "SOURCE_TEST_FIX_UNEXECUTED"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_EXACT_PR810_DEPLOYMENT_IDENTITY_REENTRY_IN_PRIOR_SAME_MACROCYCLE_RECEIPT; exact-current READY deployment remained unavailable, so no stale deployment was invoked or credited",
+    "track_b_hcu_typed_entry": "HCU_NO_CHANGE_WITH_REASON: the retained Typed Entry -> route -> engine/load -> GRID10 -> ModelExecution causal spine already has a single donor/executor authority; adding a duplicate path would reduce convergence. Next discriminator remains exact admitted execution at immutable executor identity.",
+    "track_c_global_jspace_training_readiness": "ADVANCED: rebound admitted-dataset test fixtures to the current Inference/v4 + VerifiedModelExecution provenance contract and added stale-v3 fail-closed coverage; later donor hardening preserved and extended this direction"
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute the exact current admitted-dataset regression set only on an authorized deterministic/free evidence surface, then bind the strengthened DatasetAdmission + admitted InferenceReceipt/v4 registry checks into the same immutable causal closure used for J-Space training-data acceptance. Independently, PR810 runtime promotion still requires a naturally available included-tier READY deployment at the exact then-current executor SHA before invoking the fixed FREE_ONLY capsule."
+}

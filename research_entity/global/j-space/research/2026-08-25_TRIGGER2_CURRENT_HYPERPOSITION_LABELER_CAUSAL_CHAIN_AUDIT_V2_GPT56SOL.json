@@ -1,0 +1,144 @@
+{
+  "schema": "CLAY_TRIGGER2_CURRENT_HYPERPOSITION_LABELER_CAUSAL_CHAIN_AUDIT/v2",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "reentry_head_before_write": "ffa12bccbaa83f7fc20dbc2d7ffd310572aec353",
+    "training_executed": false,
+    "accepted_dataset_tokens": 0
+  },
+  "supersession": {
+    "predecessor_audit": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_REFERENCE_LABELER_V1_ADVERSARIAL_AUDIT_GPT56SOL.json",
+    "predecessor_status": "SUPERSEDED_FOR_CURRENT_SOURCE_SCOPE",
+    "reason": "Parallel work replaced tools/trigger2_semantic_hyperposition_reference_labelers_v1.py with tools/trigger2_hyperposition_reference_labelers_v1.py before the predecessor audit commit landed. Preserve the predecessor as provenance/negative reasoning, but use this v2 audit for current-source decisions."
+  },
+  "audited_current_source": {
+    "path": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+    "blob_sha": "5f1fba475e64421635016abc1b341dcfbb04b605",
+    "tests_path": "tests/test_trigger2_hyperposition_reference_labelers_v1.py",
+    "tests_blob_sha": "3ffa4e07f373bda0838fd260d7655e0bef17be44",
+    "source_status": "CURRENT_COMPONENT_SOURCE",
+    "training_admission_status": "BLOCKED_PENDING_DERIVATION_CHAIN_AND_ADMISSION_GATE_INTEGRATION"
+  },
+  "repairs_vs_removed_predecessor_source": [
+    "Current branch validation requires the full v/K/E_plus/E_minus/F/T/A/sigma/projection/validity carrier rather than only minimal evidence lists.",
+    "D_resolve now explicitly requires discriminator_admissible together with discriminator_executed.",
+    "U_update requires a relation for every branch and rejects unknown relation values.",
+    "Salience rejects explicit confidence/probability/majority/recurrence/vote proxy fields.",
+    "Merge requires an exact synthetic-equivalence rule and verifies matching v/K/T signatures.",
+    "Current tests add inadmissible-discriminator ordering, majority anti-collapse, merge rejection and full branch-relation coverage cases."
+  ],
+  "remaining_causal_chain_gaps": [
+    {
+      "id": "UPSTREAM_BRANCH_RELATION_DERIVATION_UNBOUND",
+      "severity": "CRITICAL",
+      "finding": "U_update consumes observation.branch_relations as latent generator metadata. The current labeler validates coverage and enum values but does not compute SUPPORT/COUNTER/FALSIFY/NO_EFFECT from the synthetic task-world semantics or require a cryptographically/exactly bound deterministic derivation receipt.",
+      "boundary": "This is acceptable only as a downstream transition primitive if a separately verified generator computes branch_relations deterministically. Without that upstream proof, the training target is still generator-asserted rather than independently labeled.",
+      "required_gate": "Bind every transition row to exact generator source/hash plus a deterministic relation-derivation function/receipt; mutation-test that changing task-world evidence changes only the relations entailed by the formal world."
+    },
+    {
+      "id": "DECISION_ROLE_DERIVATION_UNBOUND",
+      "severity": "CRITICAL",
+      "finding": "Evidence decision_role=NONDECISIVE/DECISIVE_SUPPORT/DECISIVE_CONTRADICTION is caller supplied. D_resolve uses these roles to decide whether a unique eligible branch may resolve.",
+      "required_gate": "Derive decision_role from explicit proof/discriminator semantics and observed result, or require a verified deterministic proof certificate. Model/generator self-declaration cannot be the root label source."
+    },
+    {
+      "id": "DISCRIMINATOR_EXECUTION_AND_ADMISSIBILITY_RECEIPT_UNBOUND",
+      "severity": "HIGH",
+      "finding": "D_resolve now checks discriminator_executed and discriminator_admissible, but both are context booleans rather than exact execution/admission receipts. all_other_branches_explicitly_falsified is also caller supplied.",
+      "required_gate": "Consume or bind an exact discriminator receipt and derive all-other-branches-falsified from branch state instead of a free boolean."
+    },
+    {
+      "id": "DISCRIMINATOR_SEPARATION_METADATA_UNDERIVED",
+      "severity": "HIGH",
+      "finding": "U_d_test_order ranks declared separates_branch_pairs and novel_independence_groups but does not derive pair separation from each branch's predicted test outcome. A generator can overstate discrimination utility.",
+      "required_gate": "Represent predicted discriminator outcome per live branch and compute separated pairs/partitions mechanically; compute novelty from evidence/dependence identities rather than an integer claim."
+    },
+    {
+      "id": "DEPENDENCE_GROUP_CAN_REPEAT_AS_MULTIPLE_EVIDENCE_ITEMS",
+      "severity": "HIGH",
+      "finding": "Evidence deduplication keys on (evidence_id, provenance_ancestry_id, independence_group). Distinct evidence IDs in the same dependence group remain multiple E_plus/E_minus entries. Although D_resolve does not majority-count them, the latent training state still exposes correlated multiplicity and can teach a frequency shortcut.",
+      "required_gate": "Preserve provenance records while separately normalizing/collapsing evidence-strength contribution by dependence/causal group; add duplicated-packaging invariance tests."
+    },
+    {
+      "id": "BRANCH_PERMUTATION_AND_ID_INVARIANCE_NOT_TESTED",
+      "severity": "MEDIUM",
+      "finding": "The source preserves input branch order and the current tests do not compare semantically identical episodes under branch-order/ID permutations.",
+      "required_gate": "Canonicalize/evaluate semantic outputs modulo branch renaming and require update/resolve/discriminator rankings to be equivariant under branch permutation."
+    },
+    {
+      "id": "SOURCE_TEST_PRESENCE_NOT_EXECUTION",
+      "severity": "BOUNDARY",
+      "finding": "Current test files exist on main, but this cycle could not execute a local clone because the local container could not resolve github.com. Source/test presence therefore receives no execution credit here.",
+      "required_gate": "Run the exact committed tests on an available admitted/free deterministic surface and bind source identity; infrastructure failure is not a scientific failure."
+    }
+  ],
+  "status_revision": {
+    "old_blocker": "D/E impossible because reference labelers do not exist.",
+    "after_current_main": "Labeler primitives exist and solve several structural invariants.",
+    "current_precise_blocker": "D/E positive transition labels remain non-admissible until the full chain task-world semantics -> branch relations/decision roles -> update -> discriminator receipt -> resolve is mechanically derived and source-bound, then enforced by the candidate admission gate.",
+    "classification": "BLOCKER_REDUCED_FROM_MISSING_IMPLEMENTATION_TO_CAUSAL_DERIVATION_AND_INTEGRATION"
+  },
+  "external_research_updates": [
+    {
+      "source": "arXiv:2305.08298",
+      "use": "METHOD_INPUT",
+      "delta": "Keep arbitrary/flipped episode-local label mappings as binder pressure; they discourage reliance on fixed semantic label priors."
+    },
+    {
+      "source": "arXiv:2505.20896",
+      "use": "METHOD_INPUT",
+      "delta": "Systematic variable binding/routing is mechanistically plausible under training, but positive mechanism claims remain checkpoint-specific and causal."
+    },
+    {
+      "source": "arXiv:2511.05743",
+      "use": "COUNTEREVIDENCE_TO_INDUCTION_HEAD_NECESSITY",
+      "delta": "Do not turn the induction-head analogy in the training-scope report into a required internal mechanism; optimize behavioral/state invariants and diagnose learned circuitry afterward."
+    },
+    {
+      "source": "arXiv:2405.15071",
+      "use": "METHOD_INPUT_FOR_C",
+      "delta": "Track C symbolic-reasoning generalization through extended training and frozen OOD depth/vocabulary families; train-loss convergence is not sufficient evidence of rule learning."
+    },
+    {
+      "source": "ACL 2025 Selective Abstention Learning",
+      "use": "METHOD_INPUT_FOR_E",
+      "delta": "An explicit abstention objective is plausible training pressure for UNKNOWN/ABSTAIN, but project-specific epistemic correctness and calibration gates remain required."
+    }
+  ],
+  "new_training_and_eval_rules": [
+    "A deterministic transition function is not a reference labeler if its decisive relation labels are unconstrained caller metadata.",
+    "Reference-label provenance must form an executable chain from task-world specification to target transition, not begin at a generated class/effect field.",
+    "Keep semantic Hyperposition present from the first integrated episode while staging full D optimization late.",
+    "Do not hard-code classic induction-copy circuitry as the training target; mechanism hypotheses remain eval/research targets.",
+    "For C, store checkpoint curves for train, lexical OOD, rule-depth OOD and composition OOD so late grokking or memorization can be distinguished.",
+    "For E, measure selective risk/coverage or equivalent abstention utility in addition to raw ABSTAIN frequency so refusal suppression and epistemic restraint are not conflated.",
+    "Correlated evidence multiplicity must be an invariance test even when the deterministic resolver itself does not majority-count."
+  ],
+  "priority_order": [
+    "P0 derivation-bind branch_relations and evidence decision_role to deterministic task-world semantics",
+    "P1 bind discriminator execution/admissibility and compute separation from predicted branch outcomes",
+    "P2 add dependence-group normalization plus branch-permutation/evidence-repackaging invariance tests",
+    "P3 integrate exact labeler/generator hashes and transition receipts into a gate-v2 successor",
+    "P4 only then regenerate high-coverage A/B/C/E and census trajectories into Hyperposition-native before/after rows",
+    "P5 freeze checkpoint/tokenizer/ABI/splits and run smallest FREE_ONLY pilot; accepted dataset/training/J-Space credit stays zero until its own gates"
+  ],
+  "credits": {
+    "research_revision_delta": 1,
+    "new_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Implement or review the generator-side deterministic derivation layer that produces branch_relations and decision_role from formal synthetic task-world facts/rules/observations, then bind its source/hash and discriminator receipt into a gate-v2 transition admission path; do not expand D/E positive volume before this causal label chain passes adversarial invariance tests."
+}

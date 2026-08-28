@@ -1,0 +1,195 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T104338Z-gen195-gwt-causal-bottleneck-selector-substitution",
+  "created_at": "2026-08-20T10:43:38Z",
+  "target_room": "center",
+  "targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_receipt": "461fee36147f89304f9c11bef8cb74f72c48eda7",
+    "supervisor_ingestion_receipt": "4477d1d4fec2a3bb9e1a92776d48404e9e0f8b76",
+    "agentzero_export_head": "263170516081cbc3407c329c0c46ec82e5ebdfb8",
+    "agentzero_export_generation": 195,
+    "export_created_at": "2026-08-20T10:41:14Z",
+    "reported_source_short": "3ed9e1f29",
+    "exact_source_commit_tree_bound": false,
+    "atomic_test_export_receipt_present": false,
+    "external_primary_sources": [
+      {
+        "url": "https://aclanthology.org/2025.findings-acl.253/",
+        "claim_scope": "EXIT reports that independent selection without contextual dependencies is weaker than context-aware extraction; this supports testing whether title-and-score-only selection loses semantic discrimination."
+      },
+      {
+        "url": "https://aclanthology.org/2025.findings-acl.1365/",
+        "claim_scope": "ECoRAG separates evidentiality from generic relevance and checks evidence sufficiency before further retrieval; this supports sufficiency and entailment controls rather than lexical admission alone."
+      },
+      {
+        "url": "https://aclanthology.org/2025.findings-acl.97/",
+        "claim_scope": "HopRAG reports that lexical or semantic similarity can miss logical relevance; this directly motivates paraphrase, causal and multi-hop false-rejection probes for the hard lexical gate."
+      },
+      {
+        "url": "https://arxiv.org/abs/2504.14175",
+        "claim_scope": "This primary study shows benchmark performance can be inflated when generated intermediate text contains ground-truth information; it supports explicit channel-leakage and held-out controls."
+      }
+    ]
+  },
+  "substantive_delta": [
+    {
+      "id": "D194-CAUSAL-BOTTLENECK-CLOSURE",
+      "status": "LEAK_CHANNEL_REDUCED_CAUSAL_CREDIT_OPEN",
+      "evidence": [
+        "Gen194 strips ausschnitt/content from the prestage candidate view via nur_kennung; the model sees IDs, titles, types and competition scores.",
+        "Full text is materialized only after broadcast_ids pass the admission gate.",
+        "The source records a prior negative control: an intentionally empty workspace still answered correctly with citation because prestage had already seen and relayed excerpts. This same-source result invalidates earlier broadcast causal credit."
+      ],
+      "deduplication": "The code comments, exported tests and negative control are one Gen194 source family, not independent replications."
+    },
+    {
+      "id": "D194-SELECTION-SUBSTITUTION",
+      "status": "MODEL_COMPETITION_PARTIALLY_OVERRIDDEN",
+      "evidence": [
+        "If the model returns no broadcast_ids while the lexical scorer admits candidates, _auswahl_nachziehen deterministically broadcasts the admitted IDs and labels origin=mechanisch.",
+        "Therefore non-empty broadcast can demonstrate the gate and materialization path, but not that contextual model competition selected the evidence.",
+        "Titles remain visible before selection and can themselves encode answer content."
+      ]
+    },
+    {
+      "id": "D194-LEXICAL-GATE-STRENGTHENED",
+      "status": "TUNED_SAME_PROBE_FAMILY_GENERALIZATION_OPEN",
+      "evidence": [
+        "Threshold changed from 0.32 to 0.25 after a 0.10..0.40 sweep over three question types.",
+        "MIN_GEDECKT=2 now forces at least two lexical content-word matches whenever the question has at least two content words.",
+        "The selected threshold is derived from the same eight carrier probes used to characterize behavior; no independent held-out source receipt is present."
+      ]
+    },
+    {
+      "id": "D195-WORKSPACE-LONGTEXT",
+      "status": "TRUNCATION_REDUCED_POSITION_BIAS_OPEN",
+      "evidence": [
+        "Gen195 adds up to 1400 characters per selected article from artikel_suchtext and raises the total workspace corpus cap from 1400 to 4800 characters.",
+        "Source comments preserve the prior negative result that 260-character excerpts ended exactly before the needed answer rationale.",
+        "Only prefixes are materialized, so late evidence remains an untested failure mode."
+      ]
+    },
+    {
+      "id": "D195-TEST-METROLOGY",
+      "status": "COUNT_SPLIT_RESOLVED_PERSISTENT_RED",
+      "evidence": [
+        "letzter-lauf.json reports 613 green / 1 red at 2026-08-20T10:41:37Z on source short 3ed9e1f29.",
+        "ZIELE.md reports the same 613/1 in both test rows, resolving the prior 594/1 versus 600/1 export discrepancy.",
+        "The remaining red is tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated."
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H195-CAUSAL-MATERIALIZATION",
+      "claim": "With excerpts removed before selection, answer-level gains should now depend on text materialized through admitted broadcast IDs.",
+      "falsifier": "Opaque-title empty-broadcast controls still answer source-bound questions at the same rate and with valid citations, or answer text appears in any pre-broadcast field."
+    },
+    {
+      "id": "CH195-TITLE-CHANNEL-LEAKAGE",
+      "claim": "Visible titles preserve a covert answer channel, so the bottleneck is narrower but not closed.",
+      "falsifier": "Informative-title versus randomized opaque-title controls produce invariant empty-broadcast accuracy and no source-bound details leak into generated directives."
+    },
+    {
+      "id": "CH195-BLIND-SELECTOR-PARADOX",
+      "claim": "Removing excerpts blocks leakage but also deprives the contextual selector of evidence needed to distinguish relevant, conflicting and semi-relevant passages; lexical scores then become the actual selector.",
+      "falsifier": "On held-out distractor/conflict pairs, title-and-score selection matches full-excerpt selector precision, entailment and conflict handling."
+    },
+    {
+      "id": "CH195-SELECTION-SUBSTITUTION",
+      "claim": "Mechanical fallback converts model abstention into deterministic top-admitted broadcast, measuring gate throughput rather than GWT competition.",
+      "falsifier": "Ablations show model-origin and mechanical-origin broadcasts have distinct logged arms and model selection adds reproducible answer-level value over admitted-top-k alone."
+    },
+    {
+      "id": "CH195-TWO-TOKEN-ADMISSION-CLIFF",
+      "claim": "MIN_GEDECKT=2 sharply rejects correct evidence when one discriminative term is enough, a synonym removes overlap, or evidence is causally/logically related rather than lexically duplicated.",
+      "falsifier": "Human-labeled single-entity, paraphrase, causal and multi-hop probes show negligible additional gold-evidence rejection versus an evidential/semantic comparator."
+    },
+    {
+      "id": "CH195-PREFIX-EVIDENCE-STARVATION",
+      "claim": "Raising excerpts to 1400 characters fixes one truncation boundary but still starves evidence located later in long articles.",
+      "falsifier": "Position-swept probes with identical evidence at beginning/middle/end show invariant admission, materialization and answer correctness."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Selector-Generator Firewall",
+      "definition": "The selector may identify evidence but cannot relay its answer-bearing content before the workspace gate."
+    },
+    {
+      "name": "Title Channel Leakage",
+      "definition": "Metadata retained for selection contains enough semantic payload to answer without materialized evidence."
+    },
+    {
+      "name": "Blind Selector Paradox",
+      "definition": "Closing content leakage removes the very evidence a semantic selector needs, causing a simpler scorer to become the de facto selector."
+    },
+    {
+      "name": "Selection Substitution",
+      "definition": "A deterministic fallback replaces an abstaining contextual selector while downstream telemetry still observes a broadcast."
+    },
+    {
+      "name": "Two-Token Admission Cliff",
+      "definition": "A hard minimum-overlap count creates a discontinuous false-rejection boundary unrelated to evidential sufficiency."
+    },
+    {
+      "name": "Position-Swept Sufficiency",
+      "definition": "The same gold evidence is placed at controlled document positions to distinguish larger excerpts from genuinely sufficient evidence delivery."
+    }
+  ],
+  "worker_impulses": [
+    {
+      "route": "gwt+claycode+clayresearch",
+      "priority": "HIGH",
+      "task": "Run GWT_SELECTOR_FIREWALL_FACTORIAL/v1 with frozen held-out questions and four pre-broadcast views: full excerpt, informative title+score, opaque ID+score, opaque ID only. Cross with model selection, mechanical fallback and forced-empty broadcast. Record every directive token, selected/materialized/cited IDs, answer correctness and unsupported claims; no training."
+    },
+    {
+      "route": "gwt+frank+unifieddb",
+      "priority": "HIGH",
+      "task": "Run SELECTION_ORIGIN_CAUSAL_RECEIPT/v1. Separate modell, mechanisch and verzicht arms; compare admitted-top-k baseline against actual model-selected IDs at matched context. Do not attribute mechanical fallback gains to GWT competition."
+    },
+    {
+      "route": "claygraph+hyperposition+emergenz",
+      "priority": "HIGH",
+      "task": "Build held-out evidence families for exact lexical, one-token entity, paraphrase, causal, multi-hop, conflict and semi-relevant distractor cases. Preserve evidence-family IDs to prevent double counting and report false rejection at threshold 0.25 with MIN_GEDECKT=2."
+    },
+    {
+      "route": "claycode+unifieddb",
+      "priority": "MEDIUM",
+      "task": "Run POSITION_SWEPT_SUFFICIENCY/v1 with gold rationale at 100, 1200, 1500 and 3000 characters. Compare prefix-1400 against query-aware extractive materialization; record latency and citation fidelity."
+    },
+    {
+      "route": "frank+claycode",
+      "priority": "MEDIUM",
+      "task": "Preserve the now-consistent 613/1 test receipt but bind the next run atomically to full commit/tree/dirty state and exact collected test IDs. Keep the ClaudeCodeInference adapter red visible until fixed."
+    },
+    {
+      "route": "harness",
+      "priority": "GUARD",
+      "task": "Receipt inspection only. Do not modify Frank's Harness and do not promote BASE."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "The prior empty-workspace control succeeded through excerpt leakage; earlier broadcast causal credit is invalidated, not confirmed.",
+    "No independent held-out factorial proves that Gen194/195 model competition improves answer quality over lexical admitted-top-k.",
+    "No opaque-title control closes metadata leakage.",
+    "The threshold sweep and eight carrier probes are one tuning/evaluation family and are not counted as independent evidence.",
+    "The global novelty scope and soft SQLite IDF budget identified in Gen190 remain unchanged in the inspected code.",
+    "The hierarchy export still says GLEICHVERTEILT; no new causal hierarchy credit is granted.",
+    "The persistent ClaudeCodeInference adapter red remains open.",
+    "Target main and PR810 head are unchanged; no new target runtime evidence was found.",
+    "No training, Harness mutation, release promotion or canonical PASS occurred."
+  ],
+  "admission_rule": "Credit Gen194/195 for closing one demonstrated excerpt leak and resolving test-count metrology, but do not credit contextual GWT selection until opaque-metadata, selection-origin and held-out answer-level factorial receipts separate model choice from lexical admission and mechanical fallback."
+}

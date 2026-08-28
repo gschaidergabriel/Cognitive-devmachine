@@ -1,0 +1,258 @@
+name: GO872 Forge Distillery exact-current runtime gate
+
+# Exact-current retrigger from GPT-5.6 Sol go macrocycle; canonical source is selected at execution time.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/go871-forge-distillery-runtime-gate.yml'
+      - 'tools/run_go871_forge_distillery_runtime_gate.py'
+      - 'tools/promote_forge_distillery_runtime_gate.py'
+      - 'tools/ingest_forge_accepts_into_distillery.py'
+      - 'tools/forge_evidence_credit_871.py'
+      - 'tools/run_free_evidence_forge.py'
+      - 'tools/run_free_evidence_forge_safe_871.py'
+      - 'tools/forge_execution_admission_871.py'
+      - 'runtime_checks/test_forge_distillery_requires_execution_admission_871.py'
+      - 'tests/test_forge_execution_admission_871.py'
+      - 'tests/test_forge_disposable_worktree_872.py'
+      - 'tests/test_forge_distillery_promotion_872.py'
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research_entity/runtime/go871_forge_distillery_requests/*.json'
+
+permissions:
+  contents: write
+
+# One witness lane, one current intent. A queued self-hosted run has no job timeout until
+# a runner starts it, so superseded queued/in-progress requests must not accumulate.
+# Every actual execution still checks out canonical main at runner execution time below.
+concurrency:
+  group: go872-forge-distillery-exact-current-witness
+  cancel-in-progress: true
+
+jobs:
+  exact-runtime-gate:
+    if: github.actor == 'gschaidergabriel'
+    runs-on: self-hosted
+    timeout-minutes: 12
+    steps:
+      - name: Checkout canonical main at execution time
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Bind canonical execution source
+        id: source
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          SOURCE_SHA="$(git rev-parse HEAD)"
+          SOURCE_TREE="$(git rev-parse 'HEAD^{tree}')"
+          DIRTY="$(git status --porcelain=v1)"
+          test -n "$SOURCE_SHA"
+          test -n "$SOURCE_TREE"
+          test -z "$DIRTY"
+          echo "source_sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "source_tree=$SOURCE_TREE" >> "$GITHUB_OUTPUT"
+          printf '%s\n' "$SOURCE_SHA" > /tmp/clay-go872-execution-source-sha.txt
+          printf '%s\n' "$SOURCE_TREE" > /tmp/clay-go872-execution-source-tree.txt
+
+      - name: Record sanitized host/live identity
+        shell: bash
+        env:
+          EXECUTION_SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          EXECUTION_SOURCE_TREE: ${{ steps.source.outputs.source_tree }}
+          TRIGGER_PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -Eeuo pipefail
+          mkdir -p /tmp/clay-go871-forge-distillery
+          python3 - <<'PY' > /tmp/clay-go871-forge-distillery/host_probe.json
+          import json, os, subprocess
+          from pathlib import Path
+          live=Path('/workspace/clay-global-research-entity')
+          def cmd(*args):
+              p=subprocess.run(args,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False)
+              return {'rc':p.returncode,'stdout':p.stdout.strip()[-1000:],'stderr':p.stderr.strip()[-1000:]}
+          print(json.dumps({
+              'schema':'CLAY_GO872_SELFHOSTED_RUNTIME_PROBE/v2',
+              'execution_source_sha':os.environ.get('EXECUTION_SOURCE_SHA'),
+              'execution_source_tree':os.environ.get('EXECUTION_SOURCE_TREE'),
+              'trigger_pr_base_sha':os.environ.get('TRIGGER_PR_BASE_SHA') or None,
+              'source_selection':'CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME',
+              'live_repo_exists':(live/'.git').exists(),
+              'live_head':cmd('git','-C',str(live),'rev-parse','HEAD') if (live/'.git').exists() else None,
+              'live_status':cmd('git','-C',str(live),'status','--porcelain=v1') if (live/'.git').exists() else None,
+              'artifact_root_exists':Path('/artifacts/clay-entityos-swarm').exists(),
+              'provider_secret_values_inspected':False,
+              'network_provider_calls':0,
+              'paid_fallback_attempt_count':0,
+          },indent=2))
+          PY
+
+      - name: Run promotion fail-closed source guards
+        id: promotion_guard
+        shell: bash
+        run: |
+          set +e
+          python3 -m unittest -q tests.test_forge_distillery_promotion_872 \
+            > /tmp/clay-go871-forge-distillery/promotion_guard.log 2>&1
+          rc=$?
+          echo "guard_rc=$rc" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Execute exact-current Forge to Distillery successor witness
+        id: gate
+        shell: bash
+        env:
+          SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+        run: |
+          set +e
+          python3 tools/run_go871_forge_distillery_runtime_gate.py \
+            --source-sha "$SOURCE_SHA" \
+            --output /tmp/clay-go871-forge-distillery/result.json \
+            > /tmp/clay-go871-forge-distillery/stdout.log 2>&1
+          rc=$?
+          echo "gate_rc=$rc" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Promote passing witness into live Distillery exactly once
+        id: promote
+        if: always()
+        shell: bash
+        env:
+          SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          SOURCE_TREE: ${{ steps.source.outputs.source_tree }}
+          GUARD_RC: ${{ steps.promotion_guard.outputs.guard_rc }}
+          GATE_RC: ${{ steps.gate.outputs.gate_rc }}
+        run: |
+          set +e
+          OUT=/tmp/clay-go871-forge-distillery/promotion.json
+          LOG=/tmp/clay-go871-forge-distillery/promotion.log
+          if [[ "$GUARD_RC" != "0" ]]; then
+            printf '%s\n' '{"schema":"CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v1","status":"BLOCKED","reason":"SOURCE_GUARD_FAILED","network_used":false,"provider_calls":0,"paid_fallback_attempt_count":0}' > "$OUT"
+            rc=4
+          elif [[ "$GATE_RC" != "0" ]]; then
+            printf '%s\n' '{"schema":"CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v1","status":"BLOCKED","reason":"RUNTIME_GATE_NOT_PASS","network_used":false,"provider_calls":0,"paid_fallback_attempt_count":0}' > "$OUT"
+            rc=3
+          elif [[ ! -d /artifacts/clay-entityos-swarm ]]; then
+            printf '%s\n' '{"schema":"CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v1","status":"BLOCKED","reason":"LIVE_ARTIFACT_ROOT_MISSING","network_used":false,"provider_calls":0,"paid_fallback_attempt_count":0}' > "$OUT"
+            rc=2
+          else
+            python3 tools/promote_forge_distillery_runtime_gate.py \
+              --gate-result /tmp/clay-go871-forge-distillery/result.json \
+              --expected-source-sha "$SOURCE_SHA" \
+              --expected-source-tree "$SOURCE_TREE" \
+              --github-run-id "$GITHUB_RUN_ID" \
+              --github-event-name "$GITHUB_EVENT_NAME" \
+              --source-selection CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME \
+              --distillery-db /artifacts/clay-entityos-swarm/distillery/distillery.sqlite3 \
+              --output "$OUT" > "$LOG" 2>&1
+            rc=$?
+          fi
+          echo "promotion_rc=$rc" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Publish sanitized runtime result to main
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          EXECUTION_SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          EXECUTION_SOURCE_TREE: ${{ steps.source.outputs.source_tree }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const crypto = require('crypto');
+            const p = '/tmp/clay-go871-forge-distillery/result.json';
+            const promotionPath = '/tmp/clay-go871-forge-distillery/promotion.json';
+            const canonicalSelection = 'CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME';
+            const expectedRunId = String(context.runId);
+            const expectedEvent = context.eventName;
+            const expectedSha = process.env.EXECUTION_SOURCE_SHA || null;
+            const expectedTree = process.env.EXECUTION_SOURCE_TREE || null;
+            let body;
+            if (fs.existsSync(p)) {
+              const raw = fs.readFileSync(p);
+              const prePublishGateSha256 = crypto.createHash('sha256').update(raw).digest('hex');
+              const parsed = JSON.parse(raw.toString('utf8'));
+              const promotion = fs.existsSync(promotionPath)
+                ? JSON.parse(fs.readFileSync(promotionPath, 'utf8'))
+                : null;
+              if (promotion && promotion.status === 'PASS') {
+                const mismatches = [];
+                if (promotion.github_run_id !== expectedRunId) mismatches.push('github_run_id');
+                if (promotion.github_event_name !== expectedEvent) mismatches.push('github_event_name');
+                if (promotion.execution_source_sha !== expectedSha) mismatches.push('execution_source_sha');
+                if (promotion.execution_source_tree !== expectedTree) mismatches.push('execution_source_tree');
+                if (promotion.source_selection !== canonicalSelection) mismatches.push('source_selection');
+                if (promotion.gate_result_sha256 !== prePublishGateSha256) mismatches.push('gate_result_sha256');
+                if (mismatches.length) {
+                  throw new Error(`LIVE_PROMOTION_CONTEXT_MISMATCH:${mismatches.join(',')}`);
+                }
+              }
+              parsed.github_run_id = expectedRunId;
+              parsed.github_event_name = expectedEvent;
+              parsed.execution_source_sha = expectedSha;
+              parsed.execution_source_tree = expectedTree;
+              parsed.source_selection = canonicalSelection;
+              parsed.pre_publish_gate_sha256 = prePublishGateSha256;
+              parsed.live_distillery_promotion = promotion;
+              body = JSON.stringify(parsed, null, 2) + '\n';
+            } else {
+              body = JSON.stringify({
+                schema:'CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2',
+                status:'WORKFLOW_RESULT_MISSING',
+                pass:false,
+                github_run_id:expectedRunId,
+                github_event_name:expectedEvent,
+                execution_source_sha:expectedSha,
+                execution_source_tree:expectedTree,
+                source_selection:canonicalSelection,
+                live_distillery_promotion:fs.existsSync(promotionPath)
+                  ? JSON.parse(fs.readFileSync(promotionPath, 'utf8'))
+                  : null,
+                whole_product_credit:0,
+                hcu_full_credit:0,
+                jspace_credit:0,
+                training_credit:0
+              }, null, 2) + '\n';
+            }
+            const path = `research_entity/runtime/go871_forge_distillery_results/${context.runId}.json`;
+            await github.rest.repos.createOrUpdateFileContents({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path,
+              message: `runtime: publish Forge-Distillery gate ${context.runId}`,
+              content: Buffer.from(body, 'utf8').toString('base64'),
+              branch: 'main'
+            });
+
+      - name: Upload sanitized runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: go872-forge-distillery-runtime-gate
+          path: |
+            /tmp/clay-go871-forge-distillery/result.json
+            /tmp/clay-go871-forge-distillery/promotion.json
+            /tmp/clay-go871-forge-distillery/host_probe.json
+            /tmp/clay-go871-forge-distillery/stdout.log
+            /tmp/clay-go871-forge-distillery/promotion.log
+            /tmp/clay-go871-forge-distillery/promotion_guard.log
+            /tmp/clay-go872-execution-source-sha.txt
+            /tmp/clay-go872-execution-source-tree.txt
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Enforce gate and live-promotion result
+        if: always()
+        shell: bash
+        run: |
+          test "${{ steps.promotion_guard.outputs.guard_rc }}" = "0"
+          test "${{ steps.gate.outputs.gate_rc }}" = "0"
+          test "${{ steps.promote.outputs.promotion_rc }}" = "0"

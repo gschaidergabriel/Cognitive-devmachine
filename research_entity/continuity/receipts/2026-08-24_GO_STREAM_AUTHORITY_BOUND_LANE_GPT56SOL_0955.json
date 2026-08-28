@@ -1,0 +1,83 @@
+{
+  "schema": "ENTITYOS_HCU_GO_STREAM_AUTHORITY_BOUND_LANE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "43f9e5a1c8f2ef9828e1a6600e9e2ffa4cfa2dde",
+  "coordination": {
+    "shared_immutable_macrocycle_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions": 0
+  },
+  "retained_lane": "gschaidergabriel/clay-global-research-entity#1263",
+  "observe": {
+    "upstream_gap": "executor_sequence_lane_binding_v1 derives sequence lane identity from EntryPacket.stream_id after Entry identity revalidation, but the packet-carried stream_id is data and cannot self-grant recurrent stream authority.",
+    "existing_safe_boundary": "Typed Entry capability/budget views are externally supplied; stream authority needs the same fail-closed separation rather than being inferred from the Entry payload.",
+    "runtime_constraint": "No new Sandbox execution was attempted. Remaining included Sandbox quota is not directly observed and current exact runtime evidence also preserves a Python 3.13 _sqlite3 capability failure at the SQLite-dependent path."
+  },
+  "hypothesis": "A separate external stream-authority binding, followed by an authority-bound executor-lane wrapper, prevents a self-consistent Entry stream label from minting recurrent lane authority while preserving the existing lane mechanism as non-authoritative source evidence.",
+  "counterhypothesis": "Typed Entry event/admission identity already hashes stream_id, so additional stream authority is redundant.",
+  "discriminator": "Require a stream authority object whose constructor takes authority-side source/stream values rather than an EntryPacket, require a separately supplied expected authority-binding SHA, reject a self-consistent packet with a mismatching stream label, then bind that verified authority receipt together with the existing executor sequence lane receipt.",
+  "writes": [
+    {
+      "commit": "a4717fcb3f4fbe495e03399347161a2e70ee6750",
+      "path": "the artefact/MicroEntity/hcu/entry_stream_authority_binding_v1.py",
+      "schema": "ENTITYOS_HCU_ENTRY_STREAM_AUTHORITY_BINDING/v1",
+      "scope": "EXTERNAL_AUTHORITY_BINDING_INTERFACE_ONLY"
+    },
+    {
+      "commit": "64c296a5f25f1b1fa628dd2ac8de585c510ad38d",
+      "path": "the artefact/MicroEntity/hcu/test_entry_stream_authority_binding_v1.py",
+      "scope": "SOURCE_REGRESSION_DEFINITION_ONLY_NOT_EXECUTED"
+    },
+    {
+      "commit": "b41d62bd7b5be22286a6f1b8f29c76cf2b3203e9",
+      "path": "the artefact/MicroEntity/hcu/authorized_executor_sequence_lane_binding_v1.py",
+      "schema": "HCU_AUTHORIZED_EXECUTOR_SEQUENCE_LANE_BINDING/v1",
+      "scope": "PROMOTABLE_AUTHORITY_BOUND_LANE_WRAPPER_SOURCE_ONLY"
+    },
+    {
+      "commit": "238c30fc4df65f6fb941d26ae600db1928395c30",
+      "path": "the artefact/MicroEntity/hcu/test_authorized_executor_sequence_lane_binding_v1.py",
+      "scope": "SOURCE_REGRESSION_DEFINITION_ONLY_NOT_EXECUTED"
+    }
+  ],
+  "authority_boundary": {
+    "entry_packet_stream_id_is_authority": false,
+    "bare_executor_sequence_lane_is_temporal_authority": false,
+    "external_authority_binding_required_for_promotable_lane": true,
+    "second_truth_state_effect_store_created": false,
+    "effect_authority_changed": false,
+    "remaining_gap": "The expected external stream-authority binding SHA must still be sourced from actual deterministic canonical control-plane/ingress state at integration time. A caller-provided arbitrary hash is not independently self-authenticating."
+  },
+  "verification": {
+    "source_files_committed": true,
+    "project_regression_execution": "NOT_EXECUTED",
+    "authorized_free_sandbox_execution": "NOT_RUN",
+    "runtime_credit_added": 0,
+    "claim_scope": "SOURCE_ARCHITECTURE_AND_REGRESSION_DEFINITION_ONLY"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_ONLY: the current stream/lane causality frontier now has an explicit external-authority boundary instead of relying on packet self-description.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: Typed Entry stream identity is separated from stream authority and a reusable authority-bound executor-lane receipt exists without a competing truth/effect store.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_FAIL_CLOSED: recurrent/intervention training promotion can now require authority-bound lane evidence; bare same-step or packet-labelled lanes remain insufficient."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Shared current-facing README is moving rapidly under parallel organs; this source-only delta is persisted append-only and does not justify overwriting a fresher runtime-facing status surface."
+  },
+  "next_exact_action": "Wire expected_stream_authority_binding_sha256 from an actual deterministic canonical control-plane/ingress authority source, then require HCU_AUTHORIZED_EXECUTOR_SEQUENCE_LANE_BINDING/v1 at the pre-invocation preparation/temporal training gate. Only after that source closure should executor-owned atomic adjacency/finalization be implemented. Runtime execution remains fail-closed until included Sandbox quota is directly observed and the fixed SQLite-backed environment capability gate is satisfied without weakening evidence requirements."
+}

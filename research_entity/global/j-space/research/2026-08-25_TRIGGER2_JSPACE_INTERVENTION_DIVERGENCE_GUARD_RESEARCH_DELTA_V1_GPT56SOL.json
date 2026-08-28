@@ -1,0 +1,122 @@
+{
+  "schema": "CLAY_TRIGGER2_JSPACE_INTERVENTION_DIVERGENCE_GUARD_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_METHOD_DELTA_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "7d1600474a4cab4cf64e48777fcf70b4113052b4",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "current_training_ledger": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V20_GPT56SOL.json",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "reentry_dedup": {
+    "closed_duplicate_pr": 2018,
+    "reason": "Moving main independently landed ledgers V16 through V20 and overlapping Trigger-2 research. The competing V16 branch was closed rather than merged.",
+    "salvaged_unique_delta": "intervention-distribution divergence as an explicit model-specific causal-control falsifier"
+  },
+  "external_research_inputs": [
+    {
+      "source": "Grant, Han, Tartaglini, Potts, Addressing divergent representations from causal interventions on neural networks, ICLR 2026 / arXiv:2511.04638",
+      "classification": "SOURCE_DIRECT_EXTERNAL_METHOD_INPUT",
+      "finding": "Causal interventions can drive internal representations away from the target model's natural distribution. The work distinguishes behaviorally harmless divergence from pernicious divergence that activates otherwise dormant pathways, and studies regularization that keeps interventions closer to natural representations."
+    },
+    {
+      "source": "Srivastav, Steering the Language Axis: From Linear Decodability to Causal Control, arXiv:2608.12334, 2026",
+      "classification": "SOURCE_DIRECT_EXTERNAL_METHOD_INPUT",
+      "finding": "Reported activation directions can causally control language selection in Qwen 3.5-2B and other models, with layer- and direction-specific intervention effects and matched random-perturbation controls."
+    },
+    {
+      "source": "Qwen/Qwen3.5-0.8B-Base official model repository",
+      "classification": "SOURCE_DIRECT_EXTERNAL_MODEL_INPUT",
+      "finding": "A current pre-trained-only 0.8B Qwen3.5 base checkpoint is published for fine-tuning/research. This does not establish project checkpoint identity, runtime compatibility, J-Space causality or training readiness."
+    }
+  ],
+  "problem": {
+    "observation": "Current Trigger-2 causal-actionability work correctly requires selective downstream WRITE/CONTROL effects, rescue/off-target controls and exact model/runtime identity. A remaining interpretation risk is that a successful intervention may achieve the measured effect by creating a representation that is not on the model's normal computation manifold.",
+    "failure_mode": "STEERING_SUCCESS_WITH_PERNICIOUS_REPRESENTATION_DIVERGENCE",
+    "impact": "Without a divergence diagnostic, an apparently causal J-Space carrier could be credited even when it works by activating an abnormal pathway that finished Xeno would not naturally use."
+  },
+  "hypothesis": "A reusable finished-Xeno J-Space control carrier should show selective causal actionability while its intervention-induced representation shift is either within an empirically calibrated natural-support envelope or demonstrated to be behaviorally harmless by null-space/rescue tests.",
+  "counterhypothesis": "Natural-distribution proximity is not required for causal validity; some genuine causal directions necessarily leave the observational activation distribution, and a strict in-distribution threshold would reject useful mechanisms.",
+  "fusion_decision": "Do not create a new present-day data-admission gate or block the existing A02 frontier. Add divergence as a preregistered model-specific evaluation axis inside the future C1/actionability and execution-boundary source-policy experiment. Report causal effect and divergence separately; do not collapse them into one scalar pass criterion until exact-checkpoint calibration establishes a justified boundary.",
+  "proposed_future_evaluation": {
+    "id": "T2_JSPACE_INTERVENTION_DIVERGENCE_GUARD_V1",
+    "status": "PREREGISTERED_RESEARCH_REQUIREMENT_NONPROMOTING",
+    "minimum_cells": [
+      "unintervened natural activation baseline",
+      "target J-Space intervention",
+      "magnitude-matched random direction control",
+      "off-target layer/site control",
+      "inverse or rescue intervention where the causal hypothesis predicts reversibility"
+    ],
+    "measure_separately": [
+      "intended downstream causal effect",
+      "collateral behavioral damage",
+      "distance from calibrated natural representation support at the intervention site and downstream sites",
+      "persistence of divergence across subsequent tokens/steps",
+      "rescue of intended behavior and representation state",
+      "held-out family and variable-N transfer",
+      "multi-seed numerical reproducibility"
+    ],
+    "identity_requirements": [
+      "exact checkpoint bytes",
+      "exact tokenizer and chat/template ABI",
+      "runtime/build identity",
+      "layer/site/token/context/function identity",
+      "source-policy identity from T2_EXECUTION_BOUNDARY_SOURCE_POLICY_GATE_V1"
+    ],
+    "anti_goodhart": [
+      "do not choose divergence threshold on final holdout",
+      "do not infer harmlessness from low output loss alone",
+      "do not infer natural-mechanism validity from steering success alone",
+      "do not infer perniciousness from geometric distance alone without behavioral/rescue evidence"
+    ]
+  },
+  "training_generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "The new evidence changes future causal-evaluation design only. Exact-current A02 runtime proof and downstream provenance/authentication/nuisance/tokenizer gates remain the active admission frontier."
+  },
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "T2-LEDGER-V20",
+      "status": "CURRENT_RETAINED_LEDGER_AT_RESEARCH_REENTRY",
+      "relation": "This artifact is a method donor to its future successor, not a competing training ledger."
+    },
+    {
+      "artifact": "T2_EXECUTION_BOUNDARY_SOURCE_POLICY_GATE_V1",
+      "status": "CURRENT_RESEARCH_EVAL_REQUIREMENT_NONPROMOTING",
+      "relation": "Divergence guard composes with source-policy selection; it does not replace source-policy, C1 actionability, rescue or nuisance gates."
+    },
+    {
+      "artifact": "T2_JSPACE_INTERVENTION_DIVERGENCE_GUARD_V1",
+      "status": "CURRENT_PREREGISTERED_RESEARCH_REQUIREMENT_NONPROMOTING",
+      "successor": "exact-checkpoint implementation and preregistered calibration after executable A02/provenance frontier closure"
+    }
+  ],
+  "credits": {
+    "research_delta": 1,
+    "evaluation_method_delta": 1,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Keep the current V20 execution/provenance frontier unchanged: execute exact-current A02 + retained-v4 repository-bound tests first. When the exact Qwen3.5-0.8B target checkpoint/runtime is admitted for J-Space causal evaluation, preregister divergence metrics and calibration data alongside C1/source-policy/rescue controls before touching final holdout."
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "clay-go-research-receipt-erratum/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "corrects_receipt": "research_entity/continuity/receipts/2026-08-24_GO_JSPACE_INFERENCE_PARENT_ADMISSION_GPT56SOL.json",
+  "observed_main_before_erratum": "b31acd5504b051effd2828d0bbbd10e9b9e0f286",
+  "correction": {
+    "original_observation_scope": "The parent-admission gap was observed against the retained donor at and before 707de21f1b0828ac72a858aa9c51825ffb4234a6, where compile_admitted_jspace_training_dataset_v1.py still accepted self-consistent JSpaceInferenceBinding evidence without an independently admitted HCU_INFERENCE_RECEIPT/v4 parent registry.",
+    "current_donor_head_at_erratum": "54f42b20586c1aa4742df89af07d4c918faa2290",
+    "current_compiler_blob_sha": "8c3294f641e039268b85338058bf5c891c49ea0d",
+    "current_compiler_status": "PARENT_INFERENCE_RECEIPT_REGISTRY_REQUIREMENT_FUSED",
+    "current_behavior": "compile_admitted_records now requires admitted_inference_receipts, calls a fail-closed parent receipt validator, verifies the exact v4 field set and RFC8785/JCS digest identity, and cross-binds execution-critical receipt fields against JSpaceInferenceBinding before dataset rows can be emitted.",
+    "original_guard_status": "The separately added ENTITYOS_HCU_JSPACE_INFERENCE_PARENT_ADMISSION/v1 guard remains a source-level reusable donor primitive but is no longer the sole available repair path; current production compiler hardening independently closes the originally observed laundering gap.",
+    "credit_change": 0
+  },
+  "complementary_open_gap": {
+    "id": "JSPACE_VECTOR_CONTROL_NOT_BOUND_TO_ACTUAL_MODEL_INPUT_BYTES",
+    "status": "OPEN_SOURCE_CAUSALITY_GATE",
+    "next_primitive": "HCU_MODEL_INPUT_CONTROL_BINDING/v1",
+    "reason": "Parent inference ancestry is now externally admitted, but the exact executor-consumed model input bytes still require a deterministic causal binding to JSPACE_VECTOR_CONTROL_ABI/v1 or an admitted versioned transform before J-Space model-runtime causality can be promoted."
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "timestamp_fallback_sufficient": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0
+  },
+  "execution": {
+    "new_sandbox_invocation": false,
+    "paid_provider_used": false,
+    "together_used": false,
+    "vps_or_self_hosted_test": false,
+    "deterministic_tests_observed_executing_for_current_compiler_hardening": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Preserve the fused external InferenceReceipt/v4 admission fence, avoid a second competing dataset compiler, and close the complementary model-input-control causality gap by binding exact executor-consumed input bytes to JSPACE_VECTOR_CONTROL_ABI/v1 plus generation, Entry, route, GRID10, cell/role and executor invocation identity. Then include the coherent source/test closure in the single PR810 FREE_ONLY executor only after selecting an immutable donor snapshot and only execute when an included-tier exact-head Vercel build/function surface is naturally available."
+}

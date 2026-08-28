@@ -1,0 +1,477 @@
+name: ClayVerse VPS rootless QEMU TCG guest smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/clayverse-vps-qemu-rootless-guest-smoke.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clayverse-vps-qemu-rootless-guest-smoke
+  cancel-in-progress: false
+
+env:
+  RESEARCH_SHA: 9dd7da1c7f1d2acf29142a74effd2b51282661f7
+  RESEARCH_TREE: 47c09ff6d661b3da02743435dd8a343ddef85efd
+
+jobs:
+  rootless-qemu-tcg-guest-smoke:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 30
+    steps:
+      - name: Stage rootless QEMU from Ubuntu packages
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          work="/tmp/clayverse-rootless-qemu-${GITHUB_RUN_ID}"
+          prefix="$work/root"
+          debs="$work/debs"
+          mkdir -p "$prefix" "$debs"
+          test "$(id -u)" -ne 0
+          for tool in apt-cache apt-get dpkg-deb curl gpgv git tar python3 sha256sum; do command -v "$tool" >/dev/null; done
+
+          python3 - "$debs/packages.txt" <<'PY'
+          import collections, re, subprocess, sys
+          out = sys.argv[1]
+          roots = ['qemu-system-x86', 'qemu-system-common', 'qemu-system-data', 'genisoimage', 'ubuntu-cloudimage-keyring']
+          queue = collections.deque(roots)
+          seen = set()
+          ordered = []
+          while queue:
+              pkg = queue.popleft().split(':', 1)[0]
+              if not pkg or pkg in seen:
+                  continue
+              probe = subprocess.run(['apt-cache', 'show', pkg], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+              if probe.returncode != 0:
+                  continue
+              seen.add(pkg)
+              ordered.append(pkg)
+              proc = subprocess.run(['apt-cache', 'depends', pkg], text=True, capture_output=True, check=False)
+              if proc.returncode != 0:
+                  raise SystemExit(f'APT_DEPENDS_FAILED:{pkg}')
+              for line in proc.stdout.splitlines():
+                  match = re.match(r'^\s*(?:PreDepends|Depends):\s+([^\s]+)', line)
+                  if not match:
+                      continue
+                  dep = match.group(1)
+                  if dep.startswith('<') and dep.endswith('>'):
+                      continue
+                  dep = dep.strip('<>').split(':', 1)[0]
+                  if dep and dep not in seen:
+                      queue.append(dep)
+          if not all(root in seen for root in roots):
+              raise SystemExit('QEMU_ROOT_PACKAGE_CANDIDATE_MISSING')
+          with open(out, 'w', encoding='utf-8') as handle:
+              handle.write('\n'.join(ordered) + '\n')
+          print(f'ROOTLESS_QEMU_PACKAGE_COUNT={len(ordered)}')
+          PY
+
+          cd "$debs"
+          while IFS= read -r pkg; do
+            apt-get download "$pkg" >/dev/null
+          done < packages.txt
+          test -n "$(find . -maxdepth 1 -name '*.deb' -print -quit)"
+          for deb in ./*.deb; do
+            dpkg-deb -x "$deb" "$prefix"
+          done
+
+          qemu="$prefix/usr/bin/qemu-system-x86_64"
+          qemu_data="$prefix/usr/share/qemu"
+          qemu_bios="$prefix/usr/share/seabios/bios-256k.bin"
+          geniso="$prefix/usr/bin/genisoimage"
+          ubuntu_keyring="$prefix/usr/share/keyrings/ubuntu-cloudimage-keyring.gpg"
+          test -x "$qemu"
+          test -x "$geniso"
+          test -d "$qemu_data"
+          test -r "$qemu_bios"
+          test -r "$ubuntu_keyring"
+          export LD_LIBRARY_PATH="$prefix/usr/lib/x86_64-linux-gnu:$prefix/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          export QEMU_MODULE_DIR="$prefix/usr/lib/x86_64-linux-gnu/qemu"
+          "$qemu" -L "$qemu_data" --version | head -n1
+          "$qemu" -L "$qemu_data" -accel help
+          if ldd "$qemu" | grep -F 'not found'; then
+            echo 'ROOTLESS_QEMU_SHARED_LIBRARY_MISSING' >&2
+            exit 51
+          fi
+
+      - name: Bind exact immutable PR686 source for one-way guest staging
+        uses: actions/checkout@v4
+        with:
+          ref: 9dd7da1c7f1d2acf29142a74effd2b51282661f7
+          path: exact-pr686
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify exact PR686 commit and stage immutable payload
+        id: pr686
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          src="$GITHUB_WORKSPACE/exact-pr686"
+          work="/tmp/clayverse-rootless-qemu-${GITHUB_RUN_ID}"
+          payload="$work/pr686-payload"
+          mkdir -p "$payload"
+          actual_sha="$(git -C "$src" rev-parse HEAD)"
+          actual_tree="$(git -C "$src" rev-parse 'HEAD^{tree}')"
+          test "$actual_sha" = "$RESEARCH_SHA"
+          test "$actual_tree" = "$RESEARCH_TREE"
+          git -C "$src" archive --format=tar --output="$payload/source.tar" HEAD
+          archive_sha="$(sha256sum "$payload/source.tar" | awk '{print $1}')"
+          printf '%s\n' "$RESEARCH_SHA" > "$payload/research-sha.txt"
+          printf '%s\n' "$RESEARCH_TREE" > "$payload/research-tree.txt"
+          printf '%s\n' "$archive_sha" > "$payload/source-tar-sha256.txt"
+
+          cat > "$payload/guest-run.sh" <<EOF
+          #!/bin/bash
+          set -u
+          exec >/dev/ttyS0 2>&1
+          echo 'CLAY_PR686_GUEST_BEGIN source_sha=$RESEARCH_SHA source_tree=$RESEARCH_TREE'
+          uname -a
+          netifs="\$(find /sys/class/net -mindepth 1 -maxdepth 1 -printf '%f\n' | LC_ALL=C sort | tr '\n' ',')"
+          echo "CLAY_PR686_NETIFS=\$netifs"
+          cd /mnt/claypayload
+          sha256sum -c MANIFEST.sha256
+          manifest_rc=\$?
+          echo "CLAY_PR686_PAYLOAD_MANIFEST_EXIT=\$manifest_rc"
+          compile_rc=125
+          if [ "\$manifest_rc" -eq 0 ]; then
+            rm -rf /opt/clay-pr686
+            mkdir -p /opt/clay-pr686
+            tar -xf /mnt/claypayload/source.tar -C /opt/clay-pr686
+            python3 --version
+            python3 -m compileall -q '/opt/clay-pr686/the artefact/clayverse'
+            compile_rc=\$?
+          fi
+          echo "CLAY_PR686_COMPILE_EXIT=\$compile_rc"
+          if [ "\$manifest_rc" -eq 0 ] && [ "\$compile_rc" -eq 0 ] && [ "\$netifs" = 'lo,' ]; then
+            echo CLAY_PR686_GUEST_RESULT=PASS
+          else
+            echo CLAY_PR686_GUEST_RESULT=FAIL
+          fi
+          echo CLAY_PR686_GUEST_END
+          sync
+          poweroff -f
+          EOF
+          chmod 0555 "$payload/guest-run.sh"
+          (
+            cd "$payload"
+            sha256sum source.tar research-sha.txt research-tree.txt source-tar-sha256.txt guest-run.sh > MANIFEST.sha256
+          )
+          prefix="$work/root"
+          "$prefix/usr/bin/genisoimage" -quiet -R -J -V CLAYPAYLOAD -o "$work/pr686-payload.iso" "$payload"
+          echo "archive_sha=$archive_sha" >> "$GITHUB_OUTPUT"
+          echo "payload_iso_sha=$(sha256sum "$work/pr686-payload.iso" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+
+      - name: Boot verified networkless Alpine guest kernel under TCG
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          work="/tmp/clayverse-rootless-qemu-${GITHUB_RUN_ID}"
+          prefix="$work/root"
+          receipt="$RUNNER_TEMP/clayverse-rootless-qemu-guest-${GITHUB_RUN_ID}.json"
+          serial="$work/serial.log"
+          netboot="$work/alpine-netboot.tar.gz"
+          extract="$work/netboot"
+          qemu="$prefix/usr/bin/qemu-system-x86_64"
+          qemu_data="$prefix/usr/share/qemu"
+          qemu_bios="$prefix/usr/share/seabios/bios-256k.bin"
+          export LD_LIBRARY_PATH="$prefix/usr/lib/x86_64-linux-gnu:$prefix/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          export QEMU_MODULE_DIR="$prefix/usr/lib/x86_64-linux-gnu/qemu"
+          base='https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64'
+          image='alpine-netboot-3.24.1-x86_64.tar.gz'
+          mkdir -p "$extract"
+
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 "$base/$image.sha256" -o "$work/$image.sha256"
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 "$base/$image" -o "$netboot"
+          expected=$(awk -v f="$image" '$2==f || $2=="*"f {print $1; exit}' "$work/$image.sha256")
+          printf '%s' "$expected" | grep -Eq '^[0-9a-f]{64}$'
+          printf '%s  %s\n' "$expected" "$netboot" | sha256sum -c -
+
+          kernel_member=$(tar -tzf "$netboot" | grep -E '(^|/)vmlinuz-virt$' | head -n1)
+          initrd_member=$(tar -tzf "$netboot" | grep -E '(^|/)initramfs-virt$' | head -n1)
+          test -n "$kernel_member"
+          test -n "$initrd_member"
+          tar -xzf "$netboot" -C "$extract" "$kernel_member" "$initrd_member"
+          kernel="$extract/$kernel_member"
+          initrd="$extract/$initrd_member"
+          test -s "$kernel"
+          test -s "$initrd"
+          test -r "$qemu_bios"
+          kernel_sha=$(sha256sum "$kernel" | awk '{print $1}')
+          initrd_sha=$(sha256sum "$initrd" | awk '{print $1}')
+          bios_sha=$(sha256sum "$qemu_bios" | awk '{print $1}')
+          qemu_version=$("$qemu" -L "$qemu_data" --version | head -n1)
+
+          set +e
+          timeout --signal=TERM --kill-after=3s 45s "$qemu" \
+            -L "$qemu_data" \
+            -bios "$qemu_bios" \
+            -accel tcg,thread=multi \
+            -machine q35 \
+            -cpu max \
+            -smp 1 \
+            -m 768 \
+            -nodefaults \
+            -no-user-config \
+            -kernel "$kernel" \
+            -initrd "$initrd" \
+            -append 'console=ttyS0,115200 earlyprintk=ttyS0' \
+            -serial "file:$serial" \
+            -display none \
+            -monitor none \
+            -nic none \
+            -no-reboot \
+            -sandbox on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny
+          qemu_rc=$?
+          set -e
+
+          test -f "$serial"
+          serial_sha=$(sha256sum "$serial" | awk '{print $1}')
+          kernel_line=$(grep -aEm1 '^\[[[:space:]]*[0-9]+\.[0-9]+\].*Linux version |^Linux version ' "$serial" || true)
+          boot_signal=$(grep -aEm1 'Run /init as init process|Alpine Init|Alpine Linux' "$serial" || true)
+          guest_started=false
+          if [ -n "$kernel_line" ]; then guest_started=true; fi
+          if [ "$guest_started" != true ]; then
+            tail -c 32768 "$serial" >&2 || true
+          fi
+
+          python3 - "$receipt" "$expected" "$kernel_sha" "$initrd_sha" "$bios_sha" "$serial_sha" "$qemu_rc" "$guest_started" "$qemu_version" "$kernel_line" "$boot_signal" <<'PY'
+          import json, os, pathlib, platform, sys
+          out,base_sha,kernel_sha,initrd_sha,bios_sha,serial_sha,qemu_rc,started,qemu_version,kernel_line,boot_signal=sys.argv[1:]
+          payload={
+            'schema':'ClayVerseVpsRootlessQemuTcgGuestSmoke/v4',
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'executor_type':'QEMU_TCG',
+            'vmm_rootless_temp_payload':True,
+            'vmm_installed_on_host':False,
+            'qemu_data_dir_bound_to_temp_payload':True,
+            'seabios_explicitly_bound':True,
+            'host_orchestration_only':True,
+            'product_code_executed_on_host':False,
+            'host_docker_used':False,
+            'host_kernel':platform.release(),
+            'guest_base':'alpine-netboot-3.24.1-x86_64.tar.gz',
+            'guest_base_sha256':base_sha,
+            'guest_kernel_sha256':kernel_sha,
+            'guest_initramfs_sha256':initrd_sha,
+            'seabios_sha256':bios_sha,
+            'guest_kernel_marker':kernel_line or None,
+            'guest_boot_signal':boot_signal or None,
+            'guest_network_mode':'NONE',
+            'guest_memory_mib':768,
+            'guest_vcpus':1,
+            'host_filesystem_share':False,
+            'qemu_monitor_exposed':False,
+            'qemu_sandbox':'on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny',
+            'qemu_version':qemu_version,
+            'qemu_exit_status':int(qemu_rc),
+            'serial_log_sha256':serial_sha,
+            'guest_kernel_boot_observed':started=='true',
+            'receipt_fail_closed':True,
+            'cleanup_boundary':'workflow removes temporary VMM payload and guest inputs in final step',
+            'product_runtime_credit':0,
+            'whole_product_credit':0,
+            'unusual_experiment_count_added':0,
+          }
+          pathlib.Path(out).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps({'guest_kernel_boot_observed':payload['guest_kernel_boot_observed'],'executor_type':'QEMU_TCG','product_runtime_credit':0,'whole_product_credit':0},sort_keys=True))
+          if not payload['guest_kernel_boot_observed']:
+            raise SystemExit(52)
+          PY
+          test -s "$receipt"
+
+      - name: Run exact PR686 Python compile smoke inside disposable Ubuntu guest
+        shell: bash
+        env:
+          SOURCE_ARCHIVE_SHA256: ${{ steps.pr686.outputs.archive_sha }}
+          PAYLOAD_ISO_SHA256: ${{ steps.pr686.outputs.payload_iso_sha }}
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          work="/tmp/clayverse-rootless-qemu-${GITHUB_RUN_ID}"
+          prefix="$work/root"
+          receipt="$RUNNER_TEMP/clayverse-pr686-qemu-compile-${GITHUB_RUN_ID}.json"
+          base="$work/ubuntu-noble-amd64.base.img"
+          guest="$work/ubuntu-noble-amd64.guest.img"
+          seed="$work/seed.iso"
+          serial="$work/pr686-serial.log"
+          qemu="$prefix/usr/bin/qemu-system-x86_64"
+          qemu_data="$prefix/usr/share/qemu"
+          qemu_bios="$prefix/usr/share/seabios/bios-256k.bin"
+          geniso="$prefix/usr/bin/genisoimage"
+          ubuntu_keyring="$prefix/usr/share/keyrings/ubuntu-cloudimage-keyring.gpg"
+          export LD_LIBRARY_PATH="$prefix/usr/lib/x86_64-linux-gnu:$prefix/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          export QEMU_MODULE_DIR="$prefix/usr/lib/x86_64-linux-gnu/qemu"
+          base_url='https://cloud-images.ubuntu.com/noble/current'
+          image='noble-server-cloudimg-amd64.img'
+
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 "$base_url/SHA256SUMS" -o "$work/ubuntu-SHA256SUMS"
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 "$base_url/SHA256SUMS.gpg" -o "$work/ubuntu-SHA256SUMS.gpg"
+          gpgv --keyring "$ubuntu_keyring" "$work/ubuntu-SHA256SUMS.gpg" "$work/ubuntu-SHA256SUMS"
+          expected=$(awk -v f="$image" '$2==f || $2=="*"f {print $1; exit}' "$work/ubuntu-SHA256SUMS")
+          printf '%s' "$expected" | grep -Eq '^[0-9a-f]{64}$'
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 "$base_url/$image" -o "$base"
+          printf '%s  %s\n' "$expected" "$base" | sha256sum -c -
+          chmod 0444 "$base"
+          cp --reflink=auto "$base" "$guest"
+          chmod 0600 "$guest"
+
+          cat > "$work/meta-data" <<EOF
+          instance-id: clay-pr686-${GITHUB_RUN_ID}
+          local-hostname: clay-pr686-guest
+          EOF
+          cat > "$work/network-config" <<'EOF'
+          version: 2
+          ethernets: {}
+          EOF
+          cat > "$work/user-data" <<'EOF'
+          #cloud-config
+          ssh_pwauth: false
+          disable_root: true
+          write_files:
+            - path: /usr/local/sbin/clay-pr686-run.sh
+              owner: root:root
+              permissions: '0755'
+              content: |
+                #!/bin/bash
+                set -u
+                exec >/dev/ttyS0 2>&1
+                mkdir -p /mnt/claypayload
+                if ! mount -o ro -L CLAYPAYLOAD /mnt/claypayload; then
+                  echo CLAY_PR686_PAYLOAD_MOUNT_EXIT=1
+                  echo CLAY_PR686_GUEST_RESULT=FAIL
+                  echo CLAY_PR686_GUEST_END
+                  poweroff -f
+                  exit 0
+                fi
+                bash /mnt/claypayload/guest-run.sh
+          runcmd:
+            - [ /usr/local/sbin/clay-pr686-run.sh ]
+          EOF
+          "$geniso" -quiet -output "$seed" -volid cidata -joliet -rock "$work/user-data" "$work/meta-data" "$work/network-config"
+
+          qemu_version=$("$qemu" -L "$qemu_data" --version | head -n1)
+          set +e
+          timeout --signal=TERM --kill-after=5s 600s "$qemu" \
+            -L "$qemu_data" \
+            -bios "$qemu_bios" \
+            -accel tcg,thread=multi \
+            -machine q35 \
+            -cpu max \
+            -smp 2 \
+            -m 2048 \
+            -device virtio-rng-pci \
+            -drive "file=$guest,if=virtio,format=qcow2,cache=unsafe" \
+            -drive "file=$seed,if=virtio,format=raw,readonly=on" \
+            -drive "file=$work/pr686-payload.iso,media=cdrom,readonly=on" \
+            -nic none \
+            -display none \
+            -monitor none \
+            -serial "file:$serial" \
+            -no-reboot \
+            -sandbox on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny
+          qemu_rc=$?
+          set -e
+
+          test -f "$serial"
+          serial_sha=$(sha256sum "$serial" | awk '{print $1}')
+          begin=$(grep -aF "CLAY_PR686_GUEST_BEGIN source_sha=$RESEARCH_SHA source_tree=$RESEARCH_TREE" "$serial" | tail -n1 || true)
+          netifs=$(sed -n 's/^CLAY_PR686_NETIFS=//p' "$serial" | tail -n1 | tr -d '\r')
+          manifest_rc=$(sed -n 's/^CLAY_PR686_PAYLOAD_MANIFEST_EXIT=//p' "$serial" | tail -n1 | tr -d '\r')
+          compile_rc=$(sed -n 's/^CLAY_PR686_COMPILE_EXIT=//p' "$serial" | tail -n1 | tr -d '\r')
+          guest_result=$(sed -n 's/^CLAY_PR686_GUEST_RESULT=//p' "$serial" | tail -n1 | tr -d '\r')
+          end=$(grep -aF 'CLAY_PR686_GUEST_END' "$serial" | tail -n1 || true)
+          test -n "$begin"
+          test "$netifs" = 'lo,'
+          test "$manifest_rc" = 0
+          test "$compile_rc" = 0
+          test "$guest_result" = PASS
+          test -n "$end"
+          test "$qemu_rc" = 0
+
+          python3 - "$receipt" "$expected" "$SOURCE_ARCHIVE_SHA256" "$PAYLOAD_ISO_SHA256" "$serial_sha" "$qemu_version" "$qemu_rc" "$manifest_rc" "$compile_rc" "$netifs" <<'PY'
+          import json, os, pathlib, sys
+          out,image_sha,archive_sha,payload_iso_sha,serial_sha,qemu_version,qemu_rc,manifest_rc,compile_rc,netifs=sys.argv[1:]
+          payload={
+            'schema':'ClayVerseVpsQemuTcgPr686CompileSmoke/v1',
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'executor_type':'QEMU_TCG',
+            'research_sha':os.environ['RESEARCH_SHA'],
+            'research_tree':os.environ['RESEARCH_TREE'],
+            'source_archive_sha256':archive_sha,
+            'payload_iso_sha256':payload_iso_sha,
+            'guest_base':'ubuntu-noble-current-signed-cloud-image',
+            'guest_base_sha256':image_sha,
+            'guest_base_signature_verified':True,
+            'qemu_version':qemu_version,
+            'guest_network_mode':'NONE',
+            'guest_network_interfaces':netifs,
+            'guest_vcpus':2,
+            'guest_memory_mib':2048,
+            'host_orchestration_only':True,
+            'product_code_executed_on_host':False,
+            'host_docker_used':False,
+            'host_filesystem_share':False,
+            'payload_read_only':True,
+            'payload_manifest_exit':int(manifest_rc),
+            'compileall_exit':int(compile_rc),
+            'qemu_exit_status':int(qemu_rc),
+            'serial_log_sha256':serial_sha,
+            'product_runtime_credit_scope':'PYTHON_COMPILE_SMOKE_ONLY',
+            'exact_oci_credit':False,
+            'tier2_credit':False,
+            'live_provider_credit':False,
+            'final_hardware_microvm_credit':False,
+            'whole_product_pass':False,
+            'unusual_experiment_count_added':0,
+          }
+          pathlib.Path(out).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(payload,sort_keys=True))
+          PY
+          test -s "$receipt"
+
+      - name: Destroy temporary VMM, guest payloads, and staged source
+        if: always()
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          work="/tmp/clayverse-rootless-qemu-${GITHUB_RUN_ID}"
+          pkill -TERM -P $$ qemu-system-x86_64 2>/dev/null || true
+          sleep 1
+          pkill -KILL -P $$ qemu-system-x86_64 2>/dev/null || true
+          rm -rf "$work" "$GITHUB_WORKSPACE/exact-pr686"
+          test ! -e "$work"
+          test ! -e "$GITHUB_WORKSPACE/exact-pr686"
+
+      - name: Upload bounded guest receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clayverse-vps-rootless-qemu-guest-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/clayverse-rootless-qemu-guest-${{ github.run_id }}.json
+            ${{ runner.temp }}/clayverse-pr686-qemu-compile-${{ github.run_id }}.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Destroy local receipts after upload
+        if: always()
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          rm -f \
+            "$RUNNER_TEMP/clayverse-rootless-qemu-guest-${GITHUB_RUN_ID}.json" \
+            "$RUNNER_TEMP/clayverse-pr686-qemu-compile-${GITHUB_RUN_ID}.json"
+          test ! -e "$RUNNER_TEMP/clayverse-rootless-qemu-guest-${GITHUB_RUN_ID}.json"
+          test ! -e "$RUNNER_TEMP/clayverse-pr686-qemu-compile-${GITHUB_RUN_ID}.json"

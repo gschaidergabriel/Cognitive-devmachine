@@ -1,0 +1,101 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v23",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:20+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V22_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V22",
+  "revision_reason": "Immediate moving-main reentry after v22 observed commit 064055e34a871eeadc55540a3b9fd44004991034, which repairs the specific A02 Git-object source-lineage gap that v21/v22 correctly classified as open. V23 therefore narrows A02 back to source-implemented/runtime-execution-unobserved while preserving A03 replay-root, exact-current execution and all downstream training/J-Space gates. No row/token/causal/training credit is promoted.",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_v23_write": "d9940d1a0c5c02f96d098c319195bd1f02272eb5",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "artifact_lifecycle_overrides": [
+    {
+      "artifact_id": "T2-LEDGER-V22",
+      "status": "SUPERSEDED",
+      "successor": "T2-LEDGER-V23",
+      "revision_reason": "V22 was correct at observation but its A02 Git-object-lineage-needs-revision classification became stale when 064055e landed immediately afterward."
+    },
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "status": "CURRENT_SOURCE_IMPLEMENTED_GIT_OBJECT_LINEAGE_BOUND_RUNTIME_EXECUTION_UNOBSERVED",
+      "repair_commit": "064055e34a871eeadc55540a3b9fd44004991034",
+      "predecessor_status": "CURRENT_SOURCE_CANDIDATE_NEEDS_REVISION_GIT_OBJECT_BOUND_LINEAGE_PROOF",
+      "successor": "exact-current adversarial mutation + retained-v4 repository-bound execution receipt",
+      "revision_reason": "The gate now resolves a real Git commit, checks expected repository identity, commit:path bytes/source SHA-256, source-commit ancestry to executed HEAD, executed HEAD/tree identity and HEAD path bytes. Source repair is not runtime evidence."
+    },
+    {
+      "artifact": "tools/trigger2_generation_provenance_gate_v1.py + TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json",
+      "status": "CURRENT_COMPONENT_NEEDS_A03_REPLAY_ROOT_PROOF_OR_SUCCESSOR_REVISION",
+      "revision_reason": "Unchanged from v22/v21: historical generation authority still requires exact manifest identity or a mandatory immutable verified outer replay root."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2220_INTERACTION_AWARE_JSPACE_CAUSAL_METROLOGY_V1_GPT56SOL.json",
+      "status": "CURRENT_RESEARCH_METHOD_DELTA_NONPROMOTING",
+      "commit": "1c32f044aead8ad40ad2a91d3510bd723df3b0b4",
+      "revision_reason": "Retained from v22 as downstream causal-metrology requirement; no effect on the upstream execution/provenance gate order."
+    },
+    {
+      "artifact": "JSPACE_HYBRID_SITE_IDENTITY_CANDIDATE/v1 + T2_JSPACE_INTERVENTION_DIVERGENCE_GUARD_V1 + T2_JSPACE_BUCKETED_CAUSAL_ALIGNMENT_GUARD_V1 + FUTURE_CONSUMER_EQUIVALENCE/v1 + T2_ACTIONABILITY_AND_ROLE_TYPED_NUISANCE_GATE_V1",
+      "status": "CURRENT_FUSED_JSPACE_EVALUATION_STACK_NONPROMOTING",
+      "revision_reason": "Retain v22: architecture role/source policy/actionability/multi-mediator interaction/divergence/buckets/future consumers are model-specific evaluation axes, not positive labels or admission authority."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "CURRENT_DETERMINISTIC_SEMANTIC_REFERENCE_NOT_EVIDENCE_AUTHORITY",
+      "functions": ["u_state", "d_resolve", "u_test_order", "f_salience_order"]
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "revision_reason": "Conditional/model-visible nuisance leakage remains dispositive."
+    },
+    {
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24 supervisor 8.63",
+      "status": "STALE_AS_CURRENT_AUTHORITY_USEFUL_BOOTSTRAP_DONOR",
+      "successor": "BOOTSTRAP_MINIMAL 8.78 + PROGRAM_STATE 8.78 + SUPERVISOR_STEERING_8_78 + current owner correction + T2-LEDGER-V23"
+    }
+  ],
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "A02 source lineage has advanced, but exact-current repository-bound execution is still unobserved, A03 replay-root identity remains unresolved, and immutable-history/OBSERVED/nuisance/split/tokenizer/actionability gates remain open. Source repair cannot mint training data."
+  },
+  "current_frontier": [
+    "P0A add/confirm adversarial mutations covering nonexistent well-formed commit, non-ancestor commit, wrong commit:path/blob, origin/repository mismatch and post-checkout mutation against the repaired Git-object-bound A02 gate",
+    "P0B execute exact-current A02 adversarial mutation suite plus retained-v4 composition on the admitted FREE_ONLY repository-bound zero-cost execution surface and persist HEAD/tree/source/full-policy/lineage zero-credit receipt",
+    "P0C resolve A03 generation-authority replay-root identity",
+    "then close immutable genesis/ordered-history producer authority and authenticate OBSERVED evidence producer",
+    "rebind a small native seed and run final rendered family/provenance/tokenizer/role-typed nuisance/ordered-history gates",
+    "only after exact Qwen3.5 runtime identity exists, preregister the fused J-Space source-policy + hybrid-site + actionability + interaction + divergence + bucket + future-consumer + multi-seed metrology stack",
+    "only then admit a small family-disjoint positive pilot through Forge/Distillery"
+  ],
+  "credits": {
+    "research_delta": 1,
+    "versioning_reentry_delta": 1,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "trigger2_a02_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Run/complete the adversarial mutations against the repaired Git-object-bound A02 gate and execute the exact-current retained-v4 composition on the admitted FREE_ONLY repository-bound zero-cost surface. Keep all positive training generation closed until the resulting execution receipt and A03 replay-root gate pass."
+}

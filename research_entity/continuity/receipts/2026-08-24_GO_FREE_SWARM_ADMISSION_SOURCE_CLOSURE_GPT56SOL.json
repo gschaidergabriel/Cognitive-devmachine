@@ -1,0 +1,71 @@
+{
+  "schema": "CLAY_GO_FREE_SWARM_ADMISSION_SOURCE_CLOSURE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch_observed": "8.67",
+  "main_sha_observed_before_write": "9d16b4ef028d1b98319e7cb876c5b6ea1ff3b2f8",
+  "finding": "The 8.67 FREE swarm admission-ordering defect is closed at source level across the current 24h swarm shell supervisor, provider admission resolver, worker key lookup/chat path, and catalog-discovery path. Typed canonical FREE admission is now resolved before provider secret/key access and before provider network I/O. Environment attestation flags are compatibility outputs, not admission authority.",
+  "source_evidence": {
+    "supervisor_shell": "tools/run_24h_entityos_swarm_supervisor.sh",
+    "provider_admission": "tools/free_provider_admission.py",
+    "worker_runtime": "tools/run_free_go_swarm.py",
+    "swarm_driver": "tools/run_24h_entityos_swarm.py",
+    "provider_registry": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "current_provider_state": "NO_PROVIDER_IS_TYPED_FREE_ADMITTED_UNDER_OBSERVED_8_67_REGISTRY",
+    "shell_secret_boundary": "MIXED_SECRET_FILES_ONLY_AFTER_ALL_RELEVANT_PROVIDERS_FREE_ADMITTED; GROQ_SPECIFIC_SECRET_ONLY_AFTER_GROQ_FREE_ADMITTED",
+    "catalog_boundary_commit_observed": "e77704688a2f930a0fcea3d0591fcdfc86308684"
+  },
+  "execution_evidence": {
+    "github_workflow_runs_for_9d16b4ef028d1b98319e7cb876c5b6ea1ff3b2f8": 0,
+    "canonical_tripwire_runtime_receipt_observed": false,
+    "local_chatgpt_sandbox_discriminator": {
+      "scope": "NONCANONICAL_COMPONENT_LOGIC_ONLY",
+      "tests": "6/6 PASS",
+      "negative_cases": [
+        "MISSING_GLOBAL_ADMISSION",
+        "MISSING_PROVIDER_ADMISSION",
+        "UNKNOWN",
+        "PAID",
+        "SUBSCRIPTION"
+      ],
+      "negative_secret_lookups": 0,
+      "negative_network_attempts": 0,
+      "runtime_credit": 0
+    }
+  },
+  "duplicate_avoidance": {
+    "abandoned_unmerged_candidate_commit": "19346b32c1015272954f7458dbc2b9af0393e460",
+    "candidate_status": "NOT_ON_MAIN",
+    "reason": "Parallel canonical implementation landed first and is better integrated; force update was not used and duplicate admission authority was intentionally not introduced."
+  },
+  "inference_v4_side_finding": {
+    "retained_hcu_pr": 1263,
+    "donor_head_observed": "0b205544fa262afeb714a697f29d3c891551c424",
+    "new_rejection_boundary_test": "the artefact/MicroEntity/hcu/test_inference_v4_rejection_boundaries_v1.py",
+    "execution_observed_in_this_go": false,
+    "unknown_semantics": "UNKNOWN remains a legitimate unresolved J-Space state and must not be converted into UNKNOWN_RESULT_REJECT."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_identity_available_to_this_organ": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "go_tracks": {
+    "A": "ENTITYOS_EXECUTABLE_CONVERGENCE: source-level FREE provider admission ordering converged without duplicate authority",
+    "B": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT: typed cost-class/provider admission boundary verified across swarm entry paths",
+    "C": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY: no runtime promotion; PR1263 exact negative-boundary donor remains source-only pending admitted execution"
+  },
+  "acceptance": "SOURCE_CLOSURE_ONLY_RUNTIME_CLOSURE_PENDING",
+  "next_exact_action": "On an authorized zero-cost local workstation or clay-direct-dev sandbox, execute a source/hash-bound FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 with secret and socket tripwires proving zero secret lookups and zero network attempts for missing admission and UNKNOWN/PAID/SUBSCRIPTION cases; then execute the exact PR1263 0b205 inference-v4 rejection-boundary test if still current and nonduplicate. Do not start provider traffic unless typed cost_class=FREE admission exists."
+}

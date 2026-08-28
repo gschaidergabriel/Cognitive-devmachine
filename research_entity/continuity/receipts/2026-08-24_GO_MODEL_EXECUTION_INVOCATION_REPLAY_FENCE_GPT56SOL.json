@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_before_write": "db37e44b04f4d4d1d4af57d5683693a05b641a6c",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_ZERO_NEW_UNUSUAL_EXPERIMENTS",
+    "reason": "No shared immutable request id or reproducible whole-second trigger timestamp was exposed for the canonical create-only atomic lease.",
+    "unusual_experiment_count_added": 0
+  },
+  "observed_source_frontier": {
+    "retained_donor_pr": 1263,
+    "retained_donor_snapshot_after_manifest": "0e6ad07c8efb87fd28fa01f34a8e8a251533af61",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "d9a0ba65d46ad208102ed1afc325e68feae3272b",
+    "executor_route": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js"
+  },
+  "architecture_delta": {
+    "selected_chain": "Typed Entry -> Route -> VerifiedEngineAdmission -> VerifiedEngineLoad -> scheduler-owned GRID10 -> actual model-executor observation -> VerifiedModelExecution -> HCU_INFERENCE_RECEIPT/v4 -> ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3",
+    "source_changes": [
+      {
+        "commit": "866acb4297115aba7e2f8186a12acc20a110149a",
+        "claim": "model_execution_receipt_v1 now requires an externally admitted executor-scoped invocation identity to bind to the exact admitted observation digest",
+        "runtime_credit": 0
+      },
+      {
+        "commit": "396059b3f923eaf4cca5c8c40d674a0efe34513e",
+        "claim": "model-execution tests now include same executor/invocation with different output bytes as a fail-closed regression candidate",
+        "execution_status": "SOURCE_ONLY_UNEXECUTED"
+      },
+      {
+        "commit": "0203690f39e0ec90b1c3957f7ab58d370bdcaf23",
+        "claim": "inference-v4 fixture is wired to the invocation admission contract",
+        "execution_status": "SOURCE_ONLY_UNEXECUTED"
+      },
+      {
+        "commit": "0e6ad07c8efb87fd28fa01f34a8e8a251533af61",
+        "claim": "MicroEntity PACKAGE_MANIFEST schema 8 now reflects GRID10 -> VerifiedModelExecution -> Inference/v4 -> J-Space/v3 and the invocation replay policy",
+        "runtime_credit": 0
+      }
+    ]
+  },
+  "falsifier_closed_at_source_scope": {
+    "question": "Can the same executor_id plus invocation_id be independently admitted with different output bytes merely by minting a second observation digest?",
+    "source_contract_answer": "NO: verify_model_execution requires an external invocation registry mapping the executor-scoped invocation key to exactly the observation digest being verified.",
+    "positive_runtime_evidence": false,
+    "remaining_runtime_requirement": "The real executor/admission owner must atomically persist that invocation-to-observation mapping; test-local dictionaries do not establish runtime authority."
+  },
+  "execution_evidence": {
+    "donor_head_ci_status": "NO_STATUS",
+    "donor_head_workflow_runs": 0,
+    "vercel_exact_current_status": "EXECUTION_ADMISSION_BLOCKED",
+    "vercel_blocker": "Hobby build-rate limit prevented the exact-current PR810 deployment before test execution; available protected fetch also returned SSO redirect rather than capsule execution.",
+    "test_failure_observed": false,
+    "source_tests_executed_for_new_delta": false,
+    "historical_bound_component_evidence_preserved": "Earlier exact GRID10/J-Space binder-v2 Sandbox 6/6 evidence remains valid only for its historical exact snapshot and component scope."
+  },
+  "credit": {
+    "entityos_hcu_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Rebind the single retained PR810 fixed capsule to an immutable current donor snapshot carrying exact canonical producer bytes, not upstream doubles.",
+    "Run model_execution, inference-v4 and J-Space-v3 deterministic regressions in an admitted FREE_ONLY Vercel Sandbox when build admission is available.",
+    "Require the real executor/admission owner to demonstrate atomic invocation_id -> observation_sha256 uniqueness under replay/concurrency before granting model-runtime credit.",
+    "Only after that exact causal path executes may a zero-cost local approximately 0.8B model run receive bounded J-Space model-runtime credit."
+  ],
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_PROVENANCE_FENCE_EXECUTION_BLOCKED",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_MODEL_EXECUTION_REPLAY_FENCE",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_TO_EXECUTION_BOUND_INFERENCE_V4_JSPACE_V3_SOURCE_CHAIN_NO_MODEL_RUNTIME_CREDIT"
+  }
+}

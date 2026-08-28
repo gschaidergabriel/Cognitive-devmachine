@@ -1,0 +1,65 @@
+{
+  "schema": "GO_UCF_CANONICAL_PLACEHOLDER_HARDENING/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "base_main": "9145289c461e7d0bff0cf3da6dd570037f374fe7",
+  "branch": "go/ucf-canonical-placeholder-hardening-20260823",
+  "superseded_duplicate_pr": 1096,
+  "canonical_paths": {
+    "validator": "tools/validate_unified_cognitive_fabric_receipt_v1.py",
+    "tests": "tests/test_unified_cognitive_fabric_receipt_v1.py"
+  },
+  "source_commits": {
+    "validator": "81f5d395f6b347dd2288660d2530a60191d3d10a",
+    "tests": "119e89f1c89ddb757625d54ed0e57777e228e99b"
+  },
+  "exact_git_blobs": {
+    "validator": "6c65001c6fde21b1d286410128bd7e13134c4571",
+    "tests": "a9629098884c74be37df6f945cf3ffcea89857f2"
+  },
+  "r0_observed": [
+    "The active tools/ UCF validator accepted SHA-shaped all-zero/all-f placeholders because _hex checked format only.",
+    "The active tests/ positive fixture used an all-f 64-hex value as a normal J-Space/adapter digest, proving this placeholder class was admitted by the canonical path.",
+    "Current main already rejects equivalent placeholder artifact identity in the bundled cognition/boot-binding ancestry, so the downstream UCF envelope was weaker than its ancestry."
+  ],
+  "r1_infer": "A format-valid but non-identifying placeholder could survive into a canonical UCF evidence envelope and create false exact-identity appearance.",
+  "r2_delta": [
+    "Add one shared _is_placeholder_hex guard to the existing canonical _hex parser.",
+    "Reject all-zero/all-f placeholders for Git OIDs and SHA-256 identity/evidence digests without creating a second validator path.",
+    "Replace the positive all-f fixture digest with a non-placeholder value.",
+    "Add six focused placeholder poison cases covering source, identity, bundled core, inference result and intervention identities."
+  ],
+  "r3_counter": "Upstream boot binding might reject placeholders before UCF validation, but tools/validate_unified_cognitive_fabric_receipt_v1.py is independently callable and must preserve its own evidence-envelope identity invariant.",
+  "fusion": {
+    "preserved_current_capability_fence": true,
+    "duplicate_agentzeroforschung_path_promoted": false,
+    "duplicate_pr_closed": true,
+    "new_state_or_effect_authority_created": false
+  },
+  "execution": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "training": false,
+    "container_git_fetch": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB",
+    "exact_branch_test_credit": 0
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "reason": "No immutable shared macrocycle/request identity was exposed to this organ; deterministic placeholder regressions do not consume the unusual-experiment slot."
+  },
+  "claims": {
+    "source_delta": "WRITTEN_TO_CANONICAL_BRANCH_PATH",
+    "mechanism": "SOURCE_REVIEW_SUPPORTED_PENDING_EXECUTION",
+    "exact_branch_runtime": "UNOBSERVED",
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_gate": "Execute the exact canonical branch blobs in repository CI or another authorized isolated executor; do not infer semantic PASS from source shape or a workflow that fails before test steps."
+}

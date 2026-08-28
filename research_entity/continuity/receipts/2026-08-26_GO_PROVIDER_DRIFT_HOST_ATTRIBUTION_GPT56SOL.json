@@ -1,0 +1,42 @@
+{
+  "schema": "CLAY_GO_PROVIDER_DRIFT_HOST_ATTRIBUTION/v1",
+  "date": "2026-08-26",
+  "trigger": "go",
+  "target": "XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25",
+  "observed_main_before_delta": "9a04851cf3c9c7cdf5da1451380bc1d690a667fa",
+  "evidence": {
+    "clay_direct_dev_quiescence_component_commit": "e03c2bc90ec1f79487c388be313917bf19762653",
+    "clay_direct_dev_status": "PASS_COMPONENT_ONLY_ZERO_SURVIVORS",
+    "fleet_quiescence_closed": false,
+    "latest_cached_openrouter_delta": {
+      "total_requests": 87,
+      "total_429": 87,
+      "total_success": 0
+    },
+    "classification": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING"
+  },
+  "inference": "The designated clay-direct-dev sandbox is no longer the leading suspect for the observed provider drift. The unresolved P0 is host/process attribution elsewhere in the execution fleet or another provider-capable process class not covered by legacy filename matching.",
+  "delta": {
+    "tool_path": "tools/free_swarm_provider_capability_attribution_v1.py",
+    "tool_commit": "5729c3c236ace8689d14c40b634cc3beaba8940b",
+    "test_path": "tests/test_free_swarm_provider_capability_attribution_v1.py",
+    "test_commit": "1cf1bd2eadd017e3bb9042d6d8d3db443ae4816a",
+    "behavior": [
+      "no network/provider/model calls",
+      "no process termination",
+      "bind host via hostname, hashed machine-id, boot-id and pid namespace",
+      "scan process cmdlines for known provider-capable classes",
+      "scan process environments for provider credential VARIABLE NAMES only, never values",
+      "bind PPID/exe/cgroup for candidate process trees",
+      "measure direct canonical-provider budget counter delta over bounded window",
+      "separate candidate presence from causal attribution"
+    ]
+  },
+  "credit": {
+    "runtime_quiescence": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "training": 0
+  },
+  "next_exact_action": "Run the attribution probe on every host/sandbox/runner capable of exercising the canonical provider-budget path, starting with the bare VPS/self-hosted-runner surface outside clay-direct-dev. Require a bound host fingerprint, provider-key-name-only process candidates and a bounded direct counter delta. If one host shows counter movement plus a stable provider-capable process tree, terminate only the specifically identified legacy provider process under existing owner HARD_OFF authority, then rerun the canonical quiescence probe for a zero-survivor/zero-delta receipt."
+}

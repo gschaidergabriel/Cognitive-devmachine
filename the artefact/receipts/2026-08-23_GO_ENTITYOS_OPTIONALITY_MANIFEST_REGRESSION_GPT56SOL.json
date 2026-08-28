@@ -1,0 +1,40 @@
+{
+  "schema": "CLAYVERSE_SOURCE_MECHANISM_RECEIPT/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main_sha": "e72e7101753fb8d2d7bc54bf5abcd86d709416f4",
+  "finding": "Current owner law says EntityOS is an optional separately-admitted internal substrate, while canonical manifest still imposed complete EntityOS as an unconditional final ClayVerse acceptance gate.",
+  "delta": [
+    "manifest role changed to staged internal EntityOS with execution optional",
+    "execution default made explicit DISABLED",
+    "whole-product gate made conditional on explicit admission",
+    "unconditional final-pass EntityOS requirement removed",
+    "conditional exact EntityOS effect-round-trip retained when execution is enabled",
+    "new non-competing regression test reads current owner directive plus canonical manifest and fails closed on authority drift"
+  ],
+  "exact_component_evidence": {
+    "test_blob_sha": "bf34d7def688e49646543f583b6c1f5066915c76",
+    "manifest_blob_sha": "fe6a601efdbe350a7b34816c4ffceb182df5cab8",
+    "git_hash_object_test_match": true,
+    "py_compile": "PASS",
+    "unittest": "5/5 PASS",
+    "test_environment": "authorized isolated local component environment with synthetic owner/manifest fixtures",
+    "scope": "test logic and fail-closed mechanism only; exact full repository integration remains unobserved"
+  },
+  "runtime_credit": {
+    "whole_clayverse": 0,
+    "oci": 0,
+    "entityos_execution": 0
+  },
+  "execution_boundary": {
+    "vps_or_self_hosted_test": false,
+    "together": false,
+    "paid_execution": false
+  },
+  "unusual_experiment": {
+    "consumed": false,
+    "reason": "NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE_EXPOSED; deterministic regression only"
+  },
+  "next_gate": "run exact-current full repository regression and OCI build/startup on an actually-started authorized isolated executor"
+}

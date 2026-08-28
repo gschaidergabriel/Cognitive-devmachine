@@ -1,0 +1,50 @@
+{
+  "schema": "ClayVerseBoundedReceipt/v1",
+  "created_at": "2026-08-17T23:10+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "trigger": "go",
+  "classification": "FUSE_NO_CHANGE_SUPERSEDED_DUPLICATE",
+  "scope": "MICROVM_RWOP_CURRENT_MAIN_REENTRY",
+  "exact_current_main_at_reentry": "7a760fa7f918c4241d97dc1af1e6328b14a3855a",
+  "observed_canonical_main": {
+    "template_blob": "bd04961f5de42d92df6201c1605f876b307df4b5",
+    "contract_blob": "3e6dcf417e7b9dbd83aae9cda75e9c2cb54a4e1b",
+    "test_blob": "1c0555db7a027a383408ef5367c2de84083dd404",
+    "state_pvc": "ReadWriteOncePod",
+    "workspace_pvc": "ReadWriteOncePod",
+    "fs_group": 10001,
+    "rwop_contract": "PRESENT",
+    "rwop_source_regression": "PRESENT"
+  },
+  "adjudication": {
+    "earlier_frontier_finding": "VALID_AT_INITIAL_OBSERVATION",
+    "branch_candidate": "SEMANTICALLY_DUPLICATED_BY_PARALLEL_CANONICAL_MAIN_ADVANCE",
+    "pr": 644,
+    "pr_state": "CLOSED_UNMERGED_SUPERSEDED",
+    "canonical_action": "NO_CHANGE_KEEP_STRONGER_CURRENT_MAIN",
+    "stale_force_or_overwrite": false
+  },
+  "parallel_main_strength": [
+    "RWOP on both canonical writable PVCs",
+    "CSI RWOP support required and uncertain writer fencing BLOCKED",
+    "existing focused source fence in test_microvm_deployment_contract.py",
+    "node-local/control-plane/metadata NetworkPolicy exception fencing",
+    "fsGroup non-root ownership fence",
+    "image-authoritative EntityOS digest rule",
+    "Tier-2 in-place restart exclusion"
+  ],
+  "evidence_boundary": "Canonical source has the RWOP repair. No exact current-main Kubernetes/CSI/Kata execution was observed by this organ, so runtime writer-exclusivity remains unverified and whole-product PASS is not established.",
+  "latest_execution_surface": {
+    "deployment": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "sandbox_admission": "PASS_CREATED",
+    "guest_kernel": "Linux 6.12.76 x86_64",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0
+  },
+  "next_frontier": "Do not spend more source work on RWOP. Highest-information product gate remains provisioning the private GitHub read credential strictly host-side for the admitted Vercel preview controller, then one fresh exact-current source/OCI batch; later real CSI/Kata runtime must empirically prove competing-Pod RWOP denial and Tier-2 replacement semantics."
+}

@@ -1,0 +1,71 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_RUNTIME_GATE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "observed_research_main_before_runtime_gate": "525cff00ef6639c46269ca506b04216dafd4db1d",
+  "retained_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "observed_live_head": "ff67cf4192e9fbb3ea8aee2819f2dbeddd576ee6",
+    "state": "OPEN_DRAFT_DONOR_ONLY"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "qualified_identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "observed_live_head": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "state": "OPEN_DRAFT_EXECUTOR_ONLY"
+  },
+  "execution_candidate": {
+    "vercel_team_plan": "hobby",
+    "vercel_project": "dr-unterweger",
+    "deployment_id": "dpl_98ALxQrZppsRQUqSxCZZyKxTMpy2",
+    "deployment_state": "READY",
+    "deployment_git_sha": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "exact_executor_head_match": true,
+    "route": "/api/hcu-jspace-grid10-binding-capsule",
+    "route_source_verification_before_cost_gate": true,
+    "route_fixed_source_blob_count": 17,
+    "route_fixed_test_count": 14,
+    "route_cleanup_required": true
+  },
+  "observations": [
+    "The Vercel project exposed a naturally available READY preview whose Git SHA exactly matched the live retained executor PR810 head.",
+    "The exact-head deployment build completed successfully with no build error lines.",
+    "The first protected route fetch returned HTTP 302 to Vercel SSO before Function execution evidence was observed.",
+    "A Vercel-generated temporary share-access path was also attempted, but the route still returned HTTP 302 to Vercel SSO before Function execution evidence was observed.",
+    "No Sandbox result payload, source-verification result, FREE_ONLY admission result, test output, exit code, cleanup result or component PASS was observed from the exact-head Function invocation."
+  ],
+  "classification": {
+    "runtime_gate": "AUTH_BLOCKED_BEFORE_FUNCTION_OBSERVATION",
+    "infrastructure_auth_failure_is_product_failure": false,
+    "deployment_ready_is_function_invocation_evidence": false,
+    "component_runtime_credit_added": false,
+    "entityos_hcu_whole_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_EVIDENCE_BOUNDARY: exact-head READY executor deployment exists; next blocker isolated to protected Function access rather than source/build freshness.",
+    "track_b_hcu_typed_entry": "NO_NEW_RUNTIME_CREDIT: fixed 17-blob Typed Entry->route->engine/load->GRID10->execution-store chain remains source-bound; exact-head Function body was not observed executing because auth intercepted the request.",
+    "track_c_jspace_gwt_training_readiness": "NO_NEW_MODEL_OR_TRAINING_CREDIT: J-Space/GWT inference-binding capsule remains the exact next runtime discriminator; protected access blocked observation before the fixed 14-test capsule could run."
+  },
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "reason": "The canonical atomic lease protocol requires a shared immutable request id or at least whole-second immutable user-message timestamp metadata; neither was available to this organ. Ordinary exact-source acceptance work remained allowed."
+  },
+  "negative_evidence_preserved": true,
+  "secrets_or_share_tokens_persisted": false,
+  "next_exact_gate": "Obtain a connector-supported authenticated fetch that reaches the already-existing exact-head protected preview Function without changing plan/billing or creating a new execution lane; then invoke only the fixed FREE_ONLY route and require pre-cost 17-blob verification, admitted Sandbox creation, exact 14-test result fence, secret fence, exit 0 and cleanup. If access still terminates at SSO, keep the gate AUTH_BLOCKED and grant zero runtime credit.",
+  "evidence_boundary": "This receipt establishes current deployment/source/auth-boundary observations only. It does not establish Function invocation, Sandbox execution, component PASS, whole EntityOS/HCU runtime, real model execution, J-Space model causality, training benefit or whole-product acceptance."
+}

@@ -1,0 +1,94 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.71",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_branch": "7db29cb2a7b514793a421b93ec6b158cb39b440e",
+  "branch": "gpt56sol/go871-forge-distillery-admission-20260824",
+  "authority_resolution": {
+    "bootstrap_source_cache_epoch": "8.63_STALE",
+    "current_bootstrap_epoch_observed": "8.71",
+    "current_program_state_epoch_observed": "8.71",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_execution_controller": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "atomic_unusual_experiment_claim": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "overlap_search": "No open PR specifically implementing Forge ACCEPTED -> Distillery dataset admission was found before branch creation."
+  },
+  "observed_funnel": {
+    "runtime_snapshot_generated_at": "2026-08-24T14:14:00.324896+00:00",
+    "successful_worker_outputs": 1128,
+    "architecture_delta_records": 215,
+    "forge_ready": 141,
+    "forge_evaluations": 141,
+    "forge_accepted_deltas": 1,
+    "distillery_accepted_dataset_tokens": 0,
+    "distillery_accepted_packets": 0,
+    "runtime_authority_mismatch": "Snapshot embeds older admission authority and is not exact-current 8.71 runtime credit."
+  },
+  "source_observation": {
+    "forge_source": "tools/run_free_evidence_forge.py",
+    "distillery_source": "tools/run_research_distillery.py",
+    "finding": "Forge reads Distillery questions and writes accepted evaluation records, while Distillery independently ingests worker questions and synthesizes/reviews research packets. No deterministic path admits an exact accepted Forge evaluation into the Distillery dataset. The first Forge acceptance therefore has no source-level conversion edge into accepted_dataset_tokens.",
+    "classification": "SOURCE_LEVEL_MISSING_CONVERSION_EDGE"
+  },
+  "hypothesis": {
+    "id": "FORGE_ACCEPTED_NOT_DISTILLED_MISSING_EDGE",
+    "statement": "A structural reason Distillery remains at zero after the first Forge acceptance is that no exact Forge ACCEPTED -> Distillery admission edge exists.",
+    "counterhypothesis": "The zero Distillery yield is dominated by runtime authority misalignment or lack of an exact accepted evaluation record, so adding the bridge will not create live yield until the runtime is successor-aligned and produces source-bound accepted records.",
+    "discriminator": "On a successor-aligned 8.71 runtime, run the bridge against architecture_delta_evaluations.jsonl after an accepted exact-source evaluation and observe whether one new deterministic Distillery packet and nonzero accepted_dataset_tokens appear exactly once."
+  },
+  "delta": {
+    "tool": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_ingest_871.py",
+    "schema": "CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v1",
+    "behavior": [
+      "admits only CLAY_FORGE_DELTA_EVALUATION/v1 rows with status=accepted and source_scope=EXACT_WORKER_PROMPT_HEAD",
+      "requires exact 40-hex source and evaluation heads, 64-hex worker digest, bounded target blob identities, at least two reproducible runs, zero test/negative/static failures, benchmark non-regression, passing tests and positive measured improvement",
+      "is idempotent by SHA-256 of canonical evaluation JSON",
+      "writes into the existing Distillery SQLite authority rather than a second database",
+      "packet_text contains measured execution evidence only; model-authored proposal hypothesis/falsifier remain metadata marked candidate-only",
+      "explicitly sets canonical_truth=false, J-Space causal credit=0 and training credit=0",
+      "increments existing accepted_dataset_tokens only for deterministically admitted measured execution evidence"
+    ]
+  },
+  "component_logic_check": {
+    "environment": "noncanonical disposable ChatGPT container",
+    "command": "python3 -m unittest -v test_forge_distillery_ingest_871.py",
+    "result": "8/8 PASS",
+    "py_compile": "PASS",
+    "scope": "SOURCE_EQUIVALENT_BRIDGE_LOGIC_ONLY_NOT_PROJECT_RUNTIME"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_SOURCE_MECHANISM",
+      "delta": "Adds the missing deterministic executable-delta -> Forge ACCEPTED -> Distillery dataset conversion edge."
+    },
+    "track_b_hcu_and_typed_entry": {
+      "status": "ADVANCED",
+      "delta": "Adds fail-closed typed/provenance admission across worker digest, exact producer/evaluation commits, target blob identities and measured controls without adding a second truth/effect authority."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "ADVANCED_DATASET_INFRASTRUCTURE_ONLY",
+      "delta": "Measured execution evidence can enter the Distillery dataset without converting model narration into fact; packet scope explicitly excludes J-Space causal/training promotion."
+    }
+  },
+  "credits": {
+    "forge_component_acceptance_count_observed": 1,
+    "distillery_live_bridge_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Re-enter current main, wire the bridge into the successor-aligned Free Swarm/Forge/Distillery supervisor path, then execute it on the first exact-source accepted Forge evaluation and require exactly one new Distillery packet plus nonzero accepted_dataset_tokens with duplicate replay producing zero additional tokens."
+}

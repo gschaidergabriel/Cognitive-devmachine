@@ -1,0 +1,53 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol",
+  "classification": "REFINES",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "observed_main_via_pr629_base_sha": "89a7287928afb2130818eb8b9b8b71f3fa965978",
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "shared trigger metadata is minute-precision only and no immutable shared request/turn id is exposed",
+    "count_executed_by_this_organ": 0
+  },
+  "vercel_execution_reentry": {
+    "project": "dr-unterweger",
+    "deployment_id": "dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8",
+    "controller_commit": "a341eb107f8499f301e730de12680fd2df580fd8",
+    "execution_surface": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_id": "peach-traditional-sparrow-J4uLFC",
+    "sandbox_session_id": "sbx_ZBNVvNkCkxdZFs1FmwAIFJcgkoyb",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "error": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "github_secret_forwarded_to_sandbox": false,
+    "sandbox_stopped": true,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAIL"
+  },
+  "glm_source_hypofusion": {
+    "pr": 629,
+    "observed_head": "5df0789278698a3e9ede5b831fd92ee26d43d6c0",
+    "status": "SOURCE_CANDIDATE_ONLY",
+    "finding_1": "world JSON serialization currently permits Python NaN/Infinity because allow_nan defaults true; canonical inference context should fail closed on non-finite values",
+    "finding_2": "provider response model is accepted when it is any glm-* identifier or omitted; exact requested provider/model identity is not yet fail-closed bound",
+    "reentry_comment_id": 5317475114,
+    "recommended_regressions": [
+      "reject NaN/+Infinity/-Infinity before network",
+      "require exact response model identity or explicit admitted alias contract"
+    ],
+    "external_primary_contract": "Official Zhipu/BigModel Chat Completions documentation shows Bearer auth at /api/paas/v4/chat/completions, a required request model field, and a model field in the response schema."
+  },
+  "whole_product_status": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "next_exact_gate": "Provision approved host-side Vercel Preview GITHUB_READ_TOKEN without forwarding it into Sandbox, then refresh/rebind current Research main plus retained execution-relevant lanes and execute the exact private-source -> regression -> OCI build/digest -> packaged runtime path. In parallel, fold the two GLM fail-closed source findings into the single retained PR629 lane before promotion.",
+  "forbidden_surfaces_used": {
+    "vps": false,
+    "self_hosted_production": false,
+    "together_api": false,
+    "paid_final_training": false
+  }
+}

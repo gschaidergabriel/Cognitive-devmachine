@@ -1,0 +1,71 @@
+{
+  "schema": "CLAY_RESEARCH_HARVEST_RECEIPT/v1",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "track": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+  "evidence_class": "SOURCE_DIRECT_PLUS_MODEL_INFERENCE_NO_RUNTIME_CREDIT",
+  "canonical_main_observed_before_write": "053e5bee1d123749776b7e02affa700e1fc4e354",
+  "problem": "Choose the cheapest zero-cost local intervention-capable backend for the model-specific Global J-Space causal control family without creating a second state or effect authority.",
+  "observed_sources": [
+    {
+      "candidate": "NNsight",
+      "url": "https://github.com/ndif-team/nnsight",
+      "observed": "Project documentation describes local execution on PyTorch models, access to layer activations, activation modification for causal interventions, gradients over intermediate values, and batching of interventions.",
+      "authority": "UPSTREAM_PROJECT_SOURCE"
+    },
+    {
+      "candidate": "pyvene",
+      "url": "https://github.com/stanfordnlp/pyvene",
+      "observed": "Current source exposes intervenable models, original/intervened outputs and collected activations, with hook-based intervention machinery and trainable/static intervention types.",
+      "authority": "UPSTREAM_PROJECT_SOURCE"
+    },
+    {
+      "candidate": "Qwen/Qwen3-0.6B",
+      "url": "https://huggingface.co/Qwen/Qwen3-0.6B",
+      "observed": "Official Qwen model card identifies a 0.6B causal language model with 28 layers, Transformers loading support and Apache-2.0 license.",
+      "authority": "OFFICIAL_MODEL_SOURCE"
+    }
+  ],
+  "hypothesis": "NNsight plus Qwen3-0.6B is the lowest-friction first discriminator because NNsight can wrap a local torch.nn.Module directly, reducing model-specific intervention-mapping work while still exposing named activation sites and mutation needed for matched causal controls.",
+  "counterhypothesis": "pyvene may provide a more structured and reproducible intervention abstraction once Qwen model-component mappings are verified; the generic NNsight path may otherwise permit accidental site/shape drift unless EntityOS binds module path, tensor metadata and intervention identity explicitly.",
+  "first_discriminator": {
+    "model": "Qwen/Qwen3-0.6B",
+    "backend_order": ["NNsight", "pyvene"],
+    "control_family": [
+      "BASELINE_CLEAN",
+      "BASELINE_CORRUPTED",
+      "INTERVENTION_TARGET",
+      "SHAM_CONTROL",
+      "OFF_TARGET_CONTROL"
+    ],
+    "required_identity_bindings": [
+      "checkpoint_digest",
+      "tokenizer_digest",
+      "runtime_and_build_identity",
+      "verified_loader_consumption_identity",
+      "input_causal_event_identity",
+      "layer_and_module_path",
+      "activation_tensor_shape_dtype_device",
+      "intervention_vector_digest_and_alpha",
+      "model_output_digest",
+      "InferenceReceipt/v4_or_successor_identity",
+      "JSPACE_VECTOR_CONTROL_ABI/v1_trace_identity"
+    ],
+    "acceptance": [
+      "the corrupted baseline measurably changes the declared target metric relative to clean",
+      "the target intervention changes the target metric beyond matched sham and off-target controls",
+      "all five members bind the same exact model/runtime/tokenizer/checkpoint family and differ only in declared intervention variables",
+      "rerun at fixed inputs/seeds preserves the declared qualitative ordering within a predeclared tolerance",
+      "no intervention output mints canonical truth or bypasses EffectGate/EffectJournal"
+    ],
+    "falsifier": "If NNsight cannot bind a stable named Qwen3-0.6B activation site under exact local runtime identity, or target effects fail to separate from sham/off-target controls, do not grant J-Space causal credit; test pyvene next or reject the intervention hypothesis."
+  },
+  "runtime_execution": "NOT_PERFORMED_NO_EXPOSED_AUTHORIZED_LOCAL_OR_CLAY_DIRECT_DEV_BRIDGE_IN_THIS_CHAT",
+  "runtime_credit": {
+    "jspace_model": 0,
+    "training": 0,
+    "whole_hcu": 0,
+    "whole_entityos_hcu": 0
+  }
+}

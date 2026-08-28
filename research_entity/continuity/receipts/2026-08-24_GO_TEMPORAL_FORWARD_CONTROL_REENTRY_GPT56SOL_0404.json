@@ -1,0 +1,69 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "45d193b00df6c6dc074a7664df150c69e6c083fb",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "reason": "No upstream shared immutable request/macrocycle identity is exposed to this organ and available user-message time is minute precision only. Work remained deterministic source review, convergence and evidence preservation."
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed": "aa1f625788799e59cd5b01ad3abd0c9ffc31b310",
+    "sandbox_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "8822b9ff8c9c4156bac3a904e49352a839ef6cd0",
+    "executor_intentional_pinned_donor_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d"
+  },
+  "track_a_entityos_executable_convergence": {
+    "status": "ADVANCED_BY_FAIL_CLOSED_REENTRY",
+    "finding": "The retained executor remains intentionally pinned to immutable donor 511d5689 for its current 17-blob/14-result runtime candidate. The newest visible Vercel deployments are bound to older executor SHAs; no READY deployment matching executor head 8822b9ff was observed, so no route or Sandbox invocation is admissible for current-head credit.",
+    "runtime_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "track_b_hcu_and_typed_entry": {
+    "status": "ADVANCED_BY_CAUSAL_BOUNDARY_DISCRIMINATION",
+    "observed_source": [
+      "HCU_MODEL_INPUT_CONTROL_BINDING/v1 proves exact JSPACE_VECTOR_CONTROL_ABI/v1 packet presence exactly once in exact executor-observed input bytes and binds generation/Entry/route/GRID/cell/role/basis/executor/invocation/input identity.",
+      "HCU_MODEL_INPUT_CONTROL_ADMISSION_STORE/v1 atomically cross-binds that byte-level binding to an already-admitted ModelExecutionObservation in canonical MiniUnifiedDB and rejects divergent replay.",
+      "The current admission does not bind an admitted predecessor J-Space trace/step identity proving that the packet existed causally before the controlled invocation."
+    ],
+    "counterhypothesis": "A same-invocation byte-valid control binding plus admitted ModelExecution parent is sufficient to establish forward J-Space control direction.",
+    "counterhypothesis_result": "REJECTED: the packet may have been generated only after the same invocation output contributed to J-Space; current binding/admission identities alone do not exclude this temporally circular post-hoc association."
+  },
+  "track_c_global_jspace_gwt_training_readiness": {
+    "status": "ADVANCED_BY_FORWARD_CAUSAL_TOPOLOGY_GATE",
+    "required_topology": "JSpaceStep(t)/VectorControlPacket(t) -> ModelInputControlBinding(t->t+1) -> ModelExecutionObservation(t+1) -> VerifiedModelExecution(t+1) -> InferenceReceipt(t+1) -> output/contribution(t+1) -> JSpaceStep(t+1)",
+    "forbidden_projection": "VectorControlPacket(t+1) produced from output(t+1) must never be rebound as causal control for invocation(t+1).",
+    "next_deterministic_discriminator": "Add a two-adjacent-step source regression with externally admitted predecessor trace/packet identity; prove packet(t) occurs exactly once in immutable input(t+1), reject same-step packet(t+1) rebound to invocation(t+1), and only then echo the predecessor-control identity through the existing execution/inference/J-Space training provenance spine.",
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "execution_boundary": {
+    "vercel_sandbox_invoked": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "vps_self_hosted_production_testing": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md and retained donor/executor lanes are moving concurrently. Append-only exact-SHA receipt preserves the new temporal-causality discriminator without overwriting newer parallel current-facing convergence."
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Re-enter current PR1263 before writing. If no parallel implementation exists, implement one deterministic predecessor-control edge/admission plus two-step regression that proves packet(t) is admitted before and consumed by invocation(t+1), rejects same-invocation post-hoc circularity, and preserves canonical MiniUnifiedDB/EffectGate authority. Keep PR810 pinned until a naturally available exact-head included-tier READY preview exists."
+}

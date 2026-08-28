@@ -1,0 +1,71 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RUNTIME_TRANSPORT_AMBIGUITY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "observed_main_before_write": "f11b30617ea0438cf02039af025c7623e55e0a3c",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0
+  },
+  "retained_executor": {
+    "repository_qualified_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "head_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_state": "READY",
+    "route": "/api/hcu-runtime-admission-probe",
+    "requested_existing_diagnostic_query": "probe=sandbox-module",
+    "sandbox_create_allowed_by_route": false
+  },
+  "observations": {
+    "connector_fetch_result": "FAILED_BEFORE_RESPONSE_SURFACED",
+    "connector_failure": "Failed to create protection bypass: 429 Too Many Requests",
+    "provider_runtime_log_window_utc": "2026-08-24T07:11:10Z/2026-08-24T07:11:25Z",
+    "provider_runtime_event": "2026-08-24T07:11:18Z GET /api/hcu-runtime-admission-probe HTTP 200 serverless",
+    "runtime_log_query_string_observed": false,
+    "runtime_log_request_id_observed": false,
+    "causal_identity_between_connector_attempt_and_runtime_event": "UNPROVEN",
+    "sandbox_module_import_result": "UNKNOWN",
+    "sandbox_create_observed": false
+  },
+  "adjudication": {
+    "classification": "UNKNOWN_INVOCATION_OUTCOME_NO_BLIND_RETRY",
+    "reason": "The client-side/protection-bypass path reported 429 while the exact deployed route logged an HTTP 200 in the same narrow time window, but the provider log did not expose the query string or a request identity. The 200 therefore cannot be safely attributed to the requested sandbox-module diagnostic, and the failed connector response cannot be treated as proof that no invocation occurred.",
+    "retry_policy": "DO_NOT_BLINDLY_REPLAY_FROM_TRANSPORT_FAILURE",
+    "runtime_credit_change": 0,
+    "sandbox_environment_runtime_credit_change": 0,
+    "hcu_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the retained executor evidence path now has an explicit unknown-outcome boundary for protection-bypass/client failures that coincide with provider-side function execution, preventing duplicate diagnostic replay and false negative classification.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: remaining included Vercel Sandbox quota is still not directly observable, so Sandbox.create and the fixed Python/sqlite3/_sqlite3 HCU environment probe remain fail-closed; no admitted HCU/Typed Entry runtime execution occurred.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: without admitted Sandbox execution and real local model execution there is no new loader-consumption, ModelExecution, InferenceReceipt, J-Space/GWT causal trace, approximately-0.8B model-runtime, or training evidence."
+  },
+  "execution_fences": {
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_create_performed": false,
+    "provider_credential_preflight_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_attempted": false,
+    "vps_self_hosted_or_production_test_attempted": false
+  },
+  "credits_after": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain a directly authoritative read-only remaining included Vercel Sandbox quota signal. If and only if FREE_ONLY Sandbox admission opens, execute the single fixed exact-source environment capability probe; otherwise preserve the blocked gate. For any future protected diagnostic invocation, bind a surfaced request identity/query-specific response before promoting query-level execution credit.",
+  "evidence_boundary": "This receipt records transport/runtime ambiguity and a no-blind-retry decision. It does not prove sandbox-module import, Sandbox.create, HCU/model/J-Space execution, training, or whole-product acceptance."
+}

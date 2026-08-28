@@ -1,0 +1,58 @@
+{
+  "families": {
+    "MID_EPISODE_REMAP": {
+      "output_path": "/tmp/b2_out/TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "output_sha256": "bca32c5d763d62a40419c25b9e69469b4d46e820c0db813725abf00513524fcc",
+      "rows": 540,
+      "split_counts": {
+        "HOLDOUT_FROZEN": 108,
+        "TRAIN": 432
+      }
+    },
+    "PRIOR_OVERRIDE": {
+      "output_path": "/tmp/b2_out/TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "output_sha256": "8f6e209c1d93ba94f9848315164fb2e69bdfa0faa9731b507a305775b70a4758",
+      "rows": 1080,
+      "split_counts": {
+        "HOLDOUT_FROZEN": 216,
+        "TRAIN": 864
+      }
+    },
+    "STALE_BINDING_REJECTION": {
+      "output_path": "/tmp/b2_out/TRIGGER2_B2_STALE_BINDING_REJECTION_CANDIDATE_V1.jsonl",
+      "output_sha256": "e7ba9580f3c775c4efbe7de8ccef18225dabc89f97576947fec925fb12ca1969",
+      "rows": 180,
+      "split_counts": {
+        "HOLDOUT_FROZEN": 36,
+        "TRAIN": 144
+      }
+    }
+  },
+  "overall_pass": true,
+  "reports": {
+    "MID_EPISODE_REMAP": {
+      "failures": [],
+      "pass": true,
+      "rows": 540
+    },
+    "PRIOR_OVERRIDE": {
+      "agree_rows": 180,
+      "coincidental_agreement_note": "expected permutation-combinatorics overlap, not a leak -- see comment above",
+      "coincidental_target_distractor_agreement_on_queried_class_within_disagree_rows": 180,
+      "disagree_rows": 900,
+      "failures": [],
+      "pass": true,
+      "rows": 1080
+    },
+    "STALE_BINDING_REJECTION": {
+      "failures": [],
+      "pass": true,
+      "rows": 180,
+      "stale_rows": 90,
+      "valid_rows": 90
+    }
+  },
+  "schema": "CLAY_TRIGGER2_B2_PRIOR_OVERRIDE_REMAP_STALE_CANDIDATE/v1",
+  "total_rows": 1800,
+  "training_eligible": false
+}

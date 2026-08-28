@@ -1,0 +1,90 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RFC8785_V8_DIFFERENTIAL_200K/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "research_main_observed_before_write": "575ec8065fa054e42524f5fe7508a1e00b95e9ed",
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "together_used": false,
+    "paid_fallback_used": false,
+    "external_provider_credentials_used": false
+  },
+  "coordination": {
+    "retained_hcu_pr": 1263,
+    "retained_hcu_head_observed": "4639917eb348ac22a390643d3f69d982c06c8409",
+    "parallel_main_fusion_observed": true,
+    "main_fusion_commit": "65bedfb5ff7b81aec5d989f662e9f8f2173aaf9d",
+    "main_regression_fusion_commit": "ee2d6b93b3724ea873d88b54c08c7c1321074dc6",
+    "duplicate_semantic_path_created": false
+  },
+  "exact_source": {
+    "path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "main_git_blob_sha1": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "retained_pr1263_git_blob_sha1": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "sha256": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f",
+    "identity_result": "MAIN_AND_RETAINED_DONOR_BYTES_MATCH_EXACTLY"
+  },
+  "fixed_regression": {
+    "test_path": "the artefact/MicroEntity/hcu/test_entry_canonicalization_v1.py",
+    "git_blob_sha1": "bc9262473f91dbd04ddaf647e667920664495f54",
+    "sha256": "b0b5f519c6c7b751d2ed388661bb617fc1a2ee73055faaab1208a47c6612891b",
+    "command": "python3 -m unittest -v test_entry_canonicalization_v1.py",
+    "exit_code": 0,
+    "tests_run": 7,
+    "tests_failed": 0,
+    "result": "PASS"
+  },
+  "unusual_experiment": {
+    "local_count_for_this_worker_trigger": 1,
+    "global_count_for_macrocycle": "UNRESOLVED_NO_UPSTREAM_ID",
+    "id": "RFC8785_RANDOM_BINARY64_V8_DIFFERENTIAL",
+    "hypothesis": "The Python RFC8785 number serializer may diverge from ECMAScript/V8 shortest-number serialization outside the fixed Appendix-B regression vectors.",
+    "counterhypothesis": "For admitted finite binary64 values, the current Python serializer emits the same numeric JSON spelling as Node/V8 JSON.stringify, apart from explicitly excluded negative zero which EntityOS/HCU rejects at admission.",
+    "method": "Deterministically sample random IEEE-754 binary64 bit patterns; discard NaN, infinities and negative zero; serialize each value with the exact current Python canonicalizer and independently with Node/V8 JSON.stringify; compare byte spellings.",
+    "seed_decimal": 212923543062564,
+    "requested_bit_patterns": 200000,
+    "finite_values_compared": 199897,
+    "mismatches": 0,
+    "python_runtime": "Python 3.13.5",
+    "node_runtime": "v22.16.0",
+    "execution_surface": "isolated session tool container",
+    "uname": "Linux 6.18.35 x86_64 GNU/Linux",
+    "harness_sha256": "05495862dc10560878de7b5ecade3d1bc74dcd9ddbdbe4e381eda9ce23192b79",
+    "result_sha256": "aa790c337b957e7eff67a01dc538ecaafafeb02cd504d8b01435000f1ab535b6",
+    "result": "NO_DIVERGENCE_OBSERVED_IN_199897_FINITE_VALUES"
+  },
+  "interpretation": {
+    "supported": [
+      "The exact RFC8785 entry canonicalizer now present on main survived the fixed regression suite in this isolated session.",
+      "A structurally different ECMAScript/V8 serialization oracle found no numeric spelling divergence across 199897 deterministic random finite binary64 samples.",
+      "This increases confidence that Python-host numeric serialization is not silently creating alternate causal identities in the sampled region."
+    ],
+    "not_supported": [
+      "This is not an exhaustive proof over all binary64 values.",
+      "This does not validate downstream route, engine-load, inference, GRID10, J-Space/GWT, model runtime or training behavior.",
+      "This does not create whole-HCU or whole-EntityOS runtime acceptance.",
+      "This does not grant canonical semantic, truth, state or EffectGate authority to model output."
+    ]
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "DELTA: admitted main Entry identity primitive gained independent cross-implementation serialization evidence after exact source fusion.",
+    "track_b_hcu_typed_entry": "DELTA: Typed Entry causal identity foundation strengthened; downstream route/load/inference fusion remains the next nonduplicate gate.",
+    "track_c_jspace_free_local_08b": "NO_CHANGE: this experiment intentionally stayed below J-Space/model/training boundaries; no safe new model-runtime or training evidence was produced."
+  },
+  "credit": {
+    "entry_canonicalizer_component_confidence_change": "SUPPORTED_BY_ADDITIONAL_CROSS_IMPLEMENTATION_EVIDENCE",
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "entityos_whole_product_pass": false
+  },
+  "next_exact_gate": "Advance the already-admitted exact Entry bytes into one current-main causal chain for route -> verified engine load -> inference -> GRID10, preserving JCS request identity and generation fences; execute that chain on an authorized FREE isolated surface before extending credit toward J-Space/GWT. Keep PR1263 donor-only and fuse selectively rather than merging its 334-ahead/294-behind divergent history."
+}

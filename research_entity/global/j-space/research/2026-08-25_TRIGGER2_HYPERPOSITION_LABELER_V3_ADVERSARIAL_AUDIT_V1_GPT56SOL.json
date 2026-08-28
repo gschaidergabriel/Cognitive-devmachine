@@ -1,0 +1,116 @@
+{
+  "schema": "CLAY_TRIGGER2_HYPERPOSITION_LABELER_V3_ADVERSARIAL_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_NEGATIVE_DELTA_NONPROMOTING",
+  "authority": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "observed_main_before_write": "9f6c4345e96fb99a1d8ddcfa588975ca90db3576",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audited_source": {
+    "path": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+    "landed_commit": "2247a67f9ddcae78791cebefce38a18ee76400b0",
+    "blob_sha": "dbee95a2bbd7cc143499e361d90838fc0cb5ac50",
+    "tests_commit": "027682afa12351f1c45c26fd46afe5ba96f7e9b6",
+    "combined_commit_statuses_observed": [],
+    "execution_credit": "NONE_FROM_SOURCE_OR_TEST_EXISTENCE"
+  },
+  "positive_convergence_deltas": [
+    "Full semantic Hyperposition carrier fields v/K/E+/E-/F/T/A/sigma plus projection state are fail-closed validated.",
+    "Caller relation/target/winner fields are rejected and branch relations are derived from formal task-world context, predictions and observed outcomes.",
+    "Correlation ancestry, payload identity and independence-group reuse are checked against accumulated branch evidence.",
+    "Projection is explicitly nondestructive.",
+    "Branch birth comes only from formal task-world rules, not a caller branch payload.",
+    "Merge uses exact formal semantic signature rather than embedding similarity.",
+    "Discriminator ordering derives pair separation from branch predictions and remains ordinal/nonprobabilistic.",
+    "Salience remains attention ordering only and has no truth/probability/evidence-strength/resolution authority.",
+    "Task-local resolution is explicitly typed as synthetic-world resolution and does not mint canonical truth/effect/runtime/training credit."
+  ],
+  "promotion_blockers": [
+    {
+      "id": "V3_INDEPENDENCE_QUALIFICATION_STILL_CALLER_CONTROLLED",
+      "severity": "P0_CRITICAL",
+      "observed": "EVENT_SCHEMA requires event.independence_qualified as a caller-provided boolean. _novelty correctly blocks exact event, ancestry, payload and independence-group reuse, but it also grants novelty only by consulting this caller field. A novel-looking event with independence_qualified=true can therefore receive independent credit without an independently recomputed causal/dependence certificate.",
+      "consequence": "The noninvented-label chain remains incomplete at the evidence-independence boundary.",
+      "required_successor": "Remove independence_qualified from model/generator authority. Derive it from a source-bound dependence certificate/event registry or verify a certificate whose rule+inputs+digest are independently recomputed by the gate.",
+      "training_status": "BLOCK_POSITIVE_D_E_ADMISSION"
+    },
+    {
+      "id": "V3_EXACT_EVENT_ID_MUTATION_CAN_BE_HIDDEN_AS_REPLAY",
+      "severity": "P0_CRITICAL_REGRESSION",
+      "observed": "_novelty treats any previously seen event_id as EXACT_EVENT_REPLAY. u_state then performs an idempotent no-op. No v3 check binds event_id to an immutable digest of ancestry/group/payload/provenance/test/outcome/epistemic type before taking the replay path.",
+      "counterexample": "Reuse a prior event_id while changing payload_key, observed_outcome or provenance. The replay marker can suppress the conflict instead of failing closed.",
+      "required_successor": "Persist canonical event_digest in evidence records; same event_id + same digest is idempotent, same event_id + different digest is hard corruption failure. Preserve the stronger v2 mutation guard and extend it beyond relation/ancestry.",
+      "training_status": "BLOCK_POSITIVE_D_E_ADMISSION"
+    },
+    {
+      "id": "V3_DISCRIMINATOR_ADMISSIBILITY_EXECUTION_NOT_EXPLICIT",
+      "severity": "P0_HIGH",
+      "observed": "Formal world test specs require allowed_outcomes, mismatch_effect and ordinal risk/cost/coordination ranks, but no explicit admissible/observable/executed field or source-bound execution receipt. d_resolve can resolve after a FALSIFIES event solely from resulting state plus independent support.",
+      "consequence": "For curriculum-synthetic worlds this may be a deliberate closed-world simplification, but it does not yet satisfy the stronger Trigger-2 D contract that collapse occurs only after an adequate admissible discriminator/proof covers live applicable alternatives.",
+      "required_successor": "Either declare/validate an explicit formal-world law that every registered test is admissible and executable in that synthetic world, or add admissibility + execution/observation receipt and require it in resolution provenance.",
+      "training_status": "BLOCK_D_RESOLUTION_PROMOTION"
+    },
+    {
+      "id": "V3_MISMATCH_EFFECT_IS_FORMAL_WORLD_ASSERTION_NOT_DERIVED_DECISIVENESS",
+      "severity": "P1_HIGH",
+      "observed": "Each test declares mismatch_effect=COUNTERS or FALSIFIES. This is safer than per-row caller relations because it is source-bound task-world semantics, but the decisive/nondecisive property is encoded directly as a relation label.",
+      "required_successor": "Prefer a typed test property such as decisive_for_claim=true/false plus explicit claim/test semantics, then derive COUNTERS versus FALSIFIES mechanically. If mismatch_effect is retained, bind and mutation-test it as part of the formal-world proof ontology rather than treat it as generic metadata.",
+      "training_status": "REVIEW_BEFORE_REFERENCE_ROOT"
+    },
+    {
+      "id": "V3_EPISTEMIC_OBSERVED_PROMOTION_GUARD_STILL_ACCEPTS_BOOLEAN_EVIDENCE_QUALIFICATION",
+      "severity": "P1_HIGH_FOR_E",
+      "observed": "epistemic_guard accepts evidence_qualified_observation as a boolean argument when deciding whether UNKNOWN/HYPOTHESIS/PREDICTION/etc. may become OBSERVED.",
+      "consequence": "GRF/E reference labels can remain circular unless that boolean is produced by the same source-bound evidence qualification chain.",
+      "required_successor": "Bind E transitions to typed observation/proof receipts rather than a naked boolean. UNKNOWN remains distinct from ZERO/ABSENT/FAIL.",
+      "training_status": "BLOCK_E_POSITIVE_PROMOTION"
+    },
+    {
+      "id": "V3_TEST_SUITE_DOES_NOT_COVER_NEW_CRITICAL_MUTATIONS",
+      "severity": "P1_HIGH",
+      "observed": "The current 247-line source test suite covers derived relations, caller relation rejection, relation flips, update/resolution, soft counters, exact replay idempotence, ancestry/payload repackaging, projection, branch birth, merge, discriminator ranking, permutation and GRF guard. It does not test same-event/different-payload-or-outcome corruption, forged independence_qualified=true, or nonadmissible/nonexecuted discriminator behavior.",
+      "required_successor": "Add explicit mutation regressions for these three classes before v3 can become the positive D/E reference root."
+    }
+  ],
+  "versioning_effect": {
+    "training_ledger_v5_status": "REVISION_REQUIRED",
+    "reason": "Ledger v5 observed main before the converged v3 labeler and therefore still names an unmateralized convergence successor as the frontier.",
+    "protocol_v3_status": "REVISION_REQUIRED",
+    "reason_detail": "Protocol v3 also wrote immediately before v3 landed; its next action is partially superseded by the new source, but its independence/gate requirements remain valid."
+  },
+  "external_research_alignment": [
+    {
+      "source": "Wu, Geiger & Milliere 2025 variable-binding study",
+      "classification": "METHOD_INPUT_ONLY",
+      "implication": "Training can pass through shallow shortcut phases before systematic binding; keep checkpoint/family/distractor and causal tests rather than treating aggregate improvement as proof of the desired mechanism."
+    },
+    {
+      "source": "Braun et al. 2025 steering reliability",
+      "classification": "METHOD_CAUTION",
+      "implication": "Mean positive steering effect can hide high sample variance and opposite-sign effects; vector control requires held-out reliability/off-target controls."
+    },
+    {
+      "source": "Venkatesh & Kurapath 2026 steering identifiability",
+      "classification": "METHOD_CAUTION",
+      "implication": "Behaviorally equivalent steering interventions need not identify a unique semantic vector; preserve equivalence Hyperposition until structural/multi-environment discriminators separate them."
+    }
+  ],
+  "credits": {
+    "research_negative_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Harden v3 rather than create another labeler lane: derive/verify independence from immutable event/dependence receipts, bind event_id to canonical event digest and fail on mutation, make discriminator admissibility/execution/coverage explicit, bind GRF OBSERVED promotion to typed evidence receipt, add the corresponding mutation tests, then update the ledger and derivation-bound gate to exact v3 bytes before regenerating positive Hyperposition-native C1/D/E candidates."
+}

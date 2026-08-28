@@ -1,0 +1,90 @@
+{
+  "schema": "GO_HCU_TYPED_CANONICAL_EXACT_REPLICATION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "main_observed_before_write": "9eb806a5be5170710d8929b05d99b96146bcd623",
+  "candidate": {
+    "pr": 1263,
+    "observed_branch_head": "7fdb2da0c716b61063e7b6ec5fe041704e2a6341",
+    "schema": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
+    "module": "the artefact/MicroEntity/hcu/hcu_causal_canonical_v1.py",
+    "module_git_blob_expected": "7e1be2cead9e069d5192c6e430a2abba7de0412b",
+    "test": "the artefact/MicroEntity/hcu/test_hcu_causal_canonical_v1.py",
+    "test_git_blob_expected": "af143853208c92c24b0040ddf995a33f29eeb7b8"
+  },
+  "exact_blob_reproduction": {
+    "environment": "isolated ChatGPT tool container",
+    "module_git_hash_object_observed": "7e1be2cead9e069d5192c6e430a2abba7de0412b",
+    "test_git_hash_object_observed": "af143853208c92c24b0040ddf995a33f29eeb7b8",
+    "blob_identity_match": true,
+    "python_command": "python3 -m unittest -v test_hcu_causal_canonical_v1.py",
+    "node_runtime": "/opt/nvm/versions/node/v22.16.0/bin/node",
+    "tests_run": 9,
+    "tests_passed": 9,
+    "tests_failed": 0,
+    "result": "PASS_EXACT_SOURCE_COMPONENT_SCOPE"
+  },
+  "covered_discriminators": [
+    "explicit versioned canonicalization schema",
+    "object map order invariance",
+    "integer and equal binary64 float identity",
+    "negative zero collapse",
+    "non-finite number rejection",
+    "I-JSON unsafe integer rejection",
+    "value-change digest sensitivity",
+    "nested Unicode deterministic ordering",
+    "independent Python-vs-Node byte-for-byte and SHA-256 equivalence on existing vectors"
+  ],
+  "fusion_assessment": {
+    "status": "MECHANISM_SUPPORTED_CANDIDATE_NOT_CURRENT_AUTHORITY",
+    "preferred_candidate": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
+    "reason": "The candidate covers current Entry/HCU typed values including binary64 reactive signals, carries an explicit domain/version prefix, and now has exact-source independent Python-vs-Node equivalence evidence. This strengthens but does not by itself authorize migration of active Entry/router identities.",
+    "do_not": [
+      "do not add another canonicalizer",
+      "do not silently reinterpret existing Python-json, JCS or CBOR hashes",
+      "do not promote PR 1263 before one active canonical path and migration/version rules are explicit"
+    ]
+  },
+  "same_go_route_delta": {
+    "source_commits": [
+      "20a26b785ab2e61486e412ed6b40488783f02f54",
+      "95990a562cf16fb5c09e7b3726e152834267892e"
+    ],
+    "delta": "retained HCU route now carries concrete entry_admission_sha256 outside stable causal route identity and requires it in downstream inference echo, preventing inference receipt reuse across distinct admissions while preserving transport-replay-stable route identity",
+    "runtime_execution": "NOT_EXECUTED_EXACT_CURRENT_ROUTE_HEAD",
+    "github_actions": {
+      "run_id": 32652456537,
+      "job_id": 97226065033,
+      "conclusion": "failure",
+      "steps_observed": 0,
+      "classification": "EXECUTION_ADMISSION_OR_RUNNER_FAILURE_NOT_TEST_FAILURE"
+    },
+    "local_exact_head_fetch_attempt": "BLOCKED_DNS_BEFORE_SOURCE_DOWNLOAD_NO_TEST_EXECUTED"
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "the user-triggered go already consumed its single unusual experiment with the same-route causal-alias discriminator; this work is deterministic replication/regression only"
+  },
+  "credit": {
+    "canonicalizer_source_component_verified": true,
+    "route_source_delta_committed": true,
+    "combined_entry_route_canonicalizer_exact_head_executed": false,
+    "entityos_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_gate": [
+    "select exactly one current causal canonicalization schema for Entry plus HCU identities and mark other encoders experimental/legacy-only",
+    "wire the selected schema into Entry event/admission, router policy/engine/route and inference receipt identity with explicit migration/version rules",
+    "run exact current-head combined Entry + route + inference-echo + cross-language regressions in an authorized isolated executor",
+    "rebase/fuse the retained PR onto current EntityOS/HCU main without restoring legacy product authority",
+    "bind the real admitted local checkpoint/tokenizer/runtime bytes and capability authority",
+    "rebuild and digest-bind the stale MicroEntity compatibility ZIP only after source semantics settle"
+  ]
+}

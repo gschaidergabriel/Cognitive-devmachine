@@ -1,0 +1,80 @@
+{
+  "schema": "ENTITYOS_HCU_CANONICALIZATION_REENTRY_CORRECTION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "97d0363a481da26a1ca0810a8bd2bc5febc9c769",
+  "supersedes_coordination_claim_in_commit": "481752a56f33b3b53ba029d991e50b4c53e6939f",
+  "reason_for_correction": "The earlier receipt treated SUPERVISOR_INBOX 8.58 strongest-candidate language as if it superseded the explicit canonical-main adjudication. Concurrent retained-lane re-entry made the actual current precedence visible: main commit 5d99c6c37fc9dbecaa557f6091de06f703e9a412 explicitly selected RFC8785_JCS_IJSON/v1, and current PR1263 contract v3 re-enters under that main authority.",
+  "current_authority": {
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "main_adjudication_commit": "5d99c6c37fc9dbecaa557f6091de06f703e9a412",
+    "retained_pr": 1263,
+    "retained_pr_head_observed": "9a647d6376adf580ac8ca063454de32630dc6a3c",
+    "retained_contract_schema": "HCU_ENTRY_CANONICALIZATION_CONTRACT/v3",
+    "typed_canonical_candidate": "RESEARCH_PROVENANCE_ONLY_NOT_SELECTED_BY_CURRENT_MAIN",
+    "cbor_candidate": "LEGACY_CURRENT_SOURCE_DEPENDENCY_PENDING_MIGRATION",
+    "python_sort_keys_json": "LEGACY_IMPLEMENTATION_SCOPED_IDENTITY_PENDING_VERSIONED_MIGRATION"
+  },
+  "source_finding": {
+    "jcs_binary64_integer_repair_already_fused_into_retained_pr1263": true,
+    "entry_canonicalization_blob_on_pr1263": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+    "entry_canonicalization_blob_on_pr1378": "ad52378f2bd2cfedea08ced6bb24759408caa237",
+    "test_blob_on_pr1263": "6e2127b6b35b1f151acded1a6db2565b4734b27d",
+    "test_blob_on_pr1378": "6e2127b6b35b1f151acded1a6db2565b4734b27d",
+    "interpretation": "PR1378 repair bytes and focused regression bytes are already exactly present on retained PR1263; maintaining PR1378 as a separate active donor lane is duplicate coordination debt."
+  },
+  "active_migration_gap": {
+    "typed_entry_current_encoder": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1",
+    "router_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "inference_receipt_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "target_encoder": "RFC8785_JCS_IJSON/v1",
+    "cross_language_end_to_end_identity_claim": false,
+    "runtime_credit": 0
+  },
+  "macrocycle_accounting": {
+    "upstream_macrocycle_id_received": false,
+    "local_unusual_experiment_count_for_this_organ": 0,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "law": "GO_MACROCYCLE_IDENTITY_CONTRACT forbids grouping no-ID receipts by timestamp, trigger, organ or nearby commits; no cross-receipt unusual-experiment collision is asserted."
+  },
+  "execution_observation": {
+    "isolated_source_materialization": "BLOCKED_BEFORE_SOURCE_DOWNLOAD",
+    "reason": "isolated ChatGPT container DNS could not resolve raw.githubusercontent.com",
+    "semantic_test_execution": false,
+    "runtime_credit_change": 0
+  },
+  "coordination_delta": {
+    "retained_canonicalizer_lane": "PR1263",
+    "duplicate_jcs_integer_repair_lane": "PR1378_SUBSUMED_EXACT_BLOBS",
+    "second_router_entry_state_effect_or_recovery_authority_created": false
+  },
+  "next_exact_gate": [
+    "wire RFC8785_JCS_IJSON/v1 into new-version Typed Entry event/admission identity production",
+    "wire the same selected schema into router policy, EngineAdmission identity and route identity",
+    "wire the same selected schema into inference receipt hashing and echo validation",
+    "reject mixed, unknown and downgrade schema replay while preserving historical hash scope",
+    "wire HCU_REACTIVE_EVENT/v1 into GRID10 plan compilation with independent Entry-budget and runtime-capacity authority",
+    "run exact-current combined Entry+route+inference+canonicalizer+GRID10 regressions on an actually-started authorized isolated executor",
+    "only then bind exact local checkpoint/tokenizer/runtime/build bytes and measured capacity receipt for runtime promotion"
+  ],
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "credit": {
+    "research_correction": "COMMITTED",
+    "duplicate_lane_adjudication": "SUPPORTED_BY_EXACT_BLOB_EQUALITY",
+    "entityos_hcu_runtime_credit_change": 0,
+    "whole_product_pass": false
+  }
+}

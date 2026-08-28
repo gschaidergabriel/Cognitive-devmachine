@@ -1,0 +1,62 @@
+{
+  "schema": "clayverse-go-receipt-addendum/v1",
+  "trigger": {
+    "command": "go",
+    "trigger_time": "2026-08-17T17:36+07:00",
+    "trigger_time_precision": "minute"
+  },
+  "recorded_at": "2026-08-17T18:06+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "PR810_ENTITYOS_SOURCE_STAGE_STATIC_FALSIFIER",
+  "observed_canonical_main_before_write": "499c328ca5164d9fb3ebdcdd9e09825e927307a3",
+  "retained_lane": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "runner_semantics_observed_at": "7ee72a8489533325d1fe44a73ba8834733a92ea0",
+    "runner_file": "mcp/vercel-sandbox-mcp/scripts/run-clayverse-vcr-fusion.mjs"
+  },
+  "source_closure": {
+    "research_base": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+    "candidate_head": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
+    "candidate_tree": "a012708e469de32615ea9933371a13795669db5a",
+    "candidate_delta_from_base": "EXACTLY_PR611_TERMINAL_SESSIONS_AND_FOCUSED_TEST",
+    "entityos_binary_tracked_in_candidate": false
+  },
+  "falsifier": {
+    "runner_behavior": "After Sandbox.create and host-side private Research archive fetch, the runner extracts the GitHub tarball for f8e4deeb... and requires 'the artefact/EntityOS' to exist before its source-closure verification and OCI build.",
+    "source_fact": "The f8e4deeb... closure differs from base 7b2a31c9... by exactly two PR611 files; the staged EntityOS binary is intentionally excluded from source history and is not a tracked member of that commit tree.",
+    "predicted_first_source_stage_result_if_admitted_unchanged": "FAIL_CLOSED_AT_ENTITYOS_FILE_PRESENCE_CHECK_BEFORE_OCI_BUILD",
+    "runtime_observed": false,
+    "semantic_test_failure": false
+  },
+  "existing_canonical_entityos_recovery_evidence": {
+    "receipt": "the artefact/receipts/2026-08-17_entityos_github_artifact_exhaustive_negative.json",
+    "result": "NO_EXACT_GITHUB_ACTIONS_ARTIFACT_RECOVERABLE",
+    "locked_source_head": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+    "locked_source_tree": "d55d9d41f5a294a4a692cdee6fa46750652a390d",
+    "locked_artifact_sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+    "locked_artifact_size_bytes": 9181696,
+    "required_recovery": "Rebuild EntityOS from the exact locked source inside an authorized isolated Vercel Sandbox, require exact digest and size, then stage those exact bytes into the ClayVerse OCI build context."
+  },
+  "fusion_decision": {
+    "action": "CHALLENGE_RETAINED_LANE_WITHOUT_FORKING_IT",
+    "duplicate_oci_lane_created": false,
+    "pr810_overwritten_by_this_organ": false,
+    "reason": "PR810 is concurrently owned by a newer 18:00 controller run; preserve the single retained lane and feed this falsifier into its next source repair rather than creating competing controller semantics."
+  },
+  "current_provider_observation": {
+    "vercel": "DEPLOYMENT_RATE_LIMIT_BEFORE_BUILD_OR_SANDBOX_CREATE_ON_LATEST_REPAIRED_TRIGGER",
+    "daytona": "AUTHORIZED_FREE_ONLY_BUT_NO_ADMITTED_PROVIDER_CONTACT_OR_CREDENTIAL_PATH_FROM_THIS_CONTROLLER",
+    "runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "new_experiment_started": false,
+    "valid_credit": 0,
+    "further_unusual_experiment_for_17_36_go": "FORBIDDEN"
+  },
+  "product_runtime_code_delta": "NO_CHANGE",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "next_exact_step": "ON_THE_SAME_RETAINED_PR810_LANE -> STAGE_EXACT_ENTITYOS_SOURCE_79DC06..._WITH_ATTESTED_PROVENANCE -> AFTER_SANDBOX_CREATE_REBUILD_ENTITYOS_INSIDE_AUTHORIZED_VERCEL_SANDBOX -> REQUIRE_SHA256_32CD..._AND_SIZE_9181696 -> STAGE_EXACT_BINARY_INTO_F8E4DEEB..._CLAYVERSE_BUILD_CONTEXT -> BUILD_OCI -> CAPTURE_IMAGE_APT_TMUX_CLAUDE_PYTHON_IDENTITIES -> RUN_PR611_ON_ACTUAL_IN_IMAGE_TMUX -> CONTINUE_CANONICAL_HASH_LOCK_AND_DOWNSTREAM_GATES",
+  "truth_boundary": "This is source-level falsification of the currently staged controller path, not an observed Sandbox/test failure and not whole-product runtime evidence."
+}

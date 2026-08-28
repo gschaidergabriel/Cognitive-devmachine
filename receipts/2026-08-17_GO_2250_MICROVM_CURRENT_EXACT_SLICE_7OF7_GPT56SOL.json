@@ -1,0 +1,45 @@
+{
+  "schema": "ClayGoEvidenceReceipt/v1",
+  "trigger": "go",
+  "trigger_time_observed": "2026-08-17T22:50+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "scope": "bounded exact-file MicroVM deployment source/mechanism regression",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "workspace": "the artefact/",
+  "tested_git_blobs": {
+    "deployment/clayverse-kata-statefulset.template.yaml": "b075755d24fcd3dbd203b02f67eeff8a5a8c571b",
+    "deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "57db5224db000fc246445d68938b218ed8e4ff14",
+    "tests/test_microvm_deployment_contract.py": "a03de2e8fe1473c7e019dce66710bc04d244aa75"
+  },
+  "identity_check": {
+    "method": "reconstruct exact UTF-8 file bytes from current GitHub fetches and recompute Git blob SHA-1",
+    "matched": "3/3"
+  },
+  "execution_surface": "isolated non-production container via ChatGPT container.exec; no private credentials forwarded",
+  "command": "python3 -m pytest -q tests/test_microvm_deployment_contract.py",
+  "exit_code": 0,
+  "result": "7 passed in 0.10s",
+  "covered_source_contracts": [
+    "final MicroVM contract mandatory",
+    "Kata RuntimeClass/single replica/host namespace restrictions",
+    "read-only root and explicit state/tmpfs surfaces",
+    "default-deny ingress+egress NetworkPolicy source shape",
+    "readiness /readyz separated from liveness /healthz",
+    "CNI enforcement and additive-policy acceptance obligations present",
+    "GLM secretRef boundary and no CLAUDE_API_KEY in deployment template"
+  ],
+  "runtime_credit": {
+    "exact_oci_build": 0,
+    "kubernetes": 0,
+    "kata_microvm": 0,
+    "cni_networkpolicy_enforcement": 0,
+    "whole_product": 0
+  },
+  "current_primary_execution_blocker": "retained Vercel #810 exact private-source/OCI batch is blocked before source staging by missing host-side sensitive Preview GITHUB_READ_TOKEN; no secret value was requested, exposed, committed, or forwarded",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "user trigger exposes only minute-precision immutable message time and no shared immutable request/turn id, so the atomic lease slot cannot be safely claimed",
+    "count_executed": 0
+  },
+  "acceptance": "SOURCE_MECHANISM_SUPPORTED_ONLY_NOT_WHOLE_CLAYVERSE_PASS"
+}

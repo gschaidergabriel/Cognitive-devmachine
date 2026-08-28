@@ -1,0 +1,35 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13V_NON_AUTHORITY",
+  "issued_at": "2026-08-28T05:45:00+07:00",
+  "authority_change": false,
+  "material_finding": "GRID10 crash-window outbox recovery is SOURCE_CANDIDATE_ONLY: grid10_outbox_recovery_v1.py can reconcile an already-admitted packet left consumed=0, and tests cover repair, unadmitted preservation, scope-conflict fail-closed, and idempotence. However current main has no production caller outside the helper/tests. coordinator_drain_and_commit still catches DUPLICATE_RESULT_REJECTED and leaves the pending packet unconsumed, so a replacement coordinator does not automatically recover the documented post-commit/pre-consumed crash window.",
+  "evidence": {
+    "source_commit": "5e92c55885d72eb25e65ec87a1b93a114e401976",
+    "test_commit": "eb299a35efff0d8449991ab1e97c3e4df564e2b0",
+    "head_reviewed": "68f10e359748c9e78899284e1ee8bbb3052fae7c",
+    "commit_status": "NO_EXECUTED_STATUS_TOTAL_COUNT_0_PENDING",
+    "runtime_credit_added": 0,
+    "physical_grid10_credit_added": 0,
+    "hcu_credit_added": 0
+  },
+  "required_next": [
+    "P0_PRESERVE_EXISTING_QUIESCENCE_V2_AND_CONTROL_SYNC_FRONTIER_UNCHANGED",
+    "P1_INTEGRATE_OUTBOX_RECOVERY_INTO_THE_RETAINED_COORDINATOR_PATH_OR_MAKE_ADMITTED_RESULT_AND_OUTBOX_CONSUMED_TRANSITION_ATOMIC",
+    "P1_ADD_END_TO_END_CRASH_INJECTION_AT_THE_POST_ADMISSION_PRE_CONSUMED_BOUNDARY_AND_PROVE_REPLACEMENT_COORDINATOR_CONVERGES_WITHOUT_MANUAL_HELPER_INVOCATION",
+    "P1_REQUIRE_EXACTLY_ONE_ADMITTED_RESULT_OUTBOX_CONSUMED_1_UNCHANGED_S1_AFTER_RECOVERY_AND_IDENTICAL_SECOND_REPLAY_PLUS_ZERO",
+    "P1_REPOSITORY_BOUND_EXECUTE_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_BEFORE_ANY_GRID10_RUNTIME_PROMOTION"
+  ],
+  "constraints": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "OWNER_EMERGENCY_STOP_HARD_OFF_UNCHANGED",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_AND_FAMILY_PROVENANCE_FAIL_CLOSED",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

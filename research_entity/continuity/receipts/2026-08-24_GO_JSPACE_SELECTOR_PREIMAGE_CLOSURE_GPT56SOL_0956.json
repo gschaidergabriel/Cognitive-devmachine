@@ -1,0 +1,114 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "b8b8b4f2a3039ec4c8c39c26ec3e07e609faa60a",
+  "bootstrap_basis": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24_GPT56SOL_DEEPWORK_MAX_QUALITY_RATE_RESILIENT(1).txt; operating cache only; refreshed GitHub authority outranks it",
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "reason": "No upstream shared immutable request/macrocycle identity was exposed. The available user-turn time had minute precision only, so no canonical reproducible create-only unusual-experiment lease key was invented. All work in this receipt is ordinary source review, deterministic regression hardening, fusion/reentry, and protected exact-head acceptance probing."
+  },
+  "track_a_entityos_executable_convergence": {
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "live_executor_head_observed": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "exact_head_ready_deployment": {
+      "deployment_id": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+      "state": "READY",
+      "deployment_git_sha": "6a15601183f9bb61d445368e4d239e90a47b300c",
+      "exact_head_match": true
+    },
+    "route": "/api/hcu-jspace-grid10-binding-capsule",
+    "current_cost_gate_source": {
+      "remaining_sandbox_quota_directly_observed": false,
+      "remaining_quota_assumption_forbidden": true,
+      "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+      "sandbox_execution_admitted": false,
+      "effect": "Even if the protected function becomes reachable, current source fails closed before Sandbox.create until direct remaining included-quota observation is explicitly admitted."
+    },
+    "invocation_observation": {
+      "protected_fetch": "HTTP_302_VERCEL_SSO",
+      "temporary_share_access_fetch": "HTTP_302_VERCEL_SSO",
+      "function_result_observed": false,
+      "sandbox_create_observed": false,
+      "runtime_credit_added": 0,
+      "classification": "AUTH_TRANSPORT_BLOCK_BEFORE_FUNCTION; QUOTA_GATE_SOURCE_ALSO_CLOSED"
+    },
+    "epistemic_boundary": "Exact-head READY is deployment/source availability only. SSO redirects are auth/transport evidence, and the source-level quota gate independently forbids Sandbox creation. Neither is an EntityOS/HCU product negative or runtime acceptance."
+  },
+  "track_b_hcu_and_typed_entry_fabric": {
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "problem": "JSPACE_GWT_SELECTOR_PREIMAGE_REPLAY_GAP",
+    "observed_gap": "JSPACE_GWT_TRANSITION_TRACE/v1 persisted gwt_selection_sha256 plus competition/winner/gate material but omitted selector max_slots and broadcast_threshold. validate_transition_trace previously syntax-checked the selection digest without reconstructing its selector preimage, so a caller could replace the digest and rehash the outer trace while remaining self-consistent.",
+    "repair_commits": [
+      "a8815aab5b0737ef4c121e961538795b9d46eaa7",
+      "a8efd287af3d65db152749bf0704ed4d3e6696b3",
+      "d6d32387a02a56e8d3e6cae20139fe68d3abde0b"
+    ],
+    "repair": {
+      "selector_v1_parameters": "FIXED_TO_DEFAULT_MAX_SLOTS_3_AND_BROADCAST_THRESHOLD_50000",
+      "producer_nondefault_behavior": "FAIL_CLOSED_GWT_TRACE_V1_SELECTOR_PARAMETERS_FIXED",
+      "validator": "Revalidates ordered competition semantics, fixed selected count, exact winner prefix, threshold-derived broadcast gate, reconstructs RFC8785/JCS selector preimage, and requires exact gwt_selection_sha256 equality.",
+      "compatibility_decision": "select_gwt remains independently configurable; only persisted transition-trace v1 rejects unpersisted custom selector parameters rather than pretending they are reconstructable."
+    },
+    "donor_reentry": {
+      "live_head_observed": "853b005ce0c4b8e4fbaa36053f81c3095936efef",
+      "repair_tip": "d6d32387a02a56e8d3e6cae20139fe68d3abde0b",
+      "repair_tip_is_ancestor_of_live_head": true,
+      "successor_commits_after_repair_tip": 14
+    },
+    "typed_entry_effect": "No competing Typed Entry/state authority was introduced. The repair hardens the HCU Global J-Space/GWT trace primitive downstream of the existing Entry -> route -> GRID10 causal path."
+  },
+  "track_c_global_jspace_gwt_training_readiness": {
+    "status": "ADVANCED_SELECTOR_PROVENANCE_AND_REPLAY_VALIDATION",
+    "training_relevance": "A persisted transition trace can no longer gain a syntactically valid but unreconstructable GWT selector identity merely by relabeling gwt_selection_sha256 and rehashing the outer trace.",
+    "falsifiers_added": [
+      "arbitrary selector digest with recomputed outer trace must fail",
+      "short selected prefix inconsistent with fixed v1 max_slots must fail",
+      "broadcast gate inconsistent with fixed threshold must fail",
+      "producer request using unpersisted nondefault selector parameters must fail"
+    ],
+    "credit_boundary": "This closes a deterministic trace-provenance gap. It does not establish hidden-state causality, real model execution, training benefit, J-Space model-runtime credit, or whole EntityOS/HCU acceptance.",
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "verification": {
+    "local_deterministic_logic_harness": {
+      "result": "8/8 PASS",
+      "scope": "LOCAL_LOGIC_HARNESS_ONLY_NOT_EXACT_REPO_CI_OR_ENTITYOS_RUNTIME",
+      "note": "The patched validator/test logic was exercised locally with import stubs; this is useful regression evidence but not admitted product runtime evidence."
+    },
+    "github_combined_status_at_repair_tip": "NO_STATUSES",
+    "github_workflow_runs_at_repair_tip": "NONE",
+    "github_rw": "VERIFIED",
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "vps_self_hosted_production_testing": false
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Canonical main and both retained lanes were moving concurrently at high frequency. The append-only exact-SHA receipt records this nonduplicate donor repair and exact-head execution boundary without overwriting a rapidly changing current-facing README."
+  },
+  "next_exact_actions": [
+    "Keep the selector-preimage repair as part of the single PR1263 donor lineage and re-run exact donor tests when an admitted exact-source execution surface becomes available; do not create a second selector authority.",
+    "Do not grant runtime credit from the local harness, READY deployment, or SSO redirects.",
+    "For PR810, leave Sandbox creation blocked while remaining included quota is unobserved; no quota assumption, paid upgrade, fallback, or guard weakening is permitted.",
+    "Continue composing current pre-invocation control, loader-consumption, real local ~0.8B model-executor I/O, InferenceReceipt, Global J-Space/GWT, DatasetAdmission and leak-resistant family split into one exact causal path."
+  ],
+  "acceptance": "IN_PROGRESS"
+}

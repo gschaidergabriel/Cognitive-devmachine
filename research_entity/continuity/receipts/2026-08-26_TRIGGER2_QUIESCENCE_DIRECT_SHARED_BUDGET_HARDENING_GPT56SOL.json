@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_TRIGGER2_QUIESCENCE_DIRECT_SHARED_BUDGET_HARDENING/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "observed_main_before_receipt_update": "f37e17670d102c1d9ac68e9df8b5ec12c6b92552",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "problem": {
+    "name": "QUIESCENCE_COUNTER_SURFACE_COVERAGE_GAP",
+    "observed": [
+      "The pre-hardening runtime quiescence probe compared only derived free swarm/LIVE_METRICS.json worker usage before/after the bounded window.",
+      "The nearly co-temporal LIVE_METRICS snapshot reports openrouter/free requests=288 while SYSTEM_ANALYSIS_LIVE shared_provider_budget reports openrouter total_requests=4230.",
+      "tools/free_swarm_quota.py increments provider_state.total_requests inside acquire() before a provider request proceeds.",
+      "The shared budget also contains non-provider/tool lanes such as github/arxiv/crossref, so an unfiltered all-row digest would be stronger than the canonical provider-stop claim and could reject unrelated permitted source-tool activity."
+    ],
+    "inference": "LIVE_METRICS worker usage and the shared provider-budget attempt counters are not identical evidence surfaces; derived worker-metric stability alone is insufficient for the declared zero provider-counter-delta closure condition. Direct shared-budget evidence must be scoped to the provider names governed by canonical FREE_PROVIDER_ADMISSION rather than every tool lane in the shared DB.",
+    "hypothesis": "Direct read-only sampling of provider_budget.sqlite3 cumulative counters plus unexpired leases, filtered to the canonical FREE_PROVIDER_ADMISSION provider set, closes the provider-attempt measurement gap while retaining LIVE_METRICS as an independent secondary surface and allowing unrelated source-tool counters to move.",
+    "counterhypothesis": "If every provider-capable request were fully represented in LIVE_METRICS with no lag or omitted lanes, direct shared-budget sampling would be redundant. The observed 288 vs 4230 OpenRouter request counts falsify identity/equivalence of the two surfaces at the current snapshot, though they do not by themselves prove which individual process caused each attempt."
+  },
+  "delta": {
+    "source_path": "tools/free_swarm_runtime_quiescence_probe_v1.py",
+    "source_final_commit": "c6189b8c7390cb44b964bb22f06cd64c30f09d31",
+    "source_git_blob_sha1": "905f8edb24bbf8b0b48ad7f31bc2abda608e5e38",
+    "source_sha256": "96cfad0ff311d55a1f833cca84e86e3f8950df0c6bc9a36d3ad5035a66824c03",
+    "test_path": "tests/test_free_swarm_runtime_quiescence_probe_v1.py",
+    "test_commit": "45d7fdb0b6958f726e9c829eca1df20389c6b4b0",
+    "test_git_blob_sha1": "0f69fb21fa6ea610e52cb900eaf98bca4ad3837c",
+    "test_sha256": "3f06119c13afa82604b68e877595da3be3d330f4295864020f5a634357ebd3af",
+    "behavior": [
+      "add --provider-budget-db with CLAY_FREE_PROVIDER_BUDGET_DB/default shared SQLite path",
+      "read provider_state cumulative counters through SQLite mode=ro without lease cleanup or mutation",
+      "derive the direct counter/lease filter from canonical FREE_PROVIDER_ADMISSION provider names",
+      "exclude noncanonical shared-budget tool lanes from the provider-quiescence digest and lease gate",
+      "sample unexpired canonical-provider shared-budget leases directly",
+      "require direct shared-budget evidence for PASS_COMPONENT_ONLY",
+      "fail if canonical-provider shared-budget counter digest changes during the observation window",
+      "fail if an unexpired canonical-provider shared-budget lease exists at either boundary",
+      "retain derived LIVE_METRICS stability and forbidden-process sampling as independent gates"
+    ]
+  },
+  "validation": {
+    "scope": "EXACT_COMMITTED_BYTES_LOCAL_DETERMINISTIC_SOURCE_COMPONENT_ONLY",
+    "git_blob_identity_matched_local_source": true,
+    "git_blob_identity_matched_local_test": true,
+    "py_compile": "PASS",
+    "pytest": "17 passed in 0.10s",
+    "key_regressions": [
+      "direct canonical-provider shared-budget counter change is detected even when derived LIVE_METRICS signature remains static",
+      "noncanonical github/tool-lane counter movement is ignored by the canonical-provider direct counter digest",
+      "unexpired canonical-provider shared-budget lease fails closed",
+      "missing shared-budget DB evidence fails closed",
+      "existing forbidden-process and derived-usage-change rejections remain covered",
+      "parallel file_sha256 exact-hex regression is retained in the fused test file"
+    ],
+    "repository_ci_observed": false,
+    "owning_host_quiescence_probe_executed": false
+  },
+  "negative_evidence": {
+    "transient_source_transfer_fault_commit": "b229b28a704fc68926c1bd5cee26a1e020fa1dd2",
+    "fault": "file_sha256 accidentally called .hexdigest() on the already-hex string returned by _sha256_bytes during manual connector transfer",
+    "credit": 0,
+    "repair_commit": "6fcd16b552290f5c9dc27018e43be10394e3ee79",
+    "repair_verified_by_exact_git_blob_match": true,
+    "later_scope_refinement_commit": "c6189b8c7390cb44b964bb22f06cd64c30f09d31",
+    "scope_refinement_reason": "all-row shared-budget comparison would conflate canonical LLM-provider quiescence with unrelated source-tool traffic"
+  },
+  "evidence_boundary": {
+    "p0_runtime_quiescence_closed": false,
+    "provider_called": false,
+    "provider_probe_issued": false,
+    "model_runtime_executed": false,
+    "physical_grid10_executed": false,
+    "training_executed": false,
+    "vps_execution_performed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "runtime_quiescence_credit": 0,
+    "model_call_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "On the owning live host, with current FREE_PROVIDER_ADMISSION HARD_OFF, execute tools/free_swarm_runtime_quiescence_enforcer_v1.py --apply so its bounded probe uses the direct shared provider-budget DB surface filtered to the canonical provider set; require zero matching provider-capable process trees, zero unexpired canonical-provider budget leases, stable direct canonical-provider cumulative counters, stable derived LIVE_METRICS provider usage, and no provider probe before granting only runtime-quiescence component credit."
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13AI_NON_AUTHORITY",
+  "created_at": "2026-08-28T16:43:13Z",
+  "authority_change": false,
+  "material_finding": "Fresh chatgpt-vps-results telemetry proves the Clay VPS Bridge is alive and still committing LIVE.json at 2026-08-28T16:43:16Z while the corresponding telemetry workflow itself has zero jobs. Therefore the previous P0 wording 'self-hosted runner OR host-bridge unavailable' is too broad: transport from the VPS bridge to GitHub is demonstrably alive, but GitHub Actions self-hosted runner assignment/execution remains absent for the retained GRID10/Quiescence singletons. GitHub Status reports Actions operational, so do not attribute this to a current global Actions outage without new evidence.",
+  "evidence": {
+    "vps_bridge_head": "655ddfcfb0e04e9387697eef32468dd88a478e88",
+    "vps_bridge_observed_at": "2026-08-28T16:43:16.061906+00:00",
+    "telemetry_workflow_run": 33191309168,
+    "telemetry_workflow_jobs": 0,
+    "quiescence_singleton_issue": 2122,
+    "sigkill_singleton_issue": 2121,
+    "github_actions_status": "operational_at_review"
+  },
+  "steering": [
+    "P0_NARROW_BLOCKER_TO_SELF_HOSTED_LINUX_X64_RUNNER_ASSIGNMENT_OR_RUNNER_SERVICE_LIFECYCLE; DO_NOT RESTART OR REPLACE THE WORKING VPS TELEMETRY BRIDGE WITHOUT COUNTEREVIDENCE",
+    "P0_USE_EXISTING_AUTHORIZED_NON_PROVIDER_CONTROL_SURFACE_TO_INSPECT_OR_RESTORE THE ESTABLISHED SELF_HOSTED RUNNER SERVICE/REGISTRATION/LABEL MATCH; PRESERVE FREE_ONLY AND NO PAID FALLBACK",
+    "P0_PRESERVE ISSUE_2122_G0000 AND ISSUE_2121_G0000; NO DUPLICATE DISPATCH OR GENERATION ADVANCE WHILE NONTERMINAL",
+    "P0_AFTER ACTUAL RUNNER ASSIGNMENT REQUIRE EXECUTED STEP RECEIPTS BEFORE ANY RUNTIME CREDIT",
+    "P1_EXECUTION_RECEIPT_ATOMICITY_GATE FROM 9.13AH REMAINS ACTIVE AND UNCHANGED",
+    "DO_NOT MODIFY FRANK HARNESS",
+    "NO BASE WORK PACKAGE PASS FROM MODEL CONSENSUS",
+    "NO CANONICAL SEMANTICS PROMOTION WITHOUT EXECUTABLE COUNTEREVIDENCE AND REVIEW"
+  ],
+  "credit": {
+    "runtime_control_transport_pass": false,
+    "runtime_quiescence_pass": false,
+    "grid10_runtime_pass": false,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "base_promotion": false,
+    "canonical_semantics_promotion": false,
+    "training_credit": 0
+  },
+  "free_only": {
+    "enabled": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "provider_routes_admitted": false,
+    "remaining_paid_runs_authorized": 0
+  },
+  "constraints": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "GOODMAN_ANTI_ECHO_REMAINS_BINDING",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

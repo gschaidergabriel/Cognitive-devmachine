@@ -1,0 +1,40 @@
+# CLAY NOW — token-efficient current-state cache
+
+Cache head: `5a6ed4979f9ad1c91dc6c45b78bb8bce4ddfcf82` · tree `f7d3453e5412` · generated `2026-08-26T16:19:34Z`
+
+> **Cache, not authority.** Read current `SUPERVISOR_INBOX.json` / selected steering before material execution or current-state promotion.
+
+## Read path
+
+`NOW.md` → `INDEX.tsv` / `ACTIVE.tsv` → one `latest/<direction>.md` → cited evidence only if needed.
+
+## Current directions
+- **Authority / Supervisor** `CURRENT` — Supervisor inbox 8.81 is current-facing authority; FreeSwarm provider admission HARD_OFF and runtime quiescence must be proven before new provider execution. → `latest/authority-supervisor.md`
+- **Research current-state index / fast re-entry** `CURRENT_INFRASTRUCTURE` — Token-efficient Clay current-state pyramid installed with mandatory append-only worker receipts and per-direction latest results. → `latest/research-current-index.md`
+- **EntityOS runtime / S0 / effects** `PARTIAL_COMPONENT_PASS` — Canonical S0 epoch/CAS and Xeno fabric have bounded component runtime passes; whole EntityOS runtime credit remains 0. → `latest/entityos-runtime.md`
+- **HCU / physical GRID / coordinators** `SOURCE_READY_RUNTIME_UNOBSERVED` — Fused physical GRID10 source now proves overlapping children/PIDs/shared read-only S1 at source level; exact repository-bound runtime receipt still missing, so GRID10 credit remains 0. → `latest/hcu-grid.md`
+- **Trigger-2 training research** `CANDIDATE_KNOWLEDGE_STRUCTURED_INTO_TOPIC_PACKETS` — Two new topic packets structure today's B0-B6/A/G curriculum work and the atom-namespace P1-blocker resolution into durable claims/evidence/hypotheses, not just commits and NOW.md cache. → `latest/trigger2-training.md`
+- **Zero / Xeno cognitive runtime** `PARTIAL_COMPONENT_PASS` — Ordinary Xenos are S1 read-only; NODE_RESULT -> temporary scoped coordinator -> deterministic validation/commit is the current fabric law. Xeno self-organizing fabric has bounded component … → `latest/zero-xeno-runtime.md`
+- **Xeno vector language / dynamic binding** `NEEDS_CONVERGENCE` — Primary model-side target is dynamic episode-local binding/context invariance/active-codebook routing, not fixed class->atom semantics. → `latest/xeno-vector-binding.md`
+- **Hyperposition / GWT / GRF** `PARTIAL_COMPONENT_EVIDENCE` — Exact-merge singleton repair is implemented at component source/test scope; physical-grid Hyperposition/GWT re-entry remains blocked pending true GRID10 runtime pass. → `latest/hyperposition-gwt-grf.md`
+- **Global J-Space / causal metrology** `MEASUREMENT_REPAIR_REQUIRED` — Small-scope behavioral steering evidence exists; historical representation-divergence metric is instrumentation-broken and has zero representation-level credit. → `latest/jspace.md`
+- **Claude Code bridge / ZECP13-14** `CURRENT_DESIGN` — Claude Code is ZECP13/14 strong model/tool/code partner, never S0 truth authority or permanent coordinator. → `latest/claude-bridge.md`
+- **ClayCode / packet ABI / protocol** `CURRENT_DESIGN` — Xeno/ClayCode is the sole addressable model-facing cognitive semantics; JSON/SQLite/Python/tensors are carriers, not a second semantic brain. → `latest/claycode-protocol.md`
+- **Evidence / lineage / Goodman** `CURRENT_GUARDED` — Executable evidence outranks consensus; Goodman/model-family/pipeline/repackaged-history and train/calibration/holdout ancestry remain explicit anti-echo constraints. → `latest/evidence-lineage.md`
+- **Free Swarm / Forge / Distillery** `HARD_OFF_BLOCKED` — FreeSwarm provider admission is owner-emergency-stop HARD_OFF; legacy live processes were observed after stop. Accepted training tokens remain 0 unless newer exact evidence supersedes. → `latest/free-swarm-distillery.md`
+
+## Highest visible blockers
+- `hcu-grid` — Fused physical GRID10 source now proves overlapping children/PIDs/shared read-only S1 at source level; exact repository-bound runtime receipt still missing, so GRID10 cr…
+- `xeno-vector-binding` — Primary model-side target is dynamic episode-local binding/context invariance/active-codebook routing, not fixed class->atom semantics.
+- `jspace` — Small-scope behavioral steering evidence exists; historical representation-divergence metric is instrumentation-broken and has zero representation-level credit.
+- `free-swarm-distillery` — FreeSwarm provider admission is owner-emergency-stop HARD_OFF; legacy live processes were observed after stop. Accepted training tokens remain 0 unless newer exact evide…
+
+## Fast files
+
+- `INDEX.tsv` — one line per research direction
+- `ACTIVE.tsv` — active branch/PR/issue/request refs + recent branches
+- `RECENT.tsv` — latest main/repo commits
+- `latest/` — current compact result per research direction
+- `updates/` — append-only worker receipts
+
+> If a substantive research result is missing here, emit a `CLAY_FAST_RESULT/v1` receipt; do not hand-edit generated caches.

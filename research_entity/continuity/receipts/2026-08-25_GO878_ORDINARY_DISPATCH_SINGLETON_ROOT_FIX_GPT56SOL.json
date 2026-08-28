@@ -1,0 +1,94 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_receipt": "6eb0d5c36c08b2ae6772222d07fe81fb2b10ce92",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_ISSUE_TRIGGERED_PROBE_FANOUT_STAMPEDE",
+    "statement": "The clay-direct-dev roundtrip path admitted every owner-created issue with one repeated title and had no semantic ordinary-dispatch identity, create-only claim, concurrency group, or result-key dedupe. Parallel go organs therefore created genealogically identical issue-triggered runs without adding measurement information.",
+    "observed_legacy_surface": {
+      "canonical_lineage_issue": 1773,
+      "duplicate_issue_block_explicitly_reported": "1782-1791",
+      "highest_legacy_duplicate_observed_before_fix": 1820,
+      "post_cleanup_open_roundtrip_issues": [1773],
+      "scientific_replication_credit_for_fanout": 0
+    }
+  },
+  "hypothesis": "A reusable ordinary probe needs semantic identity independent of go/macrocycle/time/run/issue/main movement, with a create-only claim before trigger creation; workflow concurrency and result dedupe are defense in depth.",
+  "counterhypothesis": "Workflow concurrency alone is sufficient.",
+  "counterhypothesis_disposition": "REJECTED_AS_ROOT_FIX: concurrency can serialize jobs but does not prevent issue spam/run creation, does not establish a replay-stable semantic probe identity, and does not provide a create-before-trigger singleton boundary across independent go macrocycles.",
+  "delta": {
+    "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md",
+    "spec": "research_entity/continuity/ordinary_dispatch_specs/clay-direct-dev-roundtrip-v1.json",
+    "quarantine_claim": "research_entity/continuity/ordinary_dispatch_claims/clay-direct-dev-roundtrip-v1-g0000.json",
+    "go_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
+    "workflow": ".github/workflows/clay-direct-dev-roundtrip.yml",
+    "regression_definition": "tests/test_clay_direct_dev_dispatch_singleton_878.py",
+    "dispatch_class": "clay-direct-dev-roundtrip-v1",
+    "quarantined_generation": 0,
+    "dispatch_key": "clay-direct-dev-roundtrip-v1-g0000",
+    "typed_trigger_schema": "CLAY_ORDINARY_DISPATCH/v1",
+    "stable_concurrency_group": "clay-direct-dev-roundtrip-v1",
+    "result_identity": "SEMANTIC_DISPATCH_KEY_NOT_GITHUB_RUN_ID",
+    "new_go_alone_increments_generation": false,
+    "post_result_replay_probe_work": 0
+  },
+  "durable_commits": {
+    "protocol": "c9d22590ecea04a35af34914077acab0f14a38d0",
+    "spec": "aaf875c57e7477dcab55ce3ca5bf02a8a33a2e1b",
+    "quarantine_claim": "78873ea714cd5b7110981322a1bdde617dd65340",
+    "go_contract": "c2c7bea218e437989ec2fa76df37c84f25296691",
+    "workflow_singleton": "1de872989793f52a328ef9f95a122e4d4a3f4233",
+    "workflow_yaml_quote_fix": "b2990d28ba2b63516680473268a3a5426f6d1930",
+    "regression_definition": "2ad5b303ecf3bf31c8196da2cfee6b6f166d532c"
+  },
+  "cleanup": {
+    "explicit_user_reported_block_1782_1791": "CLOSED_DUPLICATE",
+    "additional_legacy_duplicates_through_1820": "CLOSED_DUPLICATE_WHERE_OBSERVED_OPEN",
+    "issue_1773": "LEFT_OPEN_AS_HISTORICAL_LINEAGE_REFERENCE_ONLY",
+    "legacy_actions_runs_cancelled": false,
+    "legacy_actions_cancel_reason": "NO_CANCEL_WORKFLOW_RUN_ACTION_AVAILABLE_ON_CONNECTED_GITHUB_SURFACE; existing queued runs are preserved as legacy scheduler evidence rather than falsely reported cancelled"
+  },
+  "source_verification": {
+    "workflow_singleton_present_on_main_6eb0d5c36c08b2ae6772222d07fe81fb2b10ce92": true,
+    "workflow_requires_typed_dispatch_schema": true,
+    "workflow_validates_current_spec_and_create_only_claim": true,
+    "workflow_has_stable_concurrency_group": true,
+    "workflow_result_is_semantic_dispatch_keyed": true,
+    "regression_test_defined": true,
+    "regression_test_execution_observed": false,
+    "credit_boundary": "SOURCE_AND_COORDINATION_WRITE_EVIDENCE_ONLY"
+  },
+  "parallel_convergence": {
+    "backlog_first_safe_forge_alias_observed": true,
+    "backlog_first_alias_path": "tools/run_free_evidence_forge_safe.py -> run_free_evidence_forge_backfill.main",
+    "duplicate_forge_wiring_write_created_by_this_organ": false,
+    "historical_backfill_selfhosted_terminal_semantic_result_observed": false,
+    "note": "The active Forge backlog-first wiring landed independently and was not duplicated by this receipt lane. A self-hosted backfill reconcile push run failed before jobs materialized, so it is infrastructure/workflow-start evidence only."
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: ordinary clay-direct-dev runtime dispatch can no longer be legitimately multiplied by each go organ; legacy issue surface was collapsed to one lineage reference",
+    "track_b": "ADVANCED: reusable semantic dispatch identity + create-only admission + generation/replay invariant added as a Typed Entry/coordination primitive",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no model/J-Space intervention executed; historical conversion, exact-current replay-v2 runtime evidence, and unusual-experiment coordination remain prior gates"
+  },
+  "execution_boundary": {
+    "provider_or_model_network_io_by_this_fix": false,
+    "paid_or_together_execution": false,
+    "unusual_experiment": false,
+    "canonical_effect_outside_github_coordination_writes": false
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Do not create another clay-direct-dev roundtrip issue for generation 0. Drain/observe legacy queued runs without counting them as independent replication. Advance dispatch generation only for a recorded terminal-retry or explicit infrastructure/probe-semantic change, then create exactly one typed claim-backed trigger. In parallel, execute exact-current historical Forge backfill/replay-v2 regression when an admitted runner materializes, then prove one evidence-qualified Forge ACCEPT -> exactly one Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0 before J-Space promotion."
+}

@@ -1,0 +1,122 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v29",
+  "date": "2026-08-25",
+  "local_trigger_time": "23:56+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V28_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V28",
+  "revision_reason": "Fuse moving-main deltas after V28: distinguish producer authorization from concrete runtime instance authentication; promote the exact-semantic-merge failure from generic regression noise to a diagnosed stage-invariant contract defect; add mandatory UNKNOWN/factuality and exact harness-surface floors to checkpoint selection; and require mediator-interaction controls when causal J-Space opens.",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "554468ec7a7ecb06880bbda14bd2b776391e9951",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "accepted_dataset_tokens": 0,
+    "positive_rows_admitted": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "successor_deltas": [
+    {
+      "id": "T2_OBSERVED_TWO_AXIS_AUTH",
+      "status": "CURRENT_P0_DESIGN_REQUIREMENT_RUNTIME_CLOSURE_OPEN",
+      "source_commit": "bd7ca2ac2cd6b997f8771917bb86d415c614948c",
+      "finding": "Producer authorization is necessary but not sufficient. A registry can prove that a producer identity/version is allowed, yet a caller can still forge a concrete runtime receipt unless the accepted instance is authenticated by an unforgeable issuer boundary.",
+      "axis_A_authorization": ["producer id/version or epoch", "source/consumed-artifact digest", "policy digest", "scope", "revocation/currentness", "generation"],
+      "axis_B_instance_authentication": ["event semantic digest", "subject/source-payload digest", "causal_event_id", "admission_id", "generation", "producer identity/version", "policy digest", "invocation/context digest", "replay identity/nonce or equivalent monotonic context", "parent receipt digest where required"],
+      "acceptable_instance_mechanisms": ["cryptographically authenticated typed envelope verified against trusted producer identity/policy", "equivalently unforgeable local capability/process/IPC boundary where verifier obtains receipt from trusted issuer rather than accepting caller-mintable authority"],
+      "promotion_rule": "OBSERVED candidate evidence may pass pre-admission only when both authorization and instance authentication pass; neither may mint canonical truth or direct-effect authority."
+    },
+    {
+      "id": "T2_EXACT_MERGE_STAGE_INVARIANT",
+      "status": "NEEDS_REVISION_P1_5_BLOCKS_COMPLETE_LABELER_ORACLE",
+      "source_commit": "554468ec7a7ecb06880bbda14bd2b776391e9951",
+      "issue": 2019,
+      "finding": "EXACT_FORMAL_SEMANTIC_SIGNATURE legitimately collapses equivalent branches to one, then project_state reuses the external/pre-update >=2-branch validator and rejects the derived singleton.",
+      "required_repair": "Keep caller-supplied singleton input rejected; permit singleton only through a narrow proof-carrying post-exact-merge path or explicitly supersede exact merge semantics. Add forged-singleton, merge-policy NONE, non-equivalent-branch and evidence-union/dedup negatives; run the full exact reference-labeler suite repository-bound."
+    },
+    {
+      "id": "T2_P2_UNKNOWN_FACTUALITY_HARD_FLOOR",
+      "status": "MANDATORY_PREREGISTERED_SELECTION_AXIS",
+      "source_commit": "0fa78d7e2d7d5fd86d123c5e2e5e179aa3d6d176",
+      "finding": "UNKNOWN/anti-fabrication cannot be averaged away by aggregate score. The TARGET_MEASURED pilot failed current abstain_unknown cases, including fabrication of precise facts for a fictional company.",
+      "selection_law": "No checkpoint winner if UNKNOWN/factuality retention falls below the preregistered floor, even if aggregate score is higher."
+    },
+    {
+      "id": "T2_P2_EXACT_SURFACE_HARNESS_INTEROP",
+      "status": "MANDATORY_PREREGISTERED_SELECTION_AXIS",
+      "source_commit": "0fa78d7e2d7d5fd86d123c5e2e5e179aa3d6d176",
+      "finding": "Exact rendered serialization and compact instruction-surface compliance are functional HCU harness properties, not cosmetic style. Semantic correctness must be scored separately from wire/ABI compliance.",
+      "selection_law": "Enforce a minimum harness-interoperability floor for exact JSON/typed payload and requested bounded-form output."
+    },
+    {
+      "id": "T2_P3_MEDIATOR_INTERACTION_CONTROLS",
+      "status": "MANDATORY_WHEN_CAUSAL_JSPACE_OPENS",
+      "source_commit": "0fa78d7e2d7d5fd86d123c5e2e5e179aa3d6d176",
+      "finding": "A large single-site activation effect is insufficient for context-invariant semantic-vector claims because mediator/component interactions can inflate or suppress observed effects.",
+      "required_controls": ["sign", "null", "orthogonal same-norm", "permuted/shuffled", "off-site/layer", "magnitude ladder", "lesion/rescue where available", "pairwise mediator interaction for leading sites", "prompt/task dependence", "fresh holdout", "cross-task replication"]
+    }
+  ],
+  "retained_current_status": {
+    "a02_repository_bound_runtime": "BOUNDED_COMPONENT_PASS_ONLY",
+    "a03_replay_root": "OUTER_REPLAY_ROOT_SUFFICIENT_COMPONENT_ONLY",
+    "observed_producer_auth": "BLOCKED_P0_EXECUTABLE_COUNTEREXAMPLE_CONFIRMED",
+    "nonempty_ordered_history_authority": "BLOCKED_P1",
+    "reference_labeler_complete_oracle": "BLOCKED_P1_5",
+    "qwen35_three_candidate_identity_loader": "CURRENT_READINESS_ONLY",
+    "full_three_candidate_matched_baseline": "NOT_ATTEMPTED",
+    "checkpoint_winner": "NONE",
+    "causal_jspace": "NOT_ATTEMPTED",
+    "multi_seed": "NOT_ATTEMPTED",
+    "hcu_variable_n": "NOT_ATTEMPTED",
+    "factorial_generator_v3": "QUARANTINED_FROM_DIRECT_TRAINING"
+  },
+  "deterministic_reference_semantics": {
+    "u_state": "CURRENT_SOURCE_BUT_WHOLE_STACK_NOT_REGRESSION_CLEAN",
+    "d_resolve": "CURRENT_SYNTHETIC_TASK_RESOLUTION_ONLY_NO_CANONICAL_TRUTH",
+    "u_test_order": "CURRENT_FORMAL_PAIR_SEPARATION_THEN_RISK_COST_COORDINATION_ORDER_NO_PROBABILITY_OR_TRUTH",
+    "f_salience_order": "CURRENT_ATTENTION_ORDER_ONLY_NO_TRUTH_PROBABILITY_EVIDENCE_STRENGTH_OR_RESOLUTION_AUTHORITY",
+    "whole_stack_regression_clean": false
+  },
+  "training_generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "reason": "Concrete OBSERVED instances remain forgeable at the current admission boundary, complete nonempty-history producer authority is open, and the deterministic labeler oracle has an unresolved stage-invariant contradiction. Negative pilot observations are evaluation specifications only until provenance/admission gates close."
+  },
+  "next_cycle_order": [
+    "P0 identify or implement one trusted OBSERVED receipt issuer boundary; bind it to repository-authorized producer policy; remove caller-mintable authority from the accepted path; require both producer authorization and concrete instance authentication; preserve the pre-fix forgery and run repository-bound VPS adversaries",
+    "P1 bind authenticated genesis plus complete ordered nonempty history and reject deletion/insertion/reorder/splice/prefix/duplicate-id-different-digest/stale-producer mutations while preserving exact idempotent repeat semantics",
+    "P1.5 repair issue #2019 without weakening external initial Hyperposition validation and obtain a fully classified exact reference-labeler suite",
+    "P2 preregister full matched BASE vs POSTTRAINED vs TARGET_MEASURED baseline with mandatory UNKNOWN/factuality and exact harness-interoperability floors, per-axis/worst-bucket scores, no-winner outcome, exact checkpoint/runtime identities and unopened final holdout",
+    "P3 only after P2 selection rules pass, run causal J-Space interventions with full directional/nuisance/off-site/interaction controls and fresh cross-task holdout",
+    "P4 only after P0/P1/P1.5 executable closure admit diagnostic/hard-negative data first, then reopen a small family-disjoint positive pilot; keep factorial_generator_v3 quarantined until nuisance gates explicitly pass"
+  ],
+  "credits": {
+    "research_delta": 1,
+    "successor_fusion_delta": 1,
+    "a02_component_runtime_credit": 1,
+    "a03_component_runtime_credit": 1,
+    "observed_producer_authorization_credit": 0,
+    "observed_instance_authentication_credit": 0,
+    "nonempty_history_producer_authority_credit": 0,
+    "reference_labeler_complete_oracle_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_jspace_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Close the P0 two-axis OBSERVED evidence boundary first: prove or build a single trusted issuer path that both authorizes the producer and authenticates the exact instance against event/subject/admission/generation/policy/replay identity, then execute the forgery suite repository-bound on the admitted zero-cost VPS. Do not generate positive rows before P0, P1 and P1.5 pass."
+}

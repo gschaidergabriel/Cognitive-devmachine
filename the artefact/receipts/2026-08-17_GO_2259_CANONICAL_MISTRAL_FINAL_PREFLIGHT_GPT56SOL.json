@@ -1,0 +1,87 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_date": "2026-08-17",
+  "scope": "CANONICAL_FINAL_MISTRAL_PREFLIGHT_HARDENING_ONLY",
+  "classification": "FOCUSED_EXACT_BLOB_CONFIG_MECHANISM_SUPPORTED_FULL_RUNTIME_UNOBSERVED",
+  "canonical_product": "ClayVerse single-container",
+  "owner_authority": {
+    "final_test_directive": "research_entity/global/CLAYVERSE_FINAL_SANDBOX_TEST_OF_TESTS_DIRECTIVE.md",
+    "github_token_forwarding_directive": "research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md",
+    "final_path": "VERCEL_FIRECRACKER_TO_EXACT_OCI_TO_RUNTIME_VAULT_MISTRAL_TO_CANONICAL_REENTRY_EFFECT_RECOVERY_RECREATION"
+  },
+  "canonical_path_observation": {
+    "main_adapter": "the artefact/clayverse/adapters.py::MistralInference",
+    "main_probe": "the artefact/clayverse/final_acceptance_probe.py::run_mistral_acceptance_probe",
+    "main_probe_blob_before_delta": "567a2d60b89b08c8c71463b37e4af7473c4478f8",
+    "runtime_architecture": "PER_REQUEST_RUNTIME_SECRET_LOOKUP_AND_SCRUB_PLUS_NO_REDIRECT_TRANSPORT_PLUS_CANONICAL_INFERENCE_PROVENANCE_PLUS_UNIFIEDDB_REINGEST_PLUS_EXISTING_EFFECTGATE",
+    "duplicate_runtime_lane_closed": 661
+  },
+  "candidate": {
+    "pr": 677,
+    "branch": "gpt56sol/go-main-mistral-final-hardening-20260817-2331",
+    "branch_base": "c40cc941a98498c777e799d1ed782614c38f6cd4",
+    "main_observed_at_pr_creation": "b16578a095aafa632f22d0ccabe93ad92242a9d3",
+    "promotion_status": "DRAFT_REJOIN_REQUIRED_BEFORE_PROMOTION"
+  },
+  "exact_candidate_blobs": {
+    "the artefact/clayverse/final_acceptance_mistral_config.py": "bdd12572bf16742e011523a1e1497070f44ba7bd",
+    "the artefact/tests/test_mistral_final_runtime_config.py": "58394c29e03230c837011e7c1b925ed20c363446",
+    "the artefact/clayverse/final_acceptance_probe.py": "24f55aed3588bca4f5329b5f68bb735de11d5aa2",
+    "the artefact/tests/test_mistral_final_probe_preflight_binding.py": "6757fce9ad0d6899071c288e54b2de54e4159475"
+  },
+  "delta": [
+    "final-only preflight rejects empty, whitespace-bearing, non-visible-ASCII and moving *-latest model identities",
+    "final-only preflight requires bounded visible-ASCII MISTRAL_API_KEY suitable for one Authorization header value",
+    "preflight scrubs its local secret reference before any validation error",
+    "validated fixed model is passed explicitly into the existing canonical adapters.MistralInference",
+    "development Mistral adapter semantics remain unchanged"
+  ],
+  "provider_contract_basis": {
+    "source": "official Mistral documentation refreshed 2026-08-17",
+    "endpoint": "https://api.mistral.ai/v1/chat/completions",
+    "authentication": "Authorization Bearer MISTRAL_API_KEY",
+    "fixed_model_example": "mistral-small-2603",
+    "model_card": "Mistral Small 4 v26.03"
+  },
+  "isolated_evidence": {
+    "environment": "authorized isolated non-production OpenAI tool container",
+    "helper_blob_identity_verified": true,
+    "helper_test_blob_identity_verified": true,
+    "helper_py_compile_exit": 0,
+    "helper_suite": "14 PASS, 0 FAIL in 0.03s",
+    "ast_binding_fence": "SOURCE_REGRESSION_FENCE_PRESENT_NOT_RUNTIME_CREDIT",
+    "full_final_acceptance_probe": "UNOBSERVED",
+    "live_mistral_network_call": "UNOBSERVED",
+    "vault_secret_acquisition": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED",
+    "vercel_firecracker_final_test": "UNOBSERVED"
+  },
+  "evidence_boundary": {
+    "config_mechanism_supported": true,
+    "canonical_runtime_wiring_source_candidate": true,
+    "runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "remaining_gate": [
+    "fresh-rejoin PR 677 against exact current main and run exact-current deterministic regressions",
+    "make scoped GITHUB_READ_TOKEN and approved Vault-backed MISTRAL_API_KEY available to the retained Vercel controller under current owner directives",
+    "fetch and verify exact current Research plus EntityOS bytes inside the authorized disposable Sandbox",
+    "build and start exact ClayVerse OCI digest inside the observed Firecracker guest-kernel boundary",
+    "execute real canonical Mistral inference, UnifiedDB causal re-entry, EffectGate/EntityOS path where admitted, Tier-1 recovery, full Tier-2 Sandbox/appliance recreation from the same digest, Vault secret reacquisition and Mistral again",
+    "complete remaining Clerk/WebSocket PTY, dual-user, persistence, network and security acceptance gates"
+  ],
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No immutable shared request/turn id is exposed for the global unusual-experiment lease in this go cycle.",
+    "count_added": 0
+  },
+  "non_claims": [
+    "No real Mistral credential was used or exposed.",
+    "No live Mistral API request was credited.",
+    "No exact current ClayVerse OCI image was built or started by this lane.",
+    "No final Vercel test-of-tests, Tier-1/Tier-2 recovery or whole-product PASS is claimed.",
+    "No VPS/self-hosted/production testing, Together API or owner-gated paid/final training was used."
+  ]
+}

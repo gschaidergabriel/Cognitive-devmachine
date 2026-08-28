@@ -1,0 +1,182 @@
+name: EntityOS runtime reconcile 8.71 proof
+
+# Reconcile trigger: 8.72 post-v5 exact-source conversion + safe-Forge fusion
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/runtime-reconcile-871-proof.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile-and-publish:
+    if: github.actor == 'gschaidergabriel'
+    runs-on: self-hosted
+    timeout-minutes: 12
+    steps:
+      - name: Checkout evidence source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconcile real clay-direct-dev runtime
+        shell: bash
+        run: |
+          set -u
+          LIVE=/workspace/clay-global-research-entity
+          ART=/artifacts/clay-entityos-swarm
+          OUT=/tmp/clay-runtime-reconcile-proof-${GITHUB_RUN_ID}
+          mkdir -p "$OUT"
+
+          status=EXECUTED
+          before=""
+          after=""
+          target=""
+          if [[ ! -d "$LIVE/.git" ]]; then
+            status=BLOCKED_LIVE_REPO_NOT_FOUND
+          else
+            before="$(git -C "$LIVE" rev-parse HEAD 2>/dev/null || true)"
+            if ! git -C "$LIVE" fetch --quiet origin main >"$OUT/fetch.log" 2>&1; then
+              status=BLOCKED_LIVE_FETCH_FAILED
+            else
+              target="$(git -C "$LIVE" rev-parse origin/main 2>/dev/null || true)"
+              dirty="$(git -C "$LIVE" status --porcelain=v1 2>/dev/null || true)"
+              unknown_dirty="$(printf '%s\n' "$dirty" | grep -Ev '^[ MARC?]{2} (free swarm/(README.md|LIVE_METRICS.json|DISTILLERY_LIVE.json|FORGE_LIVE.json|SYSTEM_ANALYSIS_LIVE.json|FABRIC_6000_LIVE.json)|000_FREE_SWARM_LIVE_DASHBOARD.md)$' || true)"
+              if [[ -n "$unknown_dirty" ]]; then
+                status=BLOCKED_LIVE_CHECKOUT_DIRTY_NONGENERATED
+                printf '%s\n' "$unknown_dirty" > "$OUT/unknown-dirty.txt"
+              else
+                for p in \
+                  'free swarm/README.md' \
+                  'free swarm/LIVE_METRICS.json' \
+                  'free swarm/DISTILLERY_LIVE.json' \
+                  'free swarm/FORGE_LIVE.json' \
+                  'free swarm/SYSTEM_ANALYSIS_LIVE.json' \
+                  'free swarm/FABRIC_6000_LIVE.json' \
+                  '000_FREE_SWARM_LIVE_DASHBOARD.md'; do
+                  git -C "$LIVE" restore --worktree -- "$p" 2>/dev/null || true
+                done
+                if ! git -C "$LIVE" merge --ff-only origin/main >"$OUT/fast-forward.log" 2>&1; then
+                  status=BLOCKED_FAST_FORWARD_FAILED
+                else
+                  after="$(git -C "$LIVE" rev-parse HEAD 2>/dev/null || true)"
+                  python3 "$LIVE/tools/free_provider_admission.py" --json >"$OUT/admission.json" 2>"$OUT/admission.err"
+                  admission_rc=$?
+                  if [[ $admission_rc -ne 0 ]]; then
+                    status=BLOCKED_CANONICAL_ADMISSION_INVALID
+                  else
+                    bash "$LIVE/tools/activate_6000_free_swarm.sh" >"$OUT/activate.log" 2>&1
+                    activate_rc=$?
+                    python3 "$LIVE/free swarm/update_root_results.py" --repo "$LIVE" --artifacts "$ART" >"$OUT/reconcile-1.log" 2>&1 || true
+                    sleep 20
+                    python3 "$LIVE/free swarm/update_root_results.py" --repo "$LIVE" --artifacts "$ART" >"$OUT/reconcile-2.log" 2>&1 || true
+                    if [[ $activate_rc -ne 0 ]]; then status=ACTIVATION_NONZERO; fi
+                  fi
+                fi
+              fi
+            fi
+          fi
+
+          cp "$ART/RUNTIME_RECONCILIATION.json" "$OUT/runtime.json" 2>/dev/null || true
+          cp "$ART/SUPERVISOR_6000.json" "$OUT/supervisor6000.json" 2>/dev/null || true
+          cp "$ART/SUPERVISOR.json" "$OUT/supervisor.json" 2>/dev/null || true
+          cp "$ART/local-model.json" "$OUT/local-model.json" 2>/dev/null || true
+          cp "$LIVE/free swarm/SYSTEM_ANALYSIS_LIVE.json" "$OUT/system-analysis.json" 2>/dev/null || true
+
+          STATUS="$status" BEFORE="$before" AFTER="$after" TARGET="$target" OUT="$OUT" python3 - <<'PY'
+          import datetime, json, os
+          from pathlib import Path
+          out=Path(os.environ['OUT'])
+          def load(name):
+              try:
+                  x=json.loads((out/name).read_text(encoding='utf-8')); return x if isinstance(x,dict) else {}
+              except Exception:return {}
+          runtime=load('runtime.json')
+          analysis=load('system-analysis.json')
+          sup=load('supervisor6000.json')
+          local=load('local-model.json')
+          rt=(analysis.get('runtime') or runtime.get('runtime') or {}) if isinstance(analysis,dict) else {}
+          result={
+              'schema':'CLAY_RUNTIME_RECONCILE_SELFHOSTED_PROOF/v1',
+              'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+              'status':os.environ['STATUS'],
+              'live_head_before':os.environ['BEFORE'] or None,
+              'live_head_after':os.environ['AFTER'] or None,
+              'origin_main_target':os.environ['TARGET'] or None,
+              'supervisor':rt.get('supervisor'),
+              'go_swarm':rt.get('go_swarm'),
+              'distillery':rt.get('distillery'),
+              'evidence_forge':rt.get('evidence_forge'),
+              'dashboard':rt.get('dashboard'),
+              'local_model':rt.get('local_model'),
+              'local_model_bootstrap':rt.get('local_model_bootstrap'),
+              'authority_alignment':rt.get('authority_alignment'),
+              'canonical_provider_admission':rt.get('provider_admission'),
+              'runtime_provider_admission':rt.get('provider_admission_runtime') or sup.get('provider_admission'),
+              'local_model_state':local,
+              'reconciliation_actions':runtime.get('actions'),
+              'provider_secret_values_inspected':False,
+              'paid_fallback_attempt_count':0,
+              'together_used':False,
+              'provider_runtime_credit':0,
+              'whole_hcu_runtime_credit':0,
+              'jspace_model_runtime_credit':0,
+              'training_credit':0,
+              'credit_boundary':'Operational health/alignment proof only; semantic runtime credits remain separately receipt-gated.'
+          }
+          (out/'result.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          print(json.dumps(result,ensure_ascii=False))
+          PY
+          echo "OUT=$OUT" >> "$GITHUB_ENV"
+
+      - name: Publish sanitized proof to main
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          OUT: ${{ env.OUT }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const p = `${process.env.OUT}/result.json`;
+            let body;
+            if (fs.existsSync(p)) {
+              body = fs.readFileSync(p, 'utf8');
+            } else {
+              body = JSON.stringify({schema:'CLAY_RUNTIME_RECONCILE_SELFHOSTED_PROOF/v1',github_run_id:context.runId,status:'WORKFLOW_RESULT_MISSING',provider_runtime_credit:0,whole_hcu_runtime_credit:0,jspace_model_runtime_credit:0,training_credit:0}, null, 2) + '\n';
+            }
+            const path = `research_entity/runtime/reconcile_results/${context.runId}.json`;
+            await github.rest.repos.createOrUpdateFileContents({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path,
+              message: `runtime: publish 8.71 reconciliation proof ${context.runId}`,
+              content: Buffer.from(body, 'utf8').toString('base64'),
+              branch: 'main'
+            });
+
+      - name: Upload bounded diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: entityos-runtime-reconcile-proof-${{ github.run_id }}
+          path: |
+            ${{ env.OUT }}/result.json
+            ${{ env.OUT }}/admission.json
+            ${{ env.OUT }}/runtime.json
+            ${{ env.OUT }}/supervisor6000.json
+            ${{ env.OUT }}/supervisor.json
+            ${{ env.OUT }}/local-model.json
+            ${{ env.OUT }}/system-analysis.json
+            ${{ env.OUT }}/fetch.log
+            ${{ env.OUT }}/fast-forward.log
+            ${{ env.OUT }}/activate.log
+            ${{ env.OUT }}/reconcile-1.log
+            ${{ env.OUT }}/reconcile-2.log
+            ${{ env.OUT }}/unknown-dirty.txt
+          if-no-files-found: warn
+          retention-days: 7

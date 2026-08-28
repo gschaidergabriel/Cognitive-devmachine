@@ -1,0 +1,128 @@
+{
+  "schema": "CLAY_TRIGGER2_CGROUP_RUNTIME_QUIESCENCE_RECEIPT_METHOD_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "NONCANONICAL_RESEARCH_METHOD_DELTA_NOT_RUNTIME_EXECUTED",
+  "observed_main_before_write": "1469d5d197b089f4790572734aae3ccb1f5dd339",
+  "deduplication": {
+    "parallel_delta_observed": "9ef02572ce3fbbc86970bf6e3f02c5eb4c318c00",
+    "parallel_delta_scope": "declarative-control-vs-observed-runtime plus J-Space metrology",
+    "this_delta_only_adds": [
+      "Linux cgroup-v2 bounded quiescence witness method",
+      "pidfd process-identity hardening fallback",
+      "whole-host escape-process counterhypothesis",
+      "GRID10 live-at-barrier versus live-at-commit claim-boundary resolution"
+    ]
+  },
+  "observed_current_project_facts": [
+    {
+      "id": "R0_PROVIDER_ADMISSION_HARD_OFF",
+      "finding": "Current FREE_PROVIDER_ADMISSION disables autonomous Groq, Mistral, NVIDIA and OpenRouter routes under the owner emergency stop."
+    },
+    {
+      "id": "R0_RUNTIME_QUIESCENCE_UNPROVEN",
+      "finding": "Current 8.81 delta records post-stop live FreeSwarm-related process classes and requires runtime quiescence evidence before new provider or experiment execution."
+    },
+    {
+      "id": "R0_GRID10_SOURCE_READY_RUNTIME_ZERO",
+      "finding": "The physical GRID10 fused source is repaired and pinned, but exact clean repository-bound runtime evidence remains unobserved and runtime credit remains zero."
+    }
+  ],
+  "external_primary_method_evidence": [
+    {
+      "source": "Linux kernel cgroup v2 documentation",
+      "url": "https://cdn.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html",
+      "finding": "For a non-root cgroup, cgroup.events populated is 0 exactly when the cgroup and descendants contain no live process; writing 1 to cgroup.kill kills the cgroup and descendants; pids.current reports the current process count in the cgroup and descendants.",
+      "scope": "bounded cgroup-subtree process-state evidence"
+    },
+    {
+      "source": "Linux man-pages pidfd_send_signal(2)",
+      "url": "https://www.kernel.org/pub/linux/docs/man-pages/book/man-pages-6.05.01.pdf",
+      "finding": "A pidfd is a stable reference to a specific process and avoids signaling a recycled PID; after the referenced process exits, pidfd_send_signal fails with ESRCH.",
+      "scope": "stable per-process identity and termination targeting"
+    },
+    {
+      "source": "SQLite official isolation and transaction documentation",
+      "url": "https://www.sqlite.org/isolation.html",
+      "finding": "Separate connections, including separate processes, can hold simultaneous read transactions; an active read transaction continues to observe its historical snapshot while later changes remain invisible to it.",
+      "scope": "supports the GRID10 shared held-read-snapshot source design, not runtime acceptance"
+    }
+  ],
+  "hypothesis": {
+    "id": "H_T2_CGROUP_QUIESCENCE_WITNESS",
+    "statement": "If every FreeSwarm/provider caller is proven to reside in one dedicated cgroup-v2 subtree, then cgroup.kill followed by observed cgroup.events populated=0 and pids.current=0 provides a stronger bounded runtime-quiescence witness than a process-name scan alone.",
+    "counterhypothesis": "Legacy callers may have escaped or never entered that subtree, so an empty cgroup can coexist with live provider callers elsewhere on the host.",
+    "discriminator": "Require both bounded cgroup proof and an independent host-wide scan for the known provider/supervisor caller classes, plus a bounded no-new-provider-usage observation window. Any escaped matching caller makes whole-host FreeSwarm quiescence FAIL_CLOSED."
+  },
+  "proposed_receipt": {
+    "schema": "FREE_SWARM_RUNTIME_QUIESCENCE_RECEIPT/v1",
+    "classification": "PROPOSED_NOT_EXECUTED",
+    "required_fields": [
+      "host_identity",
+      "kernel_identity",
+      "authority_main_sha",
+      "provider_admission_blob_sha",
+      "observation_start_utc",
+      "observation_end_utc",
+      "known_process_signature_set",
+      "cgroup_v2_path_or_null",
+      "pre_stop_cgroup_events_or_null",
+      "pre_stop_pids_current_or_null",
+      "termination_method",
+      "post_stop_cgroup_events_or_null",
+      "post_stop_pids_current_or_null",
+      "hostwide_matching_process_inventory_after",
+      "provider_usage_counter_before",
+      "provider_usage_counter_after",
+      "provider_usage_delta",
+      "observation_window_seconds",
+      "stdout_digest",
+      "stderr_digest",
+      "receipt_digest"
+    ],
+    "acceptance": [
+      "canonical provider admission remains HARD_OFF",
+      "if a proven encompassing cgroup exists: cgroup.events populated=0",
+      "if a proven encompassing cgroup exists: pids.current=0",
+      "host-wide scan finds zero known FreeSwarm/provider caller processes after termination",
+      "provider usage/call count delta across the bounded observation window equals zero",
+      "host/time/source identities are recorded and internally consistent"
+    ],
+    "fail_closed_cases": [
+      "cgroup is empty but containment of all relevant callers was never proven",
+      "matching caller remains outside the cgroup",
+      "only a stop command submission is observed without process-state confirmation",
+      "only one instantaneous zero-process sample is observed without a bounded window",
+      "provider usage increases after the claimed stop boundary",
+      "PID-only termination target is ambiguous under PID reuse",
+      "host identity or authority source identity is missing"
+    ]
+  },
+  "grid10_claim_boundary_resolution": {
+    "initial_concern": "The fused harness releases the ten child processes, waits for child completion, and only later performs the deterministic cohort commit.",
+    "current_contract_observation": "The current atomic cohort contract requires the same ten processes to be simultaneously live at the barrier and their exact packet digests to be bound to those live process identities before release. It does not currently require the ordinary worker processes to remain live through the later coordinator commit.",
+    "resolution": "NO_NEW_GRID10_SOURCE_DEFECT_FROM_POST_BARRIER_CHILD_EXIT_UNDER_THE_CURRENT_BASE_CONTRACT",
+    "reason": "The evidence claim is simultaneous physical cohort observation plus immutable same-cohort packet admission, not live worker residency during coordinator commit.",
+    "reopen_falsifier": "Reopen this defect if a newer canonical acceptance contract explicitly requires all ten ordinary workers to remain live until or through the coordinator commit, or if immutable process/packet binding is shown insufficient after child exit."
+  },
+  "training_and_credit_boundary": {
+    "new_positive_training_rows": 0,
+    "accepted_dataset_tokens_delta": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "canonical_truth_credit": 0,
+    "effect_authority_credit": 0
+  },
+  "next_exact_action": "On the separately authorized execution host, first produce a FREE_SWARM_RUNTIME_QUIESCENCE_RECEIPT/v1 that proves zero relevant live callers and zero post-stop provider usage under exact host/time/source identity. Only after that PASS and a fresh execution-authority reentry should the exact repaired GRID10 pin be executed. This research delta itself performs no host, provider, VPS, model or training execution."
+}

@@ -1,0 +1,81 @@
+{
+  "schema": "GO_HCU_CANONICALIZATION_MULTIPATH_CONVERGENCE/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "source_candidate": {
+    "pr": 1263,
+    "observed_head": "d0848945caa05cb65116eb5cd6483def4b1fb48d",
+    "retained_branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823"
+  },
+  "finding": "HCU_CAUSAL_CANONICALIZATION_MULTIPATH_CONVERGENCE_GAP",
+  "observed_candidates": [
+    {
+      "path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+      "schema": "RFC8785_JCS_IJSON/v1",
+      "domain": "JSON/I-JSON textual JCS including floats"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/typed_entry_canonical_v1.py",
+      "schema": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1",
+      "domain": "deterministic CBOR subset; floats intentionally rejected"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/hcu_causal_canonical_v1.py",
+      "schema": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
+      "domain": "version-prefixed typed binary encoding including IEEE-754 binary64"
+    }
+  ],
+  "active_path_observation": "At observed PR head, xeno_entry_fabric_v1.py and reactive_event_router_v1.py still mint active Entry/route identities with their own implementation-scoped Python json.dumps(sort_keys=True, compact UTF-8) canonicalizers; the three newer canonicalization modules are not yet the single retained authority path.",
+  "risk": "Promoting more than one incompatible canonicalization schema as current identity authority would create stable-but-different hashes for the same logical causal object across Entry/HCU components. That would violate the one-canonical-path law and can split replay/admission identity even when each encoder is individually deterministic.",
+  "fusion_assessment": {
+    "preferred_unifying_candidate": "ENTITYOS_HCU_TYPED_CANONICAL/v1",
+    "why": "It covers the combined Entry plus HCU routing value domain including binary64 reactive signals, carries an explicit version/domain prefix, and already has an independent Python-vs-Node byte/digest equivalence test candidate. The float-free CBOR subset cannot alone cover current HCU reactive event numbers; the hand-rolled JCS candidate should remain non-authoritative until complete conformance evidence or a locked external implementation is admitted.",
+    "promotion_status": "CANDIDATE_ONLY_NOT_AUTHORIZED_CURRENT_IDENTITY",
+    "do_not": "Do not add a fourth canonicalizer or silently reinterpret legacy hashes."
+  },
+  "rfc8785_dependency_qualification": {
+    "candidate": "rfc8785==0.1.4",
+    "upstream": "trailofbits/rfc8785.py tag v0.1.4",
+    "license": "Apache-2.0",
+    "runtime_dependencies": 0,
+    "pypi_wheel_sha256_published": "520d690b448ecf0703691c76e1a34a24ddcd4fc5bc41d589cb7c58ec651bcd48",
+    "source_files_executed": {
+      "src/rfc8785/__init__.py": "fa44927afd547caf7547247078bcf28863d1e69caf116d258c532b3f20ffd154",
+      "src/rfc8785/_impl.py": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    "isolated_source_qualification": "PASS_SELECTED_RFC8785_VECTORS_AND_FAIL_CLOSED_CASES",
+    "qualified_cases": [
+      "+0 and -0 canonicalize to 0",
+      "selected RFC8785 Appendix-B binary64 number forms",
+      "RFC8785 UTF-16 property-order sample",
+      "NaN and +/-Infinity reject",
+      "integer outside safe I-JSON range rejects",
+      "lone surrogate rejects"
+    ],
+    "binary_artifact_execution": "BLOCKED_BY_ISOLATED_TOOL_BINARY_DOWNLOAD_TRANSPORT; published wheel hash was not independently recomputed in this cycle",
+    "promotion_credit": 0
+  },
+  "unusual_experiment": {
+    "performed_here": false,
+    "reason": "This user-triggered go had already consumed its single unusual experiment with the same-route causal alias falsifier; work recorded here is source convergence analysis plus standard dependency qualification."
+  },
+  "next_gate": [
+    "choose exactly one current causal canonicalization schema for Entry + HCU identity and mark the other encoders experimental/legacy-only",
+    "wire that one schema into Entry event/admission hashes, router policy/engine/route hashes and inference receipt echo",
+    "bind canonicalization schema/version into every admitted identity and migration receipt",
+    "run exact current-head Entry + router + cross-language regressions in an authorized isolated executor",
+    "do not promote PR 1263 while merge conflict or canonicalization multipath remains unresolved"
+  ],
+  "credit": {
+    "source_finding": "SUPPORTED",
+    "architecture_delta": "DURABLE_CONVERGENCE_GATE_RECORDED",
+    "exact_full_runtime_verified": false,
+    "hcu_runtime_credit": 0,
+    "entityos_runtime_credit": 0,
+    "whole_product_pass": false
+  }
+}

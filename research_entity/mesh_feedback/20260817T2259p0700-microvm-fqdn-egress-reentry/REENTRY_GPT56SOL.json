@@ -1,0 +1,60 @@
+{
+  "schema": "ResearchReentryReceipt/v1",
+  "timestamp": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "classification": "REFINES",
+  "material_delta": "The final microVM network boundary now explicitly separates default-deny from functional external SaaS egress: standard Kubernetes NetworkPolicy alone must not be widened to broad public HTTPS/DNS; final deployment must bind exactly one FQDN-capable CNI policy strategy or one dedicated egress-proxy strategy and prove allowed plus denied flows on the real target.",
+  "evidence": {
+    "contract": "the artefact/deployment/EXTERNAL_EGRESS_POLICY_CONTRACT.md",
+    "tests": "the artefact/tests/test_external_egress_policy_contract.py",
+    "go_receipt": "the artefact/receipts/2026-08-17_GO_2259_MICROVM_FQDN_EGRESS_CONTRACT_GPT56SOL.json",
+    "primary_sources": [
+      "Kubernetes NetworkPolicy additive/default-deny semantics",
+      "Cilium DNS proxy and toFQDNs external egress semantics",
+      "Kata Containers releases/latest=4.0.0 observed 2026-08-17"
+    ]
+  },
+  "hypofusion": {
+    "counterhypothesis": "A broad standard NetworkPolicy egress rule on TCP/443 plus DNS is an acceptable way to restore Clerk/Claude/GLM connectivity after default-deny.",
+    "assessment": "REJECT_FOR_FINAL_ACCEPTANCE",
+    "falsifier": "Show a standard policy-only deployment that constrains the changing provider destinations without broad public CIDRs, unrestricted DNS, hidden host proxying, or an unreviewed side path while still surviving DNS rotation and Tier-2 replacement.",
+    "consequence_if_counterhypothesis_true": "The additional FQDN-aware/proxy deployment contract could be simplified, but runtime evidence would still need to prove no broad egress escape."
+  },
+  "routes": [
+    {
+      "receiver": "research:clay",
+      "message_kind": "MATERIAL_DELTA",
+      "decision": "ADOPT",
+      "urgency": "NEXT_CHECKPOINT",
+      "required_revalidation": "Treat external provider connectivity as a separate final network-acceptance gate after default-deny, not as permission to broaden the baseline policy."
+    },
+    {
+      "receiver": "research:microvm_network_acceptance",
+      "message_kind": "MATERIAL_DELTA_PLUS_COUNTER_CHALLENGE",
+      "decision": "ADOPT",
+      "urgency": "BEFORE_FINAL_NETWORK_POLICY_IMPLEMENTATION",
+      "required_revalidation": "Select exactly one target-specific FQDN-capable CNI or egress-proxy strategy only after the deployment target and real provider domains are known; bind exact policy bytes and test allowed/denied flows plus DNS re-resolution and Tier-2 re-attestation."
+    },
+    {
+      "receiver": "github:pull/810",
+      "message_kind": "KNOWLEDGE_NEED",
+      "decision": "DEFER",
+      "urgency": "AFTER_EXACT_OCI_CREDENTIAL_GATE",
+      "required_revalidation": "Do not alter the retained OCI controller now. After the GITHUB_READ_TOKEN gate and exact OCI acceptance, carry the accepted digest forward to the final Kata/equivalent network acceptance lane using the new egress contract."
+    },
+    {
+      "receiver": "github:pull/623",
+      "message_kind": "MATERIAL_DELTA",
+      "decision": "NO_CHANGE",
+      "urgency": "INDEX_ONLY",
+      "required_revalidation": "Identity/readiness semantics remain unchanged; later browser/Clerk runtime acceptance must execute through the admitted network-egress strategy rather than a broad policy escape."
+    }
+  ],
+  "external_delivery": {
+    "performed": false,
+    "reason": "No GitHub PR comment was needed for immediate plan invalidation. Durable research routing is sufficient; external delivery atomicity therefore was not invoked."
+  },
+  "runtime_credit": 0,
+  "whole_product_acceptance": "IN_PROGRESS"
+}

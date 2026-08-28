@@ -1,0 +1,8 @@
+[Unit]
+Description=ClayVerse: Kuration -- Quellen-Hash-Pruefung + Warteschlange (mechanisch, keine Modell-Aufrufe)
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/clayverse/werkzeug/kuration.py pruefen
+ExecStartPost=/usr/bin/python3 /opt/clayverse/werkzeug/kuration.py stand

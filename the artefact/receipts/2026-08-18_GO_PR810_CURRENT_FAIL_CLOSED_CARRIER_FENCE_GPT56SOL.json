@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:54:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "PR810_CRASH_STABLE_CARRIER_SOURCE_NOT_YET_IMPLEMENTED_FAIL_CLOSED",
+  "canonical_main_observed_before_write": "7efdd390cdc14ac90a593f86f94f683ee9a1e068",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_observed": "c71e4b3afb1627ff6c517573389830655b541b5f",
+    "source_guard_schema": "ClayVerseCurrentOCISourceGuard/v17",
+    "tier2_guard_schema": "ClayVerseTier2OuterRecreateGuard/v14",
+    "handler_snapshot_path_still_present": true,
+    "guard_snapshot_path_forbidden": true,
+    "guard_fork_path_forbidden": true,
+    "guard_persistent_true_path_forbidden": true,
+    "source_gate_expected_result_if_build_admitted": "FAIL_CLOSED_UNTIL_INDEPENDENT_CRASH_STABLE_CARRIER_IS_IMPLEMENTED"
+  },
+  "verified_repairs_in_this_go": {
+    "stale_tier1_recovery_blob_lock_repaired_commit": "84fbaa8c765ceb872ab4747747cb4158d1a5512e",
+    "phase1_tier1_tier2_network_policy_rebound_to_pinned_sdk_allow_shape": true,
+    "stale_parallel_writes_overwritten": false
+  },
+  "remaining_tier2_gap": {
+    "classification": "CRASH_STABLE_RECOVERY_IDENTITY",
+    "current_failure_mechanism": "The retained handler still derives carrier/replacement identity from process-local randomness and uses the carrier snapshot path; after source deletion a hard controller loss can lose the handoff identity before durable response/reconciliation.",
+    "generated_candidate_already_canonical": "DETERMINISTIC_PERSISTENT_DECLARED_TRANSFER_CARRIER",
+    "candidate_receipt": "the artefact/receipts/2026-08-18_GO_TIER2_DETERMINISTIC_PERSISTENT_CARRIER_CANDIDATE_GPT56SOL.json",
+    "required_properties": [
+      "deterministic collision-safe carrier identity derived from source name plus immutable Research identity",
+      "exact typed receipt binding transfer manifest, OCI identity, EntityOS identity and generation",
+      "re-fetch and validate carrier identity before source deletion",
+      "retry locates exact carrier before requiring deleted source",
+      "replacement remains distinct and persistent:false",
+      "carrier cleanup occurs only after verified replacement recovery"
+    ]
+  },
+  "execution_admission": {
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "build_started": false,
+    "product_runtime_executed": false,
+    "mistral_runtime_credit": 0,
+    "tier2_runtime_credit": 0,
+    "classification": "CONTROL_PLANE_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE"
+  },
+  "unusual_experiment": {
+    "global_go_slot_already_consumed": true,
+    "new_experiment_count": 0
+  },
+  "epistemic_status": {
+    "source_guard_fail_closed_state_verified": true,
+    "crash_stable_carrier_source_implemented": false,
+    "exact_current_head_build_verified": false,
+    "exact_oci_runtime_verified": false,
+    "tier2_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Fuse the already-canonical deterministic crash-stable carrier candidate into the single retained PR810 handler and both guards, preserving the pinned SDK allow-policy and declared-transfer-only boundary. Then, when an actually-started authorized exact-head build surface is admitted, run source guards -> immutable PR686 OCI -> Mistral Stage 1 -> EffectGate/EntityOS -> Tier1 recovery -> source deletion -> forced new-controller carrier reconciliation -> persistent:false replacement -> exact OCI/state restore -> fresh Mistral secret reacquisition -> second cognition."
+}

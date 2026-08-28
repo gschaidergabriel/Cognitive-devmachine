@@ -1,0 +1,58 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T22:54:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "scope": "PR622_python_lock_bootstrap_isolated_admission_attempt",
+  "pr": 622,
+  "branch": "go/python-lock-py313-generator-20260817-1742-sol",
+  "branch_source_observed": {
+    "source_lock_blob_sha1": "5f68dbd63cf5a134ed7fd90fb88d213e33515804",
+    "workflow_blob_sha1": "394c086b9c8e38876a2ff28b0fc62624cba5663a",
+    "dockerfile_blob_sha1": "f573055d34aef3c983135eddc00cb908cf9fd997",
+    "source_binding_test_blob_sha1": "53b0263e49a6e1bd0319f1e48d29ef67c48d3aca"
+  },
+  "declared_bootstrap": [
+    "pip-tools==7.5.3",
+    "build==1.2.2.post1",
+    "click==8.3.3",
+    "packaging==24.2",
+    "pip==26.1.2",
+    "pyproject-hooks==1.2.0",
+    "setuptools==83.0.0",
+    "wheel==0.46.2"
+  ],
+  "primary_metadata_recheck": {
+    "source": "official PyPI JSON release metadata",
+    "result": "all eight declared wheel filenames/SHA-256 values observed in PR622 SOURCE_LOCK match the corresponding official release metadata",
+    "classification": "SOURCE_IDENTITY_SUPPORT_ONLY"
+  },
+  "isolated_attempt": {
+    "environment": "isolated non-production OpenAI container",
+    "python": "3.13.5",
+    "starting_pip": "25.1.1",
+    "command_class": "pip download --only-binary=:all: --require-hashes for the eight declared locked entries, followed by planned offline install",
+    "result": "ADMISSION_BLOCKED_BEFORE_PACKAGE_OBSERVATION",
+    "exit_code": 1,
+    "stderr_signature": "Temporary failure in name resolution while resolving /simple/pip-tools/",
+    "wheel_bytes_observed": 0,
+    "offline_install_started": false
+  },
+  "interpretation": "The attempt executed but network/DNS egress failed before any package bytes were observed. This is not evidence that the declared hashes or dependency closure are wrong; it also does not promote PR622 beyond source candidate because the required exact wheel-download/offline-install path was not exercised.",
+  "github_actions_followup": {
+    "commit_workflow_run_lookup": "403 Resource not accessible by integration",
+    "runtime_credit": 0
+  },
+  "evidence_class": "EXECUTION_ADMISSION_BLOCKED_BEFORE_TARGET_PACKAGE_OBSERVATION",
+  "go_unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0
+  },
+  "non_claims": [
+    "not PR622 generator PASS",
+    "not Python lock PASS",
+    "not product requirements --require-hashes PASS",
+    "not OCI/runtime PASS",
+    "not WHOLE_CLAYVERSE_PASS"
+  ]
+}

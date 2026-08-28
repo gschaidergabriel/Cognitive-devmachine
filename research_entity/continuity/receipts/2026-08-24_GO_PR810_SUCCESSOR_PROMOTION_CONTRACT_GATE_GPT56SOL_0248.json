@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "e58582b676d6c11d3ab1b85b64a1a5915e360718",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_lane_created": false,
+    "force_push_used": false,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "95b7e584bc9a4d5f747204b1ac8fcb3614750033"
+  },
+  "observed_current_executor_state": {
+    "successor_closure_directory": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-511d5689",
+    "required_exact_blob_count": 17,
+    "route_exact_17_blob_map_present": true,
+    "route_exact_three_file_command_present": true,
+    "route_expected_verbose_test_count": 14,
+    "route_exact_result_fence_present": true,
+    "route_source_rebind_required": true,
+    "exclusive_build_guard_blob_sha": "e8baf4b2ca114ee24719d6fa14339c64a12fd1ba",
+    "historical_binder_v2_unquarantine_fallback_removed": true,
+    "actual_model_executor_io_observed": false,
+    "runtime_credit_change": 0
+  },
+  "new_discriminator": {
+    "finding": "THE_PREVIOUS_STALE_BINDER_V2_UNQUARANTINE_BRANCH_IS_GONE; THE_EXCLUSIVE_BUILD_GUARD_NOW_FAILS_CLOSED_ON ANY NAIVE QUARANTINE FLIP",
+    "guard_error": "ENTITYOS_HCU_JSPACE_SUCCESSOR_PROMOTION_CONTRACT_NOT_ADMITTED",
+    "meaning": "Source closure, fixed command, exact result identities and successor source markers are now admitted for inspection while quarantined, but no executable promotion contract yet authorizes the transition from SOURCE_REBIND_REQUIRED to executable component route.",
+    "counterhypothesis": "The completed 17-blob closure plus exact 14-test result fence is sufficient to make SOURCE_REBIND_REQUIRED=false safe without another explicit promotion contract.",
+    "falsifier": "The exclusive build guard deliberately throws on the non-quarantined successor path, so a flag-only transition cannot pass the canonical Vercel build gate. Promotion therefore requires a coherent successor-aware contract/guard/route transition rather than deletion of a quarantine constant.",
+    "promotion_requirements": [
+      "keep repository-qualified executor identity gschaidergabriel/Dr.-Unterweger#810",
+      "retain exact donor 511d568932bf47828679e3ca6ba05650f18d284d and exact 17 Git-blob map",
+      "retain exact three-file unittest command and all 14 exact verbose regression identities",
+      "retain source/manifest/contract validation and exact donor blob guard after promotion, not only while quarantined",
+      "ensure contract/source validation still occurs before FREE_ONLY cost admission and before Sandbox.create on the executable path",
+      "retain zero whole-EntityOS/HCU, J-Space-model and training credit before observed admitted execution",
+      "remove SOURCE_REBIND_REQUIRED only atomically with the successor promotion contract and exclusive build-guard admission"
+    ]
+  },
+  "negative_evidence": {
+    "exact_current_successor_sandbox_invocation_observed": false,
+    "exact_current_14_test_runtime_result_observed": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "together_preflight_or_credential_consumption": false,
+    "classification": "SOURCE_PROMOTION_GATE_NOT_RUNTIME_OR_PRODUCT_FAILURE"
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the retained executor is no longer able to fall back to historical Binder-v2 semantics after quarantine removal; non-quarantined successor source now fails closed until an explicit promotion contract is admitted.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: exact producer-derived Typed Entry -> route -> verified engine admission/load -> GRID10 trust-object closure remains pinned inside the 17-blob successor source identity and is protected from naive promotion drift.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: exact 14-test Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 result identity is now build-guard-recognized while quarantined; the next admissible action is successor promotion-contract closure, followed only then by FREE_ONLY isolated runtime execution. No model/training credit is granted."
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Parallel executor/research organs are changing current-facing surfaces rapidly. This append-only successor receipt records the newly narrowed promotion gate without overwriting moving README state."
+  },
+  "next_exact_gate": "Re-enter current PR810. If SOURCE_REBIND_REQUIRED remains true and the exact 17-blob/14-test successor route is unchanged, define and enforce one successor promotion contract that preserves contract/blob/result validation on the executable path before FREE_ONLY cost admission and Sandbox.create; update the exclusive build guard to admit only that contract; remove quarantine atomically in the same coherent source identity. Then execute only if Vercel Hobby included-tier build/function admission is actually available, capturing exact source/result digests, Sandbox identity, exit code, secret fence and cleanup. Any deterministic regression PASS remains component/path credit until real admitted zero-cost local model-executor I/O is observed through canonical MiniUnifiedDB admission."
+}

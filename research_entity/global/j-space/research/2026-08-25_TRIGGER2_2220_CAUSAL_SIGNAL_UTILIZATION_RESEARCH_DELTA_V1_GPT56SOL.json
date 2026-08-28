@@ -1,0 +1,136 @@
+{
+  "schema": "CLAY_TRIGGER2_CAUSAL_SIGNAL_UTILIZATION_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:20+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "bf50e5dee807c487cdbcf021cc28fbe7cf8668b7",
+    "observed_tree_before_write": "6d09e8ea31ce7ca2c118726ce312e647afe8d929",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "current_training_ledger": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V18_GPT56SOL.json",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "reentry_audit": {
+    "bootstrap_2026_08_24_supervisor_8_63": "STALE_AS_CURRENT_AUTHORITY_USEFUL_DONOR_ONLY",
+    "training_ledger_v18": "CURRENT_AT_AUDIT_TIME",
+    "a02_policy_digest_and_source_lineage": "CURRENT_SOURCE_CLOSED_RUNTIME_PENDING",
+    "a02_exact_current_repository_bound_execution": "NOT_OBSERVED",
+    "binding_router_factorial_v3": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+    "positive_data_gate": "CLOSED",
+    "dedup_decision": "DO_NOT_DUPLICATE_A02_BINDING_ACTIONABILITY_OR_BUCKETED_ALIGNMENT_LANES"
+  },
+  "external_research": [
+    {
+      "id": "EXT_ZHOU_MCCOY_FRANK_CONTINUOUS_CAUSAL_INTERVENTION_2026",
+      "source_class": "PRIMARY_PREPRINT",
+      "title": "Causal Interventions on Continuous Variables: A Case Study on Verb Bias in Steering Vectors for In-Context Learning",
+      "authors": "Zhenghao Herbert Zhou, R. Thomas McCoy, Robert Frank",
+      "identifier": "arXiv:2605.29971",
+      "date": "2026-05-28",
+      "source_direct_finding": "Counterfactual edits along a learned continuous verb-bias direction causally shifted downstream structural preferences, while other steering-vector components encoded error signals associated with in-context learning but those error-signal aspects were not causally used in downstream production.",
+      "project_implication": "Trigger-2 must distinguish representation/decodability and even intervention responsiveness from evidence that a candidate signal is actually consumed by the downstream cognitive update path. METHOD_INPUT_ONLY; this is not Clay/Qwen-specific runtime evidence."
+    }
+  ],
+  "research_gap": {
+    "existing_v18_law": "Decoded/separable representation is not causal control; exact intervention efficacy and off-target controls are required.",
+    "new_missing_distinction": "A signal can be present in, or associated with, a steerable representation while the hypothesized downstream update mechanism does not consume that signal. Therefore causal representation/control evidence and causal utilization-by-update evidence are separate promotion gates.",
+    "why_nonduplicate": "This extends the existing READ-versus-WRITE/actionability gate with a mediation/utilization question: did the manipulated state become an input to the intended update computation, rather than merely co-varying with or locally steering a representation?"
+  },
+  "causal_usage_ladder": {
+    "level_0_encoded_or_decodable": {
+      "meaning": "The candidate variable can be decoded or is measurably represented.",
+      "promotion_ceiling": "REPRESENTATION_OBSERVATION_ONLY"
+    },
+    "level_1_counterfactually_steerable": {
+      "meaning": "An exact-site intervention changes the candidate variable or a matched downstream readout under controls.",
+      "promotion_ceiling": "BOUNDED_CAUSAL_REPRESENTATION_OR_CONTROL_COMPONENT_ONLY"
+    },
+    "level_2_update_path_utilized": {
+      "meaning": "The candidate variable is demonstrably consumed by the intended downstream state/evidence/update computation under mediation, lesion or path-specific controls.",
+      "promotion_ceiling": "COGNITIVE_UPDATE_MECHANISM_CANDIDATE"
+    },
+    "level_3_behaviorally_functional": {
+      "meaning": "The update-path effect produces the preregistered task/trajectory consequence while preserving off-target retention and authority boundaries.",
+      "promotion_ceiling": "BOUNDED_FUNCTIONAL_CAUSAL_CREDIT_AT_EXACT_MODEL_RUNTIME_SITE_SCOPE"
+    }
+  },
+  "hypothesis": "For Global J-Space/Hyperposition, the strongest trainable causal target is not merely a decodable or steerable vector state but a state whose manipulated semantic content is demonstrably consumed by the intended update computation and then changes the correct recurrent trajectory.",
+  "counterhypothesis": "If an intervention on the candidate J-Space direction reliably changes an immediate downstream readout, separate utilization/mediation tests are redundant.",
+  "counterhypothesis_status": "NOT_ACCEPTED_FOR_PROMOTION",
+  "counterhypothesis_reason": "The external causal-intervention result provides a concrete mechanism class in which information is encoded without being causally used by the hypothesized downstream behavior. Immediate readout movement therefore cannot by itself establish update-path use.",
+  "evaluation_delta": {
+    "id": "T2_JSPACE_CAUSAL_SIGNAL_UTILIZATION_GATE_V1",
+    "status": "CURRENT_EVAL_DESIGN_NONPROMOTING_NO_ROWS",
+    "required_after_existing_actionability_and_before_positive_update_mechanism_promotion": [
+      "freeze exact model checkpoint tokenizer runtime layer site vector/subspace and intervention magnitude before holdout inspection",
+      "define the intended downstream update variable or state transition independently of the intervention readout",
+      "show that candidate-state intervention changes the intended update state in the preregistered direction under matched null same-norm orthogonal or shuffled controls",
+      "lesion or block the hypothesized candidate-to-update path and require the intervention effect on the update state to collapse when the mechanism predicts collapse",
+      "where a separable path is available perform rescue by restoring the candidate signal or downstream mediator and require predicted recovery",
+      "test an encoded-but-nonutilized positive control or synthetic analogue where decodability is preserved but update-path use is intentionally absent so the gate cannot collapse to probe accuracy",
+      "report off-target damage and protocol authority retention separately from target effect",
+      "require held-out family/context transfer and combine with the existing bucketed worst-region guard rather than mean-only acceptance",
+      "do not transfer raw activation coordinates or causal credit across model checkpoint layer runtime or site identities"
+    ]
+  },
+  "training_implication": {
+    "positive_label_rule": "Do not create a positive J-Space UPDATE_USED label from decodability, correlation, local steering, self-report, recurrence, or aggregate intervention success alone.",
+    "hard_negative_design_candidate": "Paired cases should eventually include DECODED_NOT_USED, STEERED_NOT_UPDATE_MEDIATED, UPDATE_MEDIATED_BUT_BEHAVIOR_WRONG, and UPDATE_MEDIATED_BEHAVIOR_CORRECT states, but no rows are admitted by this delta.",
+    "curriculum_relation": "READ, BIND_ROUTE and WRITE remain useful channel diagnostics; causal utilization adds a mechanism-composition gate between WRITE/control and end-to-end recurrent functional promotion."
+  },
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V18_GPT56SOL.json",
+      "status": "CURRENT_LEDGER_AT_AUDIT_TIME",
+      "revision_reason": "No contradiction. This delta extends v18 causal actionability with explicit downstream utilization/mediation separation; accepted data and credits remain unchanged."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2217_ACTIONABILITY_NUISANCE_CAUSAL_AUDIT_V1_GPT56SOL.json",
+      "status": "CURRENT_COMPLEMENTARY_RESEARCH_DONOR_NONPROMOTING",
+      "revision_reason": "READ/decode versus WRITE/control remains valid; this delta adds the distinct question of whether the target update computation actually consumes the candidate signal."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2218_CAUSAL_BUCKET_ALIGNMENT_GUARD_RESEARCH_DELTA_V1_GPT56SOL.json",
+      "status": "CURRENT_COMPLEMENTARY_RESEARCH_DONOR_NONPROMOTING",
+      "revision_reason": "Bucketed fidelity and restricted alignment remain valid and should be composed with the utilization gate."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "revision_reason": "This research delta does not repair the existing conditional/model-visible nuisance leakage."
+    }
+  ],
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "new_training_admitted_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_TRAINING_ROWS_WITH_REASON",
+    "reason": "Exact-current A02/v4 repository-bound execution remains unobserved and downstream genesis/history/OBSERVED-producer/rendered-nuisance/split/tokenizer gates remain open. This cycle adds one nonduplicate causal-utilization evaluation distinction only."
+  },
+  "credits": {
+    "research_delta": 1,
+    "external_method_delta": 1,
+    "evaluation_design_delta": 1,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "trigger2_a02_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Do not generate positive rows. First execute the exact-current A02 adversarial mutation suite plus retained v4 composition repository-bound on the admitted zero-cost surface with HEAD/tree/source/policy binding. After the existing history/OBSERVED/nuisance/split/tokenizer gates close, compose the actionability, bucketed-alignment and causal-utilization gates on one frozen family-disjoint variable-N/DB/Claude/Hyperposition pilot."
+}

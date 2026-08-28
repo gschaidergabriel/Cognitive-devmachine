@@ -1,0 +1,160 @@
+{
+  "schema": "CLAY_TRIGGER2_MODEL_CALL_TO_HCU_LINEAGE_INTEGRATION_AUDIT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "SOURCE_ONLY_INTEGRATION_AUDIT_NONPROMOTING",
+  "observed_main_before_write": "3934aca7c57deba0656773140cc1dadf3dbe9e28",
+  "authority": {
+    "supervisor_epoch": "8.83_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "model_runtime_authorized_by_this_delta": false,
+    "training_authorized_by_this_delta": false
+  },
+  "basis": {
+    "current_trigger2_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V56_GPT56SOL.json",
+    "trigger2_model_state_probe": "tools/trigger2_qwen35_checkpoint_model_state_consumption_probe_v2.py",
+    "trigger2_model_state_source_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI_V2_SOURCE_DELTA_GPT56SOL.json",
+    "trigger2_output_negative_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_MODEL_CALL_OUTPUT_BINDING_NEGATIVE_FIXTURE_DELTA_GPT56SOL.json",
+    "node_result_authority_fusion": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_NODE_RESULT_AUTHORITY_ENVELOPE_FUSION_V1_GPT56SOL.json",
+    "atomic_cohort_source": "tools/trigger2_grid10_atomic_cohort_batch_acceptance_v1.py",
+    "historical_detached_chain_receipt": "research_entity/continuity/receipts/2026-08-24_GO_DETACHED_EXECUTOR_INFERENCE_V4_CHAIN_GPT56SOL.json"
+  },
+  "field_by_field_audit": [
+    {
+      "field": "causal_event_id + admission_id",
+      "trigger2_probe": "ABSENT",
+      "current_hcu_node_result_lane": "ARCHITECTURE_CANDIDATE_ONLY_NOT_BOUND_IN_CURRENT_ATOMIC_PACKET",
+      "status": "OPEN_CANONICAL_INTEGRATION"
+    },
+    {
+      "field": "route decision identity",
+      "trigger2_probe": "ABSENT",
+      "current_hcu_node_result_lane": "NOT_BOUND_IN_NODE_RESULT_V1_OR_ATOMIC_COHORT_MEMBER",
+      "status": "OPEN_CANONICAL_INTEGRATION"
+    },
+    {
+      "field": "resolved engine/checkpoint/tokenizer/runtime identity",
+      "trigger2_probe": "PARTIAL_TO_STRONG_COMPONENT_CLOSURE: checkpoint manifest/state + tokenizer/render/input + runtime",
+      "current_hcu_node_result_lane": "NOT_REFERENCED_BY_CURRENT_NODE_RESULT_V1_PACKET",
+      "status": "OPEN_END_TO_END_REFERENCE"
+    },
+    {
+      "field": "loader-consumption/model-state identity",
+      "trigger2_probe": "SOURCE_READY_COMPONENT: complete checkpoint-state versus loaded persistent state reconciliation with forward-stability binding",
+      "current_hcu_node_result_lane": "NOT_REFERENCED_BY_CURRENT_NODE_RESULT_V1_PACKET",
+      "status": "OPEN_END_TO_END_REFERENCE"
+    },
+    {
+      "field": "GRID10 plan/cell or exact node/process authority",
+      "trigger2_probe": "ABSENT",
+      "current_hcu_node_result_lane": "PARTIAL: node id, producer PID, snapshot/cohort evidence; separate authority-envelope research adds membership incarnation design",
+      "status": "OPEN_MODEL_CALL_TO_CELL_BINDING"
+    },
+    {
+      "field": "model output digest",
+      "trigger2_probe": "SOURCE_CLOSED_COMPONENT: complete last-token logits tensor identity plus full forward-output envelope",
+      "current_hcu_node_result_lane": "RAW_NODE_RESULT_PACKET_DIGEST_ONLY; no exact model-output identity reference",
+      "status": "OPEN_END_TO_END_REFERENCE"
+    },
+    {
+      "field": "model_call_identity",
+      "trigger2_probe": "SOURCE_CLOSED_COMPONENT_BUT_ORIGINALLY_NO_REPOSITORY_SOURCE_BINDING",
+      "current_hcu_node_result_lane": "NOT_BOUND_IN_CURRENT_NODE_RESULT_V1_OR_ATOMIC_COHORT_MEMBER",
+      "status": "OPEN_CANONICAL_INTEGRATION"
+    },
+    {
+      "field": "repository/source head/tree/dirty binding",
+      "trigger2_probe": "CLOSED_AS_NEW_SOURCE_GATE_CANDIDATE_REQUIRING_UPSTREAM_PRECOMMITMENT",
+      "current_hcu_node_result_lane": "NOT_BOUND_TO_MODEL_CALL_IN_CURRENT_NODE_RESULT_PATH",
+      "status": "SOURCE_SUBGATE_ADVANCED_RUNTIME_ATTESTATION_PENDING"
+    },
+    {
+      "field": "downstream NODE_RESULT/eval/J-Space exact call reference",
+      "trigger2_probe": "ABSENT",
+      "current_hcu_node_result_lane": "NODE_RESULT packet and cohort digest exist but do not reference exact model call/output identity",
+      "status": "PRIMARY_REMAINING_SOURCE_INTEGRATION_GAP"
+    }
+  ],
+  "new_source_delta": {
+    "source": "tools/trigger2_model_call_repository_bound_gate_v1.py",
+    "source_commit": "59bca56ea474a49a673cde7d5dff6e8fd6905c2d",
+    "source_sha256": "7fbb20f682f44f0200dcddd62045d31ed83c17357e85d23451b98ccfb0667b0b",
+    "test": "tests/test_trigger2_model_call_repository_bound_gate_v1.py",
+    "test_commit": "3934aca7c57deba0656773140cc1dadf3dbe9e28",
+    "test_sha256": "bd9e57d2ff65f063e62728f1177c7491ddb0d12d4677af1acd57f7c6c6014cfa",
+    "mechanism": [
+      "recompute the existing ABI-v2 model-call binding from the exact child receipt rather than trusting a copied digest",
+      "require complete last-logits raw-byte identity so same-top1/different-logits remains distinct",
+      "require an upstream-frozen CLAY_REPOSITORY_SOURCE_IDENTITY/v1 commitment",
+      "bind canonical repository, exact HEAD SHA, tree SHA, probe source path, Git blob SHA-1, source SHA-256 and dirty=false",
+      "reject source-identity commitment transplant and dirty/unknown repository state",
+      "derive one source-bound model-call identity over exact ABI-v2 receipt, v2 call binding, output identity and precommitted source identity",
+      "retain zero checkpoint/J-Space/training/HCU/EntityOS credit"
+    ],
+    "local_deterministic_validation": {
+      "py_compile": "PASS",
+      "pytest": "8/8 PASS",
+      "scope": "LOCAL_SOURCE_ONLY_DETERMINISTIC_FIXTURE_NOT_REPOSITORY_CI_NOT_MODEL_RUNTIME",
+      "negative_controls": [
+        "SAME_TOP1_DIFFERENT_LOGITS_DISTINCT",
+        "OUTPUT_TRANSPLANT_WITHOUT_REBIND_REJECTED",
+        "PARENT_CHILD_CANDIDATE_TRANSPLANT_REJECTED",
+        "SOURCE_HEAD_CHANGE_DISTINCT",
+        "SOURCE_COMMITMENT_TRANSPLANT_REJECTED",
+        "DIRTY_REPOSITORY_REJECTED",
+        "MISSING_LAST_LOGITS_DIGEST_REJECTED"
+      ]
+    },
+    "epistemic_boundary": "The gate validates equality to a precommitted source identity; it does not self-authenticate Git facts. The admitted executor must independently attest those facts and freeze the expected commitment before the model call."
+  },
+  "integration_finding": {
+    "id": "T2_MODEL_CALL_TO_NODE_RESULT_LINEAGE_GAP",
+    "reality_level": "R0_SOURCE_OBSERVED_PLUS_R1_CAUSAL_INFERENCE",
+    "claim": "The current Trigger-2 selection probe can now be made repository/source-bound at component scope, while the current NODE_RESULT/atomic-cohort path binds packet/process/snapshot/cohort evidence but does not reference the exact source-bound model_call_identity or model_output_identity. Therefore the next canonical source closure is not another call-id scheme; it is deterministic propagation of the one already-bound call identity into the existing NODE_RESULT authority envelope and downstream cohort/evaluation/J-Space receipts.",
+    "anti_duplication_rule": "Do not invent a second model-call identity. Reuse the exact source-bound Trigger-2 call identity as referenced immutable evidence inside the deterministic NODE_RESULT authority envelope."
+  },
+  "hypothesis": {
+    "H1": "A fabric-owned reference from NODE_RESULT authority envelope -> exact source-bound model_call_identity + model_output_identity can close call-to-node provenance without teaching the model to mint authority IDs.",
+    "counterhypothesis": "A NODE_RESULT packet digest is sufficient because it already commits the semantic payload and process/snapshot evidence.",
+    "counterassessment": "Packet integrity alone cannot distinguish two exact model calls that yield the same semantic payload, nor prove which checkpoint/input/runtime/source produced that payload. This matters for checkpoint selection, causal J-Space attribution and replay lineage.",
+    "cheapest_next_discriminator": "Source-only successor fixture: extend the existing deterministic NODE_RESULT authority-envelope candidate with references to source_bound_model_call_identity_sha256 and model_output_identity_sha256 plus exact node/cell identity, then require packet/call transplant, call/cell transplant and source-head drift negatives to fail. Do not change the model-generated semantic payload schema."
+  },
+  "required_next_fail_closed_negatives": [
+    "SAME_SEMANTIC_PAYLOAD_DIFFERENT_MODEL_CALL_NOT_INTERCHANGEABLE",
+    "MODEL_CALL_REFERENCE_TRANSPLANTED_TO_DIFFERENT_NODE_OR_GRID_CELL_REJECTED",
+    "MODEL_OUTPUT_IDENTITY_MISMATCH_WITH_REFERENCED_CALL_REJECTED",
+    "SOURCE_HEAD_OR_TREE_DRIFT_REQUIRES_DISTINCT_SOURCE_BOUND_CALL_IDENTITY",
+    "RAW_NODE_RESULT_PACKET_UNCHANGED_BUT_AUTHORITY_ENVELOPE_CALL_REFERENCE_CHANGED_CHANGES_ENVELOPE_DIGEST",
+    "MODEL_GENERATED_CALL_OR_SOURCE_AUTHORITY_FIELD_IGNORED_OR_REJECTED",
+    "COHORT_MEMBER_WITH_VALID_PACKET_BUT_INVALID_CALL_AUTHORITY_ENVELOPE_REJECTS_WHOLE_BATCH"
+  ],
+  "execution": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "training_executed": false,
+    "unusual_experiment_executed": false,
+    "local_source_fixture_only": true
+  },
+  "credits": {
+    "research_delta": 1,
+    "repository_source_call_gate_source_credit": 1,
+    "local_source_fixture_credit": 1,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "P0 remains owning-live-host FreeSwarm quiescence proof. In parallel source-only, extend the existing deterministic NODE_RESULT authority-envelope lineage to reference the exact source-bound model call and output identities, preserving the raw semantic payload and one identity authority; add call/packet/cell/source transplant negatives before any admitted model runtime or checkpoint-selection promotion."
+}

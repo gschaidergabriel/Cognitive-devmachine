@@ -1,0 +1,65 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "scope": "microvm EntityOS artifact identity authority",
+  "observed_problem": {
+    "tracked_authority": "the artefact/entityos.lock.json authority_note says the source-tracked lock, not a caller-supplied digest, selects admissible EntityOS bytes",
+    "deployment_override": "the artefact/deployment/clayverse-kata-statefulset.template.yaml injected CLAYVERSE_ENTITYOS_SHA256 from secret clayverse-runtime-secrets/entityos-sha256",
+    "runtime_behavior": "the artefact/clayverse/service.py verifies EntityOS against CLAYVERSE_ENTITYOS_SHA256",
+    "image_binding": "the artefact/Dockerfile bakes CLAYVERSE_ENTITYOS_SHA256 only after requiring ENTITYOS_SHA256 == tracked LOCK_SHA256 and verifying embedded EntityOS bytes",
+    "external_primary_evidence": "Kubernetes documentation: Pod env/envFrom values override environment variables specified in the container image"
+  },
+  "classification": {
+    "byte_substitution_vulnerability": false,
+    "reason": "the immutable image still fixes the embedded EntityOS bytes; a mismatched deployment digest causes fail-closed verification rather than replacement of bytes",
+    "hardening_value": "removes a mutable deployment-time integrity expectation/DoS knob and collapses EntityOS artifact identity back to the immutable image + tracked lock"
+  },
+  "canonical_writes": [
+    {
+      "commit": "a420a7e7342d29a2713d6eddabfa353997876b01",
+      "path": "the artefact/deployment/clayverse-kata-statefulset.template.yaml",
+      "pre_blob": "73f4dcf80f78fcb4d78e144e281758c194aff6df",
+      "post_blob": "155ea70ad39241a61807e6fe5b084fbd9822a90f",
+      "change": "remove Kubernetes Secret override of CLAYVERSE_ENTITYOS_SHA256; document image-authoritative digest"
+    },
+    {
+      "commit": "e612abc14cd5c6546f094537d8cd8810e24ab6aa",
+      "path": "the artefact/tests/test_microvm_deployment_contract.py",
+      "pre_blob": "663d6ab0b3c047aed27bb7a7d63bd485bcb26d15",
+      "post_blob": "f0ec0d1806d8e359e58bf2414de0c01d929dd96d",
+      "change": "add regression prohibiting deployment digest override while binding Docker build + tracked lock authority"
+    },
+    {
+      "commit": "c6d8cc6de3bb6540a8eeb7d99b7a4c9a9da36752",
+      "path": "the artefact/README.md",
+      "pre_blob": "bf056e02f8bf16a69d93a3072f36df756e2d6fd7",
+      "post_blob": "98a2c6cb117cf856ff0707990218bf5e3b4c4927",
+      "change": "living-cycle re-entry; prior exact-file 12/12 is fenced as stale for the new blobs"
+    }
+  ],
+  "adversarial_review": {
+    "initial_regression_issue": "the first added assertion prohibited the string CLAYVERSE_ENTITYOS_SHA256 anywhere in the template, while a safe explanatory comment intentionally contains that identifier; this would create a false failing test",
+    "claim_fence": "the issue was detected before any new test PASS was claimed",
+    "parallel_resolution": "a fresher current-file read shows the assertion narrowed to '- name: CLAYVERSE_ENTITYOS_SHA256' while preserving later parallel ReadWriteOncePod and node-local NetworkPolicy fences",
+    "current_observed_test_blob": "1c0555db7a027a383408ef5367c2de84083dd404",
+    "duplicate_write": "NOT_ATTEMPTED_AFTER_CURRENT_FIX_CONFIRMED"
+  },
+  "execution_evidence": {
+    "exact_current_focused_pytest": "NOT_EXECUTED",
+    "exact_oci_build": "NOT_EXECUTED",
+    "kubernetes_kata_runtime": "NOT_EXECUTED",
+    "runtime_credit": 0,
+    "reason": "preferred Vercel private-source/OCI batch remains blocked before source staging by missing host-side sensitive Preview GITHUB_READ_TOKEN; connected Vercel surface available to this organ cannot mutate that secret"
+  },
+  "parallel_coordination": {
+    "headless_service_false_positive": "an initially observed template/test mismatch was invalidated by a fresher default-branch read showing a parallel headless-service fix; no duplicate repair was written",
+    "stale_write_guards": "multiple conditional GitHub writes were rejected with 409 while parallel workers advanced the same test file; newer bytes were never overwritten",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0,
+    "reason": "this trigger exposes no shared immutable request/turn id and only minute-precision immutable message time"
+  },
+  "whole_clayverse_acceptance": false,
+  "next_exact_discriminator": "provision host-side sensitive Vercel Preview GITHUB_READ_TOKEN outside the Sandbox, then bind fresh canonical source and execute exact focused regression -> OCI build/digest -> startup/readiness before any runtime promotion"
+}

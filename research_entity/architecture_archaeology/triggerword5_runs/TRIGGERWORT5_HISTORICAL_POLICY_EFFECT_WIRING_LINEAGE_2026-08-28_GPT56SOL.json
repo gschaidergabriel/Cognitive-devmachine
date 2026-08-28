@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0",
+  "trigger": "triggerwort 5",
+  "run_id": "triggerwort5-20260828T1414p0700-gpt56sol-historical-policy-effect-wiring",
+  "status": "SOURCE_GROUNDED_PARTIAL_OPEN_CONTINUATION",
+  "purpose": "Extend the live Triggerword-5 architecture-forensics lineage into the pinned historical Project-Frankenstein source epoch and preserve a policy-to-effect enforcement wiring gap without upgrading method presence into enforcement evidence.",
+  "authority_snapshot": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_main_before_write": "4a4287d0935d4dd19d122b1027716a569d331a73",
+    "admitted_supervisor_epoch": "8.78",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13AA_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "evidence_boundary": "static source and accessible-Git lineage only; no runtime, VPS, provider, Physical-GRID10, HCU, whole-product, causal-effect or training promotion"
+  },
+  "resolved_source_identities": {
+    "triggerword_5_design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "triggerword_5_design_sha": "099340237fad4b52187a77ef21a6ff93ae98287a",
+    "frankenstein_donor_repository": "gschaidergabriel/frankenstein",
+    "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "historical_project_frankenstein_repository": "gschaidergabriel/Project-Frankenstein",
+    "historical_project_frankenstein_sha": "39c5423e0bfae54b971aab0be82f225f7a5890b8",
+    "historical_project_engine_path": "services/project_engine.py",
+    "historical_project_engine_blob_sha": "28e927950f7112feb3960acf2633f660a343e341"
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-1414-HPEW-A01-POLICY-SCHEMA-PRESENT",
+      "classification": "HISTORICAL_ONLY",
+      "secondary_classification": ["SCHEMA", "LIVE_CODE"],
+      "claim": "At historical Project-Frankenstein commit 39c5423e0bfae54b971aab0be82f225f7a5890b8, services/project_engine.py defines persistent project policy state and a check_policy(project_id, action) decision method.",
+      "source_ref": {
+        "repository": "gschaidergabriel/Project-Frankenstein",
+        "commit": "39c5423e0bfae54b971aab0be82f225f7a5890b8",
+        "path": "services/project_engine.py",
+        "blob_sha": "28e927950f7112feb3960acf2633f660a343e341"
+      },
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-1414-HPEW-A02-DIRECT-TOOL-EXECUTION-PRESENT",
+      "classification": "HISTORICAL_ONLY",
+      "secondary_classification": ["LIVE_CODE", "ENFORCEMENT_CODE"],
+      "claim": "The same pinned source contains direct Bash/Python tool execution through subprocess.run() in the project tool path.",
+      "source_ref": {
+        "repository": "gschaidergabriel/Project-Frankenstein",
+        "commit": "39c5423e0bfae54b971aab0be82f225f7a5890b8",
+        "path": "services/project_engine.py",
+        "blob_sha": "28e927950f7112feb3960acf2633f660a343e341"
+      },
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-1414-HPEW-A03-POLICY-CALL-EDGE-ABSENT-LOCAL-FILE",
+      "classification": "NEGATIVE_RESULT",
+      "secondary_classification": ["HISTORICAL_ONLY", "ENFORCEMENT_CODE"],
+      "claim": "Within the same pinned services/project_engine.py source, source-local call-trace inspection found the definition of check_policy() but no invocation of check_policy() on the direct tool-execution path. Therefore policy method/schema presence is not source evidence that each project tool effect is policy-gated.",
+      "scope_note": "This negative result is bounded to the pinned file/source-local call graph. It does not prove that no external wrapper, hook, caller or host process enforced policy elsewhere.",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-1414-HPEW-A04-EXTERNAL-ENFORCEMENT-COUNTERHYPOTHESIS",
+      "classification": "OPEN_HYPOTHESIS",
+      "secondary_classification": ["INFERENCE"],
+      "claim": "An external caller, wrapper, hook or host-side enforcement layer may have called policy checks before reaching the direct project_engine tool path.",
+      "falsifier_or_discriminator": "Trace repository-wide callers and pinned historical entrypoints at the same source epoch; promote only if an exact call edge or runtime receipt binds policy decision to the concrete tool invocation.",
+      "confidence": 0.5
+    },
+    {
+      "atom_id": "TW5-1414-HPEW-A05-LATER-DONOR-SEPARATES-BLOCKING-FROM-BOOKKEEPING",
+      "classification": "INFERENCE",
+      "secondary_classification": ["LIVE_CODE", "HISTORICAL_LINEAGE"],
+      "claim": "The current Frankenstein donor source explicitly separates a blocking PreToolUse path from non-blocking effect bookkeeping and PostToolUse verification. This is structurally consistent with a later repair of an earlier enforcement-coupling weakness, but accessible source alone does not prove that historical causal sequence.",
+      "falsifier_or_discriminator": "Find commit messages, issue/receipt evidence, or runtime measurements directly connecting the historical project policy wiring gap to the later SEBUKKU/hook/effect separation.",
+      "confidence": 0.78
+    }
+  ],
+  "contradictions": [
+    {
+      "contradiction_id": "TW5-1414-HPEW-C01-POLICY-PRESENCE-VS-EFFECT-EDGE",
+      "status": "OPEN_BOUNDED_NEGATIVE",
+      "classification": "DECLARED_POLICY_VS_SOURCE_LOCAL_ENFORCEMENT_WIRING",
+      "observed_side_a": "A persistent project policy table and check_policy() method are present in services/project_engine.py.",
+      "observed_side_b": "The same source's direct tool execution path uses subprocess.run(), while no source-local invocation edge to check_policy() was found.",
+      "resolution_rule": "Do not describe policy storage or a policy-check method as effect enforcement unless an exact invocation edge or runtime receipt binds the policy result to the concrete effect. Preserve the external-enforcement counterhypothesis until repository-wide lineage is traced."
+    }
+  ],
+  "failure_atlas_proposal": {
+    "candidate_id": "FA-010-POLICY-ENFORCEMENT-DECLARED-BUT-UNWIRED-AT-EFFECT-BOUNDARY",
+    "status": "PROPOSED_NOT_YET_MERGED",
+    "failure_pattern": "A policy schema and decision function exist, but the observed direct execution path does not consume the decision before the effect.",
+    "engineering_rule": "METHOD_PRESENT != ENFORCEMENT_PRESENT. Acceptance must prove every real effect path traverses the canonical blocker and that deny/unknown states prevent execution rather than merely log classification."
+  },
+  "emergent_coupling_graph_proposal": {
+    "edge": "policy.authority -> effect.execution",
+    "historical_status": "SOURCE_LOCAL_EDGE_NOT_OBSERVED",
+    "required_frankenstein2_status": "DIRECT_FAIL_CLOSED_ENFORCED_EDGE_WITH_INVOCATION_IDENTITY_AND_POSTCONDITION_RECEIPT",
+    "acceptance_discriminator": "deny/unknown-capability lesion at exact invocation identity must prevent the effect; postcondition verifier must bind the same invocation without becoming the blocking authority"
+  },
+  "grid10_frankenstein2_delta": [
+    "Do not inherit a policy table or check method as proof of containment; wire policy authority directly into the sole real-effect path and test the denial edge.",
+    "Preserve the current donor's conceptual separation between hard blocking, non-blocking effect journal/bookkeeping, and post-effect verification, while correcting donor semantics that auto-admit unknown capabilities.",
+    "Bind policy decision, tool/effect invocation and verifier receipt with stable per-invocation identity such as tool_use_id or an equivalent canonical invocation key.",
+    "Keep historical causal attribution open: structural continuity is evidence for lineage, not proof that the later design was caused by this exact earlier gap."
+  ],
+  "credits": {
+    "historical_lineage_reconstruction": "PARTIAL_ADVANCED",
+    "independent_runtime_reexecution_this_run": 0,
+    "runtime_causal_credit": 0,
+    "physical_grid10_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "receipt": {
+    "source_only": true,
+    "provider_calls": 0,
+    "vps_execution": 0,
+    "unusual_experiment": false,
+    "write_kind": "append-only Triggerword-5 historical forensic packet"
+  },
+  "next_exact_gate": "Trace repository-wide historical callers and entrypoints around services/project_engine.py at pinned commit 39c5423e0bfae54b971aab0be82f225f7a5890b8, then merge the verified policy/effect coupling result into FAILURE_ATLAS.json and EMERGENT_COUPLING_GRAPH.json without silently resolving the live architecture_archaeology versus design-branch frankenstein_architecture_ingest namespace split."
+}

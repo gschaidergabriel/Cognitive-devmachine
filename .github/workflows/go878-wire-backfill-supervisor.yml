@@ -1,0 +1,184 @@
+name: GO878 wire backlog-first Forge supervisor (manual retry only)
+
+# The source wiring this one-shot workflow existed to produce is already fused on
+# canonical main.  Keep the capsule as a reproducible/manual donor, but never let
+# repeated issue creation fan out genealogically identical self-hosted jobs again.
+# Any future runtime retry must first advance an ORDINARY_DISPATCH semantic
+# generation/claim under ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: go878-wire-backfill-supervisor
+  cancel-in-progress: false
+
+jobs:
+  wire-and-regress:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Patch and test only inside clay-direct-dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          scratch="/tmp/clay-go878-backfill-${GITHUB_RUN_ID}"
+          host_tmp="/tmp/clay-go878-host-${GITHUB_RUN_ID}"
+          rm -rf "$host_tmp"
+          mkdir -p "$host_tmp"
+
+          runtime=''
+          prefix=()
+          if command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='docker'; prefix=(docker)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='sudo-docker'; prefix=(sudo -n docker)
+          elif command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='podman'; prefix=(podman)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='sudo-podman'; prefix=(sudo -n podman)
+          else
+            echo 'clay-direct-dev unreachable' >&2
+            exit 41
+          fi
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'; mkdir -p '$scratch'"
+          "${prefix[@]}" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$scratch"
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "SCRATCH='$scratch' python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+
+          root=Path(os.environ['SCRATCH'])
+          inbox=json.loads((root/'research_entity/claycode/autonomous/SUPERVISOR_INBOX.json').read_text())
+          epoch=tuple(int(x) for x in str(inbox.get('schema_version') or '').split('.'))
+          if epoch < (8,78):
+              raise SystemExit('SUPERVISOR_878_OR_NEWER_REQUIRED')
+
+          sup=root/'tools/run_6000_free_swarm_supervisor.sh'
+          text=sup.read_text()
+          desired='local x=\"$ROOT/tools/run_free_evidence_forge_backfill.py\"; [[ -f \"$x\" ]] || return 0'
+          if desired not in text:
+              old='''start_forge(){
+            local x="$ROOT/tools/run_free_evidence_forge_safe.py"; [[ -f "$x" ]] || return 0
+            # The active 6000 lane must never keep the shell-capable legacy Forge alive.
+            # Retire any pre-fix process before starting the argv-only, secret-free,
+            # bubblewrap-gated successor. A zero-match is the normal steady state.
+            while IFS= read -r pid; do
+              [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+            done < <(pgrep -f '[r]un_free_evidence_forge.py' || true)
+            pgrep -f '[r]un_free_evidence_forge_safe.py' >/dev/null 2>&1 && return 0
+            nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
+            echo $! >"$STATE_DIR/forge.pid"
+          }
+          '''
+              new='''start_forge(){
+            local x="$ROOT/tools/run_free_evidence_forge_backfill.py"; [[ -f "$x" ]] || return 0
+            # One active Forge authority: retire legacy and pre-backfill safe entrypoints
+            # before starting the backlog-first successor. The successor still delegates
+            # validation/effect credit to the same safe Forge authority.
+            while IFS= read -r pid; do
+              [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+            done < <(pgrep -f '[r]un_free_evidence_forge.py' || true)
+            while IFS= read -r pid; do
+              [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+            done < <(pgrep -f '[r]un_free_evidence_forge_safe.py' || true)
+            pgrep -f '[r]un_free_evidence_forge_backfill.py' >/dev/null 2>&1 && return 0
+            nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
+            echo $! >"$STATE_DIR/forge.pid"
+          }
+          '''
+              if old not in text:
+                  raise SystemExit('SUPERVISOR_START_FORGE_ANCHOR_MISSING_OR_PARALLEL_CHANGE')
+              text=text.replace(old,new,1)
+              sup.write_text(text)
+
+          act=root/'tools/activate_6000_free_swarm.sh'
+          a=act.read_text()
+          marker=" 'tools/run_free_evidence_forge_safe.py',\n"
+          add=" 'tools/run_free_evidence_forge_backfill.py',\n"
+          if a.count(add) < 2:
+              # There are exactly two explicit stop/kill suffix sets. Add the
+              # backfill child immediately before the old safe entrypoint in each.
+              count=a.count(marker)
+              if count != 2:
+                  raise SystemExit(f'ACTIVATION_STOP_ANCHOR_COUNT:{count}')
+              a=a.replace(marker,add+marker)
+              act.write_text(a)
+
+          # Static invariants: exactly one active start target, old safe process is
+          # only a retirement target, and restart cleanup recognizes backfill twice.
+          block=sup.read_text().split('start_forge(){',1)[1].split('refresh_root_results(){',1)[0]
+          assert 'local x="$ROOT/tools/run_free_evidence_forge_backfill.py"' in block
+          assert "pgrep -f '[r]un_free_evidence_forge_backfill.py'" in block
+          assert 'local x="$ROOT/tools/run_free_evidence_forge_safe.py"' not in block
+          assert act.read_text().count(add) >= 2
+          PY
+          cd '$scratch'
+          bash -n tools/run_6000_free_swarm_supervisor.sh tools/activate_6000_free_swarm.sh
+          python3 -m py_compile tools/free_swarm_historical_backfill.py tools/free_swarm_backfill_scheduler.py tools/run_free_evidence_forge_backfill.py tools/run_free_evidence_forge_safe.py
+          python3 -m pytest -q tests/test_free_swarm_historical_backfill.py > /tmp/go878-backfill-tests.txt 2>&1
+          "
+
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/tools/run_6000_free_swarm_supervisor.sh" "$GITHUB_WORKSPACE/tools/run_6000_free_swarm_supervisor.sh"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/tools/activate_6000_free_swarm.sh" "$GITHUB_WORKSPACE/tools/activate_6000_free_swarm.sh"
+          "${prefix[@]}" cp clay-direct-dev:/tmp/go878-backfill-tests.txt "$host_tmp/tests.txt"
+
+          RUNTIME="$runtime" HOST_TMP="$host_tmp" python3 - <<'PY'
+          import hashlib, json, os, pathlib, subprocess
+          from datetime import datetime, timezone
+          ws=pathlib.Path(os.environ['GITHUB_WORKSPACE'])
+          def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+          out={
+            'schema':'FREE_SWARM_HISTORICAL_BACKFILL_WIRING_RECEIPT/v1',
+            'generated_at':datetime.now(timezone.utc).isoformat(),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+            'github_sha_trigger':os.environ.get('GITHUB_SHA'),
+            'sandbox':'clay-direct-dev',
+            'container_runtime':os.environ.get('RUNTIME'),
+            'tests_output':(pathlib.Path(os.environ['HOST_TMP'])/'tests.txt').read_text(errors='replace')[-12000:],
+            'supervisor_sha256':sha(ws/'tools/run_6000_free_swarm_supervisor.sh'),
+            'activation_sha256':sha(ws/'tools/activate_6000_free_swarm.sh'),
+            'backfill_entrypoint_sha256':sha(ws/'tools/run_free_evidence_forge_backfill.py'),
+            'external_provider_calls_performed_by_gate':False,
+            'secrets_recorded':False,
+            'runtime_credit_added':0,
+            'scope':'BACKLOG_FIRST_FORGE_SUPERVISOR_WIRING_AND_LOCAL_REGRESSION_ONLY',
+          }
+          target=ws/'research_entity/runtime/tool_results'/f"go878-backfill-wiring-{os.environ['GITHUB_RUN_ID']}.json"
+          target.parent.mkdir(parents=True,exist_ok=True)
+          target.write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          PY
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch' /tmp/go878-backfill-tests.txt"
+          rm -rf "$host_tmp"
+
+      - name: Persist tested wiring to current main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          if git diff --quiet -- tools/run_6000_free_swarm_supervisor.sh tools/activate_6000_free_swarm.sh && ! git status --porcelain=v1 research_entity/runtime/tool_results/ | grep -q .; then
+            echo 'No source delta: parallel work already converged.'
+            exit 0
+          fi
+          git config user.name 'clay-go878-backfill-runner'
+          git config user.email 'clay-go878-backfill-runner@users.noreply.github.com'
+          git add tools/run_6000_free_swarm_supervisor.sh tools/activate_6000_free_swarm.sh research_entity/runtime/tool_results/
+          git commit -m "runtime: wire backlog-first Forge supervisor ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            if git pull --rebase origin main && git push origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((attempt * 3))
+          done
+          exit 1

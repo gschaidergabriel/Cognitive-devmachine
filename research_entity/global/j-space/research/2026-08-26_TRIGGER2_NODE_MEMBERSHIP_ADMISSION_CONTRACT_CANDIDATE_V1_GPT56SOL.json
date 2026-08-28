@@ -1,0 +1,163 @@
+{
+  "schema": "CLAY_TRIGGER2_NODE_MEMBERSHIP_ADMISSION_CONTRACT_CANDIDATE/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "NONCANONICAL_PROTOCOL_CANDIDATE_NOT_RUNTIME_ADMITTED_NOT_TRAINING_ADMITTED",
+  "observed_main_before_write": "b0a48400452aa458b2b93277bbb4f52fba1c6a71",
+  "inherits_problem_from": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_NODE_MEMBERSHIP_CAUSAL_IDENTITY_GAP_V1_GPT56SOL.json",
+  "problem_statement": "NODE_RESULT source_node_id is presently self-describing packet data. The deterministic nodes registry is not included in S1 snapshot identity, runtime_register_node does not create a packet-bound admission identity, and coordinator admission does not prove that the exact logical node/process instance producing a result was an active healthy runtime member. PID overlap and packet hash consistency therefore do not by themselves establish source membership provenance.",
+  "design_decision": {
+    "selected_candidate": "SEPARATE_RUNTIME_MEMBERSHIP_AUTHORITY_WITH_PER_NODE_ADMISSION_REVISION",
+    "reason": [
+      "Runtime membership is deterministic control-plane authority, not cognitive S1 content, so it should not be silently folded into the S1 cognitive-state digest merely to make a test green.",
+      "A global membership-generation-only rule would invalidate unrelated healthy node results whenever any other node joins/leaves. Per-node admission identity gives the required source provenance with less false staleness.",
+      "A process PID is runtime evidence, not a replay-stable logical identity. Logical admission and process-instance witness must remain separate but cross-bound."
+    ]
+  },
+  "candidate_authority_objects": {
+    "RUNTIME_MEMBERSHIP_ADMISSION/v1": {
+      "fields": [
+        "schema",
+        "runtime_generation",
+        "logical_node_id",
+        "capability",
+        "node_admission_revision",
+        "admission_event_id",
+        "admitted",
+        "healthy",
+        "controller_policy_digest",
+        "created_state_epoch",
+        "supersedes_node_admission_id"
+      ],
+      "node_admission_id": "JCS_SHA256_OF_ALL_AUTHORITY_FIELDS_EXCEPT_DISPLAY_ONLY_METADATA",
+      "owner": "DETERMINISTIC_RUNTIME_CONTROL_PLANE",
+      "model_may_self_mint": false
+    },
+    "PROCESS_INSTANCE_WITNESS/v1": {
+      "fields": [
+        "schema",
+        "node_admission_id",
+        "logical_node_id",
+        "parent_observed_pid",
+        "child_observed_pid",
+        "process_start_witness",
+        "runtime_platform_identity",
+        "source_executable_digest",
+        "witness_digest"
+      ],
+      "replay_stable": false,
+      "purpose": "Bind a concrete live OS process instance to an already-authorized logical node admission for bounded runtime evidence."
+    }
+  },
+  "transition_law": [
+    "First registration of a logical node creates node_admission_revision=1 and a controller-minted node_admission_id.",
+    "Capability change, unregister, health transition that changes result eligibility, generation change, or restart/rejoin that creates a new authorized process instance must create a successor admission revision rather than silently mutate the old authority object.",
+    "The superseded admission remains immutable historical provenance but is not current result-source authority.",
+    "Rejoin of the same logical_node_id must therefore be distinguishable from continuity of the old process instance.",
+    "Unrelated membership changes to other nodes do not automatically stale an otherwise unchanged source node admission."
+  ],
+  "node_result_binding": {
+    "required_new_fields_or_refs": [
+      "source_node_admission_id",
+      "source_node_admission_revision",
+      "source_process_witness_digest",
+      "source_runtime_generation"
+    ],
+    "existing_fields_retained": [
+      "source_node_id",
+      "generation",
+      "state_epoch",
+      "state_digest",
+      "packet_digest",
+      "s1_write_intent"
+    ],
+    "law": "Packet self-consistency proves only packet integrity. Source authority is established only when deterministic coordinator admission resolves source_node_admission_id in controller-owned membership state, checks the exact revision/generation/capability and current eligibility policy, and cross-binds the process witness where physical-runtime provenance is claimed."
+  },
+  "coordinator_admission_checks": [
+    "RESULT_SOURCE_NODE_ADMISSION_ID_MISSING -> reject",
+    "unknown source_node_admission_id -> RESULT_SOURCE_NODE_UNREGISTERED",
+    "logical node id mismatch between packet and admission -> RESULT_SOURCE_NODE_BINDING_INVALID",
+    "superseded admission revision -> RESULT_SOURCE_NODE_ADMISSION_STALE",
+    "runtime generation mismatch -> RESULT_SOURCE_NODE_GENERATION_STALE",
+    "admission not active -> RESULT_SOURCE_NODE_UNREGISTERED_OR_REVOKED",
+    "health policy says ineligible -> RESULT_SOURCE_NODE_UNHEALTHY",
+    "required capability mismatch -> RESULT_SOURCE_NODE_CAPABILITY_MISMATCH",
+    "physical proof claim with absent/mismatched process witness -> RESULT_SOURCE_PROCESS_WITNESS_INVALID",
+    "all source-membership checks occur before admitted_results mutation or cohort-derived S1 summary commit"
+  ],
+  "physical_grid10_cohort_extension": {
+    "requirement": "A physical GRID10 cohort manifest must contain ten distinct active source_node_admission_id values and ten distinct valid process-instance witnesses, each bound to the exact packet_digest produced by that process.",
+    "same_logical_node_twice": "REJECT",
+    "same_admission_twice": "REJECT",
+    "same_pid_witness_twice": "REJECT",
+    "ghost_packet_with_valid_pid_shape": "REJECT",
+    "healthy_at_barrier_but_revoked_before_integration": "REJECT_OR_EXPLICITLY_CLASSIFY_AS_HISTORICAL_EVIDENCE_ONLY; NEVER SILENTLY CURRENT",
+    "unrelated_node_join_leave": "DOES_NOT_INVALIDATE_AN_UNCHANGED_SOURCE_NODE_ADMISSION_BY_ITSELF"
+  },
+  "mandatory_negatives": [
+    "UNREGISTERED_GHOST_NODE_RESULT",
+    "REGISTERED_BUT_UNHEALTHY_NODE_RESULT",
+    "SUPERSEDED_ADMISSION_AFTER_RESTART_REJOIN",
+    "LOGICAL_NODE_ID_TRANSPLANT_ON_VALID_ADMISSION",
+    "CAPABILITY_TRANSPLANT",
+    "PROCESS_WITNESS_FROM_DIFFERENT_NODE_ADMISSION",
+    "PID_SELF_REPORT_DIFFERS_FROM_PARENT_OBSERVATION",
+    "PACKET_DIGEST_VALID_BUT_SOURCE_AUTHORITY_INVALID",
+    "COHORT_WITH_9_VALID_PLUS_1_GHOST_MEMBER",
+    "COHORT_WITH_DUPLICATED_ADMISSION_ID",
+    "COHORT_MEMBER_REVOKED_BEFORE_DERIVED_SUMMARY_COMMIT",
+    "UNRELATED_NODE_MEMBERSHIP_CHANGE_DOES_NOT_FALSELY_STALE_VALID_SOURCE_ADMISSION"
+  ],
+  "counterhypotheses": [
+    {
+      "claim": "Trusted harness-controlled --node values and parent-owned Popen calls are enough for a narrow benchmark.",
+      "decision": "Potentially true only for a narrowly named trusted-fixture claim. It is insufficient for general result-flow provenance or reusable EntityOS/HCU runtime semantics."
+    },
+    {
+      "claim": "Put the complete nodes table into the existing S1 state_digest and reject any membership change globally.",
+      "decision": "Simpler but over-couples runtime authority to cognitive S1 and can create false staleness from unrelated node changes. Retain as a baseline challenger, not preferred design."
+    }
+  ],
+  "trigger2_training_eval_reinjection": {
+    "new_positive_training_rows": 0,
+    "accepted_dataset_tokens_added": 0,
+    "eval_concepts": [
+      "self-asserted node identity is not membership authority",
+      "packet hash integrity is not source authorization",
+      "logical node identity differs from process-instance evidence",
+      "restart/rejoin creates successor authority rather than narrative continuity",
+      "unrelated membership churn must not cause indiscriminate cognitive staleness",
+      "historical evidence may remain valid as evidence without becoming current source authority"
+    ],
+    "model_must_not_learn_as_authority": [
+      "membership admission minting",
+      "health eligibility authority",
+      "capability grant authority",
+      "coordinator lease authority",
+      "canonical truth or effect authority"
+    ]
+  },
+  "current_execution_boundary": {
+    "freeswarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "provider_execution_performed": false,
+    "runtime_execution_performed": false,
+    "new_runtime_pin_created": false
+  },
+  "credits": {
+    "research_delta": 1,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_hcu_runtime_credit_added": 0,
+    "whole_entityos_runtime_credit_added": 0,
+    "jspace_model_credit_added": 0,
+    "accepted_dataset_tokens_added": 0,
+    "training_credit_added": 0
+  },
+  "next_exact_action": "Implement the minimum deterministic membership-admission gate and negatives as a successor to current GRID10 v3 source: ghost, unhealthy, stale-rejoin admission and process-witness transplant must fail before cohort integration. Re-enter current main first and deduplicate against parallel fixes. Do not create a provider lane or runtime promotion request while current proof/authentication gates remain unresolved."
+}

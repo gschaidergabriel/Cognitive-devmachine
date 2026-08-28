@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_ENTITYOS_HCU_GO_MODEL_EXECUTION_SOURCE_WIRING_GAP/v1",
+  "date_local": "2026-08-24T02:16:00+07:00",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_organ": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_immediately_before_write": "de6e4f9255cdab0b5463708a3f1c8d6ba5805fa8",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_available": false,
+    "canonical_atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed": false,
+    "unusual_experiment_count_added": 0,
+    "classification": "EXACT_SOURCE_REVIEW_AND_ARCHITECTURE_REENTRY_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "exact_current_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "retained_pr": 1263,
+    "head": "bb0397f0cb148a68d8ab5b5e610a68aa6c56b24d",
+    "model_execution_receipt_path": "the artefact/MicroEntity/hcu/model_execution_receipt_v1.py",
+    "model_execution_receipt_blob": "fce1fdc8c69742ac05276616eba146d6ca50502a",
+    "model_execution_test_path": "the artefact/MicroEntity/hcu/test_model_execution_receipt_v1.py",
+    "model_execution_test_blob": "d1ca0c023e118d6bd84652b40469887acf369279",
+    "inference_receipt_path": "the artefact/MicroEntity/hcu/inference_receipt_v1.py",
+    "inference_receipt_blob": "1e2ed83adf9c8c9d294828d62c5a9216ac944c75",
+    "jspace_binder_path": "the artefact/MicroEntity/hcu/jspace_inference_binding_v1.py",
+    "jspace_binder_blob": "a312758b62679ade0e3da78251494f1b65276cf5",
+    "package_manifest_blob": "679cb68bc9398912f875ebfbce801789dcb59a30"
+  },
+  "observed_source_state": {
+    "positive_delta": "The donor head now contains a bounded HCU_MODEL_EXECUTION_OBSERVATION/v1 -> HCU_VERIFIED_MODEL_EXECUTION/v1 source candidate with generation, verified-load receipt, exact GRID plan/cell/role, input/output byte identities and an observation digest.",
+    "trust_split_intent": "verify_model_execution requires an admitted_model_execution_observations mapping and exact normalized-record equality before producing a VerifiedModelExecution.",
+    "critical_wiring_gap": "HCU_INFERENCE_RECEIPT/v3 does not import or consume VerifiedModelExecution. make_inference_receipt still accepts model_call_id, output_ref, output_sha256 and output_size as direct caller parameters and hashes those assertions into the canonical candidate receipt.",
+    "binder_gap": "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v2 still binds output bytes from InferenceReceipt/v3 and explicitly treats model_call_id as opaque correlation metadata. It therefore cannot inherit independent output-producing-cell provenance from the new model-execution candidate until the canonical inference producer consumes that evidence.",
+    "manifest_gap": "The retained donor PACKAGE_MANIFEST source_candidate_chain still names VERIFIED_ENGINE_LOAD_V1 -> INFERENCE_RECEIPT_JCS_V3 -> GRID_PLAN_JCS_V2 and does not yet include the model-execution evidence object in the selected chain or required archive-member list.",
+    "runtime_boundary": "No actual model-executor I/O producer, admitted observation registry owner, exact integrated call site or real zero-cost local model execution was observed by this organ. Source construction therefore grants zero model/J-Space/HCU runtime credit."
+  },
+  "strongest_counterhypothesis": {
+    "claim": "The new ModelExecutionReceipt module may already be sufficient because callers are expected to pass only an externally admitted registry and future integration can remain implicit.",
+    "rejection_basis": "The selected canonical InferenceReceipt API currently has no VerifiedModelExecution parameter or equivalent execution-evidence digest fields, so a caller can still mint a syntactically valid candidate inference receipt from caller-supplied output metadata without presenting the new evidence object. The model-execution module is therefore not on the selected causal path yet."
+  },
+  "required_minimal_fusion": {
+    "single_authority_rule": "Modify the existing canonical inference path in place; do not create a parallel inference receipt authority.",
+    "inference_contract": [
+      "require VerifiedModelExecution (or exactly equivalent verified execution object) in make_inference_receipt",
+      "validate its canonical receipt digest and generation",
+      "bind it to the exact verified engine-load consumption receipt already consumed by InferenceReceipt",
+      "bind it to the exact GRID10 plan identity and output-producing cell/role",
+      "derive output_ref/output_sha256/output_size from verified execution evidence rather than independent caller parameters",
+      "retain model_call_id only as nonauthoritative correlation metadata unless executor-minted inside verified execution evidence",
+      "carry model_execution_receipt_sha256 plus executor/invocation/output-producing-cell identity downstream"
+    ],
+    "binder_contract": "J-Space binding must consume the execution-bound inference fields and reject execution-receipt/output/cell/plan/generation rebinds.",
+    "registry_contract": "The admitted model-execution observation registry must be owned/populated by the actual admitted executor I/O boundary or a canonical deterministic observation-admission authority; a unit-test-local dictionary assembled from the same observation is only a fixture, not independent runtime provenance.",
+    "manifest_contract": "Update the selected source_candidate_chain and archive members only after the canonical inference path actually consumes the evidence object."
+  },
+  "deterministic_falsifiers_required": [
+    "make_inference_receipt rejects absence of verified model execution evidence",
+    "caller output_sha256/output_ref/output_size cannot override verified execution output",
+    "verified execution receipt rebound to another engine-load consumption receipt fails closed",
+    "verified execution receipt rebound to another GRID plan/generation/cell/role fails closed",
+    "same executor invocation_id with different output bytes fails closed at canonical observation admission",
+    "J-Space binder rejects any inference receipt whose execution-evidence identity does not match exact GRID10 output-producing cell and trace role"
+  ],
+  "execution": {
+    "source_review_performed": true,
+    "new_sandbox_or_model_execution_performed": false,
+    "reason": "Current connector exposes Vercel deployment/log/fetch surfaces but no direct Sandbox create/exec action. The retained executor is also not yet bound to this donor-head model-execution evidence path. Running an older capsule would not close the exact-current gate.",
+    "runtime_credit_change": 0
+  },
+  "tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_EXACT_CURRENT_SOURCE_GAP_BINDING_AND_SINGLE_PATH_FUSION_REQUIREMENT",
+    "track_b_hcu_typed_entry": "ADVANCED: independent model-execution evidence candidate exists, but selected HCU inference chain remains unwired; no runtime credit",
+    "track_c_global_jspace_gwt_free_only": "ADVANCED_BY_PROVENANCE_GATE_DEFINITION; training readiness remains blocked until real executor evidence flows through inference and J-Space binding"
+  },
+  "credit": {
+    "source_architecture_delta": "SUPPORTED",
+    "mechanism_runtime_verified": false,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse VerifiedModelExecution into the existing HCU_INFERENCE_RECEIPT/v3 producer on current PR1263, add the provenance/replay/rebind regressions, update the selected chain without creating a second inference authority, then rebind the single Dr.-Unterweger PR810 fixed FREE executor to those exact bytes. Only after that execute a bound zero-cost real local-model I/O path that mints the observation at the executor boundary and feeds the same evidence through GRID10 -> J-Space/GWT."
+}

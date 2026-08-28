@@ -1,0 +1,181 @@
+{
+  "schema": "CLAY_TRIGGER2_V3_P0_HARD_NEGATIVE_BLUEPRINTS/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_CANDIDATE_HARD_NEGATIVE_BLUEPRINTS_NONPROMOTING",
+  "authority": {
+    "observed_main_before_write": "a16a64c7aaae0126f3b2bf044818ee050ddee1a6",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU"
+  },
+  "source_findings": [
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_HYPERPOSITION_LABELER_V3_ADVERSARIAL_AUDIT_V1_GPT56SOL.json",
+    "tools/trigger2_hyperposition_reference_labelers_v3.py",
+    "tools/trigger2_semantic_hyperposition_gate_v3.py"
+  ],
+  "training_use_boundary": {
+    "training_eligible": false,
+    "evidence_class": "SYNTHETIC_HARD_NEGATIVE_BLUEPRINT",
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "model_visible_metadata_allowed": false,
+    "note": "These are adversarial family blueprints for generator/gate regression and later family-disjoint hard-negative materialization. They are not positive D/E labels and are not canonical dataset rows."
+  },
+  "families": [
+    {
+      "family_id": "T2_V3_P0_EVENT_ID_MUTATION",
+      "target_failure": "same event_id reused with changed immutable event payload",
+      "paired_cases": [
+        {
+          "case": "exact_replay_control",
+          "event_id_relation": "same",
+          "immutable_event_fields_relation": "identical",
+          "required_reference_outcome": "IDEMPOTENT_REPLAY_ALLOWED"
+        },
+        {
+          "case": "payload_mutation",
+          "event_id_relation": "same",
+          "immutable_event_fields_relation": "payload_key_changed",
+          "required_reference_outcome": "FAIL_CLOSED_EVENT_ID_DIGEST_CONFLICT"
+        },
+        {
+          "case": "outcome_mutation",
+          "event_id_relation": "same",
+          "immutable_event_fields_relation": "observed_outcome_changed",
+          "required_reference_outcome": "FAIL_CLOSED_EVENT_ID_DIGEST_CONFLICT"
+        },
+        {
+          "case": "provenance_mutation",
+          "event_id_relation": "same",
+          "immutable_event_fields_relation": "provenance_changed",
+          "required_reference_outcome": "FAIL_CLOSED_EVENT_ID_DIGEST_CONFLICT"
+        }
+      ],
+      "split_law": "All paired mutations for one causal family stay in one split; no mutated sibling may cross train/validation/holdout.",
+      "successor_requirement": "Persist/verify canonical event_digest before replay idempotence is granted."
+    },
+    {
+      "family_id": "T2_V3_P0_FORGED_INDEPENDENCE",
+      "target_failure": "caller-controlled independence_qualified creates independent evidence credit",
+      "paired_cases": [
+        {
+          "case": "novel_identifiers_caller_false",
+          "caller_independence_qualified": false,
+          "required_reference_outcome": "DERIVE_FROM_CERTIFICATE_OR_REGISTRY_NOT_BOOLEAN"
+        },
+        {
+          "case": "novel_identifiers_caller_true",
+          "caller_independence_qualified": true,
+          "required_reference_outcome": "DERIVE_FROM_CERTIFICATE_OR_REGISTRY_NOT_BOOLEAN"
+        },
+        {
+          "case": "same_ancestry_forged_true",
+          "caller_independence_qualified": true,
+          "causal_dependence_relation": "same_correlation_ancestry",
+          "required_reference_outcome": "NO_INDEPENDENT_CREDIT"
+        },
+        {
+          "case": "same_payload_repackaged_forged_true",
+          "caller_independence_qualified": true,
+          "causal_dependence_relation": "same_payload_new_packaging",
+          "required_reference_outcome": "NO_INDEPENDENT_CREDIT"
+        }
+      ],
+      "successor_requirement": "Remove naked caller boolean from authority; derive or verify a source-bound dependence certificate/event registry and bind its digest into the gate."
+    },
+    {
+      "family_id": "T2_V3_P0_DISCRIMINATOR_ADMISSIBILITY",
+      "target_failure": "task-local resolution after a formally registered but inadmissible/unexecuted discriminator",
+      "paired_cases": [
+        {
+          "case": "admissible_executed_covering",
+          "formal_test_admissible": true,
+          "formal_test_executed": true,
+          "coverage": "all_live_applicable_alternatives",
+          "required_reference_outcome": "RESOLUTION_MAY_PROCEED_IF_OTHER_D_GATES_PASS"
+        },
+        {
+          "case": "inadmissible",
+          "formal_test_admissible": false,
+          "formal_test_executed": true,
+          "coverage": "all_live_applicable_alternatives",
+          "required_reference_outcome": "UNRESOLVED"
+        },
+        {
+          "case": "not_executed",
+          "formal_test_admissible": true,
+          "formal_test_executed": false,
+          "coverage": "all_live_applicable_alternatives",
+          "required_reference_outcome": "UNRESOLVED"
+        },
+        {
+          "case": "partial_coverage",
+          "formal_test_admissible": true,
+          "formal_test_executed": true,
+          "coverage": "strict_subset_of_live_applicable_alternatives",
+          "required_reference_outcome": "UNRESOLVED"
+        }
+      ],
+      "successor_requirement": "Bind explicit admissibility/execution/coverage semantics or an equally strong closed-world law into the reference root and resolution receipt."
+    },
+    {
+      "family_id": "T2_V3_P1_DECISIVENESS_ONTOLOGY",
+      "target_failure": "COUNTERS versus FALSIFIES encoded as a generic mismatch_effect label rather than derived from claim/test semantics",
+      "paired_cases": [
+        {
+          "case": "nondecisive_mismatch",
+          "decisive_for_claim": false,
+          "required_derived_relation": "COUNTERS"
+        },
+        {
+          "case": "decisive_mismatch",
+          "decisive_for_claim": true,
+          "required_derived_relation": "FALSIFIES"
+        }
+      ],
+      "successor_requirement": "Prefer typed decisive_for_claim/test semantics and mechanically derive relation; if mismatch_effect remains, treat it as formal proof ontology and mutation-test it."
+    },
+    {
+      "family_id": "T2_V3_P1_GRF_OBSERVED_PROMOTION",
+      "target_failure": "UNKNOWN/HYPOTHESIS/PREDICTION promoted to OBSERVED by naked evidence_qualified_observation boolean",
+      "paired_cases": [
+        {
+          "case": "boolean_true_no_receipt",
+          "source_epistemic_type": "UNKNOWN",
+          "requested_target": "OBSERVED",
+          "caller_boolean": true,
+          "typed_evidence_receipt": null,
+          "required_reference_outcome": "REJECT_PROMOTION"
+        },
+        {
+          "case": "typed_observation_receipt_valid",
+          "source_epistemic_type": "UNKNOWN",
+          "requested_target": "OBSERVED",
+          "caller_boolean": false,
+          "typed_evidence_receipt": "SOURCE_BOUND_VALID",
+          "required_reference_outcome": "PROMOTION_MAY_PROCEED_WITH_RECEIPT"
+        },
+        {
+          "case": "measurement_error_not_absence",
+          "source_epistemic_type": "MEASUREMENT_ERROR",
+          "requested_target": "UNKNOWN",
+          "required_reference_outcome": "PRESERVE_TYPED_DISTINCTION"
+        }
+      ],
+      "successor_requirement": "Bind E/GRF promotion to typed evidence/proof receipt; preserve UNKNOWN != ZERO != ABSENT != FAILURE and MEASUREMENT_ERROR != ABSENCE."
+    }
+  ],
+  "nuisance_and_split_requirements": [
+    "Branch IDs, branch order, presentation order, file/worker packaging and audit hashes remain evaluator-only nuisances.",
+    "All mutation siblings and causal/provenance ancestry siblings remain in the same dataset split.",
+    "No family becomes positive supervision until its reference successor deterministically computes the target and the model-visible nuisance audit passes.",
+    "Binding-router v3 remains separately quarantined for conditional nuisance leakage and cannot be used as a shortcut-bearing carrier for these families."
+  ],
+  "next_exact_action": "Harden the retained v3/gate chain against these families, execute exact-source mutation tests, then regenerate only the families whose reference target is mechanically closed."
+}

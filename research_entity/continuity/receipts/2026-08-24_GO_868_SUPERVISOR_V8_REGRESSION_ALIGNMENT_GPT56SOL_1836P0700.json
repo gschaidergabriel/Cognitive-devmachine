@@ -1,0 +1,86 @@
+{
+  "schema": "CLAY_GO_SOURCE_DELTA_RECEIPT/v1",
+  "date": "2026-08-24",
+  "local_time": "18:36+07:00",
+  "authority_epoch": "8.68",
+  "persistent_research_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "observation": {
+    "current_main_before_receipt": "a1c36ccddf1cfb6ad71e41698d2899c6248cc53d",
+    "source_commit": "a8ade411e0a8e9e1449a3d7fcc75c23914fec9f0",
+    "source_commit_is_ancestor_of_observed_main": true,
+    "path": "tests/test_free_swarm_admission_boundary_867.py",
+    "old_blob": "221e9507dfca15aa3f3955c70171d761449494c1",
+    "new_blob": "bc0b683b4651c611f186e9f2fff47e5e6ea2a9f9"
+  },
+  "finding": "The central FREE-provider admission regression still asserted an obsolete supervisor terminal marker, EXPIRED_WITHOUT_CANONICALLY_FREE_ADMITTED_PROVIDER, and hardcoded the older distillery entrypoint even though current supervisor v8 intentionally continues loopback local-model plus public/local Forge/Distillery work during external-provider quarantine and terminates with generic EXPIRED.",
+  "delta": [
+    "accept current local-or-entry distillery launcher selection",
+    "assert local-model and Forge quarantine-survival paths remain present",
+    "assert unadmitted external-provider swarm stop and admitted-only start gates remain present",
+    "assert current external-provider quarantine policy marker",
+    "explicitly reject resurrection of obsolete provider-specific expiry marker",
+    "assert generic supervisor EXPIRED terminal state"
+  ],
+  "coordination": {
+    "parallel_current_main_absorbed_other_tripwire_hardening": true,
+    "duplicate_malformed_epoch_unlisted_changes_discarded": true,
+    "initial_draft_prs_closed_by_parallel_convergence": [1429, 1445],
+    "direct_main_write_used_only_after_repeated_reentry_confirmed_unique_stale_assertion": true,
+    "unusual_experiment_performed": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "verification": {
+    "source_reobserved_on_main_after_write": true,
+    "source_blob_on_main_after_write": "bc0b683b4651c611f186e9f2fff47e5e6ea2a9f9",
+    "github_actions_identity_guard_attempt_on_superseded_branch_commit": {
+      "run_id": 32722436178,
+      "job_id": 97416519524,
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "RUNNER_OR_PRE_STEP_FAILURE_NOT_PRODUCT_TEST_EVIDENCE"
+    },
+    "authorized_local_or_clay_direct_dev_runtime_observed": false,
+    "free_swarm_admission_boundary_runtime_receipt_pass": false,
+    "runtime_credit_added": 0,
+    "provider_runtime_credit_added": 0,
+    "whole_entityos_hcu_credit_added": 0,
+    "hcu_full_credit_added": 0,
+    "jspace_model_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "go_tracks": {
+    "track_a": {
+      "status": "ADVANCED_SOURCE_REGRESSION_ALIGNMENT",
+      "delta": "Current supervisor-v8 quarantine semantics and the canonical admission regression are no longer self-contradictory at source level."
+    },
+    "track_b": {
+      "status": "ADVANCED_BY_CURRENT_MAIN_PARALLEL_CONVERGENCE",
+      "reason": "Current main and retained donor work advanced typed admission and J-Space/HCU identity contracts; this organ avoided creating a duplicate HCU lane."
+    },
+    "track_c": {
+      "status": "ADVANCED_BY_CURRENT_MAIN_PARALLEL_CONVERGENCE",
+      "reason": "Current main selected an instrumentable local NNsight/PyTorch J-Space intervention lane and strengthened post-load local-model identity, while model-runtime and training credit remain zero."
+    }
+  },
+  "readme": {
+    "status": "README_NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is already successor-aligned to supervisor 8.68 and records the current admission harness, local-model identity and J-Space intervention frontier; duplicating this narrow regression alignment would add narration without changing product authority."
+  },
+  "credits": {
+    "free_swarm_provider_admission_runtime": 0,
+    "external_provider_worker_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On an exposed authorized zero-cost normal-user local or clay-direct-dev clean checkout at exact current main, execute the current hardened FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 runner; require exact source stability, all boundary/hardening tests PASS, zero blocked-case credential access, zero socket/DNS attempts and exit 0 before any external LLM-provider lane restart."
+}

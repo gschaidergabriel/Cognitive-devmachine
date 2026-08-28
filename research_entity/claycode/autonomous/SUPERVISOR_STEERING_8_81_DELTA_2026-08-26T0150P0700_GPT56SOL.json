@@ -1,0 +1,51 @@
+{
+  "schema_version": "8.81",
+  "date": "2026-08-26",
+  "cycle": "physical-grid10-proof-audit",
+  "inspected_head": "aaeacb4a5c7f011d85a5c1932dca8fe93cfca163",
+  "material_finding": "The new physical GRID10 acceptance harness does not yet prove the property its request requires. spawn_node uses subprocess.run sequentially, P1 sets pids=len(packets) rather than observing OS process identifiers or overlap, so a PASS proves ten subprocess invocations but not ten simultaneously live independent Xeno processes sharing one S1 fabric. A second proof gap exists in coordinator admission: coordinator_commit accepts packet.state_epoch <= current epoch and does not compare packet.state_digest with the current snapshot; the GRID10 harness then serially commits packets produced against earlier snapshots while advancing S1. This may be a deliberate stale-evidence policy, but it is not currently distinguished from stale-state acceptance and therefore cannot mint physical GRID10 credit without an explicit policy plus adversarial regression. The 8.80 inbox also accidentally dropped standing Goodman/model-family/Ubuntu-Frank/canonical-promotion guardrails while compressing state; restore them.",
+  "evidence": {
+    "physical_grid10_harness_commit": "fbab5960980166f51047264775f102f2df22b292",
+    "physical_grid10_request_commit": "04dcb95e42d1d75556240ab1e318d260aedc1469",
+    "current_control_commit": "aaeacb4a5c7f011d85a5c1932dca8fe93cfca163",
+    "xeno_fabric_component_pass_commit": "4c4a84a505329f5470fc81dd5e8713f2e275fb0c"
+  },
+  "classification": {
+    "canonical_s0_epoch_cas": "BOUNDED_COMPONENT_RUNTIME_PASS_UNCHANGED",
+    "xeno_self_organizing_fabric": "BOUNDED_COMPONENT_RUNTIME_PASS_UNCHANGED",
+    "physical_grid10_harness": "SOURCE_PRESENT_PROOF_INSUFFICIENT_NEEDS_REVISION",
+    "physical_grid10_existing_vps_request": "STALE_FOR_CREDIT_DO_NOT_PROMOTE_IF_EXECUTED",
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0
+  },
+  "required_repairs_before_physical_grid10_credit": [
+    "Start ten ordinary Xeno node processes with overlapping lifetimes using Popen or equivalent, not ten sequential subprocess.run invocations.",
+    "Capture and receipt ten distinct OS PIDs, process start/stop timestamps, and an overlap/barrier proof showing all ten are alive concurrently while attached read-only to the same isolated S1 database.",
+    "Keep ordinary-node S1 write rejection and coordinator lease fencing unchanged.",
+    "Define the stale-result contract explicitly: either exact-snapshot admission requiring packet.state_epoch and packet.state_digest to equal the authoritative observation snapshot, or a separately named evidence-rebase protocol that cryptographically preserves original observation identity and proves revalidation before commit.",
+    "Add adversarial regression showing a stale packet with an old state_digest cannot silently masquerade as current-state evidence merely because generation matches and packet.state_epoch is <= current epoch.",
+    "Only after the repaired source is committed create/use a new pinned FREE_VPS request; the existing fbab596 pin cannot grant physical GRID10 credit even if it returns pass=true."
+  ],
+  "standing_invariants_restored": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "next_focus": [
+    "REPAIR_PHYSICAL_GRID10_HARNESS_PROOF_SEMANTICS_BEFORE_EXECUTION_CREDIT",
+    "ADD_CONCURRENT_PROCESS_LIVENESS_PID_AND_SHARED_S1_BARRIER_EVIDENCE",
+    "ADD_EXPLICIT_STALE_RESULT_POLICY_AND_NEGATIVE_STALE_DIGEST_REGRESSION",
+    "COMMIT_REPAIRED_HARNESS_THEN_CREATE_A_NEW_EXACT_FREE_VPS_PIN_AND_RECEIPT",
+    "ONLY_AFTER_TRUE_PHYSICAL_GRID10_PASS_CONTINUE_TO_LOAD_FAILURE_REJOIN_MATCHED_BUDGET_CHALLENGERS_AND_HYPERPOSITION_GWT_REENTRY"
+  ]
+}

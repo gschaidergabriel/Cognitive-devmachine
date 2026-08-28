@@ -1,0 +1,65 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_at_local": "2026-08-17T22:50+07:00",
+  "classification": "SOURCE_SECURITY_HARDENING_COMMITTED_RUNTIME_BLOCKED",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn id was exposed and the available shared user-message timestamp is minute-precision only; GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL therefore forbids claiming or executing the unusual experiment slot.",
+    "count_executed": 0
+  },
+  "fresh_join": {
+    "bootstrap_minimal_blob": "fc283dfec338a3aaf9f0f6387563bfd76f281b19",
+    "artifact_manifest_blob": "e37462b099bba5b52d34d5df5a3af94acbc9521a",
+    "microvm_contract_pre_fusion_blob": "2608f5ca9c18ff2682d137a099c7047966fb872c",
+    "microvm_template_blob": "788492efedcdc47c9a308bb5ecbbce79fdd8f380"
+  },
+  "execution_observation": {
+    "provider": "Vercel Sandbox via Dr.-Unterweger Preview controller",
+    "deployment_id": "dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8",
+    "controller_commit": "a341eb107f8499f301e730de12680fd2df580fd8",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_id": "peach-traditional-sparrow-J4uLFC",
+    "sandbox_session_id": "sbx_ZBNVvNkCkxdZFs1FmwAIFJcgkoyb",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "sandbox_stopped": true,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "test_fail": false,
+    "note": "The run failed closed before private research/EntityOS source fetch; this is execution-admission/credential blocking, not a ClayVerse semantic test failure. The Vercel sandbox itself was created successfully."
+  },
+  "parallel_reentry": {
+    "network_policy_gap": "NO_CHANGE_ALREADY_SUPERSEDED_ON_MAIN",
+    "evidence": "Current main MicroVM template already contains an ingress+egress default-deny NetworkPolicy. During this go, the MicroVM contract also advanced concurrently to require actual CNI/NetworkPolicy enforcement and additive policy inventory. A stale write was correctly rejected with HTTP 409 and then re-fused against the new blob."
+  },
+  "external_primary_security_evidence": {
+    "project": "kata-containers/kata-containers",
+    "advisory": "GHSA-2gv2-cffp-j227",
+    "cve": "CVE-2026-47243",
+    "severity": "Critical",
+    "affected_runtime_rs": "<=3.30.0",
+    "first_patched_runtime_rs": "3.31.0",
+    "impact": "guest-root to host-root escape in affected runtime-rs virtiofs configurations",
+    "source": "https://github.com/kata-containers/kata-containers/security/advisories/GHSA-2gv2-cffp-j227",
+    "observed_date": "2026-08-17"
+  },
+  "canonical_delta": {
+    "path": "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md",
+    "commit": "64a483fdd236199814a8783454bc711ba93c6395",
+    "content_blob": "57db5224db000fc246445d68938b218ed8e4ff14",
+    "change": [
+      "forbid Kata runtime-rs <=3.30.0 for final ClayVerse acceptance",
+      "require a fresh upstream Kata security-advisory/release review immediately before final acceptance",
+      "bind exact installed Kata/runtime-rs identity and shared-filesystem/virtiofs configuration into acceptance evidence",
+      "require execution evidence that the admitted patched runtime/configuration actually runs the ClayVerse workload"
+    ]
+  },
+  "evidence_boundary": {
+    "source_security_contract_improved": true,
+    "exact_oci_build_observed": false,
+    "exact_microvm_runtime_observed": false,
+    "whole_product_pass": false
+  },
+  "next_discriminator": "Provision GITHUB_READ_TOKEN only as the sensitive host-side Vercel Preview build credential without forwarding it into the sandbox; then perform one fresh exact rebind of the retained OCI controller to current research main plus admitted retained lanes, execute exact private-source fetch and OCI build, capture image/tmux/Claude/Python identities, and only after OCI acceptance execute the same digest under an admitted Kata/runtime-rs >=3.31.0 (or newer currently-safe version) microVM path with CNI enforcement, guest-kernel, network-boundary and recovery attestation."
+}

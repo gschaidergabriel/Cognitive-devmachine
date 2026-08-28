@@ -1,0 +1,73 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_CODEBOOK_V2_SECOND_ORDER_SHORTCUT_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "audited_generator": {
+    "path": "tools/trigger2_dynamic_codebook_generator_v2.py",
+    "source_commit": "333d536165fc7995d5c74dc377bf7a071eec0978",
+    "blob_sha": "7ecd5cb199af7fa69786dd4b2725e2b716f723c2"
+  },
+  "verdict": "REJECT_FOR_DIRECT_TRAINING_SECOND_ORDER_SHORTCUT_PRESENT",
+  "severity": "CRITICAL",
+  "positive_findings": [
+    "v2 preserves the full six S3 class-to-slot mappings and exact class-symbol counterbalance.",
+    "v2 reserves an unopened T5 template family and emits only TRAIN abstract-slot rows.",
+    "v2 explicitly blocks training readiness until exact verified ABI atoms/tokenizer identity are supplied.",
+    "v2 keeps cross-model J-Space label transfer false and mints no canonical/training/runtime credit.",
+    "v2 adds lexical_family_id and avoids split names inside the row family/provenance identifiers used by this TRAIN-only seed."
+  ],
+  "critical_finding": {
+    "id": "MAPPING_TEMPLATE_ORDER_JOINTLY_DECODES_SEMANTIC_CLASS",
+    "source_expression": "shift = (pidx + tidx + cidx) % len(CLASSES)",
+    "visible_variables": [
+      "pidx is recoverable from the visible realized class-to-slot mapping because all six S3 mappings are unique",
+      "tidx is recoverable from the visibly distinct T1/T2/T3/T4 prompt structure",
+      "shift is recoverable from the visible cyclic codebook entry order"
+    ],
+    "closed_form_shortcut": "cidx = (shift - pidx - tidx) mod 3",
+    "consequence": "The base semantic class can be reconstructed exactly from nuisance structure without reading the SITUATION/OBSERVATION/STATE/CASE content. The target slot then follows from the visible episode-local mapping. Therefore a model can minimize training loss without learning the intended content-dependent semantic-to-codebook binding operation.",
+    "why_current_validator_misses_it": "The validator requires at least three global codebook orders and zero global class-symbol mutual information, but it does not test conditional independence of display order from semantic class given mapping and template. Global balance can coexist with a perfect higher-order shortcut.",
+    "relation_to_v1_audit": "The v1 swarm audit required counterfactual display-order coverage inside each fixed semantic/mapping cell. v2 does not implement that stronger condition; it only changes the deterministic order schedule."
+  },
+  "adversarial_reviewer_proof_obligation": {
+    "required_counterfactual_cell": "For each fixed semantic scenario, S3 mapping, template and query polarity, vary codebook display order independently while preserving the same target.",
+    "minimum_strong_design": "Cross each positive semantic/mapping/template cell with all six display orders, or use a preregistered orthogonal array whose conditional contingency tables prove zero information leakage.",
+    "validator_requirements": [
+      "For every fixed (scenario_id, mapping_id, template_id, query_polarity), require complete or preregistered-balanced display-order support.",
+      "Compute conditional mutual information I(semantic_class; display_order | mapping_id, template_id, query_polarity); require exactly zero for the exact factorial design.",
+      "Add a nuisance-only decoder test using mapping/template/order metadata; reject the dataset if nuisance-only accuracy exceeds chance beyond a preregistered tolerance.",
+      "Add counterfactual pairs where only display order changes and target remains identical.",
+      "Add counterfactual pairs where only the S3 mapping changes and target changes exactly according to the new mapping.",
+      "Keep frozen unseen-template and unseen-real-ABI-symbol holdouts outside checkpoint/mixture/threshold selection."
+    ]
+  },
+  "swarm_roles": {
+    "evidence_extractor": "PASS: measured donor evidence still supports binding/routing as the curriculum hypothesis only at donor-model scope.",
+    "dataset_architect": "FAIL_V2: factorial nuisance structure is not independently crossed.",
+    "adversarial_shortcut_hunter": "CRITICAL_FAIL: mapping + template + order exactly decodes semantic class.",
+    "statistical_reviewer": "FAIL: zero marginal MI(class;symbol) does not rule out conditional/higher-order leakage.",
+    "abi_provenance_reviewer": "PASS_FAIL_CLOSED: abstract slots are explicitly non-train-ready until verified ABI materialization.",
+    "retention_reviewer": "NO_NEW_RETENTION_EVIDENCE: retain matched-pilot and frozen retention evaluation requirement.",
+    "harness_compatibility_reviewer": "PASS_WITH_GATE: the desired operation remains compatible with episode-local codebook routing, but the corpus must force content use rather than nuisance decoding.",
+    "final_integrator": "REJECT v2 direct training; retain it as donor source and build/fuse a v3 factorial successor."
+  },
+  "training_examples_status": {
+    "v2_rows": 96,
+    "positive_rows": 72,
+    "hard_negative_rows": 24,
+    "direct_trainable": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Create or retain one Trigger-2 v3 factorial generator that independently crosses semantic scenario, all six S3 mappings, all six codebook display orders, query polarity and template family; add a nuisance-only decoder/conditional-MI gate; then materialize exact verified ABI atoms and run split-isolation/family/provenance validators before any training admission."
+}

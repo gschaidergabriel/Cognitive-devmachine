@@ -1,0 +1,77 @@
+{
+  "schema": "ENTITYOS_HCU_GO_FREE_ISOLATED_JSPACE_FAMILY_SPLIT_COMPONENT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "research_main_observed_before_write": "14448bbf2e64dd1acfc25e33ecaf63bd3f862198",
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "together_general_inference": "FORBIDDEN",
+    "together_paid_preflight_or_training": "FORBIDDEN_IN_CURRENT_SUPERVISOR_MODE",
+    "vercel_metered_sandbox_after_cost_gate": "NOT_USED_FOR_THIS_PASS"
+  },
+  "scope": {
+    "retained_hcu_pr": 1263,
+    "retained_hcu_head_verified_after_execution": "c0605be1578ba12bdec0c1f11cb11b92099e895a",
+    "component": "J-Space dataset family split only",
+    "unusual_experiment_added": 0,
+    "macrocycle_unusual_experiment_already_consumed": "TRACE_FAMILY_SPLIT_ALIAS"
+  },
+  "exact_source": [
+    {
+      "path": "the artefact/MicroEntity/hcu/jspace_dataset_family_split_v1.py",
+      "git_blob_sha1": "c0fb3369150a6ee5d7ec2a3d384266d559c630f4",
+      "sha256": "3e26d8def1b2da36eebaf61f5effb006deacbc0ce31b9f9f670e7504ba782dcb"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/test_jspace_dataset_family_split_v1.py",
+      "git_blob_sha1": "44adb707c1702180eed04441426dfefa51a77fee",
+      "sha256": "63b8bb0fe77ff422a7f0ce425cf4d38c54cfb7eb5b168632e88d2cbfbd1a97f7"
+    }
+  ],
+  "execution": {
+    "surface": "isolated session tool container",
+    "external_metered_provider_call_started": false,
+    "external_provider_credentials_used": false,
+    "uname": "Linux 6.18.35 x86_64",
+    "python": "Python 3.13.5",
+    "git": "git version 2.47.3",
+    "source_identity_check": "git hash-object matched both live PR1263 Git blobs before test",
+    "command": "python3 -m unittest -v test_jspace_dataset_family_split_v1.py",
+    "exit_code": 0,
+    "tests_run": 6,
+    "tests_passed": 6,
+    "tests_failed": 0,
+    "duration_seconds_observed": 0.010,
+    "rerun_exit_code": 0,
+    "rerun_tests_run": 6,
+    "rerun_duration_seconds_observed": 0.008
+  },
+  "covered_contracts": [
+    "correlated traces sharing one trace_family_id never cross train/validation/holdout",
+    "family split is deterministic and domain-bound",
+    "post-admission family relabel fails exact registry rebind",
+    "trace_id collision with a different trace identity fails closed",
+    "causal grid-plan transplant against dataset admission fails closed",
+    "duplicate identical trace is idempotent"
+  ],
+  "result": "EXACT_CURRENT_COMPONENT_RUNTIME_PASS",
+  "credit": {
+    "family_split_component_runtime_credit": true,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "entityos_whole_product_pass": false
+  },
+  "coordination": {
+    "parallel_executor_fixture_blob_identity": "MATCHED_CURRENT_PR1263_FOR_BOTH_FILES",
+    "stale_or_duplicate_semantic_path_created": false,
+    "vercel_authority_race": "Later metered Vercel component attempts are quarantined under the newer FREE_ONLY cost gate and contribute no semantic/runtime credit; no further Vercel Sandbox run was started after that gate was observed by this organ."
+  },
+  "next_exact_gate": "Fuse/rebase the retained HCU/J-Space mechanisms onto current FREE_ONLY main, then expand exact-source isolated FREE regression from this passing family-split component toward the admitted causal dataset closure and ultimately the full Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> causal training path. Do not use metered Vercel Sandbox or Together under current authority without a newer explicit admission."
+}

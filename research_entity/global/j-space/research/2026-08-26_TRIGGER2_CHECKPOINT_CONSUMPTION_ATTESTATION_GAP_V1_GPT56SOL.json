@@ -1,0 +1,120 @@
+{
+  "schema": "CLAY_TRIGGER2_CHECKPOINT_CONSUMPTION_ATTESTATION_GAP/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING_SUCCESSOR_DYNAMIC",
+  "authority_snapshot": {
+    "observed_main_before_write": "b977339e993cb8f6e89129a38e4f0e60ddd51031",
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "freeswarm": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "deduplication": {
+    "repository_search_terms": [
+      "mmap pread disable_mmap safetensors checkpoint consumed identity",
+      "CHECKPOINT_CONSUMPTION_ATTESTATION OPENED_MANIFEST_BOUND in_memory_state_digest"
+    ],
+    "result": "NO_EXISTING_PROJECT_DELTA_FOUND_FOR_MMAP_VS_OPENED_SHARD_CONSUMPTION_BOUNDARY",
+    "related_existing_work": [
+      "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+      "tools/trigger2_declared_current_consumed_stale_bypass_probe_v1.py",
+      "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V48_GPT56SOL.json"
+    ],
+    "scope_separation": "The existing consumed-stale bypass discriminator addresses S1 semantic-input freshness. This delta addresses checkpoint-loader evidence: opened manifest-bound files versus exact in-memory model state used by a forward pass."
+  },
+  "observed_source": {
+    "probe": "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+    "historical_source_commit": "0e70070c8b300703fbd043e37c29e2e34ddfdabb",
+    "current_mechanism": [
+      "pre-load full manifest hash verification",
+      "strace -f open/openat capture restricted to the frozen local checkpoint directory",
+      "all expected weight shards must appear in the opened path set",
+      "opened local files are re-hashed and compared with the admitted manifest",
+      "post-load full manifest hash verification",
+      "rendered UTF-8 and input tensor identity",
+      "one observed model forward pass"
+    ],
+    "current_pass_name": "consumed_identity_match=true",
+    "bounded_reclassification": "OPENED_MANIFEST_BOUND_SHARD_IDENTITY_PLUS_FORWARD is directly supported by v1; literal consumed-byte or exact loaded-model-state identity is not independently observed by open/openat alone."
+  },
+  "external_method_evidence": [
+    {
+      "source": "https://huggingface.co/docs/safetensors/api/torch",
+      "classification": "SOURCE_DIRECT_EXTERNAL_NONCANONICAL",
+      "finding": "Current safetensors.torch.load_file documents backend='mmap' as the default and backend='pread' as an alternative that uses pread(2).",
+      "implication": "A loader can open a shard and then serve tensor bytes through a memory mapping; an open/openat event is therefore not itself a byte-read transcript."
+    },
+    {
+      "source": "https://huggingface.co/docs/transformers/main_classes/model",
+      "classification": "SOURCE_DIRECT_EXTERNAL_NONCANONICAL",
+      "finding": "Current Transformers from_pretrained documents disable_mmap and states that when mmap is enabled the default memory-mapped loader is used; disabling mmap reads files fully into memory for safetensors parsing.",
+      "implication": "The exact runtime loader backend is selection-relevant evidence and should be recorded rather than inferred from an opened-path trace."
+    }
+  ],
+  "hypothesis_fusion": {
+    "hypothesis": "CHECKPOINT_INPUT_IDENTITY_ABI/v1 overnames one evidence field: open/openat plus stable manifest hashes proves that the expected manifest-bound shard paths were opened, but does not independently prove which exact tensor bytes became the in-memory parameters consumed by the observed forward, especially when safetensors uses mmap/lazy page-backed access.",
+    "counterhypothesis": "For the declared local-only trust_remote_code=false source, pre/post full-file hashes plus observation that every required shard was opened plus a successful forward is already sufficient practical checkpoint identity; an additional in-memory-state witness adds cost without changing candidate eligibility.",
+    "stronger_alternative": "Preserve v1 as a useful opened-shard/input ABI and add a v2 state-consumption witness only for selection-grade promotion. This avoids discarding valid v1 evidence while preventing its scope from being inflated.",
+    "falsifier": "If the exact runtime can demonstrate a deterministic, independently checked binding from the admitted checkpoint manifest to the complete loaded parameter/buffer state used by the forward, then the opened-versus-consumed ambiguity is closed at that exact model/runtime identity."
+  },
+  "proposed_discriminator": {
+    "id": "CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI/v2",
+    "status": "RESEARCH_CANDIDATE_NOT_EXECUTED_NOT_CANONICAL_ABI",
+    "minimum_requirements": [
+      "retain all v1 pre/post manifest, tokenizer/renderer/input-tensor and forward evidence",
+      "record exact Transformers and safetensors versions and the resolved loader backend/mmap policy",
+      "record loading-info failures for missing, unexpected or mismatched keys and fail closed where the target contract requires exact coverage",
+      "compute a deterministic post-load in-memory model-state digest over name, dtype, shape and contiguous raw tensor bytes for all declared parameters and required persistent buffers",
+      "bind that state digest to the exact forward receipt and candidate identity",
+      "where runtime permits, add loader-backend-specific observation such as pread/read coverage or mmap file-descriptor/mapping identity as corroborating evidence, not as a substitute for the in-memory state digest",
+      "define candidate-specific expected state-digest derivation or an independent reconciliation rule before granting selection-grade consumed-state credit",
+      "add negatives for missing shard, unknown shard, post-load file mutation, missing/unexpected key, backend ambiguity and deliberate post-load parameter mutation"
+    ],
+    "acceptance_semantics": {
+      "v1_opened_shard_pass": "COMPONENT_EVIDENCE_ONLY_DO_NOT_CALL_LITERAL_CONSUMED_BYTES",
+      "v2_state_digest_without_independent_manifest_reconciliation": "OBSERVED_LOADED_STATE_IDENTITY_ONLY",
+      "v2_manifest_to_state_reconciled_plus_forward_bound": "SELECTION_GRADE_CONSUMED_MODEL_STATE_COMPONENT_ELIGIBLE",
+      "checkpoint_winner": "Still forbidden until matched evaluation and all other current gates pass.",
+      "training_credit": 0,
+      "jspace_model_credit": 0,
+      "whole_hcu_runtime_credit": 0,
+      "whole_entityos_runtime_credit": 0
+    }
+  },
+  "interaction_with_current_evidence": {
+    "ledger_v48": "P0 remains three-candidate identity evidence, but the literal consumed-identity wording should be treated as provisional until v2 or an equivalent model-state binding closes this narrower gap.",
+    "cross_checkpoint_alignment_delta": "The newly proposed cross-checkpoint J-Space alignment gate should depend on exact model-state identity, not merely equal opened-shard identity, before durable cross-checkpoint causal comparison.",
+    "enlarged_axis_measurements": "Any existing BASE/POSTTRAINED/TARGET diagnostic results remain diagnostic evidence; this delta does not erase them or promote a checkpoint winner."
+  },
+  "execution_decision": {
+    "model_runtime_executed_this_delta": false,
+    "provider_execution_used": false,
+    "vps_execution_used": false,
+    "paid_execution_used": false,
+    "reason": "Current supervisor remains FREE_ONLY with FreeSwarm HARD_OFF and no separately re-entered execution authority was established for a new model-runtime intervention. This delta is source/research only."
+  },
+  "credits": {
+    "research_delta": 1,
+    "checkpoint_consumption_metrology_delta": 1,
+    "runtime_credit_minted": 0,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Do not duplicate v1. Re-enter current authority; if model execution remains blocked, implement and unit-test a successor CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI/v2 source path without running checkpoints. If separately admitted FREE non-provider execution is later available, execute the smallest exact candidate-specific v2 discriminator first, then all three frozen candidates under matched source/runtime semantics before checkpoint selection or cross-checkpoint J-Space promotion."
+}

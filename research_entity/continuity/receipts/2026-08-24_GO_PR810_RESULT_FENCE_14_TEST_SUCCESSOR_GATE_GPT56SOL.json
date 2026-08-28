@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "1a83d89849f9f3de1bde9e03fd10bdf2408d81e7",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_lane_created": false,
+    "force_push_used": false,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "6841dd6e2909cf677012a2354e3a3f837140197f",
+    "executor_coordination_comment_id": 5388181125
+  },
+  "observed_source_state": {
+    "successor_closure_directory": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-511d5689",
+    "required_exact_blob_count": 17,
+    "exact_17_blob_directory_identity_observed": true,
+    "route_uses_exact_17_blob_map": true,
+    "route_source_pr_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "route_fixed_command": "python3 -m unittest -v test_model_execution_admission_store_v1.py test_execution_store_inference_jspace_chain_v1.py test_jspace_inference_binding_revalidation_v3.py",
+    "route_source_rebind_required": true,
+    "prevercel_build_runs_exact_donor_blob_guard": true,
+    "exclusive_executor_guard_runs_exact_donor_blob_guard_while_quarantined": true,
+    "runtime_credit_change": 0
+  },
+  "result_fence_discriminator": {
+    "finding": "CURRENT_ROUTE_RESULT_FENCE_IS_STILL_GENERIC_RELATIVE_TO_HASH_BOUND_REGRESSION_SET",
+    "current_generic_acceptance": "exit code 0 + SECRET_FENCE=PASS + plain unittest OK",
+    "counterhypothesis": "Because the command and all source blobs are hash-bound, generic unittest OK is already a successor-exact result identity.",
+    "falsifier": "The route can cheaply bind execution to the exact declared regression surface by requiring the verbose identities of every hash-bound test plus the exact total count. This removes ambiguity about accidental discovery/execution drift without relying on timing or model-generated interpretation.",
+    "required_verbose_test_count": 14,
+    "required_summary_marker": "Ran 14 tests in",
+    "require_plain_ok_without_suffix": true,
+    "tests": {
+      "test_model_execution_admission_store_v1.py": [
+        "test_exact_invocation_is_persisted_before_verified_execution_returns",
+        "test_exact_replay_is_idempotent",
+        "test_same_invocation_with_different_output_rolls_back_without_rebinding",
+        "test_stale_generation_fails_before_observation_or_invocation_write",
+        "test_concurrent_divergent_same_invocation_has_exactly_one_winner"
+      ],
+      "test_execution_store_inference_jspace_chain_v1.py": [
+        "test_upstream_trust_objects_are_canonical_producer_outputs",
+        "test_atomic_executor_admission_flows_into_inference_v4_and_jspace_v3",
+        "test_divergent_same_invocation_is_rejected_before_second_inference_or_jspace_binding",
+        "test_concurrent_divergent_invocation_yields_one_downstream_jspace_binding"
+      ],
+      "test_jspace_inference_binding_revalidation_v3.py": [
+        "test_exact_rehydrated_binding_passes",
+        "test_digest_valid_cell_transplant_fails_closed",
+        "test_digest_valid_role_transplant_fails_closed",
+        "test_digest_valid_invocation_transplant_fails_closed",
+        "test_digest_valid_stale_inference_schema_fails_closed"
+      ]
+    },
+    "promotion_rule": "KEEP_SOURCE_REBIND_REQUIRED_TRUE_UNTIL_ROUTE_RESULT_ASSERTIONS_AND_BUILD_GUARD_ARE_SUCCESSOR_EXACT_IN_THE_SAME_COHERENT_SOURCE_IDENTITY"
+  },
+  "negative_evidence": {
+    "current_executor_vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "vercel_target_indicates_upgrade_to_pro": true,
+    "paid_upgrade_or_fallback_attempted": false,
+    "exact_current_vercel_build_guard_execution_observed": false,
+    "exact_current_sandbox_function_invocation_observed": false,
+    "local_checkout_attempt": "BLOCKED_TRANSPORT_DNS_NO_GITHUB_NETWORK_IN_LOCAL_CONTAINER",
+    "local_checkout_failure_is_product_regression": false
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact 17-blob current donor closure is physically bound into the retained route and exact-donor source guard is now part of the Vercel build gate; remaining source promotion gate is narrowed to successor-exact result assertions before quarantine removal.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: route-bound closure includes exact Typed Entry canonicalization/fabric, deterministic route, verified engine admission/actual-loader evidence and GRID10 producer bytes under the same pinned donor identity.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: the exact three-file regression command covers atomic one-winner model execution, InferenceReceipt/v4, Global J-Space/GWT TrainingTrace/v1, JSpaceBinding/v3 and semantic revalidation; the exact 14-test result identity is now specified as the next promotion discriminator. No model/training credit is granted."
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current-facing README and executor state are moving rapidly under parallel organs. This new result-gate discriminator is preserved append-only as a uniquely named receipt to avoid overwriting concurrent current-facing state."
+  },
+  "next_exact_gate": "Re-enter current Research main, PR1263 and repository-qualified executor gschaidergabriel/Dr.-Unterweger#810. If SOURCE_REBIND_REQUIRED remains true and the route still uses the exact 17-blob 511d closure, make the result fence and non-quarantine build guard require all 14 verbose test identities plus `Ran 14 tests in` and plain `OK`, then remove quarantine only in a coherent source change. Execute only when FREE_ONLY Vercel Hobby build/function admission permits; capture exact source/result digests, Sandbox identity, exit code, secret fence and cleanup."
+}

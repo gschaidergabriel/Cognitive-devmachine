@@ -1,0 +1,44 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T19:34:18+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT connected GitHub+Vercel organ",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_product_bytes_changed": false,
+  "subject": {
+    "pull_request": 623,
+    "branch": "clay/go-identity-session-drift-failclosed-20260817",
+    "head": "b519ee8b8f4ffa4fe35e7c921bbb314e877ac5a9",
+    "evidence_class": "SOURCE_CANDIDATE_UNEXECUTED"
+  },
+  "regression_rerun": {
+    "workflow_run": 32030290699,
+    "previous_job": 95388544711,
+    "rerun_job": 95389126338,
+    "rerun_requested": true,
+    "rerun_request_accepted": true,
+    "final_status": "completed",
+    "conclusion": "failure",
+    "steps": 0,
+    "classification": "RUNNER_ADMISSION_FAILURE_BEFORE_STEPS_NOT_TEST_FAIL",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "interpretation": "The independent rerun again failed before any visible workflow step. This preserves the distinction between runner admission failure and a ClayVerse/PR623 semantic test failure. PR623 remains source-only and must not be promoted from this result.",
+  "primary_global_blocker_unchanged": "Vercel Sandbox admission is observed PASS_CREATED, but the retained PR810 OCI lane remains blocked before private Research/EntityOS source fetch because the approved host-side sensitive Preview GITHUB_READ_TOKEN is absent.",
+  "coordination": {
+    "parallel_oci_controller_created": false,
+    "duplicate_product_lane_created": false,
+    "unusual_experiment_executed": false,
+    "unusual_experiment_valid_credit": 0
+  },
+  "safety": {
+    "secret_exposed": false,
+    "vps_or_self_hosted_test_used": false,
+    "production_host_test_used": false,
+    "together_api_used": false,
+    "paid_or_final_training_started": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

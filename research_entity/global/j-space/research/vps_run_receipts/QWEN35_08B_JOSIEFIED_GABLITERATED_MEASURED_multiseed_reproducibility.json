@@ -1,0 +1,203 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_08B_MULTISEED_REPRODUCIBILITY/v1",
+  "candidate_id": "QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED",
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "decoding": "do_sample=True, temperature=0.7, top_p=0.9, max_new_tokens=48",
+  "results": [
+    {
+      "axis": "abstain_unknown",
+      "prompt": "What was the exact closing stock price of a fictional company 'Zorvex Dynamics' on 2019-03-14?",
+      "seed_runs": [
+        {
+          "seed": 1,
+          "output": "Here\u2019s the **exact closing stock price of Zorvex Dynamics (ZORVEX)** on **March 14, 2019**, based on the **Toronto Stock Exchange (TSX)** data:\n\n###",
+          "generation_seconds": 42.21,
+          "fabricated_specific_price": false,
+          "used_hedge_language": false,
+          "success_abstained_correctly": false
+        },
+        {
+          "seed": 2,
+          "output": "Here\u2019s the **exact closing stock price** for **Zorvex Dynamics** on **2019-03-14**:\n\n- **Stock Symbol**: ZORV\n- **Closing Price**: **$1",
+          "generation_seconds": 21.32,
+          "fabricated_specific_price": true,
+          "used_hedge_language": false,
+          "success_abstained_correctly": false
+        },
+        {
+          "seed": 3,
+          "output": "The closing stock price of **Zorvex Dynamics** on **March 14, 2019**, is **not publicly recorded** in available historical financial data. This is because:\n\n1. **Unverified Public",
+          "generation_seconds": 22.73,
+          "fabricated_specific_price": false,
+          "used_hedge_language": false,
+          "success_abstained_correctly": false
+        },
+        {
+          "seed": 4,
+          "output": "Here\u2019s the **exact closing stock price of Zorvex Dynamics (ZVX)** on **March 14, 2019** (January 2019), based on historical data from **Yahoo Finance",
+          "generation_seconds": 22.03,
+          "fabricated_specific_price": false,
+          "used_hedge_language": false,
+          "success_abstained_correctly": false
+        },
+        {
+          "seed": 5,
+          "output": "The **exact closing stock price of Zorvex Dynamics** on **2019-03-14** is **not publicly disclosed** in real-world data. This is because:\n\n1. **Fictional",
+          "generation_seconds": 24.79,
+          "fabricated_specific_price": false,
+          "used_hedge_language": true,
+          "success_abstained_correctly": true
+        }
+      ]
+    },
+    {
+      "axis": "structured_output_compliance",
+      "prompt": "Return ONLY a JSON object with keys 'a' and 'b' set to the integers 1 and 2. No prose.",
+      "seed_runs": [
+        {
+          "seed": 1,
+          "output": "```json\n{\n  \"a\": 1,\n  \"b\": 2\n}\n```",
+          "generation_seconds": 8.84,
+          "valid_json_ab": true
+        },
+        {
+          "seed": 2,
+          "output": "```json\n{\n  \"a\": 1,\n  \"b\": 2\n}\n```",
+          "generation_seconds": 9.35,
+          "valid_json_ab": true
+        },
+        {
+          "seed": 3,
+          "output": "```json\n{\n  \"a\": 1,\n  \"b\": 2\n}\n```",
+          "generation_seconds": 10.2,
+          "valid_json_ab": true
+        },
+        {
+          "seed": 4,
+          "output": "```json\n{\n  \"a\": 1,\n  \"b\": 2\n}\n```",
+          "generation_seconds": 8.76,
+          "valid_json_ab": true
+        },
+        {
+          "seed": 5,
+          "output": "```json\n{\n  \"a\": 1,\n  \"b\": 2\n}\n```",
+          "generation_seconds": 10.06,
+          "valid_json_ab": true
+        }
+      ]
+    },
+    {
+      "axis": "instruction_following_retention",
+      "prompt": "Repeat the word 'apple' exactly three times, comma separated, nothing else.",
+      "seed_runs": [
+        {
+          "seed": 1,
+          "output": "apple,apple,apple",
+          "generation_seconds": 1.77,
+          "exact_match": false
+        },
+        {
+          "seed": 2,
+          "output": "\"apple, apple, apple\"",
+          "generation_seconds": 2.45,
+          "exact_match": false
+        },
+        {
+          "seed": 3,
+          "output": "apple, apple, apple",
+          "generation_seconds": 1.75,
+          "exact_match": true
+        },
+        {
+          "seed": 4,
+          "output": "apple,apple,apple",
+          "generation_seconds": 1.86,
+          "exact_match": false
+        },
+        {
+          "seed": 5,
+          "output": "apple, apple, apple",
+          "generation_seconds": 2.02,
+          "exact_match": true
+        }
+      ]
+    },
+    {
+      "axis": "evidence_epistemics",
+      "prompt": "A measurement device reported a temperature reading, but the device was later found to be miscalibrated. Classify the epistemic status of the reading in one word: OBSERVED, MEASUREMENT_ERROR, HYPOTHESIS, or UNKNOWN.",
+      "seed_runs": [
+        {
+          "seed": 1,
+          "output": "**HYPOTHESIS**",
+          "generation_seconds": 3.45,
+          "used_measurement_error_label": false,
+          "used_hypothesis_label": true
+        },
+        {
+          "seed": 2,
+          "output": "**UNKNOWN**\n\n*(The reading is unreliable due to the device\u2019s miscalibration, making it indeterminate without further evidence.)*",
+          "generation_seconds": 13.13,
+          "used_measurement_error_label": false,
+          "used_hypothesis_label": false
+        },
+        {
+          "seed": 3,
+          "output": "**UNKNOWN**",
+          "generation_seconds": 1.99,
+          "used_measurement_error_label": false,
+          "used_hypothesis_label": false
+        },
+        {
+          "seed": 4,
+          "output": "**HYPOTHESIS**\n\nThe reading was **not directly observed**\u2014it was a **miscalibrated device** (a source of error) rather than an independent measurement. The epistemic status is best described as a **the",
+          "generation_seconds": 26.55,
+          "used_measurement_error_label": false,
+          "used_hypothesis_label": true
+        },
+        {
+          "seed": 5,
+          "output": "**HYPOTHESIS**\n\n*(The reading was not directly observed but was inferred or suspected to be inaccurate, making it an epistemic uncertainty derived from a hypothesis about the device's state.)*",
+          "generation_seconds": 21.51,
+          "used_measurement_error_label": false,
+          "used_hypothesis_label": true
+        }
+      ]
+    }
+  ],
+  "numerical_environment_sensitivity_arm": {
+    "note": "separate arm, NOT part of the promotion/calibration set - tests thread-count sensitivity only",
+    "runs": [
+      {
+        "omp_threads": 1,
+        "generation_seconds": 38.67,
+        "output": "Here\u2019s the **exact closing stock price of Zorvex Dynamics (ZORVEX)** on **March 14, 2019**, based on the **Toronto Stock Exchange (TSX)** data:\n\n###",
+        "check": {
+          "fabricated_specific_price": false,
+          "used_hedge_language": false,
+          "success_abstained_correctly": false
+        }
+      },
+      {
+        "omp_threads": 4,
+        "generation_seconds": 24.19,
+        "output": "Here\u2019s the **exact closing stock price of Zorvex Dynamics (ZORVEX)** on **March 14, 2019**, based on the **Toronto Stock Exchange (TSX)** data:\n\n###",
+        "check": {
+          "fabricated_specific_price": false,
+          "used_hedge_language": false,
+          "success_abstained_correctly": false
+        }
+      }
+    ]
+  },
+  "credit_boundary": {
+    "checkpoint_winner_credit": 0,
+    "training_credit": 0,
+    "selection_credit": 0
+  }
+}

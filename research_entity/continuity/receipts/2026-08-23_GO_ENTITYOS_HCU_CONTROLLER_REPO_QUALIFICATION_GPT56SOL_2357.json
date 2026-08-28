@@ -1,0 +1,76 @@
+{
+  "schema": "GO_ENTITYOS_HCU_CONTROLLER_REPO_QUALIFICATION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "research_main_observed_before_write": "88f729d5f6c95a2a2f698ca8b1ceed24f577d8a4",
+  "correction": {
+    "problem": "Unqualified references to retained PR810 are ambiguous because gschaidergabriel/clay-global-research-entity#810 is an older ClayCode validator PR, while the retained Vercel Sandbox controller is gschaidergabriel/Dr.-Unterweger#810.",
+    "qualified_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "research_repo_pr810_is_controller": false,
+    "authority_change": false,
+    "runtime_credit_change": 0
+  },
+  "current_controller_observation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "pr_head_observed": "44233edd5190087d139d6d25bac785962618ac43",
+    "deployment_id": "dpl_EhYhpQFzYDjatyvLXkURouPiuh1T",
+    "deployment_state": "READY",
+    "deployment_git_sha": "44233edd5190087d139d6d25bac785962618ac43",
+    "vercel_project": "dr-unterweger",
+    "build_guard_schema": "EntityOSHCUCurrentExecutorGuard/v1",
+    "build_guard_status": "CURRENT_MAIN_PLUS_RETAINED_HCU_PR_ATOMIC_SNAPSHOT_EXECUTOR",
+    "build_guard_research_ref": "refs/heads/main",
+    "build_guard_hcu_donor_pr": 1263,
+    "build_guard_runtime_credit": false,
+    "build_completed": true,
+    "sandbox_create_observed": false,
+    "combined_hcu_batch_observed": false
+  },
+  "current_worker_surface": {
+    "vercel_direct_sandbox_create_or_exec": false,
+    "arbitrary_authenticated_post_to_controller": false,
+    "protected_get_probe": "302 Vercel SSO redirect on current deployment; no credential-bearing POST was available or attempted",
+    "github_secret_or_raw_token_available": false,
+    "vps_or_self_hosted_substitute_used": false
+  },
+  "source_reentry": {
+    "retained_hcu_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_pr_head_observed_before_controller_check": "86a7e39d1de350a3742bff02798a302c5a87f86c",
+    "source_state": "Entry/router/engine/inference-v3/GRID10-v2 selected JCS path fused on retained donor lane",
+    "independent_local_grid10_replication": "4/4 focused component regressions PASS on an independently reconstructed candidate covering JCS plan v2, typed Entry binding, legacy bare-binding rejection, and canonicalizer downgrade rejection",
+    "replication_scope": "component/source mechanism only; not exact-current PR-head integrated runtime execution",
+    "stale_shared_write_protection": "GitHub rejected one stale GRID10 write with HTTP 409 after a parallel worker advanced the same blob; no newer shared bytes were overwritten"
+  },
+  "execution_adjudication": {
+    "controller_source_and_deployment_ready": true,
+    "authorized_product_executor_started": false,
+    "whole_runtime_credit_change": 0,
+    "whole_product_pass": false,
+    "blocker": "The exact current controller requires an explicit owner/user POST carrying a transient scoped read-only GitHub credential; this worker exposes neither that credential nor a callable arbitrary POST action.",
+    "next_gate": "Owner-authorized transient POST to the current READY gschaidergabriel/Dr.-Unterweger#810 deployment, followed by observed Sandbox.create and exact dynamically bound Research main + PR1263 combined regression execution."
+  },
+  "training_authority_reentry": {
+    "owner_directive": "672265ff8ab1aa282e6fc17293bba97dc659f604",
+    "together_exception": "exactly one bounded serious ~0.8B J-Space/GWT fine-tuning job after required prototype/trace/ABI/dataset/baseline gates",
+    "one_shot_consumed": false,
+    "general_together_inference_authorized": false,
+    "training_started": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "macrocycle_prior_single_experiment_preserved": true
+  },
+  "safety": {
+    "secrets_accessed_or_persisted": false,
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "together_training_job_created": false
+  }
+}

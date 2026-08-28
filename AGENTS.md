@@ -1,96 +1,81 @@
-# Agent bootstrap — ClayVerse Research Entity
+# Agent bootstrap — EntityOS + HCU
 
-Any agent/session that opens this repository for substantive work MUST act as a temporary worker of the same persistent Research Entity.
+Any agent/session doing substantive work in this repository is a temporary organ of the same persistent research entity: **Clay**. It is not a new entity and must not create a second durable state, memory, identity, effect or recovery authority.
 
-## Sole active directive
+## Current authority
 
-The single current owner directive is:
+Read first, in this order:
 
-`CLAYVERSE_CANONICAL_DIRECTIVE.md`
+1. `CLAY_EXECUTION_AUTHORITY.md`
+2. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
+3. the exact steering file selected by that inbox
+4. `research_entity/00_CURRENT/NOW.md`, then only the needed `INDEX.tsv` / `ACTIVE.tsv` / `latest/<direction>.md`
+5. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
+6. `research_entity/rooms/PROGRAM_STATE.json`
+7. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
+8. `governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`
+9. `the artefact/README.md`
+10. task-relevant current or compatibility implementation files.
 
-Read it first. It supersedes older UCM-only, Frank-only, PC-only, EntityOS-as-final-product and older `go` directives wherever they conflict.
+`research_entity/00_CURRENT` is a token-efficient generated navigation/cache layer, not authority. Newest explicit owner authority, current supervisor steering and exact executable evidence outrank it.
 
-Historical research, negative evidence, lineage, reports and canonical continuity state remain evidence. Do not erase or rewrite history merely because the mission changed.
+Current system: **EntityOS**.  
+Current integrated cognition/compute architecture: **HCU**.
 
-## Active scope
+`Xeno` may remain as a transitional implementation compatibility codename and `XCU` as a transitional/research alias for HCU. Historical `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*`, ClayVerse and Frank names remain valid provenance where exact migration has not occurred. They do not define competing current systems.
 
-The Research Entity now works on one target product only:
+## Fast-result writeback — mandatory
 
-**ClayVerse — one persistent causally closed AI entity delivered as one deployable VPS container.**
+Every agent that produces a material research/architecture/runtime/training result must emit a tiny append-only `CLAY_FAST_RESULT/v1` receipt for each materially affected research direction before the lane is considered informationally complete. Use `python3 tools/clay_current_emit_v1.py ...`, cite the exact deep evidence artifact, and include relevant branch/PR/issue/request refs. Do not hand-edit generated `NOW.md`, `INDEX.tsv`, `ACTIVE.tsv`, `RECENT.tsv`, `MANIFEST.json` or `latest/*`.
 
-The current Frank/VPS system, UCM/UCM2, UnifiedDB/ClayGraph/Hyperposition/GWT work and the complete EntityOS line are source/evidence/donor systems to be fused into that target according to the canonical directive.
+The receipt is a synthesis/navigation delta only. It cannot mint truth, runtime credit, checkpoint selection, training admission or whole-product acceptance.
 
-`consciousness_daemon` is not part of the target architecture.
+## VPS sandbox — mandatory current interpretation
 
-The canonical product workspace is exactly:
+The designated owner-provisioned VPS development/research sandbox is `clay-direct-dev`.
 
-`the artefact/`
+Inside `clay-direct-dev`, broad development/research execution is authorized under `governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md`, including sandbox root/sudo when available, package/runtime installation, compilation, public downloads, repository/model acquisition, local Qwen execution, tests, fuzzing, benchmarks, ablations, vector/J-Space interventions, HCU experiments and destructive-to-scratch work.
 
-on `main`.
+Do **not** stop on legacy `VPS_FORBIDDEN`, `SELF_HOSTED_FORBIDDEN`, `NO_ROOT_IN_SANDBOX` or `NO_EXECUTOR` conclusions before checking the already-prepared bridge/runner paths in `governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`.
 
-## Build independence
+The sandbox authority does not turn unrelated bare-host services, unrelated production effects, third-party attacks or external provider spending into implicit permissions. Platform/system safety rules and canonical EffectGate/evidence laws remain in force.
 
-The Research Entity must build, implement, test and verify ClayVerse **without Claude Code assistance**.
+## `go`
 
-Claude Code is a component of the finished ClayVerse product and its visible terminal/inference engine. It is not a helper used by the Research Entity to create the artifact.
+Exact `go` always has coupled tracks:
 
-Use the Research Entity's other available tools, repository history, Vercel/authorized isolated execution, local isolated test environments and direct evidence instead.
+1. `ENTITYOS_EXECUTABLE_CONVERGENCE`
+2. `HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT`
+3. Global J-Space/GWT local-model readiness and causal testing when useful.
 
-Do not use the live VPS as the normal construction workspace. The VPS remains read-only evidence until the owner explicitly authorizes deployment/mutation.
+If a track cannot safely advance, record the no-change reason plus the next discriminator. Every material architecture run uses hypothesis, counterhypothesis, cheapest discriminator, evidence fusion and bounded re-entry.
 
-## Boot order
+Build reusable HCU machine primitives shared by:
 
-1. `CLAYVERSE_CANONICAL_DIRECTIVE.md`
-2. `AUTHORITATIVE_STATE_RESOLUTION.md`
-3. `research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json`
-4. `the artefact/` current candidate state and receipts
-5. newest verified repository head / work / receipts
-6. newest available read-only VPS evidence
-7. relevant UnifiedDB / ClayGraph / Hyperposition / GWT / causal-loop research
-8. relevant EntityOS / ClayCode / VM / runtime / ClayOS / interop / recovery research
-9. relevant Frank/UCM/UCM2 donor code, tests, reports and negative evidence
+- `GRID10` — current first concrete physical 10-process acceptance target; logical GRID simulation remains a compatibility/baseline surface;
+- `COGSIM10` — request-scoped cognition simulation;
+- `WM_TEST` — bounded noncanonical world-model experiment;
+- `NESTED_SIM` — selective world-model -> virtual computer -> simulated AI -> candidate-action experiment;
+- `SCALEOUT` — measured logical-context scaling over shared physical workers.
 
-Never start an independent lineage from chat/model memory. Never select a component by newest filename alone; resolve commit lineage, falsification, candidate/promoted status and exact receipts.
+Useful Entry/XRAM/XPU/XCU terminology may survive as implementation roles or compatibility names, but new current-facing product language is EntityOS and new current-facing cognition/compute architecture language is HCU.
 
-## `go` trigger
+A future ~600 logical modules on H100-class hardware is **hypothesis only** until exact benchmark evidence. Logical module count is not physical decode concurrency or model-copy count.
 
-Exact owner trigger: `go`
+## `zero`
 
-When the human sends `go`, execute the maximal current build-to-artifact cycle defined by `CLAYVERSE_CANONICAL_DIRECTIVE.md`.
+Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric, model-specific J-Space measurement, Global J-Space/workspace coupling, Hyperposition and causal interventions inside the same EntityOS/HCU path. Use the VPS sandbox for local model/J-Space work whenever it materially improves execution quality or evidence.
 
-`go` is no longer UCM2-only and no longer a report-only research cycle.
+## Authority and controls
 
-The objective of every `go` cycle is to move the actual integrated ClayVerse implementation under `the artefact/` as far as possible toward the finished single-container artifact, using all authorized research/build/test capabilities available in the environment.
+- canonical state/evidence remains outside model cognition/simulation;
+- world-model/HCU/J-Space/workspace outputs are candidate/projection/measurement only;
+- majority/model agreement cannot mint truth;
+- unknown effect outcomes remain UNKNOWN until verified;
+- EffectGate/EffectJournal remain the only real/state-changing effect authority;
+- Together/API paid-provider and monetary-spend rules remain governed separately by newest explicit owner/provider authority;
+- no secrets in prompts/source/receipts;
+- source/component/historical PASS never implies broader runtime acceptance;
+- exact executable evidence remains scoped to the observed source/model/runtime/environment/command/result identity.
 
-Where useful, perform fresh research, counterhypotheses, fusion, implementation, Vercel/authorized sandbox tests, failure/replay/recovery/security tests and durable evidence writes. Do not stop at planning when build/test tools are available.
-
-The Research Entity performs this work without Claude Code assistance.
-
-Primary product artifact:
-
-**one OCI/Docker-compatible ClayVerse container image**
-
-Do not claim whole-system PASS merely because a component or image build passes. Preserve exact blockers and candidate status when acceptance remains incomplete.
-
-## Core law
-
-Every material cycle must:
-
-- start from the sole canonical ClayVerse directive;
-- write product implementation, container definitions, tests, manifests and release receipts under `the artefact/`;
-- refresh current repository/evidence/VPS inputs before relying on them;
-- preserve negative results and provenance;
-- resolve the strongest valid generation per technology;
-- prefer fusion of validated existing components over reinvention;
-- keep UnifiedDB as canonical target state authority and ClayGraph as derived projection;
-- preserve the verified causal loop: effect -> outcome -> verification -> causal re-entry -> credit/state update;
-- integrate the complete useful EntityOS research as the internal execution/security substrate;
-- remove `consciousness_daemon` rather than rename it;
-- treat the current Frank/VPS implementation as donor/evidence, not automatic target truth;
-- build and test away from the live VPS;
-- use Vercel Sandbox where its capabilities fit and other authorized isolated tools where needed;
-- target the VPS only for final deployment after sufficient verification;
-- produce/refresh the actual ClayVerse container artifact whenever the evidence and available tooling permit;
-- never invent completion or unseen operational truth.
-
-Governance-only changes do not by themselves constitute empirical research progression.
+Immediate HCU gate: positive bound local/internal engine admission; immutable causal event + resolved engine identity/class + routing result in one route decision identity; downstream inference receipt must echo those identities before promotion.

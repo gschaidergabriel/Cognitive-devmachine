@@ -1,0 +1,97 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_GENERALIZATION_AXIS_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch_observed": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_before_write": "abd79a0f5a9fa5dbe6a891ab622fd1cba579df2a",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "unusual_experiment": "NOT_USED_STATIC_SOURCE_AND_DETERMINISTIC_BLUEPRINT_REVIEW_ONLY"
+  },
+  "audited_source": {
+    "path": "tools/trigger2_dynamic_binding_blueprint_v2.py",
+    "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_EPISODE_BLUEPRINT/v2.1",
+    "claimed_rows": 9072,
+    "observed_structure": {
+      "train_rows": 6912,
+      "validation_rows": 1728,
+      "holdout_rows": 432,
+      "train_symbol_ordinals": "00..11",
+      "validation_symbol_ordinals": "00..11",
+      "holdout_symbol_ordinals": "12..14",
+      "train_templates": 4,
+      "validation_template": "T5_BOOLEAN_XOR_VALIDATION",
+      "holdout_template": "T6_PARITY_HOLDOUT"
+    }
+  },
+  "independent_deterministic_review": {
+    "rows_reconstructed_from_source_logic": 9072,
+    "split_counts": {"TRAIN":6912,"VALIDATION":1728,"HOLDOUT_FROZEN":432},
+    "train_target_count_per_symbol": 576,
+    "train_shortcut_mi_bits": {
+      "class__target_symbol": 0.0,
+      "target_symbol__template": 0.0,
+      "target_symbol__codebook_order": 0.0,
+      "target_symbol__layout": 0.0,
+      "target_symbol__polarity": 0.0,
+      "mapping__codebook_order": 0.0,
+      "class__codebook_order": 0.0
+    },
+    "scope": "Independent deterministic reconstruction of the visible combinatorial generator logic only; not model/runtime/training evidence."
+  },
+  "swarm_findings": [
+    {
+      "role": "ADVERSARIAL_SHORTCUT_HUNTER",
+      "severity": "HIGH_BEFORE_GENERALIZATION_CLAIM",
+      "id": "JOINT_HOLDOUT_FACTOR_CONFOUND",
+      "finding": "The frozen holdout changes both template family and symbol pool relative to training. A holdout failure cannot identify whether unseen-template transfer, unseen-symbol transfer, or their interaction failed."
+    },
+    {
+      "role": "PROVENANCE_AND_SPLIT_REVIEWER",
+      "severity": "HIGH_CONTRACT_TENSION",
+      "id": "VALIDATION_SYMBOL_POOL_POLICY_CONFLICT",
+      "finding": "v2.1 explicitly asserts train_syms == val_syms, while the Trigger-2 checkpoint/split hardening requires immutable mutually disjoint TRAIN_ATOMS, VALIDATION_ATOMS, HOLDOUT_ATOMS and a final reserve after checkpoint-local atom admission. This research-level policy tension must be preregistered rather than silently averaged."
+    },
+    {
+      "role": "STATISTICAL_REVIEWER",
+      "severity": "MEDIUM",
+      "id": "ZERO_MI_DOES_NOT_CLOSE_GENERALIZATION_CAUSALITY",
+      "finding": "Zero marginal MI for the audited nuisance axes is a strong anti-shortcut property, but it does not separate the two held-out generalization factors when both change together."
+    }
+  ],
+  "repair_design": {
+    "principle": "Orthogonalize semantic/template generalization from symbol-identity generalization before final joint acceptance.",
+    "minimum_2x2_evaluation_matrix": [
+      {"cell":"SEEN_TEMPLATE__SEEN_SYMBOL","purpose":"in-distribution binding floor"},
+      {"cell":"UNSEEN_TEMPLATE__SEEN_SYMBOL","purpose":"isolates template/context transfer"},
+      {"cell":"SEEN_TEMPLATE__UNSEEN_SYMBOL","purpose":"isolates symbol-identity transfer"},
+      {"cell":"UNSEEN_TEMPLATE__UNSEEN_SYMBOL","purpose":"sealed joint generalization acceptance"}
+    ],
+    "selection_rule": "Use calibration/validation cells only for model/mixture selection; keep the joint unseen-template+unseen-symbol cell sealed until all choices are frozen.",
+    "atom_rule": "Exact pool sizes remain conditional on checkpoint-local atom admission. Do not reuse the gabliterated snapshot's hidden-state ABI as selected-checkpoint fact.",
+    "diagnostic_rule": "Report all four cells separately; do not compress them into one average that can hide a template-only or symbol-only failure."
+  },
+  "training_example_implication": {
+    "stage_A_binding_isolation": "Keep the fully factorial S3/codebook-order/layout/polarity curriculum.",
+    "stage_B_architecture_grounding": "Apply the same mapping operator to Xeno/HCU protocol semantics only after Stage A is diagnostically separable.",
+    "hard_negative": "A model that succeeds on seen symbols but fails unseen symbols has not demonstrated symbol-identity-invariant binding; a model that succeeds on seen templates but fails unseen templates has not demonstrated context-invariant binding.",
+    "retention": "Preserve semantic-read, symbol-write and carrier-binding functions already measured at the donor snapshot; re-establish them at the selected checkpoint before positive ABI/J-Space credit."
+  },
+  "credit_boundary": {
+    "blueprint_source_design_progress": true,
+    "validated_dataset": false,
+    "accepted_dataset_tokens_minted": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Revise the retained Trigger-2 blueprint/split manifest so unseen-template and unseen-symbol transfer are measured as separate preregistered factors plus a final sealed joint cell; then rerun the existing factorial MI/leak checks and current cross-split guard before any dataset admission."
+}

@@ -1,0 +1,127 @@
+name: GO877 collective metrics freshness gate (manual retry only)
+
+# The historical source-repair carrier is retained for reproducibility, but it
+# must not be fanned out by repeated [CLAY-DISPATCH] issue creation. A future
+# runtime retry requires an explicit semantic dispatch generation/claim under
+# research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md before
+# this donor workflow is deliberately re-admitted.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: go877-collective-metrics-freshness
+  cancel-in-progress: false
+
+jobs:
+  freshness:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Execute exact-source freshness repair inside clay-direct-dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          scratch="/tmp/clay-go877-metrics-${GITHUB_RUN_ID}"
+          host_tmp="/tmp/clay-go877-host-${GITHUB_RUN_ID}"
+          rm -rf "$host_tmp"
+          mkdir -p "$host_tmp"
+
+          runtime=''
+          prefix=()
+          if command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='docker'; prefix=(docker)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='sudo-docker'; prefix=(sudo -n docker)
+          elif command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='podman'; prefix=(podman)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='sudo-podman'; prefix=(sudo -n podman)
+          else
+            echo 'clay-direct-dev not reachable through docker/podman' >&2
+            exit 41
+          fi
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'; mkdir -p '$scratch'"
+          "${prefix[@]}" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$scratch"
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "set -eu; cd '$scratch'; df -Pk . | tail -n 1; python3 --version; python3 tools/apply_go877_collective_metrics_freshness.py --repo .; python3 tests/test_go_collective_metrics_v1.py > /tmp/go877-tests.txt 2>&1; mkdir -p /tmp/go877-empty-artifacts; python3 'free swarm/go_collective_metrics.py' --repo . --artifacts /tmp/go877-empty-artifacts > /tmp/go877-publisher.txt 2>&1"
+
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/free swarm/collective_metrics_freshness.py" "$GITHUB_WORKSPACE/free swarm/collective_metrics_freshness.py"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/free swarm/go_collective_metrics.py" "$GITHUB_WORKSPACE/free swarm/go_collective_metrics.py"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/tests/test_go_collective_metrics_v1.py" "$GITHUB_WORKSPACE/tests/test_go_collective_metrics_v1.py"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/free swarm/GO_COLLECTIVE_METRICS.json" "$GITHUB_WORKSPACE/free swarm/GO_COLLECTIVE_METRICS.json"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/free swarm/GO_COLLECTIVE_METRICS.md" "$GITHUB_WORKSPACE/free swarm/GO_COLLECTIVE_METRICS.md"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/free swarm/COLLECTIVE_METRICS_FRESHNESS_RECEIPT.json" "$GITHUB_WORKSPACE/free swarm/COLLECTIVE_METRICS_FRESHNESS_RECEIPT.json"
+          "${prefix[@]}" cp clay-direct-dev:/tmp/go877-tests.txt "$host_tmp/tests.txt"
+          "${prefix[@]}" cp clay-direct-dev:/tmp/go877-publisher.txt "$host_tmp/publisher.txt"
+
+          python3 - "$runtime" "$host_tmp" <<'PY'
+          import hashlib, json, os, pathlib, sys
+          from datetime import datetime, timezone
+          runtime=sys.argv[1]
+          host_tmp=pathlib.Path(sys.argv[2])
+          ws=pathlib.Path(os.environ['GITHUB_WORKSPACE'])
+          receipt=json.loads((ws/'free swarm/COLLECTIVE_METRICS_FRESHNESS_RECEIPT.json').read_text())
+          aggregate=json.loads((ws/'free swarm/GO_COLLECTIVE_METRICS.json').read_text())
+          def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+          out={
+            'schema':'GO877_COLLECTIVE_METRICS_FRESHNESS_RUNTIME/v1',
+            'generated_at':datetime.now(timezone.utc).isoformat(),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+            'github_sha_checked_out':os.environ.get('GITHUB_SHA'),
+            'sandbox':'clay-direct-dev',
+            'container_runtime':runtime,
+            'tests_output':(host_tmp/'tests.txt').read_text(errors='replace'),
+            'publisher_output':(host_tmp/'publisher.txt').read_text(errors='replace'),
+            'freshness_receipt':receipt,
+            'aggregate_authority_epoch':aggregate.get('authority_epoch'),
+            'aggregate_snapshot_id':(aggregate.get('source_snapshot') or {}).get('snapshot_id'),
+            'aggregate_measurement_freshness':(aggregate.get('aggregate') or {}).get('measurement_freshness'),
+            'collector_sha256':sha(ws/'free swarm/go_collective_metrics.py'),
+            'freshness_helper_sha256':sha(ws/'free swarm/collective_metrics_freshness.py'),
+            'tests_sha256':sha(ws/'tests/test_go_collective_metrics_v1.py'),
+            'external_provider_calls_performed_by_gate':False,
+            'secrets_recorded':False,
+            'runtime_credit_added':0,
+            'scope':'freshness/publication component regression and exact bounded source snapshot only',
+          }
+          target=ws/'research_entity/runtime/tool_results'/f"go877-collective-metrics-freshness-{os.environ['GITHUB_RUN_ID']}.json"
+          target.parent.mkdir(parents=True,exist_ok=True)
+          target.write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          PY
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch' /tmp/go877-empty-artifacts /tmp/go877-tests.txt /tmp/go877-publisher.txt"
+          rm -rf "$host_tmp"
+
+      - name: Persist exact tested delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git config user.name 'clay-go877-freshness-runner'
+          git config user.email 'clay-go877-freshness-runner@users.noreply.github.com'
+          git add \
+            'free swarm/collective_metrics_freshness.py' \
+            'free swarm/go_collective_metrics.py' \
+            'free swarm/GO_COLLECTIVE_METRICS.json' \
+            'free swarm/GO_COLLECTIVE_METRICS.md' \
+            'free swarm/COLLECTIVE_METRICS_FRESHNESS_RECEIPT.json' \
+            'tests/test_go_collective_metrics_v1.py' \
+            research_entity/runtime/tool_results/
+          git commit -m "metrics: execute go877 freshness gate ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

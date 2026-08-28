@@ -1,0 +1,53 @@
+{
+  "schema": "GO_RECURSIVE_PHYSICAL_SCALING_BRIDGE_RECEIPT/v2",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "target_authority": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+  "scope": "GO_ARCHITECTURE_ONLY_NOT_TRIGGER2_TRAINING",
+  "observed_main_before_work": "4dd4c64d0601cd1d3e88b84ccd5a0519a1b98770",
+  "observed_supervisor": "8.91",
+  "finding": "The v1 recursive bridge required physical_packet_evidence and coordinator_consumed_packet_digests fields that the current fused physical GRID10 executable does not emit. The actual fused receipt already binds the exact ten packet digests twice: cohort_manifest.members[].packet_digest records the simultaneously-live physical cohort, and receipt.packet_digests records the exact set consumed by the atomic coordinator fan-in. Requiring nonexistent duplicate fields would block the shortest architecture path and encourage evidence duplication.",
+  "delta": {
+    "bridge_v2": {
+      "path": "tools/xeno_recursive_physical_scaling_bridge_acceptance_v2.py",
+      "commit": "8a3f89e2a1ecf7cfde25ee787c55f22d3a854c57"
+    },
+    "tests": {
+      "path": "tests/test_xeno_recursive_physical_scaling_bridge_acceptance_v2.py",
+      "commit": "70e29b4adfe9dbc9e5c34fc1bfa754ebef7141e8"
+    },
+    "execution_request": {
+      "path": "research_entity/execution_requests/2026-08-26_GO_GRID10_RECURSIVE_BRIDGE_V2_PIN_70E29B4_GPT56SOL_1247P0700.json",
+      "commit": "87a185bb1ae576ea8353ff659dc172f3e4b2758e"
+    }
+  },
+  "new_invariants": [
+    "bridge accepts only a PASS XENO_PHYSICAL_GRID10_FUSED_ACCEPTANCE/v1 receipt",
+    "all required same-cohort physical tests must themselves be true",
+    "exactly ten unique simultaneously-live physical PIDs are required",
+    "cohort manifest packet digests must exactly equal coordinator-consumed packet digests",
+    "ordinary-node S1 write authority remains false and coordinator-only S1 write remains true",
+    "coordinator receipt may not mint canonical truth or effect authority",
+    "recursive coordinator fan-in remains bounded and invalid lease fails closed",
+    "bridge v2 intentionally does not manufacture compression/latency/contention measurements"
+  ],
+  "negative_tests_added": [
+    "ordinary-node nonwriting physical test false",
+    "tampered physical manifest packet set",
+    "duplicate physical packet digest",
+    "coordinator canonical-truth escalation",
+    "coordinator effect-authority escalation",
+    "authority-boundary worker-write escalation",
+    "invalid recursive coordinator lease"
+  ],
+  "epistemic_boundary": "Source, tests and an exact non-provider execution request are now present on main. This automation turn did not obtain a clean repository-bound execution receipt, so no physical GRID10, recursive-scale runtime or whole-HCU credit is minted.",
+  "credit_change": {
+    "source_progress": true,
+    "runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "recursive_scale_runtime_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Run the pinned 70e29b4 detached checkout: bridge tests -> fused physical GRID10 -> bridge v2 against that exact JSON. On PASS, instrument the same process fabric for real NODE_RESULT bytes, coordinator-summary bytes, fan-in latency, S1 commit latency, contention, coordinator crash/replacement and worker rejoin before any N>10 scaling claim."
+}

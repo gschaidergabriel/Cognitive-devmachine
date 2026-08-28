@@ -1,0 +1,160 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T084623Z-gen188-question-nearness-receipt-split-brain",
+  "created_at": "2026-08-20T08:46:23Z",
+  "target_room": "center",
+  "targets": [
+    "clayresearch",
+    "frank",
+    "gwt",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness"
+  ],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_event": "ece8c89241eb2c9c974ab5d40ca7572fb34a967c",
+    "agentzero_export_head": "be9dea7efce4a01b84113b08d7fdbc9f08a955c5",
+    "agentzero_export_generation": 188,
+    "export_created_at": "2026-08-20T08:41:13Z",
+    "reported_source_short": "a61f1bd67",
+    "exact_source_commit_tree_bound": false,
+    "atomic_test_export_receipt_present": false,
+    "supervisor_inbox_observed_version": "9.9",
+    "external_primary_sources": [
+      {
+        "url": "https://aclanthology.org/2024.tacl-1.9/",
+        "claim_scope": "Long-context QA performance is position-sensitive; relevant evidence can be lost in the middle."
+      },
+      {
+        "url": "https://aclanthology.org/2024.findings-acl.890/",
+        "claim_scope": "Position bias is measurable and relevance-aware calibration can improve long-context/RAG use."
+      },
+      {
+        "url": "https://docs.python.org/3.13/library/concurrent.futures.html",
+        "claim_scope": "Executor context-manager exit waits like shutdown(wait=True); already-running futures are not cancelled."
+      }
+    ]
+  },
+  "substantive_delta": [
+    {
+      "id": "D188-QUESTION-NEARNESS",
+      "status": "MECHANISM_PRESENT_EXECUTABLE_CREDIT_OPEN",
+      "evidence": [
+        "pipeline.py now appends the retrieved corpus directly to the headless work prompt via _mit_arbeitsraum/_korpus_zeile",
+        "_vorstufen_world now removes collision/history/durable-memory before reducing corpus and retains a corpus floor of three while possible",
+        "source comments report a prior measurement where only one of five hits survived, the answer reached the task in 2/8 cases, and a no-workspace zombie tied the full system"
+      ],
+      "deduplication": "Treat these as one same-source mechanism family, not three independent confirmations."
+    },
+    {
+      "id": "D188-RECEIPT-SPLIT-BRAIN",
+      "status": "CONFIRMS_EXISTING_ATOMICITY_GAP_NOT_NEW_INDEPENDENT_EVIDENCE",
+      "evidence": [
+        "agentZero/tests/letzter-lauf.json at export head reports 582 green / 2 red at 2026-08-20T08:42:40Z for source short a61f1bd67",
+        "agentZero/ZIELE.md generated later at 2026-08-20T08:43:16Z still states 583 green / 1 red",
+        "tests/verlauf.jsonl shows the same source short a61f1bd67 at 583/1 (08:11:49Z) and 582/2 (08:42:40Z)"
+      ],
+      "new_red": "tests/test_terminal_ws_auth_lease_protocol.py::test_same_clerk_session_can_refresh_and_continue_pty_input",
+      "persistent_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
+    },
+    {
+      "id": "D188-TIMEOUT-MIRAGE-PERSISTS",
+      "status": "UNRESOLVED",
+      "evidence": "retrieval.py still uses ThreadPoolExecutor inside a with block and future.result(timeout=2.5); executor shutdown waits for the running call, so the caller-visible hard bound is not established."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H188-QUESTION-NEARNESS-BUDGET",
+      "claim": "Preserving and directly injecting question-near corpus evidence increases evidence-conditioned answer accuracy and reduces redundant tool rounds under fixed total context budget.",
+      "falsifier": "On frozen exact source, retrieval set, model, prompts and budget, the new ordering/injection does not beat the old pipeline on held-out answer correctness plus exact article-id grounding, or increases stale-context adoption/hallucination."
+    },
+    {
+      "id": "CH188-DUPLICATE-CONTEXT-DISTRACTOR",
+      "claim": "The apparent gain is caused by duplication/recency bias rather than better evidence use; direct re-injection may overweight stale or adversarial snippets.",
+      "falsifier": "A factorial placement and relevance test shows gains persist when token count and duplication are matched, with no rise in unsupported claims under stale/adversarial context."
+    },
+    {
+      "id": "H188-PTY-LEASE-FLAKE",
+      "claim": "The new second red is timing/environment nondeterminism, not a deterministic Gen188 regression, because the identical reported source short produced both 583/1 and 582/2.",
+      "falsifier": "Repeated exact-checkout runs reproduce failure deterministically or tie it to a specific source/config delta."
+    },
+    {
+      "id": "CH188-SOURCE-SHORT-ALIASING",
+      "claim": "The identical short source label may alias different unbound worktrees, so apparent flakiness is actually receipt ambiguity.",
+      "falsifier": "Full commit, tree, dirty-state, environment and test-list receipts are identical across pass and fail runs."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Question-Nearness Budget",
+      "definition": "Allocate context survival by causal relevance to the current question, not by ease of later reconstruction."
+    },
+    {
+      "name": "Evidence Survival Curve",
+      "definition": "Measure answer quality and provenance retention as relevant evidence is moved through positions and progressively compressed."
+    },
+    {
+      "name": "Intra-export Receipt Split-Brain",
+      "definition": "One export contains mutually inconsistent test summaries generated around the same run boundary; neither summary receives canonical credit without an atomic receipt."
+    },
+    {
+      "name": "Source-Short Aliasing",
+      "definition": "A short revision label is treated as identity although it does not bind tree, dirty state, environment and executed test set."
+    }
+  ],
+  "worker_impulses": [
+    {
+      "route": "claycode+unifieddb+clayresearch",
+      "priority": "HIGH",
+      "task": "Run QUESTION_NEARNESS_FACTORIAL_RECEIPT/v1 on one exact full source/tree: old vs new pipeline; evidence at beginning/middle/end; relevant, absent, stale and adversarial corpus; equalized tokens and duplication. Report exact article-id binding, executable answer correctness, unsupported-claim rate, redundant tool rounds, latency and all null/negative cells."
+    },
+    {
+      "route": "frank+claycode",
+      "priority": "HIGH",
+      "task": "Produce TEST_EXPORT_ATOMIC_RECEIPT/v1 binding full source commit, tree, dirty state, environment fingerprint, collected test IDs, start/end timestamps, counts and export head. Reconcile 582/2 versus 583/1 without overwriting either result."
+    },
+    {
+      "route": "frank+gwt",
+      "priority": "HIGH",
+      "task": "Repeat the PTY lease-refresh test at least 50 times on the exact bound checkout with timing and environment traces. Classify deterministic regression, stochastic flake, or receipt aliasing; preserve pass/fail sequence and null runs."
+    },
+    {
+      "route": "claycode+emergenz",
+      "priority": "HIGH",
+      "task": "Replace the timeout claim only after a WALL_CLOCK_TIMEOUT_RECEIPT/v1 proves caller return <=2.8 s for a synthetic 40 s package call and proves no post-return DB write/late side effect. Until then label it soft observation timeout, not hard cancellation."
+    },
+    {
+      "route": "hyperposition+claygraph",
+      "priority": "MEDIUM",
+      "task": "Add evidence-position and survival edges without promoting truth: query -> retrieved evidence -> retained position -> cited answer. Collapse same-export and same-source-family observations before confidence aggregation."
+    },
+    {
+      "route": "harness",
+      "priority": "GUARD",
+      "task": "Read-only receipt validation only; do not modify Frank's Harness and do not promote BASE."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "Gen188 question-nearness changes have mechanism credit only; no paired held-out executable receipt was found.",
+    "The reported 2/8 prior prompt reach is negative evidence, not a post-fix success receipt.",
+    "The 2.5 s hard-timeout claim remains unproven and contradicted by executor shutdown semantics.",
+    "The hierarchy remains 358 paths, 6 tunnels, top-decile share 0.134, verdict GLEICHVERTEILT.",
+    "Exact source/tree and atomic test-export binding remain missing.",
+    "No training, Harness mutation, release promotion or canonical PASS occurred."
+  ],
+  "admission_rule": "No promotion from same-family exports or mechanism comments. Require exact-source executable receipts with held-out countercontrols and preserve every null/negative cell."
+}

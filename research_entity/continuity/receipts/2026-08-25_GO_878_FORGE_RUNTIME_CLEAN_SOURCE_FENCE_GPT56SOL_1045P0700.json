@@ -1,0 +1,112 @@
+{
+  "schema": "CLAY_GO_878_FORGE_RUNTIME_CLEAN_SOURCE_FENCE_RECEIPT/v1",
+  "generated_at": "2026-08-25T03:45:00Z",
+  "authority_epoch": "8.78",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "canonical_main_reentered_before_receipt": "ecd9f1f8ca250047959144e3da571c3811369bbc",
+  "authority_basis": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "program_state": "research_entity/rooms/PROGRAM_STATE.json",
+    "owner_sandbox_authority": "governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+    "bootstrap_role": "FAST_CACHE_ONLY_NOT_CANONICAL"
+  },
+  "vps_health_gate": {
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "existing_probe_workflow": ".github/workflows/frank-self-hosted-probe.yml",
+    "existing_probe_run_id": 32803694800,
+    "observed_status_this_macrocycle": "queued",
+    "observed_conclusion": null,
+    "terminal_clay_direct_dev_roundtrip_observed": false,
+    "new_self_hosted_dispatch_created_by_this_organ": false,
+    "classification": "TRANSPORT_OR_SCHEDULING_HEALTH_NOT_POSITIVELY_PROVEN; CLAY_DIRECT_DEV_INTERNAL_FAILURE_NOT_ESTABLISHED"
+  },
+  "observation": {
+    "active_backlog_first_forge_wiring_already_on_main": true,
+    "duplicate_wiring_patch_avoided": true,
+    "defect": "The active backlog-first Forge runtime status bound source_commit/source_tree and an entrypoint SHA but did not prove that tracked runtime bytes matched the named canonical tree. A dirty tracked dependency could therefore execute while the LIVE status still named canonical HEAD/tree.",
+    "evidence_scope": "SOURCE_AND_RUNTIME_IDENTITY_CONTRACT_INSPECTION"
+  },
+  "hypothesis": "Exact-source runtime promotion must fail closed whenever tracked worktree bytes differ from the claimed canonical HEAD/tree, even if the entrypoint itself still matches HEAD.",
+  "counterhypothesis": "A downstream Forge status consumer may already enforce clean tracked-source identity and make an entrypoint-level fence redundant.",
+  "counterhypothesis_result": "No such downstream cleanliness gate was found in the inspected current/open Forge runtime-identity path before the write; current main still carried the unfenced source-identity implementation immediately before direct fusion.",
+  "delta": {
+    "source_commit": "8d6a706c45e0032a0a40312882c05196101e5daf",
+    "test_definition_commit": "10ed0c3bbb4ae471d46ffe3a3c3108387e1c10b5",
+    "source_file": "tools/run_free_evidence_forge_backfill.py",
+    "test_file": "tests/test_free_forge_backfill_runtime_source_identity_878.py",
+    "source_behavior": [
+      "observe tracked git status with untracked files excluded",
+      "bind HEAD entrypoint blob to git hash-object of runtime entrypoint bytes",
+      "expose tracked_worktree_dirty",
+      "expose entrypoint_matches_source_tree",
+      "expose source_identity_admitted",
+      "expose exact source_identity_reason",
+      "keep research execution available while exact-source promotion eligibility fails closed on dirty tracked bytes"
+    ],
+    "regressions_defined": [
+      "clean tracked tree admits exact source identity",
+      "dirty entrypoint fails closed",
+      "dirty tracked dependency fails closed even when entrypoint itself matches HEAD"
+    ]
+  },
+  "coordination": {
+    "temporary_pr": 1908,
+    "temporary_pr_state": "CLOSED_SUPERSEDED_BY_DIRECT_CURRENT_MAIN_FUSION",
+    "second_implementation_lane_retained": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed": false,
+    "reason": "NO_SHARED_REPRODUCIBLE_IMMUTABLE_MACROCYCLE_OR_REQUEST_ID_AVAILABLE_FOR_CANONICAL_CREATE_ONLY_LEASE"
+  },
+  "verification": {
+    "source_reobserved_on_later_main": "ecd9f1f8ca250047959144e3da571c3811369bbc",
+    "source_blob_observed": "a7cdd69d14bb167fd7f34cde79b0e3d20e4d5ee5",
+    "test_blob_observed": "f81dcfd23329dec0557ae1522e464089457a9cda",
+    "semantic_test_execution_observed": false,
+    "pr_verify_run": 32806179539,
+    "pr_identity_guard_run": 32806181569,
+    "pr_jobs_visible_steps": null,
+    "ci_classification": "INFRASTRUCTURE_FAILURE_NO_SEMANTIC_TEST_RESULT",
+    "runtime_pass_claimed": false
+  },
+  "go_tracks": {
+    "track_a": {
+      "status": "ADVANCED",
+      "delta": "Closed a false exact-source runtime evidence path on the active backlog-first Forge LIVE status."
+    },
+    "track_b": {
+      "status": "ADVANCED",
+      "delta": "Strengthened reusable deterministic provenance binding from canonical Git tree to runtime process/status without introducing a second truth/effect/Forge authority."
+    },
+    "track_c": {
+      "status": "ADVANCED_AT_READINESS_BOUNDARY_ONLY",
+      "delta": "Prevents J-Space dataset/model/training readiness from inheriting a LIVE Forge status whose executed tracked bytes are not proven equal to the claimed canonical source tree."
+    }
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving current-facing shared surface and already contains concurrent GO 8.78 deltas; this organ did not replace the whole file from a partial read because doing so could clobber newer parallel work. The append-only receipt plus current PROGRAM_STATE/manifest preserve this delta without stale overwrite."
+  },
+  "execution_effects": {
+    "provider_model_calls": 0,
+    "paid_calls": 0,
+    "together_calls": 0,
+    "credentials_read_or_persisted": false,
+    "new_self_hosted_dispatches": 0,
+    "unusual_interventions": 0,
+    "training_runs": 0
+  },
+  "credit": {
+    "forge_clean_source_runtime_credit_added": 0,
+    "historical_backfill_runtime_credit_added": 0,
+    "distillery_replay_v2_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain one terminal clay-direct-dev roundtrip without duplicate dispatch, execute pytest -q tests/test_free_forge_backfill_runtime_source_identity_878.py on exact-current clean source, then execute the Supervisor-8.78 historical-backfill saturation and replay-v2 frozen-pre-v2/concurrent-reopen gates before one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0."
+}

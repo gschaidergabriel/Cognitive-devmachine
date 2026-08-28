@@ -1,0 +1,113 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RUNTIME_FIRST_REENTRY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "d22a5bff0c764aa38a857e61973d678dd8760ceb",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_64.json",
+    "runtime_first": true,
+    "source_guard_proliferation": "PAUSE_UNLESS_NEW_EXECUTABLE_COUNTEREVIDENCE_REQUIRES_A_GUARD",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_REENTRY_SOURCE_REVIEW_RUNTIME_OBSERVATION_AND_FUSION"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "head_sha_observed_after_parallel_repair": "2da99e0458809988190c129b04cae913d1f15d92",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_url": "dr-unterweger-kz6470afe-gabriel-gschaiders-projects.vercel.app",
+    "deployment_state_observed": "READY",
+    "deployment_git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "predecessor_executable_counterevidence": {
+      "head_sha": "4020096457e64034debb3d1394ee3c8cd2206729",
+      "deployment_id": "dpl_DoW8ACjFq3ZjBYRYMrPvJYN3HzFD",
+      "state": "ERROR",
+      "build_error": "ENTITYOS_HCU_FREE_ONLY_SANDBOX_ADMISSION_MISSING",
+      "cause": "exclusive executor guard still required supervisor-8.63 admission markers after free-only admission source had moved to supervisor 8.64"
+    },
+    "parallel_fusion": {
+      "duplicate_patch_created_by_this_organ": false,
+      "reason": "live PR head advanced to a parallel repair before write",
+      "repair_commit_message_observed": "fix(hcu): sync exclusive cost guard to supervisor 8.64",
+      "repair_build_result": "READY_AT_EXACT_HEAD"
+    },
+    "free_only_admission_at_exact_ready_head": {
+      "supervisor": "SUPERVISOR_STEERING_8_64",
+      "remaining_sandbox_quota_directly_observed": false,
+      "remaining_quota_assumption_forbidden": true,
+      "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+      "sandbox_execution_admitted": false,
+      "sandbox_create_authorized": false
+    },
+    "function_runtime_observation": {
+      "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+      "runtime_log_timestamp_utc": "2026-08-24T04:01:43Z",
+      "logged_request_path": "/api/sandbox-probe",
+      "http_status": 200,
+      "runtime_class": "serverless",
+      "source_classification": "FUNCTION_RUNTIME_DIAGNOSTIC_ONLY",
+      "reason": "exact source has a pre-Sandbox runtime-admission case returning 200; selftest/family cases are downstream of the statically false sandbox admission",
+      "query_string_observed_in_runtime_log": false,
+      "sandbox_execution_credit": 0,
+      "environment_python_sqlite_probe_credit": 0
+    }
+  },
+  "external_provider_research": {
+    "classification": "SOURCE_DIRECT_FOR_UI_MECHANISM_NOT_ACCOUNT_USAGE_VALUE",
+    "official_usage_page_claim": "Vercel documents that the team Usage tab shows included allotments and consumed usage on Hobby.",
+    "official_sandbox_claim": "Vercel describes Sandbox as usage-based Fluid compute and exposes Sandbox observability, but the connected Vercel tool surface used in this macrocycle exposes no direct team Usage/allotment counter.",
+    "direct_remaining_sandbox_quota_value_observed": false,
+    "policy_result": "KEEP_FREE_ONLY_SANDBOX_GATE_CLOSED; DO_NOT_INFER_QUOTA_FROM_HOBBY_PLAN_OR_READY_DEPLOYMENT"
+  },
+  "retained_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "head_sha_observed": "ed6c5ff41ef36c6799cace067888896667953bc9",
+    "deferred_source_finding": {
+      "classification": "SOURCE_GAP_CANDIDATE_CONFIRMED_AT_CURRENT_DONOR_HEAD_BUT_DEFERRED_BY_RUNTIME_FIRST_PRIORITY",
+      "path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+      "function": "_verify_grid_plan_binding",
+      "observation": "DatasetAdmission accepts a reduced admitted_grid_plans mapping containing schema, caller-supplied plan_sha256, generation and three causal digests; it does not receive the scheduler-owned full GridPlan preimage or call validate_grid_plan_identity on re-admission.",
+      "producer_contrast": "jspace_inference_binding_v1.bind_training_trace_to_inference validates a full scheduler-owned GridPlan at original binding construction, but persisted re-admission later cannot independently reconstruct that producer preimage from the J-Space binding alone.",
+      "risk": "A reduced caller-owned registry can assert plan membership without independently re-deriving the scheduler-owned full plan identity at DatasetAdmission persistence/re-admission scope.",
+      "promotion_status": "NOT_PATCHED",
+      "defer_reason": "Supervisor 8.64 pauses additional source-guard proliferation unless executable counterevidence requires a guard; the current highest-information gate is admitted zero-cost runtime/environment capability.",
+      "future_exact_fix_if_reactivated": "Reuse grid10_scheduler_v1 GridPlan plus validate_grid_plan_identity as the sole producer identity authority; do not invent a second GRID hashing algorithm. Add fail-closed reduced-registry and mutated-preimage regressions before promotion."
+    }
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: observed exact executable predecessor build failure, fused parallel repair instead of duplicating it, and verified exact repaired PR810 head reached READY while preserving the supervisor-8.64 FREE_ONLY pre-Sandbox quota gate; exact-head Function runtime diagnostic is observable but no Sandbox execution is credited.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "HCU_NO_CHANGE_WITH_REASON: current donor GRID re-admission has a verified source-level producer-preimage gap candidate, but supervisor 8.64 explicitly pauses further source-guard proliferation absent executable counterevidence requiring that guard. Finding is preserved for later activation rather than patched out of priority order.",
+    "C_GLOBAL_JSPACE_GWT_AND_FREE_LOCAL_08B_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no admitted Sandbox Python/sqlite environment probe, real local ~0.8B model execution, loader-consumption observation, J-Space/GWT intervention, causal trace promotion or training run occurred; dataset source finding remains source-only and deferred."
+  },
+  "credits": {
+    "exact_executor_build_deployment_readiness": "READY_AT_EXACT_HEAD",
+    "function_runtime_diagnostic": "OBSERVED_COMPONENT_CONTROL_SCOPE_ONLY",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Re-enter current main plus live PR1263 and PR810 heads before any subsequent execution claim.",
+    "Obtain a directly observed remaining included Vercel Sandbox usage/allotment signal from an account-authoritative surface; do not infer it from Hobby plan identity, deployment readiness, or Function runtime success.",
+    "Only if FREE_ONLY admission is explicitly opened, execute the exact-head sandbox selftest and bind Python version, sqlite3/_sqlite3 availability, source identity, secret fence, result digest, exit status and cleanup.",
+    "Only after environment PASS continue canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> inference receipt -> Global J-Space/GWT observation with admitted null/sign-flipped controls.",
+    "Re-activate the GRID plan full-preimage admission hardening only if runtime evidence or later priority permits source hardening; reuse scheduler-owned identity validation."
+  ]
+}

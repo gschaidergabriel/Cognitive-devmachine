@@ -1,0 +1,28 @@
+{
+  "schema": "CLAY_SUPERVISOR_STEERING_DELTA/v1",
+  "schema_version": "8.95",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "user_trigger": "go",
+  "finding": "The canonical autonomous FREE_ONLY workflow previously exercised only the provider-authority gate plus the guarded wrapper. It did not execute the direct-CLI HARD_OFF regression or assert the direct CLI's zero provider/secret boundary counters. The workflow now runs both provider-gate and direct-CLI tests, executes both direct and guarded entrypoints under current HARD_OFF authority, asserts SKIPPED_PROVIDER_AUTHORITY with provider_calls=0 and secret_lookups=0, and records exact HEAD/tree/dirty/runtime/source hashes. This closes a workflow-evidence coverage gap but is still source/integration credit only until a clean zero-cost runner actually executes it.",
+  "source_change": {
+    "path": ".github/workflows/claycode-autonomous-research.yml",
+    "commit": "35f1e86fac0edd24fe36ee5ac1618de07fc271b9",
+    "added_checks": [
+      "tests/test_claycode_autonomous_cycle_direct_gate_v1.py",
+      "direct tools/claycode_autonomous_cycle.py HARD_OFF execution",
+      "direct CLI status/counter assertions",
+      "guarded wrapper status/counter assertions",
+      "HEAD/tree/dirty/python/source SHA256 evidence"
+    ]
+  },
+  "credit_change": {
+    "provider_path_runtime_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Execute the updated workflow-equivalent command set on a clean current FREE non-provider checkout with dirty=false and retained stdout/stderr/source hashes. Do not dispatch paid/provider work. If that runtime boundary passes, return GO to the physical GRID10 recursive scaling bridge, measured fan-in/compression/latency/contention, and coordinator failure/replacement frontier."
+}

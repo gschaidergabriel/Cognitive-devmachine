@@ -1,0 +1,47 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_08B_RESOURCE_THROUGHPUT_SWEEP/v1",
+  "candidate_id": "QWEN35_08B_POSTTRAINED",
+  "local_dir": "/root/qwen35-08b-hf-cache/models--Qwen--Qwen3.5-0.8B/snapshots/2fc06364715b967f1860aea9cf38778875588b17",
+  "runtime": {
+    "torch": "2.13.0+cpu",
+    "transformers": "5.15.1",
+    "python": "3.12.3",
+    "omp_threads": "4"
+  },
+  "physical_note": "single process, batch=1, sequential contexts on one loaded model instance - this is single-instance throughput, NOT logical grid N / HCU concurrency (that is a separate Phase 11 measurement not yet run)",
+  "contexts": {
+    "context_64": {
+      "prompt_tokens": 64,
+      "first_token_latency_seconds": 1.8733,
+      "generated_tokens": 32,
+      "total_generation_seconds": 4.8205,
+      "tokens_per_second": 6.638,
+      "peak_rss_mb_so_far": 2000.0
+    },
+    "context_128": {
+      "prompt_tokens": 128,
+      "first_token_latency_seconds": 0.5503,
+      "generated_tokens": 32,
+      "total_generation_seconds": 4.0899,
+      "tokens_per_second": 7.824,
+      "peak_rss_mb_so_far": 2000.5
+    },
+    "context_256": {
+      "prompt_tokens": 256,
+      "first_token_latency_seconds": 1.0461,
+      "generated_tokens": 32,
+      "total_generation_seconds": 4.5028,
+      "tokens_per_second": 7.107,
+      "peak_rss_mb_so_far": 2011.8
+    },
+    "context_512": {
+      "prompt_tokens": 512,
+      "first_token_latency_seconds": 2.7379,
+      "generated_tokens": 32,
+      "total_generation_seconds": 5.1963,
+      "tokens_per_second": 6.158,
+      "peak_rss_mb_so_far": 2054.8
+    }
+  },
+  "peak_rss_mb_final": 2054.8
+}

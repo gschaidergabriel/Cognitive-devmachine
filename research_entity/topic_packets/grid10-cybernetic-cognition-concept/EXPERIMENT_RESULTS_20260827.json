@@ -1,0 +1,49 @@
+{
+  "schema": "GRID10_CYBERNETIC_REGULATOR_EXPERIMENT_RESULTS/v1",
+  "concept_source": "research_entity/topic_packets/grid10-cybernetic-cognition-concept/CONCEPT.md, Part 7",
+  "topic": "Real, live execution of the concept's Part 7 experiment plan, adapted onto the actual codebase (not a literal transcription of the concept's pseudocode)",
+
+  "adaptation_from_concept_to_real_code": {
+    "why_adaptation_was_needed_not_transcription": "The concept's Part 7 pseudocode assumes a 'Grid10Fabric' class and methods (get_regulator/set_regulator/wait_for_tick_completion/aggregate_evidence_scores) that do not exist in the real tools/grid10_fabric.py (real class: Fabric, real methods: connect()/BEGIN IMMEDIATE style throughout). More importantly, it assumed passing temperature/top_p to model.generate() would matter under the EXISTING call in tools/grid10_node.py::cognitive_answer(), which uses do_sample=False (greedy decoding) -- under pure greedy decoding, temperature/top_p have ZERO effect (argmax is taken regardless of temperature scaling). Implementing the regulator table as literally specified would have produced a mechanism that writes numbers nobody's generation call actually reads.",
+    "real_changes_made": [
+      "tools/grid10_fabric.py: added a real regulators table (name/value_real/version/epoch/writer/ts_ms) with genuine version-counter CAS (not the concept's 'read old value, only UPDATE if it still matches' pattern, which is a real race under concurrent writers -- two readers can both read the old value before either writes).",
+      "tools/grid10_node.py::cognitive_answer(): temperature/top_p are now opt-in parameters; giving either switches to real do_sample=True sampling. Default behavior (every experiment before today) is unchanged.",
+      "tools/grid10_node.py: tasks opt in per-task via payload['use_regulator']=True; node_loop reads the live regulator before generating and records which values were actually used in the result. New meta_regulator_tick(): a real homeostatic controller reacting to an actual measured signal (fraction of the last 10 committed answers that are non-empty), respecting a human-pin cooldown using the existing writer/ts_ms columns."
+    ],
+    "attempted_via_free_pool_first": "The regulator-table addition was first attempted through the now-reportedly-fixed harness_aider.py fallback (per a peer's report, commit 30dd95a). Got a genuine SUCCESS signal this time (audit_exit=0, allowlist_ok=True, 'stand: fertig') -- but the actual requested files were never committed anywhere (verified: not in the working directory, not in any commit, not in any branch, only a bare PROVENANCE.json landed). This is a NEW, distinct harness bug (audit now falsely ACCEPTS incomplete work) flagged separately for the harness maintainer. Implemented directly instead. Also found and fixed one real bug in my own first implementation attempt (a double-rollback in the CAS-failure path, sqlite3.OperationalError, caught by my own test suite before committing)."
+  },
+
+  "live_experiment_design": {
+    "fleet": "10 real processes, 4 flagged as meta-evaluators (run meta_regulator_tick every 2 iterations)",
+    "task": "5 rounds, one real generation task per round, opted into regulator-controlled sampling, prompt: 'Complete with exactly one word: The weather today is'",
+    "human_override": "Injected at round 3: set_regulator('temperature', 0.65, writer='human-simulated') with real CAS-retry against concurrent meta-evaluator writers",
+    "regulator_start": "temperature=0.85, top_p=0.92 (matching the concept's documented starting point)"
+  },
+
+  "what_worked_-_real_mechanical_success": {
+    "regulator_reads_and_writes_are_genuinely_live_shared_state": "Confirmed: different tasks committed with genuinely different temperature_used values over the run (0.65 -> 0.71 -> 0.752), proving the fabric-shared regulator value was actually read fresh by nodes and actually passed through to real sampling, not a static/cached parameter.",
+    "human_pin_cooldown_respected": "Immediately after the round-3 human override (temperature forced to 0.65), subsequent commits used 0.65, not an immediate meta-evaluator overwrite back to 0.85 -- the cooldown mechanism worked.",
+    "homeostatic_drift_back_worked": "After the human pin's cooldown window passed, the temperature value drifted back UP toward the 0.85 target over subsequent meta-evaluator ticks (0.65 -> 0.71 -> 0.752 -> final settled value 0.849, essentially at target) -- the intended control-loop behavior from the concept's Part 2 (homeostasis/self-alignment via feedback) is real and observed, not just designed on paper.",
+    "cas_correctly_prevented_lost_updates": "27+ meta-regulator-tick write attempts across 4 concurrent meta-evaluator nodes, plus one human-simulated write, all resolved through the version-counter CAS without any silently-lost update (verified: the version counter incremented monotonically and consistently across the full run)."
+  },
+
+  "serious_real_limitation_found": {
+    "finding": "The regulator write frequency chosen for this test (every 2 poll iterations x 0.15s poll_sleep x 4 concurrent meta-evaluator nodes, i.e. a regulator write attempt roughly every ~75ms aggregate) created severe SQLite write-lock contention that nearly STARVED the actual cognitive task pipeline. All 8 real task commits for the whole 5-round, ~25-second-wallclock run landed in a single ~4.7-second burst near the very end, not spread across the run as seeded -- the task pipeline was effectively stalled for most of the experiment's duration while regulator-write traffic dominated the single SQLite writer.",
+    "compounding_effect_-_reclaim_thrashing": "The same task_id (cyber-r1, cyber-r3, cyber-r4) was independently claimed and re-answered by DIFFERENT nodes multiple times at different regulator settings -- the exact same reclaim-thrashing failure mode found in the use-case-1 pipeline-resilience experiment (a node's heartbeat write getting delayed long enough under contention to look 'stale' to its peers, triggering an unnecessary reclaim), except here triggered by regulator-write contention rather than a real process crash. This wasted real decode work (the same underlying question answered multiple times for no benefit) and produced a genuinely wrong signal about task completion during the run (the driver's own per-round poll saw null answers for all 5 rounds in real time, only catching up after the fact).",
+    "why_this_matters_for_the_concept_as_designed": "The concept's Part 7 acceptance targets (latency <=180ms, lease loss 0, regulator stability std <=0.04) were not grounded in anything measured on this real hardware/model before being written down -- this experiment's real baseline (established across today's earlier use cases) is ~2-6s CPU decode per short task even WITHOUT regulator overhead, so the 180ms latency target was never realistic to begin with. More importantly, this experiment demonstrates that adding 4 concurrently-writing meta-evaluators on top of that baseline made real task throughput WORSE by an order of magnitude in this specific configuration, not just marginally slower.",
+    "concrete_recommendation_not_yet_implemented": "Reduce meta-evaluator write frequency substantially (e.g. regulator_tick_every should be much larger than 2, or only ONE designated meta-evaluator should write per control cycle via a rotating/elected role rather than all 4 independently racing every cycle), and/or extend the reclaim-staleness threshold to account for write-contention-delayed heartbeats specifically, not just genuine node death -- directly extending the same tuning-tradeoff finding from the use-case-1 pipeline experiment to this new write-traffic source."
+  },
+
+  "honest_scope_statement": {
+    "not_yet_tested": "The concept's Part 6 'cognitive lego' catalog (15 independent regulator building blocks) -- only 'temperature'/'top_p' were implemented and tested here, as a minimal real proof of the mechanism, not the full catalog. The concept's Part 4 risk mitigations (Smith-Predictor dead-time compensation, derivative-filter damping, grounding_slots/grounding_log tables) were not implemented -- the peer who authored the concept explicitly flagged those sections as containing unmeasured placeholder parameters (tau/beta), and this experiment did not attempt to validate them.",
+    "what_this_experiment_actually_proves": "The core mechanical claim (a real, shared, CAS-safe regulator value that live nodes read and that measurably changes model sampling behavior, with a working human-override-priority mechanism and working homeostatic drift-back) is real and demonstrated. The write-contention risk under multi-node concurrent regulation is also real and demonstrated, not hypothetical -- and considerably more severe than the concept's own risk-mitigation table anticipated (which only flagged CAS lost-updates and lease-expiry-during-write as risks, not throughput starvation of the underlying task pipeline itself)."
+  },
+
+  "files": {
+    "fabric_change": "tools/grid10_fabric.py (regulators table, get_regulator/set_regulator)",
+    "node_change": "tools/grid10_node.py (cognitive_answer sampling, meta_regulator_tick, node_loop wiring)",
+    "regression_tests": "tests/test_grid10_fabric_regulator_v1.py (5 tests, all passing)",
+    "live_experiment_driver": "tools/grid10_cybernetic_regulator_experiment_v1.py",
+    "raw_run_receipt": "research_entity/topic_packets/grid10-cybernetic-cognition-concept/CYBERNETIC_REGULATOR_RUN_20260827.json"
+  }
+}

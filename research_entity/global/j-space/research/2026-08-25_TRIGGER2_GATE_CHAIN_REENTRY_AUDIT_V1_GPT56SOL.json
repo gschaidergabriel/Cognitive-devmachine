@@ -1,0 +1,197 @@
+{
+  "schema": "CLAY_TRIGGER2_GATE_CHAIN_REENTRY_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CURRENT_RESEARCH_DELTA_NONCANONICAL",
+  "authority_snapshot": {
+    "observed_main_before_write": "29fec78107b7a485483e98b090d05d297f77f02c",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "question": "Does the newest Trigger-2 native Hyperposition seed actually execute the stronger derivation-bound independence gate introduced after ledger v7, or only a weaker predecessor chain?",
+  "observations": [
+    {
+      "id": "OBS_GATE_SPLIT_001",
+      "reality_level": "R0",
+      "finding": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py imports trigger2_semantic_hyperposition_gate_v3.py and self_check calls gate.adjudicate plus gate.adjudicate_permutation_group.",
+      "source": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "status": "CURRENT_SOURCE_OBSERVATION"
+    },
+    {
+      "id": "OBS_GATE_SPLIT_002",
+      "reality_level": "R0",
+      "finding": "tools/trigger2_semantic_hyperposition_gate_v3.py directly passes the caller-provided event to lab.derive_relations and lab.u_state; it has no formal event-dependence registry or mechanically derived independence layer.",
+      "source": "tools/trigger2_semantic_hyperposition_gate_v3.py",
+      "status": "CURRENT_SOURCE_OBSERVATION"
+    },
+    {
+      "id": "OBS_GATE_SPLIT_003",
+      "reality_level": "R0",
+      "finding": "commit c5d772219c8e9bc8761b7c5c1f5c7f15b31bd7c9 added tools/trigger2_hyperposition_derivation_bound_gate_v2.py, which derives independence from an evaluator-only formal event-dependence registry plus prior state before recomputing the v3 update chain.",
+      "source": "commit c5d772219c8e9bc8761b7c5c1f5c7f15b31bd7c9",
+      "status": "CURRENT_SOURCE_OBSERVATION"
+    },
+    {
+      "id": "OBS_GATE_SPLIT_004",
+      "reality_level": "R0",
+      "finding": "tests/test_trigger2_semantic_hyperposition_native_seed_generator_v2.py names its self-check derivation-bound but imports only the generator; therefore the test proves the generator's currently selected semantic gate, not the separate derivation-bound gate v2.",
+      "source": "tests/test_trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "status": "CURRENT_SOURCE_OBSERVATION"
+    },
+    {
+      "id": "OBS_ROUTER_LEAK_001",
+      "reality_level": "R0",
+      "finding": "Supervisor 8.78 keeps trigger2_binding_router_factorial_generator_v3.py blocked from direct training: 0/127 audited nuisance signatures retain all three target classes, 110/127 uniquely identify one target class, nuisance-only lookup accuracy is 0.881944, and conditional MI is 1.348851 bits.",
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+      "status": "CURRENT_NEGATIVE_EVIDENCE"
+    }
+  ],
+  "inference": {
+    "reality_level": "R1",
+    "conclusion": "The newest seed/test lane is not yet evidence that the stronger derivation-bound independence semantics protect candidate generation. There are two partially overlapping gate authorities. The native seed v2 self-check can pass while never exercising the newer registry-derived independence gate.",
+    "promotion_effect": "ZERO_POSITIVE_TRAINING_PROMOTION"
+  },
+  "counterhypothesis": {
+    "claim": "The semantic gate v3 may already be sufficient because labeler v3 internally detects replay, ancestry, group and payload duplication.",
+    "falsifier": "Construct a candidate whose caller independence flag is compatible with semantic gate v3 but conflicts with a formal dependence-registry derivation; if semantic gate passes while derivation-bound gate rejects, the split is behaviorally material.",
+    "execution_status": "NOT_EXECUTED_THIS_CYCLE_NO_RUNTIME_CREDIT"
+  },
+  "artifact_classification": [
+    {
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24_GPT56SOL_DEEPWORK_MAX_QUALITY_RATE_RESILIENT(1).txt",
+      "version": "2026-08-24/8.63-cache",
+      "status": "STALE_SUPERSEDED_AS_CURRENT_AUTHORITY",
+      "predecessor": null,
+      "successor": "current main authority stack schema/supervisor 8.78",
+      "revision_reason": "Current canonical BOOTSTRAP_MINIMAL, PROGRAM_STATE and SUPERVISOR_INBOX resolve authority to 8.78."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V7_GPT56SOL.json",
+      "version": "v7",
+      "status": "SUPERSEDED_BY_POST_V7_SOURCE_DELTA",
+      "predecessor": "v6",
+      "successor": "v8",
+      "revision_reason": "Post-v7 commits added derivation-bound gate v2 and native seed v2/tests, so v7 no longer describes the exact gate graph."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "version": "v3",
+      "status": "CURRENT_CONVERGED_SOURCE_P0_HARDENING_REQUIRED",
+      "predecessor": "v2 donor family",
+      "successor": "one hardened v3.x-compatible lane",
+      "revision_reason": "Useful deterministic relation/update/resolution root remains current, but event digest and discriminator/GRF evidence admission still require fail-closed hardening before positive promotion."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_gate_v3.py",
+      "version": "v3",
+      "status": "NEEDS_REVISION_WEAKER_PARALLEL_GATE",
+      "predecessor": "semantic gate v2",
+      "successor": "single converged gate binding registry-derived independence plus event digest",
+      "revision_reason": "Directly uses caller event in v3 update chain and does not execute the newer formal registry-derived independence layer."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+      "version": "v2",
+      "status": "CURRENT_CANDIDATE_PARTIAL",
+      "predecessor": "derivation-bound gate v1",
+      "successor": "single converged semantic-Hyperposition gate successor",
+      "revision_reason": "Mechanically derives independence from registry plus prior history, but remains a separate row/gate shape and does not yet close immutable event-digest identity or all discriminator admission semantics."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "version": "v2",
+      "status": "NEEDS_REVISION_GATE_REBIND_REQUIRED",
+      "predecessor": "native seed v1",
+      "successor": "native seed v3 or in-place semantically versioned successor bound to one converged gate",
+      "revision_reason": "Self-check currently exercises semantic gate v3 rather than derivation-bound gate v2; positive source candidates remain nonadmitted."
+    },
+    {
+      "artifact": "tests/test_trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "version": "v1-for-seed-v2",
+      "status": "NEEDS_REVISION_TEST_NAME_OVERSTATES_GATE_SCOPE",
+      "predecessor": null,
+      "successor": "test that explicitly verifies exact gate identity plus fail/pass divergence cases",
+      "revision_reason": "A passing self-check does not prove the newer derivation-bound gate was exercised."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "version": "v3",
+      "status": "QUARANTINE_BLOCKED_DIRECT_TRAINING",
+      "predecessor": "binding-router donor family",
+      "successor": "full-cross or preregistered conditional-independence successor",
+      "revision_reason": "Higher-order nuisance leakage remains dispositive despite marginal balance."
+    }
+  ],
+  "new_nonpromoting_training_blueprints": [
+    {
+      "family_id": "T2_GATE_SUBSTITUTION_F01",
+      "type": "SYNTHETIC_HARD_NEGATIVE_BLUEPRINT",
+      "prompt_pattern": "A generator reports derivation-bound PASS, but inspection shows it imported an older gate while a stronger current gate exists separately.",
+      "required_target": "Do not promote. Rebind to one exact current gate and prove source identity plus fail/pass divergence before candidate acceptance.",
+      "training_eligible": false
+    },
+    {
+      "family_id": "T2_EVENT_ID_MUTATION_F01",
+      "type": "SYNTHETIC_HARD_NEGATIVE_BLUEPRINT",
+      "prompt_pattern": "The same event_id is reused while a semantically relevant event field changes outside the registry's currently compared binding tuple.",
+      "required_target": "Reject independent-evidence promotion until event_id is bound to an immutable canonical event digest.",
+      "training_eligible": false
+    },
+    {
+      "family_id": "T2_CONDITIONAL_NUISANCE_LEAK_F01",
+      "type": "SYNTHETIC_HARD_NEGATIVE_BLUEPRINT",
+      "prompt_pattern": "Marginal class/order balance looks acceptable but a higher-order nuisance signature predicts the target class.",
+      "required_target": "Reject direct training; require full crossing or a preregistered conditional-independence gate.",
+      "training_eligible": false
+    }
+  ],
+  "external_research_inputs": [
+    {
+      "source": "Geiger et al., Causal Abstraction: A Theoretical Foundation for Mechanistic Interpretability, arXiv:2301.04709",
+      "use": "Supports intervention-grounded causal abstraction rather than treating readable/decodable state as mechanism proof.",
+      "authority": "METHOD_INPUT_NOT_CLAY_FACT"
+    },
+    {
+      "source": "Wu, Geiger, Milliere, How Do Transformers Learn Variable Binding in Symbolic Programs?, arXiv:2505.20896",
+      "use": "Shows a training trajectory through shallow heuristics before systematic variable binding, reinforcing staged binding curriculum plus shortcut diagnostics.",
+      "authority": "METHOD_INPUT_NOT_CLAY_FACT"
+    },
+    {
+      "source": "Adnan et al., Monitoring Shortcut Learning using Mutual Information, arXiv:2206.13034",
+      "use": "Supports MI-based diagnostics for shortcut reliance; does not itself validate Clay's exact conditional-MI threshold.",
+      "authority": "METHOD_INPUT_NOT_CLAY_FACT"
+    }
+  ],
+  "highest_value_next_gate": {
+    "name": "T2_SINGLE_GATE_CHAIN_V4_CONVERGENCE",
+    "requirements": [
+      "one exact current semantic-Hyperposition candidate gate",
+      "mechanically derived independence from immutable event/dependence history",
+      "event_id bound to immutable event digest covering all semantically relevant fields",
+      "explicit discriminator admissibility execution and coverage",
+      "typed GRF observed-promotion evidence receipt rather than naked qualification boolean",
+      "native seed generator imports exactly that gate",
+      "tests assert exact source/gate identity and include a case that weaker predecessor would pass but current gate rejects",
+      "family/provenance split plus nuisance-only decoder and conditional-MI checks before any positive admission"
+    ],
+    "after_pass": "Regenerate the 11-row owner-targeted native seed and earlier D/E donor scenarios under the single gate, still as candidate-only until Forge/Distillery admission independently succeeds."
+  },
+  "credits": {
+    "research_revision_delta": 1,
+    "artifact_reclassification_delta": 1,
+    "new_nonpromoting_blueprint_families": 3,
+    "new_positive_training_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

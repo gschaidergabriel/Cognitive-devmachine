@@ -1,0 +1,94 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_SEMANTIC_EVIDENCE_BINDING_V5_REENTRY/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "b19418ba74a535355275249c43422f502359e272",
+  "predecessor_research_commit": "dfbba165cf925151fae9564fbcaf78191f09ceb9",
+  "reentry_reason": "Rapid parallel main movement exposed a newer Trigger-1 v5 specificity gate after the predecessor source inspection. Preserve the predecessor artifact as historical evidence and issue this successor rather than silently rewriting it.",
+  "exact_current_sources": {
+    "v5_gate": {
+      "path": "tools/trigger1_jspace_promotion_gate_v5.py",
+      "blob_sha": "ce4dc8c5cca4f37dafa6dab14ee800a836f02e18",
+      "observed_behavior": [
+        "requires semantic_target_x_output_code_factorial=true for calibration and holdout",
+        "requires holdout.per_family_semantic_target_interaction=true",
+        "requires label-free and lexically disjoint derivation declarations plus nuisance-control receipt",
+        "requires calibration-only residual-norm operating-point declarations and receipt",
+        "requires cross-family coherence/off-target declarations and receipts",
+        "requires explicit native token-scope classification"
+      ]
+    },
+    "v5_test": {
+      "path": "tests/test_trigger1_jspace_promotion_gate_v5.py",
+      "commit": "26d1374470b3eae994611bdfc66d6eacba85fe9a",
+      "observation": "The positive extra-specificity fixture passes by setting summary booleans and 64-hex receipt-shaped strings. No semantic factorial case table or interaction-analysis receipt content is reconstructed by the v5 helper."
+    }
+  },
+  "reentry_verdict": {
+    "predecessor_finding_status": "SURVIVES_BUT_TARGET_ADVANCES_FROM_V4_TO_V5",
+    "statement": "v5 materially strengthens scientific specificity but does not close the evidence-authenticity boundary identified by dfbba165. Its factorial and per-family interaction requirements remain declarations. The gate validates presence/type/shape of summary fields and receipt digests, not that those digests commit to a case universe whose semantic_target x output_code factorial and treatment interaction can be independently reconstructed.",
+    "important_narrowing": "This is not a claim that v5 is ineffective. It correctly fails closed on omission and adds several orthogonal confound controls. The remaining gap is specifically declaration-to-executed-evidence binding.",
+    "reality_level": "R1_INFERRED_FROM_EXACT_CURRENT_SOURCE"
+  },
+  "counterhypothesis": {
+    "id": "H0_RECEIPT_DIGESTS_TRANSITIVELY_BIND_THE_DECLARATIONS",
+    "statement": "The existing receipt digests may already point to trustworthy objects that contain the complete factorial and interaction evidence, making gate-side reconstruction unnecessary.",
+    "status": "UNRESOLVED_BUT_NOT_ESTABLISHED_BY_V5_GATE",
+    "falsifier_for_this_research_finding": "Demonstrate an exact-current producer/verifier chain in which v5 verifies the receipt contents or a typed upstream attestation that deterministically binds semantic target, output-code identity, case/control runtime receipts, and the interaction analysis to the exact candidate. A hash-shaped value alone does not establish this transitive binding."
+  },
+  "strict_successor_requirement": {
+    "name": "CASE_BOUND_SEMANTIC_FACTORIAL_ATTESTATION/v1",
+    "must_recompute": [
+      "semantic target counts in calibration and fresh holdout",
+      "semantic_target x output_code_identity contingency table",
+      "declared split/family identities from exact case rows",
+      "six-control runtime receipt membership for every factorial cell",
+      "per-family treatment-by-semantic-target interaction from or against a digest-bound analysis object"
+    ],
+    "must_bind": [
+      "candidate source/runtime identity",
+      "case_id + seed + prompt_sha256",
+      "semantic_target",
+      "output_code_identity",
+      "split_family_id",
+      "all required control runtime receipt sha256 values",
+      "metric definition sha256",
+      "analysis implementation/protocol sha256",
+      "factorial receipt sha256",
+      "interaction-analysis receipt sha256"
+    ],
+    "anti_goodhart_regressions": [
+      "A lying-summary candidate declares factorial=true but provides AFFIRMATIVE-only case rows; gate must fail.",
+      "A candidate provides all three semantic targets but omits one target x code cell; gate must fail.",
+      "A candidate provides a balanced table but interaction receipt binds a different case universe; gate must fail.",
+      "A valid 3x3 factorial candidate with exact row/control/analysis bindings may satisfy this evidence-authenticity layer, while remaining subject to all v4/v5 and later promotion gates."
+    ]
+  },
+  "coordination": {
+    "parallel_semantic_simplex_work": "PRESENT_AND_ORTHOGONAL",
+    "parallel_v5_specificity_gate": "PRESENT_AND_RETAINED",
+    "duplicate_gate_created_by_this_organ": false,
+    "reason": "The current run records a successor evidence-contract requirement instead of creating a competing promotion authority while main is moving rapidly."
+  },
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "NO_NEW_UNUSUAL_EXPERIMENT"
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_credit_revoked": false,
+    "canonical_semantics_promotion": false,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Extend the retained v5 authority rather than fork it: add case-bound semantic-factorial/interaction evidence verification and the four fail-closed regressions above, then execute only deterministic exact-source tests on an admitted zero-cost surface before considering a new native intervention."
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "current_main_rejoin_sha": "f9e403aa8728a0215926f83aba0b626dcc06cba7",
+  "rejoined_branch_sha": "a41f93fdd9aa7bfbe6412e60fd78b38ce1994472",
+  "branch": "go/runtime-readiness-tmux-policy-attestation-20260817-sol",
+  "scope": "runtime_readiness_live_tmux_v3_policy",
+  "source_gap": "Current /readyz can report ready from canonical UnifiedDB rows alone while a canonical tmux session is absent or its live server fails the same transport-only v3 policy attestation required by attach admission.",
+  "repair": [
+    "preserve canonical UnifiedDB schema/user/session/global-generation readiness gates",
+    "require both canonical per-user tmux sessions to exist through TerminalSessionManager._has_session",
+    "require each existing server to pass TerminalSessionManager._assert_tmux_server_policy",
+    "keep readiness read-only: no ensure, no session creation, no policy source-file mutation"
+  ],
+  "exact_source_blobs": {
+    "the artefact/clayverse/terminal_gateway.py": "aa9b8d079f2fc78746b93d676281d93272130673",
+    "the artefact/tests/test_container_healthcheck.py": "765e9dd20f94ea80f7c6c13003ba593849395d59",
+    "the artefact/manifest.json": "4c72b63964c423cd29d4a591884c277a4b5bb93a"
+  },
+  "bounded_mechanism_probe": {
+    "surface": "isolated non-production OpenAI Python container",
+    "result": "PASS",
+    "cases": 5,
+    "observed": [
+      "canonical state + both sessions live + both policies valid => ready",
+      "Andreas session missing => not_ready and absent session not policy-attested",
+      "Andreas policy invalid => not_ready",
+      "wrong schema => not_ready before any terminal probe",
+      "closed DB => not_ready before terminal probe"
+    ],
+    "classification": "MECHANISM_SUPPORTED_SOURCE_SLICE"
+  },
+  "strongest_counterhypothesis": "A named policy-attested tmux session can still exist while its foreground process is not the exact managed Claude Code launch; source-level readiness must not claim process identity.",
+  "next_exact_gate": "On the first admitted authorized isolated exact OCI runtime, start both managed sessions and require /readyz=200; remove one session and require 503; mutate live tmux policy and require 503; then perturb the pane process to discriminate whether exact managed-process attestation is also required before product readiness can be accepted.",
+  "execution_admission": {
+    "vercel": "FRESH_PREVIEW_DAILY_CAP_BLOCKED_AT_LAST_CURRENT_CHECK",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_ORCHESTRATION_PROVIDER_CONTACT_UNOBSERVED_AT_LAST_CURRENT_CHECK",
+    "vps_or_self_hosted_used": false,
+    "together_used": false
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Shared go trigger identity is only minute precision."
+  },
+  "acceptance": "SOURCE_MECHANISM_SUPPORTED_RUNTIME_UNOBSERVED"
+}

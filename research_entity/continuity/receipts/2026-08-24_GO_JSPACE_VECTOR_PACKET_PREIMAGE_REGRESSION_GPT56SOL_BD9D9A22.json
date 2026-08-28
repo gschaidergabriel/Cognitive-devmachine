@@ -1,0 +1,84 @@
+{
+  "schema": "CLAY_GO_RESULT_RECEIPT/v1",
+  "date": "2026-08-24",
+  "authority_epoch": "8.63",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6-Sol",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "trigger": "go",
+  "macrocycle_identity": "UNAVAILABLE_SHARED_IMMUTABLE_ID",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "main_observed_before_receipt": "45d193b00df6c6dc074a7664df150c69e6c083fb",
+  "retained_hcu_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "live_head_observed_before_receipt": "aa1f625788799e59cd5b01ad3abd0c9ffc31b310",
+    "source_commits_written_by_this_organ": [
+      "8b70ea3fc891bfa2fd0ebffd3843d72d23501726",
+      "bd9d9a22bc4d69ebfb88f2271161d35fe9ed723a"
+    ],
+    "ancestry_check": "PASS_BD9D9A22_IS_ANCESTOR_OF_AA1F6257"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "live_head_observed_before_receipt": "8822b9ff8c9c4156bac3a904e49352a839ef6cd0",
+    "exact_head_ready_deployment_observed": false,
+    "newest_observed_deployments": [
+      {
+        "git_sha": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+        "state": "ERROR"
+      },
+      {
+        "git_sha": "926c22dd57ef82447787e24c7412548c3ed2b890",
+        "state": "ERROR"
+      }
+    ],
+    "newest_observed_ready_sha": "2dfa1edcab41fba34282b34956716e7c222ee517",
+    "runtime_action": "NOT_INVOKED_STALE_OR_NONREADY_SOURCE_IDENTITY"
+  },
+  "observation": {
+    "gap": "JSPACE_VECTOR_CONTROL_PACKET_PREIMAGE_ADMISSION_GAP",
+    "problem": "Cross-layer equality of a vector-control digest did not by itself prove that the digest named an externally admitted canonical JSPACE_VECTOR_CONTROL_ABI/v1 packet preimage.",
+    "counterhypothesis": "Shared digest identity might be sufficient if every upstream producer were already trusted and immutable; DatasetAdmission is explicitly a cross-boundary fail-closed gate, so that assumption is too strong for training-data admission.",
+    "discriminator": "Require a caller-owned admitted VectorControlPacket registry, validate the selected packet with the sole ABI validator, and cross-bind generation, basis, role and control condition. Preserve deterministic regressions for missing, mismatched and tampered preimages."
+  },
+  "track_a": {
+    "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+    "result": "NO_NEW_RUNTIME_CREDIT",
+    "reason": "No READY Vercel deployment matched the live PR810 executor head; stale READY deployments were not invoked."
+  },
+  "track_b": {
+    "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "result": "ADVANCED_SOURCE_TEST_CONVERGENCE",
+    "delta": [
+      "DatasetAdmission producer was concurrently hardened to require admitted validated VectorControlPacket preimages.",
+      "Updated test_jspace_dataset_admission_gate_v1.py to use a real encode_vector() packet in the positive fixture and added fail-closed missing/tampered/identity/generation/basis/role/condition regressions.",
+      "Updated test_compile_admitted_jspace_training_dataset_v1.py so the compiler regression carrier supplies and asserts propagation of admitted_vector_control_packets."
+    ]
+  },
+  "track_c": {
+    "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY",
+    "result": "ADVANCED_TRAINING_PROVENANCE_FENCE_SOURCE_ONLY",
+    "delta": "Training-data admission can no longer be tested as though a repeated digest label were equivalent to a validated Vector-Control packet preimage."
+  },
+  "evidence": {
+    "gate_test_commit": "8b70ea3fc891bfa2fd0ebffd3843d72d23501726",
+    "compiler_test_commit": "bd9d9a22bc4d69ebfb88f2271161d35fe9ed723a",
+    "ci_status_for_bd9d9a22": "NO_STATUSES_OBSERVED",
+    "workflow_runs_for_observed_donor_head": "NONE_OBSERVED",
+    "local_clone_attempt": "BLOCKED_BY_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "test_execution": "NOT_OBSERVED",
+    "evidence_scope": "SOURCE_AND_REGRESSION_DEFINITION_ONLY"
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "At the next admitted execution opportunity, run the exact deterministic DatasetAdmission and admitted-training compiler regressions at one immutable donor identity; independently require an exact-live-head READY FREE_ONLY PR810 deployment before invoking its fixed sandbox route. Do not use stale deployments or paid fallback."
+}

@@ -1,0 +1,87 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary ChatGPT project organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_status_write": "62de4777f77936c0ce4540b97a682414158e8a62",
+  "scope": "terminal_tmux_policy_reapply_live_runtime_falsifier",
+  "predecessor_exact_source": {
+    "terminal_sessions_blob": "185a748f80011b324b2c4786644ad42ff369203e",
+    "managed_tmux_blob": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d",
+    "classification": "CANONICAL_CURRENT_MAIN_COMPONENT_BYTES_AT_FALSIFIER"
+  },
+  "vercel_execution": {
+    "bridge_repository": "gschaidergabriel/Dr.-Unterweger",
+    "bridge_commit": "ecea93a74753a47e3746b20956656ebfbce24e56",
+    "deployment_id": "dpl_Cx4oewsgEbJKsEpkefrWbjTGyTDd",
+    "deployment_state": "ERROR",
+    "provider": "Vercel Sandbox via Git-preview and @vercel/sandbox",
+    "sandbox_semantic_path_reached": true,
+    "runtime_observed": {
+      "tmux": "3.6a",
+      "python": "3.13.13",
+      "sqlite": "3.40.0"
+    },
+    "observations": [
+      "exact terminal and managed-tmux component bytes were staged",
+      "real tmux was provisioned before outbound network was denied for the tested path",
+      "pre-policy persistent Gabriel server upgrade/reapply succeeded",
+      "new Andreas server loaded managed policy on startup",
+      "the manager's second source-file returned nonzero because already-removed default key tables no longer existed",
+      "the predecessor reapply mechanism therefore failed on real tmux 3.6a"
+    ],
+    "classification": "EXACT_COMPONENT_RUNTIME_FAIL",
+    "not_claimed": [
+      "native Claude Code",
+      "ClayVerse OCI image",
+      "real Clerk/browser/WebSocket PTY",
+      "whole-product FAIL or PASS"
+    ]
+  },
+  "repair_candidate": {
+    "pull_request": 603,
+    "head": "66ea79af61ff319970251d86667f7dc18e81873b",
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "mechanism": "accept only exact tmux missing-table diagnostics for already-removed v3 key tables on nonzero source-file, reject empty/mixed/unknown diagnostics, then require unchanged full effective-state v3 attestation",
+    "status": "DRAFT_UNMERGED_RUNTIME_UNVERIFIED"
+  },
+  "repair_rerun": {
+    "bridge_pull_request": 846,
+    "bridge_head": "088edb8215b4989ead334ed05a1f5a3cd7991e3d",
+    "candidate_head_bound_by_runner": "66ea79af61ff319970251d86667f7dc18e81873b",
+    "candidate_terminal_blob_bound_by_runner": "c185009f8af84e1288747d8352645777a36b2053",
+    "same_falsifier": true,
+    "github_vercel_status": "failure",
+    "vercel_status_target_class": "build-rate-limit",
+    "sandbox_start_observed": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BEFORE_REPAIR_ASSERTION"
+  },
+  "daytona_fallback": {
+    "owner_authorized_free_only_fallback_present": true,
+    "merged_bridge_commit": "03851eae330fc889d30d1d10bf68f029beb80381",
+    "requires": [
+      "eligible pre-assertion Vercel failure class",
+      "DAYTONA_API_KEY",
+      "non-expired DAYTONA_FREE_CREDIT_ATTESTED_UNTIL",
+      "exact source archive and SHA",
+      "admitted workflow/dispatch execution"
+    ],
+    "executed_for_this_repair": false,
+    "reason": "No admitted Daytona dispatch invocation is exposed through the current connector surface; do not bypass the FREE_ONLY attestation contract or weaken the workflow."
+  },
+  "coordination": {
+    "duplicate_tmux_source_lane_closed_after_parallel_canonical_merge": true,
+    "temporary_diagnostic_bridge_pr_845_closed_as_superseded": true,
+    "single_retained_live_repair_lane": "ClayVerse PR #603 + Dr.-Unterweger execution bridge PR #846"
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Shared go trigger identity is only minute precision; no unique atomic lease may be fabricated."
+  },
+  "next_exact_gate": "When an admitted isolated execution slot opens, rerun the exact PR #603 candidate against real tmux 3.6a with the same pre-policy, already-hardened, new-server second-source, direct multi-argv fake-Claude and fail-closed unknown-diagnostic discriminators. Merge #603 only if that same-falsifier rerun passes, then advance to exact OCI/native-Claude/readiness/restart/concurrency acceptance.",
+  "acceptance": "IN_PROGRESS_COMPONENT_RUNTIME_BUG_FOUND_REPAIR_UNVERIFIED"
+}

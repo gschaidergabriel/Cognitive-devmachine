@@ -1,0 +1,28 @@
+{
+  "bytes": 607,
+  "datei": "agentZero/verdichtungen/aggregat.json",
+  "entity_generation": 276,
+  "erzeuger": "/opt/agentzero-export/agentzero_export.py auf frank-api",
+  "erzeugt": "2026-08-22T20:06:45Z",
+  "felder": [
+    "gesamt",
+    "gesamtverhaeltnis_quellen_je_artikel",
+    "hinweis",
+    "max_verhaeltnis",
+    "min_verhaeltnis",
+    "mittleres_verhaeltnis_je_zeile",
+    "nach_erzeuger",
+    "zeichen_artikel_summe",
+    "zeichen_quellen_summe",
+    "zeilen_ausgeweitet_statt_verdichtet"
+  ],
+  "format": "json",
+  "gegenhypothese": "Ein Verhaeltnis < 1 heisst: der Artikel ist LAENGER als die Summe seiner Quellen -- keine Verdichtung, eine Ausweitung. Das kommt in diesem Bestand vor (siehe VERDICHTUNGEN.md) und ist kein Darstellungsfehler dieses Exports, sondern ein Befund ueber den Mechanismus selbst.",
+  "gehoert_zu": "artikel(art='verdichtung') in der UnifiedDB, gefuellt von clayverse/wikiverdichtung.py aus Baunotiz-Gruppen (metadaten.quellnotizen).",
+  "geschwaerzt": "Zugangsdaten wurden vor dem Schreiben ersetzt",
+  "herkunft": "artikel(art='verdichtung') in UnifiedDB, AGGREGIERT",
+  "hypothese": "Das gemessene Verhaeltnis zeichen_quellen/zeichen_artikel je Zeile zeigt ehrlich, wie stark verdichtet wurde -- eine Zahl, keine Behauptung.",
+  "sha256": "120f39b4a05d5d9a",
+  "wieso": "82 Verdichtungen faszen Baunotizen-Gruppen zu Kurzartikeln zusammen -- ohne die Kompressionszahl daneben ist nicht pruefbar, ob eine 'Verdichtung' wirklich kuerzt oder nur umformuliert.",
+  "zeilen": 10
+}

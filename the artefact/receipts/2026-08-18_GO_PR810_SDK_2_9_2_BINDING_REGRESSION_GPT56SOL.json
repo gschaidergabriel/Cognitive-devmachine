@@ -1,0 +1,83 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:49:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "PR810_PINNED_SDK_BINDING_REGRESSION_EXECUTION_ADMISSION_BLOCKED",
+  "canonical_main_observed_before_write": "3421abbd51b63952deaebf40f2a01284aef9efe0",
+  "controller_observation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_observed": "92edcbc19abb2e88a24989105783c65f6f2af371",
+    "draft": true,
+    "mergeable_at_observation": true,
+    "runtime_credit": 0
+  },
+  "pinned_upstream_sdk": {
+    "package": "@vercel/sandbox@2.9.2",
+    "upstream_repository": "vercel/sandbox",
+    "tag_commit_observed": "62a925deb7b0d28426e2b544b309470341222ba3",
+    "network_policy_contract": "allow-all OR deny-all OR object with allow and optional subnets",
+    "create_source_public_union": ["git", "tarball"],
+    "snapshot_source_variant_publicly_present": false
+  },
+  "regressions": {
+    "phase1_network_policy": {
+      "path": "mcp/vercel-sandbox-mcp/lib/phase1-provider-handler.js",
+      "observed_shape": "{ mode: custom, allowedDomains, allowedCIDRs, deniedCIDRs }",
+      "expected_high_level_sdk_shape": "{ allow: domains }",
+      "status": "SOURCE_REGRESSION"
+    },
+    "tier1_network_policy": {
+      "path": "mcp/vercel-sandbox-mcp/lib/effect-tier1-handler.js",
+      "observed_shape": "{ mode: custom, allowedDomains, allowedCIDRs, deniedCIDRs }",
+      "expected_high_level_sdk_shape": "{ allow: domains }",
+      "status": "SOURCE_REGRESSION"
+    },
+    "tier2_snapshot_restore": {
+      "paths": [
+        "mcp/vercel-sandbox-mcp/lib/tier2-recreate-handler.js",
+        "mcp/vercel-sandbox-mcp/api/snapshot-lifecycle-probe.js"
+      ],
+      "observed_call": "Sandbox.create({ source: { type: snapshot, snapshotId } })",
+      "public_sdk_2_9_2_support_observed": false,
+      "snapshot_get_by_id_support_observed": true,
+      "status": "RESTORE_API_NOT_BOUND_TO_PINNED_PUBLIC_SDK"
+    },
+    "source_guard": {
+      "path": "mcp/vercel-sandbox-mcp/scripts/guard-clayverse-vcr-source.mjs",
+      "observed_behavior": "requires stale Phase1 REST-shaped network policy markers and admits snapshot source marker",
+      "status": "GUARD_REINFORCES_UNVERIFIED_SDK_BINDINGS"
+    }
+  },
+  "coordination": {
+    "pr810_comment_id": 5318808959,
+    "duplicate_controller_path_created": false,
+    "controller_bytes_changed_by_this_receipt": false,
+    "research_product_bytes_changed": false
+  },
+  "execution_admission": {
+    "vercel_context": "Vercel",
+    "vercel_state": "failure",
+    "vercel_target_class": "upgradeToPro=build-rate-limit",
+    "build_started": false,
+    "product_runtime_executed": false,
+    "daytona_plugin_search_results": 0,
+    "classification": "CONTROL_PLANE_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE"
+  },
+  "epistemic_status": {
+    "source_contract_regression_verified": true,
+    "snapshot_survival_after_source_delete": "UNKNOWN",
+    "clean_carrier_runtime_verified": false,
+    "exact_oci_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "No new unusual intervention was added; this was source-contract adjudication against the exact pinned upstream SDK plus control-plane admission checking."
+  },
+  "next_exact_step": "On the retained PR810 lane, rebind Phase1 and Tier1 networkPolicy to the pinned @vercel/sandbox@2.9.2 high-level contract, replace or explicitly gate the unsupported public Sandbox.create snapshot-source call with an actually admitted restore mechanism, and update exact blob/marker guards. Then obtain an actually-started authorized isolated execution path (Vercel exact-head Preview preferred; FREE_ONLY Daytona only through a control plane that actually starts) and run source guards before any runtime acceptance credit."
+}

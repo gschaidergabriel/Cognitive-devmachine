@@ -1,0 +1,54 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "fc45471f0eb61da17191a9f4a5edae7e184a1346",
+  "branch": "gpt56sol/go873-distillery-deltaid-replay-identity-20260825",
+  "source_commit_before_receipt": "8344392f7bb7640c03c88807fad2803f33fe4630",
+  "finding": {
+    "classification": "SOURCE_OBSERVED_REPLAY_IDENTITY_SUCCESSOR_REGRESSION",
+    "statement": "The Supervisor-8.73 successor on main removed timestamp and candidate narration from stable Forge replay identity but reintroduced delta_id into both execution replay identity and measured-evidence identity. Because delta_id names the candidate/evaluation envelope rather than a measured execution, re-keying only delta_id could mint a second Distillery packet and accepted-dataset-token increment for the same measured execution.",
+    "donor_evidence": "Closed unmerged PR #1687 explicitly excluded delta_id from replay identity and included a delta_id-only duplicate regression; the current 8.73 main test no longer covered that case."
+  },
+  "hypothesis": "Excluding envelope-only delta_id from stable execution identity and measured-evidence identity will collapse delta-id-only replay to DUPLICATE while preserving distinct executions through worker/source/evaluation/targets/execution-admission/provider/model/role/metric bindings.",
+  "counterhypothesis": "delta_id is a stable measured-execution identifier and should distinguish independently admissible executions.",
+  "counterhypothesis_disposition": "REJECTED_AT_CURRENT_SOURCE_AND_STEERING_CONTRACT_LEVEL: current Supervisor 8.73 specifies stable execution identity from source, worker, target blobs, provider/model/role, execution admission and measured metric identity, while the original replay-hardening donor explicitly classifies delta_id as envelope identity.",
+  "delta": {
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_replay_identity_873.py",
+    "changes": [
+      "exclude delta_id from CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1",
+      "exclude delta_id from CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1",
+      "treat delta_id-only re-key as DUPLICATE with zero token delta",
+      "remove delta_id from legacy replay-collision discriminator so ambiguous pre-v1 overlap fails closed even after envelope re-key",
+      "add explicit delta_id-only replay regression and re-keyed legacy-row regression"
+    ]
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: closes a remaining Forge-to-Distillery duplicate-token path before live promotion credit",
+    "track_b": "ADVANCED: tightens reusable causal identity by separating measured execution identity from candidate/evaluation envelope identity",
+    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE: prevents envelope re-keying from inflating future J-Space/training dataset tokens; model/J-Space/training credit remains zero"
+  },
+  "coordination": {
+    "open_overlap_search": "No open Forge/Distillery delta_id replay-identity lane was found; retained HCU donor #1263 remains separate.",
+    "unusual_experiment": "NOT_RUN_ORDINARY_DETERMINISTIC_SOURCE_REGRESSION_ONLY",
+    "unusual_interventions_executed": 0
+  },
+  "evidence_scope": "SOURCE_DELTA_AND_REGRESSION_DEFINITION_ONLY_UNTIL_EXACT_BRANCH_TEST_EXECUTION_IS_OBSERVED",
+  "runtime_observed": false,
+  "provider_or_model_execution": false,
+  "paid_or_together_execution": false,
+  "canonical_truth_credit": 0,
+  "provider_runtime_credit": 0,
+  "entityos_hcu_whole_runtime_credit": 0,
+  "hcu_full_runtime_credit": 0,
+  "jspace_model_runtime_credit": 0,
+  "training_credit": 0,
+  "whole_product_pass": false,
+  "next_exact_gate": "Run the exact branch regression and existing Forge-Distillery bridge tests; require delta_id-only replay to produce one persistent packet total and zero accepted_dataset_tokens delta, while changed measured evidence conflicts and genuinely different execution identity remains separately admissible."
+}

@@ -1,0 +1,126 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_SELECTION_IDENTITY_FUSION/v1",
+  "created_utc_window": "2026-08-25T17:03Z",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "observed_main_before_write": "0fa78d7e2d7d5fd86d123c5e2e5e179aa3d6d176",
+  "donor": {
+    "pr": 2009,
+    "head": "652522cbaa7441c13d574556c141b197e92f82f5",
+    "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_QWEN35_INPUT_IDENTITY_ABI_AUDIT_GPT56SOL.json",
+    "disposition": "SALVAGE_UNIQUE_RESEARCH_DELTA_ONLY_DO_NOT_MERGE_STALE_PR_WHOLESALE"
+  },
+  "current_main_evidence": {
+    "registry": "research_entity/global/j-space/research/trigger2_qwen35_08b_checkpoint_candidates_v2.json",
+    "registry_schema": "CLAY_TRIGGER2_QWEN35_08B_CHECKPOINT_CANDIDATES/v3",
+    "observed_at": "0fa78d7e2d7d5fd86d123c5e2e5e179aa3d6d176",
+    "facts": [
+      "BASE, POSTTRAINED and TARGET_MEASURED are marked identity_complete=true and selection_eligible=true.",
+      "All three nevertheless have consumed_identity_match=null.",
+      "All three have chat_template_sha256=null.",
+      "TARGET_MEASURED additionally has top-level weights_sha256=null and tokenizer_sha256=null despite a concrete checkpoint file manifest.",
+      "Existing loader evidence proves a load/generation smoke path, but does not bind the exact resolved consumed weight-file set to the admitted bundle or bind the resolved template/rendered prompt/input_ids tensor identity used for comparison."
+    ]
+  },
+  "material_finding": {
+    "id": "P2_CHECKPOINT_INPUT_IDENTITY_ABI_NOT_CLOSED",
+    "status": "CURRENT_NEEDS_REVISION_BEFORE_SELECTION_GRADE_MATCHED_BASELINE",
+    "claim": "Snapshot-manifest identity plus loader smoke evidence is useful bounded evidence but is insufficient for selection-grade attribution of behavioral differences to checkpoint weights. P2 must bind actually consumed model bytes and the model-visible rendering/token-input ABI before a winner can be selected.",
+    "counterhypothesis": "The missing ABI bindings are bookkeeping-only and all candidate ranking would remain unchanged after exact consumed-weight/template/input binding.",
+    "discriminator": "Run the same preregistered case families only after CHECKPOINT_INPUT_IDENTITY_ABI/v1 is complete for all measured candidates, and where compatible compare native-bundle and separately preregistered canonical-render arms."
+  },
+  "lifecycle_overrides": [
+    {
+      "artifact": "trigger2_qwen35_08b_checkpoint_candidates_v2.json selection-scope identity_complete/selection_eligible flags",
+      "status": "NEEDS_REVISION_FOR_SELECTION_IDENTITY_ABI",
+      "preserve": "immutable revisions, snapshot manifests, config/tokenizer manifest hashes, load/resource smoke evidence",
+      "reason": "consumed_identity_match remains null and prompt/render/input identity is not bound"
+    },
+    {
+      "artifact": "Qwen3.5 VPS loader/checkpoint receipts from c6c416207354f1e5d60924535357ed91c20365c5",
+      "status": "CURRENT_SNAPSHOT_MANIFEST_AND_LOAD_SMOKE_COMPONENT_EVIDENCE",
+      "credit": "NO_CHECKPOINT_SELECTION_NO_CAUSAL_JSPACE_NO_TRAINING"
+    },
+    {
+      "artifact": "TARGET_MEASURED 8-case pilot",
+      "status": "CURRENT_DIAGNOSTIC_NONPROMOTING",
+      "preserve_failures": [
+        "abstain_unknown failures",
+        "fictional-company factual fabrication",
+        "ONLY-JSON wrapper/fence violation",
+        "one-sentence Hyperposition surface violation"
+      ]
+    }
+  ],
+  "required_checkpoint_input_identity_abi_v1": {
+    "checkpoint_bundle": [
+      "candidate_id",
+      "repo",
+      "immutable_revision",
+      "checkpoint_file_manifest_sha256",
+      "config_sha256",
+      "tokenizer_json_sha256",
+      "tokenizer_config_sha256",
+      "all special-token/config inputs affecting rendering/tokenization"
+    ],
+    "loader_consumption": [
+      "resolved consumed weight/index file paths in deterministic order",
+      "sha256 for every actually consumed weight/index file",
+      "loader resolution mode/source",
+      "model class",
+      "trust_remote_code setting",
+      "dtype/device/loading options",
+      "transformers/torch/python versions",
+      "consumed_identity_match=true only after exact comparison with admitted checkpoint bundle"
+    ],
+    "prompt_and_token_input": [
+      "canonical messages object digest",
+      "resolved tokenizer.chat_template text sha256 or explicit NO_TEMPLATE",
+      "apply_chat_template parameters",
+      "rendered UTF-8 prompt sha256",
+      "input_ids tensor sha256/dtype/shape",
+      "attention-mask digest when material",
+      "generation configuration plus deterministic seed/decode parameters"
+    ],
+    "comparison_arms": {
+      "NATIVE_BUNDLE_ARM": "Bind each deployable checkpoint+tokenizer+native-template bundle exactly.",
+      "CANONICAL_RENDER_ARM": "Where tokenizer/model compatibility permits, use a separately preregistered common rendering arm to distinguish weight effects from template/tokenization effects. Never silently force an incompatible template."
+    }
+  },
+  "external_method_input_noncanonical": {
+    "slsa_v1_2": "Treat externally supplied execution parameters as untrusted and verify concrete inputs/dependencies/subjects downstream; source or directory identity alone is not execution-instance identity.",
+    "hf_chat_template_principle": "Resolved chat-template/rendering/tokenization is executable model input and must be identity-bound for reproducible matched comparisons.",
+    "project_credit": 0
+  },
+  "priority_order": [
+    "P0 OBSERVED evidence producer authentication",
+    "P1 producer-authorized immutable genesis and complete ordered nonempty history",
+    "P1.5 reference-labeler v3 exact-merge stage validation regression closure",
+    "P2 CHECKPOINT_INPUT_IDENTITY_ABI/v1 then preregistered full matched BASE/POSTTRAINED/TARGET_MEASURED baseline",
+    "P3 causal Global J-Space only after P2 selection with directional/null/orthogonal/permuted/off-target/interaction controls",
+    "P4 positive training-data admission only after upstream executable closures"
+  ],
+  "training_decision": {
+    "new_positive_rows": 0,
+    "new_training_hard_negative_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_jspace_credit": 0,
+    "reason": "Current information bottleneck is authenticated provenance plus selection/evaluation identity, not candidate-row volume."
+  },
+  "next_exact_action": "On the admitted clay-direct-dev VPS lane, close P0 first. In parallel source preparation, implement a repository-bound CHECKPOINT_INPUT_IDENTITY_ABI/v1 probe so P2 can begin only after exact consumed-weight and prompt/token-input identity is true for every measured candidate.",
+  "credit_boundary": {
+    "whole_entityos_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

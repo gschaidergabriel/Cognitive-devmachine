@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "receipt_type": "GO_MACRO_CYCLE_COORDINATION_RACE_CORRECTION",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T17:35+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "observed_canonical_main_before_write": "3e04769d646cc0d716f9490ac33d0849656104d3",
+  "classification": "CONTRADICTS_AND_SUPERSEDES_RETENTION_ONLY",
+  "scope": "WebSocket transport queue/compression candidate coordination only",
+  "observations": {
+    "pr_434": "CLOSED_UNMERGED",
+    "pr_448": "CLOSED_UNMERGED",
+    "conflict": "Parallel receipts encoded opposite retained-lane claims for PR434 and PR448 while both PRs are actually closed unmerged."
+  },
+  "adjudication": {
+    "retained_open_candidate": "NONE",
+    "canonical_runtime_semantics": "CURRENT_MAIN",
+    "main_transport_note": "The already-canonical bounded WebSocket message-size behavior remains authoritative; neither closed queue/compression/backend candidate is promoted by coordination prose.",
+    "future_rule": "If this transport hardening is revisited, refresh then-current main and create/reopen exactly one deliberately adjudicated candidate only after the pinned-Uvicorn/live-runtime discriminator is executable or otherwise materially justified.",
+    "historical_evidence": "PRESERVED_IN_CLOSED_PRS_AND_RECEIPTS"
+  },
+  "hypofusion": {
+    "strongest_counterhypothesis": "Leaving both candidates closed could drop a useful hardening opportunity.",
+    "counterevidence": "Neither candidate had exact pinned-Uvicorn/OCI/live-browser runtime evidence and both explicitly required an executable discriminator before promotion; current main already retains the simpler size bound.",
+    "cheapest_discriminator": "When an authorized isolated runner is actually available, compare current-main auto/size-only transport against one freshly reconstructed bounded queue/compression candidate under the repository-pinned Uvicorn runtime before deciding whether any backend pin belongs in the product.",
+    "work_consequence": "Do not reopen or merge either stale candidate merely to satisfy a retention label."
+  },
+  "primary_product_frontier_unchanged": "FIRST_ADMITTED_ISOLATED_RUNNER -> REFRESH_MAIN -> REJOIN_PR611_ONCE -> BIND_EXACT_HEAD -> REAL_TMUX36A_DISCRIMINATOR -> FOCUSED_AND_ADJACENT_REGRESSIONS -> PROMOTION_DECISION -> PR602_REJOIN_NATIVE_CLAUDE -> OCI_READINESS_RESTART_CONCURRENCY",
+  "runtime_execution_credit": "ZERO",
+  "product_runtime_delta": "NO_CHANGE",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Only minute-precision user-message timestamp metadata is available and no shared immutable request id is exposed; the atomic lease protocol forbids a fallback claim."
+  }
+}

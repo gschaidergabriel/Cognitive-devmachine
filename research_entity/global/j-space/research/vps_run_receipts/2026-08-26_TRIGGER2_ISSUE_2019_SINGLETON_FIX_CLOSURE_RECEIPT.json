@@ -1,0 +1,47 @@
+{
+  "schema": "CLAY_TRIGGER2_TRACK_A_ISSUE_2019_CLOSURE_RECEIPT/v1",
+  "issue": 2019,
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "status": "CLOSED",
+  "design_source": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_P1_5_EXACT_MERGE_SINGLETON_VALIDATION_REPAIR_DESIGN_V1_GPT56SOL.json",
+  "commit": "36a6475f320d7caa821b6d91e71047f38dbb19aa",
+  "mechanism": "Added _validate_state_after_merge + _project_state_after_merge in tools/trigger2_hyperposition_reference_labelers_v3.py, used only internally by u_state right after _merge_exact_equivalents. _validate_state and the public project_state() are completely unchanged and always reject any singleton for any external caller.",
+  "empirical_closure_evidence": {
+    "test_file": "tests/test_trigger2_hyperposition_reference_labelers_v3.py",
+    "tests_before": 20,
+    "tests_after": 28,
+    "all_passing": true,
+    "previously_failing_test_now_passes": "test_exact_semantic_merge_uses_declared_policy_not_similarity",
+    "new_negative_controls": [
+      "singleton pre-state submitted directly is always rejected",
+      "project_state public API rejects forged singleton carrying merged_from_branch_ids",
+      "merge singleton fails closed under merge_policy=NONE",
+      "witness rejects non-equivalent predecessors",
+      "witness rejects predecessor-id substitution",
+      "witness rejects semantic-signature substitution",
+      "witness rejects merged_origins content mismatch"
+    ],
+    "positive_control": "witness accepts a genuine exact-merge singleton produced by the real _merge_exact_equivalents function"
+  },
+  "regression_check": {
+    "method": "git stash before/after comparison, full targeted tests/ sweep with --continue-on-collection-errors",
+    "before": "97 failed, 1304 passed, 1 xfailed, 12 errors (pre-existing, unrelated)",
+    "after": "96 failed, 1313 passed, 1 xfailed, 12 errors (same pre-existing set)",
+    "conclusion": "one pre-existing failure fixed, +9 net new passing tests, zero regressions"
+  },
+  "hypothesis_and_implications": {
+    "hypothesis": "The bug existed because u_state's merge step and its validation step were written against two different implicit assumptions: _merge_exact_equivalents assumed 'producing a singleton from >=2 exactly-equivalent branches is a legitimate resolution', while project_state/_validate_state assumed 'a state reaching validation is always an external caller submission that must preserve unresolved Hyperposition'. Neither assumption is wrong on its own; they just were never reconciled with a proof boundary between them.",
+    "implication_for_future_internal_transitions": "This is a reusable pattern: whenever a deterministic internal transition can legitimately produce a state shape that would be invalid at the external boundary, the fix is a witness-checked internal-only validation path fed by data the transition itself already possesses -- never a caller-settable flag, and never touching the public/external validation function. Worth applying the same pattern if future v3+ labeler transitions grow similar internal-state-shape exceptions.",
+    "implication_for_security_review": "The design was explicit that a boolean allow_singleton would be insufficient authority; this implementation has no such flag anywhere in the public or private API surface -- there is nothing for a malicious or buggy caller to set. The only way to reach a singleton through _project_state_after_merge is for u_state to have actually run _merge_exact_equivalents on >=2 genuinely byte-identical-signature branches in the same call.",
+    "known_limitation_not_fixed": "The design doc's implementation_shape section suggested an optional digest-bound witness (pre_merge_state_sha256/post_merge_state_sha256 fields). This implementation instead recomputes everything directly against the actual pre_merge_branches list rather than trusting a digest -- functionally stronger (nothing to substitute since nothing is trusted, only recomputed) but means the witness object itself is implicit in the function call rather than a standalone serializable artifact. If a future requirement needs the witness to be independently serializable/auditable outside the call stack, that would need a small additional layer, not a redesign of the validation logic itself."
+  },
+  "evidence_scope": "reference-labeler exact-merge singleton validation component only",
+  "credit_boundary": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_credit": 0,
+    "hcu_credit": 0,
+    "reference_labeler_complete_oracle_credit": 0
+  }
+}

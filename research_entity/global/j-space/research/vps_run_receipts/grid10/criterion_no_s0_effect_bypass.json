@@ -1,0 +1,19 @@
+{
+  "pass": true,
+  "fabric_public_surface": [
+    "coordinator_commit",
+    "coordinator_drain_and_commit",
+    "elect_coordinator",
+    "emit_node_result",
+    "ordinary_write_attempt",
+    "outbox_pending_scopes",
+    "revoke_lease",
+    "runtime_claim_task",
+    "runtime_heartbeat",
+    "runtime_join",
+    "seed_scope",
+    "seed_task",
+    "snapshot"
+  ],
+  "note": "Fabric (S1) exposes zero methods capable of writing canonical S0 state or triggering external effects; the only S0-adjacent name is ordinary_write_attempt(), which always raises. S0 lives in an entirely separate system (zero_entityos_*) never imported here."
+}

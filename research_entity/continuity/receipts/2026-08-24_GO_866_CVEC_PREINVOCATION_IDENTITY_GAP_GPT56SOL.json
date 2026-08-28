@@ -1,0 +1,119 @@
+{
+  "schema": "ENTITYOS_HCU_GO_CVEC_PREINVOCATION_IDENTITY_GAP/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "authority_epoch": "8.66",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "coordination": {
+    "shared_immutable_macrocycle_id_observed": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "work_class": "ORDINARY_SOURCE_REVIEW_EXTERNAL_SOLUTION_HARVEST_CAUSAL_GAP_RECORD",
+    "parallel_commit_search": [
+      "cvec preinvocation -> no matching commit observed",
+      "cvec intervention -> no matching commit observed"
+    ]
+  },
+  "reentry": {
+    "canonical_main_observed_before_write": "99a9bf6485b02a1b56252ce9eff66630790397ad",
+    "newest_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_66.json",
+    "owner_authority_pointer": "CLAY_EXECUTION_AUTHORITY.md",
+    "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_source_snapshot_reviewed": "a16574d79ae05f051145b0bf9bf4f0405d3e2133",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_bounded_runtime_identity": "bb7324d2a21ffc143c241c652a31524c5be4c9d8 / dpl_EN62ggtQnuEcjuvtJNathL3D9Tkf / NO_SANDBOX_FUNCTION_DIAGNOSTIC_ONLY"
+  },
+  "source_observations": {
+    "jspace_llamacpp_cvec_bridge": {
+      "path": "the artefact/MicroEntity/hcu/jspace_llamacpp_cvec_bridge_v1.py",
+      "blob": "59e7cc056825c94fa73e90d0b45e4991a72cc5c1",
+      "observed": "ENTITYOS_HCU_JSPACE_LLAMA_CPP_CVEC_BINDING/v1 deterministically binds VectorControl packet identity, basis, role, checkpoint SHA-256, llama.cpp source commit, model dimensions, il_start/il_end, strength, exact F32LE buffer digest/size and a canonical binding_sha256. Validation recomputes bytes from packet plus intervention parameters."
+    },
+    "model_input_control_binding": {
+      "path": "the artefact/MicroEntity/hcu/model_input_control_binding_v1.py",
+      "blob": "a0a7744c83bab78243af8f4a06b30af939f4db05",
+      "observed": "HCU_MODEL_INPUT_CONTROL_BINDING/v1 binds the canonical VectorControl packet wire exactly once into executor-observed input bytes and binds generation, event/admission/route/GRID, cell/role, executor/invocation and input digest/size, but does not reference the llama.cpp cvec binding or native applied cvec state."
+    },
+    "model_input_control_closure": {
+      "path": "the artefact/MicroEntity/hcu/jspace_model_input_control_closure_v1.py",
+      "blob": "68b6c7b7369d67e862e32cc82b26f10cc0a8b0c8",
+      "observed": "ENTITYOS_HCU_JSPACE_MODEL_INPUT_CONTROL_CLOSURE/v1 closes byte-level packet delivery into GRID, ModelExecution/InferenceReceipt and J-Space identities, but its closure material contains vector_control_packet_sha256 rather than a native cvec binding/buffer/intervention identity."
+    },
+    "training_control_delivery_gate": {
+      "path": "the artefact/MicroEntity/hcu/jspace_training_control_delivery_gate_v1.py",
+      "blob": "cef4da696481ca55d2660e667cb8bb755e376c76",
+      "observed": "The gate correctly rejects non-BASELINE causal promotion without a forward temporal predecessor->successor control edge, preventing same-invocation post-hoc delivery from minting causality. It still validates packet/closure identity rather than native cvec application identity."
+    }
+  },
+  "external_solution_harvest": {
+    "sources": [
+      {
+        "title": "llama.cpp cvector-generator README",
+        "url": "https://github.com/ggml-org/llama.cpp/blob/master/tools/cvector-generator/README.md",
+        "principle": "Current llama.cpp exposes control-vector scale and layer-range selection as first-class runtime intervention parameters."
+      },
+      {
+        "title": "llama.cpp llama.h control-vector API",
+        "url": "https://github.com/ggml-org/llama.cpp/blob/master/include/llama.h",
+        "principle": "The runtime API applies control-vector data to a context with explicit embedding dimension and inclusive layer start/end, so applied intervention identity can in principle be observed/bound at invocation scope."
+      },
+      {
+        "title": "Activation Steering Induces Emergent Misalignment: A More Comprehensive Evaluation",
+        "url": "https://arxiv.org/abs/2606.08682",
+        "principle": "Activation steering can create broad off-target behavior; target-direction gain alone is insufficient for promotion."
+      },
+      {
+        "title": "Multi-component Causal Tracing in Large Language Models",
+        "url": "https://arxiv.org/abs/2606.03085",
+        "principle": "Causal claims require explicit internal interventions and measured target effects rather than correlation or recurrence alone."
+      }
+    ]
+  },
+  "finding": {
+    "classification": "SOURCE_LEVEL_CAUSAL_IDENTITY_GAP_HYPOTHESIS",
+    "statement": "The donor already proves exact VectorControl packet delivery and separately proves deterministic construction of a native llama.cpp cvec buffer. The reviewed causal closure does not yet demonstrate that the exact native cvec binding (including scale, layer range and buffer digest) was the intervention actually active for the exact model invocation named by ModelExecution/InferenceReceipt/J-Space. Therefore packet delivery must not be promoted into hidden-state cvec intervention causality.",
+    "not_claimed": [
+      "no claim that current runtime applies the wrong vector",
+      "no claim that cvec application is absent from all unreviewed source",
+      "no model-runtime failure",
+      "no J-Space causal failure",
+      "no training failure"
+    ]
+  },
+  "hypothesis": "A producer/executor-owned preinvocation observation that binds exact LlamaCppCVecBinding identity plus applied context/invocation identity before decode, and is then carried into ModelExecution/InferenceReceipt/J-Space, will close the native hidden-state intervention identity edge needed for model-specific J-Space causal experiments.",
+  "counterhypotheses": [
+    "An existing executor or preinvocation primitive outside the reviewed files may already bind the native cvec state; if so, this is a discovery/indexing gap rather than an architecture gap.",
+    "Binding a source-generated cvec receipt alone would still be insufficient: the runtime may fail to apply it, apply another vector, clear it, or mutate layer/scale state before decode. The useful evidence must be executor/runtime observed rather than caller-declared.",
+    "Even exact cvec application identity does not prove behavioral causality; paired baseline/control/intervention runs plus target and off-target measurements remain required."
+  ],
+  "cheapest_high_information_discriminator": "On an exposed authorized zero-cost local or clay-direct-dev runtime, instrument the exact llama.cpp pre-decode cvec application boundary to emit an executor-owned observation binding invocation_id/context identity, checkpoint/runtime identity, LlamaCppCVecBinding.binding_sha256, cvec_f32le_sha256, il_start, il_end and strength. Run paired no-cvec vs cvec application at fixed prompt/seed/model identity and verify the observation reaches ModelExecution/J-Space without caller-supplied aliases. Do not implement a new canonical guard until this runtime observation either confirms a missing edge or identifies an existing one.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_COORDINATION: during this macrocycle parallel workers synchronized BOOTSTRAP_MINIMAL and PROGRAM_STATE to supervisor 8.66; this organ's stale writes were rejected by GitHub 409 and were not forced, preserving single-current authority.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_AUDIT: retained direct InferenceReceipt/v4 rejection tests were source-reviewed; synthetic 21-marker aliases remain rejected as acceptance proxies; no duplicate guard was added.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_RESEARCH_DESIGN: isolated the native cvec preinvocation identity edge required to distinguish exact hidden-state intervention from mere VectorControl packet delivery, and fused current llama.cpp control-vector/runtime plus 2026 causal-steering evidence into the next runtime discriminator."
+  },
+  "execution_status": {
+    "direct_local_or_clay_direct_dev_bridge_exposed_to_this_chatgpt_organ": false,
+    "ssh_or_terminal_plugin_search_result": "NO_INSTALLABLE_MATCH_OBSERVED",
+    "local_container_git_clone_attempt": "FAILED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "classification": "TOOL_OR_INFRASTRUCTURE_SURFACE_UNAVAILABLE_NOT_PRODUCT_FAILURE",
+    "donor_rejection_tests_executed_by_this_organ": false,
+    "cvec_runtime_intervention_executed_by_this_organ": false
+  },
+  "credits_after": {
+    "preexisting_executor_function_runtime_diagnostic": "PASS_AT_EXACT_BB7324_DPL_EN62_NO_SANDBOX_SCOPE_ONLY",
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Use the first exposed authorized zero-cost local normal-user or clay-direct-dev bridge to (1) execute the exact selected donor InferenceReceipt/v4 rejection suite and dependencies, then (2) if component PASS holds, instrument/observe native llama.cpp cvec preinvocation application identity at the exact model invocation. Preserve exact source/environment/result receipts and paired baseline/intervention plus off-target metrics before any J-Space causal promotion.",
+  "acceptance": "IN_PROGRESS"
+}

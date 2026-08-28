@@ -1,0 +1,63 @@
+{
+  "schema": "ClayVerseGoCurrentOCIReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T19:27:38+07:00",
+  "organ": "GPT-5.6 Sol",
+  "classification": "SANDBOX_ADMISSION_REPLICATED_PRIVATE_SOURCE_CREDENTIAL_BLOCKED_BEFORE_SOURCE_FETCH",
+  "canonical_research_observed": "63d7b614da7ce0d85ca79ee15a6b2242b46246d7",
+  "execution_closure": {
+    "base": "f7eb4df7600b0f4de1a6381a04acf5d1057d8f9b",
+    "commit": "5e5adce0591058608bbd7381ecf570a39b282f0d",
+    "tree": "1e02285d77b08e6edd86f9017d0ceac5db262cf2",
+    "composition": "CURRENT_MAIN_AT_BIND_TIME_PLUS_RETAINED_PR611_PLUS_FUSED_PR622_EXECUTION_RELEVANT_BLOBS"
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "retained_lane": true,
+    "last_executed_head": "2e5505983172e582a50f4f72bebd561bc650ff5a",
+    "current_head_observed": "02f9157a15485b49f96dd4d4b20201fe148db710",
+    "current_head_delta": "deterministic timeout-budget fence test only",
+    "sandbox_timeout_ms": 2700000,
+    "retained_batch_explicit_step_timeout_ceiling_ms": 2490000,
+    "retained_runner_blob": "1298ca8002704414f86cd0c036d44e5b32be2918"
+  },
+  "vercel": {
+    "deployment": "dpl_7BkVnngPJUPiVyrqwFarGFZDevAG",
+    "controller_head": "2e5505983172e582a50f4f72bebd561bc650ff5a",
+    "build_started": true,
+    "guard": "v4_PASS_EXACT_RETAINED_RUNNER_BINDING",
+    "current_target_patch": "v5",
+    "sandbox_admission": "PASS_CREATED",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "error": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "sandbox_stopped": true,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "newer_deployment_after_last_executed_head_observed": false
+  },
+  "security_boundary": {
+    "github_read_token_forwarded_to_sandbox": false,
+    "private_source_fetch_started": false,
+    "entityos_reconstruction_started": false,
+    "oci_build_started": false,
+    "vps_used": false,
+    "self_hosted_used": false,
+    "production_host_used": false,
+    "together_used": false
+  },
+  "coordination": {
+    "redundant_local_execution_closure_commit": "0334871a43bb1f825c775abbd4e4bca8e0f93918",
+    "redundant_local_tree_equal_to_active_tree": true,
+    "redundant_ref_repointed_to_active_closure": true,
+    "active_execution_closure": "5e5adce0591058608bbd7381ecf570a39b282f0d",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT",
+    "valid_unusual_experiment_count": 0
+  },
+  "claim_boundary": {
+    "clayverse_test_fail": false,
+    "whole_product_pass": false,
+    "acceptance": "IN_PROGRESS",
+    "current_frontier": "Provision GITHUB_READ_TOKEN as a sensitive host-side Vercel Preview credential for the retained PR810 branch without exposing or forwarding it into Sandbox; then execute the same controller and continue directly through exact private-source verification, EntityOS reproduction, full source regression, OCI build/image identity and in-image assertions."
+  }
+}

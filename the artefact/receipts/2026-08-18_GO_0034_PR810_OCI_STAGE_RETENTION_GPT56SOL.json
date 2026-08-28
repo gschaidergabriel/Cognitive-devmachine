@@ -1,0 +1,50 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:34:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "6bdd586cc17f0c95c6719f2308252c77186218af",
+  "classification": "DETACHED_OCI_STAGE_TERMINALITY_REPAIRED_DEPLOYMENT_RATE_LIMITED",
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "repair_commit": "edf6c1c5d466988d306530f966846264b686813d",
+    "status_route_blob": "ddac9ec51b691b5830ef0b71fd08971ce4a0e43a",
+    "bound_research_product_commit": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "bound_research_product_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27"
+  },
+  "measured_gap": {
+    "before": "The detached batch writes state=PASS after source regression + EntityOS reconstruction + OCI build/identity + service --once while explicitly leaving Mistral/Vault/recovery/auth gates open. The status route treated any state=PASS as terminal and deleted/stopped the named Sandbox.",
+    "risk": "A component-stage green result could destructively end the same Firecracker appliance before the mandatory final Mistral/Vault -> EffectGate/EntityOS -> recovery sequence, creating a proxy-PASS/continuation failure.",
+    "repair": "The status route now maps batch state=PASS to OCI_STAGE_PASS, keeps final_test_of_tests_pass=false and whole_product_pass=false, retains the Sandbox for subsequent final gates, and destructively cleans up only state=FAIL at this stage."
+  },
+  "deployment_evidence": {
+    "exact_repair_preview_started": false,
+    "github_combined_status": "VERCEL_FAILURE_BUILD_RATE_LIMIT",
+    "target": "upgradeToPro=build-rate-limit",
+    "classification": "DEPLOYMENT_ADMISSION_BLOCKER_NOT_CLAYVERSE_TEST_FAILURE",
+    "runtime_credit_added": 0
+  },
+  "existing_ready_ancestor": {
+    "controller_commit": "5986dcbfe290f3c2f444aaa0a1cfdca3c7fcfc10",
+    "deployment_id": "dpl_37KaiTaCCj2hFVSHYcCqWCpskfde",
+    "state": "READY",
+    "note": "Ancestor READY does not transfer runtime credit to repair commit edf6c1c5... ."
+  },
+  "runtime_observation": {
+    "owner_github_read_token_observed": false,
+    "credential_bearing_post_attempted": false,
+    "private_source_runtime_credit_added": 0,
+    "exact_oci_runtime_credit_added": 0,
+    "real_mistral_runtime_credit_added": 0,
+    "whole_product_runtime_credit_added": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0
+  },
+  "next_exact_step": "After Vercel build-rate admission reopens, obtain an exact READY deployment of edf6c1c5... or a non-regressing descendant. Only then use the owner-held scoped read token to execute the detached source/OCI stage, preserve the same Sandbox after OCI_STAGE_PASS, and continue the mandatory Mistral/Vault/effect/recovery/recreation/auth sequence without inferring whole-product PASS.",
+  "acceptance": "IN_PROGRESS"
+}

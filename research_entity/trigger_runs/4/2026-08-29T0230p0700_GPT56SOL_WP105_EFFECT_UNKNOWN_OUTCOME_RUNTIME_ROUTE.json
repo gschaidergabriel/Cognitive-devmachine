@@ -1,0 +1,67 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "EVIDENCE_ONLY_NO_AUTHORITY_CHANGE",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "9.13",
+  "supervisor_delta": "9.13AJ_NON_AUTHORITY",
+  "source_project": "gschaidergabriel/frankenstein-2.0",
+  "workpackage": "F2-WP-105",
+  "material_findings": [
+    {
+      "id": "CANONICAL_EFFECT_UNKNOWN_OUTCOME_GAP",
+      "status": "STATIC_SOURCE_FALSIFIER",
+      "finding": "The currently bound EffectGate.execute owns the real execution transaction, but its generic exception path finalizes the canonical journal as FAILED after EntityOSBridge.run may already have crossed the process/effect boundary. Timeout/lost-return classes can therefore be stronger than the evidence permits. F2 must not relabel canonical FAILED as UNKNOWN because that would create a competing outcome authority.",
+      "f2_review_commit": "3ca524694f8a2089ffe9b6bf164f450697333483",
+      "required_successor_contract": "Canonical EffectGate+EffectJournal must mechanically distinguish proven pre-dispatch failure from ambiguous post-dispatch failure; ambiguous post-dispatch outcomes remain UNKNOWN/non-replayable or equivalent authority-owned unresolved state until reconciliation."
+    },
+    {
+      "id": "BOUND_RUNTIME_CROSS_REPO_PRIVATE_CHECKOUT_BLOCKER",
+      "status": "EXECUTION_TRANSPORT_NEGATIVE_EVIDENCE",
+      "finding": "Frankenstein-2.0 GitHub-hosted run 33203978272 allocated a runner and checked out F2, then failed before canonical source/hash/test execution because the public F2 workflow GITHUB_TOKEN could not checkout the separate private clay-global-research-entity repository. The exact requested Clay commit exists and the canonical repository is private.",
+      "f2_head": "55845ed20dd67db1d3bbe522533c086b2522bd6b",
+      "workflow_run_id": 33203978272,
+      "job_id": 98960212561,
+      "failure": "remote: Repository not found",
+      "runtime_probe_executed": false,
+      "runtime_credit_added": 0,
+      "f2_diagnosis_commit": "f9f97b5b92c22678435b2ccfdf760dcbe20b4038"
+    }
+  ],
+  "current_source_progress": {
+    "semantic_effect_request_identity": "SOURCE_PRESENT",
+    "intent_to_authority_request_digest_binding": "SOURCE_PRESENT",
+    "executor_boundary_request_digest_binding": "SOURCE_PRESENT",
+    "post_correlation_request_digest_binding": "SOURCE_PRESENT",
+    "single_canonical_effect_owner": "REQUIRED_BY_CURRENT_BOUND_API_TO_AVOID_DOUBLE_DISPATCH",
+    "canonical_ambiguous_post_dispatch_unknown_semantics": "OPEN",
+    "exact_bound_zero_effect_runtime_probe": "NOT_EXECUTED"
+  },
+  "safe_route": {
+    "do_not": [
+      "do not make the private canonical research repository public for CI",
+      "do not publish private canonical source into public Frankenstein-2.0 as a test workaround",
+      "do not retry the unchanged public-F2 cross-private checkout workflow and count repeated auth failures as product evidence",
+      "do not add a second F2 effect/outcome authority",
+      "do not blindly replay ambiguous effect failures"
+    ],
+    "preferred": [
+      "first repair/review canonical EffectGate ambiguous post-dispatch UNKNOWN semantics under canonical authority ownership",
+      "execute exact-source component probe on a private-side surface or the already-authorized clay-direct-dev sandbox where canonical private source is readable",
+      "bind exact F2 commit plus exact EffectGate/EffectJournal/UnifiedDB blobs before execution",
+      "only promote bounded component runtime evidence after the probe step actually executes"
+    ]
+  },
+  "credit_boundary": {
+    "entityos_whole_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "effectgate_runtime_credit_added": 0,
+    "effectjournal_runtime_credit_added": 0,
+    "real_effect_runtime_credit_added": 0,
+    "training_credit_added": 0
+  }
+}

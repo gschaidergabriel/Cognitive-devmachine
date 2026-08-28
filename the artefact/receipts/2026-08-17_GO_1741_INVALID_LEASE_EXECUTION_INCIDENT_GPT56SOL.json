@@ -1,0 +1,48 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:41+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "NO_CHANGE_PRODUCT_CODE_INVALID_LEASE_EXECUTION_INCIDENT_PRESERVED",
+  "material_observation": {
+    "kind": "REFINES",
+    "invalid_claim_commit": "2de642140d1101d9b32152407254c17deda5b9bc",
+    "experiment_result_commit": "eeae46293cd223251137d0d18a1f4242d92a5ec1",
+    "product_receipt_commit": "640af844ba885629e02f8a49fe24dd722e70c4b0",
+    "precision_correction_commit": "3fe178bf3ccc3f292ff3b67551bf6148a3e0c504",
+    "experiment_name": "tmux_3_6a_idempotent_diagnostic_mutation_fence",
+    "execution_observed": true,
+    "execution_result": "277 cases; 19 positive controls; 258 negative mutations; 0 unexpected acceptances; 0 unexpected rejections",
+    "lease_problem": "The claim synthesized 17:36:00.000000 from shared user-trigger metadata available only at minute precision (2026-08-17T17:36+07:00). GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL section 2.3 forbids timestamp-fallback lease creation from minute-precision metadata.",
+    "adjudication": "PRESERVE_RESULT_AS_UNAUTHORIZED_COORDINATION_INCIDENT_AND_BOUNDED_MECHANISM_OBSERVATION_ONLY"
+  },
+  "experiment_budget": {
+    "canonical_status": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT_LEASE",
+    "valid_unusual_experiment_count": 0,
+    "additional_unusual_experiment_authorized": false,
+    "reason": "An invalid claim cannot authorize execution, and the fail-closed coordination correction closes the slot. Starting another intervention would compound the protocol breach.",
+    "history_policy": "Preserve claim, result and receipts append-only; do not delete or rewrite them."
+  },
+  "evidence_adjudication": {
+    "mutation_observation_retained": true,
+    "evidence_class": "MECHANISM_OBSERVATION_FROM_UNAUTHORIZED_COORDINATION_INCIDENT",
+    "real_tmux_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "native_claude_runtime_credit": 0,
+    "whole_product_acceptance_credit": 0,
+    "promotion_effect": "NONE"
+  },
+  "live_fusion": {
+    "action": "ADOPT_CORRECTION",
+    "affected_lane": "PR#611",
+    "work_consequence": "Keep PR#611 Draft and byte-stable. Do not use the mutation result to promote or merge PR#611. Rejoin only once an authorized isolated runner can actually start."
+  },
+  "live_hypofusion": {
+    "strongest_counterhypothesis": "A technically successful bounded mutation matrix could be mistaken for valid go-budget or runtime evidence because its receipt superficially records a successful atomic claim.",
+    "falsifier": "Validate the source identity used for the lease itself, not merely the canonical-looking claim path or experiment output.",
+    "result": "COUNTERHYPOTHESIS_SUPPORTED_FOR_COORDINATION_RISK: lease provenance was invalid despite successful predicate observations."
+  },
+  "product_code_delta": "NO_CHANGE",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "next_exact_runtime_gate": "FIRST_ADMITTED_ISOLATED_RUNNER -> REFRESH_MAIN -> REJOIN_PR611_ONCE -> BIND_EXACT_HEAD -> REAL_TMUX36A_DISCRIMINATOR -> FOCUSED_AND_ADJACENT_REGRESSIONS -> PROMOTION_DECISION -> REJOIN_PR602 -> NATIVE_CLAUDE -> OCI_READINESS_RESTART_CONCURRENCY"
+}

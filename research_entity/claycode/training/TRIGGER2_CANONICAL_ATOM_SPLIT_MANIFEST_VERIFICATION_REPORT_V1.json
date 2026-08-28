@@ -1,0 +1,141 @@
+{
+  "empirical_crossing_check": {
+    "crossings": [],
+    "decoy_ordinals_excluded": 20,
+    "pass": true,
+    "total_distinct_ordinals": 195
+  },
+  "manifest": {
+    "abi_manifest_sha256": "0f664e6a4626351fbf97cd74a4825cedaf115b80f56b71b16c39315dba02fa11",
+    "accepted_atom_count": 46,
+    "known_decoy_ordinal_range": [
+      80,
+      99
+    ],
+    "reason_training_eligible_false": "atom NAMES only; exact atoms_index.json (atom->token-ID table) and exact target tokenizer/renderer identity remain unresolved per the cited source delta -- real rendering is a separate, later, still-blocked gate (TRIGGER2_ABI_CONTEXTUAL_RENDER_GATE/v1).",
+    "rejected_atom": "or",
+    "schema": "CLAY_TRIGGER2_CANONICAL_ATOM_SPLIT_MANIFEST/v1",
+    "source_provenance": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_ABI_SYMBOL_PRIOR_CONTEXTUAL_TOKEN_AUDIT_V1_GPT56SOL.json",
+    "split": {
+      "HOLDOUT_FROZEN": [
+        "8",
+        "9",
+        "D",
+        "G",
+        "H",
+        "M",
+        "Y",
+        "not",
+        "then"
+      ],
+      "TRAIN_AND_VALIDATION": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "A",
+        "B",
+        "C",
+        "E",
+        "F",
+        "I",
+        "J",
+        "K",
+        "L",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Z",
+        "and",
+        "false",
+        "if",
+        "maybe",
+        "no",
+        "true",
+        "unknown",
+        "yes"
+      ]
+    },
+    "split_counts": {
+      "HOLDOUT_FROZEN": 9,
+      "TRAIN_AND_VALIDATION": 37
+    },
+    "strata": {
+      "language_bearing": {
+        "atoms": [
+          "yes",
+          "no",
+          "true",
+          "false",
+          "maybe",
+          "unknown",
+          "if",
+          "then",
+          "not",
+          "and"
+        ],
+        "count": 10
+      },
+      "neutral_alphanumeric": {
+        "atoms": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L",
+          "M",
+          "N",
+          "O",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "U",
+          "V",
+          "W",
+          "X",
+          "Y",
+          "Z",
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "count": 36
+      }
+    },
+    "training_eligible": false
+  },
+  "overall_pass": true,
+  "remap_integrity_check": {
+    "checked": 1170,
+    "failures": [],
+    "pass": true
+  }
+}

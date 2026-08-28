@@ -1,0 +1,43 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "97f420ccca2f7c25d3e959859b934c59e2c95830",
+  "finding": {
+    "classification": "REPOSITORY_BOUND_NEGATIVE_INFRASTRUCTURE_EVIDENCE_CAUSE_UNRESOLVED",
+    "workflow_run": 32753831612,
+    "job_id": 97516690619,
+    "job_name": "identity-guard",
+    "job_status": "completed",
+    "job_conclusion": "failure",
+    "job_steps_returned": 0,
+    "semantic_product_failure_established": false,
+    "statement": "The Research Entity Identity Guard run is repository-bound and terminal-failed, but the connected GitHub surface returns no step records for the failed job. The failure is therefore preserved as negative infrastructure/runner evidence with semantic cause unresolved; it is not promoted to EntityOS/HCU scientific or runtime failure."
+  },
+  "hypothesis": "The identity-guard failure may be infrastructure/runner/setup related rather than a violated Clay identity invariant.",
+  "counterhypothesis": "The identity guard may have detected a real semantic identity invariant violation before step metadata became observable.",
+  "discriminator": "Obtain exact job step/log or a later repository-bound rerun result without weakening the identity invariant; classify only evidence actually observed.",
+  "go_tracks": {
+    "track_a": "ADVANCED_EVIDENCE_DISCIPLINE: narrows executable-convergence blocker by separating terminal job failure from unobserved semantic cause.",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: replay/concurrency Typed Entry-adjacent primitive is already fused on main; this cycle found no nonduplicate HCU source delta safer than resolving executable evidence.",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: local Qwen3-0.6B J-Space intervention remains unusual-experiment gated and no reproducible shared immutable macrocycle identity is available in this invocation."
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "runtime_credit": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Observe repository-bound terminal exact-current Forge/Distillery regression evidence or recover exact identity-guard job step/log evidence; do not rerun or reinterpret until cost/runner authority and exact-source identity remain admissible."
+}

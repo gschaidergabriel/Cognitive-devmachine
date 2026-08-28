@@ -1,0 +1,111 @@
+{
+  "schema": "CLAY_TRIGGER2_REENTRY_LIFECYCLE_DELTA/v3",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING",
+  "supersedes_for_current_facing_summary": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_LABELER_V2_REGRESSION_AND_CONVERGENCE_AUDIT_V2_GPT56SOL.json",
+  "revision_reason": "Canonical main advanced after the preceding audit. This re-entry marks source-level fixes that landed, retains unresolved non-circular label derivation/convergence blockers, and incorporates the new carrier-rank research delta without overstating training or J-Space evidence.",
+  "authority": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "observed_main_before_write": "bca41a0036a990135dc2aabd76581e8ed4603f2f",
+    "supervisor_epoch": "8.78",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "accepted_dataset_tokens_minted": 0
+  },
+  "lifecycle_updates": [
+    {
+      "finding_id": "V2_EVENT_ID_REPLAY_MUTATION_IS_SILENTLY_IDEMPOTENT",
+      "previous_status": "HIGH_BLOCKER",
+      "current_status": "SOURCE_LEVEL_FIX_OBSERVED_REQUIRES_EXECUTED_TEST_EVIDENCE_FOR_RUNTIME_CREDIT",
+      "evidence": [
+        "tools/trigger2_hyperposition_reference_labelers_v2.py blob 78164abd07553f1732e28a5e6297158f9a833b2e",
+        "commit ba3fa7ed0e3e01db27a90567dfa6fd4e3713c84b adds conflicting-relation and conflicting-correlation-ancestry replay tests"
+      ],
+      "remaining_boundary": "Source/tests now fail closed on same event id changing relation or ancestry, but source/test existence is not executed test or training credit."
+    },
+    {
+      "finding_id": "UNKNOWN_TARGET_DUPLICATE_BRANCH_MERGE_COLLISION_RESOLUTION_TARGET_GUARDS",
+      "previous_status": "PARTIAL_OR_UNEXPLICIT",
+      "current_status": "SOURCE_LEVEL_HARDENED",
+      "evidence": "Current event/ancestry v2 validates branch IDs and observation targets, prevents merge-target collisions, and requires PASS application to select exactly one existing branch.",
+      "remaining_boundary": "Still candidate reference logic; no dataset/model/runtime promotion."
+    },
+    {
+      "finding_id": "RELATION_DERIVATION",
+      "previous_status": "CRITICAL",
+      "current_status": "CRITICAL_BLOCKER_UNCHANGED",
+      "evidence": "Current event/ancestry v2 still consumes observation.relation; current payload/independence semantic v2 still consumes observation.effect. Neither exact-current lane independently derives branch relations/effects from a bound synthetic-world/task evaluator.",
+      "required_successor": "One separately versioned deterministic relation/world evaluator with reproducible input/output identity, or an independently adjudicated relation receipt whose equality is verified by the candidate gate."
+    },
+    {
+      "finding_id": "INDEPENDENCE_DERIVATION",
+      "previous_status": "CRITICAL",
+      "current_status": "CRITICAL_CONVERGENCE_BLOCKER",
+      "evidence": "The event/ancestry v2 uses caller independence_qualified plus ancestry; the payload/independence v2 uses independence_group + payload_key. Both contain valuable but nonidentical semantics.",
+      "required_successor": "Fuse exact event identity, correlation ancestry, dependence-group/payload identity and an independently derived qualification rule in the single converged labeler."
+    },
+    {
+      "finding_id": "RESOLUTION_SEMANTICS",
+      "previous_status": "CRITICAL_DIVERGENCE",
+      "current_status": "CRITICAL_CONVERGENCE_BLOCKER",
+      "evidence": "The full-tuple v1 lane requires explicit executed/admissible discriminator context, while the event/ancestry v2 can PASS on one surviving applicable branch and the payload/independence v2 can resolve a unique PROVEN branch. These cannot coexist as competing training-target semantics.",
+      "required_successor": "One machine-checkable unique-resolution criterion derived from adequate discriminator/proof coverage over all live applicable alternatives."
+    },
+    {
+      "finding_id": "DUAL_V2_LABELER_AUTHORITY",
+      "previous_status": "CURRENT_CANDIDATE_CONVERGENCE_REQUIRED",
+      "current_status": "CURRENT_CANDIDATE_CONVERGENCE_REQUIRED",
+      "evidence": "2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V3_GPT56SOL.json explicitly records both v2 implementations and an unmateralized T2-HYPERPOSITION-LABELER-V3-CONVERGED successor.",
+      "required_successor": "Materialize one v3 and mark both v2 implementations superseded donors after exact semantic/property tests."
+    },
+    {
+      "finding_id": "V3_BINDER_CONDITIONAL_NUISANCE_LEAK",
+      "previous_status": "QUARANTINE",
+      "current_status": "QUARANTINE_UNCHANGED",
+      "evidence": "Current supervisor 8.78 and the conditional leakage audit still reject direct training on the v3 binding-router factorial schedule.",
+      "required_successor": "Full-cross or preregistered conditionally independent schedule with model-visible nuisance challengers and semantic ablations."
+    }
+  ],
+  "new_research_delta_incorporated": {
+    "id": "HYPERPOSITION_CARRIER_RANK_EMPIRICAL",
+    "source_artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_HYPERPOSITION_CARRIER_RANK_RESEARCH_DELTA_V1_GPT56SOL.json",
+    "status": "METHOD_AND_ARCHITECTURE_HYPOTHESIS_CURRENT_NONPROMOTING",
+    "training_consequence": "Train invariant semantic Hyperposition relations/branch-local state independently of whether the eventual physical J-Space carrier is rank-1, multi-vector or low-rank subspace. Carrier geometry must be separately measured at exact model/layer/token/intervention identity.",
+    "anti_overclaim": "No carrier form is currently established for Qwen3.5-0.8B; decodability or coarse behavioral steering does not prove complete branch-local semantic representation."
+  },
+  "external_method_research_reaffirmed": [
+    "Wu, Geiger & Milliere, ICML 2025: learned variable dereferencing develops in stages and admits causal mechanism tests in the studied transformer; use this to justify multi-hop/distractor/checkpoint/causal binder evaluations, not to transfer the mechanism to Qwen by assumption.",
+    "Semantic uncertainty/set-valued abstention methods may later evaluate unresolved behavior but cannot replace deterministic D/E semantics or canonical truth authority."
+  ],
+  "coordination": {
+    "pr_2009": {
+      "state_observed": "OPEN_NONMERGED_NONMERGEABLE",
+      "head_observed": "f9db1e11e07d72e87ade35d5f2fb90413f2a1ce3",
+      "role": "parallel convergence donor; must rebase/fuse with current main rather than create a second label authority"
+    },
+    "review_comments_written_this_cycle": true,
+    "duplicate_labeler_implementation_written_by_this_organ": false
+  },
+  "current_training_decision": {
+    "generate_more_flat_volume_now": false,
+    "positive_D_E_rows_admitted": false,
+    "accepted_dataset_tokens": 0,
+    "priority": "CONVERGE_AND_DERIVE_BEFORE_GENERATE",
+    "next_exact_action": "Materialize one derivation-bound T2-HYPERPOSITION-LABELER-V3-CONVERGED: strict full-tuple schema + immutable event digest + event/ancestry/group/payload dependence semantics + independently recomputed branch relations/effects + derived discriminator outcome partitions + explicit adequate unique-resolution coverage + model-visible leakage gates. Then regenerate the highest-value variable-N/DB/Claude cognitive trajectories inside that carrier and only afterward consider D/E candidate admission."
+  },
+  "credits": {
+    "research_delta": 1,
+    "source_level_guard_improvements_observed": true,
+    "executed_labeler_test_credit_by_this_organ": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_main_before_write": "bf592fad1b51aa7b79b19b4ad2ac8a17d2b6ece0",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp": "2026-08-24T03:51+07:00",
+    "timestamp_precision": "MINUTE_ONLY",
+    "timestamp_fallback_sufficient": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0
+  },
+  "retained_hcu_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "control_label_fence_commit": "d371ccaca994f234a4cd127d48c3867cfe10ab56",
+    "control_label_source_blob": "aa87a61aaedde3452e63f2851f0c07508ebda753",
+    "control_label_test_blob": "777dd1fcc5269058fb27be67d94ab05d6148cb2a",
+    "reentered_live_head": "8b70ea3fc891bfa2fd0ebffd3843d72d23501726",
+    "ancestry": "d371ccac_IS_ANCESTOR_OF_8b70ea3f_BY_29_COMMITS"
+  },
+  "source_delta": {
+    "finding": "The public Global J-Space/GWT step previously accepted caller-supplied non-BASELINE control_condition labels even when the named intervention had not been performed, allowing causal-control label laundering into traces and later training data.",
+    "repair": [
+      "public step(...) is BASELINE-only and rejects non-BASELINE labels with NONBASELINE_CONTROL_REQUIRES_EXPLICIT_INTERVENTION",
+      "the sole internal producer helper accepts control labels only after an explicit intervention constructor has transformed the source contributions",
+      "lesion(...) removes the selected contribution before emitting LESION",
+      "deterministic regression rejects LESION, ROLE_SWAP, PERMUTED, NULL_VECTOR and SIGN_FLIP through the baseline API"
+    ],
+    "execution_status": "SOURCE_AND_REGRESSION_DEFINITION_ONLY_NO_ADMITTED_RUNTIME_EXECUTION_FOR_THIS_FENCE",
+    "evidence_scope": "SOURCE_CANDIDATE"
+  },
+  "parallel_reentry": {
+    "current_donor_successor_additions_observed": [
+      "causal DatasetAdmission/family-split provenance hardening",
+      "TrainingTrace/vector-control parent admission hardening",
+      "HCU_MODEL_INPUT_CONTROL_BINDING source primitive"
+    ],
+    "separate_open_source_gate": "JSPACE_GWT_SELECTOR_PREIMAGE_REPLAY_GAP: transition trace still needs enough admitted selector preimage material to reconstruct gwt_selection_sha256 and broadcast semantics before strong causal training promotion",
+    "model_causality_boundary": "Current source must not promote J-Space association to actual model-input control consumption without exact executor-input binding and admitted execution evidence"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "live_head_after_forward_revert": "bfe2966a7f30e9a4e1695aab4b5fa194e817362b",
+    "pinned_donor_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "net_source_diff_vs_source_ready_head_b6fcb5e2": "ZERO_FILES",
+    "reason": "Preserve the still-unexecuted immutable 17-blob/14-result FREE_ONLY runtime discriminator while the donor remains fast-moving. A temporary source-only rebind to d371 was forward-reverted after parallel re-entry clarified that the pinned executor should not churn before its discriminator runs unless a stronger source-safety need requires it.",
+    "runtime_invocation_observed": false,
+    "known_execution_block": "VERCEL_HOBBY_BUILD_RATE_LIMIT_OR_NO_EXACT_HEAD_READY_PREVIEW; INFRASTRUCTURE_ADMISSION_ONLY_NOT_PRODUCT_FAILURE",
+    "paid_upgrade_or_fallback_used": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "PRESERVED_SINGLE_PINNED_EXECUTOR_DISCRIMINATOR; NO_RUNTIME_PROMOTION; NO_DUPLICATE_EXECUTOR",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_SINGLE_GLOBAL_JSPACE_PRODUCER_FAIL_CLOSED_CAUSAL_CONTROL_SEMANTICS; SUCCESSOR_DONOR ALSO_CONTAINS_MODEL_INPUT_CONTROL_BINDING_SOURCE_WORK",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_CLOSING_DIRECT_CONTROL_LABEL_LAUNDERING_AT_SOURCE_LEVEL_AND_PRESERVING_STRICT_MODEL_INPUT_AND_SELECTOR_PREIMAGE_EVIDENCE_GATES"
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The same macrocycle already produced current README alignment/no-change adjudication while main and PR1263 were moving rapidly; append-only receipt avoids overwriting a concurrently updated current-facing README from a partial snapshot."
+  },
+  "credits_after_delta": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Preserve PR810's pinned 511d FREE_ONLY discriminator until a naturally available exact-head included-tier Vercel preview can execute it. In parallel, close the donor GWT selector-preimage replay gap and compose the now-present HCU_MODEL_INPUT_CONTROL_BINDING plus parent inference/vector-control admission primitives into one immutable successor donor closure. Only after the pinned discriminator is resolved should PR810 be coherently rebound to that successor; then execute exact source-bound regressions including the control-label fence. No paid fallback and no model/J-Space/training credit before real admitted zero-cost model-executor I/O evidence."
+}

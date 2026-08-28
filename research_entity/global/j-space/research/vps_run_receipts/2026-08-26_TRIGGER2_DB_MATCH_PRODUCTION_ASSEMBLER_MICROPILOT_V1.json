@@ -1,0 +1,38 @@
+{
+  "schema": "CLAY_TRIGGER2_DB_MATCH_PRODUCTION_ASSEMBLER_MICROPILOT/v1",
+  "date": "2026-08-26",
+  "pinned_base_commit": "3fb6f96bf07707168a74a031de817aaeb281ee68",
+  "origin_main_at_write_time": "5027e8255b20fce42dd8c4e6a52269babb8eeb4a",
+  "worktree": "/root/clay-db-match-pilot on frank-api",
+  "alignment": "Independently converged with supervisor 8.89 steering delta (commits 23edc6559, 5027e8255, SUPERVISOR_STEERING_8_89_DELTA_2026-08-26T0942P0700_GPT56SOL.json), specifically P0_PRODUCTION_ROW_ASSEMBLY and P0_DB_MATCH_END_TO_END_MICROPILOT, before reading that delta.",
+  "what_was_built": [
+    "tools/trigger2_db_match_row_assembler_v1.py -- production assembler (not a test helper) that deterministically builds one authorized, empty-history T2_GP_PILOT_DB_MATCH_V1 candidate row: generator bundle + A02 discriminator-producer receipt (via authority JSON, not a test fixture shortcut) + replay/state-history fields + tokenizer_atoms_used, binding every *_evaluator_only field.",
+    "tests/test_trigger2_db_match_row_assembler_v1.py -- 10 tests: 1 positive full-chain pass, 1 zero-credit-boundary check, 1 exact-replay-is-plus-zero check, 1 determinism-across-two-independent-assemblies check, 6 fail-closed mutation/tamper tests (missing tokenizer atoms, forged A02 binding, forged digest registry, forged v3 reference target, HIST_CHAIN-style history transplant onto a DB_MATCH row, tampered prompt)."
+  ],
+  "result_headline": "P0_DB_MATCH_END_TO_END_MICROPILOT satisfied: exactly one production-assembled DB_MATCH row passes the full v4 composer chain (candidate_pre_admission_pass: true, failures: []). This is the FIRST row in this entire campaign to clear all 5 wired per-row gates (generation provenance, A02 discriminator-producer auth, epistemic pre-update, tokenizer-ABI, hyperposition replay/state-history proof) via a real production code path instead of a one-off test script.",
+  "what_this_does_NOT_prove": [
+    "NOT a canonical dataset admission. v4.adjudicate() output: canonical_dataset_admission=false, accepted_dataset_tokens_minted=0, training_credit_minted=0, canonical_truth_minted=false, direct_effect_authority_minted=false, on every run including the passing one. supervisor 8.89's promotion_delta.gold_pilot_ready stays false and should.",
+    "NOT diverse content. The assembler still only reproduces the single fixed generator.CASE_ID/default_parameters() case from the two-case trusted generator authority -- same authority supervisor 8.89 explicitly flagged as 'not authority for a diverse training corpus'. 8-16 rows across multiple families still requires a separately versioned diverse generator authority (P1_DIVERSE_GENERATOR_AUTHORITY), not yet built.",
+    "NOT a resolution of A02 scope for HIST_CHAIN. Confirms empty-history DB_MATCH is the structurally viable path (per 8.89's own framing: classify HIST_CHAIN as unsupported-by-A02-v1, not an architecture failure); a nonempty-history successor to A02 remains undesigned and out of scope here.",
+    "NOT batch-level clean. trigger2_family_provenance_gate_v1 and the rendered-nuisance gate are batch-level and were not run against this single row in a microbatch context; both must be re-run whenever a real multi-row batch is assembled, per the composer's own family_provenance_note/remaining_p0."
+  ],
+  "new_finding_more_important_than_the_pass": {
+    "summary": "None of the 5 wired per-row gates bind or verify model-visible content. 'prompt' (the literal text listed in model_visible_fields, i.e. what the model would actually train on) is not covered by generation_receipt_evaluator_only, the A02 discriminator binding, the event digest registry, or the replay proof.",
+    "evidence": "tests/test_trigger2_db_match_row_assembler_v1.py::test_tampered_prompt_after_generation_receipt_fails_closed -- swapping row['prompt'] to an arbitrary unauthorized string AFTER full row assembly still yields v4.adjudicate(row)['pass'] == True. Marked xfail(strict=True) so the gap stays tracked and loud (suite goes red again automatically the moment anyone tries to claim it's fixed without actually fixing it).",
+    "severity": "candidate_pre_admission_pass currently certifies formal/provenance structure only, not the content a model would ever actually see. This must close (e.g. hash prompt content into generation_receipt_evaluator_only, or a dedicated prompt-content-binding gate) BEFORE any row is treated as admission-ready, not just before scaling to more rows.",
+    "also_fixed_in_same_commit": "v4 composer's own remaining_p0 array previously contained a stale/wrong claim that the replay/state-history check (required_order step 5) 'is still not actually invoked' -- this directly contradicted both the code (hyperposition_replay.adjudicate(row) is genuinely called, confirmed by direct source read) and the composer's own closed_p0 entry. Corrected in place; documentation-drift only, no functional change."
+  },
+  "replay_verification": {
+    "method": "v4.adjudicate(row) called twice on the byte-identical row dict (see test_exact_replay_of_accepted_row_is_plus_zero); also two fully independent calls to assemble_db_match_row() compared for structural equality (test_two_independent_assemblies_are_structurally_identical).",
+    "result": "Identical pass/failures on both calls; all credit fields stay at zero on both calls -- consistent with 'exact replay adds +0', though note this composer is a pure evaluator with no persistence layer of its own, so this replay check demonstrates determinism, not protection against a real ledger double-write (no ledger write path exists yet to test)."
+  },
+  "positive_rows_admitted": 0,
+  "positive_rows_candidate_pre_admission_pass": 1,
+  "next_priority_per_supervisor_8_89": [
+    "P1_A02_NONEMPTY_HISTORY_DECISION",
+    "P1_DIVERSE_GENERATOR_AUTHORITY",
+    "P1_BATCH_CURRENTNESS_AND_FAMILY_GATE",
+    "P2_SCALE_ONLY_AFTER_POSITIVE_MICRORECEIPT (this receipt is that positive microreceipt for the assembler path; scaling to 8-16 rows still blocked on prompt-content-binding gap above and on diverse generator authority)"
+  ],
+  "hard_invariants_respected": ["FREE_ONLY_NO_PAID_FALLBACK", "TOGETHER_FORBIDDEN", "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS", "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS"]
+}

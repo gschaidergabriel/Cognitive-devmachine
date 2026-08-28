@@ -1,97 +1,254 @@
-# ClayVerse integrated single-container candidate architecture
+# EntityOS + HCU — current candidate architecture
 
-## Product boundary
+## Authority boundary
 
-ClayVerse is the product endpoint. The canonical release target is one OCI/Docker-compatible image built from `the artefact/`. EntityOS is an internal execution/security/runtime substrate carried inside that image; it is not the top-level release endpoint.
+**EntityOS is the sole current product/system identity. HCU is the sole current integrated cognition/compute architecture.**
 
-There is one persistent central ClayVerse entity. Gabriel and Andreas are equal-rights authenticated perspectives into that same entity, with separate durable conversation/Claude Code homes but one canonical UnifiedDB authority.
+The persistent research entity remains Clay. Temporary ChatGPT/Claude/model workers are organs of that research entity, not new persistent identities.
 
-## Canonical product runtime path
+Compatibility/provenance names may remain only where exact migration would break paths, hashes, schemas, receipts or reproducibility:
 
-`browser -> Clerk sign-in/session -> verified Clerk JWT -> authenticated WebSocket PTY -> IdentityRouter -> user-bound persistent tmux -> normal interactive Claude Code CLI -> managed UserPromptSubmit hook -> UnifiedDB observation -> MicroClay retrieval entry/activation -> ClayGraph/temporal/provenance context -> Hyperposition -> bounded workspace context injection -> Claude reasoning -> effect-only local ClayVerse MCP when an admitted action is needed -> EffectGate -> internal EntityOS only when explicitly admitted -> verified/denied outcome -> causal re-entry/credit -> MicroClay retrieval-policy learning -> managed Stop/StopFailure hook -> assistant turn -> UnifiedDB -> rebuilt ClayGraph`
+- `Xeno` — transitional implementation compatibility codename only;
+- `XCU` — transitional/research alias for HCU only;
+- `Mini Entity` / `MicroEntity` — historical implementation/provenance paths;
+- ClayVerse / Frank — historical donor/provenance only unless explicitly re-admitted.
 
-The retired headless `claude -p`/custom chat API path is not the product runtime.
+The prior ClayVerse architecture remains available in Git history. Its browser/Clerk/Claude/MicroClay/container contracts are donor mechanisms, not current EntityOS acceptance obligations merely because their source still exists.
 
-## Canonical state and memory invariants
+## System invariant
 
-- UnifiedDB (SQLite/WAL candidate) is the persistent state/world/data/memory authority.
-- ClayGraph is derived and rebuildable; it is not a competing source of truth.
-- Exactly two canonical users (`gabriel`, `andreas`) map to one entity/database and separate permanent sessions.
-- Each session preserves its newest 20 turns at full fidelity.
-- Older history ages through explicit compression generations. The first destructive boundary is fail-closed until complete semantic coverage is established by explicit typed lines or a digest-bound stronger-extractor clearance.
-- After destructive compression there is no hidden lossless transcript authority. Provenance retains non-reversible source digest/size metadata plus admitted durable semantic extraction.
-- Cross-session retrieval is collision-triggered and bounded rather than routinely injecting another user's full session.
-- Workspace episodes are explicit, selection-fenced, and connected to causal re-entry.
+EntityOS/HCU must remain one system with one canonical durable state/evidence authority and one real-effect boundary.
 
-## MicroClay adaptive retrieval organ
+```text
+observed input / event / user data / tool result / intrinsic event
+                         |
+                         v
+                 TYPED ENTRY FABRIC
+                         |
+             admitted causal packet
+                         |
+                         v
+        canonical durable state / evidence substrate
+                         |
+             +-----------+-----------+
+             |                       |
+             v                       v
+ deterministic control             HCU
+ scheduling / guards       shared-weight / vector /
+ / budgets / generation     inference / J-Space /
+             |              bounded function cells
+             +-----------+-----------+
+                         |
+             typed causal interconnect
+             workspace / Hyperposition
+                         |
+      +----------+-------+-------+-----------+
+      |          |               |           |
+   GRID10     COGSIM10         WM_TEST    NESTED_SIM
+      |          |               |           |
+      +----------+-------+-------+-----------+
+                         |
+                      SCALEOUT
+                         |
+              calibrated ActionCandidate
+                         |
+               deterministic translation
+                         |
+              EffectGate + EffectJournal
+                         |
+                       reality
+```
 
-MicroClay is a persistent small retrieval organ inside the single ClayVerse entity, not a second identity, second agent or second source of truth. Its job is to learn the best **entry point into memory**, not merely to sort a fixed top-k after the fact.
+No HCU/J-Space/world-model/workspace output can mint canonical truth, permission, effect authority or a second persistent identity.
 
-The target retrieval path is:
+## Typed Entry Fabric
 
-`current cue + user/session + resource context -> MicroClay entry-point proposal -> exact/structured temporal lookup + FTS/vector candidates + bounded ClayGraph seed activation/expansion -> provenance/valid-time/conflict filters -> adaptive budget/ranking/abstention -> Hyperposition for unresolved facets -> GWT/context coalition -> Claude`
+All new data paths converge toward a typed admission boundary before cognition.
 
-MicroClay may adapt:
+An admitted Entry packet binds at least:
 
-- query/cue normalization and entry-point seeds;
-- memory/source/class routing;
-- relative exact/FTS/vector/graph/recency/provenance weights;
-- graph seed quality, bounded activation radius and widen-search threshold;
-- context-budget packing and abstention/UNKNOWN thresholds;
-- repeated usefulness/irrelevance/staleness priors for retrieval routes.
+- immutable ingress / causal identity;
+- live entity generation;
+- source and provenance;
+- modality / schema / type;
+- observed/received time where relevant;
+- parent / stream relation;
+- trusted capability/permission binding;
+- bounded compute/resource budget;
+- payload identity or digest.
 
-MicroClay may **not** adapt semantic truth, provenance, user rights, capability authority, EffectGate policy, EntityOS admission or the canonical memory record. Retrieval activation/accessibility is never truth or execution authority.
+### Capability law
 
-Every canonical product retrieval is causally receipt-bound to `turn_id`, `episode_id`, `causal_id`, user/session and the live entity generation. Query content is not duplicated into the retrieval-policy ledger; bounded hashes/entry keys and selected IDs provide replay/audit identity. A repeated retrieval of the same causal turn reuses the same receipt rather than learning twice.
+Capability claims arriving inside an untrusted packet are not authority.
 
-Learning is outcome-bound. The initial safe learning signal is a later verified EffectJournal/causal outcome from the same retrieval episode. A normal Claude answer is not automatically positive reward. Duplicate feedback receipts are idempotent and stale generations are rejected. User corrections, retrieval misses, unnecessary personalization and verified task outcomes are intended additional supervised/causal signals once their admission contracts are explicit.
+The Entry Fabric must compare requested capabilities against the existing deterministic canonical capability/permission source. Incoming data may narrow an admitted capability set; it may never self-grant or broaden it.
 
-The learned policy starts in `SHADOW`: the deterministic baseline continues serving Claude while the adaptive route is scored and recorded. Promotion to `ACTIVE` requires isolated replay/held-out evidence showing positive net retrieval utility without higher contamination, stale-memory use, unnecessary personalization or authority leakage. Cold/random learned parameters must never replace a known-safe baseline merely because training has begun.
+The HCU does not create a second permission system.
 
-The current source candidate implements the persistent receipt/policy spine, query-sensitive baseline, hashed cue entry keys, causal outcome learning and SHADOW gating. Full graph-native entry selection, FTS/vector fusion and any neural MicroClay implementation remain acceptance work and must be benchmarked against simpler retrieval rather than assumed superior.
+### Event identity versus admission identity
 
-## Permanent Claude Code boundary
+Replay-stable causal event identity and transport/admission identity are distinct contracts.
 
-- The image carries normal interactive Claude Code plus `tmux`; browser detach does not intentionally terminate the underlying user session.
-- Each canonical user has a durable HOME below `/var/lib/clayverse/users/<user>/home`; subscription/OAuth/session state therefore follows the persistent ClayVerse state volume rather than container-secret inheritance.
-- Claude starts from an environment allowlist, with built-in tools disabled and strict MCP configuration.
-- Managed Claude settings are installed at `/etc/claude-code/managed-settings.json`; `UserPromptSubmit`, `Stop`, and `StopFailure` hooks bind interactive conversation lifecycle to UnifiedDB automatically.
-- The local stdio MCP is effect-only: `request_effect` and read-only session state. It cannot replace the automatic turn hooks as a second state authority.
-- The admitted effect protocol is limited to `state.noop` and `entityos.exec`; generic host `process.exec` remains forbidden.
+A receive timestamp, payload reference, permission snapshot, transport envelope or resource budget may legitimately change admission identity without redefining the immutable underlying event. A change to immutable payload/provenance/event semantics must change causal event identity.
 
-## Web/auth boundary
+Current HCU route work must re-enter through this distinction rather than deriving all identity from one mutable envelope.
 
-- The server verifies Clerk session JWTs using configured issuer/key material and authorized-party checks, then resolves the subject through the persisted canonical identity binding.
-- The browser surface is an authenticated WebSocket PTY, not `/api/chat`.
-- xterm JavaScript/CSS are vendored into the ClayVerse image and served by the container; they are not fetched from a public CDN at runtime.
-- Clerk remains the intended external authentication service and its real-instance browser/JWT/key-rotation behavior is still an executable acceptance gate.
+## Canonical state and evidence
 
-## EntityOS/effect boundary
+Current authority names the durable substrate as UnifiedDB or the current compatibility MiniUnifiedDB surface where exact migration is incomplete.
 
-- EntityOS bytes are staged into the image from a verified source lock and build-time SHA-256/size contract.
-- The service verifies the embedded artifact identity at startup.
-- `CLAYVERSE_ENABLE_ENTITYOS_EXEC=0` is the default admission state. The service and per-user MCP both remain non-executing until the exact embedded EntityOS artifact has accepted isolated runtime evidence and execution is explicitly enabled.
-- Effect intent is journaled/fenced before external execution and outcome is causally re-entered; stale generation/lease writers fail closed at the admitted contract.
+Regardless of implementation name:
 
-## Container boundary
+- durable observed state/evidence is outside model-generated cognition;
+- model output is candidate reasoning, not truth;
+- world-model predictions remain noncanonical until checked against observation;
+- ClayGraph/relationship projections, if reused, are rebuildable only;
+- Hyperposition preserves unresolved alternatives rather than voting them into truth;
+- method memory may propose how to investigate but cannot manufacture a missing fact;
+- `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
 
-- Build context is default-deny/allowlisted.
-- The supplied Compose profile runs one ClayVerse service as non-root with read-only rootfs, dropped Linux capabilities, `no-new-privileges`, bounded tmpfs, one persistent state volume and one workspace volume.
-- Runtime-generated state is external to the immutable image; no companion application container is part of the release contract.
-- `consciousness_daemon` is excluded; continuity comes from persistent interactive sessions plus explicit state, hooks, causal/recovery contracts and checkpoints.
+## HCU decomposition
 
-## Deliberately unclaimed / still external
+HCU is developed as a reusable computational architecture, not as a permanent swarm of independent agents.
 
-- Exact-current-head full regression suite on an authorized isolated executor.
-- Exact OCI image build and runtime checks for the packaged Python/Node/tmux/Claude Code/xterm/managed-hook stack.
-- Real Clerk browser/JWT/WebSocket behavior.
-- Real authenticated normal interactive Claude Code sessions for both durable user homes.
-- Exact hook lifecycle: prompt ingestion -> MicroClay retrieval/context injection -> optional effect MCP -> Stop/StopFailure persistence under live Claude Code.
-- MicroClay shadow-vs-baseline replay/held-out benchmark, user-correction feedback and ACTIVE promotion gate.
-- Full exact/FTS/vector/ClayGraph entry-point fusion and bounded graph activation.
-- Live dual-session collision/concurrency/stale-generation controls.
-- Accepted exact embedded EntityOS runtime/effect contract.
-- Restart/crash/recovery and persistent-volume continuity at exact image identity.
-- Deployment readiness and later explicitly authorized VPS deployment/migration.
+Compatibility computer-role names may remain during migration:
 
-GitHub-hosted OCI jobs observed during this GO were rejected before visible job steps by runner/control-plane admission and receive no test credit. Vercel Sandbox execution is not exposed by the currently available connector surface. These are infrastructure limitations, not product PASS evidence.
+- **XRAM role** — canonical/hot/rebuildable/scratch/paged state tiers;
+- **XPU role** — deterministic scheduling, admission, generation fences and resource control;
+- **HCU accelerator plane** — shared-weight/vector/inference/J-Space/function-cell compute;
+- **typed interconnect** — causal packet, workspace and Hyperposition transport;
+- **Entry I/O** — typed ingress;
+- **effect translation** — candidate to typed effect request, then EffectGate/EffectJournal.
+
+These are software architecture roles, not claims of custom silicon.
+
+## Script-first reactive cognition
+
+The target normal path is selective rather than permanent full-model churn:
+
+`admitted event -> deterministic maintenance -> selective HCU lane activation -> candidate computation -> bounded projection -> EntityOS decision path`.
+
+Deterministic stages handle generation checks, provenance joins, deltas, contradiction/falsifier/calibration updates and routing pressure where possible. Model lanes activate only when novelty, unresolved contradiction, uncertainty, forecast/effect pressure, goal pressure or scheduled recheck justifies their cost.
+
+External hosted providers are not admitted as a required internal cognition dependency. Positive local engine admission must bind exact engine class plus real checkpoint/tokenizer/runtime/build identity. Absence from a provider denylist is not authority.
+
+Current donor implementation work remains under compatibility path `the artefact/MicroEntity/hcu/` until exact migration/fusion is safe.
+
+## Causal route identity
+
+A model-activating HCU route must bind:
+
+- immutable causal event identity;
+- entity generation;
+- router policy identity;
+- positively admitted engine identity/class;
+- exact admitted engine artifact/runtime identity;
+- deterministic routing result;
+- hash/canonicalization profile identity;
+- downstream inference receipt identity.
+
+Inference must fail closed if the downstream receipt does not echo the admitted event/route/engine/canonicalization tuple.
+
+The current Python hash serializer profile is an implementation-scoped contract only. It is not evidence of cross-language canonicalization. Heterogeneous Entry-Fabric identity requires RFC 8785 JCS or an explicitly versioned typed equivalent plus independent compatibility evidence.
+
+## HCU modes
+
+### GRID10
+
+A cheap 10-logical-cell baseline for deterministic scheduler/interconnect tests, small parallel reasoning, lesions and compute-matched comparisons.
+
+### COGSIM10
+
+Request-scoped pure cognition simulation. Temporary cells explore hypotheses, counterhypotheses, plans and critics and emit candidates only. Simulated actions have no direct real effects.
+
+### WM_TEST
+
+A bounded experimental transition/world-model mode. Predictions are noncanonical and must be calibrated against later observations.
+
+### NESTED_SIM
+
+Selective expensive mode:
+
+`observed state -> bounded world model -> virtual computer -> simulated AI cognition -> proposed action -> hypothesis/counterhypothesis comparison -> calibrated candidate -> EffectGate`
+
+It is not the default and never creates a second reality authority.
+
+### SCALEOUT
+
+Logical-context benchmark ladder:
+
+`10 -> 32 -> 64 -> 128 -> 256 -> ~600`
+
+The ~600 H100-class target is hypothesis-only until benchmarked. Logical module count must never be reported as equal to resident model count or simultaneous physical decode streams.
+
+## Global J-Space / nested workspace
+
+Global J-Space is treated as an empirical causal coordination/interface hypothesis.
+
+Target hypothesis:
+
+`transient model-local workspace <-> bounded typed projection/retrieval/re-entry <-> persistent EntityOS/HCU workspace/state`
+
+A prompt, trace, self-report, recurrence or coherent representation is not proof of hidden-state causality or consciousness. Model-specific causal interventions and discriminating ablations are required before a local J-Space mechanism is promoted.
+
+No hidden consciousness daemon or second durable transcript is admitted.
+
+## Hyperposition
+
+Hyperposition preserves unresolved, conflicting or set-valued alternatives with provenance and falsifiers.
+
+Reduction is evidence-based. Majority vote, recurrence, confidence prose or workspace stability cannot promote a candidate to canonical truth.
+
+## Effect boundary
+
+All real/state-changing actions remain behind the deterministic EffectGate + EffectJournal path.
+
+Required principles:
+
+- candidate cognition never executes directly;
+- capability is explicit and bounded;
+- causal/request/generation identity is bound before execution;
+- verified outcome re-enters canonical state through the same causal episode;
+- stale generation fails closed;
+- ambiguous post-crash effect outcome remains UNKNOWN;
+- unfinished external effects are not blindly replayed;
+- no HCU or model lane creates a second generic host execution path.
+
+## Recovery / generation
+
+Restart and recovery preserve uncertainty and canonical generation fencing.
+
+- incomplete work is terminalized/re-entered explicitly;
+- leases expire across recovery;
+- stale writers fail closed;
+- ambiguous external effects are not guessed successful;
+- derived projections are rebuilt from canonical state;
+- HCU scratch/J-Space/workspace state is not a second durable authority.
+
+## Current execution policy
+
+Current build/test/experiment/runtime credit is **authorized-isolated-sandbox-only**.
+
+Under current authority:
+
+- VPS testing is forbidden;
+- self-hosted VPS runners are forbidden;
+- production-host testing is forbidden;
+- Together API is forbidden;
+- paid fallback is forbidden;
+- final paid/model training requires explicit owner authorization.
+
+Source review, documentation, PR state, workflow existence or component regressions do not imply EntityOS/HCU runtime PASS.
+
+## Current acceptance frontier
+
+1. keep all current-facing control-plane files aligned to EntityOS + HCU while preserving historical donor hashes/paths;
+2. finish causal event identity versus admission identity separation in the Typed Entry Fabric;
+3. wire Entry capability admission to the existing canonical deterministic capability authority;
+4. bind real local ~0.8B checkpoint/tokenizer/runtime/build bytes to positive HCU engine admission;
+5. bind the actual downstream inference receipt producer to event/route/engine/canonicalization identity;
+6. rebase/fuse the strongest HCU donor candidate onto current `main` without a second router/state/effect path;
+7. rebuild compatibility package snapshots only from settled exact bytes;
+8. run combined Entry + HCU route + inference-echo + GRID10 regression on an actually-started authorized isolated executor;
+9. measure selective-inference cost/utility before widening COGSIM10/WM_TEST/NESTED_SIM;
+10. promote no whole-runtime claim until exact executable evidence supports it.

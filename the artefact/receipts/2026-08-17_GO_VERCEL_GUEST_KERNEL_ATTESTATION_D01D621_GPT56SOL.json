@@ -1,0 +1,61 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "Retained PR810 Vercel Sandbox outer guest-kernel identity attestation before private-source credential admission",
+  "bootstrap_basis": "000_CLAY_CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-17_DEEPWORK_FULL_CONTAINER(1).txt",
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "semantic_delta_commit": "d01d6218491edf468573c17f9d8c01f3803fa210",
+    "delta": "Current-target wrapper adds fail-closed uname guest-kernel identity capture immediately after Sandbox.create/provider identity and before GITHUB_READ_TOKEN admission; retained runner blob and Research target closure are unchanged."
+  },
+  "isolated_execution": {
+    "provider": "Vercel Sandbox",
+    "deployment_id": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "deployment_commit": "d01d6218491edf468573c17f9d8c01f3803fa210",
+    "sandbox_name": "tomato-weary-porpoise-K4wNz6",
+    "sandbox_session_id": "sbx_JiOY9Ys4YJcCZAgzle0wTfi7aGaI",
+    "sandbox_admission": "PASS_CREATED",
+    "guest_kernel_step": {
+      "label": "outer_microvm_guest_kernel_identity",
+      "exit_code": 0,
+      "system": "Linux",
+      "release": "6.12.76",
+      "machine": "x86_64",
+      "attestation": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY"
+    },
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "error": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "sandbox_stopped": true,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "github_secret_forwarded_to_sandbox": false
+  },
+  "classification": {
+    "provider_guest_kernel_boundary": "MECHANISM_SUPPORTED_BY_ACTUAL_GUEST_KERNEL_IDENTITY_OBSERVATION",
+    "exact_clayverse_oci_inside_guest_kernel": "UNOBSERVED",
+    "kata_or_equivalent_final_same_digest_execution": "UNOBSERVED",
+    "whole_product_acceptance": "IN_PROGRESS",
+    "note": "This evidence strengthens the outer isolated-execution surface only. It does not prove that an exact ClayVerse OCI digest executed behind the guest-kernel boundary because private source staging was blocked before OCI build."
+  },
+  "external_primary_contract": {
+    "vercel_sandbox": "Official Vercel Sandbox documentation describes each Sandbox as running in a Firecracker microVM. The provider contract plus this observed guest-kernel identity support the bounded provider-surface claim; neither substitutes for final same-digest ClayVerse microVM acceptance."
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The user-triggered go exposes no shared immutable request/turn id and only minute-precision immutable message time under the current atomic lease protocol."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_or_production_testing": false,
+    "together_api_used": false,
+    "secret_exposed": false,
+    "paid_or_final_training_started": false
+  },
+  "next_high_information_step": "Provision approved sensitive GITHUB_READ_TOKEN only in the retained Vercel Preview host environment; then refresh and rebind the single retained PR810 controller once to current admitted Research/PR611/PR622/PR623 bytes and execute exact private staging -> full regression -> OCI build/digest -> hardened in-image gates. Final acceptance still requires that same exact accepted OCI digest behind the independent Kata/equivalent guest-kernel boundary."
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "ENTITYOS_HCU_GO_BLOCKER_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "observed_main_before_write": "7aaff2ce3adfedbfad53432a4427b3b0abe5925f",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "reproducible_atomic_trigger_key_available": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed": false
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "6904f34387b084605dd5f2d5763482f9cdcf1b66",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "2da99e0458809988190c129b04cae913d1f15d92"
+  },
+  "vercel_observation": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "plan_reported_by_connected_read_only_surface": "hobby",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "latest_exact_executor_deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "latest_exact_executor_deployment_state": "READY",
+    "latest_exact_executor_deployment_git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "remaining_included_sandbox_quota_directly_observed": false,
+    "connected_vercel_surface_exposes_direct_remaining_sandbox_quota_read": false,
+    "documentation_discriminator": "Vercel Sandbox documentation exposes per-sandbox/session cumulative usage metrics such as totalDurationMs and totalActiveCpuDurationMs, but the connected read-only surface and returned documentation did not expose an authoritative account-level remaining included Sandbox quota value.",
+    "plan_identity_used_as_quota_evidence": false,
+    "sandbox_create_attempted": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "provider_credential_preflight_attempted": false
+  },
+  "hypothesis": "The existing connected Vercel read-only surface can provide a directly authoritative remaining included Sandbox quota value and thereby open the FREE_ONLY Sandbox admission gate.",
+  "counterhypothesis": "The connected surface exposes deployment/plan/session information but not remaining included Sandbox quota, so plan identity or cumulative usage cannot safely open Sandbox.create.",
+  "discriminator_result": "COUNTERHYPOTHESIS_SUPPORTED_ON_CURRENT_CONNECTED_SURFACE",
+  "go_tracks": {
+    "track_a": {
+      "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "delta": "The exact-current executor/deployment identity was revalidated and the next runtime admission blocker was narrowed to absence of a directly authoritative remaining included Sandbox quota signal on the connected read-only Vercel surface. No runtime scope was inflated."
+    },
+    "track_b": {
+      "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Supervisor 8.65 pauses further source-guard proliferation and requires the FREE_ONLY Sandbox admission gate before the fixed Python/sqlite3/_sqlite3 environment probe. The gate remains closed; no safe higher-information HCU runtime action is admitted on the current surface."
+    },
+    "track_c": {
+      "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "Model/J-Space causal execution is downstream of the blocked Sandbox environment gate. No paid training or provider preflight is permitted, and no model-specific runtime evidence was created."
+    }
+  },
+  "credits_after": {
+    "function_runtime_diagnostic_no_sandbox_scope": "PASS_PREEXISTING_EXACT_HEAD_HTTP_200",
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Obtain a directly authoritative read-only remaining included Vercel Sandbox quota signal from an admitted surface. Only if it proves sufficient included quota with no charge/upgrade path may the single retained exact-head executor run the fixed Python/sqlite3/_sqlite3 environment probe; otherwise preserve the fail-closed blocker."
+}

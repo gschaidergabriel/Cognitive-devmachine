@@ -1,0 +1,96 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXACT_HEAD_FUNCTION_RUNTIME_DIAGNOSTIC_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.64",
+  "canonical_main_observed_before_write": "92f4e5e165cb3fc4f47c3c9c9e29a740a38faf70",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_EXACT_HEAD_DEPLOYMENT_AND_FUNCTION_RUNTIME_DIAGNOSTIC"
+  },
+  "executor": {
+    "identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "exact_head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "head_commit_message": "fix(hcu): sync exclusive cost guard to supervisor 8.64",
+    "active_guard_repair_scope": "active FREE_ONLY admission markers only; historical pinned donor/rebind provenance preserved"
+  },
+  "deployment": {
+    "id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "exact_head_match": true,
+    "state": "READY",
+    "lambda_runtime_stats": {"nodejs": 12},
+    "hobby_function_cap_respected": true,
+    "deployment_identity_credit_only": true
+  },
+  "route_source": {
+    "path": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "blob_sha": "6630570d16a62f937a6512d682dfcb86ae8a4102",
+    "runtime_admission_case": "runtime-admission",
+    "runtime_admission_status_source": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "runtime_admission_returns_before_cost_gate": true,
+    "runtime_admission_declares_sandbox_create_performed": false,
+    "selftest_sqlite_probe_prepared": true,
+    "selftest_requires_sandbox_cost_admission": true,
+    "selftest_checks": ["python3 version", "sqlite3 import", "_sqlite3 import", "SQLite version", "secret fence", "probe file digest"]
+  },
+  "exact_head_admission": {
+    "path": "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+    "blob_sha": "2ac95aaa77e6586e900d4a5b4699b0f983f23464",
+    "supervisor": "SUPERVISOR_STEERING_8_64",
+    "remaining_sandbox_quota_directly_observed": false,
+    "remaining_quota_assumption_forbidden": true,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_execution_admitted": false
+  },
+  "runtime_observation": {
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "observed_time_utc": "2026-08-24T04:01:43Z",
+    "method": "GET",
+    "route": "/api/sandbox-probe",
+    "http_status": 200,
+    "source": "Vercel exact-deployment runtime logs",
+    "response_body_directly_observed": false,
+    "case_identity": "INFERRED_RUNTIME_ADMISSION_CASE_FROM_EXACT_SOURCE_PLUS_HTTP_200",
+    "inference_basis": "At this exact source identity, runtime-admission is the only admitted sandbox-probe case that returns 200 before sandboxExecutionAdmitted(); selftest and family-split are rejected by the current false cost gate before Sandbox.create.",
+    "bounded_credit": "EXACT_HEAD_FUNCTION_RUNTIME_DIAGNOSTIC_ONLY",
+    "sandbox_execution_credit": 0
+  },
+  "protected_preview_client_evidence": {
+    "direct_response_body_observed": false,
+    "observed_access_results": ["302 SSO redirect", "429 protection-bypass helper rate limit"],
+    "classification": "ACCESS_HELPER_EVIDENCE_ONLY_NOT_PRODUCT_NEGATIVE"
+  },
+  "quota_read_discriminator": {
+    "connected_provider_quota_read_tool_found": false,
+    "provider_documentation_observation": "Sandbox SDK/REST exposes per-sandbox cumulative/session usage such as totalDurationMs and totalActiveCpuDurationMs, but the searched documentation did not expose a directly authoritative pre-create remaining included Hobby Sandbox quota signal.",
+    "precreate_gate_satisfied": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "credential_preflight_attempted": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: successor guard drift was repaired in the retained executor, Hobby 12-function deployment budget restored, exact live head deployed READY, and exact-deployment serverless function-runtime diagnostic reached HTTP 200 without Sandbox creation.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: Sandbox cost admission remains closed before Sandbox.create; no HCU/Typed Entry Python regression or integrated runtime executed.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no admitted Sandbox, real local model invocation, loader-consumption evidence, J-Space/GWT vector intervention, or training run occurred."
+  },
+  "credits": {
+    "exact_head_deployment_ready": true,
+    "function_runtime_diagnostic": "PASS_INFERRED_CASE_FROM_EXACT_SOURCE_AND_RUNTIME_STATUS",
+    "sandbox_execution": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain an authoritative direct remaining included Vercel Sandbox quota observation through a read-only non-upgrade/non-billing surface. Only if the existing 8.64 FREE_ONLY gate is explicitly opened may the prepared exact-head selftest create a Sandbox and measure Python plus sqlite3/_sqlite3. If SQLite passes, continue canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> J-Space/GWT observation before any model/J-Space credit.",
+  "evidence_boundary": "This receipt promotes exact-head deployment readiness and function-runtime diagnostic evidence only. It does not promote Sandbox, HCU, model, J-Space, training, canonical-state/effect, or whole-product credit."
+}

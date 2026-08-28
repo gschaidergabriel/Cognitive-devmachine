@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_RESEARCH_COUNTERHYPOTHESIS_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "scope": "QWEN3_0_6B_NATIVE_CVEC_TRIGGER1_PROMOTION_DISCRIMINATOR",
+  "observed_source": {
+    "commit": "254dfc1529c6a795b15114cd1ed2bba728d1b1a6",
+    "schema": "CLAY_TRIGGER1_QWEN06_NATIVE_CVEC_SEMANTIC_COUNTERBALANCED/v1",
+    "output_code_counterbalance": "AFFIRMATIVE maps exactly once to A, once to B and once to C in calibration and holdout",
+    "semantic_basis": "internal direction derived from AFFIRMATIVE versus NEGATIVE/NEUTRAL activation families",
+    "material_limit": "calibration and fresh holdout request AFFIRMATIVE in every evaluation case"
+  },
+  "hypothesis": "The semantic internal direction is specifically causal for AFFIRMATIVE state and native cvec intervention changes downstream behavior because of that semantic direction.",
+  "counterhypothesis": "The plus-vector may improve generic requested-answer compliance, confidence, task engagement, or correct-code emission; because every evaluation case requests AFFIRMATIVE, A/B/C output-code counterbalancing alone cannot distinguish this from AFFIRMATIVE-specific causality.",
+  "cheapest_high_information_discriminator": {
+    "design": "counterbalance the requested semantic target itself across AFFIRMATIVE, NEGATIVE and NEUTRAL while independently counterbalancing A/B/C code mappings",
+    "selection_boundary": "layer, orientation, gain and all thresholds fixed on calibration before opening fresh holdout",
+    "controls": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM"
+    ],
+    "primary_test": "treatment_by_semantic_target_interaction rather than aggregate correct-code uplift",
+    "expected_if_specific": "+VECTOR selectively improves AFFIRMATIVE-mapped target margin relative to NEGATIVE/NEUTRAL targets, with sign-flip producing the declared opposite directional pattern; null/orthogonal/permuted controls must not reproduce the interaction",
+    "expected_if_generic_compliance": "+VECTOR improves requested-code margin similarly across semantic targets or lacks the declared semantic-target interaction",
+    "holdout": "fresh disjoint semantic-target-balanced cases opened only after calibration acceptance",
+    "identity": "bind exact GGUF, llama.cpp build/commit, cvec bytes, semantic-basis activations, prompts, mappings, seeds and metric definition"
+  },
+  "promotion_law": "OUTPUT_LABEL_COUNTERBALANCE_PASS_ALONE_DOES_NOT_MINT_SEMANTIC_CAUSALITY; REQUIRE_SEMANTIC_TARGET_COUNTERBALANCED_EXECUTABLE_INTERACTION_EVIDENCE",
+  "credits": {
+    "existing_native_cvec_component_credit_revoked": false,
+    "new_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "no shared reproducible immutable macrocycle/request identity exposed to this organ"
+  },
+  "next_exact_action": "adapt the existing semantic-counterbalanced source or its successor so requested semantic targets are independently balanced across AFFIRMATIVE/NEGATIVE/NEUTRAL, add a source regression for that invariant, then execute only after canonical unusual-experiment coordination succeeds"
+}

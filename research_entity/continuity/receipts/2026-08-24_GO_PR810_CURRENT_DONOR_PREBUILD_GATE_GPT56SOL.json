@@ -1,0 +1,61 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_receipt": "4daa93b7ccdada610d1e0e7ecc709cba1fa070df",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_commit": "32a5fa02d8a902523037ca24a606061155d12e4b",
+    "duplicate_executor_created": false,
+    "unusual_experiment_performed": false,
+    "unusual_experiment_count_added": 0
+  },
+  "observation": {
+    "donor_bound_closure_dir": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-511d5689",
+    "required_exact_blob_count": 17,
+    "all_required_files_observed_deployment_carried_at_prewrite_head": true,
+    "current_donor_guard": "mcp/vercel-sandbox-mcp/scripts/guard-hcu-jspace-v4-v3-current-donor-exact-blobs.mjs",
+    "preexisting_build_script": "node scripts/guard-entityos-hcu-current-executor.mjs",
+    "gap": "The exact current-donor 17-file closure guard existed but was not in the package lifecycle path that runs before the exclusive Vercel build guard."
+  },
+  "delta": {
+    "path": "mcp/vercel-sandbox-mcp/package.json",
+    "prevercel_build": "node scripts/guard-hcu-jspace-v4-v3-current-donor-exact-blobs.mjs",
+    "vercel_build_preserved": "node scripts/guard-entityos-hcu-current-executor.mjs",
+    "effect": "Any future npm vercel-build lifecycle now runs the exact current-donor source-closure guard before the existing executor authority/quarantine guard.",
+    "source_rebind_required": true,
+    "route_unquarantined": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: future executor builds are source-gated on the exact donor-bound closure before the existing main executor guard.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the build path now mechanically checks the exact Typed Entry/route/engine-load/GRID10/model-execution/J-Space producer closure rather than trusting staging narration.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: Vector Control, Global J-Space/GWT, TrainingTrace and JSpaceBinding producer bytes must satisfy the same exact-donor guard before build progression; model/training credit remains zero."
+  },
+  "execution_evidence": {
+    "vercel_status_on_executor_commit": "FAILURE",
+    "vercel_target_reason": "build-rate-limit",
+    "build_executed": false,
+    "source_guard_observed_executing_in_vercel": false,
+    "sandbox_executed": false,
+    "interpretation": "INFRASTRUCTURE_OR_PLAN_ADMISSION_BLOCKER_NOT_PRODUCT_REGRESSION_FAILURE",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_ADDITIONAL_CHANGE_REQUIRED",
+    "reason": "the artefact/README.md was already updated in this same go macrocycle with the transitive J-Space executor closure and exact next gate; this write strengthens pre-build enforcement without changing the product-level frontier or runtime evidence."
+  },
+  "next_exact_action": "Keep SOURCE_REBIND_REQUIRED true until the fixed hcu-jspace-grid10-binding-capsule route itself is atomically rebound from historical binder-v2 FILES/command/assertions to the complete 17-file donor-bound closure and its three deterministic regressions. Only after that coherent source change may quarantine be removed; execute only when FREE_ONLY Vercel Hobby build/function admission actually permits it."
+}

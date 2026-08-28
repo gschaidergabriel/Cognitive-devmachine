@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_EVIDENCE/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "observed_research_main_before_receipt": "4daa93b7ccdada610d1e0e7ecc709cba1fa070df"
+  },
+  "coordination": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_route_commit": "cb0126ff3729a984332c76f5b24c972c010f65b5",
+    "executor_route_blob": "a3dd662b764ae63933e06c310d081c6e6effc51a",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0
+  },
+  "delta": {
+    "class": "FAIL_CLOSED_EXECUTOR_ROUTE_SOURCE_REBIND_STAGING",
+    "route": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js",
+    "source_rebind_required": true,
+    "sandbox_create_enabled_by_delta": false,
+    "exact_carried_blob_count": 17,
+    "fixture_directory": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/jspace-execution-store-511d5689",
+    "fixed_command": "python3 -m unittest -v test_model_execution_admission_store_v1.py test_execution_store_inference_jspace_chain_v1.py test_jspace_inference_binding_revalidation_v3.py",
+    "route_contract_blob_map_equality_required": true,
+    "route_contract_target_main": "cf258187c23ced50a7a1f81e9ea5ab25abbaee56",
+    "route_contract_target_donor": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "candidate_chain": "Typed Entry -> route -> verified engine admission -> verified loader consumption -> GRID10 -> actual model-executor observation -> canonical MiniUnifiedDB atomic invocation admission -> VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3",
+    "historical_carrier_cleanup_commit": "1b00d98e06f35dd57c722ee5d15ed7808dff62ce",
+    "historical_carrier_cleanup_reason": "Do not turn the old 5c59891b provenance directory into a competing current carrier merely because a transient guard pointed there during concurrent fusion."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: the single retained PR810 route now stages the exact current 17-blob execution/J-Space closure rather than the historical four-file binder-v2 set, while remaining quarantined.",
+    "track_b_hcu_typed_entry": "ADVANCED: route staging now includes exact Typed Entry, router, engine admission/load, GRID10 and canonical MiniUnifiedDB model-execution admission producer bytes from donor 511d5689.",
+    "track_c_jspace_gwt_free_only_readiness": "ADVANCED: route staging now includes Inference/v4, JSPACE_VECTOR_CONTROL_ABI/v1, Global J-Space/GWT, TrainingTrace/v1, JSpaceBinding/v3 and the exact current regressions, still with zero model/training credit."
+  },
+  "evidence_boundary": {
+    "source_delta_committed": true,
+    "source_blob_identity_verified_for_route_file": true,
+    "deterministic_route_regression_executed": false,
+    "sandbox_execution_observed": false,
+    "actual_model_executor_io_observed": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "execution_policy": {
+    "paid_execution_used": false,
+    "together_used": false,
+    "vps_self_hosted_or_production_testing_used": false,
+    "secrets_used_or_persisted": false,
+    "sandbox_attempted": false
+  },
+  "remaining_gate": {
+    "status": "SOURCE_REBIND_REQUIRED",
+    "reason": "Current build-guard successor branch and exact result assertions have not yet been proven coherent with the staged 17-blob route. The route deliberately remains blocked before cost admission and Sandbox.create.",
+    "next_exact_action": "Harden the single current build guard to validate the staged 17-file route/contract/manifest/fixed-command/result contract, execute only static/deterministic source checks first, then atomically remove SOURCE_REBIND_REQUIRED only after that guard is green; only afterward attempt the admitted FREE_ONLY Sandbox when protected preview/build admission is available."
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:35:00+07:00",
+  "updated_at_local": "2026-08-18T00:36:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_first_write": "672f305251181a34f6966a875c4b9b596dd880a3",
+  "classification": "CONTROL_PLANE_ADMISSION_FENCE_FALSE_POSITIVE_RESOLVED_BY_EXPLICIT_RUNTIME_FREEZE",
+  "scope": "source/control-plane falsifier and fusion resolution only; no ClayVerse product/runtime promotion",
+  "initial_falsifier": {
+    "retained_research_pull_request": 680,
+    "live_pr_head_observed": "0a678b758b37a2df0cec54783750d4c4f315f59d",
+    "then_bound_product_test_byte_commit": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "then_bound_product_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
+    "controller_fence_source_commit": "83fc6531d93bf31a018c5d0037497ee7c794d164",
+    "rejected_claim": "Exact equality between a moving PR coordination head and an earlier frozen product/test-byte commit is a valid stale-product fence.",
+    "result": "REJECTED",
+    "reason": "Receipt/coordination-only commits can advance a PR head without changing the intended frozen product closure, so direct equality can create a false-positive admission failure."
+  },
+  "repair_contract": {
+    "must_preserve": [
+      "exact bound product commit/tree identity",
+      "pre-fetch and post-fetch TOCTOU checks",
+      "fail-closed behavior for real product/build/test/policy/runtime closure drift"
+    ],
+    "accepted_stronger_direction": "Use a dedicated immutable runtime-freeze candidate whose PR head itself is the exact product/test closure being executed, rather than treating the live development PR coordination head as that authority."
+  },
+  "resolution_observed": {
+    "runtime_freeze_pull_request": 682,
+    "runtime_freeze_head": "6e8838651e39e181321e71a9a0b5b0f2bdfc5df1",
+    "runtime_freeze_tree": "dbc4c97c578a8b06782936fe2658f7a56bca8dc0",
+    "runtime_freeze_state": "OPEN_DRAFT_MERGEABLE_AT_OBSERVATION",
+    "runtime_freeze_scope": "fresh current-main fusion of the single retained final-Mistral product/test bytes for exact isolated runtime evidence; not a second runtime/state/effect authority",
+    "controller_pull_request": 810,
+    "controller_head_observed_after_resolution": "cbdafaa5bb8587dc10e737caf8ddcd18b7645596",
+    "controller_binding": "go-cycle-v2 now identifies PR682 and exact 6e883865.../dbc4c97c... as the runtime candidate, verifies that exact PR head before and after private fetch, and rewrites the detached batch onto that exact source identity.",
+    "initial_false_positive_fence_still_blocks_current_freeze": false,
+    "resolution_class": "MECHANISM_SUPPORTED_BY_EXACT_SOURCE_INSPECTION_NOT_RUNTIME_EXECUTED"
+  },
+  "parallel_controller_progress_observed": {
+    "detached_named_sandbox_start": true,
+    "bounded_status_polling": true,
+    "sdk_source_guard": true,
+    "sandbox_timeout_ms": 2700000,
+    "detached_batch_timeout_ms": 2580000,
+    "snapshot_expiration_ms": 86400000,
+    "latest_ready_controller_ancestor_observed": "5986dcbfe290f3c2f444aaa0a1cfdca3c7fcfc10",
+    "exact_current_controller_head_ready_observed": false,
+    "final_test_of_tests_pass_claimed": false,
+    "whole_product_pass_claimed": false
+  },
+  "external_primary_contract_check": {
+    "provider": "Vercel Sandbox",
+    "result": "Current official Vercel documentation supports named persistent sandboxes, Python 3.13 and plan-bounded long-running sessions; the retained 45-minute Sandbox ceiling is therefore a supported control-plane mechanism, not ClayVerse runtime evidence.",
+    "runtime_credit": 0
+  },
+  "coordination": {
+    "pr810_comment_id": 5318233874,
+    "action": "The false-positive fence was routed into the single retained controller lane; subsequent parallel fusion produced the dedicated PR682 runtime freeze. No duplicate controller or Mistral runtime was created by this organ."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable per-trigger request identity is exposed to this organ; minute-precision trigger time is insufficient for the atomic lease."
+  },
+  "runtime_credit_added": {
+    "private_source": 0,
+    "full_regression": 0,
+    "exact_oci": 0,
+    "real_mistral": 0,
+    "entityos_roundtrip": 0,
+    "tier2_replacement": 0,
+    "whole_product": 0
+  },
+  "current_frontier": "Obtain an exact READY deployment of the PR810 controller bound to PR682, then execute the detached source/regression/EntityOS/OCI component stage only with the owner-held scoped read-only GitHub token. Independently, the retained lane still lacks the complete Vault-backed real Mistral -> canonical re-ingest -> verified EffectGate/EntityOS -> Tier-1 -> full same-digest Tier-2 Sandbox recreation -> secret reacquisition -> second cognition -> remaining auth/PTY/two-user/concurrency sequence required for final acceptance.",
+  "next_exact_step": "First exact-current controller READY; then owner-token detached component execution and bounded receipt. Do not infer final-test or whole-product PASS from that component stage. Continue the same retained controller path for the still-open final Mistral/recovery/auth gates.",
+  "acceptance": "IN_PROGRESS"
+}

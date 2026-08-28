@@ -1,0 +1,58 @@
+{
+  "schema": "FRANKENSTEIN_ROOT_ORPHAN_REFERENCE_AUDIT/v1",
+  "generated_by": "GPT-5.6 Sol triggerword-3 curation organ",
+  "generated_date": "2026-08-28",
+  "main_reentry_before_write": "3cf4a76b8ffa2e9bdedca3cbd2d49c5d81f1033a",
+  "purpose": "Advance the existing ROOT_MIGRATION_PRECHECK safe-next-action by separating filename/path dependency from code-content collisions for three orphan-looking root blobs. No move is performed by this audit.",
+  "parent_precheck": "DEV_SOURCE_RESEARCH/repository/ROOT_MIGRATION_PRECHECK.json",
+  "target_public_root": [
+    "README.md",
+    "HUMAN_READ_THIS/",
+    "DEV_SOURCE_RESEARCH/",
+    "AI_START_HERE_DO_NOT_SCAN_REPO/"
+  ],
+  "move_executed": false,
+  "search_boundary": {
+    "method": "GitHub repository code search plus exact current blob reads",
+    "limitation": "Code-search results can match literal content rather than path references and can lag current main; absence of a search hit is not proof of zero incoming path references.",
+    "consequence": "This audit may downgrade false-positive reference concerns but cannot alone authorize relocation or deletion."
+  },
+  "candidates": [
+    {
+      "path": "gemeinsamer State)",
+      "blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size_bytes": 0,
+      "exact_current_content_class": "EMPTY_BLOB",
+      "code_search_observation": "Matches observed only in existing Trigger-3 migration/audit metadata during this pass; no functional source-path consumer was observed.",
+      "classification": "HIGH_CONFIDENCE_ORPHAN_CANDIDATE_BUT_MOVE_NOT_YET_AUTHORIZED",
+      "required_before_move": "complete current-tree incoming path reference audit plus deterministic single-commit move/delete plan"
+    },
+    {
+      "path": "libc.malloc_trim(0)",
+      "blob_sha": "56449f7a37c0593798d05e67687af3ed244ef058",
+      "size_bytes": 1637,
+      "exact_current_content_class": "GERMAN_TECHNICAL_PROSE_FRAGMENT",
+      "code_search_observation": "Literal token also appears as executable/code content in tools/grid10_node.py and fallback copies; those hits do not establish that the odd root filename itself is referenced as a path.",
+      "classification": "ORPHAN_OR_ARCHIVE_CANDIDATE_PATH_DEPENDENCY_UNPROVEN",
+      "research_boundary": "The prose contains performance/memory claims that are not promoted by this curation and must not be treated as measured current GRID10 evidence merely because the blob exists.",
+      "required_before_move": "path-specific incoming-reference proof rather than literal-token search"
+    },
+    {
+      "path": "madvise(ptr, length, MADV_FREE);",
+      "blob_sha": "d4b4da997a55a9567842f2a182f7cc6046b708d8",
+      "size_bytes": 469,
+      "exact_current_content_class": "GERMAN_TECHNICAL_PROSE_FRAGMENT_CONTINUATION",
+      "code_search_observation": "Matches observed only in migration/audit metadata during this pass; no functional source-path consumer was observed.",
+      "classification": "HIGH_CONFIDENCE_ARCHIVE_CANDIDATE_BUT_MOVE_NOT_YET_AUTHORIZED",
+      "research_boundary": "The prose claims major RAM reduction and low reallocation latency; no exact current benchmark identity is established here, so these remain unpromoted prose claims.",
+      "required_before_move": "complete current-tree incoming path reference audit plus byte-identical destination and deterministic reference rewrite if any references exist"
+    }
+  ],
+  "result": {
+    "safe_to_delete_now": false,
+    "safe_to_move_now": false,
+    "reason": "Existing ROOT_MIGRATION_PRECHECK still requires repository-wide reference and canonical path gates. This pass only narrows the three orphan-candidate classifications.",
+    "next_exact_action": "Use an exact current recursive tree/path inventory or repository checkout grep that distinguishes path tokens from content tokens; then move only byte-identical low-risk candidates in a single source-identity-bound commit with post-move reference checks."
+  },
+  "credit_boundary": "Repository curation evidence only; no runtime, HCU, J-Space, provider, training, or whole-product credit."
+}

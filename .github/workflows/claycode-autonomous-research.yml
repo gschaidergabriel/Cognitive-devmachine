@@ -29,8 +29,54 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Run one bounded FREE_ONLY research cycle
-        run: python tools/claycode_autonomous_cycle.py | tee /tmp/claycode-cycle.json
+      - name: Verify autonomous provider authority gate and direct CLI fail-closed boundary
+        run: |
+          python -m pytest -q \
+            tests/test_claycode_autonomous_provider_gate.py \
+            tests/test_claycode_autonomous_cycle_direct_gate_v1.py
+
+      - name: Exercise direct CLI under current HARD_OFF authority
+        run: |
+          python tools/claycode_autonomous_cycle.py | tee /tmp/claycode-direct-cycle.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('/tmp/claycode-direct-cycle.json').read_text().strip().splitlines()[-1])
+          assert payload['status'] == 'SKIPPED_PROVIDER_AUTHORITY', payload
+          assert payload['entrypoint'] == 'DIRECT_CLI_GATED', payload
+          assert payload['provider_calls'] == 0, payload
+          assert payload['secret_lookups'] == 0, payload
+          assert payload['authority']['admitted'] is False, payload
+          PY
+
+      - name: Run one bounded FREE_ONLY research cycle through current-authority guard
+        run: |
+          python tools/claycode_autonomous_cycle_guarded.py | tee /tmp/claycode-cycle.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('/tmp/claycode-cycle.json').read_text().strip().splitlines()[-1])
+          assert payload['status'] == 'SKIPPED_PROVIDER_AUTHORITY', payload
+          assert payload['provider_calls'] == 0, payload
+          assert payload['secret_lookups'] == 0, payload
+          assert payload['authority']['admitted'] is False, payload
+          PY
+
+      - name: Record exact source/runtime hashes for provider-boundary evidence
+        run: |
+          {
+            echo "head=$(git rev-parse HEAD)"
+            echo "tree=$(git rev-parse HEAD^{tree})"
+            echo "dirty=$(test -z \"$(git status --porcelain)\" && echo false || echo true)"
+            echo "python=$(python --version 2>&1)"
+            sha256sum \
+              tools/claycode_autonomous_provider_gate.py \
+              tools/claycode_autonomous_cycle.py \
+              tools/claycode_autonomous_cycle_guarded.py \
+              tools/claycode_autonomous_cycle_legacy_impl.py \
+              tests/test_claycode_autonomous_provider_gate.py \
+              tests/test_claycode_autonomous_cycle_direct_gate_v1.py
+          } | tee /tmp/claycode-provider-boundary-source.txt
 
       - name: Commit cycle receipts, supervisor inbox and bounded requests
         run: |

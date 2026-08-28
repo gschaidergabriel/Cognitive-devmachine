@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-25",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "canonical_main_observed_before_receipt": "9239370999c192328f33eb47fa3bbb7e88ab39a7",
+  "finding": {
+    "classification": "COMPLETED_ONESHOT_ISSUE_TRIGGER_REMAINED_FANOUT_CAPABLE",
+    "statement": "The reusable ordinary-dispatch singleton protocol already repaired the clay-direct-dev roundtrip fanout, but the completed GO878 backlog-first Forge one-shot workflow still accepted every owner-created issue with the same title. Four identical open issues were observed (1834, 1836, 1841, 1852). Because the target supervisor wiring was already fused on main, any further issue-triggered execution was redundant scheduler/runtime load rather than new evidence.",
+    "counterhypothesis": "The stable workflow concurrency group alone was sufficient to prevent harmful duplication.",
+    "counterhypothesis_disposition": "REJECTED_FOR_TRIGGER_DEDUPLICATION: stable concurrency serializes self-hosted jobs but still permits duplicate issue creation and workflow-run creation, so completed one-shot workflows must retire broad issue triggers or move to semantic claim-backed dispatch."
+  },
+  "delta": {
+    "workflow": ".github/workflows/go878-wire-backfill-supervisor.yml",
+    "workflow_commit": "606062164802bbfcea84ca1083f24059f3bb93b8",
+    "before_trigger": "issues.opened + exact title + owner login",
+    "after_trigger": "workflow_dispatch only",
+    "retained_concurrency_group": "go878-wire-backfill-supervisor",
+    "source_target_already_converged": true,
+    "runtime_retriggered_by_this_organ": false,
+    "new_unusual_experiment": false,
+    "paid_or_provider_execution_started": false
+  },
+  "issue_cleanup": {
+    "1834": "CLOSED_COMPLETED",
+    "1836": "CLOSED_DUPLICATE",
+    "1841": "CLOSED_DUPLICATE",
+    "1852": "CLOSED_DUPLICATE",
+    "legacy_actions_runs_cancelled": false,
+    "reason": "No workflow-run cancellation action was used; existing queued/running legacy events remain scheduler evidence and receive zero independent scientific replication credit."
+  },
+  "current_evidence": {
+    "main_after_parallel_reentry": "9239370999c192328f33eb47fa3bbb7e88ab39a7",
+    "workflow_manual_only_verified_on_reentry": true,
+    "free_swarm_metrics_generated_at": "2026-08-25T03:34:21.932816+00:00",
+    "free_swarm_total_tokens": 39932437,
+    "free_swarm_worker_records": 13571,
+    "forge_generated_at": "2026-08-25T03:34:22.788539+00:00",
+    "forge_accepted_deltas": 1,
+    "forge_needs_implementation": 65,
+    "distillery_generated_at": "2026-08-25T03:34:23.199440+00:00",
+    "distillery_accepted_packets": 0,
+    "distillery_accepted_dataset_tokens": 0
+  },
+  "three_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_CONTROL_PLANE",
+      "delta": "Removed a completed title-only issue fanout surface that could continue generating redundant self-hosted execution attempts after the backlog-first Forge source target had already converged; closed the four current duplicate trigger issues without issuing another runtime dispatch."
+    },
+    "track_b_hcu_and_typed_entry": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "This cycle's new durable delta is dispatch/control-plane coordination, not an HCU or Typed Entry primitive. The current HCU/Entry causal-identity lanes already have retained ownership, while historical conversion and exact executable evidence remain the higher-information bottleneck; creating another HCU/Entry lane would duplicate work.",
+      "next_discriminator": "After an admitted exact-source model execution exists, bind ModelExecution/InferenceReceipt and J-Space trace through the existing Typed Entry -> verified engine/load -> GRID10 chain rather than creating a second ingress/model authority."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "The current highest-information blockers remain historical-backfill terminal evidence, replay-v2 exact-current execution and Forge-to-Distillery positive-token conversion. No reproducible shared immutable macrocycle identity for a new unusual J-Space intervention was exposed, and no model-specific terminal receipt was observed.",
+      "next_discriminator": "After the conversion/runtime gates close, use only the retained canonically leased zero-cost local Qwen3-0.6B/J-Space lane and require model-specific causal controls before promotion."
+    }
+  },
+  "credits_after_cycle": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "negative_evidence": [
+    "At the 2026-08-25T03:34:23Z live snapshot Distillery still reports accepted_packets=0 and accepted_dataset_tokens=0 despite 39,932,437 Free-Swarm tokens.",
+    "Forge still reports exactly 1 accepted delta and 65 NEEDS_IMPLEMENTATION candidates; raw token growth therefore has not closed the conversion bottleneck.",
+    "No terminal exact-current historical-backfill saturation result or replay-v2 runtime promotion is claimed by this receipt.",
+    "Workflow/source/issue cleanup is coordination and control-plane evidence only, not EntityOS/HCU runtime acceptance."
+  ],
+  "next_exact_action": "Do not create another GO878 backlog-first wiring issue. Preserve backpressure on raw generation. Observe or restore one already-authorized terminal clay-direct-dev transport, then execute the canonical semantic historical-backfill generation exactly once to saturation, run replay-v2 exact-current regressions, and prove one evidence-qualified Forge ACCEPT -> exactly one Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0. Validate PR1851 source-count provenance idempotence against that same historical replay before fusion.",
+  "evidence_boundary": "This cycle grants source/control-plane/coordination progress only. It does not grant provider, whole EntityOS/HCU, full HCU, J-Space model, training, or whole-product runtime credit."
+}

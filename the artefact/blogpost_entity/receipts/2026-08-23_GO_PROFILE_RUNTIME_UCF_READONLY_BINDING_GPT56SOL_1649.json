@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_GO_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT isolated component organ",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main": "06b2195ce72d4546a30d23cedaeeb6dc66a56417",
+  "merged_main": "5edb2a59400657359fc2297e9b81f04dc22e025e",
+  "source_pr": 1296,
+  "classification": "SOURCE_COMPONENT_BINDING_MERGED_CURRENT_BLOBS_UNEXECUTED",
+  "finding": "The retained ProfilePipelineRuntime still lacks pipeline_cognitive_fabric_admit. Main now contains a thin read-only bridge that delegates to the single retained pipeline_cognitive_fabric_admission_v1 compositor while re-reading the active profile from the same MiniUnifiedDB and rejecting profile/hash substitution before cognition admission.",
+  "merged_source_identity": {
+    "module": "tools/profile_runtime_cognitive_fabric_binding_v1.py",
+    "module_git_blob": "a71baddd5cb1fa6c33a0f3ba724cfa3c7f19c920",
+    "test": "tests/test_profile_runtime_cognitive_fabric_binding_v1.py",
+    "test_git_blob": "e6ff18515695b405b1462659e4a46e5ab74f895a",
+    "exact_authorized_execution": "UNEXECUTED"
+  },
+  "delta": {
+    "canonical_compositor_reused": "tools/pipeline_cognitive_fabric_admission_v1.py",
+    "second_ucf_or_state_authority_created": false,
+    "pre_inference_db_mode": "READ_ONLY",
+    "profile_authority": "MiniUnifiedDB active_profile + profiles.profile_json/profile_sha256"
+  },
+  "prior_component_evidence": {
+    "scope": "EARLIER_SUPERSEDED_BLOBS_ONLY",
+    "surface": "ChatGPT isolated Linux/Python/SQLite component environment",
+    "module_git_blob": "0c3f7b5cb7c1a15bd7cff68434db8f91e076c658",
+    "test_git_blob": "452d448d1196046f0972c2389ec30bbd5f712db7",
+    "regressions_run": 3,
+    "regressions_passed": 3,
+    "exit_code": 0,
+    "transfer_to_merged_blobs": false,
+    "reason": "The PR source/test bytes advanced after that run. Exact evidence is blob-bound and cannot be transferred to the later merged blobs."
+  },
+  "unusual_experiment": {
+    "name": "READ_ONLY_PREINFERENCE_WRITE_POISON",
+    "count_for_this_go": 1,
+    "intervention": "On the earlier tested blobs, the recording compositor attempted CREATE TABLE on the exact DB handle supplied by the bridge.",
+    "observed": "WRITE_REJECTED_AND_ADMISSION_DELEGATION_CONTINUED",
+    "scope": "earlier component mechanism only",
+    "repeated_on_merged_blobs": false
+  },
+  "provenance_repair": {
+    "issue": "The original merged receipt still described the earlier 3/3 run as exact evidence after the PR module/test blobs had changed.",
+    "resolution": "Bind merged source identity to the actual merged blobs, demote the earlier run to superseded-blob evidence, and leave merged current bytes explicitly unexecuted.",
+    "false_green_prevented": true
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB only",
+    "cognition_semantics": "single canonical pipeline_cognitive_fabric_admission_v1 compositor",
+    "model_output": "candidate only",
+    "real_effects": "EffectGate only"
+  },
+  "hcu_parallel": {
+    "decision": "NO_CHANGE_NON_DUPLICATE",
+    "reason": "Open PR #1295 owns the current HCU Hyperposition Reality Field lane; no competing HCU implementation is added here.",
+    "runtime_credit": 0
+  },
+  "credit": {
+    "reference_runtime_integrated": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu": 0,
+    "whole_product": 0
+  },
+  "next_gate": "On fresh main, wire the merged bridge as the single _pipeline_cognitive_fabric_admit handler in tools/clay_profile_pipeline_runtime.py, add the effect to allowed_effects/dispatch, integrate the existing cognition bootstrap in the same MiniUnifiedDB initialization transaction, implement the required post-commit pipeline_cognitive_fabric_finalize binding, then obtain actually-started authorized exact-source integrated execution.",
+  "forbidden_preserved": [
+    "Together API",
+    "VPS/self-hosted/production acceptance testing",
+    "paid/final model training without owner authorization",
+    "second durable truth/state/effect authority"
+  ]
+}

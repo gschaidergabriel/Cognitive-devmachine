@@ -1,0 +1,107 @@
+{
+  "schema": "CLAY_TRIGGER2_CHECKPOINT_CONSUMED_BYTE_TOCTOU_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "NONCANONICAL_RESEARCH_DELTA_FAIL_CLOSED",
+  "observed_main_before_write": "d99e3a9cd7005a7ed1a24ec4d0896c7066aec7c3",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "NOT_PROVEN",
+    "training_authorized": false,
+    "provider_execution_authorized": false
+  },
+  "reentry": {
+    "existing_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V49_GPT56SOL.json",
+    "existing_ledger_disposition": "RETAIN_AS_PARALLEL_RESEARCH_HISTORY_WITH_THIS_STRONGER_CONSUMED_BYTE_CORRECTION",
+    "parallel_current_selection_delta": "research: fuse Trigger-2 statistical gate with renderer transportability",
+    "relationship": "COMPLEMENTARY_BUT_DOWNSTREAM_SELECTION_MUST_NOT_TREAT_ABI_V1_AS_SELECTION_GRADE_UNTIL_THIS_GAP_IS_CLOSED"
+  },
+  "exact_source_observation": {
+    "probe": "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+    "probe_blob_sha1": "960783307dd2fe696f55884278715442624480d3",
+    "test_commit": "bedd46357de481a3ae40392afb9fed0f5e3be824",
+    "sequence": [
+      "pre-load _verify_manifest hashes mutable local_dir paths",
+      "child runs under strace open/openat and loader opens local checkpoint pathnames",
+      "after child exit _compare_consumed_to_manifest reopens and hashes current local_dir/path contents",
+      "post-load _verify_manifest again hashes current local_dir paths",
+      "matching path-level observations currently permit consumed_identity_match=true"
+    ],
+    "existing_test_scope": [
+      "persistent manifest mutation",
+      "missing shard open",
+      "unmanifested open",
+      "absolute-path containment",
+      "duplicate manifest path",
+      "snapshot symlink lexical path preservation"
+    ],
+    "missing_adversarial_case": "TRANSIENT_SWAP_OR_MUTATE_THEN_RESTORE_BETWEEN_PREHASH_AND_LOADER_READ"
+  },
+  "finding": {
+    "id": "T2_CHECKPOINT_CONSUMED_BYTE_TOCTOU_GAP",
+    "reality_level": "R0_SOURCE_OBSERVED_PLUS_R1_SECURITY_INFERENCE",
+    "claim": "Observed pathname access plus hashes taken before and after the loader read interval does not prove the exact bytes actually consumed when the pathname is mutable. A transient replace/mutate-and-restore can in principle make the loader read nonmanifest bytes while later path hashes again match the admitted manifest.",
+    "credit_boundary": "CHECKPOINT_INPUT_IDENTITY_ABI_V1_REMAINS_PATH_OPEN_AND_BEFORE_AFTER_CONTENT_EVIDENCE_ONLY_UNDER_MUTABLE_FS; DO_NOT_MINT_SELECTION_GRADE_CONSUMED_BYTE_IDENTITY_FROM_V1_ALONE"
+  },
+  "hypothesis": {
+    "H1": "A scheduled transient shard swap after prehash and before/during loader access can evade the current v1 predicate if the original bytes are restored before the parent rehashes the pathname.",
+    "counterhypothesis": "The source checkpoint tree is immutable for the whole load interval, making that schedule impossible.",
+    "counterassessment": "V1 does not currently attest such immutability. Selection-grade identity must encode or measure it rather than assume it.",
+    "cheapest_discriminator": "Build a deterministic source-level transient swap-and-restore regression around a fake shard/read consumer. The current v1 evidence model should be demonstrated insufficient without loading a real Qwen checkpoint."
+  },
+  "successor_candidate": {
+    "schema_target": "CLAY_TRIGGER2_CHECKPOINT_INPUT_IDENTITY_ABI/v2",
+    "preferred_linux_mechanism": "SEALED_MEMFD_CHECKPOINT_MIRROR",
+    "design": [
+      "copy each admitted manifest member into memfd while hashing and size-checking the copied bytes",
+      "apply and verify F_SEAL_WRITE, F_SEAL_GROW, F_SEAL_SHRINK and F_SEAL_SEAL before model load",
+      "build a private snapshot-shaped mirror whose manifest paths resolve to inherited sealed descriptors",
+      "run the loader against only that mirror; retain strace path observation for shard-selection completeness",
+      "derive consumed-byte identity from the pre-seal copied-byte hash plus verified irreversible seals, not from a mutable source pathname rehash after load",
+      "optionally reverify the original source tree after load as a provenance drift guard, never as the primary consumed-byte proof"
+    ],
+    "alternative": "fs-verity on a supported explicitly attested filesystem",
+    "external_primary_method_sources": [
+      "https://docs.python.org/3/library/fcntl.html",
+      "https://man7.org/linux/man-pages/man2/memfd_create.2.html",
+      "https://docs.kernel.org/filesystems/fsverity.html"
+    ],
+    "resource_risk": "A sealed in-memory mirror adds roughly checkpoint-size memory pressure and requires an explicit resource guard before full model execution."
+  },
+  "qwen_loader_side_check": {
+    "initial_concern": "Qwen3.5 documentation often shows multimodal conditional-generation loading while v1 uses AutoModelForCausalLM.",
+    "resolution": "Current Transformers Qwen3.5 support intentionally permits AutoModelForCausalLM to unwrap the composite configuration to Qwen3_5ForCausalLM/Qwen3_5TextConfig for text-only loading; this is not presently the blocking source gap.",
+    "implication": "Do not redesign the loader solely because of the AutoClass difference; keep exact Transformers/runtime identity bound in receipts."
+  },
+  "current_p0": [
+    "preserve FreeSwarm HARD_OFF and do not execute provider/model experiments while runtime quiescence is unproven",
+    "do not spend the three-frozen-checkpoint runtime budget merely to generate v1 receipts that cannot prove selection-grade consumed bytes",
+    "implement or independently attest an immutable/read-time consumed-byte successor and add transient swap-and-restore regression",
+    "only after exact-source successor review plus then-current separately admitted FREE non-provider execution authority run BASE, POSTTRAINED and TARGET_MEASURED",
+    "feed only successor-eligible identity receipts into renderer transportability, matched evaluation and preregistered statistical selection gates"
+  ],
+  "credits": {
+    "research_delta": 1,
+    "checkpoint_input_identity_v1_source_ready": 1,
+    "checkpoint_input_identity_v1_selection_grade_ready": 0,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "execution": {
+    "model_runtime_executed": false,
+    "vps_execution_executed": false,
+    "provider_execution_executed": false,
+    "training_executed": false,
+    "unusual_experiment_executed": false
+  },
+  "next_exact_action": "Re-enter current main and authority. Close the consumed-byte TOCTOU boundary with a fail-closed ABI/v2 or equivalent immutable/read-time mechanism and a deterministic transient swap-and-restore regression before any three-candidate checkpoint execution or winner eligibility."
+}

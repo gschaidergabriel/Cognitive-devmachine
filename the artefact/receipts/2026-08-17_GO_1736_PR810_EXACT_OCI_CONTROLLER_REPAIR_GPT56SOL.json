@@ -1,0 +1,97 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "trigger_identity_available": "2026-08-17T17:36+07:00 minute precision only",
+  "recorded_at": "2026-08-17T18:13:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "canonical_main_observed_before_write": "116d00cfaa3d1d1aa0e66f693e590c8441941af5",
+  "product_runtime_delta": "NO_CHANGE",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "retained_oci_lane": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "purpose": "single retained exact-current ClayVerse OCI-in-Vercel-Sandbox acceptance controller",
+    "merge_state": "DRAFT_DO_NOT_MERGE_ON_SOURCE_INSPECTION",
+    "pr_metadata_refreshed": true,
+    "latest_observed_head_during_metadata_update": "03271ded485dc9ea13ba13dccd922f528acc9213",
+    "latest_observed_vercel_status": "failure:upgradeToPro=build-rate-limit",
+    "latest_observed_execution_classification": "PROVIDER_DEPLOYMENT_ADMISSION_FAILURE_BEFORE_BUILD_AND_SANDBOX_CREATE",
+    "runtime_credit": 0,
+    "test_credit": 0
+  },
+  "execution_candidate": {
+    "research_base_sha": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+    "research_sha": "f4c91d0129bbcd9d5e83bceb66b44c2e52f517ee",
+    "research_tree_sha": "ff89be29ea79df92edd547b32abce9c7eceb34da",
+    "composition": "retained PR611 terminal/focused-test bytes plus PR622 execution-relevant Python-3.13 lock-generator workflow/test bytes",
+    "permanent_second_product_lane_created": false
+  },
+  "pr611": {
+    "retained_pr": 611,
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "historical_real_tmux_3_6a_component_evidence": "PASS_AT_OLDER_BOUND_HEAD",
+    "exact_current_oci_runtime": "UNOBSERVED"
+  },
+  "entityos_lock": {
+    "source_repository": "gschaidergabriel/Dr.-Unterweger",
+    "source_head": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+    "source_tree": "d55d9d41f5a294a4a692cdee6fa46750652a390d",
+    "source_archive_sha256": "4daf761a56164e43d332082e9357865a06d88035c54902f5adf99c204d773b8c",
+    "source_attestation_sha256": "4e08e2ea96420d1671451af09601509013018807bdcd5b321be5b6620a0a3ce4",
+    "artifact_sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+    "artifact_size": 9181696,
+    "historical_exact_scope_evidence": "actually-started Vercel Sandbox at 79dc: DENY_ALL, exact source binding, twin one-file build, runtime/self-test/no-host-Python/relocation/Batch-5, byte-identical artifact, clean stop",
+    "whole_clayverse_credit": 0
+  },
+  "controller_repairs": {
+    "primary_runner_commit": "896a3e43b9f065ff7754297861b35dd26c6f1597",
+    "primary_runner_blob": "1298ca8002704414f86cd0c036d44e5b32be2918",
+    "repaired_untracked_entityos_assumption": true,
+    "host_side_private_source_fetch_secret_forwarded_to_sandbox": false,
+    "locked_entityos_source_archive_and_attestation_fail_closed": true,
+    "locked_entityos_binary_digest_and_size_fail_closed": true,
+    "full_exact_clayverse_source_regression_restored_before_oci": true,
+    "read_only_service_once_writable_state_workspace_tmpfs_restored": true,
+    "runtime_hardening_flags": [
+      "network=none",
+      "read-only-root",
+      "no-new-privileges",
+      "cap-drop=ALL"
+    ],
+    "dpkg_outer_js_template_hazard": {
+      "classification": "SOURCE_REPAIRED_BY_CURRENT_TARGET_WRAPPER",
+      "wrapper_behavior": "requires exactly two known unsafe occurrences and rewrites them to default dpkg-query -W before generated-runner import",
+      "focused_regression_present": true
+    },
+    "parallel_fusion_note": "parallel commits added an EntityOS staging helper and canonical transport hardening on the same retained PR810 lane; no duplicate OCI lane was created"
+  },
+  "vercel_admission_history_this_cycle": {
+    "non_target_build_admitted": {
+      "deployment": "dpl_62R4EoLGtLoi8FqXZAyNXDFaUHeq",
+      "result": "READY_WITH_OIDC_THEN_SKIP_NON_TARGET_PREVIEW_BEFORE_SANDBOX_CREATE",
+      "meaning": "build admission was observable at that earlier non-target preview only"
+    },
+    "current_target": {
+      "latest_observed_head": "03271ded485dc9ea13ba13dccd922f528acc9213",
+      "result": "BUILD_RATE_LIMIT_BEFORE_BUILD_AND_SANDBOX_CREATE",
+      "meaning": "exact-current ClayVerse Sandbox/OCI execution remains UNOBSERVED; do not classify as semantic TEST_FAIL"
+    }
+  },
+  "unusual_experiment": {
+    "valid_new_experiment_executed_by_this_organ": false,
+    "valid_credit": 0,
+    "earlier_17_36_synthetic_second_lease": "INVALID_NON_AUTHORIZING",
+    "earlier_277_case_measurement": "retained only as coordination-tainted bounded mechanism history",
+    "no_further_unusual_experiment_for_this_macro_cycle": true
+  },
+  "forbidden_paths_respected": {
+    "vps_acceptance_execution": false,
+    "self_hosted_acceptance_execution": false,
+    "production_host_acceptance_execution": false,
+    "together_api": false,
+    "paid_model_training": false
+  },
+  "next_exact_step": "Do not add retry-only commits. At the first authorized isolated executor that actually starts, refresh canonical main and retained PR611/PR622 state once, rebind the single PR810 controller, then run the complete exact-target batch: Sandbox.create -> exact Research and locked EntityOS source identities -> exact EntityOS reconstruction -> full source regression -> exact OCI build/image/dependency identities -> in-image PR611 tmux/transport-policy + service once under hardened deny-all profile -> Python hash-lock materialization/verification -> promotion decisions."
+}

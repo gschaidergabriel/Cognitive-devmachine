@@ -1,0 +1,113 @@
+{
+  "schema": "CLAYCODE_COGNITIVE_PROTOCOL/v1",
+  "status": "CURRENT_OWNER_ALIGNED_SOURCE_CONTRACT_NOT_RUNTIME_CREDIT",
+  "authority": {
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "owner_target": "VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "grid_law": "N_IS_RUNTIME_PARAMETER_NOT_ARCHITECTURE_IDENTITY",
+    "durability_law": "SIMULATE_COGNITION_STORE_DURABLE_DATA"
+  },
+  "protocol_source": {
+    "path": "research_entity/claycode/contracts/ZERO_ENTITYOS_COGNITIVE_PROTOCOL_V1.clay",
+    "git_blob_sha1": "e74658f61e32b1b98366f2b7dd1cf2bb1725bf14",
+    "sha256": "a788d13c9b32b0a9b69bd11e75da0c46d21b0715ee478b69a3ba536915b2713f",
+    "frontend_semantic_sha256": "b7a03a8d39d7fa4566be5a02e5a282a58d3fcfc1292d0a35e0749b3f297a2136",
+    "frontend_contract_sha256": "66ae193bc672a64b8c23b879720be3ea8fb6024239352d38d7df69086bc064a4"
+  },
+  "frontend_dependency": {
+    "path": "tools/claycode_base_frontend.py",
+    "git_blob_sha1": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "frontend_schema": "ClayCodeBaseFrontendAST/v1",
+    "surface": "BASE_D_V18_REWARD_RELATIONS"
+  },
+  "grammar_dependency": {
+    "path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark",
+    "git_blob_sha1": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+    "sha256": "99a3b35acfe491081773b9666d9131dae8b2dd3b3bde7ac8569f6428a5fdb180"
+  },
+  "architecture_dependencies": [
+    {"path": "research_entity/global/ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS_v1.json", "schema": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1"},
+    {"path": "research_entity/global/COGNITIVE_PROCESS_ABI_v1.json", "schema": "COGNITIVE_PROCESS_ABI/v1"},
+    {"path": "research_entity/global/DB_VS_SIMULATION_BOUNDARY_v1.json", "schema": "DB_VS_SIMULATION_BOUNDARY/v1"}
+  ],
+  "claycode_records": [
+    "EpistemicItem",
+    "DBStateRef",
+    "GridRuntime",
+    "ResourceBudget",
+    "CompletionContract",
+    "GridExecutorBinding",
+    "DBWriteProposal",
+    "EffectProposal",
+    "WorkspaceReentry",
+    "ClaudeCodeBridgePacket",
+    "JSpaceMeasurement",
+    "CognitiveWorkPacket",
+    "CognitiveResultPacket"
+  ],
+  "claycode_union": "CognitivePacket",
+  "claycode_interface": "CognitiveProcess.execute(CognitiveWorkPacket)->CognitiveResultPacket",
+  "required_laws": [
+    "runtime_N distinct_from process_identity",
+    "physical_executor_identity distinct_from process_identity",
+    "GRID10 distinct_from architecture_identity",
+    "model_output never_confers canonical_truth",
+    "workspace_winner never_confers canonical_truth",
+    "ClaudeCodeBridgePacket never_confers canonical_truth",
+    "JSpaceMeasurement never_confers canonical_truth",
+    "DBWriteProposal required_before DeterministicStateAdmission",
+    "EffectProposal required_before EffectGate",
+    "workspace_reentry_presence never_implies causal_use",
+    "generated_candidate cannot_authorize real_effect",
+    "capability_claim never_confers capability_authority",
+    "missing_fact distinct_from false_fact",
+    "ClaudeCodeBridgePacket never_implies hidden_activation_access",
+    "GlobalJSpaceClaim requires exposed_causal_interface"
+  ],
+  "mapping_to_abi": {
+    "CognitiveWorkPacket": "COGNITIVE_WORK_PACKET/v1",
+    "CognitiveResultPacket": "COGNITIVE_RESULT_PACKET/v1",
+    "DBStateRef": "DB_STATE_REF/v1",
+    "WorkspaceReentry": "WORKSPACE_REENTRY/v1",
+    "ClaudeCodeBridgePacket": "CLAUDE_CODE_BRIDGE_PACKET/v1",
+    "GridExecutorBinding": "GRID_EXECUTOR_BINDING/v1",
+    "DBWriteProposal": "CANDIDATE_ONLY_REQUIRES_DETERMINISTIC_STATE_ADMISSION",
+    "EffectProposal": "CANDIDATE_ONLY_REQUIRES_EFFECTGATE_EFFECTJOURNAL",
+    "JSpaceMeasurement": "MEASUREMENT_ONLY_REQUIRES_MODEL_SPECIFIC_CAUSAL_EVIDENCE"
+  },
+  "acceptance_discriminators": [
+    "CCP-D1-V18-PARSE-AND-SEMANTIC-HASH-BOUND",
+    "CCP-D2-REQUIRED-RECORDS-AND-ABI-FIELDS-PRESENT",
+    "CCP-D3-VARIABLE-N-NOT-PROCESS-IDENTITY",
+    "CCP-D4-DB-AND-EFFECT-AUTHORITY-FENCES-EXPLICIT",
+    "CCP-D5-CLAUDE-CODE-HIDDEN-ACTIVATION-NOT-INFERRED",
+    "CCP-D6-WORKSPACE-REENTRY-PRESENCE-NOT-CAUSAL-CREDIT",
+    "CCP-D7-UNKNOWN-DISTINCT-FROM-FALSE",
+    "CCP-D8-MODEL-FREE-ROUNDTRIP-INTEGRATION-SURVIVES-RESTART-AND-N-CHANGE"
+  ],
+  "next_executable_gate": {
+    "name": "CLAYCODE_COGNITIVE_PACKET_ROUNDTRIP_RESTART_RESIZE",
+    "requirements": [
+      "parse exact .clay bytes with the bound V18 frontend/grammar",
+      "materialize one CognitiveWorkPacket from a generation-bound DB snapshot",
+      "serialize and deserialize without semantic identity drift",
+      "route through the retained restart/resize DB-boundary fixture",
+      "change N while preserving process/work/state semantics",
+      "materialize CognitiveResultPacket as candidate only",
+      "reject direct DB commit and direct effect authority",
+      "emit ClaudeCodeBridgePacket only as observable-interface candidate bridge",
+      "keep JSpace causal/model/training credit zero"
+    ],
+    "credit_if_passed": "CLAYCODE_COGNITIVE_PROTOCOL_COMPONENT_ONLY"
+  },
+  "credit_boundary": {
+    "claycode_protocol_source_contract": 1,
+    "claycode_protocol_component_runtime": 0,
+    "trained_08b_variable_grid_runtime": 0,
+    "claude_code_bridge_runtime": 0,
+    "global_jspace_causal_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

@@ -1,0 +1,365 @@
+{
+  "schema_version": "1.0",
+  "trigger": "triggerwort 5",
+  "run_id": "triggerwort5-20260828T1404p0700-gpt56sol-frankenstein-v07-forensics",
+  "status": "PARTIAL_FORENSIC_DELTA_SOURCE_GROUNDED_OPEN_CONTINUATION",
+  "purpose": "Forensic, provenance-preserving decomposition of current Frankenstein source into architecture/coupling evidence that can feed the existing architecture-archaeology pipeline and a future GRID10/Frankenstein-2.0 integration view without creating a second product, state authority, effect authority or persistent entity.",
+  "trigger_definition": {
+    "intent": "Decompose Frankenstein source forensically at code-line granularity, preserve architecture and provenance, provide an append-only worker result format, and make findings directly reusable by GRID10/Frankenstein-2.0 design work.",
+    "execution_rule": "Source archaeology and durable research delta only in this run; do not modify the Frankenstein harness or claim runtime/causal acceptance from source inspection."
+  },
+  "authority_snapshot": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_main_before_write": "2dd677638db5b6428f3aa23b2698fde750db5f19",
+    "admitted_authority_epoch": "8.78",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "frankenstein_2_0_role": "SUBORDINATE_RESEARCH_AND_IMPLEMENTATION_TARGET_NOT_COMPETING_PRODUCT_AUTHORITY",
+    "evidence_boundary": "source wiring != runtime causal effect; historical/current component evidence != EntityOS/HCU runtime acceptance"
+  },
+  "source_snapshot": {
+    "repository": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "commit_message": "research: localize post-gate fallback caller source",
+    "observed_commit_time": "2026-08-27T17:15:39Z",
+    "historical_reference_repository": "gschaidergabriel/Project-Frankenstein",
+    "historical_reference_head_used_by_current_dossier": "abba90a5767d85abc8a1ac340bae92842dab35c1"
+  },
+  "inspected_source_ranges": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "requested_line_range": "1-420",
+      "evidence_class": "CURRENT_SOURCE"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/visual_cortex.py",
+      "blob_sha": "c6f47826102e164ddc7ba80fc9b9df3072324fd8",
+      "requested_line_range": "1-280",
+      "evidence_class": "CURRENT_SOURCE"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_loop_core.py",
+      "blob_sha": "0ef555e4f6d5739a79a75f8b1af788f577307a7f",
+      "requested_line_range": "1-300",
+      "evidence_class": "CURRENT_SOURCE"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/perceptual_field.py",
+      "blob_sha": "7011c758bb5353f179e32be748227cfeb39ab82a",
+      "requested_line_range": "1-300",
+      "evidence_class": "CURRENT_SOURCE"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "requested_line_range": "full file",
+      "evidence_class": "CURRENT_SOURCE"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/ARCHITEKTUR.md",
+      "blob_sha": "ef323f2ae377f7c9a5b14dbf1bb2de1bc3e589be",
+      "requested_line_range": "full file",
+      "evidence_class": "CURRENT_SOURCE_DOCUMENTATION_CROSSCHECK"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/research/11_CURRENT_FRANKENSTEIN_V07_MODULE_ATLAS.md",
+      "blob_sha": "9642c3868ca42ae289c744fc7eef31cc328a23be",
+      "requested_line_range": "full file",
+      "evidence_class": "CURRENT_RESEARCH_INDEX_CROSSCHECK"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/research/03_PROJECT_FRANKENSTEIN_SYSTEM_AUTOPSY.md",
+      "blob_sha": "5009930df427d620e46bf9090edad83e3ed916be",
+      "requested_line_range": "full file",
+      "evidence_class": "HISTORICAL_SYNTHESIS_CROSSCHECK"
+    }
+  ],
+  "forensic_findings": [
+    {
+      "finding_id": "TW5-F001-HOOK-FANIN",
+      "classification": "CURRENT_SOURCE",
+      "claim": "All seven declared Claude lifecycle hooks converge on the same stern.py hook dispatcher command instead of separate hook-owned state authorities.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/stern.py#requested-lines-1-420"
+      ],
+      "architecture_role": "single deterministic hook/control fan-in",
+      "failure_avoided": "divergent lifecycle handlers and multiple independent state writers",
+      "runtime_credit": "NONE_FROM_SOURCE_INSPECTION"
+    },
+    {
+      "finding_id": "TW5-F002-MODEL-DB-AUTHORITY-SPLIT",
+      "classification": "CURRENT_SOURCE",
+      "claim": "stern.py declares a hard boundary that model output never directly writes unified.db; event-triggered stern.py code performs writes with evidence.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/stern.py#requested-lines-1-420"
+      ],
+      "architecture_role": "canonical-state authority separation",
+      "current_inheritance": "REUSE_AS_ENTITYOS_DETERMINISTIC_STATE_BOUNDARY",
+      "runtime_credit": "NONE_FROM_SOURCE_INSPECTION"
+    },
+    {
+      "finding_id": "TW5-F003-DYNAMIC-REACHABILITY-TRAP",
+      "classification": "CURRENT_SOURCE_PLUS_RECORDED_NEGATIVE_RESULT",
+      "claim": "wegehierarchie.py remains a required external dependency because paket.py performs a runtime import for F94; an earlier cleanup that removed it silently disabled downstream behavior until self-test exposed the missing module.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/stern.py#requested-lines-1-420",
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/paket.py"
+      ],
+      "architecture_role": "hidden dynamic dependency/reachability edge",
+      "failure_avoided": "static-cleanup-induced silent capability loss",
+      "triggerwort5_rule_derived": "A file/module may be retired only after import/call/replay reachability has been demonstrated, not from static naming or apparent duplication alone.",
+      "runtime_credit": "HISTORICAL_SELFTEST_NEGATIVE_RECORDED_IN_SOURCE_COMMENT_ONLY_FOR_THIS_RUN"
+    },
+    {
+      "finding_id": "TW5-F004-EFFECT-ADMISSION-VERIFICATION-SPLIT",
+      "classification": "CURRENT_SOURCE_DOCUMENTATION_CROSSCHECK",
+      "claim": "Current architecture separates PreToolUse admission from PostToolUse outcome verification before a verified effect is recorded.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/ARCHITEKTUR.md",
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/hooks/hooks.json"
+      ],
+      "architecture_role": "request != effect boundary",
+      "current_inheritance": "REUSE_AS_EFFECTGATE_EFFECTJOURNAL_REQUIREMENT",
+      "runtime_credit": "DOCUMENTED_LIVE_CLAIM_NOT_INDEPENDENTLY_REEXECUTED_IN_THIS_RUN"
+    },
+    {
+      "finding_id": "TW5-F005-SHARED-GWT-ARBITRATION",
+      "classification": "CURRENT_SOURCE",
+      "claim": "visual_cortex.py imports voice_loop_core and explicitly reuses Kandidat/score_kandidat/arbitrieren rather than defining a second visual arbitration formula.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/visual_cortex.py#requested-lines-1-280",
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/voice_loop_core.py#requested-lines-1-300"
+      ],
+      "architecture_role": "shared cross-modality competition primitive",
+      "current_inheritance": "ADAPT_TO_SHARED_GRID_COMPETITION_ABI",
+      "runtime_credit": "NONE_FROM_SOURCE_INSPECTION"
+    },
+    {
+      "finding_id": "TW5-F006-WAIT-FIRST-CLASS",
+      "classification": "CURRENT_SOURCE",
+      "claim": "voice_loop_core implements WAIT as an explicit candidate/baseline; deterministic user_present and self_resolvable gates are evaluated before weighted initiative scoring.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/voice_loop_core.py#requested-lines-1-300"
+      ],
+      "architecture_role": "bounded initiative and reflection/action exit semantics",
+      "current_inheritance": "REUSE_WAIT_ASK_ACT_SELF_RESOLVE_AS_EXPLICIT_CONTROL_OUTCOMES",
+      "runtime_credit": "NONE_FROM_SOURCE_INSPECTION"
+    },
+    {
+      "finding_id": "TW5-F007-OBSERVATION-PRIOR-STRUCTURAL-SEPARATION",
+      "classification": "CURRENT_SOURCE",
+      "claim": "perceptual_field.py uses separate ObservedEvidence, InferredHypothesis and RetrievalPrior types; RetrievalPrior.can_override_observation is non-caller-settable false and resolve_person_presence can only add a small agreement confidence nudge, not replace the observed value.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/perceptual_field.py#requested-lines-1-300"
+      ],
+      "architecture_role": "memory != observation boundary implemented structurally",
+      "current_inheritance": "REUSE_AS_TYPED_ENTRY_PERCEPTION_EVIDENCE_SEPARATION",
+      "runtime_credit": "SOURCE_READY_TEST_PRESENT_IN_CODE_NOT_REEXECUTED_IN_THIS_RUN"
+    },
+    {
+      "finding_id": "TW5-F008-SHARED-CAPTURE-RESOURCE-OWNERSHIP",
+      "classification": "CURRENT_SOURCE_PLUS_RECORDED_NEGATIVE_RESULT",
+      "claim": "visual_cortex.py now reuses capture_worker shared ownership to avoid competing camera handles; source comments record the prior Device-or-resource-busy failure caused by independent consumers.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/visual_cortex.py#requested-lines-1-280",
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/capture_worker.py"
+      ],
+      "architecture_role": "shared scarce-resource ownership",
+      "current_inheritance": "REUSE_SINGLE_OWNER_MULTI_CONSUMER_RESOURCE_FABRIC",
+      "runtime_credit": "NEGATIVE_RESULT_AND_FIX_RECORDED_IN_CURRENT_SOURCE_COMMENTS_NOT_REEXECUTED_IN_THIS_RUN"
+    },
+    {
+      "finding_id": "TW5-F009-GWT-SALIENCE-BOUNDARY",
+      "classification": "CURRENT_SOURCE",
+      "claim": "perceptual_field.py places an explicit salience gate before reuse of the shared GWT candidate/arbitration machinery so high-frequency perception does not automatically become workspace ignition.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/perceptual_field.py#requested-lines-1-300"
+      ],
+      "architecture_role": "delivery/admission != GWT uptake",
+      "current_inheritance": "ADAPT_TO_TYPED_ENTRY_RELEVANCE_AND_GRID_UPTAKE_GATE",
+      "runtime_credit": "NONE_FROM_SOURCE_INSPECTION"
+    },
+    {
+      "finding_id": "TW5-F010-CURRENT-VS-TARGET-VISION-CONFLICT",
+      "classification": "CURRENT_SOURCE_PLUS_CURRENT_RESEARCH_CONFLICT",
+      "claim": "Current v0.7 visual cortex still contains an external semantic vision-engine route while the stricter target recorded by current research is local Retina/temporal/UnifiedDB/GWT core perception with UNKNOWN instead of automatic cloud semantic escalation.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/visual_cortex.py#requested-lines-1-280",
+        "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/research/11_CURRENT_FRANKENSTEIN_V07_MODULE_ATLAS.md"
+      ],
+      "architecture_role": "implementation-target divergence",
+      "current_inheritance": "RETEST_AND_DECOUPLE_CORE_PRESENCE_FROM_OPTIONAL_SEMANTIC_VISION",
+      "runtime_credit": "NONE_FROM_SOURCE_INSPECTION"
+    }
+  ],
+  "coupling_edge_deltas": [
+    {
+      "edge_id": "TW5-E-HOOKS-STERN",
+      "source_mechanism_state": "Claude lifecycle events SessionStart/UserPromptSubmit/PreToolUse/PostToolUse/Stop/SessionEnd/PreCompact",
+      "target_mechanism_state": "stern.py cmd_hook dispatcher",
+      "sign_type": "routing_authority_fanin",
+      "functional_rule": "each declared hook executes python3 ${CLAUDE_PLUGIN_ROOT}/scripts/stern.py hook",
+      "timescale": "event-driven per lifecycle event",
+      "delay": "bounded by declared hook command timeouts 2-8 seconds depending on event; internal stern budgets are separately constrained",
+      "persistence": "dispatcher process is nonpersistent; durable state is externalized to unified.db/log surfaces",
+      "confidence_evidence_class": "CURRENT_SOURCE",
+      "first_known_version_commit": "UNRESOLVED_IN_THIS_DELTA",
+      "last_known_version_commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "historical_failures_affecting_edge": ["multi-handler/state-fragmentation risk; hidden external dependency risk"],
+      "current_frank_equivalent": "single hook/control fan-in",
+      "harness_intervention_handle": "disable or substitute one hook route while holding event payload constant; verify downstream state/effect difference and fail-silent behavior",
+      "causal_status": "SOURCE_WIRING_ONLY"
+    },
+    {
+      "edge_id": "TW5-E-VISUAL-VOICE-ARBITRATION",
+      "source_mechanism_state": "visual_cortex visual candidates",
+      "target_mechanism_state": "voice_loop_core shared score/arbitrate primitive",
+      "sign_type": "shared_competition_rule",
+      "functional_rule": "visual_cortex imports and reuses voice_loop_core Kandidat/score_kandidat/arbitrieren without an independent weight set",
+      "timescale": "per invoked visual cycle / per candidate arbitration",
+      "delay": "in-process function call",
+      "persistence": "weights/configuration persist outside candidate objects; individual candidates are request/cycle scoped",
+      "confidence_evidence_class": "CURRENT_SOURCE",
+      "first_known_version_commit": "UNRESOLVED_IN_THIS_DELTA",
+      "last_known_version_commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "historical_failures_affecting_edge": ["duplicate modality-specific arbitration drift"],
+      "current_frank_equivalent": "shared GWT arbitration primitive",
+      "harness_intervention_handle": "run matched visual and voice candidate sets through shared scorer; lesion shared scorer or shuffle candidate features and compare winner/WAIT behavior",
+      "causal_status": "SOURCE_WIRING_ONLY"
+    },
+    {
+      "edge_id": "TW5-E-MEMORY-PRIOR-OBSERVATION",
+      "source_mechanism_state": "RetrievalPrior from unified.db-derived context",
+      "target_mechanism_state": "InferredHypothesis built from current ObservedEvidence",
+      "sign_type": "provenance_corroboration_nonoverride",
+      "functional_rule": "prior disagreement sets overridden_prior audit flag and cannot change observed_value; agreement may add fixed +0.05 confidence capped at 1.0",
+      "timescale": "per percept resolution",
+      "delay": "in-process",
+      "persistence": "prior source is durable memory; resolved hypothesis/event may be persisted by caller",
+      "confidence_evidence_class": "CURRENT_SOURCE",
+      "first_known_version_commit": "UNRESOLVED_IN_THIS_DELTA",
+      "last_known_version_commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "historical_failures_affecting_edge": ["memory contamination overriding fresh perception"],
+      "current_frank_equivalent": "typed observation/inference/retrieval-prior separation",
+      "harness_intervention_handle": "adversarial prior-vs-observation contradiction plus reversed contradiction and agreement control",
+      "causal_status": "SOURCE_RULE_PLUS_IN_SOURCE_TEST_DEFINITION_NOT_REEXECUTED_THIS_RUN"
+    },
+    {
+      "edge_id": "TW5-E-CAPTURE-MULTICONSUMER",
+      "source_mechanism_state": "capture_worker shared camera owner",
+      "target_mechanism_state": "visual_cortex and presence consumers",
+      "sign_type": "resource_ownership_fanout",
+      "functional_rule": "consumers obtain frames from one shared/refcounted capture worker instead of opening competing device handles",
+      "timescale": "high-frequency frame stream plus occasional visual cycles",
+      "delay": "frame polling/local memory",
+      "persistence": "worker/process scoped; frames transient",
+      "confidence_evidence_class": "CURRENT_SOURCE_PLUS_RECORDED_NEGATIVE_RESULT",
+      "first_known_version_commit": "UNRESOLVED_IN_THIS_DELTA",
+      "last_known_version_commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "historical_failures_affecting_edge": ["Device or resource busy from competing capture handles"],
+      "current_frank_equivalent": "single-owner multi-consumer sensor resource",
+      "harness_intervention_handle": "compare shared-owner path against deliberately isolated duplicate-open test in an authorized local fixture, not on production hardware unless explicitly admitted",
+      "causal_status": "SOURCE_WIRING_AND_RECORDED_FAILURE_NOT_REEXECUTED_THIS_RUN"
+    }
+  ],
+  "grid10_candidate_mapping": {
+    "status": "INFERENCE_DESIGN_MAPPING_NO_RUNTIME_CREDIT",
+    "rule": "GRID10 cells are logical request-scoped function slots, not permanent mini-agents or claims of physical model concurrency.",
+    "cells": [
+      {"cell": 0, "role": "typed_entry_and_event_admission", "donor_findings": ["TW5-F001-HOOK-FANIN", "TW5-F007-OBSERVATION-PRIOR-STRUCTURAL-SEPARATION"]},
+      {"cell": 1, "role": "sensor_observation_quality_and_provenance", "donor_findings": ["TW5-F007-OBSERVATION-PRIOR-STRUCTURAL-SEPARATION", "TW5-F008-SHARED-CAPTURE-RESOURCE-OWNERSHIP"]},
+      {"cell": 2, "role": "bounded_retrieval_and_prior_context", "donor_findings": ["TW5-F007-OBSERVATION-PRIOR-STRUCTURAL-SEPARATION"]},
+      {"cell": 3, "role": "relevance_salience_competition", "donor_findings": ["TW5-F009-GWT-SALIENCE-BOUNDARY"]},
+      {"cell": 4, "role": "shared_gwt_arbitration_and_wait", "donor_findings": ["TW5-F005-SHARED-GWT-ARBITRATION", "TW5-F006-WAIT-FIRST-CLASS"]},
+      {"cell": 5, "role": "bounded_reflection_self_resolve_ask_wait", "donor_findings": ["TW5-F006-WAIT-FIRST-CLASS"]},
+      {"cell": 6, "role": "action_candidate_formation", "donor_findings": ["TW5-F004-EFFECT-ADMISSION-VERIFICATION-SPLIT"]},
+      {"cell": 7, "role": "effect_admission_authority", "donor_findings": ["TW5-F002-MODEL-DB-AUTHORITY-SPLIT", "TW5-F004-EFFECT-ADMISSION-VERIFICATION-SPLIT"]},
+      {"cell": 8, "role": "outcome_verification_and_reentry", "donor_findings": ["TW5-F004-EFFECT-ADMISSION-VERIFICATION-SPLIT"]},
+      {"cell": 9, "role": "consolidation_reachability_and_regression_guard", "donor_findings": ["TW5-F003-DYNAMIC-REACHABILITY-TRAP"]}
+    ],
+    "open_falsifier": "This partition is only useful if lesion/shuffle/replay experiments show that the preserved functions and causal boundaries survive the migration and no cell boundary creates a new state/effect authority."
+  },
+  "frankenstein_2_0_integration_contract": {
+    "status": "DESIGN_CONTRACT_CANDIDATE",
+    "preserve": [
+      "single deterministic state/effect authority boundaries",
+      "typed observation/inference/prior separation",
+      "shared arbitration rather than modality-specific policy forks",
+      "WAIT/SELF_RESOLVE as explicit outcomes",
+      "single-owner shared scarce-resource access",
+      "effect admission distinct from verified outcome",
+      "dynamic reachability proof before deleting compatibility code"
+    ],
+    "do_not_copy_blindly": [
+      "stern.py monolith topology as a mandatory future module boundary",
+      "external semantic vision API as core presence/perception dependency",
+      "historical biological names as authority",
+      "source comments or docs as runtime proof",
+      "fixed GRID10 cell identities as permanent agents"
+    ],
+    "authority_boundary": "Frankenstein-2.0 remains a research/implementation target subordinate to canonical EntityOS + HCU authority in this pipeline."
+  },
+  "worker_ingest_contract": {
+    "mode": "APPEND_ONLY_DEDUPED_FORENSIC_PACKETS",
+    "packet_required_fields": [
+      "worker_id",
+      "observed_at",
+      "source_repository",
+      "source_commit",
+      "path",
+      "blob_sha",
+      "line_start",
+      "line_end",
+      "finding_id",
+      "evidence_class",
+      "local_mechanism",
+      "coupling_role",
+      "state_inputs",
+      "state_outputs",
+      "dependencies",
+      "timing",
+      "persistence",
+      "authority_implication",
+      "failure_or_negative_result",
+      "current_reuse_decision",
+      "grid10_or_frankenstein2_mapping",
+      "open_falsifier"
+    ],
+    "dedupe_key": "sha256(source_repository|source_commit|path|blob_sha|line_start|line_end|finding_id)",
+    "merge_law": [
+      "same dedupe key is one observation family, not independent replication",
+      "conflicting packets are preserved side-by-side until source chronology/evidence resolves them",
+      "worker consensus never upgrades evidence class",
+      "a source-ready rule is not executed evidence",
+      "line-level findings must preserve exact source commit and blob identity",
+      "later source commits create new observations; they do not overwrite old provenance"
+    ],
+    "feed_targets": [
+      "research_entity/architecture_archaeology/EMERGENT_COUPLING_GRAPH.json",
+      "research_entity/architecture_archaeology/FAILURE_ATLAS.json",
+      "research_entity/architecture_archaeology/SUCCESS_PATTERN_ATLAS.json",
+      "research_entity/architecture_archaeology/CURRENT_ARCHITECTURE_INHERITANCE_MATRIX.json",
+      "future GRID10/Frankenstein-2.0 design packets"
+    ]
+  },
+  "research_credit": {
+    "forensic_source_delta": "PRESENT",
+    "architecture_archaeology_completion": false,
+    "current_runtime_causal_credit": 0,
+    "physical_grid10_credit": 0,
+    "hcu_runtime_credit": 0,
+    "entityos_hcu_whole_product_credit": 0,
+    "training_credit": 0
+  },
+  "next_high_information_actions": [
+    "Continue current v0.7 source inspection beyond the initial ranges and produce one packet per architecture-relevant line cluster rather than one narrative per file.",
+    "Resolve first-known and last-known commits for TW5 coupling edges using Project-Frankenstein and current Frankenstein Git chronology.",
+    "Deepen EMERGENT_COUPLING_GRAPH mandatory metadata edge-by-edge: type/sign, rule/equation, timescale, delay, persistence, first/last commit, failures, current equivalent and intervention handle.",
+    "Build a machine-readable call/import/reachability graph for stern.py, paket.py, wegehierarchie.py and current perception/voice modules; distinguish static import reachability from runtime path evidence.",
+    "Map the shared voice/visual arbitration primitive against current variable-grid competition requirements and design lesion/shuffle/rescue tests without claiming source reuse is causal benefit.",
+    "Resolve the local-core-vs-external-semantic-vision target conflict into optional semantic augmentation versus core presence/perception boundaries."
+  ]
+}

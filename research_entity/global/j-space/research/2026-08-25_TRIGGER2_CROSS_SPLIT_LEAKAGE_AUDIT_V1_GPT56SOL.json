@@ -1,0 +1,90 @@
+{
+  "schema": "CLAY_TRIGGER2_CROSS_SPLIT_LEAKAGE_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_at_discovery": {
+    "canonical_main_observed": "c00eace021e00f3a637aeb8e9181ab3651a8b9cd",
+    "supervisor_epoch_observed": "8.78",
+    "mode": "FREE_ONLY"
+  },
+  "audited_generator": {
+    "path": "tools/trigger2_context_binding_generator_v1.py",
+    "canonical_research_record": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CONTEXT_BINDING_CURRICULUM_GENERATOR_V1_GPT56SOL.json",
+    "strengths_preserved": [
+      "actual S3 mapping is constructed from the permutation rather than metadata only",
+      "exact within-block class-symbol counterbalancing",
+      "four semantic/template families and direct/inverted query polarity",
+      "production generation requires externally observed one-token atom identity",
+      "per-row validator rejects target tamper, codebook class-word leak and metadata-only S3 lies"
+    ]
+  },
+  "new_finding": {
+    "severity": "CRITICAL_BEFORE_DATASET_SPLIT_PROMOTION",
+    "claim": "The v1 split argument labels independently generated row sets but does not itself establish train/validation/holdout isolation.",
+    "source_basis": [
+      "Prompt construction depends on atom triplet, S3 mapping, template, polarity, lexical variant, codebook order and seed; the split value is inserted later into metadata/family/provenance fields.",
+      "family_id is prefixed with TRAIN/VALIDATION/HOLDOUT, so semantically identical family structure can appear different if a reviewer compares raw family_id strings without normalizing the split prefix.",
+      "The same atom file can be supplied independently to TRAIN, VALIDATION and HOLDOUT generation; no v1 cross-split atom-token disjointness check exists.",
+      "The same finite SEMANTIC_BANK is reused across splits; no v1 cross-split semantic-family or lexical-signature disjointness check exists.",
+      "The existing 8 generator unit tests validate within-set correctness but do not validate multi-file cross-split isolation."
+    ],
+    "reproducer_hypothesis": "Using the same admitted atom pool and same seed for separate TRAIN and HOLDOUT calls can reproduce the same model-visible prompt/target population while only split-tagged metadata changes.",
+    "epistemic_status": "SOURCE_DERIVED_STATIC_FINDING; NEW CROSS_SPLIT REGRESSION TESTS ADDED BUT THEIR EXECUTION IS UNOBSERVED IN THIS ORGAN"
+  },
+  "new_guard": {
+    "tool": "tools/trigger2_context_binding_split_audit_v1.py",
+    "tests": "tests/test_trigger2_context_binding_split_audit_v1.py",
+    "main_write_commits": [
+      "ae1f79f4b5e6d4d562b41399aaae043d74e21860",
+      "c0e7eab1a97967fe7c3b76e4130ebea2026794b6"
+    ],
+    "checks": [
+      "cross-split exact prompt SHA-256 overlap",
+      "cross-split normalized family overlap after removing cosmetic split prefix",
+      "cross-split semantic signature overlap: template_family x query_polarity x base_semantic_class x lexical_variant_index",
+      "cross-split atom token-id overlap",
+      "cross-split normalized provenance overlap after removing the declared split segment",
+      "declared split mismatch",
+      "explicit holdout isolation on atom, family and semantic axes"
+    ],
+    "law": "A split label, split-prefixed family_id, or selected_using_holdout=false flag does not establish independent train/validation/holdout populations. Isolation must be demonstrated across rendered sets."
+  },
+  "swarm_review_delta": {
+    "evidence_reviewer": "ACCEPT finding: it follows directly from generator dataflow and existing test scope.",
+    "shortcut_hunter": "BLOCK any SEALED_HOLDOUT_READY promotion from independent v1 --split calls until cross-split audit passes.",
+    "statistical_reviewer": "Within-split exact class-symbol balance is necessary but insufficient; cross-split nuisance/semantic overlap can still make validation optimistic.",
+    "goodman_reviewer": "Raw split-prefixed family IDs are not independent ancestry. Family identity must be invariant to the dataset partition label.",
+    "abi_reviewer": "Dedicated unseen-symbol holdout requires token-id/text pools to be partitioned before row generation, not asserted after generation.",
+    "final_integrator": "Keep generator v1 as a useful candidate producer; require an external cross-split guard now and a split-aware v2 builder before dataset promotion."
+  },
+  "architecture_and_training_implication": {
+    "dataset_builder_v2_required": true,
+    "required_properties": [
+      "construct TRAIN/VALIDATION/HOLDOUT together from one immutable split manifest",
+      "partition exact admitted atom token IDs before generation; reserve a dedicated unseen-symbol holdout pool",
+      "assign semantic/provenance families before rendering so the same family cannot be renamed into another split",
+      "keep an unseen-template family absent from both train and validation",
+      "compute prompt/content hashes across all splits and fail closed on overlap",
+      "bind every split manifest and row to exact model/tokenizer/ABI/generator identities",
+      "report nuisance-feature mutual information and positional/codebook-order balance across each split",
+      "freeze holdout identities before model selection or tuning consumes them"
+    ]
+  },
+  "credit_boundary": {
+    "training_data_design_progress": true,
+    "cross_split_static_guard_added": true,
+    "new_guard_runtime_test_observed_by_this_organ": false,
+    "validated_dataset": false,
+    "sealed_holdout_ready": false,
+    "official_qwen35_binding_baseline_measured": false,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_trigger2_gate": "Build a versioned split-manifest/builder that allocates disjoint atom pools plus independent semantic families before rendering, then execute both the existing within-set generator tests and the new cross-split tests on the exact candidate source."
+}

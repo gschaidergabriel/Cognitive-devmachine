@@ -1,0 +1,96 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "forschungsbefehl_1",
+  "authority_epoch": "8.71",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_delta": "21956ce4bcf0655b6812488780c1403f0dcc9c73",
+  "observed_canonical_main_after_concurrent_reentry_before_receipt": "968473111bca71936e3f668ff42e38cddb8ba905",
+  "user_goal": "Execute Forschungsbefehl 1 as an intensive Global J-Space steering research cycle and create the highest-information nonduplicate executable delta available to this organ.",
+  "trigger1_authority": {
+    "contract": "research_entity/continuity/TRIGGER_ONE_JSPACE_STEERING_CONTRACT.md",
+    "owner_directive": "research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json",
+    "parallel_lane_contract": 10,
+    "positive_claim_boundary": "Actual model/runtime consumption plus exact identity, matched controls, disjoint holdout and reproducible directional effect are required; prompt-only influence is insufficient."
+  },
+  "prior_cycle_reentry": {
+    "cycle1_receipt_commit": "d5fbedd21a4e6a86c14e31bd4dc03055b3c7a81f",
+    "cycle1_primary_path": "Qwen3-0.6B local intervention baseline followed by Qwen3.5-0.8B adapter transfer",
+    "this_cycle_nonduplication": "Adds a hosted output-logit vector intervention discriminator rather than duplicating the local residual/cvec path."
+  },
+  "new_hypothesis": {
+    "id": "H3_HOSTED_OUTPUT_LOGIT_VECTOR_AS_CHEAP_CAUSAL_DISCRIMINATOR",
+    "statement": "A provider API that explicitly consumes a token-id logit-bias vector before sampling can provide a cheap, directly consumed output-layer vector-control discriminator, even though it does not establish hidden-state/J-Space control.",
+    "prediction": "On one exact fixed model/tokenizer/provider route, +VECTOR versus SIGN_FLIP/NULL/ORTHOGONAL/PERMUTED controls will produce direction-specific log-probability/output changes under fixed seeds if the vector is actually consumed.",
+    "counterhypothesis": "Hosted parameter routing, tokenizer ambiguity, provider fallback or output-layer-only effects make the intervention nonreproducible or irrelevant to the intended J-Space mechanism.",
+    "credit_boundary": "OUTPUT_LOGIT_VECTOR_CONTROL_COMPONENT_ONLY; no hidden-state, J-Space model-runtime, HCU-full, EntityOS-whole or training credit."
+  },
+  "external_evidence": [
+    {
+      "source": "https://openrouter.ai/docs/api/reference/parameters",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "OpenRouter documents logit_bias as a token-id to bias mapping applied to logits before sampling; supported values are bounded and model/tokenizer specific."
+    },
+    {
+      "source": "https://openrouter.ai/docs/guides/routing/provider-selection",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "OpenRouter provider routing exposes require_parameters to exclude providers that do not support requested parameters and allow_fallbacks to control fallback behavior."
+    },
+    {
+      "source": "https://github.com/ggml-org/llama.cpp/blob/master/tools/cli/README.md",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "llama.cpp exposes native control-vector, scaled-control-vector and layer-range controls, preserving the stronger local hidden/residual intervention path as the primary full Trigger-1 mechanism."
+    }
+  ],
+  "repository_observations": {
+    "base_provider_request_path": "tools/run_free_go_swarm.py",
+    "finding_1": "The current generic provider request body carries model/messages/max_tokens/temperature/stream only; it has no Trigger-1 vector parameter surface.",
+    "economic_provenance": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json",
+    "finding_2": "OpenRouter is currently admitted only through openrouter/free, which is a dynamic free router. That route is economically zero-price bound but cannot provide the exact fixed model/tokenizer identity required for reproducible Trigger-1 steering.",
+    "finding_3": "A concurrent current-main delta binds one exact NVIDIA credential to three hosted-NIM model routes, improving FREE execution economics but not exposing a hidden-state/cvec API intervention surface."
+  },
+  "writes": [
+    {
+      "path": "tools/trigger1_openrouter_logit_bias_control.py",
+      "commit": "1b081dc5fc2cf0641aece39fc7e2d9fc67eb85ef",
+      "scope": "Network-free fail-closed discriminator; creates BASELINE/+VECTOR/SIGN_FLIP/NULL/ORTHOGONAL/PERMUTED control family; rejects dynamic openrouter/free; requires exact zero-price route, exact tokenizer digest, fixed seed, require_parameters=true and allow_fallbacks=false before request construction."
+    },
+    {
+      "path": "tests/test_trigger1_openrouter_logit_bias_control.py",
+      "commit": "968473111bca71936e3f668ff42e38cddb8ba905",
+      "scope": "Regression definitions for exact-route failure, control geometry, parameter-consumption routing flags, baseline behavior and tokenizer identity."
+    }
+  ],
+  "verification": {
+    "github_workflow_runs_for_test_commit": 0,
+    "local_functional_reconstruction": {
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "scope": "FUNCTIONAL_EQUIVALENCE_SMOKE_TEST_ONLY",
+      "exact_github_source_runtime_credit": false,
+      "note": "The local test reconstructed the committed pure-stdlib functions/tests from the inspected source. It is not promoted as an exact-source canonical runtime receipt."
+    },
+    "provider_network_io": false,
+    "credential_read": false,
+    "paid_or_together_use": false,
+    "real_model_intervention_executed": false
+  },
+  "scientific_result": {
+    "status": "EXECUTABLE_DELTA_CREATED_BLOCKED_BEFORE_PROVIDER_IO",
+    "positive": "Hosted output-logit vector control is a plausible cheaper causal discriminator and is implementable without weakening the local cvec path.",
+    "negative": "The currently admitted openrouter/free route is scientifically inadequate for Trigger-1 reproducibility because exact model/tokenizer identity is unresolved.",
+    "next_discriminator": "Bind one exact OpenRouter model route with provider-side zero-price evidence plus exact tokenizer identity and documented logit_bias support, then run the matched control family; otherwise keep this lane blocked and execute the local Qwen3-0.6B cvec/residual T1 path."
+  },
+  "concurrent_evidence_note": "Current main also contains a separate Forschungsbefehl-1 causal-grounding sweep and a post-supervisor-inbox NVIDIA credential-entitlement delta. These are treated as parallel donor evidence, not as this organ's runtime execution.",
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "hosted_output_logit_vector_runtime": 0
+  }
+}

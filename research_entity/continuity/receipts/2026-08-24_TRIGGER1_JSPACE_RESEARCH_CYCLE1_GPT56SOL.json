@@ -1,0 +1,178 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "forschungsbefehl_1",
+  "authority_epoch": "8.71",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_write": "1a0cd42c5eddda68a42c6c11345f1c4dbfbc672f",
+  "user_goal": "Execute research command 1 as the current Trigger-1 Global J-Space research cycle: context ingestion, hypothesis/counterhypothesis formation, external research, evidence fusion, and selection of the two highest-information executable tests.",
+  "current_observed_frontier": {
+    "supervisor": "8.71",
+    "free_swarm_tokens": 5001744,
+    "machine_readable_delta_records": 68,
+    "forge_accepted_deltas": 0,
+    "distillery_accepted_dataset_tokens": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "trigger1_repo_contract": {
+    "launcher": "tools/trigger1_jspace_research.sh",
+    "batch": "tools/run_trigger1_jspace_10x.py",
+    "lane": "tools/run_trigger1_jspace_lane.py",
+    "parallel_lanes": 10,
+    "lanes": [
+      "runtime_surface",
+      "adapter_identity",
+      "layer_localization",
+      "gain_calibration",
+      "sign_flip_control",
+      "null_control",
+      "orthogonal_control",
+      "permuted_control",
+      "seed_holdout_reproduction",
+      "receipt_chain_and_delta_forge"
+    ],
+    "evidence_rule": "Hosted text prompting is not direct vector steering; positive steering requires actual intervention consumption plus directional holdout effect and matched controls."
+  },
+  "external_research": [
+    {
+      "source": "https://arxiv.org/abs/2308.10248",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Activation Addition demonstrates inference-time residual-stream steering from activation-difference vectors and supports genuine internal intervention as a distinct mechanism from prompting."
+    },
+    {
+      "source": "https://arxiv.org/abs/2312.06681",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Contrastive Activation Addition demonstrates behavior steering with positive/negative coefficients and motivates sign-paired directional controls."
+    },
+    {
+      "source": "https://arxiv.org/abs/2505.22637",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Steering vectors can be high-variance and sometimes reverse the desired effect; coherent activation-difference geometry predicts reliability."
+    },
+    {
+      "source": "https://arxiv.org/abs/2608.08829",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Best steering layers can vary by instance; fixed global layer choices can lose substantial benefit, strengthening the need for calibration/holdout separation."
+    },
+    {
+      "source": "https://arxiv.org/abs/2403.07809",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "pyvene provides executable getter/setter intervention hooks and causal intervention tooling on PyTorch models, demonstrating a practical local intervention surface."
+    },
+    {
+      "source": "https://huggingface.co/Qwen/Qwen3-0.6B/blob/main/config.json",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Qwen3-0.6B is Qwen3ForCausalLM with hidden_size=1024 and 28 layers."
+    },
+    {
+      "source": "https://github.com/TransformerLensOrg/TransformerLens/blob/main/transformer_lens/supported_models.py",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "TransformerLens currently lists Qwen/Qwen3-0.6B as a supported model."
+    },
+    {
+      "source": "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Qwen3.5-0.8B is exactly 0.8B-class with hidden_size=1024 and 24 layers, but uses a hybrid repeated linear-attention/Gated-DeltaNet plus full-attention layout."
+    }
+  ],
+  "ten_lane_fusion": {
+    "runtime_surface": {
+      "status": "HIGH_CONFIDENCE_DESIGN_RESULT",
+      "result": "Use a local open-weight intervention-capable surface for causal credit. FREE hosted chat/text APIs may produce research proposals but cannot by themselves prove hidden-state/vector consumption."
+    },
+    "adapter_identity": {
+      "status": "REQUIRES_EXECUTION",
+      "result": "Bind JSPACE_VECTOR_CONTROL_ABI/v1 to exact model/checkpoint/tokenizer/runtime/build and layer-width before any intervention. Hidden width 1024 is compatible at the gross dimensional level for both Qwen3-0.6B and Qwen3.5-0.8B, but architecture-specific semantics are not transferable by width alone."
+    },
+    "layer_localization": {
+      "status": "REQUIRES_CALIBRATION_ONLY_TEST",
+      "result": "Select layer/range only on a calibration split and freeze before holdout. Literature does not justify one universal layer."
+    },
+    "gain_calibration": {
+      "status": "REQUIRES_CALIBRATION_ONLY_TEST",
+      "result": "Sweep signed alpha on calibration only; freeze before holdout. Reject improvements that track perturbation magnitude without directional specificity."
+    },
+    "sign_flip_control": {
+      "status": "MANDATORY",
+      "result": "+VECTOR must outperform SIGN_FLIP directionally on matched seeds; otherwise generic perturbation or sampling variance remains plausible."
+    },
+    "null_control": {
+      "status": "MANDATORY",
+      "result": "Exact zero-vector intervention must remain near baseline; substantial NULL drift invalidates causal attribution."
+    },
+    "orthogonal_control": {
+      "status": "MANDATORY",
+      "result": "Same-norm orthogonal control rejects generic activation-energy explanations."
+    },
+    "permuted_control": {
+      "status": "MANDATORY",
+      "result": "Same-norm coordinate permutation rejects coordinate-insensitive/norm-only effects."
+    },
+    "seed_holdout_reproduction": {
+      "status": "MANDATORY",
+      "result": "Frozen layer/gain must reproduce directional effect on disjoint prompts/seeds; report variance and strongest counterexample, not only mean uplift."
+    },
+    "receipt_chain_and_delta_forge": {
+      "status": "BLOCKED_ON_REAL_EXECUTION",
+      "result": "Forge-ready evidence must bind exact consumed intervention identity through model invocation and downstream receipt chain; process success or textual agreement is insufficient."
+    }
+  },
+  "primary_hypothesis": {
+    "id": "H1_QWEN3_06B_FIRST_INSTRUMENTATION_BASELINE",
+    "statement": "A first causal J-Space steering discriminator is more likely to succeed and be interpretable on Qwen3-0.6B than on Qwen3.5-0.8B because Qwen3-0.6B has a conventional Qwen3 transformer stack and existing TransformerLens support, while Qwen3.5-0.8B introduces a hybrid DeltaNet/full-attention architecture that adds intervention-site ambiguity.",
+    "prediction": "A bounded local residual-stream intervention harness can establish consumed-vector identity and matched-control directional effects on Qwen3-0.6B with less adapter/backend work than Qwen3.5-0.8B.",
+    "counterhypothesis": "Qwen3.5-0.8B generic Hugging Face hidden-state hooks are already sufficient, so its hybrid architecture does not materially increase causal-intervention complexity and exact 0.8B alignment is worth targeting first.",
+    "falsifier": "If an exact Qwen3.5-0.8B local hook consumes a bound 1024-d control vector at a named residual location, passes NULL/sign/orthogonal/permuted controls, and reaches stable holdout effect with equal or less implementation complexity than Qwen3-0.6B, reject H1."
+  },
+  "secondary_hypothesis": {
+    "id": "H2_SINGLE_LINEAR_DIRECTION_MAY_BE_INCOHERENT",
+    "statement": "A single global J-Space steering vector may fail on some behaviors because the target representation is prompt-dependent or multi-dimensional rather than one coherent direction.",
+    "prediction": "Low within-class direction coherence will correlate with high variance or sign reversals on holdout.",
+    "counterhypothesis": "The chosen J-Space feature is sufficiently linear and coherent that one fixed direction generalizes across prompts and seeds.",
+    "falsifier": "High direction coherence plus reproducible fixed-vector holdout effect across disjoint prompt families weakens the multi-direction/subspace hypothesis."
+  },
+  "selected_two_tests_for_next_cycle": [
+    {
+      "id": "T1_QWEN3_06B_VECTOR_CONSUMPTION_CONTROL_FAMILY",
+      "priority": 1,
+      "model": "Qwen/Qwen3-0.6B",
+      "design": "On one exact local zero-cost intervention-capable runtime, bind model/checkpoint/tokenizer/runtime/build and a JSPACE_VECTOR_CONTROL_ABI/v1 packet; choose layer/range and signed alpha on calibration only; freeze; then run BASELINE, +VECTOR, SIGN_FLIP, NULL_VECTOR, ORTHOGONAL_SAME_NORM, PERMUTED_SAME_NORM on disjoint holdout prompts/seeds.",
+      "pass_condition": "Executor-side consumed-vector receipt exists; NULL remains baseline-like; +VECTOR shows reproducible directional holdout effect larger than SIGN_FLIP/orthogonal/permuted controls without severe off-target collapse.",
+      "credit_if_pass": "MODEL_SPECIFIC_JSPACE_CAUSAL_COMPONENT_ONLY; NOT whole EntityOS/HCU or training PASS."
+    },
+    {
+      "id": "T2_QWEN35_08B_ADAPTER_TRANSFER_AND_ARCHITECTURE_DISCRIMINATOR",
+      "priority": 2,
+      "model": "Qwen/Qwen3.5-0.8B",
+      "design": "Implement/measure one exact named residual intervention site across its 24-layer hybrid layout, preserving layer type identity (linear_attention vs full_attention). Reuse the frozen semantic source packet but derive a model-specific adapter and repeat the matched control family on a bounded sample.",
+      "pass_condition": "The adapter binds layer type, layer index and 1024-d local vector to actual consumed intervention bytes; directional effect reproduces without being explained by generic perturbation magnitude or architecture-type drift.",
+      "credit_if_pass": "MODEL_SPECIFIC_08B_ADAPTER_COMPONENT_ONLY; no transfer of Qwen3-0.6B causal credit by analogy."
+    }
+  ],
+  "repo_observation": {
+    "current_guard_path": "research_entity/claycode/HCU_JSPACE_MODEL_INPUT_CONTROL_CAUSALITY_GATE_V1.md",
+    "finding": "The current file text still names supervisor 8.65 even though SUPERVISOR_INBOX selects 8.71. Treat the guard's mechanism as donor/current-research content but not its frozen authority line. Successor-dynamic authority should be resolved before any execution or promotion."
+  },
+  "execution": {
+    "real_model_intervention_executed": false,
+    "reason": "This ChatGPT organ exposes GitHub and web research but no authorized shell bridge into the project's local/VPS runtime or Vault-backed Trigger-1 launcher. The research cycle was executed as source-grounded hypothesis/evidence fusion and test selection; no hidden-state runtime evidence is fabricated.",
+    "provider_model_call_from_trigger1_launcher": false,
+    "credential_read": false,
+    "paid_or_together_use": false,
+    "unusual_experiment": false
+  },
+  "evidence_boundary": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "research_delta": "Trigger-1 cycle-1 completed as a ten-lane evidence fusion. The strongest next causal path is Qwen3-0.6B as the first instrumented baseline, followed by exact 0.8B transfer to Qwen3.5-0.8B. Matched sign/null/orthogonal/permutation controls and calibration/holdout separation are promoted from optional ideas to mandatory causal discriminators.",
+  "next_exact_action": "Execute T1 on an authorized zero-cost local/clay-direct-dev surface with exact source/model/runtime identities, then adjudicate H1/H2 from the emitted control-family receipts before implementing T2."
+}

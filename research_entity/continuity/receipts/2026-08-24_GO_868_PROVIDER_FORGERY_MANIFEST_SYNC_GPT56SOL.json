@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_GO_SOURCE_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.68",
+  "persistent_research_entity": "Clay",
+  "worker_role": "ORGAN_NOT_ENTITY",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "reentry": {
+    "bootstrap_cache_sha_observed": "de6e4f9255cdab0b5463708a3f1c8d6ba5805fa8",
+    "first_live_main_observed": "35111436aad7b1fdb35046f630268e7d914e5c8e",
+    "live_main_after_writes_observed": "73ef1164a368e8eeba5384243b7f0a76f7bf5226",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "retained_hcu_donor": {
+      "qualified_pr": "gschaidergabriel/clay-global-research-entity#1263",
+      "head_observed": "2badebe78db868c56ef39f0a32d198282cffcd88"
+    },
+    "retained_executor": {
+      "qualified_pr": "gschaidergabriel/Dr.-Unterweger#810",
+      "head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8"
+    }
+  },
+  "observations": [
+    "Supervisor 8.68 supersedes the uploaded 8.63 bootstrap cache and quarantines all current external LLM-provider traffic pending exact-source FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 PASS.",
+    "tools/free_provider_admission.py accepted an optional caller-supplied admission dictionary directly inside provider_is_admitted_free/admitted_provider_names, creating a source-level self-grant footgun even though primary controller key-collection paths already ignored caller-forged admission input.",
+    "PROGRAM_STATE and the artefact/README were concurrently successor-synchronized to 8.68 by another organ during this go; the attempted stale PROGRAM_STATE write failed with GitHub 409 and was not forced.",
+    "the artefact/manifest.json remained stale at supervisor 8.65 until this organ synchronized it to 8.68."
+  ],
+  "writes": [
+    {
+      "commit": "961a2fc10b0ecdb0a7285f280a78443129c4c196",
+      "path": "tools/free_provider_admission.py",
+      "delta": "Public provider admission helpers now ignore caller-supplied admission dictionaries and resolve authority only from canonical control-plane state; private inspection is limited to already validated payloads."
+    },
+    {
+      "commit": "e3fbeafa95d449e2d42b2af3c425cc5701888403",
+      "path": "tests/test_free_provider_admission_forgery_868.py",
+      "delta": "Adds regressions proving forged caller FREE payloads cannot self-grant a provider or admitted-provider set."
+    },
+    {
+      "commit": "73ef1164a368e8eeba5384243b7f0a76f7bf5226",
+      "path": "the artefact/manifest.json",
+      "delta": "Synchronizes current-facing artifact manifest from stale 8.65 execution/provider wording to supervisor 8.68 FREE_ONLY authority and records the bounded forgery hardening without runtime-credit inflation."
+    }
+  ],
+  "verification": {
+    "source_reobserved_at_live_main": true,
+    "source_blob_after_hardening": "632f13223217d6e62cb2f095785d0128c10e867a",
+    "github_actions_workflow_run_observed_for_test_commit": false,
+    "free_swarm_admission_boundary_runtime_receipt_observed": false,
+    "runtime_credit_added": 0,
+    "provider_runtime_credit_added": 0,
+    "whole_entityos_hcu_credit_added": 0,
+    "jspace_model_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "go_tracks": {
+    "track_a": {
+      "status": "ADVANCED",
+      "delta": "Closed caller-forged FREE admission self-grant footgun and synchronized stale artifact manifest to supervisor 8.68."
+    },
+    "track_b": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "The highest-information current HCU/Typed Entry gate is executable evidence, not more source guards: live donor PR1263 InferenceReceipt/v4 rejection-boundary tests still require exact execution on an exposed authorized zero-cost local normal-user or clay-direct-dev surface. No such bridge/runtime action is exposed to this ChatGPT organ in the current tool set.",
+      "next_discriminator": "Execute the live donor rejection-boundary suite at exact donor head with source/environment/result binding before any executor rebind."
+    },
+    "track_c": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "No model-specific Global J-Space/GWT or training-readiness promotion is justified without a real local model invocation and bound intervention/control trace. External LLM-provider traffic is quarantined and no authorized local/VPS execution bridge is exposed to this organ.",
+      "next_discriminator": "Real local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT control/intervention trace -> family-split/hard-negative admission."
+    }
+  },
+  "unusual_experiment": {
+    "performed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable upstream macrocycle/request identity is exposed; no post-hoc trigger key was invented."
+  },
+  "credit_boundary": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

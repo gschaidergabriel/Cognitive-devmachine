@@ -1,0 +1,103 @@
+{
+  "schema": "TRIGGER2_EVIDENCE_PROVENANCE_OPAQUE_BINDING_GATE_SOURCE_VALIDATION/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch_observed": "8.84",
+  "mode": "FREE_ONLY",
+  "scope": "EXACT_COMMITTED_BYTES_LOCAL_DETERMINISTIC_METHOD_ONLY_OOD_GATE",
+  "predecessor": "research_entity/continuity/receipts/2026-08-26_TRIGGER2_EVIDENCE_PROVENANCE_COUNTERFACTUAL_PROBE_SOURCE_VALIDATION_GPT56SOL.json",
+  "research_question": "Does the evidence-provenance discriminator remain nontrivial when fixed provenance carrier words and fixed opaque symbols cannot solve the task?",
+  "hypothesis": "Fully crossing episode-local opaque provenance mappings and codebook order, with a disjoint frozen-holdout atom alphabet, can force the evaluator blueprint to depend on current-episode binding rather than fixed atom or presentation priors.",
+  "counterhypothesis": "The source gate is still only a constructed oracle problem; a model may fail to learn the required composition or may exploit renderer/tokenizer regularities that do not exist at blueprint level.",
+  "adjudication_boundary": "The committed gate proves deterministic factorial coverage and several shortcut baselines only. It does not prove Qwen3.5-0.8B behavior, rendered-byte/tokenizer cleanliness, model-internal J-Space causality, training efficacy, or dataset admission.",
+  "source_files": [
+    {
+      "path": "tools/trigger2_evidence_provenance_opaque_binding_gate_v1.py",
+      "create_commit": "562d76a7057af7ba31514668d788eeabe020bbd6",
+      "git_blob_sha1": "fbe760599e0ce06f2bb7263aaba6ce686c1183dc",
+      "sha256": "4c42f8010a71cd320c08ae900bb67d2aebb33e335634ac97547054f07465b510"
+    },
+    {
+      "path": "tests/test_trigger2_evidence_provenance_opaque_binding_gate_v1.py",
+      "create_commit": "7a7cc8378960f2f66e6e4db0d4e4d60ebb06d8f8",
+      "git_blob_sha1": "1e6d5b9cc7bedde79657cc7cc55b428352cf529f",
+      "sha256": "824f91639953f3ff7ee279cf83784c281ff6fe23e75725a80aa7e25c94b57c53"
+    }
+  ],
+  "exact_byte_identity": {
+    "github_blob_matches_local_tool": true,
+    "github_blob_matches_local_test": true
+  },
+  "execution": {
+    "py_compile": "PASS",
+    "pytest": "7 passed in 0.23s",
+    "probe_result": {
+      "pass": true,
+      "rows": 576,
+      "families": 4,
+      "mapping_permutations_per_split": 6,
+      "codebook_orders_per_mapping": 6,
+      "atom_alphabets_disjoint": true,
+      "outcome_counts": {
+        "BOUND_EVIDENCE_CANDIDATE": 288,
+        "CLAIM_ONLY_NO_PROMOTION": 288
+      },
+      "split_metrics": {
+        "CALIBRATION": {
+          "rows": 288,
+          "chain_only_majority_accuracy": 0.5,
+          "order_only_majority_accuracy": 0.5,
+          "atom_multiset_majority_accuracy": 0.5,
+          "semantic_codebook_decoder_accuracy": 1.0
+        },
+        "FROZEN_HOLDOUT": {
+          "rows": 288,
+          "chain_only_majority_accuracy": 0.5,
+          "order_only_majority_accuracy": 0.5,
+          "atom_multiset_majority_accuracy": 0.5,
+          "semantic_codebook_decoder_accuracy": 1.0
+        }
+      },
+      "training_eligible_rows": 0,
+      "accepted_dataset_tokens_delta": 0
+    },
+    "repository_ci_observed": false,
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid_executed": false,
+    "vps_executed": false,
+    "training_executed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false
+  },
+  "relation_binding": {
+    "semantic_relations": [
+      "DIRECT_OBSERVATION",
+      "CONTENT_ASSERTION",
+      "CAUSAL_BINDING"
+    ],
+    "calibration_atoms": ["K7", "M4", "R9"],
+    "frozen_holdout_atoms": ["V2", "X5", "Q8"],
+    "mapping_rule": "all six S3 mappings per split",
+    "codebook_order_rule": "all six display orders per mapping",
+    "positive_chain": "episode-mapped DIRECT_OBSERVATION + CAUSAL_BINDING",
+    "negative_chain": "episode-mapped CONTENT_ASSERTION + CAUSAL_BINDING",
+    "chain_length_equal": true
+  },
+  "promotion_fence": {
+    "evidence_class": "METHOD_ONLY",
+    "training_eligible": false,
+    "accepted_dataset_tokens_delta": 0,
+    "checkpoint_selection_credit": 0,
+    "model_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "physical_grid_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "relation_to_current_curriculum": "This is a concrete nontraining B1/B6 bridge candidate: episode-local BIND/ROUTE/REMAP is required to recover evidence-provenance semantics, while promotion authority remains outside learned/model-visible content. It does not replace the frozen Trigger-2 B0-B6 curriculum or exact ABI/tokenizer/render gates.",
+  "next_discriminator": "Bind the blueprint to the exact selected production ABI atoms, renderer, tokenizer and input tensor only after those identities are admitted. Re-run chain-only/order-only/atom-only leakage tests over rendered bytes/tokens, freeze the disjoint holdout before model execution, and only after runtime quiescence plus explicit FREE model execution authority evaluate the selected Qwen3.5-0.8B checkpoint."
+}

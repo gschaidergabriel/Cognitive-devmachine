@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_TRIGGER2_JSPACE_POST_INTERVENTION_METROLOGY_SOURCE_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONPROMOTING_SOURCE_AND_SYNTHETIC_TEST_DELTA",
+  "observed_main_before_write": "4b3dbf3d644bb9cb90ea6d4c337d4abcfa533dc4",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "NOT_PROVEN",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false
+  },
+  "problem": {
+    "observed_failure": "The prior Qwen3.5 Trigger-2 causal-intervention receipt showed same-layer representation divergence as zero/identity despite clear behavioral changes; the campaign explicitly marked those representation-divergence numbers unreliable.",
+    "measurement_gap": "Downstream output_hidden_states did not prove that the representation metric was computed from the exact hook-mutated tensor actually returned into the same forward pass.",
+    "scope_boundary": "This delta repairs only hook-local measurement fidelity. It does not establish Qwen-specific metrology, J-Space causality, checkpoint eligibility, training readiness, HCU runtime credit, or EntityOS runtime credit."
+  },
+  "source_delta": {
+    "path": "tools/trigger2_jspace_post_intervention_metrology_v1.py",
+    "sha256": "0830a781ddde02a525215e1af90b6a41f177a3775a57781dd365a0cbb2a73184",
+    "schema": "CLAY_TRIGGER2_JSPACE_POST_INTERVENTION_METROLOGY/v1",
+    "properties": [
+      "captures PRE and POST tensors inside the same registered forward hook",
+      "returns the exact intervention POST tensor to the model",
+      "binds pre/post/returned tensor identity by dtype, shape, raw bytes and SHA-256",
+      "requires POST capture to equal the tensor returned from the hook",
+      "fails closed on unsupported output structure or shape/dtype/device mutation",
+      "optionally fails closed when an intervention expected to change state is a no-op",
+      "reports pre-to-post L2/cosine separately from any behavioral metric",
+      "explicitly grants component-only source/mechanism status and zero promotion credit"
+    ]
+  },
+  "test_delta": {
+    "path": "tests/test_trigger2_jspace_post_intervention_metrology_v1.py",
+    "sha256": "8781fdadf10941f3fece6605a09d0c9cfd4fbc4346e21ed22fef4ef185631ff3",
+    "local_synthetic_validation": {
+      "unittest": "4/4 PASS",
+      "py_compile": "PASS",
+      "self_test": "PASS_COMPONENT_ONLY",
+      "runtime_scope": "LOCAL_SYNTHETIC_TORCH_COMPONENT_ONLY_NOT_QWEN_NOT_REPOSITORY_BOUND_MODEL_RUNTIME"
+    },
+    "covered_cases": [
+      "Tensor output returns the exact captured post-intervention tensor",
+      "tuple-first-Tensor output preserves auxiliary tail and replaces only the hidden tensor",
+      "required-change no-op fails closed",
+      "shape-changing intervention fails closed"
+    ]
+  },
+  "deduplication": {
+    "repository_search_before_write": "NO_EXISTING_TRIGGER2_JSPACE_POST_INTERVENTION_METROLOGY_V1_OR_HOOK_LOCAL_POST_INTERVENTION_TENSOR_FIDELITY_ONLY_MATCH_FOUND",
+    "duplicate_runtime_or_experiment": false
+  },
+  "execution_decision": {
+    "provider_execution": false,
+    "vps_execution": false,
+    "model_runtime_execution": false,
+    "unusual_experiment": false,
+    "reason": "Owner FreeSwarm emergency-stop runtime quiescence remains unproven; this cycle is source/static/synthetic-only."
+  },
+  "credits": {
+    "research_delta": 1,
+    "source_component_delta": 1,
+    "jspace_model_credit": 0,
+    "jspace_causal_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "First prove canonical runtime quiescence under the owner FreeSwarm emergency stop. Then re-enter execution authority. Only on an explicitly admitted non-provider FREE surface and after exact checkpoint/input/runtime identity, integrate this primitive at the exact Qwen3.5 site and require a repository-bound receipt proving that PRE/POST representation measurements came from the same intervened forward pass before any representation-level J-Space causal interpretation."
+}

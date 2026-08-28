@@ -1,0 +1,32 @@
+{
+  "blueprint_schema": "CLAY_TRIGGER2_B6_HYPERPOSITION_EXPANSION_LEAKAGE_AUDIT/v1",
+  "source_module": {
+    "path": "tools/trigger2_hyperposition_expansion_generator_v1.py",
+    "sha256": "8480b3de3c7d4fa91c61b79c4309d5dc481b69de329c81f0fa47c17462ae9581"
+  },
+  "checks": {
+    "uniqueness": {
+      "pass": true,
+      "detail": "enforced by generator assert: 896/896 unique prompts, 896/896 unique ids"
+    },
+    "cross_split_entity_disjointness": {
+      "pass": true,
+      "detail": "HOLDOUT_FROZEN entities disjoint from TRAIN and VALIDATION, verified directly, zero overlap"
+    },
+    "cross_file_leakage_vs_original_family": {
+      "pass": true,
+      "detail": "expansion HOLDOUT_FROZEN entities checked against original TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl TRAIN+VALIDATION entities (and vice versa) -- zero overlap either direction"
+    },
+    "class_balance": {
+      "pass": true,
+      "detail": "PRESERVE_BRANCHES:COLLAPSE_VALID = 672:224 (3:1), improved from a first draft that had a 10:1 imbalance -- rebuilt with explicit balanced sampling (one full-exclusion COLLAPSE case + one partial-exclusion PRESERVE case + one WEAK-adversarial PRESERVE case per branch-count, rather than a full combinatorial cross-product that skewed toward the always-PRESERVE social-pressure axis"
+    },
+    "scale_proportionality": {
+      "pass": true,
+      "detail": "896 total rows (672 TRAIN) -- a real ~1.4x expansion of the original 600-row/480-TRAIN family, not a family that dwarfs the rest of the 16-family, 9544-row curriculum (a first draft reached 10560 rows, larger than the entire existing curriculum combined, and was deliberately scaled back)"
+    }
+  },
+  "overall_pass": true,
+  "rows_audited": 896,
+  "note_on_target_semantics": "targets remain PRESERVE_BRANCHES/COLLAPSE_VALID only, same as the original family -- no new atoms introduced, fully compatible with the existing shell wrapper vocabulary (xeno_diagnostic_specialist_wrapper_v1.TRAINED_CLASS_WORDS already includes both)."
+}

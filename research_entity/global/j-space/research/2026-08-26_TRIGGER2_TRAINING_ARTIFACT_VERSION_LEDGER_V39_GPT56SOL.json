@@ -1,0 +1,127 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v39",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V38_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V38",
+  "observed_main_before_write": "438e19100e9bc96926c740293cb4e6f4af48a69f",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "implementation_compatibility_codename": "Xeno",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "Reentry after V38 observed rapid parallel convergence. The V38 constant writer-free proof defect in tools/xeno_physical_grid10_acceptance_v2.py was source-repaired by d70db2bcf1495e0c5d243d0f0c146a3226408728, which binds barrier children to live read-only S1 file descriptors, retains read transactions through the barrier, and measures authoritative S1 identity around the concurrency window. A stronger nonduplicate GRID10 cohort-to-admission proof splice was then recorded and the premature runtime pin was withdrawn. A separate P0 node-membership/source-authentication causal identity gap was added. Trigger-2 also advanced issue #2022 with an executable cognitive-transition source pilot and source regressions. No runtime/model/training credit is promoted by those source changes alone.",
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V38_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V39_GPT56SOL.json",
+      "reason": "V38's newly observed writer-free constant assertion was repaired and stronger current proof gaps landed during reentry"
+    },
+    {
+      "artifact": "tools/xeno_physical_grid10_acceptance_v2.py@0011673f34bc55b838f52420376df6d68e40d9be",
+      "status": "SUPERSEDED_FOR_CURRENT_SOURCE",
+      "successor": "tools/xeno_physical_grid10_acceptance_v2.py@d70db2bcf1495e0c5d243d0f0c146a3226408728",
+      "reason": "current source replaces constant writer-free/read-transaction assertions with measured barrier/read-FD/state-window evidence"
+    },
+    {
+      "artifact": "V38 GRID10_V2_WRITER_FREE_CONSTANT_ASSERTION",
+      "status": "CLOSED_AT_SOURCE_LEVEL",
+      "closing_commit": "d70db2bcf1495e0c5d243d0f0c146a3226408728",
+      "runtime_credit": 0,
+      "reason": "source repair is not an admitted repository-bound execution receipt"
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_GRID10_COHORT_ADMISSION_IDENTITY_GAP_V1_GPT56SOL.json",
+      "status": "CURRENT_P0_RESEARCH_GAP",
+      "reason": "simultaneous barrier cohort packets and later admitted packets are different process cohorts in the audited v2 path; same-cohort causal binding or an explicit provenance-preserving derivation policy is required before integrated physical GRID10 result-flow promotion"
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_NODE_MEMBERSHIP_CAUSAL_IDENTITY_GAP_V1_GPT56SOL.json",
+      "status": "CURRENT_P0_RESEARCH_GAP",
+      "reason": "runtime node membership/health is outside current S1 snapshot digest and coordinator admission does not yet authenticate RESULT source membership/health as a deterministic authority identity"
+    },
+    {
+      "artifact": "premature physical GRID10 v2 runtime pin",
+      "status": "WITHDRAWN",
+      "closing_commit": "a0c77ca4c3dc0dc923010a1799730f4379ac177a",
+      "reason": "cohort-to-admission proof splice blocks credit-eligible runtime request until source semantics are closed"
+    },
+    {
+      "artifact": "tools/trigger2_executable_cognitive_transition_pilot_v1.py",
+      "status": "CURRENT_SOURCE_PILOT_NOT_TRAINING_ADMITTED",
+      "reason": "issue #2022 now has machine-adjudicable state_before -> semantic_delta -> CognitiveResultPacket -> state_after source trajectories instead of meta-rule narration, but no model runtime or accepted dataset lineage is proven"
+    },
+    {
+      "artifact": "tests for executable cognitive transition pilot and Qwen checkpoint gate v3",
+      "status": "CURRENT_SOURCE_REGRESSION_COVERAGE",
+      "reason": "test source landed on main; source presence does not itself prove execution PASS or model/checkpoint winner"
+    }
+  ],
+  "runtime_failure_reinjection": [
+    {
+      "finding": "A source-level proof defect can be closed while a stronger causal-identity defect remains.",
+      "training_implication": "Do not encode shell proof predicates as model semantics. Model-side curriculum should consume typed deterministic outcomes and preserve provenance/unknowns rather than learn PID/hash/process authority."
+    },
+    {
+      "finding": "Concurrent liveness and successful sequential admission can be spliced from different OS process cohorts.",
+      "hypothesis": "Physical GRID10 integrated-path credit requires exact causal binding from each simultaneously live cohort member to the evidence packet consumed by coordinator integration, or an explicitly versioned provenance-preserving derivation/revalidation protocol.",
+      "counterhypothesis": "Logical node identity plus exact-current snapshot equivalence is sufficient and OS process continuity is not required because processes are interchangeable realizations.",
+      "cheapest_discriminator": "Require the coordinator-consumed packet/evidence set to bind exact barrier-cohort process identity + packet digest, then add a disjoint-cohort negative and an unused-concurrent-packet tamper negative."
+    },
+    {
+      "finding": "Self-asserted source_node_id is not deterministic membership authority.",
+      "hypothesis": "NODE_RESULT provenance needs a separate monotonic membership/admission identity or explicit authenticated membership check at coordinator admission.",
+      "counterhypothesis": "Harness-controlled node arguments and preregistration are sufficient for the bounded fixture.",
+      "cheapest_discriminator": "Add exact-current unregistered-source and registered-but-unhealthy-source negatives; require fail-closed rejection before admitted_results mutation."
+    },
+    {
+      "finding": "Executable cognitive-transition source trajectories now exist for issue #2022.",
+      "training_implication": "Prefer instantiated typed state transitions over rule narration, but keep candidate rows non-admitted until exact ancestry/input/nuisance/Forge->Distillery gates and model evaluation close."
+    }
+  ],
+  "current_training_course_alignment": {
+    "course_delta": "research_entity/global/TRIGGERWORT_2_TRAINING_COURSE_DELTA_V36_PHYSICAL_GRID10_V2_2026-08-26.md",
+    "model_semantics": "variable-N role-flexible Xeno; deterministic fabric owns membership, leases, CAS, freshness, process proof and effect authority",
+    "stale_recovery_family": "typed runtime status -> re-read/recompute/rejoin/new NODE_RESULT; no self-granted rebase or freshness",
+    "physical_grid10": "runtime/shell property only; no process-count-to-truth semantic label",
+    "positive_training_admission": "BLOCKED",
+    "checkpoint_winner": null,
+    "primary_decode_policy": "greedy/constrained; sampling diagnostic only"
+  },
+  "next_exact_gates": [
+    "close GRID10 same-cohort process-to-packet-to-coordinator evidence identity or explicitly adopt and test a provenance-preserving derivation/revalidation policy",
+    "add UNREGISTERED_SOURCE and UNHEALTHY_SOURCE fail-closed negatives and bind deterministic membership identity into result provenance",
+    "only after those source gates close, create one exact-source FREE_ONLY repository-bound physical GRID10 request and audit its exact receipt before any bounded runtime promotion",
+    "execute the issue-2022 cognitive-transition source pilot/regressions on an admitted zero-cost surface and preserve exact source identity; do not convert source tests into training credit",
+    "continue exact checkpoint source/tokenizer/renderer/input identity work and >=64 fresh held-out matched greedy cases per decisive checkpoint axis before checkpoint freeze",
+    "keep positive Forge->Distillery admission and accepted dataset tokens at zero until lineage/reference/nuisance/input-identity gates are current and persistent replay-safe acceptance is observed"
+  ],
+  "credit_boundary_after_v39": {
+    "new_admitted_positive_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "coordination": {
+    "duplicate_lane_created": false,
+    "new_dispatch_issue_created": false,
+    "note": "This ledger fuses already-landed parallel deltas and does not create a competing implementation lane. Existing donor PRs remain donors only unless rebased into current authority."
+  }
+}

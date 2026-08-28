@@ -1,0 +1,90 @@
+{
+  "schema": "ENTITYOS_HCU_GO_PREINVOCATION_CONTROL_SOURCE_DELTA_STREAM_AUTHORITY_FENCE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "8.63",
+    "mode": "FREE_ONLY",
+    "research_main_observed_before_receipt": "0825e117fb9fb5e828a59e431c3cda4e0b9bd8d4",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "together": "FORBIDDEN_NOT_PREFLIGHTED_NOT_USED",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_or_request_id_exposed": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions": 0
+  },
+  "retained_lanes": {
+    "hcu_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed_after_source_write": "dc0be31c8b098d569c46a5c6cd366137e2878c94",
+    "executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "executor_vercel_status_observed": "success",
+    "remaining_included_sandbox_quota_directly_observed": false,
+    "new_sandbox_invocation_by_this_organ": false
+  },
+  "source_delta": {
+    "implementation_path": "the artefact/MicroEntity/hcu/preinvocation_control_admission_store_v1.py",
+    "test_path": "the artefact/MicroEntity/hcu/test_preinvocation_control_admission_store_v1.py",
+    "implementation_commit_created": "dae54fc1a395b803bd3f90a4b9c65a5ca16890a4",
+    "regression_source_commit_created": "a01208dcdbfac27fb1832ad6ac77d009281cba19",
+    "model_cell_hardening_commit_created": "0ef530f8872b9fdb301ba9950bdeb98c8a45a321",
+    "implementation_schema": "HCU_PREINVOCATION_CONTROL_PREPARATION/v1",
+    "store_schema": "HCU_PREINVOCATION_CONTROL_ADMISSION_STORE/v1",
+    "uses_existing_canonical_miniunifieddb_connection": true,
+    "second_truth_store_created": false,
+    "positive_source_scope": [
+      "revalidates predecessor TrainingTrace and exact JSpaceInferenceBinding/v3 identity",
+      "requires predecessor Vector-Control packet bytes and identity to equal the exact ModelInputControlBinding packet delivered to the controlled input",
+      "requires predecessor model invocation to differ from the controlled executor invocation and rejects same-invocation post-hoc association",
+      "requires exact controlled GRID plan/event/admission/route/cell/role and MODEL execution class",
+      "uses BEGIN IMMEDIATE and generation fence in the caller-provided canonical MiniUnifiedDB",
+      "fails closed if the controlled ModelExecution invocation is already admitted before preparation",
+      "makes one controlled executor/invocation key replay-stable and rejects divergent predecessor rebinding"
+    ],
+    "explicit_nonclaim": "This proves only source-level database-admission ordering relative to ModelExecution admission. It does not prove a physical model call had not already happened outside the admitted executor path, hidden-state use, counterfactual influence, model runtime, or training benefit."
+  },
+  "regression_source": {
+    "declared_cases": 5,
+    "cases": [
+      "positive committed predecessor preparation plus deterministic reread/replay",
+      "same-invocation post-hoc control rejection",
+      "already-admitted controlled ModelExecution rejection before preparation-store creation",
+      "same controlled invocation divergent predecessor replay rejection",
+      "predecessor packet identity must equal packet in controlled input"
+    ],
+    "python_syntax_compile_by_chatgpt_local_tool": "PASS",
+    "project_regression_execution": "NOT_EXECUTED",
+    "reason_not_executed": "Current FREE_ONLY execution re-entry directly observes no remaining included Sandbox quota. The most recent exact predecessor Sandbox discriminator also exposed a Python 3.13 _sqlite3 environment capability failure before canonical SQLite-dependent HCU logic acceptance. No quota bypass, paid upgrade, alternate VPS/self-hosted runner, or weakened SQLite path is allowed."
+  },
+  "parallel_reentry": {
+    "producer_derived_consumption_binding": "PRESENT_SOURCE_ONLY_AND_EXPLICITLY_NON_TEMPORAL",
+    "executor_sequence_lane_binding": "PRESENT_SOURCE_ONLY",
+    "latest_stream_lane_authority_receipt": "research_entity/continuity/receipts/2026-08-24_GO_JSPACE_STREAM_LANE_AUTHORITY_GAP_GPT56SOL.json",
+    "stream_authority_status": "NOT_ESTABLISHED",
+    "consequence": "The new pre-invocation store must not be promoted as full executor-owned t->t+1 temporal adjacency merely from stream_id/lane labels. Independent canonical stream admission remains upstream before positive recurrent temporal labeling."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_SOURCE_ONLY: one pre-invocation fail-closed canonical MiniUnifiedDB primitive now exists in the retained donor; current runtime execution remains blocked by FREE_ONLY quota observation and predecessor _sqlite3 environment evidence.",
+    "track_b_hcu_typed_entry": "ADVANCED: same-invocation post-hoc control and post-ModelExecution preparation are rejected; exact predecessor packet -> controlled input -> GRID/model invocation provenance is source-bound, while independent stream authority is correctly left as the next upstream gate.",
+    "track_c_global_jspace_gwt_training_readiness": "ADVANCED_FAIL_CLOSED: causal training promotion is fenced from byte-delivery-only or self-authorized stream labels; pre-invocation source evidence exists but model/hidden-state/training credit remains zero until stream authority, actual executor ordering, runtime and causal controls are admitted."
+  },
+  "credits_after_cycle": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving shared current-facing surface under parallel writes; append-only exact receipt plus retained donor source avoids clobbering fresher system state"
+  },
+  "next_exact_action": "First close independent stream authority in retained PR1263: add/reuse one deterministic canonical external stream-admission binding and require executor_sequence_lane_binding_v1 to revalidate it rather than self-authorize packet.stream_id. Then bind the resulting authority-backed lane into the pre-invocation preparation and only afterward implement actual executor-owned atomic adjacency/finalization. Runtime rerun remains fail-closed until included Sandbox quota is directly observed and the interpreter/sqlite3 capability preflight is source-hardened without weakening the fixed SQLite-backed regression fence."
+}

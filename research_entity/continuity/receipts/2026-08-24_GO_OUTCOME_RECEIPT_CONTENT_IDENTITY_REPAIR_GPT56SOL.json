@@ -1,0 +1,79 @@
+{
+  "schema": "ENTITYOS_HCU_GO_OUTCOME_RECEIPT_CONTENT_IDENTITY_REPAIR/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "mode": "FREE_ONLY",
+    "main_observed_before_receipt": "d19f581151e634a60096724e1caee06914212bc0",
+    "together": "FORBIDDEN_NOT_USED",
+    "paid_fallback": "FORBIDDEN_NOT_USED",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "coordination": {
+    "retained_hcu_donor_pr": 1263,
+    "retained_hcu_donor_head_observed": "4a42839c9d8eed6c1661497d3bb74751ed5836cf",
+    "retained_execution_controller_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_execution_controller_head_observed": "a73584c9b4655a492d7f506c41a0df10cdc93c55",
+    "duplicate_semantic_path_created": false,
+    "new_executor_authority_created": false,
+    "canonical_atomic_unusual_experiment_lease_acquired": false,
+    "new_unusual_experiment_executed_by_this_organ": false,
+    "classification": "DETERMINISTIC_SOURCE_REPAIR_AND_CAPSULE_STAGING_ALLOWED_UNDER_8_63"
+  },
+  "problem": {
+    "class": "OUTCOME_RECEIPT_CONTENT_IDENTITY_BINDING_GAP",
+    "source_path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "pre_repair_blob": "69ba2bb966866fbc67646a210559894b107b7a65",
+    "mechanism": "outcome_receipt_sha256 selected a registry entry and causal fields were checked, but the admitted receipt bytes were not canonically hashed and rebound to that claimed SHA-256 identity",
+    "risk_scope": "provenance/content-identity ambiguity in admitted causal dataset evidence; no reward minting, effect bypass, model runtime success, or whole-system failure was observed"
+  },
+  "repair": {
+    "single_authority_reused": "RFC8785_JCS_IJSON/v1 via entry_canonicalization_v1.py",
+    "new_invariant": "SHA256(RFC8785_JCS(admitted_outcome_receipt)) == training_trace.outcome_receipt_sha256",
+    "implementation_commit": "ad92eede3472aadb7cb42675b8af16da985b8f57",
+    "regression_commit": "a704e79d327506de7fa9c41efcf535d6e25f3d6c",
+    "current_donor_gate_blob": "c6290060f64f8d6ba683bda9f54096755d742b01",
+    "current_donor_test_blob": "39c02a152b0055431dd8787ceaf81c2afa4ab66f",
+    "current_donor_entry_canonicalizer_blob": "00d1d79cbb66a1956a278de4755cd8395e854199",
+    "current_head_blob_recheck": "PASS_AT_4a42839c9d8eed6c1661497d3bb74751ed5836cf"
+  },
+  "regression_obligations_encoded": [
+    "wrong claimed outcome SHA with otherwise causally valid receipt fails OUTCOME_RECEIPT_IDENTITY_MISMATCH",
+    "byte-distinct receipt cannot reuse a previously claimed SHA identity",
+    "causally wrong receipt under its own correct canonical SHA still fails the existing causal binding checks",
+    "exact canonical receipt under its matching SHA remains admissible",
+    "UNKNOWN credit remains UNKNOWN and is not promoted by receipt identity binding"
+  ],
+  "execution_capsule_staging": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "clay/fusion-vcr-native-20260817",
+    "single_controller_pr": 810,
+    "gate_fixture_commit": "763a26706af1dd139f44b37439ef7ba2e894017e",
+    "test_fixture_commit": "50d6df69cee43c1e5d93fc224dbb2220004eb792",
+    "gate_fixture_path": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/outcome-receipt-binding-a704e79d/jspace_dataset_admission_gate_v1.py",
+    "test_fixture_path": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/outcome-receipt-binding-a704e79d/test_jspace_dataset_admission_gate_v1.py",
+    "entry_canonicalizer_fixture_reuse": "existing exact donor blob 00d1d79cbb66a1956a278de4755cd8395e854199",
+    "second_executor_created": false
+  },
+  "runtime_evidence": {
+    "outcome_identity_repair_exact_free_sandbox_executed": false,
+    "reason": "The retained PR810 route was concurrently serving the supervisor-priority binder-v2 deterministic capsule; overwriting or forking that single executor solely to accelerate this later dataset-gate repair would violate nonduplicate executor coordination. Fixtures are staged for the same retained controller after the exact-current binder/GRID10 closure is frozen.",
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "parallel_runtime_adjudication": {
+    "binder_v2_bounded_snapshot_receipt": "research_entity/continuity/receipts/2026-08-24_GO_JSPACE_BINDER_V2_BOUND_SNAPSHOT_RUNTIME_OBSERVATION_GPT56SOL.json",
+    "classification": "SUPPORTED_AT_BOUND_SNAPSHOT_NOT_EXACT_CURRENT",
+    "duplicate_rerun_by_this_organ": false
+  },
+  "next_exact_gate": "Keep supervisor 8.63 FREE_ONLY. Freeze exact then-current Research main + PR1263 + PR810 identities in the single retained controller, execute J-Space inference-binding v2 plus exact GRID10 plan/cell closure, then extend that same fixed hash-bound capsule to the staged outcome-receipt identity regressions and the remaining causal DatasetAdmission/family-split closure. Do not run any new unusual intervention without a successful canonical atomic lease."
+}

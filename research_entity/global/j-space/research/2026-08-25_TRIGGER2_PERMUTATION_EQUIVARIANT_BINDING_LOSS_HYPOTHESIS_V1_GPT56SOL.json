@@ -1,0 +1,91 @@
+{
+  "schema": "CLAY_TRIGGER2_PERMUTATION_EQUIVARIANT_BINDING_LOSS_HYPOTHESIS/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "R2_GENERATED_TRAINING_HYPOTHESIS",
+  "evidence_basis": {
+    "measured_dissociation": "semantic readability high; symbol write axis writable; dynamic codebook binding near chance; cross-template transfer weak",
+    "claude_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "factorial_generator": "tools/trigger2_binding_router_factorial_generator_v3.py"
+  },
+  "core_hypothesis": "Train the missing computation as permutation equivariance rather than only independent next-token examples: semantic evidence should be invariant to episode-local codebook permutation after outputs are mapped back into semantic coordinates, while emitted opaque symbols must transform equivariantly with the codebook.",
+  "group_definition": "A counterfactual S3 group contains six prompts with identical semantic scene, query polarity and template, differing only in the realized bijection M_e from {ALLOW,DENY,ABSTAIN} to three opaque episode atoms plus independently randomized codebook-entry order.",
+  "output_only_objective": {
+    "notation": {
+      "p_e(s)": "model probability for episode atom s in example e, normalized over the three current codebook atoms",
+      "M_e(c)": "episode-local mapping from semantic decision class c to opaque atom",
+      "q_e(c)": "semantic-aligned probability q_e(c)=p_e(M_e(c))",
+      "c_star": "correct semantic decision class after applying query polarity"
+    },
+    "terms": [
+      {
+        "id": "L_CE",
+        "definition": "mean_e[-log q_e(c_star)]",
+        "purpose": "ordinary correct opaque-symbol supervision through the realized mapping"
+      },
+      {
+        "id": "L_S3_EQ",
+        "definition": "mean_e JS(q_e || mean_group(q)) or another preregistered symmetric divergence",
+        "purpose": "force the semantic decision distribution to remain stable after inverse-codebook alignment across all six S3 mappings"
+      },
+      {
+        "id": "L_CODEBOOK_NECESSITY_OPTIONAL",
+        "definition": "on a separately generated codebook-lesion control with the mapping removed, penalize confident preference among the three candidate atoms, e.g. divergence from uniform; never reuse lesion rows as positive labels",
+        "purpose": "discourage a global semantic-class-to-token prior when the episode mapping is absent",
+        "status": "HYPOTHESIS_ONLY_UNTIL_CALIBRATED"
+      },
+      {
+        "id": "L_TEMPLATE_EQ_OPTIONAL",
+        "definition": "after inverse-codebook alignment, regularize semantic decision distributions across structurally different templates that instantiate the same semantic state and polarity",
+        "purpose": "target the measured context-invariance failure",
+        "status": "HYPOTHESIS_ONLY; tune on calibration only, not sealed holdout"
+      }
+    ],
+    "combined_form": "L = L_CE + lambda_s3*L_S3_EQ + lambda_need*L_CODEBOOK_NECESSITY + lambda_template*L_TEMPLATE_EQ, with all lambdas frozen from calibration before sealed evaluation.",
+    "important_boundary": "This objective uses only observable output probabilities and known episode mappings. It does not assert that K0/K1/K2 or any measured probe direction is a literal model-internal coordinate and therefore does not mint positive J-Space causal labels."
+  },
+  "why_it_targets_the_user_hypothesis": "The model is not merely rewarded for knowing what the scene means. It is rewarded for preserving that meaning under arbitrary interface renaming and for routing the invariant decision through the concrete interface mapping supplied in the current episode. This operationalizes 'meaning -> current interface identifier' without assuming an unverified hidden-state ontology.",
+  "curriculum_use": {
+    "P0_ROUTER_ONLY": "small warmup/diagnostic fraction only; isolates episode-local slot->atom lookup but must not be mistaken for training a literal internal K-slot language",
+    "P1_SEMANTIC_TO_ROUTER": "primary behavioral binding family",
+    "P2_FACTORIAL_DIAGNOSTICS": "symbol-OOD, template-OOD, joint-OOD and query-polarity diagnostics remain separated",
+    "P3_SEALED_SUCCESSOR": "lexical-family sealed holdout plus tokenizer/rank/nuisance/full-state controls required before promotion"
+  },
+  "counterhypotheses_and_discriminators": [
+    {
+      "counterhypothesis": "The model learns template-specific codebook parsing rather than a reusable binding operation.",
+      "discriminator": "DIAG_TEMPLATE_OOD with seen atoms and a separately sealed unseen lexical/template family. Seen-template gains without template-OOD gains reject the strong binding claim."
+    },
+    {
+      "counterhypothesis": "Failure is primarily opaque-symbol copying/representation, not semantic-to-codebook binding.",
+      "discriminator": "P0_ROUTER_ONLY on unseen atoms. If P0 unseen-symbol routing fails while seen-symbol routing passes, atom handling remains a bottleneck independent of semantic decoding."
+    },
+    {
+      "counterhypothesis": "The model retains a global class->token prior and ignores the episode codebook.",
+      "discriminator": "complete S3 counterfactual groups, randomized entry order, zero/near-zero class-symbol mutual information, and codebook-lesion uncertainty control."
+    },
+    {
+      "counterhypothesis": "Apparent improvement is query-word or polarity memorization.",
+      "discriminator": "direct/inverted polarity pairs with ALLOW<->DENY transform and ABSTAIN invariance, crossed with S3 mappings and OOD templates."
+    }
+  ],
+  "acceptance_direction": {
+    "behavioral_binding_target": ">=0.90 on frozen dynamic-codebook binding successor",
+    "context_invariance_target": ">=0.90 on frozen cross-template successor",
+    "required_retention": "preserve measured semantic-read, symbol-write and carrier-binding capabilities within preregistered tolerance",
+    "promotion_rule": "No promotion from TRAIN or diagnostic cells alone; use separately frozen, label-independent, counterbalanced executable successor evidence at exact selected model/tokenizer/runtime identity."
+  },
+  "credits": {
+    "training_executed": false,
+    "accepted_dataset_tokens": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "When the exact accepted 46-atom ABI inventory is available, render the v3 factorial corpus with frozen TRAIN/HOLDOUT atom partitions, add an exact-tokenizer gate, then implement this output-only grouped loss in the future harness with lambda selection confined to calibration data and with sealed OOD successor evaluation untouched."
+}

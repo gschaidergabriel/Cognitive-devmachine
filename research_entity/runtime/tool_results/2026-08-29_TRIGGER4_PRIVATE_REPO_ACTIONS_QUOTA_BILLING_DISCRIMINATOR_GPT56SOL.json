@@ -1,0 +1,103 @@
+{
+  "schema": "TRIGGER4_PRIVATE_REPO_ACTIONS_QUOTA_BILLING_DISCRIMINATOR/v1",
+  "trigger": "4",
+  "classification": "NON_AUTHORITY_READ_ONLY_RESEARCH_EVIDENCE_DELTA",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "authority_epoch_observed": "9.13",
+  "canonical_research_main_observed_prewrite": "60f3e77900721ffa1dea1211e8b035a0e42b7c2f",
+  "authority_change": false,
+  "provider_execution": "HARD_OFF",
+  "new_dispatches": 0,
+  "new_issue_triggers": 0,
+  "vps_execution": 0,
+  "observations": {
+    "private_failure_repositories": [
+      {
+        "repository": "gschaidergabriel/clay-global-research-entity",
+        "visibility": "private",
+        "run_id": 33181911240,
+        "job_id": 98884969346,
+        "job_name": "deterministic",
+        "conclusion": "failure",
+        "steps": null
+      },
+      {
+        "repository": "gschaidergabriel/clay-global-research-entity",
+        "visibility": "private",
+        "run_id": 33182697914,
+        "job_id": 98887677431,
+        "job_name": "deterministic",
+        "conclusion": "failure",
+        "steps": null
+      },
+      {
+        "repository": "gschaidergabriel/Dr.-Unterweger",
+        "visibility": "private",
+        "run_id": 33174696352,
+        "job_id": 98860160195,
+        "job_name": "integrity",
+        "conclusion": "failure",
+        "steps": null
+      }
+    ],
+    "public_success_control": {
+      "repository": "gschaidergabriel/frankenstein-2.0",
+      "visibility": "public",
+      "run_id": 33203186451,
+      "job_id": 98957511749,
+      "job_name": "deterministic",
+      "conclusion": "success",
+      "steps_observed": [
+        "Set up job",
+        "actions/checkout@v4",
+        "actions/setup-python@v5",
+        "Compile validators",
+        "Core deterministic regression tests",
+        "Repository-bound deterministic regression tests",
+        "Validate canonical current checkpoint through successor-dynamic repository binding",
+        "Complete job"
+      ]
+    },
+    "owner_and_connector_permissions_control": "All three repositories are owned by gschaidergabriel and the connected GitHub principal reports admin/push access; visibility is the salient observed repository-class difference in this comparison."
+  },
+  "external_primary_mechanism": {
+    "source_family": "GitHub Docs",
+    "billing_and_usage": "Standard GitHub-hosted runners are free in public repositories. Private repositories consume plan-specific included Actions minutes/storage and usage beyond included quota is billed.",
+    "quota_blocking": "GitHub documents that if an account has no valid payment method on file, Actions usage is blocked once included quota is exhausted.",
+    "runner_reference": "Standard ubuntu-latest GitHub-hosted runners are available in both public and private repositories, but private-repository jobs consume the account allotment while public standard-runner jobs are free."
+  },
+  "hypothesis_update": {
+    "level": "R2_OPEN_HYPOTHESIS_STRONGLY_PRIORITIZED",
+    "candidate": "PRIVATE_REPOSITORY_ACTIONS_QUOTA_BILLING_OR_ENTITLEMENT_ADMISSION_BLOCK",
+    "support": [
+      "Three referenced zero-step jobs are in private repositories and expose failure with no executed steps.",
+      "A same-owner public repository successfully assigned and executed a standard GitHub-hosted runner immediately afterward.",
+      "GitHub's documented billing model treats public and private standard-runner execution differently at the quota/billing boundary."
+    ],
+    "not_proven": [
+      "The account's included Actions minutes are exhausted.",
+      "A payment method is absent or invalid.",
+      "A budget/spending control is blocking usage.",
+      "Repository Actions policy/rules are not the cause.",
+      "The private-repository failure is permanent rather than transient."
+    ]
+  },
+  "counterhypotheses": [
+    "A repository-specific Actions policy or rules/settings interaction blocks job admission independently of quota.",
+    "A private-repository-specific entitlement/control-plane defect unrelated to actual quota causes the same pre-step signature.",
+    "The failures were transient and the public success is temporal rather than visibility-class evidence.",
+    "Different workflow/event admission paths, not repository visibility, explain the contrast."
+  ],
+  "next_high_information_falsifier": "Read the current account Actions included-minute usage plus Actions budget/spending/payment admission state without changing billing. If quota remains available and usage is not budget/payment-blocked, sharply downgrade the quota/billing hypothesis and prioritize repository Actions policy/rules. Do not trigger new private-repository runs merely to test this while issues 2121/2122 remain nonterminal.",
+  "safe_consequence": "Use the public frankenstein-2.0 standard GitHub-hosted CI surface only for repository-local deterministic component tests already permitted by its workpackage contracts. Do not infer private-repository repair and do not mint product/runtime credit across repositories.",
+  "credit_boundary": {
+    "actions_quota_billing_root_cause_verified": false,
+    "private_repo_actions_runtime_pass": false,
+    "runtime_quiescence_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

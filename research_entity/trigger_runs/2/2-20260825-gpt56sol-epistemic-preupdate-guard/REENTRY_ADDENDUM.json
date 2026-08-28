@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_TRIGGER2_RUN_REENTRY_ADDENDUM/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_MOVING_MAIN_ADDENDUM_NONPROMOTING",
+  "reason": "Moving-main reentry after the first receipt found a concurrently landed generation-bound proof composition v2. This addendum preserves that history and records the nonduplicate fusion of the epistemic pre-update invariant into its successor composition rather than leaving a competing positive path.",
+  "moving_main_observation": {
+    "concurrent_predecessor_commit": "44ce1555c411b81650dcad9156426de3be68b390",
+    "concurrent_predecessor_path": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v2.py",
+    "observed_role": "single retained candidate composition of generation provenance -> state-history proof",
+    "remaining_gap_for_this_cycle": "v2 did not itself insert the typed epistemic pre-update guard before replay/u_state delegation"
+  },
+  "successor_fusion": {
+    "path": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+    "commit": "86c7f1fd5240e24e269b6880ab504158a3d1470f",
+    "status": "CURRENT_SUCCESSOR_SOURCE_CANDIDATE_NONPROMOTING",
+    "predecessors": [
+      "tools/trigger2_hyperposition_state_history_generation_bound_gate_v2.py",
+      "tools/trigger2_hyperposition_epistemic_preupdate_guard_v1.py"
+    ],
+    "required_order": [
+      "generation provenance",
+      "epistemic pre-update admission",
+      "replay-bound state-history/discriminator/typed-observation proof"
+    ],
+    "revision_reason": "Fuses the epistemic guard into the generation-bound positive-candidate composition while keeping semantic transitions delegated through the retained state-history gate to the existing v3 reference labeler."
+  },
+  "test_source": {
+    "path": "tests/test_trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+    "commit": "e434d83303635fc5ebb7dcfaf1b48603a94c4917",
+    "status": "CURRENT_TEST_SOURCE_EXECUTION_UNOBSERVED",
+    "coverage": [
+      "generation failure short-circuits epistemic/state-history path",
+      "epistemic rejection occurs only after generation pass",
+      "component pass remains explicitly nonpromoting with zero credits",
+      "invalid component result fails closed"
+    ],
+    "github_combined_statuses_observed": 0,
+    "exact_execution_observed": false
+  },
+  "artifact_status_delta": [
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v2.py",
+      "status": "SUPERSEDED_AS_COMPOSITION_CANDIDATE_BY_V3",
+      "successor": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+      "reason": "v3 preserves generation binding and inserts typed epistemic pre-update admission before the retained state-history path."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_epistemic_preupdate_guard_v1.py",
+      "status": "CURRENT_REUSABLE_DONOR_EMBEDDED_IN_V3_COMPOSITION",
+      "successor": "integrated or equivalent invariant may later be inlined into the single retained gate after exact tests",
+      "reason": "It is not treated as a competing positive-training authority."
+    }
+  ],
+  "credits": {
+    "new_positive_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "remaining_blockers": [
+    "producer-authenticated discriminator and observation receipts where current source still trusts row-carried assertions",
+    "immutable ordered-history authority and world-scoped event identity per adversarial reentry audit",
+    "exact-current deterministic execution receipt for v3 and its dependencies",
+    "native-seed rebind to exactly one retained proof path",
+    "final rendered nuisance/full-cross/family-provenance/tokenizer-ABI leakage gates",
+    "matched immutable low-refusal abliterated target checkpoint selection without holdout leakage"
+  ],
+  "next_exact_action": "Execute and adversarially mutate the generation->epistemic->replay v3 composition at exact current source identity, then fold any passing invariant into the one retained gate and rebind only a small native-seed pilot; keep all positive training admission at zero until the remaining producer/history/leakage/model-identity gates pass."
+}

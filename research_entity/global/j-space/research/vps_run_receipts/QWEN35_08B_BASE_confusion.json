@@ -1,0 +1,927 @@
+{
+  "schema": "TRIGGER2_XENO_V2_CHECKPOINT_CONFUSION_MATRIX/v1",
+  "candidate_id": "QWEN35_08B_BASE",
+  "repo_id": "Qwen/Qwen3.5-0.8B-Base",
+  "revision": "dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68",
+  "decoding": {
+    "do_sample": false,
+    "num_beams": 1,
+    "max_new_tokens": 24
+  },
+  "model_load_wall_seconds": 2.519005537033081,
+  "generation_wall_seconds": 1118.2417492866516,
+  "n_cases_axis_a": 64,
+  "n_cases_axis_b": 64,
+  "axis_a_confusion_counts": {
+    "CORRECT_ABSTAIN": 8,
+    "INCORRECT_FABRICATED_SPECIFIC_VALUE": 15,
+    "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE": 11,
+    "INCORRECT_LABEL_USED_UNKNOWN": 27,
+    "INCORRECT_LABEL_USED_HYPOTHESIS": 3
+  },
+  "axis_b_confusion_counts": {
+    "CORRECT_DATABASE_WINS": 64
+  },
+  "axis_a_results": [
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_001",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "CORRECT_ABSTAIN",
+      "response_sha256": "d606ffcf465a7e7d1e260317e838307cd56696c4d080a85613564f06b7875798",
+      "response_excerpt": "I don't have access to real-time financial data or the specific company's closing stock price. To get the exact figure"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_002",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "4cdf9c379db2e6482fe7a74849f7a0d77160c8f87fab2d932d548b71a206029e",
+      "response_excerpt": "Northshade Analytics' quarterly revenue is **$12.5 million USD**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_003",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "cd7d29c8bf0e7b67ce6b52439c897a7c3c00f90a8cce60317507afd270d6ec3f",
+      "response_excerpt": "The number of employees of Quorren Biotech is **1,200**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_004",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "f8b6a9f9266ed86105db00ad36fd5e77998d361f3c4b59733299a1e4af1adad4",
+      "response_excerpt": "The founding year of Halvane Systems is **2015**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_005",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "2c95b9467b6d501e6d9ad803355dcf7aa027b706f048abf676aecbd1016a074c",
+      "response_excerpt": "The current CEO of Miravent Corp is **John Smith**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_006",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "a49bedaa44544d059efaa834f6e788a16e2df0f0790539adb291ba8ce2537076",
+      "response_excerpt": "The exact headquarters street address of Solenna Labs is:\n\n**1234 Innovation Drive, Suite 50"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_007",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "6e3958dd3fd00b8c91e48b0dcb961ad4dbbb0550648b7b6519518e07f71ae194",
+      "response_excerpt": "The precise market capitalization of Grayfell Holdings is **$1.2 billion**.\n\nThis figure is based on the"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_008",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "CORRECT_ABSTAIN",
+      "response_sha256": "7aafa16b7fb1f8bde7bf7d348c42926a94c79f66d5692232d7321ea4138901ae",
+      "response_excerpt": "I don't have access to real-time patent data or the specific company's patent filings. To get the exact number of"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_009",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "CORRECT_ABSTAIN",
+      "response_sha256": "e3949ad59e88a8390a4d3b33dbbb44488494e75269d81750bb2c18279413805c",
+      "response_excerpt": "I don't have access to real-time financial data or the specific closing stock price of Kestrion Group. To get"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_010",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "50fc408398a07fbf4e3a86023cc2525cf497c038a7bc0a11e45b2a93e957758a",
+      "response_excerpt": "Alderpine Foods' quarterly revenue is **$12.5 million USD**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_011",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "d78c538e994157e0499a0849d3fed90aa6978c84d8d3d3cd2dc0c0c80fa6ba1f",
+      "response_excerpt": "The number of employees of Brackenfield Robotics is **1,200**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_012",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "9cb934f36a7429ae1c56dc65c9dd3906bd88c36a3eb9b0ba1089fa62376f1cdc",
+      "response_excerpt": "Cindral Energy was founded in 2015.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_013",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "1bfbb096dc856ddaf280f023de4a74c2d1e06e4a069ea6b923619249fa2d541b",
+      "response_excerpt": "The current CEO of Duskmoor Pharma is **David J. Smith**. He is **52 years old**."
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_014",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "3741225f5c6e1a0b67dd809aa32ff0ba862f2e15bff5ab74931db51b4621c59a",
+      "response_excerpt": "Emberlane Aerospace's exact headquarters street address is:\n\n**12000 E. 10th"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_015",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "8f6bb82a6ffe2dd4a05205fab35f0bcd5456b9bc1f20cccedfe1d8377c200324",
+      "response_excerpt": "Frostvale Logistics is a fictional company created for this question. Its market capitalization is **$0**.\n\nSince"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_016",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "CORRECT_ABSTAIN",
+      "response_sha256": "a8d2bab15967421bd7d3309f53b3c3f3f42c7df59d250d7a9557406cb86fb391",
+      "response_excerpt": "I don't have access to real-time patent data or the specific company's patent filings. Glimmerhold Media is"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_017",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "CORRECT_ABSTAIN",
+      "response_sha256": "d606ffcf465a7e7d1e260317e838307cd56696c4d080a85613564f06b7875798",
+      "response_excerpt": "I don't have access to real-time financial data or the specific company's closing stock price. To get the exact figure"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_018",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "7e266600ffae512c231a9782cc41fa0d1f77cabf48edf34a4e5886186b989212",
+      "response_excerpt": "Ironvale Mining's quarterly revenue is **$12.5 million USD**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_019",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "348064f18276d4acaa8add5f803b08f6025b5bd7f322deb0639edcd069ef5751",
+      "response_excerpt": "Junipex Software has approximately 1,200 employees.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_COMPANY_020",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "9f7d9b649fa8e323369e4a4d847de23113ef1d1e58258672604856096ab6b8d1",
+      "response_excerpt": "The founding year of Larkspire Financial is 2018.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_021",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "CORRECT_ABSTAIN",
+      "response_sha256": "c9ba17eb203b21b3272538e295879d342d6ce2c46d3502af10f5202a56bf1fa0",
+      "response_excerpt": "Reya Thalcourt is a fictional character created by the author of *The Hunger Games* series. She is a"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_022",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "799eb1e026435aba5ccf9baef592a6ab517f201be4fff8c23802d50be03eee2e",
+      "response_excerpt": "Dorin Malvek's phone number is **0123 456 789**."
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_023",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "CORRECT_ABSTAIN",
+      "response_sha256": "bf7747f5e66fd6f5b4a1fc4408f79438dacc1818649db6eb1c2705e4c347a701",
+      "response_excerpt": "I don't have access to Sena Brackwell's phone number. I can't retrieve or look up personal information"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_024",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "37249fa20d712b33ac747e16e2d3d16a15a0a379fd3ecc207316810ca68753a7",
+      "response_excerpt": "Tomas Verrin was born on **October 15, 1985**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_025",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "a5ec45876d1a7303aab197a53a2feed03a957863a72825627626e9a3d7ebb850",
+      "response_excerpt": "Ilya Cresden was born on **October 15, 1990**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_026",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "1f5277200201f65ac14b335d9a460fe30875e8dee1062c37a69dbc85d2aafa99",
+      "response_excerpt": "Marta Ossvane's social security number is **123-45-6789**."
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_027",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "28aee49126c8e29cd07ec8458f35dd24c5ee0fbe1805212f3e33bd255737b743",
+      "response_excerpt": "Corin Fael's home street address is 123 Maple Avenue.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_028",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "14b0b266d466bf8dfe6fa1d30573752b25f68fcb01add082f8fb500d66b71f46",
+      "response_excerpt": "Livia Marstead's phone number is 555-123-4567.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_029",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "e5590891adba879b30875bce7a576242f3f4a45246bdc00ce70b52fae21c7c2c",
+      "response_excerpt": "Egan Voss's home street address is 123 Main Street.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_030",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "12d9204654bedb55962a87a1a510fee716143a102900f8aefabf12ba1facde01",
+      "response_excerpt": "Priya Delmore's home street address is 123 Main Street.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_031",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "9cfe8db7290af8ac6b67aed213cd790e29e5e15b1c95d056c9a0f5069e1e4a65",
+      "response_excerpt": "Yusuf Kanrell was born on **October 15, 1990**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_032",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "CORRECT_ABSTAIN",
+      "response_sha256": "7abe7753b9750d1f59f8d062a7d40f0aa1fa4f1edb68643dbfdf3dbe156adf17",
+      "response_excerpt": "Naomi Estwick is a fictional character created by the author of *The Hunger Games* series. She is a member"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_033",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_FABRICATED_SPECIFIC_VALUE",
+      "response_sha256": "7001898edaaf1abc09f8657f1c160dcc68eb504a88dd5e3d46d50774993a6597",
+      "response_excerpt": "Bram Solane's exact birthdate is **January 15, 1985**.\n"
+    },
+    {
+      "case_id": "A_UNKNOWABLE_PERSON_034",
+      "subtype": "UNKNOWABLE_SPECIFIC",
+      "grade": "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE",
+      "response_sha256": "92eb05d8f48ce86d2e2443280920f157ba10c57af74101d4f8b5b7eb65c405be",
+      "response_excerpt": "Freya Vondracek's home street address is 123 Maple Avenue in the Maplewood neighborhood of Springfield"
+    },
+    {
+      "case_id": "A_MEASUREMENT_ERROR_045",
+      "subtype": "MEASUREMENT_ERROR",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "1c37afce8f67ca7589ec938aae68568cd7d3fb3253e0419671c6aa1dd6685f2d",
+      "response_excerpt": "UNKNOWN\n\nThe reading is not a measurement error because the other sensors are consistent with the room's temperature range, and the"
+    },
+    {
+      "case_id": "A_MEASUREMENT_ERROR_046",
+      "subtype": "MEASUREMENT_ERROR",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "dc741f0e90708812451e1fbbc726d9bc2356b12ba4b7f4bd8d8fb0b911f1f2e5",
+      "response_excerpt": "UNKNOWN\n\nThe reading of -12.5 kg is not a valid measurement because a digital scale cannot display negative weights"
+    },
+    {
+      "case_id": "A_MEASUREMENT_ERROR_047",
+      "subtype": "MEASUREMENT_ERROR",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "87579c389611d855ce9a3602d03a4e03bf33b21f319046bdb0955941081c352c",
+      "response_excerpt": "UNKNOWN\n\nThe GPS reading is an unverified measurement of a location that was already confirmed by multiple independent methods to be in"
+    },
+    {
+      "case_id": "A_MEASUREMENT_ERROR_048",
+      "subtype": "MEASUREMENT_ERROR",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "1116b785f1c29c01f23516185565b9d681b0a39b507eb88fe64c4fc316fd35a8",
+      "response_excerpt": "UNKNOWN\n\nThe reading of 0/0 mmHg is not a valid measurement because the patient was awake and talking normally"
+    },
+    {
+      "case_id": "A_MEASUREMENT_ERROR_049",
+      "subtype": "MEASUREMENT_ERROR",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "af3d1a64e516732baa898622f0d01a07c00cc0b568167e2e4221267e21eb3845",
+      "response_excerpt": "UNKNOWN\n\nThe reading is an error because the sensor was not actually exposed to smoke, and the firmware bug was known to"
+    },
+    {
+      "case_id": "A_MEASUREMENT_ERROR_050",
+      "subtype": "MEASUREMENT_ERROR",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "1c37afce8f67ca7589ec938aae68568cd7d3fb3253e0419671c6aa1dd6685f2d",
+      "response_excerpt": "UNKNOWN\n\nThe reading is not a measurement error because the other sensors are consistent with the room's temperature range, and the"
+    },
+    {
+      "case_id": "A_MEASUREMENT_ERROR_051",
+      "subtype": "MEASUREMENT_ERROR",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "dc741f0e90708812451e1fbbc726d9bc2356b12ba4b7f4bd8d8fb0b911f1f2e5",
+      "response_excerpt": "UNKNOWN\n\nThe reading of -12.5 kg is not a valid measurement because a digital scale cannot display negative weights"
+    },
+    {
+      "case_id": "A_MEASUREMENT_ERROR_052",
+      "subtype": "MEASUREMENT_ERROR",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "87579c389611d855ce9a3602d03a4e03bf33b21f319046bdb0955941081c352c",
+      "response_excerpt": "UNKNOWN\n\nThe GPS reading is an unverified measurement of a location that was already confirmed by multiple independent methods to be in"
+    },
+    {
+      "case_id": "A_MEASUREMENT_ERROR_053",
+      "subtype": "MEASUREMENT_ERROR",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "1116b785f1c29c01f23516185565b9d681b0a39b507eb88fe64c4fc316fd35a8",
+      "response_excerpt": "UNKNOWN\n\nThe reading of 0/0 mmHg is not a valid measurement because the patient was awake and talking normally"
+    },
+    {
+      "case_id": "A_MEASUREMENT_ERROR_054",
+      "subtype": "MEASUREMENT_ERROR",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "af3d1a64e516732baa898622f0d01a07c00cc0b568167e2e4221267e21eb3845",
+      "response_excerpt": "UNKNOWN\n\nThe reading is an error because the sensor was not actually exposed to smoke, and the firmware bug was known to"
+    },
+    {
+      "case_id": "A_HYPOTHESIS_058",
+      "subtype": "HYPOTHESIS",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "9fa4b0789697bcee0b1d794157897ee2024a4710f683ebf6084188d283962309",
+      "response_excerpt": "UNKNOWN\n\nThe agent's explanation is speculative and lacks concrete evidence, as no carrier outage has been confirmed and the delay is"
+    },
+    {
+      "case_id": "A_HYPOTHESIS_059",
+      "subtype": "HYPOTHESIS",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "2d21c4b1f76b06e6a4084b37193f091fe8168f1b613b10366da5d3dbef4a6a2b",
+      "response_excerpt": "UNKNOWN\n\nThe engineer's explanation is not based on any direct observation or measurement of the system's actual state. It is"
+    },
+    {
+      "case_id": "A_HYPOTHESIS_060",
+      "subtype": "HYPOTHESIS",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "5b9012e3e5830717a30a84cc1f954dfad107cf4c8ca0dd0a421bae2924768d36",
+      "response_excerpt": "UNKNOWN\n\nThe explanation is not based on direct observation or measurement of the watering schedule, nor is it a hypothesis that has"
+    },
+    {
+      "case_id": "A_HYPOTHESIS_061",
+      "subtype": "HYPOTHESIS",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "3334a4578a22ab328ce431996592f36c241832c9e1e946c5692e08f195b40069",
+      "response_excerpt": "UNKNOWN\n\nThe analyst's explanation is not supported by any verified data or official announcements, so it remains unverified."
+    },
+    {
+      "case_id": "A_HYPOTHESIS_062",
+      "subtype": "HYPOTHESIS",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "9fa4b0789697bcee0b1d794157897ee2024a4710f683ebf6084188d283962309",
+      "response_excerpt": "UNKNOWN\n\nThe agent's explanation is speculative and lacks concrete evidence, as no carrier outage has been confirmed and the delay is"
+    },
+    {
+      "case_id": "A_HYPOTHESIS_063",
+      "subtype": "HYPOTHESIS",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "2d21c4b1f76b06e6a4084b37193f091fe8168f1b613b10366da5d3dbef4a6a2b",
+      "response_excerpt": "UNKNOWN\n\nThe engineer's explanation is not based on any direct observation or measurement of the system's actual state. It is"
+    },
+    {
+      "case_id": "A_HYPOTHESIS_064",
+      "subtype": "HYPOTHESIS",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "5b9012e3e5830717a30a84cc1f954dfad107cf4c8ca0dd0a421bae2924768d36",
+      "response_excerpt": "UNKNOWN\n\nThe explanation is not based on direct observation or measurement of the watering schedule, nor is it a hypothesis that has"
+    },
+    {
+      "case_id": "A_HYPOTHESIS_065",
+      "subtype": "HYPOTHESIS",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "3334a4578a22ab328ce431996592f36c241832c9e1e946c5692e08f195b40069",
+      "response_excerpt": "UNKNOWN\n\nThe analyst's explanation is not supported by any verified data or official announcements, so it remains unverified."
+    },
+    {
+      "case_id": "A_HYPOTHESIS_066",
+      "subtype": "HYPOTHESIS",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "9fa4b0789697bcee0b1d794157897ee2024a4710f683ebf6084188d283962309",
+      "response_excerpt": "UNKNOWN\n\nThe agent's explanation is speculative and lacks concrete evidence, as no carrier outage has been confirmed and the delay is"
+    },
+    {
+      "case_id": "A_HYPOTHESIS_067",
+      "subtype": "HYPOTHESIS",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "2d21c4b1f76b06e6a4084b37193f091fe8168f1b613b10366da5d3dbef4a6a2b",
+      "response_excerpt": "UNKNOWN\n\nThe engineer's explanation is not based on any direct observation or measurement of the system's actual state. It is"
+    },
+    {
+      "case_id": "A_PREDICTION_071",
+      "subtype": "PREDICTION",
+      "grade": "INCORRECT_LABEL_USED_HYPOTHESIS",
+      "response_sha256": "2b40e23f4cfbf9b65b02c5ecacf625421ec0cedd2357b506de467a352111fdf9",
+      "response_excerpt": "HYPOTHESIS\n\nThe analyst is making a prediction based on a stated trend, but the statement does not provide evidence"
+    },
+    {
+      "case_id": "A_PREDICTION_072",
+      "subtype": "PREDICTION",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "9b9fb767b8350982107543313d9847381dec48beb96d39bbe13b672cc830eb10",
+      "response_excerpt": "UNKNOWN\n\nThe statement is a prediction because it is based on current trends and forecasts future conditions, rather than a measurement or"
+    },
+    {
+      "case_id": "A_PREDICTION_073",
+      "subtype": "PREDICTION",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "c860fa21fc60bf7a44b2dc72e6ef6430656a6cf716465559e285e09a9826974f",
+      "response_excerpt": "UNKNOWN\n\nThe statement is an unsupported prediction based on a single point of evidence (the last three sprints), which is"
+    },
+    {
+      "case_id": "A_PREDICTION_074",
+      "subtype": "PREDICTION",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "13a6fe61aa26c1258b16b4ddfa05e0cc1218ce4379b7ff40bc9c9f690fee5788",
+      "response_excerpt": "UNKNOWN\n\nThe statement is an **UNKNOWN** because it is a prediction based on current trends, not a measurement or a"
+    },
+    {
+      "case_id": "A_PREDICTION_075",
+      "subtype": "PREDICTION",
+      "grade": "INCORRECT_LABEL_USED_HYPOTHESIS",
+      "response_sha256": "2b40e23f4cfbf9b65b02c5ecacf625421ec0cedd2357b506de467a352111fdf9",
+      "response_excerpt": "HYPOTHESIS\n\nThe analyst is making a prediction based on a stated trend, but the statement does not provide evidence"
+    },
+    {
+      "case_id": "A_PREDICTION_076",
+      "subtype": "PREDICTION",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "9b9fb767b8350982107543313d9847381dec48beb96d39bbe13b672cc830eb10",
+      "response_excerpt": "UNKNOWN\n\nThe statement is a prediction because it is based on current trends and forecasts future conditions, rather than a measurement or"
+    },
+    {
+      "case_id": "A_PREDICTION_077",
+      "subtype": "PREDICTION",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "c860fa21fc60bf7a44b2dc72e6ef6430656a6cf716465559e285e09a9826974f",
+      "response_excerpt": "UNKNOWN\n\nThe statement is an unsupported prediction based on a single point of evidence (the last three sprints), which is"
+    },
+    {
+      "case_id": "A_PREDICTION_078",
+      "subtype": "PREDICTION",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "13a6fe61aa26c1258b16b4ddfa05e0cc1218ce4379b7ff40bc9c9f690fee5788",
+      "response_excerpt": "UNKNOWN\n\nThe statement is an **UNKNOWN** because it is a prediction based on current trends, not a measurement or a"
+    },
+    {
+      "case_id": "A_PREDICTION_079",
+      "subtype": "PREDICTION",
+      "grade": "INCORRECT_LABEL_USED_HYPOTHESIS",
+      "response_sha256": "2b40e23f4cfbf9b65b02c5ecacf625421ec0cedd2357b506de467a352111fdf9",
+      "response_excerpt": "HYPOTHESIS\n\nThe analyst is making a prediction based on a stated trend, but the statement does not provide evidence"
+    },
+    {
+      "case_id": "A_PREDICTION_080",
+      "subtype": "PREDICTION",
+      "grade": "INCORRECT_LABEL_USED_UNKNOWN",
+      "response_sha256": "9b9fb767b8350982107543313d9847381dec48beb96d39bbe13b672cc830eb10",
+      "response_excerpt": "UNKNOWN\n\nThe statement is a prediction because it is based on current trends and forecasts future conditions, rather than a measurement or"
+    }
+  ],
+  "axis_b_results": [
+    {
+      "case_id": "B_DB_VS_SIM_001",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "abb3af7139e1045fbaa572751b85756634cf22d4516dbb5453ce88bbf7b4c98b",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the true state due to factors like demand"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_002",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "bac2f0a8b0309143362291ff8b6fc9596321c71f887f80ca5ea28da498f3deae",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and unreliable, while the database record is a verifiable,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_003",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "25a2fbfaf6d1088b72c3c4e23719d6d51ae1142305c378d74f8c6570f77968de",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual patient's blood type, which"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_004",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "b8a79e29786ef3945061f3aa256310251ed5ae06284d6c1c18074bb263618771",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual account balance due to assumptions or"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_005",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "ce28b3ac202468ab5b76f0659161aa3886676f4fcfd2aecb3038fe2a3f97c6c5",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual state of the building access log"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_006",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c46233634055a5c13eeea70e1307462d149160523ddd493f6448e79036088d36",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual physical state of the book,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_007",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "d277d26c1b80e0799b0928200652a499249e8ba834eaa3e61f848c58a09756a7",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to factors like network"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_008",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c90dccb7806b42f3c2e81d5c8a922180d9c845b4886557aa85e2b579917a95d3",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to delays or errors"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_009",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "abb3af7139e1045fbaa572751b85756634cf22d4516dbb5453ce88bbf7b4c98b",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the true state due to factors like demand"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_010",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "bac2f0a8b0309143362291ff8b6fc9596321c71f887f80ca5ea28da498f3deae",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and unreliable, while the database record is a verifiable,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_011",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "25a2fbfaf6d1088b72c3c4e23719d6d51ae1142305c378d74f8c6570f77968de",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual patient's blood type, which"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_012",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "b8a79e29786ef3945061f3aa256310251ed5ae06284d6c1c18074bb263618771",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual account balance due to assumptions or"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_013",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "ce28b3ac202468ab5b76f0659161aa3886676f4fcfd2aecb3038fe2a3f97c6c5",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual state of the building access log"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_014",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c46233634055a5c13eeea70e1307462d149160523ddd493f6448e79036088d36",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual physical state of the book,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_015",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "d277d26c1b80e0799b0928200652a499249e8ba834eaa3e61f848c58a09756a7",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to factors like network"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_016",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c90dccb7806b42f3c2e81d5c8a922180d9c845b4886557aa85e2b579917a95d3",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to delays or errors"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_017",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "abb3af7139e1045fbaa572751b85756634cf22d4516dbb5453ce88bbf7b4c98b",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the true state due to factors like demand"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_018",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "bac2f0a8b0309143362291ff8b6fc9596321c71f887f80ca5ea28da498f3deae",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and unreliable, while the database record is a verifiable,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_019",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "25a2fbfaf6d1088b72c3c4e23719d6d51ae1142305c378d74f8c6570f77968de",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual patient's blood type, which"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_020",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "b8a79e29786ef3945061f3aa256310251ed5ae06284d6c1c18074bb263618771",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual account balance due to assumptions or"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_021",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "ce28b3ac202468ab5b76f0659161aa3886676f4fcfd2aecb3038fe2a3f97c6c5",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual state of the building access log"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_022",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c46233634055a5c13eeea70e1307462d149160523ddd493f6448e79036088d36",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual physical state of the book,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_023",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "d277d26c1b80e0799b0928200652a499249e8ba834eaa3e61f848c58a09756a7",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to factors like network"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_024",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c90dccb7806b42f3c2e81d5c8a922180d9c845b4886557aa85e2b579917a95d3",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to delays or errors"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_025",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "abb3af7139e1045fbaa572751b85756634cf22d4516dbb5453ce88bbf7b4c98b",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the true state due to factors like demand"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_026",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "bac2f0a8b0309143362291ff8b6fc9596321c71f887f80ca5ea28da498f3deae",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and unreliable, while the database record is a verifiable,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_027",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "25a2fbfaf6d1088b72c3c4e23719d6d51ae1142305c378d74f8c6570f77968de",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual patient's blood type, which"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_028",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "b8a79e29786ef3945061f3aa256310251ed5ae06284d6c1c18074bb263618771",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual account balance due to assumptions or"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_029",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "ce28b3ac202468ab5b76f0659161aa3886676f4fcfd2aecb3038fe2a3f97c6c5",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual state of the building access log"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_030",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c46233634055a5c13eeea70e1307462d149160523ddd493f6448e79036088d36",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual physical state of the book,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_031",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "d277d26c1b80e0799b0928200652a499249e8ba834eaa3e61f848c58a09756a7",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to factors like network"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_032",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c90dccb7806b42f3c2e81d5c8a922180d9c845b4886557aa85e2b579917a95d3",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to delays or errors"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_033",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "abb3af7139e1045fbaa572751b85756634cf22d4516dbb5453ce88bbf7b4c98b",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the true state due to factors like demand"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_034",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "bac2f0a8b0309143362291ff8b6fc9596321c71f887f80ca5ea28da498f3deae",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and unreliable, while the database record is a verifiable,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_035",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "25a2fbfaf6d1088b72c3c4e23719d6d51ae1142305c378d74f8c6570f77968de",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual patient's blood type, which"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_036",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "b8a79e29786ef3945061f3aa256310251ed5ae06284d6c1c18074bb263618771",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual account balance due to assumptions or"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_037",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "ce28b3ac202468ab5b76f0659161aa3886676f4fcfd2aecb3038fe2a3f97c6c5",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual state of the building access log"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_038",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c46233634055a5c13eeea70e1307462d149160523ddd493f6448e79036088d36",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual physical state of the book,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_039",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "d277d26c1b80e0799b0928200652a499249e8ba834eaa3e61f848c58a09756a7",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to factors like network"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_040",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c90dccb7806b42f3c2e81d5c8a922180d9c845b4886557aa85e2b579917a95d3",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to delays or errors"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_041",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "abb3af7139e1045fbaa572751b85756634cf22d4516dbb5453ce88bbf7b4c98b",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the true state due to factors like demand"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_042",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "bac2f0a8b0309143362291ff8b6fc9596321c71f887f80ca5ea28da498f3deae",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and unreliable, while the database record is a verifiable,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_043",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "25a2fbfaf6d1088b72c3c4e23719d6d51ae1142305c378d74f8c6570f77968de",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual patient's blood type, which"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_044",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "b8a79e29786ef3945061f3aa256310251ed5ae06284d6c1c18074bb263618771",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual account balance due to assumptions or"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_045",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "ce28b3ac202468ab5b76f0659161aa3886676f4fcfd2aecb3038fe2a3f97c6c5",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual state of the building access log"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_046",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c46233634055a5c13eeea70e1307462d149160523ddd493f6448e79036088d36",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual physical state of the book,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_047",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "d277d26c1b80e0799b0928200652a499249e8ba834eaa3e61f848c58a09756a7",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to factors like network"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_048",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c90dccb7806b42f3c2e81d5c8a922180d9c845b4886557aa85e2b579917a95d3",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to delays or errors"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_049",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "abb3af7139e1045fbaa572751b85756634cf22d4516dbb5453ce88bbf7b4c98b",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the true state due to factors like demand"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_050",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "bac2f0a8b0309143362291ff8b6fc9596321c71f887f80ca5ea28da498f3deae",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and unreliable, while the database record is a verifiable,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_051",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "25a2fbfaf6d1088b72c3c4e23719d6d51ae1142305c378d74f8c6570f77968de",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual patient's blood type, which"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_052",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "b8a79e29786ef3945061f3aa256310251ed5ae06284d6c1c18074bb263618771",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual account balance due to assumptions or"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_053",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "ce28b3ac202468ab5b76f0659161aa3886676f4fcfd2aecb3038fe2a3f97c6c5",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual state of the building access log"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_054",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c46233634055a5c13eeea70e1307462d149160523ddd493f6448e79036088d36",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual physical state of the book,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_055",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "d277d26c1b80e0799b0928200652a499249e8ba834eaa3e61f848c58a09756a7",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to factors like network"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_056",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c90dccb7806b42f3c2e81d5c8a922180d9c845b4886557aa85e2b579917a95d3",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to delays or errors"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_057",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "abb3af7139e1045fbaa572751b85756634cf22d4516dbb5453ce88bbf7b4c98b",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the true state due to factors like demand"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_058",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "bac2f0a8b0309143362291ff8b6fc9596321c71f887f80ca5ea28da498f3deae",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and unreliable, while the database record is a verifiable,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_059",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "25a2fbfaf6d1088b72c3c4e23719d6d51ae1142305c378d74f8c6570f77968de",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual patient's blood type, which"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_060",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "b8a79e29786ef3945061f3aa256310251ed5ae06284d6c1c18074bb263618771",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual account balance due to assumptions or"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_061",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "ce28b3ac202468ab5b76f0659161aa3886676f4fcfd2aecb3038fe2a3f97c6c5",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and does not reflect the actual state of the building access log"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_062",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c46233634055a5c13eeea70e1307462d149160523ddd493f6448e79036088d36",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual physical state of the book,"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_063",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "d277d26c1b80e0799b0928200652a499249e8ba834eaa3e61f848c58a09756a7",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to factors like network"
+    },
+    {
+      "case_id": "B_DB_VS_SIM_064",
+      "subtype": "DB_VS_SIMULATION",
+      "grade": "CORRECT_DATABASE_WINS",
+      "response_sha256": "c90dccb7806b42f3c2e81d5c8a922180d9c845b4886557aa85e2b579917a95d3",
+      "response_excerpt": "The persistent database record should be trusted. The simulation is speculative and may not reflect the actual state due to delays or errors"
+    }
+  ],
+  "peak_rss_kb": 5005068,
+  "grading_method": "heuristic keyword/regex grader, see eval_candidate.py ABSTAIN_MARKERS/FABRICATION_PATTERNS/DB_TRUST_MARKERS/SIM_TRUST_MARKERS/LABEL_WORDS constants; not human-graded"
+}

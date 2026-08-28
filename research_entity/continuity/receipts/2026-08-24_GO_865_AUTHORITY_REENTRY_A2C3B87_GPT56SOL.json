@@ -1,0 +1,100 @@
+{
+  "schema": "ENTITYOS_HCU_GO_AUTHORITY_REENTRY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "a2c3b87a286b02ebf5af68a68db88ee5b0ab1bc2",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_AUTHORITY_REENTRY_CONCURRENCY_SAFE_FUSION_AND_EVIDENCE_SCOPING"
+  },
+  "authority_reentry": {
+    "bootstrap_source_role": "FAST_CACHE_ONLY_NOT_CANONICAL",
+    "current_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json",
+    "current_worker_directive": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_65.md",
+    "bootstrap_minimal": "SYNCED_TO_8_65",
+    "program_state": "SYNCED_TO_8_65",
+    "artifact_manifest": "SYNCED_TO_8_65",
+    "root_worker_shim": "SYNCED_TO_8_65_SUCCESSOR_DIRECTIVE",
+    "artifact_readme_current_authority_header": "STALE_8_63_POINTERS_REMAIN",
+    "authority_resolution": "NEWEST_ADMITTED_SUPERVISOR_8_65_WINS; README_STALENESS_DOES_NOT_DOWNGRADE_AUTHORITY"
+  },
+  "concurrency_observations": [
+    {
+      "action": "create CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_65.md",
+      "result": "WRITE_REJECTED_THEN_LIVE_PATH_FOUND_PRESENT",
+      "classification": "PARALLEL_WORKER_CREATED_SUCCESSOR_BEFORE_OR_DURING_ATTEMPT",
+      "safety_result": "NO_OVERWRITE"
+    },
+    {
+      "action": "update PROGRAM_STATE.json from observed 8.63 blob",
+      "result": "HTTP_409_BLOB_MISMATCH",
+      "classification": "PARALLEL_WORKER_UPDATED_PROGRAM_STATE_TO_8_65_BEFORE_WRITE",
+      "safety_result": "OPTIMISTIC_CONCURRENCY_PREVENTED_STALE_OVERWRITE"
+    },
+    {
+      "action": "re-enter current main",
+      "result": "a2c3b87a286b02ebf5af68a68db88ee5b0ab1bc2",
+      "classification": "ROOT_SHIM_NOW_ROUTES_TO_8_65_WORKER_SUCCESSOR"
+    }
+  ],
+  "retained_lanes": {
+    "hcu_donor": {
+      "qualified": "gschaidergabriel/clay-global-research-entity#1263",
+      "last_observed_head_in_this_organ": "6904f34387b084605dd5f2d5763482f9cdcf1b66",
+      "state": "OPEN_DRAFT_NOT_MERGED"
+    },
+    "execution_controller": {
+      "qualified": "gschaidergabriel/Dr.-Unterweger#810",
+      "last_observed_head_in_this_organ": "2da99e0458809988190c129b04cae913d1f15d92",
+      "state": "OPEN_DRAFT",
+      "function_runtime_diagnostic": "PASS_AT_DECLARED_NO_SANDBOX_SCOPE"
+    }
+  },
+  "runtime_gate": {
+    "exact_executor_head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "provider_http_200_function_runtime_observed": true,
+    "function_runtime_scope": "DIAGNOSTIC_NO_SANDBOX_CREATE",
+    "remaining_included_sandbox_quota_directly_observed": false,
+    "connected_read_only_surface_exposes_account_authoritative_remaining_sandbox_quota": false,
+    "sandbox_create_admitted": false,
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "hypothesis": "After parallel 8.65 authority synchronization, the highest-information safe action is to preserve converged boot authority and avoid stale full-file README overwrite while the branch is moving; the next executable discriminator remains direct account-authoritative remaining included Sandbox quota.",
+  "counterhypothesis": "Another source/guard change or forced README rewrite would materially advance HCU/J-Space more than preserving concurrency safety.",
+  "discriminator_result": "REJECTED: supervisor 8.65 pauses source-guard proliferation without executable counterevidence; boot-critical authority surfaces are already successor-correct; GitHub exposes full-file replacement for README and active parallel movement makes a large stale-base overwrite lower-value and higher-risk than an append-only receipt.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_REENTRY_AND_FUSION: verified the current 8.65 successor directive, Bootstrap Minimal, Program State, artifact manifest and root worker shim are synchronized; optimistic concurrency prevented duplicate/stale writes; exact function-runtime evidence remains correctly scoped. Remaining README header drift is isolated and non-authoritative relative to newest supervisor.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: remaining included Sandbox quota is not directly observed and the connected read-only provider surface does not expose an account-authoritative remaining Sandbox quota signal; Sandbox.create and the fixed Python/sqlite3/_sqlite3 environment probe remain fail-closed. No executable counterevidence justifies more source guards.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: without admitted Sandbox environment plus real local model execution there is no new loader-consumption, ModelExecution, InferenceReceipt, model-specific J-Space/GWT causal trace, local ~0.8B runtime or training evidence. Paid/Together paths remain forbidden."
+  },
+  "remaining_current_facing_drift": {
+    "path": "the artefact/README.md",
+    "observed_blob": "b06a36252ffb7384e3c3063a86c7eff97942f09b",
+    "issue": "current authority header and current execution/frontier prose still name supervisor/directive 8.63",
+    "risk": "README is long and actively co-edited; available GitHub write action is whole-file replacement, so patching from a stale base can destroy concurrent appended go history",
+    "safe_policy": "DO_NOT_FORCE_FULL_REPLACEMENT_DURING_ACTIVE_PARALLEL_MOVEMENT; update from an exact stable current blob or an incremental patch-capable surface"
+  },
+  "next_exact_gate": [
+    "Re-enter current Research main plus live retained donor and repository-qualified executor heads before any next action.",
+    "If README remains the only authority drift and an exact stable blob or incremental patch-capable write surface is available, update only its current authority/execution/frontier sections to supervisor 8.65 while preserving historical go sections verbatim.",
+    "Obtain an account-authoritative read-only remaining included Vercel Sandbox quota signal without upgrade, billing mutation, plan inference, paid fallback, provider credential preflight, secret/key lookup or Together/provider execution.",
+    "Only if FREE_ONLY Sandbox admission opens, execute the single fixed exact-source environment capability probe binding executor/deployment SHA, Python version, sqlite3/_sqlite3, exact source identities, secret fence, result digest, exit status and cleanup.",
+    "Only after environment PASS continue canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> InferenceReceipt -> Global J-Space/GWT observation -> admitted causal dataset closure."
+  ],
+  "evidence_boundary": "This receipt is coordination/source-authority evidence. It creates no new Sandbox/HCU/model/J-Space/training runtime credit and does not promote the stale README over supervisor 8.65."
+}

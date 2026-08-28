@@ -1,0 +1,50 @@
+{
+  "schema": "ENTITYOS_HCU_GO_CAUSAL_BINDING_TRANSPLANT_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "active_supervisor": "SUPERVISOR_STEERING_8_61_FREE_ONLY",
+  "canonical_main_observed_before_write": "4877fbbf0ae7945d92c42415acebd2e7675fabc2",
+  "retained_hcu_pr": 1263,
+  "retained_hcu_head_last_observed": "491c9080c2a8eb3aa12143b69e8d140a1dcc99c7",
+  "authority_correction": {
+    "together_current_supervisor": "FORBIDDEN",
+    "paid_training": "QUARANTINED_PROVENANCE_ONLY_UNDER_FREE_ONLY_8_61",
+    "owner_one_shot_job_consumed": false
+  },
+  "unusual_experiment": {
+    "name": "CAUSAL_BINDING_TRANSPLANT",
+    "count_added_by_this_worker": 1,
+    "scope": "BOUNDED_ISOLATED_COMPONENT_MECHANISM_WITH_STUBBED_DEPENDENCIES",
+    "question": "Can jspace_training_trace_v1 accept unrelated but syntactically valid Entry/admission/route/GRID SHA-256 identities and still produce a self-consistent training-trace digest?",
+    "observed_result": "ACCEPTED",
+    "example_trace_sha256": "cc9750da9f26a5f14493ee1ff7a31d0762e72d3bf7ebc9c37e11e2836c52f9b7",
+    "credit_boundary": "MECHANISM_SUPPORTED_ONLY_NOT_EXACT_FULL_MODULE_OR_RUNTIME_PASS"
+  },
+  "counterhypothesis_and_fusion": {
+    "existing_dataset_admission_gate": "jspace_dataset_admission_gate_v1.py cross-binds training + live transition + admitted prototype and credited outcome ancestry",
+    "parallel_nonduplicate_delta": "PR1263 commit 4181900690a772d263b8275486087767e80619da added jspace_causal_training_binding_v1.py joining transition trace + training trace + inference binding",
+    "decision": "DO_NOT_CREATE_SECOND_CAUSAL_BINDING_PATH"
+  },
+  "residual_gate": {
+    "compiler_blob_last_observed": "f4a55ab4c53ccf896f4cbf87a762ec2ebbd9a545",
+    "compiler_schema": "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v4",
+    "observation": "compile_jspace_bootstrap_dataset_v1.py imports training trace and vector-control ABI but not the causal-training binding at retained PR1263 head 491c9080c2a8eb3aa12143b69e8d140a1dcc99c7",
+    "required_convergence": "Serious/free-only dataset freeze must consume the selected causal admission/binding path rather than raw self-consistent training traces alone."
+  },
+  "execution_surface_recheck": {
+    "vercel_team_plan": "hobby",
+    "latest_pr810_head_observed": "b723aaafc86f2f1b96e60bc600bdb57082b17572",
+    "latest_pr810_deployment_observed": "dpl_8RydxSGDscHEDFVi1YJbTW7Utgr5",
+    "deployment_state": "READY",
+    "this_worker_fetch_result": "HTTP_302_TO_VERCEL_SSO",
+    "new_entityos_hcu_runtime_credit": false,
+    "note": "Existing main receipt 2026-08-24_GO_SANDBOX_CALLABILITY_GPT56SOL.json already proves Sandbox infrastructure callability at its exact older bridge identity; this worker does not generalize that PASS to the newer deployment."
+  },
+  "next_exact_step": "Fuse retained PR1263 causal-training binding + dataset admission into the actual dataset freeze/compiler path on current FREE_ONLY main ancestry, then execute the fixed exact-SHA combined HCU/J-Space regression capsule through the admitted Vercel Sandbox bridge without Together or any new paid provider.",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

@@ -1,0 +1,96 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "current_main_at_join": "ed58970b66fb37243d1d5aff8a8de11b30b38714",
+  "current_main_change_observed_during_go": {
+    "pr": 732,
+    "merge_commit": "ed58970b66fb37243d1d5aff8a8de11b30b38714",
+    "effect": "canonical Clay orchestration now initializes neutral MiniUnifiedDB before pipeline_profile_read",
+    "runtime_pass_claimed": false
+  },
+  "authority": {
+    "program_state_blob": "38ea8402bbd1b8ba0fc8adfa924d1030544e52dd",
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "owner_directive_blob": "51041da4ac0ffb570b91213e88bc2e97ae6f9989",
+    "supervisor_inbox_blob": "275d23c710c88635486f8e4a48cda35127fea867",
+    "free_only": true,
+    "provider_execution_allowed_now": false
+  },
+  "frontier": {
+    "contract_pr": 901,
+    "required_reference_effect_surface": [
+      "pipeline_profile_read",
+      "pipeline_init",
+      "pipeline_state_read",
+      "pipeline_collect",
+      "pipeline_compile",
+      "pipeline_build_prompt",
+      "inference_generate",
+      "pipeline_gate",
+      "pipeline_commit"
+    ],
+    "current_reference_runtime_blob": "fa3031ac7bf4cea6a12c57f781c29c9c3650ebef",
+    "current_missing_effects": ["pipeline_profile_read", "inference_generate"],
+    "current_stale_effects": ["profile_load", "provider_chat_json"],
+    "status": "FAIL_CLOSED_MISMATCH"
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "id": "STALE_STRUCTURED_RUNTIME_FULL_GRAFT_COUNTERFACTUAL",
+    "class": "BOUNDED_SOURCE_FUSION_FALSIFIER",
+    "question": "Can the old PR #728 structured-runtime blob be grafted wholesale onto fresh main to close the reference effect-surface mismatch without regressing newer accepted source mechanisms?",
+    "donor": {
+      "pr": 728,
+      "head": "11086376644fe69c9b34c0a897571d1ef40bd339",
+      "runtime_blob": "400831d2275d4448c2642ed5bd3f55122a31cf3c",
+      "comparison_to_current_main": {
+        "status": "diverged",
+        "ahead_by": 13,
+        "behind_by": 201
+      }
+    },
+    "observations": [
+      "The donor has the desired v2 DB-profile/current-effect surface, but is a broad 806-line runtime delta plus additional state-box/schema behavior.",
+      "Current main contains the later recursive persisted-string-leaf gate via _iter_persisted_string_leaves.",
+      "The donor gate instead scans str(payload) as a whole; a wholesale blob replacement would not preserve the exact current persisted-string-leaf mechanism.",
+      "PR #728 is 201 commits behind current main and is not a narrow current-head fusion candidate."
+    ],
+    "result": "REJECT_WHOLESALE_GRAFT",
+    "counterhypothesis": "The donor can be treated as an exact current semantic oracle because its effect names already match BLOGPOST_ENTITY.clay.",
+    "counterhypothesis_result": "REJECTED_SOURCE_LEVEL: phase-name match is insufficient when the donor would overwrite newer gate semantics and broad adjacent runtime behavior."
+  },
+  "architecture_delta": {
+    "decision": "FUSE_NARROWLY_NOT_WHOLESALE",
+    "required_next_code_delta": [
+      "add DB-resident pipeline_profile_read to the current runtime while preserving current recursive persisted-string-leaf scanning",
+      "rename/converge provider_chat_json responsibility into generic inference_generate driven by profile.inference",
+      "deauthorize legacy profile_load/provider_chat_json effect names",
+      "retain merged #732 init-before-profile-read ordering",
+      "do not import unrelated stale #728 state-box/schema changes unless independently justified"
+    ]
+  },
+  "execution": {
+    "vercel_sandbox_exec_surface_available_in_this_session": false,
+    "exact_current_runtime_test": "UNOBSERVED_EXECUTION_ADMISSION",
+    "github_runner_test_for_this_receipt": "NOT_STARTED",
+    "runtime_pass_claimed": false,
+    "semantic_test_fail_claimed": false,
+    "provider_secret_used": false,
+    "provider_network_used": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "evidence_boundary": {
+    "source_fusion_discriminator": "SUPPORTED",
+    "reference_effect_surface_converged": false,
+    "native_v2_parity": false,
+    "exact_current_runtime": "UNOBSERVED",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_exact_step": "Implement only the current-head reference-runtime effect-surface convergence on top of ed58970b66fb37243d1d5aff8a8de11b30b38714 (or newer refreshed main), preserving the current persisted-string-leaf gate and #732 initialization order; then run the focused structured regressions and #901 parity test on an actually-started authorized isolated runner before granting runtime credit."
+}

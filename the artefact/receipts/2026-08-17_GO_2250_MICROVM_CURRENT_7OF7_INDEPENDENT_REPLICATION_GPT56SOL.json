@@ -1,0 +1,67 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T22:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "classification": "INDEPENDENT_EXACT_BLOB_SOURCE_REPLICATION",
+  "product": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "microVM deployment source contract only",
+  "observed_current_blobs": {
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "57db5224db000fc246445d68938b218ed8e4ff14",
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "b075755d24fcd3dbd203b02f67eeff8a5a8c571b",
+    "the artefact/tests/test_microvm_deployment_contract.py": "a03de2e8fe1473c7e019dce66710bc04d244aa75"
+  },
+  "reconstruction_identity": {
+    "contract_git_hash_object": "57db5224db000fc246445d68938b218ed8e4ff14",
+    "template_git_hash_object": "b075755d24fcd3dbd203b02f67eeff8a5a8c571b",
+    "test_git_hash_object": "a03de2e8fe1473c7e019dce66710bc04d244aa75",
+    "all_match_current_github": true
+  },
+  "execution": {
+    "environment": "authorized isolated OpenAI container",
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "7 passed in 0.05s",
+    "exit_code": 0
+  },
+  "contracts_exercised": [
+    "mandatory final microVM/guest-kernel envelope",
+    "exact single ClayVerse OCI artifact profile",
+    "read-only root and explicit persistent-state surfaces",
+    "default-deny Kubernetes NetworkPolicy for ingress and egress",
+    "CNI/NetworkPolicy enforcement remains an explicit runtime acceptance obligation",
+    "readiness uses /readyz while liveness uses /healthz",
+    "GLM credential remains secret-bound and Claude primary path is not replaced by CLAUDE_API_KEY"
+  ],
+  "live_fusion": {
+    "network_policy_gap": "DUPLICATE_ALREADY_CLOSED_ON_MAIN_BY_PARALLEL_WORKER",
+    "liveness_readiness_gap": "DUPLICATE_ALREADY_CLOSED_ON_MAIN_BY_PARALLEL_WORKER",
+    "action": "NO_DUPLICATE_IMPLEMENTATION; INDEPENDENT_REPLICATION_ONLY"
+  },
+  "execution_surface_refresh": {
+    "vercel_direct_tool_surface": "project/deployment/log/docs inspection only; no environment-secret mutation or direct Sandbox lifecycle mutation exposed to this organ",
+    "retained_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_controller_head": "78d92753d9442c66c3ffcff127c31faa98ffd622",
+    "strongest_controller_observation": "Sandbox.create succeeded and then failed closed before private Research/EntityOS fetch because host Preview GITHUB_READ_TOKEN was absent",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "classification": "CREDENTIAL_ADMIN_BLOCKER_NOT_CLAYVERSE_TEST_FAIL"
+  },
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "no safely shared immutable request/turn identity exposed for the atomic GO lease"
+  },
+  "nonclaims": [
+    "not an exact OCI build",
+    "not Kubernetes/CNI runtime evidence",
+    "not Kata/microVM runtime evidence",
+    "not Clerk/browser/PTY runtime evidence",
+    "not whole ClayVerse PASS"
+  ],
+  "next_discriminator": "Provision the retained PR810 controller with host-side sensitive Vercel Preview GITHUB_READ_TOKEN without forwarding or logging it in Sandbox, then rebind once to then-current Research/#611/#622 and deliberately admitted #623 bytes and execute the exact private-source -> EntityOS -> OCI build/runtime batch; final acceptance must subsequently run the same accepted OCI digest under the mandatory microVM guest-kernel envelope with actual CNI policy enforcement.",
+  "together_api": "FORBIDDEN",
+  "vps_self_hosted_production_testing": "NOT_USED",
+  "final_paid_model_training": "NOT_STARTED_OWNER_AUTHORIZATION_REQUIRED"
+}

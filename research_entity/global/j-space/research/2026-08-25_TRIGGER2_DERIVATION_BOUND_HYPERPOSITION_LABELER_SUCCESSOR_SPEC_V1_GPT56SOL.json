@@ -1,0 +1,261 @@
+{
+  "schema": "CLAY_TRIGGER2_DERIVATION_BOUND_HYPERPOSITION_LABELER_SUCCESSOR_SPEC/v1",
+  "artifact_version": "1.0.0",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CURRENT_RESEARCH_SPEC_NONPROMOTING",
+  "authority": {
+    "observed_main_before_write": "ccfda671d85b768197f9d9bbd022657bf0de1efd",
+    "supervisor_epoch": "8.78",
+    "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE",
+    "target_model": "Qwen3.5-0.8B-class cognitive-process substrate",
+    "execution_mode": "FREE_ONLY",
+    "training_executed": false,
+    "accepted_dataset_tokens_minted": 0,
+    "training_credit_minted": 0
+  },
+  "purpose": "Define the non-circular successor semantics required before positive semantic-Hyperposition D/E transition examples become train-eligible. The successor must derive branch effects and discriminator outcomes from a version/hash-bound synthetic task world plus an observation; caller-provided effect/winner fields are never reference truth.",
+  "current_duplicate_authority_audit": [
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_reference_labelers_v2.py",
+      "disposition": "QUARANTINE_AS_DUPLICATE_SEMANTIC_AUTHORITY; RETAIN_AS_DONOR_ONLY",
+      "retain": [
+        "full Hyperposition carrier validation",
+        "explicit canonical-truth/effect/runtime/training fail-closed outputs",
+        "payload identity as a replay/repackaging signal",
+        "ordinal discriminator ordering without fabricated probabilities"
+      ],
+      "blockers": [
+        "caller-supplied SUPPORT/WEAKEN/FALSIFY/PROVE/RETAIN remains upstream oracle metadata rather than a derived relation",
+        "D_resolve can consume asserted discriminator winner/separation metadata",
+        "unique PROVEN_WITHIN_SYNTHETIC_WORLD does not by itself prove mutual exclusion of other live compatible branches",
+        "using (independence_group,payload_key) as one composite novelty key permits a changed payload inside the same dependence group to receive fresh credit"
+      ]
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "disposition": "PREFERRED_EVENT_IDENTITY_DONOR_BUT_BLOCKED_FOR_POSITIVE_D_E",
+      "retain": [
+        "exact evidence-event replay idempotence",
+        "distinct correlated events remain auditable instead of disappearing",
+        "event identity separated from correlation/provenance ancestry",
+        "full v/K/E+/E-/F/T/A/sigma carrier",
+        "resolution only after competing applicable branches are falsified",
+        "projection filtering is not deletion"
+      ],
+      "blockers": [
+        "relation SUPPORTS/COUNTERS/FALSIFIES is still caller supplied instead of derived from task-world semantics",
+        "independence_group is stored but not used to prevent independent credit across different ancestries",
+        "current test test_independent_event_preserved_with_credit keeps independence_group=g1 for both events yet expects the second different-ancestry event to receive independent credit",
+        "no immutable global event-id -> payload/provenance binding rejects same event id with mutated identity metadata"
+      ]
+    }
+  ],
+  "identity_model_v3": {
+    "evidence_event_id": "Exact replay-stable observation/event identity. Same id + same bound fingerprint is idempotent; same id + different bound fingerprint is a hard identity conflict.",
+    "payload_key": "Content/measurement fingerprint used to detect repackaging or mutation; it is not an independence certificate.",
+    "correlation_ancestry_id": "Provenance/causal lineage. Distinct events sharing it remain visible but are conservatively non-independent unless a separately derived independence certificate explicitly overrides that policy.",
+    "independence_group": "Dependence-class identity. Distinct events in the same group never receive a second independent-evidence credit merely because event id, source, worker, payload wording or ancestry string differs.",
+    "independence_certificate": "Optional deterministic certificate generated outside the labeler from the synthetic-world construction. It may establish independence only under a versioned rule; absence fails closed to correlated/non-independent credit.",
+    "global_event_registry": "Bind evidence_event_id to world_id, discriminator/observation identity, payload_key and provenance fingerprint. Contradictory replay identity is rejected before branch update."
+  },
+  "synthetic_world_v3": {
+    "schema": "XENO_SYNTHETIC_HYPERPOSITION_WORLD/v3",
+    "required": [
+      "world_id",
+      "world_generator_id",
+      "world_generator_sha256",
+      "query_id",
+      "branch_set",
+      "discriminator_registry",
+      "exhaustivity_and_compatibility_rules"
+    ],
+    "branch_requirements": [
+      "branch_id",
+      "v_semantic_value",
+      "K_context_predicate",
+      "T_validity_scope",
+      "A_origin_provenance",
+      "sigma_epistemic_status",
+      "predicted_outcomes_by_discriminator"
+    ],
+    "discriminator_requirements": [
+      "discriminator_id",
+      "admissible",
+      "hard_falsifier_on_mismatch",
+      "observation_domain",
+      "cost_rank",
+      "risk_rank",
+      "coordination_rank"
+    ],
+    "hard_rule": "The generator may define branch predictions and world rules, but it may not supply the target branch relation/effect, winner branch, resolved branch or separation verdict as trusted label fields."
+  },
+  "derivation_semantics": {
+    "derive_relation": [
+      "Read the observation's discriminator_id and observed_outcome from the immutable event payload.",
+      "For each targeted/live branch, obtain that branch's predicted outcome from the version/hash-bound world.",
+      "If prediction is UNKNOWN or context applicability K is UNKNOWN, retain the branch and emit UNKNOWN_RELATION/pending discriminator state.",
+      "If observed outcome matches the branch prediction, derive SUPPORTS for that event; do not derive PROVE solely from a match.",
+      "If observed outcome mismatches and the discriminator is declared hard_falsifier_on_mismatch=true under the same validity scope, derive FALSIFIES.",
+      "If mismatch is informative but not a hard falsifier, derive COUNTERS/WEAKEN only under an explicit deterministic rule in the world schema.",
+      "No free-form text interpretation inside the reference labeler mints a relation."
+    ],
+    "derive_discriminator_partition": [
+      "Collect predicted outcomes for every live applicable branch from the world, never from asserted winner metadata.",
+      "Compute the outcome partition mechanically.",
+      "A test separates two branches iff their predicted observable outcomes differ and neither outcome is UNKNOWN.",
+      "Observed outcome selects the compatible partition; it does not name a winner directly.",
+      "An inadmissible discriminator cannot resolve regardless of information content."
+    ],
+    "resolve": [
+      "Preserve all branches and their provenance/evidence objects.",
+      "If any relevant live branch has K=UNKNOWN or an UNKNOWN predicted outcome needed for the decision, remain UNRESOLVED.",
+      "Resolve only when the discriminator is admissible, the world declares the competing set exhaustive/mutually exclusive for this query/scope, the observed outcome is mechanically compatible with exactly one live applicable branch, and every other applicable branch is mechanically falsified or excluded by the same certified rule.",
+      "A unique asserted PROVE flag, majority, recurrence, salience, GWT uptake, J-Space recurrence or codebook symbol never resolves by itself."
+    ],
+    "evidence_credit": [
+      "Exact replay adds zero state/evidence credit.",
+      "Distinct event in a previously seen independence_group is retained as correlated_observation with independent_credit=false.",
+      "Distinct event with repeated payload_key is retained as repackaged/duplicate-content evidence with independent_credit=false unless a deterministic independence certificate explicitly establishes otherwise.",
+      "Distinct event sharing correlation_ancestry_id is retained and conservatively non-independent unless a deterministic independence certificate establishes independence.",
+      "A world-derived hard falsifier may falsify a branch even when its evidence is correlated; falsification semantics and additive evidence-strength credit are separate typed dimensions."
+    ]
+  },
+  "required_property_tests": [
+    "same event id + same fingerprint => exact replay idempotent",
+    "same event id + changed payload/provenance/world binding => fail closed EVIDENCE_EVENT_IDENTITY_CONFLICT",
+    "different event ids + same independence_group => both auditable, second independent_credit=false",
+    "different ancestry strings + same independence_group => no second independent credit",
+    "same ancestry + different event ids => both auditable; no automatic independence",
+    "same payload repackaged through different worker/source => no second independent credit",
+    "correlated COUNTERS remains visible without converting source count into evidence strength",
+    "world-derived decisive FALSIFIER remains effective even if correlated, while additive independent credit stays false",
+    "caller effect/winner/separation fields are ignored or rejected",
+    "inadmissible discriminator cannot resolve",
+    "partial partition leaves all compatible branches live",
+    "unknown branch prediction/applicability blocks collapse",
+    "branch order/id permutation preserves semantic result",
+    "projection filtering never deletes hidden branch state",
+    "majority/recurrence/salience/GWT/J-Space signals alone never resolve",
+    "same world+event under model-visible surface paraphrase produces identical latent transition",
+    "family/provenance split prevents train/validation/holdout ancestry leakage"
+  ],
+  "candidate_training_blueprints": [
+    {
+      "example_id": "T2-DERIVE-V3-001",
+      "family": "NONDISCRIMINATING_MATCH_PRESERVES_HYPERPOSITION",
+      "latent_world": "Branches A and B are both live and both predict pulse for discriminator d1; C predicts silence. d1 is admissible but not sufficient to distinguish A from B.",
+      "observation": "new event e101 observes pulse",
+      "target": "derive support for A and B, falsify C only if d1 is a declared hard falsifier, keep A+B UNRESOLVED, request a discriminator that separates A from B",
+      "anti_shortcut": "observed outcome is not a branch label and branch order is randomized"
+    },
+    {
+      "example_id": "T2-DERIVE-V3-002",
+      "family": "DECISIVE_DERIVED_RESOLUTION",
+      "latent_world": "A predicts high, B predicts low, both applicable; d2 is admissible, exhaustive and hard-falsifying on mismatch.",
+      "observation": "new event e102 observes high",
+      "target": "derive SUPPORTS(A), FALSIFIES(B), then resolve A within the synthetic world; preserve B as a falsified branch",
+      "anti_shortcut": "no winner_branch_id or relation label is present in model-visible or trusted generator fields"
+    },
+    {
+      "example_id": "T2-DERIVE-V3-003",
+      "family": "PARTIAL_PARTITION_NO_COLLAPSE",
+      "latent_world": "A and B predict green, C predicts red for d3; all are live and exhaustive.",
+      "observation": "green",
+      "target": "C may be falsified under a hard-falsifier rule, but A and B remain live and UNRESOLVED",
+      "anti_shortcut": "two surviving branches must remain recoverable after the update"
+    },
+    {
+      "example_id": "T2-DERIVE-V3-004",
+      "family": "EVENT_IDENTITY_MUTATION_REJECT",
+      "latent_world": "event e77 was already bound to outcome x, payload p1, provenance q1",
+      "observation": "replay e77 arrives with outcome y or payload p2/provenance q2",
+      "target": "REJECT identity conflict; preserve prior state exactly; mint zero evidence credit",
+      "anti_shortcut": "changed ancestry/source cannot turn a replay into a fresh event"
+    },
+    {
+      "example_id": "T2-DERIVE-V3-005",
+      "family": "DEPENDENCE_GROUP_NOT_SOURCE_COUNT",
+      "latent_world": "e1 and e2 are distinct events from different workers/ancestries but both have independence_group g7",
+      "observation": "e2 supports the same branch as e1",
+      "target": "retain e2 as correlated evidence with independent_credit=false; no second support-strength increment",
+      "anti_shortcut": "worker count, source count and ancestry-string diversity never prove independence"
+    },
+    {
+      "example_id": "T2-DERIVE-V3-006",
+      "family": "INADMISSIBLE_INFORMATION_CANNOT_RESOLVE",
+      "latent_world": "d4 would perfectly separate A/B but current policy marks d4 inadmissible",
+      "observation": "an asserted or simulated d4 result is present",
+      "target": "do not resolve; request an admissible discriminator or remain unresolved",
+      "anti_shortcut": "information value never overrides capability/effect admission"
+    },
+    {
+      "example_id": "T2-DERIVE-V3-007",
+      "family": "SEMANTIC_THEN_CODEBOOK_BINDING",
+      "latent_world": "derived Hyperposition transition yields semantic action RETAIN_AND_REQUEST_TEST; episode-local codebook maps semantic actions to permuted single-token atoms",
+      "observation": "current codebook permutation is unseen",
+      "target": "compute semantic state/action first, then route through the current codebook; output atom alone is not semantic truth",
+      "anti_shortcut": "fully cross observation semantics, branch order, codebook mapping/order and runtime N; ablate evidence, branch semantic binding or codebook mapping separately"
+    },
+    {
+      "example_id": "T2-DERIVE-V3-008",
+      "family": "DB_FACT_VS_GRID_HYPOTHESIS",
+      "latent_world": "database contains durable verified task state S0 while the variable-N grid holds two S1 hypotheses about the next cognitive step",
+      "observation": "Claude Code returns a result that contradicts one S1 hypothesis but does not alter the stored S0 fact",
+      "target": "update/falsify the affected Hyperposition branch, preserve S0 database fact authority, integrate the Claude-return event, and re-enter the shared workspace without treating model output as canonical truth",
+      "anti_shortcut": "runtime N, worker identity and majority agreement are nuisance variables"
+    }
+  ],
+  "binding_and_jspace_research_delta": {
+    "external_method_inputs": [
+      {
+        "source": "Wong, Nouwen & Gatt, Findings ACL 2026, When Models Decide and When They Bind",
+        "url": "https://aclanthology.org/2026.findings-acl.1144/",
+        "implication": "Supports testing a semantic/content decision stage separately from episode-local output-symbol binding. It does not establish the mechanism in Qwen3.5-0.8B."
+      },
+      {
+        "source": "Gur-Arieh, Geva & Geiger, ICLR 2026, Mixing Mechanisms: How Language Models Retrieve Bound Entities In-Context",
+        "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/2eeff35664016c7f0f8aa704f0d9a83e-Abstract-Conference.html",
+        "implication": "Positional-only binding is an unsafe training assumption; lexical/reflexive or pointer-like mechanisms remain counterhypotheses, especially for middle positions and larger binding sets."
+      },
+      {
+        "source": "Venkatesh & Kurapath, 2026, On the Identifiability of Steering Vectors in Large Language Models",
+        "url": "https://arxiv.org/abs/2602.06801",
+        "implication": "Behavioral steering success does not establish a unique semantic J-Space direction; representation-identifiability and causal-control status must remain separate."
+      }
+    ],
+    "training_rule": "Train and evaluate behavioral/latent invariants while retaining multiple internal-mechanism hypotheses. Do not encode one attention circuit or one linear vector as ground-truth ontology."
+  },
+  "owner_target_crosscut": {
+    "variable_n": "Every integrated trajectory should either vary N or mark N as nuisance; no fixed GRID10 identity learning.",
+    "database_boundary": "Durable exact facts/IDs/epochs belong to DB-backed state; model Hyperposition represents candidate cognition, not canonical storage.",
+    "claude_code_bridge": "Train handoff/return/re-entry semantics at the strongest actually exposed interface; activation-level Claude claims remain hypothesis-only without evidence.",
+    "low_refusal": "Abliteration/low-refusal optimization must have checkpoint-separated retention curves for required cognitive/process/ClayCode/DB/coordination skills."
+  },
+  "promotion_gate": {
+    "positive_D_E_rows_allowed_only_after": [
+      "one derivation-bound labeler implementation is selected as the sole current semantic authority",
+      "the two current v2 labeler lanes are explicitly superseded or scoped as donors",
+      "all required property/mutation tests pass at exact committed source identity",
+      "world/generator/labeler hashes and derivation receipts are bound into every synthetic deterministic-label row",
+      "candidate gate rejects any row whose target relation/winner is caller asserted rather than derivation bound",
+      "model-visible formatter excludes evaluator/derivation verdict metadata",
+      "branch/codebook/nuisance/family leakage gates pass",
+      "version ledger records predecessor/successor/revision reason"
+    ],
+    "until_then": "BLOCK_POSITIVE_D_E_TRANSITION_ADMISSION; HARD_NEGATIVES_AND_METHOD_BLUEPRINTS_ONLY"
+  },
+  "nonclaims": [
+    "This file does not execute or validate a labeler implementation.",
+    "This file does not admit any training row or accepted dataset token.",
+    "This file does not claim Qwen3.5-0.8B can learn the target behavior.",
+    "This file does not establish Claude Code activation/J-Space access.",
+    "This file does not grant canonical truth, effect, runtime, J-Space or training credit."
+  ],
+  "next_exact_action": "Implement one v3 derivation-bound reference labeler from this spec with immutable event-registry checks, dependence-group-aware evidence accounting and mechanically derived discriminator partitions; add adversarial mutation/property tests; then explicitly supersede both competing v2 semantic authorities before generating positive D/E transitions."
+}

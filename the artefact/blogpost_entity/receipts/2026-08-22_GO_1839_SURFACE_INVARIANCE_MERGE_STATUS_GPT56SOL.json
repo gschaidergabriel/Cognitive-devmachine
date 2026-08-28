@@ -1,0 +1,58 @@
+{
+  "schema": "clay-go-merge-status/v1",
+  "timestamp": "2026-08-22T18:57:03+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_id": "go-20260822T1839+0700-gpt56sol-surface-invariance",
+  "unusual_experiment_total_for_macrocycle": 1,
+  "unusual_experiment_name": "SURFACE_FORM_COPY_BASELINE_FALSIFIER",
+  "pr": 939,
+  "pr_head": "3e5de0e4bf7b9696d3962565535a7d1d340a06eb",
+  "merge_commit": "ddefaa3671c61c26ab2bd701a648d8ac576cf25a",
+  "merge_classification": "SOURCE_MECHANISM_FUSION_ONLY",
+  "source_delta": {
+    "existing_compositional_ood_cases_preserved": 320,
+    "surface_invariance_cases_added": 80,
+    "total_compositional_ood_cases": 400,
+    "exact_vector_cases": 160,
+    "surface_forms": 4,
+    "negative_baseline": "literal_old_surface_slot_copy_only"
+  },
+  "falsifier_result": {
+    "old_canonical_surface_structural_pass": "80/80",
+    "old_canonical_surface_semantic_pass": "80/80",
+    "surface_invariance_parsed_by_literal_copier": "0/80",
+    "conclusion": "the former canonical exact-vector family alone was vulnerable to literal prompt-slot copying"
+  },
+  "github_actions": {
+    "workflow": "claycog-validator-pr",
+    "run_id": 32571544232,
+    "job_id": 97027586566,
+    "github_conclusion": "failure",
+    "observed_steps": [],
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_STEPS",
+    "test_failure_credit": 0,
+    "hosted_runtime_credit": 0
+  },
+  "current_execution_policy": {
+    "supervisor_state": "9.9",
+    "control": "4.1+4.2-execution-boundary-addendum",
+    "free_only": true,
+    "credentialed_together_preflight_allowed": false,
+    "together_training_network_execution_allowed": false,
+    "provider_network_called": false,
+    "upload": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "evidence_boundary": [
+    "merge does not claim source-exact hosted execution because the PR job executed zero steps",
+    "bounded isolated source-semantic regression supports the mechanism but is not whole-repository runtime credit",
+    "the added family is evaluation-only and not training data",
+    "the negative baseline proves one concrete shortcut and does not prove exhaustive semantic generalization",
+    "no tuned-model/base-model/larger-model quality comparison was executed in this macrocycle",
+    "FREE_ONLY remains authoritative for provider execution"
+  ],
+  "next_frontier": "obtain actually-started exact-source execution of the fused 400-case/160-vector gate; then require matched tuned/base/larger-model evaluation to survive surface invariance before cognition promotion"
+}

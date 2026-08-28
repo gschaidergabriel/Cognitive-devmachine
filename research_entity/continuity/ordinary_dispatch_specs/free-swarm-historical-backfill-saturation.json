@@ -1,0 +1,34 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_SPEC/v1",
+  "dispatch_class": "free-swarm-historical-backfill-saturation",
+  "retry_generation": 1,
+  "dispatch_key": "free-swarm-historical-backfill-saturation-g0001",
+  "state": "RETIRED_DUPLICATE_DISPATCH_CLASS_PROVENANCE_ONLY",
+  "authorizes_new_trigger": false,
+  "do_not_advance_generation": true,
+  "superseded_by_dispatch_class": "free-swarm-historical-backfill-v1",
+  "superseded_by_spec": "research_entity/continuity/ordinary_dispatch_specs/free-swarm-historical-backfill-v1.json",
+  "superseded_by_workflow": ".github/workflows/go878-historical-backfill-runtime.yml",
+  "retirement_reason": "This legacy saturation dispatch describes the same historical Free-Swarm backfill runtime probe as free-swarm-historical-backfill-v1. Keeping both as live generation authorities would allow semantic double-dispatch. Preserve this file only as legacy provenance; all future admitted retries use exactly one generation sequence under free-swarm-historical-backfill-v1.",
+  "purpose": "Historical provenance for the Supervisor 8.78 bounded Free-Swarm replay/backfill saturation probe. No new execution is admitted under this duplicate class.",
+  "canonical_result_path": "research_entity/continuity/ordinary_dispatch_results/free-swarm-historical-backfill-saturation-g0001.json",
+  "canonical_result_semantics": "LEGACY_PATH_ONLY; absence does not authorize a retry under this class",
+  "execution_policy": {
+    "mode": "FREE_ONLY",
+    "admitted_surface": "NONE_FOR_THIS_RETIRED_CLASS",
+    "provider_or_model_network_io": "FORBIDDEN",
+    "paid_or_unknown_monetary_path": "FORBIDDEN",
+    "together": "FORBIDDEN",
+    "canonical_effect_authority": "NONE"
+  },
+  "evidence_boundary": {
+    "claim_presence": "COORDINATION_ONLY",
+    "queued_or_running_job": "SCHEDULER_ONLY",
+    "runtime_credit_requires": "No new runtime credit may be minted under this retired duplicate class",
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "retry_law": "DO_NOT_RETRY_OR_INCREMENT_THIS_RETIRED_CLASS. Future admitted retries belong exclusively to free-swarm-historical-backfill-v1 under its ordinary-dispatch generation law."
+}

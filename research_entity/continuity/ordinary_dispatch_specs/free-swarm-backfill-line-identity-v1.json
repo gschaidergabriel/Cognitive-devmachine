@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_SPEC/v1",
+  "dispatch_class": "free-swarm-backfill-line-identity-v1",
+  "trigger_title": "[CLAY-DISPATCH] GO878 repair backfill line identity",
+  "probe_contract": "FREE_SWARM_BACKFILL_LINE_IDENTITY_RECEIPT/v1",
+  "sandbox": "clay-direct-dev",
+  "transport": "SELF_HOSTED_LINUX_X64",
+  "retry_generation": 2,
+  "current_dispatch_key": "free-swarm-backfill-line-identity-v1-g0002",
+  "current_claim_path": "research_entity/continuity/ordinary_dispatch_claims/free-swarm-backfill-line-identity-v1-g0002.json",
+  "current_result_path": "research_entity/continuity/ordinary_dispatch_results/free-swarm-backfill-line-identity-v1-g0002.json",
+  "current_workflow": ".github/workflows/go878-backfill-line-identity-reentry.yml",
+  "current_trigger_surface": "GITHUB_ACTIONS_WORKFLOW_DISPATCH_ONLY",
+  "current_trigger_state": "CLAIMED_NOT_TERMINALLY_OBSERVED",
+  "trigger_envelope_guard": "Generation-2 claim already exists. Do NOT create another claim or an Issue carrier: the current executor listens only to workflow_dispatch. An organ with admitted Actions dispatch capability must re-enter exact current source/workflow identity and issue exactly one manual workflow dispatch; if identity moved, persist a terminal source-identity block instead of executing.",
+  "generation_rule": "INCREMENT_ONLY_AFTER_TERMINAL_RESULT_REQUIRING_DELIBERATE_RETRY_OR_EXPLICIT_INFRASTRUCTURE_OR_PROBE_SEMANTIC_CHANGE; NEW_GO_ALONE_MUST_NOT_INCREMENT",
+  "generation_lineage": [
+    {
+      "generation": 0,
+      "dispatch_key": "free-swarm-backfill-line-identity-v1-g0000",
+      "state": "LEGACY_FANOUT_QUARANTINED_NO_NEW_TRIGGER",
+      "reason": "Pre-protocol issue fan-out created equivalent legacy carriers; generation 0 was quarantined and produced no canonical terminal result."
+    },
+    {
+      "generation": 1,
+      "dispatch_key": "free-swarm-backfill-line-identity-v1-g0001",
+      "state": "TERMINAL_BLOCKED_SOURCE_IDENTITY_MOVED",
+      "reason": "Canonical result recorded BLOCKED_SOURCE_IDENTITY_MOVED: the generation-1 claim/carrier bound predecessor blob f095ec12ab28aa5df87b1762b2cc19afca592365 while canonical provenance fusion moved the exact source to 5cb0045f5c355170372efd4f08c033b33c91fbed before admitted sandbox execution."
+    },
+    {
+      "generation": 2,
+      "dispatch_key": "free-swarm-backfill-line-identity-v1-g0002",
+      "state": "CURRENT_CLAIMED_AWAITING_SINGLE_MANUAL_DISPATCH",
+      "reason": "Protocol-authorized deliberate retry after terminal generation-1 source-identity block. Exact current source is 5cb0045f5c355170372efd4f08c033b33c91fbed; base patcher and post-provenance adapter fail closed on that source plus test blob 702c2e42fe6e4881ef7a08b67f6b8b0b567ac8b4, and workflow commit 8db0879a8b608987b4ace6f4f0e58852cc7f13dc routes future execution through the successor adapter. The create-only generation-2 claim is already present; the remaining trigger is the single manual workflow_dispatch, not a new Issue."
+    }
+  ],
+  "identity_excludes": [
+    "go_text",
+    "macrocycle_id",
+    "timestamp",
+    "issue_number",
+    "workflow_run_id",
+    "branch_name",
+    "unrelated_main_sha",
+    "organ_model_session_identity"
+  ],
+  "claim_path_template": "research_entity/continuity/ordinary_dispatch_claims/{dispatch_key}.json",
+  "result_path_template": "research_entity/continuity/ordinary_dispatch_results/{dispatch_key}.json",
+  "evidence_boundary": "Claim/spec state is coordination only. No runtime/model/provider/training/whole-product credit exists until a terminal exact-source generation-2 result is persisted.",
+  "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md"
+}

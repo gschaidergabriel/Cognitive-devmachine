@@ -1,0 +1,115 @@
+name: claycog-validator-pr
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/mini_cognition/**'
+      - 'the artefact/blogpost_entity/STAGED_COGNITION_ACCEPTANCE.json'
+      - 'the artefact/blogpost_entity/presets/zero_blog.json'
+      - 'the artefact/blogpost_entity/BLOGPOST_ENTITY.clay'
+      - 'research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md'
+      - 'research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md'
+      - 'research_entity/claycode/autonomous/SUPERVISOR_INBOX.json'
+      - 'tools/clay_profile_pipeline_runtime.py'
+      - '.github/workflows/claycog-validator-pr.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claycog-validator-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  strict-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+      - name: Record source identity
+        run: |
+          set -euo pipefail
+          printf 'sha=%s\n' "$GITHUB_SHA"
+          git rev-parse HEAD
+          git status --short
+      - name: Compile cognition admission boundary
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            'the artefact/blogpost_entity/mini_cognition/claycode_syntax_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/claycode_calls_v2.py' \
+            'the artefact/blogpost_entity/mini_cognition/eval_outputs_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/generate_eval_compositional_ood_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_eval_compositional_exact_vector_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_eval_surface_copy_baseline_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_semantic_call_admission_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_eval_call_depth_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_staged_cognition_contract_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/describe_campaign_offline_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_describe_campaign_offline_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/audit_together_byom_template_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_audit_together_byom_template_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py'
+      - name: Run strict ClayCode and paid-create safety regressions
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_validate_corpus_v2.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_describe_campaign_offline_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_audit_together_byom_template_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py'
+      - name: Fence staged cognition directive/runtime coherence
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_staged_cognition_contract_v1.py'
+      - name: Regenerate and validate exact SFT v2 corpus
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_sft_v2.py
+          python3 validate_corpus_v2.py train_v2.jsonl validation_v2.jsonl
+          git diff --exit-code -- corpus_manifest_v2.json
+      - name: Run exact omega OOD promotion regressions
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_exact_vector_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_compositional_exact_vector_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_surface_copy_baseline_v1.py'
+      - name: Run shared semantic-call admission regression
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_semantic_call_admission_v1.py'
+      - name: Run OOD call-depth regression
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_call_depth_v1.py'
+      - name: Materialize evaluation-only compositional OOD lesion
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_eval_compositional_ood_v1.py
+          python3 - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+          rows=[json.loads(line) for line in Path('eval_compositional_ood_v1.jsonl').read_text().splitlines() if line.strip()]
+          assert len(rows)==400, len(rows)
+          assert len({x['id'] for x in rows})==400
+          families={x['family'] for x in rows}
+          assert len(families)==7, families
+          surface=[x for x in rows if x['family']=='compositional_surface_invariance_omega']
+          assert len(surface)==80
+          assert Counter(x['surface_form'] for x in surface)=={
+              'evidence_first':20,'contract_first':20,'inputs_first':20,'record_fields':20
+          }
+          assert all('typed_args=' not in x['prompt'] for x in surface)
+          assert sum('expected_omega' in x for x in rows)==160
+          print({'cases':len(rows),'unique_ids':400,'families':sorted(families),
+                 'surface_invariance_cases':80,'exact_vector_cases':160,'role':'evaluation_only'})
+          PY

@@ -1,0 +1,36 @@
+{
+  "schema": "CLAY_GO_TRIGGER2_FAMILY_PROVENANCE_GATE_SOURCE/v1",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol",
+  "objective": "advance current supervisor 8.88 P0 training-admission frontier without reopening resolved quiescence or visible-nuisance work",
+  "evidence_basis": {
+    "supervisor_8_88_commit": "21cad7f41d41a994bfa028e6cd634bf438919654",
+    "readiness_negative_commit": "b496915a2c1da2b71cf70e9a9563e325d34dddb0",
+    "visible_nuisance_pass_commit": "f494dede9786aec058a94932cc92ce89996ce990"
+  },
+  "implemented": {
+    "gate_path": "tools/trigger2_family_provenance_gate_v1.py",
+    "gate_commit": "0ea73f04d805d1ca10daf42b65541d2c7b7f7ce8",
+    "test_path": "tests/test_trigger2_family_provenance_gate_v1.py",
+    "test_commit": "2d18a083f8bd359ccc3c5f7ae0d09b0678690989",
+    "properties": [
+      "requires explicit TRAIN/CALIBRATION/HOLDOUT causal-family provenance",
+      "binds model family and checkpoint sha256 into the anti-echo lineage root",
+      "collapses generator family, source episode root and repackaged-history root",
+      "rejects causal-family cross-split reuse",
+      "rejects anti-echo root reuse after relabel/repackaging",
+      "rejects cross-split parent-family ancestry",
+      "recomputes lineage_digest and fails closed on mutation or missing ancestry",
+      "mints zero dataset/training/runtime/HCU/EntityOS credit"
+    ]
+  },
+  "credit_boundary": {
+    "source_component_created": true,
+    "executable_test_observed": false,
+    "canonical_v4_wired": false,
+    "gold_pilot_ready": false,
+    "accepted_dataset_tokens_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_exact_action": "Execute tests/test_trigger2_family_provenance_gate_v1.py on a repository-bound clean checkout. If PASS, build the tokenizer-ABI gate, then wire both plus all remaining prerequisites into the canonical v4 composition before any 8-16 row micro-gold pilot."
+}

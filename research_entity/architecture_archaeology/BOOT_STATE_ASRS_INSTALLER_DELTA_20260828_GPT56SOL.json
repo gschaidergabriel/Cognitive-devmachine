@@ -1,0 +1,172 @@
+{
+  "schema_version": "1.0",
+  "status": "TRIGGERWORD3_ADDITIVE_GROUNDED_DELTA_OPEN_FUSION",
+  "purpose": "Add nonduplicate boot/state evidence discovered after BOOT_ORDER_AND_STATE_HISTORY.json was created concurrently. This supplement is not a competing required-output authority and should be fused into the main history when safe.",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "observed_date": "2026-08-28",
+  "source_repository": "gschaidergabriel/Project-Frankenstein",
+  "historical_source_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "target_for_future_fusion": "research_entity/architecture_archaeology/BOOT_ORDER_AND_STATE_HISTORY.json",
+  "evidence": [
+    {
+      "id": "BOOT-DELTA-INITIAL-ASRS",
+      "evidence_class": ["HISTORICAL_GIT", "PATH_HISTORY"],
+      "source": "Project-Frankenstein commit e1a8812767668091d146ee958bbc2ebb2743031c",
+      "date": "2026-02-14T17:05:27Z",
+      "claim": "ASRS rollback and the microservice installer are first verified in accessible Git at the initial repository commit.",
+      "boundary": "Initial repository commit is not an invention/creation date; content can predate import into Git."
+    },
+    {
+      "id": "BOOT-DELTA-ASRS-BASELINE",
+      "evidence_class": ["HISTORICAL_SOURCE"],
+      "source": "Project-Frankenstein:services/asrs/baseline.py",
+      "source_blob": "1dff50cac7fd0ef4433c8b83c09dee7ecf45d842",
+      "observed_mechanism": [
+        "pre-integration file backups",
+        "per-file SHA-256 checksums",
+        "systemd user-service config capture",
+        "selected config-file capture",
+        "service active-state capture",
+        "baseline metrics and response/error measurements",
+        "affected file/service identity",
+        "baseline persistence to disk"
+      ],
+      "interpretation": "Historical recovery design recognized that integration rollback needs an explicit preimage spanning code/config/service state, not merely a restart command.",
+      "boundary": "This is not an atomic whole-machine snapshot and does not prove coverage of all databases, process memory or external effects."
+    },
+    {
+      "id": "BOOT-DELTA-ASRS-ROLLBACK",
+      "evidence_class": ["HISTORICAL_SOURCE"],
+      "source": "Project-Frankenstein:services/asrs/rollback.py",
+      "source_blob": "64a6441cd2ccfe9c79f016385a570368f1d61d41",
+      "observed_mechanism": {
+        "SOFT": "disable feature + reload configs",
+        "HARD": "restore files/configs + restart affected services + clear caches",
+        "EMERGENCY": "hard recovery + restart all critical services + safe-mode flag",
+        "postcondition": "health verification contributes to rollback result"
+      },
+      "important_detail": "Before restoring an existing file the implementation writes a .pre_rollback emergency backup, then restores from the baseline backup.",
+      "boundary": "Recorded rollback success is implementation logic, not reproduced historical runtime success in this research step."
+    },
+    {
+      "id": "BOOT-DELTA-FROZEN-SYSTEMD-TOPOLOGY",
+      "evidence_class": ["HISTORICAL_SOURCE"],
+      "source": "Project-Frankenstein:install.sh",
+      "source_blob": "428c24f81738de3eede639e4368b902af49db3f1",
+      "observed_mechanism": [
+        "most services enabled against default.target",
+        "aicore-core After+Requires aicore-router",
+        "consciousness/overlay/rooms declare core/router dependencies",
+        "dream declares core/router/consciousness ordering",
+        "sentinel declares ordering after frank-watchdog",
+        "dream meta-watchdog declares ordering after dream watchdog",
+        "llm-guard declares ordering/want on llama3 GPU service",
+        "installer enables infrastructure, daemon, autonomous, watchdog/body and scheduled tiers"
+      ],
+      "counterhypothesis": "Tier labels and systemd After/Wants/Requires relationships do not establish application-level endpoint readiness or a single transactional boot barrier.",
+      "next_discriminator": "Extract a versioned service dependency graph and compare declared ordering with observed boot/restart traces."
+    },
+    {
+      "id": "BOOT-DELTA-PERSISTENT-TIMERS",
+      "evidence_class": ["HISTORICAL_SOURCE"],
+      "source": "Project-Frankenstein:install.sh",
+      "observed_mechanism": [
+        "frank-soma-sleep.timer uses Persistent=true but is deliberately not enabled by default; Personal Mode activation is separate",
+        "aicore-fas.timer uses Persistent=true and is enabled by installer",
+        "aicore-llama3-restart.timer periodically invokes an RSS watchdog"
+      ],
+      "interpretation": "Scheduled-task definition, persistence/catch-up semantics and activation authority were separate concerns in the historical installer.",
+      "boundary": "Timer firing does not establish task/model/training success."
+    },
+    {
+      "id": "BOOT-DELTA-SELF-RESTART-REQUEST",
+      "evidence_class": ["HISTORICAL_SOURCE"],
+      "source": "Project-Frankenstein:tools/self_restart.py",
+      "source_blob": "92e5dd68bab523d5ec052110c51d3c02eb82b9c4",
+      "observed_mechanism": "Allowed service name is encoded into a restart request written via temporary-file then rename; the watchdog is expected to consume/execute the request.",
+      "interpretation": "Request and effect are separate lifecycle stages even in the historical restart path.",
+      "boundary": "Writing restart_request.json is not proof that systemd restarted the service or that the service became ready."
+    },
+    {
+      "id": "BOOT-DELTA-PATH-PORTABILITY-PRESSURE",
+      "evidence_class": ["HISTORICAL_GIT"],
+      "sources": [
+        "commit 5b329c0eb00d8c3771ee78ac474ff2640dfe85f0",
+        "commit 29948ed806066bbe5978eee07e765acd531b1523",
+        "Project-Frankenstein:_bootstrap.py blob 893c13b9f21e0a05563c162914104483aaa62967"
+      ],
+      "observed_history": "Two broad path-systematization passes removed host-specific home/tmp/runtime/database assumptions; _bootstrap.py stabilizes source-root imports for CLI/systemd entrypoints.",
+      "interpretation": "Boot and recovery correctness depended on coherent path authority, not only process dependency order.",
+      "boundary": "Portable path resolution does not itself prove boot success."
+    },
+    {
+      "id": "BOOT-DELTA-SERVICE-TOPOLOGY-EVOLVES",
+      "evidence_class": ["HISTORICAL_GIT"],
+      "sources": [
+        "commit 7a587c3a567a084fe891a8e7251c11555f1e4627",
+        "commit 5713f049f1e1b0504a62f039f71549d54e905e5c",
+        "commit 30540e5767527b25f56e5c09e0e6e01c2d0146b4"
+      ],
+      "observed_history": "Voice/wallpaper services were removed; SOMA service/timer was added but activation kept conditional; later installer cleanup removed Ollama/AURA/legacy entity timers and moved entity scheduling toward room_dispatcher.",
+      "interpretation": "A timeless flat service list would falsify the actual lineage; boot topology needs version identity.",
+      "boundary": "Commit descriptions remain historical Git evidence unless exact diffs/runtime are separately verified."
+    },
+    {
+      "id": "BOOT-DELTA-CLEAN-SHUTDOWN-EXCEPTION-PRESSURE",
+      "evidence_class": ["HISTORICAL_GIT"],
+      "source": "commit 9363da520b156240ea5b4ea7d5135d678995a3a3",
+      "observed_history": "Bare except handlers were replaced because they catch SystemExit and KeyboardInterrupt and can prevent clean shutdown.",
+      "interpretation": "Shutdown/recovery semantics depend on exception boundaries as well as service-manager configuration.",
+      "boundary": "Commit message claim; no independent historical runtime reproduction here."
+    }
+  ],
+  "cross_cutting_synthesis": [
+    {
+      "claim": "RESTART_IS_NOT_STATE_RECOVERY",
+      "evidence_class": "INFERENCE_FROM_MULTIPLE_HISTORICAL_SOURCE_MECHANISMS",
+      "reason": "Historical state spans file/config backups, durable databases, systemd state, transient restart signals and process state; external effects are not covered by a service restart.",
+      "engineering_confidence": 0.96,
+      "falsifier": "Demonstrate an exact state-class inventory in which service restart alone deterministically reconstructs and verifies every required state class including external effect outcomes."
+    },
+    {
+      "claim": "SYSTEMD_ORDER_IS_NOT_APPLICATION_READINESS",
+      "evidence_class": "OPEN_HYPOTHESIS",
+      "reason": "The frozen installer relies heavily on After/Wants/Requires while many units share default.target; no readiness-barrier trace was observed in this step.",
+      "engineering_confidence": 0.88,
+      "falsifier": "Repository-bound repeated cold/restart traces prove each consumer waits on explicit provider readiness with no race-sensitive failures."
+    },
+    {
+      "claim": "RECOVERY_PREIMAGE_SHOULD_BIND_CAUSAL_IDENTITY",
+      "evidence_class": "CURRENT_REUSE_INFERENCE",
+      "reason": "ASRS already captured checksums/config/service state, but current EntityOS requires stronger provenance/generation/effect boundaries than the historical mechanism exposed.",
+      "engineering_confidence": 0.94,
+      "falsifier": "Show equivalent recovery correctness under stale/mismatched generation without explicit identity binding."
+    }
+  ],
+  "current_entityos_hcu_reuse": {
+    "reuse": [
+      "exact preimage capture before risky mutation",
+      "request/effect/outcome separation for restart",
+      "versioned lifecycle topology",
+      "post-recovery health verification",
+      "durable-vs-transient state classification"
+    ],
+    "adapt": [
+      "systemd dependency graph into explicit typed lifecycle/readiness contracts",
+      "ASRS baseline identity into current generation/provenance/effect-journal boundaries"
+    ],
+    "do_not_promote": [
+      "historical restart success into current runtime credit",
+      "timer/service presence into activation or outcome evidence",
+      "historical watchdog layering into current architecture without quiescence/restart-storm tests"
+    ]
+  },
+  "credits": {
+    "boot_history_required_output_completion": 0,
+    "historical_runtime_reproduction": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "next_exact_action": "Fuse this delta into BOOT_ORDER_AND_STATE_HISTORY.json only after re-entering current main and preserving the concurrently authored timeline; then extract the versioned systemd/service dependency graph and persistence-lifetime classes without overwriting independent evidence."
+}

@@ -1,0 +1,122 @@
+{
+  "schema": "CLAY_TRIGGER2_MODEL_CALL_CAUSAL_IDENTITY_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "NONCANONICAL_RESEARCH_DELTA_FAIL_CLOSED",
+  "observed_main_before_write": "499ec34869100e01bf4392d74f19b21c8fab4e4e",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "NOT_PROVEN",
+    "provider_execution_authorized": false,
+    "training_execution_authorized": false
+  },
+  "reentry": {
+    "current_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V49_GPT56SOL.json",
+    "parallel_stronger_consumed_byte_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CHECKPOINT_CONSUMED_BYTE_TOCTOU_DELTA_V1_GPT56SOL.json",
+    "relationship": "ORTHOGONAL_REQUIRED_SUCCESSOR_PROPERTY: immutable consumed checkpoint bytes still do not bind one exact model call to one exact output unless output identity and the call envelope are cryptographically closed"
+  },
+  "exact_source_observation": {
+    "probe": "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+    "probe_blob_sha1_at_observation": "960783307dd2fe696f55884278715442624480d3",
+    "child_forward_fields_observed": [
+      "forward_observed=true",
+      "forward_last_logits_shape",
+      "forward_top1_token_id"
+    ],
+    "input_identity_fields_observed": [
+      "rendered_utf8_sha256",
+      "input_ids tensor sha256/raw_bytes_sha256/dtype/shape",
+      "attention_mask tensor sha256/raw_bytes_sha256/dtype/shape",
+      "runtime python/torch/transformers/platform",
+      "resolved chat-template identity"
+    ],
+    "parent_promotion_fields_observed": [
+      "consumed_identity_match",
+      "prompt_input_identity_complete",
+      "selection_identity_abi_component_status"
+    ],
+    "missing_call_closure_fields": [
+      "model_output_digest",
+      "model_output_tensor dtype/shape/content identity",
+      "model_call_identity binding checkpoint+renderer+input+runtime+output",
+      "repository source/head/tree/dirty binding inside the durable runtime receipt"
+    ],
+    "unit_test_scope_observed": [
+      "manifest exactness and persistent mutation",
+      "every weight shard must be opened",
+      "unmanifested opened file rejection",
+      "absolute path containment",
+      "duplicate manifest path rejection",
+      "snapshot symlink lexical path preservation"
+    ],
+    "unit_test_gap": "No current v1 test requires output digest, model_call_identity, receipt transplant rejection, same-top1/different-logits distinction, or source/head/dirty binding."
+  },
+  "finding": {
+    "id": "T2_MODEL_CALL_CAUSAL_IDENTITY_GAP",
+    "reality_level": "R0_SOURCE_OBSERVED_PLUS_R1_CAUSAL_INFERENCE",
+    "claim": "CHECKPOINT_INPUT_IDENTITY_ABI/v1 binds much of the consumed-path and model-visible input surface but does not cryptographically close the forward result into one call identity. Shape plus top-1 token is not an output identity: distinct full-logit tensors and distinct calls can share the same shape and top-1 token. A downstream receipt can therefore not prove from the v1 fields alone that a particular semantic/model result came from the exact bound checkpoint+input call.",
+    "scope": "SOURCE_CONTRACT_GAP_ONLY; no claim that an actual receipt transplant has occurred",
+    "credit_boundary": "DO_NOT_PROMOTE MODEL_CALL_CAUSAL_IDENTITY OR DOWNSTREAM NODE_RESULT LINEAGE FROM ABI_V1 ALONE"
+  },
+  "hypothesis": {
+    "H1": "A cryptographic model_call_identity over exact consumed checkpoint identity, exact renderer/token input identity, exact runtime/source identity and an output tensor/result digest is necessary to prevent output-receipt transplantation and causal-lineage ambiguity.",
+    "counterhypothesis": "For initial checkpoint eligibility, top-1 plus exact input/checkpoint/runtime metadata is sufficient because full output identity is not reused as downstream evidence.",
+    "counterassessment": "That narrower eligibility claim may be acceptable only if explicitly scoped. Trigger-2/EntityOS intends downstream model-output -> NODE_RESULT -> J-Space/eval lineage, for which a call-level output binding becomes load-bearing.",
+    "cheapest_discriminator": "Pure deterministic fixture: construct two synthetic forward outputs with identical shape and top-1 token but different remaining logits. Under v1-like fields they collide at the output-summary level; under the successor output tensor digest/model_call_identity they must differ. Add a second transplant fixture that pairs output B with input/checkpoint envelope A and require rejection."
+  },
+  "successor_contract_delta": {
+    "target": "CHECKPOINT_INPUT_IDENTITY_ABI/v2_OR_EQUIVALENT",
+    "must_fuse_with": "consumed-byte immutability/read-time closure from the TOCTOU successor; do not build competing identity authorities",
+    "required_fields": [
+      "consumed_checkpoint_identity_digest derived from immutable/read-time proven bytes",
+      "renderer identity: tokenizer/config/chat-template plus exact rendered_utf8_sha256",
+      "input_ids and attention_mask tensor identity including dtype/shape/content digest",
+      "runtime identity including Python/Torch/Transformers/backend/device/dtype",
+      "repository/source identity including exact source hash and repository head/tree/dirty state for the executed capsule",
+      "model_output_identity: at minimum hash of the exact last-logits tensor with dtype/shape/content envelope for the identity probe, or exact generated-token/result bytes for a generation call",
+      "model_call_identity = SHA256(canonical envelope of candidate + consumed checkpoint + renderer/input + runtime/source + output identity)",
+      "downstream NODE_RESULT/evaluation receipt references the exact model_call_identity and output digest rather than copying only candidate/input metadata"
+    ],
+    "fail_closed_negatives": [
+      "same top1 token but different full logits => distinct output identity and distinct call identity",
+      "output receipt transplanted across input digest => reject",
+      "output receipt transplanted across checkpoint identity => reject",
+      "renderer/tokenizer drift with same semantic prompt text => distinct call identity",
+      "runtime/source drift => distinct call identity or explicitly scoped noncomparable receipt",
+      "missing output digest or missing call identity => no model-call lineage credit",
+      "TOCTOU-safe checkpoint byte proof absent => call identity remains non-selection-grade even if output is hashed"
+    ]
+  },
+  "training_eval_implication": {
+    "checkpoint_selection": "KEEP_NONE",
+    "jspace": "Behavioral/representation effects must reference exact model_call_identity before causal promotion",
+    "binding_eval": "Semantic winner and episode-local codebook routing scores should be attributable to exact calls, not only candidate names",
+    "positive_training_admission": "REMAINS_BLOCKED",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "execution": {
+    "model_runtime_executed": false,
+    "vps_execution_executed": false,
+    "provider_execution_executed": false,
+    "training_executed": false,
+    "unusual_experiment_executed": false,
+    "reason": "Current owner emergency stop/runtime-quiescence gate remains unresolved; this cycle is exact source audit plus durable noncanonical research delta only."
+  },
+  "credits": {
+    "research_delta": 1,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Fuse this call-level output/receipt closure with the existing consumed-byte TOCTOU successor design into one ABI/v2 authority surface. Add deterministic same-top1/different-logits and output-transplant regressions before any three-candidate model execution. Re-enter current main and supervisor authority afterward; keep FreeSwarm HARD OFF and do not admit training rows or select a checkpoint winner."
+}

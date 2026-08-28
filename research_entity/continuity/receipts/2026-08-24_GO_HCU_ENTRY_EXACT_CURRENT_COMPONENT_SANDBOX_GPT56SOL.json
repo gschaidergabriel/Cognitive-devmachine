@@ -1,0 +1,69 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXACT_CURRENT_ENTRY_COMPONENT_SANDBOX/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "main_observed_before_receipt": "cdbcaabd23aeb0168463196e29981c6ce8d61bc7",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_head": "c032c73800152c0bf6a211d6976ca5c11a3d1896"
+  },
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head": "d63873b1637d9e8d8496a59691e02249ef43dad1",
+    "deployment_id": "dpl_6izDrxzUwrMncperKNZ3mSf6iEFr",
+    "route": "GET /api/hcu-entry-capsule",
+    "surface": "Vercel Hobby included-tier protected preview",
+    "generic_command_input": false
+  },
+  "capsule": {
+    "id": "HCU_ENTRY_CANONICALIZATION_CAPSULE/v1",
+    "endpoint_declared_source_commit": "2b7b06f4c93543501e86d5f4692efa36fd191938",
+    "current_pr_head_byte_binding": "VERIFIED",
+    "files": {
+      "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py": {
+        "git_blob_sha": "00d1d79cbb66a1956a278de4755cd8395e854199",
+        "sha256": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f",
+        "same_blob_at_current_pr_head": true
+      },
+      "the artefact/MicroEntity/hcu/test_entry_canonicalization_v1.py": {
+        "git_blob_sha": "bc9262473f91dbd04ddaf647e667920664495f54",
+        "sha256": "b0b5f519c6c7b751d2ed388661bb617fc1a2ee73055faaab1208a47c6612891b",
+        "same_blob_at_current_pr_head": true
+      }
+    }
+  },
+  "execution": {
+    "status": "HCU_EXACT_SOURCE_COMPONENT_SANDBOX_PASS",
+    "sandbox_id": "azure-comfortable-asp-Z8uEJk",
+    "exit_code": 0,
+    "tests_run": 7,
+    "tests_passed": 7,
+    "secret_fence": "PASS",
+    "sandbox_cleanup": "PASS",
+    "result_scope": "RFC8785/JCS ENTRY CANONICALIZATION COMPONENT ONLY"
+  },
+  "metadata_discriminator": {
+    "finding": "The deployed route still emits an older source_commit label, but the two executed source/test Git blobs are byte-identical at current retained PR1263 head c032c73800152c0bf6a211d6976ca5c11a3d1896.",
+    "classification": "CURRENT_PR_COMPONENT_BYTES_VERIFIED_WITH_STALE_CAPSULE_SOURCE_COMMIT_LABEL",
+    "required_repair": "Rebind the capsule manifest/source_commit label to exact current PR1263 head before claiming exact-head manifest identity or extending to the full HCU spine."
+  },
+  "credit": {
+    "component_runtime_credit": "ENTRY_CANONICALIZATION_ONLY",
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0,
+    "macrocycle_global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID"
+  },
+  "next_exact_gate": "Repair the fixed capsule manifest to bind exact current main + exact current PR1263 head, then extend the same fixed hash-verified pattern toward Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> admitted causal dataset closure without a second execution authority."
+}

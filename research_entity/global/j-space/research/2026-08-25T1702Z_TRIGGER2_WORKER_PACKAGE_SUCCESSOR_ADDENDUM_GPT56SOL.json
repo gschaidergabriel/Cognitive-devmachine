@@ -1,0 +1,52 @@
+{
+  "schema": "CLAY_TRIGGER2_WORKER_PACKAGE_SUCCESSOR_ADDENDUM/v1",
+  "created_utc": "2026-08-25T17:02:00Z",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "program": "ENTITYOS_HCU",
+  "authority_epoch": "8.78",
+  "extends_worker_package_commit": "0843fe4688dac62964038163849d3277fb6bbe70",
+  "fused_research_commit": "9d52a646c785a590193f1d9de922562b16251158",
+  "reason": "The post-VPS P0/P1/P2 package was prepared from pre-fusion state and does not yet carry four material audit/research deltas. Preserve the package; apply these requirements as successor constraints.",
+  "mandatory_addenda": [
+    {
+      "id": "P1_5_LABELER_EXACT_MERGE_STAGE_VALIDATION",
+      "priority": "AFTER_P1_BEFORE_POSITIVE_DATA_ADMISSION",
+      "requirement": "Resolve tests/test_trigger2_hyperposition_reference_labelers_v3.py::test_exact_semantic_merge_uses_declared_policy_not_similarity. Current source may exact-merge equivalent branches to one and then reject that singleton through project_state->_validate_state because the generic pre-merge invariant requires >=2 branches. Do not globally weaken initial Hyperposition cardinality. Use stage-aware validation or explicitly supersede the merge semantic contract.",
+      "required_negatives": [
+        "initial singleton state without merge provenance remains rejected",
+        "fake merged_from metadata remains rejected",
+        "merge_policy NONE cannot legitimize singleton",
+        "non-equivalent branches do not merge",
+        "merged evidence union/dedup preserves exact records"
+      ]
+    },
+    {
+      "id": "P2_UNKNOWN_AND_FACTUALITY_HARD_FLOOR",
+      "priority": "MANDATORY_MATCHED_BASELINE_AXIS",
+      "requirement": "Add abstain_unknown and factuality_nonfabrication as explicit scored axes and mandatory retention floors. TARGET_MEASURED failed both current abstain_unknown pilot cases, including fabricated precise market facts for a fictional company. Do not interpret two cases as a checkpoint verdict; resolve with matched multi-family all-three-candidate evaluation.",
+      "selection_law": "Aggregate score cannot compensate for failure below a preregistered UNKNOWN/factuality floor because FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT is an EntityOS/Xeno invariant."
+    },
+    {
+      "id": "P2_EXACT_SURFACE_HARNESS_INTEROP",
+      "priority": "MANDATORY_MATCHED_BASELINE_AXIS",
+      "requirement": "Add structured_output_exactness and compact instruction-surface compliance. The pilot emitted an extra Markdown fence for an ONLY-JSON request and violated requested one-sentence form in a Hyperposition case. These are not cosmetic when modules exchange typed harness payloads.",
+      "selection_law": "Score semantic correctness separately from exact serialization/surface compliance and enforce a minimum harness-interoperability floor."
+    },
+    {
+      "id": "P3_MEDIATOR_INTERACTION_CONTROLS",
+      "priority": "MANDATORY_WHEN_CAUSAL_JSPACE_OPENS",
+      "external_source": "https://arxiv.org/abs/2606.27510",
+      "requirement": "For top J-Space intervention sites/layers, add pairwise mediator interaction checks and report prompt/task dependence. Single-site activation-patching effects may include interaction terms and can be inflated or hidden depending on other component states.",
+      "promotion_law": "No context-invariant semantic-vector claim from a large single-site effect alone; require directional/null/orthogonal/permuted controls plus interaction analysis for leading effects."
+    }
+  ],
+  "credit_boundary": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_jspace_credit": 0
+  },
+  "status": "CURRENT_SUCCESSOR_CONSTRAINT_UNTIL_EXECUTABLE_EVIDENCE_OR_NEWER_SUPERVISOR_AUTHORITY"
+}

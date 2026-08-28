@@ -1,0 +1,42 @@
+{
+  "schema": "CLAY_GO_ADVERSARIAL_SOURCE_FINDING/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "observed_main_before_write": "31b8edecc06af26653961ba097a9b7cb60fcb721",
+  "subject": "tools/miniunifieddb_cognition_store_v1.py",
+  "observed_blob": "0edbe664259cc5aa788577834e1b0ea5a9050e4d",
+  "finding": {
+    "classification": "SOURCE_INTEGRITY_GAP_RUNTIME_UNVERIFIED",
+    "summary": "resolve_prepare_binding validates current generation and task hash but does not reconstruct and compare the persisted turn binding digest or boot binding digest from the exact fields it returns.",
+    "counterexample": "If a stored turn field such as workspace_digest/slots or a stored boot field such as zero_identity_digest/grf_digest is modified while the old binding_digest is retained, the current read path has no explicit canonical-digest equality check before returning the modified material.",
+    "authority_risk": "A corrupted or improperly mutated MiniUnifiedDB row could be reintroduced into pre-inference cognition ancestry without the binding digest detecting the mutation on read. This does not create a second authority, but it weakens the intended fail-closed provenance fence."
+  },
+  "adjudication": {
+    "landed_store": "RETAIN_SINGLE_CANONICAL_STORE",
+    "duplicate_store_prs": "DONOR_ONLY_DO_NOT_MERGE_AS_PARALLEL_AUTHORITY",
+    "required_repair": [
+      "reconstruct boot binding material from persisted schema/generation/all cognition digests/provenance and require sha256(material)==binding_digest",
+      "reconstruct turn binding material from persisted schema/generation/causal_turn_id/boot binding/task/workspace/slots/contradiction/provenance/required_zero_mode and require sha256(material)==binding_digest",
+      "validate canonical JSON list fields before digest reconstruction",
+      "add deterministic tamper regressions for at least workspace_digest and zero_identity_digest"
+    ]
+  },
+  "temporal_authority": "pre-inference admission -> inference -> deterministic gate -> commit or explicit no-commit -> final UCF runtime receipt -> post-turn binding",
+  "unusual_experiment": {
+    "started_here": false,
+    "note": "Source review/counterexample only; no additional unusual experiment consumed."
+  },
+  "credit": {
+    "source_finding": "COMMITTED",
+    "runtime": 0,
+    "whole_mini_entity": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu": 0
+  },
+  "next_gate": "Repair read-time binding digest verification in the single landed cognition store, then integrate that resolver into the retained pipeline_cognitive_fabric_admit producer and obtain actually-started authorized isolated exact-source execution."
+}

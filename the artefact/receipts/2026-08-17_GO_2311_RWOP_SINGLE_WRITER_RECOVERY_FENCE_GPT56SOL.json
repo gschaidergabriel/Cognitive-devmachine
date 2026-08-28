@@ -1,0 +1,74 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "local_time": "23:11:28+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "NEW_PRODUCT_CONVERGENT_STORAGE_FENCE",
+  "scope": "Kubernetes/Kata persistent-volume single-writer and Tier-2 stale-writer fencing",
+  "observed_problem": {
+    "description": "The canonical StatefulSet reference used ReadWriteOnce for both persistent claims. Kubernetes documents RWO as node-scoped and capable of allowing multiple Pods on the same node to access one writable volume. ClayVerse requires one central entity, single-writer canonical state, and fail-closed Tier-2 stale-writer behavior.",
+    "strongest_counterhypothesis": "replicas=1 plus external Tier-2 orchestration might normally prevent overlapping writers; however replacement/deletion races are exactly the failure boundary being fenced, and Kubernetes explicitly recommends ReadWriteOncePod for production StatefulSet single-Pod access.",
+    "primary_sources": [
+      "https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/",
+      "https://kubernetes.io/docs/concepts/storage/persistent-volumes/",
+      "https://kubernetes.io/docs/tasks/administer-cluster/change-pv-access-mode-readwriteoncepod/"
+    ],
+    "source_review_date": "2026-08-17"
+  },
+  "canonical_delta": {
+    "template_commit": "327af0f53a4d48def0344a0d3c736c2364ca3fee",
+    "template_blob_after_write": "bd04961f5de42d92df6201c1605f876b307df4b5",
+    "contract_commit": "d075b909872d8eeb25ea04ae458cab27c12e4ad7",
+    "contract_blob_after_write": "0af697324d50280b5ffe2128c052ae44d732db63",
+    "manifest_commit": "b011fc0e0e95d181cf71a114fcf75108548b2ba9",
+    "manifest_blob_after_write": "6da4d0dcc6a9e2298b1840356a23a225ab945175",
+    "test_commit": "1af9ce2379b6bc2142f027fdb4cb8675d3a13998",
+    "test_blob_after_write": "eeac23a635bab1397e6edef72d0404bac1772442",
+    "changes": [
+      "both StatefulSet persistent claims changed from ReadWriteOnce to ReadWriteOncePod",
+      "deployment contract now rejects ordinary RWO as insufficient for the one-entity/single-writer Tier-2 contract",
+      "final acceptance must prove the admitted CSI stack enforces ReadWriteOncePod and rejects an overlapping stale/replacement Pod writer",
+      "manifest carries persistent_volume_writer_fence and the matching final-pass requirement",
+      "focused regression forbids reintroduction of ReadWriteOnce and binds the contract/manifest gates"
+    ]
+  },
+  "supporting_probe": {
+    "surface": "authorized isolated local container",
+    "probe": "deterministic reconstructed-template structural check",
+    "result": "PASS_FOR_RWOP_MECHANISM_ONLY",
+    "assertions": [
+      "two ReadWriteOncePod claims",
+      "no ReadWriteOnce claim",
+      "headless governing Service retained",
+      "fsGroup retained",
+      "EntityOS deployment digest override absent",
+      "default-deny ingress/egress markers retained"
+    ],
+    "byte_identity": "NOT_ESTABLISHED_FOR_THIS_RECONSTRUCTION",
+    "local_reconstruction_git_blob": "490a956d84784c93b797976a7b3ec9aa145ff25f",
+    "github_template_blob_at_probe_start": "bd04961f5de42d92df6201c1605f876b307df4b5",
+    "identity_note": "The reconstruction did not byte-match the moving canonical template, so this probe is deliberately not promoted to exact-file execution evidence. The GitHub commits/blobs are canonical source evidence; exact-current full regression remains a separate gate."
+  },
+  "evidence_class": "SOURCE_CONTRACT_HARDENED_PLUS_NON_EXACT_MECHANISM_PROBE",
+  "runtime_credit": {
+    "exact_final_oci": 0,
+    "kubernetes_api_admission": 0,
+    "csi_rwop_enforcement": 0,
+    "kata_microvm": 0,
+    "tier2_replacement": 0,
+    "whole_product": 0
+  },
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0,
+    "reason": "No shared immutable request/turn id is exposed to this worker; only minute-precision trigger timing is available, so the canonical atomic lease protocol fails closed."
+  },
+  "safety_and_authority": {
+    "vps_self_hosted_production_test": false,
+    "together_api_used": false,
+    "paid_or_final_training_started": false,
+    "whole_product_pass_claimed": false
+  },
+  "next_discriminator": "On an admitted CSI-backed Kubernetes/Kata target, prove ReadWriteOncePod support and attempt an overlapping stale/replacement Pod mount against each ClayVerse PVC; the second writable attachment must be denied, then repeat through the Tier-2 full-sandbox replacement path."
+}

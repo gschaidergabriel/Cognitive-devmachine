@@ -1,0 +1,68 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "observed_main_before_write": "a2c3b87a286b02ebf5af68a68db88ee5b0ab1bc2",
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "retained_hcu_donor": {
+    "repository_qualified_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "comparison_base": "main",
+    "comparison_status": "diverged",
+    "ahead_by": 623,
+    "behind_by": 652,
+    "merge_base_sha": "ac3789d31668d5a1860d0eb4488eefcb2271530e",
+    "comparison_main_sha": "a2c3b87a286b02ebf5af68a68db88ee5b0ab1bc2",
+    "mergeability_claim": "NOT_MADE; GitHub PR mergeable_state was observed as unknown during this macrocycle"
+  },
+  "observed_source_boundary": {
+    "classification": "DONOR_MAIN_INTEGRATION_DEBT",
+    "statement": "The retained HCU donor is not a small successor patch over current main. It is a highly diverged donor history, so wholesale merge/rebase claims would be unsafe without explicit fusion review.",
+    "representative_donor_relative_added_paths": [
+      "the artefact/MicroEntity/hcu/global_jspace_gwt_v1.py",
+      "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py",
+      "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+      "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+      "the artefact/MicroEntity/hcu/model_execution_receipt_v1.py",
+      "the artefact/MicroEntity/hcu/typed_entry_canonical_v1.py"
+    ],
+    "evidence_scope": "GITHUB_REF_COMPARISON_ONLY; NO_RUNTIME_OR_MERGEABILITY_CREDIT"
+  },
+  "adjudication": {
+    "wholesale_merge_now": "NOT_ADMITTED_BY_THIS_RECEIPT",
+    "preferred_fusion_method": "selective successor-dynamic donor fusion against refreshed main after the runtime-first quota gate, preserving exact tests/provenance and avoiding stale authority surfaces",
+    "reason": "Supervisor 8.65 is runtime-first and pauses source-guard proliferation; current Sandbox execution remains blocked on directly observed included-quota authority. The donor divergence is therefore recorded as an integration boundary, not used to justify a broad source rewrite."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: quantified a previously implicit donor/main integration boundary and prevented treating PR1263 as a near-main directly promotable executable implementation.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: established that core HCU/Typed Entry primitives remain on a 623-ahead/652-behind retained donor branch relative to the observed main, requiring selective fusion rather than blind wholesale promotion.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_EVIDENCE_BOUNDARY: representative Global J-Space/vector-control/training-path source is donor-relative rather than canonical-main source at the observed comparison; therefore no canonical-main model/J-Space/training credit may be inferred from donor source alone."
+  },
+  "execution": {
+    "vercel_remaining_included_sandbox_quota_directly_observed": false,
+    "sandbox_create_performed": false,
+    "provider_credential_preflight_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_attempted": false,
+    "vps_or_production_test_attempted": false
+  },
+  "credits_after": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Keep the runtime-first FREE_ONLY gate primary: obtain a directly authoritative remaining included Vercel Sandbox quota signal. In parallel coordination, treat PR1263 as a donor set and define a minimal successor-dynamic fusion slice only after refreshing main/PR1263/PR810, rather than assuming the 623-commit donor history can be promoted wholesale.",
+  "acceptance": "IN_PROGRESS"
+}

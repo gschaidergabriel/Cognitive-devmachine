@@ -1,0 +1,30 @@
+{
+  "schema": "GRID10_THREAD_LATENCY_EXPERIMENT_RESULTS/v1",
+  "concept_source": "research_entity/topic_packets/grid10-latency-concept/CONCEPT.md",
+  "topic": "Real A/B measurement of torch thread count (1 vs 2 vs 4 per process) under realistic concurrent load -- directly testing the external free-pool consultation's prediction.",
+
+  "experiment_design": "4 real concurrent processes (matching the concept's own grounding: typically 3-5 of 10 nodes are active-in-decode per tick, not all 10), each doing 3 real generate() calls, for each of 3 thread-count settings (1, 2, 4). Model loaded independently per process (not COW-shared in this specific isolated measurement, to keep each process's thread behavior fully independent and attributable).",
+
+  "results": {
+    "thread_count_1_baseline_current_default": {"avg_per_call_latency_s": 8.3197, "group_wallclock_s": 32.47, "n_samples": 12, "range_s": "7.58 - 8.62, tight variance"},
+    "thread_count_2": {"avg_per_call_latency_s": 23.1806, "group_wallclock_s": 79.23, "n_samples": 12, "range_s": "19.1 - 29.2"},
+    "thread_count_4": {"avg_per_call_latency_s": null, "group_wallclock_s": 360.38, "n_samples": 0, "note": "ALL 4 processes exceeded the 90s per-process join timeout without completing even 3 short generate() calls -- a severe, real failure, not a measurement gap."}
+  },
+
+  "honest_headline_finding": {
+    "the_external_consultations_prediction_was_wrong": "The free-pool consultation (Groq, since ChatGPT was confirmed down a fourth time today) predicted that 2 threads/process would be ~30-40% FASTER than 1 thread/process when <=4 processes are concurrently active, reasoning that 1-thread/process under-utilizes the 4 available cores. Measured reality is the OPPOSITE: 2 threads/process was ~2.8x SLOWER (23.2s vs 8.3s average per call), and 4 threads/process essentially hung (0 completed samples in 90s per process, where the baseline takes ~8s).",
+    "why_this_makes_sense_in_hindsight": "With 4 CONCURRENT processes each requesting N threads, TOTAL thread demand is 4xN competing for only 4 real CPU cores. At N=1, total demand is exactly 4 threads for 4 cores -- no oversubscription. At N=2, total demand is 8 threads for 4 cores -- 2x oversubscription, causing real, measured, severe context-switching and cache-thrashing overhead that outweighs any per-call parallelism benefit. At N=4, total demand is 16 threads for 4 cores -- 4x oversubscription, severe enough to make the system unable to complete even a handful of short generations within a generous timeout.",
+    "the_existing_hardcoded_default_was_already_correct": "torch.set_num_threads(1) was not an unexamined default that happened to work -- measured here, it is genuinely the BEST of the three tested settings for GRID10's actual concurrent multi-process usage pattern. No change to the default is warranted; the env-var mechanism built for this A/B test correctly leaves the default at 1."
+  },
+
+  "what_this_demonstrates_about_the_research_process_itself": "This is exactly why every external consultation this session (ChatGPT when available, free-pool when not) has been treated as a hypothesis to test, not an answer to implement -- a plausible-sounding, confidently-stated recommendation (more threads = more parallelism = faster) was directly falsified by a cheap, real measurement before anything was changed in the default behavior. If this had been implemented as recommended without measuring, it would have made GRID10 dramatically slower (and, at 4 threads, close to non-functional under real concurrent load) while believing it had been optimized.",
+
+  "net_conclusion": "No latency improvement found or applied via thread-count tuning -- the honest result of a real experiment is that the pre-existing setting was already optimal, not that a new optimization was found. Reported plainly as a negative/confirming result, not spun as a win. The larger-impact ideas from the concept (batching across process boundaries) remain unexplored due to their larger implementation scope, noted as a real follow-up rather than attempted partially and reported as more complete than it is.",
+
+  "files": {
+    "mechanism": "tools/grid10_node.py::load_model_once() (GRID10_TORCH_THREADS env var, default unchanged at 1)",
+    "unit_test": "tests/test_grid10_node_thread_count_env_v1.py (3 tests, passing)",
+    "live_experiment_driver": "tools/grid10_thread_latency_experiment_v1.py",
+    "raw_run_receipt": "research_entity/topic_packets/grid10-latency-concept/THREAD_LATENCY_RUN_20260827.json"
+  }
+}

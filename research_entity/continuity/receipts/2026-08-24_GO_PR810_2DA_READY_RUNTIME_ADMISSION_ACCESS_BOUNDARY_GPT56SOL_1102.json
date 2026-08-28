@@ -1,0 +1,88 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXACT_HEAD_READY_ACCESS_BOUNDARY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "92f4e5e165cb3fc4f47c3c9c9e29a740a38faf70",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_RUNTIME_FIRST_EXACT_HEAD_BUILD_AND_ACCESS_DISCRIMINATION"
+  },
+  "retained_executor": {
+    "identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "exact_head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "head_reverified_immediately_before_probe": true,
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "deployment_state": "READY",
+    "deployment_exact_head_match": true,
+    "deployment_surface": "VERCEL_HOBBY_PREVIEW"
+  },
+  "build_convergence": {
+    "predecessor_function_cap_blocker": "SEPARATE_RUNTIME_DIAGNOSTIC_ROUTE_EXCEEDED_HOBBY_12_SERVERLESS_FUNCTION_LIMIT",
+    "predecessor_guard_blocker": "EXCLUSIVE_EXECUTOR_GUARD_REQUIRED_STALE_SUPERVISOR_8_63_FREE_ONLY_MARKERS",
+    "bounded_repairs_observed": [
+      "runtime-admission diagnostic was folded into the retained sandbox-probe route",
+      "standalone diagnostic route was removed from deployment surface",
+      "obsolete depth-poison deployment route was retired to preserve Hobby function budget",
+      "exclusive executor FREE_ONLY guard expectations were synchronized to supervisor 8.64"
+    ],
+    "result": "EXACT_HEAD_DEPLOYMENT_READY",
+    "interpretation": "BUILD_AND_HOBBY_FUNCTION_COUNT_CONVERGENCE_ONLY"
+  },
+  "exact_head_runtime_admission_source": {
+    "path": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "blob_sha": "6630570d16a62f937a6512d682dfcb86ae8a4102",
+    "case": "runtime-admission",
+    "declared_status": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "declared_sandbox_create_performed": false,
+    "control_flow_observation": "runtime-admission returns before the later sandboxExecutionAdmitted gate and before Sandbox.create",
+    "sqlite_probe_scope": "PREPARED_IN_SELFTEST_REQUIRES_ADMITTED_SANDBOX"
+  },
+  "function_access_observation": {
+    "attempted_exact_deployment_route": "/api/sandbox-probe?case=runtime-admission",
+    "first_result": "302_VERCEL_SSO_BEFORE_FUNCTION",
+    "function_result_observed": false,
+    "sandbox_create_observed": false,
+    "protection_bypass_generation": "SHAREABLE_URL_CREATED",
+    "followup_fetch_result": "429_TOO_MANY_REQUESTS_FROM_CONNECTED_ACCESS_SURFACE_WHILE_CREATING_PROTECTION_BYPASS",
+    "classification": "ACCESS_TOOL_OR_PROTECTION_BOUNDARY_NOT_PRODUCT_RUNTIME_FAILURE",
+    "retry_policy": "NO_AGGRESSIVE_RETRY"
+  },
+  "free_only_boundary": {
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_create_authorized": false,
+    "paid_upgrade": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "hypothesis": "After build and Hobby function-count convergence, authenticated/protected-preview access is the immediate discriminator before the no-Sandbox runtime-admission function result can be observed at the exact current head.",
+  "counterhypothesis": "READY deployment or the 302/429 access results could be treated as Function, Sandbox, HCU, model or J-Space runtime evidence.",
+  "discriminator_result": "REJECTED: READY proves deployment identity only; 302 and 429 stop before the function; exact source proves the selected runtime-admission case would not call Sandbox.create but source inspection is not invocation evidence.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact live executor head 2da99e04 reached a matching READY Hobby deployment after function-budget and 8.64 guard convergence; next live gate is authenticated function access to the no-Sandbox runtime-admission case",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: no Sandbox/HCU/Typed Entry execution occurred; supervisor 8.64 pauses unrelated source-guard proliferation and current counterevidence is executor access infrastructure",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no real model invocation, loader-consumption observation, J-Space/GWT causal intervention, causal trace promotion or training occurred"
+  },
+  "credits": {
+    "exact_head_deployment_ready": "PASS_AT_2DA99E04_SNAPSHOT",
+    "function_runtime_invocation": 0,
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain admitted authenticated access to the exact-head READY preview and observe the runtime-admission function response while preserving sandbox_create_performed=false. Independently require direct remaining included Sandbox quota/no-charge authority before any selftest/sqlite3/_sqlite3 Sandbox.create. Do not use paid upgrade or infer quota from Hobby/READY state.",
+  "evidence_boundary": "Exact-head deployment/build/access/source-control-flow evidence only. No Function invocation result, Sandbox, HCU, model, J-Space, training, canonical-state, effect or whole-product credit is created by this receipt."
+}

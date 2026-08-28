@@ -1,0 +1,54 @@
+{
+  "schema": "CLAY_EVIDENCE_CORRECTION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "corrects": "research_entity/continuity/receipts/2026-08-23_GO_UCF_TEMPORAL_AUTHORITY_ADJUDICATION_1511_GPT56SOL.json",
+  "observed_main_before_write": "ef46979f7d8e2ed1153dfd4e49fb4c7886b765f4",
+  "corrected_receipt_commit": "beea31cba0b78d26093cb12b567152737c08adb5",
+  "corrected_receipt_parent": "abca3544a4c6526e292bce20f29ec66e9f95bad1",
+  "exact_source": {
+    "path": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+    "parent_blob_sha": "cad8de246ae237d2ef1b108349915c4747175977",
+    "observed_parent_path": "pipeline_build_prompt -> pipeline_cognitive_fabric_admit -> inference_generate -> pipeline_gate -> pipeline_commit"
+  },
+  "correction": {
+    "rejected_observation": "Current main BLOGPOST_ENTITY.clay still routes pipeline_build_prompt directly into inference_generate using profile.inference and prompt.system/user.",
+    "replacement_observation": "The exact parent abca3544 already contains one pipeline_cognitive_fabric_admit stage and inference consumes admitted.inference/system/user plus packet/admission-receipt digests.",
+    "reason": "The rejected observation is contradicted by the exact parent source blob and must not be used as current-main evidence."
+  },
+  "retained_architecture_finding": {
+    "status": "SUPPORTED_AS_TEMPORAL_CONTRACT_REASONING_NOT_BY_THE_REJECTED_SOURCE_OBSERVATION",
+    "finding": "A pre-inference MINI_ENTITY_COGNITIVE_FABRIC_ADMISSION/v1 receipt is candidate/provenance admission only. The final UNIFIED_COGNITIVE_FABRIC_RUNTIME_RECEIPT/v1 requires terminal post-inference gate/commit/effect outcome fields and therefore cannot truthfully be the same receipt emitted before inference.",
+    "required_order": "pre-admission -> inference -> deterministic gate -> commit or explicit no-commit -> final UCF runtime receipt -> post-turn causal binding"
+  },
+  "current_source_frontier": {
+    "reference_runtime_path": "tools/clay_profile_pipeline_runtime.py",
+    "reference_runtime_blob_observed": "8ea8a2db0ac1068ae9221f0ab0426e7d8f7149a7",
+    "gap": "pipeline_cognitive_fabric_admit is absent from allowed_effects, dispatch, and handlers in the retained reference runtime; exact MiniUnifiedDB-resident cognition-object bindings plus pre-admission/finalization runtime wiring remain unimplemented/unverified.",
+    "next_gate": "Fresh-current single integration lane: MiniUnifiedDB-resident versioned cognition-object binding -> Zero workspace capsule/InferencePacket pre-admission -> inference -> deterministic gate/CAS -> final UCF-v1 receipt -> post-turn binding, then actually-started authorized isolated exact-source execution."
+  },
+  "coordination": {
+    "duplicate_ucf_source_lanes_should_not_be_recreated": true,
+    "unusual_experiment_started_here": false,
+    "shared_macrocycle_experiment_label": "UNRESOLVED_CONFLICTING_EXISTING_RECEIPT_LABELS; no additional unusual experiment is authorized by this correction"
+  },
+  "credit": {
+    "evidence_correction": "COMMITTED",
+    "runtime": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu_runtime": 0,
+    "whole_product": 0
+  },
+  "safety": {
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_execution": false,
+    "together_used": false,
+    "vps_or_production_testing": false
+  }
+}

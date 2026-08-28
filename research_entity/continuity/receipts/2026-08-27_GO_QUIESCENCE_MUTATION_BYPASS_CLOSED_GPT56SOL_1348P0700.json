@@ -1,0 +1,25 @@
+{
+  "schema": "ENTITYOS_GO_RECEIPT/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "target": "autonomously self-organizing Xeno/HCU fabric",
+  "observed_main_before_change": "eb4a884072ce5a0b6a19d3d2725c4f3908ca8a7d",
+  "supervisor_epoch_observed": "9.13",
+  "finding": "The retained self-hosted GO quiescence workflow could execute free_swarm_quiescence_action_v1.py --apply after only HARD_OFF plus process-pattern dry-run. It did not first consume the root-specific restart-authority-v4 evidence required by Supervisor 9.13, and it did not disable a uniquely bound restart authority before process termination. This was an execution-authority bypass relative to the current fail-closed quiescence law.",
+  "change": {
+    "path": ".github/workflows/go-quiescence-action-selfhosted.yml",
+    "commit": "ac52521584a2c36e83e7b4febac46b34d14fd945",
+    "effect": "Workflow is now attribution-only: bind exact source, require current HARD_OFF, execute restart-authority attribution v4 read-only, execute process-match dry-run, and explicitly prohibit mutation from attribution-only evidence. It fails closed when legacy roots remain and states that exact root-specific restart authority must be executably disabled and immediately revalidated before any kill."
+  },
+  "evidence_boundary": {
+    "source_hardening": true,
+    "runtime_quiescence_pass": false,
+    "provider_path_runtime_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Build or identify the least-privilege executor that can disable only the exact root-specific systemd/cron restart authority emitted by restart-authority-v4, revalidate PID/cgroup/entrypoint binding immediately before action, then terminate only that bound legacy root and prove >=90 seconds with zero survivors, descendants, and restarts. No provider calls and no secret-value reads."
+}

@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T154528Z-gen204-test-flip-flakiness",
+  "created_at": "2026-08-20T15:45:28Z",
+  "target_room": "center",
+  "targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_receipt": "8946d67b1320928ed8199adf5680da64a581b2d7",
+    "export_sequence": [
+      "4ef16dc7a86c21b1db6ed6435664e3041802f6a2",
+      "3e7b8e4ddfa42a2c30b3ae7c091a9e7ab49647fd",
+      "d0b3b4e651ed365f9b7ff08ada28c2574f611ddc"
+    ],
+    "agentzero_generation": 204,
+    "reported_source_short": "cd5593ee8",
+    "test_observations": [
+      {"at": "2026-08-20T14:41:37Z", "green": 664, "red": 1},
+      {"at": "2026-08-20T15:12:37Z", "green": 663, "red": 2},
+      {"at": "2026-08-20T15:41:34Z", "green": 664, "red": 1}
+    ],
+    "transient_test": "tests/test_terminal_ws_auth_lease_protocol.py::test_same_clerk_session_can_refresh_and_continue_pty_input",
+    "persistent_test": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
+    "atomic_test_run_receipt_present": false,
+    "deduplication_rule": "The three observations share Generation 204 and reported source cd5593ee8. The red-to-green return without a reported source change is one temporal-flakiness evidence family, not a fix and not two independent failures."
+  },
+  "substantive_delta": [
+    {
+      "id": "D204-LEASE-TEST-FLIP",
+      "status": "NONDETERMINISTIC-FAILURE-OBSERVED",
+      "evidence": [
+        "The Clerk-session PTY lease-continuation test was green at 14:41Z, red at 15:12Z and green again at 15:41Z.",
+        "All three exported results report source short cd5593ee8 and Generation 204.",
+        "No repair commit or exact-source atomic run receipt accompanies the return to green."
+      ],
+      "credit_boundary": "The latest aggregate remains 664 green / 1 red, but the intervening failure is preserved. A subsequent green run is not evidence of repair, deterministic correctness or release readiness."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H204-LEASE-TIME-ORDER-RACE",
+      "claim": "The refresh-and-continue path depends on wall-clock, scheduling or event-order timing near a lease boundary, so the same source can accept or reject PTY input nondeterministically.",
+      "falsifier": "Repeated runs with frozen monotonic and wall clocks, deterministic event ordering and recorded lease/session state remain stable while the failure instead tracks a specific external fixture or resource condition."
+    },
+    {
+      "id": "CH204-EXTERNAL-FIXTURE-NONDETERMINISM",
+      "claim": "The flip is caused by an uncontrolled fixture, process residue, port/resource collision or environment state rather than the lease protocol itself.",
+      "falsifier": "The failure reproduces in isolated fresh processes with unique resources and follows randomized delays or event permutations inside the lease protocol."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Green Reversion Without Repair",
+      "definition": "A failing test returns to green under the same reported source without an intervening fix, so the latest green aggregate hides nondeterministic negative evidence."
+    },
+    {
+      "name": "Lease-Boundary Outcome Aliasing",
+      "definition": "A protocol outcome is attributed to source correctness even though hidden clock or event-order state determines whether a refreshed session may continue input."
+    }
+  ],
+  "worker_impulses": [
+    {
+      "route": "frank+unifieddb+claycode",
+      "priority": "BLOCKING",
+      "task": "Run TERMINAL_LEASE_FLAKE_MATRIX/v1 on exact frozen source. Repeat the single test in fresh processes with unique ports/resources; sweep refresh/input delays around expiry; separately freeze wall and monotonic clocks; permute refresh, authorization, lease replacement and PTY-input events. Record run_id, seed, both clocks, Clerk session ID hash, terminal/lease ID hashes, expiry, event sequence, subprocess state and assertion. Preserve every null and failure."
+    },
+    {
+      "route": "harness+claygraph",
+      "priority": "GUARD",
+      "task": "Represent the 663/2 observation as unresolved negative evidence linked to both surrounding 664/1 observations. Do not let latest-result projection erase it or award repair credit without a source delta plus deterministic reproduction receipt. Do not modify Harness or train."
+    },
+    {
+      "route": "gwt+emergenz+hyperposition",
+      "priority": "PRESERVE",
+      "task": "Keep the three existing GWT tasks OPEN. This test flip provides no stable-identity, outcome-credit or global-channel completion evidence."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "The Clerk/PTy lease test failed once and later passed under the same reported source; cause is unknown.",
+    "No stack trace, seed, clock state, event trace, run_id/result digest or exact full source tree was exported.",
+    "The Claude-Code adapter isolation test remains red in all three observations.",
+    "The existing lexical/evidence-mass, stable-identity/outcome-credit and global-channel tasks remain OPEN.",
+    "Canonical RAE/state, target main and BASE NOT_PASS are unchanged.",
+    "No training, Harness mutation, promotion, deterministic fix receipt or whole-product PASS occurred."
+  ],
+  "admission_rule": "Admit the red-green flip as nondeterministic negative evidence. Grant no repair, deterministic protocol, atomic-suite or promotion credit until a frozen-source flake matrix identifies and closes the causal condition with provenance-bound receipts."
+}

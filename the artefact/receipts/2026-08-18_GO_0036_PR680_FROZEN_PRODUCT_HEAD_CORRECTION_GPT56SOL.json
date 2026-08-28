@@ -1,0 +1,61 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:36:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "23cce3265010b27ecd32b4024dc6f02dc6c5381e",
+  "classification": "CORRECT_FROZEN_PRODUCT_TEST_BYTE_IDENTITY",
+  "scope": "coordination/evidence correction only; no runtime promotion",
+  "supersedes_specific_claim": {
+    "receipt_commit": "23cce3265010b27ecd32b4024dc6f02dc6c5381e",
+    "incorrect_frozen_product_test_byte_commit": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "incorrect_frozen_product_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
+    "reason": "The retained PR680 branch contains later non-receipt product/test bytes. Therefore the live PR-head difference after 66b767d4 is not receipt-only drift."
+  },
+  "exact_compare_evidence": {
+    "base": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "head": "ab64e4c887c3fd7bfb21b3f0296e5b95b2cbbbb5",
+    "status": "ahead",
+    "ahead_by": 6,
+    "product_test_changes_after_old_freeze": [
+      "the artefact/clayverse/engine.py: +11/-1 — graph projection rebuild moved inside completion/finalization fence",
+      "the artefact/tests/test_engine_graph_projection_completion_fence.py: new 109-line adversarial regression"
+    ],
+    "non_product_changes_in_same_range": [
+      "README update",
+      "bounded receipts"
+    ]
+  },
+  "corrected_candidate_identity": {
+    "retained_pr": 680,
+    "frozen_product_test_byte_commit": "ab64e4c887c3fd7bfb21b3f0296e5b95b2cbbbb5",
+    "frozen_product_tree": "a5665cea53db2da8b616a3cf44f4f00044ba2bd6",
+    "engine_blob": "00ecdfaaa1a2c8e4b67b5006dab404ac86841475",
+    "graph_projection_regression_blob": "4d9f93da73162b3e252838776b976232c06d217d",
+    "later_pr_head_commits_after_ab64_at_observation": "receipt/coordination only",
+    "runtime_verified": false
+  },
+  "controller_consequence": {
+    "retained_pr": 810,
+    "observed_bound_research_sha": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "observed_bound_research_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
+    "binding_includes_corrected_product_test_bytes": false,
+    "credential_should_be_spent_before_rebind": false,
+    "required_action": "After source fusion remains settled, rebind the single retained PR810 controller exactly once to ab64e4c887c3fd7bfb21b3f0296e5b95b2cbbbb5 / a5665cea53db2da8b616a3cf44f4f00044ba2bd6 or to a newer explicitly proven product/test-byte closure if one appears. Preserve TOCTOU drift checks and reject real product-byte changes."
+  },
+  "execution_evidence": {
+    "full_regression_runtime_credit_added": 0,
+    "exact_oci_runtime_credit_added": 0,
+    "whole_product_runtime_credit_added": 0,
+    "note": "This is an identity/freeze correction derived from exact Git history comparison, not executable product evidence."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable go-request identifier was exposed; this exact-history correction is ordinary coordination/evidence work."
+  },
+  "next_exact_step": "Do not spend owner credentials against a controller frozen at 66b767d4. Rebind the retained PR810 lane to the corrected exact product/test closure only after checking for any newer non-receipt PR680 bytes, obtain READY on that exact controller, then execute the isolated detached source/regression/EntityOS/OCI batch and continue the remaining Vault-Mistral-Effect-Recovery-Tier2/auth gates only if green.",
+  "acceptance": "IN_PROGRESS"
+}

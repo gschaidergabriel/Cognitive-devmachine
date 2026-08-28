@@ -1,0 +1,116 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:34:23+07:00",
+  "updated_at_local": "2026-08-18T01:47:06+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "05b482ecfb93ce5e1f13f6139e325dd647274932",
+  "canonical_main_observed_during_reentry": "0a10fabf3216c5e26bbc486b9df6851a82b49f8a",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "controller_sha_guard_repair": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "defect": "guard-clayverse-vcr-source.mjs expected a malformed retained RESEARCH_SHA while the exact retained runner contained the valid 40-character Git SHA",
+    "malformed_guard_value": "f8e4deebcb2f4b2904fddbcb0006600bc45c50",
+    "runner_value": "f8e4deebcb2f4b2904fddbcb0006600bc45c50",
+    "repair_commit": "b699ea2c5db4d9f69dd3b222bc4891e0a4d88563",
+    "repair_persisted_in_later_branch_head": true,
+    "classification": "CONTROLLER_GUARD_DEFECT_REPAIRED_NO_PRODUCT_RUNTIME_CREDIT"
+  },
+  "controller_source_guard_v11": {
+    "commit": "08998fd5cacec6d11e3a9f7154004a132db7dc07",
+    "schema": "ClayVerseCurrentOCISourceGuard/v11",
+    "status": "EXACT_ACTIVE_PR686_HANDLER_AND_SANITIZED_SNAPSHOT_CARRIER_BYTES_ADMITTED",
+    "active_controller_layout": "starter + provider wrapper/handler + effect wrapper/handler + Tier2 wrapper/handler + Tier1/Tier2 scripts + vercel config",
+    "research_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "research_tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "duplicate_write_prevented": true,
+    "duplicate_write_detail": "Concurrent updates of retained PR810 files were detected by GitHub contents-API optimistic locking; stale writes returned 409 and no overwrite occurred.",
+    "runtime_credit": 0
+  },
+  "vercel_observation": {
+    "project": "dr-unterweger",
+    "last_observed_deployment": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
+    "last_observed_commit": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
+    "last_observed_state": "ERROR",
+    "last_observed_failure": "CURRENT_OCI_RETAINED_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED on older malformed retained RESEARCH_SHA marker",
+    "latest_exact_preview_trigger_observed": "5343a97e4154a982a2e7667c0729a72d57c62f0d",
+    "latest_exact_preview_parent_controller_head": "f6b9dd2ba85b2e2cdfcb179c342e5fd5a4669f6e",
+    "latest_exact_preview_git_status": "FAILURE_BUILD_RATE_LIMIT",
+    "latest_exact_preview_status_target": "VERCEL_BUILD_RATE_LIMIT",
+    "post_current_head_deployment_observed_in_this_turn": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE",
+    "product_runtime_executed": false,
+    "exact_oci_runtime_credit": 0,
+    "live_provider_credit": 0,
+    "whole_product_credit": 0
+  },
+  "daytona_fallback_observation": {
+    "provider_authorization": "AUTHORIZED_STANDARD_FALLBACK",
+    "native_chatgpt_connector_required": false,
+    "installable_chatgpt_plugin_search_result": "NONE",
+    "daytona_api_key_present_in_this_worker": false,
+    "dns_app_daytona_io": "FAIL_BEFORE_PROVIDER_CONTACT",
+    "dns_api_daytona_io": "FAIL_BEFORE_PROVIDER_CONTACT",
+    "dns_pypi_org": "FAIL_BEFORE_PROVIDER_CONTACT",
+    "provider_contact_occurred": false,
+    "classification": "CURRENT_CHATGPT_ORCHESTRATOR_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT",
+    "daytona_runtime_credit": 0
+  },
+  "tier1_recovery_hardening": {
+    "source_fence_present": true,
+    "interrupted_no_effect_turn_required": true,
+    "verified_effect_identity_must_remain_unchanged": true,
+    "blind_external_effect_replay_forbidden": true,
+    "exact_runtime_verified": false
+  },
+  "tier2_carrier_adjudication": {
+    "direct_snapshot_delete_then_restore": "SUPERSEDED_WEAKER_THAN_DISTINCT_DECLARED_TRANSFER_CARRIER_NOT_CURRENT_PATH",
+    "sandbox_fork": "REJECTED_FOR_FULL_APPLIANCE_REPLACEMENT_CREDIT",
+    "current_source_candidate": "distinct empty carrier sandbox receives only chunked declared tier2-transfer bytes, verifies chunk and bundle identities, is snapshotted before source deletion, source is deleted before replacement creation, and a distinct persistent:false replacement is created from the carrier snapshot",
+    "source_guard_binds_sanitized_transfer": true,
+    "carrier_snapshot_before_source_delete_guarded": true,
+    "source_delete_before_replacement_create_guarded": true,
+    "snapshot_survival_across_source_delete": "NOT_A_CURRENT_PATH_DEPENDENCY; PRIMARY_VERCEL_DOCUMENTATION_IS_INCONSISTENT_ON_IMPLICIT_SANDBOX_DELETE_SNAPSHOT_LIFECYCLE",
+    "snapshot_cleanup_after_success": "EXPLICIT_SNAPSHOT_DELETE_PLUS_CARRIER_SANDBOX_DELETE_REQUIRED_FAIL_CLOSED",
+    "snapshot_cleanup_coordination_comment_id": 5318781298,
+    "tier2_independent_carrier_verified": false,
+    "runtime_credit": 0
+  },
+  "coordination": {
+    "parallel_pr810_writes_observed": true,
+    "duplicate_semantic_path_added": false,
+    "research_product_bytes_changed_by_this_organ": false,
+    "controller_infrastructure_changed_by_this_organ": true,
+    "owner_secrets_or_credentials_used": false,
+    "pr810_coordination_comment_id": 5318673462,
+    "snapshot_cleanup_coordination_comment_id": 5318781298,
+    "superseded_donor_pr": 854,
+    "superseded_donor_closed": true,
+    "temporary_unexecuted_probe_endpoint_removed": true
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "The global go unusual-experiment slot was already consumed before this organ joined the macro-cycle; all work here was deterministic repair, coordination, admission preparation, documentation adjudication and fallback-admission checking."
+  },
+  "epistemic_status": {
+    "source_candidate": true,
+    "controller_guard_defect_verified": true,
+    "controller_guard_repair_committed": true,
+    "refactored_controller_layout_guarded": true,
+    "tier2_independent_carrier_verified": false,
+    "carrier_cleanup_fence_verified": false,
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Restore authorized isolated execution admission: Vercel must admit an exact-current PR810 preview build, or an egress-capable approved controller must dispatch the authorized Daytona fallback with an approved DAYTONA_API_KEY secret path. Before Tier2 promotion, fuse and guard explicit deletion of the declared-transfer carrier snapshot plus carrier sandbox after successful replacement restore. Then execute the independent carrier path at exact identity; no direct source-snapshot-survival discriminator is required for the current design. Only after those gates pass may the credential-bearing PR686 private-source/OCI/provider/EntityOS/recovery/auth-PTY sequence receive runtime credit."
+}

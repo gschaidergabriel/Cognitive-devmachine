@@ -1,0 +1,114 @@
+{
+  "schema": "ENTITYOS_HCU_GO_CONTROLLER_VERIFIED_LOAD_REBIND/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "join": {
+    "research_main_observed_before_write": "dbd3c4557cd4f95aa286fc1d13b89672103a6312",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_head_observed": "86a7e39d1de350a3742bff02798a302c5a87f86c",
+    "retained_controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_controller_pr": 810,
+    "single_controller_lane_preserved": true
+  },
+  "authority_refresh": {
+    "program_state_schema": "8.7",
+    "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+    "one_shot_together_training_authorized": true,
+    "one_shot_together_training_consumed": false,
+    "training_precondition": "FUNCTIONAL_INSTRUMENTED_GLOBAL_JSPACE_GWT_PROTOTYPE_WITH_REAL_TRACES_PLUS_JSPACE_VECTOR_CONTROL_ABI_V1_AND_BASELINE_GATES",
+    "general_together_inference_fallback": "FORBIDDEN"
+  },
+  "observed_controller_faults": [
+    {
+      "fault": "authority contract read stale PROGRAM_STATE fields program/product_endpoint instead of current program_id/product",
+      "effect_if_owner_post_started": "fail closed in authority_contract before HCU regressions",
+      "classification": "SOURCE_CONTROL_PLANE_BUG"
+    },
+    {
+      "fault": "controller batch still selected historical physical_engine_lease regression after retained HCU inference converged to VerifiedEngineLoad from engine_load_lease_v1",
+      "effect_if_owner_post_started": "batch would validate the wrong lease seam and could fail the inference/load schema fence",
+      "classification": "SOURCE_CONTROL_PLANE_DRIFT"
+    }
+  ],
+  "controller_repairs": [
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 810,
+      "commit": "44233edd5190087d139d6d25bac785962618ac43",
+      "delta": "authority gate now verifies PROGRAM_STATE program_id, stage, product and integrated HCU architecture"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 810,
+      "commit": "bbf8f621841e79c2b8f8ecaafe6d95f2f0f12806",
+      "delta": "combined regression and end-to-end fence now follow engine_load_lease_v1 VerifiedEngineLoad rather than the older physical_engine_lease lane"
+    }
+  ],
+  "current_controller_batch": {
+    "path": "Typed Entry -> reactive HCU route -> VerifiedEngineAdmission -> EngineLoadLease/VerifiedEngineLoad -> inference receipt v3 -> GRID10 v2",
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "tests": [
+      "test_entry_canonicalization_v1",
+      "test_xeno_entry_fabric_v1",
+      "test_reactive_event_router_v1",
+      "test_engine_admission_v1",
+      "test_engine_load_lease_v1",
+      "test_inference_receipt_v1",
+      "test_grid10_scheduler_v1"
+    ],
+    "legacy_parallel_lease_path_promoted": false
+  },
+  "vercel_evidence": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_5CZgjkswgb8fSrKJZkkJbrxbA3Pe",
+    "deployment_state": "READY",
+    "deployment_git_sha": "bbf8f621841e79c2b8f8ecaafe6d95f2f0f12806",
+    "build_guard_schema": "EntityOSHCUCurrentExecutorGuard/v1",
+    "build_guard_status": "CURRENT_MAIN_PLUS_RETAINED_HCU_PR_ATOMIC_SNAPSHOT_EXECUTOR",
+    "build_guard_runtime_credit": false,
+    "sandbox_batch_started": false,
+    "credential_bearing_post_observed": false,
+    "runtime_credit": 0
+  },
+  "execution_surface": {
+    "vercel_platform_has_sandbox_create_runcommand": true,
+    "current_connected_vercel_surface_has_direct_sandbox_create_or_runcommand": false,
+    "current_connected_vercel_surface_has_arbitrary_post": false,
+    "retained_controller_is_callable_only_by_explicit_post": true,
+    "owner_scoped_github_read_token_available_to_this_organ": false,
+    "classification": "READY_CONTROLLER_BLOCKED_ON_OWNER_TRANSIENT_POST_INGRESS"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_CONTROLLER_EXECUTION_ADMISSION",
+    "track_b": "ADVANCED_HCU_TYPED_ENTRY_VERIFIED_LOAD_INFERENCE_GRID10_BATCH_ALIGNMENT",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON_REQUIRED_GWT_JSPACE_PROTOTYPE_TRACES_ABI_BASELINE_NOT_YET_EXECUTABLY_ADMITTED"
+  },
+  "unusual_experiment": {
+    "new_experiment_count_added_by_this_organ_after_join": 0,
+    "macrocycle_accounting": "CURRENT_COORDINATION_RECORDS_AUTHORITY_CONSTANT_TRANSPLANT_AS_ALREADY_CONSUMED",
+    "subsequent_work": "REGRESSION_FUSION_EXECUTION_ADMISSION_ONLY"
+  },
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_host_testing_used": false,
+    "together_job_created": false,
+    "one_shot_together_authorization_consumed": false,
+    "secrets_requested_or_persisted": false,
+    "second_executor_created": false
+  },
+  "evidence_boundary": {
+    "source_control_plane_repair": "COMMITTED",
+    "controller_deployment": "READY",
+    "authorized_sandbox_regression_execution": "NOT_STARTED",
+    "entityos_hcu_runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Owner/user initiates one transient credential-bearing POST to the exact READY retained PR810 controller; observe Sandbox.create, exact current Research main plus PR1263 SHA/tree binding, post-fetch token absence, and the combined JCS Typed Entry -> route -> VerifiedEngineAdmission -> VerifiedEngineLoad -> inference v3 -> GRID10 v2 result. Only after executable PASS proceed to real local ~0.8B loader bytes and Global J-Space/GWT prototype trace/ABI readiness for the authorized one-shot Together fine-tune."
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_OWNER_DIRECTIVE/v1",
+  "date": "2026-08-24",
+  "status": "ACTIVE_UNTIL_EXPLICITLY_REVOKED_OR_SUPERSEDED_BY_NEWER_OWNER_DIRECTIVE",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "owner_intent": {
+    "trigger_literal": "1",
+    "purpose": "Run an intensive dedicated research branch whose primary goal is to reach direct reproducible vector-based control of an admitted FREE API model through the Global J-Space control path as quickly as possible.",
+    "free_token_contingent": "AUTHORIZED_FOR_THIS_RESEARCH_BRANCH",
+    "parallel_experiment_lanes_per_trigger": 10,
+    "delta_creation_required": true,
+    "swarm_logic_required": true
+  },
+  "target_mechanism": [
+    "canonical Global J-Space/control intent",
+    "JSPACE_VECTOR_CONTROL_ABI/v1 source packet",
+    "model/version/layer-specific JSPACE_LATENT_BASIS_ADAPTER/v1",
+    "local model-specific control vector",
+    "instrumentable runtime intervention such as llama.cpp native cvec when applicable",
+    "matched controls and immutable execution receipts"
+  ],
+  "research_policy": {
+    "ten_parallel_distinct_experiments": true,
+    "calibration_and_holdout_must_be_disjoint": true,
+    "required_controls": ["BASELINE", "+VECTOR", "SIGN_FLIP", "NULL_VECTOR", "ORTHOGONAL_SAME_NORM", "PERMUTED_SAME_NORM"],
+    "fixed_seeds_required": true,
+    "reproducibility_required_before_positive_claim": true,
+    "source_or_consensus_only_is_not_model_steering_credit": true
+  },
+  "economic_and_secret_boundaries": {
+    "free_only": true,
+    "owner_authorized_free_providers": ["groq", "mistral", "nvidia", "openrouter"],
+    "together_forbidden": true,
+    "paid_or_unknown_cost_forbidden": true,
+    "paid_fallback_forbidden": true,
+    "billing_upgrade_or_credit_purchase_forbidden": true,
+    "secret_values_must_never_be_logged_or_committed": true,
+    "use_existing_typed_free_lane_and_credential_route_provenance_gates": true,
+    "shared_provider_quota_gate_must_not_be_bypassed": true,
+    "credential_rotation_to_evade_provider_limits_forbidden": true
+  },
+  "coordination": {
+    "trigger_1_is_distinct_from_trigger_go": true,
+    "GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL_is_not_repurposed": true,
+    "trigger_1_uses_its_own_batch_identity_and_exactly_10_lane_identities": true,
+    "different_lane_hypotheses_are_allowed_in_parallel_under_one_trigger_1_batch": true
+  },
+  "evidence_boundary": "A FREE API model is not considered directly J-Space/vector steerable unless the actual model/runtime consumes the bound intervention and the effect survives matched controls and disjoint holdout. Prompt-only influence or model-generated agreement is insufficient."
+}

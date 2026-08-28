@@ -1,0 +1,37 @@
+{
+  "schema": "GO_EXECUTION_RECEIPT/v1",
+  "timestamp_local": "2026-08-28T08:47:45+07:00",
+  "program": "ENTITYOS_HCU",
+  "go_target": "autonomously self-organizing shared-state Xeno/HCU fabric",
+  "frontier": "GRID10_REAL_SIGKILL_AUTOMATIC_REPLACEMENT_ACCEPTANCE/v2",
+  "current_observed_main_before_receipt": "3f19ae2701585f103da6fef9dd2f0d36c8523794",
+  "bound_source": {
+    "acceptance_commit": "51914c30d6323185de4a574c04ae100d4b1e3841",
+    "test_commit": "b2f425d800d3f7c3a1ac91a851e6a5c78bb1434d",
+    "steering_commit": "426e0a4f175afbdd0a897e6de611ac2b954a6f60"
+  },
+  "execution_attempt": {
+    "surface": "current local container",
+    "command_intent": "clean shallow clone of current main followed by python3 tools/grid10_real_sigkill_automatic_replacement_acceptance_v2.py",
+    "started_test": false,
+    "result": "INFRASTRUCTURE_BLOCKED_BEFORE_CHECKOUT",
+    "error_class": "DNS_RESOLUTION_FAILURE",
+    "error_detail": "Could not resolve host: github.com"
+  },
+  "fresh_github_observation": {
+    "workflow_runs_for_steering_commit": 0,
+    "repository_bound_v2_runtime_pass_observed": false
+  },
+  "evidence_boundary": {
+    "source_candidate_present": true,
+    "repository_bound_execution_pass": false,
+    "semantic_fail_observed": false,
+    "runtime_credit_delta": 0,
+    "physical_grid10_credit_delta": 0,
+    "whole_hcu_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "decision": "Do not weaken or bypass the v2 falsifier. The next admissible GO action remains repository-bound execution on a clean current non-provider checkout. Only after PASS may normal decode-safe node-loop SIGKILL and faster failure detection be evaluated.",
+  "provider_calls": 0,
+  "secret_lookups": 0
+}

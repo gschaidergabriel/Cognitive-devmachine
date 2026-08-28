@@ -35,27 +35,59 @@ boot=json.loads(boot_path.read_text(encoding='utf-8'))
 canonical=json.loads(canonical_path.read_text(encoding='utf-8'))
 
 # This checker guards identity continuity, not a particular bootstrap/stack release number.
-# Version numbers are intentionally not hard-pinned: unrelated schema/epoch advancement must
-# not create an identity-guard false negative. Instead, require the live boot pointer to be
-# coherent with canonical identity/revision/hash and require the current stack to expose an epoch.
+# The project now has two admitted bootstrap shapes:
+#   1) historical revision/hash-bound RAE bootstraps; and
+#   2) current EntityOS/HCU authority bootstraps where Clay/organ/product/architecture
+#      identity is explicit and canonical revision/hash are no longer duplicated into
+#      BOOTSTRAP_MINIMAL. Do not require fields from one shape to exist in the other.
 if not isinstance(boot.get('schema_version'),str) or not boot.get('schema_version'):
     fail.append('BOOT_SCHEMA_MISSING')
 if boot.get('entity_id')!=canonical.get('entity_id'):
     fail.append('BOOT_CANONICAL_ENTITY_MISMATCH')
-if boot.get('expected_revision')!=canonical.get('revision'):
-    fail.append('BOOT_CANONICAL_REVISION_MISMATCH')
-if boot.get('expected_state_hash')!=canonical.get('state_hash'):
-    fail.append('BOOT_CANONICAL_STATE_HASH_MISMATCH')
-if boot.get('identity',{}).get('every_turn_guard')!='research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md':
-    fail.append('BOOT_IDENTITY_GUARD_POINTER_MISSING')
-per=boot.get('per_turn',{})
-if 'every substantive prompt_run_id' not in per.get('identity_injection',''):
-    fail.append('BOOT_PER_TURN_INJECTION_NOT_MANDATORY')
-inv='\n'.join(boot.get('mandatory_invariants',[]))
-for formen in (('Research Entity != Frank','Clay is not self.root/Frank','Research Entity != self.root'),
-               ('Andreas uses Frank only','Andreas uses the human surface Frank only'),
-               ('every substantive prompt_run_id refreshes the Research Entity identity injection',)):
-    if not any(f in inv for f in formen):fail.append('BOOT_MANDATORY_INVARIANT_MISSING:'+formen[0])
+
+identity=boot.get('identity',{}) if isinstance(boot.get('identity'),dict) else {}
+modern_entityos_hcu=(
+    identity.get('persistent_research_entity')=='Clay'
+    or boot.get('product_endpoint')=='EntityOS'
+    or boot.get('active_program')=='ENTITYOS_HCU'
+)
+
+if modern_entityos_hcu:
+    if identity.get('persistent_research_entity')!='Clay':
+        fail.append('BOOT_PERSISTENT_ENTITY_NOT_CLAY')
+    if identity.get('temporary_worker')!='ORGAN_NOT_ENTITY':
+        fail.append('BOOT_TEMPORARY_WORKER_NOT_ORGAN')
+    if boot.get('product_endpoint')!='EntityOS':
+        fail.append('BOOT_PRODUCT_ENDPOINT_NOT_ENTITYOS')
+    if boot.get('integrated_cognition_compute_architecture')!='HCU':
+        fail.append('BOOT_COMPUTE_ARCHITECTURE_NOT_HCU')
+    if boot.get('active_program')!='ENTITYOS_HCU':
+        fail.append('BOOT_ACTIVE_PROGRAM_NOT_ENTITYOS_HCU')
+    inv='\n'.join(boot.get('mandatory_invariants',[]))
+    for needle in (
+        'temporary workers are organs of Clay, never new persistent entities',
+        'EntityOS is the sole current product/system identity',
+        'HCU is the sole current integrated cognition/compute architecture',
+    ):
+        if needle not in inv:
+            fail.append('BOOT_MANDATORY_INVARIANT_MISSING:'+needle)
+    bootstrap_identity_mode='ENTITYOS_HCU_CURRENT'
+else:
+    if boot.get('expected_revision')!=canonical.get('revision'):
+        fail.append('BOOT_CANONICAL_REVISION_MISMATCH')
+    if boot.get('expected_state_hash')!=canonical.get('state_hash'):
+        fail.append('BOOT_CANONICAL_STATE_HASH_MISMATCH')
+    if identity.get('every_turn_guard')!='research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md':
+        fail.append('BOOT_IDENTITY_GUARD_POINTER_MISSING')
+    per=boot.get('per_turn',{})
+    if 'every substantive prompt_run_id' not in per.get('identity_injection',''):
+        fail.append('BOOT_PER_TURN_INJECTION_NOT_MANDATORY')
+    inv='\n'.join(boot.get('mandatory_invariants',[]))
+    for formen in (('Research Entity != Frank','Clay is not self.root/Frank','Research Entity != self.root'),
+                   ('Andreas uses Frank only','Andreas uses the human surface Frank only'),
+                   ('every substantive prompt_run_id refreshes the Research Entity identity injection',)):
+        if not any(f in inv for f in formen):fail.append('BOOT_MANDATORY_INVARIANT_MISSING:'+formen[0])
+    bootstrap_identity_mode='LEGACY_REVISION_BOUND'
 
 stack=require('research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay',
     'researcher_identity_injection=@research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md',
@@ -89,6 +121,7 @@ if fail:
 print(json.dumps({
     'status':'PASS',
     'identity_guard':'EVERY_TURN_HOOKED',
+    'bootstrap_identity_mode':bootstrap_identity_mode,
     'actor':'RESEARCH_ENTITY',
     'frank':'SEPARATE_SUBJECT',
     'andreas_interface':'FRANK_ONLY',

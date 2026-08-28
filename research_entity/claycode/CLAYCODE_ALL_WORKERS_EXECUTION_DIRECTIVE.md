@@ -1,43 +1,91 @@
-# ClayCode All-Workers Execution Directive
+# ClayCode All-Workers Execution Directive — successor-dynamic pointer
 
-Status: PROJECT_OWNER_DIRECTIVE
-Scope: every substantive worker whose pinned/home research room is `claycode`
-Applies to roles: CHEF, ABYSS, FORGE, CARTOGRAPHER, REPLICATOR, SYNTHESIZER and any future ClayCode-room worker role
+Status: **CURRENT COMPATIBILITY ENTRYPOINT**  
+Persistent research entity: **Clay**  
+Current product/system: **EntityOS**  
+Current integrated cognition/compute architecture: **HCU**
 
-## Owner rule
+This unversioned file is intentionally a thin, successor-dynamic entrypoint. It MUST NOT freeze an old supervisor epoch as current authority.
 
-ClayCode research workers do not stop at proposing tests when an applicable execution surface is currently available.
+## Resolve current authority before material work
 
-For every material ClayCode hypothesis, compiler/runtime claim, parser/grammar claim, semantic-preservation claim, safety/authority claim, backend claim or application-proof claim:
+Workers must read and obey, in order:
 
-1. enumerate the materially relevant tests that can actually be run with currently exposed tools/capabilities;
-2. execute all applicable available tests in the current run, not merely describe them;
-3. use the strongest available execution surface first, while preserving independent replication when another available backend adds information;
-4. include positive, negative, mutation/fuzz, roundtrip/differential and failure-path tests whenever applicable;
-5. record stdout/stderr/exit state, hashes, expected-vs-observed result, counterexamples, provider/runtime identity and blockers in executable research receipts;
-6. never count an unavailable provider as executed evidence; record the exact blocker and use the best available fallback;
-7. after every material result, recompute the next highest-information executable ClayCode test and continue automatically while a materially relevant accessible test remains;
-8. stop only when the current research question is experimentally saturated for the available surfaces, a real blocker prevents further execution, or continuing would duplicate evidence without material information gain;
-9. preserve every negative result and counterexample; never silently repair the language and erase the failure that justified the change;
-10. do not promote BASE/release work merely because a test ran or passed. Existing acceptance contracts and target-host requirements remain authoritative.
+1. `CLAY_EXECUTION_AUTHORITY.md` and the newest explicit owner authority it names;
+2. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`;
+3. the exact steering file selected by that inbox;
+4. `research_entity/00_CURRENT/NOW.md`, then only the needed `INDEX.tsv` / `ACTIVE.tsv` / `latest/<direction>.md` cache entries;
+5. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`;
+6. `research_entity/rooms/PROGRAM_STATE.json`;
+7. the versioned all-workers directive named by those current surfaces;
+8. exact current source/runtime evidence;
+9. historical directives only at their retained provenance scope.
 
-## Execution-surface rule
+The `research_entity/00_CURRENT` layer is a token-efficient navigation/cache layer only. It never outranks owner authority, the current supervisor, or exact executable evidence.
 
-Use every operational surface that is exposed to the worker and materially applicable, including local/sandbox execution, E2B, SandboxAPI, Judge0, repository CI/runtime tools, compiler toolchains, differential/reference interpreters, fuzz/property runners and target-host execution when actually available.
+Newest explicit owner authority immediately overrides stale cached `VPS_FORBIDDEN`, `SELF_HOSTED_FORBIDDEN`, `NO_ROOT_IN_SANDBOX`, zero-cost-command-only, or equivalent restrictions where the owner authority explicitly changes them.
 
-Provider/tool availability is session-specific. A capability listed in research state but not exposed to the current worker is `AVAILABLE_IN_PROJECT_STATE_BUT_NOT_CALLABLE_HERE`, not runtime evidence.
+## Mandatory current-result receipt after substantive work
 
-## Continuation law
+Every worker that produces a **material research/architecture/runtime/training result** must emit at least one tiny append-only `CLAY_FAST_RESULT/v1` receipt for the affected research direction before considering the lane complete.
 
-`test -> receipt -> learn -> recompute -> next_test`
+Preferred command:
 
-not
+```bash
+python3 tools/clay_current_emit_v1.py \
+  --direction <direction> \
+  --status <status> \
+  --headline '<one-line delta>' \
+  --next '<next discriminator>' \
+  --evidence <exact-result-path> \
+  --branch <branch-if-any>
+```
 
-`test_proposal -> stop`
+Rules:
 
-A worker that ends a substantive ClayCode run with executable tests still materially available must state why those tests were not run; absence of such a blocker is an incomplete run.
+- do not rewrite old FAST_RESULT receipts;
+- do not copy long reports/logs into the receipt;
+- cite the exact original evidence path(s);
+- emit one small receipt per materially affected research direction;
+- include active branch/PR/issue/request refs when they matter;
+- never hand-edit generated `NOW.md`, `INDEX.tsv`, `ACTIVE.tsv`, `RECENT.tsv`, `MANIFEST.json` or `latest/*`;
+- if a material result is not represented in `00_CURRENT`, the research lane is informationally incomplete even if its deep artifact exists;
+- the receipt is navigation/synthesis metadata, never promotion authority.
 
-## Relation to existing ClayCode law
+## Current VPS sandbox owner override — 2026-08-25
 
-This directive strengthens the existing ClayCode mandatory executable loop and the BASE invariant `less change, more compile`.
-It does not authorize gratuitous semantic redesign, self-modification, hidden authority escalation, or skipping the Ubuntu Linux developer-system acceptance target for Frank v0.1.
+The newest explicit owner authority is:
+
+`governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md`
+
+The designated sandbox is `clay-direct-dev`.
+
+Inside that sandbox, development/research execution is broadly authorized, including sandbox root/sudo when available, package/runtime installation, compilation, public downloads, model/repository acquisition, local Qwen execution, tests, fuzzing, benchmarks, ablations, model/vector/J-Space interventions, HCU experiments, destructive-to-scratch trials, and sandbox cleanup/rebuild/reset.
+
+Current access map:
+
+`governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`
+
+Workers must check the already-established bridge/self-hosted-runner routes before claiming there is no executor merely because a direct chat SSH tool is absent.
+
+This internal sandbox freedom does not silently authorize unrelated bare-host services, unrelated production effects, attacks on third parties, credential exfiltration or external provider spending. Provider economic/credential admission remains a separate authority boundary.
+
+## Supervisor pointer
+
+Do not cache a specific epoch from this file. Read `SUPERVISOR_INBOX.json` every material cycle and obey its selected steering after applying newer explicit owner authority.
+
+## Non-negotiable stable invariants
+
+- Temporary workers are organs of Clay, never new persistent entities.
+- EntityOS is the sole current product/system identity.
+- HCU is the sole current integrated cognition/compute architecture.
+- Canonical durable truth/evidence remains deterministic and outside model/HCU/J-Space/world-model generation.
+- EffectGate + EffectJournal remain the only real/state-changing effect authority.
+- `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
+- Source/component/provider success, raw token volume, logical worker count, recurrence or model consensus do not mint broader runtime/canonical truth.
+- Paid/subscription/unknown/unlisted external-provider routes and paid fallback still fail closed unless a newer explicit owner/provider authority changes that separate boundary.
+- Exact provider runtime credit requires concrete credential/model/route economic provenance and admitted executable receipts at exact source identity.
+- Global J-Space/GWT remains an empirical causal hypothesis requiring model-specific intervention/control evidence.
+- Platform/system safety rules remain applicable inside the sandbox.
+
+Historical versioned all-worker directives remain provenance only and must not override the inbox-selected successor steering or the newest explicit owner authority.

@@ -1,0 +1,65 @@
+{
+  "schema": "GO_UCF_ADAPTIVE_CAPABILITY_FENCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "base_main_observed_at_branch_creation": "380446042cf1d7e8ed00b7b51d1f8b129bd081dd",
+  "main_observed_before_pr_adjudication": "3c1de71010b15311881d70e9a96bba141775ca9f",
+  "candidate_head_before_this_receipt": "73861d629d1503bce833c3759da31778a4da1eed",
+  "pr": 1094,
+  "finding": {
+    "class": "FAIL_OPEN_CAPABILITY_BINDING",
+    "file": "tools/validate_unified_cognitive_fabric_receipt_v1.py",
+    "observed_mechanism": "adapter_capability_match=false was rejected only for engine_class=claude_code; adaptive_backend could continue toward receipt acceptance",
+    "owner_law_conflict": "adaptive profiled inference engines must fail closed on capability mismatch and may not mint state/effect authority"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "ADAPTIVE_CAPABILITY_MISMATCH_FALSE_GREEN_SOURCE_FALSIFIER",
+    "scope": "SOURCE_LEVEL_EXECUTABLE_TRANSCRIPTION",
+    "input": {
+      "engine_class": "adaptive_backend",
+      "adapter_capability_match": false
+    },
+    "pre_fix_observation": "ADMITTED_BY_THIS_GATE",
+    "credit": "BOUNDED_MECHANISM_ONLY_NOT_EXACT_GIT_RUNTIME"
+  },
+  "repair": {
+    "validator_commit": "b5bd16810e7d80201761fe123da032f69aee59d1",
+    "test_commit": "73861d629d1503bce833c3759da31778a4da1eed",
+    "law": "adapter_capability_match=false fails closed for every engine class; Claude retains CLAUDE_ADAPTER_CAPABILITY_MISMATCH and other engines use ADAPTER_CAPABILITY_MISMATCH",
+    "focused_regression": "tests/test_unified_cognitive_fabric_adaptive_capability_fence.py",
+    "duplicate_authority_created": false
+  },
+  "exact_pr_head_workflow_observation": {
+    "head": "73861d629d1503bce833c3759da31778a4da1eed",
+    "research_entity_verify": {
+      "run_id": 32615088433,
+      "job_id": 97134373840,
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+    },
+    "identity_guard": {
+      "run_id": 32615088389,
+      "job_id": 97134373536,
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+    },
+    "semantic_test_failure_claimed": false,
+    "exact_runtime_credit": 0
+  },
+  "execution_policy": {
+    "free_only_preserved": true,
+    "provider_secret_lookup": false,
+    "provider_network_execution": false,
+    "paid_action": false,
+    "together_execution": false,
+    "training": false
+  },
+  "evidence_boundary": "SOURCE_REPAIR_PLUS_BOUNDED_MECHANISM_FALSIFIER; EXACT_PR_RUNTIME_UNOBSERVED",
+  "next_gate": "actually-started authorized isolated execution of exact final PR bytes: py_compile + canonical UCF receipt regressions + focused adaptive capability fence"
+}

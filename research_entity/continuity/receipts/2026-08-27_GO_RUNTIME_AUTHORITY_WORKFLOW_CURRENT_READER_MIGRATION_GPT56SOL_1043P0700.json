@@ -1,0 +1,35 @@
+{
+  "schema": "GO_RUNTIME_AUTHORITY_WORKFLOW_MIGRATION_RECEIPT/v1",
+  "date": "2026-08-27T10:43:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "trigger": "go",
+  "target_architecture": "autonomous self-organizing Xeno/HCU fabric",
+  "authority_epoch_observed": "9.12",
+  "free_only": true,
+  "together_forbidden": true,
+  "provider_routes_admitted": false,
+  "material_finding": "The retained self-hosted runtime-reconcile workflow was still an authority/runtime-credit consumer of the compatibility SYSTEM_ANALYSIS_LIVE mirror and still invoked the legacy update_root_results.py reconciliation path. That contradicts the 9.12 evidence law requiring authority/runtime-credit consumers to resolve SYSTEM_ANALYSIS_CURRENT and verify generation manifest and per-file hashes. The workflow has been rewritten as a non-mutating repository-bound authority/monitoring audit: it performs provider-admission resolution, the restart-authority v3/v4 + monitoring v4/v5/v6 + CURRENT-reader + consumer-audit regression stack, read-only restart attribution, and verified CURRENT readback. It starts/kills no processes and does not switch the publisher.",
+  "changes": [
+    {
+      "path": ".github/workflows/runtime-reconcile-871-selfhosted.yml",
+      "commit": "0bb8dbab4c08c48fa9ef30ba40022a67ad792a8e",
+      "effect": "remove legacy runtime mutation/restart path and direct SYSTEM_ANALYSIS_LIVE authority consumption; add clean-checkout source binding, fail-closed P0 regression stack, static authority-consumer audit, read-only restart attribution, and verified CURRENT-pointer readback"
+    }
+  ],
+  "evidence_boundary": {
+    "source_progress": true,
+    "workflow_execution_observed": false,
+    "repository_bound_test_credit": 0,
+    "runtime_quiescence_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "training_credit": 0,
+    "provider_calls_performed_by_this_change": 0,
+    "secret_values_inspected": false,
+    "processes_killed": 0,
+    "processes_started": 0
+  },
+  "next_exact_action": "Obtain one actual self-hosted run of the rewritten workflow. If the authority-consumer audit reports violations, migrate each named production authority/runtime-credit consumer (notably any legacy update_root_results direct mirror path) to read_current_publication before switching the retained publisher to monitoring v6. Only after repository PASS may restart-authority v4 be used read-only on the live Clay host; no kill is authorized by this receipt."
+}

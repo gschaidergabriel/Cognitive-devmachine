@@ -1,0 +1,60 @@
+{
+  "schema": "CLAY_GO_EXECUTOR_BUILD_DELTA_RECEIPT/v1",
+  "date": "2026-08-24",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+  "observed_failure": {
+    "executor_head": "6303be2cc726f43195336288dfbd5de556752c03",
+    "deployment_id": "dpl_9CPfNYULfANWebZ8JKX8HaGKuej7",
+    "deployment_state": "ERROR",
+    "scope": "VERCEL_BUILD_GUARD_ONLY",
+    "cause": "ENTITYOS_HCU_JSPACE_GRID10_POSITIVE_MISSING for 21 exact InferenceReceipt/v4 rejection-fence PASS markers",
+    "classification": "EXECUTABLE_BUILD_COUNTEREVIDENCE"
+  },
+  "delta": {
+    "executor_commit": "df08349c6f78918f81f0c950476fe162a9b47fbe",
+    "file": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-positive.js",
+    "mechanism": "Require all 21 previously guard-required InferenceReceipt/v4 mismatch/replay/unknown-result PASS markers in command stdout before the route can classify the fixed regression capsule as passed.",
+    "safety_direction": "FAIL_CLOSED_STRENGTHENING_NOT_GUARD_WEAKENING"
+  },
+  "verification": {
+    "deployment_id": "dpl_6ECDNBrAsuW7VXbaQ5cZMVVAPorm",
+    "deployment_git_sha": "df08349c6f78918f81f0c950476fe162a9b47fbe",
+    "deployment_state": "READY",
+    "scope": "SOURCE_PLUS_VERCEL_BUILD_ONLY",
+    "sandbox_create_observed": false,
+    "function_invocation_observed_for_this_commit": false,
+    "model_execution_observed": false,
+    "jspace_model_execution_observed": false
+  },
+  "successor_reentry": {
+    "live_pr810_head_after_delta": "aa9c9ea867b13a497cf7d7d8ed711486a4db0c90",
+    "successor_change": "sandbox-probe supervisor marker 8.64 -> 8.65",
+    "delta_known_overwritten_by_successor": false
+  },
+  "coordination": {
+    "unusual_experiment_attempted": false,
+    "atomic_lease_required_for_this_delta": false,
+    "duplicate_lane_created": false,
+    "existing_retained_lane_used": true
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_EXECUTOR_BUILD_CONVERGENCE_WITH_EXACT_COUNTEREVIDENCE_AND_READY_BUILD",
+    "track_b": "ADVANCED_HCU_INFERENCE_RECEIPT_FAIL_CLOSED_ACCEPTANCE_BINDING",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no model/J-Space execution occurred and direct remaining included Sandbox quota is still unobserved"
+  },
+  "runtime_credit": {
+    "new_whole_entityos_hcu_runtime_credit": 0,
+    "new_full_hcu_runtime_credit": 0,
+    "new_jspace_model_runtime_credit": 0,
+    "new_training_credit": 0,
+    "whole_product_pass": false
+  },
+  "remaining_gate": "Obtain a directly authoritative read-only remaining included Vercel Sandbox quota signal. Hobby/team/plan identity is not sufficient. Only after the FREE_ONLY admission gate opens may a fixed exact-source Sandbox capsule be created and executed.",
+  "evidence_boundary": "READY deployment proves build/deployment success at exact commit only. It does not prove handler invocation, Sandbox.create, Python/sqlite3/_sqlite3, real local model execution, J-Space/GWT causality, training benefit, or whole EntityOS/HCU acceptance."
+}

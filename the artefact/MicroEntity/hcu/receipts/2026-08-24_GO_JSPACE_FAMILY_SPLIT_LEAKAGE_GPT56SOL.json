@@ -1,0 +1,71 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_DATASET_FALSIFIER_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_observed": {
+    "research_main_sha": "fbc605b3d99328d71b72440b52ade09fd988ceeb",
+    "supervisor_schema": "8.61",
+    "supervisor_mode": "FREE_ONLY",
+    "paid_together_training_allowed_in_current_supervisor": false,
+    "owner_paid_one_shot_directive_quarantined": true,
+    "owner_paid_one_shot_job_consumed": false
+  },
+  "retained_hcu_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "latest_head_observed_before_receipt": "c34169bcc0cdf89e8ba6b48d01a52fa64404bfda",
+    "single_retained_lane": true
+  },
+  "material_finding": "The earlier bootstrap dataset compiler split by each complete trace hash, so matched baseline/lesion controls from one causal trace family could be assigned to different train/validation/holdout splits. During this macrocycle the retained PR1263 lane concurrently converged the same compiler filename onto ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1 and explicit trace_family_id splitting. Two stale direct writes by this organ were rejected with GitHub 409 and no parallel compiler lane was created.",
+  "unusual_experiment": {
+    "id": "FAMILY_SPLIT_LEAKAGE_POISON",
+    "count_for_this_go": 1,
+    "scope": "isolated deterministic Python reproduction of the observed split function and simple RFC8785-compatible ASCII material only; not whole-repository or model runtime execution",
+    "causal_family_material_held_constant": true,
+    "baseline": {
+      "control_condition": "BASELINE",
+      "trace_sha256": "8c8aa183daaa3f570fa6ee817047d2d5bf69f2b015c8dadb97b231be4f072d5c",
+      "legacy_trace_hash_split": "train"
+    },
+    "lesion": {
+      "control_condition": "LESION:12",
+      "trace_sha256": "e2acb2eca16e8d6895c1b0f61b879110e329e7b9156f891de04f9fd78fa0761b",
+      "legacy_trace_hash_split": "validation"
+    },
+    "result": "FALSIFIED_TRACE_HASH_AS_LEAK_RESISTANT_SPLIT_UNIT"
+  },
+  "fused_current_mechanism": {
+    "compiler": "the artefact/MicroEntity/hcu/compile_jspace_bootstrap_dataset_v1.py",
+    "dataset_schema_observed": "ENTITYOS_HCU_JSPACE_BOOTSTRAP_DATASET/v3",
+    "input_trace_schema_observed": "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1",
+    "split_unit_observed": "trace_family_id",
+    "example_family_id": "episode:control-family",
+    "example_family_sha256": "33adc1764bdd99a6322f32b92907664d74c0669aac0cc2fafeaaff211f511651",
+    "example_family_split": "train",
+    "interpretation": "Control-specific trace bytes may differ while the explicit family key remains constant, preventing the demonstrated baseline/lesion cross-split leak class."
+  },
+  "coordination": {
+    "direct_write_attempts_rejected_stale_sha": 2,
+    "overwrite_occurred": false,
+    "duplicate_compiler_lane_created": false,
+    "parallel_worker_delta_fused": true
+  },
+  "execution_and_training_credit": {
+    "exact_free_sandbox_run_observed_by_this_organ": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "together_preflight_performed": false,
+    "together_credentials_accessed": false,
+    "together_network_io_performed": false,
+    "together_job_created": false,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Start the retained exact-source authorized FREE isolated EntityOS/HCU sandbox batch and bind current Research main plus current PR1263 SHA/tree, executor identity, credential nonpersistence and actual regression result. Only after executable evidence should a real local ~0.8B loader produce instrumented J-Space/GWT traces. Paid Together preflight/job creation remains forbidden under supervisor 8.61.",
+  "claim_class": "SOURCE_MECHANISM_FALSIFIER_AND_CONVERGENCE_EVIDENCE_ONLY"
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "CLAYVERSE_GO_RECEIPT/v2",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "e72e7101753fb8d2d7bc54bf5abcd86d709416f4",
+  "branch": "go/clayverse-demote-stale-mini-directives-v2-20260823-1114",
+  "supersedes_unmerged_branch": "go/clayverse-demote-stale-mini-directives-20260823-1112",
+  "finding": {
+    "class": "DIRECT_LEGACY_AUTHORITY_REACTIVATION_PATH",
+    "paths": [
+      "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+      "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md"
+    ],
+    "observed": [
+      "BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md still said SOLE CANONICAL OWNER DIRECTIVE / Status: CURRENT / MINI_ENTITY_PIPELINE_ALL_IN_ONE after ClayVerse reconciliation.",
+      "LOCAL_INFERENCE_REQUIREMENT.md still said Status: CURRENT / Program: MINI_ENTITY_PIPELINE_ALL_IN_ONE and contained stale go work-selection language."
+    ],
+    "risk": "A direct file reader, old helper or receipt path could bypass corrected root routing and resurrect superseded Mini Entity work selection."
+  },
+  "fusion": {
+    "parallel_main_change": "PR #1172 strengthened the same authority validator with actual 4.1/4.2/4.3 Git-blob ancestry and safety checks.",
+    "resolution": "Rebased conceptually onto main@e72e7101 and fused only the two legacy-path redirect guards and poison regressions into the stronger ancestry validator; no older validator version is retained."
+  },
+  "delta": [
+    "Replace the stale Blogpost canonical-owner file with a short superseded compatibility redirect to the current ClayVerse owner directive while preserving its exact historical blob id.",
+    "Replace the stale Mini Entity local-inference current-program file with a historical donor redirect while preserving its exact historical blob id.",
+    "Extend the existing single ClayVerse authority validator, preserving PR #1172 ancestry checks, so both legacy paths must remain superseded redirects with historical blob anchors.",
+    "Add two poison regressions on top of the existing ancestry/root/nested-selector suite to reject reactivation as Status: CURRENT."
+  ],
+  "historical_blobs": {
+    "blogpost_directive": "eeb9945e4c1d01a32e13bf6cb74db0c0c49d2767",
+    "local_inference_requirement": "57de4d4f460c0755d3be21cb9ce00369104dbf60"
+  },
+  "evidence": {
+    "source_inspection": "PASS_FOR_FINDING_AND_FUSION_SHAPE",
+    "exact_branch_test_execution": "UNOBSERVED",
+    "authorized_vercel_sandbox_start_exec_exposed": false,
+    "whole_clayverse_runtime_credit": 0,
+    "classification": "SOURCE_CANDIDATE_PENDING_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_EXECUTION"
+  },
+  "unusual_experiment": "NOT_CONSUMED_NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE",
+  "safety": {
+    "free_only_preserved": true,
+    "together_used": false,
+    "vps_or_self_hosted_test_used": false,
+    "paid_or_model_training_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "next_gate": "Run the exact fused ancestry+legacy authority validator and focused regressions on an actually-started authorized isolated executor; then continue full exact-current ClayVerse regression and OCI build/startup identity."
+}

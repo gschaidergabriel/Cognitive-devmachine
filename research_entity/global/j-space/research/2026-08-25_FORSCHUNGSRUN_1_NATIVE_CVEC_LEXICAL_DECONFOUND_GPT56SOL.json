@@ -1,0 +1,174 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_NATIVE_CVEC_LEXICAL_DECONFOUND/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "966473caf712a214ac9828a4ac90793ad4ca60ee",
+  "scope": "QWEN3_0_6B_NATIVE_CVEC_LABEL_INDEPENDENT_JSPACE_PROMOTION_DISCRIMINATOR",
+  "observed_current_source": {
+    "path": "tools/trigger1_local_qwen06_native_semantic_counterbalanced_execute.py",
+    "blob_sha": "07287f9ffd7d775a5f5c924cc191d6e4ee9e8738",
+    "schema": "CLAY_TRIGGER1_QWEN06_NATIVE_CVEC_SEMANTIC_COUNTERBALANCED/v1",
+    "basis_construction": "normalize(mean(AFFIRMATIVE)-0.5*(mean(NEGATIVE)+mean(NEUTRAL)))",
+    "basis_prompt_property": "Every basis family explicitly contains the semantic pole names AFFIRMATIVE, NEGATIVE or NEUTRAL and multiple direct lexical synonyms of those poles.",
+    "evaluation_property": "Every calibration and fresh-holdout case requests AFFIRMATIVE explicitly; A/B/C output-code identity is counterbalanced but requested semantic target is not.",
+    "metric": "mapped target-code logit minus mean of the other two A/B/C logits",
+    "matched_controls": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM"
+    ]
+  },
+  "prior_native_component_evidence": {
+    "evidence_commit": "46cd012d079b36e501b1262fda52911a99839674",
+    "receipt": "research_entity/continuity/receipts/2026-08-25_QWEN3_06B_NATIVE_LLAMA_CPP_CVEC_PASS_GPT56SOL.json",
+    "gguf_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "llama_cpp_commit": "bb4caa7540188872173c44d161602d9271386413",
+    "target_layer": 20,
+    "n_embd": 1024,
+    "n_layer": 28,
+    "selected_native_gain": 32.0,
+    "native_llama_set_adapter_cvec_rc": 0,
+    "classification": "NATIVE_MODEL_SPECIFIC_NONTERMINAL_CAUSAL_COMPONENT_PASS_ONLY",
+    "canonical_semantics_credit": false,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "already_known_counterhypothesis_not_duplicated": {
+    "id": "H0_GENERIC_REQUEST_COMPLIANCE",
+    "receipt_commit": "db7b5be9c10da3353646846ad16932f7b5d0bcb3",
+    "summary": "Because all existing semantic-counterbalanced evaluation cases request AFFIRMATIVE, a plus-vector effect could be generic requested-code compliance rather than AFFIRMATIVE-specific causality.",
+    "status": "OPEN_AND_RETAINED"
+  },
+  "new_counterhypotheses": [
+    {
+      "id": "H0_LEXICAL_POLE_RECONSTRUCTION",
+      "statement": "The derived direction may primarily encode the explicit pole words and their nearby lexical field rather than an abstract decision-state coordinate. Evaluation reuses AFFIRMATIVE and related semantics, so a positive native-cvec interaction can survive output-code counterbalancing without proving lexical-transfer-independent J-Space semantics.",
+      "why_current_design_cannot_close_it": "The current basis prompts and evaluation prompts share explicit semantic pole names; A/B/C counterbalancing removes output-token identity coupling but not semantic-label lexical coupling."
+    },
+    {
+      "id": "H0_PROMPT_FAMILY_AXIS_INSTABILITY",
+      "statement": "A global mean steering vector may average prompt-family-specific directions that are not geometrically coherent. Positive aggregate steering can therefore hide reversed or weak effects on individual lexical/context families.",
+      "why_material": "Recent steering-vector reliability work reports strong prompt dependence and finds activation-difference directional coherence predictive of steering reliability."
+    }
+  ],
+  "external_primary_inputs": [
+    {
+      "source": "Panickssery et al., Steering Llama 2 via Contrastive Activation Addition",
+      "arxiv": "2312.06681",
+      "use": "Supports contrastive hidden-state vector construction and disjoint behavioral evaluation rather than terminal readout manipulation."
+    },
+    {
+      "source": "Zou et al., Representation Engineering: A Top-Down Approach to AI Transparency",
+      "arxiv": "2310.01405",
+      "use": "Supports population-level representation directions and PCA-style representation extraction as a legitimate alternative to one lexical contrast."
+    },
+    {
+      "source": "Braun et al., Understanding (Un)Reliability of Steering Vectors in Language Models",
+      "arxiv": "2505.22637",
+      "use": "Motivates an explicit geometric-coherence precondition and per-family sign checks because steering effects vary by prompt type and are more reliable when activation differences align."
+    },
+    {
+      "source": "ggml-org/llama.cpp current control-vector implementation and cvector-generator",
+      "observed_2026_08_25": true,
+      "use": "Confirms native control vectors are additive per-layer hidden-state directions, layer 0 has no cvec tensor, and official tooling supports both PCA and mean vector construction."
+    },
+    {
+      "source": "Qwen/Qwen3-0.6B official config",
+      "observed_2026_08_25": true,
+      "use": "Confirms hidden_size=1024 and num_hidden_layers=28, matching the retained native cvec dimensional/layout assumptions."
+    }
+  ],
+  "proposed_discriminator_v2": {
+    "name": "LABEL_FREE_CROSS_LEXICAL_NATIVE_CVEC_INTERACTION_GATE",
+    "principle": "Separate semantic-state evidence from output-code identity, explicit pole-word identity, generic task compliance and prompt-family-specific geometry before any J-Space semantic promotion.",
+    "phase_0_freeze_native_degrees_of_freedom": [
+      "Keep the already evidenced Qwen3-0.6B Q8_0 GGUF identity and pinned llama.cpp build/commit.",
+      "Freeze the intervention site at layer 20 so seven downstream transformer layers remain.",
+      "Use the prior native normalized-vector gain 32.0 as the preregistered default rather than resweeping holdout-sensitive gain.",
+      "Do not select layer, gain, metric or pass thresholds on fresh holdout."
+    ],
+    "phase_1_label_free_basis": [
+      "Construct at least three matched semantic scenario families whose prompt text contains no literal AFFIRMATIVE/NEGATIVE/NEUTRAL class labels and no A/B/C evaluation code labels.",
+      "Keep class membership only in experiment metadata; do not write the class name into the model-facing basis prompt.",
+      "Use lexically disjoint scenario families so the same decision relation is instantiated with materially different surface vocabulary.",
+      "Compute one normalized contrast direction per family, then estimate the common direction from those family directions using a preregistered mean or PCA rule.",
+      "Never use evaluation output-token identities or holdout logits to construct the direction."
+    ],
+    "phase_2_lexical_nuisance_fence": [
+      "Build an explicit-label-only nuisance subspace from carrier prompts containing the pole words and their close lexical synonyms without the scenario semantics.",
+      "Project the label-free candidate direction orthogonally to the preregistered nuisance subspace before native cvec serialization, or equivalently require a predeclared residualized candidate path; do not choose residualization after seeing holdout.",
+      "Retain a LABEL_ONLY_NUISANCE_VECTOR as an additional negative control. A semantic promotion candidate must outperform it on the semantic-target interaction.",
+      "Record basis/evaluation token-overlap diagnostics and fail closed if reserved pole labels or A/B/C code labels leak into label-free basis prompts."
+    ],
+    "phase_3_geometric_coherence_precondition": {
+      "measure": "pairwise cosine similarity among per-family contrast directions plus leave-one-family-out cosine to the common direction",
+      "null": "deterministic class-assignment permutation/shuffle over the same matched family activations",
+      "gate": "Observed coherence must exceed a preregistered permutation-null criterion fixed on calibration; do not invent the threshold after holdout.",
+      "reason": "A semantically meaningful reusable axis should be more cross-family coherent than a direction created by arbitrary class relabeling."
+    },
+    "phase_4_independent_target_and_code_counterbalance": {
+      "layout": "Use a Latin-square-like design in which requested semantic target is balanced across AFFIRMATIVE-like, NEGATIVE-like and NEUTRAL-like states while A/B/C output-code mapping is independently balanced.",
+      "minimum_structure": "Within each lexical evaluation family, each semantic target appears with each output code equally often or under an exact deterministic counterbalance with identical counts.",
+      "fresh_holdout": "Use lexical/domain families disjoint from basis and calibration; open only after source invariants and calibration gates pass."
+    },
+    "phase_5_primary_statistic": {
+      "case_margin": "logit(mapped_requested_code)-0.5*(logit(other_code_1)+logit(other_code_2))",
+      "delta": "case_margin(+VECTOR)-case_margin(BASELINE)",
+      "semantic_interaction": "mean(delta_affirmative_like)-0.5*(mean(delta_negative_like)+mean(delta_neutral_like))",
+      "specificity_requirement": "The positive vector must show a positive semantic interaction on every fresh lexical family, not merely a positive pooled mean.",
+      "sign_requirement": "SIGN_FLIP must reverse the preregistered semantic interaction direction.",
+      "nuisance_requirement": "NULL_VECTOR, ORTHOGONAL_SAME_NORM, PERMUTED_SAME_NORM and LABEL_ONLY_NUISANCE_VECTOR must not reproduce the target-specific interaction.",
+      "generic_compliance_rejection": "A similar positive requested-code uplift across all semantic targets rejects semantic specificity even if aggregate accuracy rises."
+    },
+    "phase_6_off_target_regression": [
+      "Add structurally matched A/B/C codebook tasks whose correct answer depends on a nonsemantic property unrelated to the target pole.",
+      "Bound intervention drift relative to baseline using a threshold preregistered from calibration/noise controls.",
+      "Preserve exact runtime identity, vector bytes, prompt digests, mapping digests, seeds and native cvec return-code receipts."
+    ],
+    "promotion_law": "NATIVE_CVEC_EFFECT + OUTPUT_CODE_COUNTERBALANCE + SEMANTIC_TARGET_COUNTERBALANCE IS STILL_INSUFFICIENT_IF_EXPLICIT_POLE_LEXEMES_OR_PROMPT_FAMILY_INSTABILITY_CAN_EXPLAIN_THE_EFFECT. REQUIRE_LABEL_FREE_CROSS_LEXICAL_INTERACTION_EVIDENCE_WITH_NUISANCE_AND_GEOMETRY_CONTROLS."
+  },
+  "implementation_delta_recommended": {
+    "successor_schema": "CLAY_TRIGGER1_QWEN06_NATIVE_CVEC_LABEL_FREE_CROSS_LEXICAL/v2",
+    "reuse": [
+      "reuse existing native llama.cpp harness",
+      "reuse six matched control machinery",
+      "reuse exact GGUF/build/vector receipt binding",
+      "reuse fresh-holdout gating and loopback-only API"
+    ],
+    "replace_or_extend": [
+      "replace explicit SEMANTIC_BASIS pole-label prompts with metadata-labeled scenario families",
+      "expand evaluation from one requested semantic target to independent target x code counterbalance",
+      "add lexical nuisance vector/control",
+      "add cross-family cosine/null diagnostics",
+      "change promotion statistic from pooled correct-code uplift to per-family treatment-by-semantic-target interaction"
+    ]
+  },
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared reproducible immutable macrocycle/request identity and canonical create-only unusual-experiment lease were exposed for this standalone research trigger."
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_credit_revoked": false,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Identifies a lexical-pole reconstruction confound not removed by A/B/C output-code counterbalancing or semantic-target counterbalancing alone, and defines a stricter label-free cross-lexical native-cvec promotion gate with geometry, nuisance, interaction and off-target controls.",
+  "next_exact_action": "Implement the v2 source successor with label-free scenario basis, independent semantic-target x A/B/C counterbalance, lexical nuisance control and cross-family coherence regression; run no unusual native intervention until canonical atomic coordination succeeds."
+}

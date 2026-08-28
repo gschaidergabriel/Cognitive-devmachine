@@ -1,0 +1,102 @@
+{
+  "schema": "clay-go-evidence-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor": "8.63",
+  "mode": "FREE_ONLY",
+  "research_main_observed_before_write": "9e4c21cb4834deab74d6374a70f31a18f1c08853",
+  "research_main_after_supervisor_inbox_write": "ca312d4ffd061347328e9b95bc74ff2fb9034ce1",
+  "coordination": {
+    "shared_immutable_macrocycle_or_request_id_available": false,
+    "available_user_message_time_precision": "minute_only",
+    "atomic_unusual_experiment_claim_attempted": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "observed": {
+    "retained_donor": {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "pull_request": 1263,
+      "head": "ff67cf4192e9fbb3ea8aee2819f2dbeddd576ee6",
+      "state": "OPEN_DRAFT_NOT_MERGED",
+      "head_commit_message": "revert(hcu): remove caller-labelled temporal binding primitive",
+      "current_jspace_inference_binding_schema": "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3"
+    },
+    "retained_executor": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pull_request": 810,
+      "head": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+      "state": "OPEN_DRAFT",
+      "source_state": "SOURCE_REBOUND_READY_SOURCE_ONLY",
+      "github_vercel_status": "failure",
+      "vercel_status_target_signal": "upgradeToPro=build-rate-limit",
+      "free_only_classification": "EXECUTION_ADMISSION_BLOCKED_FAIL_CLOSED_NO_UPGRADE_NO_PAID_FALLBACK"
+    },
+    "current_main_temporal_guard": "research_entity/claycode/HCU_JSPACE_CONTROL_TEMPORAL_CAUSALITY_GATE_V1.md",
+    "model_input_control_binding_scope": "EXACT_VECTOR_CONTROL_PACKET_OCCURS_ONCE_IN_EXACT_EXECUTOR_INPUT_BYTES",
+    "model_input_control_admission_scope": "POST_EXECUTION_CANONICAL_MINIUNIFIEDDB_BINDING_TO_ONE_ADMITTED_MODEL_EXECUTION_INVOCATION",
+    "model_input_control_closure_scope": "SAME_EXECUTION_IDENTITY_BYTE_LEVEL_CONTROL_ASSOCIATION_INTO_INFERENCE_JSPACE_CHAIN"
+  },
+  "hypothesis": {
+    "id": "HCU_FORWARD_CONTROL_REQUIRES_PREINVOCATION_PREDECESSOR_ADMISSION",
+    "statement": "A forward J-Space control claim needs a predecessor control packet/trace to be durably admitted before the controlled model invocation admission boundary, then cross-bound to the later actual executor observation. Exact packet presence in the later input is necessary but not sufficient because the same packet can otherwise be associated post hoc with the invocation that produced its own J-Space step."
+  },
+  "counterhypothesis": {
+    "id": "BYTE_BINDING_PLUS_POST_EXECUTION_ADMISSION_IS_SUFFICIENT",
+    "statement": "The existing exact input-byte binding plus post-execution MiniUnifiedDB admission might already be sufficient for forward-control credit.",
+    "rejection_basis": "Current main's temporal causality gate explicitly requires acyclic predecessor ordering from admitted evidence rather than caller labels, and the donor head removes the attempted caller-labelled temporal primitive. The existing admission store intentionally requires the model execution parent to already be admitted, so it cannot by itself establish predecessor-before-controlled-invocation ordering."
+  },
+  "cheapest_high_information_discriminator": {
+    "class": "DETERMINISTIC_SOURCE_AND_REGRESSION_WORK_NOT_UNUSUAL_EXPERIMENT",
+    "next_mechanism": "ONE_PREINVOCATION_PREDECESSOR_CONTROL_ADMISSION_EDGE_IN_THE_EXISTING_CANONICAL_MINIUNIFIEDDB_PATH",
+    "required_negative_case": "REJECT_PACKET_T_PLUS_1_FROM_CONTROLLED_OUTPUT_T_PLUS_1_REBOUND_TO_INVOCATION_T_PLUS_1",
+    "required_positive_case": "ADMIT_PACKET_T_FROM_PREDECESSOR_TRACE_T_BEFORE_INVOCATION_T_PLUS_1_AND_ECHO_EXACT_PREPARATION_IDENTITY_THROUGH_MODEL_EXECUTION_INFERENCE_AND_JSPACE_PROVENANCE",
+    "runtime_execution_now": "BLOCKED_BY_CURRENT_EXECUTOR_VERCEL_BUILD_RATE_LIMIT_UNDER_FREE_ONLY"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_CONTROL_PLANE_AND_BLOCKER_CLASSIFICATION",
+      "delta": "Supervisor Inbox now records exact retained donor/executor heads, repository-qualified executor identity, current SOURCE_REBOUND_READY source-only state, and the Vercel build-rate-limit upgrade path as a hard FREE_ONLY runtime blocker rather than implying an executable current-head Sandbox surface."
+    },
+    "track_b_hcu_typed_entry": {
+      "status": "ADVANCED_CAUSAL_ACCEPTANCE_BOUNDARY",
+      "delta": "Current-facing frontier now distinguishes exact model-input packet byte binding from forward temporal control and requires one nonduplicate pre-invocation predecessor admission edge before causality promotion."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "ADVANCED_FAIL_CLOSED_TRAINING_PROVENANCE",
+      "delta": "Current frontier is corrected from stale JSpace binding v2 to v3 and blocks training/model-causality promotion until predecessor control ordering is admitted and later model-specific influence evidence exists."
+    }
+  },
+  "writes": [
+    {
+      "path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "commit": "ca312d4ffd061347328e9b95bc74ff2fb9034ce1",
+      "scope": "CURRENT_FRONTIER_AND_EVIDENCE_BOUNDARY_ONLY"
+    },
+    {
+      "path": "research_entity/continuity/receipts/2026-08-24_GO_PREINVOCATION_CONTROL_CAUSALITY_AND_EXECUTOR_RATE_LIMIT_REENTRY_GPT56SOL.json",
+      "scope": "THIS_RECEIPT"
+    }
+  ],
+  "credits_after_cycle": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "not_claimed": [
+    "CURRENT_HEAD_VERCEL_DEPLOYMENT_READY",
+    "SANDBOX_INVOCATION",
+    "MODEL_EXECUTOR_RUNTIME_PASS",
+    "FORWARD_JSPACE_CONTROL_CAUSALITY",
+    "HIDDEN_STATE_CAUSAL_INFLUENCE",
+    "TRAINING_BENEFIT",
+    "WHOLE_ENTITYOS_HCU_PASS"
+  ],
+  "next_exact_action": "Implement or fuse one pre-invocation predecessor-control admission primitive in retained donor PR1263 that derives ordering from canonical admitted evidence rather than caller step labels, with deterministic positive and same-step-post-hoc negative regressions; then vendor/rebind only after source convergence and execute the exact fixed closure solely when the included-tier Vercel build/function surface naturally admits the then-current retained executor head."
+}

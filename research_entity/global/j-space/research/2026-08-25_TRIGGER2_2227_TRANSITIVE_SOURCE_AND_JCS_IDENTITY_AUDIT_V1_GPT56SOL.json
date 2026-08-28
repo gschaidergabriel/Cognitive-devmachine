@@ -1,0 +1,195 @@
+{
+  "schema": "CLAY_TRIGGER2_TRANSITIVE_SOURCE_AND_JCS_IDENTITY_AUDIT/v1",
+  "artifact_version": "1.0.0",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:27+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_AUDIT_NONPROMOTING",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "7d1600474a4cab4cf64e48777fcf70b4113052b4",
+    "observed_tree_before_write": "97bd2b6719641a6844531c5277ee48efacec5321",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "training_target": "Qwen3.5-0.8B-class reusable cognitive-process substrate; runtime N variable; GRID10 benchmark-only",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "reentry": {
+    "current_ledger_at_observation": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v20",
+    "current_ledger_path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V20_GPT56SOL.json",
+    "a02_status_from_v20": "CURRENT_SOURCE_CONTRACT_CLOSED_RUNTIME_EXECUTION_UNOBSERVED",
+    "binding_router_v3": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audited_sources": [
+    {
+      "path": "tools/trigger2_a02_discriminator_producer_v1.py",
+      "observed_git_blob_sha1": "da1bc015f85afe4102b9cc89f4223317d0d08203",
+      "finding": "The authority-pinned producer dynamically loads tools/trigger2_hyperposition_reference_labelers_v3.py and the artefact RFC8785 canonicalizer by path. The returned execution receipt binds the producer source SHA-256 and JCS digests of policy/world/prestate/event/result, but it does not bind the byte identity of those dynamically loaded executable dependencies."
+    },
+    {
+      "path": "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "finding": "Repository lineage verification is strong for the authority-declared producer path/commit/HEAD bytes, but the gate imports that producer and reconstructs with the same current transitive dependencies. No transitive executable dependency manifest/hash was observed for the labeler or canonicalizer. This permits a self-consistent moving-dependency island to remain internally reproducible while the pinned producer source itself is unchanged."
+    },
+    {
+      "path": "research_entity/global/j-space/research/TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTHORITY_V1.json",
+      "observed_git_blob_sha1": "07ca1bbf7f1a48dcccf9e9f8c5fbb9f54a7e88d3",
+      "finding": "The authority binds producer source bytes and lineage plus the policy JCS digest, but no labeler-source SHA, canonicalizer-source SHA, gate-source SHA, or complete transitive execution-manifest digest was observed."
+    },
+    {
+      "path": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "observed_git_blob_sha1": "dbee95a2bbd7cc143499e361d90838fc0cb5ac50",
+      "finding": "The deterministic semantic functions u_state, d_resolve, u_test_order and f_salience_order are retained, but internal _digest() uses Python json.dumps(sort_keys=True,separators=(',',':'),ensure_ascii=False) rather than the repository RFC8785/JCS canonicalizer. Derivation receipts and canonical semantic-state digests are therefore deterministic in the current Python implementation but are not established as RFC8785 cross-runtime causal identities."
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+      "observed_git_blob_sha1": "55f461a56ef08537238eeff91fe379da2adb20a1",
+      "finding": "A repository JCS implementation already exists and explicitly implements UTF-16 property ordering, finite binary64 constraints, JCS number formatting and fail-closed signed-zero admission. The audit therefore identifies a convergence gap, not a need to invent a second canonicalization authority."
+    }
+  ],
+  "primary_external_spec": {
+    "source": "RFC 8785 - JSON Canonicalization Scheme (JCS)",
+    "url": "https://www.rfc-editor.org/rfc/rfc8785.html",
+    "classification": "PRIMARY_SPEC_METHOD_INPUT",
+    "relevant_requirements": [
+      "cryptographic hashes require invariant canonical representation",
+      "JSON numbers use ECMAScript-compatible binary64 serialization",
+      "object property ordering is recursive and based on UTF-16 code units",
+      "lone surrogates are invalid",
+      "canonical bytes are UTF-8"
+    ]
+  },
+  "local_method_witness_nonpromoting": {
+    "classification": "SCRATCH_SERIALIZER_DIFFERENCE_WITNESS_NOT_REPOSITORY_RUNTIME_CREDIT",
+    "examples": [
+      {
+        "input": "-0.0",
+        "python_json_dumps": "-0.0",
+        "ecmascript_JSON_stringify": "0",
+        "implication": "plain Python compact JSON is not JCS number identity"
+      },
+      {
+        "input": "1e-7",
+        "python_json_dumps": "1e-07",
+        "ecmascript_JSON_stringify": "1e-7",
+        "implication": "exponent rendering differs"
+      },
+      {
+        "input": "1e-6",
+        "python_json_dumps": "1e-06",
+        "ecmascript_JSON_stringify": "0.000001",
+        "implication": "fixed/scientific threshold rendering differs"
+      },
+      {
+        "input": "object keys U+E000 and U+10000",
+        "python_sort_keys_order": "U+E000 then U+10000",
+        "RFC8785_UTF16_order": "U+10000 then U+E000",
+        "implication": "Python code-point key ordering can differ from JCS UTF-16 ordering"
+      }
+    ]
+  },
+  "material_finding": {
+    "id": "T2_A02_TRANSITIVE_EXECUTION_IDENTITY_GAP_V1",
+    "classification": "SOURCE_PROVENANCE_GAP_CURRENT_AUDIT",
+    "statement": "Pinning only the top-level A02 producer bytes is insufficient to authenticate the executable semantic derivation path because producer behavior also depends on dynamically loaded labeler and canonicalizer bytes. A gate that reconstructs with the same unpinned current dependencies can pass self-consistently after a dependency change. Exact repository HEAD/tree identity narrows the checkout but does not substitute for declaring which dependency bytes are part of the producer contract when the authority itself pins an older producer lineage.",
+    "scope": "A02 source/execution provenance and general Trigger-2 derivation identity only",
+    "does_not_establish": [
+      "A02 runtime failure",
+      "semantic labeler logic failure",
+      "J-Space model evidence",
+      "dataset admission",
+      "training credit",
+      "HCU or EntityOS runtime failure"
+    ]
+  },
+  "secondary_finding": {
+    "id": "T2_REFERENCE_DIGEST_JCS_CONVERGENCE_GAP_V1",
+    "classification": "CROSS_RUNTIME_IDENTITY_GAP_CURRENT_AUDIT",
+    "statement": "The v3 Hyperposition reference labeler has deterministic Python-local semantic hashes but does not use the repository JCS authority for derivation/state identities. These hashes must not be treated as cross-runtime canonical causal identity until migrated or explicitly namespaced as compatibility digests.",
+    "scope": "derivation_receipt.world_sha256/state_before_sha256/event_sha256/derivation_sha256 and canonical_semantic_state SHA identities"
+  },
+  "hypothesis": "A fully dependency-bound A02 execution manifest plus one canonical JCS identity path will eliminate a class of self-consistent moving-source passes without changing the intended Hyperposition semantics.",
+  "counterhypothesis": "Repository HEAD/tree plus reconstructed output may be operationally sufficient for a one-language bounded pilot if every consumer binds the full checkout identity and never treats internal compact digests as portable authority. Even then, explicit dependency identity remains higher-auditability and prevents future extraction/reuse from silently losing the checkout-wide assumption.",
+  "recommended_successor_gate": {
+    "id": "T2_A02_TRANSITIVE_EXECUTION_CLOSURE_GATE_V1",
+    "status": "RESEARCH_CANDIDATE_NOT_IMPLEMENTED_NOT_TRAINING_ADMITTED",
+    "required_dependency_manifest": [
+      "tools/trigger2_a02_discriminator_producer_v1.py exact bytes",
+      "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py exact bytes",
+      "tools/trigger2_hyperposition_reference_labelers_v3.py exact bytes",
+      "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py exact bytes",
+      "TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTHORITY_V1.json exact JCS digest",
+      "TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json exact JCS digest",
+      "policy JCS digest",
+      "executed HEAD and tree"
+    ],
+    "receipt_requirement": "Bind one JCS digest of the complete dependency manifest into the execution receipt and verify every path against executed HEAD before producer invocation.",
+    "negative_controls": [
+      "mutate labeler bytes while producer bytes remain unchanged => reject before execution credit",
+      "mutate canonicalizer bytes while producer bytes remain unchanged => reject",
+      "mutate generation-authority bytes under same schema/path => reject",
+      "mutate dependency manifest after receipt generation => reject",
+      "wrong HEAD/tree with individually matching copied files => reject according to declared repository lineage policy"
+    ],
+    "canonicalization_convergence": [
+      "reuse the existing EntityOS RFC8785/JCS canonicalizer; do not create a second JSON identity authority",
+      "migrate reference semantic digests in a versioned successor or explicitly namespace old Python-compact hashes as compatibility-only",
+      "add RFC8785 edge regressions for binary64 formatting, signed zero policy, UTF-16 property ordering, lone surrogate rejection and exact-I-JSON integer admission",
+      "cross-check the same world/state/event through labeler and A02 identity plumbing"
+    ]
+  },
+  "coordination_decision": {
+    "do_not_patch_current_a02_before_p0_review": true,
+    "reason": "Supervisor 8.78 currently orders exact-current A02 execution as P0 and main is moving rapidly. Changing labeler/producer/gate source immediately would move the very identity awaiting execution and could duplicate parallel work. Record the gap durably first; converge the successor only after current P0 coordination/review decides whether dependency closure is a pre-execution blocker or an immediate successor gate.",
+    "unusual_experiment_executed": false,
+    "paid_or_provider_execution": false
+  },
+  "artifact_lifecycle_recommendations": [
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "recommended_status": "CURRENT_DETERMINISTIC_SEMANTIC_REFERENCE_NEEDS_IDENTITY_SUCCESSOR_BEFORE_PORTABLE_CANONICAL_HASH_USE",
+      "reason": "semantic logic retained; digest identity path needs JCS convergence"
+    },
+    {
+      "artifact": "A02 producer-auth source contract",
+      "recommended_status": "CURRENT_TOP_LEVEL_SOURCE_CONTRACT_CLOSED_TRANSITIVE_DEPENDENCY_CLOSURE_NEEDS_REVIEW_RUNTIME_UNOBSERVED",
+      "reason": "producer source lineage is pinned, transitive executable source identity is not explicitly pinned"
+    },
+    {
+      "artifact": "T2-LEDGER-V20",
+      "recommended_status": "CURRENT_AT_OBSERVATION_WITH_THIS_NEW_AUDIT_PENDING_REENTRY",
+      "reason": "this audit is additive and does not rewrite v20 history"
+    }
+  ],
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "A newly observed transitive source-identity gap strengthens the existing zero-row boundary. Positive examples remain blocked behind exact evidence/provenance/authentication closure and final rendered nuisance/tokenizer/actionability gates."
+  },
+  "credits": {
+    "research_delta": 1,
+    "audit_delta": 1,
+    "source_provenance_gap_found": 1,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "trigger2_a02_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Re-enter moving main. Before granting A02 runtime credit, review whether the current exact-current execution receipt can bind a complete executable dependency manifest without changing semantic behavior; if not, classify current A02 execution as bounded top-level-producer evidence only and implement T2_A02_TRANSITIVE_EXECUTION_CLOSURE_GATE_V1 as the immediate successor. Preserve zero-row discipline."
+}

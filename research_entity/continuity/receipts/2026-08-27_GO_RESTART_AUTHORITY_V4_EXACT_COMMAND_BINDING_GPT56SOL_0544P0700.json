@@ -1,0 +1,39 @@
+{
+  "schema": "CLAY_GO_RESTART_AUTHORITY_V4_EXACT_COMMAND_BINDING/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "target_architecture": "AUTONOMOUS_SELF_ORGANIZING_XENO_HCU_FABRIC",
+  "observed_supervisor_epoch": "9.09",
+  "observed_main_before_write": "830781a187bc37ae626b7dc3af59b935c46c4929",
+  "frontier": "RUNTIME_QUIESCENCE_RESTART_AUTHORITY_ATTRIBUTION",
+  "finding": "Static review of restart-authority attribution v3 found a remaining provenance ambiguity: root-specific pattern-set equality rejects cross-pattern transplants, but an owning systemd/cron object could still invoke the same legacy basename from a different filesystem tree and be treated as the root's restart authority. Pattern identity alone is not exact command identity.",
+  "change": {
+    "tool": "tools/free_swarm_restart_authority_attribution_v4.py",
+    "tool_commit": "add12a39bc9542077ad6c9e59ae7ac9d93e52277",
+    "tests": "tests/test_free_swarm_restart_authority_attribution_v4.py",
+    "tests_commit": "0291af19f08f177d9f8ea432da9dbde42ee84f30",
+    "hardening": [
+      "bind each matched legacy pattern to exactly one command path in live root argv",
+      "require owning systemd/cron object to contain the same exact command path",
+      "reject same-basename different-tree transplants",
+      "reject multiple same-pattern command paths as ambiguous",
+      "retain v3 cross-root owning-object collision protection",
+      "remain read-only and never authorize kill directly"
+    ]
+  },
+  "execution": {
+    "repository_bound_tests_executed": false,
+    "reason": "available local container execution surface returned a client infrastructure error before checkout/test execution",
+    "runtime_credit": 0
+  },
+  "credit_change": {
+    "source_credit": "CANDIDATE_HARDENED",
+    "runtime_quiescence_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "On a clean current non-provider checkout, execute v3/v4 restart-authority and monitoring v4/v5 regression suites with HEAD/tree/source hashes and dirty=false. Only after PASS run v4 read-only on the live Clay host. Any basename/path ambiguity remains fail-closed; no kill may be authorized from a read-only attribution receipt without immediate PID/cgroup/owning-object revalidation."
+}

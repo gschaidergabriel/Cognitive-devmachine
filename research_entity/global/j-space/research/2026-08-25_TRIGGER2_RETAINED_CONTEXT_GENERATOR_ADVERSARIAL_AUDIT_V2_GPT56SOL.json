@@ -1,0 +1,92 @@
+{
+  "schema": "CLAY_TRIGGER2_RETAINED_CONTEXT_GENERATOR_ADVERSARIAL_AUDIT/v2",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "87e26efbc290112e56410c81707663bb3edafbe8",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false
+  },
+  "audited_retained_lane": {
+    "generator_path": "tools/trigger2_context_binding_generator_v1.py",
+    "generator_blob_sha": "4af4a384918064e80906089bd0eed98d1e2fc79f",
+    "test_path": "tests/test_trigger2_context_binding_generator_v1.py",
+    "test_blob_sha": "fdb217d663e5beab0af513f0b8246563a802e466",
+    "retained_by_convergence_review_commit": "d1b489c2d8c7c583a1bf1f937d149a0151a9f963"
+  },
+  "verdict": "REJECT_RETAINED_V1_FOR_DIRECT_TRAINING_UNTIL_SUCCESSOR_REPAIRS_LEAKS",
+  "critical_findings": [
+    {
+      "id": "DISPLAY_ORDER_DETERMINISTICALLY_REVEALS_TARGET_SEMANTIC_CLASS",
+      "severity": "CRITICAL",
+      "source_expression": "codebook_order = codebook_orders[(row_index + seed) % len(codebook_orders)]",
+      "proof_scope": "default one-block 144-row generation at seed=20260825",
+      "observed_order_to_target_class_counts": {
+        "ORDER_0": {"ABSTAIN": 24},
+        "ORDER_1": {"ALLOW": 24},
+        "ORDER_2": {"DENY": 24},
+        "ORDER_3": {"ABSTAIN": 24},
+        "ORDER_4": {"DENY": 24},
+        "ORDER_5": {"ALLOW": 24}
+      },
+      "nuisance_only_target_class_accuracy": 1.0,
+      "chance_accuracy": 0.3333333333333333,
+      "mutual_information_bits_target_class_vs_display_order": 1.584962500721156,
+      "consequence": "A model can infer the semantic target class from visible codebook display order, then use the visible mapping to emit the correct symbol without reading the situation. This directly defeats the intended content-dependent binding objective.",
+      "why_current_tests_miss_it": "The validator only requires more than one codebook order and checks marginal class-symbol balance. It does not test class/order independence, conditional mutual information, or a nuisance-only decoder."
+    },
+    {
+      "id": "SAME_SEMANTIC_BANK_CAN_BE_REUSED_ACROSS_SPLITS",
+      "severity": "HIGH",
+      "source_behavior": "generate_rows accepts TRAIN, VALIDATION, or HOLDOUT while always reading the same global SEMANTIC_BANK and QUERY_TEMPLATES.",
+      "consequence": "Separate invocations can place the same semantic lexical families and structural templates into multiple splits while provenance identifiers include the split name, so family/provenance split checks alone need not detect lexical-family contamination.",
+      "required_repair": "Built-in semantic content must be TRAIN-only, or generation must require a hash-bound split-specific lexical/template manifest whose family ids are globally checked for disjointness. Frozen holdout content must not be materialized in the training generator before freeze."
+    },
+    {
+      "id": "INVERTED_QUERY_IS_NOT_A_LOGICAL_NEGATION_FOR_ALL_DOMAIN_PROMPTS",
+      "severity": "HIGH",
+      "example": "For the state family, UNKNOWN evidence says the packet omits the epoch, while the inverted query asks whether the packet is inadmissible because it is not established as current. Under fail-closed admission semantics, missing epoch can itself support inadmissibility, so preserving ABSTAIN is not guaranteed to be semantically correct.",
+      "consequence": "The polarity transform can inject label noise even though the algebraic ALLOW<->DENY, ABSTAIN->ABSTAIN transform is internally consistent.",
+      "required_repair": "Represent each example as evidence relative to an explicit proposition. DIRECT asks whether the proposition is supported; INVERTED asks whether the negation of that same proposition is supported. Use SUPPORTS/CONTRADICTS/UNKNOWN evidence states so ternary inversion is exact by construction."
+    }
+  ],
+  "additional_open_gates": [
+    "Atom token_id/token_count metadata is trusted as input and is not recomputed against an exact frozen tokenizer identity inside the generator.",
+    "Duplicate token_id values for distinct atom texts are not rejected.",
+    "The measured rejected atom 'or' is not explicitly fenced by the retained generator.",
+    "Audit metadata contains target_semantic_class and mapping; the training exporter must provably expose only prompt as model input and target as supervision, never serialize the full candidate row into model context."
+  ],
+  "swarm_adjudication": {
+    "EVIDENCE_EXTRACTOR": "PASS: Claude evidence still supports binding/routing as the narrow training hypothesis.",
+    "DATASET_ARCHITECT": "FAIL_V1: visible nuisance factors are not independently factorialized.",
+    "ADVERSARIAL_SHORTCUT_HUNTER": "CRITICAL_FAIL: display order alone predicts target semantic class at 100% in the default 144-row block.",
+    "STATISTICAL_REVIEWER": "FAIL_V1: marginal class-symbol balance is insufficient; conditional/higher-order leakage must be tested.",
+    "SEMANTIC_LABEL_REVIEWER": "FAIL_V1: natural-language INVERTED queries do not implement an exact ternary logical complement in every domain family.",
+    "SPLIT_PROVENANCE_REVIEWER": "FAIL_V1: same lexical/template banks are callable for every split.",
+    "FINAL_INTEGRATOR": "Retain v1 only as donor evidence. Build one successor of the retained lane rather than reopening duplicate binder authorities."
+  },
+  "successor_design": {
+    "minimum_factorization": "semantic scenario x lexical variant x query polarity x all six S3 mappings x all six display orders",
+    "recommended_train_blueprint_rows_per_logical_atom_triplet": 2592,
+    "recommended_formula": "4 TRAIN templates x 3 evidence states x 3 lexical variants x 2 query polarities x 6 S3 mappings x 6 display orders",
+    "required_nuisance_gate": "For each visible nuisance signature excluding semantic evidence, all three semantic target classes and all three target slots must remain possible; add an explicit nuisance-only decoder/chance gate.",
+    "holdout_policy": "Reserve validation/holdout template-family ids and atom pools but do not materialize their semantic content until the training design is frozen."
+  },
+  "credits": {
+    "research_negative_delta": 1,
+    "accepted_dataset_tokens": 0,
+    "qwen35_training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Create one successor of tools/trigger2_context_binding_generator_v1.py that repairs all three findings, add regression tests for display-order target leakage, split lexical-family reuse, exact ternary polarity semantics, and model-visible projection, then rerun source-only factorial validation before any ABI atom materialization."
+}

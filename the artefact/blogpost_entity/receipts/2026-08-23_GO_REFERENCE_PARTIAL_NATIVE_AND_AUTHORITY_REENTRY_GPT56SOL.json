@@ -1,0 +1,73 @@
+{
+  "schema": "MINI_ENTITY_GO_RECEIPT/v1",
+  "trigger": "go",
+  "macrocycle_id": "461b9dd5-3bd9-446e-9541-0a0df740356c",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "reentry_main_sha": "8696b754c7f7abe4bd8e12a80f8899b6867997e4",
+  "free_only": true,
+  "spend_usd": 0,
+  "unusual_experiment": {
+    "count": 1,
+    "id": "MIRROR_GENERATION_POISON",
+    "additional_experiments_in_this_receipt": 0
+  },
+  "durable_deltas": [
+    {
+      "commit": "770286bf52623a2cd91f464ca8310321c1fe0be7",
+      "path": "the artefact/blogpost_entity/test_reference_legacy_generation_migration_boundary.py",
+      "purpose": "legacy generation must fail closed or be preserved exactly once; mirror can never regain authority"
+    },
+    {
+      "commit": "dd3997bf8e704e535d56a5087ff0e6082593cde9",
+      "path": "the artefact/blogpost_entity/test_reference_commit_bootstrap_atomicity.py",
+      "purpose": "pipeline_commit may not re-enter schema/bootstrap before its one atomic CAS transaction"
+    },
+    {
+      "commit": "6768a18b4823ea2f2b68042a5068ddc58420f882",
+      "path": "the artefact/blogpost_entity/test_reference_partial_native_generation_migration.py",
+      "purpose": "native authority requires entity_state(id=1), not an empty table shell; partial migration may not reset legacy generation"
+    }
+  ],
+  "retained_runtime_lane": {
+    "pr": 997,
+    "policy": "single implementation lane; do not create duplicate runtime path",
+    "observed_repairs": [
+      "one native generation/CAS authority",
+      "observational profile/state/exactly-once reads",
+      "current persisted profile_json re-hash inside commit transaction",
+      "claim-authorizing metrics included in canonical_state_hash",
+      "no commit-time schema/bootstrap re-entry",
+      "Runtime-injected trusted local_exec_runner and profile full-command rejection"
+    ],
+    "remaining_source_gates_at_reentry": [
+      "partial-native empty entity_state table plus legacy nonzero generation must fail closed or one-shot preserve",
+      "declared local_model_path must be structurally bound into admitted runner invocation, not merely readable",
+      "stable logical source identity must distinguish different source namespaces while surviving profile swaps",
+      "claim-authorizing metrics, claim strengths and tolerance must reject NaN and infinities before hash/authorization"
+    ]
+  },
+  "execution_evidence": {
+    "github_actions": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS",
+    "representative_run_id": 32612037153,
+    "representative_job_id": 97126504578,
+    "steps": null,
+    "runtime_credit": 0,
+    "vercel_sandbox_surface": "DOCUMENTATION_ONLY_NO_CALLABLE_START_EXEC",
+    "exact_current_runtime_verified": false
+  },
+  "grf_collapse": {
+    "observed": "Reference convergence is no longer blocked by the original effect/profile shape alone; parallel guards exposed authority, migration, model-binding, numerical-truth and logical-source-identity boundaries.",
+    "retained": "Keep one current-main repair lane and make every compatibility/migration/read/inference boundary fail closed before promotion.",
+    "rejected": [
+      "legacy mirror reconciliation by max(native,mirror)",
+      "table existence as proof of canonical generation authority",
+      "DB profile ownership of executable argv[0]",
+      "stored profile hash metadata without current-byte rehash",
+      "claim authority outside the canonical hashed metric state"
+    ],
+    "next": "Repair PR #997 against all current-main guards, then obtain actually-started exact-source isolated execution before any runtime/native-v2 parity credit."
+  },
+  "german_summary": "Der Go-Lauf hat den Referenzpfad auf eine einzige Reparaturspur kollabiert und drei neue Fail-Closed-Invarianten dauerhaft auf main gebunden. Neuester Befund: neben Partial-Native-Migration und Model-Binding muss Exactly-Once eine stabile logische Quellenidentität besitzen; außerdem sind NaN/Inf an allen claim-autorisierenden Zahlen zu sperren. Exakte Runtime-Evidenz bleibt null, weil die GitHub-Jobs weiterhin vor sichtbaren Steps abbrechen und keine aufrufbare Vercel-Sandbox-Exec-Oberfläche verfügbar ist."
+}

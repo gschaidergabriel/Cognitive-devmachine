@@ -1,0 +1,65 @@
+{
+  "schema_version": "8.69",
+  "cycle": "go-20260824-post-quarantine-provider-traffic",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "finding": "External LLM-provider traffic continued after the 8.68 FREE_ONLY quarantine was published. The shared provider-budget snapshot generated at 2026-08-24T11:41:06Z shows OpenRouter increasing from 8 to 63 requests relative to the 11:30 snapshot, including one success, while 8.68 had already required external LLM-provider traffic to stop. The current supervisor stop helper only targets processes matching run_24h_entityos_swarm.py, so provider-capable sibling processes or already-running provider clients can remain outside that process-name quarantine. This upgrades the prior executed unadmitted-provider breach to a runtime quarantine-enforcement failure. Monetary spend remains unproven.",
+  "evidence": {
+    "quarantine_directive_commit": "e0f26ab9cc160f7555f9c23143f346f5ce90dcbb",
+    "quarantine_directive_time_local": "2026-08-24T17:53:31+07:00",
+    "post_quarantine_metrics_commit": "c403c90bff0f6fb0c6606d1b787c5517d99b825a",
+    "post_quarantine_metrics_time_utc": "2026-08-24T11:41:06Z",
+    "openrouter_requests_previous": 8,
+    "openrouter_requests_post_quarantine_snapshot": 63,
+    "openrouter_success_previous": 0,
+    "openrouter_success_post_quarantine_snapshot": 1,
+    "supervisor_stop_helper_commit": "d87158d77e1736e4d83cb04b1122d70dae439371",
+    "stop_helper_scope": "PROCESS_NAME_ONLY_run_24h_entityos_swarm.py",
+    "free_boundary_receipt_current_state": "SOURCE_BOUND_NOT_EXACT_RUNTIME_EXECUTED",
+    "monetary_spend_proven": false
+  },
+  "classification": "EXECUTED_POST_QUARANTINE_EXTERNAL_PROVIDER_TRAFFIC_RUNTIME_ENFORCEMENT_FAILURE",
+  "required_next_cycle": [
+    "Keep every external LLM-provider lane quarantined. Do not restart provider workers from historical FREE labels, credentials, successful responses, model suffixes or provider consensus.",
+    "Enforce FREE_ONLY at the shared provider-call boundary, not only by killing one named worker process. Every catalog/chat/provider HTTP path must require one typed current admission object immediately before secret lookup and immediately before socket/network I/O.",
+    "Add a runtime quarantine generation/epoch consumed by all provider-capable processes. When quarantine is active or admission is missing, stale, UNKNOWN, PAID, SUBSCRIPTION, malformed, authority-mismatched or unlisted, provider execution must fail closed with secret_lookup_count=0 and network_attempt_count=0.",
+    "Enumerate every process/controller/distillery/evidence-forge path capable of Groq, Mistral, NVIDIA, OpenRouter or any other external LLM traffic. A process-name kill list is not sufficient authority.",
+    "Execute FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 on exact current source, including inherited-environment regression, DNS/getaddrinfo, connect, connect_ex and create_connection tripwires, then execute a post-quarantine soak receipt proving provider request counters do not increase while local zero-cost HCU research continues.",
+    "Preserve all pre- and post-quarantine provider executions append-only as unadmitted historical evidence. Do not post-hoc relabel them FREE.",
+    "Only after exact executable admission PASS may one provider lane be re-enabled at a time, with typed FREE evidence and a bound execution receipt.",
+    "Do not mint Whole-EntityOS, Whole-HCU, provider, canonical-semantics or independent Goodman credit from swarm token volume, rankings or model agreement."
+  ],
+  "new_required_receipts": {
+    "FREE_PROVIDER_RUNTIME_QUARANTINE_RECEIPT/v1": {
+      "must_bind": [
+        "source_commit_and_tree",
+        "quarantine_epoch",
+        "all_provider_capable_processes",
+        "typed_admission_digest",
+        "provider_request_counters_before_after",
+        "secret_lookup_count",
+        "network_attempt_count",
+        "socket_tripwire_counts",
+        "local_hcu_control_progress",
+        "result_digest"
+      ],
+      "pass_condition": "During an observation window with quarantine active, all external LLM-provider request counters remain unchanged and every blocked path records zero secret lookups and zero network attempts while local zero-cost HCU work remains operational."
+    }
+  },
+  "free_only": {
+    "enabled": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "external_llm_provider_execution": "RUNTIME_QUARANTINED",
+    "admission_boundary": "SHARED_PROVIDER_CALL_BOUNDARY_BEFORE_SECRET_LOOKUP_AND_BEFORE_NETWORK_IO",
+    "unknown_or_unlisted_provider": "FAIL_CLOSED"
+  },
+  "promotion": {
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "canonical_semantics_promotion": false,
+    "provider_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

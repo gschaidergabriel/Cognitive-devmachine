@@ -1,0 +1,79 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXECUTOR_DONOR_DRIFT_FAILCLOSED/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "d42e27df9d5be3c2a7443bfc3e62a38cabf39539",
+    "schema": "8.63",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together_inference_training_preflight_key_lookup": "FORBIDDEN",
+    "vps_self_hosted_production_testing": "FORBIDDEN"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_exposed": false,
+    "available_exact_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "duplicate_lane_created": false
+  },
+  "executor_reentry": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "current_head_observed": "f5a051a4325eb497ffca05d35915e83b5944faf5",
+    "current_head_commit_message": "revert(executor): preserve pinned 511d runtime discriminator",
+    "current_head_parent": "8f850d6efcf62d7b6ee8b8c698001cf44c55475c",
+    "exact_current_head_ready_deployment_observed": false,
+    "exact_current_head_sandbox_invoked": false
+  },
+  "negative_build_evidence": {
+    "deployment_id": "dpl_26pNV41EYrvFuWKRBFCHUPjQN2Xk",
+    "deployment_state": "ERROR",
+    "deployment_git_sha": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+    "deployment_commit_message": "rebind(hcu): pin donor d371 J-Space control fence",
+    "failure_stage": "VERCEL_BUILD_GUARD_BEFORE_SANDBOX_CREATE",
+    "error_code": "JSPACE_V4_V3_CURRENT_SUCCESSOR_DONOR_DRIFT",
+    "error_detail": "manifest=d371ccaca994f234a4cd127d48c3867cfe10ab56;contract=511d568932bf47828679e3ca6ba05650f18d284d",
+    "classification": "FAIL_CLOSED_SOURCE_IDENTITY_DRIFT_NOT_PRODUCT_RUNTIME_NEGATIVE",
+    "sandbox_create_credit": 0,
+    "runtime_credit_change": 0
+  },
+  "interpretation": {
+    "finding": "A moving-donor rebind attempt reached the build guard with conflicting immutable donor identities. The guard rejected it before Sandbox creation. The then-current executor branch subsequently returned to the pinned 511d runtime discriminator rather than silently mixing d371 source with a 511d contract.",
+    "counterhypothesis": "The ERROR could be treated as EntityOS/HCU runtime failure or quota failure.",
+    "counterhypothesis_adjudication": "Rejected. The observed log is an explicit source-identity guard failure during build, before Sandbox.create and before the fixed regression command; it is neither runtime evidence nor quota evidence.",
+    "evidence_scope": "BUILD_GUARD_NEGATIVE_EVIDENCE_ONLY"
+  },
+  "donor_coordination": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 1263,
+    "moving_head_observed_during_cycle": "54f42b20586c1aa4742df89af07d4c918faa2290",
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "parallel_work_observed": "DatasetAdmission, Vector-Control provenance, inference-receipt laundering and causal-event family split were changing concurrently.",
+    "prototype_content_identity_gap": "ALREADY_DURABLY_SPECIFIED_ON_CANONICAL_MAIN_BY_0ebb96ed72edc022710a8fe5b2776ef96e3c4ea2",
+    "source_overwrite_this_cycle": false,
+    "reason": "Do not race a fast-moving retained donor branch or duplicate an already-canonical repair specification."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_EXACT_NEGATIVE_EVIDENCE: distinguished donor-identity build-guard rejection from quota/runtime failure and preserved the pinned-discriminator decision without granting stale READY credit.",
+    "track_b_hcu_typed_entry_fabric": "HCU_NO_CHANGE_WITH_REASON: current retained donor is concurrently changing the exact DatasetAdmission/Vector-Control boundary; a second patch would duplicate or race active one-lane work. Next discriminator is the immutable successor donor after those fences settle and pass exact regressions.",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no exact-current executor Sandbox run or real zero-cost local ~0.8B model I/O was observed, so no model/training promotion is admissible. Next discriminator is exact-head FREE_ONLY execution followed by real loader/executor evidence and admitted causal dataset closure."
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Canonical main and both retained PR lanes moved repeatedly during this macrocycle. Append-only exact negative evidence is safer than overwriting a moving current-facing README snapshot."
+  },
+  "next_exact_gate": "Refresh PR810. If and only if a naturally available included-tier Vercel preview is READY at that exact current Git SHA, invoke only the fixed source/hash-bound FREE_ONLY capsule and require source manifest, exact result identities, secret fence, exit 0 and cleanup. Keep any PASS component-scoped. Separately let PR1263 converge its active DatasetAdmission/J-Space provenance changes to one immutable donor snapshot before any executor rebind. Do not preflight Together or use paid fallback."
+}

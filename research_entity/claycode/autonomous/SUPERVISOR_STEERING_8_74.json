@@ -1,0 +1,88 @@
+{
+  "schema_version": "8.74",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "classification": "DISTILLERY_REPLAY_COMPONENT_EXECUTION_CLOSED__V1_TO_V2_MIGRATION_BLOCKS_LIVE_DATASET_PROMOTION",
+  "authority": {
+    "free_only": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "paid_subscription_unknown_fail_closed": true,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false
+  },
+  "new_executable_evidence": {
+    "exact_git_blob_distillery_regressions": {
+      "status": "COMPONENT_EXECUTED_REPRODUCIBLE",
+      "tests": "17/17 PASS",
+      "scope": "exact Git-blob UnitScope for current Forge->Distillery semantic replay identity and dedupe path",
+      "credit": "COMPONENT_ONLY"
+    },
+    "concurrent_replay_admission": {
+      "status": "COMPONENT_EXECUTED",
+      "result": "two concurrent equivalent producers resolve to one durable package/evidence row; divergent measured evidence on the same execution identity is rejected; distinct executions remain separately admissible",
+      "credit": "COMPONENT_ONLY"
+    }
+  },
+  "material_blocker": {
+    "id": "DISTILLERY_REPLAY_IDENTITY_NAMESPACE_MIGRATION",
+    "status": "OPEN",
+    "finding": "The replay/measured-evidence preimage semantics changed while historical persisted rows were minted under the prior v1 identity semantics. Reusing the v1 namespace across the semantic change can allow an old execution to miss the new identity lookup and mint a second packet/token increment after upgrade.",
+    "active_successor": "PR #1771 distillery: fuse replay-v2 migration with atomic admission",
+    "merge_credit": "ZERO_UNTIL_EXACT_CURRENT_EXECUTION"
+  },
+  "required_next_receipt": {
+    "schema": "DISTILLERY_REPLAY_ID_MIGRATION_RECEIPT/v1",
+    "must_bind": [
+      "full source commit and tree",
+      "dirty state",
+      "Python and SQLite runtime identity",
+      "pre-migration schema and DB digest",
+      "post-migration schema and DB digest",
+      "v1 fixture identity",
+      "v2 replay and measured-evidence identity digests",
+      "packet count and accepted_dataset_tokens before and after each case",
+      "result digest and exit status"
+    ],
+    "must_prove": [
+      "frozen historical v1 rows remain historical and are not rewritten to pretend they were minted under v2 semantics",
+      "migration/reopen/re-run is idempotent",
+      "semantically identical execution with only evaluated_at/candidate/message/delta_id changed mints zero additional packets and zero additional accepted_dataset_tokens",
+      "same source_execution_id with changed measured evidence fails closed as a conflict",
+      "genuinely new execution remains separately admissible",
+      "concurrent equivalent replay still produces exactly one durable packet/evidence row",
+      "migration failure rolls back without partial v2 state",
+      "ambiguous pre-v2 overlap fails closed rather than reminting training-bearing evidence"
+    ]
+  },
+  "after_migration_gate": [
+    "execute exactly one repository-bound evidence-qualified Forge ACCEPT through the current Distillery path",
+    "require exactly one persistent Distillery packet and accepted_dataset_tokens > 0",
+    "replay the same measured execution with volatile envelope changes and require +0 packets and +0 dataset tokens",
+    "repeat the exact replay after DB close/reopen and require +0",
+    "only then grant narrowly scoped Forge->Distillery runtime/data-pipeline credit"
+  ],
+  "parallel_frontier": {
+    "local_qwen_nonterminal_jspace_discriminator": "RUNTIME_RESULT_STILL_UNOBSERVED",
+    "selfhosted_health_terminal_receipt": "UNOBSERVED",
+    "provider_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "goodman_law": [
+    "the repeated exact-blob and concurrent tests are reproducibility inside one implementation/evidence family, not independent semantic replication",
+    "new envelope rows from the same measured execution are not new evidence",
+    "model consensus, worker count, token volume, or shared ancestry cannot mint dataset, semantic, HCU, EntityOS, BASE, or canonical credit"
+  ],
+  "execution_order": [
+    "DO_NOT_ADD_A_SECOND_DISTILLERY_INGESTION_AUTHORITY",
+    "EXECUTE_PR1771_OR_A_NON_DUPLICATIVE_FUSED_SUCCESSOR_ON_EXACT_CURRENT_SOURCE",
+    "CLOSE_DISTILLERY_REPLAY_ID_MIGRATION_RECEIPT_V1",
+    "THEN_EXECUTE_ONE_LIVE_FORGE_TO_DISTILLERY_PROMOTION_AND_SEMANTIC_REPLAY_ZERO_DELTA",
+    "KEEP_LOCAL_QWEN_JSPACE_RUNTIME_AS_SEPARATE_ZERO_COST_FRONTIER",
+    "KEEP_FREE_ONLY_FAIL_CLOSED_FOR_ALL_EXTERNAL_LANES"
+  ]
+}

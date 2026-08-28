@@ -1,0 +1,92 @@
+{
+  "schema": "CLAY_TRIGGER2_MULTIHOP_MODEL_VISIBLE_FACTOR_LEAK_REVIEW/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "unusual_experiment": "NOT_USED_SOURCE_REVIEW_ONLY"
+  },
+  "source_observed": {
+    "path": "tools/trigger2_multihop_binding_generator_v1.py",
+    "blob_sha": "fa2857514dcd2b8e199a93425c651d9c14262c4d",
+    "current_main_observed_before_review": "8ae0a47d34b0be3d088ca146fdc35952d2808c10",
+    "row_formula": "4 depths * 6 root S3 * 6 symbol S3 * 4 templates * 3 semantic classes = 1728 METHOD_ONLY candidate rows",
+    "critical_source_chain": [
+      "build_rows constructs tag = D{depth}R{rp_i}S{sp_i}T{t_i}C{c_i}",
+      "the tag is embedded verbatim into relevant intermediate-node names by _chain",
+      "the same tag is embedded verbatim into distractor-node names by _distractors",
+      "those node names are serialized by _bindings directly into model-visible prompts"
+    ]
+  },
+  "finding": {
+    "severity": "CRITICAL_FOR_TRAINING_ADMISSION",
+    "status": "FAIL_SOURCE_SHORTCUT_CONTROL",
+    "direct_model_visible_leaks": [
+      "C{c_i} exposes the semantic-class loop index in binding-node identifiers, allowing the model to bypass semantic interpretation of the scenario",
+      "S{sp_i} exposes the symbol-permutation loop index, allowing a nuisance decoder to identify the current symbol permutation from identifier text instead of resolving the graph",
+      "R{rp_i} exposes the root-permutation loop index",
+      "T{t_i} exposes the template loop index",
+      "D{depth} exposes referential depth rather than requiring topology inference"
+    ],
+    "why_s3_balance_is_not_enough": "Class-to-target marginal balance can remain exactly zero-MI while model-visible identifiers disclose the latent factorial cell. The shortcut is conditional/structural: the learner can use identifier metadata to infer the semantic or routing state and ignore the intended reasoning path.",
+    "counterfactual_violation": "For otherwise matched rows that differ only in queried semantic class, the generated graph itself changes because C{c_i} is part of every generated node tag. Therefore the semantic-state counterfactual twin is not graph-invariant.",
+    "promotion_effect": "Block this multihop source from training admission until identifier leakage and counterfactual graph invariance are repaired and re-audited."
+  },
+  "formula_reconstruction_non_runtime": {
+    "method": "Independent deterministic reconstruction of the visible scheduling formulas from inspected source; not an execution receipt for the repository source bytes.",
+    "rows": 1728,
+    "class_target_mutual_information_bits": 0.0,
+    "target_codebook_order_mutual_information_bits": 0.0,
+    "class_codebook_order_mutual_information_bits": 0.0,
+    "target_relevant_first_edge_position_mutual_information_bits": 0.011650048771429864,
+    "class_relevant_first_edge_position_mutual_information_bits": 0.006857424400178407,
+    "depth_relevant_first_edge_position_mutual_information_bits": 0.23425602980349028,
+    "interpretation": "The marginal class/target codebook schedules look balanced, but first-edge position still carries residual nuisance information; this is secondary to the stronger exact factor-tag leakage above."
+  },
+  "swarm_review": {
+    "roles": [
+      "DATASET_ARCHITECT",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "COUNTERFACTUAL_REVIEWER",
+      "STATISTICAL_REVIEWER",
+      "ABI_PROVENANCE_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "adversarial_shortcut_hunter": "REJECT current multihop rows: a nuisance-only parser can read factorial metadata from node identifiers.",
+    "counterfactual_reviewer": "REJECT: graph bytes are not invariant across semantic-state twins because C{c_i} changes the graph namespace.",
+    "statistical_reviewer": "REQUIRE conditional/nuisance audits in addition to marginal class-target MI; exact marginal balance is insufficient.",
+    "abi_provenance_reviewer": "No ABI/model/training credit changes; placeholder output slots remain non-admitted.",
+    "final_integrator": "Repair the existing multihop extension rather than adding another generator lane."
+  },
+  "required_repair": [
+    "Remove semantic class, root-permutation, symbol-permutation, template-index and depth encodings from every model-visible node identifier.",
+    "Use neutral episode-local aliases whose lexical form is independent of target/class/permutation; do not merely rename D/R/S/T/C to other readable factor codes.",
+    "For fixed depth/root-permutation/symbol-permutation/template/distractor schedule, require the exact same graph bytes across all three semantic-state counterfactual rows; only the scenario/query evidence should change.",
+    "Construct relevant chains by neutral root role rather than semantic-class iteration so chain order cannot encode class identity.",
+    "Add a hard validator that rejects any model-visible factor tag and verifies graph invariance across semantic-class twins.",
+    "Add target/class versus binding-edge-position conditional nuisance checks; position diversity alone is not sufficient.",
+    "Keep all rows candidate_train_ready=false until exact ABI atom rendering, tokenizer checks, family splits and all nuisance gates pass."
+  ],
+  "research_feedback": {
+    "training_rule": "A factorial variable may exist in sidecar metadata but must not be recoverable from model-visible synthetic identifiers unless that variable is intentionally part of the task input.",
+    "architecture_implication": "Typed causal metadata and model-visible cognition text need a strict projection boundary. Runtime provenance may carry detailed factor IDs; the SFT projection should expose only the minimum task-relevant relational structure.",
+    "generalized_falsifier": "Train a nuisance-only decoder on model-visible identifiers/order/positions with semantic evidence removed. Any above-null ability to recover semantic class, target symbol, mapping ID or proof topology blocks promotion."
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Patch tools/trigger2_multihop_binding_generator_v1.py in place to use factor-independent neutral aliases and graph-invariant semantic counterfactuals, then add a source regression proving zero model-visible factor tags and zero target/class edge-position nuisance at the declared scope."
+}

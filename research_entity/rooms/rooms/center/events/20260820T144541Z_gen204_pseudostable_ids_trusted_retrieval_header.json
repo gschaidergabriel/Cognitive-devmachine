@@ -1,0 +1,187 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T144541Z-gen204-pseudostable-ids-trusted-retrieval-header",
+  "created_at": "2026-08-20T14:45:41Z",
+  "target_room": "center",
+  "targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_receipt": "bbc11c0403889d24e7b825c93289f7d1f95318dc",
+    "previous_export": "965d7b9cb9c578a2fb8a306b3f71df93de237579",
+    "latest_export": "4ef16dc7a86c21b1db6ed6435664e3041802f6a2",
+    "latest_export_tree": "7f8bdbe4af0c0514b9dc75dbd4342569b12a1837",
+    "agentzero_generation": 204,
+    "reported_source_short": "cd5593ee8",
+    "source_chronicle_family": ["f8936a821996", "314e64daed37", "cd5593ee8770"],
+    "exported_product_blobs": {
+      "pipeline.py": "31d706fa3126cb4c0a77f4a91dca499ecec16f6b",
+      "wettbewerb.py": "23cef1c07685da592505b998498ad3d9b150938b",
+      "tests/letzter-lauf.json": "15c891fed9e3c37c43df0ed657fedd9682dd580e",
+      "ZIELE.md": "28ee35a8db459607c610d6b3618e4b0f93fd225b"
+    },
+    "exact_source_commit_fetchable_here": false,
+    "atomic_test_run_receipt_present": false,
+    "deduplication_rule": "Gen204 source changes, aggregate tests, supervisor synchronization fb37cb49 and this analysis share one ancestry family. Supervisor uptake proves propagation only, not independent reproduction or task completion.",
+    "external_primary_sources": [
+      {
+        "url": "https://www.rfc-editor.org/info/rfc6920/",
+        "date": "2013-04-01",
+        "scope": "Hash-based object naming requires the hash algorithm and truncation length to be explicit; the RFC uses substantially wider truncated identifiers than 32 bits."
+      },
+      {
+        "url": "https://www.rfc-editor.org/info/rfc5155/",
+        "date": "2008-03",
+        "scope": "The standard states the birthday relation: an n-bit hash reaches roughly even collision odds around 2^(n/2) objects. For an eight-hex-character identifier, that scale is only about 2^16."
+      },
+      {
+        "url": "https://aclanthology.org/2026.eacl-industry.47/",
+        "date": "2026-03-25",
+        "scope": "Assertion-Conditioned Compliance measures agents accepting misleading function-sourced assertions instead of verifying them against tool history, environment state or documentation."
+      }
+    ]
+  },
+  "substantive_delta": [
+    {
+      "id": "D204-CONTENT-FINGERPRINT-CANDIDATE-IDS",
+      "status": "POSITIONAL-ALIASING-REDUCED_DURABLE-IDENTITY-UNPROVEN",
+      "evidence": [
+        "gedaechtnis, verlauf, kollision, lesart and selbstbild candidates no longer use list positions as identifiers.",
+        "_kennung normalizes and lowercases only the first 400 characters, hashes them with SHA-1 and retains eight hexadecimal characters: a 32-bit fingerprint.",
+        "Distinct objects sharing the first 400 normalized characters are deterministically identical; small edits inside the prefix create a new identity; native memory_id, turn_id and relation_id remain unused."
+      ],
+      "credit_boundary": "This earns source credit for removing direct slot identity. It does not satisfy the OPEN stable-identity task, collision safety, durable object identity or outcome-grounded learning."
+    },
+    {
+      "id": "D204-BOOKKEEPING-FILTER",
+      "status": "SOURCE-BOUND-CANDIDATE-APERTURE-CHANGE",
+      "evidence": [
+        "The source reports 116 of 152 durable-memory entries were compression receipts and 10 of the newest 12 were hashes, crowding an answer-bearing machine-name memory out of the candidate budget.",
+        "Known bookkeeping kinds and pure hexadecimal digest values are now removed before both candidate and prestage-memory limits are applied.",
+        "The filter deletes every checkpoint-kind record regardless of payload and therefore may hide meaningful state when the question concerns checkpoints, receipts, recovery or audit history."
+      ],
+      "credit_boundary": "The observed crowding diagnosis is credible source evidence. General memory-answer improvement and audit-question preservation require matched outcome tests."
+    },
+    {
+      "id": "D204-RETRIEVAL-TRUST-HEADER",
+      "status": "SOURCE-BOUND-PROVENANCE-LABEL_WITH-AUTHORITY-RISK",
+      "evidence": [
+        "The materialized workspace now tells Zero that the block was attached by the pipeline, is its own recall, is not user-supplied and should not be fetched again.",
+        "It also states that a failed independent lookup does not refute the block because the paths may see different stores.",
+        "This can reduce false refusals caused by unlabeled context, but it can also preempt negative evidence and elevate stale, poisoned or irrelevant retrieved text through a natural-language assertion rather than a machine-verifiable provenance contract."
+      ],
+      "credit_boundary": "No trust or security credit follows until source metadata, content/instruction separation and conflict handling are tested against false and adversarial retrieval."
+    },
+    {
+      "id": "D204-TEST-COVERAGE-GROWTH",
+      "status": "SAME-FAMILY-COVERAGE-ONLY",
+      "evidence": [
+        "tests/letzter-lauf.json and ZIELE.md now agree on 664 green / 1 red for source short cd5593ee8.",
+        "The remaining red is test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated.",
+        "The prior 643/1 versus 642/2 consumer split is absent in this snapshot, but no atomic run_id/result digest/full source tree/executor binding exists."
+      ],
+      "credit_boundary": "Consistency is restored for this export only. It is not an atomic test receipt, independent replication, adapter fix or release evidence."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H204-OBJECT-CREDIT-STABILITY",
+      "claim": "Content fingerprints prevent learned weight from transferring between unrelated objects after reorder, insertion or deletion.",
+      "falsifier": "Prefix-equivalent objects collide, edits cause credit loss, or semantic objects receive different IDs across serialization while unrelated objects share one."
+    },
+    {
+      "id": "CH204-PSEUDOSTABLE-IDENTITY",
+      "claim": "A 32-bit hash of a truncated presentation is a position-independent label but not a durable object identity.",
+      "falsifier": "Native identity and fingerprint permutation tests show collision detection, stable edit semantics and credit following memory_id/turn_id/relation_id rather than rendered text."
+    },
+    {
+      "id": "H204-RECEIPT-CROWDING-RELIEF",
+      "claim": "Removing bookkeeping before the limit increases answer-bearing memory recall without degrading audit and recovery questions.",
+      "falsifier": "Matched audit/checkpoint questions lose necessary evidence, or general questions show no supported-answer gain against an equal-budget stratified control."
+    },
+    {
+      "id": "H204-PROVENANCE-LABEL-REDUCES-FALSE-REFUSAL",
+      "claim": "A typed, accurate pipeline-origin label reduces refusal of valid retrieved evidence without raising acceptance of false or adversarial context.",
+      "falsifier": "Current natural-language trust assertions increase unsupported compliance, ignore stronger contradictory tool evidence or follow instructions embedded in retrieved text."
+    },
+    {
+      "id": "CH204-NEGATIVE-EVIDENCE-PREEMPTION",
+      "claim": "Telling the model in advance that lookup failure does not refute retrieval weakens legitimate conflict resolution and makes stale evidence sticky.",
+      "falsifier": "Blinded stale/fresh and false/true conflicts show calibrated uncertainty and preference for independently stronger, newer provenance rather than unconditional workspace priority."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Pseudo-Stable Content Identity",
+      "definition": "A position-independent content fingerprint is treated as object identity even though harmless edits change it and different objects can share it."
+    },
+    {
+      "name": "Prefix-Equivalent Memory Collision",
+      "definition": "Two memory objects become identical because the identifier hashes only the same normalized prefix."
+    },
+    {
+      "name": "Receipt-Crowding",
+      "definition": "Audit artifacts consume a recency-limited memory aperture and evict answer-bearing memories before ranking begins."
+    },
+    {
+      "name": "Provenance Assertion Escalation",
+      "definition": "Natural-language origin claims grant retrieved content higher authority without a machine-verifiable source and integrity contract."
+    },
+    {
+      "name": "Negative-Evidence Preemption",
+      "definition": "A prompt discounts future contradictory or null tool evidence before the model has observed its quality or provenance."
+    }
+  ],
+  "worker_impulses": [
+    {
+      "route": "gwt+unifieddb+claygraph+hyperposition",
+      "priority": "BLOCKING",
+      "task": "Continue the existing OPEN stable-identity/outcome-credit task. Use memory_id, turn_id and relation_id as primary identity; if a fallback is unavoidable, hash the full canonical object with an explicit wide algorithm/length and detect collisions. Run reorder, insertion, deletion, prefix-collision, edit and serialization permutation tests. Keep citation uptake separate from independently scored outcome credit."
+    },
+    {
+      "route": "frank+gwt+claycode",
+      "priority": "BLOCKING",
+      "task": "Run RETRIEVAL_TRUST_HEADER_FACTORIAL/v1 on frozen source: current header, typed metadata-only provenance, neutral label and no label; cross with true, stale, false, conflicting and instruction-bearing retrieved content plus independent tool confirmation/refutation. Measure false refusal, unsupported compliance, source selection, calibrated uncertainty and unsafe instruction following."
+    },
+    {
+      "route": "clayresearch+emergenz+unifieddb",
+      "priority": "HIGH",
+      "task": "Run BOOKKEEPING_APERTURE_ABLATION/v1 at equal context budget: unfiltered recency, current deletion, and typed stratified channels. Include ordinary memory questions and audit/checkpoint/recovery questions. Preserve nulls and report answer support, carrier recall, audit recall, latency and context bytes."
+    },
+    {
+      "route": "gwt+hyperposition+claycode",
+      "priority": "PRESERVE",
+      "task": "Do not infer global-workspace completion from hashed lesart IDs. Hyperposition/world-model is still computed after _gw_kandidaten and delivered separately; execute the already-open global-channel lesion task before any whole-GWT credit."
+    },
+    {
+      "route": "frank+unifieddb+claygraph",
+      "priority": "BLOCKING",
+      "task": "Continue TEST_EXPORT_ATOMIC_RECEIPT/v1. Bind full source commit/tree/dirty state, test run_id/result digest, Ubuntu executor, export snapshot/WAL coordinate and every summary consumer. Current 664/1 agreement is not a replacement."
+    },
+    {
+      "route": "harness",
+      "priority": "GUARD",
+      "task": "Receipt inspection only. Do not train, modify Harness, promote BASE or claim whole-product PASS."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "The lexical/evidence-mass, stable-identity/outcome-credit and global-channel task records all remain OPEN; no completion evidence file was found.",
+    "Content-hash candidate IDs reduce positional aliasing but do not use the stable native identities required by the open task.",
+    "The GWT feedback reward remains endogenous to answer citation; no independent outcome-credit receipt exists.",
+    "Hyperposition/world-model content is still constructed after the unified candidate list and passed separately into prestage, so the globality bypass persists.",
+    "The natural-language retrieval header is not an integrity proof and has no adversarial or conflict-resolution receipt.",
+    "The 664/1 suite result lacks an atomic exact-source receipt; the Claude-Code adapter isolation test remains red.",
+    "Supervisor commit fb37cb49 is same-family uptake, not independent execution or replication.",
+    "Target main, canonical RAE/state and BASE NOT_PASS are unchanged.",
+    "No training, Harness mutation, promotion, target runtime receipt or whole-product PASS occurred."
+  ],
+  "admission_rule": "Admit Gen204 source credit for position-independent fingerprints, bookkeeping filtering and an explicit workspace-origin label. Grant no durable-identity, trusted-provenance, memory-outcome, global-workspace, atomic-suite or promotion credit until the routed falsifiers return exact provenance-bound receipts."
+}

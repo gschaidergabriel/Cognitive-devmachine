@@ -1,0 +1,91 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_SWARM_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "main_observed_before_run": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md"
+  },
+  "evidence_basis": {
+    "claude_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "measured_model": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1@591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "observations": [
+      "Semantic readability is 0.94-1.00 from approximately L6 onward on the measured lexically separated family.",
+      "Baseline symbol hit is 0.3611111111 versus 0.3333333333 chance; the measured write axis can force output, but baseline dynamic binding is not established.",
+      "Mean cross-template transfer is 0.525462963 and transfer into T1 from T2/T3/T4 is at chance.",
+      "HRR/MAP carrier-space binding is 1.0 through k<=16 after centering/whitening, so carrier algebra is not the current measured bottleneck.",
+      "Static structural target is not decodable at the measured scope; do not train a fixed steering-vector solution as fact."
+    ],
+    "training_interpretation": "Prioritize content-dependent episodic class-to-symbol routing across templates while protecting already-present semantic readout, symbol writeout, and carrier-space algebra."
+  },
+  "checkpoint_boundary": {
+    "measured_snapshot_is_not_official_candidate": true,
+    "official_candidates": [
+      "Qwen/Qwen3.5-0.8B-Base@dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68",
+      "Qwen/Qwen3.5-0.8B@2fc06364715b967f1860aea9cf38778875588b17"
+    ],
+    "rule": "No positive layer/vector/J-Space label transfers from the measured gabliterated snapshot into either official candidate without same-model causal evidence."
+  },
+  "seed": {
+    "path": "research_entity/global/j-space/research/trigger2_qwen35_08b_dynamic_binding_swarm_seed_v1.jsonl",
+    "commit": "b9b88fe2cab9eb768ee49adba20710cc069f4411",
+    "git_blob_sha": "e4f24ded3b70cd1d2861e80bc47f8e086e6fe09d",
+    "rows": 18,
+    "s3_mappings": 6,
+    "rows_per_mapping": 3,
+    "targets": {"A": 6, "B": 6, "C": 6},
+    "class_symbol_cells_each": 2,
+    "templates": {"T1_codebook": 4, "T2_frage": 5, "T3_aussage": 5, "T4_ichform": 4},
+    "prompt_class_label_leaks_outside_codebook": 0,
+    "target_symbol_leaks_outside_codebook": 0,
+    "candidate_gate_pass": 18,
+    "candidate_gate_fail": 0,
+    "split": "TRAIN_ONLY",
+    "accepted_dataset_tokens": 0
+  },
+  "source_spec_tension_resolution": {
+    "chosen_rule": "ALLOW/DENY/ABSTAIN may appear only inside an explicitly delimited [CODEBOOK] span; they are forbidden elsewhere in model input.",
+    "not_mixed": "A label-free codebook variant requires a separate version/family."
+  },
+  "swarm_review": [
+    {"role":"Generator","result":"Built full S3 x three-class compact binding seed using four structurally distinct template forms."},
+    {"role":"LeakHunter","result":"0 class-label leaks outside codebook; 0 target-symbol leaks outside codebook."},
+    {"role":"CounterbalanceReviewer","result":"Each of nine semantic-class x target-symbol cells occurs exactly twice; A/B/C each occur six times."},
+    {"role":"CausalEvidenceReviewer","result":"No positive J-Space targets, no static-vector semantic-control labels, no cross-checkpoint label transfer."},
+    {"role":"SplitAncestryReviewer","result":"All rows share one synthetic provenance ancestry and remain TRAIN-only; no false holdout independence is minted."},
+    {"role":"AdversarialReviewer","result":"Rejected a larger draft whose deterministic codebook-order scheduling left an avoidable shortcut channel; compact persisted seed retains only source-candidate status until ABI materialization and stronger batch-level balancing."},
+    {"role":"FinalArbiter","result":"18/18 candidate rows accepted as METHOD_ONLY source candidates under current candidate-gate predicates; no training/runtime/canonical credit minted."}
+  ],
+  "hard_blockers_before_real_corpus": {
+    "abi_symbols": "A/B/C are structural placeholders. Replace with verified accepted atoms from the 46-atom ABI and bind exact tokenizer identity.",
+    "unseen_symbol_holdout": "Freeze a dedicated unseen-symbol holdout before tuning.",
+    "generator_repairs": [
+      "Selected S3 permutation must construct the actual class-symbol mapping rather than metadata only.",
+      "Validator must require exact realized S3 coverage.",
+      "Counterbalance must be exact or at-most-one, not loose relative deviation.",
+      "Class-word leakage must fail rather than hardcoded pass.",
+      "Lexical disjointness must cover semantic-bearing prompt material, not only one adjective."
+    ],
+    "same_model_jspace": "Fresh same-model Qwen3.5 causal evidence required before positive J-Space supervision.",
+    "training_authority": "Triggerwort 2 does not authorize paid training or provider preflight under FREE_ONLY."
+  },
+  "next_exact_action": "Materialize a leak-resistant expanded family from the verified 46-atom ABI with full S3 realization across all four measured template types, frozen unseen-symbol holdout and family-level lexical isolation; then run candidate gate + split linter before any matched Base-vs-posttrained pilot.",
+  "credits": {
+    "research_design_delta": 1,
+    "synthetic_source_candidate_rows": 18,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  }
+}

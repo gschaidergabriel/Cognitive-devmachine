@@ -1,0 +1,125 @@
+{
+  "schema": "COGNITIVE_PROCESS_ABI/v1",
+  "status": "CURRENT_OWNER_ALIGNED_SOURCE_CONTRACT_NOT_RUNTIME_CREDIT",
+  "authority": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "base_main_sha": "08ac607b528257a2ffaac49387f3277479cb9e61",
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "census_schema": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1"
+  },
+  "design_goals": [
+    "semantic process identity independent of runtime grid size N and physical module identity",
+    "durable exact state referenced from database rather than silently reconstructed",
+    "all cognitive/model outputs remain candidate/proposal/measurement until deterministic admission",
+    "Claude Code bridge bounded to actually exposed interfaces and exact request/result provenance",
+    "workspace re-entry is explicit and causally attributable",
+    "real effects remain behind EffectGate/EffectJournal",
+    "UNKNOWN remains distinct from false/zero/negative evidence"
+  ],
+  "packet_types": {
+    "COGNITIVE_WORK_PACKET/v1": {
+      "required": ["schema", "causal_event_id", "admission_id", "generation", "work_id", "process_id", "parent_work_ids", "workspace_epoch", "state_snapshot_ref", "input_refs", "epistemic_inputs", "capability_scope_ref", "resource_budget", "grid_runtime", "route_policy_ref", "completion_contract"],
+      "rules": {
+        "process_id": "must exist in current census",
+        "grid_runtime": "contains requested_N and observed_available_N as runtime facts; neither participates in semantic process identity",
+        "state_snapshot_ref": "immutable database snapshot/checkpoint reference or explicit NONE/UNKNOWN",
+        "input_refs": "typed references with digest+provenance; large durable payloads remain in DB/object substrate",
+        "epistemic_inputs": "each item tagged OBSERVED|INFERRED|HYPOTHESIS|UNKNOWN; method presence never fills UNKNOWN",
+        "capability_scope_ref": "reference to canonical capability authority; packet cannot self-grant",
+        "completion_contract": "machine-checkable success/failure/unknown conditions"
+      }
+    },
+    "COGNITIVE_RESULT_PACKET/v1": {
+      "required": ["schema", "causal_event_id", "admission_id", "generation", "work_id", "process_id", "executor_binding", "result_id", "result_class", "result_payload_ref", "result_digest", "evidence_refs", "unknowns", "db_write_proposals", "effect_request_candidates", "workspace_reentry", "runtime_receipt"],
+      "allowed_result_class": ["CANDIDATE", "PROJECTION", "MEASUREMENT", "DETERMINISTIC_CONTROL_RESULT", "EFFECT_RECEIPT"],
+      "rules": {
+        "model_grid_claude_outputs": "must be CANDIDATE|PROJECTION|MEASUREMENT",
+        "db_write_proposals": "never imply commit; deterministic DB authority validates/adopts/rejects",
+        "effect_request_candidates": "never imply execution; only ZECP17 deterministic EffectGate/Journal path may emit EFFECT_RECEIPT",
+        "workspace_reentry": "must bind source result_id, target workspace_epoch, causal_event_id and acceptance/rejection",
+        "runtime_receipt": "bind exact executor/runtime/model/tool identity actually observed or emit UNKNOWN fields"
+      }
+    },
+    "DB_STATE_REF/v1": {
+      "required": ["ref_id", "store", "snapshot_or_epoch", "object_key", "digest", "provenance", "mutability"],
+      "rules": {
+        "mutability": "IMMUTABLE_SNAPSHOT|APPEND_ONLY_EVENT|CANONICAL_MUTABLE_WITH_EPOCH",
+        "facts": "database contents are not automatically facts unless their canonical/evidence status says so",
+        "missing": "missing/unreadable state is UNKNOWN, never fabricated"
+      }
+    },
+    "WORKSPACE_REENTRY/v1": {
+      "required": ["source_result_id", "source_process_id", "causal_event_id", "from_workspace_epoch", "to_workspace_epoch", "reentry_payload_ref", "reentry_digest", "observed_downstream_change"],
+      "rules": {
+        "observed_downstream_change": "TRUE|FALSE|UNKNOWN; Global J-Space causal credit requires evidence stronger than mere text presence",
+        "stale_epoch": "must fail closed"
+      }
+    },
+    "CLAUDE_CODE_BRIDGE_PACKET/v1": {
+      "required": ["bridge_id", "direction", "causal_event_id", "work_id", "workspace_epoch", "interface_class", "payload_ref", "payload_digest", "state_refs", "tool_scope_ref", "request_or_result_identity"],
+      "allowed_direction": ["GRID_TO_CLAUDE", "CLAUDE_TO_GRID"],
+      "allowed_interface_class": ["TEXT", "STRUCTURED_TEXT", "TOOL_PROTOCOL", "SESSION_STATE_EXPOSED", "OTHER_EXPLICITLY_OBSERVED"],
+      "rules": {
+        "activation_access": "never claimed unless an exact exposed activation/hook interface is directly observed",
+        "result_reentry": "Claude assertions remain candidate claims until evidence/state/effect boundaries admit them",
+        "measurement": "bridge usefulness must be measurable against a comparator, not inferred from coherence"
+      }
+    },
+    "GRID_EXECUTOR_BINDING/v1": {
+      "required": ["grid_instance_id", "requested_N", "available_N", "executor_id", "lease_id", "process_id", "runtime_identity", "started_at", "ended_at"],
+      "rules": {
+        "N": "runtime parameter only",
+        "executor_id": "physical identity does not redefine process semantics",
+        "lease": "stale or mismatched lease fails closed"
+      }
+    }
+  },
+  "db_vs_simulation_boundary": {
+    "store_in_db_when": [
+      "value must survive module/grid restart or N change",
+      "value requires exact queryable identity/counter/epoch/digest/provenance",
+      "value is canonical task/project/evidence/configuration state",
+      "reconstructing by inference would be less reliable or more expensive than exact storage"
+    ],
+    "simulate_on_grid_when": [
+      "operation is interpretation, attention, planning, alternative generation, critique, compression, coordination cognition, or continuation choice",
+      "output can remain candidate/projection until deterministic admission"
+    ],
+    "never_simulate_as_authority": [
+      "canonical capability grants",
+      "canonical fact commitment",
+      "real-effect execution authority",
+      "effect outcome verification",
+      "exact IDs/epochs/digests that already exist durably"
+    ]
+  },
+  "minimal_causal_chain": [
+    "typed task admission",
+    "DB state reference resolution",
+    "cognitive work packet",
+    "variable-N route/executor lease",
+    "small-model or Claude Code execution where selected",
+    "cognitive result packet",
+    "workspace competition/broadcast",
+    "workspace re-entry receipt",
+    "DB write proposal and/or effect request candidate",
+    "deterministic admission/EffectGate if applicable",
+    "outcome reconciliation"
+  ],
+  "acceptance_discriminators": [
+    {"id": "ABI-D1-N-INVARIANCE", "claim": "same semantic process can execute at N=1,10,20 without process identity changing", "fail_if": "process_id or meaning depends on physical node identity or fixed N"},
+    {"id": "ABI-D2-DB-FACT-FENCE", "claim": "generated state cannot silently become durable/canonical fact", "fail_if": "model/grid/Claude result writes canonical DB state without a deterministic admission record"},
+    {"id": "ABI-D3-EFFECT-FENCE", "claim": "cognitive path cannot execute real effect directly", "fail_if": "any process other than deterministic ZECP17 authority emits an executed-effect receipt"},
+    {"id": "ABI-D4-CLAUDE-REENTRY", "claim": "Claude Code result can be causally re-entered with exact request/result/state identity", "fail_if": "return path loses causal/workspace bindings or treats model assertion as canonical fact"},
+    {"id": "ABI-D5-JSPACE-EVIDENCE", "claim": "Global J-Space re-entry credit is evidence-bounded", "fail_if": "text presence/coherence alone is labeled causal J-Space evidence"}
+  ],
+  "credit_boundary": {
+    "abi_source_contract": 1,
+    "abi_component_runtime": 0,
+    "variable_grid_runtime": 0,
+    "claude_code_bridge_runtime": 0,
+    "global_jspace_causal_runtime": 0,
+    "end_to_end_zero_equivalence": 0,
+    "training": 0
+  }
+}

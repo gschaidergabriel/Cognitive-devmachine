@@ -1,0 +1,152 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v46",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V45_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V45",
+  "observed_main_before_write": "f30bf2c8dc21a4a8f2a8f68e7a68d980f5f03476",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "implementation_compatibility_codename": "Xeno",
+    "freeswarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V45 ended with exact-source physical/process/membership/atomic-cohort fusion as the next P0. Current main f30bf2c now implements that fusion in one test-only deterministic source candidate: ten simultaneously live OS producers, held read-only S1 cohort evidence, exact barrier PID/packet binding, monotonic membership ids, strict-current membership for unseen active cohorts, and idempotent historical replay after re-registration. This materially closes the prior cross-component membership splice at source level only. The remaining explicit source boundary in f30bf2c is generic consumed-read attestation; therefore V46 promotes the declared-current/consumed-stale bypass discriminator to the next P0 while keeping every runtime/model/training credit at zero.",
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V45_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V46_GPT56SOL.json",
+      "reason": "the exact source fusion requested by V45 now exists on main"
+    },
+    {
+      "artifact": "tools/trigger2_grid10_atomic_membership_cohort_acceptance_v1.py",
+      "source_commit": "f30bf2c8dc21a4a8f2a8f68e7a68d980f5f03476",
+      "status": "CURRENT_FUSED_SOURCE_CANDIDATE_ZERO_REPOSITORY_RUNTIME_CREDIT",
+      "properties_observed_in_source": [
+        "ten simultaneously-live OS producer cohort uses one exact read-only S1 snapshot and barrier PID/packet bindings",
+        "every producer packet carries deterministic source_membership_id and the barrier ready record binds that same membership identity",
+        "membership id is monotonic and re-registration is separate from cognitive S1 identity",
+        "new active cohort rejects a member revoked/re-registered after observation even if S1 itself remains unchanged",
+        "replacement membership id cannot be substituted into the old process/packet witness",
+        "ghost membership and unhealthy membership fail closed",
+        "one atomic GLOBAL admission advances S1 once and preserves original packet digests",
+        "already-admitted exact cohort replay after re-registration is historical/idempotent zero-delta and explicitly does not revalidate historical membership as current"
+      ],
+      "declared_scope": "TEST_ONLY_PHYSICAL_GRID10_ATOMIC_COHORT_PLUS_MONOTONIC_MEMBERSHIP",
+      "remaining_gap_declared_by_source": "generic consumed-read attestation for every cognition-relevant input remains separate",
+      "credit": "SOURCE/LOCAL-CANDIDATE-ONLY; NO OBSERVED REPOSITORY-BOUND RUNTIME RECEIPT"
+    },
+    {
+      "artifact": "per-node membership fan-in source candidate",
+      "source_commit": "773a8ab8328d986b7533e58b8732288451e844ea",
+      "status": "DONOR_SUBSUMED_BY_STRONGER_PHYSICAL_ATOMIC_FUSION_FOR_CURRENT_FRONTIER",
+      "reason": "f30bf2c carries the relevant monotonic membership semantics into the physical same-cohort path; retain 773a8ab as deterministic donor/regression evidence, not a competing authority implementation"
+    },
+    {
+      "artifact": "correlated-evidence ancestry Hyperposition eval",
+      "source_commit": "cd47e03d17f9a68e70ef9212fe2390ff45d5a3b1",
+      "status": "CURRENT_CANDIDATE_EVAL_ONLY_NOT_TRAINING_ELIGIBLE",
+      "finding": "Extends majority-cannot-mint-truth into provenance ancestry: raw vote cardinality is not independent support, shared upstream/model/prompt ancestry must not be double-counted, and missing ancestry remains UNKNOWN with retrieval/discriminator requests.",
+      "credit": "EVAL_RESEARCH_ONLY_ZERO_ADMITTED_ROWS"
+    },
+    {
+      "artifact": "fabric-observed read-set attestation transfer",
+      "source_commit": "a62ee0cdf535ed7a1c3949a4af7a1879d03af354",
+      "status": "NEXT_P0_METHOD_CANDIDATE_NOT_RUNTIME_EVIDENCE",
+      "finding": "Self-declared current snapshot metadata is weaker than independently observed consumed-read identity; full attestation requires a deterministic observed read path or proof that direct bypass is impossible/detected."
+    }
+  ],
+  "source_gate_status": {
+    "atomic_replay_ordering": "SOURCE_CANDIDATE_CLOSED_ZERO_RUNTIME_CREDIT",
+    "per_node_membership_reregistration_identity": "SOURCE_CANDIDATE_CLOSED_ZERO_RUNTIME_CREDIT",
+    "physical_same_cohort_membership_splice": "SOURCE_CANDIDATE_CLOSED_AT_F30BF2C_ZERO_RUNTIME_CREDIT",
+    "generic_consumed_read_attestation": "OPEN_P0",
+    "repository_bound_exact_source_execution": "NOT_OBSERVED",
+    "semantic_transition_independent_relation_gate": "SOURCE_EVAL_GATE_PRESENT_ZERO_TRAINING_ADMISSION"
+  },
+  "next_p0_discriminator": {
+    "id": "DECLARED_CURRENT_CONSUMED_STALE_BYPASS_NEGATIVE",
+    "class": "DETERMINISTIC_SOURCE_REGRESSION_NOT_PROVIDER_OR_UNUSUAL_EXPERIMENT",
+    "construction": "Create a test-only producer path that computes its semantic payload from stale or otherwise unobserved cognition-relevant state while attempting to emit a packet whose declared generation/epoch/digest and membership/process/barrier metadata look current.",
+    "pass_condition": "The exact current fused acceptance path must make this construction impossible or reject it before cohort admission because independently observed/read-path-bound consumed input does not match the current cohort identity.",
+    "failure_condition": "If the forged-current declaration can reach cohort admission while payload cognition came from an unobserved/stale read, current source proves metadata consistency but not consumed-input identity; implement OBSERVED_READ_FACADE/FABRIC_OBSERVED_READSET_LEDGER before stronger model/J-Space/physical consumed-input claims.",
+    "promotion_scope": "SOURCE_CONSUMED_INPUT_BOUNDARY_ONLY; even PASS does not grant physical GRID10 runtime or model/training credit"
+  },
+  "training_eval_course_delta": {
+    "model_target": "SEMANTIC_COGNITIVE_TRANSITION_CANDIDATE_ONLY",
+    "candidate_eval_concepts": [
+      "SELF_REPORTED_CURRENT_METADATA_NEQ_INDEPENDENTLY_OBSERVED_CONSUMED_INPUT",
+      "LOGICAL_NODE_ID_NEQ_MEMBERSHIP_INCARNATION",
+      "HISTORICAL_REPLAY_NEQ_CURRENT_MEMBERSHIP",
+      "EVIDENCE_CARDINALITY_NEQ_INDEPENDENT_SUPPORT",
+      "CORRELATED_MODEL_OR_SOURCE_OUTPUTS_NEQ_INDEPENDENT_REPLICATION",
+      "UNKNOWN_ANCESTRY_REMAINS_UNKNOWN",
+      "SEMANTIC_RELATION_MUST_REJECT_SELF_CONSISTENT_WRONG_TARGET_ORACLE"
+    ],
+    "deterministic_not_model_authority": [
+      "membership admission/revision",
+      "process/PID and barrier witness",
+      "consumed-read delivery/read-set attestation",
+      "snapshot freshness/CAS",
+      "cohort seal/replay identity",
+      "canonical DB/effect authority",
+      "provider admission and checkpoint consumed-input attestation"
+    ],
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "hypothesis": "The fused source candidate now makes membership incarnation, physical cohort and atomic admission one causal chain, so consumed-read identity is the highest-value remaining local provenance discriminator. An observed-read boundary is preferable to asking the model to report what it consumed because the latter creates circular evidence.",
+  "counterhypothesis": "The exact bound producer source plus held read-only SQLite transaction, shared snapshot identity and barrier packet/PID binding may already exclude stale/unobserved cognition in the narrow f30bf2c fixture. The bypass-negative should decide this before adding an observed-read facade; do not add infrastructure merely because it is conceptually stronger.",
+  "training_generation_decision": {
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null,
+    "reason": "The fused runtime source still has an explicit consumed-input attestation boundary, repository-bound execution is absent, provider execution remains owner-stopped, and training is unauthorized."
+  },
+  "execution_decision": {
+    "freeswarm": "HARD_OFF",
+    "provider_preflight": "DO_NOT_RUN",
+    "provider_execution": "DO_NOT_RUN",
+    "vps_execution": "NOT_PERFORMED_THIS_CYCLE",
+    "physical_grid_runtime_promotion": "BLOCKED_ZERO_CREDIT",
+    "new_runtime_pin": "DO_NOT_CREATE_UNTIL_CONSUMED_INPUT_SOURCE_GATE_AND_CURRENT_AUTHORITY_REENTRY",
+    "blocked_execution_interpretation": "NOT_SCIENTIFIC_NEGATIVE"
+  },
+  "credits": {
+    "research_delta": 1,
+    "physical_membership_atomic_fusion_source_candidate": 1,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "jspace_model_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Implement or source-audit the declared-current/consumed-stale bypass negative against f30bf2c. If current source binding cannot exclude it, add one deterministic observed-read facade/ledger and bind read_receipt_id to membership/process/packet/cohort identity; if it already excludes the bypass, persist the exact reason/test and keep the generic ledger for stronger model/J-Space claims. Re-enter current main afterward. FreeSwarm stays HARD OFF; no runtime pin or training-row admission yet."
+}

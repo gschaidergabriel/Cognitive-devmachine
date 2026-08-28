@@ -1,0 +1,137 @@
+{
+  "schema": "CLAY_TRIGGER2_SYNTHETIC_LABEL_IDENTITY_DERIVATION_AUDIT/v1",
+  "date": "2026-08-25",
+  "local_time_context": "Asia/Phnom_Penh",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING",
+  "authority": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "observed_main_before_write": "bafd2853e21498bf62562cac1b8a9aa3e95c1666",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "owner_target_blob_sha": "2315e204d2db876baff0d846b4c590a8df045729"
+  },
+  "audited_current_artifacts": [
+    {
+      "path": "tools/entityos_hcu_trainingtrace_candidate_gate_v2.py",
+      "blob_sha": "182f8cf3417901f40187cf6e2b898d6aa264ca82",
+      "status_before": "CURRENT_CANDIDATE_GATE",
+      "status_after": "REVIEW_REQUIRED_IDENTITY_BINDING"
+    },
+    {
+      "path": "tests/test_entityos_hcu_trainingtrace_candidate_gate_v2.py",
+      "source_commit": "bafd2853e21498bf62562cac1b8a9aa3e95c1666",
+      "status_after": "REVIEW_REQUIRED_TEST_STRENGTH"
+    },
+    {
+      "path": "tools/trigger2_semantic_hyperposition_gate_v2.py",
+      "source_commit": "18d043475ac98e7f338f5bb43828b8ebfd308f69",
+      "status_after": "STALE_DEPENDENCY_REVIEW_REQUIRED"
+    },
+    {
+      "path": "tools/trigger2_semantic_hyperposition_reference_labelers_v2.py",
+      "blob_sha": "3af629620369841367ec76e49f79b24db13581fb",
+      "status_after": "COMPONENT_ONLY_RESEARCH_PRIMITIVE_BLOCKED_FOR_POSITIVE_D_E"
+    },
+    {
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V1_GPT56SOL.json",
+      "status_after": "STALE_SUCCESSOR_REQUIRED",
+      "revision_reason": "Ledger predates exact-current labeler-v2, candidate-gate-v2 and their newly observed residual identity/derivation blockers."
+    }
+  ],
+  "material_findings": [
+    {
+      "id": "T2_ID01_SHA_FORMAT_IS_NOT_ARTIFACT_IDENTITY",
+      "severity": "PROMOTION_BLOCKING",
+      "observed": "entityos_hcu_trainingtrace_candidate_gate_v2.py accepts labeler_sha256 and generator_sha256 when they merely match the regex ^[0-9a-f]{64}$. It does not fetch, hash, load, or otherwise prove that those digests identify the labeler/generator bytes that produced the row.",
+      "test_counterevidence": "tests/test_entityos_hcu_trainingtrace_candidate_gate_v2.py uses 64 zeroes for both hashes and expects deterministic synthetic resolution to pass candidate admission.",
+      "risk": "A syntactically valid invented digest can satisfy the candidate gate, so the current phrase hash-bound is stronger than the executable identity check.",
+      "required_successor": "Bind synthetic_labeler_binding to exact committed/loaded labeler and generator bytes using a content-addressed manifest or execution receipt whose digest is recomputed/verified by the admission path; reject unknown, missing, mismatched, or unconsumed identities."
+    },
+    {
+      "id": "T2_ID02_HYPERPOSITION_GATE_V2_LOADS_LABELER_V1",
+      "severity": "PROMOTION_BLOCKING_DEPENDENCY_DRIFT",
+      "observed": "The semantic Hyperposition admission gate v2 introduced at commit 18d043475ac98e7f338f5bb43828b8ebfd308f69 explicitly loads trigger2_semantic_hyperposition_reference_labelers_v1.py, while main now contains a v2 labeler successor.",
+      "risk": "Passing the Hyperposition gate v2 can still reproduce v1 semantics and inherit v1 adversarial blockers; the gate version does not imply dependency freshness.",
+      "required_successor": "Resolve one exact labeler authority, bind its file/blob/content digest into the gate, and make dependency/version drift fail closed."
+    },
+    {
+      "id": "T2_DER03_LABELER_V2_STILL_TRUSTS_CALLER_EFFECT",
+      "severity": "CRITICAL_POSITIVE_D_E_BLOCKER",
+      "observed": "U_update in labeler v2 reads observation.effect from the caller and applies SUPPORT/WEAKEN/FALSIFY/PROVE/RETAIN. It does not derive the effect from executable task-world relations or a separately verified derivation receipt.",
+      "risk": "The missing target label is moved upstream; generator metadata can still manufacture a positive transition.",
+      "required_successor": "Derive update effects from typed synthetic-world semantics or verify an independently computed deterministic derivation receipt before state mutation."
+    },
+    {
+      "id": "T2_DER04_LABELER_V2_STILL_TRUSTS_DISCRIMINATOR_RESULT_FIELDS",
+      "severity": "CRITICAL_POSITIVE_D_E_BLOCKER",
+      "observed": "D_resolve in labeler v2 trusts winner_branch_id and separates_live_branch_ids from discriminator_outcome after membership/coverage checks. The shown implementation does not derive the partition/winner from branch predictions plus an observed result and does not require an explicit admissible=true field before resolution.",
+      "required_successor": "Compute discriminator partitions/winner consistency from branch-local predictions and observed typed result, and fail closed when the discriminator is inadmissible or cannot separate all relevant live alternatives."
+    },
+    {
+      "id": "T2_DER05_UNIQUE_PROOF_IS_NOT_UNIQUE_WORLD",
+      "severity": "HIGH_POSITIVE_D_BLOCKER",
+      "observed": "D_resolve returns RESOLVED_WITHIN_SYNTHETIC_WORLD when exactly one live branch is marked PROVEN_WITHIN_SYNTHETIC_WORLD, even if another live branch remains compatible rather than mutually exclusive.",
+      "required_successor": "Require a machine-checkable exclusivity/coverage relation or a decisive discriminator that closes every competing alternative relevant to the query; otherwise remain UNRESOLVED."
+    }
+  ],
+  "training_disposition": {
+    "positive_D_E_transition_rows": "BLOCKED",
+    "semantic_hyperposition_carrier": "KEEP_CROSS_CUTTING_FROM_FIRST_INTEGRATED_EPISODE",
+    "labeler_v2": "RETAIN_AS_DONOR_NOT_GROUND_TRUTH_AUTHORITY",
+    "candidate_gate_v2": "RETAIN_AS_SCHEMA_EVIDENCE_BOUNDARY_DONOR_BUT_BLOCK_IDENTITY_PROMOTION",
+    "hyperposition_gate_v2": "REVIEW_REQUIRED_STALE_LABELER_DEPENDENCY",
+    "labeler_blocker_hard_negative_blueprints": "KEEP_AS_CANDIDATE_NONPROMOTING_DONORS",
+    "binding_router_factorial_generator_v3": "QUARANTINE_UNCHANGED_UNDER_SUPERVISOR_8_78",
+    "qwen3_0_6b_to_qwen3_5_0_8b_positive_jspace_label_transfer": "FORBIDDEN"
+  },
+  "external_method_inputs": [
+    {
+      "source": "Wu, Geiger, Milliere, How Do Transformers Learn Variable Binding in Symbolic Programs, ICML 2025 / PMLR 267",
+      "classification": "EXTERNAL_METHOD_INPUT",
+      "training_implication": "Track developmental checkpoint curves and distinguish shallow routing heuristics from systematic multi-hop binding; final aggregate accuracy is insufficient."
+    },
+    {
+      "source": "Xue et al., Why Supervised Fine-Tuning Fails to Learn, ACL 2026",
+      "classification": "EXTERNAL_METHOD_INPUT",
+      "training_implication": "Use capability/family-level diagnostics because converged aggregate SFT metrics can hide persistently unlearned subsets."
+    },
+    {
+      "source": "Sharma, Dawes, Raval, Dissociating Decodability and Causal Use in Bracket-Sequence Transformers, arXiv:2604.22128",
+      "classification": "EXTERNAL_METHOD_INPUT",
+      "training_implication": "Decodability is a representation result, not sufficient evidence of causal use; positive J-Space claims require matched interventions."
+    },
+    {
+      "source": "Makelov, Lange, Geiger, Nanda, Is This the Subspace You Are Looking for?, ICLR 2024",
+      "classification": "EXTERNAL_METHOD_CAUTION",
+      "training_implication": "Successful subspace intervention can exploit a dormant path; causal promotion needs anti-illusion/off-target controls rather than patching success alone."
+    }
+  ],
+  "successor_requirements": [
+    "Derivation-bound U_update successor computes typed relation effects rather than accepting caller labels.",
+    "D_resolve successor derives outcome partition and winner from branch predictions plus observed discriminator result and requires admissibility.",
+    "Unique resolution requires explicit exclusivity/coverage semantics or equivalent decisive criterion.",
+    "Synthetic labeler/generator identity must be content-addressed and verified against the actual executable/loaded bytes, not regex-valid digest strings.",
+    "Hyperposition admission gate must bind the exact current labeler successor and fail on dependency/version drift.",
+    "Update the Trigger-2 artifact ledger with predecessor/successor/status/revision reason for all v2 artifacts.",
+    "Only after exact source tests plus model-visible leakage checks pass should positive D/E successor rows be materialized; accepted dataset tokens and training credit remain separate later gates."
+  ],
+  "credits": {
+    "research_audit_delta": 1,
+    "new_positive_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "qwen35_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Build one derivation-bound semantic-Hyperposition labeler/gate successor that verifies exact executable labeler+generator content identity, computes U/D labels from typed synthetic-world relations, requires discriminator admissibility and exclusivity/coverage, binds the exact dependency version, then run adversarial mutation/property tests and update the version ledger before materializing any positive D/E training rows."
+}

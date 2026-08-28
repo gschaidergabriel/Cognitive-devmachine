@@ -1,0 +1,137 @@
+{
+  "schema": "CLAY_TRIGGER2_PROOF_CARRYING_NODE_RESULT_COHORT_BATCH/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "NONCANONICAL_RESEARCH_DELTA_CANDIDATE_ARCHITECTURE_AND_EVAL_ONLY",
+  "authority_observed": {
+    "supervisor": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "training_execution_authorized": false,
+    "whole_entityos_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "current_problem_fusion": {
+    "source_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V39_GPT56SOL.json",
+    "p0_gap_1": "GRID10_COHORT_ADMISSION_IDENTITY_GAP: the simultaneously-live barrier cohort and later coordinator-admitted results can be different process cohorts.",
+    "p0_gap_2": "NODE_MEMBERSHIP_CAUSAL_IDENTITY_GAP: source_node_id is packet data, while deterministic membership/health authority is not yet cryptographically or causally bound to result admission.",
+    "p0_gap_3": "Serial coordinator commits advance S1, so later packets from one common snapshot become stale unless an explicit batch or provenance-preserving revalidation protocol exists.",
+    "training_risk": "If model targets contain authoritative-looking PIDs, epochs, hashes, membership claims or freshness claims, the model can learn to narrate authority instead of producing semantics under deterministic authority."
+  },
+  "generated_concept": {
+    "name": "PROOF_CARRYING_NODE_RESULT_WITH_COHORT_BATCH_COMMIT",
+    "reality_level": "R2_GENERATED",
+    "principle": "The model emits only a semantic candidate payload. A deterministic trusted fabric wraps that payload in an immutable provenance envelope derived from observed process handles, admitted membership, the live read transaction and exact snapshot identity. Coordinator admission consumes those exact immutable cohort packets, not respawned or relabeled substitutes.",
+    "authority_boundary": "The provenance envelope is fabric-produced evidence, not model-produced authority. Its presence cannot mint S0 truth or effect authority."
+  },
+  "proposed_envelope": {
+    "schema": "NODE_RESULT_PROVENANCE/v2_CANDIDATE",
+    "model_generated_fields": [
+      "semantic_payload"
+    ],
+    "fabric_generated_fields": [
+      "causal_event_id",
+      "admission_id",
+      "barrier_cohort_id",
+      "node_id",
+      "node_admission_id",
+      "membership_generation",
+      "membership_digest",
+      "process_instance_id",
+      "parent_observed_pid",
+      "producer_handle_id",
+      "capability_scope",
+      "health_state_at_read",
+      "read_transaction_id",
+      "consumed_state_generation",
+      "consumed_state_epoch",
+      "consumed_state_digest",
+      "consumed_task_or_input_digest",
+      "semantic_payload_digest",
+      "source_executable_identity",
+      "packet_digest"
+    ],
+    "important_rule": "A caller-authored copy of any fabric field has zero authority. Admission recomputes or looks up all fabric fields from deterministic runtime state/process handles and rejects mismatch.",
+    "membership_design": "Bind membership independently from cognitive S1 content through a monotonic node_admission_id + membership_generation + membership_digest, or explicitly include nodes/health in the authoritative observation identity. Do not rely on source_node_id text alone."
+  },
+  "cohort_batch_commit": {
+    "schema": "COHORT_BATCH_COMMIT/v1_CANDIDATE",
+    "purpose": "Avoid serial fake-rebase semantics while preserving the exact simultaneously-live process cohort as the integrated evidence cohort.",
+    "preconditions": [
+      "all cohort packets are immutable and share exactly one barrier_cohort_id",
+      "all packets bind one exact consumed snapshot identity unless a separately named derivation protocol is used",
+      "each packet binds one currently admitted and healthy node_admission_id/membership_generation",
+      "parent_observed process handle/PID binding matches the producing child",
+      "packet digest and payload digest verify",
+      "no duplicate packet digest or duplicate node admission in the batch",
+      "all requested scopes/capabilities are authorized",
+      "conflicting writes inside the batch are either forbidden or resolved by one deterministic documented order independent of model preference"
+    ],
+    "commit_semantics": "Verify the entire cohort against one base identity, then atomically admit the whole set or none. Increment the S1 epoch once for the batch and record batch_id, ordered member packet digests and base/new state identities.",
+    "fail_closed": "If any member fails provenance, membership, freshness, scope, duplicate or conflict checks, no member of the batch receives integrated-cohort credit.",
+    "alternative": "If atomic cohort batching is architecturally too restrictive, define a separately named RESULT_REVALIDATION/v1 derivation where the original packet stays immutable and each successor explicitly binds parent_packet_digest, old/new snapshot identity, deterministic revalidation predicate and derivation reason. Silent field rewrite remains forbidden."
+  },
+  "hypotheses": [
+    {
+      "id": "H_PCNR_1_AUTHORITY_PAYLOAD_FACTORISATION",
+      "hypothesis": "Separating semantic payload generation from deterministic provenance sealing reduces authority-forgery shortcuts and improves transfer to unseen membership/process identities without reducing semantic task quality.",
+      "counterhypothesis": "The model needs explicit generation of provenance fields to reason correctly about stale/recovery behavior, so removing them from targets harms protocol competence.",
+      "discriminator": "Matched candidate-eval comparison: semantic-only target + deterministic envelope versus monolithic target containing authority fields. Measure semantic correctness, stale-recovery correctness, authority-field hallucination/forgery rate, unseen-node generalization and exact ABI validity. No training promotion until existing admission gates close."
+    },
+    {
+      "id": "H_PCNR_2_SAME_COHORT_CAUSAL_CLOSURE",
+      "hypothesis": "Physical GRID10 integrated-path evidence is materially stronger when the exact simultaneously-live cohort packets are the exact packet digests integrated by the coordinator.",
+      "counterhypothesis": "Logical node identity plus snapshot-equivalent respawned packets is sufficient because node processes are interchangeable realizations.",
+      "discriminator": "Positive same-cohort batch; disjoint-cohort splice negative; one unused concurrent packet negative; one respawned same-node/same-payload packet negative; require only exact cohort digest set to pass."
+    },
+    {
+      "id": "H_PCNR_3_BATCH_VS_REVALIDATION",
+      "hypothesis": "One atomic cohort batch is a simpler and more falsifiable physical-GRID10 proof than sequential stale-result revalidation for the current isolated acceptance fixture.",
+      "counterhypothesis": "Batching hides asynchronous behavior needed by real HCU operation and an explicit per-result revalidation lineage is the more transferable mechanism.",
+      "discriminator": "Implement minimal deterministic versions of both in a fixture with independent results, same-scope conflicts, membership change and stale snapshot. Compare invariant violations, provenance completeness, complexity and ability to preserve Hyperposition alternatives without silent rewrite."
+    }
+  ],
+  "hard_negative_eval_families": [
+    "UNREGISTERED_SOURCE_NODE_CLAIMS_VALID_NODE_ID",
+    "REGISTERED_BUT_UNHEALTHY_SOURCE",
+    "PID_SUBSTITUTION_SAME_NODE_ID",
+    "RESPAWNED_PROCESS_SAME_NODE_AND_PAYLOAD",
+    "DISJOINT_BARRIER_AND_ADMISSION_COHORTS",
+    "PACKET_PAYLOAD_MUTATED_AFTER_PROVENANCE_SEAL",
+    "MEMBERSHIP_GENERATION_CHANGED_AFTER_READ",
+    "STALE_SNAPSHOT_WITH_CURRENT_DECLARED_FIELDS",
+    "ONE_INVALID_MEMBER_IN_OTHERWISE_VALID_BATCH",
+    "DUPLICATE_PACKET_OR_REPLAYED_BATCH",
+    "MODEL_EMITS_FABRIC_AUTHORITY_FIELDS_AND_EXPECTS_THEM_TO_BE_TRUSTED"
+  ],
+  "training_feedback": {
+    "direct_training_decision": "NO_NEW_POSITIVE_ROWS",
+    "accepted_dataset_tokens_added": 0,
+    "training_credit_added": 0,
+    "candidate_eval_only": true,
+    "curriculum_rule": "Teach semantic state transition and typed recovery behavior. Feed deterministic statuses such as CURRENT, STALE_REJECTED, MEMBERSHIP_REJECTED, COHORT_MISMATCH, REVALIDATION_REQUIRED or BATCH_ABORTED as observations. Do not train the model to mint PID/hash/membership/freshness authority.",
+    "why": "This preserves the EntityOS/HCU authority boundary while still teaching Xeno how to react to runtime evidence."
+  },
+  "jspace_hyperposition_implication": {
+    "implication": "A cohort batch can preserve multiple unresolved semantic candidates as separate packet digests in one atomic integration event instead of forcing serial winner-like rewrites. This may be a cleaner substrate for Hyperposition/GWT re-entry experiments after the runtime gate closes.",
+    "nonclaim": "This is an architectural hypothesis only; it does not prove Global J-Space, GWT causality or model-internal Hyperposition."
+  },
+  "next_exact_action": "Before another physical-GRID10 promotion attempt, test whether the current strongest source can bind the exact barrier cohort packet digests directly into coordinator admission and deterministically reject UNREGISTERED_SOURCE, UNHEALTHY_SOURCE and DISJOINT_COHORT. If serial CAS still forces stale rewrites, prototype one atomic cohort-batch admission or an explicit immutable RESULT_REVALIDATION lineage and compare them with fail-closed negatives.",
+  "credit_boundary": {
+    "research_delta": 1,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_truth_credit": 0,
+    "effect_authority_credit": 0
+  }
+}

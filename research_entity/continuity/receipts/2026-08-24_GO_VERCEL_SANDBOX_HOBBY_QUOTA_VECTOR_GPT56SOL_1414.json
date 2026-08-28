@@ -1,0 +1,34 @@
+{
+  "schema": "ENTITYOS_HCU_GO_PROVIDER_QUOTA_OBSERVATION/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "dc394645af6151fb65018ba882d8b2f380d4074c",
+  "source": {
+    "provider": "Vercel",
+    "url": "https://vercel.com/pricing",
+    "classification": "OFFICIAL_PROVIDER_PRICING",
+    "hobby_sandbox_included": {
+      "active_cpu_hours_per_month": 5,
+      "provisioned_memory_gb_hours_per_month": 420,
+      "creations_per_month": 5000,
+      "network_gb_per_month": 20,
+      "concurrent_sandboxes": 10,
+      "snapshot_storage_gb": 15
+    }
+  },
+  "finding": "The Hobby Sandbox allowance is a multi-resource vector rather than one undifferentiated quota. Current connected read-only tooling did not expose the account's remaining values for that vector.",
+  "runtime_gate": "UNCHANGED_CLOSED_REMAINING_CAPACITY_UNOBSERVED",
+  "go_tracks": {
+    "track_a": "ADVANCED_PROVIDER_QUOTA_MODEL_PRECISION",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON_RUNTIME_GATE_CLOSED",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON_RUNTIME_GATE_CLOSED"
+  },
+  "runtime_credit_added": 0,
+  "jspace_model_runtime_credit_added": 0,
+  "training_credit_added": 0,
+  "whole_product_pass": false
+}

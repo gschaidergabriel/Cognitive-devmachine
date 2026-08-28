@@ -1,0 +1,106 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed_before_delta": "d71b61da7c0b444f2fe4608cdae01f118c53ba6c",
+    "main_after_primary_test_fix": "a30473990310a8be4d8072337f01eeb3939e9629",
+    "main_after_parallel_malformed_test_fix": "989e1d712d4aee4d6c1722c55923ca0c4093575f",
+    "main_after_readme_sync": "f5747f787c44740ef8b993e50106285e7323b968",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_head_observed": "2badebe78db868c56ef39f0a32d198282cffcd88",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "overlapping_provider_admission_prs_observed": [1421, 1422, 1423, 1424, 1427],
+    "new_parallel_provider_admission_pr_created": false,
+    "coordination_action": "REPAIR_CANONICAL_MAIN_TEST_HARNESS_AND_PRESERVE_EXISTING_FUSION_LANES"
+  },
+  "observed": {
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "provider_admission": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "providers_currently_admitted_free": [],
+    "external_llm_provider_execution": "QUARANTINED",
+    "local_normal_user_execution_authorized": true,
+    "clay_direct_dev_execution_authorized": true,
+    "local_or_vps_execution_bridge_exposed_to_this_organ": false,
+    "github_combined_status_observed_for_a304739": "NO_STATUSES",
+    "provider_secret_lookup_performed_by_this_organ": false,
+    "provider_network_call_performed_by_this_organ": false,
+    "paid_or_subscription_execution_performed": false,
+    "together_used": false
+  },
+  "material_finding": "The central FREE-provider admission boundary test supplied synthetic admission policy at root/admission.json while production load_provider_admission() resolves its default policy from root/research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json. Patching the legacy ADMISSION_PATH global did not redirect that production default. Therefore the executable discriminator could exercise a missing canonical policy path instead of the intended fixture. A concurrently-added 8.68 malformed-admission regression repeated the same noncanonical fixture-path defect.",
+  "hypothesis": "Binding every blocked-case fixture to the same canonical repository-relative admission path used by production is required for the acceptance tests to discriminate admission semantics rather than fixture placement.",
+  "counterhypothesis": "Patching admission_mod.ADMISSION_PATH is sufficient to redirect the production loader, so root/admission.json is equivalent.",
+  "counterhypothesis_adjudication": "REJECTED_BY_SOURCE: current load_provider_admission() constructs its default target from the resolved repository root plus research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json; the ADMISSION_PATH global is not the default-path authority in that function.",
+  "bounded_delta": {
+    "primary_test": {
+      "path": "tests/test_free_swarm_admission_boundary_867.py",
+      "commit": "a30473990310a8be4d8072337f01eeb3939e9629",
+      "resulting_blob": "221e9507dfca15aa3f3955c70171d761449494c1",
+      "changes": [
+        "all synthetic admission fixtures use the canonical production-relative path",
+        "missing admission case targets the canonical production-relative path",
+        "malformed admission startup tripwire requires zero secret lookups and zero network attempts",
+        "authority-epoch mismatch startup tripwire requires zero secret lookups and zero network attempts",
+        "unlisted-provider-record startup tripwire requires zero secret lookups and zero network attempts",
+        "fixture-path regression prevents reintroduction of root/admission.json drift"
+      ]
+    },
+    "parallel_malformed_test": {
+      "path": "tests/test_free_swarm_admission_boundary_868_malformed.py",
+      "commit": "989e1d712d4aee4d6c1722c55923ca0c4093575f",
+      "resulting_blob": "64b44084d2426a29a1a6193cb5957ec8cb407e89",
+      "changes": [
+        "malformed policy fixture moved from root/admission.json to the canonical production-relative path"
+      ]
+    },
+    "readme": {
+      "path": "the artefact/README.md",
+      "commit": "f5747f787c44740ef8b993e50106285e7323b968",
+      "resulting_blob": "fcdc6e9ed13163cd96dcf7e2f80424418c471325",
+      "change": "current go delta and frontier now record canonical-path harness convergence and exact runtime gate"
+    }
+  },
+  "external_solution_harvest": {
+    "status": "DESIGN_CORROBORATION_ONLY",
+    "principles": [
+      "Python unittest.mock guidance reinforces patching the object where it is actually looked up rather than assuming a similarly named global controls resolution.",
+      "Linux network namespaces can provide an OS-level no-network execution fence in addition to Python socket tripwires when the authorized local/VPS surface permits it."
+    ],
+    "promotion": "NONE"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: repaired the exact acceptance-harness path mismatch on canonical main and synchronized the artefact README.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_AT_TYPED_ADMISSION_TEST_BOUNDARY: the reusable typed provider/capability admission primitive is now exercised through the same canonical repository-relative authority path as production; no second authority created.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: current main independently added HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1 and post-load local-model identity work, but no exposed local/VPS execution bridge is available to this organ; duplicating source-only J-Space work would be lower information than executing the existing causal gate."
+  },
+  "execution_evidence": {
+    "exact_source_test_execution_observed": false,
+    "reason": "NO_EXPOSED_AUTHORIZED_LOCAL_OR_CLAY_DIRECT_DEV_EXECUTION_BRIDGE_AND_NO_GITHUB_STATUS_EXECUTION_OBSERVED",
+    "classification": "SOURCE_TEST_FIDELITY_DELTA_ONLY",
+    "not_product_failure": true
+  },
+  "credits": {
+    "free_swarm_provider_admission_runtime": 0,
+    "external_provider_worker_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On an exposed authorized zero-cost local normal-user or clay-direct-dev surface, bind exact then-current main and execute the FREE provider admission boundary suite with secret-access and socket tripwires; where supported, add an OS-level isolated network namespace/no-network fence. Emit FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 with exact source, environment, test count/results, secret_lookup_count=0, network_attempt_count=0, stdout/stderr digest, exit status and cleanup. Re-enter main immediately afterward before any provider restart or broader credit.",
+  "acceptance": "IN_PROGRESS"
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_TRIGGER2_CONTEXT_BINDING_GENERATOR_SWARM_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "audited_generator": {
+    "path": "tools/trigger2_context_binding_generator_v1.py",
+    "source_commit": "263030e5991a4323fbabedfb29d2ec34e8bbb115",
+    "blob_sha": "4af4a384918064e80906089bd0eed98d1e2fc79f"
+  },
+  "verdict": "REJECT_FOR_DIRECT_TRAINING_UNTIL_SHORTCUT_FIXED",
+  "severity": "CRITICAL",
+  "positive_findings": [
+    "The selected S3 permutation now constructs the realized class-to-symbol mapping rather than being metadata only.",
+    "All six S3 permutations are generated.",
+    "Production atom loading requires observed token_id and token_count=1 instead of inventing tokenizer facts.",
+    "The generator keeps rows METHOD_ONLY and mints zero dataset/training/J-Space/runtime credit.",
+    "The validator checks realized mapping against prompt metadata, target consistency, S3 coverage and class-symbol counterbalance."
+  ],
+  "critical_finding": {
+    "id": "CODEBOOK_ORDER_BASE_CLASS_PERFECT_SHORTCUT",
+    "source_expression": "codebook_order = codebook_orders[(row_index + seed) % len(codebook_orders)]",
+    "loop_structure": "base_class is the innermost 3-row loop inside a 2-polarity loop; each template contributes exactly 6 rows, so row_index modulo 6 resets to the same phase for every template and S3 permutation.",
+    "default_seed_mod_6": 1,
+    "resulting_order_indices": {
+      "DIRECT": {"ALLOW": 1, "DENY": 2, "ABSTAIN": 3},
+      "INVERTED": {"ALLOW": 4, "DENY": 5, "ABSTAIN": 0}
+    },
+    "consequence": "The six codebook-order indices partition perfectly by base semantic class. Therefore codebook order alone identifies the base class under the default generation design; the visible query identifies DIRECT versus INVERTED polarity, so a model can derive the target semantic class without reading the SITUATION. This defeats the intended context-invariant semantic-to-episode-codebook binding objective.",
+    "validator_gap": "The current validator collects global codebook-order variants and only fails when fewer than two variants occur. Global diversity does not test independence from semantic class, polarity, template or permutation."
+  },
+  "required_fix": {
+    "preferred": "Cross every semantic instance with all six codebook display orders independently of the S3 mapping. For each fixed (atom block, S3 mapping, template, polarity, base semantic class), require the realized order set to equal all six permutations.",
+    "alternative": "Use a preregistered balanced design that provably gives identical codebook-order distributions for every semantic class and polarity, then verify empirical independence rather than assuming randomization from global diversity.",
+    "validator_requirements": [
+      "Fail unless each fixed semantic/mapping cell has the preregistered complete or balanced order distribution.",
+      "Report contingency tables for codebook_order versus base_semantic_class, target_semantic_class and query_polarity.",
+      "Require zero or preregistered-negligible empirical mutual information for nuisance metadata/order against semantic/target class where exact balancing is intended.",
+      "Add a counterfactual-pair check: same situation + same S3 mapping + changed display order must keep target identical.",
+      "Add a counterfactual-mapping check: same situation + same atom triplet + changed S3 mapping must change target exactly according to the new mapping."
+    ]
+  },
+  "swarm_roles": {
+    "generator_architect": "PASS_WITH_FINDING: causal S3 realization corrected.",
+    "shortcut_leak_hunter": "FAIL: display-order shortcut can bypass situation semantics.",
+    "mechanistic_reviewer": "FAIL_FOR_OBJECTIVE: data can be solved without installing the hypothesized content-dependent binding computation.",
+    "split_provenance_reviewer": "NO_NEW_SPLIT_FAILURE_FOUND_IN_THIS_AUDIT; cross-split atom-pool and lexical-family validation remains a separate required gate.",
+    "jspace_evidence_guard": "PASS: no positive causal J-Space label is minted.",
+    "final_adjudicator": "REJECT direct training use until order confound is fixed and fail-closed validator added."
+  },
+  "training_examples_status": {
+    "current_generator_rows": "METHOD_ONLY_SOURCE_CANDIDATES_AT_BEST",
+    "direct_trainable": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Produce generator v2 or a minimal retained-path patch that independently balances codebook display order across every semantic/mapping cell, add a shortcut linter/test that fails v1, and only then instantiate rows using the measured 46-atom ABI split pools."
+}

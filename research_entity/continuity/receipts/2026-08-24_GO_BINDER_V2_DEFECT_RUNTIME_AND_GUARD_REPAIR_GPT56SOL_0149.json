@@ -1,0 +1,97 @@
+{
+  "schema": "ENTITYOS_HCU_GO_BINDER_V2_DEFECT_RUNTIME_AND_GUARD_REPAIR/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "latest_research_main_observed_before_write": "19781cf10f110569ece8104cbacfc8e5a7292f3d",
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "mode": "FREE_ONLY",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "unusual_experiment_policy": "NO_NEW_UNUSUAL_INTERVENTION_WITHOUT_CANONICAL_ATOMIC_LEASE"
+  },
+  "execution_controller_repair": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_pr": 810,
+    "repair_commit": "81abafaa7a544b95f4b3d0f36c796a5b7e3f1bfa",
+    "repair": "Aligned the fail-closed Vercel build guard with the fixed HCU_JSPACE_BINDER_V2_MODEL_CALL_RELABEL_REGRESSION/v1 capsule after the endpoint changed from the older Entry-component credit marker. Added guard requirements for source_main_tree, source_pr_tree and the fixed python3 test_model_call_relabel_v2.py command; forbade the stale EXACT_SHA_BOUND_HCU_SOURCE_COMPONENT_ONLY marker.",
+    "capability_expansion": false,
+    "generic_command_added": false,
+    "paid_or_together_path_added": false
+  },
+  "pre_repair_build_falsifier": {
+    "deployment": "dpl_HBu1WdEuEPRxreauNw6BQZHKqeZW",
+    "controller_commit": "b84bd72a677e8204ec2b2c63cf14ad9a27b31aea",
+    "result": "BUILD_FAILED_BEFORE_APPLICATION_OR_SANDBOX_EXECUTION",
+    "exact_error": "ENTITYOS_HCU_ENTRY_CAPSULE_MISSING:EXACT_SHA_BOUND_HCU_SOURCE_COMPONENT_ONLY",
+    "classification": "EXECUTOR_GUARD_CONTRACT_MISMATCH_NOT_HCU_TEST_FAILURE"
+  },
+  "post_repair_deployment": {
+    "deployment": "dpl_EXe9yUTvG6tdKK6zf51q8DYWey9D",
+    "controller_commit": "81abafaa7a544b95f4b3d0f36c796a5b7e3f1bfa",
+    "state_observed": "READY",
+    "route": "/api/hcu-entry-capsule",
+    "runtime_log_observation": "2026-08-23T18:48:54Z GET /api/hcu-entry-capsule HTTP 200",
+    "route_success_contract": "HTTP 200 only when the recorded relabel class is reproduced with command exit 0 and Sandbox cleanup succeeds",
+    "execution_credit": "EXACT_SHA_BOUND_HCU_COMPONENT_DEFECT_REGRESSION_ONLY"
+  },
+  "executed_capsule_identity": {
+    "capsule": "HCU_JSPACE_BINDER_V2_MODEL_CALL_RELABEL_REGRESSION/v1",
+    "source_repository": "gschaidergabriel/clay-global-research-entity",
+    "source_main_commit": "d2a44f9eef93181fe6a9538f6025a419fa711f40",
+    "source_main_tree": "bebac227bebb026458be726688adf11b747988f2",
+    "source_pr": 1263,
+    "source_pr_commit": "18be64b3d59b08fd460ccf4737a7bb368d2e2d60",
+    "source_pr_tree": "1f2edc78d0e9e817fc83ed4acd579ff1a280c879",
+    "binder_blob": "9407b5f3a354e59d44235d414797820f5032b0f1",
+    "regression_blob": "41cb9c5850fea18b794802d51f7429a39ff8749a",
+    "fixed_command": "python3 test_model_call_relabel_v2.py"
+  },
+  "mechanism_observed": {
+    "defect_class": "RECORDED_CROSS_CELL_MODEL_CALL_ALIAS",
+    "baseline_trace_cell": "cell-02",
+    "relabeled_model_call_cell": "cell-09",
+    "role": "critic",
+    "observed_old_behavior": "The exact bound binder source accepted the relabeled model_call_id while retaining the trace cell, so model_call_id was not semantically bound to the exact GRID10 plan cell/role.",
+    "interpretation": "CAUSAL_IDENTITY_GAP_REPRODUCED_AT_EXACT_COMPONENT_RUNTIME_SCOPE"
+  },
+  "current_repair_candidate": {
+    "retained_hcu_pr": 1263,
+    "latest_pr_head_observed": "da3ced824196933101f3549040f6680edbe7a8b9",
+    "source_path": "the artefact/MicroEntity/hcu/jspace_inference_binding_v1.py",
+    "repair_source_behavior": "Construct expected_model_call_id as grid10:<plan_sha256>:<trace_cell_id>:<role> and fail closed with INFERENCE_MODEL_CALL_ID_DOES_NOT_BIND_GRID10_CELL_ROLE on mismatch.",
+    "focused_test_path": "the artefact/MicroEntity/hcu/test_jspace_inference_model_call_identity_v2.py",
+    "focused_source_test_intent": "exact cell/role identity binds; relabel to another cell, another plan, or opaque legacy call label fails closed",
+    "exact_repaired_blob_sandbox_runtime": "UNOBSERVED_AT_RECEIPT_WRITE",
+    "promotion_state": "SOURCE_MECHANISM_CANDIDATE_REPAIR"
+  },
+  "credit": {
+    "old_defect_runtime_reproduction": true,
+    "guard_repair_deployment_ready": true,
+    "repaired_current_binder_runtime_verified": false,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "unusual_experiment": {
+    "count_added_by_this_organ": 0,
+    "classification": "DETERMINISTIC_REPLAY_OF_ALREADY_RECORDED_DEFECT_CLASS_AND_EXECUTOR_REPAIR",
+    "atomic_lease_consumed": false
+  },
+  "next_exact_gate": [
+    "Keep PR1263 as the single HCU donor lane and PR810 as the single bounded Sandbox execution lane.",
+    "Stage the exact repaired current PR1263 binder blob plus a minimal deterministic regression closure into one fixed hash-bound FREE_ONLY Vercel capsule; do not reuse the stale defect blob for repair credit.",
+    "Bind then-current Research main and PR1263 commit/tree identities plus every included blob/digest, fixed command, result digest, Sandbox identity, secret fence and cleanup.",
+    "Require the exact recorded cross-cell relabel case to fail closed with INFERENCE_MODEL_CALL_ID_DOES_NOT_BIND_GRID10_CELL_ROLE while the exact canonical model_call_id baseline still binds.",
+    "Only after that passes extend toward the minimum Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure.",
+    "Do not grant model, training, full-HCU or whole-EntityOS credit from this component result."
+  ],
+  "result": "EXACT_OLD_BINDER_DEFECT_REPRODUCED_AND_EXECUTOR_GUARD_REPAIRED; CURRENT_SOURCE_FIX_REQUIRES_EXACT_FREE_SANDBOX_CONFIRMATION"
+}

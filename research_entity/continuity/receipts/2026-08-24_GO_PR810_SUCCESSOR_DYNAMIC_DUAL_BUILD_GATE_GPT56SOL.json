@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "aad2c33bacc6492d2ea6f0f102c102ef61e906d9",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_comment_id": 5388229876
+  },
+  "observed_executor": {
+    "head": "3c81d2dc9b9e7f428416d7273a9e60cb8b85c028",
+    "head_commit_message": "fix(hcu): make exclusive executor guard successor-dynamic",
+    "global_executor_guard": "EntityOSHCUCurrentExecutorGuard/v13",
+    "promotion_guard_source": "scripts/guard-hcu-jspace-v4-v3-promotion-contract-v2.mjs",
+    "permission_guard_source": "scripts/guard-hcu-jspace-rebind-permission-semantics.mjs",
+    "route_source": "api/hcu-jspace-grid10-binding-capsule.js",
+    "exact_donor_blob_count": 17,
+    "expected_regression_count": 14,
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "runtime_execution_observed": false
+  },
+  "finding": {
+    "classification": "SUCCESSOR_DYNAMIC_DUAL_SOURCE_BUILD_GATE_BLOCK",
+    "observed": [
+      "The exclusive executor guard now re-runs the current donor-blob, promotion and permission guards, so their semantics must be mutually satisfiable on one exact head.",
+      "The current promotion guard proves all 14 expected test method definitions exist in hash-bound regression sources, but the executable route result acceptance checks only EXPECTED_TEST_COUNT=14, generic combined.includes('OK'), and seven semanticMarkers.",
+      "The executable route does not explicitly require all 14 verbose observed test identities and does not explicitly reject skipped= or expected failures= summaries.",
+      "The current contract remains SOURCE_REBIND_REQUIRED and sandbox_create_permitted_before_source_rebind=false. The route nevertheless falls through after successful 17-blob source verification to the FREE_ONLY cost gate and Sandbox.create path.",
+      "The current permission guard treats SOURCE_REBIND_REQUIRED as terminal quarantine and requires an unconditional SOURCE_REBIND_VERIFIED_AWAITING_PROMOTION response before the cost gate; Sandbox reachability is reserved for SOURCE_REBOUND_READY with source_rebind_complete=true and separate post-rebind permission.",
+      "Vercel reports failure for the exact observed executor head because of the Hobby build-rate limit; no semantic runtime command was observed."
+    ],
+    "inference": "Even if Vercel quota recovered immediately, exact head 3c81d2dc is not promotable: the successor build guards encode incompatible SOURCE_REBIND_REQUIRED control-flow semantics, and the promotion guard has weakened the previously pinned exact 14-result observation boundary. This is a deterministic source/build blocker independent of the external Vercel rate limit.",
+    "counterhypothesis": "Hash-bound regression source plus exact total count and seven semantic sentinels is sufficient, and SOURCE_REBIND_REQUIRED may mean verify-before-execute rather than terminal quarantine.",
+    "counterhypothesis_rejection": "Canonical current receipts already pin the stronger exact-result observation boundary, and the active permission guard explicitly reserves execution permission for a distinct SOURCE_REBOUND_READY transition. Weakening either guard to fit the route would erase evidence or rewrite the pre-rebind permission boundary rather than close it."
+  },
+  "required_coherent_fix": {
+    "result_fence": [
+      "restore an explicit 14-name EXPECTED_REGRESSION_TESTS observation set on the executable result path",
+      "derive expected count from that set",
+      "require every verbose unittest identity to be observed",
+      "require exact Ran 14 tests in summary",
+      "require standalone plain OK",
+      "reject FAILED, skipped=, and expected failures="
+    ],
+    "rebind_state_machine": [
+      "while contract status is SOURCE_REBIND_REQUIRED, successful exact 17-blob verification terminates before cost admission as SOURCE_REBIND_VERIFIED_AWAITING_PROMOTION",
+      "preserve sandbox_create_permitted_before_source_rebind=false as immutable causal evidence",
+      "only an atomic coherent SOURCE_REBOUND_READY contract plus source_rebind_complete=true plus sandbox_create_permitted_after_source_rebind=true and route quarantine removal may reach the FREE_ONLY cost gate"
+    ]
+  },
+  "negative_evidence": {
+    "sandbox_runtime_executed_by_this_organ": false,
+    "route_invoked_by_this_organ": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the live successor-dynamic executor is now adjudicated as blocked by two deterministic source/build gates before any exact-current runtime attempt; this prevents quota recovery or stale READY deployment from being mistaken for executable readiness.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: the single exact 17-blob Typed Entry -> route -> engine/load -> GRID10 -> atomic ModelExecution -> Inference/v4 closure remains retained while its source-rebind state transition is fenced from premature Sandbox execution.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: the previously established exact 14-test Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 observation boundary is explicitly preserved against a weaker successor guard; model/training credit remains zero."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "PR810 and current Research main are moving rapidly under parallel organs. An append-only exact-head receipt and executor PR comment preserve the new dual-gate finding without overwriting a moving current-facing README snapshot."
+  },
+  "next_exact_gate": "Re-enter current PR810. Require one coherent source change that restores the exact 14-result observation fence and makes SOURCE_REBIND_REQUIRED terminal before the FREE_ONLY cost gate while preserving the 17-blob dynamic closure. Only after those guards agree may a distinct SOURCE_REBOUND_READY transition be considered. Then require a READY Vercel preview whose immutable Git SHA equals the then-current PR810 head and invoke only that exact deployment under FREE_ONLY fences."
+}

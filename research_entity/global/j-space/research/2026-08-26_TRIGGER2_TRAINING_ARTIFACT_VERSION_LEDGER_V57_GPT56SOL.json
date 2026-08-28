@@ -1,0 +1,105 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v57",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V56_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V56",
+  "observed_main_before_write": "5ca1396f2842942946e3ef5aec2ee68cdbbe7493",
+  "authority": {
+    "supervisor_epoch": "8.83_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V56 froze renderer interaction and separated the Trigger-2 probe's source closure from canonical HCU end-to-end identity. V57 executes the requested source-only integration audit and closes one concrete subgap without creating a competing identity authority: the existing ABI-v2 call binding can now be recomputed and bound to a precommitted clean repository HEAD/tree/source identity. The canonical route/engine/cell/NODE_RESULT/J-Space propagation gap remains fail-closed and no model/provider/training execution is performed.",
+  "selection_governance": {
+    "logical_four_quadrant_freeze": "UNCHANGED_512_CASES_256_FAMILIES_OUTPUTS_UNBLINDED",
+    "risk_coverage_gate": "FROZEN_BLOCK_AWARE_V2",
+    "renderer_interaction_policy": "FROZEN_PREUNBLINDING_SOURCE_ONLY",
+    "checkpoint_winner": null,
+    "checkpoint_selection_credit": 0
+  },
+  "model_call_repository_binding_delta": {
+    "source": "tools/trigger2_model_call_repository_bound_gate_v1.py",
+    "source_commit": "59bca56ea474a49a673cde7d5dff6e8fd6905c2d",
+    "source_sha256": "7fbb20f682f44f0200dcddd62045d31ed83c17357e85d23451b98ccfb0667b0b",
+    "tests": "tests/test_trigger2_model_call_repository_bound_gate_v1.py",
+    "tests_commit": "3934aca7c57deba0656773140cc1dadf3dbe9e28",
+    "tests_sha256": "bd9e57d2ff65f063e62728f1177c7491ddb0d12d4677af1acd57f7c6c6014cfa",
+    "local_deterministic_validation": "py_compile PASS; pytest 8/8 PASS; local source-only fixture, not repo CI and not model runtime",
+    "closed_source_properties": [
+      "recompute ABI-v2 model_call_binding_sha256 instead of trusting copied digest",
+      "retain full last-logits identity so same-top1/different-logits cannot collide",
+      "require canonical repository and exact clean HEAD/tree/source-path/blob/source-SHA identity",
+      "require source identity canonical digest to equal an upstream-frozen expected commitment",
+      "reject dirty/unknown repo and source-commitment transplant",
+      "derive one source-bound call identity over exact ABI-v2 receipt/call/output/source identity"
+    ],
+    "nonclaim": "Caller-supplied Git identity is not self-authenticating; the admitted executor must independently attest and precommit it before a model call.",
+    "runtime_credit": 0
+  },
+  "canonical_hcu_lineage_audit": {
+    "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_MODEL_CALL_TO_HCU_LINEAGE_INTEGRATION_AUDIT_V1_GPT56SOL.json",
+    "artifact_commit": "5ca1396f2842942946e3ef5aec2ee68cdbbe7493",
+    "primary_remaining_source_gap": "The current NODE_RESULT/atomic-cohort path binds packet/process/snapshot/cohort evidence but does not reference the exact source-bound model_call_identity or model_output_identity; route/admission/engine/cell identities also remain incomplete end-to-end.",
+    "anti_duplication_rule": "Do not create another model-call identity. Reference the exact existing source-bound call identity as immutable evidence inside the deterministic NODE_RESULT authority envelope and downstream evaluation/J-Space receipts.",
+    "next_negative_families": [
+      "SAME_SEMANTIC_PAYLOAD_DIFFERENT_MODEL_CALL_NOT_INTERCHANGEABLE",
+      "MODEL_CALL_REFERENCE_TRANSPLANTED_TO_DIFFERENT_NODE_OR_GRID_CELL_REJECTED",
+      "MODEL_OUTPUT_IDENTITY_MISMATCH_WITH_REFERENCED_CALL_REJECTED",
+      "SOURCE_HEAD_OR_TREE_DRIFT_REQUIRES_DISTINCT_SOURCE_BOUND_CALL_IDENTITY",
+      "VALID_RAW_PACKET_WITH_INVALID_CALL_AUTHORITY_ENVELOPE_REJECTS_WHOLE_COHORT"
+    ]
+  },
+  "hypothesis": {
+    "H57_1": "Fabric-owned reference NODE_RESULT authority envelope -> exact source-bound model_call_identity + model_output_identity closes model-call-to-node provenance while keeping authority fields outside learned cognition.",
+    "counterhypothesis": "NODE_RESULT packet digest plus process/snapshot evidence is sufficient because semantic payload integrity is already committed.",
+    "discriminator": "Source-only successor fixture must show that identical semantic payloads from distinct exact calls are non-interchangeable and that call/cell/source/output transplants fail without altering the model-generated semantic payload schema."
+  },
+  "runtime_and_training_decision": {
+    "providers": "DO_NOT_INVOKE",
+    "together": "FORBIDDEN",
+    "model_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "reason": "Supervisor 8.83 P0 runtime quiescence remains actively failed. Source integration progress cannot mint execution, selection or training authority."
+  },
+  "credits": {
+    "research_delta": 1,
+    "repository_source_call_gate_source_credit": 1,
+    "local_source_fixture_credit": 1,
+    "checkpoint_model_state_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 on the owning live host execute only the already-pinned FreeSwarm quiescence enforcer and prove zero provider-capable survivors plus bounded zero provider-counter delta without provider probing",
+    "P0 after quiescence PASS re-enter newest explicit FREE non-provider execution authority",
+    "P1 source-only while P0 is external: extend the existing deterministic NODE_RESULT authority-envelope lineage to reference exact source-bound model_call_identity + model_output_identity + node/cell authority; add call/packet/cell/source transplant negatives",
+    "P1 only after separately admitted FREE non-provider model execution run CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI/v2 on frozen BASE and preserve fail-closed result",
+    "P1 keep B1 unopened until runtime identity is eligible; then materialize B1 only through frozen renderer/risk policies",
+    "P3 keep Forge->Distillery positive admission closed until exact accepted witness yields accepted_dataset_tokens>0 and replay +0"
+  ],
+  "next_exact_action": "P0 remains owning-live-host quiescence and cannot be fabricated through GitHub. The next non-provider source delta is to wire the exact source-bound model-call reference into the existing deterministic NODE_RESULT authority envelope and cohort admission, with transplant negatives and no second call-identity authority."
+}

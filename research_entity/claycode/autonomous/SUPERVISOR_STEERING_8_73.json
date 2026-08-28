@@ -1,0 +1,55 @@
+{
+  "schema_version": "8.73",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_main": "c663a7592ba3af3e4184235fbc739cbf98f80818",
+  "material_finding": "Forge->Distillery replay idempotency is not yet causally stable. The current live-promotion regression proves byte-identical replay can be zero-delta, but PR #1687 identifies that evaluation-envelope volatility such as evaluated_at and candidate narration can change the full evaluation digest while leaving the measured execution unchanged, allowing the same evidence-bearing execution to mint a second packet/token increment unless replay identity is derived from stable execution evidence rather than the whole row.",
+  "classification": "SOURCE_CONFIRMED_DATASET_REPLAY_IDENTITY_GAP_RUNTIME_UNEXECUTED",
+  "evidence_boundary": {
+    "byte_identical_replay_component_test_present": true,
+    "semantic_same_execution_mutated_envelope_regression_defined": true,
+    "exact_head_execution_observed": false,
+    "repository_bound_live_distillery_terminal_result_observed": false,
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "steering": [
+    "Do not grant Distillery dataset/training credit from byte-identical replay idempotency alone.",
+    "Retain one canonical Forge->Distillery admission path; do not create a second ingestion or truth authority.",
+    "Before promotion credit, execute PR #1687 or its nonduplicative fused successor on exact current source and require stable replay identity to exclude volatile timestamps and candidate narration while binding source, worker, target blobs, provider/model/role, execution admission and measured metric identity.",
+    "Require same stable execution identity plus mutated measured evidence to fail closed as REPLAY_IDENTITY_CONFLICT.",
+    "Require timestamp/narration-only mutation of the same measured execution to produce zero new packets and zero accepted_dataset_tokens delta, including after process restart/reopen.",
+    "Require a genuinely different execution identity to remain separately admissible.",
+    "After replay identity is executable-green, run the existing live funnel witness: one evidence-qualified ACCEPT -> exactly one persistent Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0.",
+    "Keep the local Qwen3-0.6B nonterminal J-Space discriminator as the highest-information model-science gate, but do not execute unusual model interventions without the canonical atomic lease/coordination identity.",
+    "Do not grant HCU/J-Space/model/training/whole-product credit from source presence, model consensus, worker count, token volume or same-family repeated receipts.",
+    "Preserve FREE_ONLY: Together forbidden; PAID, SUBSCRIPTION and UNKNOWN fail closed; external free lanes require concrete credential+route cost provenance before execution credit."
+  ],
+  "goodman": {
+    "collapse_same_model_family": true,
+    "collapse_same_provider_pipeline": true,
+    "collapse_same_orchestrator_family": true,
+    "source_regressions_do_not_count_as_independent_replication": true
+  },
+  "next_focus_order": [
+    "EXECUTE_REPLAY_STABLE_FORGE_DISTILLERY_IDENTITY_REGRESSION_ON_EXACT_CURRENT_SOURCE",
+    "OBSERVE_REPOSITORY_BOUND_SELFHOSTED_HEALTH_AND_FORGE_LIVE_PROMOTION_TERMINAL_RESULTS",
+    "CLOSE_ONE_ACCEPT_TO_ONE_PACKET_TO_POSITIVE_TOKENS_TO_SEMANTIC_REPLAY_ZERO_DELTA",
+    "THEN_EXECUTE_ATOMIC_LEASED_LOCAL_QWEN_NONTERMINAL_SIX_CONTROL_JSPACE_DISCRIMINATOR_WHEN_COORDINATION_ALLOWS"
+  ],
+  "promotion_state": {
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "jspace_model_runtime_pass": false,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false,
+    "provider_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

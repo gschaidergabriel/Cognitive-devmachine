@@ -1,0 +1,78 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "bootstrap_cache_observed_stale_head": "de6e4f9255cdab0b5463708a3f1c8d6ba5805fa8",
+    "canonical_main_at_first_refresh": "35111436aad7b1fdb35046f630268e7d914e5c8e",
+    "canonical_main_before_receipt": "0eee4cef05ea011d1f23b50f735067bef2b4bee2",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_donor_head_observed": "6cd79fa69eabda54b61b8a2f810d82ae0791d68b",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_identity_exposed_to_this_organ": false,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "vps_bridge_health": "UNRESOLVED_NO_AUTHORIZED_LOCAL_OR_CLAY_DIRECT_DEV_BRIDGE_TOOL_EXPOSED_TO_THIS_CHAT",
+    "vps_bridge_health_classification": "INFRASTRUCTURE_TOOL_EXPOSURE_STATUS_NOT_PRODUCT_FAILURE"
+  },
+  "observed_problem": {
+    "component": "tools/run_free_swarm_admission_boundary_receipt.py",
+    "purpose": "exact-source FREE provider admission boundary receipt",
+    "gap_1": "The clean-tree gate excluded untracked files even though the child PYTHONPATH contains the repository, so an untracked import-shadowing artifact could invalidate exact-source provenance.",
+    "gap_2": "The runner bound HEAD/source manifest only before child execution, so source or authority mutation during the test window could yield a green result without proving start-to-end source identity.",
+    "counterhypothesis": "Selected tracked-file hashes alone are sufficient because untracked files and mid-run repository changes are outside the declared source manifest.",
+    "adjudication": "Rejected for promotable exact-source evidence: Python import behavior can be altered by untracked repo files, and a receipt must prove the executed source identity remained stable for the full test interval rather than only at launch."
+  },
+  "writes": [
+    {
+      "commit": "3e1a0bf0b462e88c19d92abbcacba464e0e6388a",
+      "message": "security: include untracked files in exact-source receipt gate",
+      "effect": "git status cleanliness now includes all untracked files; receipt records this fence"
+    },
+    {
+      "commit": "df3f8109268800a64285efecc29967214cfabfa9",
+      "message": "security: bind FREE boundary receipt source before and after run",
+      "effect": "HEAD, clean tree and source-manifest digest must match before and after child execution; mismatch makes boundary_pass=false"
+    }
+  ],
+  "parallel_fusion": {
+    "caller_forged_provider_admission": "Parallel canonical main closed caller-supplied admission self-grant while this organ was auditing; duplicate patch was intentionally not forced.",
+    "local_model_identity": "Current main records post-load server-reported model path/file digest plus runtime executable digest in CLAY_LOCAL_RESEARCH_MODEL/v2 while explicitly keeping loader_consumption_attestation=false and all model/J-Space/training credits at zero.",
+    "jspace_epistemic_fence": "Current main 0eee4cef05ea011d1f23b50f735067bef2b4bee2 separates JSPACE_DIAGNOSTIC_READOUT from JSPACE_CAUSAL_CONTROL_CANDIDATE and requires method-matched placebo/control evidence."
+  },
+  "execution_evidence": {
+    "exact_free_swarm_boundary_runtime_executed_by_this_organ": false,
+    "reason": "No authorized normal-user local bridge or clay-direct-dev bridge is exposed to this ChatGPT organ; source-only/container-local execution would not satisfy the requested exact authorized runtime scope.",
+    "github_commit_statuses_for_first_source_fix": "NO_STATUS_OBSERVED",
+    "external_llm_provider_calls_by_this_organ": 0,
+    "paid_provider_actions_by_this_organ": 0
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: promotable FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT source provenance now rejects untracked import shadows and mid-run HEAD/tree/manifest mutation.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the live donor already advanced the causal-credit fence during this macrocycle; the next higher-information HCU discriminator is exact execution of the existing InferenceReceipt/v4 rejection suite on an exposed authorized local/clay-direct-dev surface, so another duplicate source lane was not added.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_LEVEL_VIA_PARALLEL_CANONICAL_MAIN: local model identity observation was strengthened while loader-consumption credit remains false, and diagnostic J-Space readout is now explicitly separated from causal-control candidates with matched-placebo requirements."
+  },
+  "credits": {
+    "free_swarm_provider_admission_runtime_credit": 0,
+    "external_provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On a clean exact checkout exposed through the authorized local normal-user or clay-direct-dev bridge, execute tools/run_free_swarm_admission_boundary_receipt.py to a receipt path outside the checkout; require boundary_pass=true, zero network attempts, zero secret-pre-touch evidence, identical pre/post HEAD and source manifest, then execute the live PR1263 InferenceReceipt/v4 rejection-boundary suite at its exact donor head before any executor/model/J-Space promotion.",
+  "acceptance": "IN_PROGRESS"
+}

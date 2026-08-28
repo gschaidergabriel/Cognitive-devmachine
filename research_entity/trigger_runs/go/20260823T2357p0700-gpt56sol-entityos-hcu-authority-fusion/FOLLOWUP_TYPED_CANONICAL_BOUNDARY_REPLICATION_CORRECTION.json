@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "record_type": "ENTITYOS_HCU_GO_FOLLOWUP_APPEND_ONLY_CORRECTION",
+  "corrects_commit": "0c5d3312826b758d2c09fbd424e1e6eb6c7d7a01",
+  "corrects_path": "research_entity/trigger_runs/go/20260823T2357p0700-gpt56sol-entityos-hcu-authority-fusion/FOLLOWUP_TYPED_CANONICAL_BOUNDARY_REPLICATION.json",
+  "reason": "The follow-up was authored from PR1263 head 9a647d6 and a stale main observation while canonical-main correction commit 847cce80 had already landed concurrently. Append-only correction is required; historical evidence is not rewritten.",
+  "current_canonical_authority": {
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "selected_implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "authority_commit": "5d99c6c37fc9dbecaa557f6091de06f703e9a412",
+    "reentry_correction_commit": "847cce80b5c52f7d9ceb47c43acc3c184ad2c87d",
+    "typed_canonical_v1_status": "RESEARCH_PROVENANCE_AND_FALSIFIER_EVIDENCE_ONLY_NOT_CURRENT_SELECTED_AUTHORITY"
+  },
+  "preserved_evidence": {
+    "typed_canonical_source_blob": "fe75658b68134303e51b723280d42104575eacd7",
+    "typed_canonical_test_blob": "07ecaa3d5415f86f8e2c6ac999ba9f3d4aa14060",
+    "exact_component_regression": "10_OF_10_PASS",
+    "value": "Independent evidence that host-language numeric type can create cross-language admission divergence unless explicitly fenced; useful as counterexample during JCS migration, but grants no current canonicalizer authority."
+  },
+  "current_migration_gap": {
+    "typed_entry_current_encoder": "ENTITYOS_HCU_ENTRY_CBOR_RFC8949_SUBSET/v1",
+    "router_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "inference_receipt_current_encoder": "HCU_PYTHON_JSON_DUMPS_SORT_KEYS_UTF8/v1",
+    "target_encoder": "RFC8785_JCS_IJSON/v1",
+    "cross_language_end_to_end_identity_claim": false,
+    "runtime_credit": 0
+  },
+  "next_exact_gate": "Validate the exact retained RFC8785 implementation/tests, then wire RFC8785_JCS_IJSON/v1 end-to-end through new-version Entry event/admission, router policy/EngineAdmission/route and inference receipt identities with mixed/unknown/downgrade rejection before runtime promotion.",
+  "acceptance": "IN_PROGRESS"
+}

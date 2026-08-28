@@ -1,0 +1,91 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "tested_main_sha": "ff2eb063284c9e41dd399c13be1e4b73ae7bf0c9",
+  "source_merge_sha": "a6b923ae666d7274f06c450b3dfc61afe891358b",
+  "source_pr": 925,
+  "scope": "exact-current no-network validation of the merged Qwen3.5-0.8B Together launcher seed/create-boundary identity repair while preserving the FREE_ONLY paid-provider gate",
+  "exact_source_blobs": {
+    "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py": "baba0d17f8f6181c833a19af09b4b5807a84cfa0",
+    "the artefact/blogpost_entity/mini_cognition/test_launch_together_qwen35_08b_v1.py": "5c10e297ce56e243a529857ad4c1a80eb0143a43"
+  },
+  "source_identity": {
+    "method": "reconstructed exact GitHub file bytes and verified with git hash-object before execution",
+    "launcher_hash_match": true,
+    "test_hash_match": true
+  },
+  "repair_verified": {
+    "job_known_before_post_create_verification": true,
+    "random_seed_verified_from_create_response": true,
+    "random_seed_not_required_from_retrieve_schema": true,
+    "retrieve_identity_preserves": [
+      "training_file",
+      "validation_file",
+      "model",
+      "suffix",
+      "n_epochs",
+      "n_evals",
+      "n_checkpoints",
+      "learning_rate",
+      "warmup_ratio",
+      "training_method",
+      "training_type"
+    ],
+    "free_only_gate_preserved": true,
+    "free_only_gate_order": "before TOGETHER_API_KEY lookup and before Together import/network"
+  },
+  "execution": {
+    "surface": "isolated local Linux container",
+    "network_required": false,
+    "commands": [
+      "git hash-object <launcher/test reconstructed exact bytes>",
+      "python3 -m py_compile launch_together_qwen35_08b_v1.py test_launch_together_qwen35_08b_v1.py",
+      "python3 test_launch_together_qwen35_08b_v1.py"
+    ],
+    "py_compile": "PASS",
+    "unittest": {
+      "ran": 14,
+      "passed": 14,
+      "failed": 0,
+      "result": "PASS"
+    },
+    "runtime_credit": "EXACT_GIT_BLOB_NO_NETWORK_COMPONENT"
+  },
+  "github_actions_execution_admission": {
+    "initial_pr_runs": [
+      {"run_id": 32571293052, "job_id": 97027005224, "name": "strict-admission", "steps": null},
+      {"run_id": 32571293057, "job_id": 97027005119, "name": "deterministic-cognition-gates", "steps": null},
+      {"run_id": 32571293069, "job_id": 97027005146, "name": "identity-guard", "steps": null},
+      {"run_id": 32571293076, "job_id": 97027005304, "name": "direct-lane-admission", "steps": null}
+    ],
+    "single_direct_lane_rerun": {"run_id": 32571293076, "job_id": 97027256892, "steps": null, "conclusion": "failure"},
+    "interpretation": "GitHub hosted runner/control-plane admission failed before visible step execution on both initial and one explicit rerun; zero GitHub runtime credit and not a code-test failure"
+  },
+  "provider_contract_basis": {
+    "create_job": "https://docs.together.ai/reference/post-fine-tunes",
+    "retrieve_job": "https://docs.together.ai/reference/get-fine-tunes-id",
+    "observation": "current create response schema documents random_seed; current retrieve schema documents the retained training identity fields but not random_seed"
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment": false,
+    "total_for_user_go_remains": 1,
+    "consumed_name": "POST_CREATE_PROVIDER_CONFIG_SUBSTITUTION_AND_FIELD_VISIBILITY_FALSIFIER"
+  },
+  "paid_provider_activity": {
+    "api_secret_mounted": false,
+    "provider_request": false,
+    "file_upload": false,
+    "preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "promotion": "EXACT_NO_NETWORK_COMPONENT_PASS_PROVIDER_RUNTIME_UNOBSERVED",
+  "acceptance": "IN_PROGRESS",
+  "next": "Resolve authorized runner/provider execution admission. Under current FREE_ONLY policy no Together credentialed preflight or billed create is allowed; any future billed create still requires fresh explicit owner authorization and all fingerprint/duplicate/budget gates."
+}

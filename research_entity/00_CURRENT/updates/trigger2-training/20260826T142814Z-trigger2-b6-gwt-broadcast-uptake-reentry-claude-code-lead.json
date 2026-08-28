@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "receipt_id": "20260826T142814Z-trigger2-b6-gwt-broadcast-uptake-reentry-claude-code-lead",
+  "direction": "trigger2-training",
+  "created_at": "2026-08-26T14:28:14Z",
+  "observed_head": "1e3f76d107d2e4081e27069d52b90ca074dc4232",
+  "status": "GWT_GAP_CLOSED_CANDIDATE_MATERIALIZED_ADMISSION_STILL_CLOSED",
+  "headline": "Closed the GWT broadcast/uptake/causal-re-entry gap explicitly flagged as missing in the B6 system-integration generator's commit message. 2160 new candidate rows across 3 families. One real design bug caught and fixed by the generator's own audit before commit: an initial causal-re-entry rule design made round-2 answers completely independent of round-1's outcome (0/864 rows would have tested anything).",
+  "state": "Gabriel: 'mach dass die Trainingsdaten perfekt sind' -- close remaining course-section-2 gaps, GWT first (course section 2H: 'GWT training/evaluation must cover competition, broadcast, uptake and causal re-entry'). The existing B6 generator's Hyperposition family already covers collapse/majority hard negatives but not broadcast/uptake/re-entry specifically. Added tools/trigger2_b6_gwt_broadcast_uptake_reentry_generator_v1.py + tests (7/7 pass), three families: GWT_COMPETITION_BROADCAST (864 rows -- three candidates P/Q/R each carry a discriminator_score, the ONLY legitimate winner criterion, and an independently varied repeat_count majority-distractor that must never determine the winner per section H's explicit anti-majority law; 288 rows where the distractor coincidentally agrees, 576 where it genuinely conflicts). GWT_UPTAKE (432 rows -- a downstream query must read the property of the CURRENTLY BROADCAST candidate, with two non-broadcast candidates' properties stated nearby as adjacency-shortcut hard negatives; caught and fixed a real duplication bug during development where an earlier version iterated over all 6 score permutations even though the UPTAKE prompt only ever states the winner's role, producing exact duplicate prompts whenever two different permutations shared the same argmax -- fixed by iterating over the winner role directly, 3 values instead of 6 redundant permutations). GWT_CAUSAL_REENTRY (864 rows, 576 of which are 'distinguishing' -- round 2's applicable score triple is selected by round 1's winner's IDENTITY via an explicit conditional rule (not a shared-base-plus-offset formula); a genuinely more serious bug was caught here by the generator's own audit before commit: an initial design used round2_score[role] = round1_winner_score + fixed_per_role_offset, which is provably independent of round1_winner's identity (all three round-2 candidates share the same base, so the largest offset always wins regardless of what the base value is) -- this silently made 0 of 864 rows test anything about causal re-entry at all; a model that ignored round 1 entirely would have passed every row. Fixed with a proper conditional rule where each of the three possible round-1 winners maps to a DIFFERENT round-2 score triple with a different winner, verified the fix produces 576 rows where using the wrong (repeat-count) round-1 winner actually changes the round-2 answer. Verified full cross-process determinism (no random/hash() misuse repeat of the earlier B6 bug): ran the generator twice with different PYTHONHASHSEED values, byte-identical JSONL output both times.",
+  "next": "GWT family uses its own P/Q/R role-labels and score/repeat/property small integer pools rather than the shared symbol-atom system (appropriate: this family tests selection/broadcast mechanics, not symbol binding, so it was not forced into the atom-namespace question). Continuing to the atom-namespace P1 blocker fix and then a full re-read of course section 2 (A-L) against B0-B6 coverage per Gabriel's request, honestly reporting what's covered vs still open given time constraints.",
+  "evidence": [
+    "tools/trigger2_b6_gwt_broadcast_uptake_reentry_generator_v1.py",
+    "tests/test_trigger2_b6_gwt_broadcast_uptake_reentry_generator_v1.py",
+    "research_entity/claycode/training/TRIGGER2_B6_GWT_COMPETITION_BROADCAST_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B6_GWT_UPTAKE_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B6_GWT_CAUSAL_REENTRY_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B6_GWT_AUDIT_V1.json"
+  ],
+  "organ": "Anthropic / Claude Code (claude-code-lead)",
+  "origin_actor": "claude-code-lead",
+  "actor_role": "LEAD_RESEARCHER_PRIMARY_ADJUDICATOR",
+  "provider": "Anthropic"
+}

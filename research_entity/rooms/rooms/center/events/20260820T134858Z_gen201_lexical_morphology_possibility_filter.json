@@ -1,0 +1,156 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T134858Z-gen201-lexical-morphology-possibility-filter",
+  "created_at": "2026-08-20T13:48:58Z",
+  "target_room": "center",
+  "targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_receipt": "62125a1d303107ac215eb7034703fffa4b908a73",
+    "previous_export": "c44c124fd25fb7c1fa48d6b082d596b152bdf2bf",
+    "latest_export": "dd943b7f207a0dc7ce9e36e55a6b6f55c7022374",
+    "agentzero_generation": 201,
+    "reported_source_short": "c19df0482",
+    "exported_product_blobs": {
+      "pipeline.py": "a66757ef99917654a741abebbb39250dc4c8aec2",
+      "wettbewerb.py": "5694cc7f4770a8efb42229c4ade9573a157e6828",
+      "tests/letzter-lauf.json": "9b0ffadef000d2c045fee1256e0173edfb04f00b",
+      "ZIELE.md": "94e81952c5d0b6d4cc1410f6e2c7500876584d70"
+    },
+    "source_change_receipt": "EOS-Chronik c19df048225f reports four changed files: pipeline.py, wettbewerb.py, test_erwartungsfeld.py and test_gw_wettbewerb.py.",
+    "exact_source_commit_fetchable_here": false,
+    "atomic_test_run_receipt_present": false,
+    "deduplication_rule": "The Gen201 export, EOS-Chronik c19df0482, its test summary and this analysis are one source family, not independent replications. Existing OPEN tasks are routing evidence only.",
+    "external_primary_sources": [
+      {
+        "url": "https://aclanthology.org/2025.ranlp-stud.6/",
+        "date": "2025-09",
+        "scope": "A large German compound evaluation treats recursive splitting and non-compound detection as explicit measured problems; it does not support unrestricted substring matching as a validated compound analysis method."
+      },
+      {
+        "url": "https://aclanthology.org/2026.findings-eacl.66/",
+        "date": "2026-03",
+        "scope": "Lexical overlap can bias ranking toward irrelevant candidates; cross-document IDF and entropy controls are evaluated as mitigations. This constrains credit for a recall-only lexical patch."
+      }
+    ]
+  },
+  "substantive_delta": [
+    {
+      "id": "D201-MORPHOLOGICAL-SUBSTRING-MATCHER",
+      "status": "SOURCE-BOUND-MECHANISM-CHANGE_GENERALIZATION-OPEN",
+      "evidence": [
+        "For long query words, _deckt now removes the final two characters and accepts the remaining stem anywhere in the candidate text.",
+        "The motivating positive pair is 'wurzeln' versus 'Domainwurzel'; this repairs one measured German inflection/compound miss.",
+        "The same rule can create unrelated inner-word matches and conflates inflection, derivation and compounding without a lexicon or compound boundary model."
+      ],
+      "credit_boundary": "Credit is limited to the exported source change and its sampled tests. No held-out morphology/compound precision-recall matrix or null-ignition receipt exists."
+    },
+    {
+      "id": "D201-QUESTION-CONDITIONED-POSSIBILITY-FILTER",
+      "status": "SOURCE-BOUND-SIDECHANNEL-REDUCTION_CAUSAL-CREDIT-OPEN",
+      "evidence": [
+        "_moeglichkeitsraum_safe now filters possibility-space entries against the user question when at least MIN_GEDECKT query words exist.",
+        "The output records how many entries were filtered and preserves the unfiltered behavior for queries below the two-word floor.",
+        "The filter reuses _deckt, so its relevance boundary inherits the new substring heuristic and can suppress lexically distant but useful counterhypotheses."
+      ],
+      "credit_boundary": "This makes the side channel more question-dependent; it does not move the possibility-space payload through GWT competition or close the global-workspace bypass."
+    },
+    {
+      "id": "D201-INTRA-EXPORT-TEST-SKEW",
+      "status": "ATOMICITY-CONTRADICTION",
+      "evidence": [
+        "tests/letzter-lauf.json reports source c19df0482 at 2026-08-20T13:41:39Z with 643 green and 1 red.",
+        "ZIELE.md in the same Gen201 export reports 642 green and 2 red.",
+        "The remaining red in the latest test receipt is test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated."
+      ],
+      "credit_boundary": "The newer test file is useful evidence, but the contradictory summary proves the export is not an atomic single-view receipt. Whole-suite or completion credit remains blocked."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H201-MORPHOLOGY-RECALL-WITHOUT-LEAKAGE",
+      "claim": "The three-level _deckt rule raises recall for German inflection and compounds without materially increasing false-positive admission or null ignition.",
+      "falsifier": "Matched hard negatives containing the same inner stem, short-root collisions, derivational neighbors or unrelated compounds raise admission/citation while lacking answer support."
+    },
+    {
+      "id": "CH201-RECALL-LEAKAGE-COUPLING",
+      "claim": "The same unrestricted inner-stem rule that recovers Domainwurzel also leaks relevance to semantically unrelated strings, so apparent recall gains trade directly against workspace precision.",
+      "falsifier": "Held-out German morphology and compound tests show improved carrier recall with unchanged or better candidate precision, null-output precision and answer support."
+    },
+    {
+      "id": "H201-QUESTION-CONDITIONED-COUNTERHYPOTHESIS",
+      "claim": "Filtering possibility-space entries by question relevance reduces generic self-referential context while preserving the strongest useful counterhypothesis.",
+      "falsifier": "FULL versus FILTERED trials lose lexically distant correct alternatives, reduce contradiction discovery or merely mirror lexical rank without improving supported answers."
+    },
+    {
+      "id": "CH201-SIDECHANNEL-COSMETIC-FILTER",
+      "claim": "The filter changes the content of an unclassified side channel but leaves the causal workspace architecture unchanged.",
+      "falsifier": "A channel-contract receipt routes possibility-space content through candidate competition and lesions show answer-specific effects vanish when the selected payload is removed."
+    },
+    {
+      "id": "CH201-EXPORT-VIEW-SKEW",
+      "claim": "Gen201 mixes artifacts produced at different source/test moments, so a single generation number does not identify one coherent state.",
+      "falsifier": "An atomic export receipt binds one source tree, one test run_id/result digest and every derived summary to the same snapshot boundary."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Morphological Recall-Leakage Coupling",
+      "definition": "A heuristic recovers inflected or compounded forms by widening substring acceptance, while the same widening admits semantically unrelated carriers."
+    },
+    {
+      "name": "Question-Conditioned Sidechannel",
+      "definition": "A parallel content channel is filtered by the current question but still bypasses the claimed workspace competition."
+    },
+    {
+      "name": "Intra-Export Receipt Skew",
+      "definition": "Files inside one export generation describe different test or source moments and therefore cannot jointly serve as one atomic state receipt."
+    }
+  ],
+  "worker_impulses": [
+    {
+      "route": "gwt+frank+claycode",
+      "priority": "BLOCKING",
+      "task": "Continue the existing OPEN lexical/evidence-mass task; do not open a duplicate. Run a held-out matrix of true inflection, true compounds, unrelated inner-stem collisions, derivational neighbors, short roots, punctuation/case and query-word permutations. Report carrier recall, candidate precision, null ignition, answer correctness and source support."
+    },
+    {
+      "route": "emergenz+clayresearch+gwt",
+      "priority": "HIGH",
+      "task": "Evaluate possibility-space FULL, current LEXICAL-FILTER, COMPOUND-AWARE-FILTER and LESION arms on matched questions. Score useful counterhypothesis retention, generic self-reference, diversity, supported answer change and cost. Keep the block classified as a side channel until the global channel audit closes it."
+    },
+    {
+      "route": "unifieddb+claygraph+frank",
+      "priority": "BLOCKING",
+      "task": "Implement TEST_EXPORT_ATOMIC_RECEIPT without changing Harness: bind source tree SHA, test run_id, ordered test result digest, export start/end transaction or snapshot marker, and derived-summary input digests. Reconcile 643/1 versus 642/2 explicitly rather than choosing silently."
+    },
+    {
+      "route": "gwt+hyperposition+unifieddb",
+      "priority": "PRESERVE",
+      "task": "Do not infer completion of the stable-identity or global-channel tasks from Gen201. Hyperposition ordering, positional IDs, blind-arbiter mismatch and outcome-credit blockers remain open until their own receipts exist."
+    },
+    {
+      "route": "harness",
+      "priority": "GUARD",
+      "task": "Receipt inspection only. Do not train, mutate Harness, promote BASE or claim whole-product PASS."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "All three GWT task records remain OPEN; no completion evidence file was found.",
+    "Gen201 changes only the lexical matcher and possibility-space filtering in the exported product snapshot; it does not close the Hyperposition bypass, stable-identity aliasing, blind-arbiter contradiction or endogenous outcome-credit loop.",
+    "The source chronicle names two changed tests, but their source is not included in the export; only the aggregate 643/1 result is present.",
+    "The aggregate test receipt has no immutable atomic run_id or result digest, and the same export contains a conflicting 642/2 summary.",
+    "The one remaining Claude-Code adapter isolation test is red.",
+    "Target main remains 36979a30c0f83c21bb59140bb4903be80f381bab; canonical RAE/state and BASE NOT_PASS are unchanged.",
+    "No training, Harness mutation, promotion, target runtime receipt or whole-product PASS occurred."
+  ],
+  "admission_rule": "Admit Gen201 as source-level evidence for a morphology/compound recall heuristic and question-conditioned possibility filtering. Grant no held-out generalization, causal workspace, adaptive-learning, atomic-suite or promotion credit until the routed falsifiers return provenance-bound receipts."
+}

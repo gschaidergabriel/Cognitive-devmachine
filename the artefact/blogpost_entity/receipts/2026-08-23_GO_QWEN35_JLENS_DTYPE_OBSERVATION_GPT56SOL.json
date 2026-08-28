@@ -1,0 +1,76 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main": "e579136243678fb9d734ded25d9fcf657b0a57ae",
+  "branch": "go-20260823-gpt56sol-qwen-dtype-observation",
+  "classification": "RUNTIME_ADMISSION_READINESS_WITH_BOUNDED_SOURCE_REGRESSION",
+  "coordination": {
+    "unusual_experiment_count": 0,
+    "note": "No unusual experiment is claimed. This is deterministic hardening of the existing qwen35-jlens admission path after a concrete upstream runtime falsifier was identified."
+  },
+  "external_primary_evidence": {
+    "transformers_issue": "huggingface/transformers#46459",
+    "observed_defect": "Qwen3.5 AutoModelForCausalLM could silently ignore a concrete dtype while unwrapping the composite checkpoint into the text-only model path.",
+    "transformers_fix_pr": "huggingface/transformers#46514",
+    "fix_merged": "2026-06-11",
+    "reason_for_runtime_observation": "An upstream fix does not prove the exact installed runtime or exact loaded weighted bytes. Clay runtime admission therefore observes actual loaded module dtypes instead of inferring them from a request or package label."
+  },
+  "delta": {
+    "existing_gate": "the artefact/blogpost_entity/mini_cognition/check_qwen35_jlens_admission.py",
+    "laws": [
+      "weighted forward and bounded Jacobian phases record actual loaded weight dtype samples before J-Space credit",
+      "samples cover input embeddings, output embeddings when present, and first decoder block through admitted Qwen3.5 text-layout paths",
+      "--dtype=auto is observation-only and does not manufacture an expected precision",
+      "a supported concrete dtype request must match every sampled loaded module or fail closed",
+      "unsupported concrete dtype labels fail closed rather than receiving precision credit"
+    ],
+    "authority": "No new truth authority, model authority, J-Space authority, GWT authority, effect path or receipt authority was introduced."
+  },
+  "exact_authored_blobs": {
+    "admission_gate": "bc522541bc91fa1e0a623ff19a8a63d93ef6c54f",
+    "unit_tests": "8eb2a2ecfe7661bef770641a03334c4d2a37cfa7"
+  },
+  "bounded_isolated_evidence": {
+    "py_compile": "PASS",
+    "unit_tests": "PASS_7_OF_7",
+    "covered": [
+      "official qwen3_5_text model type remains required",
+      "old composite model type expectation remains rejected",
+      "dtype aliases canonicalize deterministically",
+      "auto records actual bf16 without forcing",
+      "concrete float32 match passes",
+      "concrete float32 versus loaded bf16 fails closed",
+      "unsupported concrete dtype fails closed"
+    ],
+    "scope": "SOURCE_AND_COMPONENT_MECHANISM_ONLY"
+  },
+  "not_executed": [
+    "real Qwen3.5-0.8B checkpoint load",
+    "real weighted forward through jlens",
+    "real bounded Jacobian",
+    "J-Space lens fit",
+    "GWT calibration",
+    "intentional exact Ubuntu boot"
+  ],
+  "execution_policy": {
+    "free_only": true,
+    "together_used": false,
+    "provider_secret_lookup": false,
+    "provider_model_network_execution": false,
+    "paid_execution": false,
+    "training": false,
+    "money_spent_usd": 0
+  },
+  "credits": {
+    "bundled_08b_exact_runtime": 0,
+    "qwen_weighted_forward": 0,
+    "jspace_runtime": 0,
+    "whole_gwt": 0,
+    "whole_product": 0
+  },
+  "next_gate": "On an authorized actually-started isolated Ubuntu executor with exact local Qwen3.5-0.8B bytes, run the existing forward phase with local artifact hashing and capture dtype_admission. Only if that passes should one bounded Jacobian phase run on the same admitted bytes/runtime."
+}

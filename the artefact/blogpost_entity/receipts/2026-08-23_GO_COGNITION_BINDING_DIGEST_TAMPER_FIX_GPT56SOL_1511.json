@@ -1,0 +1,61 @@
+{
+  "schema": "CLAY_MINI_ENTITY_COMPONENT_REPAIR_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "authority": "research_entity/global/MINI_ENTITY_GO_OWNER_DIRECTIVE.md",
+  "fresh_base_main": "a2184b9322d314e26896988b3201ffe43e15ed8d",
+  "fresh_base_note": "Current main already includes merged cognition store PR #1234 and complete MicroEntity package binary PR #1244.",
+  "target": "tools/miniunifieddb_cognition_store_v1.py",
+  "defect": {
+    "classification": "DIGEST_BOUND_RECORD_ACCEPTED_AFTER_STORED_ROW_MUTATION",
+    "original_store_blob": "0edbe664259cc5aa788577834e1b0ea5a9050e4d",
+    "original_test_blob": "a56bc8edbec13777585026380ebd88f152e8a1d0",
+    "observation": "resolve_prepare_binding trusted stored boot/turn fields without recomputing their binding digests. A row could retain the old binding_digest while workspace_digest or zero_identity_digest changed.",
+    "impact": "The advertised binding digest was not an integrity identity on the read path, so pre-inference ancestry could become detached from the bytes originally hashed."
+  },
+  "exact_pre_fix_component_evidence": {
+    "git_blob_identity_verified": true,
+    "original_tests": "5/5 PASS",
+    "turn_row_tamper_falsifier": "FAIL_OPEN_OBSERVED: forged workspace_digest returned under unchanged turn binding digest",
+    "boot_row_tamper_falsifier": "FAIL_OPEN_OBSERVED: forged zero_identity_digest returned under unchanged boot binding digest"
+  },
+  "repair": {
+    "store_blob": "fe7fc09fbdbff71d4cbbd956437d42777b064bf4",
+    "integrity_test_blob": "a0c347eb9f57a776c1ccddec6b10b1bf9e824939",
+    "mechanism": [
+      "recompute and verify turn binding digest from stored material on read/idempotent reuse",
+      "recompute and verify boot binding digest from stored material on read/idempotent reuse",
+      "strictly parse stored provenance/slot JSON",
+      "revalidate referenced object metadata/admission identity on boot resolution",
+      "enable SQLite foreign-key enforcement in installed cognition schema"
+    ]
+  },
+  "exact_post_fix_component_evidence": {
+    "py_compile": "PASS",
+    "unchanged_original_test_blob": "a56bc8edbec13777585026380ebd88f152e8a1d0",
+    "distinct_tests": "7/7 PASS",
+    "turn_row_tamper": "FAIL_CLOSED:TURN_BINDING_DIGEST_MISMATCH",
+    "boot_row_tamper": "FAIL_CLOSED:BOOT_BINDING_DIGEST_MISMATCH",
+    "scope": "isolated deterministic Python/SQLite component execution only"
+  },
+  "authority_boundary": {
+    "miniunifieddb": "SOLE_CANONICAL_DURABLE_AUTHORITY",
+    "cognition_binding": "IDENTITY_PROVENANCE_ADMISSION_ONLY",
+    "effectgate": "SOLE_REAL_EFFECT_AUTHORITY",
+    "truth_credit": 0,
+    "whole_runtime_credit": 0,
+    "bundled_08b_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_runtime_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "hcu_runtime_capacity_credit": 0
+  },
+  "unusual_experiment": "NO_NEW_EXPERIMENT; current user-triggered macrocycle already records AUTHORITY_ROUTING_CLAYVERSE_REACTIVATION_POISON. These two checks are deterministic digest-integrity falsifiers/regressions.",
+  "hcu_parallel_pass": "NO_DUPLICATE_SOURCE_DELTA; current main has materialized the complete MicroEntity package binary, while exact KVM4-equivalent HCU resource/capacity/scheduler evidence remains a separate runtime gate.",
+  "next_gate": "Fuse the repaired same-store resolver into the single retained pipeline_cognitive_fabric_admit implementation, then execute exact .clay -> cognition binding -> ZERO capsule/InferencePacket -> inference -> deterministic gate/CAS -> post-turn final UCF receipt in authorized isolated execution.",
+  "forbidden_preserved": ["Together API", "paid training without owner authorization", "VPS/self-hosted/production acceptance testing"],
+  "classification": "COMPONENT_MECHANISM_REPAIR_SUPPORTED_NOT_WHOLE_PRODUCT_PASS"
+}

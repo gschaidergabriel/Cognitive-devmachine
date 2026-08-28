@@ -1,0 +1,153 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v10",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V9_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V9",
+  "revision_reason": "V9 correctly advances generation-provenance binding, but the exact retained v3 update source still has an independent P0 semantic gap: epistemic_type is validated/stored yet does not gate evidence admission in u_state. V10 fuses that nonduplicate blocker and its six hard-negative/evaluator blueprints without admitting positive rows.",
+  "authority": {
+    "observed_main_before_v10_write": "385cdb279d468a8f52d722adffaedbcf58c9e213",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "artifact_overrides_and_additions": [
+    {
+      "artifact_id": "T2-LEDGER-V9",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V9_GPT56SOL.json",
+      "version": "v9",
+      "status": "SUPERSEDED",
+      "predecessor": "T2-LEDGER-V8",
+      "successor": "T2-LEDGER-V10",
+      "revision_reason": "Generation-provenance blocker remains valid but v9 does not include the separately observed epistemic_type-to-u_state evidence-admission gap."
+    },
+    {
+      "artifact_id": "T2-EPISTEMIC-UPDATE-PATH-AUDIT-V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_EPISTEMIC_UPDATE_PATH_AUDIT_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_RESEARCH_NEGATIVE_DELTA_NONPROMOTING",
+      "predecessor": "v3 labeler adversarial audit + owner GRF/E handoff",
+      "successor": "single retained reference/gate successor with typed epistemic-evidence admission before u_state mutation",
+      "provenance": [
+        "commit b0e49ecb8735eb5ff382eb37c9c6cfd0ada6f251",
+        "tools/trigger2_hyperposition_reference_labelers_v3.py blob dbee95a2bbd7cc143499e361d90838fc0cb5ac50",
+        "TRAININGSUMFANG_2026-08-25 and XENO_UEBERGABE_CHATGPT_2026-08-25 owner handoff"
+      ],
+      "revision_reason": "Current raw u_state grants evidence-list/sigma changes from relation+independence without consulting epistemic_type or requiring a typed epistemic-admission receipt."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-LABELER-V3-CONVERGED",
+      "path": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "version": "v3 blob dbee95a2bbd7cc143499e361d90838fc0cb5ac50",
+      "status": "NEEDS_REVISION_P0_EPISTEMIC_UPDATE_AND_EXISTING_PROVENANCE_BLOCKERS",
+      "predecessor": "v2 donor family",
+      "successor": "one hardened retained labeler/gate path",
+      "revision_reason": "In addition to existing independence/event/discriminator/observation provenance blockers, HYPOTHESIS/PREDICTION/UNKNOWN/MEASUREMENT_ERROR/COUNTERHYPOTHESIS are not prevented by u_state itself from receiving evidence credit when relation/independence otherwise pass."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-DERIVATION-BOUND-GATE-V2",
+      "path": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+      "version": "v2",
+      "status": "CURRENT_PARTIAL_P0_REPAIR_NEEDS_GENERATION_AND_EPISTEMIC_BINDING",
+      "predecessor": "semantic gate v3 / derivation-bound v1 family",
+      "successor": "same retained lane with generation receipt + typed epistemic evidence admission + discriminator execution/coverage closure",
+      "revision_reason": "Derived independence cannot convert non-observation epistemic classes into evidence; generation source/output binding is also still required."
+    },
+    {
+      "artifact_id": "T2-GENERATION-PROVENANCE-BINDING-SPEC-V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_GENERATION_PROVENANCE_BINDING_SPEC_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_COMPLEMENTARY_P0_SPEC",
+      "predecessor": "T2_DI_03 plus derivation-bound source audit",
+      "successor": "single retained gate implementation",
+      "revision_reason": "Still required; V10 adds an orthogonal epistemic-admission blocker rather than replacing generation provenance."
+    },
+    {
+      "artifact_id": "T2-SEMANTIC-HYPERPOSITION-NATIVE-SEED-V2",
+      "path": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "version": "v2",
+      "status": "NEEDS_REVISION_STALE_GATE_NO_GENERATION_RECEIPT_AND_EPISTEMIC_UPDATE_UNSAFE",
+      "predecessor": "owner-target native seed donors",
+      "successor": "rebound successor only after retained gate closure",
+      "revision_reason": "The 11 scenario donors remain nonpromoting; seed-v2 self-check uses the older gate and current update semantics do not enforce GRF/E epistemic type distinctions at evidence mutation time."
+    },
+    {
+      "artifact_id": "T2-BINDING-ROUTER-V3",
+      "path": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "version": "v3",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "predecessor": "binding-router donor family",
+      "successor": "full-cross or preregistered conditional-independence successor",
+      "revision_reason": "Supervisor 8.78 nuisance leakage remains dispositive."
+    }
+  ],
+  "new_training_eval_blueprint_effect": {
+    "source": "T2-EPISTEMIC-UPDATE-PATH-AUDIT-V1",
+    "family_count": 6,
+    "families": [
+      "T2_EPI_01_HYPOTHESIS_MATCHES_PREDICTION",
+      "T2_EPI_02_PREDICTION_MISMATCH_FALSIFIER",
+      "T2_EPI_03_UNKNOWN_IS_NOT_NEGATIVE_EVIDENCE",
+      "T2_EPI_04_MEASUREMENT_ERROR_IS_NOT_ABSENCE",
+      "T2_EPI_05_OBSERVED_REQUIRES_TYPED_RECEIPT",
+      "T2_EPI_06_COUNTERHYPOTHESIS_RETAINED_NOT_EVIDENCE"
+    ],
+    "training_eligible": false,
+    "positive_rows_added": 0,
+    "accepted_dataset_tokens_added": 0,
+    "reason": "These are adversarial nonpromoting blueprints that expose a real reference-path failure class; they are not admitted training rows until the deterministic successor and leakage/split gates pass."
+  },
+  "external_method_alignment": [
+    {
+      "source": "Wei et al. 2023, arXiv:2305.08298",
+      "status": "METHOD_INPUT_ONLY",
+      "effect": "supports explicit arbitrary-symbol/codebook mapping training rather than relying on semantic label priors"
+    },
+    {
+      "source": "Wu, Geiger & Milliere 2025, arXiv:2505.20896",
+      "status": "METHOD_INPUT_ONLY",
+      "effect": "supports staged shortcut-resistant variable-binding evaluation with causal interventions"
+    },
+    {
+      "source": "Huang & Chang 2025, arXiv:2510.09794",
+      "status": "METHOD_CAUTION_ONLY",
+      "effect": "reinforces decodability != causal use and therefore separation of J-Space readout from evidence-update authority"
+    }
+  ],
+  "generation_decision": {
+    "new_positive_D_E_rows": 0,
+    "new_admitted_hard_negative_rows": 0,
+    "new_nonpromoting_blueprint_families": 6,
+    "decision": "BLUEPRINT_ONLY_WITH_REASON",
+    "reason": "The epistemic update bug creates a genuinely new hard-negative family, but positive labels and dataset admission remain P0-blocked."
+  },
+  "current_frontier": {
+    "highest_value_training_blocker": "The retained positive D/E path must jointly prove generator-output provenance, derived independence, immutable event identity, typed epistemic evidence admission, discriminator admissibility/execution/coverage, and exact-source execution before any positive Hyperposition/GRF label can be trusted.",
+    "next_exact_actions": [
+      "add deterministic epistemic_evidence_admission before u_state mutation and bind its receipt into update provenance",
+      "mutation-test that HYPOTHESIS/PREDICTION/UNKNOWN/MEASUREMENT_ERROR/COUNTERHYPOTHESIS cannot alter E_plus/E_minus/F or sigma merely by carrying outcome-shaped payloads",
+      "finish XENO_SYNTHETIC_GENERATION_RECEIPT/v1 or deterministic evaluator reconstruction",
+      "finish immutable same-event content identity and discriminator execution/coverage receipts",
+      "rebind native seed scenarios to the single retained hardened gate",
+      "execute exact-current focused tests under the current FREE_ONLY authority",
+      "only then render a small family-disjoint positive D/E pilot and rerun full-cross nuisance/conditional-MI plus split-leakage gates"
+    ]
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_delta": 1,
+    "new_nonpromoting_blueprint_families": 6,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T22:57:28+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_REVIEW_FINDING_SYNC_PENDING_CONCURRENT_MAIN",
+  "product_acceptance": "IN_PROGRESS",
+  "finding": {
+    "title": "Kata final acceptance must require the upstream currently supported release window, not only a historical patched minimum",
+    "observed_canonical_contract_blob": "afff2c3f66961316f6ad554c3aaebd21973481be",
+    "current_contract_strength": [
+      "runtime-rs <= 3.30.0 explicitly forbidden for CVE-2026-47243",
+      "3.31.0 treated as historical minimum fence",
+      "fresh upstream security-advisory review required immediately before final acceptance",
+      "exact runtime/configuration and guest-kernel identity required"
+    ],
+    "residual_gap": "The observed contract does not explicitly require the exact installed Kata/runtime-rs release to remain inside upstream's then-current supported release window. Upstream's current security policy is rolling-release/current-release only, so a historically patched but unsupported release should not be accepted merely because no individually enumerated advisory is known.",
+    "proposed_nonduplicate_delta": [
+      "Require the exact installed Kata/runtime-rs release to be within upstream's currently supported release window at final acceptance.",
+      "Bind the upstream support-policy identity used by the acceptance receipt.",
+      "Keep 3.31.0 only as a historical lower-bound fence for CVE-2026-47243, never as sufficient current acceptance.",
+      "Add a static regression that preserves this support-window requirement while leaving actual runtime proof to the target MicroVM acceptance run."
+    ],
+    "falsifier": "Reject this delta if upstream changes to a support policy that admits a separately maintained older release line and the exact target release is demonstrably inside that supported line; the contract should bind the then-current upstream policy rather than hard-code rolling release forever."
+  },
+  "primary_upstream_evidence": [
+    {
+      "url": "https://github.com/kata-containers/kata-containers/security/advisories/GHSA-2gv2-cffp-j227",
+      "observation": "runtime-rs <= 3.30.0 affected; 3.31.0 patched; critical guest-root to host-root escape via virtiofs"
+    },
+    {
+      "url": "https://github.com/kata-containers/kata-containers/security",
+      "observation": "Kata security policy states rolling monthly releases and only the current release series receives security fixes; prior releases are unsupported"
+    },
+    {
+      "url": "https://github.com/kata-containers/kata-containers/releases/tag/3.31.0",
+      "observation": "3.31.0 release lists CVE-2026-47243 as a key security fix"
+    }
+  ],
+  "coordination": {
+    "duplicate_network_policy_prs": [626, 627],
+    "duplicate_status": "CLOSED_SUPERSEDED_BY_STRONGER_MAIN",
+    "write_attempts": 2,
+    "write_result": "CAS_CONFLICT_FAIL_CLOSED",
+    "reason": "Canonical MicroVM contract changed concurrently while this organ was preparing the support-window delta; no newer main bytes were overwritten.",
+    "parallel_new_main_observation": "Tier-2 contract was independently strengthened so a container restart in the same Kata Pod/sandbox cannot be misclassified as full-appliance recovery."
+  },
+  "execution": {
+    "vercel_sandbox_admission": "PREVIOUSLY_CONFIRMED",
+    "current_private_source_gate": "BLOCKED_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "kata_microvm_runtime_credit": 0,
+    "cni_runtime_credit": 0,
+    "test_fail": false
+  },
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed_count": 0,
+    "reason": "No shared immutable request/turn id is exposed for this go trigger; minute-precision trigger identity is insufficient under current atomic experiment law."
+  },
+  "forbidden_paths_used": {
+    "vps": false,
+    "self_hosted": false,
+    "production_host": false,
+    "together_api": false,
+    "paid_final_training": false
+  },
+  "next_exact_gate": "After approved host-side Vercel Preview GITHUB_READ_TOKEN provisioning, refresh/rebind exact current Research main plus retained #611/#622 and complete EntityOS source identities; execute the retained exact OCI batch, then deploy that same digest under a currently supported advisory-clean Kata/equivalent runtime and prove guest-kernel, NetworkPolicy/CNI, Tier-2 full-sandbox replacement, recovery, no-replay and dual-user generation fences."
+}

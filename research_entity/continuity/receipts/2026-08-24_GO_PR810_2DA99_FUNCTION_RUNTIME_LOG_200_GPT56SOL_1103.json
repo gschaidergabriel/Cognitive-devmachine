@@ -1,0 +1,85 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXACT_HEAD_FUNCTION_RUNTIME_LOG_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "12898bc075a43029be3be40ae4ee2af2937762fe",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_READ_ONLY_EXACT_HEAD_RUNTIME_LOG_REENTRY_AND_EVIDENCE_FUSION"
+  },
+  "executor_identity": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "head_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "head_commit_message": "fix(hcu): sync exclusive cost guard to supervisor 8.64",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_state": "READY",
+    "deployment_git_sha_matches_head": true
+  },
+  "source_boundary": {
+    "sandbox_probe_path": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "sandbox_probe_blob_sha1": "6630570d16a62f937a6512d682dfcb86ae8a4102",
+    "free_only_admission_path": "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+    "free_only_admission_blob_sha1": "2ac95aaa77e6586e900d4a5b4699b0f983f23464",
+    "remaining_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_execution_admitted": false,
+    "source_semantics": "RUNTIME_ADMISSION_CASE returns HTTP 200 before Sandbox cost admission and sets sandbox_create_performed=false; selftest/family-split cases must hit denyUnadmittedSandbox HTTP 412 before Sandbox.create while the static FREE_ONLY gate is blocked."
+  },
+  "observed_runtime_log": {
+    "time_utc": "2026-08-24T04:01:43Z",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "request_path_as_logged": "/api/sandbox-probe",
+    "http_status": 200,
+    "source": "serverless",
+    "branch": "clay/fusion-vcr-native-20260817",
+    "query_string_visible_in_log": false,
+    "response_body_observed": false,
+    "log_warning": "Node DEP0169 url.parse deprecation warning only"
+  },
+  "inference": {
+    "classification": "SOURCE_PLUS_RUNTIME_LOG_INFERENCE",
+    "conclusion": "At exact immutable head 2da99e, the observed /api/sandbox-probe HTTP 200 cannot be produced by selftest or family-split under the exact blocked FREE_ONLY gate; it is therefore consistent with and narrows to the runtime-admission diagnostic branch. This establishes Function runtime boot at that exact deployment but not direct response-body observation.",
+    "function_runtime_boot_credit": "EXACT_HEAD_SERVERLESS_DIAGNOSTIC_ONLY",
+    "sandbox_create_observed": false,
+    "sandbox_execution_credit": 0,
+    "sqlite3_or__sqlite3_observed": false
+  },
+  "parallel_fusion": {
+    "stale_863_build_guard_repair_commit": "2da99e0458809988190c129b04cae913d1f15d92",
+    "repair_created_by_this_organ": false,
+    "duplicate_write_attempts_rejected_by_github_sha_conflict": true,
+    "coordination_result": "ADOPT_PARALLEL_REPAIR_DO_NOT_OVERWRITE"
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact current PR810 head is READY and exact-head serverless Function runtime boot is now evidenced by a 200 runtime log on the fail-closed sandbox-probe diagnostic surface; protected fetch still 429 and no response body was observed",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: runtime log evidence stops before Sandbox.create and before Python/sqlite3/_sqlite3, Typed Entry, GRID10, or canonical ModelExecution execution",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no admitted Sandbox, real local model invocation, loader-consumption evidence, J-Space/GWT causal intervention, trace promotion, or training run occurred"
+  },
+  "credits": {
+    "exact_head_build_deployment_identity": "PASS",
+    "function_runtime_boot_diagnostic": "SOURCE_PLUS_RUNTIME_LOG_EVIDENCE_AT_2DA99E",
+    "sandbox_execution": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Do not retry protection-bypass creation aggressively after the observed 429.",
+    "Obtain an authoritative direct remaining included Vercel Sandbox quota signal without upgrade, billing mutation, paid fallback, Together, or provider credential preflight.",
+    "Only if FREE_ONLY quota admission opens, re-enter live PR810 head plus exact matching READY deployment and run the fixed Python/sqlite3/_sqlite3 environment capability probe with source identity, secret fence, result digest, exit status and cleanup.",
+    "Only after environment PASS proceed to canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> inference receipt -> Global J-Space/GWT observation."
+  ],
+  "evidence_boundary": "This receipt corrects the narrower predecessor statement that no current-head Function result existed by adding exact-head serverless runtime-log evidence plus exact-source path inference. It does not claim direct JSON body observation, Sandbox execution, SQLite capability, HCU runtime, model/J-Space causality, training credit, effects, canonical semantic truth, or whole-product acceptance."
+}

@@ -1,0 +1,118 @@
+{
+  "schema": "CLAY_TRIGGER2_POSTTRAINING_CAUSAL_ADJUDICATION_SWARM/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_before_review_write": "0ac33c0ce6f2be3bb9c15b61db72b1bc07802b4a",
+    "training_executed": false,
+    "paid_provider_used": false,
+    "unusual_experiment": "NOT_USED_SOURCE_DATASET_REVIEW_ONLY"
+  },
+  "source_evidence": {
+    "bootstrap_minimal": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "candidate_gate": "tools/entityos_hcu_trainingtrace_candidate_gate_v1.py",
+    "candidate_gate_blob_sha": "a51c7b8afc6a9ae5562e5ec647528960e812eba3",
+    "claude_vector_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "swarm_convergence_commit": "a5b39757f0559b4e61774f85e39965e5c772ef33",
+    "measured_binding_baselines": {
+      "cross_template_mean_L19": 0.5254629629629629,
+      "codebook_symbol_hit": 0.3611111111111111,
+      "chance": 0.3333333333333333
+    },
+    "measured_preserved_functions": [
+      "semantic readability approximately 0.94-1.00 from around L6 onward at measured scope",
+      "symbol writeout hit 1.0 at L23 at measured scope",
+      "whitened HRR/MAP carrier binding hit 1.0 through k<=16 at measured scope"
+    ],
+    "claude_negative_runtime_fusion": "The current convergence record preserves T01 as FAIL_SCIENTIFIC: internal vector transport exists but frozen holdout behavior is 33.3% and nuisance control is more concerning; T05 remains incomplete; T06 promotion logic is scientifically insufficient. These are negative evidence, not training or J-Space credit."
+  },
+  "swarm_roles": [
+    "TRAINING_EXAMPLE_GENERATOR",
+    "CAUSAL_EVIDENCE_REVIEWER",
+    "HOLDOUT_INTEGRITY_REVIEWER",
+    "NUISANCE_CONTROL_REVIEWER",
+    "RETENTION_REVIEWER",
+    "SCHEMA_GATE_REVIEWER",
+    "GOODHART_SHORTCUT_ADVERSARY",
+    "FINAL_ADJUDICATOR"
+  ],
+  "new_training_seed": {
+    "path": "research_entity/global/j-space/research/trigger2_posttraining_causal_adjudication_seed_v1.jsonl",
+    "commit": "2249069dcec4b6400e7ba56f5a22db9d0c445138",
+    "content_sha256": "257736426d9b94db6418331bb5153f896e00aa7537d40658f7906a1f7c5213f6",
+    "rows": 12,
+    "pairs": 6,
+    "composition": {
+      "METHOD_ONLY_R2": 6,
+      "SYNTHETIC_HARD_NEGATIVE_R3": 6
+    },
+    "families": [
+      "behavioral gain versus internal-mechanism claim",
+      "frozen unseen-template/symbol holdout arbitration",
+      "semantic intervention versus nuisance-control specificity",
+      "binding gain versus retention/authority regressions",
+      "same-model lesion/rescue causal evidence protocol",
+      "candidate/source test credit versus dataset/training/runtime credit"
+    ],
+    "candidate_gate_static_recheck": "12/12 satisfy the current v1 candidate-gate predicates; this is candidate/source validation only, not canonical dataset admission."
+  },
+  "cross_worker_review": {
+    "reviewed_parallel_seed": "research_entity/global/j-space/research/trigger2_compound_evidence_arbitration_seed_v1.jsonl",
+    "reviewed_commit": "957d0afe2339d9d4582187b037f154954785093a",
+    "critical_failure": {
+      "id": "ROW_SCHEMA_ENUM_DRIFT_FAIL_CLOSED",
+      "finding": "Three positive rows use evidence_class=COMPOSITE_SOURCE_GROUNDED and fact_status=MIXED_SCOPE, but the exact current candidate gate allows neither value.",
+      "gate_evidence": {
+        "allowed_evidence_classes": ["METHOD_ONLY", "SYNTHETIC_HARD_NEGATIVE", "SOURCE_OBSERVED", "COMPONENT_CAUSAL_MEASURED", "CAUSAL_VERIFIED"],
+        "allowed_fact_status": ["UNKNOWN", "MEASURED", "VERIFIED", "NOT_APPLICABLE"]
+      },
+      "impact": "Those rows are fail-closed candidate-gate rejects despite otherwise useful reasoning content. The failure is dataset/schema integration failure, not evidence that the underlying methods are false.",
+      "anti_goodhart_rule": "Do not weaken or extend the gate merely to make newly generated rows pass. Repair row semantics to an already-admitted evidence class unless a separately governed schema evolution is justified."
+    },
+    "repair": {
+      "path": "research_entity/global/j-space/research/trigger2_compound_evidence_arbitration_repair_v11.jsonl",
+      "commit": "701ad966c7127bb9821b239cabbcb078363ee425",
+      "content_sha256": "94ca5b5a7077b3b925087bd3e75277ca687d99ae3323bc1d1d62876dbea29990",
+      "rows": 6,
+      "strategy": "Quarantine rather than rewrite history: retain the invalid v1 source as negative evidence, provide three repaired METHOD_ONLY/R2/NOT_APPLICABLE method rows plus their paired synthetic hard negatives, and genericize current-state assertions where the training target is adjudication method rather than factual replay.",
+      "candidate_gate_static_recheck": "6/6 satisfy the current v1 candidate-gate predicates."
+    }
+  },
+  "adjudication": {
+    "highest_value_training_delta": "Add explicit post-training scientific adjudication competence so a specialized 0.8B binder does not overclaim mechanism installation from behavioral gains, hide frozen holdout failures, ignore nuisance controls, or promote despite retention/authority regressions.",
+    "strongest_counterhypothesis": "These method rows can improve verbal reporting without changing the underlying dynamic binding computation. They must therefore remain a separate evaluation/retention curriculum from the Stage-A episodic binder curriculum and cannot substitute for real-atom binding data or causal runtime tests.",
+    "falsifiers": [
+      "A trained model repeats the adjudication rules in prose but still fails full-S3 unseen-template/unseen-symbol binding.",
+      "The model reports correct evidence boundaries but post-training lesion/rescue tests show no selective binding mechanism.",
+      "Adjudication training reduces target binding performance or protected semantic/authority behavior beyond the preregistered retention budget.",
+      "A future dataset build shows the method families leak split ancestry or are selected using frozen holdout outcomes."
+    ]
+  },
+  "research_feedback": {
+    "training_rule": "Behavioral target learning and scientific self-adjudication are distinct curricula. Train both, but keep their acceptance credits separate.",
+    "dataset_rule": "A row that does not pass the exact current candidate schema is not repaired by narrative plausibility; enum/schema drift is a first-class dataset failure.",
+    "architecture_implication": "The future Xeno/HCU harness should expose separate behavioral-binding, nuisance-control, retention, and causal-mechanism score channels so one aggregate metric cannot mint promotion.",
+    "harness_implication": "Promotion logic should require frozen OOD behavioral success first, then protected-retention gates, then same-model causal mechanism evidence for any J-Space claim. Behavioral PASS alone must not set J-Space runtime credit.",
+    "science_implication": "Internal vector transport, semantic behavioral control, and dynamic binding generalization are separable claims and should remain separable in receipts, datasets, and thresholds."
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "new_candidate_rows": 12,
+    "repaired_candidate_rows": 6,
+    "candidate_gate_scope_only": true,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Keep the new adjudication families separate from the Stage-A binder tranche; materialize the exact verified 46 one-token ABI atoms for real binding rows, pass the current row/family/S3/MI/cross-split leakage gates, obtain the first evidence-qualified Forge-to-Distillery accepted packet, and only after a matched local 0.8B pilot use the adjudication curriculum to enforce frozen-holdout, nuisance, retention and same-model causal promotion boundaries."
+}

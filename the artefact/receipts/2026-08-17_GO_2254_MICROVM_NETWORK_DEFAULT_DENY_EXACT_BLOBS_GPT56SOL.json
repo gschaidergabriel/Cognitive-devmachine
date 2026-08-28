@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T22:54:44+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "scope": "microvm_network_default_deny_source_contract",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "canonical_main_commit": "UNRESOLVED_CONNECTOR_COMMIT_LIST_READ_403",
+  "exact_git_blobs": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "1e41ce8424bffa94905448f76d0856acbc6a262c",
+    "the artefact/tests/test_microvm_deployment_contract.py": "cc7e3cb7628314c51534330878ca886bc464713e"
+  },
+  "blob_reconstruction": {
+    "method": "reconstructed exact GitHub file bytes in an isolated non-production container and verified each with git hash-object before execution",
+    "all_three_blobs_match_github": true
+  },
+  "deterministic_regression": {
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "exit_code": 0,
+    "result": "5 passed in 0.07s"
+  },
+  "yaml_semantic_probe": {
+    "parser": "PyYAML 6.0.3 safe_load_all",
+    "document_kinds": ["Service", "StatefulSet", "NetworkPolicy"],
+    "network_policy_count": 1,
+    "policy_name": "clayverse-default-deny",
+    "policy_types": ["Ingress", "Egress"],
+    "ingress_rules": [],
+    "egress_rules": [],
+    "result": "PASS"
+  },
+  "external_primary_evidence": {
+    "source": "Kubernetes NetworkPolicy official documentation",
+    "finding": "NetworkPolicy controls pod ingress/egress and requires a supporting network plugin; hostNetwork false alone is not an ingress/egress isolation policy."
+  },
+  "adversarial_result": {
+    "previous_gap": "Kata deployment template had hostNetwork false without an explicit pod NetworkPolicy",
+    "current_source_state": "gap closed fail-closed on current main by a default-deny policy; functional networking requires a separate reviewed deployment-specific allow policy",
+    "broad_source_template_escape_fence": "focused test rejects 0.0.0.0/0 and ::/0 in the baseline source template"
+  },
+  "runtime_credit": {
+    "exact_oci": 0,
+    "kubernetes": 0,
+    "kata_microvm": 0,
+    "cni_networkpolicy_enforcement": 0,
+    "whole_clayverse": 0
+  },
+  "execution_frontier": {
+    "vercel_sandbox": "ADMISSION_CONFIRMED_HISTORICALLY_CURRENT_PRODUCT_SOURCE_STAGE_BLOCKED_BY_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "credential_rule": "GITHUB_READ_TOKEN must remain in host-side Vercel Preview orchestration and must never be committed, logged, or forwarded into the disposable Sandbox",
+    "next_exact_gate": "provision the sensitive Preview credential; refresh/rebind exact product-relevant main and retained execution lanes once; execute exact OCI build/runtime batch; then deploy the same accepted image digest under Kata/equivalent and prove CNI default-deny plus exact reviewed allow-policy enforcement"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "the exact user go trigger exposes only minute-precision immutable message time and no shared immutable request/turn id; ordinary deterministic regression is allowed",
+    "count_executed": 0
+  },
+  "non_claims": [
+    "no exact current-main full checkout PASS",
+    "no OCI image build or image digest",
+    "no live Kubernetes/Kata/CNI enforcement",
+    "no Clerk/browser/PTY runtime evidence",
+    "no whole-product PASS"
+  ]
+}

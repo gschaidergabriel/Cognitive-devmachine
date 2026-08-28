@@ -1,0 +1,90 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "base_main_sha": "00a14d78e3312b7683e1bea62dd980bffcda0146",
+  "branch": "gpt56sol/go-claycog-byom-exact-revision-fusion-v2-20260822-1511",
+  "scope": "fuse exact-Hugging-Face-revision provenance into the canonical #834 BYOM architecture audit and make the launcher itself bind that attestation into campaign fingerprint and create intent",
+  "coordination": {
+    "parallel_architecture_merge": "bfd318c6f35a0b8b32b60c7cbaa404801f22c997 (#834)",
+    "parallel_native_secret_isolation": "7d80d7bdab921be02d82f36fc6a8dc91b6da578a (#849), with duplicate path cleanup 0664cf2af8fbb6d0e04d41f560a1603b9b2108ba",
+    "parallel_campaign_identity_hardening": "67af94be952c3352533662036b0325e9fe54df9b (#859)",
+    "duplicate_gate_path_created": false,
+    "superseded_prs_closed": [840, 855],
+    "fusion_decision": "extend audit_together_byom_template_v1.py and launch_together_v1.py rather than preserve a separate architecture helper or shell-only gate"
+  },
+  "current_provider_evidence": {
+    "together_full_ft_smallest_qwen": "Qwen/Qwen3.5-0.8B",
+    "qwen2_or_qwen2_5_full_ft_template_listed": false,
+    "byom_requires_matching_architecture": true,
+    "owner_target": "Qwen/Qwen2.5-0.5B@060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "classification": "TOGETHER_PROVIDER_CATALOG_BLOCKED_FOR_OWNER_LOCKED_QWEN2_05B"
+  },
+  "global_unusual_experiment": {
+    "count": 1,
+    "consumed_by_parallel_merged_pr": 834,
+    "id": "QWEN25_05B_VS_SMALLEST_CURRENT_TOGETHER_QWEN_FULLFT_TEMPLATE_ARCHITECTURE_FALSIFIER",
+    "result": "REJECT_CURRENT_QWEN35_08B_TEMPLATE_CANDIDATE",
+    "this_branch_reexecution_role": "REGRESSION_INDEPENDENT_REPLICATION_ONLY_NOT_A_SECOND_UNUSUAL_EXPERIMENT"
+  },
+  "delta": {
+    "canonical_audit": "the artefact/blogpost_entity/mini_cognition/audit_together_byom_template_v1.py",
+    "audit_git_blob": "c2382af8e1cb5d8023bd4c16cf2a3c2aafa7bf49",
+    "canonical_audit_test": "the artefact/blogpost_entity/mini_cognition/test_audit_together_byom_template_v1.py",
+    "audit_test_git_blob": "f1db9e35d04fac77ce68bd271cac8f089d60e3fc",
+    "launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py",
+    "launcher_git_blob": "519f66f23ccf379501f61f1e69bcecaffc6b7f48",
+    "launcher_safety_test": "the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py",
+    "launcher_safety_test_git_blob": "2ec206920b6697486163516f73909199a05d72cf",
+    "preflight_shell": "the artefact/blogpost_entity/mini_cognition/train_together_v1.sh",
+    "preflight_shell_git_blob": "414196441f3ecc75825020b3d15a290921fb4112",
+    "ci": ".github/workflows/claycog-validator-pr.yml",
+    "ci_git_blob": "7cf2e0480fc19472d577325dd0df4a0de4cf46bf",
+    "new_contract": [
+      "BYOM audit fetches custom/template config.json only at exact 40-hex HF revisions",
+      "each fetched config is bound to model id + exact revision + config byte SHA-256",
+      "both sides require exact provenance together and auto_map custom-code configs fail closed",
+      "launch_together_v1.py itself re-runs the canonical audit before provider operations",
+      "the minimal architecture identity is embedded in campaign descriptor/fingerprint and atomic create-intent ledger",
+      "a later direct --create cannot reuse a fingerprint produced for different or absent architecture attestation",
+      "train_together_v1.sh delegates the audit to the launcher so there is one canonical enforcement path",
+      "compatible=true remains local pre-provider evidence only"
+    ]
+  },
+  "isolated_execution": {
+    "environment": "ChatGPT isolated Python sandbox",
+    "exact_blob_binding": {
+      "audit": "c2382af8e1cb5d8023bd4c16cf2a3c2aafa7bf49",
+      "audit_test": "f1db9e35d04fac77ce68bd271cac8f089d60e3fc",
+      "launcher": "519f66f23ccf379501f61f1e69bcecaffc6b7f48",
+      "launcher_safety_test": "2ec206920b6697486163516f73909199a05d72cf",
+      "provider_contract_test": "61f976dd8fcefd1a436cf1fe774515f808efc95c",
+      "preflight_shell": "414196441f3ecc75825020b3d15a290921fb4112"
+    },
+    "py_compile": "PASS for audit, launcher, and both focused test modules",
+    "audit_tests": "8/8 PASS",
+    "launcher_create_safety_tests": "13/13 PASS",
+    "provider_contract_tests": "9/9 PASS after supplying the same required train/validation fixture files used by the repository test environment",
+    "preflight_shell_bash_n": "PASS",
+    "first_provider_contract_fixture_attempt": "ERROR_ONLY_BECAUSE_ISOLATED_MINI_TEST_DIRECTORY_LACKED_train_v2.jsonl_and_validation_v2.jsonl; after creating those required fixture files the exact same source passed 9/9",
+    "environment_warning": "unrelated spreadsheet runtime warmup warning appeared on Python startup; all claimed test processes exited 0",
+    "provider_network_call": false,
+    "together_secret_mounted": false,
+    "dataset_upload": false,
+    "price_preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "money_spent_usd": 0
+  },
+  "evidence_boundary": {
+    "static_and_exact_revision_architecture_discriminator": "MECHANISM_SUPPORTED_ISOLATED",
+    "create_path_attestation_binding": "MECHANISM_SUPPORTED_ISOLATED",
+    "together_template_compatibility": "BLOCKED_UNPROVEN",
+    "trained_model_quality": "UNOBSERVED",
+    "quantized_under_1gib": "UNOBSERVED"
+  },
+  "next_gate": "merge this nonduplicate exact-revision/create-binding fusion if current main still lacks it. Together training remains blocked until an actually admitted Qwen2/Qwen2.5 Full-FT template exists or the owner admits another Full-FT runner."
+}

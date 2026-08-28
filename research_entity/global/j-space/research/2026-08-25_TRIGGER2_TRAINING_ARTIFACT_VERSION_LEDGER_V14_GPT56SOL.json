@@ -1,0 +1,98 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v14",
+  "date": "2026-08-25",
+  "local_trigger_time": "21:28+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V13_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V13",
+  "revision_reason": "Moving-main reentry at 9090ab45253ca180ed797c37c78ce5c54c1c0a78 found no producer-auth source implementation, but the newest parallel reentry audit still labeled ledger v12 CURRENT even though its own ancestry contains v13 at 0117cffabc92ac64f0af9f01b8b501945d01ca9f (via fc250071261de90214b4491a8d347b46cfc03cb7). V14 corrects that self-consistent-stale metadata island, retains all substantive A02 conclusions, and keeps data/training promotion closed.",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "9090ab45253ca180ed797c37c78ce5c54c1c0a78",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "moving_main_consistency_audit": {
+    "observed_latest_reentry_audit": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2128_PRODUCER_AUTH_REENTRY_AUDIT_V2_GPT56SOL.json",
+    "latest_reentry_audit_commit": "9090ab45253ca180ed797c37c78ce5c54c1c0a78",
+    "latest_reentry_audit_claimed_current_ledger": "T2-LEDGER-V12",
+    "ancestry_fact": "fc250071261de90214b4491a8d347b46cfc03cb7 is an ancestor of 9090ab and has parent 0117cffabc92ac64f0af9f01b8b501945d01ca9f, which created T2 ledger v13",
+    "classification": "NEEDS_REVISION_METADATA_POINTER_STALE_SELF_CONSISTENT_ISLAND",
+    "semantic_effect": "NONE: A02 remains P0 open and zero-row decision remains correct",
+    "law": "successor/current status must follow repository ancestry and explicit supersession, not a worker's stale prewrite snapshot"
+  },
+  "artifact_overrides": [
+    {
+      "artifact_id": "T2-LEDGER-V12",
+      "status": "SUPERSEDED",
+      "successor": "T2-LEDGER-V13",
+      "revision_reason": "v13 exists in current main ancestry and explicitly supersedes v12."
+    },
+    {
+      "artifact_id": "T2-LEDGER-V13",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V13_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "T2-LEDGER-V14",
+      "revision_reason": "Substantive donor/A02 fusion retained; v14 only refreshes moving-main classification and exact current head."
+    },
+    {
+      "artifact_id": "T2-PRODUCER-AUTH-REENTRY-AUDIT-V2",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2128_PRODUCER_AUTH_REENTRY_AUDIT_V2_GPT56SOL.json",
+      "status": "CURRENT_RESEARCH_FINDINGS_NEEDS_REVISION_METADATA_POINTER",
+      "revision_reason": "Its A02 findings and zero-row decision remain valid, but its v12-current ledger pointer is stale relative to its own repository ancestry."
+    },
+    {
+      "artifact_id": "T2-A02-PRODUCER-AUTH-CONTRACT-V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTH_CONTRACT_V1_GPT56SOL.json",
+      "status": "CURRENT_SOURCE_DESIGN_NONPROMOTING_IMPLEMENTATION_OPEN",
+      "revision_reason": "No current-main source/test commit observed after the contract that closes producer/policy authority and executes the required A02 mutations."
+    },
+    {
+      "artifact_id": "T2-RECEIPT-AUTHORITY-DONOR-CE63A89",
+      "artifact": "trigger2-receipt-authority-gpt56sol-20260825@ce63a89f5a52fbd2ee4fe69eaa59850ff2b86677",
+      "status": "NEEDS_REVISION_DONOR_NOT_MERGE_READY",
+      "revision_reason": "Useful scoped-event/reconstruction topology only; independent repository producer/policy authority, formal discriminator-spec binding, deterministic execution-result authenticity, A02 mutations and exact-current execution remain absent."
+    },
+    {
+      "artifact_id": "T2-BINDING-ROUTER-FACTORIAL-V3",
+      "path": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "revision_reason": "Conditional nuisance leakage block remains current under Supervisor 8.78."
+    },
+    {
+      "artifact_id": "T2-UPLOADED-BOOTSTRAP-8-63",
+      "status": "STALE_AS_CURRENT_AUTHORITY_USEFUL_BOOTSTRAP_DONOR",
+      "successor": "BOOTSTRAP_MINIMAL 8.78 + SUPERVISOR_STEERING_8_78",
+      "revision_reason": "Uploaded source explicitly declares itself a cache; current authority has advanced."
+    }
+  ],
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "Producer-auth implementation and exact A02 mutation execution remain the highest-information blocker."
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_delta": 1,
+    "moving_main_consistency_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Implement the existing A02 contract once in the retained Hyperposition lane, salvaging only the valid ce63a89 scoped-event and reconstructed-receipt topology; bind producer/policy/spec from repository authority, derive execution/result identity independently, execute all A02 mutations on exact-current source, then and only then reconsider a small positive pilot."
+}

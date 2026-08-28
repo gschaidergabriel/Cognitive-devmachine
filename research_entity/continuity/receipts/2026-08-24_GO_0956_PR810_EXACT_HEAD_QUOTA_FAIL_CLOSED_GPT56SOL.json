@@ -1,0 +1,92 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_EXACT_HEAD_QUOTA_FAIL_CLOSED_GATE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "c136a2112d5043250e2c8ca7d1b0f5c3b14e5cf6",
+  "bootstrap_cache_only": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "16a24bc7fbe50155b76cf618d116b98791e6a581",
+    "bounded_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "bounded_executor_head_observed": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "executor_pinned_donor_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d"
+  },
+  "exact_head_deployment": {
+    "vercel_team_plan_observed": "hobby",
+    "deployment_id": "dpl_EtVgJ96pobVv3zqh9jozAKHgfNWa",
+    "deployment_git_sha": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "deployment_state": "READY",
+    "route": "/api/hcu-jspace-grid10-binding-capsule",
+    "exact_executor_head_match": true
+  },
+  "source_guard_observation": {
+    "file": "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+    "blob": "de6007fe152c3114e03d0578866a83355ef157a7",
+    "remaining_sandbox_quota_directly_observed": false,
+    "remaining_quota_assumption_forbidden": true,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_execution_admitted_requires": [
+      "status == ADMITTED",
+      "remaining_sandbox_quota_directly_observed == true",
+      "runtime_gate == OPEN_DIRECT_QUOTA_OBSERVED"
+    ]
+  },
+  "runtime_gate_observation": {
+    "access_surface": "CONNECTED_VERCEL_AUTHENTICATED_PROTECTED_DEPLOYMENT_FETCH",
+    "temporary_access_secret_persisted": false,
+    "http_status": 412,
+    "http_status_text": "Precondition Failed",
+    "function_result_observed": true,
+    "function_status": "FREE_ONLY_SANDBOX_COST_ADMISSION_REQUIRED",
+    "remaining_quota_directly_observed": false,
+    "quota_assumption_performed": false,
+    "credential_lookup_performed": false,
+    "external_source_network_performed": false,
+    "sandbox_create_performed": false,
+    "execution_credit": "NONE",
+    "entityos_hcu_runtime_credit": false,
+    "jspace_model_runtime_credit": false,
+    "training_credit": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  },
+  "hypothesis": "After exact-head deployment protection is crossed, the repaired FREE_ONLY guard should fail closed before Sandbox.create whenever remaining included Sandbox quota is not directly observed.",
+  "counterhypothesis": "The exact-head function may still rely on the old static ADMITTED constant and reach Sandbox.create despite quota uncertainty.",
+  "discriminator": "Invoke only the exact-head fixed GET route through the connected authenticated Vercel deployment surface and inspect the function response without changing plan, billing, credentials, source or executor topology.",
+  "result": "HYPOTHESIS_SUPPORTED_AT_EXECUTOR_GUARD_RUNTIME_SCOPE_ONLY",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact-current PR810 deployment protection was crossed and the actual serverless route was observed fail-closed at the FREE_ONLY quota gate before Sandbox creation.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_GUARD_EVIDENCE_ONLY: the retained fixed 17-blob HCU/Typed-Entry executor path now has observed exact-head fail-closed cost-admission behavior; no Sandbox component tests ran and no HCU runtime credit is added.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: the fixed J-Space/GRID10 route reached its function boundary but intentionally stopped before Sandbox/model execution because remaining included quota is unobserved; therefore no new J-Space trace, model-runtime or training evidence exists."
+  },
+  "epistemic_boundary": {
+    "exact_head_serverless_function_invocation": "OBSERVED",
+    "free_only_quota_fail_closed_guard": "OBSERVED_AT_EXACT_HEAD",
+    "sandbox_execution": "NOT_EXECUTED",
+    "jspace_grid10_regression_execution": "NOT_EXECUTED",
+    "local_approx_08b_model_execution": "NOT_EXECUTED",
+    "hidden_state_causal_use": "UNKNOWN",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The artefact README is a broad rapidly moving current-facing surface under concurrent organs; this cycle persists the exact new gate observation append-only rather than replacing a potentially stale whole-file snapshot."
+  },
+  "next_exact_action": "Do not weaken the guard and do not assume quota from Hobby plan identity. Resolve a directly observed current included Sandbox quota/entitlement or an authoritative equivalent no-charge surface without credential lookup or paid-plan changes. Only if that gate opens may the same exact-head-or-newer exact-SHA fixed route proceed to Sandbox.create and the pinned 17-blob/14-test J-Space/GRID10 component capsule. Continue the donor source path toward real zero-cost local approximately-0.8B loader/executor I/O and causal J-Space evidence; no Together preflight or paid fallback."
+}

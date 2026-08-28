@@ -1,0 +1,42 @@
+{
+  "schema": "ENTITYOS_HCU_GO_LOADER_CURRENT_JCS_REENTRY_COMPONENT_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "observed_main_before_write": "2be809ed5f3d070131b9e94c5b8de5449332019c",
+  "coordination": {
+    "new_unusual_experiment": false,
+    "atomic_lease": "NOT_ACQUIRED_COORDINATION_BLOCKED",
+    "classification": "ORDINARY_DETERMINISTIC_REENTRY_REGRESSION"
+  },
+  "reason": "Canonical main changed the RFC8785/JCS component after the original loader-boundary regression by adding MAX_CANONICAL_NESTING_DEPTH fail-closed behavior. Re-entry checked that the retained donor loader-admission mechanism remains coherent with the new canonical JCS bytes.",
+  "exact_sources": {
+    "engine_load_lease_pr1263_git_blob_sha": "8fc3d0291b23267015956c1201e1eddfbd46db74",
+    "engine_load_lease_sha256": "502710d3e3ebf31b0271786e1184be0612e95eb44a2afd39e4d164159cf6f2fe",
+    "current_main_entry_canonicalization_git_blob_sha": "55f461a56ef08537238eeff91fe379da2adb20a1",
+    "current_main_entry_canonicalization_sha256": "6dbe45ec4dea27bcffbfc32362b732e40be3e7d659376dd4fd410ec8d8cc5c97"
+  },
+  "execution": {
+    "surface": "AUTHORIZED_ISOLATED_SESSION_CONTAINER_COMPONENT_REGRESSION",
+    "python": "3.13.5",
+    "git_blob_hashes_verified_before_execution": true,
+    "runs": 2,
+    "tests_per_run": 5,
+    "result_each_run": "5_OF_5_PASS",
+    "dependency_scope": "EXACT_ENGINE_LOAD_LEASE_PLUS_EXACT_CURRENT_MAIN_RFC8785_JCS; ENGINE_ADMISSION_TYPES_MINIMAL_DETERMINISTIC_TEST_DOUBLE"
+  },
+  "measured_result": "The loader-consumption external-admission boundary preserves success/fail-closed behavior under the current depth-bounded canonicalizer: exact admitted record passes; self-asserted actual-loader label without registry, registry substitution, post-hoc evidence source, and stale generation all fail closed.",
+  "credit": {
+    "component_mechanism_evidence": "SUPPORTED_WITH_CURRENT_MAIN_JCS_REENTRY",
+    "real_loader_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Promote no loader runtime credit until an actual zero-cost local model loader produces the admitted consumption observation. Then execute the full exact Typed Entry -> route -> verified engine load -> inference -> GRID10 -> Global J-Space/GWT -> admitted causal dataset path through the single retained FREE executor."
+}

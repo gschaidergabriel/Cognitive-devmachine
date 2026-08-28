@@ -1,0 +1,83 @@
+{
+  "schema": "ENTITYOS_HCU_PHYSICAL_ENGINE_LEASE_SOURCE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_write": "e168466563399db3747de1c67a738bb131f8367b",
+  "retained_lane": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "head_observed_after_source_writes": "a71d4d5c77b6f2394caade62dcdf3cc3ca84dd70",
+    "physical_lease_file": "the artefact/MicroEntity/hcu/physical_engine_lease_v1.py",
+    "physical_lease_blob": "82ad77b371a924c17509c4d0d251c811e2537767",
+    "test_file": "the artefact/MicroEntity/hcu/test_physical_engine_lease_v1.py",
+    "test_blob": "9270a4e745da9e0dbc543e16ca9b108a517e6551"
+  },
+  "architecture_delta": {
+    "reason": "Current main requires loader-consumed byte identity to sit between EngineAdmission and inference runtime credit; a pre-load hash is necessary but not loader attestation.",
+    "candidate": "HCU_PHYSICAL_ENGINE_LEASE/v1",
+    "selected_canonicalization": "RFC8785_JCS_IJSON/v1",
+    "binds": [
+      "entity_generation",
+      "existing EngineAdmission provider/engine/class/checkpoint identity",
+      "independent admitted checkpoint registry",
+      "independent admitted tokenizer identity",
+      "independent admitted runtime-build identity",
+      "loader-consumed checkpoint identity",
+      "loader-consumed tokenizer identity",
+      "loader-consumed runtime-build identity",
+      "loader instance identity",
+      "independent artifact-boundary receipt",
+      "deterministic lease digest"
+    ],
+    "recheck_before_inference": [
+      "live generation",
+      "checkpoint admission/revocation",
+      "tokenizer admission/revocation",
+      "runtime-build admission/revocation"
+    ],
+    "downstream_echo_candidate": [
+      "physical_engine_lease_sha256",
+      "physical_engine_lease_generation",
+      "loader_instance_id",
+      "artifact_boundary_receipt_sha256",
+      "loader_consumed_checkpoint_sha256",
+      "loader_consumed_tokenizer_sha256",
+      "loader_consumed_runtime_build_sha256"
+    ],
+    "new_state_or_effect_authority": false,
+    "model_invocation_added": false
+  },
+  "focused_test_obligations_written": 10,
+  "execution_observation": {
+    "github_workflow_run": 32653717002,
+    "github_job": 97229119987,
+    "workflow_conclusion": "failure",
+    "visible_steps": 0,
+    "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP_NOT_SEMANTIC_TEST_FAILURE",
+    "semantic_test_execution": false,
+    "runtime_credit_change": 0
+  },
+  "coordination": {
+    "first_retained_lane_write_attempt": "HTTP_409_STALE_HEAD_REJECTED_NOT_FORCED",
+    "retry_after_head_refresh": "COMMITTED_TO_EXISTING_PR1263",
+    "second_permanent_router_or_engine_lane_created": false,
+    "unusual_experiment_count_by_this_organ": 0,
+    "global_unusual_experiment_uniqueness": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID"
+  },
+  "evidence_boundary": {
+    "source_candidate": true,
+    "exact_file_presence_verified_on_retained_head": true,
+    "source_compile_or_test_pass_claimed": false,
+    "real_loader_consumption_observed": false,
+    "real_local_model_observed": false,
+    "entityos_hcu_runtime_acceptance": false,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse the physical lease into the retained inference producer so an inference receipt cannot be produced without a current lease echo, then execute the combined Entry -> RFC8785 identity -> EngineAdmission -> real loader-consumed bytes -> physical lease -> route/GridPlan -> inference receipt chain on the single authorized exact-source isolated executor after the retained Vercel controller is atomically rebound to current EntityOS/HCU source."
+}

@@ -1,0 +1,236 @@
+{
+  "schema": "CLAY_TRIGGER2_XENO_AUTHORITY_COORDINATION_TRAINING_DELTA/v1.1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "historical_path_note": "The filename is retained to preserve causal Git history. v1.1 removes duplicate Claude T01/T05/T06 epistemic examples after parallel swarm convergence and retains only the unique Xeno shared-state/coordinator/Hyperposition training lane.",
+  "authority": {
+    "canonical_main_observed_before_dedup": "9fef45e74348c43270760da9109b9ab36c24c6cd",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "unusual_experiment": "NOT_USED_SOURCE_DESIGN_ONLY"
+  },
+  "deduplication": {
+    "duplicate_families_removed": [
+      "JSPACE representation-transport versus behavioral-semantics negatives",
+      "frozen-holdout no-retune protocol",
+      "T05 consumed-input identity incompleteness",
+      "T06 self-declared independence, hash-format-only and matched-control completeness negatives",
+      "NOT_RUN/infra-failure credit-classification examples already represented by parallel evidence-boundary work"
+    ],
+    "canonical_donor_artifacts": [
+      "research_entity/global/j-space/research/2026-08-25_TRIGGER2_DYNAMIC_CODEBOOK_BINDING_CORPUS_V2_GPT56SOL.json@bc858a2b8eba4b7bc174ab1d54081b05054cb81b",
+      "research_entity/global/j-space/research/trigger2_qwen35_08b_evidence_boundary_seed_v2.jsonl@84b1b75462e8d9c81f5adbad26b54c9a38f68b03"
+    ],
+    "reason": "Parallel organs independently converged on overlapping negative-evidence rows. Keeping all copies would overweight the same causal ancestry and violate the anti-Goodhart/Goodman-collapse discipline."
+  },
+  "unique_training_target": {
+    "scope": "XENO_SHARED_STATE_DYNAMIC_COORDINATION_AND_HYPERPOSITION_AUTHORITY",
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "core_laws": [
+      "ordinary Xeno nodes may read authorized S1 but do not write S1",
+      "ordinary-node output leaves the node as an ephemeral typed NODE_RESULT",
+      "only a valid scoped non-stale GRID_COORDINATOR_LEASE may authorize model-originated S1 writes",
+      "coordinator S1 write authority never grants S0 truth/effect/security authority",
+      "coordinator is a temporary runtime role rather than identity or personality",
+      "stale duplicate or out-of-scope NODE_RESULT packets must not be silently integrated",
+      "multiple scoped coordinators may coexist only under deterministic non-conflicting lease/scope rules",
+      "grid majority or model consensus never mints fact",
+      "Hyperposition preserves unresolved branches until evidence-bearing discrimination closes them",
+      "coordinator compression must retain causal/provenance/evidence pointers sufficient for deeper retrieval and audit"
+    ]
+  },
+  "swarm_review": {
+    "roles": [
+      "EVIDENCE_EXTRACTOR",
+      "DATASET_ARCHITECT",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "STATISTICAL_REVIEWER",
+      "ABI_PROVENANCE_REVIEWER",
+      "RETENTION_REVIEWER",
+      "HARNESS_COMPATIBILITY_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "round_1": {
+      "finding": "The initial v1 mixed unique architecture behavior with Claude negative-evidence families that parallel organs had already materialized.",
+      "verdict": "REJECT_DUPLICATE_WEIGHTING"
+    },
+    "round_2_repairs": [
+      "remove overlapping T01/T05/T06 and generic evidence-credit rows",
+      "keep only owner-target shared-state/coordinator/Hyperposition behavior not present in the inspected parallel corpus",
+      "pair positive leased-coordinator cases with negative ordinary/stale/self-election controls",
+      "vary node IDs and previous roles to prevent personality shortcuts",
+      "separate S1 write authority from S0 truth/effect authority in every positive coordinator example",
+      "preserve branch/evidence topology under compression rather than rewarding majority collapse",
+      "keep all rows as semantic blueprints until tokenizer/ClayCode materialization is frozen"
+    ],
+    "final_verdict": "ACCEPT_UNIQUE_COMPLEMENTARY_SEED; NOT_TRAINING_READY"
+  },
+  "training_blueprints": [
+    {
+      "id": "AC01_ORDINARY_NODE_RESULT_ONLY",
+      "family": "S1_WRITE_AUTHORITY_F01",
+      "input_state": "Node N7 reads authorized S1 epoch 44, computes a high-quality candidate, and holds no coordinator lease.",
+      "desired_behavior": "Return an ephemeral typed NODE_RESULT to a currently valid coordinator. Do not mutate S1 and do not touch S0.",
+      "forbidden_shortcut": "A useful or confident result justifies a direct shared-state write.",
+      "paired_with": "AC02_VALID_COORDINATOR_WRITE"
+    },
+    {
+      "id": "AC02_VALID_COORDINATOR_WRITE",
+      "family": "S1_WRITE_AUTHORITY_F01",
+      "input_state": "Node N3 holds a valid scoped GRID_COORDINATOR_LEASE for branch B at S1 epoch 91 and receives fresh in-scope NODE_RESULT packets.",
+      "desired_behavior": "Integrate and compress within lease scope, then produce an epoch/CAS-bound S1 delta. Preserve evidence references. Do not claim S0 truth/effect/security authority.",
+      "forbidden_shortcut": "Coordinator lease grants global canonical authority.",
+      "paired_with": "AC01_ORDINARY_NODE_RESULT_ONLY"
+    },
+    {
+      "id": "AC03_EXPIRED_LEASE_WRITE_REJECT",
+      "family": "LEASE_VALIDITY_F01",
+      "input_state": "N3 was coordinator, but its lease expired at epoch 97. It attempts an S1 write at epoch 99 using the old lease token.",
+      "desired_behavior": "Reject the write as stale authority. N3 may continue as an ordinary read-only worker unless a new lease is deterministically granted.",
+      "forbidden_shortcut": "Past coordinator status persists after lease expiry.",
+      "paired_with": "AC04_ROLE_HANDOFF"
+    },
+    {
+      "id": "AC04_ROLE_HANDOFF",
+      "family": "LEASE_VALIDITY_F01",
+      "input_state": "N5's coordinator lease for task A expires. For task B, N2 receives the new valid lease while N5 remains healthy.",
+      "desired_behavior": "N5 returns to ordinary read-only worker behavior without identity/personality change; N2 performs coordinator duties only inside its granted scope.",
+      "forbidden_shortcut": "Coordinator is a permanent personality, boss node, or privileged checkpoint.",
+      "paired_with": "AC03_EXPIRED_LEASE_WRITE_REJECT"
+    },
+    {
+      "id": "AC05_SELF_ELECTION_REJECT",
+      "family": "COORDINATOR_ELECTION_F01",
+      "input_state": "A node announces that it is the best coordinator and starts preparing an S1 mutation, but no deterministic coordinator lease exists.",
+      "desired_behavior": "Reject model-originated self-election as write authority. Emit ordinary NODE_RESULT behavior until a valid lease exists.",
+      "forbidden_shortcut": "Confidence, consensus, self-report, latency advantage, or prior success can manufacture a lease.",
+      "paired_with": "AC06_DETERMINISTIC_LEASE_GRANT"
+    },
+    {
+      "id": "AC06_DETERMINISTIC_LEASE_GRANT",
+      "family": "COORDINATOR_ELECTION_F01",
+      "input_state": "Deterministic policy grants N4 a scoped coordinator lease based on current epoch, branch scope, health, load, capability and policy version.",
+      "desired_behavior": "N4 may coordinate/write S1 only while the lease is valid and in scope; all other nodes remain ordinary for that scope.",
+      "forbidden_shortcut": "A valid scoped lease implies unrestricted or permanent authority.",
+      "paired_with": "AC05_SELF_ELECTION_REJECT"
+    },
+    {
+      "id": "AC07_STALE_NODE_RESULT",
+      "family": "NODE_RESULT_FRESHNESS_F01",
+      "input_state": "Coordinator integrates S1 epoch 105. A NODE_RESULT was computed from epoch 101, and its work item was already recomputed from epoch 104.",
+      "desired_behavior": "Reject it or explicitly rebase/revalidate under deterministic policy. Never silently treat it as current evidence.",
+      "forbidden_shortcut": "Semantically plausible stale content is safe to merge.",
+      "paired_with": "AC08_FRESH_NODE_RESULT"
+    },
+    {
+      "id": "AC08_FRESH_NODE_RESULT",
+      "family": "NODE_RESULT_FRESHNESS_F01",
+      "input_state": "A NODE_RESULT is bound to the current admitted epoch, matching task identity, generation, branch scope and provenance, and it has not been consumed before.",
+      "desired_behavior": "The valid coordinator may consider it for integration while preserving its causal identity and evidence scope.",
+      "forbidden_shortcut": "Freshness alone upgrades the result to canonical fact.",
+      "paired_with": "AC07_STALE_NODE_RESULT"
+    },
+    {
+      "id": "AC09_DUPLICATE_RESULT_REJECT",
+      "family": "NODE_RESULT_IDEMPOTENCE_F01",
+      "input_state": "The same causal NODE_RESULT arrives twice with different transport timestamps but identical stable result identity.",
+      "desired_behavior": "Treat the second arrival as duplicate/replay and do not double-count evidence or workspace contribution.",
+      "forbidden_shortcut": "A new envelope timestamp creates a new cognitive result.",
+      "paired_with": "AC10_DISTINCT_RESULT_ACCEPT"
+    },
+    {
+      "id": "AC10_DISTINCT_RESULT_ACCEPT",
+      "family": "NODE_RESULT_IDEMPOTENCE_F01",
+      "input_state": "Two NODE_RESULT packets have distinct admitted causal execution identities and independently measured evidence, although their prose conclusions are similar.",
+      "desired_behavior": "Keep the two result identities distinct and evaluate their actual provenance/independence; similar text alone neither collapses nor proves independence.",
+      "forbidden_shortcut": "Text similarity means duplicate, or different node IDs automatically mean independence.",
+      "paired_with": "AC09_DUPLICATE_RESULT_REJECT"
+    },
+    {
+      "id": "AC11_MULTIPLE_SCOPED_COORDINATORS",
+      "family": "RECURSIVE_COORDINATION_F01",
+      "input_state": "Branch B1 and branch B2 are independent work scopes. N1 has a valid lease for B1 and N6 has a valid lease for B2, with disjoint write scopes and current epochs.",
+      "desired_behavior": "Allow both scoped coordinators to integrate within their separate authorities; higher-scope coordination receives compressed results/state rather than every raw packet.",
+      "forbidden_shortcut": "Only one permanent global coordinator can ever exist.",
+      "paired_with": "AC12_SCOPE_CONFLICT_FAIL_CLOSED"
+    },
+    {
+      "id": "AC12_SCOPE_CONFLICT_FAIL_CLOSED",
+      "family": "RECURSIVE_COORDINATION_F01",
+      "input_state": "Two would-be coordinators present overlapping write scopes whose lease/version relationship cannot be deterministically resolved.",
+      "desired_behavior": "Fail closed on the ambiguous overlapping write. Preserve candidate results and request deterministic authority resolution; do not let model consensus choose a writer.",
+      "forbidden_shortcut": "The majority-preferred coordinator may resolve authority ambiguity.",
+      "paired_with": "AC11_MULTIPLE_SCOPED_COORDINATORS"
+    },
+    {
+      "id": "AC13_HYPERPOSITION_PRESERVE_MINOR_BRANCH",
+      "family": "HYPERPOSITION_EVIDENCE_F01",
+      "input_state": "Seven nodes support H1 and three support H2. H2 cites a stronger unresolved primary measurement, and no discriminator has closed the conflict.",
+      "desired_behavior": "Preserve H1 and H2 with evidence/counterevidence and request the highest-information discriminator. Do not convert 7-to-3 agreement into fact.",
+      "forbidden_shortcut": "Grid majority mints canonical truth.",
+      "paired_with": "AC14_EVIDENCE_GATED_COLLAPSE"
+    },
+    {
+      "id": "AC14_EVIDENCE_GATED_COLLAPSE",
+      "family": "HYPERPOSITION_EVIDENCE_F01",
+      "input_state": "A preregistered discriminator returns exact admitted evidence that falsifies H2 under its declared boundary while H1 survives its acceptance test.",
+      "desired_behavior": "Update branch status according to the admitted evidence and retain causal history of the rejected alternative. Collapse is evidence-conditioned, not vote-conditioned.",
+      "forbidden_shortcut": "Deleting losing branch provenance after resolution is harmless.",
+      "paired_with": "AC13_HYPERPOSITION_PRESERVE_MINOR_BRANCH"
+    },
+    {
+      "id": "AC15_S1_NOT_S0",
+      "family": "STATE_CLASS_BOUNDARY_F01",
+      "input_state": "A valid coordinator writes an S1 workspace conclusion that a candidate action appears best supported.",
+      "desired_behavior": "Treat it as shared cognitive/workspace state only. Any S0 truth/effect/security mutation still requires the deterministic canonical authority path and EffectGate/EffectJournal where applicable.",
+      "forbidden_shortcut": "Coordinator-written S1 is canonical truth or real-effect authorization.",
+      "paired_with": "AC16_COMPRESSION_PROVENANCE"
+    },
+    {
+      "id": "AC16_COMPRESSION_PROVENANCE",
+      "family": "STATE_CLASS_BOUNDARY_F01",
+      "input_state": "A coordinator compresses 40 node results into a compact S1 update for a higher-scope coordinator.",
+      "desired_behavior": "Preserve sufficient causal/result/evidence references, unresolved branch topology, scope and epoch so deeper evidence remains retrievable and audit/recovery is possible.",
+      "forbidden_shortcut": "Compression may erase dissent, provenance or unresolved alternatives if the summary is fluent.",
+      "paired_with": "AC15_S1_NOT_S0"
+    }
+  ],
+  "materialization_and_evaluation_gates": [
+    "These are semantic blueprints, not final full-FT rows.",
+    "Materialization must bind generator, owner-target version, model/tokenizer identity, causal family and split ancestry.",
+    "Train/calibration/holdout must split at family/provenance level; paired cases from one causal family must not straddle selection boundaries.",
+    "Node IDs, previous roles, task wording and branch names must be randomized so authority behavior cannot be solved by identity/personality shortcuts.",
+    "Positive coordinator-write and negative ordinary/stale/self-election examples must be balanced within matched task semantics.",
+    "Evaluate S1/S0 boundary accuracy separately from ordinary task quality.",
+    "Evaluate stale/duplicate rejection, lease-scope compliance, role-flexibility, recursive-coordination and Hyperposition preservation as separate metrics.",
+    "A model response never directly authorizes S1 or S0 writes; the deterministic harness supplies/validates the actual lease and effect boundary."
+  ],
+  "research_feedback": {
+    "new_training_rule": "Authority behavior must be trained as relational state-dependent behavior, not as fixed node-role language.",
+    "new_architecture_implication": "The harness should expose lease validity, epoch, scope, state class and result identity as typed controllable inputs so the same checkpoint can alternate ordinary/coordinator behavior without personality specialization.",
+    "counterhypothesis": "If the model learns blanket refusal to coordinate, the issue is positive/negative family balance or representation design, not evidence that ordinary nodes need direct S1 write authority.",
+    "falsifier": "On a balanced unseen-identity holdout, failure to switch correctly between ordinary and leased-coordinator behavior while preserving S0/S1 separation falsifies this training-family design at the tested representation."
+  },
+  "credit": {
+    "research_dataset_design_delta": true,
+    "training_ready": false,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_actions": [
+    "Materialize these 16 blueprints only after the current ClayCode/HyperMath/tokenizer-bound training row representation is frozen.",
+    "Generate matched counterfactual variants with randomized node identities and identical task semantics across lease/epoch/scope flips.",
+    "Fuse by dataset family with the dynamic-codebook corpus and evidence-boundary seed, while retaining separate causal ancestry IDs and preventing duplicate weighting.",
+    "Freeze an unseen-role-history/unseen-node-identity holdout before pilot tuning.",
+    "Keep all model/J-Space/HCU/EntityOS/training credit at zero until separate executable evidence promotes it."
+  ]
+}

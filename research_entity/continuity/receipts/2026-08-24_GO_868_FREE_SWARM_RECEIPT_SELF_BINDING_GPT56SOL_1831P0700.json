@@ -1,0 +1,106 @@
+{
+  "schema": "CLAY_GO_SOURCE_DELTA/v1",
+  "date": "2026-08-24",
+  "local_time": "18:31+07:00",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "organ": "GPT56SOL_CHATGPT_ORGAN",
+  "trigger": "go",
+  "authority": {
+    "bootstrap": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "owner": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "all_workers": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_68.md"
+  },
+  "reentry": {
+    "main_observed_before_delta": "0eee4cef05ea011d1f23b50f735067bef2b4bee2",
+    "main_after_source_delta_before_receipt": "f1076b872b5f216f19f2b6fce42d192a7793e698",
+    "retained_hcu_donor": {
+      "qualified_pr": "gschaidergabriel/clay-global-research-entity#1263",
+      "head_observed": "b15aa8d1e0e10f39c3e6ae715803d2c0be02d752"
+    },
+    "retained_execution_controller": {
+      "qualified_pr": "gschaidergabriel/Dr.-Unterweger#810",
+      "head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8"
+    }
+  },
+  "vps_bridge_health": {
+    "live_roundtrip_observed": false,
+    "reason": "No SSH/VPS/terminal bridge connector is exposed to this ChatGPT organ and plugin discovery returned no matching installable connector.",
+    "classification": "INFRASTRUCTURE_SURFACE_UNAVAILABLE_NOT_PRODUCT_FAILURE"
+  },
+  "track_a": {
+    "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+    "status": "ADVANCED_SOURCE_TEST_HARDENING_ONLY",
+    "finding": "The canonical FREE Swarm receipt runner did not bind its own runner implementation into SOURCE_PATHS and its outer child-process socket tripwire covered create_connection/connect but not getaddrinfo/connect_ex. This left exact-source receipt identity and network-tripwire coverage weaker than the runner wording implied.",
+    "counterhypothesis": "Per-case tests already include their own socket tripwires, so the missing outer paths might never permit an unnoticed provider call in current cases. The hardening is still warranted because exact-source receipt promotion must bind the receipt generator itself and should fail closed if a future test path performs DNS/connect_ex outside a case-local mock.",
+    "external_reference": "Python socket documentation classifies getaddrinfo as address resolution used to create connected sockets and connect_ex as a connection path equivalent to connect with error-code semantics.",
+    "writes": [
+      {
+        "commit": "32b282585f9d86dfb325f582aa10c4a43c8c7e17",
+        "path": "tools/run_free_swarm_admission_boundary_receipt_hardened_868.py",
+        "blob_sha": "568e62f31ab29faca8aed3ad0ab400d4ee23178f",
+        "delta": [
+          "bind base runner, successor wrapper and hardening test in source manifest",
+          "tripwire socket.getaddrinfo",
+          "tripwire socket.socket.connect_ex",
+          "retain create_connection/connect tripwires",
+          "emit explicit receipt_runner and hardening metadata"
+        ]
+      },
+      {
+        "commit": "f1076b872b5f216f19f2b6fce42d192a7793e698",
+        "path": "tests/test_free_swarm_receipt_runner_hardening_868.py",
+        "blob_sha": "e69e69a66b16feb02de7e478f446f0d58cdd5e14",
+        "delta": [
+          "regress manifest binding of runner sources",
+          "regress inclusion of hardening test in execution set",
+          "regress DNS/connect_ex bootstrap tripwire markers",
+          "preserve source-only zero-credit boundary"
+        ]
+      }
+    ],
+    "workflow_runs_observed_for_f1076": 0,
+    "exact_source_runtime_execution_observed": false,
+    "free_swarm_admission_boundary_receipt_pass": false
+  },
+  "track_b": {
+    "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "status": "HCU_NO_CHANGE_WITH_REASON",
+    "reason": "The retained single donor lane moved during this macrocycle to b15aa8d1e0e10f39c3e6ae715803d2c0be02d752 with exact HCU/J-Space tensor-identity regression work, while current main also advanced the J-Space diagnostic-vs-causal-control gate. Creating another overlapping HCU/J-Space source lane here would violate the nonduplication/single-donor law. The higher-information next HCU discriminator remains exact execution on an exposed authorized zero-cost surface.",
+    "next_discriminator": "Execute the live donor rejection/identity boundary suite at exact source identity on authorized normal-user local Linux or clay-direct-dev and bind environment/result digests."
+  },
+  "track_c": {
+    "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY",
+    "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+    "reason": "No model-intervention-capable local/VPS execution surface is exposed to this organ. Parallel current work already separated JSPACE_DIAGNOSTIC_READOUT from causal-control promotion and added exact tensor-identity fencing. Additional source narration would be lower-information than executing the declared clean/corrupted/target/matched-sham/off-target causal family.",
+    "next_discriminator": "On an exposed zero-cost local or clay-direct-dev backend, bind exact checkpoint/tokenizer/runtime/loader-consumed tensor identity and execute one model-specific intervention family with matched placebo before any J-Space or training promotion."
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_identity": false,
+    "atomic_unusual_experiment_claim": "NOT_ATTEMPTED",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "execution_evidence": {
+    "external_provider_calls_by_this_organ": 0,
+    "provider_secret_reads_by_this_organ": 0,
+    "runtime_receipt_created": false,
+    "negative_evidence": [
+      "no live VPS/local shell bridge exposed",
+      "no GitHub Actions workflow run observed for f1076b872b5f216f19f2b6fce42d192a7793e698"
+    ]
+  },
+  "credits": {
+    "free_swarm_provider_admission_runtime": 0,
+    "external_provider_worker_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "From an exposed authorized zero-cost normal-user local or clay-direct-dev clean checkout at exact then-current main, run python tools/run_free_swarm_admission_boundary_receipt_hardened_868.py --output <receipt>.json; require all canonical and hardening tests PASS, zero blocked-case secret reads, zero outer socket/DNS attempts, exact manifest/result digests and exit 0 before any external provider lane restart."
+}

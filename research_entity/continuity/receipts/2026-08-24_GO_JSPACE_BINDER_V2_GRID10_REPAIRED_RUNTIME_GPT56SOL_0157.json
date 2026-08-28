@@ -1,0 +1,95 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_BINDER_V2_GRID10_REPAIRED_RUNTIME/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "latest_research_main_observed_before_write": "aaa58c694da8858a8e2177389f1d7bad705fe4ef",
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "mode": "FREE_ONLY",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "unusual_experiment_policy": "NO_NEW_UNUSUAL_INTERVENTION_WITHOUT_CANONICAL_ATOMIC_LEASE"
+  },
+  "execution": {
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_controller_pr": 810,
+    "controller_commit": "d595a19ea323f14ca09d8d717f5b5cf770508db7",
+    "deployment": "dpl_7Le8masacNa2Ga9FdKSPjAUXoRy9",
+    "route": "/api/hcu-jspace-binding-v2-capsule",
+    "deployment_state_observed": "READY",
+    "build_guard": "EntityOSHCUCurrentExecutorGuard/v3",
+    "build_guard_status_observed": "CURRENT_MAIN_PLUS_RETAINED_HCU_PR_ATOMIC_SNAPSHOT_VERIFIED_LOAD_V3_EXECUTOR_FREE_ONLY_COST_FENCED",
+    "runtime_log_observation": "2026-08-23T18:56:19Z GET /api/hcu-jspace-binding-v2-capsule HTTP 200",
+    "response_body_observed": false,
+    "sandbox_id_observed": false,
+    "result_log_sha256_observed": false,
+    "source_manifest_sha256_observed": false
+  },
+  "capsule": {
+    "id": "HCU_JSPACE_INFERENCE_BINDING_V2_EXACT_GRID10_PLAN_CELL_CAPSULE/v3",
+    "fixed_command": "python3 test_binding_v2_deterministic.py",
+    "source_main_context_label_in_capsule": "d19f581151e634a60096724e1caee06914212bc0",
+    "source_pr": 1263,
+    "source_pr_context_label_in_capsule": "9c7a3c8bb23b27aee6e71275af836f0bc3b13bfb",
+    "exact_component_git_blobs": {
+      "entry_canonicalization_v1.py": "00d1d79cbb66a1956a278de4755cd8395e854199",
+      "grid10_scheduler_v1.py": "22d7407dd87b38f9ae53c2ef8bdff3383110875c",
+      "jspace_inference_binding_v1.py": "9830a6833922b05d84e2863bfbdfb8dfff2c06cf",
+      "test_binding_v2_deterministic.py": "2a9cba2c9d25ecc40acc7f891c4b44de9b529456"
+    },
+    "dependency_scope": "EXACT RFC8785/JCS + EXACT GRID10 scheduler plan/cell types + repaired exact J-Space inference binder v2; router/Entry/inference/trace producers remain bounded test doubles"
+  },
+  "success_contract": {
+    "http_200_requires": [
+      "fixed command exit code 0",
+      "BINDER_V2_BASELINE=PASS",
+      "EXACT_GRID10_PLAN_CELL_TYPES=PASS",
+      "BINDER_V2_MODEL_CALL_GRID_CELL_FAIL_CLOSED=PASS",
+      "BINDER_V2_MULTILANE_FAIL_CLOSED=PASS",
+      "BINDER_V2_RECEIPT_DIGEST_FAIL_CLOSED=PASS",
+      "BINDER_V2_GRID_DIGEST_FAIL_CLOSED=PASS",
+      "BINDER_V2_ROLE_LANE_FAIL_CLOSED=PASS",
+      "BINDER_V2_DETERMINISTIC_REGRESSIONS=6_OF_6_PASS",
+      "UNUSUAL_EXPERIMENT_COUNT_ADDED=0",
+      "Sandbox cleanup success"
+    ],
+    "secret_fence_logic": "command exits nonzero if GITHUB_READ_TOKEN or TOGETHER_API_KEY is present; HTTP 200 therefore implies that fence did not fire"
+  },
+  "mechanism_result": {
+    "status": "EXACT_REPAIRED_BINDER_GRID10_COMPONENT_RUNTIME_SUPPORTED",
+    "repaired_model_call_identity": "grid10:<plan_sha256>:<cell_id>:<role>",
+    "recorded_cross_cell_alias_regression": "FAIL_CLOSED",
+    "error_contract": "INFERENCE_MODEL_CALL_ID_DOES_NOT_BIND_GRID10_CELL_ROLE",
+    "exact_grid10_plan_cell_types_exercised": true,
+    "receipt_digest_tamper_fails_closed": true,
+    "grid_digest_tamper_fails_closed": true,
+    "role_lane_mismatch_fails_closed": true,
+    "multilane_ambiguity_fails_closed": true
+  },
+  "credit": {
+    "component_runtime_credit": "JSPACE_BINDER_V2_EXACT_GRID10_PLAN_CELL_COMPONENT_CLOSURE_ONLY",
+    "full_hcu_dependency_graph_credit": false,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "unusual_experiment": {
+    "count_added_by_this_execution": 0,
+    "classification": "DETERMINISTIC_REGRESSION_AND_COMPONENT_ACCEPTANCE",
+    "atomic_lease_consumed": false
+  },
+  "next_exact_gate": [
+    "Keep PR1263 donor-only and PR810 executor-only.",
+    "Replace remaining bounded producer doubles with the minimum exact causal chain: Typed Entry admission -> route -> verified physical engine-load lease/consumption -> inference receipt -> scheduler-owned GRID10 -> repaired J-Space binding.",
+    "Carry the already-identified outcome-receipt content/key identity repair into the single canonical DatasetAdmission path using the selected RFC8785/JCS authority.",
+    "Only then extend to observable Global J-Space/GWT traces and FREE_ONLY local approximately 0.8B readiness.",
+    "Do not grant model, training, full-HCU, effect, truth, or whole-EntityOS credit from this component result."
+  ],
+  "result": "REPAIRED_MODEL_CALL_TO_GRID_PLAN_CELL_ROLE_BINDING_SURVIVED_EXACT_HASH_BOUND_FREE_SANDBOX_COMPONENT_RUNTIME; FULL_CAUSAL_HCU_PATH_REMAINS_OPEN"
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "8.84",
+  "date": "2026-08-26",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "observed_main": "462672cf9af2de972baabc2cc7d91c948b14e9f6",
+  "material_finding": "Trigger-2 V62 falsified the prior assumption that source_bound_model_call_identity_sha256 must be injective across independent invocations. Exact committed-byte local deterministic tests validate a phase-separated authority pattern: call-content/output evidence identity may repeat across deterministic invocations, while invocation multiplicity is carried by distinct pre-call launch descriptors and post-call executor observations. The remaining source gap is node-admission/membership-incarnation provenance, not blind call-digest uniqueness. Runtime quiescence remains actively failed and therefore outranks all runtime/model/training promotion work.",
+  "executable_evidence": {
+    "two_phase_source_receipt": "e9292ea7857877ec1da972d43ee21e745a00fc66",
+    "scope": "EXACT_COMMITTED_BYTES_LOCAL_DETERMINISTIC_SOURCE_FIXTURE_ONLY",
+    "py_compile": "PASS",
+    "pytest": "9 passed in 0.03s",
+    "repository_ci": false,
+    "model_runtime": false,
+    "physical_grid10_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "canonical_semantics_credit_added": 0
+  },
+  "falsified_hypothesis": "SOURCE_BOUND_MODEL_CALL_IDENTITY_MUST_BE_INJECTIVE_OVER_INDEPENDENT_INVOCATIONS",
+  "replacement_rule": "CALL_CONTENT_IDENTITY_IS_FOR_CONTENT_EQUIVALENCE_AND_DEDUP; INVOCATION_EVENT_AUTHORITY_IS_CARRIED_BY_PHASE_SEPARATED_PRECALL_LAUNCH_PLUS_POSTCALL_EXECUTOR_OBSERVATION",
+  "remaining_source_blocker": {
+    "id": "NODE_ADMISSION_MEMBERSHIP_INCARNATION_PROVENANCE",
+    "status": "STRICT_XFAIL_SOURCE_GAP",
+    "required_closure": "A source_node_admission_id or membership incarnation must not be silently projected onto two independently attributed nodes in one cohort unless an explicit multiplexing/fanout contract exists. Cross-validate admission identity/revision, node, process and generation against proof-carrying membership evidence before cohort admission."
+  },
+  "priority_order": [
+    "P0: execute the already pinned FreeSwarm quiescence enforcer on the owning host; require zero provider-capable survivors and bounded zero provider-counter delta without issuing a provider probe",
+    "P1 source-only: close membership-incarnation provenance and integrate the validated two-phase authority chain into PROOF_CARRYING_NODE_RESULT/v1 plus fused GRID10 membership/cohort source",
+    "P1 after quiescence PASS: re-enter current explicit FREE non-provider execution authority before any model/provider/GRID10 promotion",
+    "P2: keep frozen checkpoint evaluation blinded and training materialization closed until separately admitted executable evidence",
+    "P3: keep Forge-to-Distillery training credit at zero until one exact accepted witness produces accepted_dataset_tokens > 0 and exact replay adds +0"
+  ],
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "promotion_state": {
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

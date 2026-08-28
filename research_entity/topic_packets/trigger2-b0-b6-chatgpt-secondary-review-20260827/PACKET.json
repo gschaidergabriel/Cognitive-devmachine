@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "packet_id": "trigger2-b0-b6-chatgpt-secondary-review-20260827",
+  "title": "B0-B6 training curriculum second-researcher review -- chatgpt-secondary (2026-08-27)",
+  "status": "OPEN",
+  "primary_domain": "claycode",
+  "domains": ["claycode", "training_data_quality", "gwt", "coordination"],
+  "owner_actor": "chatgpt-secondary",
+  "reviewed_by": "claude-code-lead",
+  "canonical_parent": {
+    "note": "no formal canonical-state hash captured for this pass; run against repo HEAD e14130bdf155b635a7bb072c4babec43ee2ed10c"
+  },
+  "run_context": {
+    "mechanism": "5 real single-line messages via stern.py chatgpt-senden --prompts, --num-workers 1 each, sequential runs into ChatGPT project 'clay science pipeline'. Targeted harvest via direct $B goto/text on the 5 known conversation URLs (not a full chatgpt-ernten pass over the whole historical sent_urls_v2.txt).",
+    "trigger_source": "arbeitspaket paket-1787776921707-8dca8e, resumed after a prior agent hit a Claude quota limit mid-task",
+    "questions_asked": 5,
+    "questions_answered": 5,
+    "note_on_message_format": "First real live send today used multi-paragraph text with literal newlines and hit a NEW bug: Playwright page.keyboard.type() sends 0x0A as a real Enter keypress, which submits ChatGPT's compose box mid-typing. Fixed by switching to single-line messages (joined with spaces) for all 5 sends; documented as a code comment in chatgpt_burst_worker_v2.sh."
+  },
+  "topics": [
+    {
+      "curriculum_family": "B0/B1",
+      "question_summary": "Codebook-order/ordinal-mapping leak risk, holdout/canonical-truth flag consistency, positive_jspace_label as label side-channel",
+      "chatgpt_finding": "Leak risk real IF codebook order is fixed across examples; correctly hedged that it couldn't tell from the 2 samples given. Flagged positive_jspace_label and cross-family (B0 vs B1) semantic-duplicate train/holdout leakage as bigger structural risks than the flag combination.",
+      "self_verification": "REFUTED for TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl (n=4464): direct extraction of ALLOW/DENY ordinal across 2000 sampled prompts shows near-even distribution across :00-:09+, not a fixed mapping. Not checked: B0 (risk doesn't apply, no codebook indirection) or B1_BINDING_MATERIALIZED (larger sibling file, out of scope this pass)."
+    },
+    {
+      "curriculum_family": "B2/B3",
+      "question_summary": "queried_class_ vs queried_class field-name split across two B3 files sharing one schema id; B2 prior-override lexical-marker shortcut risk",
+      "chatgpt_finding": "queried_class_ trailing-underscore is a real bug, not intentional -- noted audit_unresolvable() itself reads the buggy name, masking the defect from self-audit. B2's 'CODEBOOK (current, authoritative)' framing gives a shallow lexical-marker shortcut that can solve 'pick the authoritative block' without real prior-override binding. Unprompted extra finding: generator docstring claims ~50/50 distractor agree/disagree, but full-permutation enumeration over 6 distractor_perm values actually yields 1/6 vs 5/6.",
+      "self_verification": "BOTH CONFIRMED. tools/trigger2_b3_multihop_dereference_generator_v1.py: line 111 writes queried_class (MULTI_HOP_DEREF branch), line 195 writes queried_class_ (UNRESOLVABLE_CHAIN_REJECTION branch), audit_unresolvable() at line 214 reads queried_class_ -- same file, same schema CLAY_TRIGGER2_B3_MULTIHOP_DEREFERENCE_CANDIDATE/v1, affects all 1620 rows in TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl. distractor_agrees_with_current counted directly on TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl (n=1080): 180 True / 900 False, exactly 1/6 vs 5/6, contradicting tools/trigger2_b2_prior_override_remap_stale_generator_v1.py line 19's 'half the rows' docstring. Neither fixed in this pass -- both left for a follow-up build task."
+    },
+    {
+      "curriculum_family": "B4/B5",
+      "question_summary": "Multi-digit ABI ordinal tokenization risk (B4: 20-99, B5: 200-299) vs the earlier single-digit-atom whitespace ABI break (commit 8840389); queried_position_in_codebook presence/consistency and position-only shortcut risk",
+      "chatgpt_finding": "Multi-digit ordinals were NOT covered by 8840389's methodology (single digits 0-9 after whitespace only, not :NN/:NNN after a colon) -- open unknown, not a demonstrated bug. Correctly noted both files are already training_eligible=false (quarantined). Confirmed queried_position_in_codebook is computed consistently (order.index(queried)) in both and not rendered into either prompt -- position-shortcut risk only exists if a trainer accidentally serializes the full JSON row instead of prompt/target.",
+      "self_verification": "NOT independently re-run this pass (would need a real tokenizer sweep matching 8840389's methodology) -- left open, consistent with ChatGPT's own 'unknown, not yet a bug' framing."
+    },
+    {
+      "curriculum_family": "B6",
+      "question_summary": "round1_/round2_-prefixed keys (GWT_CAUSAL_REENTRY) vs flat scores/repeats keys (GWT_COMPETITION_BROADCAST) sharing one schema id -- regression of the earlier confirmed B6 field-naming bug?",
+      "chatgpt_finding": "NOT the same class as the earlier confirmed bug (that one omitted the family-convention key entirely; current generator has a regression test requiring family+curriculum_family). Current divergence is a milder same-concept-different-key hazard (scores<->round1_scores etc.), recommends additive aliasing over rename. Confirmed via its own reading that score permutations x repeat-count permutations are crossed independently (288/864 agree, 576/864 disagree matches the file's own audit) -- no repeat-count shortcut to the discriminator-score target. Confirmed metadata fields (score_winner, round1_winner, round2_scores, distinguishing_row) are not serialized into the prompt.",
+      "self_verification": "NOT independently re-run this pass (would need direct read of the B6 GWT generator source) -- treated as a plausible, appropriately-hedged secondary opinion, not promoted to confirmed either way."
+    },
+    {
+      "curriculum_family": "cross-cutting",
+      "question_summary": "Rank the 4 above findings by risk of enabling a spurious shortcut that bypasses the intended causal-binding task (not just a formatting nitpick)",
+      "chatgpt_finding": "Ranks B0/B1 fixed-codebook-order and B4/B5 position-only shortcut as top 2 BY CATEGORY (not as confirmed instances). Explicitly declines to manufacture a shortcut-leakage problem for B2/B3 or B6, calling both 'basically fine as-is with respect to shortcut leakage' -- distinguishes schema-hygiene from actual learnability shortcuts. Non-alarmist, consistent with instruction not to invent problems.",
+      "self_verification": "Consistency check only -- the #1-ranked risk (B0/B1) is the one item independently REFUTED by direct data check above, which the ranking answer itself could not have known (each conversation was independent, no cross-message context)."
+    }
+  ],
+  "quality_assessment": {
+    "reviewer": "claude-code-lead",
+    "verdict": "Net: 1 flagged risk REFUTED (B0/B1 codebook order, verified fine in B1_TRAIN_BALANCED_2ORDER), 1 real bug CONFIRMED (B3 queried_class_ typo, 1620 rows affected, not yet fixed), 1 doc/data mismatch CONFIRMED (B2 'half' docstring vs actual 1/6-5/6 split, cosmetic), 2 items plausible but not independently re-verified this pass (B4/B5 tokenization, B6 field-shape) -- correctly left as open rather than promoted. Precedent from the brief ('0.276-bit leak was actually intended') held again here: the single highest-ranked risk in ChatGPT's own cross-cutting answer turned out, on independent check, to not apply to the actual shipped file. ChatGPT's answers were specific, hedged appropriately where it lacked data, and explicitly declined to manufacture problems in 2 of 4 families when asked to rank -- consistent with a genuine secondary-researcher pass, not sycophantic agreement.",
+    "not_yet_done": [
+      "Real tokenizer sweep for B4/B5 multi-digit ordinals (both already quarantined training_eligible=false, so not urgent)",
+      "Independent read of the B6 GWT generator source to confirm/refute the round1_/flat field-shape assessment"
+    ],
+    "done_2026-08-27_followup": [
+      "Fixed B3 queried_class_ typo in tools/trigger2_b3_multihop_dereference_generator_v1.py (both branches now emit queried_class), added audit_cross_family_schema_consistency() as a standing regression + 2 new pytest cases, regenerated all 2160 rows from scratch via the generator CLI (not renamed in place) -- byte-identical output for the never-buggy MULTI_HOP_DEREF family (sha256 unchanged), UNRESOLVABLE_CHAIN_REJECTION content diff-verified identical to the old file except the one key rename (0 other mismatches across all 1620 rows). Re-audit: TRAIN/HOLDOUT_FROZEN triple + exact-prompt disjointness both re-verified at 0 overlap. tests/test_trigger2_b3_multihop_dereference_generator_v1.py 7/7 green.",
+      "Fixed B2 docstring cosmetic mismatch in tools/trigger2_b2_prior_override_remap_stale_generator_v1.py (no data change -- test already only asserted agree_rows>0/disagree_rows>0, not a 50/50 ratio)."
+    ]
+  },
+  "evidence_refs": [
+    "research_entity/topic_packets/trigger2-b0-b6-chatgpt-secondary-review-20260827/RAW_ANSWERS.md",
+    "research_entity/claycode/training/TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+    "tools/trigger2_b3_multihop_dereference_generator_v1.py",
+    "tools/trigger2_b2_prior_override_remap_stale_generator_v1.py"
+  ],
+  "promotion": "NONE",
+  "next_step": "Fix the confirmed B3 field-name bug and B2 docstring mismatch in a follow-up build task; run the B4/B5 tokenizer sweep before ever flipping those files to training_eligible=true; independently read the B6 GWT generator to close out that item."
+}

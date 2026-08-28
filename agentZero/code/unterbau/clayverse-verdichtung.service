@@ -1,0 +1,21 @@
+[Unit]
+Description=ClayVerse Verdichtung — schaut nach, arbeitet nur bei ueberschrittener Schwelle
+Documentation=file:/opt/clayverse/werkzeug/verdichtung.py
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Type=exec statt oneshot: Type=oneshot verbietet jedes Restart= ausser "no",
+# und Restart=on-failure ist hier ausdruecklich verlangt.
+Type=exec
+User=root
+WorkingDirectory=/opt/clayverse/werkzeug
+ExecStart=/usr/bin/python3 /opt/clayverse/werkzeug/verdichtung.py zyklus
+# on-failure, NICHT always: ein Lauf, der nichts zu tun hatte, ist ein Erfolg
+# und darf nicht sofort wieder anlaufen.
+Restart=on-failure
+RestartSec=120
+TimeoutStartSec=900
+Nice=10
+StandardOutput=journal
+StandardError=journal

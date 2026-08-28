@@ -1,0 +1,311 @@
+name: Trigger1 V2 internal-layer zero-cost vector fastpath
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: trigger1-v2-local-fastpath
+  cancel-in-progress: false
+
+jobs:
+  execute:
+    if: >-
+      github.repository == 'gschaidergabriel/clay-global-research-entity' &&
+      github.event.issue.title == '[CLAY-DISPATCH] Trigger1 V2 internal-layer vector fastpath' &&
+      github.event.issue.user.login == 'gschaidergabriel'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 90
+    steps:
+      - name: Checkout exact current main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Require canonical go atomic lease and bind source
+        shell: bash
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+          lease_result="${RUNNER_TEMP}/trigger1-lease-${GITHUB_RUN_ID}.json"
+          python3 tools/trigger1_atomic_lease_gate.py --issue-body "$ISSUE_BODY" --output "$lease_result"
+          SOURCE_HEAD="$(git rev-parse HEAD)"
+          SOURCE_TREE="$(git rev-parse 'HEAD^{tree}')"
+          SOURCE_DIRTY=false
+          [[ -n "$(git status --porcelain=v1)" ]] && SOURCE_DIRTY=true
+          claim_main="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["observed_canonical_main"])' "$lease_result")"
+          python3 - "$lease_result" "$GITHUB_ENV" "$SOURCE_HEAD" "$SOURCE_TREE" "$SOURCE_DIRTY" <<'PY'
+          import json, pathlib, sys
+          r=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
+          values={
+              'TRIGGER1_TRIGGER_KEY':r['trigger_key'],
+              'TRIGGER1_CLAIM_PATH':r['claim_path'],
+              'TRIGGER1_CLAIM_SHA256':r['claim_sha256'],
+              'TRIGGER1_CLAIM_OBSERVED_MAIN':r['observed_canonical_main'],
+              'TRIGGER1_CLAIMANT_ORGAN':str(r['claimant_organ']),
+              'TRIGGER1_EXPERIMENT_NAME':r['experiment_name'],
+              'TRIGGER1_SOURCE_HEAD':sys.argv[3],
+              'TRIGGER1_SOURCE_TREE':sys.argv[4],
+              'TRIGGER1_SOURCE_DIRTY':sys.argv[5],
+              'TRIGGER1_LEASE_ADMITTED':'true',
+          }
+          with pathlib.Path(sys.argv[2]).open('a',encoding='utf-8') as f:
+              for k,v in values.items():
+                  if '\n' in v or '\r' in v: raise SystemExit('UNSAFE_ENV_VALUE')
+                  f.write(f'{k}={v}\n')
+          PY
+          [[ "$SOURCE_DIRTY" == false ]] || { echo 'BLOCKED_SOURCE_DIRTY_BEFORE_INTERVENTION' >&2; exit 2; }
+          git cat-file -e "$claim_main^{commit}"
+          git merge-base --is-ancestor "$claim_main" "$SOURCE_HEAD" || { echo 'BLOCKED_CLAIM_MAIN_NOT_ANCESTOR_OF_EXECUTED_SOURCE' >&2; exit 2; }
+
+      - name: Verify atomic lease gate implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_trigger1_atomic_lease_gate
+
+      - name: Verify Trigger1 V2 promotion gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate
+          python3 -m unittest -v tests.test_trigger1_intermediate_promotion_bridge
+          python3 -m unittest -v tests.test_trigger1_experiment_result_classify
+
+      - name: Execute fused internal-layer causal discriminator
+        id: experiment
+        shell: bash
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          TOKENIZERS_PARALLELISM: 'false'
+        run: |
+          set -u
+          out="${RUNNER_TEMP}/clay-trigger1-v2-${GITHUB_RUN_ID}"
+          mkdir -p "$out"
+
+          # Provider-independent local-model execution: external LLM-provider
+          # credentials must not be inherited by the child process. Hugging Face
+          # is used only for the public pinned checkpoint with implicit token use off.
+          unset \
+            OPENAI_API_KEY OPENAI_API_KEYS \
+            ANTHROPIC_API_KEY ANTHROPIC_API_KEYS \
+            GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
+            MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY \
+            NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY \
+            OPENROUTER_API_KEY OPENROUTER_API_KEYS OPENROUTER2_API_KEY OPENROUTER3_API_KEY \
+            TOGETHER_API_KEY TOGETHER_API_KEYS \
+            HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true
+          while IFS= read -r name; do
+            case "$name" in
+              OPENAI*KEY*|ANTHROPIC*KEY*|GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*) unset "$name" || true ;;
+            esac
+          done < <(compgen -v)
+          export HF_HUB_DISABLE_IMPLICIT_TOKEN=1
+          export HF_TOKEN_PATH="$out/no-hf-token"
+          rm -f "$HF_TOKEN_PATH"
+
+          residual=""
+          while IFS= read -r name; do
+            case "$name" in
+              OPENAI*KEY*|ANTHROPIC*KEY*|GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*|HF_TOKEN|HUGGING_FACE_HUB_TOKEN|HUGGINGFACE_HUB_TOKEN)
+                residual="${residual}${name}"$'\n'
+                ;;
+            esac
+          done < <(compgen -v)
+
+          if [[ -n "$residual" ]]; then
+            RESIDUAL="$residual" python3 - "$out/provider-credential-fence.json" <<'PY'
+          import json, os, pathlib, sys
+          names=sorted({x for x in os.environ.get('RESIDUAL','').splitlines() if x})
+          pathlib.Path(sys.argv[1]).write_text(json.dumps({
+              'schema':'CLAY_TRIGGER1_PROVIDER_CREDENTIAL_FENCE/v1',
+              'status':'BLOCKED_PROVIDER_CREDENTIAL_ENV_REMAINS',
+              'provider_environment_credential_names_after_scrub':names,
+              'secret_values_recorded':False,
+              'hf_implicit_token_disabled':True,
+          }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+          PY
+            python3 - "$out/trigger1_local_activation_api_result.json" <<'PY'
+          import json, pathlib, sys
+          pathlib.Path(sys.argv[1]).write_text(json.dumps({
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
+              'status':'BLOCKED_PROVIDER_CREDENTIAL_FENCE',
+              'zero_provider_billing':True,
+              'provider_credential_fence_status':'BLOCKED',
+              'terminal_output_projection_shortcut':False,
+              'next_action':'REPAIR_NOW_OR_ROUTE_AROUND'
+          }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+          PY
+            echo "experiment_rc=41" >> "$GITHUB_OUTPUT"
+            echo "experiment_dir=$out" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          printf '%s\n' '{"schema":"CLAY_TRIGGER1_PROVIDER_CREDENTIAL_FENCE/v1","status":"PASS","provider_environment_credential_names_after_scrub":[],"secret_values_recorded":false,"hf_implicit_token_disabled":true}' > "$out/provider-credential-fence.json"
+
+          set +e
+          bash tools/trigger1_local_qwen06_midlayer_causal.sh "$out" >"$out/launcher.log" 2>&1
+          rc=$?
+          set -e
+          echo "experiment_rc=$rc" >> "$GITHUB_OUTPUT"
+          echo "experiment_dir=$out" >> "$GITHUB_OUTPUT"
+          test -s "$out/trigger1_local_activation_api_result.json" || {
+            python3 - "$out/trigger1_local_activation_api_result.json" "$rc" <<'PY'
+          import json, pathlib, sys
+          pathlib.Path(sys.argv[1]).write_text(json.dumps({
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
+              'status':'BLOCKED_BEFORE_RESULT',
+              'process_exit_code':int(sys.argv[2]),
+              'zero_provider_billing':True,
+              'provider_credential_fence_status':'PASS',
+              'terminal_output_projection_shortcut':False,
+              'next_action':'REPAIR_NOW_OR_ROUTE_AROUND'
+          }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+          PY
+          }
+
+      - name: Adjudicate local candidate when present
+        id: gate
+        shell: bash
+        env:
+          EXPERIMENT_DIR: ${{ steps.experiment.outputs.experiment_dir }}
+        run: |
+          set -euo pipefail
+          candidate="$EXPERIMENT_DIR/trigger1_direct_steering_candidate.json"
+          gate="$EXPERIMENT_DIR/promotion_gate.json"
+          if [[ -s "$candidate" ]]; then
+            python3 tools/trigger1_jspace_promotion_gate.py --candidate "$candidate" > "$gate"
+          else
+            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4","mechanism_runtime_vector_credit_candidate":false,"scientifically_independent_vector_candidate":false,"owner_trigger1_goal_credit_candidate":false,"failures":["NO_LOCAL_PROMOTION_CANDIDATE"]}' > "$gate"
+          fi
+
+      - name: Persist sanitized exact-source result
+        shell: bash
+        env:
+          EXPERIMENT_DIR: ${{ steps.experiment.outputs.experiment_dir }}
+          EXPERIMENT_RC: ${{ steps.experiment.outputs.experiment_rc }}
+        run: |
+          set -euo pipefail
+          issue="${{ github.event.issue.number }}"
+          run="${GITHUB_RUN_ID}"
+          outdir="research_entity/runtime/tool_results"
+          mkdir -p "$outdir"
+          target="$outdir/trigger1-v2-local-fastpath-issue${issue}-run${run}.json"
+          python3 - "$EXPERIMENT_DIR/trigger1_local_activation_api_result.json" "$EXPERIMENT_DIR/promotion_gate.json" "$target" "$EXPERIMENT_RC" "$EXPERIMENT_DIR/provider-credential-fence.json" <<'PY'
+          import json, os, pathlib, sys
+          result=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
+          gate=json.loads(pathlib.Path(sys.argv[2]).read_text(encoding='utf-8'))
+          try:
+              fence=json.loads(pathlib.Path(sys.argv[5]).read_text(encoding='utf-8'))
+          except Exception:
+              fence={'schema':'CLAY_TRIGGER1_PROVIDER_CREDENTIAL_FENCE/v1','status':'MISSING'}
+          runtime=result.get('runtime_manifest') if isinstance(result.get('runtime_manifest'),dict) else {}
+          runtime.pop('python_executable',None)
+          result.pop('snapshot_path',None)
+          result['runtime_manifest']=runtime
+          payload={
+              'schema':'CLAY_TRIGGER1_V2_SELFHOSTED_RUNTIME_RECEIPT/v1',
+              'source_result':result,
+              'promotion_gate':gate,
+              'provider_credential_fence':fence,
+              'source_claim_external_provider_credentials_read':result.get('external_provider_credentials_read'),
+              'source_claim_promoted_without_fence':False,
+              'github_actions':{
+                  'run_id':os.environ.get('GITHUB_RUN_ID'),
+                  'run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
+                  'head_sha':os.environ.get('GITHUB_SHA'),
+                  'issue_number':int('${{ github.event.issue.number }}'),
+                  'process_exit_code':int(sys.argv[4]),
+                  'runner_environment':'SELF_HOSTED_LINUX_X64',
+              },
+              'external_provider_credentials_required':False,
+              'zero_provider_billing':True,
+          }
+          pathlib.Path(sys.argv[3]).write_text(json.dumps(payload,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf-8')
+          PY
+          git config user.name 'clay-trigger1-v2-runner'
+          git config user.email 'clay-trigger1-v2-runner@users.noreply.github.com'
+          git add "$target"
+          git commit -m "evidence(trigger1): persist V2 local vector run ${run} [skip ci]" || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1
+
+      - name: Finalize canonical unusual-experiment lease result
+        if: always()
+        shell: bash
+        env:
+          EXPERIMENT_DIR: ${{ steps.experiment.outputs.experiment_dir }}
+          EXPERIMENT_RC: ${{ steps.experiment.outputs.experiment_rc }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          [[ "${TRIGGER1_LEASE_ADMITTED:-}" == true ]] || exit 0
+          claim_result="research_entity/continuity/go_experiment_claims/${TRIGGER1_TRIGGER_KEY}.result.json"
+          runtime_receipt="research_entity/runtime/tool_results/trigger1-v2-local-fastpath-issue${{ github.event.issue.number }}-run${GITHUB_RUN_ID}.json"
+          git fetch --quiet origin main
+          if git cat-file -e "origin/main:${claim_result}" 2>/dev/null || [[ -e "$claim_result" ]]; then exit 0; fi
+          python3 - "$claim_result" "$EXPERIMENT_DIR" "$EXPERIMENT_RC" "$runtime_receipt" <<'PY'
+          import json, os, pathlib, sys
+          sys.path.insert(0, str(pathlib.Path.cwd() / 'tools'))
+          import trigger1_experiment_result_classify as experiment_classify
+          out=pathlib.Path(sys.argv[1]); exp=pathlib.Path(sys.argv[2]) if sys.argv[2] else None
+          rc=int(sys.argv[3]) if sys.argv[3] else None
+          result={}; gate={}
+          if exp:
+              rp=exp/'trigger1_local_activation_api_result.json'; gp=exp/'promotion_gate.json'
+              if rp.is_file():
+                  try: result=json.loads(rp.read_text(encoding='utf-8'))
+                  except Exception: result={}
+              if gp.is_file():
+                  try: gate=json.loads(gp.read_text(encoding='utf-8'))
+                  except Exception: gate={}
+          classification=experiment_classify.classify(result, gate, rc)
+          promotion_summary=experiment_classify.evidence_summary(gate)
+          payload={
+              'schema':'clay-go-experiment-result/v1',
+              'trigger_key':os.environ['TRIGGER1_TRIGGER_KEY'],
+              'claim_path':os.environ['TRIGGER1_CLAIM_PATH'],
+              'claim_sha256':os.environ['TRIGGER1_CLAIM_SHA256'],
+              'experiment_name':os.environ['TRIGGER1_EXPERIMENT_NAME'],
+              'intervention_identity':result.get('result_sha256'),
+              'source_identity':{
+                  'head':os.environ['TRIGGER1_SOURCE_HEAD'],
+                  'tree':os.environ['TRIGGER1_SOURCE_TREE'],
+                  'dirty':os.environ.get('TRIGGER1_SOURCE_DIRTY') == 'true',
+              },
+              'execution_surface':'SELF_HOSTED_LINUX_X64_ZERO_PROVIDER_BILLING',
+              'observed_result':{
+                  'workflow_job_status':os.environ.get('JOB_STATUS'),
+                  'runtime_status':result.get('status'),
+                  'runtime_verdict':result.get('verdict'),
+                  'promotion_gate':gate,
+                  'promotion_summary':promotion_summary,
+              },
+              'classification':classification,
+              'whole_product_evidence_established':False,
+              'runtime_receipt_path':sys.argv[4],
+          }
+          out.parent.mkdir(parents=True,exist_ok=True)
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf-8')
+          PY
+          git config user.name 'clay-trigger1-v2-runner'
+          git config user.email 'clay-trigger1-v2-runner@users.noreply.github.com'
+          git add "$claim_result"
+          git commit -m "evidence(trigger1): close leased V2 midlayer run ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

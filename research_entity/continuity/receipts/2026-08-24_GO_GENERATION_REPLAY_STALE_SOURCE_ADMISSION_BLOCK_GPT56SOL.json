@@ -1,0 +1,62 @@
+{
+  "schema": "ENTITYOS_HCU_GO_STALE_GENERATION_REPLAY_ADMISSION_BLOCK/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "execution_surface": "AUTHORIZED_BOUNDED_VERCEL_HOBBY_INCLUDED_TIER_FIXED_CAPSULES_ONLY"
+  },
+  "observations": {
+    "research_main_observed_immediately_before_coordination_write": "d2a44f9eef93181fe6a9538f6025a419fa711f40",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_head_observed_before_gate": "912746256999f4663bd6f3817e065d070a410b27",
+    "execution_repository": "gschaidergabriel/Dr.-Unterweger",
+    "execution_pr": 810,
+    "execution_pr_head_observed": "cc5a8c1bfdb471cf84e6c56be93fd9254ba63f47",
+    "generation_replay_capsule": "HCU_ENTRY_GENERATION_REPLAY_CAPSULE/v1",
+    "capsule_declared_research_main": "6a499541c38910e2a062b3eef50b73266c70445a",
+    "capsule_declared_hcu_pr_head": "8d5b46365cc271829397b61882b0e7a183d11ee5",
+    "capsule_unusual_experiment_id": "ENTRY_EVENT_IDENTITY_GENERATION_ROLLOVER",
+    "ready_deployment_observed": "dpl_621XxcUfCHAU2dADdS8gpa3WCSuG"
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "PRE_EXECUTION_LIVE_REF_RECHECK_AGAINST_FIXED_GENERATION_REPLAY_CAPSULE",
+    "intervention": "Immediately before invoking the fixed unusual generation-replay Sandbox route, re-resolve the live Research main and retained PR1263 identities and compare them with the capsule-declared source identities.",
+    "prediction_if_safe_to_execute": "Both live identities equal the capsule-declared identities; the fixed unusual Sandbox experiment may proceed at that exact snapshot.",
+    "prediction_if_stale": "At least one live identity differs; execution must be denied before Sandbox.create so the unusual experiment is not consumed on stale provenance.",
+    "observed": "Both declared source identities were stale relative to the observed live refs; the Sandbox experiment was not invoked.",
+    "result": "FALSIFIER_TRIGGERED_FAIL_CLOSED_BEFORE_SANDBOX_EXECUTION",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_MACROCYCLE_ID"
+  },
+  "coordination": {
+    "execution_pr_comment_id": 5387808831,
+    "action": "Warned the single retained Vercel execution lane not to invoke the stale generation-replay capsule as exact-current evidence; requested refreeze/rebind plus immediate pre-execution recheck.",
+    "duplicate_execution_path_created": false,
+    "duplicate_hcu_authority_created": false
+  },
+  "credit": {
+    "sandbox_execution_performed_by_this_organ": false,
+    "runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "architecture_delta": {
+    "classification": "EXACT_CURRENT_CAPSULES_REQUIRE_JUST_IN_TIME_REF_STABILITY_ADMISSION",
+    "finding": "A fixed capsule can remain byte-valid while its declared Research/PR head labels become stale within minutes under active parallel convergence. Exact-current evidence therefore requires a just-in-time live ref equality gate immediately before effectful Sandbox admission; static deployment metadata alone is insufficient.",
+    "required_contract": "resolve live source refs -> compare to capsule manifest -> only then Sandbox.create; mismatch fails closed without consuming the experiment slot or granting runtime credit"
+  },
+  "next_exact_gate": "Refreeze the fixed generation-replay capsule against one exact current Research main + PR1263 snapshot, deploy through the single retained PR810 lane, re-resolve both refs immediately before invocation, and execute only if equality still holds. Preserve global unusual-experiment uniqueness as unresolved unless an upstream macrocycle_id is supplied."
+}

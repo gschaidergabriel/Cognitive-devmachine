@@ -1,56 +1,92 @@
-# AUTHORITATIVE STATE RESOLUTION — RAE-8.8
+# AUTHORITATIVE STATE RESOLUTION — XENO COMPUTATIONAL UNIT RE-ENTRY
 
-## Owner mission authority
+Status: **CURRENT**
+Owner correction date: **2026-08-23**
+Persistent research entity: **Clay**
 
-The sole current product/research mission directive is:
+## Current owner mission authority
 
-`CLAYVERSE_CANONICAL_DIRECTIVE.md`
+The newest explicit owner direction selects:
 
-It is the highest current owner instruction for target selection, product boundary and `go` behavior. Older mission/scope/bootstrap files are historical evidence wherever they conflict with it.
+`research_entity/global/XENO_GO_OWNER_DIRECTIVE.md`
 
-This does **not** erase empirical research continuity. The canonical research-state object below remains authoritative for its own revision/hash/evidence lineage. Governance-only mission changes do not automatically increment a research revision or Clay generation.
+as current `go` product/work-selection authority, with research fusion:
 
-## Canonical empirical-state authority order
+`research_entity/global/XENO_COMPUTATIONAL_UNIT_RESEARCH_FUSION_2026-08-23.md`
 
-1. Verified remote head in the dedicated GitHub backend repository
-   `gschaidergabriel/clay-global-research-entity`:
-   `research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json`
+Current executable bootstrap: **Xeno** (renamed from Mini Entity).
+Destination: **EntityOS cognitive computer with integrated HCU/XCU**.
 
-2. If remote is temporarily unavailable:
-   last locally verified snapshot whose parent/hash lineage matches the remote head.
+Historical `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*` identifiers remain valid compatibility/provenance surfaces where exact migration has not occurred. They do not define a competing current product identity.
 
-3. Project Files / File Library:
-   SOURCE CACHE ONLY. Never authoritative merely because a file has the same name.
+## Authority / evidence precedence
 
-4. Chat history / model memory:
-   non-authoritative.
+1. newest explicit owner directive;
+2. actually observed exact-identity authorized execution for executable behavior at that exact scope;
+3. verified current GitHub bytes/history/receipts;
+4. current `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, root worker shims and current Xeno artefact docs;
+5. validated bounded donor/historical evidence;
+6. cache/project files;
+7. chat/model memory.
 
-## Known historical state
+A later commit timestamp or higher historical control number does not by itself outrank a newer explicit owner instruction.
 
-Older Project/File-Library copies may contain Research Entity revision 1 / Clay generation 2.
-They are historical inputs, not the current canonical empirical head.
+## Current work-selection law
 
-Current canonical empirical research state recorded by `RESEARCH_ENTITY_CANONICAL.json`:
-- Research Entity revision: 2
-- Clay generation: 3
-- state hash: `04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346`
+Every exact `go` has two mandatory coupled tracks:
 
-## Boot rule
+1. `XENO_EXECUTABLE_CONVERGENCE`
+2. `XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT`
 
-Boot mission first from `CLAYVERSE_CANONICAL_DIRECTIVE.md`, then resolve empirical continuity.
+If track 2 cannot safely advance, the run records `XCU_NO_CHANGE_WITH_REASON` plus a discriminator. Material architecture work uses hypotheses, counterhypotheses, cheapest discriminators, evidence fusion and bounded re-entry.
 
-Never select a state by filename or modification time alone.
-Resolve revision + parent_revision + parent_state_hash + state_hash + backend commit lineage.
-If two valid heads diverge, preserve both branches and merge explicitly.
+The Xeno common substrate is incrementally prepared for:
 
-For implementation technologies, also resolve commit lineage, successor status, negative evidence, candidate/promoted/canonical status and exact receipts before choosing a ClayVerse generation.
+- `XENO_GRID10`;
+- `XENO_COGSIM10`;
+- `XENO_WM_TEST`;
+- `XENO_NESTED_SIM`;
+- `XENO_SCALEOUT`.
 
-## Research revision rule
+New primitives should be cross-mode reusable.
 
-Repository/bootstrap/governance/configuration changes do not increment the Research Entity revision or Clay generation unless they contain a valid empirical research progression event.
+## Computerization law
 
-## Scope rule
+Xeno progressively separates:
 
-The active product/research scope is now ClayVerse as defined by `CLAYVERSE_CANONICAL_DIRECTIVE.md`.
+- Entry I/O / typed new-data fabric;
+- XRAM state hierarchy;
+- XPU deterministic control/scheduler/recovery;
+- XCU shared-weight/vector/inference/J-Space acceleration;
+- typed causal interconnect/workspace/Hyperposition;
+- action translation into EffectGate requests.
 
-UCM/UCM2, Frank, ClayCode, UnifiedDB, ClayGraph, Hyperposition, GWT and EntityOS remain valid research/evidence/donor lineages but are no longer independent competing mission targets.
+These are software architecture roles, not claims of custom silicon.
+
+Scale claims remain empirical. `logical_module_count != resident_model_count != physical_decode_concurrency`. The baseline is 10 logical cells; `10 -> 32 -> 64 -> 128 -> 256 -> ~600` is a benchmark ladder. ~600 on H100-class hardware is hypothesis/planning only until exact model/quantization/KV/HBM/throughput/latency/recovery evidence exists.
+
+## State / truth / effect law
+
+- canonical durable state/evidence remains outside model-generated cognition and simulation;
+- current Xeno may use existing MiniUnifiedDB/UnifiedDB implementation surfaces during migration;
+- world-model state is noncanonical projection/candidate state;
+- HCU/XCU/J-Space/workspace/model outputs cannot mint canonical truth;
+- Hyperposition preserves unresolved alternatives; majority vote is not truth;
+- unknown external effect outcome remains UNKNOWN until verified;
+- EffectGate/EffectJournal remain the only admitted real/state-changing effect path;
+- no second persistent identity, truth store, effect path or recovery ledger.
+
+`UNKNOWN != ZERO != ERROR != MEASURED`.
+`FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
+
+## World/nested simulation law
+
+A permanent duplicate world is not required for normal operation. Bounded `WM_TEST` and selective high-cost `NESTED_SIM` are active research modes of the same Xeno compute substrate. Their outputs remain candidates and are calibrated against observed reality.
+
+## Execution law
+
+Current build/test/experiment/runtime validation remains authorized-isolated-sandbox-only unless newer owner authority changes it. VPS/self-hosted/production-host testing is forbidden under current control. Together remains forbidden. No paid fallback. Final paid/model training requires explicit owner authorization.
+
+## Fail-closed routing rule
+
+Any active bootstrap, program state, root worker shim, swarm contract, control or supervisor steering that selects ClayVerse, Frank or Mini Entity as a competing current top-level authority is stale. Preserve its research bytes as donor/compatibility evidence but do not let it override the current Xeno + XCU/Entry `go` law.

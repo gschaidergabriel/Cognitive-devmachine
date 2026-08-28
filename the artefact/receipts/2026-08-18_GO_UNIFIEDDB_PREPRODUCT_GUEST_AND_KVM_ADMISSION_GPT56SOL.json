@@ -1,0 +1,78 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "9450351da4ba5436399811b6205b09789dd520ad",
+  "owner_execution_law": {
+    "hard_untrusted_and_final_security_tests_require_hardware_backed_kvm_or_equivalent": true,
+    "tcg_role": "BOUNDED_TRUSTED_DEVELOPMENT_SMOKE_ONLY_NO_FINAL_SECURITY_CREDIT",
+    "host_product_execution_forbidden": true
+  },
+  "independent_guest_kernel_evidence": {
+    "ubuntu_qemu_tcg_guest_kernel_pass_receipt_commit": "197802a5771890ae130ee9d0f3eb553ebf086d3e",
+    "independent_guest_kernel_observed": true,
+    "guest_network": "NONE",
+    "host_product_execution": false,
+    "classification": "EXECUTED_BOUNDED_DEVELOPMENT_GUEST_KERNEL_PASS",
+    "final_security_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unifieddb_guest_terminal_evidence": {
+    "workflow": ".github/workflows/clayverse-vps-qemu-tcg-unifieddb-guest.yml",
+    "run_id": 32060128667,
+    "job_id": 95479293604,
+    "workflow_source_sha": "1fa4e2d9c80f5f455b1002171324e653a97f9a99",
+    "job_terminal_conclusion": "failure",
+    "failed_step": "Execute exact UnifiedDB core inside fresh networkless independent guest",
+    "artifact_id": 9298089080,
+    "artifact_digest": "sha256:9126a671caaa5f9e75414d9ae02f43affa171c0aa13fc27aa1920adac5c58556",
+    "receipt_schema": "ClayVerseVpsQemuTcgUnifiedDBGuestRuntime/v1",
+    "receipt_guest_base_sha256": "d1940f7d69d343355e183dff1e08a59852d32e7309baa7a4bad8365b11b005ac",
+    "receipt_store_git_blob": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "receipt_store_sha256": "8d6763d8f051bc1e1de5056ac2884a3e0a49864f8bf9da215b8c305b093fbf7f",
+    "independent_guest_kernel_observed": true,
+    "guest_result_marker": null,
+    "guest_runtime_pass": false,
+    "canonical_product_source_executed_in_guest": false,
+    "product_runtime_credit_scope": "NONE",
+    "classification": "PRE_PRODUCT_GUEST_OR_TRANSPORT_FAILURE_NOT_UNIFIEDDB_SEMANTIC_FAILURE",
+    "unifieddb_runtime_credit": 0,
+    "whole_product_credit": 0,
+    "epistemic_rule": "Because canonical_product_source_executed_in_guest=false, this run does not establish UnifiedDB PASS or UnifiedDB FAIL."
+  },
+  "kvm_hard_lane": {
+    "directive_commit": "aa6c1f283e885524ccba7d36ba829d569dc45b82",
+    "dedicated_preflight_workflow": ".github/workflows/clayverse-vps-kvm-admission-preflight.yml",
+    "preflight_source_commit": "c5c6ac1369ef8e4228a733eb390adcca3649c050",
+    "preflight_run_id": 32060674279,
+    "preflight_job_id": 95481015265,
+    "preflight_last_observed_status": "QUEUED",
+    "preflight_steps_observed": null,
+    "prior_self_hosted_orchestrator_probe_observed_dev_kvm_absent": true,
+    "current_dedicated_kvm_admission_credit": 0,
+    "final_security_credit": 0,
+    "classification": "HARD_LANE_NOT_ADMITTED_AT_CURRENT_OBSERVATION"
+  },
+  "execution_admission": {
+    "vercel_controller_runtime": "BLOCKED_PRE_EXECUTION_BY_BUILD_RATE_LIMIT_AT_LAST_EXACT_OBSERVATION",
+    "daytona_runtime": "NO_EXECUTED_PRODUCT_CREDIT",
+    "qemu_tcg_guest_kernel": "EXECUTED_BOUNDED_PASS",
+    "unifieddb_product_in_guest": "NOT_EXECUTED_IN_TERMINAL_RUN",
+    "kvm_hardware_lane": "NOT_ADMITTED_CURRENT_PREFLIGHT_QUEUED"
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "No new unusual experiment was added; this receipt classifies terminal evidence from ordinary bounded regression/admission work in the already-open GO cycle."
+  },
+  "epistemic_status": {
+    "independent_tcg_guest_kernel": "VERIFIED_BOUNDED_PASS",
+    "unifieddb_inside_independent_guest": "UNRESOLVED_PRE_PRODUCT_FAILURE",
+    "kvm_available_on_current_vps": "NOT_VERIFIED_BY_DEDICATED_PREFLIGHT",
+    "exact_clayverse_oci_inside_independent_guest": "UNEXECUTED",
+    "same_exact_accepted_oci_digest_inside_hardware_backed_vm_microvm": "UNEXECUTED",
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Repair only the pre-product transport/guest harness condition that prevented canonical_product_source_executed_in_guest in run 32060128667, then rerun the same bounded UnifiedDB smoke with exact source/store identity. Separately consume terminal KVM preflight 32060674279; if /dev/kvm is unavailable, keep all hard/untrusted/final-security lanes BLOCKED and move them only to an owner-authorized hardware-virtualized executor. After bounded UnifiedDB guest execution is real, advance toward the exact PR686/accepted OCI digest inside an independent guest, without promoting TCG to final security acceptance."
+}

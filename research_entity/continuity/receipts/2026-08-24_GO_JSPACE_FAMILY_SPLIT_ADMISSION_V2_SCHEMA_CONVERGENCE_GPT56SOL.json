@@ -1,0 +1,90 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "0ebb96ed72edc022710a8fe5b2776ef96e3c4ea2",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID_EXPOSED_TO_THIS_ORGAN",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_semantic_lane_created": false,
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_observed_after_writes": "30a097c1d9af6f7a2e1d11100fd5a5750c5c141e",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "8f850d6efcf62d7b6ee8b8c698001cf44c55475c"
+  },
+  "finding": {
+    "classification": "DATASET_ADMISSION_TO_FAMILY_SPLIT_SCHEMA_DRIFT_WITH_GREEN_COMPONENT_RISK",
+    "observed": [
+      "The current J-Space DatasetAdmission producer declares ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2.",
+      "The retained family-split consumer still hard-coded ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1 and rejected any different schema.",
+      "Its regression helper also fabricated v1 admissions, allowing the consumer tests to remain self-consistent while the current producer/consumer integration was incompatible.",
+      "Parallel donor work subsequently strengthened the family-split consumer with prototype_trace_sha256, vector_control_packet_sha256 and vector_control_condition bindings, exposing an additional fixture-sync obligation rather than invalidating the schema finding."
+    ],
+    "hypothesis": "A real current DatasetAdmission/v2 object reaching the retained family splitter would fail DATASET_ADMISSION_SCHEMA_UNSUPPORTED before family partitioning, so component-local green tests could overstate integrated training-readiness.",
+    "counterhypothesis": "The family splitter intentionally consumes a legacy v1 admission stream distinct from the current v2 producer.",
+    "counterhypothesis_rejection": "The current frontier specifies one causal DatasetAdmission/family-split path, and the family splitter documents that its inputs are expected to have passed jspace_dataset_admission_gate_v1; maintaining a private hard-coded predecessor schema would create a stale interface island rather than an explicit compatibility boundary."
+  },
+  "repair": {
+    "family_split_schema_authority_commit": "938a1b651edbe45ac9b8689dc9bf5cc8a08799f7",
+    "family_split_schema_authority_change": "Import ADMISSION_SCHEMA from jspace_dataset_admission_gate_v1 as DATASET_ADMISSION_SCHEMA instead of hard-coding v1.",
+    "initial_schema_regression_commit": "99270bb6440a0cbb333772e36ee0eac2ddf50f43",
+    "current_interface_regression_sync_commit": "83fbb6279f64ad331c1dafbc5fb74352c8d0d61c",
+    "current_interface_regressions": [
+      "family split schema equals the canonical DatasetAdmission gate schema and equals v2 at this authority epoch",
+      "stale DatasetAdmission/v1 is rejected",
+      "prototype_trace_sha256 transplant is rejected",
+      "vector_control_packet_sha256 transplant is rejected",
+      "vector_control_condition transplant is rejected",
+      "existing family leakage, trace-id collision, causal GRID transplant and duplicate-idempotence fences remain represented"
+    ],
+    "current_family_split_blob_observed_after_parallel_hardening": "ca8d0d7aae91504cf17effc7762857f9f8426279",
+    "current_family_split_test_blob_after_sync": "8926e36ef8e274cc8564ba5cc6c4de766d7d44d6"
+  },
+  "verification": {
+    "current_donor_reentry": "PASS_SOURCE_OBSERVATION",
+    "repair_survives_parallel_head_movement": true,
+    "current_family_split_imports_canonical_admission_schema": true,
+    "current_family_split_additionally_binds_control_provenance": true,
+    "current_test_fixture_tracks_v2_and_control_provenance": true,
+    "github_actions_run_for_83fbb627": "NONE_OBSERVED",
+    "runtime_or_ci_pass_claimed": false,
+    "evidence_scope": "SOURCE_AND_REGRESSION_ENCODING_ONLY"
+  },
+  "execution_gate": {
+    "vercel_team_plan": "HOBBY",
+    "exact_current_executor_head": "8f850d6efcf62d7b6ee8b8c698001cf44c55475c",
+    "exact_current_ready_deployment_observed": false,
+    "newest_observed_deployment_sha": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+    "newest_observed_deployment_state": "ERROR",
+    "latest_observed_ready_sha": "2dfa1edcab41fba34282b34956716e7c222ee517",
+    "sandbox_route_invoked_by_this_organ": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_or_credential_use": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_ONLY: removed a current producer/consumer schema incompatibility in the retained training-data path without creating a second executor or semantic authority; exact integrated runtime remains blocked on an exact-current FREE_ONLY READY deployment.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: family partitioning now inherits the canonical DatasetAdmission interface that carries Entry->Route->GRID causal provenance, while parallel hardening binds prototype and vector-control provenance at the same boundary.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_ONLY: current v2 causal admissions can reach leak-resistant family partitioning by schema contract; stale v1 and provenance-transplant paths are explicitly rejected in regression code. No model/training/runtime credit is granted."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md and both retained lanes are moving under parallel organs; this append-only exact-identity receipt preserves the bounded delta without overwriting a rapidly moving current-facing snapshot"
+  },
+  "next_exact_gate": "At the then-current donor head, execute the deterministic family-split + DatasetAdmission + admitted-dataset compiler regression set on an admitted zero-cost exact-source surface, including schema-drift and provenance-transplant negatives. Preserve source-only scope until an exact invocation is observed. Separately, do not invoke PR810 until a naturally available included-tier Vercel deployment is READY at the exact then-current executor SHA; then require the fixed source/result/secret/cleanup fences and keep any PASS component-scoped."
+}

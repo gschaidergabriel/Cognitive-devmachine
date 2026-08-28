@@ -1,0 +1,38 @@
+{
+  "schema": "GO_RECURSIVE_PHYSICAL_SCALING_BRIDGE_RECEIPT/v1",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "target_authority": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+  "scope": "GO_ARCHITECTURE_ONLY_NOT_TRIGGER2_TRAINING",
+  "observed_recent_main_before_work": "e0c25c5e547e224d315d2a4af34e49b7fc8d9c84",
+  "finding": "The recursive coordinator scaling candidate and the physical GRID10 fused candidate existed as separate evidence boundaries. Without an exact packet-set bridge, a recursive-scaling result could be produced from synthetic leaves unrelated to the physical cohort, creating a proof-splice risk.",
+  "delta": {
+    "tool": "tools/xeno_recursive_physical_scaling_bridge_acceptance_v1.py",
+    "tool_commit": "755898638901bd996d40ef6bf58f38339c1d15f9",
+    "tests": "tests/test_xeno_recursive_physical_scaling_bridge_acceptance_v1.py",
+    "tests_commit": "ce8f8d129e6755b9da47ef28d2c82a218b87126b"
+  },
+  "new_invariants": [
+    "recursive level-0 leaves must be the exact packet digests consumed by the physical GRID10 coordinator fan-in",
+    "physical receipt must itself be PASS and expose ten unique ordinary-node packet digests",
+    "ordinary physical nodes remain S1 read-only",
+    "recursive coordinator fan-in is bounded",
+    "higher levels carry digest/count summaries instead of raw leaf payloads",
+    "invalid recursive coordinator lease fails closed"
+  ],
+  "negative_tests": [
+    "tampered physical-to-recursive packet set",
+    "ordinary-node S1 write intent",
+    "duplicate packet digest",
+    "non-PASS physical receipt"
+  ],
+  "epistemic_boundary": "Source and tests are present on main, but this automation run did not obtain repository-bound execution of the new test file or a current physical GRID10 receipt containing the new bridge fields. Therefore no runtime, physical-scale, GRID10, or whole-HCU credit is minted.",
+  "credit_change": {
+    "source_progress": true,
+    "runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Execute the bridge tests repository-bound, then extend/emit the current physical GRID10 fused receipt with physical_packet_evidence and coordinator_consumed_packet_digests from the exact same cohort; feed that receipt into the bridge. On PASS, measure real coordinator fan-in/compression/latency and crash-replacement under process load before scaling N beyond 10."
+}

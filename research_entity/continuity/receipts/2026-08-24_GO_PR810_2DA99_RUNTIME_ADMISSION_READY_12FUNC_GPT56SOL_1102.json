@@ -1,0 +1,103 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RUNTIME_ADMISSION_READY_CLOSURE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "92f4e5e165cb3fc4f47c3c9c9e29a740a38faf70",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_EXACT_HEAD_BUILD_AND_FUNCTION_RUNTIME_ACCEPTANCE"
+  },
+  "executor": {
+    "identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "exact_head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "repair_commit": "2da99e0458809988190c129b04cae913d1f15d92",
+    "repair_message": "fix(hcu): sync exclusive cost guard to supervisor 8.64",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_state": "READY",
+    "deployment_git_sha_matches_head": true,
+    "lambda_runtime_stats": "nodejs=12"
+  },
+  "causal_repair_chain": [
+    {
+      "observation": "A standalone diagnostic route exceeded the Vercel Hobby deployment function-count boundary.",
+      "exact_error": "exceeded_serverless_functions_per_deployment",
+      "provider_message_scope": "No more than 12 Serverless Functions can be added to a Deployment on the Hobby plan; the offered resolution was a Pro-plan path.",
+      "classification": "FREE_ONLY_REJECT_UPGRADE_PATH",
+      "paid_upgrade_performed": false
+    },
+    {
+      "observation": "The diagnostic was folded into an existing retained route and expendable deployment routes were retired so the controller remained within the 12-function Hobby boundary.",
+      "classification": "SINGLE_LANE_FREE_ONLY_CONVERGENCE"
+    },
+    {
+      "observation": "The exact-head Vercel build then failed because the exclusive executor guard still asserted active FREE_ONLY supervisor-8.63 markers while the exact-head admission source had already moved to supervisor 8.64.",
+      "predecessor_head": "cf40d46a5c9e6b533b9b1bf94645f45c402e422e",
+      "predecessor_deployment": "dpl_8JXcyNTueBnWF498RikXEUS4jYVs",
+      "classification": "EXACT_HEAD_ACTIVE_ADMISSION_GUARD_DRIFT"
+    },
+    {
+      "observation": "Commit 2da99e0458809988190c129b04cae913d1f15d92 updates only the active admission markers in the exclusive guard to supervisor 8.64 and preserves historical pinned 8.63 provenance elsewhere.",
+      "classification": "BOUNDED_SUCCESSOR_GUARD_REPAIR"
+    }
+  ],
+  "exact_head_runtime_evidence": {
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_state": "READY",
+    "deployment_git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "runtime_log_time_utc": "2026-08-24T04:01:43Z",
+    "runtime_log": "GET /api/sandbox-probe 200",
+    "serverless_invocation_observed": true,
+    "source_route_case": "runtime-admission",
+    "source_status": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "source_research_supervisor": "SUPERVISOR_STEERING_8_64",
+    "source_sandbox_create_performed": false,
+    "source_execution_credit": "FUNCTION_RUNTIME_DIAGNOSTIC_ONLY",
+    "client_connected_fetch_at_2026_08_24T04_02_00Z": "302_VERCEL_SSO_PROTECTION",
+    "response_body_directly_observed": false,
+    "interpretation_boundary": "The 200 is Vercel runtime-log evidence. The exact deployed source returns 200 before sandboxExecutionAdmitted only for runtime-admission; selftest and family-split require the fail-closed cost gate before Sandbox.create. Do not claim direct observation of the JSON response body through the protected client fetch."
+  },
+  "free_only_gate": {
+    "admission_source_blob_sha": "2ac95aaa77e6586e900d4a5b4699b0f983f23464",
+    "supervisor": "SUPERVISOR_STEERING_8_64",
+    "remaining_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_execution_admitted": false,
+    "sandbox_create_observed": false,
+    "paid_or_upgrade_fallback_used": false,
+    "together_or_provider_preflight_used": false
+  },
+  "hypothesis": "After removing the Hobby function-count violation and synchronizing the active 8.64 guard, the executor can build and boot the exact-head serverless runtime; the remaining execution blocker is the deliberate direct-included-quota requirement before Sandbox.create.",
+  "counterhypothesis": "The current blocker is still Node parsing, function-count overflow, stale active admission guard, or HCU/model failure.",
+  "discriminator_result": "REJECTED_AT_CURRENT_SCOPE: exact-head deployment is READY with 12 Node functions and the retained runtime-admission path returns HTTP 200; no Sandbox/HCU/model execution is entered because direct remaining included quota is still unobserved.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact-head executor converged from syntax failure -> function-count FREE_ONLY rejection -> stale 8.64 guard drift -> READY 12-function deployment -> executable runtime-admission 200, leaving one explicit quota gate before Sandbox.create",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the current gate intentionally stops before Sandbox.create, so no new HCU/Typed Entry runtime claim can be promoted; semantic source churn would be lower-information than resolving execution admission",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no admitted Sandbox, real model, or J-Space/GWT execution occurred; existing vector-control/dataset readiness is preserved and model/training credit remains zero"
+  },
+  "credits": {
+    "exact_head_deployment_ready": true,
+    "serverless_function_runtime_diagnostic": "PASS",
+    "sandbox_execution": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Obtain an authoritative directly observed remaining included Vercel Sandbox quota signal for the admitted Hobby team without upgrade, billing mutation, paid fallback, provider credential preflight, or inference from plan identity.",
+    "Only if that signal opens the FREE_ONLY gate, re-enter the then-current PR810 head and require an exact matching READY deployment before Sandbox.create.",
+    "Run the already-retained selftest environment capability path and bind Python identity, sqlite3/_sqlite3 availability, secret fence, result digest, exact executor identity, and cleanup.",
+    "If environment capability passes, continue to canonical predecessor -> pre-invocation vector control -> real zero-cost local model invocation -> canonical ModelExecution -> inference receipt -> Global J-Space/GWT observation."
+  ],
+  "evidence_boundary": "This receipt grants exact-head deployment and serverless runtime-diagnostic evidence only. It grants no Sandbox execution, HCU semantic runtime, Typed Entry runtime, model-specific J-Space causality, training, effect, canonical-state, or whole-product acceptance credit."
+}

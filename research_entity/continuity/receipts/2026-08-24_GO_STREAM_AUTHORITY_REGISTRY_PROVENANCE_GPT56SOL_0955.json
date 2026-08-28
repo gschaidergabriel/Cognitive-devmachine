@@ -1,0 +1,67 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "SUPERVISOR_STEERING_8_63",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "fe4a6d3ed057d2940be0872482c0a43154e0bfd8",
+  "coordination": {
+    "shared_reproducible_macrocycle_identity": false,
+    "available_user_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments": 0
+  },
+  "track_a": {
+    "status": "SOURCE_AND_DEPLOYMENT_METADATA_ADVANCED_RUNTIME_BLOCKED",
+    "executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "exact_head_preview_state_observed": "READY",
+    "free_only_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_invoked": false,
+    "runtime_credit": 0,
+    "note": "READY deployment is build/deployment evidence only. Current executor source requires direct remaining included Sandbox quota observation before Sandbox.create."
+  },
+  "track_b": {
+    "status": "DONOR_FUSION_PLUS_TRUST_BOUNDARY_FALSIFIER",
+    "donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "durable_commits_by_this_organ": [
+      "fe18c4746bc71587db075119f223c4acb5214a8a",
+      "dd289ceb3c38699a4c4382ade6d84808b56e406e"
+    ],
+    "durable_delta": "Removed executor_sequence_lane_authority_closure_v1.py and its regression after the donor had already removed executor_sequence_lane_v1.py, making the closure pair non-importable and superseded by the retained authority-bound sequence-lane path.",
+    "latest_donor_head_observed_for_registry_review": "2de6b6b3f13e95d68116138ff6f5157f5c468b5f",
+    "observed_successor": "authorized_executor_sequence_lane_binding_v2.py",
+    "v2_improvement": "V2 removes caller-supplied expected_stream_authority_binding_sha256 and requires canonical MiniUnifiedDB readback of a stream-authority admission before lane promotion.",
+    "remaining_hypothesis": "The provenance of the registry decision is not yet proven independent merely by DB persistence: unit-test canonical_stream_authority constructs StreamAuthorityDecision locally and passes {decision_sha256: decision_record(decision)} as admitted_stream_authority_decisions before canonical DB admission.",
+    "counterhypothesis": "A real non-test call site may supply admitted_stream_authority_decisions from an independently controlled canonical ingress/control-plane registry; the unit-test fixture alone cannot disprove such a production adapter.",
+    "claim_boundary": "SOURCE_LEVEL_TRUST_BOUNDARY_OPEN; NOT A PRODUCTION EXPLOIT CLAIM",
+    "next_discriminator": "Trace every non-test admit_entry_stream_authority call and identify the concrete producer of admitted_stream_authority_decisions. Positive authority credit requires source-backed proof that this producer is independently controlled by canonical ingress/control-plane state and cannot be synthesized from the candidate decision in the same caller. If no such producer exists, fail closed rather than invent a second registry authority."
+  },
+  "track_c": {
+    "status": "SOURCE_READINESS_ADVANCED_RUNTIME_CREDIT_ZERO",
+    "observed_model_candidate": "Qwen3-0.6B Q8_0 GGUF exact pinned candidate",
+    "observed_runtime_candidate": "llama.cpp b10566 Ubuntu x64 exact pinned upstream distribution candidate",
+    "observed_successor_work": "J-Space llama.cpp cvector bridge and transformers activation executor source/test candidates appeared in the retained donor lane.",
+    "real_instrumented_model_trace_count": 0,
+    "loader_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "next_discriminator": "After exact local materialization/build identity and verified loader-consumption are available on an authorized zero-cost surface, bind actual model-executor I/O to canonical ModelExecution and J-Space trace identity before any model or training promotion."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The artefact README is a rapidly shared current-facing surface under heavy parallel mutation; this append-only exact-evidence receipt records the unique delta without clobbering concurrent convergence work."
+  },
+  "epistemic_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+}

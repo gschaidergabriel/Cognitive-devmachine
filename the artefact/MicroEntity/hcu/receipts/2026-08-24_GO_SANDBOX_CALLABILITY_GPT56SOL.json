@@ -1,0 +1,51 @@
+{
+  "schema": "ENTITYOS_HCU_VERCEL_SANDBOX_CALLABILITY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "active_supervisor_observed": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+  "scope": "VERCEL_SANDBOX_INFRASTRUCTURE_ONLY",
+  "result": "PASS",
+  "execution_bridge": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "bridge_commit": "33cdfd2aecf820c9b48e7d47376f126d0e831bfd",
+    "deployment_id": "dpl_9vST7MFPJzdcHjw8s47MSHs4DbSM",
+    "deployment_state": "READY",
+    "invocation_surface": "protected preview branch alias GET /api/sandbox-probe",
+    "extra_probe_token_required": false,
+    "deployment_protection_required": true
+  },
+  "sandbox_execution": {
+    "status": "VERCEL_SANDBOX_EXECUTION_VERIFIED",
+    "sandbox_name": "emerald-sharp-nightingale-aH3zZB",
+    "sandbox_session_id": "sbx_X2wqDATbexSETSx2RiK9gKiIFUBc",
+    "exit_code": 0,
+    "system": "Linux",
+    "machine": "x86_64",
+    "python": "Python 3.13.1",
+    "filesystem_probe_sha256": "77707d7ae00b238db00d1d983a78f73b357afd36fdf5268c6f89a49509308436",
+    "secret_fence": "PASS",
+    "cleanup": "PASS"
+  },
+  "capability_delta": {
+    "before": "Vercel Sandbox platform capability known but worker-callable execution path unproven because retained controller required arbitrary credential-bearing POST",
+    "after": "worker-callable Vercel Sandbox.create plus runCommand is empirically verified through a protected preview GET bridge without a GitHub or Sandbox probe secret"
+  },
+  "cost_boundary": {
+    "vercel_team_plan_observed": "hobby",
+    "explicit_zero_cost_sandbox_pricing_verified": false,
+    "free_only_rule": "Do not infer zero monetary cost from Hobby-plan availability; further autonomous use under FREE_ONLY must remain within already-included/no-new-paid-resource execution and must not add paid provider fallback."
+  },
+  "credit_boundary": {
+    "vercel_sandbox_infrastructure_credit": true,
+    "entityos_hcu_runtime_credit": false,
+    "jspace_model_runtime_credit": false,
+    "training_credit": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  },
+  "next_discriminator": "Use the verified protected-preview Sandbox bridge for fixed SHA-bound source capsules/regression commands, then bind exact Research main + retained PR1263 source identities and result digests without introducing a runtime GitHub credential dependency."
+}

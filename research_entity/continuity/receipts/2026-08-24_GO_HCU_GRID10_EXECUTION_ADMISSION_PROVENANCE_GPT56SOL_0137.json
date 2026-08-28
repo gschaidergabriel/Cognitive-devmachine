@@ -1,0 +1,91 @@
+{
+  "schema": "CLAY_GO_EXECUTION_ADMISSION_NEGATIVE_RECEIPT/v1",
+  "date_local": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "current_supervisor": "SUPERVISOR_STEERING_8_63",
+  "current_supervisor_mode": "FREE_ONLY",
+  "observed_research_main_before_receipt": "3a345bef810b42c2e23b4574984a72de641c1a73",
+  "coordination": {
+    "upstream_shared_macrocycle_id_available": false,
+    "canonical_atomic_experiment_lease_won": false,
+    "current_unusual_experiment_permission": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added_by_this_organ": 0,
+    "global_uniqueness_claim": "NOT_CLAIMED"
+  },
+  "executor_lane": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "role": "single retained bounded Vercel Sandbox execution-controller lane"
+  },
+  "observed_build_guard_convergence": {
+    "classification": "SOURCE_AND_BUILD_EVIDENCE_ONLY",
+    "legacy_failure": "ENTITYOS_HCU_ENTRY_CAPSULE_MISSING:EXACT_SHA_BOUND_HCU_SOURCE_COMPONENT_ONLY",
+    "observed_failing_executor_commit": "8bb6985d1628fade359c70dbcf0777965f966f50",
+    "observed_failing_deployment": "dpl_HpAs7K9Ts3xTb9Szm6kLsHRsq9Ad",
+    "parallel_guard_repair_commit": "096ade6cf88ad9dbdb7fdbfe303737c91d55a0f3",
+    "repair": "guard requirement narrowed to EXACT_BINDER_V2_RECORDED_DEFECT_REGRESSION_ONLY",
+    "repair_deployment": "dpl_AF6kprrMKdtyfDjqBnzxJ5mad3fg",
+    "repair_deployment_state_observed": "READY",
+    "runtime_credit": false
+  },
+  "grid10_binder_capsule_source_review": {
+    "executor_commit": "e1ed979735b7553454e81699a260cf8106efdbc8",
+    "deployment": "dpl_DpoubGTYLKQdgYfT8dnSV6QPNB5c",
+    "deployment_state_observed": "READY",
+    "endpoint": "api/hcu-jspace-grid10-binding-capsule.js",
+    "capsule": "HCU_JSPACE_BINDER_V2_EXACT_GRID10_CLOSURE/v1",
+    "declared_component_credit": "EXACT_GRID10_TO_JSPACE_BINDER_V2_COMPONENT_CLOSURE_ONLY",
+    "declared_source_identity_policy": "AUTHORITY_COMMIT_PLUS_EXACT_COMPONENT_GIT_BLOBS_WITH_PRE_POST_CURRENT_BLOB_REVERIFICATION",
+    "observed_implementation": "The reviewed endpoint reads deployment-carried fixture bytes with fs.readFile, verifies their Git blob SHA locally, then writes them into Sandbox. No pre/post GitHub/current-ref network reverification is present in the reviewed endpoint implementation.",
+    "finding": "SOURCE_IDENTITY_POLICY_OVERSTATES_IMPLEMENTED_CURRENT_REVERIFICATION",
+    "classification": "SOURCE_CONTRACT_DEFECT_CANDIDATE",
+    "allowed_credit_until_repaired": "EXACT_DEPLOYMENT_CARRIED_BYTES_ONLY_IF_RUNTIME_EXECUTION_IS_LATER_OBSERVED",
+    "exact_current_source_credit": false,
+    "whole_runtime_credit": false
+  },
+  "actual_execution_attempt": {
+    "target_deployment": "dpl_DpoubGTYLKQdgYfT8dnSV6QPNB5c",
+    "target_endpoint": "/api/hcu-jspace-grid10-binding-capsule",
+    "attempt_1_http_status": 302,
+    "attempt_1_result": "VERCEL_SSO_REDIRECT_BEFORE_FUNCTION_EXECUTION",
+    "share_bypass_generated": true,
+    "attempt_2_http_status": 302,
+    "attempt_2_result": "VERCEL_SSO_REDIRECT_BEFORE_FUNCTION_EXECUTION",
+    "sandbox_create_observed": false,
+    "regression_command_observed": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_AT_PROTECTED_PREVIEW_ACCESS_NOT_TEST_FAIL",
+    "runtime_credit": false
+  },
+  "new_positive_capsule_source_review": {
+    "executor_commit": "42e45e0971879358217694e65752947732b10582",
+    "endpoint": "api/hcu-jspace-grid10-positive.js",
+    "capsule": "HCU_JSPACE_GRID10_POSITIVE_ACCEPTANCE/v1",
+    "observed_mechanism": "readFixedSource performs unauthenticated fetch() against raw.githubusercontent.com URLs for gschaidergabriel/clay-global-research-entity, while the repository is private according to the connected GitHub repository state.",
+    "finding": "PRIVATE_REPOSITORY_RAW_SOURCE_FETCH_ADMISSION_RISK",
+    "classification": "SOURCE_CANDIDATE_RISK_NOT_RUNTIME_FAILURE",
+    "runtime_failure_claimed": false,
+    "required_discriminator": "Execute a protected fixed-source capsule only after access is admitted, or replace the unauthenticated private raw fetch with vendored/hash-bound bytes or an explicitly admitted authenticated exact-ref fetch without widening secret exposure."
+  },
+  "credit_boundary": {
+    "exact_grid10_binder_component_runtime_pass": false,
+    "exact_current_source_binding_verified": false,
+    "entityos_hcu_whole_runtime_pass": false,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_reentry": [
+    "Preserve supervisor 8.63 atomic lease law; run zero new unusual interventions without a canonical create-only lease.",
+    "Make source_identity_policy match executable behavior: either honest carried-byte scope or real exact-current pre/post ref/blob reverification.",
+    "Do not rely on unauthenticated raw.githubusercontent.com access for private canonical source; use vendored/hash-bound bytes or a narrowly admitted authenticated exact-ref fetch.",
+    "Resolve protected-preview invocation through an authorized connector path without weakening Vercel protection, then execute the fixed deterministic GRID10 -> J-Space binder capsule and capture sandbox id, exit code, source/result digests, secret fence and cleanup.",
+    "Do not promote READY/build/source evidence to component runtime PASS or whole EntityOS/HCU PASS."
+  ]
+}

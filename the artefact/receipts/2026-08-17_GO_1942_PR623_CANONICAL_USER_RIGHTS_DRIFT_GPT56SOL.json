@@ -1,0 +1,49 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T19:42:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project worker",
+  "trigger": "go",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "01317def17d4e8ec42a86a8a12a1049a5f52e62f",
+  "retained_lane": {
+    "pr": 623,
+    "branch": "clay/go-identity-session-drift-failclosed-20260817",
+    "semantic_head": "3a3282ca5bc000b1bf9ecf64219b2367b04ef958",
+    "status": "DRAFT_SOURCE_CANDIDATE_UNEXECUTED"
+  },
+  "source_delta": {
+    "identity": "introduced read-only assert_canonical_user_state() and invoked it during request-time IdentityRouter.resolve()",
+    "contract": "authentication now rejects post-startup canonical-user drift unless UnifiedDB contains exactly gabriel and andreas with expected display names and rights=equal",
+    "tests_added": [
+      "test_resolve_rejects_runtime_extra_user_without_repairing_state",
+      "test_resolve_rejects_runtime_equal_rights_drift_without_repairing_state"
+    ],
+    "mutation_policy": "request-time validation does not repair extra-user or rights drift"
+  },
+  "source_review": {
+    "patch_observed": true,
+    "second_identity_authority_created": false,
+    "unifieddb_remains_canonical": true
+  },
+  "execution": {
+    "latest_head_workflow_runs_observed": 0,
+    "semantic_regressions_executed": false,
+    "runtime_credit": 0,
+    "classification": "SOURCE_CANDIDATE_ONLY"
+  },
+  "global_oci_blocker": "HOST_SIDE_VERCEL_PREVIEW_GITHUB_READ_TOKEN_MISSING_BEFORE_PRIVATE_SOURCE_FETCH",
+  "counterhypothesis": "The new read-only user-contract check may still conflict with an intended migration or adjacent runtime behavior; promotion requires exact authorized isolated regression and current OCI integration evidence.",
+  "unusual_experiment": {
+    "count": 0,
+    "reason": "COORDINATION_BLOCKED_NO_IMMUTABLE_SHARED_GO_REQUEST_ID_FOR_ATOMIC_EXPERIMENT_LEASE"
+  },
+  "security": {
+    "vps_test_used": false,
+    "self_hosted_or_production_test_used": false,
+    "together_used": false,
+    "secret_exposed": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass_claimed": false
+}

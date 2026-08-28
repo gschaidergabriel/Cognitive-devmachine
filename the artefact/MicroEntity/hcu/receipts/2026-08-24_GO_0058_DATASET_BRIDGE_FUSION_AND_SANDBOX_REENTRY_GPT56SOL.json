@@ -1,0 +1,83 @@
+{
+  "schema": "ENTITYOS_HCU_GO_DATASET_BRIDGE_FUSION_AND_SANDBOX_REENTRY/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_61.json",
+    "mode": "FREE_ONLY",
+    "together_general_inference": "FORBIDDEN",
+    "together_training": "FORBIDDEN_IN_CURRENT_SUPERVISOR_MODE",
+    "paid_one_shot_owner_directive": "QUARANTINED_PROVENANCE_ONLY",
+    "paid_preflight_or_credential_lookup_performed": false,
+    "together_job_created": false
+  },
+  "observed_source": {
+    "canonical_main_before_receipt": "e13d6ea62e392943b8d675aa782c8023246f218b",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_head_after_local_fusion_and_parallel_reentry": "476b3104c30635795c250b359459fa11f3452305",
+    "selected_hcu_index_schema": "HCU_DATA_INDEX/v12",
+    "selected_serious_dataset_compiler": "hcu/compile_admitted_jspace_training_dataset_v1.py",
+    "raw_training_trace_training_eligible": false
+  },
+  "fusion_delta": {
+    "finding": "After the duplicate serious compiler was removed, jspace_training_dataset_admission_bridge_v1.py and its test still imported the deleted compile_jspace_training_dataset_v1 path. The bridge was both unimportable and strictly weaker than the selected admitted compiler because it lacked the selected inference-v3 loader/output binding and external basis admission orchestration.",
+    "action": "Removed only the stale duplicate launch-facing bridge and its stale test from the single retained HCU donor lane.",
+    "bridge_delete_commit": "b17b698e3b5caa12138506f18b8d21643d9626be",
+    "test_delete_commit": "b840be34c6713a4102e0b9547c8411b9e304c3c2",
+    "selected_path_preserved": "hcu/compile_admitted_jspace_training_dataset_v1.py",
+    "selected_path_requires": [
+      "external J-Space basis admission",
+      "training + transition + prototype dataset admission",
+      "HCU_INFERENCE_RECEIPT/v3 loader/output binding"
+    ],
+    "second_dataset_authority_created": false,
+    "semantic_scope": "SOURCE_FUSION_ONLY"
+  },
+  "independent_regression_convergence": {
+    "earlier_local_isolated_component_harness": "5/5 PASS",
+    "scope": "candidate dataset-admission packet/control-condition binding logic only, not exact repository checkout",
+    "parallel_equivalent_fix_observed": true,
+    "stale_source_overwrite_attempt": "REJECTED_409_FAIL_CLOSED",
+    "verified_parallel_gate_bindings": [
+      "vector_control_packet_sha256 across prototype-transition-training",
+      "vector_control_condition across prototype-transition-training",
+      "credit_label transition-training binding"
+    ],
+    "runtime_credit": 0
+  },
+  "vercel_execution_reentry": {
+    "execution_pr": 810,
+    "probe_deployment": "dpl_9vST7MFPJzdcHjw8s47MSHs4DbSM",
+    "probe_bridge_commit": "33cdfd2aecf820c9b48e7d47376f126d0e831bfd",
+    "existing_infrastructure_probe_claim": "Sandbox.create + runCommand + exit0 + secret fence + cleanup observed by retained execution lane",
+    "independent_runtime_log_corroboration": "GET /api/sandbox-probe 200 at 2026-08-23T17:54:08Z on the exact probe deployment",
+    "this_organ_later_fetches": "HTTP_302_AT_VERCEL_SSO_EDGE_NO_FUNCTION_INVOCATION",
+    "this_organ_new_sandbox_started": false,
+    "credit": "INFRASTRUCTURE_CALLABILITY_ONLY; ZERO_ENTITYOS_HCU_RUNTIME_CREDIT",
+    "free_only_cost_gate": "EXPLICIT_ZERO_MONETARY_COST_SANDBOX_COMPLIANCE_NOT_ESTABLISHED_FROM_HOBBY_PLAN_ALONE; DO_NOT_REPEAT_EXECUTION_FOR_RUNTIME_CREDIT_UNTIL_ADMITTED"
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_count_by_this_organ": 0,
+    "reason": "The shared active macrocycle already records its single unusual experiment in parallel receipts; all work here is deterministic regression, fusion, provenance and execution-admission reentry."
+  },
+  "acceptance": {
+    "entityos_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false,
+    "pr1263_merge_or_promotion_allowed_as_is": false
+  },
+  "current_frontier": {
+    "source": "Rejoin/fuse the selected HCU/J-Space donor mechanisms onto exact current FREE_ONLY main without restoring superseded authority or duplicate paths.",
+    "execution": "Establish a FREE_ONLY-admitted fixed hash-verified source capsule invocation through the proven Vercel Sandbox bridge, then execute exact selected Entry->route->engine-load->inference->GRID10->J-Space/admitted-dataset regressions.",
+    "model_after_exact_pass": "Bind a real zero-cost local ~0.8B checkpoint/tokenizer/runtime/build through verified loader consumption and emit request-scoped baseline/lesion/shuffle/rescue J-Space traces.",
+    "paid_training": "NOT_AN_ACTIVE_FRONTIER_UNDER_SUPERVISOR_8_61"
+  },
+  "claim_class": "DURABLE_SOURCE_FUSION_AND_EXECUTION_ADMISSION_EVIDENCE",
+  "status": "IN_PROGRESS"
+}

@@ -1,0 +1,185 @@
+{
+  "schema": "CLAY_TRIGGER2_GRID10_COHORT_FANIN_CONTRACT_CANDIDATE/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONCANONICAL_RESEARCH_CONTRACT_CANDIDATE_NOT_AUTHORITY",
+  "observed_main_before_write": "34cde26849a31b852b677a38f2c426c75d881bcf",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "owner_emergency_stop_freeswarm_supervisor": "HARD_OFF",
+    "provider_execution_authorized_by_this_artifact": false,
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "physical_grid10_runtime_credit_added": 0,
+    "jspace_model_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_hcu_runtime_credit_added": 0,
+    "whole_entityos_runtime_credit_added": 0
+  },
+  "problem": {
+    "current_blocker": "GRID10_EXACT_SNAPSHOT_SEQUENTIAL_FANIN_IMPOSSIBILITY",
+    "observed_semantics": [
+      "A physical GRID10 cohort may produce ten immutable NODE_RESULT observations from one exact S1 snapshot S_k.",
+      "EXACT_SNAPSHOT_ONLY per-packet admission requires an observation to match current S1.",
+      "Each successful per-packet coordinator commit advances S1 epoch/state identity.",
+      "Therefore after the first commit, untouched packets from the same S_k cohort are stale by construction.",
+      "Silently rewriting their observation epoch/digest as current is forbidden."
+    ],
+    "consequence": "Physical concurrency evidence and sequential fresh admission must not be spliced into one integrated same-cohort claim."
+  },
+  "candidate_contract": {
+    "name": "COHORT_EVIDENCE_SET_SINGLE_CAS/v1",
+    "authority_class": "DETERMINISTIC_S1_CONTROL_PLANE_CANDIDATE",
+    "intent": "Preserve all simultaneously produced cohort observations exactly as observations of S_k, bind them into one deterministic fan-in object, and admit that object through one coordinator-authorized CAS transition S_k -> S_k+1 without relabeling any member observation as S_k+1.",
+    "preconditions": [
+      "Coordinator lease is established before the cohort observation snapshot is acquired, or lease creation is otherwise included in the exact starting snapshot identity.",
+      "All cohort members are ordinary read-only Xeno processes and cannot write S1.",
+      "Every member packet carries exact producer/process identity, source membership identity, generation, state_epoch, state_digest, packet_digest, consumed-input/read receipt and scope provenance required by the current acceptance boundary.",
+      "All member packets bind the same starting generation/state_epoch/state_digest unless the protocol version explicitly names a heterogeneous-observation mode; v1 forbids heterogeneous starting snapshots.",
+      "The coordinator lease, generation and starting S1 digest are current and valid when the batch CAS begins."
+    ],
+    "fanin_object": {
+      "schema": "COHORT_EVIDENCE_SET/v1",
+      "required_fields": [
+        "cohort_id",
+        "generation",
+        "observed_state_epoch",
+        "observed_state_digest",
+        "coordinator_lease_id",
+        "coordinator_scope",
+        "member_count",
+        "ordered_member_refs",
+        "ordered_member_packet_digests",
+        "member_identity_digest",
+        "conflict_policy_id",
+        "fanin_digest"
+      ],
+      "cohort_id_rule": "RFC8785/JCS hash over protocol version + generation + observed_state_epoch + observed_state_digest + deterministic ordered member identity tuples; transport arrival order is excluded.",
+      "member_order_rule": "Canonical deterministic order by (source_node_id, producer_process_identity, packet_digest) after uniqueness validation; arrival order must not change the fan-in identity.",
+      "immutability_rule": "Original member packet generation/epoch/digest/payload/read receipt are immutable. The fan-in object references them; it never rewrites them to the post-commit S1 identity.",
+      "hyperposition_rule": "Competing or unresolved member candidates remain individually addressable inside the evidence set. Fan-in does not resolve disagreement merely by majority, ordering or recurrence."
+    },
+    "single_cas_transition": {
+      "starting_identity": "exact S_k generation + epoch + digest",
+      "validation": [
+        "validate coordinator lease/scope/generation",
+        "validate exact member set uniqueness and membership authorization",
+        "validate every member packet/read receipt against S_k and producer identity",
+        "validate no member is self-granting capability or effect authority",
+        "validate deterministic fan-in digest from exact immutable members",
+        "validate conflict policy identifier is admitted and deterministic"
+      ],
+      "write_semantics": "One deterministic coordinator-authorized S1 transaction stores/adopts the cohort evidence set and its member references, then advances the covered S1 epoch exactly once. All members retain observed_state_epoch=S_k.epoch as provenance.",
+      "result_identity": "The new S1 state S_k+1 may contain the admitted COHORT_EVIDENCE_SET reference. It does not imply that any member observation was made at S_k+1.",
+      "effect_boundary": "No real effect is authorized. Any later ActionCandidate still requires EffectGate/EffectJournal."
+    },
+    "downstream_summary_rule": {
+      "allowed": true,
+      "semantics": "A coordinator/Xeno may later produce a new candidate summary derived from the immutable cohort set. That summary must reference cohort_id/fanin_digest and original member packet digests, and must carry its own new observation/derivation identity.",
+      "forbidden": "The summary may not rewrite original member observations as current facts or mint canonical truth from consensus. UNKNOWN and unresolved Hyperposition branches remain explicit."
+    }
+  },
+  "why_this_candidate": {
+    "architecture_fit": [
+      "It preserves the current exact-snapshot anti-rebase invariant instead of weakening it.",
+      "It creates one deterministic control-plane fan-in boundary rather than ten serial stale-producing mutations.",
+      "It preserves same-cohort process->packet->evidence causality.",
+      "It generalizes from GRID10 to variable-N HCU without making logical cell count a truth or authority source.",
+      "It keeps model outputs as candidates and deterministic S1/Effect boundaries authoritative.",
+      "It naturally preserves Hyperposition by retaining the exact member set before any derived synthesis."
+    ],
+    "counterhypothesis": "Integrated same-cohort fan-in is not required for the intended physical GRID10 acceptance; split component semantics may be sufficient and substantially simpler.",
+    "decision_boundary": "This artifact does not choose the owner/supervisor acceptance contract. If SPLIT_COMPONENT_SEMANTICS is explicitly selected, this candidate remains donor research only."
+  },
+  "falsifiers_and_regressions": [
+    {
+      "id": "CF-001_DISJOINT_COHORT",
+      "setup": "Concurrency witness uses cohort C1 but fan-in members come from later process cohort C2 with reused logical node IDs.",
+      "expected": "REJECT_INTEGRATED_SAME_COHORT_CREDIT"
+    },
+    {
+      "id": "CF-002_ARRIVAL_ORDER_EQUIVARIANCE",
+      "setup": "Present the same exact member set in multiple transport arrival permutations.",
+      "expected": "IDENTICAL_COHORT_ID_MEMBER_IDENTITY_DIGEST_FANIN_DIGEST_AND_RESULTING_SEMANTIC_SET"
+    },
+    {
+      "id": "CF-003_MEMBER_TAMPER",
+      "setup": "Mutate one payload/read receipt/packet digest after cohort capture.",
+      "expected": "FAIL_CLOSED_BEFORE_S1_MUTATION"
+    },
+    {
+      "id": "CF-004_DUPLICATE_MEMBER",
+      "setup": "Repeat one packet/process identity while keeping member_count=10.",
+      "expected": "REJECT_DUPLICATE_MEMBER_IDENTITY"
+    },
+    {
+      "id": "CF-005_STALE_STARTING_CAS",
+      "setup": "Advance S1 after cohort capture but before the batch CAS.",
+      "expected": "REJECT_STARTING_SNAPSHOT_STALE_WITH_ZERO_PARTIAL_ADMISSION"
+    },
+    {
+      "id": "CF-006_PARTIAL_WRITE_ATOMICITY",
+      "setup": "Inject deterministic failure after validation of a strict subset of members.",
+      "expected": "ZERO_MEMBER_OR_FANIN_S1_MUTATION_AND_NO_EPOCH_ADVANCE"
+    },
+    {
+      "id": "CF-007_UNREGISTERED_OR_UNHEALTHY_SOURCE",
+      "setup": "One member lacks current deterministic membership/health authorization.",
+      "expected": "FAIL_CLOSED_ENTIRE_COHORT_OR_APPLY_EXPLICIT_VERSIONED_QUORUM_POLICY; v1 defaults to entire-cohort rejection"
+    },
+    {
+      "id": "CF-008_HYPERPOSITION_PRESERVATION",
+      "setup": "Members contain mutually incompatible unresolved candidates plus UNKNOWN.",
+      "expected": "FANIN_PRESERVES_ALL_BRANCH_REFS_AND_UNKNOWN; NO_MAJORITY_TO_TRUTH_COLLAPSE"
+    },
+    {
+      "id": "CF-009_REPLAY_IDEMPOTENCE",
+      "setup": "Replay exact same cohort fan-in request after successful admission.",
+      "expected": "IDEMPOTENT_SAME_RECEIPT_OR_DETERMINISTIC_DUPLICATE_REJECTION_WITH_NO_SECOND_EPOCH_EFFECT"
+    },
+    {
+      "id": "CF-010_SPLIT_PROOF_GUARD",
+      "setup": "Provide valid concurrent-liveness evidence plus unrelated sequential fresh commits but no same-cohort fan-in identity.",
+      "expected": "MAY_PASS_NARROW_SPLIT_COMPONENTS_BUT_MUST_NOT_PASS_INTEGRATED_SAME_COHORT_FANIN"
+    }
+  ],
+  "training_eval_reinjection": {
+    "new_positive_training_rows": 0,
+    "accepted_dataset_tokens_added": 0,
+    "candidate_eval_concepts": [
+      "observation time/state identity is distinct from later admission/current state",
+      "a deterministic fan-in reference may preserve old observations without relabeling them",
+      "majority or recurrence does not mint truth",
+      "UNKNOWN and competing Hyperposition branches survive aggregation",
+      "stale cohort observations require re-read/recompute or provenance-preserving derivation, never silent currentness rewrite"
+    ],
+    "model_nonresponsibilities": [
+      "PID/process-liveness proof",
+      "membership authority",
+      "CAS authority",
+      "packet hashing authority",
+      "canonical truth promotion",
+      "effect authorization"
+    ],
+    "admission": "CANDIDATE_EVAL_ONLY_NOT_TRAINING_ELIGIBLE"
+  },
+  "next_exact_action": "If integrated same-cohort fan-in remains the intended contract, implement COHORT_EVIDENCE_SET_SINGLE_CAS/v1 as a bounded deterministic test fixture with CF-001..CF-010 before creating any new GRID10 promotion/runtime pin. If the owner/supervisor instead selects split component semantics, explicitly rename/narrow physical GRID10 acceptance and credit surfaces and retain this artifact as a donor only.",
+  "credit_boundary": {
+    "research_delta": 1,
+    "source_implementation_credit": 0,
+    "runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "canonical_truth_credit": 0,
+    "effect_authority_credit": 0
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "schema": "ENTITYOS_HCU_GO_ENTRY_V2_MANIFEST_BOUND_SANDBOX/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "active_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "research_main_observed_before_execution": "a477fd5743b10d908dfd838f454e552249699b7c",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_head": "c032c73800152c0bf6a211d6976ca5c11a3d1896"
+  },
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_observed": "d63873b1637d9e8d8496a59691e02249ef43dad1",
+    "deployment_id_observed": "dpl_6izDrxzUwrMncperKNZ3mSf6iEFr",
+    "route": "GET /api/hcu-entry-capsule",
+    "surface": "Vercel Hobby bounded included-tier protected preview",
+    "generic_command_input": false
+  },
+  "capsule": {
+    "id": "HCU_ENTRY_CANONICALIZATION_CAPSULE/v2",
+    "source_repository": "gschaidergabriel/clay-global-research-entity",
+    "source_main_commit": "6a499541c38910e2a062b3eef50b73266c70445a",
+    "source_pr": 1263,
+    "source_pr_commit": "c032c73800152c0bf6a211d6976ca5c11a3d1896",
+    "source_manifest_sha256": "9941bbebe44d5a840779b9ac4a69188cbd7d3699d45fe22b4160a342ad8f4a1c",
+    "files": {
+      "entry_canonicalization_v1.py": {
+        "git_blob_sha": "00d1d79cbb66a1956a278de4755cd8395e854199",
+        "sha256": "bb0a5892441953716da37e70ae337cdffb02548ac07e10c4cb0e2c1fe351a53f"
+      },
+      "test_entry_canonicalization_v1.py": {
+        "git_blob_sha": "bc9262473f91dbd04ddaf647e667920664495f54",
+        "sha256": "b0b5f519c6c7b751d2ed388661bb617fc1a2ee73055faaab1208a47c6612891b"
+      }
+    }
+  },
+  "execution": {
+    "status": "HCU_EXACT_SOURCE_COMPONENT_SANDBOX_PASS",
+    "sandbox_id": "fuchsia-clever-caribou-T8PcjT",
+    "exit_code": 0,
+    "tests_run": 7,
+    "tests_passed": 7,
+    "secret_fence": "PASS",
+    "sandbox_cleanup": "PASS",
+    "cleanup_error": null,
+    "result_log_sha256": "2f3263d15ef397be77144194264ffdf72b78195a58c4d2dfa51fe51c8c835b24",
+    "result_scope": "RFC8785/JCS ENTRY CANONICALIZATION COMPONENT ONLY"
+  },
+  "falsifiers_exercised": [
+    "binary64 integer semantics versus host-safe-int policy",
+    "lone surrogate rejection",
+    "negative-zero rejection under verified erratum 7920",
+    "nonfinite number rejection",
+    "property reordering identity neutrality",
+    "RFC8785 numeric vectors",
+    "RFC8785 UTF-16 property ordering"
+  ],
+  "credit": {
+    "component_runtime_credit": "ENTRY_CANONICALIZATION_ONLY",
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false,
+    "unusual_experiment_count_added": 0
+  },
+  "macrocycle_unusual_experiment": {
+    "count_for_this_go": 1,
+    "experiment": "CURRENT_AUTHORITY_SPLIT_BRAIN_AUDIT",
+    "finding": "current-facing authority surfaces were temporarily split across steering 8.62, stale 8.61 docs/state and a compatibility validator hard-coded to 8.52",
+    "classification": "CONTROL_PLANE_SOURCE_INCONSISTENCY",
+    "runtime_capsule_is_additional_unusual_experiment": false
+  },
+  "next_exact_gate": "Extend the same fixed hash-bound single executor authority from Entry canonicalization toward Typed Entry admission -> route -> verified engine-load lease -> inference receipt -> GRID10 -> Global J-Space/GWT -> admitted causal dataset closure, while separately repairing stale current-facing authority pointers without creating a second semantic authority path."
+}

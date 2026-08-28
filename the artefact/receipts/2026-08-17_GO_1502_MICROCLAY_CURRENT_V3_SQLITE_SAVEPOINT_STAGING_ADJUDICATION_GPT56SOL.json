@@ -1,0 +1,60 @@
+{
+  "schema": "clayverse.microclay-current-v3-sandbox-staging-adjudication/v1",
+  "trigger": "go",
+  "trigger_metadata": "2026-08-17T15:02+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "organ": "GPT-5.6 Sol",
+  "research_main_observed_before_write": "2c8bf61e89d22183cfdf80c4649c2c98d1bbc1be",
+  "unusual_experiment_count_added": 0,
+  "experiment_budget_note": "Canonical coordination for this 15:02 go forbids further unusual experiments because only minute-precision trigger metadata is available; this work is ordinary deterministic diagnosis/staging only.",
+  "observed_runtime_adjudication": {
+    "started_v2_diagnostic_deployment": "dpl_7H6XmBbeCzqXeLBEH6fD9vYc47uG",
+    "terminal_error": "ModuleNotFoundError: No module named '_sqlite3'",
+    "semantic_credit": "ZERO_MICROCLAY_FAIL_CREDIT",
+    "reason": "The exact staged product blobs bound before Python failed importing sqlite3, so MicroClay assertions did not execute."
+  },
+  "sqlite_capable_substrate": {
+    "mechanism": "Provision distro python3.13 plus python3.13-libs with dnf while Sandbox egress is available, verify /usr/bin/python3.13 imports sqlite3, then update Sandbox network policy to deny-all before exact source binding and regression execution.",
+    "status": "MECHANISM_PREVIOUSLY_OBSERVED_ON_SAME_VERCEL_SANDBOX_INFRASTRUCTURE_AND_PREPARED_FOR_MICROCLAY",
+    "product_semantics_changed": false
+  },
+  "coordination_refresh": {
+    "retired_pr": 559,
+    "retired_pr_head": "6402aa3c6e4de0e17247235ed088af76c76509c4",
+    "retirement_reason": "Parallel coordination fused PR559's only non-duplicate nested outer-transaction SAVEPOINT repair into the surviving PR550 path; PR559 must not be executed as a competing product candidate.",
+    "surviving_pr": 550,
+    "surviving_pr_head_observed": "025359884a32c61b60c482ddd7eab30d50b10da6",
+    "surviving_base_pr": 484,
+    "surviving_feedback_blob": "f4637b914db915a5b1d090c20f416c69d16e9be8",
+    "retired_pr_feedback_blob": "f4637b914db915a5b1d090c20f416c69d16e9be8",
+    "feedback_blob_identity": "BYTE_IDENTICAL",
+    "transfer_rule": "Only the deterministic harness/runtime substrate lesson and exact feedback-blob binding transfer. No runtime PASS or full PR559 candidate authority transfers."
+  },
+  "prepared_staging_evidence": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-pr559-v3-feedback-savepoint-vercel-20260817-1513",
+    "exact_feedback_binding_commit": "76053f3bfac6bc5bf53562b9b5b03d32fce219c5",
+    "nested_savepoint_probe_commit": "7971068b40d1071217f8bdf8578d9af63a2489ab",
+    "nested_savepoint_probe_blob": "a4957c02277b1adb9641cf26ce3a0b0c1bf583c6",
+    "sqlite_runner_commit": "975819e69ad4cf3d9149d9a5e668995feb3e0ca0",
+    "armed_package_commit": "717df44df170135faaf3600cf649baacede14d5e",
+    "provider_status": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started_for_armed_package": false,
+    "runtime_credit": "ZERO",
+    "staging_disposition": "RETIRED_DO_NOT_EXECUTE_AS_PR559; REBIND_FRESH_SURVIVING_PR550_HEAD_WHEN_ADMISSION_RETURNS"
+  },
+  "nested_atomicity_falsifier": {
+    "purpose": "Force retrieval_feedback receipt insertion failure inside a still-live outer SQLite transaction, catch the inner failure, require zero leaked retrieval policy mutation and zero feedback receipt, prove unrelated outer work can still commit, then require one clean retry and duplicate idempotence.",
+    "evidence_status": "HARNESS_PREPARED_NOT_EXECUTED_IN_AUTHORIZED_VERCEL_SANDBOX",
+    "relevance": "Directly discriminates whether explicit retrieval learning can partially commit without its provenance/idempotency receipt."
+  },
+  "next_exact_gate": "After Vercel preview admission returns, refresh PR550 and PR484 to then-current heads; bind exact current source plus focused v3 explicit-feedback privacy/policy/replay/credit/nested-transaction/crash-restart and adjacent Schema-8 Stage-B gates into a SQLite-capable Vercel Sandbox; switch to DENY_ALL before regression execution; accept runtime credit only for the exact then-current bound source. If green, fuse the surviving explicit-feedback delta into PR484 and continue toward broader ClayVerse regression plus OCI build/start/readiness/restart.",
+  "whole_product_pass": false,
+  "microclay_product_pass": false,
+  "current_v3_runtime_verified": false,
+  "active_promotion_authorized": false,
+  "vps_used": false,
+  "together_used": false,
+  "final_paid_training_used": false
+}

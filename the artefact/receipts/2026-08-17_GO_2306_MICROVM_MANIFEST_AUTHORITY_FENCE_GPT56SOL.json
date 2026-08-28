@@ -1,0 +1,89 @@
+{
+  "receipt_type": "CLAYVERSE_GO_BOUNDED_SOURCE_CONVERGENCE",
+  "timestamp_local": "2026-08-17T23:06:56+07:00",
+  "organ": "GPT-5.6-Sol / ChatGPT temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_CONTRACT_HARDENED_RUNTIME_UNOBSERVED",
+  "product_acceptance": "IN_PROGRESS",
+  "canonical_workspace": "the artefact/",
+  "observed_current_blobs": {
+    "deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "b84fb5d04ad89a5e4c643dcb2fec136b506d8abc",
+    "deployment/clayverse-kata-statefulset.template.yaml": "155ea70ad39241a61807e6fe5b084fbd9822a90f",
+    "manifest.json": "0b070a7c6f1cfd4cfc051ae9535be036d316857f",
+    "tests/test_microvm_deployment_contract.py": "3238b02ce8a0f5c283827ade1293460c9d3e89f0"
+  },
+  "canonical_writes": [
+    {
+      "commit": "f84e2271d42f9c8718710e3fa2ce0a10fec21f4f",
+      "path": "the artefact/manifest.json",
+      "result_blob": "0b070a7c6f1cfd4cfc051ae9535be036d316857f",
+      "delta": [
+        "bind final acceptance to the then-current upstream-supported Kata release and effective runtime configuration",
+        "fail closed on unreviewed io.katacontainers.* runtime-mutating annotations after admission mutation",
+        "bind Tier-2 to full Pod/Kata sandbox/VM replacement rather than in-place container restart",
+        "add matching requires_for_final_pass obligations"
+      ]
+    },
+    {
+      "commit": "81d1db4b4760cebeff5464b8aca63c9ec0626824",
+      "path": "the artefact/tests/test_microvm_deployment_contract.py",
+      "result_blob": "3238b02ce8a0f5c283827ade1293460c9d3e89f0",
+      "delta": [
+        "bind manifest runtime-security, runtime-annotation and Tier-2 fields to focused regression",
+        "preserve parallel EntityOS image-authoritative digest regression"
+      ]
+    }
+  ],
+  "parallel_fusion_adopted": [
+    "default-deny ingress+egress NetworkPolicy with real CNI-enforcement acceptance obligation",
+    "separate /healthz liveness and /readyz readiness",
+    "headless governing Service for StatefulSet identity",
+    "Pod fsGroup 10001 / OnRootMismatch plus executable CSI non-root ownership gate",
+    "current-supported Kata rolling-release security rule and 2026-08-17 advisory refresh",
+    "Dragonball hypervisor advisory fence where selected",
+    "full Pod/Kata-sandbox Tier-2 replacement semantics",
+    "EntityOS digest identity remains image-authoritative and cannot be supplied by deployment Secret"
+  ],
+  "stale_write_behavior": "Multiple concurrent stale writes were rejected atomically by GitHub 409; no newer parallel bytes were overwritten and duplicate permanent lanes were closed/suppressed.",
+  "execution_evidence": {
+    "current_four_blob_regression": "NOT_EXECUTED_AS_BOUND_SET_BY_THIS_ORGAN",
+    "prior_12_of_12": "BOUNDED_TO_PRIOR_RECORDED_BLOBS_ONLY_DO_NOT_TRANSFER",
+    "exact_final_oci": "UNOBSERVED",
+    "kubernetes_kata_guest": "UNOBSERVED",
+    "cni_enforcement": "UNOBSERVED",
+    "csi_nonroot_volume_behavior": "UNOBSERVED",
+    "tier2_full_sandbox_replacement": "UNOBSERVED"
+  },
+  "upstream_security_review": {
+    "policy": "Kata rolling-release security support requires resolving the then-current supported release immediately before acceptance",
+    "dated_observation": "2026-08-17 current upstream release observed as 4.0.0; July 2026 advisories affect releases through 3.32.0 and are fixed in 4.0.0",
+    "advisories": [
+      "GHSA-2gv2-cffp-j227 / CVE-2026-47243",
+      "GHSA-mp2j-xm59-qfgw / CVE-2026-50540",
+      "GHSA-7fhf-v3p3-rp56",
+      "GHSA-fgm4-mv68-h344"
+    ],
+    "authority_note": "Dated upstream evidence is not a permanent 4.0.0 pin; final acceptance must refresh current primary upstream state."
+  },
+  "execution_admission_blocker": {
+    "surface": "Vercel Sandbox exact private Research/EntityOS OCI batch",
+    "state": "BLOCKED_BEFORE_PRIVATE_SOURCE_STAGING",
+    "reason": "host-side sensitive Vercel Preview GITHUB_READ_TOKEN is not provisioned",
+    "safety": "credential must remain host-side and must never be committed or forwarded into Sandbox environment/logs",
+    "runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable request/turn id and only minute-precision immutable trigger message time are exposed to this organ."
+  },
+  "forbidden_paths_respected": {
+    "vps_self_hosted_production_testing": true,
+    "together_api": true,
+    "paid_final_training": true,
+    "secret_exposure": true
+  },
+  "next_exact_gate": "Provision the approved host-side Vercel Preview read credential without exposing it to the Sandbox, then bind fresh current source, build the exact final EntityOS-bearing OCI image, capture its digest and resolved dependencies, and execute startup/readiness plus the MicroVM/Kata/CNI/CSI/Tier-2 acceptance sequence on that exact image."
+}

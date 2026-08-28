@@ -1,0 +1,83 @@
+{
+  "schema": "TRIGGER2_EVIDENCE_PROVENANCE_COUNTERFACTUAL_PROBE_SOURCE_VALIDATION/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch_observed": "8.84",
+  "mode": "FREE_ONLY",
+  "scope": "EXACT_COMMITTED_BYTES_LOCAL_DETERMINISTIC_METHOD_ONLY_PROBE",
+  "research_question": "Can Trigger-2 preserve the distinction between identical claim content and promotion-bearing evidence when only provenance/minting authority differs?",
+  "hypothesis": "A counterfactual probe that holds claim content and presentation constant while varying only evidence provenance can train/evaluate epistemic scope decisions without rewarding claim-content or layout shortcuts.",
+  "counterhypothesis": "The task collapses to superficial provenance-token classification and therefore does not establish general evidence reasoning.",
+  "adjudication_boundary": "The current probe establishes only a deterministic balanced evaluator blueprint and fail-closed source invariants. It does not establish model generalization, causal internal representation, runtime evidence, dataset admission, or training efficacy. Frozen paraphrase/OOD provenance carriers and model execution are required before any model-level claim.",
+  "source_files": [
+    {
+      "path": "tools/trigger2_evidence_provenance_counterfactual_probe_v1.py",
+      "create_commit": "1f73991738a2160911fe23869e20b9781dd7a6d2",
+      "git_blob_sha1": "2dd5be6bb3a82d2023609e0e96f1a13c7bd3beba",
+      "sha256": "21e0d0230e7d679c1c978f9a5e47b833a3fe9c3f92332cbf9307536d2fa42af0"
+    },
+    {
+      "path": "tests/test_trigger2_evidence_provenance_counterfactual_probe_v1.py",
+      "create_commit": "872d1f956082e99f2ebf2e1090858d2b8be35f3a",
+      "git_blob_sha1": "b4fd4a54c2d3c35b9c3a62d64ea08b5332ea97bf",
+      "sha256": "245d332a4a6e9df6facbef383b1d8fc8575f295c5cf82ef3cabd4eccdb417ef7"
+    }
+  ],
+  "exact_byte_identity": {
+    "github_blob_matches_local_tool": true,
+    "github_blob_matches_local_test": true
+  },
+  "execution": {
+    "py_compile": "PASS",
+    "pytest": "6 passed in 0.08s",
+    "probe_result": {
+      "pass": true,
+      "rows": 32,
+      "families": 4,
+      "counterfactual_pairs": 16,
+      "outcome_counts": {
+        "BOUND_EVIDENCE_CANDIDATE": 16,
+        "CLAIM_ONLY_NO_PROMOTION": 16
+      },
+      "nuisance_only_majority_accuracy": 0.5,
+      "claim_content_equal_within_every_pair": true,
+      "target_hidden_from_model_visible_input": true,
+      "training_eligible_rows": 0,
+      "accepted_dataset_tokens_delta": 0
+    },
+    "repository_ci_observed": false,
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid_executed": false,
+    "vps_executed": false,
+    "training_executed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false
+  },
+  "families": [
+    "PHYSICAL_COHORT_WITNESS",
+    "MODEL_INVOCATION_OCCURRENCE",
+    "CLAUDE_TOOL_RETURN",
+    "EXTERNAL_EFFECT_OUTCOME"
+  ],
+  "cognitive_process_targets": [
+    "ZECP09_SELF_EVALUATION_CONTRADICTION",
+    "ZECP14_CLAUDE_CODE_RESULT_RECONCILIATION",
+    "ZECP18_OUTCOME_RECONCILIATION_CONTINUATION_RECOVERY"
+  ],
+  "promotion_fence": {
+    "evidence_class": "METHOD_ONLY",
+    "training_eligible": false,
+    "accepted_dataset_tokens_delta": 0,
+    "model_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "physical_grid_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "negative_evidence_preserved": "The first pre-commit local test draft exposed mutable aliasing in shared claim objects and two overly specific adversarial assertions. The generator was changed to deepcopy claim/provenance per row and the regressions were corrected before committed-byte validation. No credit is taken from that failed draft run.",
+  "next_discriminator": "Before any training admission, create a frozen paraphrase/OOD successor in which the same provenance semantics are expressed through disjoint carrier vocabularies and structures, then require nuisance-only and lexical provenance-token baselines near chance while a semantic provenance evaluator remains solvable. Only after runtime quiescence and explicit model-execution admission may the selected Qwen3.5-0.8B checkpoint be tested on that frozen successor."
+}

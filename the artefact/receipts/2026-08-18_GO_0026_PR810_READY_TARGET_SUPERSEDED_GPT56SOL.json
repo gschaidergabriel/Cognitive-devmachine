@@ -1,0 +1,73 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:26:25+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed_before_write": "5a84c8efa0daead67a355d9e3cfacf4a101084bc",
+  "classification": "READY_CONTROLLER_TARGET_SUPERSEDED_NO_CREDENTIAL_RUN",
+  "canonical_runtime_path": "adapters.MistralInference -> ClayVerseEngine -> UnifiedDB pre-effect re-ingest -> EffectGate",
+  "frozen_candidate_previously_bound": {
+    "pull_request": 680,
+    "commit": "37bfaac92158168fff16e20ed29a1fe208429720",
+    "actual_tree": "99041e4e5641f99b03fb304712220fb90390b246",
+    "canonical_base": "958e3c5fa2406b42d187727e2adb6099b6ed0aa2"
+  },
+  "material_post_freeze_deltas_observed": [
+    {
+      "commit": "a4db988c17423ee98be2f12639a4264714782337",
+      "class": "PRODUCT_SECURITY",
+      "summary": "reject duplicate JSON object keys on the Mistral provider boundary"
+    },
+    {
+      "commit": "d9ed424c9412c4c207e257195c384ec2d876b2f5",
+      "class": "PRODUCT_STATE_GENERATION",
+      "summary": "fence turn-derived memory inside the generation transaction"
+    },
+    {
+      "commit": "5a837aa09538b478176ef5264b5de043e4bf0c42",
+      "class": "PRODUCT_RECOVERY_LIFECYCLE",
+      "summary": "terminalize successful workspaces before active-turn retirement"
+    }
+  ],
+  "pr680_latest_observed": {
+    "head": "215a52d0a0b862ec3e80a817cb6c8ee9ab75cd16",
+    "state": "OPEN_DRAFT",
+    "branch_receipt": "the artefact/receipts/2026-08-18_GO_0018_MISTRAL_DUPLICATE_JSON_FENCE_GPT56SOL.json",
+    "branch_receipt_next_discriminator": "freeze the converged PR680 head after overlapping repairs settle, then rebind the single retained PR810 controller once to that exact head/tree before any owner-held runtime credential is spent"
+  },
+  "pr810_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head": "860c421e3c69830948e872e05bd32bf341318906",
+    "bound_research_commit": "37bfaac92158168fff16e20ed29a1fe208429720",
+    "bound_research_tree": "99041e4e5641f99b03fb304712220fb90390b246",
+    "deployment_id": "dpl_CAtTZvDnMWMDyPATWsWWxoicqibF",
+    "deployment_state": "READY",
+    "ready_scope": "controller deployment only; no ClayVerse product runtime credit"
+  },
+  "adjudication": {
+    "prior_main_receipt_superseded_step": "5a84c8efa0daead67a355d9e3cfacf4a101084bc proposed an owner credential POST against dpl_CAtTZvDnMWMDyPATWsWWxoicqibF",
+    "why_superseded": "that deployment is exact for PR810 head 860c421e but is bound to Research 37bfaac; PR680 subsequently gained material product security, state-generation and recovery/lifecycle deltas",
+    "credential_run_against_37bfaac": "REJECT_AS_FINAL_ACCEPTANCE_TARGET",
+    "runtime_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "access_observation": {
+    "exact_head_preview_ready": true,
+    "connector_get_to_runtime_endpoint": "HTTP_302_VERCEL_SSO",
+    "interpretation": "control-plane/access-interface boundary, not ClayVerse semantic test failure",
+    "credential_bearing_post_attempted": false,
+    "owner_secret_observed": false,
+    "secret_synthesized_or_persisted": false
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "no immutable shared go-request identity was exposed; ordinary source, control-plane and provenance checks do not consume the one unusual experiment"
+  },
+  "next_exact_step": "Let overlapping PR680 repairs settle and pass their focused deterministic regressions; choose one new exact frozen PR680 commit/tree containing the accepted post-freeze deltas; rebind the single retained PR810 controller exactly to that commit/tree and accepted closure; require a READY deployment of that exact controller head; only then use the owner-held scoped read credential for private-source verification -> Sandbox.create/Firecracker guest identity -> full exact-source regression -> OCI build/digest -> approved runtime Mistral secret acquisition -> canonical cognition -> UnifiedDB pre-effect re-ingest -> EffectGate/EntityOS -> Tier-1 recovery -> destroy/recreate from the same digest -> post-recovery cognition and remaining whole-product gates.",
+  "acceptance": "IN_PROGRESS"
+}

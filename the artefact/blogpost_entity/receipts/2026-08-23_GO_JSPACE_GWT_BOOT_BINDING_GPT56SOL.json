@@ -1,0 +1,123 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-23",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "owner_directive": "research_entity/global/ENTITYOS_FIXED_CLAUDE_ADAPTIVE_INFERENCE_INTEGRATION.md",
+  "branch": "go/jspace-boot-binding-v1-gpt56sol-20260823",
+  "branch_base_main_sha": "944c730204cf77645628a67679eb47418e01738c",
+  "tested_code_head_sha": "97464a8c21875b0f9ff6f7c543ebda87fab083b8",
+  "parallel_main_observed_after_branch_creation": "7028a6f66ac0d61a09487f09caf1b2df417325f4",
+  "scope": "source contract plus exact-Git-blob isolated deterministic validation for JSPACE_GWT_BOOT_BINDING_RECEIPT/v1; no Ubuntu host start and no model/provider execution",
+  "coordination": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This worker received no upstream macrocycle_id or atomic unusual-experiment lease. Per GO_MACROCYCLE_IDENTITY_CONTRACT and current BOOTSTRAP_MINIMAL, it must not invent or borrow another organ's macrocycle identity.",
+    "parallel_macrocycle_id_observed_but_not_adopted": "cdd2fb97-a30f-41b3-9573-ae97c0346f31",
+    "unusual_experiment_count": 0,
+    "deterministic_regressions_only": true,
+    "duplicate_runtime_lane_created": false,
+    "retained_reference_runtime_pr_997_untouched": true
+  },
+  "exact_git_blobs": {
+    "the artefact/blogpost_entity/jspace_gwt/JSPACE_GWT_BOOT_BINDING_V1.md": "c473ad4f3075de5253db3e625fcd0280d8287b18",
+    "the artefact/blogpost_entity/jspace_gwt/validate_jspace_gwt_boot_binding_v1.py": "41a776f0cc67a553e04f1b601b825b72c6d48c37",
+    "the artefact/blogpost_entity/jspace_gwt/test_validate_jspace_gwt_boot_binding_v1.py": "08988812bce49fbbed799f4f2ab18f19d2f3353b"
+  },
+  "isolated_execution": {
+    "environment": {
+      "class": "ChatGPT isolated Linux container",
+      "python": "3.13-compatible runtime"
+    },
+    "source_identity_method": "validator and test files were reconstructed from GitHub branch fetches and git hash-object matched the exact GitHub blob ids before execution",
+    "py_compile": "PASS",
+    "unittest": {
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "result": "PASS"
+    },
+    "validator_sha256": "5241fd749992398cc1a167f556a3db3a9f63ab295a4ff9357f0ad62b93fa563a",
+    "test_sha256": "035b9f0d58041d10e3a44d61c9f152484be6afc76152c717bfacf697eab8772e",
+    "runtime_credit": "BOUNDED_EXACT_GIT_BLOB_SOURCE_CONTRACT_COMPONENT"
+  },
+  "deterministic_regressions": [
+    {
+      "id": "VALID_SOURCE_ONLY_RECEIPT",
+      "expected": "PASS",
+      "observed": "PASS"
+    },
+    {
+      "id": "LENS_POST_LOAD_NONFINITE",
+      "basis": "known upstream Jacobian-Lens serialization overflow failure class",
+      "expected": "FAIL_CLOSED",
+      "observed": "FAIL_CLOSED"
+    },
+    {
+      "id": "JSPACE_UNFITTED_POSITION",
+      "basis": "known upstream fit/apply position-domain mismatch failure class",
+      "expected": "FAIL_CLOSED",
+      "observed": "FAIL_CLOSED"
+    },
+    {
+      "id": "PROMPT_COPY_CONFOUND_GUARD_DISABLED",
+      "basis": "known upstream prompt-copy measurement confound",
+      "expected": "FAIL_CLOSED",
+      "observed": "FAIL_CLOSED"
+    },
+    {
+      "id": "BOOT_RECEIPT_CANNOT_GRANT_WHOLE_GWT_CREDIT",
+      "expected": "FAIL_CLOSED",
+      "observed": "FAIL_CLOSED"
+    }
+  ],
+  "primary_external_evidence": [
+    {
+      "url": "https://github.com/anthropics/jacobian-lens/issues/5",
+      "role": "upstream measurement-domain and prompt-copy confound report"
+    },
+    {
+      "url": "https://github.com/anthropics/jacobian-lens/issues/6",
+      "role": "upstream float16 serialization overflow/nonfinite report"
+    },
+    {
+      "url": "https://github.com/anthropics/jacobian-lens",
+      "role": "official reference implementation"
+    },
+    {
+      "url": "https://transformer-circuits.pub/2026/workspace/index.html",
+      "role": "companion paper"
+    }
+  ],
+  "authority_guards": {
+    "miniunifieddb_is_truth_authority": true,
+    "jspace_measurement_is_not_truth": true,
+    "gwt_workspace_is_not_truth": true,
+    "claude_result_is_candidate_only": true,
+    "effect_gate_required": true,
+    "whole_gwt_credit_forced_zero_by_validator": true,
+    "whole_product_forced_in_progress_by_validator": true
+  },
+  "execution_policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "provider_preflight": false,
+    "billed_create": false,
+    "training_started": false,
+    "money_spent_usd": 0
+  },
+  "claims": {
+    "boot_binding_source_contract": "SOURCE_CANDIDATE",
+    "validator_mechanism": "BOUNDED_EXACT_GIT_BLOB_COMPONENT_PASS",
+    "ubuntu_boot_receipt": "NOT_EXECUTED_HOST_INTENTIONALLY_OFFLINE",
+    "bundled_08b_exact_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_gwt_credit": 0,
+    "claude_adapter_runtime_credit": 0,
+    "whole_mini_entity": "IN_PROGRESS"
+  },
+  "next_gate": "At the next intentional exact Ubuntu start, produce PRESTART_FROZEN_BASELINE plus POSTSTART_OBSERVATION_RECEIPT/v1 and a real JSPACE_GWT_BOOT_BINDING_RECEIPT/v1 bound to exact source/tree/dirty state, executor, bundled checkpoint/tokenizer/runtime/manifest, lens/profile/fit corpus, workspace calibration, Zero/GRF projection, Claude adapter capability profile, first inference engine choice and origin attribution. Numeric finiteness and admitted readout positions must pass before any J-Space/GWT runtime credit."
+}

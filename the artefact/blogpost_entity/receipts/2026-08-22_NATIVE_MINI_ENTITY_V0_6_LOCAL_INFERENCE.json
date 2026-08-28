@@ -1,0 +1,40 @@
+{
+  "schema": "mini-entity-native-sandbox-receipt/v1",
+  "date": "2026-08-22",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "version": "mini-entity/0.6.0",
+  "platform": "linux-x86_64",
+  "release_contract": "application-neutral .clay ELF + SQLite MiniUnifiedDB; zero_blog is replaceable DB preset",
+  "sandbox_artifacts": {
+    "binary_name": "mini_entity.clay",
+    "binary_sha256": "939784dd29514ead0721882e83fc78b6d21373e8281774c683cebc6cd92ae7a7",
+    "zero_blog_db_name": "mini_entity.db",
+    "zero_blog_db_sha256": "3c548b926e02295eb2b11736949d8d7af45f6d674457d0dc5777cfb2c0f43f04",
+    "zero_blog_preset_sha256": "f5c3e5f0ff421ddec1a5af8b541457cfcb6369dc294939f5018a7a7c2c8766a4"
+  },
+  "verified": [
+    "fresh SQLite MiniUnifiedDB initializes with integrity_check=ok",
+    "zero_blog is applied as DB preset rather than immutable binary personality",
+    "preset-apply can replace profile/application/system prompt without rebuilding executable",
+    "inference_mode supports api and local_exec",
+    "direct local model contract accepts a readable model/weights path and configurable argv runner",
+    "local runner is executed directly without shell interpolation",
+    "local_exec inference succeeds with API token length zero",
+    "local inference output passes the same output gate and atomic persistence path",
+    "successful local inference advances generation exactly once and consumes evidence exactly once",
+    "profile/persona may change while the same DB generation/history continues",
+    "loopback HTTP text generation can run without an API token when the local endpoint requires none",
+    "remote non-loopback plaintext HTTP with token remains rejected",
+    "API tokens remain runtime secret configuration and are not required by local inference"
+  ],
+  "fixture_limits": {
+    "direct_local_model": "backend contract tested with a fixture model file plus mock local runner; this does not prove real GGUF/model quality or llama.cpp compatibility",
+    "external_provider": "no authorized real Mistral/API secret was mounted in this chat sandbox; real-provider final PASS remains uncredited"
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_discriminators": [
+    "exercise actual GGUF weights through an admitted llama.cpp-compatible runner",
+    "exercise one authorized real external provider call",
+    "converge canonical structured Clay two-file path so active profile/inference configuration is loaded from MiniUnifiedDB rather than requiring a third runtime profile file"
+  ]
+}

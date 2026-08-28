@@ -1,0 +1,21 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "receipt_id": "20260826T105610Z-trigger2-blueprint-v2-leakage-audit-claude-code-lead",
+  "direction": "trigger2-training",
+  "created_at": "2026-08-26T10:56:10Z",
+  "observed_head": "f0e1d63cadd99310fa7392a1c1fe610c641bc54a",
+  "status": "CANDIDATE_TOOLING_ADDED_KNOWN_LEAK_FOUND_ADMISSION_STILL_CLOSED",
+  "headline": "New rendered-byte leakage audit for the strongest existing binding-generator donor (trigger2_dynamic_binding_blueprint_v2.py) confirms H5's counterhypothesis: pairwise zero-MI was insufficient. Found a real ~0.276-bit joint leak between routed target symbol and (codebook-order|mapping|layout|polarity) x template, not visible to the blueprint's own pairwise selftest.",
+  "state": "Per TRIGGERWORT_2 course Step 6 (positive admission gates closed -> build generators/labelers/nuisance-controls/evals only, do not inflate accepted tokens) and per V35 delta guidance to rebase/audit the strongest existing donor rather than fork a new generator: added tools/trigger2_dynamic_binding_blueprint_v2_leakage_audit_v1.py + tests/test_trigger2_dynamic_binding_blueprint_v2_leakage_audit_v1.py (6/6 pass, run via `python3 -m pytest`). Audit renders full prompt bytes (codebook + evidence/query, placeholder ABI_ACCEPTED_ORDINAL atoms, real tokenizer binding remains a separate later gate) from the existing v2.1 blueprint and checks: (1) exact prompt uniqueness -- PASS, 9072/9072 unique; (2) cross-split (TRAIN/VALIDATION/HOLDOUT_FROZEN) exact content disjointness -- PASS, zero overlap; (3) text-conditional target uniformity, i.e. for every one of 72 distinct evidence+query texts a model could see, the routed target symbol is exactly uniform across the full mapping x codebook-order product -- PASS, proves no pure lexical shortcut on text alone; (4) higher-order joint mutual information between target/class and 2-way nuisance-field combinations -- FAIL: target__permxt, target__ordxt, target__layxt, target__pxt each ~0.276 bits (class-level joint MI stays clean, only the routed SYMBOL leaks, not the semantic class); (5) dependency-free bag-of-words shortcut classifier (5-fold CV within TRAIN, candidates restricted to each row's own valid symbol triple) -- borderline, 28.1% vs 33.3% chance, no evidence of an exploitable lexical shortcut consistent with finding (3). accepted_dataset_tokens remains 0; training_credit remains 0; this is tooling + a nuisance finding, not an admission event.",
+  "next": "Root-cause and fix the perm/ord/layout/polarity x template interaction in trigger2_dynamic_binding_blueprint_v2.py or its successor (likely: the per-template triple-crossing needs balancing so every (nuisance-field, template) cell is represented with equal frequency within each split, not just each field marginally). Rerun this audit after any generator change -- test_higher_order_joint_mi_finds_the_known_open_leak is intentionally written to FAIL today so a future fix shows up as a real, observed regression-test flip rather than being silently re-passed by accident. Then continue the still-open PR #1956 next-exact-gates list (exact 46-atom ABI inventory/manifest, small audited pilot materialization, joint TRAIN/VALIDATION/HOLDOUT split-manifest construction) before any admission attempt.",
+  "evidence": [
+    "tools/trigger2_dynamic_binding_blueprint_v2_leakage_audit_v1.py",
+    "tests/test_trigger2_dynamic_binding_blueprint_v2_leakage_audit_v1.py",
+    "tools/trigger2_dynamic_binding_blueprint_v2.py",
+    "research_entity/global/TRIGGERWORT_2_TRAINING_COURSE_DELTA_V35_SUPERVISOR_8_81_2026-08-26.md"
+  ],
+  "organ": "Anthropic / Claude Code (claude-code-lead)",
+  "origin_actor": "claude-code-lead",
+  "actor_role": "LEAD_RESEARCHER_PRIMARY_ADJUDICATOR",
+  "provider": "Anthropic"
+}

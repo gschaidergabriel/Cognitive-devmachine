@@ -1,0 +1,83 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:35:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "38e6acf349be57c0237cadd2793915e3fe22a30a",
+  "classification": "CURRENT_CONTROLLER_SOURCE_HARDENED_EXECUTION_ADMISSION_BLOCKED",
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "observed_head": "be42d08cde4e6356e536ce790c26f7d5c5aa0406",
+    "bound_research_sha": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "bound_research_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
+    "candidate_pull_request": 680,
+    "candidate_head_guard": "VERIFY_BEFORE_AND_AFTER_PRIVATE_FETCH",
+    "function_max_duration_seconds": 300,
+    "sandbox_timeout_ms": 2700000,
+    "detached_batch_timeout_ms": 2580000,
+    "terminal_cleanup": "DELETE_WITH_STOP_FALLBACK",
+    "whole_product_pass_surface": false
+  },
+  "research_candidate": {
+    "pull_request": 680,
+    "observed_head": "0a678b758b37a2df0cec54783750d4c4f315f59d",
+    "state": "OPEN_DRAFT_LIVE_FUSION_NOT_RUNTIME_FROZEN",
+    "comparison_from_bound_66b767": {
+      "ahead_by_commits": 7,
+      "contains_product_code_delta": true,
+      "material_paths": [
+        "the artefact/clayverse/engine.py",
+        "the artefact/tests/test_engine_graph_projection_completion_fence.py"
+      ]
+    },
+    "adjudication": "CURRENT_READY_OLDER_CONTROLLERS_MUST_NOT_RECEIVE_CURRENT_PRODUCT_RUNTIME_CREDIT"
+  },
+  "execution_admission": {
+    "vercel_exact_head_status": "FAILURE_CONTROL_PLANE_RATE_LIMIT",
+    "vercel_message": "Deployment rate limited; retry in 24 hours",
+    "test_steps_started": false,
+    "sandbox_started_for_exact_head": false,
+    "private_source_runtime_credit_added": 0,
+    "exact_oci_runtime_credit_added": 0,
+    "real_mistral_runtime_credit_added": 0,
+    "whole_product_runtime_credit_added": 0,
+    "daytona_plugin_available_to_this_organ": false
+  },
+  "secret_boundary": {
+    "owner_scoped_github_read_token_observed": false,
+    "credential_bearing_post_attempted": false,
+    "secret_synthesized": false
+  },
+  "source_hardening_observed": [
+    "300-second parent-function wall-clock no longer owns the long batch lifetime",
+    "private source token is command-scoped to the Sandbox fetch path and cleared before detached batch",
+    "post-fetch token absence fence remains explicit",
+    "detached batch timeout is bounded below the outer Sandbox timeout",
+    "start failure uses destructive Sandbox delete best-effort before stop fallback",
+    "terminal status uses destructive Sandbox delete before stop fallback",
+    "candidate PR head is verified immediately before source admission and again after fetch so a moving candidate fails closed"
+  ],
+  "remaining_frontier": [
+    "settle/freeze exact PR680 product candidate",
+    "rebind retained PR810 once to that exact head/tree and rebuild when Vercel admission is available",
+    "owner-authenticated scoped read-token POST for exact private source staging",
+    "full source regression plus exact OCI build/digest in authorized Sandbox",
+    "approved runtime Vault Mistral acquisition and canonical --mistral-once cognition",
+    "UnifiedDB pre-effect re-ingest plus EffectGate/EntityOS causal round-trip",
+    "Tier-1 recovery",
+    "full outer Sandbox/appliance destruction and same-digest recreation with new generation",
+    "Vault secret reacquisition, stale-result/no-blind-replay proof, second Mistral cognition",
+    "remaining Clerk/auth/PTY/dual-user/concurrency/persistence/network acceptance"
+  ],
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No immutable shared go-request experiment identity was exposed; no unusual intervention was executed."
+  },
+  "research_write": "COMMITTED",
+  "acceptance": "BLOCKED",
+  "blocker": "Exact current PR810 deployment is rate-limited before build while PR680 is still a moving live-fusion head; an older READY controller is intentionally stale and current source now fails closed on that mismatch."
+}

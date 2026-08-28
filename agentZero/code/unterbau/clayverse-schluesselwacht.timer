@@ -1,0 +1,11 @@
+[Unit]
+Description=Schluesselwacht taeglich 05:40 (mit Streuung, damit 9 Anbieter nicht auf die Sekunde genau getroffen werden)
+
+[Timer]
+OnCalendar=*-*-* 05:40:00
+RandomizedDelaySec=900
+Persistent=true
+Unit=clayverse-schluesselwacht.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,66 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_date_local": "2026-08-18",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "PR810_PINNED_SDK_SNAPSHOT_SOURCE_CORRECTION_NETWORK_POLICY_REGRESSION_RETAINED",
+  "canonical_main_observed_before_write": "bdbdf323a3c3ef4569e56abeee15bc81f7a37725",
+  "controller_head_observed": "c0dac53e9e5adabdad4f2cd2d1082d88746322a2",
+  "corrects_receipt_commit": "aa6a8e3cdb2660615c69816cc4dd31770fbfb5f8",
+  "also_refines_receipt_commit": "bdbdf323a3c3ef4569e56abeee15bc81f7a37725",
+  "pinned_upstream_sdk": {
+    "repository": "vercel/sandbox",
+    "package": "@vercel/sandbox@2.9.2",
+    "release_commit": "62a925deb7b0d28426e2b544b309470341222ba3",
+    "release_tree": "616ac359d546b00a073da44a269578bee1e0e7cc",
+    "sandbox_source_path": "packages/vercel-sandbox/src/sandbox.ts",
+    "sandbox_source_blob": "16fa1e86191f387f02c030b01a7d84c7f4f7a571",
+    "network_policy_path": "packages/vercel-sandbox/src/network-policy.ts",
+    "network_policy_blob": "74bbe6af675dae8a2591f177da8824c3312df12d"
+  },
+  "correction": {
+    "previous_claim": "The pinned public SDK did not admit Sandbox.create({ source: { type: snapshot, snapshotId } }).",
+    "status": "REJECTED_BY_EXACT_PINNED_SOURCE",
+    "exact_create_contract": "CreateSandboxParams explicitly includes source: { type: snapshot; snapshotId: string } and forbids runtime/image on that union branch.",
+    "network_policy_regression": "CONFIRMED: high-level NetworkPolicy is allow-all | deny-all | { allow, subnets }; mode/allowedDomains/allowedCIDRs/deniedCIDRs is not the pinned high-level contract."
+  },
+  "controller_convergence_observed": {
+    "source_guard_commit": "c0dac53e9e5adabdad4f2cd2d1082d88746322a2",
+    "sdk_allow_policy_enforced_for_phase1_tier1_tier2": true,
+    "source_snapshot_forbidden": true,
+    "source_fork_forbidden": true,
+    "distinct_declared_transfer_carrier_snapshot_admitted": true,
+    "carrier_cleanup_required_after_replacement_and_second_cognition": true,
+    "runtime_credit": 0
+  },
+  "tier2_remaining_gap": {
+    "classification": "CRASH_STABLE_RECOVERY_IDENTITY_NOT_YET_VERIFIED",
+    "current_handler_observation": "createDeclaredCarrier still derives carrierName from randomUUID and reports carrier identity primarily through the in-process response/error path.",
+    "counter_reality": "If the controller process dies after source.delete() but before the replacement receipt is durably returned, a later process may not know which independent carrier/snapshot to recover from.",
+    "preferred_repair": "Bind the distinct declared-transfer carrier to a deterministic, collision-safe recovery identity derived from immutable source/research/manifest identity or persist an equivalently recoverable typed pointer outside the deleted source before the delete boundary; retry must locate and verify exact carrier/snapshot identity before replacement.",
+    "do_not_infer": "SDK-supported snapshot restore does not by itself prove snapshot lifetime, crash recovery, exact replacement identity, Tier2 PASS, or whole-product PASS."
+  },
+  "execution_admission": {
+    "last_exact_head_status_observed": "VERCEL_BUILD_RATE_LIMIT",
+    "actually_started_exact_current_head_build": false,
+    "product_runtime_executed_for_current_head": false,
+    "runtime_credit": 0,
+    "classification": "CONTROL_PLANE_EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE"
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "This delta is exact pinned-source adjudication and durable epistemic correction only; no new unusual intervention was added."
+  },
+  "epistemic_status": {
+    "snapshot_restore_sdk_contract_verified": true,
+    "network_policy_sdk_contract_verified": true,
+    "distinct_carrier_mechanism": "SOURCE_CANDIDATE",
+    "crash_stable_recovery_verified": false,
+    "tier2_runtime_verified": false,
+    "exact_oci_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "In the single retained PR810 lane, preserve the corrected SDK allow-policy and distinct-carrier snapshot path, make the carrier recovery identity crash-stable across controller-process loss after source deletion, bind guards to that exact mechanism, then obtain an actually-started exact-head authorized isolated build and execute source guards plus immutable PR686 OCI/provider/effect/Tier1/Tier2 recovery path before any runtime credit."
+}

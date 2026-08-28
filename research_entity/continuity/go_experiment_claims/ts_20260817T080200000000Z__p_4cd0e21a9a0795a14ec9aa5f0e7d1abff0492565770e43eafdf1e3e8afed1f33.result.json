@@ -1,0 +1,34 @@
+{
+  "schema": "clay-go-experiment-result/v1",
+  "claim_path": "research_entity/continuity/go_experiment_claims/ts_20260817T080200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+  "trigger_key": "ts_20260817T080200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
+  "experiment_name": "recovery_receipt_semantic_forgery_discriminator",
+  "source_identity": {
+    "research_main_before_claim": "83c171c6881c7790904f1af955850341e69127f4",
+    "candidate_pr": 552,
+    "candidate_pr_head": "b35ba4ad2ff4d45dcd27506ba8ad26815a74e523",
+    "recovery_py_git_blob": "1d2a39df46eb8df1af2e67f8e08df08472aa6f56",
+    "effect_journal_py_git_blob": "19b248eb9e04fdf4af6cc678b6faefd3c78a2d23"
+  },
+  "execution_surface": "OpenAI isolated non-production container",
+  "intervention": "Evaluate the exact PR552 persisted-outcome decoder semantics plus the current EffectJournal credit law against 18 structurally admitted redacted-outcome-v1 envelopes whose digest/byte/safe-field values are syntactically valid but not semantically bound to any available raw outcome.",
+  "observed_result": {
+    "cases": 18,
+    "trusted_and_positive_credit": 18,
+    "example": {
+      "audit": "redacted-outcome-v1",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "bytes": 0,
+      "ok": true,
+      "status": "VERIFIED",
+      "capability": "entityos.exec",
+      "decoder_trusted": true,
+      "causal_credit": 1.0
+    },
+    "classification": "FAIL_COUNTEREXAMPLE_FOUND"
+  },
+  "interpretation": "PR552 fixes live/recovery outcome-hash identity for canonical receipts, but its structural receipt decoder cannot prove that copied safe fields such as ok remain semantically bound to the unavailable raw outcome. Legacy/reconstructed recovery therefore must not mint positive learning credit from the redacted receipt alone. Preserve the inner raw-outcome digest for identity while suppressing positive reconstructed credit unless a stronger independently verifiable semantic binding exists.",
+  "whole_product_evidence": false,
+  "status": "FAIL",
+  "next_step": "Strengthen the existing PR552 recovery line so reconstructed persisted effect receipts preserve raw-outcome hash identity but receive zero positive causal credit; add a regression that the forged canonical envelope cannot reward recovery."
+}

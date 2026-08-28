@@ -1,0 +1,68 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "reentry": {
+    "research_main_observed_before_receipt": "cba1ed71f6f78e5db0620ee30d2734e2141914de",
+    "retained_executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_executor_pr": 810,
+    "ready_preview_commit": "e0cb4bc77513e135821642b7adfa73c57d490c0b",
+    "miniunifieddb_fusion_guard_commit": "d0c1ec632c6086c56977b4b4963574b07d416304",
+    "ready_preview_contains_fusion_guard": true,
+    "ready_preview_successor_distance": 10
+  },
+  "capsule": {
+    "id": "HCU_MINIUNIFIEDDB_MODEL_EXECUTION_INFERENCE_V4_PROVENANCE_ACCEPTANCE/v3",
+    "manifest_schema": "HCU_SOURCE_CAPSULE_MANIFEST/v7",
+    "fixed_command": "python3 test_model_execution_inference_v4_exact.py",
+    "canonical_model_execution_admission_store_git_blob": "0d1b1aa1f4c71f167b94374bc359d8dd2c07eed7",
+    "integration_test_git_blob": "8c75c44d8fdf95d23fb3de07c466be802b1a211c",
+    "actual_model_executor_io_declared": false,
+    "whole_runtime_credit_declared": false
+  },
+  "execution_attempt": {
+    "deployment_state_observed": "READY",
+    "first_request_outcome": "HTTP_302_VERCEL_SSO_REDIRECT_BEFORE_FUNCTION",
+    "authorized_access_helper_used": true,
+    "second_request_outcome": "HTTP_302_VERCEL_SSO_REDIRECT_BEFORE_FUNCTION",
+    "function_invocation_observed": false,
+    "sandbox_create_observed": false,
+    "fixed_command_executed": false,
+    "component_regression_result": "NOT_OBSERVED",
+    "classification": "DEPLOYMENT_PROTECTION_AUTH_BLOCK_NOT_PRODUCT_REGRESSION",
+    "negative_evidence_preserved": true
+  },
+  "interpretation": {
+    "observed": "The exact successor preview built READY, but both protected endpoint fetches were redirected to Vercel SSO before the serverless function result was observed.",
+    "not_observed": "No Function body result, Sandbox identity, Sandbox.create, command exit code, test stdout/stderr, result digest, secret-fence result or cleanup result was observed from this attempt.",
+    "credit_rule": "A READY deployment or authentication redirect is not function invocation evidence and cannot mint component, model, J-Space or whole-product runtime credit."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_SOURCE_AND_DEPLOYMENT_CARRIER; EXECUTION_EVIDENCE_BLOCKED_BEFORE_FUNCTION",
+    "track_b_hcu_and_typed_entry_fabric": "ADVANCED_SOURCE: canonical MiniUnifiedDB invocation admission remains bound into the retained executor component path; runtime result not observed",
+    "track_c_global_jspace_gwt_and_training_readiness_free_only": "ADVANCED_SOURCE: successor lane continues exact Inference/v4-to-JSpace closure; no model/J-Space runtime promotion from the protected request"
+  },
+  "coordination": {
+    "unusual_experiment_performed": false,
+    "unusual_experiment_count_added": 0,
+    "atomic_lease": "NOT_CLAIMED_NO_UNUSUAL_INTERVENTION",
+    "paid_fallback_attempted": false,
+    "together_preflight_attempted": false
+  },
+  "credit": {
+    "component_runtime_credit_from_this_attempt": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Re-enter current PR810 and PR1263. Preserve SOURCE_REBIND_REQUIRED until the single fixed executor carries one immutable exact donor production/regression/transitive closure. When an already-admitted FREE_ONLY protected-function path is actually invokable, execute the fixed deterministic capsule and capture exact Function/Sandbox/command/result/cleanup evidence. Do not reinterpret SSO/authentication or READY deployment state as runtime evidence and do not use paid fallback."
+}

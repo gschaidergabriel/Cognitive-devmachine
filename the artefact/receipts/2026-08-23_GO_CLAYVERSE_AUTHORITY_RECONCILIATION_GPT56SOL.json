@@ -1,0 +1,40 @@
+{
+  "schema": "CLAYVERSE_GO_AUTHORITY_RECONCILIATION/v4",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "initial_main_sha": "dbb73ac784fab32d625297ff9272989b861ae909",
+  "authority_merge": "0b80a8f5d1e5657787482eadfc4315db9cb75cd0",
+  "observation": {
+    "authority_split_brain": "RESOLVED_AT_SOURCE_BY_PR_1167",
+    "parallel_drift": ["PR #1155 stale Mini Entity cross-bind", "PR #1158 historical Control 4.3 Mini Entity selection", "PR #1166 historical Mini Entity assertion"],
+    "swarm_drift": [
+      "GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT named tools/run_go_zero_swarm.py but no implementation was found",
+      "legacy tools/run_free_go_swarm.py hard-codes MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+      "legacy controller injects Mini Entity task language"
+    ]
+  },
+  "delta": {
+    "authority_reconciled_to": "CLAYVERSE_SINGLE_CONTAINER",
+    "stage": "CLAYVERSE_ARTIFACT",
+    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+    "control_override": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_4_CLAYVERSE_PRODUCT_AUTHORITY.json",
+    "swarm_contract": "research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md fails closed until a ClayVerse controller is admitted",
+    "swarm_admission_assertion": "tools/assert_clayverse_swarm_admission.py",
+    "legacy_swarm_controller": "QUARANTINED_BY_CONTROL_4_4",
+    "inherited_safety_preserved": ["canonical entity/version/revision/state-hash binding", "every-turn identity guard", "FREE_ONLY", "Together forbidden", "VPS testing forbidden", "exact isolated execution required for runtime credit", "Frank harness protected"]
+  },
+  "bounded_evidence": {
+    "earlier_authority_validator_mechanism": "py_compile PASS; focused synthetic regressions 6/6 PASS",
+    "current_exact_branch_execution": "UNOBSERVED",
+    "github_actions_prior_head": "two workflow failures with job steps=null; execution admission failure before visible test steps, not test failure",
+    "vercel_sandbox_start_exec": "NOT_EXPOSED",
+    "provider_swarm_started": false,
+    "vps_test_used": false,
+    "together_used": false,
+    "paid_training_used": false,
+    "unusual_experiment": "NOT_CONSUMED_NO_SHARED_IMMUTABLE_MACROCYCLE_LEASE",
+    "whole_product_runtime_credit": 0
+  },
+  "next_gate": "Run current authority + swarm admission assertions, exact-current full ClayVerse regressions, OCI build/startup and image digest binding on an actually-started authorized isolated executor; then continue Clerk/PTY/tmux/Claude/UnifiedDB/MicroClay/EffectGate/EntityOS/recovery acceptance."
+}

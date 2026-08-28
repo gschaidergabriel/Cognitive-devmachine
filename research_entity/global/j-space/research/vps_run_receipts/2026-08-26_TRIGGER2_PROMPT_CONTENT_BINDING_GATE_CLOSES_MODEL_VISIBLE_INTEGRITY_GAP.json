@@ -1,0 +1,27 @@
+{
+  "schema": "CLAY_TRIGGER2_PROMPT_CONTENT_BINDING_GATE_CLOSURE/v1",
+  "date": "2026-08-26",
+  "follows_up_on": "research_entity/global/j-space/research/vps_run_receipts/2026-08-26_TRIGGER2_DB_MATCH_PRODUCTION_ASSEMBLER_MICROPILOT_V1.json",
+  "gap_closed": "None of the 5 previously wired v4 per-row gates bound or verified row['prompt'] (model_visible content). A row could pass full candidate_pre_admission_pass with an arbitrary swapped prompt.",
+  "what_was_built": [
+    "tools/trigger2_trusted_hyperposition_pilot_generator_v1.py: additive-only render_prompt(case_id, parameters) pure function, pinned prompt text for CASE_ID (T2_GP_PILOT_DB_MATCH_V1) only; raises ValueError fail-closed for any other case_id or mismatched parameters. No existing exported symbol changed.",
+    "tools/trigger2_prompt_content_binding_gate_v1.py: new gate, same recompute-dont-trust pattern as A02's producer.produce() -- independently calls generator.render_prompt(case_id, parameters) itself, does not trust row['prompt'] or any caller-declared hash, fails closed on mismatch.",
+    "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py: wired as 6th and final per-row check (required_order now has 6 entries); docstring, closed_p0/remaining_p0 self-documentation updated.",
+    "tools/trigger2_db_match_row_assembler_v1.py: now derives prompt via generator.render_prompt() instead of freely-authored text, attaches prompt_binding_evaluator_only (sha256 + render_source).",
+    "research_entity/global/j-space/research/TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json: generator.source_sha256 re-pinned to the new additive generator file bytes, documented inline; git_commit_sha left pointing at the prior commit pending a fast-follow update once this change's own commit sha is known.",
+    "tests: 8 new dedicated unit tests (tests/test_trigger2_prompt_content_binding_gate_v1.py), 3 new/updated tests in the assembler suite (prompt-tamper test converted from tracked xfail to a real passing fail-closed assertion, plus 2 new forgery tests), 2 new/updated tests in the v4 composer's own dedicated test file."
+  ],
+  "verification": {
+    "method": "full regression run across every test file importing the trusted generator module or the v4 composer, plus the repository-bound A02 acceptance test, after the re-pin",
+    "result": "88 passed, 0 failed, 0 skipped, 0 xfail remaining for this area",
+    "previously_tracked_xfail_test": "tests/test_trigger2_db_match_row_assembler_v1.py::test_tampered_prompt_after_generation_receipt_fails_closed -- now asserts real fail-closed behavior, PROMPT_CONTENT_BINDING appears in v4 failures on prompt tamper."
+  },
+  "scope_and_limits": [
+    "Only closes the gap for the DB_MATCH case. HIST_CHAIN has no pinned prompt yet -- moot for now since HIST_CHAIN cannot pass A02 (empty-history scope).",
+    "Still does not create diverse content. render_prompt() returns one fixed pinned string for the one fixed case; P1_DIVERSE_GENERATOR_AUTHORITY still not built and will need its own binding, not a copy of this one string.",
+    "positive_rows_admitted remains 0. This closes a soundness gap in the certification chain; it does not admit any row to any canonical dataset.",
+    "git_commit_sha in the generator authority is stale until a fast-follow commit updates it -- flagged so it is not silently forgotten."
+  ],
+  "positive_rows_admitted": 0,
+  "positive_rows_candidate_pre_admission_pass": 1
+}

@@ -1,0 +1,78 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:50:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "2e114efc9ee196bd115a2c80b7c90bf64c0cb130",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+  "controller_pr": 810,
+  "controller_head_observed": "92edcbc19abb2e88a24989105783c65f6f2af371",
+  "controller_state_observed": {
+    "draft": true,
+    "mergeable": true
+  },
+  "deltas_by_this_organ": [
+    {
+      "commit": "9367d587984bffedaddc0b49f4313abee2e32541",
+      "path": "mcp/vercel-sandbox-mcp/scripts/run-tier1-recovery.sh",
+      "classification": "SOURCE_CANDIDATE_RECOVERY_ACCEPTANCE_HARDENING",
+      "change": "Tier-1 interrupted-no-effect recovery now crosses two separate OCI container processes over the same persisted UnifiedDB/state. The first process leaves one canonical active no-effect turn; the second process requires that turn to survive the process boundary, invokes recovery, requires one generation advance and one abort/re-entry, and fences the previously VERIFIED entityos.exec effect against replay or mutation.",
+      "receipt_shape_alignment": "Uses the actual PR686 redacted effect receipts: target includes sha256+bytes; argv includes argc+sha256+bytes.",
+      "runtime_credit": 0
+    },
+    {
+      "commit": "8aca83fcb68af9cafd75abe0d9cc4f2fe1f82fe4",
+      "path": "mcp/vercel-sandbox-mcp/lib/effect-tier1-handler.js",
+      "classification": "SOURCE_CANDIDATE_HANDOFF_FENCE",
+      "change": "Tier-1 handoff requires process-boundary recovery evidence, no verified-effect replay, exact interrupted-turn recovery counters, checkpoint/state hash, HCP/Vault-only runtime secret path, and deny-all after bounded network use.",
+      "runtime_credit": 0
+    }
+  ],
+  "coordination": {
+    "parallel_writes_observed": true,
+    "deltas_remain_ancestors_of_observed_controller_head": true,
+    "duplicate_semantic_path_added": false,
+    "optimistic_locking_respected": true
+  },
+  "tier2_source_state": {
+    "observed_direction": "sanitized declared transfer -> distinct carrier sandbox -> distinct carrier snapshot -> delete source sandbox -> fresh persistent:false replacement from carrier snapshot",
+    "source_snapshot_forbidden_by_current_guard": true,
+    "carrier_declared_transfer_only_guarded": true,
+    "source_delete_before_replacement_create_guarded": true,
+    "replacement_nonpersistent_guarded": true,
+    "runtime_credit": 0
+  },
+  "new_runtime_falsifier": {
+    "path": "mcp/vercel-sandbox-mcp/lib/tier2-recreate-handler.js",
+    "observed_at_controller_head": "92edcbc19abb2e88a24989105783c65f6f2af371",
+    "issue": "Tier-2 net() still uses networkPolicy {allow: domains} while the current Vercel Sandbox network-policy contract uses mode=custom with allowedDomains/allowedCIDRs/deniedCIDRs.",
+    "comparison": "The Tier-1 handler already uses the current custom-policy shape.",
+    "durable_pr_comment_id": 5318796647,
+    "required_before_runtime_credit": "Rebind Tier-2 to the current provider network-policy shape and guard against regression, then execute on an admitted isolated runtime.",
+    "runtime_credit": 0
+  },
+  "execution_admission": {
+    "latest_canonical_research_receipt": "the artefact/receipts/2026-08-18_GO_CONTROLLER_REENTRY_EXECUTION_ADMISSION_GPT56SOL_0147.json",
+    "canonical_receipt_commit": "2e114efc9ee196bd115a2c80b7c90bf64c0cb130",
+    "canonical_receipt_status": "FAILURE_CONTROL_PLANE_ADMISSION",
+    "canonical_receipt_description": "Deployment rate limited; no latest-head build, source guard, Sandbox, OCI or Tier-2 execution started.",
+    "this_organ_latest_deployment_listing_found_new_exact_head_deployment": false,
+    "clayverse_test_failure": false,
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "new_experiment_count_by_this_organ": 0,
+    "reason": "No additional unusual experiment was introduced. Snapshot lifecycle work remains an ordinary provider-contract discriminator and runtime admission is blocked."
+  },
+  "next_exact_step": "First repair the Tier-2 Vercel networkPolicy provider-contract mismatch without creating a second orchestration path. When Vercel admits exact-head work again, run the preview-fenced source guards/provider lifecycle discriminator, then the single retained PR686 exact OCI -> Mistral/Vault -> EffectGate/EntityOS -> Tier1 cross-process recovery -> sanitized carrier destructive Tier2 -> replacement restore -> second cognition -> auth/PTY/dual-user acceptance chain. Preserve zero runtime and whole-product credit until actually observed."
+}

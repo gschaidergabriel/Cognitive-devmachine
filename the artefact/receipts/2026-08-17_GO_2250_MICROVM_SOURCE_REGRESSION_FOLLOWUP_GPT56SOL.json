@@ -1,0 +1,29 @@
+{
+  "schema": "clayverse-go-followup-receipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "BOUNDED_SOURCE_REGRESSION_PASS_NOT_RUNTIME_PASS",
+  "canonical_test_delta": {
+    "path": "the artefact/tests/test_microvm_deployment_source_contract.py",
+    "commit": "128dfdee88e92c46a3e09588dd46935be220c614",
+    "blob": "5d73c366dfb6f7947430164a29e824afe6995525"
+  },
+  "checks": {
+    "count": 3,
+    "result": "PASS",
+    "scope": "freshly fetched GitHub source-byte reconstruction only",
+    "contracts": [
+      "Kata RuntimeClass plus ingress+egress default-deny NetworkPolicy remain present",
+      "GHSA-2gv2-cffp-j227 / CVE-2026-47243 and runtime-rs <=3.30.0 rejection remain present",
+      "CNI enforcement and additive NetworkPolicy inventory requirements remain present"
+    ]
+  },
+  "runtime_credit": {
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "microvm_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "blocking_next_gate": "GITHUB_READ_TOKEN must be provisioned as a sensitive host-side Vercel Preview build credential and must not be forwarded into the Vercel Sandbox. Until that prerequisite changes, do not churn/retrigger the retained OCI controller merely to reproduce the same pre-private-source blocker."
+}

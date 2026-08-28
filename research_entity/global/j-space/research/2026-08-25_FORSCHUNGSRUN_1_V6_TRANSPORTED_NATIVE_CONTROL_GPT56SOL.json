@@ -1,0 +1,109 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_V6_TRANSPORTED_NATIVE_CONTROL/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_after_v6_test_write": "2b57eb799de672d3ae724af9e9fcd25a51d609c4",
+  "goal": "Drive the exact Qwen3-0.6B target by model-internal J-Space vectors with evidence strong enough to distinguish semantic control from output/readout/compliance/scenario/quantization shortcuts.",
+  "observed_current_runtime_boundary": {
+    "native_llamacpp_cvec_component_runtime_credit": true,
+    "native_component_scope": "PASS_FRESH_HOLDOUT_MATCHED_CONTROLS_NATIVE_COMPONENT",
+    "canonical_semantics_promotion": false,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "vps_execution_state": {
+    "sandbox": "clay-direct-dev",
+    "owner_authority": "ACTIVE_FOR_ZERO_COST_SANDBOX_DEVELOPMENT_AND_RESEARCH",
+    "ordinary_dispatch_key": "clay-direct-dev-roundtrip-v1-g0000",
+    "ordinary_dispatch_claim_state": "LEGACY_FANOUT_QUARANTINED_NO_NEW_TRIGGER",
+    "legacy_matching_jobs_observed": 31,
+    "legacy_matching_jobs_terminal_at_audit": 0,
+    "runner_policy": "KEEP_SELF_HOSTED_LINUX_X64_OFFLINE_UNTIL_AFTER_2026-08-26T02:54:00Z_UNLESS_ALL_LEGACY_RUNS_ARE_EXPLICITLY_CANCELLED",
+    "terminal_clay_direct_dev_roundtrip_receipt_observed_this_run": false,
+    "new_vps_model_decode_executed_by_this_organ": false,
+    "reason": "Current idempotency/quarantine evidence forbids creating another generation-0 dispatch and the self-hosted runner is intentionally kept offline while legacy queued jobs drain. No available Actions-write surface exposes cancellation of those queued runs."
+  },
+  "durable_delta": {
+    "gate_source_commit": "9c8a1be9d1b3a65370a05c3fa986147448b41d62",
+    "gate_test_commit": "d9c2d98ad21550c0f5fa256cbfb4ad0dc1285896",
+    "gate_path": "tools/trigger1_jspace_promotion_gate_v6.py",
+    "test_path": "tests/test_trigger1_jspace_promotion_gate_v6.py",
+    "local_deterministic_regression": "7_OF_7_PASS",
+    "local_regression_scope": "AUTHORED_V6_GATE_LOGIC_ONLY_NOT_VPS_RUNTIME_EVIDENCE",
+    "new_full_native_candidate_field": "full_native_jspace_vector_control_candidate"
+  },
+  "v6_required_evidence": {
+    "blocked_semantic_basis": [
+      "matched AFFIRMATIVE/NEGATIVE/NEUTRAL scenario triplets",
+      "within-family centering",
+      "equal family weighting",
+      "restricted within-family permutation null",
+      "basis/calibration/holdout disjointness"
+    ],
+    "semantic_simplex": [
+      "adequately powered resolved ONE_DIMENSIONAL_SUPPORTED or TWO_DIMENSIONAL_REQUIRED decision",
+      "bound rank-analysis receipt"
+    ],
+    "downstream_transport": [
+      "nonterminal endpoint independent of intervention vector and output token identities",
+      "target-specific sign-sensitive displacement",
+      "nuisance controls fail to reproduce",
+      "transport rank bound to representation rank"
+    ],
+    "dual_readout": [
+      "exact prompt-boundary tokenization attestation",
+      "at least two context-valid codebook families",
+      "semantic-target x code-identity counterbalance",
+      "context-valid likelihood margin plus actual emitted/parsed decision",
+      "both readouts agree"
+    ],
+    "causal_matrix": [
+      "class-selective diagonal advantage",
+      "SIGN_FLIP reverses selectivity",
+      "NULL_VECTOR remains baseline-like",
+      "nuisance controls fail to reproduce",
+      "behavioral causal rank agrees with representation and transport rank"
+    ],
+    "native_carrier_geometry_for_full_candidate": [
+      "Q8_0 target-runtime basis independently reconstructed",
+      "imported full-precision basis excluded from parity decision",
+      "carrier-local norm calibration",
+      "subspace/principal-angle or equivalent alignment test",
+      "leave-one-family-out stability",
+      "permutation null",
+      "within-carrier causal matrix"
+    ]
+  },
+  "falsifiers_locked_by_tests": [
+    "scenario aliasing cannot promote",
+    "logit effect without emitted-decision agreement cannot promote",
+    "output change without independent downstream transport cannot promote",
+    "representation/transport/behavioral rank mismatch cannot promote",
+    "imported actuator without independently reconstructed target-carrier geometry cannot become full native J-Space control candidate",
+    "v6 evidence cannot override a v5 failure"
+  ],
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "COORDINATION_BLOCKED_NO_NEW_UNUSUAL_INTERVENTION",
+    "reason": "No canonical shared immutable go/request identity plus successful create-only unusual-experiment lease is available for a new native holdout intervention in this standalone Forschungsrun trigger."
+  },
+  "credit_change": {
+    "new_vps_runtime_credit": 0,
+    "new_model_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "After the quarantined self-hosted queue is terminal or explicitly cancelled and a canonical unusual-experiment lease is available, execute one exact-source clay-direct-dev native Qwen3-0.6B Q8_0 run that populates the v5+v6 evidence objects, including blocked triplets, resolved simplex rank, native target-carrier geometry, downstream nonterminal transport, dual output readout and class-selective causal matrix. Submit only that receipt-bound candidate to the composed promotion gates."
+}

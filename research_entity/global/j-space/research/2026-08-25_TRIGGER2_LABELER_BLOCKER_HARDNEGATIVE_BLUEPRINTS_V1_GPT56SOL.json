@@ -1,0 +1,196 @@
+{
+  "schema": "CLAY_TRIGGER2_LABELER_BLOCKER_HARDNEGATIVE_BLUEPRINTS/v1",
+  "date": "2026-08-25",
+  "local_time_context": "Asia/Phnom_Penh",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CURRENT_CANDIDATE_BLUEPRINTS_NONPROMOTING",
+  "authority": {
+    "observed_main_before_write": "5fd4bd93e46d01a236f1f29c6a06def2307f44ef",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "accepted_dataset_tokens_minted": 0
+  },
+  "purpose": "Convert exact-current adversarial failures of the first semantic-Hyperposition reference labeler into reusable hard-negative training blueprints without manufacturing positive D/E transition labels while the derivation-bound successor is still blocked.",
+  "source_evidence": [
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_REFERENCE_LABELER_V1_ADVERSARIAL_AUDIT_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_LABELER_CONVERGENCE_AUDIT_V1_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json"
+  ],
+  "global_blueprint_contract": {
+    "semantic_hyperposition_carrier_required": true,
+    "minimum_branch_count": 2,
+    "required_branch_tuple": ["v_semantic_value", "K_context_predicate", "E_plus", "E_minus", "F_falsifier", "T_validity_scope", "A_origin_provenance", "sigma_epistemic_status"],
+    "projection_is_non_destructive": true,
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "positive_jspace_causal_label_allowed": false,
+    "model_visible_projection": "Prompt/task state only; blocker IDs, evaluator verdicts, target labels, split metadata and provenance bookkeeping are excluded from model input.",
+    "training_eligibility": "FALSE_UNTIL_SUCCESSOR_GENERATOR_MATERIALIZES_ROWS_AND_ALL_GATES_PASS"
+  },
+  "examples": [
+    {
+      "example_id": "T2-HN-LAB-001",
+      "family": "DERIVATION_NOT_ASSERTION",
+      "phase": "D_E_PREPARATION",
+      "semantic_hyperposition_state": "Two live incompatible branches with no derived proof relation; observation metadata merely says effect=PROVE for branch b0.",
+      "prompt_blueprint": "A generator supplies an observation whose metadata says PROVE(b0), but the task-world facts/rules contain no derivation that proves b0. May U_update mark b0 PROVEN and permit later resolution?",
+      "correct_target": "REJECT. Caller/generator assertion of PROVE is not a reference label. Derive the effect from executable task-world semantics or a separately verified deterministic derivation receipt; keep the Hyperposition unresolved meanwhile.",
+      "anti_shortcut": "The token PROVE must not itself cause a proof transition.",
+      "source_blocker": "LABELER_ORACLE_EFFECT_SELF_ASSERTION",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-002",
+      "family": "DERIVATION_NOT_ASSERTION",
+      "phase": "D_E_PREPARATION",
+      "semantic_hyperposition_state": "Two live branches; observation metadata merely says FALSIFY(b1) while no branch prediction conflicts with the observed fact.",
+      "prompt_blueprint": "An observation is tagged FALSIFY for b1, but no deterministic relation between the observation and b1 is evaluated. Is setting b1=FALSIFIED a valid training label?",
+      "correct_target": "REJECT. A falsification label must be derived from branch semantics plus observation, not copied from caller metadata. Preserve b1 until a deterministic contradiction/falsifier relation is established.",
+      "anti_shortcut": "Effect-name copying is forbidden for both positive and negative updates.",
+      "source_blocker": "LABELER_ORACLE_EFFECT_SELF_ASSERTION",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-003",
+      "family": "DISCRIMINATOR_DERIVATION",
+      "phase": "D",
+      "semantic_hyperposition_state": "Three live branches have explicit predicted outcomes for a proposed discriminator; the supplied outcome object asserts b0 as winner without checking predictions.",
+      "prompt_blueprint": "A discriminator object names winner_branch_id=b0 and claims it separates all live branches, but the resolver never compares the observed result with each branch's predicted discriminator outcome. Resolve to b0?",
+      "correct_target": "REJECT AND KEEP UNRESOLVED. Compute the outcome partition from branch predictions and the observed discriminator result. Winner/separation fields cannot be self-authenticating labels.",
+      "anti_shortcut": "Syntactic completeness of a discriminator object is not discriminating evidence.",
+      "source_blocker": "DISCRIMINATOR_OUTCOME_SELF_ASSERTION",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-004",
+      "family": "DISCRIMINATOR_ADMISSIBILITY",
+      "phase": "D",
+      "semantic_hyperposition_state": "Two live branches; a discriminator is explicitly marked inadmissible but its declared winner/separation metadata is otherwise complete.",
+      "prompt_blueprint": "The proposed test is inadmissible under current capability/effect constraints yet claims full separation and b1 as winner. May it resolve the task-local Hyperposition?",
+      "correct_target": "NO. Fail closed before resolution. An inadmissible discriminator cannot create a valid resolution label even if its asserted winner/separation fields look complete.",
+      "anti_shortcut": "Information value never overrides admission/authority boundaries.",
+      "source_blocker": "INADMISSIBLE_DISCRIMINATOR_CAN_RESOLVE",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-005",
+      "family": "EVIDENCE_DEPENDENCE",
+      "phase": "E_D",
+      "semantic_hyperposition_state": "Branch b0 already has evidence e1 in dependence group g7. A second package e2 has a different ancestry string but the same independently-derived dependence group g7.",
+      "prompt_blueprint": "Can e2 count as a second independent support update solely because provenance_ancestry_id differs from e1 while both belong to dependence group g7?",
+      "correct_target": "NO. Different ancestry text does not establish independent evidence. The update must respect both immutable causal/provenance identity and dependence-group identity; correlated/repackaged evidence must not be double-counted.",
+      "anti_shortcut": "Worker/source count and ancestry-string diversity are not independence proof.",
+      "source_blocker": "INDEPENDENCE_GROUP_IGNORED",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-006",
+      "family": "EVIDENCE_REPLAY_IDENTITY",
+      "phase": "E_D",
+      "semantic_hyperposition_state": "Evidence ID e42 was already admitted with immutable causal/provenance identity pA. A replay uses the same e42 but altered ancestry pB.",
+      "prompt_blueprint": "Treat the replayed e42/pB object as fresh independent evidence because the ancestry field changed?",
+      "correct_target": "REJECT. The same evidence/causal identity cannot become a fresh fact by mutating ancestry metadata. Fail closed on contradictory replay identity and preserve the original provenance binding.",
+      "anti_shortcut": "Metadata mutation cannot mint evidence independence.",
+      "source_blocker": "EVIDENCE_ID_REPLAY_NOT_GLOBALLY_GUARDED",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-007",
+      "family": "UNIQUE_RESOLUTION_EXCLUSIVITY",
+      "phase": "D",
+      "semantic_hyperposition_state": "b0 is proven within the synthetic world; b1 is still live and semantically compatible with b0 rather than mutually exclusive.",
+      "prompt_blueprint": "Does proof of b0 alone justify resolving the Hyperposition to b0 when compatible b1 remains live?",
+      "correct_target": "NO. Proof of one compatible branch is not a unique-resolution certificate. Keep unresolved unless exclusivity/coverage semantics or a discriminator closes every competing live alternative relevant to the query.",
+      "anti_shortcut": "PROVEN does not mean UNIQUE when alternatives can co-exist.",
+      "source_blocker": "T2_LAB_F2_PROVE_TO_UNIQUE_RESOLUTION_NEEDS_EXCLUSIVITY_SEMANTICS",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-008",
+      "family": "UNIQUE_RESOLUTION_COVERAGE",
+      "phase": "D",
+      "semantic_hyperposition_state": "Three mutually exclusive live branches; a test distinguishes b0 from b1 but leaves b2 observationally identical to b0.",
+      "prompt_blueprint": "The observed test result favors b0 over b1 but cannot distinguish b0 from b2. Resolve to b0?",
+      "correct_target": "NO. The discriminator does not cover all live alternatives. Retain b0 and b2 and request a discriminator that separates the remaining equivalence class.",
+      "anti_shortcut": "Partial separation cannot be rounded up to unique resolution.",
+      "source_blocker": "DISCRIMINATOR_OUTCOME_SELF_ASSERTION",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-009",
+      "family": "BRANCH_PERMUTATION_INVARIANCE",
+      "phase": "A_D",
+      "semantic_hyperposition_state": "The same branch relations/evidence are serialized in two orders with renamed nonsemantic branch IDs.",
+      "prompt_blueprint": "Serialization 1 lists b0 first; serialization 2 permutes/renames branches but preserves all semantic relations. A resolver changes its semantic decision because the former first branch moved. Accept?",
+      "correct_target": "REJECT. Branch order and identifier are nuisance variables. The semantic state/update/resolution must be equivariant to consistent branch permutation/renaming.",
+      "anti_shortcut": "First-position and stable-ID preferences are forbidden semantic cues.",
+      "source_blocker": "REFERENCE_TESTS_MISS_NEGATIVE_CASES",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-010",
+      "family": "PROJECTION_NOT_DELETION",
+      "phase": "A_D",
+      "semantic_hyperposition_state": "A context projection hides b2 from the current workspace view while b2 remains valid in backing Hyperposition state.",
+      "prompt_blueprint": "Because b2 is not visible in the current projection, may the updater delete b2 from the backing branch set and later treat the episode as binary?",
+      "correct_target": "NO. Projection is a non-destructive view. Hidden branches remain recoverable with their branch-local evidence, falsifier, validity, provenance and epistemic type until an explicit valid state transition changes them.",
+      "anti_shortcut": "Visibility is not existence or validity.",
+      "source_blocker": "T2_LAB_F1_FULL_HP_SCHEMA_NOT_YET_ENFORCED",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-011",
+      "family": "SALIENCE_NOT_TRUTH",
+      "phase": "D_E",
+      "semantic_hyperposition_state": "b1 is the most urgent/actionable branch but b0 has the stronger independent evidence relation; neither is uniquely resolved.",
+      "prompt_blueprint": "The salience rank puts b1 first because it is urgent and actionable. May the model increase b1's truth status or collapse to b1?",
+      "correct_target": "NO. Salience controls attention/order only. It is neither probability nor evidence strength nor truth authority; branch resolution still requires the declared evidence/discriminator semantics.",
+      "anti_shortcut": "Attention priority must stay factorized from epistemic status.",
+      "source_blocker": "T2_LAB_F4_SALIENCE_IS_CORRECTLY_NONTRUTH_BUT_SEMANTICS_ARE_UNDERDETERMINED",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-LAB-012",
+      "family": "JSPACE_READABILITY_NOT_CAUSALITY",
+      "phase": "JSPACE_ACCEPTANCE",
+      "semantic_hyperposition_state": "A branch/class is linearly decodable and a steering vector changes output frequency, but no same-model lesion/shuffle/rescue or equivalent causal control binds the activation to the intended computation.",
+      "prompt_blueprint": "Can high probe accuracy plus a behavior shift under one steering vector be written into positive J-Space causal training labels?",
+      "correct_target": "NO. Treat readability/writeability as component evidence only. Positive causal J-Space labels require model-specific intervention evidence with appropriate controls and off-target/retention checks.",
+      "anti_shortcut": "Decodability and steerability do not automatically establish the intended causal semantic mechanism.",
+      "source_blocker": "VECTOR_WRITEABILITY_OR_DECODABILITY_DOES_NOT_MINT_SEMANTIC_CAUSAL_CONTROL",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    }
+  ],
+  "swarm_review": {
+    "DATASET_ARCHITECT": "PASS_AS_BLUEPRINT_ONLY: examples target exact measured/source-audited failure modes rather than invented positive transitions.",
+    "HYPERPOSITION_REVIEWER": "PASS_WITH_MATERIALIZATION_GATE: every future row must instantiate the full branch tuple and non-destructive projection, not merely append Hyperposition prose.",
+    "ADVERSARIAL_SHORTCUT_HUNTER": "PASS_AS_DESIGN: explicit lexical blocker IDs/evaluator verdicts must remain outside model-visible serialization; rendered descendants require nuisance/metadata leakage checks.",
+    "EPISTEMIC_PROVENANCE_REVIEWER": "PASS: examples preserve UNKNOWN/unresolved state and reject evidence independence by packaging/count alone.",
+    "FINAL_ARBITER": "ADMIT_AS_VERSIONED_CANDIDATE_BLUEPRINTS_ONLY; DO_NOT COUNT AS MATERIALIZED OR ACCEPTED TRAINING ROWS."
+  },
+  "successor_requirements": [
+    "Derivation-bound U_update_v2 computes effect from task-world semantics or a verified deterministic derivation receipt.",
+    "D_resolve_v2 derives partitions/winner consistency from branch predictions plus observed discriminator result and rejects inadmissible discriminators.",
+    "Evidence replay/independence logic binds immutable evidence/causal identity plus dependence group.",
+    "Full v/K/E+/E-/F/T/A/sigma branch tuple and projection visibility are machine-validated.",
+    "Unique resolution requires explicit mutually-exclusive/coverage semantics or an equivalent decisive criterion.",
+    "Branch-permutation, projection-not-deletion, forged-effect, forged-discriminator, inadmissible-discriminator, correlated-evidence and replay-mutation regressions pass.",
+    "Rendered model-visible descendants pass metadata-redaction, family/provenance split, nuisance-only decoder and conditional-MI gates."
+  ],
+  "credits": {
+    "new_hardnegative_blueprints": 12,
+    "materialized_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_positive_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Converge one derivation-bound full-tuple reference-labeler successor and adversarial property tests; only then materialize these blueprints and any positive D/E transition rows into a counterbalanced Hyperposition-native candidate corpus."
+}

@@ -1,7 +1,7 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "workspace_id": "frank-architecture-archaeology",
-  "status": "ACTIVE",
+  "status": "ACTIVE_INCOMPLETE_REQUIRED_OUTPUTS_PRESENT",
   "source_repository": "gschaidergabriel/Project-Frankenstein",
   "analysis_lenses": [
     "research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md",
@@ -22,22 +22,104 @@
     "ORIGINALITY_PRIOR_ART_QUEUE.json",
     "CURRENT_ARCHITECTURE_INHERITANCE_MATRIX.json"
   ],
-  "work_packages": {
-    "A-01-HISTORY-TIMELINE": {"status":"OPEN","goal":"Chronological architecture/version timeline from commit history and release docs."},
-    "A-02-MECHANISM-INVENTORY": {"status":"OPEN","goal":"Enumerate all material modules/mechanisms/aliases and first known versions."},
-    "A-03-COUPLING-GRAPH": {"status":"OPEN","goal":"Reconstruct cross-module recurrent coupling graph with timescales and state variables."},
-    "A-04-FAILURE-ATLAS": {"status":"OPEN","goal":"Extract bugs, regressions, negative results, ordering failures and root causes."},
-    "A-05-SUCCESS-ATLAS": {"status":"OPEN","goal":"Extract measured/reported successful mechanisms and reusable invariants."},
-    "A-06-GWT-LINEAGE": {"status":"OPEN","goal":"Trace workspace/attention/broadcast/reentry mechanisms and mathematics across versions."},
-    "A-07-PERSONALITY-SELF": {"status":"OPEN","goal":"Trace E-PQ, ego/body, self-knowledge, goals, reward and identity machinery."},
-    "A-08-MEMORY-LINEAGE": {"status":"OPEN","goal":"Trace Titan/LCME/Hippocampus/graph/retrieval/consolidation lineage."},
-    "A-09-LORA-LINEAGE": {"status":"OPEN","goal":"Trace all LoRA generations, SOMA, training targets, failures and measured deltas."},
-    "A-10-BOOT-STATE": {"status":"OPEN","goal":"Trace boot order, service lifecycle, snapshot/restart/recovery/state persistence sensitivities."},
-    "A-11-PAPERS": {"status":"OPEN","goal":"Read and connect all papers/research notes to implemented mechanisms and evidence."},
-    "A-12-ORIGINALITY": {"status":"OPEN","goal":"Prior-art queue and careful originality classification after native mechanism reconstruction."},
-    "A-13-CURRENT-INHERITANCE": {"status":"OPEN","goal":"Map each current FRANK/Harness/ClayCode component to reuse/adapt/retest/reject decisions."}
+  "current_inventory_snapshot": {
+    "evidence_class": "CURRENT_SOURCE_FILE_PRESENCE_ONLY",
+    "canonical_main_observed": "b237dc3cb915b49d30386a8a57ca9d887f75488e",
+    "observed_date": "2026-08-28",
+    "present_required_outputs": 11,
+    "missing_required_outputs": 0,
+    "completion_credit_from_presence": false,
+    "note": "All eleven named required output artifacts are present. Presence proves only that an output artifact exists. It does not prove exhaustive archaeology, runtime behavior, causal support, originality, prior-art exhaustion, or completion of the corresponding work package."
   },
-  "live_claims": [],
+  "required_output_status": {
+    "MECHANISM_INDEX.json": "PRESENT_PARTIAL_OPEN_COMPLETION",
+    "EMERGENT_COUPLING_GRAPH.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
+    "FAILURE_ATLAS.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
+    "SUCCESS_PATTERN_ATLAS.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
+    "BOOT_ORDER_AND_STATE_HISTORY.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
+    "LORA_HISTORY.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
+    "GWT_HISTORY.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
+    "MEMORY_HISTORY.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
+    "PERSONALITY_SELF_HISTORY.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
+    "ORIGINALITY_PRIOR_ART_QUEUE.json": "PRESENT_QUEUE_ONLY_OPEN_RESEARCH",
+    "CURRENT_ARCHITECTURE_INHERITANCE_MATRIX.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION"
+  },
+  "work_packages": {
+    "A-01-HISTORY-TIMELINE": {
+      "status": "OPEN",
+      "goal": "Chronological architecture/version timeline from commit history and release docs."
+    },
+    "A-02-MECHANISM-INVENTORY": {
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
+      "goal": "Enumerate all material modules/mechanisms/aliases and first known versions."
+    },
+    "A-03-COUPLING-GRAPH": {
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
+      "goal": "Reconstruct cross-module recurrent coupling graph with timescales and state variables."
+    },
+    "A-04-FAILURE-ATLAS": {
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
+      "goal": "Extract bugs, regressions, negative results, ordering failures and root causes."
+    },
+    "A-05-SUCCESS-ATLAS": {
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
+      "goal": "Extract measured/reported successful mechanisms and reusable invariants."
+    },
+    "A-06-GWT-LINEAGE": {
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
+      "goal": "Trace workspace/attention/broadcast/reentry mechanisms and mathematics across versions."
+    },
+    "A-07-PERSONALITY-SELF": {
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
+      "goal": "Trace E-PQ, ego/body, self-knowledge, goals, reward and identity machinery."
+    },
+    "A-08-MEMORY-LINEAGE": {
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
+      "goal": "Trace Titan/LCME/Hippocampus/graph/retrieval/consolidation lineage."
+    },
+    "A-09-LORA-LINEAGE": {
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
+      "goal": "Trace all LoRA generations, SOMA, training targets, failures and measured deltas."
+    },
+    "A-10-BOOT-STATE": {
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
+      "goal": "Trace boot order, service lifecycle, snapshot/restart/recovery/state persistence sensitivities."
+    },
+    "A-11-PAPERS": {
+      "status": "OPEN",
+      "goal": "Read and connect all papers/research notes to implemented mechanisms and evidence."
+    },
+    "A-12-ORIGINALITY": {
+      "status": "QUEUE_PRESENT_OPEN_RESEARCH_NO_NOVELTY_FINDING",
+      "goal": "Prior-art queue and careful originality classification after native mechanism reconstruction."
+    },
+    "A-13-CURRENT-INHERITANCE": {
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
+      "goal": "Map each current FRANK/Harness/ClayCode component to reuse/adapt/retest/reject decisions."
+    }
+  },
+  "live_claims": [
+    {
+      "claim": "All eleven named required archaeology output files are present at the observed canonical snapshot.",
+      "evidence_class": "CURRENT_SOURCE_FILE_PRESENCE_ONLY",
+      "scope": "REQUIRED_OUTPUT_INVENTORY_ONLY",
+      "promotion_boundary": "No work-package completion, runtime, causal, originality, prior-art exhaustion, model, training or whole-product credit."
+    },
+    {
+      "claim": "ORIGINALITY_PRIOR_ART_QUEUE.json contains a conservative search/claim-chart queue and explicitly records zero novelty, patentability, independent-invention and world-first findings.",
+      "evidence_class": "CURRENT_SOURCE",
+      "scope": "PRIOR_ART_RESEARCH_QUEUE_ONLY",
+      "promotion_boundary": "Queue presence is not a novelty determination."
+    }
+  ],
   "completed_receipts": [],
-  "last_updated": "2026-08-09"
+  "next_high_information_actions": [
+    "Reconstruct first verified accessible Git appearance and removal/supersession windows for every material mechanism family before calling the historical timeline exhaustive.",
+    "Deepen EMERGENT_COUPLING_GRAPH.json into commit/time-window-qualified coexistence topology and distinguish source wiring from measured causal use edge by edge.",
+    "Extend BOOT_ORDER_AND_STATE_HISTORY.json backward and forward in Git chronology and derive the exact service/dependency/persistence-lifetime graph before marking A-10 complete.",
+    "Deepen GWT_HISTORY.json, MEMORY_HISTORY.json, LORA_HISTORY.json and PERSONALITY_SELF_HISTORY.json from grounded partials toward exhaustive lineage while preserving exact family/provenance and negative-evidence boundaries.",
+    "Execute element-by-element prior-art claim charts only after each native mechanism is reconstructed; preserve broad prior art and near-misses rather than optimizing toward novelty.",
+    "Reconcile source conflicts across all partial outputs into CURRENT_ARCHITECTURE_INHERITANCE_MATRIX.json without promoting component/source/history evidence into current runtime acceptance."
+  ],
+  "last_updated": "2026-08-28"
 }

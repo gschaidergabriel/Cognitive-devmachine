@@ -1,0 +1,181 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_08B_CHECKPOINT_IDENTITY/v1",
+  "utc_timestamp": "2026-08-27T11:41:59Z",
+  "candidate_id": "QWEN35_08B_HUIHUI_ABLITERATED_PRODUCTION",
+  "repo": "huihui-ai/Huihui-Qwen3.5-0.8B-abliterated",
+  "requested_revision": "4813135658fe51b2e535b8e77927d2f23909ce42",
+  "local_dir": null,
+  "note": "Measured via HF Hub API files_metadata (real LFS sha256 blobs) + direct raw-file fetch for non-LFS text files, not a local download -- same real hashes either way, this checkpoint was already downloaded and run multiple times today in the claylab sandbox for the actual production adapter.",
+  "file_manifest": [
+    {
+      "path": ".gitattributes",
+      "size": 1570,
+      "sha256": "34448b82c17d60fec9b65b1f093c115ddbaadc04beb1b0140b6bfed2e012a930"
+    },
+    {
+      "path": "LICENSE",
+      "size": 11544,
+      "sha256": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a"
+    },
+    {
+      "path": "README.md",
+      "size": 2488,
+      "sha256": "a710a5cc0b2a7a25e2766400af36125b3dcb3efa4cb00ffe5e55ff28bd17dfb9"
+    },
+    {
+      "path": "chat_template.jinja",
+      "size": 7755,
+      "sha256": "273d8e0e683b885071fb17e08d71e5f2a5ddfb5309756181681de4f5a1822d80"
+    },
+    {
+      "path": "config.json",
+      "size": 2907,
+      "sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204"
+    },
+    {
+      "path": "merges.txt",
+      "size": 3353259,
+      "sha256": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d"
+    },
+    {
+      "path": "model.safetensors-00001-of-00001.safetensors",
+      "size": 1746942600,
+      "sha256": "37b0b6be0bf8e4d4ac025e229872d894d43d2b0cb946cfe237b1e60f154013ea"
+    },
+    {
+      "path": "model.safetensors.index.json",
+      "size": 50900,
+      "sha256": "d8a08838a613b025eb7952ed9db11696213e57e76a375661ef5c12f9dd5dcf4e"
+    },
+    {
+      "path": "preprocessor_config.json",
+      "size": 390,
+      "sha256": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516"
+    },
+    {
+      "path": "tokenizer.json",
+      "size": 12807982,
+      "sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42"
+    },
+    {
+      "path": "tokenizer_config.json",
+      "size": 16709,
+      "sha256": "49e2b6e395f959f077f1e992b338919c0d4a9732fc6e613995e06557f843500c"
+    },
+    {
+      "path": "video_preprocessor_config.json",
+      "size": 385,
+      "sha256": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13"
+    },
+    {
+      "path": "vocab.json",
+      "size": 6722759,
+      "sha256": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003"
+    }
+  ],
+  "file_manifest_sha256": "0eaa226d325c3c0c4e1dee65c477d4435b4e87f96b01f78d81eeb6e13604cd31",
+  "total_bytes": 1769921248,
+  "config_json_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+  "tokenizer_config_json_sha256": "49e2b6e395f959f077f1e992b338919c0d4a9732fc6e613995e06557f843500c",
+  "chat_template_jinja_sha256": "273d8e0e683b885071fb17e08d71e5f2a5ddfb5309756181681de4f5a1822d80",
+  "tokenizer_json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+  "config": {
+    "architectures": [
+      "Qwen3_5ForConditionalGeneration"
+    ],
+    "image_token_id": 248056,
+    "model_type": "qwen3_5",
+    "text_config": {
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "attn_output_gate": true,
+      "dtype": "bfloat16",
+      "eos_token_id": 248044,
+      "full_attention_interval": 4,
+      "head_dim": 256,
+      "hidden_act": "silu",
+      "hidden_size": 1024,
+      "initializer_range": 0.02,
+      "intermediate_size": 3584,
+      "layer_types": [
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention"
+      ],
+      "linear_conv_kernel_dim": 4,
+      "linear_key_head_dim": 128,
+      "linear_num_key_heads": 16,
+      "linear_num_value_heads": 16,
+      "linear_value_head_dim": 128,
+      "max_position_embeddings": 262144,
+      "mlp_only_layers": [],
+      "model_type": "qwen3_5_text",
+      "mtp_num_hidden_layers": 1,
+      "mtp_use_dedicated_embeddings": false,
+      "num_attention_heads": 8,
+      "num_hidden_layers": 24,
+      "num_key_value_heads": 2,
+      "rms_norm_eps": 1e-06,
+      "tie_word_embeddings": true,
+      "use_cache": true,
+      "vocab_size": 248320,
+      "mamba_ssm_dtype": "float32",
+      "rope_parameters": {
+        "mrope_interleaved": true,
+        "mrope_section": [
+          11,
+          11,
+          10
+        ],
+        "rope_type": "default",
+        "rope_theta": 10000000,
+        "partial_rotary_factor": 0.25
+      }
+    },
+    "tie_word_embeddings": true,
+    "transformers_version": "4.57.0.dev0",
+    "video_token_id": 248057,
+    "vision_config": {
+      "deepstack_visual_indexes": [],
+      "depth": 12,
+      "hidden_act": "gelu_pytorch_tanh",
+      "hidden_size": 768,
+      "in_channels": 3,
+      "initializer_range": 0.02,
+      "intermediate_size": 3072,
+      "model_type": "qwen3_5",
+      "num_heads": 12,
+      "num_position_embeddings": 2304,
+      "out_hidden_size": 1024,
+      "patch_size": 16,
+      "spatial_merge_size": 2,
+      "temporal_patch_size": 2
+    },
+    "vision_end_token_id": 248054,
+    "vision_start_token_id": 248053
+  },
+  "identity_complete": true,
+  "revision_matches_pinned": true,
+  "lora_adapter_note": "This receipt identifies the BASE checkpoint only. The actual production model also requires the Together-trained LoRA adapter on top (run 3: ft-5b6d4ced-21d1, herzradgraz_ca05/Qwen3.5-0.8B-trigger2-b0b6-diag-v4-hyperpos-5e9da2db) -- adapter identity is separately tracked via its Together job ID and adapter_config.json, not folded into this base-checkpoint receipt."
+}

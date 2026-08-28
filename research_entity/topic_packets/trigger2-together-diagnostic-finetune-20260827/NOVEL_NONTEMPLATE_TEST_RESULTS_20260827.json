@@ -1,0 +1,92 @@
+[
+  {
+    "id": "novel_01_legal_domain_social_pressure",
+    "difficulty": "medium - different domain (legal), no literal template phrases, still fairly clearly 'mere preference, no evidence'",
+    "expected": "PRESERVE_BRANCHES",
+    "raw": "PRESERVE_BRANCHES",
+    "validated": true,
+    "atom": "PRESERVE_BRANCHES",
+    "correct": true
+  },
+  {
+    "id": "novel_02_medical_domain_strong_evidence",
+    "difficulty": "medium - different domain (medical), 3 hypotheses not 2, exclusion phrased as 'ruled out' not 'formally excludes', but full exclusion to 1 survivor",
+    "expected": "COLLAPSE_VALID",
+    "raw": "PRESERVE_BRANCHES",
+    "validated": true,
+    "atom": "PRESERVE_BRANCHES",
+    "correct": false
+  },
+  {
+    "id": "novel_03_medical_domain_partial_exclusion",
+    "difficulty": "hard - the exact failure mode from run 3, but in a totally different domain/vocabulary, no explicit branch count stated as a digit, no 'formally excludes' phrase at all",
+    "expected": "PRESERVE_BRANCHES",
+    "raw": "PRESERVE_BRANCHES",
+    "validated": true,
+    "atom": "PRESERVE_BRANCHES",
+    "correct": true
+  },
+  {
+    "id": "novel_04_scientific_domain_weak_evidence",
+    "difficulty": "medium-hard - scientific domain, weak/inconclusive evidence framed very differently from training ('too small to be significant' instead of 'does NOT formally exclude')",
+    "expected": "PRESERVE_BRANCHES",
+    "raw": "PRESERVE_BRANCHES",
+    "validated": true,
+    "atom": "PRESERVE_BRANCHES",
+    "correct": true
+  },
+  {
+    "id": "novel_05_scientific_domain_strong_evidence_2branch",
+    "difficulty": "medium - strong falsifying evidence, 2 branches, different vocabulary ('flatly incompatible' / 'definitive control experiment')",
+    "expected": "COLLAPSE_VALID",
+    "raw": "PRESERVE_BRANCHES",
+    "validated": true,
+    "atom": "PRESERVE_BRANCHES",
+    "correct": false
+  },
+  {
+    "id": "novel_06_implicit_branch_count_five",
+    "difficulty": "hard - 5 branches (never seen at training, which only went up to 4), implicit count (never stated as a digit), no discriminator event at all",
+    "expected": "PRESERVE_BRANCHES",
+    "raw": "PRESERVE_BRANCHES",
+    "validated": true,
+    "atom": "PRESERVE_BRANCHES",
+    "correct": true
+  },
+  {
+    "id": "novel_07_implicit_branch_count_five_narrowed_to_one",
+    "difficulty": "hard - 5 branches (unseen scale), full exclusion down to exactly 1 survivor, entirely different vocabulary ('definitively cleared', 'conclusively confirmed')",
+    "expected": "COLLAPSE_VALID",
+    "raw": "COLLAPSE_VALID",
+    "validated": true,
+    "atom": "COLLAPSE_VALID",
+    "correct": true
+  },
+  {
+    "id": "novel_08_repeated_assertion_not_evidence",
+    "difficulty": "medium - repeated-agreement-without-new-evidence pattern, but framed as a seminar discussion, no template vocabulary at all",
+    "expected": "PRESERVE_BRANCHES",
+    "raw": "PRESERVE_BRANCHES",
+    "validated": true,
+    "atom": "PRESERVE_BRANCHES",
+    "correct": true
+  },
+  {
+    "id": "novel_09_ambiguous_hard_case_near_exclusion",
+    "difficulty": "very hard - genuinely ambiguous/borderline case requiring judgment about what counts as 'formal' exclusion (unverified witness = not yet formal), designed to probe real reasoning depth, not a training pattern at all",
+    "expected": "PRESERVE_BRANCHES",
+    "raw": "PRESERVE_BRANCHES",
+    "validated": true,
+    "atom": "PRESERVE_BRANCHES",
+    "correct": true
+  },
+  {
+    "id": "novel_10_two_independent_strong_exclusions",
+    "difficulty": "hard - two SEPARATE strong exclusion events (not one event excluding two at once), 4 branches, 2 survivors remain -- tests whether the model can aggregate two distinct falsification events and still correctly conclude PRESERVE since 2 branches survive",
+    "expected": "PRESERVE_BRANCHES",
+    "raw": "PRESERVE_BRANCHES",
+    "validated": true,
+    "atom": "PRESERVE_BRANCHES",
+    "correct": true
+  }
+]

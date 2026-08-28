@@ -1,0 +1,69 @@
+{
+  "schema_version": "8.75",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "classification": "LIVE_DASHBOARD_AND_COLLECTIVE_METRICS_TRUTH_SPLIT__DISTILLERY_MIGRATION_GATE_REMAINS_PRIMARY",
+  "authority": {
+    "free_only": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "paid_subscription_unknown_fail_closed": true,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false
+  },
+  "material_new_finding": {
+    "status": "SOURCE_EXECUTED_METROLOGY_SPLIT",
+    "finding": "The latest metrics refresh commits update the live dashboard at 2026-08-24T19:46Z with 1 Forge ACCEPTED delta and 21,438,010 Free-Swarm tokens while free swarm/GO_COLLECTIVE_METRICS.json still carries generated_at=2026-08-24T13:58:54Z, authority_epoch=8.71, 7,302,860 tokens, forge_accepted_deltas=0 and distillery accepted_dataset_tokens=0. A stale collective snapshot is therefore being retained beside a newer live dashboard and must not be treated as current aggregate truth.",
+    "credit": "METROLOGY_BLOCKER_ONLY"
+  },
+  "required_metrics_freshness_gate": {
+    "schema": "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1",
+    "must_bind": [
+      "metrics generation timestamp",
+      "authority epoch",
+      "source commit/tree observed before write",
+      "live dashboard generation timestamp",
+      "Forge accepted count and source digest",
+      "Distillery packet count and accepted_dataset_tokens",
+      "Free-Swarm token total and usage-row digest",
+      "result digest"
+    ],
+    "must_prove": [
+      "a collective metrics snapshot older than any canonical input surface is marked STALE/UNMEASURED and cannot overwrite or supersede a newer aggregate",
+      "authority_epoch must equal the active supervisor epoch or be explicitly HISTORICAL",
+      "Forge ACCEPTED and Distillery counts are derived from the same bounded input snapshot rather than mixed-time consumers",
+      "re-running metrics with unchanged inputs is idempotent",
+      "out-of-order metrics writers cannot regress latest aggregate state"
+    ]
+  },
+  "primary_existing_blocker": {
+    "id": "DISTILLERY_REPLAY_IDENTITY_NAMESPACE_MIGRATION",
+    "status": "OPEN",
+    "active_successor": "PR #1771",
+    "rule": "Do not grant live Distillery/dataset/training credit until DISTILLERY_REPLAY_ID_MIGRATION_RECEIPT/v1 passes on exact current source."
+  },
+  "execution_order": [
+    "KEEP_PR1771_REPLAY_V2_MIGRATION_AS_PRIMARY_DATA_CREDIT_GATE",
+    "STOP_TREATING_STALE_GO_COLLECTIVE_METRICS_JSON_AS_CURRENT_TRUTH",
+    "CLOSE_COLLECTIVE_METRICS_FRESHNESS_RECEIPT_V1_WITHOUT_CREATING_A_SECOND_METRICS_AUTHORITY",
+    "CLOSE_DISTILLERY_REPLAY_ID_MIGRATION_RECEIPT_V1",
+    "THEN_EXECUTE_ONE_EVIDENCE_QUALIFIED_FORGE_ACCEPT_TO_EXACTLY_ONE_DISTILLERY_PACKET_TO_ACCEPTED_DATASET_TOKENS_GT_ZERO_TO_SEMANTIC_REPLAY_PLUS_ZERO",
+    "KEEP_LOCAL_QWEN_JSPACE_RUNTIME_AS_SEPARATE_ZERO_COST_FRONTIER",
+    "KEEP_FREE_ONLY_FAIL_CLOSED_FOR_ALL_EXTERNAL_LANES"
+  ],
+  "goodman_law": [
+    "stale or duplicated dashboard/metrics rows are not independent evidence",
+    "one Forge ACCEPTED delta remains one evidence family until executable lineage and downstream conversion are bound",
+    "model consensus, token volume, worker count and shared orchestration ancestry cannot mint semantic, dataset, HCU, EntityOS, BASE or canonical credit"
+  ],
+  "promotion_state": {
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "jspace_model_runtime_pass": false,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false,
+    "provider_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

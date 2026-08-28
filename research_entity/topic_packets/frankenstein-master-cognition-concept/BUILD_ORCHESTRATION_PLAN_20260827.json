@@ -1,0 +1,33 @@
+{
+  "schema": "FRANKENSTEIN_BUILD_ORCHESTRATION_PLAN/v2",
+  "date": "2026-08-27",
+  "status": "QUARANTINED_NON_OPERATIVE_UNDER_CURRENT_PROVIDER_HARD_OFF",
+  "authority_source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+  "authority_observed_schema": "9.13",
+  "provider_routes_admitted": false,
+  "free_swarm_owner_emergency_stop": true,
+  "together_forbidden": true,
+  "remaining_together_paid_runs_authorized": 0,
+  "legacy_plan_preserved_byte_identical_at": "research_entity/topic_packets/frankenstein-master-cognition-concept/BUILD_ORCHESTRATION_PLAN_20260827_PROVIDER_QUARANTINED_854f6bc.json",
+  "canonical_runtime_entrypoints": [
+    "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
+    "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py"
+  ],
+  "allowed_now": [
+    "non-provider local source review",
+    "non-provider deterministic tests",
+    "package graph and curation work that does not dispatch external helpers",
+    "documentation and research synthesis",
+    "authority-status inspection"
+  ],
+  "forbidden_now": [
+    "Nemotron/Groq/Mistral/OpenRouter provider dispatch",
+    "free-pool fallback dispatch",
+    "harness_aider fallback-start from Frankenstein orchestration",
+    "provider secret lookup before explicit current admission",
+    "Together inference or training",
+    "interpreting this plan or its preserved legacy donor as execution authority"
+  ],
+  "reactivation_gate": "A later explicit canonical authority must set provider_routes_admitted=true, clear the emergency stop, and satisfy all then-current provider/economic provenance gates before either canonical entrypoint may load its preserved provider-backed donor. Together additionally requires together_forbidden=false and remaining_together_paid_runs_authorized>0. Historical plan text never grants authority.",
+  "evidence_boundary": "This plan change and the entrypoint gate are source/unit-test closure only. They do not mint provider runtime, HCU, J-Space, training, BASE, or whole EntityOS credit."
+}

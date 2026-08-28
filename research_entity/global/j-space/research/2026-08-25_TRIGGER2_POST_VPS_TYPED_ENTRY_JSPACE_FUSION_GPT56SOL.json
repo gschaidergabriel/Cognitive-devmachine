@@ -1,0 +1,160 @@
+{
+  "schema": "CLAY_TRIGGER2_POST_VPS_TYPED_ENTRY_JSPACE_FUSION/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "authority_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "observed_main_before_write": "035f3f82a270d6415b2410992729471b82455053",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING",
+  "purpose": "Fuse the newest executable Trigger-2 VPS evidence, existing Typed Entry authority, Qwen3.5-0.8B measured evidence, and current causal-steering research into the next nonduplicate training-readiness discriminator without generating unsafe positive rows.",
+  "audit_basis": [
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_1656Z_AUDIT_GPT56SOL.json@035f3f82a270d6415b2410992729471b82455053",
+    "tools/trigger2_hyperposition_state_history_proof_gate_v1.py@035f3f82a270d6415b2410992729471b82455053",
+    "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py@035f3f82a270d6415b2410992729471b82455053",
+    "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py@035f3f82a270d6415b2410992729471b82455053",
+    "research_entity/global/j-space/research/vps_run_receipts/2026-08-25_TRIGGER2_TRACKA_P4_OBSERVED_PRODUCER_AUTH_VPS_RECEIPT.json",
+    "research_entity/global/j-space/research/vps_run_receipts/2026-08-25_TRIGGER2_VPS_TRACK_B_STATUS_SUMMARY.json"
+  ],
+  "decision": "NO_NEW_POSITIVE_TRAINING_ROWS_THIS_CYCLE",
+  "decision_reason": "The exact executable counterexample for caller-forged OBSERVED receipts remains a P0. A standalone new receipt producer would not by itself close the hole because the same producer could be invoked over fabricated input. The closure must reuse the existing deterministic Typed Entry admission identity and bind it to an independently controlled or canonically persisted admission witness before OBSERVED semantics can become positive training evidence.",
+  "new_finding_observed_entry_bridge": {
+    "reality_level": "R0_SOURCE_OBSERVATION_PLUS_R1_ARCHITECTURE_INFERENCE",
+    "source_observation": [
+      "xeno_entry_fabric_v1.py already separates immutable causal-event identity from concrete admission identity.",
+      "admit_entry deterministically derives event_sha256 from causal/source/provenance/payload identity and admission_sha256 from event_sha256 plus entity_generation, ingress_id, received_time, admitted capabilities/binding, budget and payload_ref.",
+      "The retained Trigger-2 observation validator does not currently require those Entry identities and accepts arbitrary nonempty source/provenance/receipt_id strings when the matching event digest/fences are satisfied.",
+      "Repository search found no second implementation of ENTITYOS_TYPED_OBSERVATION_EVIDENCE_RECEIPT/v1 that already binds it to Typed Entry admission identity."
+    ],
+    "design_conclusion": "Do not create a parallel observation-truth authority. Build a narrow OBSERVED-to-Typed-Entry bridge that reuses the canonical Entry Fabric identities and remains non-truth-minting.",
+    "critical_counterexample": "A gate that merely recomputes an observation receipt from row-supplied Entry data is still forgeable by co-mutating the Entry and receipt. Therefore Entry identity is necessary but not sufficient: the gate must also verify an admission witness or controller authority input that is not derived from the candidate row.",
+    "minimum_bridge_binding": [
+      "event_semantic_sha256",
+      "entry_event_sha256",
+      "entry_admission_sha256",
+      "causal_id",
+      "ingress_id",
+      "entity_generation",
+      "source_kind",
+      "source_id",
+      "observed_time",
+      "provenance_ref",
+      "provenance_sha256",
+      "payload_ref",
+      "payload_sha256",
+      "admission_authority_or_witness_digest",
+      "canonical_truth_allowed=false",
+      "direct_effect_authority=false"
+    ],
+    "acceptance_rule": "Recompute Entry event/admission identity using the retained versioned Entry Fabric and evaluator/controller-held authority inputs; reject unless an independently controlled/canonically persisted witness binds the exact admission_sha256. Candidate-row fields may narrow identity but must not self-authorize the witness.",
+    "fail_closed_if": [
+      "admission witness is missing",
+      "admission/controller authority is supplied only by the candidate row",
+      "Entry Fabric source/version identity is ambiguous",
+      "entry_event_sha256 mismatch",
+      "entry_admission_sha256 mismatch",
+      "generation mismatch or stale replay",
+      "payload/provenance digest mismatch",
+      "same receipt/replay identity reused for a different admission or subject",
+      "post-mint mutation",
+      "caller authority bits request canonical truth or direct effect authority"
+    ],
+    "status": "SOURCE_DESIGN_READY_IMPLEMENTATION_AND_EXECUTION_PENDING"
+  },
+  "required_adversarial_matrix": [
+    "FORGED_OBSERVATION_RECEIPT_ONLY -> reject",
+    "FORGED_ENTRY_PLUS_FORGED_RECEIPT_COHERENT_CO_MUTATION_WITHOUT_EXTERNAL_WITNESS -> reject",
+    "ADMISSION_SHA_SWAP -> reject",
+    "EVENT_SHA_SWAP -> reject",
+    "INGRESS_ID_SWAP -> reject",
+    "GENERATION_STALE_REPLAY -> reject",
+    "PAYLOAD_DIGEST_SWAP -> reject",
+    "PROVENANCE_DIGEST_SWAP -> reject",
+    "RECEIPT_REUSE_ACROSS_DIFFERENT_ADMISSION -> reject",
+    "WITNESS_DIGEST_SWAP -> reject",
+    "POST_MINT_RECEIPT_MUTATION -> reject",
+    "EXACT_TYPED_ENTRY_PLUS_INDEPENDENT_EXACT_ADMISSION_WITNESS -> pass candidate pre-admission only"
+  ],
+  "qwen35_08b_training_relevance": {
+    "measured_status": "CURRENT_BOUNDED_COMPONENT_EVIDENCE_NO_CHECKPOINT_SELECTION",
+    "measured_registry": "3 identity-complete and loader-consumed candidates",
+    "matched_baseline": "NEEDS_REVISION_FULL_CROSS_CANDIDATE_MULTI_SEED",
+    "negative_evidence": "The minimal TARGET_MEASURED 8-case single-seed pilot failed both abstain_unknown cases.",
+    "training_rule_delta": "abstain_unknown becomes a mandatory worst-bucket model-selection axis. Do not infer prevalence or generate a large training family from two failures; after provenance/admission closure, construct counterbalanced minimal pairs in which lexical nuisance is held fixed and only evidence availability changes.",
+    "selection_rule": "No winner until BASE, POSTTRAINED and TARGET_MEASURED are evaluated under identical runtime, prompts, decoding, family splits, calibration/holdout discipline and multi-seed criteria with checkpoint-separated capability and retention curves."
+  },
+  "causal_jspace_phase9_research_delta": {
+    "status": "DESIGN_INPUT_NOT_RUNTIME_EVIDENCE",
+    "model_architecture_observation": "Qwen3.5-0.8B has 24 text layers in six repeated 3x Gated DeltaNet then 1x full Gated Attention groups; full-attention layers occur every fourth block.",
+    "model_specific_site_bank_rule": "Do not sample intervention layers uniformly as if every block had the same mechanism. Pre-register strata covering DeltaNet blocks and the pre/post boundaries around full-attention layers 3,7,11,15,19,23 under zero-based indexing, then narrow with nonpromoting screening before confirmatory intervention.",
+    "controls": [
+      "sign flip",
+      "zero/null vector",
+      "orthogonal vector",
+      "same-norm random vector",
+      "permuted direction",
+      "wrong-layer/site control",
+      "dose-response magnitude ladder",
+      "lesion and rescue where technically available",
+      "direction-derivation set disjoint from evaluation holdout",
+      "cross-encoding/counterbalanced label controls",
+      "generation-time-course measurement rather than final-output-only scoring"
+    ],
+    "promotion_rule": "Linear decodability, output steering, recurrence or one-layer success does not establish Global J-Space causality. Require preregistered, model-specific intervention effects that survive matched nuisance controls and replicate across fresh families/seeds.",
+    "external_sources": [
+      "https://huggingface.co/Qwen/Qwen3.5-0.8B-Base",
+      "https://huggingface.co/Qwen/Qwen3.5-0.8B-Base/blob/dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68/config.json",
+      "https://arxiv.org/abs/2608.12334"
+    ]
+  },
+  "lifecycle_delta": [
+    {
+      "artifact": "2026-08-25_TRIGGER2_1656Z_AUDIT_GPT56SOL.json",
+      "status": "CURRENT",
+      "reason": "Canonical current audit; this file narrows its next OBSERVED-auth implementation direction rather than superseding its lifecycle conclusions."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_proof_gate_v1.py::_validate_observation_receipt",
+      "status": "NEEDS_REVISION",
+      "successor": "OBSERVED_TO_TYPED_ENTRY_BRIDGE_GATE_WITH_INDEPENDENT_ADMISSION_WITNESS",
+      "reason": "Shape and event-digest checks are insufficient against executable caller-forged receipt evidence."
+    },
+    {
+      "artifact": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+      "status": "CURRENT_REUSE_DONOR",
+      "reason": "Existing deterministic event/admission identity split should be reused rather than duplicated. Reuse does not by itself grant evidence-truth or runtime credit."
+    },
+    {
+      "artifact": "immutable genesis + ordered nonempty history producer authority",
+      "status": "BLOCKED",
+      "reason": "Structural replay integrity exists, but complete content provenance root/chain is still not independently producer-authorized."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_FROM_DIRECT_TRAINING",
+      "reason": "Retain only donor topology while supervisor 8.78 nuisance-independence/full-cross requirements remain unsatisfied."
+    },
+    {
+      "artifact": "Qwen3.5-0.8B checkpoint registry",
+      "status": "CURRENT_BOUNDED",
+      "reason": "Pinned candidate/loader identity is observed; selection, causal J-Space and training remain zero credit."
+    },
+    {
+      "artifact": "Qwen3.5-0.8B minimal 8-case TARGET_MEASURED pilot",
+      "status": "CURRENT_NEGATIVE_EVIDENCE_NEEDS_EXPANSION",
+      "reason": "Preserve the two abstain_unknown failures; do not treat the tiny pilot as a matched checkpoint baseline or prevalence estimate."
+    }
+  ],
+  "credits": {
+    "new_positive_training_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_jspace_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Implement a non-second-authority OBSERVED-to-Typed-Entry bridge successor that reuses xeno_entry_fabric_v1 event/admission identities and requires an independently controlled/canonically persisted admission witness; include coherent Entry+receipt co-mutation negatives. Execute it on exact clean repository-bound FREE VPS evidence. Only after OBSERVED and nonempty-history producer authority both close may native-seed rebind and small positive ordered-history pilot generation proceed."
+}

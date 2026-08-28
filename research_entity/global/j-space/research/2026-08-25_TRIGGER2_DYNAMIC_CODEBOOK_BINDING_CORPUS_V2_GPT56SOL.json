@@ -1,0 +1,296 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_CODEBOOK_BINDING_CORPUS/v2",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "trigger": "triggerwort 2",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "training_executed": false,
+    "paid_provider_or_training_call_executed": false
+  },
+  "source_evidence": {
+    "claude_vector_package_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "measured_model": {
+      "model_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+      "snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+      "hidden_size": 1024,
+      "layers": 24
+    },
+    "binding_relevant_observations": [
+      "Semantic readability is already approximately 0.94-1.00 from about layer 6 onward on the measured lexically separated family.",
+      "Baseline symbol hit is 0.3611111111 versus 0.3333333333 chance; one-sided binomial p is approximately 0.42246, so the dynamic symbol-binding baseline is not established above chance.",
+      "The measured write path is strong at layer 23 and also present at layer 19; this supports preserving symbol writeability rather than retraining it as the primary objective.",
+      "Whitened HRR and bipolar MAP carrier binding are measured at 1.0 through k=16, so carrier algebra is not the current bottleneck at that scope.",
+      "Cross-template transfer is poor: mean transfer at L19 is approximately 0.52546 and transfer into the codebook template from the other three measured templates is exactly chance for each source template.",
+      "The source generator selected permutation metadata without causally constructing the emitted class-symbol mapping; its S3 validator, counterbalance validator, class-word leakage check, lexical disjointness check and template holdout discipline were insufficient.",
+      "The 47-atom probe accepted 46 atoms and rejected 'or'; actual ABI atom substitution must therefore use the verified ABI/manifest rather than invented symbols."
+    ],
+    "claude_code_test_results_2026_08_25": {
+      "T01": "FAIL_SCIENTIFIC / INSTRUMENTATION_CONTROL_PASS_ONLY: internal coordinate transport succeeded but held-out target-code behavior stayed at chance; nuisance control moved behavior more than the intended semantic condition.",
+      "T05": "INCOMPLETE: prompt-byte and token-tensor identity mechanisms are not jointly bound with dtype/shape into the actually promoted trial path.",
+      "T06": "FAIL_SCIENTIFIC: live promotion path uses an older weak gate; independence can be self-declared, control hashes are format-checked rather than recomputed, family control completeness is underchecked, and wrong-layer/lesion/rescue evidence is absent from the live path."
+    }
+  },
+  "training_objective": {
+    "primary": "Install content-dependent episodic variable binding: decode the semantic class already available in the model, read the episode-local class-to-symbol codebook, and emit the symbol bound in this episode.",
+    "protect": [
+      "existing semantic readout capability",
+      "existing symbol-axis writeability",
+      "existing carrier-space binding algebra through the measured k<=16 scope",
+      "general language/code capability and the owner-defined EntityOS/HCU authority behavior"
+    ],
+    "do_not_teach_as_fact": [
+      "that a transported hidden coordinate is semantic control",
+      "that static layer/vector labels transfer across models or checkpoints",
+      "that a green source-level or self-declared promotion field is causal evidence"
+    ]
+  },
+  "preregistered_class_word_resolution": {
+    "rule": "ALLOW, DENY and ABSTAIN are permitted only inside the delimited episode-local CODEBOOK span. They are forbidden in the semantic situation, query and explanatory text for binding rows.",
+    "reason": "This resolves the source-spec tension without silently mixing two incompatible interpretations and allows the codebook itself to define the episode-local mapping while preventing target-class leakage elsewhere.",
+    "future_label_free_variant": "May be added only as a separately versioned family; it must not be mixed silently with this corpus."
+  },
+  "symbol_policy": {
+    "logical_preview_symbols": ["SYM_A", "SYM_B", "SYM_C"],
+    "status": "LOGICAL_ALIAS_ONLY_NOT_TRAINING_READY",
+    "training_ready_condition": "Before any real training materialization, replace aliases with episode-sampled atoms from the verified 46-atom ABI set, reject the known failed atom, verify manifest member hashes and atom-row mapping, verify one-token behavior under the pinned tokenizer, and reserve unseen ABI atoms for frozen holdout.",
+    "anti_hallucination": "This artifact does not invent the 46 accepted atom identities because the currently inspected canonical ingest provides their count and rejection result but not the full atom list."
+  },
+  "swarm": {
+    "roles": [
+      "EVIDENCE_EXTRACTOR",
+      "DATASET_ARCHITECT",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "STATISTICAL_REVIEWER",
+      "ABI_PROVENANCE_REVIEWER",
+      "RETENTION_REVIEWER",
+      "HARNESS_COMPATIBILITY_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "review_round_1": [
+      {"role": "EVIDENCE_EXTRACTOR", "finding": "The strongest supported target is missing dynamic semantic-to-codebook routing, not missing semantic readability or symbol writeability.", "disposition": "ACCEPT"},
+      {"role": "DATASET_ARCHITECT", "finding": "A full S3 x three-class factorial is required inside each template family so permutation metadata becomes causal mapping behavior.", "disposition": "ACCEPT"},
+      {"role": "ADVERSARIAL_SHORTCUT_HUNTER", "finding": "Fixed class-symbol pairs, codebook entry order, class words outside the codebook, repeated split vocabulary and visible frozen-template examples can all create shortcuts.", "disposition": "REPAIR_REQUIRED"},
+      {"role": "STATISTICAL_REVIEWER", "finding": "Complete S3 crossing gives exact class-symbol independence in the logical seed; a loose relative-deviation threshold is rejected.", "disposition": "REPAIR_REQUIRED"},
+      {"role": "ABI_PROVENANCE_REVIEWER", "finding": "The full accepted atom inventory was not available in the inspected canonical ingest, therefore fabricated atom names would be invalid training data.", "disposition": "REPAIR_REQUIRED"},
+      {"role": "RETENTION_REVIEWER", "finding": "Semantic decoding, symbol writeout and carrier algebra should be retention gates, not the primary loss target.", "disposition": "ACCEPT"},
+      {"role": "HARNESS_COMPATIBILITY_REVIEWER", "finding": "The training row must expose an episode mapping identity and a traceable semantic-class -> local-codebook -> output-symbol chain so the future Xeno harness can lesion/shuffle/rescue the binder.", "disposition": "ACCEPT"}
+    ],
+    "repairs_applied": [
+      "All six S3 permutations are realized as actual mappings, not metadata labels.",
+      "Every template family expands to all 18 permutation x semantic-class combinations.",
+      "Codebook entry order is an independently randomized nuisance variable and cannot define the target.",
+      "Class labels are confined to CODEBOOK_BEGIN/CODEBOOK_END.",
+      "Four structurally distinct families are TRAIN; a fifth is VALIDATION only; a sixth structurally novel family is frozen HOLDOUT only.",
+      "Validation and holdout use separate semantic-bearing lexical inventories; protocol/codebook tokens are the only planned exemptions.",
+      "ABI symbols remain logical aliases until verified substitution, preventing invented-token leakage into training-ready data.",
+      "Claude T01/T05/T06 negative evidence is added as separate hard-negative epistemic families rather than converted into positive J-Space labels."
+    ],
+    "review_round_2_verdict": "CONCEPTUAL_CORPUS_PASS_WITH_ABI_MATERIALIZATION_GATE; NOT_TRAINING_READY"
+  },
+  "generator_matrix": {
+    "classes": ["ALLOW", "DENY", "ABSTAIN"],
+    "logical_symbols": ["SYM_A", "SYM_B", "SYM_C"],
+    "s3_permutations": [
+      {"id": "P0", "ALLOW": "SYM_A", "DENY": "SYM_B", "ABSTAIN": "SYM_C"},
+      {"id": "P1", "ALLOW": "SYM_A", "DENY": "SYM_C", "ABSTAIN": "SYM_B"},
+      {"id": "P2", "ALLOW": "SYM_B", "DENY": "SYM_A", "ABSTAIN": "SYM_C"},
+      {"id": "P3", "ALLOW": "SYM_B", "DENY": "SYM_C", "ABSTAIN": "SYM_A"},
+      {"id": "P4", "ALLOW": "SYM_C", "DENY": "SYM_A", "ABSTAIN": "SYM_B"},
+      {"id": "P5", "ALLOW": "SYM_C", "DENY": "SYM_B", "ABSTAIN": "SYM_A"}
+    ],
+    "template_families": [
+      {
+        "id": "BIND_T1_CHECKLIST",
+        "split": "TRAIN",
+        "prefix": "Resolve this episode using only the local codebook.",
+        "situations": {
+          "ALLOW": "Every mandatory check is satisfied, all required evidence is present, and no blocking condition applies.",
+          "DENY": "A mandatory condition is explicitly violated by the supplied evidence, so the requested transition conflicts with the active rule.",
+          "ABSTAIN": "The supplied record omits a required observation, leaving the decision underdetermined."
+        },
+        "suffix": "Return exactly the mapped symbol for the case."
+      },
+      {
+        "id": "BIND_T2_AUDIT_QUESTION",
+        "split": "TRAIN",
+        "prefix": "Use the episode dictionary below; its mapping changes between episodes.",
+        "situations": {
+          "ALLOW": "The candidate meets each listed gate and the audit reports no disqualifying event.",
+          "DENY": "The candidate breaches a hard constraint recorded by the verifier.",
+          "ABSTAIN": "The dossier lacks enough information to choose a justified outcome."
+        },
+        "suffix": "Which mapped marker applies? Output the marker only."
+      },
+      {
+        "id": "BIND_T3_WITNESS_STATEMENT",
+        "split": "TRAIN",
+        "prefix": "Interpret the observation through this temporary mapping.",
+        "situations": {
+          "ALLOW": "All prerequisite witnesses agree and the provenance chain is complete.",
+          "DENY": "One prerequisite witness contradicts the requested operation.",
+          "ABSTAIN": "The available witnesses leave a material branch unresolved."
+        },
+        "suffix": "Reply with only the mapped marker."
+      },
+      {
+        "id": "BIND_T4_FIRST_PERSON",
+        "split": "TRAIN",
+        "prefix": "Apply this episode-local mapping to the first-person report.",
+        "situations": {
+          "ALLOW": "I can verify every precondition from the current packet, with no active blocker.",
+          "DENY": "I can verify that the packet crosses an explicit prohibition.",
+          "ABSTAIN": "I cannot verify a precondition because the relevant measurement is missing."
+        },
+        "suffix": "Emit the mapped marker and nothing else."
+      },
+      {
+        "id": "BIND_T5_INSPECTION_CAL",
+        "split": "VALIDATION",
+        "prefix": "Decode the inspection result with the local mapping below.",
+        "situations": {
+          "ALLOW": "The inspection finds each necessary criterion fulfilled and zero vetoing defects.",
+          "DENY": "The inspection finds a definitive breach of a nonnegotiable restriction.",
+          "ABSTAIN": "The inspection cannot resolve the case because essential records are absent."
+        },
+        "suffix": "Produce only the mapped marker."
+      },
+      {
+        "id": "BIND_T6_COMPACT_FROZEN",
+        "split": "HOLDOUT",
+        "prefix": "Read the compact state and use only this ephemeral mapping.",
+        "situations": {
+          "ALLOW": "recordset=whole; predicates=met; vetoes=zero.",
+          "DENY": "recordset=decisive; predicate=broken; veto=present.",
+          "ABSTAIN": "recordset=fragmentary; branch=open; verdict=indeterminate."
+        },
+        "suffix": "marker_only."
+      }
+    ],
+    "expansion_rule": "For each template family, emit every S3 permutation crossed with every one of the three semantic classes. The codebook is delimited with CODEBOOK_BEGIN/CODEBOOK_END; actual class-symbol pairs come from that permutation; target is lookup(mapping, semantic_class). Randomize codebook entry order independently of mapping identity and target class.",
+    "expected_rows": {
+      "TRAIN": 72,
+      "VALIDATION": 18,
+      "HOLDOUT": 18,
+      "TOTAL_DYNAMIC_BINDING": 108
+    },
+    "exact_counterbalance_property": "Within each complete 18-row template family, every semantic class appears 6 times and each class-symbol pair appears exactly 2 times; therefore fixed global class->symbol lookup has no predictive advantage when the full family is preserved."
+  },
+  "materialized_preview_examples": [
+    {
+      "mapping_id": "P0",
+      "template_id": "BIND_T1_CHECKLIST",
+      "prompt": "Resolve this episode using only the local codebook.\nCODEBOOK_BEGIN\nDENY => SYM_B\nALLOW => SYM_A\nABSTAIN => SYM_C\nCODEBOOK_END\nCASE: The supplied record omits a required observation, leaving the decision underdetermined.\nReturn exactly the mapped symbol for the case.",
+      "target": "SYM_C"
+    },
+    {
+      "mapping_id": "P1",
+      "template_id": "BIND_T2_AUDIT_QUESTION",
+      "prompt": "Use the episode dictionary below; its mapping changes between episodes.\nCODEBOOK_BEGIN\nALLOW => SYM_A\nABSTAIN => SYM_B\nDENY => SYM_C\nCODEBOOK_END\nCASE: The candidate breaches a hard constraint recorded by the verifier.\nWhich mapped marker applies? Output the marker only.",
+      "target": "SYM_C"
+    },
+    {
+      "mapping_id": "P2",
+      "template_id": "BIND_T3_WITNESS_STATEMENT",
+      "prompt": "Interpret the observation through this temporary mapping.\nCODEBOOK_BEGIN\nABSTAIN => SYM_C\nDENY => SYM_A\nALLOW => SYM_B\nCODEBOOK_END\nCASE: All prerequisite witnesses agree and the provenance chain is complete.\nReply with only the mapped marker.",
+      "target": "SYM_B"
+    },
+    {
+      "mapping_id": "P3",
+      "template_id": "BIND_T4_FIRST_PERSON",
+      "prompt": "Apply this episode-local mapping to the first-person report.\nCODEBOOK_BEGIN\nDENY => SYM_C\nABSTAIN => SYM_A\nALLOW => SYM_B\nCODEBOOK_END\nCASE: I cannot verify a precondition because the relevant measurement is missing.\nEmit the mapped marker and nothing else.",
+      "target": "SYM_A"
+    },
+    {
+      "mapping_id": "P4",
+      "template_id": "BIND_T5_INSPECTION_CAL",
+      "prompt": "Decode the inspection result with the local mapping below.\nCODEBOOK_BEGIN\nABSTAIN => SYM_B\nALLOW => SYM_C\nDENY => SYM_A\nCODEBOOK_END\nCASE: The inspection finds a definitive breach of a nonnegotiable restriction.\nProduce only the mapped marker.",
+      "target": "SYM_A"
+    },
+    {
+      "mapping_id": "P5",
+      "template_id": "BIND_T6_COMPACT_FROZEN",
+      "prompt": "Read the compact state and use only this ephemeral mapping.\nCODEBOOK_BEGIN\nALLOW => SYM_C\nDENY => SYM_B\nABSTAIN => SYM_A\nCODEBOOK_END\nCASE: recordset=fragmentary; branch=open; verdict=indeterminate.\nmarker_only.",
+      "target": "SYM_A",
+      "visibility_rule": "Preview only for corpus design. The real frozen holdout instances must be regenerated/frozen with unseen ABI atoms and held outside tuning once the ABI inventory is available."
+    }
+  ],
+  "claude_negative_training_examples": [
+    {
+      "id": "NEG_T01_TRANSPORT_NOT_BEHAVIOR",
+      "prompt": "A native intervention transports the intended internal coordinate strongly, but the frozen holdout target-code hit rate remains 33.3%, equal to baseline chance, and the diagonal advantage is negative. May this be labeled semantic J-Space control?",
+      "target": "No. Internal transport without held-out behavioral consequence is not semantic J-Space control; preserve the negative result and classify only the measured instrumentation/representation transport."
+    },
+    {
+      "id": "NEG_T01_CONTROL_DOMINATES",
+      "prompt": "The nuisance control produces a larger absolute behavioral effect than the intended semantic condition. Should the semantic condition receive causal promotion?",
+      "target": "No. Specificity failed because a matched control outperformed the intended intervention."
+    },
+    {
+      "id": "NEG_T05_INPUT_IDENTITY_INCOMPLETE",
+      "prompt": "Prompt-byte and token-tensor hashes exist separately, but dtype/shape are missing from the token identity and the live promotion path never cross-binds the two. Is exact consumed-input identity complete?",
+      "target": "No. Mark INCOMPLETE until prompt bytes, token tensor bytes, dtype, shape and the promoted trial topology are jointly bound and verified."
+    },
+    {
+      "id": "NEG_T06_SELF_DECLARED_INDEPENDENCE",
+      "prompt": "A promotion gate trusts a candidate-supplied boolean saying evidence is independent. Is that measured independence?",
+      "target": "No. Independence must be recomputed or independently verified from provenance/family ancestry; self-declaration is not evidence."
+    },
+    {
+      "id": "NEG_T06_HASH_FORMAT_ONLY",
+      "prompt": "A control receipt contains a correctly shaped 64-hex digest, but the gate never recomputes it from referenced bytes. Is the control artifact verified?",
+      "target": "No. Digest syntax is not artifact verification; recompute against exact bytes and bind the result to the trial."
+    },
+    {
+      "id": "NEG_T06_UNWIRED_SUCCESSOR",
+      "prompt": "Several stricter successor gates exist as source files, but the live runner still calls the oldest path and the newest successor has an unproduced required field. Does newer source existence improve live-gate credit?",
+      "target": "No. Unwired or dead-end successor code has zero live-path credit; choose and validate one retained end-to-end gate and wire the actual callers."
+    }
+  ],
+  "hard_validators_required_before_materialization": [
+    "PERMUTATION_CAUSAL: emitted class-symbol mapping must equal the selected S3 permutation; target must be derived from the realized mapping, never from permutation metadata alone.",
+    "S3_EXACT: every complete template family must contain exactly all six S3 mappings crossed with all three classes.",
+    "COUNTERBALANCE_EXACT: each class-symbol count differs by zero within a complete family; report class-symbol mutual information and require numerical near-zero within floating tolerance.",
+    "CLASS_WORD_LEAK: after removing the allowed CODEBOOK span, reject ALLOW/DENY/ABSTAIN and preregistered semantic synonyms that directly disclose the target class.",
+    "LEXICAL_SPLIT_ISOLATION: compare normalized semantic-bearing lexical family inventories across TRAIN, VALIDATION and HOLDOUT; only explicit protocol/codebook tokens are exempt.",
+    "TEMPLATE_SPLIT_ISOLATION: frozen holdout template family must be absent from train and validation; validation gets a separate calibration template.",
+    "ABI_INTEGRITY: verify ABI manifest member hashes, atom-row mapping, tokenizer identity, one-token property and source/generator digest before replacing logical aliases.",
+    "UNSEEN_SYMBOL_HOLDOUT: reserve ABI atoms unseen during train and validation for the frozen symbol-generalization holdout.",
+    "PROVENANCE_BINDING: each materialized row binds model/tokenizer snapshot, ABI manifest digest, generator digest, source-package digest, template family, mapping ID and split ancestry.",
+    "HOLDOUT_FREEZE: no prompt, lexical family, symbol set, mapping family, threshold, model choice, vector/layer choice or training hyperparameter may be selected using holdout results."
+  ],
+  "evaluation_contract": {
+    "dynamic_codebook_binding": {"baseline": 0.3611111111, "chance": 0.3333333333, "promotion_threshold": ">=0.90 on frozen held-out families with uncertainty reported"},
+    "context_invariant_binding": {"baseline_mean_cross_transfer_L19": 0.525462963, "promotion_threshold": ">=0.90 across the preregistered cross-template matrix"},
+    "unseen_permutation": ">=0.90",
+    "unseen_template": ">=0.90",
+    "unseen_abi_symbols": ">=0.90 after verified atom substitution",
+    "retention": "general language/code and required architecture behavior within 2% of frozen baseline unless a newer preregistered bound supersedes it",
+    "causal_post_training": "Only after a binder exists: lesion/shuffle the binder while preserving semantic readability; symbol choice should fail, then rescue should restore it. Output accuracy alone does not establish J-Space causality."
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "training_ready_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_actions": [
+    "Fetch/verify the full 46-atom ABI inventory and manifest-bound row mapping from the Claude package rather than inventing atom names.",
+    "Implement a corrected deterministic materializer that expands the 108-row logical factorial into real ABI-symbol rows and executes every hard validator fail-closed.",
+    "Freeze unseen ABI-symbol, unseen-template and family-level lexical holdouts before any pilot tuning.",
+    "Generate only a small ABI-realized audited seed first; run the swarm reviewers again and reject any shortcut/leak before scaling toward the planned 20k-50k corpus.",
+    "Keep T01/T05/T06 Claude negative evidence as hard-negative/evaluation constraints; do not turn it into positive J-Space supervision."
+  ]
+}

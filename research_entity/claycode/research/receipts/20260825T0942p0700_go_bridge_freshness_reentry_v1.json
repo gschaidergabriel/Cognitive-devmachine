@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_GO_BRIDGE_REPAIR_AND_FRESHNESS_FRONTIER_RECEIPT/v1",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger": "go",
+  "report_time_local": "2026-08-25T09:42:00+07:00",
+  "report_time_note": "Report timestamp only; it is not used as a macrocycle identity or unusual-experiment key.",
+  "authority_epoch_observed": "8.77",
+  "canonical_main_at_reentry": "92435b90e450a99b09e016592228a0f84be53739",
+  "canonical_main_at_initial_entry": "3ec74051b9622fe4c2f9402b18d618e8c733b710",
+  "coordination": {
+    "shared_immutable_macrocycle_identity": null,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/macrocycle identifier is exposed; minute-precision trigger time is insufficient for a reproducible atomic experiment key.",
+    "new_unusual_experiments_executed": 0
+  },
+  "observed": {
+    "supervisor_selected": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_77.json",
+    "collective_metrics_state": {
+      "status": "STALE",
+      "generated_at": "2026-08-24T13:58:54Z",
+      "authority_epoch": "8.71",
+      "total_tokens": 7302860,
+      "forge_accepted_deltas": 0
+    },
+    "supervisor_live_reference": {
+      "free_swarm_tokens": 35308070,
+      "forge_evaluations": 144,
+      "nominal_forge_accepted": 1,
+      "distillery_accepted_packets": 0,
+      "distillery_accepted_dataset_tokens": 0
+    },
+    "replay_v2": {
+      "pr": 1771,
+      "state_at_final_reentry": "MERGED",
+      "merge_commit": "92435b90e450a99b09e016592228a0f84be53739",
+      "claim_boundary": "SOURCE_FUSION_PRESENT; exact-current migration execution receipt remains separately required before runtime/dataset credit"
+    },
+    "metrics_publisher_gap": "free swarm/go_collective_metrics.py still writes GO_COLLECTIVE_METRICS.json and .md directly without authority-epoch binding, shared snapshot identity, compare-before-commit monotonicity, or stale-writer regression prevention.",
+    "bridge": {
+      "canonical_repo_probe_issue": 1774,
+      "canonical_repo_probe_run": 32802521850,
+      "canonical_repo_probe_state": "QUEUED_NONTERMINAL",
+      "registered_runner_controller_repo": "gschaidergabriel/Dr.-Unterweger",
+      "controller_workflow": ".github/workflows/frank-self-hosted-probe.yml",
+      "controller_repair_commit": "6344d2573816dfae44fdc26de8987cf8fcc7ac65",
+      "controller_probe_run": 32802635799,
+      "controller_probe_state": "QUEUED_NONTERMINAL",
+      "sandbox_target": "clay-direct-dev",
+      "interpretation": "DEGRADED_OR_OFFLINE_SELF_HOSTED_TRANSPORT; queue state is infrastructure evidence only and is not EntityOS/HCU runtime failure evidence"
+    }
+  },
+  "durable_delta": {
+    "controller_bridge_probe": "Upgraded the controller-side self-hosted workflow to discover docker/podman/incus/lxc clay-direct-dev, execute a bounded in-sandbox roundtrip when available, and persist CLAY_DIRECT_DEV_ROUNDTRIP/v1 evidence without secrets.",
+    "controller_commit": "6344d2573816dfae44fdc26de8987cf8fcc7ac65",
+    "replay_lane_fusion_observed": "PR1771 merged during this go reentry, eliminating the source-level open-PR blocker while preserving the separate executable-receipt gate."
+  },
+  "go_tracks": {
+    "track_a": {
+      "state": "ADVANCED",
+      "delta": "EntityOS execution transport was repaired at the actual registered controller repo and a bounded clay-direct-dev roundtrip carrier was launched; replay-v2 source fusion was re-entered after parallel merge."
+    },
+    "track_b": {
+      "state": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Supervisor 8.77 places engineering budget on collective-metrics freshness/conversion closure; self-hosted execution transport is currently queued, and no independent nonduplicate HCU/Typed Entry primitive could be promoted with executable evidence in this cycle."
+    },
+    "track_c": {
+      "state": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "Collective metrics remain stale, Distillery accepted_dataset_tokens remains zero, exact-current replay-v2 execution receipt has not yet been observed, and the self-hosted sandbox transport has not produced a terminal roundtrip receipt. J-Space/model/training credit therefore remains zero."
+    }
+  },
+  "research_prior_art_applied": {
+    "principles": [
+      "stale/out-of-order observations must not supersede newer measurement state",
+      "publish replacement should be atomic where supported",
+      "concurrent writers require serialization or compare-before-commit monotonicity"
+    ],
+    "constraint": "Applied only as design guidance to the existing publisher path; no second metrics database or truth authority introduced."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_action": "Recover/observe a terminal CLAY_DIRECT_DEV_ROUNDTRIP/v1 controller receipt; then implement freshness fail-closed inside the existing go_collective_metrics publisher/consumer path with authority epoch + shared snapshot identity + monotonic stale-writer rejection + deterministic digest tests, execute them on exact-current source, and emit COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1. After that execute the merged replay-v2 exact-current migration receipt and only then attempt one Forge ACCEPT -> exactly one Distillery packet -> accepted_dataset_tokens > 0 conversion proof.",
+  "evidence_boundary": "Source inspection, source merge, queued workflow state, and controller workflow repair do not by themselves establish EntityOS/HCU runtime acceptance, J-Space model runtime, or training credit."
+}

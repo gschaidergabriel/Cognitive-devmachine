@@ -1,0 +1,98 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RUNTIME_QUOTA_OBSERVATION_PATH/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.64",
+  "canonical_main_observed_before_write": "666bfbd18b61bec5b45ecb828e42690746db497f",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_64.json",
+    "runtime_first": true,
+    "source_guard_proliferation": "PAUSED_UNLESS_EXECUTABLE_COUNTEREVIDENCE_REQUIRES_A_GUARD",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN",
+    "unknown_paid_or_subscription_lanes": "FAIL_CLOSED_BEFORE_SECRET_LOOKUP_AND_NETWORK_IO"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_RUNTIME_ADMISSION_REENTRY_PROVIDER_DOCUMENTATION_DISCRIMINATOR"
+  },
+  "retained_lanes": {
+    "hcu_donor": {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "pr": 1263,
+      "live_head_observed": "ba0ce949cf7176c921ac67760ea22c260b3337f3"
+    },
+    "execution_controller": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 810,
+      "live_head_observed": "7570d254614a93df90d30ef87db1800c41ae3d5e"
+    }
+  },
+  "exact_head_deployment": {
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "team_plan_observed": "hobby",
+    "deployment_id": "dpl_94nfBLCkvKEWDYLUSju4RMNgvVm8",
+    "deployment_git_sha": "7570d254614a93df90d30ef87db1800c41ae3d5e",
+    "deployment_state": "READY",
+    "exactly_matches_live_pr810_head_at_observation": true,
+    "evidence_boundary": "READY exact-head deployment is deployment identity evidence only, not Function, Sandbox, EntityOS/HCU, model or training runtime credit."
+  },
+  "runtime_gate_observation": {
+    "executor_source_file": "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+    "last_verified_blob_at_predecessor_exact_head": "de6007fe152c3114e03d0578866a83355ef157a7",
+    "admission_semantics_changed_between_6a156011_and_7570d254": false,
+    "remaining_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "sandbox_create_permitted": false,
+    "sandbox_create_observed": false,
+    "environment_capability_probe_executed": false,
+    "sqlite3_or__sqlite3_observed": false
+  },
+  "access_surface_observation": {
+    "connected_protection_bypass_attempt": "RATE_LIMITED",
+    "observed_error": "429 Too Many Requests while creating protection bypass",
+    "function_result_observed": false,
+    "sandbox_create_observed": false,
+    "classification": "ACCESS_TRANSPORT_BLOCKER_NOT_PRODUCT_NEGATIVE"
+  },
+  "provider_documentation_discriminator": {
+    "source": "https://vercel.com/docs/cli/usage",
+    "observed_capability": "Vercel CLI documents `vercel usage` for current-period billing usage/costs and `vercel usage --format json` for machine-readable usage data.",
+    "important_boundary": "Documentation establishes a candidate observation mechanism, not this account's remaining Sandbox included quota and not Sandbox-specific remaining allowance semantics.",
+    "connected_tool_gap": "The currently exposed Vercel connector has team/project/deployment/log/access/documentation tools but no billing-usage or `vercel usage` action.",
+    "credential_policy": "No Vercel credential/token lookup, CLI login, provider preflight, paid upgrade or paid fallback was attempted.",
+    "gate_decision": "DO_NOT_OPEN_RUNTIME_GATE_FROM_PLAN_IDENTITY_OR_DOCUMENTATION_ALONE"
+  },
+  "hypothesis": "The next admissible discriminator is an already-authenticated, directly observed usage/quota surface that proves remaining included Sandbox capacity without paid transition; provider documentation suggests the Vercel usage CLI as a candidate observation surface but the current connector cannot execute it.",
+  "counterhypothesis": "Hobby plan identity, an exact-head READY deployment, or documented existence of a usage command is sufficient to infer remaining Sandbox quota and authorize Sandbox.create.",
+  "discriminator_result": "COUNTERHYPOTHESIS_REJECTED: none of those observations directly measures remaining included Sandbox quota for this account, so the fail-closed gate remains closed.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BLOCKER_PRECISION: exact-current executor READY deployment is available; the unresolved gate is now specifically a directly authenticated remaining-Sandbox-quota signal plus protected Function access, not deployment freshness.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "HCU_NO_CHANGE_WITH_REASON: supervisor 8.64 pauses source-only guard proliferation and no admitted runtime counterevidence reached HCU/Typed Entry code.",
+    "C_GLOBAL_JSPACE_GWT_AND_FREE_LOCAL_08B_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no admitted real model execution, J-Space/GWT intervention, or model-specific causal trace occurred; preserve zero model/training credit."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Use an already-authorized Vercel billing/usage surface, when available, to directly observe current remaining included Sandbox capacity without credential discovery, paid upgrade, paid fallback or plan-based inference.",
+    "Do not treat `vercel usage` documentation itself as account quota evidence; require actual account-scoped output and verify that it discriminates Sandbox included usage/remaining capacity.",
+    "Only after direct FREE_ONLY quota admission and exact-head protected Function access, run the fixed environment probe and bind executor identity, Python version, sqlite3/_sqlite3 availability, source commit/tree, secret fence, result digest and cleanup.",
+    "If sqlite3 is unavailable, classify the execution surface as capability-blocked and do not weaken SQLite-dependent HCU invariants.",
+    "After environment PASS, run the retained canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> J-Space/GWT observation path before granting model/J-Space credit."
+  ],
+  "evidence_boundary": "This receipt advances blocker precision and identifies a documented candidate quota-observation mechanism only. It grants no Sandbox execution, EntityOS/HCU runtime, J-Space model, training, or whole-product credit."
+}

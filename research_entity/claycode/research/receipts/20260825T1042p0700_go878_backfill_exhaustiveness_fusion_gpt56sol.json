@@ -1,0 +1,70 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "created_for_user_trigger": "go",
+  "user_trigger_time_local": "2026-08-25T10:31+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "5e7d618a948ee83df51fc6a71f03e366a616e98d",
+  "coordination": {
+    "shared_immutable_macrocycle_id_available": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_only": true
+  },
+  "problem": {
+    "observed": "Historical extraction completion remained path-sensitive: the core could count non-exhaustive zero-novel passes and SATURATE after one explicit exhaustive zero at pass>=2; the original finite ceiling was 3 passes.",
+    "counterhypothesis": "Current producer-side explicit exhaustive signaling alone might already prevent premature completion.",
+    "discriminator": "Inspect exact current producer and consumer semantics plus every mutation-capable current wrapper before writing.",
+    "result": "Counterhypothesis rejected at consumer boundary. Current producer had already improved to explicit <true|false>, but consumer completion still needed a shared fail-closed guard."
+  },
+  "durable_writes": [
+    {"commit": "643f8fcdc4fc2a4d2ffcb28513c9bdef0b94f1c9", "path": "tools/free_swarm_backfill_exhaustiveness_878.py", "scope": "SHARED_FAIL_CLOSED_COMPLETION_GUARD"},
+    {"commit": "a1206a12a2189b143d4971135cdf30fa166df7da", "path": "tests/test_free_swarm_backfill_exhaustiveness_878.py", "scope": "FOCUSED_REGRESSION_SOURCE"},
+    {"commit": "17028a7119ce1f31aacede54977265dc6f6203f4", "path": "tools/free_swarm_backfill_scheduler.py", "scope": "CURRENT_MAIN_PRODUCER_FUSION"},
+    {"commit": "4203d3668e2e801c5bddbc99b076035b18976b31", "path": "tools/run_free_evidence_forge_backfill.py", "scope": "CURRENT_MAIN_ACTIVE_FORGE_FUSION"}
+  ],
+  "parallel_convergence": {
+    "stale_pr_1879": "CLOSED_SUPERSEDED_DONOR_FUSED",
+    "successor_pr_1894": "CLOSED_SUPERSEDED_AFTER_MAIN_ADVANCED_37_COMMITS",
+    "write_strategy": "FILE_SCOPED_SHA_GUARDED_CURRENT_MAIN_FUSION_NO_FORCE",
+    "newer_runtime_capsule_observed": "tools/run_free_swarm_historical_backfill_capsule_878.py imports and installs the same shared exhaustiveness guard"
+  },
+  "semantics_after_fusion": {
+    "non_exhaustive_or_missing_exhaustive": "DOES_NOT_ADVANCE_ZERO_CONFIRMATION_STREAK",
+    "saturation": "REQUIRES_TWO_CONSECUTIVE_ZERO_NOVEL_PASSES_WITH_EXPLICIT_EXHAUSTIVE_TRUE",
+    "non_exhaustive_pass": "RESETS_ZERO_CONFIRMATION_STREAK",
+    "max_passes": 64,
+    "max_pass_terminal_state": "MAX_PASSES_REACHED_NOT_SEMANTIC_PASS",
+    "causal_binding": "PRESERVED_EXISTING_SOURCE_EVENT_CHUNK_EXACT_NEXT_PASS_AND_BOUNDED_DELTA_LIST_GUARDS"
+  },
+  "test_evidence": {
+    "committed_regressions": 9,
+    "executed_test_pass_observed_by_this_organ": false,
+    "push_workflow_runs_observed_for_commit_4203d366": 0,
+    "runtime_credit_from_source_only": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: premature historical-backfill semantic completion was repaired in the single active Forge path without overwriting newer liveness/runtime-identity work.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BOUNDED_SCOPE: the causal research-entry envelope now preserves exact source-event/chunk/next-pass binding while adding fail-closed explicit completion semantics; this is ingestion/provenance hardening, not full Typed Entry runtime credit.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BOUNDED_SCOPE: stronger historical corpus completion reduces false truncation before Forge/Distillery/J-Space dataset construction. No J-Space/model/training runtime credit is granted."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "negative_evidence": [
+    "No executed unit-test PASS was observed by this organ for the new regression suite.",
+    "No automatically associated GitHub workflow run was observed for commit 4203d3668e2e801c5bddbc99b076035b18976b31.",
+    "No new unusual experiment was permitted because this chat surface does not expose a shared immutable macrocycle identity."
+  ],
+  "next_exact_action": "Using the already-authorized clay-direct-dev/self-hosted transport, checkout an exact current commit containing 643f8fcd+a1206a12+17028a71+4203d366, run python -m unittest tests.test_free_swarm_backfill_exhaustiveness_878 plus the existing historical-backfill/batch-identity regressions, bind command/source/tree/sandbox/exit/output into the canonical receipt path, then observe the already-established terminal historical-backfill and replay-v2 flows without creating duplicate triggers.",
+  "evidence_boundary": "SOURCE_AND_COORDINATION_DELTA_COMMITTED; EXECUTED_TEST_AND_RUNTIME_ACCEPTANCE_UNRESOLVED"
+}

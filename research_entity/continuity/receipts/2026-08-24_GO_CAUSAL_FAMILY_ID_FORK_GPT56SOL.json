@@ -1,0 +1,93 @@
+{
+  "schema": "CLAY_ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_main_before_write": "d2a44f9eef93181fe6a9538f6025a419fa711f40",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor_authority": "SUPERVISOR_STEERING_8_62_FREE_ONLY",
+  "retained_hcu_lane": {
+    "pull_request": 1263,
+    "head_sha": "912746256999f4663bd6f3817e065d070a410b27",
+    "state": "OPEN_DRAFT_NOT_MERGED",
+    "mergeable": false
+  },
+  "exact_source_bindings": {
+    "jspace_training_trace_v1.py_blob": "ae7dbb06dee6ca301e54251380025146a44b0379",
+    "jspace_dataset_admission_gate_v1.py_blob": "69ba2bb966866fbc67646a210559894b107b7a65",
+    "jspace_dataset_family_split_v1.py_blob": "c0fb3369150a6ee5d7ec2a3d384266d559c630f4",
+    "compile_jspace_bootstrap_dataset_v1.py_blob": "c00c78c64c522dbe258b49ad777a19a936a9fe24",
+    "test_jspace_dataset_family_split_v1.py_blob": "44adb707c1702180eed04441426dfefa51a77fee",
+    "test_compile_jspace_bootstrap_dataset_v1.py_blob": "a017563929d9705a9c3fb5c3f8f892e15ba8dab6"
+  },
+  "unusual_experiment": {
+    "name": "CAUSAL_FAMILY_ID_FORK",
+    "count": 1,
+    "hypothesis": "Two correlated training traces with the same admitted causal ancestry can select different caller-controlled trace_family_id labels and therefore be assigned to different dataset splits.",
+    "method": "Reproduce the exact ENTITYOS_HCU_JSPACE_DATASET_FAMILY_SPLIT/v1 domain-separated SHA-256 bucket rule while holding the causal-origin concept fixed and varying only the free family label.",
+    "observations": [
+      {
+        "trace_family_id": "same-causal-origin-alias-0",
+        "split_hash_sha256": "8df317c20d354bca2a9c38c66ee9e2bf1817c6715d12136f940305834bb953c8",
+        "first_bucket_byte": 141,
+        "split": "train"
+      },
+      {
+        "trace_family_id": "same-causal-origin-alias-9",
+        "split_hash_sha256": "e0b7089008846961e7c8d35870fe38e160c597af519c9326a2151eaf293fd74c",
+        "first_bucket_byte": 224,
+        "split": "validation"
+      },
+      {
+        "trace_family_id": "same-causal-origin-alias-12",
+        "split_hash_sha256": "f83501e1b7931c7dfb7da4d10ccacbf182e0a2951712926ce59c377018954f73",
+        "first_bucket_byte": 248,
+        "split": "holdout"
+      }
+    ],
+    "classification": "MECHANISM_SUPPORTED_BY_EXACT_SPLIT_ALGORITHM_REPRODUCTION_PLUS_EXACT_CURRENT_PR_SOURCE_INSPECTION_NOT_FULL_PR_RUNTIME"
+  },
+  "source_mechanism": {
+    "training_trace": "build_training_trace accepts trace_family_id as a caller-supplied nonempty string and includes it in the self-authenticating trace digest, but does not derive it from causal ancestry.",
+    "dataset_admission": "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2 binds generation, Entry, route, GRID, cell, role, basis, vector-control condition and optional verified outcome ancestry, but DatasetAdmission carries no family identity and does not bind trace_family_id.",
+    "family_split": "The family splitter hashes the explicit training_trace.trace_family_id and only proves that an already-built trace was not relabelled after registry admission.",
+    "serious_compiler": "compile_jspace_bootstrap_dataset_v1 returns the explicit trace_family_id from each validated trace and calls split_for_family on that label; the admitted compiler reuses this lower compiler after separate admission/inference checks.",
+    "counterhypothesis_rejected": "Exact trace digest plus admitted-training registry prevents post-admission relabelling, but does not prove that independently constructed correlated traces were assigned the same family label before admission."
+  },
+  "impact": {
+    "risk": "CORRELATED_TRAIN_VALIDATION_HOLDOUT_LEAKAGE_BY_PRE_ADMISSION_FAMILY_ALIAS",
+    "benchmark_effect": "Held-out quality can be inflated because causal relatives may be partitioned under different aliases.",
+    "truth_effect_authority": "UNCHANGED_NONE",
+    "whole_runtime_credit_delta": 0,
+    "hcu_full_runtime_credit_delta": 0,
+    "jspace_model_runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "adjacent_source_drift": {
+    "finding": "The standalone family splitter currently declares DATASET_ADMISSION_SCHEMA v1 while the current dataset admission gate emits v2.",
+    "scope": "INTERFACE_DRIFT_SOURCE_FINDING_ONLY; serious compiler imports split_for_family directly, so this is not claimed as proof of serious-pipeline runtime failure."
+  },
+  "repair_contract": [
+    "Family split ownership must come from causally admitted ancestry, not an unconstrained caller label.",
+    "Preserve trace_family_id as optional provenance/human grouping only; it must not be the sole split authority.",
+    "Use one existing split authority rather than creating a second family service or state authority.",
+    "A baseline/lesion/shuffle/rescue set sharing the admitted causal-family anchors must be forced into one split even if their supplied labels differ.",
+    "Fail closed on ambiguous family ownership or contradictory causal-family bindings.",
+    "Version the split/dataset contract if split semantics change and preserve exact receipt provenance."
+  ],
+  "required_regression": {
+    "name": "SAME_CAUSAL_ANCESTRY_DIFFERENT_LABELS_ONE_SPLIT_OR_REJECT",
+    "expected": "Two admitted traces sharing the selected stable causal-family anchors but carrying different family labels cannot appear in different train/validation/holdout partitions.",
+    "execution_gate": "Run the fixed regression on the admitted bounded FREE isolated Sandbox surface after exact source/capsule binding; fail closed on quota/billing/upgrade/charge path."
+  },
+  "coordination": {
+    "duplicate_implementation_created": false,
+    "target_lane": "PR1263_SINGLE_RETAINED_HCU_DONOR",
+    "reason_for_no_core_code_write_in_this_receipt": "The retained HCU donor is hot and materially diverged while main is advancing concurrently; source semantics should be repaired inside PR1263 rather than by creating a second parallel family-split implementation."
+  },
+  "result": "NEW_PRE_ADMISSION_CAUSAL_FAMILY_ALIAS_LEAKAGE_MECHANISM_SUPPORTED_AND_DURABLY_BOUND",
+  "next_exact_gate": "Repair family ownership inside retained PR1263, add SAME_CAUSAL_ANCESTRY_DIFFERENT_LABELS_ONE_SPLIT_OR_REJECT regression, then execute the same fixed exact-source family-split/admitted-dataset capsule on the bounded FREE Sandbox. In parallel preserve the existing entry-capsule manifest-label repair and extend only after exact component evidence toward route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> admitted causal dataset closure.",
+  "acceptance": "IN_PROGRESS"
+}

@@ -1,0 +1,104 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_GENERATOR_POLARITY_SWARM_REVIEW/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "main_observed_during_review": "f548a1cac683b3e9d3dabf2936c0e201f4e3324d",
+  "reviewed": [
+    {
+      "path": "tools/trigger2_dynamic_codebook_generator_v2.py",
+      "observed_scope": "96 abstract-slot rows: 72 METHOD_ONLY positives plus 24 SYNTHETIC_HARD_NEGATIVE rows; full S3, four train templates, exact class-symbol counterbalance, class-word leak check, reserved unopened T5; no train-ready ABI materialization."
+    },
+    {
+      "path": "tools/trigger2_dynamic_codebook_binding_template_generator_v2.py",
+      "observed_scope": "432 METHOD_ONLY rows = 4 templates x 6 realized S3 mappings x 3 semantic classes x 6 display orders; exact crossing of target mapping and codebook display order; train-template-only and ABI-unmaterialized."
+    },
+    {
+      "path": "research_entity/global/j-space/research/2026-08-25_FORSCHUNGSRUN_2_V2_POLARITY_DECONFOUND_GPT56SOL.json",
+      "observed_scope": "Existing source-only deconfound establishes the required exact 3 semantic target x 3 opaque code x 2 query-polarity factorial per split and shows that merely exposing both polarities without equal counts can leave a class-correlated shortcut."
+    }
+  ],
+  "swarm_review": [
+    {
+      "role": "EVIDENCE_EXTRACTOR",
+      "verdict": "PASS",
+      "finding": "The Claude ingest supports dynamic context-dependent binding/routing as a training objective while positive cross-checkpoint J-Space labels remain forbidden."
+    },
+    {
+      "role": "SHORTCUT_HUNTER",
+      "verdict": "ORDER_CONFOUND_FIXED_POLARITY_CONFOUND_OPEN",
+      "finding": "The 432-row order-crossed generator removes deterministic codebook-position leakage by fully crossing six display orders, but it has no independent query-polarity axis."
+    },
+    {
+      "role": "STATISTICAL_REVIEWER",
+      "verdict": "CRITICAL_SUCCESSOR_REQUIREMENT",
+      "finding": "A successor must cross semantic target x opaque code x query polarity with exact counts. Presence of both polarity forms is insufficient if their counts remain class-correlated."
+    },
+    {
+      "role": "OUTPUT_CONTRACT_REVIEWER",
+      "verdict": "SEPARATE_HARD_NEGATIVE_CHANNEL_REQUIRED",
+      "finding": "The 96-row generator's hard-negative target form 'REJECT <wrong>; CORRECT <right>' is intentionally different from the one-symbol production contract. Do not blindly mix those rows into the same direct symbol-only SFT objective; keep them in a separately typed rejection/evaluator family or use a separately preregistered compatible objective."
+    },
+    {
+      "role": "ABI_PROVENANCE_REVIEWER",
+      "verdict": "MATERIALIZATION_BLOCKED",
+      "finding": "Both generators correctly remain abstract. No train-ready atom rows may be minted until the accepted 46-atom inventory, exact selected-checkpoint tokenizer identity, single-token counts/positions, ABI member/row integrity and generator source identity are verified."
+    },
+    {
+      "role": "SPLIT_LEAKAGE_REVIEWER",
+      "verdict": "TRAIN_TEMPLATE_ONLY_NOT_CORPUS_COMPLETE",
+      "finding": "The 432 rows strengthen TRAIN template generation but do not establish validation/holdout lexical-family isolation, unseen-symbol holdout, or a frozen unseen-template family at final materialized-corpus scope."
+    },
+    {
+      "role": "FINAL_ARBITER",
+      "verdict": "PREFER_ORDER_CROSSED_V2_AS_DONOR_DO_NOT_DUPLICATE",
+      "finding": "Keep the order-crossed 432-row generator as the stronger current donor for binding-template construction. Add polarity/split/materialization in a separately versioned successor rather than opening a competing generator lane."
+    }
+  ],
+  "critical_new_blockers": [
+    {
+      "id": "T2_BIND_B1_QUERY_POLARITY_MISSING",
+      "severity": "CRITICAL",
+      "observed": "Current order-crossed v2 factorial is 4 x 6 x 3 x 6 = 432 and contains no query-polarity dimension.",
+      "required_successor": "Exact independent QUERY_POLARITY crossing with equal counts, preserving target/code/display-order balance. Reuse the already preregistered polarity semantics or separately preregister an equivalent; do not invent a ternary 'negation = complement' rule."
+    },
+    {
+      "id": "T2_BIND_B2_HARDNEG_OUTPUT_CONTRACT_MISMATCH",
+      "severity": "HIGH",
+      "observed": "Hard-negative rows in trigger2_dynamic_codebook_generator_v2.py use explanatory REJECT/CORRECT targets while production positives require one symbol only.",
+      "required_successor": "Keep rejection supervision separately typed/evaluated so direct symbol emission is not contaminated by a competing output grammar."
+    },
+    {
+      "id": "T2_BIND_B3_FINAL_SPLIT_AND_ATOM_MATERIALIZATION_OPEN",
+      "severity": "HIGH",
+      "observed": "Current generators are source templates with placeholders and TRAIN-only scope.",
+      "required_successor": "After checkpoint selection/tokenizer binding, materialize verified atoms with dedicated unseen-symbol holdout, disjoint lexical/provenance families, at least four train templates plus a frozen unseen-template family, and exact family-level split linting."
+    }
+  ],
+  "successor_design_constraint": {
+    "positive_train_factorial_if_four_templates_and_six_display_orders_are_retained": "4 templates x 6 S3 mappings x 3 semantic targets x 2 query polarities x 6 display orders = 864 METHOD_ONLY positive template rows",
+    "note": "864 is a source-template combinatorial count, not an accepted-token target and not evidence of training utility. Validation and frozen holdout require separately isolated families rather than cloning TRAIN ancestry.",
+    "query_polarity_rule": "Exact count balance is mandatory. For a three-class task, do not treat negation as a single complement class. Use the already preregistered query-polarity construction or freeze a new unambiguous formulation before generation."
+  },
+  "coordination": {
+    "redundant_seed_created_then_removed_by_this_organ": true,
+    "reason": "A parallel organ had already committed a stronger 18-row dynamic-binding seed/audit; duplicate lane was removed rather than retained as a competing training source.",
+    "new_unusual_experiment_executed": false,
+    "paid_provider_or_training_executed": false
+  },
+  "credits": {
+    "research_review_delta": 1,
+    "new_accepted_dataset_tokens": 0,
+    "new_jspace_model_runtime_credit": 0,
+    "new_training_credit": 0,
+    "new_hcu_runtime_credit": 0,
+    "new_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Build a separately versioned polarity-crossed successor from the order-crossed v2 donor, using exact balanced polarity semantics and a separate hard-negative output family; then deterministic-self-test it before any ABI atom materialization. Keep final tokenizer/atom/split holdouts fail-closed."
+}

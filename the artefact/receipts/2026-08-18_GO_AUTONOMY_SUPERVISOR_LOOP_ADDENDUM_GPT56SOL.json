@@ -1,0 +1,66 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_CONVERGENCE_ADDENDUM",
+  "canonical_binding": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "workspace": "the artefact/",
+    "receipt_parent_rule": "THE_PARENT_OF_THIS_RECEIPT_COMMIT_IS_THE_EXACT_CANONICAL_MAIN_OBSERVED_IMMEDIATELY_BEFORE_THIS_ADDENDUM_WRITE"
+  },
+  "new_source_since_primary_receipt": {
+    "typed_planner": "ClayVerseAutonomyDecision/v1",
+    "typed_planner_wait_kind": "INTENTIONALLY_NOT_ADMITTED_UNTIL_TYPED_WAKE_CONDITION_EXISTS",
+    "one_shot_dispatch": "ClayVerseAutonomyDispatch/v1 over existing UnifiedDB leases",
+    "dispatch_terminal_payload": "OPAQUE_RANDOM_NONCE_ONLY",
+    "dispatch_hook_role": "SYSTEM_AUTONOMY_TURN_NOT_USER_GOAL",
+    "dispatch_claude_session_binding": true,
+    "reason_stop_compiles_typed_next_step": true,
+    "effect_stop_without_mcp_dispatch_fails_step": true,
+    "owner_commands": ["/goal", "/goal-ack", "/goal-cancel"],
+    "owner_command_cross_user_fence": true,
+    "terminal_activity_registry": "PROCESS_LOCAL_TRANSIENT_NON_AUTHORITY",
+    "detached_idle_tmux_attestation": [
+      "no attached clients",
+      "one pane",
+      "pane alive",
+      "not in tmux mode",
+      "pane_current_command=claude"
+    ],
+    "pulse_current_claude_process_readiness": "REQUIRES_SUCCESSFUL_HUMAN_CANONICAL_ROUNDTRIP_AFTER_CURRENT_PANE_PROCESS_START",
+    "pulse_db_connections": "SHORT_LIVED_SAME_UNIFIEDDB",
+    "pulse_runtime_form": "ASYNC_TASK_IN_EXISTING_APPLICATION_PROCESS",
+    "pulse_second_daemon": false,
+    "fastapi_lifecycle_helper": true,
+    "activation_attestation_module": "clayverse/autonomy_activation.py",
+    "live_activation": false
+  },
+  "activation_gate": {
+    "law": "LIVE_AUTONOMY_PULSE_INSTALLATION_REQUIRES_EXACT_SAME_TERMINAL_SESSION_MANAGER_ACTIVITY_ARBITER_FOR_WEB_PTY_AND_PULSE",
+    "split_manager_same_state_root": "DENIED",
+    "same_exact_manager": "ELIGIBLE_FOR_LIFECYCLE_INSTALLATION",
+    "reason": "Prevent browser attach racing synthetic nonce dispatch between detached-client check and tmux send-keys.",
+    "unsafe_timer_activation_forbidden": true
+  },
+  "focused_source_tests_added": [
+    "tests/test_autonomy_planner.py",
+    "tests/test_autonomy_dispatch.py",
+    "tests/test_autonomy_hook_dispatch.py",
+    "tests/test_autonomy_goal_commands.py",
+    "tests/test_autonomy_pulse.py",
+    "tests/test_autonomy_activation_gate.py"
+  ],
+  "evidence": {
+    "source_written_to_main": true,
+    "exact_current_checkout_pytest_pass_claimed": false,
+    "exact_oci_pass_claimed": false,
+    "exact_microvm_pass_claimed": false,
+    "whole_product_pass_claimed": false,
+    "known_prior_github_hosted_guard_pattern": "RUNNER_ID_0_STEPS_EMPTY_PRE_STEP_ZERO_TEST_CREDIT",
+    "vps_or_self_hosted_test_used": false
+  },
+  "next_exact_step": "Refactor create_terminal_app/service wiring so browser WebSocket PTY and AutonomyPulse receive the exact same TerminalSessionManager instance; then install only through install_attested_autonomy_pulse and execute the focused exact-checkout guard before any live autonomy claim."
+}

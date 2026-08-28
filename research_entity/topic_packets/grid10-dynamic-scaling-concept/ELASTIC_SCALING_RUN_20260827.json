@@ -1,0 +1,39 @@
+{
+  "schema": "GRID10_ELASTIC_SCALING_EXPERIMENT/v1",
+  "concept_source": "research_entity/topic_packets/grid10-dynamic-scaling-concept/CONCEPT.md (adapted, not literal -- see critical review in the same directory)",
+  "model_load_time_s": 7.19,
+  "phase1_measurement_window_s": 8.0,
+  "standby_node_ids": [
+    "elastic-06",
+    "elastic-07",
+    "elastic-08",
+    "elastic-09"
+  ],
+  "active_node_ids": [
+    "elastic-00",
+    "elastic-01",
+    "elastic-02",
+    "elastic-03",
+    "elastic-04",
+    "elastic-05"
+  ],
+  "cpu_delta_ticks_per_node": {
+    "elastic-00": 10,
+    "elastic-01": 10,
+    "elastic-02": 9,
+    "elastic-03": 10,
+    "elastic-04": 10,
+    "elastic-05": 11,
+    "elastic-06": 1,
+    "elastic-07": 1,
+    "elastic-08": 1,
+    "elastic-09": 2
+  },
+  "active_group_total_cpu_ticks": 60,
+  "standby_group_total_cpu_ticks": 5,
+  "standby_vs_active_cpu_ratio": 0.083,
+  "elastic_poll_rate_change_events": [],
+  "scale_out_claiming_node": "elastic-01",
+  "measured_scale_out_reaction_time_s": 0.074,
+  "concept_claimed_target_reaction_time_ms": 30
+}

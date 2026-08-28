@@ -1,0 +1,106 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:42:30+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "7983d8bda9e9e0adf6d0cd222bff3f21fbe72e57",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "controller_observation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "latest_head_observed": "cfc375ca9809c1c557dde8f382d00b14f5d0c4b6",
+    "tier2_handler_state": "fresh empty distinct carrier; chunked SHA-256-bound declared transfer; carrier snapshot before source deletion; replacement persistent:false from carrier snapshot",
+    "carrier_name_state": "random UUID-derived name",
+    "carrier_persistence_state": false,
+    "post_source_delete_error_path": "carrier intentionally retained and carrier name plus snapshot id returned when the handler catches an error",
+    "remaining_crash_gap": "a hard controller/process termination after source deletion can lose the random carrier handoff identity before a catch response is emitted",
+    "runtime_credit": 0
+  },
+  "primary_provider_evidence": {
+    "provider": "Vercel Sandbox",
+    "persistent_sandbox_contract": "current official Vercel Sandbox documentation states named persistent sandboxes can be retrieved across later processes with Sandbox.get({name}); the filesystem is restored from the last session/snapshot, and persistence is enabled by default unless persistent:false is requested",
+    "named_recovery_contract": "Sandbox.get({name,resume:false}) can retrieve a named persistent sandbox without automatically resuming it; subsequent filesystem/command activity can resume from the persisted state",
+    "storage_scope": "this uses the already-authorized Vercel Sandbox surface and does not assume Vercel Drives private-beta access or a new Blob storage product",
+    "runtime_verification": false
+  },
+  "generated_candidate": {
+    "name": "DETERMINISTIC_PERSISTENT_DECLARED_TRANSFER_CARRIER",
+    "carrier_role": "temporary acceptance-test storage carrier only; never ClayVerse identity, memory, truth, effect or recovery authority",
+    "carrier_name_derivation": "derive a deterministic bounded name from versioned domain separator + original source sandbox name + immutable Research SHA; do not depend on process-local randomness",
+    "carrier_persistent": true,
+    "carrier_snapshot_expiration": "bounded, e.g. 24h maximum for the acceptance handoff",
+    "carrier_payload": "only the sanitized tier2-transfer archive and exact carrier receipt; no source guest filesystem clone",
+    "carrier_receipt_must_bind": [
+      "source sandbox name",
+      "Research SHA/tree",
+      "exact OCI image id and saved-image SHA-256",
+      "EntityOS SHA-256",
+      "transfer manifest SHA-256",
+      "bundle SHA-256 and bounded byte/chunk counts",
+      "Tier-1 generation and causal identity required by the declared transfer manifest"
+    ],
+    "first_attempt_sequence": [
+      "derive carrier name before reading/deleting the source",
+      "fail closed if an existing same-name carrier has mismatched receipt/identity",
+      "create or resume the deterministic persistent carrier",
+      "copy only declared transfer chunks from the source and verify every chunk plus reconstructed bundle plus manifest",
+      "persist/snapshot carrier and independently retrieve it by deterministic name before source deletion",
+      "delete source only after the named carrier identity and hashes are re-verified",
+      "create a distinct persistent:false replacement from a fresh verified carrier snapshot",
+      "verify declared transfer and exact OCI identity in replacement",
+      "reacquire fresh HCP-WIF/Mistral secret and continue Tier-2 recovery/cognition",
+      "delete the carrier only after replacement recovery evidence is durably established"
+    ],
+    "crash_retry_sequence": [
+      "recompute carrier name from original requested source name plus immutable Research SHA before attempting source lookup",
+      "retrieve carrier by name with resume:false",
+      "if exact carrier receipt validates, resume/verify and create a new carrier snapshot if needed",
+      "continue replacement without requiring the deleted source",
+      "if carrier is absent or receipt mismatches after source deletion, return explicit UNKNOWN/BLOCKED and never synthesize success"
+    ],
+    "idempotency": "one deterministic carrier per source acceptance attempt; retries validate and reuse exact transfer identity rather than minting parallel authorities",
+    "cleanup": "delete the persistent carrier and its snapshots after successful replacement verification; retain only bounded durable GitHub/runtime receipts, not the carrier as long-term canonical state"
+  },
+  "counterhypotheses": {
+    "random_nonpersistent_carrier_is_enough": "REJECTED_FOR_CRASH_RECOVERY_PROMOTION because its handoff identity can exist only in process memory/error response",
+    "source_snapshot_is_enough": "REJECTED because deleting the producing source sandbox is not an admitted independent-carrier lifecycle",
+    "persistent_carrier_becomes_second_state_authority": "REJECTED_IF_AND_ONLY_IF payload is strictly declared transfer, bounded lifecycle, fail-closed receipt validation and destructive cleanup after replacement; otherwise fail closed"
+  },
+  "required_falsifiers_before_promotion": [
+    "source guard proves deterministic carrier naming and exact receipt binding",
+    "current exact-head Vercel build admits the handler/guard bytes",
+    "separate request/process can retrieve the carrier by deterministic name after the creating request is gone",
+    "source is deleted before replacement creation",
+    "replacement restores only declared transfer and not undeclared source-guest filesystem state",
+    "hard interruption after source deletion is recoverable from the named carrier without replaying external effects",
+    "carrier receipt mismatch/stale generation fails closed",
+    "carrier is deleted after successful replacement and no canonical ClayVerse state depends on it"
+  ],
+  "coordination": {
+    "parallel_pr810_writes_observed": true,
+    "controller_code_changed_by_this_receipt": false,
+    "duplicate_semantic_path_added": false,
+    "owner_secrets_or_credentials_used": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "The global go unusual-experiment slot was already consumed; this is deterministic architecture/provider-contract adjudication only."
+  },
+  "epistemic_status": {
+    "provider_contract_supported": true,
+    "architecture_candidate": true,
+    "source_implemented": false,
+    "exact_runtime_verified": false,
+    "tier2_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Fuse deterministic named persistent-carrier recovery into the single retained PR810 Tier-2 handler/guard without duplicating the controller path; then obtain an exact-head Vercel preview and run source guard -> PR686 private source -> OCI -> provider -> EffectGate/EntityOS -> Tier1 -> destructive Tier2 source deletion -> forced cross-process carrier recovery -> replacement -> second cognition."
+}

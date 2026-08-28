@@ -1,0 +1,58 @@
+{
+  "schema_version": "8.90",
+  "cycle": "trigger2-db-match-production-pre-admission-pass-prompt-binding-closed",
+  "evidence_basis": [
+    "bec70f77d5e9384f9acfd89a93526f6069c87c76: production trigger2_db_match_row_assembler_v1 exists and exactly one authorized empty-history T2_GP_PILOT_DB_MATCH_V1 row passes the then-current full v4 candidate pre-admission chain; canonical_dataset_admission=false, accepted_dataset_tokens_minted=0, training_credit_minted=0; identical replay remains +0 at evaluator level",
+    "1443fd33c238fb07e59a066aeb70686108989a2f: executable counterexample found during the assembler work (post-assembly prompt swap could pass) was closed by an independently recomputing PROMPT_CONTENT_BINDING gate wired as the sixth v4 per-row check; relevant regression run reports 88 passed, 0 failed",
+    "563906206b6072c351031ca2e1761908bb34df1a: trusted synthetic generator authority source_sha256 and git_commit_sha were re-pinned to the exact commit that introduced render_prompt(), removing the temporary stale self-reference note",
+    "83b5ff9ae04c0690027bb4c87943675fe6d35a9b: latest observed distillery remains 0 accepted dataset tokens from 88,774 source tokens and Source->GO remains 0.000%; activity/worker volume therefore still mints no training utility credit",
+    "a80d824b6721576b8aff874c790a4cbd0e32f1d3: GO recursive coordinator scaling is new source-only architecture progress with repository_bound_test_execution_observed_this_cycle=false and zero physical/HCU/training credit; keep it separate from Trigger-2 admission promotion",
+    "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json on main remains OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF with all provider routes admitted=false and no paid fallback"
+  ],
+  "material_corrections": {
+    "retired_training_p0s": "Do not keep production row assembly, authorized DB_MATCH end-to-end construction, or prompt-content binding listed as missing. They now have executable local regression evidence at candidate-pre-admission/component scope.",
+    "db_match_credit_boundary": "The DB_MATCH result is a candidate_pre_admission_pass, not canonical dataset admission. Positive rows admitted remains 0; accepted dataset tokens and training credit remain 0. The evaluator replay +0 demonstrates deterministic evaluation, not a canonical ledger double-write defense because no canonical admission write occurred.",
+    "prompt_integrity": "Model-visible prompt content is now independently re-derived from pinned generator authority and checked fail-closed. This closes the demonstrated prompt-transplant counterexample for DB_MATCH only; a future diverse generator must carry equivalent content-subject provenance rather than inherit authority from this fixed string.",
+    "generator_authority": "The current authority still covers only two fixed synthetic property-test cases and only one currently prompt-bound A02-compatible DB_MATCH path. It is not authority for the requested diverse training corpus. The next training P0 is therefore a separately versioned diverse causal-family generator authority, not more scaling of the one fixed case.",
+    "go_architecture_lane": "Recursive coordinator scaling source work is useful but runtime-unobserved. Do not mint physical GRID10, whole-HCU, EntityOS, training, BASE, or canonical-semantics credit from deterministic topology/source tests. Repository-bound execution and later real-process binding remain separate requirements.",
+    "free_only": "Keep all autonomous provider/model routes HARD_OFF under current owner emergency stop. GO/non-provider local source validation may continue only under current FREE_ONLY authority; no paid fallback and no Together route."
+  },
+  "next_priority_order": [
+    "P0_DIVERSE_GENERATOR_AUTHORITY_V2: build a separately versioned generator authority covering the intended causal-family/category matrix. For each generated row bind generator source/commit, parameters, model-visible prompt/content subject, formal world/event/history inputs, evaluator/discriminator inputs, tokenizer ABI, and authority version. Do not copy the two-case v1 authority into training eligibility.",
+    "P0_DIVERSE_GENERATOR_ANTI_SHORTCUT_TESTS: before any canonical admission, execute nuisance-only decoders, conditional leakage tests, target/order counterbalancing, mutation/transplant tests, and Goodman family-disjoint ancestry checks over the generated microbatch. Train/calibration/holdout causal families and model/checkpoint ancestry must remain explicit and disjoint where independence is claimed.",
+    "P0_FINAL_ADMISSION_CURRENTNESS: bind the candidate microbatch to one exact successor/ledger/generator-authority snapshot and revalidate family provenance, tokenizer ABI, rendered nuisance controls, prompt-content binding, and currentness immediately before the canonical write boundary; fail closed on ledger or authority advance.",
+    "P1_REAL_8_TO_16_ROW_MICROPILOT: only after the diverse authority and final-boundary gates pass, attempt 8-16 rows spanning multiple causal families through the production assembler/adjudicator/admission path. Require per-row accepted/rejected receipts and, for any canonical accept, identical replay producing +0 additional accepted tokens/rows.",
+    "P2_SCALE_TO_256_PLUS_64_FAMILIES_ONLY_AFTER_REAL_MICROPILOT: do not jump from one fixed DB_MATCH candidate_pre_admission_pass to bulk 256/1024/4096/10000 scaling without real canonical admission receipts from the diverse microbatch.",
+    "P3_A02_NONEMPTY_HISTORY_SUCCESSOR_ONLY_IF_NEEDED: HIST_CHAIN remains outside A02-v1 empty-history scope. Any nonempty-history support must be separately versioned and adversarially tested; do not relax A02-v1 post hoc.",
+    "P3_GO_RECURSIVE_COORDINATOR_RUNTIME: separately execute xeno_recursive_coordinator_scaling_acceptance_v1 repository-bound on an admissible non-provider FREE surface before considering any runtime scaling claim; later bind measured fan-in/compression/latency/contention/crash-replacement/evidence ancestry to the real physical fabric.",
+    "KEEP_PROVIDER_HARD_OFF_AND_KEEP_FRANK_HARNESS_UNCHANGED"
+  ],
+  "external_design_anchor": {
+    "source": "SLSA provenance v1.2 concepts",
+    "application": "Treat generated training examples analogously to provenance subjects: the trusted producer identity/process, exact subject/content, and resolved inputs/parameters must be bound and downstream-verifiable. This is a design analogy only and does not itself mint Clay executable evidence or semantics credit."
+  },
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "promotion_delta": {
+    "production_row_assembler_ready": true,
+    "db_match_candidate_pre_admission_pass": true,
+    "prompt_content_binding_source_and_regression_closed": true,
+    "diverse_training_generator_authorized": false,
+    "canonical_dataset_rows_admitted": 0,
+    "accepted_dataset_tokens_delta": 0,
+    "training_credit_delta": 0,
+    "base_credit_delta": 0,
+    "canonical_semantics_credit_delta": 0,
+    "physical_grid10_credit_delta": 0,
+    "whole_hcu_credit_delta": 0
+  }
+}

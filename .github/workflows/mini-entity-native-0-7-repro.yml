@@ -1,0 +1,301 @@
+name: Mini Entity native 0.7 exact repro
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'the artefact/blogpost_entity/native/**'
+      - '.github/workflows/mini-entity-native-0-7-repro.yml'
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/native/**'
+      - '.github/workflows/mini-entity-native-0-7-repro.yml'
+      - 'research_entity/receipts/MINI_ENTITY_NATIVE_0_7_REPRO_REQUEST.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-bound-native-repro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Bind exact checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "HEAD=$(git rev-parse HEAD)"
+          echo "TREE=$(git rev-parse HEAD^{tree})"
+          test -z "$(git status --porcelain)"
+
+      - name: Install native build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential pkg-config libsqlite3-dev libcurl4-openssl-dev libjson-c-dev sqlite3 jq strace binutils
+
+      - name: Regression-only source-closure falsifiers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v 'the artefact/blogpost_entity/native/test_build_native_bound.py'
+
+      - name: Exact source-bound repeat build
+        shell: bash
+        run: |
+          set -euo pipefail
+          NATIVE='the artefact/blogpost_entity/native'
+          mkdir -p /tmp/mini07
+          python3 "$NATIVE/build_native_bound.py" \
+            --source "$NATIVE/mini_entity.c" \
+            --output /tmp/mini07/mini_entity.clay \
+            --receipt /tmp/mini07/build_receipt.json \
+            --version-label mini-entity/0.7.0-dev1 \
+            --source-date-epoch 1787371200 \
+            --repeat 3 \
+            | tee /tmp/mini07/build_stdout.json
+          chmod +x /tmp/mini07/mini_entity.clay
+          test "$(/tmp/mini07/mini_entity.clay --version)" = 'mini-entity/0.7.0-dev1'
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('/tmp/mini07/build_receipt.json').read_text())
+          assert p['schema']=='mini-entity-native-build-provenance/v2'
+          b=p['build_definition']
+          c=b['source_closure']
+          expected={'mini_entity.c','mini_entity_part00.inc','mini_entity_part01.inc','mini_entity_part02.inc','mini_entity_part03.inc','mini_entity_part04.inc'}
+          assert {x['path'] for x in c['files']}==expected, c['files']
+          assert len(c['files'])==6
+          assert b['source_identity_sha256']==c['sha256']
+          assert b['repeat_byte_identity'] is True
+          assert len(set(b['repeat_hashes']))==1
+          PY
+          sha256sum /tmp/mini07/mini_entity.clay
+          if strings /tmp/mini07/mini_entity.clay | grep -Eai 'zero_blog|Gasthaus|Maurer|T_OMEGA|Gabriel|Andreas'; then
+            echo 'APPLICATION_OR_PERSONALITY_SEMANTICS_LEAKED_INTO_BINARY'
+            exit 1
+          fi
+
+      - name: Fresh database is neutral
+        shell: bash
+        run: |
+          set -euo pipefail
+          /tmp/mini07/mini_entity.clay init /tmp/mini07/neutral.db
+          /tmp/mini07/mini_entity.clay status /tmp/mini07/neutral.db | tee /tmp/mini07/neutral_status.json
+          jq -e '.generation==0 and .active_profile==null and .profile_present==false and .local_model_configured==false' /tmp/mini07/neutral_status.json
+
+      - name: Canonical v2 stays fail-closed; simple local-exec isolates parent secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/mini07/fixture_runner.py <<'PY'
+          import json, os, pathlib, sys
+          for name in ('CLAY_TEST_SECRET','OPENAI_API_KEY','MISTRAL_API_KEY','UNRELATED_PARENT_SECRET'):
+              if os.environ.get(name):
+                  raise SystemExit(41)
+          pathlib.Path(sys.argv[1]).read_text(encoding='utf-8')
+          print(json.dumps({'fixture':'local_exec','longitudinal_self_report':{}}, sort_keys=True))
+          PY
+          cat > /tmp/mini07/simple-profile.json <<'JSON'
+          {
+            "profile_id": "native-local-exec-fixture",
+            "identity": {"task": "bounded generic local-exec fixture", "language": "en"},
+            "personality": {
+              "system_prompt": "Return bounded fixture JSON only.",
+              "output_contract": {"longitudinal_self_report_field": "longitudinal_self_report"}
+            },
+            "inference": {"kind": "local_exec", "max_tokens": 64, "temperature": 0.0}
+          }
+          JSON
+          printf 'fixture-model-bytes\n' > /tmp/mini07/model.gguf
+          printf 'MUST_NOT_BE_READ\n' > /tmp/mini07/should-not-be-opened.secret
+
+          /tmp/mini07/mini_entity.clay source-init /tmp/mini07/source.db
+          /tmp/mini07/mini_entity.clay source-add /tmp/mini07/source.db evidence event-1 '{"measurement_status":"MEASURED","observed":"fixture"}'
+
+          /tmp/mini07/mini_entity.clay init /tmp/mini07/v2-block.db
+          /tmp/mini07/mini_entity.clay preset-apply /tmp/mini07/v2-block.db 'the artefact/blogpost_entity/presets/zero_blog.json'
+          /tmp/mini07/mini_entity.clay status /tmp/mini07/v2-block.db | tee /tmp/mini07/v2_status.json
+          jq -e '.native_semantic_admission=="CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY"' /tmp/mini07/v2_status.json
+          set +e
+          /tmp/mini07/mini_entity.clay run /tmp/mini07/v2-block.db /tmp/mini07/source.db >/tmp/mini07/v2_block.out 2>/tmp/mini07/v2_block.err
+          V2_RC=$?
+          set -e
+          test "$V2_RC" -ne 0
+          grep -F 'ERROR:CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY' /tmp/mini07/v2_block.err
+          test "$(sqlite3 /tmp/mini07/v2-block.db 'select generation from entity_state where id=1;')" = '0'
+          test "$(sqlite3 /tmp/mini07/source.db 'select count(*) from mini_entity_events where consumed_generation is null;')" = '1'
+
+          /tmp/mini07/mini_entity.clay init /tmp/mini07/entity.db
+          /tmp/mini07/mini_entity.clay preset-apply /tmp/mini07/entity.db /tmp/mini07/simple-profile.json
+          /tmp/mini07/mini_entity.clay set-local-model /tmp/mini07/entity.db /tmp/mini07/model.gguf
+          /tmp/mini07/mini_entity.clay set-local-runner-json /tmp/mini07/entity.db '["python3","/tmp/mini07/fixture_runner.py","{{PROMPT_FILE}}"]'
+          env \
+            CLAY_TEST_SECRET='SENTINEL_CLAY_TEST_SECRET_0_7' \
+            OPENAI_API_KEY='SENTINEL_OPENAI_0_7' \
+            MISTRAL_API_KEY='SENTINEL_MISTRAL_0_7' \
+            UNRELATED_PARENT_SECRET='SENTINEL_UNRELATED_0_7' \
+            strace -f -e trace=openat,network -o /tmp/mini07/local_exec.trace \
+              /tmp/mini07/mini_entity.clay run /tmp/mini07/entity.db /tmp/mini07/source.db /tmp/mini07/should-not-be-opened.secret \
+              | tee /tmp/mini07/local_exec_result.json
+          jq -e '.ok==true and .generation==1 and .source_count==1 and .inference_kind=="local_exec"' /tmp/mini07/local_exec_result.json
+          test "$(sqlite3 /tmp/mini07/entity.db 'select generation from entity_state where id=1;')" = '1'
+          test "$(sqlite3 /tmp/mini07/entity.db 'select count(*) from outputs;')" = '1'
+          test "$(sqlite3 /tmp/mini07/entity.db 'select count(*) from study_rows;')" = '1'
+          test "$(sqlite3 /tmp/mini07/source.db 'select count(*) from mini_entity_events where consumed_generation is null;')" = '0'
+          test "$(sqlite3 /tmp/mini07/entity.db 'pragma integrity_check;')" = 'ok'
+          test "$(sqlite3 /tmp/mini07/source.db 'pragma integrity_check;')" = 'ok'
+          KEY_LOOKUP_COUNT=$(grep -F -c '/tmp/mini07/should-not-be-opened.secret' /tmp/mini07/local_exec.trace || true)
+          NETWORK_ATTEMPT_COUNT=$(grep -E -c 'socket\(|connect\(|sendto\(|sendmsg\(|recvfrom\(|recvmsg\(' /tmp/mini07/local_exec.trace || true)
+          test "$KEY_LOOKUP_COUNT" = '0'
+          test "$NETWORK_ATTEMPT_COUNT" = '0'
+          printf '{"key_file_lookup_count":%s,"network_attempt_count":%s,"parent_secret_isolation":true,"canonical_v2_fail_closed":true}\n' "$KEY_LOOKUP_COUNT" "$NETWORK_ATTEMPT_COUNT" > /tmp/mini07/local_exec_io_counts.json
+
+      - name: Deterministic atomic rollback fault matrix on admitted simple profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          setup_case() {
+            c="$1"
+            /tmp/mini07/mini_entity.clay init "/tmp/mini07/${c}-entity.db" >/dev/null
+            /tmp/mini07/mini_entity.clay source-init "/tmp/mini07/${c}-source.db" >/dev/null
+            /tmp/mini07/mini_entity.clay source-add "/tmp/mini07/${c}-source.db" evidence "${c}-event" '{"measurement_status":"MEASURED","observed":"fault"}' >/dev/null
+            /tmp/mini07/mini_entity.clay preset-apply "/tmp/mini07/${c}-entity.db" /tmp/mini07/simple-profile.json >/dev/null
+            /tmp/mini07/mini_entity.clay set-local-model "/tmp/mini07/${c}-entity.db" /tmp/mini07/model.gguf >/dev/null
+            /tmp/mini07/mini_entity.clay set-local-runner-json "/tmp/mini07/${c}-entity.db" '["python3","/tmp/mini07/fixture_runner.py","{{PROMPT_FILE}}"]' >/dev/null
+          }
+          assert_rolled_back() {
+            c="$1"
+            test "$(sqlite3 "/tmp/mini07/${c}-entity.db" 'select generation from entity_state where id=1;')" = '0'
+            test "$(sqlite3 "/tmp/mini07/${c}-entity.db" 'select count(*) from outputs;')" = '0'
+            test "$(sqlite3 "/tmp/mini07/${c}-entity.db" 'select count(*) from study_rows;')" = '0'
+            test "$(sqlite3 "/tmp/mini07/${c}-source.db" 'select count(*) from mini_entity_events where consumed_generation is null;')" = '1'
+            test "$(sqlite3 "/tmp/mini07/${c}-entity.db" 'pragma integrity_check;')" = 'ok'
+            test "$(sqlite3 "/tmp/mini07/${c}-source.db" 'pragma integrity_check;')" = 'ok'
+          }
+          run_must_fail() {
+            c="$1"
+            set +e
+            /tmp/mini07/mini_entity.clay run "/tmp/mini07/${c}-entity.db" "/tmp/mini07/${c}-source.db" >"/tmp/mini07/${c}.out" 2>"/tmp/mini07/${c}.err"
+            rc=$?
+            set -e
+            test "$rc" -ne 0
+            printf '%s\n' "$rc" > "/tmp/mini07/${c}.rc"
+            assert_rolled_back "$c"
+          }
+
+          setup_case generation
+          sqlite3 /tmp/mini07/generation-entity.db "CREATE TRIGGER fail_generation BEFORE UPDATE OF generation ON entity_state BEGIN SELECT RAISE(ABORT,'GO_FAULT_GENERATION'); END;"
+          run_must_fail generation
+
+          setup_case output
+          sqlite3 /tmp/mini07/output-entity.db "CREATE TRIGGER fail_output BEFORE INSERT ON outputs BEGIN SELECT RAISE(ABORT,'GO_FAULT_OUTPUT'); END;"
+          run_must_fail output
+
+          setup_case study
+          sqlite3 /tmp/mini07/study-entity.db "CREATE TRIGGER fail_study BEFORE INSERT ON study_rows BEGIN SELECT RAISE(ABORT,'GO_FAULT_STUDY'); END;"
+          run_must_fail study
+
+          setup_case event
+          sqlite3 /tmp/mini07/event-source.db "CREATE TRIGGER fail_event BEFORE UPDATE OF consumed_generation ON mini_entity_events WHEN NEW.consumed_generation IS NOT NULL BEGIN SELECT RAISE(ABORT,'GO_FAULT_EVENT'); END;"
+          run_must_fail event
+
+      - name: Second clean rebuild is byte-identical
+        shell: bash
+        run: |
+          set -euo pipefail
+          NATIVE='the artefact/blogpost_entity/native'
+          python3 "$NATIVE/build_native_bound.py" \
+            --source "$NATIVE/mini_entity.c" \
+            --output /tmp/mini07/mini_entity_second.clay \
+            --receipt /tmp/mini07/build_receipt_second.json \
+            --version-label mini-entity/0.7.0-dev1 \
+            --source-date-epoch 1787371200 \
+            --repeat 2 >/tmp/mini07/build_stdout_second.json
+          test "$(sha256sum /tmp/mini07/mini_entity.clay | awk '{print $1}')" = "$(sha256sum /tmp/mini07/mini_entity_second.clay | awk '{print $1}')"
+
+      - name: Write bounded machine receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          prov=json.loads(Path('/tmp/mini07/build_receipt.json').read_text())
+          prov2=json.loads(Path('/tmp/mini07/build_receipt_second.json').read_text())
+          io=json.loads(Path('/tmp/mini07/local_exec_io_counts.json').read_text())
+          def q(db,sql): return subprocess.check_output(['sqlite3',db,sql],text=True).strip()
+          faults={}
+          for c in ('generation','output','study','event'):
+              faults[c]={
+                  'run_exit_code':int(Path(f'/tmp/mini07/{c}.rc').read_text()),
+                  'generation':int(q(f'/tmp/mini07/{c}-entity.db','select generation from entity_state where id=1;')),
+                  'outputs':int(q(f'/tmp/mini07/{c}-entity.db','select count(*) from outputs;')),
+                  'study_rows':int(q(f'/tmp/mini07/{c}-entity.db','select count(*) from study_rows;')),
+                  'pending_events':int(q(f'/tmp/mini07/{c}-source.db','select count(*) from mini_entity_events where consumed_generation is null;')),
+                  'entity_integrity':q(f'/tmp/mini07/{c}-entity.db','pragma integrity_check;'),
+                  'source_integrity':q(f'/tmp/mini07/{c}-source.db','pragma integrity_check;'),
+              }
+          receipt={
+              'schema':'MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT/v2',
+              'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+              'source_tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),
+              'native_source_closure':prov['build_definition']['source_closure'],
+              'source_identity_sha256':prov['build_definition']['source_identity_sha256'],
+              'binary':prov['subject'],
+              'first_repeat_hashes':prov['build_definition']['repeat_hashes'],
+              'first_repeat_byte_identity':prov['build_definition']['repeat_byte_identity'],
+              'second_binary':prov2['subject'],
+              'clean_rebuild_same_sha256':prov['subject']['sha256']==prov2['subject']['sha256'],
+              'compiler':prov['build_definition']['compiler'],
+              'pkg_config_packages':prov['build_definition']['pkg_config_packages'],
+              'fixture_local_exec':{
+                  **io,
+                  'generation':int(q('/tmp/mini07/entity.db','select generation from entity_state where id=1;')),
+                  'outputs':int(q('/tmp/mini07/entity.db','select count(*) from outputs;')),
+                  'study_rows':int(q('/tmp/mini07/entity.db','select count(*) from study_rows;')),
+                  'pending_events':int(q('/tmp/mini07/source.db','select count(*) from mini_entity_events where consumed_generation is null;')),
+                  'model_quality_credit':False,
+              },
+              'canonical_v2_admission':{
+                  'status':'FAIL_CLOSED_UNTIL_PIPELINE_PARITY',
+                  'error':'CANONICAL_PROFILE_V2_REQUIRES_PIPELINE_PARITY',
+                  'generation_after_rejection':int(q('/tmp/mini07/v2-block.db','select generation from entity_state where id=1;')),
+              },
+              'fault_matrix':faults,
+              'unusual_experiment':'NONE_NEW; this run contains deterministic regression/admission checks only',
+              'acceptance_scope':'EXACT_CHECKOUT_SOURCE_CLOSURE_BOUND_REPEAT_BUILD_PLUS_V2_FAIL_CLOSED_PLUS_SIMPLE_PROFILE_LOCAL_EXEC_SECRET_ISOLATION_IO_AND_ATOMIC_ROLLBACK_MATRIX_ON_GITHUB_UBUNTU',
+              'not_claimed':['canonical v2 semantic parity','real local model quality','real remote provider acceptance','cross-environment reproducibility','whole Mini Entity final acceptance'],
+          }
+          assert receipt['clean_rebuild_same_sha256'] is True
+          assert receipt['fixture_local_exec']['parent_secret_isolation'] is True
+          assert receipt['canonical_v2_admission']['generation_after_rejection'] == 0
+          Path('/tmp/mini07/MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT.json').write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(receipt,indent=2,sort_keys=True))
+          PY
+
+      - name: Upload bounded evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: mini-entity-native-0.7-repro
+          path: |
+            /tmp/mini07/mini_entity.clay
+            /tmp/mini07/build_receipt.json
+            /tmp/mini07/build_receipt_second.json
+            /tmp/mini07/v2_status.json
+            /tmp/mini07/v2_block.err
+            /tmp/mini07/local_exec_result.json
+            /tmp/mini07/local_exec.trace
+            /tmp/mini07/local_exec_io_counts.json
+            /tmp/mini07/generation.err
+            /tmp/mini07/output.err
+            /tmp/mini07/study.err
+            /tmp/mini07/event.err
+            /tmp/mini07/MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT.json
+          if-no-files-found: error

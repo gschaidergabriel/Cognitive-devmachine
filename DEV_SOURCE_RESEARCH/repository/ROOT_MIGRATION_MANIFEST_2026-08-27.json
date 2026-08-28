@@ -1,0 +1,60 @@
+{
+  "schema": "FRANKENSTEIN_ROOT_MIGRATION_MANIFEST/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "canonical_main_observed_before_write": "ed70385760c03a30dea7b6ecf8f6b78cbbaa584a",
+  "target_public_root": [
+    "README.md",
+    "HUMAN_READ_THIS/",
+    "DEV_SOURCE_RESEARCH/",
+    "AI_START_HERE_DO_NOT_SCAN_REPO/"
+  ],
+  "migration_executed": false,
+  "acceptance": "PREPARED_NOT_RUN",
+  "reason": "A cosmetic mass move would break or obscure host discovery, GitHub configuration, authority pointers, imports, tests, exact evidence paths and historical provenance. Move only after dependency closure and compatibility tests.",
+  "classes": {
+    "PUBLIC_KEEP": "intended public entry surface",
+    "MOVE_WITH_COMPAT_SHIM": "current path has runtime/tool/authority/discovery semantics; relocation needs an explicit compatibility mechanism",
+    "HISTORICAL_PRESERVE": "historical/evidence identity must remain reproducible",
+    "GENERATED_OR_VENDOR": "inspect provenance/generator before relocation",
+    "UNKNOWN_BLOCK": "do not move until exact dependency/provenance is resolved"
+  },
+  "entries": [
+    {"path":"README.md","class":"PUBLIC_KEEP","reason":"explicit Triggerword-3 target; intentionally not rewritten"},
+    {"path":"HUMAN_READ_THIS/","class":"PUBLIC_KEEP","reason":"human progressive-disclosure entry"},
+    {"path":"DEV_SOURCE_RESEARCH/","class":"PUBLIC_KEEP","reason":"developer/research progressive-disclosure entry"},
+    {"path":"AI_START_HERE_DO_NOT_SCAN_REPO/","class":"PUBLIC_KEEP","reason":"AI installer/no-scan entry"},
+    {"path":".github/","class":"MOVE_WITH_COMPAT_SHIM","reason":"GitHub requires repository-defined workflow/config locations"},
+    {"path":".gitignore","class":"MOVE_WITH_COMPAT_SHIM","reason":"Git root semantics"},
+    {"path":"AGENTS.md","class":"MOVE_WITH_COMPAT_SHIM","reason":"agent host discovery convention may require root placement"},
+    {"path":"CLAUDE.md","class":"MOVE_WITH_COMPAT_SHIM","reason":"Claude Code project instruction discovery may require current placement"},
+    {"path":".claude/","class":"MOVE_WITH_COMPAT_SHIM","reason":"host lifecycle/instruction discovery surface"},
+    {"path":"CLAY_EXECUTION_AUTHORITY.md","class":"MOVE_WITH_COMPAT_SHIM","reason":"current authority pointer; migration must be atomic with all references"},
+    {"path":"governance/","class":"MOVE_WITH_COMPAT_SHIM","reason":"current owner/economic authority paths are referenced by continuity surfaces"},
+    {"path":"research_entity/","class":"MOVE_WITH_COMPAT_SHIM","reason":"canonical research/continuity/evidence tree and exact paths are widely referenced"},
+    {"path":"the artefact/","class":"MOVE_WITH_COMPAT_SHIM","reason":"current canonical product/research workspace identity"},
+    {"path":"tools/","class":"MOVE_WITH_COMPAT_SHIM","reason":"live imports and runtime source paths depend on current topology"},
+    {"path":"tests/","class":"MOVE_WITH_COMPAT_SHIM","reason":"test discovery/imports assume repository topology"},
+    {"path":"schemas/","class":"MOVE_WITH_COMPAT_SHIM","reason":"schema consumers may use root-relative paths"},
+    {"path":"rae.py","class":"MOVE_WITH_COMPAT_SHIM","reason":"runtime entry point; relocation without shim changes invocation semantics"},
+    {"path":"rae_core/","class":"MOVE_WITH_COMPAT_SHIM","reason":"runtime import target"},
+    {"path":"receipts/","class":"HISTORICAL_PRESERVE","reason":"evidence paths may be cited by exact identity"},
+    {"path":"frank_reference/","class":"HISTORICAL_PRESERVE","reason":"historical Frank source/provenance"},
+    {"path":"free swarm/","class":"HISTORICAL_PRESERVE","reason":"FreeSwarm/evidence lineage must survive current HARD_OFF and negative results"},
+    {"path":"agentZero/","class":"HISTORICAL_PRESERVE","reason":"large donor/provenance tree with deep links"},
+    {"path":"agentzeroforschung/","class":"HISTORICAL_PRESERVE","reason":"research archive/provenance tree"},
+    {"path":"dump/","class":"GENERATED_OR_VENDOR","reason":"inspect unique evidence and generator before any move/delete"},
+    {"path":"dump archive/","class":"GENERATED_OR_VENDOR","reason":"inspect provenance/content denominator before relocation"},
+    {"path":"gemeinsamer State)","class":"UNKNOWN_BLOCK","reason":"malformed-looking root name; exact path history/reference check required before move/delete"}
+  ],
+  "next_required_checks": [
+    "enumerate exact references to every MOVE_WITH_COMPAT_SHIM and UNKNOWN_BLOCK path from current main",
+    "freeze complete current root path inventory and blob/tree identities",
+    "derive host-specific discovery requirements for AGENTS.md CLAUDE.md and .claude",
+    "bind every current authority pointer before moving governance research_entity or the artefact",
+    "run import/test/workflow/link analysis for all move candidates",
+    "build old_path -> new_path -> compatibility mechanism -> test table",
+    "preserve exact historical blob/tree identity",
+    "perform no mass move until UNKNOWN_BLOCK count is zero and required compatibility tests are defined"
+  ]
+}

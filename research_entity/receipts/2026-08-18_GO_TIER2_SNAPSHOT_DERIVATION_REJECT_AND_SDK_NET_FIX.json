@@ -1,0 +1,70 @@
+{
+  "schema": "ClayGoReceipt/v1",
+  "date_local": "2026-08-18",
+  "trigger": "go",
+  "classification": "SOURCE_MECHANISM_PROGRESS_WITH_EXECUTION_ADMISSION_BLOCKER",
+  "research_main_observed_before_write": "2d33f05eb7794bf0b7690bf05bdd8f71e0c3a943",
+  "runtime_candidate": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "pr": 686,
+    "head_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree_sha": "47c09ff6d661b3da02743435dd8a343ddef85efd"
+  },
+  "controller": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "observed_head_after_guard_write": "ba78e1624e299c7ed8e7f202c66fdae0c8db3009",
+    "writes": [
+      {
+        "commit": "87ddd36d6d0c8faeadf2cb10382e4bcb548ea837",
+        "path": "mcp/vercel-sandbox-mcp/lib/phase1-provider-handler.js",
+        "delta": "replace @vercel/sandbox update networkPolicy REST-shape with SDK shape {allow:[...]} while retaining deny-all closure"
+      },
+      {
+        "commit": "5e0fa0a3f6f6dc0fc0e266144c3e9a61d9f5a8ba",
+        "path": "mcp/vercel-sandbox-mcp/lib/effect-tier1-handler.js",
+        "delta": "same @vercel/sandbox SDK networkPolicy correction on EffectGate/EntityOS + Tier-1 provider phase"
+      },
+      {
+        "commit": "ba78e1624e299c7ed8e7f202c66fdae0c8db3009",
+        "path": "mcp/vercel-sandbox-mcp/scripts/guard-clayverse-tier2-recreate.mjs",
+        "delta": "fail closed on Sandbox.fork and snapshot-derived new appliances; require a declared-transfer/new-appliance Tier-2 source contract"
+      }
+    ]
+  },
+  "parallel_fusion_observed": {
+    "tier1_interrupted_turn_source_candidate": true,
+    "tier1_script_blob": "2b83b6b527bcdad896d8db83f52b304b44a6dc00",
+    "properties": [
+      "inject exactly one deliberate canonical no-effect active turn before recovery",
+      "require active_pre_injection=0, active_before=1, active_after=0",
+      "require exactly one entity-generation advance",
+      "require recovery.aborted_no_effect=1 and active_turns_closed=1",
+      "require no new effect rows and unchanged pre-existing VERIFIED entityos.exec row identity",
+      "require one no-effect causal re-entry and one TURN_ABORTED:container_restart system turn"
+    ],
+    "evidence_class": "SOURCE_MECHANISM_ONLY_NOT_RUNTIME_PASS"
+  },
+  "hypofusion": {
+    "observed_candidate": "Vercel Sandbox snapshot survives source-sandbox deletion and can seed another sandbox",
+    "strongest_counterhypothesis": "survival across provider lifecycle is insufficient for ClayVerse Tier-2 because the owner directive requires discarding/recreating the full microVM/workload from the exact accepted OCI image digest and only then restoring logical ClayVerse state from declared UnifiedDB/WAL/known-good snapshot state",
+    "owner_contract": "research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md",
+    "current_pr810_violation_observed": "tier2-recreate-handler.js uses source.snapshot/carrier.snapshot as Sandbox.create source, thereby deriving replacement guest filesystem state from the prior appliance instead of proving a clean appliance recreated from the exact OCI artifact plus declared logical state",
+    "decision": "REJECT_AS_TIER2_ACCEPTANCE_MECHANISM_UNTIL_REPLACED_OR_OWNER_DIRECTIVE_CHANGES"
+  },
+  "execution": {
+    "authorized_surface_checked": "Vercel project dr-unterweger",
+    "exact_head_deployment_observed": false,
+    "current_runtime_credit_added": 0,
+    "reason": "no deployment for the newly written exact PR810 head was present at the check; older READY/ERROR deployments are stale and cannot transfer runtime credit",
+    "whole_product_pass": false
+  },
+  "unusual_experiment": {
+    "count_added": 0,
+    "reason": "global go unusual-experiment slot was already consumed / immutable per-trigger identity was not available to this organ; no duplicate unusual experiment was started"
+  },
+  "next_discriminator": "replace snapshot-derived appliance seeding with an authorized declared carrier that can reconstruct a brand-new Sandbox/microVM from the exact accepted OCI image plus only declared logical ClayVerse state; then run the exact-current source guard and isolated runtime sequence",
+  "acceptance": "IN_PROGRESS",
+  "whole_clayverse_pass": false
+}

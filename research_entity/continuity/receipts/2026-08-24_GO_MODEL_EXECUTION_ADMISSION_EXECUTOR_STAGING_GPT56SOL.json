@@ -1,0 +1,72 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_before_write": "61cc8ff449a7641fc0c6624f0f2bb81da1c8fd95",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_ZERO_NEW_UNUSUAL_EXPERIMENTS",
+    "unusual_experiment_count_added": 0,
+    "retained_hcu_donor_pr": 1263,
+    "retained_hcu_donor_head": "6d92398eab24da96dc43726028ba331305a3ddec",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "duplicate_executor_created": false,
+    "parallel_fusion_observed": "PR810 independently advanced exact ModelExecution/v1 -> InferenceReceipt/v4 producer integration while this organ staged the missing canonical invocation-admission source into the same lane."
+  },
+  "staging_delta": {
+    "executor_branch": "clay/fusion-vcr-native-20260817",
+    "admission_store_fixture": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/model-execution-admission-6d92398e/model_execution_admission_store_v1.py",
+    "admission_store_fixture_commit": "e636f6e01f38143b07d9d38cefbd88a4616777f0",
+    "source_blob": "0d1b1aa1f4c71f167b94374bc359d8dd2c07eed7",
+    "regression_fixture": "mcp/vercel-sandbox-mcp/fixtures/hcu-capsules/model-execution-admission-6d92398e/test_model_execution_admission_store_v1.py",
+    "regression_fixture_commit": "e07e710d3946a111256d17e2a8298563e2ec590a",
+    "source_regression_blob": "19cca07584db3d4818ccb77b8c96ba7f127d7bd3",
+    "byte_identity_policy": "EXACT_DONOR_BYTES_STAGED_UNMODIFIED",
+    "route_rebind_performed": false,
+    "reason_route_rebind_not_performed": "The complete exact producer/test dependency closure was still moving in parallel. Removing fail-closed quarantine or changing a fixed command before the closure converges would risk mixed-snapshot or partial-source runtime credit."
+  },
+  "parallel_executor_reentry": {
+    "head_observed_after_staging_and_parallel_writes": "d714d7c378f4701f29c94fbe23bdfca753a1bd14",
+    "parallel_commit_message": "test(hcu): bind exact model execution to current inference v4",
+    "parallel_capsule": "HCU_MODEL_EXECUTION_INFERENCE_V4_PROVENANCE_ACCEPTANCE/v2",
+    "parallel_scope": "EXACT_MODEL_EXECUTION_PLUS_EXACT_INFERENCE_V4_WITH_TEST_DOUBLES_FOR_REMAINING_RUNTIME_BOUNDARIES",
+    "actual_model_executor_io_observed": false,
+    "real_model_execution_credit": false,
+    "jspace_model_runtime_credit": false
+  },
+  "negative_execution_evidence": {
+    "latest_admission_staging_head_checked": "e07e710d3946a111256d17e2a8298563e2ec590a",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "vercel_target_class": "HOBBY_BUILD_RATE_LIMIT_UPGRADE_SURFACE",
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_REGRESSION_FAILURE",
+    "admission_store_regressions_observed_executing": false,
+    "sandbox_execution_observed_for_admission_store": false,
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_EXACT_SOURCE_STAGING_IN_SINGLE_RETAINED_EXECUTOR_WITH_ROUTE_QUARANTINE_PRESERVED",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_MODEL_EXECUTION_INVOCATION_ADMISSION_FROM_DONOR_ONLY_TO_EXECUTOR_STAGED_EXACT_BYTES",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_EXECUTION_PROVENANCE_CLOSURE_TOWARD_INFERENCE_V4_AND_JSPACE_V3_WITH_ZERO_MODEL_OR_TRAINING_CREDIT"
+  },
+  "credit": {
+    "source_staging_credit": "EXACT_BYTES_STAGED_IN_SINGLE_RETAINED_EXECUTOR",
+    "admission_store_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Re-enter the latest PR810 head and finish one immutable dependency/test closure that includes the staged MiniUnifiedDB admission store plus exact ModelExecution/v1, InferenceReceipt/v4 and JSpaceBinding/v3 producers.",
+    "Keep any stale fixed route fail-closed until manifest identities, file blobs, fixed command and result contract are changed atomically for that closure.",
+    "When Vercel Hobby included-tier build admission and protected function access are available, execute the deterministic exact-source closure and capture exact Sandbox evidence.",
+    "Only after that source/runtime boundary passes, instrument a real zero-cost local model executor to emit actual I/O through the same canonical MiniUnifiedDB atomic admission path before any J-Space model-runtime promotion."
+  ]
+}

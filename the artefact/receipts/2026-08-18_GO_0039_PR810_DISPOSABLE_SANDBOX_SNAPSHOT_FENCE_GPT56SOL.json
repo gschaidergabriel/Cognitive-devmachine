@@ -1,0 +1,80 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:39:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "6fe74d7aa4dfc96f422de52f5103366e5ec2c338",
+  "classification": "ADVERSARIAL_CONTROLLER_SECURITY_AND_LIFECYCLE_REVIEW",
+  "scope": "source/control-plane review only; no runtime promotion",
+  "owner_source_law": {
+    "github_read_token_forwarding": "allowed only as bounded transient read/fetch input to an authorized disposable Vercel Sandbox",
+    "credential_persistence": "forbidden in snapshots/persisted state/logs/OCI/product memory",
+    "sandbox_cleanup": "bounded stop/cleanup required"
+  },
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "exact_head_observed_before_receipt": "99c55e5b7f553e59fcf4cd4d5af34db9759e2ad0",
+    "research_freeze_pr": 682,
+    "research_freeze_sha": "6e8838651e39e181321e71a9a0b5b0f2bdfc5df1",
+    "research_freeze_tree": "dbc4c97c578a8b06782936fe2658f7a56bca8dc0",
+    "detached_architecture": "300-second HTTP starter -> named 2.7M-ms Vercel Sandbox -> one scoped private fetch -> token clear/nonpersistence check -> detached OCI batch -> bounded status reattach",
+    "current_persistence_setting": true,
+    "snapshot_expiration_ms": 86400000
+  },
+  "falsifier": {
+    "claim": "persistent Sandbox filesystem snapshots are required for the detached status/reconnect path",
+    "result": "REJECTED_BY_PRIMARY_PROVIDER_CONTRACT",
+    "reason": "Vercel documents Sandbox.get as reconnecting to an actively running named sandbox from another process; filesystem persistence/snapshots are a separate stop/resume feature. The current status path uses Sandbox.get({name,resume:false}), so active-session reattachment does not require persistent snapshots.",
+    "risk": "if the disposable acceptance sandbox stops/expires without the terminal cleanup poll, persistent mode may preserve a filesystem snapshot containing private Research/EntityOS checkout and OCI/build bytes even though the GitHub token itself was cleared"
+  },
+  "recommended_repair": {
+    "sandbox_create": "persistent:false; remove snapshotExpiration",
+    "retain": [
+      "named Sandbox",
+      "2.7M-ms active session timeout",
+      "detached batch command",
+      "Sandbox.get({name,resume:false}) status reattach while active",
+      "terminal sandbox.delete()",
+      "best-effort delete/stop on starter failure"
+    ],
+    "source_guard": "require persistent:false and fail closed if persistent:true or snapshotExpiration reappears",
+    "product_authority_change": false
+  },
+  "coordination": {
+    "pr810_comment_id": 5318241084,
+    "status": "DURABLY_ROUTED_TO_SINGLE_RETAINED_CONTROLLER_LANE",
+    "duplicate_controller_created": false,
+    "attempted_direct_code_patch": "NOT_COMMITTED_DUE_PARALLEL_HEAD_DRIFT_AND_INTERMITTENT_GITHUB_UPSTREAM_502",
+    "orphan_blob_note": "unreferenced Git blobs created during an aborted atomic write attempt do not constitute branch/product state"
+  },
+  "controller_closure_review": {
+    "earlier_endpoint_batch_drift": "detected then independently repaired in retained PR810",
+    "current_guard_head": "99c55e5b7f553e59fcf4cd4d5af34db9759e2ad0",
+    "current_guard_class": "binds frozen PR682 endpoint/batch baseline closure",
+    "exact_head_vercel_status": "failure: build-rate-limit",
+    "interpretation": "CONTROL_PLANE_ADMISSION_FAILURE_NOT_CLAYVERSE_TEST_FAILURE"
+  },
+  "runtime_observation": {
+    "preview_runtime_logs": "only GET /api/go-cycle-v2 probes returning 405 were observed in the checked last-hour window; no POST",
+    "credential_bearing_post_observed": false,
+    "sandbox_start_from_detached_runtime_path_observed": false,
+    "private_source_runtime_credit_added": 0,
+    "exact_oci_runtime_credit_added": 0,
+    "provider_inference_runtime_credit_added": 0,
+    "whole_product_runtime_credit_added": 0
+  },
+  "provider_architecture_update": {
+    "current_owner_directive": "generic LLM provider boundary; Mistral is first concrete token/API acceptance profile, not unique product authority",
+    "effect_on_this_receipt": "none; the snapshot fence protects private source/build bytes independent of selected inference provider"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "no shared immutable per-trigger identity exposed for global one-experiment lease"
+  },
+  "next_exact_step": "After Vercel build-rate admission recovers, obtain an exact READY deployment only after the retained controller closure is self-consistent and the disposable-sandbox persistence review is resolved. Then spend the owner-held scoped read-only GitHub token once on the exact frozen source path, capture source/regression/OCI evidence, and continue provider-generic Stage-1 inference/effect/recovery gates without claiming Clerk/browser or whole-product credit.",
+  "acceptance": "IN_PROGRESS"
+}

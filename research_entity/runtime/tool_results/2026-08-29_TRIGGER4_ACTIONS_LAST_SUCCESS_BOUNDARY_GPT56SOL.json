@@ -1,0 +1,85 @@
+{
+  "schema": "TRIGGER4_ACTIONS_LAST_SUCCESS_BOUNDARY/v1",
+  "observed_date_local": "2026-08-29",
+  "trigger": "4",
+  "normalized_trigger": "triggerword 4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "canonical_main_before_write": "78cc94fc6d69e6395788e85ec2a1246db8d3c567",
+  "execution_authority": "8.78 FREE_ONLY",
+  "current_steering_delta": "9.13AJ_NON_AUTHORITY",
+  "mode": "FREE_ONLY",
+  "purpose": "Use read-only existing GitHub Actions history to bound when runner/job materialization was last directly observed working, without dispatch, rerun, provider call, VPS mutation, or Frank Harness modification.",
+  "direct_observations": {
+    "latest_success_query": {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "endpoint_semantics": "actions/runs filtered status=success, per_page=1 on connected GitHub surface",
+      "returned_total_success_count": 406,
+      "top_returned_success_run_id": 32061392029,
+      "workflow": "ClayVerse VPS QEMU TCG UnifiedDB guest runtime",
+      "head_sha": "65b62e2cda72a875f6221c3475b6431eac4856ec",
+      "created_at": "2026-08-17T19:37:36Z",
+      "updated_at": "2026-08-17T19:47:59Z",
+      "conclusion": "success"
+    },
+    "latest_success_job": {
+      "job_id": 95483238667,
+      "name": "unifieddb-in-independent-guest",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "runner_id": 21,
+      "runner_name": "rae-1",
+      "runner_group_id": 1,
+      "runner_group_name": "Default",
+      "started_at": "2026-08-17T19:42:52Z",
+      "completed_at": "2026-08-17T19:47:59Z",
+      "materialized_step_count": 8,
+      "all_returned_steps_completed_successfully": true
+    },
+    "historical_receipt_context": {
+      "path": "the artefact/receipts/2026-08-18_GO_TIER2_SOURCE_FUSION_QEMU_GUEST_AND_UNIFIEDDB_LOADER_FIX_GPT56SOL.json",
+      "state_recorded_then": "run 32061392029 was queued behind an existing rae-1 guest run",
+      "new_read_only_observation": "the same run is now directly observed completed success with runner_id=21 and materialized steps"
+    },
+    "current_failure_control": {
+      "run_id": 33182697914,
+      "workflow": "GRID10 Cognitive Envelope CI",
+      "job_id": 98887677431,
+      "job_name": "deterministic",
+      "runner_label": "ubuntu-latest",
+      "created_at": "2026-08-28T14:56:46Z",
+      "completed_at": "2026-08-28T14:56:48Z",
+      "conclusion": "failure",
+      "runner_id": 0,
+      "runner_name": "",
+      "steps": []
+    }
+  },
+  "inference_update": {
+    "actions_or_runner_assignment_never_worked_as_sufficient_explanation": "FALSIFIED_BY_2026_08_17_MATERIALIZED_SUCCESS",
+    "permanent_self_hosted_label_incompatibility_as_sufficient_explanation": "FALSIFIED_BY_RAE1_RUNNER_ID_21_SUCCESS",
+    "current_workflow_user_code_failure_as_sufficient_explanation": "DISFAVORED_BY_CURRENT_ZERO_STEP_FAILURE",
+    "best_supported_change_window": "AFTER_2026-08-17T19:47:59Z_AND_BEFORE_OR_BY_2026-08-28T14:56:46Z_FOR_OBSERVED_REPOSITORY_ACTIONS_MATERIALIZATION_DEGRADATION",
+    "exact_account_repository_billing_assignment_or_service_side_root_cause": "UNKNOWN",
+    "runtime_product_failure": "NOT_OBSERVED"
+  },
+  "coordination": {
+    "duplicate_dispatch_performed": false,
+    "generation_advance_performed": false,
+    "workflow_rerun_performed": false,
+    "vps_runner_or_telemetry_restart_performed": false,
+    "frank_harness_modified": false,
+    "provider_or_paid_call_performed": false,
+    "issue_2121_preserve_nonterminal_g0000": true,
+    "issue_2122_preserve_nonterminal_g0000": true
+  },
+  "credit_boundary": {
+    "runtime_control_transport_pass": false,
+    "runtime_quiescence_pass": false,
+    "grid10_runtime_pass": false,
+    "frankenstein2_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Use an authorized GitHub Actions account/repository usage-assignment or vendor/backend diagnostic to localize the post-2026-08-17 degradation. If that surface remains unavailable, preserve the existing g0000 singletons and working VPS telemetry bridge unchanged; consume only a future actually materialized terminal job receipt. Continue nonduplicative Stage-1 source fusion/hook binding without claiming runtime credit."
+}

@@ -1,0 +1,69 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "59a84a939d93b8cf435c9d1a7452e819748629ee",
+  "classification": "PROVIDER_EFFECT_CAPABILITY_FENCE_PLUS_TIER2_TRANSPORT_GATE",
+  "scope": "source/adjudication/control-plane evidence only; no exact runtime promotion",
+  "research_candidate": {
+    "pull_request": 684,
+    "head": "cbd73228207be70eb51821ed37699f7d621db883",
+    "tree": "2658c09110d702370ecf3ddf42a5f968798375b8",
+    "mergeable": true,
+    "draft": true,
+    "runtime_credit": 0
+  },
+  "provider_capability_delta": {
+    "red_test_commit": "66f9b7eb98ca038977171f7bb2c6f739689493df",
+    "green_probe_commit": "74c0362d9d37e0a23d4e191b0e5a4c1182e7aa89",
+    "green_cli_commit": "ce0fa3e1072c95cac6655000a3f1d03b65ae8313",
+    "contract": "required_effect_capability is fail-closed and limited to entityos.exec/state.noop; the persisted EffectJournal capability is checked before a required provider effect can receive acceptance credit",
+    "independent_parallel_falsifier": "test_api_acceptance_required_capability.py on later PR684 head explicitly rejects a successful state.noop as an entityos.exec round-trip",
+    "exact_execution_observed": false
+  },
+  "controller_observation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "observed_head": "1b3ccde34d421bed77d70a39a7704cf9a2616612",
+    "vercel_status": "FAILURE",
+    "vercel_target": "upgradeToPro=build-rate-limit",
+    "classification": "CONTROL_PLANE_EXECUTION_ADMISSION_BLOCKER_BEFORE_RUNTIME",
+    "test_failure": false,
+    "exact_head_runtime_credit": 0,
+    "research_binding_observed": "controller source was still bound to an earlier PR684 generation while PR684 continued moving; exact rebind is required immediately before any credential-bearing run"
+  },
+  "vault_provider_path": {
+    "stage1_source_candidate": "Vercel OIDC -> HCP Vault Secrets inside the Sandbox guest -> transient MISTRAL_API_KEY -> generic api_probe_cli -> secret cleanup -> deny-all egress",
+    "stage1_runtime_credit": 0,
+    "cross_phase_gap": "later effect/recovery source still contained an older direct MISTRAL_API_KEY function-environment path at the observed controller head; no final provider/recovery credit is granted from source inspection"
+  },
+  "tier2_adjudication": {
+    "current_recreate_endpoint": "fail-closed 409 TIER2_FULL_DELETE_RECREATE_TRANSPORT_REQUIRED",
+    "credit": 0,
+    "required_semantics": "carry only declared ClayVerse state/workspace plus the exact digest-bound OCI artifact and bounded receipts outside the old guest; permanently delete Sandbox1; create genuinely new Sandbox2; load and remeasure the same OCI artifact; recover under a new generation with no blind effect replay",
+    "whole_sandbox_snapshot_or_fork": "FORBIDDEN_SUBSTITUTE",
+    "vercel_drive_candidate": "current Vercel primary documentation exposes Sandbox Drives as a single-attached persistent storage primitive that can be remounted by a new sandbox and therefore structurally matches the declared transfer boundary",
+    "drive_admission_blocker": "Drive functionality is documented on the beta @vercel/sandbox line while the retained controller pins @vercel/sandbox 2.9.2; no beta dependency/source-lock change was made without a separate supply-chain adjudication and exact version lock"
+  },
+  "runtime_credit_added": {
+    "exact_pr684_tests": 0,
+    "credential_bearing_private_fetch": 0,
+    "exact_oci_build_digest": 0,
+    "vault_mistral_stage1": 0,
+    "entityos_effect_roundtrip": 0,
+    "tier1_recovery": 0,
+    "tier2_delete_recreate": 0,
+    "second_provider_cognition": 0,
+    "clerk_websocket_pty": 0,
+    "whole_product": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "shared immutable per-trigger experiment identity is not exposed; no duplicate experiment lease was invented"
+  },
+  "next_exact_step": "First freeze/rebind the retained PR810 controller to the then-current PR684 head/tree only after source motion settles. Close the Tier2 transport dependency by admitting and exact-locking a Vercel Drive-capable SDK/API path (or a stronger explicitly declared alternative), then make every Mistral cognition phase reacquire the provider secret through the same approved Vault-in-Sandbox boundary and require entityos.exec explicitly. When Vercel build admission reopens, obtain exact-head READY and run the one credential-bearing Vercel Sandbox sequence; promote only observed exact receipts.",
+  "acceptance": "IN_PROGRESS"
+}

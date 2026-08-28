@@ -1,0 +1,73 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "retained_executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "batch_commit": "fc919cda713ca5c3eef24b1f20767b4f905e1a7e",
+    "guard_commit": "1e492cbf965383f0396e5250a2594c0c7462370e",
+    "parallel_head_observed_after_write": "21c5f808403463dc75dee1e3a7301a9f12442c88"
+  },
+  "delta": {
+    "detached_batch_schema": "EntityOSHCUDetachedSandboxRun/v3",
+    "selected_chain": "Entry/JCS -> route -> engine admission -> verified loader consumption -> GRID10/v2 -> VerifiedModelExecution/v1 -> InferenceReceipt/v4 -> JSpaceBinding/v3",
+    "added_regressions": [
+      "test_model_execution_receipt_v1",
+      "test_jspace_inference_model_call_identity_v2"
+    ],
+    "added_fail_closed_fences": [
+      "VERIFIED_MODEL_EXECUTION_V1_REQUIRED",
+      "MODEL_EXECUTION_INVOCATION_BINDING_V1_REQUIRED",
+      "INFERENCE_RECEIPT_V4_REQUIRED",
+      "JSPACE_INFERENCE_BINDING_V3_REQUIRED",
+      "INFERENCE_VERIFIED_MODEL_EXECUTION_PATH_MISSING",
+      "MODEL_EXECUTION_INVOCATION_ADMISSION_PATH_MISSING",
+      "MODEL_EXECUTION_INVOCATION_REPLAY_FENCE_MISSING",
+      "INFERENCE_CALLER_OUTPUT_PROVENANCE_ARGUMENT_STILL_PRESENT"
+    ],
+    "removed_executor_expectations": [
+      "EntityOSHCUDetachedSandboxRun/v2",
+      "INFERENCE_RECEIPT_V3_REQUIRED",
+      "JSPACE_INFERENCE_BINDING_V2_REQUIRED"
+    ],
+    "real_model_loader_credit": false,
+    "real_model_executor_credit": false,
+    "runtime_credit": false
+  },
+  "coordination": {
+    "parallel_nonduplicate_progress": "PR810 advanced after the guard write with commit 21c5f808403463dc75dee1e3a7301a9f12442c88 vendoring the exact donor model_execution_receipt_v1 producer into the fixed capsule fixture closure.",
+    "action": "No competing fixture copy was added by this organ after that observation.",
+    "unusual_experiment_count_added": 0
+  },
+  "execution_evidence": {
+    "guard_commit_vercel_status": "FAILURE_BEFORE_BUILD_OR_TEST",
+    "blocker": "VERCEL_HOBBY_BUILD_RATE_LIMIT",
+    "test_executed": false,
+    "sandbox_executed": false,
+    "interpretation": "EXECUTION_ADMISSION_BLOCKER_NOT_TEST_FAILURE"
+  },
+  "next_gate": [
+    "Let the single retained PR810 fixture closure converge on exact donor producer bytes without parallel duplicate routes.",
+    "When included-tier build admission returns, deploy the exact new PR810 head and require the build guard to accept the v4/v3 detached contract.",
+    "Resolve protected-preview function admission; then execute deterministic exact-current archives or the fixed vendored capsule in the admitted FREE_ONLY Sandbox.",
+    "Grant no real model/J-Space runtime credit until actual loader and executor I/O are independently admitted and causally bound."
+  ],
+  "credit": {
+    "source_executor_convergence": "ADVANCED",
+    "build_guard_runtime_credit": 0,
+    "sandbox_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  }
+}

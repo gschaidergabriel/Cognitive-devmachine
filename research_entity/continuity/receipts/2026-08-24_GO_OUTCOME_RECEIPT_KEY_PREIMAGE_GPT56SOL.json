@@ -1,0 +1,90 @@
+{
+  "schema": "ENTITYOS_HCU_GO_OUTCOME_RECEIPT_KEY_PREIMAGE/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "latest_main_observed_immediately_before_write": "a477fd5743b10d908dfd838f454e552249699b7c",
+    "bootstrap_schema_observed": "8.62",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_62.json",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN",
+    "vps_self_hosted_production_testing": "FORBIDDEN"
+  },
+  "coordination": {
+    "retained_fusion_pr": 1401,
+    "retained_fusion_head_observed": "f50b1deb324447bbcea7bba860f998152c608bec",
+    "retained_fusion_base_is_stale_against_current_main": true,
+    "parallel_supervisor_862_reentry_work_observed": true,
+    "parallel_output_cell_binding_adjudication_observed": true,
+    "duplicate_code_path_created": false,
+    "code_write_to_stale_pr_head": false
+  },
+  "exact_source_inspection": {
+    "gate_path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "gate_git_blob_sha1": "69ba2bb966866fbc67646a210559894b107b7a65",
+    "test_path": "the artefact/MicroEntity/hcu/test_jspace_dataset_admission_gate_v1.py",
+    "test_git_blob_sha1": "c6fed64ce3d07cc974d96467b64f7549c23591b1",
+    "observed_mechanism": "outcome_receipt_sha256 is validated syntactically and used as the admitted_outcome_receipts mapping key, while _verify_outcome_binding checks status/credit/causal/cell/role fields but does not recompute a canonical digest of the mapped receipt bytes and compare it with that key",
+    "existing_positive_test_shape": "the current test fixture admits outcomes under h('6') while constructing the receipt mapping independently; no receipt-byte digest equality assertion is present"
+  },
+  "unusual_experiment": {
+    "macrocycle_id": null,
+    "local_intervention_count": 1,
+    "id": "OUTCOME_RECEIPT_KEY_PREIMAGE_COLLISION",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "hypothesis": "If the mapping key is treated as a SHA-256 receipt identity but receipt bytes are never rebound to it, two byte-distinct receipts can occupy the same claimed outcome_receipt_sha256 identity while satisfying every currently explicit outcome causal-binding predicate.",
+    "intervention": "Construct two VERIFIED POSITIVE receipt mappings with identical currently-bound training/transition/generation/Entry/route/GRID/cell/role fields and only one additional evidence_note byte difference; evaluate the exact explicit binding predicate set while independently hashing each mapping's deterministic JSON bytes.",
+    "execution_surface": "isolated session tool container",
+    "external_network_or_paid_provider_used": false,
+    "claimed_registry_key": "6666666666666666666666666666666666666666666666666666666666666666",
+    "receipt_a_sha256_under_deterministic_json_reproduction": "dfbf5e3929121f5ba969218a853f2084a9f0336c851a5ffe5adcf7aea5ae5e07",
+    "receipt_b_sha256_under_deterministic_json_reproduction": "b0095e81149e400ba50bf0e3a8a6193dc15639a02eab74cca4a16ae79ef95eed",
+    "byte_distinct": true,
+    "either_digest_equals_claimed_key": false,
+    "both_pass_current_explicit_binding_predicates_in_source_equivalent_reproduction": true,
+    "classification": "MECHANISM_SUPPORTED_SOURCE_EQUIVALENT_SYNTHETIC_NOT_EXACT_BLOB_RUNTIME"
+  },
+  "counterhypothesis": {
+    "claim": "admitted_outcome_receipts may itself be a separately trusted control-plane registry whose key is already the canonical identity assertion, making receipt-byte rehashing redundant rather than a security boundary",
+    "adjudication": "RETAINED_UNRESOLVED",
+    "reason": "the current candidate names the reference outcome_receipt_sha256 and promises exact verified outcome ancestry, but the inspected retained subtree exposes no separately evidenced registry-construction contract here that proves key/content digest coupling. Until such a producer/admission invariant is bound, key-only membership is weaker than the rest of the exact self-authenticating HCU identity spine."
+  },
+  "finding": {
+    "class": "OUTCOME_RECEIPT_CONTENT_IDENTITY_BINDING_GAP_CANDIDATE",
+    "impact": "A registry can distinguish causal-field compatibility without proving that the byte-level receipt identified by outcome_receipt_sha256 is the object actually verified. This is provenance/identity ambiguity, not observed reward minting, effect bypass, or whole-runtime failure.",
+    "reward_minting_observed": false,
+    "effect_authority_bypass_observed": false,
+    "whole_runtime_failure_observed": false
+  },
+  "repair_discriminator": {
+    "preferred_direction": "reuse the single selected RFC8785_JCS_IJSON/v1 canonicalization authority to define one explicit outcome-receipt identity material/schema and require canonical receipt digest == outcome_receipt_sha256 before causal-field admission; do not invent a second canonicalizer",
+    "alternative_if_registry_key_is_authoritative_handle": "rename/version the field and contract as an opaque admitted outcome reference rather than SHA-256 byte identity, and prove the registry producer/admission boundary separately",
+    "required_regressions": [
+      "byte-distinct receipt under the same claimed SHA key fails closed",
+      "causally correct receipt under a wrong SHA key fails closed",
+      "exact canonical receipt bytes under their matching SHA key remain admissible",
+      "UNKNOWN remains UNKNOWN and exact provenance binding must not promote reward/truth"
+    ],
+    "code_change_made_now": false,
+    "reason_no_code_change": "PR1401 is an actively moving stale-base fusion lane and current main is concurrently converging supervisor 8.62 plus executed Entry evidence. Directly patching that stale branch would violate the non-overwrite/nonduplicate fusion law before the retained subtree is rejoined to exact current main."
+  },
+  "execution_credit": {
+    "exact_pr1401_blob_runtime_credit_change": 0,
+    "entityos_hcu_whole_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_REFRESH_AND_NONOVERWRITE_COORDINATION; exact Entry component runtime evidence already fused by parallel main work; no duplicate runtime path created",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_NEW_OUTCOME_PROVENANCE_IDENTITY_FALSIFIER_AND_DURABLE_RECEIPT",
+    "track_c_global_jspace_training_readiness": "ADVANCED_BY_FAIL_CLOSED_SERIOUS_DATASET_OUTCOME_IDENTITY_DISCRIMINATOR; no model/training credit"
+  },
+  "next_exact_gate": "After the retained HCU/J-Space subtree is re-fused onto exact then-current main, resolve outcome-receipt identity semantics in the single canonical dataset-admission path, add the four bounded regressions, and include them in the fixed hash-bound FREE full-spine capsule Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> causal dataset admission/family split."
+}

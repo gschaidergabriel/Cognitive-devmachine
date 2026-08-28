@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T18:07:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_receipt": "f5e9e70939cce5f5a638f250aece5a1b05ab4fe6",
+  "classification": "EXECUTION_ADMISSION_BLOCKED_BEFORE_PRODUCT_ASSERTION",
+  "product_runtime_delta": "NO_CHANGE",
+  "observations": {
+    "retained_oci_controller": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 810,
+      "branch": "clay/fusion-vcr-native-20260817",
+      "current_head_observed": "50a6f3e24813d46a934c4aefb3c9dcdb2355f7b9",
+      "exact_execution_candidate": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
+      "candidate_tree": "a012708e469de32615ea9933371a13795669db5a",
+      "retained_tmux_pr": 611,
+      "retained_tmux_head": "2957e80228815ac266635981a55f22bc15dc9ed4",
+      "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+      "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc"
+    },
+    "vercel": {
+      "latest_executed_predecessor_deployment": "dpl_BH8m9HTYUXWNSPQTDzURrJy5QmuE",
+      "predecessor_result": "PRE_SANDBOX_SOURCE_GUARD_MISMATCH",
+      "predecessor_error": "VCR_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED",
+      "repaired_current_head_status": "FAILURE_BUILD_RATE_LIMIT",
+      "semantic_assertion_reached": false,
+      "sandbox_started_on_repaired_head": false,
+      "oci_build_started_on_repaired_head": false,
+      "runtime_credit": 0
+    },
+    "daytona_fallback": {
+      "workflow_repository": "gschaidergabriel/Dr.-Unterweger",
+      "workflow_run_id": 32021241780,
+      "workflow_head": "e9a50a8325810410b837b1bae85212ef5710fa3f",
+      "route": "RATE_LIMIT_PRE_ASSERTION_FREE_ONLY",
+      "attempt_1": {
+        "job_id": 95361186733,
+        "conclusion": "failure",
+        "visible_steps": 0,
+        "provider_contact_observed": false,
+        "runtime_credit": 0
+      },
+      "attempt_2_fresh_rerun": {
+        "job_id": 95367346696,
+        "conclusion": "failure",
+        "visible_steps": 0,
+        "provider_contact_observed": false,
+        "runtime_credit": 0
+      },
+      "interpretation": "GITHUB_HOSTED_RUNNER_OR_PRE_STEP_ADMISSION_FAILURE_NOT_DAYTONA_TEST_FAIL"
+    }
+  },
+  "counterhypothesis": "A credentialed egress-capable Daytona controller or an admitted Vercel Preview may still execute the exact OCI candidate successfully; current evidence does not falsify Daytona or ClayVerse runtime semantics because neither repaired Vercel nor Daytona reached the intended product assertion.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_added": 0,
+    "reason": "No uniquely reproducible immutable trigger identity beyond minute-precision shared metadata."
+  },
+  "forbidden_paths_used": {
+    "vps": false,
+    "self_hosted": false,
+    "production_host": false,
+    "together_api": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_discriminator": "Execute the same retained PR810 exact-source controller on the first admitted authorized isolated Vercel deployment, or through an egress-capable FREE_ONLY Daytona controller that reaches provider contact. Then bind exact image/dependency identities and run the in-image PR611/service assertions before any promotion."
+}

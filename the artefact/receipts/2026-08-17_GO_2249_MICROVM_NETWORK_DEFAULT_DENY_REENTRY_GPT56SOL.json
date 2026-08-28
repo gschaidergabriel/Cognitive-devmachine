@@ -1,0 +1,40 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "CONFIRMS_PARALLEL_PRODUCT_DELTA_WITH_EXACT_BLOB_SUPPORTING_EXECUTION",
+  "scope": "MicroVM/Kata deployment network boundary only",
+  "observed": {
+    "parallel_main_delta": "A concurrent canonical update closed the previously observed Kubernetes network-policy gap before this organ could write. The attempted stale update was rejected by GitHub with HTTP 409 and was not forced.",
+    "template_blob": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "contract_blob": "1e41ce8424bffa94905448f76d0856acbc6a262c",
+    "test_blob": "cc7e3cb7628314c51534330878ca886bc464713e",
+    "network_contract": "clayverse-default-deny selects app=clayverse with Ingress and Egress policyTypes and empty ingress/egress rules; deployment-specific reviewed allow policy remains required for functionality and final acceptance",
+    "isolated_supporting_command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "isolated_supporting_result": "5 passed in 0.06s; exit 0",
+    "git_blob_reconstruction": "all three locally executed source files matched the exact current GitHub blob IDs before pytest"
+  },
+  "evidence_class": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "runtime_credit": {
+    "kata_microvm": 0,
+    "kubernetes_cni_networkpolicy": 0,
+    "oci_image": 0,
+    "whole_clayverse": 0
+  },
+  "counterhypothesis": "A syntactically correct NetworkPolicy may still be ineffective or differently enforced on the eventual cluster/CNI/runtime. Final acceptance must prove the baseline deny and the exact deployment-specific allow policy on the actual VM/microVM-capable target.",
+  "next_discriminator": "Build the exact final ClayVerse OCI image with complete accepted EntityOS and dependency-lock closure, then run that same digest under the admitted Kata/equivalent guest-kernel runtime and empirically verify default-deny/explicit-allow network behavior, recovery, effect replay fencing and dual-user continuity.",
+  "coordination": {
+    "stale_write_forced": false,
+    "duplicate_product_patch_created": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0
+  },
+  "nonclaims": [
+    "not an exact whole-repository test pass",
+    "not an OCI build/runtime pass",
+    "not a live Kubernetes/CNI NetworkPolicy pass",
+    "not a Kata/microVM runtime pass",
+    "not WHOLE_CLAYVERSE_PASS"
+  ]
+}

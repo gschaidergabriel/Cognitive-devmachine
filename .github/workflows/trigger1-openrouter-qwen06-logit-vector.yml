@@ -1,0 +1,95 @@
+name: Trigger1 Qwen3-0.6B FREE logit-vector experiment
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: trigger1-qwen06-logit-vector
+  cancel-in-progress: false
+
+jobs:
+  execute:
+    if: >-
+      github.repository == 'gschaidergabriel/clay-global-research-entity' &&
+      github.event.issue.title == '[CLAY-DISPATCH] Trigger1 Qwen3 0.6B logit vector' &&
+      github.event.issue.user.login == 'gschaidergabriel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact current main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Execute bounded FREE provider child
+        id: experiment
+        shell: bash
+        env:
+          CLAY_FREE_PROVIDER_BUDGET_DB: /tmp/clay-trigger1-qwen06/provider_budget.sqlite3
+          CLAY_SWARM_ARTIFACT_ROOT: /tmp/clay-trigger1-qwen06/free-lane
+        run: |
+          set -u
+          mkdir -p /tmp/clay-trigger1-qwen06
+          set +e
+          python3 tools/free_swarm_exec_with_vault.py \
+            python3 tools/trigger1_openrouter_qwen06_logit_vector_execute.py \
+            --output /tmp/clay-trigger1-qwen06/experiment.json \
+            > /tmp/clay-trigger1-qwen06/stdout.log 2>&1
+          rc=$?
+          set -e
+          echo "experiment_rc=$rc" >> "$GITHUB_OUTPUT"
+          test -s /tmp/clay-trigger1-qwen06/experiment.json || {
+            python3 - "$rc" <<'PY'
+          import json, pathlib, sys
+          pathlib.Path('/tmp/clay-trigger1-qwen06/experiment.json').write_text(json.dumps({
+              'schema':'CLAY_TRIGGER1_OPENROUTER_QWEN06_LOGIT_VECTOR_EXPERIMENT/v1',
+              'status':'BLOCKED_BEFORE_RESULT',
+              'process_exit_code':int(sys.argv[1]),
+              'secret_exposed':False,
+              'paid_fallback_attempt_count':0,
+              'credit_scope':'NONE',
+          }, indent=2, sort_keys=True)+'\n')
+          PY
+          }
+
+      - name: Persist sanitized immutable result
+        shell: bash
+        env:
+          EXPERIMENT_RC: ${{ steps.experiment.outputs.experiment_rc }}
+        run: |
+          set -euo pipefail
+          issue="${{ github.event.issue.number }}"
+          run="${GITHUB_RUN_ID}"
+          outdir="research_entity/runtime/tool_results"
+          mkdir -p "$outdir"
+          target="$outdir/trigger1-qwen06-logit-vector-issue${issue}-run${run}.json"
+          python3 - "$target" "$EXPERIMENT_RC" <<'PY'
+          import json, os, pathlib, sys
+          src=pathlib.Path('/tmp/clay-trigger1-qwen06/experiment.json')
+          obj=json.loads(src.read_text())
+          obj['github_actions']={
+              'run_id':os.environ.get('GITHUB_RUN_ID'),
+              'run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
+              'head_sha':os.environ.get('GITHUB_SHA'),
+              'issue_number':int('${{ github.event.issue.number }}'),
+              'process_exit_code':int(sys.argv[2]),
+          }
+          obj['secret_exposed']=False
+          pathlib.Path(sys.argv[1]).write_text(json.dumps(obj,indent=2,sort_keys=True,ensure_ascii=False)+'\n')
+          PY
+          git config user.name 'clay-trigger1-runner'
+          git config user.email 'clay-trigger1-runner@users.noreply.github.com'
+          git add "$target"
+          git commit -m "evidence(trigger1): persist Qwen3-0.6B logit-vector run ${run} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

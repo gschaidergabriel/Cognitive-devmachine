@@ -1,0 +1,88 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "macrocycle_id": "UNRESOLVED_NO_UPSTREAM_ID",
+  "local_run_id": "go-20260823T0850+07-gpt56sol-generation-mirror",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "authority": {
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "worker_directive": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
+    "canonical_generation_authority": "MiniUnifiedDB entity_state.generation"
+  },
+  "join": {
+    "observed_main_before_delta": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+    "reference_candidate_pr": 966,
+    "reference_candidate_head": "3d490ee3179400d889bdc81ea8a769d84212e481",
+    "reference_candidate_status": "DRAFT_SOURCE_CANDIDATE"
+  },
+  "grf": {
+    "R0_observed": [
+      "PR #966 _ensure_schema reads entity_state.generation",
+      "PR #966 _ensure_schema reads eos_pipeline_state.generation",
+      "PR #966 computes max(native_generation, mirror_generation)",
+      "PR #966 writes that maximum back into entity_state.generation when larger",
+      "current main generation-authority receipt says entity_state.generation is the sole live generation/CAS authority"
+    ],
+    "R1_hypothesis": "The legacy eos_pipeline_state generation field remains causally capable of advancing canonical generation during schema/bootstrap convergence.",
+    "R3_counterhypothesis": "The legacy generation is only a harmless downstream compatibility mirror and therefore cannot influence canonical state.",
+    "R4_intervention": "Initialize native generation=3 and legacy mirror generation=999, then apply the exact candidate max-and-write migration algorithm.",
+    "R5_observed_pattern": "A nominal projection becomes an upstream authority whenever migration reads it and promotes its larger value into canonical generation.",
+    "R6_result": "COUNTERHYPOTHESIS_FALSIFIED_AT_BOUNDED_MECHANISM_SCOPE"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "LEGACY_GENERATION_MIRROR_POISON",
+    "scope": "BOUNDED_ISOLATED_SQL_MECHANISM_REPRODUCTION_OF_EXACT_CANDIDATE_ALGORITHM",
+    "input": {
+      "canonical_native_generation_before": 3,
+      "legacy_mirror_generation": 999
+    },
+    "observed": {
+      "canonical_native_generation_after": 999
+    },
+    "falsified": "LEGACY_MIRROR_IS_HARMLESS_DOWNSTREAM_PROJECTION",
+    "does_not_claim": [
+      "exact PR checkout runtime PASS/FAIL",
+      "native-v2 parity",
+      "whole Mini Entity PASS"
+    ]
+  },
+  "delta": {
+    "generation_guard_commit": "b288b689b5938ec0e0b0b3af982d8e183577c50a",
+    "generation_guard_file": "the artefact/blogpost_entity/test_reference_generation_authority_invariant.py",
+    "guard_law": "Schema/bootstrap logic may mirror canonical generation downstream, but may not read legacy eos_pipeline_state.generation as an input capable of advancing entity_state.generation.",
+    "cognition_ood_commit": "26b566b48e0f8a0d026325255f7efb75e13d50d8",
+    "cognition_ood_generator_commit": "4b7b84ee6c0ec923165494783b17d723e9885505",
+    "cognition_ood_family": "compositional_generation_authority_poison",
+    "cognition_ood_cases": 40,
+    "cognition_law": "Replaceable checkpoint/backend cognition must preserve canonical generation authority and reject compatibility-mirror promotion."
+  },
+  "runner_recheck": {
+    "candidate_head": "3d490ee3179400d889bdc81ea8a769d84212e481",
+    "workflow": "claycog-validator-pr",
+    "original_job_id": 97036217498,
+    "rerun_job_id": 97124996493,
+    "rerun_conclusion": "failure",
+    "visible_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+  },
+  "provider_and_budget": {
+    "provider_network_call": false,
+    "together_api_call": false,
+    "training_started": false,
+    "spend_usd": 0,
+    "free_only_preserved": true
+  },
+  "evidence_boundary": {
+    "generation_authority_defect": "MECHANISM_SUPPORTED_AND_SOURCE_BOUND_TO_PR_966_HEAD",
+    "main_guard": "COMMITTED_SOURCE_GATE",
+    "cognition_ood": "COMMITTED_EVALUATION_CONTRACT",
+    "exact_candidate_runtime": "UNOBSERVED",
+    "approximately_1b_checkpoint_quality": "UNOBSERVED",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_step": "Rebase/rewrite PR #966 onto fresh main so eos_pipeline_state generation is downstream-only or removed as authority input; then execute the exact repaired head in an actually-started authorized isolated runner. The 40 generation-authority-poison OOD cases become part of later matched base/tuned/larger-model cognition promotion evaluation."
+}

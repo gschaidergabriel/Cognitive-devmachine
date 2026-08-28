@@ -1,0 +1,89 @@
+{
+  "schema": "GO_TYPED_ENTRY_CAPABILITY_REPAIR_EXACT_REPLICATION/v2",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "program": "EntityOS + HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_before_first_write": "63fdd580aee5d383a3c7d01213a3ba41a2b8bf02",
+  "source_candidate": {
+    "pr": 1263,
+    "latest_head_inspected": "3f46c38d0df01cea3cc27cf8fddc75cbb4d42d4e",
+    "module": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+    "module_git_blob": "0f4d39159be77bace7ee95397b744c781e8f8599",
+    "test": "the artefact/MicroEntity/hcu/test_xeno_entry_fabric_v1.py",
+    "test_git_blob": "684b5808ca33dd96be120795dd2bd4fb8515b7df"
+  },
+  "repaired_invariants": [
+    "untrusted Entry capability claims may only narrow a separately trusted capability set and must echo the separately trusted capability-binding digest; Entry admission cannot self-grant permissions",
+    "replay-stable causal event identity is distinct from concrete admission/transport identity",
+    "receive time, ingress instance, payload location, capability narrowing and resource budget may alter admission identity without redefining the immutable causal event",
+    "immutable payload/provenance/causal occurrence changes alter event identity"
+  ],
+  "exact_blob_reproduction": {
+    "environment": "isolated local tool sandbox",
+    "module_git_hash_object_observed": "0f4d39159be77bace7ee95397b744c781e8f8599",
+    "test_git_hash_object_observed": "684b5808ca33dd96be120795dd2bd4fb8515b7df",
+    "blob_identity_match": true,
+    "command": "python3 -m unittest -v test_xeno_entry_fabric_v1.py",
+    "tests_run": 15,
+    "tests_passed": 15,
+    "tests_failed": 0,
+    "result": "PASS_EXACT_SOURCE_COMPONENT_SCOPE"
+  },
+  "earlier_replication": {
+    "head": "4eadd47eb944f86d6659b02dcb283661b0876bd1",
+    "module_git_blob": "89cda2894f4a90440964a2ffdb01ef274c3279ad",
+    "test_git_blob": "a5c5666c52b3def5b15d1e5b3d96836822b3fc6f",
+    "tests": "12/12 PASS",
+    "status": "SUPERSEDED_BY_LATER_EXACT_BLOB_REPLICATION"
+  },
+  "covered_falsifiers": [
+    "stale or ill-typed generation authority rejects",
+    "unknown field cannot smuggle effect/truth authority",
+    "provenance and payload digests are mandatory",
+    "capability binding must equal external authority binding",
+    "entry cannot self-grant effect.request",
+    "entry may narrow but not broaden authorized capabilities",
+    "duplicate/ill-typed capability claims reject",
+    "budget is complete and nonnegative",
+    "HCU projection preserves causal event and admission identities",
+    "invalid reactive signal rejects",
+    "transport replay preserves event identity but changes admission identity",
+    "payload/provenance changes change event identity",
+    "distinct causal occurrence changes event identity",
+    "canonical field ordering is deterministic"
+  ],
+  "evidence_boundary": {
+    "source_component_verified": true,
+    "exact_branch_full_checkout_executed": false,
+    "combined_entry_route_grid10_executed": false,
+    "oci_or_entityos_runtime_executed": false,
+    "hcu_model_runtime_executed": false,
+    "jspace_causal_use_verified": false,
+    "runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "the macrocycle unusual discriminator was already consumed by same-route causal-alias stress; both exact-blob runs here were deterministic regression/replication only"
+  },
+  "security": {
+    "vps_self_hosted_production_testing_used": false,
+    "together_used": false,
+    "paid_execution_used": false,
+    "secrets_accessed_or_persisted": false
+  },
+  "remaining_blockers": [
+    "wire admitted_capabilities and expected_capability_binding_sha256 to the existing canonical permission/capability authority rather than a new HCU authority",
+    "fuse the useful typed Entry/GRID10 candidate into the retained HCU route lane without duplicate route authority",
+    "bind the real admitted local checkpoint/tokenizer/runtime bytes and capability record instead of trusting event-supplied model identity",
+    "bind the downstream inference receipt producer to the event/route/engine echo contract",
+    "run exact combined Entry + HCU route + inference-echo + GRID10 regressions on an actually-started authorized isolated executor",
+    "rebuild and digest-bind the stale MicroEntity compatibility ZIP after source semantics settle",
+    "close current EntityOS/HCU authority drift in the canonical artefact manifest and legacy ClayVerse authority validator without weakening inherited safety checks"
+  ],
+  "promotion": "SOURCE_COMPONENT_REPAIR_AND_IDENTITY_SPLIT_SUPPORTED_NOT_RUNTIME_PROMOTED"
+}

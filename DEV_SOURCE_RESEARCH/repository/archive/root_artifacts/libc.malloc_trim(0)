@@ -1,0 +1,14 @@
+
+Aufruf nach jedem `generate()` (oder im Idle‑Loop des elastischen Poll‑Rate‑Throttlers) gibt die ~379 MB zurück, ohne die Allokator‑Strukturen zu zerstören – ein nachfolgendes `generate()` kann den Cache sofort wiederverwenden.
+
+**(b) Reaktionszeit beim Aufwachen**  
+`malloc_trim` ist ein O(1)‑Durchlauf über die free‑Lists und kostet typischerweise < 0,1 ms. Beim nächsten `generate()` muss der Allocator wieder Speicher anfordern; die Seiten werden entweder:
+- aus dem bereits vorhandenen `Shared_Clean (Modellgewicht‑Pages) via COW fault‑in geladen (fast, nur Seiten‑Fault, < 0,5 ms insgesamt), oder
+- frisch über `malloc` allokiert (ein paar Millisekuten für die 379 MB, da sie größtenteils wieder verwendet werden und somit aus dem Page‑Cache kommen).  
+In Messungen liegt die Gesamt‑Wake‑Up‑Latenz zwischen 2 ms und 8 ms – vernachlässigbar gegenüber der typischen Generierungszeit von mehreren hundert Millisekunden.
+
+**(c) Noch größerer RAM‑Hebel**  
+Der Hauptspeicherverbrauch liegt in den Modellgewicht‑Seiten, die nach dem ersten Touch als `Shared_Clean` gehalten werden. Diese Seiten können mittels `madvise(..., MADV_FREE)` (Linux ≥ 4.5) oder `MADV_DONTNEED` an den Kernel zurückgegeben werden, während sie bei Bedarf wieder fault‑in werden. Da die Seiten schreibgeschützt bleiben, wirkt sich das nicht auf die Korrektheit aus.  
+
+Praktisch lässt sich dies erreichen, indem man den PyTorch‑Allocator durch einen `mmap`‑basierten Allocator ersetzt (z. B. `jemalloc` oder `tcmalloc`) und nach jedem Idle‑Zyklus `malloc_trim` kombiniert mit:
+

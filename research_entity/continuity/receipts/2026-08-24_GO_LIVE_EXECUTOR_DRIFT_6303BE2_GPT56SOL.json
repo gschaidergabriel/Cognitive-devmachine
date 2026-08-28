@@ -1,0 +1,75 @@
+{
+  "schema": "ENTITYOS_HCU_GO_LIVE_EXECUTOR_DRIFT_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "parent_receipt": "research_entity/continuity/receipts/2026-08-24_GO_865_AUTHORITY_REENTRY_A2C3B87_GPT56SOL.json",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_EXACT_HEAD_REENTRY_AND_SOURCE_DIFF_SCOPING"
+  },
+  "canonical_main_before_write": "857f0b16f3cad4749598dbf49f00bf02e6359393",
+  "retained_donor": {
+    "qualified": "gschaidergabriel/clay-global-research-entity#1263",
+    "live_head": "81c93fa7c80e952123f74f954e57ed162076ba9d",
+    "prior_observed_head": "6904f34387b084605dd5f2d5763482f9cdcf1b66",
+    "compare": {
+      "status": "ahead",
+      "ahead_by": 9,
+      "observed_changes_from_prior_head": "RECEIPT/COORDINATION_ONLY_IN_COMPARE_RESULT",
+      "runtime_credit_change": 0
+    }
+  },
+  "retained_executor": {
+    "qualified": "gschaidergabriel/Dr.-Unterweger#810",
+    "live_head": "6303be2cc726f43195336288dfbd5de556752c03",
+    "evidence_bound_function_runtime_head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "compare": {
+      "status": "ahead",
+      "ahead_by": 3,
+      "behind_by": 0,
+      "changed_files": [
+        "mcp/vercel-sandbox-mcp/api/hcu-runtime-admission-probe.js",
+        "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+        "mcp/vercel-sandbox-mcp/scripts/guard-entityos-hcu-current-executor.mjs"
+      ],
+      "materiality": "RUNTIME_ADMISSION_AND_FREE_ONLY_GUARD_SURFACES_CHANGED"
+    },
+    "live_head_commit_message": "fix(entityos-hcu): sync live executor guard to supervisor 8.65",
+    "live_head_material_source_delta": "current executor guard now requires supervisor 8.65 markers and changes the exact positive/inference guard obligations; this is source evidence only",
+    "runtime_evidence_promotion": "FORBIDDEN_FROM_2DA99_TO_6303BE_WITHOUT_NEW_EXACT_HEAD_EXECUTABLE_OBSERVATION"
+  },
+  "runtime_credit": {
+    "function_runtime_diagnostic_at_2da99e0458809988190c129b04cae913d1f15d92": "PASS_AT_DECLARED_NO_SANDBOX_SCOPE",
+    "function_runtime_diagnostic_at_live_6303be2cc726f43195336288dfbd5de556752c03": "UNVERIFIED",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "hypothesis": "The prior HTTP-200 function-runtime evidence cannot be successor-promoted to the current executor head because the live head changed runtime-admission and guard files after the evidence-bound snapshot.",
+  "counterhypothesis": "The three commits are authority-only wording changes and the old runtime observation remains sufficient for the current head.",
+  "discriminator_result": "COUNTERHYPOTHESIS_REJECTED_FOR_RUNTIME_CREDIT: the compare includes runtime-admission probe, free-only Sandbox admission and current-executor guard changes, so exact-source runtime identity has changed materially. Source review can show intended 8.65 synchronization but cannot substitute for a fresh exact-head executable observation.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact live executor drift is now bounded; stale exact-head function-runtime evidence is prevented from being promoted onto the current executor head. Current convergence gate is fresh exact-head deployment/function revalidation at 6303be2 only after normal FREE_ONLY access, while Sandbox.create remains separately quota-gated.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: no current-head Sandbox execution is admitted; remaining included quota is still not directly observed and the source delta itself creates no HCU/Typed Entry runtime evidence.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no current-head real local model invocation, loader-consumption observation, ModelExecution, InferenceReceipt, J-Space/GWT causal trace, ~0.8B runtime or training evidence exists. Paid/Together paths remain forbidden."
+  },
+  "next_exact_gate": [
+    "Re-enter current Research main plus live PR1263 and PR810 heads immediately before action.",
+    "Resolve an exact deployment carrying current PR810 head 6303be2cc726f43195336288dfbd5de556752c03 and obtain a bounded handler/function-runtime observation at that exact source without Sandbox.create or paid/unknown execution; do not reuse the 2da99 runtime observation as current-head evidence.",
+    "Independently obtain a directly authoritative read-only remaining included Vercel Sandbox quota signal; do not infer quota from plan/team identity.",
+    "Only if both exact-current executor identity and FREE_ONLY Sandbox admission are satisfied, run the fixed exact-source environment probe; only after environment PASS continue the real model/J-Space causal chain."
+  ],
+  "evidence_boundary": "This receipt is exact-head source/coordination evidence. It deliberately reduces current-head runtime credit to UNVERIFIED rather than projecting older executable evidence across changed runtime-admission source."
+}

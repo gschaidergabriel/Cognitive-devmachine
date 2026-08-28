@@ -1,0 +1,15 @@
+{
+  "schema": "CLAY_FLEET_QUIESCENCE_MULTI_HOST_STATUS/v1",
+  "checked_hosts": [
+    {"host": "ai-core-node", "result": "CLEAN", "method": "process/network scan, no Clay-attributed provider-capable processes found"},
+    {"host": "clay-direct-dev on frank-api (31.97.117.141)", "result": "PASS_COMPONENT_ONLY", "method": "pinned enforcer tools/free_swarm_runtime_quiescence_enforcer_v1.py --apply, zero survivors", "receipt": "2026-08-26_FREE_SWARM_QUIESCENCE_ENFORCER_CLAY_DIRECT_DEV_RECEIPT.json"},
+    {"host": "clay-direct-dev on AgentForge (72.61.19.188)", "result": "CLEANED_THEN_PASS", "method": "manual process-tree attribution + termination (distillery/evaluate/fabric-updater), 65s post-termination observation clean", "receipt": "2026-08-26_AGENTFORGE_HOST_CLAY_ATTRIBUTED_QUIESCENCE_RECEIPT.json", "note": "this was the actual source of the fleet-wide OpenRouter counter movement the 8.83-8.87 supervisor cycle observed"},
+    {"host": "andreas-maco (Andreas' workstation)", "result": "CLEAN", "method": "process scan, only unrelated Brave browser renderer processes (false-positive match on --enable-distillability-service flag, not Clay-related)"}
+  ],
+  "hosts_not_checked": [
+    "GitHub Actions runners (none currently self-hosted/registered for this repo, confirmed via repos/.../actions/runners API returning empty)",
+    "any other machine not currently known to this coordinator session"
+  ],
+  "conclusion": "All Clay-accessible hosts known to this coordinator are now clean. Fleet quiescence cannot be certified 100% (unknown/undiscovered hosts remain a theoretical gap), but every host this session had credentials/access to has been checked and any found Clay-attributed provider-capable processes terminated.",
+  "credit_boundary": {"positive_rows_admitted": 0, "training_credit": 0, "fleet_quiescence_credit": "component_evidence_only_not_promoted"}
+}

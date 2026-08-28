@@ -1,0 +1,60 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "timestamp": "2026-08-17T23:04:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / temporary Clay organ",
+  "classification": "LIVE_FUSION_REENTRY_NO_DUPLICATE_PRODUCT_PATH",
+  "product": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "observed_main_context": {
+    "latest_addressable_parallel_base": "1d28fdb9f5470d3d1c199b5e708714b2740241e4",
+    "note": "main advanced concurrently during this macro-cycle; exact runtime work must rebind immediately before compute"
+  },
+  "current_source_blobs_observed": {
+    "deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "df0e90fc4d4c5d490360e9ccd603f7d44ff9c09d",
+    "deployment/clayverse-kata-statefulset.template.yaml": "73f4dcf80f78fcb4d78e144e281758c194aff6df",
+    "tests/test_microvm_deployment_contract.py": "8e03f51ba06a8d9a31dc8b0c32c90b77399bc157",
+    "manifest.json": "9ac10e882b4f760935f3671f479eb064d8fa058d"
+  },
+  "live_fusion": {
+    "network_default_deny": "ALREADY_CANONICAL_STRONGER_THAN_DONOR",
+    "kata_current_security_floor": "ALREADY_CANONICAL_STRONGER_THAN_DONOR",
+    "tier2_full_sandbox_replacement": "ALREADY_CANONICAL",
+    "statefulset_headless_governing_service": "ALREADY_CANONICAL",
+    "pvc_nonroot_fsgroup_contract": "ALREADY_CANONICAL",
+    "action": "DO_NOT_CREATE_OR_MERGE_A_SECOND_SEMANTIC_IMPLEMENTATION"
+  },
+  "supporting_external_primary_evidence": {
+    "kubernetes_networkpolicy": "NetworkPolicy requires an enforcing network plugin/CNI; policies combine additively and node/NAT behavior has documented caveats",
+    "kata_security": "Kata upstream rolling-release policy supports only the latest monthly release; releases/latest observed 4.0.0 during this cycle; runtime-rs is the default/recommended runtime from 4.0.0"
+  },
+  "execution": {
+    "exact_current_bound_microvm_regression": "NOT_EXECUTED",
+    "exact_final_oci": "NOT_EXECUTED",
+    "kata_microvm": "NOT_EXECUTED",
+    "cni_enforcement": "NOT_EXECUTED",
+    "csi_pvc_behavior": "NOT_EXECUTED",
+    "runtime_credit": 0
+  },
+  "known_execution_blocker": {
+    "retained_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "observed_platform_state": "Sandbox.create previously succeeds, then private source staging fails closed",
+    "blocker": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "required_boundary": "host-side sensitive Vercel Preview credential only; never forward token into Sandbox",
+    "connected_surface": "no environment/secret mutation action available to this organ"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "no shared immutable request/turn id and available exact-trigger metadata is only minute precision"
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "safety": {
+    "vps_or_self_hosted_test": false,
+    "production_test": false,
+    "together_api": false,
+    "secret_exposed": false,
+    "paid_or_final_training": false
+  }
+}

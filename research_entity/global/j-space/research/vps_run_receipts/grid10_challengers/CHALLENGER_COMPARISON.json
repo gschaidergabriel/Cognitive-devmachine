@@ -1,0 +1,123 @@
+{
+  "schema": "GRID10_CHALLENGER_COMPARISON/v1",
+  "task_set": [
+    {
+      "task_id": "t0",
+      "prompt": "2 + 2 =",
+      "expected_substr": "4"
+    },
+    {
+      "task_id": "t1",
+      "prompt": "The capital of France is",
+      "expected_substr": "paris"
+    },
+    {
+      "task_id": "t2",
+      "prompt": "The opposite of hot is",
+      "expected_substr": "cold"
+    },
+    {
+      "task_id": "t3",
+      "prompt": "The sky is",
+      "expected_substr": "blue"
+    }
+  ],
+  "results": {
+    "single_xeno": {
+      "config": "single_xeno",
+      "physical_processes": 1,
+      "wallclock_s": 9.07,
+      "answers": {
+        "t0": "4\n3 +",
+        "t1": "Paris, and the capital of",
+        "t2": "cold.\n\n<think>\n\n</think>",
+        "t3": "a vast, blue expanse"
+      },
+      "correct_count": 4,
+      "total": 4,
+      "peak_rss_kb": 2156704,
+      "consistency_note": "N/A -- single sequential run, no concurrent duplication possible"
+    },
+    "independent_n_no_s1": {
+      "config": "independent_n_no_s1",
+      "physical_processes": 10,
+      "wallclock_s": 41.38,
+      "total_model_generations_performed": 40,
+      "unique_task_generations_needed": 4,
+      "wasted_duplicate_generations": 36,
+      "waste_ratio": 0.9,
+      "per_process_correct_of_4": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "consistency_note": "no shared state exists to prevent it, so every node redoes every task independently -- with GRID10's claim-awareness the same 4 tasks require exactly 4 generations total, not up to 40"
+    },
+    "naive_voting": {
+      "config": "naive_voting",
+      "physical_processes": 10,
+      "wallclock_s": 21.0,
+      "task": "The capital of France is",
+      "vote_tallies": {
+        "paris, and the capit": 10
+      },
+      "winner": "paris, and the capit",
+      "winner_correct": true,
+      "note": "produces one answer to one pre-chosen question via majority; has no mechanism at all for multi-task claim-awareness, hyperposition preservation, or persistent cross-task state -- those concepts do not apply to this architecture, which is exactly the gap GRID10's S1 fabric closes"
+    },
+    "fixed_random_coordinator": {
+      "config": "fixed_random_coordinator",
+      "physical_processes": 1,
+      "scenario": "coordinator process marked unhealthy mid-run",
+      "pending_scopes_after_failure": [
+        "fixed-scope"
+      ],
+      "stuck": true,
+      "note": "unlike GRID10 (criterion coordinator_failure_replacement=PASS, a healthy node is automatically re-elected via elect_coordinator's healthy-node scan), a fixed/random-once coordinator has no re-election call anywhere in this design by construction -- a dead fixed coordinator permanently strands its scope's Result-Channel backlog"
+    },
+    "compression_lesion": {
+      "config": "compression_lesion",
+      "physical_processes": 1,
+      "scope_level_work_committed": true,
+      "global_scope_exists_and_has_content": false,
+      "branch_a_content_present": true,
+      "cross_scope_visibility": false,
+      "note": "branch:a and branch:b both accumulate real committed results, but with recursive compression skipped there is no GLOBAL view at all -- a consumer asking 'what has the whole fabric learned' gets nothing, even though the per-scope work genuinely happened; this is the direct contrast to GRID10's recursive_global_compression=PASS criterion"
+    },
+    "dynamic_coordinator": {
+      "config": "dynamic_coordinator",
+      "note": "= the actual physical GRID10 acceptance run itself (11 real fork()'d processes, 17/17 criteria PASS)",
+      "reference": "research_entity/global/j-space/research/vps_run_receipts/grid10/GRID10_ACCEPTANCE_RECEIPT.json",
+      "coordinator_failure_replacement": "PASS -- contrast directly with fixed_random_coordinator's stuck=true above",
+      "recursive_global_compression": "PASS -- contrast directly with compression_lesion's cross_scope_visibility=false above"
+    },
+    "hyperposition_lesion": {
+      "config": "hyperposition_lesion",
+      "note": "this is REAL evidence, not simulated: the first two physical GRID10 acceptance runs (before grid10_node.py was patched to carry `unresolved_alternatives` through NODE_RESULT) both produced hyperposition_preservation.pass=false -- found_paris=false, found_minority_alt=false -- because the node's cognitive_answer() collapsed the task to its own single greedy answer and silently dropped the declared alternatives. That IS the lesioned behavior; the fix (see commit history on tools/grid10_node.py) is what makes the current GRID10_ACCEPTANCE_RECEIPT.json show hyperposition_preservation.pass=true.",
+      "pre_fix_observed_result": {
+        "pass": false,
+        "found_paris": false,
+        "found_minority_alt": false
+      },
+      "post_fix_observed_result": {
+        "pass": true,
+        "found_paris": true,
+        "found_minority_alt": true
+      }
+    }
+  },
+  "headline": {
+    "correctness": "single_xeno and dynamic_coordinator both achieve full task correctness on this small set; naive_voting depends entirely on majority luck for the ONE question it can even ask; fixed_random_coordinator and compression_lesion show real committed work becoming permanently stuck/invisible once their missing mechanism is needed",
+    "efficiency": "independent_n_no_s1 wastes 36/40 generations (90%) doing the exact same 4 tasks 10 times over with no claim-awareness -- GRID10's claim-awareness criterion (PASS) is what prevents this",
+    "resilience": "only dynamic_coordinator (GRID10) survives a coordinator dying (coordinator_failure_replacement=PASS); fixed_random_coordinator strands its scope permanently",
+    "structural_completeness": "only dynamic_coordinator (GRID10) provides both cross-scope visibility (recursive_global_compression) and preserves genuinely unresolved alternatives (hyperposition_preservation) -- every challenger config is missing at least one of these by construction, not by bad luck"
+  },
+  "credit_scope": "CHALLENGER_COMPARISON_COMPONENT_ONLY_NOT_TRAINING_NOT_HCU_WHOLE"
+}

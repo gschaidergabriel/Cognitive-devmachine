@@ -1,0 +1,105 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_CODEBOOK_GENERATOR_V2_ORDER_CONFOUND_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "audited_source_commit": "333d536165fc7995d5c74dc377bf7a071eec0978",
+    "audited_path": "tools/trigger2_dynamic_codebook_generator_v2.py",
+    "audited_blob_sha": "7ecd5cb199af7fa69786dd4b2725e2b716f723c2",
+    "training_executed": false,
+    "provider_execution": false,
+    "unusual_experiment": "NOT_USED_DETERMINISTIC_SOURCE_AUDIT_ONLY"
+  },
+  "evidence_basis": {
+    "claude_results": "ENTITYOS_CLAUDE_RESULTS_2026-08-25.pdf: T01 FAIL_SCIENTIFIC / INSTRUMENTATION_CONTROL_PASS_ONLY; T05 INCOMPLETE; T06 FAIL_SCIENTIFIC",
+    "prior_v1_audit": "2026-08-25_TRIGGER2_CONTEXT_BINDING_GENERATOR_V1_SWARM_AUDIT_GPT56SOL.json",
+    "measured_training_target": "context-dependent episodic semantic-to-local-codebook symbol routing, not semantic relearning or static vector transport"
+  },
+  "swarm_review": {
+    "roles": [
+      "DATASET_ARCHITECT",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "STATISTICAL_REVIEWER",
+      "CAUSAL_BINDING_REVIEWER",
+      "PROVENANCE_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "positive_findings": [
+      "The v2 source preserves all six S3 mappings and exact global class-to-slot counterbalance.",
+      "Rows remain METHOD_ONLY/SYNTHETIC_HARD_NEGATIVE and explicitly mint zero canonical dataset, training, J-Space, HCU or EntityOS credit.",
+      "The exact 46 accepted ABI atom identities are still treated as unresolved rather than invented.",
+      "The validator rejects class words outside the local codebook and validates realized mapping to target consistency."
+    ],
+    "critical_finding": {
+      "id": "V2_CODEBOOK_ORDER_CONDITIONED_SEMANTIC_CLASS_SHORTCUT",
+      "severity": "CRITICAL",
+      "source_rule": "shift = (pidx + tidx + cidx) % len(CLASSES); order = CLASSES[shift:] + CLASSES[:shift]",
+      "derivation": [
+        "The model-visible realized codebook reveals the S3 mapping, therefore the S3 permutation index pidx is recoverable for the three abstract slots.",
+        "The prompt format reveals which of T1/T2/T3/T4 is active, therefore template index tidx is recoverable.",
+        "The visible class-entry display order reveals cyclic shift exactly.",
+        "Therefore cidx = (shift - pidx - tidx) mod 3 is recoverable without reading the SITUATION/CASE/STATE semantic content.",
+        "Once cidx is recovered, target = realized_mapping[CLASSES[cidx]] is determined."
+      ],
+      "codebook_blind_semantics_bypass_accuracy_on_72_positive_rows": 1.0,
+      "rows_solved_by_shortcut": 72,
+      "positive_rows": 72,
+      "consequence": "The intended semantic-reading -> episode-local binding computation is not identified by this seed. A learner can exploit mapping/order/template covariance and achieve perfect positive-row accuracy while ignoring the semantic situation.",
+      "validator_gap": "validate_rows only requires at least three distinct codebook entry orders. It does not test conditional independence or counterfactual order invariance within fixed mapping/template/semantic cells."
+    },
+    "verdict": "REJECT_V2_FOR_DIRECT_TRAINING_OR_BINDER_CREDIT_UNTIL_ORDER_CONFOUND_IS_REMOVED"
+  },
+  "required_repair": {
+    "preferred_design": "For every fixed atom block/S3 mapping/template/semantic instance, cross the episode with all six codebook display orders, keeping semantic text, realized mapping and target fixed. This makes display order a true nuisance factor rather than a semantic-class code.",
+    "minimum_validator_gates": [
+      "ORDER_COUNTERFACTUAL_COMPLETENESS: for each fixed semantic/mapping/template cell, require the preregistered complete display-order set or a formally balanced equivalent.",
+      "ORDER_TARGET_INVARIANCE: changing display order alone must never change the target.",
+      "CONDITIONAL_ORDER_MI: measure display_order versus base/target semantic class conditional on mapping and template; require zero for an exactly crossed design.",
+      "SITUATION_ABLATION_BASELINE: remove or mask semantic situation text and verify that target prediction from nuisance fields cannot exceed chance under the generator design.",
+      "MAPPING_COUNTERFACTUAL: with situation fixed, changing S3 mapping must move the target exactly according to the realized new mapping.",
+      "REAL_ATOM_AND_SPLIT_GATES: after order repair, still require exact verified ABI atom partitioning, global holdout-atom absence and family/provenance split atomicity before training eligibility."
+    ]
+  },
+  "training_example_delta": [
+    {
+      "id": "ORDER_CONFOUND_NE01",
+      "type": "SYNTHETIC_HARD_NEGATIVE",
+      "input": "A dynamic-codebook corpus has all six S3 mappings and zero global class-symbol MI, but display_order is a deterministic function of mapping index, template index and semantic class.",
+      "desired": "Reject binder-training readiness. Global class-symbol balance does not remove a conditional nuisance shortcut; display order must be independent/counterfactually crossed so the semantic content is necessary."
+    },
+    {
+      "id": "ORDER_CONFOUND_NE02",
+      "type": "METHOD_ONLY",
+      "input": "How do you prove codebook display order is a nuisance variable rather than a hidden label?",
+      "desired": "Hold semantic instance, mapping and target fixed and vary all preregistered display orders; require invariant target plus zero conditional dependence of order on semantic class. Add a situation-ablation baseline to ensure nuisance-only prediction stays at chance."
+    },
+    {
+      "id": "ORDER_CONFOUND_NE03",
+      "type": "SYNTHETIC_HARD_NEGATIVE",
+      "input": "A validator reports three distinct codebook orders globally and calls order randomized.",
+      "desired": "Reject that inference. Global diversity is insufficient; test the joint/conditional contingency structure against semantic class, mapping, template, target and split."
+    }
+  ],
+  "research_return": {
+    "training_rule": "Nuisance-factor diversity is not nuisance-factor independence. Every intended nuisance dimension must be counterfactually crossed or statistically proven independent at the conditioning level relevant to the task.",
+    "harness_implication": "The Xeno training/eval harness should include semantic-content ablation and nuisance-only challenger baselines; high task accuracy is not binder evidence if a nuisance-only challenger exceeds chance.",
+    "falsifier": "If a repaired full-order-crossed corpus still allows a semantics-masked challenger to predict target above chance, another leakage channel remains and binder claims stay closed."
+  },
+  "credits": {
+    "new_training_examples": 3,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Repair one retained Trigger-2 generator so codebook order is fully crossed/conditionally independent, add the nuisance-only semantic-ablation challenger and exact order counterfactual validator, then rerun the source audit before any exact-46-atom materialization or Forge/Distillery admission."
+}

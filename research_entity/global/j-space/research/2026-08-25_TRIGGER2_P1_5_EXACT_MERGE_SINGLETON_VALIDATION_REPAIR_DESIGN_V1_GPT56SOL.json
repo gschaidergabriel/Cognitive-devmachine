@@ -1,0 +1,98 @@
+{
+  "schema": "CLAY_TRIGGER2_EXACT_MERGE_SINGLETON_VALIDATION_REPAIR_DESIGN/v1",
+  "trigger_instance": "triggerwort 2 @ 2026-08-25T23:56+07:00",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "authority_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "main",
+  "observed_main_before_write": "7946f77ace556d571eba9d64c52659cd09b5a021",
+  "status": "NONCANONICAL_SOURCE_REPAIR_DESIGN_ZERO_PROMOTION_CREDIT",
+  "issue": 2019,
+  "problem": "The v3 reference labeler correctly requires at least two branches for an external/pre-update Hyperposition state, but u_state may legitimately collapse >=2 exactly equivalent branches to one via EXACT_FORMAL_SEMANTIC_SIGNATURE and then sends that derived singleton through project_state -> _validate_state, which rejects it as STATE_REQUIRES_AT_LEAST_TWO_BRANCHES.",
+  "observed_source_chain": [
+    "_validate_state rejects len(branches) < 2",
+    "_merge_exact_equivalents groups by deterministic _semantic_signature and records merged_from_branch_ids plus merge provenance",
+    "u_state applies _merge_exact_equivalents and immediately calls project_state(world, out)",
+    "project_state calls the same strict _validate_state without knowing whether the singleton was produced by the current exact-merge transition"
+  ],
+  "rejected_repairs": [
+    {
+      "repair": "Change _validate_state to accept every singleton when world.merge_policy == EXACT_FORMAL_SEMANTIC_SIGNATURE",
+      "reason": "Unsafe: a caller can submit an arbitrary singleton under that world policy and bypass the initial Hyperposition >=2-branch invariant."
+    },
+    {
+      "repair": "Trust serialized merged_from_branch_ids/A.merge_policy fields on a singleton",
+      "reason": "Insufficient: caller-controlled provenance-shaped fields are not proof that the current transition actually merged >=2 exactly equivalent prior branches."
+    },
+    {
+      "repair": "Remove post-merge projection validation",
+      "reason": "Unsafe: it weakens unrelated structural/provenance/evidence checks and converts one state-shape conflict into a broader fail-open path."
+    }
+  ],
+  "recommended_repair": {
+    "law": "Separate strict external-state validation from proof-carrying derived post-merge validation.",
+    "external_preupdate_validation": {
+      "minimum_branches": 2,
+      "caller_singleton": "REJECT_ALWAYS",
+      "purpose": "Preserve semantic Hyperposition as unresolved alternatives at admission/pre-update boundaries."
+    },
+    "derived_post_merge_validation": {
+      "singleton_allowed_only_if": [
+        "the immediately preceding validated state contained at least two branches",
+        "world.merge_policy is EXACT_FORMAL_SEMANTIC_SIGNATURE",
+        "the current u_state transition itself invoked _merge_exact_equivalents",
+        "the singleton output is accompanied by an internal transition witness, not merely caller-serialized marker fields",
+        "the witness names >=2 distinct predecessor branch ids present in the validated pre-merge state",
+        "all named predecessor branches recompute to the same deterministic _semantic_signature",
+        "the output branch recomputes to that same semantic signature for merge-defining fields",
+        "merged_from_branch_ids is deterministic/sorted and exactly matches the witness predecessor set",
+        "A.merge_policy, A.semantic_signature_sha256 and merged_origins are consistent with the recomputed predecessor set",
+        "normal branch/evidence/projection invariants still pass"
+      ],
+      "purpose": "Represent a legitimate resolution-by-exact-equivalence without making singleton state a general caller-admissible shape."
+    },
+    "implementation_shape": {
+      "preferred": "Keep _validate_state strict by default. Add a narrowly scoped internal derived-state validation path or validation context used only by u_state after exact merge, carrying a nonserialized transition witness derived from the already validated pre-merge state.",
+      "do_not": "Do not make a boolean allow_singleton caller API sufficient authority.",
+      "possible_internal_witness_fields": [
+        "pre_merge_state_sha256",
+        "post_merge_state_sha256",
+        "merge_policy",
+        "semantic_signature_sha256",
+        "input_branch_ids",
+        "output_branch_id"
+      ]
+    }
+  },
+  "mandatory_regressions": [
+    "existing test_exact_semantic_merge_uses_declared_policy_not_similarity becomes PASS",
+    "arbitrary singleton pre-state remains STATE_REQUIRES_AT_LEAST_TWO_BRANCHES",
+    "singleton carrying forged merged_from_branch_ids without current-transition witness fails",
+    "singleton under merge_policy NONE fails",
+    "two non-equivalent predecessor branches cannot create a valid singleton witness",
+    "witness predecessor-id substitution fails",
+    "semantic-signature substitution fails",
+    "pre-merge-state digest substitution fails if digest-bound witness is used",
+    "merged_origins mismatch fails",
+    "branch-birth evidence-must-be-empty regressions remain PASS",
+    "exact replay/idempotence regressions remain PASS",
+    "full retained v3 reference-labeler suite is classified repository-bound, not just the formerly failing test"
+  ],
+  "training_boundary": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "reference_labeler_complete_oracle_credit": 0,
+    "reason": "This document is a source repair design only. Positive training admission remains blocked by P0 OBSERVED instance authentication, P1 nonempty-history authority, this P1.5 implementation/runtime closure, and P2 checkpoint/input identity."
+  },
+  "relationship_to_v30": {
+    "ledger": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V30_GPT56SOL.json",
+    "advances": "p1_5_reference_labeler.requirement",
+    "does_not_supersede_ledger": true,
+    "does_not_create_second_semantic_authority": true
+  },
+  "next_exact_action": "Implement the phase-separated validation/witness repair in the single retained v3 labeler lane, add the mandatory negative regressions, run the complete reference-labeler suite on exact source, and preserve zero dataset/J-Space/HCU/training credit until repository-bound execution plus the upstream P0/P1 gates pass."
+}

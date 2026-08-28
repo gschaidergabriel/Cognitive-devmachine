@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "trigger": "triggerwort 5",
+  "run_id": "triggerwort5-20260828T1414p0700-gpt56sol-stern-effect-ingest-drift",
+  "status": "SOURCE_GROUNDED_PARTIAL_OPEN_CONTINUATION",
+  "purpose": "Advance the current Triggerword-5 live forensic feed by resolving the accessible-Git window for the hooks-to-stern control/effect fan-in and by preserving the observed ingest-path/schema drift instead of silently reconciling it.",
+  "authority_snapshot": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_main_before_write": "4f4a7088a54dd21e1848f090446590efa05a2ac1",
+    "bootstrap_program_state_epoch": "8.78",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13AA_NON_AUTHORITY",
+    "free_only": true,
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "evidence_boundary": "source/Git chronology and repository topology only; no runtime, causal, provider, Physical-GRID10, HCU, whole-product or training promotion"
+  },
+  "resolved_source_identities": {
+    "triggerword_5_design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "triggerword_5_design_sha": "099340237fad4b52187a77ef21a6ff93ae98287a",
+    "frankenstein_donor_repository": "gschaidergabriel/frankenstein",
+    "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "historical_project_frankenstein_repository": "gschaidergabriel/Project-Frankenstein",
+    "historical_project_frankenstein_current_main_observed": "39c5423e0bfae54b971aab0be82f225f7a5890b8"
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-1414-A01-HOOKS-STERN-FIRST-ACCESSIBLE-GIT",
+      "classification": "HISTORICAL_SOURCE",
+      "claim": "The first verified accessible Git commit in gschaidergabriel/frankenstein that contains both scripts/stern.py and hooks/hooks.json is b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a (2026-08-25T22:18:41Z); a path-filtered query strictly before 2026-08-25T22:18:40Z returned no scripts/stern.py commits.",
+      "scope_note": "This is a first-verified-in-accessible-Git boundary, not a claim that stern.py was invented at this commit; the commit message itself states it ships an actual installable payload.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein commit b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a",
+        "GitHub commits path=scripts/stern.py until=2026-08-25T22:18:40Z => []"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-1414-A02-HOOKS-STERN-PATH-REORG",
+      "classification": "HISTORICAL_SOURCE",
+      "claim": "Commit ccf2264f23b65ed796f9ed44a38c8c55bd379345 (2026-08-27T12:22:13Z) moved the shipped repository into the human/dev/AI three-layer structure; subsequent stern.py history is under DEV_SOURCE_RESEARCH/repository/scripts/stern.py while earlier history is under scripts/stern.py.",
+      "source_refs": [
+        "gschaidergabriel/frankenstein commit ccf2264f23b65ed796f9ed44a38c8c55bd379345",
+        "path-filtered commit histories for scripts/stern.py and DEV_SOURCE_RESEARCH/repository/scripts/stern.py"
+      ],
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-1414-A03-CURRENT-SEVEN-HOOK-FANIN",
+      "classification": "LIVE_CODE",
+      "claim": "At donor 5641dc6b2df6ebed1df246ee7533134324f6c427, all seven declared lifecycle hooks route through the same scripts/stern.py hook dispatcher; PreToolUse and PostToolUse both use matcher '*'.",
+      "source_ref": {
+        "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+        "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+        "span": "full file"
+      },
+      "architecture_role": "single deterministic hook/control fan-in",
+      "causal_status": "SOURCE_WIRING_ONLY",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-1414-A04-STERN-CANONICAL-WRITE-BOUNDARY",
+      "classification": "ENFORCEMENT_CODE",
+      "claim": "The current stern.py header declares hard hook boundaries including no LLM calls in hooks, fail-silent hook behavior, bounded hook budgets, and the explicit rule that the model never writes unified.db itself; event-triggered stern.py code performs writes with evidence.",
+      "source_ref": {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+        "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+        "span": "header / hard-boundary block near file start"
+      },
+      "architecture_role": "model/cognition separated from deterministic durable-state write authority",
+      "causal_status": "SOURCE_ENFORCEMENT_INTENT_AND_CODE_BOUNDARY; NOT_REEXECUTED_THIS_RUN",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-1414-A05-EFFECT-EDGE-WINDOW-UPDATE",
+      "classification": "INFERENCE",
+      "claim": "For the existing TW5-E-HOOKS-STERN coupling edge, first_known_version_commit can now be bounded to b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a in accessible current-repo Git, with a path relocation at ccf2264f23b65ed796f9ed44a38c8c55bd379345 and the edge still present at donor 5641dc6b2df6ebed1df246ee7533134324f6c427.",
+      "falsifier": "An accessible earlier commit containing an equivalent shipped stern/hook fan-in, or evidence that b0be's hooks and stern payload do not implement the claimed fan-in semantics.",
+      "confidence": 0.95
+    }
+  ],
+  "contradictions": [
+    {
+      "contradiction_id": "TW5-1414-C01-INGEST-PATH-DRIFT",
+      "status": "OPEN",
+      "classification": "SCHEMA_PATH_DRIFT",
+      "design_branch_claim": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md declares research_entity/frankenstein_architecture_ingest/{INGEST_PACKET_SCHEMA.json,INGEST_STATE.json,inbox/,receipts/} as the live ingest surfaces.",
+      "current_main_observation": "At canonical main 4f4a7088a54dd21e1848f090446590efa05a2ac1 the expected inbox path is absent, while the active append-only projection is research_entity/architecture_archaeology/TRIGGERWORD5_LIVE_FORENSIC_FEED.json with packets under research_entity/architecture_archaeology/triggerword5_runs/.",
+      "resolution_rule": "Do not alias the two layouts silently. Preserve both provenance chains until a newer explicit authority or migration receipt declares one layout canonical and binds any state/packet migration.",
+      "impact": "Triggerword-5 workers can otherwise report successful ingestion into different namespaces without sharing dedupe/state semantics."
+    },
+    {
+      "contradiction_id": "TW5-1414-C02-HISTORICAL-HEAD-DRIFT",
+      "status": "OPEN_EXPECTED_MOVING_HEAD",
+      "classification": "PROVENANCE_VERSION_DRIFT",
+      "claim": "The earlier forensic dossier recorded historical Project-Frankenstein head abba90a5767d85abc8a1ac340bae92842dab35c1, while current Project-Frankenstein main is 39c5423e0bfae54b971aab0be82f225f7a5890b8.",
+      "resolution_rule": "Keep the dossier's pinned historical source identity for reproducibility and separately inspect newer historical-repo commits before importing predecessor claims."
+    }
+  ],
+  "grid10_frankenstein2_delta": [
+    "Treat hook/control fan-in as a reusable deterministic ingress/effect-boundary pattern, but require runtime receipts before causal credit.",
+    "When source paths move, preserve semantic identity across path migrations explicitly; path equality is not mechanism identity and path difference is not mechanism difference.",
+    "Triggerword-4 assembly should not consume an ingest packet solely because it exists in one of the two current Triggerword-5 namespaces; ingestion state/dedupe provenance must be reconciled first."
+  ],
+  "credits": {
+    "git_chronology_reconstruction": "PARTIAL_ADVANCED",
+    "independent_runtime_reexecution_this_run": 0,
+    "runtime_causal_credit": 0,
+    "physical_grid10_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "receipt": {
+    "source_only": true,
+    "provider_calls": 0,
+    "vps_execution": 0,
+    "unusual_experiment": false,
+    "write_kind": "append-only Triggerword-5 forensic packet plus live-feed index update"
+  },
+  "next_exact_gate": "Cross-check the historical Project-Frankenstein predecessor effect/state path at pinned commits, then reconcile the frankenstein_architecture_ingest versus architecture_archaeology namespace/state contract before Triggerword-4 treats either as a complete live-ingest authority."
+}

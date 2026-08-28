@@ -1,0 +1,111 @@
+{
+  "schema": "AUTONOMOUS_EXPORT_LIVENESS_GITHUB_SIDE_RECEIPT/v1",
+  "status": "PARTIAL_GITHUB_SIDE_ONLY_DOES_NOT_SATISFY_LIVE_LIVENESS_GATE",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_identity": {
+    "macrocycle_id": null,
+    "status": "UNRESOLVED_NO_UPSTREAM_ID",
+    "reason": "No orchestrator-issued macrocycle_id was supplied to this organ. Per GO_MACROCYCLE_IDENTITY_CONTRACT.md, local time/branch/trigger similarity cannot be used to invent or infer one."
+  },
+  "bound_main_sha": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+  "bound_main_subject": "claycode supervisor: bind autonomous export liveness stall",
+  "parallel_main_observed_after_write": {
+    "sha": "e0ea2b61ce14a09adc83a40dc68b09b7b52369bd",
+    "subject": "research: narrow autonomous export liveness fault domain",
+    "relationship": "Independent no-upstream-id repository-observation receipt. It rejected repository-wide GitHub outage but explicitly left NO_NEW_STATE unresolved. No cross-receipt unusual-slot grouping is claimed."
+  },
+  "execution_policy": {
+    "free_only": true,
+    "paid_provider_execution": false,
+    "product_state_mutated": false,
+    "runtime_restart_attempted": false,
+    "host_runtime_access_available_to_this_organ": false,
+    "vercel_clay_project_visible_to_connected_account": false
+  },
+  "observed_github_timeline": {
+    "agentzero": {
+      "last_export_sha": "5e134f5f07ddebc0a1c182d04579e361bbbe82a8",
+      "last_export_payload_time_utc": "2026-08-22T20:06:44Z",
+      "generation": 276,
+      "producer": "/opt/agentzero-export/agentzero_export.py on frank-api",
+      "recent_regular_sequence_utc": [
+        "2026-08-22T15:06:43Z",
+        "2026-08-22T15:36:43Z",
+        "2026-08-22T16:06:43Z",
+        "2026-08-22T16:36:43Z",
+        "2026-08-22T17:06:43Z",
+        "2026-08-22T17:36:43Z",
+        "2026-08-22T18:06:43Z",
+        "2026-08-22T18:36:43Z",
+        "2026-08-22T19:06:44Z",
+        "2026-08-22T19:36:44Z",
+        "2026-08-22T20:06:44Z"
+      ],
+      "expected_period_seconds": 1800,
+      "missed_expected_slots_by_2026_08_23T01_19Z": 10
+    },
+    "eos_rating": {
+      "last_export_sha": "9452c6fe621bc2d8c6f8cf5eb3f9fb88fd91591d",
+      "last_export_time_utc": "2026-08-22T20:25:04Z",
+      "source": "UnifiedDB /var/lib/clay/wiki.db table eos_bewertungen",
+      "unchanged_state_commits": [
+        "2026-08-22T17:55:04Z 12 ratings 7 up 5 down",
+        "2026-08-22T18:25:04Z 12 ratings 7 up 5 down",
+        "2026-08-22T18:55:04Z 12 ratings 7 up 5 down",
+        "2026-08-22T19:25:04Z 12 ratings 7 up 5 down",
+        "2026-08-22T19:55:04Z 12 ratings 7 up 5 down",
+        "2026-08-22T20:25:04Z 12 ratings 7 up 5 down"
+      ],
+      "expected_period_seconds": 1800,
+      "missed_expected_slots_by_2026_08_23T01_19Z": 9
+    },
+    "control": {
+      "repo_remained_writable_after_export_stall": true,
+      "later_main_sha": "33ddff52f2e8528996b6c37c48e2d888db1f4025",
+      "later_main_commit_time_utc": "2026-08-22T23:40:10Z",
+      "interpretation": "Rejects a repository-wide GitHub write outage; does not reject bot-specific credentials, host-local push failure, network failure, or shared export-host failure."
+    }
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID",
+    "id": "DUAL_STREAM_NO_NEW_STATE_FALSIFIER",
+    "question": "Can absence of new application state alone explain the missing export commits?",
+    "counterhypothesis": "Timers and exporters remained healthy; they emitted no commits only because there was no new state.",
+    "prediction_if_counterhypothesis_true": "For an exporter that commits timestamp refreshes even when semantic state is unchanged, successful scheduled runs should still create later commits.",
+    "observation": "The EOS rating exporter created six consecutive 30-minute commits while semantic rating counts stayed exactly 12 total / 7 up / 5 down, changing at least the generated timestamp. After 20:25:04Z no later EOS rating export exists through the bound observation window. AgentZero independently stopped after 20:06:44Z.",
+    "result": "REJECT_NO_NEW_STATE_AS_SUFFICIENT_EXPLANATION",
+    "information_gain": "Moves the live failure frontier from application-idle semantics to execution/export infrastructure. Correlated cessation of two periodic evidence streams supports a shared scheduler/process/DB/filesystem/network/auth/push dependency class but does not identify which member."
+  },
+  "live_failure_classification": {
+    "NO_NEW_STATE": "REJECTED_AS_SUFFICIENT_EXPLANATION_FOR_EOS_EXPORT",
+    "RUN_FAILED": "UNKNOWN",
+    "RUN_BLOCKED": "UNKNOWN",
+    "PUSH_FAILED": "UNKNOWN",
+    "TIMER_DISABLED": "UNKNOWN",
+    "PROCESS_STUCK": "UNKNOWN",
+    "DB_LOCKED": "UNKNOWN",
+    "DISK_FULL": "UNKNOWN",
+    "AUTH_FAILED": "UNKNOWN",
+    "SHARED_HOST_OR_DEPENDENCY_FAILURE": "RETAINED",
+    "GLOBAL_GITHUB_WRITE_OUTAGE": "REJECTED"
+  },
+  "required_live_AUTONOMOUS_EXPORT_LIVENESS_RECEIPT_v1_fields_still_missing": [
+    "timer/service enabled and active state",
+    "last-trigger and next-trigger times",
+    "last successful run id",
+    "process exit code",
+    "stdout digest",
+    "stderr digest",
+    "lock and SQLite busy state",
+    "disk and inode availability",
+    "git worktree state",
+    "git remote and push result",
+    "network/auth result",
+    "generation before and after",
+    "which of export timer, rating timer, or shared dependency stopped first"
+  ],
+  "promotion_boundary": "This receipt is evidence-only. It MUST NOT be used to claim AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1 PASS, runtime health, AgentZero product PASS, Mini Entity product PASS, or permission to restart/mutate the live runtime.",
+  "next_exact_step": "On the authorized live execution surface, observe the required liveness fields without restarting or mutating product state; classify the first failing boundary, then persist the full AUTONOMOUS_EXPORT_LIVENESS_RECEIPT/v1 before any operational repair."
+}

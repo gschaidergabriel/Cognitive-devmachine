@@ -1,0 +1,94 @@
+{
+  "schema": "mini-entity-native-profile-digest-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "branch": "gpt56sol/go-profile-integrity-current-20260822-1839",
+  "branch_base": "c1e58ca5b569062ac166f5cfe2df486f18eb47c0",
+  "current_main_before_pr": "827b40021a5cfa9044c741ded1eb838897ba140a",
+  "source_candidate_head_before_receipt": "8113c221d99001825e90922573df8a97c4843b17",
+  "pull_request": 889,
+  "pull_request_status": "MERGED_SOURCE_ONLY_RUNTIME_UNVERIFIED",
+  "merge_commit": "b55152e49df699c017f1a39e8197413ad14c4e7d",
+  "superseded_donor_pr": 747,
+  "finding": {
+    "classification": "ACTIVE_PROFILE_DIGEST_NOT_ENFORCED_ON_READ",
+    "status": "SOURCE_REPAIRED_ON_MAIN_RUNTIME_UNVERIFIED",
+    "observed_main_part01_blob": "856af5c0126a3a86ed51872ffe9078a4c1fab8e1",
+    "mechanism": "preset-apply stores profile_json plus profile_sha256, while active_profile_json read only profile_id and profile_json; active profile bytes could drift from their recorded digest before status/run consumed them",
+    "security_scope": "integrity consistency only; the digest is unkeyed and stored beside the profile, so this mechanism is not authentication against coherent profile+digest rewriting"
+  },
+  "delta": {
+    "merged_part01_blob": "519c2dee8152eecd6206499c103277f20536fd4e",
+    "behavior": [
+      "load profile_sha256 with active profile bytes",
+      "reject missing or malformed digest metadata",
+      "recompute SHA-256 over exact stored profile_json bytes before use",
+      "reject mismatch as PROFILE_HASH_MISMATCH before profile enters runtime configuration/cognition"
+    ],
+    "canonical_test_adapter_blob": "4e41b8b6f8298d8d4fc9c44cac2befd6d8659017",
+    "new_runtime_test": "the artefact/blogpost_entity/native/test_native_profile_integrity_runtime.py",
+    "second_runtime_created": false,
+    "profile_v2_guard_removed": false
+  },
+  "regression_cases": [
+    "valid imported profile digest accepted",
+    "same-length profile-byte drift rejected and generation unchanged",
+    "malformed 63-character digest metadata rejected and generation unchanged"
+  ],
+  "unusual_experiment": {
+    "count": 1,
+    "name": "COHERENT_PROFILE_AND_DIGEST_REWRITE_BOUNDARY",
+    "purpose": "falsify any overclaim that the new digest fence is a trust-root/authentication mechanism",
+    "intervention": "rewrite both profile_json and profile_sha256 coherently and observe whether the runtime remains internally consistent",
+    "expected_under_consistency_only": "accepted with generation unchanged",
+    "execution_status": "NOT_EXECUTED_RUNNER_ADMISSION_FAILED_BEFORE_STEPS",
+    "claim_boundary": "test is bound into canonical exact-repro adapter but receives zero empirical credit until an admitted job actually executes it"
+  },
+  "execution": {
+    "vercel_executable_sandbox_surface": "NOT_EXPOSED_BY_AVAILABLE_CONNECTOR",
+    "native_workflow_run_id": 32571078347,
+    "native_job_id": 97026504607,
+    "native_job": "source-bound-native-repro",
+    "native_conclusion": "failure",
+    "native_steps": null,
+    "identity_workflow_run_id": 32571078329,
+    "identity_job_id": 97026504608,
+    "identity_job": "identity-guard",
+    "identity_conclusion": "failure",
+    "identity_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE",
+    "runtime_credit": "ZERO"
+  },
+  "approx1b_lane_refresh": {
+    "primary_base": "Qwen/Qwen3.5-0.8B",
+    "public_supported_models_doc_observed": "2026-08-22",
+    "public_full_ft_listing_observed": true,
+    "public_full_ft_sft_context": 131072,
+    "public_full_ft_max_batch_sft": 8,
+    "public_pricing_doc_observed": "2026-08-22",
+    "public_minimum_job_charge_usd": 4.0,
+    "credentialed_provider_call": false,
+    "provider_upload": false,
+    "provider_estimate": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0,
+    "free_only_control_respected": true
+  },
+  "fusion": {
+    "stale_donor_closed": true,
+    "donor_pr": 747,
+    "fresh_pr": 889,
+    "fresh_pr_merged": true,
+    "merge_commit": "b55152e49df699c017f1a39e8197413ad14c4e7d",
+    "main_intervening_file_overlap": false,
+    "intervening_scope": "Qwen3.5-0.8B launcher/test/receipt only"
+  },
+  "acceptance": "SOURCE_REPAIR_MERGED; EXACT_RUNTIME_UNVERIFIED; WHOLE_MINI_ENTITY_IN_PROGRESS",
+  "next_gate": "obtain an actually-started exact current-head native repro job; execute the bound profile-integrity regressions and single coherent-rewrite boundary experiment before runtime promotion"
+}

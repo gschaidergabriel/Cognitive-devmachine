@@ -1,0 +1,54 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13J_NON_AUTHORITY",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "authority_epoch_change": false,
+  "material_findings": [
+    "VPS bootstrap v1 had a real output-containment soundness gap: a receipt or capsule path could mutate the owning checkout while the bootstrap still claimed no owning-worktree mutation.",
+    "Commits 163e0ed/3a33fb1/88067c1 add bootstrap v2 plus adversarial output-containment tests. The source now rejects capsule/receipt paths inside the owning checkout before remote transport, rechecks HEAD/tree/status before PASS, and preserves no-apply/no-provider authority.",
+    "No repository-bound bootstrap-v2 test PASS exists. The latest receipt reports INFRASTRUCTURE_CLIENT_ERROR_BEFORE_TEST_EXECUTION and mints zero runtime-control-transport credit.",
+    "Latest clay-direct-dev telemetry at 2026-08-27T12:53:37Z shows workspace HEAD 7e00fa0, main behind origin/main by 53 commits, dirty tracked/untracked files, and active local run4_fixed_holdout_eval.py plus run4_fixed_novel_test.py processes. These process names do not by themselves prove a Together/provider call, but the host is not a clean current execution-authority surface.",
+    "The VPS bridge still exposes DAEMON_ERROR from 2026-08-27T06:53:43Z: SSH port 22 cannot reach github.com. The latest completed bridge command remains an older 2026-08-25 test receipt, so no current CONTROL_SYNC_REFRESH_PASS has completed.",
+    "Commit 6689e24 prepares a purported Together run-4 dataset and calls run 4 authorized, but current canonical authority remains 9.13 FREE_ONLY/HARD_OFF, Together forbidden, remaining paid allowance zero. No evidence inspected here proves that a paid run 4 launched; do not infer provider execution from local run4-named evaluation processes.",
+    "Fresh distillery metrics remain 0 accepted dataset tokens out of 88,774 and Source-to-GO pass-through remains 0.000 percent."
+  ],
+  "evidence_credit": {
+    "bootstrap_v2_source_progress": true,
+    "bootstrap_v2_repository_test_pass": false,
+    "runtime_control_transport_credit": 0,
+    "runtime_quiescence_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "physical_grid10_credit_delta": 0,
+    "hcu_full_credit_delta": 0,
+    "training_credit_delta": 0,
+    "base_credit_delta": 0,
+    "canonical_semantics_credit_delta": 0
+  },
+  "steering": [
+    "P0 replace all bootstrap-v1 execution instructions with bootstrap-v2 only; v1 is diagnostic historical source and MUST NOT mint no-mutation credit.",
+    "P0 execute tests/test_vps_control_sync_bootstrap_v2.py together with tests/test_vps_control_sync_refresh_v1.py repository-bound on a clean current non-provider checkout; bind HEAD, tree, dirty=false, exact source hashes, stdout and stderr.",
+    "P0 only after repository-bound tests pass, deliver an exactly SHA-pinned bootstrap-v2 copy outside the stale owning checkout and run it with --run-tests. Require BOOTSTRAP_CAPSULE_PASS_NO_APPLY_AUTHORITY and unchanged owning HEAD/tree/status.",
+    "P0 only after bootstrap-v2 pass, run the extracted refresh in non-mutating mode. Require stable remote-main resolution and coherent current 9.13 FREE_ONLY/HARD_OFF authority before separately admitting any apply operation.",
+    "P0 do not treat current run4_fixed_* local evaluation process names as provider-call evidence. Separately, no Together run 4 or run 5 is authorized; stale text claiming otherwise has zero execution authority.",
+    "P0 after CONTROL_SYNC_REFRESH_PASS, re-enter restart-authority-v4 read-only, prove exact root ownership, then separately authorize least-privilege disable and prove zero survivors, descendants and restarts for at least 90 seconds.",
+    "P1 retain model-family/checkpoint ancestry: Huihui paid-substitute diagnostics and retained Josiefied lineage remain distinct. No cross-lineage ABI, HRR, checkpoint-selection or canonical-production promotion.",
+    "P2 no canonical training/admission scaling until Goodman anti-echo, train/calibration/holdout family provenance, exact retained tokenizer/renderer/atoms-index ABI, admission gates and replay-plus-zero are executable and current."
+  ],
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "ALL_PROVIDER_ROUTES_REMAIN_HARD_OFF_UNDER_AUTHORITY_9_13",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

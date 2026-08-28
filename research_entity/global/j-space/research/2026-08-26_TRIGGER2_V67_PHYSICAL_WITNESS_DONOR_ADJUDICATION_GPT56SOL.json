@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_TRIGGER2_PHYSICAL_WITNESS_DONOR_ADJUDICATION/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "APPEND_ONLY_SOURCE_RESEARCH_NONPROMOTING",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "observed_main_before_write": "7b1247b71fd065e9fc25b978f6dc6f2129875e1a",
+  "p0_reentry": {
+    "finding": "Current main contains direct owning-host evidence that at least two pre-stop run_6000_free_swarm_supervisor.sh process incarnations survived after the hard-stop source commit. This strengthens stale-runtime/source-epoch collapse as a candidate explanation but does not prove causal ownership of every provider-attempt increment.",
+    "direct_survivor_pids": [680904, 680982],
+    "quiescence_credit": 0,
+    "required_action": "Reuse the already-pinned owning-host quiescence enforcer request; do not create a duplicate dispatch and do not issue a provider probe."
+  },
+  "p1_reentry": {
+    "blocker_id": "CALLER_FORGEABLE_PHYSICAL_COHORT_PROOF_DICTIONARY",
+    "current_contract_test": "tests/test_trigger2_physical_cohort_proof_origin_boundary_v1.py",
+    "contract_state": "STRICT_XFAIL_EXPECTING_PHYSICAL_COHORT_PROOF_ORIGIN_UNTRUSTED",
+    "base_coordinator": "tools/trigger2_grid10_fused_physical_membership_cohort_acceptance_v1.py:FusedFabric.atomic_fused_cohort_commit",
+    "base_coordinator_observation": "The sole retained base coordinator still accepts an ordinary proof dict and validates physical predicates by caller-supplied values before mutation."
+  },
+  "donor": {
+    "branch": "trigger2-v67-physical-witness-provenance-gpt56sol",
+    "head": "e92ceba8892880f4f12401af8380b071f7e9365e",
+    "file": "tools/trigger2_grid10_physical_cohort_witness_v2.py",
+    "useful_mechanisms": [
+      "closure-scoped mint capability for PhysicalCohortWitness construction",
+      "witness deep-copy plus digest binding",
+      "fabric-instance ownership binding",
+      "explicit PHYSICAL_OBSERVATION versus SYNTHETIC_SOURCE_FIXTURE evidence classes",
+      "explicit zero-credit receipt boundary"
+    ],
+    "adjudication": "DONOR_NOT_MERGEABLE_AS_CLOSURE",
+    "reason": "The donor adds ObservedPhysicalFusedFabric and SourceFixtureFusedFabric facades but leaves the existing FusedFabric.atomic_fused_cohort_commit raw-dict entry point unchanged. Therefore the current strict base-boundary regression would remain xfail and a caller can still bypass the facade by invoking the retained base coordinator directly. Merging the donor wholesale would add a peer facade without closing the sole retained authority boundary.",
+    "merge_action": "DO_NOT_MERGE_WHOLESALE; SALVAGE_MECHANISMS_INTO_SOLE_RETAINED_COORDINATOR"
+  },
+  "hypothesis": "The blocker closes if witness provenance is enforced at the sole retained FusedFabric physical commit boundary, while deterministic synthetic composition is moved to an explicitly nonphysical entry point whose receipt cannot claim physical runtime credit.",
+  "counterhypothesis": "A subclass facade is sufficient if every physical caller is migrated to it and the base raw-dict method is explicitly demoted to a nonphysical internal/composition primitive with no reachable physical-evidence semantics.",
+  "adjudication_rule": "Do not accept the counterhypothesis from naming or convention. It requires exact-current call-graph/source evidence that no physical promotion path can reach the raw base entry and the strict origin regression must pass against the retained authority surface.",
+  "preferred_source_shape": {
+    "single_authority": "Keep one FusedFabric state/cohort authority; do not introduce a second database, cohort identity or effect path.",
+    "physical_entry": "atomic_fused_cohort_commit accepts only an instance-bound sealed PhysicalCohortWitness minted from the retained physical observation path.",
+    "synthetic_entry": "atomic_fused_source_fixture_commit accepts only an explicitly marked synthetic source fixture and returns source_fixture_only=true with physical_grid10_runtime_credit_added=0.",
+    "shared_internal": "Both entries may delegate to one private atomic implementation after provenance classification so persistence/replay semantics remain single-path.",
+    "required_regressions": [
+      "raw all-true synthetic proof rejected before mutation by physical entry",
+      "wrong-fabric witness rejected before mutation",
+      "mutated witness rejected before mutation",
+      "explicit source fixture still exercises commit/replay/persisted resealed envelope semantics but cannot claim physical credit",
+      "physical entry preserves existing membership/snapshot/read-receipt/PID/lease/CAS fail-closed checks",
+      "transport-order invariance remains unchanged"
+    ]
+  },
+  "highest_information_discriminator": "Fuse the donor witness-mint and instance/digest binding into the sole retained base coordinator, split an explicit nonphysical source-fixture entry, then promote the strict physical-proof-origin xfail to a normal passing regression using exact-current committed bytes.",
+  "coordination": {
+    "new_unusual_experiment": false,
+    "duplicate_implementation_created": false,
+    "donor_branch_merged": false,
+    "new_provider_or_host_execution_request_created": false
+  },
+  "execution_this_cycle": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid10_executed": false,
+    "vps_command_executed": false,
+    "training_executed": false,
+    "paid_execution": false,
+    "work_class": "CURRENT_MAIN_REENTRY_PARALLEL_DONOR_ADJUDICATION_AND_SOURCE_DESIGN_FUSION"
+  },
+  "credits": {
+    "research_delta": 1,
+    "source_design_adjudication_credit": 1,
+    "repository_ci_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Re-enter moving main. If no newer worker has already fused the witness boundary into the sole FusedFabric coordinator, implement that fusion rather than merging the donor facade wholesale; require the strict origin regression to pass and preserve a separately explicit source-fixture-only path."
+}

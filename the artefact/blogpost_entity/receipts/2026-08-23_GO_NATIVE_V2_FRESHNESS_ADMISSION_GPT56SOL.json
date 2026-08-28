@@ -1,0 +1,95 @@
+{
+  "schema": "GO_NATIVE_V2_FRESHNESS_ADMISSION/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "observed_main_before_write": "cc3de1686ed6f60b6e4b23836372ad32ebef1dfc",
+  "retained_lane": {
+    "pr": 997,
+    "branch": "go-20260823-gpt56sol-reference-convergence-fresh",
+    "freshness_pr": 1128,
+    "freshness_merge_commit": "b2c2b9d38220c858b2b68ab00068b5bb2ffd1ebc",
+    "main_ancestry_fused_through": "23c0f4c32fe0570a79aa81f94ff75948448d06c8",
+    "pr997_state_after_fusion": "OPEN_DRAFT_MERGEABLE",
+    "duplicate_native_v2_implementation_created": false,
+    "native_v2_fail_closed_guard_removed": false
+  },
+  "post_fusion_main_delta": {
+    "from": "23c0f4c32fe0570a79aa81f94ff75948448d06c8",
+    "to": "cc3de1686ed6f60b6e4b23836372ad32ebef1dfc",
+    "commit_count": 6,
+    "reference_runtime_overlap": false,
+    "observed_changed_scope": [
+      "Claude adapter boundary receipt validator/tests",
+      "Claude pinned safe-mode source/test/receipt"
+    ],
+    "decision": "Do not churn the retained native-v2 branch solely for non-overlapping Claude-only main advances while the exact runner remains admission-blocked; refresh again immediately before an admitted exact run or promotion."
+  },
+  "exact_head_execution_admission": {
+    "branch_head": "b2c2b9d38220c858b2b68ab00068b5bb2ffd1ebc",
+    "workflow_run": 32615880003,
+    "workflow": "Mini Entity native 0.7 exact repro",
+    "initial_job": {
+      "job_id": 97136402575,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP"
+    },
+    "single_targeted_readmission": {
+      "job_id": 97136462192,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP"
+    },
+    "identity_guard_job": {
+      "workflow_run": 32615879972,
+      "job_id": 97136402511,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_PRE_STEP"
+    },
+    "semantic_test_failure_observed": false,
+    "runtime_credit": 0
+  },
+  "claude_parallel_fusion": {
+    "owner_neutral_prompt_pr": 1116,
+    "owner_neutral_prompt_merge": "f2a55ccdc3a6d25842ee87b6bfa3a2b84fe3e033",
+    "side_memory_fence_preserved": true,
+    "safe_mode_merge_now_on_main": "cc3de1686ed6f60b6e4b23836372ad32ebef1dfc",
+    "redundant_local_fusion_branch": "go/claude-owner-prompt-fusion-20260823-gpt56sol",
+    "redundant_branch_action": "FORCE_RESET_TO_MAIN_23c0f4c_AFTER_PR1116_MERGED_TO_AVOID_COMPETING_PERMANENT_PATH"
+  },
+  "grf": {
+    "R0_OBSERVE": "Reference lane freshness was executable as a branch-only merge; exact runner admission was not.",
+    "R1_INFER": "The current limiting mechanism is executor admission, not a demonstrated reference-runtime semantic defect.",
+    "R2_GENERATE": [
+      "retry exact job once",
+      "create second native implementation",
+      "remove parity guard",
+      "wait for admitted isolated executor while retaining one source lane"
+    ],
+    "R3_COUNTER": "Repeated workflow conclusion=failure could be interpreted as code failure; rejected because both attempts exposed no executed steps.",
+    "R4_DISCRIMINATE": "Inspect latest-attempt job steps after one targeted rerun.",
+    "R5_EMERGENT": "Ancestry and source-lane convergence can be closed independently from executable promotion; they must not be collapsed into runtime PASS.",
+    "R6_VERIFY": "FRESHNESS_FUSED; EXECUTION_ADMISSION_BLOCKED; NATIVE_V2_RUNTIME_UNVERIFIED"
+  },
+  "next_gate": [
+    "On the next actually-started authorized isolated executor, bind exact #997 head plus then-current main ancestry.",
+    "Run focused source-identity/cursor/evidence/numeric-truth regressions and full structured reference suite with generation/CAS/fault rollback.",
+    "Only on exact green execution re-adjudicate NATIVE_PROFILE_V2_PARITY_CONTRACT before modifying the native v2 fail-closed guard."
+  ],
+  "policy": {
+    "free_only": true,
+    "provider_secret_lookup": false,
+    "provider_network": false,
+    "paid_execution": false,
+    "together_used": false,
+    "unusual_experiment_claimed": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

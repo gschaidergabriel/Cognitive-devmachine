@@ -1,0 +1,69 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:44:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "0a10fabf3216c5e26bbc486b9df6851a82b49f8a",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "controller_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "commit": "ba15ad95a4c7794ef06afb7806662443915e73c8",
+    "latest_descendant_observed": "517587ab97bf0a0fd9e78a7d9a3d38a10a120936",
+    "path": "mcp/vercel-sandbox-mcp/scripts/guard-clayverse-tier2-recreate.mjs",
+    "change": "retained Tier2 build guard now rejects Sandbox fork, source/carrier snapshots, snapshot-derived replacement, snapshot carrier identity and generic persistent:true in the currently implemented recreate handler; current invalid snapshot-derived carrier therefore fails closed until an independently durable carrier is explicitly implemented and bound",
+    "preserved_fences": [
+      "starter nonpersistent contract",
+      "Tier1 interrupted-turn recovery checks",
+      "declared transfer source sanitization",
+      "fresh OIDC/HCP provider secret boundary",
+      "replacement identity and no-whole-product-pass fences"
+    ],
+    "product_semantic_bytes_changed": false,
+    "controller_infrastructure_changed": true
+  },
+  "provider_lifecycle_adjudication": {
+    "snapshot_after_producer_delete": "NOT_ADMITTED",
+    "reason": "current first-party Vercel lifecycle guidance binds snapshots to the producing Sandbox lifecycle; source/carrier snapshot schemes therefore cannot be promoted as independent durable Tier2 carriers merely by source inspection",
+    "deterministic_persistent_declared_transfer_carrier": "RETAINED_AS_ARCHITECTURE_CANDIDATE_ONLY",
+    "candidate_receipt_commit": "913441bd80c09eeb3b2108fa60f253cba2392fec",
+    "candidate_runtime_verified": false
+  },
+  "execution_admission": {
+    "earlier_exact_preview_trigger": "01b50b49c99e0482739de36d0f1c0f7c8a3fc412",
+    "latest_controller_head_checked": "517587ab97bf0a0fd9e78a7d9a3d38a10a120936",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE",
+    "build_started": false,
+    "source_guard_runtime_credit": 0,
+    "exact_oci_runtime_credit": 0,
+    "live_provider_credit": 0,
+    "tier2_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "coordination": {
+    "single_retained_controller_path_preserved": true,
+    "parallel_pr810_activity_observed": true,
+    "donor_branch_not_promoted_as_second_path": true,
+    "owner_secrets_or_credentials_used": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "the shared go unusual-experiment slot was already consumed; this cycle performed source repair, provider-contract adjudication and ordinary execution-admission checks only"
+  },
+  "epistemic_status": {
+    "source_failclosed_delta_committed": true,
+    "exact_guard_execution_verified": false,
+    "independent_tier2_carrier_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Implement and bind one independently recoverable declared-transfer carrier in the single retained PR810 path (the deterministic named persistent carrier is a current candidate), prove its identity/retry/cleanup semantics, then rerun exact-head Vercel guards and the PR686 OCI/provider/EffectGate/EntityOS/Tier1/Tier2 sequence once isolated execution admission is available."
+}

@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "inbox_selected_supervisor": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "canonical_main_observed_before_delta": "9239370999c192328f33eb47fa3bbb7e88ab39a7"
+  },
+  "observed_exact_current_source": {
+    "historical_backfill_core": {
+      "path": "tools/free_swarm_historical_backfill.py",
+      "blob_sha": "f095ec12ab28aa5df87b1762b2cc19afca592365",
+      "max_passes": 3,
+      "saturation_rule_observed": "passes>=2 AND first consecutive zero-novel pass AND envelope.exhaustive=true can mark SATURATED"
+    },
+    "backfill_scheduler": {
+      "path": "tools/free_swarm_backfill_scheduler.py",
+      "blob_sha": "08ab932003d907709f44cd964f45c4334aadf589",
+      "producer_exhaustive_contract": "ALREADY_FAIL_CLOSED_ON_CURRENT_MAIN",
+      "placeholder": "<true|false>"
+    },
+    "generation_0_result": "NOT_OBSERVED",
+    "generation_1_saturation_result": "NOT_OBSERVED"
+  },
+  "material_finding": "The current historical-conversion blocker is narrower than stale donor text: producer prompt semantics are already corrected on main, but the canonical historical-backfill core still caps extraction at three passes and may semantically saturate after one explicit exhaustive zero-novel follow-up. This can truncate a large historical chunk before repeated bounded extraction has demonstrated a stable fixed point.",
+  "hypothesis": "Premature core saturation can under-extract materially distinct historical deltas and therefore contribute to the observed Forge-to-Distillery conversion stall even when producer prompts are correctly emitting explicit exhaustiveness state.",
+  "counterhypothesis": "The three-pass/one-confirmation rule is harmless because every historical chunk actually contains at most the bounded amount of materially distinct information recoverable within the first passes; if so, a stricter two-confirmation/high-ceiling policy should not increase recovered variants on a saturated replay corpus.",
+  "cheapest_high_information_discriminator": "Adapt the existing PR #1879 lane against exact-current main rather than creating another donor: retain two consecutive explicit exhaustive zero-novel confirmations, keep missing/non-exhaustive signals fail-closed, raise the finite extraction ceiling to at least 64 with MAX_PASSES_REACHED != SATURATED, and execute deterministic regressions plus an exact-current bounded historical replay before granting runtime credit.",
+  "coordination": {
+    "existing_donor_pr": 1879,
+    "new_parallel_pr_created": false,
+    "pr_review_comment_id": 5404741720,
+    "review_delta": "Recorded that current main already fixed producer wording, so PR #1879 must rebase/adapt its stale scheduler assertion and converge on the remaining core completion semantics instead of duplicating current producer work.",
+    "new_ordinary_dispatch": false,
+    "new_unusual_experiment": false,
+    "provider_or_paid_execution_started": false
+  },
+  "three_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_RESEARCH_AND_COORDINATION",
+      "delta": "Exact-current blocker narrowed from generic historical-backfill nontermination to a falsifiable core completion bug; the existing donor lane received current-main adaptation guidance while duplicate/quarantined runtime dispatch was avoided."
+    },
+    "track_b_hcu_and_typed_entry": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "No nonduplicate HCU or Typed Entry primitive is the dominant blocker in this exact-current re-entry. The measured source defect is downstream historical evidence extraction/completion semantics, while the retained HCU donor lane #1263 remains separate.",
+      "next_discriminator": "After exact-current historical conversion produces admitted evidence, continue the existing Typed Entry -> verified engine/load -> GRID10 -> ModelExecution/InferenceReceipt path rather than adding a second ingress or cognition authority."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "Historical conversion and dataset admission remain upstream blockers, and no canonically leased model-specific unusual intervention was executed in this macrocycle.",
+      "next_discriminator": "Only after upstream conversion closure, use the retained lease-gated zero-cost local Qwen3-0.6B model-specific causal lane with exact source/runtime identity and matched controls."
+    }
+  },
+  "credits_after_cycle": {
+    "historical_backfill_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "negative_evidence": [
+    "No canonical generation-0 historical-backfill result file was observed on the exact-current main checked in this cycle.",
+    "No canonical quarantined generation-1 saturation result file was observed either.",
+    "PR #1879 is diverged from current main and its literal scheduler placeholder assertion is stale against current main; source presence alone is not executable evidence."
+  ],
+  "next_exact_action": "Re-enter current main and existing PR #1879. Adapt that single donor to the narrowed core-only completion defect, execute its deterministic regressions on exact-current bytes when an admitted zero-cost executor is available, then obtain one canonical historical-backfill terminal result before Forge->Distillery positive-token conversion and semantic replay +0.",
+  "evidence_boundary": "Source inspection, coordination review and durable research receipt only. No whole EntityOS/HCU, full-HCU, J-Space model, provider, training, historical-saturation or whole-product runtime credit is granted."
+}

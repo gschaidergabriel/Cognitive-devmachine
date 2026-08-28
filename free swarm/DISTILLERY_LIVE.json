@@ -1,0 +1,178 @@
+{
+  "state": "LIVE",
+  "generated_at": "2026-08-27T21:30:59.756112+00:00",
+  "collected_source_tokens": 88774,
+  "accepted_dataset_tokens": 0,
+  "dataset_yield": 0.0,
+  "compression_factor": null,
+  "accepted_packets": 0,
+  "accepted_packet_tokens": 0,
+  "rejected_candidates": 0,
+  "collected_chunks": 275,
+  "model_input_tokens": 6116,
+  "model_output_tokens": 23481,
+  "questions": {
+    "CYCLIC": 851,
+    "OPEN": 73
+  },
+  "sources": {
+    "web_search_chunk": 8
+  },
+  "reviewers": [],
+  "candidate_states": {},
+  "counters": {
+    "model_input_tokens": 6116,
+    "model_output_tokens": 23481,
+    "collected_source_tokens": 88774,
+    "collected_chunks": 275
+  },
+  "small_models": [
+    "google/gemma-4-26b-a4b-it:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "liquid/lfm-2.5-2.6b:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "google/gemma-4-31b-it:free",
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "cohere/north-mini-code:free",
+    "dots-studio/dots-3-note-preview:free"
+  ],
+  "provider_budget": {
+    "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+    "generated_at": "2026-08-26T00:53:36.645651+00:00",
+    "providers": {
+      "arxiv": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 3.1,
+        "cooldown_seconds": 0.0,
+        "total_requests": 43,
+        "total_success": 15,
+        "total_429": 0,
+        "total_errors": 13,
+        "last_status": "200",
+        "last_observed_at": "2026-08-26T00:30:14.475371+00:00"
+      },
+      "crossref": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 863,
+        "total_success": 858,
+        "total_429": 5,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-25T03:31:08.891051+00:00"
+      },
+      "exa": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 2,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:46.265750+00:00"
+      },
+      "github": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 945,
+        "total_success": 858,
+        "total_429": 0,
+        "total_errors": 87,
+        "last_status": "200",
+        "last_observed_at": "2026-08-26T00:30:17.327732+00:00"
+      },
+      "groq": {
+        "max_inflight": 128,
+        "active_leases": 0,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 167,
+        "total_success": 109,
+        "total_429": 58,
+        "total_errors": 26,
+        "last_status": "429",
+        "last_observed_at": "2026-08-25T02:48:27.263665+00:00"
+      },
+      "huggingface_hub": {
+        "max_inflight": 4,
+        "active_leases": 0,
+        "min_interval_s": 0.25,
+        "cooldown_seconds": 0.0,
+        "total_requests": 863,
+        "total_success": 863,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-25T03:31:08.581488+00:00"
+      },
+      "nvidia": {
+        "max_inflight": 256,
+        "active_leases": 0,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 6743,
+        "total_success": 5125,
+        "total_429": 659,
+        "total_errors": 924,
+        "last_status": "200",
+        "last_observed_at": "2026-08-25T02:56:52.958682+00:00"
+      },
+      "openalex": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.25,
+        "cooldown_seconds": 0.0,
+        "total_requests": 863,
+        "total_success": 32,
+        "total_429": 0,
+        "total_errors": 831,
+        "last_status": "200",
+        "last_observed_at": "2026-08-25T03:31:09.770626+00:00"
+      },
+      "openrouter": {
+        "max_inflight": 16,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 9.990901470184326,
+        "total_requests": 4935,
+        "total_success": 198,
+        "total_429": 4724,
+        "total_errors": 12,
+        "last_status": "429",
+        "last_observed_at": "2026-08-26T00:53:36.636613+00:00"
+      },
+      "semantic_scholar": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 674,
+        "total_success": 36,
+        "total_429": 638,
+        "total_errors": 187,
+        "last_status": "429",
+        "last_observed_at": "2026-08-25T03:31:08.658120+00:00"
+      },
+      "tavily": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 6,
+        "total_success": 6,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:43.721169+00:00"
+      }
+    }
+  },
+  "db_bytes": 1069056
+}

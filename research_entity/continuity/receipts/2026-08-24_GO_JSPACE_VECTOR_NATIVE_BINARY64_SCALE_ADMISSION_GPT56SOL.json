@@ -1,0 +1,97 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "bc60279ff248492f3dd9097350ad4005c304228f",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; AVAILABLE_CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "atomic_claim_created": false,
+    "duplicate_hcu_lane_created": false,
+    "duplicate_executor_lane_created": false,
+    "retained_hcu_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_donor_head_reentered_after_delta": "2125299fe92ea1e11519b3d018793707b46467c2",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_rebind_changed": false
+  },
+  "finding": {
+    "id": "JSPACE_VECTOR_SCALE_ENCODER_IMAGE_ADMISSION_GAP",
+    "reality_level": "R0_SOURCE_OBSERVATION_PLUS_DETERMINISTIC_MATH_CHECK",
+    "scope": "JSPACE_VECTOR_CONTROL_ABI/v1_SOURCE_AND_REGRESSION_ONLY",
+    "observation": "The canonical encoder defines every nonzero q8 scale as Fraction.from_float(max_abs)/127, but the pre-delta validator admitted any reduced rational whose 127*scale merely rounded to a positive finite binary64. Therefore a self-consistent packet with a recomputed packet digest could use a finite rational scale that no finite-binary64 source vector can cause the canonical encoder to emit.",
+    "hypothesis": "One JSPACE_VECTOR_CONTROL_ABI/v1 wire language should admit only scale rationals in the exact image of the canonical finite-binary64 encoder.",
+    "counterhypothesis": "Digest identity, reduced-rational form, finite 127*scale and the full-q8 anchor already define a sufficiently canonical wire language even when scale*127 is not exactly representable as binary64.",
+    "discriminator": "Require Fraction.from_float(float(scale*127)) == scale*127 after digest verification, then encode ordinary binary64 vectors and reject a newly hash-consistent non-encoder-native rational such as scale=1/3.",
+    "result": "COUNTERHYPOTHESIS_REJECTED_AT_SOURCE_SEMANTICS_SCOPE"
+  },
+  "delta": {
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "source_path": "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py",
+    "source_commit": "f01b79a55a6e8015e10ad83cec2c50d9689903ac",
+    "source_blob": "697779a458680d641082b936cb9558e27effe99f",
+    "test_path": "the artefact/MicroEntity/hcu/test_jspace_vector_control_v1.py",
+    "test_commit": "fe51c9da33ec94031701fc7ad53af00ea00888b3",
+    "test_blob": "c4683508dbae4d4e2f3d36f4f29afb2cada91187",
+    "law_added": "For every nonzero admitted vector-control packet, anchor_fraction=scale*127 must equal Fraction.from_float(float(anchor_fraction)); otherwise reject SCALE_RATIONAL_BINARY64_ANCHOR_EXACT_REQUIRED.",
+    "wire_version_changed": false,
+    "second_vector_control_authority_created": false,
+    "compatibility_abi_wrapper_changed": false,
+    "survived_parallel_donor_movement": true,
+    "reentered_source_blob_at_2125299": "697779a458680d641082b936cb9558e27effe99f"
+  },
+  "deterministic_validation": {
+    "class": "LOCAL_MATH_SOURCE_VALIDATION_NOT_ENTITYOS_RUNTIME_CREDIT",
+    "ordinary_binary64_samples_checked": 199906,
+    "ordinary_encoder_scale_exactness_failures": 0,
+    "forged_anchor_fraction": "127/3",
+    "forged_anchor_exact_binary64": false,
+    "regression_source_added": "test_self_consistent_non_encoder_native_scale_fails_closed",
+    "admitted_sandbox_test_executed": false,
+    "ci_runtime_credit": 0
+  },
+  "executor_boundary": {
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "pinned_donor_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "policy": "DO_NOT_CHURN_IMMUTABLE_PINNED_EXECUTOR_SOLELY_BECAUSE_FAST_MOVING_DONOR_ADVANCED_WHILE_EXACT_HEAD_FREE_BUILD_GATE_IS_ADMISSION_BLOCKED",
+    "new_vector_fence_silently_projected_into_pinned_executor": false,
+    "new_sandbox_invocation": false,
+    "paid_upgrade_or_fallback": false
+  },
+  "parallel_frontier_reentry": {
+    "current_main_at_last_prewrite_refresh": "bc60279ff248492f3dd9097350ad4005c304228f",
+    "model_input_control_causality_gate": "HCU_MODEL_INPUT_CONTROL_BINDING/v1 remains required because canonical Vector Control packet identity alone does not prove those bytes or a declared deterministic transform were consumed by the exact model invocation.",
+    "prototype_registry_content_identity_gate": "A parallel main receipt additionally records a source-review hypothesis around prototype registry key/content revalidation at DatasetAdmission; this delta does not claim to close that separate boundary."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_CONVERGENCE: the existing single Vector Control ABI now has one encoder-reachable scale language, reducing ambiguous source states without creating a second wire or executor path.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_HCU_PRIMITIVE: JSPACE_VECTOR_CONTROL_ABI/v1 fail-closes digest-valid but encoder-unreachable rational scales while preserving generation/basis/role/control fences and the existing Typed Entry causal spine.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_READINESS: training/control traces cannot legitimately carry a newly minted q8 scale outside the canonical binary64 encoder image; actual model-input consumption and prototype-registry content identity remain separate gates before promotion."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "execution": {
+    "vercel_sandbox_invoked": false,
+    "vps_or_self_hosted_test": false,
+    "production_host_test": false,
+    "together_preflight_or_key_lookup": false,
+    "paid_fallback": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving shared current-facing whole-file surface while parallel go cycles are advancing main. The exact bounded delta is preserved append-only in this receipt; replacing the full README from a fetched snapshot would risk overwriting newer parallel state. The current README authority/frontier remains compatible with this delta and runtime credits are unchanged."
+  },
+  "next_exact_gate": "Preserve the immutable PR810 pinned capsule until a naturally available included-tier exact-head READY deployment exists. In the retained donor lane, prioritize HCU_MODEL_INPUT_CONTROL_BINDING/v1 so exact model-executor input bytes are derivably bound to the canonical Vector Control packet or one versioned deterministic transform plus generation, Entry, route, GRID10 cell/role and invocation identity; separately resolve the prototype-registry key/content identity boundary without creating a second registry. No J-Space model/training promotion before admitted exact evidence."
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "ClayVerseArchitectureReceipt/v1",
+  "local_time": "2026-08-17T21:07:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "owner_intent": "ClayVerse should behave like a sealed sandbox/binary-like machine continuum with controlled input/output, complete EntityOS and UnifiedDB inside, direct managed Linux terminal control, and automatic snapshot rollback after EntityOS/internal crashes.",
+  "decision": "ADOPT_SEALED_VM_LIKE_CONTINUUM_WITH_AUTOMATIC_KNOWN_GOOD_SNAPSHOT_RECOVERY",
+  "laws": [
+    "final accepted ClayVerse image contains complete accepted EntityOS substrate",
+    "UnifiedDB remains sole canonical persistent state authority",
+    "external input crosses explicit ingress and is canonicalized before cognition/execution",
+    "LLM output is re-ingested as proposed intent/command before execution",
+    "accepted ClayVerse/EntityOS layer directly controls managed Linux PTY/tmux within policy",
+    "stdout/stderr/results/effect receipts re-enter the same causal continuum",
+    "only explicit attributable egress crosses outward",
+    "critical internal crash triggers automatic recovery from last accepted known-good logical machine snapshot",
+    "recovery fences stale generation and advances a new runtime generation",
+    "ambiguous external effects are not replayed; they become UNKNOWN_AFTER_CRASH unless replay safety is proven",
+    "snapshot consistency binds UnifiedDB checkpoint, generations, EntityOS/config/policy hashes, causal queue position and EffectJournal state"
+  ],
+  "stability_rationale": "The sealed inner boundary acts as a shock absorber: internal failures are contained and reconstructed without making outside systems the runtime/state authority.",
+  "snapshot_note": "Logical consistency snapshot is mandatory; CRIU/filesystem/RAM snapshots may later optimize recovery but cannot replace UnifiedDB/EffectJournal consistency rules.",
+  "testing_required": [
+    "EntityOS crash idle/active",
+    "terminal child crash",
+    "crash before/after effect emission and acknowledgement",
+    "interrupted UnifiedDB write",
+    "stale pre-crash result after recovery",
+    "corrupt newest snapshot fallback",
+    "crash during recovery",
+    "no blind replay of ambiguous external effects",
+    "ingress freeze until recovered readiness",
+    "stale auth/session/generation resurrection rejection"
+  ],
+  "whole_product_acceptance": "IN_PROGRESS"
+}

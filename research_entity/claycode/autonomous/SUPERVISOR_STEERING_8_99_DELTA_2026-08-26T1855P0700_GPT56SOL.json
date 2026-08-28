@@ -1,0 +1,83 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "schema_version": "8.99",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "trigger": "go",
+  "supersedes_for_current_frontier": "8.98",
+  "material_delta": "Repair a control-plane consistency regression introduced at 8.98: SUPERVISOR_INBOX advanced to 8.98 while FREE_PROVIDER_ADMISSION remained 8.97, and the 8.98 steering document omitted product/HCU fields required by tools/free_provider_admission.py. Under the fail-closed resolver this prevents a coherent current HARD_OFF snapshot. Rebind the explicit all-providers-false admission to 8.99 and restore required authority fields. Separately record the independently reproduced Trigger-2 correction: the prior ~0.276-bit blueprint-v2 higher-order nuisance-leak claim was a cross-split measurement attribution error; corrected within-split/excess-MI checks pass. This retracts that specific leak claim only and does not authorize training rows.",
+  "evidence_update": {
+    "observed_main_before_write": "80a0e0b24736f61712ccb5762e9394cf1ecada55",
+    "provider_authority_regression": {
+      "supervisor_inbox_epoch": "8.98",
+      "free_provider_admission_epoch_observed": "8.97",
+      "resolver_behavior": "tools/free_provider_admission.py requires steering epoch equality, product=EntityOS, integrated_cognition_compute_architecture=HCU, and provider-admission authority_epoch equality; mismatch fails closed",
+      "credit": 0
+    },
+    "trigger2_blueprint_v2_correction": {
+      "commit": "0d220f497b6a444e845f7d36a8f213d20ef484a7",
+      "status": "PRIOR_0_276_BIT_LEAK_CLAIM_RETRACTED",
+      "reproduced_result": "within-split I(target; nuisance x template)=0 for TRAIN/VALIDATION/HOLDOUT_FROZEN; combined excess over template baseline is numerical zero; prior signal came from intended HOLDOUT symbol-support shift",
+      "tests_reported": "13/13 PASS",
+      "admission_effect": "NONE_ACCEPTED_DATASET_TOKENS_REMAIN_ZERO"
+    },
+    "runtime_quiescence": "P0 remains open exactly as in 8.98: persistent metrics/update liveness requires restart-authority attribution, disable-before-kill, and >=90s zero-survivor/zero-restart proof. Repository metric commits do not prove provider calls."
+  },
+  "p0": {
+    "id": "RUNTIME_QUIESCENCE_RESTART_AUTHORITY",
+    "status": "OPEN",
+    "required": [
+      "fresh dry-run ownership match on clay-direct-dev",
+      "parent-chain and restart-authority classification for each matched root",
+      "disable known Clay restart authority before process termination",
+      "zero matching survivors and descendants",
+      "zero restart events for >=90 seconds",
+      "host/boot/pid-namespace-bound receipt",
+      "no provider or hosted-model calls during validation"
+    ]
+  },
+  "training_frontier": {
+    "blueprint_v2_specific_higher_order_leak": "RETRACTED_NOT_CONFIRMED",
+    "blueprint_v2_method_audit": "SOURCE_TEST_PASS_ONLY",
+    "diverse_generator_authority": "STILL_NOT_CANONICALLY_AUTHORIZED_FOR_TRAINING",
+    "canonical_dataset_rows_admitted": 0,
+    "training_credit": 0,
+    "rule": "Do not convert corrected nuisance-audit PASS into dataset admission, BASE credit, checkpoint-selection credit, or canonical-semantics credit. Continue exact Trigger-2 course gates including ABI inventory, joint split manifest/currentness, Goodman family provenance, model/checkpoint ancestry, and a small audited pilot before any scale-up."
+  },
+  "preserve_invariants": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "COMPONENT_SOURCE_PASS_IS_NOT_RUNTIME_PASS",
+    "GLOBAL_PROVIDER_COUNTERS_ALONE_DO_NOT_PROVE_CLAY_ACTIVITY",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "ORDINARY_XENO_S1_READ_ONLY_COORDINATOR_ONLY_WRITES",
+    "DO_NOT_MODIFY_FRANK_HARNESS",
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN"
+  ],
+  "next_order": [
+    "P0 runtime quiescence with restart-authority attribution",
+    "provider gate direct entrypoint + direct CLI + guarded HARD_OFF runtime proof with zero boundary crossings",
+    "physical GRID10 fused/recursive bridge runtime evidence",
+    "coordinator fan-in/compression/latency/contention",
+    "coordinator crash/replacement and worker rejoin",
+    "matched-budget challengers"
+  ],
+  "execution_request": "research_entity/execution_requests/2026-08-26_GO_QUIESCENCE_RESTART_AUTHORITY_ATTRIBUTION_GPT56SOL_1848P0700.json",
+  "credit_change": {
+    "runtime_quiescence": 0,
+    "provider_path_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_full": 0,
+    "training": 0,
+    "base": 0,
+    "canonical_semantics": 0
+  }
+}

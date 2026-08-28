@@ -1,0 +1,103 @@
+{
+  "schema": "CLAY_TRIGGER2_MULTIHOP_BINDING_DISTRACTOR_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_observed": "8.78",
+  "research_question": "Given measured strong semantic readability and writable output axes but weak context-invariant dynamic codebook binding, should Trigger-2 train an addressable episode-local routing computation rather than another static semantic direction?",
+  "evidence_basis": {
+    "claude_source_package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "measured_donor_model": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "measured_donor_snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "baseline_dynamic_symbol_hit": 0.3611111111,
+    "chance": 0.3333333333,
+    "mean_l19_cross_template_transfer": 0.52546296296,
+    "semantic_readability_summary": "approximately 0.94-1.00 from about layer 6 onward on the measured family",
+    "current_interpretation": "semantic state is readable and carrier/output axes are usable, but context-dependent episode-local binding/routing is not established"
+  },
+  "external_primary_research_delta": [
+    {
+      "source": "Wu, Geiger, Milliere, How Do Transformers Learn Variable Binding in Symbolic Programs?, arXiv:2505.20896",
+      "training_implication": "factor referential depth and include irrelevant binding chains/distractors; evaluate systematic dereference rather than direct lookup only"
+    },
+    {
+      "source": "Li, Li, Huang, Steering Vector Fields for Context-Aware Inference-Time Control in Large Language Models, arXiv:2602.01654",
+      "training_implication": "do not treat one static context-independent steering direction as sufficient when the useful direction varies by context"
+    },
+    {
+      "source": "Zhou, McCoy, Frank, Causal Interventions on Continuous Variables..., arXiv:2605.29971",
+      "training_implication": "keep encoded/decodable signals separate from downstream causally used signals; encoded-not-used is a hard-negative evidence class"
+    }
+  ],
+  "swarm_review_roles": [
+    "dataset_architect",
+    "leakage_auditor",
+    "causal_evidence_reviewer",
+    "adversarial_shortcut_hunter",
+    "minimality_retention_reviewer"
+  ],
+  "delta": {
+    "tool": "tools/trigger2_multihop_binding_generator_v1.py",
+    "test": "tests/test_trigger2_multihop_binding_generator_v1.py",
+    "generator_repair_commit": "d536bed57620e49fbb5f24fdcfcd6677d35d825b",
+    "test_commit": "5d20d0e671c4effecdbc344b01a6da7a18b08bdf",
+    "factorial_rows": 1728,
+    "factors": {
+      "referential_depth": [1, 2, 3, 4],
+      "root_s3_permutations": 6,
+      "symbol_s3_permutations": 6,
+      "template_families": 4,
+      "semantic_classes": 3,
+      "distractor_chains_per_episode": 2
+    },
+    "depth_counts": {"1": 432, "2": 432, "3": 432, "4": 432},
+    "class_symbol_mutual_information_bits": 0.0,
+    "candidate_train_ready": false,
+    "abstract_slots": ["ATOM_A", "ATOM_B", "ATOM_C"]
+  },
+  "local_static_validation": {
+    "scope": "source-equivalent local deterministic generator/test logic, not EntityOS/HCU/model runtime",
+    "tests": 8,
+    "passed": 8,
+    "failed": 0,
+    "tested_failure_modes": [
+      "target_tamper",
+      "binding_text_metadata_mismatch",
+      "class_word_leak_outside_codebook",
+      "root_permutation_metadata_lie",
+      "binding_cycle",
+      "distractor_path_intersection",
+      "declared_depth_mismatch",
+      "class_symbol_counterbalance_and_zero_MI"
+    ]
+  },
+  "important_parallel_reentry": {
+    "removed_donor": "tools/trigger2_dynamic_codebook_generator_v2.py",
+    "current_template_successor": "tools/trigger2_dynamic_codebook_binding_template_generator_v2.py",
+    "current_router_successor": "tools/trigger2_binding_router_factorial_generator_v3.py",
+    "repair": "multihop generator was made self-contained after the donor removal; it supplements rather than supersedes router v3"
+  },
+  "current_projection_gate_implication": "Materialized rows must later bind exact nonzero ABI/tokenizer/evidence hashes to actual bytes; placeholder/source rows remain deliberately ineligible.",
+  "counterhypotheses": [
+    "The model may memorize graph surface syntax rather than learn dereference.",
+    "The model may exploit line position or root-role priors despite zero class-symbol MI.",
+    "Multi-hop success may fail on unseen templates or unseen real ABI atoms.",
+    "Post-training hidden-state transport may improve without behaviorally causal routing."
+  ],
+  "next_falsifiers": [
+    "freeze unseen template families and unseen ABI atom partition",
+    "materialize only with exact tokenizer and accepted one-token atom evidence",
+    "run family-level split/leak guards plus evidence-byte binding gate",
+    "evaluate depth 1/2/3/4 separately with distractor topology perturbations",
+    "require same-model post-training causal intervention before positive J-Space control credit"
+  ],
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "training": 0,
+    "positive_qwen35_jspace_control": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0
+  }
+}

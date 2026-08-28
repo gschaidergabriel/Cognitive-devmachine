@@ -1,0 +1,81 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "merged_recovery_redacted_receipt_identity_zero_credit_exact_blob_mechanism",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "canonical_main_before_write": "8a4c1c1401eb7f8e4673a0c88b759858a98e3dee",
+  "canonical_delta": {
+    "merged_pull_request": 552,
+    "merge_commit": "2ba39e7b338a34a71d43a8d0f235a2b7928a34ca",
+    "donor_head": "72637dc0f4aaaa24d4a0391e6bead64945cdb2b7",
+    "recovery_path": "the artefact/clayverse/recovery.py",
+    "recovery_git_blob_on_main": "66540a9d2d20860fed015033da8013965ef830be",
+    "test_recovery_receipt_blob": "8d130286581e33cd9b0e63c092225a3ea7f84bb1",
+    "test_restart_recovery_blob": "b9c21818485f9aaeea693441dcf23e832d1417fc"
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "kernel": "Linux x86_64 6.18.35",
+    "network_dependency": "none",
+    "classification": "EXACT_PRODUCT_BLOB_MECHANISM_EXECUTION_WITH_MINIMAL_DEPENDENCY_STUBS",
+    "blob_identity_recomputed_before_execution": true,
+    "harness_boundary": "Executed the exact merged recovery.py bytes unchanged. EffectJournal and UnifiedDB imports were supplied by a minimal compatibility harness sufficient for the exercised recovery SQL/state contracts. This was not a full checkout, full branch pytest run, container restart, or OCI run.",
+    "cases": [
+      {
+        "name": "orphan_structurally_valid_forged_receipt",
+        "claimed_outcome_hash_preserved": true,
+        "observed_credit": 0.0,
+        "reentered": 1,
+        "uncertain_effects": 0,
+        "result": "PASS"
+      },
+      {
+        "name": "orphan_malformed_receipt",
+        "observed_credit": 0.0,
+        "reentered": 1,
+        "uncertain_effects": 1,
+        "result": "PASS"
+      },
+      {
+        "name": "active_turn_structurally_valid_forged_receipt",
+        "claimed_outcome_hash_preserved": true,
+        "observed_credit": 0.0,
+        "reentered": 1,
+        "active_turns_closed": 1,
+        "workspace_state": "RECOVERY_CLOSED_AFTER_EFFECT_REENTRY",
+        "recovery_turn": "TURN_ABORTED:container_restart",
+        "result": "PASS"
+      }
+    ],
+    "assertion_result": "ALL_ASSERTIONS_PASS"
+  },
+  "execution_admission": {
+    "github_actions_observation": "fresh exact fusion head produced a completed failure run with zero jobs; classify as admission failure before test execution",
+    "vercel_bridge": "confirmed by prior actually-started microVM evidence, but new preview/build admission currently rate-limited before Sandbox.create",
+    "vercel_runtime_credit_for_this_delta": false
+  },
+  "coordination": {
+    "unusual_experiment": "NO_NEW_UNUSUAL_EXPERIMENT",
+    "reason": "the 15:02 GO unusual experiment was already consumed by the canonical recovery receipt forgery discriminator; this is deterministic regression/mechanism validation",
+    "duplicate_cleanup": [
+      "PR 557 closed after earlier fusion lane was discovered",
+      "PR 556 closed after PR 552 merged to canonical main"
+    ]
+  },
+  "result": {
+    "source_in_main": true,
+    "zero_credit_recovery_mechanism": "MECHANISM_SUPPORTED",
+    "full_branch_pytest": "UNOBSERVED",
+    "exact_oci_restart_runtime": "UNOBSERVED",
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "when an authorized full-checkout isolated runner is admitted, execute the focused recovery receipt regression plus adjacent restart/effect/generation tests on exact then-current main",
+    "validate verified effect -> persisted receipt -> causal-row loss -> restart/recovery through the exact ClayVerse image with zero re-minted credit and no external replay",
+    "continue whole-product OCI/auth/PTY/Claude/MicroClay/recovery acceptance separately"
+  ]
+}

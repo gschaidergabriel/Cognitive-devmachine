@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "research_main_observed_before_write": "ba1c5babb0ab5edefec0440a082c6554ebe10001"
+  },
+  "coordination": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_exact_snapshot_inspected": "c6dbbdd3bee56f5d358d996ccb89b91a980938bc",
+    "duplicate_lane_created": false,
+    "unusual_experiment_performed": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No upstream shared immutable macrocycle/request identifier was exposed; available user-message time is not sufficient to mint a reproducible atomic trigger key. Work remained deterministic source review/fusion only."
+  },
+  "observation": {
+    "executor_rebind_contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v3",
+    "executor_rebind_contract_donor": "48d1bcb8357df0cf90d99133027f88ab67361a3f",
+    "executor_contract_forbid_upstream_test_doubles": true,
+    "executor_contract_integrated_test_blob": "a3bb09bd1a5d1e7ad95c01bef1b5a2d1349588b4",
+    "executor_integrated_test_imports_transitive_fixture": "from test_inference_receipt_v1 import fixture",
+    "latest_donor_integrated_test_blob": "cd0abb3fe22d0fa015befe35c896f56fa006f08c",
+    "latest_donor_integrated_test_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "latest_donor_change": "The integrated execution-store -> inference-v4 -> Global-J-Space/GWT -> TrainingTrace -> JSpaceBinding regression now derives Typed Entry admission, routing, engine artifact admission, actual-loader-consumption evidence and scheduler-owned GRID10 plan through the production constructors/validators instead of importing test_inference_receipt_v1.fixture for those upstream trust objects."
+  },
+  "finding": {
+    "classification": "UPSTREAM_TEST_FIXTURE_TRUST_GAP_IN_EXECUTOR_REBIND_SNAPSHOT",
+    "observed": "At exact executor snapshot c6dbbdd3..., the contract explicitly forbids upstream test doubles but its bound integrated regression blob a3bb09bd... still imports test_inference_receipt_v1.fixture. The current retained donor head 511d568... replaces that fixture-derived upstream chain with production-derived Typed Entry, route, verified engine admission/load and GRID10 objects; its integrated regression blob is cd0abb3f....",
+    "counterhypothesis": "The fixture import is acceptable because the fixture itself may internally invoke production constructors and therefore could be semantically equivalent to the direct producer-derived chain.",
+    "discriminator": "Exact-byte promotion is already the contract law. Rebind the executor to donor 511d568... (or a newer immutable successor with the same producer-derived property) and require the integrated test blob cd0abb3f... or its explicitly reviewed successor before removing SOURCE_REBIND_REQUIRED. This is cheaper and stronger than proving semantic equivalence of the older fixture across the admitted domain.",
+    "runtime_credit_change": 0,
+    "model_runtime_credit_change": 0,
+    "training_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_PREVENTING_QUARANTINE_REMOVAL_ON_A_FIXTURE_DERIVED_UPSTREAM_TRUST_CHAIN_AND_IDENTIFYING_THE_EXACT_SUCCESSOR_DONOR_BLOB",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_REQUIRING_TYPED_ENTRY_ROUTE_ENGINE_LOAD_AND_GRID10_TRUST_OBJECTS_TO_BE_DERIVED_THROUGH_THEIR_PRODUCTION_CONSTRUCTORS_VALIDATORS_IN_THE_INTEGRATED_CHAIN_REGRESSION",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_TIGHTENING_THE_CAUSAL_TRACE_PROVENANCE_BEFORE_JSPACE_V3_BINDING_DATASET_OR_FUTURE_LOCAL_08B_CREDIT"
+  },
+  "evidence_boundary": {
+    "source_identity_only": true,
+    "new_ci_execution_observed": false,
+    "new_sandbox_execution_observed": false,
+    "actual_model_executor_io_observed": false,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The current README already requires one immutable exact-donor source/test/transitive-fixture closure and forbids upstream doubles before SOURCE_REBIND_REQUIRED removal. This receipt adds the exact obsolete/current integrated-test blob identities and the stronger producer-derived donor discriminator without changing the product-level frontier."
+  },
+  "next_exact_action": "On the single retained Dr.-Unterweger#810 lane, re-enter the newest head, move the rebind contract and vendored integrated regression to donor 511d568932bf47828679e3ca6ba05650f18d284d or a reviewed newer immutable successor carrying the producer-derived upstream chain, keep SOURCE_REBIND_REQUIRED active until the entire exact_donor_git_blobs map and fixed command are coherent, then execute only if the supervisor-8.63 FREE_ONLY Vercel Hobby cost/build/function admission fence permits it."
+}

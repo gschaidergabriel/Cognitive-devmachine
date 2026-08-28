@@ -1,0 +1,89 @@
+{
+  "schema": "ENTITYOS_HCU_GO_ADJUDICATION_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "main_observed_before_write": "2b9775e3f5b1b645ba643c816d30fe942e9d554f",
+  "authority_decision": {
+    "retained_lane": "PR_1263",
+    "retained_head_observed": "478b054bb40576f712d55b0b9facb87e96ec9bf4",
+    "superseded_lane": "PR_1363_CLOSED_UNMERGED",
+    "unpromoted_successor_branch": "gpt56sol/entityos-hcu-entry-admission-grid10-fusion-20260823",
+    "successor_disposition": "ABANDONED_DONOR_ONLY_NO_PR_OPENED",
+    "reason": "Current PR1263 already subsumes the useful Entry/GRID mechanisms with stronger versioned deterministic canonicalization, external capability/budget authority, single route/engine authority and inference-echo binding. Promoting another Entry/router path would violate the one-authority convergence law."
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE",
+    "reason": "Current main the artefact/README.md already states EntityOS/HCU authority, external capability admission, event-vs-admission identity, single versioned canonicalization gate, EngineAdmission frontier and exact combined Entry+route+inference+GRID10 isolated-execution gate; another edit would be duplicate churn."
+  },
+  "independent_bounded_reproduction": {
+    "purpose": "adversarial adjudication of event/admission identity, self-grant rejection and GRID10 replay semantics before discovering the stronger retained implementation",
+    "environment": "isolated ChatGPT Linux/Python tool container",
+    "python": "3.13.5",
+    "compile": "PASS",
+    "tests_run": 22,
+    "tests_passed": 22,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "exact_donor_blobs": {
+      "entry_fabric_v1.py": "5fe174fdf293791421cfd2df4d75f83093823e0f",
+      "grid10_scheduler_v1.py": "26415a2c5327e950cf6e5d1750346e9719730a74",
+      "test_entry_fabric_v1.py": "dfd293ea929fc16488ceb6d09a40b88efb383128",
+      "test_grid10_scheduler_v1.py": "9a5d2e53d22037a54acda9348e4416973fa834d8"
+    },
+    "supported_mechanisms": [
+      "same causal event remains stable across transport/admission metadata changes",
+      "admission identity changes when transport, budget or capability-authority binding changes",
+      "untrusted permission/capability self-grant fails closed against external authority",
+      "GRID10 semantic plan identity remains causal-event stable while concrete plan/task identities remain admission-specific",
+      "stale generation and logical-cell budget fail closed",
+      "logical GRID10 never claims physical decoder concurrency"
+    ],
+    "promotion_credit": "INDEPENDENT_MECHANISM_REPRODUCTION_ONLY_NOT_RETAINED_SOURCE_EXACT_RUNTIME"
+  },
+  "retained_lane_observed_strength": [
+    "replay-stable Entry event_sha256 separated from admission_sha256",
+    "external expected capability-binding digest plus admitted capability set and admitted compute budget; Entry claims may narrow but not broaden authority",
+    "versioned deterministic Typed Entry canonicalization and normalized RFC3339 causal time",
+    "independently reproduced canonicalizer parity evidence",
+    "admission-to-event binding at HCU route boundary",
+    "separate deterministic EngineAdmission control-plane object with reserved engine authority fields fail-closed",
+    "route identity binds causal event, router policy, admitted engine and routing result",
+    "inference receipt echo binds concrete admission plus route/engine/artifact identity",
+    "GRID10 donor semantics remain inside the same HCU architecture"
+  ],
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "existing_macrocycle_experiment": "same-route causal-alias stress",
+    "note": "the event-alias case in the 22-test reproduction was regression-only and did not consume another unusual experiment"
+  },
+  "negative_results_and_blocks": [
+    "available GitHub Actions HCU identity-guard run failed before any step execution; this is execution admission/runner failure, not semantic test failure",
+    "no actually-started authorized full EntityOS/HCU isolated executor was available to this organ",
+    "no real local ~0.8B checkpoint/tokenizer/runtime/build bytes were loaded and bound into EngineAdmission",
+    "no exact combined Entry -> admission/event binding -> EngineAdmission -> HCU route -> real inference producer -> inference-echo runtime was executed"
+  ],
+  "safety": {
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_execution_or_training_used": false,
+    "secrets_accessed_or_persisted": false,
+    "new_state_authority_added": false,
+    "new_effect_path_added": false
+  },
+  "credit": {
+    "research_fusion": "COMMITTED",
+    "duplicate_lane_removed": true,
+    "entityos_runtime_credit_change": 0,
+    "hcu_runtime_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "current_frontier": "Keep PR1263 as the single donor lane; select/finalize exactly one causal canonicalization path; then have the real EntityOS/HCU control plane construct EngineAdmission from verified loaded local ~0.8B checkpoint/tokenizer/runtime/build bytes and execute the exact Entry -> admission/event binding -> EngineAdmission -> HCU route -> real inference producer -> inference-echo chain in an actually-started authorized isolated executor."
+}

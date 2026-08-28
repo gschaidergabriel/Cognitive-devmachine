@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_GO_SOURCE_INTEGRATION_REPAIR/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "pull_request": 1275,
+  "observed_defect": "The pre-inference compositor default path imported zero_workspace_capsule_v1 and zero_inference_packet_v2 as top-level modules although the canonical implementations live under research_entity/global/j-space/implementations. Existing focused tests injected doubles and therefore did not exercise the real default import path. The packet implementation itself imports zero_workspace_capsule_v1 by its historical top-level name.",
+  "evidence": {
+    "pre_repair_compositor_blob": "a722fc418054b3c473980dacb91ab4f59d6a66ff",
+    "canonical_capsule_blob": "5a6eb721bb82595914d8434d3f57dce032b6c3db",
+    "canonical_packet_blob": "c7dda725bdc6ad65058e6d16b082085a149f6a32",
+    "existing_validator_pattern": "tools/validate_zero_ucf_capsule_chain_v2.py uses explicit importlib file loading from the same canonical j-space implementation tree",
+    "source_failure_mode": "DEFAULT_IMPORT_PATH_UNRESOLVED_OUTSIDE_EXPLICIT_JSPACE_PATH_INJECTION"
+  },
+  "repair": {
+    "compositor_blob": "34f15df72f21b16ff2b657ab300fe9385ad41ea0",
+    "default_import_regression_blob": "6c489b1242edc2efeb222ea5cf888ed9a29856b3",
+    "mechanism": "load the exact canonical capsule by repository path, bind it temporarily under the historical zero_workspace_capsule_v1 module name while executing the exact canonical packet module, then restore the prior sys.modules entry",
+    "copies_created": 0,
+    "second_fabric_path_created": false,
+    "canonical_capsule_packet_bytes_modified": false
+  },
+  "regression_obligation": [
+    "default loader resolves the canonical ZERO_WORKSPACE_CAPSULE/v1 and ZERO_INFERENCE_PACKET/v2 files",
+    "packet.capsule_v1 is the exact capsule module loaded by the compositor",
+    "pre-existing top-level capsule module aliases are restored after loading"
+  ],
+  "execution": {
+    "new_exact_repo_dependency_test_executed": false,
+    "github_verify_latest_attempt": "PRE_STEP_FAILURE_steps_null",
+    "classification": "SOURCE_INTEGRATION_REPAIR_WITH_EXACT_REPO_TEST_OBLIGATION_NOT_RUNTIME_ACCEPTANCE"
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "runtime_identity_configuration": "Zero",
+    "effect_authority": "EffectGate",
+    "model_output": "CANDIDATE_ONLY"
+  },
+  "unusual_experiment": "NO_NEW_UNUSUAL_EXPERIMENT; this is deterministic integration repair following the already-consumed macrocycle intervention",
+  "runtime_credit": {
+    "whole_mini_entity": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu": 0
+  },
+  "next_gate": "Rebase the compositor onto current main without losing the merged invocation-selector/read-only-turn prerequisites, execute the exact repo dependency regression on an admitted executor, then wire the compositor into the single retained ProfilePipelineRuntime effect path."
+}

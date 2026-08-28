@@ -1,0 +1,74 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local_minute": "2026-08-17T22:49+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "CANONICAL_SOURCE_REPAIR_WITH_EXACT_BLOB_ISOLATED_REGRESSION",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "frontier": "MICROVM_PERSISTENT_VOLUME_NONROOT_OWNERSHIP",
+  "donor": {
+    "pr": 630,
+    "head": "428fdbb48b9289cc9f3ad0987f3490350c1f0246",
+    "mergeable_at_review": false,
+    "use": "SEMANTIC_DONOR_ONLY_REAPPLIED_TO_NEWER_MAIN_WITH_CAS_FENCES",
+    "stale_ancestry_promoted": false
+  },
+  "canonical_writes": [
+    {
+      "path": "the artefact/deployment/clayverse-kata-statefulset.template.yaml",
+      "commit": "ac0a94794ae47b295c71f28218fa220c07153c76",
+      "blob": "73f4dcf80f78fcb4d78e144e281758c194aff6df",
+      "delta": "Pod fsGroup=10001 and fsGroupChangePolicy=OnRootMismatch while preserving current headless-Service, Tier-2, default-deny network, non-root and read-only-root contracts"
+    },
+    {
+      "path": "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md",
+      "commit": "22e0999607969c1eea26423af27ccb0287d8ce17",
+      "blob": "df0e90fc4d4c5d490360e9ccd603f7d44ff9c09d",
+      "delta": "CSI/storage-class identity and effective non-root mount-group behavior become executable acceptance evidence; unsupported/uncertain ownership is BLOCKED"
+    },
+    {
+      "path": "the artefact/tests/test_microvm_deployment_contract.py",
+      "commit": "0c23c41e11abeb7c2dfe69c169aac03a658a7ffd",
+      "blob": "8e03f51ba06a8d9a31dc8b0c32c90b77399bc157",
+      "delta": "source regression fences fsGroup/runAs identity, OnRootMismatch, VOLUME_MOUNT_GROUP contract, no privileged/init-container ownership repair"
+    }
+  ],
+  "primary_upstream_basis": {
+    "provider": "Kubernetes official documentation/API",
+    "claims": [
+      "Pod fsGroup provides a supplemental group and supported volume ownership/permission semantics",
+      "fsGroupChangePolicy OnRootMismatch is a supported value for fsGroup-capable volumes",
+      "when a CSI driver advertises VOLUME_MOUNT_GROUP, the CSI driver receives/applies the fsGroup mount-group semantics and fsGroupChangePolicy no longer controls that delegated operation"
+    ]
+  },
+  "isolated_regression": {
+    "surface": "OpenAI isolated non-production container",
+    "blob_rebind": {
+      "template": "MATCH 73f4dcf80f78fcb4d78e144e281758c194aff6df",
+      "contract": "MATCH df0e90fc4d4c5d490360e9ccd603f7d44ff9c09d",
+      "test": "MATCH 8e03f51ba06a8d9a31dc8b0c32c90b77399bc157"
+    },
+    "command": "python -m pytest -q 'the artefact/tests/test_microvm_deployment_contract.py' -k 'not manifest_network_gates_match_the_deployment_contract'",
+    "result": "12 passed, 1 deselected in 0.05s",
+    "exit_code": 0,
+    "scope": "exact changed MicroVM template/contract/test blobs plus adjacent source-contract regressions; unchanged manifest-only test intentionally deselected because manifest bytes were not reconstructed in this run"
+  },
+  "non_claims": [
+    "no Kubernetes API admission runtime credit",
+    "no actual CSI/storage-class fsGroup or VOLUME_MOUNT_GROUP behavior credit",
+    "no PVC create/write/fsync/read/rename/delete runtime probe",
+    "no Kata/microVM runtime credit",
+    "no exact OCI image build/digest credit",
+    "no whole-product PASS"
+  ],
+  "external_execution_blocker": "Retained Vercel #810 exact private-source/OCI execution still requires approved host-side Preview GITHUB_READ_TOKEN; the credential must not be committed or forwarded into the Sandbox.",
+  "next_exact_gate": "On the exact accepted OCI digest under the admitted Kata/equivalent target, identify StorageClass/CSI and prove uid=10001,gid=10001 create/write/fsync/read/rename/delete on /var/lib/clayverse and /workspace before and after full Pod/Kata-sandbox replacement, alongside the existing CNI/default-deny, guest-kernel, Tier-2, recovery and no-replay gates.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_reason": "No shared immutable request/turn identifier or whole-second trigger timestamp is exposed; deterministic source repair/regression only.",
+  "vps_self_hosted_production_testing": "NOT_USED",
+  "together_api": "FORBIDDEN_NOT_USED",
+  "paid_final_training": "NOT_STARTED_OWNER_AUTHORIZATION_REQUIRED"
+}

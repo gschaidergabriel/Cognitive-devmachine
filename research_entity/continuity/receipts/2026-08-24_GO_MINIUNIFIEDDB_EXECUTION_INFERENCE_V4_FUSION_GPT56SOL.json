@@ -1,0 +1,79 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "reentry": {
+    "research_main_observed_before_receipt": "ba1c5babb0ab5edefec0440a082c6554ebe10001",
+    "retained_hcu_donor_pr": 1263,
+    "retained_executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "retained_executor_pr": 810,
+    "executor_head_observed_after_fusion": "c6dbbdd3bee56f5d358d996ccb89b91a980938bc",
+    "fusion_guard_commit": "d0c1ec632c6086c56977b4b4963574b07d416304",
+    "successor_distance_from_fusion_guard": 18,
+    "fusion_guard_is_ancestor_of_observed_executor_head": true
+  },
+  "observation": {
+    "prior_gap": "The exact ModelExecution/v1 -> InferenceReceipt/v4 component harness verified model execution from caller-constructed admitted observation/invocation maps even though the retained donor already defined HCU_MODEL_EXECUTION_ADMISSION_STORE/v1 for atomic admission inside the existing canonical MiniUnifiedDB.",
+    "risk": "A deterministic component harness could therefore demonstrate downstream provenance while bypassing the canonical invocation uniqueness/generation/rollback owner that the product path is intended to require.",
+    "post_fusion_state": "The retained PR810 positive component path now creates VerifiedModelExecution only through admit_and_verify_model_execution on an existing MiniUnifiedDB SQLite connection before feeding the exact receipt into InferenceReceipt/v4. Successor work has built further J-Space/v3 and concurrency closure on top of this same lineage."
+  },
+  "delta": {
+    "executor_test_commit": "a3c916d9d86104fbc4419f46860e61725287e363",
+    "executor_capsule_commit": "e042336a1942976d12537f72899342db08d2d99c",
+    "executor_guard_commit": "d0c1ec632c6086c56977b4b4963574b07d416304",
+    "integration_test_blob": "8c75c44d8fdf95d23fb3de07c466be802b1a211c",
+    "positive_capsule_blob_at_fusion": "a3b02d1483b28fad9be6f46fcd693c41ec19d00e",
+    "guard_blob_at_fusion": "318afe22e5848425239d085aa8923c7d9f535475",
+    "canonical_admission_store_git_blob": "0d1b1aa1f4c71f167b94374bc359d8dd2c07eed7",
+    "component_regressions_encoded": [
+      "canonical MiniUnifiedDB observation+invocation admission precedes VerifiedModelExecution",
+      "exact replay is idempotent without duplicate observation/invocation rows",
+      "same invocation with divergent output fails with MODEL_EXECUTION_INVOCATION_REPLAY_DIVERGENCE and rolls back",
+      "stale generation fails before model-execution admission tables are written",
+      "the admitted VerifiedModelExecution receipt is consumed by HCU_INFERENCE_RECEIPT/v4",
+      "post-verification execution provenance tamper fails closed"
+    ],
+    "encoded_regression_count": 6,
+    "source_fusion": "COMMITTED_TO_SINGLE_RETAINED_EXECUTOR",
+    "duplicate_executor_created": false
+  },
+  "hypothesis": {
+    "claim": "Routing the deterministic integration harness through the same MiniUnifiedDB atomic admission primitive used by the intended runtime boundary removes a false-positive class in which downstream Inference/v4 provenance is valid only against caller-supplied registry maps.",
+    "falsifier": "An exact-source admitted Sandbox run of the fused capsule fails one of the six admission/inference fences, or successor integration demonstrates that the real executor path can still mint VerifiedModelExecution without the canonical admission transaction."
+  },
+  "counterhypothesis": {
+    "claim": "The caller-supplied map harness was already sufficient because verify_model_execution checked equivalent values, so storage-level admission adds no meaningful causal guarantee.",
+    "discriminator": "Divergent replay, stale-generation no-write and concurrent one-winner behavior require transactional persistence semantics that an ephemeral caller map does not establish. Successor regressions should preserve this distinction through J-Space/v3."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: the sole retained executor path now consumes the canonical MiniUnifiedDB model-execution admission primitive instead of bypassing it with caller maps, and the change remains an ancestor of the observed successor head.",
+    "track_b_hcu_and_typed_entry_fabric": "ADVANCED: generation, exact RFC8785/JCS observation bytes, executor-scoped invocation uniqueness and rollback semantics are enforced at the HCU model-execution admission boundary used by the component path.",
+    "track_c_global_jspace_gwt_and_training_readiness_free_only": "ADVANCED: Inference/v4 entering the J-Space lineage is now downstream of canonical invocation admission; later successor work extends this invariant to a single-winner JSpaceBinding/v3 path."
+  },
+  "evidence": {
+    "source_write_observed": true,
+    "successor_lineage_observed": true,
+    "runtime_test_executed_by_this_organ": false,
+    "actual_model_executor_io_observed": false,
+    "source_rebind_required": true,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "unusual_experiment_performed": false,
+    "unusual_experiment_count_added": 0,
+    "atomic_lease": "NOT_CLAIMED_NO_UNUSUAL_INTERVENTION",
+    "parallel_duplicate_patch_avoided": true
+  },
+  "next_exact_action": "Keep SOURCE_REBIND_REQUIRED until the single PR810 route carries and hash-binds one immutable donor snapshot for every required production source, regression and transitive fixture through Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3. Then, only when FREE_ONLY Vercel Hobby build/function admission permits, execute the fixed deterministic closure and record exact source/result digests, Sandbox identity, exit code, secret fence and cleanup. Real model/J-Space runtime credit remains blocked until actual zero-cost local model-executor I/O uses the same canonical MiniUnifiedDB admission path."
+}

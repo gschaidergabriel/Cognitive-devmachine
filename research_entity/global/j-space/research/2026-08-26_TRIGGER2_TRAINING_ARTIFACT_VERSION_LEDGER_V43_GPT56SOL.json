@@ -1,0 +1,123 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v43",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V42_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V42",
+  "observed_main_before_write": "a425f44d828baea8901024d1a8e4699f9db340ee",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "owner_target": "VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "freeswarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "revision_reason": "V42 correctly blocked the atomic cohort candidate on historical replay ordering. Current main a425f44 repairs that ordering and hardens PID/snapshot/current-node checks. A separate monotonic node-membership acceptance candidate also exists. Exact-current source inspection now narrows the next P0: the atomic cohort path validates logical node_id against the current nodes table but does not bind the monotonic membership admission identity that is revoked on re-registration. Thus packet/process/snapshot proof and membership-authority proof can still be spliced across components.",
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V42_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V43_GPT56SOL.json",
+      "reason": "a425f44 repairs V42's replay-ordering blocker; membership-authority integration becomes the next exact atomic-path gap"
+    },
+    {
+      "artifact": "tools/trigger2_grid10_atomic_cohort_batch_acceptance_v1.py@a425f44d828baea8901024d1a8e4699f9db340ee",
+      "status": "CURRENT_SOURCE_CANDIDATE_REPLAY_GAP_CLOSED_MEMBERSHIP_FUSION_OPEN",
+      "finding": "Exact replay is recognized before current-start freshness, stored member bindings are revalidated, packet PID is bound to barrier-ready PID and snapshot, read-only/writer-free evidence is required, and nodes-table capability/health is checked. No monotonic source_membership_id is carried in each NODE_RESULT/cohort member/cohort_id.",
+      "runtime_credit": 0
+    },
+    {
+      "artifact": "tools/trigger2_node_membership_admission_acceptance_v1.py@e80722242b3113820263e5d87b8a7b74fa06b3ca",
+      "status": "CURRENT_COMPLEMENTARY_SOURCE_CANDIDATE_NOT_YET_FUSED_INTO_ATOMIC_COHORT",
+      "finding": "Defines monotonic membership_id authority; re-registration invalidates the prior membership identity even if S1 cognitive snapshot identity does not change; unknown, revoked, unhealthy and generation-stale membership is rejected.",
+      "runtime_credit": 0
+    }
+  ],
+  "new_gap": {
+    "id": "ATOMIC_COHORT_MONOTONIC_MEMBERSHIP_AUTHORITY_SPLICE",
+    "classification": "R0_CURRENT_SOURCE_OBSERVATION_PLUS_R1_STATIC_CONTROL_FLOW_INFERENCE",
+    "severity": "P0_BEFORE_INTEGRATED_ATOMIC_COHORT_OR_PHYSICAL_GRID_PROMOTION",
+    "finding": "The current atomic path authenticates a cohort member as a unique logical node with an exact producer PID/packet/snapshot and checks that nodes(node_id) is currently healthy with capability=reason. The monotonic node_memberships membership_id from the separate membership acceptance is absent from the atomic packet envelope, canonical member tuple and cohort_id. Therefore current-node presence does not prove that the exact producer realization that emitted the consumed packet still owns an admitted membership identity.",
+    "contract_mismatch": "The atomic fan-in research contract requires an ordered runtime membership/process identity set, but the executable candidate currently operationalizes process identity plus logical node_id only; the monotonic membership admission identity is not part of the sealed cohort identity."
+  },
+  "static_adversarial_construction": [
+    "Register x01 and create its valid simultaneous cohort packet plus exact barrier PID/snapshot witness.",
+    "Before the unseen cohort batch is committed, re-register logical node x01 with the same capability and healthy state. The separate membership contract revokes the old membership_id and creates a new one while S1 epoch/digest can remain unchanged.",
+    "Keep the old packet, old producer PID and old ready-row witness unchanged.",
+    "The current atomic nodes-table check can still see x01 as present, healthy and capability=reason; no source_membership_id comparison distinguishes the revoked producer membership from the replacement membership.",
+    "Therefore exact PID/packet/snapshot binding can coexist with an authority handoff unless an explicit monotonic membership policy is fused into the batch gate."
+  ],
+  "hypothesis": {
+    "claim": "Each ordinary NODE_RESULT used by a new active atomic cohort batch should carry a deterministic fabric-produced monotonic membership admission identity, and cohort_id/admission must bind and revalidate that identity before S1 mutation.",
+    "preferred_base_policy": "STRICT_CURRENT_MEMBERSHIP_FOR_ACTIVE_COHORT: re-registration/revocation after observation invalidates that old member for a new active batch and forces rejoin/recompute.",
+    "counterhypothesis": "If a cohort is explicitly historical evidence, membership-valid-at-observation could remain admissible after re-registration. That alternative must be separately versioned, preserve the superseded membership_id and evidence age, and must never relabel the old producer as the replacement node's current active participation.",
+    "decision_boundary": "Do not let the current nodes-table implementation accidentally choose between active-membership and historical-evidence semantics."
+  },
+  "cheapest_high_information_discriminator": {
+    "id": "COHORT_MEMBERSHIP_REREGISTRATION_NEGATIVE",
+    "class": "ORDINARY_DETERMINISTIC_REGRESSION_NOT_UNUSUAL_EXPERIMENT",
+    "construction": "Form one valid exact simultaneous cohort; re-register one logical node with identical capability before new batch commit without changing S1 cognitive state identity; attempt to commit the old cohort.",
+    "expected_under_preferred_base_policy": "FAIL_CLOSED_BEFORE_ANY_S1_MUTATION_WITH_EXPLICIT_STALE_OR_REVOKED_MEMBERSHIP_RESULT",
+    "paired_controls": [
+      "unchanged active membership may proceed to later gates",
+      "unknown membership_id rejects",
+      "unhealthy active membership rejects",
+      "generation-stale membership rejects",
+      "replacement membership_id substituted into old packet/process evidence rejects",
+      "exact already-admitted cohort replay remains idempotent zero-delta without claiming old membership became current"
+    ]
+  },
+  "required_fusion_contract": [
+    "Fabric, not the model, creates source_membership_id or an equivalent deterministic membership-admission identity.",
+    "Bind membership_id + logical node_id + capability + generation + producer PID/process identity + packet_digest into the cohort member identity and cohort_id.",
+    "Apply one explicit versioned membership policy at cohort seal/admission before any state mutation.",
+    "Keep membership authority distinct from S1 cognitive state_digest; do not mutate S1 merely to hide the distinction.",
+    "Preserve original observation membership/provenance after commit or replay; current coordinator summaries may reference it but may not relabel it.",
+    "Retain disjoint-cohort, packet-tamper, stale-start, consumed-input, duplicate/replay and arrival-order regressions as independent gates."
+  ],
+  "training_course_reinjection": {
+    "positive_training_admission": "BLOCKED",
+    "new_positive_rows_generated": 0,
+    "new_positive_rows_admitted": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "candidate_eval_concepts": [
+      "logical node_id is not membership admission identity",
+      "healthy current registry row does not authenticate an old producer realization",
+      "PID/packet/snapshot binding does not imply membership authorization",
+      "membership freshness differs from evidence age and S1 snapshot freshness",
+      "re-registration requires explicit rejoin/recompute or historical-evidence policy"
+    ],
+    "model_side_target": "Given typed deterministic outcomes such as MEMBERSHIP_REVOKED or MEMBERSHIP_REPLACED, quarantine/discard the affected active-cohort proposal and rejoin/recompute as required; never invent or refresh membership authority in model text."
+  },
+  "execution_decision": {
+    "freeswarm": "HARD_OFF",
+    "new_provider_or_training_execution": "NOT_AUTHORIZED",
+    "new_physical_grid_runtime_pin": "BLOCKED_PENDING_COMPOSITE_MEMBERSHIP_PLUS_COHORT_PLUS_CONSUMED_INPUT_ACCEPTANCE",
+    "component_source_pass_promotes_whole_product": false
+  },
+  "credits": {
+    "research_delta": 1,
+    "architecture_training_reinjection_delta": 1,
+    "repository_bound_negative_execution_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Implement one composite deterministic acceptance successor that seals monotonic membership_id into the exact atomic same-cohort packet/process/snapshot set and runs the re-registration, ghost, unhealthy, generation-stale and membership-substitution negatives. Keep FreeSwarm HARD_OFF; do not repin physical GRID10 or admit training rows until this composite contract and consumed-model-input identity are current and falsified."
+}

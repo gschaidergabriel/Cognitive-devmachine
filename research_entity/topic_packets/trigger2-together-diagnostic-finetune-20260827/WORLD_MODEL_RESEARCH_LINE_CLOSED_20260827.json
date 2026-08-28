@@ -1,0 +1,50 @@
+{
+  "schema": "RESEARCH_LINE_CLOSURE_FUSION/v1",
+  "packet_id": "trigger2-together-diagnostic-finetune-20260827",
+  "topic": "Closing the 'world model' research line per owner instruction -- fusing everything learned across the GRID10 world-model simulation AND the earlier ChatGPT/free-pool hypothesis-formation work on Hyperposition, before pivoting to concrete GRID10 application development (4 use cases, separate note).",
+  "status": "CLOSED -- no further abstract world-model exploration planned; findings below are the final state of this line",
+
+  "source_1_grid10_world_model_simulation": {
+    "what_was_built": "tools/run_grid10_world_model_simulation_v1.py: 5 regional/domain scopes + GLOBAL, 6 evidence ticks, per-scope Hyperposition collapse/preserve tracking, real tick-over-tick GWT broadcast/uptake with a rotating coordinator, on top of the proven 10-real-process fabric (grid10_fabric.py/grid10_node.py).",
+    "real_bugs_found_running_it_live": [
+      "Coordinator lease TTL (8s) had no renewal path -- any coordination longer than 8s per scope silently stopped committing forever. Fixed in grid10_node.py, verified with a real regression test (tests/test_grid10_node_lease_renewal_v1.py).",
+      "My own first-draft evidence-strength classifier used substring matching ('confirmed' matched inside 'unconfirmed'), and the collapse rule never actually checked agreement across STRONG evidence despite a comment claiming it did. Caught before reporting, rewrote with explicit hand-authored (strength, direction) triples."
+    ],
+    "external_critique_nemotron_free_pool_fallback": "The system is a sophisticated coordination protocol, not genuine emergent world-modeling. It maintains a distributed state machine where each tick's GWT broadcast simply shares the latest coordinator summary; the language model only greedy-completes prompts, so no internal model is updated or refined. Missing for a true world model: (1) a learnable, updatable representation integrating evidence over time, (2) counterfactual/predictive simulation, (3) belief-revision mechanisms on collapse, (4) grounding to real sensorimotor data. Biggest untested weakness: fault tolerance beyond the lease -- coordinator crash mid-commit or WAL corruption has no recovery protocol.",
+    "my_own_extension_of_that_critique": "Agreed in full. Additionally: the fix I made addresses graceful lease EXPIRY, not a hard coordinator CRASH mid-commit (a genuinely different, harder failure mode, untested). The Hyperposition collapse rule (STRONG evidence + agreement) has a code path for genuinely CONFLICTING strong evidence but it was never exercised in the one run's evidence script -- implemented, not empirically verified. Node count (10) and tick count (6) were tractability choices for a CPU-only sandbox, not an architectural ceiling.",
+    "receipts": [
+      "research_entity/global/j-space/research/vps_run_receipts/grid10/GRID10_WORLD_MODEL_SIMULATION_RECEIPT_20260827.json",
+      "research_entity/global/j-space/research/vps_run_receipts/grid10/GRID10_WORLD_MODEL_OPERATION_REPORT_20260827.json"
+    ]
+  },
+
+  "source_2_earlier_hyperposition_hypothesis_formation": {
+    "reference": "HYPERPOSITION_FOCUS_CONCEPT_20260827.json (this same topic packet dir)",
+    "what_it_was": "Owner hypothesis ('the model was best exactly where Hyperposition/GRF math is') checked against real per-family accuracy numbers, then developed into a concrete training-data-expansion recipe via a pool consultation (Groq tier of ~/last-resort/llm.py, not the ChatGPT bridge which was down at the time).",
+    "verdict_then": "PARTIALLY confirmed -- Hyperposition (80% correct, n=60) is genuinely the model's strongest reasoning-requiring capability, but B6_CLAUDE_HANDOFF_REENTRY (88%, n=48, a DIFFERENT capability -- text-based evidentiary-provenance classification, not branch-preservation judgment) was empirically stronger. The owner's strategic instinct (concentrate depth where the model already excels) was well-supported; the literal framing was corrected rather than accepted at face value.",
+    "recipe_produced": "Branch-count diversity (2/3/4/5), evidence-pressure matrix (strength x pressure type), multi-step branch evolution across rounds, adversarial near-identical evidence pairs, domain-vocabulary mixing, staged curriculum ordering.",
+    "how_it_was_actually_used_since": "This recipe partially informed the Hyperposition expansion built for run 3 (896 rows, 3 diversity axes) and, later, the bias-fix data built for run 4 (440 rows, 5 domains, explicit strength/direction encoding) -- both real, both trained, both evaluated.",
+    "the_honest_downstream_result": "Run 4's bias-fix data, built following this general direction (targeted, diverse, non-templated training examples), did NOT fix the measured bias when actually tested: 0/30 correct on the exact COLLAPSE_VALID cases it was built to teach (on the new data's own held-out split), and the original 10-scenario novel test stayed at 8/10, byte-identical before and after a real infrastructure bug fix that ruled out 'the adapter never loaded' as an explanation. See RUN4_BIAS_FIX_RESULTS_AND_ADAPTER_KEY_BUG_20260827.json in this same directory for the full account. This is the single most important finding from the whole hypothesis-formation exercise: a plausible, well-reasoned, pool-reviewed training-data strategy, built with real discipline (audited, deduplicated, family-disjoint holdouts), still failed empirically. The recipe was not wrong on its face -- the SCALE (275 rows within an 11,569-row corpus) was very likely the actual bottleneck, not the content design. This was not tested as a separate variable, so it remains a recommendation for any future attempt (oversample or scope-limit the training data), not a proven fix."
+  },
+
+  "fused_findings_across_both_sources": {
+    "what_genuinely_works": [
+      "Real multi-process coordination infrastructure (GRID10 fabric): proven 17/17 on the acceptance test, proven again under real sustained multi-tick load with a genuine bug found and fixed along the way.",
+      "Deterministic tracking of evidence strength/direction and collapse/preserve state OVER TIME, computed by a driver/rule rather than a model, is reliable and auditable (the world-model simulation's dynamics matched the intended design exactly once the two bugs were fixed).",
+      "A small model CAN be trained to do reasonably well (80%) on the Hyperposition judgment task in templated/curriculum-style phrasing -- this is real, measured capability, not zero."
+    ],
+    "what_does_not_work_or_is_unproven": [
+      "Training a small (0.8B) model via LoRA to generalize this judgment to genuinely novel, non-templated phrasing: stuck at 8/10 across two separate training attempts (runs 3 and 4), with a specific, reproducible bias (defaults to PRESERVE under unfamiliar strong-evidence phrasing) that targeted new training data did not move.",
+      "Calling the GRID10 simulation a 'world model' in any strong sense: the model's role is short greedy completions; all actual world-state logic lives in driver code, not learned weights. This was independently confirmed by an external critic (Nemotron) with no prompting toward that conclusion.",
+      "Coordinator crash-mid-commit recovery (as opposed to graceful lease-expiry) -- flagged as the single most important untested robustness gap by external critique, not yet addressed.",
+      "Genuinely conflicting STRONG evidence in the Hyperposition rule -- a code path exists (per the v2 fix), never empirically exercised."
+    ],
+    "why_this_line_is_being_closed_here_rather_than_continued": "The abstract question ('can this become a real world model, and can training fix the small model's generalization gap') has now been tested twice (runs 3 and 4) with real, honest, negative-leaning results on the generalization question, plus an independent external critique converging on the same infrastructure-vs-cognition distinction I'd already reached myself. Continuing to iterate on the abstract question without a materially different approach (e.g. a much larger model, or a fundamentally different training strategy not yet tried) would very likely reproduce the same null result. The owner's redirect -- stop exploring the abstract question, apply the INFRASTRUCTURE (which does genuinely work) to concrete use cases instead -- matches exactly where the evidence already points."
+  },
+
+  "what_carries_forward_into_the_concrete_use_case_work": [
+    "The GRID10 fabric itself (proven, now including the lease-renewal fix) is the reusable asset -- not the 'world model' framing.",
+    "The Hyperposition collapse/preserve pattern (evidence accumulates over time, a rule decides when to commit to one alternative) is a genuinely reusable DESIGN PATTERN for the new use cases (e.g. multi-agent negotiation convergence, pipeline consensus-before-escalation) -- implemented via driver logic + fabric commits, NOT via asking a small trained model to make the judgment itself (that path is the one just shown not to generalize).",
+    "The SQLite/WAL commit log itself (state_epoch-versioned, digest-checked) is directly reusable as the 'lueckenlos nachvollziehbare Historie' the owner asked for in the synthetic-trajectory-generation use case -- no new logging infrastructure needed, it already exists."
+  ]
+}

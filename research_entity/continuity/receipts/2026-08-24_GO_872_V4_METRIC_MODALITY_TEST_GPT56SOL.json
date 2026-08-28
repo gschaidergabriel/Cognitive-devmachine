@@ -1,0 +1,53 @@
+{
+  "schema": "CLAY_GO_872_DETERMINISTIC_SOURCE_TEST_RECEIPT/v1",
+  "trigger": "go",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY"
+  },
+  "tested_source": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "head": "06a8eea5b2341c0f5828e3f8719e4b66aeaec94d",
+    "promotion_gate_path": "tools/trigger1_jspace_promotion_gate.py",
+    "promotion_gate_git_blob_sha": "12d703c5a6fcf66d5a7aa0bef24ef26f91c6727a",
+    "promotion_gate_content_sha256": "01c985783c1830384ece704d3a53559f8439cbbc353cad8ffd596a4604aee272",
+    "base_test_path": "tests/test_trigger1_jspace_promotion_gate.py",
+    "base_test_git_blob_sha": "addec696a9539fe1b22a01f7fb0f7639f99b9ca2",
+    "base_test_content_sha256": "4b9f3e0499ea5dad59e38a0bc223937677a171afd634a310fb41ecfd80fb7b31",
+    "metric_modality_test_path": "tests/test_trigger1_jspace_metric_modality_v4.py",
+    "metric_modality_test_git_blob_sha": "76ee858455e89d1ae0b96212c19c6cf27ae94ade",
+    "metric_modality_test_content_sha256": "0247d6b649276efa5ca06789f931aea5be16220530c0c9da2f888750871bfd1c"
+  },
+  "execution": {
+    "class": "DETERMINISTIC_LOCAL_SOURCE_UNIT_TEST_ONLY",
+    "command": "python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate tests.test_trigger1_jspace_metric_modality_v4",
+    "tests_run": 19,
+    "tests_passed": 19,
+    "tests_failed": 0,
+    "tests_errors": 0,
+    "status": "PASS",
+    "stderr_sha256": "618d413f90c6bf61579e3fefedba63ce0a53013063d33fe0097f3acd70f56fd9",
+    "network_dependency": false,
+    "provider_calls": 0,
+    "model_interventions": 0
+  },
+  "verified_invariants": [
+    "missing holdout.metric_uses_output_tokens fails scientific-independence and owner goal candidacy",
+    "non-boolean holdout.metric_uses_output_tokens fails scientific-independence and owner goal candidacy",
+    "counterbalanced token-output metric remains eligible when all other evidence is valid",
+    "existing 16 promotion-gate regressions remain green"
+  ],
+  "evidence_boundary": "Exact source/unit regression evidence only. This does not mint provider runtime, Qwen model, J-Space model-runtime, full HCU, whole EntityOS/HCU, training, whole-product, or canonical scientific truth credit.",
+  "credits": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  }
+}

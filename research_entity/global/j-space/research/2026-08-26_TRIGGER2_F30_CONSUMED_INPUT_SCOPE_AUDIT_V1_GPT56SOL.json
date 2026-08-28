@@ -1,0 +1,73 @@
+{
+  "schema": "CLAY_TRIGGER2_F30_CONSUMED_INPUT_SCOPE_AUDIT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_STATIC_SOURCE_AUDIT_NONPROMOTING",
+  "observed_main_before_write": "048595462de8c7f97491126cf2e07be6d0d4d180",
+  "audited_source": {
+    "commit": "f30bf2c8dc21a4a8f2a8f68e7a68d980f5f03476",
+    "path": "tools/trigger2_grid10_atomic_membership_cohort_acceptance_v1.py",
+    "supporting_snapshot_source": "tools/xeno_physical_grid10_acceptance_v2.py"
+  },
+  "question": "Does the current fused physical atomic membership fixture need a generic observed-read facade before any bounded source claim, or is its exact current task-selection input already structurally bound to the held read snapshot?",
+  "source_observations": [
+    "child_node opens the exact DB in SQLite read-only mode and begins an explicit read transaction via open_ro_snapshot.",
+    "open_ro_snapshot materializes epoch, generation, tasks, scopes and leases from that same open read transaction and hashes those covered S1 fields into state_digest.",
+    "child_node reads its active deterministic membership from the same SQLite connection while that read transaction remains open.",
+    "the task-selection helper _choose_task consumes only snapshot['tasks']; it performs no second DB/file/network read and deterministically selects from the materialized snapshot object.",
+    "the packet declares generation/epoch/state_digest from that same snapshot object and carries the selected task_id in payload.",
+    "the barrier ready record binds the same snapshot identity and membership id while the transaction remains open; parent procfs checks the exact S1 DB is still attached O_RDONLY at the barrier.",
+    "concurrent_probe launches the exact script path supplied by the parent with fixed child arguments and checks all children share the exact snapshot identity before release.",
+    "the current fixture has no model call, tokenizer input, external retrieval, tool result, file read, network input or other cognition-relevant channel beyond the covered deterministic fixture inputs."
+  ],
+  "bounded_conclusion": {
+    "classification": "NARROW_FIXTURE_TASK_SELECTION_INPUT_IS_SOURCE_BOUND_TO_HELD_S1_SNAPSHOT",
+    "claim": "For the exact f30bf2c test-only fixture, the task-selection semantic input is structurally derived from the same held read transaction whose covered tasks/scopes/leases/epoch/generation are included in state_digest. A separate generic read facade is therefore not required merely to support the narrow source claim that this fixture's task selection came from its held S1 snapshot.",
+    "not_proved": [
+      "repository-bound execution of f30bf2c",
+      "actual model-visible prompt/token bytes consumed by Qwen3.5",
+      "loader/checkpoint bytes consumed by a model runtime",
+      "external retrieval/tool/file/network inputs",
+      "all future Xeno cognition-relevant reads",
+      "generic hidden/unobserved read exclusion outside this exact child path",
+      "J-Space hidden-state input identity or causal use"
+    ],
+    "credit_added": 0
+  },
+  "bypass_discriminator_result": {
+    "status": "NARROW_BYPASS_NOT_PRESENT_IN_CURRENT_EXACT_CHILD_CONTROL_FLOW; GENERIC_BYPASS_CLASS_REMAINS_OPEN_FOR REAL_MODEL_PATH",
+    "reason": "A stale task read cannot be introduced through the audited child_node without changing the exact source/control flow because _choose_task only receives the snapshot materialized from the held transaction. But future model/retrieval/tool paths introduce additional inputs and must bind their actual delivered/consumed identities independently.",
+    "important_limit": "Source control-flow inspection is not runtime execution evidence. It narrows what a future negative must target; it does not mint physical GRID10 runtime credit."
+  },
+  "design_decision": {
+    "do_not_overengineer_current_fixture": true,
+    "decision": "Do not insert a generic observed-read facade into the current deterministic no-model fixture solely to duplicate its already source-bound task snapshot. Preserve the S-Bus-derived observed-read method as the stronger future gate for real model/retrieval/tool inputs.",
+    "next_consumed_input_boundary": "MODEL_VISIBLE_INPUT_AND_CHECKPOINT_CONSUMPTION",
+    "required_future_chain": "typed admitted task/evidence -> exact rendered model-visible input bytes/tokens -> exact tokenizer/template identity -> exact checkpoint/runtime/loader consumed identity -> model output digest -> NODE_RESULT semantic body -> deterministic membership/process/snapshot authority envelope -> atomic cohort admission"
+  },
+  "checkpoint_link": {
+    "current_gate": "tools/trigger2_qwen35_checkpoint_candidates_gate_v4.py",
+    "current_fact": "The gate explicitly keeps consumed_identity_match=UNPROVEN_BY_LOADER_PROBE_V1 and checkpoint selection unresolved; observed loading from a pinned local snapshot path is not consumed-byte attestation.",
+    "implication": "After the deterministic GRID10 source chain, checkpoint/model-visible consumed identity is now a higher-information Trigger-2 gate than adding generic read instrumentation to the no-model fixture."
+  },
+  "training_eval_reinjection": {
+    "positive_rows_added": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "hard_boundary": "Never infer consumed model input from declared packet metadata, source path presence, loader activity or prompt construction alone. Bind what the model runtime actually consumed at the claimed scope."
+  },
+  "credits": {
+    "research_delta": 1,
+    "static_source_scope_narrowing": 1,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Advance the Qwen3.5 candidate/input chain from loader-activity-only to selection-grade consumed identity: bind exact checkpoint manifest/tokenizer/template/runtime identity and exact model-visible rendered input bytes/tokens to the model call/output receipt. Keep checkpoint winner null until matched evaluation and consumed identity both close. Do not add training rows or provider execution."
+}

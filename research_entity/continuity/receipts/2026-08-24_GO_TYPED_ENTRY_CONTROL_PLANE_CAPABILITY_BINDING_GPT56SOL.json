@@ -1,0 +1,86 @@
+{
+  "schema": "ENTITYOS_HCU_GO_TYPED_ENTRY_CONTROL_PLANE_CAPABILITY_BINDING/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+    "mode": "FREE_ONLY",
+    "main_observed_before_receipt": "8d6e9e918b00861f45a6958a32ff28d01294eab2",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_pr_head_after_delta": "eda3d0c2c6eeff9df598fb386f209155ea2d5bd7"
+  },
+  "frontier_finding": {
+    "problem": "Typed Entry accepted externally supplied admitted_capabilities and expected_capability_binding_sha256 but the active HCU donor lane had no concrete producer binding that view to canonical session/generation state. Historical EffectGate exposed real-effect capabilities, but directly copying those into Entry would create an unsafe authority-domain conflation.",
+    "counterhypothesis_rejected_by_review": "Treat EffectGate.available_capabilities as the Entry admitted-capability set.",
+    "reason_rejected": "That would let Typed Entry carry effect capability names and risks a second effect-authority path; EffectGate/EffectJournal must remain the only real-effect authority."
+  },
+  "source_delta": {
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "adapter": {
+      "path": "the artefact/MicroEntity/hcu/control_plane_capability_binding_v1.py",
+      "git_blob_sha": "4409f4a344e2141bc1f288172a50f525577dc3b7",
+      "role": "read-only deterministic adapter over canonical session/generation state plus EffectGate capability context; not a second permission/effect authority"
+    },
+    "tests": {
+      "path": "the artefact/MicroEntity/hcu/test_control_plane_capability_binding_v1.py",
+      "git_blob_sha": "c6e07341a9d30cf4dcc03ce8a3b5112fceebb199",
+      "execution_status": "NOT_EXECUTED_THIS_MACROCYCLE"
+    },
+    "invariants": [
+      "canonical session owner and live generation are read from the canonical DB before Entry admission",
+      "EffectGate must share the exact canonical DB object used for the capability projection",
+      "Typed Entry admitted capabilities remain the deterministic cognitive set hcu.route + memory.read",
+      "EffectGate capabilities are bound as observed control-plane context but are never copied into Entry admitted capabilities",
+      "generic process.exec exposure fails closed",
+      "trusted ingress source_kind and source_id must match the untrusted Entry claims before Typed Entry admission",
+      "session/user/generation and capability context are included in the RFC8785/JCS capability-binding digest",
+      "an Entry can narrow but cannot mint effect capability authority"
+    ]
+  },
+  "adversarial_review": {
+    "first_repair": "Prevent effect capability names such as entityos.exec/state.noop from becoming Typed Entry authority even when EffectGate legitimately exposes them.",
+    "second_repair": "Prevent untrusted source_kind/source_id relabeling from bypassing authenticated ingress identity.",
+    "remaining_question": "The internal cognitive capability policy is still a source candidate in PR1263 and requires fusion/admission review against the exact current EntityOS control-plane policy before canonical promotion."
+  },
+  "budget_authority_review": {
+    "finding": "Typed Entry admitted_budget remains an externally supplied authority view. GRID10 later consumes the packet budget fail-closed, but that does not establish the initial budget producer.",
+    "capacity_guard_boundary": "Current HCU capacity_guard explicitly prevents source/planning topology numbers from minting runtime capacity without an exact authorized-isolated measurement receipt.",
+    "decision": "NO_ARBITRARY_BUDGET_PRODUCER_ADDED",
+    "required_next_mechanism": "Bind admitted_budget to deterministic EntityOS compute-control authority backed by admitted measured capacity/policy; until then do not infer model-call/token/wall-time authority from planning targets."
+  },
+  "experiment_coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "reproducible_atomic_trigger_key": null,
+    "atomic_lease_acquired": false,
+    "new_unusual_experiments_executed": 0,
+    "status": "COORDINATION_BLOCKED_ZERO_NEW_UNUSUAL_EXPERIMENTS",
+    "action": "A proposed cross-session alias intervention was not executed and its separate experiment-only source file was deleted after supervisor 8.63 became current."
+  },
+  "track_status": {
+    "track_a_entityos_executable_convergence": "NO_NEW_RUNTIME_CREDIT; parallel retained PR810 J-Space binder invocation remained pre-function protected-preview admission work, so this organ did not fork a second executor.",
+    "track_b_hcu_typed_entry": "SOURCE_DELTA_ADVANCED capability/session/ingress authority binding without importing EffectGate effect rights into Entry.",
+    "track_c_global_jspace_gwt": "NO_CHANGE_WITH_REASON: current exact J-Space inference-binding v2 + GRID10 execution lane is already active in retained PR810/PR1263 work; this organ avoided duplicate implementation/execution and Together remains forbidden."
+  },
+  "remaining_blockers": [
+    "admitted_budget lacks a canonical deterministic producer tied to admitted measured capacity/policy",
+    "capability adapter and tests are source candidates in PR1263 and have not received exact authorized FREE Sandbox runtime evidence",
+    "current supervisor-wide executable frontier remains J-Space inference-binding v2 + GRID10 closure and then the full Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT causal spine",
+    "unusual interventions remain blocked until a reproducible trigger identity and successful create-only atomic lease exist"
+  ],
+  "execution_credit": {
+    "authorized_free_sandbox_execution_for_this_delta": false,
+    "source_review_only": true,
+    "entityos_hcu_runtime_credit_change": 0,
+    "hcu_full_runtime_credit_change": 0,
+    "jspace_model_runtime_credit_change": 0,
+    "training_credit_change": 0,
+    "whole_product_pass": false
+  },
+  "migration_reuse_score": "EASIER",
+  "next_exact_gate": "Review/fuse the adapter against exact-current EntityOS deterministic control-plane policy without importing a second authority, then bind admitted_budget to measured deterministic compute-control authority. Runtime-test these deltas only through admitted fixed exact-source FREE capsules and without consuming an unleased unusual intervention. Current supervisor-wide priority remains the exact J-Space inference-binding v2 + GRID10 closure and full Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT causal spine."
+}

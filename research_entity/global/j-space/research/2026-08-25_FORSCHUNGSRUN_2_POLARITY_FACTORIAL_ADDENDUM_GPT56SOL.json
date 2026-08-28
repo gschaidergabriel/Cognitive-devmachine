@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_POLARITY_FACTORIAL_ADDENDUM/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "165678c47b29f42cde89eb3d19fabe2cd3ee73ee",
+  "parent_run2_audit": "research_entity/global/j-space/research/2026-08-25_FORSCHUNGSRUN_2_STRUCTURAL_PROMOTION_GATE_AUDIT_GPT56SOL.json",
+  "scope": "STATIC_FACTORIAL_AUDIT_OF_PROBE_QUERY_POLARITY_IN_THE_ALREADY_QUEUED_QWEN3_0_6B_STRUCTURAL_NATIVE_DISCRIMINATOR",
+  "execution": {
+    "new_model_intervention_executed": false,
+    "queued_structural_run_id": 32810213066,
+    "queued_recovery_run_id": 32811360359,
+    "reason": "Supervisor 8.78 forbids spawning duplicate self-hosted experiments while the frozen structural and recovery runs remain queued; this addendum changes no executable scientific source.",
+    "scientific_negative_inferred_from_queue": false
+  },
+  "observed_source": {
+    "case_generator_path": "tools/trigger1_structural_label_free_cases.py",
+    "case_generator_blob_sha": "66bb2f5cfccad602ee9c759961a369ab2c61be41",
+    "case_test_path": "tests/test_trigger1_structural_label_free_cases.py",
+    "case_test_blob_sha": "752dbe4e9fcf77cbceca55fdaf4d326f0dea7601",
+    "nuisance_residualizer_path": "tools/trigger1_nuisance_residualize.py",
+    "nuisance_residualizer_blob_sha": "aeec098dfa26b93d3edc376ec69fd846220184d7",
+    "case_count_per_split": 9,
+    "target_x_output_code_factorial": "EXACT_3X3",
+    "query_polarity_test_current_semantics": "EACH_TARGET_CONTAINS_BOTH_POLARITIES_ONLY_NOT_EQUAL_ORTHOGONAL_COUNTERBALANCE"
+  },
+  "finding": {
+    "id": "R2_B8_TARGET_QUERY_POLARITY_NOT_FACTORIALLY_INDEPENDENT",
+    "severity": "MATERIAL_FOR_ABSTRACT_STATE_PROMOTION",
+    "counts_per_split": {
+      "AFFIRMATIVE": {"positive_query": 2, "negated_query": 1},
+      "NEGATIVE": {"positive_query": 1, "negated_query": 2},
+      "NEUTRAL": {"positive_query": 2, "negated_query": 1}
+    },
+    "target_query_polarity_mutual_information_bits": 0.07278022578373265,
+    "best_target_accuracy_using_query_polarity_alone": 0.4444444444444444,
+    "balanced_target_prior_accuracy": 0.3333333333333333,
+    "observation": "The generator's polarity=(scenario+target_index)%2 rule makes NEGATIVE probe queries negated in 2/3 cases while AFFIRMATIVE and NEUTRAL are negated in only 1/3 cases. The current unit test verifies only that both Boolean values occur for every target; it does not require target and query polarity to be statistically independent.",
+    "residualization_gap": "QUERY_POLARITY is not one of the four required nuisance families (CANONICAL_LABEL_LEXEME, SEMANTIC_SYNONYM_LEXICON, GENERIC_INSTRUCTION_COMPLIANCE, OUTPUT_CODE_IDENTITY). Therefore calibration class means may retain a probe-polarity component even after the current nuisance projection.",
+    "claim_boundary": "This source-level confound does not prove that the queued native causal result will fail or that a future PASS is entirely explained by polarity. Opaque output-code rotation and the causal matrix reduce the plausibility of a pure polarity-only explanation. It does mean the current 9-case design cannot by itself establish a fully counterbalanced target-internal-state axis free of probe-polarity information."
+  },
+  "successor_factorial": {
+    "name": "TARGET_X_CODE_X_QUERY_POLARITY_COMPLETE_FACTORIAL",
+    "minimum_cases_per_split": 18,
+    "construction": "Use three Latin-square output-code mappings crossed with two independent probe-polarity phases. For every semantic target and every opaque code A/B/C, include exactly one positive-query and one negated-query probe.",
+    "required_invariants": [
+      "Every target x output_code x query_polarity cell occurs exactly once or an equal preregistered replicate count.",
+      "Target-query-polarity mutual information is exactly zero by construction before model execution.",
+      "Calibration and holdout remain lexically disjoint outside the frozen structural whitelist.",
+      "No canonical semantic labels or listed synonyms are model-facing.",
+      "Demo polarity scheduling is independently counterbalanced so probe polarity cannot be inferred from a global phase token/format shortcut.",
+      "Output-code identity remains exactly counterbalanced within every target and polarity stratum.",
+      "Add a deterministic regression that fails if any target has unequal positive/negated counts or if any target x code pair lacks both polarities."
+    ],
+    "defense_in_depth_control": "Report an explicit matched QUERY_POLARITY nuisance/control contrast on calibration and holdout even though the complete factorial should make it orthogonal by design; do not tune the semantic vector or gain on holdout using this control."
+  },
+  "integration_with_parent_run2_audit": {
+    "promotion_rule": "R2_B8 is additive to the already recorded Run-2 blockers. Even if the queued 9-case structural run passes, classify it as bounded label-free structural native component evidence only. Canonical semantic J-Space promotion remains blocked until the stricter successor also fixes the parent audit's per-target positivity, true sign-flip reversal, frozen/preregistered gain, geometry-null, off-target and cross-task-family requirements.",
+    "frozen_queued_run_modified": false
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_runtime_credit": 1,
+    "structural_label_free_native_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Do not dispatch a duplicate model run. Let the already queued structural run execute when the existing free self-hosted runner becomes live, preserve its result at bounded scope, then require an 18-cell-per-split target x code x query-polarity complete-factorial successor together with the parent Run-2 strict promotion gates before any canonical semantic J-Space claim."
+}

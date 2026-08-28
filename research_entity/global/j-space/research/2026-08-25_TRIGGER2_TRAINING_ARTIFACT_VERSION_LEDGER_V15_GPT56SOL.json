@@ -1,0 +1,153 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v15",
+  "date": "2026-08-25",
+  "local_trigger_time": "21:28+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V14_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V14",
+  "revision_reason": "This trigger cycle re-entered moving main, confirmed Supervisor 8.78 Priority 2, and implemented the existing A02 producer-auth contract exactly once on main: authority-pinned producer/policy, exact receipt reconstruction, a retained v4 composition, and the required adversarial mutation source tests. Positive data remains closed because exact-current deterministic execution on the admitted FREE_ONLY execution surface has not been observed.",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_v15_write": "f15dcfa8f8c83468d3ec51dbac1bba6b5a0607e5",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE + strongest causally evidenced Global J-Space bridge",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "source_delta": [
+    {
+      "artifact_id": "T2-A02-DISCRIMINATOR-PRODUCER-V1",
+      "path": "tools/trigger2_a02_discriminator_producer_v1.py",
+      "status": "CURRENT_SOURCE_IMPLEMENTATION_NONPROMOTING_EXECUTION_UNOBSERVED",
+      "commit": "df22782a1da2c05e67e3be8eaf73ceac62492b27",
+      "purpose": "Derive synthetic admissibility/execution/coverage and execution receipt identity from pinned policy plus retained v3 u_test_order semantics."
+    },
+    {
+      "artifact_id": "T2-A02-DISCRIMINATOR-PRODUCER-AUTHORITY-V1",
+      "path": "research_entity/global/j-space/research/TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTHORITY_V1.json",
+      "status": "CURRENT_SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING_EXECUTION_UNOBSERVED",
+      "commits": [
+        "5e298033b64348f746f7d7c2593a9ce9623b0e4b",
+        "8484832580fa338c465f3fa1296c9fb9645e4736"
+      ],
+      "purpose": "Bind producer path/source SHA/schema plus the bounded case and formal discriminator policy/spec; candidate fields have zero authority."
+    },
+    {
+      "artifact_id": "T2-A02-PRODUCER-AUTH-GATE-V1",
+      "path": "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "status": "CURRENT_SOURCE_IMPLEMENTATION_NONPROMOTING_EXECUTION_UNOBSERVED",
+      "commit": "d53d18c956ec22438f4edff5170bfba4229538aa",
+      "purpose": "Reconstruct expected authority-derived receipt and require exact equality with the transported receipt while preserving zero-credit fences."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-GENERATION-A02-EPISTEMIC-STATE-HISTORY-GATE-V4",
+      "path": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py",
+      "status": "CURRENT_RETAINED_SUCCESSOR_SOURCE_CANDIDATE_NONPROMOTING_EXECUTION_UNOBSERVED",
+      "commit": "ce23698478f66bb4ee5e501bca6b68e40c8945d9",
+      "predecessor": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+      "required_order": [
+        "GENERATION_PROVENANCE",
+        "A02_DISCRIMINATOR_PRODUCER_AUTH",
+        "EPISTEMIC_PREUPDATE_ADMISSION",
+        "REPLAY_STATE_HISTORY_RETAINED_HYPERPOSITION_SEMANTICS"
+      ],
+      "second_semantic_authority_created": false
+    },
+    {
+      "artifact_id": "T2-A02-MUTATION-SUITE-V1",
+      "path": "tests/test_trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "status": "CURRENT_TEST_SOURCE_EXECUTION_UNOBSERVED",
+      "commit": "54a745a7b270da602952d674749fef587317824f",
+      "required_mutations_present": [
+        "T2_SHPG_A02_FAKE_EXECUTED",
+        "T2_SHPG_A02_COHERENT_RECEIPT_REWRITE",
+        "T2_SHPG_A02_PRODUCER_PATH_OR_SHA_SWAP",
+        "T2_SHPG_A02_POLICY_SWAP",
+        "T2_SHPG_A02_PRESTATE_REWRITE",
+        "T2_SHPG_A02_WORLD_SCOPED_EVENT_REWRITE",
+        "T2_SHPG_A02_COVERAGE_REWRITE"
+      ]
+    },
+    {
+      "artifact_id": "T2-V4-ORDER-AND-ZERO-CREDIT-TESTS",
+      "path": "tests/test_trigger2_hyperposition_state_history_generation_bound_gate_v4.py",
+      "status": "CURRENT_TEST_SOURCE_EXECUTION_UNOBSERVED",
+      "commit": "f15dcfa8f8c83468d3ec51dbac1bba6b5a0607e5"
+    }
+  ],
+  "artifact_lifecycle_overrides": [
+    {
+      "artifact_id": "T2-LEDGER-V14",
+      "status": "SUPERSEDED",
+      "successor": "T2-LEDGER-V15",
+      "revision_reason": "V14 correctly identified A02 implementation as open; v15 records the source implementation without upgrading runtime or training credit."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+      "status": "SUPERSEDED_AS_CURRENT_WHOLE_COMPOSITION_REUSED_BY_SUCCESSOR_CHAIN",
+      "successor": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py",
+      "revision_reason": "v4 inserts authority-pinned A02 producer authentication before the existing epistemic/state-history path."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTH_CONTRACT_V1_GPT56SOL.json",
+      "status": "CURRENT_CONTRACT_IMPLEMENTED_AT_SOURCE_LEVEL_EXECUTION_UNOBSERVED",
+      "successor": "exact-current A02 mutation execution receipt"
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "revision_reason": "Supervisor 8.78 conditional nuisance leakage remains dispositive."
+    },
+    {
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE 2026-08-24 supervisor 8.63",
+      "status": "STALE_AS_CURRENT_AUTHORITY_USEFUL_BOOTSTRAP_DONOR",
+      "successor": "BOOTSTRAP_MINIMAL 8.78 + SUPERVISOR_STEERING_8_78"
+    }
+  ],
+  "execution_evidence": {
+    "author_side_syntax_preflight": "PERFORMED_NONPROMOTING",
+    "exact_current_repository_bound_a02_test_execution": "NOT_OBSERVED",
+    "live_free_vps_execution_surface": "OBSERVED_BY_SUPERVISOR_8_78_BUT_NOT_INVOKABLE_FROM_THIS_ORGAN_TOOLSET",
+    "github_actions_zero_step_class": "NEGATIVE_INFRASTRUCTURE_EVIDENCE_NOT_SEMANTIC_NEGATIVE",
+    "runtime_credit_minted": 0
+  },
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "A02 source closure materially advanced the blocker, but Supervisor 8.78 requires exact-current executable mutation proof before any new positive pilot. Additional rows now would outrun evidence authority."
+  },
+  "current_frontier": {
+    "p0": "EXECUTE_EXACT_CURRENT_A02_MUTATION_SUITE_ON_ADMITTED_FREE_VPS_AND_BIND_RECEIPT_TO_HEAD_TREE_SOURCE_HASHES",
+    "after_pass": [
+      "rebind a small native-seed pilot to exactly the retained v4 proof path",
+      "bind immutable genesis/ordered-history producer authority before nonempty-history positives",
+      "authenticate OBSERVED evidence producer before OBSERVED positives",
+      "run rendered nuisance full-cross-or-conditional-MI family/provenance split tokenizer-ABI gates",
+      "only then allow a small family-disjoint positive D/E/Epistemic pilot into Forge/Distillery admission"
+    ]
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_delta": 1,
+    "source_implementation_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "trigger2_discriminator_producer_auth_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "On the admitted live FREE_ONLY Clay VPS, clean-checkout exact current main, verify producer authority source SHA, run the focused A02 producer-auth and v4 ordering/mutation tests, and write a head/tree/source-hash-bound receipt. Do not generate positive rows before that exact pass."
+}

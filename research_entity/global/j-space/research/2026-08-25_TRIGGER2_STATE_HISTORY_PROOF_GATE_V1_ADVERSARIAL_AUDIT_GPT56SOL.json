@@ -1,0 +1,199 @@
+{
+  "schema": "CLAY_TRIGGER2_STATE_HISTORY_PROOF_GATE_V1_ADVERSARIAL_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CURRENT_NEGATIVE_AND_PARTIAL_POSITIVE_RESEARCH_DELTA_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "2950e27b1f29a4171768cbc67346f0cd137d0c09",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audited_source": {
+    "path": "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+    "blob_sha": "26745fdeee5e552ece4a7c9efe4a785ec9483ec5",
+    "classification": "CURRENT_PARTIAL_P0_ADVANCE_NEEDS_REVISION_BEFORE_POSITIVE_PROMOTION"
+  },
+  "audited_tests": {
+    "path": "tests/test_trigger2_hyperposition_state_history_proof_gate_v1.py",
+    "blob_sha": "73186bb2fb41c1bd5e2079e5b5b7fef81e5fb926",
+    "classification": "CURRENT_SOURCE_TESTS_SCOPE_LIMITED_EXECUTION_UNOBSERVED",
+    "execution_observed_by_this_audit": false
+  },
+  "closed_or_materially_advanced": [
+    {
+      "id": "ADV_REPLAY_FROM_CLEAN_GENESIS",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "The gate reconstructs state from a clean genesis plus ordered row-carried history and rejects supplied state_before when it is not exactly equal to the replay result. This directly blocks a simple preseeded-FALSIFIED/synthetic prior-state forgery."
+    },
+    {
+      "id": "ADV_EVENT_SEMANTIC_DIGEST_ON_RECORDS",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "The gate computes a semantic event digest, checks it against an event digest registry, detects same-id/different-digest reuse within the adjudication, and decorates derived evidence records with event_sha256."
+    },
+    {
+      "id": "ADV_DERIVED_INDEPENDENCE_REUSED",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "Caller independence_qualified is overwritten using the retained derivation-bound gate v2 derivation before the v3 labeler update."
+    },
+    {
+      "id": "ADV_DISCRIMINATOR_COVERAGE_RECOMPUTED",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "The gate requires a typed discriminator receipt and mechanically recomputes pair-separation counts through u_test_order; resolved competitors must cite digest-bound event IDs with receipts."
+    },
+    {
+      "id": "ADV_OBSERVED_REQUIRES_TYPED_SHAPE",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "Events typed OBSERVED require exactly one typed observation receipt with matching event digest and authority fences."
+    }
+  ],
+  "remaining_p0_findings": [
+    {
+      "id": "P0_GENERATION_PROVENANCE_STILL_ROW_CONTROLLED",
+      "reality_level": "R0_SOURCE_OBSERVED_PLUS_R1_CONSEQUENCE",
+      "finding": "The gate consumes formal world, dependence registry, event digest registry, event history and receipts from the candidate row. It delegates source binding to derivation-bound gate v2, whose expected generator path is still obtained from the row binding. No generator-produced output manifest or deterministic reconstruction binds those exact evaluator objects to the verified generator invocation.",
+      "impact": "A coherent event/world/registry/receipt/claimed-target substitution can move together while remaining internally consistent. The new replay check proves consistency of supplied history, not origin of that history.",
+      "existing_nonduplicate_successor_input": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_GENERATION_PROVENANCE_BINDING_SPEC_V1_GPT56SOL.json",
+      "required_fix": "Consume one authority-resolved generation receipt/source manifest or deterministically rebuild evaluator subjects from pinned generator inputs inside the retained gate."
+    },
+    {
+      "id": "P0_DISCRIMINATOR_ADMISSIBLE_EXECUTED_ARE_ASSERTED_BOOLEANS",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "_validate_discriminator_receipt rejects admissible!=True or executed!=True but has no independent policy/executor source from which either value is derived. The receipt is row supplied; execution_receipt_id only has to be a nonempty string.",
+      "impact": "Typed shape is not execution proof. A caller can assert admissible=true and executed=true unless a stronger source-bound receipt producer is introduced.",
+      "required_fix": "Derive admissibility from an authority-bound discriminator policy/spec digest and bind execution to a deterministic execution result or trusted synthetic executor receipt whose subject/input/output digests are recomputed by the gate."
+    },
+    {
+      "id": "P0_OBSERVATION_RECEIPT_TYPED_BUT_NOT_EVIDENCE_AUTHENTICATED",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "For OBSERVED, the gate validates receipt schema, event digest, authority fences, and nonempty source/provenance/time/receipt_id strings, but it does not bind a source content digest, qualification-rule digest, source-produced observation identity, or independently recompute evidence qualification.",
+      "impact": "The previous naked boolean has become a typed container, but caller-created receipt strings can still syntactically authorize OBSERVED promotion at this gate boundary.",
+      "required_fix": "Require source identity + immutable source/observation digest + qualification rule identity/digest and recompute qualification; synthetic observations must remain explicitly synthetic."
+    },
+    {
+      "id": "P0_HISTORY_HAS_REPLAY_BUT_NO_IMMUTABLE_HISTORY_COMMITMENT",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "The ordered history is replayed as a row list, but the gate does not bind an immutable history root, prior root, append-only consistency proof, or source-manifest history identity. Multiple distinct histories that converge to the same supplied state can therefore remain provenance-ambiguous if each row is rebuilt self-consistently.",
+      "impact": "Replay equivalence to a supplied final state is weaker than proof of the exact historical lineage asserted for a training label.",
+      "required_fix": "Bind ordered (index,event_id,event_digest) history to an immutable source-generated root or equivalent exact source replay manifest; detect reorder/delete/insert even when final state is unchanged."
+    },
+    {
+      "id": "P0_EVENT_DIGEST_NOT_WORLD_SCOPED",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "event_semantic_sha256 hashes event schema/id/ancestry/group/payload/provenance/epistemic/test/outcome/authority fences but not world_id or an immutable world digest.",
+      "impact": "The same event_id and event fields can have the same event digest in two different formal worlds unless a higher-level registry scopes identity. That is too weak for a global replay-stable causal event identity claim.",
+      "required_fix": "Bind world_id plus world/source-manifest digest into event identity or explicitly scope the event registry key by immutable world identity."
+    }
+  ],
+  "remaining_p1_findings": [
+    {
+      "id": "P1_NON_RFC8785_CANONICALIZATION",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "The gate hashes json.dumps(sort_keys=True,separators=(',',':'),ensure_ascii=False) output rather than the already-admitted RFC8785/JCS canonicalization component.",
+      "impact": "Python-local determinism may be sufficient for narrow current fixtures, but cross-language/ABI number/string serialization equivalence is not proven. Proof identities should converge on the existing canonicalization authority rather than creating a second serializer contract.",
+      "required_fix": "Use the admitted JCS canonicalizer or prove byte-for-byte equivalence over the full allowed schema domain."
+    },
+    {
+      "id": "P1_CURRENT_TESTS_DO_NOT_COVER_COHERENT_MULTI_OBJECT_FORGERY",
+      "reality_level": "R0_SOURCE_OBSERVED",
+      "finding": "Current tests cover isolated event mutation, preseeded state, unexecuted/outcome/coverage flags and missing typed observation receipt. They do not demonstrate rejection when event + dependence registry + digest registry + discriminator receipt + claimed target are coherently rewritten together, nor do they prove receipt producer authenticity.",
+      "impact": "Green source tests would not yet establish closure of the remaining provenance root even if execution later passes."
+    }
+  ],
+  "highest_information_mutation_capsule": {
+    "name": "COHERENT_PROVENANCE_AND_RECEIPT_FORGERY_CAPSULE",
+    "ordinary_or_unusual": "ORDINARY_DETERMINISTIC_SOURCE_TEST",
+    "cases": [
+      {
+        "id": "T2_SHPG_A01_COHERENT_EVENT_REGISTRY_RECEIPT_REWRITE",
+        "mutation": "Reuse event_id; change a semantic event field and coherently update dependence registry, digest registry, discriminator receipt digests/world hash, and claimed target.",
+        "expected_after_correct_fix": "FAIL_GENERATION_OR_EVENT_IDENTITY_PROVENANCE_CONFLICT",
+        "current_execution_status": "NOT_EXECUTED_BY_THIS_AUDIT"
+      },
+      {
+        "id": "T2_SHPG_A02_FAKE_EXECUTED_TRUE",
+        "mutation": "Provide admissible=true, executed=true and an arbitrary nonempty execution_receipt_id without an independently bound executor result.",
+        "expected_after_correct_fix": "FAIL_EXECUTION_PROOF_MISSING",
+        "current_execution_status": "NOT_EXECUTED_BY_THIS_AUDIT"
+      },
+      {
+        "id": "T2_SHPG_A03_FAKE_OBSERVATION_RECEIPT",
+        "mutation": "For an OBSERVED event provide syntactically valid source/provenance/time strings and matching event digest but no immutable source evidence or qualification-rule proof.",
+        "expected_after_correct_fix": "FAIL_OBSERVATION_EVIDENCE_PROOF_MISSING",
+        "current_execution_status": "NOT_EXECUTED_BY_THIS_AUDIT"
+      },
+      {
+        "id": "T2_SHPG_A04_HISTORY_EQUIVALENT_FINAL_STATE_DIFFERENT_LINEAGE",
+        "mutation": "Insert or reorder idempotent/non-effectful history events while preserving the same final replayed state and rebuilding row-local registries/receipts.",
+        "expected_after_correct_fix": "FAIL_HISTORY_COMMITMENT_MISMATCH",
+        "current_execution_status": "NOT_EXECUTED_BY_THIS_AUDIT"
+      },
+      {
+        "id": "T2_SHPG_A05_CROSS_WORLD_EVENT_ID_REUSE",
+        "mutation": "Reuse the same event_id/event semantic payload under a different immutable world identity.",
+        "expected_after_correct_fix": "FAIL_EVENT_WORLD_IDENTITY_SCOPE_CONFLICT_OR_EXPLICITLY_SCOPED_REGISTRY_REQUIRED",
+        "current_execution_status": "NOT_EXECUTED_BY_THIS_AUDIT"
+      }
+    ]
+  },
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+      "version": "v1",
+      "status": "CURRENT_PARTIAL_P0_ADVANCE_NEEDS_REVISION",
+      "predecessor": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+      "successor": "same retained gate lane with generation/source manifest, authenticated discriminator/observation receipts, world-scoped event identity and immutable history commitment",
+      "revision_reason": "Substantially improves replay/digest/coverage structure but row-supplied proof objects remain insufficiently origin-bound for positive training promotion."
+    },
+    {
+      "artifact": "tests/test_trigger2_hyperposition_state_history_proof_gate_v1.py",
+      "version": "v1",
+      "status": "CURRENT_NEEDS_ADVERSARIAL_EXTENSION_EXECUTION_UNOBSERVED",
+      "predecessor": null,
+      "successor": "same test lane plus T2_SHPG_A01..A05 and exact-current execution receipt",
+      "revision_reason": "Current tests cover important isolated mutations but not coherent proof-root forgery or external receipt authenticity."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_STATE_HISTORY_PROOF_ENVELOPE_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_COMPLEMENTARY_RESEARCH_SPEC_NONPROMOTING",
+      "predecessor": "state-proof audits",
+      "successor": "implemented converged proof ABI",
+      "revision_reason": "Its source/world/history/discriminator/observation requirements remain complementary to the newly landed gate and identify the exact residual closure work."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_GENERATION_PROVENANCE_BINDING_SPEC_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_COMPLEMENTARY_RESEARCH_SPEC_NONPROMOTING",
+      "predecessor": "generation provenance reentry finding",
+      "successor": "implemented generator receipt/reconstruction in retained gate lane",
+      "revision_reason": "Directly closes the source-vs-produced-evaluator-object gap observed here; do not duplicate its receipt authority."
+    }
+  ],
+  "generation_decision": {
+    "new_positive_D_E_rows": 0,
+    "new_duplicate_hard_negative_rows": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "The gate itself is now the highest-information object. Existing hard-negative blueprints already cover the conceptual families; add executable mutation tests rather than corpus volume."
+  },
+  "credits": {
+    "research_delta": 1,
+    "adversarial_audit_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "source_runtime_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Extend the single retained state-history gate lane with authority-resolved generation receipt/source-manifest binding; derive discriminator admission/execution from bound proof producers rather than receipt booleans; strengthen typed observation evidence; world-scope event identity; bind ordered history; add T2_SHPG_A01..A05; execute exact-current deterministic tests before any positive pilot regeneration."
+}

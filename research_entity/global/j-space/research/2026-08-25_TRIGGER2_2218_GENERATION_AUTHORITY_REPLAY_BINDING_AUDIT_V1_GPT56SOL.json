@@ -1,0 +1,92 @@
+{
+  "schema": "CLAY_TRIGGER2_GENERATION_AUTHORITY_REPLAY_BINDING_AUDIT/v1",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:18+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "1df97f7b8ac851180ef5c82971275360b5c937b7",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audit_basis": [
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V18_GPT56SOL.json",
+    "tools/trigger2_generation_provenance_gate_v1.py@1df97f7b8ac851180ef5c82971275360b5c937b7",
+    "research_entity/global/j-space/research/TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json@1df97f7b8ac851180ef5c82971275360b5c937b7",
+    "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py",
+    "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py"
+  ],
+  "finding": {
+    "id": "T2_A03_GENERATION_AUTHORITY_MANIFEST_REPLAY_BINDING",
+    "reality_level": "R0_SOURCE_OBSERVATION_PLUS_R1_REPLAY_INFERENCE",
+    "source_observation": "trigger2_generation_provenance_gate_v1 resolves TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json from a repository path, verifies the authority-selected generator source_sha256, reconstructs subjects and recomputes XENO_SYNTHETIC_GENERATION_RECEIPT/v1. The receipt binds generator identity, invocation parameter/material digests, subject digests, semantic scope and zero-credit fences. At exact current source identity it does not include the authority manifest's own blob identity or JCS/SHA-256 digest.",
+    "authority_manifest_git_blob_sha": "2380ba0cbe40429c0d0ff339334ed9723dd34102",
+    "generation_gate_git_blob_sha": "9b9739319125c3b326dc0df4f8691dc02db7f550",
+    "classification": "NEEDS_DISCRIMINATION_FOR_DURABLE_HISTORICAL_REPLAY_NOT_A02_REOPEN"
+  },
+  "hypothesis": "An admitted row or historical replay object that carries only XENO_SYNTHETIC_GENERATION_RECEIPT/v1 can become authority-time-dependent if the authority manifest later changes while retaining the same path/schema, because the receipt itself does not identify the exact authority-manifest bytes that authorized the case/subjects.",
+  "counterhypothesis": "Row-level authority-manifest identity is redundant because every dataset admission and later replay is always wrapped by a mandatory exact repository HEAD/tree/source-hash receipt that preserves the historical authority bytes.",
+  "resolution_rule": "Do not choose between these by convenience. If downstream dataset admission/replay provably requires and verifies an immutable outer HEAD/tree envelope that includes the authority manifest, document that as the replay root. Otherwise bind authority_manifest_sha256_or_blob_identity into the generation receipt and invocation identity.",
+  "cheapest_high_information_discriminator": {
+    "id": "T2_A03_AUTHORITY_DRIFT_MUTATION",
+    "type": "DETERMINISTIC_NONPROMOTING_MUTATION_TEST",
+    "mutation": "Replace the trusted generation-authority manifest with a schema-valid successor that changes an allowed case/subject authority and coherently regenerate candidate subjects/receipt under the new manifest while retaining the same authority path.",
+    "required_result": "Historical receipt verification must reject unless the exact historical authority-manifest identity is independently bound by the receipt or by a mandatory verified outer exact-head/tree replay envelope.",
+    "unusual_experiment": false,
+    "provider_execution": false,
+    "training_execution": false
+  },
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "tools/trigger2_generation_provenance_gate_v1.py",
+      "status": "CURRENT_COMPONENT_SOURCE_NEEDS_REPLAY_ROOT_PROOF_OR_SUCCESSOR_REVISION",
+      "reason": "Generator executable bytes are pinned, but authority-manifest bytes are not represented inside XENO_SYNTHETIC_GENERATION_RECEIPT/v1."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json",
+      "status": "CURRENT_SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING",
+      "reason": "No claim that its content is wrong; the issue is exact historical identity binding at replay."
+    },
+    {
+      "artifact": "A02 producer/policy source closure",
+      "status": "CURRENT_SEPARATE_SCOPE_NOT_REOPENED",
+      "reason": "Recent policy-digest/source-lineage hardening concerns the A02 discriminator producer. A03 is an upstream generation-authority replay-root question."
+    },
+    {
+      "artifact": "2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V18_GPT56SOL.json",
+      "status": "CURRENT_LEDGER_NONCANONICAL_NEEDS_NEXT_REENTRY_TO_INCORPORATE_A03_IF_NOT_SUPERSEDED_IN_PARALLEL",
+      "reason": "V18 does not explicitly classify the generation-authority manifest replay-root question."
+    }
+  ],
+  "training_generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "A02 exact-current repository-bound execution remains unobserved and A03 replay-root identity is unresolved. More row volume would not increase trustworthy training readiness."
+  },
+  "credits": {
+    "research_delta": 1,
+    "artifact_reclassification_delta": 1,
+    "runtime_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "First execute the exact-current A02 mutation/v4 suite on the admitted zero-cost repository-bound surface. Separately run T2_A03_AUTHORITY_DRIFT_MUTATION or prove the mandatory downstream outer exact-head/tree replay envelope before treating generation provenance as durable across authority evolution."
+}

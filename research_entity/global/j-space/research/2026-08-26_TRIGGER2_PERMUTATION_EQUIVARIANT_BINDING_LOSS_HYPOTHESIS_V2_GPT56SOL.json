@@ -1,0 +1,217 @@
+{
+  "schema": "CLAY_TRIGGER2_PERMUTATION_EQUIVARIANT_BINDING_LOSS_HYPOTHESIS/v2",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CURRENT_NONCANONICAL_TRAINING_HYPOTHESIS_AND_SOURCE_GATE_DELTA",
+  "observed_main_before_write": "5d0f49613f983664dcddfcc6ebb72a25d40a0f58",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "NOT_PROVEN",
+    "training_execution_authorized": false,
+    "provider_execution_authorized": false,
+    "paid_fallback_authorized": false,
+    "current_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V49_GPT56SOL.json"
+  },
+  "supersedes_for_current_course_interpretation": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_PERMUTATION_EQUIVARIANT_BINDING_LOSS_HYPOTHESIS_V1_GPT56SOL.json",
+  "revision_reason": "V1's core permutation-equivariance idea remains useful, but its next action points to tools/trigger2_binding_router_factorial_generator_v3.py. Supervisor/current Trigger-2 authority now explicitly quarantines v3 from direct training because of model-visible conditional nuisance leakage. The repository already contains a stronger fully factorial v2.1 blueprint donor with all six mapping permutations, all six codebook orders and two layouts. V2 therefore preserves the mechanism hypothesis, rebases it onto the nontraining v2.1 donor, adds an executable deterministic blueprint-level equivariance/leakage gate, and keeps all rendered/model/training credit closed.",
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_PERMUTATION_EQUIVARIANT_BINDING_LOSS_HYPOTHESIS_V1_GPT56SOL.json",
+      "status": "SUPERSEDED_FOR_CURRENT_COURSE_BY_V2",
+      "reason": "core hypothesis retained; stale v3 execution dependency removed"
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "REMAINS_BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "reason": "conditional display-order nuisance leakage remains dispositive"
+    },
+    {
+      "artifact": "tools/trigger2_dynamic_binding_blueprint_v2.py",
+      "status": "RETAINED_FULLY_FACTORIAL_METHOD_ONLY_DONOR",
+      "known_scope": "9072 blueprint rows; 6912 train, 1728 validation, 432 frozen holdout; training_eligible=false; exact ABI/render/tokenizer gate still open"
+    },
+    {
+      "artifact": "tools/trigger2_dynamic_binding_equivariance_gate_v1.py",
+      "status": "NEW_SOURCE_GATE_COMMITTED_EXECUTION_RECEIPT_NOT_YET_OBSERVED",
+      "create_commit": "0b62fa9e286c9735ec03d24a639fc26066445719",
+      "scope": "deterministic blueprint-distribution equivariance and leakage only"
+    },
+    {
+      "artifact": "tests/test_trigger2_dynamic_binding_equivariance_gate_v1.py",
+      "status": "NEW_REGRESSION_TEST_SOURCE_COMMITTED_EXECUTION_RECEIPT_NOT_YET_OBSERVED",
+      "create_commit": "5d0f49613f983664dcddfcc6ebb72a25d40a0f58",
+      "coverage": [
+        "current v2.1 blueprint expected pass and exact group counts",
+        "causal target tamper fails closed",
+        "model-visible query target hint breaks semantic-ablation balance",
+        "hidden audit metadata cannot affect the projected-visible gate",
+        "missing crossing row fails order, mapping and layout invariants"
+      ]
+    }
+  ],
+  "deterministic_gate_design": {
+    "expected_rows": 9072,
+    "semantic_ablation_projected_visible_groups": 3024,
+    "expected_group_size": 3,
+    "preregistered_optimal_nuisance_lookup_accuracy": 0.3333333333333333,
+    "order_groups": 1512,
+    "mapping_equivariance_groups": 252,
+    "layout_groups": 4536,
+    "mapping_order_cell_size": 36,
+    "target_count_per_symbol_per_mapping_group": 12,
+    "projection_boundary": "The ablation signature retains projected model-visible ordered codebook, layout and query while removing semantic evidence and hidden generation metadata. This is not the final serialized Xeno/ClayCode renderer proof.",
+    "required_successor": "Repeat the same independence/equivariance claims over exact serialized production bytes after accepted ABI atoms, renderer and tokenizer/input identity are fixed."
+  },
+  "revised_output_only_objective": {
+    "notation": {
+      "p_e(s)": "model probability for current episode atom s, normalized over the three current codebook atoms",
+      "M_e(c)": "episode-local bijection from semantic class c to opaque current atom",
+      "q_e(c)": "inverse-mapped semantic probability q_e(c)=p_e(M_e(c))",
+      "c_star": "correct semantic class for the current evidence/query episode"
+    },
+    "mandatory_terms": [
+      {
+        "id": "L_CE",
+        "definition": "mean_e[-log q_e(c_star)]",
+        "purpose": "correct current-episode opaque-symbol emission through the realized mapping"
+      },
+      {
+        "id": "L_S3_EQ",
+        "definition": "symmetric divergence among inverse-mapped q_e distributions across fully crossed mapping counterfactuals sharing the same semantic episode",
+        "purpose": "semantic decision invariance under arbitrary episode-local renaming while emitted symbols transform with M_e"
+      },
+      {
+        "id": "L_ORDER_INV",
+        "definition": "consistency across all six codebook entry orders for fixed semantics, mapping and target",
+        "purpose": "prevent presentation-order shortcuts from becoming the learned router"
+      }
+    ],
+    "conditional_terms": [
+      {
+        "id": "L_LAYOUT_INV",
+        "status": "USE_ONLY_IF_BOTH_LAYOUTS_SURVIVE_PRODUCTION_RENDERER",
+        "purpose": "make evidence/query layout a nuisance rather than a target cue"
+      },
+      {
+        "id": "L_TEMPLATE_EQ",
+        "status": "CALIBRATION_ONLY_NEVER_SEALED_HOLDOUT_TUNING",
+        "purpose": "target context invariance across semantically isomorphic template families"
+      }
+    ],
+    "diagnostic_not_default_training_term": {
+      "id": "CODEBOOK_LESION_UNCERTAINTY",
+      "reason": "A codebook-removed example is useful to detect global class->token priors, but forcing uniform output can conflate calibration, base-rate and malformed-input behavior. Keep it as a preregistered diagnostic until the exact production grammar establishes a justified training target."
+    },
+    "combined_hypothesis": "L = L_CE + lambda_s3*L_S3_EQ + lambda_order*L_ORDER_INV plus only preregistered calibration-selected optional terms. All weights freeze before sealed evaluation.",
+    "hidden_state_boundary": "No term assumes K0/K1/K2, L23, CVEC or any probe direction is a literal universal internal semantic coordinate. Positive J-Space labels remain forbidden without checkpoint-specific causal evidence."
+  },
+  "external_method_evidence": [
+    {
+      "source": "Wei et al. (2023), Symbol tuning improves in-context learning in language models, EMNLP 2023",
+      "url": "https://aclanthology.org/2023.emnlp-main.61/",
+      "method_input": "Training with arbitrary symbols can strengthen use of current input-label mappings and flipped labels.",
+      "boundary": "PaLM-family evidence; no Qwen3.5/Xeno model credit."
+    },
+    {
+      "source": "Jang et al. (2024), Rectifying Demonstration Shortcut in In-Context Learning, NAACL 2024",
+      "url": "https://aclanthology.org/2024.naacl-long.242/",
+      "method_input": "Models may rely on pretrained semantic priors instead of demonstration input-label relations, including settings with semantically unrelated labels.",
+      "boundary": "Supports explicit shortcut challengers; does not prove this project's mechanism."
+    },
+    {
+      "source": "Tao, Chen, Liu (2024), Inference and Verbalization Functions During In-Context Learning, Findings EMNLP 2024",
+      "url": "https://aclanthology.org/2024.findings-emnlp.957/",
+      "method_input": "Controlled interventions support a factorization between task inference and subsequent mapping/verbalization into the current label space.",
+      "boundary": "Supports factorized semantic/router evaluation; exact Xeno layer/mechanism remains unobserved."
+    },
+    {
+      "source": "Wu, Geiger, Milliere (2025), How Do Transformers Learn Variable Binding in Symbolic Programs?, arXiv:2505.20896",
+      "url": "https://arxiv.org/abs/2505.20896",
+      "method_input": "High behavioral accuracy can precede a systematic variable-binding mechanism; causal intervention distinguishes shallow heuristics from later routing mechanisms.",
+      "boundary": "Supports causal successor tests; no transfer of their model-internal mechanism to Qwen3.5."
+    }
+  ],
+  "counterhypotheses_and_falsifiers": [
+    {
+      "counterhypothesis": "The model learns a template-specific parser plus symbol-copy routine rather than a reusable binding operation.",
+      "falsifier": "Require frozen template-OOD and joint template+symbol OOD transfer after all source/render leakage gates pass."
+    },
+    {
+      "counterhypothesis": "Opaque atom handling is the true bottleneck, not semantic-to-codebook binding.",
+      "falsifier": "Score direct atom write/copy validity separately; router credit is conditional on semantic and atom-write prerequisites."
+    },
+    {
+      "counterhypothesis": "A global class->atom prior survives despite aggregate balance.",
+      "falsifier": "Complete mapping groups, exact codebook-flip sensitivity, semantic-ablation nuisance challenger and codebook-lesion diagnostic."
+    },
+    {
+      "counterhypothesis": "The equivariance loss makes predictions mutually consistent but consistently wrong.",
+      "falsifier": "L_CE and independent semantic decision accuracy remain mandatory; consistency alone grants zero binding credit."
+    },
+    {
+      "counterhypothesis": "The source factorial is clean but the production renderer/tokenizer reintroduces lexical, length, position or token-rank leakage.",
+      "falsifier": "Repeat leakage/equivariance audit on exact serialized bytes and token tensors under the exact selected checkpoint/tokenizer/renderer/input ABI before any admission."
+    },
+    {
+      "counterhypothesis": "Regularization harms ABSTAIN/unknown calibration or authority-boundary behavior.",
+      "falsifier": "Preregister retention floors for unknown/false/measurement-error/hypothesis/canonical discrimination and risk-coverage; failure blocks substrate promotion even if binding accuracy rises."
+    }
+  ],
+  "factorized_evaluation_contract": [
+    "semantic decision accuracy before mapping",
+    "exact atom validity/writeability",
+    "binding accuracy conditional on semantic+write prerequisites",
+    "mapping permutation equivariance and codebook-flip sensitivity",
+    "all-six-order invariance",
+    "layout invariance if production layout remains variable",
+    "semantic-ablation nuisance-only accuracy against preregistered 1/3 null",
+    "template-OOD, symbol-OOD and joint-OOD",
+    "greedy/constrained production decode",
+    "exact checkpoint/tokenizer/renderer/rendered-UTF8/input-tensor identity",
+    "post-training retention and authority-negative suite",
+    "checkpoint-specific causal rebinding lesion/patch/rescue before any positive J-Space promotion"
+  ],
+  "training_generation_decision": {
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens_delta": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null,
+    "reason": "Runtime quiescence is unresolved, training execution is unauthorized, v3 remains quarantined, exact production ABI/render/tokenizer evidence remains open, and the new gate is source-only until exact-current execution is observed."
+  },
+  "execution_decision": {
+    "providers": "DO_NOT_INVOKE",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "model_runtime_executed_this_cycle": false,
+    "vps_execution_executed_this_cycle": false,
+    "provider_execution_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "unusual_experiment_executed_this_cycle": false
+  },
+  "credits": {
+    "research_delta": 1,
+    "stale_training_dependency_corrected": 1,
+    "equivariance_gate_source_delta": 1,
+    "regression_test_source_delta": 1,
+    "equivariance_gate_execution_credit": 0,
+    "rendered_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Do not render or train from v3. Preserve the v2.1 blueprint plus equivariance gate as the current source-level binder donor. First close the upstream runtime-quiescence/control-plane gate. Separately, before any future binding admission, execute the committed equivariance tests on exact-current source and then reproduce the same nuisance/equivariance invariants over the exact production Xeno/ClayCode serialized bytes and token tensors under an admitted checkpoint/tokenizer/renderer/input identity. Only after those gates may a small candidate pilot be considered; accepted dataset tokens and training credit remain zero until independent admission."
+}

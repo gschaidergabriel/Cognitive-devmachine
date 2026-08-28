@@ -1,0 +1,49 @@
+{
+  "bag_of_words_shortcut_probe": {
+    "accuracy": 0.21176470588235294,
+    "accuracy_minus_mean_chance": -0.016176470588235292,
+    "folds": 5,
+    "mean_chance_accuracy": 0.22794117647058823,
+    "n": 170,
+    "note": "eq_text excludes the codebook block entirely (only the QUERY line remains), so this probe can only ever see which entity is asked about -- it directly tests whether entity NAME alone (independent of codebook content) predicts target, which it must not since atom assignment is freshly resampled per episode.",
+    "pass": true,
+    "per_fold_accuracy": [
+      0.11764705882352941,
+      0.23529411764705882,
+      0.29411764705882354,
+      0.20588235294117646,
+      0.20588235294117646
+    ]
+  },
+  "episodes_by_split": {
+    "HOLDOUT_FROZEN": 18,
+    "TRAIN": 60,
+    "VALIDATION": 36
+  },
+  "exact_full_permutation_n": [
+    2,
+    3
+  ],
+  "failures": [],
+  "holdout_atom_pool_disjoint_from_train_val": true,
+  "holdout_entity_namespace_disjoint_from_train_val": true,
+  "n_levels_covered": [
+    2,
+    3,
+    4,
+    6,
+    8,
+    12
+  ],
+  "overall_pass": true,
+  "reason_training_eligible_false": "placeholder ABI_ACCEPTED_ORDINAL atoms, no real tokenizer/atom-manifest binding, no admission gate run -- candidate/quarantined only per TRIGGERWORT_2 course Step 6.",
+  "rows": 1828,
+  "sampled_permutation_count": 6,
+  "schema": "CLAY_TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE/v1",
+  "split_counts": {
+    "HOLDOUT_FROZEN": 324,
+    "TRAIN": 940,
+    "VALIDATION": 564
+  },
+  "training_eligible": false
+}

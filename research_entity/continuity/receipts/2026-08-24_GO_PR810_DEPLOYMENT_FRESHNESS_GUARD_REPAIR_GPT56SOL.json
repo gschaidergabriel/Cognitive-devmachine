@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "1ce2ff7b1f4ae4d42546074186bfc7fc19ff757a",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; AVAILABLE_CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head": "b6fcb5e26b66f30951a308caf6f23df8192d4040"
+  },
+  "vercel_observation": {
+    "team": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "plan": "hobby",
+    "project": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "project_name": "dr-unterweger",
+    "newest_observed_deployment_id": "dpl_37MKrzWoXH7QNeaiBEtcHcfkXMaV",
+    "newest_observed_deployment_commit": "bb34db97bdc250ce63ae4beab3030d26c06b6bfc",
+    "newest_observed_deployment_state": "ERROR",
+    "deployments_newer_than_newest_observed": 0,
+    "exact_current_head_deployment_observed": false,
+    "exact_current_head_ready_observed": false,
+    "route_invoked": false,
+    "sandbox_runtime_executed": false
+  },
+  "predecessor_build_failure": {
+    "deployment_commit": "bb34db97bdc250ce63ae4beab3030d26c06b6bfc",
+    "failure_stage": "VERCEL_BUILD_EXCLUSIVE_EXECUTOR_GUARD",
+    "runtime_or_function_invocation_reached": false,
+    "error_code": "ENTITYOS_HCU_JSPACE_GRID10_BINDING_CAPSULE_SUCCESSOR_MISSING",
+    "missing_markers": [
+      "const EXPECTED_TEST_COUNT = 14;",
+      "semanticMarkers.every((marker) => combined.includes(marker))",
+      "combined.includes('OK')"
+    ],
+    "classification": "PREDECESSOR_BUILD_GUARD_SOURCE_EXPECTATION_DRIFT_NOT_ENTITYOS_HCU_RUNTIME_FAILURE"
+  },
+  "current_head_source_repair": {
+    "base_predecessor": "bb34db97bdc250ce63ae4beab3030d26c06b6bfc",
+    "current_head": "b6fcb5e26b66f30951a308caf6f23df8192d4040",
+    "ahead_by_commits": 2,
+    "guard_path": "mcp/vercel-sandbox-mcp/scripts/guard-entityos-hcu-current-executor.mjs",
+    "route_path": "mcp/vercel-sandbox-mcp/api/hcu-jspace-grid10-binding-capsule.js",
+    "guard_route_marker_alignment_observed": [
+      "const EXPECTED_TEST_COUNT = EXPECTED_REGRESSION_TESTS.length;",
+      "EXPECTED_REGRESSION_TESTS.every(",
+      "line.trim() === 'OK'"
+    ],
+    "source_rebind_status": "SOURCE_REBOUND_READY",
+    "source_rebind_complete": true,
+    "exact_donor_blob_count": 17,
+    "expected_regression_count": 14,
+    "source_verification_precedes_free_only_cost_gate": true,
+    "sandbox_create_preceded_by_source_verification_and_cost_gate": true,
+    "source_scope_only": true,
+    "build_pass_observed": false,
+    "runtime_pass_observed": false
+  },
+  "hypothesis": "The predecessor deployment failed because the exclusive executor guard encoded stale literal result-fence markers rather than the route's successor-dynamic semantics; the current head source repair should remove that specific build blocker without weakening the exact-result fence.",
+  "counterhypothesis": "The apparent repair could merely rename the guard checks while leaving another current-head build or source-coherence defect unresolved.",
+  "discriminator_result": "SOURCE_ONLY_PARTIAL_SUPPORT: current guard and route now share the successor-dynamic count/name/standalone-OK semantics and preserve exact source/cost/create ordering, but no exact-current build exists, so the counterhypothesis remains open until an exact-head included-tier build executes.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: corrected the retained executor's current-facing PR evidence boundary from an unverified exact-head build-rate assertion to exact deployment freshness plus the predecessor guard failure and current-head source repair; no stale deployment was invoked for credit.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: source inspection confirms the retained 17-blob producer-derived Typed Entry -> route -> engine/load -> GRID10 -> atomic ModelExecution -> Inference/v4 closure remains behind exact deployment-carried blob verification before FREE_ONLY cost admission and Sandbox.create.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: the current route preserves the explicit 14-test result fence for Inference/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> JSpaceBinding/v3 while replacing stale literal guard expectations with successor-dynamic source checks; no model-runtime or training credit is granted."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "writes": {
+    "executor_pr_body_updated": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_pr_head_unchanged": "b6fcb5e26b66f30951a308caf6f23df8192d4040",
+    "research_receipt": "research_entity/continuity/receipts/2026-08-24_GO_PR810_DEPLOYMENT_FRESHNESS_GUARD_REPAIR_GPT56SOL.json"
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The current canonical README is a large rapidly moving current-facing summary and still contains historical re-entry sections. This macrocycle makes a narrower authoritative current-facing correction directly on the retained executor PR and records an append-only exact-SHA receipt rather than risking a whole-file overwrite from a partial connector view."
+  },
+  "next_exact_gate": "Require a naturally available included-tier Vercel preview whose immutable Git SHA equals the then-current gschaidergabriel/Dr.-Unterweger#810 head. Do not trigger paid upgrade or fallback. If READY at exact head, invoke only the fixed FREE_ONLY hcu-jspace-grid10-binding-capsule route and require pre-cost 17-blob verification, in-Sandbox SHA-256 checks, exact 14-test identities/count/standalone-OK/no-failure summaries, secret fence, exit 0 and cleanup. Keep PASS component-scoped. Separately require real zero-cost local approximately-0.8B loader/model-executor I/O bound to verified loader-consumption and canonical MiniUnifiedDB atomic ModelExecution before J-Space model-runtime credit."
+}

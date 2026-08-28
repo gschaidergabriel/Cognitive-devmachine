@@ -1,0 +1,139 @@
+# AgentZeroForschung — Zentraler Index
+
+## Direktiven und Methoden
+
+- `README.md` — aktive Forschungsrolle und zentrale Ablage
+- `GO_PROTOCOL.md` — einzige Bedeutung des Triggers `go`
+- `EVIDENCE_MODEL.md` — Evidenzklassen, Kausalitaet, Replikation, Emergenz
+- `MESSGERAETE_REGISTER.md` — aktuelle und zukuenftige Messkanaele
+
+## Analysen
+
+1. `analysen/2026-08-18T041853Z_BASELINE.md`
+   - Generation 31
+   - Vergleich 04:15:21Z -> 04:18:53Z
+   - kognitive Kernzaehler stabil
+   - Export-/Instrumentierungsdelta klar sichtbar
+   - erste Hypothesen zu Puls, Retrieval-Lernen und Tabellenzuwachs
+
+2. `analysen/2026-08-18T042641Z_INVENTUR_UEBERBLICK.md`
+   - Vollinventur aller aktuellen Datenfamilien auf Snapshot 04:26:41Z
+   - 34 Manifest-Artefakte; UnifiedDB-Metrologie und direkter Zero-Laufzeitbestand getrennt
+   - neue Instrumente `bauverlauf/`, `tests/`, `ZIELE.md`, `karten/*.meta.json` aufgenommen
+   - aktuelle Forschungsgrenzen: keine Gen-31-Verhaltensstichprobe, Andreas 0 Turns, Retrieval-Lernen 0
+   - Instrumentenwidersprueche bei Tool-Erreichbarkeit und Kartenzaehler als UNRESOLVED markiert
+
+3. `analysen/2026-08-18T044854Z_ENTITYOS_FERTIGSTELLUNG.md`
+   - neue Fertigstellungsbewertung auf Snapshot 04:48:54Z / Generation 31
+   - aktive Zielmatrix: 21/28 = 75 % (Gastkern bewusst zurueckgestellt)
+   - funktionaler Systemkern geschaetzt ca. 80–85 %, finale Acceptance-Reife ca. 60–70 %
+   - aktueller Testlauf: 479 gruen / 13 rot; rote Tests betreffen mehrere Kerninvarianten
+   - kritischer Restpfad: Effect/Causal/Re-ingest/State-Authority/Fail-closed, MCP-Werkzeugpfad, reale Autonomie, Retrieval-Lernen
+   - neues `messwerk/` als Forschungsinstrument beruecksichtigt
+
+4. `analysen/2026-08-18T051855Z_ENTITYOS_FERTIGSTELLUNG_UPDATE.md`
+   - Snapshot 05:18:55Z / Generation 31
+   - aktive Zielmatrix unveraendert 21/28 = 75 %
+   - funktionaler Systemkern weiter ca. 80–85 %, finale Acceptance-Reife vorsichtiger ca. 55–65 %
+   - Tests 475 gruen / 18 rot
+   - Zero-Verkehr 10 -> 14 Turns; erstmals 4 Andreas-Turns; Kausal-/Workspace-/Retrieval-Episoden 5 -> 7
+   - Retrieval-Lernen weiterhin 0 Entry-Points / 0 Feedback / 0 durable memory
+
+5. `analysen/2026-08-18T071856Z_ENTITYOS_NEUBEWERTUNG.md`
+   - Snapshot 07:18:56Z / Generation 32
+   - aktive Zielmatrix 22/28 = 78,6 %
+   - funktionaler Systemkern geschaetzt ca. 84–88 %, finale Acceptance-Reife ca. 62–70 %
+   - Tests vom Tief 475/18 auf 478/15 verbessert und ueber mehrere Laeufe stabil
+   - Zero-Verkehr 14 -> 24 Turns; Kausal-/Workspace-/Retrieval-Episoden 7 -> 12; Checkpoints 39 -> 41
+   - Messwerk 8 direkt GEMESSEN; Causal Credit Horizon erstmals ueber Verkehrsschwelle
+   - Restblocker: MCP-Werkzeuge, Retrieval-Lernen/Wegehierarchie, Provider-Erreichbarkeit, 4. Clay-Dienst, Uebersetzer und 15 rote Kerninvarianten
+
+6. `analysen/2026-08-18T072700Z_TOKEN_EFFIZIENZ_PIPELINE.md`
+   - Mistral-Vorstufe -> Zero/Caveman -> Mistral-Small-Uebersetzer als aktueller Headless-Pfad bewertet
+   - harte Befunde: Hook-/Identitaetsanker 5550 -> 206 Zeichen = 96,29 % Reduktion dieses Bestandteils; Retrieval-Paket ca. 21 % weniger Tokens je gleicher Faktenmenge
+   - Uebersetzer-Eval: 96-98 % Pass, 99,1-99,6 Faithfulness, 0 Fabrications im 50er-Set
+   - ordinary Claude/Zero-Tokenlast vorsichtig als ca. 35-60 % niedriger INFERIERT; globale Pipeline-Tokenersparnis bleibt ohne provider-native Usage-Zaehlung UNRESOLVED
+   - vorgeschlagenes hoechstwertiges Messgeraet: TOKEN_LEDGER + kontrollierter Direct-vs-Pipeline-Shadow-Vergleich
+
+7. `analysen/2026-08-18T074540Z_GENERATION33_MESSINTEGRITAET.md`
+   - Generation 33; UnifiedDB-Schemaexport erstmals vollstaendig 87/87
+   - Laufzeitzaehler steigen auf 45 Turns / 22 Causal / 23 Retrieval / 23 Workspace Episodes
+   - harte Messinkonsistenz: `letzter-lauf.json` 478/15 vs `ZIELE.md` 479/14 am selben Export-Head
+   - keine Promotion aus widerspruechlichen Testzaehlern
+   - naechstes hoechstwertiges Instrument: atomarer `TEST_RECEIPT_LEDGER/v1` mit Run-ID, Source-SHA, Suite-/Result-Digest und Fail-Liste
+
+8. `analysen/2026-08-18T074200Z_CLAUDE_TOKEN_ERSPARNIS.md`
+   - Kostenlinse explizit auf Claude-Code-Tokens eingeschraenkt; Mistral unter der Eignerannahme kostenlos
+   - Quellcode bestaetigt: voller World-/Recent-Kontext geht an Mistral, nur der verdichtete `caveman_prompt` an `claude -p`; Toolauswahl separat
+   - Headless Claude deaktiviert Prompt-History, Auto-Memory, CLAUDE.md-Autoloading, Background Tasks und Session-Persistenz
+   - aktuelle Planungs-Schaetzung: normale Turns ca. 50-70 % weniger Claude-Tokens, schwere Build-/Toolturns ca. 35-55 %; Arbeitswert ~60 % bzw. ~2,5x Arbeit je Claude-Tokenbudget
+   - Gesamtquote bleibt INFERENCE bis `CLAUDE_TOKEN_LEDGER` + Direct-vs-Pipeline-A/B vorliegt; `outsourced`-Feld allein wird nicht als realisierte Ersparnis gezaehlt
+
+9. `analysen/2026-08-18T214455Z_GENERATION116_ADAPTER_EVIDENZKORREKTUR.md`
+   - Generation 116 auf Snapshot `95234c157...`
+   - durable Testreceipt ist repliziert `583 gruen / 1 rot`, nicht 584/0
+   - einziger roter Invariant bleibt die Claude-Code-Runtime-Adapter-Isolation
+   - Commit-Narrativ `584/0` wird mangels dauerhaftem Receipt zu `UNVERIFIED_TRANSIENT` herabgestuft
+   - hoechster Informationsgewinn: Exact-Source-/Environment-Bindung plus atomarer `TEST_RECEIPT_LEDGER/v1` und kontrollierte Wiederholung dieses einen Tests
+   - Retrieval-Lernen bleibt unbelegt: `retrieval_entrypoint_policy=0`, `retrieval_feedback=0`
+
+10. `analysen/2026-08-19T174204Z_GEN159_AGGREGATIONSFEHLER_HIERARCHIE.md`
+   - Generation 159 auf Snapshot `0ece040dec22750b9c7e14c050ade5ee96afaca4`
+   - Roh-Receipt ist intern konsistent: 352 Wege = 244 Autobahn + 40 Schnellstrasse + 62 langsame Strasse + 6 Tunnel
+   - Zielaggregator meldet fuer denselben Stand unmoegliche `-1 Tunnel` und zugleich ein anderes Hierarchie-Verdikt
+   - Fehlerlokalisierung verschiebt sich auf Aggregations-/Messpfad; Rohdaten selbst zeigen keinen negativen Count
+   - vorgeschlagen: atomarer `HIERARCHY_RECEIPT/v1` mit typisierten ERROR/UNMEASURED-Zustaenden und mechanischer Verdict-Regel
+   - Tests bleiben 583/1; persistenter Adapter-Red getrennt behandeln
+
+11. `analysen/2026-08-19T224111Z_GEN159_EXPORT_LATENZ_SPIKE.md`
+   - Generation 159 auf Snapshot `150c3766dcdeae16df711cd306d4f21ab4d07f0e`
+   - Exportdauer springt `52.47 s -> 168.79 s` = Faktor 3.217 bei nur kleinem 30-Minuten-Datenzuwachs
+   - funktionaler Frontier bleibt stabil `583 gruen / 1 rot`; kein Produktregressions-Credit aus der Exportlatenz
+   - Haupt-Hypothese: I/O-/Lock-/Concurrent-Load-Spike; Gegenhypothese: datenabhaengiger superlinearer Export-Hotspot
+   - vorgeschlagen: `EXPORT_RECEIPT/v1` mit Phasenzeiten, SQLite-Waits, CPU/RSS/I/O und COMPLETE/INCOMPLETE-Semantik ueber mehrere regulaere Exporte
+
+12. `analysen/2026-08-20T0247Z_GEN174_QUELLBINDUNG_UND_HIERARCHIE_SCHWELLE.md`
+   - Generation 174 auf Export `af005559ea94be333a19e693c8dec2a0c6d9ca8e`
+   - Tests stabil `583/1`; Source-Identifier `2b096801f` im Bauverlauf auf lokale EntityOS-Chronik `2b096801f85e` abgebildet — Source-Provenienz erstmals teilweise aufgeloest
+   - Hierarchie-Rohdaten intern konsistent: 353 Wege = 6 Tunnel + 244 Autobahn + 40 Schnellstrasse + 63 langsame Strasse
+   - eigentliche Verdikt-Schwelle im neuen read-only `abruf_lage()` sichtbar: `top_decile >= 0.20`; aktueller Wert `0.136` ist danach korrekt GLEICHVERTEILT
+   - `ZIELE.md` verwendet dagegen weiterhin eine andere Semantik (`0.136` vs ~`0.10` bereits als Hierarchiebildung) und meldet `-1 Tunnel`; Root Cause verschiebt sich auf doppelte Urteilregeln + Sentinel-Aggregation
+   - `abruf_lage()` ist positiver Observability-Delta: Retrieval-Lernzustand kann gelesen werden, ohne die Karte durch die Beobachtung zu speisen
+
+13. `analysen/2026-08-20T125000Z_GEN197_GWT_RUECKKANAL_ALIASING.md`
+   - Generation 197 auf Export `2b969fdfdc60f3830eb2d19218520670665967b1`
+   - Tests `631/1`; Source-Prefix `6b9048c7a` im Bauverlauf auf `6b9048c7ab2b` (pipeline.py + wettbewerb.py) abgebildet
+   - GWT besitzt jetzt persistenten Rueckkanal Broadcast -> Zitierung -> `gw_lernen` -> spaetere Rangfolge, inklusive Verfall und negativem Update
+   - harter neuer Gegenbefund: Nicht-Korpus-Quellen verwenden positionsabhaengige IDs (`gedaechtnis:0`, `verlauf:0`, ...); persistentes Lernen kann dadurch Boosts zwischen unterschiedlichen Objekten aliasen
+   - zweiter Gegenbefund: Artikel-ID-Zitierung ist ein brauchbares lokales Proxy-Signal, aber kein unabhaengiger Outcome-Nachweis; falsche zitierte Evidenz kann sich selbst bestaetigen
+   - vorgeschlagen: stabile provenance-/content-gebundene Kandidaten-IDs plus Falsifikatoren fuer Slot-Permutation und korrekter Beleg vs. plausibler Distraktor
+
+14. `analysen/2026-08-21T0848Z_GEN213_WERKZEUGSPUR_ABSICHTSONTOLOGIE.md`
+   - Generation 213 auf Export `b2f47c88f860ea888ff5a3803a54eb7abb106974`; Tests `747/1`
+   - erstmals reale Toolspur im Headless-Zero-Pfad; Memory-Herkunft und mechanische Absichtsabweichung koennen aus echten Tool-Uses statt nur Endtext abgeleitet werden
+   - harter neuer Gegenbefund `READ_EFFECT_CONFLATION`: `absicht.py` sagt reine Leser seien nie Verdacht, `_AUSSENWIRKUNG` klassifiziert aber WebSearch/WebFetch als Aussenwirkung
+   - zweiter Messfehler `SILENT_OBSERVER_FAILURE`: Absichts-Buchung kann mit `except Exception: pass` verschwinden und 0-Faelle von ungemessenen Faellen ununterscheidbar machen
+   - vorgeschlagen: orthogonale Tool-Ontologie (`READ_LOCAL`, `READ_EXTERNAL`, `WRITE_DURABLE`, `EFFECT_EXTERNAL`, `CONTROL`) plus `INTENT_TRACE_RECEIPT/v1`
+   - bekannter Warm-Session-Systemprompt-Alias bleibt im Gen-213-Source sichtbar
+
+## Offene Forschungsfront
+
+- Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;
+- Andreas- und Gabriel-Verhalten als Cross-user-Replikation untersuchen, ohne private Inhalte zu vermischen;
+- Tool-Erreichbarkeit zwischen Chat, Laufzeitskizze, Messwerk und Zielpruefer operational trennen;
+- provider-native TOKEN_LEDGER je Pipeline-Stufe bauen/messen und Direct-vs-Pipeline-Shadow-Baseline etablieren;
+- `TEST_RECEIPT_LEDGER/v1` als atomare Quelle fuer `letzter-lauf.json`, `ZIELE.md` und Acceptance-Zaehler etablieren;
+- `HIERARCHY_RECEIPT/v1` bauen: ein Raw-Receipt fuer Wege/Raenge/Tunnel/Top-Decile/Schwelle/Verdict; negative numerische Sentinels verbieten und alle Verbraucher auf dieselbe Regel zwingen;
+- vollen Commit+Tree hinter lokal gebundenem EntityOS-Prefix `6b9048c7ab2b...` exportieren;
+- GWT-Lernidentitaeten fuer Nicht-Korpus-Quellen stabilisieren: keine positionsabhaengigen IDs als persistente Lernschluessel;
+- GWT-Reward kausal testen: korrekter Beleg vs. plausibler zitierter Distraktor; Citation nur als Proxy, unabhaengiges Outcome-Signal bevorzugen;
+- `INTENT_TRACE_RECEIPT/v1` bauen und Fremdtext (`READ_EXTERNAL`) strikt von persistenter/externer Wirkung trennen; Beobachterfehler typisiert als `UNMEASURED/ERROR` statt fail-silent buchen;
+- Warm-Session-Systempromptpfad session- oder content-adressiert machen und mit Zwei-Session-Overlap-Falsifikator pruefen;
+- `EXPORT_RECEIPT/v1` ueber mindestens sechs regulaere Exporte binden, um I/O-/Lock-Jitter gegen einen datenabhaengigen Hotspot zu trennen;
+- Claude-Code-Runtime-Adapter-Test auf demselben isolierten Exact-Checkout mehrfach ausfuehren und Environment-Digest binden;
+- Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;
+- rote Tests als Zeitreihe gegen reale Zero-Episoden und Bauinterventionen korrelieren;
+- Retrieval-Feedback/Entry-Point-Lernen als Zeitreihe verfolgen;
+- Graph-Teilprojektion gegen Vollgraph-Samplingregel spezifizieren;
+- Baucommits als Interventionen mit nachfolgenden Messwerten zeitlich verbinden;
+- jede neue Messdatenfamilie registrieren und auf Sampling-/Instrumentenbias pruefen.

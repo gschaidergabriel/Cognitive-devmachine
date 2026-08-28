@@ -1,0 +1,10 @@
+{
+  "config": "fixed_random_coordinator",
+  "physical_processes": 1,
+  "scenario": "coordinator process marked unhealthy mid-run",
+  "pending_scopes_after_failure": [
+    "fixed-scope"
+  ],
+  "stuck": true,
+  "note": "unlike GRID10 (criterion coordinator_failure_replacement=PASS, a healthy node is automatically re-elected via elect_coordinator's healthy-node scan), a fixed/random-once coordinator has no re-election call anywhere in this design by construction -- a dead fixed coordinator permanently strands its scope's Result-Channel backlog"
+}

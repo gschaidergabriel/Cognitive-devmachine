@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "created_for_user_trigger": "go",
+  "user_trigger_time_local": "2026-08-25T09:43+07:00",
+  "trigger_time_precision": "MINUTE_ONLY",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "d37fcdfda75ba4e7c7c6a79dfeb4176c0a966d6c",
+  "coordination": {
+    "shared_immutable_macrocycle_id_available": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_dispatch_protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md",
+    "replay_dispatch_key": "distillery-replay-v2-exact-main-v1-g0000",
+    "replay_legacy_fanout_quarantined": [1848, 1859, 1860, 1864],
+    "new_replay_runtime_triggers_created_by_this_organ": 0
+  },
+  "durable_writes_by_this_organ": [
+    {
+      "commit": "65fb0bc55a769ec6d105591a6070df5396054849",
+      "path": "research_entity/continuity/ordinary_dispatch_specs/distillery-replay-v2-exact-main-v1.json",
+      "scope": "DEFINE_STABLE_ORDINARY_REPLAY_DISPATCH_IDENTITY"
+    },
+    {
+      "commit": "4c07f8e5ac11d784f9a9d730c3cb8fe6e539c31f",
+      "path": "research_entity/continuity/ordinary_dispatch_claims/distillery-replay-v2-exact-main-v1-g0000.json",
+      "scope": "CREATE_ONCE_LEGACY_FANOUT_QUARANTINE"
+    },
+    {
+      "commit": "bb5f7edd4d58aae8dcad087019871960c196eedc",
+      "path": "research_entity/continuity/ordinary_dispatch_specs/distillery-replay-v2-exact-main-v1.json",
+      "scope": "SUCCESSOR_REBIND_TO_SURVIVING_CANONICAL_GO873_CARRIER"
+    },
+    {
+      "commit": "6eb0d5c36c08b2ae6772222d07fe81fb2b10ce92",
+      "path": "research_entity/continuity/ordinary_dispatch_claims/distillery-replay-v2-exact-main-v1-g0000.json",
+      "scope": "REPAIR_QUARANTINE_CARRIER_BINDING_WITHOUT_NEW_TRIGGER"
+    }
+  ],
+  "parallel_convergence_observed": {
+    "priority_1_backlog_first_forge_source_fused": "e12dfc8b194af20d98253d9d64f445a8e9a8166b",
+    "historical_backfill_receipt_primitive_source_fused": "e8d0fab70d582a426d72ee624dd36f8f095e70e0",
+    "ordinary_dispatch_singleton_regression_fused": "d37fcdfda75ba4e7c7c6a79dfeb4176c0a966d6c",
+    "duplicate_reconcile_pr_1827": "CLOSED_UNMERGED_SUPERSEDED",
+    "freshness_donor_pr_1817": "CLOSED_UNMERGED_DUPLICATE_DONOR_ONLY"
+  },
+  "observed_live_boundary": {
+    "forge_generated_at": "2026-08-25T03:04:11.528732+00:00",
+    "forge_accepted_deltas": 1,
+    "forge_candidate_states": {
+      "ACCEPTED": 1,
+      "NEEDS_IMPLEMENTATION": 65,
+      "NEW": 403,
+      "PATCH_REJECTED": 81,
+      "VALIDATED_NOT_BETTER": 1
+    },
+    "distillery_generated_at": "2026-08-25T03:04:11.218999+00:00",
+    "distillery_accepted_dataset_tokens": 0,
+    "distillery_accepted_packets": 0,
+    "distillery_candidate_states": {},
+    "historical_backfill_terminal_receipt_observed": false,
+    "distillery_exact_main_replay_v2_terminal_receipt_observed": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: current main fused the single backlog-first Forge source authority; this organ added a stable replay-v2 ordinary-dispatch identity/quarantine so scheduler fanout cannot masquerade as additional execution evidence. Runtime promotion remains blocked on terminal repository-bound receipts.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: PR1263 remains the single retained HCU/Typed Entry/Global J-Space donor lane. The highest-information exact-current blocker is conversion/replay executable evidence; adding another HCU source lane would duplicate authority rather than converge it.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: replay-v2 execution is now bound to one ordinary dispatch generation and duplicate scheduler runs are explicitly genealogically identical. This strengthens leak/replay-safe future dataset readiness but grants zero model/J-Space/training credit until exact-current executable evidence and positive accepted dataset tokens exist."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "negative_evidence": [
+    "No FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1 terminal runtime result was found in the repository during this macrocycle.",
+    "No research_entity/runtime/distillery_selfhosted terminal receipt was found during this macrocycle.",
+    "Live Distillery remains at accepted_dataset_tokens=0 and accepted_packets=0.",
+    "A transient GitHub 409 during claim repair was treated fail-closed; the file was re-read and then updated without force."
+  ],
+  "next_exact_action": "Observe one terminal canonical historical-backfill result and one terminal exact-current Distillery replay-v2 result from the already-claimed ordinary dispatches; create zero further triggers. If both pass, execute/observe the existing evidence-qualified Forge ACCEPT -> exactly one Distillery packet -> accepted_dataset_tokens>0 -> semantic replay +0 witness before any dataset/model/training promotion.",
+  "evidence_boundary": "SOURCE_COORDINATION_AND_LIVE_STATUS_ONLY; NO_NEW_RUNTIME_MODEL_PROVIDER_OR_TRAINING_CREDIT"
+}

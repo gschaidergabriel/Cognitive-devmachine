@@ -1,0 +1,97 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "base_main_sha": "f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d",
+  "source_candidate_commit_before_receipt": "4026bec57720c59427cb57afb7b54b3ef6b8a7d5",
+  "pr": 891,
+  "pr_head_sha": "8e745e68e5aee0e95ee35ad8907a6d07dbc8f1a3",
+  "merge_sha": "04209767aba1806c9566bac34274b5430879586a",
+  "branch": "gpt56sol/go-08b-job-identity-full-fence-20260822-r2",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "product_scope": "application-neutral Mini Entity pipeline plus replaceable approximately-1B ClayCode cognition attachment",
+  "finding": {
+    "status": "SOURCE_DEFECT_CONFIRMED_AND_REPAIR_MERGED",
+    "path": "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py",
+    "mechanism": "the direct 0.8B campaign fingerprint and billed CREATE bound learning_rate, warmup_ratio, training_method, training_type, suffix and n_checkpoints, but the post-CREATE provider retrieval identity check verified only training/validation file, model, epoch/eval counts and random_seed",
+    "impact": "a provider-visible job whose effective training identity diverged in omitted fields could be reported as created_job_identity=VERIFIED even though it no longer matched the authorized campaign fingerprint"
+  },
+  "provider_contract_refresh": {
+    "source": "https://docs.together.ai/reference/post-fine-tunes",
+    "retrieve_source": "https://docs.together.ai/reference/get-fine-tunes-id",
+    "observed_response_fields": [
+      "training_file",
+      "validation_file",
+      "model",
+      "suffix",
+      "n_epochs",
+      "n_evals",
+      "n_checkpoints",
+      "training_type",
+      "training_method",
+      "learning_rate",
+      "warmup_ratio",
+      "random_seed"
+    ],
+    "evidence_scope": "current public provider schema; authenticated exact job behavior remains a later preflight/create acceptance gate"
+  },
+  "unusual_experiment": {
+    "name": "DIRECT08_PROVIDER_TRAINING_IDENTITY_SUBSTITUTION",
+    "local_count": 1,
+    "macrocycle_id": null,
+    "global_slot_status": "UNRESOLVED_NO_SHARED_MACROCYCLE_ID",
+    "coordination_law": "do not infer shared macrocycle identity from time/date/branch/model; this organ received no upstream opaque macrocycle_id",
+    "counterhypothesis": "the pre-fix post-CREATE identity verifier rejects a provider job that preserves its checked core fields but substitutes effective learning rate, warmup ratio and Full training type",
+    "prefixed_observation": "pre-fix verifier returned an empty mismatch map for metadata with learning_rate=0.0009, warmup_ratio=0.5 and training_type=Lora while all previously checked fields matched",
+    "postfix_bounded_observation": "the repaired comparison returns mismatches for learning_rate, warmup_ratio and training_type, while accepting provider objects with extra unrelated nested fields",
+    "result": "COUNTERHYPOTHESIS_REJECTED",
+    "scope": "bounded deterministic mechanism reproduction only; not exact repository runner/runtime credit"
+  },
+  "delta": {
+    "full_post_create_identity": [
+      "training_file",
+      "validation_file",
+      "model",
+      "suffix",
+      "n_epochs",
+      "n_evals",
+      "n_checkpoints",
+      "random_seed",
+      "learning_rate",
+      "warmup_ratio",
+      "training_method",
+      "training_type"
+    ],
+    "nested_provider_projection": "compare only expected nested provider fields so extra SDK/provider metadata does not cause false mismatch while missing/substituted expected fields fail closed",
+    "regression": "new provider-training-identity substitution test plus expanded exact expected identity test",
+    "parallel_fusion": "preserves current main f4b1a8c canonical validate_corpus_v2 preflight repair and its regression",
+    "no_second_training_path": true
+  },
+  "execution": {
+    "bounded_mechanism_reproduction": "PASS",
+    "exact_pr_runner_status": "BLOCKED_EXECUTION_ADMISSION",
+    "workflow_runs": [
+      {"run_id": 32571095837, "job_id": 97026545077, "name": "deterministic-cognition-gates", "conclusion": "failure", "steps": null},
+      {"run_id": 32571095841, "job_id": 97026545089, "name": "identity-guard", "conclusion": "failure", "steps": null},
+      {"run_id": 32571095842, "job_id": 97026545211, "name": "direct-lane-admission", "conclusion": "failure", "steps": null},
+      {"run_id": 32571095844, "job_id": 97026545230, "name": "strict-admission", "conclusion": "failure", "steps": null}
+    ],
+    "classification": "all observed exact PR jobs completed before visible runner steps; this is execution-admission/control-plane failure, not a semantic/test failure",
+    "exact_branch_runtime_credit": "ZERO",
+    "authenticated_together_job_retrieval": "NOT_EXECUTED"
+  },
+  "together": {
+    "secret_used": false,
+    "provider_call": false,
+    "upload": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0,
+    "owner_billed_create_authorization": "NOT_GRANTED_BY_THIS_GO"
+  },
+  "acceptance": "SOURCE_REPAIR_MERGED_PLUS_BOUNDED_MECHANISM_SUPPORT; EXACT_RUNTIME_UNVERIFIED; TRAINING_NOT_STARTED; WHOLE_PRODUCT_IN_PROGRESS",
+  "next_gate": "obtain an actually-started exact-current runner and execute canonical v2 generation/validation plus the direct-0.8B launcher regression; then authenticated no-bill Together model_limits/file validation/price preflight before any separately owner-authorized billed create"
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T22:50+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_EXACT_GIT_BLOB_SOURCE_EXECUTION",
+  "scope": "MicroVM/Kata deployment network fail-closed boundary only",
+  "coordination": {
+    "parallel_delta_observed": true,
+    "action": "ADOPT_NO_OVERWRITE",
+    "reason": "A parallel Clay organ had already closed the identified hostNetwork/NetworkPolicy source gap on canonical main with a stronger default-deny design before this organ's write boundary.",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0,
+    "trigger_identity_note": "Only minute-precision immutable trigger time and no shared immutable request/turn id were available."
+  },
+  "source_identity": {
+    "deployment_template": {
+      "path": "the artefact/deployment/clayverse-kata-statefulset.template.yaml",
+      "git_blob_sha": "788492efedcdc47c9a308bb5ecbbce79fdd8f380"
+    },
+    "deployment_contract": {
+      "path": "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md",
+      "git_blob_sha": "2608f5ca9c18ff2682d137a099c7047966fb872c"
+    },
+    "regression": {
+      "path": "the artefact/tests/test_microvm_deployment_contract.py",
+      "git_blob_sha": "5c2f48f7f97a2ef6d3ac1e5357a828ec4562ee3d"
+    }
+  },
+  "isolated_execution": {
+    "environment": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "blob_reconstruction": "git hash-object matched all three current GitHub blob SHAs exactly before execution",
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "6 passed in 0.04s",
+    "exit_code": 0,
+    "yaml_parse": {
+      "documents": 3,
+      "kinds": ["Service", "StatefulSet", "NetworkPolicy"],
+      "network_policy_name": "clayverse-default-deny",
+      "policy_types": ["Ingress", "Egress"],
+      "ingress": [],
+      "egress": []
+    }
+  },
+  "primary_external_basis": {
+    "kubernetes_networkpolicy": "Official Kubernetes documentation states pods are non-isolated by default until a selecting NetworkPolicy isolates them, and empty ingress/egress rules with the corresponding policyTypes establish default deny. Matching policies combine additively and require an enforcing network plugin/CNI.",
+    "kubernetes_runtimeclass": "Official Kubernetes RuntimeClass documentation confirms runtimeClassName selects the configured runtime handler and is the mechanism for choosing hardware-virtualized runtime classes where configured."
+  },
+  "observed_contract": {
+    "default_deny_present": true,
+    "hostNetwork_false_not_treated_as_network_policy": true,
+    "broad_ipv4_allow_in_baseline": false,
+    "broad_ipv6_allow_in_baseline": false,
+    "deployment_specific_allow_policy_required": true,
+    "cni_enforcement_required_for_acceptance": true,
+    "additive_policy_inventory_required": true
+  },
+  "non_claims": [
+    "No Kubernetes CNI enforcement was executed.",
+    "No Kata/microVM runtime was executed for the final ClayVerse image.",
+    "No exact final OCI image build/digest was produced.",
+    "No Clerk/browser/PTY/Claude/EntityOS whole-product acceptance is claimed.",
+    "This source regression does not imply WHOLE_CLAYVERSE_PASS."
+  ],
+  "execution_frontier": {
+    "vercel_controller_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_controller_head": "78d92753d9442c66c3ffcff127c31faa98ffd622",
+    "last_observed_deployment": "dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8",
+    "sandbox_admission": "PASS_CREATED",
+    "blocker": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "next_exact_step": "Provision GITHUB_READ_TOKEN as sensitive Vercel Preview host credential without forwarding it into Sandbox; then refresh/rebind the single retained controller to current Research/PR611/PR622/deliberately admitted PR623 bytes and execute the exact OCI acceptance batch."
+  },
+  "acceptance": "IN_PROGRESS"
+}

@@ -1,0 +1,135 @@
+{
+  "schema_version": "research-center-event/1.0",
+  "event_id": "20260820T065802Z_gen184_budget_shedding_semantic_trace",
+  "created_at": "2026-08-20T06:58:02Z",
+  "event_type": "source_delta_counterhypothesis_and_worker_feedback",
+  "promotion_status": "CANDIDATE_ONLY",
+  "training_performed": false,
+  "harness_mutated": false,
+  "canonical_context": {
+    "research_parent_commit": "f3a55609bdeb97be677a4b0ef747795dbfbd25a9",
+    "agentzero_export_commit": "81f4e27dc404a3bcb16896d2496611d4006193fa",
+    "agentzero_export_tree": "8238c962e86c2bb1d236d5d6de3545a72944f9c6",
+    "generation": 184,
+    "test_source_short": "368c1159c",
+    "tests_green": 583,
+    "tests_red": 1,
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "retained_pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843",
+    "rae_version": "RAE-8.8 revision 2",
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS"
+  },
+  "verified_state_transition": {
+    "worker_feedback_receipt": "f3a55609bdeb97be677a4b0ef747795dbfbd25a9",
+    "finding": "The ClayCode supervisor consumed the prior CSWT-Z negative evidence and retained zero post-fix causal credit. This closes the routing/acknowledgement loop but is not an independent replication.",
+    "goal_renderer_now": "583_GREEN_1_RED_OPEN",
+    "prior_null_fail_open_counterexample_preserved": true,
+    "atomic_test_export_receipt_present": false,
+    "export_serialization_receipt_present": false
+  },
+  "new_source_delta": {
+    "path": "agentZero/code/produkt/mistral_prestage/pipeline.py",
+    "commit": "81f4e27dc404a3bcb16896d2496611d4006193fa",
+    "mechanism": "The 14500-character regulator now progressively compresses profile, halves then removes hyperposition, removes the possibility-space, and only then emits a stderr warning if world/frame still exceed the budget.",
+    "credit": "SOURCE_MECHANISM_ONLY",
+    "blocking_gap": "Overflow is warned but still returned; no typed reject, per-component conservation trace, semantic-loss receipt or post-compression outcome is bound."
+  },
+  "primary_sources": [
+    {
+      "title": "Lost in the Middle: How Language Models Use Long Contexts",
+      "url": "https://arxiv.org/abs/2307.03172",
+      "finding": "Long-context performance depends strongly on the position of relevant information, so total length alone is not a sufficient semantic preservation metric."
+    },
+    {
+      "title": "LLMLingua-2: Data Distillation for Efficient and Faithful Task-Agnostic Prompt Compression",
+      "url": "https://aclanthology.org/2024.findings-acl.57/",
+      "finding": "Faithful prompt compression requires preserving essential information and evaluating downstream behavior; naive token removal is not an adequate guarantee."
+    },
+    {
+      "title": "Retaining Key Information under High Compression Ratios: Query-Guided Compressor for LLMs",
+      "url": "https://aclanthology.org/2024.acl-long.685/",
+      "finding": "Compression can collapse toward closed-book performance when key information is removed; relevance-aware retention is a necessary control."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-BUDGET-SHEDDING-SEMANTIC-CONSERVATION-001",
+      "claim": "The ordered five-stage shedding policy stays within budget while preserving task-relevant evidence better than size-matched random deletion or oldest-first truncation.",
+      "test": "On frozen exact source/tree and held-out queries, log component characters and hashes before/after each stage; compare current policy, random deletion and oldest-first truncation at identical final size. Score answer correctness, evidence recall, epistemic residual value and latency.",
+      "falsifier": "Current shedding loses more required evidence or yields worse held-out outcomes than either control, or component totals do not reconcile to final context."
+    },
+    {
+      "id": "H-HYPERPOSITION-DROP-IS-SAFE-001",
+      "claim": "Hyperposition and possibility-space are genuinely lower-value, reconstructible signals whose removal does not damage decisions under load.",
+      "test": "Create paired cases where required evidence exists only in hyperposition or possibility-space, then force stages 4 and 5 while holding all other context fixed.",
+      "falsifier": "A correct decision becomes incorrect or ungrounded specifically after either signal is dropped."
+    },
+    {
+      "id": "H-TYPED-OVERFLOW-FAIL-CLOSED-001",
+      "claim": "No over-budget context may proceed as an ordinary turn; overflow becomes a typed, receipt-bound nonmeasurement.",
+      "test": "Inject an irreducible world/frame larger than 14500 characters. Require status OVERFLOW_ERROR, zero downstream model call and a conserved component trace in the atomic run receipt.",
+      "falsifier": "The current warning-only path still calls the model or any consumer renders the turn as measured/successful."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-FITTING-IN-BUDGET-IMPLIES-FAITHFULNESS-001",
+      "status": "REFUTED_AS_GENERAL_RULE",
+      "attack": "Equal length does not imply equal relevance or positional accessibility; current source has no semantic preservation test."
+    },
+    {
+      "id": "CH-HYPERPOSITION-AND-POSSIBILITY-ARE-DISPENSABLE-001",
+      "status": "OPEN_UNSUPPORTED",
+      "attack": "The deletion order is architectural judgment, not an empirically bound value ranking."
+    },
+    {
+      "id": "CH-STDERR-WARNING-IS-FAIL-CLOSED-001",
+      "status": "REFUTED_BY_SOURCE",
+      "attack": "The function returns the oversized context after warning, so execution can continue unless a downstream caller independently rejects it."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Semantic Shedding Ladder",
+      "definition": "A declared priority order for removing context components under pressure, each rung carrying an independently tested information-loss budget."
+    },
+    {
+      "name": "Budget Compliance Without Fidelity",
+      "definition": "A context satisfies its size limit while silently losing the information required for the task."
+    },
+    {
+      "name": "Warning-Only Overflow",
+      "definition": "An invariant violation is logged but the invalid object is still returned into normal execution."
+    },
+    {
+      "name": "Context Conservation Trace",
+      "definition": "A receipt that reconciles component sizes, hashes, removal stage and retained evidence to the exact final prompt."
+    }
+  ],
+  "routing": [
+    {
+      "targets": ["claycode", "unifieddb", "agentzeroforschung"],
+      "impulse": "Add CONTEXT_CONSERVATION_TRACE/v1 and make irreducible overflow typed and fail-closed before the model call; bind it to TEST_EXPORT_ATOMIC_RECEIPT/v1."
+    },
+    {
+      "targets": ["gwt", "emergenz", "hyperposition", "claygraph"],
+      "impulse": "Falsify the current deletion ranking with paired signal-only probes and size-matched random/oldest-first controls. Measure evidence recall and held-out correctness, not character count alone."
+    },
+    {
+      "targets": ["clayresearch", "frank", "harness"],
+      "impulse": "Count supervisor adoption as routing acknowledgement only. Preserve 583/1, missing exact source identity, prior null/export-order counterexamples and NOT_PASS; do not mutate Harness."
+    }
+  ],
+  "negative_and_null_results": [
+    "Generation 184 remains 583/1 with the same ClaudeCode adapter red.",
+    "The CSWT-Z v2 paired causal test has not executed.",
+    "No atomic test/export receipt or export serialization receipt exists.",
+    "The current budget function warns but returns an irreducibly oversized context.",
+    "Supervisor adoption is not independent empirical replication.",
+    "Target main and PR810 head are unchanged; no runtime, deployment, training, promotion or whole-product credit is claimed."
+  ],
+  "deduplication": {
+    "policy": "Gen183/184 exports and supervisor commit f3a55609 are one AgentZero/ClayCode lineage. The new source patch is a mechanism delta; the earlier 270-turn pilot is referenced but not recounted as new evidence."
+  }
+}

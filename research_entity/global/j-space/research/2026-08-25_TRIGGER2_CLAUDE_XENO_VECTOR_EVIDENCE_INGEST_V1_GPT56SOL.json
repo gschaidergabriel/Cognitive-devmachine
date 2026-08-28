@@ -1,0 +1,244 @@
+{
+  "schema": "CLAY_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST/v1.1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "purpose": "Ingest the full user-supplied Claude Code XENO vector-language measurement package into ongoing Clay research and bind future triggerwort-2 training-data work and go harness work to its evidence while preserving observation/inference/hypothesis boundaries.",
+  "source_package": {
+    "filename": "123.tar.xz",
+    "sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "root": "xeno-vektorsprache/",
+    "file_count_verified": 63,
+    "inventory_policy": "The archive SHA-256 binds all 63 supplied files. Material text/JSON evidence was parsed; binary ABI artifacts were verified through the supplied manifest and local ABI self-test rather than copied as new canonical truth.",
+    "key_source_hashes": {
+      "01_analyse/MESSERGEBNISSE.md": "b88a7eb73ac8630d9caad5dbb729422823b8b240bf12edff734717fe32c5954d",
+      "02_konzept/XENO_VEKTORSPRACHE_SPEC.md": "680caed575b853d99b08623f6ca6b070fce82372a5906d0da0e8522de2a1da12",
+      "03_fuer_chatgpt/00_AUFTRAG.md": "17deeec9fc7222e8a133c71e3294430420473c61ea1c927da7b71e49d00b0066",
+      "03_fuer_chatgpt/01_ABI_SPEC.json": "7b711c0019ece01d77b239bae08427ba22209f51da407e950bf63b0924871983",
+      "03_fuer_chatgpt/02_referenz_implementierung.py": "60b5e4bd3cdbf3bbf82249481fdfa707b33a9a5c05fdbff5538d9b609038be0c",
+      "03_fuer_chatgpt/03_generator_geruest.py": "0d01c40447fabc88985797523ee4ab4aa4d27a01d18142047571d5fe9648307f",
+      "abi/MANIFEST.json": "0f664e6a4626351fbf97cd74a4825cedaf115b80f56b71b16c39315dba02fa11"
+    }
+  },
+  "authority_at_ingest": {
+    "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+    "canonical_main_before_initial_ingest": "c306bd1ac714b6d205685b361e9019d78e24046c",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "note": "The older 2026-08-24 8.63 fast bootstrap is a stale cache for current authority. The Claude package is evidence, not authority, and cannot override newer owner/supervisor state."
+  },
+  "target_model_identity": {
+    "model_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "hidden_size": 1024,
+    "layers": 24,
+    "vocab_size": 248320,
+    "full_attention_layers": [3, 7, 11, 15, 19, 23],
+    "model_specificity": "All numerical measurement claims remain scoped to this exact measured snapshot unless separately replicated."
+  },
+  "observed_evidence": {
+    "geometry": {
+      "raw_pairwise_cosine": {"L0": 0.407, "L11": 0.532, "L19": 0.548, "L23": 0.638},
+      "centered_pairwise_cosine": {"L0": 0.040, "L11": 0.020, "L19": 0.067, "L23": 0.090},
+      "top_direction_variance_fraction": {"L0": 0.566, "L11": 0.477, "L19": 0.378, "L23": 0.454},
+      "claim": "Centering is mandatory before similarity/geometry operations on this measured carrier space.",
+      "boundary": "The effective rank of the full 1024-dimensional state space was under-sampled with 149 prompts and is not established."
+    },
+    "binding_capacity": {
+      "HRR_whitened_k_1_to_16": 1.0,
+      "MAP_bipolar_k_1_to_16": 1.0,
+      "raw_unwhitened_HRR_k8": 0.885,
+      "raw_unwhitened_HRR_k16": 0.860,
+      "guaranteed_operating_limit": 16,
+      "upper_limit_measured": false,
+      "claim": "Carrier-space binding algebra is not the present bottleneck for k<=16."
+    },
+    "semantic_rank": {
+      "L15": {"r1": 0.58, "r2": 0.83, "r3": 0.92, "r4": 0.89, "full": 0.86},
+      "L19": {"r1": 0.61, "r2": 0.86, "r3": 0.92, "r4": 0.97, "full": 0.94},
+      "L21": {"r1": 0.56, "r2": 0.86, "r3": 0.92, "r4": 0.97, "full": 0.97},
+      "L23": {"r1": 0.72, "r2": 0.92, "r3": 0.94, "r4": 0.94, "full": 0.94},
+      "claim": "The measured semantic concept is not well represented by one direction; a low-rank subspace is required. Rank-3 is a conservative ABI design choice, not a universal semantic-rank fact."
+    },
+    "read_write_profile": {
+      "semantic_readability": "0.94-1.00 from approximately L6 onward on the measured lexically separated family",
+      "direction_stability_deep": "approximately +0.75 to +0.78 at L17-L23",
+      "baseline_symbol_hit": 0.3611111111111111,
+      "baseline_symbol_hit_chance": 0.3333333333333333,
+      "baseline_vs_chance_one_sided_binomial_p_approx": 0.4224625249772148,
+      "write_L23": {"gain_x_gap": 1.0, "margin": 8.125359694163004, "hit": 1.0, "degraded": 0.0},
+      "write_L19": {"gain_x_gap": 2.0, "margin": 3.7092676162719727, "hit": 1.0, "degraded": 0.0},
+      "primary_write_layer": 23,
+      "secondary_read_layers": [19, 21],
+      "claim": "Semantic reading and symbol-axis writeout are present; the evidence points to missing context-dependent binding/routing between them."
+    },
+    "alphabet": {
+      "tested_atoms": 47,
+      "accepted_atoms": 46,
+      "rejected_atom": "or",
+      "rejected_diagonal": -0.15028889973958334,
+      "raw": {"diag_mean": 5.73472433912416, "offdiag_absmean": 1.4646089201262134, "dominance": 3.915532849977431, "self_hit": 1.0},
+      "centered": {"diag_mean": 5.029161590316618, "offdiag_absmean": 0.8077840010724233, "dominance": 6.225874223356548, "self_hit": 1.0},
+      "orthogonal": {"diag_mean": 4.2573428535503695, "offdiag_absmean": 0.2999417928913312, "dominance": 14.19389679747898, "self_hit": 0.9787234042553191},
+      "claim": "Use the 46 accepted orthogonalized contrast-centered symbol atoms; orthogonalization materially reduces cross-talk."
+    },
+    "codec": {
+      "space": "centered+whitened",
+      "dtype": "float64",
+      "ridge": 0.001,
+      "cycle_rel_error": {"L19": 5.583150500410665e-14, "L21": 8.115842696428798e-14, "L23": 4.464641124895244e-14},
+      "condition_number": {"L19": 387296.31598368136, "L21": 399663.1494186718, "L23": 465344.609635231},
+      "float32_observed_cycle_error_approx": 9.5e-7,
+      "claim": "The supplied linear codec is numerically stable enough in float64 at measured scope; nonlinear/lossy codecs inherit no credit."
+    },
+    "structure_task": {
+      "n": 18,
+      "L7": {"loo_acc": 0.5, "perm_p": 0.065},
+      "L19": {"loo_acc": 0.3888888888888889, "perm_p": 0.24},
+      "L23": {"loo_acc": 0.2222222222222222, "perm_p": 0.665},
+      "verdict": "STRUCT_CLASS_NOT_DECODABLE",
+      "claim": "The measured fantasy-predicate structural target is not represented well enough for a static steering vector to recover the missing dynamic binding."
+    },
+    "context_invariance": {
+      "n_per_task": 36,
+      "tasks": ["T1_codebook", "T2_frage", "T3_aussage", "T4_ichform"],
+      "mean_pair_cosine_deep": 0.26841114306951397,
+      "mean_cross_transfer_L19": 0.5254629629629629,
+      "chance": 0.3333333333333333,
+      "into_T1_from_T2_T3_T4": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+      "verdict": "NOT_CONTEXT_INVARIANT",
+      "claim": "Within-template decoding can be perfect while cross-template semantic binding remains poor; transfer into the codebook template is at chance from all other measured templates."
+    },
+    "abi_selftest_reperformed_by_gpt56sol": {
+      "status": "PASS",
+      "alphabet_max_orthonormal_deviation": 6.66e-16,
+      "codec_cycle_error": 3.58e-14,
+      "binding_capacity": {"k2": 1.0, "k4": 1.0, "k8": 1.0, "k16": 1.0},
+      "codebook_roundtrip": 1.0,
+      "scope": "ABI_REFERENCE_IMPLEMENTATION_ONLY; NOT MODEL TRAINING OR WHOLE HCU CREDIT"
+    }
+  },
+  "claude_disclosed_corrections_preserved": [
+    {"issue": "Initial MAP collapse at k=2", "cause": "incorrect Gaussian elementwise-product unbinding with division near zero", "correction": "bipolar MAP makes product self-inverse and restores 1.0 capacity through k=16"},
+    {"issue": "Initial raw-state capacity decline interpreted as binding-capacity limit", "cause": "anisotropy", "correction": "centering/whitening restores performance to 1.0 through k=16"},
+    {"issue": "Low cross-task direction correlation interpreted as context-dependent atoms", "cause": "one compared structural task had no decodable representation", "correction": "claim vacated; context invariance was measured separately across four individually decodable templates"}
+  ],
+  "training_objective_from_evidence": {
+    "teach_only": [
+      {"id": "A_CONTEXT_INVARIANT_BINDING", "baseline": 0.5254629629629629, "accept": 0.90},
+      {"id": "B_DYNAMIC_CODEBOOK_BINDING", "baseline": 0.3611111111111111, "chance": 0.3333333333333333, "accept": 0.90}
+    ],
+    "protect_do_not_retrain_as_primary_objective": [
+      "semantic reading already measured present",
+      "symbol emission axis already measured writable",
+      "HRR/MAP carrier-space binding algebra already measured sufficient through k=16"
+    ],
+    "interpretation": "Training should install a content-dependent variable-binding/routing computation that maps currently decoded semantics through the episode-local codebook to the correct symbol while preserving the existing read/write/carrier functions."
+  },
+  "dataset_requirements": [
+    "Complete class-symbol counterbalancing/statistical independence.",
+    "Use the full S3 mapping family for three-class codebooks rather than cyclic rotations only.",
+    "Draw symbols per episode from the 46-atom ABI with a dedicated unseen-symbol holdout.",
+    "Use split-isolated semantic-bearing lexical families; define protocol/codebook-token exemptions explicitly.",
+    "Do not leak the target semantic class outside the allowed codebook/metadata boundary.",
+    "Randomize codebook-entry order and example positions.",
+    "Use at least four structurally different training templates plus a separate frozen unseen-template family.",
+    "Control output token length; supplied accepted atoms are single-token under the measured tokenizer.",
+    "Bind every row to exact ABI manifest, model/tokenizer identity, generator version and source provenance.",
+    "Use causal/provenance family-level splits and freeze holdouts before tuning."
+  ],
+  "source_spec_internal_tension": {
+    "class_word_rule": "00_AUFTRAG section 4 says no class words such as ALLOW in model text, while section 3 explicitly places ALLOW/DENY/ABSTAIN inside the episode codebook.",
+    "preregistered_resolution_required": "Either permit class labels only inside the episode-local codebook while banning target-class leakage elsewhere, or define a separately versioned label-free demonstration codebook. Do not silently mix the two interpretations."
+  },
+  "generator_review_gpt56sol": [
+    {"severity": "CRITICAL", "id": "PERMUTATION_METADATA_NOT_CAUSAL", "evidence": "03_generator_geruest.py selects perm for logging but actual cb_paare construction ignores it.", "impact": "The current holdout_permutation split is metadata-only and does not establish unseen-permutation generalization.", "required_fix": "Construct the actual class<->symbol mapping from the selected S3 permutation and derive target_symbol from that mapping."},
+    {"severity": "CRITICAL", "id": "S3_VALIDATOR_TOO_WEAK", "evidence": "The validator passes len(perms)>=3.", "impact": "Partial permutation coverage can be reported as valid.", "required_fix": "Check exact expected permutation families per split and verify realized mappings, not metadata IDs alone."},
+    {"severity": "HIGH", "id": "COUNTERBALANCE_VALIDATOR_TOO_LOOSE", "evidence": "The maximum relative deviation threshold is <0.5 although the source requires complete counterbalancing.", "impact": "Large class-symbol imbalance could pass.", "required_fix": "Enforce exact or at-most-one count differences and near-zero class-symbol mutual information."},
+    {"severity": "HIGH", "id": "CLASS_WORD_CHECK_IS_NON_CHECK", "evidence": "The code calculates leakage candidates then hardcodes ok=True.", "impact": "Target-class leakage can never fail validation.", "required_fix": "Parse the allowed codebook span and fail on class labels/synonyms elsewhere in situation/query/answer text."},
+    {"severity": "HIGH", "id": "LEXICAL_DISJOINTNESS_CHECK_INCOMPLETE", "evidence": "The validator hashes only the sampled target adjective and ignores subjects/template lexical material.", "impact": "Split leakage can pass while prompts reuse semantic-bearing vocabulary.", "required_fix": "Compare normalized semantic-bearing lexemes/families across train/val/holdout with explicit protocol-token exemptions."},
+    {"severity": "HIGH", "id": "TEMPLATE_REQUIREMENT_UNDERCHECKED", "evidence": "Training excludes T4 and the validator accepts >=3 training templates although the task requires at least four structurally distinct templates.", "impact": "Context-invariance training pressure is weaker than specified.", "required_fix": "Provide >=4 training templates and reserve an additional structurally novel family for frozen holdout D."},
+    {"severity": "MEDIUM", "id": "VOCAB_HASH_MISNAMED_TRUNCATED", "evidence": "vocab_hash is a 16-hex SHA-256 prefix over one sampled word.", "impact": "It is weak provenance and not a vocabulary-family hash.", "required_fix": "Hash the canonical full lexical-family inventory with full SHA-256 and optionally add row-level lexeme hashes."},
+    {"severity": "MEDIUM", "id": "ABI_ROW_INTEGRITY_NOT_VALIDATED", "evidence": "The generator records target_symbol_atom_row and the manifest hash but does not independently verify row/atom mapping or manifest member hashes.", "impact": "An ABI/data mismatch could survive generation.", "required_fix": "Verify ABI manifest member hashes, atom row mapping, model/tokenizer identity and generator/source identity before row emission."},
+    {"severity": "MEDIUM", "id": "HOLDOUT_TEMPLATE_VISIBLE_IN_VALIDATION", "evidence": "T4 appears in validation although it is the designated holdout_schablone.", "impact": "Model weights are not trained on validation, but human/hyperparameter selection can tune to the nominal holdout family.", "required_fix": "Keep the frozen template family absent from both train and validation; use separate calibration templates."
+    }
+  ],
+  "swarm_logic_for_future_triggerwort_2": {
+    "roles": [
+      "EVIDENCE_EXTRACTOR",
+      "DATASET_ARCHITECT",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "STATISTICAL_REVIEWER",
+      "ABI_PROVENANCE_REVIEWER",
+      "RETENTION_REVIEWER",
+      "HARNESS_COMPATIBILITY_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "cycle": [
+      "extract exact current Claude task/evidence",
+      "separate OBSERVED/INFERRED/HYPOTHESIS",
+      "generate candidate examples/families",
+      "independent adversarial review for shortcuts/leakage",
+      "statistical counterbalance/split review",
+      "ABI/provenance validation",
+      "retention and negative-control review",
+      "harness compatibility review",
+      "repair and review again until gates pass",
+      "emit versioned dataset delta, falsifiers and no-credit boundary"
+    ],
+    "non_negotiable": "Reviewers may reject the generator and validators themselves; green self-tests are not self-authenticating evidence."
+  },
+  "go_harness_research_return": {
+    "binding": "The Xeno harness must consume the same exact ABI/protocol assumptions that triggerwort-2 training data teaches.",
+    "required_interfaces": [
+      "exact checkpoint/tokenizer/runtime/build identity",
+      "XENO_VECTOR_ABI/v0.1 or an explicitly versioned successor",
+      "L23 write hook and L19/L21 observation hooks when this exact model-specific ABI is used",
+      "float64 codec artifacts for this ABI",
+      "46-atom symbol index",
+      "64 fixed role vectors",
+      "typed codebook episode/result representation",
+      "trace fields linking semantic decision -> episode-local codebook lookup -> emitted symbol",
+      "post-training lesion/shuffle/rescue instrumentation",
+      "strict S0/S1/S2 and coordinator authority boundaries from the current EntityOS/HCU owner target"
+    ],
+    "acceptance_link": "Harness evaluation must use frozen unseen-symbol, unseen-permutation, unseen-vocabulary and unseen-template families plus retention tests; output accuracy alone does not establish J-Space causality."
+  },
+  "research_hypotheses_generated_not_observed": [
+    {"id": "H_BINDER_ATTENTION_MEDIATED", "claim": "The missing dynamic binding may depend heavily on attention-mediated routing because the operation is content-dependent and full-attention layers occur at 3/7/11/15/19/23.", "status": "HYPOTHESIS", "falsifier": "Matched interventions that improve binding equivalently without those pathways, or causal lesion evidence locating necessity/sufficiency elsewhere."},
+    {"id": "H_LOW_RANK_SEMANTIC_TO_SYMBOL_ROUTER", "claim": "A relatively small learned routing circuit may suffice because semantic decoding, symbol writeout and carrier algebra are already present.", "status": "HYPOTHESIS", "falsifier": "Narrow training fails while broad model changes are required, or existing read/write capabilities cannot be preserved."},
+    {"id": "H_TRAIN_BINDING_NOT_SEMANTIC_RELEARNING", "claim": "Focusing loss/curriculum on episodic remapping should reduce catastrophic interference compared with retraining semantics/symbol output.", "status": "HYPOTHESIS", "falsifier": "Narrow training fails while broader retraining improves held-out binding without exceeding retention limits."}
+  ],
+  "acceptance_contract": {
+    "holdout_unseen_permutations": ">=0.90",
+    "holdout_unseen_template": ">=0.90",
+    "four_template_cross_transfer": ">=0.90",
+    "general_language_and_code_retention": "within 2% of baseline",
+    "causal_post_training_test": "After a binding circuit exists, lesion it while preserving semantic readability; symbol choice must fail, then rescue must restore symbol choice. Pre-training this lesion test is not meaningful because the binder is already absent.",
+    "statistical_rule": "Thresholds alone are insufficient; report uncertainty/significance and damage/retention bounds."
+  },
+  "credits": {
+    "training_executed": false,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_actions": [
+    "Replace the generator permutation metadata path with a permutation-causal constructor and hard validator.",
+    "Resolve and preregister the class-word/codebook exception and lexical-disjointness definition.",
+    "Expand to >=4 training templates plus a fifth frozen unseen template and enforce family-level split isolation.",
+    "Add full ABI/source provenance checks and deterministic leakage/counterbalance tests.",
+    "Generate a small audited seed first; swarm-review it before scaling to 20k-50k training rows.",
+    "On future exact triggerwort 2 cycles, evolve dataset/recipe/evaluation from new Claude measurements; on exact go cycles, evolve the ABI-compatible Xeno harness."
+  ],
+  "correction_history": [
+    "v1 initial ingest was merged via PR #1988.",
+    "v1.1 corrects the archive file count from an erroneous 47 to the verified 63 and replaces the partial per-file inventory with an archive-hash-bound inventory policy."
+  ]
+}

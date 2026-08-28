@@ -1,0 +1,62 @@
+{
+  "QWEN35_08B_TARGET_MEASURED": {
+    "axis_a_confusion_counts": {
+      "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE": 15,
+      "INCORRECT_FABRICATED_SPECIFIC_VALUE": 18,
+      "CORRECT_ABSTAIN": 1,
+      "INCORRECT_LABEL_USED_UNKNOWN": 24,
+      "CORRECT_LABEL": 6
+    },
+    "axis_b_confusion_counts": {
+      "CORRECT_DATABASE_WINS": 64
+    },
+    "n_cases_axis_a": 64,
+    "n_cases_axis_b": 64,
+    "decoding": {
+      "do_sample": false,
+      "num_beams": 1,
+      "max_new_tokens": 24
+    },
+    "peak_rss_kb": 5076428
+  },
+  "QWEN35_08B_BASE": {
+    "axis_a_confusion_counts": {
+      "CORRECT_ABSTAIN": 8,
+      "INCORRECT_FABRICATED_SPECIFIC_VALUE": 15,
+      "INCORRECT_NEITHER_ABSTAIN_NOR_CLEAR_VALUE": 11,
+      "INCORRECT_LABEL_USED_UNKNOWN": 27,
+      "INCORRECT_LABEL_USED_HYPOTHESIS": 3
+    },
+    "axis_b_confusion_counts": {
+      "CORRECT_DATABASE_WINS": 64
+    },
+    "n_cases_axis_a": 64,
+    "n_cases_axis_b": 64,
+    "decoding": {
+      "do_sample": false,
+      "num_beams": 1,
+      "max_new_tokens": 24
+    },
+    "peak_rss_kb": 5005068
+  },
+  "QWEN35_08B_POSTTRAINED": {
+    "axis_a_confusion_counts": {
+      "CORRECT_ABSTAIN": 34,
+      "INCORRECT_LABEL_USED_UNKNOWN": 12,
+      "CORRECT_LABEL": 11,
+      "INCORRECT_LABEL_USED_HYPOTHESIS": 7
+    },
+    "axis_b_confusion_counts": {
+      "CORRECT_DATABASE_WINS": 56,
+      "INCORRECT_SIMULATION_TREATED_AS_TRUE": 8
+    },
+    "n_cases_axis_a": 64,
+    "n_cases_axis_b": 64,
+    "decoding": {
+      "do_sample": false,
+      "num_beams": 1,
+      "max_new_tokens": 24
+    },
+    "peak_rss_kb": 5005112
+  }
+}

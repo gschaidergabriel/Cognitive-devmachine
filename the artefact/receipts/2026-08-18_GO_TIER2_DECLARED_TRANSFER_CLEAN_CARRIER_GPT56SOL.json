@@ -1,0 +1,63 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:42:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_latest_observed_before_write": "7ffff22c4ee8a22f5b0c5969f0c45ffb3d1a1d25",
+  "immutable_product_candidate": {
+    "pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd"
+  },
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "latest_head_observed_before_coordination_write": "cfc375ca9809c1c557dde8f382d00b14f5d0c4b6",
+    "coordination_comment_id": 5318741029,
+    "runtime_credit": 0,
+    "tier2_credit": 0,
+    "whole_product_credit": 0
+  },
+  "adjudication": {
+    "reject_as_final_appliance": [
+      "Sandbox.fork from the old ClayVerse guest",
+      "replacement Sandbox.create sourced from an old-guest or carrier snapshot"
+    ],
+    "retained_non_beta_candidate": "fresh disposable data-only Sandbox carrier receiving only a chunked, hash-bound declared transfer archive; delete source; create fresh persistent:false replacement from stock runtime; copy only the same verified chunks; reconstruct and reverify declared state/workspace/exact OCI; delete carrier",
+    "authority_boundary": "carrier is opaque transport only and never UnifiedDB/state/memory/effect authority",
+    "reason": "This avoids carrying undeclared old guest root filesystem into the replacement and does not require Drive Private Beta, Blob, VPS, or a second application container."
+  },
+  "transport_contract": {
+    "declared_inputs": [
+      "tier2 transfer manifest",
+      "exact OCI archive/digest identity",
+      "workspace archive",
+      "logical UnifiedDB snapshot database",
+      "logical snapshot manifest"
+    ],
+    "chunk_index": "ordered chunk name + size + sha256 and full deterministic archive sha256",
+    "copy_rule": "bounded chunk buffers only; no whole OCI buffering; verify at source->carrier and carrier->replacement boundaries",
+    "network": "deny-all during carrier transport except separately admitted infrastructure acquisition",
+    "cleanup": "source deletion before final replacement restore; carrier deletion after replacement transfer verification"
+  },
+  "new_counterhypothesis": {
+    "name": "FRESH_REPLACEMENT_RUNTIME_TOOLING_GAP",
+    "observation": "The current source acceptance guest installs Docker/build tools with dnf before OCI build. A genuinely fresh stock replacement does not inherit that package state when snapshot/fork inheritance is removed.",
+    "falsifier_or_fix": "Make replacement runtime prerequisites explicit and reproducible, or use an independently admitted exact image-backed runtime path; never let snapshot inheritance silently supply Docker/tooling."
+  },
+  "execution": {
+    "status": "BLOCKED_CONTROL_PLANE_ADMISSION",
+    "provider": "Vercel",
+    "observed_blocker": "free deployment rate limit (>100 deployments/day); exact-current preview/runtime not started",
+    "clayverse_test_failure": false,
+    "credential_used": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "No new experiment executed; current shared GO coordination already records the global unusual-experiment slot as unavailable/consumed or not safely attributable."
+  },
+  "next_exact_step": "Keep PR810 fail-closed. Implement or fuse the declared-transfer clean-carrier transport plus explicit fresh-runtime tooling prerequisite without duplicating the hot retained lane; when Vercel admission returns, run exact-head source guards first, then the ordinary bounded transport discriminator, and only after that spend owner credentials on the full OCI/Vault/Mistral/Tier2 path.",
+  "acceptance": "IN_PROGRESS"
+}

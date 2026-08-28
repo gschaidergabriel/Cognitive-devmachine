@@ -1,0 +1,103 @@
+{
+  "schema": "ENTITYOS_HCU_GO_FUNCTION_RUNTIME_LOG_DELTA_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "78d644cdab3172918d1524835181479fda50e042",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_64.json",
+    "runtime_first": true,
+    "source_guard_proliferation": "PAUSED_UNLESS_EXECUTABLE_COUNTEREVIDENCE_REQUIRES_A_GUARD",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_READ_ONLY_EXACT_DEPLOYMENT_RUNTIME_LOG_AND_SOURCE_REVALIDATION"
+  },
+  "retained_executor": {
+    "lane": "gschaidergabriel/Dr.-Unterweger#810",
+    "head_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "deployment_state": "READY",
+    "deployment_git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "deployment_url": "dr-unterweger-kz6470afe-gabriel-gschaiders-projects.vercel.app",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx"
+  },
+  "exact_deployed_source": {
+    "route_file": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "route_blob_sha": "6630570d16a62f937a6512d682dfcb86ae8a4102",
+    "cost_admission_file": "mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+    "cost_admission_semantics": {
+      "supervisor": "SUPERVISOR_STEERING_8_64",
+      "remaining_sandbox_quota_directly_observed": false,
+      "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+      "sandbox_execution_admitted": false
+    },
+    "runtime_admission_branch": {
+      "schema": "ENTITYOS_HCU_RUNTIME_ADMISSION_PROBE/v1",
+      "status": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+      "returns_http_200": true,
+      "sandbox_create_performed": false,
+      "execution_credit": "FUNCTION_RUNTIME_DIAGNOSTIC_ONLY"
+    },
+    "sandbox_cases": "selftest and hcu-family-split-v1 cross sandboxExecutionAdmitted() before Sandbox.create and therefore remain blocked while the static current admission is false"
+  },
+  "runtime_observation": {
+    "source": "Vercel runtime logs scoped to exact deployment dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "timestamp_utc": "2026-08-24T04:01:43Z",
+    "request_path_logged": "/api/sandbox-probe",
+    "http_status": 200,
+    "runtime_class": "serverless",
+    "cache": "MISS",
+    "query_string_directly_observed": false,
+    "response_body_directly_observed": false,
+    "request_initiator_proven": false,
+    "source_semantic_inference": "At this exact deployed source identity, the static FREE_ONLY admission makes sandboxExecutionAdmitted() false. The only reachable HTTP 200 path before Sandbox.create is the runtime-admission diagnostic branch. Therefore the 200 proves exact-head serverless function boot at the declared diagnostic scope but does not prove Sandbox creation or environment capability.",
+    "classification": "FUNCTION_RUNTIME_BOOT_EVIDENCE_AT_EXACT_DEPLOYED_SOURCE_WITH_QUERY_INFERRED_FROM_EXACT_SOURCE_CONTROL_FLOW",
+    "sandbox_create_observed": false,
+    "python_or_sqlite_sandbox_probe_observed": false,
+    "hcu_regression_observed": false
+  },
+  "access_observation": {
+    "current_v3_grid10_route": "/api/hcu-jspace-grid10-binding-capsule",
+    "connected_authenticated_fetch_status": 302,
+    "temporary_share_fetch_status": 302,
+    "classification": "CURRENT_CLIENT_PATH_REMAINS_PROTECTED_BY_VERCEL_SSO_BEFORE_HANDLER",
+    "important_distinction": "The exact deployment has independent serverless function-runtime evidence from provider runtime logs, but this organ's connected fetch path still cannot obtain a protected handler response. Do not conflate provider-observed invocation with user-client access."
+  },
+  "hypothesis": "After exact-head build recovery, the next blocker is no longer generic function boot: provider runtime logs prove the exact deployment can execute a serverless handler. The remaining gates are reproducible protected-handler access for the current target route and, independently, direct remaining included Sandbox quota authority before Sandbox.create.",
+  "counterhypothesis": "The 200 could be treated as Sandbox/environment/HCU execution or as proof that remaining included Sandbox quota exists.",
+  "discriminator_result": "REJECTED: exact deployed source statically keeps sandboxExecutionAdmitted() false and the runtime-admission branch explicitly performs no Sandbox.create. No Python/sqlite3/_sqlite3, HCU, model, J-Space, or training execution follows from this 200.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact current retained executor head 2da99e04 has provider-observed serverless function-runtime boot evidence at the no-Sandbox runtime-admission diagnostic scope; the blocker is narrowed from generic function execution to protected target-route access plus direct included Sandbox quota authority.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: no Sandbox was admitted or created and no HCU/Typed Entry runtime code executed; supervisor 8.64 runtime-first policy does not justify additional source guard proliferation from this diagnostic evidence.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no real model loader/executor I/O, J-Space/GWT causal intervention, causal trace, local approximately-0.8B model execution, or training run occurred."
+  },
+  "credits": {
+    "function_runtime_diagnostic_exact_source": "PASS_AT_DECLARED_NO_SANDBOX_SCOPE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Re-enter current main plus live PR1263 and PR810 heads before any further execution claim.",
+    "Obtain a directly observed authoritative remaining included Vercel Sandbox quota signal without upgrade, billing mutation, paid fallback, plan inference or Together/provider credential preflight.",
+    "Obtain reproducible function-level access to the exact then-current v3/GRID10 or supervisor-8.64 runtime probe route through an admitted non-paid path; keep Vercel SSO failures separate from product evidence.",
+    "Only if FREE_ONLY Sandbox admission opens, execute the fixed environment capability probe and bind executor SHA, deployment SHA, Python version, sqlite3/_sqlite3 availability, exact source identities, secret fence, result digest, exit status and cleanup.",
+    "Only after environment PASS continue canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> InferenceReceipt -> Global J-Space/GWT observation with admitted controls."
+  ],
+  "evidence_boundary": "This receipt promotes only exact-source serverless Function runtime boot evidence at a diagnostic no-Sandbox scope. It does not establish protected target-route accessibility, remaining Sandbox quota, Sandbox execution, Python/SQLite capability, HCU runtime, real model execution, J-Space causality, training benefit, or whole EntityOS acceptance."
+}

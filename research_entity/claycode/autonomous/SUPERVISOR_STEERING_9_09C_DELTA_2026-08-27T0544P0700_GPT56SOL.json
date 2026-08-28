@@ -1,0 +1,54 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_epoch": "9.09",
+  "delta_id": "9.09C",
+  "date": "2026-08-27",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "authority_change": false,
+  "material_findings": [
+    "Monitoring v5 is a material source improvement over v4: the legacy v3 metrics builder is confined to an isolated staging repo and no longer writes legacy authority/runtime truth to canonical paths before hardening.",
+    "The v5 receipt itself states repository-bound tests have not executed and runtime credit remains zero. Retained publication is not yet switched: fresh autonomous metrics commits after the v5 source commit still publish free swarm/SYSTEM_ANALYSIS_LIVE.json with schema CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3.",
+    "A remaining publication-set coherence gap exists in v5: SYSTEM_ANALYSIS_PROVENANCE_V5.json, SYSTEM_ANALYSIS_LIVE.json, and README.md are each replaced atomically but are published sequentially. Per-file os.replace/rename atomicity does not make the three-file publication a single atomic transaction. A concurrent multi-file reader can therefore observe mixed generations unless readers bind a common publication generation/digest and fail closed on mismatch.",
+    "Restart-authority attribution v4 landed during this review and materially supersedes v3 by requiring exact command-path identity in addition to v3 pattern/cgroup/root binding, including same-basename different-tree and multi-path ambiguity negatives. Its own receipt records repository-bound tests as unexecuted and runtime credit zero, so v4 is SOURCE_CANDIDATE_HARDENED, not kill authority or quiescence PASS.",
+    "These are monitoring/control-observability and restart-provenance findings only. They are not evidence of provider execution, runtime quiescence, HCU success, training success, BASE package completion, or canonical semantics."
+  ],
+  "steering": {
+    "p0_runtime": [
+      "Treat restart-authority v4 as the current source frontier; do not revert to v3-only attribution. Execute both v3 and v4 committed regression suites repository-bound on one clean current non-provider checkout with HEAD/tree/source hashes/dirty=false/stdout/stderr.",
+      "Execute monitoring v4 and v5 tests repository-bound on the same clean checkout; v5 must be included because it supersedes the v4 publication design.",
+      "Before retained publisher switch, add an adversarial publication-set coherence regression: force a reader between each canonical replace and prove it cannot accept mixed-generation authority/runtime/provenance. Close this either with one atomically swapped generation directory/symlink, or with a common publication_id plus content digests verified by every authority-bearing reader; fail closed on mismatch.",
+      "Do not switch the retained autonomous publisher merely because individual v5 writes are atomic. After the coherence regression and repository-bound PASS, switch to v5 and prove the retained output schema/generation is actually v5 on current bytes.",
+      "Only after repository-bound restart-authority v4 PASS run v4 read-only on the live Clay host; fail closed on path/basename/cgroup/owning-object ambiguity. Any later disable/kill step requires immediate PID/cgroup/owning-object revalidation and then at least 90 seconds zero survivors/descendants/restarts before provider-path runtime work."
+    ],
+    "p1_training": [
+      "Carry forward 9.09B unchanged: repair B3 queried_class_/queried_class plus adversarial schema-consistency regression; resolve B2 180/900 agreement-factor mismatch with explicit design plus leakage diagnostic; bind exact retained Qwen3.5-0.8B tokenizer/renderer ABI including leading-space digit behavior before canonical admission.",
+      "Do not reopen the refuted B0/B1 fixed-codebook-order claim without new executable evidence."
+    ]
+  },
+  "promotion": {
+    "base_work_package_promotion": false,
+    "canonical_semantics_promotion": false,
+    "training_credit_added": 0,
+    "canonical_dataset_rows_admitted": 0,
+    "runtime_quiescence_credit_added": 0,
+    "provider_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "monitoring_runtime_credit_added": 0,
+    "restart_authority_runtime_credit_added": 0
+  },
+  "invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "GLOBAL_PROVIDER_COUNTERS_ALONE_DO_NOT_PROVE_CLAY_ACTIVITY",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

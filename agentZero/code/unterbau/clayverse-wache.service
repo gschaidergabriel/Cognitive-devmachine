@@ -1,0 +1,7 @@
+[Unit]
+Description=ClayVerse-Wache: Tode + stilles Stehen aller Agenten auf dieser VPS (mechanisch, keine Modell-Aufrufe)
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/clayverse/werkzeug/wache.py wacht

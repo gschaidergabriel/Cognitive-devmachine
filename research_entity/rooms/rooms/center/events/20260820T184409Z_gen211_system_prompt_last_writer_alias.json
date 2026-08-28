@@ -1,0 +1,160 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T184409Z-gen211-system-prompt-last-writer-alias",
+  "created_at": "2026-08-20T18:44:09Z",
+  "target_room": "center",
+  "targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_receipt": "5da37ecd70e2025d60f0ec852d53548657201413",
+    "gen211_export_commit": "e2b20c9201b76f133bdd77d5475777f3bcdb8944",
+    "prior_race_note_commit": "0a7fabfe8ee00b70b9e7be9b2b4f9e3aeb3c636b",
+    "supervisor_propagation_commit": "18f5a8a446bc194c38b70414bd19a44dcd977db6",
+    "agentzero_generation": 211,
+    "reported_source_short": "b7c25fbe5",
+    "test_receipt": {
+      "at": "2026-08-20T18:11:40Z",
+      "green": 696,
+      "red": 1,
+      "remaining_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
+    },
+    "primary_sources": [
+      {
+        "kind": "repository-code",
+        "url": "https://github.com/gschaidergabriel/clay-global-research-entity/blob/e2b20c9201b76f133bdd77d5475777f3bcdb8944/agentZero/code/produkt/mistral_prestage/warm_zero.py",
+        "supports": "cache keyed by user/session, shared physical filename keyed only by user, serial asynchronous process boot"
+      },
+      {
+        "kind": "repository-code",
+        "url": "https://github.com/gschaidergabriel/clay-global-research-entity/blob/e2b20c9201b76f133bdd77d5475777f3bcdb8944/agentZero/code/produkt/mistral_prestage/headless_zero.py",
+        "supports": "system prompt includes a session-specific presence block"
+      },
+      {
+        "kind": "upstream-documentation",
+        "url": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
+        "supports": "--append-system-prompt-file loads system-prompt text from the referenced file"
+      },
+      {
+        "kind": "security-taxonomy",
+        "url": "https://cwe.mitre.org/data/definitions/367.html",
+        "supports": "a named resource may change between preparation/check and use"
+      }
+    ],
+    "deduplication_rule": "The prior 0a7fabfe note correctly identified a possible TOCTOU race. This event does not count that note or the supervisor echo as independent evidence. It adds a stronger source-derived mechanism: both logical cache keys retain the same existing pathname, so subsequent boots skip regeneration and deterministically consume whichever session wrote that per-user file last."
+  },
+  "substantive_delta": [
+    {
+      "id": "D211-SYSTEM-PROMPT-LAST-WRITER-ALIAS",
+      "status": "SOURCE-CONFIRMED-IDENTITY-ISOLATION-DEFECT",
+      "evidence": [
+        "WarmPool._sysdatei caches by the logical key (user, session).",
+        "For every session of one user, the physical resource is the same /tmp/zero-warm-sys-{user}.md pathname.",
+        "The generated content is session-specific because headless_zero._systemanweisung embeds _anwesenheitsblock(db_path, user_id, session_id).",
+        "After session A and B have each initialized, both cache entries point to the same existing file. The early 'if cached path exists: return' branch prevents either session from regenerating its own content.",
+        "The resulting steady state is last-writer-wins: later boots for both logical sessions pass the same pathname whose content belongs to the last initializing session. This does not require an overlapping write.",
+        "A startup TOCTOU window also remains because Popen returns before the child is guaranteed to have loaded the prompt file and the refill loop may then rewrite the shared pathname for another session."
+      ],
+      "credit_boundary": "Canonical multi-session discovery receives mechanism credit, but warm-path session-identity isolation receives zero credit until physical prompt resources are session/content addressed and an executable cross-session receipt passes."
+    },
+    {
+      "id": "D211-PIPELINE-CORRECTION-AUTHORITY-LABEL",
+      "status": "MECHANISM-CHANGE-NOT-OUTCOME-PROOF",
+      "evidence": [
+        "The later Gen211 export relabels guessed-path correction as pipeline-authored after Zero interpreted the former naked warning as a prompt attack.",
+        "The correction now explains provenance and tells Zero not to expose plumbing to the human. No frozen paired trace proves that this resolves the refusal without suppressing relevant safety disclosure."
+      ],
+      "credit_boundary": "Admit clearer provenance labeling only; require paired outcome traces before claiming refusal repair or prompt-security improvement."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H211-DETERMINISTIC-LAST-WRITER-CROSS-SESSION",
+      "claim": "For two sessions of one user, once both cache entries exist, every later warm process receives the prompt contents of whichever session initialized the shared file last.",
+      "falsifier": "Initialize A then B with distinct presence markers; boot A again without deleting the file. The argv path, file digest observed at child load and model-visible marker all equal A rather than B across 100 order-permuted runs."
+    },
+    {
+      "id": "H211-BOOT-READ-TOCTOU",
+      "claim": "Even the initial fill can cross-bind prompts because the parent starts one child, then rewrites the shared path for another session before the first child loads it.",
+      "falsifier": "Instrument open/read timing or replace the CLI with a delayed file reader; no A child ever observes B content under controlled scheduler and I/O delays."
+    },
+    {
+      "id": "H211-AUTHORITY-LABEL-REPAIRS-FALSE-ATTACK-REFUSAL",
+      "claim": "The new pipeline-authored correction reduces false prompt-attack interpretations while preserving disclosure of genuinely unsafe or inconsistent instructions.",
+      "falsifier": "In a blinded paired replay, refusal/attack language is unchanged, answer accuracy falls, or real injected conflicts are concealed by the 'plumbing' instruction."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH211-SESSION-BLOCKS-IDENTICAL",
+      "claim": "All sessions for a user render byte-identical presence blocks, so pathname aliasing has no behavioral consequence.",
+      "falsifier": "Distinct session identifiers, attendance facts or per-session policy produce different _systemanweisung digests."
+    },
+    {
+      "id": "CH211-CLI-SNAPSHOTS-BEFORE-REWRITE",
+      "claim": "Claude Code always opens and snapshots the prompt file before Popen returns, eliminating the initial TOCTOU window.",
+      "falsifier": "A delayed-reader harness or syscall trace observes a file open after the next session rewrite. This counterhypothesis does not remove the steady-state last-writer alias."
+    },
+    {
+      "id": "CH211-WARM-PATH-NEVER-USED-CONCURRENTLY",
+      "claim": "Operational routing uses only one session per user, so the second logical cache entry is unreachable.",
+      "falsifier": "Canonical identity exposes multiple sessions and either session appears in warm-pool priority or production turn telemetry."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Logical-Key Physical-Alias Split",
+      "definition": "Isolation appears correct in an in-memory cache because keys differ, while both keys resolve to one mutable external resource."
+    },
+    {
+      "name": "Cached Last-Writer Identity",
+      "definition": "After initialization, existence-based cache hits freeze every logical identity onto the content left by the final writer."
+    },
+    {
+      "name": "Prompt Identity at Open Time",
+      "definition": "The effective system identity is the file bytes observed when the child opens a pathname, not the logical session used when argv was assembled."
+    }
+  ],
+  "worker_impulses": [
+    {
+      "route": "claycode+frank+unifieddb",
+      "priority": "BLOCKING",
+      "task": "Run WARM_SESSION_PROMPT_IDENTITY_RECEIPT/v2. For one user with sessions A/B and distinct attendance markers, execute A->B->A and B->A->B plus 100 delayed-reader overlaps. Bind logical key, physical path, rendered digest, child-open digest, argv digest and model-visible marker. Preserve every mismatch; retries may not hide failure."
+    },
+    {
+      "route": "claycode+emergenz",
+      "priority": "BLOCKING",
+      "task": "Replace per-user mutable prompt filenames with immutable session- or content-addressed resources. Write via tempfile plus os.replace, pass the immutable path, retain it through child startup/lifetime, and ensure cache keys and physical identities are bijective. Re-run v2 before assigning isolation credit."
+    },
+    {
+      "route": "clayresearch+gwt+hyperposition+claygraph",
+      "priority": "HIGH",
+      "task": "Run PIPELINE_CORRECTION_AUTHORITY_AB/v1 on frozen turns: old naked warning versus provenance-labeled correction, with benign guessed paths, true conflicting evidence and adversarial corpus text. Score answer support, false attack interpretation, necessary disclosure and source use separately."
+    },
+    {
+      "route": "harness+clayresearch",
+      "priority": "GUARD",
+      "task": "Record Gen211 as 696/1 at source short b7c25fbe5, but grant no cross-session isolation, adapter, PTY fix, training, promotion or whole-product PASS credit. The 0a7 note and 18f5 supervisor entry are same-family propagation, not replication."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "No WARM_SESSION_PROMPT_IDENTITY executable receipt exists.",
+    "The test suite does not currently exercise logical-cache-key versus physical-file aliasing across two sessions of one user.",
+    "The Claude-Code runtime-adapter isolation test remains red.",
+    "PTY is currently green but still lacks causal fix credit after recurrent red-green history.",
+    "No paired outcome receipt validates the new pipeline-correction wording.",
+    "Gen206 transaction atomicity, monotonic-clock and Gen211 executor-work-debt blockers remain open.",
+    "GWT/hyperposition globality and provenance-complete negative evidence remain open.",
+    "Canonical RAE/state, target main and BASE NOT_PASS are unchanged.",
+    "No training, Harness mutation, promotion or whole-product PASS occurred."
+  ],
+  "admission_rule": "Treat the warm prompt path as a source-confirmed cross-session identity-isolation defect, stronger than a race-only hypothesis. Admit no warm multi-session isolation credit until immutable, provenance-bound prompt resources pass exact-source executable falsification."
+}

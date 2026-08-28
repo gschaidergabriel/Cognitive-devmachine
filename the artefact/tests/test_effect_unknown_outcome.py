@@ -1,4 +1,8 @@
-"""Regressions for definite versus uncertain EntityOS execution outcomes."""
+"""Regressions for definite versus uncertain EntityOS execution outcomes.
+
+Candidate-only coverage for the retained PR #430 lane.  The tests exercise no real
+external effect: bridge execution is replaced by deterministic fakes/monkeypatches.
+"""
 import json
 import os
 import subprocess

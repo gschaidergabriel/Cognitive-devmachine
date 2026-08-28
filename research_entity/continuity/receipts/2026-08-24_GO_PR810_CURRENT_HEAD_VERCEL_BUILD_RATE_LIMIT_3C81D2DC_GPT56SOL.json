@@ -1,0 +1,72 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "research_main_observed_before_write": "aad2c33bacc6492d2ea6f0f102c102ef61e906d9",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_NO_UPSTREAM_SHARED_IMMUTABLE_REQUEST_ID; CHAT_TIMESTAMP_ONLY_MINUTE_PRECISION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "duplicate_executor_lane_created": false,
+    "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "observed_executor": {
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head": "3c81d2dc9b9e7f428416d7273a9e60cb8b85c028",
+    "head_commit_message": "fix(hcu): make exclusive executor guard successor-dynamic",
+    "retained_donor_head": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "source_guard_delta": "exclusive executor guard now validates successor-dynamic rebind contract authority, exact source-verification -> FREE_ONLY cost-gate -> Sandbox.create ordering, and re-runs the donor/promotion/permission guard chain inside the exclusive Vercel build guard",
+    "source_guard_scope": "SOURCE_ONLY_NO_RUNTIME_CREDIT"
+  },
+  "vercel_observation": {
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "commit": "3c81d2dc9b9e7f428416d7273a9e60cb8b85c028",
+    "combined_status_context": "Vercel",
+    "combined_status_state": "failure",
+    "status_target_classification": "UPGRADE_TO_PRO_BUILD_RATE_LIMIT",
+    "exact_current_head_ready_deployment_observed": false,
+    "sandbox_function_invocation_observed": false
+  },
+  "finding": {
+    "classification": "INFRASTRUCTURE_PLAN_BUILD_RATE_LIMIT_BEFORE_EXACT_CURRENT_RUNTIME",
+    "observed": "The exact current retained executor head has a Vercel failure status whose target is the upgradeToPro build-rate-limit surface. The branch source itself simultaneously advanced the exclusive executor guard to successor-dynamic source validation.",
+    "inference": "The current blocker is Vercel Hobby build admission/rate capacity, not an observed HCU regression failure. No exact-current deployment exists to invoke, so runtime acceptance cannot advance in this macrocycle without violating FREE_ONLY by upgrading or paying.",
+    "counterhypothesis": "The Vercel failure might encode a semantic build/test failure rather than a plan/rate limit.",
+    "falsifier": "The returned Vercel status target explicitly classifies the failure as upgradeToPro=build-rate-limit, while no current-head function invocation exists. A later exact-head deployment/build log can supersede this classification."
+  },
+  "negative_evidence": {
+    "stale_ready_deployment_invoked": false,
+    "sandbox_runtime_executed_by_this_organ": false,
+    "upgrade_to_pro_attempted": false,
+    "paid_provider_or_fallback_attempted": false,
+    "together_preflight_or_credential_use": false,
+    "vps_self_hosted_or_production_execution": false,
+    "runtime_credit_change": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the exact current execution blocker is narrowed from generic deployment absence to an observed Vercel Hobby build-rate-limit admission failure; stale READY deployment invocation remains excluded from current-head acceptance.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_BY_SINGLE_RETAINED_LANE_OBSERVATION: PR810 head 3c81d2dc makes the exclusive executor guard successor-dynamic and checks the exact Typed Entry -> route -> engine/load -> GRID10 -> execution/inference/J-Space source verification ordering plus donor/promotion/permission guard chain without creating a second executor authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_AT_SOURCE_GUARD_BOUNDARY_ONLY: the exact current 17-blob/14-test J-Space execution closure is now protected by the successor-dynamic exclusive build guard, but Vercel rate admission blocked an exact-head deployment. J-Space model runtime and training credit therefore remain zero."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The artefact README and retained executor are moving rapidly under parallel organs; this append-only receipt preserves the exact new build-rate-limit evidence without overwriting transient current-facing prose."
+  },
+  "next_exact_gate": "Re-enter PR810 and Vercel together. When Hobby build admission naturally becomes available, require a READY deployment whose immutable githubCommitSha equals the then-live PR810 head and whose source guard chain remains coherent. Invoke only that exact deployment's fixed hcu-jspace-grid10-binding capsule under FREE_ONLY admission and require deployment-carried 17-blob verification, in-sandbox SHA-256, secret fence, fixed 14-test result fence, exit 0 and cleanup. Do not upgrade, pay, invoke stale source, or grant model/training credit from source/build status."
+}

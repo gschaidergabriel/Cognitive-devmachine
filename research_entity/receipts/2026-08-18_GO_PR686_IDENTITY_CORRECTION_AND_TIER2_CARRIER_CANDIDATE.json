@@ -1,0 +1,89 @@
+{
+  "schema": "ClayGoReceipt/v1",
+  "date": "2026-08-18",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "APPEND_ONLY_PROVENANCE_CORRECTION_PLUS_GENERATED_TIER2_CARRIER_CANDIDATE",
+  "canonical_main_before_write": "6c39cebeaaad807ed2ee66e3299be9a15be25276",
+  "correction": {
+    "superseded_receipt": "research_entity/receipts/2026-08-18_GO_PR686_TIER2_DURABLE_CARRIER_BLOCKER.json",
+    "superseded_fields_only": [
+      "research_freeze.head_sha",
+      "research_freeze.tree_sha",
+      "controller.observed_head"
+    ],
+    "reason": "Direct GitHub ref/commit/PR observations disagree with the recorded identities. Preserve the prior receipt as historical evidence but do not use its incorrect identities for source/runtime binding.",
+    "observed_pr686": {
+      "pull_request": 686,
+      "state": "open",
+      "draft": true,
+      "head_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+      "tree_sha": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+      "commit_message": "freeze(clayverse): generic API runtime + snapshot + Tier-2 closure",
+      "runtime_credit": "NONE_CURRENT_HEAD_UNOBSERVED"
+    },
+    "observed_pr810": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pull_request": 810,
+      "state": "open",
+      "draft": true,
+      "head_sha": "c7e22878d1e6399638e5679301da0091cf24dfa4",
+      "tier2_handler_blob": "a713257a294c186ba23dab0955038926222f85be",
+      "tier2_handler_research_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+      "tier2_handler_research_tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+      "identity_alignment_with_actual_pr686": true
+    }
+  },
+  "current_tier2_mechanism_observation": {
+    "prepare_declares": [
+      "runtime-bound logical UnifiedDB snapshot",
+      "workspace.tar",
+      "exact OCI image tar",
+      "manifest with SHA-256/size bindings"
+    ],
+    "current_recreate_mechanism": "source.stop -> Sandbox.fork(sourceSandbox=sourceName,persistent=true) -> source.delete",
+    "classification": "SOURCE_MECHANISM_REJECTED_FOR_FINAL_TIER2",
+    "reason": "Fork/snapshot-derived replacement is not the required durable external export followed by full source-appliance deletion and a genuinely new persistent:false replacement sandbox."
+  },
+  "generated_carrier_candidate": {
+    "status": "GENERATED_NOT_EXECUTED_NOT_ACCEPTED",
+    "mechanism": "Use a separate storage-only named Vercel Sandbox as an external carrier for only the declared integrity-bound transfer artifacts; seal/verify them outside the source guest; delete the source sandbox; create a new ClayVerse replacement sandbox with persistent:false; retrieve and re-verify only the declared artifacts; restore; then delete the carrier after successful recovery.",
+    "why_materially_different_from_forbidden_snapshot_resume": "The ClayVerse source sandbox is never resumed or forked. Its filesystem snapshot is not used to instantiate the replacement. The carrier is a separate non-ClayVerse transport organ and never becomes UnifiedDB/state/effect authority.",
+    "official_vercel_capabilities_observed": [
+      "named persistent Sandbox.create",
+      "Sandbox.get resume by name",
+      "sandbox filesystem read/write APIs",
+      "persistent sandbox stop snapshots filesystem",
+      "non-persistent Sandbox.create for replacement"
+    ],
+    "unresolved_before_execution": [
+      "owner/cost authorization for a storage-only persistent Sandbox carrier",
+      "bounded large-file transport strategy for OCI tar without unbounded function memory",
+      "carrier integrity manifest and chunk hash protocol",
+      "proof that replacement sandbox/session identity is independent of source and carrier",
+      "fresh OIDC/HCP secret reacquisition after replacement",
+      "cleanup semantics if controller fails between source deletion and restore"
+    ],
+    "authority_fence": "Carrier may hold opaque integrity-bound transfer bytes only; it may not serve live ClayVerse requests, modify canonical state, mint truth, execute effects, hold Mistral/GitHub secrets, or become a second durable state authority."
+  },
+  "tier1_discriminator": {
+    "current_gap": "Current Tier-1 evidence path proves a clean recovery point with active_before == 0.",
+    "required_next_source_discriminator": "Inject one bounded no-effect interrupted canonical turn after the VERIFIED entityos.exec round-trip and before the recovery process boundary; require active_before == 1, exactly one generation advance, exactly one aborted_no_effect closure, active_after == 0, preservation of the prior VERIFIED entityos.exec outcome exactly once, and no external-effect replay; persist checkpoint/state hash for Tier-2.",
+    "runtime_credit": "NONE"
+  },
+  "experiment_accounting": {
+    "unusual_experiment_count_added": 0,
+    "global_go_slot_already_consumed": true,
+    "consumed_experiment": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED"
+  },
+  "epistemic_status": {
+    "identity_correction_verified": true,
+    "carrier_candidate_generated": true,
+    "carrier_candidate_runtime_verified": false,
+    "exact_pr686_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "First keep PR686 binding at actual immutable 9dd7da1/47c09ff6. Repair PR810 source so final Tier-2 no longer uses source fork/resume; either admit the storage-only Vercel carrier candidate with bounded chunked integrity transfer or record explicit owner rejection and select another already-authorized durable carrier. In parallel close the Tier-1 interrupted-turn discriminator before granting Tier-1 recovery credit."
+}

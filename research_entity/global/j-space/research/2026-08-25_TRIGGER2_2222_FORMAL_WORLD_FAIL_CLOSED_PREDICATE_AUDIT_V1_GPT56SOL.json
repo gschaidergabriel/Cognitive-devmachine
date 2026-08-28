@@ -1,0 +1,118 @@
+{
+  "schema": "CLAY_TRIGGER2_FORMAL_WORLD_FAIL_CLOSED_PREDICATE_AUDIT/v1",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:22+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_NEGATIVE_DELTA_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "7fa77983ce1fa9d372caeeba8586f716bffd5dde",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "current_training_ledger_observed": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V21_GPT56SOL.json",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "scope_and_dedup": {
+    "audited_source": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+    "audited_tests": "tests/test_trigger2_hyperposition_reference_labelers_v3.py",
+    "relationship_to_p0": "DOES_NOT_REPLACE_OR_DELAY_A02_GIT_OBJECT_LINEAGE_PLUS_REPOSITORY_BOUND_EXECUTION_P0",
+    "repository_search_result": "No current Trigger-2 artifact was found that explicitly tests malformed IN/NOT_IN context-predicate operand types or requires a structured fail-closed result for that mutation.",
+    "no_new_labeler_lane": true,
+    "no_new_dataset_lane": true
+  },
+  "observations": [
+    {
+      "id": "T2-K-PREDICATE-NONITERABLE-01",
+      "severity": "P1_FAIL_CLOSED_ROBUSTNESS_BEHIND_CURRENT_P0",
+      "source_observation": "_validate_context_predicate accepts every recognized non-EXISTS clause when a value key is present, but it does not constrain the operand type for IN or NOT_IN. _context_applies later executes Python membership against that value.",
+      "counterexample_blueprint": "Use a source-valid branch K clause such as {key: mode, op: IN, value: 7} or {key: mode, op: NOT_IN, value: null}. Predicate validation can return true, after which membership evaluation can raise TypeError instead of returning the labeler's structured fail object.",
+      "consequence": "Malformed or drifted formal-world material can escape the declared deterministic fail-closed contract as an implementation exception. This does not mint wrong training rows by itself because the current positive-data gate is already closed, but it is unsafe for a future reference root.",
+      "required_successor": "Define an explicit JSON operand grammar for IN/NOT_IN, preferably a JSON array with deterministic equality semantics; reject all other operand shapes during validation and add mutation regressions that assert structured failure rather than exception."
+    },
+    {
+      "id": "T2-BRANCH-BIRTH-EVIDENCE-TEMPLATE-01",
+      "severity": "P2_AUTHORITY_HYGIENE_REVIEW",
+      "source_observation": "World branch-birth templates are validated with allow_empty_evidence=true, whose implementation skips per-record validation for E_plus/E_minus/F rather than explicitly requiring those lists to be empty.",
+      "counterhypothesis": "The generation-authority/state-history proof lane can guarantee that formal-world templates are immutable trusted genesis material, making nonempty template evidence a legitimate explicitly bound initial condition.",
+      "required_successor": "Resolve the ambiguity under the existing generation/genesis authority lane: either require E_plus/E_minus/F to be empty for branch births or bind and validate any nonempty initial evidence as typed genesis evidence. Do not create a second authority path."
+    }
+  ],
+  "test_gap": {
+    "current_v3_tests_observed": [
+      "derived relation and target generation",
+      "caller-label rejection",
+      "outcome flip",
+      "update/resolution",
+      "soft counters",
+      "exact replay idempotence",
+      "ancestry/payload reuse",
+      "projection",
+      "branch birth",
+      "exact semantic merge",
+      "discriminator ranking",
+      "branch permutation/ID nuisance",
+      "salience nonauthority",
+      "UNKNOWN-to-OBSERVED guard",
+      "unknown-test/invalid-outcome failure"
+    ],
+    "missing_mutations": [
+      "IN with non-array/non-iterable value",
+      "NOT_IN with null/non-array value",
+      "branch-birth template carrying nonempty untyped E_plus/E_minus/F"
+    ]
+  },
+  "hypothesis": "If the v3 reference semantics are eventually used as a mechanically trusted label root, schema-valid-but-type-invalid predicate operands will be a realistic corruption/drift class and must fail closed before semantic application rather than rely on Python runtime membership behavior.",
+  "counterhypothesis": "An upstream immutable generator schema can make these malformed operands unreachable, so source-side validation would be redundant.",
+  "cheapest_discriminator": "After the current A02 lineage/execution P0 is closed or without displacing it, add two deterministic mutation tests for IN/NOT_IN operand type and require a named structured rejection code with zero credit. If upstream schema is claimed sufficient, mutation-test the exact admitted generator and prove it cannot emit the invalid shape at the same bound source identity.",
+  "artifact_reclassification_delta": [
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "CURRENT_SEMANTIC_DONOR_NEEDS_REVISION_P1_FAIL_CLOSED_PREDICATE_TYPE_GUARD",
+      "predecessor_status": "CURRENT_SEMANTIC_DONOR_BEHIND_AUTHORITY_GATES",
+      "revision_reason": "New source-level malformed-operand counterexample; does not alter the stronger existing P0 evidence/history/producer-authority blockers."
+    },
+    {
+      "artifact": "tests/test_trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "COVERAGE_INCOMPLETE_P1_MALFORMED_CONTEXT_OPERAND_MUTATIONS",
+      "revision_reason": "Current tests do not cover noniterable IN/NOT_IN operands or branch-birth nonempty-evidence ambiguity."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V21_GPT56SOL.json",
+      "status": "CURRENT_LEDGER_AT_AUDIT_TIME_NO_P0_DISPLACEMENT",
+      "revision_reason": "This delta is additive robustness evidence; v21 P0 ordering remains stronger and unchanged."
+    },
+    {
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24 supervisor 8.63",
+      "status": "STALE_AS_CURRENT_AUTHORITY_USEFUL_BOOTSTRAP_DONOR",
+      "successor": "Supervisor 8.78 plus current moving-main Trigger-2 ledger"
+    }
+  ],
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "Current provenance/runtime P0 remains open, and this audit found an additional fail-closed robustness gap in the semantic donor. Generating data before fixing and mutation-testing the retained path would lower evidence quality."
+  },
+  "credits": {
+    "research_negative_delta": 1,
+    "source_audit_delta": 1,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "trigger2_a02_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Keep v21 P0 first: harden A02 Git-object/path/blob/ancestry plus executed HEAD/tree proof and run its exact repository-bound mutations. Then patch the retained v3 predicate validator to an explicit JSON-array IN/NOT_IN grammar, add structured-failure mutations, and resolve branch-birth initial-evidence semantics inside the single generation/genesis authority path before any positive pilot rows."
+}

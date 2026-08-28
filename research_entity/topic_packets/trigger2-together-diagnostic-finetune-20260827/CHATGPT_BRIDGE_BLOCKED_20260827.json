@@ -1,0 +1,23 @@
+{
+  "schema": "STATUS_NOTE/v1",
+  "packet_id": "trigger2-together-diagnostic-finetune-20260827",
+  "arbeitspaket": "paket-1787794793671-59bc07",
+  "topic": "Attempted ChatGPT batch consultation (B3 failure-pattern analysis + specialist-network concept), blocked by unstable chatgpt bridge login state",
+  "what_was_asked": [
+    "Send single-line batch questions via stern.py chatgpt-senden about why the diagnostic model derails into generic code on complex B3 multi-hop-dereference prompts, and how to redesign B3 training data for the next round.",
+    "Separately, get ChatGPT's design for a narrow-specialist-network concept around the central 0.8B Xeno model, review/bugfix/integrate anything worth keeping myself."
+  ],
+  "what_actually_happened": {
+    "sequence_of_direct_checks_by_claude_code": [
+      {"time_desc": "immediately before this arbeitspaket was opened", "command": "cd ~ && python3 ~/.claude/star/stern.py chatgpt-login-status", "result": {"eingeloggt": true, "chatgpt_cookies_gefunden": 20}},
+      {"time_desc": "first action on this arbeitspaket, dry-run before real send", "command": "cd ~ && python3 ~/.claude/star/stern.py chatgpt-senden --dry-run --prompts [...]", "result": {"ok": false, "grund": "nicht eingeloggt", "chatgpt_cookies_gefunden": 1}},
+      {"time_desc": "immediate recheck", "command": "cd ~ && python3 ~/.claude/star/stern.py chatgpt-login-status", "result": {"eingeloggt": false, "chatgpt_cookies_gefunden": 1}},
+      {"time_desc": "15s later recheck", "command": "cd ~ && python3 ~/.claude/star/stern.py chatgpt-login-status", "result": {"eingeloggt": false, "chatgpt_cookies_gefunden": 1}}
+    ],
+    "finding": "The chatgpt bridge's reported login state changed from eingeloggt=true/20 cookies to eingeloggt=false/1 cookie within a few minutes of real wall-clock time, between two direct checks run by the same agent from the same $HOME cwd (ruling out the earlier-diagnosed cwd trap as the explanation this time). The state then held stable at false/1 cookie across two more checks 15s apart, i.e. it settled rather than being a single-sample fluke -- but it settled to NOT logged in, not to the previously-reported logged-in state.",
+    "action_taken": "Did not proceed with chatgpt-senden. The tool's own dry-run already returned a hard failure (ok:false) for the exact call that would have been made; pushing ahead with a real (non-dry-run) call against a bridge the tool itself reports as unauthenticated would not produce real ChatGPT research, only a failed call or, worse, output from whatever unauthenticated/wrong session state the daemon is actually in."
+  },
+  "consequence": "Both parts of arbeitspaket paket-1787794793671-59bc07 (B3 failure-pattern analysis via ChatGPT, specialist-network concept via ChatGPT) are BLOCKED, not completed and not abandoned. Nothing was fabricated in place of real ChatGPT output.",
+  "recommended_next_step": "A human needs to open the daemon's visible browser window and complete/refresh the chatgpt.com login (per the tool's own 'empfehlung' message each time), then run chatgpt-login-bestaetigen, and -- given the login state has now been observed to flip within minutes twice in one session -- ideally verify it holds stable across a couple of checks a minute or more apart before the next agent trusts a single green reading and starts a real batch send.",
+  "self_note": "This is consistent with, not a reversal of, the earlier-agreed rule split (deterministic facts get checked directly, not filtered through a second LLM's opinion) -- login status is exactly the kind of deterministic fact worth checking directly before spending a real chatgpt-senden call on it, and doing so caught this before any wasted/garbled send."
+}

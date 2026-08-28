@@ -1,0 +1,97 @@
+{
+  "schema": "mini-entity/go-reference-legacy-migration-boundary/v1",
+  "timestamp_local": "2026-08-23T08:50:00+07:00",
+  "trigger": "go",
+  "macrocycle_id": "461b9dd5-3bd9-446e-9541-0a0df740356c",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "initial_live_main_sha": "e964ed34c0590a3ba75e26e6f60be7b0d32195b6",
+  "latest_main_before_receipt": "770286bf52623a2cd91f464ca8310321c1fe0be7",
+  "execution_policy": {
+    "free_only": true,
+    "provider_execution": "NOT_ATTEMPTED",
+    "provider_secret_lookup": "NOT_ATTEMPTED",
+    "spend_usd": 0
+  },
+  "grf": {
+    "R0_observed": [
+      "The 2026-08-17 ClayVerse container bootstrap is cache only; live repository authority has superseded the product endpoint with the Multi-use Mini Entity pipeline all-in-one and optional approximately-1B ClayCode cognition.",
+      "Current canonical Clay requires DB-resident pipeline_profile_read and generic inference_generate, while current main Python reference remains intentionally unconverged.",
+      "Retained donor/fresh-transplant candidate PR #996 carries useful DB-profile and generic inference mechanisms but still contains recurrent eos_pipeline_state.generation reconciliation into entity_state.generation.",
+      "Current main also auto-activates guards for observational read phases, current-byte profile snapshot re-hashing, and inclusion of claim-authorizing personality/state metrics in canonical_state_hash.",
+      "Parallel current work independently landed mirror-authority guards and donor adjudication; this macrocycle re-entered those commits rather than duplicating them."
+    ],
+    "R1_inferred": "Removing recurrent mirror authority alone is insufficient: a superficially compliant repair can silently reset a legacy-only generation to zero, destroying continuity. Legacy migration therefore needs an explicit one-shot/fail-closed contract in addition to the no-feedback authority rule.",
+    "R2_generated": [
+      "Ignore legacy eos_pipeline_state.generation and create entity_state.generation=0.",
+      "Continue max(native, mirror) reconciliation for rollback protection.",
+      "Fail closed with explicit LEGACY_GENERATION_MIGRATION_REQUIRED when canonical authority is absent but legacy generation exists.",
+      "Perform a bounded one-time preservation of legacy generation while establishing entity_state, then permanently deauthorize later mirror values."
+    ],
+    "R3_counter": [
+      "Silent reset satisfies single-authority syntax but destroys causal continuity.",
+      "Recurrent max reconciliation preserves continuity but makes the compatibility mirror a live authority.",
+      "A safe migration boundary must distinguish first admission from all later opens and must never allow post-migration mirror tampering to advance canonical state."
+    ],
+    "R4_intervention": {
+      "unusual_experiment": {
+        "count_for_this_macrocycle": 1,
+        "id": "MIRROR_GENERATION_POISON",
+        "scope": "isolated SQLite deterministic reproduction of the donor reconciliation fragment",
+        "setup": {
+          "entity_state_generation_before": 1,
+          "eos_pipeline_state_generation": 9
+        },
+        "observed": {
+          "entity_state_generation_after": 9,
+          "mirror_controlled_native": true
+        },
+        "classification": "MECHANISM_SUPPORTED_NO_WHOLE_RUNTIME_CREDIT"
+      },
+      "ordinary_regression_delta": "Add an auto-activating future-reference test that permits only explicit migration-required failure or exact one-shot preservation, then poisons any retained legacy generation column and requires canonical generation to remain unchanged."
+    },
+    "R5_emergent": [
+      "Authority and continuity are separate invariants: eliminating a second authority must not erase the only surviving historical generation evidence.",
+      "The robust migration contract is two-phase: establish canonical authority exactly once, then make compatibility state observational/non-authoritative forever.",
+      "Current reference convergence now needs effect parity plus one profile authority, one generation authority, observational reads, current-byte profile snapshot integrity, claim-metric hash completeness, exactly-once persistence, and explicit legacy continuity handling."
+    ],
+    "R6_verified": {
+      "source_guard_commit": "770286bf52623a2cd91f464ca8310321c1fe0be7",
+      "source_guard_path": "the artefact/blogpost_entity/test_reference_legacy_generation_migration_boundary.py",
+      "guard_syntax_ast": "PASS_ISOLATED_LOCAL_CONTAINER",
+      "candidate_review": {
+        "pr": 996,
+        "review_id": 5001467053,
+        "finding_count": 4,
+        "findings": [
+          "recurrent mirror generation authority",
+          "read phases re-enter schema/migration writes",
+          "commit snapshot fence does not re-hash current profile_json bytes",
+          "canonical_state_hash omits metrics used by deterministic claim authorization"
+        ]
+      },
+      "temporary_guard_pr": {
+        "pr": 1010,
+        "state": "CLOSED_AFTER_DIRECT_CURRENT_MAIN_LANDING",
+        "branch_commit": "a4d25bd036b6069a2b1fe75458a3e29854c7de62"
+      },
+      "exact_full_repo_runtime": false,
+      "whole_product_verified": false,
+      "runtime_credit": "ZERO",
+      "runtime_note": "No callable authorized isolated full-repository execution surface was available through this interface; candidate GitHub Actions evidence observed in current coordination remained steps-null/pre-execution and therefore gives zero semantic test credit."
+    }
+  },
+  "next_gate": [
+    "Build the replacement reference convergence narrowly from fresh current main, not by wholesale donor promotion.",
+    "Keep entity_state.active_profile -> profiles(profile_json, profile_sha256) as the only profile authority.",
+    "Keep entity_state.generation as the only live generation/CAS authority.",
+    "Handle legacy-only generation by explicit fail-closed migration or exact one-shot preservation; never silently reset and never recurrently promote mirror state.",
+    "Keep pipeline_profile_read, pipeline_state_read and exactly-once lookup observational after pipeline_init.",
+    "At commit re-read current profile_json bytes and recompute their digest before snapshot acceptance.",
+    "Include every metric used by deterministic state-claim authorization inside the canonical serialization before canonical_state_hash.",
+    "Preserve secret isolation, read-only evidence SQL, recursive persisted-string leak scanning, RFC6901 response pointers, shell-free local_exec, exactly-once, atomic commit and stale-generation rejection.",
+    "Then obtain actually-started exact-current authorized isolated focused and adjacent regression execution before reference PARITY/runtime credit."
+  ],
+  "german_summary": "Der Referenzpfad wurde nicht vorschnell aus einem stale Donor übernommen. Der Mirror-Generationsfehler wurde mechanistisch reproduziert; parallel gelandete Guards wurden fusioniert. Neu auf main ist ein ausführbarer Migrationsguard, der sowohl wiederkehrende Mirror-Autorität als auch einen stillen Legacy-Reset auf Generation 0 verhindert. PR #996 ist mit vier aktuellen Source-Blockern markiert. Exakte Runtime-Evidenz bleibt null, bis ein autorisierter isolierter Runner tatsächlich startet."
+}

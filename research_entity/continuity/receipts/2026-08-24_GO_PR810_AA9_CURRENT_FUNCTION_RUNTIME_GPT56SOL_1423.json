@@ -1,0 +1,96 @@
+{
+  "schema": "ENTITYOS_HCU_GO_PR810_CURRENT_FUNCTION_RUNTIME/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "authority_epoch": "8.65",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "4a67e563cbb1c86153221fe94aaf835f979ab5a8",
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "new_unusual_experiments_executed": 0,
+    "classification": "ORDINARY_READ_ONLY_PROVIDER_LOG_AND_EXACT_SOURCE_VERIFICATION"
+  },
+  "exact_executor": {
+    "repository_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "git_sha": "aa9c9ea867b13a497cf7d7d8ed711486a4db0c90",
+    "deployment_id": "dpl_5WvWvbJEHCaRk7i1F6aJqfePkb84",
+    "deployment_state": "READY",
+    "branch": "clay/fusion-vcr-native-20260817"
+  },
+  "provider_runtime_observation": {
+    "source": "Vercel read-only runtime logs",
+    "request_time_utc": "2026-08-24T07:21:46Z",
+    "method": "GET",
+    "path": "/api/hcu-runtime-admission-probe",
+    "status_code": 200,
+    "runtime_source": "serverless",
+    "cache": "MISS"
+  },
+  "exact_source_scope": {
+    "path": "mcp/vercel-sandbox-mcp/api/hcu-runtime-admission-probe.js",
+    "git_sha": "aa9c9ea867b13a497cf7d7d8ed711486a4db0c90",
+    "blob_sha": "d763668e808660948335f3adbca0a065d8444881",
+    "supervisor": "SUPERVISOR_STEERING_8_65",
+    "default_probe_when_query_absent": "runtime",
+    "runtime_success_status": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "sandbox_create_call_present_on_runtime_path": false,
+    "sandbox_create_performed_field": false,
+    "credential_lookup_performed_field": false,
+    "external_source_network_performed_field": false,
+    "execution_credit_declared": "RUNTIME_DIAGNOSTIC_ONLY",
+    "entityos_hcu_whole_runtime_credit": false,
+    "hcu_full_runtime_credit": false,
+    "jspace_model_runtime_credit": false,
+    "training_credit": false,
+    "whole_product_pass": false
+  },
+  "inference": {
+    "claim": "The exact aa9c9ea deployment executed the current no-query runtime-admission route and returned HTTP 200. Because the exact deployed route defaults an absent probe query to runtime and its runtime branch returns HTTP 200 as FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE without Sandbox.create, this establishes function-runtime diagnostic credit at the exact current aa9c9ea no-Sandbox scope.",
+    "classification": "EXACT_SOURCE_PLUS_PROVIDER_RUNTIME_LOG_BOUND_INFERENCE",
+    "falsifiers": [
+      "deployment Git SHA not equal aa9c9ea867b13a497cf7d7d8ed711486a4db0c90",
+      "provider log not bound to dpl_5WvWvbJEHCaRk7i1F6aJqfePkb84",
+      "route source at exact SHA contains Sandbox.create on the runtime branch",
+      "request path maps to a different handler than the exact source path"
+    ]
+  },
+  "credits_after": {
+    "current_head_function_runtime_diagnostic": "PASS_AT_EXACT_AA9C9EA_NO_SANDBOX_SCOPE",
+    "sandbox_module_import_credit": 0,
+    "sandbox_create_credit": 0,
+    "sandbox_environment_runtime_credit": 0,
+    "python_sqlite3__sqlite3_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "local_model_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "remaining_gate": {
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_execution_admitted": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "next_exact_gate": "Obtain a directly authoritative read-only remaining included Vercel Sandbox quota/no-charge signal. READY deployment, current function HTTP 200, Hobby/team/plan identity, and cumulative per-sandbox usage must not open Sandbox.create. Re-enter live executor/deployment identity immediately before any later admitted environment probe."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: current executor aa9c9ea now has exact READY deployment plus provider-observed HTTP 200 function runtime at the no-Sandbox diagnostic route; prior d548 current-head drift is superseded without scope inflation.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: no Sandbox environment execution is admitted while direct remaining included quota remains unobserved; HCU runtime credit stays zero.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no real local model invocation or model-specific Global J-Space/GWT causal trace was executed; model/J-Space/training credit stays zero."
+  },
+  "actions_not_performed_by_this_organ": [
+    "HTTP handler invocation",
+    "Sandbox.create",
+    "provider credential preflight",
+    "Together inference or training",
+    "paid fallback",
+    "billing mutation",
+    "VPS/self-hosted/production-host testing"
+  ],
+  "acceptance": "IN_PROGRESS"
+}

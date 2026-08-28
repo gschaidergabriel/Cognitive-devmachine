@@ -1,0 +1,80 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_SPLIT_ALIAS_AND_RUNTIME_GUARD_SUCCESSOR_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "92f4e5e165cb3fc4f47c3c9c9e29a740a38faf70",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_SOURCE_HARDENING_PLUS_READ_ONLY_EXACT_HEAD_BUILD_ACCEPTANCE"
+  },
+  "durable_donor_delta": {
+    "lane": "gschaidergabriel/clay-global-research-entity#1263",
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "source_commit": "f06390f9a19b997befb19857ec4e6ec435005dfe",
+    "test_commit": "6e76b9ca267873e237be650cd5e19702b636b122",
+    "source_path": "the artefact/MicroEntity/hcu/jspace_latent_basis_adapter_v1.py",
+    "test_path": "the artefact/MicroEntity/hcu/test_jspace_latent_basis_adapter_v1.py",
+    "finding": "LatentBasisAdapter bound calibration_split_sha256 and holdout_split_sha256 but did not fail closed when both identities were equal, allowing a formally valid adapter to alias calibration and holdout partitions.",
+    "repair": "Reject CALIBRATION_HOLDOUT_SPLIT_ALIAS during construction and deserialized validation before adapter digest credit.",
+    "regressions_added": [
+      "test_calibration_and_holdout_split_alias_fails_closed",
+      "test_deserialized_split_alias_fails_before_digest_credit"
+    ],
+    "latest_donor_head_observed": "ed6c5ff41ef36c6799cace067888896667953bc9",
+    "latest_donor_contains_delta": true,
+    "ancestry_observation": "GitHub compare reports latest donor head ahead of 6e76b9ca by 9 commits with 6e76b9ca as merge base; later work preserves and further strengthens adapter validation.",
+    "execution_scope": "SOURCE_AND_TEST_DELTA_ONLY_NO_ADMITTED_MODEL_RUNTIME_EXECUTION"
+  },
+  "runtime_first_successor_observation": {
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "stale_guard_counterevidence_head": "cf40d46a5c9e6b533b9b1bf94645f45c402e422e",
+    "stale_guard_error": "ENTITYOS_HCU_FREE_ONLY_SANDBOX_ADMISSION_MISSING",
+    "localized_cause": "exclusive build guard still expected supervisor 8.63 active-admission markers while exact-head free-only-sandbox-admission.js already carried supervisor 8.64 fail-closed quota markers",
+    "successor_fix_commit_observed": "2da99e0458809988190c129b04cae913d1f15d92",
+    "fix_origin": "PARALLEL_RETAINED_EXECUTOR_WORKER_ALREADY_SOLVED_DO_NOT_DUPLICATE",
+    "exact_head_deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "exact_head_deployment_state": "READY",
+    "build_guard_chain": "PASS",
+    "exact_blobs_checked": 17,
+    "rebind_contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+    "rebind_contract_status": "SOURCE_REBOUND_READY",
+    "runtime_credit_from_build": 0,
+    "sandbox_create_observed": false,
+    "function_probe_invoked": false
+  },
+  "free_only_gate": {
+    "connected_vercel_team_plan": "hobby",
+    "remaining_sandbox_quota_directly_observed": false,
+    "quota_inferred_from_plan_identity": false,
+    "sandbox_create_permitted_now": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "decision": "DO_NOT_INVOKE_SANDBOX_CAPABILITY_PROBE_UNTIL_DIRECT_INCLUDED_QUOTA_SIGNAL_OPENS_GATE"
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact-head build failure was localized to stale 8.63 guard expectations; parallel retained-lane repair 2da99e04 produced an exact-head READY deployment with full build guard chain PASS. Runtime remains blocked before Sandbox.create by unobserved included quota.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: model-specific HCU J-Space LatentBasisAdapter now fails closed on calibration/holdout split identity alias at construction and revalidation; latest donor retains the delta.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_READINESS_ONLY: calibration and holdout identities can no longer be identical in the adapter artifact, reducing one direct train/evaluation leakage mode. No model-runtime efficacy or training credit is granted."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Obtain a directly observed authoritative remaining included Vercel Sandbox quota signal without upgrade, billing mutation, paid fallback or provider credential preflight.",
+    "Re-enter live PR810 and require an exact matching READY deployment after any successor movement.",
+    "Only if the FREE_ONLY quota gate opens, run the fixed environment capability probe binding executor SHA, Python version, sqlite3/_sqlite3 availability, exact source identities, secret fence, result digest and cleanup.",
+    "If environment capability passes, advance canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> inference receipt -> Global J-Space/GWT causal observation with admitted controls."
+  ],
+  "evidence_boundary": "This receipt records source/test hardening, exact-head Vercel build counterevidence, and successor build recovery. READY/build PASS is not Function/Sandbox/HCU/model/J-Space/training/whole-product runtime acceptance."
+}

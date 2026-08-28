@@ -1,0 +1,52 @@
+{
+  "schema_version": "8.77",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "classification": "PERSISTENT_METRICS_FRESHNESS_GAP_WITH_TOKEN_VOLUME_OUTRUNNING_VERIFIED_CONVERSION",
+  "authority": {
+    "free_only": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "paid_subscription_unknown_fail_closed": true,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false
+  },
+  "material_new_finding": {
+    "status": "EXECUTED_STALENESS_AND_ZERO_DATASET_CONVERSION_PERSIST",
+    "finding": "After Supervisor 8.76, the live dashboard advanced to 35,308,070 cumulative Free-Swarm tokens, 144 Forge evaluations and 1 nominal ACCEPTED delta, while Distillery remains at 0 accepted packets / 0 accepted dataset tokens. free swarm/GO_COLLECTIVE_METRICS.json is still frozen at 2026-08-24T13:58:54Z, authority_epoch 8.71, 7,302,860 tokens and 0 Forge accepts. PR #1771 remains open at 289b3144a06d0eaa8901b92cc023ef75893b8ba4. Thus no executable freshness or dataset-conversion gate has closed while raw token volume continues to rise.",
+    "credit": "METROLOGY_AND_CONVERSION_BLOCKER"
+  },
+  "backpressure": {
+    "rule": "Do not increase external-LLM worker count, concurrency, token budgets, or add new provider lanes while the canonical metrics freshness gate is stale and accepted_dataset_tokens remains zero. Existing admitted FREE lanes may finish bounded in-flight work, but the next cycle must spend its engineering/testing budget on freshness and conversion closure rather than more raw generation.",
+    "forbidden_as_progress_proxy": [
+      "cumulative token growth",
+      "worker count",
+      "model consensus",
+      "same-family repeated ACCEPT labels without new execution identity"
+    ]
+  },
+  "required_execution": [
+    "IMPLEMENT_FRESHNESS_FAIL_CLOSED_IN_EXISTING_GO_COLLECTIVE_METRICS_PATH",
+    "EXECUTE_STALE_INPUT_AUTHORITY_EPOCH_OUT_OF_ORDER_WRITER_IDEMPOTENCE_AND_SHARED_SNAPSHOT_TESTS",
+    "EMIT_COLLECTIVE_METRICS_FRESHNESS_RECEIPT_V1",
+    "EXECUTE_PR1771_EXACT_CURRENT_DISTILLERY_REPLAY_ID_MIGRATION_RECEIPT_V1",
+    "THEN_PROVE_ONE_EVIDENCE_QUALIFIED_FORGE_ACCEPT_TO_EXACTLY_ONE_DISTILLERY_PACKET_TO_ACCEPTED_DATASET_TOKENS_GT_ZERO_TO_SEMANTIC_REPLAY_PLUS_ZERO",
+    "ONLY_AFTER_BOTH_GATES_PASS_ALLOW_SWARM_SCALE_UP_RECONSIDERATION"
+  ],
+  "goodman_law": [
+    "shared orchestration/model-family descendants collapse to one evidence family",
+    "stale and live metrics copies are not independent evidence",
+    "token volume cannot substitute for executable conversion",
+    "no canonical or BASE promotion from consensus or labels"
+  ],
+  "promotion_state": {
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "jspace_model_runtime_pass": false,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false,
+    "provider_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "schema": "CLAY_TRIGGER2_QUERY_POLARITY_FACTORIAL_METHOD_SEED/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "4e9b58bdd1a017e4f25e61554016463a797c586d",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "paid_provider_used": false,
+    "unusual_experiment": "NOT_USED_SOURCE_METHOD_ONLY"
+  },
+  "purpose": "Add the still-open query-polarity factor as a donor method seed for the single retained Trigger-2 dynamic binding generator. This file is not a competing generator and is not training-ready.",
+  "current_donor_state": {
+    "order_crossed_generator_commit": "843c71101cf314faf8b97edbadf7f563189ae723",
+    "order_crossed_scope": "semantic class x S3 mapping x six display orders are independently crossed; TRAIN/VALIDATION/HOLDOUT scaffolding remains non-train-ready until exact ABI atom rendering",
+    "remaining_factor": "query polarity must be independently crossed with scenario, mapping, display order and template family before the preregistered successor can satisfy supervisor 8.78 polarity deconfounding requirements"
+  },
+  "polarity_semantics": {
+    "DIRECT": {
+      "description": "Evaluate the stated rule as written.",
+      "ALLOW": "ALLOW",
+      "DENY": "DENY",
+      "ABSTAIN": "ABSTAIN"
+    },
+    "INVERTED": {
+      "description": "Evaluate the logical complement of the stated rule outcome.",
+      "ALLOW": "DENY",
+      "DENY": "ALLOW",
+      "ABSTAIN": "ABSTAIN"
+    },
+    "unknown_law": "Negating an unresolved proposition does not manufacture a known truth value; ABSTAIN remains ABSTAIN."
+  },
+  "method_seed_examples": [
+    {
+      "id": "QP01_TRUE_DIRECT",
+      "pair_id": "QP_TRUE",
+      "evidence_class": "METHOD_ONLY",
+      "reality_level": "R2",
+      "query_polarity": "DIRECT",
+      "model_input": "CODEBOOK_BEGIN\nALLOW -> ATOM_C\nDENY -> ATOM_A\nABSTAIN -> ATOM_B\nCODEBOOK_END\nCase: Facts: p=true; q=true. Rule condition: p AND q.\nQuery: Evaluate the rule as written. Return exactly one mapped symbol.",
+      "target": "ATOM_C",
+      "training_eligible": false
+    },
+    {
+      "id": "QP02_TRUE_INVERTED",
+      "pair_id": "QP_TRUE",
+      "evidence_class": "METHOD_ONLY",
+      "reality_level": "R2",
+      "query_polarity": "INVERTED",
+      "model_input": "CODEBOOK_BEGIN\nALLOW -> ATOM_C\nDENY -> ATOM_A\nABSTAIN -> ATOM_B\nCODEBOOK_END\nCase: Facts: p=true; q=true. Rule condition: p AND q.\nQuery: Evaluate the logical complement of the rule outcome. Return exactly one mapped symbol.",
+      "target": "ATOM_A",
+      "training_eligible": false
+    },
+    {
+      "id": "QP03_FALSE_DIRECT",
+      "pair_id": "QP_FALSE",
+      "evidence_class": "METHOD_ONLY",
+      "reality_level": "R2",
+      "query_polarity": "DIRECT",
+      "model_input": "CODEBOOK_BEGIN\nALLOW -> ATOM_C\nDENY -> ATOM_A\nABSTAIN -> ATOM_B\nCODEBOOK_END\nCase: Facts: p=true; q=false. Rule condition: p AND q.\nQuery: Evaluate the rule as written. Return exactly one mapped symbol.",
+      "target": "ATOM_A",
+      "training_eligible": false
+    },
+    {
+      "id": "QP04_FALSE_INVERTED",
+      "pair_id": "QP_FALSE",
+      "evidence_class": "METHOD_ONLY",
+      "reality_level": "R2",
+      "query_polarity": "INVERTED",
+      "model_input": "CODEBOOK_BEGIN\nALLOW -> ATOM_C\nDENY -> ATOM_A\nABSTAIN -> ATOM_B\nCODEBOOK_END\nCase: Facts: p=true; q=false. Rule condition: p AND q.\nQuery: Evaluate the logical complement of the rule outcome. Return exactly one mapped symbol.",
+      "target": "ATOM_C",
+      "training_eligible": false
+    },
+    {
+      "id": "QP05_UNKNOWN_DIRECT",
+      "pair_id": "QP_UNKNOWN",
+      "evidence_class": "METHOD_ONLY",
+      "reality_level": "R2",
+      "query_polarity": "DIRECT",
+      "model_input": "CODEBOOK_BEGIN\nALLOW -> ATOM_C\nDENY -> ATOM_A\nABSTAIN -> ATOM_B\nCODEBOOK_END\nCase: Facts: p=true; q=UNKNOWN. Rule condition: p AND q.\nQuery: Evaluate the rule as written. Return exactly one mapped symbol.",
+      "target": "ATOM_B",
+      "training_eligible": false
+    },
+    {
+      "id": "QP06_UNKNOWN_INVERTED",
+      "pair_id": "QP_UNKNOWN",
+      "evidence_class": "METHOD_ONLY",
+      "reality_level": "R2",
+      "query_polarity": "INVERTED",
+      "model_input": "CODEBOOK_BEGIN\nALLOW -> ATOM_C\nDENY -> ATOM_A\nABSTAIN -> ATOM_B\nCODEBOOK_END\nCase: Facts: p=true; q=UNKNOWN. Rule condition: p AND q.\nQuery: Evaluate the logical complement of the rule outcome. Return exactly one mapped symbol.",
+      "target": "ATOM_B",
+      "training_eligible": false
+    }
+  ],
+  "swarm_review": {
+    "generator_role": "Constructed polarity-matched minimal pairs while keeping scenario, realized mapping and display order fixed inside each pair.",
+    "semantic_reviewer": "Confirmed DIRECT identity, INVERTED ALLOW<->DENY, and ABSTAIN invariance under unresolved truth.",
+    "shortcut_hunter": "Rejected any design where polarity frequency, template identity, symbol family or display order predicts target independently of scenario plus episode mapping.",
+    "statistical_reviewer": "Full successor must cross query polarity independently with semantic scenario, all six S3 mappings, all six display orders and template family; nuisance-only prediction must remain at chance under preregistered tests.",
+    "split_reviewer": "Polarity pairs belong to the same causal/counterfactual family and must never be separated across TRAIN/VALIDATION/HOLDOUT.",
+    "abi_reviewer": "ATOM_A/B/C are logical aliases only. Exact accepted one-token ABI atoms and frozen tokenizer identity are required before materialization.",
+    "final_adjudicator": "ACCEPT_AS_METHOD_DONOR_ONLY; FUSE_INTO_SINGLE_RETAINED_SUCCESSOR; DO_NOT_TRAIN_DIRECTLY."
+  },
+  "full_factorial_requirement": {
+    "training_only_if_four_train_templates": "4 templates x 3 semantic states x 6 S3 mappings x 6 display orders x 2 query polarities = 864 logical rows before hard negatives",
+    "retained_six_template_scaffold_including_validation_holdout": "6 templates x 3 semantic states x 6 S3 mappings x 6 display orders x 2 query polarities = 1296 logical rows before hard negatives",
+    "pair_integrity": "For every fixed scenario + mapping + display order + template cell, DIRECT and INVERTED must coexist in the same causal family.",
+    "counterfactual_target_law": "Known true/false targets flip through the episode-local mapping under INVERTED; unresolved targets remain unchanged."
+  },
+  "required_validator_delta": [
+    "Fail if any fixed scenario/mapping/display-order/template cell lacks both DIRECT and INVERTED polarity variants.",
+    "Fail if DIRECT and INVERTED paired rows cross dataset splits.",
+    "Fail if INVERTED does not swap known ALLOW/DENY target semantics exactly through the realized codebook.",
+    "Fail if ABSTAIN changes under polarity inversion without new evidence.",
+    "Compute nuisance-only decoder accuracy over template, mapping id, display order, polarity marker and symbol family; reject if it predicts the semantic scenario or target above preregistered chance tolerance without reading scenario content.",
+    "Keep exact verified ABI atom, tokenizer-count, last-token-position, family/provenance and holdout-freeze gates unchanged."
+  ],
+  "research_feedback": [
+    "The training target is increasingly specific: content-dependent semantic-state reading must be composed with an episode-local codebook and an independently varying query operator.",
+    "The repeated discovery of higher-order shortcuts shows that marginal balance is insufficient; conditional/factorial nuisance independence must be a first-class dataset invariant.",
+    "For future HCU/J-Space training traces, counterfactual operator changes should be represented as causal families rather than independent rows, so the harness can test function composition rather than memorization."
+  ],
+  "credit_boundary": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Fuse query polarity into the single retained order-crossed Trigger-2 generator and its cross-split leak guard; then run exact factorial/pair-integrity/nuisance-only-decoder validators before any ABI atom materialization or training admission."
+}

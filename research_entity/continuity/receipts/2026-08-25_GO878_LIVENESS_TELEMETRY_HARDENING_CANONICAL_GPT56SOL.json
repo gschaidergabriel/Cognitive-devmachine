@@ -1,0 +1,56 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_source_commits": {
+    "state_split": "b27318a223771519dfd84796dc0f9518fdb84f9c",
+    "state_split_regressions": "abeb4a7ff0c7829ae4574015657026a50223332e",
+    "telemetry_cleanup_hardening": "00187c830783687ba2e33c654bd1244c62068367",
+    "hardening_regression_lock": "e313381f9b21619175a59a4668b291e4c8a553f6"
+  },
+  "coordination": {
+    "superseded_pr_1892_closed_unmerged": true,
+    "superseded_pr_1909_closed_unmerged_after_direct_canonical_successors": true,
+    "duplicate_pr_opened_after_successor_discovery": false,
+    "new_unusual_experiments": 0,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "no shared reproducible immutable macrocycle/request identity exposed to this organ"
+  },
+  "observed": [
+    "Supervisor 8.78 remains inbox-selected authority",
+    "canonical main contains the tri-state extraction-liveness/backpressure split",
+    "pending historical extraction keeps the shared 6000 extraction transport alive",
+    "when pending extraction is zero, READY plus NEEDS_IMPLEMENTATION pressure retains stop authority",
+    "missing or invalid Forge state remains fail-closed",
+    "the canonical supervisor previously closed the read-only Forge SQLite connection only on the normal path and did not export RAW_GENERATION_BACKPRESSURE into SUPERVISOR_6000.json"
+  ],
+  "delta": [
+    "close any opened read-only Forge SQLite connection in a finally boundary",
+    "surface RAW_GENERATION_BACKPRESSURE.json as raw_generation_backpressure in SUPERVISOR_6000.json with fail-closed UNOBSERVED fallback",
+    "record current transport/backpressure semantics in supervisor policy telemetry",
+    "lock these hardenings in tests/test_go_878_raw_generation_backpressure.py"
+  ],
+  "go_tracks": {
+    "track_a": "ADVANCED: exact-current EntityOS control-plane liveness/backpressure state is canonical and operator-visible",
+    "track_b": "ADVANCED_AT_DETERMINISTIC_CONTROL_EVIDENCE_BOUNDARY: the single canonical supervisor exports its fail-closed/liveness decision without creating another state/effect authority",
+    "track_c": "ADVANCED_AT_DATASET_READINESS_BOUNDARY: historical extraction transport cannot self-deadlock and its control decision is observable before historical saturation/model/training promotion"
+  },
+  "evidence": {
+    "source_write": "COMMITTED_CANONICAL_MAIN",
+    "regression_source_write": "COMMITTED_CANONICAL_MAIN",
+    "test_execution_observed_for_00187c_or_e313381": false,
+    "runtime_execution_observed_for_00187c_or_e313381": false,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": "CURRENT_GO_README_ALREADY_UPDATED_BY_CANONICAL_PARALLEL_WORK: the artefact/README.md at the post-write re-entry already documents Supervisor 8.78, the state-split liveness semantics, zero runtime credit, and the exact-current raw-generation regression gate. This organ did not overwrite that moving current-facing file merely to restamp a SHA.",
+  "next_exact_gate": "execute tests/test_go_878_raw_generation_backpressure.py on an authorized exact-current FREE_ONLY surface, then obtain a bounded supervisor receipt proving the same state transitions and telemetry at runtime before claiming historical saturation or raw scale-up"
+}

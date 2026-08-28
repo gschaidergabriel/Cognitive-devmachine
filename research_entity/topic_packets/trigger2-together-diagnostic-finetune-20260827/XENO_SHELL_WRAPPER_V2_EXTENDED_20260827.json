@@ -1,0 +1,39 @@
+{
+  "schema": "STATUS_NOTE/v1",
+  "packet_id": "trigger2-together-diagnostic-finetune-20260827",
+  "topic": "Extended the diagnostic specialist wrapper with typed family decoding (the ABI-mismatch fix that could honestly be done) and ran a real 48-row test beyond the original 12",
+  "zip_package_recheck": "Re-opened ~/Desktop/Xeno_Shell_Harness_v1_Projektpaket_2026-08-26.zip fully (00_README, 02_architecture including the 16-point DoD json, 03_training_status, 04_research_data). Confirmed nothing new/actionable: the 3 code files are the exact same byte-identical files already checked; the DoD document independently and honestly reports the same blockers already found (no HRR artifacts anywhere -- confirmed via 'exhaustive filesystem search, not assumed' in the package's own text -- ZECP13/14 bridge not built, workspace-reentry receipts not built). 03_training_status is dated 2026-08-26, before today's actual Together run, and is superseded by this packet. Nothing pulled in beyond what was already known; correctly nothing to pull in.",
+  "abi_mismatch_real_fix": {
+    "what_was_added": "tools/xeno_diagnostic_specialist_wrapper_v1.py now has decode_atom_family(atom) plus FAMILY_ORDINAL_RANGES / FAMILY_CLASS_WORDS, both extracted directly from a fresh per-family scan of the real target field of all 16 B0-B6 training files (not guessed, not reused from memory of the earlier flat-vocabulary scan). A validated atom is no longer just 'valid/invalid' -- it is now typed (ORDINAL or CLASS_WORD) and attributed to every trained family whose real observed range/word-set it is consistent with (lists multiple families honestly where the real data is genuinely ambiguous, e.g. ordinals 0-14 are shared by five families; P/Q/R are shared by two GWT families -- not force-picking one).",
+    "honest_limit_not_worked_around": "This solves the ENGINEERING half of the ABI mismatch (bare string -> typed, family-attributable structure). It does not and cannot solve the DATA half: the diagnostic model was trained on placeholder ABI_ACCEPTED_ORDINAL:NN atoms, not the real tokenizer-bound 46-symbol production alphabet from XENO_SHELL_MASTER_SPEC.md SS7. Closing that gap requires retraining on real-ABI-bound data (atoms_index.json, real token IDs) -- a new training pass, which was neither authorized (the one paid Together run already happened, 'EIN Lauf' was explicit) nor attempted here. Reported as BLOCKED-BY-DATA, not silently bypassed.",
+    "tests_added": "8 new offline tests (test_decode_ordinal_single_family, test_decode_ordinal_ambiguous_shared_range, test_decode_ordinal_b5_range, test_decode_class_word_single_family, test_decode_class_word_shared_between_two_gwt_families, test_decode_real_holdout_hits_from_the_live_sandbox_demo, test_wrap_includes_family_decode_when_valid, test_wrap_family_decode_is_none_when_rejected) -- 22 total in the file now, all passing. Also reran tests/test_xeno_shell_packets_v1.py and tests/test_xeno_shell_s0s1s2_transitions_v1.py: 41 tests total across all three files, all green, no regressions."
+  },
+  "core_integration_status": "The 0.8B core (huihui-ai/Huihui-Qwen3.5-0.8B-abliterated base + the actual Together LoRA adapter from job ft-959a53c0-8228) is the load-bearing model behind load_diagnostic_model()/generate_and_validate() -- this is not a placeholder or mock, it is the real trained artifact, confirmed by matching raw generations against the original holdout test byte-for-byte on overlapping rows.",
+  "extended_real_test": {
+    "why_bigger": "Original demonstration used the same 12 rows as the initial holdout test. This run uses 48 FRESH real HOLDOUT_FROZEN rows (3 per family across all 16 trained families, sampled with a different random seed, never seen in training), run live in the claylab sandbox through the extended wrapper.",
+    "results": {
+      "n_rows": 48,
+      "n_shell_validated": 30,
+      "n_shell_rejected": 18,
+      "n_exact_correct_of_validated": 13,
+      "shell_validation_rate": "62.5% (30/48) -- well-formed trained atoms, correct or not",
+      "exact_task_accuracy": "27.1% (13/48) -- up from the original 12-row sample's 16.7%; larger sample gives a more stable, still honest, still modest estimate. Not framed as a success -- most validated atoms were still the wrong specific answer.",
+      "full_raw_data": "SHELL_WRAPPER_DEMO_BIG_RESULTS_20260827.json in this packet directory"
+    },
+    "new_finding_from_the_family_decode_layer": "The typed decode surfaced a failure category the original binary shell check could not see: real cross-family confusion. 4 of the 48 rows (all from B2_MID_EPISODE_REMAP or B2_PRIOR_OVERRIDE, both of which expect an ABI_ACCEPTED_ORDINAL answer) instead produced ALLOW/ABSTAIN -- real trained atoms, but ones that only belong to the unrelated B0_READ family. Plausible cause: B2 prompts contain literal 'ALLOW=>...', 'DENY=>...', 'ABSTAIN=>...' codebook-key text as part of the prompt surface, and the model sometimes echoes one of those keys instead of dereferencing to the mapped ordinal value -- a second, distinct confusion pattern from the B3 code-derailment one, not previously visible in the smaller 12-row sample or the plain accept/reject check."
+  },
+  "final_honest_status": {
+    "done": [
+      "Both local leads (zip package, master spec) re-checked in full -- confirmed redundant with what was already known, nothing missed.",
+      "ABI mismatch's engineering half solved for real: typed, per-family atom decoding grounded in fresh real-data extraction, not a guess.",
+      "0.8B core (real base + real adapter) is the thing actually running behind every test in this packet -- not swapped for a mock at any point.",
+      "Tested well beyond the original 12 rows: 48 additional fresh real holdout rows, run live in the sandbox, full raw results committed.",
+      "22/22 new+existing wrapper tests green, 41/41 across all three xeno_shell test files, no regressions."
+    ],
+    "deliberately_not_done": [
+      "The DATA half of the ABI mismatch (real tokenizer-bound 46-symbol production alphabet) is not fixed -- that requires retraining, which is out of scope for this packet (one authorized paid run, already used) and was not attempted.",
+      "The full XENO_MODEL_SLOT/v1 production contract (real measured checkpoint-identity receipt, HRR vector-ABI artifacts, hook registry) is still correctly BLOCKED per the harness's own pre-existing, honest DoD tracking -- not claimed as done, not faked.",
+      "ZECP13/14 Claude Code bridge, ZECP10 workspace-reentry receipts, GRID10 N-invariance cross-test, engine-mode-5 (no-model path) exercise: all pre-existing gaps from the harness's own 2026-08-26 DoD, not touched in this session -- multi-session scope, not something to rush into the remainder of an already very long day."
+    ]
+  }
+}

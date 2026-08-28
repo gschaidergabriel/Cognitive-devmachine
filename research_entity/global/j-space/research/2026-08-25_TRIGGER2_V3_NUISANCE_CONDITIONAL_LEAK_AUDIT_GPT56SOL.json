@@ -1,0 +1,88 @@
+{
+  "schema": "CLAY_TRIGGER2_V3_NUISANCE_CONDITIONAL_LEAK_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "program": "ENTITYOS_HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "32454388b1c23c5c2d1f15951a6b487ccaaf36ad",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false
+  },
+  "audited_source": {
+    "path": "tools/trigger2_binding_router_factorial_generator_v3.py",
+    "blob_sha": "ecd941ef346080bd5f3db1e96da7ae26810a85d7",
+    "scope": "P1 TRAIN blueprint schedule only",
+    "relevant_source_rule": "order = stable_shuffle(CLASSES, f\"P1|{tid}|{pool_name}|{base}|{polarity}|P{pid}\")"
+  },
+  "verdict": "REJECT_V3_FOR_DIRECT_BINDING_TRAINING_UNTIL_DISPLAY_ORDER_IS_FULLY_CROSSED_OR_EQUIVALENT_INDEPENDENCE_IS_PROVEN",
+  "primary_finding": {
+    "id": "RANDOMIZED_ORDER_IS_CONDITIONED_ON_TARGET_GENERATING_FACTORS",
+    "severity": "CRITICAL",
+    "finding": "The deterministic shuffle key includes template id, base semantic state, query polarity and S3 permutation. Therefore display order is not an independently randomized nuisance variable; it is generated from variables that determine the target class.",
+    "train_p1_rows_reconstructed": 144,
+    "formula": "4 TRAIN templates * 3 base states * 2 polarities * 6 S3 mappings",
+    "display_order_only": {
+      "mutual_information_bits_with_target_class": 0.022940410767280105,
+      "empirical_majority_lookup_accuracy": 0.3958333333333333,
+      "chance_accuracy": 0.3333333333333333
+    },
+    "conditional_nuisance_signature": {
+      "signature": "template_family_proxy + query_polarity + realized_S3_mapping + display_order",
+      "semantic_evidence_excluded": true,
+      "distinct_signatures": 127,
+      "signatures_with_one_possible_target_class": 110,
+      "signatures_with_two_possible_target_classes": 17,
+      "signatures_with_all_three_possible_target_classes": 0,
+      "required_all_three_support_fraction": 0.0,
+      "empirical_lookup_accuracy": 0.8819444444444444,
+      "mutual_information_bits_with_target_class": 1.3488513896100467
+    },
+    "interpretation_boundary": "The 88.19% value is an empirical nuisance-signature lookup diagnostic over the deterministic generated blueprint, not an out-of-sample model accuracy claim. The decisive structural failure is that zero of 127 nuisance signatures retain all three target classes as possible outcomes.",
+    "consequence": "A learner can exploit generator scheduling/context regularities rather than learn semantic-evidence-to-episode-codebook binding. Marginal class-symbol balance and a deterministic shuffle are insufficient anti-shortcut guarantees."
+  },
+  "swarm_review": {
+    "DATASET_ARCHITECT": "FAIL: display order is scheduled from target-generating variables instead of independently factorialized.",
+    "ADVERSARIAL_SHORTCUT_HUNTER": "CRITICAL_FAIL: 110/127 nuisance signatures uniquely identify the target class and none retain all three classes.",
+    "STATISTICAL_REVIEWER": "FAIL: marginal order-only MI is small but conditional nuisance MI is 1.34885 bits; marginal balance hides higher-order leakage.",
+    "CAUSAL_BINDING_REVIEWER": "FAIL_FOR_TRAINING: counterfactual S3 balance does not isolate semantic binding when presentation scheduling remains target-conditioned.",
+    "CONVERGENCE_REVIEWER": "Use the current v2 full-cross display-order mechanism as donor. Do not create a second semantic authority; repair/fuse v3 proof-topology features onto a nuisance-independent factorial schedule.",
+    "FINAL_ADJUDICATOR": "v3 remains useful donor/source research, but direct training use is blocked until conditional nuisance support passes."
+  },
+  "new_training_rules": [
+    "RANDOMIZED_DOES_NOT_IMPLY_INDEPENDENT",
+    "VISIBLE_NUISANCE_FACTORS_MUST_BE_FULLY_CROSSED_OR_PASS_A_PREREGISTERED_CONDITIONAL_INDEPENDENCE_GATE",
+    "FOR_EACH_NUISANCE_SIGNATURE_EXCLUDING_SEMANTIC_EVIDENCE_ALL_TARGET_CLASSES_AND_TARGET_SLOTS_MUST_REMAIN_POSSIBLE",
+    "MARGINAL_CLASS_SYMBOL_BALANCE_CANNOT_SUBSTITUTE_FOR_HIGHER_ORDER_SHORTCUT_TESTS"
+  ],
+  "recommended_repair": {
+    "minimum": "For every fixed semantic scenario, lexical realization, query polarity and S3 mapping, emit all six display orders with the same target; across evidence states, retain all three semantic target classes for every nuisance signature.",
+    "preferred_donor": "tools/trigger2_context_binding_generator_v2.py",
+    "required_regressions": [
+      "all-three target-class support per nuisance signature",
+      "all-three target-slot support per nuisance signature",
+      "six display orders per fixed semantic scenario/polarity/mapping",
+      "nuisance-only decoder at chance by construction or preregistered tolerance",
+      "conditional MI gate in addition to marginal MI"
+    ]
+  },
+  "research_feedback": {
+    "training_implication": "The binding curriculum should teach an operator invariant to presentation order, not merely survive a pseudorandom order schedule.",
+    "harness_implication": "Future Xeno evaluation should include nuisance-only baselines that receive template/style, polarity, realized mapping and presentation features but no semantic evidence. Any above-chance shortcut blocks binder promotion.",
+    "general_clay_rule": "A deterministic generator can be perfectly reproducible and still leak the target. Reproducibility and independence are separate properties.",
+    "falsifier": "If the repaired full-cross generator still permits a nuisance-only classifier above the preregistered chance tolerance on frozen unseen families, the remaining shortcut source must be isolated before training promotion."
+  },
+  "credits": {
+    "research_negative_delta": 1,
+    "accepted_dataset_tokens": 0,
+    "qwen35_training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Converge the v3 proof-topology/router-isolation donors onto the v2 full-cross nuisance schedule, add the conditional nuisance-support regression, and only then proceed toward exact 46-atom/tokenizer-bound materialization."
+}

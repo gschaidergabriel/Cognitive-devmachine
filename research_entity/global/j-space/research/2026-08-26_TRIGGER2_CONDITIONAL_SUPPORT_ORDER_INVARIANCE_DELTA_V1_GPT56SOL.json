@@ -1,0 +1,178 @@
+{
+  "schema": "CLAY_TRIGGER2_CONDITIONAL_SUPPORT_ORDER_INVARIANCE_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "NONCANONICAL_RESEARCH_DELTA_METHOD_ONLY_NO_TRAINING_PROMOTION",
+  "authority_snapshot": {
+    "observed_main_before_write": "1469d5d197b089f4790572734aae3ccb1f5dd339",
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "training_execution_authorized": false,
+    "freeswarm_provider_routes": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "current_source": {
+    "path": "tools/trigger2_binding_router_factorial_generator_v3.py",
+    "blob_sha1": "ecd941ef346080bd5f3db1e96da7ae26810a85d7",
+    "current_status": "QUARANTINE_BLOCKED_DIRECT_TRAINING",
+    "known_failure": "stable_shuffle key includes base semantic state, making display order conditional on a target-generating factor"
+  },
+  "prior_negative_evidence": {
+    "source": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_V3_NUISANCE_CONDITIONAL_LEAK_AUDIT_GPT56SOL.json",
+    "train_p1_rows": 144,
+    "nuisance_signatures": 127,
+    "signatures_with_one_possible_target_class": 110,
+    "signatures_with_two_possible_target_classes": 17,
+    "signatures_with_all_three_possible_target_classes": 0,
+    "nuisance_lookup_accuracy": 0.8819444444444444,
+    "conditional_mutual_information_bits": 1.3488513896100467
+  },
+  "new_concept": {
+    "name": "CONDITIONAL_SUPPORT_CERTIFICATE_SEPARATED_FROM_ORDER_INVARIANCE_COVERAGE",
+    "claim_level": "R2_GENERATED_WITH_DETERMINISTIC_STATIC_RECONSTRUCTION_SUPPORT",
+    "motivation": "The current audit mixes two distinct requirements: (A) target non-predictability from visible nuisance variables and (B) exposure/generalization across presentation-order permutations. Full crossing all six orders is sufficient for both, but it is stronger and more expensive than is logically necessary for A.",
+    "variables": {
+      "B": "base semantic state in {ALLOW,DENY,ABSTAIN}",
+      "P": "query polarity in {DIRECT,INVERTED}",
+      "M": "episode-local bijection from semantic decision class to output symbol",
+      "O": "display order of codebook entries",
+      "K": "other visible nuisance factors such as template/style/pool/family",
+      "C": "decision class phi_P(B)",
+      "Y": "target output symbol M(C)"
+    },
+    "certificate": "For each fixed nuisance signature N=(K,P,M,O) excluding semantic evidence, require equal support for all B values. Because phi_P is a permutation of the three decision classes and M is bijective, equal B support implies P(C|N)=1/3 and P(Y|N)=1/3 exactly in the empirical design. Therefore a nuisance-only lookup decoder is at exact 1/3 by construction for both class and symbol targets.",
+    "critical_condition": "O must not depend on B or any other semantic-evidence variable unless the full conditional support equality is still mechanically proven. RANDOMIZED is not enough; the schedule must be SEMANTIC_BLIND or otherwise support-certified.",
+    "separate_order_invariance_requirement": "Independence from nuisance does not prove robustness to unseen order permutations. Order invariance should be measured as a separate equivariance/generalization axis using held-out or fully crossed order interventions."
+  },
+  "deterministic_static_reconstruction": {
+    "scope": "P1 TRAIN algebra reconstructed from current v3 loop structure; no model/runtime execution",
+    "current_v3_reproduction": {
+      "rows": 144,
+      "signature_definition": "template_id + polarity + S3 permutation + display_order, semantic scene/base excluded",
+      "distinct_signatures": 127,
+      "support_histogram": {
+        "1_target_class": 110,
+        "2_target_classes": 17,
+        "3_target_classes": 0
+      },
+      "majority_lookup_accuracy": 0.8819444444444444,
+      "mutual_information_bits": 1.3488513896100465,
+      "matches_prior_audit": true
+    },
+    "base_blind_order_schedule_counterfactual": {
+      "only_schedule_change": "derive display order from template_id + pool + polarity + S3 permutation, explicitly excluding base semantic state",
+      "rows": 144,
+      "distinct_signatures": 48,
+      "support_histogram": {
+        "1_target_class": 0,
+        "2_target_classes": 0,
+        "3_target_classes": 48
+      },
+      "majority_lookup_accuracy": 0.3333333333333333,
+      "mutual_information_bits": 0.0,
+      "interpretation": "At logical schedule level, the critical conditional target leak disappears without increasing row count. This does NOT prove serialized-byte leakage freedom, model robustness, or training suitability."
+    }
+  },
+  "hypotheses": [
+    {
+      "id": "H49_1_SUPPORT_CERTIFICATE_IS_THE_MINIMAL_ANTI_SHORTCUT_INVARIANT",
+      "hypothesis": "Exact per-signature three-class/three-symbol support is the minimal structural anti-shortcut invariant needed to eliminate the diagnosed v3 conditional nuisance lookup path.",
+      "counterhypothesis": "Even with exact target support, other visible serialized features correlated with semantic evidence can preserve a shortcut; support certification over the chosen nuisance signature is insufficient.",
+      "cheapest_discriminator": "Run the existing rendered-prompt semantic ablation gate plus a serialized-byte nuisance decoder on a candidate schedule that passes exact support. Any above-chance result falsifies sufficiency of the chosen nuisance signature and requires expanding N."
+    },
+    {
+      "id": "H49_2_BASE_BLIND_SCHEDULE_CAN_REPAIR_THE_CRITICAL_LEAK_WITHOUT_6X_CORPUS_GROWTH",
+      "hypothesis": "Holding display order constant across the three semantic base states for each (template, polarity, mapping) cell removes the diagnosed target-conditioned scheduling leak at the same 144-row P1 TRAIN size.",
+      "counterhypothesis": "The reduced schedule removes lookup leakage but underexposes order permutations, causing the model to overfit to mapping/order pairings and fail unseen-order binding.",
+      "cheapest_discriminator": "Do not train yet. Materialize two eval-only candidate schedules: base-blind minimal and full six-order cross. Verify exact support, then preregister a later matched-token pilot evaluating all six order interventions on family-disjoint templates/symbols once training authority and corpus admission exist."
+    },
+    {
+      "id": "H49_3_ORDER_INVARIANCE_SHOULD_BE_AN_INTERVENTIONAL_AXIS_NOT_ASSUMED_FROM_BALANCE",
+      "hypothesis": "Dynamic binding promotion should require counterfactual order interventions at evaluation time because aggregate balance cannot establish a routing mechanism invariant to presentation order.",
+      "counterhypothesis": "A fully crossed training design makes a separate order-intervention evaluation redundant.",
+      "cheapest_discriminator": "Freeze identical semantic/codebook episodes, permute only codebook display order, and require target equivariance under all six permutations; include template-OOD, symbol-OOD and joint-OOD families."
+    }
+  ],
+  "design_options": {
+    "FULL_CROSS_REFERENCE": {
+      "train_p1_rows": 864,
+      "construction": "4 templates * 2 polarities * 6 S3 mappings * 6 display orders * 3 base states",
+      "benefit": "maximal direct order exposure and exact conditional support",
+      "cost": "6x current P1 TRAIN row count before other curriculum expansion"
+    },
+    "BASE_BLIND_MINIMAL_SUPPORT": {
+      "train_p1_rows": 144,
+      "construction": "4 templates * 2 polarities * 6 S3 mappings * 1 display order shared across all 3 base states",
+      "benefit": "exact diagnosed conditional-support repair at current row count",
+      "risk": "not every mapping/template cell sees all order permutations during training"
+    },
+    "BASE_BLIND_MULTIORDER_INTERMEDIATE": {
+      "train_p1_rows_formula": "144 * R, where 1 < R < 6",
+      "construction": "R semantic-blind display-order replicates per nuisance cell; each replicate contains all 3 base states",
+      "benefit": "preserves exact support while trading corpus size for order exposure",
+      "selection_law": "R must be chosen before model evaluation; final holdout must not select R"
+    }
+  },
+  "required_successor_gates_before_any_direct_training": [
+    "exact three-class support for every nuisance signature excluding semantic evidence",
+    "exact three-target-symbol support for every nuisance signature",
+    "nuisance-only lookup accuracy exactly chance by construction where discrete support permits",
+    "conditional MI = 0 for certified discrete schedule or preregistered tolerance only after exact serialized expansion",
+    "rendered-prompt semantic-ablation gate on final bytes",
+    "serialized-byte nuisance decoder that sees every model-visible nonsemantic feature",
+    "all-six display-order counterfactual equivariance eval",
+    "family/provenance split disjointness",
+    "cross-split prompt/content hash exclusion",
+    "tokenizer/ABI single-token and position integrity",
+    "no hidden metadata used as evidence of independence"
+  ],
+  "external_research_delta": [
+    {
+      "source": "Wu, Geiger, Milliere (2025), How Do Transformers Learn Variable Binding in Symbolic Programs?, arXiv:2505.20896",
+      "classification": "PRIMARY_RESEARCH_METHOD_EVIDENCE",
+      "finding": "Transformers in the studied symbolic-program task passed through a shallow heuristic phase before learning a systematic binding mechanism; causal interventions localized routing behavior.",
+      "implication": "High aggregate accuracy or balanced labels cannot substitute for intervention-based binding diagnostics."
+    },
+    {
+      "source": "Adnan et al. (2022), Monitoring Shortcut Learning using Mutual Information, arXiv:2206.13034",
+      "classification": "PRIMARY_RESEARCH_METHOD_EVIDENCE",
+      "finding": "Mutual information is used as a diagnostic for shortcut learning under spurious correlations.",
+      "implication": "Retain MI as a diagnostic, but combine it with exact support/equivariance because low marginal MI can hide high-order conditional leakage, as v3 already demonstrated."
+    },
+    {
+      "source": "NIST IR 7878, Combinatorial Coverage Measurement",
+      "classification": "OFFICIAL_COMBINATORIAL_METHOD_REFERENCE",
+      "finding": "t-way combinatorial coverage formalizes whether combinations of factor values are covered and provides a coverage vocabulary when exhaustive crossing is impractical.",
+      "implication": "Treat order/template/mapping/polarity as explicit factors and report interaction-strength coverage separately from the target-independence certificate rather than conflating them."
+    }
+  ],
+  "novel_training_evaluation_rule": "TARGET_INDEPENDENCE and NUISANCE_COVERAGE are separate axes. A schedule may pass exact conditional target support yet remain weak on order coverage; conversely, broad order coverage may still leak target if the schedule is semantic-conditioned. Trigger-2 should require both axes explicitly.",
+  "nonduplication": {
+    "open_pr_2007": "retains rendered model-visible semantic-ablation gate donor; this delta does not duplicate that validator",
+    "open_pr_2009": "retains broad Trigger-2 training convergence lane; this delta contributes a narrower mathematical schedule invariant rather than creating a competing training authority",
+    "checkpoint_abi_v48": "unchanged; existing checkpoint identity probe remains the executable P0 when current authority permits",
+    "new_generator_implementation_created": false,
+    "new_training_rows_created": 0
+  },
+  "promotion_boundary": {
+    "direct_training_use_of_v3": "BLOCKED",
+    "base_blind_schedule_training_use": "BLOCKED_CANDIDATE_ONLY",
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Implement only as a successor candidate or validator delta after rechecking overlapping PRs: make P1 display-order scheduling semantic-blind, add an exact conditional-support certificate for class and symbol targets, and keep all-six order permutations as a separate intervention/equivariance gate. Run deterministic source tests only; do not admit rows or execute model training. Independently, checkpoint ABI execution remains blocked until then-current non-provider FREE runtime authority is explicit and FreeSwarm emergency-stop quiescence requirements are satisfied."
+}

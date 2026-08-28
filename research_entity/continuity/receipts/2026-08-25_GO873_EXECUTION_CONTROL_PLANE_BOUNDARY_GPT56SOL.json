@@ -1,0 +1,84 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "683f85d69d92beec257cf7119748b4ffd413cf06",
+  "finding": {
+    "classification": "SOURCE_CONVERGED_EXECUTION_CONTROL_PLANE_BOUNDARY_UNRESOLVED",
+    "statement": "Canonical main has converged the replay-stable Forge execution identity, rebuild-stable training packet bytes, and live semantic replay closure. Executable promotion remains unproven. Two hosted CI carriers terminated failure before any observable job steps and their job-log blobs were unavailable; the older retained self-hosted Forge live gate remained queued at last direct observation; the merged health observer had not persisted OBSERVER_LATEST.json at last direct read. These are execution/control-plane observations, not Forge/Distillery semantic failures and not runtime PASS."
+  },
+  "source_convergence": {
+    "replay_delta_id_stability_commit": "8835f7a7a45c3e4bb6d28d8c24f7b2f1e4552609",
+    "training_packet_rebuild_stability_commit": "e4f1b7c5bbf1e3cdedd5fd66b82fd7b466fbb765",
+    "rebuild_regression_commit": "91db73dade60d6bc33a900af55c8451a4753d400",
+    "live_semantic_replay_closure_commit": "83a120454107b57aee4813559a6f6961ec477213",
+    "selfhosted_exact_main_workflow_commit": "fbc53ba5af6634f9e6832f156e776b99a2655a7e"
+  },
+  "execution_observations": [
+    {
+      "scope": "HOSTED_REPLAY_CARRIER_PR1724",
+      "run_id": 32753936480,
+      "job_id": 97517023752,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps_observed": false,
+      "job_log_fetch": "404_BLOB_NOT_FOUND",
+      "semantic_interpretation": "UNKNOWN_PRESTEP_OR_INFRASTRUCTURE_CAUSE"
+    },
+    {
+      "scope": "HOSTED_REBUILD_STABILITY_CARRIER_PR1726",
+      "run_id": 32760820826,
+      "job_id": 97538986034,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps_observed": false,
+      "job_log_fetch": "404_BLOB_NOT_FOUND",
+      "semantic_interpretation": "UNKNOWN_PRESTEP_OR_INFRASTRUCTURE_CAUSE"
+    },
+    {
+      "scope": "RETAINED_SELFHOSTED_FORGE_LIVE_GATE",
+      "run_id": 32742535392,
+      "job_id": 97480167751,
+      "status_at_last_direct_observation": "queued",
+      "conclusion": null
+    }
+  ],
+  "health_observer": {
+    "expected_path": "research_entity/runtime/selfhosted_health/OBSERVER_LATEST.json",
+    "last_direct_read": "404_NOT_FOUND",
+    "observer_persist_commit_found": false,
+    "interpretation": "RUNNER_HEALTH_UNRESOLVED_NOT_ASSUMED_FAILED"
+  },
+  "current_selfhosted_gate": {
+    "workflow": ".github/workflows/go873-distillery-selfhosted-main-regression.yml",
+    "trigger_modes": ["push_main_path_filtered", "workflow_dispatch"],
+    "run_observation_limit": "AVAILABLE_COMMIT_WORKFLOW_READER_FILTERS_TO_PULL_REQUEST_RUNS; ABSENCE_FROM THAT READER IS NOT EVIDENCE OF NONEXECUTION",
+    "runtime_credit": 0
+  },
+  "coordination": {
+    "closed_superseded_prs": [1724, 1726],
+    "duplicate_execution_lane_retained": false,
+    "shared_reproducible_macrocycle_identity_exposed": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: canonical replay/rebuild/live semantic source closure plus exact-main self-hosted deterministic regression carrier; executable result still open.",
+    "track_b": "ADVANCED: measured execution identity is separated from volatile observation/evaluation envelope identity and legacy ambiguity fails closed.",
+    "track_c": "ADVANCED_AT_TRACE_DATASET_INTERFACE_SCOPE: current main also carries fail-closed J-Space trace/vector-control ABI source contracts; model-specific unusual intervention remains lease-blocked and no model/training credit is minted."
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Observe an admitted terminal execution that reaches actual steps for the exact-current replay/rebuild/live-bridge regression family. Then require one repository-bound evidence-qualified Safe-Forge ACCEPT -> exactly one persistent Distillery packet -> accepted_dataset_tokens > 0 -> timestamp/narration/delta_id semantic replay +0 across reopen, with changed measured evidence rejected as REPLAY_IDENTITY_CONFLICT. Do not run the unusual local Qwen J-Space intervention without a canonical atomic lease."
+}

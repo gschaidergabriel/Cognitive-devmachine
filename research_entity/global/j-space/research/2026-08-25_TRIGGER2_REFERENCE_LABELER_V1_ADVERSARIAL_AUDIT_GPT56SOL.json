@@ -1,0 +1,167 @@
+{
+  "schema": "CLAY_TRIGGER2_REFERENCE_LABELER_ADVERSARIAL_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "observed_main_before_write": "ed5b4e7f8595d6723b7b60fd1ed3b76d135ae20e",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "training_executed": false,
+    "accepted_dataset_tokens_minted": 0
+  },
+  "audited_artifact": {
+    "path": "tools/trigger2_semantic_hyperposition_reference_labelers_v1.py",
+    "blob_sha": "7b9191d5dff647af4793ca2797085d18fbef1da3",
+    "tests_path": "tests/test_trigger2_semantic_hyperposition_reference_labelers_v1.py",
+    "tests_blob_sha": "b050eab48244676444180b5b22aa5bcb97a30e1d",
+    "current_source_role": "deterministic synthetic/curriculum reference primitive",
+    "audit_disposition": "COMPONENT_ONLY_RESEARCH_PRIMITIVE_BLOCKED_FOR_D_E_TRANSITION_ADMISSION"
+  },
+  "positive_findings": [
+    "U_update preserves the branch set and explicitly avoids automatic resolution.",
+    "D_resolve preserves alternatives rather than deleting losing branches.",
+    "canonical-truth, direct-effect, runtime-credit and training-credit outputs are fail-closed false.",
+    "same provenance ancestry is at least partially recognized as non-independent.",
+    "salience ranking is explicitly separated from truth, probability and evidence strength.",
+    "the source tests cover branch preservation, duplicate ancestry, no-discriminator unresolved behavior, task-local resolution, ordinal discriminator ranking and truth-authority leakage."
+  ],
+  "material_blockers": [
+    {
+      "id": "LABELER_ORACLE_EFFECT_SELF_ASSERTION",
+      "severity": "CRITICAL",
+      "finding": "U_update receives effect=SUPPORT/WEAKEN/FALSIFY/PROVE/RETAIN from the caller and does not derive that effect from branch semantics plus the observation. A caller-provided PROVE can therefore set PROVEN_WITHIN_SYNTHETIC_WORLD without a proof relation being computed by the labeler.",
+      "why_it_matters": "This moves the missing label one field upstream rather than constructing a correct target state. D/E training labels remain circular if the generator invents effect metadata.",
+      "required_successor": "Derive update effects from an executable task-world relation/proof evaluator or bind the effect to a separately verified deterministic derivation receipt; never trust model-visible or generator-asserted effect labels as the ground truth source."
+    },
+    {
+      "id": "DISCRIMINATOR_OUTCOME_SELF_ASSERTION",
+      "severity": "CRITICAL",
+      "finding": "D_resolve trusts winner_branch_id and separates_live_branch_ids supplied by discriminator_outcome. It verifies set membership but does not derive the winner or separation from branch predictions and observed discriminator results.",
+      "why_it_matters": "A syntactically complete discriminator object can manufacture resolution labels without demonstrating discriminating evidence.",
+      "required_successor": "Represent each live branch's predicted discriminator outcome and compute partition/separation plus winner consistency from the observed result."
+    },
+    {
+      "id": "INADMISSIBLE_DISCRIMINATOR_CAN_RESOLVE",
+      "severity": "CRITICAL",
+      "finding": "D_resolve does not require discriminator_outcome.admissible == true. A discriminator marked inadmissible can still resolve when its declared winner and separation set pass the current checks.",
+      "required_successor": "Fail closed on inadmissible discriminators before any resolution path."
+    },
+    {
+      "id": "INDEPENDENCE_GROUP_IGNORED",
+      "severity": "HIGH",
+      "finding": "U_update requires evidence.independence_group but never uses it. Two items with different provenance_ancestry_id but the same declared dependence group are currently treated as independent updates.",
+      "why_it_matters": "This violates the current Goodman/provenance-independence law and can double-count correlated evidence.",
+      "required_successor": "Collapse duplicate/correlated evidence by both causal/provenance ancestry and an explicit independently-derived dependence-group identity."
+    },
+    {
+      "id": "EVIDENCE_ID_REPLAY_NOT_GLOBALLY_GUARDED",
+      "severity": "HIGH",
+      "finding": "The updater does not fail closed on replay of the same evidence_id under altered ancestry metadata. Same-ancestry detection is branch-local and does not establish global causal-event uniqueness.",
+      "required_successor": "Bind evidence_id to immutable provenance/causal identity and reject contradictory replay identity before applying an update."
+    },
+    {
+      "id": "REFERENCE_TESTS_MISS_NEGATIVE_CASES",
+      "severity": "HIGH",
+      "finding": "The current test source does not exercise inadmissible-discriminator resolution, same-independence-group/different-ancestry evidence, forged PROVE effects, altered-ancestry evidence replay, branch-permutation invariance or derivation-from-task-world semantics.",
+      "required_successor": "Add mutation/regression tests for every blocker before changing the artifact status."
+    }
+  ],
+  "revision_of_training_blocker": {
+    "old_claim": "D/E are blocked because no labelers exist.",
+    "new_status": "SUPERSEDED_IN_FORM_BUT_NOT_CLOSED",
+    "current_claim": "Reference-labeler source now exists, but D/E transition admission remains blocked until labels are derived rather than self-asserted and independence/discriminator invariants are enforced.",
+    "predecessor": "TRAININGSUMFANG_2026-08-25.pdf section 8a / pre-labeler state",
+    "successor": "semantic-hyperposition reference labeler v2 or equivalent derivation-bound successor",
+    "revision_reason": "Existence blocker changed into correctness/non-circularity blocker after exact-current source landed."
+  },
+  "external_research_delta": [
+    {
+      "source": "arXiv:2305.08298 Symbol tuning improves in-context learning in language models",
+      "class": "EXTERNAL_METHOD_INPUT",
+      "training_implication": "Arbitrary/flipped symbol-label mappings are useful pressure toward reading episode-local mappings instead of memorizing semantic label priors; this supports the binder curriculum but does not prove a specific Qwen mechanism."
+    },
+    {
+      "source": "arXiv:2505.20896 How Do Transformers Learn Variable Binding in Symbolic Programs?",
+      "class": "EXTERNAL_METHOD_INPUT",
+      "training_implication": "Systematic variable binding/routing can emerge under training and can be studied causally; use as mechanism plausibility, not as positive evidence for the selected Qwen checkpoint."
+    },
+    {
+      "source": "arXiv:2511.05743 In-Context Learning Without Copying",
+      "class": "EXTERNAL_COUNTEREVIDENCE_TO_MECHANISM_OVERCOMMITMENT",
+      "training_implication": "Abstractive ICL can persist when copy-predictable-token training pressure is suppressed, so the curriculum must target behavioral invariants and not hard-code classic induction-copy heads as a necessary mechanism."
+    },
+    {
+      "source": "arXiv:2405.15071 Grokked Transformers are Implicit Reasoners",
+      "class": "EXTERNAL_METHOD_INPUT",
+      "training_implication": "Reasoning generalization may emerge late and differ sharply by reasoning type; C must be tracked on frozen OOD/depth/vocabulary curves through training rather than stopped at train-loss convergence."
+    },
+    {
+      "source": "ACL 2024: Explore Spurious Correlations at the Concept Level in Language Models for Text Classification (arXiv:2311.08648)",
+      "class": "EXTERNAL_METHOD_INPUT",
+      "training_implication": "Counterfactual rebalancing can mitigate concept-label shortcuts; this independently supports the current full-cross and nuisance-challenger strategy."
+    },
+    {
+      "source": "ACL 2025: Alleviating Hallucinations from Knowledge Misalignment in Large Language Models via Selective Abstention Learning",
+      "class": "EXTERNAL_METHOD_INPUT",
+      "training_implication": "Explicit abstention objectives can teach selective rejection; supports treating UNKNOWN/ABSTAIN as a first-class E/GRF behavior while still requiring project-specific epistemic labels and calibration."
+    }
+  ],
+  "curriculum_revision": {
+    "mechanism_rule": "TRAIN_BEHAVIORAL_AND_LATENT_STATE_INVARIANTS_WITHOUT_TREATING_A_SPECIFIC_ATTENTION_CIRCUIT_HYPOTHESIS_AS_GROUND_TRUTH",
+    "phase_order": [
+      "0 freeze checkpoint/tokenizer/ABI candidates, retention baselines, family/provenance splits and semantic-Hyperposition latent schema",
+      "1 C1-C6 symbolic inference with fixed labels inside the Hyperposition carrier; measure OOD class-state decodability throughout training",
+      "2 A cross-surface context invariance using projections of the same latent episode",
+      "3 B episode-local codebook routing with fully crossed visible nuisances and nuisance-only/semantic-ablation challengers",
+      "4 E epistemic typing plus explicit UNKNOWN/ABSTAIN and evidence/provenance discipline",
+      "5 D update/retain/discriminate/resolve only after derivation-bound U/D reference logic passes adversarial gates",
+      "6 selective A+B+C+D+E composition with census-derived ZECP process trajectories, variable N, DB-vs-simulation, Claude handoff/re-entry and recovery",
+      "7 same-selected-model causal J-Space evaluation; no positive J-Space training labels from cross-model/readout-only evidence"
+    ],
+    "anti_shortcut_acceptance": [
+      "all target classes and target slots remain possible under every model-visible nuisance signature or a preregistered equivalent independence proof passes",
+      "nuisance-only decoder remains at preregistered chance/null bound on frozen unseen families",
+      "semantic ablation destroys semantic-class predictability from intended evidence while presentation-only features remain nonpredictive",
+      "branch order, branch identifiers, codebook display order, runtime N and executor identity are nuisance-invariant where declared",
+      "family/provenance ancestry remains atomic across train/validation/holdout/final-reserve",
+      "formatter exposes no evaluator-only metadata"
+    ]
+  },
+  "artifact_status_delta": [
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_reference_labelers_v1.py",
+      "status_before_this_audit": "NEW_CURRENT_SOURCE_PRIMITIVE",
+      "status_after_this_audit": "COMPONENT_ONLY_RESEARCH_PRIMITIVE_BLOCKED_FOR_D_E_TRANSITION_ADMISSION",
+      "successor_required": "v2 derivation-bound reference labeler",
+      "revision_reason": "self-asserted update/discriminator labels and incomplete independence enforcement"
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status_after_this_audit": "QUARANTINE_UNCHANGED",
+      "revision_reason": "supervisor 8.78 conditional nuisance leakage remains dispositive"
+    },
+    {
+      "artifact": "2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json",
+      "status_after_this_audit": "CURRENT_METHOD_CONTRACT",
+      "revision_reason": "cross-cutting Hyperposition requirement survives and is strengthened by the labeler audit"
+    }
+  ],
+  "local_execution_note": "Attempted local repository clone for source regression execution, but the local container had no DNS/network access to github.com. This is a tool/infrastructure limitation and creates neither pass nor failure credit for the labeler tests.",
+  "credits": {
+    "research_negative_delta": 1,
+    "new_training_rows": 0,
+    "materialized_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Implement/review a separately versioned derivation-bound reference-labeler successor that computes branch updates and discriminator separation from synthetic task-world semantics, enforces admissibility plus ancestry/dependence identity, adds adversarial mutation tests, then wire that successor into an upgraded semantic-Hyperposition admission gate before any D/E transition row is training-eligible."
+}

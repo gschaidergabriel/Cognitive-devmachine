@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_GO_UCF_TERMINAL_CLOSURE_RECEIPT/v1",
+  "date": "2026-08-23",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT terminal-closure adjudication organ",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_BUNDLED_08B_UNIFIED_JSPACE_GWT",
+  "base_main": "2192ea63f41fc3158d4d3c13597bde156d56a2f9",
+  "branch": "gpt56sol/go-ucf-terminal-closure-guard-20260823-1511",
+  "finding": {
+    "candidate_pr": 1241,
+    "unsafe_pattern": "pipeline_commit succeeds, then pipeline_cognitive_fabric_finalize runs, then require finalized.ok can fail the outer run after canonical durable state is already committed",
+    "risk": "retry or recovery can misclassify COMMITTED_FINALIZATION_FAILED as NOT_COMMITTED and duplicate processing/effects",
+    "temporal_invariant": "final UCF evidence remains post-terminal; it must not be moved before inference/gate/commit merely to avoid this ambiguity"
+  },
+  "delta": [
+    "add a narrow fail-closed static guard for UCF terminal closure",
+    "reject FINALIZE before canonical COMMIT",
+    "reject fatal require finalized.ok after canonical COMMIT",
+    "allow current one-phase main to remain explicit/unconverged without false failure",
+    "leave the safe implementation choice open: idempotent commit-aware post-commit finalization with explicit COMMITTED_FINALIZATION_* state, or transaction-coupled durable receipt closure"
+  ],
+  "exact_git_blobs": {
+    "tools/check_ucf_terminal_closure.py": "19c61b4afaf79cbba866ef0de898598440717dee",
+    "tests/test_ucf_terminal_closure_guard.py": "dee8d99a6879fe07a60b6618a079159c95be00d5"
+  },
+  "exact_content_sha256": {
+    "tools/check_ucf_terminal_closure.py": "f6a808c6e8086cedcffbce7defc9b2315252fef9f9b191831547908b9607ce91",
+    "tests/test_ucf_terminal_closure_guard.py": "6893bf0df7c1eb4ef10455bfc383f0ad18c0fbfcd95c2c558675cc151be34c9d"
+  },
+  "execution": {
+    "surface": "isolated ChatGPT Linux/Python component environment",
+    "command": "python -m unittest -v tests/test_ucf_terminal_closure_guard.py",
+    "tests_run": 4,
+    "tests_passed": 4,
+    "result": "PASS_COMPONENT_GUARD_ONLY",
+    "environment_note": "A non-test artifact-tool spreadsheet warmup emitted a timeout traceback during interpreter startup, but unittest process exit code was 0 and all four named guard tests passed."
+  },
+  "coordination": {
+    "pr1241_comment_id": 5385055154,
+    "pr1241_merge_recommendation": "DO_NOT_MERGE_UNTIL_TERMINAL_CLOSURE_AMBIGUITY_IS_FIXED",
+    "parallel_package_repair": "main already carries repaired MICROENTITY_CURRENT.zip blob 12c2c53eeb72ea6075aa9dc09ca888341f008feb",
+    "duplicate_hcu_delta": "NO_CHANGE_NON_DUPLICATION"
+  },
+  "unusual_experiment": {
+    "new_intervention_count_here": 0,
+    "macrocycle_intervention": "MICROENTITY_ZIP_PREFIX_TRUNCATION_POISON already recorded by the package-repair lane",
+    "note": "This terminal-closure work uses deterministic regressions only and does not consume a second unusual experiment."
+  },
+  "authority": {
+    "durable_state": "MiniUnifiedDB",
+    "runtime_identity_configuration": "Zero",
+    "effects": "EffectGate only",
+    "ucf_receipts": "evidence/provenance only; no truth/effect authority"
+  },
+  "runtime_credit": {
+    "whole_mini_entity": 0,
+    "reference_runtime_ucf": 0,
+    "bundled_08b": 0,
+    "jspace": 0,
+    "whole_gwt": 0,
+    "claude_adapter": 0,
+    "hcu": 0
+  },
+  "next_exact_gate": "Fuse this guard into the current two-phase UCF source-contract lane, implement PREPARE/FINALIZE in the single retained ProfilePipelineRuntime with explicit commit-aware idempotent terminal semantics, then obtain actually-started authorized isolated exact-source execution."
+}

@@ -1,0 +1,52 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local_minute": "2026-08-17T22:49+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_EXACT_CURRENT_FILESET_EXECUTION",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "supersedes_evidence_scope": "2026-08-17_GO_2249_MICROVM_PVC_FSGROUP_CURRENT_MAIN_GPT56SOL.json isolated_regression only; canonical source writes remain the same",
+  "exact_git_blobs": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "73f4dcf80f78fcb4d78e144e281758c194aff6df",
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "df0e90fc4d4c5d490360e9ccd603f7d44ff9c09d",
+    "the artefact/tests/test_microvm_deployment_contract.py": "8e03f51ba06a8d9a31dc8b0c32c90b77399bc157",
+    "the artefact/manifest.json": "0b070a7c6f1cfd4cfc051ae9535be036d316857f"
+  },
+  "blob_rebind": "MATCH_4_OF_4_GIT_HASH_OBJECT",
+  "isolated_regression": {
+    "surface": "OpenAI isolated non-production container",
+    "command": "python -m pytest -q 'the artefact/tests/test_microvm_deployment_contract.py'",
+    "result": "13 passed in 0.03s",
+    "exit_code": 0,
+    "scope": "complete current MicroVM deployment-contract regression file over the exact four bound Git blobs"
+  },
+  "supported_mechanisms": [
+    "Kata runtime class and one-replica source fence",
+    "separate headless governing Service plus client-facing Service",
+    "read-only/non-root/capability-drop source fence",
+    "PVC fsGroup=10001 + OnRootMismatch source fence without privileged/init-container repair",
+    "default-deny NetworkPolicy ingress+egress source fence",
+    "separate liveness /healthz from readiness /readyz",
+    "CNI enforcement and additive-policy acceptance contract",
+    "manifest network gates",
+    "Tier-2 full Pod/Kata-sandbox replacement contract",
+    "Kata rolling-release/advisory/runtime-annotation source fences",
+    "provider credential source boundary"
+  ],
+  "non_claims": [
+    "no Kubernetes API admission evidence",
+    "no StorageClass/CSI mount-group evidence",
+    "no live PVC uid/gid 10001 write/fsync/rename/delete evidence",
+    "no CNI enforcement evidence",
+    "no live Kata guest-kernel or runtime-annotation evidence",
+    "no Tier-2 full-sandbox replacement execution",
+    "no exact OCI image build/digest",
+    "no whole ClayVerse PASS"
+  ],
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "vps_self_hosted_production_testing": "NOT_USED",
+  "together_api": "FORBIDDEN_NOT_USED"
+}

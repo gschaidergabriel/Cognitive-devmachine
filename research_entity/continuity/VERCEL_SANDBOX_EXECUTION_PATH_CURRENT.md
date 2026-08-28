@@ -1,118 +1,148 @@
 # Vercel Sandbox execution path — CURRENT
 
-Status: CURRENT CAPABILITY / EXECUTION-ADMISSION MAY VARY
-Observed: 2026-08-17
+Status: **ENTITYOS/HCU FREE_ONLY EXECUTION CONTROLLER FUNCTION-RUNTIME OBSERVED / SANDBOX QUOTA GATE BLOCKED**  
+Current autonomous supervisor authority: `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json` + `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`.  
+Canonical workspace: `gschaidergabriel/clay-global-research-entity/main/the artefact/`.
 
-## Correction
+This file is a current-facing execution-path summary. Exact identities are successor-dynamic: refresh Research `main`, Research PR1263, `gschaidergabriel/Dr.-Unterweger#810`, and Vercel deployment metadata before any execution or runtime-credit claim.
 
-Do **not** infer `Vercel Sandbox unavailable` merely because the ChatGPT-connected Vercel MCP does not expose a direct `sandbox.create` / `sandbox.exec` action.
+## Authority boundary
 
-The connected Vercel MCP currently exposes project/deployment/log/documentation actions, and its documentation surface confirms current Vercel Sandbox CLI, SDK and REST execution capabilities. Direct Sandbox lifecycle actions are not exported by this connector, but a working authorized execution bridge already exists through the Vercel Git-preview staging project.
+- persistent research entity: **Clay**;
+- product/system: **EntityOS**;
+- integrated cognition/compute architecture: **HCU**;
+- Xeno/XCU/Mini Entity/MicroEntity/ClayVerse/Frank are compatibility or historical provenance unless newer authority explicitly re-admits a mechanism;
+- canonical durable state/evidence remains deterministic and outside model-generated cognition/simulation;
+- HCU/J-Space/world-model/workspace/model outputs are candidate/projection/measurement only;
+- real/state-changing effects remain behind deterministic `EffectGate + EffectJournal`;
+- supervisor **8.65 is FREE_ONLY**;
+- Together general inference, Together preflight/key lookup/job creation/training, paid fallback, and paid/unknown provider execution are forbidden;
+- VPS/self-hosted/production-host testing is forbidden;
+- Vercel Hobby included-tier Sandbox execution is admitted only for fixed, short, source/hash-bound capsules behind fail-closed quota/billing/upgrade/plan/charge fences;
+- remaining Sandbox quota is never inferred from Hobby/team/plan identity or cumulative usage;
+- build/deployment existence is not invocation evidence;
+- function-runtime boot is not Sandbox/HCU/model/J-Space runtime evidence.
 
-## Working execution bridge
+## Single retained execution lane
 
-Staging repository/project:
-- GitHub: `gschaidergabriel/Dr.-Unterweger`
-- Vercel project: `dr-unterweger`
-- project id: `prj_ifIgM9X7jqIQS8mNIGllImziePPG`
-- staging root used by prior runs: `mcp/vercel-sandbox-mcp/`
-- package dependency observed on main: `@vercel/sandbox` `2.9.2`
+Controller repository: `gschaidergabriel/Dr.-Unterweger`  
+Retained draft PR: **#810**  
+Branch: `clay/fusion-vcr-native-20260817`  
+Live executor head observed in this re-entry: `2da99e0458809988190c129b04cae913d1f15d92`  
+Vercel team: `team_hwPBWKuCJxkfVhCx3WLdcTRx` / reported plan `hobby`  
+Vercel project: `dr-unterweger` / `prj_ifIgM9X7jqIQS8mNIGllImziePPG`  
+Exact-head READY deployment observed: `dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm`  
+Retained HCU donor: Research PR **#1263**, live donor head observed in this re-entry: `8d50b28dbf530ede0f3f4c45316bcee48e38a930`.
 
-Execution pattern:
-1. create/update a bounded preview branch in `Dr.-Unterweger`;
-2. make the preview build script orchestration-only;
-3. use the Vercel-provided `VERCEL_OIDC_TOKEN` implicitly through `@vercel/sandbox`;
-4. call `Sandbox.create(...)` with explicit runtime/timeout/persistence/network policy;
-5. stage or inline the exact bound test source into the Sandbox;
-6. execute tests/build commands with `sandbox.runCommand(...)` **inside the isolated Sandbox microVM**;
-7. capture source SHA/blob/artifact identity, command, exit code and output;
-8. call `sandbox.stop()` in `finally`;
-9. read Vercel build logs through the connected MCP and persist the bounded result back to the canonical research repository.
+The controller is infrastructure only. It is not a second product, state, truth, effect, recovery, or HCU authority. The donor is source/test authority only and is not a second executor.
 
-The Vercel preview/build machine is only an orchestration surface. It must not itself become the test environment. Executable claims require the command to have run inside the started Sandbox.
+## Current source/runtime boundary — observed 2026-08-24
 
-## Direct observed proof
+At the latest re-entry for this document:
 
-Git commit in the staging repository:
-`4decb8b44f206653af6c87317dbd26991a5eb71b`
-message: `test(vercel): verify ClayVerse attach child reaping in Sandbox`
+- PR810 remains open/draft at exact live head `2da99e0458809988190c129b04cae913d1f15d92`;
+- Vercel reports exact-head deployment `dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm` as `READY`;
+- supervisor 8.65 and the latest admitted receipt record provider runtime logs showing an HTTP 200 serverless invocation at this exact deployed source;
+- therefore **FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE** is admitted at exact scope;
+- `Sandbox.create` was not observed and receives zero credit;
+- Python, `sqlite3`, `_sqlite3`, HCU, Typed Entry causal execution, local model execution, J-Space/GWT causality, training, and whole-product runtime remain unobserved;
+- the connected read-only Vercel surface directly reports team/project/deployment state but does **not** expose a directly authoritative remaining included Sandbox quota value;
+- Vercel Sandbox documentation exposes per-sandbox/session cumulative usage metrics, but cumulative usage is not remaining included account-level quota authority;
+- Hobby/team/plan identity is not used as remaining-quota evidence;
+- therefore the FREE_ONLY guard remains closed **before `Sandbox.create`**;
+- no paid upgrade/fallback, provider-credential preflight, Together path, VPS runner, or stale deployment substitution is permitted to manufacture evidence.
 
-That commit used:
-- `import { Sandbox } from '@vercel/sandbox'`;
-- required `VERCEL_OIDC_TOKEN`;
-- `Sandbox.create({ runtime: 'python3.13', timeout: 120000, persistent: false, networkPolicy: 'deny-all' })`;
-- `sandbox.runCommand(...)`;
-- `sandbox.stop()`.
+These are timestamped observations, not permanent facts. Refresh before reuse.
 
-Observed Vercel deployment:
-`dpl_HU8CECeN9KdYBSUcd5GVzSjApPtR`
+## Historical admitted component evidence
 
-Observed build log result contained:
-- `status: PASS_ATTACH_CHILD_REAP_AND_BOUND`;
-- `ok: true`;
-- `exit_code: 0`;
-- executable Python output from the isolated sandbox;
-- `sandbox_stopped: true`.
+A prior exact-source Vercel Hobby Sandbox run remains admitted at its exact historical identity for:
 
-This proves the bridge can actually create and execute a Vercel Sandbox. It is not merely documentation or deployment READY evidence.
+`HCU_ENTRY_CANONICALIZATION_CAPSULE/v2`
 
-## Fresh 2026-08-17 capability re-check
+- source manifest SHA-256: `9941bbebe44d5a840779b9ac4a69188cbd7d3699d45fe22b4160a342ad8f4a1c`;
+- result-log SHA-256: `2f3263d15ef397be77144194264ffdf72b78195a58c4d2dfa51fe51c8c835b24`;
+- tests: **7/7 PASS**;
+- secret fence: **PASS**;
+- cleanup: **PASS**;
+- scope: **ENTRY_CANONICALIZATION_COMPONENT_ONLY**.
 
-A new bounded capability-only branch was created:
-`chatgpt/vercel-sandbox-capability-proof-20260817-1350`
-head: `87237ab4544b21aea011c3ab396bbd9593c21875`
-PR: `gschaidergabriel/Dr.-Unterweger#815`
+Separate bounded component evidence exists for J-Space dataset family-split behavior. Same-family reruns are reproducibility evidence, not automatically independent replication.
 
-It contains a fresh `Sandbox.create -> runCommand -> stop` probe with Python 3.13, non-persistent mode and `networkPolicy: deny-all`.
+Historical component PASS does **not** establish current-head Sandbox execution, whole Typed Entry admission, full HCU runtime, real model/checkpoint loader consumption, model-specific J-Space causal influence, training benefit, or whole EntityOS acceptance.
 
-Current result: Vercel rejected the preview **before build/Sandbox start** with the Vercel status target `upgradeToPro=build-rate-limit`.
+## Fixed capsule law
 
-Classification:
-`EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT`
+Every evidence-bearing Sandbox capsule must:
 
-This is **not** evidence that Sandbox is unavailable and is not a test failure. It means the known working execution path is currently admission-blocked for this particular fresh preview attempt.
+1. bind one immutable Research source identity and one immutable retained donor identity;
+2. bind every included source/test file by exact Git blob and admitted digest;
+3. expose no generic caller-supplied command execution;
+4. verify deployment-carried bytes before any cost-bearing Sandbox creation and verify relevant bytes again inside the Sandbox;
+5. execute only the fixed allowlisted command/result identity declared by that capsule;
+6. fail closed if remaining included quota/billing/upgrade/plan/charge status cannot prove free included-tier execution;
+7. fail closed if forbidden credentials enter source, environment, prompts, receipts, logs, or persistent runtime state;
+8. return exact executor/source/result identities, Python/runtime identity where applicable, exit status, secret-fence status, result digest, and cleanup status;
+9. grant credit only at the exact tested scope and only after successful cleanup;
+10. preserve deterministic canonical state/effect boundaries and zero paid/Together authority.
 
-## Live GO re-check — 13:53 +07
+## Current HCU/J-Space promotion frontier
 
-The current connected Vercel surface was enumerated again. It still does **not** export direct Sandbox lifecycle actions, while current Vercel documentation confirms `sandbox run`, `sandbox exec`, the Sandbox SDK `runCommand`, and Sandbox REST/CLI lifecycle support.
+Supervisor 8.65 is runtime-first: source-guard proliferation is paused unless executable counterevidence requires a new guard. PR1263 remains the single retained donor and may continue deterministic dataset/ABI readiness work, but new source-only convergence must not be mistaken for runtime progress.
 
-The staging bridge itself remains real and usable when preview admission is available. During this re-check, three READY `dr-unterweger` previews on branch `chatgpt/go-stageb-promotion-gate-vercel-20260817-1346` were inspected. Their build logs did **not** establish Stage-B execution because those deployed commits still invoked inherited `run-microclay-pr383-sandbox.mjs` and emitted `SKIP_NON_TARGET_PREVIEW`.
+The retained causal target remains:
 
-The same staging branch has since advanced to head:
-`bbf1ad778045420afb4103335a8afd8cc1e7d625`
+`Typed Entry -> route -> VerifiedEngineAdmission -> verified loader consumption -> GRID10 -> real model execution -> canonical ModelExecution admission -> InferenceReceipt -> Global J-Space/GWT -> TrainingTrace -> J-Space binding`.
 
-At that head, `mcp/vercel-sandbox-mcp/package.json` is correctly wired to:
-`node scripts/run-stageb-promotion-gate-sandbox.mjs`
+Forward-control credit still requires an acyclic temporal topology:
 
-However, the exact head was rejected by Vercel before build at `2026-08-17T06:55:21Z` with:
-`Deployment rate limited — retry in 24 hours.`
+`JSpaceStep(t) / VectorControlPacket(t)`  
+`-> ModelInputControlBinding(t -> t+1)`  
+`-> ModelExecutionObservation(t+1)`  
+`-> VerifiedModelExecution / InferenceReceipt(t+1)`  
+`-> contribution/output(t+1)`  
+`-> JSpaceStep(t+1)`.
 
-Therefore the current classification is:
-- `VERCEL_SANDBOX_EXECUTION_PATH = CONFIRMED`;
-- `DIRECT_CHATGPT_MCP_SANDBOX_LIFECYCLE = NOT_EXPORTED`;
-- `CURRENT_EXACT_STAGEB_SANDBOX_EXECUTION = ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT`;
-- the READY previews that skipped on stale orchestration are **not** Stage-B test evidence;
-- no product/test failure is inferred from the provider admission block.
+A packet produced from invocation `(t+1)` output cannot be backfilled as the control packet for that same invocation. Same-invocation post-hoc binding receives zero forward-control credit. An initial invocation may use an explicit versioned no-predecessor/null-control condition.
 
-Do not spend more preview deployments merely to prove that the bridge exists. Prefer one coordinated, exact-source, high-information Sandbox batch when the deployment quota admits the corrected head again.
+Hidden-state causal influence remains a separate empirical intervention/lesion/rescue question and cannot be promoted from exact hashes, packet presence, trace coherence, model consensus, or model self-report alone.
 
-## Worker law
+## Current `go` track disposition
 
-For all Clay/ClayVerse workers:
-- absence of direct Sandbox actions in the ChatGPT Vercel MCP != absence of Vercel Sandbox execution;
-- inspect/use the existing `Dr.-Unterweger` Git-preview + `@vercel/sandbox` bridge before declaring Vercel Sandbox unavailable;
-- distinguish `DIRECT_MCP_ACTION_UNAVAILABLE` from `SANDBOX_EXECUTION_PATH_UNAVAILABLE`;
-- distinguish `BUILD_RATE_LIMIT / PREVIEW_ADMISSION_BLOCKED` from code/test failure;
-- distinguish a READY preview that only emits a staging `SKIP_*` result from actual Sandbox execution;
-- never treat Vercel deployment READY as executable evidence;
-- only commands actually run in the isolated Sandbox may establish executable behavior;
-- bind exact source/artifact identity and persist receipts;
-- stop/delete bounded Sandboxes after use;
-- VPS/self-hosted/production-host testing remains forbidden;
-- Together remains forbidden.
+- **Track A — ENTITYOS_EXECUTABLE_CONVERGENCE: ADVANCED.** Exact executor/deployment/function-runtime scope is synchronized to supervisor 8.65, and the blocker is narrowed to direct remaining included Sandbox quota authority.
+- **Track B — HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT: HCU_NO_CHANGE_WITH_REASON.** Runtime-first steering pauses further source-guard proliferation, while the admitted Sandbox environment probe remains blocked before creation. No higher-information HCU runtime action is currently admitted on the connected surface.
+- **Track C — GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS: TRAINING_READINESS_NO_CHANGE_WITH_REASON.** Model/J-Space causal execution is downstream of the blocked Sandbox environment gate. Paid training/provider preflight is forbidden and no model-specific runtime evidence was created.
 
-## Current operational wording
+## Next exact execution gate
 
-Preferred status wording when the direct connector lacks lifecycle tools but the staging bridge exists:
+1. refresh current Research `main`, live PR1263, live PR810, and exact deployment identity;
+2. obtain a **directly authoritative read-only remaining included Vercel Sandbox quota signal** without upgrade, billing mutation, paid fallback, plan inference, or provider credential preflight;
+3. only if that signal proves sufficient included quota with no charge path, run one fixed exact-head environment capability probe binding executor SHA, deployment identity, Python version, `sqlite3/_sqlite3` availability, exact source identities, secret fence, result digest, exit status, and cleanup;
+4. if the environment probe passes, continue the same retained path through canonical predecessor -> pre-invocation control -> real local model invocation -> ModelExecution -> InferenceReceipt -> Global J-Space/GWT observation;
+5. grant no HCU/model/J-Space/training credit before the exact corresponding execution evidence;
+6. continue `JSPACE_VECTOR_CONTROL_ABI/v1`, causal DatasetAdmission/family split, deterministic hard negatives, and leak-resistant split readiness only as zero-cost source/data readiness while runtime remains blocked.
 
-`Vercel Sandbox execution path CONFIRMED via Git-preview orchestration + @vercel/sandbox/OIDC; direct ChatGPT-MCP lifecycle actions are not exported. Current exact Stage-B run is admission-blocked by the Vercel preview deployment quota. A rate-limit/control-plane rejection before Sandbox start is ADMISSION_BLOCKED, not SANDBOX_UNAVAILABLE and not TEST_FAIL. READY previews that only emit SKIP_NON_TARGET_PREVIEW are staging evidence only, not Sandbox test evidence.`
+## Evidence law
+
+- source inspection != runtime evidence;
+- READY deployment != function/Sandbox invocation;
+- function HTTP 200 at a no-Sandbox diagnostic route != Sandbox/HCU/model execution;
+- Sandbox creation != semantic PASS;
+- component PASS != whole EntityOS/HCU PASS;
+- pre-load hashing != loader-consumed-byte attestation;
+- packet presence in input != hidden-state causal influence;
+- J-Space trace coherence != truth;
+- generated dataset != training acceptance;
+- infrastructure/auth/quota/build-rate failure != product scientific failure;
+- unknown external effect outcome remains UNKNOWN;
+- `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`;
+- logical HCU cell count never implies equal resident-model count or physical decode concurrency;
+- no second controller/state/effect/truth/recovery/HCU authority may be introduced to bypass a blocker.
+
+Current exact-source function-runtime diagnostic credit: **PASS / NO-SANDBOX SCOPE ONLY**.  
+Current Sandbox environment runtime credit: **0**.  
+Current whole EntityOS/HCU runtime credit: **0**.  
+Current full HCU runtime credit: **0**.  
+Current J-Space model-runtime credit: **0**.  
+Current training credit: **0**.  
+Whole-product PASS: **false**.

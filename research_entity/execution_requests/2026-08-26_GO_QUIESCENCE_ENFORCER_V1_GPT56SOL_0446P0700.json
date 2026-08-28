@@ -1,0 +1,42 @@
+{
+  "schema": "GO_FREE_SWARM_RUNTIME_QUIESCENCE_ENFORCER_REQUEST/v1",
+  "date": "2026-08-26",
+  "priority": "P0",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "autonomous self-organizing Xeno/HCU fabric",
+  "authority_context": "FREE_ONLY; owner emergency-stop FreeSwarm HARD_OFF; no provider probes; Together forbidden",
+  "source_pin": {
+    "commit": "0d14624bf211e797936626e94c87459e37dd0cbb",
+    "entrypoint": "tools/free_swarm_runtime_quiescence_enforcer_v1.py",
+    "required_probe": "tools/free_swarm_runtime_quiescence_probe_v1.py"
+  },
+  "required_execution": [
+    "Use clay-direct-dev or the host actually owning the post-stop provider-capable legacy processes.",
+    "Checkout the pinned commit in a clean detached worktree and verify dirty=false.",
+    "Run the enforcer first without --apply and preserve the dry-run JSON receipt.",
+    "Verify the selected roots are only exact legacy FreeSwarm/provider-capable scripts and their PPID descendants; unrelated Xeno/Trigger2/repository services must not be selected.",
+    "If and only if canonical FREE_PROVIDER_ADMISSION remains OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF, run: python3 tools/free_swarm_runtime_quiescence_enforcer_v1.py --repo . --apply --window-seconds 60 --output /tmp/free_swarm_quiescence_enforcer_receipt.json",
+    "Preserve before process tree, termination events, zero-survivor check, bounded quiescence probe receipt, HEAD/tree/runtime/source hashes and stdout/stderr hashes.",
+    "Do not make any provider/model call as part of this execution.",
+    "Do not execute or promote GRID10 in the same authority step; a fresh non-provider execution-authority re-entry is required after quiescence PASS."
+  ],
+  "pass_conditions": {
+    "canonical_provider_admission_hard_off": true,
+    "selected_process_roots_exact_legacy_classes_only": true,
+    "remaining_matching_process_tree": 0,
+    "bounded_quiescence_probe": "PASS_COMPONENT_ONLY",
+    "provider_usage_delta_during_window": 0,
+    "provider_capable_restart_during_window": 0,
+    "observation_seconds_min": 60,
+    "unrelated_processes_terminated": 0
+  },
+  "fail_closed": [
+    "Any ambiguity in root matching => stop before --apply.",
+    "Any admission state other than HARD_OFF => stop before --apply.",
+    "Any remaining matched process => FAIL_RUNTIME_QUIESCENCE.",
+    "Any provider counter movement => FAIL_PROVIDER_USAGE_DRIFT.",
+    "Any inability to observe counters/processes => INCOMPLETE, not PASS."
+  ],
+  "next_if_pass": "Re-enter current FREE non-provider execution authority, then rerun/rebind physical GRID10 under the valid quiescence->authority predecessor chain.",
+  "credit_boundary": "QUIESCENCE_COMPONENT_ONLY; NO_GRID10_HCU_TRAINING_OR_CANONICAL_SEMANTICS_CREDIT"
+}

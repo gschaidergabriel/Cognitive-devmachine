@@ -1,0 +1,57 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:29+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "CONTRADICTS_REFINES_TIER2_DURABLE_CARRIER_BLOCKER",
+  "canonical_main_observed_before_write": "05b482ecfb93ce5e1f13f6139e325dd647274932",
+  "immutable_runtime_freeze": {
+    "pull_request": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head_observed": "6e276fd4bbed0fe962e97fb14e1426083a6fc5f7",
+    "package_vercel_sandbox": "2.9.2",
+    "tier2_candidate": "manual Sandbox.snapshot -> delete source named sandbox -> Sandbox.create from exact snapshotId with persistent:false",
+    "runtime_credit": 0
+  },
+  "correction": {
+    "supersedes_claim": "Vercel snapshot lifecycle is necessarily destroyed with named sandbox deletion",
+    "primary_vercel_docs_observed": [
+      "Vercel Sandbox persistent-sandbox documentation states sandbox.delete permanently removes the named sandbox/sessions while snapshots survive deletion and expire or are deleted separately.",
+      "Vercel REST documentation exposes snapshot deletion as a separate DELETE /v2/sandboxes/snapshots/{snapshotId} operation.",
+      "Vercel Sandbox documentation and current SDK examples admit Sandbox.create({source:{type:'snapshot',snapshotId}}) and describe snapshots as reusable by multiple sandboxes."
+    ],
+    "repo_documentation_conflict": "The current vercel/sandbox repository skill text also contains a contradictory shorthand saying sandbox.delete removes all snapshots. Because first-party published product/API documentation explicitly specifies separate snapshot lifetime/deletion, the prior categorical rejection of snapshots is not supportable. Exact runtime remains the empirical discriminator.",
+    "result": "VERCEL_MANUAL_SNAPSHOT_IS_NOW_AN_ADMISSIBLE_TIER2_CARRIER_CANDIDATE, NOT A VERIFIED CARRIER"
+  },
+  "declared_transfer_hygiene": {
+    "prepare_script_observed": "run-tier2-prepare.sh creates a logical UnifiedDB snapshot, deterministic workspace tar, exact docker-save OCI bytes, hashes/manifest, then removes all /vercel/sandbox top-level entries except tier2-transfer and removes /var/lib/docker and /var/lib/containerd before the outer snapshot.",
+    "remaining_obligation": "The replacement guest must prove only declared transfer artifacts are used as authority, no secret env/files survive, no undeclared Docker image is preloaded, exact image identity is restored, generation advances, stale writers fail, no effect is blindly replayed, and a fresh provider secret is reacquired."
+  },
+  "latest_observed_parallel_delta": {
+    "controller_head": "6e276fd4bbed0fe962e97fb14e1426083a6fc5f7",
+    "tier2_snapshot_source_commit": "60b60997978de2a442b6756ac0c0ee5efb353a1e",
+    "tier1_recovery_hardening": "Current controller additionally injects an interrupted no-effect turn and requires one deterministic recovery abort/re-entry without external effect replay.",
+    "parallel_write_policy": "No overlapping PR810 write was made by this organ because that retained lane was actively changing during this go."
+  },
+  "execution_evidence": {
+    "latest_observed_vercel_build_before_current_snapshot_head": "ERROR on controller commit 582f4ac6691d3782207c247f28665d2d8bf9e84f at stale retained-runner RESEARCH_SHA guard before Tier2 guard execution",
+    "exact_controller_head_runtime_verified": false,
+    "snapshot_delete_then_recreate_verified": false,
+    "mistral_runtime_verified": false,
+    "whole_product_pass": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "No new unusual experiment was admitted for this organ in the shared go macro-cycle; source/primary-doc adjudication and normal acceptance preparation only."
+  },
+  "next_exact_step": "Allow the single retained PR810 lane to settle and deploy on the exact corrected PR686 identity; then execute its normal authorized Tier2 acceptance path so the real Vercel API decides snapshot-survival semantics: create sanitized manual snapshot -> delete old named sandbox -> create a distinct persistent:false sandbox from the exact snapshotId -> verify declared transfer/image/generation/recovery/secret fences. If any boundary fails, keep Tier2 fail-closed and promote no runtime credit."
+}

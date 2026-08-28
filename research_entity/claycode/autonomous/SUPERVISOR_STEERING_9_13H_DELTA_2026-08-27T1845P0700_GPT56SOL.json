@@ -1,0 +1,38 @@
+{
+  "schema": "ENTITYOS_HCU_SUPERVISOR_STEERING_DELTA/v1",
+  "authority_epoch_observed": "9.13",
+  "delta_id": "9.13H_NON_AUTHORITY",
+  "program": "ENTITYOS_HCU",
+  "trigger": "go",
+  "material_progress": [
+    "Added adversarial local-git regression coverage for tools/vps_control_sync_refresh_v1.py: dirty checkout, stale clean no-apply, safe fast-forward apply, divergence, authority-epoch mismatch, provider=true, Together violation, remote race, post-reset validation failure.",
+    "Closed a real remote-race gap: refresh PASS now requires remote main to resolve to the same SHA both before and after post-refresh validation.",
+    "Added tools/vps_control_sync_bootstrap_v1.py: read-only bootstrap delivery for stale owning checkouts. It fetches current remote main into object storage only, extracts exact refresh/test bytes from that commit, SHA-256 binds them, optionally tests them in a detached temporary worktree, proves owning HEAD/tree/status unchanged, and rechecks remote main before bootstrap PASS."
+  ],
+  "evidence_boundary": {
+    "source_progress": true,
+    "repository_bound_test_pass": false,
+    "runtime_control_transport_pass": false,
+    "runtime_quiescence_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0,
+    "reason": "Local container execution surface failed before test execution; no test/runtime PASS is claimed from committed source alone."
+  },
+  "current_p0": [
+    "Execute tests/test_vps_control_sync_refresh_v1.py repository-bound on a clean current non-provider checkout.",
+    "Execute vps_control_sync_bootstrap_v1.py from a separately delivered/pinned control-plane copy against the owning VPS checkout with --run-tests; require BOOTSTRAP_CAPSULE_PASS_NO_APPLY_AUTHORITY.",
+    "Only then run extracted/current refresh without --apply; if and only if it reports clean stale fast-forwardable coherent 9.13 HARD_OFF state, separately admit --apply and require CONTROL_SYNC_REFRESH_PASS.",
+    "After control-sync PASS, run Restart-Authority-v4 read-only and continue the previously frozen quiescence chain."
+  ],
+  "hard_constraints": [
+    "FREE_ONLY",
+    "ALL_PROVIDER_ROUTES_HARD_OFF",
+    "TOGETHER_FORBIDDEN",
+    "NO_PAID_FALLBACK",
+    "NO_RUNTIME_PROCESS_MUTATION_FROM_BOOTSTRAP",
+    "NO_GRID10_PROMOTION_FROM_SOURCE_ONLY",
+    "ORDINARY_XENO_S1_READ_ONLY",
+    "COORDINATOR_ONLY_S1_WRITES"
+  ]
+}

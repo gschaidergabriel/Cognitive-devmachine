@@ -1,0 +1,48 @@
+{
+  "schema": "CLAY_EVIDENCE_CORRECTION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger_context": "go",
+  "correction_of": {
+    "path": "research_entity/continuity/receipts/2026-08-24_GO_PR810_SINGLE_PHYSICAL_JSPACE_CLOSURE_PATH_GPT56SOL.json",
+    "research_commit": "c2685718eb1176e5d051859379097271857a2b61",
+    "incorrect_inference": "The current-donor guard should reuse jspace-execution-store-5c59891b and avoid a donor-bound 511d5689 closure directory.",
+    "corrected_inference": "Parallel history showed entry_canonicalization_v1.py was intentionally renamed from the historical 5c59891b closure into jspace-execution-store-511d5689 before the guard was strengthened. The current-donor guard and clean 511d5689 snapshot are therefore the intended convergence path; immutable historical closure directories remain provenance rather than current staging authority."
+  },
+  "exact_evidence": {
+    "executor_commit_showing_intentional_rename": "0bfead2e28cc09638f76712083eda68122e986b3",
+    "rename": "fixtures/hcu-capsules/jspace-execution-store-5c59891b/entry_canonicalization_v1.py -> fixtures/hcu-capsules/jspace-execution-store-511d5689/entry_canonicalization_v1.py",
+    "entry_blob": "55f461a56ef08537238eeff91fe379da2adb20a1",
+    "guard_blob_before_erroneous_change": "b37c3a68e6718c3a16412fd57d5607ea2562bb70",
+    "erroneous_path_change_commit": "89dbaa4e5868edb0f5cb5f50cd919c82452aa689",
+    "restored_guard_commit": "5f8350be01d7fd2fb9bd71f324b04172c4627e27",
+    "restored_guard_blob": "9f0570a517210c807f3cbe326d1033ebb7e7914e",
+    "current_closure_dir": "fixtures/hcu-capsules/jspace-execution-store-511d5689"
+  },
+  "epistemic_result": {
+    "counterhypothesis_won": true,
+    "reason": "Commit ancestry supplied direct evidence of an intentional donor-snapshot migration that was not visible from the first directory listing. The earlier single-path optimization was therefore reverted rather than defended after contradictory evidence appeared.",
+    "history_policy": "APPEND_ONLY_CORRECTION; DO_NOT_REWRITE_PRIOR_RECEIPT",
+    "product_failure": false,
+    "runtime_failure": false,
+    "runtime_credit_added": 0
+  },
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "source_rebind_required": true
+  },
+  "execution": {
+    "new_build_executed": false,
+    "new_sandbox_executed": false,
+    "unusual_experiment_performed": false,
+    "unusual_experiment_count_added": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Continue the clean donor-bound jspace-execution-store-511d5689 closure by carrying each current manifest/contract Git blob byte-identically, then run the current-donor exact-blob guard; keep SOURCE_REBIND_REQUIRED until the fixed route is atomically rebound to the complete passing closure."
+}

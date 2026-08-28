@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority": {
+    "persistent_research_entity": "Clay",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "supervisor": "SUPERVISOR_STEERING_8_63",
+    "mode": "FREE_ONLY",
+    "research_main_observed_before_receipt": "f1dc1467388fe34bc2bb349dac6a661283d3b5df",
+    "bootstrap_role": "FAST_CACHE_NOT_CANONICAL"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "duplicate_primitive_avoided": true,
+    "fact": "A create-only attempt for model_input_control_binding_v1.py returned that the path already existed because a parallel organ had created the primitive. This organ re-entered that implementation and strengthened the same retained PR1263 lane instead of creating a competing binder or executor."
+  },
+  "finding": {
+    "id": "MODEL_INPUT_CONTROL_FIRST_ADMISSION_CAUSAL_PARENT_LABEL_GAP",
+    "reality_level": "R0_SOURCE_OBSERVATION",
+    "scope": "HCU_MODEL_INPUT_CONTROL_ADMISSION_STORE/v1_SOURCE_AND_REGRESSION_ONLY",
+    "observation": "The parallel HCU_MODEL_INPUT_CONTROL_ADMISSION_STORE/v1 already atomically revalidated exact consumed input bytes and a semantically valid admitted ModelExecutionObservation, and cross-bound generation/executor/invocation/GRID hash/cell/role/input identity. However ModelInputControlBinding.entry_event_sha256, entry_admission_sha256 and route_decision_sha256 remained independent caller parameters. The store did not revalidate those labels against the scheduler-owned GridPlan on first admission.",
+    "counterhypothesis": "Cross-binding grid_plan_sha256 to the admitted ModelExecutionObservation is sufficient because the GridPlan digest semantically implies its Entry/route parent fields.",
+    "counterhypothesis_result": "REJECTED_AT_ADMISSION_API_SCOPE",
+    "reason": "The binding contains separate causal-parent fields. Without receiving and validating the exact GridPlan, the admission store has no object from which to compare those independent labels; a first self-consistent binding can therefore name the right GridPlan digest while carrying different Entry/route labels. A later divergent replay fence does not repair the first-admission semantic gap."
+  },
+  "delta": {
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "source_path": "the artefact/MicroEntity/hcu/model_input_control_admission_store_v1.py",
+    "source_commit": "5e01f08581ef11aed610a89e5aa31cf5136da159",
+    "source_blob": "db2de3f9227155207c585868553dcf39f79aec59",
+    "test_path": "the artefact/MicroEntity/hcu/test_model_input_control_admission_store_v1.py",
+    "test_commit": "2130baee12e5f1845b952b8c745424f8d3acb303",
+    "test_blob": "362770c43483146ea5b416114ffb17abc49a22ba",
+    "mechanism": [
+      "admit_model_input_control_binding now requires the exact GridPlan object",
+      "validate_grid_plan_identity is executed inside the same admission transaction before control rows are installed/persisted",
+      "binding.grid_plan_sha256, the validated GridPlan identity and the admitted ModelExecutionObservation grid identity must match",
+      "binding generation, entry_event_sha256, entry_admission_sha256 and route_decision_sha256 must match the scheduler-owned GridPlan",
+      "the named cell must be unique, ExecutionClass.MODEL and exactly MODEL:<binding.role>",
+      "all failures occur before a control binding/invocation row is committed"
+    ],
+    "new_schema_created": false,
+    "second_database_created": false,
+    "second_executor_created": false,
+    "existing_binding_schema_changed": false
+  },
+  "regression_obligations": {
+    "positive_exact_model_execution_and_grid_parent": "ENCODED",
+    "missing_model_execution_parent_rejects": "ENCODED",
+    "parent_input_mismatch_rejects": "ENCODED",
+    "wrong_entry_event_on_first_binding_rejects_before_control_write": "ENCODED",
+    "wrong_entry_admission_on_first_binding_rejects_before_control_write": "ENCODED",
+    "wrong_route_decision_on_first_binding_rejects_before_control_write": "ENCODED",
+    "semantically_invalid_grid_plan_rejects_before_control_write": "ENCODED",
+    "stale_generation_rejects_before_control_write": "ENCODED",
+    "semantically_invalid_stored_model_execution_parent_rejects": "ENCODED",
+    "github_workflow_runs_for_exact_test_commit": 0,
+    "runtime_test_executed_by_this_organ": false,
+    "evidence_class": "SOURCE_TEST_CODE_ONLY_UNEXECUTED"
+  },
+  "three_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the single retained model-input control admission path now derives its causal parent from the exact scheduler-owned GridPlan rather than accepting three independent Entry/route labels on first admission.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: Typed Entry event/admission and deterministic route identity are now explicitly cross-bound through GridPlan into HCU model-input control evidence in the same MiniUnifiedDB admission transaction.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: a byte-valid Vector-Control/Input binding can no longer be admitted under a different Entry/route causal lineage merely by choosing caller labels; downstream model/J-Space promotion still requires explicit admission identity echo and exact execution evidence."
+  },
+  "executor_boundary": {
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "current_pinned_runtime_candidate_donor_snapshot": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "executor_rebind_performed": false,
+    "reason": "The fixed executor candidate remains an immutable source/runtime discriminator. New donor semantics are not silently projected into it while no exact-head admitted FREE_ONLY deployment is available."
+  },
+  "execution": {
+    "vercel_sandbox_invoked": false,
+    "vps_or_self_hosted_test": false,
+    "production_host_test": false,
+    "together_preflight_or_execution": false,
+    "paid_upgrade_or_fallback": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md remains a rapidly moving shared whole-file surface while current main and PR1263 are advancing in parallel. The bounded exact-identity delta is append-only in this receipt; a stale full-file replacement would risk erasing newer admitted state."
+  },
+  "next_exact_gate": "Do not add another input binder. Re-enter the live PR1263 head and close downstream evidence identity: make one non-competing versioned evidence path require HCU_MODEL_INPUT_CONTROL_ADMISSION/v1 and cross-bind its admission_sha256/binding_sha256/model_execution_observation_sha256/vector_control_packet_sha256/input identity to the already canonical InferenceReceipt/v4 and JSpaceBinding/v3 identities. The integrated producer regression must construct the Vector-Control packet before the model invocation, place its canonical bytes in the exact executor input, admit ModelExecution plus ModelInputControl against the same GridPlan/MiniUnifiedDB, and only then produce inference/J-Space/training evidence. This still establishes byte-level delivery only; hidden-state causal use requires separately leased intervention/lesion/rescue evidence."
+}

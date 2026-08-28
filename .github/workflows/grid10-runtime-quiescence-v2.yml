@@ -1,0 +1,216 @@
+name: GRID10 runtime quiescence v2
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  quiescence:
+    if: "github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] GRID10 runtime quiescence v2' && github.event.issue.user.login == 'gschaidergabriel' && contains(github.event.issue.body || '', 'dispatch_schema: CLAY_ORDINARY_DISPATCH/v1')"
+    concurrency:
+      group: grid10-runtime-quiescence-v2
+      cancel-in-progress: false
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Validate singleton and locked source identity
+        id: dispatch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib, re, subprocess
+          event=json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          body=str((event.get('issue') or {}).get('body') or '')
+          fields={}
+          for line in body.splitlines():
+              if ':' not in line:
+                  continue
+              k,v=line.split(':',1)
+              k=k.strip()
+              if k in {'dispatch_schema','dispatch_key'} and k not in fields:
+                  fields[k]=v.strip()
+          if fields.get('dispatch_schema') != 'CLAY_ORDINARY_DISPATCH/v1':
+              raise SystemExit('invalid or missing dispatch_schema')
+          key=fields.get('dispatch_key','')
+          if not re.fullmatch(r'grid10-runtime-quiescence-v2-g[0-9]{4}', key):
+              raise SystemExit('invalid or missing dispatch_key')
+          spec_path=pathlib.Path('research_entity/continuity/ordinary_dispatch_specs/grid10-runtime-quiescence-v2.json')
+          spec=json.loads(spec_path.read_text())
+          expected=f"{spec['dispatch_class']}-g{int(spec['retry_generation']):04d}"
+          if spec.get('current_dispatch_key') != expected or key != expected:
+              raise SystemExit(f'stale/noncanonical dispatch key: {key} != {expected}')
+          claim_path=pathlib.Path(f'research_entity/continuity/ordinary_dispatch_claims/{key}.json')
+          if not claim_path.is_file():
+              raise SystemExit('create-only dispatch claim missing')
+          claim=json.loads(claim_path.read_text())
+          if claim.get('dispatch_key') != key or claim.get('dispatch_class') != spec.get('dispatch_class'):
+              raise SystemExit('dispatch claim identity mismatch')
+          if claim.get('new_issue_authorized_by_this_claim') is not True:
+              raise SystemExit('claim does not authorize this generation trigger')
+          result_path=pathlib.Path(f'research_entity/continuity/ordinary_dispatch_results/{key}.json')
+          skip=result_path.is_file()
+          if not skip:
+              locks=[
+                ('source_path','source_blob_sha'),
+                ('control_guard_path','control_guard_blob_sha'),
+                ('test_path','test_blob_sha'),
+                ('bootstrap_test_path','bootstrap_test_blob_sha'),
+                ('execution_request_path','execution_request_blob_sha'),
+              ]
+              for path_field,sha_field in locks:
+                  p=pathlib.Path(spec[path_field])
+                  if not p.is_file():
+                      raise SystemExit(f'missing locked source: {p}')
+                  blob=subprocess.check_output(['git','hash-object',str(p)],text=True).strip()
+                  if blob != spec[sha_field]:
+                      raise SystemExit(f'blob mismatch {p}: {blob} != {spec[sha_field]}')
+              if subprocess.check_output(['git','status','--porcelain=v1','--untracked-files=normal'],text=True).strip():
+                  raise SystemExit('checkout not clean before runtime')
+          with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as out:
+              out.write(f'dispatch_key={key}\n')
+              out.write(f'skip={str(skip).lower()}\n')
+              out.write(f'result_path={result_path.as_posix()}\n')
+          print('ALREADY_SATISFIED' if skip else f'ADMITTED_SINGLETON {key}')
+          PY
+
+      - name: Execute repository-bound tests and 90s read-only observation
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -uo pipefail
+          work="/tmp/grid10-runtime-quiescence-${DISPATCH_KEY}"
+          rm -rf "$work"
+          mkdir -p "$work"
+
+          python3 -m pytest -q -p no:cacheprovider \
+            tests/test_free_swarm_runtime_quiescence_probe_v2.py \
+            tests/test_vps_control_sync_bootstrap_v2.py \
+            >"$work/tests.stdout" 2>"$work/tests.stderr"
+          test_rc=$?
+
+          probe_rc=125
+          if [[ "$test_rc" -eq 0 ]]; then
+            python3 tools/free_swarm_runtime_quiescence_probe_v2.py \
+              --repo . \
+              --window-seconds 90 \
+              --sample-interval-seconds 2 \
+              --receipt "$work/quiescence.json" \
+              >"$work/probe.stdout" 2>"$work/probe.stderr"
+            probe_rc=$?
+          else
+            : >"$work/probe.stdout"
+            : >"$work/probe.stderr"
+          fi
+
+          TEST_RC="$test_rc" PROBE_RC="$probe_rc" python3 - <<'PY' >"$work/envelope.json"
+          import json, os, pathlib, platform, socket, subprocess
+          root=pathlib.Path('/tmp') / f"grid10-runtime-quiescence-{os.environ['DISPATCH_KEY']}"
+          qpath=root/'quiescence.json'
+          q=None
+          if qpath.is_file() and qpath.read_text().strip():
+              try:
+                  q=json.loads(qpath.read_text())
+              except Exception:
+                  q=None
+          test_rc=int(os.environ['TEST_RC'])
+          probe_rc=int(os.environ['PROBE_RC'])
+          status='PASS' if test_rc==0 and probe_rc==0 and isinstance(q,dict) and q.get('pass') is True else 'FAIL_CLOSED'
+          event=json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          env={
+            'schema':'GRID10_RUNTIME_QUIESCENCE_V2_REPOSITORY_BOUND_RUNTIME_RECEIPT/v1',
+            'dispatch_schema':'CLAY_ORDINARY_DISPATCH/v1',
+            'dispatch_key':os.environ['DISPATCH_KEY'],
+            'issue_number':(event.get('issue') or {}).get('number'),
+            'run_id':os.environ.get('GITHUB_RUN_ID'),
+            'event_sha':os.environ.get('GITHUB_SHA'),
+            'checkout_head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+            'checkout_tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),
+            'runner_name':os.environ.get('RUNNER_NAME'),
+            'runner_hostname':socket.gethostname(),
+            'runner_platform':platform.platform(),
+            'runtime_surface':'OWNING_VPS_SELF_HOSTED_READONLY_OBSERVER',
+            'test_returncode':test_rc,
+            'probe_returncode':probe_rc,
+            'test_stdout':(root/'tests.stdout').read_text(errors='replace')[-8000:],
+            'test_stderr':(root/'tests.stderr').read_text(errors='replace')[-8000:],
+            'probe_stdout':(root/'probe.stdout').read_text(errors='replace')[-8000:],
+            'probe_stderr':(root/'probe.stderr').read_text(errors='replace')[-8000:],
+            'quiescence':q,
+            'status':status,
+            'credit_scope':'RUNTIME_QUIESCENCE_COMPONENT_ONLY' if status=='PASS' else 0,
+            'physical_grid10_credit':0,
+            'whole_hcu_credit':0,
+            'whole_entityos_credit':0,
+            'provider_calls':0,
+            'secret_lookups':0,
+            'process_mutations':0,
+          }
+          print(json.dumps(env,indent=2,sort_keys=True))
+          PY
+          exit 0
+
+      - name: Persist append-only terminal result
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+        run: |
+          set -euo pipefail
+          work="/tmp/grid10-runtime-quiescence-${DISPATCH_KEY}"
+          mkdir -p research_entity/runtime/tool_results research_entity/continuity/ordinary_dispatch_results
+          target="research_entity/runtime/tool_results/grid10-runtime-quiescence-v2-${DISPATCH_KEY}.json"
+          result="research_entity/continuity/ordinary_dispatch_results/${DISPATCH_KEY}.json"
+
+          git fetch origin main
+          if git show "origin/main:${result}" >/dev/null 2>&1; then
+            echo "ALREADY_SATISFIED_REMOTE ${DISPATCH_KEY}"
+            exit 0
+          fi
+
+          cp "$work/envelope.json" "$target"
+          TARGET="$target" DISPATCH_KEY="$DISPATCH_KEY" python3 - <<'PY' >"$result"
+          import json, os, pathlib
+          receipt=json.loads(pathlib.Path(os.environ['TARGET']).read_text())
+          print(json.dumps({
+            'schema':'CLAY_ORDINARY_DISPATCH_RESULT/v1',
+            'dispatch_key':os.environ['DISPATCH_KEY'],
+            'dispatch_class':'grid10-runtime-quiescence-v2',
+            'status':receipt['status'],
+            'issue_number':receipt.get('issue_number'),
+            'run_id':receipt.get('run_id'),
+            'event_sha':receipt.get('event_sha'),
+            'checkout_head':receipt.get('checkout_head'),
+            'checkout_tree':receipt.get('checkout_tree'),
+            'receipt_path':os.environ['TARGET'],
+            'runtime_credit':'RUNTIME_QUIESCENCE_COMPONENT_ONLY' if receipt['status']=='PASS' else 0,
+            'physical_grid10_credit':0,
+            'whole_hcu_credit':0,
+            'whole_entityos_credit':0,
+            'retry_requires_generation_advance':True
+          },indent=2,sort_keys=True))
+          PY
+
+          git config user.name 'grid10-quiescence-v2-runner'
+          git config user.email 'grid10-quiescence-v2-runner@users.noreply.github.com'
+          git add "$target" "$result"
+          git commit -m "evidence(runtime): singleton GRID10 quiescence v2 ${DISPATCH_KEY} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

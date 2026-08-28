@@ -1,0 +1,26 @@
+{
+  "schema": "ClayGoFrontierReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T22:50:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "NEW",
+  "frontier": "MICROVM_NETWORK_BOUNDARY_DEFAULT_DENY",
+  "observed_source": {
+    "manifest_blob": "e37462b099bba5b52d34d5df5a3af94acbc9521a",
+    "microvm_contract_blob": "83c6666a6a6d2419396e14febc18a8a28975c6a0",
+    "kata_template_blob": "ac0f76e9add55cc4976924903f39294c82cbd595"
+  },
+  "observation": "Final acceptance now requires the exact accepted ClayVerse image digest behind an independent VM/microVM guest-kernel envelope, but the canonical Kata StatefulSet template contains no NetworkPolicy. hostNetwork=false does not itself isolate normal pod ingress/egress.",
+  "primary_evidence": [
+    "Kubernetes NetworkPolicy docs: pods are non-isolated for ingress and egress unless selecting policies apply; default-deny policies isolate directions.",
+    "Kubernetes docs: default-deny egress also blocks DNS and requires an explicit DNS allowance if DNS is needed.",
+    "Kubernetes docs: standard NetworkPolicy is L3/L4 and cannot enforce TLS semantics or target services by name."
+  ],
+  "strongest_counterhypothesis": "Adding a broad HTTPS allow rule would restore functionality but would violate the controlled-egress intent because standard NetworkPolicy cannot bind that rule to Clerk/Anthropic/GLM identities.",
+  "decision": "Implement a single retained source lane whose reference deployment is default-deny for both directions and requires explicit provider/cluster-specific ingress and egress allow policies plus enforcement attestation before final acceptance.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "runtime_credit": 0,
+  "whole_product_pass": false
+}

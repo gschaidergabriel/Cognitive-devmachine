@@ -1,0 +1,74 @@
+{
+  "schema": "ENTITYOS_HCU_GO_PR810_BUILD_GUARD_COUNTEREVIDENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "3067f529774dd151adc779d371369dba3ad346e5",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_PROVIDER_BUILD_REVALIDATION_SOURCE_INSPECTION_AND_SINGLE_LANE_FUSION"
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_last_observed": "3373a1209d6d600f96124b40437f46af15debe1a",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_before_guard_sync": "d46e3df1233d7fdaf5ce07a8189d47f73a03cb8f",
+    "executor_head_after_parallel_single_lane_guard_sync": "6303be2cc726f43195336288dfbd5de556752c03"
+  },
+  "runtime_counterevidence": [
+    {
+      "deployment_id": "dpl_BXvzu9Pt6KMguP4jW2YndozusQm4",
+      "executor_sha": "d46e3df1233d7fdaf5ce07a8189d47f73a03cb8f",
+      "state": "ERROR",
+      "build_failure": "ENTITYOS_HCU_FREE_ONLY_SANDBOX_ADMISSION_MISSING",
+      "missing_markers": [
+        "supervisor: 'SUPERVISOR_STEERING_8_64'",
+        "SUPERVISOR_8_64_REQUIRES_DIRECT_REMAINING_INCLUDED_QUOTA_OBSERVATION_BEFORE_SANDBOX_CREATE"
+      ],
+      "interpretation": "The Sandbox admission source had already advanced to supervisor 8.65 while the exclusive executor build guard still asserted 8.64. This is executable build counterevidence that justified one guard repair under supervisor 8.65 runtime-first policy."
+    },
+    {
+      "deployment_id": "dpl_9CPfNYULfANWebZ8JKX8HaGKuej7",
+      "executor_sha": "6303be2cc726f43195336288dfbd5de556752c03",
+      "state": "ERROR",
+      "build_failure": "ENTITYOS_HCU_JSPACE_GRID10_POSITIVE_MISSING",
+      "missing_marker_count": 21,
+      "missing_marker_family": "EXACT_INFERENCE_V4_* fail-closed provenance/replay/identity fences",
+      "interpretation": "The 8.65 guard sync passed the prior authority mismatch and exposed the next concrete carrier/guard closure gap. The positive carrier's pass predicate does not currently bind the full base Inference/v4 fail-closed marker family even though its exact integration test invokes base.main()."
+    }
+  ],
+  "source_observation": {
+    "sandbox_admission_blob_at_d46e": "168cfa6ac167bfc33c95083e981edad7d1d04bad",
+    "sandbox_admission_supervisor": "SUPERVISOR_STEERING_8_65",
+    "guard_blob_at_6303": "9789330718f6748d2ae5a8f99135a9feac150c6e",
+    "positive_carrier_blob_at_6303": "a3b02d1483b28fad9be6f46fcd693c41ec19d00e",
+    "exact_integration_test_blob_at_6303": "8c75c44d8fdf95d23fb3de07c466be802b1a211c",
+    "carrier_current_pass_predicate": "binds MiniUnifiedDB admission + six exact execution/inference-v4 integration outputs and zero-credit fences, but not the 21 base Inference/v4 marker family now required by the build guard",
+    "counterhypothesis_checked": "The guard might merely be over-demanding markers with no producer path. Source inspection shows test_model_execution_inference_v4_exact.py calls base.main(), so the marker family can be produced by the exact test chain; promotion should bind observed outputs rather than satisfy the guard with comments or inert marker strings."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: re-entered live executor deployments, converted a generic ERROR into two exact sequential build counterexamples, observed the first 8.64 authority drift repaired on the same retained PR810 lane, and narrowed the current build blocker to a 21-marker positive-carrier/result-binding closure gap.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: executable counterevidence justified and validated the single-lane supervisor-8.65 executor-guard repair; source inspection identified the next fail-closed HCU Inference/v4 carrier invariant without creating a duplicate executor or weakening the guard.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no admitted Sandbox environment, actual local model executor I/O, model-specific J-Space/GWT causal trace, approximately-0.8B runtime, or training occurred. The next source/runtime discriminator remains downstream of current build closure and direct remaining included Sandbox quota authority."
+  },
+  "credits_after": {
+    "function_runtime_diagnostic_exact_source_historical_head": "PASS_AT_DECLARED_NO_SANDBOX_SCOPE",
+    "current_live_executor_ready_deployment": 0,
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On the same retained PR810 lane, make hcu-jspace-grid10-positive bind the exact base Inference/v4 fail-closed marker family as observed runtime-result predicates (not inert source strings), preserve the existing six MiniUnifiedDB/Inference-v4 integration predicates and zero-credit fences, then re-deploy and inspect build logs. Even after a READY build, keep Sandbox.create fail-closed until an account-authoritative read-only remaining included Sandbox quota signal is directly observed under supervisor 8.65.",
+  "evidence_boundary": "This receipt records provider build execution and exact source inspection. It is not Sandbox execution, HCU model execution, J-Space model evidence, training evidence, or whole-product acceptance."
+}

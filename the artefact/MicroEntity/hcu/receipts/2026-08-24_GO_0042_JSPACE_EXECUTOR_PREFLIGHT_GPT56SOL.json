@@ -1,0 +1,110 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXECUTOR_PREFLIGHT_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "research_main": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "sha": "d0b46007567fa2066954b9ac4cbf80132e1a7e02",
+    "observed_unchanged_immediately_before_write": true
+  },
+  "retained_hcu_donor": {
+    "pr": 1263,
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "observed_head_sha": "bbad88fecdf82c750d9a260f0954467bb7bc04a4",
+    "draft": true,
+    "single_retained_lane": true
+  },
+  "retained_vercel_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_sha": "a85d75fed192d9dd8cfbec49dedff9bfa6e0e520",
+    "deployment_id": "dpl_5L1PZpoG8oxHTiMp8XPuGEueAKSr",
+    "deployment_state": "READY",
+    "commit_message": "test(entityos-hcu): include Global J-Space GWT training prototype in sandbox batch",
+    "controller_behavior_observed_from_source": [
+      "resolves current Research refs/heads/main at POST time",
+      "resolves current retained HCU PR 1263 head at POST time",
+      "binds both commit and tree identities",
+      "creates a persistent=false Vercel Sandbox only after identity resolution",
+      "fetches exact private commit archives inside the Sandbox using transient GITHUB_READ_TOKEN",
+      "re-resolves both snapshots and fails closed on movement",
+      "clears token before detached regression execution",
+      "checks GITHUB_READ_TOKEN absence in a fresh Sandbox command",
+      "returns runtime_credit=false on start response"
+    ],
+    "batch_contains": [
+      "RFC8785/JCS canonicalization regressions",
+      "Typed Entry regressions",
+      "reactive HCU route regressions",
+      "engine admission regressions",
+      "verified engine-load lease regressions",
+      "inference receipt v3 regressions",
+      "GRID10 v2 regressions",
+      "Global J-Space/GWT prototype regressions",
+      "J-Space bootstrap dataset compiler regressions"
+    ]
+  },
+  "live_execution_surface_observation": {
+    "vercel_project": "dr-unterweger",
+    "latest_ready_deployment_contains_jspace_batch": true,
+    "runtime_logs_window": "last_2_hours_at_observation",
+    "credential_bearing_post_observed": false,
+    "go_cycle_v2_gets_observed": true,
+    "get_behavior": "405_METHOD_NOT_ALLOWED_EXPECTED_POST_ONLY",
+    "sandbox_run_observed_by_this_organ": false,
+    "github_workflow_runs_for_exact_hcu_head": 0,
+    "callable_connector_post_action_available_to_this_organ": false,
+    "classification": "EXECUTION_START_BLOCKED_ON_OWNER_CREDENTIAL_BEARING_VERCEL_POST"
+  },
+  "coordination_observation": {
+    "initial_hcu_head": "d195755c16f704996c0b84eb7fa0d5ff2a5913ef",
+    "initial_global_jspace_test_drift": "test_global_jspace_gwt_v1.py still used the pre-basis-digest API while global_jspace_gwt_v1.py required basis_sha256 and the vector-control module used parse_packet_text/decode_vector rather than VectorControlPacket.decode_text",
+    "attempted_direct_repair": "REJECTED_WITH_GITHUB_409_STALE_SHA",
+    "overwrite_occurred": false,
+    "refreshed_hcu_head": "bbad88fecdf82c750d9a260f0954467bb7bc04a4",
+    "parallel_worker_resolution": "drift repaired in the retained lane; basis_sha256 is now bound in the Global J-Space tests and a same-basis-id/different-basis-bytes discriminator was added",
+    "duplicate_repair_created": false
+  },
+  "unusual_experiment": {
+    "added_by_this_organ": false,
+    "reason": "The refreshed retained HCU lane already contains the bounded same-basis-id/different-basis-bytes discriminator during the current parallel go activity; this organ did not multiply the intervention."
+  },
+  "training": {
+    "together_general_inference": "FORBIDDEN",
+    "one_shot_approx_08b_jspace_gwt_finetune": "OWNER_AUTHORIZED_UNTIL_ONE_JOB_IS_CREATED",
+    "one_shot_consumed": false,
+    "job_created_by_this_organ": false,
+    "launch_status": "NOT_READY_FOR_LAUNCH_BECAUSE_EXACT_SANDBOX_BATCH_HAS_NOT_RUN",
+    "next_training_gates": [
+      "owner-start exact current Vercel Sandbox batch",
+      "obtain exact PASS or actionable semantic failure",
+      "bind actual local ~0.8B loader-consumed checkpoint/tokenizer/runtime/build identity",
+      "produce real instrumented J-Space/GWT traces and causal controls",
+      "freeze leak-resistant train/validation/holdout dataset",
+      "freeze pre-training evaluation and Together support/price preflight",
+      "create exactly one authorized fine-tuning job only after all prior gates pass"
+    ]
+  },
+  "runtime_credit": {
+    "entityos_hcu_whole_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_discriminator": "Owner/user performs one credential-bearing POST to the exact READY PR810 Vercel controller with a scoped read-only GitHub source token. Require returned bound Research main SHA/tree and HCU PR1263 SHA/tree, post-fetch token absence, actually-started disposable Sandbox evidence, then inspect the detached status/log for the combined Entry->route->engine-load->inference->GRID10->Global-J-Space->dataset-compiler result.",
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_runner_testing": false,
+    "production_host_testing": false,
+    "secret_requested_or_persisted_by_this_organ": false,
+    "together_job_started": false,
+    "false_pass_claimed": false
+  }
+}

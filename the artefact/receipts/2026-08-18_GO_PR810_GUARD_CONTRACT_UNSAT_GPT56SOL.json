@@ -1,0 +1,60 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:42:19+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "PR810_SOURCE_GUARD_CONTRACT_UNSAT_AND_CURRENT_BLOB_DRIFT",
+  "canonical_main_observed_before_write": "a95d360c57fd72472106949ca8617ad6639544bf",
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "exact_head_observed": "cfc375ca9809c1c557dde8f382d00b14f5d0c4b6",
+    "comparison_anchor": "4f77bdfbb75feda92e6e6a7dcf1c0d718a0855d4",
+    "head_delta_from_anchor": "only lib/phase1-provider-handler.js changed"
+  },
+  "source_guard_conflict": {
+    "package_build_sequence": "diagnose-retained-runner -> guard-clayverse-vcr-source -> guard-clayverse-phase-identity -> guard-clayverse-tier2-recreate",
+    "vcr_guard": {
+      "schema": "ClayVerseCurrentOCISourceGuard/v11",
+      "requires_in_tier2_handler": "await source.snapshot({"
+    },
+    "tier2_guard": {
+      "schema": "ClayVerseTier2OuterRecreateGuard/v7",
+      "forbids_in_tier2_handler": "await source.snapshot({"
+    },
+    "logical_result": "SOURCE_GUARD_CONTRACT_UNSAT",
+    "reason": "The same exact source marker is simultaneously mandatory and forbidden for the same tier2 handler while both guards are mandatory in one vercel-build. No possible handler bytes can satisfy both contracts simultaneously."
+  },
+  "independent_current_blob_drift": {
+    "vcr_guard_locked_phase1_blob": "fac6c39dec7c758b0501e756684f33c19334b6a2",
+    "current_exact_head_phase1_blob": "8fe063c27b162495fa41372b17d209abe7d81fe6",
+    "result": "ACTIVE_PR686_CONTROLLER_BLOB_MISMATCH_WOULD_FAIL_CLOSED"
+  },
+  "deterministic_check": {
+    "surface": "isolated ChatGPT container",
+    "schema": "ClayVerseGuardConstraintSAT/v1",
+    "intersection": ["await source.snapshot({"],
+    "joint_contract_satisfiable": false,
+    "exit_code": 0,
+    "unusual_experiment_count_added": 0
+  },
+  "execution_admission": {
+    "vercel_current_status_observed_for_prior_current_head": "FAILURE_CONTROL_PLANE_ADMISSION",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "clayverse_test_failure": false,
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "fusion": {
+    "do_not_create_second_controller_path": true,
+    "do_not_promote_snapshot_or_declared_transfer_mechanism": true,
+    "repair_priority": "First make the mandatory source guards jointly satisfiable and rebind active blobs to one exact controller head. Then restore authorized Vercel build admission. Only after both are green should the retained Tier-2 dependency/delete-boundary discriminator execute."
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_count": 0,
+    "reason": "No unusual experiment executed; prior go coordination law remains fail-closed/global slot already accounted elsewhere."
+  },
+  "next_exact_step": "On the single retained PR810 lane, choose one Tier-2 carrier contract and make guard-clayverse-vcr-source and guard-clayverse-tier2-recreate enforce that same contract; refresh all exact active blob locks after the phase1 change; run the mandatory guard chain at one immutable head; then obtain a fresh authorized Vercel preview admission before any product runtime credit."
+}

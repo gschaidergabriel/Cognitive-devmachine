@@ -1,0 +1,54 @@
+{
+  "schema": "clayverse.vercel-sandbox-runtime-adjudication/v1",
+  "trigger": "go",
+  "trigger_metadata": "2026-08-17T15:02+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "organ": "GPT-5.6 Sol",
+  "research_main_observed_before_write": "77d3b3d816c880bff5acae6e51c6e4c6de745b51",
+  "classification": "EXECUTION_ENVIRONMENT_FAILURE_NOT_MICROCLAY_SEMANTIC_FAILURE",
+  "unusual_experiment_count_added": 0,
+  "experiment_budget_note": "The 15:02 go unusual-experiment slot is already closed by canonical coordination receipts; this work is deterministic regression/diagnosis only.",
+  "observed_started_execution": {
+    "deployment": "dpl_7H6XmBbeCzqXeLBEH6fD9vYc47uG",
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_branch": "chatgpt/go-microclay-explicit-feedback-pr501-vercel-20260817-1418",
+    "staging_head": "e76a8fcf27653504eb9b53b6429832044b93b9bb",
+    "execution_surface": "VERCEL_SANDBOX_MICROVM",
+    "network_policy": "DENY_ALL",
+    "sandbox_stopped": true,
+    "feedback_blob": "b293b8c2903eb01ce83523b0d483c3ebbdafee8c",
+    "retrieval_blob": "b264802d77917cd5c81ef091bc0a07cdf3b06393",
+    "blob_bind_exit_code": 0,
+    "test_exit_code": 1,
+    "traceback_terminal": "ModuleNotFoundError: No module named '_sqlite3'",
+    "traceback_runtime_path": "/vercel/runtimes/python/lib/python3.13/sqlite3/",
+    "interpretation": "The exact v2 target blobs were bound successfully, but the probe failed while importing sqlite3 before MicroClay semantics executed. This run therefore gives zero semantic FAIL credit to MicroClay and positive evidence that the Vercel Sandbox bridge itself started and executed correctly."
+  },
+  "prepared_deterministic_remediation": {
+    "staging_commits": [
+      "a8342086dce5b070b3ccedf2aa19dc1e7e67f110",
+      "121a3cb0c3eed4f5fbc043c894290069f9b44c74"
+    ],
+    "mechanism": "Provision distro python3.13/python3.13-libs inside the ephemeral Sandbox with dnf while network is available, verify /usr/bin/python3.13 can import sqlite3, then switch the Sandbox to DENY_ALL before exact blob binding and regression execution.",
+    "product_code_changed": false
+  },
+  "remediation_retry_admission": {
+    "staging_head": "bbcff45e9a0fcdeded0f2a06ca80e5a878a5a9da",
+    "github_vercel_status": "failure",
+    "provider_message": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "runtime_credit": "ZERO"
+  },
+  "supersession_boundary": {
+    "v2_candidate": "PR501/PR499 diagnostic only",
+    "current_product_candidate": "PR550 stacked on PR484 Schema-8 / MicroClay policy-v3",
+    "rule": "Do not transfer v2 semantic PASS/FAIL to v3. Transfer only the verified execution-environment lesson: Vercel runtime python3.13 lacks _sqlite3 and a distro-Python provisioning path is prepared."
+  },
+  "next_exact_gate": "When Vercel preview admission is available again, apply the SQLite-capable Sandbox execution substrate to the current non-superseded PR550+PR484 exact source, then run its focused v3 explicit-feedback plus adjacent user-scope/replay/credit/restart/schema/Stage-B regressions with exact blob/harness binding. Do not rerun v2 merely to manufacture product credit.",
+  "whole_product_pass": false,
+  "microclay_product_pass": false,
+  "v3_runtime_verified": false,
+  "vps_used": false,
+  "together_used": false
+}

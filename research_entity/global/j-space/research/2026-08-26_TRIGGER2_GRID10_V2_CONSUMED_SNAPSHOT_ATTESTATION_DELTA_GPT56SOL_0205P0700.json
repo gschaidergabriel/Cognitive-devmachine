@@ -1,0 +1,106 @@
+{
+  "schema": "CLAY_TRIGGER2_GRID10_V2_CONSUMED_SNAPSHOT_ATTESTATION_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_NONCANONICAL_RESEARCH_DELTA_CANDIDATE_EVAL_ONLY",
+  "observed_main_before_write": "2fca4005a3e9aa3732189897e38947dda27c9b45",
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0150P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false
+  },
+  "runtime_change_reinjected": {
+    "source": "tools/xeno_physical_grid10_acceptance_v2.py",
+    "source_commit": "0011673f34bc55b838f52420376df6d68e40d9be",
+    "runtime_request": "research_entity/execution_requests/2026-08-26_TRIGGER2_PHYSICAL_GRID10_V2_VPS_EXECUTION_PIN_0011673_GPT56SOL_0205P0700.json",
+    "request_commit_observed_on_main": "2fca4005a3e9aa3732189897e38947dda27c9b45",
+    "repaired_properties": [
+      "ten simultaneously live distinct OS node processes are measured with a release barrier",
+      "parent/child PID binding and interval overlap are explicit proof objects",
+      "ordinary nodes read one explicit SQLite read transaction and are S1 non-writing",
+      "ordinary result packets bind generation state_epoch and state_digest",
+      "stale epoch is rejected before coordinator commit",
+      "equal epoch with mismatched digest is rejected before coordinator commit",
+      "fresh physical-node results are re-observed against the exact current snapshot before serial coordinator CAS admission"
+    ]
+  },
+  "material_finding": "Physical GRID10 v2 repairs the v1 concurrency and stale-packet proof gaps, but source-bound packet metadata and even exact source-bound execution are not a general proof that a future model inference consumed the exact declared S1 representation. Packet freshness, source execution identity, and model-input consumption causality are three different evidence classes and must remain separate in Trigger-2 training/evaluation.",
+  "evidence_class_split": {
+    "E1_PACKET_FRESHNESS": {
+      "question": "Does the packet name the currently admissible generation/epoch/digest and fail closed on stale or forged identity?",
+      "grid10_v2_status": "SOURCE_PROOF_PRESENT_RUNTIME_PENDING",
+      "sufficient_for": "packet-level freshness/admission component claims only"
+    },
+    "E2_PRODUCER_EXECUTION_IDENTITY": {
+      "question": "Was the exact reviewed producer source executed at the bound clean repository identity?",
+      "grid10_v2_status": "PINNED_REQUEST_PRESENT_RUNTIME_RECEIPT_PENDING",
+      "sufficient_for": "exact-source producer component runtime claims only after accepted receipt"
+    },
+    "E3_CONSUMED_INPUT_CAUSALITY": {
+      "question": "Can the exact bytes/serialization that causally entered the cognitive/model computation be bound to the claimed S1 snapshot and output receipt?",
+      "grid10_v2_status": "NOT_PROVEN_AS_GENERAL_MODEL_INPUT_ATTESTATION",
+      "sufficient_for": "required before model/J-Space causal consumption credit"
+    }
+  },
+  "hypothesis": "For the deterministic synthetic GRID10 v2 harness, exact source binding plus the explicit read transaction can be sufficient to establish the harness's own packet-construction path at component scope, because the child process constructs its packet directly from the local snapshot object produced by ro_snapshot. This still does not transfer to a model-backed Xeno path unless the exact rendered/model input bytes and model-call identity are bound downstream.",
+  "counterhypothesis": "Exact source binding alone could be treated as consumed-snapshot attestation for all later Xeno cognition, because the reviewed code is expected to pass the snapshot into the model. This is rejected as a general rule: loader/renderer/model-call substitutions, preprocessing drift, post-read mutation, or a model call that never receives the claimed bytes can preserve source and packet metadata while breaking causal input identity.",
+  "training_eval_delta": {
+    "new_required_concept": "PACKET_FRESHNESS_NEQ_CONSUMED_INPUT_CAUSALITY",
+    "positive_behavior": [
+      "accept exact-current packet metadata as packet freshness only when deterministic gates and provenance match",
+      "distinguish exact producer execution from proof of exact model-input consumption",
+      "request or preserve an input/render/model-call attestation when a claim depends on model/J-Space causal consumption",
+      "keep runtime component credit bounded to the evidence actually observed"
+    ],
+    "hard_negatives": [
+      "packet generation epoch digest all match, but the model consumed a different serialized snapshot",
+      "producer source hash matches, but a renderer silently reordered or dropped fields before inference",
+      "packet declares the correct snapshot digest, but output was produced from cached local state from an earlier call",
+      "model output is causally valid for a current snapshot, but the packet carries a forged digest authored after inference",
+      "ten physical processes pass concurrency proof, therefore full HCU or J-Space model causality is claimed",
+      "a clean exact-source runtime receipt is treated as training or canonical-semantics credit"
+    ],
+    "mirrored_eval_axes": [
+      "freshness_identity",
+      "producer_source_identity",
+      "rendered_input_identity",
+      "model_call_identity",
+      "output_receipt_identity",
+      "credit_scope"
+    ],
+    "admission": "CANDIDATE_EVAL_ONLY_NOT_TRAINING_ELIGIBLE"
+  },
+  "runtime_interface_recommendation": {
+    "minimum_future_model_backed_binding": [
+      "s1_snapshot_digest",
+      "rendered_input_digest",
+      "renderer_or_serializer_identity",
+      "model_or_checkpoint_identity",
+      "model_call_id",
+      "output_digest",
+      "generation_epoch_and_scope",
+      "parent_causal_event_or_admission_identity"
+    ],
+    "note": "Field names are design recommendations, not canonical schema authority. Exact current runtime design may implement an equivalent cryptographic/causal binding."
+  },
+  "discriminator": {
+    "next_high_information_gate": "Execute the already-pinned physical GRID10 v2 request on the admitted free VPS. On exact PASS, review the receipt only for physical GRID10 component scope, then separately test a model-backed or renderer-backed consumed-input binding before granting model/J-Space causal consumption credit.",
+    "no_duplicate_execution_request_created": true,
+    "reason": "A current exact-source VPS request already exists on main."
+  },
+  "credit": {
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_hcu_runtime_credit_added": 0,
+    "whole_entityos_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "accepted_dataset_tokens_added": 0,
+    "canonical_semantics_credit_added": 0
+  },
+  "epistemic_boundary": "This delta is source-grounded research/evaluation design. It is not a VPS runtime receipt, model execution, training run, dataset admission, canonical truth update, or effect-authority grant."
+}

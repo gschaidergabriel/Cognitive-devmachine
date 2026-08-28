@@ -1,0 +1,76 @@
+{
+  "schema": "clayverse.execution-admission-receipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:02:00+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed_before_receipt_branch": "40532aadc90650623388aa774a30be0b1a28c3c5",
+  "execution_policy": {
+    "preferred_surface": "VERCEL_SANDBOX",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN"
+  },
+  "vercel": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "project": "dr-unterweger",
+    "direct_chatgpt_sandbox_lifecycle": "NOT_EXPORTED",
+    "git_preview_oidc_sandbox_bridge": "CONFIRMED",
+    "latest_assertion_relevant_started_sandbox": {
+      "deployment_id": "dpl_CmQJ5bkaXf4GUxZKJgrMq9QSH3wo",
+      "staging_head": "dc2b524961137c40c427cc6d371d411ee6c4cfac",
+      "research_pr": 501,
+      "research_feedback_blob": "b293b8c2903eb01ce83523b0d483c3ebbdafee8c",
+      "route_donor_pr": 499,
+      "route_donor_blob": "b264802d77917cd5c81ef091bc0a07cdf3b06393",
+      "sandbox_started": true,
+      "network_policy": "DENY_ALL",
+      "sandbox_stopped": true,
+      "blob_bind_exit_code": 0,
+      "test_exit_code": 1,
+      "test_output": "",
+      "classification": "EXECUTED_CROSS_BRANCH_COUNTEREVIDENCE_UNADJUDICATED",
+      "semantic_test_verdict": "UNRESOLVED_EMPTY_OUTPUT"
+    },
+    "latest_ready_preview_checked": {
+      "deployment_id": "dpl_FwTbHw7uiqEZQiR1akhVZdcyrmCL",
+      "staging_head": "52e536eeed2c44cac640890d95eaa1b378165a2f",
+      "branch": "chatgpt/go-stageb-outcome-ok-pr549-vercel-20260817-1342",
+      "state": "READY",
+      "build_result": "SKIP_NON_TARGET_PREVIEW",
+      "sandbox_started": false,
+      "runtime_credit": 0
+    },
+    "corrected_pr549_runner": {
+      "staging_pr": "gschaidergabriel/Dr.-Unterweger#838",
+      "current_head_observed": "4542a6ee4c7141a334ea7787b7d8fd7cc54224f6",
+      "runner": "scripts/run-stageb-outcome-ok-pr549.mjs",
+      "expected_ref": "chatgpt/go-stageb-outcome-ok-pr549-vercel-20260817-1342",
+      "target_research_head": "5c19606bf3198d85b1f6c1da6ba64c4e5f4d2429",
+      "admission": "BLOCKED_BEFORE_CORRECTED_RUNNER_EXECUTION",
+      "provider_error": "Resource is limited - try again in 24 hours (more than 100, code: api-deployments-free-per-day).",
+      "classification": "FREE_DAILY_DEPLOYMENT_CAP_REACHED_NOT_TEST_FAIL_NOT_SANDBOX_UNAVAILABLE"
+    }
+  },
+  "coordination": {
+    "unusual_experiment_count_added_by_this_lane": 0,
+    "single_go_experiment_slot": "ALREADY_CLAIMED_ON_CANONICAL_MAIN",
+    "claim_commit": "40532aadc90650623388aa774a30be0b1a28c3c5",
+    "claimed_experiment": "recovery_receipt_semantic_forgery_discriminator",
+    "duplicate_experiment_forbidden": true
+  },
+  "claims": {
+    "vercel_sandbox_path_confirmed": true,
+    "current_free_preview_capacity_available": false,
+    "pr549_exact_sandbox_pass": false,
+    "pr549_exact_sandbox_fail": false,
+    "microclay_pr501_pr499_semantic_fail": false,
+    "whole_clayverse_pass": false
+  },
+  "next_gate": "Do not spend additional preview deployments while the free daily deployment cap is active. When provider admission returns, refresh canonical main and target PR heads first, then run one coordinated exact-source high-information Sandbox batch; READY/SKIP previews and pre-start provider rejections receive zero runtime credit.",
+  "evidence_scope": "PROVIDER_AND_EXECUTION_ADMISSION_TRUTH_PLUS_ONE_STARTED_SANDBOX_COUNTEREVIDENCE; NO_PRODUCT_PROMOTION"
+}

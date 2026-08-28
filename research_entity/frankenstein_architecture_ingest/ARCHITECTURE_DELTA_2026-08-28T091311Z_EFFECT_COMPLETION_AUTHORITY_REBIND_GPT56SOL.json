@@ -1,0 +1,138 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/effect-completion-authority-rebind",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T09:13:11Z",
+  "canonical_main_sha": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+  "authority_epoch": "9.13",
+  "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+  "execution_mode": "FREE_ONLY_HARD_OFF_NO_PROVIDER_EXECUTION",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_delta": "f20248b6035b50c05525d5c481c27852e0d14b0c",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packet_ingest": {
+    "new_unconsumed_packets_found": 0,
+    "duplicate_ingest_avoided": true,
+    "newest_branch_packet": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "newest_branch_packet_already_consumed": true
+  },
+  "reconciliation_scope": {
+    "main_feed_contract": "research_entity/architecture_archaeology/triggerword5_ingest_receipts/TRIGGERWORT5_TO_TRIGGERWORD4_EFFECT_CONTRACT_2026-08-28_GPT56SOL.json",
+    "main_feed_contract_status": "SOURCE_GROUNDED_DESIGN_CONTRACT_RUNTIME_CREDIT_ZERO",
+    "authority_metadata_issue": "The contract records authority epoch 8.78, while current admitted supervisor authority is 9.13. Under 9.13 the old authority label is historical metadata only; the underlying donor-source claims were independently rechecked against the unchanged pinned donor and current primary hook documentation before reuse.",
+    "promotion": "SOURCE_FINDINGS_REBOUND_TO_CURRENT_AUTHORITY_WITH_RUNTIME_CREDIT_ZERO"
+  },
+  "direct_source_crosschecks": [
+    {
+      "id": "TW5-913-EFFECT-001",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3100,
+      "line_end": 3195,
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "The donor's EffectGate section explicitly states that zulassen()/PreToolUse never blocks a Claude Code tool; ABGELEHNT/WIEDERHOLUNG/UNGEPRUEFT are bookkeeping outcomes and an older external wache-koenig.py is named as the blocking guard.",
+      "target_2_0_action": "REPAIR",
+      "runtime_credit_delta": 0
+    },
+    {
+      "id": "TW5-913-EFFECT-002",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3400,
+      "line_end": 3580,
+      "source_kind": "LIVE_CODE",
+      "finding": "PostToolUse/merken reads one active_turns.effect_id selected by session_id and uses that mutable session-scoped pointer to find the effects row. Non-ZUGELASSEN admission statuses remain unchanged even after the tool has actually run.",
+      "target_2_0_action": "REPAIR",
+      "runtime_credit_delta": 0
+    },
+    {
+      "id": "TW5-913-COMPLETION-003",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 5840,
+      "line_end": 6008,
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "_beleg_pruefen accepts an effect proof unless status is exactly legacy lowercase 'fehler', and accepts test:<exit_code>:<description> solely when exit_code is the string '0'. Current denied/failed/unchecked/duplicate statuses and textual test claims are therefore not bound to a typed successful execution receipt.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "runtime_credit_delta": 0
+    },
+    {
+      "id": "TW5-913-HOOK-CONFIG-004",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "line_start": 1,
+      "line_end": 81,
+      "source_kind": "CONFIG",
+      "finding": "The packaged plugin routes PreToolUse and PostToolUse through stern.py and describes the plugin hook path as fail-silent/exit-0; this config does not artifact-bind the separately named host-global blocking guard.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "runtime_credit_delta": 0
+    }
+  ],
+  "external_primary_crosscheck": {
+    "source": "https://code.claude.com/docs/en/hooks",
+    "observed_currently": [
+      "PreToolUse input includes call-scoped tool_use_id and can deny/block a tool before execution.",
+      "PostToolUse input includes the same tool_use_id after successful execution.",
+      "PostToolUse fires once per tool and can fire concurrently for parallel tool-call batches; PostToolBatch runs after the full parallel batch resolves."
+    ],
+    "architecture_consequence": "session_id is contextual identity only. Frankenstein 2.0 must bind effect lifecycle to tool_use_id or an equally exact immutable invocation_id."
+  },
+  "frankenstein_2_effect_contract_delta": {
+    "state_separation": [
+      "ADMISSION_DECISION",
+      "ENFORCEMENT_DECISION",
+      "EXECUTION_RECEIPT",
+      "WORLD_EFFECT_VERIFICATION",
+      "RESULT_REENTRY",
+      "COMPLETION_EVIDENCE"
+    ],
+    "invocation_identity": "Use immutable tool_use_id or equally exact generated invocation_id for PreToolUse -> enforcement -> execution -> PostToolUse/PostToolUseFailure -> result re-entry. Never use one mutable session-wide current-effect slot as the sole correlation key.",
+    "enforcement": "No enforcement credit from bookkeeping. A deny/allow contract must exercise the actual pre-side-effect blocking adapter and bind its decision receipt to invocation identity, policy generation and source/config identity.",
+    "completion": "Completion must use a typed success allowlist and immutable execution receipts. DENIED, FAILED, UNCHECKED, UNKNOWN, stale, duplicate-unresolved and unbound textual test claims fail closed.",
+    "world_effect": "A successful command or file-result hash is an execution/tool-result receipt, not universal proof of an external-world effect. Unknown external outcome remains UNKNOWN until effect-appropriate observation re-enters canonical state.",
+    "sparse_world_link": "World-Substrate operator learning must consume verified outcomes with stronger credit than execution-only or simulated transitions; unverified tool success must not silently become world truth."
+  },
+  "contradictions_preserved": [
+    "Current EntityOS design names deterministic real-effect authority, while the pinned donor's named EffectGate explicitly says ordinary tools proceed regardless of its bookkeeping decision.",
+    "The donor completion verifier claims evidence checking but its executable effect predicate rejects only legacy lowercase 'fehler' and its test predicate trusts an unbound textual exit-code assertion.",
+    "The donor names wache-koenig.py as the actual blocking predecessor, but that host artifact is not present in the pinned donor source used here and therefore receives no enforcement credit."
+  ],
+  "highest_value_next_spans": [
+    {
+      "priority": "P0",
+      "span": "actual installed global-hook/wache-koenig source + loaded settings/order identity",
+      "reason": "Either bind the real pre-side-effect enforcement predecessor or permanently preserve the provenance hole."
+    },
+    {
+      "priority": "P0",
+      "span": "same-session two-mutating-call interleaving under the exact installed Claude Code scheduler",
+      "reason": "Falsify or bound active_turns.effect_id pointer collapse using tool_use_id/effect_id/pre/post ordering."
+    },
+    {
+      "priority": "P1",
+      "span": "typed completion receipt adversarial suite",
+      "reason": "Prove DENIED/FEHLGESCHLAGEN/UNGEPRUEFT/WIEDERHOLUNG/UNKNOWN/stale/forged-test-zero/receipt-transplant all fail closed before Triggerword-4 promotion."
+    }
+  ],
+  "credits": {
+    "source_crosscheck": "PASS",
+    "external_primary_crosscheck": "PASS",
+    "packet_ingest_delta": 0,
+    "donor_runtime_reexecution": 0,
+    "frankenstein_effect_invocation_runtime": 0,
+    "frankenstein_effect_enforcement_runtime": 0,
+    "frankenstein_completion_receipt_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "trigger4_feed": "No architecture restart. Consume this as a current-authority source contract: per-invocation identity, actual pre-side-effect enforcement, typed completion receipts, and explicit execution-vs-world-effect separation are mandatory before effect-path promotion."
+}

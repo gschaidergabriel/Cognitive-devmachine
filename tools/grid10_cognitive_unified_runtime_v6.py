@@ -14,6 +14,12 @@ MEMORY_OFF remain mechanically distinct and gain remains a compute-budget contro
 There is no default provider call. An explicit admitted inference_fn is required to run
 specialist/GWT cognition. Receipts are candidate-cognition evidence only and cannot mint
 canonical truth, effects or completion.
+
+V4 commits the durable Agency transition before the optional cognitive fan-out. If that
+fan-out raises, v6 persists a sanitized FAILED closure receipt bound to the same tick,
+Agency epoch and ControlSnapshot before re-raising a bounded runtime error. This makes the
+post-commit failure boundary machine-visible; it does not claim two-phase atomicity or make
+a failed cognitive cycle replayable under the same tick identity.
 """
 from __future__ import annotations
 
@@ -40,6 +46,11 @@ from grid10_live_control_binding_v2 import (
 
 SCHEMA = "GRID10_UNIFIED_COGNITIVE_RUNTIME/v6"
 RECEIPT_SCHEMA = "GRID10_V6_CONTROL_BOUND_RECEIPT/v1"
+FAILED_COGNITIVE_RECEIPT_SCHEMA = "GRID10_CONTROL_BOUND_COGNITIVE_CYCLE_FAILED/v1"
+
+
+class CognitiveCycleExecutionError(RuntimeError):
+    """Cognition failed after V4 committed the durable Agency transition."""
 
 
 @dataclass(frozen=True)
@@ -149,6 +160,8 @@ class UnifiedCognitiveRuntimeV6:
 
         controlled: ControlledCognitiveCycleResultV2 | None = None
         cognitive_receipt: Mapping[str, Any]
+        cognitive_error: Exception | None = None
+        cognitive_cycle_status = "NOT_RUN"
         reserved_context_overrides: tuple[str, ...] = ()
         if self.inference_fn is None:
             cognitive_receipt = {
@@ -173,7 +186,7 @@ class UnifiedCognitiveRuntimeV6:
                 "woken_goal_ids": list(base.woken_goal_ids),
                 "controller_action": next_action,
             }
-            # Caller context is candidate data, not causal identity authority.  Record any
+            # Caller context is candidate data, not causal identity authority. Record any
             # attempted collision, then deterministically bind the reserved fields to the
             # already-committed V4 cycle so GWT prompts cannot drift onto a foreign tick/action.
             reserved_context_overrides = tuple(
@@ -184,17 +197,41 @@ class UnifiedCognitiveRuntimeV6:
                 )
             )
             context.update(causal_context)
-            controlled = run_control_bound_cognitive_cycle_v2(
-                tick_id=tick_id,
-                assurance_mode=base.heartbeat_result.assurance_mode,
-                controller_action=next_action,
-                fabric=self.runtime_v4.heartbeat_runtime.fabric,
-                context=context,
-                control_snapshot=control,
-                config=self.cognitive_config,
-                inference_fn=self.inference_fn,
-            )
-            cognitive_receipt = sanitized_control_receipt_v2(controlled)
+            try:
+                controlled = run_control_bound_cognitive_cycle_v2(
+                    tick_id=tick_id,
+                    assurance_mode=base.heartbeat_result.assurance_mode,
+                    controller_action=next_action,
+                    fabric=self.runtime_v4.heartbeat_runtime.fabric,
+                    context=context,
+                    control_snapshot=control,
+                    config=self.cognitive_config,
+                    inference_fn=self.inference_fn,
+                )
+                cognitive_receipt = sanitized_control_receipt_v2(controlled)
+                cognitive_cycle_status = "SUCCESS"
+            except Exception as exc:
+                # V4 has already committed the Agency transition. Never leave that durable
+                # transition without an exact v6 closure simply because candidate cognition
+                # failed. Persist only bounded error metadata; arbitrary exception text may
+                # contain provider/runtime data and is therefore represented by a digest.
+                cognitive_error = exc
+                cognitive_cycle_status = "FAILED"
+                cognitive_receipt = {
+                    "schema": FAILED_COGNITIVE_RECEIPT_SCHEMA,
+                    "reason": "INFERENCE_OR_GWT_EXCEPTION_AFTER_V4_COMMIT",
+                    "error_type": type(exc).__name__,
+                    "error_digest": _digest({
+                        "error_type": type(exc).__name__,
+                        "error_text": str(exc),
+                    }),
+                    "control_epoch": int(control.control_epoch),
+                    "control_snapshot_digest": control.snapshot_digest,
+                    "agency_epoch_after": int(base.agency_epoch_after),
+                    "provider_calls": None,
+                    "provider_calls_status": "UNKNOWN_AFTER_EXCEPTION",
+                    "retry_same_tick_authorized": False,
+                }
 
         # V4 already committed the durable Agency/wake transition. This row is an append-only
         # causal control/cognition receipt; it is deliberately not a second Agency authority.
@@ -221,6 +258,9 @@ class UnifiedCognitiveRuntimeV6:
             "v4_control_snapshot_source": base.checkpoint.get("control_snapshot_source"),
             "workspace_ignition_threshold": ignition_threshold,
             "workspace_ignited": workspace_ignited,
+            "cognitive_cycle_status": cognitive_cycle_status,
+            "post_v4_commit_failure": cognitive_error is not None,
+            "same_tick_retry_authorized": False if cognitive_error is not None else None,
             "reserved_cognitive_context_overrides": list(reserved_context_overrides),
             "controlled_cognitive_cycle_receipt": cognitive_receipt,
             "canonical_truth_minted": False,
@@ -257,6 +297,11 @@ class UnifiedCognitiveRuntimeV6:
             raise
         finally:
             con.close()
+
+        if cognitive_error is not None:
+            raise CognitiveCycleExecutionError(
+                f"COGNITIVE_CYCLE_FAILED_AFTER_V4_COMMIT:{tick_id}:{receipt_digest}"
+            ) from cognitive_error
 
         return UnifiedCycleResultV6(
             tick_id=tick_id,
@@ -297,6 +342,7 @@ def build_unified_cognitive_runtime_v6(
 
 
 __all__ = [
+    "CognitiveCycleExecutionError",
     "UnifiedCycleResultV6",
     "UnifiedCognitiveRuntimeV6",
     "build_unified_cognitive_runtime_v6",

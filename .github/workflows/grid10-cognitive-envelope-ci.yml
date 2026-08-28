@@ -49,6 +49,7 @@ jobs:
             tools/grid10_live_control_binding_v2.py \
             tools/grid10_persistent_agency_v1.py \
             tools/grid10_persistent_scheduler_v1.py \
+            tools/grid10_persistent_scheduler_v2.py \
             tools/grid10_cognitive_twin_server_v1.py \
             tools/grid10_assurance_monitors_v1.py \
             tools/grid10_executor_governor_v1.py \
@@ -71,6 +72,7 @@ jobs:
           python test_grid10_live_control_binding_v2.py -v
           python test_grid10_persistent_agency_v1.py -v
           python test_grid10_persistent_scheduler_v1.py -v
+          python test_grid10_persistent_scheduler_v2.py -v
           python test_grid10_glm_inference_provider_v1.py -v
           python test_grid10_glm_cognitive_cycle_v1.py -v
       - name: Bounded agency-coupled unified-runtime CLI smoke

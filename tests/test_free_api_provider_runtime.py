@@ -592,11 +592,17 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         pid = os.fork()
         if pid == 0:
             child_opener_called = False
+            reimported_opener_called = False
 
             def child_opener(*args, **kwargs):
                 nonlocal child_opener_called
                 child_opener_called = True
                 raise RuntimeError("child reached authenticated transport")
+
+            def reimported_opener(*args, **kwargs):
+                nonlocal reimported_opener_called
+                reimported_opener_called = True
+                raise RuntimeError("reimported runtime reached authenticated transport")
 
             try:
                 MOD.os.environ = env
@@ -611,12 +617,34 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     outcome = child_result["receipt"]["outcome"]
                 except RuntimeError as exc:
                     outcome = str(exc)
+
+                child_spec = importlib.util.spec_from_file_location(
+                    "free_api_provider_runtime_reimported_in_child", PATH
+                )
+                child_mod = importlib.util.module_from_spec(child_spec)
+                sys.modules[child_spec.name] = child_mod
+                child_spec.loader.exec_module(child_mod)
+                child_mod.execute_chat.__kwdefaults__["wall_time"] = lambda: 1.0
+                reimported_receipt = child_mod.receipt()
+                try:
+                    reimported_result = child_mod.execute_chat(
+                        VALID_MESSAGES,
+                        model="mock",
+                        environ=env,
+                        opener=reimported_opener,
+                    )
+                    reimported_outcome = reimported_result["receipt"]["outcome"]
+                except RuntimeError as exc:
+                    reimported_outcome = str(exc)
                 payload = (
                     f"{outcome}:{child_opener_called}:"
                     f"{capability_receipt['route']['selected']}:"
                     f"{capability_receipt['route']['reason']}:"
                     f"{capability_receipt['route'].get('retryable_in_process')}:"
-                    f"{capability_receipt['route'].get('recovery_action')}"
+                    f"{capability_receipt['route'].get('recovery_action')}:"
+                    f"{reimported_outcome}:{reimported_opener_called}:"
+                    f"{reimported_receipt['route']['selected']}:"
+                    f"{reimported_receipt['route']['reason']}"
                 ).encode("ascii")
                 os.close(read_fd)
                 os.write(write_fd, payload)
@@ -637,7 +665,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(
             child_evidence,
             "forked_during_active_execution:False:None:"
-            "forked_during_active_execution:False:exec_or_process_restart",
+            "forked_during_active_execution:False:exec_or_process_restart:"
+            "forked_during_active_execution:False:None:"
+            "forked_during_active_execution",
         )
 
     def test_execution_receipt_pins_unicode_database_version(self):

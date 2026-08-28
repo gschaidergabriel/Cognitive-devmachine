@@ -1,0 +1,70 @@
+{
+  "schema": "TRIGGERWORD5_REENTRY_FUSION/v1",
+  "created_at": "2026-08-28T10:57:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/retrieval-identity-forensics",
+  "routing": "PASS",
+  "canonical_main_reentered": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority": {
+    "epoch": "9.13",
+    "delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "frank_harness": "DO_NOT_MODIFY",
+    "runtime_credit": 0,
+    "training_credit": 0
+  },
+  "design_branch_reentry_head": "cccd0372185bbe260c7b60e96377e97e3b12d518",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "fused_inputs": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105400Z_5641dc6_GPT56SOL_RETRIEVAL_TURN_BINDING_FORENSICS.json",
+      "commit": "a381cc8ebb9517a77323c74b2704425e10cb079b",
+      "role": "SCHEMA_CONFORMING_SOURCE_FORENSICS_PACKET"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_RETRIEVAL_TURN_IDENTITY_HANDOFF_GPT56SOL.json",
+      "commit": "8d243fd67d2e720c465fe4e10507febd49f81e45",
+      "role": "INTERCONNECT_ABI_IDENTITY_LOSS_LOCALIZATION"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1054Z_RETRIEVAL_TURN_IDENTITY_HANDOFF_GPT56SOL.json",
+      "commit": "3519c1378cd7896fa377e13287a2703c6b49f233",
+      "role": "SOURCE_SCOPE_INGEST_RECEIPT"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_RETRIEVAL_FEEDBACK_ROUND_IDENTITY_GPT56SOL.json",
+      "commit": "cccd0372185bbe260c7b60e96377e97e3b12d518",
+      "role": "PARALLEL_SOURCE_CROSSCHECK_PLUS_MECHANICAL_TRANSCRIPT_CONTAMINATION_EXTENSION"
+    }
+  ],
+  "fusion": {
+    "shared_finding": "Round-scoped retrieval identity exists in the donor but is not preserved as the join key across Stop feedback paths; session-recency and transcript-suffix/latest-message reconstruction are structurally weaker than the identity already present in retrieval_episodes.",
+    "parallel_extension": "The parallel delta broadens the defect beyond model relevance: mechanical feedback also evaluates multiple open same-session retrieval rows against session-scoped transcript/effect evidence, so exact round binding is a shared feedback-plane requirement.",
+    "target_mechanism": "RetrievalFeedbackIdentity/v1 with typed RetrievalFeedbackCandidate/Result",
+    "required_identity": ["retrieval_id", "turn_id", "episode_id", "causal_id", "generation", "query_hash", "candidate_set_digest", "evidence_turn_or_response_id", "source_build_identity"],
+    "preserve": ["existing deterministic retrieval identity ledger", "deterministic feedback reducer pattern", "model relevance remains noncanonical/non-human", "SHADOW promotion remains gated"],
+    "repair": ["eliminate session-latest joins for model relevance", "scope mechanical evidence to exact round identity", "validate query/candidate identity before reducer admission", "defer model inference outside deterministic Stop completion authority"]
+  },
+  "contradictions_preserved": [
+    "The donor invests in fresh round-scoped retrieval identities while downstream feedback paths still reconstruct attribution from session-level ordering/transcript context.",
+    "Source structure makes cross-round contamination plausible, but installed runtime reachability remains unverified."
+  ],
+  "checkpoint": {
+    "packet_queue_status_at_prior_reentry": "QUIESCENT_AFTER_2026-08-28T10:48:00Z",
+    "ingest_state_file_rewrite": "DEFERRED_DUE_ACTIVE_PARALLEL_WRITERS_AND_WHOLE_FILE_REPLACEMENT_RISK",
+    "append_only_chain_sufficient_for_reentry": true,
+    "state_sync_required": true
+  },
+  "credit_boundary": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "parallel_source_corroboration": "PASS_NOT_INDEPENDENT_RUNTIME_REPLICATION",
+    "wrong_round_runtime_reproduction": 0,
+    "stop_latency_runtime": 0,
+    "canonical_semantics": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "result": "FUSION_PASS_SOURCE_SCOPE_RUNTIME_PROMOTION_ZERO",
+  "next_exact_gate": "Triggerword-4 external/donor-side verification: introduce RetrievalFeedbackCandidate/Result bound to exact retrieval_id+turn_id+episode_id+causal_id+generation+query_hash+candidate_set_digest+evidence round identity; run two same-session disjoint retrievals with reversed/interleaved model/mechanical feedback and assert zero cross-credit; separately prove slow/unreachable local model cannot skip deterministic Stop bookkeeping. Frank Harness remains untouched."
+}

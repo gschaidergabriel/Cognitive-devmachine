@@ -1,0 +1,32 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_SPEC/v1",
+  "dispatch_class": "grid10-sigkill-independent-replacement-v3",
+  "trigger_title": "[CLAY-DISPATCH] GRID10 SIGKILL independent replacement v3",
+  "probe_contract": "GRID10_REAL_SIGKILL_INDEPENDENT_REPLACEMENT_ACCEPTANCE/v3",
+  "sandbox": "clay-direct-dev",
+  "transport": "SELF_HOSTED_LINUX_X64",
+  "retry_generation": 0,
+  "current_dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+  "source_path": "tools/grid10_real_sigkill_independent_replacement_acceptance_v3.py",
+  "source_blob_sha": "183df2fc3fd36701296c4c7f1978cb990311bc00",
+  "test_path": "tests/test_grid10_real_sigkill_independent_replacement_acceptance_v3.py",
+  "test_blob_sha": "a4224ed5a19ff81a04d4b7aad43edc6431fd0a75",
+  "credit_ceiling": "GRID10_CRASH_INDEPENDENT_REPLACEMENT_COMPONENT_ONLY",
+  "physical_grid10_credit_ceiling": 0,
+  "provider_calls_allowed": 0,
+  "secret_lookups_allowed": 0,
+  "generation_rule": "INCREMENT_ONLY_AFTER_TERMINAL_RESULT_REQUIRING_DELIBERATE_RETRY_OR_EXPLICIT_INFRASTRUCTURE_OR_PROBE_SEMANTIC_CHANGE; NEW_TRIGGER_ALONE_MUST_NOT_INCREMENT",
+  "identity_excludes": [
+    "trigger_text",
+    "macrocycle_id",
+    "timestamp",
+    "issue_number",
+    "workflow_run_id",
+    "branch_name",
+    "unrelated_main_sha",
+    "organ_model_session_identity"
+  ],
+  "claim_path_template": "research_entity/continuity/ordinary_dispatch_claims/{dispatch_key}.json",
+  "result_path_template": "research_entity/continuity/ordinary_dispatch_results/{dispatch_key}.json",
+  "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md"
+}

@@ -206,7 +206,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
     def test_capability_receipt_advertises_execution_schema_provenance(self):
         capability_receipt = MOD.receipt()
 
-        self.assertEqual(capability_receipt["schema_version"], "1.3")
+        self.assertEqual(capability_receipt["schema_version"], "1.4")
         self.assertEqual(
             capability_receipt["execution_receipt_schema_version"], "1.3"
         )
@@ -223,6 +223,13 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         ])
         for provider in capability_receipt["inventory"]:
             self.assertFalse(provider["model_availability_verified"])
+
+    def test_route_selection_is_scoped_to_provider_endpoint(self):
+        route = MOD.route({"NVIDIA_API_KEY": "secret"})
+
+        self.assertEqual(route["selected"], "nvidia")
+        self.assertEqual(route["selection_scope"], "provider_endpoint")
+        self.assertFalse(route["model_availability_verified"])
 
     def test_execution_receipt_pins_unicode_database_version(self):
         class Response:

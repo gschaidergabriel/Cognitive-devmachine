@@ -17,10 +17,9 @@
   "research_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
   "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-  "continuation_head_before_checkpoint": "9cc2b6b026e725a8b7ca189bf6fd18e67564a163",
+  "continuation_head_observed_before_update": "f798db9de9d44397d59a5f3b3978b37bc53d97ef",
   "continuation_sync": {
     "main_behind_by": 0,
-    "branch_ahead_by": 81,
     "merge_receipt_pr": 2119,
     "merge_commit": "9cc2b6b026e725a8b7ca189bf6fd18e67564a163",
     "generated_metadata_conflict_repair_commit": "5b3d5d45382fe7ef587e286dae5acb140dd3e741",
@@ -40,7 +39,7 @@
       "gate_id": "TRIGGERWORD4_CONTINUATION_BRANCH_MAIN_SYNC",
       "status": "ACCEPTED_AT_SCOPE",
       "scope": "SOURCE_COORDINATION_ONLY",
-      "evidence": "branch compare behind_by=0 at main 4a4287d0935d4dd19d122b1027716a569d331a73"
+      "evidence": "branch compare behind_by=0 against main 4a4287d0935d4dd19d122b1027716a569d331a73 after PR 2119 merge"
     }
   ],
   "reopened_gates": [],
@@ -49,8 +48,9 @@
     "tests/test_grid10_real_sigkill_independent_replacement_acceptance_v3.py",
     "tools/grid10_persistent_agency_v1.py",
     "tools/grid10_cognitive_unified_runtime_v2.py",
-    "tools/test_grid10_persistent_agency_v1.py",
-    "tools/test_grid10_cognitive_unified_runtime_v2.py"
+    "tools/grid10_cognitive_unified_runtime_v4.py",
+    "tools/grid10_persistent_scheduler_v1.py",
+    "tools/grid10_cognitive_agency_loop_v1.py"
   ],
   "open_critical_defects": [
     {
@@ -67,6 +67,21 @@
       "id": "WACHE_KOENIG_HOST_ARTIFACT_PROVENANCE_HOLE",
       "class": "SOURCE_PROVENANCE_GAP",
       "effect": "No donor-artifact enforcement credit for the referenced host-only blocking guard until exact artifact/config/order is acquired and bound."
+    },
+    {
+      "id": "PERCEPTION_CONTROL_CALLER_REACHABILITY_UNPROVEN",
+      "class": "TRIGGERWORD5_SOURCE_REACHABILITY_GAP",
+      "effect": "Typed NOT_COMPUTED/dependency-taint semantics are source-grounded when evaluate_head is used, but system-wide perception enforcement credit is blocked until raw-compute bypasses are audited and negatively tested."
+    },
+    {
+      "id": "VOICE_CONTEXT_CROSS_SOURCE_FRESHNESS_GENERATION_GAP",
+      "class": "TRIGGERWORD5_CONTEXT_PROVENANCE_GAP",
+      "effect": "Future Frankenstein-2.0 response-context compilation must bind field-level provenance, observed_at/generation, conflict/UNKNOWN state and deterministic digest before stronger autonomous decision credit."
+    },
+    {
+      "id": "PENDING_EFFECT_PARENT_CAUSAL_INVALIDATION_REQUIRED",
+      "class": "TRIGGERWORD5_EFFECT_PATH_REQUIREMENT",
+      "effect": "Pre-dispatch EffectCandidate/tool proposals must be invocation- and parent-cycle-bound and become non-dispatchable when their parent is cancelled, superseded or generation-stale; post-dispatch ambiguity remains UNKNOWN until verification."
     }
   ],
   "latest_trigger5_evidence": [
@@ -74,20 +89,32 @@
       "commit": "4a4287d0935d4dd19d122b1027716a569d331a73",
       "path": "research_entity/architecture_archaeology/triggerword5_ingest_receipts/TRIGGERWORT5_TO_TRIGGERWORD4_EFFECT_CONTRACT_2026-08-28_GPT56SOL.json",
       "classification": "INGESTED_SOURCE_GROUNDED_DESIGN_CONTRACT_RUNTIME_CREDIT_ZERO"
+    },
+    {
+      "commit": "f798db9de9d44397d59a5f3b3978b37bc53d97ef",
+      "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_PERCEPTION_VOICE_PENDING_EFFECT_DELTA_2026-08-28T1430P0700_GPT56SOL.json",
+      "classification": "SOURCE_FORENSICS_PLUS_HISTORICAL_COMPONENT_RECEIPT_INGEST_NO_NEW_RUNTIME_EXECUTION",
+      "assembly_constraints": [
+        "WorldNeed/WorldSlice inherit typed NOT_COMPUTED plus dependency-taint propagation",
+        "pending effects inherit parent-cycle cancellation and generation invalidation before dispatch",
+        "response context compiler carries provenance/freshness/generation plus bounded digest"
+      ]
     }
   ],
   "last_discriminator": {
-    "type": "BRANCH_LINEAGE_COMPARE",
-    "result": "PASS_AT_SOURCE_COORDINATION_SCOPE",
+    "type": "COMMIT_STATUS_PLUS_BRANCH_LINEAGE_CHECK",
+    "result": "NO_REPOSITORY_BOUND_RUNTIME_STATUS_EVIDENCE",
     "main": "4a4287d0935d4dd19d122b1027716a569d331a73",
-    "branch": "9cc2b6b026e725a8b7ca189bf6fd18e67564a163",
-    "behind_by": 0,
+    "branch": "f798db9de9d44397d59a5f3b3978b37bc53d97ef",
+    "branch_was_behind_main_after_sync": false,
+    "combined_status_count": 0,
     "runtime_credit": 0
   },
   "last_receipt": {
-    "type": "GITHUB_MERGE",
-    "pr": 2119,
-    "commit": "9cc2b6b026e725a8b7ca189bf6fd18e67564a163"
+    "type": "GITHUB_SOURCE_COORDINATION_AND_CHECKPOINT",
+    "sync_pr": 2119,
+    "sync_merge_commit": "9cc2b6b026e725a8b7ca189bf6fd18e67564a163",
+    "previous_checkpoint_commit": "da83f8bcdf1387a0fe3291bac0e5fd73eca71fe4"
   },
   "credits": {
     "physical_grid10": 0,
@@ -96,7 +123,7 @@
     "jspace_model": 0,
     "training": 0
   },
-  "next_exact_action": "On an authorized zero-cost repository-bound non-provider execution surface, run the exact-current v3 acceptance plus its regression test from a clean checkout. Require distinct real parent/coord-old/coord-new PIDs; SIGKILL coord-old after durable admission and before ACK; pre-TTL replacement blocked; post-TTL automatic coord-new election and recovery/replay executed by coord-new; exactly one admission; outbox consumed 0->1; S1 unchanged; replay +0; no provider calls. Only if that exact gate passes, move the worker out of the parent into a distinct real process and repeat under normal decode-safe node loops before any Physical-GRID10 credit.",
+  "next_exact_action": "On an authorized zero-cost repository-bound non-provider execution surface, run the exact-current v3 acceptance plus its regression test from a clean checkout. Require distinct real parent/coord-old/coord-new PIDs; SIGKILL coord-old after durable admission and before ACK; pre-TTL replacement blocked; post-TTL automatic coord-new election and recovery/replay executed by coord-new; exactly one admission; outbox consumed 0->1; S1 unchanged; replay +0; no provider calls. Only if that exact gate passes, move the worker out of the parent into a distinct real process and repeat under normal decode-safe node loops before any Physical-GRID10 credit. Downstream Frankenstein-2.0 assembly must also carry forward the Triggerword-5 perception taint, context freshness/generation and parent-causal pending-effect constraints recorded here.",
   "rollback_point": "9cc2b6b026e725a8b7ca189bf6fd18e67564a163",
-  "work_generation": "triggerwort4-20260828-main-sync-and-gate-checkpoint-1"
+  "work_generation": "triggerwort4-20260828-main-sync-gate-checkpoint-trigger5-fusion-2"
 }

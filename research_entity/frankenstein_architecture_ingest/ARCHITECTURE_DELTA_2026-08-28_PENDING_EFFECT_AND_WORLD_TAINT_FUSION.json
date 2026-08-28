@@ -1,0 +1,128 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_PENDING_EFFECT_AND_WORLD_TAINT_FUSION_5641dc6b",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_observed_before_write": "d7869b9ba00beb7142565387a5753d1a22f1e775",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "status": "CONSUMED_DEDUPLICATED_CORROBORATION",
+      "reason": "Nonblocking stern admission, session-scoped effect pointer, bounded outcome verification and secret-redaction findings are already represented by REENTRY_FUSION and the canonical-main Triggerword-5 effect contract. No independent evidence credit is added."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "status": "CONSUMED_WITH_NEW_UNIQUE_ATOMS",
+      "reason": "Effect findings are deduplicated, while mechanically enforced NOT_COMPUTED/dependency-taint behavior and pre-dispatch cancellation of voice tool calls add reusable donor constraints not yet represented as dedicated successor atoms."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "status": "CONSUMED_DEDUPLICATED_CORROBORATION",
+      "reason": "The packet independently re-derives the same source-level effect authority split already fused into the branch and canonical-main handoff."
+    }
+  ],
+  "source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "3130-3585,8810-8895",
+      "result": "DIRECT_SOURCE_CONFIRMED_NONBLOCKING_ORDINARY_PRETOOL_ACCOUNTING_AND_SEBUKKU_ONLY_DENY_BRANCH"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py",
+      "span": "96-560",
+      "result": "DIRECT_SOURCE_CONFIRMED_COMPUTE_OFF_AND_DEPENDENCY_TAINT_RETURN_NOT_COMPUTED_BEFORE_COMPUTE_FN"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "span": "1300-1410",
+      "result": "DIRECT_SOURCE_CONFIRMED_CANCELLED_RESPONSE_AND_BARGE_IN_CLEAR_PENDING_TOOL_CALLS_BEFORE_LOCAL_DISPATCH"
+    }
+  ],
+  "new_or_strengthened_atoms": [
+    {
+      "atom_id": "F2_PENDING_EFFECT_CANCEL_BEFORE_DISPATCH_023",
+      "source_kind": "ENFORCEMENT_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1300-1410@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Realtime function calls are queued until response.done. If the parent response is cancelled/non-completed, or barge-in occurs first, the queued calls are cleared and are not locally dispatched.",
+      "authority_boundary": "This is a session-local pre-dispatch cancellation guard, not canonical EffectGate authority and not a solution for an effect whose external submission may already have occurred.",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_delta": "Introduce a typed PENDING_EFFECT state bound to parent cognitive/response identity. Parent cancellation/supersession invalidates the candidate before EffectGate submission. After submission, ambiguous transport/outcome becomes UNKNOWN rather than replayable cancellation.",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "F2_PERCEPTION_TAINT_NOTCOMPUTED_WORLD_DONOR_024",
+      "source_kind": "ENFORCEMENT_CODE_PLUS_HISTORICAL_COMPONENT_RECEIPT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:96-560@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Perception Control derives compute/egress/memory permissions mechanically from policy tiers, resolves dependencies from a central DAG, and returns status=NOT_COMPUTED,value=null without invoking compute_fn when the head or an upstream dependency is compute-disabled/unknown.",
+      "authority_boundary": "The guarantee applies only to callers routed through evaluate_head; source-wide bypass absence is not yet proven. Historical ablation evidence is component-scoped and is not a new runtime execution in this Triggerword-5 pass.",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_delta": "WorldNeed/WorldSlice and GRID control must carry typed NOT_COMPUTED and dependency-taint semantics. A COMPUTE_OFF protected variable may not be reconstructed through downstream transforms, inverse inference or similarity fallback.",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "F2_VOICE_CAPSULE_GENERATION_CONSISTENCY_REQUIREMENT_025",
+      "source_kind": "OPEN_HYPOTHESIS_FROM_LIVE_CODE_STRUCTURE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py:250-450@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "VoiceSessionCapsule is an ephemeral projection over multiple fresh state/presence/visual/policy sources, but the packet finds no single cross-source transaction/generation snapshot guaranteeing those reads belong to one coherent decision generation.",
+      "counterhypothesis": "The source inputs change slowly enough, or are otherwise serialized, so cross-source skew is not decision-relevant in normal operation.",
+      "falsifier": "Instrument capsule field generations/timestamps during concurrent state and presence changes and test whether mixed-generation capsules alter preregistered speech/address decisions.",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_delta": "Before capsule-derived state can steer stronger autonomous speech/effect decisions, compile it with bounded freshness and generation/provenance stamps; preserve it as noncanonical RAM projection.",
+      "confidence": 0.82
+    }
+  ],
+  "deduplicated_effect_contract": {
+    "status": "UNCHANGED_CORROBORATED",
+    "required_successor_states": [
+      "ADMISSION_DECISION",
+      "ENFORCEMENT_DECISION",
+      "EXECUTION_RECEIPT",
+      "WORLD_EFFECT_VERIFICATION",
+      "RESULT_REENTRY",
+      "COMPLETION_EVIDENCE"
+    ],
+    "invocation_identity": "Immutable per-call tool_use_id or equally exact generated invocation_id; session_id alone is contextual and must not be the sole mutable correlation pointer.",
+    "unknown_outcome": "UNKNOWN remains first-class and is never blindly replayed."
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-INGEST-STATE-EXACT-ID-005",
+      "status": "RESOLVED_BY_THIS_SUCCESSOR_BOOKKEEPING_WITH_PROVENANCE_PRESERVED",
+      "claim": "A 07:24:27Z receipt reported no unconsumed inbox packets, while later INGEST_STATE still omitted the exact IDs of three already-present 07:21/07:24 packets. This run consumes those exact IDs explicitly instead of deleting or rewriting the earlier contradictory receipt."
+    },
+    {
+      "id": "PERCEPTION-POLICY-VS-DETECTOR-QUALITY",
+      "status": "OPEN_SCOPE_BOUNDARY",
+      "claim": "Strong mechanical policy gating does not imply strong semantic detector quality; several donor heads remain simple keyword/regex scaffolds."
+    }
+  ],
+  "design_changes_feeding_triggerword4": [
+    "Add parent-bound PENDING_EFFECT cancellation before deterministic EffectGate submission; do not conflate cancellation with UNKNOWN after submission.",
+    "Carry NOT_COMPUTED and dependency taint into sparse WorldNeed/WorldSlice so disabled variables cannot be silently reconstructed downstream.",
+    "Add bounded generation/freshness/provenance stamps to the Voice/GRID context compiler before using multi-source capsule state for stronger decisions.",
+    "Retain the already-fused deterministic effect-state split and immutable per-invocation identity contract; the two effect packets add corroboration, not new authority."
+  ],
+  "evidence_scope": {
+    "source_forensics": true,
+    "historical_component_receipt_reused": true,
+    "new_runtime_execution": false,
+    "new_provider_execution": false,
+    "unusual_experiment": false,
+    "whole_frankenstein2_runtime_pass": false,
+    "whole_entityos_hcu_credit_delta": 0,
+    "hcu_runtime_credit_delta": 0,
+    "jspace_model_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_exact_gate": "Triggerword-5: audit source-wide evaluate_head reachability/bypasses and the historical/current blocking wache-koenig provenance. Triggerword-4: encode parent-bound PENDING_EFFECT cancellation plus NOT_COMPUTED dependency-taint WorldSlice regressions and generation-stamped Voice/GRID context compilation."
+}

@@ -348,47 +348,15 @@ def persist_recovery_classification(
     exclusive_recovery_authorized: bool,
     terminal_ts: float | None = None,
 ) -> CycleIntentClassification:
-    """Persist a reconciliation result only under an external exclusive-recovery gate.
+    """Legacy compatibility entry point; mutation now requires the canonical lease gate.
 
-    The boolean is deliberately explicit: this module cannot prove process/lease ownership.
-    Callers must bind it to the real coordinator/heartbeat lease before using this mutator.
+    A caller-supplied boolean cannot prove exclusive recovery ownership. Keep the old
+    signature so stale callers fail closed with an explicit migration error rather than
+    silently retaining a second mutation-authority path. Use
+    ``grid10_v6_recovery_lease_gate_v1.persist_recovery_classification_with_canonical_lease``
+    for any recovery mutation.
     """
-    if not exclusive_recovery_authorized:
-        raise RecoveryMutationNotAuthorized("EXCLUSIVE_RECOVERY_AUTHORIZATION_REQUIRED")
-    result = classify_cycle_intent(path, tick_id=tick_id)
-    con = _connect(Path(path))
-    try:
-        con.execute("BEGIN IMMEDIATE")
-        row = con.execute(
-            f"SELECT status FROM {INTENT_TABLE} WHERE tick_id=?",
-            (tick_id,),
-        ).fetchone()
-        if row is None:
-            raise CrashReconciliationError(f"MISSING_CYCLE_INTENT:{tick_id}")
-        if row["status"] == STATUS_CLOSED and result.status != STATUS_CLOSED:
-            raise CrashReconciliationError(f"CLOSED_INTENT_CANNOT_REGRESS:{tick_id}")
-        con.execute(
-            f"""UPDATE {INTENT_TABLE}
-                SET status=?,terminal_ts=?,classification_json=?,classification_digest=?
-                WHERE tick_id=?""",
-            (
-                result.status,
-                time.time() if terminal_ts is None else float(terminal_ts),
-                _canon(result.evidence),
-                result.digest,
-                tick_id,
-            ),
-        )
-        con.execute("COMMIT")
-    except Exception:
-        try:
-            con.execute("ROLLBACK")
-        except sqlite3.Error:
-            pass
-        raise
-    finally:
-        con.close()
-    return result
+    raise RecoveryMutationNotAuthorized("CANONICAL_RECOVERY_LEASE_GATE_REQUIRED")
 
 
 __all__ = [

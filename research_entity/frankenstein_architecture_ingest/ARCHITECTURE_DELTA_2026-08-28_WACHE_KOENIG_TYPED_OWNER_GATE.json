@@ -1,0 +1,125 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_WACHE_KOENIG_TYPED_OWNER_GATE_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:34:00Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "ARCHIVED_EXACT_SOURCE_PLUS_CURRENT_DONOR_CROSSCHECK_NO_NEW_RUNTIME_EXECUTION",
+  "packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "historical_source_identity": {
+    "wache_koenig": {
+      "archive_path": "Drive:aicore/tools/schranke/wache-koenig.py",
+      "sha256": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23"
+    },
+    "freigabe": {
+      "archive_path": "Drive:aicore/tools/schranke/freigabe",
+      "sha256": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d"
+    },
+    "archive_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ACTION_BOUNDARY_SUBMANIFEST.json",
+    "archive_manifest_blob": "b3bceb16a1c0038d0d719b44bfec7295170a3dd7"
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_WACHE_BASH_ONLY_BLOCKING_GATE_031",
+      "classification": "HISTORICAL_SOURCE",
+      "claim": "The exact archived wache-koenig source is a real pre-execution blocking gate for selected Bash commands when installed in a PreToolUse scheduler: it ignores non-Bash tools, classifies Bash command text, and returns the blocking exit path for hard-deny classes or ticket-required commands lacking a valid ticket.",
+      "confidence": 1.0,
+      "boundary": "Exact source capability is established; scheduler registration/order and current runtime reachability are not.",
+      "target_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "F2_WACHE_ONE_SHOT_COMMAND_GRANT_032",
+      "classification": "HISTORICAL_SOURCE",
+      "claim": "The historical gate binds a grant to the exact command SHA-256, verifies validity timing, and unlinks the ticket on successful consumption, making the intended grant single-use rather than a reusable session-wide approval.",
+      "confidence": 1.0,
+      "boundary": "The ticket binds shell text, not resolved executable/resource/cwd/environment/generation identity; concurrent identical-consumption atomicity is unmeasured.",
+      "target_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "F2_WACHE_HUMAN_OUT_OF_BAND_GRANT_033",
+      "classification": "HISTORICAL_SOURCE",
+      "claim": "The companion freigabe path requires a controlling /dev/tty and fresh human challenge responses before minting the one-shot ticket, preserving an architectural separation between model request and owner grant.",
+      "confidence": 1.0,
+      "boundary": "Typing heuristics are not identity proof and should not become EntityOS authority; the reusable invariant is out-of-model grant provenance, bounded scope, expiry and one-shot consumption.",
+      "target_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "F2_WACHE_COVERAGE_GAP_034",
+      "classification": "NEGATIVE_RESULT",
+      "claim": "wache-koenig exits without enforcement for non-Bash tools by design. Therefore it cannot establish complete effect authority for Write/Edit/NotebookEdit or non-shell external effects, and current stern.py generic admission remains nonblocking bookkeeping.",
+      "confidence": 1.0,
+      "target_action": "REPLACE_WITH_VERIFIED_SUCCESSOR"
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "id": "TW5-OWNER-GRANT-015",
+      "delta": "Frankenstein-2.0 must keep the strongest historical invariant: a model/candidate EffectRequest cannot self-authorize. A separately minted deterministic owner/capability decision is consumed at the real executor boundary before dispatch.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-TYPED-ONE-SHOT-DECISION-016",
+      "delta": "Replace raw-command tickets and caller skip_approval booleans with a one-shot typed EffectDecision bound to immutable invocation_id/tool_use_id, request_digest, resource identity, session/generation/causal identity, policy version, grant provenance, expiry and executor identity.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-ENFORCEMENT-COVERAGE-017",
+      "delta": "All state-changing tool/effect classes must converge on one deterministic enforcement adapter or explicit typed adapters with equivalent DENY=>nonexecution receipts. Bash-only regex gating is donor evidence, not complete authority.",
+      "feeds_triggerword4": true
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-WACHE-PROVENANCE-006",
+      "status": "PARTIALLY_RESOLVED",
+      "resolution": "Exact archived wache-koenig.py and freigabe bytes/hashes are now resolved. Remaining unknown is exact scheduler registration/order and current/historical runtime reachability for that snapshot."
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-COVERAGE-008",
+      "status": "OPEN",
+      "claim_a": "The historical watcher genuinely blocks selected Bash commands when installed.",
+      "claim_b": "It intentionally ignores non-Bash tools, while current stern generic effect admission is nonblocking.",
+      "resolution_rule": "Do not promote either mechanism to whole-system EffectGate authority. Triggerword-4 must implement typed cross-tool enforcement and prove DENY non-execution at the actual executor boundary."
+    }
+  ],
+  "hypotheses": [
+    "The most reusable historical primitive is not the regex classifier but the separation model request -> independently minted bounded grant -> one-shot executor consumption.",
+    "Combining that invariant with current donor generation/precondition/idempotence checks and post-effect hashing yields a stronger causal EffectGate/EffectJournal design than either lineage alone."
+  ],
+  "counterhypotheses": [
+    "A newer current host permission system may already supersede wache-koenig and cover more tools; exact source plus scheduler evidence could make it a better donor.",
+    "For shell-only execution a raw command hash may remain useful as a secondary exact-text fence, but it is insufficient as the sole typed resource/effect identity."
+  ],
+  "critical_unknowns": [
+    "Exact historical/global settings.json or equivalent scheduler registration/order for this wache-koenig snapshot.",
+    "Whether current Frankenstein 0.7 uses this watcher, a successor, host permissions, or no equivalent gate.",
+    "Which current paths protect Write/Edit/NotebookEdit and Realtime function-call effects before external submission.",
+    "Atomicity of identical one-shot ticket consumption under concurrency."
+  ],
+  "acceptance_tests_feeding_triggerword4": [
+    "DENY produces a bound enforcement receipt and zero executor dispatch.",
+    "One ALLOW/owner decision can be consumed exactly once for one immutable request identity.",
+    "Request digest/resource/generation/policy mismatch fails closed.",
+    "Parallel identical or reordered requests cannot cross-consume decisions.",
+    "Bash, file mutation and Realtime/external effects share equivalent authority semantics.",
+    "After possible external submission, transport uncertainty becomes OUTCOME_UNKNOWN rather than cancellation or blind replay."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED_EXACT_ARCHIVE_SOURCE",
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Recover exact scheduler/settings registration and ordering for the archived wache-koenig snapshot or explicitly quarantine runtime reachability; then trace current non-Bash and Realtime executor permission paths and feed the typed one-shot EffectDecision ABI plus DENY/nonexecution/concurrency tests into Triggerword-4."
+}

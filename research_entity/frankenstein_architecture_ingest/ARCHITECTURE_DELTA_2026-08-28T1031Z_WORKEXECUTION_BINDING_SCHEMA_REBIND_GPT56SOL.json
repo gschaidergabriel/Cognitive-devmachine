@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "delta_id": "TW5-DELTA-20260828T1031Z-WORKEXECUTION-BINDING-SCHEMA-REBIND-GPT56SOL",
+  "created_at": "2026-08-28T10:31:00Z",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "organ": "GPT-5.6-Sol/triggerwort5/forensic-ingest",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_write": "007131285ed54a706be2bca8a4160db1d0730a18",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority": {
+    "supervisor_schema_version": "9.13",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together": "FORBIDDEN"
+  },
+  "source_packet": {
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "status": "PARTIAL_ADMISSION_WITH_SCHEMA_AND_PROVENANCE_CORRECTIONS",
+    "authority_binding_status": "STALE_EXACT_MAIN_IDENTITY_REBOUND_TO_CURRENT_9_13",
+    "schema_findings": [
+      {
+        "kind": "INVALID_ENUM",
+        "atom_id": "TW5-WORKEXEC-SUCC-005-TOOL-USE-TO-AGENT-JOIN-REMAINS-UNPROVEN",
+        "field": "target_2_0_action",
+        "packet_value": "RESEARCH",
+        "allowed_replacement": "UNDECIDED",
+        "reason": "INGEST_PACKET_SCHEMA.json does not admit RESEARCH. The claim is retained as an unresolved forensic question, not silently normalized into an implementation action."
+      },
+      {
+        "kind": "LINE_PROVENANCE_CORRECTION",
+        "atom_id": "TW5-WORKEXEC-SUCC-002-SPEC-EXPECTS-SPAWN-AFTER-HANDOFF",
+        "packet_span": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md:1-7",
+        "verified_span": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md:77-81",
+        "reason": "Lines 1-7 are cadence text; the handoff-before-spawn and reconcile-after sequence is present later in the file."
+      }
+    ]
+  },
+  "admitted_architecture_atoms": [
+    {
+      "atom_id": "TW5-INGEST-WORKEXEC-001-DURABLE-HANDOFF-IS-NOT-SPAWN",
+      "subsystem": "delegation_workpackage",
+      "source_kind": "LIVE_CODE",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 5580,
+      "line_end": 5845,
+      "claim": "handoff() durably creates entityos_arbeitspaket and a deterministic handoff capsule, while explicitly declaring that stern itself does not delegate/spawn the child.",
+      "runtime_reachability": "SOURCE_REACHABLE_DONOR_PATH; NO_CHILD_RUNTIME_BINDING_CREDIT",
+      "confidence": 0.99,
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "TW5-INGEST-WORKEXEC-002-SPEC-HANDOFF-SPAWN-RECONCILE-SEQUENCE",
+      "subsystem": "architect_delegation_spec",
+      "source_kind": "SPEC",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "line_start": 77,
+      "line_end": 81,
+      "claim": "The donor specification requires stern.py handoff before spawning, stern.py reconcile after, and lastschutz before parallel build-agent spawning.",
+      "runtime_reachability": "SPEC_ONLY_NOT_SPAWN_IMPLEMENTATION",
+      "confidence": 0.99,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-INGEST-WORKEXEC-003-DONOR-HOOKS-LACK-CHILD-LIFECYCLE",
+      "subsystem": "hook_lifecycle_identity",
+      "source_kind": "CONFIG",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "line_start": 1,
+      "line_end": 81,
+      "claim": "The versioned donor plugin registers SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact only; it does not register dedicated SubagentStart, SubagentStop, TaskCreated or TaskCompleted hooks.",
+      "runtime_reachability": "CONFIG_PRESENT_NOT_INSTALLED_HOST_LOAD_PROOF",
+      "confidence": 0.99,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-INGEST-WORKEXEC-004-AGENT-ID-TASK-ID-DISTINCT",
+      "subsystem": "native_subagent_task_identity_abi",
+      "source_kind": "SPEC",
+      "repo": "EXTERNAL_PRIMARY/Claude-Code-docs",
+      "commit_sha": "CURRENT_DOCS_OBSERVED_2026-08-28",
+      "path": "https://code.claude.com/docs/en/hooks",
+      "line_start": 2049,
+      "line_end": 2143,
+      "claim": "Current official documentation exposes agent_id on SubagentStart/SubagentStop and task_id on the separate task lifecycle. These are distinct documented identity namespaces and must not be assumed synonymous.",
+      "runtime_reachability": "EXTERNAL_PRIMARY_CAPABILITY_ONLY; INSTALLED_BUILD_UNOBSERVED",
+      "confidence": 0.99,
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "TW5-INGEST-WORKEXEC-005-PARENT-TOOL-CALL-TO-CHILD-JOIN-UNKNOWN",
+      "subsystem": "native_spawn_causal_join",
+      "source_kind": "UNKNOWN",
+      "repo": "EXTERNAL_PRIMARY/Claude-Code-docs",
+      "commit_sha": "CURRENT_DOCS_OBSERVED_2026-08-28",
+      "path": "https://code.claude.com/docs/en/hooks",
+      "line_start": 778,
+      "line_end": 2109,
+      "claim": "tool_use_id exists on tool-hook events and agent_id exists on subagent lifecycle events, but no source observed in this ingest proves a deterministic parent Agent tool_use_id -> child agent_id join key for the installed target runtime.",
+      "runtime_reachability": "UNKNOWN_UNTIL_INSTALLED_ABI_CAPTURE",
+      "confidence": 0.99,
+      "target_2_0_action": "UNDECIDED"
+    }
+  ],
+  "frankenstein_2_architecture_delta": {
+    "decision": "INTRODUCE_WORKEXECUTION_BINDING_V1_AS_A_TYPED_CAUSAL_BINDING_CONTRACT_AFTER_ABI_PINNING",
+    "required_identity_domains": [
+      "package_id",
+      "parent_session_id",
+      "generation",
+      "spawn_tool_use_id_optional_unknown",
+      "agent_id_optional_unknown",
+      "task_id_optional_independent_unknown",
+      "agent_type_optional",
+      "binding_evidence_refs"
+    ],
+    "required_binding_states": [
+      "PENDING",
+      "OBSERVED_PARTIAL",
+      "BOUND",
+      "CONFLICT",
+      "STALE",
+      "UNKNOWN"
+    ],
+    "invariants": [
+      "PACKAGE_EXISTS != CHILD_EXECUTED",
+      "SESSION_ID != CHILD_INVOCATION_ID",
+      "AGENT_ID != TASK_ID_UNLESS_EXPLICITLY_PROVEN_BY_A_CONCRETE_RUNTIME",
+      "TIMESTAMP_OR_EVENT_ORDER != CAUSAL_JOIN_KEY",
+      "MISSING_IDENTITY_REMAINS_UNKNOWN",
+      "MODEL_OR_SPEC_TEXT_CANNOT_MINT_A_BINDING",
+      "RETRY_OR_REPLACEMENT_MUST_BIND_OR_SUPERSEDE_GENERATION_EXPLICITLY"
+    ],
+    "effect_on_sparse_world_substrate": "No world-substrate representation is promoted by this ingest. WorkExecutionBinding identities should instead become provenance references for any later learned transition/operator so delegated/model-produced results cannot masquerade as directly observed execution.",
+    "trigger4_handoff": "Do not implement a guessed tool_use_id->agent_id reducer. First pin the installed lifecycle ABI on an authorized non-provider test surface; then implement the typed binding and an adversarial concurrent-child anti-crosswire test."
+  },
+  "preserved_contradictions": [
+    "Donor SPEC describes handoff -> spawn -> reconcile, while LIVE_CODE handoff explicitly does not spawn.",
+    "Donor repository plugin config lacks child lifecycle hooks, while current official Claude Code docs expose such lifecycle events; installed-host configuration remains unobserved.",
+    "The source packet labels itself current-authority-bound to canonical main 5a953eb..., but exact canonical main observed for this ingest is 24389f8...; source claims were rechecked, authority labeling was not inherited.",
+    "The source packet contains a schema-invalid target_2_0_action value RESEARCH and an incorrect line span for its governance atom; packet is not admitted wholesale.",
+    "Current official docs establish event-local identity fields but do not establish the exact parent Agent invocation -> child agent join required for causal closure."
+  ],
+  "runtime_credit": {
+    "donor_runtime_pass": false,
+    "installed_subagent_lifecycle_pass": false,
+    "workexecution_binding_runtime_pass": false,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_high_information_discriminator": {
+    "action": "Capture one harmless installed Agent invocation with exact PreToolUse/PostToolUse plus SubagentStart/SubagentStop payloads, then test two concurrent children for non-crosswiring.",
+    "status": "NOT_EXECUTED_THIS_TRIGGER5_INGEST",
+    "reason": "Triggerword 5 is the forensic/ingest lane, current provider routes are HARD_OFF, and no authorized installed-target runtime execution was performed in this pass."
+  },
+  "canonical_frankenstein_2_repository": {
+    "owner_law_target": "gschaidergabriel/frankenstein-2.0",
+    "observed_repository_state": "NOT_VISIBLE_OR_NOT_INITIALIZED_404_AT_2026-08-28T10:31Z",
+    "action": "DO_NOT_INVENT_SECOND_ARTIFACT_REPOSITORY; KEEP_THIS_DELTA_IN_RESEARCH_CONTROL_REPO_UNTIL_TRIGGER4_BOOTSTRAPS_CANONICAL_TARGET"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828T161706P0700_EFFECT_AUTHORITY_BRIDGE_REENTRY_GPT56SOL",
+  "recorded_at": "2026-08-28T16:17:06+07:00",
+  "trigger": "triggerwort 5",
+  "status": "SOURCE_GROUNDED_DELTA_WITH_V2_SUCCESSOR_PREPARED_VALIDATOR_CLI_NOT_OBSERVED",
+  "trigger_routing": {
+    "normalized_message": "triggerwort 5",
+    "mapped_macro": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+    "routing_self_test": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828"
+  },
+  "authority": {
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "authority_epoch": "9.13",
+    "canonical_main_sha": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "source_identity": {
+    "frankenstein_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "design_branch_sha_observed_before_parallel_reentry": "97e53d406c896735bc960c06fb4d637bacf9f5ff"
+  },
+  "packet_reentry": {
+    "new_unconsumed_packet_observed": "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
+    "original_packet_blob_sha": "0a6d3d0b6622bcf423150cf530078cee9b4cf453",
+    "original_v2_admission": "FAIL_CLOSED_MISSING_SCHEMA_VERSION_AUTHORITY_CLASSIFICATION_AND_AUTHORITY_BINDING",
+    "original_packet_mutated": false,
+    "successor_packet": "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
+    "successor_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T091706Z_5641dc6_GPT56SOL_MAIN_ARCHAEOLOGY_EFFECT_AUTHORITY_BRIDGE_V2.json",
+    "successor_blob_sha": "bde5d480a01f8c26b18df6ddab6e5fec3735cb4b",
+    "successor_creation_commit": "b1c205720c0baec3bba827cd1f59d2aaa7abc8fe",
+    "successor_binding_crosscheck": "PASS_AGAINST_REFRESHED_MAIN_AND_VALIDATE_INGEST_PACKET_V2_SOURCE_LOGIC",
+    "validator_cli_execution": "NOT_OBSERVED_IN_THIS_RUN",
+    "canonical_consumed_state_change": false,
+    "reason_not_marked_consumed": "Executable validator CLI receipt was not observed; preserve the difference between a source/authority crosscheck and an executed validator PASS."
+  },
+  "forensic_atoms": [
+    {
+      "atom_id": "F2_TW5_V2_ADMISSION_CURRENTNESS_1617_001",
+      "source_kind": "SCHEMA",
+      "claim": "Triggerword-5 v2 admission requires schema_version=2, CURRENT_AUTHORITY_BOUND or HISTORICAL_SOURCE_EPOCH classification, and exact binding to refreshed main, supervisor inbox/selected steering and FREE_PROVIDER_ADMISSION. The newly arrived 09:14 bridge packet lacks these v2 fields and therefore must not be silently promoted as admitted.",
+      "confidence": 1.0,
+      "target_2_0_action": "KEEP"
+    },
+    {
+      "atom_id": "F2_EFFECT_GATE_NONBLOCKING_REVALIDATED_1617_002",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "Current donor ordinary PreToolUse effect admission remains bookkeeping: zulassen stores a session-scoped effect_id and the dispatcher deliberately emits no normal deny/block decision. SEBUKKU is the explicit blocking special case.",
+      "confidence": 1.0,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR"
+    },
+    {
+      "atom_id": "F2_EFFECT_INVOCATION_MUTABLE_SLOT_1617_003",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "zulassen updates active_turns.effect_id by session_id and merken later reads that mutable session slot. This is a structural correlation ambiguity if relevant calls interleave; the exact installed scheduler serialization counterhypothesis remains untested.",
+      "confidence": 0.99,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "F2_COMPLETION_STATUS_ALLOWLIST_GAP_1617_004",
+      "source_kind": "NEGATIVE_RESULT",
+      "claim": "_beleg_pruefen rejects effect evidence only when status is exactly lowercase legacy 'fehler'. Current FEHLGESCHLAGEN, ABGELEHNT, WIEDERHOLUNG and UNGEPRUEFT are not rejected by this predicate, and reconcile sets stand='fertig' whenever the predicate returns ok.",
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "F2_COMPLETION_TEST_ZERO_UNBOUND_1617_005",
+      "source_kind": "NEGATIVE_RESULT",
+      "claim": "test:<exit_code>:<description> is accepted solely from supplied exit_code='0' and is not bound by that predicate to runner, command digest, source SHA, environment, time or output digest.",
+      "confidence": 1.0,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR"
+    },
+    {
+      "atom_id": "F2_RECEIPT_CONSTRUCTION_NOT_RUNTIME_RECEIPT_1617_006",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "Code that hashes resulting file bytes or Bash stdout/stderr is receipt-construction source. It must not itself be classified as RUNTIME_RECEIPT or world-effect verification until an exact execution produced the receipt and the effect class was independently verified.",
+      "confidence": 1.0,
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "F2_PRE_GIT_WACHE_TRANSITION_UNRESOLVED_1617_007",
+      "source_kind": "HISTORICAL_ONLY",
+      "claim": "Accessible Git already contains zulassen/merken in the earliest verified stern.py boundary. A 2026-08-05 Drive handoff proves an older Wache/coordination surface existed, but does not supply wache-koenig.py bytes or establish the same effect semantics. The post-hoc-only to Phase-2 transition remains PRE_GIT_HOST_PROVENANCE_UNRESOLVED.",
+      "confidence": 1.0,
+      "target_2_0_action": "COMPATIBILITY_ONLY"
+    }
+  ],
+  "architecture_delta": {
+    "effect_identity": "Use immutable invocation/tool_use identity as the primary effect correlation key; session/episode/generation remain context, not the unique invocation pointer.",
+    "effect_authority": "Separate ADMISSION_DECISION from executor-consumed ENFORCEMENT_DECISION and from EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION and RESULT_REENTRY.",
+    "completion_evidence": "Only typed success states from immutable source/operation/runtime-bound receipts may close work packages. Failed, denied, duplicate/unresolved, unchecked, stale, unknown or unbound text claims fail closed.",
+    "epistemic_boundary": "Receipt-construction code is source evidence; a produced receipt is runtime evidence; a verified external-world effect is a distinct stronger state.",
+    "ingest_authority": "Every fresh packet must bind exact current authority or remain non-admitted/historical. Never repair provenance by mutating the original packet."
+  },
+  "contradictions_preserved": [
+    "Historical donor naming says EffectGate while ordinary executable path is nonblocking bookkeeping.",
+    "Completion documentation implies stronger evidence than the current executable predicate enforces.",
+    "Original 09:14 bridge source classified receipt-construction code as RUNTIME_RECEIPT; this delta corrects the evidence level without deleting the original claim.",
+    "A historical Wache surface is documented before accessible stern Git, but implementation/semantic continuity is unproven."
+  ],
+  "counterhypotheses": [
+    "Installed Claude Code scheduling may serialize all relevant same-session mutation hook triplets, making the mutable pointer safe in the current donor runtime despite the structural design risk.",
+    "A host-global blocker outside the inspected donor may already provide stronger effect enforcement, but exact current source/config/order and executor consumption remain unobserved."
+  ],
+  "triggerword4_handoff": [
+    "Do not port historical EffectGate naming as authority; implement a real pre-side-effect executor-consumed allow/deny gate.",
+    "Key effect rows and receipts by immutable invocation/tool_use identity, then bind session, episode and generation as context.",
+    "Harden completion to a typed success allowlist with invocation/effect, operation digest, cwd/runtime, exit/outcome, HEAD/tree/source hashes, dirty state and output digests.",
+    "Preserve UNKNOWN external outcomes and do not infer world-effect success from a tool-result receipt.",
+    "Before using this new bridge as formally admitted ingest, execute validate_ingest_packet_v2.py on a refreshed checkout and then update consumed state append-only."
+  ],
+  "credits": {
+    "new_runtime_execution": 0,
+    "runtime_causal": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Execute research_entity/frankenstein_architecture_ingest/validate_ingest_packet_v2.py against the v2 successor on a checkout whose main is refreshed to 92c3b67be5c7d9c5553d71842fa1baa562a728d0 or newer current authority; only on exact PASS append the successor packet_id to consumed state and write the admission receipt. Separately, the runtime scheduler interleaving falsifier remains a Triggerword-4/executable gate, not source-forensics credit."
+}

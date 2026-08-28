@@ -13,6 +13,18 @@ class EntityOSIntegrityError(PermissionError):
     pass
 
 
+class EntityOSOutcomeUnknown(RuntimeError):
+    """EntityOS may have started executing but no trustworthy return was observed.
+
+    This is deliberately distinct from pre-spawn/integrity failures. Once ``Popen``
+    succeeds, an exception on the return path cannot prove that the child produced no
+    real-world effect. Callers must preserve canonical uncertainty and must not infer
+    replay safety from this exception.
+    """
+
+    replay_permitted = False
+
+
 @dataclass(frozen=True)
 class EntityOSBridge:
     """Execute an exact SHA-256 pinned EntityOS snapshot, not a mutable path inode."""
@@ -130,29 +142,60 @@ class EntityOSBridge:
         finally:
             os.close(fd)
 
+    @staticmethod
+    def _reap_after_unknown(proc: subprocess.Popen[bytes]) -> None:
+        """Best-effort local cleanup; killing the process cannot undo prior effects."""
+
+        try:
+            proc.kill()
+        except Exception:
+            pass
+        try:
+            proc.wait(timeout=1.0)
+        except Exception:
+            pass
+
     def run(self, argv):
         if not isinstance(argv, list) or not argv or any(not isinstance(x, str) or "\x00" in x for x in argv):
             raise ValueError("explicit non-empty string argv required")
         fd = self._open_verified()
         try:
             executable = f"/proc/self/fd/{fd}"
-            cp = subprocess.run(
+            # Popen is the causal boundary. If construction itself fails, the target
+            # program never became an observed child process and the original error is
+            # preserved. Once Popen succeeds, any missing/exceptional return is outcome
+            # uncertainty rather than proof of non-execution.
+            proc = subprocess.Popen(
                 [executable, *argv],
                 executable=executable,
                 pass_fds=(fd,),
                 shell=False,
-                capture_output=True,
-                text=False,
-                timeout=self.timeout,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
                 env={"PATH": self._EXEC_PATH},
             )
+            try:
+                stdout, stderr = proc.communicate(timeout=self.timeout)
+            except Exception as exc:
+                self._reap_after_unknown(proc)
+                raise EntityOSOutcomeUnknown(
+                    f"EntityOS return unknown after process start: {type(exc).__name__}"
+                ) from exc
+            returncode = proc.returncode
+            if returncode is None:
+                # communicate() normally sets returncode. If a custom/runtime backend
+                # violates that contract after process creation, stay fail-closed.
+                self._reap_after_unknown(proc)
+                raise EntityOSOutcomeUnknown(
+                    "EntityOS return code unresolved after process start"
+                )
         finally:
             os.close(fd)
         return {
-            "ok": cp.returncode == 0,
-            "exit": cp.returncode,
-            "stdout_sha256": hashlib.sha256(cp.stdout).hexdigest(),
-            "stderr_sha256": hashlib.sha256(cp.stderr).hexdigest(),
-            "stdout": cp.stdout[:4096].decode(errors="replace"),
-            "stderr": cp.stderr[:4096].decode(errors="replace"),
+            "ok": returncode == 0,
+            "exit": returncode,
+            "stdout_sha256": hashlib.sha256(stdout).hexdigest(),
+            "stderr_sha256": hashlib.sha256(stderr).hexdigest(),
+            "stdout": stdout[:4096].decode(errors="replace"),
+            "stderr": stderr[:4096].decode(errors="replace"),
         }

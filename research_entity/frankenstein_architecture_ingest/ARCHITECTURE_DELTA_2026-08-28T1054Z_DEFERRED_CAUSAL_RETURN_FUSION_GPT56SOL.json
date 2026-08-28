@@ -1,0 +1,131 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:54:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "delta_class": "DEFERRED_COGNITION_AND_VOICE_CAUSAL_RETURN_FUSION",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true
+  },
+  "design_branch_head_before_write": "4ebdcbffff35e85d9d09e9fa92f0de2c15d8402c",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "ingest_disposition": {
+    "new_inbox_packet_consumed": false,
+    "reason": "The newest inbox packet observed at reentry is the already-accounted Stop-hook packet. This delta cross-checks and fuses existing source evidence rather than minting duplicate packet consumption.",
+    "stop_hook_currentness_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_REENTRY_2026-08-28T1051Z_SUPERVISOR_9_13AC_STOP_HOOK_BINDING_GPT56SOL.json"
+  },
+  "direct_source_crosscheck": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "span": "885-970",
+      "source_kind": "LIVE_CODE",
+      "finding": "When gespraech.aktiv has admitted this listener path, every non-empty speech_end starts Realtime without the wake-word matcher. The Realtime call passes API/config/session context but no dedicated activation_event_id, audio-segment identity, transcript digest or activation generation. After return, a waiting-for-Hey-FranKenstein pulse is still emitted, preserving stale wake-word wording beside the newer reactive activation law."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "span": "1685-1790",
+      "source_kind": "LIVE_CODE",
+      "finding": "Immediate tool output is returned as function_call_output bound to the original call_id. Later asynchronous completion preserves auftrag_id only in best-effort outcome logging, then re-enters the model-facing conversation as a new role=user input_text item that carries neither the original call_id nor a typed task/result join."
+    }
+  ],
+  "corroborates_existing_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_VOICE_ACTIVATION_ASYNC_RETURN_BINDING_GPT56SOL.json",
+    "blob_sha": "e43ba9cbcb48c563ce8253e107b30d73a2a312f2",
+    "classification": "DIRECT_DONOR_SOURCE_CROSSCHECK_NOT_INDEPENDENT_RUNTIME_REPLICATION"
+  },
+  "fusion_with_stop_hook_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+    "blob_sha": "cb02c22743a4d076b751ad2106abc9ec48691854",
+    "shared_failure_shape": "Deferred or slow cognition/result work is rejoined through context-local ordering or weak identifiers rather than one replay-stable origin identity plus generation.",
+    "shared_nonclaim": "The similarity is an architecture synthesis, not evidence that the two paths share one runtime bug or one implementation."
+  },
+  "architecture_effect": {
+    "candidate_primitive": "DeferredCausalReturnEnvelope/v1",
+    "status": "GENERATED_ARCHITECTURE_CANDIDATE_FOR_TRIGGERWORD4",
+    "purpose": "Provide one typed interconnect shape for request-scoped cognition and asynchronous result re-entry while preserving subsystem-specific payload schemas.",
+    "minimum_common_fields": [
+      "origin_event_id",
+      "origin_kind",
+      "origin_generation",
+      "request_or_call_id",
+      "producer_class",
+      "producer_runtime_or_build_identity",
+      "result_status",
+      "result_payload_digest_or_ref",
+      "evidence_class",
+      "completion_receipt_id",
+      "reentry_id",
+      "created_at"
+    ],
+    "subsystem_specializations": [
+      "RetrievalRelevanceCandidate retains exact retrieval_id plus turn/causal generation and model-derived evidence classification.",
+      "VoiceActivationBinding/v1 retains activation_event_id, enable generation, audio/transcript provenance and Realtime invocation identity.",
+      "VoiceAsyncReturnBinding/v1 retains original call_id, task/auftrag_id, task generation, submission/completion receipts and conversation re-entry identity."
+    ],
+    "invariants": [
+      "SESSION_ID_IS_CONTEXT_NOT_CAUSAL_JOIN_KEY",
+      "TIMESTAMP_OR_QUEUE_ORDER_IS_NOT_CAUSAL_JOIN_KEY",
+      "NEWEST_OPEN_ROW_IS_NOT_SUFFICIENT_UNDER_OVERLAP",
+      "LOG_SIDE_ID_IS_NOT_MODEL_FACING_TYPED_RETURN_BINDING",
+      "ROLE_USER_TRANSPORT_DOES_NOT_CHANGE_SYSTEM_GENERATED_PROVENANCE_INTO_HUMAN_SPEECH",
+      "MODEL_DERIVED_RELEVANCE_IS_CANDIDATE_EVIDENCE_NOT_WORLD_FACT",
+      "ASYNC_COMPLETION_IS_NOT_A_VERIFIED_WORLD_EFFECT_WITHOUT_BOUND_EFFECT_OR_COMPLETION_RECEIPT",
+      "UNKNOWN_OR_FAILED_OUTCOME_REMAINS_TYPED_UNKNOWN_OR_FAILED",
+      "RETRY_OR_REPLACEMENT_REQUIRES_EXPLICIT_GENERATION"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "sparse_world_substrate_binding": {
+    "classification": "ARCHITECTURE_INFERENCE",
+    "rule": "Local transcript activation, model relevance judgments and asynchronous textual result reports may become typed evidence inputs or candidate returns, but none may mint canonical world facts merely by entering a model context. Exact observation/effect provenance remains outside vector/model cognition."
+  },
+  "contradictions_preserved": [
+    "Reactive voice activation no longer requires a wake word, while post-session status text still says it waits for Hey FranKenstein.",
+    "Immediate Realtime tool results preserve call_id, while asynchronous completion re-entry loses the same protocol-level call binding in the model-facing conversation.",
+    "Stop-hook source declares no LLM calls in hooks while its live Stop path performs synchronous Ollama relevance inference; this remains source-scope contradictory semantics with runtime credit zero."
+  ],
+  "counterhypotheses": [
+    "Chronological single-task operation may often associate asynchronous completion correctly in practice, but chronology is not a deterministic join and must be falsified under overlapping reverse-order completions.",
+    "An installed/private wrapper outside the pinned donor may add stronger activation or completion identities; that remains UNKNOWN until exact installed-source evidence is observed.",
+    "A generalized DeferredCausalReturnEnvelope may be unnecessary if three subsystem-specific bindings prove simpler and equally auditable; Triggerword-4 should keep the shared envelope only if it reduces duplicated authority/identity logic without erasing subsystem semantics."
+  ],
+  "triggerword4_handoff": {
+    "do_not_build_in_trigger5": true,
+    "required_discriminators": [
+      "Two same-session retrieval episodes with reversed completion; relevance must attach only to the exact retrieval_id/turn/generation.",
+      "Cognition-disabled, warm, slow/cold and unreachable local-model Stop conditions; deterministic later Stop bookkeeping must remain complete.",
+      "Two overlapping background voice/tool tasks completing in reverse order; each result must preserve original call_id plus task generation through model re-entry.",
+      "Activation replay/provenance test proving two distinct non-empty speech_end events cannot collapse to one activation identity.",
+      "Transport-role test proving an internal asynchronous result cannot be reclassified as human-originated speech merely because the provider API uses a message item."
+    ]
+  },
+  "credits": {
+    "donor_source_crosscheck": "PASS_AT_EXACT_DONOR_SHA",
+    "architecture_fusion": "SOURCE_GROUNDED_GENERATED_CANDIDATE",
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "voice_runtime": 0,
+    "stop_hook_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "next_exact_gate": "Triggerword-4/external non-provider test lane: decide whether DeferredCausalReturnEnvelope/v1 is a useful shared ABI or keep the three bindings separate, then execute reverse-order overlap tests for retrieval and asynchronous voice returns plus slow/unreachable local-model Stop bookkeeping without modifying Frank's Harness."
+}

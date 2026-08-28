@@ -1,0 +1,57 @@
+{
+  "schema": "TRIGGERWORD5_FORENSIC_CORRECTION/v1",
+  "receipt_id": "TW5-CORRECTION-20260828T1447P0700-9.13-STEERING-BLOB-IDENTITY-REBUTTAL-GPT56SOL",
+  "created_at": "2026-08-28T14:47:00+07:00",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "9.13",
+  "status": "CORRECTION_REJECTED_BY_DIRECT_GIT_IDENTITY_EVIDENCE",
+  "amends_without_rewriting_history": {
+    "incorrect_correction_path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_WACHE_SOURCE_RECLASSIFICATION_AUTHORITY_BLOB_CORRECTION_GPT56SOL.json",
+    "incorrect_correction_commit": "518b99ca7adc2204ab9f65c2ac3d81be3858c763",
+    "incorrect_claimed_correct_value": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4",
+    "reason_rejected": "The claimed corrected value has 39 hexadecimal characters and therefore cannot be a Git SHA-1 object id. Direct GitHub fetch_file metadata for the selected steering file reports the 40-character blob id bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c."
+  },
+  "verified_identity": {
+    "path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "hex_length": 40,
+    "authority_epoch_in_file": "9.13",
+    "mode_in_file": "FREE_ONLY"
+  },
+  "affected_current_triggerword5_artifacts": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_REALTIME_MEMORY_EPISTEMIC_ADMISSION_DELTA_2026-08-28T1445P0700_GPT56SOL.json",
+      "commit": "c0846c02d72a56269ab38dc9dd40306711ec4072",
+      "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+      "classification": "IDENTITY_CORRECT_NO_CHANGE_REQUIRED"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T074026Z_REALTIME_MEMORY_EPISTEMIC_ADMISSION_GPT56SOL.json",
+      "commit": "e876db37c6b6a768f3589f9bc31e7b40c4853cdf",
+      "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+      "classification": "IDENTITY_CORRECT_NO_CHANGE_REQUIRED"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_DONOR_HOOK_SCHEDULER_NEGATIVE_GPT56SOL.json",
+      "commit": "b3ae722657267c50fec78c1ec964e57f4b080086",
+      "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+      "classification": "IDENTITY_CORRECT_NO_CHANGE_REQUIRED"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_DONOR_HOOK_SCHEDULER_NEGATIVE_GPT56SOL.json",
+      "commit": "5a8cf1f5d23fcfa1ad633a3a353d15e1fa6f03cb",
+      "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+      "classification": "IDENTITY_CORRECT_NO_CHANGE_REQUIRED"
+    }
+  ],
+  "evidence_boundary": "This correction concerns exact Git object identity only. It grants no runtime, provider, HCU, GRID10, canonical-semantics or training credit.",
+  "credits": {
+    "runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  }
+}

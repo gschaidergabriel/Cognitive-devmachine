@@ -81,52 +81,38 @@ class UnifiedCognitiveRuntimeV4Tests(unittest.TestCase):
         self.assertEqual(cycle.next_tick_not_before, 100.25)
         self.assertEqual(cycle.checkpoint["pulse_interval_seconds_consumed"], 0.25)
         self.assertEqual(cycle.checkpoint["control_snapshot"]["control_epoch"], receipt.control_epoch)
+        self.assertEqual(cycle.checkpoint["control_snapshot_source"], "latched_here")
         self.assertEqual(agency.snapshot().next_tick_not_before, 100.25)
 
-    def test_live_grid_compute_off_gates_actual_action_candidate(self):
-        _, _, _agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)
+    def test_provided_control_snapshot_is_exact_cycle_basis_without_second_latch(self):
+        _, _, agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)
         base = runtime.control_plane.snapshot()
         patch = runtime.control_plane.build_patch(
-            patch_id="test:planning-off",
+            patch_id="test:provided-pulse",
             writer="unit-test",
             writer_kind="EXPERIMENT",
-            reason="prove mode consumer",
-            changes={"grid.planning.mode": "COMPUTE_OFF"},
+            reason="prove one externally latched basis",
+            changes={"pulse.active_interval_seconds": 0.35},
             base=base,
         )
-        self.assertTrue(runtime.control_plane.apply_patch(patch).accepted)
+        receipt = runtime.control_plane.apply_patch(patch)
+        self.assertTrue(receipt.accepted)
+        provided = runtime.control_plane.snapshot()
+        counted = CountingControlPlane(runtime.control_plane)
+        runtime.control_plane = counted
         cycle = runtime.tick_once(
-            tick_id="t-grid-mode",
-            interval=1.0,
+            tick_id="t-provided-control",
+            interval=None,
             now_ts=100.0,
+            control_snapshot=provided,
             trusted_axes=_trusted_normal_axes(),
         )
-        self.assertEqual(cycle.heartbeat_result.next_action, "ACT_CANDIDATE")
-        self.assertEqual(cycle.checkpoint["raw_next_action"], "ACT_CANDIDATE")
-        self.assertEqual(cycle.next_action, "OBSERVE")
-        self.assertTrue(any(x.startswith("GRID_MODE_BLOCK:planning") for x in cycle.checkpoint["control_reasons"]))
-
-    def test_live_grid_gain_below_salience_gates_actual_action_candidate(self):
-        _, _, _agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)
-        base = runtime.control_plane.snapshot()
-        patch = runtime.control_plane.build_patch(
-            patch_id="test:planning-low-gain",
-            writer="unit-test",
-            writer_kind="EXPERIMENT",
-            reason="prove gain consumer",
-            changes={"grid.planning.gain": 0.20},
-            base=base,
-        )
-        self.assertTrue(runtime.control_plane.apply_patch(patch).accepted)
-        cycle = runtime.tick_once(
-            tick_id="t-grid-gain",
-            interval=1.0,
-            now_ts=100.0,
-            trusted_axes=_trusted_normal_axes(),
-        )
-        self.assertEqual(cycle.heartbeat_result.next_action, "ACT_CANDIDATE")
-        self.assertEqual(cycle.next_action, "OBSERVE")
-        self.assertTrue(any(x.startswith("GRID_GAIN_BELOW_SALIENCE:") for x in cycle.checkpoint["control_reasons"]))
+        self.assertEqual(counted.snapshot_calls, 0)
+        self.assertEqual(cycle.next_tick_not_before, 100.35)
+        self.assertEqual(cycle.checkpoint["control_snapshot_source"], "provided")
+        self.assertEqual(cycle.checkpoint["control_snapshot"]["control_epoch"], provided.control_epoch)
+        self.assertEqual(cycle.checkpoint["control_snapshot"]["snapshot_digest"], provided.snapshot_digest)
+        self.assertEqual(agency.snapshot().next_tick_not_before, 100.35)
 
     def test_missing_hard_evidence_persists_hold_with_hold_interval(self):
         _, _, agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)

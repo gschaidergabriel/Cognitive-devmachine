@@ -1,0 +1,92 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-ARCH-20260828T0813Z-FALLBACK-CALLER-CALLEE-ABI-GPT56SOL",
+  "created_at": "2026-08-28T08:13:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/architecture-forensics",
+  "routing_result": "PASS",
+  "pins": {
+    "canonical_main": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_sha_before_delta": "98874c97a5a6ab9f168b858df79f018875a08312",
+    "authority_epoch": "9.13",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c"
+  },
+  "scope": "EXACT_CURRENT_DONOR_SOURCE_FORENSICS_ONLY",
+  "finding": {
+    "id": "TW5-CONTRADICTION-FALLBACK-CALLER-CALLEE-ABI-010",
+    "classification": [
+      "CURRENT_SOURCE",
+      "LIVE_CODE",
+      "NEGATIVE_RESULT"
+    ],
+    "summary": "The exact pinned stern.py fallback caller invokes harness_aider.py with subcommand fallback-start, while the exact pinned harness_aider.py argparse surface defines only start and explicitly accepts only start. The current curated source pair therefore has a caller/callee command-ABI mismatch.",
+    "semantic_atoms": [
+      {
+        "atom_id": "TW5-ABI-010-A",
+        "kind": "LIVE_CODE",
+        "source_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+        "source_selector": "_chatgpt_harness_fallback",
+        "observed": "subprocess.run constructs [python3, harness_aider.py, fallback-start, --auftrag, ..., --kandidaten, ..., --grund, ...]",
+        "meaning": "stern.py expects a fallback-start command surface on harness_aider.py."
+      },
+      {
+        "atom_id": "TW5-ABI-010-B",
+        "kind": "LIVE_CODE",
+        "source_path": "DEV_SOURCE_RESEARCH/repository/scripts/harness_aider.py",
+        "source_blob_sha": "6f55e6a2137ecac9add560482b1b4fab1719aee8",
+        "source_selector": "main/argparse",
+        "observed": "The parser creates only the start subparser; main rejects commands other than start; no fallback-start parser is defined.",
+        "meaning": "The exact pinned callee does not implement the command expected by stern.py."
+      },
+      {
+        "atom_id": "TW5-ABI-010-C",
+        "kind": "HISTORICAL_SOURCE",
+        "source_path": "DEV_SOURCE_RESEARCH/research/33_POST_GATE_FALLBACK_CALLER_SOURCE_LOCALIZATION.md",
+        "observed": "The donor research note describes the stern -> harness_aider.py fallback-start seam as an explicit automatic fallback path while separately warning that exact process-level causal binding is not established.",
+        "meaning": "The architectural prose correctly localized a caller seam but overstates executability if read against the exact current curated callee bytes."
+      }
+    ],
+    "source_level_conclusion": "For the exact pinned curated source pair, automatic fallback-start is not an executable caller-to-callee contract as written. A normal argparse dispatch against this exact harness_aider.py should fail before model/provider execution.",
+    "not_established": [
+      "that the historical post-gate provider event used these exact harness_aider.py bytes",
+      "that an installed ~/.claude/star/harness_aider.py at the historical event time lacked fallback-start",
+      "that no other wrapper or historical version implemented fallback-start",
+      "runtime failure of the historical fallback event",
+      "repository-wide provider shutdown",
+      "whole-system effect containment"
+    ]
+  },
+  "contradiction": {
+    "status": "PRESERVED_AND_NARROWED",
+    "claim_a": "stern.py contains and documents an automatic fallback-start caller seam.",
+    "claim_b": "the exact pinned harness_aider.py callee exposes only start.",
+    "resolution": "Treat the caller seam as PRESENT but the exact current caller-to-callee ABI as BROKEN/UNPROVEN_EXECUTABLE until exact runtime or historical callee bytes demonstrate a matching fallback-start implementation."
+  },
+  "architecture_effect": {
+    "frankenstein_2_rule": "Do not inherit a named fallback capability from prose or caller existence alone. Assembly must bind every effect/provider caller to an exact implemented callee contract and current authority before secret lookup, provider import or network I/O.",
+    "triggerword4_feed": "Carry forward the caller graph as a donor warning, not as a working fallback feature. Under 9.13 HARD_OFF, provider fallback remains disabled and receives zero runtime credit.",
+    "reuse_score": "EASIER_WITH_EVIDENCE"
+  },
+  "counterhypotheses": [
+    "The deployed historical harness_aider.py differed from the curated donor copy and did implement fallback-start.",
+    "A wrapper or alternate file resolved fallback-start before the shown argparse surface.",
+    "The post-gate provider provenance event originated from another caller sharing the same actor identity."
+  ],
+  "next_exact_gate": "Recover or bind the exact historical/deployed harness_aider.py bytes for the post-gate event and compare its command surface with stern.py. If unavailable, retain historical process causality as unresolved and require Triggerword-4 to implement one explicit invocation-bound, authority-gated effect/provider ABI rather than inheriting this seam.",
+  "execution": {
+    "provider_network_io": false,
+    "vps_test": false,
+    "harness_modified": false,
+    "unusual_experiment": false
+  },
+  "credit": {
+    "new_runtime_credit": 0,
+    "new_training_credit": 0,
+    "new_physical_grid10_credit": 0,
+    "new_whole_hcu_credit": 0,
+    "reason": "Static exact-source architecture forensics only."
+  }
+}

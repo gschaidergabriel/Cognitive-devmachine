@@ -1,0 +1,32 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_SPEC/v1",
+  "dispatch_class": "trigger4-pr430-unknown-outcome-v1",
+  "trigger_title": "[CLAY-DISPATCH] Trigger4 PR430 UNKNOWN_OUTCOME acceptance",
+  "probe_contract": "TRIGGER4_PR430_UNKNOWN_OUTCOME_ACCEPTANCE/v1",
+  "sandbox": "clay-direct-dev",
+  "transport": "SELF_HOSTED_LINUX_X64",
+  "fixed_runner": "tools/run_trigger4_pr430_unknown_outcome_acceptance_v1.py",
+  "authority_epoch": "8.78",
+  "candidate_repository": "gschaidergabriel/clay-global-research-entity",
+  "candidate_pr": 430,
+  "candidate_head_sha": "2f99e400f1c0ea1b8598573ab0fab993885cba5e",
+  "candidate_test": "the artefact/tests/test_effect_unknown_outcome.py",
+  "expected_tests": 8,
+  "retry_generation": 0,
+  "current_dispatch_key": "trigger4-pr430-unknown-outcome-v1-g0000",
+  "generation_rule": "INCREMENT_ONLY_AFTER_TERMINAL_RESULT_REQUIRING_DELIBERATE_RETRY_OR_EXPLICIT_INFRASTRUCTURE_OR_PROBE_SEMANTIC_CHANGE; NEW_TRIGGER4_ALONE_MUST_NOT_INCREMENT",
+  "identity_excludes": [
+    "triggerword_4_text",
+    "macrocycle_id",
+    "timestamp",
+    "issue_number",
+    "workflow_run_id",
+    "organ_model_session_identity"
+  ],
+  "claim_path_template": "research_entity/continuity/ordinary_dispatch_claims/{dispatch_key}.json",
+  "result_path_template": "research_entity/continuity/ordinary_dispatch_results/{dispatch_key}.json",
+  "runtime_receipt_path_template": "research_entity/runtime/tool_results/trigger4-pr430-unknown-outcome-{dispatch_key}.json",
+  "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md",
+  "execution_scope": "Execute only the exact retained PR430 UNKNOWN_OUTCOME regression suite at the pinned candidate head inside the owner-authorized zero-cost clay-direct-dev sandbox. No provider/model call, no real external effect, no arbitrary command payload, no product promotion by issue/queue state.",
+  "evidence_boundary": "Exact-candidate bounded UNKNOWN_OUTCOME component runtime evidence only; never automatic canonical EffectGate/EffectJournal promotion, physical GRID10, whole HCU, whole EntityOS, provider, training or whole-product credit."
+}

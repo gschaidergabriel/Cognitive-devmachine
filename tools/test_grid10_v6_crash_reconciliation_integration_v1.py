@@ -13,9 +13,11 @@ from grid10_cognitive_unified_runtime_v6 import (
     build_unified_cognitive_runtime_v6,
 )
 from grid10_v6_crash_reconciliation_v1 import (
+    STATUS_ABORTED_BEFORE_V4_COMMIT,
     STATUS_CLOSED,
     STATUS_RECOVERY_REQUIRED,
     classify_cycle_intent,
+    prepare_cycle_intent,
 )
 
 
@@ -92,6 +94,47 @@ class V6CrashReconciliationIntegrationTests(unittest.TestCase):
         self.assertFalse(result.v6_closure_present)
         self.assertEqual(result.provider_calls_status, "UNKNOWN_AFTER_PROCESS_INTERRUPTION")
         self.assertFalse(result.same_tick_retry_authorized)
+
+    def test_legacy_expected_epoch_schema_remains_read_write_compatible(self):
+        # The first source-only reconciler revision used this column name. A persistent
+        # developer/test DB created at that revision must not become unreadable merely because
+        # the semantics were later renamed to agency_epoch_at_prepare.
+        con = sqlite3.connect(str(self.db))
+        try:
+            con.execute(
+                """
+                CREATE TABLE grid10_v6_cycle_intents(
+                  tick_id TEXT PRIMARY KEY,
+                  schema TEXT NOT NULL,
+                  expected_agency_epoch INTEGER NOT NULL,
+                  control_epoch INTEGER NOT NULL,
+                  control_snapshot_digest TEXT NOT NULL,
+                  status TEXT NOT NULL,
+                  prepared_ts REAL NOT NULL,
+                  terminal_ts REAL,
+                  classification_json TEXT,
+                  classification_digest TEXT,
+                  closure_receipt_digest TEXT
+                )
+                """
+            )
+            con.commit()
+        finally:
+            con.close()
+
+        prepare_cycle_intent(
+            self.db,
+            tick_id="legacy-schema",
+            agency_epoch_at_prepare=17,
+            control_epoch=3,
+            control_snapshot_digest="legacy-control",
+            prepared_ts=400.0,
+        )
+        result = classify_cycle_intent(self.db, tick_id="legacy-schema")
+        self.assertEqual(result.status, STATUS_ABORTED_BEFORE_V4_COMMIT)
+        self.assertEqual(result.evidence["agency_epoch_at_prepare"], 17)
+        self.assertEqual(result.evidence["control_epoch"], 3)
+        self.assertEqual(result.evidence["control_snapshot_digest"], "legacy-control")
 
 
 if __name__ == "__main__":

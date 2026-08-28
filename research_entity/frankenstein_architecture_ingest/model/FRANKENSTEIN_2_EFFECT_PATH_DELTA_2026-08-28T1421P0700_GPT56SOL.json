@@ -1,0 +1,117 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "recorded_at": "2026-08-28T14:21:06+07:00",
+  "evidence_scope": "SOURCE_FORENSICS_PLUS_EXTERNAL_PRIMARY_HOOK_SEMANTICS_NO_RUNTIME_EXECUTION",
+  "donor_source": {
+    "repository": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "hooks_blob": "c483bc81cbae080a8175f7ce694ef657484614b5"
+  },
+  "ingested_packet": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+  "architecture_findings": [
+    {
+      "id": "TW5-EFFECT-D001",
+      "classification": "CURRENT_SOURCE",
+      "finding": "The donor's named EffectGate is request/result bookkeeping rather than the actual ordinary-tool deny boundary. stern.py explicitly states that this path never blocks and references a separate external historical wache-koenig.py blocker.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "confidence": 1.0
+    },
+    {
+      "id": "TW5-EFFECT-D002",
+      "classification": "CURRENT_SOURCE+EXTERNAL_PRIMARY",
+      "finding": "Effect correlation is unsafe for general parallel Claude Code tool execution: donor PreToolUse stores one active_turns.effect_id per session, PostToolUse later reads that mutable session pointer, while current Claude Code hook semantics expose per-call tool_use_id and permit concurrent PostToolUse for parallel tool calls.",
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.99
+    },
+    {
+      "id": "TW5-EFFECT-D003",
+      "classification": "CURRENT_SOURCE",
+      "finding": "The PostToolUse fallback may create an effects row as VERIFIED/FEHLGESCHLAGEN when no PreToolUse row exists. This preserves execution observation but overloads authorization and outcome semantics.",
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.99
+    },
+    {
+      "id": "TW5-EFFECT-D004",
+      "classification": "CURRENT_SOURCE",
+      "finding": "_wirkung_pruefen provides a useful bounded outcome-evidence primitive through exit status and post-call hashes, but it is not permission authority and must be attached to the exact per-call identity.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.99
+    },
+    {
+      "id": "TW5-EFFECT-D005",
+      "classification": "NEGATIVE_RESULT+CURRENT_REPAIR_SOURCE",
+      "finding": "Current source records a real prior secret leak through unredacted tool_input/argv/target persistence and now redacts before truncation. Frankenstein-2.0 must keep this as a journal-boundary regression requirement, not merely a helper function.",
+      "target_2_0_action": "KEEP",
+      "confidence": 0.99
+    }
+  ],
+  "frankenstein_2_effect_abi_delta": {
+    "request": {
+      "type": "EffectRequest",
+      "required_identity": ["tool_use_id", "session_id", "generation", "causal_event_id", "tool_name", "request_digest"],
+      "payload_rule": "typed minimal metadata; redact secrets before any durable persistence; raw content is not canonical journal material by default"
+    },
+    "decision": {
+      "type": "EffectDecision",
+      "required_identity": ["tool_use_id", "request_digest", "policy_generation"],
+      "states": ["ALLOW", "DENY", "ADMISSION_UNKNOWN"],
+      "law": "DENY must actually stop execution on the admitted host path; missing/failed admission never becomes ALLOW retroactively"
+    },
+    "outcome": {
+      "type": "EffectOutcome",
+      "required_identity": ["tool_use_id", "request_digest"],
+      "states": ["SUCCEEDED", "FAILED", "UNKNOWN"],
+      "law": "execution observation is independent from admission state; successful execution does not mint authorization"
+    },
+    "journal": {
+      "type": "EffectJournal",
+      "law": "append-only per-call causal chain request -> decision -> outcome; no mutable session-global pointer is sufficient correlation authority",
+      "batch_rule": "PostToolBatch may provide aggregate telemetry only; it may not replace per-call effect identity or become a second effect authority"
+    }
+  },
+  "required_triggerword4_acceptance_tests": [
+    "Two state-changing tool calls in one session overlap/concurrently complete: each tool_use_id must retain exactly one request, decision and outcome with zero cross-assignment.",
+    "Reverse PostToolUse completion order relative to PreToolUse order: correlation remains exact.",
+    "Force PreToolUse timeout/failure, then deliver PostToolUse: admission remains ADMISSION_UNKNOWN and cannot be upgraded to ALLOW/authorized VERIFIED.",
+    "Leave a previous call completed, then force the next PreToolUse failure: stale prior correlation identity must be rejected rather than reused.",
+    "DENY path: prove the tool does not execute, not merely that a journal row says DENY/ABGELEHNT.",
+    "Secret-fence: representative API keys/tokens/password forms never appear in request/decision/outcome/recovery durable rows; digest/marker evidence remains sufficient for debugging.",
+    "Outcome verifier: wrong target/generation/tool_use_id fails closed and cannot update another effect chain."
+  ],
+  "preserved_contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "RESOLVED_AS_ARCHITECTURE_REPAIR_REQUIREMENT",
+      "claim_a": "The donor subsystem is named EffectGate and produces ABGELEHNT states.",
+      "claim_b": "The exact current source explicitly says that ordinary effect bookkeeping never blocks the tool.",
+      "resolution": "Do not inherit the name as enforcement proof. Preserve useful checks/outcome hashing, but Frankenstein-2.0 requires a verified blocking successor plus a separate journal."
+    },
+    {
+      "id": "TW5-CONTRADICTION-PARALLEL-EFFECT-CORRELATION-003",
+      "status": "OPEN_UNTIL_EXECUTABLE_REGRESSION",
+      "claim_a": "Donor correlation assumes one active effect pointer per session.",
+      "claim_b": "Claude Code supports per-call tool_use_id and parallel tool completions.",
+      "resolution": "Architecture decision is per-call identity; runtime promotion waits for the Triggerword-4 parallel/reordered regression."
+    }
+  ],
+  "next_exact_gate": [
+    "Recover the exact historical/current blocking wache-koenig.py source/reachability and classify KEEP/REPAIR/RETIRE at span level.",
+    "Recover Git commit windows for stern.py Phase-1 consolidation, Phase-2 effect introduction, idempotency repair and secret-redaction repair.",
+    "Feed the typed EffectRequest/EffectDecision/EffectOutcome ABI and the seven fail-closed regressions into Triggerword-4 executor/effects assembly.",
+    "Continue the repository-wide canonical-state writer audit so stern.py's declared exclusivity is proven or bounded rather than assumed."
+  ],
+  "credits": {
+    "source_forensics": "PARTIAL_PASS_WITH_NEW_P0_DELTA",
+    "runtime_causal": 0,
+    "effect_runtime_acceptance": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "schema": "CLAY_EXACT_SOURCE_LOCAL_COMPONENT_COUNTEREVIDENCE/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "classification": "EXACT_SOURCE_LOCAL_COMPONENT_EXECUTABLE_COUNTEREVIDENCE",
+  "status": "POST_START_EXCEPTION_COUNTERHYPOTHESIS_FALSIFIED_AT_ENTITYOS_BRIDGE_COMPONENT_SCOPE",
+  "canonical_main_observed_before_write": "091cf2584378f7e21ba621588bcd4eef9b93d5d5",
+  "related_negative_evidence": "research_entity/continuity/triggerword4/reviews/ENTITYOS_EFFECT_UNKNOWN_POST_DISPATCH_GAP_GPT56SOL_20260829T0231P0700.json",
+  "source_identity": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "path": "the artefact/clayverse/entityos_bridge.py",
+    "expected_git_blob_sha": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+    "reconstructed_exact_git_blob_sha": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+    "exact_blob_match": true
+  },
+  "execution_surface": {
+    "class": "LOCAL_CONTAINER_COMPONENT_ONLY",
+    "network_required": false,
+    "provider_api_used": false,
+    "vps_used": false,
+    "production_host_used": false,
+    "real_external_effect": false,
+    "entityos_product_binary_executed": false,
+    "claim_scope": "EntityOSBridge exact-source subprocess boundary behavior only"
+  },
+  "harmless_fixture": {
+    "type": "temporary executable shell fixture",
+    "sha256": "2ca4aad455d3b01e6eff3591cae08127a6b906fe04bee4a7d33927c81147906b",
+    "behavior": "write the literal local marker 'entered' inside a temporary directory, then sleep for five seconds",
+    "bridge_timeout_seconds": 0.35,
+    "persistent_or_external_side_effect": false
+  },
+  "observed": {
+    "bridge_verify_snapshot": "sealed-memfd",
+    "bridge_verify_size_bytes": 65,
+    "exception": "TimeoutExpired",
+    "marker_exists_after_exception": true,
+    "marker_content": "entered\n",
+    "conclusion": "POST_START_EXCEPTION_PROVEN"
+  },
+  "hypothesis_test": {
+    "counterhypothesis": "Every exception that can escape EntityOSBridge.run occurs before the child process starts, so generic FAILED can safely mean no external effect occurred.",
+    "result": "FALSIFIED_AT_EXACT_ENTITYOS_BRIDGE_COMPONENT_SCOPE",
+    "reason": "The exact canonical EntityOSBridge blob launched a sealed executable snapshot, the child performed a deterministic local write proving process start, and subprocess.run then raised TimeoutExpired. Therefore an exception can escape after the execution boundary was crossed."
+  },
+  "fusion_with_current_effectgate_source": {
+    "effect_gate_blob_sha": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+    "static_observation": "The current bound EffectGate.execute catches every Exception from entityos_bridge.run and finalizes the canonical EffectJournal row as FAILED before re-raising.",
+    "inference": "For a post-start timeout like the observed counterexample, FAILED is stronger than the available world evidence unless current authority explicitly defines FAILED as unresolved/non-replayable. The current journal vocabulary separately contains UNKNOWN_AFTER_RESTART, so that equivalence is not established.",
+    "inference_level": "SOURCE_PLUS_EXACT_BRIDGE_COMPONENT_EXECUTION; NOT_FULL_EFFECTGATE_RUNTIME"
+  },
+  "github_actions_attempt": {
+    "branch": "chatgpt/trigger4-effect-unknown-fault-injection-20260829",
+    "candidate_head": "6936c3adf3b95a94d735a8ee2ec2717b2e42529a",
+    "workflow_run_id": 33204507124,
+    "result": "INFRASTRUCTURE_BLOCKED_ZERO_STEPS",
+    "job_id": 98962005680,
+    "job_conclusion": "failure",
+    "observed_steps": 0,
+    "credit": 0,
+    "note": "The research-repository GitHub-hosted run failed before any job step. This is infrastructure evidence only and is not an EffectGate/EntityOS negative result."
+  },
+  "local_harness_note": {
+    "first_attempt": "Exact Git blob identity was successfully verified, but the first import wrapper omitted registering the dynamically loaded module in sys.modules and hit a Python dataclass harness error before product code execution.",
+    "classification": "HARNESS_ERROR_NO_PRODUCT_CREDIT",
+    "corrected_attempt": "Module registration was corrected without changing the exact source file bytes; the post-start TimeoutExpired counterexample then executed successfully."
+  },
+  "credit_boundary": {
+    "exact_entityos_bridge_blob_execution": 1,
+    "post_start_exception_counterexample": 1,
+    "effectgate_effectjournal_integrated_fault_injection": 0,
+    "canonical_unknown_after_dispatch_semantics": 0,
+    "real_effect_runtime": 0,
+    "external_world_verification": 0,
+    "wp105_full_acceptance": 0,
+    "physical_grid10_runtime": 0,
+    "whole_frankenstein2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Under the canonical EntityOS effect-authority lane, execute one exact-bound EffectGate+EffectJournal+UnifiedDB zero-real-effect regression using the same harmless post-start timeout fixture. Acceptance after repair: process-start marker is present; canonical outcome is explicit unresolved/non-replayable (for example UNKNOWN_AFTER_DISPATCH) rather than definite FAILED/NOT_APPLIED; automatic replay is zero until an authority-owned verifier resolves APPLIED versus NOT_APPLIED. Preserve the existing F2 single-call transaction topology and semantic request_sha256 binding; Frankenstein consumes the canonical uncertainty and does not invent a second outcome journal."
+}

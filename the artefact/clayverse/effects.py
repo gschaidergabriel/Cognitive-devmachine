@@ -5,7 +5,7 @@ import uuid
 from dataclasses import dataclass
 
 from .effect_journal import EffectJournal
-from .entityos_bridge import EntityOSBridge
+from .entityos_bridge import EntityOSBridge, EntityOSOutcomeUnknown
 from .store import Lease, StaleGeneration, UnifiedDB
 
 
@@ -217,7 +217,16 @@ class EffectGate:
                 outcome = dict(self.entityos_bridge.run(req.argv))
                 outcome["boundary"] = "EntityOS"
                 outcome["entityos_sha256"] = self.entityos_bridge.sha256.lower()
+            except EntityOSOutcomeUnknown:
+                # Authority-owned uncertainty: the bridge observed a process-start
+                # boundary but did not obtain a trustworthy return. Do not overwrite the
+                # existing PENDING journal fact with a stronger FAILED claim. PENDING is
+                # already fail-closed for autonomous replay and can be reconciled/recovered
+                # by the canonical journal into UNKNOWN_AFTER_RESTART.
+                raise
             except Exception as exc:
+                # Bridge failures that never crossed the observed process-start boundary
+                # remain definite local failures under the current bridge contract.
                 self.journal.complete(
                     effect_id,
                     {"ok": False, "error": type(exc).__name__, "boundary": "EntityOS"},

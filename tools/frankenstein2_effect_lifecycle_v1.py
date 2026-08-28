@@ -552,6 +552,109 @@ class EffectLifecycleStore:
         finally:
             con.close()
 
+    def record_execution_bundle(
+        self,
+        invocation_id: str,
+        *,
+        executable_id: str,
+        command_digest: str,
+        environment_id: str,
+        exit_code: int,
+        result_digest: str,
+        source_digest: str,
+        duplicate_state: str,
+        status: str,
+        now_ts: float | None = None,
+    ) -> None:
+        """Atomically persist the base execution receipt and its v2 identity metadata.
+
+        The external dispatch has already returned by this point. Because SUBMITTED means
+        the real-world outcome may exist, a persistence failure must roll back both local
+        execution rows so recovery never observes a half-bundle and callers can classify
+        the post-submission state as UNKNOWN rather than treating a partial receipt as fact.
+        """
+        ts = time.time() if now_ts is None else float(now_ts)
+        if not source_digest:
+            raise EffectLifecycleError("MISSING_EXECUTION_SOURCE_DIGEST")
+        if not duplicate_state:
+            raise EffectLifecycleError("MISSING_EXECUTION_DUPLICATE_STATE")
+        if not status:
+            raise EffectLifecycleError("MISSING_EXECUTION_STATUS")
+        status = str(status)
+        if status == "SUCCEEDED" and int(exit_code) != 0:
+            raise EffectLifecycleError("SUCCEEDED_STATUS_CONTRADICTS_NONZERO_EXIT")
+
+        con = self._con()
+        try:
+            con.execute("BEGIN IMMEDIATE")
+            req = self._require_request(con, invocation_id)
+            if req["pending_state"] != PendingEffectState.SUBMITTED.value:
+                raise EffectLifecycleError("EXECUTION_RECEIPT_REQUIRES_SUBMITTED")
+            if con.execute("SELECT 1 FROM execution_receipts WHERE invocation_id=?", (invocation_id,)).fetchone():
+                raise EffectLifecycleError("EXECUTION_RECEIPT_ALREADY_FINAL")
+            if con.execute("SELECT 1 FROM execution_v2_metadata WHERE invocation_id=?", (invocation_id,)).fetchone():
+                raise EffectLifecycleError("EXECUTION_V2_METADATA_ALREADY_FINAL")
+
+            source_binding = con.execute(
+                "SELECT expected_source_digest FROM completion_v2_source_bindings WHERE invocation_id=?",
+                (invocation_id,),
+            ).fetchone()
+            if source_binding is None:
+                raise EffectLifecycleError("EXECUTION_BUNDLE_REQUIRES_SOURCE_BINDING")
+            if str(source_binding["expected_source_digest"]) != str(source_digest):
+                raise EffectLifecycleError("EXECUTION_SOURCE_DIGEST_MISMATCH")
+
+            con.execute(
+                "INSERT INTO execution_receipts VALUES(?,?,?,?,?,?,?,?)",
+                (
+                    invocation_id,
+                    req["request_digest"],
+                    executable_id,
+                    command_digest,
+                    environment_id,
+                    int(exit_code),
+                    result_digest,
+                    ts,
+                ),
+            )
+            con.execute(
+                "INSERT INTO execution_v2_metadata VALUES(?,?,?,?,?)",
+                (invocation_id, str(source_digest), str(duplicate_state), status, ts),
+            )
+            self._event(
+                con,
+                invocation_id,
+                "EXECUTION_RECORDED",
+                {"exit_code": int(exit_code), "result_digest": result_digest},
+                ts,
+            )
+            self._event(
+                con,
+                invocation_id,
+                "EXECUTION_V2_METADATA_RECORDED",
+                {
+                    "source_digest": str(source_digest),
+                    "duplicate_state": str(duplicate_state),
+                    "status": status,
+                },
+                ts,
+            )
+            con.execute("COMMIT")
+        except sqlite3.IntegrityError as exc:
+            try:
+                con.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
+            raise EffectLifecycleError("EXECUTION_BUNDLE_PERSISTENCE_CONFLICT") from exc
+        except Exception:
+            try:
+                con.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
+            raise
+        finally:
+            con.close()
+
     def verify_world_effect(self, invocation_id: str, outcome: WorldOutcome | str, *, evidence_digest: str | None, now_ts: float | None = None) -> None:
         ts = time.time() if now_ts is None else float(now_ts)
         outcome = WorldOutcome(outcome)

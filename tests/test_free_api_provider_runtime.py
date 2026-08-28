@@ -1,4 +1,6 @@
 import builtins
+import hashlib
+import hmac
 import importlib.util
 import http.client
 import json
@@ -206,9 +208,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
     def test_capability_receipt_advertises_execution_schema_provenance(self):
         capability_receipt = MOD.receipt()
 
-        self.assertEqual(capability_receipt["schema_version"], "1.7")
+        self.assertEqual(capability_receipt["schema_version"], "1.8")
         self.assertEqual(
-            capability_receipt["execution_receipt_schema_version"], "1.6"
+            capability_receipt["execution_receipt_schema_version"], "1.7"
         )
         self.assertEqual(
             capability_receipt["unicode_database_version"],
@@ -329,8 +331,28 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             receipts[0]["semantic_request_id"],
             receipts[1]["semantic_request_id"],
         )
+        public_context = b"frank-cost-principal-v1:nvidia:NVIDIA_API_KEY"
+        guessed_binding = hmac.new(
+            credentials[0].encode("ascii"),
+            public_context,
+            hashlib.sha256,
+        ).hexdigest()[:16]
+        public_guess = (
+            "nvidia:NVIDIA_API_KEY:"
+            f"{guessed_binding}:"
+            "nvidia_developer_program_free_prototype_endpoint:"
+            "rotation-regression"
+        )
+        guessed_principal_id = hashlib.sha256(
+            public_guess.encode("utf-8")
+        ).hexdigest()[:16]
+        self.assertNotEqual(
+            guessed_principal_id,
+            receipts[0]["cost_policy_principal_id"],
+        )
         self.assertTrue(all(
-            receipt["cost_policy_principal_scope"] == "credential_binding"
+            receipt["cost_policy_principal_scope"]
+            == "process_local_credential_binding"
             for receipt in receipts
         ))
         for credential in credentials:
@@ -369,7 +391,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             now=iter((1.0, 1.01)).__next__,
         )
 
-        self.assertEqual(result["receipt"]["schema_version"], "1.6")
+        self.assertEqual(result["receipt"]["schema_version"], "1.7")
         self.assertEqual(
             result["receipt"]["unicode_database_version"],
             MOD.unicodedata.unidata_version,

@@ -1,0 +1,55 @@
+{
+  "schema": "TRIGGERWORD5_FORENSIC_RECLASSIFICATION/v1",
+  "receipt_id": "TW5-RECLASS-20260828T0743Z-WACHE-SOURCE-CLOSURE-9_13-GPT56SOL",
+  "created_at": "2026-08-28T07:43:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "current_authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor_selection_commit": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "amends_without_rewriting_history": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_WACHE_KOENIG_SOURCE_CLOSURE_GPT56SOL.json",
+      "commit": "fb4b41de5c1d5b1906117036fa4adccf5c99e286",
+      "classification_now": "CORROBORATING_DIRECT_BYTE_SOURCE_CROSSCHECK_NOT_PACKET_CONSUMPTION_NOT_RUNTIME_REPLICATION",
+      "note": "This file was written after direct Drive-byte crosscheck but raced with a parallel organ that had already consumed the same historical packet into canonical INGEST_STATE. Its source findings remain valid at exact hashes; it is not a second ingestion or independent runtime replication."
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_WACHE_KOENIG_SOURCE_CLOSURE_GPT56SOL.json",
+      "commit": "53aa2f7bf502a208d016b3cfb785f0ff7a4cee5a",
+      "original_authority_label": "8.78",
+      "classification_now": "HISTORICAL_SOURCE_EPOCH_METADATA_PLUS_CORROBORATING_CROSSCHECK_ONLY",
+      "note": "The receipt wording 'INGESTED' is superseded by this reclassification for packet-consumption semantics. Current 9.13 authority requires exact current authority binding and source forensics must not mint runtime credit."
+    }
+  ],
+  "canonical_parallel_ingest": {
+    "packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+    "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_HISTORICAL_WACHE_CAPABILITY_LEASE.json",
+    "architecture_delta_commit": "0e323a18e9f998634072752c4271a791928fc0d1",
+    "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0735Z_HISTORICAL_WACHE_CAPABILITY_LEASE_GPT56SOL.json",
+    "status": "CANONICAL_PACKET_CONSUMPTION_IN_SHARED_INGEST_STATE"
+  },
+  "direct_crosscheck_preserved": {
+    "wache_koenig_sha256": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+    "freigabe_sha256": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+    "result": "SOURCE_IDENTITY_AND_SOURCE_BEHAVIOR_CORROBORATED",
+    "runtime_reachability": "UNKNOWN",
+    "whole_effect_coverage": false
+  },
+  "current_interpretation": [
+    "Historical wache-koenig is a source-confirmed Bash-only pre-execution blocker when actually registered.",
+    "The one-shot exact-command ticket and out-of-model grant producer are useful donor semantics, not current authority.",
+    "Scheduler registration/order, current host reachability, atomic concurrent consumption and non-Bash coverage remain open.",
+    "No provider execution, donor runtime execution, unusual experiment, physical GRID10 runtime, HCU runtime, J-Space runtime or training credit was produced by this corroboration."
+  ]
+}

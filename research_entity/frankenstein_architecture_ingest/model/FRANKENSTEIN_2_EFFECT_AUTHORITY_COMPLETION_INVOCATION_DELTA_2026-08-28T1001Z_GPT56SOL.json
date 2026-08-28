@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "created_at": "2026-08-28T10:01:00Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_ingest": "49a77cd74142048cd20de4aff5e40254392fbe71",
+  "canonical_main_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+  "authority": {
+    "schema_version": "9.13",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "free_swarm_owner_emergency_stop": true
+  },
+  "packet_provenance": {
+    "consumed_in_order": [
+      "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
+      "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL"
+    ],
+    "supersession": {
+      "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL": "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL"
+    },
+    "accepted_packet": "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
+    "rejected_overclaim": "The superseded packet classified PostTool receipt-construction source as RUNTIME_RECEIPT; v2 correctly narrows this to source-level ENFORCEMENT_CODE/receipt-construction semantics. No runtime credit is minted."
+  },
+  "source_crosschecks": [
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3100,
+      "line_end": 3198,
+      "classification": "CURRENT_DONOR_SOURCE",
+      "result": "CONFIRMED",
+      "claim": "The section explicitly states ordinary zulassen()/PreToolUse never returns deny/block and therefore is bookkeeping/admission logging rather than containment authority."
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3180,
+      "line_end": 3585,
+      "classification": "CURRENT_DONOR_SOURCE",
+      "result": "CONFIRMED",
+      "claim": "zulassen() writes the new effect_id into active_turns.effect_id keyed by session_id; merken() later reads that current session slot, creating structural ambiguity under interleaved same-session calls."
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 5840,
+      "line_end": 6008,
+      "classification": "CURRENT_DONOR_SOURCE",
+      "result": "CONFIRMED",
+      "claim": "_beleg_pruefen rejects an effect proof only when status == lowercase 'fehler' and accepts textual test:<exit_code>:<description> whenever exit_code == '0', without binding execution identity."
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "line_start": 1,
+      "line_end": 220,
+      "classification": "CURRENT_DONOR_CONFIG",
+      "result": "CONFIRMED_BOUNDED",
+      "claim": "PreToolUse and PostToolUse are routed through the same stern.py dispatcher with short timeouts and the path is documented fail-silent. This confirms the configured donor hook topology, not installed-host runtime scheduling or call interleaving."
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "delta_id": "F2-EFFECT-AUTHORITY-001",
+      "subsystem": "effect_authority",
+      "donor_finding": "Ordinary donor EffectGate is nonblocking bookkeeping even when its internal status is ABGELEHNT/WIEDERHOLUNG/UNGEPRUEFT.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "successor_contract": "Every canonical/external state-changing mutation must obtain a deterministic pre-side-effect EffectDecision. ALLOW/DENY must be executable enforcement, not descriptive status. Decision is bound to immutable invocation identity, request digest, generation, capability/resource scope, policy version and expiry; one-shot consumption is atomic.",
+      "acceptance": [
+        "DENY proves non-execution for each admitted mutating tool/effect class.",
+        "Expired, stale-generation, wrong-request, wrong-resource, wrong-invocation and reused decisions fail closed.",
+        "No caller-controlled skip_approval or model text can become final effect authority."
+      ]
+    },
+    {
+      "delta_id": "F2-EFFECT-INVOCATION-002",
+      "subsystem": "effect_invocation_identity",
+      "donor_finding": "One mutable active_turns.effect_id slot is shared at session scope between PreToolUse and PostToolUse.",
+      "target_2_0_action": "REPAIR",
+      "successor_contract": "Use immutable call-scoped invocation identity (tool_use_id or equivalent) as the primary join key from EffectRequest -> EffectDecision -> SubmissionReceipt -> ExecutionReceipt -> EffectOutcome. session_id remains context, never the sole effect-call identity.",
+      "acceptance": [
+        "Two same-session overlapping mutating calls cannot cross-bind receipts.",
+        "Reverse completion order still maps each PostToolUse result to the correct effect.",
+        "Duplicate/replayed invocation identity is rejected or deterministically idempotent by policy."
+      ],
+      "counterhypothesis": "The installed scheduler may serialize relevant hook triplets; runtime tracing is still required before claiming the donor race is reachable in practice."
+    },
+    {
+      "delta_id": "F2-EXECUTION-RECEIPT-003",
+      "subsystem": "execution_receipts",
+      "donor_finding": "The donor constructs bounded tool-result evidence by hashing file bytes or process outputs, but source code is not itself a runtime receipt and a successful tool return is not universal world-effect verification.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "successor_contract": "Preserve tool-class-specific result hashing as one ExecutionReceipt layer, bind it to invocation/effect/source/runtime identity, then require effect-class-specific WORLD_EFFECT_VERIFICATION where real-world consequences extend beyond the immediate tool result.",
+      "acceptance": [
+        "ExecutionReceipt and WORLD_EFFECT_VERIFICATION are distinct typed states.",
+        "Unknown post-submission outcome remains OUTCOME_UNKNOWN and is not blindly replayed.",
+        "Only observed/verified outcome can receive verified-transition learning credit in the sparse world substrate."
+      ]
+    },
+    {
+      "delta_id": "F2-COMPLETION-EVIDENCE-004",
+      "subsystem": "completion",
+      "donor_finding": "Current predicate can accept FEHLGESCHLAGEN/ABGELEHNT/WIEDERHOLUNG/UNGEPRUEFT-like effect rows because only lowercase 'fehler' is rejected, and accepts unbound textual test:0 claims.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "successor_contract": "CompletionEvidence must consume typed, immutable success receipts with an explicit success allowlist and exact binding to source/artifact/command/runtime/environment/output/invocation identity. Non-success, unknown, stale, transplanted or unbound evidence fails closed.",
+      "acceptance": [
+        "Adversarial rejection: FEHLGESCHLAGEN, ABGELEHNT, WIEDERHOLUNG, UNGEPRUEFT, UNKNOWN and stale generation.",
+        "Forged textual test:0 is rejected.",
+        "Receipt transplanted from another invocation/source/runtime is rejected.",
+        "Successful execution never retroactively creates missing admission authority."
+      ]
+    },
+    {
+      "delta_id": "F2-WORLD-SUBSTRATE-005",
+      "subsystem": "sparse_generative_world_substrate",
+      "donor_finding": "Effect/result evidence and completion evidence are currently too weakly separated for safe learning of world-transition operators.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "successor_contract": "World-substrate operator updates may use observed Z0 + admitted executed effect + verified observed Zt as high-credit transition evidence. Predicted, unverified, denied, duplicate, unknown-outcome or merely completed-in-prose transitions remain lower epistemic classes and never receive verified-transition credit."
+    }
+  ],
+  "typed_successor_chain": [
+    "HumanIntentDecision",
+    "EffectRequest",
+    "EffectDecision",
+    "SubmissionReceipt",
+    "ExecutionReceipt",
+    "EffectOutcome",
+    "WORLD_EFFECT_VERIFICATION",
+    "RESULT_REENTRY",
+    "CompletionEvidence"
+  ],
+  "contradictions_preserved": [
+    "Donor comments call the section EffectGate/Zulassung while the ordinary hook path is explicitly nonblocking.",
+    "Completion comments describe mechanische Belegprüfung while executable predicates allow structurally weak/non-success evidence.",
+    "Structural session-pointer race risk is source-confirmed, but installed runtime reachability remains unverified and could be reduced by scheduler serialization.",
+    "Configured hook topology is source/config evidence only; host-global predecessor composition and exact installed order remain UNKNOWN."
+  ],
+  "runtime_credit": {
+    "donor_effect_enforcement": 0,
+    "donor_invocation_race_reproduced": 0,
+    "frankenstein_2_effect_successor": 0,
+    "completion_successor": 0,
+    "whole_entityos_hcu": 0
+  },
+  "highest_value_next_spans": [
+    {
+      "priority": "P0",
+      "target": "Triggerword-4 successor effect boundary",
+      "reason": "Implement/falsify call-scoped one-shot EffectDecision and typed completion receipts before donor freeze; port tests before refactor."
+    },
+    {
+      "priority": "P0",
+      "target": "installed same-session overlapping-call trace",
+      "reason": "Discriminate structural race from scheduler-serialization counterhypothesis without granting runtime causal credit from source alone."
+    },
+    {
+      "priority": "P1",
+      "target": "host-global wache-koenig/settings composition",
+      "reason": "Recover exact predecessor bytes/order only to the degree needed to preserve proven blocking semantics; do not let security-only archaeology displace functional build work."
+    }
+  ],
+  "feeds_triggerword_4": true,
+  "acceptance_state": "SOURCE_DELTA_ACCEPTED_RUNTIME_UNVERIFIED"
+}

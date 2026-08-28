@@ -406,6 +406,19 @@
     "counterhypothesis": "The runtime version or source commit is sufficient implicit Unicode provenance; rejected because neither appears in the execution receipt and Python distributions can embed different UCD versions independently of FRANK source bytes.",
     "uncertainty": "The version field identifies the classification database but does not authenticate the host, prove an untampered Python module or freeze future FRANK policy. Reproducible replay still requires the same runtime policy and UCD version."
   },
+  "receipt_schema_capability_advertisement": {
+    "checked_at": "2026-08-28",
+    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.2 advertises both the execution receipt schema version and the active Unicode Character Database version before credential use, network access or model execution. Consumers can reject an unsupported provenance contract during capability inspection instead of discovering it only after execution.",
+    "sources": [
+      "https://docs.python.org/3/library/unicodedata.html#unicodedata.unidata_version",
+      "https://www.unicode.org/versions/"
+    ],
+    "external_evidence": "Python exposes the exact UCD version used by unicodedata. Unicode states that version changes can alter property-dependent program behavior and recommends a full three-field version when precise character-property behavior matters. Advertising the execution schema in the capability record is a local FRANK protocol rule derived from those versioned dependencies, not an external Unicode or NVIDIA requirement.",
+    "internal_measurement": "After execution receipts moved to schema 1.2, the capability receipt remained schema 1.1 and exposed neither the execution_receipt_schema_version nor unicode_database_version. A consumer inspecting only capabilities therefore could not determine the post-execution record contract. Shared schema constants now prevent literal drift, and capability schema 1.2 exposes both values from the same runtime that constructs execution receipts.",
+    "executable_evidence": "test_capability_receipt_advertises_execution_schema_provenance",
+    "counterhypothesis": "Capability and execution receipts are independently versioned, so consumers can infer the execution contract from source code; rejected because capability inspection is the runtime contract, the source or runtime version is absent from that receipt, and a remote consumer need not possess identical source bytes.",
+    "uncertainty": "This is one-way advertisement, not bidirectional negotiation, consumer acknowledgement, host authentication or proof that deployed code matches reviewed source. Schema-1.1 capability consumers must explicitly accept the additive schema-1.2 contract."
+  },
   "canonical_blob_write_boundary": {
     "checked_at": "2026-08-27",
     "claim": "A successful repository contents write is not accepted as canonical evidence until the returned remote content blob SHA exactly matches git hash-object for the intended local bytes. Large replacement files are assembled from bounded lossless chunks before the write; textual success alone cannot establish byte identity.",
@@ -735,6 +748,9 @@
     "checked_at": "2026-08-25",
     "claim": "FRANK v0.1 explicitly requests n=1 and requires the non-streaming provider response to contain exactly one choice. A response with zero or multiple choices remains EXECUTED but cannot be partially represented as VERIFIED or DONE.",
     "source": "https://docs.nvidia.com/nim/large-language-models/1.7.0/system-example.html",
+Warning: truncated output (original token count: 8322)
+Total output lines: 250
+
     "external_evidence": "NVIDIA's official non-streaming Chat Completions examples set n to 1 and return one index-0 choice.",
     "internal_measurement": "A status-200 response containing two valid choices previously returned the first content as success and reached VERIFIED and DONE without validating or representing the second choice.",
     "executable_evidence": "test_multiple_response_choices_cannot_be_partially_verified",
@@ -832,16 +848,7 @@
   },
   "provider_response_passive_metadata_compatibility": {
     "checked_at": "2026-08-26",
-    "claim": "The v0.1 text adapter accepts NVIDIA's documented passive message metadata only when refusal, annotations, audio and function_call are null, tool_calls is an exact empty built-in list, and choice routed_experts is null. Nonempty tool calls, non-null values and unknown message or choice extensions remain unverified; reasoning has its separate typed scalar boundary.",
-    "source": "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html",
-    "external_evidence": "NVIDIA's current expected non-streaming Chat Completions response, updated 2026-08-21, includes those five null message fields, an empty tool_calls list and null routed_experts on an ordinary stopped text answer.",
-    "internal_measurement": "A locally replayed response matching the documented passive message shape previously remained EXECUTED but was rejected as invalid_provider_response solely because the text adapter allowed only role and content.",
-    "executable_evidence": [
-      "test_documented_nvidia_passive_message_metadata_remains_compatible",
-      "test_response_tool_calls_cannot_reach_text_verified_state"
-    ],
-    "counterhypothesis": "Rejecting every message extension is the safest compatible text-only policy; falsified because it rejects NVIDIA's current ordinary text response even though exact null and empty passive forms can be separated from executable tool-call content.",
-    "uncertainty": "These fields are compatibility metadata and are not promoted into new semantic receipt claims. Backend- or model-specific non-null variants still require a separate typed adapter. No Ubuntu NVIDIA live receipt is available on this host."
+    "claim": "The v0.1 text adapter accepts NVIDIA's documented passive message metadata only when refusal, annotations, audio and function_call are null, tool_calls is an exact empty built-in …322 tokens truncated… and are not promoted into new semantic receipt claims. Backend- or model-specific non-null variants still require a separate typed adapter. No Ubuntu NVIDIA live receipt is available on this host."
   },
   "provider_response_top_level_schema_closure": {
     "checked_at": "2026-08-28",
@@ -1082,6 +1089,7 @@
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
     "Every FREE_API_EXECUTION_RECEIPT schema 1.2 record includes the exact Unicode Character Database version used for General_Category-based semantic admission; version-dependent classification cannot remain implicit provenance.",
+    "Every FREE_API_CAPABILITY_RECEIPT schema 1.2 record advertises the execution receipt schema and active Unicode Character Database version before execution; an unsupported provenance contract can fail during capability inspection.",
     "The serialized UTF-8 text-chat JSON request is at most 2000000 bytes; oversized payloads fail before runtime-environment snapshot, credential lookup or network access, while the exact boundary remains accepted.",
     "Every Chat Completions request explicitly sets max_tokens to 4096, bounding the combined reasoning and visible generation budget; finish_reason length remains unverified and requires changed input or budget rather than blind replay.",
     "Requests above the transport envelope are rejected before json.dumps can materialize the document; the preflight exactly counts the fixed request envelope, per-message objects, list separators and default ensure_ascii escape widths, while the serialized UTF-8 byte check remains defense in depth.",

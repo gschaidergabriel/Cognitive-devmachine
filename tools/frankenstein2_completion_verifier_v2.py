@@ -117,6 +117,13 @@ class TestReceipt:
     assertions_total: int
     assertions_passed: int
     test_result_digest: str
+    # These bindings are append-only to preserve construction compatibility while
+    # making legacy/unbound receipts fail closed whenever a TestReceipt is supplied.
+    request_digest: str = ""
+    result_digest: str = ""
+    test_plan_digest: str = ""
+    executable_id: str = ""
+    environment_id: str = ""
 
 
 @dataclass(frozen=True)
@@ -245,6 +252,14 @@ def verify_completion(
     if test_receipt is not None:
         if test_receipt.source_digest != expected.source_digest:
             reasons.append("TEST_SOURCE_DRIFT")
+        if test_receipt.request_digest != expected.request_digest:
+            reasons.append("TEST_REQUEST_MISMATCH")
+        if test_receipt.result_digest != execution.result_digest:
+            reasons.append("TEST_RESULT_TRANSPLANT")
+        if not test_receipt.test_plan_digest:
+            reasons.append("MISSING_TEST_PLAN_DIGEST")
+        if not test_receipt.executable_id or not test_receipt.environment_id:
+            reasons.append("MISSING_TEST_PROVENANCE")
         if test_receipt.status not in SUCCESS_TEST:
             reasons.append(f"TEST_NOT_SUCCESS:{test_receipt.status}")
         if test_receipt.assertions_total <= 0:

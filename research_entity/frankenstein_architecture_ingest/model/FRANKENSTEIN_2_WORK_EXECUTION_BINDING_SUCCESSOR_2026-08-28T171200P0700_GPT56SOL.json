@@ -1,0 +1,167 @@
+{
+  "artifact": "FRANKENSTEIN_2_WORK_EXECUTION_BINDING_SUCCESSOR",
+  "schema_version": 1,
+  "created_at": "2026-08-28T10:12:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/native-subagent-workexecution-binding-successor",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main_sha": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "design_parent_observed_before_write": "e47b12ddc382e47ead2127b1e95e3f09be54551f",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "execution_scope": "SOURCE_FORENSICS_AND_ARCHITECTURE_MODEL_ONLY",
+    "runtime_credit_delta": 0,
+    "whole_entityos_hcu_credit_delta": 0,
+    "hcu_full_credit_delta": 0,
+    "jspace_model_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "supersession": {
+    "predecessor_packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T082628Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+    "relationship": "REFINES_NOT_INVALIDATES",
+    "reason": "The predecessor correctly established the native child identity gap. This successor removes an unsafe implicit coupling between agent_id, task_id and tool_use_id by modeling them as distinct identity domains until an observed join exists."
+  },
+  "source_packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+  "architecture_delta": {
+    "component": "WorkExecutionBinding/v1",
+    "role": "Immutable/append-only causal binding between durable Frankenstein delegated-work intent and observed native execution-child/task/tool lifecycle evidence. It is not a spawn runtime and not a completion authority.",
+    "required_identity_domains": {
+      "workpackage_id": {
+        "source": "entityos_arbeitspaket.paket_id",
+        "required": true,
+        "semantics": "Durable delegated-work intent identity."
+      },
+      "session_id": {
+        "source": "parent/current session evidence",
+        "required": true,
+        "semantics": "Conversation/session scope; insufficient by itself for child attribution."
+      },
+      "generation": {
+        "source": "current canonical session/work generation",
+        "required": true,
+        "semantics": "Prevents stale/replayed child results from crossing recovery/restart boundaries."
+      },
+      "agent_tool_use_id": {
+        "source": "observed PreToolUse/PostToolUse event for Agent",
+        "required": false,
+        "unknown_policy": "UNKNOWN until the installed runtime emits it for the actual spawn call",
+        "semantics": "Native spawn-tool invocation identity, not the child actor identity."
+      },
+      "agent_id": {
+        "source": "observed SubagentStart/SubagentStop lifecycle",
+        "required": false,
+        "unknown_policy": "UNKNOWN until installed-runtime lifecycle capture",
+        "semantics": "Native subagent child identity."
+      },
+      "task_id": {
+        "source": "observed TaskCreated/TaskCompleted lifecycle only",
+        "required": false,
+        "unknown_policy": "ABSENT_OR_UNKNOWN for an ordinary subagent path unless the task system actually participates",
+        "semantics": "Task-system identity. MUST NOT be treated as agent_id."
+      },
+      "agent_type": {
+        "source": "observed SubagentStart/SubagentStop",
+        "required": false,
+        "semantics": "Native child type/name, useful for policy but not sufficient identity."
+      },
+      "agent_transcript_path": {
+        "source": "observed SubagentStop",
+        "required": false,
+        "semantics": "Child transcript locator/evidence pointer; content is not automatically canonical truth."
+      },
+      "reconcile_evidence_ref": {
+        "source": "stern.py reconcile/evidence path",
+        "required": false,
+        "semantics": "Evidence that the durable workpackage was reconciled after child execution."
+      }
+    },
+    "proposed_append_only_events": [
+      "WORKPACKAGE_RECORDED",
+      "SPAWN_INVOCATION_OBSERVED",
+      "CHILD_STARTED",
+      "TASK_CREATED_OPTIONAL",
+      "CHILD_STOPPED",
+      "TASK_COMPLETED_OPTIONAL",
+      "RESULT_CANDIDATE_RECORDED",
+      "RECONCILED",
+      "FAILED",
+      "UNKNOWN_OUTCOME"
+    ],
+    "allowed_promotions": [
+      "WORKPACKAGE_RECORDED -> SPAWN_INVOCATION_OBSERVED only from an exact Agent tool event bound to the package by an observed mechanism",
+      "SPAWN_INVOCATION_OBSERVED -> CHILD_STARTED only when a deterministic shared key or observed runtime relationship joins the invocation to agent_id",
+      "CHILD_STARTED -> CHILD_STOPPED only for the same agent_id and generation",
+      "TASK_CREATED_OPTIONAL/TASK_COMPLETED_OPTIONAL are parallel task-system facts and do not establish child identity by themselves",
+      "CHILD_STOPPED -> RESULT_CANDIDATE_RECORDED treats last_assistant_message/transcript as candidate output only",
+      "RESULT_CANDIDATE_RECORDED -> RECONCILED requires explicit stern.py reconcile/evidence acceptance at the declared scope"
+    ],
+    "fail_closed_invariants": [
+      "Never join tool_use_id to agent_id by timestamp proximity, event order, agent_type or narrative similarity.",
+      "Never treat task_id as agent_id or require task_id when the task system did not participate.",
+      "Never mark a workpackage complete solely because SubagentStop fired or last_assistant_message exists.",
+      "Never accept stale generation or ambiguous package/child provenance.",
+      "Two concurrent Agent invocations must remain distinct even if they share session_id, agent_type or similar prompts.",
+      "If an external effect outcome is unknown inside child work, reconciliation remains UNKNOWN until effect evidence closes it.",
+      "Source/docs capability evidence cannot substitute for installed-host lifecycle observation."
+    ],
+    "candidate_storage_shape": {
+      "table_or_journal": "entityos_work_execution_binding",
+      "append_only_preferred": true,
+      "minimum_fields": [
+        "binding_event_id",
+        "workpackage_id",
+        "session_id",
+        "generation",
+        "event_kind",
+        "observed_at",
+        "authority_epoch",
+        "donor_sha",
+        "provenance_class"
+      ],
+      "nullable_observed_fields": [
+        "agent_tool_use_id",
+        "agent_id",
+        "task_id",
+        "agent_type",
+        "agent_transcript_path",
+        "result_candidate_digest",
+        "reconcile_evidence_ref",
+        "failure_reason"
+      ]
+    },
+    "integration_points": [
+      "stern.py handoff: emit/return workpackage_id only; no invented child identity",
+      "hook dispatcher/config successor: capture Agent Pre/PostToolUse plus SubagentStart/SubagentStop when the installed runtime proves support",
+      "optional TaskCreated/TaskCompleted capture: keep task namespace independent",
+      "stern.py reconcile: consume only an unambiguous binding plus declared evidence; do not infer completion from child text",
+      "GRID10 coordinator: use binding state for actor/task ownership and recovery rather than session-level heuristics"
+    ]
+  },
+  "observed_evidence": {
+    "donor_live_code": "handoff() creates entityos_arbeitspaket/capsule and explicitly does not spawn.",
+    "donor_config": "hooks.json registers seven events and lacks dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted hooks.",
+    "donor_spec": "architekt_governance expects handoff before spawn and reconcile afterwards.",
+    "external_primary": "Current Claude Code docs describe Agent as the native spawn tool, agent_id on SubagentStart/SubagentStop, task_id on TaskCreated/TaskCompleted, and tool_use_id plus tool_response on tool hooks; Agent-specific tool_response correlation to agent_id was not established by the reviewed docs.",
+    "installed_runtime": "NOT_OBSERVED"
+  },
+  "hypothesis": "Most of the Frankenstein-2.0 child harness can reuse native Claude child lifecycle if WorkExecutionBinding/v1 preserves identity-domain separation and only promotes edges proven by installed-runtime evidence.",
+  "counterhypothesis": "The installed host may lack the documented ABI or may not provide a deterministic invocation-to-child join, requiring a bounded wrapper/transcript correlation primitive instead of direct hook-only binding.",
+  "cheapest_high_information_discriminator": {
+    "name": "ONE_HARMLESS_NATIVE_CHILD_CAUSAL_CAPTURE",
+    "required_observations": [
+      "exact installed Claude Code version/build",
+      "Agent PreToolUse payload including tool_use_id",
+      "SubagentStart payload including agent_id",
+      "SubagentStop payload for same agent_id",
+      "Agent PostToolUse payload including exact tool_response shape",
+      "whether any stable shared key directly joins tool_use_id to agent_id",
+      "whether TaskCreated/TaskCompleted fires for this ordinary subagent path"
+    ],
+    "acceptance": "A deterministic non-timing join is observed and replayable; otherwise WorkExecutionBinding retains UNKNOWN and the direct-hook binding hypothesis is falsified for that build.",
+    "runtime_executed_in_this_delta": false
+  },
+  "triggerword4_feed": {
+    "priority": "P0_BEFORE_R2_CHILD_HARNESS_FREEZE",
+    "instruction": "Do not freeze a child-harness ABI that aliases package, agent, task and tool identities. First prove the installed native join, then implement the smallest fail-closed WorkExecutionBinding successor."
+  }
+}

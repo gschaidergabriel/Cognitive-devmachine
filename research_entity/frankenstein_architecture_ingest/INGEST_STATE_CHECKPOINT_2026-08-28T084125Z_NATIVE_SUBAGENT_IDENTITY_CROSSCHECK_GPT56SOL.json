@@ -1,0 +1,87 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_STATE_CHECKPOINT/v1",
+  "created_at": "2026-08-28T08:41:25Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/native-subagent-direct-crosscheck",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_this_run": "e7a97a127f62f8ab9bbac6d3cf141879d9cea286",
+  "new_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T084125Z_NATIVE_SUBAGENT_IDENTITY_CROSSCHECK_GPT56SOL.json",
+    "commit": "067da16fee3d63bd9c861317344e2433a3af8fea"
+  },
+  "ingest_ledger_observation": {
+    "ingest_state_path": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "observed_blob_sha": "d0af3803a9b56e958b010e64d8ac0cbd628bfaf3",
+    "state_last_ingest_at": "2026-08-28T08:08:00Z",
+    "classification": "STALE_RELATIVE_TO_APPEND_ONLY_RECEIPTS",
+    "reason": "The central INGEST_STATE still predates the 083520Z admission reconciliation even though the append-only receipt validator-admits both Wache v2 successors and the native-subagent identity packet."
+  },
+  "admitted_not_yet_reflected_in_central_state": [
+    {
+      "packet_id": "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+      "blob_sha": "660fee9248758a73bd6a040830127632c53b055b",
+      "admission": "PASS",
+      "runtime_credit_delta": 0
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL",
+      "blob_sha": "99ef8f48d49911ea2796963c9f0af0ae9dcf8358",
+      "admission": "PASS",
+      "runtime_credit_delta": 0
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+      "blob_sha": "bad15660b245dfc33139736cd9857064c82812ef",
+      "admission": "PASS",
+      "runtime_credit_delta": 0,
+      "direct_source_crosscheck": "PASS_THIS_RUN"
+    }
+  ],
+  "provenance_reconciliation": {
+    "wache_v1_predecessor": "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL",
+    "wache_v2_successors": [
+      "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+      "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL"
+    ],
+    "classification": "PARALLEL_ADMITTED_SUCCESSORS_COMPLEMENTARY_PROVENANCE",
+    "mutual_supersession": false,
+    "timestamp_winner": false
+  },
+  "architecture_state_delta": [
+    "Durable handoff/workpackage state is retained as a useful donor primitive but is not spawn proof.",
+    "Pinned donor plugin lifecycle capture is child-identity blind at dedicated lifecycle-event level.",
+    "Current Claude Code documentation exposes a potentially sufficient native identity/lifecycle ABI, but installed-host proof is absent.",
+    "Triggerword-4 should not freeze a bespoke duplicate spawn runtime until the installed native ABI has been measured and found insufficient.",
+    "Parallel-child and downstream effect attribution require immutable workpackage/agent/task/tool/generation lineage."
+  ],
+  "unresolved": [
+    "TW5-CONTRADICTION-NATIVE-SUBAGENT-IDENTITY-014",
+    "Central INGEST_STATE.json reconciliation remains pending; this checkpoint is append-only and does not silently overwrite concurrent frontier work.",
+    "Installed-host native child lifecycle remains unobserved and receives zero runtime credit."
+  ],
+  "next_exact_gate": "Reconcile the moving central INGEST_STATE against this checkpoint and the 083520Z admission receipt without deleting concurrent frontier entries; separately, only on an authorized installed-host surface, capture a harmless native child lifecycle and bind workpackage_id to agent_id/task_id/tool_use_id/generation.",
+  "credits": {
+    "packet_admission": "PASS_AT_THREE_PACKET_SCOPE_FROM_083520_RECEIPT",
+    "native_identity_direct_source_crosscheck": "PASS",
+    "installed_host_native_child_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "training": 0
+  }
+}

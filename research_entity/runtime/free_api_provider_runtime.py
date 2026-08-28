@@ -27,8 +27,8 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.6"
-EXECUTION_RECEIPT_SCHEMA_VERSION = "1.5"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.7"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.6"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
 PAYMENT_LATCH_SCOPE = "process_local"
@@ -468,6 +468,7 @@ def receipt() -> dict:
             "payment_required_is_hard_stop": True,
             "payment_latch_restart_durable": False,
             "provider_account_identity_verified": False,
+            "semantic_request_identity_authorizes_replay": False,
             "model_availability_inferred_without_probe": False,
             "network_probe_performed": False,
         },
@@ -1463,6 +1464,9 @@ def _execute_chat_locked(
         # failed post-response clock read must not suppress the receipt.
         finished = started
     body_digest = hashlib.sha256(body).hexdigest()
+    semantic_request_id = _safe_request_id(
+        f"{selected}:{endpoint_capability_id}:{body_digest}"
+    )
     request_id = _safe_request_id(
         f"{selected}:{endpoint_capability_id}:"
         f"{cost_policy_principal_id}:{body_digest}"
@@ -1478,6 +1482,7 @@ def _execute_chat_locked(
         "cost_policy_principal_id": cost_policy_principal_id,
         "cost_policy_principal_scope": "credential_binding",
         "budget_epoch_id": _budget_epoch_id(env),
+        "semantic_request_id": semantic_request_id,
         "request_id": request_id,
         "provider_response_id_sha256": provider_response_id_sha256,
         "provider_reasoning_characters": provider_reasoning_characters,

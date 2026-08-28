@@ -34,6 +34,7 @@ jobs:
             tools/grid10_cognitive_regulator_port_v1.py \
             tools/grid10_cognitive_fabric_adapter_v1.py \
             tools/grid10_cognitive_heartbeat_v1.py \
+            tools/grid10_cognitive_unified_runtime_v2.py \
             tools/grid10_persistent_agency_v1.py \
             tools/grid10_cognitive_twin_server_v1.py \
             tools/grid10_assurance_monitors_v1.py \
@@ -47,30 +48,33 @@ jobs:
         run: |
           python test_grid10_cognitive_envelope_control_v1.py -v
           python test_grid10_cognitive_runtime_v1.py -v
+          python test_grid10_cognitive_unified_runtime_v2.py -v
           python test_grid10_persistent_agency_v1.py -v
           python test_grid10_glm_inference_provider_v1.py -v
           python test_grid10_glm_cognitive_cycle_v1.py -v
-      - name: Bounded heartbeat CLI smoke
+      - name: Bounded unified-heartbeat CLI smoke
         env:
           PYTHONPATH: tools
         run: |
           TD=$(mktemp -d)
-          python - <<'PY' "$TD/fabric.sqlite"
-          import sys
-          from pathlib import Path
-          from grid10_fabric import Fabric
-          Fabric(Path(sys.argv[1]))
-          PY
-          python tools/grid10_cognitive_heartbeat_v1.py \
-            --fabric "$TD/fabric.sqlite" \
-            --state-db "$TD/heartbeat.sqlite" \
+          python tools/grid10_cognitive_unified_runtime_v2.py \
+            --unified-db "$TD/unified.sqlite" \
             --frames-jsonl "$TD/frames.jsonl" \
             --ticks 2 --interval 0.05 --trusted-normal-test-fixture
-          python - <<'PY' "$TD/frames.jsonl"
-          import json,sys
-          rows=[json.loads(x) for x in open(sys.argv[1]) if x.strip()]
+          python - <<'PY' "$TD/unified.sqlite" "$TD/frames.jsonl"
+          import json,sqlite3,sys
+          db,frames=sys.argv[1:]
+          rows=[json.loads(x) for x in open(frames) if x.strip()]
           assert len(rows)==2
           assert all(x['schema']=='COGNITIVE_LOOP_FRAME/v1' for x in rows)
           assert all(x['assurance_mode']=='NORMAL' for x in rows)
-          print(json.dumps({'pass':True,'frames':len(rows),'last_frame':rows[-1]['frame_id']}))
+          con=sqlite3.connect(db)
+          try:
+              names={r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+              required={'nodes','regulators','ticks','meta','agency_meta','goals','deferred_intents','agency_events'}
+              assert required <= names,(required-names)
+              assert con.execute("SELECT COUNT(*) FROM ticks").fetchone()[0] == 2
+          finally:
+              con.close()
+          print(json.dumps({'pass':True,'frames':len(rows),'shared_required_tables':sorted(required),'last_frame':rows[-1]['frame_id']}))
           PY

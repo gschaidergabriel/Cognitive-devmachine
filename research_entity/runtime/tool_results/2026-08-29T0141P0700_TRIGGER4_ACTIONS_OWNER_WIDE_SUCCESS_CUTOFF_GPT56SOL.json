@@ -1,0 +1,71 @@
+{
+  "schema": "TRIGGER4_ACTIONS_OWNER_WIDE_SUCCESS_CUTOFF_DIAGNOSTIC/v1",
+  "observed_at_local": "2026-08-29T01:41:38+07:00",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "authority": {
+    "mode": "FREE_ONLY",
+    "current_supervisor_epoch_observed": "9.13",
+    "current_supervisor_delta_observed": "9.13AJ_NON_AUTHORITY",
+    "canonical_main_before_write": "1b2208495dc55ff9a7ede118fa78cfb3d2083ade"
+  },
+  "question": "Does the current cross-repository zero-step GitHub Actions failure localize to the August 26 incident, a self-hosted runner fault, repository configuration, or a broader owner/account Actions admission boundary?",
+  "direct_connected_observations": {
+    "clay_latest_successful_actions_run": {
+      "run_id": 32061392029,
+      "created_at": "2026-08-17T19:37:36Z",
+      "conclusion": "success"
+    },
+    "dr_unterweger_latest_successful_actions_run": {
+      "run_id": 32058854197,
+      "created_at": "2026-08-17T19:10:16Z",
+      "conclusion": "success"
+    },
+    "current_clay_hosted_zero_step_control": {
+      "run_id": 33182697914,
+      "job_id": 98887677431,
+      "runner_label": "ubuntu-latest",
+      "conclusion": "failure",
+      "steps": [],
+      "job_log_fetch": "BlobNotFound/404"
+    },
+    "preserved_singletons": {
+      "issue_2121": "OPEN_NO_COMMENTS_GRID10_SIGKILL_V3_G0000",
+      "issue_2122": "OPEN_NO_COMMENTS_GRID10_QUIESCENCE_V2_G0000"
+    }
+  },
+  "external_context_noncanonical": {
+    "github_status_august_26": "GitHub documented Actions jobs failing to start and runner-assignment/stuck-queue impact on 2026-08-26, later marked recovered.",
+    "community_august_27": "A fresh GitHub Community report describes runner_id=0 and empty steps on new ubuntu-latest runs after the August 26/27 incidents were marked resolved.",
+    "community_august_18": "A separate GitHub Community report describes GitHub-hosted jobs blocked before runner assignment by an Actions billing/entitlement message despite apparently healthy billing.",
+    "evidence_class": "EXTERNAL_CORROBORATION_ONLY_NOT_ACCOUNT_SPECIFIC_PROOF"
+  },
+  "inference": {
+    "august_26_incident_as_sufficient_root_cause": "STRONGLY_DISFAVORED_BECAUSE_BOTH_REPOSITORIES_LAST_SUCCESS_PRECEDES_INCIDENT_BY_MORE_THAN_EIGHT_DAYS",
+    "self_hosted_runner_service_as_sufficient_root_cause": "STRONGLY_DISFAVORED_BY_GITHUB_HOSTED_UBUNTU_LATEST_ZERO_STEP_FAILURE",
+    "single_repository_configuration_as_sufficient_root_cause": "DISFAVORED_BY_MATCHING_SUCCESS_CUTOFF_ACROSS_TWO_OWNER_REPOSITORIES",
+    "owner_account_actions_admission_entitlement_or_billing_boundary": "CURRENT_LEADING_HYPOTHESIS",
+    "residual_or_account_shard_actions_control_plane_fault": "LIVE_COUNTERHYPOTHESIS",
+    "exact_root_cause": "UNKNOWN"
+  },
+  "falsifiers": [
+    "A successful post-2026-08-17 GitHub-hosted Actions job in either owner repository would weaken the owner-wide cutoff claim.",
+    "Direct GitHub Billing/Plans or Actions budget evidence showing an active block would promote the account admission/billing hypothesis.",
+    "Direct account evidence showing healthy Actions entitlement plus a fresh successful hosted control while the target workflow still zero-steps would push localization back toward workflow/repository-specific admission."
+  ],
+  "coordination": {
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false,
+    "vps_telemetry_bridge_restarted_or_replaced": false,
+    "issues_2121_2122_modified": false
+  },
+  "next_exact_gate": "Inspect the authorized GitHub account Billing & plans / Actions budget-entitlement surface or a GitHub Support/admin annotation for the owner account. The connected GitHub tool surface does not expose sensitive account billing endpoints, so do not guess the result. In parallel, continue source-only Frankenstein 2.0 P1 closure without minting runtime credit.",
+  "credit_boundary": {
+    "runtime_control_transport_pass": false,
+    "runtime_quiescence_pass": false,
+    "physical_grid10_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  }
+}

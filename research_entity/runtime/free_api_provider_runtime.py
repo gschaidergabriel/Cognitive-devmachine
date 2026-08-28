@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import hmac
 import http.client
 import json
 import math
@@ -26,8 +27,8 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.5"
-EXECUTION_RECEIPT_SCHEMA_VERSION = "1.4"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.6"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.5"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
 PAYMENT_LATCH_SCOPE = "process_local"
@@ -466,6 +467,7 @@ def receipt() -> dict:
             "together_access_forbidden": True,
             "payment_required_is_hard_stop": True,
             "payment_latch_restart_durable": False,
+            "provider_account_identity_verified": False,
             "model_availability_inferred_without_probe": False,
             "network_probe_performed": False,
         },
@@ -812,8 +814,19 @@ def _cost_policy_principal_id(
     spec: ProviderSpec, key_name: str, environ: dict[str, str]
 ) -> str:
     evidence = _zero_cost_evidence_for(spec, environ) or "NONE"
+    # Bind cost authority to the exact credential without serializing it or an
+    # unsalted raw-key digest. HMAC uses the validated bearer token as its key
+    # and a domain-separated provider/key-name context as the message.
+    credential_binding_id = hmac.new(
+        environ[key_name].encode("ascii"),
+        f"frank-cost-principal-v1:{spec.provider_id}:{key_name}".encode(
+            "ascii"
+        ),
+        hashlib.sha256,
+    ).hexdigest()[:16]
     value = (
-        f"{spec.provider_id}:{key_name}:{evidence}:{_budget_epoch(environ)}"
+        f"{spec.provider_id}:{key_name}:{credential_binding_id}:"
+        f"{evidence}:{_budget_epoch(environ)}"
     )
     return _safe_request_id(value)
 
@@ -1463,6 +1476,7 @@ def _execute_chat_locked(
         "model_availability_verified": outcome == "success",
         "endpoint_capability_id": endpoint_capability_id,
         "cost_policy_principal_id": cost_policy_principal_id,
+        "cost_policy_principal_scope": "credential_binding",
         "budget_epoch_id": _budget_epoch_id(env),
         "request_id": request_id,
         "provider_response_id_sha256": provider_response_id_sha256,

@@ -1,0 +1,94 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T09:15:24Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/actor-class-reconciliation",
+  "classification": "CURRENT_DONOR_SOURCE_AND_PARALLEL_DELTA_RECONCILIATION_NO_RUNTIME_CREDIT",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_observed_before_write": "97e53d406c896735bc960c06fb4d637bacf9f5ff"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "packet_ingest": {
+    "new_unconsumed_packets": [],
+    "latest_packet": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "latest_packet_status": "ALREADY_CONSUMED",
+    "action": "RECONCILE_NEWER_APPEND_ONLY_DELTAS_NOT_DUPLICATE_PACKET_INGEST"
+  },
+  "inputs": [
+    "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T091233Z_REALTIME_MUTATION_CHILD_POLICY_REENTRY_FUSION_GPT56SOL.json",
+    "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091348Z_HEADLESS_SESSION_VS_NATIVE_SUBAGENT_ACTOR_CLASS_GPT56SOL.json",
+    "research_entity/global/TRIGGERWORD_4_NATIVE_CHILD_EXECUTION_BINDING_AND_POLICY_ENVELOPE_ADDENDUM.md",
+    "research_entity/global/TRIGGERWORD_4_STAGE1_EFFECT_PERCEPTION_VOICE_FORENSIC_FUSION_CONTRACT.md"
+  ],
+  "source_crosscheck": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "lines": "824-831",
+      "kind": "LIVE_CODE",
+      "finding": "Realtime voice delegation calls gespraechsmodus.claude_frage with a stored session id and permission mode; it does not pass workpackage_id, agent_id, task_id, tool invocation identity or cwd."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "lines": "355-376",
+      "kind": "ENFORCEMENT_CODE",
+      "finding": "claude_frage directly executes claude -p, creates/resumes a CLI session with --session-id/--resume, forwards permission mode, denies Bash and defaults cwd to Path.home(). This source path does not prove a native subagent spawn relation."
+    }
+  ],
+  "material_reconciliation": {
+    "status": "PARALLEL_FINDINGS_COMPATIBLE_BUT_NEXT_GATE_REFINED",
+    "preserve": [
+      "ChildPolicyEnvelope remains distinct from HumanIntentDecision and EffectDecision.",
+      "Realtime tools remain separate authority classes; MemoryCandidate -> MemoryAdmission and ResearchRequestCandidate -> deterministic admission remain required.",
+      "Every mutating operation requires exact invocation identity plus deterministic pre-side-effect enforcement and typed completion evidence."
+    ],
+    "refine": "The prior native-child-only next gate is insufficient for the current Voice donor. Voice currently uses a direct headless claude -p session path, while Triggerword-4 also targets native subagent actors. Runtime evidence for one actor class must not be transplanted to the other.",
+    "required_execution_actor_class": [
+      "HEADLESS_SESSION_CHILD",
+      "NATIVE_SUBAGENT_CHILD",
+      "UNKNOWN_CHILD_ACTOR"
+    ]
+  },
+  "trigger4_feed": {
+    "required_contract_delta": [
+      "Add execution_actor_class and exact spawn/invocation mechanism to WorkExecutionBinding.",
+      "Bind ChildPolicyEnvelope independently per actor class because loaded settings/hooks/cwd/tool surfaces may differ.",
+      "NATIVE_SUBAGENT_RUNTIME_PASS must not imply HEADLESS_SESSION_CHILD_RUNTIME_PASS, and the converse also fails.",
+      "Voice acceptance must either executably migrate onto one actor class or prove every actor class actually retained by Frankenstein 2.0.",
+      "Completion receipts must originate from the same actor class, generation and invocation lineage that executed the work."
+    ],
+    "new_gate": "NCX-ACTORCLASS-PAIRED-DIFFERENTIAL",
+    "highest_information_discriminator": "After current control-sync/quiescence prerequisites are satisfied, run the same harmless bounded work intent once through direct headless claude -p and once through the native subagent path; capture exact installed build, loaded settings/hooks provenance, cwd/isolation, actor/task/tool identities, terminal evidence and policy-envelope digest for differential comparison."
+  },
+  "contradictions_preserved": [
+    {
+      "id": "TW5-CONTRADICTION-NATIVE-GATE-VS-VOICE-HEADLESS-017",
+      "a": "Triggerword-4 native-child contracts correctly demand native actor/task/invocation identity before native-child runtime credit.",
+      "b": "Current donor Voice delegation directly launches/resumes a headless claude -p session and does not source-prove native SubagentStart/SubagentStop lineage.",
+      "resolution": "DO_NOT_SMOOTH; SPLIT_EXECUTION_ACTOR_CLASS_AND_TEST_SEPARATELY"
+    }
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "parallel_delta_reconciliation": "PASS_AT_SOURCE_AND_DESIGN_SCOPE",
+    "headless_session_runtime": 0,
+    "native_subagent_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "First satisfy current 9.13 control-sync/quiescence prerequisites. Then execute the NCX-ACTORCLASS-PAIRED-DIFFERENTIAL harmless probe and admit actor-class-specific WorkExecutionBinding + ChildPolicyEnvelope + invocation/effect/completion receipts."
+}

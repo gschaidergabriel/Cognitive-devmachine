@@ -1,0 +1,37 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13AD_NON_AUTHORITY",
+  "timestamp_local": "2026-08-28T18:46:20+07:00",
+  "authority_change": false,
+  "material_finding": "The exact GRID10 SIGKILL independent-replacement v3 ordinary-dispatch chain is now source-complete on main: canonical dispatch spec, create-only g0000 claim, and a self-hosted Linux/X64 clay-direct-dev runner exist with provider_calls_allowed=0, secret_lookups_allowed=0, Physical-GRID10 credit ceiling 0, and Whole-HCU credit ceiling 0. No matching dispatch result receipt exists and repository issue search found no matching singleton trigger issue. Earlier GitHub-hosted v3 workflow execution remains infrastructure-negative with a completed failure job whose step list is empty, so it mints no runtime credit.",
+  "evidence_boundary": {
+    "grid10_v3_dispatch_source_ready": true,
+    "grid10_v3_singleton_claim_present": true,
+    "grid10_v3_trigger_issue_observed": false,
+    "grid10_v3_result_receipt_observed": false,
+    "grid10_v3_repository_bound_runtime_pass": false,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "provider_calls_authorized": 0,
+    "secret_lookups_authorized": 0
+  },
+  "steering": [
+    "DO_NOT_INCREMENT_RETRY_GENERATION_OR_CREATE_DUPLICATE_TRIGGER_WHILE_G0000_HAS_NO_TERMINAL_RESULT",
+    "NEXT_GRID10_ACTION_IS_EXACTLY_ONE_SINGLETON_ISSUE_FOR_DISPATCH_KEY_grid10-sigkill-independent-replacement-v3-g0000_IF_AND_ONLY_IF_RECHECK_CONFIRMS_NO_MATCHING_ISSUE_AND_NO_RESULT_RECEIPT",
+    "TRIGGER_BODY_MUST_BIND_dispatch_schema_CLAY_ORDINARY_DISPATCH_v1_AND_EXACT_DISPATCH_KEY_G0000",
+    "SELF_HOSTED_RUNNER_MUST_EXECUTE_ONLY_CURRENT_MAIN_LOCKED_SOURCE_AND_TEST_BLOBS_AND_PERSIST_BOUNDED_RESULT_OR_FAIL_CLOSED",
+    "A_PASS_MAY_MINT_ONLY_GRID10_CRASH_INDEPENDENT_REPLACEMENT_COMPONENT_CREDIT; PHYSICAL_GRID10_AND_WHOLE_HCU_REMAIN_ZERO_BECAUSE_WORKER_IS_STILL_PARENT_OWNED",
+    "P0_BOOTSTRAP_V2_CONTROL_SYNC_AND_REPOSITORY_BOUND_QUIESCENCE_V2_GE90S_REMAINS_UNCHANGED_AND_OUTRANKS_ANY_RUNTIME_PROMOTION",
+    "FREE_ONLY_HARD_OFF_NO_PAID_FALLBACK_REMAINS_UNCHANGED",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_AND_MODEL_CHECKPOINT_ANCESTRY_REMAIN_FAIL_CLOSED",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "provider_authority_epoch": "9.13",
+  "free_only": true,
+  "no_paid_fallback": true,
+  "together_forbidden": true,
+  "frank_harness": "DO_NOT_MODIFY"
+}

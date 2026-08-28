@@ -1,0 +1,143 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:53:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "STOP_HOOK_AUTHORITY_REBIND_AND_DIRECT_DONOR_CROSSCHECK",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "design": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_sha_before_checkpoint": "65b62d3e93f16213b3d010c57f6828529070cd37"
+  },
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_resolution": {
+    "bootstrap_minimal_schema": "8.78",
+    "operative_supervisor_pointer": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_delta_needs_review": true,
+    "resolution": "OPERATIVE_EXECUTION_AUTHORITY_REMAINS_BOOTSTRAP_SELECTED_8_78; 9.13AC_IS_USED_ONLY_AS_CURRENT_FORENSIC_FRONTIER_EVIDENCE_UNTIL_ADMITTED",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes_admitted_by_current_inbox": false,
+    "free_swarm_owner_emergency_stop": true,
+    "non_provider_local_or_sandbox_validation_allowed": true,
+    "together": "FORBIDDEN"
+  },
+  "inbox_scan": {
+    "latest_packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T104200Z_5641dc6_GPT56SOL_STOP_HOOK_LLM_BOUNDARY.json",
+    "latest_packet_id": "TW5-PACKET-20260828T104200Z-STOP-HOOK-LLM-BOUNDARY-GPT56SOL",
+    "latest_packet_already_consumed": true,
+    "unconsumed_packets": [],
+    "disposition": "NO_NEW_PACKET_NO_DUPLICATE_INGEST"
+  },
+  "direct_source_crosscheck": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "33-48",
+      "source_kind": "SPEC",
+      "finding": "Hard boundary declares that no LLM call may occur in a hook and that model output never writes unified.db directly."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4820-5065",
+      "source_kind": "LIVE_CODE",
+      "finding": "Stop cognition path performs a synchronous configurable Ollama /api/generate call; it chooses the newest same-session retrieval episode lacking modell:relevanz feedback and applies model-derived credit through MicroClay._apply_credit."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "8840-8898",
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "Stop calls _kognition_richten_hook before _gw_absicht_schreiben, architekt_governance_zug and _statuszeile_warten."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "8560-8665,9025-9105",
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "cmd_hook arms one event-wide SIGALRM; _HookTimeout is handled outside event dispatch, so an interrupted synchronous cognition call returns through the outer handler rather than resuming later Stop statements."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-STOP-HOOK-CONTRACT-CONTRADICTION-v2",
+      "subsystem": "hook-cognition-boundary",
+      "kind": "SPEC_VS_LIVE_CODE_CONTRADICTION",
+      "what_it_does": "Preserves the explicit contradiction between the no-LLM-in-hook invariant and the live synchronous Stop-hook Ollama relevance judge.",
+      "runtime_reachable": true,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-STOP-TIMEOUT-BOOKKEEPING-SKIP-v1",
+      "subsystem": "hook-time-budget",
+      "kind": "SOURCE_GROUNDED_CONTROL_FLOW_INFERENCE",
+      "what_it_does": "A Stop event-wide timeout during synchronous cognition transfers control to the outer timeout handler; later Stop bookkeeping in the same invocation is not resumed.",
+      "runtime_reachable": null,
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.98
+    },
+    {
+      "atom_id": "TW5-RETRIEVAL-NEWEST-SAME-SESSION-BINDING-v1",
+      "subsystem": "retrieval-credit-identity",
+      "kind": "LIVE_CODE_WITH_UNVERIFIED_RACE_HYPOTHESIS",
+      "what_it_does": "Model relevance is attached by selecting the newest open retrieval episode for session_id, not by an immutable retrieval/turn identity supplied by the Stop event.",
+      "runtime_reachable": true,
+      "target_2_0_action": "REPAIR",
+      "confidence": 1.0
+    }
+  ],
+  "contradictions_preserved": [
+    "SPEC says no LLM call in any hook; LIVE_CODE performs synchronous local-model inference in Stop.",
+    "The previous Triggerword-5 delta bound its evidence to an older canonical main and described 9.13 as authority; current canonical BOOTSTRAP_MINIMAL selects 8.78 while current inbox labels 9.13AC NON_AUTHORITY and needs_review=true.",
+    "Session-scoped newest-open retrieval selection is source-visible, but wrong-round credit under overlapping or reordered Stops remains unobserved at runtime."
+  ],
+  "architecture_effect": {
+    "mechanism": "HookCognitionBoundary/v2",
+    "rule": "Deterministic hook completion/bookkeeping must not depend on synchronous model inference. Model-derived retrieval relevance is noncanonical candidate evidence and must bind immutable retrieval_id, turn/causal generation and exact model-runtime identity before learning or causal credit.",
+    "preserve": [
+      "modell:relevanz remains a distinct non-human evidence class",
+      "the model does not directly write canonical truth",
+      "failure to obtain a model judgment produces no fabricated relevance result",
+      "small local relevance judging remains reusable as a GRID/HCU cognition primitive"
+    ],
+    "repair": [
+      "compile a typed RetrievalRelevanceCandidate outside deterministic Stop completion authority",
+      "bind candidate and result to immutable retrieval_id plus turn/causal generation and candidate-text digest",
+      "bind exact model/checkpoint/runtime/endpoint identity to the returned model-derived evidence",
+      "enforce endpoint locality/capability policy instead of treating a localhost default as authority",
+      "prove Stop bookkeeping completes when cognition is disabled, slow, cold or unreachable",
+      "prove two same-session retrieval episodes cannot receive each other's relevance result under reverse completion order"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "feeds_triggerword_4": {
+    "required_actions": [
+      "defer model relevance out of the Stop critical path",
+      "add immutable retrieval/turn/generation/model-runtime binding",
+      "add external or donor-side tests without modifying Frank's own Harness",
+      "test reverse-order overlapping same-session retrieval completion",
+      "test slow/unreachable local model while deterministic Stop bookkeeping still completes"
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "authority_provenance_rebind": "PASS_SOURCE_SCOPE",
+    "new_worker_packet_ingest": "NO_NEW_PACKET",
+    "installed_stop_runtime": 0,
+    "latency_acceptance": 0,
+    "concurrency_acceptance": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4/external-validation lane only: execute build-bound Stop latency/ordering and retrieval-identity discriminators without modifying Frank's Harness. Triggerword 5 performs no runtime/VPS/provider execution for this checkpoint.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false
+}

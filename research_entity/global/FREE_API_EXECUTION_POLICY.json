@@ -408,16 +408,16 @@
   },
   "receipt_schema_capability_advertisement": {
     "checked_at": "2026-08-28",
-    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.3 advertises both the execution receipt schema version and the active Unicode Character Database version before credential use, network access or model execution. Consumers can reject an unsupported provenance contract during capability inspection instead of discovering it only after execution.",
+    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.4 advertises both the execution receipt schema version and the active Unicode Character Database version before credential use, network access or model execution. Consumers can reject an unsupported provenance contract during capability inspection instead of discovering it only after execution.",
     "sources": [
       "https://docs.python.org/3/library/unicodedata.html#unicodedata.unidata_version",
       "https://www.unicode.org/versions/"
     ],
     "external_evidence": "Python exposes the exact UCD version used by unicodedata. Unicode states that version changes can alter property-dependent program behavior and recommends a full three-field version when precise character-property behavior matters. Advertising the execution schema in the capability record is a local FRANK protocol rule derived from those versioned dependencies, not an external Unicode or NVIDIA requirement.",
-    "internal_measurement": "After execution receipts moved to schema 1.2, the capability receipt remained schema 1.1 and exposed neither the execution_receipt_schema_version nor unicode_database_version. A consumer inspecting only capabilities therefore could not determine the post-execution record contract. Shared schema constants now prevent literal drift, and capability schema 1.3 exposes both values from the same runtime that constructs execution receipts.",
+    "internal_measurement": "After execution receipts moved to schema 1.2, the capability receipt remained schema 1.1 and exposed neither the execution_receipt_schema_version nor unicode_database_version. A consumer inspecting only capabilities therefore could not determine the post-execution record contract. Shared schema constants now prevent literal drift, and capability schema 1.4 retains both values from the same runtime that constructs execution receipts.",
     "executable_evidence": "test_capability_receipt_advertises_execution_schema_provenance",
     "counterhypothesis": "Capability and execution receipts are independently versioned, so consumers can infer the execution contract from source code; rejected because capability inspection is the runtime contract, the source or runtime version is absent from that receipt, and a remote consumer need not possess identical source bytes.",
-    "uncertainty": "This is one-way advertisement, not bidirectional negotiation, consumer acknowledgement, host authentication or proof that deployed code matches reviewed source. Older capability consumers must explicitly accept the additive schema-1.3 contract."
+    "uncertainty": "This is one-way advertisement, not bidirectional negotiation, consumer acknowledgement, host authentication or proof that deployed code matches reviewed source. Older capability consumers must explicitly accept the additive schema-1.4 contract."
   },
   "model_availability_capability_scope": {
     "checked_at": "2026-08-28",
@@ -433,6 +433,20 @@
     "executable_evidence": "test_capability_receipt_does_not_infer_model_availability",
     "counterhypothesis": "A configured free NVIDIA endpoint implies every syntactically valid requested model is available; falsified by NVIDIA's simultaneous model-specific Available and Deprecated states.",
     "uncertainty": "This change improves claim scope but does not discover a usable model. A future cost-zero model discovery protocol must bind a fresh model-list or catalog observation to its endpoint, time and model identifier without promoting partner or paid availability. No NVIDIA credential is present on this host, so no live probe or model execution was attempted."
+  },
+  "provider_route_scope": {
+    "checked_at": "2026-08-28",
+    "claim": "A configured route selects only an eligible provider endpoint, not a concrete available model. FREE_API_CAPABILITY_RECEIPT schema 1.4 therefore marks every route with selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/api-reference.html",
+      "https://docs.api.nvidia.com/nim/reference/models-1",
+      "https://build.nvidia.com/models"
+    ],
+    "external_evidence": "NVIDIA documents GET /v1/models as a separate operation that lists models currently loaded and available for inference, while its model catalog presents model-specific endpoints and availability. Selecting the NVIDIA provider endpoint is therefore not equivalent to observing any particular model in that endpoint's current model set.",
+    "internal_measurement": "With a syntactically valid NVIDIA credential, the prior route returned selected=nvidia while every unprobed inventory row correctly retained model_availability_verified=false. Because the route omitted its selection scope and availability state, a consumer could overread selected as model-ready. The regression first raised KeyError for selection_scope; the fixed route explicitly reports provider_endpoint scope and false model availability.",
+    "executable_evidence": "test_route_selection_is_scoped_to_provider_endpoint",
+    "counterhypothesis": "Choosing an eligible provider route also proves the requested model is available; falsified because NVIDIA exposes current model availability through a distinct /v1/models observation and the capability route performs no model-bound network probe.",
+    "uncertainty": "This field closes an inference gap but performs no discovery. A future zero-cost model probe must bind provider origin, exact model identifier, observation time and cost status; a later successful execution remains request-bounded rather than a durable availability guarantee."
   },
   "model_availability_execution_evidence": {
     "checked_at": "2026-08-28",
@@ -1123,8 +1137,9 @@
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
     "Every FREE_API_EXECUTION_RECEIPT schema 1.3 record includes the exact Unicode Character Database version used for General_Category-based semantic admission; version-dependent classification cannot remain implicit provenance.",
-    "Every FREE_API_CAPABILITY_RECEIPT schema 1.3 record advertises the execution receipt schema and active Unicode Character Database version before execution; an unsupported provenance contract can fail during capability inspection.",
+    "Every FREE_API_CAPABILITY_RECEIPT schema 1.4 record advertises the execution receipt schema and active Unicode Character Database version before execution; an unsupported provenance contract can fail during capability inspection.",
     "Provider-level zero-cost endpoint evidence never proves concrete model availability; every unprobed capability inventory row records model_availability_verified=false.",
+    "A selected capability route identifies only an eligible provider endpoint; it records selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
     "Execution model availability is verified only by a fully typed success response reaching VERIFIED and DONE; every other outcome records model_availability_verified=false.",
     "The serialized UTF-8 text-chat JSON request is at most 2000000 bytes; oversized payloads fail before runtime-environment snapshot, credential lookup or network access, while the exact boundary remains accepted.",
     "Every Chat Completions request explicitly sets max_tokens to 4096, bounding the combined reasoning and visible generation budget; finish_reason length remains unverified and requires changed input or budget rather than blind replay.",

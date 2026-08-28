@@ -26,7 +26,7 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.3"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.4"
 EXECUTION_RECEIPT_SCHEMA_VERSION = "1.3"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
@@ -424,6 +424,8 @@ def _route_from_inventory(rows: list[dict]) -> dict:
     return {
         "selected": eligible[0]["provider_id"] if eligible else None,
         "candidates": [row["provider_id"] for row in eligible],
+        "selection_scope": "provider_endpoint",
+        "model_availability_verified": False,
         "zero_cost_only": ZERO_COST_ONLY,
         "denied_providers": sorted(DENIED_PROVIDERS),
         "payment_blocked_providers": blocked,

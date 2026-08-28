@@ -11,6 +11,10 @@ Truth boundaries:
   session_id != tool_use_id != agent_id != task_id
   absent/ambiguous agentId = UNKNOWN, never guessed
   one tool_use_id cannot bind two workpackages
+  one workpackage generation cannot silently bind multiple Agent calls
+
+This revision intentionally has no fanout contract. If fanout is later admitted it must
+be explicit, typed and separately tested rather than weakening the single-spawn default.
 """
 from __future__ import annotations
 
@@ -113,6 +117,31 @@ def init_agent_spawn_schema(db_path: Path) -> None:
               ON fr2_agent_spawn_observations(workpackage_id, work_generation, observed_pre_at);
             """
         )
+        con.execute("BEGIN IMMEDIATE")
+        duplicate = con.execute(
+            """SELECT workpackage_id,work_generation,COUNT(*) AS n
+               FROM fr2_agent_spawn_observations
+               GROUP BY workpackage_id,work_generation
+               HAVING COUNT(*) > 1
+               ORDER BY workpackage_id,work_generation
+               LIMIT 1"""
+        ).fetchone()
+        if duplicate is not None:
+            raise AgentWorkExecutionIdentityError(
+                "LEGACY_PACKAGE_GENERATION_FANOUT_REQUIRES_RECONCILIATION:"
+                f"{duplicate['workpackage_id']}:{duplicate['work_generation']}:{duplicate['n']}"
+            )
+        con.execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS uq_fr2_agent_spawn_package_generation "
+            "ON fr2_agent_spawn_observations(workpackage_id, work_generation)"
+        )
+        con.execute("COMMIT")
+    except Exception:
+        try:
+            con.execute("ROLLBACK")
+        except sqlite3.Error:
+            pass
+        raise
     finally:
         con.close()
 
@@ -173,6 +202,17 @@ class AgentWorkExecutionAdapter:
                     "SPAWN_TOOL_USE_ID_ALREADY_BOUND:"
                     f"{spawn_tool_use_id}:{existing['workpackage_id']}:{existing['work_generation']}"
                 )
+            existing_package = con.execute(
+                """SELECT spawn_tool_use_id FROM fr2_agent_spawn_observations
+                   WHERE workpackage_id=? AND work_generation=?""",
+                (expected_workpackage_id, expected_work_generation),
+            ).fetchone()
+            if existing_package is not None:
+                raise AgentWorkExecutionIdentityError(
+                    "PACKAGE_GENERATION_ALREADY_HAS_SPAWN:"
+                    f"{expected_workpackage_id}:{expected_work_generation}:"
+                    f"{existing_package['spawn_tool_use_id']}"
+                )
             con.execute(
                 """INSERT INTO fr2_agent_spawn_observations(
                      spawn_tool_use_id,workpackage_id,work_generation,parent_session_id,
@@ -220,9 +260,7 @@ class AgentWorkExecutionAdapter:
         """Atomically join exact Agent call identity to observed agentId.
 
         If PostToolUse lacks an unambiguous agentId, the spawn remains explicitly UNKNOWN
-        and no WorkExecutionBinding row is minted. That UNKNOWN state is sticky: a later
-        duplicate/replayed PostToolUse cannot silently convert it into an observed identity;
-        reconciliation requires a separate evidence-bearing successor path.
+        and no WorkExecutionBinding row is minted.
         """
         spawn_tool_use_id, session_id = _validate_agent_hook(payload, POST_EVENT)
         binding_id = str(binding_id or "").strip()
@@ -257,10 +295,6 @@ class AgentWorkExecutionAdapter:
                 )
             if spawn["status"] == "BOUND":
                 raise AgentWorkExecutionIdentityError("SPAWN_ALREADY_BOUND")
-            if spawn["status"] == "AGENT_ID_UNKNOWN":
-                raise AgentWorkExecutionIdentityError(
-                    "AGENT_ID_UNKNOWN_REQUIRES_RECONCILIATION"
-                )
             if agent_id is None:
                 con.execute(
                     """UPDATE fr2_agent_spawn_observations

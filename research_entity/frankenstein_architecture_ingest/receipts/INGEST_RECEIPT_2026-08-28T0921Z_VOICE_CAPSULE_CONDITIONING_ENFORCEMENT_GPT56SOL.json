@@ -1,0 +1,70 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "created_at": "2026-08-28T09:21:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/voice-capsule-conditioning-forensics",
+  "classification": "SOURCE_FORENSICS_AND_APPEND_ONLY_ARCHITECTURE_FUSION",
+  "routing": {
+    "status": "VERIFIED",
+    "directive_path": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md"
+  },
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main_sha": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "source": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "files": [
+      "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py"
+    ]
+  },
+  "write": {
+    "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0921Z_VOICE_CAPSULE_CONDITIONING_ENFORCEMENT_GPT56SOL.json",
+    "architecture_delta_commit": "c3fc9c0a8e353520238fa791005b2af33b180933",
+    "central_ingest_state_mutated": false
+  },
+  "finding": {
+    "contradiction_id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+    "status": "SOURCE_CONFIRMED_OPEN_ENFORCEMENT_GAP",
+    "summary": "VoiceSessionCapsule is populated/refreshed with presence, visual state, GWT winning_intent, memory refs, permissions/privacy and goals/effects, but the actual Realtime response.create conditioning path serializes only persona + _zustandstext (+ optional hint), not the capsule. Missing presence also collapses to user_present=True inside capsule arbitration.",
+    "runtime_credit_delta": 0
+  },
+  "design_fusion": {
+    "component": "VoiceContextCompiler",
+    "purpose": "Project only bounded, relevant, provenance/epistemic/privacy/freshness-bearing capsule fields into the exact per-response conditioning boundary without turning context into authority or a second truth store.",
+    "required_runtime_acceptance": [
+      "compiled_context_digest bound to response/invocation identity",
+      "field lesion/shuffle tests",
+      "UNKNOWN-presence regression",
+      "privacy projection regression",
+      "authority non-grant regression",
+      "deterministic token bound"
+    ]
+  },
+  "coordination": {
+    "main_archaeology_bridge_reused_not_duplicated": true,
+    "effect_authority_rebind_reused_not_duplicated": true,
+    "central_state_mixed_freshness_preserved": true,
+    "note": "Append-only delta/receipt chosen because central INGEST_STATE is concurrently mixed-freshness and whole-file replacement could drop parallel frontier work."
+  },
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SOURCE_SCOPE",
+    "architecture_fusion": "PASS_AT_APPEND_ONLY_DESIGN_SCOPE",
+    "voice_conditioning_runtime": 0,
+    "provider_execution": 0,
+    "physical_grid10_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword 4 must wire a deterministic VoiceContextCompiler into the exact Realtime per-response conditioning path and produce source-bound lesion/shuffle/UNKNOWN/privacy/token-bound receipts before any voice-cortex runtime credit."
+}

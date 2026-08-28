@@ -1,0 +1,117 @@
+{
+  "schema": "TRIGGERWORD4_COMPLETION_TEST_RECEIPT_BINDING_HARDENING/v1",
+  "trigger": "triggerwort 4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation",
+  "routing_self_test": "PASS",
+  "scope": "SOURCE_AND_LOCAL_AUTHORING_VALIDATION_ONLY",
+  "authority": {
+    "canonical_main_observed": "a96dc388fe6e8b2259ff22bb7b44d9463381e9b9",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AF_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_execution": "HARD_OFF",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "paid_fallback": false,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "directive_sources": {
+    "grid10_runtime_directive_blob": "9469f0a6be99c2af2dfad25386c4196ffc9101a4",
+    "frankenstein2_assembly_directive_blob": "94cc8b6c3f1f03bfacb48d4a24d11429d0bad6cb",
+    "sparse_world_substrate_directive_blob": "d0e6b698193f75099df57d4db31c22c5fb90589b"
+  },
+  "donor": {
+    "repository": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "preserved_as_baseline": true
+  },
+  "continuation": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "branch_head_observed_before_receipt": "f1f9fc321222877e21397e4b41513fae3a9f2c33",
+    "retained_pr": 2118,
+    "source_commits_confirmed_ancestor_of_observed_head": true,
+    "ahead_from_test_commit": 6,
+    "behind_from_test_commit": 0
+  },
+  "finding": {
+    "class": "COMPLETION_TEST_RECEIPT_TRANSPLANT_BINDING_GAP",
+    "basis": "Completion Verifier v2 already bound test receipt schema, invocation, generation and source, but the optional TestReceipt did not bind the request digest or the exact execution result and did not require a test-plan or test-runner provenance identity. A formally valid PASS receipt could therefore be structurally underbound relative to the execution it was claimed to validate.",
+    "supervisor_focus": "P1_HARDEN_COMPLETION_VERIFIER_TO_TYPED_SUCCESS_ALLOWLIST_AND_STRUCTURED_EXECUTION_RECEIPTS",
+    "counterhypothesis": "Invocation+generation+source identity may be sufficient if invocation IDs are perfectly immutable and globally unique. The stronger request/result/test-plan/provenance binding is retained because it cheaply rejects receipt transplantation and legacy unbound evidence at the validator boundary without creating a second completion authority."
+  },
+  "source_delta": {
+    "implementation_path": "tools/frankenstein2_completion_verifier_v2.py",
+    "implementation_commit": "3ddfb1ba3fcd5e039702d87a9266cf7e57b65acf",
+    "implementation_blob_sha": "b808d469c94739a51c36e5dfe591b2a38c78961b",
+    "test_path": "tests/test_frankenstein2_completion_verifier_v2.py",
+    "test_commit": "8917b9e701100dab63f619c0700f50ca367e44f9",
+    "test_blob_sha": "0a457f5fa9349dd13b54dac3ba3db283f14cd69d",
+    "new_test_receipt_bindings": [
+      "request_digest must equal ExpectedInvocation.request_digest",
+      "result_digest must equal the exact ExecutionReceipt.result_digest",
+      "test_plan_digest must be present",
+      "test executable_id and environment_id must be present"
+    ],
+    "new_fail_closed_reasons": [
+      "TEST_REQUEST_MISMATCH",
+      "TEST_RESULT_TRANSPLANT",
+      "MISSING_TEST_PLAN_DIGEST",
+      "MISSING_TEST_PROVENANCE"
+    ],
+    "compatibility_boundary": "New TestReceipt fields are append-only with empty defaults so existing constructors remain syntactically constructible; supplied legacy/unbound TestReceipts now fail closed rather than silently closing completion."
+  },
+  "adversarial_tests": {
+    "total_defined_in_completion_verifier_suite": 20,
+    "local_authoring_passed": 20,
+    "local_authoring_failed": 0,
+    "new_cases": [
+      "test request transplant rejected",
+      "test result transplant rejected",
+      "missing test-plan binding rejected",
+      "missing test provenance rejected",
+      "legacy unbound test receipt fails closed",
+      "nonzero exit rejected even when textual execution status says SUCCEEDED"
+    ],
+    "classification": "LOCAL_AUTHORING_DETERMINISTIC_UNIT_CHECK_ONLY_NOT_REPOSITORY_BOUND_RUNTIME_EVIDENCE"
+  },
+  "coordination": {
+    "issue_2122": {
+      "dispatch_key": "grid10-runtime-quiescence-v2-g0000",
+      "terminal_result_observed": false,
+      "duplicate_dispatch_created": false,
+      "generation_advanced": false
+    },
+    "issue_2121": {
+      "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+      "workflow_run_id": 33168491753,
+      "last_direct_observed_workflow_status": "queued",
+      "terminal_result_observed": false,
+      "duplicate_dispatch_created": false,
+      "generation_advanced": false
+    },
+    "checkpoint_overwritten": false,
+    "reason": "Parallel Triggerword-4 workers were actively advancing the checkpoint; this delta is preserved append-only to avoid clobbering newer recovery/effect-identity work."
+  },
+  "execution_boundary": {
+    "provider_calls_performed": 0,
+    "provider_secret_lookups_performed": 0,
+    "together_used": false,
+    "paid_fallback_used": false,
+    "frank_harness_modified": false,
+    "vps_runtime_pass_claimed": false,
+    "repository_bound_test_execution_observed_for_this_delta": false
+  },
+  "credit": {
+    "completion_test_receipt_source_hardening": 1,
+    "completion_runtime": 0,
+    "frankenstein2_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Do not duplicate issue 2122 or 2121. On the next admitted non-provider repository-bound deterministic execution surface, execute the exact committed completion-verifier suite including the new receipt-transplant tests and the existing lifecycle/interleaving tests. If green, grant only bounded completion-validator component evidence; then bind a real test receipt at the authoritative CompletionGate only where test evidence is actually required and source/result/provenance identities are observed rather than fabricated. Physical GRID10, Frankenstein-2.0, HCU and EntityOS runtime credits remain zero until their separate executable gates close."
+}

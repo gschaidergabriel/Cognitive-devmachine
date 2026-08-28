@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "delta_id": "TW5-DELTA-20260828T091547Z-REALTIME-TOOL-AUTHORITY-FEEDFORWARD-GPT56SOL",
+  "created_at": "2026-08-28T09:15:47Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/realtime-tool-authority-feedforward",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "classification": "CURRENT_DONOR_SOURCE_CROSSCHECK_NO_RUNTIME_CREDIT",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "ref": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_before_write": "f20248b6035b50c05525d5c481c27852e0d14b0c"
+  },
+  "authority": {
+    "schema": "9.13",
+    "canonical_main_observed": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "together": "FORBIDDEN"
+  },
+  "packet_ingest": {
+    "new_unconsumed_packets": [],
+    "action": "NO_DUPLICATE_PACKET_CONSUMPTION",
+    "note": "Latest inbox packet TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL is already recorded as consumed. This delta is a direct donor-source crosscheck and Triggerword-4 feed-forward gap closure."
+  },
+  "source_atoms": [
+    {
+      "atom_id": "TW5-RT-AUTH-001-DECLARED-RESEARCH-INTENT-POLICY",
+      "subsystem": "voice_realtime_research_tool_policy",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 480,
+      "line_end": 497,
+      "source_kind": "SPEC",
+      "what_it_does": "The model-facing frank_forschung tool description declares that research is only to be invoked on an explicit user request and never proactively; neu_anstossen is described as starting a new research request.",
+      "authority_class": "MODEL_FACING_DECLARATION_NOT_DETERMINISTIC_ADMISSION",
+      "runtime_reachable": true,
+      "known_counterevidence": [
+        "The dispatch implementation below does not receive or validate a fresh user-intent decision object before accepting neu_anstossen."
+      ],
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-RT-AUTH-002-RESEARCH-DISPATCH-NO-FRESH-INTENT-GATE",
+      "subsystem": "voice_realtime_research_tool_enforcement",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 521,
+      "line_end": 530,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "_tool_forschung accepts aktion=neu_anstossen when frage is non-empty and immediately hands the question to the asynchronous bridge. It contains no deterministic check that the current user explicitly requested research and no capability/privacy/economic admission object.",
+      "authority_class": "CURRENT_DONOR_SOURCE_EXTERNAL_REQUEST_PRECURSOR_WITHOUT_TYPED_ADMISSION",
+      "runtime_reachable": true,
+      "failure_mode": "A model-issued tool call can satisfy the mechanical dispatcher even when the declared explicit-user-only policy is not represented as fresh deterministic evidence at the dispatch boundary.",
+      "known_counterevidence": [
+        "Normal model behavior may usually obey the tool description; that is behavioral alignment, not fail-closed authority enforcement."
+      ],
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-RT-AUTH-003-MEMORY-WRITE-NO-TYPED-ADMISSION",
+      "subsystem": "voice_realtime_memory_write",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 539,
+      "line_end": 545,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "_tool_erinnerung_schreiben validates only that subject and value are non-empty, then calls the bounded stern.py conversational-memory writer with quelle=realtime-tool. No typed provenance/epistemic/privacy/generation admission is enforced at this call boundary.",
+      "authority_class": "CURRENT_DONOR_SOURCE_CANONICAL_INTERNAL_MUTATION_PRECURSOR",
+      "runtime_reachable": true,
+      "failure_mode": "A plausible or misrecognized/model-generated conversational claim can be durably stored without a first-class MemoryAdmission decision that distinguishes observation, user statement, inference, third-party speech or uncertain transcription.",
+      "known_counterevidence": [
+        "The downstream stern.py writer is bounded to the conversational-memory table rather than arbitrary UnifiedDB mutation; bounded scope reduces blast radius but does not provide epistemic admission semantics."
+      ],
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.98
+    },
+    {
+      "atom_id": "TW5-RT-AUTH-004-RESEARCH-BRIDGE-IS-EXTERNAL-SUBMISSION-PATH",
+      "subsystem": "voice_realtime_research_external_bridge",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 832,
+      "line_end": 840,
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "_forschung_taetigkeit describes and invokes the real ChatGPT burst research bridge through stern chatgpt-senden. It is therefore not equivalent to a local read-only cognition operation.",
+      "authority_class": "EXTERNAL_EFFECT_REQUEST_PATH_SOURCE_ONLY",
+      "runtime_reachable": true,
+      "failure_mode": "If provider/external execution were admitted in a future authority mode, the model-facing intent policy alone would not be sufficient deterministic pre-submission authority.",
+      "known_counterevidence": [
+        "Current supervisor 9.13 keeps provider routes HARD_OFF, and this Triggerword-5 pass did not invoke the path."
+      ],
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.99
+    }
+  ],
+  "crosscheck_against_current_design": {
+    "native_child_addendum": "research_entity/global/TRIGGERWORD_4_NATIVE_CHILD_EXECUTION_BINDING_AND_POLICY_ENVELOPE_ADDENDUM.md",
+    "finding": "The current NCX contract correctly binds delegated child identity, ChildPolicyEnvelope and invocation-level effect/completion lineage, but it does not explicitly define promotion gates for top-level Realtime research submission and conversational-memory admission. These are distinct pre-child/pre-external authority boundaries and should not be hidden inside NCX-06.",
+    "duplicate_status": "NON_DUPLICATE_FEEDFORWARD_DELTA"
+  },
+  "frankenstein_2_architecture_delta": {
+    "law": [
+      "MODEL_FACING_TOOL_POLICY != DETERMINISTIC_AUTHORITY",
+      "HUMAN_INTENT_DECISION != CAPABILITY_PRIVACY_ECONOMIC_ADMISSION",
+      "MEMORY_WRITE != FACT_ADMISSION",
+      "READ_ONLY_TOOL != INTERNAL_MUTATION != DELEGATED_EXECUTION != EXTERNAL_SUBMISSION != SESSION_CONTROL"
+    ],
+    "new_trigger4_gate_family": "RTG_REALTIME_TOOL_AUTHORITY",
+    "required_gates": [
+      {
+        "id": "RTG-01",
+        "name": "Realtime tool class inventory",
+        "acceptance": "Every declared Realtime tool/submode is typed as READ_ONLY, CANONICAL_INTERNAL_MUTATION, DELEGATED_EXECUTION_REQUEST, EXTERNAL_EFFECT_REQUEST or SESSION_CONTROL; mixed tools such as frank_forschung retain submode-specific classification."
+      },
+      {
+        "id": "RTG-02",
+        "name": "Research request admission",
+        "acceptance": "frank_forschung/neu_anstossen requires a fresh deterministic ResearchRequestCandidate bound to current user transcript/event plus HumanIntentDecision, capability scope, privacy scope and economic/provider admission before external submission. Current HARD_OFF must deterministically deny."
+      },
+      {
+        "id": "RTG-03",
+        "name": "Adversarial no-user-request deny",
+        "acceptance": "A synthetically/model-issued neu_anstossen call without a fresh matching user research request is denied before chatgpt_senden or successor submission, with a typed non-submission receipt."
+      },
+      {
+        "id": "RTG-04",
+        "name": "MemoryAdmission",
+        "acceptance": "frank_erinnerung_schreiben successor produces MemoryCandidate then deterministic MemoryAdmission binding source event/transcript identity, provenance class, epistemic class, privacy tags and generation before durable commit."
+      },
+      {
+        "id": "RTG-05",
+        "name": "Misrecognition and third-party speech",
+        "acceptance": "Low-confidence, contradicted or third-party/misattributed speech cannot silently become durable self-memory; it is denied, quarantined or stored with explicit non-fact epistemic provenance according to policy."
+      },
+      {
+        "id": "RTG-06",
+        "name": "Session-control separation",
+        "acceptance": "frank_gespraech_beenden remains session control and cannot acquire canonical mutation or external-effect authority merely because it is a Realtime tool."
+      }
+    ]
+  },
+  "hypotheses": [
+    "Separating RTG top-level Realtime authority gates from NCX child gates will prevent model-facing descriptions from being mistaken for deterministic permission while retaining the donor's low-latency voice design.",
+    "MemoryCandidate -> MemoryAdmission can preserve useful conversational memory without requiring every voice turn to pass through external EffectGate semantics."
+  ],
+  "counterhypotheses": [
+    "The Realtime model/tool schema may obey explicit-user-only research instructions reliably enough in normal operation that a separate deterministic gate adds little practical safety.",
+    "The bounded conversational-memory table may be sufficiently non-authoritative that full typed MemoryAdmission is unnecessary overhead."
+  ],
+  "falsifiers": [
+    "Run a deterministic local harness that directly invokes the tool dispatcher with neu_anstossen but no matching user-intent token/event; the current donor should accept to the background bridge, while the 2.0 successor must deny before any external call.",
+    "Inject synthetic low-confidence or third-party transcript provenance into the 2.0 memory candidate path; if it can still produce an unqualified durable fact row, MemoryAdmission is ineffective.",
+    "Benchmark normal acknowledged memory capture before/after admission; reject a design that materially harms latency/usability without reducing misattribution/epistemic error."
+  ],
+  "negative_evidence": [
+    "No provider/external research execution occurred in this Triggerword-5 pass.",
+    "No VPS runtime test occurred in this Triggerword-5 pass.",
+    "No whole EntityOS/HCU, Realtime runtime, child runtime, provider path or training credit is granted by this source delta."
+  ],
+  "trigger4_feed": {
+    "action": "ADD_RTG_REALTIME_TOOL_AUTHORITY_GATE_FAMILY_TO_STAGE1_R2_SUCCESSOR_CONTRACT",
+    "relationship_to_ncx": "RTG governs top-level voice tool admission; NCX governs delegated child execution identity/policy/effects. frank_auftrag_stellen crosses RTG -> NCX and must preserve both lineages.",
+    "next_exact_discriminator": "Implement/test pure deterministic RTG dispatcher/admission harness under non-provider local validation; keep provider route HARD_OFF. Then Triggerword 4 may bind the same receipts into its executable Stage-1 path.",
+    "runtime_credit_change": 0,
+    "whole_product_credit_change": 0,
+    "training_credit_change": 0
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-2026-08-28-EFFECT-AUTHORITY-LINEAGE-FUSION",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "recorded_at": "2026-08-28T14:31:00+07:00",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_ref": "main",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_ingest": "7ef999d96b80759830a7edc138f3feb04509d3bf",
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AUTHORITY_LINEAGE_FUSION.json",
+  "architecture_delta_commit": "72d4d7252f748bbfef04bf656acdbd9828696752",
+  "packets_consumed": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
+      "status": "CONSUMED_CROSSCHECKED"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+      "status": "CONSUMED_CROSSCHECKED"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+      "status": "CONSUMED_WITH_ARCHIVE_SOURCE_REACHABILITY_BOUNDARY"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL",
+      "status": "CONSUMED_CROSSCHECKED"
+    }
+  ],
+  "crosschecks": [
+    "current donor stern.py exact source at pinned donor SHA",
+    "historical Project-Frankenstein ToolExecutor exact source at abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "historical Project-Frankenstein AgentLoop exact source at abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "repository code search found zero tool_use_id matches in current Frankenstein query",
+    "wache-koenig/freigabe claims retained as archived-source packet evidence; exact bytes were not reopened directly in this pass"
+  ],
+  "material_design_delta": [
+    "Treat historical pre-execution denial and current nonblocking stern journaling as complementary but incomplete lineages, not one mechanism.",
+    "Require immutable call-scoped invocation identity plus request digest and generation across admission, enforcement, execution, outcome, completion and re-entry.",
+    "Retire caller-controlled skip_approval as successor authority.",
+    "If owner approval is required, mint a separate short-lived scope-bound one-shot capability consumed by deterministic enforcement.",
+    "Use archived Bash watcher regex/ticket cases as donor regression fixtures, not complete EffectGate authority.",
+    "Preserve submitted-but-unknown outcome as OUTCOME_UNKNOWN and prohibit blind replay."
+  ],
+  "contradiction_updates": [
+    "TW5-CONTRADICTION-EFFECT-SEMANTICS-002 resolved as an explicit lineage split rather than a semantic inconsistency to smooth away.",
+    "TW5-CONTRADICTION-INVOCATION-IDENTITY-005 remains open and requires successor repair plus runtime scheduling discrimination.",
+    "TW5-CONTRADICTION-WACHE-REACHABILITY-004 remains open because archived source does not prove scheduler registration/runtime reachability.",
+    "TW5-CONTRADICTION-WACHE-COVERAGE-005 remains open because the archived watcher is Bash-only."
+  ],
+  "runtime_credit": {
+    "new_runtime_execution": false,
+    "frankenstein_2_runtime_credit": 0,
+    "entityos_hcu_runtime_credit_delta": 0,
+    "hcu_runtime_credit_delta": 0,
+    "jspace_model_runtime_credit_delta": 0,
+    "training_credit_delta": 0,
+    "provider_runtime_credit_delta": 0
+  },
+  "next_exact_gate": "Trace current Realtime tool/function-call dispatch into the effect boundary and bind Triggerword-4 to an immutable invocation-scoped typed Effect ABI with parallel/reverse-order/wrong-call/deny/cancel/outcome-unknown regressions."
+}

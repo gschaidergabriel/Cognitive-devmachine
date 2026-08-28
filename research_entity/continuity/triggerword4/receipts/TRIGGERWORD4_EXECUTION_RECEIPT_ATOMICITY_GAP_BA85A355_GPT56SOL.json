@@ -1,0 +1,75 @@
+{
+  "schema": "TRIGGERWORD4_EXECUTION_RECEIPT_ATOMICITY_GAP/v1",
+  "date": "2026-08-28",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "status": "SOURCE_GAP_OBSERVED_NONCANONICAL_NO_RUNTIME_CREDIT",
+  "routing": {
+    "exact_normalized_trigger_verified": true,
+    "mandatory_triggerword4_directives_fetched": true,
+    "continuation_not_restart": true,
+    "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "single_existing_pr": 2118,
+    "branch_head_observed": "ba85a355585f3122c8e123896453dcddaa307218"
+  },
+  "authority": {
+    "canonical_main_observed": "127041598242dd4ab755e3096e8d5c2484ea23d4",
+    "latest_supervisor_schema": "9.13",
+    "latest_supervisor_delta_observed": "9.13AG_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_execution": "HARD_OFF",
+    "paid_fallback": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "runtime_transport_reentry": {
+    "grid10_runtime_quiescence_issue": 2122,
+    "grid10_runtime_quiescence_state": "OPEN_NO_TERMINAL_RESULT_OBSERVED",
+    "grid10_sigkill_issue": 2121,
+    "grid10_sigkill_run": 33168491753,
+    "grid10_sigkill_run_state": "QUEUED_NO_TERMINAL_RESULT_OBSERVED",
+    "frankenstein2_bootstrap_v2_run": 33174696310,
+    "frankenstein2_bootstrap_v2_state": "QUEUED_NO_RUNNER_EXECUTION_OBSERVED",
+    "effect_invocation_ci_run": 33181297970,
+    "effect_invocation_ci_state": "COMPLETED_FAILURE_ZERO_EXECUTED_STEPS",
+    "classification": "SELF_HOSTED_OR_ACTIONS_EXECUTION_TRANSPORT_FAILURE_NOT_RUNTIME_SEMANTIC_RESULT",
+    "duplicate_dispatch_authorized": false,
+    "generation_advance_authorized": false
+  },
+  "source_finding": {
+    "lifecycle_path": "tools/frankenstein2_effect_lifecycle_v1.py",
+    "lifecycle_blob": "0d085b0c83c7cb0fa69ecb50a5bd1efd14848bde",
+    "dispatch_boundary_path": "tools/frankenstein2_effect_dispatch_boundary_v1.py",
+    "dispatch_boundary_blob": "4ec2e8680a50ad4b3efa2edd653c24fd4a423585",
+    "observed_behavior": "record_execution commits the base execution_receipts row in one BEGIN IMMEDIATE transaction; record_execution_v2_metadata then opens and commits a second BEGIN IMMEDIATE transaction. guarded_dispatch invokes those two persistence calls sequentially after the external dispatch callback returns.",
+    "failure_window": "A crash, storage error, process kill, or second-write failure after the first COMMIT can leave execution_receipts present while execution_v2_metadata is absent.",
+    "epistemic_effect": "Completion remains fail-closed because v2 completion validation requires the missing metadata, but the post-dispatch recovery/audit state becomes partial and cannot be described as one atomic execution receipt bundle.",
+    "counterhypothesis": "Late fail-closed completion rejection is sufficient and no atomic execution bundle is needed.",
+    "counterhypothesis_assessment": "REJECTED_AS_TOO_WEAK_FOR_RECOVERY_EXACTNESS: the system already treats SUBMITTED-and-later failures as outcome-unknown; splitting two identity-bearing execution records across commits creates avoidable ambiguity in that exact crash window.",
+    "runtime_semantics_exercised": false
+  },
+  "next_source_gate": {
+    "goal": "Persist the base ExecutionReceipt plus source_digest/duplicate_state/status metadata in one SQLite writer transaction after a returned dispatch observation.",
+    "required_regression": "Inject failure between the two logical inserts and prove rollback leaves neither execution_receipts nor execution_v2_metadata; successful path must commit both with one invocation/request/source/generation lineage.",
+    "compatibility_requirement": "Do not introduce a second effect authority or a second lifecycle store; fold the fix into the existing Frankenstein2 effect lifecycle/dispatch boundary lane.",
+    "execution_requirement": "Repository-bound deterministic execution remains required before test or runtime credit; zero-step Actions failure is not a semantic failure."
+  },
+  "coordination": {
+    "overlap_search": "NO_EXISTING_MATCH_FOR_EXECUTION_V2_METADATA_ATOMICITY_PARTIAL_PERSISTENCE_FOUND_AT_OBSERVATION",
+    "effect_invocation_falsifier_parallel_delta": "PRESENT_AT_BA85A355_AND_NOT_DUPLICATED_BY_THIS_RECEIPT",
+    "unusual_experiment": "NOT_USED"
+  },
+  "credits": {
+    "research_delta": "COMMITTED_RECEIPT_ONLY",
+    "source_fix": 0,
+    "repository_bound_test_credit": 0,
+    "vps_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "frankenstein2_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "evidence_law": "SOURCE_GAP_OBSERVED != SOURCE_FIX != TEST_EXECUTED != RUNTIME_PASS != PHYSICAL_GRID10_OR_WHOLE_ENTITYOS_HCU_PASS"
+}

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Production-oriented GRID10 cognitive runtime entry with one physical SQLite authority.
 
-This entry point closes the split-database gap in the v1 demo path. Fabric state and
-cognitive-heartbeat checkpoint/telemetry tables are opened against the same physical
-SQLite file. The check is deterministic and fail-closed: resolved path plus device/inode
-identity must agree before cognition starts.
+This entry point closes the split-database gap in the v1 demo path. Fabric state,
+cognitive-heartbeat checkpoint/telemetry, and persistent AgencyState/GoalContract control
+state are opened against the same physical SQLite file. The check is deterministic and
+fail-closed: resolved path plus device/inode identity must agree before cognition starts.
 
 This module does not grant canonical truth or external effect authority. GRID/model
 outputs remain candidate cognition; EffectGate/EffectJournal remain the external-effect
@@ -16,7 +16,6 @@ from dataclasses import asdict, dataclass
 import argparse
 import hashlib
 import json
-import os
 from pathlib import Path
 import sqlite3
 import time
@@ -30,6 +29,7 @@ from grid10_cognitive_heartbeat_v1 import (
     _trusted_normal_axes,
     append_frame_jsonl,
 )
+from grid10_persistent_agency_v1 import PersistentAgencyStore
 
 
 @dataclass(frozen=True)
@@ -79,45 +79,57 @@ def fingerprint_sqlite(path: Path) -> UnifiedDbFingerprint:
 def assert_shared_unifieddb_authority(
     fabric: Fabric,
     store: CognitiveHeartbeatStore,
+    agency: PersistentAgencyStore | None = None,
 ) -> UnifiedDbFingerprint:
-    fabric_fp = fingerprint_sqlite(Path(fabric.path))
-    store_fp = fingerprint_sqlite(Path(store.path))
-    same_physical = (
-        fabric_fp.realpath == store_fp.realpath
-        and fabric_fp.device == store_fp.device
-        and fabric_fp.inode == store_fp.inode
-        and fabric_fp.main_db_path == store_fp.main_db_path
-    )
-    if not same_physical:
+    fingerprints = {
+        "fabric": fingerprint_sqlite(Path(fabric.path)),
+        "heartbeat": fingerprint_sqlite(Path(store.path)),
+    }
+    if agency is not None:
+        fingerprints["agency"] = fingerprint_sqlite(Path(agency.path))
+
+    physical_keys = {
+        (fp.realpath, fp.device, fp.inode, fp.main_db_path)
+        for fp in fingerprints.values()
+    }
+    if len(physical_keys) != 1:
         raise RuntimeError(
             "UNIFIEDDB_AUTHORITY_SPLIT:"
             + json.dumps(
-                {"fabric": asdict(fabric_fp), "heartbeat": asdict(store_fp)},
+                {name: asdict(fp) for name, fp in fingerprints.items()},
                 sort_keys=True,
                 separators=(",", ":"),
             )
         )
-    if fabric_fp.schema_digest != store_fp.schema_digest:
+    schema_digests = {fp.schema_digest for fp in fingerprints.values()}
+    if len(schema_digests) != 1:
         raise RuntimeError("UNIFIEDDB_SCHEMA_VIEW_MISMATCH")
-    return fabric_fp
+    return fingerprints["fabric"]
 
 
 def build_shared_runtime(
     unified_db: Path,
     *,
     allow_regulator_writes: bool = False,
-) -> tuple[Fabric, CognitiveHeartbeatStore, CognitiveHeartbeatRuntime, UnifiedDbFingerprint]:
+) -> tuple[
+    Fabric,
+    CognitiveHeartbeatStore,
+    PersistentAgencyStore,
+    CognitiveHeartbeatRuntime,
+    UnifiedDbFingerprint,
+]:
     db = Path(unified_db).expanduser()
     db.parent.mkdir(parents=True, exist_ok=True)
     fabric = Fabric(db)
     store = CognitiveHeartbeatStore(db)
-    fingerprint = assert_shared_unifieddb_authority(fabric, store)
+    agency = PersistentAgencyStore(db)
+    fingerprint = assert_shared_unifieddb_authority(fabric, store, agency)
     runtime = CognitiveHeartbeatRuntime(
         fabric,
         store,
         config=HeartbeatConfig(allow_regulator_writes=bool(allow_regulator_writes)),
     )
-    return fabric, store, runtime, fingerprint
+    return fabric, store, agency, runtime, fingerprint
 
 
 def run_bounded(
@@ -129,14 +141,14 @@ def run_bounded(
     allow_regulator_writes: bool = False,
     trusted_normal_test_fixture: bool = False,
 ) -> list[dict[str, Any]]:
-    _, _, runtime, fingerprint = build_shared_runtime(
+    _, _, _, runtime, fingerprint = build_shared_runtime(
         unified_db,
         allow_regulator_writes=allow_regulator_writes,
     )
     print(json.dumps({
         "schema": "GRID10_UNIFIED_RUNTIME_AUTHORITY/v2",
         "status": "PASS",
-        "scope": "ONE_PHYSICAL_SQLITE_AUTHORITY_FOR_FABRIC_AND_COGNITIVE_HEARTBEAT",
+        "scope": "ONE_PHYSICAL_SQLITE_AUTHORITY_FOR_FABRIC_HEARTBEAT_AND_AGENCY",
         "fingerprint": asdict(fingerprint),
         "external_effect_authority_changed": False,
     }, sort_keys=True))

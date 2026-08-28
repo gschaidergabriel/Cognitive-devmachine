@@ -1,0 +1,59 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_STAGE3_NEGATIVE_RESULT_PREBINDING_RETRIEVAL_PLAN_DERIVED_SCORE_PROVENANCE",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "created_at_local": "2026-08-29T06:51:00+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "research_main_observed_before_write": "c8e41d0a07cc25ed86d61724cd6c05398c66edfd",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-302",
+    "target_generation": 2,
+    "claim_id": "F2-WP-302-G2-GPT56SOL-WP301-PROVENANCE-HARDENING-20260829",
+    "target_branch_head": "7a8d3308fdcb63b4b13665a5ae4b55e6333624af",
+    "target_source_blob_sha": "6249d32785687e8ff51233bb0a69c14d3d84a4b7",
+    "canonical_falsifier": "workpackages/falsifiers/F2-WP-302/20260829T0650P0700_PREBINDING_PLAN_DERIVED_SCORE_CIRCULAR_FENCE_FALSIFIER_GPT56SOL.json",
+    "canonical_falsifier_commit": "8ea9176f927c22c66538a47d13e67bbaffaa7a76"
+  },
+  "review_evidence": {
+    "branch": "review/wp302-g2-prebinding-plan-score-falsifier-20260829",
+    "head_sha": "9dfe417b5a5a36470b685dcbea149304b4e38b4c",
+    "workflow_run_id": 33221717601,
+    "job_id": 99016955540,
+    "conclusion": "success",
+    "test": "test_prebinding_self_inconsistent_plan_can_mint_forged_familiarity",
+    "observed_tests": 1
+  },
+  "counterexample": {
+    "original_signal_scores_bp": 1000,
+    "forged_weighted_score_bp": 10000,
+    "binding_fences_digest_after_forgery": true,
+    "evaluation_accepts_forged_plan": true,
+    "reported_familiarity_bp": 10000
+  },
+  "interpretation": [
+    "G2 closes post-binding RetrievalResult substitution but does not yet close pre-binding derived-score inconsistency inside a caller-supplied RetrievalPlan.",
+    "The current validator checks score ranges and rank_score consistency with weighted_score_bp, but does not reconstruct weighted_score_bp from signal_scores_bp and RetrievalNeed.axis_weights_bp.",
+    "Therefore the exact plan digest can preserve a self-consistent digest of already-forged derived scores; digest equality alone is not derivation provenance.",
+    "This falsifier does not imply world-truth/effect authority because WP302 output remains candidate-only, but it can inflate familiarity/attention signals and therefore matters to the cognitive substrate."
+  ],
+  "recommended_discriminator_and_repair": [
+    "Reconstruct weighted score, bottleneck score, overlap axes/count and rank score from signal_scores_bp plus the exact RetrievalNeed weights and reject any mismatch.",
+    "Retain plan/need digest fences and selected-result membership checks.",
+    "If builder-origin provenance itself is required, receive an independently supplied upstream WP301 plan receipt/digest instead of minting the expected digest from the same caller-supplied plan object."
+  ],
+  "credit_boundary": {
+    "research_delta": 1,
+    "component_negative_evidence": 1,
+    "wp302_g2_acceptance": 0,
+    "runtime": 0,
+    "vps_runtime": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "The sole active WP302 G2 claimant should absorb this falsifier into the existing provenance-hardening lane, implement deterministic derived-score reconstruction/fail-closed validation, and rerun canonical plus adversarial repository CI before G2 acceptance."
+}

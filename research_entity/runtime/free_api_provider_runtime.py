@@ -27,8 +27,8 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.13"
-EXECUTION_RECEIPT_SCHEMA_VERSION = "1.11"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.14"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.12"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
 PAYMENT_LATCH_SCOPE = "process_local"
@@ -40,6 +40,10 @@ COST_POLICY_PRINCIPAL_FORK_CONTEXT = (
     "child_pid_and_monotonic_parent_fork_generation"
 )
 EXECUTION_LOCK_FORK_ISOLATED = hasattr(os, "register_at_fork")
+FORK_ACTIVE_EXECUTION_QUARANTINE_SUPPORTED = hasattr(
+    os, "register_at_fork"
+)
+PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED = False
 
 
 def _prepare_process_state_for_fork() -> None:
@@ -49,7 +53,11 @@ def _prepare_process_state_for_fork() -> None:
 
 def _reinitialize_process_state_after_fork() -> None:
     global _PROCESS_COST_PRINCIPAL_KEY, PROCESS_EXECUTION_LOCK
+    global PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+    inherited_active_execution = PROCESS_EXECUTION_LOCK.locked()
     PROCESS_EXECUTION_LOCK = threading.Lock()
+    if inherited_active_execution:
+        PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED = True
     _PROCESS_COST_PRINCIPAL_KEY = hmac.new(
         _PROCESS_COST_PRINCIPAL_KEY,
         b"FRANK_PROCESS_COST_PRINCIPAL_FORK_V2\0"
@@ -501,6 +509,12 @@ def receipt() -> dict:
             COST_POLICY_PRINCIPAL_FORK_CONTEXT
         ),
         "execution_lock_fork_isolated": EXECUTION_LOCK_FORK_ISOLATED,
+        "fork_active_execution_quarantine_supported": (
+            FORK_ACTIVE_EXECUTION_QUARANTINE_SUPPORTED
+        ),
+        "fork_active_execution_quarantined": (
+            PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+        ),
         "unicode_database_version": UNICODE_DATABASE_VERSION,
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "inventory": rows,
@@ -947,6 +961,8 @@ def execute_chat(
     payment_latches: set[str] | None = None,
 ) -> dict:
     """Serialize authorization through receipt so payment latches are atomic."""
+    if PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED:
+        raise RuntimeError("forked_during_active_execution")
     _enforce_pre_snapshot_message_bound(messages)
     _enforce_pre_lock_text_size_lower_bound(messages, model)
     acquired = PROCESS_EXECUTION_LOCK.acquire(
@@ -1535,6 +1551,10 @@ def _execute_chat_locked(
             COST_POLICY_PRINCIPAL_FORK_CONTEXT
         ),
         "execution_lock_fork_isolated": EXECUTION_LOCK_FORK_ISOLATED,
+        "fork_active_execution_quarantine_supported": (
+            FORK_ACTIVE_EXECUTION_QUARANTINE_SUPPORTED
+        ),
+        "fork_active_execution_quarantined": False,
         "budget_epoch_id": _budget_epoch_id(env),
         "semantic_request_id": semantic_request_id,
         "request_id": request_id,

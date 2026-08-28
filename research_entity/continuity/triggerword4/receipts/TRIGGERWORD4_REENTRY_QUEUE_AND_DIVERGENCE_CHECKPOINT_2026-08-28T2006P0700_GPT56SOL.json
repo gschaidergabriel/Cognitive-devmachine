@@ -1,0 +1,71 @@
+{
+  "schema": "TRIGGERWORD4_REENTRY_QUEUE_AND_DIVERGENCE_CHECKPOINT/v1",
+  "created_at_local": "2026-08-28T20:06:00+07:00",
+  "trigger": "triggerwort 4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation",
+  "authority": {
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AF_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "paid_fallback": false,
+    "together": "FORBIDDEN",
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "source_identity": {
+    "canonical_main_observed": "2d45c692e47b27e7a20d8ba7b3db6e82ca2ee3ca",
+    "continuation_branch_observed": "ac054bd3d7bb2b4dfddd8bbdf4bcee0d96959130",
+    "merge_base_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+    "compare_status": "diverged",
+    "main_ahead_from_branch_compare": 32,
+    "branch_behind_from_compare": 796,
+    "direct_pr_2120_merge_attempt": "CONFLICT_405_NO_FORCE_MERGE"
+  },
+  "runtime_frontier": {
+    "quiescence_v2": {
+      "issue": 2122,
+      "dispatch_key": "grid10-runtime-quiescence-v2-g0000",
+      "workflow_run_id": 33170694983,
+      "job_id": 98846842202,
+      "status": "queued",
+      "runner_id": 0,
+      "runner_name": "",
+      "executed_steps": 0,
+      "terminal_result": "ABSENT"
+    },
+    "grid10_sigkill_v3": {
+      "issue": 2121,
+      "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+      "workflow_run_id": 33168491753,
+      "job_id": 98839547140,
+      "status": "queued",
+      "runner_id": 0,
+      "runner_name": "",
+      "executed_steps": 0,
+      "terminal_result": "ABSENT"
+    },
+    "classification": "SELF_HOSTED_RUNNER_UNASSIGNED_OR_UNAVAILABLE_BEFORE_TEST_SEMANTICS",
+    "duplicate_dispatch_authorized": false,
+    "generation_advance_authorized": false
+  },
+  "parallel_branch_delta": {
+    "latest_observed_commit": "ac054bd3d7bb2b4dfddd8bbdf4bcee0d96959130",
+    "finding": "A same-session two-invocation interleaving falsifier is source-present for the P1 mutable-session effect-id gap, but its observed CI attempt executed zero steps and therefore mints source-only evidence, no runtime correlation credit.",
+    "next_runtime_gate": "Execute the exact committed falsifier only on an admitted repository-bound non-provider surface once execution infrastructure is genuinely available."
+  },
+  "sync_policy": {
+    "blind_merge": "FORBIDDEN_BY_OBSERVED_CONFLICT_AND_LARGE_DIVERGENCE",
+    "force_overwrite": false,
+    "safe_strategy": "preserve both histories; reconcile current authority and additive evidence file-by-file or through an explicit conflict-resolution lane; never replace branch-local newer evidence with stale main copies",
+    "runtime_gate_priority": "existing queued singleton jobs outrank duplicate dispatch or speculative runtime claims"
+  },
+  "credits": {
+    "runtime_quiescence_component": 0,
+    "grid10_crash_replacement_component": 0,
+    "effect_invocation_runtime": 0,
+    "physical_grid10": 0,
+    "full_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "next_exact_action": "Restore/assign the existing matching self-hosted Linux/X64 runner lifecycle so already queued #2122 and #2121 can begin, while resolving PR #2120 through explicit conflict-safe source fusion rather than a force merge."
+}

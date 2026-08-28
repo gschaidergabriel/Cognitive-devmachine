@@ -1,0 +1,62 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING/v1",
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13AK_NON_AUTHORITY",
+  "classification": "NON_AUTHORITY_STEERING_EXECUTABLE_EVIDENCE_BOUND",
+  "observed_main_before_write": "72087e0f9d0758bdadfd227cfde7a7559dcc5c2f",
+  "material_findings": [
+    {
+      "id": "ACTIONS_SCOPE_NARROWED",
+      "finding": "Same-account public repository gschaidergabriel/frankenstein-2.0 obtained GitHub-hosted ubuntu-latest runners and executed real workflow steps successfully during the same investigation window, while private clay-global-research-entity jobs remain zero-step/runner_id=0. Account-wide or global GitHub-hosted runner failure is therefore falsified by executable counterevidence.",
+      "best_supported_class": "PRIVATE_REPOSITORY_OR_REPOSITORY_POLICY_VISIBILITY_BILLING_ADMISSION_SPECIFIC_ACTIONS_CONTROL_PLANE",
+      "credit": "CONTROL_PLANE_COUNTEREVIDENCE_ONLY"
+    },
+    {
+      "id": "POST_START_EXCEPTION_OUTCOME_GAP",
+      "finding": "Exact canonical EntityOSBridge blob execution produced a child-start marker before subprocess.run raised TimeoutExpired. Therefore an exception can escape after the execution boundary has been crossed; generic Exception -> FAILED in the bound EffectGate overclaims definite non-application for this class unless authority defines FAILED as unresolved/non-replayable, which current evidence does not establish.",
+      "required_semantics": "Authority-owned explicit unresolved/non-replayable outcome after post-start ambiguous failure; no automatic replay until verification resolves APPLIED versus NOT_APPLIED.",
+      "credit": "EXACT_BRIDGE_COMPONENT_COUNTEREXAMPLE_ONLY"
+    },
+    {
+      "id": "EFFECT_TOPOLOGY_COMPONENT_PASS",
+      "finding": "Exact-bound EffectGate+EffectJournal+UnifiedDB no-real-effect topology executed on GitHub-hosted ubuntu-latest and passed: PENDING before action boundary, canonical lease held, one bridge invocation, VERIFIED finalization, duplicate attempt zero additional bridge calls, residual PENDING reopen -> UNKNOWN_AFTER_RESTART and zero replay.",
+      "credit": "EXACT_BOUND_NO_REAL_EFFECT_COMPONENT_ONLY; NO_REAL_EFFECT_RUNTIME_OR_WHOLE_SYSTEM_CREDIT"
+    }
+  ],
+  "p0": [
+    "Preserve #2122 grid10-runtime-quiescence-v2-g0000 and #2121 grid10-sigkill-independent-replacement-v3-g0000 as singleton nonterminal lanes; no duplicate dispatch or generation advance.",
+    "Do not restart or replace the working VPS telemetry bridge without counterevidence.",
+    "Discriminate private-repository Actions admission using read-only repository settings/visibility/policy/billing/quota evidence where available. Public Frankenstein-2.0 runner success means account-wide GitHub-hosted outage is no longer an admissible sole explanation.",
+    "Only actually executed bound receipts may mint Quiescence or GRID10 component credit."
+  ],
+  "p1": [
+    "Keep the retained single EntityOS effect-authority implementation lane; do not invent a second Frankenstein outcome journal or effect executor.",
+    "Add an exact-bound EffectGate+EffectJournal+UnifiedDB fault-injection regression for successful process start followed by TimeoutExpired. Acceptance requires an explicit unresolved/non-replayable canonical outcome and zero automatic replay until authority-owned verification.",
+    "Harden process-start causality beyond exception class: successful Popen is the execution boundary. Add a falsifier for a non-Timeout ordinary exception after successful child creation; FAILED is rejection if it implies definite non-application.",
+    "Preserve semantic request_sha256 plus immutable call identity -> canonical effect_id bijection and execute the overlapping A/B zero-real-effect falsifier before invocation-identity runtime credit.",
+    "Execution-receipt atomicity remains source-closed only until exact-source executed rollback/success regressions pass.",
+    "Do not modify Frank's Harness."
+  ],
+  "authority_invariants": {
+    "free_only": true,
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "paid_fallback": false,
+    "remaining_paid_runs_authorized": 0,
+    "base_work_package_promotion_from_model_consensus": false,
+    "canonical_semantics_promotion_without_executable_counterevidence_and_review": false,
+    "goodman_anti_echo": true,
+    "model_family_checkpoint_ancestry_explicit": true,
+    "ubuntu_only_frank_v0_1_target": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "promotion_ceiling": {
+    "base": 0,
+    "training": 0,
+    "canonical_semantics": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "whole_frankenstein2": 0
+  }
+}

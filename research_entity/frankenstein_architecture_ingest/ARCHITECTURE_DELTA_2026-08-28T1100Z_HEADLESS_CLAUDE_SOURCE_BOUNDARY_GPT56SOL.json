@@ -1,0 +1,125 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T11:00:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "delta_class": "HEADLESS_CLAUDE_INVOCATION_SOURCE_AND_ENFORCEMENT_BINDING",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "design_branch_head_before_write": "63074bdce64acc5efa72ff3e5c891a0e5fae34da",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "packet_provenance": {
+    "packet_id": "TW5-PACKET-20260828T105800Z-HEADLESS-CLAUDE-MUTATION-BOUNDARY-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T1058Z_5641dc6_GPT56SOL_HEADLESS_CLAUDE_MUTATION_BOUNDARY.json",
+    "blob_sha": "73dba04e7c1b3792bdef82a8a5f977683433374d",
+    "disposition": "CONSUMED_AFTER_DIRECT_SOURCE_CROSSCHECK_AND_OVERLAP_FUSION"
+  },
+  "direct_source_crosscheck": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "span": "340-430",
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "claude_frage invokes headless claude -p with JSON output, permission mode, unconditional --disallowedTools Bash and an appended system prompt. It does not pass --settings or an explicit plugin/hook identity; when cwd is absent it runs from Path.home().",
+      "packet_claim": "CORROBORATED"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "span": "400-610",
+      "source_kind": "LIVE_CODE",
+      "finding": "Realtime memory write directly calls stern gespraech-erinnerung-schreiben after subject/value validation, while new research dispatch requires only aktion=neu_anstossen plus nonempty frage before entering the background bridge. These source facts are already architecture-classified by the 10:57 RealtimeToolAuthorityMatrix delta.",
+      "packet_claim": "CORROBORATED_EXISTING_ARCHITECTURE_NO_DUPLICATE_CREDIT"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/INSTALL_HOST_STEPS.md",
+      "blob_sha": "38e48ad40d54fc43c5921714267f2148f393c5d1",
+      "span": "1-220",
+      "source_kind": "INSTALLER",
+      "finding": "The install record distinguishes plugin-scoped hooks from global ~/.claude/settings.json hooks and explicitly records that a real session launched without the plugin's own hook wiring did not join the room. The same document says chatgpt-senden depends on an external host-level burst-worker script not shipped in the repo. This directly supports the law that repository manifest presence is not proof of invocation-time hook/enforcement identity.",
+      "packet_claim": "CORROBORATED_AND_STRENGTHENED"
+    }
+  ],
+  "architecture_effect": {
+    "name": "HeadlessWorkEnvironmentBinding/v1",
+    "status": "SOURCE_GROUNDED_SUCCESSOR_REQUIREMENT",
+    "core_finding": "The donor's voice-delegated Claude work has a partial local safety fence (Bash denied) but does not bind the exact executable/settings/plugin/hook/repository environment that supplies the rest of mutation/effect enforcement. Frankenstein 2.0 must not infer final effect authority from ambient Claude configuration.",
+    "minimum_binding": [
+      "originating voice call_id / task request id",
+      "task generation and immutable task digest",
+      "Claude executable/runtime identity",
+      "working-directory/repository identity",
+      "settings identity/digest actually loaded",
+      "plugin/hook manifest identity/digest actually loaded",
+      "permission mode",
+      "disallowed/allowed tool policy identity",
+      "source/build identity for deterministic reducers/effect gates",
+      "submission and completion receipts"
+    ],
+    "invariants": [
+      "REPOSITORY_HOOK_MANIFEST_PRESENT_IS_NOT_INVOCATION_HOOK_RECEIPT",
+      "AMBIENT_SETTINGS_ARE_NOT_SOURCE_BOUND_EFFECT_AUTHORITY",
+      "BASH_DENIAL_IS_PARTIAL_CAPABILITY_REDUCTION_NOT_COMPLETE_MUTATION_AUTHORITY",
+      "TASK_ADMISSION_IS_NOT_CHILD_EFFECT_AUTHORITY",
+      "SESSION_ID_IS_NOT_CALL_SCOPED_EFFECT_IDENTITY",
+      "MISSING_OR_MISMATCHED_ENVIRONMENT_BINDING_FAILS_CLOSED_FOR_STATE_CHANGING_CHILD_EFFECTS"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "overlap_fusion": {
+    "existing_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1057Z_REALTIME_TOOL_AUTHORITY_CLASSIFICATION_GPT56SOL.json",
+    "memory_and_research_atoms": "CORROBORATION_ONLY",
+    "new_unique_delta": "Invocation-time source/environment binding for headless Claude delegation, plus installer evidence that plugin/global hook presence varies by launch/install path.",
+    "no_second_authority": true
+  },
+  "contradictions_preserved": [
+    "Voice task delegation has a hard Bash deny, but non-Bash mutation capabilities remain governed by ambient Claude settings/plugin state not bound by claude_frage itself.",
+    "Repository hooks/hooks.json can declare PreToolUse(*) and Stop while a headless invocation may run under a different installed/global/plugin configuration; source presence alone does not prove those hooks fired.",
+    "The donor installer explicitly documents sessions without plugin hook wiring, so hook availability is an installation/runtime property rather than a repository-only property.",
+    "Realtime memory and research paths remain unevenly intent-gated as already captured by RealtimeToolAuthorityMatrix/v1."
+  ],
+  "counterhypotheses": [
+    "The installed host may consistently load exactly the intended Frankenstein plugin and global settings for every delegated claude -p invocation; this would reduce practical risk but requires exact invocation/load receipts before runtime credit.",
+    "A strict explicit --settings pin may not be the only correct implementation if the runtime can attest the actual resolved settings/plugin/hook set after launch; the requirement is exact environment identity, not one particular CLI flag."
+  ],
+  "triggerword4_handoff": {
+    "do_not_build_in_trigger5": true,
+    "required_actions": [
+      "bind every delegated headless work item to exact invocation environment identity before any state-changing child effect is admitted",
+      "preserve the donor Bash deny as defense-in-depth, not as final effect authority",
+      "make each nonexempt mutating child effect pass deterministic EffectDecision regardless of Claude permission mode",
+      "record actual hook/settings/plugin identities and firing receipts where those mechanisms are relied upon",
+      "retain MemoryAdmission and ResearchRequestAdmission from RealtimeToolAuthorityMatrix/v1; do not duplicate those gates inside HeadlessWorkEnvironmentBinding"
+    ],
+    "required_discriminators": [
+      "Launch-equivalence/source-bound test with intended settings/plugin loaded versus omitted/mismatched configuration; state-changing child effects must remain denied or explicitly degraded when enforcement identity is unbound.",
+      "Non-Bash mutation negative test proving Write/Edit or equivalent cannot bypass deterministic child EffectDecision merely because Bash is denied.",
+      "Session-resume test proving reused Claude session identity cannot satisfy a new call/task generation without exact task/effect binding."
+    ]
+  },
+  "credits": {
+    "packet_ingest": "PASS_SOURCE_SCOPE",
+    "direct_source_crosscheck": "PASS_AT_EXACT_DONOR_SHA",
+    "runtime": 0,
+    "hook_firing_runtime": 0,
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "local_runtime_execution": false,
+  "unusual_experiment": false,
+  "next_exact_gate": "Triggerword-4 non-provider/source-bound verification: prove the successor binds actual headless execution environment identity and denies non-Bash state-changing child effects when settings/plugin/hook identity is missing, mismatched or stale; no runtime credit until exact receipts exist."
+}

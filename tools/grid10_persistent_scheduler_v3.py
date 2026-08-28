@@ -8,7 +8,11 @@ v6-unclosed crash window as UNKNOWN without same-tick replay.
 """
 from __future__ import annotations
 
+from dataclasses import asdict
+import argparse
+import json
 from pathlib import Path
+import time
 from typing import Any, Callable, Iterable, Mapping
 
 from grid10_cognitive_unified_runtime_v7 import build_unified_cognitive_runtime_v7
@@ -69,6 +73,62 @@ class PersistentCognitiveSchedulerV3(PersistentCognitiveSchedulerV2):
             observed_events=observed_events,
             cognitive_context=cognitive_context,
         )
+
+
+def main() -> int:
+    p = argparse.ArgumentParser()
+    p.add_argument("--unified-db", required=True)
+    p.add_argument("--frames-jsonl", required=True)
+    p.add_argument("--cycles", type=int, default=1)
+    p.add_argument("--forever", action="store_true")
+    p.add_argument("--active-interval", type=float, default=None)
+    p.add_argument("--hold-poll", type=float, default=None)
+    p.add_argument("--idle-poll", type=float, default=None)
+    p.add_argument("--recovery-stale-after", type=float, default=60.0)
+    p.add_argument("--allow-regulator-writes", action="store_true")
+    p.add_argument("--trusted-normal-test-fixture", action="store_true")
+    p.add_argument("--event", action="append", default=[])
+    args = p.parse_args()
+
+    # As in v2, the CLI intentionally exposes no provider selector. Plain service/CLI use
+    # therefore cannot create an implicit provider route.
+    scheduler = PersistentCognitiveSchedulerV3(
+        Path(args.unified_db),
+        Path(args.frames_jsonl),
+        config=SchedulerConfig(
+            active_interval_seconds=args.active_interval,
+            hold_poll_seconds=args.hold_poll,
+            idle_poll_seconds=args.idle_poll,
+            allow_regulator_writes=bool(args.allow_regulator_writes),
+            trusted_normal_test_fixture=bool(args.trusted_normal_test_fixture),
+        ),
+        recovery_stale_after_seconds=float(args.recovery_stale_after),
+    )
+    if args.forever:
+        scheduler.run_forever()
+        return 0
+
+    for i in range(max(0, int(args.cycles))):
+        now = time.time()
+        row = scheduler.cycle_once(
+            cycle_id=f"bounded-scheduler-v3-{time.time_ns()}-{i}",
+            now_ts=now,
+            observed_events=args.event if i == 0 else (),
+        )
+        print(json.dumps(asdict(row), sort_keys=True))
+        if row.heartbeat_tick_id is not None:
+            # Inherited cycle_once already appended the frame. This branch is intentionally
+            # a no-op marker: v3 does not create a second frame/event authority.
+            pass
+        if i + 1 < args.cycles:
+            snap = scheduler.agency.snapshot()
+            if snap.next_tick_not_before is not None:
+                time.sleep(max(0.05, snap.next_tick_not_before - time.time()))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
 
 
 __all__ = [

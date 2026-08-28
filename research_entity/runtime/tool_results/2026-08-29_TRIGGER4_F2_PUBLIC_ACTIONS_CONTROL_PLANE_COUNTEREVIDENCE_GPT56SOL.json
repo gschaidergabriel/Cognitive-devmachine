@@ -1,5 +1,5 @@
 {
-  "schema": "TRIGGER4_ACTIONS_CONTROL_PLANE_COUNTEREVIDENCE/v1",
+  "schema": "TRIGGER4_ACTIONS_CONTROL_PLANE_COUNTEREVIDENCE/v2",
   "trigger": "4",
   "classification": "NON_AUTHORITY_READ_ONLY_EXECUTION_EVIDENCE_DELTA",
   "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
@@ -21,34 +21,53 @@
     "updated_at_utc": "2026-08-28T19:17:22Z"
   },
   "comparison_to_9_13_evidence": {
-    "clay_global_research_entity_hosted_runs": [33181911240, 33182697914],
-    "dr_unterweger_hosted_run": 33174696352,
-    "prior_symptom": "completed failure before any workflow step with runner_id=0 and steps=[]",
-    "new_discriminator": "A same-owner public repository executed a GitHub-hosted workflow successfully after those failures."
+    "clay_global_research_entity": {
+      "visibility": "private",
+      "hosted_runs": [33181911240, 33182697914],
+      "prior_symptom": "completed failure before any workflow step with runner_id=0 and steps=[]"
+    },
+    "dr_unterweger": {
+      "visibility": "private",
+      "hosted_run": 33174696352,
+      "prior_symptom": "completed failure before any workflow step with runner_id=0 and steps=[]"
+    },
+    "frankenstein_2_0": {
+      "visibility": "public",
+      "hosted_run": 33203186451,
+      "result": "completed success"
+    },
+    "new_discriminator": "The two observed zero-step failing repositories are private, while a same-owner public repository executed a GitHub-hosted workflow successfully after those failures."
   },
   "hypothesis_update": {
     "weakened": [
       "GitHub Actions is globally unavailable for the account",
       "all same-owner GitHub-hosted Actions are blocked by one universal pre-step failure"
     ],
+    "strengthened_but_unproven": [
+      "private-repository-specific Actions entitlement, billing, assignment, policy or admission behavior is a material discriminator"
+    ],
     "still_plausible": [
-      "repository-specific Actions policy/configuration",
+      "repository-specific Actions policy/configuration independent of visibility",
       "private-repository-specific Actions entitlement/billing/assignment behavior",
       "repository rules/settings interaction",
       "different workflow or event admission path",
       "transient control-plane failure that has recovered only on some repositories"
     ],
     "not_established": [
+      "repository visibility itself is causal",
+      "a paid GitHub plan/change is required or authorized",
       "the private clay-global-research-entity Actions path is repaired",
       "the Dr.-Unterweger Actions path is repaired",
       "the retained self-hosted VPS runner path is repaired or broken",
       "any previously zero-step product test now has runtime credit"
     ]
   },
-  "safe_consequence": "Use Frankenstein-2.0 public GitHub-hosted CI as an available exact-repository execution surface for non-provider deterministic component tests when the workpackage contract permits it. Do not use this success to mint runtime credit for private-repository workflows or to restart/replace the working VPS telemetry bridge.",
-  "next_high_information_discriminator": "Compare current Actions/run metadata and repository-level differences between the working public Frankenstein-2.0 repository and the failing private repositories before any retry storm. Prefer one existing/private-repo read-only discriminator or one already-authorized exact-source run after confirming zero-cost admission; do not duplicate nonterminal issue 2121/2122 generations.",
+  "safe_consequence": "Use Frankenstein-2.0 public GitHub-hosted CI as an available exact-repository execution surface for non-provider deterministic component tests when the workpackage contract permits it. Treat private/public visibility as a high-information discriminator only, not a causal conclusion. Do not purchase/upgrade/change paid GitHub service from this evidence, do not extrapolate private repo or VPS PASS, and do not restart/replace the working VPS telemetry bridge.",
+  "next_high_information_discriminator": "Read-only compare Actions-relevant repository/workflow/rules metadata between the working public Frankenstein-2.0 repository and the failing private repositories. If an already-authorized zero-cost exact-source private-repo run is later used, do one bounded discriminator rather than retry storms. Do not duplicate nonterminal issue 2121/2122 generations.",
   "credit_boundary": {
     "actions_control_plane_account_global_failure_falsified": "PARTIALLY_WEAKENED_NOT_FULLY_FALSIFIED",
+    "private_public_visibility_correlation_observed": true,
+    "visibility_causality_proven": false,
     "frankenstein2_public_actions_execution_available": true,
     "private_repo_actions_runtime_pass": false,
     "runtime_quiescence_pass": false,

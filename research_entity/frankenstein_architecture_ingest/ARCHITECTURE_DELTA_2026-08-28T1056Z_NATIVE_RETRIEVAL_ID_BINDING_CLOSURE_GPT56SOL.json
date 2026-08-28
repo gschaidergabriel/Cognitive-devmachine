@@ -1,0 +1,118 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:56:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "NATIVE_RETRIEVAL_ID_BINDING_CLOSURE",
+  "status": "PASS_SOURCE_SCOPE_NO_NEW_PACKET",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "schema_blob_sha": "12ad7f4511d365b327cdbee34f5471829198c203"
+  },
+  "design": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_sha_observed_before_write": "6328045a7d95e4cd5b65a707cb40aea36ac67ad2"
+  },
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_resolution": {
+    "bootstrap_minimal_schema": "8.78",
+    "operative_supervisor_pointer": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "execution_mode": "FREE_ONLY",
+    "note": "Later 9.13AC material is not promoted here; BOOTSTRAP_MINIMAL on canonical main selects supervisor 8.78."
+  },
+  "inbox_disposition": {
+    "unconsumed_packets": [],
+    "new_packet_consumed": false,
+    "ingest_state_modified": false,
+    "reason": "No new packet exists after the already-consumed 2026-08-28T104200Z Stop-hook packet; this delta is a direct exact-donor forensic closure."
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-RETRIEVAL-ID-NATIVE-PRIMARY-KEY-v1",
+      "subsystem": "retrieval-credit-identity",
+      "kind": "SCHEMA",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/daten/schema_leer.sql",
+      "finding": "retrieval_episodes.retrieval_id is TEXT PRIMARY KEY; retrieval_feedback.retrieval_id is a NOT NULL foreign key to retrieval_episodes(retrieval_id). The canonical retrieval/feedback substrate therefore already contains an immutable explicit retrieval identity and does not require a new identity table or synthetic replacement key for the Triggerword-4 repair.",
+      "target_2_0_action": "REUSE",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-RETRIEVAL-ID-NATIVE-UUID-EMISSION-v1",
+      "subsystem": "retrieval-credit-identity",
+      "kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "MicroClay creates retrieval_id = str(uuid.uuid4()), inserts that exact value into retrieval_episodes, and returns it in the retrieval receipt.",
+      "target_2_0_action": "REUSE",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-RETRIEVAL-CREDIT-EXACT-ID-REDUCER-v1",
+      "subsystem": "retrieval-credit-identity",
+      "kind": "ENFORCEMENT_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "MicroClay._apply_credit writes retrieval_feedback with row['retrieval_id']; receipt deduplication is derived from retrieval_id plus causal_id, generation, signal_class and credit. The deterministic reducer is already capable of preserving exact retrieval identity once the correct row is supplied.",
+      "target_2_0_action": "REUSE",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-HUMAN-FEEDBACK-EXACT-RETRIEVAL-ID-v1",
+      "subsystem": "retrieval-credit-identity",
+      "kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "mensch_urteil(retrieval_id, urteil) resolves SELECT * FROM retrieval_episodes WHERE retrieval_id=? and documents that stern nuetzlich/nutzlos targets exactly that retrieval_id. Exact-ID feedback is therefore already an implemented donor pattern, not a speculative new interface.",
+      "target_2_0_action": "REUSE",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-STOP-PATH-DROPS-NATIVE-RETRIEVAL-ID-v2",
+      "subsystem": "hook-cognition-boundary",
+      "kind": "NEGATIVE_RESULT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "_kognition_richten_hook does not receive or resolve an event-bound retrieval_id; it instead selects the newest same-session retrieval lacking modell:relevanz feedback using ORDER BY ts DESC LIMIT 1. The identity weakness is therefore localized to correlation at the Stop boundary, not absence of identity in UnifiedDB/MicroClay.",
+      "runtime_observed_failure": false,
+      "target_2_0_action": "REPAIR",
+      "confidence": 1.0
+    }
+  ],
+  "architecture_precision_delta": {
+    "previous_model": "Triggerword-4 should bind deferred model relevance to an immutable retrieval_id rather than newest same-session selection.",
+    "refined_model": "The required immutable retrieval_id already exists end-to-end in schema, retrieval receipt, reducer and explicit human-feedback path. Triggerword-4 should carry this native ID across the Stop/deferred-cognition boundary rather than inventing a replacement identity layer.",
+    "migration_consequence": "EASIER",
+    "schema_migration_required_for_retrieval_identity": false,
+    "new_truth_or_effect_authority_required": false
+  },
+  "contradictions_preserved": [
+    "The donor already supports exact retrieval_id feedback while the Stop model-relevance path still chooses newest-open-by-session; this is a boundary wiring inconsistency, not evidence that retrieval identity is absent.",
+    "Wrong-round model relevance under overlapping/reordered same-session Stops remains a source-grounded risk hypothesis, not an observed runtime failure."
+  ],
+  "feeds_triggerword_4": {
+    "required_action": "Thread the native retrieval_id returned by retrieval receipt into a typed RetrievalRelevanceCandidate and returned model-derived result; resolve and reduce by that exact ID plus existing causal/generation guards, never by ORDER BY ts DESC LIMIT 1.",
+    "minimum_tests": [
+      "two same-session retrievals whose model relevance results complete in reverse order still attach to their original native retrieval_id",
+      "unknown/stale retrieval_id fails closed without falling back to newest row",
+      "duplicate returned result is idempotent under existing receipt identity semantics",
+      "slow/unavailable cognition cannot prevent deterministic Stop bookkeeping completion"
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "architecture_precision": "PASS_SOURCE_SCOPE",
+    "runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "execution": {
+    "provider": false,
+    "vps": false,
+    "local_runtime": false,
+    "unusual_experiment": false
+  },
+  "next_exact_gate": "Triggerword-4 build/verification: reuse the native retrieval_id rather than adding an identity layer; eliminate newest-open session correlation from deferred relevance attachment and prove exact binding under reverse completion order plus stale/unknown-ID rejection and slow/unavailable cognition."
+}

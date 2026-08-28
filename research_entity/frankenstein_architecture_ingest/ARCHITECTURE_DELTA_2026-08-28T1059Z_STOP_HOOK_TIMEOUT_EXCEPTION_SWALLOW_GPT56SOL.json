@@ -1,0 +1,146 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:59:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "STOP_HOOK_HARD_DEADLINE_EXCEPTION_SWALLOW_CORRECTION",
+  "authority": {
+    "operative_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "canonical_supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AC_DELTA_2026-08-28T1747P0700_GPT56SOL.json",
+    "authority_change": false,
+    "provider_routes_admitted": false,
+    "owner_emergency_stop": true
+  },
+  "source_identity": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "donor_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "design_repo": "gschaidergabriel/clay-global-research-entity",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_before_write": "464a94d00850673ccf732c61fd88af342a243fc9",
+    "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d"
+  },
+  "packet_provenance": {
+    "new_unconsumed_packets": [],
+    "latest_known_packet_id": "TW5-PACKET-20260828T104200Z-STOP-HOOK-LLM-BOUNDARY-GPT56SOL",
+    "latest_known_packet_state": "ALREADY_CONSUMED",
+    "disposition": "NO_NEW_PACKET_DIRECT_SOURCE_SUCCESSOR_FORENSICS"
+  },
+  "corrects_prior_source_inference": {
+    "artifacts": [
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1050Z_STOP_HOOK_CAUSAL_BINDING_TIMEOUT_GPT56SOL.json"
+    ],
+    "scope": "GLOBAL_TIMEOUT_CONTROL_FLOW_CONCLUSION_ONLY",
+    "prior_conclusion": "A Stop event SIGALRM raised as _HookTimeout necessarily transfers to the outer cmd_hook _HookTimeout handler, so a timeout during synchronous cognition necessarily skips the later Stop statements.",
+    "correction": "That transfer is not guaranteed. _HookTimeout subclasses Exception, while nested model/cognition helpers contain broad except Exception handlers. If SIGALRM raises _HookTimeout while execution is inside one of those protected regions, the cancellation exception can match the nested generic handler, be logged as an ordinary cognition/Ollama error, and be converted to None or otherwise suppressed before the outer cmd_hook handler sees it.",
+    "preserve_other_prior_findings": true,
+    "evidence_class": "SOURCE_INFERENCE_NOT_RUNTIME_OBSERVATION"
+  },
+  "source_atoms": [
+    {
+      "kind": "ENFORCEMENT_CODE",
+      "symbol": "_HookTimeout/_hook_alarm",
+      "observation": "_HookTimeout is declared as a subclass of Exception and _hook_alarm raises _HookTimeout().",
+      "implication": "The hard-deadline signal is catchable by ordinary broad except Exception clauses."
+    },
+    {
+      "kind": "LIVE_CODE",
+      "symbol": "_ollama_generate",
+      "observation": "The synchronous Ollama helper catches expected transport/timeouts and then also catches generic Exception, logs the error, and returns None.",
+      "implication": "An asynchronously raised _HookTimeout can be consumed as an ordinary Ollama failure when delivered inside that generic exception boundary."
+    },
+    {
+      "kind": "LIVE_CODE",
+      "symbol": "_kognition_richten_hook",
+      "observation": "The Stop cognition path itself also contains broad exception-to-log/fail-silent handling around cognition work.",
+      "implication": "There is more than one nested boundary capable of consuming an Exception-derived cancellation signal."
+    },
+    {
+      "kind": "CONFIG",
+      "symbol": "limit.Stop/kognition.timeout_sekunden",
+      "observation": "Default Stop event budget is 2.0 seconds and the synchronous cognition network timeout is 1.3 seconds with cognition enabled by default.",
+      "implication": "The per-network timeout is a sub-budget but is not proof of the event-wide hard deadline; network/C-layer signal delivery and nested exception handling remain separate controls."
+    }
+  ],
+  "forensic_conclusions": [
+    {
+      "id": "TW5-FINDING-STOP-CANCELLATION-SWALLOW-024",
+      "classification": "SOURCE_INFERENCE",
+      "claim": "The donor's event-wide Stop deadline is not source-proven hard across the synchronous cognition path because its cancellation exception is an ordinary Exception and can be swallowed by nested generic handlers.",
+      "runtime_credit": 0
+    },
+    {
+      "id": "TW5-FINDING-STOP-TIMEOUT-DUAL-FAILURE-MODES-025",
+      "classification": "SOURCE_INFERENCE",
+      "claim": "Two distinct timeout outcomes must remain possible until runtime discrimination: if _HookTimeout reaches the outer handler, later Stop bookkeeping is skipped; if a nested generic handler consumes it, the event can continue after the nominal event-wide deadline. The previous source delta represented only the first branch.",
+      "runtime_credit": 0
+    }
+  ],
+  "counterhypotheses": [
+    "In the exact deployed interpreter/runtime, SIGALRM may consistently be delivered outside the generic catch regions, so cancellation swallowing may never occur in practice.",
+    "A C-level blocking call may defer Python signal-handler execution until control returns, producing deadline overrun by delayed delivery rather than nested exception swallowing.",
+    "An external wrapper or process boundary not represented by the inspected donor source may enforce a stronger deadline."
+  ],
+  "architecture_delta": {
+    "name": "HardDeadlineIntegrity/v1",
+    "status": "REQUIRED_BY_SOURCE_FORENSICS",
+    "requirements": [
+      "A deterministic hard-deadline/cancellation signal must not be representable as an ordinary failure that optional cognition helpers are allowed to consume.",
+      "Required Stop lifecycle bookkeeping must not depend on successful, timely, or cancellable model inference.",
+      "Per-I/O timeout and event-wide absolute deadline are distinct controls and must be evidenced separately.",
+      "Use a monotonic absolute deadline and remaining-budget checks at deterministic boundaries; never infer hard-deadline integrity from a configured network timeout alone.",
+      "Exact retrieval_id/turn_id/episode_id/causal_id/generation binding remains required independently of timeout integrity."
+    ],
+    "compatibility_minimum": [
+      "Before any generic except Exception that can execute under the hook alarm, explicitly re-raise _HookTimeout (except _HookTimeout: raise) or use an equivalent non-swallowable cancellation channel.",
+      "Add a regression proving a cancellation injected inside _ollama_generate and inside the outer cognition helper reaches the event deadline authority rather than being converted to None/fail-silent success."
+    ],
+    "preferred_frankenstein_2_repair": [
+      "Remove/defer model relevance inference from the deterministic Stop hook critical path and execute it as retrieval_id-bound noncanonical cognition work.",
+      "Keep the Stop hook limited to deterministic bounded bookkeeping/admission and enqueue typed candidate work for GRID/HCU cognition.",
+      "Admit any later model relevance only through the deterministic reducer with exact round identity and stale/mismatch rejection."
+    ]
+  },
+  "triggerword4_acceptance_gates": [
+    "External or donor-side source test, without modifying Frank's own Harness: inject the hard-deadline signal while execution is inside _ollama_generate; fail if a generic cognition handler consumes it.",
+    "Repeat at the _kognition_richten_hook generic exception boundary; fail if cancellation is logged and converted into normal continuation.",
+    "Slow/cold/unreachable local cognition: prove deterministic Stop lifecycle evidence is complete and bounded, with exact build/source identity.",
+    "Two same-session retrieval rounds completed in reverse/interleaved order: prove zero cross-credit using native retrieval_id and existing round identities.",
+    "No source-only pass promotes installed runtime, physical GRID10, whole HCU, EntityOS, canonical semantics, or training credit."
+  ],
+  "contradictions_preserved": [
+    "The donor still contains the declared no-LLM-in-hooks invariant and a live synchronous local Ollama call in Stop.",
+    "The outer timeout handler exists, but nested broad Exception handlers make its receipt of the cancellation signal path-dependent rather than guaranteed.",
+    "Whether cancellation swallowing, delayed signal delivery, outer-handler abort, or another wrapper dominates on the exact installed runtime remains unmeasured."
+  ],
+  "feeds_triggerword4": {
+    "required_actions": [
+      "implement HardDeadlineIntegrity/v1 before treating Stop as deterministic reactive control",
+      "prefer moving local model relevance out of Stop rather than relying on exception-order patches",
+      "if compatibility mode remains, explicitly re-raise hard-deadline cancellation through every broad exception boundary",
+      "reuse native retrieval_id and round identities; do not invent a competing retrieval authority",
+      "keep model relevance noncanonical and fail closed on stale/unknown/mismatched identity",
+      "do not modify Frank's own Harness to manufacture evidence"
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "source_forensics": "PASS_WITH_SUCCESSOR_CORRECTION",
+    "runtime_reproduction": 0,
+    "installed_host_credit": 0,
+    "provider_execution_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "runtime_execution": false,
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "frank_harness_modified": false,
+  "result": "SOURCE_FORENSICS_PASS_PRIOR_TIMEOUT_CONTROL_FLOW_CORRECTED",
+  "next_exact_gate": "Triggerword-4 build/verification lane: make Stop model relevance deferred/out-of-hook, or at minimum make _HookTimeout non-swallowable across every generic cognition exception boundary; then execute exact-build non-provider cancellation-injection and slow/unreachable cognition probes while proving deterministic Stop lifecycle evidence and exact retrieval-round identity."
+}

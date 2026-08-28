@@ -1,0 +1,47 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-RECEIPT-20260828T1042Z-HOOK-SELFTEST-WORKEXECUTION-EFFECT-IDENTITY-GPT56SOL",
+  "created_at": "2026-08-28T10:42:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/forensic-ingest",
+  "trigger_routing": "PASS",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "status": "COMMITTED_NON_DUPLICATE_SOURCE_TEST_DELTA_NO_RUNTIME_CREDIT",
+  "continuation_context": {
+    "accepted_workexecution_successor": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
+    "parallel_v2_reconciliation_commit": "a29aea21ac1f111b65a5e28b25c6b43a4284d6a6",
+    "parallel_v2_receipt_head_observed": "4ad1ca906627931a3127f8226e09864bcac7288b",
+    "preexisting_main_hook_identity_run": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_HOOK_INVOCATION_IDENTITY_2026-08-28_GPT56SOL.json",
+    "deduplication_result": "Existing architecture claim was not rewritten. Only the uncovered selftest blind spot and its WorkExecutionBinding/effect-identity regression contract were appended."
+  },
+  "write": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1041Z_HOOK_SELFTEST_WORKEXECUTION_EFFECT_IDENTITY_GPT56SOL.json",
+    "commit_sha": "7bec265e35605bfef4fa37d5f783e9972472a119",
+    "result": "COMMITTED"
+  },
+  "forensic_basis": [
+    "Pinned donor cmd_hook forwards full PreToolUse payload to zulassen(data) and full PostToolUse payload to merken(data).",
+    "Pinned donor stern.py has no explicit tool_use_id or agent_id token usage despite the platform ABI exposing those identities.",
+    "Pinned donor zulassen/merken correlate through the session-scoped active_turns.effect_id slot already identified by prior Triggerword-5 forensics.",
+    "Pinned donor _selbsttest_payload emits PreToolUse/PostToolUse test fixtures without tool_use_id, so the test cannot falsify call-scoped identity loss/cross-wire."
+  ],
+  "architecture_effect": [
+    "Treat WorkExecutionBinding/v2 and EffectInvocationIdentity/v1 as one causal identity chain at the Agent spawn tool_use_id boundary.",
+    "Require call-scoped tool_use_id in hook regression fixtures.",
+    "Require same-session A/B interleaving and reverse-completion-order regressions before source-level identity closure.",
+    "Keep package_id -> Agent tool_use_id deterministic and keep Agent response agentId -> lifecycle agent_id as a separate installed-runtime normalization gate.",
+    "Sparse WorldSlice/WorldNeed may reference bound causal receipts but cannot synthesize missing identity joins."
+  ],
+  "ingest_state_mutation": "NOT_ATTEMPTED_CONCURRENT_LIVE_BRANCH_APPEND_ONLY_RECEIPT_PREFERRED",
+  "runtime_execution": "NONE",
+  "provider_execution": "NONE",
+  "vps_execution": "NONE",
+  "runtime_credit_delta": 0,
+  "training_credit_delta": 0,
+  "next_exact_gate": "Triggerword 4: implement tool_use_id-bound Pre/Post persistence/correlation and run the deterministic A/B same-session interleaving regressions; only then, under explicitly admitted target-runtime authority, capture one harmless Agent PostToolUse plus SubagentStart/SubagentStop sequence to verify installed child identity normalization.",
+  "research_write": "COMMITTED"
+}

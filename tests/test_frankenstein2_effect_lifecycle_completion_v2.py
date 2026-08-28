@@ -103,13 +103,38 @@ class EffectLifecycleCompletionV2IntegrationTests(unittest.TestCase):
         self.assertEqual(snap["execution_v2"]["source_digest"], "src-A")
         self.assertEqual(snap["execution_v2"]["duplicate_state"], "UNIQUE")
 
-    def test_legacy_complete_chain_without_v2_evidence_cannot_mint(self):
-        self._prepare_success_chain(expected_source=None, execution_source=None)
-        legacy = self.store.completion_status("call-A")
-        self.assertTrue(legacy.closable)
-        with self.assertRaisesRegex(EffectLifecycleError, "COMPLETION_V2_GATE_OPEN"):
-            self.store.issue_completion_evidence("call-A", now_ts=10.0)
-        self.assertIsNone(self.store.snapshot("call-A")["completion"])
+    def test_submission_without_v2_source_binding_is_rejected_before_state_transition(self):
+        req = self.store.build_request(
+            invocation_id="call-unbound",
+            session_id="session-1",
+            agent_id="frankenstein-2",
+            task_id="task-1",
+            turn_id="turn-1",
+            causal_id="cause-1",
+            generation=7,
+            tool_name="bounded-tool",
+            normalized_arguments={"x": 1},
+            effect_scope="TEST_ONLY",
+        )
+        self.store.create_request(req, now_ts=1.0)
+        self.store.decide(
+            "call-unbound",
+            AdmissionDecision.ALLOW,
+            reason="test admission",
+            now_ts=2.0,
+        )
+        self.store.record_enforcement(
+            "call-unbound",
+            boundary_id="effect-gate-1",
+            dispatch_permitted=True,
+            now_ts=3.0,
+        )
+        with self.assertRaisesRegex(EffectLifecycleError, "SUBMIT_REQUIRES_SOURCE_BINDING"):
+            self.store.mark_submitted("call-unbound", now_ts=4.0)
+        snap = self.store.snapshot("call-unbound")
+        self.assertEqual(snap["request"]["pending_state"], "PENDING")
+        self.assertIsNone(snap["execution"])
+        self.assertIsNone(snap["completion"])
 
     def test_source_drift_between_pre_submission_binding_and_execution_is_rejected(self):
         self._prepare_success_chain(expected_source="src-A", execution_source="src-B")
@@ -164,6 +189,10 @@ class EffectLifecycleCompletionV2IntegrationTests(unittest.TestCase):
         self.store.create_request(req2)
         self.store.decide("call-C", AdmissionDecision.ALLOW, reason="test")
         self.store.record_enforcement("call-C", boundary_id="gate", dispatch_permitted=True)
+        with self.assertRaisesRegex(EffectLifecycleError, "SUBMIT_REQUIRES_SOURCE_BINDING"):
+            self.store.mark_submitted("call-C")
+        self.assertEqual(self.store.snapshot("call-C")["request"]["pending_state"], "PENDING")
+        self.store.bind_completion_source("call-C", source_digest="src-C")
         self.store.mark_submitted("call-C")
         with self.assertRaisesRegex(EffectLifecycleError, "SOURCE_BINDING_REQUIRES_PRE_SUBMISSION"):
             self.store.bind_completion_source("call-C", source_digest="late-source")

@@ -1,0 +1,101 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "SOURCE_REENTRY_NO_RUNTIME_PROMOTION",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "9.13",
+  "supervisor_delta_observed": "9.13AL_NON_AUTHORITY",
+  "research_main_observed_before_write": "7d6f3e44baa645a1e089aeedeeff722e3db50845",
+  "retained_lane": {
+    "pull_request": 430,
+    "branch": "go/effect-unknown-outcome-gpt56sol-20260817",
+    "observed_head": "2f99e400f1c0ea1b8598573ab0fab993885cba5e",
+    "status": "DRAFT_CANDIDATE_NOT_AUTHORITY",
+    "single_lane_preserved": true
+  },
+  "reentry_result": {
+    "prior_open_falsifier": "POST_POPEN_NON_TIMEOUT_EXCEPTION_CLASSIFICATION",
+    "source_status": "CLOSED_ON_RETAINED_PR_SOURCE",
+    "runtime_status": "UNVERIFIED_CURRENT_HEAD",
+    "promotion_status": "HOLD"
+  },
+  "source_evidence": {
+    "causal_boundary_commit": "9a239d6c3a12ecb9ea616e8ffbcb503b5759759f",
+    "causal_boundary_message": "effects(trigger4): bind UNKNOWN to observed child-start boundary",
+    "bridge_path": "the artefact/clayverse/entityos_bridge.py",
+    "bridge_blob_sha": "7781580f4e862c23491cc862e19c5d1f62b3ada6",
+    "test_alignment_commit": "2f99e400f1c0ea1b8598573ab0fab993885cba5e",
+    "test_path": "the artefact/tests/test_effect_unknown_outcome.py",
+    "test_blob_sha": "67d40b2cb2b38540da8b03e25b37f9af8f69da3",
+    "observed_semantics": [
+      "subprocess.Popen construction is the explicit observed child-start boundary",
+      "Popen failure propagates as a definite pre-child-start failure rather than UNKNOWN",
+      "after Popen succeeds, communicate exceptions of any ordinary Exception class are converted to EntityOSOutcomeUnknown",
+      "post-start missing returncode is also EntityOSOutcomeUnknown",
+      "best-effort kill/wait cleanup does not claim prior external effects were undone",
+      "EntityOSOutcomeUnknown.replay_permitted is false"
+    ]
+  },
+  "falsifier_evidence": [
+    {
+      "case": "PRE_POPEN_OSERROR",
+      "expected": "definite failure path",
+      "source_present": true
+    },
+    {
+      "case": "POST_POPEN_TIMEOUT",
+      "expected": "EntityOSOutcomeUnknown and replay forbidden",
+      "source_present": true
+    },
+    {
+      "case": "POST_POPEN_NON_TIMEOUT_OSERROR",
+      "expected": "EntityOSOutcomeUnknown and replay forbidden",
+      "source_present": true
+    },
+    {
+      "case": "REAL_HARMLESS_CHILD_START_MARKER_THEN_TIMEOUT",
+      "expected": "PROCESS_STARTED observed while terminal outcome remains UNKNOWN",
+      "source_present": true,
+      "real_external_effect_credit": 0
+    }
+  ],
+  "counterhypothesis_resolution": {
+    "prior_counterhypothesis": "TimeoutExpired may be the only ordinary post-start exception that needs UNKNOWN classification.",
+    "source_disposition": "REJECTED_AS_IMPLEMENTATION_ASSUMPTION",
+    "reason": "The retained source no longer relies on exception taxonomy after successful Popen; it treats child-start state as the causal discriminator and includes a non-Timeout OSError falsifier.",
+    "runtime_disposition": "NOT_PROMOTED_UNTIL_CURRENT_HEAD_TESTS_EXECUTE"
+  },
+  "hosted_execution_boundary": {
+    "current_pr_head": "2f99e400f1c0ea1b8598573ab0fab993885cba5e",
+    "private_repository_actions": "BLOCKED_CONTROL_PLANE",
+    "observed_head_runs": 5,
+    "representative_run": 33204977760,
+    "representative_conclusion": "failure",
+    "classification": "PRIVATE_REPOSITORY_ACTIONS_PRESTEP_FAILURE_ZERO_TEST_CREDIT",
+    "fresh_runtime_credit_added": 0
+  },
+  "integration_implication_for_frankenstein2_wp105": {
+    "status": "DO_NOT_CONSUME_AS_NEW_CANONICAL_AUTHORITY_YET",
+    "reason": "PR430 remains a draft donor and the current-head causal-boundary changes lack admitted execution evidence. Frankenstein 2.0 must continue to bind the currently admitted EffectGate/EffectJournal implementation tuple until an explicit successor binding is admitted.",
+    "required_before_rebind": [
+      "actually-started deterministic exact-head test evidence for the retained PR430 causal-boundary matrix",
+      "current-authority reentry after that evidence",
+      "explicit successor EffectGate/EffectJournal implementation binding",
+      "F2 adapter update that preserves one effect authority and semantic request/call identity"
+    ]
+  },
+  "credit_boundary": {
+    "research_delta": 1,
+    "source_falsifier_closed": 1,
+    "current_head_runtime_test_credit": 0,
+    "effect_authority_promotion": 0,
+    "real_effect_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Do not rebuild the post-Popen classifier. Preserve PR430 as the sole donor and wait for an existing authorized execution surface to become runnable; then execute the exact-head no-real-effect UNKNOWN matrix. Until that transport gate changes, continue nonduplicate WP105 source falsifiers against invocation/outcome identity and keep Frankenstein 2.0 bound to the currently admitted EntityOS effect-authority tuple."
+}

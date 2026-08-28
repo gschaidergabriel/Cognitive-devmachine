@@ -132,16 +132,19 @@ A failure automatically creates the repair loop. No owner “retry” command is
 
 ## 7. Gate priority law
 
-Default priority:
+Default priority during the functional-build phase:
 
-1. hard correctness/authority/data-integrity defect;
-2. blocker preventing later causal integration;
-3. current stage acceptance gap;
+1. hard correctness / state-integrity / causal-identity defect that invalidates evidence;
+2. blocker preventing later cognitive integration;
+3. current functional stage acceptance gap;
 4. next-stage prerequisite;
-5. quality/capability improvement;
-6. performance/resource optimization after correctness.
+5. cognition/capability improvement;
+6. performance/resource optimization after correctness;
+7. security hardening only after the functional Frankenstein-2.0 architecture is sufficiently complete to expose what actually needs protection.
 
 Do not polish downstream UI/Voice/world-model details while a known P0 coordination/identity/state corruption gate invalidates their evidence.
+
+Do not, however, let historical security mechanisms such as Schranke or Wache-König block the cognitive build merely because they once existed.
 
 ## 8. Automatic Triggerword-5 ingestion
 
@@ -158,10 +161,13 @@ REVEALS_HIDDEN_DEPENDENCY
 REVEALS_BUG
 CONTRADICTS_MASTER
 HISTORICAL_ONLY
+DEFERRED_SECURITY_REFERENCE
 INSUFFICIENT_EVIDENCE
 ```
 
-High-impact contradictions reopen the affected gate automatically.
+High-impact contradictions reopen the affected gate automatically only if they affect current functional correctness, causal integrity, state consistency, cognition, persistence, perception, world modeling, delegation, runtime viability or completion evidence.
+
+Security-only archaeology that does not affect those properties is retained for the later hardening phase and must not reopen the current functional-build frontier.
 
 ## 9. Automatic testing ladder
 
@@ -242,13 +248,17 @@ But never claim background continuation after the turn ends. The next user `trig
 
 ## 13. Completion behavior
 
-When all Frankenstein-2.0 acceptance gates are green at their declared scopes, Triggerword 4 automatically transitions to the permanent optimization regime defined in the master directive:
+When all Frankenstein-2.0 functional acceptance gates are green at their declared scopes, Triggerword 4 first freezes a functional architecture map and attack/effect surface inventory, then transitions into two parallel regimes:
 
 ```text
+A) capability optimization:
 measure -> bottleneck -> hypothesis/counterhypothesis -> bounded change -> A/B/ablation -> retain/reject -> receipt -> repeat
+
+B) security hardening:
+actual exposed surface -> threat model -> minimal protective boundaries -> adversarial tests -> retain/reject -> receipts
 ```
 
-Thus even after first complete assembly, the owner can keep sending only `triggerwort 4` to continue improving quality, cognition, latency, RAM, compute, context efficiency, robustness and usability.
+Security design must therefore protect the architecture that actually exists, rather than forcing the cognitive architecture to conform prematurely to historical security machinery.
 
 ## 14. User-visible response contract
 
@@ -271,3 +281,99 @@ OWNER INPUT:
 SYSTEM RESPONSIBILITY:
     figure out everything else from current state, evidence, authority and master architecture.
 ```
+
+## 16. Functional-core-first / deferred-security law
+
+Owner decision, 2026-08-28:
+
+> Build Frankenstein 2.0 first. Build the dedicated security systems after the functional architecture is sufficiently complete and its real surfaces are known.
+
+This is a priority and architecture law for Triggerword 4.
+
+### 16.1 Deferred security mechanisms
+
+The following historical mechanisms are **not current functional acceptance prerequisites** merely because they existed in Project Frankenstein or a donor lineage:
+
+- Schranke;
+- Wache-König / Wache-v2 admission machinery;
+- historical owner-admission guards;
+- legacy path-local policy blockers;
+- security-only permission walls whose sole purpose is hardening rather than causal correctness.
+
+Classify useful findings from them as:
+
+`DEFERRED_SECURITY_REFERENCE`
+
+Preserve exact provenance for later threat-model work, but do not spend current Triggerword-4 build cycles reconstructing or polishing them unless a specific piece is also required for functional correctness.
+
+### 16.2 What remains mandatory now
+
+Do **not** confuse security deferral with removal of engineering truth requirements. The functional build still requires:
+
+- stable workpackage/child/task/invocation identity;
+- deterministic or inspectable causal lineage;
+- exact execution/result receipts where needed to know what actually happened;
+- CompletionEvidence so `done` is distinguishable from a claim;
+- UNKNOWN/CONFLICT/NOT_COMPUTED semantics;
+- checkpoint/restart/concurrency integrity;
+- sandbox/test isolation sufficient to avoid corrupting the development target;
+- provenance of effective child/tool/cwd/settings configuration when needed for reproducibility.
+
+These are correctness, observability and experimental-method requirements, not the final security product.
+
+### 16.3 Effect path during functional build
+
+During the functional-build phase, prioritize:
+
+```text
+EffectIntent / ToolInvocation
+-> immutable invocation identity
+-> ExecutionReceipt
+-> observed/derived WorldOutcome
+-> ResultReentry
+-> CompletionEvidence
+```
+
+A future hard-security layer may insert or strengthen:
+
+```text
+Policy / Admission / Enforcement / Least-Privilege / User-authorization
+```
+
+at the actual effect boundaries after those boundaries are known.
+
+Therefore:
+
+`EFFECT_CAUSALITY_REQUIRED_NOW`
+
+but
+
+`FINAL_SECURITY_ENFORCEMENT_DEFERRED`
+
+### 16.4 Worker routing consequence
+
+Triggerword-5 packets about Schranke/Wache/history are still valid evidence, but Triggerword 4 must route them as follows:
+
+```text
+if finding changes causal correctness / state integrity / runtime semantics:
+    ingest into current build
+else if finding is security-only:
+    archive as DEFERRED_SECURITY_REFERENCE
+    do not reopen current gate
+```
+
+### 16.5 Security re-entry condition
+
+The deferred security phase begins only after we can enumerate the actual Frankenstein-2.0 surfaces, including at minimum:
+
+- native child spawn/execution surfaces;
+- tool/effect classes;
+- filesystem/network/process surfaces;
+- UnifiedDB mutation surfaces;
+- Voice/Retina privacy-sensitive flows;
+- World-model/Micro-Lab interfaces;
+- external provider/model interfaces;
+- user-control/configuration interfaces;
+- recovery/update/install paths.
+
+Then design security around the finished architecture rather than resurrecting historical guards by default.

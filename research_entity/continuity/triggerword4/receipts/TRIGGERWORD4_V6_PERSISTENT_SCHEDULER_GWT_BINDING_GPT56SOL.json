@@ -7,6 +7,8 @@
   "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
   "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
   "branch_head_before_receipt_observed": "c56ea169e7360fd6879173063c97f738974129f1",
+  "receipt_initial_create_commit": "7022cd693bd6051c5d11ed4ef444b7c39faf5577",
+  "receipt_initial_create_actual_parent": "e8d5659199663f2f8ff362614aa450f5882aeab3",
   "authority_observed": "SUPERVISOR_9.13AE_SINGLETON_GRID10_V3_G0000_IN_FLIGHT",
   "source_delta": {
     "unified_runtime_implementation_commit": "405676b34fde45bd295fb4f0c66ceb51bffbf741",
@@ -34,9 +36,10 @@
     ]
   },
   "parallel_fusion": {
-    "post_write_v6_failure_closure_commit_observed": "1e9a3e30bf4318e3eacf994eaa3d129a2fc50598",
+    "post_write_v6_failure_closure_implementation_commit_observed": "1e9a3e30bf4318e3eacf994eaa3d129a2fc50598",
+    "post_write_v6_failure_closure_regression_commit_observed": "e8d5659199663f2f8ff362614aa450f5882aeab3",
     "post_write_gwt_memory_reentry_receipt_commit_observed": "c56ea169e7360fd6879173063c97f738974129f1",
-    "v6_failure_closure_effect": "candidate cognition exceptions after V4 durable commit now produce sanitized FAILED v6 closure and prohibit same-tick retry before re-raising",
+    "v6_failure_closure_effect": "candidate cognition exceptions after V4 durable commit now produce sanitized FAILED v6 closure and prohibit same-tick retry before re-raising; regression binds the failed closure to the already-committed Agency epoch and verifies raw exception text is not persisted",
     "memory_reentry_effect": "normal memory reentry eligibility is intersected with the same GWT eligibility set, preventing subthreshold private specialist results from being advertised through normal reentry",
     "duplicate_lane_created": false,
     "single_existing_pr": 2118

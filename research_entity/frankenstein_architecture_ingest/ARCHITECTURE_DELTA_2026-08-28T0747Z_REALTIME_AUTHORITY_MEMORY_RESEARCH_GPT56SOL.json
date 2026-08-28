@@ -1,7 +1,8 @@
 {
   "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
-  "delta_id": "T5_2026-08-28T0747Z_REALTIME_AUTHORITY_MEMORY_RESEARCH_5641dc6b_GPT56SOL",
+  "delta_id": "T5_2026-08-28T0747Z_REALTIME_AUTHORITY_MEMORY_RESEARCH_5641dc6B_GPT56SOL",
   "trigger": "triggerwort 5",
+  "status": "CORROBORATING_AUTHORITY_BOUND_DELTA_PACKET_ADMISSION_FAIL_CLOSED",
   "authority_binding": {
     "authority_epoch": "9.13",
     "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
@@ -25,33 +26,34 @@
       "together": "FORBIDDEN"
     }
   },
-  "evidence_scope": "CURRENT_DONOR_SOURCE_FORENSICS_AND_PACKET_FUSION_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "evidence_scope": "CURRENT_DONOR_SOURCE_FORENSICS_AND_CORROBORATING_PACKET_FUSION_ONLY_NO_NEW_RUNTIME_EXECUTION",
   "donor": {
     "repo": "gschaidergabriel/frankenstein",
     "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
   },
-  "design_lane": {
-    "repo": "gschaidergabriel/clay-global-research-entity",
-    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-    "observed_head_before_write": "a3c503825474834332275305370330dff1272203"
+  "integrity_reconciliation": {
+    "checkpoint": "research_entity/frankenstein_architecture_ingest/checkpoints/CHECKPOINT_20260828T0749Z_TRIGGERWORD5_PACKET_ADMISSION_INTEGRITY_GPT56SOL.json",
+    "checkpoint_commit": "19eaa4280063de3e1eea70432b430f2bd9b2562a",
+    "shared_ingest_state": "ACTIVE_PARALLEL_CAS_CONTENTION_DO_NOT_FORCE_OVERWRITE",
+    "rule": "Semantic source findings may survive by direct source crosscheck or schema-valid successor delta even when an individual packet is not admitted. Packet admission, semantic finding retention, runtime credit and architecture credit remain separate."
   },
-  "packet_ingest": [
+  "packet_disposition": [
     {
       "packet_id": "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
-      "status": "INGESTED_SOURCE_CROSSCHECKED",
-      "independent_runtime_credit": false
+      "status": "DURABLY_FUSED_NO_DUPLICATE_ARCHITECTURE_CREDIT",
+      "note": "Current shared INGEST_STATE already lists this packet. This delta only corroborates its source findings."
     },
     {
       "packet_id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
-      "status": "INGESTED_BY_REFERENCE_TO_EXISTING_STRONGER_DELTA",
-      "existing_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REALTIME_MEMORY_EPISTEMIC_ADMISSION.json",
-      "existing_delta_commit": "a6ef008fd6e6f384eae3e45722cb0b3c5e6821fa",
-      "independent_runtime_credit": false
+      "status": "PACKET_ADMISSION_QUARANTINED_SCHEMA_INVALID_SEMANTIC_FINDINGS_RETAINED_BY_DIRECT_SOURCE_AND_SUCCESSOR_DELTA",
+      "existing_successor_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REALTIME_MEMORY_EPISTEMIC_ADMISSION.json",
+      "existing_successor_delta_commit": "a6ef008fd6e6f384eae3e45722cb0b3c5e6821fa",
+      "note": "Do not treat the consumed_packet_ids entry in the shared state as sufficient packet-admission proof. Preserve the contradiction until safe state reconciliation."
     },
     {
       "packet_id": "TW5-PACKET-20260828T0741Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-AUTHORITY-REBIND",
-      "status": "INGESTED_AUTHORITY_CORRECTION",
-      "independent_runtime_credit": false
+      "status": "AUTHORITY_REBIND_DURABLY_RECEIPTED_SHARED_STATE_SYNC_PENDING",
+      "note": "Authority-rebind evidence is preserved under epoch 9.13; no runtime reexecution, containment credit or forced last-writer-wins state mutation."
     }
   ],
   "direct_source_crosschecks": [
@@ -63,7 +65,7 @@
     {
       "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
       "blob": "c483bc81cbae080a8175f7ce694ef657484614b5",
-      "finding": "Repository config declares PreToolUse/PostToolUse matcher '*' through stern.py, but the manifest itself explicitly describes the stern hook path as fail-silent/exit-0; repository declaration is not host/runtime enforcement proof."
+      "finding": "Repository config declares PreToolUse/PostToolUse matcher '*' through stern.py, but the manifest explicitly describes this dispatcher path as fail-silent/exit-0; repository declaration is not host/runtime enforcement proof."
     },
     {
       "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
@@ -78,19 +80,19 @@
       "claim": "frank_forschung action=neu_anstossen is a source-reachable asynchronous research-request submission path whose local dispatcher relies on model/tool-description compliance for explicit-user-request intent rather than the mechanically enforced two-step confirmation used by frank_auftrag_stellen.",
       "confidence": 0.99,
       "target_action": "ADAPT_TO_TYPED_RESEARCH_REQUEST_ADMISSION",
-      "boundary": "Under current 9.13 provider authority all provider routes are HARD_OFF/not admitted, so this source path receives zero current provider runtime credit and must not be executed for this Triggerword-5 ingest."
+      "boundary": "Under current 9.13 provider authority all provider routes are HARD_OFF/not admitted, so this source path receives zero current provider runtime credit."
     },
     {
       "atom_id": "F2_DELEGATED_CLAUDE_BASH_DENY_NOT_EFFECT_AUTHORITY_043",
       "classification": "ENFORCEMENT_CODE",
-      "claim": "The voice-delegated Claude Code path hard-denies Bash at CLI tool-class level, but Write/Edit and other non-Bash mutations remain available. This is a useful blast-radius control, not an executor-consumed one-shot EffectDecision for each mutation.",
+      "claim": "The voice-delegated Claude Code path hard-denies Bash at CLI tool-class level, but Write/Edit and other non-Bash mutations remain available. This is defense-in-depth, not an executor-consumed one-shot EffectDecision for each mutation.",
       "confidence": 1.0,
       "target_action": "KEEP_BASH_DENY_AS_DEFENSE_IN_DEPTH_AND_ADD_CANONICAL_EFFECT_DECISION"
     },
     {
       "atom_id": "F2_HOOK_MANIFEST_DECLARATION_NOT_RUNTIME_PROOF_044",
       "classification": "CONFIG",
-      "claim": "hooks.json declares broad PreToolUse/PostToolUse routing into stern.py, but source/config presence does not prove exact host registration, headless claude -p firing, or pre-side-effect denial; moreover the declared stern dispatcher path is fail-silent/exit-0.",
+      "claim": "hooks.json declares broad PreToolUse/PostToolUse routing into stern.py, but source/config presence does not prove exact host registration, headless claude -p firing or pre-side-effect denial.",
       "confidence": 1.0,
       "target_action": "REQUIRE_SOURCE_BOUND_RUNTIME_RECEIPT_BEFORE_ENFORCEMENT_CREDIT"
     },
@@ -149,10 +151,16 @@
       "id": "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-011",
       "status": "REFINED_OPEN",
       "claim": "Storage tables are separated but direct Realtime retrieval lacks structural epistemic/transformation typing and merges heterogeneous memory sources into one context list."
+    },
+    {
+      "id": "TW5-CONTRADICTION-MEMORY-PACKET-ADMISSION-SCHEMA-015",
+      "status": "OPEN_FAIL_CLOSED",
+      "claim": "Shared INGEST_STATE currently lists packet 074026 as consumed while the current integrity checkpoint classifies the packet itself schema-invalid. Semantic findings survive independently; admitted-packet credit remains quarantined until safe reconciliation."
     }
   ],
   "credits": {
     "source_forensics": "ADVANCED",
+    "packet_admission_credit_074026": 0,
     "new_runtime_execution": 0,
     "provider_runtime": 0,
     "memory_runtime_acceptance": 0,
@@ -164,5 +172,5 @@
     "training": 0,
     "whole_product_pass": false
   },
-  "next_exact_gate": "Feed Triggerword-4 the typed VoiceIntent/HumanIntent/TaskAdmission/ResearchRequestAdmission/MemoryAdmission/EffectDecision ABIs and repository-bound adversarial tests; independently recover exact host/plugin registration for headless voice-delegated claude -p, and audit all other conversation/durable-memory consumers before repository-wide epistemic claims."
+  "next_exact_gate": "Safely reconcile INGEST_STATE via compare-and-swap/append-only receipts without overwriting parallel work; keep packet 074026 quarantined unless a schema-valid successor supersedes it, register the 0741 authority rebind exactly once, then hand Triggerword-4 the typed admission/effect/memory adversarial tests."
 }

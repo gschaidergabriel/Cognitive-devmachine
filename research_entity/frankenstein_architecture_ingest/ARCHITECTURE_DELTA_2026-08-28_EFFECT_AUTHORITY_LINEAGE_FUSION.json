@@ -1,0 +1,174 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_EFFECT_AUTHORITY_LINEAGE_FUSION_5641dc6b",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_ingest": "7ef999d96b80759830a7edc138f3feb04509d3bf",
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "authority_sources": [
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json@main schema 8.78",
+    "research_entity/rooms/PROGRAM_STATE.json@main schema 8.78",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json@main"
+  ],
+  "consumed_packets": [
+    "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
+    "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+    "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+    "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL"
+  ],
+  "direct_crosschecks": [
+    {
+      "source": "gschaidergabriel/frankenstein:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3100-3600@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "result": "CONFIRMED",
+      "claim": "The donor section named EffectGate explicitly states that ordinary zulassen() bookkeeping does not generically block tools and stores one effect_id in active_turns for the session, later consumed by PostToolUse bookkeeping."
+    },
+    {
+      "source": "GitHub code search tool_use_id in gschaidergabriel/frankenstein",
+      "result": "ZERO_MATCHES_AT_QUERY_TIME",
+      "claim": "No repository occurrence of tool_use_id was observed in this pass; this supports, but does not alone prove, absence from every runtime-provided compatibility layer."
+    },
+    {
+      "source": "gschaidergabriel/Project-Frankenstein:agentic/executor.py:70-180,540-685@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "result": "CONFIRMED",
+      "claim": "Historical ToolExecutor has real pre-execution approval checks, but execute() accepts a caller-controlled skip_approval boolean and does not consume approval_id or an approved-request digest."
+    },
+    {
+      "source": "gschaidergabriel/Project-Frankenstein:agentic/loop.py:430-530@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "result": "CONFIRMED",
+      "claim": "Historical AgentLoop requests approval for non-safe tools, then calls execute(..., skip_approval=True) after approval; safe-tool routing also uses skip_approval=True. Approval-to-execution binding is therefore caller discipline rather than an executor invariant."
+    },
+    {
+      "source": "archived wache-koenig/freigabe bytes referenced by packet TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+      "result": "PACKET_SUPPORTED_NOT_DIRECT_BYTES_REOPENED_THIS_RUN",
+      "claim": "Historical Bash-only blocking and one-shot command-ticket semantics remain source-lineage evidence, not current runtime reachability credit."
+    }
+  ],
+  "new_or_strengthened_atoms": [
+    {
+      "atom_id": "F2_EFFECT_LINEAGE_SPLIT_020",
+      "source_kind": "HISTORICAL_SOURCE_PLUS_CURRENT_ENFORCEMENT_CODE",
+      "claim": "Frankenstein effect authority evolved through two incomplete but complementary lineages: historical Project-Frankenstein had real pre-execution denial but weak decision-to-execution binding; current stern.py has richer generation/idempotency/outcome journaling but deliberately nonblocking ordinary admission bookkeeping.",
+      "target_action": "ADAPT_TO_GRID",
+      "boundary": "Neither lineage alone satisfies current EntityOS EffectGate+EffectJournal authority."
+    },
+    {
+      "atom_id": "F2_APPROVAL_ID_NOT_EXECUTION_CAPABILITY_021",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "Historical approval_id correlates UI/workflow approval but is not mechanically consumed by ToolExecutor.execute(); no approved request digest, invocation identity, generation or one-shot execution lease is passed to the executor boundary.",
+      "target_action": "REPLACE_WITH_VERIFIED_SUCCESSOR"
+    },
+    {
+      "atom_id": "F2_CALLER_CONTROLLED_SKIP_APPROVAL_022",
+      "source_kind": "NEGATIVE_RESULT",
+      "claim": "skip_approval=True is caller-controlled authority in the historical executor path. It is acceptable as lineage evidence but must not survive as Frankenstein-2.0 real-effect authority.",
+      "target_action": "RETIRE_WITH_EVIDENCE"
+    },
+    {
+      "atom_id": "F2_IMMUTABLE_INVOCATION_BINDING_REQUIRED_023",
+      "source_kind": "ARCHITECTURE_REQUIREMENT_FROM_CROSSCHECKED_GAP",
+      "claim": "Every state-changing call must carry an immutable invocation_id/tool_use_id successor plus canonical request_digest and generation from admission through enforcement, execution, outcome verification, completion and re-entry. Session identity is context, not a correlation key.",
+      "target_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "F2_OWNER_GRANT_IS_SEPARATE_CAPABILITY_024",
+      "source_kind": "ARCHITECTURE_REQUIREMENT_FROM_HISTORICAL_DONOR",
+      "claim": "When human approval is required, the owner grant must be minted outside model text, scope-bound to the exact typed EffectRequest, short-lived and single-use, then consumed by deterministic enforcement. Human approval is not implied for every effect; policy decides when it is required.",
+      "target_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "F2_WACHE_REGEX_AS_REGRESSION_DONOR_ONLY_025",
+      "source_kind": "HISTORICAL_ONLY",
+      "claim": "The archived wache-koenig command classifier/ticket mechanism is useful as a destructive-command regression corpus and capability-lease donor, but Bash-only regex authority cannot be promoted to the complete EntityOS effect boundary.",
+      "target_action": "COMPATIBILITY_ONLY"
+    }
+  ],
+  "architecture_fusion": {
+    "effect_contract": {
+      "required_chain": [
+        "EffectRequest(invocation_id, request_digest, generation, actor/capability scope, resource identity)",
+        "EffectDecision(admit|deny|ask, policy/version, reason, exact request binding)",
+        "EnforcementDecision / one-shot ExecutionLease consumed at the real executor boundary",
+        "ExecutionReceipt(executor identity, submitted/not-submitted boundary, exact invocation binding)",
+        "WorldEffectVerification(VERIFIED|FAILED|OUTCOME_UNKNOWN with evidence refs)",
+        "CompletionEvidence(exact admissible receipts only)",
+        "Outcome re-entry into canonical state and GRID/GWT as evidence, never retroactive authority"
+      ],
+      "hard_rules": [
+        "No caller-controlled skip_approval bypass in the successor authority path.",
+        "No mutable session-wide current-effect pointer as the sole invocation correlation key.",
+        "Successful execution never retroactively creates prior admission authority.",
+        "Post-submission transport uncertainty becomes OUTCOME_UNKNOWN, not cancellation success and not blind replay.",
+        "Journal status labels are not enforcement decisions unless bound to the exact enforcement receipt.",
+        "Model, Voice and GRID outputs may propose EffectRequest only; deterministic control consumes authority."
+      ]
+    },
+    "grid10_handoff": [
+      "Triggerword-4 should implement one typed effect ABI across voice, tool, executor and completion paths before porting donor convenience wrappers.",
+      "Use immutable invocation identity as the join key across parallel calls and reverse completion order tests.",
+      "Preserve historical approval/wache cases as negative/regression fixtures, not runtime authority.",
+      "Retain explicit UNKNOWN outcome and cancellation-before-submission versus submitted boundary."
+    ],
+    "world_substrate_interaction": [
+      "WorldSlice/Hyperposition may inform an EffectRequest but cannot grant capability or verify a world effect.",
+      "Verified outcomes may update sparse world-substrate operator confidence; simulated or merely predicted outcomes receive lower/noncanonical credit."
+    ]
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "RESOLVED_AS_LINEAGE_SPLIT_NOT_SINGLE_MECHANISM",
+      "resolution": "Historical pre-execution denial and current nonblocking stern admission bookkeeping are distinct mechanisms from different phases; neither is silently renamed into the other."
+    },
+    {
+      "id": "TW5-CONTRADICTION-INVOCATION-IDENTITY-005",
+      "status": "OPEN_REPAIR_REQUIRED",
+      "claim": "Current donor correlation is session-scoped while the successor requires immutable call-scoped identity. Runtime interleaving manifestation remains unmeasured."
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-REACHABILITY-004",
+      "status": "OPEN",
+      "claim": "Archived wache source capability is preserved, but exact current/historical scheduler registration and ordering remain unproven in this run."
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-COVERAGE-005",
+      "status": "OPEN_DESIGN_BOUNDARY",
+      "claim": "Historical watcher is Bash-only and therefore cannot establish one complete real-effect authority for Write/Edit/NotebookEdit or non-shell tool effects."
+    }
+  ],
+  "evidence_scope": {
+    "new_runtime_execution": false,
+    "source_crosscheck": true,
+    "historical_source_crosscheck": true,
+    "whole_frankenstein_2_runtime_pass": false,
+    "whole_entityos_hcu_credit_delta": 0,
+    "provider_runtime_credit_delta": 0,
+    "training_credit_delta": 0,
+    "classification": "SOURCE_FORENSICS_AND_ARCHITECTURE_FUSION_ONLY"
+  },
+  "highest_value_next_spans": [
+    {
+      "priority": "P0",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1050-1600@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "reason": "Trace Realtime function-call dispatch to determine whether voice-originated tools bypass, duplicate or correctly converge on the successor effect boundary."
+    },
+    {
+      "priority": "P0",
+      "path": "historical/global .claude/settings.json or equivalent scheduler provenance",
+      "reason": "Pin actual wache-koenig hook registration, matcher scope and ordering; do not grant runtime reachability from archived source alone."
+    },
+    {
+      "priority": "P0",
+      "path": "Triggerword-4 typed effect ABI/tests",
+      "reason": "Specify and test parallel calls, reverse completion, wrong-call identity, denial non-execution, cancellation-before-submit and submitted-outcome-unknown."
+    },
+    {
+      "priority": "P1",
+      "path": "downstream effects.status consumers in current donor",
+      "reason": "Find every place that conflates VERIFIED/outcome with pre-admission or completion authority."
+    }
+  ],
+  "next_exact_gate": "Trace current Realtime tool dispatch into effect authority, then hand Triggerword-4 an immutable invocation-bound EffectRequest/Decision/ExecutionReceipt/WorldEffectVerification/CompletionEvidence ABI with fail-closed parallel-call regressions."
+}

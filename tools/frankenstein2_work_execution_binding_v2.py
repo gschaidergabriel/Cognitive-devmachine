@@ -260,7 +260,7 @@ class WorkExecutionLedger(v1.WorkExecutionLedger):
         evidence_ref: str,
         evidence_payload: Mapping[str, Any],
     ) -> str:
-        """Mint one completion only after every observed invocation has a known result."""
+        """Mint one completion only after every observed invocation has a known successful result."""
         evidence_kind = str(evidence_kind).upper().strip()
         if evidence_kind not in v1.MECHANISTIC_EVIDENCE_KINDS:
             raise ValueError(
@@ -316,6 +316,18 @@ class WorkExecutionLedger(v1.WorkExecutionLedger):
             if unknown_n:
                 raise ValueError(f"UNKNOWN_INVOCATION_OUTCOME:{unknown_n}")
 
+            failed_or_rejected = con.execute(
+                """SELECT outcome,COUNT(*) AS n
+                   FROM fr2_work_results
+                   WHERE binding_id=? AND outcome IN ('FAILURE','REJECTED')
+                   GROUP BY outcome
+                   ORDER BY outcome""",
+                (binding_id,),
+            ).fetchall()
+            if failed_or_rejected:
+                summary = ",".join(f"{item['outcome']}:{int(item['n'])}" for item in failed_or_rejected)
+                raise ValueError(f"NON_SUCCESS_INVOCATION_OUTCOME:{summary}")
+
             existing = con.execute(
                 "SELECT completion_id FROM fr2_completion_evidence WHERE binding_id=?",
                 (binding_id,),
@@ -362,7 +374,9 @@ class WorkExecutionLedger(v1.WorkExecutionLedger):
                     "evidence_ref": evidence_ref,
                     "binding_schema": SCHEMA,
                     "all_observed_invocations_resolved": True,
+                    "all_observed_invocations_successful": True,
                     "unknown_outcome_count": 0,
+                    "failed_or_rejected_outcome_count": 0,
                 },
             )
             con.execute("COMMIT")

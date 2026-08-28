@@ -2,12 +2,20 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
 import sqlite3
 import tempfile
 import unittest
 
+from grid10_v6_crash_reconciliation_v1 import (
+    STATUS_PREPARED,
+    STATUS_RECOVERY_REQUIRED,
+    install_reconciliation_schema,
+    prepare_cycle_intent,
+)
 from grid10_v6_recovery_lease_gate_v1 import (
     RecoveryLeaseNotAuthorized,
+    persist_recovery_classification_with_canonical_lease,
     recovery_work_id_for_tick,
     verify_active_recovery_lease_in_transaction,
 )
@@ -89,6 +97,42 @@ def _seed(
     finally:
         con.close()
     return work_id
+
+
+def _seed_recovery_required_evidence(
+    path: Path,
+    *,
+    tick_id: str = "t1",
+    agency_epoch_at_prepare: int = 0,
+    agency_epoch_after: int = 1,
+    control_epoch: int = 1,
+    control_snapshot_digest: str = "control-digest",
+) -> None:
+    """Create the smallest exact DB evidence for POST_V4 recovery classification."""
+    install_reconciliation_schema(path)
+    prepare_cycle_intent(
+        path,
+        tick_id=tick_id,
+        agency_epoch_at_prepare=agency_epoch_at_prepare,
+        control_epoch=control_epoch,
+        control_snapshot_digest=control_snapshot_digest,
+        prepared_ts=0.0,
+    )
+    con = _connect(path)
+    try:
+        con.execute(
+            """CREATE TABLE IF NOT EXISTS grid10_cognitive_cycles(
+                 tick_id TEXT PRIMARY KEY,
+                 agency_epoch_before INTEGER NOT NULL,
+                 agency_epoch_after INTEGER NOT NULL
+               )"""
+        )
+        con.execute(
+            "INSERT INTO grid10_cognitive_cycles VALUES(?,?,?)",
+            (tick_id, agency_epoch_at_prepare, agency_epoch_after),
+        )
+    finally:
+        con.close()
 
 
 class RecoveryLeaseGateTests(unittest.TestCase):
@@ -200,6 +244,75 @@ class RecoveryLeaseGateTests(unittest.TestCase):
             con.execute("ROLLBACK")
         finally:
             con.close()
+
+    def test_persist_recovery_classification_records_lease_proof_without_raw_token(self):
+        _seed(self.db)
+        _seed_recovery_required_evidence(self.db)
+        result, proof, envelope_digest = persist_recovery_classification_with_canonical_lease(
+            self.db,
+            tick_id="t1",
+            work_id=recovery_work_id_for_tick("t1"),
+            spec_rev=1,
+            executor_node="worker-a",
+            lease_token="lease-a",
+            checked_at=NOW,
+            terminal_ts=1.0,
+        )
+        self.assertEqual(result.status, STATUS_RECOVERY_REQUIRED)
+        self.assertEqual(proof.work_id, recovery_work_id_for_tick("t1"))
+        self.assertEqual(len(envelope_digest), 64)
+        con = _connect(self.db)
+        try:
+            row = con.execute(
+                "SELECT status,classification_json,classification_digest FROM grid10_v6_cycle_intents WHERE tick_id=?",
+                ("t1",),
+            ).fetchone()
+        finally:
+            con.close()
+        self.assertIsNotNone(row)
+        self.assertEqual(row["status"], STATUS_RECOVERY_REQUIRED)
+        self.assertEqual(row["classification_digest"], envelope_digest)
+        envelope = json.loads(row["classification_json"])
+        self.assertEqual(envelope["lease_proof"]["work_id"], recovery_work_id_for_tick("t1"))
+        self.assertEqual(envelope["classification"]["same_tick_retry_authorized"], False)
+        self.assertNotIn("lease-a", row["classification_json"])
+
+    def test_persist_recovery_classification_rejects_without_v4_commit_and_rolls_back(self):
+        _seed(self.db)
+        install_reconciliation_schema(self.db)
+        prepare_cycle_intent(
+            self.db,
+            tick_id="t1",
+            agency_epoch_at_prepare=0,
+            control_epoch=1,
+            control_snapshot_digest="control-digest",
+            prepared_ts=0.0,
+        )
+        with self.assertRaisesRegex(
+            RecoveryLeaseNotAuthorized,
+            "RECOVERY_MUTATION_REQUIRES_RECOVERY_REQUIRED:ABORTED_BEFORE_V4_COMMIT",
+        ):
+            persist_recovery_classification_with_canonical_lease(
+                self.db,
+                tick_id="t1",
+                work_id=recovery_work_id_for_tick("t1"),
+                spec_rev=1,
+                executor_node="worker-a",
+                lease_token="lease-a",
+                checked_at=NOW,
+            )
+        con = _connect(self.db)
+        try:
+            row = con.execute(
+                "SELECT status,classification_json,classification_digest FROM grid10_v6_cycle_intents WHERE tick_id=?",
+                ("t1",),
+            ).fetchone()
+        finally:
+            con.close()
+        self.assertIsNotNone(row)
+        self.assertEqual(row["status"], STATUS_PREPARED)
+        self.assertIsNone(row["classification_json"])
+        self.assertIsNone(row["classification_digest"])
 
 
 if __name__ == "__main__":

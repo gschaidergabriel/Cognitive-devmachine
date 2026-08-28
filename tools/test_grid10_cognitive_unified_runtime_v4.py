@@ -20,6 +20,16 @@ from grid10_cognitive_unified_runtime_v4 import (
 from grid10_persistent_agency_v1 import GoalState, WakeKind
 
 
+class CountingControlPlane:
+    def __init__(self, delegate):
+        self.delegate = delegate
+        self.snapshot_calls = 0
+
+    def snapshot(self):
+        self.snapshot_calls += 1
+        return self.delegate.snapshot()
+
+
 class UnifiedCognitiveRuntimeV4Tests(unittest.TestCase):
     def setUp(self):
         self.td = tempfile.TemporaryDirectory()
@@ -45,6 +55,78 @@ class UnifiedCognitiveRuntimeV4Tests(unittest.TestCase):
         self.assertEqual(cycle.agency_epoch_after, cycle.agency_epoch_before + 1)
         self.assertFalse(agency.due_for_tick(now_ts=101.99))
         self.assertTrue(agency.due_for_tick(now_ts=102.0))
+
+    def test_live_control_snapshot_latched_once_and_drives_default_pulse_cadence(self):
+        _, _, agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)
+        base = runtime.control_plane.snapshot()
+        patch = runtime.control_plane.build_patch(
+            patch_id="test:pulse-025",
+            writer="unit-test",
+            writer_kind="EXPERIMENT",
+            reason="prove pulse consumer",
+            changes={"pulse.active_interval_seconds": 0.25},
+            base=base,
+        )
+        receipt = runtime.control_plane.apply_patch(patch)
+        self.assertTrue(receipt.accepted)
+        counted = CountingControlPlane(runtime.control_plane)
+        runtime.control_plane = counted
+        cycle = runtime.tick_once(
+            tick_id="t-live-pulse",
+            interval=None,
+            now_ts=100.0,
+            trusted_axes=_trusted_normal_axes(),
+        )
+        self.assertEqual(counted.snapshot_calls, 1)
+        self.assertEqual(cycle.next_tick_not_before, 100.25)
+        self.assertEqual(cycle.checkpoint["pulse_interval_seconds_consumed"], 0.25)
+        self.assertEqual(cycle.checkpoint["control_snapshot"]["control_epoch"], receipt.control_epoch)
+        self.assertEqual(agency.snapshot().next_tick_not_before, 100.25)
+
+    def test_live_grid_compute_off_gates_actual_action_candidate(self):
+        _, _, _agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)
+        base = runtime.control_plane.snapshot()
+        patch = runtime.control_plane.build_patch(
+            patch_id="test:planning-off",
+            writer="unit-test",
+            writer_kind="EXPERIMENT",
+            reason="prove mode consumer",
+            changes={"grid.planning.mode": "COMPUTE_OFF"},
+            base=base,
+        )
+        self.assertTrue(runtime.control_plane.apply_patch(patch).accepted)
+        cycle = runtime.tick_once(
+            tick_id="t-grid-mode",
+            interval=1.0,
+            now_ts=100.0,
+            trusted_axes=_trusted_normal_axes(),
+        )
+        self.assertEqual(cycle.heartbeat_result.next_action, "ACT_CANDIDATE")
+        self.assertEqual(cycle.checkpoint["raw_next_action"], "ACT_CANDIDATE")
+        self.assertEqual(cycle.next_action, "OBSERVE")
+        self.assertTrue(any(x.startswith("GRID_MODE_BLOCK:planning") for x in cycle.checkpoint["control_reasons"]))
+
+    def test_live_grid_gain_below_salience_gates_actual_action_candidate(self):
+        _, _, _agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)
+        base = runtime.control_plane.snapshot()
+        patch = runtime.control_plane.build_patch(
+            patch_id="test:planning-low-gain",
+            writer="unit-test",
+            writer_kind="EXPERIMENT",
+            reason="prove gain consumer",
+            changes={"grid.planning.gain": 0.20},
+            base=base,
+        )
+        self.assertTrue(runtime.control_plane.apply_patch(patch).accepted)
+        cycle = runtime.tick_once(
+            tick_id="t-grid-gain",
+            interval=1.0,
+            now_ts=100.0,
+            trusted_axes=_trusted_normal_axes(),
+        )
+        self.assertEqual(cycle.heartbeat_result.next_action, "ACT_CANDIDATE")
+        self.assertEqual(cycle.next_action, "OBSERVE")
+        self.assertTrue(any(x.startswith("GRID_GAIN_BELOW_SALIENCE:") for x in cycle.checkpoint["control_reasons"]))
 
     def test_missing_hard_evidence_persists_hold_with_hold_interval(self):
         _, _, agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)

@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "trigger": "triggerwort 5",
+  "run_id": "triggerwort5-20260828T1414p0700-gpt56sol-hook-invocation-identity",
+  "status": "SOURCE_PLUS_EXTERNAL_PRIMARY_GROUNDED_DESIGN_DELTA",
+  "purpose": "Resolve the open same-session effect-correlation question by cross-checking the exact current Frankenstein donor hooks/stern implementation against current Claude Code primary hook semantics.",
+  "source_snapshot": {
+    "repository": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "stern_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "hooks_path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+    "hooks_blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5"
+  },
+  "external_primary": {
+    "provider": "Anthropic Claude Code Docs",
+    "url": "https://code.claude.com/docs/en/hooks",
+    "observed_2026_08_28": [
+      "PreToolUse fires on every tool call and can block before execution.",
+      "PostToolUse fires after a successful tool call.",
+      "Both PreToolUse and PostToolUse input include tool_use_id, a call-scoped tool identity.",
+      "Claude Code explicitly supports several tool calls at once and exposes PostToolBatch after a full batch of parallel tool calls resolves."
+    ]
+  },
+  "forensic_findings": [
+    {
+      "finding_id": "TW5-HOOK-ID-001",
+      "classification": "CURRENT_SOURCE_PLUS_EXTERNAL_PRIMARY",
+      "claim": "The current plugin hooks route PreToolUse and PostToolUse through separate stern.py command-hook invocations, but stern.zulassen()/merken() correlate them using a mutable active_turns.effect_id slot scoped only by session_id. Current Claude Code hook input already provides tool_use_id at both lifecycle points.",
+      "impact": "The donor discards a stronger call-scoped identity and uses a weaker mutable session-scoped pointer.",
+      "causal_status": "STRUCTURAL_IDENTITY_GAP; no overlapping-call runtime reproduction performed in this run"
+    },
+    {
+      "finding_id": "TW5-HOOK-ID-002",
+      "classification": "OPEN_RUNTIME_RACE_WITH_STRONGER_PLATFORM_PLAUSIBILITY",
+      "claim": "Parallel tool-call batches are a documented Claude Code behavior. Therefore a session-wide current-effect slot is not a safe architecture contract for exact PreToolUse->PostToolUse correlation unless the exact runtime scheduler independently proves serialization strong enough to prevent overwrite/interleaving.",
+      "counterhypothesis": "The exact installed Claude Code version may serialize each relevant PreToolUse/tool/PostToolUse triplet despite supporting parallel tool batches.",
+      "falsifier": "Capture a batch with at least two same-session state-changing tool calls and bind PreToolUse/PostToolUse order plus tool_use_id/effect_id. A mismatch confirms the race; strict non-overlap can bound the current-version risk but does not justify discarding tool_use_id in Frankenstein-2.0."
+    },
+    {
+      "finding_id": "TW5-HOOK-ENFORCEMENT-003",
+      "classification": "CURRENT_SOURCE_PLUS_EXTERNAL_PRIMARY_CONTRAST",
+      "claim": "Claude Code PreToolUse supports real denial through permissionDecision='deny' or blocking exit semantics, while the donor stern EffectGate intentionally emits no blocking decision and states that tools always proceed.",
+      "impact": "The current donor named EffectGate is admission/journal bookkeeping, not the blocking effect authority required by current EntityOS/HCU design."
+    },
+    {
+      "finding_id": "TW5-WACHE-PROVENANCE-004",
+      "classification": "UNRESOLVED_HOST_ONLY_PREDECESSOR",
+      "claim": "Current stern source points to ~/aicore/opt/aicore/tools/schranke/wache-koenig.py in global settings as the older blocking guard. No wache-named path was found in the exact pinned historical Project-Frankenstein tree ec21e66c4672fde1f0a5d948ebc51457b69b620a, and current donor repository code search did not resolve that host path.",
+      "boundary": "Repository absence does not prove the host guard did not exist; it means this run cannot promote its behavior or lineage without the actual host/source artifact."
+    }
+  ],
+  "frankenstein2_delta": {
+    "invocation_identity_rule": "Use immutable tool_use_id or an equally exact generated invocation_id as the primary PreToolUse->execution->PostToolUse/PostToolUseFailure correlation key; session_id is contextual identity only, never the sole effect pointer.",
+    "effect_state_split": [
+      "ADMISSION_DECISION",
+      "ENFORCEMENT_DECISION",
+      "EXECUTION_RECEIPT",
+      "WORLD_EFFECT_VERIFICATION",
+      "RESULT_REENTRY",
+      "COMPLETION_EVIDENCE"
+    ],
+    "blocking_rule": "If a policy is intended to prevent an effect, its enforcement adapter must exercise the actual host blocking mechanism and produce a bound denial/allow receipt; bookkeeping status alone is not enforcement.",
+    "batch_rule": "Parallel/batched tool calls require per-invocation correlation and must not share a mutable single current-effect slot."
+  },
+  "credits": {
+    "donor_runtime_reexecution": 0,
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Acquire the actual wache-koenig source/host artifact or classify it permanently as unavailable provenance; resolve first/last Git windows for EffectGate/completion/schema edges; then merge the invocation-identity gap into FAILURE_ATLAS and map tool_use_id-bound enforcement/result re-entry into the Triggerword-4 Frankenstein-2.0 effect contract."
+}

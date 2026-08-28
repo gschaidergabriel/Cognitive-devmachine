@@ -1,0 +1,72 @@
+{
+  "schema": "ENTITYOS_EFFECT_AUTHORITY_BINDING_EPOCH_COMPATIBILITY/v1",
+  "classification": "NON_AUTHORITY_COMPATIBILITY_ATTESTATION",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed_before_write": "af48d7068927adab2033baff4006e33f1140df1b",
+  "purpose": "Bind the existing exact EffectGate+EffectJournal implementation source tuple to the current inbox-selected 9.13AJ NON_AUTHORITY evidence surface without creating, broadening, replacing, or self-granting effect authority.",
+  "prior_exact_source_binding": {
+    "path": "research_entity/continuity/ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_V1.json",
+    "blob_sha": "b4d91a0dd233c9dc15ff8218feea9248ac1c13c5",
+    "declared_supervisor_epoch": "8.78",
+    "status": "CURRENT_EXACT_SOURCE_IDENTITY_BINDING_NO_NEW_AUTHORITY",
+    "implementation_bound_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+    "effectgate_path": "the artefact/clayverse/effects.py",
+    "effectgate_blob_sha": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+    "effectjournal_path": "the artefact/clayverse/effect_journal.py",
+    "effectjournal_blob_sha": "cda63471f1467481f2ff79032d3931730a334a20",
+    "canonical_state_schema_path": "the artefact/clayverse/store.py",
+    "canonical_state_schema_blob_sha": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "canonical_state_schema_version": "6",
+    "adapter_api_version": "ENTITYOS_EFFECT_AUTHORITY_PY_API/v1"
+  },
+  "current_inbox_surface": {
+    "path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "blob_sha": "b8681e633a3a94f5e8ab00472ec4c3e321a2dcc1",
+    "schema_version": "9.13",
+    "selected_delta": "9.13AJ_NON_AUTHORITY",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AJ_DELTA_2026-08-29T0038P0700_GPT56SOL.json",
+    "evidence_rule": "NEW_EVIDENCE_MUST_BIND_CURRENT_CANONICAL_AUTHORITY_OR_LABEL_OLDER_EPOCH_AS_HISTORICAL_ONLY"
+  },
+  "selected_delta_surface": {
+    "path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AJ_DELTA_2026-08-29T0038P0700_GPT56SOL.json",
+    "blob_sha": "9ae9dd8e0c21d1171e0d986ee6a4e901d1dc40c4",
+    "schema_version": "9.13",
+    "supervisor_delta": "9.13AJ_NON_AUTHORITY",
+    "authority_change": false,
+    "mode": "FREE_ONLY"
+  },
+  "compatibility_finding": {
+    "effect_authority_changed_by_9_13AJ": false,
+    "source_tuple_changed_by_9_13AJ": false,
+    "prior_8_78_basis_retained_as_provenance": true,
+    "current_evidence_may_reference_prior_exact_source_tuple": true,
+    "reason": "The inbox-selected 9.13AJ surface explicitly declares NON_AUTHORITY and authority_change=false. This attestation therefore rebinds evidence provenance to the current selected surface while leaving the already-admitted EffectGate+EffectJournal authority and exact implementation tuple unchanged.",
+    "epistemic_boundary": "This is a compatibility/evidence attestation, not an owner/supervisor authority grant. If a later owner or authority-changing supervisor record changes effect authority or the bound implementation tuple, this record becomes historical and must fail closed for current promotion."
+  },
+  "frankenstein2_consumption": {
+    "target_workpackage": "F2-WP-105",
+    "rule": "The already-active WP105 lane may use this record only to satisfy current-epoch provenance binding for the exact external authority tuple. It must still verify the binding bytes/API and execute the deterministic no-real-effect integration matrix before any integration credit. This record gives zero runtime, real-effect, completion, GRID10, whole-system, HCU, J-Space or training credit.",
+    "new_mutation_authority_created": false,
+    "second_effect_authority_created": false
+  },
+  "fail_closed_conditions": [
+    "current SUPERVISOR_INBOX no longer selects the recorded 9.13AJ surface",
+    "a newer owner or supervisor record has authority_change=true for effect authority",
+    "EffectGate, EffectJournal, UnifiedDB schema, bound commit, blob or API identity differs from the prior exact source binding",
+    "caller or adapter attempts to self-select a different effect authority",
+    "UNKNOWN_AFTER_RESTART is treated as permission to replay"
+  ],
+  "credit_boundary": {
+    "current_epoch_provenance_compatibility": "EVIDENCE_ONLY",
+    "effectgate_runtime_credit_added": 0,
+    "effectjournal_runtime_credit_added": 0,
+    "real_effect_runtime_credit_added": 0,
+    "completion_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "next_exact_action": "Re-enter current authority and Frankenstein-2.0 main. If this exact 9.13AJ compatibility tuple is still current, the existing active F2-WP-105 mutation authority should consume it through CanonicalEffectAuthorityPort and run the deterministic no-real-effect matrix: exact authority binding -> journal PENDING before executor stub -> exact call/receipt correlation -> VERIFIED-or-UNKNOWN journal transition -> separate completion verification; DENY, UNKNOWN, authority/blob/API mismatch and restart uncertainty must dispatch zero or remain non-replayable as applicable."
+}

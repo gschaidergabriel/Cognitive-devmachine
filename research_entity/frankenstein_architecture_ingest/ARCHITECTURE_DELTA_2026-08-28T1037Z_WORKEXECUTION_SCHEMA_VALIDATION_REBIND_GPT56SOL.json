@@ -1,0 +1,99 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:37:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest-schema-validation",
+  "trigger": "triggerwort 5",
+  "delta_class": "WORK_EXECUTION_BINDING_SCHEMA_VALIDATION_REBIND",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "branch": "main",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_branch": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "parallel_ingest_head_observed": "8851207bdb3bc3a8115807959ddfc78bb134a60b"
+  },
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "packet_provenance": {
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "supersedes_packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "parallel_primary_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1035Z_WORKEXECUTION_BINDING_GPT56SOL.json",
+    "parallel_primary_delta_commit": "c5e9d543fc64aeb15a8dca1fc4f577ea30f70180",
+    "parallel_primary_receipt_commit": "8851207bdb3bc3a8115807959ddfc78bb134a60b"
+  },
+  "schema_validation": {
+    "schema_path": "research_entity/frankenstein_architecture_ingest/INGEST_PACKET_SCHEMA.json",
+    "schema_blob_sha": "8b2732394418e725067be52ee480ad1da649a9f7",
+    "result": "PACKET_HAS_ONE_ENUM_VIOLATION",
+    "violation": {
+      "atom_id": "TW5-WORKEXEC-SUCC-005-TOOL-USE-TO-AGENT-JOIN-REMAINS-UNPROVEN",
+      "field": "target_2_0_action",
+      "packet_value": "RESEARCH",
+      "allowed_values": [
+        "KEEP",
+        "REPAIR",
+        "ADAPT_TO_GRID",
+        "REPLACE_WITH_VERIFIED_SUCCESSOR",
+        "COMPATIBILITY_ONLY",
+        "RETIRE_WITH_EVIDENCE",
+        "UNDECIDED"
+      ]
+    },
+    "disposition": "SEMANTIC_CONTENT_ACCEPTED_WITH_SCHEMA_DEFECT_PRESERVED",
+    "normalization_rule": "Do not mutate the immutable packet. In the architecture model, treat the invalid target_2_0_action as UNDECIDED while preserving the atom's source finding and open research question.",
+    "producer_followup": "Packet producers must emit only schema-admitted target_2_0_action values or deliberately version the schema before using a new action enum."
+  },
+  "source_and_docs_crosscheck": {
+    "donor_stern": "CONFIRMED: handoff creates durable entityos_arbeitspaket/capsule and explicitly does not spawn a child",
+    "donor_hooks": "CONFIRMED: plugin hooks.json registers seven parent/general hook classes and no dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted entries",
+    "official_docs_refinement": "CURRENT CAPABILITY DOCS support distinct agent_id, task_id and tool_use_id identity domains; tool hooks running inside subagents can carry agent_id, but a deterministic parent Agent tool_use_id -> SubagentStart agent_id join is still not established by documentation alone",
+    "runtime_credit": 0
+  },
+  "architecture_effect": {
+    "semantic_mechanism": "NO_DUPLICATE_MECHANISM; retain parallel WorkExecutionBinding/v1",
+    "workexecutionbinding_invariant": [
+      "paket_id is durable delegated-work intent, not child-execution proof",
+      "spawn_tool_use_id, agent_id, optional task_id and child_tool_use_id remain distinct identity namespaces",
+      "task_id is optional unless an actual task lifecycle is observed",
+      "timing/order/session proximity never creates a causal join",
+      "an unobserved parent spawn_tool_use_id -> agent_id edge remains UNKNOWN",
+      "result admission/reconcile requires an immutable typed receipt bound to the exact WorkExecutionBinding"
+    ],
+    "schema_atom_005_target_2_0_action": "UNDECIDED",
+    "sparse_world_boundary": "WorkExecutionBinding identity/provenance remains typed exact metadata outside vector-native WorldSlice similarity; the world substrate must never infer missing execution identity by semantic proximity."
+  },
+  "contradiction": {
+    "id": "TW5-CONTRADICTION-WORKEXEC-PACKET-SCHEMA-017",
+    "statement": "The newest packet is semantically useful and source-corroborated, but one atom uses target_2_0_action=RESEARCH, which is not admitted by the current packet schema. Accepting it without recording the mismatch would make packet validation non-fail-closed."
+  },
+  "feeds_triggerword_4": {
+    "changed": false,
+    "next_exact_gate": "Capture exact installed Agent PreToolUse/PostToolUse plus SubagentStart/SubagentStop payloads for one harmless invocation; accept a parent tool_use_id -> agent_id join only from an observed deterministic shared key, then falsify under two overlapping Agent invocations."
+  },
+  "credit_boundary": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "packet_schema_validation": "DEFECT_PRESERVED_AND_NORMALIZED_IN_MODEL_ONLY",
+    "installed_runtime_child_lifecycle": 0,
+    "parent_agent_call_to_child_join_runtime": 0,
+    "workexecutionbinding_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "feeds_triggerword_4_boolean": true
+}

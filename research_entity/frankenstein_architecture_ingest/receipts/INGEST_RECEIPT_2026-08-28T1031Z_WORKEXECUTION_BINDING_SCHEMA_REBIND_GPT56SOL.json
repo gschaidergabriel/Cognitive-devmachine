@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "receipt_id": "TW5-RECEIPT-20260828T1031Z-WORKEXECUTION-BINDING-SCHEMA-REBIND-GPT56SOL",
+  "created_at": "2026-08-28T10:31:00Z",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "directive_path": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+  "directive_fetched_from_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_sha_before_ingest": "007131285ed54a706be2bca8a4160db1d0730a18",
+  "design_delta_commit": "82ce27fa28d493629a75c87e8c2fcf8ce7596b0a",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "source_packet": {
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "consumption_result": "PARTIAL_ADMITTED_WITH_CORRECTIONS",
+    "wholesale_schema_admission": false
+  },
+  "crosschecks": [
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:5580-5845",
+      "result": "PASS",
+      "finding": "handoff creates durable workpackage/capsule and explicitly does not itself delegate/spawn."
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/hooks/hooks.json:1-81",
+      "result": "PASS",
+      "finding": "donor config registers seven parent/tool lifecycle hooks and lacks dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted hooks."
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md:77-81",
+      "result": "PASS_WITH_PACKET_PROVENANCE_CORRECTION",
+      "finding": "handoff-before-spawn/reconcile-after sequence exists, but packet span 1-7 was incorrect."
+    },
+    {
+      "source": "research_entity/frankenstein_architecture_ingest/INGEST_PACKET_SCHEMA.json@8b2732394418e725067be52ee480ad1da649a9f7",
+      "result": "PACKET_SCHEMA_FAIL",
+      "finding": "packet atom TW5-WORKEXEC-SUCC-005 uses target_2_0_action=RESEARCH, which is not in the admitted enum; architecture delta retains the unresolved action as UNDECIDED rather than modifying the immutable packet."
+    },
+    {
+      "source": "https://code.claude.com/docs/en/hooks observed 2026-08-28",
+      "result": "EXTERNAL_PRIMARY_SOURCE_SUPPORT",
+      "finding": "current docs expose agent_id on subagent lifecycle and task_id on separate task lifecycle; no installed-target runtime firing or deterministic parent Agent tool_use_id -> agent_id join was observed."
+    }
+  ],
+  "authority_rebind": {
+    "packet_canonical_main": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "current_canonical_main": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "current_supervisor_schema_version": "9.13",
+    "current_supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "result": "SOURCE_CLAIMS_RECHECKED_AT_UNCHANGED_DONOR; PACKET_CURRENT_AUTHORITY_LABEL_NOT_INHERITED"
+  },
+  "architecture_delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1031Z_WORKEXECUTION_BINDING_SCHEMA_REBIND_GPT56SOL.json",
+  "architecture_change": "Frankenstein 2.0 should use a typed WorkExecutionBinding/v1 that preserves package_id, parent session, generation, spawn tool_use_id, agent_id and optional independent task_id as separate identity domains. Missing joins remain UNKNOWN; timing/order is forbidden as causal identity. Implementation waits for installed ABI evidence.",
+  "sparse_world_substrate_change": "NO_STRUCTURAL_PROMOTION. Work execution identities become candidate provenance refs for later learned transitions/operators; delegated/model-produced outputs do not become observed world transitions merely because a package or child exists.",
+  "canonical_frankenstein_2_repository_check": {
+    "owner_law_target": "gschaidergabriel/frankenstein-2.0",
+    "result": "404_NOT_VISIBLE_OR_NOT_INITIALIZED",
+    "fallback_behavior": "No second artifact repository invented; forensic delta remains in clay-global-research-entity control/forensics branch until authorized Triggerword-4 bootstrap."
+  },
+  "runtime_actions": [],
+  "runtime_credit": {
+    "installed_subagent_lifecycle": 0,
+    "workexecution_binding": 0,
+    "entityos_whole": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "training": 0
+  },
+  "negative_evidence": [
+    "Original packet is not wholesale schema-valid.",
+    "Original governance atom points at the wrong source span.",
+    "Exact current-main identity in the packet is stale.",
+    "Installed target lifecycle ABI remains unobserved.",
+    "Parent Agent tool_use_id -> child agent_id deterministic join remains unproven.",
+    "Canonical gschaidergabriel/frankenstein-2.0 repository was not visible/initialized through the current GitHub surface."
+  ],
+  "checkpoint": {
+    "shared_ingest_state_mutated": false,
+    "reason": "INGEST_STATE.json is a shared moving aggregate and was not rewritten from a truncated read; append-only delta+receipt preserve this ingest without clobber risk.",
+    "next_exact_action": "On the next authorized build/runtime lane, pin the installed Claude Code lifecycle ABI with a harmless Agent invocation and capture exact PreToolUse/PostToolUse/SubagentStart/SubagentStop payload identities; then implement WorkExecutionBinding/v1 and run a two-concurrent-child anti-crosswire test.",
+    "trigger5_next_forensic_span": "Search donor/runtime integration surfaces for any existing host-independent join between package_id and native child invocation before proposing new execution machinery."
+  },
+  "acceptance": "INGEST_ACCEPTED_AT_SOURCE_FORENSIC_SCOPE_ONLY"
+}

@@ -6,6 +6,11 @@ same physical SQLite opened by ``grid10_cognitive_unified_runtime_v4`` and deleg
 heartbeat/checkpoint/next-tick state transition to that v4 core. Idle/HOLD scheduling uses the
 same v4 CAS helper so the service wrapper no longer owns a second write sequence.
 
+The live Dynamic Frame is the default cadence authority: active and HOLD ticks are resolved
+inside v4 from its single per-tick ControlSnapshot; an idle cycle latches one snapshot solely
+to resolve ``pulse.idle_interval_seconds``. Explicit config/CLI interval values remain bounded
+compatibility/test overrides and do not create a second durable control authority.
+
 The key Stage-2 behavior is explicit and falsifiable:
 
     checkpoint -> HOLD/DORMANT -> process restart -> exact wake condition
@@ -34,9 +39,9 @@ from grid10_persistent_agency_v1 import GoalState
 
 @dataclass(frozen=True)
 class SchedulerConfig:
-    active_interval_seconds: float = 1.0
-    hold_poll_seconds: float = 15.0
-    idle_poll_seconds: float = 30.0
+    active_interval_seconds: float | None = None
+    hold_poll_seconds: float | None = None
+    idle_poll_seconds: float | None = None
     allow_regulator_writes: bool = False
     trusted_normal_test_fixture: bool = False
 
@@ -121,7 +126,14 @@ class PersistentCognitiveScheduler:
             )
 
         if not active_goal_ids:
-            next_due = now + max(0.05, float(self.config.idle_poll_seconds))
+            # No cognitive heartbeat runs here, so this idle scheduler boundary may latch its
+            # own immutable snapshot without violating the one-snapshot-per-cognitive-tick law.
+            if self.config.idle_poll_seconds is None:
+                control = self.runtime.control_plane.snapshot()
+                idle_interval = control.float("pulse.idle_interval_seconds")
+            else:
+                idle_interval = float(self.config.idle_poll_seconds)
+            next_due = now + max(0.05, float(idle_interval))
             after_epoch, _checkpoint = _atomic_commit_idle_hold(
                 self.agency,
                 expected_agency_epoch=before.state_epoch,
@@ -192,9 +204,9 @@ def main() -> int:
     p.add_argument("--frames-jsonl", required=True)
     p.add_argument("--cycles", type=int, default=1)
     p.add_argument("--forever", action="store_true")
-    p.add_argument("--active-interval", type=float, default=1.0)
-    p.add_argument("--hold-poll", type=float, default=15.0)
-    p.add_argument("--idle-poll", type=float, default=30.0)
+    p.add_argument("--active-interval", type=float, default=None)
+    p.add_argument("--hold-poll", type=float, default=None)
+    p.add_argument("--idle-poll", type=float, default=None)
     p.add_argument("--allow-regulator-writes", action="store_true")
     p.add_argument("--trusted-normal-test-fixture", action="store_true")
     p.add_argument("--event", action="append", default=[])

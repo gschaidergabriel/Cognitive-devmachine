@@ -16,6 +16,8 @@ class EntityOSIntegrityError(PermissionError):
 class EntityOSOutcomeUnknown(RuntimeError):
     """The EntityOS child started, but no verified outcome was returned."""
 
+    replay_permitted = False
+
 
 @dataclass(frozen=True)
 class EntityOSBridge:
@@ -134,35 +136,58 @@ class EntityOSBridge:
         finally:
             os.close(fd)
 
+    @staticmethod
+    def _reap_after_unknown(proc: subprocess.Popen[bytes]) -> None:
+        """Best-effort local cleanup; terminating a child cannot undo prior effects."""
+
+        try:
+            proc.kill()
+        except Exception:
+            pass
+        try:
+            proc.wait(timeout=1.0)
+        except Exception:
+            pass
+
     def run(self, argv):
         if not isinstance(argv, list) or not argv or any(not isinstance(x, str) or "\x00" in x for x in argv):
             raise ValueError("explicit non-empty string argv required")
         fd = self._open_verified()
         try:
             executable = f"/proc/self/fd/{fd}"
+            # Popen construction is the observed child-start boundary. Failure before
+            # it returns means no child process was observed. Once it returns, any
+            # exceptional or missing terminal return is outcome uncertainty: the child
+            # may already have produced an external effect.
+            proc = subprocess.Popen(
+                [executable, *argv],
+                executable=executable,
+                pass_fds=(fd,),
+                shell=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                env={"PATH": self._EXEC_PATH},
+            )
             try:
-                cp = subprocess.run(
-                    [executable, *argv],
-                    executable=executable,
-                    pass_fds=(fd,),
-                    shell=False,
-                    capture_output=True,
-                    text=False,
-                    timeout=self.timeout,
-                    env={"PATH": self._EXEC_PATH},
+                stdout, stderr = proc.communicate(timeout=self.timeout)
+            except Exception as exc:
+                self._reap_after_unknown(proc)
+                raise EntityOSOutcomeUnknown(
+                    f"EntityOS return unknown after child start: {type(exc).__name__}"
+                ) from exc
+            returncode = proc.returncode
+            if returncode is None:
+                self._reap_after_unknown(proc)
+                raise EntityOSOutcomeUnknown(
+                    "EntityOS return code unresolved after child start"
                 )
-            except subprocess.TimeoutExpired as exc:
-                # subprocess.run raises TimeoutExpired only after the child has
-                # been created. The child may therefore already have produced
-                # a real external effect even though its outcome was lost.
-                raise EntityOSOutcomeUnknown("EntityOS timed out after launch") from exc
         finally:
             os.close(fd)
         return {
-            "ok": cp.returncode == 0,
-            "exit": cp.returncode,
-            "stdout_sha256": hashlib.sha256(cp.stdout).hexdigest(),
-            "stderr_sha256": hashlib.sha256(cp.stderr).hexdigest(),
-            "stdout": cp.stdout[:4096].decode(errors="replace"),
-            "stderr": cp.stderr[:4096].decode(errors="replace"),
+            "ok": returncode == 0,
+            "exit": returncode,
+            "stdout_sha256": hashlib.sha256(stdout).hexdigest(),
+            "stderr_sha256": hashlib.sha256(stderr).hexdigest(),
+            "stdout": stdout[:4096].decode(errors="replace"),
+            "stderr": stderr[:4096].decode(errors="replace"),
         }

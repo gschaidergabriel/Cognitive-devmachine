@@ -1,0 +1,141 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_PERCEPTION_TAINT_PENDING_EFFECT_CANCEL_5641dc6b_GPT56SOL",
+  "analysis_time_utc": "2026-08-28T07:30:17Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_PLUS_HISTORICAL_COMPONENT_RECEIPT_NO_NEW_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "branch": "main"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_delta": "aceba5ba6a0530b23a8ebca7f7cee6f4a9beec4e",
+    "canonical_main_observed": "45f46138db94e0228240ea15b586bf8be622410b"
+  },
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "status": "INGESTED_UNIQUE_ATOMS_ONLY",
+      "unique_atoms_promoted": [
+        "TW5-A-PERCEPTION-003-TIER-TAINT-NOTCOMPUTED",
+        "TW5-A-PERCEPTION-004-ABLATION-RECEIPT",
+        "TW5-A-VOICE-005-CAPSULE-POLICY-LIVE-REFRESH",
+        "TW5-A-VOICE-006-BARGEIN-PENDING-TOOL-CANCEL"
+      ],
+      "deduped_overlap": "effect admission/outcome semantics already represented by prior effect-path/effect-authority deltas; no duplicate evidence credit granted"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "status": "ALREADY_DURABLY_PROCESSED_DEDUPED",
+      "evidence": [
+        "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_AUTHORITY_DELTA_2026-08-28T142407P0700_GPT56SOL.json",
+        "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_20260828T072407Z_EFFECT_AUTHORITY_GPT56SOL.json"
+      ],
+      "double_count_credit": false
+    },
+    {
+      "packet_id": "triggerwort5-20260828T1414p0700-gpt56sol-hook-invocation-identity",
+      "source_namespace": "research_entity/architecture_archaeology/TRIGGERWORD5_LIVE_FORENSIC_FEED.json",
+      "status": "CROSS_NAMESPACE_REFERENCED_NOT_COPIED",
+      "dedupe_reason": "tool_use_id/per-call correlation and nonblocking donor EffectGate findings overlap current branch frontier; retain canonical-main provenance while consuming the design invariant"
+    }
+  ],
+  "source_cross_checks": [
+    {
+      "id": "TW5-XCHECK-PERCEPTION-TAINT-001",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py",
+      "blob": "91a66ecf34a6486a6bf077dcb115fcc224e3119b",
+      "spans": [[96,143],[420,560]],
+      "result": "CONFIRMED",
+      "finding": "HeadPolicy mechanically derives compute/inference/memory/persistence permissions from tier. evaluate_head resolves dependencies from the central DAG, returns NOT_COMPUTED/value=None for unknown or COMPUTE_OFF heads and for taint-blocked dependencies before calling compute_fn. OUTPUT_OFF is a separate egress barrier after computation.",
+      "boundary": "Source proves the enforcement function semantics, not that every live perception caller routes through it. System-wide bypass absence remains unproven."
+    },
+    {
+      "id": "TW5-XCHECK-PERCEPTION-ABLATION-002",
+      "path": "DEV_SOURCE_RESEARCH/repository/phase43/evidence/PERCEPTION_CONTROL_PLANE_ABLATION_2026-08-27.json",
+      "blob": "2745be0f1e2f40ad358c22519857885bf871d9ce",
+      "result": "HISTORICAL_COMPONENT_RECEIPT_ACCEPTED_WITH_SCOPE",
+      "finding": "Archived project receipt records object.known.cup=COMPUTE_OFF -> NOT_COMPUTED/value=null while person.presence remained ON/OK on the same real camera frame, with persisted status later re-read from unified.db.",
+      "boundary": "No rerun in this Triggerword-5 invocation; no whole Visual Cortex, GRID10, HCU or EntityOS runtime credit."
+    },
+    {
+      "id": "TW5-XCHECK-VOICE-CANCEL-003",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "span": [1300,1408],
+      "result": "CONFIRMED",
+      "finding": "Function calls are queued until response.done. Non-completed responses clear pending calls, and barge-in clears the queue before truncate/cancel, preventing interrupted-response calls from reaching _tool_ausfuehren after cancellation.",
+      "boundary": "This is a pre-dispatch cancellation guard in the Realtime voice path only. It cannot resolve UNKNOWN outcomes after an external effect has already been submitted."
+    },
+    {
+      "id": "TW5-XCHECK-HOOK-IDENTITY-004",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py + hooks/hooks.json",
+      "blobs": ["8b413ed8b55de67b1c9450a4149951ec7676a947","c483bc81cbae080a8175f7ce694ef657484614b5"],
+      "result": "CONFIRMED_WITH_EXTERNAL_PRIMARY",
+      "finding": "Donor PreToolUse/PostToolUse use one mutable active_turns.effect_id per session and normal PreToolUse intentionally does not deny. Current Claude Code primary hook documentation exposes call-scoped tool_use_id, supports actual PreToolUse denial, and states PostToolUse fires concurrently for parallel tool calls before PostToolBatch.",
+      "external_primary": "https://code.claude.com/docs/en/hooks",
+      "boundary": "Structural identity weakness is established; an actual donor overlapping-call mismatch was not reproduced in this analysis lane."
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "id": "TW5-PERCEPTION-TAINT-010",
+      "feeds_triggerword4": true,
+      "delta": "Promote COMPUTE_OFF/OUTPUT_OFF/MEMORY_OFF plus DAG taint propagation and NOT_COMPUTED/value=None into the typed GRID/WorldSlice control contract. A disabled or tainted variable must not be reconstructed downstream or represented as false/zero. Require source-wide caller reachability audit before system-level privacy credit."
+    },
+    {
+      "id": "TW5-PENDING-EFFECT-CANCEL-011",
+      "feeds_triggerword4": true,
+      "delta": "Generalize Realtime barge-in handling into a typed PENDING_EFFECT lease/state before EffectGate submission: cancellation/supersession may invalidate an undispatched candidate, but once submission may have occurred the state becomes OUTCOME_UNKNOWN until independently verified; never convert cancellation into blind replay."
+    },
+    {
+      "id": "TW5-VOICE-CAPSULE-GENERATION-012",
+      "feeds_triggerword4": true,
+      "delta": "Keep VoiceSessionCapsule as an ephemeral projection over canonical sources and add a deterministic generation/freshness/provenance stamp before it can steer stronger expression or autonomous decisions. Do not turn it into a second durable memory authority."
+    },
+    {
+      "id": "TW5-EFFECT-INVOCATION-ID-013",
+      "feeds_triggerword4": true,
+      "delta": "Bind ADMISSION_DECISION -> ENFORCEMENT_DECISION -> EXECUTION_RECEIPT -> WORLD_EFFECT_VERIFICATION -> RESULT_REENTRY/COMPLETION_EVIDENCE by immutable per-call tool_use_id or equivalent invocation_id plus request_digest, session, generation and causal identity. session_id alone is contextual, never the sole effect pointer."
+    },
+    {
+      "id": "TW5-DUAL-INGEST-PROVENANCE-014",
+      "feeds_triggerword4": false,
+      "delta": "Do not collapse architecture_archaeology and frankenstein_architecture_ingest into one mutable truth surface. Treat canonical-main live feed packets as append-only research provenance and owner-branch inbox/state as the Triggerword-5 assembly-facing ingestion index; bridge by stable packet/run IDs and dedupe keys, preserving both histories until an explicit owner migration authority supersedes one lane."
+    }
+  ],
+  "preserved_contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-PERCEPTION-ENFORCEMENT-REACHABILITY-005",
+      "status": "OPEN",
+      "claim_a": "evaluate_head mechanically enforces tier/DAG taint semantics.",
+      "claim_b": "Full source-wide proof that every sensitive live perception computation enters through evaluate_head is absent.",
+      "resolution_rule": "Audit all live callers and reject system-level privacy/lesion credit until bypass paths are absent or separately fenced."
+    },
+    {
+      "id": "TW5-CONTRADICTION-INGEST-NAMESPACE-006",
+      "status": "OPEN_BUT_BOUNDED",
+      "claim_a": "Canonical-main architecture_archaeology live feed contains new Triggerword-5 packets.",
+      "claim_b": "Owner directive names frankenstein_architecture_ingest/inbox as canonical packet location for this program.",
+      "resolution_rule": "Preserve both append-only provenance surfaces, bridge by stable IDs/dedupe keys, and do not delete or silently promote either lane without newer explicit owner authority."
+    }
+  ],
+  "credits": {
+    "source_forensics": "PRESENT",
+    "historical_component_runtime_receipt": "PRESENT_SCOPED_PERCEPTION_ABLATION_ONLY",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Audit every live caller of perception_control evaluate_head for raw-compute bypass, then recover/inspect the actual wache-koenig host/source artifact if an authorized source surface exists; in parallel Triggerword 4 should encode per-invocation effect correlation plus pre-dispatch cancellation/OUTCOME_UNKNOWN tests without granting runtime credit from this source-only pass."
+}

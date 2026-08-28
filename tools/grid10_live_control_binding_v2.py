@@ -13,6 +13,8 @@ Specialist computation remains independent from broadcast ignition:
 * gain still changes specialist token budget.
 * GWT eligibility additionally requires ``gain >= grid.workspace_ignition_threshold``.
 * if no visible specialist reaches the threshold, the workspace inference is NOT called.
+* normal memory re-entry is restricted to specialists that actually crossed the same
+  GWT ignition gate; sub-threshold private computation cannot be advertised as re-entry.
 
 This is candidate cognition only. No canonical truth, effect, completion, provider admission,
 or whole-runtime acceptance is created here.
@@ -229,6 +231,7 @@ def run_control_bound_cognitive_cycle_v2(
         and row.error is None
         and plan_by_id[row.cell_id].gain >= ignition_threshold
     )
+    gwt_eligible_set = set(gwt_eligible)
     workspace_ignited = bool(gwt_eligible)
 
     workspace_tokens = 0
@@ -351,7 +354,12 @@ def run_control_bound_cognitive_cycle_v2(
     )
     cycle = CognitiveCycleResult(workspace=workspace, cells=tuple(fanin_rows))
     memory_eligible = tuple(
-        p.cell_id for p in plans if p.compute and p.expose_output and p.memory_reentry_eligible
+        p.cell_id
+        for p in plans
+        if p.cell_id in gwt_eligible_set
+        and p.compute
+        and p.expose_output
+        and p.memory_reentry_eligible
     )
     return ControlledCognitiveCycleResultV2(
         schema=SCHEMA,

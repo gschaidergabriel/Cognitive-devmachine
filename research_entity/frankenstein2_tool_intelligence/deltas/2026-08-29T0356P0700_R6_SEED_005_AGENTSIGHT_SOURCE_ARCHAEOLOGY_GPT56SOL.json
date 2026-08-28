@@ -1,0 +1,138 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_SOURCE_ARCHAEOLOGY_DELTA/v1",
+  "created_at_local": "2026-08-29T03:56:00+07:00",
+  "trigger": "6",
+  "worker": "GPT-5.6-Sol",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "research_id": "R6-SEED-005",
+  "status": "E2_ARCHITECTURE_MAPPED_NOT_BUILD_CANDIDATE",
+  "evidence_ladder": {
+    "before": "E0_SEED",
+    "after": "E2_ARCHITECTURE_MAPPED",
+    "runtime_reproduction_credit": 0,
+    "f2_ablation_credit": 0,
+    "build_candidate_credit": 0,
+    "f2_accepted_credit": 0
+  },
+  "architecture_delta_fusion": {
+    "schema": "ArchitectureDeltaFusion/v1",
+    "snapshot_bound": true,
+    "f2_main_sha": "738df2763bcb89d3d0386eb99cf2ec3c6bf664b5",
+    "research_entity_main_sha_before_write": "9d34ad079a59a22ff1469d86b36a0f940c5a5efb",
+    "f2_checkpoint": {
+      "path": "checkpoints/CURRENT.json",
+      "current_workpackage": "F2-WP-105",
+      "generation": 1,
+      "frontier": "semantic typed effect-request identity/digest must bind canonical authority evidence, journal and executor before dispatch",
+      "runtime_credit": 0
+    },
+    "f2_workpackage_implications": {
+      "F2-WP-005": "IN_PROGRESS telemetry/data spine; direct AgentSight target",
+      "F2-WP-605": "NOT_STARTED child performance/latency/quality telemetry; direct AgentSight target",
+      "F2-WP-902": "NOT_STARTED whole-system resource/latency/quality characterization; direct AgentSight target",
+      "F2-WP-904": "NOT_STARTED failure injection/root-cause closure; AgentSight can serve as independent witness",
+      "F2-WP-105": "ACTIVE effect/completion binding; AgentSight may observe effects but MUST NOT become effect authority"
+    },
+    "trigger4_delta": "F2 checkpoint is on active WP105 semantic effect-request binding; observed source/component evidence only and no whole runtime credit.",
+    "trigger5_delta": "Latest searchable forensic feed remains centered on historical/current effect path, effect-authority fragmentation and effect completion. This strengthens the value of an independent read-only system witness but forbids it from minting completion/effect truth.",
+    "research_entity_delta": "Supervisor 9.13AL records private clay-global-research-entity Actions pre-step admission failure. Trigger6 DB mirror runtime materialization received zero credit; this is transport/admission evidence, not a materializer semantic negative.",
+    "conflicts": [
+      "AgentSight persists SQLite materialized views; F2 UnifiedDB must remain canonical, so AgentSight DB can only be derived witness data.",
+      "AgentSight can capture TLS plaintext; this conflicts with least-data/secret-fence goals unless capture scope and retention are explicitly bounded.",
+      "System-level observations can corroborate effects but cannot replace EffectGate/EffectJournal authority or typed effect-request identity."
+    ],
+    "stale_review_rule": "Any later change to F2-WP-005, F2-WP-105, F2-WP-605, F2-WP-902, F2-WP-904, EffectGate/EffectJournal semantics, telemetry schema, or execution environment requires STALE_REVIEW_REQUIRED before handoff."
+  },
+  "candidate": {
+    "repository": "eunomia-bpf/agentsight",
+    "upstream_default_branch": "master",
+    "upstream_commit": "934f441eff8ca210807333633f47b2efcb8cd020",
+    "upstream_commit_message": "chore: release agentsight 1.0.30 [skip ci]",
+    "license": "MIT",
+    "source_class": "PUBLIC_EXTERNAL_REPOSITORY"
+  },
+  "source_read_findings": [
+    {
+      "classification": "SOURCE_DIRECT",
+      "finding": "AgentSight is an eBPF-based observability framework that correlates agent/model activity with process, file, resource and network behavior without requiring target SDK instrumentation."
+    },
+    {
+      "classification": "SOURCE_DIRECT",
+      "finding": "Its architecture is eBPF programs -> JSON/event streams -> native capture core/runners -> analyzers/materialized view -> SQLite/OTel/output."
+    },
+    {
+      "classification": "SOURCE_DIRECT",
+      "finding": "Live eBPF-backed record/debug modes are Linux-specific and require elevated privilege such as sudo or CAP_BPF plus CAP_SYS_ADMIN; agent-native session/report paths can operate without eBPF on other systems."
+    },
+    {
+      "classification": "SOURCE_DIRECT",
+      "finding": "TLS interception observes plaintext at SSL/TLS call boundaries; source documentation explicitly warns captured data can include prompts, responses, paths, headers and network targets."
+    },
+    {
+      "classification": "SOURCE_DIRECT",
+      "finding": "The analysis chain includes an authorization-header remover and saved-session/offline profiling paths use conservative redaction defaults, but plaintext capture still creates a sensitive-data surface."
+    },
+    {
+      "classification": "SOURCE_DIRECT",
+      "finding": "The project supports SQLite materialized views and OpenTelemetry GenAI export, which are suitable as derived telemetry sinks but are not intrinsically canonical state."
+    }
+  ],
+  "f2_mechanism_map": {
+    "adopt_whole_tool": "REJECT_AT_E2",
+    "preferred_donor_pattern": "READ_ONLY_INDEPENDENT_SYSTEM_WITNESS_SIDECAR",
+    "mechanisms": [
+      {
+        "mechanism": "process tree exec/exit witness",
+        "targets": ["F2-WP-005", "F2-WP-605", "F2-WP-904"],
+        "value": "Cross-check child-agent launch/exit and subprocess effects independently of F2 self-report."
+      },
+      {
+        "mechanism": "file/network activity witness",
+        "targets": ["F2-WP-005", "F2-WP-904", "F2-WP-105"],
+        "value": "Detect system-boundary side effects and compare them against typed effect/journal traces without granting authority."
+      },
+      {
+        "mechanism": "resource/latency/session profiling",
+        "targets": ["F2-WP-605", "F2-WP-902"],
+        "value": "Provide an independent measurement plane for child cost, retries, latency and process resource usage."
+      },
+      {
+        "mechanism": "OTel GenAI export/event normalization",
+        "targets": ["F2-WP-005", "F2-WP-902"],
+        "value": "Potential schema/adapter donor for exporting derived telemetry without coupling it to UnifiedDB authority."
+      }
+    ]
+  },
+  "hypothesis": "A narrowly scoped AgentSight-derived read-only witness can improve F2 telemetry falsifiability by independently observing child processes and selected system effects, especially for WP005/WP605/WP902/WP904, while UnifiedDB and EffectGate/EffectJournal remain the only canonical state/effect authorities.",
+  "counterhypotheses": [
+    "F2-native telemetry may already provide enough information, making eBPF complexity and privilege overhead net-negative.",
+    "TLS plaintext capture may create unacceptable secret/privacy exposure relative to its additional information gain.",
+    "Kernel/process observations may correlate with effects but still fail to prove F2 causal identity unless joined through explicit session/task/effect IDs.",
+    "AgentSight SQLite/OTel views may introduce a stale second-memory temptation unless enforced as disposable derived witness data.",
+    "Platform-specific probe behavior and statically linked TLS binaries can create systematic blind spots that look like absence of activity."
+  ],
+  "integration_fences": [
+    "NO_SECOND_TRUTH_STORE",
+    "NO_EFFECT_AUTHORITY",
+    "NO_COMPLETION_AUTHORITY",
+    "READ_ONLY_WITNESS_ONLY",
+    "EXPLICIT_F2_CAUSAL_ID_JOIN_REQUIRED",
+    "BOUNDED_CAPTURE_SCOPE",
+    "SECRET_AND_PROMPT_PAYLOAD_CAPTURE_OFF_BY_DEFAULT_FOR_F2_ABLATION",
+    "DERIVED_DB_DISPOSABLE_AND_REBUILDABLE",
+    "NO_E6_PROMOTION_WITHOUT_TRIGGER4_MEASUREMENT_RECEIPT"
+  ],
+  "cheapest_high_information_next_discriminator": {
+    "class": "TRIGGER4_F2_ABLATION_DESIGN_NOT_EXECUTED_HERE",
+    "proposal": "On an admitted F2 test surface, run the same deterministic child/effect fixture twice: baseline F2-native telemetry only, then F2-native telemetry plus a process/file-only AgentSight witness with TLS payload capture disabled. Join by explicit process/session/time/effect correlation and score incremental detection, false positives, dropped events, CPU/RAM/latency overhead and provenance closure.",
+    "acceptance_signal": "AgentSight witness catches at least one intentionally hidden/missing application-level event or materially improves root-cause localization while staying within bounded overhead and producing zero canonical/effect authority writes.",
+    "falsifier": "No incremental observability benefit over F2-native telemetry, unacceptable privilege/overhead, non-joinable causal identity, or any requirement for TLS plaintext to obtain the claimed core benefit.",
+    "execution_status": "NOT_RUN",
+    "reason": "This Trigger6 slot is source archaeology. E4 requires Trigger4 build/test/measurement evidence; current authority also forbids treating source inspection as runtime credit."
+  },
+  "handoff": {
+    "to_trigger4": false,
+    "reason": "Not yet E5. Architecture mapping is strong enough to define a bounded ablation, but no F2 reproduction/ablation has run.",
+    "next_trigger6_role_recommendation": "EXPERIMENTAL_FALSIFIER"
+  }
+}

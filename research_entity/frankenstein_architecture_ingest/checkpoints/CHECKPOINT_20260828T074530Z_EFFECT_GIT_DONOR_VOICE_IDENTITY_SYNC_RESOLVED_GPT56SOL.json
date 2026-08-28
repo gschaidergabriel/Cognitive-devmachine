@@ -1,0 +1,42 @@
+{
+  "schema": "TRIGGERWORD5_RECONCILIATION_CHECKPOINT/v1",
+  "checkpoint_id": "TW5-RECONCILE-20260828T074530Z-EFFECT-GIT-DONOR-VOICE-IDENTITY-SYNC-RESOLVED-GPT56SOL",
+  "created_at": "2026-08-28T07:45:30Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.78",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_observed_before_final_refresh": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+  "supersedes_checkpoint": "research_entity/frankenstein_architecture_ingest/checkpoints/CHECKPOINT_20260828T074045Z_EFFECT_GIT_DONOR_VOICE_IDENTITY_RECONCILIATION_GPT56SOL.json",
+  "shared_state_resolution": {
+    "packet_073413": "CONSUMED_BY_SHARED_STATE",
+    "packet_073606": "CONSUMED_BY_SHARED_STATE",
+    "packet_072938": "SUPERSEDED_BY_SHARED_STATE",
+    "packet_073512": "CONSUMED_BY_SHARED_STATE",
+    "packet_073507": "CONSUMED_BY_SHARED_STATE",
+    "packet_073652": "CONSUMED_BY_SHARED_STATE",
+    "sync_status": "RESOLVED_BY_PARALLEL_FUSION_NO_FORCE_OVERWRITE_REQUIRED"
+  },
+  "our_delta_disposition": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_GIT_DONOR_VOICE_IDENTITY_FUSION_GPT56SOL.json",
+    "commit": "546be46e9ca91f3273b0d04e44a3b5ee3d5b4084",
+    "classification": "CORROBORATING_FOR_PACKET_ATOMS_PLUS_UNIQUE_SOURCE_TRACE_FOR_REALTIME_PARENT_TO_CHILD_IDENTITY",
+    "double_count_credit": false
+  },
+  "our_receipt": {
+    "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_20260828T073942Z_EFFECT_GIT_DONOR_VOICE_IDENTITY_GPT56SOL.json",
+    "commit": "0e54c8650da158c9dfc76d4406d0c2e0e9a36e8a"
+  },
+  "unique_remaining_finding": "The direct source trace extends the already-consumed Realtime mutation packet: Realtime call_id is not carried as immutable parent identity into helper/background child IDs or claude_frage/Claude-session descendants. Frankenstein 2.0 should preserve an explicit parent_realtime_call_id -> child_task_id -> child_tool_use_id lineage rather than relying on session identity.",
+  "evidence_boundary": "SOURCE_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "credits": {
+    "new_runtime_execution": 0,
+    "effect_runtime_acceptance": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_runtime": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Trace downstream Claude tool_use_id and host hook/effect-journal binding for a voice-originated child action, preserving the typed parent_realtime_call_id -> child_task_id -> child_tool_use_id -> EffectRequest/Decision/Outcome/Reentry chain; runtime evidence remains a later separately authorized acceptance gate."
+}

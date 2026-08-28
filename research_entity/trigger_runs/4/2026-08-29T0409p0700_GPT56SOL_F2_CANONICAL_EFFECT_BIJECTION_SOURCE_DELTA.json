@@ -55,8 +55,12 @@
   "execution_evidence": {
     "local_openai_container_attempt": "BLOCKED_BY_TOOL_SESSION_LIMIT_NOT_A_SEMANTIC_RESULT",
     "github_actions_run": 33211267880,
+    "github_actions_job": 98984770257,
     "github_actions_head": "9e3b71c5f21a10e8c97139d1cd3d0962e1cbc7ff",
-    "github_actions_status_at_receipt": "QUEUED",
+    "github_actions_status": "COMPLETED_FAILURE_ZERO_STEPS",
+    "github_actions_steps": 0,
+    "github_actions_runner_id": 0,
+    "classification": "PRIVATE_REPOSITORY_PRESTEP_TRANSPORT_OR_ADMISSION_FAILURE_NOT_TEST_FAILURE",
     "executed_test_result_observed": false,
     "runtime_credit_added": 0
   },
@@ -65,7 +69,7 @@
     "This mapping never dispatches an effect, classifies an outcome, verifies world state, or issues completion evidence.",
     "EffectGate+EffectJournal remain the sole canonical effect/outcome authority.",
     "PR2125 UNKNOWN_AFTER_DISPATCH candidate remains unadmitted until exact-source execution and current-main attestation.",
-    "A queued workflow is not execution evidence."
+    "A zero-step workflow failure is control-plane evidence, not executable semantic evidence."
   ],
   "credit_boundary": {
     "f2_effect_invocation_bijection_source_delta": true,
@@ -77,5 +81,5 @@
     "jspace_model_runtime_credit_added": 0,
     "training_credit_added": 0
   },
-  "next_exact_action": "Do not duplicate run 33211267880 while it is nonterminal. If it executes, inspect the exact head-bound result and preserve only component-level credit. Independently, wire the actual canonical EffectGate-returned effect_id plus admitted current authority_ref into this bijection at the existing WP105 integration boundary; then rerun the overlapping A/B zero-real-effect matrix. If PR2125 remains candidate-only, fail closed rather than consuming its UNKNOWN contract as current authority."
+  "next_exact_action": "Do not rerun the zero-step private-repository CI as a same-path retry. Wire the actual canonical EffectGate-returned effect_id plus admitted current authority_ref into this bijection at the existing WP105 integration boundary, then execute the overlapping A/B zero-real-effect matrix on the first admitted surface that actually runs steps. If PR2125 remains candidate-only, fail closed rather than consuming its UNKNOWN contract as current authority."
 }

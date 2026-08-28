@@ -1,0 +1,88 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v2",
+  "created_at": "2026-08-28T10:57:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/stop-hook-timeout-fence",
+  "routing_self_test": "PASS",
+  "result": "SOURCE_FORENSIC_DELTA_COMMITTED_NO_RUNTIME_PROMOTION",
+  "authority": {
+    "canonical_main_reentered": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "design_branch_head_observed_before_delta": "b074bcad4c382ba2b5cbb303b69baaf00c3b0876",
+  "delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1057Z_STOP_HOOK_TIMEOUT_FENCE_GPT56SOL.json",
+    "commit": "ea5a8b94a59d814df4b7a14dae732ef221a99437",
+    "class": "STOP_HOOK_DEADLINE_PROPAGATION_AND_CAUSAL_TAIL_FENCE",
+    "candidate_primitive": "HookDeadlineFence/v1"
+  },
+  "packet_accounting": {
+    "new_inbox_packet_consumed": false,
+    "new_packet_created": false,
+    "reason": "Newest Stop-hook packet was already consumed by prior exact-source ingest. This run performs a nonduplicate direct-source discriminator on deadline propagation and persists append-only delta plus receipt."
+  },
+  "source_crosschecks": [
+    {
+      "span": "stern.py:1-55",
+      "result": "Declared hard hook budget and no-LLM-in-hook invariants observed."
+    },
+    {
+      "span": "stern.py:300-520",
+      "result": "Stop default 2.0s; kognition default enabled; local qwen2.5:0.5b; model timeout default 1.3s."
+    },
+    {
+      "span": "stern.py:8400-8465",
+      "result": "_HookTimeout subclasses Exception and is raised by the SIGALRM handler for the global hook deadline."
+    },
+    {
+      "span": "stern.py:4800-4935",
+      "result": "_ollama_generate has broad except Exception -> log + None around the blocking local Ollama call, creating a source-level path that can consume _HookTimeout."
+    },
+    {
+      "span": "stern.py:8838-8915",
+      "result": "Model relevance runs before later gw_absicht/governance/waiting Stop bookkeeping."
+    },
+    {
+      "span": "stern.py:9009-9045",
+      "result": "Outer cmd_hook timeout handling exists, but source has no typed completion receipt proving which Stop tail substeps completed if deadline propagation is consumed earlier."
+    }
+  ],
+  "local_semantic_probe": {
+    "classification": "DETERMINISTIC_PYTHON_LANGUAGE_SEMANTICS_ONLY",
+    "result": "PASS",
+    "observed": "SIGALRM raised a custom Exception subclass inside a nested try/except Exception; the nested handler caught it and execution continued.",
+    "project_runtime_credit": 0
+  },
+  "new_architecture_conclusion": "The Stop-hook problem is not only model latency and weak retrieval round selection. The intended global hard deadline is itself not source-enforced across nested fail-silent boundaries because its control exception is catchable as an ordinary Exception. Frankenstein 2.0 should separate operational substep failure from non-consumable global deadline control and emit typed Stop completion/substep evidence where completion is used causally.",
+  "overlap_handling": {
+    "parallel_delta_observed": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1053Z_RETRIEVAL_CREDIT_ROUND_BINDING_GPT56SOL.json",
+    "parallel_fusion_observed": "research_entity/global/TRIGGERWORD_4_DEFERRED_CAUSAL_RETURN_RETRIEVAL_VOICE_FUSION_ADDENDUM.md",
+    "disposition": "RETAIN_NONOVERLAPPING_DEADLINE_FENCE_DELTA; DO_NOT_DUPLICATE_RETRIEVAL_OR_VOICE_IDENTITY_WORK"
+  },
+  "next_exact_gate": "Triggerword-4 external non-provider source/build-bound Stop deadline test: preserve Frank Harness; test cognition disabled/warm/slow-or-cold/unreachable local model plus deterministic injected-delay deadline propagation; record later Stop substep completion and exact retrieval round identity before any runtime or causal promotion.",
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "language_semantics": "PASS_LOCAL_NON_PRODUCT_PROBE",
+    "runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "state_update": "NOT_REQUIRED_FOR_APPEND_ONLY_DIRECT_SOURCE_DELTA; receipt is the ingestion checkpoint and later state compaction may index it.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false
+}

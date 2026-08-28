@@ -1,0 +1,79 @@
+{
+  "schema": "TRIGGER4_F2_WP105_TRUE_PRE_DISPATCH_EXECUTED_CI/v1",
+  "trigger": "4",
+  "classification": "NON_AUTHORITY_EXECUTABLE_COMPONENT_EVIDENCE_DELTA",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "canonical_research_main_before_write": "ff6005fa35d3e8aa3684a78fef7eeac02b6f5c94",
+  "authority_epoch_observed": "9.13",
+  "authority_selected_by_inbox": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AJ_DELTA_2026-08-29T0038P0700_GPT56SOL.json",
+  "routing": {
+    "normalized_user_message": "4",
+    "result": "TRIGGERWORD_4",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": true
+  },
+  "coordination": {
+    "workpackage": "F2-WP-105",
+    "active_claim_id": "F2-WP-105-G1-EXECUTION-COMPLETION-GPT56SOL-20260828T215528P0700",
+    "active_mutation_authority_preserved": true,
+    "canonical_wp105_source_mutated_by_this_organ": false,
+    "duplicate_branch_created": false,
+    "duplicate_pr_created": false
+  },
+  "exact_source": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "branch": "chatgpt/f2-wp105-true-pre-dispatch-20260829",
+    "head_sha": "49938f91b4889036defdd7cc7bfd4aefd7f6c4a9"
+  },
+  "executed_ci": [
+    {
+      "run_id": 33202552432,
+      "job_id": 98955357797,
+      "workflow": "Frankenstein 2.0 Effect Executor Interlock CI",
+      "runner_id": 1000045737,
+      "runner_name": "GitHub Actions 1000045737",
+      "conclusion": "success",
+      "material_steps": [
+        "Compile policy-neutral executor interlock",
+        "Run effect identity PRE-POST regression",
+        "Run external-gate executor interlock falsifiers"
+      ]
+    },
+    {
+      "run_id": 33202552447,
+      "job_id": 98955358258,
+      "workflow": "Frankenstein 2.0 Effect Invocation Correlation CI",
+      "runner_id": 1000045738,
+      "runner_name": "GitHub Actions 1000045738",
+      "conclusion": "success",
+      "material_steps": [
+        "Compile call-scoped effect correlation path",
+        "Run Stage-1 identity regressions",
+        "Run legacy result-bound effect correlation falsifier",
+        "Run true pre-dispatch temporal-causality falsifier"
+      ]
+    }
+  ],
+  "finding": "The exact WP105 branch head now has observed runner-assigned, step-executed successful CI for the result-free true pre-dispatch effect-binding path. This supersedes the narrower historical statement that the successor was source-only/unexecuted, but only at deterministic component-CI scope.",
+  "promotion_scope": "TRUE_PRE_DISPATCH_EFFECT_BINDING_AND_EXECUTOR_INTERLOCK_DETERMINISTIC_COMPONENT_CI_ONLY",
+  "nonpromotion": {
+    "effect_enforcement_runtime": 0,
+    "real_external_effect_execution": 0,
+    "external_world_verification": 0,
+    "vps_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "whole_frankenstein2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training_credit": 0
+  },
+  "integration_boundary": "The branch was observed divergent from Frankenstein-2.0 main; executable component evidence does not authorize blind merge. The active WP105 owner must reconcile/rebase against current main and rerun exact-current regressions before mainline promotion.",
+  "execution_boundaries": {
+    "new_workflow_dispatches": 0,
+    "duplicate_issue_triggers": 0,
+    "provider_calls": 0,
+    "paid_actions": 0,
+    "vps_execution": 0,
+    "frank_harness_modified": false
+  },
+  "next_exact_action": "Preserve the active WP105 mutation lane, reconcile its true-pre-dispatch implementation onto current Frankenstein-2.0 main without losing intervening Stage-1 work, then require exact-reconciled-source CI for the same pre-dispatch temporal-causality and executor-interlock falsifiers before any mainline component promotion. In parallel, keep diagnosing private-repository Actions admission without duplicate dispatch storms."
+}

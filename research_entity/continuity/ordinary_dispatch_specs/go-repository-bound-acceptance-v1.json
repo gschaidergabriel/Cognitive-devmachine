@@ -1,0 +1,27 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_SPEC/v1",
+  "dispatch_class": "go-repository-bound-acceptance-v1",
+  "trigger_title": "[CLAY-DISPATCH] GO repository-bound acceptance bundle",
+  "probe_contract": "GO_REPOSITORY_BOUND_ACCEPTANCE_BUNDLE/v1",
+  "sandbox": "clay-direct-dev",
+  "transport": "SELF_HOSTED_LINUX_X64",
+  "fixed_runner": "tools/run_go_repository_bound_acceptance_bundle_v1.py",
+  "authority_epoch": "8.78",
+  "retry_generation": 0,
+  "current_dispatch_key": "go-repository-bound-acceptance-v1-g0000",
+  "generation_rule": "INCREMENT_ONLY_AFTER_TERMINAL_RESULT_REQUIRING_DELIBERATE_RETRY_OR_EXPLICIT_INFRASTRUCTURE_OR_PROBE_SEMANTIC_CHANGE; NEW_TRIGGER4_ALONE_MUST_NOT_INCREMENT",
+  "identity_excludes": [
+    "triggerword_4_text",
+    "macrocycle_id",
+    "timestamp",
+    "issue_number",
+    "workflow_run_id",
+    "branch_name",
+    "organ_model_session_identity"
+  ],
+  "claim_path_template": "research_entity/continuity/ordinary_dispatch_claims/{dispatch_key}.json",
+  "result_path_template": "research_entity/continuity/ordinary_dispatch_results/{dispatch_key}.json",
+  "runtime_receipt_path_template": "research_entity/runtime/tool_results/go-repository-bound-acceptance-{dispatch_key}.json",
+  "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md",
+  "evidence_boundary": "Exact-source component runtime evidence only; never physical GRID10, whole HCU, whole EntityOS, provider, training or whole-product credit."
+}

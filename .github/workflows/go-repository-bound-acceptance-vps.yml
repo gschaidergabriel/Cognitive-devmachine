@@ -1,0 +1,158 @@
+name: GO repository-bound acceptance on clay-direct-dev
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: go-repository-bound-acceptance-v1
+  cancel-in-progress: false
+
+jobs:
+  acceptance:
+    if: >-
+      github.repository == 'gschaidergabriel/clay-global-research-entity' &&
+      github.event.issue.title == '[CLAY-DISPATCH] GO repository-bound acceptance bundle' &&
+      github.event.issue.user.login == 'gschaidergabriel' &&
+      contains(github.event.issue.body || '', 'dispatch_schema: CLAY_ORDINARY_DISPATCH/v1')
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact event main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Validate singleton dispatch
+        id: dispatch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib, re
+          event=json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          body=str((event.get('issue') or {}).get('body') or '')
+          fields={}
+          for line in body.splitlines():
+              if ':' in line:
+                  k,v=line.split(':',1); k=k.strip()
+                  if k in {'dispatch_schema','dispatch_key'} and k not in fields: fields[k]=v.strip()
+          if fields.get('dispatch_schema')!='CLAY_ORDINARY_DISPATCH/v1': raise SystemExit('invalid dispatch_schema')
+          key=fields.get('dispatch_key','')
+          if not re.fullmatch(r'go-repository-bound-acceptance-v1-g[0-9]{4}',key): raise SystemExit('invalid dispatch_key')
+          spec=json.loads(pathlib.Path('research_entity/continuity/ordinary_dispatch_specs/go-repository-bound-acceptance-v1.json').read_text())
+          expected=f"{spec['dispatch_class']}-g{int(spec['retry_generation']):04d}"
+          if spec.get('current_dispatch_key')!=expected or key!=expected: raise SystemExit('stale/noncanonical dispatch key')
+          claim_path=pathlib.Path(f'research_entity/continuity/ordinary_dispatch_claims/{key}.json')
+          if not claim_path.is_file(): raise SystemExit('create-only claim missing')
+          claim=json.loads(claim_path.read_text())
+          if claim.get('dispatch_key')!=key or claim.get('dispatch_class')!=spec.get('dispatch_class'): raise SystemExit('claim mismatch')
+          if claim.get('new_issue_authorized_by_this_claim') is not True: raise SystemExit('claim does not authorize issue')
+          result=pathlib.Path(f'research_entity/continuity/ordinary_dispatch_results/{key}.json')
+          with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as out:
+              out.write(f'dispatch_key={key}\n')
+              out.write(f'skip={str(result.is_file()).lower()}\n')
+          print('ALREADY_SATISFIED' if result.is_file() else 'ADMITTED_SINGLETON',key)
+          PY
+
+      - name: Execute fixed bundle inside clay-direct-dev
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+          TARGET_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          mkdir -p /tmp/go-repository-bound-acceptance
+          runtime=''; found='false'; exec_prefix=()
+          try_runtime() {
+            local rt="$1"
+            command -v "$rt" >/dev/null 2>&1 || return 1
+            if "$rt" inspect clay-direct-dev >/dev/null 2>&1; then runtime="$rt"; exec_prefix=("$rt" exec clay-direct-dev); found='true'; return 0; fi
+            if command -v sudo >/dev/null 2>&1 && sudo -n "$rt" inspect clay-direct-dev >/dev/null 2>&1; then runtime="sudo-$rt"; exec_prefix=(sudo -n "$rt" exec clay-direct-dev); found='true'; return 0; fi
+            return 1
+          }
+          try_runtime docker || try_runtime podman || true
+          if [[ "$found" != true ]] && command -v incus >/dev/null 2>&1 && incus info clay-direct-dev >/dev/null 2>&1; then runtime='incus'; exec_prefix=(incus exec clay-direct-dev --); found='true'; fi
+          if [[ "$found" != true ]] && command -v lxc >/dev/null 2>&1 && lxc info clay-direct-dev >/dev/null 2>&1; then runtime='lxc'; exec_prefix=(lxc exec clay-direct-dev --); found='true'; fi
+          [[ "$found" == true ]] || { echo 'clay-direct-dev not discoverable' >&2; exit 20; }
+
+          workdir="/tmp/clay-go-repository-bound-${GITHUB_RUN_ID}"
+          repo='https://github.com/gschaidergabriel/clay-global-research-entity.git'
+          set +e
+          "${exec_prefix[@]}" sh -lc "set -eu; rm -rf '$workdir'; git clone --no-checkout '$repo' '$workdir'; cd '$workdir'; git fetch --no-tags origin '$TARGET_SHA'; git checkout --detach '$TARGET_SHA'; test -z \"\$(git status --porcelain)\"; test \"\$(git rev-parse HEAD)\" = '$TARGET_SHA'; python3 tools/run_go_repository_bound_acceptance_bundle_v1.py" > /tmp/go-repository-bound-acceptance/runner.stdout 2> /tmp/go-repository-bound-acceptance/runner.stderr
+          runner_rc=$?
+          set -e
+
+          inner_present='false'
+          if "${exec_prefix[@]}" sh -lc "test -f '$workdir/artifacts/go-repository-bound-acceptance/receipt.json'"; then
+            "${exec_prefix[@]}" sh -lc "cat '$workdir/artifacts/go-repository-bound-acceptance/receipt.json'" > /tmp/go-repository-bound-acceptance/inner.json
+            inner_present='true'
+          else
+            RUNNER_RC="$runner_rc" python3 - <<'PY' > /tmp/go-repository-bound-acceptance/inner.json
+          import json, os
+          print(json.dumps({
+            'schema':'GO_REPOSITORY_BOUND_ACCEPTANCE_DISPATCH_FAILURE/v1',
+            'target_sha':os.environ['TARGET_SHA'],
+            'runner_exit_code':int(os.environ['RUNNER_RC']),
+            'runner_receipt_present':False,
+            'bundle_pass':False,
+            'evidence_boundary':{
+              'repository_bound_component_execution':False,
+              'physical_grid10_runtime_credit':0,
+              'whole_hcu_runtime_credit':0,
+              'whole_entityos_runtime_credit':0,
+              'training_credit':0}},indent=2,sort_keys=True))
+          PY
+          fi
+
+          RUNNER_RC="$runner_rc" INNER_PRESENT="$inner_present" RUNTIME="$runtime" python3 - <<'PY' > /tmp/go-repository-bound-acceptance/result.json
+          import json,os,pathlib
+          inner=json.loads(pathlib.Path('/tmp/go-repository-bound-acceptance/inner.json').read_text())
+          target=os.environ['TARGET_SHA']; present=os.environ['INNER_PRESENT']=='true'; rc=int(os.environ['RUNNER_RC'])
+          if present and inner.get('head')!=target: raise SystemExit('inner receipt HEAD mismatch')
+          event=json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          passed=bool(present and rc==0 and inner.get('bundle_pass') is True)
+          status='PASS' if passed else ('FAIL' if present else 'BLOCKED')
+          out={
+            'schema':'CLAY_ORDINARY_DISPATCH_RESULT/v1','dispatch_key':os.environ['DISPATCH_KEY'],
+            'dispatch_class':'go-repository-bound-acceptance-v1','status':status,
+            'issue_number':(event.get('issue') or {}).get('number'),'run_id':os.environ.get('GITHUB_RUN_ID'),
+            'event_sha':os.environ.get('GITHUB_SHA'),'checkout_head':target,'sandbox':'clay-direct-dev',
+            'transport':'SELF_HOSTED_LINUX_X64','container_runtime':os.environ.get('RUNTIME') or None,
+            'runner_exit_code':rc,'runner_receipt_present':present,
+            'runtime_credit':'REPOSITORY_BOUND_COMPONENT_EXECUTION_ONLY' if passed else 0,
+            'physical_grid10_runtime_credit':0,'whole_hcu_runtime_credit':0,'whole_entityos_runtime_credit':0,
+            'training_credit':0,'retry_requires_generation_advance':True}
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+
+      - name: Persist singleton receipts
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/runtime/tool_results research_entity/continuity/ordinary_dispatch_results
+          target="research_entity/runtime/tool_results/go-repository-bound-acceptance-${DISPATCH_KEY}.json"
+          result="research_entity/continuity/ordinary_dispatch_results/${DISPATCH_KEY}.json"
+          git fetch origin main
+          if git show "origin/main:${result}" >/dev/null 2>&1; then echo "ALREADY_SATISFIED_REMOTE ${DISPATCH_KEY}"; exit 0; fi
+          cp /tmp/go-repository-bound-acceptance/inner.json "$target"
+          cp /tmp/go-repository-bound-acceptance/result.json "$result"
+          git config user.name 'clay-direct-dev-runner'
+          git config user.email 'clay-direct-dev-runner@users.noreply.github.com'
+          git add "$target" "$result"
+          git commit -m "evidence(vps): repository-bound acceptance ${DISPATCH_KEY} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do git pull --rebase origin main && git push origin HEAD:main && exit 0; sleep $((attempt * 3)); done
+          exit 1

@@ -1,0 +1,38 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CORRECTION_RECEIPT/v1",
+  "created_at": "2026-08-28T10:49:16Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "routing_self_test": "PASS",
+  "authority": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF"
+  },
+  "design_branch_observed": "75f6cf4044182bede5f4dac1945bcd6b6f29bde5",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "correction": {
+    "state_surface": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "state_canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "state_last_ingest": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1040Z_WORKEXECUTION_BINDING_V2_ABI_RECONCILIATION_GPT56SOL.json",
+    "later_fail_closed_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_CORRECTION_2026-08-28T104212Z_WORKEXECUTION_V2_ADMISSION_CURRENTNESS_GPT56SOL.json",
+    "corrected_packet": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
+    "admission_status": "QUARANTINED_FAIL_CLOSED",
+    "reason": "The exact packet lacks mandatory authority_classification, is bound to an older canonical main, and has no validate_ingest_packet_v2.py PASS against a proven refreshed local main. Therefore current INGEST_STATE and later receipts that call it consumed/schema-valid cannot be read as CURRENT_AUTHORITY_BOUND admission evidence.",
+    "stop_hook_packet_note": "TW5-PACKET-20260828T104200Z-STOP-HOOK-LLM-BOUNDARY-GPT56SOL also predates the v2 authority envelope and its source findings remain source-scope evidence only until rebound/validated; its runtime credit remains zero.",
+    "lineage_note": "The compacted INGEST_STATE still preserves many earlier architecture-delta references; no lineage-loss claim is made here."
+  },
+  "retained_semantics": [
+    "WorkExecutionBinding target remains paket_id/package_generation -> exact Agent tool_use_id -> documented Agent PostToolUse tool_response.agentId, with installed-target runtime proof required.",
+    "Donor Stop synchronously invokes local Ollama relevance cognition despite a declared no-LLM-in-hooks invariant.",
+    "Stop relevance selection is session-scoped newest-open retrieval and requires exact retrieval/turn/generation binding before causal or learning credit."
+  ],
+  "credits": {"source_forensics":"PASS_WITH_ADMISSION_CORRECTION","runtime":0,"whole_entityos_hcu":0,"training":0},
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "next_exact_action": "Reconcile INGEST_STATE append-safely with the fail-closed admission correction and later Stop-hook source receipts. Restore CURRENT_AUTHORITY_BOUND packet admission only through a freshly rebound schema-v2 successor validated by validate_ingest_packet_v2.py against proven refreshed main; Triggerword-4 retains overlapping-Agent identity and Stop-hook retrieval/latency discriminators."
+}

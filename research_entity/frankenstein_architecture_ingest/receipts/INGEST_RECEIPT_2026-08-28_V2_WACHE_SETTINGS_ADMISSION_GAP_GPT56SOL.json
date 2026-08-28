@@ -1,0 +1,42 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "worker": "GPT-5.6-Sol/triggerwort5",
+  "trigger_routing": "PASS",
+  "source_bootstrap_role": "FAST_CACHE_ONLY",
+  "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+  "authority_epoch": "9.13",
+  "design_sha_observed_before_write": "697d45574f60863b59f804ae823962f86de4341f",
+  "architecture_delta_commit": "30dec777882657034e415c2f1e785d775cacb312",
+  "architecture_delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_V2_WACHE_SETTINGS_ADMISSION_GAP_GPT56SOL.json",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packet_id": "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+  "packet_consumed": false,
+  "packet_admission": "BLOCKED_PENDING_DECLARED_EXECUTABLE_VALIDATOR_PASS",
+  "checks": [
+    "Triggerword-5 directive fetched from current design branch and routing verified.",
+    "Current canonical main refreshed to 97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc.",
+    "Current donor main refreshed to 5641dc6b2df6ebed1df246ee7533134324f6c427.",
+    "V2 packet authority values manually crosschecked against exact current main blobs and matched 9.13 HARD_OFF.",
+    "validate_ingest_packet_v2.py exists on the design branch but is absent from exact canonical main.",
+    "Attempted exact local validation by cloning the canonical repo; local container DNS/network access failed before clone, so no executable validator PASS exists from this organ.",
+    "Pinned donor hooks/hooks.json crosschecked: seven plugin events route through scripts/stern.py; no Wache binding is present in this config.",
+    "Pinned donor stern.py crosschecked: the ordinary EffectGate PreToolUse branch is explicitly nonblocking; DIGITAL SEBUKKU is a separate actual deny branch.",
+    "Pinned donor stern.py crosschecked: effect correlation remains session-scoped via active_turns.effect_id, consistent with the 9.13 invocation-identity gap."
+  ],
+  "negative_evidence": [
+    "NO_EXECUTABLE_V2_ADMISSION_PASS",
+    "NO_CURRENT_PINNED_PLUGIN_WACHE_BINDING",
+    "NO_GENERAL_EFFECTGATE_PRE_SIDE_EFFECT_BLOCKING",
+    "NO_OVERLAPPING_CALL_INVOCATION_CAUSALITY_TEST"
+  ],
+  "credit_delta": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "state_update_rule": "Do not append the V2 packet to INGEST_STATE.consumed_packet_ids until its declared executable validator passes against refreshed canonical main.",
+  "next_exact_action": "Run the exact v2 validator on a network-capable/current canonical-main checkout, then either consume the packet on PASS or issue a superseding packet/reconciliation receipt on FAIL; keep the 9.13 same-session A/B interleaving falsifier as the next effect-identity discriminator."
+}

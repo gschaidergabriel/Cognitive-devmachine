@@ -41,6 +41,7 @@ class EffectInvocationBindingTests(unittest.TestCase):
             boundary_id=f"gate-{invocation_id}",
             dispatch_permitted=True,
         )
+        self.store.bind_completion_source(invocation_id, source_digest=f"src-{invocation_id}")
         self.store.mark_submitted(invocation_id)
         self.store.record_execution(
             invocation_id,

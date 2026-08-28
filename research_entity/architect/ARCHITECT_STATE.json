@@ -1,13 +1,13 @@
 {
   "schema": "ARCHITECT_STATE/v1",
   "architect_id": "federated-development-architect",
-  "generation": 3,
+  "generation": 4,
   "status": "ACTIVE",
   "federation_mode": "SEPARATE_STATE_SHARED_DIRECTION",
   "active_project_binding_id": "frankenstein-2.0",
   "active_owner_intent_epoch_id": null,
   "active_owner_direction_summary": "Resume Frankenstein 2.0 as the active primary project; no owner project pivot was expressed by this Architect trigger.",
-  "current_focus": "Reconcile the moving Frankenstein 2.0 Phase-2 persistent-agency frontier, preserve granular evidence over stale aggregate caches, and route the smallest dependency-correct mutation through existing workpackage authority.",
+  "current_focus": "Close Stage-2 reconciliation/cache lag, then route one bounded persistent-agency integration workpackage instead of spawning more overlapping component repairs.",
   "active_goal_ids": [
     "GOAL-F2-ARCHITECTURE-ASSEMBLY",
     "GOAL-F2-EVIDENCE-SPINE",
@@ -15,81 +15,74 @@
   ],
   "active_workpackage_ids": [
     "F2-WP-200",
-    "F2-WP-201"
+    "F2-WP-201",
+    "F2-WP-203",
+    "F2-WP-204",
+    "F2-WP-205"
   ],
-  "active_hypothesis_ids": [
-    "HYP-F2-WP201-IDENTITY-VS-PROJECTION-CHANGE"
-  ],
+  "active_hypothesis_ids": [],
   "current_architecture_view": {
     "project": "Frankenstein 2.0",
     "phase": 2,
     "phase_name": "persistent agency substrate",
-    "granular_accepted_at_scope": [
-      "F2-WP-202 PredictionContract/residual generation 1",
-      "F2-WP-203 AgencyState generation 2 item-type repair at AGENCY_STATE_G2_ITEM_TYPE_REPAIR_REPOSITORY_HOSTED_CI_ONLY",
-      "F2-WP-204 Goal lifecycle generation 1 at GOAL_LIFECYCLE_REPOSITORY_HOSTED_CI_ONLY",
-      "F2-WP-205 Wake/WAIT/HOLD generation 2 tri-state repair at WAKE_HOLD_TRISTATE_REPOSITORY_HOSTED_CI_ONLY"
+    "granular_component_evidence": [
+      "F2-WP-200 Persistent Pulse: repository-hosted CI fused; reconciliation credit boundary explicitly keeps whole-system acceptance zero",
+      "F2-WP-201 StateFingerprint: ACCEPTED_AT_SCOPE receipt with 17-test exact-head hosted CI; projection_changed is separated from generation-sensitive identity_changed",
+      "F2-WP-202 PredictionContract/residual: accepted at bounded repository-hosted component scope",
+      "F2-WP-203 AgencyState generation 2 item-type repair: accepted at bounded repository-hosted CI scope",
+      "F2-WP-204 generation 2 fail-closed repair: source/CI accepted at scope with 27/27 deterministic tests; terminal reconciliation remains the next declared gate",
+      "F2-WP-205 generation 2 tri-state wake repair: granular reconciliation accepted at bounded repository-hosted CI scope; terminal pointer/cache synchronization remains"
     ],
-    "open_or_reconciliation_required": [
-      "F2-WP-200 Persistent Pulse terminal reconciliation after fused repository-hosted CI evidence",
-      "F2-WP-201 StateFingerprint source/test/CI plus identity-vs-projection semantic discriminator",
-      "F2-WP-203 aggregate cache/pointer reconciliation to generation-2 accepted evidence",
-      "F2-WP-204 aggregate cache/pointer reconciliation to generation-1 accepted evidence",
-      "F2-WP-205 aggregate cache/pointer terminalization to generation-2 accepted evidence"
-    ],
-    "credit_boundary": "Repository-hosted component CI does not imply target runtime, VPS, physical GRID10, whole Frankenstein 2.0, EntityOS or HCU acceptance."
+    "integration_requirement": "After terminal reconciliation/cache synchronization, compose Persistent Pulse + StateFingerprint + AgencyState + Goal lifecycle + Wake/HOLD in one bounded Stage-2 integration workpackage if no exact-current owner already exists. Explicitly preserve projection_changed versus identity_changed, UNKNOWN wake evidence, and no-effect/no-completion boundaries.",
+    "credit_boundary": "Current evidence is component/repository-CI evidence only; it does not establish target runtime, VPS, physical GRID10, whole Frankenstein 2.0, EntityOS or HCU acceptance."
   },
   "unresolved_contradictions": [
-    "F2 aggregate workpackages/STATE.json generation 11 says F2-WP-203 IN_PROGRESS while its generation-2 active pointer records ACCEPTED with a bounded repository-hosted-CI terminal scope.",
-    "F2 aggregate workpackages/STATE.json says F2-WP-204 IN_PROGRESS while exact generation-1 reconciliation says ACCEPTED at GOAL_LIFECYCLE_REPOSITORY_HOSTED_CI_ONLY.",
-    "F2 aggregate workpackages/STATE.json says F2-WP-205 IN_PROGRESS while exact generation-2 reconciliation says ACCEPTED at WAKE_HOLD_TRISTATE_REPOSITORY_HOSTED_CI_ONLY.",
-    "Research Entity PROGRAM_STATE.json retains 8.78-era supervisor fields while current SUPERVISOR_INBOX selects supervisor epoch 9.13 FREE_ONLY.",
-    "F2-WP-201 active claim describes typed projection change detection while the reviewed donor digest is generation-sensitive; consumers could confuse identity change with projection-content change unless the contract is explicit."
+    "F2 aggregate workpackages/STATE.json generation 11 remains behind granular Stage-2 claim/reconciliation/receipt evidence for WP-200/WP-201/WP-203/WP-204/WP-205.",
+    "Research Entity PROGRAM_STATE.json retains 8.78-era supervisor fields while current SUPERVISOR_INBOX selects supervisor epoch 9.13 FREE_ONLY."
   ],
   "worker_frontier": {
-    "triggerword4": "Preserve existing mutation authorities. Do not duplicate accepted WP-203/WP-205 repair lanes. Continue WP-201 generation-1 semantic discriminator and WP-200 terminal reconciliation; repair aggregate/pointer lag for WP-203/WP-204/WP-205 at already-earned scopes.",
-    "triggerword5": "Donor forensics/live ingest remains an evidence input; no new donor-forensics blocker is required for the immediate WP-201 discriminator."
+    "triggerword4": "Finish existing Stage-2 terminal reconciliations and aggregate synchronization. Then claim at most one nonduplicate bounded Stage-2 integration lane after rechecking exact-current ownership.",
+    "triggerword5": "Donor forensics/live ingest remains an evidence input; no new donor-forensics blocker is required for the immediate Stage-2 integration gate."
   },
   "test_frontier": {
-    "frankenstein_2": "WP-201 requires same-projection/different-generation tests plus mapping-order determinism and caller-significant type preservation; exact-current repository CI is still required before acceptance.",
+    "stage2_integration": "Prove generation-only identity movement does not automatically become projection change or ACT eligibility; prove missing wake observation remains UNKNOWN/ABSTAIN rather than HOLD/no-match; preserve explicit caller-supplied evidence and authority fences.",
     "entityos_hcu": "Supervisor 9.13 keeps whole EntityOS/HCU, physical GRID10 and training credit at zero; provider routes remain unadmitted."
   },
   "current_blockers": [
-    "F2-WP-201 has no exact-current fused source/test/CI acceptance and its identity-vs-projection change semantics remain unresolved.",
-    "F2-WP-200 has fused source/CI evidence but lacks terminal reconciliation at the latest observed head.",
-    "F2-WP-203/F2-WP-204/F2-WP-205 aggregate state lags granular accepted evidence.",
+    "Stage-2 granular acceptance and aggregate/pointer state are not yet synchronized.",
+    "No integrated persistent-agency component path is yet credited from the individually accepted Stage-2 primitives.",
     "Research Entity aggregate program authority surface lags current supervisor 9.13."
   ],
   "current_uncertainty": [
-    "Whether Persistent Pulse should react to every generation/identity transition or only projection-content changes must be made explicit by contract/test rather than inferred from helper naming.",
-    "No whole persistent-loop/runtime implication is established by the current Phase-2 component CI evidence."
+    "A dedicated Stage-2 integration workpackage is architecturally indicated by accepted component next-actions, but exact-current claim ownership must be rechecked immediately before mutation because F2 main is moving rapidly.",
+    "No whole persistent-loop/runtime implication is established by current Stage-2 component CI evidence."
   ],
   "last_ingested_heads": {
-    "frankenstein_2_main": "e022dcbc9fd01c99f567dc0860c34ca15d5b4885",
+    "frankenstein_2_main": "466080f8bfcf55bc9d67ad7029dec3ac6c5ff4ca",
     "research_entity_main": "d81d31b34d2abb98bf2f0bc80c46decbfd23c8b0",
-    "architect_branch_before_generation_3": "9e946a822de5eea0cd7c45f9d799d0ad384cb479"
+    "architect_branch_before_generation_4": "4efe977c0afda25393bc3dee8454929a8cb9003c"
   },
   "direction_binding_summary": {
     "project_binding": "Frankenstein 2.0 remains ACTIVE_PRIMARY.",
     "owner_delta": "NO_PROJECT_PIVOT_DETECTED",
     "evidence_precedence": "granular claim/reconciliation/receipt and current supervisor inbox outrank stale aggregate state",
-    "duplicate_work_rule": "existing workpackage generation ownership is preserved; Architect routes rather than steals build authority"
+    "duplicate_work_rule": "recheck exact-current claim/PR ownership before any Stage-2 integration mutation"
   },
   "current_processing_mode": "ARCHITECT_SYNTHESIS_PRIORITIZATION_AND_ROUTING",
-  "current_context_budget_policy": "Compile the smallest sufficient context from current owner direction, changed heads, active claims, granular receipts/reconciliations, open contradictions and relevant methods; do not replay full history by default.",
+  "current_context_budget_policy": "Compile the smallest sufficient context from current owner direction, changed heads, granular receipts/reconciliations, open contradictions and relevant methods; do not replay full history by default.",
   "next_exact_actions": [
-    "Route the next unresolved Phase-2 semantic mutation through the existing F2-WP-201 generation-1 authority: explicitly distinguish or reject identity_changed versus projection_changed semantics and bind deterministic tests plus repository CI.",
-    "Terminalize/reconcile F2-WP-200 after exact-current verification, preserving PERSISTENT_PULSE_REPOSITORY_HOSTED_CI_ONLY scope.",
-    "Repair F2-WP-203/F2-WP-204/F2-WP-205 aggregate/pointer state to granular accepted scopes without reopening completed mutation work.",
+    "Terminalize F2-WP-201 generation 1 at STATE_FINGERPRINT_REPOSITORY_HOSTED_CI_ONLY and F2-WP-204 generation 2 at its earned repository-hosted CI scope through their existing authorities.",
+    "Synchronize aggregate/pointer state for WP-200/WP-201/WP-203/WP-204/WP-205 to granular evidence without inflating scope.",
+    "Immediately recheck current main/open claims; if unowned, route Triggerword-4 to one bounded Stage-2 integration workpackage for Pulse + StateFingerprint + AgencyState + Goal lifecycle + Wake/HOLD with deterministic cross-component falsifiers.",
     "Reconcile Research Entity aggregate authority surfaces to supervisor 9.13 FREE_ONLY while preserving historical 8.78 records.",
     "Continue Architect UnifiedDB/bootstrap materialization without creating project truth authority."
   ],
   "wake_resume_conditions": [
     "owner invokes architect/architekt alias",
     "Frankenstein 2.0 main head changes materially",
-    "F2-WP-201 source/test/CI or reconciliation appears",
-    "F2-WP-200 terminal reconciliation appears",
+    "Stage-2 terminal reconciliation/cache synchronization completes",
+    "a Stage-2 integration claim appears",
     "owner pivots or completes the active project"
   ],
-  "last_checkpoint": "research_entity/architect/checkpoints/ARCHITECT_REENTRY_DELTA_G3_20260829T0602P0700.json"
+  "last_checkpoint": "research_entity/architect/checkpoints/ARCHITECT_REENTRY_DELTA_G4_20260829T0604P0700.json"
 }

@@ -1,0 +1,65 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T1048Z-VOICE-ACTIVATION-ASYNC-RETURN-BINDING-GPT56SOL",
+  "created_at": "2026-08-28T10:48:00Z",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "organ": "GPT-5.6-Sol/triggerwort5/voice-presence-forensics",
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "supervisor_epoch": "9.13",
+  "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_before_delta": "52e3554fd51920d959c84dddb35b638201d153fd",
+  "delta_commit": "f5d170b838da69c93a8d5f244172df0af865e2b5",
+  "delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_VOICE_ACTIVATION_ASYNC_RETURN_BINDING_GPT56SOL.json",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "span": "820-980",
+      "result": "PASS",
+      "finding": "reactive non-wakeword speech_end starts Realtime; triggering utterance identity is not passed as a dedicated causal binding into fuehren_gespraech; stale room-status text still mentions waiting for Hey FranKenstein"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "span": "1660-1785",
+      "result": "PASS",
+      "finding": "immediate tool result is function_call_output bound to call_id; later async completion logs auftrag_id but re-enters conversation as role=user input_text without call_id/auftrag_id binding"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
+      "result": "DEDUPED",
+      "finding": "existing capsule-conditioning gap retained, not duplicated"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0740Z_REALTIME_TASK_MEMORY_EFFECT_FUSION_GPT56SOL.json",
+      "result": "DEDUPED_AND_EXTENDED",
+      "finding": "existing outer Realtime call_id/TaskAdmission/effect-boundary analysis retained; this receipt adds activation ingress identity and background result re-entry identity"
+    }
+  ],
+  "admitted_new_architecture_contracts": [
+    "VoiceActivationBinding/v1",
+    "VoiceAsyncReturnBinding/v1"
+  ],
+  "address_continuity_disposition": "No AddressContinuity symbol found in pinned donor/current research code searches; do not claim implementation.",
+  "shared_ingest_state_mutated": false,
+  "shared_ingest_state_reason": "Append-only receipt avoids racing a rapidly moving shared INGEST_STATE aggregate; exact delta+commit identities provide deterministic reentry without overwriting parallel work.",
+  "runtime_actions": [],
+  "provider_actions": [],
+  "vps_actions": [],
+  "credits": {
+    "source_forensics": "PASS",
+    "runtime": 0,
+    "voice_activation_runtime": 0,
+    "voice_async_return_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "training": 0
+  },
+  "next_exact_action": "Triggerword 4 may implement the two typed bindings and a reverse-order overlapping background completion anti-crosswire regression on an authorized non-provider lane. Triggerword 5 should continue only with newer unconsumed packets or nonduplicate source-forensic gaps.",
+  "acceptance": "INGEST_ACCEPTED_AT_SOURCE_FORENSIC_SCOPE_ONLY"
+}

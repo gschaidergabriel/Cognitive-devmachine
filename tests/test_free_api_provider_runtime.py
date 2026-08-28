@@ -206,9 +206,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
     def test_capability_receipt_advertises_execution_schema_provenance(self):
         capability_receipt = MOD.receipt()
 
-        self.assertEqual(capability_receipt["schema_version"], "1.6")
+        self.assertEqual(capability_receipt["schema_version"], "1.7")
         self.assertEqual(
-            capability_receipt["execution_receipt_schema_version"], "1.5"
+            capability_receipt["execution_receipt_schema_version"], "1.6"
         )
         self.assertEqual(
             capability_receipt["unicode_database_version"],
@@ -322,6 +322,10 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             receipts[1]["cost_policy_principal_id"],
         )
         self.assertNotEqual(receipts[0]["request_id"], receipts[1]["request_id"])
+        self.assertEqual(
+            receipts[0]["semantic_request_id"],
+            receipts[1]["semantic_request_id"],
+        )
         self.assertTrue(all(
             receipt["cost_policy_principal_scope"] == "credential_binding"
             for receipt in receipts
@@ -2248,14 +2252,20 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
 
-        def request_id(content):
+        def request_ids(content):
             return MOD.execute_chat(
                 [{"role": "user", "content": content}], model="mock",
                 environ=env, opener=lambda *args, **kwargs: Response(),
                 now=iter((30.0, 30.01)).__next__,
-            )["receipt"]["request_id"]
+            )["receipt"]
 
-        self.assertNotEqual(request_id("AA"), request_id("BB"))
+        first = request_ids("AA")
+        second = request_ids("BB")
+        self.assertNotEqual(first["request_id"], second["request_id"])
+        self.assertNotEqual(
+            first["semantic_request_id"],
+            second["semantic_request_id"],
+        )
 
     def test_invalid_response_is_executed_but_never_verified(self):
         class Response:

@@ -8,7 +8,10 @@ import tempfile
 import unittest
 
 from grid10_cognitive_heartbeat_v1 import _trusted_normal_axes
-from grid10_cognitive_unified_runtime_v6 import build_unified_cognitive_runtime_v6
+from grid10_cognitive_unified_runtime_v6 import (
+    CognitiveCycleExecutionError,
+    build_unified_cognitive_runtime_v6,
+)
 from grid10_glm_cognitive_cycle_v1 import CognitiveCycleConfig
 from grid10_glm_inference_provider_v1 import GLMInferenceReceipt, GLMInferenceResult
 
@@ -52,6 +55,15 @@ class FakeInference:
                 response_id=f"fake-{i}", secret_recorded=False,
             ),
         )
+
+
+class ExplodingInference:
+    def __init__(self):
+        self.calls = 0
+
+    def __call__(self, messages, *, config):
+        self.calls += 1
+        raise RuntimeError("DO_NOT_PERSIST_RAW_EXCEPTION_TEXT")
 
 
 class UnifiedRuntimeV6Tests(unittest.TestCase):
@@ -197,6 +209,61 @@ class UnifiedRuntimeV6Tests(unittest.TestCase):
         self.assertNotIn("forged-goal", prompts)
         self.assertNotIn("FORGED_ACTION", prompts)
         self.assertIn("v6-causal-binding", prompts)
+
+    def test_post_v4_commit_inference_exception_gets_sanitized_failure_closure(self):
+        exploding = ExplodingInference()
+        _, _, agency, runtime, _ = build_unified_cognitive_runtime_v6(
+            self.db,
+            inference_fn=exploding,
+            cognitive_config=CognitiveCycleConfig(thinking_for_deep_roles=False),
+        )
+        before = agency.snapshot()
+
+        with self.assertRaises(CognitiveCycleExecutionError) as caught:
+            runtime.tick_once(
+                tick_id="v6-post-commit-failure",
+                now_ts=275.0,
+                trusted_axes=_trusted_normal_axes(),
+                cognitive_context={"goal": "g"},
+            )
+
+        after = agency.snapshot()
+        self.assertEqual(after.state_epoch, before.state_epoch + 1)
+        self.assertEqual(exploding.calls, 1)
+        self.assertIn("v6-post-commit-failure", str(caught.exception))
+
+        con = sqlite3.connect(str(self.db))
+        try:
+            base_row = con.execute(
+                "SELECT agency_epoch_after FROM grid10_cognitive_cycles WHERE tick_id=?",
+                ("v6-post-commit-failure",),
+            ).fetchone()
+            closure_row = con.execute(
+                "SELECT agency_epoch_after,control_snapshot_digest,receipt_json,receipt_digest "
+                "FROM grid10_v6_control_bound_receipts WHERE tick_id=?",
+                ("v6-post-commit-failure",),
+            ).fetchone()
+        finally:
+            con.close()
+
+        self.assertIsNotNone(base_row)
+        self.assertIsNotNone(closure_row)
+        self.assertEqual(base_row[0], after.state_epoch)
+        self.assertEqual(closure_row[0], after.state_epoch)
+        receipt_text = closure_row[2]
+        receipt = json.loads(receipt_text)
+        self.assertEqual(receipt["cognitive_cycle_status"], "FAILED")
+        self.assertTrue(receipt["post_v4_commit_failure"])
+        self.assertFalse(receipt["same_tick_retry_authorized"])
+        failed = receipt["controlled_cognitive_cycle_receipt"]
+        self.assertEqual(failed["schema"], "GRID10_CONTROL_BOUND_COGNITIVE_CYCLE_FAILED/v1")
+        self.assertEqual(failed["reason"], "INFERENCE_OR_GWT_EXCEPTION_AFTER_V4_COMMIT")
+        self.assertEqual(failed["error_type"], "RuntimeError")
+        self.assertIsNone(failed["provider_calls"])
+        self.assertEqual(failed["provider_calls_status"], "UNKNOWN_AFTER_EXCEPTION")
+        self.assertFalse(failed["retry_same_tick_authorized"])
+        self.assertNotIn("DO_NOT_PERSIST_RAW_EXCEPTION_TEXT", receipt_text)
+        self.assertEqual(receipt["receipt_digest"], closure_row[3])
 
     def test_no_inference_function_means_zero_provider_calls(self):
         _, _, _, runtime, _ = build_unified_cognitive_runtime_v6(self.db)

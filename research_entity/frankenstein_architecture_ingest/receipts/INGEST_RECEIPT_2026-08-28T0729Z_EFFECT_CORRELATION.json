@@ -1,0 +1,60 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_INGEST_RECEIPT/v1",
+  "receipt_id": "T5_INGEST_2026-08-28T0729Z_EFFECT_CORRELATION_5641dc6b",
+  "created_at": "2026-08-28T07:29:01Z",
+  "trigger": "triggerwort 5",
+  "worker": "chatgpt-gpt56sol-triggerword5-ingestor",
+  "authority_epoch_observed": "8.78",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_observed_before_write": "45f46138db94e0228240ea15b586bf8be622410b",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_before_ingest": "abe04a89844f8734754c7789736165cc60510262",
+  "routing": {
+    "normalized_trigger": "triggerwort 5",
+    "owner_directive_fetched": true,
+    "sparse_world_directive_fetched": true,
+    "packet_schema_fetched": true,
+    "ingest_state_fetched_and_reentered": true,
+    "status": "TRIGGER_ROUTING_ACTIVE"
+  },
+  "packets_consumed": [
+    {"packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS", "disposition": "INGESTED_DEDUPED_WITH_UNIQUE_CORRELATION_DELTA"},
+    {"packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT", "disposition": "INGESTED_DEDUPED_NO_INDEPENDENT_CREDIT"},
+    {"packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT", "disposition": "INGESTED_SOURCE_CROSSCHECKED"}
+  ],
+  "direct_crosschecks": [
+    "Pinned donor stern.py confirms normal PreToolUse calls zulassen() without emitting deny/block; only SEBUKKU emits permissionDecision=deny in the checked dispatcher.",
+    "Pinned donor stern.py confirms PostToolUse fallback can create VERIFIED without a pre-admission row and causal_episodes starts with credit=0,reentered=0.",
+    "Pinned donor gw_absicht confirms aussenwirkung is selected from effects rows with status=VERIFIED, establishing the status semantic overload at source level.",
+    "Current official Claude Code hook reference exposes tool_use_id on tool hooks and states PostToolUse fires concurrently for parallel tool calls; donor correlation instead uses one mutable active_turns.effect_id per session."
+  ],
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_ARCHITECTURE_DELTA_2026-08-28T1429P0700_GPT56SOL_EFFECT_CORRELATION.json",
+    "commit": "427e073dc0c18d62898e57978e4dd32618cac54c"
+  },
+  "preserved_or_added_contradictions": [
+    "TW5-CONTRADICTION-EFFECT-ENFORCEMENT-003",
+    "TW5-CONTRADICTION-VERIFIED-PREADMISSION-004",
+    "TW5-CONTRADICTION-EFFECT-CORRELATION-005"
+  ],
+  "triggerword_4_handoff": [
+    "Do not reuse donor zulassen() as canonical blocking EffectGate.",
+    "Separate ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, COMPLETION_EVIDENCE and CAUSAL_REENTRY.",
+    "Use immutable per-call invocation identity to bind request, execution and outcome; reject mismatches/reordering instead of sharing one session effect pointer.",
+    "Represent cancellation/transport ambiguity/missing outcome as UNKNOWN and prohibit blind replay.",
+    "Feed GWT/GRID from typed verified world-effect/re-entry evidence, not VERIFIED status alone."
+  ],
+  "credits": {
+    "new_donor_runtime_execution": 0,
+    "runtime_causal_credit": 0,
+    "provider_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "hcu_runtime_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "acceptance": "SOURCE_INGEST_CHECKPOINT_COMPLETE_RUNTIME_UNRESOLVED",
+  "next_exact_gate": "Inspect realtime_gespraech.py tool bridge plus the historical/current blocking wache-koenig/executor path, then recover effect-path Git chronology and carry immutable invocation identity plus UNKNOWN outcome semantics into Triggerword-4 executor/effect tests."
+}

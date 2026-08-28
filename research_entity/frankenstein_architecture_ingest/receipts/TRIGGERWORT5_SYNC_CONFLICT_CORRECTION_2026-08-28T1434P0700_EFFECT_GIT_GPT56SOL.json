@@ -1,0 +1,37 @@
+{
+  "schema": "TRIGGERWORD5_SYNC_CONFLICT_CORRECTION/v1",
+  "run_id": "triggerwort5-20260828T143413p0700-gpt56sol-effect-git-and-donor-closure",
+  "recorded_at": "2026-08-28T14:38:23+07:00",
+  "organ": "GPT-5.6 Sol",
+  "correction": {
+    "field": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "actual_result": "NOT_UPDATED_BY_THIS_ORGAN_DUE_TO_CONCURRENT_COMPARE_AND_SWAP_CONFLICT",
+    "attempts": 1,
+    "http_result": "409_BLOB_SHA_MISMATCH",
+    "handling": "FAIL_CLOSED_NO_LAST_WRITER_WINS_OVERWRITE"
+  },
+  "durable_writes_that_are_confirmed": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T073413Z_5641dc6_GPT56SOL_EFFECT_GIT_AND_DONOR_CLOSURE.json",
+      "commit": "ae134bc6244b38512780a39e2c80fb0e590f4871"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_GIT_AND_DONOR_CLOSURE_SUCCESSOR.json",
+      "commit": "56862beac37802d6f248b5ab2ed72cdb76eee394"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_20260828T073413Z_EFFECT_GIT_AND_DONOR_CLOSURE_GPT56SOL.json",
+      "commit": "04995639c8b7b09473243b2efbbc905eb4f3c95a"
+    }
+  ],
+  "required_reentry_action": "On the next safe INGEST_STATE CAS, deduplicate then register packet TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE, architecture delta 56862beac37802d6f248b5ab2ed72cdb76eee394 and receipt 04995639c8b7b09473243b2efbbc905eb4f3c95a. Preserve all concurrent state entries.",
+  "evidence_credit": {
+    "runtime_causal": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  }
+}

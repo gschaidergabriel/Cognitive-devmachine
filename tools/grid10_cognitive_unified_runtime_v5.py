@@ -4,11 +4,12 @@
 v5 is a thin successor integration layer, not a second state/wake authority. V4 remains the
 sole owner of wake_due, heartbeat, Agency checkpoint and pulse scheduling. V5 latches one
 immutable ControlSnapshot, passes that exact object into v4, and then passes the same object
-into ``grid10_live_control_binding_v1`` for specialist compute/GWT/memory semantics.
+into ``grid10_live_control_binding_v2`` for specialist compute/GWT/memory semantics.
 
-This deliberately removes the former second action-gate interpretation from v5. GRID mode
-semantics have one home: the live control binding. Gain influences specialist compute budget
-and downstream feed there; it does not masquerade as COMPUTE_OFF in the pulse controller.
+GRID mode semantics have one home: the live control binding. Gain influences specialist
+compute budget; ``grid.workspace_ignition_threshold`` mechanically controls which visible
+specialist outputs can ignite/broadcast through GWT. It does not masquerade as COMPUTE_OFF
+in the pulse controller.
 
 There is no default provider call. An explicit admitted inference_fn is required to run the
 GRID/GWT burst. The v5 augmented receipt is noncanonical and does not grant effect/completion
@@ -31,10 +32,10 @@ from grid10_cognitive_unified_runtime_v4 import (
 )
 from grid10_glm_cognitive_cycle_v1 import CognitiveCycleConfig
 from grid10_glm_inference_provider_v1 import GLMInferenceResult
-from grid10_live_control_binding_v1 import (
-    ControlledCognitiveCycleResult,
-    run_control_bound_cognitive_cycle,
-    sanitized_control_receipt,
+from grid10_live_control_binding_v2 import (
+    ControlledCognitiveCycleResultV2,
+    run_control_bound_cognitive_cycle_v2,
+    sanitized_control_receipt_v2,
 )
 
 SCHEMA = "GRID10_UNIFIED_COGNITIVE_RUNTIME/v5"
@@ -55,7 +56,7 @@ class UnifiedCycleResultV5:
     control_epoch: int
     control_snapshot_digest: str
     checkpoint: Mapping[str, Any]
-    controlled_cognitive_cycle: ControlledCognitiveCycleResult | None
+    controlled_cognitive_cycle: ControlledCognitiveCycleResultV2 | None
     receipt_digest: str
 
 
@@ -144,7 +145,7 @@ class UnifiedCognitiveRuntimeV5:
         raw_next_action = str(base.heartbeat_result.next_action)
         next_action = str(base.next_action)
 
-        controlled: ControlledCognitiveCycleResult | None = None
+        controlled: ControlledCognitiveCycleResultV2 | None = None
         cognitive_receipt: Mapping[str, Any]
         if self.inference_fn is None:
             cognitive_receipt = {
@@ -167,7 +168,7 @@ class UnifiedCognitiveRuntimeV5:
             context.setdefault("tick_id", tick_id)
             context.setdefault("woken_goal_ids", list(base.woken_goal_ids))
             context.setdefault("controller_action", next_action)
-            controlled = run_control_bound_cognitive_cycle(
+            controlled = run_control_bound_cognitive_cycle_v2(
                 tick_id=tick_id,
                 assurance_mode=base.heartbeat_result.assurance_mode,
                 controller_action=next_action,
@@ -177,7 +178,7 @@ class UnifiedCognitiveRuntimeV5:
                 config=self.cognitive_config,
                 inference_fn=self.inference_fn,
             )
-            cognitive_receipt = sanitized_control_receipt(controlled)
+            cognitive_receipt = sanitized_control_receipt_v2(controlled)
 
         # V4's durable Agency checkpoint already committed the wake/pulse state transition.
         # This is an append-only causal binding receipt, not a second canonical checkpoint.

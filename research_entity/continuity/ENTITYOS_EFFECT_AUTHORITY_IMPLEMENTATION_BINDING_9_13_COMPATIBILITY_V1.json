@@ -1,0 +1,78 @@
+{
+  "schema": "ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_COMPATIBILITY/v1",
+  "status": "CURRENT_EPOCH_COMPATIBILITY_ATTESTATION_NO_NEW_AUTHORITY",
+  "trigger": "4",
+  "canonical_main_observed_before_write": "ff6005fa35d3e8aa3684a78fef7eeac02b6f5c94",
+  "purpose": "Rebase the already-admitted exact EffectGate+EffectJournal implementation identity from its recorded 8.78 supervisor basis onto the current inbox-selected 9.13 NON_AUTHORITY delta without changing or broadening effect authority.",
+  "prior_binding": {
+    "path": "research_entity/continuity/ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_V1.json",
+    "blob_sha": "b4d91a0dd233c9dc15ff8218feea9248ac1c13c5",
+    "schema": "ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING/v1",
+    "recorded_supervisor_epoch": "8.78",
+    "api_version": "ENTITYOS_EFFECT_AUTHORITY_PY_API/v1"
+  },
+  "current_authority_surface": {
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "b8681e633a3a94f5e8ab00472ec4c3e321a2dcc1",
+    "schema_version": "9.13",
+    "selected_delta": "9.13AJ_NON_AUTHORITY",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AJ_DELTA_2026-08-29T0038P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "9ae9dd8e0c21d1171e0d986ee6a4e901d1dc40c4",
+    "authority_change": false,
+    "owner_execution_authority_pointer_path": "CLAY_EXECUTION_AUTHORITY.md",
+    "owner_execution_authority_pointer_blob_sha": "b850dbdf0ec5b4c04aa0c7f6e6a98a07f6f9d2f9",
+    "active_owner_execution_authority_path": "governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+    "active_owner_execution_authority_blob_sha": "8870abb01aa630539c09cd0e1a7e153d80e2db65"
+  },
+  "unchanged_exact_identity_tuple_verified_on_current_main": {
+    "artifact_manifest": {
+      "path": "the artefact/manifest.json",
+      "blob_sha": "c1969463d378f828bac7bbb44c55a2851b61c273",
+      "effect_authority": "EffectGate+EffectJournal"
+    },
+    "effect_gate": {
+      "path": "the artefact/clayverse/effects.py",
+      "blob_sha": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+      "request_symbol": "EffectRequest",
+      "gate_symbol": "EffectGate"
+    },
+    "effect_journal": {
+      "path": "the artefact/clayverse/effect_journal.py",
+      "blob_sha": "cda63471f1467481f2ff79032d3931730a334a20",
+      "journal_symbol": "EffectJournal"
+    },
+    "canonical_state_schema": {
+      "path": "the artefact/clayverse/store.py",
+      "blob_sha": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+      "state_symbol": "UnifiedDB",
+      "schema_version": "6"
+    },
+    "api_contract_version": "ENTITYOS_EFFECT_AUTHORITY_PY_API/v1"
+  },
+  "compatibility_decision": {
+    "result": "CURRENT_9_13_COMPATIBLE_EXACT_SOURCE_IDENTITY",
+    "reason": "The current inbox-selected 9.13AJ steering is explicitly NON_AUTHORITY with authority_change=false, while every authority-bearing source/manifest/pointer identity bound by the v1 record remains byte-identical on current main. This record therefore updates epoch provenance only and mints no new effect authority.",
+    "effect_authority_changed": false,
+    "implementation_identity_changed": false,
+    "api_contract_changed": false,
+    "state_schema_changed": false,
+    "new_authority_granted": false
+  },
+  "frankenstein2_consumption": {
+    "target_workpackage": "F2-WP-105",
+    "rule": "The existing active F2-WP-105 lane may consume the prior v1 exact identity tuple together with this 9.13 compatibility attestation. No second WP105 mutation lane is created. All adapter/executor calls remain non-authoritative and must fail closed on any authority/path/blob/schema/API/call-identity mismatch.",
+    "next_gate": "Execute the existing deterministic no-real-effect WP105 integration matrix: exact request -> bound canonical authority -> journal PENDING -> executor stub -> VERIFIED-or-UNKNOWN journal transition -> separate completion verification; prove DENY/UNKNOWN and every authority/blob/call-identity mismatch cause zero executor dispatch, and restart uncertainty remains UNKNOWN without replay."
+  },
+  "credit_boundary": {
+    "current_epoch_authority_binding_verified": true,
+    "source_identity_runtime_credit_added": 0,
+    "effectgate_runtime_credit_added": 0,
+    "effectjournal_runtime_credit_added": 0,
+    "real_effect_runtime_credit_added": 0,
+    "completion_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_frankenstein2_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "training_credit_added": 0
+  }
+}

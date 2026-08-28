@@ -1,0 +1,112 @@
+{
+  "packet_id": "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+  "created_at": "2026-08-28T07:36:06Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/schema-repair-source-validation",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Schema-valid successor for the invalid historical wache-koenig packet. Directly re-read exact archived Drive source bytes for wache-koenig.py and freigabe, verified SHA-256 against the canonical archive manifest, and preserved source-only/historical scope. No runtime reachability or whole-system enforcement credit.",
+  "files_examined": [
+    {
+      "path": "Drive:aicore/tools/schranke/wache-koenig.py",
+      "sha_or_blob": "sha256:7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "spans_examined": [
+        {"line_start": 42, "line_end": 120},
+        {"line_start": 123, "line_end": 138},
+        {"line_start": 141, "line_end": 175}
+      ]
+    },
+    {
+      "path": "Drive:aicore/tools/schranke/freigabe",
+      "sha_or_blob": "sha256:23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "spans_examined": [{"line_start": 1, "line_end": 117}]
+    },
+    {
+      "path": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ACTION_BOUNDARY_SUBMANIFEST.json",
+      "sha_or_blob": "b3bceb16a1c0038d0d719b44bfec7295170a3dd7",
+      "spans_examined": [{"line_start": 1, "line_end": 1}]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-WK-SV-A001-BASH-ONLY-BLOCKING-PRETOOL-GATE",
+      "subsystem": "historical effect authority / command gate",
+      "path": "Drive:aicore/tools/schranke/wache-koenig.py",
+      "commit_sha": "historical-sha256:7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "line_start": 141,
+      "line_end": 168,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "Parses a PreToolUse-style JSON event, returns allow for every non-Bash tool, classifies Bash command text, exits 2 for hard-deny classes or ticket-required commands without a valid ticket, and exits 0 otherwise. When wired as a blocking PreToolUse hook this is genuine pre-execution blocking for its Bash scope.",
+      "runtime_reachable": null,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 1.0,
+      "open_questions": ["Recover exact scheduler/settings registration and ordering.", "Identify typed enforcement coverage for non-Bash state-changing tools."]
+    },
+    {
+      "atom_id": "TW5-WK-SV-A002-COMMAND-POSITION-CLASSIFIER",
+      "subsystem": "historical effect authority / parser",
+      "path": "Drive:aicore/tools/schranke/wache-koenig.py",
+      "commit_sha": "historical-sha256:7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "line_start": 42,
+      "line_end": 120,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "Defines hard-deny and ticket-required regex classes anchored to command positions, strips heredoc/string data before primary checks, separately reinspects ssh/scp/rsync and shell -c inner commands, and adds database destructive-operation detection.",
+      "runtime_reachable": null,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "confidence": 1.0,
+      "open_questions": ["Port useful cases as typed intent/resource/capability regression fixtures rather than retaining regex as canonical authority."]
+    },
+    {
+      "atom_id": "TW5-WK-SV-A003-ONE-SHOT-COMMAND-BOUND-TICKET",
+      "subsystem": "historical owner grant",
+      "path": "Drive:aicore/tools/schranke/wache-koenig.py",
+      "commit_sha": "historical-sha256:7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "line_start": 123,
+      "line_end": 138,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "Hashes exact command text, loads the matching ticket, checks full hash and validity window, deletes expired tickets, and unlinks a valid ticket before returning allow, making the grant one-shot in the ordinary path.",
+      "runtime_reachable": null,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 1.0,
+      "open_questions": ["Successor should bind typed EffectRequest, resource identity, generation, owner grant identity, policy version and exact executor lease atomically."]
+    },
+    {
+      "atom_id": "TW5-WK-SV-A004-HUMAN-TTY-GRANT-PRODUCER",
+      "subsystem": "historical owner grant",
+      "path": "Drive:aicore/tools/schranke/freigabe",
+      "commit_sha": "historical-sha256:23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "line_start": 1,
+      "line_end": 117,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "Requires /dev/tty, two sequential fresh typed challenges with timing checks, applies an optional deletion-size bound, then writes a mode-0600 command-hash ticket with 10-minute delayed activation and 20-minute validity.",
+      "runtime_reachable": null,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 1.0,
+      "open_questions": ["Replace behavioral typing heuristics with explicit authenticated owner/capability grant while preserving out-of-model separation, scope binding, expiry and one-shot consumption."]
+    }
+  ],
+  "hypotheses": [
+    "Frankenstein 2.0 should preserve the architectural split: model/candidate requests never self-authorize; a deterministic executor boundary consumes a separately minted, scope-bound owner/capability decision before execution.",
+    "The historical command-hash ticket is a useful donor for one-shot capability lease semantics, but the successor must bind typed EffectRequest + immutable invocation identity + request digest + resource identity + generation + policy/executor identity."
+  ],
+  "counterhypotheses": [
+    "A newer host-level permission layer may already supersede wache-koenig and cover more tool classes; exact source plus live wiring would outrank this historical donor.",
+    "For shell-only commands, raw-command tickets may remain simpler than a larger typed object; acceptance must test aliasing, cwd/environment/resource resolution, concurrent identical attempts and cross-tool effects before retaining that design."
+  ],
+  "contradictions": [
+    "Current donor stern.py ordinary admission is nonblocking bookkeeping, while historical wache-koenig source contains genuine Bash-scoped pre-execution blocking when registered; these are different authority classes.",
+    "Historical wache-koenig has zero non-Bash coverage by design, so it cannot establish one complete effect authority for Write/Edit/NotebookEdit or other effectful tools.",
+    "Source and archive identity are exact, but scheduler registration/order and runtime reachability remain unproven."
+  ],
+  "critical_unknowns": [
+    "Exact settings/scheduler entry and ordering that registered this wache-koenig snapshot.",
+    "Whether current Frankenstein 0.7 retains this exact watcher, a successor, host permissions, or no equivalent gate.",
+    "Whether all state-changing tool classes converge on one deterministic execution boundary.",
+    "Atomicity of ticket consumption under concurrent identical attempts."
+  ],
+  "recommended_next_spans": [
+    {"path": "historical/global .claude/settings.json or equivalent", "line_start": null, "line_end": null, "reason": "Prove actual hook registration/order and matcher scope for wache-koenig.", "priority": "P0"},
+    {"path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py", "line_start": null, "line_end": null, "reason": "Trace realtime function-call/tool executor permission boundary and compare it against hook-based Bash gating.", "priority": "P0"},
+    {"path": "current Claude/Frankenstein host permission configuration", "line_start": null, "line_end": null, "reason": "Determine whether a newer deterministic gate supersedes the historical watcher and covers non-Bash effects.", "priority": "P0"}
+  ],
+  "supersedes_packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL"
+}

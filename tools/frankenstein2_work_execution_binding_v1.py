@@ -295,10 +295,16 @@ class WorkExecutionLedger:
         try:
             con.execute("BEGIN IMMEDIATE")
             inv = con.execute(
-                "SELECT binding_id FROM fr2_work_invocations WHERE invocation_id=?", (invocation_id,)
+                """SELECT i.binding_id,b.status
+                   FROM fr2_work_invocations i
+                   JOIN fr2_work_execution_bindings b ON b.binding_id=i.binding_id
+                   WHERE i.invocation_id=?""",
+                (invocation_id,),
             ).fetchone()
             if inv is None or inv["binding_id"] != binding_id:
                 raise ValueError("result does not bind to this invocation/binding")
+            if inv["status"] in {"COMPLETED", "ABANDONED"}:
+                raise ValueError(f"binding is terminal: {inv['status']}")
             con.execute(
                 "INSERT INTO fr2_work_results(result_id,binding_id,invocation_id,outcome,result_digest,result_provenance,observed_at) VALUES(?,?,?,?,?,?,?)",
                 (result_id, binding_id, invocation_id, outcome, result_digest, provenance, float(observed_at or time.time())),
@@ -347,7 +353,7 @@ class WorkExecutionLedger:
         try:
             con.execute("BEGIN IMMEDIATE")
             row = con.execute(
-                """SELECT b.work_generation,r.outcome,r.binding_id,r.invocation_id
+                """SELECT b.work_generation,b.status,r.outcome,r.binding_id,r.invocation_id
                    FROM fr2_work_execution_bindings b
                    JOIN fr2_work_results r ON r.binding_id=b.binding_id
                    WHERE b.binding_id=? AND r.result_id=?""",
@@ -355,6 +361,8 @@ class WorkExecutionLedger:
             ).fetchone()
             if row is None:
                 raise ValueError("missing bound result")
+            if row["status"] in {"COMPLETED", "ABANDONED"}:
+                raise ValueError(f"binding is terminal: {row['status']}")
             if row["work_generation"] != expected_work_generation:
                 raise ValueError("STALE_WORK_GENERATION")
             if row["invocation_id"] != invocation_id or row["binding_id"] != binding_id:

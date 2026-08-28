@@ -1,0 +1,100 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_EFFECT_GIT_CHRONOLOGY_BOUNDARY_GPT56SOL",
+  "recorded_at": "2026-08-28T14:36:07+07:00",
+  "trigger": "triggerwort 5",
+  "status": "ACCESSIBLE_GIT_BOUNDARY_RESOLVED_PRE_GIT_TRANSITION_UNRESOLVED",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "admitted_authority_epoch": "8.78",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13AA_NON_AUTHORITY",
+    "execution_mode": "FREE_ONLY",
+    "evidence_scope": "SOURCE_AND_GIT_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION"
+  },
+  "source_identity": {
+    "canonical_main_observed": "01da78bd43066e912410ed1d308f26dba0dae23c",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "c6e2cf3a04b29b8d033f55051f21fef70737af9f",
+    "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "chronology": [
+    {
+      "state": "FIRST_VERIFIED_IN_ACCESSIBLE_GIT",
+      "commit": "b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a",
+      "commit_time_utc": "2026-08-25T22:18:41Z",
+      "path": "scripts/stern.py",
+      "blob_sha": "777cc14c695a504b74dc6f8a425b6f9de82a41ab",
+      "finding": "The first accessible Git snapshot of stern.py already contains the PHASE-2/ZECP17 nonblocking zulassen() bookkeeping path and the PostToolUse merken() verification path together. Its own source commentary says an earlier state had only the post-hoc half, but that earlier state is not represented by an accessible stern.py Git commit."
+    },
+    {
+      "state": "DIRECT_PARENT_HAS_NO_STERN_FILE",
+      "commit": "9051cb5938a713c84a9670275beb449cd93ebb71",
+      "path": "scripts/stern.py",
+      "result": "NOT_FOUND",
+      "finding": "The direct parent does not contain scripts/stern.py, so b0be33f is an import/first repository snapshot boundary, not evidence that PHASE-2 was invented at that commit."
+    },
+    {
+      "state": "PATH_RELOCATION",
+      "commit": "ccf2264f23b65ed796f9ed44a38c8c55bd379345",
+      "commit_time_utc": "2026-08-27T12:22:13Z",
+      "from": "scripts/stern.py",
+      "to": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "The repository three-layer restructuring moved the source path. This relocation must not be misread as semantic introduction of the effect mechanism."
+    },
+    {
+      "state": "CURRENT_DONOR",
+      "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "Current donor source still explicitly distinguishes STAR-scoped nonblocking zulassen()/merken() bookkeeping from the older blocking global wache-koenig predecessor."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_EFFECT_TRANSITION_PREGIT_BOUNDARY_034",
+      "source_kind": "CURRENT_SOURCE_PLUS_GIT_NEGATIVE_RESULT",
+      "claim": "The exact historical transition from post-hoc-only effect logging to PHASE-2 nonblocking admission bookkeeping cannot be assigned to an accessible Frankenstein Git commit. The first accessible stern.py Git snapshot already contains both halves; its parent has no stern.py. Therefore the earlier transition belongs to pre-Git/host provenance unless another exact archived source revision is recovered.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_2_0_action": "PRESERVE_FIRST_VERIFIED_VS_CREATED_DISTINCTION"
+    },
+    {
+      "atom_id": "F2_EFFECT_GATE_NAMING_NOT_AUTHORITY_035",
+      "source_kind": "CURRENT_SOURCE",
+      "claim": "The historical name EffectGate in stern.py is not evidence of enforcement authority: the source explicitly states normal zulassen() never blocks and that the older global watcher is the separate blocking path.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_2_0_action": "USE_TYPED_ENFORCEMENT_STATE_NOT_HISTORICAL_NAME"
+    }
+  ],
+  "contradiction_update": {
+    "id": "TW5-CONTRADICTION-EFFECT-GIT-CHRONOLOGY-006",
+    "status": "ACCESSIBLE_GIT_BOUNDARY_RESOLVED_PRE_GIT_HOST_TRANSITION_OPEN",
+    "rule": "Use 'first verified in accessible Git' for b0be33f; do not claim 'introduced/created on 2026-08-25' for PHASE-2 effect semantics."
+  },
+  "triggerword4_handoff": [
+    "Do not port authority from historical naming or commit dates; port only source-proven invariants.",
+    "Implement one typed executor-bound EffectGate with immutable invocation identity and distinct ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION and COMPLETION_EVIDENCE states.",
+    "Keep historical wache-koenig command guards as possible defence-in-depth donor logic, not canonical EntityOS permission authority.",
+    "Document b0be33f as first verified accessible Git state, not creation date."
+  ],
+  "dedupe": {
+    "wache_predecessor_bytes": "ALREADY_DURABLY_PINNED_BY_PARALLEL_ORGAN",
+    "existing_model_delta": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WACHE_KOENIG_PREDECESSOR_PIN_2026-08-28T1434P0700_GPT56SOL.json",
+    "existing_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_WACHE_KOENIG_PREDECESSOR_PIN_GPT56SOL.json",
+    "double_count_credit": false,
+    "unique_delta_here": "Git provenance boundary and first-verified-versus-created distinction only."
+  },
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_execution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Search exact archived host/source revisions or dated snapshots predating b0be33f for stern.py/EffectGate semantics; if none are recoverable, permanently classify the post-hoc-only -> PHASE-2 transition date as PRE_GIT_HOST_PROVENANCE_UNRESOLVED. In parallel Triggerword 4 should implement the typed executor-bound successor rather than depend on historical chronology."
+}

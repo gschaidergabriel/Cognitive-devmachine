@@ -1,0 +1,28 @@
+{
+  "schema": "ARCHITECT_REENTRY_DELTA/v1",
+  "checkpoint_id": "ARCH-REENTRY-G3-20260829T0602P0700",
+  "architect_id": "federated-development-architect",
+  "generation": 3,
+  "created_at": "2026-08-29T06:02:00+07:00",
+  "reason": "F2 main advanced after Architect generation-2 checkpoint; ingest concurrent Triggerword-4 deltas before closing wake.",
+  "previous_architect_checkpoint": "research_entity/architect/checkpoints/ARCHITECT_CHECKPOINT_G2_20260829T0557P0700.json",
+  "observed_heads": {
+    "frankenstein_2_main": "e022dcbc9fd01c99f567dc0860c34ca15d5b4885",
+    "research_entity_main": "d81d31b34d2abb98bf2f0bc80c46decbfd23c8b0",
+    "architect_branch_after_g2_state": "9e946a822de5eea0cd7c45f9d799d0ad384cb479"
+  },
+  "new_observations": [
+    "F2 aggregate state advanced to generation 11.",
+    "F2-WP-203 now has generation-2 item-type repair evidence; its active pointer records state ACCEPTED and terminal scope AGENCY_STATE_G2_ITEM_TYPE_REPAIR_REPOSITORY_HOSTED_CI_ONLY, while aggregate state remains IN_PROGRESS.",
+    "F2-WP-205 generation 2 repairs the missing-observation versus explicit-nonmatch epistemic conflation; exact reconciliation records ACCEPTED at WAKE_HOLD_TRISTATE_REPOSITORY_HOSTED_CI_ONLY with GitHub-hosted CI evidence.",
+    "F2-WP-205 generation-2 active pointer and aggregate state still require terminalization/reconciliation despite granular acceptance.",
+    "F2-WP-201 remains the smallest unresolved Phase-2 semantic primitive unless a newer exact claim supersedes it."
+  ],
+  "architect_decision_delta": "Do not reopen or duplicate WP-203/WP-205 implementation. Preserve their new generation-2 granular acceptance scopes, treat aggregate/pointer lag as reconciliation work, and keep WP-201 identity-vs-projection semantics as the next unresolved component discriminator alongside WP-200 terminalization.",
+  "credit_boundary": "No target-runtime, physical-GRID10, whole-Frankenstein-2.0, whole-EntityOS/HCU or training credit is minted by these repository-hosted CI results.",
+  "evidence_refs": [
+    "gschaidergabriel/frankenstein-2.0@e022dcbc9fd01c99f567dc0860c34ca15d5b4885:workpackages/STATE.json",
+    "gschaidergabriel/frankenstein-2.0@e022dcbc9fd01c99f567dc0860c34ca15d5b4885:workpackages/active/F2-WP-203.json",
+    "gschaidergabriel/frankenstein-2.0@214f50688e5ee82a985ba47d7e9b7b6988d056fd:workpackages/reconciliations/F2-WP-205/2-F2-WP-205-G2-GPT56SOL-UNKNOWN-WAKE-20260829.json"
+  ]
+}

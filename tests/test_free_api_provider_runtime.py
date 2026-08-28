@@ -214,6 +214,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             capability_receipt["unicode_database_version"],
             MOD.unicodedata.unidata_version,
         )
+        self.assertFalse(capability_receipt["invariants"][
+            "semantic_request_identity_authorizes_replay"
+        ])
 
     def test_capability_receipt_does_not_infer_model_availability(self):
         capability_receipt = MOD.receipt()
@@ -366,7 +369,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             now=iter((1.0, 1.01)).__next__,
         )
 
-        self.assertEqual(result["receipt"]["schema_version"], "1.5")
+        self.assertEqual(result["receipt"]["schema_version"], "1.6")
         self.assertEqual(
             result["receipt"]["unicode_database_version"],
             MOD.unicodedata.unidata_version,

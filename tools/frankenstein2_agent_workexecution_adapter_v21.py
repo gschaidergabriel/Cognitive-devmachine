@@ -220,7 +220,9 @@ class AgentWorkExecutionAdapter:
         """Atomically join exact Agent call identity to observed agentId.
 
         If PostToolUse lacks an unambiguous agentId, the spawn remains explicitly UNKNOWN
-        and no WorkExecutionBinding row is minted.
+        and no WorkExecutionBinding row is minted. That UNKNOWN state is sticky: a later
+        duplicate/replayed PostToolUse cannot silently convert it into an observed identity;
+        reconciliation requires a separate evidence-bearing successor path.
         """
         spawn_tool_use_id, session_id = _validate_agent_hook(payload, POST_EVENT)
         binding_id = str(binding_id or "").strip()
@@ -255,6 +257,10 @@ class AgentWorkExecutionAdapter:
                 )
             if spawn["status"] == "BOUND":
                 raise AgentWorkExecutionIdentityError("SPAWN_ALREADY_BOUND")
+            if spawn["status"] == "AGENT_ID_UNKNOWN":
+                raise AgentWorkExecutionIdentityError(
+                    "AGENT_ID_UNKNOWN_REQUIRES_RECONCILIATION"
+                )
             if agent_id is None:
                 con.execute(
                     """UPDATE fr2_agent_spawn_observations

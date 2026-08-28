@@ -27,7 +27,7 @@
   "continuation": {
     "repository": "gschaidergabriel/clay-global-research-entity",
     "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-    "head_observed_before_checkpoint_update": "1a13dcf3f13ab1cc73a7cfb369ed1b8dc9dfb2df",
+    "head_observed_before_checkpoint_update": "d3fe7fccd10515b67c9a2be67f67358eaec8fe2d",
     "single_existing_pr": 2118,
     "branch_relation_to_main_before_reentry_write": "DIVERGED_AHEAD_788_BEHIND_31_DO_NOT_TREAT_BRANCH_AS_CANONICAL_AUTHORITY"
   },
@@ -60,11 +60,25 @@
   "active_cognitive_runtime_lane": {
     "runtime": "tools/grid10_cognitive_unified_runtime_v6.py",
     "crash_reconciliation": "tools/grid10_v6_crash_reconciliation_v1.py",
+    "recovery_lease_gate": "tools/grid10_v6_recovery_lease_gate_v1.py",
+    "recovery_lease_gate_blob": "99094a9f59a3cd508fb80dd10e886b3dcc327dd1",
+    "recovery_mutation_time_fence_test": "tools/test_grid10_v6_recovery_mutation_time_fence_v1.py",
+    "recovery_mutation_time_fence_test_blob": "791f545312152c229c3101351c7b2064ba0a412d",
     "integration_test": "tools/test_grid10_v6_crash_reconciliation_integration_v1.py",
     "scheduler": "tools/grid10_persistent_scheduler_v2.py",
     "single_basis": "V4 remains wake/Agency owner; v6 latches one ControlSnapshot and binds Pulse -> GRID/GWT -> receipt",
     "crash_protocol": "PREPARED before V4; CLOSED in same SQLite transaction as v6 receipt; post-V4/no-v6 is RECOVERY_REQUIRED with UNKNOWN provider state and no same-tick retry",
-    "exclusive_recovery_mutation_required": true
+    "exclusive_recovery_mutation_required": true,
+    "mutation_time_authority": "EXTERNAL_CHECKED_AT_FORBIDDEN; SQLITE_RUNTIME_TIME_REQUIRED"
+  },
+  "source_delta_this_reentry": {
+    "id": "GRID10_V6_RECOVERY_MUTATION_TIME_FENCE",
+    "finding": "Persisting recovery previously accepted caller-supplied checked_at, weakening expiry as a mutation-time authority boundary.",
+    "fix_commit": "7944d9038df0e0f9076f1adfd73206a40ebf1ee0",
+    "test_commit": "f89ecc977d5a2523ae1e93cb14dd3894008961cd",
+    "tests_defined": 2,
+    "execution_observed": false,
+    "runtime_credit": 0
   },
   "duplicate_lane_resolution": {
     "status": "FUSED_AND_RETIRED",
@@ -79,9 +93,9 @@
     "final_retirement_commit": "5242e9ab808e073dffe15b9f294e1beeb85934b9"
   },
   "last_receipt": {
-    "type": "TRIGGERWORD4_REENTRY_RECEIPT/v1",
-    "path": "research_entity/continuity/triggerword4/receipts/TRIGGERWORD4_9_13AF_DUAL_SINGLETON_REENTRY_GPT56SOL_20260828T2000P0700.json",
-    "commit": "1a13dcf3f13ab1cc73a7cfb369ed1b8dc9dfb2df"
+    "type": "TRIGGERWORD4_SOURCE_CLOSURE_RECEIPT/v1",
+    "path": "research_entity/continuity/triggerword4/receipts/TRIGGERWORD4_V6_RECOVERY_MUTATION_TIME_FENCE_SOURCE_CLOSURE_GPT56SOL_20260828T2000P0700.json",
+    "commit": "d3fe7fccd10515b67c9a2be67f67358eaec8fe2d"
   },
   "negative_evidence": [
     {
@@ -107,13 +121,17 @@
     {
       "id": "POINT_TELEMETRY_NOT_QUIESCENCE_ACCEPTANCE",
       "classification": "ZOMBIE_DEFUNCT_POINT_TELEMETRY_IS_NOT_REPOSITORY_BOUND_GE90S_RECEIPT"
+    },
+    {
+      "id": "RECOVERY_MUTATION_TIME_FENCE_EXECUTION_MISSING",
+      "classification": "SOURCE_AND_TEST_DEFINED_NO_WORKFLOW_RUN_OR_STATUS_OBSERVED_RUNTIME_CREDIT_ZERO"
     }
   ],
   "open_critical_defects": [
     "Admitted deterministic execution evidence for current V4/V5/V6/live-control/scheduler/crash-reconciliation source is missing.",
     "Repository-bound >=90s runtime quiescence acceptance result for g0000 remains missing.",
     "Recovery protocol is observability/classification rather than full V4+v6 two-phase atomicity.",
-    "Recovery mutation requires an externally proven exclusive recovery/coordinator lease.",
+    "Recovery mutation requires an externally proven exclusive recovery/coordinator lease; source now additionally forbids caller-time replay but that regression test is execution-unverified.",
     "Native child WorkExecutionBinding remains open.",
     "Frankenstein completion must be bound to typed execution receipts rather than textual success.",
     "Per-invocation tool/effect identity and overlapping-call falsifier remain open.",
@@ -140,6 +158,6 @@
     "training": 0,
     "frankenstein2_runtime": 0
   },
-  "next_exact_action": "Inspect only the terminal canonical results for issue 2122 (P0 runtime-quiescence-v2 g0000) and issue 2121 (P1 SIGKILL independent-replacement-v3 g0000). While either result is absent, do not create duplicate dispatches or advance generations. Continue only non-conflicting source/test assembly on the existing Triggerword-4 lane. If 2122 passes, mint at most runtime-quiescence component credit after verifying the exact bound >=90s window and stable identities. If 2121 passes, mint at most crash-independent-replacement component credit; physical GRID10 remains 0 until a distinct real-process retest closes that separate gate.",
-  "work_generation": "triggerwort4-20260828-9_13AF-dual-singleton-reentry-1"
+  "next_exact_action": "Inspect only the terminal canonical results for issue 2122 (P0 runtime-quiescence-v2 g0000) and issue 2121 (P1 SIGKILL independent-replacement-v3 g0000). While either result is absent, do not create duplicate dispatches or advance generations. Add tools/test_grid10_v6_recovery_mutation_time_fence_v1.py to the next admitted non-provider deterministic V6 regression capsule. Continue only non-conflicting source/test assembly on the existing Triggerword-4 lane. If 2122 passes, mint at most runtime-quiescence component credit after verifying the exact bound >=90s window and stable identities. If 2121 passes, mint at most crash-independent-replacement component credit; physical GRID10 remains 0 until a distinct real-process retest closes that separate gate.",
+  "work_generation": "triggerwort4-20260828-9_13AF-recovery-time-fence-1"
 }

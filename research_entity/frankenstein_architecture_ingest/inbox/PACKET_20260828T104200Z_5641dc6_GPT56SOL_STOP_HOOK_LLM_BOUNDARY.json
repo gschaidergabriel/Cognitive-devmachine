@@ -1,0 +1,211 @@
+{
+  "packet_id": "TW5-PACKET-20260828T104200Z-STOP-HOOK-LLM-BOUNDARY-GPT56SOL",
+  "created_at": "2026-08-28T10:42:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/stop-hook-llm-boundary",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Current-donor cognition/retrieval forensic: reconcile the declared no-LLM-in-hooks invariant with the live Stop-hook local Ollama relevance judge and its UnifiedDB credit path. Source-only; no donor mutation and no runtime/provider/VPS credit.",
+  "authority_binding": {
+    "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "design_head_observed_pre_create": "9bf076fbb97b3c299300a5b8e4f6922b93ae9cfe",
+    "supervisor_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "runtime_credit": 0
+  },
+  "files_examined": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "sha_or_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "spans_examined": [
+        {"line_start": 1, "line_end": 90},
+        {"line_start": 4820, "line_end": 5065},
+        {"line_start": 8840, "line_end": 9009}
+      ]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "stern-stop-llm-001-declared-hard-boundary",
+      "subsystem": "hook-runtime/cognition",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 33,
+      "line_end": 48,
+      "excerpt_hash": null,
+      "source_kind": "SPEC",
+      "what_it_does": "Declares unchanged hard hook invariants, including an unconditional rule that no LLM call occurs in a hook, alongside hard hook time budgets and fail-silent behavior.",
+      "why_it_exists": "Protect hot hook latency/reliability and keep model cognition outside hook authority.",
+      "inputs": [],
+      "outputs": ["declared hook invariant"],
+      "reads": [],
+      "writes": [],
+      "dependencies": ["FRANKENSTEIN_KONZEPT_UND_PLAN_2026-08-25.md §1.9"],
+      "authority_class": "DECLARED_INVARIANT_NOT_SELF_ENFORCING",
+      "failure_mode": "Later live code can violate the declaration while the prose remains unchanged.",
+      "concurrency_implication": "None directly; the invariant is intended to bound hook occupancy.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": "Declares that LLM latency must not enter hook critical paths.",
+      "state_lifetime": "source-level declaration",
+      "runtime_reachable": null,
+      "runtime_entrypoints": [],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["stern-stop-llm-002-blocking-ollama-call", "stern-stop-llm-004-stop-hook-invocation"],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR",
+      "open_questions": ["Was §1.9.2 intentionally superseded by PHASE 4b, or is PHASE 4b an admitted exception that was never reflected in the top-level invariant?"]
+    },
+    {
+      "atom_id": "stern-stop-llm-002-blocking-ollama-call",
+      "subsystem": "local-cognition/relevance-judge",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 4845,
+      "line_end": 4962,
+      "excerpt_hash": null,
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "Implements a synchronous localhost Ollama /api/generate call for qwen2.5:0.5b relevance judging; temperature is 0 and failures return None. kognition_urteil compiles user query plus selected memory candidates and calls this model path.",
+      "why_it_exists": "Add model-assisted relevance evidence to MicroClay without granting the model direct DB authority.",
+      "inputs": ["user query", "selected durable_memory candidate texts", "kognition config"],
+      "outputs": ["relevance booleans", "relevance fraction", "bounded model raw answer", "credit -1..1"],
+      "reads": ["star_konfig via _konfig()"],
+      "writes": [],
+      "dependencies": ["localhost Ollama", "qwen2.5:0.5b", "urllib", "transcript-derived query"],
+      "authority_class": "MODEL_CANDIDATE_EVIDENCE_ONLY",
+      "failure_mode": "Connection/timeout/HTTP/JSON/empty-response failures produce None; synchronous model latency still consumes caller budget.",
+      "concurrency_implication": "A blocking local inference occupies the hook process while it runs; concurrent hook invocations may contend on Ollama/CPU independently of DB locking.",
+      "privacy_implication": "Prompt is sent to the configured Ollama URL; default is localhost but configuration can alter the URL, so locality is configuration-dependent rather than encoded by the function.",
+      "latency_or_cost_implication": "Synchronous inference is on the Stop critical path; configured sub-timeout is intended to fit within the global Stop limit.",
+      "state_lifetime": "request-scoped model output until reduced to retrieval feedback",
+      "runtime_reachable": true,
+      "runtime_entrypoints": ["cmd_hook event=Stop -> _kognition_richten_hook -> kognition_urteil -> _ollama_generate", "manual CLI stern kognition-richten"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["stern-stop-llm-001-declared-hard-boundary"],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 0.99,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "open_questions": ["Installed-runtime latency distribution under cold/warm Ollama", "Whether the configured Ollama URL is always localhost on actual installations"]
+    },
+    {
+      "atom_id": "stern-stop-llm-003-model-credit-reducer",
+      "subsystem": "MicroClay/retrieval-feedback",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 4994,
+      "line_end": 5054,
+      "excerpt_hash": null,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "On the newest retrieval episode lacking modell:relevanz feedback, loads selected memory candidates and the final user transcript text, calls the model judge, then applies its numeric credit through MicroClay._apply_credit and commits. The signal class is explicitly non-human and therefore is designed not to count toward SHADOW->ACTIVE promotion.",
+      "why_it_exists": "Keep model output noncanonical while still recording it as typed candidate relevance evidence through the existing reducer path.",
+      "inputs": ["session_id", "transcript_path", "retrieval_episodes.selected_memory_ids"],
+      "outputs": ["retrieval_feedback/model relevance credit", "hook log"],
+      "reads": ["retrieval_episodes", "durable_memory", "transcript JSONL", "star_konfig"],
+      "writes": ["retrieval feedback/credit via MicroClay._apply_credit"],
+      "dependencies": ["MicroClay._apply_credit", "schreib_verbindung", "kognition_urteil"],
+      "authority_class": "DETERMINISTIC_REDUCER_WRITES_MODEL_DERIVED_CANDIDATE_EVIDENCE",
+      "failure_mode": "Any exception is swallowed/logged; absent/failed model judgment yields no model feedback, while subsequent Stop operations depend on the outer hook remaining alive.",
+      "concurrency_implication": "Selection uses newest qualifying retrieval episode per session; concurrent or reordered Stop processing needs explicit episode/turn identity tests to exclude wrong-round credit attachment.",
+      "privacy_implication": "Reads the user transcript and memory candidate text for model judging.",
+      "latency_or_cost_implication": "DB read + synchronous inference + DB write occur before later Stop substeps.",
+      "state_lifetime": "durable retrieval feedback after commit",
+      "runtime_reachable": true,
+      "runtime_entrypoints": ["cmd_hook event=Stop"],
+      "tests_or_receipts": [],
+      "known_counterevidence": [],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 0.98,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "open_questions": ["Can two same-session Stop events race such that ORDER BY ts DESC LIMIT 1 attaches model credit to the wrong retrieval episode?", "Does SIGALRM interrupt during Ollama or DB operations in a way that leaves later Stop bookkeeping skipped?"]
+    },
+    {
+      "atom_id": "stern-stop-llm-004-stop-hook-invocation",
+      "subsystem": "hook-runtime/Stop",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 8870,
+      "line_end": 8898,
+      "excerpt_hash": null,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "The live Stop event calls _kognition_richten_hook after cycle close, mechanical MicroClay credit, Claude-usage accounting and visual-use accounting, and before gw_absicht, governance-turn accounting and waiting-status update.",
+      "why_it_exists": "Integrate PHASE 4b.2 model relevance judging into every eligible completed turn.",
+      "inputs": ["session_id", "transcript_path"],
+      "outputs": ["model relevance feedback when eligible", "then later Stop bookkeeping if budget remains"],
+      "reads": ["hook input JSON"],
+      "writes": ["indirect retrieval feedback via _kognition_richten_hook"],
+      "dependencies": ["global Stop SIGALRM budget", "all earlier Stop substeps", "all later Stop substeps"],
+      "authority_class": "LIVE_HOOK_CONTROL_FLOW",
+      "failure_mode": "The synchronous model call is in the critical path despite the file-level hard invariant forbidding any hook LLM call. Global-budget exhaustion could prevent later bookkeeping; this consequence is SOURCE-INFERRED, not runtime-observed here.",
+      "concurrency_implication": "Per-hook process execution does not serialize other sessions; shared local model and DB resources may contend.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": "Model inference is additive to earlier Stop operations inside a fixed overall Stop budget.",
+      "state_lifetime": "one Stop event plus resulting durable feedback",
+      "runtime_reachable": true,
+      "runtime_entrypoints": ["Claude Code Stop hook via hooks.json -> stern.py hook"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["stern-stop-llm-001-declared-hard-boundary"],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 0.99,
+      "target_2_0_action": "REPAIR",
+      "open_questions": ["Observed p50/p95/p99 Stop duration with warm/cold/unreachable Ollama", "Whether later Stop operations are skipped under timeout in the installed runtime"]
+    }
+  ],
+  "hypotheses": [
+    "Frankenstein 2.0 should preserve the useful model-assisted relevance signal but move local model inference out of the deterministic hook critical path into a GRID/request-scoped cognitive work item whose result is later reduced as candidate evidence.",
+    "The current modell:relevanz signal-class boundary is a useful donor invariant because it prevents model relevance votes from independently promoting MicroClay SHADOW->ACTIVE."
+  ],
+  "counterhypotheses": [
+    "Because the model is local and bounded to a 1.3-second timeout inside a 2.0-second Stop budget, the current exception may be operationally acceptable and cheaper than adding an asynchronous work queue; only runtime latency/ordering evidence can decide this.",
+    "The top-level no-LLM-in-hook sentence may be stale prose intentionally superseded by PHASE 4b rather than an intended current invariant; source chronology must establish supersession before treating the prose as authority."
+  ],
+  "contradictions": [
+    "SPEC stern.py lines 33-48 declares 'Kein LLM-Aufruf in einem Hook. Nie.' while LIVE_CODE/ENFORCEMENT_CODE lines 4820-5054 and 8870-8898 implement and invoke a synchronous Ollama model call from the Stop hook.",
+    "The PHASE 4c commentary itself cites the no-LLM-in-hook rule as binding for PostToolUse while explicitly treating the PHASE 4b Stop-hook model call as a conscious documented exception, proving the architecture currently carries both statements simultaneously rather than one cleanly replacing the other."
+  ],
+  "critical_unknowns": [
+    "Exact source chronology/owner intent for whether PHASE 4b formally supersedes the top-level §1.9.2 invariant.",
+    "Installed-runtime Stop-hook latency distribution and timeout behavior with warm, cold, slow and unavailable Ollama.",
+    "Whether global SIGALRM expiry during _kognition_richten_hook can skip gw_absicht, governance turn accounting or waiting-status update.",
+    "Whether same-session concurrent/reordered Stop events can attach model credit to the wrong newest retrieval episode because the selector is session-scoped and LIMIT 1."
+  ],
+  "recommended_next_spans": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 120,
+      "line_end": 260,
+      "reason": "Pin exact default kognition.aktiv, kognition.timeout_sekunden and Stop global budget declarations, then bind them to this contradiction.",
+      "priority": "P0"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 4450,
+      "line_end": 4760,
+      "reason": "Trace retrieval episode identity/generation semantics feeding the relevance judge and test whether session-scoped newest-row selection is safe under multiple turns/concurrent Stop delivery.",
+      "priority": "P0"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 9009,
+      "line_end": 9100,
+      "reason": "Trace cmd_hook alarm cleanup and outer exception behavior to determine exact consequences of Stop-budget expiry after the model call.",
+      "priority": "P0"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/FRANKENSTEIN_KONZEPT_UND_PLAN_2026-08-25.md",
+      "line_start": null,
+      "line_end": null,
+      "reason": "Resolve whether PHASE 4b explicitly amended/superseded §1.9.2 or only implemented an unformalized exception.",
+      "priority": "P1"
+    }
+  ],
+  "supersedes_packet_id": null,
+  "credits": {
+    "source_forensics": "PASS_AT_SOURCE_SCOPE",
+    "runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

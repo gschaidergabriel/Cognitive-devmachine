@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.15"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.16"
 EXECUTION_RECEIPT_SCHEMA_VERSION = "1.12"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
@@ -483,6 +483,14 @@ def _route_from_inventory(rows: list[dict]) -> dict:
         "payment_latch_capacity_exhausted": capacity_exhausted,
         "fork_active_execution_quarantined": (
             PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+        ),
+        "retryable_in_process": (
+            False if PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED else None
+        ),
+        "recovery_action": (
+            "exec_or_process_restart"
+            if PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+            else None
         ),
         "reason": reason,
     }

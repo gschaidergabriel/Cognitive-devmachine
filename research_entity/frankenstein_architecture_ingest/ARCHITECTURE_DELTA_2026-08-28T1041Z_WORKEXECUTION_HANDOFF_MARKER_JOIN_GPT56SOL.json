@@ -1,0 +1,96 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:41:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/workexecution-handoff-marker-join",
+  "trigger": "triggerwort 5",
+  "delta_class": "WORKEXECUTION_HANDOFF_MARKER_JOIN",
+  "authority": {
+    "authority_epoch": "9.13",
+    "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "mode": "FREE_ONLY",
+    "provider_execution": "NOT_USED",
+    "runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "design_parent_observed": "a29aea21ac1f111b65a5e28b25c6b43a4284d6a6",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "forensic_atoms": [
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "handoff() around pinned source lines 5680-5845",
+      "finding": "handoff() creates paket_id, builds a deterministic capsule whose first line is HANDOFF <paket_id>, states that this capsule is the text the coordinator gives the delegated subagent, and returns both paket_id and capsule; stern itself does not spawn the child"
+    },
+    {
+      "source_kind": "CONFIG",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "finding": "the versioned donor already routes PreToolUse and PostToolUse through stern.py but has no dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted registration"
+    },
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "cmd_hook receives the whole hook JSON; current donor handling does not persist tool_use_id or agent_id, so the join is not implemented in donor source today"
+    },
+    {
+      "source_kind": "EXTERNAL_PRIMARY",
+      "source": "https://code.claude.com/docs/en/hooks",
+      "finding": "current Claude Code hook ABI documents PreToolUse/PostToolUse tool_use_id; Agent tool_input.prompt is the delegated task; Agent PostToolUse tool_response.agentId is the child run identifier"
+    }
+  ],
+  "architecture_effect": {
+    "component": "WorkExecutionBinding/v2.1",
+    "new_closed_at_source_abi_level": [
+      "paket_id -> Agent spawn tool_use_id via exact HANDOFF marker in Agent tool_input.prompt",
+      "Agent spawn tool_use_id -> agent_id via the same Agent PostToolUse event's tool_use_id and tool_response.agentId"
+    ],
+    "candidate_join_algorithm": [
+      "On parent-thread PreToolUse where tool_name == Agent, read tool_use_id and tool_input.prompt.",
+      "Parse an exact line marker HANDOFF <paket_id>; accept only exactly one marker.",
+      "Verify paket_id exists in entityos_arbeitspaket and is in the expected unresolved state for the same parent session/current package generation.",
+      "Append SPAWN_INVOCATION_OBSERVED binding paket_id + package_generation + parent_session_id + spawn_tool_use_id; never infer this edge by time, description similarity, session order or completion order.",
+      "On Agent PostToolUse, require the same tool_use_id and read tool_response.agentId; append CHILD_RUN_OBSERVED for that exact WorkExecutionBinding.",
+      "If marker count is zero/multiple, package state mismatches, tool_use_id conflicts, or agentId is absent/ambiguous, retain UNKNOWN/CONTRADICTION and do not synthesize a binding."
+    ],
+    "fail_closed_invariants": [
+      "HANDOFF marker is an identity carrier, not completion evidence.",
+      "The package-to-invocation join is valid only when the marker is inside the actual Agent tool_input.prompt observed for that tool_use_id.",
+      "A tool_use_id may not bind to two different paket_id values.",
+      "A paket_id may not silently fan out to multiple Agent invocations unless an explicit fanout contract admits that cardinality.",
+      "Nested/subagent hook calls must not be confused with the parent spawn call; common hook agent_id presence identifies calls occurring inside a subagent.",
+      "task_id remains a separate optional namespace and is not inferred from agent_id or tool_use_id.",
+      "No reconcile success follows from spawn/start alone; completion still requires the current typed result-receipt and evidence law."
+    ],
+    "counterhypotheses": [
+      "The real coordinator may fail to pass the handoff capsule byte-faithfully into Agent tool_input.prompt.",
+      "A deployed Claude Code build may differ from the current documented hook ABI.",
+      "A coordinator may accidentally reuse one capsule for multiple Agent calls, creating a cardinality conflict.",
+      "Host/user/managed hook composition may differ from repository hooks.json."
+    ],
+    "still_open": [
+      "installed-target capture proving the actual Agent PreToolUse contains HANDOFF <paket_id> in tool_input.prompt",
+      "installed-target Agent PostToolUse proving the same tool_use_id carries tool_response.agentId",
+      "resume/background/replacement generation semantics on the target build",
+      "typed child result receipt -> exact WorkExecutionBinding -> reconcile success"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "reconciliation_with_parent_delta": {
+    "parent_delta": "ARCHITECTURE_DELTA_2026-08-28T1040Z_WORKEXECUTION_BINDING_V2_ABI_RECONCILIATION_GPT56SOL.json",
+    "nonduplicate_delta": "The parent closed invocation tool_use_id -> agentId at documentation level but explicitly left paket_id -> spawn tool_use_id open. This delta closes that first edge at source/ABI design level using the donor's existing HANDOFF marker and the documented Agent prompt field.",
+    "runtime_claim": "NOT_PROMOTED"
+  },
+  "feeds_triggerword_4": {
+    "preferred_change": "Extend the existing single hook/control lane with a small fail-closed WorkExecutionBinding adapter; do not add a second spawn mechanism.",
+    "next_exact_gate": "Capture one harmless installed-target Agent lifecycle where a real handoff capsule is passed as Agent prompt, and prove paket_id -> tool_use_id -> agentId from exact hook payloads without timing inference."
+  },
+  "credit": {
+    "source_forensics": "PASS_AT_PINNED_SOURCE_AND_CURRENT_DOCUMENTED_ABI_SCOPE",
+    "installed_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

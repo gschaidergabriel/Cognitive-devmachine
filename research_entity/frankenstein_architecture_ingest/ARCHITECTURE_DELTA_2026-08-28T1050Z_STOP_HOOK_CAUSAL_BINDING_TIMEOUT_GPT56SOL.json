@@ -1,0 +1,113 @@
+{
+  "schema": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T10:50:00Z",
+  "trigger": "triggerwort 5",
+  "authority": {
+    "epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "supervisor_inbox_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "steering_delta": "SUPERVISOR_STEERING_9_13AC_DELTA_2026-08-28T1747P0700_GPT56SOL.json"
+  },
+  "source_scope": {
+    "donor_repository": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "donor_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "design_repository": "gschaidergabriel/clay-global-research-entity",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_sha_before_write": "65b62d3e93f16213b3d010c57f6828529070cd37",
+    "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d"
+  },
+  "evidence_scope": "SOURCE_FORENSICS_ONLY_RUNTIME_CREDIT_ZERO",
+  "new_findings": [
+    {
+      "id": "TW5-FINDING-STOP-DEFAULT-LLM-020",
+      "source_kind": "CONFIG",
+      "span": "stern.py:430-540",
+      "observation": "The donor configuration enables cognition by default, selects qwen2.5:0.5b on localhost Ollama, assigns a 1.3 second cognition timeout, and assigns Stop a 2.0 second event limit. The comments explicitly document the model judge as a boundary/exception to the older no-LLM-in-hooks rule.",
+      "inference": "The synchronous Stop-hook model call is not merely an orphaned implementation fragment in this donor source; it is intentionally configured as active-by-default source behavior.",
+      "runtime_frequency": "UNKNOWN"
+    },
+    {
+      "id": "TW5-FINDING-STOP-TIMEOUT-CONTROLFLOW-021",
+      "source_kind": "ENFORCEMENT_CODE",
+      "spans": [
+        "stern.py:8405-8520",
+        "stern.py:8600-8720",
+        "stern.py:8845-9025",
+        "stern.py:9009-9100"
+      ],
+      "observation": "cmd_hook arms one event-wide SIGALRM using the Stop limit. In the Stop path, _kognition_richten_hook executes before _gw_absicht_schreiben, architekt_governance_zug, and _statuszeile_warten. The outer _HookTimeout handler exits the event body before finally cancelling the timer.",
+      "inference": "If the event-wide timeout fires during synchronous cognition, the later Stop bookkeeping statements are skipped by control flow.",
+      "runtime_occurrence": "UNKNOWN"
+    },
+    {
+      "id": "TW5-FINDING-RETRIEVAL-JUDGE-BINDING-022",
+      "source_kind": "ENFORCEMENT_CODE",
+      "spans": [
+        "stern.py:4260-4455",
+        "stern.py:4940-5065"
+      ],
+      "observation": "retrieval_episodes persists retrieval_id, turn_id, episode_id, causal_id, session_id, generation, and query_hash. _kognition_richten_hook selects the newest uncredited retrieval row by session_id and separately extracts the last user message from the Stop transcript. Before model judging, the source does not require equality or binding across the selected row's turn_id, episode_id, causal_id, generation, or query_hash and the transcript/user-turn being judged.",
+      "inference": "Exact causal identities exist in the donor but are not enforced at the relevance-judgment attachment boundary. Reordered or interleaved same-session processing is therefore structurally capable of pairing a judgment with the wrong retrieval round unless another unobserved invariant prevents it.",
+      "runtime_reachability": "UNMEASURED"
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-STOP-DEFAULT-LLM-INVARIANT-020",
+      "status": "SOURCE_GROUNDED_OPEN",
+      "a": "Historical/top-level hook contract says no LLM calls in hooks.",
+      "b": "Current donor source intentionally enables and budgets synchronous local Ollama relevance inference inside Stop.",
+      "resolution": "Do not keep both as simultaneous canonical architecture claims. Triggerword 4 must either remove/defer the inference or explicitly replace the old invariant with a bounded non-deterministic cognition contract."
+    },
+    {
+      "id": "TW5-CONTRADICTION-RETRIEVAL-JUDGMENT-ROUND-BINDING-021",
+      "status": "SOURCE_GROUNDED_OPEN",
+      "a": "Retrieval storage provides exact retrieval/turn/episode/causal/generation identities.",
+      "b": "The relevance judge attaches by newest uncredited session row plus transcript-last-user-text without enforcing those identities.",
+      "resolution": "Require an exact RetrievalJudgmentBinding before relevance credit can be applied."
+    },
+    {
+      "id": "TW5-CONTRADICTION-STOP-TIMEOUT-BOOKKEEPING-022",
+      "status": "SOURCE_GROUNDED_OPEN",
+      "a": "Stop performs deterministic/state bookkeeping after cognition.",
+      "b": "The same event-wide timeout can escape from synchronous cognition and bypass those later statements.",
+      "resolution": "Essential deterministic bookkeeping must not be downstream of optional model inference under a shared abort boundary."
+    }
+  ],
+  "frankenstein_2_design_deltas": [
+    {
+      "name": "HookCognitionBoundary/v1",
+      "requirement": "Move model relevance inference out of the deterministic Stop critical path into a request-scoped GRID/work-item path, or isolate it behind an explicitly bounded optional cognition boundary that cannot suppress required Stop bookkeeping. Model output remains candidate evidence only."
+    },
+    {
+      "name": "RetrievalJudgmentBinding/v1",
+      "requirement": "Before model-derived relevance can affect retrieval credit, bind the judgment to retrieval_id, turn_id, episode_id, causal_id, generation, query_hash, exact model/runtime identity, and an exact user-turn/transcript digest or equivalent replay-stable identity. Mismatch fails closed."
+    },
+    {
+      "name": "StopTimeoutIsolation/v1",
+      "requirement": "Required Stop bookkeeping must complete independently of best-effort cognition timeout/failure. A cognition timeout may degrade cognition, but it must not silently suppress gateway-intent, governance, wait-state, or equivalent deterministic lifecycle writes."
+    }
+  ],
+  "triggerword4_acceptance_gates": [
+    "Two same-session retrieval rounds with distinct retrieval_id/turn_id/generation identities, deliberately reordered/interleaved: relevance judgment must fail closed rather than attach to the wrong episode.",
+    "Slow/cold/unreachable local cognition: required later Stop bookkeeping must still execute and produce its normal deterministic evidence path.",
+    "Cognition disabled versus warm model versus slow/unreachable model: measure exact source/build-bound substep ordering and latency without modifying Frank's own Harness.",
+    "No runtime or architecture PASS may be promoted from this source delta alone."
+  ],
+  "hypothesis": "The main architectural defect is not local-model use by itself but coupling non-deterministic model inference to the deterministic Stop critical path without exact retrieval-round identity binding.",
+  "counterhypothesis": "An external serialization invariant may ensure Stop executions cannot interleave and the 1.3 second sub-budget may always complete before the 2.0 second Stop alarm in deployed conditions, making wrong-round attachment and skipped bookkeeping unreachable in practice.",
+  "falsifiers": [
+    "Repository/host-bound execution proves an invariant that exactly serializes retrieval creation and Stop processing and binds the selected retrieval row to the same turn before judgment.",
+    "Exact runtime probes across disabled/warm/slow/unreachable cognition demonstrate later bookkeeping cannot be skipped despite the observed Python control flow, implying an unobserved wrapper or process boundary changes semantics."
+  ],
+  "runtime_credit": {
+    "frankenstein_2_whole": 0,
+    "entityos_hcu_whole": 0,
+    "physical_grid10": 0,
+    "stop_hook_runtime": 0,
+    "training": 0
+  },
+  "donor_mutated": false,
+  "frank_harness_modified": false
+}

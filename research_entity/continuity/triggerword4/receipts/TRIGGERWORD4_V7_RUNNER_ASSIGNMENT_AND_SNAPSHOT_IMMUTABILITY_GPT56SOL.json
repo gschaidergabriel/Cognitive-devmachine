@@ -1,0 +1,56 @@
+{
+  "schema": "TRIGGERWORD4_CONTINUATION_RECEIPT/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "RUNNER_ASSIGNMENT_BLOCKER_AND_CONTROL_SNAPSHOT_IMMUTABILITY_SOURCE_EVIDENCE_ONLY",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
+  "branch_head_before_receipt_observed": "8f6dcc295c71fd9385229d0b43de3f991a2a53ef",
+  "authority": {
+    "supervisor_inbox_schema": "9.13",
+    "selected_delta": "9.13AE_NON_AUTHORITY",
+    "singleton_dispatch_rule": "DO_NOT_CREATE_DUPLICATE_TRIGGER_OR_INCREMENT_GENERATION_WHILE_G0000_RESULT_IS_ABSENT",
+    "execution_mode": "FREE_ONLY",
+    "clay_direct_dev_vps_sandbox_zero_cost_execution_allowed": true,
+    "provider_calls_authorized_for_this_gate": 0,
+    "together_forbidden": true,
+    "paid_fallback_forbidden": true
+  },
+  "source_delta_observed": {
+    "commit": "8f6dcc295c71fd9385229d0b43de3f991a2a53ef",
+    "test_file": "tests/test_frankenstein2_cognitive_control_plane_v1.py",
+    "implementation_file": "tools/frankenstein2_cognitive_control_plane_v1.py",
+    "finding": "ControlSnapshot.values is defensively copied and wrapped with MappingProxyType in __post_init__, and the current head adds a regression asserting mutation raises TypeError while snapshot_digest and the latched control value remain unchanged.",
+    "runtime_test_execution_observed": false,
+    "source_or_test_presence_is_runtime_pass": false
+  },
+  "singleton_dispatch": {
+    "dispatch_schema": "CLAY_ORDINARY_DISPATCH/v1",
+    "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+    "issue": 2121,
+    "workflow_run_id": 33168491753,
+    "workflow_status_observed": "queued",
+    "job_id": 98839547140,
+    "job_status_observed": "queued",
+    "required_labels": ["self-hosted", "Linux", "X64"],
+    "runner_id_observed": 0,
+    "runner_name_observed": "",
+    "steps_observed": [],
+    "classification": "RUNNER_ASSIGNMENT_INFRASTRUCTURE_BLOCKER_BEFORE_CODE_EXECUTION",
+    "terminal_result_receipt_observed": false,
+    "duplicate_dispatch_created": false,
+    "retry_generation_advanced": false
+  },
+  "evidence_boundary": {
+    "grid10_code_failure_observed": false,
+    "deterministic_test_result_observed_from_singleton": false,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "frankenstein2_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Restore or observe assignment of one authorized self-hosted Linux X64 runner for the already-existing g0000 singleton, then inspect that same run to terminal state and bind any result to the canonical ordinary-dispatch receipt. Do not create another issue, workflow trigger, or retry generation while g0000 is nonterminal. Until code steps actually execute, remain at source evidence only and do not advance to Frankenstein-2.0 VPS runtime PASS."
+}

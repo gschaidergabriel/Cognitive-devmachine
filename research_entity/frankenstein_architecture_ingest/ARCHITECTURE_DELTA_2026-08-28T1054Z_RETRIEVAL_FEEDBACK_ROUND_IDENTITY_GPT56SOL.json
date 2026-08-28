@@ -1,0 +1,169 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:54:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "RETRIEVAL_FEEDBACK_ROUND_IDENTITY_AND_TRANSCRIPT_CONTAMINATION",
+  "routing": {
+    "normalized_trigger": "triggerwort 5",
+    "directive_fetch": "PASS",
+    "directive_path": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_before_delta": "4ebdcbffff35e85d9d09e9fa92f0de2c15d8402c"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "source_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py"
+  },
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "steering_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "authority_change": false,
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN",
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "ingest_mode": {
+    "new_worker_packets_after_previous_checkpoint": 0,
+    "packet_status": "QUIESCENT_AT_CHECK",
+    "continuation": "DIRECT_SOURCE_FORENSICS_NO_PACKET_REPLAY"
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-ATOM-MC-RETRIEVAL-IDENTITY-020A",
+      "subsystem": "MicroClay retrieval episode identity",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "lines": "4135-4319",
+      "kind": "ENFORCEMENT_CODE",
+      "what_it_does": "MicroClay.retrieve accepts explicit turn_id, episode_id, causal_id and generation, computes query_hash, and persists those identities together with retrieval_id, session_id and selected memory ids in retrieval_episodes.",
+      "authority_class": "DETERMINISTIC_RETRIEVAL_STATE",
+      "runtime_reachable": "SOURCE_REACHABLE_RUNTIME_UNVERIFIED_IN_THIS_RUN",
+      "failure_mode": "The row contains enough identity to support an exact later join, but downstream feedback code does not consistently use it.",
+      "target_2_0_action": "KEEP_IDENTITY_ENVELOPE_AND_REQUIRE_EXACT_JOIN"
+    },
+    {
+      "atom_id": "TW5-ATOM-MC-SYNTHETIC-ROUND-020B",
+      "subsystem": "MicroClay UserPromptSubmit round marker",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "lines": "4740-4829",
+      "kind": "LIVE_CODE",
+      "what_it_does": "Each _microclay_schatten invocation creates fresh causal_id plus synthetic t-mc/ep-mc rows and stores the current nutzertext through MicroClay.retrieve. The synthetic turn is a system marker, not the actual transcript user-turn identity.",
+      "authority_class": "ROUND_LOCAL_SYNTHETIC_IDENTITY",
+      "runtime_reachable": "SOURCE_REACHABLE_RUNTIME_UNVERIFIED_IN_THIS_RUN",
+      "failure_mode": "Round uniqueness is repaired, but the retrieval episode is not cryptographically or structurally joined to the exact transcript user-message object later reread by Stop.",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "TW5-ATOM-MECHANICAL-TRANSCRIPT-SCOPE-020C",
+      "subsystem": "mechanical retrieval feedback",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "lines": "4670-4747,4430-4559",
+      "kind": "LIVE_CODE",
+      "what_it_does": "_transcript_assistenttext_lesen is documented as returning the response text of this round, but it actually concatenates assistant text across the transcript and returns the last approximately 20k characters. kreditsignal_mechanisch then evaluates up to 20 open retrieval_episodes from the same session against that same aggregate assistant text and the session-level active_turns episode effect window.",
+      "authority_class": "NONCANONICAL_RETRIEVAL_POLICY_FEEDBACK",
+      "runtime_reachable": "SOURCE_REACHABLE_RUNTIME_UNVERIFIED_IN_THIS_RUN",
+      "failure_mode": "A memory selected in an older open retrieval can receive mechanical credit because its id/token appears in later assistant text or later same-session effect text; the implementation does not prove round-local attribution.",
+      "known_counterevidence": "The code labels the signal as a usefulness hypothesis rather than truth and does not let it alone promote SHADOW to ACTIVE.",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-ATOM-MODEL-QUERY-JOIN-020D",
+      "subsystem": "Stop model relevance feedback",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "lines": "4815-5084",
+      "kind": "LIVE_CODE",
+      "what_it_does": "_kognition_richten_hook selects the newest retrieval episode in the session lacking modell:relevanz, then independently rereads the latest user text from transcript_path and asks Ollama to judge the selected row's memory candidates against that text.",
+      "authority_class": "MODEL_DERIVED_CANDIDATE_FEEDBACK",
+      "runtime_reachable": "SOURCE_REACHABLE_RUNTIME_UNVERIFIED_IN_THIS_RUN",
+      "failure_mode": "The join predicate is session recency, not retrieval_id/turn_id/episode_id/causal_id/generation/query_hash equality. Under reordered or overlapping rounds, the chosen retrieval row and latest transcript user text can be from different rounds.",
+      "target_2_0_action": "REPAIR_AND_DEFER_OUTSIDE_STOP"
+    },
+    {
+      "atom_id": "TW5-ATOM-CREDIT-ROW-BINDING-020E",
+      "subsystem": "retrieval feedback reducer",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "lines": "4375-4435",
+      "kind": "ENFORCEMENT_CODE",
+      "what_it_does": "MicroClay._apply_credit deterministically hashes retrieval_id, causal_id, generation, signal_class and credit into a receipt id and writes feedback for the row it is handed.",
+      "authority_class": "DETERMINISTIC_REDUCER",
+      "runtime_reachable": "SOURCE_REACHABLE_RUNTIME_UNVERIFIED_IN_THIS_RUN",
+      "failure_mode": "The reducer correctly binds feedback after row selection but cannot detect that an upstream selector paired that row with evidence from a different transcript round; query_hash/turn identity is not revalidated at the reducer boundary.",
+      "target_2_0_action": "KEEP_REDUCER_PATTERN_ADD_INPUT_IDENTITY_VALIDATION"
+    }
+  ],
+  "declared_vs_enforced_contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-RETRIEVAL-FEEDBACK-ROUND-IDENTITY-020",
+      "declared": "_transcript_assistenttext_lesen says the mechanical credit signal needs the actual response text of this round.",
+      "enforced": "The reader aggregates assistant messages across the transcript and truncates by character count, while mechanical credit applies that aggregate to up to 20 open same-session retrieval rows.",
+      "status": "SOURCE_CONFIRMED_RUNTIME_IMPACT_UNVERIFIED"
+    },
+    {
+      "id": "TW5-CONTRADICTION-MODEL-QUERY-ROW-JOIN-021",
+      "declared": "The model relevance judge is conceptually a judgment of the request and candidates for one retrieval episode.",
+      "enforced": "The retrieval row is chosen by newest-open session order while request text is chosen independently as the latest user transcript text; no exact identity/digest equality is enforced.",
+      "status": "SOURCE_CONFIRMED_RUNTIME_REORDER_REACHABILITY_UNVERIFIED"
+    }
+  ],
+  "architecture_effect": {
+    "mechanism": "RetrievalFeedbackIdentity/v1",
+    "rule": "Every mechanical or model-derived retrieval feedback item must be bound to the exact retrieval episode and exact evidence round before it can update retrieval policy. Session recency is not an admissible join key.",
+    "required_identity": [
+      "retrieval_id",
+      "turn_id",
+      "episode_id",
+      "causal_id",
+      "generation",
+      "query_hash",
+      "evidence_turn_or_response_id",
+      "candidate_set_digest"
+    ],
+    "repair": [
+      "create RetrievalFeedbackCandidate from the retrieval episode at the moment exact round evidence is available rather than reselecting newest-open rows later",
+      "for model relevance, carry the exact query text or a source-bound query payload ref whose digest equals retrieval_episodes.query_hash; do not reread 'latest user message' as the join mechanism",
+      "for mechanical feedback, scope assistant/effect evidence to immutable round/turn/invocation identities; do not use a session-wide transcript suffix for multiple open retrievals",
+      "make deferred model result echo retrieval_id, causal_id, generation, query_hash and candidate_set_digest and reject any mismatch before _apply_credit successor",
+      "keep model relevance noncanonical and non-human; do not allow it alone to promote SHADOW->ACTIVE",
+      "port adversarial reverse-completion and transcript-interleaving tests before enabling learned retrieval policy as an active serving influence"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "hypothesis": "Same-session reordering or multiple open retrieval episodes can cause both mechanical and model feedback to attach evidence from one conversational round to another retrieval row because the current Stop feedback paths use session-scoped transcript/effect selection instead of exact round identity joins.",
+  "counterhypothesis": "The installed hook runner may serialize UserPromptSubmit and Stop strongly enough that only one relevant open retrieval exists and transcript state always corresponds to the selected row; source alone does not establish whether the structural ambiguity is runtime-reachable on the target host.",
+  "cheapest_high_information_discriminator": "In the Triggerword-4 external test lane, create two same-session retrieval episodes with distinct query hashes and disjoint candidate markers, then reverse Stop/model completion order and inject assistant/user text unique to each round. Assert that each feedback receipt can only update its matching retrieval_id/query_hash. Repeat with cognition disabled and slow/unreachable local model while proving deterministic Stop bookkeeping completes.",
+  "feeds_triggerword_4": {
+    "required_actions": [
+      "introduce RetrievalFeedbackCandidate/Result with immutable retrieval and query identity",
+      "remove session-latest transcript joins from model relevance",
+      "make mechanical evidence round-scoped rather than transcript-suffix scoped",
+      "run two-round reversed/interleaved identity falsifier",
+      "retain HookCognitionBoundary/v1 deferred-cognition rule from the prior delta",
+      "do not modify Frank's own Harness to obtain evidence"
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "direct_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "new_packet_ingest": "NO_NEW_PACKET_QUIESCENT",
+    "installed_runtime": 0,
+    "wrong_round_runtime_reproduction": 0,
+    "latency_acceptance": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 external verification: bind RetrievalFeedbackCandidate to retrieval_id+turn_id+episode_id+causal_id+generation+query_hash+candidate_set_digest, then run two same-session disjoint retrievals with reverse completion/interleaving and prove zero cross-credit; separately prove slow/unreachable model cannot skip deterministic Stop bookkeeping.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "runtime_execution": false,
+  "unusual_experiment": false,
+  "feeds_triggerword_4_boolean": true
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "TRIGGERWORD4_V6_RECOVERY_TIME_FENCE_CI_BINDING/v1",
+  "observed_at_local": "2026-08-28T20:07:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT triggerword-4 continuation",
+  "trigger": "triggerwort 4",
+  "canonical_main_observed": "a96dc388fe6e8b2259ff22bb7b44d9463381e9b9",
+  "supervisor_epoch": "9.13",
+  "supervisor_delta": "9.13AF_NON_AUTHORITY",
+  "supervisor_inbox_blob": "70188fd990d8497c2cb005c2f8f953edf9792ab0",
+  "mode": "FREE_ONLY",
+  "trigger_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "pr": 2118,
+  "source_test": "tools/test_grid10_v6_recovery_mutation_time_fence_v1.py",
+  "source_test_blob": "791f545312152c229c3101351c7b2064ba0a412d",
+  "lease_gate_source": "tools/grid10_v6_recovery_lease_gate_v1.py",
+  "lease_gate_blob": "99094a9f59a3cd508fb80dd10e886b3dcc327dd1",
+  "ci_binding": {
+    "commit": "b418d44c6572d44e660b2ff7720eb57710796dd7",
+    "workflow": ".github/workflows/grid10-cognitive-envelope-ci.yml",
+    "workflow_blob_after_write": "80e7fad3450b2d125c933cd084177f70a93e083a",
+    "path_trigger_added": true,
+    "explicit_test_invocation_added": true
+  },
+  "ci_observation": {
+    "workflow_run_id": 33173957207,
+    "job_id": 98857677251,
+    "head_sha": "b418d44c6572d44e660b2ff7720eb57710796dd7",
+    "job_name": "deterministic",
+    "status": "completed",
+    "conclusion": "failure",
+    "runner_label": "ubuntu-latest",
+    "runner_id": 0,
+    "runner_name": "",
+    "steps_observed": 0
+  },
+  "classification": {
+    "ci_binding_status": "SOURCE_CLOSED",
+    "test_execution_status": "NOT_OBSERVED",
+    "ci_failure_class": "INFRASTRUCTURE_OR_RUNNER_PRE_STEP_FAILURE",
+    "logic_failure_credit": 0,
+    "runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "whole_entityos_credit": 0,
+    "training_credit": 0
+  },
+  "coordination": {
+    "runtime_quiescence_issue": 2122,
+    "runtime_quiescence_generation": "g0000",
+    "runtime_quiescence_terminal_result_observed": false,
+    "grid10_sigkill_issue": 2121,
+    "grid10_sigkill_generation": "g0000",
+    "grid10_sigkill_terminal_result_observed": false,
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false
+  },
+  "evidence_boundaries": [
+    "CI path coverage and explicit invocation close a source-level enforcement gap but do not prove test execution.",
+    "A workflow job that completes with runner_id=0 and zero observed steps is infrastructure evidence only, not a GRID10 logic failure.",
+    "Issue or dispatch existence is not runtime PASS.",
+    "No provider/model call, paid fallback, physical GRID10, HCU, EntityOS, canonical semantics or training credit is minted by this receipt."
+  ],
+  "next_exact_gate": "Execute the exact recovery mutation time-fence regression on an admitted functioning non-provider deterministic surface; independently inspect only terminal canonical results for issues 2122 and 2121 without duplicate dispatch or generation advance."
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/retrieval-identity-schema-ingest",
+  "created_at": "2026-08-28T11:00:25Z",
+  "trigger": "triggerwort 5",
+  "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_epoch": "9.13",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_head_before_ingest": "0f82da4b293cbd7323b6040ec8f7faea3205ab79",
+  "packet_id": "TW5-PACKET-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL",
+  "packet_blob_sha": "bd9949e7f4e366d18c1fbefe154668883ab8802a",
+  "packet_disposition": "CONSUMED_AFTER_DIRECT_SOURCE_AND_SCHEMA_CROSSCHECK",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1100Z_RETRIEVAL_IDENTITY_BINDING_SCHEMA_GPT56SOL.json",
+  "architecture_delta_commit": "34246b5239846584ec075ae44433d8589d39ff33",
+  "semantic_result": "EXACT_RETRIEVAL_IDENTITIES_ALREADY_SCHEMA_ENFORCED_BUT_AUTOMATIC_MODEL_JUDGEMENT_TARGET_AND_CARDINALITY_BINDING_REMAIN_WEAKER_THAN_AVAILABLE_DONOR_PRIMITIVES",
+  "source_evidence": [
+    "retrieval_episodes persists retrieval_id, turn_id, episode_id, causal_id, session_id, generation and query_hash together",
+    "schema_leer.sql enforces retrieval_id PRIMARY KEY and turn_id, episode_id and causal_id individually UNIQUE",
+    "Stop model relevance selects session newest unjudged retrieval and recovers query from latest transcript user text rather than exact retrieval identity",
+    "retrieval_feedback has receipt_id PRIMARY KEY but no visible UNIQUE(retrieval_id, signal_class)",
+    "_apply_credit receipt hash includes credit value, so receipt-id deduplication alone does not establish one model judgement per retrieval when differing values are possible",
+    "mensch_urteil already demonstrates exact retrieval_id lookup before the shared reducer"
+  ],
+  "evidence_scope": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "schema_crosscheck": "PASS_AT_EXACT_DONOR_SHA",
+    "runtime_wrong_round_credit": 0,
+    "runtime_double_credit": 0,
+    "provider_execution": false,
+    "vps_execution": false,
+    "training": 0
+  },
+  "target_contract": "SameSessionRetrievalCreditBinding/v1 + RetrievalJudgementWorkItem/v1: immutable retrieval/turn/episode/causal/generation/query identity before cognition, cardinality-explicit model-judgement admission, exact-row deterministic reduction, degraded transcript fallback cannot promote exact causal credit",
+  "feeds_triggerword_4": true,
+  "next_exact_gate": "Triggerword 4: implement exact immutable RetrievalJudgementWorkItem binding and deterministic tests for reversed same-session completion, competing same-retrieval model judgements, and transcript/query mismatch."
+}

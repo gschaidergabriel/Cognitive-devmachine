@@ -1,11 +1,11 @@
 {
   "schema": "TRIGGER4_POST_POPEN_NON_TIMEOUT_REENTRY/v1",
-  "status": "SOURCE_PRESENT_EXECUTION_BLOCKED_NO_DUPLICATE",
+  "status": "SOURCE_PRESENT_F2_CONSUMER_CI_PASS_CANONICAL_FINALIZATION_OPEN",
   "trigger": "4",
   "organ": "GPT-5.6 Sol",
   "authority": {
     "research_repository": "gschaidergabriel/clay-global-research-entity",
-    "research_main_observed_before_write": "cb8d87bf26913f1e5691e98c9736556233c5e561",
+    "research_main_observed_before_initial_write": "cb8d87bf26913f1e5691e98c9736556233c5e561",
     "schema_version": "9.13",
     "supervisor_delta": "9.13AL_NON_AUTHORITY",
     "mode": "FREE_ONLY",
@@ -41,22 +41,47 @@
       "job_id": 98983010290,
       "executed_tests": 4,
       "conclusion": "success",
-      "scope": "DETERMINISTIC_FIXTURE_PINNED_NO_REAL_EFFECT_COMPONENT_INTEGRATION_ONLY",
-      "not_credit": [
-        "direct private research-repository EntityOS runtime",
-        "real external effect",
-        "physical GRID10",
-        "whole Frankenstein 2.0",
-        "whole EntityOS/HCU",
-        "training"
-      ]
+      "scope": "DETERMINISTIC_FIXTURE_PINNED_NO_REAL_EFFECT_COMPONENT_INTEGRATION_ONLY"
     },
-    "f2_main_reentry": {
+    "public_f2_unknown_consumer": {
       "repository": "gschaidergabriel/frankenstein-2.0",
-      "main_observed": "efd94028ae871f8cd5372d0bc9da040b38a06dc3",
-      "commit_message": "Trigger 4: freeze post-start timeout outcome gap",
-      "workflow_runs_observed_immediately_after_commit": 0,
-      "note": "Do not convert source presence or a newly-created workflow trigger surface into executed CI evidence."
+      "pr": 22,
+      "pr_head": "52989e90a8cf914b810ba5203698f126f3f0c5dd",
+      "pr_merge_ref_observed": "b64c754209dde8f9a267f83249e5c1a746072561",
+      "merged": true,
+      "workflow_run_id": 33211070321,
+      "job_id": 98984132811,
+      "conclusion": "success",
+      "observed_test": "test_canonical_unknown_outcome_stays_unverified_and_nonreplayable",
+      "observed_result": "PASS",
+      "contract": {
+        "stage": "EXECUTION_RECORDED",
+        "execution_outcome": "UNKNOWN",
+        "verified_complete": false,
+        "replay_disposition": "FORBIDDEN_UNVERIFIED_OUTCOME"
+      },
+      "adjacent_regressions": {
+        "structured_execution_receipt_tests": 12,
+        "execution_completion_tests": 18,
+        "effect_invocation_correlation_tests": 10
+      },
+      "scope": "F2_CONSUMER_SOURCE_AND_PUBLIC_REPOSITORY_CI_COMPONENT_ONLY"
+    },
+    "f2_bound_canonical_negative_falsifier": {
+      "repository": "gschaidergabriel/frankenstein-2.0",
+      "commit_observed": "efd94028ae871f8cd5372d0bc9da040b38a06dc3",
+      "test": "tests/test_bound_entityos_effect_poststart_timeout.py",
+      "source_semantics": "F2 interlock raises UNKNOWN after executor entry while the currently bound canonical journal stores FAILED; this freezes the missing live-UNKNOWN finalization gap",
+      "workflow_runs_observed_for_exact_commit_at_checks": 0,
+      "executed_credit": 0
+    },
+    "local_validation_attempt": {
+      "attempted": true,
+      "purpose": "clone public F2 exact commit and replay existing no-real-effect workflow locally",
+      "result": "TRANSPORT_BLOCKED_BEFORE_SOURCE_ACQUISITION",
+      "error": "Could not resolve host: github.com",
+      "semantic_test_credit": 0,
+      "classification": "LOCAL_SANDBOX_NETWORK_DNS_LIMITATION_NOT_PRODUCT_FAILURE"
     }
   },
   "coordination": {
@@ -67,11 +92,14 @@
     "new_unusual_experiment": false,
     "provider_execution": false,
     "paid_fallback": false,
-    "vps_execution_by_this_organ": false
+    "vps_execution_by_this_organ": false,
+    "duplicate_test_pr_created_by_this_organ": false
   },
   "promotion_boundary": {
     "post_popen_non_timeout_source_present": true,
-    "post_popen_non_timeout_exact_current_executed_regression": false,
+    "post_popen_non_timeout_private_exact_current_executed_regression": false,
+    "f2_unknown_consumer_component_pass": true,
+    "canonical_effect_finalization_unknown_path_admitted": false,
     "private_actions_transport_recovered": false,
     "real_effect_runtime_pass": false,
     "physical_grid10_runtime_pass": false,
@@ -79,5 +107,6 @@
     "hcu_full_runtime_pass": false,
     "training_credit": 0
   },
-  "next_exact_action": "Re-enter current F2/main and retained PR430 before modifying source. Do not duplicate-dispatch private Actions while the admission evidence is unchanged. If a nonduplicate already-authorized executed surface becomes available, run the exact current post-Popen ordinary-exception regression and require typed UNKNOWN/nonreplayable plus zero automatic replay; otherwise keep the source result as prepared-not-executed and advance other nonduplicate Stage-1 evidence work."
+  "remaining_gap": "Frankenstein 2.0 now demonstrably consumes UNKNOWN_OUTCOME without promoting it to success/failure/completion, but the currently bound canonical EntityOS EffectGate/EffectJournal finalization still lacks executed current-source evidence that post-process-start ambiguity is journaled as UNKNOWN rather than FAILED.",
+  "next_exact_action": "Re-enter current F2/main and retained PR430 before modifying source. Do not duplicate-dispatch private Actions while the admission evidence is unchanged. Preserve the single canonical EntityOS effect authority. The next promotion-bearing discriminator is an actually-started exact-current canonical EffectGate/EffectJournal regression proving post-process-start timeout and ordinary return-path exceptions terminalize as UNKNOWN/nonreplayable with zero automatic replay and later authority-owned verification; F2 consumer behavior is already component-closed and should not be rebuilt."
 }

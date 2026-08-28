@@ -1,0 +1,135 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:57:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "delta_class": "RETRIEVAL_IDENTITY_SUBSTRATE_PRESENT_BUT_STOP_REASSOCIATION_WEAK",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "design_branch_head_reentered_before_write": "c38567e9e53185daa58576778847ad69556f0f86",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "ingest_disposition": {
+    "new_inbox_packet_consumed": false,
+    "inbox_status": "NO_NEW_PACKET_AFTER_2026-08-28T1048Z_AT_REENTRY",
+    "reason": "Direct exact-donor source forensics deepens the already-ingested Stop-hook finding. No duplicate packet consumption is minted."
+  },
+  "source_atoms": [
+    {
+      "atom_id": "retrieval-id-001-exact-round-identity-present",
+      "subsystem": "MicroClay/retrieval-episode",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "span_examined": "4170-4455,4720-4795",
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "MicroClay.retrieve receives turn_id, episode_id, causal_id and generation, creates a fresh retrieval_id, and persists the full tuple in retrieval_episodes. _microclay_schatten creates fresh per-round turn_id, episode_id and causal_id rather than relying on the session-level active_turns identity.",
+      "runtime_reachable": true,
+      "target_2_0_action": "KEEP"
+    },
+    {
+      "atom_id": "retrieval-id-002-feedback-receipt-id-bound",
+      "subsystem": "MicroClay/retrieval-feedback",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "span_examined": "4170-4455",
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "MicroClay._apply_credit derives a deterministic receipt identity from retrieval_id, causal_id, generation, signal_class and credit, then persists retrieval_id, causal_id and generation in retrieval_feedback. Exact feedback identity therefore exists after a row is chosen.",
+      "runtime_reachable": true,
+      "target_2_0_action": "KEEP"
+    },
+    {
+      "atom_id": "retrieval-id-003-stop-reassociation-gap",
+      "subsystem": "Stop/model-relevance-judge",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "span_examined": "4945-5065",
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "_kognition_richten_hook is invoked with session_id plus transcript_path, reacquires the target retrieval via newest same-session row lacking modell:relevanz (ORDER BY ts DESC LIMIT 1), and independently reconstructs the query by returning the last user text in the transcript. It does not receive the retrieval_id/turn_id/episode_id/causal_id/generation created for the originating UserPromptSubmit round.",
+      "runtime_reachable": true,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "retrieval-id-004-timeout-tail-abort",
+      "subsystem": "Stop/control-flow",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "span_examined": "8848-8912,9009-9100",
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "Stop performs _kognition_richten_hook before _gw_absicht_schreiben, governance-turn accounting and waiting-status update. Event-wide _HookTimeout transfers control to the outer timeout handler and returns 0; interrupted Stop statements are not resumed. This is source-level control-flow evidence, not an installed-runtime latency result.",
+      "runtime_reachable": true,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "retrieval-id-005-session-level-identity-prior-negative",
+      "subsystem": "MicroClay/history",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "span_examined": "4720-4795",
+      "source_kind": "NEGATIVE_RESULT",
+      "finding": "Current source preserves a historical LIVE bug note: reusing session-level turn_id/episode_id caused UNIQUE failures after the first message; the fail-silent path left one retrieval episode per session across the observed 106 sessions until per-round identities were introduced. This historical donor evidence directly argues against returning to session-only association for round-scoped feedback.",
+      "runtime_reachable": null,
+      "target_2_0_action": "KEEP"
+    }
+  ],
+  "root_cause_refinement": {
+    "classification": "INVOCATION_REASSOCIATION_GAP_NOT_SCHEMA_IDENTITY_ABSENCE",
+    "finding": "The donor already has enough round-scoped identity to represent an exact retrieval-to-feedback causal join. The weak point is the Stop/model-judge interface, which discards the originating tuple and later guesses the target from session-local recency plus independently reconstructed transcript text.",
+    "important_consequence": "A feedback receipt can be cryptographically/deterministically self-consistent for the wrong retrieval row: receipt hashing proves which selected row was credited, not that the selected row belonged to the Stop event's originating user round.",
+    "runtime_claim": false
+  },
+  "fusion_with_current_trigger4": {
+    "current_design_head_seen": "c38567e9e53185daa58576778847ad69556f0f86",
+    "current_addendum": "research_entity/global/TRIGGERWORD_4_DEFERRED_CAUSAL_RETURN_RETRIEVAL_VOICE_FUSION_ADDENDUM.md",
+    "effect": "CORROBORATES_AND_NARROWS",
+    "refinement": "For RetrievalRelevanceCandidate, migration is easier than a new identity schema: preserve and carry the donor's existing retrieval_id + turn_id + episode_id + causal_id + generation tuple through deferred cognition and typed re-entry; fail closed on tuple/generation mismatch. Do not use newest-open-row selection as the causal join.",
+    "shared_envelope_status": "STILL_CANDIDATE; this delta does not prove that one generalized DeferredCausalReturnEnvelope is superior to specialized bindings."
+  },
+  "contradictions_preserved": [
+    "Exact round identity exists in retrieval_episodes and retrieval_feedback, yet Stop-side model feedback currently chooses its target using session-local newest-row ordering.",
+    "The donor has already repaired one session-level round-identity failure in MicroClay, while a different session-level reassociation remains in the model relevance path.",
+    "The deterministic feedback receipt is strongly bound after row selection, but semantic attribution can still be wrong if row selection is wrong."
+  ],
+  "counterhypotheses": [
+    "If Claude Code guarantees strict non-overlapping Stop processing and the latest transcript user text always corresponds to the latest uncredited retrieval, the current selector may behave correctly in ordinary operation; only an overlapping/reordered execution discriminator can promote that claim.",
+    "A smaller specialized retrieval binding may be preferable to the generalized DeferredCausalReturnEnvelope even though the shared causal-return shape is useful conceptually."
+  ],
+  "feeds_triggerword_4": {
+    "do_not_build_in_trigger5": true,
+    "required_discriminators": [
+      "Create two same-session retrieval episodes with distinct retrieval_id/turn_id/episode_id/causal_id/generation bindings and force reverse/interleaved Stop relevance completion; fail if modell:relevanz attaches to the wrong tuple.",
+      "Verify any successor carries the originating tuple directly rather than reconstructing it via ORDER BY ts DESC LIMIT 1.",
+      "Run cognition-disabled, warm, slow/cold and unreachable local-model Stop conditions and prove deterministic tail bookkeeping completes under the successor design without modifying Frank's Harness.",
+      "Negative test stale generation/replayed candidate return: fail closed rather than credit a newer retrieval."
+    ]
+  },
+  "migration_reuse_score": "EASIER_CROSS_MODE",
+  "credits": {
+    "direct_donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "architecture_refinement": "PASS_SOURCE_SCOPE",
+    "new_packet_consumption": 0,
+    "installed_runtime": 0,
+    "latency_acceptance": 0,
+    "concurrency_acceptance": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "next_exact_gate": "Triggerword-4 external/non-provider verification: execute the exact tuple-bound reverse-order retrieval test and Stop slow/unreachable-model tail-bookkeeping test against current successor design; promote no runtime claim until exact source/build/runtime receipts exist."
+}

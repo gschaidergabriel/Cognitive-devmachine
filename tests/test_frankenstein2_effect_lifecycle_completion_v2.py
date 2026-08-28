@@ -163,6 +163,102 @@ class EffectLifecycleCompletionV2IntegrationTests(unittest.TestCase):
         with self.assertRaisesRegex(EffectLifecycleError, "SOURCE_BINDING_REQUIRES_PRE_SUBMISSION"):
             self.store.bind_completion_source("call-C", source_digest="late-source")
 
+    def test_same_session_two_call_interleaving_rejects_cross_invocation_result_and_closes_independently(self):
+        """Falsify mutable session-scoped effect correlation with reordered same-session calls."""
+        req_a = self.store.build_request(
+            invocation_id="tool-use-A",
+            session_id="shared-session",
+            agent_id="agent-1",
+            task_id="task-A",
+            turn_id="turn-A",
+            causal_id="cause-A",
+            generation=11,
+            tool_name="bounded-tool",
+            normalized_arguments={"slot": "A"},
+            effect_scope="TEST_ONLY",
+        )
+        req_b = self.store.build_request(
+            invocation_id="tool-use-B",
+            session_id="shared-session",
+            agent_id="agent-1",
+            task_id="task-B",
+            turn_id="turn-B",
+            causal_id="cause-B",
+            generation=11,
+            tool_name="bounded-tool",
+            normalized_arguments={"slot": "B"},
+            effect_scope="TEST_ONLY",
+        )
+        self.store.create_request(req_a, now_ts=1.0)
+        self.store.create_request(req_b, now_ts=1.1)
+        self.store.bind_completion_source("tool-use-A", source_digest="src-A", now_ts=2.0)
+        self.store.bind_completion_source("tool-use-B", source_digest="src-B", now_ts=2.1)
+
+        # Deliberately interleave/reorder state transitions inside one session.
+        self.store.decide("tool-use-B", AdmissionDecision.ALLOW, reason="B admitted", now_ts=3.0)
+        self.store.decide("tool-use-A", AdmissionDecision.ALLOW, reason="A admitted", now_ts=3.1)
+        self.store.record_enforcement("tool-use-A", boundary_id="gate-A", dispatch_permitted=True, now_ts=4.0)
+        self.store.record_enforcement("tool-use-B", boundary_id="gate-B", dispatch_permitted=True, now_ts=4.1)
+        self.store.mark_submitted("tool-use-B", now_ts=5.0)
+        self.store.mark_submitted("tool-use-A", now_ts=5.1)
+        self.store.record_execution(
+            "tool-use-B",
+            executable_id="tool-v1",
+            command_digest="cmd-B",
+            environment_id="sandbox",
+            exit_code=0,
+            result_digest="result-B",
+            now_ts=6.0,
+        )
+        self.store.record_execution(
+            "tool-use-A",
+            executable_id="tool-v1",
+            command_digest="cmd-A",
+            environment_id="sandbox",
+            exit_code=0,
+            result_digest="result-A",
+            now_ts=6.1,
+        )
+        self.store.record_execution_v2_metadata(
+            "tool-use-B",
+            source_digest="src-B",
+            duplicate_state="UNIQUE",
+            status="SUCCEEDED",
+            now_ts=7.0,
+        )
+        self.store.record_execution_v2_metadata(
+            "tool-use-A",
+            source_digest="src-A",
+            duplicate_state="UNIQUE",
+            status="SUCCEEDED",
+            now_ts=7.1,
+        )
+        self.store.verify_world_effect(
+            "tool-use-A", WorldOutcome.SUCCEEDED, evidence_digest="world-A", now_ts=8.0
+        )
+        self.store.verify_world_effect(
+            "tool-use-B", WorldOutcome.SUCCEEDED, evidence_digest="world-B", now_ts=8.1
+        )
+
+        # A mutable session singleton would be vulnerable to attaching B's latest result to A.
+        with self.assertRaisesRegex(EffectLifecycleError, "RESULT_REENTRY_DIGEST_MISMATCH"):
+            self.store.reenter_result("tool-use-A", result_digest="result-B", now_ts=9.0)
+        self.assertIsNone(self.store.snapshot("tool-use-A")["reentry"])
+
+        # Exact invocation correlation survives the adversarial reorder and both chains close.
+        self.store.reenter_result("tool-use-B", result_digest="result-B", now_ts=9.1)
+        self.store.reenter_result("tool-use-A", result_digest="result-A", now_ts=9.2)
+        receipt_b = self.store.issue_completion_evidence("tool-use-B", now_ts=10.0)
+        receipt_a = self.store.issue_completion_evidence("tool-use-A", now_ts=10.1)
+        self.assertTrue(receipt_a)
+        self.assertTrue(receipt_b)
+        snap_a = self.store.snapshot("tool-use-A")
+        snap_b = self.store.snapshot("tool-use-B")
+        self.assertEqual(snap_a["reentry"]["result_digest"], "result-A")
+        self.assertEqual(snap_b["reentry"]["result_digest"], "result-B")
+        self.assertEqual(snap_a["completion"]["evidence_class"], V2_COMPLETION_EVIDENCE_CLASS)
+        self.assertEqual(snap_b["completion"]["evidence_class"], V2_COMPLETION_EVIDENCE_CLASS)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.14"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.15"
 EXECUTION_RECEIPT_SCHEMA_VERSION = "1.12"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
@@ -428,11 +428,15 @@ def inventory(
                 "payment_latch_capacity_exhausted": (
                     latch_capacity_exhausted
                 ),
+                "fork_active_execution_quarantined": (
+                    PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+                ),
                 "eligible_before_payment_latch": eligible_before_latch,
                 "eligible": bool(
                     eligible_before_latch
                     and not payment_blocked
                     and not latch_capacity_exhausted
+                    and not PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
                 ),
             }
         )
@@ -457,7 +461,9 @@ def _route_from_inventory(rows: list[dict]) -> dict:
         and row["payment_latch_capacity_exhausted"]
         for row in rows
     )
-    if eligible:
+    if PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED:
+        reason = "forked_during_active_execution"
+    elif eligible:
         reason = "highest_priority_configured_zero_cost_provider"
     elif blocked:
         reason = "payment_required_hard_stop_active"
@@ -475,6 +481,9 @@ def _route_from_inventory(rows: list[dict]) -> dict:
         "denied_providers": sorted(DENIED_PROVIDERS),
         "payment_blocked_providers": blocked,
         "payment_latch_capacity_exhausted": capacity_exhausted,
+        "fork_active_execution_quarantined": (
+            PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+        ),
         "reason": reason,
     }
 

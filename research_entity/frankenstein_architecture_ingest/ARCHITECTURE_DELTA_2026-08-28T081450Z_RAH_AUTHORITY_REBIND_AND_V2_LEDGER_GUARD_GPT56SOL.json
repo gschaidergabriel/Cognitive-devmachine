@@ -1,0 +1,123 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T08:14:50Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest-verifier",
+  "trigger": "triggerwort 5",
+  "status": "CURRENT_9_13_SOURCE_FORENSICS_REBIND_AND_LEDGER_GUARD",
+  "routing": {
+    "normalized_message": "triggerwort 5",
+    "directive": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "directive_fetch": "PASS"
+  },
+  "authority": {
+    "authority_epoch": "9.13",
+    "canonical_main_sha": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "pins": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed": "b5df7cc77d622a8542eb2aa35f579531523e03bd"
+  },
+  "reconciles": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0812Z_RAH_ADAPTIVE_RECURSION_IDENTITY_GAP_GPT56SOL.json",
+      "issue": "The delta labels supervisor 8.78 although the refreshed selected authority is 9.13.",
+      "action": "PRESERVE_DIRECTLY_CROSSCHECKED_SOURCE_FINDINGS_BUT_REBIND_CURRENT_DESIGN_CONSEQUENCE_TO_9_13_NO_RUNTIME_PROMOTION"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T074533Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_GPT56SOL.json",
+      "issue": "Historical source claim is crosschecked, but the packet predates and fails INGEST_PACKET_SCHEMA_V2 current-authority admission requirements.",
+      "action": "HISTORICAL_SOURCE_CROSSCHECK_FUSED_NOT_CURRENT_AUTHORITY_BOUND; DO_NOT_TREAT_LEDGER_PRESENCE_AS_V2_ADMISSION"
+    }
+  ],
+  "external_primary_crosscheck": {
+    "source": "arXiv:2606.13643 Recursive Agent Harnesses",
+    "status": "SOURCE_DIRECT",
+    "observed": "The paper defines recursion over full agent harnesses and reports the fixed-GPT-5 Oolong-Synthetic comparison 71.75% Codex-style coding agent versus 81.36% RAH across 199 samples up to 4M-token contexts.",
+    "scope": "External architecture evidence only; no Frankenstein runtime credit."
+  },
+  "direct_donor_crosscheck": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+    "observed": [
+      "RealtimeSession carries a mutable Claude session reference and optional room session identity as session-scope context.",
+      "Realtime function-call handling preserves provider call_id through pending dispatch and executes each completed call using that call_id.",
+      "The examined live Realtime path does not expose a complete recursive actor/task lineage equivalent to agent_id, parent_agent_id, task_id, recursive_call_id and generation.",
+      "Repository code search for parent_agent_id returned no result at the examined donor state."
+    ],
+    "classification": "CURRENT_DONOR_SOURCE_CROSSCHECK_NO_RUNTIME_EXECUTION"
+  },
+  "architecture_atoms": [
+    {
+      "id": "TW5-RAH-913-ROUTING-TAXONOMY",
+      "classification": "SPEC",
+      "status": "ADOPT_AS_DESIGN_TAXONOMY",
+      "claim": "R0 deterministic recursion, R1 model recursion, R2 harness recursion and R3 GRID adaptive routing remain distinct recursion classes; no class receives runtime credit from specification alone."
+    },
+    {
+      "id": "TW5-RAH-913-INVOCATION-DONOR",
+      "classification": "LIVE_CODE",
+      "status": "REUSE_WITH_SCOPE_BOUNDARY",
+      "claim": "Provider call_id is a useful immutable tool-invocation identity donor but is not by itself a recursive actor/task lineage."
+    },
+    {
+      "id": "TW5-RAH-913-RECURSIVE-LINEAGE-GAP",
+      "classification": "NEGATIVE_RESULT",
+      "status": "P0_BLOCKER_FOR_R2_R3_WHOLE_SYSTEM_CREDIT",
+      "claim": "Stable child actor/parent/task/recursive-call/generation lineage is not established in the examined donor Realtime path. Recursive full-harness children therefore cannot receive whole-system causal/effect/result credit yet."
+    },
+    {
+      "id": "TW5-INGEST-V2-LEDGER-NOT-ADMISSION",
+      "classification": "ENFORCEMENT_CODE_AND_EVIDENCE_MODEL",
+      "status": "FAIL_CLOSED_RULE",
+      "claim": "INGEST_STATE consumed_packet_ids is a ledger, not an admission receipt. A packet failing v2 shape/current-authority validation remains non-admitted even if temporarily listed as consumed."
+    }
+  ],
+  "frankenstein_2_successor_contract": {
+    "conceptual_type": "RecursiveActorContext",
+    "minimum_fields": [
+      "session_id",
+      "agent_id",
+      "parent_agent_id",
+      "task_id",
+      "recursive_call_id",
+      "turn_id_or_tool_use_id",
+      "causal_id",
+      "generation"
+    ],
+    "effect_rule": "Every mutating child operation must obtain invocation-bound HumanIntent/Capability admission as applicable and a one-shot EffectDecision independently of parent or launch-policy identity.",
+    "result_rule": "Child outputs remain typed candidates with provenance, correlation class, tests/receipts and contradiction state; majority vote cannot mint truth.",
+    "failure_rule": "Missing, stale, duplicated or mismatched recursive lineage fails closed for effect/result/completion promotion."
+  },
+  "contradictions_preserved": [
+    "Historical --settings inheritance is source-supported while exact settings bytes/order, wache-befehl versus wache-koenig identity and present host reachability remain unresolved.",
+    "INGEST_STATE may still contain the 074533Z packet in consumed_packet_ids, but the earlier v2 admission gate and successor correction establish that this ledger presence is not current-authority packet admission.",
+    "RAH design is externally and internally specified, while executable Frankenstein R2/R3 recursive actor lineage remains unverified."
+  ],
+  "world_substrate_relevance": {
+    "delta": "INDIRECT_ONLY",
+    "rule": "Recursive child results feed sparse WorldNeed/WorldSlice/GWT fusion only as provenance-bearing candidates; recursion does not change canonical truth authority."
+  },
+  "credits": {
+    "new_runtime_credit": 0,
+    "effect_runtime_acceptance": 0,
+    "rah_runtime_acceptance": 0,
+    "physical_grid10_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Produce and validate an immutable INGEST_PACKET_SCHEMA_V2 HISTORICAL_SOURCE_EPOCH successor for the 074533Z settings evidence before current-authority packet admission; separately implement/test RecursiveActorContext lineage across one bounded R2 child and bind child tool invocation, effect decision, execution receipt and result re-entry before any R2/R3 runtime promotion."
+}

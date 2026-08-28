@@ -1,0 +1,132 @@
+{
+  "schema": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:51:24Z",
+  "status": "INGEST_ADMISSION_GATE_REPAIR_SOURCE_ONLY_NO_RUNTIME_PROMOTION",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_sha": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "observed_ingest_soundness_gap": {
+    "classification": "CURRENT_REPOSITORY_STATE_PLUS_MACHINE_SCHEMA_COMPARISON",
+    "state_observation": "INGEST_STATE currently lists four late packets as consumed, while packet-level validation is not represented as a separate admission state.",
+    "machine_schema": "research_entity/frankenstein_architecture_ingest/INGEST_PACKET_SCHEMA.json",
+    "findings": [
+      {
+        "packet_id": "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
+        "v1_shape": "STRUCTURALLY_COMPATIBLE_ON_INSPECTED_REQUIRED_FIELDS",
+        "authority": "UNBOUND_TO_CURRENT_9_13_IN_PACKET",
+        "admission": "SOURCE_CONTENT_MAY_BE_REUSED_AFTER_CURRENT_AUTHORITY_REBIND; PACKET_ITSELF_IS_NOT_V2_CURRENT_AUTHORITY_BOUND"
+      },
+      {
+        "packet_id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+        "v1_shape": "INVALID",
+        "reasons": [
+          "files_examined spans use symbol keys instead of required integer line_start/line_end",
+          "atoms omit required path/commit_sha/line_start/line_end/runtime_reachable fields",
+          "target_2_0_action values include non-schema values such as REPAIR_MEMORY_SCHEMA_OR_ADD_TYPED_ADMISSION_PROJECTION, REPAIR_AND_TYPE and REPAIR_MEMORY_ADMISSION"
+        ],
+        "admission": "PACKET_NOT_MACHINE_ADMISSIBLE; DIRECT_SOURCE_FINDINGS_MAY_SURVIVE_IN A SEPARATE CURRENT-AUTHORITY-BOUND DELTA"
+      },
+      {
+        "packet_id": "TW5-PACKET-20260828T0741Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-AUTHORITY-REBIND",
+        "v1_shape": "INVALID",
+        "reasons": [
+          "missing required created_at/files_examined/atoms/hypotheses/counterhypotheses/critical_unknowns/recommended_next_spans packet structure"
+        ],
+        "admission": "AUTHORITY CONTENT IS USEFUL BUT CUSTOM REBIND OBJECT IS NOT A V1 INGEST PACKET"
+      },
+      {
+        "packet_id": "TW5-PACKET-20260828T0744Z-5641dc6-GPT56SOL-REALTIME-MEMORY-EPISTEMIC-AUTHORITY-9-13",
+        "v1_shape": "INVALID",
+        "reasons": [
+          "missing required created_at/files_examined/atoms/hypotheses/counterhypotheses/contradictions/critical_unknowns/recommended_next_spans packet structure"
+        ],
+        "admission": "AUTHORITY CONTENT IS USEFUL BUT CUSTOM REBIND OBJECT IS NOT A V1 INGEST PACKET"
+      }
+    ]
+  },
+  "direct_source_preservation": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "crosschecked_sources": [
+      {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+        "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+        "spans": [[480, 620]],
+        "preserved_findings": [
+          "frank_forschung says explicit-user-request-only in tool prose, while local neu_anstossen dispatch checks a non-empty question and submits to the background bridge",
+          "Realtime memory read/write wrappers directly dispatch to stern and memory write locally checks only non-empty subject/value"
+        ]
+      },
+      {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+        "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+        "spans": [[330, 410]],
+        "preserved_findings": [
+          "voice-delegated claude -p hard-disallows Bash while Read/Write/Edit/Grep/Glob remain available; this narrows blast radius but is not per-effect authorization"
+        ]
+      },
+      {
+        "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+        "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+        "spans": [[1, 70]],
+        "preserved_findings": [
+          "repository config declares PreToolUse and PostToolUse matcher '*' through stern.py; repository declaration is not proof that an exact current host/headless process actually loads/fires the hook"
+        ]
+      },
+      {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+        "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+        "spans": [[14270, 14365]],
+        "preserved_findings": [
+          "gespraech_erinnerung schema stores id/ts/subject/value/quelle without structural epistemic/transformation/admission identity",
+          "gespraech_erinnerung_lesen can append durable_memory matches into the same treffer list with a source label but no explicit epistemic/transformation class"
+        ]
+      }
+    ],
+    "invariant": "Packet rejection does not erase independently crosschecked source facts; it only prevents packet validity, current-authority binding, runtime or promotion credit from being inferred from a malformed envelope."
+  },
+  "repair": {
+    "schema_v2_path": "research_entity/frankenstein_architecture_ingest/INGEST_PACKET_SCHEMA_V2.json",
+    "schema_v2_commit": "c8ae2db187694a1eb27b8b167c08744c38ac88cf",
+    "validator_path": "research_entity/frankenstein_architecture_ingest/validate_ingest_packet_v2.py",
+    "validator_commit": "15c56e52405cdf8ee00640924e019e11a4981005",
+    "admission_pipeline": [
+      "PACKET_SHAPE_V1_COMPATIBLE",
+      "V2_AUTHORITY_BINDING_PRESENT",
+      "REFRESHED_MAIN_CURRENTNESS_MATCH",
+      "HIGH_IMPACT_SOURCE_CROSSCHECK",
+      "ARCHITECTURE_FUSION_WITH_CONTRADICTIONS_PRESERVED",
+      "ONLY_THEN_CONSUMED_AS_CURRENT_AUTHORITY_BOUND"
+    ],
+    "semantic_rule": "A consumed ledger entry is not by itself an admission receipt. Current packet admission requires packet-shape validity plus current-authority currentness; source-crosschecked findings may be fused separately with their own evidence class."
+  },
+  "frankenstein2_delta": {
+    "new_product_mechanism": false,
+    "effect_memory_design_changed": false,
+    "forensic_ingest_soundness_changed": true,
+    "reason": "The existing 9.13 Realtime/Memory architecture delta remains substantively correct where directly source-crosschecked. This delta repairs the evidence-envelope/admission path rather than creating a duplicate EffectDecision or MemoryAdmission design authority."
+  },
+  "credits": {
+    "source_forensics": "ADVANCED_WITH_INGEST_SOUNDNESS_REPAIR",
+    "runtime_execution": 0,
+    "effect_runtime_acceptance": 0,
+    "memory_runtime_acceptance": 0,
+    "canonical_semantics_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Migrate new packet producers/consumers to v2 and require validate_ingest_packet_v2.py PASS against a freshly fetched main before adding a packet to consumed_packet_ids; then audit remaining memory consumers/context compilers and the same-session overlapping-effect invocation falsifier without provider execution."
+}

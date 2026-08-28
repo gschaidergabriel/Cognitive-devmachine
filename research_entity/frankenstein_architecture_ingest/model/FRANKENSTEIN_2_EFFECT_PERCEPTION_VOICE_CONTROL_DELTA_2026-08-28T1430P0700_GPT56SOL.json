@@ -1,0 +1,153 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828T1430P0700_EFFECT_PERCEPTION_VOICE_CONTROL",
+  "recorded_at": "2026-08-28T14:30:02+07:00",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "routing": "TRIGGER_ROUTING_ACTIVE",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_PLUS_HISTORICAL_COMPONENT_RECEIPT_NO_NEW_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_commit_before_write": "427e073dc0c18d62898e57978e4dd32618cac54c"
+  },
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "result": "RECONCILED_EXISTING_MODEL_DELTA",
+      "existing_delta": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_AUTHORITY_DELTA_2026-08-28T142407P0700_GPT56SOL.json",
+      "double_count_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "result": "INGESTED_UNIQUE_CONTROL_FINDINGS",
+      "double_count_credit": false
+    }
+  ],
+  "source_crosschecks": [
+    {
+      "id": "EFFECT_PRETOOL_NONBLOCKING_CROSSCHECK",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "3200-3655, 8810-8895",
+      "blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "result": "PASS_SOURCE_FINDING",
+      "finding": "zulassen records admission-like classifications and one session-level effect_id, but the normal PreToolUse dispatcher deliberately emits no deny/block decision; PostToolUse separately observes and journals outcome."
+    },
+    {
+      "id": "PERCEPTION_NOT_COMPUTED_TAINT_CROSSCHECK",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py",
+      "lines": "420-560",
+      "blob": "91a66ecf34a6486a6bf077dcb115fcc224e3119b",
+      "result": "PASS_SOURCE_FINDING",
+      "finding": "evaluate_head resolves dependencies from the central DAG; unknown, COMPUTE_OFF and taint-blocked heads return NOT_COMPUTED/value=None before compute_fn is called."
+    },
+    {
+      "id": "VOICE_PENDING_TOOL_CANCELLATION_CROSSCHECK",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "lines": "1300-1408",
+      "blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "result": "PASS_SOURCE_FINDING",
+      "finding": "Realtime function calls remain queued until response.done; non-completed responses and barge-in clear pending calls before local dispatch, preventing interrupted-turn candidate effects from executing afterward."
+    }
+  ],
+  "architecture_findings": [
+    {
+      "id": "TW5-CTRL-D001",
+      "classification": "CURRENT_SOURCE_ENFORCEMENT",
+      "finding": "Perception Control provides a reusable causal disablement pattern: NOT_COMPUTED is distinct from false/zero, dependency taint propagates, and COMPUTE_OFF prevents the underlying computation rather than merely hiding its output.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.99
+    },
+    {
+      "id": "TW5-CTRL-D002",
+      "classification": "HISTORICAL_COMPONENT_MEASUREMENT",
+      "finding": "The archived Phase-43 ablation reports object.known.cup COMPUTE_OFF yielding NOT_COMPUTED while person.presence remained OK on the same frame. This supports the component pattern only; no new runtime execution occurred in this ingest.",
+      "target_2_0_action": "KEEP",
+      "confidence": 0.97
+    },
+    {
+      "id": "TW5-CTRL-D003",
+      "classification": "CURRENT_SOURCE_ENFORCEMENT",
+      "finding": "Realtime barge-in/non-completed-response handling implements a useful pre-dispatch cancellation primitive for pending model-generated tool calls. It is not a canonical EffectGate and does not resolve UNKNOWN outcomes once an external effect may already have been submitted.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.99
+    },
+    {
+      "id": "TW5-CTRL-D004",
+      "classification": "CURRENT_SOURCE_PROJECTION",
+      "finding": "VoiceSessionCapsule remains an ephemeral compiled projection over multiple live sources. Cross-source temporal consistency is not established by an atomic snapshot, so Frankenstein 2.0 should bind context compilation to explicit generation/freshness/provenance rather than turn the capsule into a second state authority.",
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.97
+    }
+  ],
+  "frankenstein_2_control_delta": {
+    "world_substrate": [
+      "Map COMPUTE_OFF and dependency-taint semantics into WorldNeed/WorldSlice so protected variables stay NOT_COMPUTED through downstream transform chains.",
+      "Do not let vector similarity, reverse decomposition or another operator silently reconstruct a disabled protected variable.",
+      "Expose stop reason, blocked dependency and provenance in the read-only Cognitive Twin."
+    ],
+    "effects": [
+      "Preserve EffectRequest, EffectDecision, EffectOutcome and ReentryStatus as distinct typed states.",
+      "Add PendingEffect {candidate_id,parent_response_id,state=PENDING|CANCELLED|SUBMITTED} before deterministic EffectGate submission.",
+      "Cancellation of a superseded/interrupted cognitive turn may invalidate PENDING candidates; SUBMITTED external effects transition only through observed SUCCEEDED|FAILED|UNKNOWN and are never blindly replayed.",
+      "Actual DENY authority must remain at the executor/host boundary capable of preventing execution."
+    ],
+    "voice_context": [
+      "Compile a bounded per-response GRID/Voice context slice with generation, freshness, provenance and privacy tier.",
+      "Keep VoiceSessionCapsule RAM-only/noncanonical; do not create an autonomous voice-memory truth store.",
+      "Require field-level lesion/shuffle tests before claiming causal conditioning."
+    ]
+  },
+  "preserved_contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "note": "Normal stern.py effect admission bookkeeping is nonblocking; separate actual host/blocker authority remains to be mapped."
+    },
+    {
+      "id": "TW5-CONTRADICTION-PERCEPTION-POLICY-VS-DETECTOR-QUALITY-005",
+      "status": "OPEN_SCOPE_BOUNDARY",
+      "note": "Strong policy enforcement does not imply strong detector/model quality or prove every live caller routes through evaluate_head."
+    },
+    {
+      "id": "TW5-CONTRADICTION-PENDING-CANCEL-VS-EFFECT-AUTHORITY-006",
+      "status": "OPEN_SCOPE_BOUNDARY",
+      "note": "Realtime pending-call cancellation is pre-dispatch control only and must not be promoted to whole-system EffectGate authority."
+    }
+  ],
+  "required_triggerword4_acceptance_tests": [
+    "COMPUTE_OFF protected world variable remains NOT_COMPUTED through dependent WorldSlice operators and cannot be reconstructed by a downstream dependency.",
+    "Unknown/unregistered protected dependency fails closed as NOT_COMPUTED rather than false/zero.",
+    "Cancelled or barge-in parent response with a PENDING tool candidate produces zero local tool dispatches.",
+    "A tool candidate already marked SUBMITTED is not silently converted to CANCELLED; outcome remains SUCCEEDED, FAILED or UNKNOWN from evidence.",
+    "Parallel/reordered tool calls preserve per-call request/decision/outcome identity with zero cross-assignment.",
+    "Voice context compiler rejects stale/mismatched generation and preserves UNKNOWN rather than filling missing presence/state fields.",
+    "Lesion/shuffle of a declared Voice/GRID conditioning field changes only preregistered decisions and yields a bounded conditioning receipt."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_execution": 0,
+    "effect_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Map the separately referenced blocking wache-koenig predecessor/current host permission path and prove which component can actually stop execution.",
+    "Audit all live perception callers for evaluate_head bypasses before granting system-wide privacy/NOT_COMPUTED credit.",
+    "Finish Realtime silence-reopen/stale-context revalidation and bind VoiceSessionCapsule successor to one generation-stamped GRID context compiler.",
+    "Feed pending-effect cancellation plus taint-preserving WorldSlice invariants into Triggerword-4 tests without executing the donor."
+  ]
+}

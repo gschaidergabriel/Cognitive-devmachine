@@ -1258,9 +1258,6 @@
     "counterhypothesis": "Catching only Exception inside the suite preserves deliberate BaseException propagation; falsified because a true __exit__ suppressed SystemExit and execution continued as a normal incomplete-provider receipt."
   },
   "invariants": [
-Warning: truncated output (original token count: 3566)
-Total output lines: 70
-
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
     "Never make a paid request unless the project owner separately authorizes a nonzero budget.",
@@ -1295,7 +1292,8 @@ Total output lines: 70
     "Text-chat messages and message objects are exact built-in list and dict containers with exact built-in string field names; polymorphic container subclasses fail closed before iteration or mapping behavior can run.",
     "The text-chat request contains at least one message; empty conversations are rejected before routing, credential use or network access.",
     "The text-chat adapter accepts only system, user and assistant roles; arbitrary and tool/function roles are rejected before routing, credential use or network access.",
-    "The text-chat conversation optionally starts with one system message, then alternates user and assistant roles beginning and ending with …66 tokens truncated…e a typed adapter.",
+    "The text-chat conversation optionally starts with one system message, then alternates user and assistant roles beginning and ending with user; invalid sequences are rejected before routing, credential use or network access.",
+    "Each plain-text message contains exactly role and content; extension fields such as tool_calls are rejected before routing, credential use or network access and require a typed adapter.",
     "Caller-owned mutable messages are copied before validation; routing and concurrent mutations cannot change the validated request snapshot that is serialized.",
     "Each execution snapshots only recognized runtime environment fields before routing; the credential and cost-policy inputs authorized for an attempt are the same values used to construct its request.",
     "Each capability receipt uses one recognized environment snapshot and derives route directly from its inventory rows; configured capability evidence and selected route cannot represent different observation times.",

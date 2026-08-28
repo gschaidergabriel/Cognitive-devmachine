@@ -1,0 +1,74 @@
+{
+  "schema": "TRIGGER4_SELF_HOSTED_RUNNER_CROSS_REPO_DISCRIMINATOR/v1",
+  "trigger": "triggerwort 4",
+  "organ": "GPT-5.6 Sol / ChatGPT triggerword-4 continuation",
+  "canonical_main_observed_before_write": "a96dc388fe6e8b2259ff22bb7b44d9463381e9b9",
+  "supervisor_epoch": "9.13",
+  "supervisor_delta": "9.13AF_NON_AUTHORITY",
+  "evidence_class": "CROSS_REPOSITORY_GITHUB_ACTIONS_TRANSPORT_DIAGNOSIS",
+  "question": "Are the current Research-Entity self-hosted jobs queued merely because the runner is scoped to the controller repository, or is the retained self-hosted runner/host bridge itself unavailable?",
+  "observations": [
+    {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "purpose": "GRID10 runtime quiescence v2",
+      "workflow_run_id": 33170694983,
+      "job_id": 98846842202,
+      "job_status": "queued",
+      "steps_observed": 0,
+      "terminal_semantics_observed": false
+    },
+    {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "purpose": "GRID10 SIGKILL independent replacement v3",
+      "workflow_run_id": 33168491753,
+      "job_id": 98839547140,
+      "job_status": "queued",
+      "steps_observed": 0,
+      "terminal_semantics_observed": false
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "purpose": "Clay Self-Hosted VPS/Sandbox Probe",
+      "workflow_run_id": 32815473976,
+      "job_id": 97702719398,
+      "created_at": "2026-08-25T06:05:40Z",
+      "completed_at_boundary": "2026-08-26T06:05:42Z",
+      "job_status": "completed",
+      "job_conclusion": "cancelled",
+      "steps_observed": 0,
+      "scope_note": "This workflow is the documented controller-repository self-hosted transport and itself failed to obtain execution."
+    }
+  ],
+  "inference": {
+    "repo_scope_only_hypothesis": "DISFAVORED",
+    "runner_or_host_bridge_unavailable_hypothesis": "SUPPORTED",
+    "confidence": "HIGH_BUT_NOT_HOST_DIRECTLY_OBSERVED",
+    "reason": "A controller-repository workflow that is explicitly runs-on:self-hosted also received no executable step before cancellation, while current Research-Entity self-hosted jobs remain queued. This cross-repository observation is inconsistent with repository scoping as a sufficient explanation and points upstream to runner/host-bridge availability."
+  },
+  "coordination": {
+    "duplicate_grid10_dispatch_authorized": false,
+    "retry_generation_advance_authorized": false,
+    "existing_dispatch_keys_to_preserve": [
+      "grid10-runtime-quiescence-v2-g0000",
+      "grid10-sigkill-independent-replacement-v3-g0000"
+    ]
+  },
+  "next_exact_gate": "Repair or restart the already-established self-hosted runner / host bridge lifecycle so an existing queued singleton can acquire a matching Linux/X64 runner; then inspect the existing terminal result path. Do not mint a replacement GRID10 dispatch merely to bypass the transport outage.",
+  "current_tool_boundary": "The connected GitHub surface can inspect/write repository and Actions evidence but exposes no host-service/SSH control capable of starting the offline self-hosted runner; no installable SSH/VPS plugin was available in this session.",
+  "credit_boundary": {
+    "runtime_semantic_result": "NOT_OBSERVED",
+    "runtime_pass_credit": 0,
+    "runtime_failure_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "whole_entityos_credit": 0,
+    "training_credit": 0
+  },
+  "evidence_boundaries": [
+    "cross-repository queue history is transport evidence, not host process introspection",
+    "cancelled zero-step controller probe is not a sandbox logic failure",
+    "queued singleton jobs are not runtime execution",
+    "no provider/model call or paid fallback was used",
+    "this discriminator does not authorize a duplicate dispatch or generation advance"
+  ]
+}

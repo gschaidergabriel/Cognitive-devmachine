@@ -1,0 +1,51 @@
+name: GRID10 Cognitive Envelope CI
+
+on:
+  push:
+    branches: [chatgpt/grid10-cognitive-envelope-control-20260828]
+    paths:
+      - 'tools/grid10_cognitive_*'
+      - 'research_entity/topic_packets/grid10-cognitive-envelope-control-v1/**'
+      - '.github/workflows/grid10-cognitive-envelope-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile tools/grid10_cognitive_envelope_control_v1.py tools/grid10_cognitive_regulator_port_v1.py tools/grid10_fabric.py
+      - name: Unit tests
+        working-directory: tools
+        run: python test_grid10_cognitive_envelope_control_v1.py -v
+      - name: Real Fabric compatibility smoke
+        env:
+          PYTHONPATH: tools
+        run: |
+          python - <<'PY'
+          import json, tempfile
+          from pathlib import Path
+          from grid10_fabric import Fabric
+          from grid10_cognitive_regulator_port_v1 import CognitiveRegulatorPort
+          from grid10_cognitive_envelope_control_v1 import AssuranceMode, RegulatorCommand
+          with tempfile.TemporaryDirectory() as td:
+              fabric=Fabric(Path(td)/'fabric.sqlite')
+              port=CognitiveRegulatorPort(fabric,max_writes_per_control_cycle=2)
+              r=port.read('cog.temperature')
+              assert r.physical_name == 'temperature'
+              over=port.apply_control_cycle(control_epoch_id='ci-overbudget',assurance_mode=AssuranceMode.NORMAL,commands=[
+                  RegulatorCommand('cog.temperature',0.8,'ci','EXECUTOR',r.version,'negative'),
+                  RegulatorCommand('cog.top_p',0.9,'ci','EXECUTOR',0,'negative'),
+                  RegulatorCommand('cog.poll_intensity',0.9,'ci','EXECUTOR',0,'negative'),
+              ])
+              assert over.applied == 0 and over.rejected == 3
+              print(json.dumps({'pass':True,'temperature_default':r.value_real,'version':r.version,'write_budget_fail_closed':True}))
+          PY

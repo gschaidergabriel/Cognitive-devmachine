@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "status": "CURRENT_SUCCESSOR_TRIGGER_ROUTER",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "legacy_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
@@ -23,11 +23,15 @@
       "auto_test": true,
       "auto_promote_passed_gate": true,
       "auto_repair_failed_gate": true,
+      "auto_self_route_vps": true,
+      "auto_repair_bridge_or_sandbox": true,
+      "auto_build_missing_execution_route": true,
       "routine_owner_confirmation_required": false,
-      "clarification_policy": "ask only for a genuine hard external blocker after self-resolution paths are exhausted; continue all independent work first",
+      "clarification_policy": "ask only for a genuine hard external blocker after all self-resolution routes in the VPS self-routing playbook are exhausted; continue all independent work first",
       "fetch_before_execute": true,
       "protocols": [
         "research_entity/global/TRIGGERWORD_4_ONE_COMMAND_AUTONOMOUS_GATE_DRIVER.md",
+        "research_entity/global/TRIGGERWORD_4_VPS_SELF_ROUTING_EXECUTION_PLAYBOOK.md",
         "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
         "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
         "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_MASTER_ARCHITECTURE_AND_ASSEMBLY_WORKFLOW.md",
@@ -35,6 +39,21 @@
         "research_entity/global/TRIGGERWORD_4_VOICE_VPS_TEXT_MODE_ACCEPTANCE_ADDENDUM.md",
         "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
       ],
+      "authority_sources": [
+        "CLAY_EXECUTION_AUTHORITY.md",
+        "governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+        "governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md",
+        "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+      ],
+      "vps_execution_routes": [
+        "configured Git/SSH bridge via jump/VPS/claylab/git-bridge",
+        "gschaidergabriel/Dr.-Unterweger self-hosted Linux/X64 runner workflows",
+        "Clay repository self-hosted workflow path",
+        "source-controlled self-built dedicated runner workflow when existing routes are insufficient"
+      ],
+      "vps_sandbox": "clay-direct-dev",
+      "vps_self_resolution_rule": "NO_DIRECT_SSH != NO_VPS_EXECUTOR; missing bridge/tool/workflow/package/runtime is an engineering task to repair/build inside standing authority, not an owner confirmation gate",
       "voice_vps_policy": "build full Voice control/session integration on VPS; exercise production-shared Voice Session Core through text/event Realtime harness; physical microphone/speaker/audio-hardware acceptance is a separate later host-specific scope and does not block Triggerword-4 assembly progression",
       "effect_successor_policy": "separate EffectRequest, AdmissionDecision, EnforcementReceipt, ExecutionReceipt, WorldEffectVerification, ResultReentry and CompletionEvidence; bind immutable per-invocation identity; DENY must prove non-execution; UNKNOWN world outcome cannot close completion; pre-submission cancellation must not be confused with post-submission uncertainty",
       "failure_behavior": "TRIGGER_ROUTING_FAILED"
@@ -67,6 +86,13 @@
     "triggerword 4 automatically selects, tests, promotes or repairs gates from durable state",
     "triggerword 4 automatically ingests relevant triggerword-5 forensic evidence",
     "routine gate progression requires no owner confirmation",
+    "NO_DIRECT_SSH != NO_VPS_EXECUTOR",
+    "MISSING_ROUTE != BLOCKED_EXTERNAL",
+    "MISSING_WORKFLOW_OR_TOOL_OR_PACKAGE -> SELF_BUILD_OR_REPAIR",
+    "BROKEN_BRIDGE_OR_SANDBOX -> REPAIR_OR_REBUILD_UNDER_OWNER_AUTHORITY",
+    "triggerword 4 must exhaust the VPS self-routing ladder before claiming an external execution blocker",
+    "clay-direct-dev is the authorized high-churn development/research sandbox",
+    "provider/spend authority remains separate from sandbox execution authority",
     "effect admission, enforcement, execution, world verification and completion are distinct causal states",
     "tool/effect correlation uses immutable invocation identity rather than one mutable session-level effect pointer",
     "NOT_COMPUTED is preserved through perception/world/grid dependency taint and is not reconstructed by downstream operators",
@@ -74,5 +100,5 @@
     "Triggerword-4 Voice may reach ACCEPTED_AT_SCOPE on VPS text/event control-plane evidence while physical audio I/O remains explicitly NOT_TESTED_ON_VPS",
     "4 and 5 must fetch their current protocols before substantive execution"
   ],
-  "updated_at": "2026-08-28T15:35:00+07:00"
+  "updated_at": "2026-08-28T14:49:00+07:00"
 }

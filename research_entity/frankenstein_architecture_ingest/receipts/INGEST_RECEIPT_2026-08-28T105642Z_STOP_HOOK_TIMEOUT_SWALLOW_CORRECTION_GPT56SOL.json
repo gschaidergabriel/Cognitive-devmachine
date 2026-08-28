@@ -1,0 +1,61 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v2",
+  "created_at": "2026-08-28T10:56:42Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "routing_self_test": "PASS",
+  "canonical_main_reentered": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "design_branch_head_before_receipt": "9b5a31a0670c2157a058e7a3f8d1e536dbfcad43",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "donor_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+  "authority": {
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "inbox": {
+    "new_packet_consumed": false,
+    "reason": "Already quiescent after the 10:48Z Stop-hook packet; no duplicate packet ingestion performed."
+  },
+  "direct_source_crosscheck": {
+    "correction_delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T105642Z_STOP_HOOK_TIMEOUT_SWALLOW_CORRECTION_GPT56SOL.json",
+    "correction_commit": "b4ddef9a9b6de6d8f76af16999afb1a27e99aafa",
+    "source_spans": [
+      "stern.py:33-48",
+      "stern.py:4820-5065",
+      "stern.py:8350-8480",
+      "stern.py:8840-8898",
+      "stern.py:9015-9110"
+    ],
+    "finding": "The predecessor 10:48Z claim that an event-wide SIGALRM during model relevance necessarily transfers control to cmd_hook's outer _HookTimeout handler is not source-safe. _HookTimeout subclasses Exception and _ollama_generate has a broad except Exception branch, so a deadline signal delivered in that scope can be consumed as a model failure and reduced to None. This preserves the no-LLM-in-hook contradiction but changes the primary deadline risk from deterministic later-bookkeeping skip to delivery-point-dependent behavior plus possible loss of hard-deadline authority.",
+    "classification": "SOURCE_SCOPE_CORRECTION_NO_RUNTIME_PROMOTION"
+  },
+  "parallel_reentry": {
+    "observed_newer_design_head_after_correction_write": "9b5a31a0670c2157a058e7a3f8d1e536dbfcad43",
+    "parallel_topic": "retrieval identity reassociation gap",
+    "disposition": "PRESERVED_NO_OVERWRITE; correction file confirmed present at current branch head"
+  },
+  "triggerword4_handoff": {
+    "build_here": false,
+    "required_acceptance_dimensions": [
+      "BOOKKEEPING_COMPLETION",
+      "HARD_DEADLINE_ENFORCEMENT",
+      "RETRIEVAL_IDENTITY_ATTACHMENT"
+    ],
+    "next_exact_gate": "External non-provider verification lane: straddle Stop's event-wide SIGALRM with the local model call and separately force model-local timeout; bind exact source/build/runtime identity; prove actual wall-clock deadline behavior and deterministic later Stop bookkeeping, then run reverse-order same-session retrieval relevance attachment including repeated-identical-query case."
+  },
+  "credits": {
+    "architecture_source_correction": "PASS",
+    "runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "result": "INGEST_CHECKPOINT_COMMITTED_SOURCE_CORRECTION_NO_RUNTIME_PROMOTION"
+}

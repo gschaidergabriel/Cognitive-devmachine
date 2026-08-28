@@ -1,0 +1,54 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "created_at": "2026-08-28T10:40:35Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/gwt-tool-provenance-crosscheck",
+  "trigger": "triggerwort 5",
+  "routing_selftest": "PASS",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "mode": "FREE_ONLY",
+  "provider_routes_admitted": false,
+  "delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T104035Z_GWT_TOOL_EVENT_PROVENANCE_CHILD_CONCURRENCY_GPT56SOL.json",
+    "commit_sha": "8f805a7fadff244cb53b1531112f3ea97f943724",
+    "classification": "CURRENT_DONOR_SOURCE_FORENSICS_NO_RUNTIME_CREDIT"
+  },
+  "parallel_reentry": {
+    "branch_observed_before_delta": "4dc7eb2424c57d82375aac9ad08736c474a0b810",
+    "actual_delta_parent_after_concurrent_branch_movement": "4ad1ca906627931a3127f8226e09864bcac7288b",
+    "parallel_parent_message": "trigger5: receipt WorkExecutionBinding v2 reconciliation",
+    "nonduplication_result": "PASS; parallel lane consumed the schema-valid WorkExecutionBinding V2 successor and retained the package-to-invocation runtime gap. This receipt covers only the additional propagation of missing invocation/child identity into Global Workspace tool-event ownership and reflection measurements."
+  },
+  "finding": "The pinned donor persists PostToolUse event provenance as session-only hook:PostToolUse:session=<session_id>, while gw_absicht later reconstructs all fired tools by the same session provenance plus a turn time window. Because current platform hook surfaces expose finer tool_use_id and child agent identity, Frankenstein 2.0 should retain those typed identities before any GWT/workspace aggregation; otherwise overlapping parent/child or sibling-child tool events can become irreversibly ownership-ambiguous at source level.",
+  "claim_boundary": "SOURCE_GROUNDED_PROVENANCE_COLLAPSE_POSSIBILITY; no installed-host collision or GWT runtime failure was executed or claimed.",
+  "triggerword4_feed": {
+    "priority": "P0_BEFORE_GRID_GWT_REFLECTION_CREDIT",
+    "required": [
+      "typed tool event capture preserving tool_use_id and child agent identity when observed",
+      "explicit projection rule for parent/child aggregation after raw provenance retention",
+      "synthetic same-session disjoint actor/invocation regression before runtime credit"
+    ]
+  },
+  "packet_state": {
+    "new_packet_consumed_by_this_receipt": false,
+    "ingest_state_mutated": false,
+    "reason": "append-only architecture crosscheck only; packet consumption and WorkExecutionBinding V2 reconciliation were already handled by the concurrent canonical ingest lane"
+  },
+  "execution": {
+    "provider_calls": 0,
+    "vps_calls": 0,
+    "installed_runtime_calls": 0,
+    "unusual_experiment": "NOT_RUN"
+  },
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "installed_host_runtime": 0,
+    "gwt_runtime": 0,
+    "work_execution_binding_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 source implementation: add typed hook identity capture and make gw_absicht/GWT ownership a declared projection over retained raw invocation/child provenance; then run a synthetic same-session parent/child or two-child interleaving regression before any installed-host/runtime credit."
+}

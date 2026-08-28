@@ -5,11 +5,13 @@ on:
     branches: [chatgpt/grid10-cognitive-envelope-control-20260828]
     paths:
       - 'tools/grid10_cognitive_*'
+      - 'tools/test_grid10_cognitive_*'
       - 'tools/grid10_persistent_*'
       - 'tools/test_grid10_persistent_*'
       - 'tools/grid10_assurance_*'
       - 'tools/grid10_executor_*'
       - 'tools/grid10_glm_*'
+      - 'tools/frankenstein2_cognitive_control_plane_v1.py'
       - 'research_entity/topic_packets/grid10-cognitive-envelope-control-v1/**'
       - '.github/workflows/grid10-cognitive-envelope-ci.yml'
   workflow_dispatch:
@@ -37,6 +39,8 @@ jobs:
             tools/grid10_cognitive_unified_runtime_v2.py \
             tools/grid10_cognitive_unified_runtime_v3.py \
             tools/grid10_cognitive_unified_runtime_v4.py \
+            tools/frankenstein2_cognitive_control_plane_v1.py \
+            tools/grid10_cognitive_controlled_runtime_v1.py \
             tools/grid10_persistent_agency_v1.py \
             tools/grid10_persistent_scheduler_v1.py \
             tools/grid10_cognitive_twin_server_v1.py \
@@ -54,6 +58,7 @@ jobs:
           python test_grid10_cognitive_unified_runtime_v2.py -v
           python test_grid10_cognitive_unified_runtime_v3.py -v
           python test_grid10_cognitive_unified_runtime_v4.py -v
+          python test_grid10_cognitive_controlled_runtime_v1.py -v
           python test_grid10_persistent_agency_v1.py -v
           python test_grid10_persistent_scheduler_v1.py -v
           python test_grid10_glm_inference_provider_v1.py -v

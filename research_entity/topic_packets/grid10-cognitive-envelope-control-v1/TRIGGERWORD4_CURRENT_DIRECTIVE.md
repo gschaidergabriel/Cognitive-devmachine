@@ -11,18 +11,27 @@ Exact user phrase: `triggerwort 4`
 
 Continue the GRID10 Cognitive Runtime / Cognitive Envelope / persistent heartbeat line from the newest verified checkpoint. Never restart the project merely because a new executor/session begins.
 
+## Authority precedence / live provider gate
+
+This continuation contract is subordinate to the newest canonical owner/supervisor authority on `main` for execution, provider, spend, effect and evidence rights.
+
+As of the currently observed authority epoch `9.13`, `SUPERVISOR_INBOX.json` states `provider_routes_admitted=false`, `free_swarm_owner_emergency_stop=true`, `no_paid_fallback=true`, `together_forbidden=true`, and allows non-provider local/sandbox validation under current FREE_ONLY authority. Therefore the older GLM subscription allowance below is **DORMANT / NOT EXECUTABLE** while that gate remains closed.
+
+Fail closed before any provider model network I/O unless a newer canonical authority explicitly re-admits the exact provider route and its required economic/credential provenance. A branch-local model/provider instruction never overrides a newer canonical HARD-OFF gate.
+
+`CURRENT_PROVIDER_HARD_OFF > STALE_BRANCH_PROVIDER_ALLOWANCE`
+
 ## Current execution policy
 
 - Do **not** use Claude Code for this workstream unless the owner explicitly changes this directive later.
-- Development reasoning, source changes, test orchestration and VPS sandbox work are performed through the available ChatGPT/GitHub/VPS-sandbox paths.
-- For model-backed inference tests use Zhipu/BigModel GLM directly via the standard API, not through a Claude compatibility wrapper.
-- Default low-cost test model: `glm-4.7-flash`.
-- Default smoke/regulator/transport tests: thinking disabled; small bounded output (`max_tokens` normally 16-128).
-- Enable deeper GLM thinking only for tests where reasoning quality is itself the measured variable.
-- The owner explicitly authorizes substantive use of the available GLM subscription for testing. A full VPS validation may therefore use up to roughly **100,000 provider-reported total tokens** by default when the measurements are useful, rather than minimizing every call. Raise or lower this bound in later trigger runs based on measured information gain and current subscription limits.
-- Token use must buy evidence: repeated calls should measure latency distributions, ten-cell concurrency, reasoning/quality, regulator behavior, ablations, recovery, or stability. Blind token burning is not progress.
-- Every live benchmark must retain a hard request/token ceiling and stop on repeated provider/transport errors so a bug cannot create an unbounded spend loop.
-- API credential is runtime secret only. Read from `ZAI_API_KEY`, `GLM_API_KEY`, or `BIGMODEL_API_KEY`; never commit plaintext, never echo to logs, never include in persisted receipts.
+- Development reasoning, source changes, deterministic test orchestration and authorized non-provider local/VPS-sandbox work are performed through the available ChatGPT/GitHub/VPS-sandbox paths.
+- Provider-backed inference is conditional on the live canonical provider gate. While `provider_routes_admitted=false`, perform **zero** provider model calls and **zero** provider credential lookups.
+- Historical/conditional provider preference, if a future canonical authority re-admits it: use Zhipu/BigModel GLM directly via the standard API rather than a Claude compatibility wrapper; previous low-cost test preference was `glm-4.7-flash`.
+- Historical/conditional smoke/regulator/transport defaults were thinking disabled with small bounded output (`max_tokens` normally 16-128); deeper thinking was reserved for tests where reasoning quality itself is measured. These settings do not authorize execution.
+- The earlier owner allowance for substantive GLM subscription testing and roughly 100,000 provider-reported total tokens is retained as provenance only while the current canonical provider HARD-OFF is active. It must not be consumed, preflighted, or treated as current spend authority.
+- If provider execution is later re-admitted, token use must buy evidence: repeated calls should measure latency distributions, ten-cell concurrency, reasoning/quality, regulator behavior, ablations, recovery, or stability. Blind token burning is not progress.
+- Every future live provider benchmark must retain a hard request/token ceiling and stop on repeated provider/transport errors so a bug cannot create an unbounded spend loop.
+- API credentials remain runtime secrets only. Never commit plaintext, never echo secrets to logs, and never include them in persisted receipts. Under current HARD-OFF, do not probe or consume provider credentials.
 
 ## Priority order
 
@@ -53,7 +62,7 @@ Repeatedly benchmark and improve:
 - decode duplication;
 - SQLite/WAL write pressure;
 - context tokens;
-- provider input/output tokens;
+- provider input/output tokens when an exact provider route is canonically re-admitted;
 - cold-start latency;
 - per-tick latency;
 - time-to-first-useful-result;
@@ -83,14 +92,14 @@ Safety/alignment/containment, evidence quality, completion correctness and recov
 
 Each substantive triggerwort-4 cycle should:
 
-1. refresh current repo/VPS evidence;
+1. refresh current repo/VPS evidence and newest canonical execution/provider authority;
 2. read the newest checkpoint and open deficits;
 3. select the highest-leverage unresolved bottleneck;
 4. form at least one hypothesis and counterhypothesis when uncertainty is material;
 5. implement the smallest discriminating change;
-6. run deterministic tests first;
-7. run bounded GLM-4.7-Flash inference where model behavior is needed, including repeated/parallel trials when they add statistical evidence;
-8. run VPS sandbox integration/benchmark where available;
+6. run deterministic non-provider tests first;
+7. run provider-backed inference only if the newest canonical authority explicitly re-admits the exact route; otherwise record provider HARD-OFF and continue with non-provider discriminators;
+8. run authorized non-provider VPS sandbox integration/benchmark where available;
 9. compare against the previous baseline;
 10. reject regressions or retain improvement with receipt;
 11. persist exact next checkpoint so the next trigger resumes rather than restarts.
@@ -106,6 +115,8 @@ Each substantive triggerwort-4 cycle should:
 `CONTINUATION_CHECKPOINT_OUTRANKS_FRESH_START`
 
 `CLAUDE_CODE_NOT_IN_CURRENT_TRIGGER4_EXECUTION_PATH`
+
+`CURRENT_PROVIDER_HARD_OFF > STALE_BRANCH_PROVIDER_ALLOWANCE`
 
 `GLM_OUTPUT_IS_CANDIDATE_INFERENCE_NOT_CANONICAL_TRUTH`
 

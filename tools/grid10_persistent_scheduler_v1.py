@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Persistent GRID10 scheduler over the single UnifiedDB cognitive runtime.
 
-This is a control-loop adapter, not a second cognition/state authority. It uses the same
-physical SQLite opened by ``grid10_cognitive_unified_runtime_v2`` and turns durable
-AgencyState/DeferredIntent state into repeatable heartbeat scheduling. It never executes
-external effects and it does not treat model/GRID output as verified world state.
+This is a control-loop service wrapper, not a second cognition/state authority. It uses the
+same physical SQLite opened by ``grid10_cognitive_unified_runtime_v4`` and delegates every
+heartbeat/checkpoint/next-tick state transition to that v4 core. Idle/HOLD scheduling uses the
+same v4 CAS helper so the service wrapper no longer owns a second write sequence.
 
 The key Stage-2 behavior is explicit and falsifiable:
 
@@ -25,7 +25,10 @@ import time
 from typing import Iterable
 
 from grid10_cognitive_heartbeat_v1 import _trusted_normal_axes, append_frame_jsonl
-from grid10_cognitive_unified_runtime_v2 import build_shared_runtime
+from grid10_cognitive_unified_runtime_v4 import (
+    _atomic_commit_idle_hold,
+    build_unified_cognitive_runtime_v4,
+)
 from grid10_persistent_agency_v1 import GoalState
 
 
@@ -53,7 +56,7 @@ class SchedulerCycleResult:
 
 
 class PersistentCognitiveScheduler:
-    """Drive durable AgencyState into the existing GRID10 heartbeat without a user prompt."""
+    """Keep the v4 durable AgencyState/heartbeat controller alive without a user prompt."""
 
     def __init__(
         self,
@@ -71,7 +74,7 @@ class PersistentCognitiveScheduler:
             self.agency,
             self.runtime,
             self.fingerprint,
-        ) = build_shared_runtime(
+        ) = build_unified_cognitive_runtime_v4(
             self.unified_db,
             allow_regulator_writes=config.allow_regulator_writes,
         )
@@ -93,17 +96,17 @@ class PersistentCognitiveScheduler:
     ) -> SchedulerCycleResult:
         now = time.time() if now_ts is None else float(now_ts)
 
-        # Deferred-intent evaluation happens before due-time evaluation. Material evidence is
-        # allowed to wake a goal immediately rather than waiting for a later idle poll.
+        # Evaluate deferred intents exactly once. If a material event wakes a goal, pass those
+        # exact IDs into v4 so the core receipt preserves the wake lineage without re-firing it.
         awakened = self.agency.wake_due(
             now_ts=now,
             observed_events=tuple(observed_events),
             event_id_prefix=f"{cycle_id}:wake",
         )
+        before = self.agency.snapshot()
         active_goal_ids = self._active_goal_ids()
 
         if not awakened and not self.agency.due_for_tick(now_ts=now):
-            snap = self.agency.snapshot()
             return SchedulerCycleResult(
                 cycle_id=cycle_id,
                 status="NOT_DUE",
@@ -112,30 +115,21 @@ class PersistentCognitiveScheduler:
                 heartbeat_tick_id=None,
                 assurance_mode=None,
                 cognitive_action=None,
-                next_tick_not_before=snap.next_tick_not_before,
-                agency_state_epoch=snap.state_epoch,
+                next_tick_not_before=before.next_tick_not_before,
+                agency_state_epoch=before.state_epoch,
                 unified_db_realpath=self.fingerprint.realpath,
             )
 
         if not active_goal_ids:
             next_due = now + max(0.05, float(self.config.idle_poll_seconds))
-            self.agency.schedule_next_tick(
-                not_before=next_due,
-                mode="HOLD",
-                event_id=f"{cycle_id}:idle-schedule",
+            after_epoch, _checkpoint = _atomic_commit_idle_hold(
+                self.agency,
+                expected_agency_epoch=before.state_epoch,
+                cycle_id=cycle_id,
+                awakened_goal_ids=tuple(awakened),
+                next_tick_not_before=next_due,
                 now_ts=now,
             )
-            self.agency.set_continuation_checkpoint(
-                {
-                    "cycle_id": cycle_id,
-                    "mode": "HOLD",
-                    "reason": "NO_ACTIVE_OR_TRIAL_GOAL",
-                    "next_tick_not_before": next_due,
-                },
-                event_id=f"{cycle_id}:idle-checkpoint",
-                now_ts=now,
-            )
-            snap = self.agency.snapshot()
             return SchedulerCycleResult(
                 cycle_id=cycle_id,
                 status="HOLD_NO_ACTIVE_GOAL",
@@ -145,52 +139,32 @@ class PersistentCognitiveScheduler:
                 assurance_mode=None,
                 cognitive_action="HOLD",
                 next_tick_not_before=next_due,
-                agency_state_epoch=snap.state_epoch,
+                agency_state_epoch=after_epoch,
                 unified_db_realpath=self.fingerprint.realpath,
             )
 
         trusted = _trusted_normal_axes() if self.config.trusted_normal_test_fixture else None
         tick_id = f"{cycle_id}:heartbeat"
-        result = self.runtime.tick_once(tick_id=tick_id, trusted_axes=trusted)
-        append_frame_jsonl(self.frames_jsonl, result.frame_json)
+        cycle = self.runtime.tick_once(
+            tick_id=tick_id,
+            interval=self.config.active_interval_seconds,
+            hold_interval=self.config.hold_poll_seconds,
+            now_ts=now,
+            prewoken_goal_ids=tuple(awakened),
+            trusted_axes=trusted,
+        )
+        append_frame_jsonl(self.frames_jsonl, cycle.heartbeat_result.frame_json)
 
-        interval = (
-            self.config.hold_poll_seconds
-            if result.next_action == "HOLD"
-            else self.config.active_interval_seconds
-        )
-        next_due = now + max(0.05, float(interval))
-        self.agency.set_continuation_checkpoint(
-            {
-                "cycle_id": cycle_id,
-                "heartbeat_tick_id": tick_id,
-                "active_goal_ids": list(active_goal_ids),
-                "awakened_goal_ids": list(awakened),
-                "assurance_mode": result.assurance_mode.value,
-                "cognitive_action": result.next_action,
-                "next_tick_not_before": next_due,
-                "external_effect_executed": False,
-            },
-            event_id=f"{cycle_id}:checkpoint",
-            now_ts=now,
-        )
-        self.agency.schedule_next_tick(
-            not_before=next_due,
-            mode=result.assurance_mode.value,
-            event_id=f"{cycle_id}:next-tick",
-            now_ts=now,
-        )
-        snap = self.agency.snapshot()
         return SchedulerCycleResult(
             cycle_id=cycle_id,
             status="HEARTBEAT_RAN",
-            awakened_goal_ids=awakened,
+            awakened_goal_ids=cycle.woken_goal_ids,
             active_goal_ids=active_goal_ids,
             heartbeat_tick_id=tick_id,
-            assurance_mode=result.assurance_mode.value,
-            cognitive_action=result.next_action,
-            next_tick_not_before=next_due,
-            agency_state_epoch=snap.state_epoch,
+            assurance_mode=cycle.assurance_mode,
+            cognitive_action=cycle.next_action,
+            next_tick_not_before=cycle.next_tick_not_before,
+            agency_state_epoch=cycle.agency_epoch_after,
             unified_db_realpath=self.fingerprint.realpath,
         )
 

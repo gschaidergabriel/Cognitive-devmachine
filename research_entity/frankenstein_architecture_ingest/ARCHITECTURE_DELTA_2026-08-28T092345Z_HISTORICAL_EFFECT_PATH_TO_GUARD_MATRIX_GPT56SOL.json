@@ -1,0 +1,161 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T09:23:45Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/historical-effect-path-matrix",
+  "status": "SOURCE_GROUNDED_PATH_TO_GUARD_MATRIX_NO_RUNTIME_CREDIT",
+  "routing": {
+    "normalized_message": "triggerwort 5",
+    "mapped_macro": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+    "directive_fetch": "PASS",
+    "assembly_lane": false
+  },
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main_observed": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_sha_observed_before_write": "b815989dcbb694b96ea53546a990b7f8639102e5",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_calls_this_run": 0,
+    "vps_execution_this_run": 0,
+    "unusual_experiment": false
+  },
+  "source_identity": {
+    "current_frankenstein_donor": {
+      "repository": "gschaidergabriel/frankenstein",
+      "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "stern_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+    },
+    "historical_predecessor": {
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "pinned_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "pinned_tree": "ec21e66c4672fde1f0a5d948ebc51457b69b620a",
+      "current_head_observed": "39c5423e0bfae54b971aab0be82f225f7a5890b8"
+    }
+  },
+  "packet_ingest": {
+    "new_unconsumed_packets": [],
+    "latest_known_packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "latest_known_packet_status": "ALREADY_CONSUMED",
+    "action": "NON_DUPLICATE_DIRECT_SOURCE_FORENSICS"
+  },
+  "path_to_guard_matrix": [
+    {
+      "entry_class": "HISTORICAL_AGENTIC_TOOL_EXECUTOR",
+      "source": ["agentic/loop.py", "agentic/executor.py", "agentic/tools.py", "agentic/state.py"],
+      "classification": ["HISTORICAL_ONLY", "LIVE_CODE", "ENFORCEMENT_CODE"],
+      "pre_effect_guard": "ToolExecutor._needs_approval plus AgentLoop safe-auto-approve/user-approval routing; code/bash also have guardrails and optional Firejail containment.",
+      "execution_shape": "Synchronous executor call returns ToolResult before the loop advances.",
+      "result_identity": "ToolResult carries tool_name/success/data/error/execution_time_ms; ExecutionStep has a step id, but the ToolResult itself carries no immutable invocation/effect/generation identity.",
+      "completion_binding": "AgentLoop marks the current step completed when current_step.tool_name equals the requested action, then advances.",
+      "authority_assessment": "REAL_PRE_EXECUTION_GUARD_PATTERN_PRESENT_BUT_NOT_CANONICAL_EXACT_INVOCATION_EFFECT_AUTHORITY",
+      "salvage_for_frankenstein2": "Reuse pre-execution controller gating and defense-in-depth guardrails; bind every decision/result to exact WorkExecutionBinding/invocation_id/tool_use_id/effect_id/generation/actor class."
+    },
+    {
+      "entry_class": "HISTORICAL_PROJECT_ENGINE_BASH",
+      "source": ["services/project_engine.py"],
+      "classification": ["HISTORICAL_ONLY", "LIVE_CODE", "ENFORCEMENT_CODE"],
+      "pre_effect_guard": "Command goes through _sandbox_wrap; sandbox can explicitly be 'off'. Dangerous-command filtering and bwrap wrapping are path-local mechanisms.",
+      "execution_shape": "Direct subprocess.run(shell=True) in _exec_tool.",
+      "policy_coupling": "check_policy() exists in the same subsystem, but prior repository-wide forensics found no consumer call edge binding it to the direct execution path.",
+      "authority_assessment": "PATH_LOCAL_GUARDS_PRESENT_CANONICAL_POLICY_TO_EFFECT_EDGE_NOT_OBSERVED",
+      "salvage_for_frankenstein2": "Keep sandbox/path-local guards only as narrowing defense-in-depth beneath one canonical deterministic EffectDecision."
+    },
+    {
+      "entry_class": "HISTORICAL_PROJECT_ENGINE_FILESYSTEM_MUTATION",
+      "source": ["services/project_engine.py:_exec_tool write_file/edit_file/task_write"],
+      "classification": ["HISTORICAL_ONLY", "LIVE_CODE"],
+      "pre_effect_guard": "Path resolution/project-root handling is present, but the observed mutation branches write directly with pathlib after local checks; no exact check_policy-to-call edge is established.",
+      "execution_shape": "Direct file writes and task JSON writes.",
+      "receipt_shape": "Human-readable [OK]/[ERROR] strings rather than immutable typed execution/effect receipts.",
+      "authority_assessment": "DIRECT_MUTATION_WITH_LOCAL_PATH_CHECKS_NO_PROVEN_CANONICAL_EFFECT_AUTHORITY",
+      "salvage_for_frankenstein2": "Require exact invocation identity, pre-write EffectDecision, resulting byte/hash receipt, and source/generation binding."
+    },
+    {
+      "entry_class": "HISTORICAL_PROJECT_ENGINE_EXTERNAL_COMMUNICATION",
+      "source": ["services/project_engine.py:_exec_send_email"],
+      "classification": ["HISTORICAL_ONLY", "LIVE_CODE", "EXTERNAL_EFFECT_PATH"],
+      "pre_effect_guard": "No canonical policy consumption edge was observed in the direct dispatch; method sends to local toolbox HTTP endpoint.",
+      "execution_shape": "HTTP POST to http://127.0.0.1:8096/email/send, then parses response.",
+      "authority_assessment": "SECOND_STAGE_TOOLBOX_MAY_HAVE_GUARDS_UNKNOWN_FROM_THIS_PATH; PROJECT_ENGINE_EDGE_NOT_PROVEN",
+      "salvage_for_frankenstein2": "Treat downstream service response as execution receipt only; preserve external outcome UNKNOWN until separately verified and bind the same invocation identity end-to-end."
+    },
+    {
+      "entry_class": "HISTORICAL_PROJECT_ENGINE_MCP",
+      "source": ["services/project_engine.py:_call_mcp_tool"],
+      "classification": ["HISTORICAL_ONLY", "LIVE_CODE", "EXTERNAL_OR_PLUGIN_EFFECT_PATH"],
+      "pre_effect_guard": "MCP tool dispatch is selected by tool_name prefix and executed through configured MCP command; no shared canonical policy/effect edge is source-proven here.",
+      "execution_shape": "Subprocess JSON-RPC initialize/tools-call exchange.",
+      "authority_assessment": "DOWNSTREAM_TOOL_AUTHORITY_FRAGMENTED_OR_UNKNOWN",
+      "salvage_for_frankenstein2": "Wrap all external/plugin tools behind the same canonical EffectDecision and exact per-invocation receipt adapter."
+    },
+    {
+      "entry_class": "HISTORICAL_PROJECT_ENGINE_SPECIALIZED_EFFECT_TOOLS",
+      "source": ["services/project_engine.py tool dispatch: send_email, heartbeat_create/toggle, vault, spend, trading, notify, goal/world/task_dag and related helpers"],
+      "classification": ["HISTORICAL_ONLY", "LIVE_CODE", "MIXED_STATE_AND_EXTERNAL_EFFECTS"],
+      "pre_effect_guard": "Dispatch fans out to independent helper implementations with different local semantics. Presence of project_policies/check_policy does not prove convergence before these effects.",
+      "authority_assessment": "MULTIPLE_NON_IDENTICAL_EFFECT_PLANES",
+      "salvage_for_frankenstein2": "Classify each helper as canonical-state mutation, candidate-only, or real external effect; require every real effect to traverse one deterministic authority edge."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-HIST-GUARD-MATRIX-001",
+      "classification": "HISTORICAL_SOURCE",
+      "claim": "Historical Project-Frankenstein contains at least two distinct pre-effect control families: the agentic ToolExecutor approval/risk plane and ProjectEngine path-local guards/sandboxing."
+    },
+    {
+      "atom_id": "TW5-HIST-GUARD-MATRIX-002",
+      "classification": "NEGATIVE_RESULT",
+      "claim": "No source evidence observed in this pass establishes that all historical effect entry classes converge through one canonical policy/effect decision before execution."
+    },
+    {
+      "atom_id": "TW5-HIST-GUARD-MATRIX-003",
+      "classification": "INFERENCE",
+      "claim": "The strongest reusable predecessor pattern is not any single historical guard implementation but the combination of pre-execution decision plus synchronous result capture; Frankenstein 2.0 must add exact causal identity and a single authority boundary rather than preserve the fragmented topology.",
+      "confidence": 0.94,
+      "falsifier": "A pinned historical shared wrapper/entrypoint proving every listed real-effect class consumed one canonical deterministic decision with exact invocation identity before execution."
+    }
+  ],
+  "contradictions_preserved": [
+    {
+      "id": "TW5-HIST-CONTRADICTION-GUARDS-VS-CANONICAL-AUTHORITY-018",
+      "a": "Historical source contains real guard-like mechanisms, including pre-execution approval and sandbox/command restrictions.",
+      "b": "The same historical source exposes multiple independent effect entry classes and does not establish one common policy-to-effect authority edge.",
+      "resolution": "DO_NOT_SMOOTH; classify as effect-authority fragmentation with useful donor guards."
+    },
+    {
+      "id": "TW5-HIST-CONTRADICTION-SEQUENTIAL-AGENTIC-VS-CURRENT-HOOK-RACE-019",
+      "a": "The pinned historical agentic loop shown is synchronous around a ToolExecutor result, reducing interleaving risk in that path.",
+      "b": "The current stern hook donor correlates PreToolUse/PostToolUse via a mutable session-scoped effect_id while platform hook input has call-scoped identity.",
+      "resolution": "Actor/runtime-specific evidence only; historical sequential behavior must not be transplanted as proof of current hook serialization."
+    }
+  ],
+  "trigger4_feed": {
+    "required_effect_contract": [
+      "PolicyDecision/capability authority",
+      "ApprovalReceipt when human approval is required",
+      "EffectDecision before side effect",
+      "WorkExecutionBinding with actor_class + invocation_id/tool_use_id + generation + effect_id",
+      "ExecutionReceipt",
+      "WorldEffectVerification with UNKNOWN as first-class",
+      "ResultReentry and CompletionEvidence"
+    ],
+    "single_authority_rule": "All real effect entry classes must converge through one canonical deterministic authorization edge. Path-local guards may only narrow, never grant or replace authority.",
+    "highest_information_next_gate": "Acquire the actual historical/current wache-koenig.py blocker source or classify it as unavailable provenance; then compare its deny semantics against the historical Agentic ToolExecutor and current stern nonblocking bookkeeping to select the smallest reusable canonical blocker adapter for Triggerword 4."
+  },
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "historical_effect_path_matrix": "PASS_AT_STATIC_SOURCE_SCOPE",
+    "runtime_causal": 0,
+    "effect_enforcement_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "evidence_boundary": "STATIC_SOURCE_AND_ACCESSIBLE_GIT_ONLY; no provider call, no VPS execution, no runtime intervention, no whole-product/model/training promotion"
+}

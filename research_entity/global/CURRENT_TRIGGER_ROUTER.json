@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "status": "CURRENT_SUCCESSOR_TRIGGER_ROUTER",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "legacy_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
@@ -15,8 +15,19 @@
       "aliases": ["4", "triggerword 4", "triggerwort 4"],
       "kind": "grid10_frankenstein2_build_assembly_continuation",
       "continuation": true,
+      "single_command_mode": true,
+      "spam_safe": true,
+      "idempotent_resume": true,
+      "auto_ingest_trigger5": true,
+      "auto_select_gate": true,
+      "auto_test": true,
+      "auto_promote_passed_gate": true,
+      "auto_repair_failed_gate": true,
+      "routine_owner_confirmation_required": false,
+      "clarification_policy": "ask only for a genuine hard external blocker after self-resolution paths are exhausted; continue all independent work first",
       "fetch_before_execute": true,
       "protocols": [
+        "research_entity/global/TRIGGERWORD_4_ONE_COMMAND_AUTONOMOUS_GATE_DRIVER.md",
         "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
         "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
         "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_MASTER_ARCHITECTURE_AND_ASSEMBLY_WORKFLOW.md",
@@ -45,13 +56,18 @@
   "invariants": [
     "NEW_SESSION != NEW_PROJECT",
     "NEW_WORKER != NEW_TRUTH",
+    "NEW_TRIGGER != NEW_BUILD_FROM_ZERO",
+    "REPEATED_TRIGGER4_MUST_CONVERGE_NOT_STAMPEDE",
     "SPECIFICATION != IMPLEMENTATION",
     "IMPLEMENTATION != VERIFIED_BEHAVIOR",
     "MODEL_OUTPUT != ARCHITECTURE_AUTHORITY",
-    "triggerword 4 is build/assembly/verification",
+    "triggerword 4 is the normal single-command build/assembly/verification interface",
+    "triggerword 4 automatically selects, tests, promotes or repairs gates from durable state",
+    "triggerword 4 automatically ingests relevant triggerword-5 forensic evidence",
+    "routine gate progression requires no owner confirmation",
     "triggerword 5 is forensic analysis/live ingest",
     "Triggerword-4 Voice may reach ACCEPTED_AT_SCOPE on VPS text/event control-plane evidence while physical audio I/O remains explicitly NOT_TESTED_ON_VPS",
     "4 and 5 must fetch their current protocols before substantive execution"
   ],
-  "updated_at": "2026-08-28T14:30:00+07:00"
+  "updated_at": "2026-08-28T15:00:00+07:00"
 }

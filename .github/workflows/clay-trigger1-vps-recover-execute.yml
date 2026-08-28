@@ -8,10 +8,6 @@ permissions:
   contents: write
   pull-requests: read
 
-concurrency:
-  group: clay-trigger1-vps-recovery-execute-v1
-  cancel-in-progress: false
-
 jobs:
   execute:
     if: >-
@@ -20,6 +16,12 @@ jobs:
       github.event.pull_request.user.login == 'gschaidergabriel' &&
       contains(github.event.pull_request.body || '', 'dispatch_schema: CLAY_TRIGGER1_VPS_RECOVER_EXECUTE/v1') &&
       contains(github.event.pull_request.body || '', 'dispatch_nonce: 20260825T1200P0700_GPT56SOL_RECOVER')
+    # Acquire the recovery singleton only for the exact authorized dispatch. Keeping this
+    # at workflow scope caused every unrelated opened PR to sit in this concurrency queue
+    # before its strict job-if could skip, adding avoidable self-hosted backpressure.
+    concurrency:
+      group: clay-trigger1-vps-recovery-execute-v1
+      cancel-in-progress: false
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 180
     steps:

@@ -8,10 +8,6 @@ permissions:
   contents: write
   pull-requests: read
 
-concurrency:
-  group: clay-trigger1-structural-native-abstract-v1
-  cancel-in-progress: false
-
 jobs:
   execute:
     if: >-
@@ -20,6 +16,12 @@ jobs:
       github.event.pull_request.user.login == 'gschaidergabriel' &&
       contains(github.event.pull_request.body || '', 'dispatch_schema: CLAY_TRIGGER1_STRUCTURAL_NATIVE_ABSTRACT_PR/v1') &&
       contains(github.event.pull_request.body || '', 'dispatch_nonce: 20260825T1140P0700_GPT56SOL_PR')
+    # Keep the scientific dispatch singleton, but acquire its concurrency key only after
+    # the strict dispatch job-if is true. Workflow-level concurrency made every unrelated
+    # opened PR wait behind the frozen Trigger-1 run even though its job would be skipped.
+    concurrency:
+      group: clay-trigger1-structural-native-abstract-v1
+      cancel-in-progress: false
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 180
     steps:

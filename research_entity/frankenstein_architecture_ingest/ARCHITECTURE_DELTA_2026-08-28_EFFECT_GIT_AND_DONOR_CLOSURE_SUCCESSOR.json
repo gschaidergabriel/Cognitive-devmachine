@@ -1,0 +1,66 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_EFFECT_GIT_AND_DONOR_CLOSURE_SUCCESSOR_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:34:13Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_AND_GIT_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "source_packet": "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+  "findings": [
+    {
+      "id": "TW5-EFFECT-LINEAGE-009",
+      "classification": "HISTORICAL_SOURCE_PLUS_EXACT_GIT_BOUNDARY",
+      "finding": "b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a is the first verified accessible-Git installable-plugin commit for scripts/stern.py. The file is added there with 8123 lines and already contains the Phase-2 nonblocking zulassen(), session-scoped active_turns.effect_id correlation, _wirkung_pruefen(), and no-pre-row VERIFIED/FEHLGESCHLAGEN fallback. The parent repo does not contain scripts/stern.py, while its README already describes the host underlab effect journal as LIVE. Therefore b0be33fb is a shipping/source-availability boundary, not a defensible creation date.",
+      "trigger4_delta": "Preserve source lineage as HOST_PREHISTORY_UNKNOWN -> FIRST_SHIPPED_SOURCE_b0be33fb -> LIVE_HOST_MIRROR_4901b894 -> REORG_ccf2264 -> CURRENT_DONOR_5641dc6. Do not infer feature creation timestamps inside the host-only gap."
+    },
+    {
+      "id": "TW5-EFFECT-LINEAGE-010",
+      "classification": "HISTORICAL_GIT_OBSERVABILITY_GAP",
+      "finding": "4901b894249c93e766bab946edfd7b37c01f71f3 explicitly records that live ~/.claude/star/stern.py grew from 8123 to 12019 lines across PHASE 9-24 on the development host before being recopied to Git. Exact intermediate introduction/supersession chronology is therefore not reconstructible from repository commits alone.",
+      "trigger4_delta": "Use exact source snapshots for donor behavior; use Git chronology only where Git actually observes the transition."
+    },
+    {
+      "id": "TW5-DONOR-CLOSURE-011",
+      "classification": "CURRENT_SOURCE_PLUS_HISTORICAL_SOURCE",
+      "finding": "The previously reported missing F94 wegehierarchie implementation is recoverable in the exact current donor at DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/_archiv-phase4/wegehierarchie.py with blob 83d1068bedc4b1fa7dd32aead7600484f8532e34, identical to the archived file first shipped at b0be33fb. Current paket.py still imports `.wegehierarchie`, and accessible Git has no commits for scripts/udb/abruf/wegehierarchie.py. Thus the unknown source is resolved to an archived donor, but executable package closure remains unresolved/broken at repository-source scope.",
+      "trigger4_delta": "Donor freeze may use the archived F94 bytes only as a donor. Triggerword-4 must either adapt them through an explicit successor module or retire/replace the caller branch, with a regression where a carried productive walk updates reinforcement state and missing dependency cannot degrade silently. Do not blindly restore an archived module into the live namespace."
+    }
+  ],
+  "contradiction_updates": [
+    {
+      "id": "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004",
+      "status": "REFINED_PARTIALLY_RESOLVED",
+      "resolved": "Exact F94 source bytes and historical blob identity are now located.",
+      "unresolved": "The active-package `.wegehierarchie` import has no accessible-Git committed root-module source; live-host extra compatibility files were not inspected."
+    },
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-GIT-CREATION-005",
+      "status": "OPEN_BOUNDED",
+      "resolved": "First verified accessible-Git installable source boundary is b0be33fb.",
+      "unresolved": "Exact host-only creation chronology before that commit."
+    }
+  ],
+  "triggerword4_acceptance_deltas": [
+    "DONOR_DEPENDENCY_CLOSURE must search explicit archived/generated/plugin-installed compatibility paths before classifying source bytes as absent.",
+    "RECOVERABLE_ARCHIVE_SOURCE != LIVE_IMPORT_CLOSURE and must remain distinct evidence states.",
+    "A recovered archived dependency is donor material only until a source-bound successor regression proves intended semantics.",
+    "Effect migration chronology must label first_verified_accessible_git separately from created_at/first_live, which remain UNKNOWN when host-only history intervenes."
+  ],
+  "credits": {
+    "source_forensics": "PRESENT",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Atomize the remaining F94 archived implementation assumptions and either identify a safe Triggerword-4 successor contract or explicitly retire the caller path; independently recover wache-koenig only from an actual authorized host/source artifact, not from repository absence."
+}

@@ -1,0 +1,121 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:48:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "STOP_HOOK_LLM_BOUNDARY_AND_RETRIEVAL_CREDIT_IDENTITY",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "packet_provenance": {
+    "packet_id": "TW5-PACKET-20260828T104200Z-STOP-HOOK-LLM-BOUNDARY-GPT56SOL",
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T104200Z_5641dc6_GPT56SOL_STOP_HOOK_LLM_BOUNDARY.json",
+    "packet_blob_sha": "bcfc78b590a9fffd905051630dfb3540755432d0",
+    "disposition": "CONSUMED_AFTER_DIRECT_SOURCE_CROSSCHECK",
+    "schema_check": "FOUR_ATOMS_USE_ALLOWED_REPAIR_OR_ADAPT_TO_GRID_ACTIONS"
+  },
+  "direct_source_crosscheck": {
+    "declared_boundary": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "span": "33-48",
+      "finding": "file-level hard boundary states no LLM call in a hook, never; hook paths are hard-budgeted and fail-silent"
+    },
+    "configured_limits": {
+      "span": "430-620",
+      "limit_stop_seconds_default": 2.0,
+      "kognition_active_default": 1,
+      "kognition_model_default": "qwen2.5:0.5b",
+      "kognition_ollama_url_default": "http://localhost:11434",
+      "kognition_timeout_seconds_default": 1.3,
+      "finding": "locality is a default configuration value, not a hard-coded transport fence in _ollama_generate"
+    },
+    "model_call_and_reducer": {
+      "span": "4820-5065",
+      "finding": "_ollama_generate performs synchronous HTTP /api/generate; kognition_urteil sends the current query plus selected durable-memory candidate text; _kognition_richten_hook selects the newest session retrieval lacking modell:relevanz feedback and writes reduced model-derived credit through MicroClay._apply_credit"
+    },
+    "stop_control_flow": {
+      "span": "8840-8898",
+      "finding": "Stop invokes _kognition_richten_hook before _gw_absicht_schreiben, architekt_governance_zug and waiting-status update"
+    },
+    "global_timeout": {
+      "span": "8560-8665,9025-9105",
+      "finding": "cmd_hook arms one event-wide SIGALRM using the event limit; _HookTimeout exits to the outer handler, logs and returns 0, so code remaining after the interrupted operation is not resumed"
+    },
+    "phase4c_internal_comment": {
+      "span": "5054+",
+      "finding": "later PHASE 4c commentary continues to cite the no-LLM-in-hook rule for PostToolUse while calling the PHASE 4b Stop inference a conscious documented boundary case, preserving both concepts simultaneously"
+    }
+  },
+  "architecture_effect": {
+    "mechanism": "HookCognitionBoundary/v1",
+    "rule": "deterministic hook admission/bookkeeping paths must not depend on synchronous model inference for completion; model-assisted retrieval relevance remains noncanonical candidate evidence and should execute as request-scoped/deferred cognition outside the hook critical path",
+    "preserve_from_donor": [
+      "modell:relevanz remains a distinct non-human signal class",
+      "model output never writes canonical state directly; deterministic reducer owns durable feedback write",
+      "failure to obtain model judgment yields no fabricated relevance judgment",
+      "local small-model relevance judging remains reusable as an HCU/GRID cognition primitive"
+    ],
+    "repair": [
+      "move qwen/Ollama relevance inference out of Stop's event-wide deterministic critical path into a typed RetrievalRelevanceCandidate work item",
+      "bind that work item to immutable retrieval_id plus turn/causal generation, not session newest-row selection alone",
+      "after model completion, admit only a typed model-derived relevance result through the deterministic reducer",
+      "make model endpoint capability/locality policy explicit; localhost default is not equivalent to a transport authority guarantee",
+      "ensure Stop's deterministic later bookkeeping (_gw_absicht_schreiben, governance turn accounting, waiting status or successor equivalents) cannot be skipped merely because cognitive inference is slow/unavailable",
+      "if synchronous compatibility mode is temporarily retained, classify it as an explicit bounded exception with a separately measured budget and no whole-runtime credit"
+    ],
+    "evidence_types": {
+      "model_relevance": "INFERRED_OR_MODEL_DERIVED_CANDIDATE_EVIDENCE",
+      "retrieval_episode": "DETERMINISTIC_STATE_IDENTITY",
+      "credit_write": "DETERMINISTIC_REDUCER_OUTPUT",
+      "promotion_authority": "MODEL_RELEVANCE_ALONE_FORBIDDEN"
+    },
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "contradictions_preserved": [
+    "CURRENT DONOR SPEC says no LLM call in any hook; CURRENT DONOR LIVE_CODE performs a synchronous Ollama generation in Stop.",
+    "The code documents the Stop model path as a conscious boundary case while later code still cites the unconditional no-LLM rule for PostToolUse; exact owner/supersession intent is unresolved.",
+    "Default Ollama URL is localhost, but _ollama_generate accepts configured ollama_url; actual installed endpoint is unobserved.",
+    "Session-scoped ORDER BY ts DESC LIMIT 1 is source-visible; wrong-round credit under overlapping/reordered Stop is a plausible failure mode but not runtime-observed."
+  ],
+  "source_inferences_not_runtime_claims": [
+    "A SIGALRM timeout during _kognition_richten_hook can prevent execution of later Stop statements in that process because control transfers to the outer _HookTimeout handler.",
+    "Concurrent/reordered same-session Stops can in principle race around newest-open retrieval selection; exact reachability requires an execution test.",
+    "Cold/warm/unreachable local-model latency distribution is unknown despite a historical source comment reporting a 1.18s cold start."
+  ],
+  "feeds_triggerword_4": {
+    "required_actions": [
+      "compile RetrievalRelevanceCandidate with immutable retrieval_id/turn/causal generation and bounded candidate-text digest",
+      "schedule small-model relevance inference outside deterministic Stop/hook completion authority",
+      "reduce returned model judgment only through typed model-derived evidence admission; never directly promote canonical fact or SHADOW->ACTIVE state",
+      "add endpoint capability/locality fence before transcript/memory candidate text leaves the reducer boundary",
+      "test two same-session retrieval episodes with overlapping/reversed completion to prove exact credit attachment",
+      "test slow/unavailable model while proving deterministic Stop bookkeeping still completes",
+      "retain a kill switch for the cognition primitive without disabling mechanical retrieval/accounting paths"
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "packet_ingest": "PASS_SOURCE_SCOPE",
+    "installed_stop_runtime": 0,
+    "latency_acceptance": 0,
+    "concurrency_acceptance": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 build/verification lane: make model relevance a retrieval_id-bound deferred candidate-evidence job, then verify with two overlapping same-session retrieval episodes in reverse completion order plus a deliberately slow/unavailable local-model fixture while deterministic Stop bookkeeping remains complete. No runtime credit from this source-only ingest.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "feeds_triggerword_4_boolean": true
+}

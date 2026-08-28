@@ -1,0 +1,102 @@
+{
+  "schema": "TRIGGERWORD4_SOURCE_FUSION_RECEIPT/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "GRID10_V6_CRASH_WINDOW_RECONCILIATION_FUSION_SOURCE_AND_TEST_DEFINITION_ONLY",
+  "authority": {
+    "canonical_main_observed": "13ea5c49a74d4ea6815cbaabc061d8de8272dc86",
+    "supervisor_schema": "9.13",
+    "supervisor_delta": "9.13AE_NON_AUTHORITY",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "donor": {
+    "repository": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "preserve_as_baseline": true
+  },
+  "continuation": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "head_before_receipt": "5242e9ab808e073dffe15b9f294e1beeb85934b9",
+    "single_existing_pr": 2118
+  },
+  "finding": "The prior v6 bounded exception closure could not make abrupt process death between the durable V4 Agency/cycle commit and the later v6 receipt transaction machine-visible. A parallel continuation implemented a tighter repair directly inside v6: create-once PREPARED intent before V4, exact ControlSnapshot/epoch binding, and intent CLOSED in the same SQLite transaction as the v6 receipt. The recovery classifier preserves UNKNOWN and forbids same-tick retry when V4 is present but v6 closure is absent.",
+  "fusion": {
+    "active_runtime": "tools/grid10_cognitive_unified_runtime_v6.py",
+    "active_reconciliation": "tools/grid10_v6_crash_reconciliation_v1.py",
+    "active_integration_test": "tools/test_grid10_v6_crash_reconciliation_integration_v1.py",
+    "active_v6_blob_observed": "09b5d8507799aba8bda0fbd8128d2eb9f1a8a125",
+    "active_reconciliation_blob_observed": "63f16c78ac516d963b71183ed2d9e3bae1e60d56",
+    "active_integration_test_blob_observed": "9665af7d637ae733121541c112ca20d070b9f25c",
+    "ci_fusion_commit": "384884c1077f0832be4dce6b50e04babe08859fd",
+    "duplicate_lane_retired": true,
+    "retired_donor_commits": [
+      "07ae2409a6672649921467914e1a2ba43692d3a6",
+      "0a3e23a2463cc83a086cd8f95a1e915e9b47c130",
+      "41a49e45958ad0f1c83dd980538250146a78ad13",
+      "aae4bfe8cdd59c917471dc6befbda7a5d1fd1357",
+      "cf46530937ae1f0a5f40093e4b64252a949b00b9"
+    ],
+    "retirement_commits": [
+      "830a639b071c5fdd48fc029d0b8ed6b23d7f95dc",
+      "a4283ead88fd1500a7855be06674a2197ca97461",
+      "20ae79b2774a06950544d843a7196090530b05cf",
+      "5242e9ab808e073dffe15b9f294e1beeb85934b9"
+    ],
+    "reason_for_retirement": "Do not keep a second recovery table/protocol when the same defect is solved more tightly inside the existing v6 authority lane."
+  },
+  "scientific_frame": {
+    "hypothesis": "A durable pre-V4 intent plus same-transaction v6 receipt/close can make the post-V4 process-death window exactly classifiable without replaying the tick.",
+    "counterhypothesis": "A separate wrapper runtime is necessary to provide crash observability.",
+    "decision": "Counterhypothesis not supported at source-design level; the integrated v6 protocol covers the intended crash boundary with fewer competing authorities and stronger control-epoch binding.",
+    "remaining_falsifier": "Execute the exact integration suite on an admitted non-provider surface and inject a real process death at the V4->v6 boundary; verify surviving PREPARED + V4 evidence classifies RECOVERY_REQUIRED_POST_V4_COMMIT and cannot authorize same-tick replay."
+  },
+  "github_ci": {
+    "latest_observed_run": 33170505135,
+    "head_sha": "5242e9ab808e073dffe15b9f294e1beeb85934b9",
+    "conclusion": "failure",
+    "job_steps_observed": [],
+    "runner_id": 0,
+    "classification": "ZERO_STEP_GITHUB_HOSTED_INFRASTRUCTURE_FAILURE_NOT_CODE_TEST_RESULT",
+    "deterministic_tests_executed": false,
+    "runtime_pass_claimed": false
+  },
+  "singleton_grid10_v3": {
+    "workflow_run_id": 33168491753,
+    "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+    "issue": 2121,
+    "state_last_observed": "queued",
+    "terminal_result_receipt_observed": false,
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false
+  },
+  "execution_boundary": {
+    "provider_calls_performed": 0,
+    "provider_secret_lookups_performed": 0,
+    "together_used": false,
+    "paid_fallback_used": false,
+    "frank_harness_modified": false,
+    "vps_runtime_pass_claimed": false
+  },
+  "credit": {
+    "source_fusion": 1,
+    "deterministic_test_execution": 0,
+    "physical_grid10_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "frankenstein2_runtime": 0
+  },
+  "remaining_gaps": [
+    "The integrated v6 crash-reconciliation source and tests have no admitted execution receipt because GitHub-hosted CI still terminates before any step.",
+    "The protocol is recovery observability, not full V4+v6 two-phase atomicity.",
+    "Recovery mutation still requires an externally proven exclusive recovery/coordinator lease.",
+    "Physical GRID10 remains blocked on the already-dispatched singleton g0000 terminal result and later distinct-real-process evidence."
+  ],
+  "next_exact_gate": "Do not create another GRID10 v3 dispatch. First obtain admitted deterministic execution of the current v6 crash-reconciliation integration and existing V4/V5/V6/live-control/scheduler tests on a non-provider surface. In parallel inspect terminal state plus canonical result for workflow 33168491753 / issue 2121. Only after those gates close should the continuation advance physical GRID10 credit or Frankenstein-2.0 VPS runtime assembly. Provider routes remain HARD-OFF."
+}

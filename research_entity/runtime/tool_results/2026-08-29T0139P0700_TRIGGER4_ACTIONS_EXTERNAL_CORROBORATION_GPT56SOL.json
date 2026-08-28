@@ -1,0 +1,72 @@
+{
+  "schema": "TRIGGER4_ACTIONS_EXTERNAL_CORROBORATION/v1",
+  "observed_at_local": "2026-08-29T01:39:48+07:00",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "canonical_main_before_write": "cb089d001d7f6a9bed757f7d04d9fba9865180d7",
+  "supervisor_epoch": "9.13",
+  "mode": "FREE_ONLY",
+  "purpose": "Add nonduplicate external corroboration to the existing Triggerword-4 P0 Actions pre-step discriminator without launching or retrying any workflow.",
+  "project_observation_reused": {
+    "run_id": 33181911240,
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "runner_class": "ubuntu-latest",
+    "job_id": 98884969346,
+    "job_conclusion": "failure",
+    "job_steps": null,
+    "decoded_job_log_fetch": "BlobNotFound/404",
+    "scope": "PRE_STEP_TRANSPORT_OR_CONTROL_PLANE_EVIDENCE_ONLY"
+  },
+  "external_corroboration": [
+    {
+      "source_class": "COMMUNITY_REPORT_NOT_VENDOR_AUTHORITY",
+      "source": "https://github.com/orgs/community/discussions/205948",
+      "published": "2026-08-27",
+      "reported_signature": "Fresh jobs in two independent repositories after the August 26-27 incidents were marked resolved: completed/failure, runner_id=0, empty runner_name, runner_group_id=0, no steps, no log content, including minimal ubuntu-latest workflows.",
+      "relevance": "Matches the local cross-repository pre-step fingerprint closely and weakens explanations that require Frankenstein source, self-hosted runner labels, or one repository's workflow logic."
+    },
+    {
+      "source_class": "COMMUNITY_REPORT_NOT_VENDOR_AUTHORITY",
+      "source": "https://github.com/orgs/community/discussions/205888",
+      "published": "2026-08-26",
+      "reported_signature": "Private-repository GitHub-hosted workflow runs failed before runner assignment with zero steps and startup-failure/no-jobs symptoms despite Actions being enabled and included minutes remaining.",
+      "relevance": "Provides an independent same-family control-plane/scheduler symptom with standard hosted runners."
+    },
+    {
+      "source_class": "VENDOR_PRIMARY_STATUS",
+      "source": "https://www.githubstatus.com/",
+      "observed": "2026-08-29",
+      "reported_fact": "GitHub reports Actions operational now, but documents August 26-27 incidents where Actions jobs failed to start, runner assignment was disrupted, some jobs were stuck waiting for runner, and service recovery required backend mitigation.",
+      "relevance": "Establishes a recent vendor-confirmed failure family in the same pre-execution/runner-assignment layer while not proving that the current project symptom is the same residual defect."
+    }
+  ],
+  "inference_update": {
+    "best_supported_scope": "COMMON_ACTIONS_PRE_STEP_ASSIGNMENT_OR_ADMISSION_LAYER",
+    "platform_residual_or_customer_scoped_service_side_failure": "PLAUSIBLE_AND_EXTERNALLY_CORROBORATED_NOT_PROVEN",
+    "account_or_repository_administrative_restriction": "STILL_PLAUSIBLE_NOT_OBSERVED",
+    "workflow_source_failure_as_sufficient_explanation": "DISFAVORED_BY_SAME_SIGNATURE_ON_MINIMAL_INDEPENDENT_HOSTED_WORKFLOWS",
+    "self_hosted_runner_service_or_label_match_as_sufficient_explanation": "FURTHER_DISFAVORED",
+    "frankenstein_product_logic_failure": "NOT_OBSERVED"
+  },
+  "counterhypotheses": [
+    "Independent community reports can share a different backend incident fingerprint without sharing this account's exact root cause.",
+    "A customer/account administrative state can produce the same pre-step signature as a GitHub service-side scheduler defect.",
+    "The current self-hosted queued singletons and GitHub-hosted zero-step failures may be two distinct faults that merely meet at the pre-step boundary."
+  ],
+  "coordination": {
+    "duplicate_dispatch_performed": false,
+    "generation_advance_performed": false,
+    "vps_restart_or_replacement_performed": false,
+    "frank_harness_modified": false,
+    "provider_or_paid_call_performed": false
+  },
+  "credit_boundary": {
+    "runtime_control_transport_pass": false,
+    "runtime_quiescence_pass": false,
+    "grid10_runtime_pass": false,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Use an authorized GitHub Actions administrative/usage/assignment diagnostic or vendor-support/backend annotation, if available, to distinguish customer/account/repository admission restriction from residual service-side runner-assignment failure. Until then preserve existing singleton runs and the working VPS telemetry bridge unchanged; do not convert this external corroboration into runtime PASS."
+}

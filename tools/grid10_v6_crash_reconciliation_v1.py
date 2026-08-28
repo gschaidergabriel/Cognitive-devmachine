@@ -77,6 +77,32 @@ def _connect(path: Path) -> sqlite3.Connection:
     return con
 
 
+def _prepare_epoch_column(con: sqlite3.Connection) -> str:
+    """Resolve the epoch column across the two source-only v1 schema spellings.
+
+    The first source revision used ``expected_agency_epoch``. Before runtime admission the
+    semantics were corrected to ``agency_epoch_at_prepare`` because V4.wake_due may advance
+    the Agency epoch before the V4 cycle commit. CREATE TABLE IF NOT EXISTS cannot rename a
+    column in an already-created developer/test database, so readers/writers must understand
+    both spellings rather than silently stranding an otherwise valid local database.
+    """
+    columns = {str(row["name"]) for row in con.execute(f"PRAGMA table_info({INTENT_TABLE})")}
+    if "agency_epoch_at_prepare" in columns:
+        return "agency_epoch_at_prepare"
+    if "expected_agency_epoch" in columns:
+        return "expected_agency_epoch"
+    raise CrashReconciliationError("INTENT_SCHEMA_MISSING_PREPARE_EPOCH_COLUMN")
+
+
+def _prepare_epoch_from_row(row: sqlite3.Row) -> int:
+    keys = set(row.keys())
+    if "agency_epoch_at_prepare" in keys:
+        return int(row["agency_epoch_at_prepare"])
+    if "expected_agency_epoch" in keys:
+        return int(row["expected_agency_epoch"])
+    raise CrashReconciliationError("INTENT_ROW_MISSING_PREPARE_EPOCH")
+
+
 def install_reconciliation_schema(path: Path) -> None:
     con = _connect(Path(path))
     try:
@@ -97,6 +123,7 @@ def install_reconciliation_schema(path: Path) -> None:
             )
             """
         )
+        _prepare_epoch_column(con)
     finally:
         con.close()
 
@@ -115,9 +142,14 @@ def prepare_cycle_intent(
     con = _connect(Path(path))
     try:
         con.execute("BEGIN IMMEDIATE")
+        epoch_column = _prepare_epoch_column(con)
         try:
             con.execute(
-                f"INSERT INTO {INTENT_TABLE} VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                f"""INSERT INTO {INTENT_TABLE}(
+                       tick_id,schema,{epoch_column},control_epoch,control_snapshot_digest,
+                       status,prepared_ts,terminal_ts,classification_json,
+                       classification_digest,closure_receipt_digest
+                     ) VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     tick_id,
                     SCHEMA,
@@ -201,6 +233,7 @@ def classify_cycle_intent(path: Path, *, tick_id: str) -> CycleIntentClassificat
         ).fetchone()
         if intent is None:
             raise CrashReconciliationError(f"MISSING_CYCLE_INTENT:{tick_id}")
+        prepared_epoch = _prepare_epoch_from_row(intent)
         base = _row_or_none(
             con,
             "SELECT agency_epoch_before,agency_epoch_after FROM grid10_cognitive_cycles WHERE tick_id=?",
@@ -218,7 +251,6 @@ def classify_cycle_intent(path: Path, *, tick_id: str) -> CycleIntentClassificat
     v6 = closure is not None
     mismatches: list[str] = []
     if base is not None:
-        prepared_epoch = int(intent["agency_epoch_at_prepare"])
         base_before = int(base["agency_epoch_before"])
         if base_before < prepared_epoch:
             mismatches.append("V4_AGENCY_EPOCH_BEFORE_PREPARE_EPOCH")
@@ -231,7 +263,10 @@ def classify_cycle_intent(path: Path, *, tick_id: str) -> CycleIntentClassificat
                     (prepared_epoch, base_before),
                 ).fetchall()
             except sqlite3.OperationalError as exc:
-                gap_events = [] if "no such table" in str(exc).lower() else (_ for _ in ()).throw(exc)
+                if "no such table" in str(exc).lower():
+                    gap_events = []
+                else:
+                    raise
             finally:
                 con_gap.close()
             expected_epochs = list(range(prepared_epoch + 1, base_before + 1))
@@ -275,7 +310,7 @@ def classify_cycle_intent(path: Path, *, tick_id: str) -> CycleIntentClassificat
         "schema": SCHEMA,
         "tick_id": tick_id,
         "intent_status": intent["status"],
-        "agency_epoch_at_prepare": int(intent["agency_epoch_at_prepare"]),
+        "agency_epoch_at_prepare": prepared_epoch,
         "control_epoch": int(intent["control_epoch"]),
         "control_snapshot_digest": str(intent["control_snapshot_digest"]),
         "v4_cycle_present": v4,

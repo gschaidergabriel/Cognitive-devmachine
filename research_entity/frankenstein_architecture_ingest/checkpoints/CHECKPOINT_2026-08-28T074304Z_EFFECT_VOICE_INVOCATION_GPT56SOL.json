@@ -1,0 +1,57 @@
+{
+  "schema": "TRIGGERWORD5_REENTRY_CHECKPOINT/v1",
+  "checkpoint_id": "TW5-CHECKPOINT-20260828T074304Z-EFFECT-VOICE-INVOCATION-GPT56SOL",
+  "recorded_at": "2026-08-28T07:43:04Z",
+  "trigger": "triggerwort 5",
+  "trigger_routing": "PASS",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "canonical_main_authority_parent": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f"
+  },
+  "design_lane": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "head_observed_before_checkpoint": "a6ef008fd6e6f384eae3e45722cb0b3c5e6821fa",
+    "ingest_state_blob_observed": "66ce0c7e44558ae25431266c9fc6bfc06720945d"
+  },
+  "writes": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T073755Z_EFFECT_VOICE_INVOCATION_FUSION.json",
+      "commit": "262d84d08f6a1376e62ddfa6b40eac29fc3b676b",
+      "role": "source-grounded effect/voice invocation architecture delta"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T073755Z_EFFECT_VOICE_INVOCATION_FUSION_AUTHORITY_REBIND_9_13.json",
+      "commit": "b3025ce72e8ed693ebe42e764be6aaa7b7d46422",
+      "role": "append-only rebind from historical 8.78 observation to current 9.13 authority"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T073755Z_EFFECT_VOICE_INVOCATION_CORROBORATION_9_13.json",
+      "commit": "519d7372ec7a953b6611b9739bd882a6aa68f4bb",
+      "role": "corroborating direct-source receipt; no duplicate packet consumption"
+    }
+  ],
+  "reentry_observation": {
+    "parallel_packet_consumption": "The four 07:25-07:30 packets were already present in current INGEST_STATE consumed_packet_ids after parallel organ progress.",
+    "dedupe_action": "This organ did not re-consume them and downgraded its receipt to corroboration-only.",
+    "parallel_lane_status": "ACTIVE_MOVING_HEAD",
+    "state_write_policy": "Do not overwrite INGEST_STATE unless the exact observed blob remains current; this checkpoint is the durable no-lost-update handoff."
+  },
+  "unique_source_delta": {
+    "id": "TW5-CONTRADICTION-VOICE-CALL-ID-PROPAGATION-010",
+    "finding": "Current Realtime function_call call_id reaches _tool_ausfuehren but is not propagated into helpers, confirmation, asynchronous assignment or downstream execution; _HintergrundBruecke creates an unrelated auftrag_id.",
+    "successor_contract": "Carry call-scoped identity or a deterministic immutable invocation_id through proposal digest, VoiceApprovalEvidence, EffectRequest, EffectDecision, executor consumption, WorldEffectVerification, ResultReentry and CompletionEvidence.",
+    "runtime_credit": 0
+  },
+  "next_exact_gate": "Repository-bound same-session two-call interleaving under admitted non-provider validation authority: reverse completion order, reject identity transplant, prove denied decision means non-execution, and bind typed success completion receipts. Preserve zero causal/runtime promotion until exact-source evidence passes."
+}

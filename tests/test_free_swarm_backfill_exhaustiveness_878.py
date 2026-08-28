@@ -1,5 +1,6 @@
 from pathlib import Path
 import sqlite3
+import subprocess
 import sys
 import unittest
 
@@ -141,6 +142,51 @@ class BackfillExhaustiveness878Tests(unittest.TestCase):
         self.assertIn("from free_swarm_backfill_exhaustiveness_878 import install as install_exhaustiveness", source)
         self.assertIn("install_exhaustiveness(historical_backfill_core)", source)
         self.assertNotIn("from free_swarm_historical_backfill import (", source)
+
+    def test_exact_source_capsule_executes_shared_policy_in_fresh_process(self):
+        code = (
+            "import sys; "
+            f"sys.path.insert(0, {str(TOOLS)!r}); "
+            "import run_free_swarm_historical_backfill_capsule_878 as capsule; "
+            "assert capsule.historical_backfill_core.MAX_PASSES >= 64; "
+            "assert capsule.ingest_artifact_history is capsule.historical_backfill_core.ingest_artifact_history; "
+            "assert capsule.backfill_metrics is capsule.historical_backfill_core.backfill_metrics"
+        )
+        proc = subprocess.run(
+            [sys.executable, "-c", code],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            timeout=15,
+            check=False,
+        )
+        self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
+
+    def test_capsule_pass_requires_semantic_chunk_saturation_not_only_scan_cursor(self):
+        code = (
+            "import sys; "
+            f"sys.path.insert(0, {str(TOOLS)!r}); "
+            "import run_free_swarm_historical_backfill_capsule_878 as c; "
+            "good={'historical_chunks':2,'pending_extraction':0,'chunk_states':{'SATURATED':2}}; "
+            "assert c.classify_full_saturation(good,2,True)==c.PASS_STATUS; "
+            "pending={'historical_chunks':2,'pending_extraction':1,'chunk_states':{'SATURATED':1,'PENDING_EXTRACTION':1}}; "
+            "assert c.classify_full_saturation(pending,2,True)=='FAIL_PENDING_EXTRACTION'; "
+            "maxed={'historical_chunks':2,'pending_extraction':0,'chunk_states':{'SATURATED':1,'MAX_PASSES_REACHED':1}}; "
+            "assert c.classify_full_saturation(maxed,2,True)=='FAIL_MAX_PASSES_REACHED'; "
+            "other={'historical_chunks':2,'pending_extraction':0,'chunk_states':{'SATURATED':1,'UNKNOWN':1}}; "
+            "assert c.classify_full_saturation(other,2,True)=='FAIL_CHUNK_STATE_NOT_SATURATED'; "
+            "assert c.classify_full_saturation(good,1,True)=='FAIL_SCAN_SET_NOT_SATURATED'; "
+            "assert c.classify_full_saturation({'historical_chunks':0,'pending_extraction':0,'chunk_states':{}},2,True)=='FAIL_NO_HISTORICAL_CHUNKS'"
+        )
+        proc = subprocess.run(
+            [sys.executable, "-c", code],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            timeout=15,
+            check=False,
+        )
+        self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
 
 
 if __name__ == "__main__":

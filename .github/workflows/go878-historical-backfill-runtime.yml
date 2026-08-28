@@ -20,7 +20,7 @@ jobs:
       github.event.issue.user.login == 'gschaidergabriel' &&
       contains(github.event.issue.body || '', 'dispatch_schema: CLAY_ORDINARY_DISPATCH/v1')
     runs-on: [self-hosted, Linux, X64]
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -77,7 +77,11 @@ jobs:
               raise SystemExit('DISPATCH_CLAIM_IDENTITY_MISMATCH')
 
           result_path = pathlib.Path(f'research_entity/continuity/ordinary_dispatch_results/{key}.json')
-          quarantine = claim.get('claim_kind') == 'LEGACY_FANOUT_QUARANTINE' or claim.get('execution_claim') is False
+          quarantine = (
+              claim.get('claim_kind') == 'LEGACY_FANOUT_QUARANTINE'
+              or claim.get('execution_claim') is False
+              or claim.get('new_issue_authorized_by_this_claim') is False
+          )
           satisfied = result_path.is_file()
           skip = quarantine or satisfied
           reason = 'LEGACY_FANOUT_QUARANTINE' if quarantine else ('ALREADY_SATISFIED' if satisfied else 'ADMITTED_SINGLETON')
@@ -92,16 +96,13 @@ jobs:
 
       - name: Run exact-current regressions and bounded provider-free backfill capsule in clay-direct-dev
         if: steps.dispatch.outputs.skip != 'true'
+        id: execution
         shell: bash
         env:
           DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
         run: |
           set -euo pipefail
           scratch="/tmp/clay-go878-historical-backfill-${GITHUB_RUN_ID}"
-          host_tmp="/tmp/clay-go878-historical-backfill-host-${GITHUB_RUN_ID}"
-          rm -rf "$host_tmp"
-          mkdir -p "$host_tmp"
-
           runtime=''
           prefix=()
           if command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then
@@ -113,8 +114,12 @@ jobs:
           elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then
             runtime='sudo-podman'; prefix=(sudo -n podman)
           else
-            echo 'CLAY_DIRECT_DEV_UNREACHABLE' >&2
-            exit 41
+            echo 'execution_status=BLOCKED_CLAY_DIRECT_DEV_UNREACHABLE' >> "$GITHUB_OUTPUT"
+            echo 'regression_status=NOT_RUN' >> "$GITHUB_OUTPUT"
+            echo 'regression_rc=999' >> "$GITHUB_OUTPUT"
+            echo 'receipt_present=false' >> "$GITHUB_OUTPUT"
+            echo 'capsule_rc=999' >> "$GITHUB_OUTPUT"
+            exit 0
           fi
 
           source_sha="$(git rev-parse HEAD)"
@@ -125,12 +130,25 @@ jobs:
           "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'; mkdir -p '$scratch'"
           "${prefix[@]}" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$scratch"
 
-          # Exact-current preflight is part of the same admitted singleton and the
-          # capsule is unreachable if either regression fails. This turns the
-          # supervisor's g0001 precondition into executable control flow rather than
-          # a documentation-only promise.
+          # Exact-current preflight runs inside the same admitted sandbox/source copy.
+          # Failure is terminal evidence for this dispatch generation and is persisted
+          # below; it must never silently fall through to the capsule.
+          set +e
           "${prefix[@]}" exec clay-direct-dev sh -lc "cd '$scratch' && python3 -m pytest -q tests/test_free_swarm_backfill_exhaustiveness_878.py tests/test_go_878_raw_generation_backpressure.py"
+          regression_rc=$?
+          set -e
+          if [[ "$regression_rc" -ne 0 ]]; then
+            echo 'execution_status=FAIL_EXACT_CURRENT_REGRESSION' >> "$GITHUB_OUTPUT"
+            echo 'regression_status=FAIL' >> "$GITHUB_OUTPUT"
+            echo "regression_rc=$regression_rc" >> "$GITHUB_OUTPUT"
+            echo 'receipt_present=false' >> "$GITHUB_OUTPUT"
+            echo 'capsule_rc=999' >> "$GITHUB_OUTPUT"
+            echo "runtime=$runtime" >> "$GITHUB_OUTPUT"
+            "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'" || true
+            exit 0
+          fi
 
+          set +e
           "${prefix[@]}" exec \
             -e CLAY_GO878_SOURCE_SHA="$source_sha" \
             -e CLAY_GO878_SOURCE_TREE="$source_tree" \
@@ -139,48 +157,97 @@ jobs:
             -e CLAY_GO878_SANDBOX="clay-direct-dev" \
             -e CLAY_GO878_RUN_ID="$GITHUB_RUN_ID" \
             clay-direct-dev sh -lc "cd '$scratch' && python3 tools/run_free_swarm_historical_backfill_capsule_878.py --artifact-root /artifacts/clay-entityos-swarm --max-lines-per-pass 50000 --max-passes 64 --receipt '$scratch/$target'"
+          capsule_rc=$?
+          set -e
 
           mkdir -p "$(dirname "$target")"
-          "${prefix[@]}" cp "clay-direct-dev:$scratch/$target" "$GITHUB_WORKSPACE/$target"
-          printf '%s\n' "$runtime" > "$host_tmp/runtime.txt"
-          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'"
+          if "${prefix[@]}" cp "clay-direct-dev:$scratch/$target" "$GITHUB_WORKSPACE/$target" 2>/dev/null && [[ -s "$target" ]]; then
+            receipt_present=true
+          else
+            receipt_present=false
+          fi
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'" || true
+
+          echo 'execution_status=CAPSULE_EXECUTED' >> "$GITHUB_OUTPUT"
+          echo 'regression_status=PASS' >> "$GITHUB_OUTPUT"
+          echo 'regression_rc=0' >> "$GITHUB_OUTPUT"
+          echo "receipt_present=$receipt_present" >> "$GITHUB_OUTPUT"
+          echo "capsule_rc=$capsule_rc" >> "$GITHUB_OUTPUT"
+          echo "runtime=$runtime" >> "$GITHUB_OUTPUT"
+          exit 0
 
       - name: Persist semantic result exactly once
-        if: steps.dispatch.outputs.skip != 'true'
+        if: always() && steps.dispatch.outputs.skip != 'true'
         shell: bash
         env:
           DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+          EXECUTION_STATUS: ${{ steps.execution.outputs.execution_status }}
+          REGRESSION_STATUS: ${{ steps.execution.outputs.regression_status }}
+          REGRESSION_RC: ${{ steps.execution.outputs.regression_rc }}
+          CAPSULE_RECEIPT_PRESENT: ${{ steps.execution.outputs.receipt_present }}
+          CAPSULE_RC: ${{ steps.execution.outputs.capsule_rc }}
+          CAPSULE_RUNTIME: ${{ steps.execution.outputs.runtime }}
         run: |
           set -euo pipefail
           target="research_entity/runtime/tool_results/free-swarm-historical-backfill-${DISPATCH_KEY}.json"
           result="research_entity/continuity/ordinary_dispatch_results/${DISPATCH_KEY}.json"
           mkdir -p "$(dirname "$result")"
 
-          TARGET="$target" RESULT="$result" python3 - <<'PY' > "$result"
+          TARGET="$target" python3 - <<'PY' > "$result"
           import json, os, pathlib, subprocess
 
-          receipt = json.loads(pathlib.Path(os.environ['TARGET']).read_text(encoding='utf-8'))
-          if receipt.get('schema') != 'FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1':
-              raise SystemExit('BACKFILL_RECEIPT_SCHEMA_MISMATCH')
-          if receipt.get('status') not in {'PASS_SATURATED_SCAN_SET', 'FAIL_NOT_SATURATED'}:
-              raise SystemExit('BACKFILL_RECEIPT_STATUS_UNKNOWN')
+          known_receipt_statuses = {
+              'PASS_FULL_HISTORICAL_SATURATION',
+              'FAIL_SCAN_SET_NOT_SATURATED',
+              'FAIL_NO_HISTORICAL_CHUNKS',
+              'FAIL_PENDING_EXTRACTION',
+              'FAIL_MAX_PASSES_REACHED',
+              'FAIL_CHUNK_STATE_NOT_SATURATED',
+          }
+          target = pathlib.Path(os.environ['TARGET'])
+          receipt = None
+          receipt_status = None
+          if target.is_file():
+              receipt = json.loads(target.read_text(encoding='utf-8'))
+              if receipt.get('schema') != 'FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1':
+                  raise SystemExit('BACKFILL_RECEIPT_SCHEMA_MISMATCH')
+              receipt_status = str(receipt.get('status') or '')
+              if receipt_status not in known_receipt_statuses:
+                  raise SystemExit(f'BACKFILL_RECEIPT_STATUS_UNKNOWN:{receipt_status}')
+
+          execution_status = os.environ.get('EXECUTION_STATUS') or 'NOT_EXECUTED'
+          regression_rc = int(os.environ.get('REGRESSION_RC') or 999)
+          capsule_rc = int(os.environ.get('CAPSULE_RC') or 999)
+          if execution_status == 'BLOCKED_CLAY_DIRECT_DEV_UNREACHABLE':
+              status = execution_status
+          elif execution_status == 'FAIL_EXACT_CURRENT_REGRESSION' or regression_rc != 0:
+              status = 'FAIL_EXACT_CURRENT_REGRESSION'
+          elif receipt is None:
+              status = 'FAIL_CAPSULE_NO_RECEIPT'
+          else:
+              status = receipt_status
+
           event = json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text(encoding='utf-8'))
           print(json.dumps({
               'schema': 'CLAY_ORDINARY_DISPATCH_RESULT/v1',
               'dispatch_class': 'free-swarm-historical-backfill-v1',
               'dispatch_key': os.environ['DISPATCH_KEY'],
-              'status': receipt['status'],
+              'status': status,
               'issue_number': (event.get('issue') or {}).get('number'),
               'run_id': os.environ.get('GITHUB_RUN_ID'),
               'event_sha': os.environ.get('GITHUB_SHA'),
               'checkout_head': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
-              'preflight_regressions': 'PASS_REQUIRED_BY_WORKFLOW_CONTROL_FLOW',
+              'preflight_regressions': os.environ.get('REGRESSION_STATUS') or None,
               'preflight_tests': [
                   'tests/test_free_swarm_backfill_exhaustiveness_878.py',
                   'tests/test_go_878_raw_generation_backpressure.py',
               ],
-              'receipt_path': os.environ['TARGET'],
-              'runtime_credit': 'HISTORICAL_BACKFILL_INGEST_COMPONENT_ONLY' if receipt['status'] == 'PASS_SATURATED_SCAN_SET' else 0,
+              'regression_rc': regression_rc,
+              'capsule_rc': capsule_rc,
+              'capsule_runtime': os.environ.get('CAPSULE_RUNTIME') or None,
+              'receipt_path': os.environ['TARGET'] if receipt is not None else None,
+              'receipt_status': receipt_status,
+              'runtime_credit': 'HISTORICAL_BACKFILL_INGEST_COMPONENT_ONLY' if status == 'PASS_FULL_HISTORICAL_SATURATION' else 0,
               'whole_entityos_hcu_runtime_credit': 0,
               'jspace_model_runtime_credit': 0,
               'training_credit': 0,
@@ -197,7 +264,8 @@ jobs:
 
           git config user.name 'clay-go878-backfill-runner'
           git config user.email 'clay-go878-backfill-runner@users.noreply.github.com'
-          git add "$target" "$result"
+          if [[ -s "$target" ]]; then git add "$target"; fi
+          git add "$result"
           git commit -m "evidence(go878): singleton historical backfill ${DISPATCH_KEY} [skip ci]"
           for attempt in 1 2 3 4 5 6; do
             if git pull --rebase origin main && git push origin HEAD:main; then
@@ -207,3 +275,20 @@ jobs:
             sleep $((attempt * 3))
           done
           exit 1
+
+      - name: Enforce full historical saturation
+        if: always() && steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+        run: |
+          set -euo pipefail
+          result="research_entity/continuity/ordinary_dispatch_results/${DISPATCH_KEY}.json"
+          git fetch origin main
+          git show "origin/main:${result}" > /tmp/clay-go878-result.json
+          python3 - <<'PY'
+          import json
+          result=json.load(open('/tmp/clay-go878-result.json',encoding='utf-8'))
+          if result.get('status') != 'PASS_FULL_HISTORICAL_SATURATION':
+              raise SystemExit(f"terminal non-pass: {result.get('status')}")
+          PY

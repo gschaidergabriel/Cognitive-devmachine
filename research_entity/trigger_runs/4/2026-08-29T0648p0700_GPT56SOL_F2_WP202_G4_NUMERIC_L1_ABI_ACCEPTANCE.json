@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_STAGE3_COMPONENT_DEPENDENCY_REPAIR_ACCEPTANCE",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "created_at_local": "2026-08-29T06:48:00+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "research_main_observed_before_write": "f5fceb4ec48f4bb2ed9217b415d5b46dc745d60e",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-202",
+    "generation": 4,
+    "claim_id": "F2-WP-202-G4-GPT56SOL-NUMERIC-L1-ZERO-FLOAT-ABI-REPAIR-20260829",
+    "claim_commit": "da951e01fed51a06797a54a7a4deb791b9ebca21",
+    "implementation_branch": "trigger4/wp202-g4-numeric-l1-zero-float-abi-20260829",
+    "pull_request": 120,
+    "merged_commit": "5c1ef488e4aadf32778598e1b10cafeca32876c7",
+    "terminal_pointer_commit": "94c1db1a51740b28154776547943d8dc0feec0b5"
+  },
+  "falsifier_lineage": {
+    "initial_negative_receipt": "research_entity/trigger_runs/4/2026-08-29T0639p0700_GPT56SOL_F2_WP302_WP202_NUMERIC_L1_ABI_FALSIFIER.json",
+    "pre_repair_wp302_recovery_run": 33221054410,
+    "pre_repair_wp302_recovery_job": 99014957038,
+    "pre_repair_result": "10 passed, 4 failed",
+    "cause": "PredictionResidual.numeric_l1 declared float but empty numeric residual sum emitted integer 0",
+    "repair": "numeric_l1=float(sum(value for _, value in numeric))",
+    "post_repair_review_run": 33221389605,
+    "post_repair_review_job": 99015954472,
+    "post_repair_review_result": "14 passed in 0.06s"
+  },
+  "accepted_evidence": {
+    "scope": "PREDICTION_RESIDUAL_NUMERIC_L1_FLOAT_ABI_REPOSITORY_HOSTED_CI_ONLY",
+    "canonical_source": "src/frankenstein2/prediction_contract.py",
+    "canonical_source_blob_sha": "a955ae23e8a39fcdf7910f44bdf000d6560f538c",
+    "canonical_regression": "tests/test_prediction_contract.py",
+    "canonical_regression_blob_sha": "b24fbcdf6fe49276671acad3bf9010f79966cd85",
+    "producer_main_run_id": 33221426518,
+    "producer_main_job_id": 99016070563,
+    "producer_main_conclusion": "success",
+    "producer_tests": 30,
+    "downstream_main_run_id": 33221426429,
+    "downstream_main_job_id": 99016069971,
+    "downstream_main_conclusion": "success",
+    "receipt": "workpackages/receipts/F2-WP-202_G4_NUMERIC_L1_ZERO_FLOAT_ABI_GHA_33221426518.json",
+    "reconciliation": "workpackages/reconciliations/F2-WP-202/4-F2-WP-202-G4-GPT56SOL-NUMERIC-L1-ZERO-FLOAT-ABI-REPAIR-20260829.json"
+  },
+  "interpretation": [
+    "The pre-repair WP302 failures were not another pytest/bootstrap failure because the repaired recovery workflow reached and executed the actual suite.",
+    "A one-line producer ABI normalization was sufficient to move the exact recovery suite from 10/14 to 14/14 while preserving strict WP302 validation.",
+    "Canonical main producer and downstream compatibility CI are both green on the exact merged source identity.",
+    "The earlier contradicted WP302 acceptance classification is not erased; this receipt records the dependency repair that removes the observed numeric_l1 blocker and returns WP302 to rebase/reconciliation work."
+  ],
+  "credit_boundary": {
+    "research_delta": 1,
+    "repository_hosted_component_ci": 1,
+    "downstream_repository_compatibility_ci": 1,
+    "target_runtime": 0,
+    "vps_runtime": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Re-enter the sole active F2-WP-302 generation-1 lane on exact post-WP202-G4 main, preserve the prior contradicted-acceptance history, and reconcile/rebase the consumer only after its current provenance/contract scope is green without opening a duplicate WP302 mutation authority."
+}

@@ -206,9 +206,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
     def test_capability_receipt_advertises_execution_schema_provenance(self):
         capability_receipt = MOD.receipt()
 
-        self.assertEqual(capability_receipt["schema_version"], "1.4")
+        self.assertEqual(capability_receipt["schema_version"], "1.5")
         self.assertEqual(
-            capability_receipt["execution_receipt_schema_version"], "1.3"
+            capability_receipt["execution_receipt_schema_version"], "1.4"
         )
         self.assertEqual(
             capability_receipt["unicode_database_version"],
@@ -230,6 +230,51 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(route["selected"], "nvidia")
         self.assertEqual(route["selection_scope"], "provider_endpoint")
         self.assertFalse(route["model_availability_verified"])
+
+    def test_receipts_disclose_process_local_payment_latch_scope(self):
+        capability_receipt = MOD.receipt()
+
+        self.assertEqual(
+            capability_receipt["route"]["payment_latch_scope"],
+            "process_local",
+        )
+        self.assertTrue(all(
+            row["payment_latch_scope"] == "process_local"
+            for row in capability_receipt["inventory"]
+        ))
+
+        class PaymentResponse:
+            status = 402
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                raise AssertionError("HTTP 402 body must not be read")
+
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ={
+                "NVIDIA_API_KEY": "secret",
+                "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+                "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+                "FRANK_FREE_ONLY_BUDGET_EPOCH": "scope-regression",
+            },
+            opener=lambda *args, **kwargs: PaymentResponse(),
+            now=iter((1.0, 1.01)).__next__,
+            payment_latches=set(),
+        )
+
+        self.assertTrue(result["receipt"]["payment_latch_active"])
+        self.assertEqual(
+            result["receipt"]["payment_latch_scope"],
+            "process_local",
+        )
 
     def test_execution_receipt_pins_unicode_database_version(self):
         class Response:
@@ -264,7 +309,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             now=iter((1.0, 1.01)).__next__,
         )
 
-        self.assertEqual(result["receipt"]["schema_version"], "1.3")
+        self.assertEqual(result["receipt"]["schema_version"], "1.4")
         self.assertEqual(
             result["receipt"]["unicode_database_version"],
             MOD.unicodedata.unidata_version,

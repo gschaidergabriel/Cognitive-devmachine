@@ -1,0 +1,51 @@
+{
+  "schema": "ARCHITEKT_TRIGGER_ROUTER_EXTENSION/v1",
+  "status": "CURRENT_EXTENSION",
+  "matching": "trimmed_full_message_case_insensitive_exact",
+  "macro": {
+    "aliases": ["architekt", "triggerwort architekt", "triggerword architekt"],
+    "kind": "persistent_federated_cognitive_development_interface",
+    "continuation": true,
+    "idempotent_resume": true,
+    "dedicated_state": "research_entity/architect/ARCHITECT_STATE.json",
+    "dedicated_unifieddb": "research_entity/architect/architect.sqlite",
+    "trigger_descriptor": "research_entity/architect/ARCHITEKT_TRIGGER.json",
+    "contract": "research_entity/architect/ARCHITEKT_CONTRACT.md",
+    "schema_contract": "research_entity/architect/ARCHITECT_UNIFIEDDB_SCHEMA.json",
+    "db_bootstrap": "tools/bootstrap_architect_unifieddb.py",
+    "context_compiler": "tools/architect_context_compiler.py",
+    "federation_mode": "SEPARATE_STATE_SHARED_DIRECTION",
+    "refresh_before_current_claims": true,
+    "feeds_from": [
+      "explicit owner intent",
+      "gschaidergabriel/frankenstein-2.0 canonical goals/workpackages/evidence",
+      "gschaidergabriel/clay-global-research-entity research/evidence state",
+      "gschaidergabriel/Dr.-Unterweger controller/bootstrap state",
+      "Triggerword-4 worker/test/measurement state",
+      "Triggerword-5 current Frankenstein donor-forensic state"
+    ],
+    "may_direct": ["triggerword 4", "triggerword 5", "research workers", "test/measurement workpackages"],
+    "cannot_claim": ["hidden model state persistence", "private chain-of-thought persistence", "canonical project truth from Architect memory alone"],
+    "resume_sequence": [
+      "LOAD_STATE",
+      "ENSURE_ARCHITECT_DB",
+      "REFRESH_EXTERNAL_HEADS",
+      "INGEST_NEW_OBSERVATIONS",
+      "RECONCILE_DIRECTION_BINDINGS",
+      "PRESERVE_CONTRADICTIONS",
+      "COMPILE_CONTEXT",
+      "RESUME_HIGHEST_VALUE_GOAL",
+      "DIRECT_OR_DELEGATE",
+      "RECORD_EPISODE_DECISIONS_HYPOTHESES_METHODS",
+      "CHECKPOINT"
+    ]
+  },
+  "invariants": [
+    "NEW_SESSION != NEW_ARCHITECT",
+    "SEPARATE_DB != SEPARATE_PROJECT",
+    "ARCHITECT_MEMORY != PROJECT_CANONICAL_TRUTH",
+    "ARCHITECT_DIRECTION_BINDING != DATA_COPY",
+    "OWNER_DIRECTION_PLUS_CANONICAL_PROJECT_STATE_DRIVES_ARCHITECT_DIRECTION",
+    "STALE_BINDING_MUST_BE_REFRESHED_BEFORE CURRENT_CLAIMS"
+  ]
+}

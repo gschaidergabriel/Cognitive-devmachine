@@ -3,12 +3,12 @@
   "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
   "donor_repo": "gschaidergabriel/frankenstein",
   "last_resolved_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
-  "last_resolved_design_sha_before_ingest": "6d81876d2f6b12b98c30892b8d7dcea946686d25",
-  "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
-  "last_ingest_at": "2026-08-28T08:08:00Z",
-  "last_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0808Z_HISTORICAL_SETTINGS_INHERITANCE_GPT56SOL.json",
-  "last_architecture_delta_commit": "07cda04ec258bf4a7a54bdbbeb827e6aa36220a6",
-  "last_ingest_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0808Z_HISTORICAL_SETTINGS_INHERITANCE_GPT56SOL.json",
+  "last_resolved_design_sha_before_ingest": "41bec098d4dc9992eb6a865277d131a172908ac5",
+  "canonical_main_observed": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+  "last_ingest_at": "2026-08-28T08:40:33Z",
+  "last_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json",
+  "last_architecture_delta_commit": "21b85a28878147f42141925cb384e0990f5db990",
+  "last_ingest_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json",
   "additional_architecture_deltas": [
     {
       "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
@@ -87,6 +87,12 @@
       "commit": "07cda04ec258bf4a7a54bdbbeb827e6aa36220a6",
       "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0808Z_HISTORICAL_SETTINGS_INHERITANCE_GPT56SOL.json",
       "receipt_commit": "98874c97a5a6ab9f168b858df79f018875a08312"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json",
+      "commit": "21b85a28878147f42141925cb384e0990f5db990",
+      "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json",
+      "receipt_commit": "41bec098d4dc9992eb6a865277d131a172908ac5"
     }
   ],
   "corroborating_ingest_receipts": [
@@ -156,11 +162,15 @@
     "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
     "TW5-PACKET-20260828T0741Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-AUTHORITY-REBIND",
     "TW5-PACKET-20260828T0744Z-5641dc6-GPT56SOL-REALTIME-MEMORY-EPISTEMIC-AUTHORITY-9-13",
-    "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL"
+    "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL",
+    "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+    "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL",
+    "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL"
   ],
   "superseded_packet_ids": [
     "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL",
-    "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL"
+    "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+    "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL"
   ],
   "unresolved_contradiction_ids": [
     "TW5-CONTRADICTION-INGEST-PATH-001",
@@ -184,12 +194,13 @@
     "TW5-CONTRADICTION-HOOK-REACHABILITY-013"
   ],
   "current_frontier": [
+    "P0 bind durable workpackage/entityos_arbeitspaket identity to observed native agent_id/task_id/tool_use_id/generation before Triggerword-4 R2 freeze; donor handoff persists work but explicitly does not spawn, current donor hooks.json lacks dedicated SubagentStart/SubagentStop/Task hooks, and official docs are capability evidence rather than installed-runtime proof",
     "P0 trace exact current host/plugin/settings enforcement loaded by gespraechsmodus.claude_frage and prove which state-changing delegated tool classes reach a deterministic final effect boundary; task-level voice confirmation and Bash denial are not sufficient proof",
     "P0 compile voice confirmation into immutable TaskAdmission bound to Realtime call_id/voice invocation + task digest + session/causal evidence, while requiring each downstream mutation to obtain and atomically consume a one-shot EffectDecision",
     "P0 type gespraech_erinnerung as MemoryCandidate -> MemoryAdmission with immutable source/utterance identity, transformation_class, epistemic_class, generation, privacy/retention tier and content digest; all direct Realtime readers must preserve these fields and remembered/model-inferred rows must not satisfy verified-fact queries",
     "P0 classify frank_forschung neu_anstossen as ResearchRequestCandidate and require deterministic HumanIntent/Capability/Privacy/Economic admission appropriate to the route; tool-description prose is not authority",
     "P0 audit the complete Realtime TOOLS declaration and every mutating _tool_ausfuehren branch into READ_ONLY / EPHEMERAL_STATE / CANONICAL_INTERNAL_MUTATION / EXTERNAL_EFFECT_REQUEST / SESSION_CONTROL; define explicit HumanIntentDecision policy per class and keep it distinct from EffectDecision",
-    "P0 recover exact historical --settings artifact bytes/path/hash and hook ordering; historical inherited blocking is now corroborated, but relation of .claude/wache-befehl.py to archived wache-koenig.py and current host/global reachability remain UNKNOWN",
+    "P0 recover exact historical --settings artifact bytes/path/hash and hook ordering; both immutable v2 Wache successors are admitted as complementary historical-source provenance, but relation of .claude/wache-befehl.py to archived wache-koenig.py and current host/global reachability remain UNKNOWN",
     "P0 make Frankenstein-2.0 executor atomically consume a one-shot typed EffectDecision/CapabilityLease bound to immutable tool_use_id/invocation_id + request_digest + session/generation/causal identity + policy version + capability/resource identity; caller-controlled skip_approval cannot be final authority",
     "P0 resolve F94 wegehierarchie by explicit ADAPT-or-RETIRE before Triggerword-4 donor freeze: exact algorithm bytes are recoverable in _archiv-phase4 but live paket.py imports a missing root .wegehierarchie target; require source-bound carried-walk reinforcement regression or removal/replacement proving no silent degradation",
     "P0 repair the Triggerword-4 assembly design so unavailable Presence remains UNKNOWN/None rather than falling back to user_present=True; add explicit WAIT/ASK/re-observe semantics and a regression test",

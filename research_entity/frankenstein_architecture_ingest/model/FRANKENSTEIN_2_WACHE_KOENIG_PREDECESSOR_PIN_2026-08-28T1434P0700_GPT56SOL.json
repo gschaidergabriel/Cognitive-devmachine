@@ -1,0 +1,128 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_WACHE_KOENIG_PREDECESSOR_PIN",
+  "recorded_at": "2026-08-28T14:34:31+07:00",
+  "trigger": "triggerwort 5",
+  "status": "SOURCE_PREDECESSOR_PINNED_HOST_REACHABILITY_OPEN",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13AA_NON_AUTHORITY",
+    "execution_mode": "FREE_ONLY",
+    "evidence_scope": "SOURCE_FORENSICS_AND_ARCHIVED_COMPONENT_EVIDENCE_ONLY_NO_NEW_RUNTIME_EXECUTION"
+  },
+  "canonical_main_observed": "55f2c9daa55ffe30392585c08d48d0659d2d33a3",
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "bc9132205fb23f1622aad058912d2af8e0d04948"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "current_star_reference": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py explicitly names ~/aicore/opt/aicore/tools/schranke/wache-koenig.py as the older blocking global-settings watcher while stern.zulassen() remains nonblocking bookkeeping."
+  },
+  "pinned_predecessor_sources": [
+    {
+      "role": "BLOCKING_PRETOOLUSE_WATCHER",
+      "drive_file_id": "10z1K5hKV9t9wBu1k5zXEvxSjaCZy3TUH",
+      "file_name": "wache-koenig.py",
+      "bytes": 8373,
+      "sha256": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "identity_crosscheck": "Exact byte size and SHA-256 match research_entity/archive_assimilation/manifests/DRIVE_AICORE_ACTION_BOUNDARY_SUBMANIFEST.json."
+    },
+    {
+      "role": "HUMAN_COMMAND_BOUND_GRANT_TOOL",
+      "drive_file_id": "1xi-hFPSWJ6NC8ruDV6iTttw_-wMv08dI",
+      "file_name": "freigabe",
+      "bytes": 5512,
+      "sha256": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "identity_crosscheck": "Exact byte size and SHA-256 match the same frozen action-boundary manifest."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_WACHE_REAL_PREEXEC_DENY_PINNED_029",
+      "source_kind": "HISTORICAL_ENFORCEMENT_CODE_PINNED_BYTES",
+      "claim": "The pinned wache-koenig.py is a real Bash PreToolUse enforcement primitive rather than post-hoc journaling. It classifies commands as FREI, SCHEIN or NIE and exits nonzero for gated/forbidden commands; NIE has no grant path, while SCHEIN requires a matching ticket before execution.",
+      "important_spans": [
+        "pruefen(): command-position classification with nested ssh/bash-c reinspection",
+        "schein_da(): SHA-256 binds ticket to exact command bytes and unlinks the ticket before allowing execution",
+        "main(): Bash-only gate; NIE and missing/invalid SCHEIN both terminate with exit status 2"
+      ],
+      "confidence": 1.0,
+      "target_2_0_action": "SALVAGE_ENFORCEMENT_PRINCIPLE_REPLACE_POLICY_HEURISTICS"
+    },
+    {
+      "atom_id": "F2_WACHE_GRANT_IDENTITY_ONE_USE_030",
+      "source_kind": "HISTORICAL_ENFORCEMENT_CODE_PINNED_BYTES",
+      "claim": "The predecessor already contains two properties Frankenstein-2.0 needs at a stronger typed layer: exact-request digest binding and single-use consumption before dispatch. A grant for one command cannot authorize a different command, and a consumed ticket is deleted before the command runs.",
+      "boundary": "The identity is command-text SHA-256 only; it lacks generation, causal_event_id, tool_use_id/invocation_id, canonical capability scope and EffectJournal identity required by EntityOS.",
+      "confidence": 1.0,
+      "target_2_0_action": "ADAPT_TO_TYPED_EFFECT_CAPABILITY"
+    },
+    {
+      "atom_id": "F2_FREIGABE_HUMAN_GATE_PINNED_031",
+      "source_kind": "HISTORICAL_ENFORCEMENT_CODE_PINNED_BYTES",
+      "claim": "The paired freigabe source requires a controllable /dev/tty, two separately generated typed challenges, timing checks, a 10-minute delay, a subsequent 20-minute validity window and exact command SHA-256 binding. For local rm it additionally refuses unmeasurable wildcard/expansion targets and caps one grant at 300 MB.",
+      "boundary": "Typing-time heuristics and terminal-presence checks are historical human-gate techniques, not suitable as canonical machine authority. Their reusable architectural property is external owner grant issuance separated from model self-approval.",
+      "confidence": 1.0,
+      "target_2_0_action": "SALVAGE_EXTERNAL_OWNER_GRANT_SEPARATION_ONLY"
+    },
+    {
+      "atom_id": "F2_WACHE_LIMITS_EXPLICIT_032",
+      "source_kind": "HISTORICAL_NEGATIVE_RESULT_AND_SELF_DECLARED_LIMIT",
+      "claim": "The predecessor explicitly leaves /tmp/claude-* scratch ungated and states that the same user can modify wache-koenig.py unless file ownership/mode is hardened. Its safety classification is regex/parser based and intentionally optimized to reduce false positives after an earlier overbroad version.",
+      "consequence": "Frankenstein-2.0 must not copy this file wholesale as canonical EffectGate. Typed effect classes, immutable request identity, source-bound enforcement and authority separation must replace editable regex policy as the primary boundary; parser/command guards can remain defence in depth.",
+      "confidence": 1.0,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR"
+    },
+    {
+      "atom_id": "F2_WACHE_HOST_REACHABILITY_STILL_UNKNOWN_033",
+      "source_kind": "OPEN_CONTRADICTION",
+      "claim": "Exact predecessor bytes are now recovered and their semantics are source-proven, but this Triggerword-5 lane still has no exact-current artifact proving that the same bytes are installed at ~/aicore/opt/aicore/tools/schranke/wache-koenig.py today, registered in current global settings.json, ordered before the STAR stern.py hook, and firing for every relevant current host tool invocation.",
+      "counterevidence": [
+        "Current Frankenstein stern.py source explicitly references the global watcher as existing/older and distinct from STAR bookkeeping.",
+        "The frozen 2026-08-09 action-boundary manifest reports a pure-classifier probe PASS on the exact pinned bytes.",
+        "A 2026-08-22 architecture sketch reports the true wache-koenig boundary as outside the repository."
+      ],
+      "promotion_rule": "Do not upgrade historical source identity into current whole-host enforcement credit without current installation + hook-order + invocation evidence.",
+      "confidence": 0.99,
+      "target_2_0_action": "VERIFY_OR_REPLACE"
+    }
+  ],
+  "architecture_fusion": {
+    "effect_path": [
+      "Preserve wache-koenig's pre-dispatch deny/hold semantic and stern.py's post-effect observation/journal semantic, but fuse them behind ONE EntityOS EffectGate/EffectJournal authority rather than two competing gates.",
+      "Replace command-only tickets with typed OwnerCapabilityGrant bound to invocation_id/tool_use_id + request_digest + session_id + generation + causal_event_id + capability scope + expiry + single-use nonce.",
+      "NIE-style absolute denials map to deterministic policy denial; SCHEIN-style gated operations map to explicit external owner capability requirements; neither model output nor successful execution may mint the grant.",
+      "Consume authorization atomically before dispatch; preserve UNKNOWN_OUTCOME after possible external submission and never replay blindly.",
+      "Keep command parsers, forbidden-pattern checks and sandbox checks only as defence in depth below typed authority."
+    ],
+    "triggerword4_handoff": [
+      "During donor freeze, import the exact wache/freigabe hashes as historical donor provenance, not as current-runtime truth.",
+      "Build the Frankenstein-2.0 executor so a denied EffectRequest provably cannot reach dispatch.",
+      "Require immutable per-call identity across admission -> enforcement -> submission -> execution -> world verification -> re-entry -> completion.",
+      "Add regressions for wrong grant digest, replayed/consumed grant, expired grant, absolute deny, missing grant, concurrent reverse-order completions and post-submission UNKNOWN outcome."
+    ]
+  },
+  "contradiction_update": {
+    "id": "TW5-CONTRADICTION-EFFECT-HOST-ENFORCEMENT-005",
+    "previous": "Referenced historical/global wache-koenig path not pinned in donor artifact.",
+    "now": "PREDECESSOR_SOURCE_PINNED_EXACT_BYTES; CURRENT_HOST_INSTALLATION_AND_HOOK_ORDER_STILL_OPEN"
+  },
+  "credits": {
+    "historical_source_forensics": "PRESENT_EXACT_BYTES",
+    "new_runtime_execution": 0,
+    "current_host_enforcement_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Locate an exact-current global settings/hook-registration or installation receipt that binds wache-koenig.py to the current host and establishes ordering/reachability. If that cannot be sourced, Triggerword-4 must replace it with one typed deterministic EffectGate at the actual executor boundary and retain this predecessor only as provenance."
+}

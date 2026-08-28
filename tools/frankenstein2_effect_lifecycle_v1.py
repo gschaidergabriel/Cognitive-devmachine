@@ -444,6 +444,12 @@ class EffectLifecycleStore:
                 raise EffectLifecycleError("SUBMIT_REQUIRES_ENFORCEMENT_ALLOW")
             if enf["decision"] != AdmissionDecision.ALLOW.value or enf["request_digest"] != req["request_digest"]:
                 raise EffectLifecycleError("SUBMIT_IDENTITY_MISMATCH")
+            source_binding = con.execute(
+                "SELECT expected_source_digest FROM completion_v2_source_bindings WHERE invocation_id=?",
+                (invocation_id,),
+            ).fetchone()
+            if source_binding is None or not str(source_binding["expected_source_digest"]):
+                raise EffectLifecycleError("SUBMIT_REQUIRES_SOURCE_BINDING")
             changed = con.execute(
                 "UPDATE effect_requests SET pending_state=? WHERE invocation_id=? AND pending_state=?",
                 (PendingEffectState.SUBMITTED.value, invocation_id, PendingEffectState.PENDING.value),

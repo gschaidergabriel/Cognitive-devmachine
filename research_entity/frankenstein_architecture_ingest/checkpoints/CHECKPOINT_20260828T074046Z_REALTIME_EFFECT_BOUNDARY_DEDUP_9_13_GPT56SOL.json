@@ -1,0 +1,50 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "checkpoint_id": "TW5-CHECKPOINT-20260828T074046Z-REALTIME-EFFECT-BOUNDARY-DEDUP-9_13-GPT56SOL",
+  "created_at": "2026-08-28T07:40:46Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "9.13",
+  "routing": "PASS",
+  "canonical_main_observed": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+  "authority_binding": {
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21"
+  },
+  "donor": {"repo": "gschaidergabriel/frankenstein", "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"},
+  "parallel_reentry": {
+    "overlapping_packet": "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
+    "overlap_already_consumed_in_shared_state": true,
+    "independent_ingest_credit": 0,
+    "shared_state_write": "SKIPPED_TO_AVOID_OVERWRITING_ACTIVE_PARALLEL_STATE",
+    "classification": "CORROBORATING_SOURCE_CROSSCHECK_WITH_UNIQUE_HEADLESS_CLAUDE_GUARD_SPAN"
+  },
+  "writes": {
+    "architecture_delta": {"path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REALTIME_EFFECT_BOUNDARY_9_13.json", "commit": "6306e5eaa687b3edebec87eefbed6dca36ad6cb7"},
+    "receipt": {"path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T074046Z_REALTIME_EFFECT_BOUNDARY_9_13_GPT56SOL.json", "commit": "472b687a9a01e0b780fbc9f1f46d2e78f12f0a51"}
+  },
+  "unique_delta_beyond_parallel_packet": [
+    "Direct source crosscheck of gespraechsmodus.claude_frage: voice-triggered headless Claude unconditionally receives --disallowedTools Bash.",
+    "This is narrow defense-in-depth because non-Bash state-changing tools remain available; whole-effect containment remains unproven.",
+    "The successor delta binds exact current 9.13 supervisor/provider-admission identities instead of stale 8.78 labels."
+  ],
+  "deduped_shared_findings": [
+    "Realtime pending-call cancellation before dispatch",
+    "two-step human-intent prefilter for frank_auftrag_stellen",
+    "direct bounded conversational-memory mutation path",
+    "HumanIntentDecision must remain distinct from EffectDecision"
+  ],
+  "credits": {
+    "source_crosscheck": "PRESENT_DEDUPED",
+    "independent_ingest_credit": 0,
+    "new_runtime_execution": 0,
+    "effect_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  },
+  "acceptance": "CORROBORATING_SOURCE_DELTA_COMMITTED_RUNTIME_UNRESOLVED",
+  "next_exact_gate": "Recover exact host/Claude hook scheduler/settings identity applied to claude_frage and trace every non-Bash mutating tool plus stern.gespraech_erinnerung_schreiben to deterministic admission/enforcement. Triggerword-4 must execute a repository-bound non-Bash DENY plus pending-call cancellation falsifier with immutable invocation identity before runtime credit."
+}

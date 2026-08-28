@@ -1,0 +1,139 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_EFFECT_LINEAGE_INVOCATION_SUCCESSOR_5641dc6b",
+  "trigger": "triggerwort 5",
+  "analysis_time_utc": "2026-08-28T07:32:40Z",
+  "authority_context": "SUPERVISOR_INBOX schema 9.13 / 9.13AA_NON_AUTHORITY; FREE_ONLY; source-forensics only",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_commit_before_ingest": "5bfef3cca0b1bba75c790d2f04e0aa76a5109d30"
+  },
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "newly_ingested_packets": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072552Z_5641dc6_GPT56SOL_MAIN_FEED_SUCCESSOR_BRIDGE.json",
+      "classification": "SOURCE_CROSSCHECK_AND_EXTERNAL_PRIMARY_CORROBORATION"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072816Z_PROJECT_FRANKENSTEIN_EFFECT_PREDECESSOR_GPT56SOL.json",
+      "classification": "HISTORICAL_SOURCE_LINEAGE_EVIDENCE_ONLY"
+    }
+  ],
+  "dedupe": [
+    {
+      "incoming": "TW5-SUCCESSOR-A001-CALL-IDENTITY-GAP",
+      "existing": "F2_EFFECT_INVOCATION_CORRELATION_RISK_018 plus current ingest frontier",
+      "action": "STRENGTHEN_NOT_DUPLICATE",
+      "reason": "Exact donor source plus current Claude Code hook documentation upgrades the design requirement: tool_use_id is already available per call and PostToolUse may fire concurrently for parallel tool calls. Runtime manifestation of the donor race remains unexecuted."
+    },
+    {
+      "incoming": "TW5-SUCCESSOR-A002-BLOCK-CAPABILITY-NOT-NORMAL-EFFECT-GATE",
+      "existing": "F2_EFFECTGATE_IS_NONBLOCKING_BOOKKEEPING_015",
+      "action": "CORRECT_OVERBROAD_WORDING",
+      "reason": "Normal effect admission is nonblocking, but cmd_hook has a distinct SEBUKKU permissionDecision=deny branch. Therefore no-generic-effect-deny is correct; no-deny-anywhere is not."
+    },
+    {
+      "incoming": "TW5-SUCCESSOR-A003-VERIFIED-IS-NOT-PREADMISSION",
+      "existing": "effect semantic-overload findings already consumed",
+      "action": "CORROBORATE_NO_INDEPENDENT_CREDIT"
+    }
+  ],
+  "new_or_strengthened_atoms": [
+    {
+      "atom_id": "F2_EFFECT_INVOCATION_IDENTITY_REQUIRED_025",
+      "source_kind": "ENFORCEMENT_CODE_PLUS_EXTERNAL_PRIMARY",
+      "sources": [
+        "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3310-3588@5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "current Anthropic Claude Code hooks reference observed 2026-08-28: tool_use_id is call-scoped; PostToolUse fires concurrently for parallel tool calls"
+      ],
+      "claim": "Frankenstein donor effect correlation discards an available call-scoped identity and stores one mutable active_turns.effect_id per session. That is not a valid Frankenstein-2.0 correlation contract when the host protocol permits concurrent per-tool PostToolUse delivery.",
+      "evidence_boundary": "Architecture requirement is source-and-protocol grounded. No live donor race was executed in this Triggerword-5 lane, so runtime-bug reproduction credit remains zero.",
+      "target_action": "REPAIR",
+      "grid10_delta": "Bind immutable invocation_id/tool_use_id + request_digest + session_id + generation + causal_id through EffectRequest -> AdmissionDecision -> EnforcementDecision -> ExecutionReceipt -> WorldEffectVerification -> ResultReentry -> CompletionEvidence. Reject wrong-call or stale identity rather than reconciling by a mutable session slot."
+    },
+    {
+      "atom_id": "F2_NORMAL_EFFECT_GATE_NONBLOCKING_SEBUKKU_DENY_NUANCE_026",
+      "source_kind": "ENFORCEMENT_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:8810-8895@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "The hook surface can block: a session-bound SEBUKKU condition emits permissionDecision=deny. The ordinary effect path instead calls zulassen() and intentionally emits no deny/block response.",
+      "evidence_boundary": "This resolves source semantics only. It does not establish the external wache-koenig predecessor or whole-system effect authority.",
+      "target_action": "REPAIR",
+      "grid10_delta": "Do not inherit contradictory names. Keep termination/session kill semantics separate from canonical effect admission, and place deterministic generic effect enforcement at the actual execution boundary."
+    },
+    {
+      "atom_id": "F2_HISTORICAL_PREEXEC_APPROVAL_LINEAGE_027",
+      "source_kind": "HISTORICAL_ONLY",
+      "source": "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1 agentic/executor.py:70-180 and agentic/loop.py:430-530",
+      "claim": "The historical agentic path contains real pre-execution approval behavior: required approval can return without dispatch, while a caller-side safe-tool route later invokes the executor with skip_approval=True after either allowlisting or explicit approval.",
+      "evidence_boundary": "Pinned historical source proves implementation, not that this path was the production effect authority. The caller-controlled skip_approval boolean and tool-name safe set are too weak to reuse as canonical authority.",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_delta": "Frankenstein 2.0 should recombine the strongest lineage properties: true pre-execution hold/deny plus modern post-effect observation/journaling, but authorization must be typed, scope-bound and immutable-call-bound rather than a reusable boolean bypass."
+    },
+    {
+      "atom_id": "F2_HISTORICAL_EXECUTION_GUARDS_DEFENCE_IN_DEPTH_028",
+      "source_kind": "HISTORICAL_ONLY",
+      "source": "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1 agentic/executor.py:330-470",
+      "claim": "Historical Firejail and destructive-command/code guards are useful defence-in-depth examples but are incomplete and may degrade to unsandboxed execution when Firejail is unavailable.",
+      "evidence_boundary": "Historical source only; regex/sandbox checks cannot substitute for EffectGate authority.",
+      "target_action": "REPLACE_WITH_VERIFIED_SUCCESSOR"
+    }
+  ],
+  "architecture_fusion": {
+    "effect_plane": [
+      "Preserve three distinct facts: a request existed; an authority admitted/enforced it; an outcome was observed. None implies another.",
+      "Successful PostToolUse must never retroactively mint admission authority.",
+      "Pre-dispatch cancellation may close a PENDING_EFFECT as CANCELLED; after submission, transport uncertainty is OUTCOME_UNKNOWN until verified and must not be blindly replayed.",
+      "Use immutable per-call identity end-to-end; session identity is context, not effect identity."
+    ],
+    "lineage": [
+      "Historical Project-Frankenstein pre-execution approval and current stern post-effect journaling are complementary donor lineages, not one monotonic mechanism.",
+      "Neither lineage maps wholesale to EntityOS: historical skip_approval/tool-name allowlists are too weak, while current normal zulassen bookkeeping is intentionally nonblocking."
+    ],
+    "world_and_perception_carry_forward": [
+      "Previously consumed Perception Control evidence remains the preferred donor for NOT_COMPUTED and dependency-taint semantics in WorldNeed/WorldSlice; this successor does not double-count that component receipt."
+    ]
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-PARALLEL-EFFECT-CORRELATION-003",
+      "status": "SOURCE_AND_PROTOCOL_STRENGTHENED_RUNTIME_REPRODUCTION_OPEN",
+      "claim": "Host protocol exposes call-scoped tool_use_id and parallel PostToolUse semantics, while donor correlation uses one mutable session effect pointer."
+    },
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "claim": "Normal donor effect admission is bookkeeping, not generic blocking enforcement; successful outcome may exist independently of admission."
+    },
+    {
+      "id": "TW5-CONTRADICTION-HISTORICAL-EFFECT-LINEAGE-007",
+      "status": "OPEN_PROVENANCE_RUNTIME_REACHABILITY",
+      "claim": "Historical Project-Frankenstein source had pre-execution approval enforcement, while current stern normal effect admission is intentionally nonblocking. Exact production reachability and the intervening wache-koenig lineage remain unresolved."
+    }
+  ],
+  "critical_unknowns": [
+    "Exact source/commit/runtime wiring of ~/aicore/opt/aicore/tools/schranke/wache-koenig.py.",
+    "Exact production reachability of Project-Frankenstein AgentLoop/ToolExecutor at commit abba90a5767d85abc8a1ac340bae92842dab35c1.",
+    "Exact approval request/wait storage identity semantics in historical executor.py lines 470-620.",
+    "All current downstream consumers of effects.status and any assumptions that VERIFIED implies pre-admission.",
+    "Exact installed-host trace of overlapping state-changing calls remains a runtime discriminator for manifestation, not for the 2.0 identity design requirement."
+  ],
+  "evidence_scope": {
+    "new_runtime_execution": false,
+    "historical_runtime_reexecution": false,
+    "whole_frankenstein_2_runtime_pass": false,
+    "entityos_whole_runtime_credit_delta": 0,
+    "hcu_runtime_credit_delta": 0,
+    "physical_grid10_credit_delta": 0,
+    "training_credit_delta": 0,
+    "classification": "SOURCE_FORENSICS_EXTERNAL_PRIMARY_CROSSCHECK_AND_HISTORICAL_LINEAGE_FUSION_ONLY"
+  },
+  "next_exact_gate": "Recover the exact wache-koenig predecessor if accessible and pin its call ordering; inspect Project-Frankenstein executor.py approval storage lines 470-620 for call identity; then audit current effects.status consumers and Realtime Function-Calling dispatch for any bypass of the typed effect boundary."
+}

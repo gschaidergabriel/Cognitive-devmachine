@@ -127,6 +127,35 @@ class AgentWorkExecutionAdapterTests(unittest.TestCase):
             )
         self.assertEqual(_count(self.db, "fr2_agent_spawn_observations"), 1)
 
+    def test_same_package_generation_cannot_silently_fan_out(self) -> None:
+        self.adapter.record_agent_pretool(
+            _pre("spawn-a", "wp-a"),
+            expected_workpackage_id="wp-a",
+            expected_work_generation="g1",
+        )
+        with self.assertRaisesRegex(
+            AgentWorkExecutionIdentityError, "PACKAGE_GENERATION_ALREADY_HAS_SPAWN"
+        ):
+            self.adapter.record_agent_pretool(
+                _pre("spawn-b", "wp-a"),
+                expected_workpackage_id="wp-a",
+                expected_work_generation="g1",
+            )
+        self.assertEqual(_count(self.db, "fr2_agent_spawn_observations"), 1)
+
+    def test_new_work_generation_may_have_distinct_spawn(self) -> None:
+        self.adapter.record_agent_pretool(
+            _pre("spawn-g1", "wp-a"),
+            expected_workpackage_id="wp-a",
+            expected_work_generation="g1",
+        )
+        self.adapter.record_agent_pretool(
+            _pre("spawn-g2", "wp-a"),
+            expected_workpackage_id="wp-a",
+            expected_work_generation="g2",
+        )
+        self.assertEqual(_count(self.db, "fr2_agent_spawn_observations"), 2)
+
     def test_absent_agent_id_remains_unknown_and_mints_no_binding(self) -> None:
         self.adapter.record_agent_pretool(
             _pre("spawn-a", "wp-a"),

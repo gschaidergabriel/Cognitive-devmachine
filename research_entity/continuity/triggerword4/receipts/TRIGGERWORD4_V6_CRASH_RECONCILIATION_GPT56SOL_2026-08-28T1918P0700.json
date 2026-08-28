@@ -20,16 +20,26 @@
   },
   "continuation": {
     "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-    "source_head_before_receipt": "8974cfadba772e3bf1b3456b63ca609e95c2e0e0",
+    "earlier_observed_source_head": "8974cfadba772e3bf1b3456b63ca609e95c2e0e0",
+    "source_head_immediately_before_original_receipt_commit": "5242e9ab808e073dffe15b9f294e1beeb85934b9",
+    "original_receipt_commit": "e096b08e60c8e6fa954d2f3910511447dcce5a1a",
     "prior_checkpoint": "research_entity/continuity/triggerword4/receipts/TRIGGERWORD4_V6_POST_COMMIT_FAILURE_CLOSURE_GPT56SOL.json",
-    "anti_restart_respected": true
+    "anti_restart_respected": true,
+    "parallel_fusion_observed": {
+      "range": "8974cfadba772e3bf1b3456b63ca609e95c2e0e0..5242e9ab808e073dffe15b9f294e1beeb85934b9",
+      "commits_ahead": 6,
+      "temporary_v7_and_scheduler_v3_files_present_at_intermediate_commits": true,
+      "temporary_v7_and_scheduler_v3_files_present_at_fused_head": false,
+      "final_semantic_authority": "V6_CRASH_RECONCILIATION_ONLY",
+      "current_unit_test_source_has_additional_consecutive_and_duplicate_wake_epoch_cases": true
+    }
   },
   "source_delta": {
     "new_module": "tools/grid10_v6_crash_reconciliation_v1.py",
     "unit_regression": "tools/test_grid10_v6_crash_reconciliation_v1.py",
     "integration_regression": "tools/test_grid10_v6_crash_reconciliation_integration_v1.py",
     "runtime_wiring": "tools/grid10_cognitive_unified_runtime_v6.py",
-    "commits_observed_in_delta": [
+    "commits_observed_in_primary_delta": [
       "71a7aacf0e435057448eb9aa3527be9ce5c6c292",
       "cdf6905b482ee3890223a34efc005964c58a2f58",
       "570ddf3624a5195c006376f8d55638a8144b3dfa",
@@ -45,8 +55,8 @@
       "after restart PREPARED + matching V4 + no V6 is RECOVERY_REQUIRED_POST_V4_COMMIT",
       "provider call state is UNKNOWN_AFTER_PROCESS_INTERRUPTION for that crash window",
       "same-tick retry remains unauthorized",
-      "wake_due Agency epoch movement is accepted only when every intervening epoch is exactly attested by this tick's DEFERRED_INTENT_FIRED events",
-      "foreign or incomplete pre-V4 Agency epoch movement is INCONSISTENT_EVIDENCE"
+      "wake_due Agency epoch movement is accepted only when every intervening epoch is exactly and contiguously attested by this tick's DEFERRED_INTENT_FIRED events",
+      "foreign, incomplete, duplicate or skipped pre-V4 Agency epoch evidence is INCONSISTENT_EVIDENCE"
     ],
     "full_two_phase_atomicity_claimed": false,
     "automatic_same_tick_replay_claimed": false,
@@ -56,11 +66,13 @@
     "hypothesis": "A durable create-once pre-V4 intent plus exact V4/V6 evidence is sufficient to turn the previously silent process-kill window into a fail-closed, restart-classifiable recovery state without replaying uncertain cognition.",
     "counterhypothesis": "The V4 cycle row alone is sufficient and no PREPARED intent is needed because absence of a V6 receipt implies cognition never ran.",
     "counterhypothesis_rejected_reason": "Absence of a V6 receipt cannot distinguish process death before provider cognition, during cognition, or after cognition but before receipt commit; therefore provider-call state must remain UNKNOWN and an explicit pre-entry intent is needed to distinguish an attempted cycle from unrelated historical rows.",
-    "additional_counterfinding": "V4 wake_due can advance Agency epochs before the V4 cycle commit, so exact equality between prepare epoch and V4 agency_epoch_before is invalid. The repaired classifier admits only a contiguous sequence of tick-bound DEFERRED_INTENT_FIRED wake epochs and rejects foreign/interleaved writes."
+    "additional_counterfinding": "V4 wake_due can advance Agency epochs before the V4 cycle commit, so exact equality between prepare epoch and V4 agency_epoch_before is invalid. The repaired classifier admits only a contiguous sequence of tick-bound DEFERRED_INTENT_FIRED wake epochs and rejects foreign/interleaved/duplicate/skipped epoch evidence."
   },
   "local_deterministic_evidence": {
     "classification": "LOCAL_CONTAINER_SOURCE_DETERMINISTIC_ONLY_NOT_ADMITTED_GRID10_RUNTIME",
-    "standalone_reconciliation_tests": "11/11 PASS",
+    "standalone_reconciliation_tests_executed_before_parallel_test_additions": "11/11 PASS",
+    "current_unit_test_source_case_count_observed_after_parallel_fusion": 13,
+    "current_13_case_suite_repository_bound_execution_observed": false,
     "integration_test_source_added": true,
     "integration_test_repository_bound_execution_observed": false,
     "python_compile_check_observed_before_final_parallel_delta": true,
@@ -89,11 +101,11 @@
     "frankenstein2_runtime": 0
   },
   "remaining_gaps": [
-    "The new V6 reconciliation integration regression has not yet been executed in an admitted repository-bound environment.",
+    "The current 13-case V6 reconciliation unit suite and the V6 reconciliation integration regression have not yet been executed in an admitted repository-bound environment.",
     "PREPARED and the V4 Agency commit are still separate transactions; the protocol classifies the gap but does not eliminate it.",
     "Recovery-classification persistence still requires binding exclusive_recovery_authorized to a real coordinator/heartbeat lease; the helper deliberately cannot self-authorize recovery ownership.",
     "The independent GRID10 SIGKILL g0000 run remains queued with no terminal canonical result receipt.",
     "No Frankenstein 2.0 runtime acceptance can begin from this source delta alone."
   ],
-  "next_exact_gate": "Execute the V6 reconciliation unit+integration regressions repository-bound under the current admitted FREE_ONLY execution path without provider/secret access; bind the recovery mutator to an exact exclusive worker/heartbeat lease; separately observe terminal state and canonical result for workflow run 33168491753/issue 2121 before any retry-generation advance."
+  "next_exact_gate": "Execute the current V6 reconciliation unit+integration regressions repository-bound under the current admitted FREE_ONLY execution path without provider/secret access; bind the recovery mutator to an exact exclusive worker/heartbeat lease; separately observe terminal state and canonical result for workflow run 33168491753/issue 2121 before any retry-generation advance."
 }

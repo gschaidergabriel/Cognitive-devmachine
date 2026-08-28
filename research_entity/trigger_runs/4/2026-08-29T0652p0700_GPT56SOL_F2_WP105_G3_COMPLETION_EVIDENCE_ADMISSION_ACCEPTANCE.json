@@ -1,0 +1,65 @@
+{
+  "schema": "CLAY_TRIGGER4_EXECUTABLE_EVIDENCE_DELTA/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_reentry": {
+    "research_main_before_write": "abf3f1ca47bd9094a500f142f369d5b058503b71",
+    "current_supervisor_schema": "9.13",
+    "current_inbox_blob_sha": "51382c86f7a902da685c46c39ba63f360e9b3f2e",
+    "current_supervisor_delta": "9.13AN_NON_AUTHORITY",
+    "current_steering_blob_sha": "64e1f55b068c8f230ea438f0d60083dfe9744287",
+    "mode": "FREE_ONLY",
+    "compatibility_note": "The WP105 G3 candidate was source-bound and tested under the earlier same-epoch 9.13 inbox/steering blobs f77bed7d4394f418bdde9c5769a48c7824b5391a / f0e1ada88e6f0537cbf2083f4c50fdd336d27e9a. Re-entry to the current 9.13AN non-authority steering found no contradictory completion/effect instruction; FREE_ONLY/HARD_OFF, no-provider, no-paid-fallback, and no-Frank-Harness constraints remain compatible."
+  },
+  "f2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "current_main_after_terminalization": "dddaf7b557a26116569942f9db0eb0a652cc4a20",
+    "workpackage": "F2-WP-105",
+    "generation": 3,
+    "claim_id": "F2-WP-105-G3-GPT56SOL-COMPLETION-EVIDENCE-ADMISSION-20260829",
+    "state": "ACCEPTED",
+    "terminal_scope": "COMPLETION_EVIDENCE_ADMISSION_SOURCE_BOUND_NO_REAL_EFFECT_REPOSITORY_HOSTED_CI_ONLY",
+    "merged_candidate_main_sha": "e80c0c420de4fe0777464d0321f84748f1dbd282",
+    "acceptance_receipt": "workpackages/receipts/F2-WP-105_G3_COMPLETION_EVIDENCE_ADMISSION_GHA_33221546401.json",
+    "reconciliation": "workpackages/reconciliations/F2-WP-105/3-F2-WP-105-G3-GPT56SOL-COMPLETION-EVIDENCE-ADMISSION-20260829.json",
+    "source_binding": "workpackages/falsifiers/F2-WP-105_G3_COMPLETION_EVIDENCE_ADMISSION_SOURCE_BINDING.json"
+  },
+  "executable_evidence": {
+    "tested_head_sha": "cd3bca47cd5ae3990875613c168f02ae2c5577d3",
+    "primary_run_id": 33221546401,
+    "primary_job_id": 99016432046,
+    "primary_conclusion": "success",
+    "adjacent_successes": [
+      {"run_id": 33221546374, "job_id": 99016431852, "scope": "WP104_WP105_IDENTITY_CORRELATION"},
+      {"run_id": 33221546348, "job_id": 99016431889, "scope": "EFFECT_INVOCATION_CORRELATION"},
+      {"run_id": 33221546347, "job_id": 99016431851, "scope": "EFFECT_EXECUTOR_INTERLOCK"}
+    ],
+    "observed_component_delta": [
+      "Caller-authored final VerificationReceipt no longer finalizes through the deferred verification boundary without a separately minted CompletionEvidenceAdmission.",
+      "Current admitted success path requires a separately resolved CurrentEntityOSEffectAuthorityBinding, independent typed journal-success evidence with exact VERIFIED status/effect/attempt/evidence identity, and a receipt citing the identical evidence.",
+      "Only EFFECT_JOURNAL_VERIFIED + APPLIED is admitted by this generation. NOT_APPLIED and other final evidence classes remain fail-closed absent equivalent admitted authority adapters.",
+      "Existing state.execution_completion remains the only completion state machine and EffectGate+EffectJournal remain the sole real-effect authority."
+    ]
+  },
+  "credit_boundary": {
+    "repository_component_ci": 1,
+    "live_entityos_journal_observation": 0,
+    "real_external_effect": 0,
+    "target_runtime": 0,
+    "physical_grid10": 0,
+    "canonical_semantics": 0,
+    "whole_frankenstein2": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "research_reconciliation": {
+    "current_inbox_completion_frontier_text": "P1_TYPED_RECEIPT_FAIL_CLOSED_SUCCESS_ALLOWLIST_REQUIRED",
+    "status_against_new_f2_evidence": "EXECUTED_COMPONENT_SCOPE_DELTA_NOW_EXISTS; SUPERVISOR_INBOX_IS_NOT_MUTATED_BY_THIS ORGAN",
+    "interpretation": "This new evidence should be considered during the next supervisor review. It does not self-promote the supervisor frontier or canonical semantics."
+  },
+  "next_exact_action": "Do not open another WP105 completion generation merely to widen the allowlist. Re-enter current authority and active workpackages; only add NOT_APPLIED/external-observation/deterministic-state finalization if an independently admitted authority/observation contract exists. Otherwise route around the already-owned WP202/WP302 lanes and continue the smallest nonduplicate Trigger-4 P1 dependency."
+}

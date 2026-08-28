@@ -748,9 +748,6 @@
     "checked_at": "2026-08-25",
     "claim": "FRANK v0.1 explicitly requests n=1 and requires the non-streaming provider response to contain exactly one choice. A response with zero or multiple choices remains EXECUTED but cannot be partially represented as VERIFIED or DONE.",
     "source": "https://docs.nvidia.com/nim/large-language-models/1.7.0/system-example.html",
-Warning: truncated output (original token count: 8322)
-Total output lines: 250
-
     "external_evidence": "NVIDIA's official non-streaming Chat Completions examples set n to 1 and return one index-0 choice.",
     "internal_measurement": "A status-200 response containing two valid choices previously returned the first content as success and reached VERIFIED and DONE without validating or representing the second choice.",
     "executable_evidence": "test_multiple_response_choices_cannot_be_partially_verified",
@@ -848,7 +845,16 @@ Total output lines: 250
   },
   "provider_response_passive_metadata_compatibility": {
     "checked_at": "2026-08-26",
-    "claim": "The v0.1 text adapter accepts NVIDIA's documented passive message metadata only when refusal, annotations, audio and function_call are null, tool_calls is an exact empty built-in …322 tokens truncated… and are not promoted into new semantic receipt claims. Backend- or model-specific non-null variants still require a separate typed adapter. No Ubuntu NVIDIA live receipt is available on this host."
+    "claim": "The v0.1 text adapter accepts NVIDIA's documented passive message metadata only when refusal, annotations, audio and function_call are null, tool_calls is an exact empty built-in list, and choice routed_experts is null. Nonempty tool calls, non-null values and unknown message or choice extensions remain unverified; reasoning has its separate typed scalar boundary.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html",
+    "external_evidence": "NVIDIA's current expected non-streaming Chat Completions response, updated 2026-08-21, includes those five null message fields, an empty tool_calls list and null routed_experts on an ordinary stopped text answer.",
+    "internal_measurement": "A locally replayed response matching the documented passive message shape previously remained EXECUTED but was rejected as invalid_provider_response solely because the text adapter allowed only role and content.",
+    "executable_evidence": [
+      "test_documented_nvidia_passive_message_metadata_remains_compatible",
+      "test_response_tool_calls_cannot_reach_text_verified_state"
+    ],
+    "counterhypothesis": "Rejecting every message extension is the safest compatible text-only policy; falsified because it rejects NVIDIA's current ordinary text response even though exact null and empty passive forms can be separated from executable tool-call content.",
+    "uncertainty": "These fields are compatibility metadata and are not promoted into new semantic receipt claims. Backend- or model-specific non-null variants still require a separate typed adapter. No Ubuntu NVIDIA live receipt is available on this host."
   },
   "provider_response_top_level_schema_closure": {
     "checked_at": "2026-08-28",

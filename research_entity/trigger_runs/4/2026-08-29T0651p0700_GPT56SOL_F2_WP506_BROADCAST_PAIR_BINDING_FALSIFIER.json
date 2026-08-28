@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_STAGE5_NEGATIVE_RESULT_GWT_BROADCAST_CANDIDATE_PAYLOAD_PAIR_BINDING",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 REVIEW_ONLY falsifier organ",
+  "created_at_local": "2026-08-29T06:51:00+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "research_main_observed_before_write": "1d4b1f60bb3cbccd3f4ed5a97f491b70d5b26728",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-506",
+    "generation": 1,
+    "claim_id": "F2-WP-506-G1-GPT56SOL-GWT-SELECTION-BROADCAST-20260829",
+    "claim_branch": "trigger4/wp506-gwt-selection-broadcast-20260829",
+    "reviewed_claim_head": "9e9bd5226ee32881501f928a808077b5608b0f7f",
+    "reviewed_source": "src/frankenstein2/gwt_workspace.py",
+    "reviewed_source_blob_sha": "c581493824a1473f24a0df853084d49c1b6e3221"
+  },
+  "preimplementation_review": {
+    "draft_pr": 146,
+    "head_sha": "57a2e722b186813bd5da2f22ac47905253f6e1dc",
+    "falsifier_scope": [
+      "foreign candidate injection despite valid outer SituationFrame/GRID10 plan binding",
+      "candidate alias/Sybil amplification",
+      "stale producer output crossing current outer plan binding",
+      "UNKNOWN/CONFLICT/Hyperposition preservation without false uptake or resolution"
+    ]
+  },
+  "source_observation": {
+    "pair_binding_defect": "BroadcastEnvelope validates and canonical-sorts candidate_ids and candidate_payload_refs independently, then only checks equal lengths. Therefore positional candidate_id -> payload_ref association can change when lexical orders differ.",
+    "candidate_origin_gap": "WorkspaceCandidate carries caller-supplied payload_ref and provenance_refs, while build_workspace_selection binds the surrounding SituationFrame/GRID10 plan but does not require exact producing GRID10 CellInput/CellOutput identity/digest or an independently admitted equivalent producer receipt.",
+    "epistemic_preservation": "UNKNOWN and CONFLICT remain typed; CONFLICT alternatives are retained; Hyperposition binding is all-present/all-absent; selection/broadcast explicitly deny truth/effect/uptake authority."
+  },
+  "executable_falsifier": {
+    "draft_pr": 154,
+    "branch": "review/wp506-broadcast-pair-binding-falsifier-20260829",
+    "head_sha": "c622cfb9d1ddcf66b725731db9a6776f39a13c0e",
+    "test": "test_broadcast_preserves_candidate_id_payload_pairing",
+    "counterexample": [
+      ["a", "payload:z"],
+      ["b", "payload:y"]
+    ],
+    "required_invariant": "zip(broadcast.candidate_ids, broadcast.candidate_payload_refs) must equal the exact selected candidate_id/payload_ref pairs",
+    "workflow_run_id": 33222089772,
+    "job_id": 99018090156,
+    "workflow": "F2 WP506 GWT Selection Broadcast CI",
+    "compile_conclusion": "success",
+    "falsification_suite_conclusion": "failure",
+    "job_conclusion": "failure",
+    "infrastructure_classification": "NOT_INFRASTRUCTURE_FAILURE; checkout/setup/dependency-install/compile all completed successfully before the falsification suite failed"
+  },
+  "interpretation": [
+    "The pair-binding failure is bounded negative repository-component evidence against the reviewed WP506 implementation, not runtime or whole-system evidence.",
+    "A digest over a WorkspaceSelection does not rescue a BroadcastEnvelope that destroys candidate/payload association while constructing its own canonical representation.",
+    "Candidate-origin provenance remains a separate open discriminator even after fixing pair ordering: an outer GRID plan binding is not evidence that each caller-supplied candidate was produced by that plan."
+  ],
+  "recommended_repair": [
+    "Represent broadcast candidate identity and payload reference as one atomic record, or canonicalize candidate_id/payload_ref pairs together rather than sorting parallel arrays independently.",
+    "Absorb the failing pair-binding regression into the sole WP506 mutation lane and require repository-hosted CI PASS before component acceptance.",
+    "Bind each candidate to exact producer identity/digest (for example plan + generation + cell + CellInput/CellOutput identity) or an independently admitted equivalent receipt; reject stale or foreign producer lineage fail-closed."
+  ],
+  "credit_boundary": {
+    "research_delta": 1,
+    "component_negative_evidence": 1,
+    "wp506_acceptance": 0,
+    "runtime_execution_observed": false,
+    "vps_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "mutation_authority": false,
+  "next_exact_action": "The sole F2-WP-506 claimant should preserve this negative result, repair candidate/payload pair binding, absorb the regression, then close or explicitly scope the separate candidate-producer provenance gap before claim-scoped repository component acceptance."
+}

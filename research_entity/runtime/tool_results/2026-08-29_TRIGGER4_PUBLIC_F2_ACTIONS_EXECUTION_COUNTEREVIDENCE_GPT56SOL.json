@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_TRIGGER4_ACTIONS_CONTROL_PLANE_DISCRIMINATOR/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "classification": "READ_ONLY_EXISTING_WORKFLOW_EVIDENCE_FUSED",
+  "canonical_main_before_write": "5531c8699cb7c53ff97bd37f92fe037b1fad1e71",
+  "authority_epoch": "9.13",
+  "supervisor_delta": "9.13AJ_NON_AUTHORITY",
+  "question": "Is the observed GitHub Actions blocker a universal account-wide inability to assign/start GitHub-hosted jobs, or can jobs execute on at least one repository while a narrower repository-access/control-plane failure remains?",
+  "observations": [
+    {
+      "repository": "gschaidergabriel/frankenstein-2.0",
+      "repository_visibility": "public",
+      "commit": "83ec5e537a6b496453d0b67faba55aac4236c68e",
+      "workflow_run_id": 33203978946,
+      "workflow": "Frankenstein 2.0 Canonical Effect Authority Bridge CI",
+      "runner_class": "github-hosted ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "executed_steps": [
+        "checkout",
+        "setup-python",
+        "compile canonical-authority bridge",
+        "run canonical effect-authority falsifiers"
+      ],
+      "scope": "semantic EffectRequest substitution component falsifiers only"
+    },
+    {
+      "repository": "gschaidergabriel/frankenstein-2.0",
+      "repository_visibility": "public",
+      "commit": "55845ed20dd67db1d3bbe522533c086b2522bd6b",
+      "workflow_run_id": 33203978272,
+      "workflow": "Frankenstein 2.0 Bound EntityOS Effect Runtime CI",
+      "runner_class": "github-hosted ubuntu-latest",
+      "status": "completed",
+      "conclusion": "failure",
+      "executed_before_failure": [
+        "runner setup",
+        "checkout Frankenstein 2.0 exact head"
+      ],
+      "failure_step": "checkout current-epoch authority metadata identity",
+      "failure_detail": "actions/checkout attempted repository gschaidergabriel/clay-global-research-entity at 60f3e77900721ffa1dea1211e8b035a0e42b7c2f and git returned 'Repository not found' three times",
+      "downstream_steps": "skipped"
+    },
+    {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "repository_visibility": "private",
+      "commit_verified_via_connected_github": "60f3e77900721ffa1dea1211e8b035a0e42b7c2f",
+      "commit_message": "authority(trigger4): attest effect binding against current 9.13 epoch",
+      "meaning": "the cross-repo checkout failure is not evidence that the pinned commit is nonexistent"
+    }
+  ],
+  "result": {
+    "universal_account_wide_no_github_hosted_job_start": "FALSIFIED",
+    "public_frankenstein2_github_hosted_step_execution": "OBSERVED",
+    "failed_bound_runtime_probe_classification": "CROSS_REPOSITORY_PRIVATE_REPOSITORY_ACCESS_OR_TOKEN_SCOPE_FAILURE_BEFORE_RUNTIME_PROBE",
+    "entityos_effectgate_semantic_result_from_failed_probe": "NONE",
+    "runtime_credit_added": 0,
+    "physical_grid10_credit_added": 0,
+    "whole_entityos_hcu_credit_added": 0
+  },
+  "inference_boundary": [
+    "This does not prove that GitHub Actions admission is healthy for the private clay-global-research-entity repository.",
+    "This does not prove that all account/repository Actions control-plane issues are absent.",
+    "It does prove that the account can execute GitHub-hosted workflow steps on the public Frankenstein 2.0 repository during the same Triggerword-4 window.",
+    "The failed bound-runtime workflow did not reach EntityOS implementation checkout, source-hash verification, compile, or runtime probe, so it carries zero product/runtime semantic credit."
+  ],
+  "recommended_noncredential_successor": {
+    "preferred_topology": "run the exact-bound probe from the private canonical research repository, where the default GITHUB_TOKEN can read its own private authority/source snapshots, and checkout only the public Frankenstein 2.0 repository as the external test subject",
+    "why": "avoids introducing a cross-repository PAT/secret merely to make the public Frankenstein 2.0 workflow read a private sibling repository",
+    "execution_status": "NOT_EXECUTED_BY_THIS_ORGAN",
+    "reason_not_executed": "current supervisor asks for low-risk read-only/existing-workflow discrimination and runtime credit requires an admitted executed path; this artifact only narrows the blocker and does not create a new dispatch"
+  },
+  "additional_wp105_negative_evidence": {
+    "source_review_commit": "3ca524694f8a2089ffe9b6bf164f450697333483",
+    "finding": "current bound EntityOS EffectGate can classify an ambiguous post-dispatch exception as FAILED even when execution may have begun; UNKNOWN/no-blind-replay remains an authority-owned successor requirement",
+    "credit": "STATIC_SOURCE_FALSIFIER_ONLY"
+  },
+  "next_exact_action": "Consume this discriminator in the current supervisor/frontier: stop treating the P0 as universally account-wide. Preserve existing private-repository zero-step evidence separately, and use an already-admitted non-provider validation surface or a private-repo-owned exact-source workflow only when execution authority/quota is explicitly resolved. For WP105, do not promote the exact-bound state.noop probe until the workflow actually reaches execution and the canonical ambiguous-post-dispatch UNKNOWN contract is repaired/proven."
+}

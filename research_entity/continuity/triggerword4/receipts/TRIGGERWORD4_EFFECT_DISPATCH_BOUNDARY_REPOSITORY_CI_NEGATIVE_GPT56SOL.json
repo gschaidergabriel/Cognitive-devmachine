@@ -1,0 +1,84 @@
+{
+  "schema": "TRIGGERWORD4_EFFECT_DISPATCH_BOUNDARY_REPOSITORY_CI_NEGATIVE/v1",
+  "trigger": "triggerwort 4",
+  "status": "REPOSITORY_CI_ATTEMPT_FAILED_BEFORE_ANY_TEST_STEP",
+  "authority": {
+    "canonical_main_observed": "588cc08cf828ea1e7c24323710f6b819871e2cf3",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AF_NON_AUTHORITY",
+    "provider_execution": "HARD_OFF",
+    "together": "FORBIDDEN",
+    "paid_fallback": false
+  },
+  "routing": {
+    "normalized_trigger": "triggerwort 4",
+    "triggerword4_directives_fetched": true,
+    "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "single_existing_pr": 2118,
+    "new_lane_created": false
+  },
+  "source_component": {
+    "source": "tools/frankenstein2_effect_dispatch_boundary_v1.py",
+    "source_blob_sha": "4ec2e8680a50ad4b3efa2edd653c24fd4a423585",
+    "test": "tools/test_frankenstein2_effect_dispatch_boundary_v1.py",
+    "test_blob_sha": "d284d5176639c1146b95da48d40392faea274563",
+    "source_closure_receipt_commit": "97cab98865292d121c564190a5683b57f4e7cf3d",
+    "prior_local_component_tests": {
+      "passed": 8,
+      "failed": 0,
+      "classification": "LOCAL_ISOLATED_DETERMINISTIC_SOURCE_COMPONENT_TEST_ONLY",
+      "runtime_credit": 0
+    }
+  },
+  "repository_ci_observation": {
+    "workflow": "GRID10 Cognitive Envelope CI",
+    "workflow_run_id": 33174207050,
+    "head_sha": "4700acc6ac9ce8769e210de12a96c769036c75fc",
+    "status": "completed",
+    "conclusion": "failure",
+    "job_id": 98858515773,
+    "job_name": "deterministic",
+    "runner_label": "ubuntu-latest",
+    "runner_id": 0,
+    "runner_name": "",
+    "steps_observed": 0,
+    "job_steps": [],
+    "job_log_fetch": "BLOB_NOT_FOUND_404",
+    "classification": "INFRASTRUCTURE_OR_RUNNER_FAILURE_BEFORE_TEST_EXECUTION",
+    "code_test_failure_observed": false,
+    "repository_test_credit": 0,
+    "runtime_credit": 0
+  },
+  "singleton_runtime_gates": [
+    {
+      "issue": 2122,
+      "dispatch_key": "grid10-runtime-quiescence-v2-g0000",
+      "terminal_result_on_main": false,
+      "duplicate_or_generation_advance_authorized": false
+    },
+    {
+      "issue": 2121,
+      "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+      "terminal_result_on_main": false,
+      "duplicate_or_generation_advance_authorized": false
+    }
+  ],
+  "credit_boundary": {
+    "effect_dispatch_boundary_source_component": "PASS_LOCAL_8_OF_8_FROM_PRIOR_RECEIPT",
+    "repository_bound_test": 0,
+    "host_pre_dispatch_enforcement": 0,
+    "effect_invocation_runtime_causal_credit": 0,
+    "physical_grid10": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "frankenstein2_runtime": 0,
+    "training": 0
+  },
+  "interpretation": [
+    "A GitHub Actions failure with zero executed job steps is not a product or component test failure.",
+    "The source-level pre-dispatch adapter remains only a candidate enforcement boundary until the authoritative Frankenstein-2 host/tool executor is proven to route through it.",
+    "No donor Frankenstein 1.x harness, provider, VPS process, secret, or paid execution path was invoked by this observation.",
+    "The two supervisor-selected P0 singleton dispatches remain non-duplicated while terminal canonical result files are absent."
+  ],
+  "next_exact_action": "At the next admitted execution opportunity, bind the adapter to the authoritative isolated Frankenstein-2 executor and execute EFX-01 DENY non-execution plus EFX-02 reversed same-session overlapping-call completion. Separately consume terminal results for issues 2122 and 2121 if and only if their canonical result files appear; do not duplicate or advance their generations while absent."
+}

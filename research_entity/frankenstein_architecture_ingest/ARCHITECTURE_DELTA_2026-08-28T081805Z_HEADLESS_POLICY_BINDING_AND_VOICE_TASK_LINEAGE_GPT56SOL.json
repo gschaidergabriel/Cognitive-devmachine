@@ -1,0 +1,164 @@
+{
+  "schema_version": "1",
+  "kind": "FRANKENSTEIN_2_ARCHITECTURE_DELTA",
+  "created_at": "2026-08-28T08:18:05Z",
+  "worker_id": "GPT-5.6-Sol_TRIGGERWORD5_FORENSIC_INGEST",
+  "trigger": "triggerwort 5",
+  "evidence_scope": "SOURCE_AND_PACKET_INGEST_ONLY_NO_RUNTIME_PROMOTION",
+  "authority": {
+    "authority_epoch": "9.13",
+    "canonical_main_observed": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "resolved_heads": {
+    "frankenstein_donor_repo": "gschaidergabriel/frankenstein",
+    "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "frankenstein_donor_tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "grid_design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "grid_design_head_before_write": "7390419aba85264b6a6925eaa37f5d78a1afda50"
+  },
+  "live_ingest": {
+    "packet_id": "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL",
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T081600Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_V2_SUCCESSOR_GPT56SOL.json",
+    "packet_blob_sha": "99ef8f48d49911ea2796963c9f0af0ae9dcf8358",
+    "authority_classification": "HISTORICAL_SOURCE_EPOCH",
+    "authority_binding_matches_refreshed_main": true,
+    "source_scope_admission": "ADMITTED_AS_HISTORICAL_SOURCE_EVIDENCE_ONLY",
+    "runtime_credit": 0,
+    "consumed_ledger_update": "WITHHELD_DUE_RAPID_PARALLEL_BRANCH_MOVEMENT_AND_STALE_INGEST_STATE",
+    "note": "This immutable v2 successor closes the envelope/admission defect of the 074533Z predecessor for historical-source use only. It does not prove current host hook reachability or enforcement."
+  },
+  "files_examined": [
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "ref": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "sha_or_blob": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "spans_examined": ["claude_frage launcher argv around lines 352-380", "subprocess execution around lines 365-380"]
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "ref": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "sha_or_blob": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "spans_examined": ["plugin hook declaration lines 1-38", "PreToolUse matcher and stern.py dispatcher"]
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "ref": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/.claude-plugin/plugin.json",
+      "sha_or_blob": "448dafc8ba4f5c491c5c06d9578549634ad42354",
+      "spans_examined": ["plugin identity/version metadata and installation separation"]
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "ref": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "sha_or_blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "spans_examined": ["RealtimeSession._claude_taetigkeit lines 822-842", "function call collection and dispatch around response.output_item.done/response.done", "_auftrag_stellen_mit_bestaetigung lines 1570-1690", "_tool_ausfuehren lines 1690-1725"]
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "id": "HEADLESS_CALLER_PINNED_BASH_DENY",
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "gespraechsmodus.claude_frage constructs the headless Claude command with --disallowedTools Bash, so Bash denial is explicitly caller-pinned for this delegation path rather than depending only on model instructions.",
+      "runtime_reachable": true,
+      "authority_boundary": "DEFENSE_IN_DEPTH_ONLY_NOT_EFFECT_AUTHORITY",
+      "target_2_0_action": "KEEP"
+    },
+    {
+      "id": "HEADLESS_SETTINGS_PLUGIN_HOOK_IDENTITY_UNBOUND",
+      "source_kind": "NEGATIVE_RESULT",
+      "what_it_does": "The complete claude_frage argv examined contains no explicit --settings argument, plugin directory/identity, hook path, settings digest, plugin digest or hook digest. Any settings/plugin/hook loading therefore depends on external/default Claude Code resolution not bound by this caller's source-level invocation receipt.",
+      "runtime_reachable": null,
+      "known_counterevidence": ["A historical v2 packet establishes that an earlier helper path reportedly inherited blocking policy through --settings in a historical environment.", "The donor repository contains a Frankenstein plugin hook declaration."],
+      "why_counterevidence_does_not_close_gap": "Existence or historical inheritance does not prove which exact settings/plugin/hook bytes a current headless claude_frage process resolves and executes.",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "id": "PLUGIN_PRETOOL_HOOK_DECLARED_FAIL_SILENT",
+      "source_kind": "CONFIG",
+      "what_it_does": "hooks/hooks.json declares a PreToolUse matcher for all tools routed to scripts/stern.py hook, while its own description explicitly classifies this path as fail-silent and exit-0-always.",
+      "runtime_reachable": null,
+      "authority_boundary": "HOOK_DECLARATION_AND_BOOKKEEPING_CANNOT_RECEIVE_PRE_SIDE_EFFECT_CONTAINMENT_CREDIT_WITHOUT_EXECUTABLE_DENIAL_EVIDENCE",
+      "target_2_0_action": "COMPATIBILITY_ONLY"
+    },
+    {
+      "id": "REALTIME_CALL_ID_EXISTS_BEFORE_VOICE_TASK_CONFIRMATION",
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "Realtime function_call call_id is retained in _offene_tool_calls and passed into _tool_ausfuehren for completed responses.",
+      "runtime_reachable": true,
+      "target_2_0_action": "KEEP"
+    },
+    {
+      "id": "REALTIME_CALL_ID_DROPPED_AT_CONFIRMED_TASK_HANDOFF",
+      "source_kind": "NEGATIVE_RESULT",
+      "what_it_does": "Although _tool_ausfuehren receives call_id, the frank_auftrag_stellen branch invokes _auftrag_stellen_mit_bestaetigung(args) without call_id. The confirmation state binds normalized task text, time and transcript count; on success it calls self.auftrag.stellen(auftrag_text), whose background bridge forwards text to _claude_taetigkeit. No immutable Realtime call_id/task-admission identity is carried into claude_frage.",
+      "runtime_reachable": true,
+      "failure_mode": "Two distinct or overlapping confirmed task invocations can enter the delegation layer without a source-level one-to-one lineage from provider call_id through task admission, background job, headless invocation and downstream effect receipt.",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "id": "VOICE_CONFIRMATION_IS_MECHANICAL_BUT_NOT_SPEAKER_OR_INTENT_AUTHORITY",
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "The voice tool uses a two-stage exact-text confirmation, requires at least one new server transcription, enforces a 300-second expiry and rejects simple contradiction keywords. Its own source explicitly states that this is not intent classification or speaker verification and that unrelated speech can still be misinterpreted as approval.",
+      "runtime_reachable": true,
+      "authority_boundary": "USEFUL_HUMAN_CONFIRMATION_DEFENSE_NOT_SUFFICIENT_TASK_OR_EFFECT_AUTHORITY",
+      "target_2_0_action": "KEEP"
+    }
+  ],
+  "contradictions_preserved": [
+    {
+      "id": "HISTORICAL_SETTINGS_INHERITANCE_VS_CURRENT_HEADLESS_IDENTITY",
+      "left": "The v2 historical packet admits a source-crosschecked historical finding that blocking policy was attributed to inherited --settings.",
+      "right": "The current donor claude_frage source does not pin an exact settings/plugin/hook identity in its argv.",
+      "resolution": "NOT_A_FACTUAL_CONTRADICTION; historical inheritance is preserved as donor evidence while current invocation identity and reachability remain UNKNOWN."
+    },
+    {
+      "id": "HOOK_DECLARATION_VS_ENFORCEMENT_CREDIT",
+      "left": "Current donor repository declares a PreToolUse hook for all tools.",
+      "right": "Source inspection cannot prove the hook is loaded for claude_frage, and the declared path is fail-silent/exit-0-always.",
+      "resolution": "PRESERVE_CONFIG_AS_COMPATIBILITY_DONOR; withhold deterministic containment/effect-authority credit."
+    }
+  ],
+  "architecture_delta": {
+    "before": "Voice confirmation, an explicit Bash deny, historical settings inheritance and a repository hook declaration existed as separate safety mechanisms, while current Triggerword-5 frontier already required exact host/plugin/settings proof and invocation-bound effect identity.",
+    "after": "For Frankenstein 2.0, the delegation boundary is now explicitly decomposed into three independently evidenced layers: (1) VoiceProposal/TaskAdmission bound to Realtime call_id + task digest + session/causal/generation evidence, (2) HeadlessDelegationCapsule binding exact executable/source/settings/plugin/hook identities plus cwd/session/tool policy, and (3) one-shot pre-side-effect EffectDecision/CapabilityLease with typed outcome receipt. Historical hooks and Bash denial remain defense-in-depth donors, not canonical effect authority.",
+    "required_lineage": [
+      "realtime_call_id",
+      "task_admission_id",
+      "task_digest",
+      "background_task_id",
+      "claude_session_id",
+      "headless_invocation_id",
+      "resolved_settings_digest",
+      "resolved_plugin_digest",
+      "resolved_hook_digest",
+      "effect_id",
+      "typed_effect_receipt_id"
+    ],
+    "prohibited_shortcut": "SESSION_ID_OR_NORMALIZED_TEXT_ALONE_MUST_NOT_SERVE_AS_EFFECT_INVOCATION_IDENTITY"
+  },
+  "hypothesis": "Claude Code default configuration discovery may in practice load the intended Frankenstein plugin/settings for this headless path.",
+  "counterhypothesis": "The process may resolve a different user/project settings/plugin generation or no Frankenstein plugin at all while Bash denial still works, producing an apparently safe but causally unbound effect path.",
+  "falsifier": "At exact donor/source identity, capture a bounded non-provider launch/introspection receipt proving the exact resolved executable, settings, plugin and hook identities for claude_frage, then run the current supervisor's same-session two-call interleaving test to prove call_id -> task admission -> invocation -> effect/result one-to-one lineage. No provider/VPS runtime credit is granted by this source delta.",
+  "credits": {
+    "new_runtime_credit": 0,
+    "effect_enforcement_runtime_credit": 0,
+    "frankenstein_whole_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Triggerword 4 should bind Realtime call_id to an immutable TaskAdmission and HeadlessDelegationCapsule, prove exact current settings/plugin/hook resolution for claude_frage, and execute the same-session two-call interleaving falsifier before any writable delegated path receives containment or completion credit."
+}

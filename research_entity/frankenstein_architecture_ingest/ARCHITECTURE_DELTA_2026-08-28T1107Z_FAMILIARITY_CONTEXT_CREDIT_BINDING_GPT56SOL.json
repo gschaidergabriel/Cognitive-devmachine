@@ -1,0 +1,117 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T11:07:14Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "FAMILIARITY_RETRIEVAL_CONTEXT_AND_CREDIT_BINDING",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_binding": {
+    "canonical_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "review_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_execution": false
+  },
+  "direct_source_crosscheck": {
+    "candidate_keys_and_score": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "MicroClay._entry_keys / _score_candidate / retrieve",
+      "classification": ["LIVE_CODE", "ENFORCEMENT_CODE"],
+      "finding": "Adaptive entry keys are kind, subject and hashed lexical cue intersections. The candidate score combines lexical overlap, recency, structured-kind weight and the mean capital of those keys. The exact retrieval episode records turn_id, episode_id, causal_id, session_id and generation, but those context identities are not part of the learned entry-key namespace."
+    },
+    "episode_union_credit": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "MicroClay.retrieve -> retrieval_episodes.entry_keys; MicroClay._apply_credit",
+      "classification": ["LIVE_CODE", "ENFORCEMENT_CODE"],
+      "finding": "The persisted retrieval episode stores a capped union of entry_keys across all selected items. _apply_credit reads that episode-wide key set and applies the same retrieval-level credit to every key. This is exact receipt accounting at retrieval_id scope, but it is not per-selected-candidate credit assignment."
+    },
+    "mechanical_credit_semantics": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "MicroClay.kreditsignal_mechanisch",
+      "classification": ["LIVE_CODE", "NEGATIVE_RESULT"],
+      "finding": "The donor explicitly labels the mechanical 'mentioned/unused' signal as a utility hypothesis rather than a measurement. The adjacent gw_lernen projection also explicitly acknowledges that only a round-wide entry-key union is available, so it uses a capped key x selected-memory cross-product; that projection is observation-only and does not feed scoring."
+    },
+    "serving_boundary": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "MicroClay.DEFAULT_MODE / retrieve serving selection",
+      "classification": ["LIVE_CODE", "ENFORCEMENT_CODE"],
+      "finding": "DEFAULT_MODE is SHADOW and baseline remains the serving path unless explicit promotion changes the mode. Therefore this forensic gap must not be reported as current serving corruption at the exact donor snapshot."
+    }
+  },
+  "architecture_interpretation": {
+    "observed": [
+      "Retrieval identity is richer than learned-entrypoint identity: episode/turn/causal/session/generation are recorded in retrieval_episodes but not represented in _entry_keys.",
+      "Credit is retrieval-level and is spread over the episode-wide union of selected-item entry keys.",
+      "No explicit state, intent, affect or epistemic-context key participates in _entry_keys at the inspected donor span.",
+      "The donor itself distinguishes mechanical mention from verified usefulness and keeps adaptive serving in SHADOW by default."
+    ],
+    "inference": "A Frankenstein-2.0 familiarity/world-substrate layer that reuses this policy unchanged could learn a global lexical/subject prior where the intended substrate requires context-conditioned familiarity. This is a design-risk inference, not an observed runtime failure.",
+    "counterhypothesis": "Global lexical/subject capital may be intentionally desirable as a coarse prior, while state/intent/affect conditioning is supplied later by GWT competition or another deterministic layer. If so, replacing the global prior would overfit context and reduce transfer.",
+    "cheapest_discriminator": "Preserve the global prior and add an observation-only contextual shadow score keyed by deterministic StateContext/IntentContext/AffectBucket identities; compare held-out retrieval ordering and calibration against global-only capital before any serving promotion."
+  },
+  "target_2_0_contract": {
+    "name": "FamiliarityContextBinding/v1",
+    "role": "typed optional context binding for familiarity/retrieval-credit evidence without turning context inference into truth authority",
+    "minimum_fields": [
+      "retrieval_id",
+      "memory_id",
+      "entry_key",
+      "turn_id",
+      "episode_id",
+      "causal_id",
+      "generation",
+      "state_context_id_or_UNKNOWN",
+      "intent_context_id_or_UNKNOWN",
+      "affect_bucket_id_or_UNKNOWN",
+      "signal_class",
+      "credit",
+      "source_receipt_id",
+      "policy_version"
+    ],
+    "laws": [
+      "UNKNOWN context remains UNKNOWN; missing state/intent/affect must not be fabricated from text similarity.",
+      "Keep per-candidate attribution distinct from retrieval-wide feedback; do not silently smear one candidate's evidence across all selected memories.",
+      "Preserve a global context-free prior as a donor baseline/control rather than deleting it.",
+      "Context-conditioned familiarity is candidate/projection evidence only and has no truth or effect authority.",
+      "Any ACTIVE serving promotion requires held-out improvement plus lesion/shuffle controls and deterministic rollback to the global baseline."
+    ]
+  },
+  "sparse_world_substrate_reuse": {
+    "mechanism": "context-conditioned familiarity prior with explicit UNKNOWN and per-candidate credit lineage",
+    "applies_to": ["GRID10", "COGSIM10", "WM_TEST", "NESTED_SIM", "SCALEOUT"],
+    "migration_reuse_score": "EASIER_CROSS_MODE",
+    "reason": "The same typed context/credit identity can modulate retrieval salience across modes while canonical memory, truth and effect authority stay outside the adaptive score."
+  },
+  "feeds_triggerword_4": {
+    "required_actions": [
+      "Add FamiliarityContextBinding/v1 as SHADOW-only instrumentation first; do not change serving order in the first implementation.",
+      "Persist per-selected-memory entry-key attribution rather than only the episode-wide union for new traces while retaining compatibility fields for replay.",
+      "Construct counterbalanced tests where lexical cue and subject are held constant but deterministic state/intent/affect context changes.",
+      "Run context-shuffle and context-lesion controls; promotion is rejected if gains disappear under family-level holdout or arise from label leakage.",
+      "Keep global capital as explicit baseline and fail closed to UNKNOWN context instead of inferring a state fact from missing data."
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "familiarity_context_runtime": 0,
+    "retrieval_serving_regression": "NOT_OBSERVED",
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "negative_evidence": [
+    "No runtime retrieval experiment was executed.",
+    "No provider, VPS or paid route was invoked.",
+    "Absence of state/intent/affect in _entry_keys is a source observation; usefulness of adding those contexts remains an empirical hypothesis.",
+    "The exact donor defaults to SHADOW, limiting this finding to architecture/training-readiness risk until an ACTIVE path is evidenced."
+  ],
+  "next_exact_gate": "Triggerword-4: instrument per-candidate FamiliarityContextBinding/v1 in SHADOW and run lexical-constant context counterbalance + context-shuffle/lesion evaluation before any ACTIVE promotion. Triggerword-5: continue with the next unconsumed packet or another nonduplicate sparse-world-substrate source span.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false
+}

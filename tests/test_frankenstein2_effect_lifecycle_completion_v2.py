@@ -9,6 +9,11 @@ from tools.frankenstein2_effect_lifecycle_v1 import (
     V2_COMPLETION_EVIDENCE_CLASS,
     WorldOutcome,
 )
+from tools.frankenstein2_hook_invocation_adapter_v1 import (
+    HookInvocationIdentityError,
+    build_effect_request_from_pretool,
+    require_matching_posttool,
+)
 
 
 class EffectLifecycleCompletionV2IntegrationTests(unittest.TestCase):
@@ -258,6 +263,128 @@ class EffectLifecycleCompletionV2IntegrationTests(unittest.TestCase):
         self.assertEqual(snap_b["reentry"]["result_digest"], "result-B")
         self.assertEqual(snap_a["completion"]["evidence_class"], V2_COMPLETION_EVIDENCE_CLASS)
         self.assertEqual(snap_b["completion"]["evidence_class"], V2_COMPLETION_EVIDENCE_CLASS)
+
+    def test_hook_adapter_uses_tool_use_id_and_survives_reverse_posttool_order(self):
+        pre_a = {
+            "hook_event_name": "PreToolUse",
+            "session_id": "shared-session",
+            "tool_use_id": "call-A",
+            "tool_name": "Write",
+            "tool_input": {"file_path": "/tmp/a", "content": "A"},
+        }
+        pre_b = {
+            "hook_event_name": "PreToolUse",
+            "session_id": "shared-session",
+            "tool_use_id": "call-B",
+            "tool_name": "Write",
+            "tool_input": {"file_path": "/tmp/b", "content": "B"},
+        }
+        req_a = build_effect_request_from_pretool(
+            self.store,
+            pre_a,
+            agent_id="agent-1",
+            task_id="task-A",
+            turn_id="turn-A",
+            causal_id="cause-A",
+            generation=12,
+            effect_scope="TEST_ONLY",
+        )
+        req_b = build_effect_request_from_pretool(
+            self.store,
+            pre_b,
+            agent_id="agent-1",
+            task_id="task-B",
+            turn_id="turn-B",
+            causal_id="cause-B",
+            generation=12,
+            effect_scope="TEST_ONLY",
+        )
+        self.assertEqual(req_a.invocation_id, "call-A")
+        self.assertEqual(req_b.invocation_id, "call-B")
+        self.assertEqual(req_a.session_id, req_b.session_id)
+        self.assertNotEqual(req_a.request_digest, req_b.request_digest)
+        self.store.create_request(req_a)
+        self.store.create_request(req_b)
+
+        # Post events arrive in reverse order but still bind to their immutable call ids.
+        post_b = {
+            "hook_event_name": "PostToolUse",
+            "session_id": "shared-session",
+            "tool_use_id": "call-B",
+            "tool_name": "Write",
+        }
+        post_a = {
+            "hook_event_name": "PostToolUseFailure",
+            "session_id": "shared-session",
+            "tool_use_id": "call-A",
+            "tool_name": "Write",
+        }
+        self.assertEqual(require_matching_posttool(req_b, post_b).invocation_id, "call-B")
+        self.assertEqual(require_matching_posttool(req_a, post_a).invocation_id, "call-A")
+
+        # A session-scoped fallback would accept this cross-close; the adapter must not.
+        with self.assertRaisesRegex(HookInvocationIdentityError, "INVOCATION_ID_MISMATCH"):
+            require_matching_posttool(req_a, post_b)
+
+    def test_hook_adapter_missing_call_identity_fails_closed_without_session_fallback(self):
+        payload = {
+            "hook_event_name": "PreToolUse",
+            "session_id": "shared-session",
+            "tool_name": "Write",
+            "tool_input": {"file_path": "/tmp/a", "content": "A"},
+        }
+        with self.assertRaisesRegex(HookInvocationIdentityError, "MISSING_OR_INVALID_TOOL_USE_ID"):
+            build_effect_request_from_pretool(
+                self.store,
+                payload,
+                agent_id="agent-1",
+                task_id="task-A",
+                turn_id="turn-A",
+                causal_id="cause-A",
+                generation=12,
+                effect_scope="TEST_ONLY",
+            )
+
+    def test_hook_adapter_rejects_wrong_event_session_and_tool(self):
+        pre = {
+            "hook_event_name": "PreToolUse",
+            "session_id": "session-A",
+            "tool_use_id": "call-A",
+            "tool_name": "Edit",
+            "tool_input": {"file_path": "/tmp/a", "old_string": "x", "new_string": "y"},
+        }
+        req = build_effect_request_from_pretool(
+            self.store,
+            pre,
+            agent_id="agent-1",
+            task_id="task-A",
+            turn_id="turn-A",
+            causal_id="cause-A",
+            generation=12,
+            effect_scope="TEST_ONLY",
+        )
+        with self.assertRaisesRegex(HookInvocationIdentityError, "UNEXPECTED_HOOK_EVENT"):
+            require_matching_posttool(req, pre)
+        with self.assertRaisesRegex(HookInvocationIdentityError, "SESSION_ID_MISMATCH"):
+            require_matching_posttool(
+                req,
+                {
+                    "hook_event_name": "PostToolUse",
+                    "session_id": "session-B",
+                    "tool_use_id": "call-A",
+                    "tool_name": "Edit",
+                },
+            )
+        with self.assertRaisesRegex(HookInvocationIdentityError, "TOOL_NAME_MISMATCH"):
+            require_matching_posttool(
+                req,
+                {
+                    "hook_event_name": "PostToolUse",
+                    "session_id": "session-A",
+                    "tool_use_id": "call-A",
+                    "tool_name": "Write",
+                },
+            )
 
 
 if __name__ == "__main__":

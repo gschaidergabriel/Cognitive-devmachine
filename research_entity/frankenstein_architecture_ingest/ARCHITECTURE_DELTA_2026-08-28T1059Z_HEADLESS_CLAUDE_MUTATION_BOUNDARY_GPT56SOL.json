@@ -1,0 +1,119 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:59:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "HEADLESS_CLAUDE_ENFORCEMENT_BINDING_AND_TYPED_VOICE_MUTATION_ADMISSION",
+  "donor": {"repo":"gschaidergabriel/frankenstein","commit_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427"},
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN",
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "packet_provenance": {
+    "packet_id": "TW5-PACKET-20260828T105800Z-HEADLESS-CLAUDE-MUTATION-BOUNDARY-GPT56SOL",
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T1058Z_5641dc6_GPT56SOL_HEADLESS_CLAUDE_MUTATION_BOUNDARY.json",
+    "packet_blob_sha": "73dba04e7c1b3792bdef82a8a5f977683433374d",
+    "disposition": "CONSUMED_AFTER_DIRECT_SOURCE_CROSSCHECK",
+    "schema_check": "REQUIRED_FIELDS_AND_ALLOWED_ATOM_ACTIONS_PRESENT"
+  },
+  "direct_source_crosscheck": {
+    "headless_claude_invocation": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "span": "340-405",
+      "finding": "claude_frage hard-denies the entire Bash tool and passes permission mode, but does not pin settings/plugin/hook source identity or repository root; default cwd is Path.home()."
+    },
+    "voice_delegate_caller": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "span": "820-900",
+      "finding": "_claude_taetigkeit calls claude_frage without cwd or settings/plugin identity, so the delegated execution inherits the unpinned ambient-host enforcement surface."
+    },
+    "realtime_tools_and_helpers": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "span": "400-610",
+      "finding": "The Realtime tool surface includes direct durable-memory-write intent and new-research dispatch. Memory write forwards to stern gespraech-erinnerung-schreiben; research neu_anstossen mechanically dispatches after a nonempty question. Their explicit-user/importance constraints are primarily model-facing descriptions rather than the two-stage task confirmation state machine."
+    },
+    "task_gate_and_dispatch": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "span": "1650-1745",
+      "finding": "The external task path has a mechanical second-stage confirmation gate; _tool_ausfuehren receives call_id but task/memory/research helper calls do not carry that call identity into their downstream admission/execution state."
+    },
+    "plugin_manifest": {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "span": "1-53",
+      "finding": "Repository config declares PreToolUse(*) and Stop plus five other hooks through stern.py, but manifest existence is not proof that the headless home-cwd invocation loaded these exact bytes."
+    }
+  },
+  "architecture_effect": {
+    "mechanisms": ["HeadlessDelegationEnforcementBinding/v1","TypedVoiceMutationAdmission/v1"],
+    "rules": [
+      "Any delegated executor that may mutate state or world effects must bind the exact settings/plugin/hook/executor policy identity used for that invocation; ambient host configuration is not reproducible authority.",
+      "Realtime tool call identity must survive into typed admission and downstream execution/effect receipts rather than being used only for immediate function_call_output correlation.",
+      "Memory mutation and research dispatch require domain-specific deterministic admissions; model-facing descriptions are policy hints, not final authority."
+    ],
+    "preserve_from_donor": [
+      "whole-Bash denial rather than command-name denylist whack-a-mole",
+      "two-stage spoken task confirmation UX and transcript-veto concept",
+      "separation between read-only status/memory retrieval and mutation/dispatch tools",
+      "asynchronous work bridge so long actions do not block live conversation",
+      "single plugin hook manifest concept as an installable compatibility surface"
+    ],
+    "repair": [
+      "bind delegated work to a typed TaskAdmission containing originating Realtime call_id, proposal digest, exact confirming utterance/turn evidence, generation, capability and resource scope",
+      "bind the executor invocation to exact settings/plugin/hook bytes and a fixed build/repository identity; do not infer hook firing from repository presence",
+      "classify every delegated Claude tool class as READ_ONLY, EPHEMERAL_STATE, CANONICAL_INTERNAL_MUTATION, EXTERNAL_EFFECT_REQUEST or SESSION_CONTROL and require final deterministic authority for mutating/effect classes",
+      "compile frank_erinnerung_schreiben into MemoryCandidate -> MemoryAdmission with source utterance/call identity, transformation and epistemic class, generation, privacy/retention and digest",
+      "compile frank_forschung/neu_anstossen into ResearchRequestCandidate -> HumanIntentDecision + CapabilityDecision + PrivacyDecision + EconomicDecision before downstream dispatch",
+      "preserve call-scoped identity across background auftrag_id and subsequent execution/outcome/reentry joins"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "contradictions_preserved": [
+    "A repository PreToolUse(*) hook manifest exists, yet the voice-delegated claude -p command does not source-bind which settings/plugin/hook bytes actually load.",
+    "The donor mechanically confirms external tasks but relies on model-facing policy for direct memory-write selection and new-research explicit-user intent.",
+    "hooks/hooks.json and plugin metadata describe no LLM in hooks, while the preceding exact-current Stop forensics found synchronous local Ollama in Stop.",
+    "Immediate Realtime function_call_output preserves call_id, while longer-lived background work identities are separate and do not carry that protocol identity end-to-end in the examined source."
+  ],
+  "source_inferences_not_runtime_claims": [
+    "Running headless Claude from Path.home() without explicit settings/plugin binding can make actual enforcement depend on ambient host state; exact installed behavior remains unobserved.",
+    "Non-Bash Claude tools may be capable of mutation under ambient permissions, but this run did not execute or enumerate installed tool capabilities.",
+    "The downstream stern memory and research functions may contain additional guards not re-audited in this packet; the gap claimed here is at the examined Realtime admission/delegation boundary."
+  ],
+  "feeds_triggerword_4": {
+    "required_actions": [
+      "introduce TaskAdmission/WorkExecutionBinding carrying Realtime call identity through executor and final receipt",
+      "pin exact executor settings/plugin/hook/build identity rather than relying on ambient home state",
+      "introduce MemoryCandidate/MemoryAdmission and ResearchRequestCandidate typed gates with distinct authority semantics",
+      "add a mutating-tool-class matrix and fail closed when a class lacks deterministic final authority",
+      "verify two overlapping voice calls completing in reverse order cannot transplant confirmation, work receipt, memory admission or effect outcome across call identities",
+      "keep voice speaker/address confidence as convenience evidence, not hard authentication"
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "packet_ingest": "PASS_SOURCE_SCOPE",
+    "headless_hook_runtime_binding": 0,
+    "voice_mutation_runtime_acceptance": 0,
+    "effect_enforcement_runtime_acceptance": 0,
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Continue Triggerword-5 source forensics at INSTALL_HOST_STEPS.md plus stern.py memory/research implementations to determine what exact ambient Claude settings/plugin installation and downstream mutation/provider guards exist; then feed Triggerword-4 a source-bound TaskAdmission/MemoryAdmission/ResearchRequestAdmission executor contract. No provider, VPS or unusual experiment in this lane.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "feeds_triggerword_4_boolean": true
+}

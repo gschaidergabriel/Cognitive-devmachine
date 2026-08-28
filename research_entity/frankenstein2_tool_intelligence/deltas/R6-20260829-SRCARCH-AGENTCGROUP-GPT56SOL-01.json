@@ -1,0 +1,79 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_SOURCE_AUDIT_MIRROR/v1",
+  "research_id": "R6-SEED-006",
+  "receipt_id": "R6-20260829-SRCARCH-AGENTCGROUP-GPT56SOL-01",
+  "trigger": "6",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "E2_ARCHITECTURE_MAPPED_STATIC_ONLY_MIRROR",
+  "worker": "GPT-5.6-Sol",
+  "canonical_f2_result": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/R6-20260829-SRCARCH-AGENTCGROUP-GPT56SOL-01.json",
+    "commit": "bb75355ab50737caf5ffe973ff49f4f3f334ac40",
+    "canonical_claim_commit": "5bf02182a5c5fab22439bbb5ca4c2ca543b24e4a"
+  },
+  "mirror": {
+    "source_f2_head": "bb75355ab50737caf5ffe973ff49f4f3f334ac40",
+    "target_re_head_before_claim_mirror": "9d2eb96937e77de0de6071c6aa5a6fc83306da0c",
+    "claim_mirror_commit": "633ab5feac727dab70ecd2097d3e54f1fba2b307",
+    "claim_authority": false,
+    "truth_authority": false,
+    "effect_authority": false
+  },
+  "candidate": {
+    "repository": "eunomia-bpf/agentcgroup",
+    "source_commit": "551ca1689b7d2d30db6b8a8613414750103cc68b",
+    "license": "GPL-2.0",
+    "upstream_paper": "arXiv:2602.09345",
+    "seed_targets": ["F2-WP-605", "F2-WP-902", "F2-WP-1000"]
+  },
+  "decision": {
+    "evidence_level": "E2_ARCHITECTURE_MAPPED_STATIC_ONLY",
+    "adoption_class": "CONCEPT_DISTILL_MEASUREMENT_ONLY__REJECT_DIRECT_CONTROLLER_ADOPTION_AT_E2",
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "integration_credit": 0,
+    "E3": 0,
+    "E4": 0,
+    "E5": 0,
+    "E6": 0
+  },
+  "fused_findings": [
+    "AgentCgroup's useful transferable mechanism is tool/effect-call-scoped resource measurement, not its upstream authority model.",
+    "AGENT_RESOURCE_HINT directly influences memory.high; memory:high maps to max and arbitrary memory:<N>g/m values are parsed without a canonical authority clamp. F2 must treat hints as untrusted candidate input only.",
+    "Upstream cgroup identity uses wrapper PID plus timestamp and is not F2 causal/effect identity. Any resource record must bind existing immutable F2 call/effect identity.",
+    "Exit code 137 is labeled OOM upstream, but exit 137 alone does not prove an OOM-killer cause. F2 must preserve candidate cause until corroborated by memory.events/kernel evidence.",
+    "Production wrapper suppresses many cgroup/log/cleanup failures; commands may execute with an instrumentation coverage gap. F2 needs explicit MEASURED/DEGRADED/UNKNOWN coverage state.",
+    "Shell JSONL serialization is not robust canonical evidence serialization; use typed JSON plus exact digests.",
+    "Full controller operation is privileged and Linux/kernel/eBPF dependent; this is too heavy for the current characterization need compared with standard cgroup-v2 measurement-first reuse.",
+    "Cgroup-v2 fallback does not produce a transactional applied-policy receipt and can mark protection active after unsuccessful writes; any future enforcement needs request/applied/observed separation.",
+    "BPF backend selection is based on executable presence; failed attach does not automatically retry the standard cgroup backend.",
+    "Daemon source calls blocking stdout.readline before memory-pressure polling/health checks despite a nonblocking comment; this remains a source-level risk until a separate E3 discriminator reproduces it.",
+    "Local no-root wrapper's reported memory.peak is max of the wrapper process VmRSS before/after child execution, not the child command's true peak, so local peak-memory accuracy is not established.",
+    "Several bash tests validate copied snippets/simulated values rather than production wrapper execution; the 14/14 headline is weak production acceptance evidence.",
+    "Live semantic-hint validation explicitly prompts low/high choices for example operations, so 5/5 is prompt-conditioned rather than proof of a general intrinsic resource predictor.",
+    "GPL-2.0 favors mechanism distillation/reimplementation unless a deliberate compatible dependency decision is made."
+  ],
+  "thin_f2_design": {
+    "name": "ResourceEnvelope",
+    "role": "read-only measurement-first derived telemetry",
+    "identity": "keyed by existing immutable F2 call/invocation/effect identity; PID/time retained as metadata only",
+    "fields": ["duration", "exit_or_signal", "memory.current", "memory.peak", "memory.events", "optional_PSI", "coverage_status", "candidate_resource_hint"],
+    "authority": "resource hints never self-grant. Any future enforcement remains deterministic authority-owned, clamped and separately receipted.",
+    "second_truth_store": false,
+    "second_effect_authority": false
+  },
+  "counterhypotheses": [
+    "Standard cgroup-v2 read-only telemetry may capture most useful characterization value without privileged eBPF enforcement.",
+    "Agent resource hints may be too weak/gameable for enforcement and may only justify candidate scheduling metadata.",
+    "Per-tool resource telemetry may add little beyond F2 aggregate telemetry; future ablation must prove unique localization value."
+  ],
+  "next_discriminators_require_new_f2_atomic_claim": [
+    "E3 false-OOM test: non-OOM SIGKILL versus cgroup memory.events ground truth",
+    "E3 child-memory test: known child allocation versus local-wrapper logged peak and real child/cgroup peak",
+    "E3 serializer test: quotes/backslashes/newlines/control characters",
+    "E3 event-loop responsiveness test under quiet process-monitor output",
+    "E4 F2-native ResourceEnvelope versus AgentCgroup sidecar/controller on equivalent child-agent workload"
+  ],
+  "db_sync": "PENDING; mirror is append-only provenance/source evidence and does not mint private Research-DB materialization credit or alter UnifiedDB authority"
+}

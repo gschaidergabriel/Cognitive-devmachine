@@ -6,7 +6,8 @@ path routes through this boundary, so it cannot mint runtime or EffectGate enfor
 credit. Its job is narrower: make the intended executor ordering executable and testable.
 
 Required ordering for an admitted effect:
-  enforcement receipt -> SUBMITTED latch -> real dispatch callback -> execution receipt
+  enforcement receipt -> SUBMITTED latch -> real dispatch callback
+  -> atomic execution receipt + v2 identity metadata bundle
 
 DENY/UNKNOWN never call the dispatcher. Once SUBMITTED has been latched, any callback or
 receipt-persistence failure is classified as outcome-unknown and must not be blindly retried.
@@ -15,6 +16,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Callable, Protocol, TypeVar
+
+try:
+    from .frankenstein2_execution_receipt_atomicity_v1 import record_execution_bundle_atomic
+except ImportError:
+    from frankenstein2_execution_receipt_atomicity_v1 import record_execution_bundle_atomic
 
 SCHEMA = "FRANKENSTEIN2_EFFECT_DISPATCH_BOUNDARY/v1"
 
@@ -65,28 +71,6 @@ class EffectLifecyclePort(Protocol):
     ) -> None: ...
 
     def mark_submitted(self, invocation_id: str, *, now_ts: float | None = None) -> None: ...
-
-    def record_execution(
-        self,
-        invocation_id: str,
-        *,
-        executable_id: str,
-        command_digest: str,
-        environment_id: str,
-        exit_code: int,
-        result_digest: str,
-        now_ts: float | None = None,
-    ) -> None: ...
-
-    def record_execution_v2_metadata(
-        self,
-        invocation_id: str,
-        *,
-        source_digest: str,
-        duplicate_state: str,
-        status: str,
-        now_ts: float | None = None,
-    ) -> None: ...
 
 
 TStore = TypeVar("TStore", bound=EffectLifecyclePort)
@@ -159,17 +143,14 @@ def guarded_dispatch(
         if status == "SUCCEEDED" and observation.exit_code != 0:
             raise EffectDispatchBoundaryError("SUCCEEDED_STATUS_CONTRADICTS_NONZERO_EXIT")
 
-        store.record_execution(
+        record_execution_bundle_atomic(
+            store,
             invocation_id,
             executable_id=observation.executable_id,
             command_digest=observation.command_digest,
             environment_id=observation.environment_id,
             exit_code=observation.exit_code,
             result_digest=observation.result_digest,
-            now_ts=now_ts,
-        )
-        store.record_execution_v2_metadata(
-            invocation_id,
             source_digest=observation.source_digest,
             duplicate_state=observation.duplicate_state,
             status=status,

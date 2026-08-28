@@ -1,0 +1,57 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-2026-08-28-WACHE-REENTRY-CLOSURE",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "recorded_at": "2026-08-28T14:36:00+07:00",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "reentry_head_observed": "d2c7b5cd3fd5332a029424df1e74c7136ee9989f",
+  "reason": "Parallel Triggerword-5 writes landed while this run was ingesting. This receipt fuses the unique still-unconsumed Wache-Koenig packet with the parallel archive-provenance delta and the current run's crosschecked effect-lineage delta without claiming independent replication.",
+  "packet_closed": {
+    "packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072938Z_HISTORICAL_WACHE_KOENIG_OWNER_GATE_GPT56SOL.json",
+    "status": "CONSUMED_WITH_REENTRY_DEDUPE"
+  },
+  "fused_deltas": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WACHE_KOENIG_ARCHIVE_PROVENANCE_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+      "commit": "d2c7b5cd3fd5332a029424df1e74c7136ee9989f",
+      "classification": "UNIQUE_ARCHIVE_IDENTITY_AND_PROVENANCE_DELTA"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AUTHORITY_LINEAGE_FUSION.json",
+      "commit": "72d4d7252f748bbfef04bf656acdbd9828696752",
+      "classification": "CROSSCHECKED_EFFECT_LINEAGE_AND_SUCCESSOR_CONTRACT; OVERLAPPING_PACKET_OBSERVATIONS_DEDUPED"
+    }
+  ],
+  "prior_receipt": {
+    "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_EFFECT_AUTHORITY_LINEAGE_FUSION.json",
+    "commit": "344b7210df007a776c81e2bf78d070d8e019889b"
+  },
+  "reentry_findings": [
+    "Parallel state already consumed the 07:25:52Z main-feed bridge, 07:28:16Z historical predecessor packet and 07:30:38Z approval-identity packet; this run does not count them again.",
+    "The 07:29:38Z Wache-Koenig packet remained absent from consumed_packet_ids at reentry and is the only packet newly closed by this successor receipt.",
+    "Parallel delta d2c7b5cd pins historical archive identity and limitations but still grants zero current-host enforcement runtime credit.",
+    "The current run independently crosschecked the historical ToolExecutor/AgentLoop approval gap and current donor nonblocking effect journaling, strengthening the immutable invocation-bound successor contract without independent-runtime credit."
+  ],
+  "architecture_handoff": {
+    "effect_chain": "EffectRequest -> EffectDecision -> one-shot Enforcement/ExecutionLease -> ExecutionReceipt -> WorldEffectVerification -> ResultReentry -> CompletionEvidence",
+    "required_binding": "immutable invocation_id/tool_use_id successor + request_digest + generation + causal/session context + policy/version",
+    "human_grant": "separate scope-bound non-self-grantable capability when policy requires approval; never caller-controlled skip_approval",
+    "unknown_outcome": "submitted transport ambiguity remains OUTCOME_UNKNOWN until verified; no blind replay",
+    "wache_role": "historical regression/capability donor only until exact bytes plus current host wiring are proven"
+  },
+  "credit": {
+    "new_runtime_execution": 0,
+    "current_host_enforcement_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "whole_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "provider_runtime": 0
+  },
+  "next_exact_gate": "Trace current Realtime function-call dispatch and current host hook/effect wiring into one immutable invocation-bound effect ABI; recover or hash-match archived wache bytes and exact scheduler ordering before any current-host enforcement claim."
+}

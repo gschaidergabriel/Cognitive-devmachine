@@ -17,7 +17,12 @@
   },
   "architecture_delta": {
     "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_WACHE_DIRECT_SOURCE_AND_9_13_SCHEMA_CORRECTION.json",
-    "commit": "b15a047dfb355eb838ffddd77a00efe19d6b5bcb"
+    "commit": "107dac4469b3cc85e7f2b9d96a092679bbe7880c",
+    "supersedes_delta_commit": "b15a047dfb355eb838ffddd77a00efe19d6b5bcb",
+    "contradiction_ids": [
+      "TW5-CONTRADICTION-WACHE-PACKET-SCHEMA-012",
+      "TW5-CONTRADICTION-EVIDENCE-AUTHORITY-CURRENTNESS-013"
+    ]
   },
   "current_authority_binding": {
     "canonical_main": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
@@ -43,7 +48,8 @@
     "duplicate_architecture_lane_created": false,
     "new_ingest_integrity_delta": true,
     "packet_schema_error_preserved": true,
-    "authority_currentness_rebound_to_9_13": true
+    "authority_currentness_rebound_to_9_13": true,
+    "parallel_contradiction_id_collision_resolved": true
   },
   "credits": {
     "historical_direct_source_crosscheck": "PRESENT",

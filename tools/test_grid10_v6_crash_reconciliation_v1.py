@@ -158,6 +158,40 @@ class CrashReconciliationTests(unittest.TestCase):
         self.assertEqual(result.status, STATUS_CLOSED)
         self.assertEqual(result.evidence["mismatches"], [])
 
+    def test_consecutive_wake_epoch_gap_is_accepted(self):
+        self._insert_agency_event(
+            event_id="t1:wake:intent-a",
+            event_type="DEFERRED_INTENT_FIRED",
+            state_epoch=8,
+        )
+        self._insert_agency_event(
+            event_id="t1:wake:intent-b",
+            event_type="DEFERRED_INTENT_FIRED",
+            state_epoch=9,
+        )
+        self._insert_v4(before=9, after=10)
+        self._insert_v6(after=10)
+        result = classify_cycle_intent(self.db, tick_id="t1")
+        self.assertEqual(result.status, STATUS_CLOSED)
+        self.assertEqual(result.evidence["mismatches"], [])
+
+    def test_duplicate_wake_epoch_cannot_mask_missing_checkpoint(self):
+        self._insert_agency_event(
+            event_id="t1:wake:intent-a",
+            event_type="DEFERRED_INTENT_FIRED",
+            state_epoch=8,
+        )
+        self._insert_agency_event(
+            event_id="t1:wake:intent-b",
+            event_type="DEFERRED_INTENT_FIRED",
+            state_epoch=8,
+        )
+        self._insert_v4(before=9, after=10)
+        self._insert_v6(after=10)
+        result = classify_cycle_intent(self.db, tick_id="t1")
+        self.assertEqual(result.status, STATUS_INCONSISTENT)
+        self.assertIn("PRE_V4_EPOCH_GAP_NOT_FULLY_EVENT_ATTESTED", result.evidence["mismatches"])
+
     def test_foreign_pre_v4_epoch_write_is_inconsistent(self):
         self._insert_agency_event(
             event_id="other-worker:event",

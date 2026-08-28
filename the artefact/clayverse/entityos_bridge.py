@@ -134,40 +134,55 @@ class EntityOSBridge:
         finally:
             os.close(fd)
 
+    @staticmethod
+    def _best_effort_reap_started_process(proc: subprocess.Popen) -> None:
+        """Contain a started child without inventing a terminal effect outcome."""
+        try:
+            if proc.poll() is None:
+                proc.kill()
+        except Exception:
+            pass
+        try:
+            proc.communicate(timeout=1.0)
+        except Exception:
+            pass
+
     def run(self, argv):
         if not isinstance(argv, list) or not argv or any(not isinstance(x, str) or "\x00" in x for x in argv):
             raise ValueError("explicit non-empty string argv required")
         fd = self._open_verified()
-        dispatch_attempted = False
         try:
             executable = f"/proc/self/fd/{fd}"
-            # From this point onward the child may have started. Any missing terminal
-            # receipt must therefore remain UNKNOWN rather than being promoted to a
-            # definite negative fact that could make a blind retry look safe.
-            dispatch_attempted = True
-            cp = subprocess.run(
+            # subprocess.Popen returns only after the parent has crossed Python's
+            # launch/exec handshake. A failure raised *by Popen itself* is therefore
+            # still a pre-dispatch/launch failure and must not be promoted to UNKNOWN.
+            # Once Popen returns successfully, the child may already have produced an
+            # external effect; every missing or untrustworthy terminal receipt from
+            # that point onward is causally UNKNOWN and must never enable blind replay.
+            proc = subprocess.Popen(
                 [executable, *argv],
                 executable=executable,
                 pass_fds=(fd,),
                 shell=False,
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
                 text=False,
-                timeout=self.timeout,
                 env={"PATH": self._EXEC_PATH},
             )
-            return {
-                "ok": cp.returncode == 0,
-                "exit": cp.returncode,
-                "stdout_sha256": hashlib.sha256(cp.stdout).hexdigest(),
-                "stderr_sha256": hashlib.sha256(cp.stderr).hexdigest(),
-                "stdout": cp.stdout[:4096].decode(errors="replace"),
-                "stderr": cp.stderr[:4096].decode(errors="replace"),
-            }
-        except Exception as exc:
-            if dispatch_attempted:
+            try:
+                stdout, stderr = proc.communicate(timeout=self.timeout)
+                return {
+                    "ok": proc.returncode == 0,
+                    "exit": proc.returncode,
+                    "stdout_sha256": hashlib.sha256(stdout).hexdigest(),
+                    "stderr_sha256": hashlib.sha256(stderr).hexdigest(),
+                    "stdout": stdout[:4096].decode(errors="replace"),
+                    "stderr": stderr[:4096].decode(errors="replace"),
+                }
+            except Exception as exc:
+                self._best_effort_reap_started_process(proc)
                 raise EntityOSOutcomeUnknown(
-                    "EntityOS dispatch may have started without a terminal receipt"
+                    "EntityOS child started without a trustworthy terminal receipt"
                 ) from exc
-            raise
         finally:
             os.close(fd)

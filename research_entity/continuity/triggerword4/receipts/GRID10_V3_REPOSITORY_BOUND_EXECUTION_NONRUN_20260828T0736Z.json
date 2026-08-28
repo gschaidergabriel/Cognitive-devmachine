@@ -1,0 +1,43 @@
+{
+  "schema": "TRIGGERWORD4_GATE_RECEIPT/v1",
+  "recorded_at": "2026-08-28T07:36:00Z",
+  "trigger": "triggerwort 4",
+  "gate_id": "GRID10_SIGKILL_INDEPENDENT_REPLACEMENT_V3_REPOSITORY_BOUND_EXECUTION",
+  "classification": "INFRASTRUCTURE_WORKFLOW_NONEXECUTION",
+  "runtime_credit": 0,
+  "source_lane": {
+    "branch": "go/grid10-v3-runtime-20260828",
+    "head": "e19db35e281dd4210b2892da3fbd01bd16024d92",
+    "message": "ci(go): minimize GRID10 v3 workflow for Actions indexer"
+  },
+  "observed_workflow_run": {
+    "run_id": 33149053380,
+    "workflow_name": "Research Entity Identity Guard",
+    "status": "completed",
+    "conclusion": "failure",
+    "job_id": 98776542633,
+    "job_name": "identity-guard",
+    "runner_id": 0,
+    "runner_name": "",
+    "steps": []
+  },
+  "interpretation": [
+    "No repository-bound GRID10 v3 acceptance test step executed in this observed run.",
+    "The failure conclusion is not evidence that GRID10 v3 semantics failed.",
+    "The run is not a PASS and grants zero runtime/Physical-GRID10/HCU credit.",
+    "Keep the gate open until an exact clean-checkout execution actually runs the v3 acceptance and regression with source identity bound."
+  ],
+  "required_next_execution": [
+    "distinct parent/coord-old/coord-new real PIDs",
+    "SIGKILL coord-old after durable admission and before ACK",
+    "pre-TTL replacement blocked",
+    "post-TTL automatic coord-new election",
+    "recovery/replay executed by coord-new",
+    "exactly one admission",
+    "outbox consumed 0->1",
+    "S1 unchanged",
+    "replay +0",
+    "provider calls 0"
+  ],
+  "blocked_gate_policy": "BLOCKED_GATE != BLOCKED_PROJECT; continue independent Frankenstein-2.0 forensic fusion and source/preassembly work while runtime evidence remains zero."
+}

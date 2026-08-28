@@ -1,0 +1,61 @@
+{
+  "schema_version": "TRIGGERWORD4_COORDINATION_RECEIPT/v1",
+  "status": "COORDINATION_WRITE_COMMITTED_NO_RUNTIME_CREDIT",
+  "trigger": "4",
+  "routing_self_test": "PASS",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "authority": {
+    "canonical_main_observed_before_write": "1b2208495dc55ff9a7ede118fa78cfb3d2083ade",
+    "selected_supervisor_delta": "9.13AJ_NON_AUTHORITY",
+    "selected_supervisor_delta_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AJ_DELTA_2026-08-29T0038P0700_GPT56SOL.json",
+    "trigger4_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "trigger4_branch_head_observed_before_write": "0e6eff974e89b0f9173fe64b619a929dcb386b39"
+  },
+  "branch_relation": {
+    "status": "DIVERGED_DO_NOT_BLIND_MERGE",
+    "ahead_by": 922,
+    "behind_by": 61,
+    "merge_base_observed": "4a4287d0935d4dd19d122b1027716a569d331a73"
+  },
+  "observed_execution_blocker": {
+    "classification": "GITHUB_ACTIONS_PRESTEP_ASSIGNMENT_OR_CONTROL_PLANE_UNKNOWN",
+    "evidence_summary": "Selected steering 9.13AJ records failed jobs across GitHub-hosted and self-hosted runner families dying before step initialization with runner_id=0 and steps=[], while VPS bridge telemetry remained alive.",
+    "counterhypothesis_rejected": "A stopped self-hosted runner alone explains the shared failure.",
+    "runtime_credit": 0
+  },
+  "coordination_writes": [
+    {
+      "issue": 2121,
+      "action": "ASSIGN_AND_COMMENT",
+      "assignee": "gschaidergabriel",
+      "comment_id": 5456375392,
+      "instruction": "Do not restart runner or retry until first repository/org/Actions policy, billing/quota, concurrency, disablement, or equivalent UI/API cause is captured for runs 22395268107 / 22395074062."
+    },
+    {
+      "issue": 2122,
+      "action": "ASSIGN_AND_COMMENT",
+      "assignee": "gschaidergabriel",
+      "comment_id": 5456378733,
+      "instruction": "Keep existing zero-cost read-only owning-VPS quiescence lane; do not retry/restart while shared Actions pre-step failure is unresolved."
+    }
+  ],
+  "duplication_guard": {
+    "new_dispatch_created": false,
+    "new_generation_advanced": false,
+    "runner_restart_attempted": false,
+    "workflow_retry_attempted": false,
+    "reason": "Existing issues 2121 and 2122 are the retained bounded lanes and 9.13AJ marks further retries/restarts as lower-information until the common pre-step cause is observed."
+  },
+  "credits": {
+    "physical_grid10": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "frankenstein2_runtime": 0
+  },
+  "next_exact_gate": "Capture the first repository/org/Actions policy, billing/quota, concurrency, disablement, or equivalent control-plane cause visible for workflow runs 22395268107 and 22395074062; only then decide whether the existing 2121/2122 execution lanes can resume. Continue only non-conflicting source/test assembly meanwhile.",
+  "evidence_boundary": "This receipt proves GitHub coordination writes and branch/main reentry observations only. It is not execution evidence and mints no GRID10/HCU/EntityOS/Frankenstein runtime credit."
+}

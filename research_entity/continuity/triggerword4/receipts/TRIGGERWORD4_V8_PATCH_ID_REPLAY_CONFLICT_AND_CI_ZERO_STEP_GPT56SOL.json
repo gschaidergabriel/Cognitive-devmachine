@@ -1,0 +1,73 @@
+{
+  "schema": "TRIGGERWORD4_CONTINUATION_RECEIPT/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "CONTROL_PATCH_REPLAY_IDENTITY_FAIL_CLOSED_SOURCE_CLOSURE_AND_ZERO_STEP_CI_NEGATIVE_EVIDENCE",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
+  "branch_head_reentry_observed_before_receipt": "71a7aacf0e435057448eb9aa3527be9ce5c6c292",
+  "authority": {
+    "supervisor_schema": "9.13",
+    "selected_delta": "9.13AE_NON_AUTHORITY",
+    "free_only": true,
+    "together_forbidden": true,
+    "paid_fallback_forbidden": true,
+    "singleton_g0000_duplicate_trigger_forbidden": true
+  },
+  "finding": {
+    "class": "IDEMPOTENCY_KEY_ALIASING_FAIL_OPEN",
+    "implementation_file": "tools/frankenstein2_cognitive_control_plane_v1.py",
+    "test_file": "tests/test_frankenstein2_cognitive_control_plane_v1.py",
+    "before": "apply_patch treated any existing patch_id as an accepted idempotent replay without verifying that the new patch payload matched the originally committed patch_json",
+    "risk": "a caller bug or patch-id collision could make a different control change appear already committed while returning an accepted replay receipt",
+    "counterhypothesis": "patch_id uniqueness discipline outside this module prevents conflicting reuse",
+    "counterhypothesis_status": "INSUFFICIENT_FOR_FAIL_CLOSED_CONTROL_AUTHORITY because the module itself exposes patch_id as the durable idempotency key and stores patch_json but did not compare it"
+  },
+  "source_delta": {
+    "implementation_commit": "1ec7ef02a576c1f45bfd56aed1a278ad32fd807b",
+    "regression_commit": "76f6dd96decab53d4985c5db30826c37d37e724d",
+    "change": "canonicalize the submitted patch once, load the stored patch_json for an existing patch_id, reject non-identical reuse with PATCH_ID_REUSE_CONFLICT, and reuse the same canonical patch_json for the durable revision row",
+    "regression": "same patch_id with a changed reason/base/payload is rejected, state digest remains unchanged, committed value remains the original value, and revision count remains one",
+    "runtime_pass_claimed": false
+  },
+  "ci_negative_evidence": {
+    "workflow_run_id": 33170013635,
+    "head_sha": "76f6dd96decab53d4985c5db30826c37d37e724d",
+    "job_id": 98844577561,
+    "status": "completed",
+    "conclusion": "failure",
+    "runner_label": "ubuntu-latest",
+    "runner_id": 0,
+    "steps": [],
+    "classification": "ZERO_STEP_GITHUB_HOSTED_INFRASTRUCTURE_FAILURE_NOT_CODE_TEST_RESULT",
+    "deterministic_tests_observed": false
+  },
+  "singleton_dispatch": {
+    "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+    "issue": 2121,
+    "workflow_run_id": 33168491753,
+    "last_observed_status": "queued",
+    "last_observed_job_id": 98839547140,
+    "last_observed_runner_id": 0,
+    "terminal_result_receipt_observed": false,
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false
+  },
+  "parallel_reentry": {
+    "checkpoint_v7_commit_observed": "c7bb993ff20b63ffc20bafef28b4028ab320bf56",
+    "later_crash_reconciliation_commit_observed": "71a7aacf0e435057448eb9aa3527be9ce5c6c292",
+    "duplicate_lane_created": false,
+    "retained_pr": 2118
+  },
+  "credit": {
+    "source_closure": 1,
+    "physical_grid10_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "frankenstein2_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Do not create a second g0000 trigger. First observe assignment/terminal state of the existing self-hosted workflow 33168491753 and bind any terminal result to the canonical ordinary-dispatch receipt. While runner assignment remains absent, continue only nonduplicate source-level fail-closed audits on the newest Triggerword-4 head; do not claim GRID10 or Frankenstein-2.0 runtime PASS."
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "TRIGGERWORD_5_INGEST_CORROBORATION_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T10:07:17Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/corroborating-crosscheck",
+  "classification": "CORROBORATING_DIRECT_SOURCE_AND_EXTERNAL_PRIMARY_CROSSCHECK_NOT_RUNTIME_REPLICATION",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main_sha": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "runtime_probe_this_receipt": false,
+    "unusual_experiment": "NOT_USED"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "crosschecked_delta": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORK_EXECUTION_BINDING_NATIVE_CHILD_DELTA_2026-08-28T1005Z_GPT56SOL.json",
+  "crosschecked_packet": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+  "checks": [
+    {
+      "id": "HANDOFF_IS_NOT_SPAWN",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "5690-5785",
+      "result": "CONFIRMED",
+      "finding": "handoff() creates entityos_arbeitspaket and a deterministic DB-derived handoff capsule, while its own docstring explicitly says stern delegates nothing itself."
+    },
+    {
+      "id": "GOVERNANCE_EXPECTS_HANDOFF_SPAWN_RECONCILE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "span": "1-160",
+      "result": "CONFIRMED",
+      "finding": "The governance path says user approval precedes architect spawn and requires stern.py handoff before spawning plus stern.py reconcile afterward; the workpackage layer and native spawn layer are therefore distinct."
+    },
+    {
+      "id": "DONOR_HOOK_MANIFEST_HAS_NO_DEDICATED_CHILD_LIFECYCLE",
+      "source": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "span": "1-75",
+      "result": "CONFIRMED_WITH_BOUNDARY",
+      "finding": "The checked-in donor manifest subscribes seven hook classes and does not list SubagentStart/SubagentStop/Task lifecycle hooks. This is donor-config evidence only, not proof about host/global settings or installed runtime capabilities."
+    },
+    {
+      "id": "CURRENT_CLAUDE_NATIVE_IDENTITY_CAPABILITY",
+      "source": "https://code.claude.com/docs/en/hooks",
+      "observed_on": "2026-08-28",
+      "result": "EXTERNAL_PRIMARY_CONFIRMS_CAPABILITY_NOT_HOST_RUNTIME",
+      "finding": "Current official documentation states SubagentStart receives unique agent_id and agent_type; SubagentStop carries agent_id/agent_type/transcript identity; tool hooks inside subagents carry agent_id/agent_type; TaskCreated carries task_id."
+    },
+    {
+      "id": "CURRENT_CLAUDE_RESUME_AND_WORKTREE_CAPABILITY",
+      "source": "https://code.claude.com/docs/en/sub-agents",
+      "observed_on": "2026-08-28",
+      "result": "EXTERNAL_PRIMARY_CONFIRMS_CAPABILITY_NOT_HOST_RUNTIME",
+      "finding": "Current official documentation describes resumable subagent identity by agent ID and optional isolation: worktree. Exact installed build/config behavior remains unobserved."
+    }
+  ],
+  "architecture_judgement": {
+    "result": "CORROBORATES_WORK_EXECUTION_BINDING_V1_DIRECTION",
+    "law": "work_package_id identifies durable intended work; binding_id must identify a concrete execution attempt; native agent/task identity may populate that binding only after observed installed-runtime evidence; call-scoped tool/effect identity remains distinct.",
+    "do_not_promote": [
+      "official documentation to installed-host runtime evidence",
+      "handoff package creation to child spawn evidence",
+      "child final text to typed completion evidence",
+      "logical child identity to effect/world truth authority"
+    ]
+  },
+  "contradictions_preserved": [
+    "The donor source requires/assumes a spawn step in governance while the deterministic handoff implementation performs no spawn itself.",
+    "Current official Claude Code exposes useful native identity/lifecycle primitives, while exact installed host version/settings/hook behavior remain UNKNOWN."
+  ],
+  "security_priority": "Historical Wache/Schranke-only archaeology remains DEFERRED_SECURITY_REFERENCE under the current functional-core-first Triggerword-5 directive unless it exposes a present functional identity/causal/completion defect.",
+  "runtime_credit": {
+    "native_child_runtime": 0,
+    "work_execution_binding_runtime": 0,
+    "effect_invocation_runtime": 0,
+    "completion_runtime": 0,
+    "entityos_whole_runtime": 0
+  },
+  "next_exact_gate": "Pin the exact installed Claude Code build and bounded relevant host policy/settings identities, then—only on an admitted host/native-runtime observation surface—capture one harmless child lifecycle and two disjoint-child ordering traces binding work_package_id -> native agent/task identity -> child/tool invocation -> result -> typed reconcile. Until then retain runtime credit 0.",
+  "result": "PASS_AT_CORROBORATING_SOURCE_CROSSCHECK_SCOPE_ONLY"
+}

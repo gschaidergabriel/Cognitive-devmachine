@@ -1,0 +1,26 @@
+{
+  "schema_version": "TRIGGERWORD5_STATE_SYNC_PENDING/v1",
+  "created_at": "2026-08-28T11:01:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/retrieval-identity-binding",
+  "status": "SYNC_PENDING_DUE_CONCURRENT_INGEST_STATE_MOVEMENT",
+  "target_state": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+  "observed_state_blob_sha": "d2ce91e956485a995075a58bdbc3226ad581c3f4",
+  "observed_state_last_ingest_at": "2026-08-28T10:53:00Z",
+  "observed_state_last_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1053Z_STOP_HOOK_AUTHORITY_REBIND_DIRECT_DONOR_GPT56SOL.json",
+  "branch_head_observed_after_own_receipt": "b6659cf0ac64c714ad4c877696d2761baf9f1000",
+  "branch_head_message": "trigger5: ingest headless Claude mutation boundary",
+  "own_packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105532Z_5641dc6_GPT56SOL_RETRIEVAL_IDENTITY_BINDING.json",
+  "own_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T105532Z_RETRIEVAL_IDENTITY_BINDING_GPT56SOL.json",
+  "own_ingest_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T105532Z_RETRIEVAL_IDENTITY_BINDING_GPT56SOL.json",
+  "reason": "INGEST_STATE changed between reads while parallel Triggerword-5 workers were committing. A full-file replacement without rebasing all concurrent provenance could discard newer state. Fail-closed decision: preserve the append-only packet/delta/receipt and record state synchronization as pending instead of overwriting shared state.",
+  "required_reentry_action": "On the next state-merge opportunity, fetch one stable exact INGEST_STATE blob, append TW5-PACKET-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL to consumed_packet_ids, append the 10:55 architecture delta/receipt tuple without deleting any concurrent entries, merge the retrieval-identity frontier and contradiction, and update the top-level last_* fields only if this delta is still newest at merge time.",
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SOURCE_SCOPE",
+    "state_sync": "PENDING",
+    "runtime": 0,
+    "provider": 0,
+    "training": 0,
+    "whole_product": 0
+  }
+}

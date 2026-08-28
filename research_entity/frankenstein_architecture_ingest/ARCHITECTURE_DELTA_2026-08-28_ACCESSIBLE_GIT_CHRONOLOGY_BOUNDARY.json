@@ -1,0 +1,97 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_ACCESSIBLE_GIT_CHRONOLOGY_BOUNDARY",
+  "analysis_time_utc": "2026-08-28T07:35:30Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "current_commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "52dfe4b68d00f481d00338c430c513b79dcf2342"
+  },
+  "finding_class": "NEGATIVE_RESULT_WITH_CHRONOLOGY_BOUNDARY",
+  "accessible_git_chronology": [
+    {
+      "order": 1,
+      "commit": "4f55d688fe27e9361374ea912e57319bfb566407",
+      "committed_at_utc": "2026-08-25T21:37:33Z",
+      "path": "windows/quelle/stern.py",
+      "status": "FIRST_VERIFIED_SOURCE_BEARING_COMMIT_FOR_THIS_PATH",
+      "evidence": [
+        "Git path history reports this commit as the first source-bearing commit before the later repository reorganization.",
+        "Its parent 6cc5a3f3e23451c2275463bde407912e2d46b8f7 returns Not Found for windows/quelle/stern.py.",
+        "This first source snapshot already contains Phase-2 zulassen()/merken() effect bookkeeping and _beleg_pruefen completion-evidence verification."
+      ],
+      "interpretation": "The relative introduction order of posttool-only logging, Phase-2 admission bookkeeping and completion verification is already collapsed at this import boundary. Do not claim their creation dates or exact within-host sequence from this repository history."
+    },
+    {
+      "order": 2,
+      "commit": "9051cb5938a713c84a9670275beb449cd93ebb71",
+      "committed_at_utc": "2026-08-25T21:47:52Z",
+      "path": "README.md plus windows/quelle/stern.py inherited from prior commit",
+      "status": "PUBLIC_NARRATIVE_ALREADY_CALLS_EFFECT_JOURNAL_LIVE",
+      "evidence": "README at this point describes the effect journal as LIVE while the canonical Linux scripts/stern.py path is still absent. This is evidence of source/package chronology, not proof of original host-runtime introduction time."
+    },
+    {
+      "order": 3,
+      "commit": "b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a",
+      "committed_at_utc": "2026-08-25T22:18:41Z",
+      "path": "scripts/stern.py",
+      "status": "FIRST_VERIFIED_CANONICAL_LINUX_PLUGIN_PAYLOAD_COMMIT",
+      "evidence": [
+        "Commit message explicitly ships the actual installable plugin payload.",
+        "Parent 9051cb5938a713c84a9670275beb449cd93ebb71 has no scripts/stern.py at that path.",
+        "The new Linux source already carries the same integrated Phase-2 effect and completion-evidence mechanisms rather than exposing their original build sequence."
+      ]
+    },
+    {
+      "order": 4,
+      "commit": "ccf2264f23b65ed796f9ed44a38c8c55bd379345",
+      "committed_at_utc": "2026-08-27T12:22:13Z",
+      "path_transition": "scripts/stern.py -> DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "status": "REPOSITORY_TOPOLOGY_MIGRATION_NOT_FEATURE_INTRODUCTION",
+      "interpretation": "Do not date EffectGate semantics from the current path's Git history; this commit moved/reorganized an already-existing source tree."
+    }
+  ],
+  "cross_repo_lineage_context": {
+    "historical_repo": "gschaidergabriel/Project-Frankenstein",
+    "historical_commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "current_ingest_finding": "Historical AgentLoop/ToolExecutor source had real pre-execution approval denial for non-safe tools, while current stern generic admission is source-proven nonblocking.",
+    "boundary": "This establishes a semantic predecessor/branching lineage but does not by itself prove a direct Git ancestry edge into the imported stern.py snapshot."
+  },
+  "architecture_rule": {
+    "rule_id": "F2_HISTORICAL_CHRONOLOGY_IMPORT_BOUNDARY_024",
+    "status": "SOURCE_VERIFIED_NEGATIVE_RESULT",
+    "claim": "Current Frankenstein repository Git cannot by itself reconstruct the requested internal chronological sequence posttool-only logging -> Phase-2 nonblocking admission bookkeeping -> completion verifier, because the first accessible source-bearing snapshots already contain the later mechanisms together. Historical sequencing before the import must remain UNKNOWN unless recovered from the original underlab/source repository, archived commits, or an explicitly ancestry-bound predecessor repository.",
+    "target_action": "PRESERVE_UNKNOWN_AND_RECOVER_EXTERNAL_PROVENANCE"
+  },
+  "triggerword4_handoff": {
+    "do_not_assume": [
+      "Do not treat first public source appearance as creation time.",
+      "Do not infer that Project-Frankenstein approval code is a direct ancestor of stern.py without an ancestry/provenance bridge.",
+      "Do not use the current relocated path history as an effect-feature introduction timestamp."
+    ],
+    "usable_now": [
+      "Use current source-proven semantics: generic stern PreToolUse bookkeeping is nonblocking; explicit host/executor enforcement must be separate and typed.",
+      "Use immutable per-invocation identity and separate admission/enforcement/execution/world-verification/completion states regardless of unresolved historical sequencing."
+    ]
+  },
+  "credits": {
+    "source_forensics": "PRESENT",
+    "git_chronology_boundary": "PRESENT",
+    "historical_original_creation_sequence": "UNKNOWN",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Search the original underlab/source lineage and Project-Frankenstein history for an ancestry-bound source of the pre-import effect pipeline; if no immutable bridge exists, close the internal chronology as HISTORICAL_PROVENANCE_UNAVAILABLE rather than inventing a sequence."
+}

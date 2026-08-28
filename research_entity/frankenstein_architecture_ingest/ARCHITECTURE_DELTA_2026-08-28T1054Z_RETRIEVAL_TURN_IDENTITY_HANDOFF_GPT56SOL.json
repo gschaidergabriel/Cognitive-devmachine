@@ -1,0 +1,129 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:54:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/retrieval-identity-forensics",
+  "trigger": "triggerwort 5",
+  "delta_class": "RETRIEVAL_TURN_CAUSAL_IDENTITY_HANDOFF",
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "design_head_before_delta": "a381cc8ebb9517a77323c74b2704425e10cb079b",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "source_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "source_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "authority_binding": {
+    "epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY",
+    "runtime_credit": 0
+  },
+  "packet": {
+    "packet_id": "TW5-PACKET-20260828T105400Z-RETRIEVAL-TURN-BINDING-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105400Z_5641dc6_GPT56SOL_RETRIEVAL_TURN_BINDING_FORENSICS.json",
+    "commit": "a381cc8ebb9517a77323c74b2704425e10cb079b",
+    "disposition": "SELF_GENERATED_SOURCE_FORENSICS_PACKET_ADMITTED_FOR_SAME_TRIGGER_AFTER_DIRECT_SOURCE_CROSSCHECK"
+  },
+  "material_finding": {
+    "summary": "The donor already creates and persists round-scoped retrieval_id, turn_id, episode_id, causal_id, generation and query_hash, but the later Stop relevance-cognition interface carries only session_id plus transcript_path. The model-feedback path therefore reconstructs both target retrieval and query indirectly at Stop time instead of consuming the exact identity produced at retrieval time.",
+    "architectural_class": "INTERCONNECT_ABI_IDENTITY_LOSS",
+    "not_a_missing_state_problem": true,
+    "runtime_failure_observed": false,
+    "confidence_source_structure": 0.99
+  },
+  "source_crosscheck": [
+    {
+      "span": "4210-4310",
+      "kind": "LIVE_CODE",
+      "finding": "MicroClay.retrieve persists retrieval_id, turn_id, episode_id, causal_id, session_id, generation and query_hash in retrieval_episodes and returns retrieval_id/query digest in its receipt."
+    },
+    {
+      "span": "4725-4808",
+      "kind": "LIVE_CODE",
+      "finding": "_microclay_schatten deliberately creates fresh causal_id, turn_id and episode_id per UserPromptSubmit and passes them into retrieve, specifically to make repeated same-session rounds distinct."
+    },
+    {
+      "span": "4960-5045",
+      "kind": "LIVE_CODE",
+      "finding": "_kognition_richten_hook receives only session_id/transcript_path, selects ORDER BY ts DESC LIMIT 1 among same-session rows without modell:relevanz, then separately resolves the last user message from transcript_path before applying credit to the selected row."
+    },
+    {
+      "span": "8840-8898",
+      "kind": "LIVE_CODE",
+      "finding": "Stop calls _kognition_richten_hook(session_id, transcript_path); no retrieval_id, turn_id, episode_id, causal_id or generation crosses this control boundary."
+    }
+  ],
+  "causal_analysis": {
+    "observed": [
+      "Round-scoped retrieval identity exists before Stop.",
+      "Stop relevance cognition does not receive that identity.",
+      "Target retrieval row is rediscovered by session_id/newest-open ordering.",
+      "Query text is rediscovered independently as the last user message in the transcript."
+    ],
+    "inference": "If Stop processing overlaps, reorders, is delayed, or sees more than one uncredited same-session retrieval, the independently reconstructed target row and query can plausibly refer to different rounds.",
+    "falsifier": "Execute two same-session retrieval rounds with distinct retrieval_id/turn_id/query, deliberately reverse/interleave Stop relevance processing, and prove that each model-derived feedback receipt binds to the intended retrieval_id and matching query identity. A source-only result cannot close this gate.",
+    "counterhypothesis": "Installed hook scheduling may serialize the relevant events strongly enough that session-newest selection never misbinds in practice; only an executable interleaving test can establish that."
+  },
+  "frankenstein_2_0_architecture_update": {
+    "primitive": "RetrievalRelevanceCandidate/v1",
+    "target_2_0_action": "ADAPT_TO_GRID",
+    "identity_envelope_required": [
+      "retrieval_id",
+      "turn_id",
+      "episode_id",
+      "causal_id",
+      "generation",
+      "query_hash",
+      "selected_memory_ids_digest_or_bounded_candidate_digest",
+      "source_build_identity"
+    ],
+    "rules": [
+      "Construct the candidate from the exact retrieval receipt/row; do not rediscover a target by newest same-session ordering.",
+      "Carry query identity with the candidate. If raw query text is required for inference, bind it to query_hash/value provenance rather than reading an unrelated latest transcript message later.",
+      "Model output remains candidate evidence only; deterministic reducer remains the sole writer of retrieval_feedback/policy updates.",
+      "Reject stale generation, unknown retrieval_id, identity mismatch, duplicate receipt, source/build mismatch and query-hash mismatch fail-closed.",
+      "Run relevance inference outside deterministic Stop completion authority per the preceding Stop-hook boundary delta.",
+      "Preserve the existing round-scoped identity generation and retrieval ledger; repair the handoff rather than introducing a second state store."
+    ],
+    "grid_mapping": {
+      "producer": "retrieval cell / Typed Entry-admitted retrieval path",
+      "candidate_bus": "typed causal packet/workspace interconnect",
+      "consumer": "small-model/HCU relevance cognition cell",
+      "reducer": "deterministic retrieval-feedback admission",
+      "truth_authority": "NONE_FROM_MODEL_OUTPUT",
+      "effect_authority": "UNCHANGED"
+    }
+  },
+  "contradictions_preserved": [
+    "The donor intentionally repaired retrieval rounds to be round-scoped, yet downstream model relevance still uses session-scoped rediscovery.",
+    "Rich causal identity is stored, but the Stop cognition ABI behaves as if only session identity were available."
+  ],
+  "feeds_triggerword_4": {
+    "required_actions": [
+      "Use the exact retrieval receipt to construct RetrievalRelevanceCandidate/v1 with immutable retrieval/turn/episode/causal/generation/query identity.",
+      "Add a two-round same-session reverse-completion test that fails on any cross-attachment.",
+      "Add query-hash/value binding so the model cannot judge retrieval A using transcript query B.",
+      "Keep Frank Harness untouched; use donor-side tests/external test lane under current authority.",
+      "Retain runtime, canonical-semantics, physical GRID10 and training credit at zero until executable gates pass."
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "architecture_identity_delta": "PASS_SOURCE_SCOPE",
+    "wrong_attachment_runtime_observed": false,
+    "interleaving_acceptance": 0,
+    "stop_latency_acceptance": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 external/donor-side test lane: bind RetrievalRelevanceCandidate/v1 to exact retrieval_id+turn_id+episode_id+causal_id+generation+query_hash, then execute two same-session retrievals with reversed/interleaved relevance completion and assert zero cross-attachment; separately preserve the 9.13AC slow/unreachable-model Stop bookkeeping test. Do not modify Frank Harness.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "feeds_triggerword_4_boolean": true
+}

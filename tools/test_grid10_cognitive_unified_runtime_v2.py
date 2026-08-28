@@ -25,10 +25,11 @@ class UnifiedRuntimeV2Tests(unittest.TestCase):
     def tearDown(self):
         self.td.cleanup()
 
-    def test_one_physical_db_contains_fabric_and_heartbeat_tables(self):
+    def test_one_physical_db_contains_fabric_heartbeat_and_agency_tables(self):
         db = self.root / "unified.sqlite"
-        fabric, store, _, fp = build_shared_runtime(db)
+        fabric, store, agency, _, fp = build_shared_runtime(db)
         self.assertEqual(Path(fabric.path).resolve(), Path(store.path).resolve())
+        self.assertEqual(Path(fabric.path).resolve(), Path(agency.path).resolve())
         self.assertEqual(fp, fingerprint_sqlite(db))
         con = sqlite3.connect(str(db))
         try:
@@ -37,10 +38,10 @@ class UnifiedRuntimeV2Tests(unittest.TestCase):
             )}
         finally:
             con.close()
-        self.assertIn("nodes", names)
-        self.assertIn("regulators", names)
-        self.assertIn("ticks", names)
-        self.assertIn("meta", names)
+        self.assertTrue({
+            "nodes", "regulators", "ticks", "meta",
+            "agency_meta", "goals", "deferred_intents", "agency_events",
+        }.issubset(names))
 
     def test_split_database_authority_fails_closed(self):
         fabric = Fabric(self.root / "fabric.sqlite")
@@ -48,19 +49,31 @@ class UnifiedRuntimeV2Tests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "UNIFIEDDB_AUTHORITY_SPLIT"):
             assert_shared_unifieddb_authority(fabric, store)
 
-    def test_restart_reopens_same_authority_and_keeps_tick_history(self):
+    def test_restart_reopens_same_authority_and_keeps_tick_and_goal_history(self):
         db = self.root / "unified.sqlite"
-        _, store1, runtime1, fp1 = build_shared_runtime(db)
+        _, store1, agency1, runtime1, fp1 = build_shared_runtime(db)
+        agency1.create_goal(
+            goal_id="goal-restart",
+            origin="test",
+            semantic_goal="survive process re-entry",
+            success_criteria=("goal survives",),
+            uncertainty=0.2,
+            event_id="evt-goal-create",
+            now_ts=100.0,
+        )
         first = runtime1.tick_once(tick_id="restart-before", trusted_axes=_trusted_normal_axes())
         self.assertEqual(first.assurance_mode.value, "NORMAL")
         self.assertTrue(store1.load_previous_projected())
 
         # New objects simulate process/session re-entry. No in-memory runtime state is reused.
-        _, store2, runtime2, fp2 = build_shared_runtime(db)
+        _, store2, agency2, runtime2, fp2 = build_shared_runtime(db)
         second = runtime2.tick_once(tick_id="restart-after", trusted_axes=_trusted_normal_axes())
         self.assertEqual(second.assurance_mode.value, "NORMAL")
         self.assertEqual(fp1, fp2)
         self.assertTrue(store2.load_previous_projected())
+        goal = agency2.get_goal("goal-restart")
+        self.assertEqual(goal.semantic_goal, "survive process re-entry")
+        self.assertEqual(goal.generation, 0)
 
         con = sqlite3.connect(str(db))
         try:
@@ -68,10 +81,14 @@ class UnifiedRuntimeV2Tests(unittest.TestCase):
                 "SELECT tick_id FROM ticks ORDER BY created_ts"
             )]
             last = con.execute("SELECT v FROM meta WHERE k='last_tick_id'").fetchone()[0]
+            event_count = con.execute(
+                "SELECT COUNT(*) FROM agency_events WHERE goal_id='goal-restart'"
+            ).fetchone()[0]
         finally:
             con.close()
         self.assertEqual(tick_ids, ["restart-before", "restart-after"])
         self.assertEqual(last, "restart-after")
+        self.assertEqual(event_count, 1)
 
     def test_bounded_entry_emits_two_replayable_frames_on_shared_db(self):
         db = self.root / "unified.sqlite"

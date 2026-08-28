@@ -15,11 +15,13 @@ There is no default provider call. An explicit admitted inference_fn is required
 specialist/GWT cognition. Receipts are candidate-cognition evidence only and cannot mint
 canonical truth, effects or completion.
 
-V4 commits the durable Agency transition before the optional cognitive fan-out. If that
-fan-out raises, v6 persists a sanitized FAILED closure receipt bound to the same tick,
-Agency epoch and ControlSnapshot before re-raising a bounded runtime error. This makes the
-post-commit failure boundary machine-visible; it does not claim two-phase atomicity or make
-a failed cognitive cycle replayable under the same tick identity.
+V4 commits the durable Agency transition before the optional cognitive fan-out. V6 now
+persists a create-once PREPARED crash-reconciliation intent before entering V4 and closes
+that intent in the same SQLite transaction as the V6 cognition receipt. If the process dies
+after V4 commit but before the V6 receipt transaction, the surviving PREPARED intent plus
+V4 cycle row is machine-classifiable as RECOVERY_REQUIRED_POST_V4_COMMIT with unknown
+provider-call state and no same-tick retry authorization. This is recovery observability,
+not a claim of full two-phase atomicity.
 """
 from __future__ import annotations
 
@@ -42,6 +44,11 @@ from grid10_live_control_binding_v2 import (
     ControlledCognitiveCycleResultV2,
     run_control_bound_cognitive_cycle_v2,
     sanitized_control_receipt_v2,
+)
+from grid10_v6_crash_reconciliation_v1 import (
+    install_reconciliation_schema,
+    mark_intent_closed_in_transaction,
+    prepare_cycle_intent,
 )
 
 SCHEMA = "GRID10_UNIFIED_COGNITIVE_RUNTIME/v6"
@@ -129,6 +136,7 @@ class UnifiedCognitiveRuntimeV6:
         self.cognitive_config = cognitive_config
         self.unified_db = Path(self.agency.path)
         _init_v6_schema(self.unified_db)
+        install_reconciliation_schema(self.unified_db)
 
     def tick_once(
         self,
@@ -145,6 +153,14 @@ class UnifiedCognitiveRuntimeV6:
         # Single immutable current-cycle basis. V4 is explicitly supplied this exact snapshot,
         # so pulse scheduling and later specialist/GWT gating cannot read divergent revisions.
         control: ControlSnapshot = self.control_plane.snapshot()
+        prepared_agency_epoch = int(self.agency.snapshot().state_epoch)
+        prepare_cycle_intent(
+            self.unified_db,
+            tick_id=tick_id,
+            agency_epoch_at_prepare=prepared_agency_epoch,
+            control_epoch=int(control.control_epoch),
+            control_snapshot_digest=control.snapshot_digest,
+        )
         base = self.runtime_v4.tick_once(
             tick_id=tick_id,
             interval=interval,
@@ -247,6 +263,7 @@ class UnifiedCognitiveRuntimeV6:
             "tick_id": tick_id,
             "agency_epoch_before": base.agency_epoch_before,
             "agency_epoch_after": base.agency_epoch_after,
+            "agency_epoch_at_prepare": prepared_agency_epoch,
             "assurance_mode": base.assurance_mode,
             "raw_next_action": raw_next_action,
             "next_action": next_action,
@@ -261,6 +278,7 @@ class UnifiedCognitiveRuntimeV6:
             "cognitive_cycle_status": cognitive_cycle_status,
             "post_v4_commit_failure": cognitive_error is not None,
             "same_tick_retry_authorized": False if cognitive_error is not None else None,
+            "crash_reconciliation_intent_prepared": True,
             "reserved_cognitive_context_overrides": list(reserved_context_overrides),
             "controlled_cognitive_cycle_receipt": cognitive_receipt,
             "canonical_truth_minted": False,
@@ -287,6 +305,11 @@ class UnifiedCognitiveRuntimeV6:
                     receipt_digest,
                     time.time(),
                 ),
+            )
+            mark_intent_closed_in_transaction(
+                con,
+                tick_id=tick_id,
+                closure_receipt_digest=receipt_digest,
             )
             con.execute("COMMIT")
         except Exception:

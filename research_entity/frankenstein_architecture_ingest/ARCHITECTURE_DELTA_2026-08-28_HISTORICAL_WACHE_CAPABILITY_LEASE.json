@@ -1,0 +1,110 @@
+{
+  "schema": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:35:30Z",
+  "authority_epoch": "8.78",
+  "status": "SOURCE_ARCHIVE_CORROBORATED_DESIGN_DELTA",
+  "source_snapshot": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "canonical_main_observed": "55f2c9daa55ffe30392585c08d48d0659d2d33a3",
+    "design_branch_before_write": "e7ef1dfd7c2c42aa2f2b38b1694386486a12a5ec",
+    "ingested_packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL"
+  },
+  "crosschecks": [
+    {
+      "source": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ACTION_BOUNDARY_SUBMANIFEST.json",
+      "blob_sha": "b3bceb16a1c0038d0d719b44bfec7295170a3dd7",
+      "result": "CORROBORATES archived wache-koenig.py sha256 7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23 and freigabe sha256 23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d, plus the source-declared limits and one-shot command-bound ticket design"
+    },
+    {
+      "source": "research_entity/archive_assimilation/receipts/666_20260809T0521p0700_chatgpt_secondary_drive_aicore_action_boundary.json",
+      "blob_sha": "9bc0e493acc1148003f328de99c9f2810c701753",
+      "result": "CORROBORATES owner-gate separation, command-hash binding, expiry/single-use lineage and a bounded non-destructive classifier replay; does not establish current runtime reachability"
+    }
+  ],
+  "forensic_findings": [
+    {
+      "finding_id": "F2_WACHE_BASH_ONLY_REAL_BLOCKING_PREDECESSOR",
+      "classification": "HISTORICAL_SOURCE_CORROBORATED",
+      "claim": "The archived wache-koenig.py is a genuine pre-execution blocking predecessor for selected Bash commands when installed in a PreToolUse scheduler: it returns a blocking exit for hard-deny classes and for ticket-required commands without a valid grant. It is not a complete cross-tool effect authority because non-Bash tools are intentionally outside its scope.",
+      "migration": "Keep the pre-execution enforcement position, retire Bash-only regex classification as canonical authority."
+    },
+    {
+      "finding_id": "F2_WACHE_ONE_SHOT_OWNER_GRANT_PRECURSOR",
+      "classification": "HISTORICAL_SOURCE_CORROBORATED",
+      "claim": "The archived gate consumes a one-shot ticket bound to the exact command hash; the companion freigabe path separates grant creation from model/tool execution through a controlling TTY and adds delay/expiry. This is a strong precursor to a typed owner/capability lease, but raw command text omits typed resource, resolved executable, cwd/environment, generation and causal identity.",
+      "migration": "Adapt the separation, one-shot consumption, scope binding and expiry into a typed EffectDecision/CapabilityLease; do not copy typing heuristics or raw-command authority."
+    },
+    {
+      "finding_id": "F2_EFFECT_LINEAGE_IS_NONMONOTONIC",
+      "classification": "INFERENCE_FROM_CROSSCHECKED_SOURCE",
+      "claim": "The effect lineage contains distinct mechanisms rather than one continuously strengthening gate: historical Project-Frankenstein caller-side human approval, archived wache-koenig Bash enforcement, and current stern.py nonblocking admission/outcome journaling each preserve different useful properties and different gaps.",
+      "migration": "Frankenstein 2.0 must fuse typed pre-execution decision consumption with exact post-effect verification/journaling rather than naming any one donor mechanism as the finished EffectGate."
+    }
+  ],
+  "frankenstein2_effect_contract_delta": {
+    "candidate_state": "PENDING_EFFECT",
+    "decision_type": "EffectDecision",
+    "decision_required_fields": [
+      "decision_id",
+      "invocation_id_or_tool_use_id",
+      "request_digest",
+      "session_id",
+      "generation",
+      "causal_id",
+      "policy_version",
+      "capability_scope",
+      "resource_identity",
+      "decision",
+      "issued_at",
+      "expires_at"
+    ],
+    "executor_rule": "The actual execution boundary must atomically consume a matching one-shot EffectDecision/CapabilityLease before submission. Caller-controlled skip_approval, session-wide mutable pointers, journal labels, model output and owner-intent prose are not substitutes.",
+    "mismatch_rule": "Any mismatch in invocation identity, request digest, generation, capability scope, resource identity, policy version or expiry fails closed before effect submission.",
+    "post_submission_rule": "After submission, cancellation and outcome are distinct. Transport uncertainty becomes OUTCOME_UNKNOWN until verified; never reinterpret it as CANCELLED and never blindly replay.",
+    "coverage_rule": "All state-changing tool classes must converge on the same deterministic effect authority or carry an explicit typed exemption with narrower capabilities; a Bash-only gate is insufficient."
+  },
+  "world_and_grid_reuse": {
+    "rule": "Treat capability/effect authority as typed metadata outside the vector plane. HCU/GRID/world-model outputs may propose an EffectRequest but cannot mint, widen or consume an owner capability lease on their own.",
+    "negative_rule": "A recalled historical approval method or vector similarity to an approved action never creates present authority."
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-WACHE-REACHABILITY-008",
+      "status": "OPEN",
+      "detail": "Exact archived source and hash are recovered, but the exact scheduler/settings binding and ordering that made this snapshot live are not established by this run."
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-COVERAGE-009",
+      "status": "OPEN",
+      "detail": "The historical gate intentionally covers Bash only; current evidence does not establish one equivalent deterministic gate for every non-Bash state-changing tool path."
+    }
+  ],
+  "triggerword4_handoff": {
+    "required_regressions": [
+      "one-shot decision consumed exactly once",
+      "request-digest mismatch denies before submission",
+      "stale generation denies before submission",
+      "wrong invocation/tool_use_id denies before submission",
+      "expired grant denies before submission",
+      "capability/resource mismatch denies before submission",
+      "parallel same-session effects cannot overwrite each other's decision identity",
+      "non-Bash mutating tools traverse the same effect authority",
+      "post-submission unknown outcome cannot be replayed as if cancelled"
+    ],
+    "donor_fixture_reuse": "Retain historical benign/delete/nested-shell/hard-deny cases as regression fixtures only; do not elevate regex classification into EntityOS authority."
+  },
+  "credits": {
+    "historical_source_forensics": "PRESENT",
+    "historical_classifier_replay": "PREEXISTING_BOUNDED_RECEIPT_ONLY",
+    "current_donor_runtime": 0,
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover the exact historical/global hook scheduler registration and ordering for wache-koenig, then trace current realtime_gespraech function-call dispatch to prove whether every state-changing voice tool reaches the same typed successor effect boundary; keep runtime credit at zero until exact execution receipts exist."
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v2",
+  "created_at": "2026-08-28T10:42:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/workexecution-handoff-marker-join",
+  "trigger": "triggerwort 5",
+  "routing": "PASS",
+  "authority": {
+    "authority_epoch": "9.13",
+    "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "mode": "FREE_ONLY"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1041Z_WORKEXECUTION_HANDOFF_MARKER_JOIN_GPT56SOL.json",
+    "commit_sha": "744e6dd833ff785609b1b43eb260596ad2b2696c",
+    "disposition": "ADMITTED_APPEND_ONLY_NONRUNTIME_ARCHITECTURE_DELTA"
+  },
+  "reentry": {
+    "parallel_head_after_delta": "9bf076fbb97b3c299300a5b8e4f6922b93ae9cfe",
+    "delta_remains_ancestor": true,
+    "parallel_followups_preserved": [
+      "7bec265e35605bfef4fa37d5f783e9972472a119 closes the hook identity selftest blind spot and explicitly requires paket_id -> Agent tool_use_id -> response agentId regression coverage",
+      "9bf076fbb97b3c299300a5b8e4f6922b93ae9cfe records a separate GWT child-tool provenance gap"
+    ]
+  },
+  "observed": [
+    "Pinned donor handoff() creates paket_id and emits a delegation capsule beginning with exact HANDOFF <paket_id>.",
+    "Pinned donor handoff() explicitly states that the coordinator gives this capsule text to the delegated subagent, while stern itself does not perform the spawn.",
+    "Current official Claude Code hook reference documents Agent tool_input.prompt as the task for the agent and hook events carry tool_use_id.",
+    "Current official Claude Code hook reference documents Agent PostToolUse tool_response.agentId, allowing the same Agent PostToolUse payload to bind tool_use_id to agentId.",
+    "Current donor source does not persist tool_use_id or agent_id, so the binding remains unimplemented and not target-runtime-proven by donor source alone."
+  ],
+  "new_information": "deterministic paket_id -> spawn tool_use_id join candidate from the existing HANDOFF marker carried in the documented Agent prompt ABI; this complements, rather than duplicates, the already-admitted tool_use_id -> agentId ABI join",
+  "contradictions_preserved": [
+    "Governance says handoff precedes native spawn, but donor source itself does not issue that native spawn.",
+    "Current official ABI supports the identity joins, but installed target-host payloads have not been observed in this run.",
+    "Repository hooks.json is not proof of full user/managed/host hook composition."
+  ],
+  "runtime_actions": [],
+  "provider_actions": [],
+  "unusual_experiment": "NOT_USED",
+  "credit_delta": {
+    "source_forensics": "BOUNDED_POSITIVE_DELTA",
+    "installed_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword 4 implements the fail-closed marker join and call-scoped tool_use_id correlation with same-session interleaving regressions, then an explicitly admitted installed-target run captures one harmless real Agent delegation and proves paket_id -> tool_use_id -> agentId from exact hook payloads without timing inference."
+}

@@ -30,6 +30,7 @@ import json
 from pathlib import Path
 import sqlite3
 import time
+from types import MappingProxyType
 from typing import Any, Mapping
 
 SCHEMA = "FRANKENSTEIN2_COGNITIVE_CONTROL_PLANE/v1"
@@ -88,6 +89,12 @@ class ControlSnapshot:
     control_epoch: int
     values: Mapping[str, ControlValue]
     snapshot_digest: str
+
+    def __post_init__(self) -> None:
+        # frozen=True protects the dataclass attributes, not a mutable dict stored in
+        # values. Copy before proxying so neither callers nor the constructor's source
+        # mapping can mutate a latched snapshot while leaving snapshot_digest unchanged.
+        object.__setattr__(self, "values", MappingProxyType(dict(self.values)))
 
     def get(self, name: str) -> float | int | str:
         try:

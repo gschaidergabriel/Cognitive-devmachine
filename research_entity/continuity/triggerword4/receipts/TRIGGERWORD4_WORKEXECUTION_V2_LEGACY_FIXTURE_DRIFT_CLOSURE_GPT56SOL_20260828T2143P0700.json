@@ -1,0 +1,45 @@
+{
+  "schema": "TRIGGERWORD4_SOURCE_TEST_DRIFT_CLOSURE_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "scope": "FRANKENSTEIN2_WORKEXECUTION_BINDING_V2_LEGACY_MIGRATION_TEST_FIXTURE_ONLY",
+  "authority_boundary": "NONCANONICAL_SOURCE_TEST_RECEIPT_NO_RUNTIME_OR_PRODUCT_CREDIT",
+  "finding": {
+    "classification": "TEST_FIXTURE_DRIFT",
+    "test": "tests/test_frankenstein2_work_execution_binding_v2.py::WorkExecutionBindingV2Tests::test_v2_refuses_legacy_database_with_multiple_completions",
+    "problem": "The migration test attempted to manufacture a historical multiple-completion database through the current v1 API. Parallel Triggerword-4 hardening made v1 terminal state monotonic, so the predecessor API now rejects the legacy behavior before the v2 migration discriminator can observe it.",
+    "counterhypothesis": "The test could remain valid if the predecessor API intentionally preserved the historical bug, but current branch source explicitly fences terminal bindings, so this counterhypothesis is rejected at source scope.",
+    "impact_if_unfixed": "The v2 migration test can fail for fixture-construction reasons and no longer discriminates whether v2 rejects an actually ambiguous legacy database."
+  },
+  "delta": {
+    "commit": "90126ec1400db8e683bfdcb125c0bd9f2ae26f2d",
+    "file": "tests/test_frankenstein2_work_execution_binding_v2.py",
+    "change": "Seed a pre-hardening v1-compatible ambiguous SQLite state directly under the legacy schema, then require v2 initialization to reject it with LEGACY_MULTIPLE_COMPLETIONS_REQUIRE_RECONCILIATION:b1:2.",
+    "fixture_independence": "The historical-state test no longer depends on the present predecessor API retaining a retired defect."
+  },
+  "execution": {
+    "repository_bound_test_execution_observed": false,
+    "github_hosted_semantic_execution_observed": false,
+    "self_hosted_vps_semantic_execution_observed": false,
+    "reason": "Existing Triggerword-4 self-hosted singleton runtime jobs remain queued without assigned runner/terminal result and no duplicate dispatch was authorized. This write closes source/test construction only."
+  },
+  "coordination": {
+    "duplicate_runtime_dispatch_created": false,
+    "generation_advanced": false,
+    "parallel_write_conflicts_observed": 2,
+    "conflict_handling": "REENTERED_AND_FUSED_NO_FORCE_OVERWRITE",
+    "existing_singletons_preserved": [
+      "grid10-runtime-quiescence-v2-g0000",
+      "grid10-sigkill-independent-replacement-v3-g0000"
+    ]
+  },
+  "credit": {
+    "workexecution_v2_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Execute the current WorkExecutionBinding v1/v2 and Agent handoff regression set on an admitted deterministic execution surface when available; independently restore or assign the existing self-hosted Linux/X64 runner so the already-queued Triggerword-4 singleton jobs can acquire a runner. Do not duplicate issue 2121/2122 or advance their generation while canonical terminal results are absent."
+}

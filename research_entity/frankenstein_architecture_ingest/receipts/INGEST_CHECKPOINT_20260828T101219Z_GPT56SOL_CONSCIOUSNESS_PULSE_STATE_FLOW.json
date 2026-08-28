@@ -1,0 +1,104 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "checkpoint_id": "INGEST_CHECKPOINT_20260828T101219Z_GPT56SOL_CONSCIOUSNESS_PULSE_STATE_FLOW",
+  "created_at": "2026-08-28T10:12:19Z",
+  "routing": {
+    "trigger": "triggerwort 5",
+    "status": "VERIFIED",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "organ": "GPT-5.6-Sol/triggerwort5/consciousness-pulse-state-flow"
+  },
+  "authority": {
+    "canonical_main_sha": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "runtime_credit": 0,
+    "design_head_before_write": "efd5c4ccb5dd2d5ebc726d039cbabd83e1264fba"
+  },
+  "source_identity": {
+    "current_frankenstein_donor_repo": "gschaidergabriel/frankenstein",
+    "current_frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "historical_repo": "gschaidergabriel/Project-Frankenstein",
+    "historical_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "historical_source": "services/consciousness_daemon.py",
+    "historical_source_kind": ["LIVE_CODE_AT_HISTORICAL_SHA", "HISTORICAL_ONLY_FOR_CURRENT_PRODUCT_AUTHORITY"]
+  },
+  "coordination": {
+    "duplicate_avoidance": "Native child spawn/lifecycle + WorkExecutionBinding frontier was checkpointed by a parallel Triggerword-5 lane during this macro; this checkpoint deliberately advances the next functional priority instead.",
+    "shared_ingest_state_write": "NOT_PERFORMED",
+    "reason": "Concurrent workers are moving the branch and central ingest state; append-only receipt preserves provenance without clobbering mixed-freshness shared state."
+  },
+  "semantic_atoms": [
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "services/consciousness_daemon.py :: timing constants + workspace update loop",
+      "observed": "WORKSPACE_UPDATE_INTERVAL_S is 60 seconds at the pinned historical SHA. The running loop repeatedly calls _update_workspace() and then sleeps for that interval.",
+      "evidence_scope": "historical source only"
+    },
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "services/consciousness_daemon.py :: _update_workspace",
+      "observed": "The workspace refresh gathers live hardware, mood and ego data, refreshes proprioception caches, ticks additional internal controllers, derives energy from CPU load, and replaces the in-memory WorkspaceSnapshot under a lock.",
+      "evidence_scope": "historical source only"
+    },
+    {
+      "classification": "SCHEMA",
+      "source_span": "services/consciousness_daemon.py :: WorkspaceSnapshot dataclass + workspace_state schema",
+      "observed": "WorkspaceSnapshot carries timestamp, body/ego, mood, memory, identity, environment, attention_focus, mood_value and energy_level. workspace_state persists corresponding fields and indexes timestamp.",
+      "evidence_scope": "historical source only"
+    },
+    {
+      "classification": "ENFORCEMENT_CODE",
+      "source_span": "services/consciousness_daemon.py :: _update_workspace persistence branch",
+      "observed": "Only every fifth workspace update is inserted into workspace_state; old snapshots are bounded by MAX_WORKSPACE_HISTORY. On startup the newest workspace_state row is reloaded into the mutable current workspace.",
+      "evidence_scope": "historical source only"
+    },
+    {
+      "classification": "NEGATIVE_RESULT",
+      "source_span": "forensic comparison against current Typed Entry / causal identity requirements",
+      "observed": "The inspected workspace path is timestamped and lock-protected but no replay-stable causal_event_id/admission_id/frame_id/generation/provenance envelope is established by the inspected spans. A mutable latest WorkspaceSnapshot therefore cannot by itself serve as canonical causal truth or an exact effect-completion record.",
+      "evidence_scope": "source forensics; no runtime claim"
+    }
+  ],
+  "architecture_delta_for_frankenstein_2": {
+    "preserve": [
+      "periodic low-cost workspace refresh",
+      "restart recovery from durable workspace projection",
+      "bounded history",
+      "attention and energy as explicit state dimensions",
+      "separation between fast mutable working state and slower persistence"
+    ],
+    "change": [
+      "Wrap each accepted observation set in an immutable CausalWorkspaceFrame carrying frame_id, causal_event_ids, admission_ids, generation and source/provenance references.",
+      "Treat the mutable/latest workspace as a rebuildable cognitive projection, never canonical truth.",
+      "Emit any Pulse/coordination frame as a projection referencing its exact CausalWorkspaceFrame and unresolved alternatives; pulse recurrence must not mint fact authority.",
+      "Bind downstream GRID/GWT cognition to frame identity; cognition yields ActionCandidate only.",
+      "Require EffectGate + EffectJournal for real effects and re-enter verified outcomes as new Typed Entry observations rather than mutating cognitive state into truth."
+    ],
+    "recommended_flow": "Typed Entry observations -> immutable CausalWorkspaceFrame -> attention/narrative/pulse projection -> GRID/GWT/HCU cognition -> ActionCandidate -> EffectGate -> EffectJournal -> verified outcome -> Typed Entry re-entry",
+    "pulse_role": "COORDINATION_PROJECTION_NOT_TRUTH_BUS"
+  },
+  "hypotheses_and_falsifiers": [
+    {
+      "hypothesis": "The historical consciousness workspace is a useful donor for persistent cognitive continuity if its mutable latest-state mechanism is subordinated to typed immutable causal frames.",
+      "confidence": 0.88,
+      "falsifier": "A deterministic replay test shows that identical admitted causal frames can produce different workspace lineage solely because unbound latest-state reads race across feeder loops."
+    },
+    {
+      "hypothesis": "Periodic workspace persistence is suitable for recovery/projection but insufficient for exact effect/evidence closure.",
+      "confidence": 0.96,
+      "falsifier": "Exact source evidence demonstrates every real effect and observed outcome is already atomically bound to the persisted workspace row with causal identity, generation and provenance."
+    }
+  ],
+  "triggerword4_handoff": {
+    "status": "READY_AS_ARCHITECTURE_INPUT",
+    "instruction": "Reuse the workspace continuity mechanism only behind Typed Entry causal-frame admission; do not port mutable latest state as canonical authority. Pulse/attention/workspace outputs remain candidate/projection state until deterministic effect/outcome closure."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_frontier": "TITAN memory evolution: activation decay, consolidation, compression and retrieval weighting, unless a newer branch checkpoint already covers it."
+}

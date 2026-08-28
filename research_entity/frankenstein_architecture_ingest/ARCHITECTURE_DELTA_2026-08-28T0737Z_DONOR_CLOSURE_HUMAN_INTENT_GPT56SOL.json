@@ -1,0 +1,152 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28T0737Z_DONOR_CLOSURE_HUMAN_INTENT_5641dc6b_GPT56SOL",
+  "trigger": "triggerwort 5",
+  "authority_context": {
+    "bootstrap_schema": "8.78",
+    "supervisor_inbox_schema_observed": "9.13",
+    "supervisor_delta_observed": "9.13AA_NON_AUTHORITY",
+    "mode": "FREE_ONLY_HARD_OFF_PROVIDER_ROUTES",
+    "canonical_product": "EntityOS",
+    "canonical_compute_architecture": "HCU"
+  },
+  "evidence_scope": "SOURCE_FORENSICS_AND_PACKET_FUSION_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "8d06100e9bea50cb5dd7846792918398fae942fb",
+    "canonical_main_observed": "01da78bd43066e912410ed1d308f26dba0dae23c"
+  },
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+      "status": "INGESTED_SOURCE_CROSSCHECKED",
+      "independent_runtime_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
+      "status": "INGESTED_SOURCE_CROSSCHECKED",
+      "independent_runtime_credit": false
+    }
+  ],
+  "source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/paket.py",
+      "blob": "4381bca97d67c56df75bd6f16e6919b9d2151f3f",
+      "finding": "Live F94 success path imports from .wegehierarchie and catches/logs the encompassing failure path."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/_archiv-phase4/wegehierarchie.py",
+      "blob": "83d1068bedc4b1fa7dd32aead7600484f8532e34",
+      "finding": "Exact F94 implementation bytes survive in the donor archive, not at the live relative import target."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "finding": "frank_auftrag_stellen uses a mechanical two-step confirmation path requiring exact normalized task text, a new server-transcribed user utterance, no contradiction keyword and <=300s proposal age; frank_erinnerung_schreiben is dispatched through a different branch without that task confirmation."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "gespraech_erinnerung_schreiben persists only to the dedicated bounded gespraech_erinnerung table and commits immediately; this is a bounded internal mutation surface, not arbitrary UnifiedDB write authority."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_EFFECT_GIT_FIRST_SHIPPED_BOUNDARY_034",
+      "source_kind": "HISTORICAL_ONLY",
+      "claim": "Packet evidence pins b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a as the first verified accessible-Git installable scripts/stern.py boundary already containing Phase-2 nonblocking admission, session-wide effect pointer and post-effect completion semantics. This is a shipping/source-availability boundary, not a creation timestamp.",
+      "confidence": 1.0,
+      "target_action": "KEEP_LINEAGE_BOUNDARY",
+      "boundary": "README/live-host evidence indicates prehistory outside accessible Git; do not fabricate creation chronology."
+    },
+    {
+      "atom_id": "F2_WEGEHIERARCHIE_RECOVERABLE_BUT_IMPORT_UNCLOSED_035",
+      "source_kind": "NEGATIVE_RESULT",
+      "claim": "The exact F94 wegehierarchie implementation is recoverable from _archiv-phase4, while current live paket.py imports .wegehierarchie. Repository-source dependency closure is therefore unresolved/broken at the pinned donor identity even though the algorithm bytes survive.",
+      "confidence": 0.995,
+      "target_action": "REPAIR_OR_RETIRE_WITH_VERIFIED_SUCCESSOR",
+      "boundary": "Do not blindly copy archived bytes into the live namespace; the archive location may reflect intentional retirement. Triggerword-4 must either adapt the logic under a source-bound regression or retire the caller branch explicitly."
+    },
+    {
+      "atom_id": "F2_REALTIME_HUMAN_INTENT_DECISION_DONOR_036",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "Realtime task dispatch already has a mechanically stronger human-intent admission step distinct from effect execution: first call only proposes; second call dispatches only when exact normalized text matches, bestaetigt=true, at least one new server-transcribed user utterance arrived, proposal age <=300s and no explicit contradiction keyword was observed.",
+      "confidence": 1.0,
+      "target_action": "KEEP_AND_GENERALIZE_AS_TYPED_HUMAN_INTENT_DECISION",
+      "boundary": "This is not speaker verification or full intent classification, and it is not canonical EffectGate authority."
+    },
+    {
+      "atom_id": "F2_REALTIME_BOUNDED_MEMORY_MUTATION_POLICY_GAP_037",
+      "source_kind": "LIVE_CODE",
+      "claim": "Realtime conversational-memory writes bypass the task dispatcher's two-step confirmation but are bounded to a dedicated gespraech_erinnerung table rather than durable_memory or arbitrary UnifiedDB writes. The gap is therefore mutation-intent policy classification, not proof of an external-effect bypass.",
+      "confidence": 0.99,
+      "target_action": "CLASSIFY_AND_BIND_POLICY",
+      "boundary": "Whether low-risk reversible conversational memory should be implicitly authorized by normal conversation is a product/policy question and remains open; the successor must make that classification explicit and provenance-bearing."
+    },
+    {
+      "atom_id": "F2_REALTIME_CALL_ID_AS_INVOCATION_DONOR_038",
+      "source_kind": "LIVE_CODE",
+      "claim": "Realtime retains call_id through queued function-call lifecycle and function_call_output. This is a useful local predecessor for immutable per-call identity, but it is insufficient until the same identity or an explicitly bound successor survives HumanIntentDecision, EffectDecision/executor submission, journal/outcome and result re-entry.",
+      "confidence": 0.98,
+      "target_action": "ADAPT_TO_GRID"
+    }
+  ],
+  "frankenstein2_architecture_delta": {
+    "typed_mutation_classes": [
+      "READ_ONLY",
+      "EPHEMERAL_STATE",
+      "CANONICAL_INTERNAL_MUTATION",
+      "EXTERNAL_EFFECT_REQUEST",
+      "SESSION_CONTROL"
+    ],
+    "human_intent_contract": [
+      "Introduce HumanIntentDecision as an invocation-bound typed input distinct from EffectDecision and WorldEffectVerification.",
+      "HumanIntentDecision binds invocation_id/call_id + normalized or canonical request digest + source modality/utterance provenance + freshness window + policy class.",
+      "Explicit confirmation is mandatory where policy marks the mutation class as confirmation-required; low-risk reversible internal mutations may use an explicitly defined implicit-intent policy, never accidental fall-through from a different tool branch.",
+      "Model output cannot self-mint HumanIntentDecision."
+    ],
+    "effect_contract": [
+      "External effects remain behind deterministic EntityOS EffectGate/EffectJournal even after HumanIntentDecision succeeds.",
+      "HumanIntentDecision is evidence of user intent, not execution authority; EffectDecision remains separately one-shot, request-digest/generation/capability bound and executor-consumed.",
+      "Cancellation-before-submission invalidates pending decisions; after submission, uncertain outcome remains OUTCOME_UNKNOWN until verified."
+    ],
+    "donor_freeze_contract": [
+      "For wegehierarchie, Triggerword-4 must choose ADAPT or RETIRE explicitly.",
+      "ADAPT requires exact archived source identity plus a package-closure regression where a successful carried walk updates reinforcement and dependency absence cannot degrade silently.",
+      "RETIRE requires removal/replacement of the live import/caller path plus a regression proving no hidden branch still expects F94 semantics."
+    ]
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004",
+      "status": "REFINED_SOURCE_RECOVERED_IMPORT_CLOSURE_OPEN",
+      "claim": "F94 source bytes exist exactly in _archiv-phase4 but live paket.py still targets .wegehierarchie."
+    },
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-GIT-CREATION-010",
+      "status": "OPEN_HOST_PREHISTORY",
+      "claim": "First accessible installable Git source already contains Phase-2; accessible Git cannot establish its creation time."
+    },
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-MUTATION-INTENT-011",
+      "status": "SOURCE_CONFIRMED_POLICY_CLASSIFICATION_OPEN",
+      "claim": "External task dispatch requires a mechanically evidenced second human utterance and confirmation, while bounded conversational-memory mutation commits immediately. The successor needs explicit mutation-class intent policy rather than silently treating these paths as equivalent."
+    }
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Audit the complete Realtime TOOLS declaration and every mutating _tool_ausfuehren branch into typed mutation classes; trace call_id across any bridge to host/Claude execution; close VoiceSessionCapsule serialization with direct source search/lesion evidence; and hand Triggerword-4 source-bound regressions for HumanIntentDecision policy plus wegehierarchie ADAPT-or-RETIRE closure."
+}

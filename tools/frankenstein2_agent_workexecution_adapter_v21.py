@@ -10,6 +10,7 @@ Truth boundaries:
   HANDOFF marker = work identity carrier, not completion evidence
   session_id != tool_use_id != agent_id != task_id
   absent/ambiguous agentId = UNKNOWN, never guessed
+  task_id remains UNKNOWN here until a separate observed Task lifecycle join exists
   one tool_use_id cannot bind two workpackages
   one workpackage generation cannot silently bind multiple Agent calls
 
@@ -260,7 +261,10 @@ class AgentWorkExecutionAdapter:
         """Atomically join exact Agent call identity to observed agentId.
 
         If PostToolUse lacks an unambiguous agentId, the spawn remains explicitly UNKNOWN
-        and no WorkExecutionBinding row is minted.
+        and no WorkExecutionBinding row is minted. That UNKNOWN state is sticky: a later
+        duplicate/replayed PostToolUse cannot silently convert it into observed identity.
+        Task identity is not admitted by this Agent-only edge; it requires separately
+        observed TaskCreated/TaskCompleted evidence.
         """
         spawn_tool_use_id, session_id = _validate_agent_hook(payload, POST_EVENT)
         binding_id = str(binding_id or "").strip()
@@ -272,6 +276,10 @@ class AgentWorkExecutionAdapter:
             raise AgentWorkExecutionIdentityError("CHILD_RUNTIME_KIND_REQUIRED")
         if not identity_provenance:
             raise AgentWorkExecutionIdentityError("IDENTITY_PROVENANCE_REQUIRED")
+        if native_task_id is not None:
+            raise AgentWorkExecutionIdentityError(
+                "NATIVE_TASK_ID_REQUIRES_SEPARATE_OBSERVED_TASK_BINDING"
+            )
 
         tool_response = payload.get("tool_response")
         if not isinstance(tool_response, Mapping):
@@ -295,6 +303,10 @@ class AgentWorkExecutionAdapter:
                 )
             if spawn["status"] == "BOUND":
                 raise AgentWorkExecutionIdentityError("SPAWN_ALREADY_BOUND")
+            if spawn["status"] == "AGENT_ID_UNKNOWN":
+                raise AgentWorkExecutionIdentityError(
+                    "AGENT_ID_UNKNOWN_REQUIRES_RECONCILIATION"
+                )
             if agent_id is None:
                 con.execute(
                     """UPDATE fr2_agent_spawn_observations
@@ -323,7 +335,7 @@ class AgentWorkExecutionAdapter:
                     child_runtime_kind,
                     agent_id,
                     agent_id,
-                    native_task_id,
+                    None,
                     identity_provenance,
                     time.time(),
                     time.time(),
@@ -339,7 +351,7 @@ class AgentWorkExecutionAdapter:
                     "child_runtime_kind": child_runtime_kind,
                     "child_execution_id": agent_id,
                     "native_agent_id": agent_id,
-                    "native_task_id": native_task_id,
+                    "native_task_id": None,
                     "identity_provenance": identity_provenance,
                     "spawn_tool_use_id": spawn_tool_use_id,
                     "parent_session_id": session_id,
@@ -348,12 +360,11 @@ class AgentWorkExecutionAdapter:
             con.execute(
                 """UPDATE fr2_agent_spawn_observations
                    SET status='BOUND',agent_id=?,agent_identity_state='OBSERVED',
-                       binding_id=?,native_task_id=?,post_payload_digest=?,observed_post_at=?
+                       binding_id=?,native_task_id=NULL,post_payload_digest=?,observed_post_at=?
                    WHERE spawn_tool_use_id=?""",
                 (
                     agent_id,
                     binding_id,
-                    native_task_id,
                     post_payload_digest,
                     time.time(),
                     spawn_tool_use_id,
@@ -376,7 +387,7 @@ class AgentWorkExecutionAdapter:
             child_runtime_kind=child_runtime_kind,
             child_execution_id=agent_id,
             native_agent_id=agent_id,
-            native_task_id=native_task_id,
+            native_task_id=None,
             identity_provenance=identity_provenance,
             status="BOUND",
         )

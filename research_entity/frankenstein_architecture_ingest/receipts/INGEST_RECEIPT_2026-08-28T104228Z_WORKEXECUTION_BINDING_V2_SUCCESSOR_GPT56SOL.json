@@ -11,16 +11,28 @@
   "design_head_before_ingest": "4dc7eb2424c57d82375aac9ad08736c474a0b810",
   "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T104228Z_WORKEXECUTION_BINDING_V2_SUCCESSOR_GPT56SOL.json",
   "architecture_delta_commit": "c8de05a10afd1b65c04e840e428e14bb285aa1c2",
-  "packets_consumed": [
+  "packets_examined": [
     {
       "packet_id": "TW5-PACKET-20260828T103200Z-WORKEXECUTION-BINDING-SCHEMA-PROVENANCE-CORRECTION-GPT56SOL",
-      "disposition": "CONSUMED_AS_PROVENANCE_CORRECTION"
+      "local_disposition": "CORROBORATING_PROVENANCE_CORRECTION",
+      "canonical_parallel_state_disposition": "CONSUMED_BY_1040_ABI_RECONCILIATION"
     },
     {
       "packet_id": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
-      "disposition": "CONSUMED_AS_SUCCESSOR_WITH_DIRECT_SOURCE_AND_EXTERNAL_PRIMARY_CROSSCHECK"
+      "local_disposition": "CORROBORATING_SCHEMA_VALID_SUCCESSOR_WITH_DIRECT_SOURCE_AND_EXTERNAL_PRIMARY_CROSSCHECK",
+      "canonical_parallel_state_disposition": "CONSUMED_SCHEMA_VALID_SUCCESSOR_BY_1040_ABI_RECONCILIATION"
     }
   ],
+  "canonical_parallel_reconciliation": {
+    "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1040Z_WORKEXECUTION_BINDING_V2_ABI_RECONCILIATION_GPT56SOL.json",
+    "architecture_delta_commit": "a29aea21ac1f111b65a5e28b25c6b43a4284d6a6",
+    "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1040Z_WORKEXECUTION_BINDING_V2_ABI_RECONCILIATION_GPT56SOL.json",
+    "receipt_commit": "4ad1ca906627931a3127f8226e09864bcac7288b",
+    "ingest_state_observed_at_branch_head": "52e3554fd51920d959c84dddb35b638201d153fd",
+    "state_consumes_both_packets": true,
+    "duplicate_state_write_suppressed": true,
+    "failed_closed_state_update": "409_BLOB_CHANGED_DURING_CONCURRENT_INGEST"
+  },
   "source_crosscheck": {
     "stern_handoff": "CONFIRMED_DURABLE_PACKAGE_AND_CAPSULE_NO_NATIVE_SPAWN",
     "governance_span": "CONFIRMED_LINES_77_81_HANDOFF_THEN_SPAWN_THEN_RECONCILE",
@@ -41,7 +53,7 @@
     "runtime_credit": 0,
     "training_credit": 0
   },
-  "result": "PASS_SOURCE_INGEST_AND_CURRENT_EXTERNAL_PRIMARY_ABI_CROSSCHECK_ONLY",
-  "state_sync": "CHECKPOINT_RECEIPT_PERSISTED; INGEST_STATE_SYNC_ATTEMPT_FOLLOWS_ON_LATEST_HEAD",
+  "result": "PASS_CORROBORATING_SOURCE_INGEST; CANONICAL_PACKET_CONSUMPTION_ALREADY_PERSISTED_BY_PARALLEL_1040_ABI_RECONCILIATION",
+  "state_sync": "SATISFIED_BY_PARALLEL_1040_ABI_RECONCILIATION; SECOND_STATE_WRITE_SUPPRESSED_AFTER_FAIL_CLOSED_409",
   "next_exact_gate": "Triggerword-4: bind paket_id/package_generation deterministically to exact Agent tool_use_id, capture target Agent PostToolUse tool_use_id + tool_response.agentId, cross-check child lifecycle identity, then run two overlapping Agent invocations before runtime credit."
 }

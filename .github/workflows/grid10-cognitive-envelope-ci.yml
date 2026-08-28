@@ -28,6 +28,7 @@ on:
       - 'tools/frankenstein2_effect_dispatch_boundary_v1.py'
       - 'tools/test_frankenstein2_effect_dispatch_boundary_v1.py'
       - 'tools/test_frankenstein2_execution_receipt_atomicity_v1.py'
+      - 'tools/test_frankenstein2_execution_receipt_native_atomicity_v1.py'
       - 'tools/frankenstein2_effect_invocation_binding_v1.py'
       - 'tests/test_frankenstein2_effect_invocation_binding_v1.py'
       - 'tools/frankenstein2_work_execution_binding_v1.py'
@@ -99,6 +100,7 @@ jobs:
           PYTHONPATH=.. python ../tests/test_frankenstein2_effect_lifecycle_completion_v2.py -v
           python test_frankenstein2_effect_dispatch_boundary_v1.py -v
           python test_frankenstein2_execution_receipt_atomicity_v1.py -v
+          python test_frankenstein2_execution_receipt_native_atomicity_v1.py -v
           PYTHONPATH=.. python ../tests/test_frankenstein2_effect_invocation_binding_v1.py -v
           PYTHONPATH=.. python ../tests/test_frankenstein2_work_execution_binding_v1.py -v
           PYTHONPATH=.. python ../tests/test_frankenstein2_work_execution_binding_v2.py -v

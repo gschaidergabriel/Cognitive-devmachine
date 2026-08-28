@@ -248,10 +248,17 @@ class PersistentSchedulerV2Tests(unittest.TestCase):
             con.close()
         self.assertEqual(v4_count, 1)
         self.assertEqual(len(v6_rows), 1)
-        closure = json.loads(v6_rows[0][0])
+        closure_raw = v6_rows[0][0]
+        closure = json.loads(closure_raw)
         self.assertEqual(closure["cognitive_cycle_status"], "FAILED")
         self.assertTrue(closure["post_v4_commit_failure"])
         self.assertFalse(closure["same_tick_retry_authorized"])
+        self.assertNotIn("SCHEDULER_TEST_COGNITION_FAILURE", closure_raw)
+        self.assertEqual(
+            closure["controlled_cognitive_cycle_receipt"]["error_type"],
+            "RuntimeError",
+        )
+        self.assertTrue(closure["controlled_cognitive_cycle_receipt"]["error_digest"])
 
         # Recovery occurs only on the already-scheduled later tick, never by replaying the
         # committed failed tick identity.

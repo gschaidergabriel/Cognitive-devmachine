@@ -1,0 +1,146 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:31:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "WORK_EXECUTION_BINDING_SUCCESSOR_WITH_PACKET_CORRECTIONS",
+  "routing_selftest": "PASS",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_branch": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "ref": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "pre_ingest_sha": "007131285ed54a706be2bca8a4160db1d0730a18"
+  },
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN",
+    "runtime_credit_from_this_ingest": 0
+  },
+  "packet_provenance": {
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "acceptance": "ACCEPT_WITH_CORRECTIONS",
+    "supersedes_packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL"
+  },
+  "packet_corrections": [
+    {
+      "correction_id": "TW5-WORKEXEC-CORR-001-SCHEMA-ENUM",
+      "finding": "Packet atom TW5-WORKEXEC-SUCC-005 uses target_2_0_action=RESEARCH, but INGEST_PACKET_SCHEMA.json does not admit RESEARCH.",
+      "resolution": "Preserve the packet defect and normalize the architecture-model action to UNDECIDED until the runtime ABI discriminator is observed.",
+      "severity": "STRUCTURAL_NONFATAL"
+    },
+    {
+      "correction_id": "TW5-WORKEXEC-CORR-002-SOURCE-SPAN",
+      "finding": "Packet atom TW5-WORKEXEC-SUCC-002 cites architekt_governance.md lines 1-7, but the supporting handoff-before-spawn/reconcile-after sequence is in the later Ablauf section, not the cited opening span.",
+      "resolution": "Accept the semantic claim only against the directly re-read Ablauf span; do not propagate the packet's stale line range.",
+      "severity": "PROVENANCE_SPAN_MISALIGNMENT"
+    },
+    {
+      "correction_id": "TW5-WORKEXEC-CORR-003-JOIN-SCOPE",
+      "finding": "Current primary hook documentation exposes agent_id on hook inputs inside a subagent, so child-internal tool activity can be attributed after child identity exists. The unresolved causal boundary is specifically the parent Agent invocation tool_use_id to spawned child agent_id join.",
+      "resolution": "Narrow the unknown instead of claiming all child tool attribution is unavailable.",
+      "severity": "SEMANTIC_REFINEMENT"
+    }
+  ],
+  "source_revalidation": {
+    "status": "PASS_AT_EXACT_DONOR_SHA_WITH_NO_RUNTIME_CREDIT",
+    "checks": [
+      {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+        "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+        "span": "5580-5845",
+        "finding": "handoff() durably creates entityos_arbeitspaket and a deterministic capsule; its docstring explicitly says stern itself does not delegate/spawn."
+      },
+      {
+        "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+        "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+        "span": "1-81",
+        "finding": "Versioned donor config contains SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact only; no dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted hooks."
+      },
+      {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+        "blob_sha": "b578cc8651c50db1ef98c3d5c74f95f81ba24db9",
+        "span": "Ablauf section, directly re-read in this ingest",
+        "finding": "SPEC says architect is spawned after approval and delegation follows stern.py handoff before spawn plus stern.py reconcile afterwards."
+      }
+    ]
+  },
+  "architecture_effect": {
+    "new_successor_mechanism": "WorkExecutionBinding/v1",
+    "purpose": "Bind durable delegated-work intent to observed native child execution without introducing a second spawn runtime or inventing causal joins.",
+    "fields": {
+      "workpackage_id": "REQUIRED durable EntityOS workpackage identity",
+      "generation": "REQUIRED canonical generation/retry lineage",
+      "parent_session_id": "REQUIRED parent session identity",
+      "parent_prompt_id": "OPTIONAL when observed",
+      "parent_agent_tool_use_id": "OPTIONAL/UNKNOWN until parent Agent invocation is observed",
+      "child_agent_id": "OPTIONAL/UNKNOWN until native SubagentStart or equivalent is observed",
+      "child_agent_type": "OPTIONAL",
+      "task_id": "OPTIONAL independent task-system namespace; never substitute for child_agent_id",
+      "child_transcript_path": "OPTIONAL observed child transcript identity",
+      "binding_evidence_refs": "REQUIRED array of exact source/runtime receipt references for every promoted join",
+      "binding_status": "UNKNOWN | OBSERVED_PARTIAL | VERIFIED_AT_EXACT_RUNTIME_IDENTITY | SUPERSEDED"
+    },
+    "fail_closed_invariants": [
+      "WORKPACKAGE_EXISTS != CHILD_EXECUTED",
+      "TASK_ID != AGENT_ID",
+      "TOOL_USE_ID_TO_AGENT_ID_MUST_NOT_BE_INFERRED_FROM_TIME_OR_ORDER",
+      "MISSING_NATIVE_LIFECYCLE_FIELD => UNKNOWN_NOT_SYNTHESIZED",
+      "HOST_PRIVATE_HOOK_CONFIGURATION_REMAINS_UNKNOWN_UNTIL_OBSERVED",
+      "RETRY_OR_REPLACEMENT_MUST_ADVANCE_OR_EXPLICITLY_SUPERSEDE_GENERATION_BINDING",
+      "MODEL_OR_PACKET_TEXT_CANNOT_MINT_EXECUTION_IDENTITY"
+    ],
+    "grid10_attachment": "Delegation/Agency control may emit durable work intent; GRID10 may consume WorkExecutionBinding as typed execution evidence only after deterministic admission. The binding does not grant effect authority or completion success by itself.",
+    "trigger4_action": "ADAPT_TO_GRID",
+    "runtime_pass": false
+  },
+  "contradictions_preserved": [
+    {
+      "id": "TW5-CONTRADICTION-WORKPACKAGE-NATIVE-CHILD-BINDING-017",
+      "branch_a": "Donor SPEC requires handoff -> spawn -> reconcile.",
+      "branch_b": "Donor LIVE_CODE handoff explicitly does not spawn, and versioned CONFIG lacks dedicated native child lifecycle hooks.",
+      "status": "UNRESOLVED_EXECUTABLE_BINDING"
+    },
+    {
+      "id": "TW5-CONTRADICTION-PARENT-AGENT-INVOCATION-CHILD-ID-018",
+      "branch_a": "Primary docs expose call-scoped tool_use_id on tool events and unique agent_id on subagent lifecycle.",
+      "branch_b": "No installed-runtime shared key joining parent Agent tool_use_id to spawned agent_id has been observed in this ingest.",
+      "status": "UNKNOWN_RUNTIME_ABI"
+    }
+  ],
+  "critical_unknowns": [
+    "Exact installed Claude Code build and enabled lifecycle hooks on the target host.",
+    "Exact Agent PostToolUse tool_response schema on that build.",
+    "Deterministic shared key, if any, joining the parent Agent invocation to SubagentStart agent_id.",
+    "Whether TaskCreated/TaskCompleted participates in ordinary delegated subagent execution.",
+    "Whether host/private settings already capture lifecycle outside the versioned donor plugin.",
+    "Exact resume/replacement/retry supersession behavior across generations."
+  ],
+  "next_exact_gate": {
+    "lane": "TRIGGERWORD_4_OR_OTHER_AUTHORIZED_NON_PROVIDER_RUNTIME_VALIDATION",
+    "action": "Capture one harmless native Agent invocation with exact parent PreToolUse/PostToolUse plus SubagentStart/SubagentStop payloads and bind the observed keys; then run a two-concurrent-child disjoint-scratch falsifier. Do not infer joins from event order.",
+    "triggerword5_execution": "NOT_RUN_THIS_INGEST_ANALYSIS_ONLY",
+    "provider_execution": "NONE"
+  },
+  "credit_boundary": {
+    "source_forensics": "PASS_WITH_PACKET_CORRECTIONS_AT_EXACT_DONOR_SHA",
+    "work_execution_binding_runtime": 0,
+    "native_subagent_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "training": 0
+  },
+  "feeds_triggerword_4": true
+}

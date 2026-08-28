@@ -26,10 +26,11 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.4"
-EXECUTION_RECEIPT_SCHEMA_VERSION = "1.3"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.5"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.4"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
+PAYMENT_LATCH_SCOPE = "process_local"
 MAX_PROVIDER_REQUEST_BYTES = 2_000_000
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_OUTPUT_TOKENS = 4_096
@@ -380,6 +381,7 @@ def inventory(
                 # arbitrary requested model is currently deployed there.
                 "model_availability_verified": False,
                 "budget_epoch_id": _budget_epoch_id(env),
+                "payment_latch_scope": PAYMENT_LATCH_SCOPE,
                 "payment_blocked_current_budget_epoch": payment_blocked,
                 "payment_latch_capacity_exhausted": (
                     latch_capacity_exhausted
@@ -426,6 +428,7 @@ def _route_from_inventory(rows: list[dict]) -> dict:
         "candidates": [row["provider_id"] for row in eligible],
         "selection_scope": "provider_endpoint",
         "model_availability_verified": False,
+        "payment_latch_scope": PAYMENT_LATCH_SCOPE,
         "zero_cost_only": ZERO_COST_ONLY,
         "denied_providers": sorted(DENIED_PROVIDERS),
         "payment_blocked_providers": blocked,
@@ -462,6 +465,7 @@ def receipt() -> dict:
             "paid_calls_forbidden": True,
             "together_access_forbidden": True,
             "payment_required_is_hard_stop": True,
+            "payment_latch_restart_durable": False,
             "model_availability_inferred_without_probe": False,
             "network_probe_performed": False,
         },
@@ -1489,6 +1493,7 @@ def _execute_chat_locked(
         "retryable": retryable,
         "cooldown_seconds": cooldown_seconds,
         "payment_latch_active": payment_latch_active,
+        "payment_latch_scope": PAYMENT_LATCH_SCOPE,
         "payment_latch_publication_failed": (
             payment_latch_publication_failed
         ),

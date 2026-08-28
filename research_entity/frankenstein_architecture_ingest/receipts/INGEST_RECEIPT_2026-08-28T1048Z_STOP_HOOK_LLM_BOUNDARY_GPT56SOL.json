@@ -1,0 +1,35 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "created_at": "2026-08-28T10:48:00Z",
+  "trigger": "triggerwort 5",
+  "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packet_id": "TW5-PACKET-20260828T104200Z-STOP-HOOK-LLM-BOUNDARY-GPT56SOL",
+  "packet_blob_sha": "bcfc78b590a9fffd905051630dfb3540755432d0",
+  "packet_disposition": "CONSUMED_AFTER_DIRECT_SOURCE_CROSSCHECK",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+  "architecture_delta_commit": "efc62c7453d99ea77d8cc8a88d00863042d96e22",
+  "semantic_result": "STOP_HOOK_LLM_BOUNDARY_CONTRADICTION_CONFIRMED_AND_DEFERRED_GRID_COGNITION_ADOPTED_AS_TARGET",
+  "source_evidence": [
+    "stern.py hard boundary still says no LLM invocation in a hook",
+    "default Stop global budget is 2.0s; kognition model timeout is 1.3s; default model qwen2.5:0.5b; default endpoint http://localhost:11434",
+    "_ollama_generate performs synchronous HTTP generation and kognition_urteil sends user query plus selected durable-memory candidate text",
+    "_kognition_richten_hook selects newest same-session retrieval without modell:relevanz feedback using ORDER BY ts DESC LIMIT 1 and writes typed model credit through MicroClay._apply_credit",
+    "Stop calls _kognition_richten_hook before later GW/governance/waiting bookkeeping",
+    "event-wide SIGALRM transfers timeout to outer handler and returns 0, so interrupted later Stop code is not resumed"
+  ],
+  "evidence_scope": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "installed_runtime": 0,
+    "latency_measurement": 0,
+    "concurrency_measurement": 0,
+    "provider_execution": false,
+    "vps_execution": false,
+    "training": 0
+  },
+  "target_contract": "HookCognitionBoundary/v1: model relevance is retrieval_id-bound noncanonical candidate evidence executed outside deterministic hook completion authority; deterministic reducer alone writes admitted feedback",
+  "next_exact_gate": "Triggerword-4: implement deferred retrieval_id-bound relevance candidate execution, then test two overlapping same-session retrieval episodes with reverse completion order and a slow/unavailable model while deterministic Stop bookkeeping completes."
+}

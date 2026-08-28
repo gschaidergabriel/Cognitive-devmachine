@@ -27,8 +27,8 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.11"
-EXECUTION_RECEIPT_SCHEMA_VERSION = "1.9"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.12"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.10"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
 PAYMENT_LATCH_SCOPE = "process_local"
@@ -40,8 +40,13 @@ EXECUTION_LOCK_FORK_ISOLATED = hasattr(os, "register_at_fork")
 
 def _reinitialize_process_state_after_fork() -> None:
     global _PROCESS_COST_PRINCIPAL_KEY, PROCESS_EXECUTION_LOCK
-    _PROCESS_COST_PRINCIPAL_KEY = secrets.token_bytes(32)
     PROCESS_EXECUTION_LOCK = threading.Lock()
+    _PROCESS_COST_PRINCIPAL_KEY = hmac.new(
+        _PROCESS_COST_PRINCIPAL_KEY,
+        b"FRANK_PROCESS_COST_PRINCIPAL_FORK_V1\0"
+        + str(os.getpid()).encode("ascii"),
+        hashlib.sha256,
+    ).digest()
 
 
 MAX_PROVIDER_REQUEST_BYTES = 2_000_000

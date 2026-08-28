@@ -1,0 +1,97 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECONCILIATION/v1",
+  "created_at": "2026-08-28T10:37:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/workexecution-ordering-reconciliation",
+  "lane": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_LIVE_INGEST",
+  "routing_self_test": "PASS",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_write": "a859b3bf959969fb96090d2bfce9c19cd8595681",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority": {
+    "authority_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c"
+  },
+  "reconciles": [
+    {
+      "commit": "e9874eedd559d19962a5866f64734af42ae9d4aa",
+      "role": "packet quarantine and source-span/schema/currentness correction",
+      "status": "RETAIN"
+    },
+    {
+      "commit": "fa891ff6bf037b1d154bbbc3d12be2b754f793df",
+      "role": "external-primary correction establishing documented Agent invocation join",
+      "status": "RETAIN_AND_PREFER_FOR_JOIN_SEMANTICS"
+    },
+    {
+      "commit": "a859b3bf959969fb96090d2bfce9c19cd8595681",
+      "role": "append-only ingest checkpoint created after the correction but containing pre-correction join wording",
+      "status": "RETAIN_AS_HISTORICAL_CHECKPOINT_WITH_JOIN_WORDING_SUPERSEDED"
+    }
+  ],
+  "ordering_conflict": {
+    "classification": "APPEND_ONLY_SEMANTIC_ORDERING_CONFLICT_NOT_ARCHITECTURE_DISAGREEMENT",
+    "stale_statement": "The a859b3bf checkpoint still states that a deterministic parent Agent tool_use_id -> child agent_id join remains unproven by documentation.",
+    "resolution": "For current specification/capability interpretation, fa891ff6 correction supersedes that statement. Generic PostToolUse supplies top-level tool_use_id and the Agent-specific PostToolUse tool_response is documented to contain agentId. The same event therefore exposes a documented tool_use_id -> tool_response.agentId pair. This is not installed-host runtime proof and does not by itself prove equality with SubagentStart/SubagentStop agent_id on the target build.",
+    "do_not_rewrite_history": true
+  },
+  "effective_work_execution_binding_v1": {
+    "identity_domains": [
+      "durable_workpackage_id",
+      "parent_session_id",
+      "generation",
+      "agent_tool_use_id",
+      "agent_tool_response_agentId",
+      "lifecycle_agent_id",
+      "optional_task_id"
+    ],
+    "closed_at_external_primary_spec_scope": [
+      "PostToolUse.tool_use_id -> PostToolUse.tool_response.agentId for Agent tool responses"
+    ],
+    "still_open": [
+      "durable_workpackage_id -> exact Agent tool_use_id deterministic binding",
+      "installed-runtime equality/normalization of Agent tool_response.agentId and SubagentStart/SubagentStop agent_id",
+      "actual target-host hook firing and concurrency behavior",
+      "typed completion/result receipt binding back to durable_workpackage_id"
+    ],
+    "task_id_rule": "Keep task_id optional and independent unless TaskCreated/TaskCompleted is actually part of the observed execution path.",
+    "anti_crosswire_rule": "Never infer package/child identity from timestamp or event order when call-scoped identity can be carried explicitly.",
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "packet_disposition": {
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "status": "REMAINS_QUARANTINED_PARTIAL_ACCEPT_NOT_CONSUMED",
+    "reasons": [
+      "canonical_main binding in the immutable packet is stale relative to 24389f873a775fd3af5fc3c896a58836d09a3bff",
+      "target_2_0_action=RESEARCH is outside the current INGEST_PACKET_SCHEMA enum",
+      "the governance handoff/spawn/reconcile claim was attached to the wrong source span",
+      "its external-primary open-join claim has been narrowed/corrected by current documentation"
+    ]
+  },
+  "architecture_effect": {
+    "frankenstein_2_0": "Do not add a second spawn runtime. Preserve donor durable handoff intent, but insert an explicit GRID-controlled WorkExecutionBinding at the coordinator boundary that binds package_id to the exact Agent tool_use_id before or as the Agent invocation is issued; then reconcile tool_response.agentId/lifecycle agent_id and completion receipts as evidence, not truth by narration.",
+    "sparse_world_substrate": "Delegated work identities may be provenance references for learned/operator candidates, but package existence, child existence or model output never promotes a simulated/inferred transition to an observed world transition."
+  },
+  "next_discriminator": {
+    "trigger5_source_only": "Search current donor/coordinator integration surfaces for any existing explicit package_id -> Agent invocation key before proposing new machinery.",
+    "trigger4_or_authorized_runtime": "Capture one harmless Agent invocation with exact PreToolUse/PostToolUse and SubagentStart/SubagentStop identities, then run two concurrent children to falsify cross-wiring. Bind package_id explicitly; do not use timing/order heuristics.",
+    "execution_this_trigger": "NOT_RUN_SOURCE_AND_EXTERNAL_PRIMARY_ONLY",
+    "unusual_experiment": false
+  },
+  "credits": {
+    "source_forensics": "PASS_WITH_RECONCILIATION",
+    "installed_host_runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "acceptance": "RECONCILIATION_COMMITTED_SOURCE_FORENSIC_SCOPE_ONLY"
+}

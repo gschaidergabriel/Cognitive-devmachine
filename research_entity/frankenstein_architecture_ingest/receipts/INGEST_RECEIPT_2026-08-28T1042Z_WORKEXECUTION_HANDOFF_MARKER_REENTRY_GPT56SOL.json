@@ -1,0 +1,83 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T1042Z-WORKEXECUTION-HANDOFF-MARKER-REENTRY-GPT56SOL",
+  "created_at": "2026-08-28T10:42:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "routing": {
+    "status": "VERIFIED",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "shared_world_directive": "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+  },
+  "authority": {
+    "canonical_main_sha_observed": "4792b1ba4186e21b60c6eb051a6d47b6510a31f6",
+    "supervisor_epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together": "FORBIDDEN"
+  },
+  "pins": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_head_observed_before_receipt": "744e6dd833ff785609b1b43eb260596ad2b2696c"
+  },
+  "packet_state": {
+    "rejected_original_packet": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "rejection_reasons": [
+      "schema-invalid target_2_0_action=RESEARCH",
+      "wrong architekt_governance.md provenance span"
+    ],
+    "schema_valid_successor": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
+    "successor_status": "CONSUMED_SOURCE_FORENSIC_SCOPE_NO_RUNTIME_CREDIT"
+  },
+  "current_architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1041Z_WORKEXECUTION_HANDOFF_MARKER_JOIN_GPT56SOL.json",
+    "blob_sha": "e08227e7b0aad074bf9d3da8840492e8e5e58be5",
+    "classification": "SOURCE_ABI_DESIGN_DELTA_NO_RUNTIME_PROMOTION",
+    "effective_component": "WorkExecutionBinding/v2.1"
+  },
+  "forensic_result": {
+    "donor_handoff": "handoff() creates a durable paket_id and deterministic capsule beginning with HANDOFF <paket_id>; stern itself does not spawn the child.",
+    "typed_capture_gap": "Pinned stern.py contains no explicit tool_use_id or agent_id field readers/writers; normal effect correlation remains session-scoped through active_turns.effect_id.",
+    "documented_abi": "Current official Claude Code hooks documentation exposes tool_use_id on Agent PreToolUse/PostToolUse and Agent PostToolUse.tool_response.agentId.",
+    "source_abi_candidate_join": "If the actual Agent PreToolUse prompt contains exactly one verified HANDOFF <paket_id> marker, paket_id can be deterministically bound to that call's tool_use_id; the same Agent PostToolUse event can then bind tool_use_id to tool_response.agentId.",
+    "runtime_boundary": "No installed-target hook payload has yet shown that the real coordinator passes the handoff capsule byte-faithfully into Agent tool_input.prompt or that the target build emits the documented fields."
+  },
+  "contradictions_preserved": [
+    "Donor governance requires handoff -> spawn -> reconcile, but handoff LIVE_CODE explicitly performs no spawn.",
+    "Current documented Agent ABI offers exact invocation and child identifiers, while donor stern.py does not typed-capture them.",
+    "Source/ABI design closure is not installed-runtime causal closure.",
+    "Central INGEST_STATE last_ingest_at remains 2026-08-28T10:35:00Z and its primary last_architecture_delta pointer predates the 10:40/10:41 append-only reconciliations."
+  ],
+  "central_ingest_state": {
+    "updated_in_this_receipt": false,
+    "reason": "Do not clobber shared INGEST_STATE during rapid concurrent writes. This append-only receipt is the exact reentry checkpoint; a later single-owner compaction may advance the central pointer atomically.",
+    "observed_last_ingest_at": "2026-08-28T10:35:00Z"
+  },
+  "feeds_triggerword_4": {
+    "required_change": "Extend the existing hook/control lane with typed WorkExecutionBinding capture; do not add a second spawn runtime.",
+    "next_exact_gate": "On an authorized non-provider target, capture one harmless real handoff -> Agent call and prove paket_id -> tool_use_id -> agentId from exact hook payloads; then run two overlapping Agent invocations with reverse completion order to falsify cross-wiring before runtime credit."
+  },
+  "execution": {
+    "provider_execution": "NOT_PERFORMED",
+    "vps_or_production_execution": "NOT_PERFORMED",
+    "runtime_test": "NOT_PERFORMED_SOURCE_FORENSICS_ONLY",
+    "unusual_experiment": "NOT_PERFORMED",
+    "external_effect": "GITHUB_APPEND_ONLY_RESEARCH_WRITE_ONLY"
+  },
+  "credits": {
+    "source_forensics": "PASS_AT_PINNED_SOURCE_AND_CURRENT_DOCUMENTED_ABI_SCOPE",
+    "installed_native_subagent_runtime": 0,
+    "workexecutionbinding_runtime": 0,
+    "effect_invocation_runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0
+  },
+  "acceptance": "TRIGGERWORD5_REENTRY_CHECKPOINT_COMMITTED_NO_RUNTIME_PROMOTION"
+}

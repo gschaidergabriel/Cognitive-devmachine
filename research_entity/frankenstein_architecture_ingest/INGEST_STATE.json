@@ -3,12 +3,12 @@
   "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
   "donor_repo": "gschaidergabriel/frankenstein",
   "last_resolved_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
-  "last_resolved_design_sha_before_ingest": "38741e6ea28c746fd7faffa3e2aa095f5418119e",
-  "canonical_main_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
-  "last_ingest_at": "2026-08-28T10:10:00Z",
-  "last_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1010Z_EFFECT_AUTHORITY_COMPLETION_V3_CURRENTNESS_CLOSURE_GPT56SOL.json",
-  "last_architecture_delta_commit": "593f39696c05d7f65c5ed9eec4e89532ac32afcb",
-  "last_ingest_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1010Z_EFFECT_AUTHORITY_COMPLETION_V3_CURRENTNESS_CLOSURE_GPT56SOL.json",
+  "last_resolved_design_sha_before_ingest": "39b1ec3e15ff8b00ccbac764ae5b44ee72ca1d59",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "last_ingest_at": "2026-08-28T10:35:00Z",
+  "last_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1035Z_WORKEXECUTION_BINDING_GPT56SOL.json",
+  "last_architecture_delta_commit": "c5e9d543fc64aeb15a8dca1fc4f577ea30f70180",
+  "last_ingest_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1035Z_WORKEXECUTION_BINDING_GPT56SOL.json",
   "additional_architecture_deltas": [
     {
       "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
@@ -105,6 +105,12 @@
       "commit": "593f39696c05d7f65c5ed9eec4e89532ac32afcb",
       "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1010Z_EFFECT_AUTHORITY_COMPLETION_V3_CURRENTNESS_CLOSURE_GPT56SOL.json",
       "receipt_commit": "e47b12ddc382e47ead2127b1e95e3f09be54551f"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1035Z_WORKEXECUTION_BINDING_GPT56SOL.json",
+      "commit": "c5e9d543fc64aeb15a8dca1fc4f577ea30f70180",
+      "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1035Z_WORKEXECUTION_BINDING_GPT56SOL.json",
+      "receipt_commit": "8851207bdb3bc3a8115807959ddfc78bb134a60b"
     }
   ],
   "corroborating_ingest_receipts": [
@@ -187,14 +193,16 @@
     "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
     "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
     "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
-    "TW5-PACKET-20260828T100450Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-COMPLETION-V3-CURRENTNESS-REBIND"
+    "TW5-PACKET-20260828T100450Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-COMPLETION-V3-CURRENTNESS-REBIND",
+    "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL"
   ],
   "superseded_packet_ids": [
     "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL",
     "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
     "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL",
     "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
-    "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL"
+    "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
+    "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL"
   ],
   "unresolved_contradiction_ids": [
     "TW5-CONTRADICTION-INGEST-PATH-001",
@@ -217,13 +225,14 @@
     "TW5-CONTRADICTION-DELEGATED-EFFECT-COVERAGE-012",
     "TW5-CONTRADICTION-HOOK-REACHABILITY-013",
     "TW5-CONTRADICTION-INVOCATION-SERIALIZATION-015",
-    "TW5-CONTRADICTION-COMPLETION-INTENT-VS-PREDICATE-016"
+    "TW5-CONTRADICTION-COMPLETION-INTENT-VS-PREDICATE-016",
+    "TW5-CONTRADICTION-WORKEXEC-PARENT-CHILD-JOIN-017"
   ],
   "current_frontier": [
     "P0 for Triggerword-4 donor freeze: replace donor nonblocking EffectGate semantics with deterministic pre-side-effect ALLOW/DENY enforcement using one-shot EffectDecision bound to immutable invocation identity, request digest, generation, policy and capability/resource scope; no containment/runtime credit until executable DENY non-execution is observed",
     "P0 for Triggerword-4 donor freeze: replace session-scoped active_turns.effect_id as the successor join key with call-scoped tool_use_id/invocation_id -> effect_id binding; run an overlapping same-session two-call falsifier because source proves structural ambiguity but not runtime reachability",
     "P0 for Triggerword-4 donor freeze: replace completion proof with typed success allowlist and immutable execution-receipt binding; adversarially reject FEHLGESCHLAGEN/ABGELEHNT/WIEDERHOLUNG/UNGEPRUEFT/UNKNOWN, forged test:0, source drift and receipt/invocation transplant",
-    "P0 bind durable workpackage/entityos_arbeitspaket identity to observed native agent_id/task_id/tool_use_id/generation before Triggerword-4 R2 freeze; donor handoff persists work but explicitly does not spawn, current donor hooks.json lacks dedicated SubagentStart/SubagentStop/Task hooks, and official docs are capability evidence rather than installed-runtime proof",
+    "P0 bind durable workpackage/entityos_arbeitspaket identity through WorkExecutionBinding/v1: keep paket_id, spawn_tool_use_id, native agent_id, optional independent task_id, child_tool_use_id, agent run/resume generation and typed result receipt distinct; never close the parent Agent-call -> child agent_id edge by timing/order/session heuristics; donor handoff persists work but explicitly does not spawn and current donor hooks.json lacks dedicated child/task lifecycle registration",
     "P0 trace exact current host/plugin/settings enforcement loaded by gespraechsmodus.claude_frage and prove which state-changing delegated tool classes reach a deterministic final effect boundary; task-level voice confirmation and Bash denial are not sufficient proof",
     "P0 compile voice confirmation into immutable TaskAdmission bound to Realtime call_id/voice invocation + task digest + session/causal evidence, while requiring each downstream mutation to obtain and atomically consume a one-shot EffectDecision",
     "P0 type gespraech_erinnerung as MemoryCandidate -> MemoryAdmission with immutable source/utterance identity, transformation_class, epistemic_class, generation, privacy/retention tier and content digest; all direct Realtime readers must preserve these fields and remembered/model-inferred rows must not satisfy verified-fact queries",

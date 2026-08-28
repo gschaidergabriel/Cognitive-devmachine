@@ -5,10 +5,10 @@
   "last_resolved_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
   "last_resolved_design_sha_before_ingest": "db223d8208af6e43d374a7107d8ff158380debb5",
   "canonical_main_observed": "01da78bd43066e912410ed1d308f26dba0dae23c",
-  "last_ingest_at": "2026-08-28T07:39:00Z",
-  "last_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_HISTORICAL_WACHE_CAPABILITY_LEASE.json",
-  "last_architecture_delta_commit": "0e323a18e9f998634072752c4271a791928fc0d1",
-  "last_ingest_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0735Z_HISTORICAL_WACHE_CAPABILITY_LEASE_GPT56SOL.json",
+  "last_ingest_at": "2026-08-28T07:40:00Z",
+  "last_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0737Z_DONOR_CLOSURE_HUMAN_INTENT_GPT56SOL.json",
+  "last_architecture_delta_commit": "d5f4caa7f8b1f7c3f9175606a280cc9f0b1d9067",
+  "last_ingest_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0737Z_DONOR_CLOSURE_HUMAN_INTENT_GPT56SOL.json",
   "additional_architecture_deltas": [
     {
       "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
@@ -57,6 +57,12 @@
       "commit": "0e323a18e9f998634072752c4271a791928fc0d1",
       "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0735Z_HISTORICAL_WACHE_CAPABILITY_LEASE_GPT56SOL.json",
       "receipt_commit": "ca98d8cd0012a5a0efda9e1394dc86212d940898"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0737Z_DONOR_CLOSURE_HUMAN_INTENT_GPT56SOL.json",
+      "commit": "d5f4caa7f8b1f7c3f9175606a280cc9f0b1d9067",
+      "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0737Z_DONOR_CLOSURE_HUMAN_INTENT_GPT56SOL.json",
+      "receipt_commit": "b0cb9b20d0da310524c6139726ce6b95b89c2b80"
     }
   ],
   "corroborating_ingest_receipts": [
@@ -116,7 +122,9 @@
     "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
     "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
     "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL",
-    "TW5-PACKET-20260828T073722Z-WACHE-KOENIG-DRIVE-DIRECT-CROSSCHECK-GPT56SOL"
+    "TW5-PACKET-20260828T073722Z-WACHE-KOENIG-DRIVE-DIRECT-CROSSCHECK-GPT56SOL",
+    "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+    "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY"
   ],
   "superseded_packet_ids": [
     "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL"
@@ -132,14 +140,17 @@
     "TW5-CONTRADICTION-PENDING-EFFECT-UNKNOWN-006",
     "TW5-CONTRADICTION-HISTORICAL-APPROVAL-BINDING-007",
     "TW5-CONTRADICTION-WACHE-REACHABILITY-008",
-    "TW5-CONTRADICTION-WACHE-COVERAGE-009"
+    "TW5-CONTRADICTION-WACHE-COVERAGE-009",
+    "TW5-CONTRADICTION-EFFECT-GIT-CREATION-010",
+    "TW5-CONTRADICTION-REALTIME-MUTATION-INTENT-011"
   ],
   "current_frontier": [
     "P0 accessible-Git chronology refined: earliest verified stern.py in the inspected accessible repository is windows/quelle/stern.py@4f55d688fe27e9361374ea912e57319bfb566407 and already contains Phase-2 zulassen(); its inspected parent 6cc5a3f3 has no stern.py, while Linux scripts/stern.py first appears at b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a; any earlier posttool-only stern transition requires live-host/archive/other-repository provenance rather than fabricated Git ancestry",
     "P0 recover exact historical/global scheduler registration and ordering for the archived wache-koenig snapshot; source identity and behavior are now directly crosschecked, but current/historical runtime reachability is not promoted",
+    "P0 audit the complete Realtime TOOLS declaration and every mutating _tool_ausfuehren branch into READ_ONLY / EPHEMERAL_STATE / CANONICAL_INTERNAL_MUTATION / EXTERNAL_EFFECT_REQUEST / SESSION_CONTROL; define explicit HumanIntentDecision policy per class and keep it distinct from EffectDecision",
     "P0 trace every current state-changing tool class, including realtime voice function calls, to one deterministic successor effect boundary; historical wache-koenig is Bash-only and cannot establish whole-effect coverage",
     "P0 make Frankenstein-2.0 executor atomically consume a one-shot typed EffectDecision/CapabilityLease bound to immutable tool_use_id/invocation_id + request_digest + session/generation/causal identity + policy version + capability/resource identity; caller-controlled skip_approval cannot be final authority",
-    "P0 resolve exact donor dependency closure for dynamically imported wegehierarchie and other runtime compatibility modules before Triggerword-4 donor freeze; require exact source/hash or an explicit tested successor and preserve silent-degradation regression coverage",
+    "P0 resolve F94 wegehierarchie by explicit ADAPT-or-RETIRE before Triggerword-4 donor freeze: exact algorithm bytes are recoverable in _archiv-phase4 but live paket.py imports a missing root .wegehierarchie target; require source-bound carried-walk reinforcement regression or removal/replacement proving no silent degradation",
     "P0 repair the Triggerword-4 assembly design so unavailable Presence remains UNKNOWN/None rather than falling back to user_present=True; add explicit WAIT/ASK/re-observe semantics and a regression test",
     "P0 specify a minimal provenance-bearing VoiceSessionCapsule/GRID context compiler because current realtime _response_erstellen() refreshes the capsule but does not serialize it into per-response instructions; require field-level lesion/shuffle tests and bounded token/privacy/freshness rules",
     "P0 resolve migration authority between canonical-main research_entity/architecture_archaeology/TRIGGERWORD5_LIVE_FORENSIC_FEED.json and the owner-branch research_entity/frankenstein_architecture_ingest/inbox append-only lane without deleting provenance",
@@ -148,6 +159,6 @@
     "P1 turn shared voice/visual arbitration plus WAIT-margin telemetry into a typed GRID competition ABI with modality-specific calibration and lesion/shuffle acceptance requirements",
     "P1 bind EffectRequest/EffectDecision/EffectOutcome and ADMISSION_DECISION/ENFORCEMENT_DECISION/SUBMISSION_RECEIPT/EXECUTION_RECEIPT/WORLD_EFFECT_VERIFICATION/RESULT_REENTRY/COMPLETION_EVIDENCE as distinct typed states behind canonical EntityOS EffectGate/EffectJournal authority; successful execution must never retroactively create admission authority",
     "P1 add a typed PENDING_EFFECT -> CANCELLED-before-submission versus SUBMITTED -> OUTCOME_UNKNOWN/VERIFIED state boundary; never map post-submission transport uncertainty to cancellation success or blind replay",
-    "P1 add Triggerword-4 regressions for one-shot decision consumption, request-digest mismatch, stale generation, wrong invocation identity, expiry, capability/resource mismatch, parallel state-changing calls, reverse completion order, forced PreToolUse failure with stale prior pointer, actual DENY non-execution, non-Bash tool coverage, perception-policy bypass and secret-fence coverage"
+    "P1 add Triggerword-4 regressions for HumanIntentDecision classification/freshness/provenance, one-shot EffectDecision consumption, request-digest mismatch, stale generation, wrong invocation identity, expiry, capability/resource mismatch, parallel state-changing calls, reverse completion order, forced PreToolUse failure with stale prior pointer, actual DENY non-execution, non-Bash tool coverage, perception-policy bypass and secret-fence coverage"
   ]
 }

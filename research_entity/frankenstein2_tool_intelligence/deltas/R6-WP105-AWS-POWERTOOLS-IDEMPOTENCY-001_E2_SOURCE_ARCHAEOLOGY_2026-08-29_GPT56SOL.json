@@ -1,0 +1,80 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-WP105-AWS-POWERTOOLS-IDEMPOTENCY-001",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "MIRRORED_E2_NO_DOUBLE_CREDIT",
+  "canonical_f2_result": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/claims/R6-WP105-AWS-POWERTOOLS-IDEMPOTENCY-001/E2_SOURCE_ARCHAEOLOGY_RESULT.json",
+    "commit": "363e67306b53c3101a24e98e15395d49a4a6ec24",
+    "claim_commit": "08df15849faeb8e8e50f4ad80209268121e61fb3"
+  },
+  "research_entity_reentry": {
+    "prewrite_main_observed": "93e2216eb3fbf2a098f4857c2791587f39fe46d9",
+    "existing_parallel_reconciliation": "research_entity/frankenstein2_tool_intelligence/reconciliations/R6_WP105_IDEMPOTENCY_PARALLEL_SCOUT_FUSION_2026-08-29_GPT56SOL.json",
+    "relationship": "E2_SOURCE_DEPTH_EXTENSION_OF_EXISTING_E1_SCOUT_NOT_INDEPENDENT_REPLICATION"
+  },
+  "source_pin": {
+    "repository": "aws-powertools/powertools-lambda-python",
+    "branch": "develop",
+    "commit": "a39e1018e36b7965b08313288bea3b7420df5220"
+  },
+  "unique_e2_value_over_existing_e1": [
+    "Reads and maps the concrete DataRecord/base/Redis/test implementation rather than retaining only the scout-level donor summary.",
+    "Binds the current upstream concurrent-double-execution repair to the exact missing-expiry fail-closed branch and its threaded execution_count==1 falsifier.",
+    "Identifies Powertools delete_record-on-exception as a negative donor boundary: for arbitrary external effects, deleting an in-progress record after an exception can erase post-dispatch ambiguity and reopen unsafe replay.",
+    "Identifies TTL/expiry reclaim as insufficient evidence of non-application after an external effect boundary may have been crossed.",
+    "Re-enters current F2 after EffectRequestIdentity/request_sha256 closure and therefore narrows donor value to concurrency/ambiguity semantics rather than semantic hash creation."
+  ],
+  "retained_architecture_mapping": {
+    "adopt_structurally": [
+      "missing ownership/freshness discriminator => fail closed, never assume orphan",
+      "same retry/operation identity with semantic payload mismatch => reject before dispatch",
+      "deterministic concurrent contender test proving at most one dispatch",
+      "typed in-progress/completed lifecycle rather than boolean duplicate flag"
+    ],
+    "reject_for_f2_real_effects": [
+      "exception => delete in-progress record",
+      "TTL expiry => automatic replay eligibility after dispatch ambiguity",
+      "external Redis/DynamoDB as a second authority store",
+      "MD5 as canonical semantic request digest",
+      "cached prior response as current-world verification"
+    ]
+  },
+  "current_f2_boundary": {
+    "semantic_request_sha256": "ALREADY_IMPLEMENTED_AND_COMPONENT_CI_GREEN",
+    "canonical_effect_authority": "EffectGate+EffectJournal only",
+    "post_dispatch_ambiguous_exception": "MUST_REMAIN_UNKNOWN_NONREPLAYABLE_UNTIL_AUTHORITY_OWNED_VERIFICATION_OR_PROVEN_TARGET_IDEMPOTENCY",
+    "runtime_promotion": 0
+  },
+  "evidence_ladder": {
+    "E0_seed": true,
+    "E1_source_read": true,
+    "E2_architecture_mapped": true,
+    "E3_claim_reproduced_in_f2": false,
+    "E4_f2_ablation": false,
+    "E5_build_candidate": false,
+    "E6_f2_accepted": false
+  },
+  "credit_rule": "The existing E1 scout plus this E2 source archaeology form one genealogical research line. Do not count them as independent replications or confidence multipliers.",
+  "next_nonduplicate_gate": "A future Trigger6 EXPERIMENTAL_FALSIFIER may specify a no-real-effect same-request concurrent-contender plus post-dispatch-exception matrix; Trigger4/current authority decides execution/integration. Required result: one dispatch maximum, missing ownership evidence fails closed, and post-dispatch ambiguity remains UNKNOWN with no automatic replay.",
+  "credits": {
+    "logical_powertools_e2_line": 1,
+    "independent_replication_credit": 0,
+    "e3": 0,
+    "e4": 0,
+    "build_candidate": 0,
+    "f2_accepted": 0,
+    "whole_f2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0
+  },
+  "execution": {
+    "new_real_effect_experiment": false,
+    "provider_calls": 0,
+    "vps_execution": 0,
+    "paid_fallback": false,
+    "pending_research_sqlite_runtime_credit": 0
+  }
+}

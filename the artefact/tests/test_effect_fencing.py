@@ -114,13 +114,55 @@ def test_ambiguous_post_dispatch_attempt_is_canonical_unknown(tmp_path):
     assert EffectGate(db).journal.recover_pending()==0
     assert db.db.execute('SELECT status FROM effects WHERE effect_id=?',(effect['effect_id'],)).fetchone()[0]=='UNKNOWN_AFTER_DISPATCH'; db.close()
 
-def test_bridge_wraps_exception_after_dispatch_boundary_as_unknown(monkeypatch):
+def test_bridge_popen_launch_failure_remains_definite_pre_dispatch(monkeypatch):
     bridge=EntityOSBridge('/unused','a'*64,timeout=0.01)
     monkeypatch.setattr(EntityOSBridge,'_open_verified',lambda self: os.open('/dev/null',os.O_RDONLY))
-    def timeout(*args,**kwargs): raise subprocess.TimeoutExpired(cmd='entityos',timeout=0.01)
-    monkeypatch.setattr(subprocess,'run',timeout)
-    with pytest.raises(EntityOSOutcomeUnknown,match='dispatch may have started'):
+    def launch_failure(*args,**kwargs): raise OSError('exec handshake failed')
+    monkeypatch.setattr(subprocess,'Popen',launch_failure)
+    with pytest.raises(OSError,match='exec handshake failed'):
         bridge.run(['probe'])
+
+def test_bridge_wraps_any_failure_after_successful_popen_as_unknown(monkeypatch):
+    bridge=EntityOSBridge('/unused','a'*64,timeout=0.01)
+    monkeypatch.setattr(EntityOSBridge,'_open_verified',lambda self: os.open('/dev/null',os.O_RDONLY))
+    class StartedProcess:
+        def __init__(self):
+            self.returncode=None; self.killed=False; self.communicate_calls=0
+        def communicate(self,timeout=None):
+            self.communicate_calls+=1
+            if self.communicate_calls==1:
+                raise RuntimeError('transport lost after child start')
+            self.returncode=-9
+            return b'',b''
+        def poll(self): return self.returncode
+        def kill(self): self.killed=True; self.returncode=-9
+    started=StartedProcess()
+    monkeypatch.setattr(subprocess,'Popen',lambda *args,**kwargs: started)
+    with pytest.raises(EntityOSOutcomeUnknown,match='child started'):
+        bridge.run(['probe'])
+    assert started.killed is True
+    assert started.communicate_calls==2
+
+def test_bridge_timeout_after_successful_popen_is_unknown_and_reaped(monkeypatch):
+    bridge=EntityOSBridge('/unused','a'*64,timeout=0.01)
+    monkeypatch.setattr(EntityOSBridge,'_open_verified',lambda self: os.open('/dev/null',os.O_RDONLY))
+    class TimedOutProcess:
+        def __init__(self):
+            self.returncode=None; self.killed=False; self.communicate_calls=0
+        def communicate(self,timeout=None):
+            self.communicate_calls+=1
+            if self.communicate_calls==1:
+                raise subprocess.TimeoutExpired(cmd='entityos',timeout=timeout)
+            self.returncode=-9
+            return b'',b''
+        def poll(self): return self.returncode
+        def kill(self): self.killed=True; self.returncode=-9
+    started=TimedOutProcess()
+    monkeypatch.setattr(subprocess,'Popen',lambda *args,**kwargs: started)
+    with pytest.raises(EntityOSOutcomeUnknown,match='child started'):
+        bridge.run(['probe'])
+    assert started.killed is True
+    assert started.communicate_calls==2
 
 def test_second_effect_gate_does_not_recover_another_live_pending_effect(tmp_path):
     p=tmp_path/'unified.db'; db1,uid,sid=setup_db(tmp_path); eid=EffectGate(db1).journal.begin(None,sid,uid,'state.noop','x',db1.session_generation(sid))

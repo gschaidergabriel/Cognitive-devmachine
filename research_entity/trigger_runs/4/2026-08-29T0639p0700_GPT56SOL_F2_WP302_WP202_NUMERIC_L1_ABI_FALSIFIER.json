@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_STAGE3_NEGATIVE_RESULT_COMPONENT_ABI_FALSIFIER",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "created_at_local": "2026-08-29T06:39:00+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "research_main_observed_before_write": "ba407443b9261db28be93f886fc32dcf8a39f824",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "current_main_observed": "3dd411b20687fc1c516e65ff6abe55e98d410669",
+    "workpackage_under_review": "F2-WP-302",
+    "canonical_active_claim_state": "IN_PROGRESS",
+    "canonical_active_claim_id": "F2-WP-302-G1-GPT56SOL-FAMILIARITY-PREDICTION-ERROR-20260829",
+    "upstream_dependency": "F2-WP-202",
+    "orphaned_wp302_source_head": "e021f759f20b340296a3ff50670a96d6cd12d34a",
+    "recovery_branch": "review/wp302-orphan-recovery-pytest-20260829",
+    "recovery_head": "90b717bfaaaf584b1b0d49e1a254663c72e4cb2c",
+    "review_pull_request": 104
+  },
+  "observations": {
+    "original_wp302_workflow_run_success": 33220839486,
+    "original_wp302_falsification_run_failure": 33220839602,
+    "original_failure_classification": "CI_HARNESS_MISSING_PYTEST_NOT_PRODUCT_NEGATIVE",
+    "recovery_workflow_run": 33221054410,
+    "recovery_job_id": 99014957038,
+    "recovery_conclusion": "failure",
+    "tests_passed": 10,
+    "tests_failed": 4,
+    "tests_total": 14,
+    "recovery_failure_classification": "REPRODUCIBLE_UPSTREAM_DOWNSTREAM_COMPONENT_ABI_CONTRADICTION"
+  },
+  "abi_falsifier": {
+    "producer": "src/frankenstein2/prediction_contract.py",
+    "producer_observation": "PredictionResidual.numeric_l1 is annotated float but PredictionContract.observe assigns sum(value for _, value in numeric); with no numeric residual entries Python sum returns integer 0.",
+    "consumer": "src/frankenstein2/familiarity_prediction_error.py",
+    "consumer_observation": "WP302 _validate_residual requires type(residual.numeric_l1) is float and therefore rejects exact-match/non-numeric PredictionResidual values emitted by WP202 before intended familiarity/evidence assertions.",
+    "failing_cases": [
+      "unknown familiarity with exact residual",
+      "familiar exact match candidate",
+      "low-familiarity exact match candidate",
+      "missing-evidence fail-closed test is pre-empted by numeric_l1 type rejection"
+    ],
+    "counterhypothesis_rejected": "The second red workflow was only another CI bootstrap failure. Pytest installation succeeded and the suite executed, so this failure is inside the component interaction.",
+    "recommended_dependency_correct_repair": "Repair or version the WP202 producer ABI so the zero numeric L1 value is emitted as 0.0, for example float(sum(...)); rerun WP202 compatibility tests and the WP302 falsification suite. Do not weaken residual digest, exact_match, mismatch_fraction or evidence fences merely to make WP302 green."
+  },
+  "coordination": {
+    "duplicate_wp302_mutation_claim_created": false,
+    "candidate_recovery_only": true,
+    "canonical_wp302_source_mutated": false,
+    "review_pr_comment_id": 5458885397
+  },
+  "credit_boundary": {
+    "research_delta": 1,
+    "component_negative_evidence": 1,
+    "wp302_component_acceptance": 0,
+    "target_runtime": 0,
+    "vps_runtime": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "The sole active WP302 claimant/reconciler should adopt a dependency-correct WP202 zero-float ABI repair or equivalent versioned contract, rerun both WP202 regression coverage and the exact WP302 suite, then reconcile WP302 only if the exact-source repository-hosted CI is green. Continue to avoid duplicate Stage-3 mutation claims while WP305/WP306 and other active lanes remain owned."
+}

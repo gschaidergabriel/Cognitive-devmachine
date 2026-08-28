@@ -1,0 +1,34 @@
+{
+  "schema": "TRIGGERWORD4_EXECUTION_SURFACE_OVERRIDE/v1",
+  "status": "CURRENT_OWNER_DIRECTED_OVERRIDE",
+  "recorded_at": "2026-08-28T14:49:30+07:00",
+  "trigger": "triggerwort 4",
+  "supersedes_checkpoint_interpretation": "BLOCKED_NO_REPOSITORY_BOUND_SHELL_OR_AUTHORIZED_VPS_CONNECTOR",
+  "new_interpretation": "SELF_RESOLUTION_REQUIRED_NOT_EXTERNAL_BLOCKER",
+  "mandatory_playbook": "research_entity/global/TRIGGERWORD_4_VPS_SELF_ROUTING_EXECUTION_PLAYBOOK.md",
+  "authority": [
+    "CLAY_EXECUTION_AUTHORITY.md",
+    "governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+    "governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md"
+  ],
+  "known_routes": [
+    "configured Git/SSH bridge via jump host -> VPS -> claylab -> /srv/claylab/git-bridge",
+    "gschaidergabriel/Dr.-Unterweger self-hosted Linux/X64 runner",
+    "Dr.-Unterweger frank-self-hosted-probe workflow",
+    "Dr.-Unterweger clay-grid10-cognitive-envelope-vps workflow",
+    "Dr.-Unterweger clay-exact-branch-bridge-vps-v2 workflow",
+    "Clay-repo self-hosted workflow patterns including clay-direct-dev-roundtrip",
+    "new source-controlled dedicated workflow built by the worker when existing workflows are insufficient"
+  ],
+  "sandbox": "clay-direct-dev",
+  "worker_law": [
+    "NO_DIRECT_SSH != NO_VPS_EXECUTOR",
+    "MISSING_ROUTE != BLOCKED_EXTERNAL",
+    "MISSING_TOOL_OR_WORKFLOW_OR_PACKAGE -> BUILD_OR_REPAIR",
+    "BROKEN_BRIDGE_OR_SANDBOX -> REPAIR_OR_REBUILD",
+    "only after all documented routes are concretely attempted/falsified may BLOCKED_EXTERNAL be considered"
+  ],
+  "current_grid_gate": "GRID10_SIGKILL_INDEPENDENT_REPLACEMENT_V3_REPOSITORY_BOUND_EXECUTION",
+  "gate_instruction": "Route this gate through the existing or self-built self-hosted/VPS bridge, bind exact source SHA, execute in clay-direct-dev, persist a receipt, then promote or repair from evidence. Do not leave it parked solely because the conversational worker lacks a direct shell tool.",
+  "runtime_credit_delta": 0
+}

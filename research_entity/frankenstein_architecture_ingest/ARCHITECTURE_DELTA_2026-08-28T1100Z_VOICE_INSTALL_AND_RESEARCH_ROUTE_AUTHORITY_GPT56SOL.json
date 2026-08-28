@@ -1,0 +1,123 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T11:00:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "VOICE_INSTALL_MODE_HOOK_BINDING_AND_RESEARCH_ROUTE_AUTHORITY",
+  "donor": {"repo":"gschaidergabriel/frankenstein","commit_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427"},
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "free_swarm_owner_emergency_stop": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "direct_source_crosscheck": {
+    "install_host_contract": {
+      "path": "DEV_SOURCE_RESEARCH/repository/INSTALL_HOST_STEPS.md",
+      "finding": "The donor documents two different hook-loading modes: marketplace plugin enabled in global ~/.claude/settings.json can use plain claude in any directory; underlab/dev Star wiring requires explicit claude --settings ~/.claude/star/settings.json. It also records a live case where a session launched without plugin settings failed to join the room because plugin hooks did not fire."
+    },
+    "terminal_launcher_enforcement": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/install_terminal_help_icon.sh",
+      "blob_sha": "bf9bcf8a5a23e7091a58dc75742eb3bb131ff1c9",
+      "finding": "The launcher mechanically checks enabledPlugins; if marketplace Frankenstein is enabled it calls plain claude, else if ~/.claude/star/settings.json exists it calls claude --settings that file, else it explicitly warns hooks will not fire."
+    },
+    "voice_delegate_mismatch": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "finding": "claude_frage always constructs plain headless claude -p and does not perform the install-mode check or pass a dev/star --settings path; default cwd is home. Therefore source alone cannot prove donor hooks/effect logic is loaded in dev/star mode."
+    },
+    "research_dispatch": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "finding": "frank_forschung/neu_anstossen reaches _forschung_taetigkeit -> stern chatgpt-senden asynchronously after model-facing explicit-user policy and a nonempty question."
+    },
+    "automatic_fallback_route": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "chatgpt_senden automatically attempts _chatgpt_harness_fallback when the browser bridge remains unauthenticated after recovery, and again after a hard 403/Cloudflare send failure. The default fallback candidates are nvidia-nemotron,mistral-small; dry_run suppresses the fallback."
+    },
+    "fallback_callee_mismatch": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/harness_aider.py",
+      "blob_sha": "6f55e6a2137ecac9add560482b1b4fab1719aee8",
+      "finding": "At the same donor SHA, harness_aider.py defines MODELL_MAP entries for NVIDIA NIM, Groq, Mistral and OpenRouter API routes and reads provider keys, but its argparse surface defines only the subcommand start and explicitly rejects anything other than start. stern.py invokes fallback-start. No fallback-start implementation is source-visible in this exact file."
+    }
+  },
+  "negative_results": [
+    {
+      "id": "NR-VOICE-DEVSTAR-HOOK-BINDING",
+      "classification": "SOURCE_NEGATIVE_RESULT",
+      "claim": "Voice-delegated headless Claude does not reproduce the donor's own install-mode-dependent settings selection, so exact hook firing/effect enforcement is unresolved for dev/star installations.",
+      "runtime_credit": 0
+    },
+    {
+      "id": "NR-CHATGPT-HARNESS-FALLBACK-SUBCOMMAND-MISMATCH",
+      "classification": "SOURCE_NEGATIVE_RESULT",
+      "claim": "stern.py calls harness_aider.py fallback-start while exact-current harness_aider.py exposes only start; the automatic fallback path is source-incompatible at this donor SHA unless another installed file differs from repository source.",
+      "runtime_credit": 0
+    }
+  ],
+  "architecture_effect": {
+    "mechanisms": ["ExecutorEnvironmentBinding/v1","ResearchRouteDecision/v1"],
+    "rules": [
+      "Executor admission must bind install_mode, settings source/hash, plugin/hook manifest hash, cwd/build root, executable identity and tool-policy identity before mutation/effect credit.",
+      "Research dispatch must resolve a typed route decision under the current authority epoch before any browser bridge, fallback harness or provider-capable path runs.",
+      "A fallback must fail closed when its callee contract is source-incompatible, its provider/economic class is not admitted, or exact runtime identity is unknown.",
+      "Historical donor labels such as Free-Pool do not by themselves satisfy current FREE_ONLY authority; provider route admission is an explicit current-authority decision."
+    ],
+    "preserve_from_donor": [
+      "launcher-side install-mode detection concept",
+      "dry-run suppression of real fallback",
+      "browser-login check and hard-failure detection before fallback",
+      "provider provenance labels and isolated harness workroom/audit concept as historical donor mechanisms only"
+    ],
+    "repair": [
+      "reuse one install-mode resolver for terminal and headless voice delegation; bind its result into every delegated execution receipt",
+      "never allow plain home-cwd headless execution to imply Frankenstein hooks are active unless marketplace/plugin state or an explicit settings source is attested",
+      "compile frank_forschung into a ResearchRequestCandidate then HumanIntentDecision, CapabilityDecision, PrivacyDecision, EconomicDecision and ResearchRouteDecision before dispatch",
+      "remove or repair the fallback-start/start ABI mismatch before any fallback path can receive functional credit",
+      "under current 9.13AC FREE_ONLY hard-off, route decisions for provider-backed NVIDIA/Mistral/Groq/OpenRouter execution remain DENY unless newer explicit authority admits an exact route",
+      "preserve failed/incompatible fallback attempts as negative evidence rather than silently treating fallback availability as fact"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "contradictions_preserved": [
+    "The terminal launcher knows dev/star installs need --settings, while voice claude_frage does not perform that install-mode binding.",
+    "stern.py describes automatic Free-Pool fallback via harness_aider.py fallback-start, while exact-current harness_aider.py has only start.",
+    "The fallback is labeled Free-Pool but exact harness source contains provider API models/keys; current Clay authority independently says provider routes are not admitted.",
+    "Plugin/source documentation can describe hook behavior without proving the exact installed headless process loaded those hooks."
+  ],
+  "source_inferences_not_runtime_claims": [
+    "The fallback-start invocation would normally be rejected by the exact-current harness_aider argparse contract; no runtime invocation was performed to verify installed-file drift or wrapper substitution.",
+    "Provider-backed model routes are source-visible in harness_aider.py, but no provider key was read and no provider call was made in this Triggerword-5 run.",
+    "A marketplace-enabled host may make plain claude -p load Frankenstein hooks successfully; the unresolved issue is exact invocation-bound evidence, not a claim that all plain invocations lack hooks."
+  ],
+  "feeds_triggerword_4": {
+    "required_actions": [
+      "implement ExecutorEnvironmentBinding/v1 with install_mode/settings/plugin/hook/executable/cwd identities",
+      "make voice delegation use the same deterministic install-mode resolver as the terminal launcher or a stricter verified successor",
+      "implement ResearchRouteDecision/v1 with current authority digest and explicit allowed route classes",
+      "repair/retire source-incompatible fallback-start and add a static ABI test matching caller subcommands to callee argparse",
+      "add fail-closed tests for dev/star without --settings, marketplace enabled/disabled, missing plugin manifest, wrong settings hash, provider route denied, and fallback callee ABI mismatch"
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "install_mode_contract_crosscheck": "PASS_SOURCE_SCOPE",
+    "fallback_callee_abi_crosscheck": "PASS_SOURCE_SCOPE_NEGATIVE_RESULT",
+    "headless_hook_runtime_binding": 0,
+    "research_route_runtime_acceptance": 0,
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 build/verification lane: add source-bound ExecutorEnvironmentBinding/v1 and ResearchRouteDecision/v1, plus a static caller/callee subcommand ABI test; keep provider-capable routes denied under current 9.13AC FREE_ONLY authority. Triggerword-5 next source frontier is exact stern memory-write canonical admission if not already covered by a newer concurrent packet.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "feeds_triggerword_4_boolean": true
+}

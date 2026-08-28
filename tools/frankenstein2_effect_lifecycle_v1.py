@@ -644,15 +644,15 @@ class EffectLifecycleStore:
             con.close()
 
     def issue_completion_evidence(self, invocation_id: str, *, now_ts: float | None = None) -> str:
-        """Mint completion only after the legacy chain AND Completion Verifier v2 close."""
+        """Validate bound receipts and mint completion in one writer transaction."""
         ts = time.time() if now_ts is None else float(now_ts)
-        status = self.completion_status(invocation_id)
-        if not status.closable:
-            raise EffectLifecycleError("COMPLETION_GATE_OPEN:" + ",".join(status.reasons))
-
         con = self._con()
         try:
+            # Completion is a state transition. Acquire the writer snapshot before the
+            # first bound-receipt read so validation and mint cannot be interleaved.
+            con.execute("BEGIN IMMEDIATE")
             req = self._require_request(con, invocation_id)
+            reasons: list[str] = []
             adm = con.execute(
                 "SELECT decision FROM admission_decisions WHERE invocation_id=?",
                 (invocation_id,),
@@ -673,6 +673,36 @@ class EffectLifecycleStore:
                 "SELECT result_digest,task_id,turn_id,causal_id,generation FROM result_reentries WHERE invocation_id=?",
                 (invocation_id,),
             ).fetchone()
+
+            if adm is None or adm["decision"] != AdmissionDecision.ALLOW.value:
+                reasons.append("ADMISSION_NOT_ALLOW")
+            if enf is None or int(enf["dispatch_permitted"]) != 1:
+                reasons.append("ENFORCEMENT_NOT_ALLOW")
+            elif enf["request_digest"] != req["request_digest"]:
+                reasons.append("ENFORCEMENT_REQUEST_MISMATCH")
+            if req["pending_state"] != PendingEffectState.SUBMITTED.value:
+                reasons.append("NOT_SUBMITTED")
+            if exe is None:
+                reasons.append("MISSING_EXECUTION_RECEIPT")
+            else:
+                if exe["request_digest"] != req["request_digest"]:
+                    reasons.append("EXECUTION_REQUEST_MISMATCH")
+                if int(exe["exit_code"]) != 0:
+                    reasons.append("EXECUTION_FAILED")
+            if world is None:
+                reasons.append("MISSING_WORLD_VERIFICATION")
+            elif world["outcome"] != WorldOutcome.SUCCEEDED.value:
+                reasons.append(f"WORLD_{world['outcome']}")
+            if reentry is None:
+                reasons.append("MISSING_RESULT_REENTRY")
+            else:
+                if exe is not None and reentry["result_digest"] != exe["result_digest"]:
+                    reasons.append("REENTRY_RESULT_MISMATCH")
+                if reentry["task_id"] != req["task_id"] or reentry["turn_id"] != req["turn_id"] or reentry["causal_id"] != req["causal_id"] or int(reentry["generation"]) != int(req["generation"]):
+                    reasons.append("REENTRY_LINEAGE_MISMATCH")
+            if reasons:
+                raise EffectLifecycleError("COMPLETION_GATE_OPEN:" + ",".join(reasons))
+
             source_binding = con.execute(
                 "SELECT expected_source_digest FROM completion_v2_source_bindings WHERE invocation_id=?",
                 (invocation_id,),
@@ -681,82 +711,76 @@ class EffectLifecycleStore:
                 "SELECT source_digest,duplicate_state,status FROM execution_v2_metadata WHERE invocation_id=?",
                 (invocation_id,),
             ).fetchone()
-        finally:
-            con.close()
 
-        expected_source = "" if source_binding is None else str(source_binding["expected_source_digest"])
-        execution_source = "" if execution_v2 is None else str(execution_v2["source_digest"])
-        duplicate_state = "UNKNOWN" if execution_v2 is None else str(execution_v2["duplicate_state"])
-        execution_status = "UNKNOWN" if execution_v2 is None else str(execution_v2["status"])
+            expected_source = "" if source_binding is None else str(source_binding["expected_source_digest"])
+            execution_source = "" if execution_v2 is None else str(execution_v2["source_digest"])
+            duplicate_state = "UNKNOWN" if execution_v2 is None else str(execution_v2["duplicate_state"])
+            execution_status = "UNKNOWN" if execution_v2 is None else str(execution_v2["status"])
 
-        expected = V2ExpectedInvocation(
-            invocation_id=invocation_id,
-            request_digest=str(req["request_digest"]),
-            task_id=str(req["task_id"]),
-            turn_id=str(req["turn_id"]),
-            causal_id=str(req["causal_id"]),
-            generation=int(req["generation"]),
-            source_digest=expected_source,
-        )
-        decision = verify_completion_v2(
-            expected,
-            admission=V2AdmissionReceipt(
-                V2_ADMISSION_SCHEMA,
-                invocation_id,
-                str(req["request_digest"]),
-                int(req["generation"]),
-                str(adm["decision"]),
-            ),
-            enforcement=V2EnforcementReceipt(
-                V2_ENFORCEMENT_SCHEMA,
-                invocation_id,
-                str(enf["request_digest"]),
-                int(req["generation"]),
-                str(enf["decision"]),
-                bool(enf["dispatch_permitted"]),
-                str(enf["boundary_id"]),
-            ),
-            execution=V2ExecutionReceipt(
-                V2_EXECUTION_SCHEMA,
-                invocation_id,
-                str(exe["request_digest"]),
-                int(req["generation"]),
-                execution_source,
-                str(exe["executable_id"]),
-                str(exe["environment_id"]),
-                execution_status,
-                int(exe["exit_code"]),
-                str(exe["result_digest"]),
-                duplicate_state,
-            ),
-            world=V2WorldVerificationReceipt(
-                V2_WORLD_SCHEMA,
-                invocation_id,
-                int(req["generation"]),
-                str(exe["result_digest"]),
-                str(world["outcome"]),
-                None if world["evidence_digest"] is None else str(world["evidence_digest"]),
-            ),
-            reentry=V2ResultReentryReceipt(
-                V2_REENTRY_SCHEMA,
-                invocation_id,
-                int(reentry["generation"]),
-                str(reentry["result_digest"]),
-                str(reentry["task_id"]),
-                str(reentry["turn_id"]),
-                str(reentry["causal_id"]),
-            ),
-            require_test_receipt=False,
-            require_world_evidence=True,
-        )
-        if not decision.closable or not decision.validation_digest:
-            raise EffectLifecycleError("COMPLETION_V2_GATE_OPEN:" + ",".join(decision.reasons))
+            expected = V2ExpectedInvocation(
+                invocation_id=invocation_id,
+                request_digest=str(req["request_digest"]),
+                task_id=str(req["task_id"]),
+                turn_id=str(req["turn_id"]),
+                causal_id=str(req["causal_id"]),
+                generation=int(req["generation"]),
+                source_digest=expected_source,
+            )
+            decision = verify_completion_v2(
+                expected,
+                admission=V2AdmissionReceipt(
+                    V2_ADMISSION_SCHEMA,
+                    invocation_id,
+                    str(req["request_digest"]),
+                    int(req["generation"]),
+                    str(adm["decision"]),
+                ),
+                enforcement=V2EnforcementReceipt(
+                    V2_ENFORCEMENT_SCHEMA,
+                    invocation_id,
+                    str(enf["request_digest"]),
+                    int(req["generation"]),
+                    str(enf["decision"]),
+                    bool(enf["dispatch_permitted"]),
+                    str(enf["boundary_id"]),
+                ),
+                execution=V2ExecutionReceipt(
+                    V2_EXECUTION_SCHEMA,
+                    invocation_id,
+                    str(exe["request_digest"]),
+                    int(req["generation"]),
+                    execution_source,
+                    str(exe["executable_id"]),
+                    str(exe["environment_id"]),
+                    execution_status,
+                    int(exe["exit_code"]),
+                    str(exe["result_digest"]),
+                    duplicate_state,
+                ),
+                world=V2WorldVerificationReceipt(
+                    V2_WORLD_SCHEMA,
+                    invocation_id,
+                    int(req["generation"]),
+                    str(exe["result_digest"]),
+                    str(world["outcome"]),
+                    None if world["evidence_digest"] is None else str(world["evidence_digest"]),
+                ),
+                reentry=V2ResultReentryReceipt(
+                    V2_REENTRY_SCHEMA,
+                    invocation_id,
+                    int(reentry["generation"]),
+                    str(reentry["result_digest"]),
+                    str(reentry["task_id"]),
+                    str(reentry["turn_id"]),
+                    str(reentry["causal_id"]),
+                ),
+                require_test_receipt=False,
+                require_world_evidence=True,
+            )
+            if not decision.closable or not decision.validation_digest:
+                raise EffectLifecycleError("COMPLETION_V2_GATE_OPEN:" + ",".join(decision.reasons))
 
-        receipt_digest = str(decision.validation_digest)
-        con = self._con()
-        try:
-            con.execute("BEGIN IMMEDIATE")
-            self._require_request(con, invocation_id)
+            receipt_digest = str(decision.validation_digest)
             con.execute(
                 "INSERT INTO completion_evidence VALUES(?,?,?,?)",
                 (invocation_id, V2_COMPLETION_EVIDENCE_CLASS, receipt_digest, ts),

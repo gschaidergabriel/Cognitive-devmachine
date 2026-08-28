@@ -1,0 +1,55 @@
+{
+  "schema": "TRIGGERWORD4_COMPLETION_ATOMICITY_NEGATIVE/v1",
+  "trigger": "triggerwort 4",
+  "organ": "GPT-5.6 Sol / ChatGPT triggerword-4 continuation",
+  "canonical_main_observed": "6215a339aef182f889f04550627d5b3fafe1f1fe",
+  "supervisor_epoch": "9.13",
+  "supervisor_delta": "9.13AF_NON_AUTHORITY",
+  "execution_mode": "FREE_ONLY",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "branch_head_observed_before_receipt": "4700acc6ac9ce8769e210de12a96c769036c75fc",
+  "evidence_class": "SOURCE_NEGATIVE_WITH_REGRESSION_PIN",
+  "scope": "FRANKENSTEIN2_EFFECT_LIFECYCLE_COMPLETION_MINT_ATOMICITY_ONLY",
+  "source": {
+    "path": "tools/frankenstein2_effect_lifecycle_v1.py",
+    "blob_sha": "b127f2a35052ca4ab35593d1bbc4b45accbd9f13",
+    "method": "EffectLifecycleStore.issue_completion_evidence"
+  },
+  "observed_source_behavior": [
+    "completion_status is evaluated before the completion-mint writer transaction",
+    "bound request/admission/enforcement/execution/world/reentry/source metadata are read on a connection that is closed before verification",
+    "verify_completion_v2 executes after that read connection is closed",
+    "a later separate connection begins BEGIN IMMEDIATE and inserts completion_evidence",
+    "there is therefore no single SQLite writer snapshot spanning bound receipt reads, validation, and completion mint"
+  ],
+  "hypothesis": "A concurrent writer or direct database mutation can change a receipt participating in the validated decision after validation but before completion_evidence is minted, producing completion evidence for a state that was not the state present at mint time.",
+  "counterhypothesis": "Current lifecycle APIs are largely create-once, so ordinary API use may make the race difficult to realize. That reduces exposure but does not establish the required atomic invariant at the database boundary and does not protect against direct/migration/repair writers.",
+  "regression_pin": {
+    "path": "tools/test_grid10_cognitive_frankenstein2_completion_atomicity_v1.py",
+    "commit": "b0497955434ec85100320985e4adbf30d52db35a",
+    "classification": "EXPECTED_FAILURE_UNTIL_FIXED",
+    "desired_invariant": "BEGIN_IMMEDIATE precedes the first bound receipt read and one connection is retained through verification and completion_evidence insertion"
+  },
+  "ci_wiring": {
+    "commit": "0769f862bef11f549669c6eae8a062b5c96f3a46",
+    "workflow": ".github/workflows/grid10-cognitive-envelope-ci.yml",
+    "test_added_to_existing_lane": true,
+    "test_execution_pass_observed": false,
+    "note": "A general exact-tree audit for the commit completed failure and no trustworthy combined test status was available; this is infrastructure/CI evidence, not a semantic code failure or PASS."
+  },
+  "coordination": {
+    "new_grid10_dispatch_created": false,
+    "quiescence_issue_2122_duplicated": false,
+    "sigkill_issue_2121_duplicated": false,
+    "unusual_experiment_used": false,
+    "second_completion_authority_created": false
+  },
+  "next_exact_gate": "Refactor the existing EffectLifecycleStore.issue_completion_evidence implementation in place so one BEGIN IMMEDIATE transaction spans all bound receipt reads, verify_completion_v2, completion_evidence insertion, event insertion, and COMMIT; eliminate the pre-transaction completion_status dependency from the mint path; then remove expectedFailure and execute the deterministic regression plus adversarial mutation/concurrency checks.",
+  "credit_boundary": {
+    "frankenstein_completion_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

@@ -5,7 +5,7 @@
   "last_resolved_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
   "last_resolved_design_sha_before_ingest": "62103b7aca5d1f799fb0c56ca917fb33f77aded2",
   "canonical_main_observed": "86f74e6350d81c2fa2f55da83cfdbe2e6e9758e9",
-  "last_ingest_at": "2026-08-28T07:27:36Z",
+  "last_ingest_at": "2026-08-28T07:28:47Z",
   "last_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REENTRY_FUSION.json",
   "last_architecture_delta_commit": "e54601f01161c222c814c999af4641eb71d233ff",
   "last_ingest_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_REENTRY_FUSION.json",
@@ -21,6 +21,12 @@
       "commit": "82344698b4410693fad4853e23ffe0108df57cdf",
       "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_DONOR_CLOSURE_AND_OPENSET_WORLD.json",
       "receipt_commit": "32313a929d8e9902bcc4edbb869c1bc9461539c5"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_PATH_DELTA_2026-08-28T1421P0700_GPT56SOL.json",
+      "commit": "d51282ce3474ffa74d8fd2ba41643a46eadbe771",
+      "receipt": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072106Z_5641dc6_GPT56SOL_EFFECT_PATH_FORENSICS.json",
+      "receipt_commit": "97e1bc4d0ff363daae642a871bb81477ae8d7031"
     }
   ],
   "consumed_packet_ids": [
@@ -28,7 +34,8 @@
     "triggerwort5-20260828T1412p0700-gpt56sol-voice-visual-lineage",
     "TW5-PACKET-20260828T0714Z-5641dc6-GPT56SOL-LIVE-FEED-BRIDGE",
     "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL",
-    "triggerwort5-20260828T1414p0700-gpt56sol-effect-completion-forensics"
+    "triggerwort5-20260828T1414p0700-gpt56sol-effect-completion-forensics",
+    "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS"
   ],
   "superseded_packet_ids": [],
   "unresolved_contradiction_ids": [
@@ -36,18 +43,20 @@
     "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
     "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
     "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
-    "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004"
+    "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004",
+    "TW5-CONTRADICTION-PARALLEL-EFFECT-CORRELATION-003"
   ],
   "current_frontier": [
     "P0 recover Git introduction/supersession chronology for posttool-only effect logging -> Phase-2 nonblocking admission bookkeeping -> current completion verifier; preserve source-ready versus live-wired transitions",
-    "P0 inspect the actual blocking wache-koenig predecessor and real hook scheduler to determine whether same-session PreToolUse/PostToolUse can interleave; require immutable invocation-id to effect-id pairing in the Frankenstein-2.0 design",
+    "P0 inspect the actual blocking wache-koenig predecessor and real hook scheduler to determine whether same-session PreToolUse/PostToolUse can interleave; Frankenstein-2.0 must use immutable per-call tool_use_id + request_digest + session/generation/causal identity rather than one active_turns.effect_id pointer",
     "P0 resolve exact donor dependency closure for dynamically imported wegehierarchie and other runtime compatibility modules before Triggerword-4 donor freeze; require exact source/hash or an explicit tested successor and preserve silent-degradation regression coverage",
     "P0 repair the Triggerword-4 assembly design so unavailable Presence remains UNKNOWN/None rather than falling back to user_present=True; add explicit WAIT/ASK/re-observe semantics and a regression test",
     "P0 specify a minimal provenance-bearing VoiceSessionCapsule/GRID context compiler because current realtime _response_erstellen() refreshes the capsule but does not serialize it into per-response instructions; require field-level lesion/shuffle tests and bounded token/privacy/freshness rules",
     "P0 resolve migration authority between canonical-main research_entity/architecture_archaeology/TRIGGERWORD5_LIVE_FORENSIC_FEED.json and the owner-branch research_entity/frankenstein_architecture_ingest/inbox append-only lane without deleting provenance",
     "P1 map typed ObservedEvidence/InferredHypothesis/RetrievalPrior, NOT_COMPUTED, open-set UNKNOWN and anti-self-confirmation semantics into the Triggerword-4/5 sparse WorldNeed/WorldSlice substrate contract",
     "P1 turn shared voice/visual arbitration plus WAIT-margin telemetry into a typed GRID competition ABI with modality-specific calibration and lesion/shuffle acceptance requirements",
-    "P1 bind ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION and COMPLETION_EVIDENCE as distinct typed states behind canonical EntityOS EffectGate/EffectJournal authority",
+    "P1 bind EffectRequest/EffectDecision/EffectOutcome and ADMISSION_DECISION/ENFORCEMENT_DECISION/EXECUTION_RECEIPT/WORLD_EFFECT_VERIFICATION/COMPLETION_EVIDENCE as distinct typed states behind canonical EntityOS EffectGate/EffectJournal authority; successful execution must never retroactively create admission authority",
+    "P1 add Triggerword-4 regressions for parallel state-changing tool calls, reverse completion order, forced PreToolUse failure with stale prior pointer, actual DENY non-execution, wrong-call identity rejection and secret-fence coverage",
     "P1 map historical Project-Frankenstein predecessor effect/state boundaries at exact commits rather than relying on synthesis prose"
   ]
 }

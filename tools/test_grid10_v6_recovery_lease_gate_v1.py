@@ -246,7 +246,7 @@ class RecoveryLeaseGateTests(unittest.TestCase):
             con.close()
 
     def test_persist_recovery_classification_records_lease_proof_without_raw_token(self):
-        _seed(self.db)
+        _seed(self.db, claimed_at="2020-01-01T00:00:00Z", expires_at="2099-01-01T00:00:00Z")
         _seed_recovery_required_evidence(self.db)
         result, proof, envelope_digest = persist_recovery_classification_with_canonical_lease(
             self.db,
@@ -255,7 +255,6 @@ class RecoveryLeaseGateTests(unittest.TestCase):
             spec_rev=1,
             executor_node="worker-a",
             lease_token="lease-a",
-            checked_at=NOW,
             terminal_ts=1.0,
         )
         self.assertEqual(result.status, STATUS_RECOVERY_REQUIRED)
@@ -277,8 +276,35 @@ class RecoveryLeaseGateTests(unittest.TestCase):
         self.assertEqual(envelope["classification"]["same_tick_retry_authorized"], False)
         self.assertNotIn("lease-a", row["classification_json"])
 
+    def test_persist_recovery_classification_rejects_external_time_override_before_mutation(self):
+        _seed(self.db, claimed_at="2020-01-01T00:00:00Z", expires_at="2099-01-01T00:00:00Z")
+        _seed_recovery_required_evidence(self.db)
+        with self.assertRaisesRegex(
+            RecoveryLeaseNotAuthorized,
+            "EXTERNAL_CHECKED_AT_OVERRIDE_FORBIDDEN",
+        ):
+            persist_recovery_classification_with_canonical_lease(
+                self.db,
+                tick_id="t1",
+                work_id=recovery_work_id_for_tick("t1"),
+                spec_rev=1,
+                executor_node="worker-a",
+                lease_token="lease-a",
+                checked_at=NOW,
+            )
+        con = _connect(self.db)
+        try:
+            row = con.execute(
+                "SELECT status,classification_json FROM grid10_v6_cycle_intents WHERE tick_id=?",
+                ("t1",),
+            ).fetchone()
+        finally:
+            con.close()
+        self.assertEqual(row["status"], STATUS_PREPARED)
+        self.assertIsNone(row["classification_json"])
+
     def test_persist_recovery_classification_rejects_without_v4_commit_and_rolls_back(self):
-        _seed(self.db)
+        _seed(self.db, claimed_at="2020-01-01T00:00:00Z", expires_at="2099-01-01T00:00:00Z")
         install_reconciliation_schema(self.db)
         prepare_cycle_intent(
             self.db,
@@ -299,7 +325,6 @@ class RecoveryLeaseGateTests(unittest.TestCase):
                 spec_rev=1,
                 executor_node="worker-a",
                 lease_token="lease-a",
-                checked_at=NOW,
             )
         con = _connect(self.db)
         try:

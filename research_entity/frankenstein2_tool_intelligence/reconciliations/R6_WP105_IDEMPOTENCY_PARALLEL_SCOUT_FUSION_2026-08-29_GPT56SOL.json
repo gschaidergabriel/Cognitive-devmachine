@@ -1,0 +1,93 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_PARALLEL_DISCOVERY_RECONCILIATION/v1",
+  "trigger": "6",
+  "status": "RECONCILED_NO_DOUBLE_CREDIT",
+  "topic": "F2-WP-105 post-start ambiguity, retry identity and idempotency",
+  "research_main_before_reconciliation_observed": "1321a7449403e37e1668ef4654540eb50cc7030a",
+  "f2_main_reentry_observed": "24cdd2576ceaaba1e05544ab75bbb9a95a333f1e",
+  "parallel_packets": [
+    {
+      "research_id": "R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001",
+      "canonical_f2_path": "research/tool_intelligence/deltas/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001_E1_SOURCE_READ_20260829T0404P0700_GPT56SOL.json",
+      "mirror_path": "research_entity/frankenstein2_tool_intelligence/deltas/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001_E1_SOURCE_READ_20260829T0404P0700_GPT56SOL.json",
+      "role": "PRIMARY_STRUCTURAL_DONOR_SCOUT",
+      "unique_value": [
+        "Pins and source-reads AWS Powertools idempotency, CloudEvents identity and Restate durable invocation donors.",
+        "Retains AWS conditional INPROGRESS/COMPLETE concurrency fencing and a current upstream fail-open expiry bug lesson.",
+        "Separates invocation_id, idempotency_key and attempt_id; recommends attach/query of the original attempt after ambiguity."
+      ]
+    },
+    {
+      "research_id": "R6-DISCOVERY-WP105-POSTSTART-UNKNOWN-IDEMPOTENCY-001",
+      "path": "research_entity/frankenstein2_tool_intelligence/deltas/R6_DISCOVERY_WP105_POSTSTART_UNKNOWN_IDEMPOTENCY_2026-08-29_GPT56SOL.json",
+      "role": "CURRENT_FRONTIER_AND_STANDARD_SEMANTICS_EXTENSION_DONOR",
+      "unique_value": [
+        "Re-enters after F2 semantic EffectRequestIdentity/request_sha256 binding became current source, so it does not duplicate the already-closed digest-binding blocker.",
+        "Adds RFC 9110 retry semantics: non-idempotent operations should not be automatically retried after response uncertainty unless idempotency or provable non-application exists.",
+        "Adds Python subprocess TimeoutExpired semantics as direct support that post-start timeout is a process-control observation, not proof that earlier world side effects did not happen.",
+        "Adds AWS Builders Library counterexample that a payload hash alone is not a retry identity because two identical requests can intentionally represent two distinct operations.",
+        "Directly maps the bound EntityOS contradiction: EffectGate converts any bridge exception to FAILED while current F2 raises ExecutorOutcomeUnknown after post-start ambiguity; EffectJournal has UNKNOWN_AFTER_RESTART but no distinct post-dispatch UNKNOWN finalization in the bound source."
+      ]
+    }
+  ],
+  "current_trigger4_feedback_fused": [
+    {
+      "path": "research_entity/runtime/tool_results/2026-08-29_TRIGGER4_F2_WP105_AB_BIJECTION_EXECUTED_CURRENT_MAIN_GPT56SOL.json",
+      "finding": "Immutable request/call to canonical effect-id correlation now has executed deterministic no-real-effect public CI component evidence. This narrows Trigger6 away from semantic digest creation and toward ambiguity/idempotency/outcome semantics."
+    },
+    {
+      "path": "research_entity/runtime/tool_results/2026-08-29_TRIGGER4_POST_POPEN_NON_TIMEOUT_REENTRY_GPT56SOL.json",
+      "finding": "Current source classifies ordinary exceptions after successful Popen as typed UNKNOWN/nonreplayable; exact-current execution of that specific regression remains blocked/unobserved on the private canonical checkout."
+    }
+  ],
+  "fused_conclusion": {
+    "logical_discovery_units": 1,
+    "e1_source_read_credit": 1,
+    "independent_replication_credit": 0,
+    "double_credit": 0,
+    "strongest_current_hypothesis": "F2 should prefer a minimal native UNKNOWN-safe retry envelope over a new durable workflow/event store. Keep semantic request digest, stable retry/operation identity, invocation/attempt identity and canonical effect_id distinct. Same retry identity with a changed semantic digest fails before dispatch. Ambiguous post-start outcomes remain UNKNOWN and nonreplayable by default until authority-owned verification or an independently proven target idempotency contract closes the uncertainty.",
+    "identity_warning": "Do not promote request_sha256 into the retry key. Semantic equality and operation identity are different dimensions.",
+    "authority_warning": "Trigger6 source evidence does not authorize a new EntityOS journal status/schema. Any UNKNOWN_POST_DISPATCH integration is a Trigger4/current-authority design-and-test action and must retain the single EffectGate/EffectJournal lane.",
+    "dependency_decision": "NO_EXTERNAL_RUNTIME_IMPORT_JUSTIFIED_AT_E1"
+  },
+  "next_nonduplicate_trigger6_step": {
+    "preferred_slot": "INTEGRATION_DISTILLER",
+    "question": "Can existing F2 invocation_id, autonomy goal/step identity or another already-canonical field satisfy stable operation_retry_id semantics across retry/restart paths without overloading occurrence identity?",
+    "required_mapping": [
+      "semantic request identity/digest",
+      "logical operation/retry identity",
+      "execution attempt identity",
+      "canonical effect_id",
+      "dispatch-start evidence",
+      "outcome certainty",
+      "verification evidence reference",
+      "concurrency/duplicate fence"
+    ],
+    "required_negative_cases": [
+      "same retry id + different request digest => reject, zero dispatch",
+      "live/ambiguous original attempt => zero concurrent duplicate dispatch",
+      "intentional second identical semantic request + distinct operation id => not deduplicated",
+      "post-start timeout/ordinary exception => UNKNOWN, no negative world fact",
+      "UNKNOWN non-idempotent effect => no automatic replay",
+      "replay only after proven idempotency or authoritative non-application verification"
+    ]
+  },
+  "agent_sight_parallel_note": "AgentSight has independently advanced elsewhere to a narrow E3 reproduction on current F2, but that does not change or promote this WP105 idempotency scout; observability remains witness evidence, not effect authority.",
+  "credits": {
+    "this_reconciled_wp105_scout_e1": 1,
+    "wp105_scout_e2": 0,
+    "wp105_scout_e3": 0,
+    "wp105_scout_e4": 0,
+    "wp105_build_candidate": 0,
+    "wp105_f2_accepted": 0,
+    "whole_f2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0
+  },
+  "execution": {
+    "new_real_effect_experiment": false,
+    "provider_calls": 0,
+    "vps_execution": 0,
+    "paid_fallback": false
+  }
+}

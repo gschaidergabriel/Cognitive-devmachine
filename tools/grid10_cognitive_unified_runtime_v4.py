@@ -19,10 +19,10 @@ same SQLite/WAL file. This module never grants canonical truth or external-effec
 GRID/model output remains candidate cognition; EffectGate/EffectJournal remain authoritative
 for real effects outside this runtime.
 
-Triggerword-4 convergence note: persistent service wrappers may pre-evaluate wake conditions
-only when they pass the exact awakened goal IDs back into ``tick_once``. That keeps one v4
-state-transition core instead of allowing a scheduler adapter to retain its own heartbeat /
-checkpoint / schedule write semantics.
+Wake ownership law: this shared runtime owns ``wake_due`` for every cognitive tick. A caller
+may supply observed events, but may not supply already-woken goal IDs as causal provenance.
+That prevents a wrapper from forcing an early heartbeat or minting false wake lineage merely
+by passing a non-empty iterable.
 """
 from __future__ import annotations
 
@@ -50,9 +50,6 @@ SCHEMA = "GRID10_UNIFIED_COGNITIVE_RUNTIME/v4"
 CHECKPOINT_SCHEMA = "GRID10_COGNITIVE_CYCLE_CHECKPOINT/v1"
 IDLE_CHECKPOINT_SCHEMA = "GRID10_IDLE_HOLD_CHECKPOINT/v1"
 
-# These are routing requirements, not claims that the cells themselves are canonical truth.
-# The live control plane can attenuate or disable the compute/output path that would otherwise
-# publish the heartbeat's cognitive action candidate.
 ACTION_GRID_CELLS: Mapping[str, tuple[str, ...]] = {
     "OBSERVE": ("orientation",),
     "SEARCH": ("epistemic", "retrieval"),
@@ -140,13 +137,7 @@ def _apply_grid_action_controls(
     snapshot: ControlSnapshot,
     raw_action: str,
 ) -> tuple[str, tuple[str, ...], tuple[Mapping[str, Any], ...]]:
-    """Consume live GRID modes/gains before publishing a cognitive action candidate.
-
-    A cell that is COMPUTE_OFF/OUTPUT_OFF cannot support an action requiring that cell.
-    Gain is a live admission weight: the weakest required cell must meet the live pulse
-    salience threshold. This is deliberately bounded and deterministic; it does not invent
-    world facts or execute an effect.
-    """
+    """Consume live GRID modes/gains before publishing a cognitive action candidate."""
     cells = _grid_control_view(snapshot, raw_action)
     if not cells or raw_action == "HOLD":
         return raw_action, (), cells
@@ -163,11 +154,10 @@ def _apply_grid_action_controls(
     if not reasons:
         return raw_action, (), cells
 
-    # Fail toward a lower-authority observation candidate. If even orientation is disabled,
-    # hold rather than silently bypassing the live control frame.
     orientation = _grid_control_view(snapshot, "OBSERVE")
     orientation_ok = bool(orientation) and all(
-        bool(r["compute_enabled"]) and bool(r["output_enabled"])
+        bool(r["compute_enabled"])
+        and bool(r["output_enabled"])
         and float(r["gain"]) >= threshold
         for r in orientation
     )
@@ -188,21 +178,14 @@ def _atomic_commit_cycle(
     next_tick_not_before: float,
     now_ts: float,
 ) -> int:
-    """Commit checkpoint + scheduler mode as one AgencyState epoch transition.
-
-    Heartbeat telemetry is written by the existing heartbeat store before this function.
-    If another agency writer moves the epoch in between, this commit fails closed rather
-    than silently overwriting the newer continuation state.
-    """
+    """Commit checkpoint + scheduler mode as one AgencyState epoch transition."""
     encoded_checkpoint = json.dumps(checkpoint, sort_keys=True, separators=(",", ":"))
     encoded_woken = json.dumps(list(woken_goal_ids), sort_keys=True, separators=(",", ":"))
     event_id = f"cognitive-cycle:{tick_id}"
     con = _connect(Path(agency.path))
     try:
         con.execute("BEGIN IMMEDIATE")
-        row = con.execute(
-            "SELECT state_epoch FROM agency_meta WHERE singleton=1"
-        ).fetchone()
+        row = con.execute("SELECT state_epoch FROM agency_meta WHERE singleton=1").fetchone()
         if row is None:
             raise RuntimeCycleConflict("MISSING_AGENCY_META")
         observed_epoch = int(row["state_epoch"])
@@ -289,13 +272,7 @@ def _atomic_commit_idle_hold(
     now_ts: float,
     reason: str = "NO_ACTIVE_OR_TRIAL_GOAL",
 ) -> tuple[int, Mapping[str, Any]]:
-    """Persist an idle/HOLD scheduler decision with one AgencyState CAS transaction.
-
-    No heartbeat/model cycle ran, so this deliberately does *not* mint a row in
-    ``grid10_cognitive_cycles``. It only advances the durable AgencyState schedule/checkpoint
-    and appends a typed agency event. This replaces the older scheduler adapter's two separate
-    ``set_continuation_checkpoint`` + ``schedule_next_tick`` writes.
-    """
+    """Persist an idle/HOLD scheduler decision with one AgencyState CAS transaction."""
     checkpoint: Mapping[str, Any] = {
         "schema": IDLE_CHECKPOINT_SCHEMA,
         "cycle_id": cycle_id,
@@ -310,9 +287,7 @@ def _atomic_commit_idle_hold(
     con = _connect(Path(agency.path))
     try:
         con.execute("BEGIN IMMEDIATE")
-        row = con.execute(
-            "SELECT state_epoch FROM agency_meta WHERE singleton=1"
-        ).fetchone()
+        row = con.execute("SELECT state_epoch FROM agency_meta WHERE singleton=1").fetchone()
         if row is None:
             raise RuntimeCycleConflict("MISSING_AGENCY_META")
         observed_epoch = int(row["state_epoch"])
@@ -400,27 +375,22 @@ class UnifiedCognitiveRuntimeV4:
     ) -> UnifiedCycleResult:
         now = time.time() if now_ts is None else float(now_ts)
         if prewoken_goal_ids is not None:
-            if tuple(observed_events):
-                raise RuntimeCycleError(
-                    "AMBIGUOUS_WAKE_INPUT:prewoken_goal_ids_and_observed_events"
-                )
-            woken = tuple(str(goal_id) for goal_id in prewoken_goal_ids)
-        else:
-            woken = self.agency.wake_due(
-                now_ts=now,
-                observed_events=tuple(observed_events),
-                event_id_prefix=f"{tick_id}:wake",
+            raise RuntimeCycleError(
+                "PREWOKEN_WAKE_LINEAGE_UNSUPPORTED:runtime_owns_wake_due"
             )
+        observed_events = tuple(observed_events)
+        woken = self.agency.wake_due(
+            now_ts=now,
+            observed_events=observed_events,
+            event_id_prefix=f"{tick_id}:wake",
+        )
         before = self.agency.snapshot()
         if not woken and not self.agency.due_for_tick(now_ts=now):
             raise RuntimeCycleNotDue(
                 f"NEXT_TICK_NOT_DUE:{before.next_tick_not_before}"
             )
 
-        # Exactly one immutable dynamic-frame snapshot is latched for this cognitive tick.
-        # No control mutation occurs below; later commits become visible on a later tick.
         control = self.control_plane.snapshot()
-
         heartbeat = self.heartbeat_runtime.tick_once(
             tick_id=tick_id,
             trusted_axes=trusted_axes,

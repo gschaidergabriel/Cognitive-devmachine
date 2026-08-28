@@ -3,8 +3,8 @@
 
 This is a control-loop service wrapper, not a second cognition/state authority. It uses the
 same physical SQLite opened by ``grid10_cognitive_unified_runtime_v4`` and delegates every
-heartbeat/checkpoint/next-tick state transition to that v4 core. Idle/HOLD scheduling uses the
-same v4 CAS helper so the service wrapper no longer owns a second write sequence.
+wake/heartbeat/checkpoint/next-tick cognitive transition to that v4 core. Idle/HOLD scheduling
+uses the same v4 CAS helper so the service wrapper no longer owns a second write sequence.
 
 The live Dynamic Frame is the default cadence authority: active and HOLD ticks are resolved
 inside v4 from its single per-tick ControlSnapshot; an idle cycle latches one snapshot solely
@@ -16,9 +16,9 @@ The key Stage-2 behavior is explicit and falsifiable:
     checkpoint -> HOLD/DORMANT -> process restart -> exact wake condition
     -> ACTIVE -> cognitive heartbeat -> checkpoint -> durable next-tick schedule
 
-A wake event may make cognition immediately due even when an idle poll was scheduled later.
-This prevents HOLD from degenerating into busy-waiting while still allowing material new
-evidence to resume the goal promptly.
+The scheduler may inspect whether a deferred wake condition is due, but it never performs the
+wake transition itself. Only v4 calls ``wake_due`` and therefore only v4 may mint wake lineage
+inside a cognitive-cycle receipt.
 """
 from __future__ import annotations
 
@@ -31,6 +31,7 @@ from typing import Iterable
 
 from grid10_cognitive_heartbeat_v1 import _trusted_normal_axes, append_frame_jsonl
 from grid10_cognitive_unified_runtime_v4 import (
+    RuntimeCycleNotDue,
     _atomic_commit_idle_hold,
     build_unified_cognitive_runtime_v4,
 )
@@ -58,6 +59,35 @@ class SchedulerCycleResult:
     next_tick_not_before: float | None
     agency_state_epoch: int
     unified_db_realpath: str
+
+
+def _pending_wake_due(snapshot, *, now_ts: float, observed_events: Iterable[str]) -> bool:
+    """Pure preflight: report whether v4's next wake_due call should have work to do.
+
+    This helper performs no writes and grants no wake provenance. It exists only so an idle
+    service wrapper does not run a heartbeat when there is neither an active goal nor a due
+    deferred intent.
+    """
+    observed = frozenset(str(x) for x in observed_events)
+    goals = {g.goal_id: g for g in snapshot.goals}
+    for intent in snapshot.deferred_intents:
+        if getattr(intent.state, "value", str(intent.state)) != "PENDING":
+            continue
+        goal = goals.get(intent.goal_id)
+        if goal is None:
+            continue
+        if goal.state != GoalState.DORMANT or goal.generation != intent.goal_generation:
+            continue
+        kind = getattr(intent.wake_kind, "value", str(intent.wake_kind))
+        if kind in {"TIME_AT", "PERIODIC_REVIEW"}:
+            try:
+                if now_ts >= float(intent.wake_value):
+                    return True
+            except ValueError:
+                continue
+        elif kind == "EVENT" and intent.wake_value in observed:
+            return True
+    return False
 
 
 class PersistentCognitiveScheduler:
@@ -92,6 +122,26 @@ class PersistentCognitiveScheduler:
             if g.state in {GoalState.ACTIVE, GoalState.TRIAL}
         )
 
+    def _not_due_result(
+        self,
+        *,
+        cycle_id: str,
+        snapshot,
+        active_goal_ids: tuple[str, ...],
+    ) -> SchedulerCycleResult:
+        return SchedulerCycleResult(
+            cycle_id=cycle_id,
+            status="NOT_DUE",
+            awakened_goal_ids=(),
+            active_goal_ids=active_goal_ids,
+            heartbeat_tick_id=None,
+            assurance_mode=None,
+            cognitive_action=None,
+            next_tick_not_before=snapshot.next_tick_not_before,
+            agency_state_epoch=snapshot.state_epoch,
+            unified_db_realpath=self.fingerprint.realpath,
+        )
+
     def cycle_once(
         self,
         *,
@@ -100,34 +150,28 @@ class PersistentCognitiveScheduler:
         observed_events: Iterable[str] = (),
     ) -> SchedulerCycleResult:
         now = time.time() if now_ts is None else float(now_ts)
-
-        # Evaluate deferred intents exactly once. If a material event wakes a goal, pass those
-        # exact IDs into v4 so the core receipt preserves the wake lineage without re-firing it.
-        awakened = self.agency.wake_due(
-            now_ts=now,
-            observed_events=tuple(observed_events),
-            event_id_prefix=f"{cycle_id}:wake",
-        )
+        observed_events = tuple(str(x) for x in observed_events)
         before = self.agency.snapshot()
-        active_goal_ids = self._active_goal_ids()
+        active_goal_ids = tuple(
+            g.goal_id
+            for g in before.goals
+            if g.state in {GoalState.ACTIVE, GoalState.TRIAL}
+        )
+        wake_expected = _pending_wake_due(
+            before,
+            now_ts=now,
+            observed_events=observed_events,
+        )
 
-        if not awakened and not self.agency.due_for_tick(now_ts=now):
-            return SchedulerCycleResult(
-                cycle_id=cycle_id,
-                status="NOT_DUE",
-                awakened_goal_ids=awakened,
-                active_goal_ids=active_goal_ids,
-                heartbeat_tick_id=None,
-                assurance_mode=None,
-                cognitive_action=None,
-                next_tick_not_before=before.next_tick_not_before,
-                agency_state_epoch=before.state_epoch,
-                unified_db_realpath=self.fingerprint.realpath,
-            )
-
-        if not active_goal_ids:
-            # No cognitive heartbeat runs here, so this idle scheduler boundary may latch its
-            # own immutable snapshot without violating the one-snapshot-per-cognitive-tick law.
+        # No active cognition and no legitimate wake is pending. The wrapper may either remain
+        # NOT_DUE or write one atomic idle-HOLD checkpoint; it must not manufacture wake IDs.
+        if not active_goal_ids and not wake_expected:
+            if not self.agency.due_for_tick(now_ts=now):
+                return self._not_due_result(
+                    cycle_id=cycle_id,
+                    snapshot=before,
+                    active_goal_ids=active_goal_ids,
+                )
             if self.config.idle_poll_seconds is None:
                 control = self.runtime.control_plane.snapshot()
                 idle_interval = control.float("pulse.idle_interval_seconds")
@@ -138,14 +182,14 @@ class PersistentCognitiveScheduler:
                 self.agency,
                 expected_agency_epoch=before.state_epoch,
                 cycle_id=cycle_id,
-                awakened_goal_ids=tuple(awakened),
+                awakened_goal_ids=(),
                 next_tick_not_before=next_due,
                 now_ts=now,
             )
             return SchedulerCycleResult(
                 cycle_id=cycle_id,
                 status="HOLD_NO_ACTIVE_GOAL",
-                awakened_goal_ids=awakened,
+                awakened_goal_ids=(),
                 active_goal_ids=(),
                 heartbeat_tick_id=None,
                 assurance_mode=None,
@@ -155,23 +199,34 @@ class PersistentCognitiveScheduler:
                 unified_db_realpath=self.fingerprint.realpath,
             )
 
+        # Active work or a deterministically due wake enters v4. v4 owns wake_due and records
+        # the exact goal IDs it actually woke; caller-supplied prewoken provenance is forbidden.
         trusted = _trusted_normal_axes() if self.config.trusted_normal_test_fixture else None
         tick_id = f"{cycle_id}:heartbeat"
-        cycle = self.runtime.tick_once(
-            tick_id=tick_id,
-            interval=self.config.active_interval_seconds,
-            hold_interval=self.config.hold_poll_seconds,
-            now_ts=now,
-            prewoken_goal_ids=tuple(awakened),
-            trusted_axes=trusted,
-        )
-        append_frame_jsonl(self.frames_jsonl, cycle.heartbeat_result.frame_json)
+        try:
+            cycle = self.runtime.tick_once(
+                tick_id=tick_id,
+                interval=self.config.active_interval_seconds,
+                hold_interval=self.config.hold_poll_seconds,
+                now_ts=now,
+                observed_events=observed_events,
+                trusted_axes=trusted,
+            )
+        except RuntimeCycleNotDue:
+            current = self.agency.snapshot()
+            return self._not_due_result(
+                cycle_id=cycle_id,
+                snapshot=current,
+                active_goal_ids=self._active_goal_ids(),
+            )
 
+        append_frame_jsonl(self.frames_jsonl, cycle.heartbeat_result.frame_json)
+        active_after = self._active_goal_ids()
         return SchedulerCycleResult(
             cycle_id=cycle_id,
             status="HEARTBEAT_RAN",
             awakened_goal_ids=cycle.woken_goal_ids,
-            active_goal_ids=active_goal_ids,
+            active_goal_ids=active_after,
             heartbeat_tick_id=tick_id,
             assurance_mode=cycle.assurance_mode,
             cognitive_action=cycle.next_action,

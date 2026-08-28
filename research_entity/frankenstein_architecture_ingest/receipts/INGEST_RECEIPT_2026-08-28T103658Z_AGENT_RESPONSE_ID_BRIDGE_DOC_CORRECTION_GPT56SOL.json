@@ -1,0 +1,42 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "created_at": "2026-08-28T10:36:58Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/agent-response-id-bridge-doc-correction",
+  "trigger": "triggerwort 5",
+  "routing_selftest": "PASS",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch_pre_write_sha": "bf8faeb47e3e4dd8ac850a085ae95c6078f3c980",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority_epoch": "9.13",
+  "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+  "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+  "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+  "mode": "FREE_ONLY",
+  "provider_routes_admitted": false,
+  "together": "FORBIDDEN",
+  "delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T103658Z_AGENT_RESPONSE_ID_BRIDGE_DOC_CORRECTION_GPT56SOL.json",
+    "commit_sha": "c373c326212424a36cac2d59d87d0ad9efc50172",
+    "classification": "EXTERNAL_PRIMARY_CAPABILITY_CORRECTION_NO_RUNTIME_CREDIT"
+  },
+  "finding": "Current official Claude Code Hooks documentation explicitly documents Agent PostToolUse tool_response.agentId while the same tool event carries tool_use_id; SubagentStart/SubagentStop separately expose agent_id. This refines the previous docs-level unknown into a documented invocation-to-child identifier bridge candidate. Exact equality/behavior on the installed target build remains runtime-unverified.",
+  "provenance_correction": "architekt_governance handoff-before-spawn/reconcile-after support is at the Ablauf step-6 span around donor lines 76-77, not the earlier packet lines 1-7.",
+  "nonduplication": "Existing 10:31/10:37 WorkExecutionBinding deltas and schema-validation receipts were preserved. This receipt adds only the newly observed official Agent tool_response.agentId capability evidence and the resulting narrower causal unknown.",
+  "execution": {
+    "provider_calls": 0,
+    "vps_calls": 0,
+    "runtime_agent_capture": 0,
+    "unusual_experiment": "NOT_RUN"
+  },
+  "credits": {
+    "source_forensics": "PASS_WITH_SUCCESSOR_CORRECTION",
+    "installed_native_child_runtime": 0,
+    "work_execution_binding_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "On Triggerword-4 or another authorized non-provider runtime lane, capture one harmless installed Agent invocation and prove or falsify tool_response.agentId == Subagent lifecycle agent_id at exact build identity, then test two overlapping disjoint child calls without timing/order joins."
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T091531Z-INGEST-STATE-MIXED-FRESHNESS-GPT56SOL",
+  "created_at": "2026-08-28T09:15:31Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/ingest-state-mixed-freshness",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "routing_status": "VERIFIED",
+  "directive": {
+    "path": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "blob_sha": "9f9a2fcb36a6129216af08a742f7449fd8c14f6f"
+  },
+  "authority": {
+    "epoch": "9.13",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "source_identity": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_repo": "gschaidergabriel/clay-global-research-entity",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_sha_observed_before_write": "97e53d406c896735bc960c06fb4d637bacf9f5ff",
+    "canonical_main_observed": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+    "ingest_state_path": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "ingest_state_blob_sha": "98b83296c20c248bca969d6e0a062acd24944886"
+  },
+  "packet_scan": {
+    "new_unconsumed_packets": [],
+    "latest_seen_packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "latest_seen_packet_status": "ALREADY_CONSUMED",
+    "duplicate_packet_ingest_performed": false
+  },
+  "finding": {
+    "classification": "NEGATIVE_RESULT_AND_COORDINATION_STATE",
+    "id": "TW5-INGEST-MIXED-FRESHNESS-001",
+    "claim": "The central INGEST_STATE is mixed-freshness at the observed design head: consumed_packet_ids includes the newest inbox packet, but last_ingest_at/last_architecture_delta/canonical_main_observed still point to the 08:40Z reconciliation epoch while append-only Triggerword-5 architecture deltas and receipts on the same branch extend through at least 09:12Z.",
+    "observed_state": {
+      "central_last_ingest_at": "2026-08-28T08:40:33Z",
+      "central_last_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json",
+      "central_canonical_main_observed": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+      "newest_crosschecked_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091233Z_REALTIME_MUTATION_CHILD_POLICY_REENTRY_FUSION_GPT56SOL.json",
+      "newest_crosschecked_delta_created_at": "2026-08-28T09:12:33Z",
+      "newest_crosschecked_branch_receipt_commit": "97e53d406c896735bc960c06fb4d637bacf9f5ff"
+    },
+    "invariant": "INGEST_STATE_LAST_POINTER != NECESSARILY_LATEST_ADMITTED_TRIGGER5_DELTA",
+    "risk": "A worker that uses only last_ingest_at/last_architecture_delta as its freshness oracle can rediscover or duplicate already-fused work, miss newer architecture constraints, or report a stale frontier even though consumed_packet_ids and append-only evidence are newer.",
+    "confidence": 1.0,
+    "runtime_credit_delta": 0
+  },
+  "hypothesis": "The mixed-freshness aggregate is primarily a merge-safety artifact: workers correctly prefer append-only evidence over destructive whole-file rewrites, but the aggregate pointer has no monotonic merge-safe reconciliation primitive.",
+  "counterhypothesis": "If every Triggerword-4/5 consumer already derives freshness from branch HEAD plus append-only deltas/receipts and treats INGEST_STATE summary pointers as advisory only, the practical duplication/staleness risk is limited even though the aggregate remains internally mixed-freshness.",
+  "falsifier": "A current executable/static consumer audit showing that every routing/reentry path ignores the stale last_* summary pointers for freshness and reconstructs the latest admitted state from append-only evidence would downgrade this from a coordination defect to an advisory-state cosmetic lag.",
+  "architecture_action": {
+    "current_safe_action": "KEEP_CENTRAL_FILE_UNCHANGED_AND_PERSIST_APPEND_ONLY_EVIDENCE",
+    "reason": "The connected write primitive replaces the entire file and the branch is moving concurrently; a whole-file update without a merge-safe compare-and-reconcile step risks dropping concurrent entries.",
+    "successor_action": "REPAIR",
+    "target": "Use an append-only INGEST_EVENT/receipt ledger with a rebuildable aggregate or a merge-safe monotonic reconciler whose watermark binds design HEAD, packet set and admitted delta/receipt identities. Consumers must not treat last_ingest_at or last_architecture_delta alone as canonical freshness authority.",
+    "minimum_watermark_fields": [
+      "design_head_sha",
+      "canonical_main_sha",
+      "max_admitted_packet_created_at_or_order_key",
+      "consumed_packet_set_digest",
+      "latest_admitted_delta_identity",
+      "latest_admitted_receipt_identity",
+      "authority_epoch_and_digest",
+      "reconciler_version"
+    ]
+  },
+  "preserved_nonduplication": {
+    "parallel_latest_fusion": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091233Z_REALTIME_MUTATION_CHILD_POLICY_REENTRY_FUSION_GPT56SOL.json",
+    "action": "REUSED_NOT_REIMPLEMENTED",
+    "reason": "That delta already fused Realtime mutation, child-policy, memory-admission, research-admission and WorldSlice child-provenance findings. This run adds only the newly crosschecked aggregate-freshness defect."
+  },
+  "trigger4_feed": {
+    "rule": "Triggerword 4 should reconstruct current Triggerword-5 evidence from append-only deltas/receipts plus current branch HEAD until a merge-safe ingest-state reconciler exists; do not gate assembly on stale last_ingest_at/last_architecture_delta pointers.",
+    "runtime_promotion": "NONE"
+  },
+  "credits": {
+    "new_packet_ingest": 0,
+    "source_forensics": "ADVANCED_COORDINATION_LAYER",
+    "design_fusion": "ADVANCED_COORDINATION_LAYER",
+    "provider_execution": 0,
+    "physical_grid10_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Implement or prove an existing merge-safe ingest-state reconciliation/watermark path without destructive whole-file state loss; separately, Triggerword-4 remains responsible for the installed native-child lifecycle and invocation-bound effect enforcement runtime gates."
+}

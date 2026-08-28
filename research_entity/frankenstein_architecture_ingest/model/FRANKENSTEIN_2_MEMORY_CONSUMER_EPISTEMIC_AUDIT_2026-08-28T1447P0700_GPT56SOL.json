@@ -1,0 +1,112 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_MEMORY_CONSUMER_EPISTEMIC_AUDIT_GPT56SOL",
+  "recorded_at": "2026-08-28T14:47:00+07:00",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "status": "SOURCE_FORENSICS_COUNTEREVIDENCE_ADDED_CURRENT_9_13_AUTHORITY_BOUND",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "current_authority_epoch": "9.13",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "evidence_scope": "PINNED_DONOR_SOURCE_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION"
+  },
+  "source_identity": {
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "8d14ee37c0edb368e866deb04ce2f4f78c0a1a7b",
+    "frankenstein_donor_repo": "gschaidergabriel/frankenstein",
+    "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "question": "Does the under-typed direct Realtime memory-reader imply repository-wide epistemic collapse, or do downstream/current consumers preserve uncertainty structurally?",
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_MEMORY_DIRECT_RETRIEVAL_UNTYPED_046",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py::gespraech_erinnerung_lesen",
+      "claim": "The direct conversation-memory reader returns conversation-memory and durable-memory hits through one result list whose structural distinctions are ts/subject/value/source. It does not attach transformation_class, epistemic_class, immutable source-event identity or verification state.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_2_0_action": "TYPE_DIRECT_MEMORY_READ_RESULT"
+    },
+    {
+      "atom_id": "F2_STATE_CONTEXT_PARTIAL_EPISTEMIC_GUARD_047",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py::gespraech_zustandskontext",
+      "claim": "Counterevidence: the state/context compiler does not blindly flatten every folgerung. It reads the latest art='lehre' conclusion plus konfidenz, derives lehre_unsicher when confidence is NULL, and emits explicit unconfirmed/uncertain language into the state text.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_2_0_action": "PRESERVE_AS_DONOR_UNCERTAINTY_GUARD_NOT_AS_GENERAL_FACT_AUTHORITY"
+    },
+    {
+      "atom_id": "F2_GWT_UNCERTAINTY_PROPAGATION_048",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/voice_loop_core.py::kandidaten_bauen",
+      "claim": "Counterevidence: the Voice/GWT candidate builder consumes lehre only when lehre_unsicher is true and explicitly lowers confidence/raises uncertainty, proposing speech that labels the lesson unconfirmed. This is a real local uncertainty-propagation mechanism rather than full epistemic collapse.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_2_0_action": "RETAIN_UNCERTAINTY_PROPAGATION_AS_REGRESSION_TEST"
+    },
+    {
+      "atom_id": "F2_VOICE_CAPSULE_PROVENANCE_REFERENCE_PARTIAL_GUARD_049",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py::memory_refs_und_goals",
+      "claim": "Counterevidence plus remaining gap: VoiceSessionCapsule avoids copying full memory rows and retains table/id references; for folgerung it includes art and whether confidence is unknown. However it still lacks a general transformation/epistemic/provenance class for every memory reference, and it re-labels selected records into convenience roles such as goal_offen/effect_ausgang/lehre.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_2_0_action": "EXTEND_REFERENCE_ABI_WITH_TYPED_EPISTEMIC_METADATA_WITHOUT_DUPLICATING_CANONICAL_STATE"
+    }
+  ],
+  "bounded_conclusion": {
+    "repository_wide_epistemic_collapse": "CONTRADICTED_AS_TOO_BROAD",
+    "direct_realtime_memory_read_gap": "CONFIRMED",
+    "existing_partial_guards": [
+      "folgerung confidence-NULL -> lehre_unsicher in state compiler",
+      "Voice/GWT candidate propagates uncertainty and low confidence",
+      "VoiceSessionCapsule keeps table/id references instead of copying full canonical rows"
+    ],
+    "remaining_architecture_gap": "Epistemic typing is inconsistent across consumer boundaries. Direct Realtime retrieval and capsule memory references need one typed MemoryView/MemoryReference ABI so source, transformation, epistemic class, provenance and generation survive retrieval/ranking/context compilation."
+  },
+  "contradiction_update": {
+    "id": "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-008",
+    "previous_status": "STORAGE_SEPARATE_RETRIEVAL_EPISTEMICALLY_UNTYPED",
+    "new_status": "DIRECT_RETRIEVAL_UNTYPED_BUT_PARTIAL_DOWNSTREAM_UNCERTAINTY_GUARDS_EXIST",
+    "preserved_negative": "Remembering or retrieving a claim must not mint factual truth.",
+    "counterevidence": "Specific folgerung/GWT paths already preserve NULL-confidence uncertainty; do not replace them with a less precise blanket redesign."
+  },
+  "triggerword4_handoff": [
+    "Do not rebuild all memory consumers. Normalize the boundary with MemoryCandidate/MemoryAdmission for writes and typed MemoryReference/MemoryView for reads.",
+    "Minimum read metadata: canonical row/table ref, immutable source_event_id where available, source_actor/source_system, transformation_class, epistemic_class, verification_state, generation, privacy/retention class, content digest/reference.",
+    "Preserve existing lehre_unsicher -> low-confidence GWT behavior as a regression constraint.",
+    "Preserve VoiceSessionCapsule's no-second-memory-DB rule and table/id reference strategy; enrich references rather than duplicating rows.",
+    "Context/ranking may reorder references but must not erase epistemic/provenance classes."
+  ],
+  "acceptance_tests_for_triggerword4": [
+    "Direct Realtime read: a verbatim user claim, model summary and inference are structurally distinct in returned MemoryView items.",
+    "State context: a folgerung with NULL confidence remains explicitly uncertain after the new typed ABI.",
+    "GWT: an uncertain folgerung cannot be promoted to high-confidence fact merely by candidate selection or repetition.",
+    "VoiceSessionCapsule: table/id references remain compact and no second durable memory authority is created.",
+    "Mixed ranking: conversation-memory and durable-memory items retain source/transformation/epistemic/provenance metadata after sorting/context compilation."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED_WITH_COUNTEREVIDENCE",
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "memory_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_full": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Audit the exact Realtime consumer path that serializes MemoryView/tool output into model context and the headless claude_frage path for whether either strips or invents epistemic/provenance metadata; Triggerword 4 can proceed now with typed read/write memory boundary tests without waiting for a whole-memory rewrite."
+}

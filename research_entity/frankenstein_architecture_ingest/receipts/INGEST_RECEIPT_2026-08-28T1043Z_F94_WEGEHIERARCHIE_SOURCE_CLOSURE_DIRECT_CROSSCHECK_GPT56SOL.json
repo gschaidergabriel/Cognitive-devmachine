@@ -1,0 +1,43 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T1043Z-F94-WEGEHIERARCHIE-SOURCE-CLOSURE-GPT56SOL",
+  "created_at": "2026-08-28T10:43:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/f94-source-closure-direct-crosscheck",
+  "routing_status": "PASS",
+  "authority_epoch": "9.13",
+  "canonical_main_sha_observed": "4792b1ba4186e21b60c6eb051a6d47b6510a31f6",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_delta": "17a04890de8bdbc9177ee7309e8dcfcb4765ad21",
+  "delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1043Z_F94_WEGEHIERARCHIE_SOURCE_CLOSURE_DIRECT_CROSSCHECK_GPT56SOL.json",
+  "delta_commit": "05bc9697293073cc961d8ac32f324ca67f2d46cc",
+  "source_crosscheck": {
+    "status": "PASS_SOURCE_ONLY",
+    "observed": [
+      "udb/abruf root directory lacks wegehierarchie.py",
+      "only retained wegehierarchie.py is under _archiv-phase4",
+      "paket.py live F94 path still imports .wegehierarchie",
+      "stern.py current source preserves both the earlier deletion-caused ModuleNotFoundError account and the later measured kill/archival decision",
+      "paket.py catches the post-result bookkeeping exception and still returns result"
+    ],
+    "inference": "Because F92b success-mark writes precede the missing-module import and their commit follows it, import failure is a source-supported likely rollback/loss boundary for those writes; exact runtime/transaction observation was not executed.",
+    "runtime_executed": false
+  },
+  "disposition": {
+    "architecture_delta_admitted": true,
+    "ingest_state_mutated": false,
+    "reason_ingest_state_not_mutated": "Current INGEST_STATE already carries F94 ADAPT-or-RETIRE as a P0 frontier and the design branch is moving rapidly under parallel Triggerword-5 workers; append-only delta+receipt preserves the new direct-source closure evidence without risking a stale whole-file overwrite.",
+    "duplicate_check": "PASS; immediately preceding parallel changes covered WorkExecutionBinding/tool-hook identity, not the F94 archive/live-import closure contradiction."
+  },
+  "triggerword4_handoff": "Resolve F94 before donor freeze. Preserve the PHASE-4 negative measurement, but remove the live dependency on a retired/archive-only module or replace it with a measured typed successor. Preserve F92b success-mark bookkeeping independently and add a source-closure regression.",
+  "credits": {
+    "runtime": 0,
+    "provider": 0,
+    "grid10": 0,
+    "entityos_hcu": 0,
+    "training": 0
+  },
+  "acceptance": "SOURCE_FORENSICS_PASS_RUNTIME_UNRESOLVED"
+}

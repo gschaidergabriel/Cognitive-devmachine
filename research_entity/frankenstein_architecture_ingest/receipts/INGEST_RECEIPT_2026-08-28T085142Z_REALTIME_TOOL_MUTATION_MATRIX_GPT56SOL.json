@@ -1,0 +1,49 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T085142Z-REALTIME-TOOL-MUTATION-MATRIX-GPT56SOL",
+  "created_at": "2026-08-28T08:51:42Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/realtime-tool-mutation-matrix",
+  "routing_result": "PASS",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "write": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_REALTIME_TOOL_MUTATION_MATRIX_2026-08-28T085142Z_GPT56SOL.json",
+    "commit": "d9f936c849defef619bbc641a9c9a627fcd2eaea"
+  },
+  "source_crosschecks": [
+    "realtime_gespraech.py current declared tool schemas and _tool_ausfuehren dispatch",
+    "realtime_gespraech.py _tool_forschung, _tool_erinnerung_schreiben, _auftrag_stellen_mit_bestaetigung and background bridges",
+    "stern.py gespraech memory/status bridge and chatgpt_senden wrapper source"
+  ],
+  "result": {
+    "tool_surface_classification": "COMPLETE_FOR_CURRENT_DECLARED_REALTIME_TOOLS",
+    "read_only": ["frank_status_lesen", "frank_erinnerung_lesen", "frank_forschung/lesen"],
+    "canonical_internal_mutation": ["frank_erinnerung_schreiben"],
+    "ephemeral_then_delegated_execution": ["frank_auftrag_stellen"],
+    "external_effect_request": ["frank_forschung/neu_anstossen"],
+    "session_control": ["frank_gespraech_beenden"],
+    "new_high_impact_finding": "frank_forschung/neu_anstossen is mechanically dispatched from the model tool call when a nonempty question is present; the explicit-user-only constraint is model-facing tool prose rather than an equivalent deterministic two-step ResearchRequest admission gate."
+  },
+  "promotion_boundary": "SOURCE_ONLY_NO_RUNTIME_OR_EXTERNAL_EXECUTION_CREDIT",
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "runtime": 0,
+    "provider_or_external_research_execution": 0,
+    "physical_grid10": 0,
+    "entityos_whole": 0,
+    "hcu_full": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword 4 should compile this matrix into typed admission rules: MemoryCandidate -> MemoryAdmission; ResearchRequestCandidate -> deterministic HumanIntent/Capability/Privacy/Economic admission; delegated child -> WorkExecutionBinding + ChildPolicyEnvelope + invocation-level EffectDecision; read/session-control remain separate classes."
+}

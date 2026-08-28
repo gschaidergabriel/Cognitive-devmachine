@@ -1,0 +1,139 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:56:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "delta_class": "RETRIEVAL_RELEVANCE_IDENTITY_SOURCE_CLOSURE",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "supervisor_steering_blob_sha": "bc67f57771a9a9c5ac96d9cd135927047066bc20",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "design_branch_head_observed_before_write": "25a8f9622fabd7dd7a92b6f73071fdc6ee30a888",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "ingest_disposition": {
+    "new_inbox_packet_consumed": false,
+    "duplicate_consumption_avoided": true,
+    "reason": "Inbox was already quiescent after the accounted Stop-hook packet; this turn performs direct pinned-donor source closure on the retrieval identity boundary and refines the existing Triggerword-4 handoff."
+  },
+  "direct_source_atoms": [
+    {
+      "atom_id": "TW5-1056-RETRIEVAL-ROW-IDENTITY",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "4235-4290",
+      "finding": "MicroClay.retrieve persists one retrieval_episodes row carrying retrieval_id, turn_id, episode_id, causal_id, session_id, generation and query_hash together with selected memory IDs and entry keys. The durable retrieval row therefore already contains enough internal identity dimensions to avoid a newest-session-row join.",
+      "target_2_0_action": "KEEP"
+    },
+    {
+      "atom_id": "TW5-1056-ROUND-SHARP-RETRIEVAL-CREATION",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "4710-4795",
+      "finding": "_microclay_schatten deliberately creates a fresh causal_id, turn_id and episode_id per UserPromptSubmit shadow retrieval and passes them into MicroClay.retrieve. The stored turn content is only a system marker; the actual user query is supplied to retrieve and represented by query_hash rather than by that synthetic turn text.",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "TW5-1056-STOP-SELECTION-GAP",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "4970-5055",
+      "finding": "_kognition_richten_hook does not select by retrieval_id, turn_id, causal_id, generation or query_hash. It selects the newest same-session retrieval lacking modell:relevanz feedback, separately reads the last user text from transcript_path, evaluates that text against the selected row's memory IDs, then applies credit to that row. No exact row-to-transcript identity equality is enforced before the model judgment is admitted.",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-1056-REDUCER-IDENTITY-CAPABLE",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "4340-4425",
+      "finding": "MicroClay._apply_credit is already row-bound: its receipt identity incorporates retrieval_id, causal_id, generation, signal_class and credit; retrieval_feedback stores retrieval_id, causal_id and generation. The reducer can therefore preserve exact retrieval identity if the caller supplies the correct row. The structural defect is upstream candidate selection/rejoin, not a need to replace the reducer or retrieval schema wholesale.",
+      "target_2_0_action": "KEEP"
+    }
+  ],
+  "architecture_effect": {
+    "mechanism": "RetrievalRelevanceBinding/v2",
+    "classification": "SOURCE_GROUNDED_ARCHITECTURE_REFINEMENT_NO_RUNTIME_PROMOTION",
+    "core_conclusion": "Move model relevance out of Stop and create the deferred relevance candidate at the moment the retrieval row is created, when the exact retrieval_id/turn_id/causal_id/generation/query_hash and selected-memory set are already co-present. A later model result must return that same tuple and model runtime/build identity to a deterministic reducer; Stop must not recover ownership by scanning newest same-session rows.",
+    "minimal_candidate_fields": [
+      "retrieval_id",
+      "turn_id",
+      "episode_id",
+      "causal_id",
+      "generation",
+      "query_hash",
+      "selected_memory_ids_digest_or_bounded_ref",
+      "query_text_ephemeral_ref_or_bound_transcript_message_ref",
+      "producer_model_runtime_or_build_identity",
+      "candidate_generation",
+      "created_at",
+      "expiry"
+    ],
+    "return_verification": [
+      "fetch retrieval_episodes by retrieval_id, never newest session row",
+      "require equality of turn_id, causal_id, generation and query_hash against the candidate envelope",
+      "require candidate/result generation and model runtime identity to match the admitted request",
+      "reject stale, duplicate, unknown or mismatched returns before _apply_credit",
+      "preserve modell:relevanz as model-derived candidate evidence with no truth/effect/promotion authority"
+    ],
+    "important_simplification": "Because exact retrieval identity already exists in the donor schema and _apply_credit receipt path, Frankenstein 2.0 does not need a second retrieval truth store or a new global identity system for this repair. It needs a typed deferred-work binding that carries existing identities without dropping them.",
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "privacy_and_lifetime_boundary": {
+    "finding": "The current relevance prompt includes user query text plus durable-memory candidate text. Moving work out of Stop must not turn that text into unnecessary durable model memory.",
+    "requirement": "Prefer local short-lived/bounded payload refs or a transcript-message reference bound to query_hash; durable receipts should retain digests/identity/provenance, not full prompt text unless separately authorized and required."
+  },
+  "duplicate_prompt_edge_case": {
+    "finding": "query_hash alone is not an exact event identity because two identical user prompts in one session can share the same hash.",
+    "requirement": "retrieval_id remains the primary join key. If a transcript message must be re-read later, bind a message/event identity or a locally generated submission generation/ordinal in addition to query_hash; never use query_hash alone to choose among repeated identical prompts."
+  },
+  "contradictions_preserved": [
+    "The donor stores strong round-sharp retrieval identity but the Stop relevance path discards it during ownership selection and falls back to newest same-session row plus latest transcript user text.",
+    "The reducer receipt is exact-row capable, yet exactness of the durable feedback cannot repair a wrong row chosen upstream.",
+    "The top-level no-LLM-in-hook invariant still conflicts with synchronous Stop Ollama inference; this delta does not resolve runtime behavior and grants zero runtime credit."
+  ],
+  "counterhypotheses": [
+    "If Claude Code guarantees strictly serialized one-Stop-per-UserPromptSubmit delivery with no reordering, newest-session-row selection may usually work. That guarantee is not enforced by this donor source and does not satisfy the supervisor's required interleaving discriminator.",
+    "Using query_hash to bind the latest transcript text may remove many mismatches, but repeated identical prompts remain ambiguous; retrieval_id plus generation remains necessary.",
+    "A shared DeferredCausalReturnEnvelope/v1 may be useful across retrieval and voice, but RetrievalRelevanceBinding/v2 remains valid as a subsystem-specific specialization if a shared envelope would add coupling or erase semantics."
+  ],
+  "feeds_existing_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_DEFERRED_CAUSAL_RETURN_FUSION_GPT56SOL.json",
+    "relationship": "REFINES_RETRIEVAL_SPECIALIZATION_WITH_DIRECT_STERN_SOURCE_CLOSURE",
+    "does_not_supersede_shared_envelope_decision": true
+  },
+  "triggerword4_handoff": {
+    "do_not_build_in_trigger5": true,
+    "required_actions": [
+      "emit RetrievalRelevanceCandidate from the retrieval-creation path using the exact retrieval row identity instead of recovering ownership in Stop",
+      "execute model relevance outside deterministic hook completion authority",
+      "on return, fetch by retrieval_id and verify turn_id + causal_id + generation + query_hash + candidate generation before _apply_credit",
+      "keep Stop mechanical bookkeeping independent of model availability/latency",
+      "do not modify Frank Harness to obtain evidence"
+    ],
+    "highest_information_discriminator": "Create two same-session retrievals, including a repeated-identical-query variant, then force reverse-order relevance completion. PASS only if each modell:relevanz receipt remains attached to its exact retrieval_id/turn/causal/generation and no Stop bookkeeping is skipped."
+  },
+  "credits": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "architecture_refinement": "PASS_SOURCE_SCOPE",
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "stop_hook_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "next_exact_gate": "Triggerword-4/external non-provider test lane: implement exact retrieval_id-bound deferred relevance specialization and execute reverse-order same-session plus repeated-identical-query interleaving, while separately testing cognition-disabled/warm/slow/unreachable model conditions and proving deterministic Stop bookkeeping completes."
+}

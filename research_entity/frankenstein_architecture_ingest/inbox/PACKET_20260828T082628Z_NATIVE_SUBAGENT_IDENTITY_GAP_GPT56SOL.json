@@ -1,0 +1,191 @@
+{
+  "schema_version": 2,
+  "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+  "created_at": "2026-08-28T08:26:28Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/native-subagent-identity-gap",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Current donor source forensics plus current Claude Code external-primary capability crosscheck for native child-agent identity/lifecycle instrumentation. This packet does not claim the installed host version exposes or fires the documented ABI; host/runtime proof remains required.",
+  "authority_classification": "CURRENT_AUTHORITY_BOUND",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "files_examined": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "sha_or_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "spans_examined": [
+        {"line_start": 5690, "line_end": 5985}
+      ]
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "sha_or_blob": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "spans_examined": [
+        {"line_start": 1, "line_end": 81}
+      ]
+    },
+    {
+      "path": "ExternalPrimary:ClaudeCodeDocs/sub-agents",
+      "sha_or_blob": "WEB_PRIMARY_SNAPSHOT_2026-08-28",
+      "spans_examined": [
+        {"line_start": 311, "line_end": 312},
+        {"line_start": 839, "line_end": 854},
+        {"line_start": 891, "line_end": 894}
+      ]
+    },
+    {
+      "path": "ExternalPrimary:ClaudeCodeDocs/hooks",
+      "sha_or_blob": "WEB_PRIMARY_SNAPSHOT_2026-08-28",
+      "spans_examined": [
+        {"line_start": 399, "line_end": 399},
+        {"line_start": 2048, "line_end": 2109}
+      ]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-NATIVE-SUBAGENT-001-HANDOFF-IS-NOT-SPAWN",
+      "subsystem": "delegation_workpackage",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5690,
+      "line_end": 5785,
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "handoff() creates an entityos_arbeitspaket row, builds a deterministic transition capsule from UnifiedDB-derived state, records advisory file leases/collision hints and returns the capsule. Its own docstring explicitly states that stern delegates nothing itself.",
+      "why_it_exists": "Make delegated work durable and evidence-bearing while keeping coordinator/worker communication compact.",
+      "inputs": ["session_id", "auftrag", "womit", "warum", "optional thema"],
+      "outputs": ["paket_id", "deterministic handoff capsule", "advisory lease/collision hints"],
+      "reads": ["entityos_arbeitspaket", "durable_memory", "sessions", "lease state"],
+      "writes": ["entityos_arbeitspaket", "handoff room/status state", "file lease metadata"],
+      "dependencies": ["UnifiedDB", "external coordinator/native spawn path not implemented by handoff()"],
+      "authority_class": "CURRENT_DONOR_SOURCE_NOT_RUNTIME_SPAWN_PROOF",
+      "failure_mode": "A durable workpackage can exist without an exact spawned child identity because handoff() has no spawn operation or child actor binding.",
+      "concurrency_implication": "File leases are advisory collision hints rather than hard ownership locks, so child attribution/isolation must be established elsewhere.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": "Keeping implementation detail in child contexts can reduce coordinator context growth, but this benefit is not measured by donor source alone.",
+      "state_lifetime": "durable workpackage state in UnifiedDB",
+      "runtime_reachable": true,
+      "runtime_entrypoints": ["stern.py handoff CLI/function path"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["The actual current native child spawn mechanism is not in this function and current host ~/CLAUDE.md/runtime ABI has not been observed in this packet."],
+      "confidence": 0.99,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "open_questions": ["Which exact current host/native mechanism consumes this capsule and creates the child?", "How is package_id bound to native agent_id/task_id at spawn time?"]
+    },
+    {
+      "atom_id": "TW5-NATIVE-SUBAGENT-002-DONOR-HOOK-IDENTITY-BLINDNESS",
+      "subsystem": "hook_lifecycle_identity",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 1,
+      "line_end": 81,
+      "source_kind": "CONFIG",
+      "what_it_does": "The pinned donor plugin registers exactly seven event classes through stern.py: SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact. It does not register dedicated SubagentStart, SubagentStop or Task lifecycle hooks.",
+      "why_it_exists": "Single-dispatcher hook consolidation for the current donor plugin.",
+      "inputs": ["seven configured Claude hook event classes"],
+      "outputs": ["stern.py hook invocation"],
+      "reads": [],
+      "writes": [],
+      "dependencies": ["Claude Code hook scheduler", "stern.py cmd_hook"],
+      "authority_class": "CURRENT_DONOR_CONFIG_NOT_HOST_LOAD_PROOF",
+      "failure_mode": "Dedicated native child lifecycle identity is not captured by this plugin configuration. Generic tool hooks could still receive child identity from a capable runtime, but current stern.py contains no agent_id or tool_use_id handling, so that identity is not durably bound by the inspected donor path.",
+      "concurrency_implication": "Parallel child events can collapse toward parent/session-level bookkeeping unless actor/task/invocation identity is explicitly captured.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": null,
+      "state_lifetime": "plugin configuration generation",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["configured plugin hook scheduler if this exact hooks.json is loaded"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["Current host/global settings may register additional hooks outside the versioned donor plugin; this packet has not observed that host configuration."],
+      "confidence": 0.99,
+      "target_2_0_action": "REPAIR",
+      "open_questions": ["Does the installed host add SubagentStart/SubagentStop/Task hooks elsewhere?", "Does the installed runtime place agent_id/agent_type in generic PreToolUse/PostToolUse payloads on this host?"]
+    },
+    {
+      "atom_id": "TW5-NATIVE-SUBAGENT-003-EXTERNAL-PRIMARY-IDENTITY-ABI",
+      "subsystem": "native_claude_subagent_abi",
+      "path": "ExternalPrimary:ClaudeCodeDocs/hooks+sub-agents",
+      "commit_sha": "EXTERNAL-PRIMARY-2026-08-28",
+      "line_start": 399,
+      "line_end": 2109,
+      "source_kind": "SPEC",
+      "what_it_does": "Current official Claude Code documentation describes a native Agent/subagent path with unique agent_id in SubagentStart/SubagentStop, agent_id/agent_type on tool hook inputs inside subagents, resumable child instances by agent ID, nested subagents with a configurable depth limit, and optional worktree isolation.",
+      "why_it_exists": "Provide native child execution/lifecycle capabilities that Frankenstein may be able to govern instead of reimplementing a parallel agent runtime.",
+      "inputs": ["Agent/subagent invocation", "runtime configuration", "optional subagent definitions"],
+      "outputs": ["native child context", "agent_id", "lifecycle hook payloads", "resumable child identity when supported"],
+      "reads": ["Claude Code configuration and subagent definitions"],
+      "writes": ["runtime-managed child transcript/state; exact host behavior depends on installed build/config"],
+      "dependencies": ["specific installed Claude Code version/build", "enabled native Agent/subagent facilities", "settings/permissions"],
+      "authority_class": "EXTERNAL_PRIMARY_CAPABILITY_NOT_INSTALLED_RUNTIME_EVIDENCE",
+      "failure_mode": "Treating current documentation as proof of the user's installed runtime would silently upgrade a capability description into runtime evidence.",
+      "concurrency_implication": "Native agent_id plus optional worktree isolation are promising primitives for exact actor/work ownership, but must be observed on the installed runtime before Triggerword-4 credit.",
+      "privacy_implication": "Subagent context/config inheritance must be measured on host before deciding what owner/project instructions are propagated.",
+      "latency_or_cost_implication": "Native delegation has spawn/context overhead; the owner-original therefore requires DIRECT_SMALL versus DELEGATE_BUILD efficiency classification.",
+      "state_lifetime": "runtime/version-dependent",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["documented Agent/subagent facility; installed reachability unverified"],
+      "tests_or_receipts": ["official Claude Code documentation snapshot reviewed 2026-08-28"],
+      "known_counterevidence": ["Installed version/build and managed settings are unobserved; documented current behavior may not match the target host."],
+      "confidence": 0.98,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "open_questions": ["What exact Claude Code version/build is installed?", "Which documented lifecycle fields fire on that build?", "Does worktree isolation behave as documented in the target repository/runtime?"]
+    }
+  ],
+  "hypotheses": [
+    "Frankenstein 2.0 can obtain most of the R2 child-harness substrate by binding entityos_arbeitspaket successors to the installed Claude native agent_id/task/lifecycle ABI rather than building a duplicate spawn runtime.",
+    "The largest current donor gap is not absence of delegated-work state but absence of exact actor/task/invocation binding between durable workpackages and the native child lifecycle."
+  ],
+  "counterhypotheses": [
+    "The installed Claude Code build or managed settings may not expose the current documented native lifecycle ABI, forcing a bounded headless or custom wrapper path.",
+    "The actual current host may already add SubagentStart/SubagentStop or agent_id capture outside the versioned donor plugin, making the apparent donor identity gap only a repository-visibility gap.",
+    "Native agent_id alone may be insufficient for safe parallelism if filesystem/worktree/edit/effect ownership remains shared or mutable."
+  ],
+  "contradictions": [
+    "The project architecture and owner policy expect spawned build agents, while the pinned donor handoff() explicitly does not spawn and the versioned plugin does not register dedicated child lifecycle hooks; preserve this as an unresolved integration boundary rather than assuming an invisible mechanism.",
+    "Current official docs expose identity/lifecycle primitives that could close the gap, but installed-runtime evidence is absent and must not be inferred from documentation.",
+    "Durable file leases exist but are advisory only, while Triggerword-4 requires stronger parallel child attribution/ownership before whole-system credit."
+  ],
+  "critical_unknowns": [
+    "Exact current host ~/CLAUDE.md relevant delegation span/hash and whether it matches the owner-original policy.",
+    "Exact installed Claude Code version/build and enabled native Agent/subagent facilities.",
+    "Actual current spawn call path that consumes the handoff capsule.",
+    "Observed SubagentStart/SubagentStop/Task/tool hook payloads and stable agent_id/task_id/tool_use_id on target host.",
+    "Whether child and parent share the same worktree by default on target runtime and whether isolation: worktree is available/enabled.",
+    "How package_id is preserved across resume/replacement and parent restart.",
+    "Measured coordinator-context growth difference between DIRECT_SMALL/central execution and delegated multi-step execution."
+  ],
+  "recommended_next_spans": [
+    {
+      "path": "current host Claude Code version + bounded relevant ~/CLAUDE.md/settings spans",
+      "reason": "Pin installed policy/build without committing private host configuration or secrets.",
+      "priority": "P0"
+    },
+    {
+      "path": "bounded native child probe: handoff -> one harmless child -> lifecycle hook capture -> reconcile",
+      "reason": "Observe the exact installed agent_id/task/tool lifecycle and bind it to workpackage identity before designing a bespoke R2 runtime.",
+      "priority": "P0"
+    },
+    {
+      "path": "two-child disjoint scratch probe + optional worktree isolation variant",
+      "reason": "Test actor/task/event ordering and collision isolation using real native concurrency without mutating production state.",
+      "priority": "P1"
+    },
+    {
+      "path": "Triggerword-4 workpackage successor schema",
+      "reason": "Add immutable workpackage_id + agent_id + parent_agent_id + task_id + generation + tool_use_id/effect lineage, but only after installed native identity fields are pinned.",
+      "priority": "P1"
+    }
+  ]
+}

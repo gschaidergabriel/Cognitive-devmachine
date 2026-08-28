@@ -8,10 +8,12 @@
   "compute_architecture": "HCU",
   "execution_mode": "FREE_ONLY",
   "authority": {
-    "canonical_main_observed": "13ea5c49a74d4ea6815cbaabc061d8de8272dc86",
+    "canonical_main_observed": "77a3abb3f8108b045a5933f771df0ef22a36194b",
     "supervisor_schema": "9.13",
-    "supervisor_delta": "9.13AE_NON_AUTHORITY",
+    "supervisor_delta": "9.13AF_NON_AUTHORITY",
     "provider_routes_admitted": false,
+    "provider_execution": "HARD_OFF",
+    "paid_fallback": false,
     "together_forbidden": true,
     "frank_harness": "DO_NOT_MODIFY"
   },
@@ -19,17 +21,27 @@
     "repository": "gschaidergabriel/frankenstein",
     "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
     "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
-    "preserve_as_baseline": true
+    "preserve_as_baseline": true,
+    "donor_changed_since_prior_checkpoint": false
   },
   "continuation": {
     "repository": "gschaidergabriel/clay-global-research-entity",
     "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-    "head_observed_before_checkpoint_update": "789a14d2f3df38ed47e0fb786c8f880966364672",
-    "single_existing_pr": 2118
+    "head_observed_before_checkpoint_update": "1a13dcf3f13ab1cc73a7cfb369ed1b8dc9dfb2df",
+    "single_existing_pr": 2118,
+    "branch_relation_to_main_before_reentry_write": "DIVERGED_AHEAD_788_BEHIND_31_DO_NOT_TREAT_BRANCH_AS_CANONICAL_AUTHORITY"
   },
   "current_stage": "FRANKENSTEIN2_FUNCTIONAL_CORE_ASSEMBLY",
-  "priority_policy": "FUNCTIONAL_COGNITIVE_CORE_FIRST; preserve Frankenstein 1.x donor; no VPS runtime PASS before real admitted receipts.",
+  "priority_policy": "FUNCTIONAL_COGNITIVE_CORE_FIRST; preserve Frankenstein 1.x donor; no VPS/runtime PASS before exact admitted receipts; do not duplicate in-flight ordinary dispatch generations.",
   "current_gates": [
+    {
+      "id": "GRID10_RUNTIME_QUIESCENCE_V2_G0000",
+      "status": "P0_IN_FLIGHT_TERMINAL_RESULT_ABSENT_NO_DUPLICATE_OR_GENERATION_ADVANCE_ALLOWED",
+      "issue": 2122,
+      "dispatch_key": "grid10-runtime-quiescence-v2-g0000",
+      "runtime_credit": 0,
+      "future_pass_credit_ceiling": "RUNTIME_QUIESCENCE_COMPONENT_ONLY"
+    },
     {
       "id": "GRID10_V6_CRASH_RECONCILIATION_DETERMINISTIC_EXECUTION",
       "status": "SOURCE_AND_TEST_DEFINITION_READY_EXECUTION_EVIDENCE_BLOCKED_CI_ZERO_STEP",
@@ -37,10 +49,12 @@
     },
     {
       "id": "GRID10_V3_SINGLETON_SIGKILL_INDEPENDENT_REPLACEMENT_G0000",
-      "status": "IN_FLIGHT_QUEUED_TERMINAL_RESULT_ABSENT_NO_DUPLICATE_ALLOWED",
+      "status": "P1_IN_FLIGHT_TERMINAL_RESULT_ABSENT_NO_DUPLICATE_OR_GENERATION_ADVANCE_ALLOWED",
       "workflow_run_id": 33168491753,
       "issue": 2121,
-      "runtime_credit": 0
+      "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+      "runtime_credit": 0,
+      "future_pass_credit_ceiling": "GRID10_CRASH_INDEPENDENT_REPLACEMENT_COMPONENT_ONLY"
     }
   ],
   "active_cognitive_runtime_lane": {
@@ -65,9 +79,9 @@
     "final_retirement_commit": "5242e9ab808e073dffe15b9f294e1beeb85934b9"
   },
   "last_receipt": {
-    "type": "TRIGGERWORD4_SOURCE_FUSION_RECEIPT/v1",
-    "path": "research_entity/continuity/triggerword4/receipts/TRIGGERWORD4_V6_CRASH_RECONCILIATION_FUSION_GPT56SOL.json",
-    "commit": "789a14d2f3df38ed47e0fb786c8f880966364672"
+    "type": "TRIGGERWORD4_REENTRY_RECEIPT/v1",
+    "path": "research_entity/continuity/triggerword4/receipts/TRIGGERWORD4_9_13AF_DUAL_SINGLETON_REENTRY_GPT56SOL_20260828T2000P0700.json",
+    "commit": "1a13dcf3f13ab1cc73a7cfb369ed1b8dc9dfb2df"
   },
   "negative_evidence": [
     {
@@ -78,14 +92,26 @@
       "classification": "INFRASTRUCTURE_FAILURE_NOT_CODE_TEST_RESULT"
     },
     {
+      "id": "GRID10_RUNTIME_QUIESCENCE_V2_SINGLETON_RESULT_MISSING",
+      "issue": 2122,
+      "state": "open_no_comments_terminal_result_absent_at_reentry",
+      "effect": "No retry/generation advance and no runtime-quiescence component credit."
+    },
+    {
       "id": "GRID10_V3_SINGLETON_RESULT_MISSING",
       "workflow_run_id": 33168491753,
-      "state": "queued",
+      "issue": 2121,
+      "state": "open_no_comments_terminal_result_absent_at_reentry",
       "effect": "No retry/generation advance and no Physical-GRID10 credit."
+    },
+    {
+      "id": "POINT_TELEMETRY_NOT_QUIESCENCE_ACCEPTANCE",
+      "classification": "ZOMBIE_DEFUNCT_POINT_TELEMETRY_IS_NOT_REPOSITORY_BOUND_GE90S_RECEIPT"
     }
   ],
   "open_critical_defects": [
     "Admitted deterministic execution evidence for current V4/V5/V6/live-control/scheduler/crash-reconciliation source is missing.",
+    "Repository-bound >=90s runtime quiescence acceptance result for g0000 remains missing.",
     "Recovery protocol is observability/classification rather than full V4+v6 two-phase atomicity.",
     "Recovery mutation requires an externally proven exclusive recovery/coordinator lease.",
     "Native child WorkExecutionBinding remains open.",
@@ -114,6 +140,6 @@
     "training": 0,
     "frankenstein2_runtime": 0
   },
-  "next_exact_action": "Do not dispatch another GRID10 v3 generation. Obtain admitted non-provider deterministic execution of the exact current v6 crash-reconciliation integration plus V4/V5/V6/live-control/persistent-scheduler regressions, while continuing to inspect terminal state and canonical result for workflow 33168491753 / issue 2121. If and only if those evidence gates close, advance the persistent functional core into memory degradation/compression and sparse WorldSlice; do not claim VPS/Frankenstein-2.0 runtime PASS from source or zero-step CI.",
-  "work_generation": "triggerwort4-20260828-v6-crash-reconciliation-fusion-1"
+  "next_exact_action": "Inspect only the terminal canonical results for issue 2122 (P0 runtime-quiescence-v2 g0000) and issue 2121 (P1 SIGKILL independent-replacement-v3 g0000). While either result is absent, do not create duplicate dispatches or advance generations. Continue only non-conflicting source/test assembly on the existing Triggerword-4 lane. If 2122 passes, mint at most runtime-quiescence component credit after verifying the exact bound >=90s window and stable identities. If 2121 passes, mint at most crash-independent-replacement component credit; physical GRID10 remains 0 until a distinct real-process retest closes that separate gate.",
+  "work_generation": "triggerwort4-20260828-9_13AF-dual-singleton-reentry-1"
 }

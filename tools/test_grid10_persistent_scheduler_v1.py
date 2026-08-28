@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+import json
 from pathlib import Path
+import sqlite3
 import tempfile
 import unittest
 
@@ -46,14 +48,29 @@ class PersistentSchedulerTests(unittest.TestCase):
             now_ts=now + 1,
         )
 
-    def test_completed_cycle_schedules_next_tick_and_restart_respects_due_time(self):
+    def test_completed_cycle_uses_v4_atomic_receipt_and_restart_respects_due_time(self):
         s1 = self.scheduler()
         self.seed_active(s1)
+        before_epoch = s1.agency.snapshot().state_epoch
         first = s1.cycle_once(cycle_id="cycle-1", now_ts=110.0)
         self.assertEqual(first.status, "HEARTBEAT_RAN")
         self.assertEqual(first.cognitive_action, "ACT_CANDIDATE")
         self.assertEqual(first.next_tick_not_before, 115.0)
+        self.assertEqual(first.agency_state_epoch, before_epoch + 1)
         self.assertTrue(self.frames.exists())
+
+        con = sqlite3.connect(str(self.db))
+        try:
+            row = con.execute(
+                "SELECT checkpoint_json,next_tick_not_before FROM grid10_cognitive_cycles WHERE tick_id=?",
+                ("cycle-1:heartbeat",),
+            ).fetchone()
+        finally:
+            con.close()
+        self.assertIsNotNone(row)
+        checkpoint = json.loads(row[0])
+        self.assertEqual(checkpoint["schema"], "GRID10_COGNITIVE_CYCLE_CHECKPOINT/v1")
+        self.assertEqual(row[1], 115.0)
 
         # Re-open all runtime objects from UnifiedDB. The scheduler must not run early merely
         # because this is a new process/session.
@@ -65,15 +82,32 @@ class PersistentSchedulerTests(unittest.TestCase):
         self.assertEqual(due.heartbeat_tick_id, "cycle-2:heartbeat")
         self.assertEqual(s2.agency.get_goal("g1").state, GoalState.ACTIVE)
 
-    def test_no_active_goal_enters_hold_without_manufacturing_work(self):
+    def test_no_active_goal_enters_hold_with_one_atomic_state_transition(self):
         s = self.scheduler()
+        before_epoch = s.agency.snapshot().state_epoch
         row = s.cycle_once(cycle_id="idle", now_ts=200.0)
         self.assertEqual(row.status, "HOLD_NO_ACTIVE_GOAL")
         self.assertEqual(row.cognitive_action, "HOLD")
         self.assertEqual(row.next_tick_not_before, 230.0)
+        self.assertEqual(row.agency_state_epoch, before_epoch + 1)
         snap = s.agency.snapshot()
         self.assertEqual(snap.mode, "HOLD")
-        self.assertIn("NO_ACTIVE_OR_TRIAL_GOAL", snap.continuation_checkpoint)
+        checkpoint = json.loads(snap.continuation_checkpoint)
+        self.assertEqual(checkpoint["schema"], "GRID10_IDLE_HOLD_CHECKPOINT/v1")
+        self.assertEqual(checkpoint["reason"], "NO_ACTIVE_OR_TRIAL_GOAL")
+
+        con = sqlite3.connect(str(self.db))
+        try:
+            heartbeat_count = con.execute("SELECT COUNT(*) FROM ticks").fetchone()[0]
+            cycle_count = con.execute("SELECT COUNT(*) FROM grid10_cognitive_cycles").fetchone()[0]
+            idle_events = con.execute(
+                "SELECT COUNT(*) FROM agency_events WHERE event_type='COGNITIVE_IDLE_HOLD_COMMITTED'"
+            ).fetchone()[0]
+        finally:
+            con.close()
+        self.assertEqual(heartbeat_count, 0)
+        self.assertEqual(cycle_count, 0)
+        self.assertEqual(idle_events, 1)
 
     def test_exact_wake_event_overrides_later_idle_poll_after_restart(self):
         s1 = self.scheduler()
@@ -118,6 +152,16 @@ class PersistentSchedulerTests(unittest.TestCase):
         self.assertEqual(s2.agency.get_goal(active.goal_id).state, GoalState.ACTIVE)
         self.assertEqual(s2.agency.get_intent("wake:intent").state, DeferredIntentState.FIRED)
         self.assertEqual(resumed.next_tick_not_before, 311.0)
+
+        con = sqlite3.connect(str(self.db))
+        try:
+            row = con.execute(
+                "SELECT woken_goal_ids_json FROM grid10_cognitive_cycles WHERE tick_id=?",
+                ("wake-exact:heartbeat",),
+            ).fetchone()
+        finally:
+            con.close()
+        self.assertEqual(json.loads(row[0]), [active.goal_id])
 
     def test_default_untrusted_semantic_axes_fail_closed_to_hold_cadence(self):
         config = SchedulerConfig(active_interval_seconds=5.0, hold_poll_seconds=20.0)

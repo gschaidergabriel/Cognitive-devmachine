@@ -1,0 +1,68 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_STAGE3_COMPONENT_BUILD_ACCEPTANCE",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "created_at_local": "2026-08-29T06:36:38+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "research_main_observed_before_write": "b221f1e69b5fc51f1b660a75f9581bb9acbc3f32",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-304",
+    "generation": 1,
+    "claim_id": "F2-WP-304-G1-GPT56SOL-PROCESS-DISTILLATION-20260829",
+    "claim_commit": "e84d216dd0643242b6f542c98d586cd9f2e952a2",
+    "implementation_branch": "trigger4/wp304-process-distillation-g1",
+    "pull_request": 97,
+    "merged_commit": "0c136f1fc2a46ed5a03bce1875a021cae4641138",
+    "current_main_reentered": "61a4b54e6cc61a6aa1d15a29b21caf39fc19a00a",
+    "current_main_message": "trigger4: claim F2-WP-208 bounded epistemic context view"
+  },
+  "accepted_evidence": {
+    "scope": "RECURSIVE_PROCESS_DISTILLATION_DETERMINISTIC_REPOSITORY_HOSTED_CI_ONLY",
+    "source_path": "src/frankenstein2/process_distillation.py",
+    "source_blob_sha": "4c8e6678fbaac4866699e3a0b01d9eb82951a4c1",
+    "test_path": "tests/test_process_distillation.py",
+    "test_blob_sha": "c46901385193949bfca3d799a6f4e5fcfdc950f7",
+    "declared_falsifier_tests": 11,
+    "push_workflow_run_id": 33220831236,
+    "push_job_id": 99014312336,
+    "push_conclusion": "success",
+    "pull_request_workflow_run_id": 33220906595,
+    "pull_request_conclusion": "success",
+    "receipt": "workpackages/receipts/F2-WP-304_G1_PROCESS_DISTILLATION_GHA_33220831236.json",
+    "reconciliation": "workpackages/reconciliations/F2-WP-304/1-F2-WP-304-G1-GPT56SOL-PROCESS-DISTILLATION-20260829.json"
+  },
+  "mechanism": [
+    "explicit caller-supplied process evidence is frozen without payload inspection",
+    "ordered step references remain ordered while set-like evidence/provenance references are canonicalized",
+    "REPORTED_SUCCESS, REPORTED_FAILURE and UNKNOWN remain declarations and never mint fact or completion",
+    "recursive process candidates bind exact immutable parent digests, same process identity, generation fences and bounded depth",
+    "candidate classification explicitly denies fact, Method-validation, transfer and authority promotion"
+  ],
+  "parallel_frontier": {
+    "F2-WP-302": "IN_PROGRESS_FAMILIARITY_PREDICTION_ERROR_DO_NOT_DUPLICATE",
+    "F2-WP-303": "ACCEPTED_TYPED_MEMORY_SPLIT_COMPONENT_CI_ONLY",
+    "F2-WP-305": "CLAIMED_PROCESSING_CREDIT_ABLATION_DO_NOT_DUPLICATE",
+    "F2-WP-306": "ACTIVE_BOUNDED_CONTEXT_COMPILER_DO_NOT_DUPLICATE",
+    "F2-WP-208": "NEW_ACTIVE_BOUNDED_EPISTEMIC_CONTEXT_VIEW_AT_CURRENT_F2_MAIN"
+  },
+  "pr430_unknown_outcome_dispatch": {
+    "dispatch_key": "trigger4-pr430-unknown-outcome-v1-g0000",
+    "state": "CLAIM_EXISTS_NO_TERMINAL_RESULT_FILE_OBSERVED_AT_2026-08-29T06:36:38+07:00",
+    "duplicate_dispatch_created": false,
+    "runtime_credit": 0
+  },
+  "credit_boundary": {
+    "research_delta": 1,
+    "f2_repository_component_ci": 1,
+    "target_runtime": 0,
+    "vps_runtime": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Preserve WP304 generation 1 as accepted component evidence and do not duplicate active WP302/WP305/WP306/WP208 lanes. Re-enter after those claims move; the next Stage-3 composition step should consume typed memory, process candidates, processing-credit evidence and bounded context without turning retrieval/memory/process metadata into truth. Keep the singleton PR430 g0000 dispatch unchanged until its terminal semantic result is actually persisted."
+}

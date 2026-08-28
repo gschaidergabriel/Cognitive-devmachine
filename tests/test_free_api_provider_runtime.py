@@ -503,6 +503,50 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(os.waitstatus_to_exitcode(status), 0)
         self.assertNotEqual(parent_principal_id, child_principal_id)
 
+    @unittest.skipUnless(hasattr(os, "fork"), "requires POSIX fork")
+    def test_reused_child_pid_does_not_reuse_cost_principal(self):
+        env = {
+            "NVIDIA_API_KEY": "fork-pid-reuse-credential",
+            "FRANK_FREE_ONLY_BUDGET_EPOCH": "fork-pid-reuse",
+        }
+
+        class FixedPidOS:
+            @staticmethod
+            def getpid():
+                return 4242
+
+        def forked_principal_id():
+            read_fd, write_fd = os.pipe()
+            pid = os.fork()
+            if pid == 0:
+                try:
+                    os.close(read_fd)
+                    principal_id = MOD._cost_policy_principal_id(
+                        MOD.PROVIDERS[0],
+                        "NVIDIA_API_KEY",
+                        env,
+                    )
+                    os.write(write_fd, principal_id.encode("ascii"))
+                finally:
+                    os._exit(0)
+            os.close(write_fd)
+            try:
+                principal_id = os.read(read_fd, 128).decode("ascii")
+            finally:
+                os.close(read_fd)
+            _, status = os.waitpid(pid, 0)
+            self.assertEqual(os.waitstatus_to_exitcode(status), 0)
+            return principal_id
+
+        original_os = MOD.os
+        MOD.os = FixedPidOS()
+        try:
+            first_principal_id = forked_principal_id()
+            second_principal_id = forked_principal_id()
+        finally:
+            MOD.os = original_os
+        self.assertNotEqual(first_principal_id, second_principal_id)
+
     def test_execution_receipt_pins_unicode_database_version(self):
         class Response:
             status = 200

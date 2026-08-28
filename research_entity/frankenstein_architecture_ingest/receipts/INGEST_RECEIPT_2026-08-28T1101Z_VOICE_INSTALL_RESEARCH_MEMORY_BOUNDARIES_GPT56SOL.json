@@ -1,0 +1,79 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v2",
+  "created_at": "2026-08-28T11:01:30Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "free_swarm_owner_emergency_stop": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "source_blobs": {
+      "gespraechsmodus.py":"d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "realtime_gespraech.py":"37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "hooks/hooks.json":"c483bc81cbae080a8175f7ce694ef657484614b5",
+      "install_terminal_help_icon.sh":"bf9bcf8a5a23e7091a58dc75742eb3bb131ff1c9",
+      "stern.py":"8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "harness_aider.py":"6f55e6a2137ecac9add560482b1b4fab1719aee8"
+    }
+  },
+  "writes": [
+    {
+      "path":"research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1100Z_VOICE_INSTALL_AND_RESEARCH_ROUTE_AUTHORITY_GPT56SOL.json",
+      "commit":"ce3adae1bc0db328a96ce7bccb4cf392722a2c6b",
+      "scope":"install-mode hook binding + research route authority + fallback caller/callee ABI negative result"
+    },
+    {
+      "path":"research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1101Z_VOICE_MEMORY_CANONICAL_WRITE_GPT56SOL.json",
+      "commit":"feff70d23138e5ec4f7390e1f3c9bba3e2a01698",
+      "scope":"direct Realtime model-selected conversational-memory insert into dedicated UnifiedDB table and MemoryAdmission target"
+    }
+  ],
+  "material_findings": [
+    "Donor install docs and launcher code prove hook loading is installation-mode dependent: marketplace enabled can use plain claude, while dev/star wiring explicitly requires --settings ~/.claude/star/settings.json. Voice claude_frage does not implement this resolver.",
+    "stern.py automatically routes chatgpt_senden failures toward harness_aider.py fallback-start with NVIDIA/Mistral candidates, but exact-current harness_aider.py exposes only start. This is a source-level caller/callee ABI mismatch; no runtime invocation was performed.",
+    "harness_aider.py source contains provider API model routes and key loading, so Free-Pool labeling does not erase provider/economic authority requirements. Current 9.13AC keeps provider routes unadmitted.",
+    "stern.py's PHASE-42b gespraech_erinnerung_schreiben directly inserts model-selected subject/value into a dedicated gespraech_erinnerung table inside unified.db after only nonempty checks. It usefully avoids creating a second durable_memory writer but still needs typed MemoryAdmission before canonical internal mutation."
+  ],
+  "target_2_0_contracts": [
+    "ExecutorEnvironmentBinding/v1",
+    "ResearchRouteDecision/v1",
+    "MemoryAdmission/v1"
+  ],
+  "negative_results": [
+    "SOURCE_NEGATIVE_RESULT: voice headless delegation does not reproduce dev/star --settings selection from the donor's own launcher/install contract.",
+    "SOURCE_NEGATIVE_RESULT: stern calls harness_aider.py fallback-start while exact-current harness_aider.py supports only start."
+  ],
+  "parallel_reconciliation": {
+    "strategy":"APPEND_ONLY_NON_DUPLICATE",
+    "central_ingest_state_mutation":"NOT_ATTEMPTED",
+    "reason":"The Triggerword-5 design branch is moving rapidly under parallel append-only work; a stale full-ledger replacement would risk erasing concurrent receipts. A prior write in this run correctly failed with 409 and was re-entered rather than forced.",
+    "successor_action":"Next safe central INGEST_STATE reconciliation should reference the 10:58 packet, 10:59 delta/receipt and these 11:00/11:01 deltas without changing evidence scope."
+  },
+  "credits": {
+    "donor_source_forensics":"PASS_AT_EXACT_DONOR_SHA",
+    "new_runtime_execution":0,
+    "provider_runtime":0,
+    "voice_runtime":0,
+    "memory_runtime_acceptance":0,
+    "effect_enforcement_runtime":0,
+    "physical_grid10":0,
+    "whole_hcu":0,
+    "whole_entityos":0,
+    "training":0
+  },
+  "provider_execution":false,
+  "vps_execution":false,
+  "unusual_experiment":false,
+  "result":"TRIGGERWORD5_SOURCE_FORENSICS_APPEND_ONLY_CHECKPOINT_PASS",
+  "next_exact_gate":"Triggerword-4 should compile ExecutorEnvironmentBinding/v1 + ResearchRouteDecision/v1 + MemoryAdmission/v1 and static caller/callee ABI checks, with provider-backed routes denied under current authority. Triggerword-5 should re-enter newest inbox/current branch before choosing another P0 source span."
+}

@@ -1,0 +1,92 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_ARCHITECTURE_DELTA_FUSION/v1",
+  "trigger": "6",
+  "run_id": "trigger6-20260829T0356p0700-gpt56sol-r6-seed-005-agentsight",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "SOURCE_GROUNDED_E2_ARCHITECTURE_MAPPED",
+  "evidence_level": "E2_ARCHITECTURE_MAPPED",
+  "architecture_snapshot": {
+    "research_entity_main": "9d34ad079a59a22ff1469d86b36a0f940c5a5efb",
+    "research_entity_supervisor": "9.13AL_NON_AUTHORITY_under_9.13_FREE_ONLY",
+    "frankenstein2_main": "738df2763bcb89d3d0386eb99cf2ec3c6bf664b5",
+    "f2_workpackages_blob": "403a57059b34609e9a09875d08bf4f33337b6d96",
+    "f2_research_acquisition_blob": "eaff5cb79880a503c4316376294c6f17f1f474f1",
+    "trigger5_delta_blob": "832b73e69ea02e125599ba91399cd78447bacf36",
+    "trigger6_seed_manifest_blob_f2": "db4f86dac633aefbff44024cde23191ffe56ee8a",
+    "trigger6_protocol_blob_research_entity": "3bc16d821b736ec8fd0d0e2928281a6d36745c2c"
+  },
+  "architecture_delta_fusion": {
+    "current_gap": "F2-WP-005 full telemetry/data spine is IN_PROGRESS while F2-WP-605 child telemetry and F2-WP-902/F2-WP-904 whole-system characterization/failure-injection remain NOT_STARTED.",
+    "trigger4_delta": "Recent Trigger-4 work is concentrated on effect/outcome lineage and exact-bound receipts; no Trigger-4 tool_research outcome directory was observed at current F2 main, so no AgentSight acceptance feedback exists.",
+    "trigger5_delta": "Current Trigger-5 evidence preserves deterministic hook/effect fan-in and warns that source wiring is not runtime causal credit; it also preserves ingest namespace drift rather than silently reconciling it.",
+    "supervisor_delta": "Private clay-global-research-entity GitHub Actions remains a zero-step admission/control-plane blocker. Trigger6 DB mirror runtime materialization credit is zero; this does not constitute a negative result for the materializer or for AgentSight.",
+    "supersession": "The original R6-SEED-005 hypothesis remains active but is narrowed from generic adoption to an optional independent witness plane whose output must remain derived evidence, never canonical state/effect authority."
+  },
+  "candidate": {
+    "seed_id": "R6-SEED-005",
+    "repo": "eunomia-bpf/agentsight",
+    "source_pin": "934f441eff8ca210807333633f47b2efcb8cd020",
+    "observed_release": "1.0.30",
+    "default_branch": "master",
+    "license": "MIT",
+    "source_findings": [
+      "Architecture is layered: eBPF programs -> JSON stdout -> native capture/event streams -> pluggable analyzers/materialized view -> SQLite/OTel/output/web.",
+      "eBPF programs include SSL/TLS uprobes, process lifecycle tracing and stdio capture; capture runners normalize events and can also ingest agent-native session files, /proc snapshots and saved SQLite databases.",
+      "The CLI supports top, monitor, record, report and debug modes; report can query saved local SQLite sessions without live eBPF attachment.",
+      "Live eBPF capture requires elevated privileges (sudo or CAP_BPF plus CAP_SYS_ADMIN) and Linux-specific instrumentation; binary resolution and statically linked SSL/BoringSSL create explicit capture failure modes.",
+      "The Rust collector uses bundled rusqlite plus async/runtime/web dependencies; therefore full import is materially heavier than a narrow adapter or offline witness importer."
+    ]
+  },
+  "f2_mapping": {
+    "affected_workpackages": ["F2-WP-005", "F2-WP-605", "F2-WP-902", "F2-WP-904"],
+    "recommended_role": "OPTIONAL_EXTERNAL_WITNESS_AND_CHARACTERIZATION_TOOL",
+    "do_not_adopt_as": ["UNIFIEDDB_REPLACEMENT", "SECOND_CANONICAL_STATE", "EFFECT_AUTHORITY", "COGNITIVE_TRUTH", "MANDATORY_RUNTIME_DEPENDENCY"],
+    "thin_integration_shape": [
+      "Prefer AgentSight as an out-of-process measurement witness during bounded characterization/failure experiments.",
+      "Import only typed, provenance-bound witness records or OTLP/SQLite-derived summaries into F2 telemetry; preserve original AgentSight database/report hashes as external evidence references.",
+      "Keep UnifiedDB authoritative; AgentSight SQLite remains a derived measurement artifact.",
+      "Use non-privileged saved-session/report surfaces when they answer the question; escalate to privileged eBPF only when independent OS-level process/file/network/TLS evidence has positive information gain.",
+      "Do not couple AgentSight frontend/web server into the minimal F2 cognitive kernel."
+    ]
+  },
+  "hypothesis": "AgentSight can add independent OS-level observability that catches process/file/network/TLS effects missed by self-reported F2 telemetry and materially improves F2-WP-902/F2-WP-904 root-cause evidence.",
+  "counterhypotheses": [
+    "F2-native telemetry plus direct OS profilers may cover the same discriminators with less privilege, dependency and operational overhead.",
+    "TLS uprobes can miss or misattribute traffic for stripped/static runtimes or thread-name filtering edge cases, reducing witness reliability.",
+    "Root/CAP_BPF/CAP_SYS_ADMIN requirements may make the strongest AgentSight mode unsuitable as a permanent production dependency.",
+    "AgentSight-derived session reconstruction may correlate with F2 events without proving canonical causal identity unless F2 supplies explicit run/trace/effect bindings."
+  ],
+  "acceptance_falsifiers_for_next_stage": [
+    "On one exact F2 workload, compare F2-native telemetry vs AgentSight witness for process tree, file effects, network destinations, token/LLM spans and latency; count independently observed/missed/misattributed events.",
+    "Measure p50/p95/p99 latency and CPU/RSS/I/O overhead with AgentSight OFF vs non-privileged session/report mode vs privileged eBPF record mode.",
+    "Inject known child-process/file/network effects and verify that AgentSight evidence binds to immutable F2 run_id/trace_id/effect_id without becoming a second authority.",
+    "Verify fail-open observational behavior: AgentSight absence/failure must not block F2 cognition/effects unless a specific test explicitly requires the witness.",
+    "Reject promotion if the same diagnostic information is obtainable more cheaply and deterministically from F2-native telemetry or narrower standard tools."
+  ],
+  "promotion": {
+    "e3_claim_reproduced": false,
+    "e4_f2_ablation": false,
+    "e5_build_candidate": false,
+    "e6_f2_accepted": false,
+    "architecture_credit": 0,
+    "reason": "Source architecture and integration surface are mapped, but no upstream claim reproduction or F2 ablation has been executed in this Trigger6 slot."
+  },
+  "research_db": {
+    "canonical_f2_db_present": true,
+    "research_entity_db_runtime_materialization_credit": 0,
+    "mirror_state": "SOURCE_DELTA_PERSISTED_OUTSIDE_BLOCKED_DB_MATERIALIZER",
+    "reconciliation_required_after_actions_recovery": true
+  },
+  "next_exact_action": "Trigger6 EXPERIMENTAL_FALSIFIER or Trigger4 measurement lane should run an exact-bound three-mode witness ablation (F2 native only vs AgentSight non-privileged report/session mode vs AgentSight privileged eBPF mode) and persist event-coverage plus overhead metrics before any E5 handoff.",
+  "credits": {
+    "source_read": 1,
+    "architecture_mapped": 1,
+    "claim_reproduced": 0,
+    "f2_ablation": 0,
+    "build_candidate": 0,
+    "f2_accepted": 0,
+    "whole_f2_runtime": 0,
+    "entityos_hcu_runtime": 0,
+    "training": 0
+  }
+}

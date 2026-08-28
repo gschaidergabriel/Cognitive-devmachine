@@ -1,0 +1,129 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_LATE_PACKET_ASSIMILATION_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:28:28Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_commit_before_write": "4034659cc56fef540a89516642e930d162031b64"
+  },
+  "packets_ingested": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "status": "INGESTED_DEDUPED_AND_STRENGTHENED",
+      "unique_value": "Per-call effect correlation risk, current donor secret-redaction negative-result lineage, and packet-reported Claude hook tool_use_id/concurrency cross-check."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "status": "INGESTED_DEDUPED_AND_STRENGTHENED",
+      "unique_value": "Exact cmd_hook distinction: normal EffectGate-named PreToolUse bookkeeping emits no deny/block while SEBUKKU is a separate explicit deny-capable branch; downstream VERIFIED semantic overload is made explicit."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "status": "INGESTED_DEDUPED_AND_EXTENDED",
+      "unique_value": "Perception Control NOT_COMPUTED/dependency-taint enforcement, historical ablation evidence, Realtime pending-tool cancellation on cancelled/barge-in responses, and VoiceSessionCapsule as ephemeral projection."
+    }
+  ],
+  "direct_crosschecks_this_ingest": [
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3090-3600",
+      "result": "CONFIRMED",
+      "claim": "zulassen is nonblocking bookkeeping; capability/generation/precondition/idempotency findings are journal classifications; PostToolUse can preserve those classifications while appending observed outcome, and missing PreToolUse can produce a new VERIFIED/FEHLGESCHLAGEN row; causal_episodes is appended with credit=0,reentered=0."
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:cmd_hook",
+      "result": "CONFIRMED",
+      "claim": "The normal PreToolUse branch calls zulassen without emitting a deny/block decision; PostToolUse calls merken. A separate SEBUKKU branch can emit deny, proving hook blocking capability exists but is not used by normal effect bookkeeping."
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:420-560",
+      "result": "CONFIRMED",
+      "claim": "evaluate_head uses the central dependency DAG, returns NOT_COMPUTED/value=None for unknown, COMPUTE_OFF or taint-blocked heads, and does not call compute_fn when those gates trip."
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1300-1560",
+      "result": "CONFIRMED",
+      "claim": "Function calls are queued until response.done; cancelled/non-completed responses clear pending calls, and barge-in also clears pending calls before truncate/cancel, preventing pre-dispatch execution from an interrupted response."
+    }
+  ],
+  "dedupe_and_fusion": [
+    {
+      "finding": "DONOR_EFFECTGATE_NONBLOCKING",
+      "action": "MERGED_WITH_REENTRY_FUSION_AND_EFFECT_VOICE_DELTA",
+      "credit_rule": "Repeated GPT56Sol source readings are corroboration, not independent runtime replication."
+    },
+    {
+      "finding": "VOICE_CAPSULE_EPHEMERAL_PROJECTION",
+      "action": "MERGED_WITH_EFFECT_AND_VOICE_CONDITIONING_DELTA",
+      "credit_rule": "No additional causal conditioning credit; per-response compiler edge remains an open repair."
+    }
+  ],
+  "new_or_strengthened_architecture_rules": [
+    {
+      "rule_id": "F2_EFFECT_IDENTITY_PER_INVOCATION_020",
+      "status": "STRENGTHENED_OPEN_REPAIR",
+      "claim": "A single mutable active_turns.effect_id per session is not an acceptable Frankenstein-2.0 general correlation contract. Request/admission/execution/outcome must bind an immutable per-invocation identity, with generation and causal parentage, even if a particular host appears serialized.",
+      "evidence": "Current donor source shows the single session pointer; the ingested effect-path packet additionally reports current Claude hook tool_use_id/concurrency semantics. Runtime race reproduction was not performed here.",
+      "target_action": "REPAIR"
+    },
+    {
+      "rule_id": "F2_EFFECT_STATE_TYPE_SPLIT_021",
+      "status": "SOURCE_CONFIRMED_DESIGN_DELTA",
+      "claim": "ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION and COMPLETION_EVIDENCE must be separate typed states. Donor VERIFIED cannot be inherited as a single overloaded authority bit because PostToolUse fallback can mint VERIFIED without a PreToolUse row.",
+      "target_action": "REPLACE_WITH_VERIFIED_SUCCESSOR"
+    },
+    {
+      "rule_id": "F2_PERCEPTION_NOT_COMPUTED_TAINT_022",
+      "status": "SOURCE_CONFIRMED_COMPONENT_PATTERN",
+      "claim": "GRID10/WorldSlice control should reuse the Perception Control invariant that COMPUTE_OFF and protected upstream dependencies propagate NOT_COMPUTED/value=None before compute, with the central dependency graph rather than caller-declared dependencies determining taint.",
+      "target_action": "ADAPT_TO_GRID"
+    },
+    {
+      "rule_id": "F2_PENDING_EFFECT_CANCELLATION_023",
+      "status": "SOURCE_CONFIRMED_COMPONENT_PATTERN",
+      "claim": "Realtime's pending-call cancellation is a reusable pre-dispatch effect state: a candidate/tool request belonging to a cancelled or superseded cognitive turn must be invalidated before EffectGate submission. This does not solve UNKNOWN outcomes after external submission.",
+      "target_action": "KEEP_AND_GENERALIZE"
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-INGEST-PATH-001",
+      "status": "OPEN",
+      "claim": "Canonical main architecture archaeology feed and owner-branch inbox/state remain parallel research projections with unresolved migration authority."
+    },
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "claim": "Normal stern EffectGate-named admission is conclusively nonblocking at source level; the remaining unknown is the exact current authority/reachability of the separate external blocker and how it composes with canonical EntityOS EffectGate."
+    },
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-ENFORCEMENT-003",
+      "status": "OPEN_REPAIR_REQUIRED",
+      "claim": "The donor stores ABGELEHNT/WIEDERHOLUNG but still allows normal host execution; status naming cannot be treated as enforcement evidence."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VERIFIED-PREADMISSION-004",
+      "status": "OPEN_REPAIR_REQUIRED",
+      "claim": "PostToolUse can create VERIFIED without a PreToolUse row while downstream code uses VERIFIED as outside-effect evidence; observed success and admitted-then-verified execution are not structurally distinct."
+    }
+  ],
+  "credits": {
+    "source_forensics": "PRESENT_STRENGTHENED",
+    "historical_component_receipt_reused": "PERCEPTION_ABLATION_ONLY_NO_RERUN",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Inspect the actual current blocking wache-koenig predecessor and host hook/permission ordering, then recover Git introduction/supersession windows for posttool-only logging -> nonblocking admission bookkeeping -> current completion verifier; feed the typed per-invocation effect-state split, NOT_COMPUTED taint rule and pending-effect cancellation rule into Triggerword-4 assembly without modifying the donor in this analysis lane."
+}

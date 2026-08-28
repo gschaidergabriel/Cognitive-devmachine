@@ -1,0 +1,48 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T1441P0700-F94-CANONICAL-ARCHIVE-CROSSCHECK-GPT56SOL",
+  "recorded_at": "2026-08-28T14:41:20+07:00",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "routing_self_test": "PASS",
+  "authority_epoch": "8.78",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed": "01da78bd43066e912410ed1d308f26dba0dae23c",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_head_before_delta": "5446a1ab56b53282006d6b388a63a310fe5d6a97",
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_F94_CANONICAL_ARCHIVE_CROSSCHECK_GPT56SOL.json",
+    "commit": "84e40af61a620ba81205f52605504aa7b829786c"
+  },
+  "packet_results": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+      "result": "INGESTED_WITH_UNIQUE_CROSS_REPOSITORY_SOURCE_CROSSCHECK"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
+      "result": "DEDUPED_ALREADY_FUSED_BY_PARALLEL_TRIGGERWORD5_LANE",
+      "existing_delta_commit": "9c3f5132bc7a528f858bf2a90015007898ac493d",
+      "existing_receipt_commit": "4da1e9b32e7543700e6fd3f9c7503173bb1e2573"
+    }
+  ],
+  "exact_crosscheck": {
+    "donor_live_paket_blob": "4381bca97d67c56df75bd6f16e6919b9d2151f3f",
+    "donor_archived_wegehierarchie_blob": "83d1068bedc4b1fa7dd32aead7600484f8532e34",
+    "canonical_archive_paket_blob": "4381bca97d67c56df75bd6f16e6919b9d2151f3f",
+    "canonical_archive_wegehierarchie_blob": "83d1068bedc4b1fa7dd32aead7600484f8532e34",
+    "finding": "Exact F94 caller and implementation source pair survives together in canonical-main research archive, while pinned Frankenstein donor live import closure remains unproven/broken at source layout."
+  },
+  "coordination": "APPEND_ONLY_DELTA_AND_RECEIPT_ONLY; INGEST_STATE_NOT_OVERWRITTEN_DURING_RAPID_PARALLEL_BRANCH_MOVEMENT",
+  "runtime_credit": {
+    "new_runtime_execution": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Triggerword 4 decides F94 ADAPT versus RETIRE and proves package/import/schema behavior with exact-source positive and negative regressions; Triggerword 5 continues from packets newer than 2026-08-28T07:35:12Z."
+}

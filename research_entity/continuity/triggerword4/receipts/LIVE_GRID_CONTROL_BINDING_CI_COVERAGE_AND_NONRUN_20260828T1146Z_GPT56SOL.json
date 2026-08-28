@@ -1,0 +1,74 @@
+{
+  "schema": "TRIGGERWORD4_LIVE_GRID_CONTROL_BINDING_CI_RECEIPT/v1",
+  "status": "SOURCE_CI_COVERAGE_REPAIRED_RUNTIME_UNOBSERVED",
+  "trigger": "triggerwort 4",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "observed_at_utc": "2026-08-28T11:47:00Z",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "checkpoint_gate": "GRID10_SIGKILL_INDEPENDENT_REPLACEMENT_V3_REPOSITORY_BOUND_EXECUTION",
+  "source_deltas": [
+    {
+      "path": "tools/grid10_cognitive_controlled_runtime_v1.py",
+      "classification": "SOURCE_READY_NONCANONICAL_CONTROLLED_GRID_ADAPTER",
+      "runtime_credit": 0
+    },
+    {
+      "path": "tools/test_grid10_cognitive_controlled_runtime_v1.py",
+      "classification": "SOURCE_READY_DETERMINISTIC_COMPONENT_TEST",
+      "runtime_credit": 0
+    },
+    {
+      "path": "tools/grid10_live_control_binding_v1.py",
+      "observed_blob_sha": "44e3b55e9d86870236042328e465ee10ef26e74c",
+      "classification": "PARALLEL_SOURCE_READY_LIVE_GRID_GWT_BINDING",
+      "runtime_credit": 0
+    },
+    {
+      "path": "tools/test_grid10_live_control_binding_v1.py",
+      "observed_commit": "972ea86e91104b59a94493a0d118d489542c7479",
+      "classification": "PARALLEL_SOURCE_READY_FAKE_INFERENCE_COMPONENT_TESTS",
+      "runtime_credit": 0
+    },
+    {
+      "path": ".github/workflows/grid10-cognitive-envelope-ci.yml",
+      "commit": "de5b6657adc5a8665a21adc67df6d00c9f1b0010",
+      "classification": "CI_COVERAGE_REPAIR",
+      "delta": "Added path triggers, py_compile coverage, and test invocation for grid10_live_control_binding_v1.py and test_grid10_live_control_binding_v1.py."
+    }
+  ],
+  "ci_observation": {
+    "workflow": "GRID10 Cognitive Envelope CI",
+    "run_id": 33168448282,
+    "job_id": 98839405699,
+    "head_sha": "de5b6657adc5a8665a21adc67df6d00c9f1b0010",
+    "status": "completed",
+    "conclusion": "failure",
+    "started_at": "2026-08-28T11:46:49Z",
+    "completed_at": "2026-08-28T11:46:51Z",
+    "runner_id": 0,
+    "runner_name": "",
+    "steps": [],
+    "job_log_fetch": "BLOB_NOT_FOUND_404",
+    "classification": "INFRASTRUCTURE_OR_RUNNER_NONRUN_NOT_PRODUCT_TEST_FAILURE",
+    "test_execution_observed": false,
+    "runtime_credit": 0
+  },
+  "negative_evidence": [
+    "The relevant GRID10 CI did trigger after CI coverage repair but no runner was assigned and no job steps were observed.",
+    "No compile, unit test, integration test, provider call, VPS execution, model inference, effect, completion, Physical-GRID10 acceptance, or whole-HCU acceptance is credited by this receipt."
+  ],
+  "credits": {
+    "source_integration_delta": "OBSERVED",
+    "ci_coverage": "OBSERVED_REPAIRED",
+    "component_test_execution": 0,
+    "vps_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_action": "Execute the exact repository-bound GRID10 v3/V4 + live-control binding tests on an authorized zero-cost execution surface with a real runner/receipt; then bind the admitted live cell runner to the persistent Pulse/Agency cycle and preserve exact ControlSnapshot, inference, GWT, memory-reentry and effect/completion boundaries.",
+  "authority_boundary": "This append-only receipt preserves source and negative CI evidence only. It cannot mint canonical truth, runtime acceptance, model credit, effect authority, or completion."
+}

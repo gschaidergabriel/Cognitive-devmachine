@@ -1,0 +1,49 @@
+{
+  "schema": "TRIGGER4_F2_REPOSITORY_BOOTSTRAP_ROUTE/v1",
+  "trigger": "triggerwort 4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation",
+  "authority": {
+    "supervisor_epoch": "9.13AC_FRANKENSTEIN2_BOOTSTRAP_P0",
+    "authority_source_sha": "f1f9fc321222877e21397e4b41513fae3a9f2c33",
+    "clay_main_sha_at_route_build": "a96dc388fe6e8b2259ff22bb7b44d9463381e9b9"
+  },
+  "canonical_target": "gschaidergabriel/frankenstein-2.0",
+  "bootstrap_controller": "gschaidergabriel/Dr.-Unterweger",
+  "controller_workflow": ".github/workflows/frankenstein2-bootstrap-v1.yml",
+  "controller_commit": "e445b6222bf2077361877f36b12d61fbab398c66",
+  "route_class": "SOURCE_CONTROLLED_SELF_HOSTED_LINUX_X64_SINGLETON_PUSH_PATH_BOOTSTRAP",
+  "route_properties": {
+    "concurrency_group": "frankenstein2-canonical-repository-bootstrap-v1",
+    "issue_fanout_used": false,
+    "provider_calls_requested": 0,
+    "paid_spend_requested": 0,
+    "target_repo_create_or_converge": true,
+    "seed_readme": true,
+    "seed_workpackages": true,
+    "seed_machine_state": true,
+    "seed_observability_schemas": true,
+    "seed_research_provenance": true,
+    "controller_receipt_required": true
+  },
+  "observed_state_after_route_commit": {
+    "target_repository_lookup": "404_NOT_FOUND",
+    "controller_latest_receipt": "NOT_OBSERVED",
+    "bootstrap_pass": false,
+    "whole_frankenstein2_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "anti_stampede": {
+    "secondary_bootstrap_dispatch_created": false,
+    "reason": "The dedicated singleton controller route is already committed. A second equivalent bootstrap path would reduce causal clarity and violate convergence semantics until the first route has a terminal observable result."
+  },
+  "next_exact_gate": "Observe either gschaidergabriel/frankenstein-2.0 with a concrete target commit/tree and seeded canonical spine, or runtime/frankenstein2_bootstrap/LATEST.json in gschaidergabriel/Dr.-Unterweger. If the route fails, inspect its exact job/step failure and repair this same singleton route rather than creating a duplicate dispatch.",
+  "evidence_boundary": [
+    "controller workflow source committed != workflow executed",
+    "workflow queued != repository created",
+    "repository created != bootstrap contents verified",
+    "bootstrap contents verified != Frankenstein 2.0 runtime PASS",
+    "no provider/model/runtime/system credit is minted by this staging receipt"
+  ]
+}

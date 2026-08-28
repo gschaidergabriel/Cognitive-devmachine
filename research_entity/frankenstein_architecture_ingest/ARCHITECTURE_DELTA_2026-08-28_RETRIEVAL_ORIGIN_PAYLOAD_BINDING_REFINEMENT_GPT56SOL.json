@@ -1,0 +1,148 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:55:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "delta_class": "RETRIEVAL_ORIGIN_AND_INPUT_PAYLOAD_BINDING_REFINEMENT",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "source_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "source_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "ingest_disposition": {
+    "new_inbox_packet_consumed": false,
+    "reason": "No newer unconsumed packet was observed after the already-consumed 10:42Z Stop-hook packet; this is a direct-source refinement of the existing Stop-hook/deferred-causal-return handoff, not duplicate packet consumption.",
+    "corroborates": [
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_DEFERRED_CAUSAL_RETURN_FUSION_GPT56SOL.json"
+    ]
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "retrieval-origin-uuid-envelope-existing",
+      "subsystem": "MicroClay retrieval identity",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 4260,
+      "line_end": 4355,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "The retrieval path already mints retrieval_id as UUID and persists it together with turn_id, episode_id, causal_id, session_id, user_id, generation, policy_version, query_hash, selected_memory_ids and related bounded receipt fields. The returned receipt exposes retrieval_id and query_sha256.",
+      "runtime_reachable": true,
+      "target_2_0_action": "KEEP_AND_EXPOSE_TO_DEFERRED_COGNITION"
+    },
+    {
+      "atom_id": "retrieval-credit-origin-dedupe-existing",
+      "subsystem": "retrieval feedback reducer",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 4356,
+      "line_end": 4425,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "_apply_credit derives generation and causal_id from the exact retrieval row, records feedback with retrieval_id/causal_id/generation and de-duplicates by receipt_id. The default receipt_id hash includes retrieval_id, causal_id, generation, signal_class and the numeric credit value.",
+      "runtime_reachable": true,
+      "target_2_0_action": "ADAPT_IDEMPOTENCY_FOR_DEFERRED_MODEL_RESULTS"
+    },
+    {
+      "atom_id": "human-feedback-exact-retrieval-join-existing",
+      "subsystem": "human retrieval feedback",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 4528,
+      "line_end": 4559,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "mensch_urteil already accepts a retrieval_id and resolves exactly SELECT * FROM retrieval_episodes WHERE retrieval_id=? before applying credit. This is a donor-local precedent proving exact retrieval binding does not require a second identity authority.",
+      "runtime_reachable": true,
+      "target_2_0_action": "KEEP_AS_JOIN_PATTERN"
+    },
+    {
+      "atom_id": "model-feedback-late-session-join",
+      "subsystem": "Stop-hook model relevance",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5000,
+      "line_end": 5065,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "_kognition_richten_hook does not receive retrieval_id. It late-selects the newest same-session retrieval lacking modell:relevanz feedback, then reads candidate subject/value and the last user transcript text before calling the model and applying credit to that selected row.",
+      "runtime_reachable": true,
+      "target_2_0_action": "REPAIR_AND_ADAPT_TO_GRID"
+    }
+  ],
+  "forensic_result": {
+    "new_identity_table_required": false,
+    "reason": "The donor already has a per-retrieval UUID plus turn/episode/causal/generation/query-hash envelope and an exact-ID feedback precedent. The missing contract is propagation and immutable input binding, not identity invention.",
+    "minimal_repair_direction": "Create RetrievalRelevanceCandidate/v1 at retrieval/dispatch time from the existing retrieval identity envelope; never discover the origin later by session ordering."
+  },
+  "input_binding_gap": {
+    "classification": "SOURCE_GROUNDED_ARCHITECTURE_INFERENCE",
+    "finding": "A deferred migration that carries retrieval_id but re-reads current durable_memory candidate text or simply takes the latest transcript user text at completion can still evaluate bytes different from those associated with the originating retrieval. retrieval_episodes stores query_hash and selected_memory_ids but the current Stop model path reconstructs model input later.",
+    "required_binding": [
+      "retrieval_id",
+      "turn_id",
+      "episode_id",
+      "causal_id",
+      "generation",
+      "policy_version",
+      "query_sha256",
+      "bounded_query_payload_or_immutable_ref",
+      "ordered_selected_memory_ids",
+      "candidate_payload_digest_over_exact_rendered_model_input",
+      "candidate_payload_ref_or_bounded_snapshot_when_needed",
+      "producer_model_and_runtime_or_build_identity",
+      "origin_created_at"
+    ],
+    "rule": "The model result may be reduced only against the origin envelope and exact input digest it actually judged. A matching retrieval_id alone is necessary but not sufficient for deferred causal credit."
+  },
+  "idempotency_refinement": {
+    "classification": "SOURCE_GROUNDED_RISK_WITH_SCHEMA_UNIQUENESS_NOT_ESTABLISHED_IN_THIS_PASS",
+    "finding": "The visible _apply_credit default receipt hash includes the resulting numeric credit. Two different model outputs for the same retrieval/generation/signal_class therefore generate different receipt IDs at this layer. This pass did not establish a separate database UNIQUE(retrieval_id, signal_class) constraint, so Triggerword-4 must not assume value-dependent receipt hashing alone gives exactly-once model relevance admission.",
+    "target_rule": "A logical relevance job gets a stable job/admission identity independent of the returned credit value. Retries of the same logical job are idempotent; conflicting second results for the same accepted retrieval/generation/model-evidence slot are rejected or quarantined, not applied as another policy update."
+  },
+  "contradictions_preserved": [
+    "Exact retrieval identity already exists and human feedback uses it, while model feedback still joins by newest same-session open row.",
+    "The current synchronous path reconstructs query/candidate text near Stop time; moving it out of the hook without freezing or digest-binding its exact inputs would repair latency while leaving a causal-input transplant gap.",
+    "_apply_credit records generation but explicitly does not enforce a stale-generation fence in this donor phase; deferred Triggerword-4 admission must define currentness rather than infer it from the stored field."
+  ],
+  "counterhypotheses": [
+    "If durable_memory rows and transcript turn content are proven immutable for the entire deferred-job lifetime, a full bounded input snapshot may be unnecessary; an immutable content reference plus digest can be sufficient.",
+    "The database schema may already enforce uniqueness that prevents two modell:relevanz rows for one retrieval despite value-dependent receipt hashes; that remains UNKNOWN here and should be source-crosschecked before adding a redundant uniqueness mechanism.",
+    "A shared DeferredCausalReturnEnvelope may remain unnecessary if RetrievalRelevanceCandidate/v1 can use the same identity law with a simpler subsystem-specific serializer."
+  ],
+  "feeds_triggerword_4": {
+    "do_not_build_in_trigger5": true,
+    "required_actions": [
+      "Reuse existing retrieval_id/turn_id/episode_id/causal_id/generation/query_hash instead of inventing a second retrieval identity.",
+      "Emit RetrievalRelevanceCandidate/v1 at origin time with an exact digest/ref for the query plus ordered candidate payload actually sent for judgment.",
+      "On completion, exact-lookup retrieval_id and verify turn/causal/generation/query/input digest before any reducer write.",
+      "Define stable logical-job idempotency independent of numeric model credit and explicitly handle a conflicting second result.",
+      "Execute reversed-completion same-session tests and an input-mutation/transplant adversarial test; relevance must never attach to the wrong retrieval or different candidate bytes.",
+      "Keep model-derived relevance noncanonical and preserve deterministic Stop bookkeeping independently of model latency/failure."
+    ]
+  },
+  "credits": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "new_packet_ingest": 0,
+    "runtime_execution": 0,
+    "provider_runtime": 0,
+    "vps_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "next_exact_gate": "Triggerword-4 external/non-provider lane: implement RetrievalRelevanceCandidate/v1 by reusing the existing retrieval envelope, bind the exact query/candidate input digest at dispatch, and prove reverse-order overlap plus input-mutation/transplant rejection while later deterministic Stop bookkeeping remains complete."
+}

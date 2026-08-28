@@ -1,0 +1,78 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_INGEST_RECEIPT/v1",
+  "receipt_id": "T5_INGEST_2026-08-28T1432P0700_LATE_EFFECT_PERCEPTION_VOICE_CORROBORATION_5641dc6b",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "classification": "CORROBORATING_SOURCE_CROSSCHECK_NOT_INDEPENDENT_RUNTIME_REPLICATION",
+  "routing_self_test": "PASS",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_LATE_INGEST_EFFECT_PERCEPTION_VOICE.json",
+    "commit": "e95fa1cdb62ecfbfc22ef645721ac30373bba609"
+  },
+  "coordination_reentry": {
+    "state_observed_after_delta_write": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json@8f1ee02125f07c1e7f574e5e90fece264d134bb2",
+    "finding": "Parallel Triggerword-5 lanes had already consumed both 07:24 packets and persisted stronger primary deltas before this organ could update INGEST_STATE.",
+    "action": "DO_NOT_DOUBLE_CONSUME_OR_OVERWRITE_PRIMARY_STATE; preserve this source crosscheck as corroborating append-only evidence."
+  },
+  "packets_crosschecked_not_newly_consumed_here": [
+    "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+    "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT"
+  ],
+  "primary_state_already_records": [
+    "ARCHITECTURE_DELTA_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+    "ARCHITECTURE_DELTA_2026-08-28_INVOCATION_EFFECT_PERCEPTION_FUSION.json",
+    "TW5-CONTRADICTION-PERCEPTION-ENFORCEMENT-COVERAGE-005",
+    "TW5-CONTRADICTION-PENDING-EFFECT-UNKNOWN-006"
+  ],
+  "direct_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "range": "3200-3655",
+      "result": "CONFIRMED_NORMAL_ZULASSEN_IS_NONBLOCKING_EFFECT_BOOKKEEPING_AND_POSTTOOL_OUTCOME_STATUS_CAN_EXIST_WITHOUT_PRIOR_ADMISSION"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "range": "8810-8895",
+      "result": "CONFIRMED_SEBUKKU_IS_NARROW_EXPLICIT_PRETOOL_DENY_BRANCH; ORDINARY_ZULASSEN_BRANCH_EMITS_NO_DENY"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "range": "900-1560",
+      "result": "CONFIRMED_PENDING_REALTIME_TOOL_CALLS_ARE_DISCARDED_ON_NONCOMPLETED_RESPONSE_OR_BARGE_IN_BEFORE_LOCAL_DISPATCH"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py",
+      "range": "96-560",
+      "result": "CONFIRMED_TIER_POLICY_AND_DEPENDENCY_DAG_SUPPORT_NOT_COMPUTED_STYLE_FAIL_CLOSED_COMPUTE_GATING"
+    },
+    {
+      "source": "Anthropic Claude Code current hooks documentation observed 2026-08-28",
+      "result": "CONFIRMED_CALL_SCOPED_TOOL_USE_ID_ON_PRETOOLUSE_AND_POSTTOOLUSE_AND_REAL_PRETOOL_DENY_CAPABILITY"
+    }
+  ],
+  "frankenstein2_corroborated_contract": [
+    "Use immutable call-scoped tool_use_id or equivalent invocation_id for the entire effect lifecycle; session_id alone is contextual, never the sole mutable effect pointer.",
+    "Separate EffectRequest, ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, RESULT_REENTRY and COMPLETION_EVIDENCE.",
+    "Successful observed execution never retroactively creates admission authority.",
+    "PENDING_EFFECT may become CANCELLED only before submission; after possible submission, uncertainty is OUTCOME_UNKNOWN until verified and blind replay is forbidden.",
+    "Perception COMPUTE_OFF/OUTPUT_OFF/MEMORY_OFF plus dependency taint is a donor for WorldNeed/WorldSlice NOT_COMPUTED semantics, but system-wide privacy credit requires caller-path reachability audit.",
+    "VoiceSessionCapsule remains an ephemeral generation/freshness-bound projection; its per-response conditioning path remains an open causal gap."
+  ],
+  "runtime_credit": {
+    "new_donor_runtime_execution": 0,
+    "new_host_hook_runtime_execution": 0,
+    "whole_entityos_hcu_delta": 0,
+    "hcu_full_delta": 0,
+    "provider_delta": 0,
+    "jspace_model_delta": 0,
+    "training_delta": 0
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Recover exact effect/completion Git windows and actual wache-koenig artifact or preserve unavailable provenance; audit perception call-path bypasses; close VoiceSessionCapsule per-response generation/conditioning; then Triggerword-4 must execute invocation-bound enforcement/outcome/re-entry and WorldSlice taint regressions at the authorized scope."
+}

@@ -85,23 +85,52 @@ jobs:
           if [[ "$found" != true ]] && command -v incus >/dev/null 2>&1 && incus info clay-direct-dev >/dev/null 2>&1; then runtime='incus'; exec_prefix=(incus exec clay-direct-dev --); found='true'; fi
           if [[ "$found" != true ]] && command -v lxc >/dev/null 2>&1 && lxc info clay-direct-dev >/dev/null 2>&1; then runtime='lxc'; exec_prefix=(lxc exec clay-direct-dev --); found='true'; fi
           [[ "$found" == true ]] || { echo 'clay-direct-dev not discoverable' >&2; exit 20; }
+
           workdir="/tmp/clay-go-repository-bound-${GITHUB_RUN_ID}"
           repo='https://github.com/gschaidergabriel/clay-global-research-entity.git'
-          "${exec_prefix[@]}" sh -lc "set -eu; rm -rf '$workdir'; git clone --no-checkout '$repo' '$workdir'; cd '$workdir'; git fetch --no-tags origin '$TARGET_SHA'; git checkout --detach '$TARGET_SHA'; test -z \"\$(git status --porcelain)\"; test \"\$(git rev-parse HEAD)\" = '$TARGET_SHA'; python3 tools/run_go_repository_bound_acceptance_bundle_v1.py"
-          "${exec_prefix[@]}" sh -lc "cat '$workdir/artifacts/go-repository-bound-acceptance/receipt.json'" > /tmp/go-repository-bound-acceptance/inner.json
-          RUNTIME="$runtime" python3 - <<'PY' > /tmp/go-repository-bound-acceptance/result.json
+          set +e
+          "${exec_prefix[@]}" sh -lc "set -eu; rm -rf '$workdir'; git clone --no-checkout '$repo' '$workdir'; cd '$workdir'; git fetch --no-tags origin '$TARGET_SHA'; git checkout --detach '$TARGET_SHA'; test -z \"\$(git status --porcelain)\"; test \"\$(git rev-parse HEAD)\" = '$TARGET_SHA'; python3 tools/run_go_repository_bound_acceptance_bundle_v1.py" > /tmp/go-repository-bound-acceptance/runner.stdout 2> /tmp/go-repository-bound-acceptance/runner.stderr
+          runner_rc=$?
+          set -e
+
+          inner_present='false'
+          if "${exec_prefix[@]}" sh -lc "test -f '$workdir/artifacts/go-repository-bound-acceptance/receipt.json'"; then
+            "${exec_prefix[@]}" sh -lc "cat '$workdir/artifacts/go-repository-bound-acceptance/receipt.json'" > /tmp/go-repository-bound-acceptance/inner.json
+            inner_present='true'
+          else
+            RUNNER_RC="$runner_rc" python3 - <<'PY' > /tmp/go-repository-bound-acceptance/inner.json
+          import json, os
+          print(json.dumps({
+            'schema':'GO_REPOSITORY_BOUND_ACCEPTANCE_DISPATCH_FAILURE/v1',
+            'target_sha':os.environ['TARGET_SHA'],
+            'runner_exit_code':int(os.environ['RUNNER_RC']),
+            'runner_receipt_present':False,
+            'bundle_pass':False,
+            'evidence_boundary':{
+              'repository_bound_component_execution':False,
+              'physical_grid10_runtime_credit':0,
+              'whole_hcu_runtime_credit':0,
+              'whole_entityos_runtime_credit':0,
+              'training_credit':0}},indent=2,sort_keys=True))
+          PY
+          fi
+
+          RUNNER_RC="$runner_rc" INNER_PRESENT="$inner_present" RUNTIME="$runtime" python3 - <<'PY' > /tmp/go-repository-bound-acceptance/result.json
           import json,os,pathlib
           inner=json.loads(pathlib.Path('/tmp/go-repository-bound-acceptance/inner.json').read_text())
-          target=os.environ['TARGET_SHA']
-          if inner.get('head')!=target: raise SystemExit('inner receipt HEAD mismatch')
+          target=os.environ['TARGET_SHA']; present=os.environ['INNER_PRESENT']=='true'; rc=int(os.environ['RUNNER_RC'])
+          if present and inner.get('head')!=target: raise SystemExit('inner receipt HEAD mismatch')
           event=json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          passed=bool(present and rc==0 and inner.get('bundle_pass') is True)
+          status='PASS' if passed else ('FAIL' if present else 'BLOCKED')
           out={
             'schema':'CLAY_ORDINARY_DISPATCH_RESULT/v1','dispatch_key':os.environ['DISPATCH_KEY'],
-            'dispatch_class':'go-repository-bound-acceptance-v1','status':'PASS' if inner.get('bundle_pass') is True else 'FAIL',
+            'dispatch_class':'go-repository-bound-acceptance-v1','status':status,
             'issue_number':(event.get('issue') or {}).get('number'),'run_id':os.environ.get('GITHUB_RUN_ID'),
             'event_sha':os.environ.get('GITHUB_SHA'),'checkout_head':target,'sandbox':'clay-direct-dev',
             'transport':'SELF_HOSTED_LINUX_X64','container_runtime':os.environ.get('RUNTIME') or None,
-            'runtime_credit':'REPOSITORY_BOUND_COMPONENT_EXECUTION_ONLY' if inner.get('bundle_pass') is True else 0,
+            'runner_exit_code':rc,'runner_receipt_present':present,
+            'runtime_credit':'REPOSITORY_BOUND_COMPONENT_EXECUTION_ONLY' if passed else 0,
             'physical_grid10_runtime_credit':0,'whole_hcu_runtime_credit':0,'whole_entityos_runtime_credit':0,
             'training_credit':0,'retry_requires_generation_advance':True}
           print(json.dumps(out,indent=2,sort_keys=True))

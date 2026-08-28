@@ -9,7 +9,8 @@
   "design_sha_before_ingest": "b15a047dfb355eb838ffddd77a00efe19d6b5bcb",
   "canonical_main_observed": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
   "authority_observed": "SUPERVISOR_INBOX schema 9.13; FREE_ONLY; source-forensics only",
-  "consumed_packet_ids": [
+  "parallel_resolution": "Re-entry after this receipt's first commit showed that another organ had already registered 073413 and 073512 in INGEST_STATE. They remain examined/crosschecked here but receive zero packet-consumption credit from this receipt.",
+  "packet_ids_examined": [
     "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
     "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
     "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
@@ -18,9 +19,20 @@
     "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
     "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL"
   ],
+  "packet_ids_consumed_by_this_receipt": [
+    "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
+    "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+    "TW5-PACKET-20260828T073652Z-REALTIME-MEMORY-TASK-AUTHORITY-GPT56SOL",
+    "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
+    "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL"
+  ],
+  "parallel_already_consumed_zero_credit_here": [
+    "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+    "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY"
+  ],
   "dedupe_notes": [
     "073413 Linux b0be33fb shipping chronology is preserved but does not override the already-newer frontier showing earlier accessible windows/quelle/stern.py at 4f55d688fe27e9361374ea912e57319bfb566407.",
-    "073606 is a schema-valid successor/corroboration for historical wache-koenig evidence already semantically admitted; zero independent runtime or duplicate mechanism credit.",
+    "073606 is a schema-valid successor/corroboration for historical wache-koenig evidence already semantically admitted; its packet is consumed here for schema/provenance closure but receives zero independent runtime or duplicate mechanism credit.",
     "Realtime cancellation, Presence UNKNOWN fallback and VoiceSessionCapsule conditioning were already represented; this receipt uses them only to close boundaries, not to double-credit them."
   ],
   "crosschecks": [
@@ -37,7 +49,8 @@
   },
   "promotion": {
     "source_forensics_delta": 1,
-    "packet_consumption_credit": 1,
+    "packet_consumption_count": 5,
+    "parallel_packet_consumption_credit": 0,
     "independent_runtime_replication_credit": 0,
     "new_runtime_execution": 0,
     "provider_execution": 0,
@@ -54,5 +67,5 @@
     "P0 close or explicitly retire F94 wegehierarchie active-package import before Triggerword-4 donor freeze",
     "P1 preserve Realtime call_id/cancellation as an invocation-identity predecessor and extend it through admission/effect/outcome/reentry"
   ],
-  "next_exact_gate": "Re-enter the moving branch, register these seven packet IDs in INGEST_STATE without overwriting parallel deltas, then audit any newer unconsumed packets."
+  "next_exact_gate": "Register only the five still-unconsumed packet IDs in current INGEST_STATE without overwriting parallel deltas; then re-enter inbox for any newer packets."
 }

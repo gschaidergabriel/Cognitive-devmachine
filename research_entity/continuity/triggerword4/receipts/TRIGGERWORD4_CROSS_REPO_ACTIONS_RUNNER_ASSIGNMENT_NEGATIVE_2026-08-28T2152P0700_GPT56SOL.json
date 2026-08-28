@@ -1,0 +1,85 @@
+{
+  "schema": "TRIGGERWORD4_CROSS_REPO_ACTIONS_RUNNER_ASSIGNMENT_NEGATIVE/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation",
+  "authority_observed": {
+    "schema_version": "9.13",
+    "supervisor_delta": "9.13AH_NON_AUTHORITY",
+    "canonical_main": "62486683ea4a8253f9028de0edb4988b6a99cc18",
+    "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "retained_pr": 2118
+  },
+  "new_cross_repo_observation": [
+    {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "workflow": "GRID10 Cognitive Envelope CI",
+      "run_id": 33181911240,
+      "job_id": 98884969346,
+      "head_sha": "78b8e84cadec8926a579a8f4f8b8d79b6606ac6f",
+      "labels": ["ubuntu-latest"],
+      "status": "completed",
+      "conclusion": "failure",
+      "runner_id": 0,
+      "runner_name": "",
+      "steps": [],
+      "created_at": "2026-08-28T14:47:14Z",
+      "completed_at": "2026-08-28T14:47:16Z",
+      "job_log": "UNAVAILABLE_404_BLOB_NOT_FOUND"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "workflow": "Frank Deep Integrity",
+      "run_id": 33174696352,
+      "job_id": 98860160195,
+      "head_sha": "5e72d7aaa7b383930346295ec0c6dfbc33123760",
+      "labels": ["ubuntu-latest"],
+      "status": "completed",
+      "conclusion": "failure",
+      "runner_id": 0,
+      "runner_name": "",
+      "steps": [],
+      "created_at": "2026-08-28T13:17:02Z",
+      "completed_at": "2026-08-28T13:17:04Z"
+    }
+  ],
+  "prior_runtime_context": {
+    "self_hosted_singletons": [
+      "#2122 quiescence-v2 g0000 remains nonterminal queued zero-step with runner_id=0",
+      "#2121 SIGKILL-v3 g0000 remains nonterminal queued zero-step with runner_id=0"
+    ],
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false
+  },
+  "finding": {
+    "class": "CROSS_REPOSITORY_CROSS_RUNNER_CLASS_ZERO_STEP_ASSIGNMENT_FAILURE",
+    "observed": "The same zero-step runner_id=0 failure signature is present on GitHub-hosted ubuntu-latest jobs in two separate private repositories, in addition to the existing self-hosted/Linux/X64 Triggerword-4 queues.",
+    "inference": "The P0 blocker cannot currently be localized solely to the retained self-hosted VPS runner lifecycle. Evidence now supports a broader GitHub Actions runner-assignment/scheduling/account-or-repository-control-plane hypothesis.",
+    "not_proven": [
+      "GitHub-wide outage",
+      "billing/quota cause",
+      "account suspension or policy cause",
+      "repository configuration cause",
+      "self-hosted runner process failure as sole cause",
+      "GRID10 or Frankenstein code failure"
+    ]
+  },
+  "hypothesis": "A shared Actions scheduling/control-plane condition affecting the account/repositories is preventing both hosted and self-hosted jobs from receiving a runner before any step executes.",
+  "counterhypothesis": "The observed jobs may fail for independent pre-step admission/configuration reasons that coincidentally expose the same runner_id=0/steps=[] shape; runner_id=0 alone does not identify the upstream cause.",
+  "next_high_information_discriminator": "Inspect an exact-current Actions failure reason or account/repository Actions usage/runner-assignment diagnostic that is independent of workflow code. Do not create duplicate #2121/#2122 dispatches. If a current ubuntu-latest job executes at least one step while self-hosted remains unassigned, narrow the blocker back toward self-hosted lifecycle; if current hosted jobs across repositories remain zero-step runner_id=0, retain the broader scheduling/control-plane hypothesis.",
+  "execution_credit": {
+    "source_test_execution": 0,
+    "physical_grid10": 0,
+    "frankenstein2_runtime": 0,
+    "whole_hcu": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "evidence_boundaries": [
+    "zero-step runner assignment failure is infrastructure/control-plane evidence, not product semantic failure",
+    "workflow existence or failure does not prove runtime execution",
+    "cross-repository correlation is not proof of one causal root",
+    "no provider call, paid fallback, Together call, or secret lookup was used",
+    "no runtime PASS is claimed"
+  ]
+}

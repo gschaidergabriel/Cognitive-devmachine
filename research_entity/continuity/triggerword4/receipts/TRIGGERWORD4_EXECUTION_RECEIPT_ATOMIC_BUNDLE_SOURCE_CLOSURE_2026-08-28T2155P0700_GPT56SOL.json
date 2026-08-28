@@ -1,0 +1,78 @@
+{
+  "schema": "TRIGGERWORD4_EXECUTION_RECEIPT_ATOMIC_BUNDLE_SOURCE_CLOSURE/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "authority_observed": {
+    "canonical_main": "62486683ea4a8253f9028de0edb4988b6a99cc18",
+    "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "retained_pr": 2118,
+    "frontier_delta": "9.13AH_NON_AUTHORITY",
+    "authoritative_supervisor": "8.78"
+  },
+  "scope": "FRANKENSTEIN2_EXECUTION_RECEIPT_PLUS_V2_METADATA_ATOMIC_WRITER_SOURCE_AND_REGRESSION_ONLY",
+  "observed_source": {
+    "lifecycle_path": "tools/frankenstein2_effect_lifecycle_v1.py",
+    "lifecycle_blob_sha": "20c1e6d668017adcd5137d8d1aac7260028f5682",
+    "atomic_method": "EffectLifecycleStore.record_execution_bundle",
+    "property": "execution_receipts and execution_v2_metadata are inserted inside one BEGIN IMMEDIATE transaction; source binding is checked before commit; both execution events are in the same transaction",
+    "dispatch_path": "tools/frankenstein2_effect_dispatch_boundary_v1.py",
+    "dispatch_blob_sha": "d1950ccdfb04a10f8bcda8af248ad216943ae575",
+    "dispatch_property": "guarded_dispatch calls record_execution_bundle after SUBMITTED and classifies persistence failure as post-submission outcome-unknown"
+  },
+  "regression_delta": {
+    "path": "tools/test_frankenstein2_execution_receipt_atomicity_v1.py",
+    "commit": "488511cc4ac771ce5ebc449816967754ab30e5d0",
+    "current_blob_sha_observed": "cfcf92245280fe2ed0f8bcea34a698658ace851a",
+    "added_test": "test_injected_failure_then_same_identity_retry_succeeds_atomically",
+    "failure_injection": "SQLite BEFORE INSERT trigger on execution_v2_metadata aborts the second logical insert",
+    "required_pre_retry_state": {
+      "execution_receipts": 0,
+      "execution_v2_metadata": 0
+    },
+    "retry_identity": "same invocation_id, request digest, generation, source digest, command digest, result digest, and fixed now_ts",
+    "required_post_retry_state": {
+      "execution_receipts": 1,
+      "execution_v2_metadata": 1,
+      "execution_events": [
+        "EXECUTION_RECORDED",
+        "EXECUTION_V2_METADATA_RECORDED"
+      ]
+    }
+  },
+  "parallel_fusion": {
+    "current_branch_head_observed": "8f11b2dfb17a42e6674a6d7b595becea401b1f99",
+    "parallel_deltas_preserved": [
+      "f1a806f17aa5a06adb362089742ac80fe6609874 restores dispatch-boundary fake ABI to record_execution_bundle",
+      "8f11b2dfb17a42e6674a6d7b595becea401b1f99 migrates Completion-v2 integration to atomic receipt bundle",
+      "91bf6c6f397456684f9d5b37dc25b08f9891cdca records cross-repository runner-assignment negative"
+    ],
+    "force_overwrite_used": false,
+    "duplicate_runtime_dispatch_created": false,
+    "singleton_generation_advanced": false
+  },
+  "execution_evidence": {
+    "github_hosted_run_for_retry_commit": 33182315410,
+    "github_hosted_job_for_retry_commit": 98886367600,
+    "run_conclusion": "failure",
+    "runner_id": 0,
+    "steps": [],
+    "classification": "PRE_STEP_RUNNER_ASSIGNMENT_OR_ACTIONS_CONTROL_PLANE_NEGATIVE_NOT_TEST_EXECUTION",
+    "source_test_execution_credit": 0,
+    "official_github_status_context": "Actions currently reported operational, with recent Aug 26-27 runner-assignment/start incidents; this context does not establish the present root cause"
+  },
+  "acceptance": {
+    "p1_source_shape": "CLOSED_AT_SOURCE_SCOPE",
+    "p1_regression_shape": "BOUND_BUT_UNEXECUTED",
+    "p1_runtime_acceptance": "NOT_ESTABLISHED",
+    "falsifier": "An admitted runner executes the exact-current atomicity regression and either leaves a base row/event after injected metadata failure, or fails the same-identity retry/one-bundle assertions."
+  },
+  "credits": {
+    "physical_grid10": 0,
+    "frankenstein2_runtime": 0,
+    "whole_hcu": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Obtain one exact-current runner-assigned deterministic execution of tools/test_frankenstein2_execution_receipt_atomicity_v1.py and adjacent EffectLifecycle/dispatch regressions without duplicating Triggerword-4 self-hosted singleton issues #2121/#2122. If runner assignment remains zero-step, keep the blocker infrastructure/control-plane scoped and do not grant semantic failure or runtime credit."
+}

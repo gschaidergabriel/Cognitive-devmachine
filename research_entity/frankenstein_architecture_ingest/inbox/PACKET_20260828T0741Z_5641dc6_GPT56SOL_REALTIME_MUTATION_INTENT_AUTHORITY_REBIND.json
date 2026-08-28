@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "packet_id": "TW5-PACKET-20260828T0741Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-AUTHORITY-REBIND",
+  "worker_id": "GPT-5.6 Sol",
+  "trigger": "triggerwort 5",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "SOURCE_FORENSICS_AUTHORITY_REBIND_ONLY_NO_RUNTIME_REEXECUTION",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY",
+    "together": "FORBIDDEN",
+    "provider_routes_admitted": false,
+    "canonical_main_observed": "eeb860a728b1e9b89d96abd6e41350c58126c5ce"
+  },
+  "predecessor_artifacts": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T073512Z_5641dc6_GPT56SOL_REALTIME_MUTATION_INTENT_BOUNDARY.json",
+      "commit": "3c76411b8ece1e833efac2deb3e21977c19992ca",
+      "status": "SOURCE_PACKET_RETAINED_PROVENANCE"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_ARCHITECTURE_DELTA_2026-08-28T1436P0700_GPT56SOL_REALTIME_MUTATION_INTENT.json",
+      "commit": "9ebb4248e117c7b2fbe409d8026db9fb0d264d2d",
+      "historical_source_epoch": "8.78",
+      "status": "HISTORICAL_AUTHORITY_LABEL_NOT_CURRENT_AUTHORITY"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1436P0700_REALTIME_MUTATION_INTENT_GPT56SOL.json",
+      "commit": "a5c860148ea9f02b5cb043268065f111a057c238",
+      "historical_source_epoch": "8.78",
+      "status": "HISTORICAL_AUTHORITY_LABEL_NOT_CURRENT_AUTHORITY"
+    }
+  ],
+  "re_admitted_source_atoms_under_9_13": [
+    {
+      "atom_id": "TW5-RTM-001",
+      "claim": "Realtime task dispatch frank_auftrag_stellen uses a mechanical second-utterance confirmation gate before dispatch.",
+      "evidence_class": "CURRENT_DONOR_SOURCE_AT_5641DC6_SOURCE_ONLY"
+    },
+    {
+      "atom_id": "TW5-RTM-002",
+      "claim": "Realtime function-call lifecycle retains call_id for function_call_output and clears pending calls on cancelled/barge-in turns.",
+      "evidence_class": "CURRENT_DONOR_SOURCE_AT_5641DC6_SOURCE_ONLY"
+    },
+    {
+      "atom_id": "TW5-RTM-003",
+      "claim": "frank_erinnerung_schreiben commits bounded conversational memory through stern.gespraech_erinnerung_schreiben without the task dispatcher's two-step confirmation path.",
+      "evidence_class": "CURRENT_DONOR_SOURCE_AT_5641DC6_SOURCE_ONLY"
+    },
+    {
+      "atom_id": "TW5-RTM-004",
+      "claim": "The memory writer is bounded to gespraech_erinnerung and explicitly separate from durable_memory; this is not evidence of arbitrary UnifiedDB write authority or external EffectGate containment bypass.",
+      "evidence_class": "CURRENT_DONOR_SOURCE_AT_5641DC6_SOURCE_ONLY"
+    }
+  ],
+  "architecture_implication": {
+    "status": "SOURCE_GROUNDED_DESIGN_REQUIREMENT_NOT_RUNTIME_PASS",
+    "requirement": "Frankenstein 2.0 should classify mutating Realtime calls under a typed HumanIntentDecision bound to immutable invocation identity and request digest, while keeping HumanIntentDecision distinct from EffectDecision/EffectJournal enforcement. Session identity is context only when call-scoped identity exists.",
+    "effect_enforcement_correction": "Under 9.13, donor EffectGate is nonblocking bookkeeping unless executable pre-side-effect denial is demonstrated. Do not describe it as containment authority merely because the journal exists.",
+    "completion_evidence_correction": "Any successor completion claim must require typed successful receipts bound to invocation/effect identity; textual test:0 or non-success states fail closed."
+  },
+  "contradiction": {
+    "id": "TW5-CONTRADICTION-REALTIME-MUTATION-INTENT-008",
+    "status": "SOURCE_CONFIRMED_POLICY_CLASSIFICATION_OPEN",
+    "claim_a": "External task dispatch requires explicit second-utterance confirmation in the donor Realtime path.",
+    "claim_b": "Bounded persistent conversational-memory mutation does not use that confirmation path.",
+    "boundary": "This establishes differing mutation-intent policies, not that all internal memory writes must use the same UX or that external effect containment has been proven."
+  },
+  "credit": {
+    "new_runtime_credit": 0,
+    "new_training_credit": 0,
+    "new_canonical_semantics_credit": 0,
+    "new_physical_grid10_credit": 0,
+    "new_whole_hcu_credit": 0
+  },
+  "next_exact_gate": "Audit every current Realtime mutating tool class and build a repository-bound two-overlapping-call falsifier keyed by tool_use_id/invocation_id; no causal or containment promotion until executable evidence exists."
+}

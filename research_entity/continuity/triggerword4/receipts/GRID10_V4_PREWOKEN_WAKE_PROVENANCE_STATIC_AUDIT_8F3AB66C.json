@@ -1,0 +1,52 @@
+{
+  "schema": "TRIGGERWORD4_STATIC_AUDIT_RECEIPT/v1",
+  "status": "SOURCE_OBSERVED_NONRUNTIME",
+  "trigger": "triggerwort 4",
+  "routing": "PASS",
+  "observed_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "observed_branch_head": "8f3ab66c08850cc94abad5da0d9b91c64bcf57f2",
+  "observed_main": "8af8dcdbdc8819f5d0f948a9bd90179e41565fe7",
+  "source": {
+    "path": "tools/grid10_cognitive_unified_runtime_v4.py",
+    "blob_sha": "dc3d130416cf820a29e119013d715da09580a393",
+    "scope": "UnifiedCognitiveRuntimeV4.tick_once prewoken_goal_ids admission"
+  },
+  "finding": {
+    "id": "PREWOKEN_WAKE_PROVENANCE_UNBOUND",
+    "severity": "HIGH_CAUSAL_INTEGRITY",
+    "classification": "SOURCE_OBSERVED",
+    "summary": "Caller-supplied prewoken_goal_ids are accepted as wake lineage without binding them to a wake_due transition or an equivalent wake receipt. Any non-empty supplied iterable also bypasses the due_for_tick guard.",
+    "observed_logic": [
+      "prewoken_goal_ids plus observed_events is rejected as ambiguous",
+      "otherwise prewoken_goal_ids are converted directly to strings and assigned to woken",
+      "due_for_tick is checked only when woken is empty",
+      "the supplied values are subsequently persisted in the cognitive-cycle checkpoint and COGNITIVE_CYCLE_COMMITTED event"
+    ],
+    "risk": "A buggy or untrusted wrapper can force an early heartbeat/cognitive cycle and persist false wake lineage without a matching deferred-intent wake transition. This does not grant EffectGate authority, but it weakens deterministic scheduler causality and receipt provenance.",
+    "counterhypothesis": "The API may be intended only for a trusted in-process scheduler wrapper. Even under that interpretation, the trust/binding invariant is implicit rather than enforced at the shared runtime boundary, so accidental misuse remains fail-open.",
+    "recommended_fix": "Replace naked prewoken goal IDs with a verifiable wake receipt/token bound to the same agency state transition, or at minimum validate supplied goal IDs against exact current post-wake state plus an event identity tied to the cycle. Do not let mere non-empty caller input bypass schedule due-ness.",
+    "cheapest_discriminator": "Set next_tick_not_before in the future, call tick_once with no observed_events and a fabricated non-empty prewoken_goal_ids value, and assert that the runtime rejects it without heartbeat/cognitive-cycle credit. The exact-current source is predicted to fail this acceptance test."
+  },
+  "execution_evidence": {
+    "negative_test_run": false,
+    "reason": "No admitted direct VPS/shell surface was available to this ChatGPT organ. A local repository clone attempt was blocked by container DNS/transport and is not product evidence.",
+    "github_actions_observation": {
+      "run_id": 33168001854,
+      "head_sha": "6004df0799f694b55f43d16e938ad00df1812001",
+      "workflow": "GRID10 Cognitive Envelope CI",
+      "conclusion": "failure",
+      "job": "deterministic",
+      "job_steps_observed": 0,
+      "decoded_log_fetch": "UNAVAILABLE_404",
+      "classification": "UNRESOLVED_PRE_STEP_CI_FAILURE_NOT_PRODUCT_NEGATIVE"
+    }
+  },
+  "credit_boundary": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "vps_runtime_pass": false
+  },
+  "next_exact_gate": "Add a fail-closed regression for fabricated/stale prewoken wake lineage, repair the shared v4 runtime boundary, then run the repository-bound exact-source acceptance path on the authorized zero-cost clay-direct-dev VPS and ingest only a source/hash-bound receipt."
+}

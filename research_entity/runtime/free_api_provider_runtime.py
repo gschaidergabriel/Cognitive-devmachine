@@ -26,6 +26,8 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.2"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.2"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_REQUEST_BYTES = 2_000_000
@@ -443,8 +445,10 @@ def receipt() -> dict:
     env = _snapshot_runtime_environment(None)
     rows = inventory(env)
     return {
-        "schema_version": "1.1",
+        "schema_version": CAPABILITY_RECEIPT_SCHEMA_VERSION,
         "kind": "FREE_API_CAPABILITY_RECEIPT",
+        "execution_receipt_schema_version": EXECUTION_RECEIPT_SCHEMA_VERSION,
+        "unicode_database_version": UNICODE_DATABASE_VERSION,
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "inventory": rows,
         "route": _route_from_inventory(rows),
@@ -1441,7 +1445,7 @@ def _execute_chat_locked(
         f"{cost_policy_principal_id}:{body_digest}"
     )
     receipt_data = {
-        "schema_version": "1.2",
+        "schema_version": EXECUTION_RECEIPT_SCHEMA_VERSION,
         "kind": "FREE_API_EXECUTION_RECEIPT",
         "unicode_database_version": UNICODE_DATABASE_VERSION,
         "provider": selected,

@@ -1,0 +1,44 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECONCILIATION/v1",
+  "created_at": "2026-08-28T11:07:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "current_authority": {
+    "canonical_main_sha":"b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_inbox_schema":"9.13",
+    "supervisor_delta":"9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha":"ae841294a222445ddde62c5412cfed065da97c5c",
+    "provider_routes_admitted":false,
+    "frank_harness":"DO_NOT_MODIFY"
+  },
+  "new_delta": {
+    "path":"research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1101Z_VOICE_MEMORY_CANONICAL_WRITE_GPT56SOL.json",
+    "commit":"feff70d23138e5ec4f7390e1f3c9bba3e2a01698"
+  },
+  "predecessors": [
+    {
+      "path":"research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T073652Z_REALTIME_MEMORY_TASK_AUTHORITY_GPT56SOL.json",
+      "blob_sha":"e13afbdc4332217ce525a6b6f0fca35d36b6ce80",
+      "relationship":"SEMANTIC_PREDECESSOR",
+      "already_established":"Realtime wrapper directly dispatches model-selected memory write without two-step task confirmation and proposed MemoryCandidate/MemoryAdmission separation."
+    },
+    {
+      "path":"research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T0744Z_5641dc6_GPT56SOL_REALTIME_MEMORY_EPISTEMIC_AUTHORITY_9_13.json",
+      "blob_sha":"bd2c8d2a549f617e8abbc8c14242c965c40b49a1",
+      "relationship":"SEMANTIC_PREDECESSOR_AUTHORITY_REBIND",
+      "already_established":"The conversation-memory schema lacks explicit epistemic/transformation/admission identity and retrieval must preserve provenance rather than factualizing remembered claims."
+    }
+  ],
+  "new_information_retained": [
+    "Direct current-donor stern.py body was re-read in this run, confirming the dedicated gespraech_erinnerung table is inside unified.db and the actual write predicate before INSERT is only nonempty subject/value.",
+    "The successor explicitly preserves the donor's useful durable_memory single-writer invariant: conversation memory uses a separate table instead of adding a second writer to durable_memory.",
+    "The successor is rebound to the newer current 9.13AC supervisor inbox blob ae841294a222445ddde62c5412cfed065da97c5c."
+  ],
+  "credit_rule":"NO_DUPLICATE_ARCHITECTURE_CREDIT. Treat the 11:01 delta as exact-current direct-source revalidation/extension of the 07:36/07:44 memory lineage, not as an independent discovery or independent replication.",
+  "triggerword4_single_target":"One MemoryCandidate/MemoryAdmission ABI only; do not create parallel competing memory-authority designs from these multiple forensic packets.",
+  "runtime_credit":0,
+  "provider_execution":false,
+  "vps_execution":false,
+  "unusual_experiment":false,
+  "result":"RECONCILED_NO_DUPLICATE_CREDIT"
+}

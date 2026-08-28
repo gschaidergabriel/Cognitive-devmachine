@@ -1,0 +1,51 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T091233Z-REALTIME-MUTATION-CHILD-POLICY-REENTRY-FUSION-GPT56SOL",
+  "created_at": "2026-08-28T09:12:33Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/realtime-mutation-child-policy-fusion",
+  "routing": "VERIFIED",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_fusion": "f4c6190b3a1255e4befe4e05513d1af8fa7c2a8b",
+  "canonical_main_observed": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+  "authority_epoch": "9.13",
+  "execution_mode": "FREE_ONLY_HARD_OFF_NO_PROVIDER_EXECUTION",
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091233Z_REALTIME_MUTATION_CHILD_POLICY_REENTRY_FUSION_GPT56SOL.json",
+    "commit_sha": "7f07027bea6a3401b5314faccb1373d03f51d6ad"
+  },
+  "packet_result": {
+    "new_unconsumed_packets": [],
+    "latest_inbox_packet": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "latest_inbox_packet_status": "ALREADY_CONSUMED",
+    "duplicate_parallel_delta_reused": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T090900Z_NATIVE_CHILD_REENTRY_NO_NEW_PACKET_GPT56SOL.json"
+  },
+  "evidence_ingested": [
+    "ARCHITECTURE_DELTA_2026-08-28T084125Z_NATIVE_SUBAGENT_IDENTITY_CROSSCHECK_GPT56SOL.json",
+    "ARCHITECTURE_DELTA_2026-08-28T084812Z_CLAUDE_FRAGE_CHILD_POLICY_ENVELOPE_GPT56SOL.json",
+    "model/FRANKENSTEIN_2_REALTIME_TOOL_MUTATION_MATRIX_2026-08-28T085142Z_GPT56SOL.json",
+    "ARCHITECTURE_DELTA_2026-08-28T090900Z_NATIVE_CHILD_REENTRY_NO_NEW_PACKET_GPT56SOL.json"
+  ],
+  "source_crosscheck": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+    "result": "PASS_AT_SOURCE_SCOPE",
+    "finding": "Declared explicit-user-only research policy and mechanical tool dispatch are separate layers; Realtime branches also separate memory mutation, delegated task, research and session control semantics."
+  },
+  "design_change": [
+    "ChildPolicyEnvelope is retained as a distinct typed binding from HumanIntentDecision and EffectDecision.",
+    "Realtime tool classes remain typed separately rather than collapsed into one tool permission bit.",
+    "Memory writes require MemoryCandidate -> MemoryAdmission before durable mutation.",
+    "Research submission requires ResearchRequestCandidate -> deterministic HumanIntent/Capability/Privacy/Economic admission before external submission.",
+    "Delegated child mutation requires exact native actor/task/invocation lineage plus one-shot invocation-bound effect authority.",
+    "WorldSlice delegation remains scope-bound, replay-resistant and preserves UNKNOWN/NOT_COMPUTED semantics."
+  ],
+  "runtime_credit_delta": 0,
+  "provider_execution_credit_delta": 0,
+  "training_credit_delta": 0,
+  "acceptance": "SOURCE_AND_DESIGN_FUSION_PASS_RUNTIME_UNRESOLVED",
+  "next_exact_gate": "Observe one harmless installed native-child lifecycle and effective child policy envelope, then prove deterministic pre-side-effect denial for all mutating capability classes and deterministic ResearchRequestAdmission before any external research submission."
+}

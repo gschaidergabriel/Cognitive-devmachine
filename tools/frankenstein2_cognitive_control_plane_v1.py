@@ -27,6 +27,7 @@ from dataclasses import asdict, dataclass
 from enum import Enum
 import hashlib
 import json
+import math
 from pathlib import Path
 import sqlite3
 import time
@@ -275,8 +276,10 @@ class CognitiveControlPlane:
                 raise ControlError(f"INVALID_INT:{spec.name}")
             try:
                 fval = float(value)
-            except (TypeError, ValueError) as exc:
+            except (TypeError, ValueError, OverflowError) as exc:
                 raise ControlError(f"INVALID_INT:{spec.name}") from exc
+            if not math.isfinite(fval):
+                raise ControlError(f"NON_FINITE_NUMBER:{spec.name}")
             ival = int(fval)
             if abs(fval - ival) > 1e-12:
                 raise ControlError(f"NON_INTEGRAL_VALUE:{spec.name}")
@@ -287,8 +290,10 @@ class CognitiveControlPlane:
             return ival
         try:
             fval = float(value)
-        except (TypeError, ValueError) as exc:
+        except (TypeError, ValueError, OverflowError) as exc:
             raise ControlError(f"INVALID_FLOAT:{spec.name}") from exc
+        if not math.isfinite(fval):
+            raise ControlError(f"NON_FINITE_NUMBER:{spec.name}")
         if spec.minimum is not None and fval < spec.minimum:
             raise ControlError(f"BELOW_MIN:{spec.name}")
         if spec.maximum is not None and fval > spec.maximum:

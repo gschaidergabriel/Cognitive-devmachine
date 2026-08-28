@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_SOURCE_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "canonical_main_observed_before_branch_reentry": "cbe1fed983b5747244d6057bcc139d1d19213048",
+  "canonical_main_observed_after_pr_checks": "374db1d8601f8281dc653a7657cd1f886ccdcee9",
+  "branch": "gpt56sol/go878-live-promotion-distinct-execution-successor-20260825",
+  "source_commit_after_test_delta": "80452205975eef0e348b8712abb9f40944d079fb",
+  "pull_request": 1891,
+  "donor": {
+    "pull_request": 1761,
+    "state_observed": "OPEN_STALE_NONMERGEABLE",
+    "head": "fc5bfb0f7442ba81fe0bb058dbb0ce13d2f8ad82",
+    "semantic_delta_reused": "positive separation arm for genuinely distinct execution identity"
+  },
+  "observed_gap": "Canonical main already rejects semantic-envelope replay inflation and measured-evidence conflicts, but the live-promotion regression did not explicitly assert the opposite arm: a genuinely different stable execution identity must remain separately admissible.",
+  "delta": {
+    "file": "tests/test_forge_distillery_live_semantic_replay_873.py",
+    "test": "test_genuinely_different_execution_identity_is_separately_admissible",
+    "assertions": [
+      "first qualified execution promotes as a new packet",
+      "second qualified evaluation with a different worker_sha promotes as a new packet",
+      "stable execution replay identities differ",
+      "packet ids differ",
+      "second execution has positive first token delta",
+      "semantic replay of each execution adds zero tokens",
+      "measured-conflict control adds zero tokens",
+      "accepted dataset token counter increases only for the genuinely distinct execution"
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_REGRESSION_SCOPE: closes over-collapse failure mode at the live Forge->Distillery promotion boundary.",
+    "B_HCU_TYPED_ENTRY": "ADVANCED_CAUSAL_IDENTITY_SCOPE: stable execution identity must collapse equivalent envelopes without collapsing genuinely distinct executions.",
+    "C_GLOBAL_JSPACE_GWT_TRAINING_READINESS": "ADVANCED_DATASET_SAFETY_SCOPE: future training-bearing packets are guarded against both duplicate inflation and false deduplication; model/J-Space/training credit remains zero."
+  },
+  "transport": {
+    "controller_probe_run": 32803694800,
+    "status_observed_in_this_cycle": "queued",
+    "classification": "DEGRADED_TRANSPORT_OR_SCHEDULING_NONTERMINAL",
+    "new_runtime_dispatch_created": false,
+    "reason_no_duplicate_dispatch": "canonical generation-0 transport diagnosis already exists and a second dispatch would add little information while the retained plain self-hosted probe remains queued"
+  },
+  "github_actions_observation": {
+    "pr_head_before_receipt_followup": "35c15a717a7b0b838ed7b62fbbebd704e670fac8",
+    "research_identity_guard_run": 32805806629,
+    "research_identity_guard_conclusion": "failure",
+    "research_identity_guard_job_steps_observed": 0,
+    "research_entity_verify_run": 32805806637,
+    "research_entity_verify_conclusion": "failure",
+    "research_entity_verify_job_steps_observed": 0,
+    "runner_class_in_workflow_source": "ubuntu-latest",
+    "classification": "PRE_STEP_GITHUB_ACTIONS_FAILURE_NO_CODE_TEST_RESULT",
+    "inference_boundary": "The available evidence does not identify billing/quota, runner provisioning, permissions, or another GitHub Actions control-plane cause; it also does not establish a product/test regression because no workflow step executed.",
+    "rerun_attempted": false,
+    "reason_no_rerun": "FREE_ONLY plus unknown GitHub-hosted execution/quota state: do not retry an externally metered surface without evidence that retry is a known-free high-information action."
+  },
+  "execution_evidence": {
+    "source_delta_committed": true,
+    "exact_head_test_execution_observed": false,
+    "clay_direct_dev_roundtrip_observed": false,
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "unusual_experiment_executed": false,
+    "canonical_effects": 0
+  },
+  "credits_added": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "provider_runtime": 0
+  },
+  "counterhypothesis": "A replay identity that collapses volatile envelope fields may be too broad and accidentally merge distinct measured executions; this regression is the positive-separation discriminator.",
+  "next_exact_gate": "Restore one authorized clay-direct-dev transport, execute this focused live semantic replay test on exact branch/current successor source, then fuse only if the distinct-execution arm is green together with semantic-replay and measured-conflict guards."
+}

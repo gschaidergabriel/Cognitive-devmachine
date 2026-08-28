@@ -1,0 +1,177 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T11:03:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "HEADLESS_CLAUDE_SOURCE_BINDING_MEMORY_AND_RESEARCH_ADMISSION",
+  "routing_self_test": "PASS",
+  "authority": {
+    "canonical_main": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "operative_supervisor_epoch": "9.13",
+    "selected_steering": "SUPERVISOR_STEERING_9_13AC_DELTA_2026-08-28T1747P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "ingested_packet": {
+    "packet_id": "TW5-PACKET-20260828T105800Z-HEADLESS-CLAUDE-MUTATION-BOUNDARY-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T1058Z_5641dc6_GPT56SOL_HEADLESS_CLAUDE_MUTATION_BOUNDARY.json",
+    "blob_sha": "73dba04e7c1b3792bdef82a8a5f977683433374d",
+    "producer_commit": "b96c9e4fff10d96a3d2e02e281634ec47f561286",
+    "disposition": "CONSUMED_AFTER_DIRECT_SOURCE_CROSSCHECK",
+    "packet_is_evidence_not_authority": true
+  },
+  "source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "source_kind": "ENFORCEMENT_CODE",
+      "result": "CONFIRMED",
+      "finding": "claude_frage constructs headless claude -p with permission mode and unconditional --disallowedTools Bash, but the examined invocation does not bind an exact settings/plugin/hook artifact identity and falls back to cwd=Path.home() when cwd is absent."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "source_kind": "CONFIG",
+      "result": "CONFIRMED",
+      "finding": "The donor manifest declares seven hook events including PreToolUse(*) and Stop routed through scripts/stern.py hook. Repository declaration alone is not a receipt that this manifest was loaded by a particular headless invocation."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/INSTALL_HOST_STEPS.md",
+      "source_kind": "INSTALLER_SPEC",
+      "result": "CONFIRMED_WITH_STRONGER_BOUNDARY",
+      "finding": "The donor itself documents that plugin hooks depend on installation/enabling and that some global hooks are separate host-level settings. It also records a live case where a session launched without plugin hook wiring did not join the room. Therefore ambient installed settings/plugin identity is materially relevant and must not be inferred from repository presence."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "source_kind": "LIVE_CODE",
+      "result": "CONFIRMED",
+      "finding": "frank_erinnerung_schreiben directly forwards subject/value to stern conversation-memory write; frank_forschung neu_anstossen dispatches when a nonempty question is supplied; only frank_auftrag_stellen is mechanically routed through the explicit two-stage confirmation state machine in the examined voice tool dispatcher."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "source_kind": "ENFORCEMENT_CODE",
+      "result": "CONFIRMED",
+      "finding": "gespraech_erinnerung_schreiben performs a durable SQLite insert into the dedicated gespraech_erinnerung table after only nonempty subject/value validation. chatgpt_senden is a real subprocess wrapper around the host-level chatgpt_burst_worker_v2.sh send path and is not merely a cached-read operation. No external/provider action was invoked in this Triggerword-5 run."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-ATOM-HEADLESS-SOURCE-BINDING-024",
+      "subsystem": "voice.delegated_claude.enforcement_identity",
+      "kind": "ENFORCEMENT_CODE_PLUS_INSTALLER_SPEC",
+      "what_it_does": "Voice-delegated headless Claude is partially constrained by a hard Bash denial, while the exact settings/plugin/hook bytes governing other tools are ambient rather than invocation-bound in the examined launcher.",
+      "authority_class": "PARTIAL_TOOL_RESTRICTION_NOT_SOURCE_BOUND_FINAL_EFFECT_AUTHORITY",
+      "runtime_reachability": "SOURCE_REACHABLE_INSTALLED_HOOK_IDENTITY_UNVERIFIED",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-ATOM-VOICE-MEMORY-ADMISSION-025",
+      "subsystem": "voice.durable_memory_mutation",
+      "kind": "LIVE_CODE",
+      "what_it_does": "A Realtime model function call can request a durable conversation-memory insert without passing through the external-task confirmation state machine and without carrying Realtime call_id into the stern write helper.",
+      "authority_class": "MODEL_DERIVED_DURABLE_INTERNAL_MUTATION_REQUEST",
+      "runtime_reachability": "SOURCE_REACHABLE_RUNTIME_EFFECT_UNMEASURED",
+      "containment": "The write is narrower than arbitrary UnifiedDB mutation because stern confines it to the dedicated gespraech_erinnerung table.",
+      "target_2_0_action": "ADAPT_TO_GRID_WITH_TYPED_MEMORY_ADMISSION"
+    },
+    {
+      "atom_id": "TW5-ATOM-VOICE-RESEARCH-ADMISSION-026",
+      "subsystem": "voice.external_research_request",
+      "kind": "LIVE_CODE",
+      "what_it_does": "The Realtime tool description says new research is explicit-user-request-only, but the mechanical neu_anstossen branch checks only for a nonempty question before background dispatch toward stern.chatgpt_senden.",
+      "authority_class": "MODEL_DERIVED_EXTERNAL_RESEARCH_REQUEST_WITH_BEHAVIORAL_INTENT_POLICY",
+      "runtime_reachability": "SOURCE_REACHABLE_EXTERNAL_EXECUTION_NOT_ATTEMPTED",
+      "target_2_0_action": "REPAIR_WITH_TYPED_HUMAN_INTENT_AND_ECONOMIC_ADMISSION"
+    },
+    {
+      "atom_id": "TW5-ATOM-VOICE-TOOL-ADMISSION-MATRIX-027",
+      "subsystem": "voice.tool_dispatch",
+      "kind": "ARCHITECTURE_INFERENCE_FROM_LIVE_CODE",
+      "what_it_does": "The six Realtime tools mix read-only state access, durable internal memory mutation, asynchronous external/delegated work, research dispatch and session control under one model-facing function-calling surface, while only one class currently has an explicit mechanical two-step confirmation gate.",
+      "authority_class": "MIXED_REQUIRES_TYPED_CLASSIFICATION",
+      "runtime_reachability": "SOURCE_GROUNDED",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    }
+  ],
+  "architecture_model_update": {
+    "HeadlessExecutionBinding/v1": {
+      "rule": "A delegated headless execution may receive runtime enforcement credit only when the invocation is bound to the exact installed settings/plugin/hook identity and relevant working-source identity. Repository manifest existence is not hook-firing evidence.",
+      "preserve": ["hard Bash denial as a useful donor restriction"],
+      "must_add": ["exact invocation identity", "exact settings/plugin/hook artifact identity", "exact cwd/source identity where relevant", "tool-policy identity", "external proof that expected hooks actually fire"],
+      "runtime_credit_now": 0
+    },
+    "MemoryAdmission/v1": {
+      "pipeline": "RealtimeFunctionCall -> MemoryCandidate -> deterministic MemoryAdmission -> dedicated canonical memory writer -> MemoryReceipt",
+      "required_fields": ["realtime_call_id", "source_utterance_or_turn_id", "content_digest", "transformation_class", "epistemic_class", "generation", "privacy_tier", "retention_tier", "provenance"],
+      "rule": "Do not blindly reuse the external-task confirmation policy; durable memory requires its own typed admission because it is an internal canonical-state mutation with different risk and semantics.",
+      "preserve": "Keep the donor's narrow dedicated conversation-memory table unless a later canonical migration explicitly replaces it."
+    },
+    "ResearchRequestAdmission/v1": {
+      "pipeline": "RealtimeFunctionCall -> ResearchRequestCandidate -> HumanIntentDecision -> Capability/Privacy/EconomicAdmission -> bounded dispatch -> request/response receipt",
+      "rule": "aktion=lesen remains a read-only cached-result path; aktion=neu_anstossen is a distinct outward request and cannot rely only on model-facing prose saying 'explicit request only'.",
+      "current_free_only_note": "No provider route is admitted by current 9.13AC steering in this run, so network/provider execution remains zero."
+    },
+    "VoiceToolAdmissionMatrix/v1": {
+      "classes": ["READ_ONLY", "DURABLE_INTERNAL_MUTATION", "DELEGATED_WORK_REQUEST", "EXTERNAL_RESEARCH_REQUEST", "SESSION_CONTROL"],
+      "rule": "Each tool class receives its own deterministic admission contract; successful execution cannot retroactively create missing intent or authority."
+    }
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-HEADLESS-HOOK-DECLARATION-VS-INVOCATION-BINDING-024",
+      "status": "SOURCE_GROUNDED_OPEN",
+      "a": "Donor plugin configuration declares broad PreToolUse/Stop hook wiring.",
+      "b": "Voice headless launcher does not bind the exact installed plugin/settings/hook identity; donor install docs confirm hook reachability can differ by launch/install state.",
+      "resolution_target": "Triggerword-4 external source/build-bound hook-firing probe without modifying Frank Harness."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-INTENT-POLICY-COVERAGE-025",
+      "status": "SOURCE_GROUNDED_OPEN",
+      "a": "Voice task execution has a mechanical two-stage confirmation path.",
+      "b": "Durable memory and new research requests are mechanically dispatched through separate paths without equivalent typed admission, while their restrictions mostly live in model-facing descriptions.",
+      "resolution_target": "Typed per-class admission matrix, not one generic confirmation gate."
+    }
+  ],
+  "hypothesis": "Frankenstein 2.0 can retain the useful low-latency voice and headless delegation mechanisms if GRID10 moves intent/admission/effect semantics into typed deterministic boundaries while leaving model outputs as candidates and preserving fast reactive paths.",
+  "counterhypothesis": "Ambient Claude installation policy and ordinary model compliance may already make the current donor sufficiently safe in practice; however this would still not establish reproducible source-bound enforcement or fail-closed authority and requires installed-host evidence.",
+  "feeds_triggerword_4": {
+    "priority": "P0/P1",
+    "required_actions": [
+      "bind exact installed settings/plugin/hook identity to headless delegated invocations and prove hook firing externally",
+      "preserve hard Bash denial but audit non-Bash mutating tools through the final deterministic effect boundary",
+      "introduce MemoryCandidate/MemoryAdmission with Realtime call identity and epistemic/privacy/retention provenance",
+      "split research cached-read from new-dispatch and require HumanIntent plus current economic/provider authority for new dispatch",
+      "carry Realtime call_id through background work/request receipts instead of dropping it at helper boundaries",
+      "do not modify Frank's own Harness for evidence"
+    ],
+    "acceptance_discriminators": [
+      "headless invocation with exact known plugin/settings identity fires the expected PreToolUse/Stop path; mismatched/unloaded identity fails closed for enforcement credit",
+      "voice memory write with missing/stale/mismatched call_id or provenance is rejected while a correctly admitted bounded memory candidate writes exactly once",
+      "frank_forschung neu_anstossen without deterministic HumanIntent/EconomicAdmission does not dispatch; lesen remains available as read-only",
+      "parallel voice calls preserve call_id through request/admission/background completion and cannot cross-attach results"
+    ]
+  },
+  "credit_boundary": {
+    "packet_ingest": "PASS_SOURCE_CROSSCHECKED",
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "installed_hook_firing": 0,
+    "memory_admission_runtime": 0,
+    "research_dispatch_runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "execution": {
+    "provider": false,
+    "vps": false,
+    "local_runtime": false,
+    "unusual_experiment": false,
+    "frank_harness_modified": false
+  },
+  "next_exact_gate": "Triggerword-4: implement typed per-class VoiceToolAdmission using native Realtime call_id; bind headless settings/plugin/hook identity and native retrieval_id feedback identity; then run source/build-bound external probes for hook firing, reverse/interleaved call binding, memory single-write admission, research no-admission no-dispatch, and slow/unavailable Stop cognition bookkeeping preservation."
+}

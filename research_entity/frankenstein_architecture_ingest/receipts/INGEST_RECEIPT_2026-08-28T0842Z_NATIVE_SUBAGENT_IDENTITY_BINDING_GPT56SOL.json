@@ -1,0 +1,59 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "created_at": "2026-08-28T08:42:37Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "status": "INGESTED_SOURCE_CROSSCHECKED_NO_RUNTIME_CREDIT",
+  "routing_self_test": "PASS",
+  "authority": {
+    "canonical_main": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "authority_epoch": "9.13",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_execution": "NONE_HARD_OFF"
+  },
+  "pins": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_ref": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_sha_before_ingest": "e7a97a127f62f8ab9bbac6d3cf141879d9cea286"
+  },
+  "packet": {
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T082628Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+    "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "blob_sha": "bad15660b245dfc33139736cd9857064c82812ef",
+    "classification": "ADMITTED_WITH_SOURCE_AND_EXTERNAL_PRIMARY_CROSSCHECK"
+  },
+  "crosscheck_result": {
+    "donor_handoff_not_spawn": "CONFIRMED",
+    "donor_plugin_lacks_dedicated_subagent_lifecycle_hooks": "CONFIRMED",
+    "official_docs_expose_agent_id_agent_type_and_tool_use_id": "CONFIRMED_AS_CAPABILITY",
+    "official_docs_expose_resumable_agent_id_and_worktree_isolation": "CONFIRMED_AS_CAPABILITY",
+    "target_host_runtime_abi": "UNVERIFIED",
+    "runtime_credit": 0
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0840Z_NATIVE_SUBAGENT_IDENTITY_BINDING_GPT56SOL.json",
+    "blob_sha": "a6b969e725ebd91e0a4ea272ad78ef0613ca318e",
+    "commit_sha": "333d418711a9fbec8712cb13e45e0846eed69007",
+    "core_change": "Introduce WorkExecutionBinding/v1 as a required successor boundary: workpackage_id=delegated work identity, agent_id=observed child actor identity, tool_use_id=one tool invocation identity. session_id is context only. SubagentStart is not an admission gate; mutating authority remains deterministic and pre-side-effect."
+  },
+  "world_substrate_delta": "Bind delegated-child WorldNeed/WorldSlice access to cycle/workpackage plus observed actor/invocation identity through the GRID/XPU adapter; no direct child access and no canonical truth promotion.",
+  "contradictions_preserved": [
+    "Actual current spawn consumer for stern.py handoff remains unidentified.",
+    "Versioned donor hook config lacks dedicated child lifecycle hooks, but host/global/managed settings may add them.",
+    "Official current Claude Code capability does not prove installed target-host behavior."
+  ],
+  "next_exact_gate": "Observe one harmless target-host handoff->spawn->SubagentStart/tool hook/SubagentStop chain and bind workpackage_id to actual agent_id and tool_use_id before Triggerword-4 implementation credit.",
+  "aggregate_ingest_state": {
+    "status": "SYNC_PENDING",
+    "reason": "Append-only receipt persisted. INGEST_STATE.json was not rewritten from a truncated concurrent aggregate read; a reconciler must append this packet_id without dropping newer parallel entries."
+  },
+  "credits": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "training": 0
+  }
+}

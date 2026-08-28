@@ -5,6 +5,8 @@ on:
     branches: [chatgpt/grid10-cognitive-envelope-control-20260828]
     paths:
       - 'tools/grid10_cognitive_*'
+      - 'tools/grid10_assurance_*'
+      - 'tools/grid10_executor_*'
       - 'research_entity/topic_packets/grid10-cognitive-envelope-control-v1/**'
       - '.github/workflows/grid10-cognitive-envelope-ci.yml'
   workflow_dispatch:
@@ -22,30 +24,42 @@ jobs:
         with:
           python-version: '3.12'
       - name: Compile
-        run: python -m py_compile tools/grid10_cognitive_envelope_control_v1.py tools/grid10_cognitive_regulator_port_v1.py tools/grid10_fabric.py
-      - name: Unit tests
+        run: |
+          python -m py_compile \
+            tools/grid10_fabric.py \
+            tools/grid10_cognitive_envelope_control_v1.py \
+            tools/grid10_cognitive_regulator_port_v1.py \
+            tools/grid10_cognitive_fabric_adapter_v1.py \
+            tools/grid10_cognitive_heartbeat_v1.py \
+            tools/grid10_cognitive_twin_server_v1.py \
+            tools/grid10_assurance_monitors_v1.py \
+            tools/grid10_executor_governor_v1.py
+      - name: Unit and integration tests
         working-directory: tools
-        run: python test_grid10_cognitive_envelope_control_v1.py -v
-      - name: Real Fabric compatibility smoke
+        run: |
+          python test_grid10_cognitive_envelope_control_v1.py -v
+          python test_grid10_cognitive_runtime_v1.py -v
+      - name: Bounded heartbeat CLI smoke
         env:
           PYTHONPATH: tools
         run: |
-          python - <<'PY'
-          import json, tempfile
+          TD=$(mktemp -d)
+          python - <<'PY' "$TD/fabric.sqlite"
+          import sys
           from pathlib import Path
           from grid10_fabric import Fabric
-          from grid10_cognitive_regulator_port_v1 import CognitiveRegulatorPort
-          from grid10_cognitive_envelope_control_v1 import AssuranceMode, RegulatorCommand
-          with tempfile.TemporaryDirectory() as td:
-              fabric=Fabric(Path(td)/'fabric.sqlite')
-              port=CognitiveRegulatorPort(fabric,max_writes_per_control_cycle=2)
-              r=port.read('cog.temperature')
-              assert r.physical_name == 'temperature'
-              over=port.apply_control_cycle(control_epoch_id='ci-overbudget',assurance_mode=AssuranceMode.NORMAL,commands=[
-                  RegulatorCommand('cog.temperature',0.8,'ci','EXECUTOR',r.version,'negative'),
-                  RegulatorCommand('cog.top_p',0.9,'ci','EXECUTOR',0,'negative'),
-                  RegulatorCommand('cog.poll_intensity',0.9,'ci','EXECUTOR',0,'negative'),
-              ])
-              assert over.applied == 0 and over.rejected == 3
-              print(json.dumps({'pass':True,'temperature_default':r.value_real,'version':r.version,'write_budget_fail_closed':True}))
+          Fabric(Path(sys.argv[1]))
+          PY
+          python tools/grid10_cognitive_heartbeat_v1.py \
+            --fabric "$TD/fabric.sqlite" \
+            --state-db "$TD/heartbeat.sqlite" \
+            --frames-jsonl "$TD/frames.jsonl" \
+            --ticks 2 --interval 0.05 --trusted-normal-test-fixture
+          python - <<'PY' "$TD/frames.jsonl"
+          import json,sys
+          rows=[json.loads(x) for x in open(sys.argv[1]) if x.strip()]
+          assert len(rows)==2
+          assert all(x['schema']=='COGNITIVE_LOOP_FRAME/v1' for x in rows)
+          assert all(x['assurance_mode']=='NORMAL' for x in rows)
+          print(json.dumps({'pass':True,'frames':len(rows),'last_frame':rows[-1]['frame_id']}))
           PY

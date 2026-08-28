@@ -2,70 +2,51 @@
   "schema": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
   "trigger": "triggerwort 5",
   "created_at": "2026-08-28T07:41:00Z",
-  "corrected_at": "2026-08-28T07:42:00Z",
+  "corrected_at": "2026-08-28T07:43:00Z",
+  "status": "CORROBORATING_CURRENT_AUTHORITY_REBIND_NO_PACKET_OWNERSHIP_NO_DUPLICATE_CREDIT",
   "authority_binding": {
     "authority_epoch": "9.13",
     "mode": "FREE_ONLY",
     "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
     "authority_selection_main": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
     "current_main_observed_after_selection": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
-    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
     "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
-    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
     "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
-    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
     "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
-    "note": "9.13AB is selected non-authority steering under canonical 9.13. Earlier 8.78 labels are historical source epochs only. The later main movement observed here is a descendant of the authority-selection commit and does not by itself promote provider execution."
+    "note": "9.13AB is selected non-authority steering under canonical 9.13. Earlier 8.78 labels are historical source epochs only."
   },
-  "donor": {"repo": "gschaidergabriel/frankenstein", "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"},
+  "donor": {"repo":"gschaidergabriel/frankenstein","sha":"5641dc6b2df6ebed1df246ee7533134324f6c427"},
   "packet_ownership": {
-    "consumed_by_this_delta": [
-      "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY"
-    ],
-    "corroborating_already_consumed_by_parallel_state": [
+    "consumed_by_this_delta": [],
+    "already_consumed_by_canonical_branch_state_on_reentry": [
       "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+      "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
       "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY"
     ],
     "duplicate_credit": 0
   },
   "source_crosschecks": [
-    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/paket.py","blob":"4381bca97d67c56df75bd6f16e6919b9d2151f3f","result":"Current carried-walk success path imports .wegehierarchie inside a guarded block; package closure is not established by the active tree."},
-    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/_archiv-phase4/wegehierarchie.py","blob":"83d1068bedc4b1fa7dd32aead7600484f8532e34","result":"Exact F94 bytes survive in the archived namespace; recoverable donor source is not a live relative-import target."},
-    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py","blob":"37b972474d80d827fdef64fbbb79c1c31e173aaa","result":"Realtime preserves call_id for function-call output, uses a mechanical two-step task confirmation, dispatches a separate bounded internal-memory mutation, and re-enters asynchronous results later."}
+    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/paket.py","blob":"4381bca97d67c56df75bd6f16e6919b9d2151f3f","result":"Live carried-walk path imports .wegehierarchie; active package closure is not established by this donor tree."},
+    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/_archiv-phase4/wegehierarchie.py","blob":"83d1068bedc4b1fa7dd32aead7600484f8532e34","result":"Exact F94 bytes survive in archived namespace; archive presence is not executable package closure."},
+    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py","blob":"37b972474d80d827fdef64fbbb79c1c31e173aaa","result":"Realtime preserves call_id, mechanically gates task dispatch with a second human utterance, and has a distinct bounded internal-memory mutation path."}
   ],
-  "forensic_fusion": [
-    {"id":"F2_9_13_GIT_BOUNDARY","classification":"CORROBORATING_HISTORICAL_SOURCE_BOUNDARY","claim":"Accessible Git source windows already contain Phase-2 effect semantics; they are source-availability boundaries, not safe creation timestamps. Host-only prehistory must not be invented."},
-    {"id":"F2_9_13_DONOR_CLOSURE","classification":"CORROBORATING_CURRENT_SOURCE_NEGATIVE_RESULT","claim":"F94 wegehierarchie is recoverable from _archiv-phase4 while live paket.py names .wegehierarchie. Triggerword 4 must ADAPT or RETIRE this dependency with a source-bound regression; archived bytes alone do not close the executable package."},
-    {"id":"F2_9_13_HUMAN_INTENT_SEPARATION","classification":"CORROBORATING_CURRENT_SOURCE_ENFORCEMENT","claim":"Realtime task dispatch has genuine pre-dispatch human-intent evidence but binds it through normalized text/session counters/timing, not immutable proposal/audio/transcript identity. Treat this as a HumanIntentDecision donor, distinct from EffectDecision."},
-    {"id":"F2_9_13_REALTIME_INVOCATION_IDENTITY","classification":"CURRENT_SOURCE_NOVEL_INGEST","claim":"Realtime preserves call_id and prevents interrupted queued calls from later dispatch. Frankenstein 2.0 should bind immutable call identity through proposal, HumanIntentDecision, EffectRequest, EffectDecision, executor receipt and result re-entry instead of collapsing to a session-wide mutable pointer."},
-    {"id":"F2_9_13_MUTATION_CLASSES","classification":"ARCHITECTURE_DELTA","claim":"Bounded internal conversation-memory writes and external world effects are distinct mutation classes. Front-policy semantics may differ, but both require deterministic typed admission/provenance and neither may create a second canonical authority."},
-    {"id":"F2_9_13_CROSS_MODAL_EFFECT_GAP","classification":"NEGATIVE_RESULT","claim":"Realtime confirmation, direct bounded memory writes, delegated Claude Code, nonblocking stern bookkeeping and historical Bash-only wache are heterogeneous control surfaces. No source-proven single current cross-modal EffectGate exists across them."}
+  "corroborated_architecture_constraints": [
+    "HumanIntentDecision is distinct from EffectDecision.",
+    "Immutable call/invocation identity is primary across asynchronous cross-modal effect flow; session_id is context only.",
+    "Internal canonical mutations and external world effects may use different front policies but cannot create competing canonical authorities.",
+    "A final executor must consume a matching one-shot EffectDecision before side-effect submission; nonblocking journal bookkeeping is not containment.",
+    "CompletionEvidence is success-allowlist and receipt-bound under 9.13; non-success, unknown, stale and unbound textual success claims fail closed.",
+    "F94 wegehierarchie must be explicitly ADAPTed or RETIREd with source-bound regression rather than silently relying on archived bytes."
   ],
-  "frankenstein2_contract": {
-    "typed_states": ["ObservedHumanInput","HumanIntentDecision","EffectRequest","EffectDecision","SubmissionReceipt","ExecutionReceipt","WorldEffectVerification","ResultReentry","CompletionEvidence"],
-    "identity_rule": "Immutable call/invocation identity is primary; session_id is context only.",
-    "intent_rule": "HumanIntentDecision binds exact proposal/input causal identity and policy and cannot authorize a different request; it is not EffectDecision.",
-    "effect_rule": "The final executor atomically consumes a matching one-shot EffectDecision/CapabilityLease before side-effect submission; nonblocking journal labels are observation, not enforcement.",
-    "internal_mutation_rule": "CANONICAL_INTERNAL_MUTATION gets deterministic admission with provenance/generation/causal identity; implicit conversational-consent policy must be explicit and testable.",
-    "completion_rule": "Only structured successful receipts bound to invocation/effect identity, operation digest, runtime/cwd identity, outcome, source/HEAD/tree/dirty state and output digests may promote completion. Non-success/unknown/stale states and textual test:0 claims fail closed under 9.13.",
-    "unknown_rule": "Post-submission transport uncertainty remains OUTCOME_UNKNOWN until verified; it is not cancellation and must not trigger blind replay."
-  },
   "triggerword4_acceptance": [
-    "two same-session overlapping effect calls retain distinct invocation identities through reverse completion order",
-    "HumanIntentDecision cannot be transplanted to a different proposal/request digest",
+    "same-session overlapping calls keep distinct invocation identities through reverse completion order",
+    "HumanIntentDecision cannot be transplanted to another proposal/request digest",
     "first voice proposal cannot dispatch an external effect",
-    "stale/mismatched/contradicted voice confirmation fails closed",
-    "internal-memory mutation is classified/provenance-bound without being mislabeled as arbitrary external-effect authority",
+    "stale/mismatched/contradicted confirmation fails closed",
     "all external mutating modalities converge on executor-side EffectDecision consumption",
-    "non-Bash file tools are covered or explicitly fail closed",
     "F94 is source-bound ADAPT or explicit RETIRE with no-silent-degradation regression",
-    "FEHLGESCHLAGEN/ABGELEHNT/WIEDERHOLUNG/UNGEPRUEFT/unknown/stale/forged textual success cannot satisfy CompletionEvidence"
+    "non-success/unknown/stale/forged textual success cannot satisfy CompletionEvidence"
   ],
-  "contradictions": [
-    {"id":"TW5-CONTRADICTION-EVIDENCE-AUTHORITY-011","status":"REPAIRED_FOR_THIS_DELTA","detail":"This successor binds exact 9.13 authority artifacts; older 8.78 labels remain historical provenance only."},
-    {"id":"TW5-CONTRADICTION-REALTIME-MUTATION-INTENT-011","status":"OPEN_POLICY_CLASSIFICATION","detail":"External task dispatch requires two-step intent evidence while bounded conversation-memory mutation commits immediately; the open issue is mutation-class policy, not arbitrary DB access."},
-    {"id":"TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004","status":"REFINED_OPEN","detail":"Archived F94 source is recovered but active-package closure is not proven."}
-  ],
-  "credits": {"source_forensics":"ADVANCED","runtime_provider":0,"effect_invocation_runtime":0,"effect_enforcement_runtime":0,"completion_receipt_runtime":0,"physical_grid10":0,"entityos_whole_runtime":0,"hcu_full_runtime":0,"canonical_semantics":0,"training":0},
-  "next_exact_gate": "Keep provider routes HARD_OFF. Build/inspect a non-provider same-session two-call interleaving falsifier binding tool_use_id/effect_id/Pre/Post order and harden CompletionEvidence to a typed success allowlist before runtime or containment credit."
+  "credits": {"source_forensics":"CORROBORATING_ONLY","runtime_provider":0,"effect_invocation_runtime":0,"effect_enforcement_runtime":0,"completion_receipt_runtime":0,"physical_grid10":0,"entityos_whole_runtime":0,"hcu_full_runtime":0,"canonical_semantics":0,"training":0},
+  "next_exact_gate": "Keep provider routes HARD_OFF. Prefer the existing canonical Triggerword-5 branch state; only ingest a genuinely new unconsumed packet or execute an explicitly admitted non-provider discriminator."
 }

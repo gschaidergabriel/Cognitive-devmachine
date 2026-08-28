@@ -614,7 +614,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 payload = (
                     f"{outcome}:{child_opener_called}:"
                     f"{capability_receipt['route']['selected']}:"
-                    f"{capability_receipt['route']['reason']}"
+                    f"{capability_receipt['route']['reason']}:"
+                    f"{capability_receipt['route'].get('retryable_in_process')}:"
+                    f"{capability_receipt['route'].get('recovery_action')}"
                 ).encode("ascii")
                 os.close(read_fd)
                 os.write(write_fd, payload)
@@ -635,7 +637,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(
             child_evidence,
             "forked_during_active_execution:False:None:"
-            "forked_during_active_execution",
+            "forked_during_active_execution:False:exec_or_process_restart",
         )
 
     def test_execution_receipt_pins_unicode_database_version(self):

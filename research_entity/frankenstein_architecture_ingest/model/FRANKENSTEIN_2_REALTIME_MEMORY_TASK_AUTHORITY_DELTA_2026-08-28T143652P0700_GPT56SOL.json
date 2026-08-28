@@ -1,0 +1,92 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828T143652P0700_REALTIME_MEMORY_TASK_AUTHORITY",
+  "recorded_at": "2026-08-28T14:36:52+07:00",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "evidence_scope": "CURRENT_DONOR_SOURCE_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "realtime_blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+    "stern_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "packet": {
+    "id": "TW5-PACKET-20260828T073652Z-REALTIME-MEMORY-TASK-AUTHORITY-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T073652Z_REALTIME_MEMORY_TASK_AUTHORITY_GPT56SOL.json",
+    "packet_commit": "1a69f10e5155db803c48144433a7fd361a460892"
+  },
+  "findings": [
+    {
+      "id": "TW5-RT-D001",
+      "classification": "CURRENT_SOURCE_ENFORCEMENT",
+      "finding": "Realtime pending model tool calls are cancelled before local dispatch when their parent response is cancelled/non-completed. This is useful PendingEffect cancellation, not post-submission EffectGate authority.",
+      "target_2_0_action": "KEEP_AND_TYPE"
+    },
+    {
+      "id": "TW5-RT-D002",
+      "classification": "CURRENT_SOURCE_ENFORCEMENT",
+      "finding": "frank_auftrag_stellen uses a genuine mechanical proposal/confirmation gate before asynchronous task delegation: exact normalized task text, a new server-transcribed microphone utterance, <=300s age and no explicit contradiction keyword are required. The source itself admits multi-speaker/unrelated utterance ambiguity remains.",
+      "target_2_0_action": "ADAPT_TO_TASK_ADMISSION"
+    },
+    {
+      "id": "TW5-RT-D003",
+      "classification": "CURRENT_SOURCE_ENFORCEMENT",
+      "finding": "frank_erinnerung_schreiben has no analogous confirmation/admission state: non-empty model-supplied subject/value are dispatched directly to stern.py, whose exact source inserts them into the dedicated persistent gespraech_erinnerung table with source=realtime-tool.",
+      "target_2_0_action": "REPAIR_MEMORY_ADMISSION"
+    },
+    {
+      "id": "TW5-RT-D004",
+      "classification": "CURRENT_SOURCE_LIVE_CODE",
+      "finding": "A confirmed voice task is delegated to gespraechsmodus.claude_frage with the shared/resumed Claude session and berechtigung. Voice confirmation therefore proves only task admission; it does not prove executor-consumed authorization for each downstream effect.",
+      "target_2_0_action": "REPAIR_AND_BIND_DOWNSTREAM_EFFECTS"
+    }
+  ],
+  "triggerword4_required_design_delta": [
+    "Introduce VoiceIntentEvidence separate from TaskAdmission. TaskAdmission binds task_id/request_digest/speaker-or-user-evidence/time/generation and expires; it never grants downstream state-changing effects by itself.",
+    "Introduce MemoryCandidate separate from MemoryAdmission. Every persisted conversational memory binds source utterance/event, author/model transformation class, provenance, epistemic class, privacy/retention tier and generation. A model summary/inference is never silently promoted to world fact.",
+    "Keep PendingEffect cancellation for cancelled Realtime responses, but once a candidate is SUBMITTED only EffectOutcome {SUCCEEDED,FAILED,UNKNOWN} plus re-entry evidence may close it.",
+    "Require the delegated executor/host boundary to consume a per-call EffectDecision bound to invocation_id/tool_use_id + request_digest + task_admission_id where applicable + generation + policy version + one-shot state.",
+    "Do not use one spoken task confirmation, one Claude session permission mode or one durable-memory row as a blanket capability/truth grant.",
+    "For overlapping background voice tasks, preserve immutable task identity and prevent shared-resume session state from cross-assigning effects/outcomes."
+  ],
+  "acceptance_tests_for_triggerword4": [
+    "Realtime model emits frank_erinnerung_schreiben containing a model inference: row is admitted only as INFERRED/MODEL_CANDIDATE and cannot satisfy a FACT/OBSERVED query without independent evidence.",
+    "Verbatim user quote memory and model summary of the same utterance remain distinguishable by provenance and transformation class.",
+    "A cancelled Realtime response with pending tool calls produces zero local dispatches.",
+    "A second unrelated speaker utterance cannot by itself mint TaskAdmission for the original proposed action; unresolved speaker/intent becomes ASK/UNKNOWN.",
+    "Confirmed TaskAdmission followed by a downstream state-changing tool with missing/mismatched EffectDecision is denied before execution.",
+    "Two confirmed background tasks sharing one resumed Claude session retain distinct task/effect/outcome identities under interleaved completion order.",
+    "Memory privacy/retention gate rejects or redacts disallowed spoken content before durable persistence while preserving an auditable rejection receipt."
+  ],
+  "preserved_contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-008",
+      "state": "OPEN",
+      "detail": "Direct Realtime model Function Calling persists conversation memory. This is compatible with EntityOS only if the storage/read path is explicitly noncanonical evidence/candidate memory or a deterministic MemoryAdmission gate prevents silent truth promotion."
+    },
+    {
+      "id": "TW5-CONTRADICTION-TASK-VS-EFFECT-AUTHORITY-009",
+      "state": "OPEN",
+      "detail": "The two-step voice gate is real task confirmation, but downstream per-effect enforcement remains unresolved."
+    },
+    {
+      "id": "TW5-CONTRADICTION-MULTISPEAKER-CONFIRMATION-010",
+      "state": "OPEN",
+      "detail": "Source acknowledges a second unrelated utterance can satisfy freshness if the model interprets it as approval and no keyword veto matches."
+    }
+  ],
+  "counterhypothesis": "If every downstream read of gespraech_erinnerung already treats rows strictly as attributed remembered claims and every delegated Claude effect is independently host-gated, the current architecture may need metadata/schema hardening rather than a new central gate. This must be proven by end-to-end read/effect tracing, not assumed from table naming or permission prose.",
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_execution": 0,
+    "effect_runtime_acceptance": 0,
+    "memory_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Trace stern.py gespraech_erinnerung read consumers and gespraechsmodus.claude_frage -> host/settings/tool execution path. Prove whether remembered claims remain epistemically typed and whether every delegated state-changing tool consumes a per-call effect decision."
+}

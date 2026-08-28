@@ -1,0 +1,94 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CORRECTION/v2",
+  "created_at": "2026-08-28T11:00:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "correction_class": "PARALLEL_REENTRY_AUTHORITY_AND_RETRIEVAL_IDENTITY_FUSION",
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_resolution": {
+    "bootstrap_minimal_path": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "bootstrap_minimal_blob_sha": "a189e7deec84ae18120d00978571448bc5aa051b",
+    "bootstrap_rule": "NEWEST_EXPLICIT_OWNER_THEN_SUPERVISOR_INBOX_SELECTED_STEERING_THEN_BOOTSTRAP_PROGRAM_STATE_THEN_EXACT_EXECUTABLE_EVIDENCE",
+    "bootstrap_static_authority_correction_pointer": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_inbox_selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AC_DELTA_2026-08-28T1747P0700_GPT56SOL.json",
+    "operative_authority_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "reason": "The bootstrap's own authority-resolution rule ranks SUPERVISOR_INBOX_SELECTED_STEERING above bootstrap/program state. Current canonical SUPERVISOR_INBOX explicitly selects 9.13AC. Therefore the static 8.78 authority_correction pointer does not override the inbox-selected 9.13 steering.",
+    "authority_change": false
+  },
+  "parallel_artifact_review": {
+    "artifact": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1056Z_NATIVE_RETRIEVAL_ID_BINDING_CLOSURE_GPT56SOL.json",
+    "artifact_blob_sha": "b0c62e2499f7da28c34c89c8572db26917ec08ee",
+    "disposition": "PARTIALLY_RETAINED_WITH_AUTHORITY_FIELD_CORRECTED",
+    "retained": [
+      "retrieval_episodes.retrieval_id is already the native explicit retrieval identity",
+      "MicroClay emits and persists the native retrieval_id",
+      "MicroClay._apply_credit preserves exact retrieval_id once the correct row is supplied",
+      "human feedback already demonstrates exact retrieval_id targeting",
+      "the model Stop boundary is the wiring defect because it falls back to newest-open-by-session"
+    ],
+    "corrected": [
+      "authority_resolution: 8.78 is not operative under the current inbox-selected steering rule; operative epoch is 9.13"
+    ],
+    "runtime_credit": 0
+  },
+  "fusion": {
+    "inputs": [
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1050Z_STOP_HOOK_CAUSAL_BINDING_TIMEOUT_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_RETRIEVAL_FEEDBACK_ROUND_IDENTITY_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1056Z_NATIVE_RETRIEVAL_ID_BINDING_CLOSURE_GPT56SOL.json"
+    ],
+    "fused_boundary": "RetrievalFeedbackIdentity/v1 reuses the donor's native retrieval_id as the primary join key and carries existing turn_id, episode_id, causal_id, generation and query_hash across the deferred cognition boundary. candidate_set_digest and exact evidence-turn/response identity are added as verification fields, not as a competing identity authority.",
+    "mechanical_feedback_extension": "The 10:54 direct-source delta adds a separate source-grounded defect not closed by native retrieval_id alone: kreditsignal_mechanisch applies a session transcript suffix and session-level effect context across up to 20 open retrieval rows. Triggerword-4 must make mechanical evidence round-scoped too.",
+    "schema_migration_required_for_primary_retrieval_identity": false,
+    "new_truth_authority_required": false,
+    "new_effect_authority_required": false,
+    "migration_reuse_score": "EASIER"
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-AUTHORITY-POINTER-VS-INBOX-022",
+      "status": "RESOLVED_BY_DECLARED_AUTHORITY_ORDER",
+      "a": "BOOTSTRAP_MINIMAL contains a static authority_correction pointer to SUPERVISOR_STEERING_8_78.json.",
+      "b": "The same BOOTSTRAP_MINIMAL declares SUPERVISOR_INBOX_SELECTED_STEERING higher priority, and current SUPERVISOR_INBOX selects 9.13AC.",
+      "resolution": "Use 9.13AC as operative supervisor steering; preserve 8.78 pointer as stale lower-priority bootstrap state until canonical bootstrap is repaired."
+    },
+    {
+      "id": "TW5-CONTRADICTION-RETRIEVAL-IDENTITY-PRESENT-BUT-DROPPED-023",
+      "status": "SOURCE_GROUNDED_OPEN",
+      "a": "Native retrieval_id and round identity fields already exist and exact-id human feedback is implemented.",
+      "b": "Stop model feedback and mechanical feedback use session-scoped correlation paths instead of exact round joins.",
+      "resolution": "Reuse native retrieval_id and existing identity fields at both feedback boundaries; no fallback to newest session row or transcript suffix attribution."
+    }
+  ],
+  "feeds_triggerword_4": {
+    "required_actions": [
+      "reuse native retrieval_id; do not invent a second retrieval identity table",
+      "thread retrieval_id+turn_id+episode_id+causal_id+generation+query_hash through RetrievalRelevanceCandidate/Result",
+      "add candidate_set_digest and exact evidence-turn/response identity verification",
+      "scope mechanical assistant/effect evidence to the exact retrieval round",
+      "reject stale/unknown/mismatched identities without newest-row fallback",
+      "prove reverse/interleaved same-session completion causes zero cross-credit",
+      "prove slow/unreachable cognition cannot suppress deterministic Stop bookkeeping",
+      "do not modify Frank's own Harness for this evidence"
+    ]
+  },
+  "credit_boundary": {
+    "source_forensics": "PASS",
+    "authority_resolution": "PASS_SOURCE_ORDER",
+    "runtime_reproduction": 0,
+    "installed_host_credit": 0,
+    "provider_execution_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "runtime_execution": false,
+  "unusual_experiment": false,
+  "result": "PARALLEL_FORENSICS_FUSED_AUTHORITY_CORRECTED_SOURCE_SCOPE_ONLY"
+}

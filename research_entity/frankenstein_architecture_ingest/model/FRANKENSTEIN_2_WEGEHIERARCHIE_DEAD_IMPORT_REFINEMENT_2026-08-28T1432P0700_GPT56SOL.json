@@ -1,0 +1,61 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_WEGEHIERARCHIE_DEAD_IMPORT_REFINEMENT",
+  "recorded_at": "2026-08-28T07:32Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "evidence_scope": "CURRENT_SOURCE_PLUS_HISTORICAL_GIT_NEGATIVE_RESULT; NO_RUNTIME_REEXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "current_pinned_commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "historical_negative_commit": "4901b894249c93e766bab946edfd7b37c01f71f3"
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_WEGEHIERARCHIE_KNOWN_DEAD_IMPORT_023",
+      "subsystem": "retrieval_learning_dependency_closure",
+      "current_source": {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/paket.py",
+        "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "line_start": 2030,
+        "line_end": 2095,
+        "source_kind": "LIVE_CODE"
+      },
+      "historical_evidence": {
+        "commit_sha": "4901b894249c93e766bab946edfd7b37c01f71f3",
+        "source_kind": "NEGATIVE_RESULT",
+        "claim": "The live-mirror sync commit explicitly records that the dead-import class remained reproducible via udb.abruf.wegehierarchie and was intentionally not repaired in that mirror commit."
+      },
+      "claim": "The current pinned donor still dynamically imports .wegehierarchie in the F94 carried-path reinforcement branch, while the current repository source search resolves no matching module. Historical Git evidence independently records the same import class as reproducibly dead in the live-mirror sync. Therefore donor source/package dependency closure is not merely unproven: a known source-level compatibility defect is evidenced across the historical sync and the current pinned source unless a separately installed host-only artifact is proven.",
+      "confidence": 0.995,
+      "runtime_boundary": "Do not promote this to a claim that the current installed host runtime fails. No host/VPS runtime was executed or inspected in this Triggerword-5 run; a host-only/generated module remains a live counterhypothesis until exact source identity is recovered.",
+      "failure_mode": "When F94 reaches carried-path reinforcement, missing .wegehierarchie raises inside the surrounding bookkeeping try; the path logs an error and loses reinforcement bookkeeping rather than providing the intended success-path update.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "triggerword4_contract": [
+        "Donor freeze must enumerate dynamic imports and generated/host-only compatibility dependencies at exact source identity.",
+        "Every unresolved runtime import must fail donor-freeze admission or be mapped to an explicit tested successor; silent feature loss is not acceptable.",
+        "A carried-path regression must prove reinforcement succeeds without ModuleNotFoundError and that missing dependency is surfaced as explicit DEGRADED/FAIL rather than silently counted as no reinforcement."
+      ]
+    }
+  ],
+  "contradiction_update": {
+    "id": "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004",
+    "previous_status": "OPEN_SOURCE_TREE_CLOSURE_UNPROVEN",
+    "new_status": "SOURCE_RESOLVED_KNOWN_DEFECT_RUNTIME_HOST_STATUS_OPEN",
+    "resolution": "Current source contains the dynamic import; current repository search does not resolve the module; historical Git explicitly records the same dead import as reproducible. Remaining uncertainty is limited to exact installed-host/generated dependency presence and runtime reachability, not whether the donor source mirror is dependency-closed."
+  },
+  "counterhypotheses": [
+    "An exact host-only/generated wegehierarchie.py may exist outside the compressed repository and satisfy the import on a deployed installation.",
+    "A later packaging/install step may synthesize or inject the module without committing it into the donor repository; this must be proven by exact installer/source evidence before runtime credit."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_execution": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover an exact source/hash or explicit tested successor for wegehierarchie at the donor/install boundary; in parallel follow current Triggerword-5 frontier by tracing realtime_gespraech._tool_ausfuehren to the actual executor/permission boundary and auditing protected perception callers for evaluate_head bypass."
+}

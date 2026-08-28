@@ -18,10 +18,10 @@
     "ingest_state_fetched_and_reentered": true,
     "status": "TRIGGER_ROUTING_ACTIVE"
   },
-  "packets_consumed": [
-    {"packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS", "disposition": "INGESTED_DEDUPED_WITH_UNIQUE_CORRELATION_DELTA"},
-    {"packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT", "disposition": "INGESTED_DEDUPED_NO_INDEPENDENT_CREDIT"},
-    {"packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT", "disposition": "INGESTED_SOURCE_CROSSCHECKED"}
+  "packets_crosschecked": [
+    {"packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS", "disposition": "DEDUPED_CROSSCHECK_WITH_CORRELATION_CONFIRMATION"},
+    {"packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT", "disposition": "DEDUPED_NO_INDEPENDENT_CREDIT"},
+    {"packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT", "disposition": "DEDUPED_SOURCE_CROSSCHECK"}
   ],
   "direct_crosschecks": [
     "Pinned donor stern.py confirms normal PreToolUse calls zulassen() without emitting deny/block; only SEBUKKU emits permissionDecision=deny in the checked dispatcher.",
@@ -33,7 +33,13 @@
     "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_ARCHITECTURE_DELTA_2026-08-28T1429P0700_GPT56SOL_EFFECT_CORRELATION.json",
     "commit": "427e073dc0c18d62898e57978e4dd32618cac54c"
   },
-  "preserved_or_added_contradictions": [
+  "concurrency_reentry": {
+    "observed_after_receipt_creation": "The canonical owner-branch INGEST_STATE independently consumed all three packet IDs through a parallel organ before this worker could update the state checkpoint.",
+    "state_write_by_this_worker": "SKIPPED_TO_AVOID_DUPLICATE_CONSUMPTION_AND_LOST_PARALLEL_WRITES",
+    "independent_evidence_credit": false,
+    "rule": "This receipt and its architecture delta are a source-grounded cross-check only. Do not count them as an additional independent ingest, replication, runtime pass or progress increment."
+  },
+  "preserved_or_confirmed_contradictions": [
     "TW5-CONTRADICTION-EFFECT-ENFORCEMENT-003",
     "TW5-CONTRADICTION-VERIFIED-PREADMISSION-004",
     "TW5-CONTRADICTION-EFFECT-CORRELATION-005"
@@ -46,6 +52,8 @@
     "Feed GWT/GRID from typed verified world-effect/re-entry evidence, not VERIFIED status alone."
   ],
   "credits": {
+    "source_crosscheck": "PRESENT_DEDUPED",
+    "independent_ingest_credit": 0,
     "new_donor_runtime_execution": 0,
     "runtime_causal_credit": 0,
     "provider_runtime_credit": 0,
@@ -55,6 +63,6 @@
     "jspace_model_credit": 0,
     "training_credit": 0
   },
-  "acceptance": "SOURCE_INGEST_CHECKPOINT_COMPLETE_RUNTIME_UNRESOLVED",
+  "acceptance": "DEDUPED_SOURCE_CROSSCHECK_COMPLETE_RUNTIME_UNRESOLVED",
   "next_exact_gate": "Inspect realtime_gespraech.py tool bridge plus the historical/current blocking wache-koenig/executor path, then recover effect-path Git chronology and carry immutable invocation identity plus UNKNOWN outcome semantics into Triggerword-4 executor/effect tests."
 }

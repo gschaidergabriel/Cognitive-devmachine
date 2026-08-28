@@ -1,0 +1,83 @@
+{
+  "schema": "TRIGGER4_POST_POPEN_NON_TIMEOUT_REENTRY/v1",
+  "status": "SOURCE_PRESENT_EXECUTION_BLOCKED_NO_DUPLICATE",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol",
+  "authority": {
+    "research_repository": "gschaidergabriel/clay-global-research-entity",
+    "research_main_observed_before_write": "cb8d87bf26913f1e5691e98c9736556233c5e561",
+    "schema_version": "9.13",
+    "supervisor_delta": "9.13AL_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU"
+  },
+  "finding": {
+    "retained_pr": 430,
+    "retained_pr_head_observed": "2f99e400f1c0ea1b8598573ab0fab993885cba5e",
+    "source_question": "Does a non-timeout exception after successful subprocess.Popen remain causally ambiguous rather than being classified as definite FAILED?",
+    "source_result": "YES_SOURCE_PRESENT",
+    "source_evidence": [
+      "entityos_bridge.py treats successful Popen construction as the observed child-start boundary and maps any exception from communicate() after that point to EntityOSOutcomeUnknown",
+      "test_entityos_bridge_types_other_return_path_error_after_popen_as_unknown injects OSError after Popen and requires EntityOSOutcomeUnknown, replay_permitted=false, kill and reap"
+    ],
+    "semantic_interpretation": "A post-process-start return-channel exception does not prove the external effect was not applied. UNKNOWN/nonreplayable plus authority-owned verification is the fail-closed classification."
+  },
+  "execution_evidence": {
+    "private_research_actions": {
+      "workflow_run_id": 33204977783,
+      "job_id": 98963609693,
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "PRIVATE_REPOSITORY_ACTIONS_PRESTEP_OR_ADMISSION_FAILURE",
+      "semantic_test_credit": 0,
+      "runtime_credit": 0
+    },
+    "public_f2_bound_topology_donor": {
+      "repository": "gschaidergabriel/frankenstein-2.0",
+      "pr": 17,
+      "candidate_head_observed": "953d51ee2fba0be9747b828030a5f92c918a6bff",
+      "workflow_run_id": 33210719728,
+      "job_id": 98983010290,
+      "executed_tests": 4,
+      "conclusion": "success",
+      "scope": "DETERMINISTIC_FIXTURE_PINNED_NO_REAL_EFFECT_COMPONENT_INTEGRATION_ONLY",
+      "not_credit": [
+        "direct private research-repository EntityOS runtime",
+        "real external effect",
+        "physical GRID10",
+        "whole Frankenstein 2.0",
+        "whole EntityOS/HCU",
+        "training"
+      ]
+    },
+    "f2_main_reentry": {
+      "repository": "gschaidergabriel/frankenstein-2.0",
+      "main_observed": "efd94028ae871f8cd5372d0bc9da040b38a06dc3",
+      "commit_message": "Trigger 4: freeze post-start timeout outcome gap",
+      "workflow_runs_observed_immediately_after_commit": 0,
+      "note": "Do not convert source presence or a newly-created workflow trigger surface into executed CI evidence."
+    }
+  },
+  "coordination": {
+    "pr17_comment_id": 5457725724,
+    "pr430_comment_id": 5457742541,
+    "issue_2121": "UNTOUCHED_NO_DUPLICATE",
+    "issue_2122": "UNTOUCHED_NO_DUPLICATE",
+    "new_unusual_experiment": false,
+    "provider_execution": false,
+    "paid_fallback": false,
+    "vps_execution_by_this_organ": false
+  },
+  "promotion_boundary": {
+    "post_popen_non_timeout_source_present": true,
+    "post_popen_non_timeout_exact_current_executed_regression": false,
+    "private_actions_transport_recovered": false,
+    "real_effect_runtime_pass": false,
+    "physical_grid10_runtime_pass": false,
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "training_credit": 0
+  },
+  "next_exact_action": "Re-enter current F2/main and retained PR430 before modifying source. Do not duplicate-dispatch private Actions while the admission evidence is unchanged. If a nonduplicate already-authorized executed surface becomes available, run the exact current post-Popen ordinary-exception regression and require typed UNKNOWN/nonreplayable plus zero automatic replay; otherwise keep the source result as prepared-not-executed and advance other nonduplicate Stage-1 evidence work."
+}

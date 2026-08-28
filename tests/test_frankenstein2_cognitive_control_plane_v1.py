@@ -139,6 +139,35 @@ class ControlPlaneTests(unittest.TestCase):
         self.assertEqual(r2.reason, "IDEMPOTENT_REPLAY_ALREADY_COMMITTED")
         self.assertEqual(len(self.p.revision_rows()), 1)
 
+    def test_patch_id_reuse_with_different_payload_is_rejected(self):
+        s0 = self.p.snapshot()
+        original = self.p.build_patch(
+            patch_id="collision",
+            writer="human",
+            writer_kind="HUMAN",
+            reason="first",
+            changes={"world.physics.gain": 1.4},
+            base=s0,
+        )
+        self.p.apply_patch(original)
+        committed = self.p.snapshot()
+
+        conflicting = self.p.build_patch(
+            patch_id="collision",
+            writer="human",
+            writer_kind="HUMAN",
+            reason="second",
+            changes={"world.physics.gain": 1.8},
+            base=committed,
+        )
+        with self.assertRaisesRegex(ControlError, "PATCH_ID_REUSE_CONFLICT"):
+            self.p.apply_patch(conflicting)
+
+        after = self.p.snapshot()
+        self.assertEqual(after.snapshot_digest, committed.snapshot_digest)
+        self.assertAlmostEqual(after.float("world.physics.gain"), 1.4)
+        self.assertEqual(len(self.p.revision_rows()), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,52 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "created_at": "2026-08-28T10:40:00Z",
+  "trigger": "triggerwort 5",
+  "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packet_dispositions": [
+    {
+      "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+      "disposition": "REJECTED_NOT_CONSUMED",
+      "reason": "immutable packet contains schema-invalid target_2_0_action and wrong provenance span"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T103200Z-WORKEXECUTION-BINDING-SCHEMA-PROVENANCE-CORRECTION-GPT56SOL",
+      "packet_blob_sha": "5e2dce1b6e59a7e8c803da5a1b16cc9be62e37a4",
+      "disposition": "CONSUMED_CORRECTION_WITH_LATER_ABI_REFINEMENT",
+      "note": "retains schema/provenance correction and source findings; later V2 supersedes only its stale interpretation that Agent tool_use_id->agent_id remained undocumented"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
+      "packet_blob_sha": "e4283250db4cef25fec50aff9adcbfc5364c7e21",
+      "disposition": "CONSUMED_SCHEMA_VALID_SUCCESSOR"
+    }
+  ],
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1040Z_WORKEXECUTION_BINDING_V2_ABI_RECONCILIATION_GPT56SOL.json",
+  "architecture_delta_commit": "a29aea21ac1f111b65a5e28b25c6b43a4284d6a6",
+  "semantic_result": "WORKEXECUTION_BINDING_V2_DOCUMENTED_AGENT_POSTTOOL_JOIN_PACKAGE_TO_INVOCATION_STILL_OPEN",
+  "direct_crosscheck": [
+    "stern.py handoff persists durable delegated-work intent and explicitly does not spawn the native child",
+    "architekt_governance.md lines 77-81 contain handoff-before-spawn / reconcile-after-spawn / lastschutz-before-parallel-spawn requirements",
+    "donor hooks.json lacks dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted registrations"
+  ],
+  "external_primary_crosscheck": [
+    "current Claude Code docs show Agent PostToolUse tool_response.agentId and PostToolUse tool_use_id in the same documented event surface",
+    "current docs keep Task lifecycle task_id separate from Subagent lifecycle agent_id",
+    "current docs permit PreToolUse deny to prevent tool execution; donor/runtime enforcement remains separately unproven"
+  ],
+  "remaining_causal_gap": "paket_id -> exact Agent spawn tool_use_id on the actual coordinator path, plus installed-host confirmation that documented Agent PostToolUse agentId and lifecycle agent_id fire and match",
+  "runtime_boundary": {
+    "provider_execution": false,
+    "vps_execution": false,
+    "unusual_experiment": false,
+    "installed_host_execution": false,
+    "runtime_credit": 0,
+    "training_credit": 0
+  },
+  "result": "PASS_SOURCE_INGEST_AND_EXTERNAL_PRIMARY_ABI_RECONCILIATION_ONLY",
+  "next_exact_gate": "Triggerword-4: deterministically bind paket_id to Agent tool_use_id, capture one harmless installed Agent PostToolUse plus SubagentStart/SubagentStop, verify tool_response.agentId equals lifecycle agent_id, then falsify cross-wiring with two overlapping children and reverse completion order."
+}

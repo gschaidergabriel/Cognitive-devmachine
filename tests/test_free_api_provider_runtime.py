@@ -208,7 +208,6 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
     def test_capability_receipt_advertises_execution_schema_provenance(self):
         capability_receipt = MOD.receipt()
 
-        self.assertEqual(capability_receipt["schema_version"], "1.8")
         self.assertEqual(
             capability_receipt["execution_receipt_schema_version"], "1.7"
         )
@@ -216,6 +215,16 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             capability_receipt["unicode_database_version"],
             MOD.unicodedata.unidata_version,
         )
+        self.assertEqual(
+            capability_receipt["execution_cost_policy_principal_scope"],
+            "process_local_credential_binding",
+        )
+        self.assertFalse(
+            capability_receipt[
+                "execution_cost_policy_principal_restart_stable"
+            ]
+        )
+        self.assertEqual(capability_receipt["schema_version"], "1.9")
         self.assertFalse(capability_receipt["invariants"][
             "semantic_request_identity_authorizes_replay"
         ])

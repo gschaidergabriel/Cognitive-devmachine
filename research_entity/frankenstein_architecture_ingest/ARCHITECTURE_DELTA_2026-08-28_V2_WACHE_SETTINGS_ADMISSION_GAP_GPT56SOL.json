@@ -1,0 +1,95 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5",
+  "trigger": "triggerwort 5",
+  "design_sha_before_delta": "697d45574f60863b59f804ae823962f86de4341f",
+  "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+  "authority_epoch": "9.13",
+  "execution_mode": "FREE_ONLY_HARD_OFF_PROVIDER_ROUTES",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packet": {
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T081406Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_V2_GPT56SOL.json",
+    "packet_id": "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+    "status": "PREPARED_NOT_CONSUMED",
+    "reason": "The packet requires validate_ingest_packet_v2.py PASS against a freshly refreshed canonical-main checkout. Current canonical main 97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc does not contain that validator path; the validator exists on the Triggerword-5 design branch. A local exact execution attempt could not clone GitHub because the local container has no DNS/network access. Manual parity checks confirm the packet's authority binding matches current main, but manual parity is not substituted for the packet's declared executable admission gate."
+  },
+  "authority_binding_crosscheck": {
+    "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN",
+    "manual_crosscheck": "MATCH",
+    "executable_validator_pass": false
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-CURRENT-HOOK-CONFIG-001",
+      "subsystem": "plugin_hook_scheduler",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "line_start": 1,
+      "line_end": 68,
+      "source_kind": "CONFIG",
+      "claim": "The pinned donor routes seven plugin hook events through scripts/stern.py hook. PreToolUse and PostToolUse both use matcher '*'. No wache-befehl.py or wache-koenig.py binding appears in this pinned plugin hook config.",
+      "runtime_reachable": "SOURCE_CONFIGURED_NOT_RUNTIME_VERIFIED",
+      "target_2_0_action": "KEEP_CONFIG_TOPOLOGY_REPAIR_EFFECT_ENFORCEMENT"
+    },
+    {
+      "atom_id": "TW5-CURRENT-STERN-EFFECTGATE-002",
+      "subsystem": "effect_enforcement",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 8860,
+      "line_end": 8876,
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "PreToolUse has one explicit blocking branch for DIGITAL SEBUKKU, but the normal EffectGate branch calls zulassen(data) and intentionally emits no deny/block decision. Therefore EffectGate bookkeeping is not general pre-side-effect containment.",
+      "runtime_reachable": "SOURCE_PATH_PRESENT_NOT_RUNTIME_VERIFIED",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-CURRENT-STERN-EFFECT-IDENTITY-003",
+      "subsystem": "effect_invocation_identity",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "source_kind": "LIVE_CODE",
+      "claim": "zulassen() stores one effect_id in session-scoped active_turns.effect_id and merken() later resolves the same effect through that session-scoped slot. This preserves the 9.13 structural concern that overlapping same-session calls can cross-wire unless immutable call-scoped invocation identity is bound.",
+      "runtime_reachable": "SOURCE_PATH_PRESENT_NOT_INTERLEAVING_TESTED",
+      "target_2_0_action": "REPLACE_WITH_INVOCATION_BOUND_SUCCESSOR"
+    },
+    {
+      "atom_id": "TW5-HISTORICAL-WACHE-INHERITANCE-004",
+      "subsystem": "historical_hook_scheduler",
+      "source_kind": "HISTORICAL_ONLY",
+      "claim": "The V2 packet preserves 2026-08-06 evidence that an externally inherited Claude settings path reportedly invoked .claude/wache-befehl.py and blocked a helper action. This is useful donor lineage but cannot be promoted to current donor hook reachability because the pinned plugin config points to stern.py and exact historical settings bytes/order are absent.",
+      "runtime_reachable": null,
+      "target_2_0_action": "ADAPT_TO_GRID"
+    }
+  ],
+  "contradictions_preserved": [
+    "Historical inherited Wache blocking can be true while the pinned current donor plugin config contains no Wache binding.",
+    "stern.py contains a real PreToolUse deny path for DIGITAL SEBUKKU while the ordinary EffectGate path is explicitly nonblocking; neither fact should be generalized into the opposite claim.",
+    "The V2 packet's authority values match current 9.13 main, but its declared executable admission gate has not been executed successfully in this organ."
+  ],
+  "architecture_delta": {
+    "frankenstein_2_effect_boundary": "Require immutable invocation identity plus explicit pre-side-effect ALLOW/DENY enforcement and typed completion receipts; retain historical Wache inheritance only as donor evidence for enforced pre-effect policy propagation.",
+    "trigger4_handoff": "Do not assemble a successor EffectGate that merely journals decisions. The Trigger-4 lane must consume a bound pre-effect decision before every mutating submission and return typed invocation-bound completion/outcome receipts.",
+    "historical_wache_status": "HISTORICAL_ONLY_UNTIL_EXACT_CURRENT_REACHABILITY_OR_ARCHIVE_IDENTITY_IS_PROVEN"
+  },
+  "credits": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Execute validate_ingest_packet_v2.py against a locally refreshed canonical main at 97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc (or a later exact current main after rebinding the packet). Only on executable PASS may the V2 packet enter consumed_packet_ids. Separately execute the 9.13 same-session overlapping-call falsifier before granting invocation-causality credit."
+}

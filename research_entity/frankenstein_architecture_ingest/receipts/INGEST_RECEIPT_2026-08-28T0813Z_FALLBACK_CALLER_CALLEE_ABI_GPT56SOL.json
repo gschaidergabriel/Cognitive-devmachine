@@ -1,0 +1,56 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T0813Z-FALLBACK-CALLER-CALLEE-ABI-GPT56SOL",
+  "created_at": "2026-08-28T08:13:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "routing_result": "PASS",
+  "directive": {
+    "path": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "ref": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "fetched": true
+  },
+  "pins": {
+    "canonical_main": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_sha_before_ingest": "98874c97a5a6ab9f168b858df79f018875a08312",
+    "authority_epoch": "9.13",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c"
+  },
+  "packet_consumption": {
+    "new_worker_packet_consumed": false,
+    "reason": "The newest branch activity had already checkpointed the historical settings packet. This receipt records a nonduplicate exact-donor source-forensics delta instead of re-consuming an existing packet."
+  },
+  "crosscheck": {
+    "status": "PASS_NARROW_SCOPE",
+    "sources": [
+      "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/harness_aider.py blob=6f55e6a2137ecac9add560482b1b4fab1719aee8",
+      "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/research/33_POST_GATE_FALLBACK_CALLER_SOURCE_LOCALIZATION.md"
+    ],
+    "admitted_claim": "The exact pinned curated donor contains a stern.py caller for harness_aider.py fallback-start but the exact pinned harness_aider.py command parser exposes only start, so executability of that caller-to-callee fallback contract is contradicted at source level.",
+    "not_admitted": [
+      "historical deployed harness bytes were identical",
+      "historical provider event runtime failure",
+      "no alternate wrapper existed",
+      "provider shutdown runtime acceptance",
+      "whole-system effect containment"
+    ]
+  },
+  "delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0813Z_FALLBACK_CALLER_CALLEE_ABI_GPT56SOL.json",
+    "commit": "2d87a68f041c93c585896d8a44e2984b354ce273"
+  },
+  "contradictions": {
+    "created": ["TW5-CONTRADICTION-FALLBACK-CALLER-CALLEE-ABI-010"],
+    "preserved": ["historical runtime callee bytes unknown", "alternate caller/wrapper remains possible"]
+  },
+  "runtime_credit": {
+    "new_runtime_credit": 0,
+    "new_training_credit": 0,
+    "new_physical_grid10_credit": 0,
+    "reason": "Exact-source forensic ingest only; no provider, VPS or harness runtime execution."
+  },
+  "next_exact_gate": "Recover or bind exact historical/deployed harness_aider.py bytes for the post-gate event; otherwise keep historical process causality unresolved and require Triggerword-4 to use an explicit invocation-bound authority-gated provider/effect ABI."
+}

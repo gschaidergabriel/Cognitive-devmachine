@@ -1,0 +1,88 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5",
+  "trigger": "triggerwort 5",
+  "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+  "authority_epoch": "9.13",
+  "design_sha_before_delta": "1f0393caca2ce45402fc2ab162bdbcd90cfedea6",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packet": {
+    "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T082628Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+    "blob_sha": "bad15660b245dfc33139736cd9857064c82812ef",
+    "status": "UNCONSUMED_EXECUTABLE_ADMISSION_PENDING"
+  },
+  "source_crosscheck": {
+    "donor_handoff": "CONFIRMED_SOURCE_ONLY: stern.py handoff() creates entityos_arbeitspaket plus deterministic capsule/lease hints and explicitly states stern delegates nothing itself.",
+    "donor_hook_config": "CONFIRMED_SOURCE_ONLY: pinned plugin hooks route seven event classes through stern.py and do not register SubagentStart/SubagentStop/Task lifecycle hooks.",
+    "donor_identity_capture": "CONFIRMED_NEGATIVE_SOURCE_FINDING: exact pinned stern.py contains no agent_id or tool_use_id token, so inspected donor code does not durably bind those native invocation identities.",
+    "external_primary": "CONFIRMED_CAPABILITY_ONLY: current official Claude Code docs describe SubagentStart/SubagentStop with unique agent_id, agent_id/agent_type in tool-hook inputs inside subagents, tool_use_id on PreToolUse, resumable subagents by agent ID, optional worktree isolation, nested subagents, and task lifecycle hooks. Installed host version/config/runtime firing is not proven by documentation."
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-NATIVE-ID-BIND-001",
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "5690-5985",
+      "claim": "Durable delegation intent/workpackage state exists independently of actual child process identity; handoff() is preparation/accounting, not spawning.",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "TW5-NATIVE-ID-BIND-002",
+      "source_kind": "CONFIG",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "span": "1-81",
+      "claim": "Versioned donor plugin lacks dedicated native subagent/task lifecycle registration.",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-NATIVE-ID-BIND-003",
+      "source_kind": "NEGATIVE_RESULT",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "claim": "No agent_id/tool_use_id handling is present in the exact pinned donor file; current child actor and tool invocation identities are therefore not bound by this inspected path.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR"
+    },
+    {
+      "atom_id": "TW5-NATIVE-ID-BIND-004",
+      "source_kind": "SPEC",
+      "path": "ExternalPrimary:code.claude.com/docs/en/hooks + /sub-agents",
+      "claim": "A documented native identity/lifecycle ABI exists that could supply agent_id, agent_type, tool_use_id, task lifecycle and worktree isolation to a successor harness, subject to exact installed-version/runtime verification.",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    }
+  ],
+  "architecture_delta": {
+    "decision": "PREFER_NATIVE_IDENTITY_ABI_IF_INSTALLED_AND_OBSERVED; DO_NOT_BUILD_A_SECOND_SPAWN_RUNTIME_YET",
+    "workpackage_successor_contract": [
+      "workpackage_id remains deterministic durable EntityOS delegation identity",
+      "bind observed native agent_id to exactly one workpackage generation at spawn/start reconciliation",
+      "bind every mutating tool invocation to observed tool_use_id plus agent_id plus session/generation/effect lineage before EffectGate consumption",
+      "preserve explicit parent/child lineage as EntityOS metadata rather than inferring it from timestamps or transcript proximity",
+      "treat worktree isolation as a filesystem-isolation primitive only, not canonical state/effect authority",
+      "completion must reconcile workpackage_id + native actor identity + invocation/effect receipts; child narrative alone cannot close the package"
+    ],
+    "trigger4_handoff": "Before designing a bespoke recursive R2/R3 spawn runtime, pin the installed Claude Code build and observe whether the native lifecycle ABI actually fires. If it does, adapt the existing workpackage state to it. If not, only then design the smallest bounded verified wrapper successor.",
+    "execution_boundary": "The recommended native-child runtime probe would invoke Claude/provider execution. Current 9.13 provider authority is HARD_OFF/FREE_ONLY with no admitted provider routes, so this organ does not execute that probe. Source/config/docs forensics remain allowed and carry zero runtime credit."
+  },
+  "counterhypotheses_preserved": [
+    "Host/global settings may already register lifecycle hooks outside the versioned donor plugin.",
+    "Installed Claude Code may be older/differently configured and not expose the documented current ABI.",
+    "Native agent_id may close actor identity while leaving filesystem/effect ownership unsafe; identity alone is insufficient.",
+    "A bespoke wrapper may still be necessary if installed native lifecycle events cannot be bound deterministically to workpackage/effect lineage."
+  ],
+  "validator": {
+    "path": "research_entity/frankenstein_architecture_ingest/validate_ingest_packet_v2.py",
+    "required_for_consumption": true,
+    "executable_pass_in_this_organ": false,
+    "note": "Manual source/authority parity and external-primary verification do not substitute for executable packet admission."
+  },
+  "credits": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "When execution authority admits the provider/runtime path, pin installed Claude Code version/config and run one bounded harmless native child lifecycle capture, binding workpackage_id -> agent_id -> tool_use_id/event lineage. Until then, independently run the non-provider v2 packet validator on a freshly refreshed canonical-main checkout before consuming this packet."
+}

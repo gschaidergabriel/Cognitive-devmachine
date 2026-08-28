@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "receipt_id": "TW5-INGEST-RECEIPT-20260828T1032Z-WORKEXECUTION-SCHEMA-QUARANTINE-GPT56SOL",
+  "created_at": "2026-08-28T10:32:00Z",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "organ": "GPT-5.6-Sol/triggerwort5/forensic-ingest",
+  "trigger_routing": "PASS",
+  "routing_directive": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_delta": "007131285ed54a706be2bca8a4160db1d0730a18",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority_epoch": "9.13",
+  "authority_evidence": {
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "together": "FORBIDDEN"
+  },
+  "packet": {
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "adjudication": "PARTIAL_SOURCE_ASSIMILATION_SCHEMA_QUARANTINED_NOT_MARKED_CONSUMED",
+    "schema_error": "atoms[4].target_2_0_action is RESEARCH, which is not admitted by INGEST_PACKET_SCHEMA.json",
+    "authority_identity_issue": "Packet canonical_main_sha is stale, but exact current supervisor/provider-authority blobs were re-fetched and match packet bindings."
+  },
+  "cross_checks": [
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427 DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "result": "PASS_SOURCE_CORROBORATION",
+      "claim": "handoff durably records entityos_arbeitspaket and explicitly does not spawn/delegate itself"
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427 DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "result": "PASS_SOURCE_CORROBORATION",
+      "claim": "versioned donor hooks omit SubagentStart/SubagentStop/TaskCreated/TaskCompleted"
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427 DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "result": "PASS_SOURCE_CORROBORATION",
+      "claim": "spec expects handoff before spawn and reconcile after spawn"
+    },
+    {
+      "source": "Claude Code official hooks/subagents documentation observed 2026-08-28",
+      "result": "PASS_EXTERNAL_PRIMARY_CAPABILITY_ONLY",
+      "claim": "native subagent lifecycle exposes agent_id; task lifecycle exposes task_id separately; hook calls inside subagents can carry agent_id; installed target firing remains unproven"
+    }
+  ],
+  "architecture_write": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_BINDING_DELTA_2026-08-28T1031Z_GPT56SOL.json",
+    "commit_sha": "38dd0b0c10ece5f3f19275897fc2f877ff09cc15",
+    "result": "COMMITTED",
+    "delta": "WorkExecutionBinding/v1 added as forensic architecture delta; packet itself remains immutable and unconsumed due schema quarantine."
+  },
+  "new_open_contradiction": "TW5-CONTRADICTION-WORKPACKAGE-NATIVE-CHILD-BINDING-017",
+  "design_effect": [
+    "Preserve donor handoff as durable work-intent provenance, not execution proof.",
+    "Require explicit workpackage_id -> native agent_id binding before child runtime attribution.",
+    "Keep task_id and agent_id as distinct identity spaces.",
+    "After native child binding is established, carry agent_id + call-scoped tool_use_id into effect/request/receipt provenance for child mutations.",
+    "Do not infer joins from timestamps, ordering, session identity or model narration."
+  ],
+  "runtime_execution": "NONE",
+  "runtime_credit": 0,
+  "provider_execution": "NONE",
+  "vps_execution": "NONE",
+  "training_credit": 0,
+  "next_exact_gate": "Under an explicitly admitted target runtime lane, capture one non-mutating Agent/subagent lifecycle and inspect exact Agent PostToolUse + SubagentStart/SubagentStop payloads to prove or falsify a deterministic workpackage/invocation -> agent_id join. Current provider HARD_OFF means this Triggerword-5 run does not execute that gate.",
+  "research_write": "COMMITTED"
+}

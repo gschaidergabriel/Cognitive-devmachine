@@ -1,0 +1,86 @@
+{
+  "schema": "TRIGGERWORD4_EFFECT_DISPATCH_BOUNDARY_SOURCE_CLOSURE/v1",
+  "trigger": "triggerwort 4",
+  "status": "SOURCE_COMPONENT_PASS_LOCAL_REPOSITORY_CI_NOT_RUN",
+  "authority": {
+    "canonical_main_observed": "6215a339aef182f889f04550627d5b3fafe1f1fe",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AF_NON_AUTHORITY",
+    "execution_mode": "FREE_ONLY",
+    "provider_execution": "HARD_OFF",
+    "together": "FORBIDDEN",
+    "paid_fallback": false
+  },
+  "continuation": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "branch_head_observed_after_ci_binding": "4700acc6ac9ce8769e210de12a96c769036c75fc",
+    "single_existing_pr": 2118,
+    "new_lane_created": false
+  },
+  "delta": {
+    "source": "tools/frankenstein2_effect_dispatch_boundary_v1.py",
+    "source_commit": "c7e4e7d9b33e57537a74aecfd0fee16d0bd76d50",
+    "test": "tools/test_frankenstein2_effect_dispatch_boundary_v1.py",
+    "test_commit": "aa8e3877bc7d3e49236ed9cd3beb938f671638d4",
+    "ci": ".github/workflows/grid10-cognitive-envelope-ci.yml",
+    "ci_commit": "4700acc6ac9ce8769e210de12a96c769036c75fc",
+    "purpose": "Provide an additive fail-closed pre-dispatch adapter that makes EnforcementReceipt -> SUBMITTED -> callback -> ExecutionReceipt ordering executable without modifying the donor Harness or minting host enforcement authority."
+  },
+  "invariants": [
+    "DENY_AND_UNKNOWN_ZERO_DISPATCH",
+    "STORED_ADMISSION_MISMATCH_REJECTED_BEFORE_CALLBACK",
+    "ALLOW_LATCHES_SUBMITTED_BEFORE_CALLBACK",
+    "POST_SUBMISSION_CALLBACK_FAILURE_CLASSIFIED_OUTCOME_UNKNOWN",
+    "POST_SUBMISSION_RECEIPT_FAILURE_CLASSIFIED_OUTCOME_UNKNOWN",
+    "NO_BLIND_RETRY_CREDIT_AFTER_SUBMISSION_UNCERTAINTY",
+    "NONZERO_EXIT_DEFAULTS_TO_FAILED_NOT_SUCCESS"
+  ],
+  "local_component_test": {
+    "command": "PYTHONPATH=/tmp python -m unittest -v test_frankenstein2_effect_dispatch_boundary_v1.py",
+    "tests": 8,
+    "passed": 8,
+    "failed": 0,
+    "classification": "LOCAL_ISOLATED_DETERMINISTIC_SOURCE_COMPONENT_TEST_ONLY",
+    "provider_calls": 0,
+    "secret_lookups": 0,
+    "runtime_credit": 0
+  },
+  "repository_ci": {
+    "workflow_definition_bound": true,
+    "workflow_runs_observed_for_ci_commit": 0,
+    "classification": "NOT_RUN_NO_REPOSITORY_TEST_CREDIT",
+    "known_current_runner_boundary": "Canonical main concurrently records cross-repo runner outage discrimination; absence of a run is infrastructure/runner evidence, not a code failure."
+  },
+  "singleton_runtime_gates": [
+    {
+      "issue": 2122,
+      "dispatch_key": "grid10-runtime-quiescence-v2-g0000",
+      "observed_state": "open",
+      "comments": 0,
+      "terminal_result_observed": false,
+      "duplicate_dispatch_authorized": false,
+      "runtime_credit": 0
+    },
+    {
+      "issue": 2121,
+      "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+      "observed_state": "open",
+      "comments": 0,
+      "terminal_result_observed": false,
+      "duplicate_dispatch_authorized": false,
+      "runtime_credit": 0
+    }
+  ],
+  "credit_boundary": {
+    "effect_dispatch_boundary_source_component": "PASS_LOCAL_8_OF_8",
+    "repository_bound_test": 0,
+    "host_pre_dispatch_enforcement": 0,
+    "physical_grid10": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "frankenstein2_runtime": 0,
+    "training": 0
+  },
+  "next_exact_action": "Wire this source primitive into the authoritative Frankenstein-2 host/tool executor only after exact current hook/executor identity is resolved, then execute EFX-01 DENY non-execution and EFX-02 reversed-parallel-completion at the actual boundary. Do not promote host enforcement from source tests. In parallel, inspect only terminal canonical results for issues 2122 and 2121; do not duplicate or advance those singleton generations while terminal results remain absent."
+}

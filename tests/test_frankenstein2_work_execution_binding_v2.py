@@ -137,6 +137,34 @@ class WorkExecutionBindingV2Tests(unittest.TestCase):
             self._complete("inv-2", "r2")
         self.assertEqual(_count(self.db, "fr2_completion_evidence"), 0)
 
+    def test_failure_prior_invocation_blocks_later_success_completion(self) -> None:
+        self._bind()
+        self._invoke("inv-1")
+        self._invoke("inv-2")
+        self._result("inv-1", "r1", outcome="FAILURE")
+        self._result("inv-2", "r2", outcome="SUCCESS")
+        with self.assertRaisesRegex(ValueError, "NON_SUCCESS_INVOCATION_OUTCOME:FAILURE:1"):
+            self._complete("inv-2", "r2")
+        self.assertEqual(_count(self.db, "fr2_completion_evidence"), 0)
+        self.assertEqual(
+            _row(self.db, "SELECT status FROM fr2_work_execution_bindings WHERE binding_id='b1'")["status"],
+            "RESULT_OBSERVED",
+        )
+
+    def test_rejected_prior_invocation_blocks_later_success_completion(self) -> None:
+        self._bind()
+        self._invoke("inv-1")
+        self._invoke("inv-2")
+        self._result("inv-1", "r1", outcome="REJECTED")
+        self._result("inv-2", "r2", outcome="SUCCESS")
+        with self.assertRaisesRegex(ValueError, "NON_SUCCESS_INVOCATION_OUTCOME:REJECTED:1"):
+            self._complete("inv-2", "r2")
+        self.assertEqual(_count(self.db, "fr2_completion_evidence"), 0)
+        self.assertEqual(
+            _row(self.db, "SELECT status FROM fr2_work_execution_bindings WHERE binding_id='b1'")["status"],
+            "RESULT_OBSERVED",
+        )
+
     def test_unknown_outcome_blocks_same_binding_reinvocation(self) -> None:
         self._bind()
         self._invoke("inv-1")

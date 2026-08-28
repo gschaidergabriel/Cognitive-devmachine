@@ -1,0 +1,189 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T1048Z-VOICE-ACTIVATION-ASYNC-RETURN-BINDING-GPT56SOL",
+  "created_at": "2026-08-28T10:48:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/voice-presence-forensics",
+  "lane": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_LIVE_INGEST",
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_binding": {
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together": "FORBIDDEN",
+    "runtime_credit": 0
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "deduplication": {
+    "existing_voice_capsule_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
+    "existing_voice_task_effect_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0740Z_REALTIME_TASK_MEMORY_EFFECT_FUSION_GPT56SOL.json",
+    "not_repeated": [
+      "VoiceSessionCapsule refreshed projection is not compiled into every response",
+      "Realtime call_id is already recognized as useful outer pre-dispatch invocation identity",
+      "high-level voice TaskAdmission does not imply downstream EffectDecision"
+    ],
+    "new_scope": [
+      "local speech_end activation -> exact Realtime invocation binding",
+      "background completion -> original Realtime function-call/result re-entry binding",
+      "stale wake-word semantic residue in live reactive mode"
+    ]
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-VOICE-ACT-001-REACTIVE-SPEECH-END-STARTS-REALTIME",
+      "subsystem": "voice_activation",
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "line_start": 885,
+      "line_end": 945,
+      "claim": "With gespraech.aktiv enabled, every non-empty local VoiceLite speech_end transcript can start a Realtime conversation; the live path explicitly does not require or call the wake-word matcher.",
+      "confidence": 1.0,
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "TW5-VOICE-ACT-002-ACTIVATION-NOT-CAUSALLY-BOUND-INTO-REALTIME",
+      "subsystem": "voice_activation_identity",
+      "source_kind": "NEGATIVE_RESULT",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "line_start": 885,
+      "line_end": 953,
+      "claim": "The triggering local speech_end result and transcript cause realtime_gespraech.fuehren_gespraech() to run, but the inspected call passes API/config/Claude-session/room-session context only. It does not pass a dedicated activation_event_id, local audio-segment identity, transcript digest/generation or other replay-stable causal identity for the exact utterance that opened this Realtime invocation.",
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-VOICE-ACT-003-WAKEWORD-SEMANTIC-RESIDUE",
+      "subsystem": "voice_activation_semantics",
+      "source_kind": "CONFIG",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "line_start": 885,
+      "line_end": 970,
+      "claim": "The live activation path says no wake word is required, but after a conversation the room pulse still reports waiting for 'Hey FranKenstein'. Historical/wake-word helper semantics therefore coexist with the current reactive activation law and must not be treated as current activation provenance.",
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-VOICE-ASYNC-001-IMMEDIATE-CALL-RESULT-IS-CALL-ID-BOUND",
+      "subsystem": "realtime_tool_result",
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "line_start": 1700,
+      "line_end": 1745,
+      "claim": "The immediate dispatch result is returned to Realtime as function_call_output carrying the original call_id. This is an explicit protocol-level result binding for the immediate tool result.",
+      "confidence": 1.0,
+      "target_2_0_action": "KEEP"
+    },
+    {
+      "atom_id": "TW5-VOICE-ASYNC-002-BACKGROUND-COMPLETION-LOSES-CALL-ID-IN-CONVERSATION",
+      "subsystem": "realtime_background_result_reentry",
+      "source_kind": "NEGATIVE_RESULT",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "line_start": 1735,
+      "line_end": 1785,
+      "claim": "Later background completion is logged with auftrag_id, then reintroduced to the Realtime conversation as a new role=user input_text message followed by response creation. The conversation item is not function_call_output and carries neither the original call_id nor auftrag_id in the injected text/item. Therefore protocol-level causal attribution of the asynchronous completion to the original function call is not preserved in the conversation path.",
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-VOICE-ASYNC-003-LOG-ID-DOES-NOT-REPAIR-CONVERSATION-JOIN",
+      "subsystem": "voice_outcome_logging",
+      "source_kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "line_start": 1735,
+      "line_end": 1785,
+      "claim": "task_completion outcome logging preserves auftrag_id as best-effort telemetry, but a log-side identifier is not itself a typed conversation/result join and cannot mint exact result re-entry provenance for the model response.",
+      "confidence": 1.0,
+      "target_2_0_action": "ADAPT_TO_GRID"
+    }
+  ],
+  "architecture_delta": {
+    "VoiceActivationBinding_v1": {
+      "purpose": "Bind local reactive speech activation to the exact Realtime invocation without timestamp/session heuristics.",
+      "minimum_fields": [
+        "activation_event_id",
+        "activation_generation",
+        "gespraech_enable_generation",
+        "local_audio_segment_ref_or_digest",
+        "local_transcript_digest",
+        "local_transcript_provenance",
+        "realtime_invocation_id",
+        "parent_room_session_id_optional_context",
+        "parent_claude_session_id_optional_context",
+        "source_build_identity",
+        "created_at"
+      ],
+      "invariants": [
+        "SESSION_ID != ACTIVATION_EVENT_ID",
+        "NONEMPTY_TRANSCRIPT != VERIFIED_SPEAKER_IDENTITY",
+        "TIMESTAMP_OR_QUEUE_ORDER != CAUSAL_JOIN_KEY",
+        "WAKEWORD_HELPER_EXISTENCE != CURRENT_WAKEWORD_REQUIREMENT",
+        "LOCAL_TRANSCRIPT_IS_ACTIVATION_EVIDENCE_NOT_WORLD_FACT"
+      ]
+    },
+    "VoiceAsyncReturnBinding_v1": {
+      "purpose": "Preserve exact lineage from original Realtime function call through asynchronous background work to later spoken result re-entry.",
+      "minimum_fields": [
+        "voice_invocation_id",
+        "original_call_id",
+        "tool_name",
+        "task_or_auftrag_id",
+        "task_generation",
+        "submission_receipt_id",
+        "completion_receipt_id",
+        "completion_status",
+        "completion_payload_digest",
+        "reentry_conversation_item_id_or_client_event_id",
+        "response_request_id_or_client_event_id",
+        "source_build_identity"
+      ],
+      "invariants": [
+        "IMMEDIATE_FUNCTION_CALL_OUTPUT != BACKGROUND_COMPLETION",
+        "AUFTRAG_ID_IN_LOG != CALL_ID_BOUND_CONVERSATION_RESULT",
+        "ROLE_USER_INJECTION_MUST_NOT_MASQUERADE_AS_HUMAN_SPEECH",
+        "FAILED_OR_UNKNOWN_BACKGROUND_OUTCOME_MUST_REMAIN_TYPED_FAILURE_OR_UNKNOWN",
+        "RETRY_OR_REPLACEMENT_REQUIRES_EXPLICIT_GENERATION"
+      ]
+    }
+  },
+  "contradictions_preserved": [
+    "Historical/module wake-word wording remains present while the current live listener intentionally starts on any non-empty speech_end when enabled.",
+    "Immediate Realtime tool result has a clean call_id join, while later asynchronous completion re-entry is converted into an unbound user-role text item.",
+    "The async completion log knows auftrag_id, but the model-facing conversation item does not carry that exact task identity."
+  ],
+  "counterhypotheses": [
+    "Conversation chronology may be sufficient for human-legible reporting in a single-task session, but it is not a deterministic causal identity and can fail under overlapping background tasks or reordered completions.",
+    "An external/private runtime component may already map local activation or background completion to exact IDs outside the inspected donor repository; that remains UNKNOWN rather than denied."
+  ],
+  "triggerword4_handoff": {
+    "required_changes": [
+      "Mint VoiceActivationBinding/v1 before entering the Realtime session and pass its identity into the session object/log/response provenance.",
+      "Remove or mark historical wake-word status text so it cannot be mistaken for current activation law.",
+      "Persist original call_id alongside task/auftrag_id at async dispatch; on completion create a typed VoiceAsyncReturnBinding/v1 before model re-entry.",
+      "Do not represent system-generated background completion as if it were human-originated speech; preserve a distinct internal/result provenance channel even if the provider conversation API ultimately requires a message item.",
+      "Falsify cross-wiring with two overlapping background calls completing in reverse order."
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "sparse_world_substrate_effect": "NO_WORLD_FACT_PROMOTION. Activation and async-return bindings are provenance/interconnect identities only. Neither local STT text nor model-generated reporting mints canonical observation or world transition truth.",
+  "address_continuity": {
+    "symbol_search_result": "NOT_FOUND_IN_PINNED_DONOR_OR_CURRENT_RESEARCH_CODE_SEARCH",
+    "disposition": "DESIGN_TERM_OR_UNRESOLVED; DO_NOT_CLAIM_IMPLEMENTED"
+  },
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "new_runtime_reexecution": 0,
+    "voice_activation_runtime": 0,
+    "voice_async_return_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 build/verification lane: implement source-bound VoiceActivationBinding/v1 and VoiceAsyncReturnBinding/v1, then run a non-provider deterministic two-overlapping-background-completion reverse-order regression plus activation replay/provenance tests before any runtime promotion."
+}

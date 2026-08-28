@@ -1,0 +1,34 @@
+name: Trigger 4 Bound Effect Topology Exact Source CI
+
+on:
+  pull_request:
+    paths:
+      - 'research_entity/runtime/tests/test_trigger4_bound_effect_topology_exact_source.py'
+      - '.github/workflows/trigger4-bound-effect-topology-exact-source-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-source-no-real-effect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      CLAY_RESEARCH_ROOT: ${{ github.workspace }}
+      ENTITYOS_BOUND_IMPL_ROOT: ${{ github.workspace }}/_bound_impl
+    steps:
+      - name: Checkout candidate and current binding
+        uses: actions/checkout@v4
+      - name: Checkout exact bound implementation from same repository
+        uses: actions/checkout@v4
+        with:
+          ref: 2b68aad14bf7824d513b52898904909256e3522d
+          path: _bound_impl
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile exact-source topology test
+        run: python -m py_compile research_entity/runtime/tests/test_trigger4_bound_effect_topology_exact_source.py
+      - name: Run exact bound EffectGate and EffectJournal no-real-effect discriminator
+        run: python research_entity/runtime/tests/test_trigger4_bound_effect_topology_exact_source.py -v

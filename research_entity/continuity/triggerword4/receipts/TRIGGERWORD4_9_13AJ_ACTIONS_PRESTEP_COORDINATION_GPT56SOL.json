@@ -73,13 +73,21 @@
       "instruction": "Keep the existing zero-cost read-only owning-VPS quiescence lane and do not retry/restart while the shared Actions pre-step failure is unresolved."
     }
   ],
-  "correction_note": "An earlier draft of this receipt and the initial issue comments carried incorrect 2239... run identifiers from an intermediate summary. The issue comments were corrected in place after direct read of 9.13AJ and this receipt now records only the directly verified 3318... run identities above.",
+  "source_gate_check": {
+    "workflow": ".github/workflows/grid10-cognitive-envelope-ci.yml",
+    "workflow_blob_sha": "28318f72ca3e642b25bd336e566bd92ca6736ddf",
+    "required_test": "tools/test_grid10_v6_recovery_mutation_time_fence_v1.py",
+    "result": "ALREADY_BOUND_TO_DETERMINISTIC_CI_NO_REDUNDANT_PATCH",
+    "details": "The workflow path trigger includes tools/test_grid10_v6_recovery_mutation_time_fence_* and the deterministic Unit and integration tests step already invokes python test_grid10_v6_recovery_mutation_time_fence_v1.py -v. Runtime execution remains blocked upstream at pre-step admission, so source presence creates no test/runtime credit."
+  },
+  "correction_note": "An earlier draft of this receipt and the initial issue comments carried incorrect 2239... run identifiers from an intermediate summary. The issue comments were corrected in place after direct read of 9.13AJ and this receipt records only the directly verified 3318... run identities above.",
   "duplication_guard": {
     "new_dispatch_created": false,
     "new_generation_advanced": false,
     "runner_restart_attempted": false,
     "workflow_retry_attempted": false,
-    "reason": "Existing issues 2121 and 2122 are the retained bounded lanes and 9.13AJ marks further retries/restarts as lower-information until the common pre-step cause is observed."
+    "redundant_ci_patch_created": false,
+    "reason": "Existing issues 2121 and 2122 are the retained bounded lanes; 9.13AJ marks retries/restarts as lower-information until the common pre-step cause is observed, and the required V6 time-fence test is already bound in CI."
   },
   "credits": {
     "physical_grid10": 0,
@@ -89,6 +97,6 @@
     "training": 0,
     "frankenstein2_runtime": 0
   },
-  "next_exact_gate": "Discriminate the common GitHub Actions account/repository/pre-step admission or assignment cause using low-risk read-only/UI/API evidence. Only after that evidence should the existing 2121/2122 execution lanes resume. Continue only non-conflicting source/test assembly meanwhile.",
-  "evidence_boundary": "This receipt proves GitHub coordination writes, read-only workflow-job observations, and branch/main reentry observations only. The failed jobs expose no initialized test steps and therefore do not count as product-test failures or runtime PASS. No GRID10/HCU/EntityOS/Frankenstein runtime credit is minted."
+  "next_exact_gate": "Discriminate the common GitHub Actions account/repository/pre-step admission or assignment cause using low-risk read-only/UI/API evidence. Only after that evidence should the existing 2121/2122 execution lanes resume. Continue only non-conflicting source/test assembly meanwhile; do not re-add the already-bound V6 recovery mutation time-fence test.",
+  "evidence_boundary": "This receipt proves GitHub coordination writes, read-only workflow-job observations, branch/main reentry observations, and current CI source binding only. The failed jobs expose no initialized test steps and therefore do not count as product-test failures or runtime PASS. No GRID10/HCU/EntityOS/Frankenstein runtime credit is minted."
 }

@@ -10,6 +10,8 @@ on:
       - 'tools/test_grid10_v6_crash_reconciliation_*'
       - 'tools/grid10_v6_recovery_lease_gate_*'
       - 'tools/test_grid10_v6_recovery_lease_gate_*'
+      - 'tools/grid10_v6_recovery_mutation_time_fence_*'
+      - 'tools/test_grid10_v6_recovery_mutation_time_fence_*'
       - 'tools/grid10_live_control_*'
       - 'tools/test_grid10_live_control_*'
       - 'tools/grid10_persistent_*'
@@ -86,6 +88,7 @@ jobs:
           python test_grid10_v6_crash_reconciliation_v1.py -v
           python test_grid10_v6_crash_reconciliation_integration_v1.py -v
           python test_grid10_v6_recovery_lease_gate_v1.py -v
+          python test_grid10_v6_recovery_mutation_time_fence_v1.py -v
           python test_grid10_cognitive_controlled_runtime_v1.py -v
           python test_grid10_live_control_binding_v1.py -v
           python test_grid10_live_control_binding_v2.py -v

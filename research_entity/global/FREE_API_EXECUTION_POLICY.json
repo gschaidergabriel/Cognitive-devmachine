@@ -391,6 +391,21 @@
     "counterhypothesis": "Preserving an unassigned scalar is sufficient to treat it as semantic provider text for forward compatibility; falsified for the current closed adapter because preservation and interpretation are distinct, Unicode forbids interpreting it as an abstract character, and U+0378 alone crossed all three verified boundaries.",
     "uncertainty": "This is an explicit local FRANK text-adapter policy, not a claim that every control, format character, mark, private-use, noncharacter or unassigned scalar is invalid in all data. They remain preserved when another semantic witness is present. Cn classification is version-sensitive: the current host exposes Unicode 15.0 data, and a future Python/Unicode upgrade can assign a formerly Cn scalar; the regression pins U+0378 only while it remains Cn. A future typed adapter may authorize pure private-use content with an explicit versioned interpretation agreement. Tool, binary, multimodal and protocol-specific payloads require separate adapters. Modifier symbols remain deliberately unclassified."
   },
+  "unicode_database_receipt_provenance": {
+    "checked_at": "2026-08-28",
+    "claim": "Every FREE_API_EXECUTION_RECEIPT schema 1.2 record names the exact Unicode Character Database version used by the runtime's semantic-text classifier. A host upgrade cannot silently present version-dependent Cn decisions as equivalent execution provenance.",
+    "sources": [
+      "https://docs.python.org/3/library/unicodedata.html#unicodedata.unidata_version",
+      "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/",
+      "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-4/",
+      "https://www.unicode.org/versions/"
+    ],
+    "external_evidence": "Python exposes unicodedata.unidata_version as the version of the Unicode database used by its module. Unicode states that each published UCD version is stable, that new major versions can add characters or alter property data, and that precise character-property behavior should cite a full version. Unicode implementation guidance also notes that protocols can announce Unicode versions so newer systems can predict downlevel unassigned-character behavior.",
+    "internal_measurement": "Execution receipts at the prior schema 1.1 head applied General_Category-based semantic admission, including the new Cn boundary, but contained no UCD version. On the current Ubuntu-compatible host the classifier uses Unicode 15.0.0; the same payload could therefore change admission after a Python/UCD upgrade while retaining indistinguishable receipt metadata. Schema 1.2 now records unicode_database_version on success and every classified failure receipt.",
+    "executable_evidence": "test_execution_receipt_pins_unicode_database_version",
+    "counterhypothesis": "The runtime version or source commit is sufficient implicit Unicode provenance; rejected because neither appears in the execution receipt and Python distributions can embed different UCD versions independently of FRANK source bytes.",
+    "uncertainty": "The version field identifies the classification database but does not authenticate the host, prove an untampered Python module or freeze future FRANK policy. Reproducible replay still requires the same runtime policy and UCD version."
+  },
   "canonical_blob_write_boundary": {
     "checked_at": "2026-08-27",
     "claim": "A successful repository contents write is not accepted as canonical evidence until the returned remote content blob SHA exactly matches git hash-object for the intended local bytes. Large replacement files are assembled from bounded lossless chunks before the write; textual success alone cannot establish byte identity.",
@@ -1066,6 +1081,7 @@
     "Provider endpoint URLs containing userinfo are rejected before request construction or network access.",
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
+    "Every FREE_API_EXECUTION_RECEIPT schema 1.2 record includes the exact Unicode Character Database version used for General_Category-based semantic admission; version-dependent classification cannot remain implicit provenance.",
     "The serialized UTF-8 text-chat JSON request is at most 2000000 bytes; oversized payloads fail before runtime-environment snapshot, credential lookup or network access, while the exact boundary remains accepted.",
     "Every Chat Completions request explicitly sets max_tokens to 4096, bounding the combined reasoning and visible generation budget; finish_reason length remains unverified and requires changed input or budget rather than blind replay.",
     "Requests above the transport envelope are rejected before json.dumps can materialize the document; the preflight exactly counts the fixed request envelope, per-message objects, list separators and default ensure_ascii escape widths, while the serialized UTF-8 byte check remains defense in depth.",

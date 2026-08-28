@@ -1,0 +1,354 @@
+#!/usr/bin/env python3
+"""Claude Agent spawn -> WorkExecutionBinding v2.1 source adapter.
+
+Source-only deterministic identity bridge. It records the exact HANDOFF marker carried
+inside an observed Agent PreToolUse prompt and joins the same call-scoped tool_use_id to
+the Agent PostToolUse agentId. It does not spawn children, grant task/effect authority,
+or claim installed-runtime equivalence between documented agentId and lifecycle agent_id.
+
+Truth boundaries:
+  HANDOFF marker = work identity carrier, not completion evidence
+  session_id != tool_use_id != agent_id != task_id
+  absent/ambiguous agentId = UNKNOWN, never guessed
+  one tool_use_id cannot bind two workpackages
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+import hashlib
+import json
+from pathlib import Path
+import re
+import sqlite3
+import time
+from typing import Any, Mapping
+
+from frankenstein2_work_execution_binding_v1 import (
+    WorkExecutionBinding,
+    _append_event,
+    _connect,
+)
+
+SCHEMA = "FRANKENSTEIN2_AGENT_WORKEXECUTION_ADAPTER/v2.1"
+PRE_EVENT = "PreToolUse"
+POST_EVENT = "PostToolUse"
+AGENT_TOOL = "Agent"
+HANDOFF_RE = re.compile(r"(?m)^[ \t]*HANDOFF[ \t]+([^\s]+)[ \t]*$")
+
+
+class AgentWorkExecutionIdentityError(ValueError):
+    """Observed hook payload cannot be bound to one exact delegated work item."""
+
+
+@dataclass(frozen=True)
+class AgentSpawnObservation:
+    spawn_tool_use_id: str
+    workpackage_id: str
+    work_generation: str
+    parent_session_id: str
+    status: str
+    agent_id: str | None
+    binding_id: str | None
+
+
+def _required_text(payload: Mapping[str, Any], key: str) -> str:
+    value = payload.get(key)
+    if not isinstance(value, str) or not value.strip():
+        raise AgentWorkExecutionIdentityError(f"MISSING_OR_INVALID_{key.upper()}")
+    return value.strip()
+
+
+def _canon(value: Any) -> str:
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str)
+
+
+def _digest(value: Any) -> str:
+    return hashlib.sha256(_canon(value).encode("utf-8")).hexdigest()
+
+
+def _exact_handoff_package(prompt: str) -> str:
+    matches = HANDOFF_RE.findall(prompt)
+    if len(matches) != 1:
+        raise AgentWorkExecutionIdentityError(
+            f"HANDOFF_MARKER_CARDINALITY:{len(matches)}"
+        )
+    return matches[0]
+
+
+def _validate_agent_hook(payload: Mapping[str, Any], expected_event: str) -> tuple[str, str]:
+    event = _required_text(payload, "hook_event_name")
+    if event != expected_event:
+        raise AgentWorkExecutionIdentityError(f"UNEXPECTED_HOOK_EVENT:{event}")
+    tool_name = _required_text(payload, "tool_name")
+    if tool_name != AGENT_TOOL:
+        raise AgentWorkExecutionIdentityError(f"UNEXPECTED_TOOL:{tool_name}")
+    return _required_text(payload, "tool_use_id"), _required_text(payload, "session_id")
+
+
+def init_agent_spawn_schema(db_path: Path) -> None:
+    # Opening the base WorkExecution database first is intentional: this adapter extends
+    # the same SQLite authority instead of creating a parallel execution ledger.
+    con = _connect(Path(db_path))
+    try:
+        con.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS fr2_agent_spawn_observations(
+              spawn_tool_use_id TEXT PRIMARY KEY,
+              workpackage_id TEXT NOT NULL,
+              work_generation TEXT NOT NULL,
+              parent_session_id TEXT NOT NULL,
+              prompt_digest TEXT NOT NULL,
+              status TEXT NOT NULL,
+              agent_id TEXT,
+              agent_identity_state TEXT NOT NULL,
+              binding_id TEXT UNIQUE,
+              native_task_id TEXT,
+              pre_payload_digest TEXT NOT NULL,
+              post_payload_digest TEXT,
+              observed_pre_at REAL NOT NULL,
+              observed_post_at REAL
+            );
+            CREATE INDEX IF NOT EXISTS idx_fr2_agent_spawn_package
+              ON fr2_agent_spawn_observations(workpackage_id, work_generation, observed_pre_at);
+            """
+        )
+    finally:
+        con.close()
+
+
+class AgentWorkExecutionAdapter:
+    def __init__(self, db_path: Path) -> None:
+        self.db_path = Path(db_path)
+        # WorkExecutionLedger schema is created by its public constructor semantics.
+        from frankenstein2_work_execution_binding_v1 import init_schema
+        init_schema(self.db_path)
+        init_agent_spawn_schema(self.db_path)
+
+    def record_agent_pretool(
+        self,
+        payload: Mapping[str, Any],
+        *,
+        expected_workpackage_id: str,
+        expected_work_generation: str,
+    ) -> AgentSpawnObservation:
+        """Record exact package -> Agent call identity from observed PreToolUse.
+
+        The expected package/generation comes from already-admitted durable work state.
+        This adapter verifies only that the actual observed Agent prompt carries exactly
+        one HANDOFF marker and that its package id matches that admitted identity.
+        """
+        spawn_tool_use_id, session_id = _validate_agent_hook(payload, PRE_EVENT)
+        expected_workpackage_id = str(expected_workpackage_id or "").strip()
+        expected_work_generation = str(expected_work_generation or "").strip()
+        if not expected_workpackage_id:
+            raise AgentWorkExecutionIdentityError("EXPECTED_WORKPACKAGE_ID_REQUIRED")
+        if not expected_work_generation:
+            raise AgentWorkExecutionIdentityError("EXPECTED_WORK_GENERATION_REQUIRED")
+
+        tool_input = payload.get("tool_input")
+        if not isinstance(tool_input, Mapping):
+            raise AgentWorkExecutionIdentityError("MISSING_OR_INVALID_TOOL_INPUT")
+        prompt = tool_input.get("prompt")
+        if not isinstance(prompt, str) or not prompt:
+            raise AgentWorkExecutionIdentityError("MISSING_OR_INVALID_AGENT_PROMPT")
+        marker_package_id = _exact_handoff_package(prompt)
+        if marker_package_id != expected_workpackage_id:
+            raise AgentWorkExecutionIdentityError(
+                f"HANDOFF_PACKAGE_MISMATCH:{expected_workpackage_id}:{marker_package_id}"
+            )
+
+        prompt_digest = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+        pre_payload_digest = _digest(dict(payload))
+        con = _connect(self.db_path)
+        try:
+            con.execute("BEGIN IMMEDIATE")
+            existing = con.execute(
+                "SELECT workpackage_id,work_generation FROM fr2_agent_spawn_observations "
+                "WHERE spawn_tool_use_id=?",
+                (spawn_tool_use_id,),
+            ).fetchone()
+            if existing is not None:
+                raise AgentWorkExecutionIdentityError(
+                    "SPAWN_TOOL_USE_ID_ALREADY_BOUND:"
+                    f"{spawn_tool_use_id}:{existing['workpackage_id']}:{existing['work_generation']}"
+                )
+            con.execute(
+                """INSERT INTO fr2_agent_spawn_observations(
+                     spawn_tool_use_id,workpackage_id,work_generation,parent_session_id,
+                     prompt_digest,status,agent_id,agent_identity_state,binding_id,native_task_id,
+                     pre_payload_digest,post_payload_digest,observed_pre_at,observed_post_at
+                   ) VALUES(?,?,?,?,?,'PRE_OBSERVED',NULL,'UNKNOWN',NULL,NULL,?,NULL,?,NULL)""",
+                (
+                    spawn_tool_use_id,
+                    expected_workpackage_id,
+                    expected_work_generation,
+                    session_id,
+                    prompt_digest,
+                    pre_payload_digest,
+                    time.time(),
+                ),
+            )
+            con.execute("COMMIT")
+        except Exception:
+            try:
+                con.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
+            raise
+        finally:
+            con.close()
+        return AgentSpawnObservation(
+            spawn_tool_use_id,
+            expected_workpackage_id,
+            expected_work_generation,
+            session_id,
+            "PRE_OBSERVED",
+            None,
+            None,
+        )
+
+    def record_agent_posttool(
+        self,
+        payload: Mapping[str, Any],
+        *,
+        binding_id: str,
+        child_runtime_kind: str,
+        identity_provenance: str,
+        native_task_id: str | None = None,
+    ) -> WorkExecutionBinding | None:
+        """Atomically join exact Agent call identity to observed agentId.
+
+        If PostToolUse lacks an unambiguous agentId, the spawn remains explicitly UNKNOWN
+        and no WorkExecutionBinding row is minted.
+        """
+        spawn_tool_use_id, session_id = _validate_agent_hook(payload, POST_EVENT)
+        binding_id = str(binding_id or "").strip()
+        child_runtime_kind = str(child_runtime_kind or "").strip()
+        identity_provenance = str(identity_provenance or "").strip()
+        if not binding_id:
+            raise AgentWorkExecutionIdentityError("BINDING_ID_REQUIRED")
+        if not child_runtime_kind:
+            raise AgentWorkExecutionIdentityError("CHILD_RUNTIME_KIND_REQUIRED")
+        if not identity_provenance:
+            raise AgentWorkExecutionIdentityError("IDENTITY_PROVENANCE_REQUIRED")
+
+        tool_response = payload.get("tool_response")
+        if not isinstance(tool_response, Mapping):
+            raise AgentWorkExecutionIdentityError("MISSING_OR_INVALID_TOOL_RESPONSE")
+        raw_agent_id = tool_response.get("agentId")
+        agent_id = raw_agent_id.strip() if isinstance(raw_agent_id, str) and raw_agent_id.strip() else None
+        post_payload_digest = _digest(dict(payload))
+
+        con = _connect(self.db_path)
+        try:
+            con.execute("BEGIN IMMEDIATE")
+            spawn = con.execute(
+                "SELECT * FROM fr2_agent_spawn_observations WHERE spawn_tool_use_id=?",
+                (spawn_tool_use_id,),
+            ).fetchone()
+            if spawn is None:
+                raise AgentWorkExecutionIdentityError("POST_WITHOUT_BOUND_PRE")
+            if spawn["parent_session_id"] != session_id:
+                raise AgentWorkExecutionIdentityError(
+                    f"SESSION_ID_MISMATCH:{spawn['parent_session_id']}:{session_id}"
+                )
+            if spawn["status"] == "BOUND":
+                raise AgentWorkExecutionIdentityError("SPAWN_ALREADY_BOUND")
+            if agent_id is None:
+                con.execute(
+                    """UPDATE fr2_agent_spawn_observations
+                       SET status='AGENT_ID_UNKNOWN',agent_identity_state='UNKNOWN',
+                           post_payload_digest=?,observed_post_at=?
+                       WHERE spawn_tool_use_id=?""",
+                    (post_payload_digest, time.time(), spawn_tool_use_id),
+                )
+                con.execute("COMMIT")
+                return None
+
+            # One transaction writes the child binding and marks the spawn observation bound.
+            # No intermediate state may claim a child binding while the spawn record remains
+            # unbound (or vice versa).
+            con.execute(
+                """INSERT INTO fr2_work_execution_bindings(
+                     binding_id,workpackage_id,work_generation,parent_execution_id,
+                     child_runtime_kind,child_execution_id,native_agent_id,native_task_id,
+                     identity_provenance,identity_observed_at,status,created_at
+                   ) VALUES(?,?,?,?,?,?,?,?,?,?,'BOUND',?)""",
+                (
+                    binding_id,
+                    spawn["workpackage_id"],
+                    spawn["work_generation"],
+                    spawn_tool_use_id,
+                    child_runtime_kind,
+                    agent_id,
+                    agent_id,
+                    native_task_id,
+                    identity_provenance,
+                    time.time(),
+                    time.time(),
+                ),
+            )
+            _append_event(
+                con,
+                binding_id,
+                "CHILD_IDENTITY_BOUND",
+                {
+                    "workpackage_id": spawn["workpackage_id"],
+                    "work_generation": spawn["work_generation"],
+                    "child_runtime_kind": child_runtime_kind,
+                    "child_execution_id": agent_id,
+                    "native_agent_id": agent_id,
+                    "native_task_id": native_task_id,
+                    "identity_provenance": identity_provenance,
+                    "spawn_tool_use_id": spawn_tool_use_id,
+                    "parent_session_id": session_id,
+                },
+            )
+            con.execute(
+                """UPDATE fr2_agent_spawn_observations
+                   SET status='BOUND',agent_id=?,agent_identity_state='OBSERVED',
+                       binding_id=?,native_task_id=?,post_payload_digest=?,observed_post_at=?
+                   WHERE spawn_tool_use_id=?""",
+                (
+                    agent_id,
+                    binding_id,
+                    native_task_id,
+                    post_payload_digest,
+                    time.time(),
+                    spawn_tool_use_id,
+                ),
+            )
+            con.execute("COMMIT")
+        except Exception:
+            try:
+                con.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
+            raise
+        finally:
+            con.close()
+
+        return WorkExecutionBinding(
+            binding_id=binding_id,
+            workpackage_id=spawn["workpackage_id"],
+            work_generation=spawn["work_generation"],
+            child_runtime_kind=child_runtime_kind,
+            child_execution_id=agent_id,
+            native_agent_id=agent_id,
+            native_task_id=native_task_id,
+            identity_provenance=identity_provenance,
+            status="BOUND",
+        )
+
+    def spawn_snapshot(self, spawn_tool_use_id: str) -> dict[str, Any]:
+        con = _connect(self.db_path)
+        try:
+            row = con.execute(
+                "SELECT * FROM fr2_agent_spawn_observations WHERE spawn_tool_use_id=?",
+                (str(spawn_tool_use_id),),
+            ).fetchone()
+            if row is None:
+                raise AgentWorkExecutionIdentityError("UNKNOWN_SPAWN_TOOL_USE_ID")
+            return {"schema": SCHEMA, **dict(row)}
+        finally:
+            con.close()

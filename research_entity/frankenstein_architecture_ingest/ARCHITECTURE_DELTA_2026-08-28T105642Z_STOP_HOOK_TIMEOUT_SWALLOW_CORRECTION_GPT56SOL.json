@@ -1,0 +1,132 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:56:42Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "delta_class": "STOP_HOOK_TIMEOUT_EXCEPTION_HIERARCHY_CORRECTION",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "design_branch_head_observed_before_write": "d823626c7277d54e4555424edb6e1c2cb485bed8",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "ingest_disposition": {
+    "new_inbox_packet_consumed": false,
+    "duplicate_consumption_avoided": true,
+    "reason": "The inbox was already quiescent after the accounted Stop-hook packet. This delta is a direct exact-donor correction discovered while falsifying a high-impact source inference in the already-ingested 10:48Z Stop-hook delta."
+  },
+  "corrects": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+    "scope": "source_inferences_not_runtime_claims[0] and the corresponding global-timeout interpretation only",
+    "preserved_from_predecessor": [
+      "SPEC still declares no LLM call in a hook",
+      "LIVE_CODE still performs synchronous Ollama inference from Stop",
+      "model relevance remains noncanonical candidate evidence",
+      "retrieval ownership remains insufficiently bound in the current Stop selector",
+      "moving model inference outside deterministic hook completion authority remains the preferred Frankenstein-2.0 action"
+    ]
+  },
+  "direct_source_atoms": [
+    {
+      "atom_id": "TW5-105642-HOOK-TIMEOUT-CLASS",
+      "subsystem": "stern hook dispatcher",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "8420-8440",
+      "claim": "_HookTimeout subclasses Exception and _hook_alarm raises _HookTimeout.",
+      "runtime_reachability": "SOURCE_REACHABLE_FROM_CMD_HOOK_SIGNAL_HANDLER",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-105642-OLLAMA-GENERIC-CATCH",
+      "subsystem": "Stop cognition relevance judge",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "4830-4875",
+      "claim": "_ollama_generate wraps urlopen/read/JSON handling in a try and ends with except Exception -> log -> None. Because _HookTimeout is an Exception, an event-wide SIGALRM delivered while this try scope is active is catchable here rather than necessarily escaping to cmd_hook's outer _HookTimeout handler.",
+      "runtime_reachability": "SOURCE_LOGIC; EXACT DELIVERY POINT NOT_RUNTIME_OBSERVED",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-105642-OUTER-TIMEOUT-HANDLER",
+      "subsystem": "stern hook dispatcher",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "9020-9045",
+      "claim": "cmd_hook has an outer except _HookTimeout that aborts remaining event-body statements only when _HookTimeout actually propagates to that level.",
+      "runtime_reachability": "LIVE_CODE",
+      "target_2_0_action": "KEEP_WITH_EXPLICIT_EXCEPTION_FENCE"
+    },
+    {
+      "atom_id": "TW5-105642-STOP-ORDER",
+      "subsystem": "Stop event",
+      "source_kind": "LIVE_CODE",
+      "span": "8850-8895",
+      "claim": "Stop calls _kognition_richten_hook before _gw_absicht_schreiben, architekt_governance_zug and waiting-status update.",
+      "runtime_reachability": "LIVE_CODE",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    }
+  ],
+  "corrected_source_reasoning": {
+    "predecessor_inference": "A SIGALRM timeout during _kognition_richten_hook can prevent later Stop statements because control transfers to cmd_hook's outer _HookTimeout handler.",
+    "status": "TOO_STRONG_AND_NOT_SOURCE_SAFE",
+    "replacement": "If SIGALRM fires while execution is inside _ollama_generate's broad try scope, _HookTimeout is an Exception and can be consumed by the generic except Exception branch, which returns None. In that case _kognition_richten_hook can return and later Stop bookkeeping can continue. Therefore source alone does not establish that model-path timeout skips later Stop bookkeeping.",
+    "new_risk": "The same catchability means the event-wide hard timeout is not structurally guaranteed to retain abort authority across broad Exception handlers. Because setitimer is armed once for the event and the signal may be consumed, later code can continue after the nominal deadline instead of the outer timeout handler terminating the event body.",
+    "evidence_class": "SOURCE_LEVEL_CONTROL_FLOW_INFERENCE_NOT_RUNTIME_MEASUREMENT"
+  },
+  "contradictions_preserved": [
+    "SPEC says no LLM call in a hook; LIVE_CODE calls synchronous Ollama from Stop.",
+    "cmd_hook presents SIGALRM as a hard event ceiling, but _HookTimeout is an Exception and nested broad Exception handlers can catch it.",
+    "The predecessor 10:48Z source inference predicted skipped later Stop bookkeeping on timeout; exact exception hierarchy instead leaves that outcome delivery-point-dependent and unverified.",
+    "Fail-silent model error handling and hard event-abort signaling currently share the same ordinary Exception hierarchy, conflating a recoverable cognition failure with control-plane deadline authority."
+  ],
+  "counterhypotheses": [
+    "If SIGALRM is delivered outside a nested broad Exception try scope, _HookTimeout can still reach cmd_hook's outer handler and abort the remaining event body.",
+    "urllib or lower runtime behavior could transform an interrupted operation into another exception before the Python signal exception becomes observable at the generic catch; exact installed-runtime behavior therefore still requires a source/build-bound timing test.",
+    "A model-local timeout may return None before the event-wide SIGALRM fires, in which case later Stop bookkeeping can complete normally; this does not prove the global deadline is sound."
+  ],
+  "architecture_effect": {
+    "mechanism": "HookDeadlineAuthority/v2",
+    "classification": "SOURCE_GROUNDED_CORRECTION_NO_RUNTIME_PROMOTION",
+    "rule": "Deterministic hook deadline authority must not be represented by an exception type that ordinary subsystem catch-all handlers can silently consume. Cognitive/model failures and control-plane deadline aborts require distinct exception/control channels.",
+    "target_2_0_action": "ADAPT_TO_GRID",
+    "required_actions": [
+      "keep model inference out of deterministic Stop/hook completion authority",
+      "if compatibility code retains a signal deadline, ensure deadline-control exceptions bypass ordinary subsystem Exception recovery or are explicitly re-raised",
+      "separate cognition timeout/failure from hook deadline expiry in receipts and tests",
+      "measure cognition-disabled, warm, slow/cold and unreachable local-model conditions while proving exact Stop bookkeeping and actual wall-clock deadline behavior",
+      "preserve exact retrieval_id/turn/causal/generation binding from RetrievalRelevanceBinding/v2"
+    ]
+  },
+  "triggerword4_handoff": {
+    "do_not_build_in_trigger5": true,
+    "highest_information_discriminator": "In the external non-provider verification lane, force the model call to straddle the event-wide Stop SIGALRM and separately force a model-local timeout. Record whether _HookTimeout reaches the outer handler, whether later deterministic Stop bookkeeping completes, and whether elapsed wall time remains inside the declared event limit. Repeat with cognition disabled/warm/slow/unreachable while binding exact source/build/runtime identity.",
+    "acceptance_split": [
+      "BOOKKEEPING_COMPLETION",
+      "HARD_DEADLINE_ENFORCEMENT",
+      "RETRIEVAL_IDENTITY_ATTACHMENT"
+    ]
+  },
+  "credits": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "architecture_correction": "PASS_SOURCE_SCOPE",
+    "new_runtime_execution": 0,
+    "stop_hook_runtime": 0,
+    "latency_acceptance": 0,
+    "concurrency_acceptance": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "next_exact_gate": "Triggerword-4/external non-provider lane: preserve Frank Harness; test deadline propagation versus generic Exception swallowing with exact source/build/runtime identity, while independently verifying deterministic Stop bookkeeping and retrieval_id-bound reverse-order relevance completion."
+}

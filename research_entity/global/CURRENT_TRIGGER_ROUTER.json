@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.2",
+  "schema_version": "2.3",
   "status": "CURRENT_SUCCESSOR_TRIGGER_ROUTER",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "legacy_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
@@ -18,6 +18,14 @@
       "single_command_mode": true,
       "spam_safe": true,
       "idempotent_resume": true,
+      "canonical_repository": "gschaidergabriel/frankenstein-2.0",
+      "canonical_repository_bootstrap_controller": "gschaidergabriel/Dr.-Unterweger",
+      "repository_first_required": true,
+      "commit_every_coherent_step_required": true,
+      "workpackage_checklist_required": true,
+      "archive_all_material_measurements_required": true,
+      "archive_negative_results_required": true,
+      "checkpoint_every_worker_run_required": true,
       "auto_ingest_trigger5": true,
       "auto_select_gate": true,
       "auto_test": true,
@@ -53,6 +61,7 @@
       "fetch_before_execute": true,
       "protocols": [
         "research_entity/global/TRIGGERWORD_4_ONE_COMMAND_AUTONOMOUS_GATE_DRIVER.md",
+        "research_entity/global/TRIGGERWORD_4_CANONICAL_FRANKENSTEIN2_REPOSITORY_AND_WORKER_ARCHIVE_LAW.md",
         "research_entity/global/TRIGGERWORD_4_VPS_SELF_ROUTING_EXECUTION_PLAYBOOK.md",
         "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
         "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
@@ -88,6 +97,7 @@
       ],
       "vps_sandbox": "clay-direct-dev",
       "vps_self_resolution_rule": "NO_DIRECT_SSH != NO_VPS_EXECUTOR; missing bridge/tool/workflow/package/runtime is an engineering task to repair/build inside standing authority, not an owner confirmation gate",
+      "canonical_repository_policy": "once initialized, gschaidergabriel/frankenstein-2.0 is the canonical implementation/evidence home; every Triggerword-4 worker must fetch its README/workpackage/checkpoint state first, commit every meaningful coherent step, archive tests/measurements/negative results/receipts, check off workpackages only with evidence, and checkpoint the exact next action before stopping",
       "recursive_harness_policy": "treat context as an external typed environment when beneficial; distinguish deterministic data recursion, recursive model calls, recursive full agent harnesses and GRID-controlled adaptive recursion; recursive/model/child-harness outputs remain candidates and never gain UnifiedDB canonical, EffectGate, CompletionGate or hard-policy authority",
       "native_subagent_policy": "efficiency-calibrated owner-original rule: trivial clear already-known changes may close directly; real building/new features/multi-step implementation/iteration/debugging delegates to a durable native child workpackage; child implementation noise should remain local while evidence/results re-enter canonical state",
       "native_child_binding_policy": "workpackage existence is not proof of child spawn; bind current workpackage generation to observed native actor/task identity and bind every mutating call to exact invocation identity; installed-runtime evidence is required before R2/native-child runtime credit",
@@ -109,6 +119,8 @@
       "aliases": ["5", "triggerword 5", "triggerwort 5"],
       "kind": "frankenstein_architecture_forensics_live_ingest",
       "continuation": true,
+      "primary_donor_repository": "gschaidergabriel/frankenstein",
+      "historical_lookup_policy": "historical sources are allowed only on demand to resolve provenance/supersession of a concrete mechanism in the primary donor, then return immediately to the primary donor",
       "fetch_before_execute": true,
       "protocols": [
         "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
@@ -172,6 +184,10 @@
     "NEW_USER_OR_HIGH_CONSEQUENCE_INTERRUPT_MUST_RECOMPILE_CONTEXT_NOT_BE_BURIED_IN_HISTORY",
     "RUMINATION_OR_REPETITION_MUST_TRIGGER_DISCRIMINATION_CONTEXT_RESET_OR_HOLD",
     "MEMORY_DECAY_NORMALLY_MEANS_LOWER_ACTIVATION_OR_COMPRESSION_BEFORE_HARD_DELETION",
+    "FRANKENSTEIN_2_CANONICAL_REPOSITORY = gschaidergabriel/frankenstein-2.0",
+    "TRIGGERWORD4_WORKER_STEP_NOT_COMMITTED_AND_ARCHIVED != FINISHED_PROJECT_STEP",
+    "WORKPACKAGE_CHECKMARK_REQUIRES_ARCHIVED_ACCEPTANCE_EVIDENCE",
+    "ALL_MATERIAL_TESTS_MEASUREMENTS_NEGATIVE_RESULTS_AND_RECEIPTS_MUST_CONVERGE_INTO_THE_CANONICAL_REPOSITORY",
     "triggerword 4 is the normal single-command build/assembly/verification interface",
     "triggerword 4 automatically selects, tests, promotes or repairs gates from durable state",
     "triggerword 4 automatically ingests relevant triggerword-5 forensic evidence",
@@ -191,9 +207,10 @@
     "effect admission, enforcement, execution, world verification and completion are distinct causal states",
     "tool/effect correlation uses immutable invocation identity rather than one mutable session-level effect pointer",
     "NOT_COMPUTED is preserved through perception/world/grid dependency taint and is not reconstructed by downstream operators",
+    "triggerword 5 primary donor is gschaidergabriel/frankenstein; historical sources are on-demand provenance only",
     "triggerword 5 is forensic analysis/live ingest",
     "Triggerword-4 Voice may reach ACCEPTED_AT_SCOPE on VPS text/event control-plane evidence while physical audio I/O remains explicitly NOT_TESTED_ON_VPS",
     "4 and 5 must fetch their current protocols before substantive execution"
   ],
-  "updated_at": "2026-08-28T16:45:00+07:00"
+  "updated_at": "2026-08-28T17:24:00+07:00"
 }

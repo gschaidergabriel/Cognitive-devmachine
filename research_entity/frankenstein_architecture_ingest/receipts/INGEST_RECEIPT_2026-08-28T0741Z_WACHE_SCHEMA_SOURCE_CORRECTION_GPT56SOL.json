@@ -1,0 +1,67 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:41:00Z",
+  "authority_epoch": "8.78",
+  "status": "SCHEMA_CORRECTION_AND_DIRECT_SOURCE_VALIDATION",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_observed_before_receipt": "b3067a03081b2c0c6504aa7d7c15cd243a745041",
+  "original_packet": {
+    "packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072938Z_HISTORICAL_WACHE_KOENIG_OWNER_GATE_GPT56SOL.json",
+    "status": "HISTORICALLY_INGESTED_BUT_SCHEMA_DEFECT_FOUND",
+    "schema_defect": "At least one atom used target_2_0_action=REPLACE, which is not allowed by INGEST_PACKET_SCHEMA.json. The permitted successor action for that semantic meaning is REPLACE_WITH_VERIFIED_SUCCESSOR."
+  },
+  "successor_packet": {
+    "packet_id": "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T073606Z_HISTORICAL_WACHE_KOENIG_SOURCE_VALIDATED_GPT56SOL.json",
+    "commit": "c4e5c77d9ffd2ab564348449a82daff93895fec8",
+    "status": "SCHEMA_VALID_SUCCESSOR",
+    "supersedes_packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL"
+  },
+  "direct_source_validation": {
+    "archive_manifest": {
+      "path": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ACTION_BOUNDARY_SUBMANIFEST.json",
+      "blob_sha": "b3bceb16a1c0038d0d719b44bfec7295170a3dd7"
+    },
+    "wache_koenig": {
+      "drive_file_id": "10z1K5hKV9t9wBu1k5zXEvxSjaCZy3TUH",
+      "sha256_manifest": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "sha256_fetched": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "result": "EXACT_MATCH"
+    },
+    "freigabe": {
+      "drive_file_id": "1xi-hFPSWJ6NC8ruDV6iTttw_-wMv08dI",
+      "sha256_manifest": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "sha256_fetched": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "result": "EXACT_MATCH"
+    },
+    "validated_findings": [
+      "wache-koenig is a genuine Bash-scoped pre-execution blocker when registered by the hook scheduler",
+      "non-Bash tools intentionally bypass the historical watcher",
+      "valid grants are command-hash-bound, time-bounded and unlinked on ordinary successful consumption",
+      "freigabe separates grant creation through /dev/tty and two fresh typed challenges, with delayed activation and expiry",
+      "typing-speed heuristics and regex classification are historical mechanisms, not current canonical authority primitives"
+    ]
+  },
+  "architecture_delta_reuse": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_HISTORICAL_WACHE_CAPABILITY_LEASE.json",
+    "commit": "0e323a18e9f998634072752c4271a791928fc0d1",
+    "decision": "RETAIN_NO_DUPLICATE_DELTA",
+    "reason": "The existing delta is source-corroborated and already expresses the correct typed one-shot EffectDecision/CapabilityLease migration. This receipt repairs packet provenance/schema without manufacturing independent evidence or a duplicate design authority."
+  },
+  "evidence_scope": {
+    "source_forensics": true,
+    "archive_identity_verified": true,
+    "scheduler_registration_verified": false,
+    "current_runtime_reachability_verified": false,
+    "runtime_execution_this_receipt": false,
+    "current_donor_runtime_credit_delta": 0,
+    "whole_entityos_hcu_credit_delta": 0,
+    "jspace_model_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_exact_gate": "Recover exact historical/global hook scheduler registration and ordering for the archived wache-koenig snapshot, then trace current realtime_gespraech state-changing function-call dispatch into the deterministic successor effect boundary; preserve non-Bash coverage as an explicit P0 until proven."
+}

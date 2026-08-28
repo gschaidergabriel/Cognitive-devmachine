@@ -1,0 +1,47 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "created_at": "2026-08-28T10:58:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "routing_self_test": "PASS",
+  "canonical_main_reentered": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "supervisor_epoch": "9.13",
+  "supervisor_delta": "9.13AC_NON_AUTHORITY",
+  "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "donor_stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+  "design_branch_head_after_delta_reentry": "dc06706b74cc5caaded4920f38e7cbea9d8abd10",
+  "delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1056Z_STOP_HOOK_TIMEOUT_IDENTITY_CORRECTION_GPT56SOL.json",
+    "create_commit": "fe6c303189bab2caf291f33ad92cb5aea85c8c2b",
+    "blob_sha_reobserved_on_moving_branch": "f6408469d0e19a5cd8a92a7d8ce6a784020a33bf",
+    "classification": "SOURCE_FORENSICS_CORRECTION_RUNTIME_CREDIT_ZERO"
+  },
+  "parallel_movement": {
+    "observed": true,
+    "detail": "The shared design branch advanced after this organ's delta write. The delta file was explicitly re-fetched from the newer branch head and remained present byte-addressably by blob SHA; no central INGEST_STATE rewrite was attempted against the moving append-only lane.",
+    "coordination_policy": "APPEND_ONLY_DELTA_AND_RECEIPT_PREFERRED_OVER_RACING_WHOLE_STATE_REWRITE"
+  },
+  "findings_admitted": [
+    "retrieval_episodes already stores retrieval_id turn_id episode_id causal_id session_id generation; repair selector binding rather than create a second identity schema",
+    "_kognition_richten_hook selects newest unscored retrieval by session context and pairs it with latest transcript user text without exact turn/episode/causal/generation equality",
+    "_HookTimeout subclasses Exception while _ollama_generate and _kognition_richten_hook catch generic Exception, so a global SIGALRM can be swallowed inside synchronous model cognition instead of reaching cmd_hook's outer timeout handler",
+    "current stern.py preserves an unresolved contract contradiction between no-LLM-in-hook hard boundary and an explicitly documented Stop-hook local-model exception"
+  ],
+  "runtime_credit": {
+    "new_execution": 0,
+    "stop_hook": 0,
+    "provider": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "frank_harness_modified": false,
+  "result": "INGEST_CORRECTION_COMMITTED_AND_REENTERED_SOURCE_SCOPE_ONLY",
+  "next_exact_gate": "Triggerword-4 or external donor test lane: preserve exact retrieval causal identity through the relevance selector and make hook deadline cancellation non-swallowable, then execute same-session reversed retrieval pairing plus cognition-disabled/warm/slow/unreachable local-model Stop timing without modifying Frank Harness."
+}

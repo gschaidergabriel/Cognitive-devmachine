@@ -2,43 +2,36 @@
   "schema": "FRANKENSTEIN_ARCHITECTURE_INGEST_RECEIPT/v1",
   "receipt_id": "T5_RECEIPT_2026-08-28_PACKET_CONSUMPTION_PERCEPTION_CANCEL_FRESHNESS_5641dc6b",
   "trigger": "triggerwort 5",
-  "status": "INGESTED_DEDUPED_SOURCE_GROUNDED_NO_NEW_RUNTIME_CREDIT",
+  "status": "REDUNDANT_PARALLEL_DONOR_DO_NOT_DOUBLE_COUNT",
   "authority_epoch": "8.78",
   "donor_repo": "gschaidergabriel/frankenstein",
   "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
   "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-  "design_head_observed_before_delta": "d7869b9ba00beb7142565387a5753d1a22f1e775",
   "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
-  "delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PACKET_CONSUMPTION_PERCEPTION_CANCEL_FRESHNESS.json",
-  "delta_commit": "5fa12a0d2b353b121c67ce7f807c41082fffd11e",
-  "consumed_packet_ids": [
+  "donor_delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PACKET_CONSUMPTION_PERCEPTION_CANCEL_FRESHNESS.json",
+  "donor_delta_original_commit": "5fa12a0d2b353b121c67ce7f807c41082fffd11e",
+  "donor_delta_reconciliation_commit": "7ef999d96b80759830a7edc138f3feb04509d3bf",
+  "canonical_ingest_winner": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+  "reentry_observation": "A newer parallel INGEST_STATE had already marked all three examined packets consumed and indexed the broader privacy/cancellation successor before this donor attempted its state update. The current INGEST_STATE was therefore left unchanged.",
+  "packets_examined": [
     "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
     "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
     "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT"
   ],
-  "cross_checks": [
-    "stern.py 3150-3655 confirms ordinary EffectGate-named path is bookkeeping/nonblocking and uses one active_turns.effect_id session slot",
-    "perception_control.py 420-560 confirms central DAG dependency resolution, COMPUTE_OFF/unknown/taint -> NOT_COMPUTED before compute_fn",
-    "realtime_gespraech.py 1300-1410 confirms pending function calls are discarded for non-completed responses and on barge-in before dispatch",
-    "voice_session_capsule.py 250-450 confirms multi-source ephemeral capsule refresh and missing-presence fallback to user_present=True"
+  "source_cross_checks": [
+    "stern.py confirms ordinary effect admission bookkeeping is nonblocking and session-pointer based",
+    "perception_control.py confirms DAG taint and NOT_COMPUTED before compute",
+    "realtime_gespraech.py confirms pending call cancellation before dispatch on non-completed response/barge-in",
+    "voice_session_capsule.py confirms ephemeral multi-source projection and user_present=True fallback when presence is unavailable"
   ],
-  "dedupe": {
-    "effect_semantics_double_counted": false,
-    "existing_branch_effect_delta_reused": true,
-    "existing_main_effect_handoff_reused": true,
-    "new_unique_design_content": [
-      "WorldSlice DAG taint + NOT_COMPUTED transfer",
-      "typed pending-effect cancellation before dispatch",
-      "Voice/GRID consistent-generation freshness contract with UNKNOWN presence"
-    ]
-  },
-  "runtime_credit": {
+  "credit": {
+    "new_independent_evidence": 0,
     "new_runtime_reexecution": 0,
     "hcu_full": 0,
     "whole_entityos_hcu": 0,
     "training": 0,
     "whole_product_pass": false
   },
-  "feeds_triggerword4": true,
-  "next_exact_gate": "Implement source-bound regressions for WorldSlice taint/NOT_COMPUTED, zero-submission cancellation before dispatch, and mixed-generation/unknown-presence voice context gating."
+  "coordination_result": "PARALLEL_DUPLICATE_RECONCILED_NO_STATE_OVERWRITE",
+  "next_exact_gate": "Use the canonical winner/current INGEST_STATE frontier: perception enforcement reachability audit, typed PENDING_EFFECT versus SUBMITTED/OUTCOME_UNKNOWN boundary, UNKNOWN-presence voice gating and donor dependency closure."
 }

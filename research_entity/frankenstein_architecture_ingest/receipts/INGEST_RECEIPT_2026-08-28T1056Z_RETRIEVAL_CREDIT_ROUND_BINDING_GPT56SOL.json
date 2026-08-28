@@ -1,0 +1,75 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v2",
+  "created_at": "2026-08-28T10:56:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/retrieval-credit-round-binding",
+  "result": "SOURCE_FORENSIC_DELTA_COMMITTED_NO_RUNTIME_PROMOTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "authority": {
+    "canonical_main_reentered": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "design_head_before_delta": "4ebdcbffff35e85d9d09e9fa92f0de2c15d8402c",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true
+  },
+  "inbox": {
+    "latest_prior_packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T104200Z_5641dc6_GPT56SOL_STOP_HOOK_LLM_BOUNDARY.json",
+    "latest_prior_packet_disposition": "ALREADY_CONSUMED_AFTER_DIRECT_SOURCE_CROSSCHECK",
+    "new_unconsumed_packets_after_prior_ingest": 0,
+    "direct_source_forensics_used": true,
+    "new_packet_created_by_this_run": false
+  },
+  "delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1053Z_RETRIEVAL_CREDIT_ROUND_BINDING_GPT56SOL.json",
+    "commit": "1e27381a462ad207cce5ae7c10b45215f26140a6",
+    "class": "RETRIEVAL_CREDIT_ROUND_IDENTITY_AND_CROSS_TURN_CONTAMINATION",
+    "mechanism": "RoundBoundRetrievalCredit/v1"
+  },
+  "direct_source_crosscheck": [
+    {
+      "span": "stern.py:4180-4335",
+      "finding": "retrieval_episodes stores retrieval_id, turn_id, episode_id, causal_id and generation"
+    },
+    {
+      "span": "stern.py:4710-4788",
+      "finding": "_microclay_schatten creates fresh round-scoped causal_id/turn_id/episode_id after a documented prior session-scoped uniqueness failure; active_turns remains session-scoped"
+    },
+    {
+      "span": "stern.py:4445-4525",
+      "finding": "mechanical credit selects up to 20 feedback-open rows by session, uses session active episode effects from each retrieval timestamp through now, and does not require the completed round retrieval_id"
+    },
+    {
+      "span": "stern.py:4660-4715",
+      "finding": "assistant evidence helper concatenates all assistant transcript records and truncates only by character tail, despite declaring this-round semantics"
+    },
+    {
+      "span": "stern.py:4920-5065",
+      "finding": "model relevance chooses newest session row lacking model feedback and pairs it with the transcript's last user message"
+    },
+    {
+      "span": "stern.py:4320-4450",
+      "finding": "post-selection reducer receipt strongly binds retrieval_id/causal_id/generation/signal/value but cannot prove upstream target/evidence round correctness"
+    }
+  ],
+  "new_architecture_conclusion": "Frankenstein 2.0 must bind retrieval credit before evaluation, not only at reducer receipt time. Exact retrieval/turn/episode/causal/generation identity and exact assistant/effect/model evidence refs must travel together. Session-newest/open-row heuristics fail the causal-boundary requirement.",
+  "counterhypothesis": "Strictly sequential per-session hook delivery may make the current heuristic operationally adequate in common steady-state runs; this is not source-enforced and fail-silent timeout/error paths can leave older rows open.",
+  "next_exact_gate": "Triggerword-4 lane: implement RoundBoundRetrievalCredit/v1 with HookCognitionBoundary/v1 and test two same-session retrievals where A remains open and only B assistant/effect evidence contains A's selected token; then test reversed model completion. Require exact target+evidence receipt binding before runtime credit.",
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "packet_ingest": "NO_NEW_PACKET",
+    "runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "state_update": "NOT_REQUIRED_FOR_THIS_APPEND_ONLY_DIRECT_SOURCE_DELTA; receipt is the ingestion checkpoint and a later state compaction may index it",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false
+}

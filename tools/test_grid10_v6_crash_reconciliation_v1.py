@@ -7,6 +7,7 @@ import tempfile
 import unittest
 
 from grid10_v6_crash_reconciliation_v1 import (
+    CrashReconciliationError,
     DuplicateCycleIntent,
     RecoveryMutationNotAuthorized,
     STATUS_ABORTED_BEFORE_V4_COMMIT,
@@ -47,6 +48,14 @@ def _install_fixture_runtime_tables(path: Path) -> None:
                  receipt_digest TEXT NOT NULL
                )"""
         )
+        con.execute(
+            """CREATE TABLE agency_events(
+                 event_seq INTEGER PRIMARY KEY AUTOINCREMENT,
+                 event_id TEXT UNIQUE NOT NULL,
+                 event_type TEXT NOT NULL,
+                 state_epoch INTEGER NOT NULL
+               )"""
+        )
     finally:
         con.close()
 
@@ -60,7 +69,7 @@ class CrashReconciliationTests(unittest.TestCase):
         prepare_cycle_intent(
             self.db,
             tick_id="t1",
-            expected_agency_epoch=7,
+            agency_epoch_at_prepare=7,
             control_epoch=11,
             control_snapshot_digest="ctrl-a",
             prepared_ts=100.0,
@@ -127,12 +136,46 @@ class CrashReconciliationTests(unittest.TestCase):
         result = classify_cycle_intent(self.db, tick_id="t1")
         self.assertEqual(result.status, STATUS_INCONSISTENT)
 
+    def _insert_agency_event(self, *, event_id, event_type, state_epoch):
+        con = _connect(self.db)
+        try:
+            con.execute(
+                "INSERT INTO agency_events(event_id,event_type,state_epoch) VALUES(?,?,?)",
+                (event_id, event_type, state_epoch),
+            )
+        finally:
+            con.close()
+
+    def test_matching_wake_epoch_gap_is_accepted(self):
+        self._insert_agency_event(
+            event_id="t1:wake:intent-a",
+            event_type="DEFERRED_INTENT_FIRED",
+            state_epoch=8,
+        )
+        self._insert_v4(before=8, after=9)
+        self._insert_v6(after=9)
+        result = classify_cycle_intent(self.db, tick_id="t1")
+        self.assertEqual(result.status, STATUS_CLOSED)
+        self.assertEqual(result.evidence["mismatches"], [])
+
+    def test_foreign_pre_v4_epoch_write_is_inconsistent(self):
+        self._insert_agency_event(
+            event_id="other-worker:event",
+            event_type="GOAL_CREATED",
+            state_epoch=8,
+        )
+        self._insert_v4(before=8, after=9)
+        self._insert_v6(after=9)
+        result = classify_cycle_intent(self.db, tick_id="t1")
+        self.assertEqual(result.status, STATUS_INCONSISTENT)
+        self.assertIn("FOREIGN_PRE_V4_AGENCY_EVENT", result.evidence["mismatches"])
+
     def test_duplicate_prepare_fails_closed(self):
         with self.assertRaises(DuplicateCycleIntent):
             prepare_cycle_intent(
                 self.db,
                 tick_id="t1",
-                expected_agency_epoch=7,
+                agency_epoch_at_prepare=7,
                 control_epoch=11,
                 control_snapshot_digest="ctrl-a",
             )

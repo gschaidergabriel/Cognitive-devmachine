@@ -1,0 +1,94 @@
+{
+  "packet_id": "TW5-PACKET-20260828T073722Z-WACHE-KOENIG-DRIVE-DIRECT-CROSSCHECK-GPT56SOL",
+  "created_at": "2026-08-28T07:37:22Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/wache-koenig-direct-crosscheck",
+  "trigger": "triggerwort 5",
+  "scope": "Independent direct-source crosscheck of the newly pinned historical wache-koenig/freigabe predecessor pair using the exact Google Drive file IDs recorded by the active Triggerword-5 design lane. Source-only; no host/runtime promotion.",
+  "current_donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "sources": [
+    {
+      "file_name": "wache-koenig.py",
+      "drive_file_id": "10z1K5hKV9t9wBu1k5zXEvxSjaCZy3TUH",
+      "observed_bytes": 8373,
+      "observed_sha256": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "identity_result": "MATCHES_PINNED_PREDECESSOR_IDENTITY"
+    },
+    {
+      "file_name": "freigabe",
+      "drive_file_id": "1xi-hFPSWJ6NC8ruDV6iTttw_-wMv08dI",
+      "observed_bytes": 5512,
+      "observed_sha256": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "identity_result": "MATCHES_PINNED_PREDECESSOR_IDENTITY"
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-WACHE-XCHECK-001-REAL-PREDISPATCH-DENY",
+      "subsystem": "historical_effect_enforcement",
+      "source_kind": "HISTORICAL_ENFORCEMENT_CODE_PINNED_BYTES_DIRECTLY_RETRIEVED",
+      "what_it_does": "wache-koenig.py parses PreToolUse JSON for Bash, classifies the command through pruefen(), exits 2 for NIE and for SCHEIN without a valid ticket, and exits 0 only for free commands or an accepted ticket. This is source-level pre-dispatch allow/deny semantics, not post-hoc journaling.",
+      "important_spans": ["wache-koenig.py:105-120 pruefen", "wache-koenig.py:141-168 main"],
+      "confidence": 1.0,
+      "target_2_0_action": "SALVAGE_ENFORCEMENT_PRINCIPLE_REPLACE_POLICY_HEURISTICS"
+    },
+    {
+      "atom_id": "TW5-WACHE-XCHECK-002-DIGEST-BOUND-ONE-SHOT-TICKET",
+      "subsystem": "historical_effect_grant_identity",
+      "source_kind": "HISTORICAL_ENFORCEMENT_CODE_PINNED_BYTES_DIRECTLY_RETRIEVED",
+      "what_it_does": "schein_da() hashes the exact command string with SHA-256, requires the ticket's stored hash to match, checks valid-from/valid-until, and unlinks the ticket before returning success. The predecessor therefore already embodies exact-command binding plus one-use consumption before dispatch.",
+      "important_spans": ["wache-koenig.py:123-138 schein_da"],
+      "boundary": "Command-text SHA-256 is not sufficient Frankenstein-2.0 identity because it lacks immutable tool_use_id/invocation_id, generation, causal_event_id, policy generation and typed capability/effect scope.",
+      "confidence": 1.0,
+      "target_2_0_action": "ADAPT_TO_TYPED_EFFECT_DECISION"
+    },
+    {
+      "atom_id": "TW5-WACHE-XCHECK-003-EXTERNAL-HUMAN-GRANT-SEPARATION",
+      "subsystem": "historical_human_approval",
+      "source_kind": "HISTORICAL_ENFORCEMENT_CODE_PINNED_BYTES_DIRECTLY_RETRIEVED",
+      "what_it_does": "freigabe opens /dev/tty, uses two fresh typed challenges, timing checks, a ten-minute delayed-validity window followed by twenty minutes of validity, and writes a ticket bound by SHA-256 to the exact command. For local rm it refuses unmeasurable wildcard/expansion targets and caps measured deletion size at 300 MB.",
+      "important_spans": ["freigabe:34-55 tty/challenge timing", "freigabe:78-110 grant creation"],
+      "boundary": "Typing-time and terminal-presence heuristics are historical human-gate techniques, not canonical machine authority. The reusable principle is that owner grant issuance is outside model self-approval and becomes an exact-request input to deterministic effect admission.",
+      "confidence": 1.0,
+      "target_2_0_action": "SALVAGE_EXTERNAL_OWNER_GRANT_SEPARATION_ONLY"
+    },
+    {
+      "atom_id": "TW5-WACHE-XCHECK-004-CURRENT-HOST-REACHABILITY-NOT-PROVEN",
+      "subsystem": "current_host_effect_authority",
+      "source_kind": "NEGATIVE_EVIDENCE_BOUNDARY",
+      "what_it_does": "Direct Drive retrieval proves historical source identity and semantics only. It does not prove these bytes are currently installed at the referenced host path, registered in current global settings, ordered before stern.py, immutable against the executing user, or invoked for every relevant current effect.",
+      "confidence": 1.0,
+      "target_2_0_action": "VERIFY_OR_REPLACE"
+    }
+  ],
+  "architecture_implication": "Triggerword-4 should not copy wache-koenig wholesale. Preserve pre-dispatch blocking, exact-request binding and one-shot consumption as typed EffectDecision invariants; replace editable regex policy and command-text-only identity with immutable invocation/generation/causal/policy identity, and preserve stern-style post-effect observation as a separate EffectOutcome/EffectJournal stage.",
+  "counterhypotheses": [
+    "The current host may already run these exact bytes in the intended order; source retrieval alone cannot establish that runtime fact.",
+    "A newer successor may exist on-host and supersede the archived predecessor; current installation/source hash evidence is required before selecting a donor implementation."
+  ],
+  "credits": {
+    "historical_source_identity_crosscheck": "PASS",
+    "historical_source_semantics_crosscheck": "PASS",
+    "current_host_reachability": 0,
+    "runtime_causal": 0,
+    "effect_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "recommended_next_spans": [
+    {
+      "path": "current-host://global settings / PreToolUse hook registration",
+      "reason": "Prove installed source hash, hook order and exact invocation coverage without assuming plugin-local config equals whole-host composition.",
+      "priority": "P0"
+    },
+    {
+      "path": "Triggerword-4 executor/effect successor",
+      "reason": "Require one-shot EffectDecision consumption, wrong-digest rejection, stale-generation rejection, DENY non-execution and post-submit UNKNOWN outcome semantics.",
+      "priority": "P0"
+    }
+  ]
+}

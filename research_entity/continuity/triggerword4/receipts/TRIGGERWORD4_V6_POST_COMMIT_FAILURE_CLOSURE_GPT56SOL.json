@@ -1,0 +1,66 @@
+{
+  "schema": "TRIGGERWORD4_SOURCE_CLOSURE_RECEIPT/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "GRID10_V6_POST_V4_COMMIT_COGNITION_FAILURE_CLOSURE_SOURCE_ONLY",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
+  "authority_observed": "SUPERVISOR_9.13AE_SINGLETON_GRID10_V3_G0000_IN_FLIGHT",
+  "source_delta": {
+    "implementation_commit": "1e9a3e30bf4318e3eacf994eaa3d129a2fc50598",
+    "regression_commit": "e8d5659199663f2f8ff362614aa450f5882aeab3",
+    "implementation_file": "tools/grid10_cognitive_unified_runtime_v6.py",
+    "regression_file": "tools/test_grid10_cognitive_unified_runtime_v6.py",
+    "finding": "v6 delegated the durable Agency/wake transition to V4 before optional specialist/GWT cognition; an exception in that later cognition path could therefore leave a committed V4 tick without any v6 causal closure receipt",
+    "change": "v6 now catches cognition-path exceptions only after the V4 commit boundary, persists a sanitized FAILED receipt bound to tick_id, agency_epoch_after, control_epoch and control_snapshot_digest, records provider call count as UNKNOWN_AFTER_EXCEPTION, forbids same-tick retry authorization, then raises CognitiveCycleExecutionError chained from the original exception",
+    "raw_exception_persistence": false,
+    "two_phase_atomicity_claimed": false,
+    "same_tick_replayability_claimed": false
+  },
+  "regression_added": {
+    "name": "test_post_v4_commit_inference_exception_gets_sanitized_failure_closure",
+    "asserts": [
+      "Agency state advances exactly once at the pre-existing V4 commit boundary",
+      "matching grid10_cognitive_cycles base row exists",
+      "matching grid10_v6_control_bound_receipts closure row exists",
+      "closure is typed FAILED and bound to the committed Agency epoch",
+      "provider call count remains unknown after exception instead of being fabricated",
+      "same-tick retry is not authorized",
+      "raw exception text is absent from the persisted receipt"
+    ]
+  },
+  "scientific_frame": {
+    "hypothesis": "post-commit candidate-cognition failure must remain causally observable even when the larger runtime is not yet two-phase atomic",
+    "counterhypothesis": "re-raising the cognition exception alone is sufficient because the caller can infer failure from control flow",
+    "decision": "reject the counterhypothesis for durable recovery: caller control flow does not survive process death/restart and cannot reconstruct the exact committed Agency/control boundary without a repository-defined durable closure"
+  },
+  "runtime_evidence": {
+    "github_actions_run_for_regression_commit": 33169673458,
+    "github_actions_conclusion": "failure",
+    "job_name": "deterministic",
+    "job_steps_observed": [],
+    "classification": "ZERO_STEP_CI_INFRASTRUCTURE_FAILURE_NOT_CODE_TEST_RESULT",
+    "tests_executed_by_this_receipt": false,
+    "runtime_pass_claimed": false
+  },
+  "singleton_dispatch": {
+    "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+    "workflow_run_id": 33168491753,
+    "state_last_observed": "queued",
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false
+  },
+  "credit": {
+    "source_closure": 1,
+    "deterministic_test_execution": 0,
+    "physical_grid10_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "frankenstein2_runtime": 0
+  },
+  "remaining_gap": "The V4 Agency commit and v6 candidate-cognition closure are still separate transactions; a process kill between them can still produce an unclosed committed tick. Full repair requires a separately designed prepare/commit or recovery-reconciliation protocol and admitted runtime evidence.",
+  "next_exact_gate": "Obtain an admitted deterministic compile/test receipt for the current Triggerword-4 branch, then design or falsify a crash-window reconciliation/two-phase protocol without duplicating the in-flight GRID10 SIGKILL g0000 dispatch; observe terminal state plus canonical result for run 33168491753 before any retry or generation advance."
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "REVIEW_ONLY_NO_AUTHORITY_CHANGE",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "9.13",
+  "retained_lane": {
+    "pull_request": 430,
+    "branch": "go/effect-unknown-outcome-gpt56sol-20260817",
+    "observed_head": "2ab149cdb052f6130e1b37281d0a23b77967f8f4",
+    "status": "DRAFT_CANDIDATE_NOT_AUTHORITY"
+  },
+  "observed_strength": [
+    "PR430 is the already-retained UNKNOWN-outcome donor and should remain the single implementation lane.",
+    "It owns UNKNOWN in the canonical EffectJournal rather than asking Frankenstein to relabel outcomes.",
+    "It gives UNKNOWN zero causal credit and rebinds same-turn retry without a second bridge execution.",
+    "Exact current bound EntityOSBridge counterevidence separately proves child-start marker present before TimeoutExpired escapes."
+  ],
+  "remaining_falsifier": {
+    "id": "POST_POPEN_NON_TIMEOUT_EXCEPTION_CLASSIFICATION",
+    "finding": "PR430 currently converts subprocess.TimeoutExpired into EntityOSOutcomeUnknown while retaining subprocess.run(). Successful child creation is the causal boundary, not the TimeoutExpired class. An ordinary exception arising after successful Popen but outside the explicitly caught TimeoutExpired path can still reach EffectGate's generic Exception -> FAILED branch, recreating the same evidence overclaim under a different exception class.",
+    "counterhypothesis": "TimeoutExpired is the only ordinary exception that can escape subprocess.run after successful child creation on the supported runtime, so exception-class handling is causally complete.",
+    "discriminator": "Instrument or fake a successful Popen followed by a non-Timeout ordinary communicate/return-path exception. Acceptance requires canonical UNKNOWN/non-replayable and exactly one execution attempt; FAILED is a rejection result.",
+    "preferred_repair": "Make successful Popen the explicit process-start boundary, or otherwise prove and enforce an exhaustive post-start exception taxonomy. Preserve pre-Popen/open/integrity/spawn failures as definite failures."
+  },
+  "coordination": {
+    "duplicate_candidate_pr_2126": "CLOSED_UNMERGED",
+    "unique_finding_transferred_to_pr430_review": true,
+    "new_competing_implementation_lane_created": false
+  },
+  "hosted_test_status": {
+    "pr430_head_workflow_run": 33204812081,
+    "job": 98963046535,
+    "runner_id": 0,
+    "steps": 0,
+    "classification": "PRIVATE_RESEARCH_REPOSITORY_PRESTEP_FAILURE_ZERO_TEST_CREDIT"
+  },
+  "credit_boundary": {
+    "review_delta": 1,
+    "fresh_pr430_head_test_credit_added": 0,
+    "real_effect_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_frankenstein2_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "next_exact_action": "Keep PR430 as the single donor; add the post-Popen non-Timeout falsifier and causal-boundary hardening there, obtain an actually-started deterministic exact-head test, then re-enter current authority and issue an explicit successor EffectGate/EffectJournal implementation binding before F2 consumes the new UNKNOWN_OUTCOME semantics."
+}

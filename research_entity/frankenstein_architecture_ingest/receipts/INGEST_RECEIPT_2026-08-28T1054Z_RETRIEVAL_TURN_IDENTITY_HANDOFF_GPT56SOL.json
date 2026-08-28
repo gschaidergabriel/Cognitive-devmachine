@@ -1,0 +1,67 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v2",
+  "created_at": "2026-08-28T10:54:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/retrieval-identity-forensics",
+  "routing": "PASS",
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_epoch": "9.13",
+  "authority_delta": "9.13AC_NON_AUTHORITY",
+  "mode": "FREE_ONLY",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "source_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+  "packet": {
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105400Z_5641dc6_GPT56SOL_RETRIEVAL_TURN_BINDING_FORENSICS.json",
+    "commit": "a381cc8ebb9517a77323c74b2704425e10cb079b",
+    "status": "CONSUMED_BY_THIS_RECEIPT_AFTER_DIRECT_SOURCE_CROSSCHECK"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_RETRIEVAL_TURN_IDENTITY_HANDOFF_GPT56SOL.json",
+    "commit": "8d243fd67d2e720c465fe4e10507febd49f81e45",
+    "classification": "SOURCE_FORENSICS_ONLY_RUNTIME_CREDIT_ZERO"
+  },
+  "evidence": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "4210-4310",
+      "classification": "LIVE_CODE",
+      "finding": "retrieval_episodes already persists retrieval/turn/episode/causal/generation/query identity"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "4725-4808",
+      "classification": "LIVE_CODE",
+      "finding": "UserPromptSubmit creates fresh round-scoped causal_id, turn_id and episode_id"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "4960-5045",
+      "classification": "LIVE_CODE",
+      "finding": "Stop relevance cognition rediscoveries target by session/newest-open and query by transcript-last-user independently"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "8840-8898",
+      "classification": "LIVE_CODE",
+      "finding": "Stop call crosses only session_id and transcript_path into relevance cognition"
+    }
+  ],
+  "result": "PASS_SOURCE_SCOPE_INTERCONNECT_ABI_IDENTITY_LOSS_LOCALIZED",
+  "runtime_failure_observed": false,
+  "provider_execution": false,
+  "vps_execution": false,
+  "frank_harness_modified": false,
+  "unusual_experiment": false,
+  "credits": {
+    "source_forensics": "PASS",
+    "interleaving_runtime": 0,
+    "stop_latency_runtime": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  },
+  "state_note": "INGEST_STATE.json was not rewritten in this receipt commit because the branch is under active parallel writes and the append-only packet+delta+receipt chain carries exact commit provenance without risking destructive whole-file replacement. State synchronization should consume this receipt by exact path/commit on reentry.",
+  "next_exact_gate": "Triggerword-4 donor-side/external test lane: construct RetrievalRelevanceCandidate/v1 from the exact retrieval receipt, carry retrieval_id+turn_id+episode_id+causal_id+generation+query_hash, reverse/interleave two same-session relevance completions, and fail on any cross-attachment; keep Frank Harness unchanged and preserve runtime credit at zero until executed."
+}

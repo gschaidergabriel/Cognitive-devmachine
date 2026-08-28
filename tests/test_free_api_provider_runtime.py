@@ -206,9 +206,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
     def test_capability_receipt_advertises_execution_schema_provenance(self):
         capability_receipt = MOD.receipt()
 
-        self.assertEqual(capability_receipt["schema_version"], "1.5")
+        self.assertEqual(capability_receipt["schema_version"], "1.6")
         self.assertEqual(
-            capability_receipt["execution_receipt_schema_version"], "1.4"
+            capability_receipt["execution_receipt_schema_version"], "1.5"
         )
         self.assertEqual(
             capability_receipt["unicode_database_version"],
@@ -276,6 +276,59 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "process_local",
         )
 
+    def test_credential_rotation_changes_cost_principal_lineage_without_exposure(self):
+        class SuccessResponse:
+            status = 200
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion","id":"chatcmpl-test",'
+                    b'"created":1,"model":"mock","usage":{'
+                    b'"prompt_tokens":1,"completion_tokens":1,'
+                    b'"total_tokens":2},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":{'
+                    b'"role":"assistant","content":"ok"}}]}'
+                )
+
+        credentials = (
+            "credential-alpha-high-entropy",
+            "credential-beta-high-entropy",
+        )
+        receipts = []
+        for index, credential in enumerate(credentials):
+            result = MOD.execute_chat(
+                VALID_MESSAGES,
+                model="mock",
+                environ={
+                    "NVIDIA_API_KEY": credential,
+                    "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+                    "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+                    "FRANK_FREE_ONLY_BUDGET_EPOCH": "rotation-regression",
+                },
+                opener=lambda *args, **kwargs: SuccessResponse(),
+                now=iter((2.0 + index, 2.01 + index)).__next__,
+            )
+            receipts.append(result["receipt"])
+
+        self.assertNotEqual(
+            receipts[0]["cost_policy_principal_id"],
+            receipts[1]["cost_policy_principal_id"],
+        )
+        self.assertNotEqual(receipts[0]["request_id"], receipts[1]["request_id"])
+        self.assertTrue(all(
+            receipt["cost_policy_principal_scope"] == "credential_binding"
+            for receipt in receipts
+        ))
+        for credential in credentials:
+            self.assertNotIn(credential, repr(receipts))
+
     def test_execution_receipt_pins_unicode_database_version(self):
         class Response:
             status = 200
@@ -309,7 +362,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             now=iter((1.0, 1.01)).__next__,
         )
 
-        self.assertEqual(result["receipt"]["schema_version"], "1.4")
+        self.assertEqual(result["receipt"]["schema_version"], "1.5")
         self.assertEqual(
             result["receipt"]["unicode_database_version"],
             MOD.unicodedata.unidata_version,

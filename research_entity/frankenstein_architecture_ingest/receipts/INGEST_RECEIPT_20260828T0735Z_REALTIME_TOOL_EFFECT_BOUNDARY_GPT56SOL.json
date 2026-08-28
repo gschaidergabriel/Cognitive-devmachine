@@ -1,0 +1,34 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T0735Z-REALTIME-TOOL-EFFECT-BOUNDARY-GPT56SOL",
+  "recorded_at": "2026-08-28T07:35Z",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "authority_epoch": "8.78",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "delta_path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_REALTIME_TOOL_EFFECT_BOUNDARY_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+  "delta_commit": "9c3f5132bc7a528f858bf2a90015007898ac493d",
+  "new_findings": [
+    "Realtime call_id is not propagated into downstream memory/task effect records.",
+    "frank_erinnerung_schreiben commits directly to the dedicated gespraech_erinnerung table through in-process stern dispatch; no independent user-confirmation receipt exists on that path.",
+    "frank_auftrag_stellen has a real two-stage voice confirmation gate, then dispatches to headless Claude Code; Bash is hard-disabled, while file Write/Edit remains intentionally available.",
+    "Pre-dispatch barge-in cancellation does not create a downstream pending-effect lease after _tool_ausfuehren begins."
+  ],
+  "evidence_boundary": "SOURCE_FORENSICS_AND_HISTORICAL_GIT_REPORTS_ONLY; NO_NEW_RUNTIME_REEXECUTION; HOST_WACHE_KOENIG_AUTHORITY_UNRESOLVED",
+  "triggerword4_handoff": [
+    "Add immutable VoiceToolInvocation identity and request digest through downstream execution/results.",
+    "Treat confirmed utterance as human-intent admission evidence, not effect/completion authority.",
+    "Put persistent memory and file-changing downstream paths behind typed deterministic admission/effect contracts.",
+    "Preserve CANCELLED-before-submission versus SUBMITTED/OUTCOME_UNKNOWN separation."
+  ],
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Resolve host-only wache-koenig/Claude hook ordering and audit protected perception caller bypasses before any system-wide effect/privacy promotion."
+}

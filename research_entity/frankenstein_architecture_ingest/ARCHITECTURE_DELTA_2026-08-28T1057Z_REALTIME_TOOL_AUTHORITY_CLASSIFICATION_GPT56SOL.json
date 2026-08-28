@@ -1,0 +1,219 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:57:36Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "delta_class": "REALTIME_TOOL_AUTHORITY_AND_HUMAN_INTENT_CLASSIFICATION",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true
+  },
+  "design_branch_head_before_write": "8c76a9f7262d98929ae2ed2fc7185673856b5830",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "realtime_path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+    "realtime_blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+    "stern_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "ingest_disposition": {
+    "new_inbox_packet_consumed": false,
+    "reason": "Latest inbox packet was already consumed. This is a nonduplicate direct-source execution of the explicit open P0 in INGEST_STATE: classify the complete Realtime TOOLS surface and every mutating dispatch branch into authority classes with HumanIntentDecision policy distinct from EffectDecision.",
+    "prior_deltas_reused_not_repeated": [
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0740Z_REALTIME_TASK_MEMORY_EFFECT_FUSION_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REALTIME_MEMORY_EFFECT_FUSION.json",
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0744Z_AUTHORITY_REBIND_MEMORY_EPISTEMIC_FUSION_GPT56SOL.json"
+    ]
+  },
+  "direct_source_crosscheck": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "span": "430-550",
+      "source_kind": "SCHEMA",
+      "finding": "TOOLS declares exactly six Realtime function surfaces: frank_status_lesen, frank_erinnerung_lesen, frank_erinnerung_schreiben, frank_auftrag_stellen, frank_forschung and frank_gespraech_beenden. Tool descriptions contain behavioral intent constraints, including two-step confirmation for task dispatch and explicit-user-request-only prose for research."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "span": "1640-1805",
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "_tool_ausfuehren dispatches model-selected tool calls. The task path routes through _auftrag_stellen_mit_bestaetigung; memory write and research dispatch do not share that mechanical confirmation gate. Session-end mutates only local session control state before returning function output."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "symbol": "_tool_forschung / _forschung_taetigkeit / _HintergrundBruecke",
+      "source_kind": "LIVE_CODE",
+      "finding": "frank_forschung with aktion=neu_anstossen starts asynchronous real ChatGPT/browser research work through stern.py chatgpt_senden. The explicit-user-request restriction exists in tool/persona prose, but this path has no transcript-bound mechanical HumanIntentDecision analogous to the task confirmation state machine."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "symbol": "gespraech_erinnerung_schreiben",
+      "source_kind": "CANONICAL_INTERNAL_MUTATION",
+      "finding": "The Realtime memory writer inserts subject/value/source into the durable gespraech_erinnerung table and commits. Narrow table scope limits blast radius but persistence is still a durable internal mutation and does not establish factual truth."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "symbol": "_auftrag_stellen_mit_bestaetigung",
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "frank_auftrag_stellen has the strongest current HumanIntent precursor: exact normalized task match, bestaetigt=true, at least one new server-originated user transcript, <=300s freshness and explicit contradiction veto. The donor itself states this is not speaker verification or complete intent classification."
+    }
+  ],
+  "complete_tool_classification": [
+    {
+      "tool": "frank_status_lesen",
+      "authority_class": "READ_ONLY",
+      "mutation": false,
+      "human_intent_decision": "NOT_REQUIRED_FOR_ORDINARY_SCOPED_READ; active session/capability/privacy scope still applies",
+      "effect_decision": "NOT_APPLICABLE",
+      "successor_rule": "Return typed read evidence with source/freshness/provenance; do not let a status read mint authority."
+    },
+    {
+      "tool": "frank_erinnerung_lesen",
+      "authority_class": "READ_ONLY",
+      "mutation": false,
+      "human_intent_decision": "NOT_REQUIRED_FOR_ORDINARY_SCOPED_READ; memory privacy and session capability scope still apply",
+      "effect_decision": "NOT_APPLICABLE",
+      "successor_rule": "Retrieved memory remains remembered evidence with provenance, never verified world fact merely because it was retrieved."
+    },
+    {
+      "tool": "frank_erinnerung_schreiben",
+      "authority_class": "CANONICAL_INTERNAL_MUTATION",
+      "mutation": true,
+      "human_intent_decision": "REQUIRES_EXPLICIT_MEMORY_ADMISSION_POLICY bound to current user/transcript evidence or an owner-authorized implicit-session-memory rule; model tool choice alone is insufficient",
+      "effect_decision": "DISTINCT_NOT_A_SUBSTITUTE; use MemoryCandidate -> MemoryAdmission for this internal epistemic mutation",
+      "successor_rule": "Bind candidate text, provenance, causal/session/turn identity, privacy class and memory type; user claim, quote, model summary, inference and verified observation must remain distinguishable."
+    },
+    {
+      "tool": "frank_auftrag_stellen",
+      "authority_class": "EXTERNAL_EFFECT_REQUEST",
+      "mutation": "INDIRECT_DOWNSTREAM",
+      "human_intent_decision": "REQUIRED; donor two-step gate is reusable evidence for TaskAdmission but must be bound to immutable voice call_id/task digest/session/causal identity",
+      "effect_decision": "REQUIRED_SEPARATELY_FOR_EACH_NONEXEMPT_CHILD_EFFECT_AT_EXECUTOR",
+      "successor_rule": "Human task approval authorizes a task request, not every downstream Write/Edit/command. Child effects need one-shot typed EffectDecision consumption."
+    },
+    {
+      "tool": "frank_forschung",
+      "submode": "lesen",
+      "authority_class": "READ_ONLY",
+      "mutation": false,
+      "human_intent_decision": "NOT_REQUIRED_FOR_ALREADY_ADMITTED_CACHED_READ; explicit-use UX policy may remain",
+      "effect_decision": "NOT_APPLICABLE",
+      "successor_rule": "Return source/provenance/freshness of the cached research result."
+    },
+    {
+      "tool": "frank_forschung",
+      "submode": "neu_anstossen",
+      "authority_class": "EXTERNAL_EFFECT_REQUEST",
+      "mutation": "STARTS_EXTERNAL_RESEARCH_WORK",
+      "human_intent_decision": "REQUIRED_AND_MUST_BE_MECHANICAL; current explicit-user-request-only wording is model-facing prose, not an enforcement proof",
+      "effect_decision": "SEPARATE_FROM_RESEARCH_REQUEST_ADMISSION; any downstream provider/browser/host effects remain subject to current execution authority",
+      "successor_rule": "Compile ResearchRequestCandidate -> ResearchRequestAdmission from exact user evidence/call_id/request digest before dispatch; fail closed when current provider/execution authority does not admit the concrete route."
+    },
+    {
+      "tool": "frank_gespraech_beenden",
+      "authority_class": "SESSION_CONTROL",
+      "mutation": "EPHEMERAL_SESSION_STATE_ONLY",
+      "human_intent_decision": "REQUIRED_AS_SESSION_INTENT_EVIDENCE; bind to the current user turn/transcript rather than an ungrounded model assertion",
+      "effect_decision": "NOT_APPLICABLE_WHILE_SCOPE_REMAINS_SESSION_LOCAL",
+      "successor_rule": "Terminate only the scoped voice session; session control must not imply canonical state/effect authority."
+    }
+  ],
+  "class_coverage": {
+    "READ_ONLY": ["frank_status_lesen", "frank_erinnerung_lesen", "frank_forschung:lesen"],
+    "EPHEMERAL_STATE": [],
+    "CANONICAL_INTERNAL_MUTATION": ["frank_erinnerung_schreiben"],
+    "EXTERNAL_EFFECT_REQUEST": ["frank_auftrag_stellen", "frank_forschung:neu_anstossen"],
+    "SESSION_CONTROL": ["frank_gespraech_beenden"]
+  },
+  "new_architecture_inference": {
+    "name": "RealtimeToolAuthorityMatrix/v1",
+    "status": "SOURCE_GROUNDED_SUCCESSOR_REQUIREMENT",
+    "core_finding": "The Realtime tool surface must be classified by the authority it can exercise, not by a single generic 'tool call' category. Human intent admission and EffectDecision are separate state transitions; neither model tool selection nor successful execution can retroactively create the missing earlier authority.",
+    "typed_states": [
+      "VoiceIntentEvidence",
+      "HumanIntentDecision",
+      "ReadRequest",
+      "MemoryCandidate",
+      "MemoryAdmission",
+      "TaskRequestCandidate",
+      "TaskAdmission",
+      "ResearchRequestCandidate",
+      "ResearchRequestAdmission",
+      "EffectRequest",
+      "EffectDecision",
+      "SubmissionReceipt",
+      "ExecutionReceipt",
+      "EffectOutcome",
+      "ResultReentry"
+    ],
+    "invariants": [
+      "MODEL_TOOL_CHOICE_IS_NOT_HUMAN_INTENT_DECISION",
+      "HUMAN_INTENT_DECISION_IS_NOT_EFFECT_DECISION",
+      "TASK_ADMISSION_IS_NOT_CHILD_EFFECT_AUTHORITY",
+      "MEMORY_ADMISSION_IS_NOT_WORLD_FACT_VERIFICATION",
+      "READ_ONLY_RESULT_IS_NOT_CAPABILITY_GRANT",
+      "SUCCESSFUL_EXECUTION_CANNOT_RETROACTIVELY_MINT_ADMISSION",
+      "SESSION_CONTROL_CANNOT_ESCAPE_SESSION_SCOPE"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "contradictions_preserved": [
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-TOOL-INTENT-ENFORCEMENT-020",
+      "status": "OPEN",
+      "detail": "Realtime tool/persona prose requires explicit user intent for some operations, but code-level mechanical intent enforcement is uneven: task dispatch has a two-step state machine, while durable memory write and new research dispatch can proceed from model tool selection without an equivalent transcript-bound admission decision."
+    },
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-RESEARCH-ROUTE-AUTHORITY-021",
+      "status": "OPEN",
+      "detail": "Donor source can launch real asynchronous ChatGPT/browser research through frank_forschung:neu_anstossen. Current 9.13 FREE_ONLY authority has provider routes admitted=false and FreeSwarm emergency stop active; exact installed donor route/economic/execution admission is therefore not inferred and no runtime credit is granted."
+    }
+  ],
+  "counterhypotheses": [
+    "The Realtime model may reliably follow the explicit-user-request-only tool descriptions in normal dialogue; this is behavioral compliance, not deterministic admission proof.",
+    "Conversation-memory writes are narrowly scoped and may be intended as low-risk implicit session memory; even then the policy must be explicit and the memory must remain typed/provenance-bearing rather than silently becoming fact authority.",
+    "frank_forschung may resolve to a route that is locally free and owner-authorized on the installed host; source inspection alone cannot establish that current runtime/economic authority."
+  ],
+  "triggerword4_handoff": {
+    "do_not_build_in_trigger5": true,
+    "required_actions": [
+      "compile the RealtimeToolAuthorityMatrix/v1 into the Voice/GRID adapter so every tool call is classified before dispatch",
+      "create a HumanIntentDecision object distinct from EffectDecision and bind it to call_id, exact user evidence, request digest, session/causal/generation identity and policy version where required",
+      "convert frank_erinnerung_schreiben to MemoryCandidate -> deterministic MemoryAdmission with epistemic/provenance/privacy typing",
+      "convert frank_forschung:neu_anstossen to ResearchRequestCandidate -> ResearchRequestAdmission and re-check current concrete execution authority before dispatch",
+      "retain the donor task two-step gate as a TaskAdmission donor primitive, but require per-child one-shot EffectDecision at the executor",
+      "keep frank_gespraech_beenden session-local and transcript-grounded",
+      "add negative tests proving model tool choice alone cannot authorize memory persistence, research launch or child state-changing effects"
+    ],
+    "required_regressions": [
+      "model emits frank_erinnerung_schreiben without admissible MemoryAdmission -> no durable memory row",
+      "model emits frank_forschung:neu_anstossen without transcript-bound ResearchRequestAdmission -> no research dispatch",
+      "valid TaskAdmission with mismatched child EffectRequest -> DENY",
+      "read-only tool result cannot be replayed as capability/admission evidence",
+      "session-end intent from stale/different turn cannot terminate a new generation",
+      "successful downstream work cannot backfill a missing HumanIntentDecision"
+    ]
+  },
+  "credits": {
+    "donor_source_crosscheck": "PASS_AT_EXACT_DONOR_SHA",
+    "tool_authority_classification": "COMPLETE_FOR_DECLARED_REALTIME_TOOLS_AT_PINNED_SOURCE",
+    "runtime_execution": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 adapter/test lane: enforce RealtimeToolAuthorityMatrix/v1 and HumanIntentDecision separation, then run source-bound negative tests that model tool selection alone cannot persist memory, launch new research or authorize child effects. Triggerword-5 next source span should inspect the exact response/capsule compiler path or F94 package-closure frontier, avoiding duplicate retrieval-binding work.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "feeds_triggerword_4_boolean": true
+}

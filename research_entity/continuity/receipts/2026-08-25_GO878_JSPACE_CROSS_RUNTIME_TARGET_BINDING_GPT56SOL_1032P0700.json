@@ -1,0 +1,65 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_branch": "a1206a12a2189b143d4971135cdf30fa166df7da",
+  "finding": {
+    "classification": "CROSS_RUNTIME_TARGET_IDENTITY_AND_ACTIVATION_MAPPING_GAP",
+    "statement": "The current JSPACE_VECTOR_CONTROL_ABI/v1 packet builds target_model_runtime_identity from the measured source PyTorch runtime/checkpoint/tokenizer identity and target_activation_site from the source intervention. That is valid for the existing same-runtime loopback candidate, but it cannot truthfully establish the next requested Qwen3-0.6B GGUF + llama.cpp native cvec target. Copying those source identities into a native target would collapse source component evidence into false target provenance.",
+    "counterhypothesis": "The PyTorch and native targets may implement equivalent vector semantics, but equivalence is not established by model family/name, equal vector dimension, or a source-runtime PASS. It requires an explicit target runtime/artifact/vector/layer binding and later native consumption receipt.",
+    "falsifier": "A native target binding is admissible only if the existing source control packet is hash-valid and same-runtime, the target runtime identity differs explicitly, the exact source vector is named, llama_set_adapter_cvec is the declared native API, dimensions match without silent projection, and a deterministic target-layer mapping/conversion receipt is present. Runtime credit remains false until later exact execution consumes the binding."
+  },
+  "delta": {
+    "tool": "tools/jspace_cross_runtime_target_binding_v1.py",
+    "tests": "tests/test_jspace_cross_runtime_target_binding_v1.py",
+    "schemas": [
+      "JSPACE_NATIVE_CVEC_TARGET_SPEC/v1",
+      "JSPACE_CROSS_RUNTIME_TARGET_BINDING/v1",
+      "JSPACE_CROSS_RUNTIME_TARGET_BINDING_ADMISSION/v1"
+    ],
+    "properties": [
+      "preserves JSPACE_VECTOR_CONTROL_ABI/v1 as the measured source full-control packet",
+      "requires explicit distinct target runtime build/checkpoint/tokenizer plus runtime source commit and artifact format",
+      "requires native llama_set_adapter_cvec rather than an inferred/invented control API",
+      "cross-binds source local/applied vector identities and source activation site",
+      "rejects source/target vector dimension mismatch rather than silently projecting",
+      "requires explicit target layer mapping and conversion receipts",
+      "emits runtime_observed=false and zero native/full-HCU/training/whole-product promotion by construction"
+    ]
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: adds the typed provenance bridge required before the measured PyTorch Qwen3-0.6B component can be tested through the retained native llama.cpp cvec execution path.",
+    "track_b": "ADVANCED: HCU vector-control interconnect now has a nonduplicate cross-runtime identity primitive that prevents source runtime/checkpoint/activation-site evidence from masquerading as target evidence.",
+    "track_c": "ADVANCED: current Qwen3-0.6B nonterminal hidden-state component PASS can now progress toward a falsifiable native-cvec discriminator without granting premature J-Space/full-HCU/training credit."
+  },
+  "coordination": {
+    "duplicate_search": "NO_EXISTING_CROSS_RUNTIME_TARGET_BINDING_FOUND_BEFORE_WRITE",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_NEW_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed_by_this_organ": 0,
+    "provider_or_model_network_io_by_this_organ": false,
+    "paid_or_together_execution": false
+  },
+  "test_status": {
+    "committed_regressions": 8,
+    "repository_bound_execution_observed": false,
+    "credit": "SOURCE_AND_REGRESSION_DEFINITION_ONLY"
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is being updated concurrently on rapidly moving main; replacing its whole current-facing content from this isolated branch would risk clobbering newer backfill/Qwen evidence. This append-only receipt preserves the exact delta for successor-dynamic fusion."
+  },
+  "credits": {
+    "qwen_nonterminal_hidden_state_component_credit_observed_on_main": true,
+    "native_cvec_runtime_credit_added": 0,
+    "entityos_hcu_whole_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Run the 8 committed deterministic regressions on exact branch source, fuse only if current and nonduplicate, then construct JSPACE_NATIVE_CVEC_TARGET_SPEC/v1 from the pinned Qwen3-0.6B Q8_0 GGUF + pinned llama.cpp build + exact 1024D layer-20 vector conversion/layer mapping. A later native execution must consume the emitted binding and repeat matched controls before any native cvec runtime credit."
+}

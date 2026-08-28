@@ -18,11 +18,14 @@ from dataclasses import dataclass
 import hashlib
 import json
 from pathlib import Path
-import re
 import sqlite3
 import time
 from typing import Any, Mapping
 
+from frankenstein2_agent_hook_identity_v1 import (
+    AgentHookIdentityError,
+    parse_handoff_marker,
+)
 from frankenstein2_work_execution_binding_v1 import (
     WorkExecutionBinding,
     _append_event,
@@ -33,7 +36,6 @@ SCHEMA = "FRANKENSTEIN2_AGENT_WORKEXECUTION_ADAPTER/v2.1"
 PRE_EVENT = "PreToolUse"
 POST_EVENT = "PostToolUse"
 AGENT_TOOL = "Agent"
-HANDOFF_RE = re.compile(r"(?m)^[ \t]*HANDOFF[ \t]+([^\s]+)[ \t]*$")
 
 
 class AgentWorkExecutionIdentityError(ValueError):
@@ -67,12 +69,11 @@ def _digest(value: Any) -> str:
 
 
 def _exact_handoff_package(prompt: str) -> str:
-    matches = HANDOFF_RE.findall(prompt)
-    if len(matches) != 1:
-        raise AgentWorkExecutionIdentityError(
-            f"HANDOFF_MARKER_CARDINALITY:{len(matches)}"
-        )
-    return matches[0]
+    """Use the single canonical Agent HANDOFF parser for admission semantics."""
+    try:
+        return parse_handoff_marker(prompt)
+    except AgentHookIdentityError as exc:
+        raise AgentWorkExecutionIdentityError(str(exc)) from exc
 
 
 def _validate_agent_hook(payload: Mapping[str, Any], expected_event: str) -> tuple[str, str]:

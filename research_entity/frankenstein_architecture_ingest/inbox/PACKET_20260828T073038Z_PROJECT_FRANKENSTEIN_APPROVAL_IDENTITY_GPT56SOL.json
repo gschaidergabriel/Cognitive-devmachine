@@ -1,0 +1,115 @@
+{
+  "packet_id": "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL",
+  "created_at": "2026-08-28T07:30:38Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/approval-identity-forensics",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Successor forensic pass over the historical Project-Frankenstein approval path requested by the current Triggerword-5 frontier. Source-only; no runtime promotion.",
+  "files_examined": [
+    {
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/executor.py",
+      "sha_or_blob": "2a87f8d58e5785fcd6b821141416f9dcd00433bf@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "spans_examined": [
+        {"line_start": 70, "line_end": 180},
+        {"line_start": 590, "line_end": 685}
+      ]
+    },
+    {
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/loop.py",
+      "sha_or_blob": "e39c0e9ad00843f62a0fea7dd881a80f3acc70dd@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "spans_examined": [
+        {"line_start": 430, "line_end": 530}
+      ]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-HIST-APPROVAL-005-REQUEST-ID-NOT-EXECUTION-BINDING",
+      "subsystem": "historical-agentic-effect-authority",
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/executor.py",
+      "commit_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "line_start": 590,
+      "line_end": 685,
+      "excerpt_hash": null,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "request_approval() creates an 8-character UUID-derived approval_id and stores tool_name/tool_input/risk/reason/timestamp under that id. wait_for_approval() checks responses by approval_id. However ToolExecutor.execute() accepts only tool_name, tool_input and skip_approval; after approval, AgentLoop calls execute(..., skip_approval=True) without passing approval_id or a request digest into the execution boundary.",
+      "why_it_exists": "The historical overlay needed a simple human approval handshake before risky tool execution.",
+      "inputs": ["tool_name", "tool_input", "approval response keyed by approval_id"],
+      "outputs": ["approval_id", "boolean approved/rejected", "later execute(skip_approval=True)"],
+      "reads": ["approval_responses.json"],
+      "writes": ["approval_queue.json", "in-memory _pending_approvals"],
+      "dependencies": ["AgentLoop preserves the same tool_call variables across request and later execute call by convention"],
+      "authority_class": "HISTORICAL_APPROVAL_HANDSHAKE_WITHOUT_STRUCTURAL_EXECUTION_BINDING",
+      "failure_mode": "Approval is not mechanically bound at execute() to the exact approved input, generation or invocation identity. A trusted caller is expected to preserve the same tool/input; skip_approval=True is itself a caller-controlled bypass. Therefore approval_id is useful lineage but not a sufficient Frankenstein-2.0 effect token.",
+      "concurrency_implication": "Different approvals are keyed independently, but the execution boundary does not consume or invalidate the approval id; exact once-only invocation binding is absent from the inspected path.",
+      "privacy_implication": "The approval queue persists full tool_input in JSON; this is a historical privacy surface that should not be copied directly into a canonical effect journal.",
+      "latency_or_cost_implication": "Polling waits up to 120 seconds in AgentLoop for risky calls.",
+      "state_lifetime": "approval files plus in-memory request map; no execution-bound token lifetime",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["AgentLoop -> request_approval -> wait_for_approval -> execute(skip_approval=True)"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["The inspected AgentLoop does pass the same in-memory tool_call.action/tool_call.action_input after approval, reducing accidental mismatch in that caller. This is source-level caller discipline, not an invariant enforced by ToolExecutor.execute()."],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 0.995,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "open_questions": ["Whether any historical overlay or executor wrapper independently verified the approved request contents immediately before execution.", "Whether approval responses were one-shot consumed or could remain reusable in historical runtime state."]
+    },
+    {
+      "atom_id": "TW5-HIST-APPROVAL-006-CALLER-NAME-ALLOWLIST-BYPASS",
+      "subsystem": "historical-agentic-loop",
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/loop.py",
+      "commit_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "line_start": 450,
+      "line_end": 515,
+      "excerpt_hash": null,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "AgentLoop auto-approves a fixed tool-name set and otherwise requests approval. Both the safe path and the approved risky path invoke ToolExecutor.execute(..., skip_approval=True), so the final executor relies on caller classification/approval discipline rather than independently consuming a typed approval decision.",
+      "why_it_exists": "Keep read-only/low-risk actions fast while preserving human approval for mutating tools.",
+      "inputs": ["tool_call.action", "fixed _SAFE_AUTO_APPROVE set", "approval result"],
+      "outputs": ["execute with skip_approval=True or denied ToolResult"],
+      "reads": ["ToolRegistry risk metadata"],
+      "writes": ["agent state after execution"],
+      "dependencies": ["fixed tool-name classification", "approval flow"],
+      "authority_class": "HISTORICAL_CALLER_SIDE_POLICY_ROUTER",
+      "failure_mode": "Tool-name safety can drift from argument-level semantics, and caller-controlled skip_approval means the executor does not independently prove that the current invocation was the approved one.",
+      "concurrency_implication": "A future typed gate must bind approval/decision to immutable invocation identity and request digest, not only tool name or session context.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": "Safe-set calls avoid approval latency.",
+      "state_lifetime": "per loop iteration",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["AgentLoop ACT phase"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["Historical source does implement real pre-execution denial in the ordinary AgentLoop path when user approval is not granted; the defect here is exact decision-to-execution binding, not absence of any enforcement."],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 0.99,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "open_questions": ["Recover production reachability of this historical AgentLoop before granting runtime lineage credit."]
+    }
+  ],
+  "hypotheses": [
+    "The historical AgentLoop/ToolExecutor supplies a useful conceptual predecessor for true pre-execution enforcement, but its approval identity should be treated as UI/workflow correlation rather than a canonical effect capability because execute() does not consume the approval id or approved request digest.",
+    "Frankenstein 2.0 should combine historical pre-execution deny behavior with the newer post-execution journal, while binding EffectDecision to immutable invocation_id/tool_use_id + request_digest + generation and consuming that decision at the actual executor boundary."
+  ],
+  "counterhypotheses": [
+    "A historical wrapper outside these files may have revalidated tool input against the approval request before execute(); no such binding is established by the inspected source.",
+    "If the historical runtime was strictly single-threaded and AgentLoop was the only caller, caller discipline may have made mismatches rare; that does not make it a reusable authority contract."
+  ],
+  "contradictions": [
+    "Historical Project-Frankenstein has real pre-execution human denial, but the approval decision is not structurally consumed by the executor invocation; both facts must be preserved.",
+    "The later stern.py path adds richer generation/idempotency/outcome bookkeeping but intentionally does not generically block execution; the two lineages each contain a missing half of the desired Frankenstein-2.0 EffectGate/EffectJournal contract."
+  ],
+  "critical_unknowns": [
+    "Production reachability of AgentLoop/ToolExecutor at the pinned historical commit.",
+    "Whether external overlay code one-shot consumed approvals or revalidated request contents before execution.",
+    "Exact source/runtime lineage of wache-koenig.py between historical AgentLoop enforcement and current stern.py bookkeeping.",
+    "Exact installed hook scheduler behavior for parallel current-donor tool calls."
+  ],
+  "recommended_next_spans": [
+    {"path": "historical://gschaidergabriel/Project-Frankenstein overlay approval responder", "line_start": null, "line_end": null, "reason": "Determine whether approval responses were one-shot, request-bound and content-revalidated before execution.", "priority": "P0"},
+    {"path": "historical://wache-koenig.py", "line_start": null, "line_end": null, "reason": "Bridge the missing enforcement lineage between historical AgentLoop and current stern bookkeeping.", "priority": "P0"},
+    {"path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py", "line_start": 1050, "line_end": 1600, "reason": "Trace voice function-call dispatch into the current effect/executor boundary using immutable invocation identity requirements.", "priority": "P0"}
+  ],
+  "supersedes_packet_id": null
+}

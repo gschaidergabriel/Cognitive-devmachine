@@ -1,0 +1,60 @@
+{
+  "schema": "ENTITYOS_EFFECT_AUTHORITY_NEGATIVE_EVIDENCE/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "classification": "NEGATIVE_RESULT_SOURCE_LEVEL_EFFECT_OUTCOME_AMBIGUITY",
+  "status": "OPEN_REQUIRES_EXECUTABLE_COUNTEREVIDENCE_BEFORE_SEMANTICS_PROMOTION",
+  "canonical_source_observed": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "implementation_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+    "effects_path": "the artefact/clayverse/effects.py",
+    "effects_blob_sha": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+    "effect_journal_path": "the artefact/clayverse/effect_journal.py",
+    "effect_journal_blob_sha": "cda63471f1467481f2ff79032d3931730a334a20",
+    "entityos_bridge_path": "the artefact/clayverse/entityos_bridge.py",
+    "entityos_bridge_blob_sha": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac"
+  },
+  "observed_behavior": [
+    "EffectGate.execute() persists PENDING through EffectJournal.begin() before EntityOSBridge.run(req.argv).",
+    "EntityOSBridge.run() executes a sealed exact-byte process via subprocess.run(..., timeout=self.timeout).",
+    "EffectGate.execute() catches every Exception from EntityOSBridge.run() and immediately finalizes the canonical effect row as FAILED.",
+    "EffectJournal.FINAL currently contains VERIFIED, DENIED, FAILED, STALE_OUTCOME and UNKNOWN_AFTER_RESTART; no explicit ambiguous post-dispatch state exists."
+  ],
+  "problem": "A subprocess timeout, transport interruption, lost return, post-start observation failure, or another exception after the process may have started does not prove that the external effect was not applied. Canonically finalizing every such exception as FAILED collapses an UNKNOWN world outcome into a negative fact. That violates the project invariant that unknown external outcomes remain UNKNOWN until verified and creates a potential blind-replay hazard if higher layers interpret FAILED as safe-to-retry.",
+  "hypothesis": "The canonical effect authority needs an authority-owned unresolved post-dispatch terminal/recovery state (for example UNKNOWN_AFTER_DISPATCH) or equivalent typed outcome that is non-replayable until explicit world verification establishes APPLIED or NOT_APPLIED.",
+  "counterhypothesis": "All exceptions currently emitted by EntityOSBridge.run() may be mechanically proven to occur before the external executable can start, making FAILED sound. The current implementation does not establish that property: subprocess.run timeout is an explicit counterexample candidate because timeout occurs after launch may have happened.",
+  "required_discriminator": {
+    "type": "ZERO_REAL_EFFECT_EXECUTABLE_FAULT_INJECTION",
+    "setup": "Use an exact-byte harmless executable fixture that records a deterministic local marker and then delays or causes a lost-return/timeout after process start. Keep the test isolated from production/external effects.",
+    "acceptance": [
+      "Demonstrate whether EntityOSBridge.run can raise after process start.",
+      "If yes, canonical journal must not classify that path as definitely FAILED/NOT_APPLIED.",
+      "The resulting unresolved state must prohibit blind replay.",
+      "A separate verifier must be able to resolve APPLIED versus NOT_APPLIED without inventing a second effect authority.",
+      "Pre-dispatch integrity/open/argv failures must remain distinguishable from ambiguous post-dispatch failures."
+    ]
+  },
+  "candidate_minimal_design": {
+    "authority_ownership": "EffectGate+EffectJournal only",
+    "pre_dispatch_failure": "FAILED_BEFORE_EFFECT or equivalent only when mechanically proven no process/effect boundary was crossed",
+    "ambiguous_post_dispatch": "UNKNOWN_AFTER_DISPATCH or equivalent unresolved canonical state",
+    "replay": "FORBIDDEN while unresolved",
+    "verification": "separate explicit verifier transitions unresolved state to verified APPLIED or verified NOT_APPLIED",
+    "f2_role": "consume the canonical state; Frankenstein must not relabel, self-authorize, or infer completion from executor text"
+  },
+  "do_not_do": [
+    "Do not weaken this into log-only warning while leaving FAILED as canonical world semantics.",
+    "Do not infer NOT_APPLIED from exception type unless the exact exception is proven pre-dispatch.",
+    "Do not auto-retry an ambiguous effect.",
+    "Do not create a second F2 recovery journal to compensate for canonical ambiguity."
+  ],
+  "credit_boundary": {
+    "source_negative_evidence": "PRESENT",
+    "runtime_fault_injection_credit": 0,
+    "canonical_semantics_promotion": false,
+    "real_effect_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0
+  },
+  "next_exact_action": "Under the existing canonical effect-authority lane, add a zero-real-effect fault-injection regression that proves post-start timeout/lost-return behavior. Only after executable counterevidence should EffectJournal/EffectGate semantics be changed to preserve ambiguous outcomes as unresolved and non-replayable."
+}

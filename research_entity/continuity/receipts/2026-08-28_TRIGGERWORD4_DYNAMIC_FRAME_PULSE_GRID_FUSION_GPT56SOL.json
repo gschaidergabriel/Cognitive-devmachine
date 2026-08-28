@@ -1,0 +1,115 @@
+{
+  "schema": "TRIGGERWORD4_DYNAMIC_FRAME_PULSE_GRID_FUSION_RECEIPT/v1",
+  "status": "SOURCE_FUSION_COMPLETE_RUNTIME_EVIDENCE_BLOCKED_BY_ZERO_STEP_CI",
+  "created_at": "2026-08-28T11:55:00Z",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "authority": {
+    "current_trigger4_authority_epoch_observed": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "no_paid_fallback": true,
+    "provider_calls_performed_in_this_receipt": 0,
+    "provider_credential_lookups_performed_in_this_receipt": 0
+  },
+  "problem": {
+    "initial_gap": "Live Dynamic Frame existed as a typed source component but pulse cadence and actual GRID/GWT compute did not yet share one exact immutable per-tick control basis.",
+    "parallel_conflict_found": "A parallel V5 implementation imported V4 ACTION_GRID_CELLS and reintroduced a second action-gate interpretation while V4 and the controlled/live-binding layer were being fused.",
+    "wake_conflict_found": "Parallel work correctly moved wake_due ownership exclusively into V4 while stale prewoken expectations remained in tests until a later parallel repair."
+  },
+  "fused_authority_law": [
+    "V4 owns wake_due, heartbeat, Agency checkpoint and pulse scheduling.",
+    "One immutable ControlSnapshot basis exists per cognitive tick.",
+    "An enclosing runtime may latch the snapshot once and pass the exact object into V4; V4 then performs zero second control-plane reads for that basis.",
+    "GRID COMPUTE_OFF/OUTPUT_OFF/MEMORY_OFF/gain semantics live in grid10_live_control_binding_v1 / the controlled GRID layer, not in V4 pulse action rewriting.",
+    "V5 is a thin V4 + live-binding integrator and performs no implicit provider call.",
+    "Model/cell outputs remain candidate cognition and cannot mint canonical truth, completion or external effects."
+  ],
+  "writes": [
+    {
+      "commit": "4f30d911c773e5c471148c54b9c51c76f581d1b5",
+      "path": "tools/grid10_cognitive_unified_runtime_v4.py",
+      "delta": "removed duplicate GRID action semantics; added externally supplied ControlSnapshot reuse; retained sole wake ownership and dynamic pulse cadence"
+    },
+    {
+      "commit": "7bfac40c99fdd0f682aca7f4f96bfdc44e10e410",
+      "path": "tools/grid10_cognitive_controlled_runtime_v1.py",
+      "delta": "reuses the exact V4 control-plane instance and passes the exact latched snapshot into V4 before applying cell/GWT/memory controls"
+    },
+    {
+      "commit": "8412e945d25e7501939084b4fc652c20b64878f2",
+      "path": "tools/test_grid10_cognitive_unified_runtime_v4.py",
+      "provenance": "parallel_worker_after_fusion",
+      "delta": "aligned V4 tests with shared external snapshot ownership and sole wake authority"
+    },
+    {
+      "commit": "7da6f87757813d7a114aced658a045f7d7caf6b3",
+      "path": "tools/grid10_cognitive_unified_runtime_v5.py",
+      "delta": "replaced competing V5 action/wake path with thin V4 + live-control-binding integration and append-only causal receipt"
+    },
+    {
+      "commit": "987028a37adc32b50cdf98c2d9f91ae6b38457f8",
+      "path": "tools/test_grid10_cognitive_unified_runtime_v5.py",
+      "delta": "tests same snapshot digest across V4 pulse and fake GRID cycle, zero-gain distinct from COMPUTE_OFF, compute-off at live binding, and zero implicit provider calls"
+    },
+    {
+      "commit": "2900686bedc4e1201569a86e6c39a63ccd467dec",
+      "path": ".github/workflows/grid10-cognitive-envelope-ci.yml",
+      "delta": "added V5 compile and deterministic test execution to the existing GRID10 CI"
+    },
+    {
+      "commit": "5ac8c48ed51924c5de2d23943ca254f358f3a234",
+      "path": "tools/grid10_persistent_scheduler_v1.py",
+      "delta": "live Dynamic Frame becomes default active/HOLD/idle cadence source while explicit overrides remain test/compatibility inputs"
+    },
+    {
+      "commit": "2117769c2353b525d0ac124f7d0091f32f1dde7c",
+      "path": "tools/test_grid10_persistent_scheduler_v1.py",
+      "delta": "added deterministic active and idle live-cadence tests"
+    }
+  ],
+  "ci_evidence": [
+    {
+      "workflow_run": 33168398680,
+      "job": 98839239445,
+      "head": "2117769c2353b525d0ac124f7d0091f32f1dde7c",
+      "conclusion": "failure",
+      "steps": [],
+      "classification": "INFRASTRUCTURE_ZERO_STEP_NEGATIVE_NOT_PRODUCT_TEST_RESULT"
+    },
+    {
+      "workflow_run": 33168944183,
+      "job": 98841056253,
+      "head": "2900686bedc4e1201569a86e6c39a63ccd467dec",
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "INFRASTRUCTURE_ZERO_STEP_NEGATIVE_NOT_PRODUCT_TEST_RESULT"
+    }
+  ],
+  "evidence_scope": {
+    "routing_source": "PASS",
+    "source_fusion": "OBSERVED_IN_GITHUB",
+    "deterministic_test_definitions": "SOURCE_READY",
+    "python_compile_observed": false,
+    "deterministic_tests_observed": false,
+    "vps_runtime_observed": false,
+    "provider_runtime_observed": false,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "negative_evidence": [
+    "GitHub Hosted Actions jobs failed before exposing any executable step result; this cannot be converted into a product logic failure or PASS.",
+    "No provider route is admitted under observed authority 9.13, so no model-network inference or credential preflight was attempted.",
+    "No VPS/runtime receipt was minted in this organ execution."
+  ],
+  "next_exact_action": "Execute the exact current branch deterministic compile/tests on an admitted non-provider execution surface, including V4, V5, ControlledRuntime, LiveControlBinding and PersistentScheduler. If green, bind the persistent service scheduler to the V5/controlled GRID burst without duplicating wake or control authority; then advance the functional frontier into memory activation degradation/compression and sparse multi-projection WorldSlice while keeping runtime credit scoped to observed receipts.",
+  "acceptance": "IN_PROGRESS",
+  "runtime_credit": 0
+}

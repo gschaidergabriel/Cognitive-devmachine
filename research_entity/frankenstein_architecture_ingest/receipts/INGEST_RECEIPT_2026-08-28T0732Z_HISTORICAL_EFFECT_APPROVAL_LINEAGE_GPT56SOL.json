@@ -3,31 +3,18 @@
   "receipt_id": "TW5_INGEST_2026-08-28T0732Z_HISTORICAL_EFFECT_APPROVAL_LINEAGE_GPT56SOL",
   "trigger": "triggerwort 5",
   "authority_epoch": "8.78",
-  "donor_repo": "gschaidergabriel/frankenstein",
-  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
-  "historical_repo": "gschaidergabriel/Project-Frankenstein",
-  "historical_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
-  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "status": "REDUNDANT_PARALLEL_DONOR_DO_NOT_DOUBLE_COUNT",
   "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0732Z_HISTORICAL_EFFECT_APPROVAL_LINEAGE_GPT56SOL.json",
-  "architecture_delta_commit": "7a19dc92b5fc6832af3148c4b757c1d90bfca1f2",
-  "packet_results": [
-    {
-      "packet_id": "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
-      "result": "CONSUMED_DEDUPED_NO_INDEPENDENT_CREDIT"
-    },
-    {
-      "packet_id": "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
-      "result": "CONSUMED_SOURCE_CROSSCHECKED_HISTORICAL_LINEAGE_ONLY"
-    }
-  ],
-  "source_crosschecks": [
+  "canonical_ingest_winner": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_HISTORICAL_APPROVAL_BINDING.json",
+  "canonical_ingest_winner_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_HISTORICAL_APPROVAL_BINDING.json",
+  "race_resolution": "A concurrent Triggerword-5 worker consumed the same predecessor packet plus a newer approval-identity packet and advanced INGEST_STATE before this receipt could update state. This receipt is provenance-only and intentionally receives no independent architecture/runtime credit.",
+  "source_crosschecks_preserved": [
     "gschaidergabriel/Project-Frankenstein agentic/executor.py:70-180@abba90a5767d85abc8a1ac340bae92842dab35c1",
     "gschaidergabriel/Project-Frankenstein agentic/loop.py:430-530@abba90a5767d85abc8a1ac340bae92842dab35c1",
-    "gschaidergabriel/Project-Frankenstein agentic/executor.py:470-730@abba90a5767d85abc8a1ac340bae92842dab35c1",
-    "gschaidergabriel/frankenstein DEV_SOURCE_RESEARCH/repository/scripts/stern.py effect/hook path@5641dc6b2df6ebed1df246ee7533134324f6c427"
+    "gschaidergabriel/Project-Frankenstein agentic/executor.py:470-730@abba90a5767d85abc8a1ac340bae92842dab35c1"
   ],
   "promotion_boundary": {
-    "source_forensics": "PRESENT",
+    "independent_architecture_credit": 0,
     "historical_runtime_reachability": "UNRESOLVED",
     "new_runtime_execution": false,
     "whole_frankenstein2_runtime_pass": false,
@@ -35,7 +22,5 @@
     "hcu_runtime_credit_delta": 0,
     "jspace_model_credit_delta": 0,
     "training_credit_delta": 0
-  },
-  "accepted_design_delta": "Frankenstein-2.0 must recombine pre-execution deny semantics with current request/outcome journaling, but bind admission/enforcement/receipt/reentry/completion to one immutable per-invocation identity and exact request digest; historical skip_approval/name allowlisting and current mutable session effect pointer are donor weaknesses, not authority contracts.",
-  "remaining_open_provenance": "wache-koenig source/host artifact and exact invocation-binding semantics remain unresolved; repository absence is not evidence of runtime absence."
+  }
 }

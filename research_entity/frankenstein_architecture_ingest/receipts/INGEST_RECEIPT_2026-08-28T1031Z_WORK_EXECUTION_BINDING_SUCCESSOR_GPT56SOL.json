@@ -1,0 +1,82 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "created_at": "2026-08-28T10:31:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "routing_selftest": "PASS",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch_pre_ingest_sha": "007131285ed54a706be2bca8a4160db1d0730a18",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority": {
+    "epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "together": "FORBIDDEN"
+  },
+  "consumed_packet": {
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "decision": "ACCEPT_WITH_CORRECTIONS"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORK_EXECUTION_BINDING_DELTA_2026-08-28T1031Z_GPT56SOL.json",
+    "commit_sha": "5af9a3ed7c0f40e03cd214bda8225b284e603b33"
+  },
+  "direct_source_checks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "donor_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "result": "CONFIRMED_HANDOFF_PERSISTS_WORKPACKAGE_AND_EXPLICITLY_DOES_NOT_SPAWN"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "donor_blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "result": "CONFIRMED_VERSIONED_CONFIG_LACKS_SUBAGENT_AND_TASK_LIFECYCLE_HOOKS"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "donor_blob_sha": "b578cc8651c50db1ef98c3d5c74f95f81ba24db9",
+      "result": "CONFIRMED_SPEC_HANDOFF_BEFORE_SPAWN_RECONCILE_AFTER; PACKET_LINE_SPAN_WAS_WRONG"
+    }
+  ],
+  "external_primary_crosscheck": {
+    "classification": "CURRENT_OFFICIAL_CAPABILITY_DOCUMENTATION_NOT_INSTALLED_RUNTIME_EVIDENCE",
+    "findings": [
+      "PostToolUse exposes tool_use_id plus tool-specific tool_input/tool_response.",
+      "SubagentStart/SubagentStop expose a distinct unique agent_id lifecycle.",
+      "TaskCreated/TaskCompleted expose a distinct task_id namespace.",
+      "Hooks firing inside a subagent can carry agent_id, narrowing the unresolved join to parent Agent invocation -> spawned child identity."
+    ]
+  },
+  "packet_defects_preserved": [
+    "target_2_0_action=RESEARCH violates the current ingest packet schema enum; architecture model normalizes to UNDECIDED.",
+    "architekt_governance semantic claim was sourced from the wrong packet span; direct source reread corrected provenance.",
+    "No parent Agent tool_use_id -> child agent_id runtime join is admitted from documentation or timing."
+  ],
+  "new_architecture_mechanism": "WorkExecutionBinding/v1",
+  "new_unresolved_contradictions": [
+    "TW5-CONTRADICTION-WORKPACKAGE-NATIVE-CHILD-BINDING-017",
+    "TW5-CONTRADICTION-PARENT-AGENT-INVOCATION-CHILD-ID-018"
+  ],
+  "execution": {
+    "provider_calls": 0,
+    "vps_calls": 0,
+    "runtime_agent_capture": 0,
+    "unusual_experiment": "NOT_RUN",
+    "scope": "SOURCE_FORENSICS_AND_ARCHITECTURE_INGEST_ONLY"
+  },
+  "credits": {
+    "source_forensics": "PASS_WITH_CORRECTIONS",
+    "work_execution_binding_runtime": 0,
+    "native_subagent_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Observe exact installed native Agent parent-tool and child-lifecycle payloads on an authorized non-provider validation lane; only then promote any parent tool_use_id -> child agent_id binding."
+}

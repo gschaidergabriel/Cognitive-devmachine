@@ -240,8 +240,9 @@ def persist_recovery_classification_with_canonical_lease(
     envelope. It never creates or renews a lease.
 
     A mutating caller may not supply `checked_at`. Lease freshness for persistence is
-    evaluated from SQLite/runtime time inside the same writer transaction. This prevents a
-    stale or compromised caller from authorizing mutation by replaying a historical time.
+    evaluated from SQLite/runtime time inside the same writer transaction. The lease is
+    checked before evidence classification and rechecked immediately before mutation, so a
+    lease that expires while classification is running cannot authorize a late write.
 
     The first recovery classification is immutable. Re-entry against an already classified
     intent fails closed instead of replacing the original lease/time evidence with a later
@@ -261,7 +262,7 @@ def persist_recovery_classification_with_canonical_lease(
     con = _connect(Path(path))
     try:
         con.execute("BEGIN IMMEDIATE")
-        proof = verify_active_recovery_lease_in_transaction(
+        verify_active_recovery_lease_in_transaction(
             con,
             tick_id=tick_id,
             work_id=work_id,
@@ -287,6 +288,17 @@ def persist_recovery_classification_with_canonical_lease(
             raise RecoveryLeaseNotAuthorized(
                 f"RECOVERY_INTENT_NOT_PREPARED:{row['status']}:{tick_id}"
             )
+
+        # Freshness must hold at the write boundary, not merely when classification began.
+        proof = verify_active_recovery_lease_in_transaction(
+            con,
+            tick_id=tick_id,
+            work_id=work_id,
+            spec_rev=spec_rev,
+            executor_node=executor_node,
+            lease_token=lease_token,
+            checked_at=None,
+        )
 
         envelope = {
             "schema": "GRID10_V6_RECOVERY_CLASSIFICATION_WITH_LEASE/v1",

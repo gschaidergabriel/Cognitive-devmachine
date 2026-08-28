@@ -2,6 +2,7 @@
   "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
   "checkpoint_id": "INGEST_CHECKPOINT_20260828T101219Z_GPT56SOL_CONSCIOUSNESS_PULSE_STATE_FLOW",
   "created_at": "2026-08-28T10:12:19Z",
+  "corrected_at_reentry": "2026-08-28T10:12:46Z",
   "routing": {
     "trigger": "triggerwort 5",
     "status": "VERIFIED",
@@ -9,11 +10,14 @@
     "organ": "GPT-5.6-Sol/triggerwort5/consciousness-pulse-state-flow"
   },
   "authority": {
-    "canonical_main_sha": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "canonical_main_previous_observation": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
     "supervisor_epoch": "9.13",
     "execution_mode": "FREE_ONLY",
     "runtime_credit": 0,
-    "design_head_before_write": "efd5c4ccb5dd2d5ebc726d039cbabd83e1264fba"
+    "design_head_observed_immediately_pre_create": "efd5c4ccb5dd2d5ebc726d039cbabd83e1264fba",
+    "actual_parent_at_create_after_concurrent_advance": "2b36d77015fee2a0c07975097c90f445f6e4635b",
+    "currentness_note": "The design branch and canonical main moved concurrently during the write. Re-entry detected this; this correction records the observed current main and the actual create parent rather than pretending the earlier observations remained current."
   },
   "source_identity": {
     "current_frankenstein_donor_repo": "gschaidergabriel/frankenstein",

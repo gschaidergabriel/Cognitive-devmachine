@@ -19,6 +19,9 @@ Continue the GRID10 Cognitive Runtime / Cognitive Envelope / persistent heartbea
 - Default low-cost test model: `glm-4.7-flash`.
 - Default smoke/regulator/transport tests: thinking disabled; small bounded output (`max_tokens` normally 16-128).
 - Enable deeper GLM thinking only for tests where reasoning quality is itself the measured variable.
+- The owner explicitly authorizes substantive use of the available GLM subscription for testing. A full VPS validation may therefore use up to roughly **100,000 provider-reported total tokens** by default when the measurements are useful, rather than minimizing every call. Raise or lower this bound in later trigger runs based on measured information gain and current subscription limits.
+- Token use must buy evidence: repeated calls should measure latency distributions, ten-cell concurrency, reasoning/quality, regulator behavior, ablations, recovery, or stability. Blind token burning is not progress.
+- Every live benchmark must retain a hard request/token ceiling and stop on repeated provider/transport errors so a bug cannot create an unbounded spend loop.
 - API credential is runtime secret only. Read from `ZAI_API_KEY`, `GLM_API_KEY`, or `BIGMODEL_API_KEY`; never commit plaintext, never echo to logs, never include in persisted receipts.
 
 ## Priority order
@@ -86,7 +89,7 @@ Each substantive triggerwort-4 cycle should:
 4. form at least one hypothesis and counterhypothesis when uncertainty is material;
 5. implement the smallest discriminating change;
 6. run deterministic tests first;
-7. run bounded GLM-4.7-Flash inference only where model behavior is needed;
+7. run bounded GLM-4.7-Flash inference where model behavior is needed, including repeated/parallel trials when they add statistical evidence;
 8. run VPS sandbox integration/benchmark where available;
 9. compare against the previous baseline;
 10. reject regressions or retain improvement with receipt;

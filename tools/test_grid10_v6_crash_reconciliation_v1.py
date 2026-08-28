@@ -214,30 +214,30 @@ class CrashReconciliationTests(unittest.TestCase):
                 control_snapshot_digest="ctrl-a",
             )
 
-    def test_recovery_persistence_requires_explicit_exclusive_gate(self):
+    def test_legacy_recovery_persistence_requires_canonical_lease_gate(self):
         self._insert_v4()
-        with self.assertRaises(RecoveryMutationNotAuthorized):
-            persist_recovery_classification(
-                self.db,
-                tick_id="t1",
-                exclusive_recovery_authorized=False,
-            )
-        result = persist_recovery_classification(
-            self.db,
-            tick_id="t1",
-            exclusive_recovery_authorized=True,
-            terminal_ts=200.0,
-        )
-        self.assertEqual(result.status, STATUS_RECOVERY_REQUIRED)
+        for flag in (False, True):
+            with self.subTest(exclusive_recovery_authorized=flag):
+                with self.assertRaisesRegex(
+                    RecoveryMutationNotAuthorized,
+                    "CANONICAL_RECOVERY_LEASE_GATE_REQUIRED",
+                ):
+                    persist_recovery_classification(
+                        self.db,
+                        tick_id="t1",
+                        exclusive_recovery_authorized=flag,
+                        terminal_ts=200.0,
+                    )
         con = _connect(self.db)
         try:
             row = con.execute(
-                "SELECT status,classification_digest FROM grid10_v6_cycle_intents WHERE tick_id='t1'"
+                "SELECT status,classification_json,classification_digest FROM grid10_v6_cycle_intents WHERE tick_id='t1'"
             ).fetchone()
         finally:
             con.close()
-        self.assertEqual(row["status"], STATUS_RECOVERY_REQUIRED)
-        self.assertEqual(row["classification_digest"], result.digest)
+        self.assertEqual(row["status"], STATUS_PREPARED)
+        self.assertIsNone(row["classification_json"])
+        self.assertIsNone(row["classification_digest"])
 
     def test_close_marker_and_v6_receipt_can_commit_atomically(self):
         self._insert_v4()

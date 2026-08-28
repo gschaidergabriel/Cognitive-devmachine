@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.8"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.9"
 EXECUTION_RECEIPT_SCHEMA_VERSION = "1.7"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
@@ -459,6 +459,10 @@ def receipt() -> dict:
         "schema_version": CAPABILITY_RECEIPT_SCHEMA_VERSION,
         "kind": "FREE_API_CAPABILITY_RECEIPT",
         "execution_receipt_schema_version": EXECUTION_RECEIPT_SCHEMA_VERSION,
+        "execution_cost_policy_principal_scope": (
+            COST_POLICY_PRINCIPAL_SCOPE
+        ),
+        "execution_cost_policy_principal_restart_stable": False,
         "unicode_database_version": UNICODE_DATABASE_VERSION,
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "inventory": rows,

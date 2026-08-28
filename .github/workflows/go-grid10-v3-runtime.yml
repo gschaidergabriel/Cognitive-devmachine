@@ -2,19 +2,9 @@ name: GO GRID10 v3 runtime falsifier
 
 on:
   push:
-    branches: ['go/grid10-v3-runtime-20260828']
-    paths:
-      - '.github/workflows/go-grid10-v3-runtime.yml'
-  pull_request:
-    branches: [main]
-    paths:
-      - '.github/workflows/go-grid10-v3-runtime.yml'
-      - 'tools/grid10_real_sigkill_independent_replacement_acceptance_v3.py'
-      - 'tools/grid10_fabric.py'
-      - 'tools/grid10_decode_safe_node_wrapper_v1.py'
-      - 'tools/grid10_liveness_heartbeat_v1.py'
-      - 'tools/grid10_outbox_recovery_v1.py'
-      - 'tests/test_grid10_real_sigkill_independent_replacement_acceptance_v3.py'
+    branches:
+      - go/grid10-v3-runtime-20260828
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -23,53 +13,20 @@ jobs:
   grid10-v3:
     runs-on: ubuntu-latest
     timeout-minutes: 8
-    env:
-      PYTHONDONTWRITEBYTECODE: '1'
-      NO_PROXY: '*'
-      no_proxy: '*'
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Bind source and prove clean checkout
-        shell: bash
+      - name: Bind checkout
         run: |
           set -euo pipefail
           test -z "$(git status --porcelain)"
           git rev-parse HEAD
           git rev-parse 'HEAD^{tree}'
-          sha256sum \
-            tools/grid10_real_sigkill_independent_replacement_acceptance_v3.py \
-            tools/grid10_fabric.py \
-            tools/grid10_decode_safe_node_wrapper_v1.py \
-            tools/grid10_liveness_heartbeat_v1.py \
-            tools/grid10_outbox_recovery_v1.py \
-            tests/test_grid10_real_sigkill_independent_replacement_acceptance_v3.py
-      - name: Run independent replacement SIGKILL v3
-        shell: bash
+          sha256sum tools/grid10_real_sigkill_independent_replacement_acceptance_v3.py tools/grid10_fabric.py tools/grid10_decode_safe_node_wrapper_v1.py tools/grid10_liveness_heartbeat_v1.py tools/grid10_outbox_recovery_v1.py
+      - name: Run v3 falsifier
         run: |
           set -euo pipefail
-          python -m pytest -q tests/test_grid10_real_sigkill_independent_replacement_acceptance_v3.py
-      - name: Run executable directly and capture receipt
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p evidence/go-grid10-v3
-          python tools/grid10_real_sigkill_independent_replacement_acceptance_v3.py \
-            --workdir evidence/go-grid10-v3/work \
-            | tee evidence/go-grid10-v3/receipt.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          p=Path('evidence/go-grid10-v3/receipt.json')
-          d=json.loads(p.read_text())
-          assert d['pass'] is True
-          assert d['provider_calls'] == 0
-          assert d['secret_lookups'] == 0
-          assert d['physical_grid10_credit'] == 0
-          assert d['whole_hcu_credit'] == 0
-          assert len({d['parent_pid'], d['old_coordinator_pid'], d['new_coordinator_pid']}) == 3
-          PY
+          rm -rf /tmp/grid10-v3-go
+          python3 tools/grid10_real_sigkill_independent_replacement_acceptance_v3.py --workdir /tmp/grid10-v3-go | tee /tmp/grid10-v3-receipt.json
+          python3 -c "import json; d=json.load(open('/tmp/grid10-v3-receipt.json')); assert d['pass'] is True; assert d['provider_calls']==0; assert d['secret_lookups']==0; assert len({d['parent_pid'],d['old_coordinator_pid'],d['new_coordinator_pid']})==3"

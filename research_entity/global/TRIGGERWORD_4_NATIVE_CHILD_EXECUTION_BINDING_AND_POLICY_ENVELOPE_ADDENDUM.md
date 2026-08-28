@@ -243,3 +243,83 @@ invocation-bound Effect/Completion lineage
 Source/docs forensics alone earn no runtime credit.
 
 The immediate discriminator is an authorized harmless installed-host child lifecycle probe. Triggerword 4 must self-route to the available VPS/host bridge and solve route/tool/setup blockers under standing authority rather than asking the owner for routine confirmation.
+
+## 12. Successor correction — WorkExecutionBinding v2.1
+
+A later reconciled Triggerword-5 wave narrowed the parent-child join further. The donor `handoff()` produces a deterministic capsule beginning with:
+
+`HANDOFF <paket_id>`
+
+and describes that capsule as the text passed to the delegated subagent. Current official Claude Code hook ABI documents the `Agent` call prompt, call-scoped `tool_use_id` and Agent PostToolUse `tool_response.agentId`.
+
+Therefore the preferred source/ABI binding candidate is now:
+
+```text
+paket_id + package_generation
+  -> exact HANDOFF marker in observed Agent tool_input.prompt
+  -> Agent spawn tool_use_id
+  -> same Agent PostToolUse tool_use_id + tool_response.agentId
+  -> child agent_id candidate
+  -> child tool_use_id(s)
+  -> result_receipt_id
+  -> reconcile
+```
+
+This **supersedes any earlier implication that timestamp/order/session matching is necessary**.
+
+Fail closed if the marker is absent/multiple, package generation does not match, a tool_use_id is already bound to a different package, `agentId` is absent/ambiguous, or cardinality is not declared.
+
+`HANDOFF_MARKER = IDENTITY_CARRIER, NOT COMPLETION_EVIDENCE`.
+
+Target-host runtime equality between documented `tool_response.agentId` and lifecycle `agent_id` still requires exact installed-runtime evidence.
+
+## 13. Typed hook identity is a prerequisite, not an optional refinement
+
+The pinned donor receives full hook JSON but its `stern.py` reducer does not typed-extract/persist `tool_use_id` or `agent_id`; existing effect correlation uses a session-scoped mutable `active_turns.effect_id`.
+
+Frankenstein 2.0 must preserve a raw event identity record before any projection:
+
+```text
+session_id
+turn/episode_id
+generation
+hook_event_name
+tool_name
+tool_use_id
+agent_id/agent_type if observed
+workexecution_binding_id if known
+payload digest
+UTC + monotonic timestamp
+runtime/source identity
+```
+
+Synthetic selftests must carry unique tool_use_id values and include same-session A/B interleaving plus reverse completion order. A green test without call-scoped identities earns no invocation-concurrency credit.
+
+## 14. GWT provenance rule
+
+Latest donor source forensics show `gw_absicht` can reconstruct tool activity by session provenance plus a time window and reduce it to tool-name sets. This loses child/invocation ownership before reflective/GWT measurement.
+
+For Frankenstein 2.0:
+
+```text
+RAW_TYPED_TOOL_EVENTS
+ -> explicit aggregation/projection
+ -> GWT/GRID view
+```
+
+not:
+
+```text
+SESSION + TIME WINDOW
+ -> irreversible ownership collapse
+```
+
+GWT may intentionally aggregate parent/child activity, but raw provenance must survive and every aggregate must link back to exact source events. `F2-WP-508` cannot receive causal-use credit without this property.
+
+## 15. Current reconciled fusion source
+
+The detailed worker-wave reconciliation, including Stop-hook model-boundary and F94 source-closure consequences, is:
+
+`research_entity/global/TRIGGERWORD_4_WORKEXECUTION_GWT_HOOK_AND_SOURCE_CLOSURE_FUSION_2026-08-28.md`
+
+Whenever this addendum is loaded, that fusion document is a mandatory successor companion. If the two disagree on WorkExecution binding details, the later fusion contract controls while preserving earlier evidence history.

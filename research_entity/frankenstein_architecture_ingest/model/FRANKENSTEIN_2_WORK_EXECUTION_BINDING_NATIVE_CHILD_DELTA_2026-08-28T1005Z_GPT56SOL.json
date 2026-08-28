@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "delta_type": "FRANKENSTEIN_2_WORK_EXECUTION_BINDING_NATIVE_CHILD",
+  "created_at": "2026-08-28T10:05:15Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/work-execution-binding-forensics",
+  "trigger": "triggerwort 5",
+  "routing": "PASS",
+  "authority": {
+    "epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_head_before_write": "0a24a19015cbb5d10efef17518cb1684e1e83507",
+    "provider_execution": "NOT_ATTEMPTED",
+    "runtime_probe": "NOT_ATTEMPTED",
+    "unusual_experiment": "NOT_USED"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree_sha": "9f529a1ea8896cf9988298ea58e827c241d6949f"
+  },
+  "source_atoms": [
+    {
+      "atom_id": "WXB-HANDOFF-001",
+      "subsystem": "delegation/workpackage",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5700,
+      "line_end": 5815,
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "handoff() creates entityos_arbeitspaket with stand=laeuft, builds a deterministic DB-derived transition capsule, records affected files/open work/relevant memory, writes advisory file leases and emits a reconcile evidence requirement.",
+      "runtime_reachable": "UNVERIFIED_AT_THIS_EXACT_SHA",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "critical_boundary": "The function explicitly states stern does not delegate/spawn anything; it only records that delegation is intended and returns coordinator material."
+    },
+    {
+      "atom_id": "WXB-PACKAGE-SCHEMA-002",
+      "subsystem": "delegation/workpackage",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5600,
+      "line_end": 5795,
+      "source_kind": "SCHEMA",
+      "what_it_does": "The workpackage write visible in the donor binds paket_id, besteller, session_id, auftrag, womit, warum, stand, ergebnis, beleg, erstellt and geaendert, but no native child agent/task/spawn invocation identity is bound in this path.",
+      "runtime_reachable": "UNVERIFIED_AT_THIS_EXACT_SHA",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "WXB-RECONCILE-003",
+      "subsystem": "delegation/completion",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5815,
+      "line_end": 6100,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "reconcile() closes a workpackage after mechanical evidence parsing, but the visible completion relation is workpackage/session/evidence-string based and is not bound to a particular native child execution attempt or spawn invocation.",
+      "runtime_reachable": "UNVERIFIED_AT_THIS_EXACT_SHA",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "related_ingest": "The separate 2026-08-28 Effect/Completion source ingest already established permissive effect-status and unbound test:0 defects; this delta does not duplicate those findings."
+    },
+    {
+      "atom_id": "WXB-GOVERNANCE-004",
+      "subsystem": "architect/delegation-policy",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 1,
+      "line_end": 160,
+      "source_kind": "ARCHITECTURE_DOC",
+      "what_it_does": "The donor governance document requires the main instance to obtain permission, then spawn an architect agent, calls stern.py handoff before spawning and stern.py reconcile afterward, and calls lastschutz before parallel build agents. It points to an existing host ~/.claude/star/architekt/ pattern rather than implementing the native spawn in the donor workpackage code.",
+      "runtime_reachable": "HOST_RUNTIME_UNKNOWN",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "WXB-HOOKS-005",
+      "subsystem": "hook/lifecycle",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 1,
+      "line_end": 75,
+      "source_kind": "CONFIG",
+      "what_it_does": "The checked-in plugin subscribes SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact through stern.py. No SubagentStart/SubagentStop/Task lifecycle subscription is present in this donor manifest.",
+      "runtime_reachable": "SOURCE_PRESENT_HOST_INSTALL_UNKNOWN",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "critical_boundary": "Absence from this donor manifest is not proof that the installed Claude runtime lacks native child/task events."
+    }
+  ],
+  "forensic_conclusion": {
+    "classification": "SOURCE_GAP_CONFIRMED_RUNTIME_ABI_UNKNOWN",
+    "finding": "Frankenstein already has a deterministic work-package and transition-capsule ancestor, but the source-grounded chain stops before native child execution. The real spawn/task/lifecycle identity is currently external to handoff(), and reconcile() cannot prove which concrete child attempt produced a claimed result.",
+    "architecture_gap": "WORKPACKAGE_TO_EXECUTION_TO_EFFECT_TO_COMPLETION_CAUSAL_BINDING",
+    "confidence": 0.99,
+    "runtime_credit": 0
+  },
+  "target_contract": {
+    "name": "WorkExecutionBinding/v1",
+    "purpose": "Bind a durable work package to one concrete executor attempt and carry that identity through tool/effect receipts and completion without making the child/model a truth authority.",
+    "minimum_fields": [
+      "binding_id",
+      "work_package_id",
+      "attempt_no",
+      "replaces_binding_id|null",
+      "parent_session_id",
+      "parent_generation",
+      "executor_kind",
+      "native_agent_id|null",
+      "native_task_id|null",
+      "child_session_id|null",
+      "spawn_invocation_id|null",
+      "workspace_identity",
+      "cwd_identity",
+      "base_head",
+      "base_tree",
+      "authority_digest",
+      "started_at",
+      "terminal_state",
+      "completion_receipt_id|null",
+      "result_digest|null"
+    ],
+    "executor_kind_enum": [
+      "NATIVE_CHILD",
+      "COORDINATOR_DIRECT",
+      "EXTERNAL_WORKER",
+      "UNKNOWN"
+    ],
+    "terminal_state_enum": [
+      "PLANNED",
+      "SPAWNED",
+      "RUNNING",
+      "RETURNED",
+      "FAILED",
+      "CANCELLED",
+      "LOST",
+      "RECONCILED",
+      "REJECTED"
+    ],
+    "join_law": "work_package_id identifies intent/work; binding_id identifies one concrete execution attempt; call-scoped tool_use_id/invocation_id identifies each effect invocation. session_id is context only and may not substitute for either attempt or invocation identity.",
+    "effect_relation": "binding_id -> tool_use_id/invocation_id -> effect_id -> ExecutionReceipt/EffectOutcome",
+    "completion_relation": "binding_id + work_package_id + exact source/workspace identity -> typed CompletionEvidence -> RECONCILED|REJECTED",
+    "replacement_law": "Resume/replacement creates a new binding_id and monotonically increasing attempt_no while preserving work_package_id and explicit replaces_binding_id lineage.",
+    "shared_worktree_law": "Every material edit/effect receipt must retain actor/binding identity; cross-binding file changes are contamination evidence unless explicitly transferred/accepted.",
+    "authority_law": "Executor/model output remains candidate evidence. Only deterministic effect/completion authorities may promote observed outcomes."
+  },
+  "owner_policy_preservation": {
+    "direct_small_exception": "Preserve efficiency-calibrated DIRECT_SMALL behavior. A trivial coordinator-direct action need not be forced through child spawn merely to satisfy the ABI; when it participates in a tracked workpackage, executor_kind=COORDINATOR_DIRECT binds its concrete execution without inventing a child.",
+    "real_building": "REAL_BUILDING remains delegation-oriented, but the actual native child mechanism must be discovered from the current installed runtime rather than guessed from historical provider/tool names."
+  },
+  "trigger4_required_discriminators": [
+    "Package created but no native spawn observed must never be reported as RUNNING child execution.",
+    "Two same-parent-session children A/B must retain disjoint binding_id and native agent/task identities through interleaved tool events.",
+    "A completion receipt from binding A transplanted onto binding B must fail closed.",
+    "A child final-text DONE with no bound typed receipt must fail closed.",
+    "Replacement/resume must preserve work_package_id but create a new attempt/binding and explicit predecessor lineage.",
+    "Shared-worktree cross-child edits must be attributable and contamination detectable rather than silently fused.",
+    "Parent/session restart must permit recovery by durable binding identity without converting LOST/UNKNOWN into success.",
+    "DIRECT_SMALL coordinator-direct control must avoid unnecessary spawn overhead while retaining invocation/effect lineage where completion credit is claimed."
+  ],
+  "relationship_to_sparse_world_substrate": {
+    "finding": "Operator/outcome learning must not consume a child narrative as verified world transition. Any WorldExperience/high-credit operator update must join through exact WorkExecutionBinding + effect/outcome verification so concurrency or result-transplant errors cannot become learned causal structure.",
+    "credit_law": "UNBOUND_OR_UNKNOWN_EXECUTION => ZERO_CAUSAL_OPERATOR_CREDIT"
+  },
+  "contradictions_preserved": [
+    "The donor governance prose assumes an agent is spawned after handoff, while handoff() explicitly does not spawn; this is a layer boundary, not evidence that spawn succeeded.",
+    "The checked-in hook manifest lacks child lifecycle hooks, while the current native-runtime directive expects investigation of such events; installed runtime capability remains UNKNOWN rather than inferred absent."
+  ],
+  "critical_unknowns": [
+    "Exact current installed Claude Code native child/task spawn mechanism and version/build.",
+    "Whether child/task lifecycle exposes stable agent_id, task_id, parent_id, child session_id and call-scoped tool_use_id in the installed runtime.",
+    "Which lifecycle hooks actually fire and their payload schema/order under one and two concurrent children.",
+    "Context inheritance, nesting depth, cancellation, resume/replacement and parent-death behavior.",
+    "Shared-worktree versus isolated-worktree semantics of the current native path.",
+    "Measured coordinator-context reduction from delegation versus DIRECT_SMALL control."
+  ],
+  "next_exact_forensic_gate": "Using an authorized host/native-runtime observation path when available, pin installed Claude Code build and capture one bounded non-destructive child lifecycle trace (then two disjoint children) binding work_package_id -> native agent/task identity -> child session -> tool_use_id -> result -> reconcile. Until that exists, keep native execution runtime credit at 0.",
+  "result": "PASS_SOURCE_FORENSICS_ONLY"
+}

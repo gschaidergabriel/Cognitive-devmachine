@@ -1,0 +1,229 @@
+name: GRID10 SIGKILL independent replacement v3
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  acceptance:
+    if: "github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] GRID10 SIGKILL independent replacement v3' && github.event.issue.user.login == 'gschaidergabriel' && contains(github.event.issue.body || '', 'dispatch_schema: CLAY_ORDINARY_DISPATCH/v1')"
+    concurrency:
+      group: grid10-sigkill-independent-replacement-v3
+      cancel-in-progress: false
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Validate singleton dispatch and exact source identity
+        id: dispatch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib, re, subprocess
+          event = json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          body = str((event.get('issue') or {}).get('body') or '')
+          fields = {}
+          for line in body.splitlines():
+              if ':' not in line:
+                  continue
+              k, v = line.split(':', 1)
+              k = k.strip()
+              if k in {'dispatch_schema', 'dispatch_key'} and k not in fields:
+                  fields[k] = v.strip()
+          if fields.get('dispatch_schema') != 'CLAY_ORDINARY_DISPATCH/v1':
+              raise SystemExit('invalid or missing dispatch_schema')
+          key = fields.get('dispatch_key', '')
+          if not re.fullmatch(r'grid10-sigkill-independent-replacement-v3-g[0-9]{4}', key):
+              raise SystemExit('invalid or missing dispatch_key')
+          spec_path = pathlib.Path('research_entity/continuity/ordinary_dispatch_specs/grid10-sigkill-independent-replacement-v3.json')
+          spec = json.loads(spec_path.read_text())
+          expected = f"{spec['dispatch_class']}-g{int(spec['retry_generation']):04d}"
+          if spec.get('current_dispatch_key') != expected or key != expected:
+              raise SystemExit(f'stale/noncanonical dispatch key: {key} != {expected}')
+          claim_path = pathlib.Path(f'research_entity/continuity/ordinary_dispatch_claims/{key}.json')
+          if not claim_path.is_file():
+              raise SystemExit('create-only dispatch claim missing')
+          claim = json.loads(claim_path.read_text())
+          if claim.get('dispatch_key') != key or claim.get('dispatch_class') != spec.get('dispatch_class'):
+              raise SystemExit('dispatch claim identity mismatch')
+          if claim.get('new_issue_authorized_by_this_claim') is not True:
+              raise SystemExit('claim does not authorize this generation trigger')
+          result_path = pathlib.Path(f'research_entity/continuity/ordinary_dispatch_results/{key}.json')
+          skip = result_path.is_file()
+          if not skip:
+              for field in ('source_path', 'test_path'):
+                  p = pathlib.Path(spec[field])
+                  if not p.is_file():
+                      raise SystemExit(f'missing locked source: {p}')
+              source_blob = subprocess.check_output(['git','hash-object',spec['source_path']], text=True).strip()
+              test_blob = subprocess.check_output(['git','hash-object',spec['test_path']], text=True).strip()
+              if source_blob != spec['source_blob_sha']:
+                  raise SystemExit(f'source blob mismatch: {source_blob} != {spec["source_blob_sha"]}')
+              if test_blob != spec['test_blob_sha']:
+                  raise SystemExit(f'test blob mismatch: {test_blob} != {spec["test_blob_sha"]}')
+              if subprocess.check_output(['git','status','--porcelain'], text=True).strip():
+                  raise SystemExit('checkout not clean before runtime')
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as out:
+              out.write(f'dispatch_key={key}\n')
+              out.write(f'skip={str(skip).lower()}\n')
+              out.write(f'result_path={result_path.as_posix()}\n')
+          print('ALREADY_SATISFIED' if skip else f'ADMITTED_SINGLETON {key}')
+          PY
+
+      - name: Execute exact acceptance inside clay-direct-dev
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/grid10-sigkill-v3-host
+          mkdir -p /tmp/grid10-sigkill-v3-host
+          target="/tmp/grid10-sigkill-v3-${DISPATCH_KEY}"
+          work="/tmp/grid10-sigkill-v3-work-${DISPATCH_KEY}"
+          kind=''
+
+          if command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then
+            kind='docker'
+            tar -C "$GITHUB_WORKSPACE" -cf - . | docker exec -i clay-direct-dev sh -lc "rm -rf '$target' '$work'; mkdir -p '$target' '$work'; tar -C '$target' -xf -"
+            exec_in() { docker exec clay-direct-dev sh -lc "$1"; }
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then
+            kind='sudo-docker'
+            tar -C "$GITHUB_WORKSPACE" -cf - . | sudo -n docker exec -i clay-direct-dev sh -lc "rm -rf '$target' '$work'; mkdir -p '$target' '$work'; tar -C '$target' -xf -"
+            exec_in() { sudo -n docker exec clay-direct-dev sh -lc "$1"; }
+          elif command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then
+            kind='podman'
+            tar -C "$GITHUB_WORKSPACE" -cf - . | podman exec -i clay-direct-dev sh -lc "rm -rf '$target' '$work'; mkdir -p '$target' '$work'; tar -C '$target' -xf -"
+            exec_in() { podman exec clay-direct-dev sh -lc "$1"; }
+          elif command -v incus >/dev/null 2>&1 && incus info clay-direct-dev >/dev/null 2>&1; then
+            kind='incus'
+            tar -C "$GITHUB_WORKSPACE" -cf - . | incus exec clay-direct-dev -- sh -lc "rm -rf '$target' '$work'; mkdir -p '$target' '$work'; tar -C '$target' -xf -"
+            exec_in() { incus exec clay-direct-dev -- sh -lc "$1"; }
+          elif command -v lxc >/dev/null 2>&1 && lxc info clay-direct-dev >/dev/null 2>&1; then
+            kind='lxc'
+            tar -C "$GITHUB_WORKSPACE" -cf - . | lxc exec clay-direct-dev -- sh -lc "rm -rf '$target' '$work'; mkdir -p '$target' '$work'; tar -C '$target' -xf -"
+            exec_in() { lxc exec clay-direct-dev -- sh -lc "$1"; }
+          else
+            echo 'BLOCKED_SANDBOX_NOT_DISCOVERED_FROM_RUNNER' > /tmp/grid10-sigkill-v3-host/blocker.txt
+            exit 20
+          fi
+
+          exec_in "set -eu; cd '$target'; test -z \"\$(git status --porcelain)\"; git rev-parse HEAD; git rev-parse 'HEAD^{tree}'; git hash-object tools/grid10_real_sigkill_independent_replacement_acceptance_v3.py; git hash-object tests/test_grid10_real_sigkill_independent_replacement_acceptance_v3.py; python3 --version" > /tmp/grid10-sigkill-v3-host/identity.txt
+
+          set +e
+          exec_in "set -eu; cd '$target'; python3 tools/grid10_real_sigkill_independent_replacement_acceptance_v3.py --workdir '$work'" > /tmp/grid10-sigkill-v3-host/acceptance.json 2> /tmp/grid10-sigkill-v3-host/acceptance.stderr
+          rc=$?
+          set -e
+          printf '%s\n' "$rc" > /tmp/grid10-sigkill-v3-host/exit_code.txt
+          printf '%s\n' "$kind" > /tmp/grid10-sigkill-v3-host/runtime_kind.txt
+
+          EXIT_CODE="$rc" python3 - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path('/tmp/grid10-sigkill-v3-host/acceptance.json')
+          if not p.is_file() or not p.read_text().strip():
+              raise SystemExit('acceptance emitted no JSON receipt')
+          r=json.loads(p.read_text())
+          checks=r.get('checks') or {}
+          required=[
+            'old_real_child_pid_bound','new_real_child_pid_bound','replacement_process_is_independent',
+            'old_coordinator_sigkilled','post_admission_pre_ack_window_proven','replacement_blocked_before_ttl',
+            'replacement_election_executed_by_new_child','replacement_recovery_executed_by_new_child',
+            'exactly_one_admission_after_recovery','outbox_consumed_after_recovery',
+            'recovery_does_not_move_s1_epoch','recovery_does_not_change_s1_digest',
+            'identical_replay_plus_zero_epoch','identical_replay_plus_zero_digest'
+          ]
+          ok=(os.environ['EXIT_CODE']=='0' and r.get('pass') is True and all(checks.get(k) is True for k in required)
+              and r.get('provider_calls')==0 and r.get('secret_lookups')==0
+              and r.get('physical_grid10_credit')==0 and r.get('whole_hcu_credit')==0
+              and len({r.get('parent_pid'),r.get('old_coordinator_pid'),r.get('new_coordinator_pid')})==3)
+          if not ok:
+              raise SystemExit('bounded acceptance validation failed')
+          PY
+
+      - name: Persist exact bounded receipt
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/runtime/tool_results research_entity/continuity/ordinary_dispatch_results
+          target="research_entity/runtime/tool_results/grid10-sigkill-v3-${DISPATCH_KEY}.json"
+          result="research_entity/continuity/ordinary_dispatch_results/${DISPATCH_KEY}.json"
+          git fetch origin main
+          if git show "origin/main:${result}" >/dev/null 2>&1; then
+            echo "ALREADY_SATISFIED_REMOTE ${DISPATCH_KEY}"
+            exit 0
+          fi
+          TARGET="$target" RESULT="$result" DISPATCH_KEY="$DISPATCH_KEY" python3 - <<'PY' > "$target"
+          import json, os, pathlib, platform, socket, subprocess
+          acceptance=json.loads(pathlib.Path('/tmp/grid10-sigkill-v3-host/acceptance.json').read_text())
+          identity=pathlib.Path('/tmp/grid10-sigkill-v3-host/identity.txt').read_text().splitlines()
+          envelope={
+            'schema':'GRID10_SIGKILL_V3_REPOSITORY_BOUND_RUNTIME_RECEIPT/v1',
+            'dispatch_schema':'CLAY_ORDINARY_DISPATCH/v1',
+            'dispatch_key':os.environ['DISPATCH_KEY'],
+            'issue_number':json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text()).get('issue',{}).get('number'),
+            'run_id':os.environ.get('GITHUB_RUN_ID'),
+            'event_sha':os.environ.get('GITHUB_SHA'),
+            'checkout_head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+            'checkout_tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),
+            'checkout_dirty_before_runtime':False,
+            'source_blob_sha':identity[2] if len(identity)>2 else None,
+            'test_blob_sha':identity[3] if len(identity)>3 else None,
+            'runner_name':os.environ.get('RUNNER_NAME'),
+            'runner_hostname':socket.gethostname(),
+            'runner_platform':platform.platform(),
+            'sandbox':'clay-direct-dev',
+            'container_runtime':pathlib.Path('/tmp/grid10-sigkill-v3-host/runtime_kind.txt').read_text().strip(),
+            'acceptance':acceptance,
+            'stderr':pathlib.Path('/tmp/grid10-sigkill-v3-host/acceptance.stderr').read_text(errors='replace'),
+            'status':'PASS' if acceptance.get('pass') is True else 'FAIL',
+            'credit_scope':'GRID10_CRASH_INDEPENDENT_REPLACEMENT_COMPONENT_ONLY',
+            'physical_grid10_credit':0,
+            'whole_hcu_credit':0,
+            'provider_calls':0,
+            'secret_lookups':0
+          }
+          print(json.dumps(envelope,indent=2,sort_keys=True))
+          PY
+          TARGET="$target" DISPATCH_KEY="$DISPATCH_KEY" python3 - <<'PY' > "$result"
+          import json, os, pathlib
+          receipt=json.loads(pathlib.Path(os.environ['TARGET']).read_text())
+          print(json.dumps({
+            'schema':'CLAY_ORDINARY_DISPATCH_RESULT/v1',
+            'dispatch_key':os.environ['DISPATCH_KEY'],
+            'dispatch_class':'grid10-sigkill-independent-replacement-v3',
+            'status':receipt['status'],
+            'issue_number':receipt.get('issue_number'),
+            'run_id':receipt.get('run_id'),
+            'event_sha':receipt.get('event_sha'),
+            'checkout_head':receipt.get('checkout_head'),
+            'checkout_tree':receipt.get('checkout_tree'),
+            'receipt_path':os.environ['TARGET'],
+            'runtime_credit':'GRID10_CRASH_INDEPENDENT_REPLACEMENT_COMPONENT_ONLY' if receipt['status']=='PASS' else 0,
+            'physical_grid10_credit':0,
+            'whole_hcu_credit':0,
+            'retry_requires_generation_advance':True
+          },indent=2,sort_keys=True))
+          PY
+          git config user.name 'grid10-v3-runner'
+          git config user.email 'grid10-v3-runner@users.noreply.github.com'
+          git add "$target" "$result"
+          git commit -m "evidence(grid10): singleton SIGKILL v3 ${DISPATCH_KEY} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

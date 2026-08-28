@@ -1,0 +1,33 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "worker": "GPT-5.6-Sol/triggerwort5",
+  "trigger_routing": "PASS",
+  "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+  "authority_epoch": "9.13",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "architecture_delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_V2_WACHE_PARALLEL_SUCCESSOR_RECONCILIATION_GPT56SOL.json",
+  "architecture_delta_commit": "8514a60c24bb1afa64f89005432791b2b84c5e2b",
+  "packets_observed": [
+    "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+    "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL"
+  ],
+  "packet_consumption": "NONE",
+  "classification": "PARALLEL_V2_SUCCESSOR_FORK_EXPLICITLY_PRESERVED",
+  "reason": "Both packets supersede the same 074533Z predecessor, neither supersedes the other, and the declared v2 executable admission validator has not produced a PASS in this organ against a freshly refreshed local canonical-main checkout.",
+  "source_crosschecks": [
+    "Both packets bind authority epoch 9.13 and exact current main/authority blobs.",
+    "Current validator requires schema-v2 shape plus exact refreshed-main authority binding and grants zero runtime credit even on PASS.",
+    "Pinned donor plugin hooks route through stern.py and do not establish current Wache registration.",
+    "Pinned donor ordinary EffectGate path is nonblocking bookkeeping; DIGITAL SEBUKKU is a distinct actual deny path.",
+    "Pinned donor effect correlation remains session-scoped through active_turns.effect_id, so sibling/overlapping invocation isolation remains unproven."
+  ],
+  "trigger4_handoff": "Use historical settings inheritance as donor evidence for policy-envelope transport only. Require invocation-bound one-shot pre-effect decisions, sibling non-replayability, explicit denial before mutation submission, and typed completion/outcome receipts.",
+  "credit_delta": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_action": "Run validate_ingest_packet_v2.py independently on both v2 successors using a freshly fetched canonical main; then issue explicit provenance reconciliation before any consumed_packet_ids update."
+}

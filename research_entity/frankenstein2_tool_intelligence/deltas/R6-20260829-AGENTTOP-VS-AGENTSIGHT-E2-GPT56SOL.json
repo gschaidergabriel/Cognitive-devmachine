@@ -1,0 +1,42 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_COMPARATIVE_SOURCE_AUDIT_MIRROR/v1",
+  "research_id": "R6-SEED-008",
+  "claim_target": "E2_PORTABLE_WITNESS_COMPARISON_WITH_R6_SEED_005",
+  "status": "E2_COMPARATIVE_ARCHITECTURE_MAPPED_NOT_BUILD_CANDIDATE",
+  "source_f2_repository": "gschaidergabriel/frankenstein-2.0",
+  "source_f2_result_commit": "a8698176f9e16b4e93a8f94a754f2cd882e6804d",
+  "source_f2_result_path": "research/tool_intelligence/deltas/R6-20260829-AGENTTOP-VS-AGENTSIGHT-E2-GPT56SOL.json",
+  "source_f2_claim_commit": "f99bda58113fa2899d7c41a676b2b56f6f2efc95",
+  "source_snapshot": {
+    "f2_before_result": "b3a8b55eae264b2ecf16e7c61cd5ca47e1d88a15",
+    "research_entity_before_result": "9afad12608a4b59d887f9805cd80d92227546906",
+    "authority_epoch": "9.13",
+    "mode": "FREE_ONLY"
+  },
+  "source_pins": {
+    "agenttop": "tech4242/agenttop@5e3929fe8d691b4a1e7b5975adb74091611e5e7b",
+    "agentsight": "eunomia-bpf/agentsight@934f441eff8ca210807333633f47b2efcb8cd020",
+    "agenttop_version": "0.3.1",
+    "agentsight_version": "1.0.30",
+    "licenses": ["MIT", "MIT"]
+  },
+  "fused_findings": [
+    "agenttop is a lower-privilege OTLP-native observer whose main semantic evidence comes from provider-emitted logs/metrics plus local scraping; it is not an independent system-boundary witness.",
+    "agenttop's current /v1/traces handler accepts trace payloads but does not store or process them, so it does not presently close F2 causal trace requirements.",
+    "AgentSight is heavier and privilege/privacy sensitive but can independently observe process/file/network/resource behavior and therefore can disagree with application self-report.",
+    "The candidates are complementary, not interchangeable: routine low-friction OTLP observation and controlled independent system-witness falsification solve different epistemic problems.",
+    "A full agenttop import is not justified merely to receive OTLP; a thin F2-native standards-based ingress is the preferred E2 distillation direction.",
+    "Neither observer may mint UnifiedDB truth, EffectGate/EffectJournal outcome, completion evidence, or synthesize missing F2 causal_id/generation/effect_id from time/PID/session/tool identifiers."
+  ],
+  "proposed_pattern": {
+    "tier_0": "F2 typed telemetry + UnifiedDB evidence + EffectGate/EffectJournal authority",
+    "tier_1": "minimal content-minimized F2-native OTLP ingress for provider-emitted telemetry",
+    "tier_2": "pinned AgentSight sidecar/offline witness only for controlled diagnostic/falsification runs"
+  },
+  "next_discriminator": "E3 deterministic secret-free OTLP fixture on an admitted FREE isolated surface, measuring exact field preservation, UNKNOWN-id preservation, replay/duplicate behavior, malformed/partial payload handling, redaction, and overhead; AgentSight independent-system A/B remains separate and later.",
+  "execution_performed": false,
+  "architecture_credit": 0,
+  "runtime_credit": 0,
+  "db_sync_status": "PENDING_RESEARCH_DB_SYNC",
+  "promotion": "NONE"
+}

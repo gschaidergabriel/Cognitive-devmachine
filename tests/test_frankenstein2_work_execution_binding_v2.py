@@ -137,6 +137,21 @@ class WorkExecutionBindingV2Tests(unittest.TestCase):
             self._complete("inv-2", "r2")
         self.assertEqual(_count(self.db, "fr2_completion_evidence"), 0)
 
+    def test_unknown_outcome_blocks_same_binding_reinvocation(self) -> None:
+        self._bind()
+        self._invoke("inv-1")
+        self._result("inv-1", "r1", outcome="UNKNOWN")
+        with self.assertRaisesRegex(ValueError, "UNKNOWN_OUTCOME_REQUIRES_RECONCILIATION"):
+            self._invoke("inv-2")
+        self.assertEqual(
+            _count(self.db, "fr2_work_invocations", "binding_id=?", ("b1",)),
+            1,
+        )
+        self.assertEqual(
+            _row(self.db, "SELECT status FROM fr2_work_execution_bindings WHERE binding_id='b1'")["status"],
+            "UNKNOWN_OUTCOME",
+        )
+
     def test_late_result_cannot_regress_a_legacy_terminal_binding(self) -> None:
         self._bind()
         self._invoke("inv-1")

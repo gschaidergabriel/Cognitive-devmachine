@@ -1,0 +1,76 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_STATE_CHECKPOINT/v1",
+  "created_at": "2026-08-28T08:29:45Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest-checkpoint",
+  "trigger": "triggerwort 5",
+  "status": "APPEND_ONLY_CHECKPOINT_PENDING_SAFE_INGEST_STATE_JSON_RECONCILIATION",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "base_ingest_state": {
+    "path": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "blob_sha": "d0af3803a9b56e958b010e64d8ac0cbd628bfaf3",
+    "observed_problem": "The base state still reports canonical_main_observed=de3a572..., last_ingest_at=08:08Z and includes the invalid 074533Z v1 historical-settings envelope in consumed_packet_ids. It predates the v2 admission corrections and newer native-subagent forensic priority."
+  },
+  "validated_admissions_to_reconcile": [
+    {
+      "packet_id": "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL",
+      "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T081600Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_V2_SUCCESSOR_GPT56SOL.json",
+      "packet_blob": "99ef8f48d49911ea2796963c9f0af0ae9dcf8358",
+      "validator_blob": "7b19b41666c7fc6c7fd47091ef48f566509fa824",
+      "admitted": true,
+      "runtime_credit_delta": 0,
+      "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T082212Z_HISTORICAL_SETTINGS_V2_EXACT_ADMISSION_GPT56SOL.json"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+      "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T082628Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+      "packet_blob": "bad15660b245dfc33139736cd9857064c82812ef",
+      "validator_blob": "7b19b41666c7fc6c7fd47091ef48f566509fa824",
+      "admitted": true,
+      "runtime_credit_delta": 0,
+      "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T082846Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json"
+    }
+  ],
+  "supersession_correction": {
+    "invalid_current_consumed_envelope": "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL",
+    "replacement_admitted_envelope": "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL",
+    "required_state_semantics": "Move the 074533Z v1 packet out of current consumed-envelope semantics while preserving its historical commit/receipt provenance; represent it as superseded/invalidated-for-v2-admission and represent the 081600Z successor as the admitted envelope."
+  },
+  "latest_architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T082846Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+    "commit": "ef71cf2e707f61d8207affbdc307e8922ce9fb05"
+  },
+  "latest_receipt": {
+    "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T082846Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+    "commit": "ce18e860c8595b1eaa5c9695c7ce4d752610b735"
+  },
+  "current_forensic_frontier": [
+    "P0 pin installed Claude Code version/build and bounded current host delegation/settings identities without committing private host configuration",
+    "P0 observe one harmless real handoff -> native child spawn -> SubagentStart/tool/SubagentStop lifecycle -> reconcile and bind workpackage_id to agent_id/task_id/tool_use_id/generation",
+    "P0 determine whether current host/global settings add child lifecycle hooks beyond the versioned donor plugin",
+    "P0 preserve owner-original efficiency classification: DIRECT_SMALL for trivial already-known work, DELEGATE_BUILD for real multi-step building",
+    "P0 continue invocation-bound one-shot EffectDecision and completion-receipt repair; native child identity must not bypass effect authority",
+    "P1 run two-child disjoint scratch/isolation discriminator and context-pollution ablation after the one-child ABI is pinned"
+  ],
+  "credits": {
+    "packet_admission_historical_settings_v2": "PASS",
+    "packet_admission_native_subagent_identity_gap": "PASS",
+    "installed_host_native_spawn_runtime": 0,
+    "native_child_lifecycle_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "why_sidecar_checkpoint_not_blind_overwrite": "INGEST_STATE.json is a shared moving coordination surface and the branch was receiving concurrent Triggerword-4/5 commits during this run. This append-only checkpoint binds the correction to the exact observed base blob and prevents a stale full-file replacement from deleting parallel frontier work. The next state editor should compare the current blob and merge these operations rather than overwrite by timestamp proximity."
+}

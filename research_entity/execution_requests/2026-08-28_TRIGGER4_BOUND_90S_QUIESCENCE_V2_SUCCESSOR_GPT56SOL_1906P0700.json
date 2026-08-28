@@ -1,0 +1,68 @@
+{
+  "schema": "TRIGGER4_BOUND_90S_QUIESCENCE_EXECUTION_REQUEST/v2",
+  "created_at_local": "2026-08-28T19:06:00+07:00",
+  "trigger": "triggerwort 4",
+  "objective": "Repair the stale full-commit binding in the prior 90-second quiescence request while preserving exact current-main, authority, source, and pre/post stability gates without any provider/model/process mutation.",
+  "prior_request": "research_entity/execution_requests/2026-08-28_GO_BOUND_90S_QUIESCENCE_V2_GPT56SOL_0348P0700.json",
+  "prior_request_status": "HISTORICAL_EVIDENCE_PRESERVED_EXECUTION_BINDING_STALE",
+  "repair_reason": "The prior request pins required_source_commit=3867c05cdeac1d7cdd9a2ec2d629e168abdd106e while also requiring local HEAD to equal current remote main. At this trigger re-entry, canonical main is 779e0420dc04035034700c49dea215e927a8925a, so those requirements cannot both hold. This successor removes the creation-time full-commit pin and instead binds execution atomically to the remote main observed at execution start, requiring that identity and the authority/source hashes to remain unchanged through the observation window.",
+  "authority_snapshot": {
+    "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AE_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "no_paid_fallback": true,
+    "hard_off_required": true
+  },
+  "runtime_binding": {
+    "remote_main_at_execution_start": "RESOLVE_AT_EXECUTION_START",
+    "require_local_head_equals_remote_main_pre": true,
+    "require_local_head_equals_remote_main_post": true,
+    "require_same_remote_main_pre_post": true,
+    "require_same_local_head_pre_post": true,
+    "require_same_tree_pre_post": true,
+    "require_dirty_false_pre_post": true,
+    "require_same_authority_epoch_pre_post": true,
+    "require_same_supervisor_schema_pre_post": true,
+    "require_same_control_source_sha256_pre_post": true,
+    "fail_closed_if_remote_main_moves_during_window": true,
+    "creation_time_main_sha_is_observation_not_runtime_pin": true
+  },
+  "target_environment": "owning clay-direct-dev/VPS only after bootstrap-v2/control-sync has made the checkout current, clean, and authority-bound",
+  "commands": [
+    "python3 -m pytest -q tests/test_free_swarm_runtime_quiescence_probe_v2.py tests/test_vps_control_sync_bootstrap_v2.py",
+    "python3 tools/free_swarm_runtime_quiescence_probe_v2.py --repo . --window-seconds 90 --sample-interval-seconds 2 --receipt /tmp/TRIGGER4_BOUND_90S_QUIESCENCE_V2.json"
+  ],
+  "pass_requires": [
+    "pre-observation vps_control_sync_guard_v1 PASS",
+    "local HEAD equals remote main resolved at execution start and dirty=false",
+    "SUPERVISOR_INBOX and FREE_PROVIDER_ADMISSION are epoch-coherent FREE_ONLY/HARD_OFF",
+    "all provider routes false and Together forbidden",
+    "at least 90 seconds actual observation",
+    "zero live forbidden Clay worker roots in every sample",
+    "zero shared provider-budget counter movement",
+    "zero unexpired shared provider-budget leases",
+    "zero derived provider-usage movement",
+    "post-observation control-sync PASS",
+    "same remote main/local HEAD/tree/authority epoch/control source hashes before and after"
+  ],
+  "forbidden": [
+    "provider/model calls",
+    "secret lookup",
+    "process kill/restart",
+    "checkout/reset/pull/ref mutation inside the quiescence probe",
+    "creation of a duplicate GRID10 v3 g0000 dispatch while issue 2121 lacks a terminal result",
+    "GRID10/HCU/training/EntityOS promotion from this receipt alone"
+  ],
+  "grid10_singleton_boundary": {
+    "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+    "issue_number": 2121,
+    "state_at_creation": "IN_FLIGHT_PENDING_TERMINAL_RESULT",
+    "duplicate_trigger_authorized": false,
+    "retry_generation_advance_authorized": false
+  },
+  "credit_boundary": "A PASS may close only the scoped runtime-quiescence prerequisite. Physical GRID10, full HCU, training, canonical semantics, and whole EntityOS runtime credit remain separate executable gates.",
+  "evidence_status": "SOURCE_EXECUTION_REQUEST_ONLY_NOT_RUNTIME_EVIDENCE"
+}

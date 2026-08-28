@@ -1,0 +1,78 @@
+{
+  "schema": "TRIGGERWORD4_CALL_EFFECT_BIJECTION_SOURCE_AND_LOCAL_UNIT/v1",
+  "trigger": "4",
+  "routing_self_test": "PASS",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "9.13",
+    "selected_delta": "9.13AL_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_execution": "HARD_OFF",
+    "paid_fallback": false,
+    "frank_harness": "DO_NOT_MODIFY",
+    "canonical_main_observed_after_write": "66c875c9d348491c68eb627cf1210b2791df6eae"
+  },
+  "continuation": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "branch_head_observed_after_source_test_write": "4a6f08e5f0d0342ebe9b16143baf36c375ced182",
+    "existing_pr": 2118,
+    "no_new_pr_or_dispatch_lane_created": true
+  },
+  "finding": {
+    "supervisor_gap": "P1_MUTABLE_SESSION_EFFECT_ID_STRUCTURAL_GAP",
+    "required_falsifier": "overlapping A/B immutable_call_id to canonical_effect_id bijection",
+    "prior_gap": "existing invocation guard correlated an external observed invocation id directly to lifecycle invocation_id but did not persist an explicit create-once external-call <-> canonical-effect bijection",
+    "source_delta": "added SQLite-backed create-once bijection with UNIQUE constraints on both immutable_call_id and canonical_effect_id, exact reverse verification, lineage fields, and result re-entry only after pair verification"
+  },
+  "source": {
+    "path": "tools/frankenstein2_effect_call_bijection_v1.py",
+    "source_commit": "251b0e66cf448aa9ca9fb0c11d766c1f21516496",
+    "verified_at_commit": "e5230c5190a9c44feeffea1b515d394701ac4244",
+    "blob_sha": "85d5e8cf79ba5eaaf5dccbe98763e5e5869d45de",
+    "schema": "FRANKENSTEIN2_EFFECT_CALL_BIJECTION/v1"
+  },
+  "test": {
+    "path": "tests/test_frankenstein2_effect_call_bijection_v1.py",
+    "commit": "e5230c5190a9c44feeffea1b515d394701ac4244",
+    "blob_sha": "31e0a6ced12c82a0944c27c7a5363e0a7315a7b8",
+    "cases": 5,
+    "local_deterministic_result": "5/5 PASS",
+    "duration_seconds": 0.013,
+    "coverage": [
+      "overlapping call-B cannot re-enter into effect-A even with same result digest",
+      "call id cannot be rebound to another canonical effect",
+      "canonical effect id cannot be rebound to another call",
+      "same pair cannot silently mutate stored lineage",
+      "unknown call and missing result digest fail closed"
+    ],
+    "execution_scope": "LOCAL_DETERMINISTIC_UNIT_ONLY",
+    "repository_bound_ci_or_vps_result": "NOT_OBSERVED"
+  },
+  "coordination": {
+    "issue_2121": "PRESERVE_EXISTING_NONTERMINAL_SINGLETON_NO_DUPLICATE_NO_GENERATION_ADVANCE",
+    "issue_2122": "PRESERVE_EXISTING_NONTERMINAL_SINGLETON_NO_DUPLICATE_NO_GENERATION_ADVANCE",
+    "unusual_experiment": "NOT_USED",
+    "provider_calls": 0,
+    "secret_lookups": 0
+  },
+  "credit": {
+    "source_primitive": "PRESENT",
+    "local_unit_test": "PASS",
+    "frankenstein_effect_invocation_runtime_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "frankenstein2_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Bind FRANKENSTEIN2_EFFECT_CALL_BIJECTION/v1 at the real Frankenstein PreToolUse/PostToolUse or equivalent tool-call boundary, then execute the exact overlapping A/B test against the real lifecycle store on an admitted non-provider repository/VPS surface once the existing Actions/control-transport blocker permits execution. Do not use a mutable session-scoped effect pointer as correlation authority.",
+  "evidence_boundaries": [
+    "local deterministic unit PASS is not repository-bound CI/VPS runtime PASS",
+    "source presence is not donor-hook integration",
+    "bijection correctness does not prove external effect enforcement or completion verification",
+    "component evidence does not imply Frankenstein-2.0, Physical-GRID10, HCU or EntityOS acceptance"
+  ]
+}

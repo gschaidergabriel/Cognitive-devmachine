@@ -1,0 +1,81 @@
+{
+  "schema": "TRIGGERWORD4_F2_CANONICAL_EFFECT_BIJECTION_SOURCE_DELTA/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "classification": "SOURCE_DELTA_PLUS_EXECUTABLE_FALSIFIER_SOURCE_NO_RUNTIME_CREDIT",
+  "authority_observation": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_main_observed": "93e2216eb3fbf2a098f4857c2791587f39fe46d9",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "98763fab66aa8007b707cfdd293a16825baa6579",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AL_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "effect_authority": "EffectGate+EffectJournal"
+  },
+  "continuation_lane": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "head_before_receipt": "9e3b71c5f21a10e8c97139d1cd3d0962e1cbc7ff",
+    "pull_request": 2118,
+    "overlapping_unknown_outcome_lane": 2125,
+    "overlap_rule": "PR2125 remains the single EntityOS UNKNOWN-after-dispatch authority repair lane. This delta does not modify EffectGate, EffectJournal, EntityOSBridge, or canonical outcome semantics."
+  },
+  "problem": "The F2 lifecycle already correlates state by immutable invocation_id, but it had no create-once persisted bijection from that invocation identity to the canonical effect_id minted by EntityOS EffectGate. A mutable or session-scoped effect pointer can therefore cross-wire two overlapping same-session calls even when invocation/result correlation itself is correct.",
+  "hypothesis": "A non-authoritative create-once reference index with invocation_id PRIMARY KEY and canonical_effect_id UNIQUE, bound to an exact authority_ref, is sufficient to make A/B cross-wiring and effect-id reuse fail closed before F2 result/completion consumption.",
+  "counterhypothesis": "A local bijection primitive can still be insufficient if the real WP105 adapter never binds the actual EffectGate-returned effect_id, if authority_ref is stale, or if a second executor/outcome journal is introduced. Therefore source presence cannot mint enforcement or runtime credit.",
+  "writes": [
+    {
+      "commit": "102d5e59ff6a43a169d58ad1d181197ff5ab34ac",
+      "path": "tools/frankenstein2_canonical_effect_binding_v1.py",
+      "blob_sha": "777a0b502e04a41620eeed5d3a010cdd7ba7430d",
+      "role": "create-once 1:1 invocation-to-canonical-effect reference guard; no effect execution or outcome authority"
+    },
+    {
+      "commit": "f9204b8a8799e68fc5b4d27fca4e626b34747496",
+      "path": "tests/test_frankenstein2_canonical_effect_binding_v1.py",
+      "blob_sha": "36e69842e1c854fafd88beb50d47f22b7c06c22b",
+      "role": "overlapping call-A/call-B cross-wire, rebind, effect-id reuse, authority-ref swap and unknown-invocation falsifiers"
+    },
+    {
+      "commit": "9e3b71c5f21a10e8c97139d1cd3d0962e1cbc7ff",
+      "path": ".github/workflows/grid10-cognitive-envelope-ci.yml",
+      "blob_sha": "b4a70e211d8e48b46045c9bdba515d53a9834fd7",
+      "role": "compile and deterministic test binding for the new primitive"
+    }
+  ],
+  "falsifier_matrix": [
+    "two overlapping same-session invocations A/B bind A->effect-A and B->effect-B",
+    "Post(B) presented as target A is rejected before result/completion use",
+    "effect-B presented for invocation A is rejected",
+    "invocation A cannot be rebound to effect-B",
+    "effect-A cannot be reused by invocation B",
+    "stale or alternate authority_ref is rejected",
+    "unknown invocation cannot mint a canonical-effect reference"
+  ],
+  "execution_evidence": {
+    "local_openai_container_attempt": "BLOCKED_BY_TOOL_SESSION_LIMIT_NOT_A_SEMANTIC_RESULT",
+    "github_actions_run": 33211267880,
+    "github_actions_head": "9e3b71c5f21a10e8c97139d1cd3d0962e1cbc7ff",
+    "github_actions_status_at_receipt": "QUEUED",
+    "executed_test_result_observed": false,
+    "runtime_credit_added": 0
+  },
+  "authority_boundary": [
+    "This mapping never mints canonical effect_id; only EffectGate may do so.",
+    "This mapping never dispatches an effect, classifies an outcome, verifies world state, or issues completion evidence.",
+    "EffectGate+EffectJournal remain the sole canonical effect/outcome authority.",
+    "PR2125 UNKNOWN_AFTER_DISPATCH candidate remains unadmitted until exact-source execution and current-main attestation.",
+    "A queued workflow is not execution evidence."
+  ],
+  "credit_boundary": {
+    "f2_effect_invocation_bijection_source_delta": true,
+    "f2_effect_invocation_runtime_pass": false,
+    "entityos_effect_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_frankenstein2_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "next_exact_action": "Do not duplicate run 33211267880 while it is nonterminal. If it executes, inspect the exact head-bound result and preserve only component-level credit. Independently, wire the actual canonical EffectGate-returned effect_id plus admitted current authority_ref into this bijection at the existing WP105 integration boundary; then rerun the overlapping A/B zero-real-effect matrix. If PR2125 remains candidate-only, fail closed rather than consuming its UNKNOWN contract as current authority."
+}

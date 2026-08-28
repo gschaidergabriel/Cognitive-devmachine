@@ -313,6 +313,58 @@ class RecoveryLeaseGateTests(unittest.TestCase):
         self.assertEqual(envelope["classification"]["same_tick_retry_authorized"], False)
         self.assertNotIn("lease-a", row["classification_json"])
 
+    def test_persist_recovery_classification_is_create_once_and_preserves_first_proof(self):
+        _seed(self.db, claimed_at="2020-01-01T00:00:00Z", expires_at="2099-01-01T00:00:00Z")
+        _seed_recovery_required_evidence(self.db)
+        _, _, first_digest = persist_recovery_classification_with_canonical_lease(
+            self.db,
+            tick_id="t1",
+            work_id=recovery_work_id_for_tick("t1"),
+            spec_rev=1,
+            executor_node="worker-a",
+            lease_token="lease-a",
+            terminal_ts=1.0,
+        )
+        con = _connect(self.db)
+        try:
+            first = con.execute(
+                "SELECT terminal_ts,classification_json,classification_digest FROM grid10_v6_cycle_intents WHERE tick_id=?",
+                ("t1",),
+            ).fetchone()
+        finally:
+            con.close()
+        self.assertIsNotNone(first)
+        first_json = first["classification_json"]
+        self.assertEqual(first["terminal_ts"], 1.0)
+        self.assertEqual(first["classification_digest"], first_digest)
+
+        with self.assertRaisesRegex(
+            RecoveryLeaseNotAuthorized,
+            "RECOVERY_INTENT_NOT_PREPARED:RECOVERY_REQUIRED_POST_V4_COMMIT:t1",
+        ):
+            persist_recovery_classification_with_canonical_lease(
+                self.db,
+                tick_id="t1",
+                work_id=recovery_work_id_for_tick("t1"),
+                spec_rev=1,
+                executor_node="worker-a",
+                lease_token="lease-a",
+                terminal_ts=2.0,
+            )
+
+        con = _connect(self.db)
+        try:
+            second = con.execute(
+                "SELECT terminal_ts,classification_json,classification_digest FROM grid10_v6_cycle_intents WHERE tick_id=?",
+                ("t1",),
+            ).fetchone()
+        finally:
+            con.close()
+        self.assertIsNotNone(second)
+        self.assertEqual(second["terminal_ts"], 1.0)
+        self.assertEqual(second["classification_json"], first_json)
+        self.assertEqual(second["classification_digest"], first_digest)
+
     def test_persist_recovery_classification_rejects_external_time_override_before_mutation(self):
         _seed(self.db, claimed_at="2020-01-01T00:00:00Z", expires_at="2099-01-01T00:00:00Z")
         _seed_recovery_required_evidence(self.db)

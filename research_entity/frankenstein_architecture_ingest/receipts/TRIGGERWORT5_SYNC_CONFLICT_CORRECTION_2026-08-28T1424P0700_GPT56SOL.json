@@ -1,0 +1,47 @@
+{
+  "schema": "TRIGGERWORD5_SYNC_CONFLICT_CORRECTION/v1",
+  "run_id": "triggerwort5-20260828T1414p0700-gpt56sol-ingest",
+  "recorded_at": "2026-08-28T14:24:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "corrects": "research_entity/frankenstein_architecture_ingest/receipts/TRIGGERWORT5_INGEST_CHECKPOINT_2026-08-28T1414P0700_GPT56SOL.json",
+  "correction": {
+    "field": "writes",
+    "originally_listed_state_write": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "actual_result": "NOT_COMMITTED_BY_THIS_ORGAN_DUE_TO_CONCURRENT_COMPARE_AND_SWAP_CONFLICTS",
+    "attempts": 2,
+    "http_result": "409_BLOB_SHA_MISMATCH",
+    "handling": "FAIL_CLOSED_NO_LAST_WRITER_WINS_OVERWRITE"
+  },
+  "durable_writes_that_are_confirmed": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_ARCHITECTURE_DELTA_2026-08-28T1414P0700_GPT56SOL.json",
+      "commit": "ff314179af77f9859045c2711bca47ee193b1f0a"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/TRIGGERWORT5_INGEST_CHECKPOINT_2026-08-28T1414P0700_GPT56SOL.json",
+      "commit": "fde3582e880d2644829c2009c87a02bb58c46af5"
+    }
+  ],
+  "parallel_state_observed_after_conflicts": {
+    "ingest_state_blob": "f0f79d1f9ceb68443ded523c8e9b5d8fc803f4f9",
+    "canonical_main_observed_by_parallel_state": "3aaffb1114365d6d78aacfb0509cb6354926b435",
+    "consumed_packet_ids_include_both_live_feed_bridges": true,
+    "effect_completion_forensics_already_consumed": true,
+    "camera_ownership_contradiction_present_in_state": false
+  },
+  "unmerged_but_durable_supplemental_finding": {
+    "id": "TW5-CONTRADICTION-CAMERA-OWNERSHIP-004",
+    "source": "DEV_SOURCE_RESEARCH/repository/scripts/capture_worker.py@5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "finding": "CaptureWorker single-owner enforcement uses a process-local class set and threading.Lock. It does not establish cross-process camera ownership or stale-owner recovery for Physical-GRID10.",
+    "required_triggerword4_delta": "Add cross-process lease/OS-device ownership with exact process identity, expiry/stale-owner handling and crash recovery before any Physical-GRID10 camera-authority claim.",
+    "status": "DURABLE_SUPPLEMENT_NOT_FORCED_INTO_MOVING_INGEST_STATE"
+  },
+  "evidence_credit": {
+    "runtime_causal": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

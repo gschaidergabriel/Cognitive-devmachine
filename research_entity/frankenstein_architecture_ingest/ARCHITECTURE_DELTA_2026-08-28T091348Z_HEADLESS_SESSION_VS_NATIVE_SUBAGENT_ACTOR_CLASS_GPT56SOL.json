@@ -1,0 +1,113 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T09:13:48Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/headless-vs-native-actor-class",
+  "classification": "CURRENT_DONOR_SOURCE_FORENSICS_NO_RUNTIME_CREDIT",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_observed_before_write": "f20248b6035b50c05525d5c481c27852e0d14b0c"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "packet_ingest": {
+    "newer_packet_after_latest_consumed_082628Z": false,
+    "action": "FORENSIC_CONTINUATION_NOT_DUPLICATE_PACKET_INGEST"
+  },
+  "material_finding": "The donor voice task bridge and the Triggerword-4 native-subagent contract cover two distinct runtime actor classes that must not be silently collapsed: realtime voice delegates through a fresh/resumed headless `claude -p` process/session, while the newer R2 design also targets native subagent actors. A native SubagentStart/SubagentStop proof does not automatically prove attribution/policy/effect lineage for the headless voice child path.",
+  "atoms": [
+    {
+      "atom_id": "TW5-ACTORCLASS-001-VOICE-BRIDGE-CALLS-HEADLESS-HELPER",
+      "subsystem": "voice_delegation",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 824,
+      "line_end": 831,
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "RealtimeSession._claude_taetigkeit calls gespraechsmodus.claude_frage with the stored Claude session id and mutable berechtigung, then persists a returned session id. It passes no cwd, workpackage_id, agent_id, task_id or tool invocation identity.",
+      "runtime_reachable": true,
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-ACTORCLASS-002-CLAUDE-FRAGE-IS-DIRECT-HEADLESS-PROCESS",
+      "subsystem": "headless_child_execution",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 355,
+      "line_end": 376,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "claude_frage directly constructs and executes `claude -p` with JSON output, permission mode, hard Bash denial and append-system-prompt. It creates a new session with --session-id or resumes one with --resume; subprocess cwd falls back to Path.home(). The donor code does not invoke a parent Agent/subagent spawn primitive in this path.",
+      "runtime_reachable": true,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-ACTORCLASS-003-DONOR-HOOKS-NOT-SUBAGENT-LIFECYCLE",
+      "subsystem": "hook_lifecycle_identity",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 1,
+      "line_end": 81,
+      "source_kind": "CONFIG",
+      "what_it_does": "The versioned donor plugin routes seven hook event classes through stern.py: SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact. Dedicated SubagentStart/SubagentStop/Task lifecycle registration is absent in this file.",
+      "runtime_reachable": null,
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.99
+    }
+  ],
+  "architecture_delta": {
+    "required_distinction": "execution_actor_class",
+    "recommended_values": [
+      "HEADLESS_SESSION_CHILD",
+      "NATIVE_SUBAGENT_CHILD",
+      "UNKNOWN_CHILD_ACTOR"
+    ],
+    "work_execution_binding_addition": "Bind execution_actor_class plus spawn/invocation mechanism. Do not infer native-subagent lifecycle evidence for a headless `claude -p` session child.",
+    "child_policy_envelope_addition": "Bind policy evidence separately for each actor class because loaded settings/hooks/cwd/tool surfaces can differ between direct headless CLI sessions and native subagent execution.",
+    "effect_lineage_addition": "Each mutating call still requires exact invocation identity and deterministic pre-side-effect enforcement regardless of actor class.",
+    "completion_addition": "Completion credit must bind terminal evidence from the same actor class and generation that executed the work. Session resume continuity is not by itself child-actor identity proof."
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-HEADLESS-VS-NATIVE-CHILD-016",
+      "a": "Triggerword-4 R2 now specifies native child actor/task/invocation binding and SubagentStart/equivalent lifecycle evidence.",
+      "b": "The current donor voice task path directly launches/resumes `claude -p` and does not source-prove a native subagent spawn relation.",
+      "status": "SOURCE_CONFIRMED_ACTOR_CLASS_SPLIT"
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "claim": "The installed Claude Code runtime may emit enough equivalent lifecycle/tool identity for direct headless `claude -p` sessions that both classes can share one implementation after measurement.",
+      "discriminator": "Run one harmless HEADLESS_SESSION_CHILD probe and one harmless NATIVE_SUBAGENT_CHILD probe on an authorized host; compare actual lifecycle event sets, actor/task IDs, loaded policy provenance, cwd/isolation semantics and per-tool invocation identity."
+    },
+    {
+      "claim": "The voice path may later be migrated entirely onto native subagents, making the headless class compatibility-only.",
+      "discriminator": "Do not retire headless support until the installed native path reproduces session continuity, policy containment, latency and result re-entry requirements with executable receipts."
+    }
+  ],
+  "trigger4_feed": {
+    "new_gate": "NCX-ACTORCLASS-SPLIT",
+    "rule": "NATIVE_SUBAGENT_RUNTIME_PASS does not imply HEADLESS_SESSION_CHILD_RUNTIME_PASS. Voice/delegated-task acceptance must either prove both actor classes actually used by 2.0 or explicitly retire one with executable migration evidence.",
+    "highest_value_next_test": "Paired harmless actor-class probe: same bounded work intent through direct headless `claude -p` and native subagent path; capture exact build/settings/hooks/cwd/actor/task/tool identity and terminal result for differential comparison."
+  },
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_credit": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  }
+}

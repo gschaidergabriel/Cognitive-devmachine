@@ -381,14 +381,17 @@ class CognitiveControlPlane:
                 raise ControlError(f"UNKNOWN_CONTROL:{item.name}")
             validated.append((item, spec, self._validate_value(spec, item.value)))
 
+        patch_json = _cj(asdict(patch))
         con = _connect(self.path)
         try:
             con.execute("BEGIN IMMEDIATE")
             existing_revision = con.execute(
-                "SELECT new_snapshot_digest,control_epoch FROM cognitive_control_revisions WHERE patch_id=?",
+                "SELECT new_snapshot_digest,control_epoch,patch_json FROM cognitive_control_revisions WHERE patch_id=?",
                 (patch.patch_id,),
             ).fetchone()
             if existing_revision is not None:
+                if str(existing_revision["patch_json"]) != patch_json:
+                    raise ControlError("PATCH_ID_REUSE_CONFLICT")
                 con.execute("COMMIT")
                 return ControlPatchReceipt(
                     PATCH_SCHEMA, patch.patch_id, True, "IDEMPOTENT_REPLAY_ALREADY_COMMITTED",
@@ -423,7 +426,7 @@ class CognitiveControlPlane:
             after = self._snapshot_con(con)
             con.execute(
                 "INSERT INTO cognitive_control_revisions(control_epoch,patch_id,base_snapshot_digest,new_snapshot_digest,writer,writer_kind,reason,patch_json,created_ts) VALUES(?,?,?,?,?,?,?,?,?)",
-                (epoch, patch.patch_id, patch.base_snapshot_digest, after.snapshot_digest, patch.writer, patch.writer_kind, patch.reason, _cj(asdict(patch)), now),
+                (epoch, patch.patch_id, patch.base_snapshot_digest, after.snapshot_digest, patch.writer, patch.writer_kind, patch.reason, patch_json, now),
             )
             con.execute("COMMIT")
             return ControlPatchReceipt(PATCH_SCHEMA, patch.patch_id, True, "ATOMIC_PATCH_COMMITTED", previous.snapshot_digest, after.snapshot_digest, epoch, tuple(item.name for item in patch.items))

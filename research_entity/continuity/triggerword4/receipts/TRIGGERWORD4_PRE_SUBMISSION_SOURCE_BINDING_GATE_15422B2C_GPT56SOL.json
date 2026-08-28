@@ -1,0 +1,79 @@
+{
+  "schema": "TRIGGERWORD4_PRE_SUBMISSION_SOURCE_BINDING_GATE/v1",
+  "date": "2026-08-28",
+  "trigger": "triggerwort 4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "status": "SOURCE_FAIL_CLOSED_DELTA_COMMITTED_TEST_EXECUTION_NOT_OBSERVED",
+  "routing": {
+    "exact_normalized_trigger_verified": true,
+    "mandatory_triggerword4_directives_fetched": true,
+    "continuation_not_restart": true,
+    "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "single_existing_pr": 2118
+  },
+  "authority": {
+    "canonical_main_observed": "588cc08cf828ea1e7c24323710f6b819871e2cf3",
+    "supervisor_epoch": "9.13",
+    "latest_supervisor_delta": "9.13AF_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_execution": "HARD_OFF",
+    "together": "FORBIDDEN",
+    "paid_fallback": false,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "finding": {
+    "source": "tools/frankenstein2_effect_lifecycle_v1.py",
+    "observed_invariant_text": "Create-once expected source identity before any submission can occur.",
+    "pre_delta_behavior": "mark_submitted required PENDING + ALLOW + matching enforcement but did not require completion_v2_source_bindings before transitioning to SUBMITTED.",
+    "risk": "an effect could enter SUBMITTED without an expected source identity even though later Completion Verifier v2 would refuse completion; this violated the stronger pre-dispatch provenance invariant.",
+    "counterhypothesis": "late completion rejection alone might be sufficient if SUBMITTED were only a diagnostic label; rejected because the lifecycle contract treats SUBMITTED as the dispatch boundary state and the source-binding API explicitly promises pre-submission binding."
+  },
+  "source_delta": {
+    "source_commit": "5bb3c9746e919b3e7fcef3242c31be5a331dd4a8",
+    "source_blob_after": "cff9610627f1b4a3fb9865f8a2ece4327673aae2",
+    "test_commit": "15422b2c38a7ecf73c66cb67a147f1f9e96adf49",
+    "test_blob_after": "52ec2ef7a76b54e4b9b985ca885b290b50bc5f5c",
+    "change": "mark_submitted now requires a non-empty completion_v2_source_bindings row before the SUBMITTED CAS; missing binding raises SUBMIT_REQUIRES_SOURCE_BINDING and leaves the request PENDING.",
+    "regression": "tests/test_frankenstein2_effect_lifecycle_completion_v2.py now asserts unbound submission is rejected before state transition and that binding then permits submission while late rebinding remains rejected.",
+    "parallel_fusion": "A concurrent hook invocation identity test expansion changed the same test file. The first write received HTTP 409 and was not forced; the newer blob was fetched and preserved before the regression was applied."
+  },
+  "validation": {
+    "source_diff_verified": true,
+    "test_diff_verified": true,
+    "repository_ci_for_test_commit": "NO_COMMIT_SCOPED_RUN_OR_STATUS_OBSERVED_AT_CHECK_TIME",
+    "local_container_repository_clone": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "parallel_repository_ci_evidence_commit": "fbe4755b7d0472eadb5099d332d6fc4e4079036f",
+    "parallel_repository_ci_classification": "INFRASTRUCTURE_OR_RUNNER_FAILURE_BEFORE_TEST_EXECUTION_ZERO_STEPS",
+    "test_execution_observed_for_this_delta": false,
+    "code_test_failure_observed": false,
+    "classification": "SOURCE_VERIFIED_REGRESSION_WRITTEN_EXECUTION_PENDING"
+  },
+  "singleton_runtime_gates": {
+    "grid10_runtime_quiescence_v2": {
+      "issue": 2122,
+      "dispatch_key": "grid10-runtime-quiescence-v2-g0000",
+      "status": "QUEUED_OR_TERMINAL_RESULT_NOT_OBSERVED",
+      "duplicate_dispatch_authorized": false,
+      "generation_advance_authorized": false
+    },
+    "grid10_sigkill_independent_replacement_v3": {
+      "issue": 2121,
+      "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+      "status": "QUEUED_OR_TERMINAL_RESULT_NOT_OBSERVED",
+      "duplicate_dispatch_authorized": false,
+      "generation_advance_authorized": false
+    }
+  },
+  "credits": {
+    "source_fail_closed_delta": "COMMITTED",
+    "repository_bound_test_credit": 0,
+    "vps_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "whole_entityos_credit": 0,
+    "frankenstein2_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "When an already-authorized runner/host execution surface is actually available, execute the exact current tests/test_frankenstein2_effect_lifecycle_completion_v2.py against the exact branch head containing source blob cff9610627f1b4a3fb9865f8a2ece4327673aae2 and preserve the result. Separately consume the existing singleton terminal results for issues 2122 and 2121 if they appear; do not create replacement dispatches or advance generations. Persistent GRID10 runtime acceptance remains prerequisite to Frankenstein-2 runtime promotion.",
+  "evidence_law": "SOURCE_DIFF_VERIFIED != TEST_EXECUTED != VPS_RUNTIME_PASS != PHYSICAL_GRID10_OR_WHOLE_ENTITYOS_HCU_PASS"
+}

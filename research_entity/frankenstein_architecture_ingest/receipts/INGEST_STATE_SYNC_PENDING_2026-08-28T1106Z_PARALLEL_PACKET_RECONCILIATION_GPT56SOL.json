@@ -1,0 +1,63 @@
+{
+  "schema_version": "TRIGGERWORD5_STATE_SYNC_PENDING/v1",
+  "created_at": "2026-08-28T11:06:30Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "status": "SYNC_PENDING_DUE_CONCURRENT_INGEST_STATE_MOVEMENT",
+  "target_state": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "observed_design_head": "04b44b917d2f460aca46d204ef2eafcfabc5ac85",
+  "observed_state_blob_sha": "d02a4bed07c7de10c7938c3f30fd12a3fe83e3fc",
+  "observed_state_last_ingest_at": "2026-08-28T11:00:25Z",
+  "observed_state_last_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1100Z_RETRIEVAL_IDENTITY_BINDING_SCHEMA_GPT56SOL.json",
+  "observed_consumption": {
+    "TW5-PACKET-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL": "PRESENT_IN_CENTRAL_STATE",
+    "TW5-PACKET-20260828T105400Z-RETRIEVAL-TURN-BINDING-GPT56SOL": "MISSING_FROM_CENTRAL_STATE_BUT_DURABLE_DELTA_RECEIPT_EXISTS",
+    "TW5-PACKET-20260828T105800Z-HEADLESS-CLAUDE-MUTATION-BOUNDARY-GPT56SOL": "MISSING_FROM_CENTRAL_STATE_BUT_DURABLE_DELTA_RECEIPT_EXISTS"
+  },
+  "durable_chains_to_reconcile": [
+    {
+      "packet_id": "TW5-PACKET-20260828T105400Z-RETRIEVAL-TURN-BINDING-GPT56SOL",
+      "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105400Z_5641dc6_GPT56SOL_RETRIEVAL_TURN_BINDING_FORENSICS.json",
+      "delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_RETRIEVAL_TURN_IDENTITY_HANDOFF_GPT56SOL.json",
+      "delta_commit": "8d243fd67d2e720c465fe4e10507febd49f81e45",
+      "receipt_path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1054Z_RETRIEVAL_TURN_IDENTITY_HANDOFF_GPT56SOL.json",
+      "receipt_commit": "3519c1378cd7896fa377e13287a2703c6b49f233",
+      "disposition": "CONSUMED_AFTER_DIRECT_SOURCE_CROSSCHECK"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T105800Z-HEADLESS-CLAUDE-MUTATION-BOUNDARY-GPT56SOL",
+      "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T1058Z_5641dc6_GPT56SOL_HEADLESS_CLAUDE_MUTATION_BOUNDARY.json",
+      "delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1059Z_HEADLESS_CLAUDE_MUTATION_BOUNDARY_GPT56SOL.json",
+      "delta_commit": "b6659cf0ac64c714ad4c877696d2761baf9f1000",
+      "receipt_path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1059Z_HEADLESS_CLAUDE_MUTATION_BOUNDARY_GPT56SOL.json",
+      "receipt_commit": "8fed7bfb9c32862990e05265a49652cd0c5fec16",
+      "disposition": "CONSUMED_AFTER_DIRECT_SOURCE_CROSSCHECK"
+    }
+  ],
+  "failed_state_write": {
+    "attempted": true,
+    "result": "HTTP_409_CONCURRENT_BLOB_MOVEMENT",
+    "interpretation": "COORDINATION_CONFLICT_NOT_PRODUCT_FAILURE",
+    "state_mutated_by_failed_attempt": false
+  },
+  "fail_closed_decision": "Do not replace the shared INGEST_STATE from a stale whole-file snapshot while the branch is under active parallel Triggerword-5 writes. Preserve exact append-only packet/delta/receipt provenance and defer only the central index reconciliation.",
+  "required_reentry_action": "Fetch one stable exact current INGEST_STATE blob and append only the two missing packet IDs plus their exact delta/receipt tuples if still absent. Preserve any newer last_* pointers and all concurrent entries. If the blob moves again, leave synchronization pending rather than overwriting concurrent provenance.",
+  "architecture_credit": {
+    "retrieval_identity_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "headless_voice_boundary_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "central_state_sync": "PENDING_ONLY",
+    "runtime": 0,
+    "provider": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false
+}

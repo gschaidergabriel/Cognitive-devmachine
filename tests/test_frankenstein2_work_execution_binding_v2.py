@@ -181,15 +181,51 @@ class WorkExecutionBindingV2Tests(unittest.TestCase):
         self.assertEqual(_count(self.db, "fr2_completion_evidence", "binding_id=?", ("b1",)), 1)
 
     def test_v2_refuses_legacy_database_with_multiple_completions(self) -> None:
+        """Represent pre-hardening v1 state directly so predecessor repairs cannot erase coverage."""
         legacy_db = Path(self.td.name) / "legacy.sqlite3"
-        legacy = LegacyLedger(legacy_db)
-        self._bind(ledger=legacy)
-        self._invoke("inv-1", ledger=legacy)
-        self._invoke("inv-2", ledger=legacy)
-        self._result("inv-1", "r1", ledger=legacy)
-        self._complete("inv-1", "r1", completion="c1", ledger=legacy)
-        self._result("inv-2", "r2", ledger=legacy)
-        self._complete("inv-2", "r2", completion="c2", ledger=legacy)
+        mod.v1.init_schema(legacy_db)
+        con = sqlite3.connect(str(legacy_db))
+        try:
+            con.execute("PRAGMA foreign_keys=ON")
+            con.execute(
+                """INSERT INTO fr2_work_execution_bindings
+                   (binding_id,workpackage_id,work_generation,parent_execution_id,child_runtime_kind,
+                    child_execution_id,native_agent_id,native_task_id,identity_provenance,
+                    identity_observed_at,status,created_at)
+                   VALUES('b1','wp1','g1',NULL,'LEGACY_TEST_CHILD','child-1',NULL,NULL,
+                          'legacy-fixture',1.0,'COMPLETED',1.0)"""
+            )
+            con.executemany(
+                """INSERT INTO fr2_work_invocations
+                   (invocation_id,binding_id,invocation_kind,native_tool_use_id,request_digest,started_at)
+                   VALUES(?, 'b1', 'LEGACY_CALL', NULL, ?, ?)""",
+                [
+                    ("inv-1", "legacy-request-1", 2.0),
+                    ("inv-2", "legacy-request-2", 3.0),
+                ],
+            )
+            con.executemany(
+                """INSERT INTO fr2_work_results
+                   (result_id,binding_id,invocation_id,outcome,result_digest,result_provenance,observed_at)
+                   VALUES(?, 'b1', ?, 'SUCCESS', ?, 'legacy-fixture', ?)""",
+                [
+                    ("r1", "inv-1", "legacy-result-1", 4.0),
+                    ("r2", "inv-2", "legacy-result-2", 5.0),
+                ],
+            )
+            con.executemany(
+                """INSERT INTO fr2_completion_evidence
+                   (completion_id,binding_id,invocation_id,result_id,evidence_kind,evidence_digest,evidence_ref,verified_at)
+                   VALUES(?, 'b1', ?, ?, 'DETERMINISTIC_TEST_RECEIPT', ?, ?, ?)""",
+                [
+                    ("c1", "inv-1", "r1", "legacy-evidence-1", "fixture://legacy/c1", 6.0),
+                    ("c2", "inv-2", "r2", "legacy-evidence-2", "fixture://legacy/c2", 7.0),
+                ],
+            )
+            con.commit()
+        finally:
+            con.close()
+
         self.assertEqual(_count(legacy_db, "fr2_completion_evidence", "binding_id=?", ("b1",)), 2)
         with self.assertRaisesRegex(
             ValueError,

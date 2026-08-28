@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "trigger": "triggerwort 5",
+  "run_id": "triggerwort5-20260828T1414p0700-gpt56sol-historical-effect-authority-fragmentation",
+  "status": "SOURCE_GROUNDED_DELTA_AFTER_COUNTERHYPOTHESIS_TEST",
+  "purpose": "Refine the historical policy/effect finding after repository-wide counterhypothesis search, avoiding the false stronger claim that historical Project-Frankenstein had no enforcement mechanisms at all.",
+  "authority_snapshot": {
+    "admitted_supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_main_parent": "55f2c9daa55ffe30392585c08d48d0659d2d33a3",
+    "evidence_boundary": "static source/search at pinned historical repository head only"
+  },
+  "source_identity": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "commit": "39c5423e0bfae54b971aab0be82f225f7a5890b8",
+    "project_engine": {
+      "path": "services/project_engine.py",
+      "blob_sha": "28e927950f7112feb3960acf2633f660a343e341"
+    },
+    "agentic_executor_path": "agentic/executor.py",
+    "agentic_loop_path": "agentic/loop.py"
+  },
+  "counterhypothesis_test": {
+    "hypothesis": "An external repository caller may invoke ProjectEngine.check_policy() before project tool execution.",
+    "test": "Repository-wide code search for check_policy at pinned current historical head.",
+    "result": "Only services/project_engine.py was returned; no second repository call site was found.",
+    "promotion": "The specific external-check_policy-wrapper counterhypothesis is falsified at this repository snapshot.",
+    "remaining_alternative": "Other independently implemented enforcement paths may exist without calling check_policy()."
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-1414-HEAF-A01-PROJECT-POLICY-DECIDER-UNCONSUMED-REPOSITORY-WIDE",
+      "classification": "NEGATIVE_RESULT",
+      "claim": "Repository-wide code search at Project-Frankenstein 39c5423e0bfae54b971aab0be82f225f7a5890b8 finds check_policy only in services/project_engine.py. No repository call site consuming that specific policy decider was observed.",
+      "scope_note": "Search evidence can miss dynamically constructed/reflection-based calls; the claim is bounded to accessible static repository code at the pinned head.",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-1414-HEAF-A02-AGENTIC-EXECUTOR-INDEPENDENT-APPROVAL-PLANE",
+      "classification": "HISTORICAL_ONLY",
+      "secondary_classification": ["LIVE_CODE", "ENFORCEMENT_CODE"],
+      "claim": "agentic/executor.py implements a separate ToolExecutor approval/risk path: execute() checks _needs_approval unless skip_approval is set, and provides additional code/bash guardrails and sandboxing. This is an enforcement mechanism independent of ProjectEngine.check_policy().",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-1414-HEAF-A03-AGENTIC-LOOP-EXPLICIT-BYPASS-AFTER-CLASSIFICATION-OR-APPROVAL",
+      "classification": "HISTORICAL_ONLY",
+      "secondary_classification": ["LIVE_CODE", "ENFORCEMENT_CODE"],
+      "claim": "agentic/loop.py explicitly calls ToolExecutor.execute(..., skip_approval=True) for tools in a local safe-auto-approve set and after explicit user approval for other tools. Therefore ToolExecutor's internal approval check is not a sole unconditional effect gate; upstream classification/approval logic participates in authority.",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-1414-HEAF-A04-HISTORICAL-EFFECT-AUTHORITY-FRAGMENTATION",
+      "classification": "INFERENCE",
+      "claim": "The pinned historical repository exposes multiple non-identical effect-control mechanisms: ProjectEngine has project_policies/check_policy plus separate direct-path blocking/sandbox logic, while the agentic ToolExecutor/AgentLoop has independent risk approval and guardrails. The source does not establish one canonical policy-to-effect authority edge shared by all effect paths.",
+      "falsifier": "A pinned architecture entrypoint or shared wrapper proving that all externally effectful paths converge through one canonical enforcement decision before execution.",
+      "confidence": 0.92
+    }
+  ],
+  "correction_to_prior_packet": {
+    "prior_path": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_HISTORICAL_POLICY_EFFECT_WIRING_LINEAGE_2026-08-28_GPT56SOL.json",
+    "preserved": "ProjectEngine.check_policy presence does not establish its consumption by the direct ProjectEngine tool path.",
+    "refined": "Do not generalize this to 'no historical enforcement'. Independent agentic approval/guardrail enforcement exists in the same repository.",
+    "new_architecture_problem": "fragmented/non-unified effect authority rather than total absence of guards"
+  },
+  "failure_atlas_proposal": {
+    "candidate_id": "FA-010-EFFECT-AUTHORITY-FRAGMENTATION-AND-UNCONSUMED-POLICY-DECIDER",
+    "status": "PROPOSED_NOT_YET_MERGED",
+    "failure_pattern": "Policy state/decision logic and concrete effect guards exist in different planes, while the repository does not demonstrate one canonical fail-closed edge consumed by every effect path.",
+    "frankenstein2_rule": "Every real effect must converge through one canonical deterministic authorization edge; path-specific safety checks may narrow further but may not create independent competing authorities."
+  },
+  "grid10_frankenstein2_delta": [
+    "Model the donor/historical effect layer as fragmented roles, not as one inherited EffectGate simply because several guard-like functions exist.",
+    "For Frankenstein 2.0, require explicit convergence of policy/capability authority, invocation identity, hard pre-effect blocking, effect journaling, and postcondition verification.",
+    "Test each effect ingress class independently and then prove convergence; a safe agentic executor does not prove the project-engine path is gated, and vice versa.",
+    "Keep path-local safety guards as defense in depth beneath the canonical effect authority, not as alternate sources of permission."
+  ],
+  "credits": {
+    "historical_lineage_reconstruction": "ADVANCED_WITH_COUNTERHYPOTHESIS_TEST",
+    "runtime": 0,
+    "effect_causality": 0,
+    "physical_grid10": 0,
+    "hcu": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Enumerate all effectful historical entry classes at the pinned Project-Frankenstein head and build a path-to-guard matrix; then merge the verified fragmentation result into FAILURE_ATLAS.json and EMERGENT_COUPLING_GRAPH.json and hand the single-authority requirement to Triggerword 4."
+}

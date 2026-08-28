@@ -234,8 +234,9 @@ def classify_cycle_intent(path: Path, *, tick_id: str) -> CycleIntentClassificat
                 gap_events = [] if "no such table" in str(exc).lower() else (_ for _ in ()).throw(exc)
             finally:
                 con_gap.close()
-            expected_gap = base_before - prepared_epoch
-            if len(gap_events) != expected_gap:
+            expected_epochs = list(range(prepared_epoch + 1, base_before + 1))
+            observed_epochs = [int(event["state_epoch"]) for event in gap_events]
+            if observed_epochs != expected_epochs:
                 mismatches.append("PRE_V4_EPOCH_GAP_NOT_FULLY_EVENT_ATTESTED")
             for event in gap_events:
                 if event["event_type"] != "DEFERRED_INTENT_FIRED" or not str(event["event_id"]).startswith(f"{tick_id}:wake:"):

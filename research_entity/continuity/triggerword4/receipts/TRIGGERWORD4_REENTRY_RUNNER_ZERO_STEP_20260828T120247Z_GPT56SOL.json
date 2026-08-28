@@ -1,0 +1,74 @@
+{
+  "schema": "TRIGGERWORD4_REENTRY_BLOCKER_RECEIPT/v1",
+  "created_at": "2026-08-28T12:02:47Z",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "SOURCE_REENTRY_AND_EXECUTION_INFRASTRUCTURE_CLASSIFICATION_ONLY",
+  "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "continuation_head_observed_before_receipt": "104f562577b44964f493f5543a1bf8fbb2321b57",
+  "donor": {
+    "repository": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "preserve_as_baseline": true
+  },
+  "current_supervisor": {
+    "base_epoch": "9.13",
+    "selected_delta": "9.13AE",
+    "selected_singleton_dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000"
+  },
+  "singleton_dispatch": {
+    "issue": 2121,
+    "workflow_run_id": 33168491753,
+    "job_id": 98839547140,
+    "status_observed": "queued",
+    "conclusion_observed": null,
+    "required_runner_labels": ["self-hosted", "Linux", "X64"],
+    "runner_id_observed": 0,
+    "runner_name_observed": "",
+    "steps_observed": [],
+    "result_receipt_observed": false,
+    "retry_or_duplicate_created_by_this_organ": false,
+    "classification": "RUNNER_ASSIGNMENT_PENDING_NOT_PRODUCT_TEST_RESULT"
+  },
+  "hosted_ci_reentry": {
+    "branch_head_run_id": 33169275146,
+    "job_id": 98842155902,
+    "head_sha": "47e2a5b8208eecc3306a41d54f597bbdc53cfdde",
+    "workflow": "GRID10 Cognitive Envelope CI",
+    "status": "completed",
+    "conclusion": "failure",
+    "runner_labels": ["ubuntu-latest"],
+    "runner_id_observed": 0,
+    "runner_name_observed": "",
+    "steps_observed": [],
+    "classification": "ZERO_STEP_CI_INFRASTRUCTURE_FAILURE_NOT_CODE_FAIL"
+  },
+  "source_reentry": {
+    "v6_gwt_gate_source_present": true,
+    "v6_gwt_tests_present": true,
+    "v6_ci_inclusion_present": true,
+    "v6_reserved_causal_context_fix_head": "104f562577b44964f493f5543a1bf8fbb2321b57",
+    "native_child_workexecution_test_source_present": true,
+    "runtime_credit_from_these_source_observations": 0
+  },
+  "evidence_boundary": {
+    "physical_grid10_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "product_logic_failure_claimed": false,
+    "runtime_pass_claimed": false
+  },
+  "decision": {
+    "duplicate_dispatch": "FORBIDDEN_WHILE_G0000_NONTERMINAL",
+    "generation_advance": "FORBIDDEN_WITHOUT_TERMINAL_INFRA_ONLY_RETRY_ELIGIBILITY",
+    "github_actions_result_interpretation": "NO_TEST_EVIDENCE_WHEN_ZERO_STEPS_AND_NO_RUNNER_ASSIGNMENT",
+    "parallel_source_work": "CONTINUE_NONOVERLAPPING_FUNCTIONAL_CORE_WORK",
+    "frankenstein2_vps_assembly": "DO_NOT_PROMOTE_TO_RUNTIME_PASS_BEFORE_GRID_CONTROL_EXECUTION_RECEIPTS"
+  },
+  "next_exact_gate": "Observe terminal state for run 33168491753 and its canonical ordinary-dispatch result path. Independently obtain one admitted non-provider deterministic compile/test receipt for current Triggerword-4 V4/V5/V6/ControlledRuntime/LiveControlBinding/PersistentScheduler source without relying on zero-step GitHub Actions. Re-enter continuation head before any implementation write."
+}

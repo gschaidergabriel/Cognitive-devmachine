@@ -1,0 +1,39 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "created_at": "2026-08-28T10:56:00Z",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "canonical_main_sha_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_epoch": "9.13",
+  "supervisor_delta": "9.13AC_NON_AUTHORITY",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "donor_source_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+  "new_inbox_packet_consumed": false,
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_RETRIEVAL_ORIGIN_PAYLOAD_BINDING_REFINEMENT_GPT56SOL.json",
+  "architecture_delta_commit": "24d703dca596909651788577fd75cdbea1dce1c3",
+  "semantic_result": "EXISTING_RETRIEVAL_UUID_ENVELOPE_REUSED; DEFERRED_MODEL_RELEVANCE_MUST_BIND_EXACT_ORIGIN_AND_INPUT_PAYLOAD",
+  "source_evidence": [
+    "MicroClay.retrieve mints retrieval_id as UUID and persists turn_id, episode_id, causal_id, session_id, generation, policy_version, query_hash and selected_memory_ids.",
+    "The retrieval receipt already returns retrieval_id and query_sha256.",
+    "mensch_urteil performs exact retrieval_id lookup before applying feedback, providing an existing donor-local exact-join pattern.",
+    "_kognition_richten_hook instead late-selects ORDER BY ts DESC LIMIT 1 within session and reconstructs candidate/query text before model judgment.",
+    "_apply_credit default receipt hashing includes numeric credit; exactly-once uniqueness for modell:relevanz beyond receipt_id was not established in this pass."
+  ],
+  "evidence_scope": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "new_packet_ingest": 0,
+    "runtime_execution": 0,
+    "provider_execution": false,
+    "vps_execution": false,
+    "training": 0
+  },
+  "nonduplicate_relation": {
+    "existing_stop_hook_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+    "existing_deferred_fusion_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_DEFERRED_CAUSAL_RETURN_FUSION_GPT56SOL.json",
+    "added_information": "Shows that the donor already has sufficient origin identity to avoid a new identity table, and tightens the Triggerword-4 handoff with exact input-payload digest/ref binding plus output-independent logical-job idempotency."
+  },
+  "target_contract": "RetrievalRelevanceCandidate/v1 reuses retrieval_id plus turn/episode/causal/generation/query identity, captures the exact bounded query/candidate input digest or immutable ref at dispatch, and admits at most one logical model-relevance result per accepted origin slot through deterministic reduction.",
+  "next_exact_gate": "Triggerword-4 external/non-provider test lane: implement the existing-ID candidate envelope and prove reverse-order overlap plus input-mutation/transplant rejection without modifying Frank's Harness or granting runtime credit from source inspection."
+}

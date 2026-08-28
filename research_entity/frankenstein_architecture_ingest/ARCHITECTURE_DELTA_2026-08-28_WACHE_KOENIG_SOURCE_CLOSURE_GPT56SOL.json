@@ -1,0 +1,125 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "recorded_at": "2026-08-28T07:36:00Z",
+  "organ": "GPT-5.6 Sol",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_before_delta": "871a6d9830c708d5c79e17c158c4cb4366926192",
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "source_packet": {
+    "id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072938Z_HISTORICAL_WACHE_KOENIG_OWNER_GATE_GPT56SOL.json",
+    "classification": "SOURCE_PACKET_CROSSCHECKED"
+  },
+  "direct_crosscheck": {
+    "current_donor": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "span": "3120-3170",
+      "finding": "The donor explicitly states its ordinary Phase-2 zulassen path is nonblocking bookkeeping and names ~/aicore/opt/aicore/tools/schranke/wache-koenig.py in global settings.json as the older separate blocking watcher."
+    },
+    "archived_wache": {
+      "drive_file_id": "10z1K5hKV9t9wBu1k5zXEvxSjaCZy3TUH",
+      "sha256_expected": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "sha256_observed": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "result": "BYTE_IDENTITY_MATCH",
+      "source_findings": [
+        "main() exits allow for every tool_name other than Bash",
+        "hard-deny classes exit 2",
+        "ticket-required destructive Bash classes exit 2 when no valid ticket exists",
+        "ticket identity is SHA-256 of the exact command text",
+        "a valid ticket is unlinked before the command is allowed, giving one-shot consumption in the single-process source path",
+        "classifier explicitly rechecks nested ssh and shell -c command strings"
+      ]
+    },
+    "archived_freigabe": {
+      "drive_file_id": "1xi-hFPSWJ6NC8ruDV6iTttw_-wMv08dI",
+      "sha256_expected": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "sha256_observed": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "result": "BYTE_IDENTITY_MATCH",
+      "source_findings": [
+        "requires /dev/tty and exits when no controlling terminal exists",
+        "requires two fresh typed challenge sequences",
+        "uses typing-time heuristics as secondary anti-bot evidence, not identity proof",
+        "writes a chmod-0600 command-hash ticket",
+        "ticket becomes valid after 10 minutes and expires 20 minutes later",
+        "ticket is bound to the exact command hash"
+      ]
+    },
+    "archive_manifest": {
+      "path": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ACTION_BOUNDARY_SUBMANIFEST.json",
+      "blob_sha": "b3bceb16a1c0038d0d719b44bfec7295170a3dd7",
+      "finding": "The frozen archive manifest independently records the same two SHA-256 identities and classifies the mechanism as a historical owner-capability precursor, with a safe classifier replay only."
+    }
+  },
+  "promoted_source_findings": [
+    {
+      "id": "TW5-WACHE-SOURCE-001",
+      "status": "SOURCE_CONFIRMED",
+      "claim": "The named historical wache-koenig artifact is real and byte-identified; it implements a genuine pre-execution blocking gate for selected Bash commands when and only when actually registered in the hook scheduler."
+    },
+    {
+      "id": "TW5-WACHE-SOURCE-002",
+      "status": "SOURCE_CONFIRMED",
+      "claim": "The historical gate is Bash-only. Non-Bash state-changing tool classes are explicitly outside its source coverage."
+    },
+    {
+      "id": "TW5-WACHE-SOURCE-003",
+      "status": "SOURCE_CONFIRMED",
+      "claim": "The strongest reusable donor idea is separated authority: the model/tool request cannot mint its own grant; a distinct human-terminal path mints a short-lived command-bound one-shot grant consumed at the execution boundary."
+    }
+  ],
+  "not_promoted": [
+    "No current or historical scheduler registration/order was observed in this run.",
+    "No runtime invocation of wache-koenig or freigabe was performed.",
+    "No atomicity claim is granted for concurrent identical-command ticket consumption.",
+    "No whole-system effect-authority coverage is granted because non-Bash tools are uncovered by this artifact.",
+    "Typing-speed heuristics are not treated as authenticated owner identity."
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-WACHE-REACHABILITY-004",
+      "status": "REFINED_OPEN",
+      "resolution_delta": "Exact source bytes are now closed; only scheduler registration/order and runtime reachability remain unresolved."
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-COVERAGE-005",
+      "status": "CONFIRMED_OPEN",
+      "resolution_delta": "The artifact itself proves Bash-only coverage by exiting allow for non-Bash tools. Frankenstein 2.0 therefore requires one typed effect boundary across all state-changing tool classes rather than preserving Bash-specific authority."
+    }
+  ],
+  "frankenstein_2_design_delta": [
+    "Preserve the out-of-model authority split, short lifetime, exact request binding, one-shot consumption and fail-closed denial semantics.",
+    "Replace raw shell-text authority with a typed EffectRequest and executor-consumed one-shot EffectDecision bound to invocation_id/tool_use_id, request_digest, session/generation/causal identity, policy version, resource identity and executor identity.",
+    "Keep ADMISSION_DECISION, ENFORCEMENT_DECISION, SUBMISSION_RECEIPT, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, RESULT_REENTRY and COMPLETION_EVIDENCE as distinct typed states; later success must never synthesize earlier admission authority.",
+    "Do not reuse typing-speed heuristics as authentication. If human approval is required, bind an explicit authenticated owner grant to the typed effect decision while preserving separation from model text.",
+    "The sparse World Substrate capability chain and the real-effect authority chain may share one-shot/scope/expiry design ideas, but they remain separate capability classes: world-read cognition capability must never imply real-effect authority."
+  ],
+  "triggerword4_feed": {
+    "must_add_or_preserve_tests": [
+      "DENY prevents execution rather than merely journaling ABGELEHNT",
+      "one-shot EffectDecision is consumed exactly once",
+      "request_digest mismatch is rejected",
+      "stale generation is rejected",
+      "wrong invocation_id/tool_use_id is rejected",
+      "parallel same-session state-changing calls cannot cross-correlate decisions/outcomes",
+      "non-Bash state-changing tools traverse the same deterministic effect boundary",
+      "post-submission unknown outcome is not converted into cancellation success or blind replay",
+      "effect capability material is absent from model prompts, ordinary logs and durable memory"
+    ],
+    "next_runtime_evidence_gate": "Recover and pin exact historical/current hook scheduler registration and ordering for wache-koenig or its successor. Only then can source capability be promoted toward runtime reachability; until then runtime credit remains zero."
+  },
+  "credits": {
+    "source_forensics": "PASS_AT_DECLARED_SOURCE_SCOPE",
+    "historical_runtime": 0,
+    "current_donor_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

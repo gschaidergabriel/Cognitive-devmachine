@@ -1,0 +1,133 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:56:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "delta_class": "STOP_HOOK_TIMEOUT_AND_RETRIEVAL_IDENTITY_CORRECTION",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "steering_blob_sha": "bc67f57771a9a9c5ac96d9cd135927047066bc20",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "design_branch_head_observed_before_write": "802a085915222b41dc68176fd5467aa1bcbdf5f2",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "ingest_disposition": {
+    "new_inbox_packet_consumed": false,
+    "reason": "No new packet is minted or re-consumed. This is a direct exact-donor source correction/refinement of the already admitted Stop-hook forensics under current supervisor 9.13."
+  },
+  "source_atoms": [
+    {
+      "source_kind": "SPEC",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "1-60",
+      "finding": "The file-level hard boundary says there is no LLM call in a hook, ever, and that hook time budgets are protected by a hard SIGALRM upper bound."
+    },
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "4190-4345",
+      "finding": "retrieval_episodes already persists replay-relevant identity fields retrieval_id, turn_id, episode_id, causal_id, session_id and generation. The identity substrate therefore exists before model relevance feedback."
+    },
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "4835-4895",
+      "finding": "_ollama_generate is synchronous and catches a generic Exception after transport-specific exceptions, returning None for every generic exception."
+    },
+    {
+      "source_kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "4960-5068",
+      "finding": "_kognition_richten_hook chooses one unscored row by session_id plus newest ts, reconstructs the query from the latest transcript user message, and only after selection writes feedback through the selected retrieval row. It does not require turn_id, episode_id, causal_id or generation equality at selection time."
+    },
+    {
+      "source_kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "8380-8485",
+      "finding": "_HookTimeout subclasses Exception and the SIGALRM handler raises _HookTimeout."
+    },
+    {
+      "source_kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "8586-8675",
+      "finding": "cmd_hook arms ITIMER_REAL around the hook and expects _HookTimeout to reach the outer timeout handler."
+    }
+  ],
+  "corrected_findings": [
+    {
+      "id": "STOP_TIMEOUT_PROPAGATION_CORRECTION",
+      "classification": "NEGATIVE_RESULT_SOURCE_STATIC",
+      "finding": "The prior interpretation that a global SIGALRM during synchronous Stop cognition necessarily transfers to cmd_hook's outer _HookTimeout handler is not supported by the exact donor source. Because _HookTimeout is an Exception and _ollama_generate catches generic Exception, the alarm can be consumed inside the local model call and converted to None. _kognition_richten_hook also has its own generic Exception catch as a second swallowing boundary.",
+      "implication": "After delivery, the one-shot timer may no longer provide the intended outer hard-stop behavior for later Stop bookkeeping. This is a source-level control-flow defect/hazard, not runtime proof of an overrun.",
+      "supersedes_claim": "Any earlier delta wording that treated SIGALRM escape to the outer handler as guaranteed."
+    },
+    {
+      "id": "RETRIEVAL_SCHEMA_VS_SELECTOR_CORRECTION",
+      "classification": "NEGATIVE_RESULT_SOURCE_STATIC",
+      "finding": "The Stop relevance identity problem is not absence of retrieval identity columns. Exact retrieval/turn/episode/causal/generation fields are already persisted. The downgrade occurs in _kognition_richten_hook selection and transcript pairing, which select by session/newest instead of binding to those existing fields.",
+      "implication": "Target-2.0 should repair the selector/join and fail closed on identity mismatch rather than introduce a second retrieval identity schema."
+    },
+    {
+      "id": "HOOK_LLM_CONTRACT_CONTRADICTION_REFINED",
+      "classification": "CURRENT_SOURCE_CONTRADICTION",
+      "finding": "The same current donor file both states 'no LLM call in a hook, ever' and later explicitly documents the Stop model judge as a deliberate boundary case. The contradiction is therefore source-visible and intentional-at-implementation level, but unresolved at contract level."
+    }
+  ],
+  "target_2_0_actions": [
+    {
+      "action": "REPAIR",
+      "component": "RetrievalRelevanceCandidate selection",
+      "rule": "Bind candidate feedback to exact retrieval_id plus turn_id/episode_id/causal_id/generation or an equivalent replay-stable origin envelope. session_id and newest-row ordering are context only, never the causal join key."
+    },
+    {
+      "action": "REPAIR",
+      "component": "query/transcript pairing",
+      "rule": "Use query/turn evidence bound to the selected retrieval origin. Do not use the globally latest transcript user message as an implicit join under overlapping or reordered Stop processing."
+    },
+    {
+      "action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "component": "hook timeout boundary",
+      "rule": "A hard hook timeout exception must not be swallowed by local model fail-silent exception handlers. Separate model-transport failure from global hook-deadline cancellation, or move slow/model-derived work outside the deterministic critical hook path."
+    }
+  ],
+  "required_discriminators": [
+    "Static/unit test: force the hook deadline while _ollama_generate is active and assert the deadline reaches the outer hook boundary rather than being converted to None.",
+    "Two same-session retrieval episodes with distinct turn_id/episode_id/causal_id/generation and reversed/interleaved Stop processing; model relevance must attach only to the intended retrieval_id.",
+    "Transcript mismatch test: newest transcript user message differs from the selected retrieval's originating turn; feedback must fail closed rather than score the old retrieval against the new query.",
+    "Source/build-bound Stop timing run for cognition disabled, warm local model, slow/cold local model and unreachable local model, without modifying Frank Harness."
+  ],
+  "counterhypotheses": [
+    "Normal single-threaded session ordering may make newest-open retrieval and latest-user transcript coincide most of the time; this does not establish correctness under overlap/replay and must be tested.",
+    "urllib or another lower layer may often time out at the 1.3s local-model budget before the outer hook alarm fires; that would reduce observed incidence but would not repair the exception-class collision in the hard deadline design.",
+    "The intended architecture may deliberately permit local model work in Stop despite the file header; if so, the header/spec must be revised and the model step given an explicit bounded contract rather than carrying both rules simultaneously."
+  ],
+  "contradictions_preserved": [
+    "No-hook-LLM hard boundary versus explicit synchronous local Ollama Stop inference.",
+    "Hard outer SIGALRM intent versus generic Exception handlers that can consume _HookTimeout.",
+    "Rich retrieval causal identity at persistence time versus session/newest identity downgrade at model-feedback selection time."
+  ],
+  "evidence_boundary": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "runtime_execution": 0,
+    "provider_runtime": 0,
+    "stop_hook_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "triggerword4_handoff": "Repair existing causal selector identity rather than adding schema; preserve global-deadline cancellation as a non-swallowable control signal or defer model work outside the deterministic Stop critical path; then execute the supervisor-required external/source-bound discriminators without changing Frank Harness."
+}

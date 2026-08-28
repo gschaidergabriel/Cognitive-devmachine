@@ -458,6 +458,51 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(os.waitstatus_to_exitcode(status), 0)
         self.assertEqual(child_acquired, b"1")
 
+    @unittest.skipUnless(hasattr(os, "fork"), "requires POSIX fork")
+    def test_cost_principal_fork_isolation_survives_entropy_failure(self):
+        env = {
+            "NVIDIA_API_KEY": "fork-entropy-failure-credential",
+            "FRANK_FREE_ONLY_BUDGET_EPOCH": "fork-entropy-failure",
+        }
+        parent_principal_id = MOD._cost_policy_principal_id(
+            MOD.PROVIDERS[0],
+            "NVIDIA_API_KEY",
+            env,
+        )
+
+        class FailingSecrets:
+            @staticmethod
+            def token_bytes(size):
+                raise OSError("simulated entropy failure")
+
+        read_fd, write_fd = os.pipe()
+        original_secrets = MOD.secrets
+        MOD.secrets = FailingSecrets()
+        try:
+            pid = os.fork()
+        finally:
+            MOD.secrets = original_secrets
+        if pid == 0:
+            try:
+                os.close(read_fd)
+                child_principal_id = MOD._cost_policy_principal_id(
+                    MOD.PROVIDERS[0],
+                    "NVIDIA_API_KEY",
+                    env,
+                )
+                os.write(write_fd, child_principal_id.encode("ascii"))
+            finally:
+                os._exit(0)
+
+        os.close(write_fd)
+        try:
+            child_principal_id = os.read(read_fd, 128).decode("ascii")
+        finally:
+            os.close(read_fd)
+        _, status = os.waitpid(pid, 0)
+        self.assertEqual(os.waitstatus_to_exitcode(status), 0)
+        self.assertNotEqual(parent_principal_id, child_principal_id)
+
     def test_execution_receipt_pins_unicode_database_version(self):
         class Response:
             status = 200

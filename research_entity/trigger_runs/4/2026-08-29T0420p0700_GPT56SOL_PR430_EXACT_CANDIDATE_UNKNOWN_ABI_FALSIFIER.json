@@ -1,0 +1,97 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "PR430_EXACT_CANDIDATE_RUNTIME_PASS_WITH_F2_UNKNOWN_TYPE_COUNTEREXAMPLE",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "workpackage": "F2-WP-105",
+  "research_main_observed_before_write": "11b95a33dce98ebb7dd05005bf4aa42faeeb3198",
+  "authority": {
+    "admitted_supervisor_epoch": "8.78",
+    "admitted_supervisor": "SUPERVISOR_STEERING_8_78",
+    "mode": "FREE_ONLY",
+    "non_authority_surface_observed": "9.13AL_NON_AUTHORITY",
+    "canonical_effect_authority": "EffectGate+EffectJournal",
+    "authority_change": false
+  },
+  "candidate_source": {
+    "retained_research_pr": 430,
+    "retained_research_pr_head": "2f99e400f1c0ea1b8598573ab0fab993885cba5e",
+    "effects_blob": "ae1b8db9111868374258435e97c7dfeda41bc318",
+    "effect_journal_blob": "4615150638dc4409317550d44b84d942a260de58",
+    "entityos_bridge_blob": "7781580f4e862c23491cc862e19c5d1f62b3ada6",
+    "bound_store_blob_reused": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "candidate_only": true,
+    "admitted_canonical_binding": false
+  },
+  "f2_discriminator": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "draft_pr": 25,
+    "branch": "chatgpt/trigger4-pr430-exact-candidate-falsifier-20260829",
+    "head": "2e8c412ffe2821884eeb71dcb7aae0666ce8c19a",
+    "pr_merge_ref_tested": "998873637f8d5825fb84561d440c69701416dee8",
+    "workflow": "Frankenstein 2.0 PR430 Exact Candidate UNKNOWN CI",
+    "workflow_run_id": 33212076607,
+    "job_id": 98987389410,
+    "runner": "GitHub-hosted Ubuntu 24.04 / Python 3.12.14",
+    "conclusion": "SUCCESS",
+    "real_external_effect": false,
+    "hash_fence": "PASS"
+  },
+  "executed_tests": [
+    {
+      "name": "test_fixture_is_byte_exact_pr430_candidate",
+      "result": "PASS",
+      "claim": "All vendored PR430 candidate files match the exact Git blob identities observed on retained PR430; the old bound store blob is unchanged."
+    },
+    {
+      "name": "test_exact_pr430_timeout_after_popen_is_unknown_nonreplayable",
+      "result": "PASS",
+      "claim": "After successful Popen construction, TimeoutExpired is classified by the exact PR430 EntityOSBridge as EntityOSOutcomeUnknown with replay_permitted=false and local kill/reap cleanup."
+    },
+    {
+      "name": "test_exact_pr430_ordinary_error_after_popen_is_unknown_nonreplayable",
+      "result": "PASS",
+      "claim": "After successful Popen construction, an ordinary OSError on the return path is likewise EntityOSOutcomeUnknown and nonreplayable."
+    },
+    {
+      "name": "test_exact_pr430_native_unknown_terminalizes_unknown_outcome",
+      "result": "PASS",
+      "claim": "The exact PR430 candidate EffectGate maps its native EntityOSOutcomeUnknown into canonical candidate journal status UNKNOWN_OUTCOME, re-enters with zero causal credit, and releases the effect lease."
+    },
+    {
+      "name": "test_counterexample_f2_executor_unknown_is_not_pr430_native_unknown",
+      "result": "PASS_NEGATIVE_RESULT",
+      "claim": "F2 ExecutorOutcomeUnknown is not a subclass of PR430 EntityOSOutcomeUnknown. When passed directly through the exact PR430 candidate EffectGate it takes the generic exception branch and is journaled FAILED/entityos_execution_failure."
+    }
+  ],
+  "hypothesis_update": {
+    "prior_hypothesis": "PR430 source-level UNKNOWN_OUTCOME support is sufficient to close the integrated F2 post-dispatch uncertainty gap once executed.",
+    "counterevidence": "The exact PR430 bytes correctly handle native EntityOSOutcomeUnknown but do not recognize F2 ExecutorOutcomeUnknown as the same uncertainty type.",
+    "revised_hypothesis": "The integrated path needs exactly one explicit typed uncertainty ABI or adapter at the F2 callback-to-canonical EntityOS boundary so every observed post-dispatch ambiguous return is translated into the one canonical unknown-outcome type before EffectGate finalization.",
+    "design_constraint": "The adapter must not become a second effect authority, journal, completion authority, or replay authority. EffectGate+EffectJournal remain canonical."
+  },
+  "evidence_scope": {
+    "pr430_native_entityos_unknown_candidate_runtime": "PASS_COMPONENT",
+    "pr430_native_effectgate_unknown_candidate_runtime": "PASS_COMPONENT",
+    "f2_to_pr430_unknown_type_compatibility": "FAIL_AS_COUNTEREXAMPLE",
+    "current_8_78_bound_zero_effect_component_runtime": "PASS_SEPARATELY_RUN_33211745166",
+    "real_external_effect_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_frankenstein2_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "coordination": {
+    "draft_pr_kept_candidate_only": true,
+    "draft_pr_comment_id": 5457883778,
+    "private_research_actions_duplicate_dispatch": false,
+    "new_unusual_experiment": false,
+    "together_used": false,
+    "paid_fallback": false,
+    "vps_execution_by_this_organ": false
+  },
+  "next_exact_action": "Do not merge PR25 or PR430 as authority merely because native candidate tests pass. First define a single fail-closed typed UNKNOWN_OUTCOME ABI/adapter at the existing F2 callback-to-canonical EffectGate boundary. The adapter must translate only an already-observed post-dispatch ambiguous executor outcome (currently ExecutorOutcomeUnknown) into the canonical EntityOSOutcomeUnknown semantics, preserve request/call/effect identity, forbid automatic replay, and leave all pre-dispatch failures definite. Then execute a byte/source-bound no-real-effect integration test proving the translated F2 post-start timeout and ordinary return-path exception terminalize as UNKNOWN_OUTCOME rather than FAILED before any successor canonical implementation binding is admitted."
+}

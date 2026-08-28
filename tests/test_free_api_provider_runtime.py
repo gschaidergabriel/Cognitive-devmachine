@@ -553,6 +553,76 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             MOD.os = original_os
         self.assertNotEqual(first_principal_id, second_principal_id)
 
+    @unittest.skipUnless(hasattr(os, "fork"), "requires POSIX fork")
+    def test_child_forked_during_active_execution_is_quarantined(self):
+        request_started = threading.Event()
+        release_parent_request = threading.Event()
+        parent_results = []
+        env = {
+            "NVIDIA_API_KEY": "fork-active-request-credential",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        def blocking_parent_opener(*args, **kwargs):
+            request_started.set()
+            release_parent_request.wait(timeout=5)
+            raise RuntimeError("simulated parent transport completion")
+
+        parent_thread = threading.Thread(
+            target=lambda: parent_results.append(MOD.execute_chat(
+                VALID_MESSAGES,
+                model="mock",
+                environ=env,
+                opener=blocking_parent_opener,
+            ))
+        )
+        parent_thread.start()
+        self.assertTrue(request_started.wait(timeout=2))
+
+        read_fd, write_fd = os.pipe()
+        pid = os.fork()
+        if pid == 0:
+            child_opener_called = False
+
+            def child_opener(*args, **kwargs):
+                nonlocal child_opener_called
+                child_opener_called = True
+                raise RuntimeError("child reached authenticated transport")
+
+            try:
+                try:
+                    child_result = MOD.execute_chat(
+                        VALID_MESSAGES,
+                        model="mock",
+                        environ=env,
+                        opener=child_opener,
+                    )
+                    outcome = child_result["receipt"]["outcome"]
+                except RuntimeError as exc:
+                    outcome = str(exc)
+                payload = f"{outcome}:{child_opener_called}".encode("ascii")
+                os.close(read_fd)
+                os.write(write_fd, payload)
+            finally:
+                os._exit(0)
+
+        os.close(write_fd)
+        try:
+            child_evidence = os.read(read_fd, 256).decode("ascii")
+        finally:
+            os.close(read_fd)
+            release_parent_request.set()
+        _, status = os.waitpid(pid, 0)
+        parent_thread.join(timeout=2)
+        self.assertFalse(parent_thread.is_alive())
+        self.assertEqual(os.waitstatus_to_exitcode(status), 0)
+        self.assertEqual(len(parent_results), 1)
+        self.assertEqual(
+            child_evidence,
+            "forked_during_active_execution:False",
+        )
+
     def test_execution_receipt_pins_unicode_database_version(self):
         class Response:
             status = 200

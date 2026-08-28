@@ -1,0 +1,67 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_DISCOVERY_SCOUT_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001",
+  "slot": "DISCOVERY_SCOUT",
+  "evidence_level": "E1_SOURCE_READ",
+  "status": "MIRRORED_SOURCE_RESULT_NO_ARCHITECTURE_CREDIT",
+  "canonical_f2_result": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001_E1_SOURCE_READ_20260829T0404P0700_GPT56SOL.json",
+    "commit": "da2c65c748cf1d475da8e583086cb6e804d98bce",
+    "claim_path": "research/tool_intelligence/claims/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001/E1_SOURCE_READ_STRUCTURAL_DONOR_SHORTLIST.json",
+    "claim_blob_sha": "a9610442501c2ee18e359ecccab6bc887f70e9b2"
+  },
+  "source_pins": {
+    "aws_powertools": "a39e1018e36b7965b08313288bea3b7420df5220",
+    "cloudevents_spec": "c2051019ea466f258d13d3a23686c099ff66ebd3",
+    "restate": "e8b0592c31b25f4fd00446bb44c68d0b8e3a8ed7"
+  },
+  "retained_findings": [
+    "AWS Powertools is the strongest small structural donor: payload-derived idempotency key, separate validation hash, INPROGRESS/COMPLETE state and conditional concurrency fencing. Its exact current develop head also provides a negative result: a missing in-progress expiry check allowed live records to be reclaimed and concurrent duplicate execution before the current fix.",
+    "CloudEvents is a thin identity donor: source+id provides replay/dedup identity while occurrence and emitted event remain distinct; event id must not be overloaded as semantic request identity.",
+    "Restate is a useful structural donor for invocation identity plus attach/output after uncertainty, but importing its durable runtime/journal would create an architecture-heavy competing execution/state authority and is rejected for WP-105.",
+    "The preferred hypothesis is a minimal F2-native semantic request binder using existing RFC8785/JCS method provenance plus SHA-256, separate invocation/attempt identities, append-only EffectJournal transitions and a non-replayable UNKNOWN_POST_DISPATCH state until verification closes the outcome."
+  ],
+  "generated_contract_candidate": {
+    "reality_level": "R2_GENERATED_NOT_ACCEPTED",
+    "fields": [
+      "semantic_request_schema",
+      "semantic_request_canonical_bytes",
+      "semantic_request_sha256",
+      "invocation_id",
+      "idempotency_key",
+      "attempt_id",
+      "journal_sequence",
+      "outcome_state",
+      "verification_evidence_ref"
+    ],
+    "outcome_states": [
+      "PENDING",
+      "DISPATCH_STARTED",
+      "VERIFIED_SUCCEEDED",
+      "VERIFIED_FAILED",
+      "UNKNOWN_POST_DISPATCH",
+      "REJECTED_PRE_DISPATCH"
+    ],
+    "critical_rule": "UNKNOWN_POST_DISPATCH => VERIFY/ATTACH/QUERY original attempt; no blind replay unless the destination effect has an independently proven stable idempotency contract."
+  },
+  "next_discriminator": "A future Trigger-6 E2 claim should map the minimal semantic_request_sha256 + invocation_id + attempt_id + append-only outcome ABI onto exact current F2-WP-105 source and test for overlap with existing F2/EntityOS primitives. No real effects and no external runtime import are justified at E1.",
+  "mirror": {
+    "source_research_entity_main_before_claim_mirror": "3e980fccc658bf8e652410b1cc76b5f85f7de924",
+    "claim_mirror_commit": "269a27a35389359045e53528b036de7970b2233b",
+    "cross_repo_atomicity_assumed": false,
+    "db_materialization_credit": 0
+  },
+  "credits": {
+    "research_source_read": 1,
+    "architecture_mapped": 0,
+    "claim_reproduced": 0,
+    "f2_ablation": 0,
+    "build_candidate": 0,
+    "f2_accepted": 0,
+    "whole_f2_runtime": 0,
+    "entityos_hcu_runtime": 0,
+    "training": 0
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "TRIGGER4_FRANKENSTEIN2_WP105_PRE_DISPATCH_FALSIFIER_MIRROR/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "canonical_research_main_before_write": "d6d1ad78dac1145138f2b67b897cb97942a99d34",
+  "frankenstein2_repository": "gschaidergabriel/frankenstein-2.0",
+  "frankenstein2_main_observed_after_falsifier": "b5386748f29edc9dbf45c0c5879d73c3a3818b9c",
+  "falsifier_commit": "d66c3a0337bd93cc42547f07ad1e2d62ef8eb6be",
+  "falsifier_path": "workpackages/falsifiers/F2-WP-105/TRIGGER4_GPT56SOL_PRE_DISPATCH_TEMPORAL_CAUSALITY_GAP.json",
+  "classification": "CANDIDATE_FALSIFIER",
+  "active_wp105_mutation_authority_preserved": true,
+  "canonical_wp105_source_mutated_by_this_organ": false,
+  "finding": {
+    "status": "STRONGER_PRE_DISPATCH_USABILITY_CLAIM_NOT_ESTABLISHED",
+    "effect_correlation_source_blob": "45c1570a1e4a45a33c9ba555403f37677e77c8dc",
+    "deferred_verification_source_blob": "3d74b80047cbacf112401bc6f9377db1ac1afbbc",
+    "effect_correlation_test_blob": "6024af23235ca9276cd0b599215640f9dac75d82",
+    "reason": "prepare_effect_call is documented as PRE-dispatch but requires DeferredExecutionVerificationTarget; that target requires a result-bound binding and an EXECUTION_RECORDED-or-verified lineage. The executed fixture binds the result and records execution before calling prepare_effect_call. This preserves the existing cross-call correlation CI PASS while blocking promotion to a demonstrated true pre-dispatch executor invariant."
+  },
+  "preserved_positive_evidence": {
+    "wp103_delivery_store_ci_run": 33200977958,
+    "wp103_scope": "RECIPIENT_DELIVERY_LIFECYCLE_CANONICAL_UNIFIEDDB_STORE_SOURCE_AND_REPOSITORY_CI_ONLY",
+    "wp105_effect_correlation_ci_run": 33201281386,
+    "wp105_scope": "CALL_SCOPED_EFFECT_ID_PRE_POST_CORRELATION_COMPONENT_ONLY",
+    "wp105_component_pass_revoked": false
+  },
+  "successor_gate": "The active F2-WP-105 mutation authority should introduce or refactor to a result-free true pre-dispatch effect envelope constructible before RecordExecution, bind explicit effect_id to exact call identity before external dispatch, consume a typed execution receipt after dispatch, preserve UNKNOWN outcomes, and require separate world verification before completion.",
+  "credit_boundary": {
+    "true_pre_dispatch_effect_binding": 0,
+    "effect_enforcement_runtime": 0,
+    "real_effect_execution_runtime": 0,
+    "external_world_verification_runtime": 0,
+    "vps_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "whole_frankenstein2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training_credit": 0
+  }
+}

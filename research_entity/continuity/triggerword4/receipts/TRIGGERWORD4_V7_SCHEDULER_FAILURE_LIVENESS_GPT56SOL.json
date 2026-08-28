@@ -1,0 +1,76 @@
+{
+  "schema": "TRIGGERWORD4_SOURCE_CLOSURE_RECEIPT/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "PERSISTENT_SCHEDULER_POST_COMMIT_COGNITION_FAILURE_LIVENESS_SOURCE_CLOSURE_ONLY",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
+  "authority_observed": "SUPERVISOR_9.13AE_NON_AUTHORITY_DELTA_SINGLETON_GRID10_V3_G0000_IN_FLIGHT",
+  "directive_blobs": {
+    "grid10_runtime": "9469f0a6be99c2af2dfad25386c4196ffc9101a4",
+    "frankenstein2_vps_assembly": "94cc8b6c3f1f03bfacb48d4a24d11429d0bad6cb",
+    "sparse_world_substrate": "d0e6b698193f75099df57d4db31c22c5fb90589b"
+  },
+  "starting_checkpoint": {
+    "receipt_commit": "7022cd693bd6051c5d11ed4ef444b7c39faf5577",
+    "finding": "V6 already persisted a sanitized FAILED closure after a post-V4 cognition exception and prohibited same-tick retry, but PersistentCognitiveSchedulerV2 allowed CognitiveCycleExecutionError to escape cycle_once/run_forever. One candidate-cognition failure could therefore terminate the persistent service even though the durable next-tick schedule had already been committed."
+  },
+  "source_delta": {
+    "scheduler_fix_commit": "c7198c3d78f1b0e3154cd90bae049b33bbd984ff",
+    "scheduler_regression_commit": "36c06785c4bd332f5d2041bbb0608dd2ca828e89",
+    "files": [
+      "tools/grid10_persistent_scheduler_v2.py",
+      "tools/test_grid10_persistent_scheduler_v2.py"
+    ],
+    "change": "Scheduler v2 now catches only CognitiveCycleExecutionError, re-reads the exact durable V6 FAILED closure from UnifiedDB, validates tick/schema/failure/no-retry invariants, returns HEARTBEAT_COGNITION_FAILED, and leaves the already-committed next_tick_not_before as the sole recovery cadence. Missing or malformed closure remains a hard integrity failure rather than being papered over.",
+    "regression_added": "A post-commit cognition failure must yield exactly one failed V6 receipt, must not replay the same tick identity, and a later scheduled tick can recover with a healthy inference function."
+  },
+  "parallel_fusion": {
+    "control_snapshot_immutability_fix_observed": "8dc10229da4fb414ea9a526576d7ded4aba651c4",
+    "control_snapshot_immutability_test_observed": "8f6dcc295c71fd9385229d0b43de3f991a2a53ef",
+    "conflicting_patch_id_replay_fix_observed": "1ec7ef02a576c1f45bfd56aed1a278ad32fd807b",
+    "source_bound_completion_verifier_v2_observed": "57e3af7c757b64c13dded3d382814e2c51f2fa0c",
+    "duplicate_lane_created": false,
+    "single_existing_pr": 2118
+  },
+  "ci_evidence": {
+    "run_id": 33169985958,
+    "head_sha": "36c06785c4bd332f5d2041bbb0608dd2ca828e89",
+    "conclusion": "failure",
+    "job_id": 98844488625,
+    "job_steps_observed": [],
+    "runner_id": 0,
+    "classification": "ZERO_STEP_GITHUB_HOSTED_INFRASTRUCTURE_FAILURE_NOT_CODE_TEST_RESULT",
+    "deterministic_tests_executed": false,
+    "runtime_pass_claimed": false
+  },
+  "singleton_dispatch": {
+    "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+    "issue": 2121,
+    "workflow_run_id": 33168491753,
+    "state_last_observed": "queued",
+    "terminal_result_receipt_observed": false,
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false
+  },
+  "execution_boundary": {
+    "provider_calls_performed": 0,
+    "provider_secret_lookups_performed": 0,
+    "together_used": false,
+    "paid_fallback_used": false,
+    "frankenstein_harness_modified": false,
+    "vps_runtime_pass_claimed": false
+  },
+  "credit": {
+    "source_closure": 1,
+    "physical_grid10_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "frankenstein2_runtime": 0
+  },
+  "blocked_promotion_reason": "The scheduler liveness defect is closed at source/test-definition scope, but deterministic execution of the new regression remains unobserved because GitHub-hosted CI again failed with zero steps/runner_id=0. The canonical singleton clay-direct-dev GRID10 v3 dispatch is still queued without terminal result evidence.",
+  "next_exact_gate": "Inspect terminal state and canonical ordinary-dispatch result for workflow 33168491753 / issue 2121 without creating another trigger or advancing generation. If it closes, bind any accepted component evidence to the exact source ancestry that now includes c7198c3 and 36c0678 before promoting the persistent scheduler path. Do not claim Frankenstein-2.0 runtime completion until the end-to-end Stage-2/GRID acceptance chain is actually executed."
+}

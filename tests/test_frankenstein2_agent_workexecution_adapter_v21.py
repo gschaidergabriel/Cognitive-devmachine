@@ -262,24 +262,25 @@ class AgentWorkExecutionAdapterTests(unittest.TestCase):
         self.assertEqual(self.adapter.spawn_snapshot("spawn-a")["status"], "PRE_OBSERVED")
         self.assertEqual(_count(self.db, "fr2_work_execution_bindings"), 0)
 
-    def test_task_identity_remains_distinct_from_agent_identity(self) -> None:
+    def test_agent_adapter_cannot_invent_task_identity(self) -> None:
         self.adapter.record_agent_pretool(
             _pre("spawn-a", "wp-a"),
             expected_workpackage_id="wp-a",
             expected_work_generation="g1",
         )
-        bound = self.adapter.record_agent_posttool(
-            _post("spawn-a", "agent-17"),
-            binding_id="binding-a",
-            child_runtime_kind="CLAUDE_AGENT",
-            identity_provenance="test-post",
-            native_task_id="task-17",
-        )
-        self.assertIsNotNone(bound)
-        assert bound is not None
-        self.assertEqual(bound.native_agent_id, "agent-17")
-        self.assertEqual(bound.native_task_id, "task-17")
-        self.assertNotEqual(bound.native_agent_id, bound.native_task_id)
+        with self.assertRaisesRegex(
+            AgentWorkExecutionIdentityError,
+            "NATIVE_TASK_ID_REQUIRES_SEPARATE_OBSERVED_TASK_BINDING",
+        ):
+            self.adapter.record_agent_posttool(
+                _post("spawn-a", "agent-17"),
+                binding_id="binding-a",
+                child_runtime_kind="CLAUDE_AGENT",
+                identity_provenance="test-post",
+                native_task_id="task-17",
+            )
+        self.assertEqual(self.adapter.spawn_snapshot("spawn-a")["status"], "PRE_OBSERVED")
+        self.assertEqual(_count(self.db, "fr2_work_execution_bindings"), 0)
 
 
 if __name__ == "__main__":

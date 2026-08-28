@@ -1,0 +1,45 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T091708Z-EFFECT-AUTHORITY-COMPLETION-INVOCATION-GPT56SOL",
+  "created_at": "2026-08-28T09:17:08Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/effect-authority-completion-invocation-ingest",
+  "routing": "VERIFIED",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "canonical_main_observed": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+  "authority_epoch": "9.13",
+  "execution_mode": "FREE_ONLY_HARD_OFF_NO_PROVIDER_EXECUTION",
+  "packet": {
+    "packet_id": "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
+    "packet_blob_sha": "0a6d3d0b6622bcf423150cf530078cee9b4cf453",
+    "result": "INGESTED"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091708Z_EFFECT_AUTHORITY_COMPLETION_INVOCATION_INGEST_GPT56SOL.json",
+    "commit_sha": "3b8288005a536930edb98b2cfb2c93a6d58081ee"
+  },
+  "direct_source_crosscheck": {
+    "result": "PASS_SOURCE_SCOPE",
+    "donor_blob_stern_py": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "validated": [
+      "EffectGate donor path explicitly nonblocking",
+      "session-scoped active_turns.effect_id is used for Pre/Post association",
+      "completion effect-status predicate fails to use a current explicit success allowlist",
+      "textual test:0 evidence is not immutable execution-identity bound",
+      "PostToolUse hashes are bounded execution-result evidence, not arbitrary world-effect proof"
+    ]
+  },
+  "design_change": [
+    "Effect audit/admission bookkeeping is separated from deny-capable pre-side-effect EffectDecision authority.",
+    "Mutating Pre/Post correlation is required to use immutable call-scoped invocation identity rather than a mutable session pointer.",
+    "ExecutionReceipt is separated from WorldEffectVerification.",
+    "CompletionDecision is fail-closed over typed invocation-bound success receipts; legacy unbound test:0 is not sufficient evidence."
+  ],
+  "runtime_credit_delta": 0,
+  "provider_execution_credit_delta": 0,
+  "training_credit_delta": 0,
+  "acceptance": "SOURCE_AND_DESIGN_INGEST_PASS_RUNTIME_UNRESOLVED",
+  "next_exact_gate": "On an authorized non-provider surface, run one harmless same-session two-call interleaving falsifier and require exact call-scoped tool identity -> effect decision -> execution receipt pairing; separately adversarially reject denied/failed/unchecked/duplicate/unknown/stale and unbound test:0 completion evidence."
+}

@@ -1,0 +1,111 @@
+{
+  "schema": "ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_CANDIDATE/v2",
+  "status": "CANDIDATE_EXACT_SOURCE_IDENTITY_BINDING_NO_NEW_AUTHORITY",
+  "trigger": "4",
+  "purpose": "Bind the existing Triggerword-4 live-indeterminate-effect repair losslessly so it can be reviewed and executed without silently reusing the v1 API identity. This record is not current authority until the source delta is admitted and a current-main attestation promotes it.",
+  "authority_observation": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_main_observed": "676fcb87df81ba792bf4f86a1128b9be0d0dbe7f",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "b8681e633a3a94f5e8ab00472ec4c3e321a2dcc1",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AJ_NON_AUTHORITY",
+    "free_only": true,
+    "prior_current_binding_path": "research_entity/continuity/ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_V1.json",
+    "prior_current_binding_blob_sha": "b4d91a0dd233c9dc15ff8218feea9248ac1c13c5",
+    "current_epoch_compatibility_path": "research_entity/continuity/ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_9_13_COMPATIBILITY_V1.json",
+    "current_epoch_compatibility_blob_sha": "7f3964ea60a8f30de382e82fef441148e30bab83",
+    "artifact_manifest_path": "the artefact/manifest.json",
+    "artifact_manifest_blob_sha": "c1969463d378f828bac7bbb44c55a2851b61c273",
+    "artifact_manifest_effect_authority": "EffectGate+EffectJournal",
+    "authority_change": false
+  },
+  "candidate_source": {
+    "branch": "chatgpt/trigger4-effectgate-unknown-after-dispatch-20260829",
+    "bound_commit": "77ba81418a79cbb031644f629997b189bbb34a5b",
+    "effect_gate": {
+      "path": "the artefact/clayverse/effects.py",
+      "blob_sha": "66b0e29d79893608b6576629ca4d3373cab1c5c1",
+      "request_symbol": "EffectRequest",
+      "gate_symbol": "EffectGate"
+    },
+    "effect_journal": {
+      "path": "the artefact/clayverse/effect_journal.py",
+      "blob_sha": "36a4a4d586c6508dba11b738be3f5f92263b1f1b",
+      "journal_symbol": "EffectJournal"
+    },
+    "entityos_bridge": {
+      "path": "the artefact/clayverse/entityos_bridge.py",
+      "blob_sha": "71bcc317e827c337d4b45d28e6993d4557ed4ed4",
+      "bridge_symbol": "EntityOSBridge",
+      "live_unknown_symbol": "EntityOSOutcomeUnknown"
+    },
+    "canonical_state_schema": {
+      "path": "the artefact/clayverse/store.py",
+      "blob_sha": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+      "state_symbol": "UnifiedDB",
+      "schema_version": "6"
+    },
+    "regression_test": {
+      "path": "the artefact/tests/test_effect_fencing.py",
+      "blob_sha": "5c84683bf57d577c6e45cad482da5d6574c47dbd"
+    }
+  },
+  "api_contract": {
+    "version": "ENTITYOS_EFFECT_AUTHORITY_PY_API/v2-candidate",
+    "effect_gate_call": "EffectGate.execute(req, episode_id=None, lease=None) -> (effect_id, outcome) or raises a typed terminal-boundary exception",
+    "live_indeterminate_exception": "EntityOSOutcomeUnknown",
+    "journal_states": [
+      "PENDING",
+      "VERIFIED",
+      "DENIED",
+      "FAILED",
+      "STALE_OUTCOME",
+      "UNKNOWN_AFTER_RESTART",
+      "UNKNOWN_AFTER_DISPATCH"
+    ],
+    "live_unknown_rule": "If EntityOS invocation may have crossed the dispatch boundary but no trustworthy terminal receipt exists, canonical state is UNKNOWN_AFTER_DISPATCH, credit remains zero, and blind replay is forbidden. It must never be collapsed to FAILED or VERIFIED.",
+    "restart_unknown_rule": "UNKNOWN_AFTER_RESTART remains a distinct recovery classification for a persisted PENDING effect discovered after restart; it is not an alias for live dispatch uncertainty.",
+    "definite_failure_rule": "Pre-dispatch integrity/admission errors whose non-occurrence is established may remain FAILED or DENIED according to the existing contract.",
+    "conservative_boundary_note": "The candidate EntityOSBridge treats any exception raised by subprocess.run after entering the dispatch attempt as potentially indeterminate. This may conservatively overclassify a launch failure as UNKNOWN, but it avoids the unsafe false-negative claim that an effect definitely did not occur."
+  },
+  "required_fail_closed_invariants": [
+    "EffectGate remains the sole canonical real-effect gate and EffectJournal remains the canonical effect journal",
+    "caller does not mint canonical effect_id",
+    "journal PENDING exists before EntityOS dispatch can begin",
+    "EntityOSOutcomeUnknown becomes UNKNOWN_AFTER_DISPATCH with zero credit",
+    "UNKNOWN_AFTER_DISPATCH cannot authorize automatic retry or second dispatch",
+    "UNKNOWN_AFTER_RESTART remains separately represented and cannot authorize automatic retry",
+    "EntityOSIntegrityError and other established pre-dispatch failures are not silently upgraded to UNKNOWN_AFTER_DISPATCH",
+    "the complete EffectGate + EffectJournal + EntityOSBridge + UnifiedDB identity tuple is validated; collapsing this candidate back to a single source_blob_sha is forbidden",
+    "any repository/path/blob/schema/API mismatch fails closed before Frankenstein-2.0 dispatch integration"
+  ],
+  "regression_expectations": [
+    "test_ambiguous_post_dispatch_attempt_is_canonical_unknown",
+    "test_bridge_wraps_exception_after_dispatch_boundary_as_unknown",
+    "test_failed_entityos_attempt_is_receipted",
+    "test_pending_receipt_exists_before_entityos_execution",
+    "test_explicit_restart_recovery_reenters_pending_as_unknown"
+  ],
+  "frankenstein2_consumption": {
+    "target_workpackage": "F2-WP-105",
+    "status": "BLOCKED_UNTIL_CANDIDATE_IS_ADMITTED_AND_EXACTLY_ATTESTED",
+    "rule": "F2 must not consume this candidate as current canonical authority. After admission/current-main attestation, the active WP105 lane may translate its local ExecutorOutcomeUnknown into the canonical EntityOSOutcomeUnknown only at the integration boundary, preserve the complete v2 authority identity, and prove UNKNOWN causes no blind replay or second executor path.",
+    "secondary_executor_authority": false
+  },
+  "evidence_boundary": {
+    "source_review": "PRESENT",
+    "regression_source": "PRESENT",
+    "regression_execution": "NOT_OBSERVED",
+    "private_clay_actions_execution": "CURRENTLY_PRESTEP_BLOCKED_OR_UNRESOLVED",
+    "effectgate_runtime_credit_added": 0,
+    "effectjournal_runtime_credit_added": 0,
+    "real_effect_runtime_credit_added": 0,
+    "whole_frankenstein2_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "promotion_gate": "Execute the candidate regression set on an admitted exact-source surface, preserve the complete multi-source identity tuple, then admit/merge the source delta and create a successor current-main attestation with the post-merge blobs and API version. Only after that may active F2-WP-105 consume the live UNKNOWN contract in its deterministic no-real-effect matrix.",
+  "no_authority_claim": "This file is an exact candidate binding and review aid only. It does not amend owner authority, supervisor authority, EffectGate authority, EffectJournal authority, execution rights, provider rights, runtime credit, or product acceptance."
+}

@@ -191,7 +191,8 @@ class WorkExecutionLedger(v1.WorkExecutionLedger):
             ).fetchone()
             if binding is None:
                 raise ValueError("unknown binding_id")
-            if str(binding["status"]) in TERMINAL_BINDING_STATES:
+            current_status = str(binding["status"])
+            if current_status in TERMINAL_BINDING_STATES:
                 raise ValueError(f"binding is terminal: {binding['status']}")
 
             inv = con.execute(
@@ -215,7 +216,15 @@ class WorkExecutionLedger(v1.WorkExecutionLedger):
                     float(observed_at if observed_at is not None else time.time()),
                 ),
             )
-            next_status = "RESULT_OBSERVED" if outcome != "UNKNOWN" else "UNKNOWN_OUTCOME"
+            # UNKNOWN is monotonic at binding scope. A later known result from an
+            # invocation that was already in flight may resolve that invocation, but it
+            # must not erase the fact that another invocation still has an unknown
+            # external outcome. Reconciliation is a separate evidence-bearing path.
+            next_status = (
+                "UNKNOWN_OUTCOME"
+                if current_status == "UNKNOWN_OUTCOME" or outcome == "UNKNOWN"
+                else "RESULT_OBSERVED"
+            )
             cur = con.execute(
                 """UPDATE fr2_work_execution_bindings
                    SET status=?

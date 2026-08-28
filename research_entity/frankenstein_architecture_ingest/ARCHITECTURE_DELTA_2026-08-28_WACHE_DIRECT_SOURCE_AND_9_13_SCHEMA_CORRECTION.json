@@ -1,0 +1,101 @@
+{
+  "schema": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:39:30Z",
+  "authority_epoch": "9.13",
+  "status": "CORROBORATING_DIRECT_SOURCE_AND_INGEST_INTEGRITY_CORRECTION",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "source_snapshot": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "canonical_main_observed": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_before_write": "da7fc965de7135444e03e2548e24df1058713c03",
+    "selected_supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c"
+  },
+  "corroborated_packet": {
+    "packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072938Z_HISTORICAL_WACHE_KOENIG_OWNER_GATE_GPT56SOL.json",
+    "already_consumed_by_parallel_worker": true,
+    "packet_consumption_is_not_repeated": true
+  },
+  "direct_source_crosscheck": [
+    {
+      "source": "Drive:aicore/tools/schranke/wache-koenig.py",
+      "drive_file_id": "10z1K5hKV9t9wBu1k5zXEvxSjaCZy3TUH",
+      "sha256_observed": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "expected_sha256_from_archive_manifest": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "identity_match": true,
+      "source_findings": [
+        "main() exits 0 immediately for non-Bash tools",
+        "hard-deny classes exit 2 before execution",
+        "ticket-required commands lacking a valid ticket exit 2",
+        "schein_da() hashes the exact command, checks delayed validity/expiry, unlinks the ticket before returning allow",
+        "ticket consume path has no explicit inter-process lock/atomic compare-and-consume primitive beyond filesystem unlink"
+      ],
+      "evidence_class": "HISTORICAL_SOURCE_DIRECTLY_RETRIEVED_NOT_RUNTIME_REACHABILITY"
+    },
+    {
+      "source": "Drive:aicore/tools/schranke/freigabe",
+      "drive_file_id": "1xi-hFPSWJ6NC8ruDV6iTttw_-wMv08dI",
+      "sha256_observed": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "expected_sha256_from_archive_manifest": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "identity_match": true,
+      "source_findings": [
+        "grant creation requires a controlling /dev/tty",
+        "two sequential fresh challenges are required",
+        "ticket binds the exact command SHA-256 and is chmod 0600",
+        "ticket validity begins after 600 seconds and ends 1200 seconds later",
+        "typing-speed heuristics are explicitly auxiliary, not a cryptographic identity proof"
+      ],
+      "evidence_class": "HISTORICAL_SOURCE_DIRECTLY_RETRIEVED_NOT_RUNTIME_REACHABILITY"
+    }
+  ],
+  "ingest_integrity_corrections": [
+    {
+      "correction_id": "TW5-INGEST-SCHEMA-WACHE-001",
+      "classification": "NEGATIVE_RESULT",
+      "finding": "The consumed packet is not fully valid against the current INGEST_PACKET_SCHEMA: atom TW5-WK-A002-COMMAND-POSITION-AND-NESTED-SHELL-CLASSIFIER uses target_2_0_action='REPLACE', while the schema enum permits REPLACE_WITH_VERIFIED_SUCCESSOR but not REPLACE.",
+      "required_handling": "Do not silently rewrite the historical packet. Preserve it byte-for-byte as provenance; treat its semantic intent as REPLACE_WITH_VERIFIED_SUCCESSOR only in successor architecture projections that explicitly record this normalization.",
+      "credit_effect": "No runtime/base/canonical/training credit. Packet content remains usable as historical source evidence after explicit schema-error quarantine."
+    },
+    {
+      "correction_id": "TW5-INGEST-AUTHORITY-CURRENTNESS-002",
+      "classification": "AUTHORITY_BINDING_CORRECTION",
+      "finding": "The already-written Wache architecture delta and ingest receipt label authority_epoch 8.78, but canonical main now selects supervisor 9.13AB and requires new evidence to bind exact current authority or label older epochs historical-only.",
+      "required_handling": "Treat the 8.78 label on those 07:35Z artifacts as historical/source epoch metadata only. This successor correction is bound to canonical main eeb860a728b1e9b89d96abd6e41350c58126c5ce plus SUPERVISOR_INBOX blob de2ba445a3e3896426957e6b3a37be047462d58c and selected steering blob bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c.",
+      "credit_effect": "No promotion; source forensics remain source forensics."
+    }
+  ],
+  "architecture_effect": {
+    "effect_contract_semantics": "NO_CHANGE_REQUIRED_TO_THE_PARALLEL_WACHE_CAPABILITY_LEASE_DELTA",
+    "evidence_strengthening": "Direct retrieval of both archived source files at the exact manifest hashes corroborates the historical Bash-only blocking gate and out-of-model one-shot human grant mechanism without promoting scheduler reachability.",
+    "ingest_rule_strengthening": "Triggerword-5 packet validation failures and stale authority labels are first-class negative evidence; ingestion must not silently normalize or promote them."
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-WACHE-PACKET-SCHEMA-010",
+      "status": "SOURCE_RESOLVED_PROCESS_REPAIR_REQUIRED",
+      "detail": "The historical packet's semantic content is corroborated, but at least one target_2_0_action value violates the current ingest schema. Historical packet stays immutable; successor projection records explicit normalization."
+    },
+    {
+      "id": "TW5-CONTRADICTION-EVIDENCE-AUTHORITY-CURRENTNESS-011",
+      "status": "SUCCESSOR_BOUND_TO_9_13",
+      "detail": "Earlier 8.78-labeled Triggerword-5 artifacts remain historical/source evidence only under current 9.13 evidence-currentness law; this correction binds the exact current canonical/supervisor identities."
+    }
+  ],
+  "credits": {
+    "historical_direct_source_crosscheck": "PRESENT",
+    "new_runtime_execution": 0,
+    "current_donor_runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover exact historical/global scheduler registration/order for wache-koenig and execute only the currently authorized non-provider falsifiers that bind immutable tool_use_id/invocation_id to pre-decision and post-outcome receipts; separately harden Triggerword-5 packet admission so enum/schema failures and authority-currentness mismatches fail closed before an artifact can be labeled current/admitted."
+}

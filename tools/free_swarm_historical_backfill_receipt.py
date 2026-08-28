@@ -2,16 +2,20 @@
 """Fail-closed exact-source receipt for the FREE Swarm historical Forge backfill.
 
 The historical replay implementation remains ``free_swarm_historical_backfill.py``.
-This tool creates no second Forge authority.  It runs that existing incremental
+This tool creates no second Forge authority. It runs that existing incremental
 scanner to a bounded quiescent point and then measures whether every workers.jsonl
 visible at the beginning of the run has been scanned through its exact byte cutoff
 and whether the shared Forge DB has no unresolved historical extraction chunks.
 
-The receipt is deliberately scoped.  A PASS proves only historical backfill
+The receipt is deliberately scoped. A PASS proves only historical backfill
 scan/extraction saturation for the bound source/authority/artifact-cutoff/Forge-DB
-state.  It grants zero whole-EntityOS, HCU, J-Space model, provider or training
-credit.  Appends/new files after the cutoff are reported but do not rewrite the
-identity of the bounded historical set.
+state. It grants zero whole-EntityOS, HCU, J-Space model, provider or training
+credit. Because the underlying scanner is not cutoff-bounded, a PASS additionally
+requires the workers.jsonl scan set to remain immutable for the duration of the
+receipt. Appends, in-place changes, replacements, truncations, or newly appearing
+workers.jsonl files fail closed instead of contaminating cutoff-bound metrics.
+Concurrent Forge DB commits from another SQLite connection also fail closed so
+``before``/``after`` metrics cannot silently mix unrelated live-writer activity.
 """
 from __future__ import annotations
 
@@ -140,6 +144,14 @@ def scalar(con: sqlite3.Connection, sql: str, params: tuple[Any, ...] = ()) -> i
     return int(row[0] or 0) if row else 0
 
 
+def db_data_version(con: sqlite3.Connection) -> int:
+    """Connection-local detector for commits made by other SQLite connections."""
+    row = con.execute("PRAGMA main.data_version").fetchone()
+    if not row:
+        raise RuntimeError("FORGE_DB_DATA_VERSION_UNAVAILABLE")
+    return int(row[0])
+
+
 def db_snapshot(con: sqlite3.Connection) -> dict[str, Any]:
     required = {
         "candidates",
@@ -221,6 +233,7 @@ def artifact_cutoff(artifact_root: Path) -> dict[str, Any]:
                 "size_cutoff": int(st.st_size),
                 "mtime_ns_at_cutoff": int(st.st_mtime_ns),
                 "inode_at_cutoff": int(st.st_ino),
+                "sha256_at_cutoff": sha256_file(path),
             }
         )
     identity = {
@@ -273,21 +286,35 @@ def cutoff_progress(
         exists = path.exists() and path.is_file()
         current_size = None
         current_inode = None
+        current_mtime_ns = None
+        current_sha256 = None
         replaced_or_truncated = True
+        appended_after_cutoff = False
+        content_changed_at_cutoff = False
         if exists:
             st = path.stat()
             current_size = int(st.st_size)
             current_inode = int(st.st_ino)
+            current_mtime_ns = int(st.st_mtime_ns)
             replaced_or_truncated = (
                 current_inode != int(row["inode_at_cutoff"])
                 or current_size < int(row["size_cutoff"])
             )
+            appended_after_cutoff = bool(
+                current_inode == int(row["inode_at_cutoff"])
+                and current_size > int(row["size_cutoff"])
+            )
+            if not replaced_or_truncated and not appended_after_cutoff:
+                current_sha256 = sha256_file(path)
+                content_changed_at_cutoff = current_sha256 != str(row.get("sha256_at_cutoff") or "")
         tracked_matches_cutoff_inode = (
             tracked_inode is not None and int(tracked_inode) == int(row["inode_at_cutoff"])
         )
         caught_up = bool(
             exists
             and not replaced_or_truncated
+            and not appended_after_cutoff
+            and not content_changed_at_cutoff
             and tracked_matches_cutoff_inode
             and offset >= int(row["size_cutoff"])
         )
@@ -297,9 +324,13 @@ def cutoff_progress(
                 "exists_after": exists,
                 "current_size": current_size,
                 "current_inode": current_inode,
+                "current_mtime_ns": current_mtime_ns,
+                "current_sha256": current_sha256,
                 "tracked_inode": int(tracked_inode) if tracked_inode is not None else None,
                 "tracked_byte_offset": offset,
                 "replaced_or_truncated": replaced_or_truncated,
+                "appended_after_cutoff": appended_after_cutoff,
+                "content_changed_at_cutoff": content_changed_at_cutoff,
                 "caught_up_to_cutoff": caught_up,
             }
         )
@@ -311,6 +342,8 @@ def cutoff_progress(
         "caught_up_files": sum(int(bool(row["caught_up_to_cutoff"])) for row in rows),
         "uncaught_up_files": sum(int(not bool(row["caught_up_to_cutoff"])) for row in rows),
         "replaced_or_truncated_files": sum(int(bool(row["replaced_or_truncated"])) for row in rows),
+        "appended_after_cutoff_files": sum(int(bool(row["appended_after_cutoff"])) for row in rows),
+        "content_changed_at_cutoff_files": sum(int(bool(row["content_changed_at_cutoff"])) for row in rows),
         "files": rows,
         "post_cutoff_new_files": post_cutoff,
         "post_cutoff_new_file_count": len(post_cutoff),
@@ -352,6 +385,7 @@ def classify(
     progress: dict[str, Any],
     db_after: dict[str, Any],
     rounds: list[dict[str, int]],
+    external_db_changed: bool = False,
 ) -> tuple[str, list[str]]:
     blockers: list[str] = []
     if source.get("dirty"):
@@ -362,8 +396,16 @@ def classify(
         blockers.append("NO_VISIBLE_WORKERS_JSONL_AT_CUTOFF")
     if int(progress.get("replaced_or_truncated_files", 0) or 0) > 0:
         blockers.append("CUTOFF_FILE_REPLACED_OR_TRUNCATED")
+    if int(progress.get("appended_after_cutoff_files", 0) or 0) > 0:
+        blockers.append("CUTOFF_FILE_APPENDED_AFTER_CUTOFF")
+    if int(progress.get("content_changed_at_cutoff_files", 0) or 0) > 0:
+        blockers.append("CUTOFF_FILE_CONTENT_CHANGED")
+    if int(progress.get("post_cutoff_new_file_count", 0) or 0) > 0:
+        blockers.append("POST_CUTOFF_NEW_WORKERS_FILES_OBSERVED")
     if int(progress.get("uncaught_up_files", 0) or 0) > 0:
         blockers.append("HISTORICAL_SCAN_NOT_CAUGHT_UP_TO_CUTOFF")
+    if external_db_changed:
+        blockers.append("FORGE_DB_CHANGED_BY_OTHER_CONNECTION_DURING_RECEIPT")
     if rounds and int(rounds[-1].get("lines_seen", 0)) != 0:
         blockers.append("NO_QUIESCENT_SCAN_ROUND_OBSERVED")
     if int(db_after.get("historical_outputs", 0) or 0) <= 0:
@@ -446,6 +488,7 @@ def build_receipt(
                 source=source_before,
             )
         backfill.ensure_schema(con)
+        data_version_before = db_data_version(con)
         before = db_snapshot(con)
         rounds = run_incremental_scan(
             con,
@@ -455,9 +498,11 @@ def build_receipt(
         )
         after = db_snapshot(con)
         progress = cutoff_progress(con, artifact_root, cutoff)
+        data_version_after = db_data_version(con)
     finally:
         con.close()
 
+    external_db_changed = data_version_after != data_version_before
     source_after = source_identity(repo)
     source_stable = source_before == source_after
     if not source_stable:
@@ -470,6 +515,7 @@ def build_receipt(
         progress=progress,
         db_after=after,
         rounds=rounds,
+        external_db_changed=external_db_changed,
     )
     if not source_stable:
         status = "BLOCKED"
@@ -488,9 +534,16 @@ def build_receipt(
         "source": source_after,
         "artifact_root": str(artifact_root),
         "forge_db": str(forge_db),
+        "forge_db_external_data_version": {
+            "before": data_version_before,
+            "after": data_version_after,
+            "external_change_detected": external_db_changed,
+            "semantics": "PRAGMA main.data_version on the same connection; self-commits do not change it, commits from other connections do",
+        },
         "artifact_root_scan_set": cutoff,
         "artifact_root_scan_progress": progress,
         "post_cutoff_history_excluded_from_cutoff_identity": True,
+        "post_cutoff_history_admissible_for_pass": False,
         "incremental_scan_rounds": rounds,
         "lines_scanned": lines_scanned,
         "successful_outputs": successful_outputs_observed,
@@ -518,7 +571,7 @@ def build_receipt(
         "model_credit_added": 0,
         "training_credit_added": 0,
         "evidence_note": (
-            "PASS establishes only exact-source historical backfill scan/extraction saturation at the bound cutoff and Forge DB. "
+            "PASS establishes only exact-source historical backfill scan/extraction saturation at the bound immutable cutoff and Forge DB without observed concurrent external DB commits. "
             "It does not establish whole EntityOS/HCU, J-Space model, provider, or training acceptance."
         ),
     }

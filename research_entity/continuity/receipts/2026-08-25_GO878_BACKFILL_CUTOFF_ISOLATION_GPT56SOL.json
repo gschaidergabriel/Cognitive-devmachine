@@ -1,0 +1,101 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "newest_observed_supervisor": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "owner_execution_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "main_at_final_exact_branch_reentry": "0d92862a761c95480c755ea5396d8722c0eab8ad"
+  },
+  "coordination": {
+    "macrocycle_identity": "MACROCYCLE_ID_UNRESOLVED",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "line_identity_lane": "retained singleton issue #1874 / generation-1 convergence; not duplicated",
+    "cutoff_isolation_pr": 1907,
+    "cutoff_isolation_branch": "go878/backfill-receipt-cutoff-growth-gpt56sol-20260825-1036"
+  },
+  "observation": {
+    "receipt_predecessor_blob": "0c67e6a6ff55e444cd189991c84495dd4200dbe8",
+    "artifact_defect": "FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1 captured a per-file size/inode cutoff while its scanner continued to live EOF. Existing-file appends or new workers.jsonl files could therefore enter the Forge DB after cutoff and contaminate global after/delta metrics while cutoff progress still classified the original bytes as caught up. Same-size in-place mutation was not cryptographically bound.",
+    "forge_db_defect": "before/after metrics were read from the live Forge SQLite using one connection but did not detect commits made by other connections during the receipt, so unrelated concurrent Forge activity could contaminate the bounded evidence window.",
+    "counterhypothesis": "If the artifact set remains byte-identical and no other SQLite connection commits during the receipt, live scanning/metrics are observationally equivalent to the intended bounded evidence window for these two dimensions. The new guards preserve this positive case.",
+    "remaining_limit": "The scanner still lacks a true immutable per-file end-mark, so live artifact writers invalidate rather than coexist with a receipt. This is fail-closed but not the final concurrency-friendly design."
+  },
+  "delta": {
+    "source_blob_after": "8b1ec56a393b760a210fa56b09601a2c77e8a59b",
+    "test_blob_after": "b0394f1fdcab798628e7fb4964d7861fed72d60d",
+    "cutoff_fields_added": ["sha256_at_cutoff"],
+    "forge_db_guard": "PRAGMA main.data_version sampled on the same observer connection before and after the receipt scan; change implies commit by another connection and blocks PASS",
+    "fail_closed_conditions_added": [
+      "CUTOFF_FILE_APPENDED_AFTER_CUTOFF",
+      "CUTOFF_FILE_CONTENT_CHANGED",
+      "POST_CUTOFF_NEW_WORKERS_FILES_OBSERVED",
+      "FORGE_DB_CHANGED_BY_OTHER_CONNECTION_DURING_RECEIPT"
+    ],
+    "positive_control": "unchanged cutoff file and no observed external DB commit remain admissible",
+    "credit_scope": "SOURCE_AND_DETERMINISTIC_MINIMAL_REPRODUCTION_ONLY"
+  },
+  "verification": {
+    "deterministic_minimal_reproduction": {
+      "status": "PASS",
+      "invariants": 6,
+      "cases": [
+        "unchanged file => caught up",
+        "append after cutoff => blocked",
+        "same-size in-place mutation => cutoff hash mismatch blocked",
+        "new workers.jsonl after cutoff => blocked",
+        "external_db_changed classifier signal => blocked",
+        "SQLite data_version changes for another connection commit and remains unchanged for observer self-commit"
+      ]
+    },
+    "sqlite_data_version_observed_values": {
+      "before_external_commit": 1,
+      "after_external_commit": 2,
+      "after_observer_self_commit": 2
+    },
+    "exact_repo_pytest": "NOT_EXECUTED_IN_THIS_TOOL_SURFACE",
+    "clay_direct_dev_runtime": "NOT_EXECUTED_IN_THIS_TOOL_SURFACE",
+    "provider_calls": 0,
+    "model_experiment_calls": 0,
+    "paid_calls": 0
+  },
+  "external_prior_art": {
+    "sqlite_snapshot_isolation": "https://www.sqlite.org/isolation.html",
+    "sqlite_wal_end_mark": "https://www.sqlite.org/fileformat.html",
+    "sqlite_data_version": "https://www.sqlite.org/pragma.html#pragma_data_version",
+    "derived_design_direction": "Replace receipt-invalidating file immutability with an explicit per-file immutable high-water/end mark that ignores post-cutoff appends, while retaining an isolated Forge-DB snapshot or equivalent external-writer fence."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
+      "status": "ADVANCED_SOURCE_EVIDENCE_INTEGRITY",
+      "delta": "historical saturation receipts now fail closed on artifact cutoff drift and observed concurrent external Forge DB commits instead of silently mixing mutable live state"
+    },
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
+      "status": "ADVANCED_CAUSAL_PROVENANCE_INVARIANT",
+      "delta": "evidence generation binds both historical ingress bytes and the database observation window strongly enough to reject two classes of cross-generation contamination"
+    },
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": {
+      "status": "PARALLEL_MAIN_ADVANCE_NO_NEW_EXPERIMENT_BY_THIS_ORGAN",
+      "reason": "current main now records native Qwen3-0.6B llama.cpp cvec fresh-holdout matched-control component runtime PASS, but canonical-semantics promotion remains blocked pending a label-independent counterbalanced discriminator; this invocation lacks a canonical unusual-experiment lease identity"
+    }
+  },
+  "credits_after_cycle": {
+    "historical_backfill_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "provider_runtime_credit": 0,
+    "native_qwen_cvec_model_specific_nonterminal_component_credit": true,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Run the six focused regressions plus the full historical-backfill/receipt suite on exact-current PR source inside clay-direct-dev before promoting PR #1907 out of draft. Then replace invalidation-on-append with a true per-file immutable end-mark scanner and execute a terminal full-history saturation receipt before Forge-to-Distillery token promotion. In parallel, only the label-independent/counterbalanced native cvec candidate should enter the J-Space promotion gate.",
+  "evidence_boundary": "source + deterministic minimal reproduction for PR #1907; separate canonical main contains bounded native Qwen cvec component runtime evidence; no whole EntityOS/HCU/full-HCU/J-Space-model/training/product promotion"
+}

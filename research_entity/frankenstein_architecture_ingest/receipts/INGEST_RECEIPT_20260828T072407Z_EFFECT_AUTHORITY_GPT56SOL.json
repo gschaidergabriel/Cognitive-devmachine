@@ -1,0 +1,32 @@
+{
+  "receipt_type":"TRIGGERWORD5_ARCHITECTURE_INGEST_RECEIPT/v1",
+  "created_at":"2026-08-28T07:24:07Z",
+  "trigger":"triggerwort 5",
+  "worker":"chatgpt-gpt56sol-triggerword5-ingestor",
+  "donor_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_reentered":"86f74e6350d81c2fa2f55da83cfdbe2e6e9758e9",
+  "directive_branch":"chatgpt/grid10-cognitive-envelope-control-20260828",
+  "routing":"TRIGGER_ROUTING_ACTIVE",
+  "parallel_coordination":"Initial write attempt was rejected with HTTP 409 after the branch advanced concurrently. The branch was re-entered and the already-persisted parallel ingest was consumed/deduplicated before writing this narrower successor delta; no force update was used.",
+  "source_cross_checks":[
+    "PreToolUse normal path calls zulassen but intentionally emits no deny/block decision after admission-like checks.",
+    "SEBUKKU is the only blocking PreToolUse branch in the checked cmd_hook span, proving the hook can block but normal admission bookkeeping does not use that authority.",
+    "PostToolUse merken can create VERIFIED/FEHLGESCHLAGEN when no PreToolUse row exists.",
+    "causal_episodes is then created with credit=0 and reentered=0.",
+    "gw_absicht treats status=VERIFIED effects as aussenwirkung, exposing semantic overload between observed success and admitted-then-verified execution."
+  ],
+  "writes":[
+    {"path":"research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072407Z_5641dc6_GPT56SOL_EFFECT_AUTHORITY_ENFORCEMENT.json","commit_sha":"9e8624de9e2efb0b2749887d44a850f3a365125a","role":"append-only source forensic successor packet"},
+    {"path":"research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_AUTHORITY_DELTA_2026-08-28T142407P0700_GPT56SOL.json","commit_sha":"be43e9916036545cf3d905f2094055bdd594e4ca","role":"Triggerword-4-facing successor design correction"}
+  ],
+  "preserved_contradictions":["TW5-CONTRADICTION-EFFECT-ENFORCEMENT-003","TW5-CONTRADICTION-VERIFIED-PREADMISSION-004"],
+  "design_delta":"Frankenstein 2 must model AdmissionDecision, ObservedOutcome and ReentryStatus as distinct typed states. Observed success cannot retroactively mint admission. Actual EffectGate authority must sit at a boundary capable of preventing execution; hooks may remain adapters/audit surfaces.",
+  "runtime_reexecution":0,
+  "runtime_credit":0,
+  "physical_grid10_credit":0,
+  "hcu_runtime_credit":0,
+  "whole_entityos_hcu_credit":0,
+  "training_credit":0,
+  "acceptance":"SOURCE_FORENSIC_SUCCESSOR_COMMITTED_RUNTIME_UNRESOLVED",
+  "next_exact_gate":"Trace realtime_gespraech Function-Calling/tool execution into host permission/effect paths and recover Git chronology for zulassen/merken fallback semantics; preserve UNKNOWN outcome and per-call effect identity requirements."
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "CLAY_EXTERNAL_COMPONENT_EVIDENCE_INGEST/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "classification": "EXACT_BOUND_SOURCE_DETERMINISTIC_COMPONENT_EXECUTION_EVIDENCE",
+  "status": "OBSERVED_AND_INGESTED",
+  "canonical_main_observed_before_write": "676fcb87df81ba792bf4f86a1128b9be0d0dbe7f",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "source_pull_request": 12,
+  "source_branch": "chatgpt/trigger4-wp105-bound-effect-topology-falsifier-20260829",
+  "tested_candidate_head": "8a3d4201d46bc2dc9acbf447b5c67942af36dc37",
+  "workflow_run_id": 33204251444,
+  "workflow_job_id": 98961137076,
+  "runner": "github-hosted ubuntu-latest",
+  "conclusion": "success",
+  "executed_step": "Run exact bound no-real-effect topology falsifier",
+  "authority_binding": {
+    "binding_blob_sha": "b4d91a0dd233c9dc15ff8218feea9248ac1c13c5",
+    "binding_source_commit": "5638204026468b631de5e774e8403d7a6334021e",
+    "bound_implementation_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+    "effect_gate_blob_sha": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+    "effect_journal_blob_sha": "cda63471f1467481f2ff79032d3931730a334a20",
+    "unifieddb_blob_sha": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "unifieddb_schema_version": "6",
+    "api_version": "ENTITYOS_EFFECT_AUTHORITY_PY_API/v1"
+  },
+  "observed_at_component_scope": [
+    "The candidate test recomputed the Git blob identity of the vendored binding record and all three authority-bound implementation files before semantic assertions.",
+    "The exact bound EffectGate created an EffectJournal PENDING row before the in-process fake EntityOSBridge action boundary.",
+    "The canonical entityos.exec lease was held during the fake bridge invocation.",
+    "One EffectGate.execute invocation produced exactly one fake bridge invocation, then VERIFIED journal state and lease release.",
+    "A second attempt for the same canonical episode produced zero additional bridge invocations.",
+    "A residual PENDING effect recovered after database reopen to UNKNOWN_AFTER_RESTART and a retry produced zero bridge invocations."
+  ],
+  "discriminator": {
+    "supported_hypothesis": "The current bound EntityOS EffectGate owns journal/lease/action/finalization as one canonical transaction.",
+    "falsified_counterhypothesis_at_current_api_topology": "EffectGate.execute can safely be used as authorization-only and then followed by a separate Frankenstein executor dispatch without semantic duplication risk.",
+    "production_implication": "For the current bound API, prefer one canonical EffectGate.execute call wrapped by Frankenstein semantic request/call correlation. If a split prepare/dispatch/finalize topology becomes necessary, it must be explicitly owned/admitted by EntityOS rather than invented as a second Frankenstein effect path."
+  },
+  "current_f2_followup": {
+    "main_review_commit": "004a13f2f444cb6a789b8841534ec2e854e18812",
+    "selected_review_shape": "B_SINGLE_CALL_ENTITYOS_TRANSACTION_OBSERVER",
+    "falsifier_next": "OVERLAPPING_AB_SINGLE_CALL_BIJECTION_ZERO_EFFECT",
+    "required_identity": "request_sha256 plus immutable call identity must bind bijectively to the canonical returned effect_id without latest-row or timestamp inference"
+  },
+  "scope_boundary": {
+    "fake_bridge_only": true,
+    "real_external_effect": false,
+    "entityos_binary_executed": false,
+    "external_world_verified": false,
+    "wp105_full_acceptance": false,
+    "physical_grid10_runtime": false,
+    "whole_frankenstein2_runtime": false,
+    "whole_entityos_hcu_runtime": false,
+    "jspace_model_runtime": false,
+    "training": false
+  },
+  "credits": {
+    "exact_bound_effectgate_effectjournal_unifieddb_no_real_effect_component": 1,
+    "canonical_effectgate_real_effect_runtime": 0,
+    "external_world_verification_runtime": 0,
+    "wp105_full_acceptance": 0,
+    "physical_grid10_runtime": 0,
+    "whole_frankenstein2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Allow the existing active F2-WP-105 mutation lane to implement the minimal single-call EntityOS transaction observer: losslessly map EffectRequestIdentity to canonical EffectRequest, call the exact bound EffectGate exactly once, bind returned effect_id and journal evidence to request_sha256/call lineage, preserve separate structured completion verification, and execute the overlapping A/B zero-real-effect bijection falsifier."
+}

@@ -1,6 +1,10 @@
 name: GO GRID10 v3 runtime falsifier
 
 on:
+  push:
+    branches: ['go/grid10-v3-runtime-20260828']
+    paths:
+      - '.github/workflows/go-grid10-v3-runtime.yml'
   pull_request:
     branches: [main]
     paths:

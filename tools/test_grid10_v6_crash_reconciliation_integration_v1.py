@@ -12,6 +12,7 @@ from grid10_cognitive_unified_runtime_v6 import (
     CognitiveCycleExecutionError,
     build_unified_cognitive_runtime_v6,
 )
+from grid10_persistent_agency_v1 import GoalState, WakeKind
 from grid10_v6_crash_reconciliation_v1 import (
     STATUS_ABORTED_BEFORE_V4_COMMIT,
     STATUS_CLOSED,
@@ -58,6 +59,81 @@ class V6CrashReconciliationIntegrationTests(unittest.TestCase):
         self.assertEqual(intent[0], STATUS_CLOSED)
         self.assertEqual(intent[1], receipt[0])
         self.assertEqual(receipt[0], cycle.receipt_digest)
+
+    def test_real_deferred_wake_gap_is_attested_through_v6(self):
+        _, _, agency, runtime, _ = build_unified_cognitive_runtime_v6(self.db)
+        goal = agency.create_goal(
+            goal_id="g-wake",
+            origin="AUTHENTICATED_USER",
+            semantic_goal="resume when evidence arrives",
+            state=GoalState.CANDIDATE,
+            success_criteria=("verified evidence",),
+            uncertainty=0.4,
+            priority=10,
+            event_id="wake-integration:create",
+            now_ts=100.0,
+        )
+        active = agency.transition_goal(
+            "g-wake",
+            expected_generation=goal.generation,
+            new_state=GoalState.ACTIVE,
+            event_id="wake-integration:activate",
+            reason="admitted",
+            now_ts=101.0,
+        )
+        agency.defer_goal(
+            "g-wake",
+            expected_generation=active.generation,
+            intent_id="i-wake",
+            wake_kind=WakeKind.EVENT,
+            wake_value="evidence:new",
+            event_id="wake-integration:defer",
+            reason="await material evidence",
+            now_ts=102.0,
+        )
+        agency.schedule_next_tick(
+            not_before=999.0,
+            mode="HOLD",
+            event_id="wake-integration:far-schedule",
+            now_ts=103.0,
+        )
+
+        tick_id = "integrated-real-wake"
+        runtime.tick_once(
+            tick_id=tick_id,
+            now_ts=200.0,
+            observed_events=("evidence:new",),
+            trusted_axes=_trusted_normal_axes(),
+        )
+        result = classify_cycle_intent(self.db, tick_id=tick_id)
+        self.assertEqual(result.status, STATUS_CLOSED)
+        self.assertEqual(result.evidence["mismatches"], [])
+
+        con = sqlite3.connect(str(self.db))
+        con.row_factory = sqlite3.Row
+        try:
+            intent = con.execute(
+                "SELECT agency_epoch_at_prepare FROM grid10_v6_cycle_intents WHERE tick_id=?",
+                (tick_id,),
+            ).fetchone()
+            cycle = con.execute(
+                "SELECT agency_epoch_before FROM grid10_cognitive_cycles WHERE tick_id=?",
+                (tick_id,),
+            ).fetchone()
+            gap_events = con.execute(
+                "SELECT event_id,event_type,state_epoch FROM agency_events "
+                "WHERE state_epoch>? AND state_epoch<=? ORDER BY state_epoch,event_seq",
+                (int(intent["agency_epoch_at_prepare"]), int(cycle["agency_epoch_before"])),
+            ).fetchall()
+        finally:
+            con.close()
+
+        self.assertEqual(int(cycle["agency_epoch_before"]), int(intent["agency_epoch_at_prepare"]) + 1)
+        self.assertEqual(len(gap_events), 1)
+        self.assertEqual(gap_events[0]["event_type"], "DEFERRED_INTENT_FIRED")
+        self.assertEqual(gap_events[0]["event_id"], f"{tick_id}:wake:i-wake")
+        self.assertEqual(int(gap_events[0]["state_epoch"]), int(cycle["agency_epoch_before"]))
+        self.assertEqual(agency.get_goal("g-wake").state, GoalState.ACTIVE)
 
     def test_exception_closure_still_closes_intent_before_bounded_reraise(self):
         _, _, _, runtime, _ = build_unified_cognitive_runtime_v6(

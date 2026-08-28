@@ -11,6 +11,10 @@ Required chain:
 
 The critical safety property is that session_id is context only. invocation_id is the
 correlation authority for every state transition, including parallel/reordered calls.
+
+CompletionEvidence is minted only at issue_completion_evidence(). That method is wired to
+the source-bound Frankenstein-2 Completion Verifier v2. The v1 completion_status() remains
+a diagnostic/precondition view and can no longer mint completion by itself.
 """
 from __future__ import annotations
 
@@ -23,7 +27,39 @@ import sqlite3
 import time
 from typing import Any, Mapping
 
+try:  # package import when tests import tools.frankenstein2_effect_lifecycle_v1
+    from .frankenstein2_completion_verifier_v2 import (
+        ADMISSION_SCHEMA as V2_ADMISSION_SCHEMA,
+        ENFORCEMENT_SCHEMA as V2_ENFORCEMENT_SCHEMA,
+        EXECUTION_SCHEMA as V2_EXECUTION_SCHEMA,
+        REENTRY_SCHEMA as V2_REENTRY_SCHEMA,
+        WORLD_SCHEMA as V2_WORLD_SCHEMA,
+        AdmissionReceipt as V2AdmissionReceipt,
+        EnforcementReceipt as V2EnforcementReceipt,
+        ExecutionReceipt as V2ExecutionReceipt,
+        ExpectedInvocation as V2ExpectedInvocation,
+        ResultReentryReceipt as V2ResultReentryReceipt,
+        WorldVerificationReceipt as V2WorldVerificationReceipt,
+        verify_completion as verify_completion_v2,
+    )
+except ImportError:  # direct script/tools-PYTHONPATH execution
+    from frankenstein2_completion_verifier_v2 import (
+        ADMISSION_SCHEMA as V2_ADMISSION_SCHEMA,
+        ENFORCEMENT_SCHEMA as V2_ENFORCEMENT_SCHEMA,
+        EXECUTION_SCHEMA as V2_EXECUTION_SCHEMA,
+        REENTRY_SCHEMA as V2_REENTRY_SCHEMA,
+        WORLD_SCHEMA as V2_WORLD_SCHEMA,
+        AdmissionReceipt as V2AdmissionReceipt,
+        EnforcementReceipt as V2EnforcementReceipt,
+        ExecutionReceipt as V2ExecutionReceipt,
+        ExpectedInvocation as V2ExpectedInvocation,
+        ResultReentryReceipt as V2ResultReentryReceipt,
+        WorldVerificationReceipt as V2WorldVerificationReceipt,
+        verify_completion as verify_completion_v2,
+    )
+
 SCHEMA = "FRANKENSTEIN2_EFFECT_LIFECYCLE/v1"
+V2_COMPLETION_EVIDENCE_CLASS = "VERIFIED_EFFECT_COMPLETION_V2"
 
 
 class EffectLifecycleError(RuntimeError):
@@ -165,6 +201,18 @@ class EffectLifecycleStore:
                   receipt_digest TEXT NOT NULL,
                   created_ts REAL NOT NULL
                 );
+                CREATE TABLE IF NOT EXISTS completion_v2_source_bindings(
+                  invocation_id TEXT PRIMARY KEY REFERENCES effect_requests(invocation_id),
+                  expected_source_digest TEXT NOT NULL,
+                  bound_ts REAL NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS execution_v2_metadata(
+                  invocation_id TEXT PRIMARY KEY REFERENCES effect_requests(invocation_id),
+                  source_digest TEXT NOT NULL,
+                  duplicate_state TEXT NOT NULL,
+                  status TEXT NOT NULL,
+                  recorded_ts REAL NOT NULL
+                );
                 CREATE TABLE IF NOT EXISTS effect_lifecycle_events(
                   seq INTEGER PRIMARY KEY AUTOINCREMENT,
                   invocation_id TEXT NOT NULL,
@@ -251,6 +299,50 @@ class EffectLifecycleStore:
         except sqlite3.IntegrityError as exc:
             con.execute("ROLLBACK")
             raise EffectLifecycleError(f"DUPLICATE_INVOCATION_ID:{req.invocation_id}") from exc
+        except Exception:
+            try:
+                con.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
+            raise
+        finally:
+            con.close()
+
+    def bind_completion_source(
+        self,
+        invocation_id: str,
+        *,
+        source_digest: str,
+        now_ts: float | None = None,
+    ) -> None:
+        """Create-once expected source identity before any submission can occur."""
+        ts = time.time() if now_ts is None else float(now_ts)
+        if not source_digest:
+            raise EffectLifecycleError("MISSING_EXPECTED_SOURCE_DIGEST")
+        con = self._con()
+        try:
+            con.execute("BEGIN IMMEDIATE")
+            req = self._require_request(con, invocation_id)
+            if req["pending_state"] != PendingEffectState.PENDING.value:
+                raise EffectLifecycleError("SOURCE_BINDING_REQUIRES_PRE_SUBMISSION_PENDING")
+            con.execute(
+                "INSERT INTO completion_v2_source_bindings VALUES(?,?,?)",
+                (invocation_id, str(source_digest), ts),
+            )
+            self._event(
+                con,
+                invocation_id,
+                "COMPLETION_V2_SOURCE_BOUND",
+                {"expected_source_digest": str(source_digest)},
+                ts,
+            )
+            con.execute("COMMIT")
+        except sqlite3.IntegrityError as exc:
+            try:
+                con.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
+            raise EffectLifecycleError("COMPLETION_V2_SOURCE_ALREADY_BOUND") from exc
         except Exception:
             try:
                 con.execute("ROLLBACK")
@@ -394,6 +486,66 @@ class EffectLifecycleStore:
         finally:
             con.close()
 
+    def record_execution_v2_metadata(
+        self,
+        invocation_id: str,
+        *,
+        source_digest: str,
+        duplicate_state: str,
+        status: str,
+        now_ts: float | None = None,
+    ) -> None:
+        """Persist the v2-only execution identity fields after the base execution receipt."""
+        ts = time.time() if now_ts is None else float(now_ts)
+        if not source_digest:
+            raise EffectLifecycleError("MISSING_EXECUTION_SOURCE_DIGEST")
+        if not duplicate_state:
+            raise EffectLifecycleError("MISSING_EXECUTION_DUPLICATE_STATE")
+        if not status:
+            raise EffectLifecycleError("MISSING_EXECUTION_STATUS")
+        con = self._con()
+        try:
+            con.execute("BEGIN IMMEDIATE")
+            self._require_request(con, invocation_id)
+            exe = con.execute(
+                "SELECT exit_code FROM execution_receipts WHERE invocation_id=?",
+                (invocation_id,),
+            ).fetchone()
+            if exe is None:
+                raise EffectLifecycleError("V2_EXECUTION_METADATA_REQUIRES_EXECUTION_RECEIPT")
+            if str(status) == "SUCCEEDED" and int(exe["exit_code"]) != 0:
+                raise EffectLifecycleError("SUCCEEDED_STATUS_CONTRADICTS_NONZERO_EXIT")
+            con.execute(
+                "INSERT INTO execution_v2_metadata VALUES(?,?,?,?,?)",
+                (invocation_id, str(source_digest), str(duplicate_state), str(status), ts),
+            )
+            self._event(
+                con,
+                invocation_id,
+                "EXECUTION_V2_METADATA_RECORDED",
+                {
+                    "source_digest": str(source_digest),
+                    "duplicate_state": str(duplicate_state),
+                    "status": str(status),
+                },
+                ts,
+            )
+            con.execute("COMMIT")
+        except sqlite3.IntegrityError as exc:
+            try:
+                con.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
+            raise EffectLifecycleError("EXECUTION_V2_METADATA_ALREADY_FINAL") from exc
+        except Exception:
+            try:
+                con.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
+            raise
+        finally:
+            con.close()
+
     def verify_world_effect(self, invocation_id: str, outcome: WorldOutcome | str, *, evidence_digest: str | None, now_ts: float | None = None) -> None:
         ts = time.time() if now_ts is None else float(now_ts)
         outcome = WorldOutcome(outcome)
@@ -486,30 +638,134 @@ class EffectLifecycleStore:
             con.close()
 
     def issue_completion_evidence(self, invocation_id: str, *, now_ts: float | None = None) -> str:
+        """Mint completion only after the legacy chain AND Completion Verifier v2 close."""
         ts = time.time() if now_ts is None else float(now_ts)
         status = self.completion_status(invocation_id)
         if not status.closable:
             raise EffectLifecycleError("COMPLETION_GATE_OPEN:" + ",".join(status.reasons))
+
+        con = self._con()
+        try:
+            req = self._require_request(con, invocation_id)
+            adm = con.execute(
+                "SELECT decision FROM admission_decisions WHERE invocation_id=?",
+                (invocation_id,),
+            ).fetchone()
+            enf = con.execute(
+                "SELECT decision,request_digest,dispatch_permitted,boundary_id FROM enforcement_receipts WHERE invocation_id=?",
+                (invocation_id,),
+            ).fetchone()
+            exe = con.execute(
+                "SELECT request_digest,executable_id,environment_id,exit_code,result_digest FROM execution_receipts WHERE invocation_id=?",
+                (invocation_id,),
+            ).fetchone()
+            world = con.execute(
+                "SELECT outcome,evidence_digest FROM world_effect_verifications WHERE invocation_id=?",
+                (invocation_id,),
+            ).fetchone()
+            reentry = con.execute(
+                "SELECT result_digest,task_id,turn_id,causal_id,generation FROM result_reentries WHERE invocation_id=?",
+                (invocation_id,),
+            ).fetchone()
+            source_binding = con.execute(
+                "SELECT expected_source_digest FROM completion_v2_source_bindings WHERE invocation_id=?",
+                (invocation_id,),
+            ).fetchone()
+            execution_v2 = con.execute(
+                "SELECT source_digest,duplicate_state,status FROM execution_v2_metadata WHERE invocation_id=?",
+                (invocation_id,),
+            ).fetchone()
+        finally:
+            con.close()
+
+        expected_source = "" if source_binding is None else str(source_binding["expected_source_digest"])
+        execution_source = "" if execution_v2 is None else str(execution_v2["source_digest"])
+        duplicate_state = "UNKNOWN" if execution_v2 is None else str(execution_v2["duplicate_state"])
+        execution_status = "UNKNOWN" if execution_v2 is None else str(execution_v2["status"])
+
+        expected = V2ExpectedInvocation(
+            invocation_id=invocation_id,
+            request_digest=str(req["request_digest"]),
+            task_id=str(req["task_id"]),
+            turn_id=str(req["turn_id"]),
+            causal_id=str(req["causal_id"]),
+            generation=int(req["generation"]),
+            source_digest=expected_source,
+        )
+        decision = verify_completion_v2(
+            expected,
+            admission=V2AdmissionReceipt(
+                V2_ADMISSION_SCHEMA,
+                invocation_id,
+                str(req["request_digest"]),
+                int(req["generation"]),
+                str(adm["decision"]),
+            ),
+            enforcement=V2EnforcementReceipt(
+                V2_ENFORCEMENT_SCHEMA,
+                invocation_id,
+                str(enf["request_digest"]),
+                int(req["generation"]),
+                str(enf["decision"]),
+                bool(enf["dispatch_permitted"]),
+                str(enf["boundary_id"]),
+            ),
+            execution=V2ExecutionReceipt(
+                V2_EXECUTION_SCHEMA,
+                invocation_id,
+                str(exe["request_digest"]),
+                int(req["generation"]),
+                execution_source,
+                str(exe["executable_id"]),
+                str(exe["environment_id"]),
+                execution_status,
+                int(exe["exit_code"]),
+                str(exe["result_digest"]),
+                duplicate_state,
+            ),
+            world=V2WorldVerificationReceipt(
+                V2_WORLD_SCHEMA,
+                invocation_id,
+                int(req["generation"]),
+                str(exe["result_digest"]),
+                str(world["outcome"]),
+                None if world["evidence_digest"] is None else str(world["evidence_digest"]),
+            ),
+            reentry=V2ResultReentryReceipt(
+                V2_REENTRY_SCHEMA,
+                invocation_id,
+                int(reentry["generation"]),
+                str(reentry["result_digest"]),
+                str(reentry["task_id"]),
+                str(reentry["turn_id"]),
+                str(reentry["causal_id"]),
+            ),
+            require_test_receipt=False,
+            require_world_evidence=True,
+        )
+        if not decision.closable or not decision.validation_digest:
+            raise EffectLifecycleError("COMPLETION_V2_GATE_OPEN:" + ",".join(decision.reasons))
+
+        receipt_digest = str(decision.validation_digest)
         con = self._con()
         try:
             con.execute("BEGIN IMMEDIATE")
-            req = self._require_request(con, invocation_id)
-            exe = con.execute("SELECT result_digest FROM execution_receipts WHERE invocation_id=?", (invocation_id,)).fetchone()
-            world = con.execute("SELECT outcome,evidence_digest FROM world_effect_verifications WHERE invocation_id=?", (invocation_id,)).fetchone()
-            receipt_digest = digest_json({
-                "schema": SCHEMA,
-                "invocation_id": invocation_id,
-                "request_digest": req["request_digest"],
-                "result_digest": exe["result_digest"],
-                "world_outcome": world["outcome"],
-                "world_evidence_digest": world["evidence_digest"],
-                "task_id": req["task_id"],
-                "turn_id": req["turn_id"],
-                "causal_id": req["causal_id"],
-                "generation": int(req["generation"]),
-            })
-            con.execute("INSERT INTO completion_evidence VALUES(?,?,?,?)", (invocation_id, "VERIFIED_EFFECT_COMPLETION", receipt_digest, ts))
-            self._event(con, invocation_id, "COMPLETION_EVIDENCE_ISSUED", {"receipt_digest": receipt_digest}, ts)
+            self._require_request(con, invocation_id)
+            con.execute(
+                "INSERT INTO completion_evidence VALUES(?,?,?,?)",
+                (invocation_id, V2_COMPLETION_EVIDENCE_CLASS, receipt_digest, ts),
+            )
+            self._event(
+                con,
+                invocation_id,
+                "COMPLETION_EVIDENCE_ISSUED",
+                {
+                    "receipt_digest": receipt_digest,
+                    "validator_schema": decision.schema,
+                    "evidence_class": V2_COMPLETION_EVIDENCE_CLASS,
+                },
+                ts,
+            )
             con.execute("COMMIT")
             return receipt_digest
         except sqlite3.IntegrityError as exc:
@@ -536,6 +792,8 @@ class EffectLifecycleStore:
                 ("admission_decisions", "admission"),
                 ("enforcement_receipts", "enforcement"),
                 ("execution_receipts", "execution"),
+                ("completion_v2_source_bindings", "completion_v2_source"),
+                ("execution_v2_metadata", "execution_v2"),
                 ("world_effect_verifications", "world"),
                 ("result_reentries", "reentry"),
                 ("completion_evidence", "completion"),

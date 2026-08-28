@@ -1,0 +1,122 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:55:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "delta_class": "RETRIEVAL_FEEDBACK_ROUND_BINDING_REUSE",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true
+  },
+  "design_branch_head_before_write": "802a085915222b41dc68176fd5467aa1bcbdf5f2",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "ingest_disposition": {
+    "new_inbox_packet_consumed": false,
+    "reason": "Inbox was quiescent after the already-accounted Stop-hook packet. This delta is a nonduplicate direct-source refinement of the current Stop/retrieval binding frontier.",
+    "corroborates": [
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_DEFERRED_CAUSAL_RETURN_FUSION_GPT56SOL.json"
+    ]
+  },
+  "direct_source_crosscheck": [
+    {
+      "span": "4220-4385",
+      "source_kind": "LIVE_CODE",
+      "finding": "MicroClay.retrieve mints a unique retrieval_id and persists it together with turn_id, episode_id, causal_id, session_id and generation plus query_hash. Strong round-scoped correlation identity already exists in the donor; Frankenstein 2.0 does not need to invent a second retrieval identity namespace."
+    },
+    {
+      "span": "4620-4820",
+      "source_kind": "LIVE_CODE",
+      "finding": "_microclay_schatten explicitly creates fresh round-scoped causal_id, turn_id and episode_id for every UserPromptSubmit and documents why session-scoped active_turn identity was insufficient. The synthetic turn content is only a MicroClay marker, not the actual user query payload."
+    },
+    {
+      "span": "4820-5085",
+      "source_kind": "LIVE_CODE",
+      "finding": "_kognition_richten_hook discards the available round identity at Stop time: it re-selects the newest session retrieval lacking modell:relevanz feedback and independently re-reads the last user message from transcript_path. It does not verify that the selected retrieval row's query_hash matches the transcript query it sends to Ollama."
+    },
+    {
+      "span": "4380-4620",
+      "source_kind": "LIVE_CODE",
+      "finding": "The mechanical Stop feedback path scans up to twenty open retrieval rows by session_id, uses the session-scoped active_turns.episode_id for effects, and searches the accumulated assistant transcript tail. Therefore the same round-binding weakness is broader than the model relevance path: evidence can be gathered from context that is not keyed to each retrieval row's own turn_id/episode_id/causal_id."
+    },
+    {
+      "span": "4380-4465",
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "MicroClay._apply_credit creates deterministic feedback receipts from retrieval_id, causal_id, generation, signal_class and value. This is useful downstream enforcement, but it cannot repair a wrong retrieval/evidence association made before the reducer is called."
+    }
+  ],
+  "new_architecture_inference": {
+    "name": "RetrievalFeedbackBinding/v2",
+    "status": "SOURCE_GROUNDED_SUCCESSOR_REQUIREMENT",
+    "core_finding": "The donor's main gap is not absence of round identity; it is loss of that identity between retrieval creation and later feedback evidence collection.",
+    "reuse_existing_identity": [
+      "retrieval_id",
+      "turn_id",
+      "episode_id",
+      "causal_id",
+      "generation",
+      "query_sha256"
+    ],
+    "required_addition": [
+      "an exact query payload reference or a verifiable bounded query artifact bound to retrieval_id, because retrieval_episodes stores query_hash but the synthetic MicroClay turn does not store the user's query text",
+      "typed evidence references for assistant output/effects used by mechanical feedback rather than session-wide transcript tails or active_turns episode lookup",
+      "producer runtime/build identity for model-derived feedback",
+      "explicit result status and receipt identity"
+    ],
+    "invariants": [
+      "SESSION_ID_IS_CONTEXT_NOT_ROUND_JOIN_KEY",
+      "LATEST_TRANSCRIPT_MESSAGE_IS_NOT_RETRIEVAL_IDENTITY",
+      "LATEST_OPEN_RETRIEVAL_IS_NOT_CURRENT_ROUND_PROOF",
+      "ACTIVE_TURN_SESSION_EPISODE_IS_NOT_RETRIEVAL_EPISODE_IDENTITY",
+      "DETERMINISTIC_RECEIPT_CANNOT_SANITIZE_MISBOUND_UPSTREAM_EVIDENCE",
+      "QUERY_HASH_MAY_VALIDATE_A_PAYLOAD_BUT_DOES_NOT_SUPPLY_THE_PAYLOAD_OR_SELECT_THE_RETRIEVAL_ROW"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "relationship_to_deferred_causal_return_envelope": {
+    "classification": "REFINEMENT_NOT_COMPETING_ABI",
+    "finding": "DeferredCausalReturnEnvelope/v1 remains a useful common outer interconnect candidate. RetrievalFeedbackBinding/v2 is the retrieval-specific specialization and should reuse the donor's existing strong round IDs rather than replace them."
+  },
+  "counterhypotheses": [
+    "Strictly sequential one-request-at-a-time Stop handling may make newest-open retrieval and latest transcript query coincide in common practice; this does not establish deterministic binding under overlap, timeout, replay or reordered processing.",
+    "The current query_hash could be used as a validation check against the transcript query, but the donor Stop path does not perform that comparison and still must first select the correct retrieval row.",
+    "An installed wrapper outside the pinned donor may add stronger event-to-retrieval binding; this remains UNKNOWN without exact installed-source evidence."
+  ],
+  "triggerword4_handoff": {
+    "do_not_build_in_trigger5": true,
+    "required_actions": [
+      "reuse retrieval_id/turn_id/episode_id/causal_id/generation as the canonical retrieval feedback join rather than creating a parallel identity system",
+      "at UserPromptSubmit, bind retrieval_id to an exact query payload reference or otherwise verifiable query artifact; keep query_sha256 as an integrity check",
+      "enqueue model relevance work from the exact retrieval created by the originating event instead of querying newest-open-by-session at Stop",
+      "bind mechanical feedback to exact assistant/effect evidence IDs for that retrieval round instead of transcript-tail and session active_turn resolution",
+      "preserve _apply_credit-style deterministic receipt/idempotence semantics after exact evidence binding",
+      "test two same-session retrievals with reversed Stop completion, swapped transcript recency and distinct effects; fail if either model or mechanical feedback crosses rounds"
+    ]
+  },
+  "credits": {
+    "donor_source_crosscheck": "PASS_AT_EXACT_DONOR_SHA",
+    "architecture_refinement": "SOURCE_GROUNDED",
+    "runtime_execution": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "next_exact_gate": "Triggerword-4/external non-provider test lane: prove exact round binding with two same-session retrievals whose Stop/model completions and transcript recency are intentionally reversed; separately verify mechanical feedback uses only evidence bound to the target retrieval round."
+}

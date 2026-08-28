@@ -1,0 +1,172 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:58:04Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "delta_class": "SPARSE_GENERATIVE_WORLD_SUBSTRATE_DONOR_PRIMITIVES",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "design_branch_head_before_write": "4587759aa99961d05b0d0b0593fddd71686b1178",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "ingest_disposition": {
+    "new_inbox_packet_consumed": false,
+    "reason": "Inbox remained quiescent after the already-consumed Stop-hook packet. The shared Triggerword-4/5 sparse-world directive explicitly requires mining Retina/Familiarity, typed epistemics, Hyperposition-adjacent routing and action-grounded memory for reusable world-substrate mechanisms; this is a direct-source, nonduplicate forensic delta.",
+    "parallel_topics_preserved_not_overwritten": [
+      "STOP_HOOK_LLM_BOUNDARY",
+      "STOP_HOOK_TIMEOUT_SWALLOW_CORRECTION",
+      "RETRIEVAL_FEEDBACK_ROUND_BINDING"
+    ]
+  },
+  "source_atoms": [
+    {
+      "atom_id": "SWD_PERCEPTUALFIELD_TYPED_NEED_EPISTEMICS",
+      "subsystem": "typed_perception_and_need",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/perceptual_field.py",
+      "blob_sha": "7011c758bb5353f179e32be748227cfeb39ab82a",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 1,
+      "line_end": 260,
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "ObservedEvidence, InferredHypothesis and RetrievalPrior are distinct typed records; retrieval priors cannot override fresh observation. VisualNeed is a typed top-down request that can select a bounded local fast path instead of forcing the full expensive visual path.",
+      "world_substrate_reuse": "Use the same separation for WorldNeed/WorldSlice: exact observed inputs remain distinct from inferred trajectories and retrieved/learned priors, and a typed need should request only the local structure required for the current discrimination.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "runtime_scope": "SOURCE_WIRED; INSTALLED_RUNTIME_NOT_REOBSERVED_IN_THIS_TRIGGER"
+    },
+    {
+      "atom_id": "SWD_ACTIVE_SENSING_PROGRESSIVE_EXPANSION",
+      "subsystem": "bounded_sparse_expansion",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/active_sensing.py",
+      "blob_sha": "5471e8b1f869dea6449960d524cc83d55312efc9",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 389,
+      "line_end": 556,
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "active_sense executes an ordered cheap-to-expensive ladder, returns at the first sufficient answer, uses a process-shared rolling budget, and structurally prevents presence-only needs from automatically escalating to the generic semantic engine.",
+      "world_substrate_reuse": "WorldSlice materialization should be progressive and need-scoped: cheap temporal/local structure first, then selective expansion, with hard cost/policy gates and early stop when the current discriminator is satisfied. Loading the complete world representation is an anti-pattern.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "runtime_scope": "SOURCE_WIRED; DONOR COMMENTS REPORT PRIOR REAL TESTS BUT NO NEW RUNTIME CREDIT HERE"
+    },
+    {
+      "atom_id": "SWD_FAMILIARITY_OPENSET_ANTIPOISON",
+      "subsystem": "learned_projection_admission",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/familiarity.py",
+      "blob_sha": "288b1626d18ab0a89c9404427c0542cbc8a4ecb5",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 300,
+      "line_end": 460,
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "Familiarity is explicitly open-set: a nearest prototype is not forced into a match. Cheap hits cannot refresh the prototype, increment expensive confirmation, or promote SILVER to GOLD. Only fresh externally anchored expensive confirmations may reinforce/promote; rollback tombstones a bad prototype.",
+      "world_substrate_reuse": "Similarity/recurrence inside the sparse world substrate must not self-promote a learned atom/operator. UNKNOWN remains explicit; promotion requires independent evidence-bearing observations or verified outcomes; wrong projections remain reversible/tombstoneable.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "runtime_scope": "SOURCE_WIRED; NO NEW CAMERA/VISION EXECUTION"
+    },
+    {
+      "atom_id": "SWD_PERCEPTION_TAINT_NOTCOMPUTED",
+      "subsystem": "policy_taint_and_epistemic_absence",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py",
+      "blob_sha": "91a66ecf34a6486a6bf077dcb115fcc224e3119b",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 430,
+      "line_end": 610,
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "evaluate_head is a single egress/enforcement point. Unknown or COMPUTE_OFF dependencies produce NOT_COMPUTED with value=null; dependency taint blocks downstream computation; OUTPUT_OFF blocks egress; persistence restrictions propagate through dependencies.",
+      "world_substrate_reuse": "World variables/operators need a deterministic policy DAG with taint propagation. COMPUTE_OFF must remain NOT_COMPUTED through every downstream transform rather than being reconstructed from correlated dimensions; output and persistence permissions must remain separately enforceable.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "runtime_scope": "SOURCE_WIRED; NO NEW EXECUTION"
+    },
+    {
+      "atom_id": "SWD_ACTION_GROUNDED_TRANSITION_LEARNING",
+      "subsystem": "verified_transition_learning",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/action_grounded_memory.py",
+      "blob_sha": "18a350165f38776b21eb9b0794bbfc5f25cedd59",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 300,
+      "line_end": 430,
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "The donor resolves pre-evidence -> action -> post-evidence -> outcome into explicit mutually-exclusive outcomes. Missing post evidence is not silently treated as no change. Retrieval priors can audit/corroborate but cannot write the observed outcome label.",
+      "world_substrate_reuse": "Transform-operator learning should bind observed Z0 + exact action/effect + observed Zt. Verified outcome may update confidence; missing/failed post observation remains UNKNOWN/failed evidence; retrieved priors and simulations cannot overwrite the observed transition.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "runtime_scope": "SOURCE_WIRED; DONOR TEST CLAIMS NOT RE-RUN HERE"
+    }
+  ],
+  "architecture_inference": {
+    "name": "SparseWorldDonorFusion/v1",
+    "status": "SOURCE_GROUNDED_SUCCESSOR_REQUIREMENT",
+    "core_rule": "A Frankenstein-2.0 world model should be a typed, sparse, progressively materialized projection substrate: need-scoped selection plus open-set uncertainty plus evidence-gated learning plus dependency-tainted policy, not a permanently materialized authoritative graph.",
+    "reusable_mechanisms": [
+      "VisualNeed-style typed request -> WorldNeed with explicit bounds",
+      "Active-Sensing-style cheap-first progressive expansion -> bounded WorldSlice",
+      "Familiarity-style open-set UNKNOWN and no self-reinforcing cheap-hit promotion",
+      "Perception-Control-style COMPUTE_OFF/OUTPUT_OFF/MEMORY_OFF and dependency taint",
+      "Action-Grounded-Memory-style verified transition evidence for operator learning",
+      "separate noncanonical vector/projection payload from durable typed provenance, epistemics and rollback state"
+    ],
+    "not_literal_copies": [
+      "The 8x8 brightness grid is a visual familiarity primitive, not a universal world-vector format.",
+      "Camera-specific thresholds and OCR/pose stages are donor-local calibration, not world-substrate constants.",
+      "Familiarity's RAM-only vector lifetime is a privacy choice for camera prototypes and must not be generalized as the world substrate storage architecture.",
+      "A donor external-vision/provider path is mechanism evidence only and does not grant current execution authority under supervisor 9.13 FREE_ONLY."
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "contradictions_and_tensions_preserved": [
+    {
+      "id": "WORLD_PERSISTENCE_VS_FAMILIARITY_RAM_ONLY",
+      "finding": "The shared Triggerword-4/5 directive calls for an external local database for vector atoms/operators, while donor familiarity deliberately keeps its dense prototype grid RAM-only for privacy. Reuse familiarity's epistemic promotion/rollback pattern, not its storage lifetime as a universal rule. World vectors require their own privacy and persistence policy."
+    },
+    {
+      "id": "DONOR_PROVIDER_CAPABILITY_VS_CURRENT_FREE_ONLY",
+      "finding": "active_sensing can reach an external semantic engine when a VisualNeed permits it, but current Clay supervisor 9.13/9.13AC admits no provider route. The staged escalation architecture is reusable; the external-provider execution path is not currently authorized evidence."
+    },
+    {
+      "id": "DIRECT_RAW_COMPUTE_VS_WORLD_ADAPTER_CAPABILITY",
+      "finding": "perception_control documentation allows a tightly-scoped transient in-process consumer to call a compute function directly for internal use, whereas the new world-substrate directive requires ordinary executor/Voice/tool access only through a GRID/XPU world adapter with bounded capability. Frankenstein 2.0 must preserve the stricter world-adapter boundary rather than generalizing the donor's internal-compute escape hatch."
+    }
+  ],
+  "counterhypotheses": [
+    "A dense always-materialized world graph could outperform JIT slices at very small scale because retrieval overhead may dominate; this must be measured against bounded sparse expansion rather than assumed.",
+    "Open-set conservatism may increase UNKNOWN/ASK frequency enough to reduce task throughput; calibration must measure task quality and cost jointly, not optimize for fewer expansions alone.",
+    "Evidence-gated operator promotion may adapt too slowly in rapidly changing domains; a separate low-authority provisional-learning tier may be needed without granting canonical truth.",
+    "Dependency taint can over-block legitimate independent derivations if the dependency graph is too coarse; tests need both privacy-preserving rejection and non-overblocking controls."
+  ],
+  "triggerword4_handoff": {
+    "do_not_build_in_trigger5": true,
+    "required_actions": [
+      "Define a typed WorldNeed derived from current GoalContract/Entry/GWT state with max_depth, max_atoms, max_latency_ms, max_compute, uncertainty_target, privacy_scope and causal_scope.",
+      "Implement a tiny local resolver that expands cheap/local atoms/operators first and returns as soon as a declared discriminator/sufficiency condition is met; no whole-world load.",
+      "Implement WorldVariablePolicy + dependency DAG so COMPUTE_OFF becomes NOT_COMPUTED and taints downstream transforms; independently enforce OUTPUT_OFF and MEMORY_OFF/persistence semantics.",
+      "Implement open-set atom/operator retrieval: nearest similarity cannot force a match and repeated self-matches cannot promote confidence.",
+      "Bind operator-confidence promotion to verified observed transitions with exact effect/action and post-observation identity; simulated/predicted transitions receive strictly lower credit.",
+      "Persist provenance, uncertainty, version and rollback/tombstone metadata separately from vector similarity; keep the substrate noncanonical relative to UnifiedDB/effect authority.",
+      "Add a capability-gated world adapter so executor/Voice cannot directly query or mutate the world DB and stale/replayed capabilities fail closed.",
+      "Run the first falsification suite on a tiny synthetic/local substrate: sparse-vs-dense cost/quality, open-set unknown, self-poisoning prevention, COMPUTE_OFF taint, rollback, verified-vs-simulated update credit, stale capability rejection and no-direct-access checks."
+    ]
+  },
+  "credits": {
+    "donor_source_crosscheck": "PASS_AT_EXACT_DONOR_SHA",
+    "architecture_refinement": "SOURCE_GROUNDED",
+    "new_inbox_packet_ingest": 0,
+    "runtime_execution": 0,
+    "provider_runtime": 0,
+    "vps_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "feeds_triggerword_4_boolean": true,
+  "next_exact_gate": "Triggerword-4 build/verification lane, after its current control/identity gates: implement the smallest local WorldNeed->WorldSlice resolver plus policy-taint/open-set/verified-transition falsification suite. Source-only Triggerword-5 evidence grants zero runtime, provider or training credit."
+}

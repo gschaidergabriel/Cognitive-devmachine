@@ -234,7 +234,10 @@ class ControlledGridRuntimeV1:
             computed = cell_runner is not None
             digest = None if error is not None else _digest(candidate)
             emitted = bool(error is None and mode != ControlMode.OUTPUT_OFF and gain >= ignition)
-            memory_eligible = bool(error is None and mode != ControlMode.MEMORY_OFF)
+            # Owner control law: OUTPUT_OFF is local-only diagnostics/regulation and cannot
+            # re-enter downstream cognition through durable memory. Normal memory re-entry is
+            # therefore reserved for ON; MEMORY_OFF also computes/outputs but remains ephemeral.
+            memory_eligible = bool(error is None and mode == ControlMode.ON)
             row = ControlledCellExecution(
                 CELL_SCHEMA,
                 cell,

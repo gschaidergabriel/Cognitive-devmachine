@@ -1,0 +1,87 @@
+{
+  "schema": "TRIGGER4_WP105_AUTHORITY_REENTRY_EXECUTION_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / Triggerword-4 continuation organ",
+  "status": "ADMITTED_8_78_BOUND_NONAUTHORITY_FAIL_CLOSED_COMPONENT_PASS",
+  "canonical_research_repo": "gschaidergabriel/clay-global-research-entity",
+  "research_main_observed_before_write": "14f8091e8b9029f0f7c29818d097845398e82801",
+  "authority_resolution": {
+    "admitted_supervisor_epoch": "8.78",
+    "admitted_supervisor_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "bootstrap_minimal_schema_version": "8.78",
+    "program_state_schema_version": "8.78",
+    "mode": "FREE_ONLY",
+    "newer_research_surface": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AL_DELTA_2026-08-29T0343P0700_GPT56SOL.json",
+    "newer_research_surface_classification": "NON_AUTHORITY_NEEDS_REVIEW",
+    "rule": "Numerical/newer research steering does not become authority unless admitted by the canonical authority stack."
+  },
+  "effect_authority": {
+    "authority": "EffectGate+EffectJournal",
+    "binding_record": "research_entity/continuity/ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_V1.json",
+    "binding_record_commit": "5638204026468b631de5e774e8403d7a6334021e",
+    "implementation_bound_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+    "effect_gate_blob_sha": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+    "effect_journal_blob_sha": "cda63471f1467481f2ff79032d3931730a334a20",
+    "unifieddb_blob_sha": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "authority_change": false
+  },
+  "f2_component_execution": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "source_commit": "1d9e1a1c70bb6100cf08de8e384bde1f89f92bab",
+    "source_commit_message": "trigger4: falsify non-authority attestation dispatch",
+    "workflow": "Frankenstein 2.0 Current EntityOS Effect Authority Binding CI",
+    "workflow_run_id": 33211395285,
+    "job_id": 98985189581,
+    "runner": "GitHub-hosted Ubuntu 24.04 / Python 3.12.14",
+    "conclusion": "success",
+    "observed_matrix_tests": 4,
+    "observed_matrix_result": "PASS",
+    "falsifier": {
+      "test": "test_binding_or_epoch_mismatch_fails_before_dispatch",
+      "nonauthority_shape": {
+        "schema_version": "9.13",
+        "selected_delta": "9.13AL_NON_AUTHORITY",
+        "authority_status": "NON_AUTHORITY",
+        "authority_change": false
+      },
+      "expected_rejection": "AUTHORITY_STATUS_MISMATCH",
+      "result": "PASS",
+      "dispatch_credit": 0,
+      "interpretation": "A NON_AUTHORITY current-epoch attestation cannot be promoted into the current EntityOS effect authority consumer."
+    },
+    "adjacent_regression_results": {
+      "canonical_effect_authority_bridge_tests": 15,
+      "structured_execution_receipt_tests": 12,
+      "execution_completion_tests": 18,
+      "all_pass": true
+    },
+    "scope": "DETERMINISTIC_PUBLIC_REPOSITORY_NO_REAL_EFFECT_COMPONENT_INTEGRATION_ONLY"
+  },
+  "preceding_trigger4_evidence": {
+    "unknown_consumer_ci_pass": true,
+    "unknown_consumer_run_id": 33211070321,
+    "unknown_consumer_job_id": 98984132811,
+    "retained_unknown_donor_pr": "gschaidergabriel/clay-global-research-entity#430",
+    "retained_unknown_donor_private_ci_steps_executed": false,
+    "canonical_post_start_finalization_gap": "OPEN"
+  },
+  "credit_boundary": {
+    "wp105_authority_binding_component_pass": true,
+    "nonauthority_rejection_component_pass": true,
+    "real_external_effect_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_frankenstein2_runtime_credit_added": 0,
+    "whole_entityos_runtime_credit_added": 0,
+    "whole_hcu_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "coordination": {
+    "new_duplicate_pr_created": false,
+    "new_unusual_experiment": false,
+    "provider_model_network_io": false,
+    "paid_fallback": false,
+    "together_used": false
+  },
+  "remaining_high_information_gate": "Preserve the single canonical EffectGate+EffectJournal authority and execute an exact-current canonical post-process-start timeout and ordinary-exception regression on an admitted runner that proves terminal UNKNOWN/nonreplayable plus zero automatic replay until authority-owned verification. The F2 authority-selection and UNKNOWN-consumer contracts are now component-closed; do not rebuild them."
+}

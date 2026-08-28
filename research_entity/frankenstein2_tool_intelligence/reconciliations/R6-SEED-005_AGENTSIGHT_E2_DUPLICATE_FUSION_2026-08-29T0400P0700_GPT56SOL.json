@@ -1,0 +1,47 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RECONCILIATION/v1",
+  "created_at_local": "2026-08-29T04:00:00+07:00",
+  "research_id": "R6-SEED-005",
+  "candidate": "eunomia-bpf/agentsight",
+  "classification": "CONCURRENT_SAME_SOURCE_DUPLICATE_NOT_INDEPENDENT_REPLICATION",
+  "source_pin": "934f441eff8ca210807333633f47b2efcb8cd020",
+  "architecture_snapshot": {
+    "frankenstein2_main": "738df2763bcb89d3d0386eb99cf2ec3c6bf664b5",
+    "research_entity_pre_audit_main": "9d34ad079a59a22ff1469d86b36a0f940c5a5efb"
+  },
+  "deltas": [
+    {
+      "commit": "bbcbe41c3b9b3fc5e434e3ae619640d448aa7b06",
+      "path": "research_entity/frankenstein2_tool_intelligence/deltas/TRIGGER6_R6-SEED-005_AGENTSIGHT_SOURCE_ARCHAEOLOGY_2026-08-29T0356P0700_GPT56SOL.json",
+      "role": "PRIMARY_E2_ARCHITECTURE_DELTA_FUSION",
+      "unique_value": "Exact workpackage mapping, optional-witness integration shape, three-mode ablation framing and source/dependency observations."
+    },
+    {
+      "commit": "437a2e93f63b52a3d07f2b8b2a8080466282f738",
+      "path": "research_entity/frankenstein2_tool_intelligence/deltas/2026-08-29T0356P0700_R6_SEED_005_AGENTSIGHT_SOURCE_ARCHAEOLOGY_GPT56SOL.json",
+      "role": "SUPPLEMENTAL_E2_PRIVACY_AUTHORITY_FENCES",
+      "unique_value": "Explicit plaintext-TLS sensitivity, secret/prompt capture-off-by-default fence, immutable typed F2 causal-ID join requirement, no-second-truth/no-effect-authority fences, and process/file-only cheapest discriminator."
+    }
+  ],
+  "fusion": {
+    "evidence_level": "E2_ARCHITECTURE_MAPPED",
+    "independent_replication_count": 0,
+    "slot_credit": 1,
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "f2_ablation_credit": 0,
+    "build_candidate_credit": 0,
+    "accepted_credit": 0,
+    "canonical_interpretation": "AgentSight is an optional external read-only witness/characterization donor, not a canonical state store, effect authority, completion authority or mandatory F2 runtime dependency.",
+    "preferred_next_test": "Exact-bound three-mode witness ablation: F2-native telemetry only vs AgentSight non-privileged session/report mode vs privileged eBPF mode, with a lower-risk process/file-only eBPF subcase that leaves TLS plaintext capture disabled unless separately justified.",
+    "privacy_fence": "TLS plaintext and prompt/response capture must remain disabled by default for F2 ablation; enable only when a specific discriminator requires it and the active authority admits that sensitive capture surface.",
+    "causal_fence": "No AgentSight observation is accepted as F2 causal/effect evidence unless it is joined to explicit immutable F2 run/session/task/effect identity; correlation by time/process alone is insufficient."
+  },
+  "supersession": {
+    "delete_neither": true,
+    "reason": "Both append-only deltas contain unique evidence-bearing details. Reconciliation prevents double-counting while preserving provenance.",
+    "future_workers_should_treat_as": "ONE_E2_RESEARCH_RESULT_WITH_TWO_COMPLEMENTARY_RECEIPTS"
+  },
+  "next_role": "EXPERIMENTAL_FALSIFIER",
+  "next_exact_action": "Design or execute, only on an admitted surface, the three-mode AgentSight witness ablation and measure incremental event coverage, false positives/misattribution, causal-ID join completeness, CPU/RSS/I/O/latency overhead and whether the core benefit survives with TLS payload capture disabled."
+}

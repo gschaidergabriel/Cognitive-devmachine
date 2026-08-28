@@ -77,11 +77,13 @@ class ControlledGridRuntimeV1Tests(unittest.TestCase):
         self.assertIn("goal", called_cells)
         self.assertTrue(by_cell["goal"].computed)
         self.assertNotIn("goal", gwt_cells)
-        self.assertIn("goal", memory_cells)
+        self.assertNotIn("goal", memory_cells)
+        self.assertFalse(by_cell["goal"].eligible_for_memory_feed)
 
         self.assertIn("epistemic", called_cells)
         self.assertIn("epistemic", gwt_cells)
         self.assertNotIn("epistemic", memory_cells)
+        self.assertFalse(by_cell["epistemic"].eligible_for_memory_feed)
 
         self.assertIn("hypothesis", called_cells)
         self.assertFalse(by_cell["hypothesis"].emitted_to_gwt)

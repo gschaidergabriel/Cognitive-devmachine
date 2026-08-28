@@ -34,6 +34,9 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
     )
     owner = bool(base.get("owner_trigger1_goal_credit_candidate") is True and binding_ok)
     modular = bool(base.get("modular_hcu_jspace_control_candidate") is True and binding_ok)
+    full_native = bool(
+        base.get("full_native_jspace_vector_control_candidate") is True and binding_ok
+    )
 
     failures = sorted(
         set(list(base.get("v7_failures", [])) + list(bound.get("failures", [])))
@@ -52,6 +55,7 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "owner_trigger1_goal_credit_candidate": owner,
         "owner_trigger1_direct_free_api_model_credit_candidate": owner,
         "modular_hcu_jspace_control_candidate": modular,
+        "full_native_jspace_vector_control_candidate": full_native,
         "v8_failures": failures,
         "canonical_credit_minted": False,
         "canonical_semantics_promotion": False,
@@ -61,11 +65,11 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "training_credit": False,
         "evidence_boundary": (
             "v8 composes the complete v7 scientific/evidence chain with exact frozen "
-            "preregistration-to-runtime binding. Positive candidate status requires both "
-            "v7 and plan/runtime binding PASS; plan mutation, identity drift, metric drift, "
-            "unplanned lexical/scenario families, seed drift, prompt reuse, or incomplete "
-            "scenario target/code coverage fail closed. This is adjudication only and "
-            "mints no canonical semantics, runtime, HCU, EntityOS, training, BASE, or effect credit."
+            "preregistration-to-runtime binding. Positive candidate status, including the strongest inherited "
+            "full-native vector-control candidate, requires both the corresponding v7 evidence result and "
+            "plan/runtime binding PASS; plan mutation, identity drift, metric drift, unplanned lexical/scenario "
+            "families, seed drift, prompt reuse, or incomplete scenario target/code coverage fail closed. This is "
+            "adjudication only and mints no canonical semantics, runtime, HCU, EntityOS, training, BASE, or effect credit."
         ),
     }
 
@@ -79,6 +83,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
             "scientifically_independent_vector_candidate": False,
             "owner_trigger1_goal_credit_candidate": False,
             "modular_hcu_jspace_control_candidate": False,
+            "full_native_jspace_vector_control_candidate": False,
             "preregistration_runtime_binding_pass": False,
             "canonical_credit_minted": False,
             "v8_failures": [f"CANDIDATE_FILE_INVALID:{type(exc).__name__}"],
@@ -89,6 +94,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
             "scientifically_independent_vector_candidate": False,
             "owner_trigger1_goal_credit_candidate": False,
             "modular_hcu_jspace_control_candidate": False,
+            "full_native_jspace_vector_control_candidate": False,
             "preregistration_runtime_binding_pass": False,
             "canonical_credit_minted": False,
             "v8_failures": ["CANDIDATE_OBJECT_REQUIRED"],
@@ -113,6 +119,9 @@ def scan_batch(batch_dir: Path) -> dict[str, Any]:
         ),
         "modular_hcu_jspace_control_candidate": any(
             row.get("modular_hcu_jspace_control_candidate") is True for row in verdicts
+        ),
+        "full_native_jspace_vector_control_candidate": any(
+            row.get("full_native_jspace_vector_control_candidate") is True for row in verdicts
         ),
         "preregistration_runtime_binding_pass": any(
             row.get("preregistration_runtime_binding_pass") is True for row in verdicts

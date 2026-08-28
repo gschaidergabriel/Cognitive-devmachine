@@ -149,6 +149,7 @@ class UnifiedCognitiveRuntimeV6:
 
         controlled: ControlledCognitiveCycleResultV2 | None = None
         cognitive_receipt: Mapping[str, Any]
+        reserved_context_overrides: tuple[str, ...] = ()
         if self.inference_fn is None:
             cognitive_receipt = {
                 "schema": "GRID10_CONTROL_BOUND_COGNITIVE_CYCLE_NOT_RUN/v1",
@@ -167,9 +168,22 @@ class UnifiedCognitiveRuntimeV6:
             }
         else:
             context = dict(cognitive_context or {})
-            context.setdefault("tick_id", tick_id)
-            context.setdefault("woken_goal_ids", list(base.woken_goal_ids))
-            context.setdefault("controller_action", next_action)
+            causal_context = {
+                "tick_id": tick_id,
+                "woken_goal_ids": list(base.woken_goal_ids),
+                "controller_action": next_action,
+            }
+            # Caller context is candidate data, not causal identity authority.  Record any
+            # attempted collision, then deterministically bind the reserved fields to the
+            # already-committed V4 cycle so GWT prompts cannot drift onto a foreign tick/action.
+            reserved_context_overrides = tuple(
+                sorted(
+                    key
+                    for key, value in causal_context.items()
+                    if key in context and context[key] != value
+                )
+            )
+            context.update(causal_context)
             controlled = run_control_bound_cognitive_cycle_v2(
                 tick_id=tick_id,
                 assurance_mode=base.heartbeat_result.assurance_mode,
@@ -207,6 +221,7 @@ class UnifiedCognitiveRuntimeV6:
             "v4_control_snapshot_source": base.checkpoint.get("control_snapshot_source"),
             "workspace_ignition_threshold": ignition_threshold,
             "workspace_ignited": workspace_ignited,
+            "reserved_cognitive_context_overrides": list(reserved_context_overrides),
             "controlled_cognitive_cycle_receipt": cognitive_receipt,
             "canonical_truth_minted": False,
             "external_effect_executed": False,

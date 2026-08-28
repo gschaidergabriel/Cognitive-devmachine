@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "receipt_id": "TW5-RECEIPT-20260828T091547Z-REALTIME-TOOL-AUTHORITY-FEEDFORWARD-GPT56SOL",
+  "created_at": "2026-08-28T09:15:47Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/realtime-tool-authority-feedforward",
+  "routing_status": "VERIFIED",
+  "directive": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_ref": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_delta": "f20248b6035b50c05525d5c481c27852e0d14b0c",
+  "delta_commit": "b7745096306b28f7201ad0b72201eb1583042ed5",
+  "canonical_main_observed": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+  "authority_schema": "9.13",
+  "mode": "FREE_ONLY",
+  "provider_routes_admitted": false,
+  "packet_ingest": {
+    "new_unconsumed_packets": 0,
+    "duplicate_consumption": false
+  },
+  "direct_source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "lines": "480-497",
+      "finding": "explicit-user-only research rule exists as model-facing tool policy"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "lines": "521-530",
+      "finding": "neu_anstossen dispatcher checks non-empty question then hands to background bridge; no fresh deterministic user-intent/capability/privacy/economic decision at this boundary"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "lines": "539-545",
+      "finding": "memory-write dispatcher checks subject/value then invokes bounded durable writer; no typed MemoryAdmission at this boundary"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "lines": "832-840",
+      "finding": "research background activity reaches the real chatgpt-senden burst bridge; classified as external submission path source-only"
+    }
+  ],
+  "design_crosscheck": {
+    "path": "research_entity/global/TRIGGERWORD_4_NATIVE_CHILD_EXECUTION_BINDING_AND_POLICY_ENVELOPE_ADDENDUM.md",
+    "finding": "NCX already covers delegated child identity/policy/invocation lineage but does not explicitly carry the new top-level Realtime research/memory admission gates",
+    "feedforward": "RTG-01..RTG-06"
+  },
+  "architecture_change": "Added a distinct RTG_REALTIME_TOOL_AUTHORITY gate family as Triggerword-4 feed-forward: deterministic research request admission, adversarial no-user-request deny, typed MemoryAdmission, misrecognition/third-party provenance handling, and session-control separation. RTG and NCX remain separate but frank_auftrag_stellen crosses both lineages.",
+  "execution": {
+    "provider_external_calls": 0,
+    "vps_runtime_tests": 0,
+    "donor_writes": 0,
+    "source_only": true
+  },
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "realtime_runtime": 0,
+    "native_child_runtime": 0,
+    "provider_path_runtime": 0,
+    "training": 0
+  },
+  "next_exact_action": "Triggerword 4 should materialize RTG as a pure deterministic local admission/dispatcher harness and prove RTG-03/RTG-04/RTG-05 without enabling provider routes; only then bind receipts into Stage-1 executable assembly."
+}

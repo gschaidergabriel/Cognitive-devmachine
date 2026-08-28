@@ -225,7 +225,7 @@
   },
   "payment_latch_durability_scope": {
     "checked_at": "2026-08-28",
-    "claim": "Capability schema 1.7 and execution schema 1.6 explicitly publish payment_latch_scope=process_local. payment_latch_active=true therefore proves only that the current interpreter process retained the provider and budget-epoch hard stop; it makes no restart-durability claim.",
+    "claim": "Capability schema 1.8 and execution schema 1.7 explicitly publish payment_latch_scope=process_local. payment_latch_active=true therefore proves only that the current interpreter process retained the provider and budget-epoch hard stop; it makes no restart-durability claim.",
     "sources": [
       "https://docs.python.org/3/library/threading.html",
       "https://www.freedesktop.org/software/systemd/man/systemd.exec.html",
@@ -407,7 +407,7 @@
   },
   "unicode_database_receipt_provenance": {
     "checked_at": "2026-08-28",
-    "claim": "Every FREE_API_EXECUTION_RECEIPT schema 1.6 record names the exact Unicode Character Database version used by the runtime's semantic-text classifier. A host upgrade cannot silently present version-dependent Cn decisions as equivalent execution provenance.",
+    "claim": "Every FREE_API_EXECUTION_RECEIPT schema 1.7 record names the exact Unicode Character Database version used by the runtime's semantic-text classifier. A host upgrade cannot silently present version-dependent Cn decisions as equivalent execution provenance.",
     "sources": [
       "https://docs.python.org/3/library/unicodedata.html#unicodedata.unidata_version",
       "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/",
@@ -422,16 +422,16 @@
   },
   "receipt_schema_capability_advertisement": {
     "checked_at": "2026-08-28",
-    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.7 advertises both the execution receipt schema version and the active Unicode Character Database version before credential use, network access or model execution. Consumers can reject an unsupported provenance contract during capability inspection instead of discovering it only after execution.",
+    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.8 advertises both the execution receipt schema version and the active Unicode Character Database version before credential use, network access or model execution. Consumers can reject an unsupported provenance contract during capability inspection instead of discovering it only after execution.",
     "sources": [
       "https://docs.python.org/3/library/unicodedata.html#unicodedata.unidata_version",
       "https://www.unicode.org/versions/"
     ],
     "external_evidence": "Python exposes the exact UCD version used by unicodedata. Unicode states that version changes can alter property-dependent program behavior and recommends a full three-field version when precise character-property behavior matters. Advertising the execution schema in the capability record is a local FRANK protocol rule derived from those versioned dependencies, not an external Unicode or NVIDIA requirement.",
-    "internal_measurement": "After execution receipts moved to schema 1.2, the capability receipt remained schema 1.1 and exposed neither the execution_receipt_schema_version nor unicode_database_version. A consumer inspecting only capabilities therefore could not determine the post-execution record contract. Shared schema constants now prevent literal drift, and capability schema 1.7 retains both values from the same runtime that constructs execution receipts.",
+    "internal_measurement": "After execution receipts moved to schema 1.2, the capability receipt remained schema 1.1 and exposed neither the execution_receipt_schema_version nor unicode_database_version. A consumer inspecting only capabilities therefore could not determine the post-execution record contract. Shared schema constants now prevent literal drift, and capability schema 1.8 retains both values from the same runtime that constructs execution receipts.",
     "executable_evidence": "test_capability_receipt_advertises_execution_schema_provenance",
     "counterhypothesis": "Capability and execution receipts are independently versioned, so consumers can infer the execution contract from source code; rejected because capability inspection is the runtime contract, the source or runtime version is absent from that receipt, and a remote consumer need not possess identical source bytes.",
-    "uncertainty": "This is one-way advertisement, not bidirectional negotiation, consumer acknowledgement, host authentication or proof that deployed code matches reviewed source. Older capability consumers must explicitly accept the additive schema-1.7 contract."
+    "uncertainty": "This is one-way advertisement, not bidirectional negotiation, consumer acknowledgement, host authentication or proof that deployed code matches reviewed source. Older capability consumers must explicitly accept the additive schema-1.8 contract."
   },
   "model_availability_capability_scope": {
     "checked_at": "2026-08-28",
@@ -450,7 +450,7 @@
   },
   "provider_route_scope": {
     "checked_at": "2026-08-28",
-    "claim": "A configured route selects only an eligible provider endpoint, not a concrete available model. FREE_API_CAPABILITY_RECEIPT schema 1.7 therefore marks every route with selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
+    "claim": "A configured route selects only an eligible provider endpoint, not a concrete available model. FREE_API_CAPABILITY_RECEIPT schema 1.8 therefore marks every route with selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/latest/api-reference.html",
       "https://docs.api.nvidia.com/nim/reference/models-1",
@@ -464,7 +464,7 @@
   },
   "model_availability_execution_evidence": {
     "checked_at": "2026-08-28",
-    "claim": "FREE_API_EXECUTION_RECEIPT schema 1.6 sets model_availability_verified=true only when the requested model produced a fully typed success response that crossed VERIFIED and DONE. Provider errors, rate limits, pending responses, malformed bodies and transport failures retain false because none proves successful availability of that model.",
+    "claim": "FREE_API_EXECUTION_RECEIPT schema 1.7 sets model_availability_verified=true only when the requested model produced a fully typed success response that crossed VERIFIED and DONE. Provider errors, rate limits, pending responses, malformed bodies and transport failures retain false because none proves successful availability of that model.",
     "sources": [
       "https://build.nvidia.com/openai/gpt-oss-20b",
       "https://docs.nvidia.com/nim/large-language-models/latest/api-reference.html"
@@ -509,21 +509,23 @@
   },
   "credential_cost_principal_binding": {
     "checked_at": "2026-08-28",
-    "claim": "Execution schema 1.5 binds cost_policy_principal_id to the exact validated credential through a domain-separated HMAC-SHA-256 pseudonym. Rotating a credential under the same provider, environment-key name, evidence class and budget epoch changes both cost lineage and request identity without serializing the credential or an unsalted raw-key digest. Receipts explicitly scope this handle as credential_binding rather than a verified provider account identity.",
+    "claim": "Execution schema 1.7 binds cost_policy_principal_id to the exact validated credential through a domain-separated HMAC-SHA-256 pseudonym keyed by a fresh 256-bit process secret. Rotating a credential changes cost lineage without serializing it, while a receipt alone no longer supplies a deterministic offline verifier for guessed credential values. Receipts explicitly scope the handle as process_local_credential_binding rather than a verified provider account identity.",
     "sources": [
       "https://www.rfc-editor.org/info/rfc2104/",
       "https://docs.python.org/3/library/hmac.html",
+      "https://docs.python.org/3/library/secrets.html",
+      "https://pages.nist.gov/800-63-4/sp800-63b.html",
       "research_entity/rooms/rooms/center/events/20260811T105521Z_live_cost_principal_payment_boundary.json"
     ],
-    "external_evidence": "RFC 2104 defines HMAC as a keyed-hash construction whose result depends on a secret key and the authenticated message. Python implements that construction and provides hexadecimal output suitable for non-binary exchange. The repo-native cost-principal research required a host-held opaque handle or keyed pseudonym and explicitly rejected treating provider/key-name identity as billing-account identity.",
-    "internal_measurement": "Two successful deterministic requests used different valid NVIDIA_API_KEY values with identical provider, key-name, endpoint, model, payload, evidence class and budget epoch. Before repair both receipts emitted the same cost_policy_principal_id 3c69966c8622e5d3 and the same request_id. After repair both identifiers differ, cost_policy_principal_scope is credential_binding, and neither raw credential appears in the receipts.",
+    "external_evidence": "RFC 2104 and Python define HMAC with distinct key and message inputs; Python secrets supplies operating-system cryptographic randomness suitable for secret management. NIST requires password verifiers to resist offline guessing; that requirement is analogous threat guidance rather than a direct API-token storage rule. The repo-native cost-principal research required a host-held opaque handle or keyed pseudonym and explicitly rejected treating provider/key-name identity as billing-account identity.",
+    "internal_measurement": "The first repair correctly separated two rotated credentials, but used the credential as HMAC key over a completely public message. A receipt-only test recomputed the exact published cost_policy_principal_id fad403426b45679e from one guessed credential and public context. With a random non-receipted process key, the same public calculation no longer matches; credential rotation still changes lineage, and loading a fresh runtime produces a distinct principal ID for the same credential.",
     "executable_evidence": "test_credential_rotation_changes_cost_principal_lineage_without_exposure",
-    "counterhypothesis": "Provider, credential-variable name and budget epoch are sufficient cost-principal identity because a key rotation preserves authority; falsified because those public labels stayed constant while the actual credential—and potentially its account, project or entitlement—changed undetected.",
-    "uncertainty": "The HMAC handle distinguishes credential bytes but does not prove the provider account, billing principal, project, entitlement, owner or current zero-cost balance behind them. It is a local lineage discriminator, not provider authentication. Credential revocation and restart-durable payment state still require authoritative control-plane evidence."
+    "counterhypothesis": "Using the bearer credential itself as the HMAC key hides it because HMAC is keyed; falsified because the authenticated message and downstream hash input were public, so each guessed credential deterministically reproduced or rejected the receipt value offline.",
+    "uncertainty": "The repaired HMAC handle distinguishes credential bytes only within one process. It intentionally changes after restart and still does not prove provider account, billing principal, project, entitlement, owner or current zero-cost balance. A restart-stable opaque handle requires separate durable host key management and owner-approved state semantics."
   },
   "dual_request_cost_identity": {
     "checked_at": "2026-08-28",
-    "claim": "Execution schema 1.6 separates a credential-independent semantic_request_id from the credential-bound request_id and cost_policy_principal_id. Equal serialized requests to the same provider endpoint retain semantic correlation across credential rotation, while different payloads and different cost authorities retain distinct execution lineage.",
+    "claim": "Execution schema 1.7 separates a credential-independent semantic_request_id from the process-local credential-bound request_id and cost_policy_principal_id. Equal serialized requests to the same provider endpoint retain semantic correlation across credential rotation, while different payloads and different cost authorities retain distinct execution lineage.",
     "sources": [
       "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
       "https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-idempotency-key-header-07",
@@ -1181,13 +1183,13 @@
     "Provider endpoint URLs containing userinfo are rejected before request construction or network access.",
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
-    "Every FREE_API_EXECUTION_RECEIPT schema 1.6 record includes the exact Unicode Character Database version used for General_Category-based semantic admission; version-dependent classification cannot remain implicit provenance.",
-    "Every FREE_API_CAPABILITY_RECEIPT schema 1.7 record advertises the execution receipt schema and active Unicode Character Database version before execution; an unsupported provenance contract can fail during capability inspection.",
+    "Every FREE_API_EXECUTION_RECEIPT schema 1.7 record includes the exact Unicode Character Database version used for General_Category-based semantic admission; version-dependent classification cannot remain implicit provenance.",
+    "Every FREE_API_CAPABILITY_RECEIPT schema 1.8 record advertises the execution receipt schema and active Unicode Character Database version before execution; an unsupported provenance contract can fail during capability inspection.",
     "Provider-level zero-cost endpoint evidence never proves concrete model availability; every unprobed capability inventory row records model_availability_verified=false.",
     "A selected capability route identifies only an eligible provider endpoint; it records selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
     "Execution model availability is verified only by a fully typed success response reaching VERIFIED and DONE; every other outcome records model_availability_verified=false.",
     "Capability inventory, route and every execution receipt explicitly identify payment-latch scope as process_local; an active latch cannot be interpreted as restart-durable enforcement.",
-    "Every execution cost-policy principal is bound to the exact validated credential by a domain-separated HMAC pseudonym; credential rotation changes cost lineage without serializing secret material, while provider account identity remains explicitly unverified.",
+    "Every execution cost-policy principal is bound to the exact validated credential by a process-secret-keyed, domain-separated HMAC pseudonym; receipt-only credential guesses cannot reproduce the handle, restart stability and provider account identity remain explicitly false.",
     "Every execution receipt separates credential-independent semantic request correlation from credential-bound cost and execution lineage; semantic_request_id never authorizes replay or claims provider idempotency.",
     "The serialized UTF-8 text-chat JSON request is at most 2000000 bytes; oversized payloads fail before runtime-environment snapshot, credential lookup or network access, while the exact boundary remains accepted.",
     "Every Chat Completions request explicitly sets max_tokens to 4096, bounding the combined reasoning and visible generation budget; finish_reason length remains unverified and requires changed input or budget rather than blind replay.",

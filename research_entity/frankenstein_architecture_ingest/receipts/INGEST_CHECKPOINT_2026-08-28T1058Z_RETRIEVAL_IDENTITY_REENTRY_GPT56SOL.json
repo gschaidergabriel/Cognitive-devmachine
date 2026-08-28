@@ -1,0 +1,68 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "created_at": "2026-08-28T10:58:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "routing_self_test": "PASS",
+  "canonical_main": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_observed_before_checkpoint": "27b751eaaf60de0782d484c5ac9692b3db9b7d16",
+  "authority": {
+    "execution_authority_surface": "BOOTSTRAP_MINIMAL/SUPERVISOR_8_78_UNCHANGED",
+    "current_forensic_steering_delta": "9.13AC_NON_AUTHORITY",
+    "authority_change_from_9_13AC": false,
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "runtime_credit": 0
+  },
+  "ingested_frontier": {
+    "packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105532Z_5641dc6_GPT56SOL_RETRIEVAL_IDENTITY_BINDING.json",
+    "packet_commit": "c06aab6bae35f1282487d92820dba37448687474",
+    "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T105532Z_RETRIEVAL_IDENTITY_BINDING_GPT56SOL.json",
+    "architecture_delta_commit": "dc06706b74cc5caaded4920f38e7cbea9d8abd10",
+    "ingest_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T105532Z_RETRIEVAL_IDENTITY_BINDING_GPT56SOL.json",
+    "provenance_correction": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_EVIDENCE_CORRECTION_2026-08-28T1058Z_RETRIEVAL_IDENTITY_CANONICAL_SHA_GPT56SOL.json",
+    "provenance_correction_commit": "27b751eaaf60de0782d484c5ac9692b3db9b7d16"
+  },
+  "source_scope_result": {
+    "status": "PASS_WITH_PROVENANCE_CORRECTION",
+    "finding": "The donor already has a native exact retrieval_id plus turn/episode/causal/generation provenance tuple, but automatic Stop model relevance targets newest unjudged retrieval by session/time and reconstructs the judged query from the transcript latest user message. Exact identity exists; the causal join is dropped at the Stop/deferred-cognition boundary.",
+    "query_binding_refinement": "retrieval_episodes stores query_hash, but the automatic model-judge path does not compare the judged transcript query digest against that stored query_hash before applying credit.",
+    "receipt_refinement": "_apply_credit becomes deterministic only after row selection; its receipt identity does not itself prove that the selected row and model-judged query were paired correctly.",
+    "runtime_misattachment_observed": false
+  },
+  "frankenstein_2_handoff": {
+    "primitive": "RetrievalJudgementIdentityBinding/v1",
+    "reuse": "native retrieval_id/turn_id/episode_id/causal_id/generation; deterministic reducer/idempotence",
+    "repair": "carry exact native identity plus immutable query identity across deferred GRID/local cognition and reject mismatches before any policy/feedback write",
+    "degraded_only": "session newest-row plus transcript-last-message reassociation",
+    "acceptance_tests": [
+      "two same-session retrievals complete model relevance in reverse order and each result attaches only to its original retrieval_id",
+      "judged query digest must match retrieval-producing query_hash",
+      "stale/mismatched generation/turn/episode/causal identity produces zero feedback/policy writes",
+      "slow/unavailable cognition cannot prevent deterministic Stop bookkeeping completion"
+    ]
+  },
+  "shared_ingest_state": {
+    "path": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "observed_blob_sha": "e6f8b682d97d6172c600f8f98f249b3ef19159d7",
+    "observed_last_ingest_at": "2026-08-28T10:48:00Z",
+    "status": "SYNC_PENDING",
+    "reason": "The shared state remained behind multiple concurrently appended Triggerword-5 deltas/receipts during this cycle. This checkpoint is append-only and does not overwrite the shared state from a stale base; next integrator should reconcile all post-10:48 commits in provenance order before one atomic state advance."
+  },
+  "credit": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "runtime": 0,
+    "provider": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4/external non-provider test lane: implement exact native retrieval-id/query-digest propagation and run reverse-order SameSessionRetrievalCreditBinding plus mismatch-generation/query rejection; do not modify Frank Harness."
+}

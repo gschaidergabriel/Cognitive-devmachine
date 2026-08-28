@@ -1,0 +1,61 @@
+{
+  "schema": "TRIGGERWORD4_EFFECT_INVOCATION_INTERLEAVING_FALSIFIER_SOURCE/v1",
+  "trigger": "triggerwort 4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation",
+  "supervisor_epoch": "9.13",
+  "supervisor_delta": "9.13AF_NON_AUTHORITY",
+  "authority_change": false,
+  "canonical_main_observed": "2d45c692e47b27e7a20d8ba7b3db6e82ca2ee3ca",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "source_commit": "b2de80412231cc9ac6c1031235e9e9032d4c2c80",
+  "source_commit_is_ancestor_of_later_observed_branch_head": "8ddb484b942acd9121a2cff5fce3d315f43d755b",
+  "test_path": "tests/test_frankenstein2_effect_lifecycle_completion_v2.py",
+  "test_blob_sha": "34aa2a1355aea290b1fd9ee97d16026e7ad77f26",
+  "implementation_path": "tools/frankenstein2_effect_lifecycle_v1.py",
+  "implementation_blob_sha_observed": "b127f2a35052ca4ab35593d1bbc4b45accbd9f13",
+  "finding": {
+    "class": "SAME_SESSION_CALL_SCOPED_INVOCATION_FALSIFIER_SOURCE_ADDED",
+    "supervisor_gap_addressed": "P1_MUTABLE_SESSION_EFFECT_ID_STRUCTURAL_GAP",
+    "falsifier": "Create two distinct tool-use invocations in the same session, interleave admission/enforcement/submission/execution order, intentionally attempt to re-enter result-B into tool-use-A, require RESULT_REENTRY_DIGEST_MISMATCH with no A reentry row, then re-enter each exact result and require independent Completion-V2 closure.",
+    "source_basis": [
+      "effect_requests uses invocation_id as primary key",
+      "record_execution is selected by invocation_id",
+      "reenter_result selects the execution result by the same invocation_id and rejects a mismatched result digest",
+      "Completion-V2 rebinds invocation, request, generation, source, execution, world and reentry lineage before completion evidence can be minted"
+    ]
+  },
+  "execution_observation": {
+    "github_actions_run_id": 33173731597,
+    "head_sha": "b2de80412231cc9ac6c1031235e9e9032d4c2c80",
+    "workflow": "GRID10 Cognitive Envelope CI",
+    "status": "completed",
+    "conclusion": "failure",
+    "job_id": 98856930127,
+    "executed_steps": 0,
+    "classification": "INFRASTRUCTURE_OR_RUNNER_START_FAILURE_BEFORE_TEST_SEMANTICS",
+    "test_semantic_result": "NOT_OBSERVED"
+  },
+  "credit": {
+    "source_falsifier": "PRESENT",
+    "repository_bound_test_pass": false,
+    "frankenstein_effect_invocation_runtime_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "coordination": {
+    "issue_2122_duplicate_trigger_authorized": false,
+    "issue_2121_duplicate_trigger_authorized": false,
+    "generation_advance_authorized_while_terminal_results_absent": false
+  },
+  "frankenstein_donor_sha_observed": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "next_exact_gate": "Execute the exact committed same-session two-call falsifier on an admitted repository-bound non-provider surface once execution infrastructure is available; if it passes, grant only effect-invocation correlation component credit and then bind the same call-scoped identity to the real Frankenstein PreToolUse/PostToolUse boundary before any runtime causal promotion.",
+  "evidence_boundaries": [
+    "source inspection is not runtime execution",
+    "a zero-step GitHub Actions failure is not a test failure",
+    "this test does not prove donor Frankenstein hook integration",
+    "this test does not prove pre-side-effect enforcement",
+    "component evidence does not imply Frankenstein-2.0, Physical-GRID10, HCU or EntityOS acceptance"
+  ]
+}

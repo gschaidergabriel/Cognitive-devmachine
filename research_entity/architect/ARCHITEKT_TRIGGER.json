@@ -1,0 +1,44 @@
+{
+  "schema": "ARCHITEKT_TRIGGER/v1",
+  "aliases": ["architekt", "triggerwort architekt", "triggerword architekt"],
+  "matching": "trimmed_full_message_case_insensitive_exact",
+  "kind": "persistent_federated_cognitive_development_interface",
+  "continuation": true,
+  "idempotent_resume": true,
+  "dedicated_unifieddb": "research_entity/architect/architect.sqlite",
+  "state": "research_entity/architect/ARCHITECT_STATE.json",
+  "contract": "research_entity/architect/ARCHITEKT_CONTRACT.md",
+  "schema_contract": "research_entity/architect/ARCHITECT_UNIFIEDDB_SCHEMA.json",
+  "bootstrap": "tools/bootstrap_architect_unifieddb.py",
+  "context_compiler": "tools/architect_context_compiler.py",
+  "federation_mode": "SEPARATE_STATE_SHARED_DIRECTION",
+  "refresh_before_current_claims": true,
+  "direction_sources": [
+    "explicit owner intent",
+    "gschaidergabriel/frankenstein-2.0",
+    "gschaidergabriel/clay-global-research-entity",
+    "gschaidergabriel/Dr.-Unterweger",
+    "Triggerword-4 worker/test state",
+    "Triggerword-5 donor-forensic state"
+  ],
+  "resume_sequence": [
+    "LOAD_STATE",
+    "ENSURE_ARCHITECT_DB",
+    "REFRESH_EXTERNAL_HEADS",
+    "INGEST_NEW_OBSERVATIONS",
+    "RECONCILE_DIRECTION_BINDINGS",
+    "PRESERVE_CONTRADICTIONS",
+    "COMPILE_CONTEXT",
+    "RESUME_HIGHEST_VALUE_GOAL",
+    "DIRECT_OR_DELEGATE",
+    "RECORD_EPISODE_DECISIONS_HYPOTHESES_METHODS",
+    "CHECKPOINT"
+  ],
+  "invariants": [
+    "NEW_SESSION != NEW_ARCHITECT",
+    "SEPARATE_DB != SEPARATE_PROJECT",
+    "ARCHITECT_MEMORY != PROJECT_CANONICAL_TRUTH",
+    "ARCHITECT_DIRECTION_BINDING != DATA_COPY",
+    "STALE_EXTERNAL_STATE_MUST_BE_REFRESHED_BEFORE CURRENT CLAIMS"
+  ]
+}

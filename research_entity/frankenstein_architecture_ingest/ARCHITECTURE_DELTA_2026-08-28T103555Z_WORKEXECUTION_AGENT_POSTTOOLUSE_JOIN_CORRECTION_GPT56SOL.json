@@ -1,0 +1,78 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T10:35:55Z",
+  "trigger": "triggerwort 5",
+  "lane": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_LIVE_INGEST",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_observed_before_successor": "e9874eedd559d19962a5866f64734af42ae9d4aa",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority_epoch": "9.13",
+  "mode": "FREE_ONLY",
+  "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+  "source_packet": {
+    "packet_id": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T103555Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_V2.json",
+    "supersedes_packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "status": "INGESTED_BY_THIS_DELTA_SCHEMA_VALID"
+  },
+  "supersedes_or_corrects": [
+    "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1036Z_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_PACKET_QUARANTINE_GPT56SOL.json#TW5-DELTA-1036-005-TOOLUSE-AGENT-JOIN-OPEN"
+  ],
+  "material_correction": {
+    "previous_claim": "tool_use_id -> agent_id remained undocumented/open because PostToolUse and SubagentStart exposed different event-local fields",
+    "current_external_primary_evidence": [
+      "Claude Code hooks reference: PostToolUse input includes tool_use_id plus tool_response.",
+      "Claude Code hooks reference: Agent PostToolUse tool_response explicitly contains agentId for completed and async_launched Agent calls.",
+      "Claude Code hooks reference: SubagentStart/SubagentStop expose agent_id; TaskCreated/TaskCompleted expose task_id as a separate task-system identity."
+    ],
+    "corrected_claim": "On the documented successful Agent PostToolUse ABI, tool_use_id and tool_response.agentId are co-present, so tool_use_id -> agent_id is directly joinable without timing/order inference. This is capability/documentation evidence only until the installed target host payload is observed.",
+    "confidence": 0.99
+  },
+  "work_execution_binding_v1": {
+    "identity_domains": {
+      "paket_id": "durable delegated-work identity from stern.py handoff",
+      "tool_use_id": "call-scoped Agent invocation identity",
+      "agent_id": "native subagent-run identity, documented as tool_response.agentId / lifecycle agent_id",
+      "task_id": "optional independent TaskCreate/TaskUpdate task-system identity"
+    },
+    "verified_or_documented_edges": [
+      "Agent PostToolUse: tool_use_id -> tool_response.agentId",
+      "SubagentStart/SubagentStop: agent_id -> child lifecycle",
+      "TaskCreated/TaskCompleted: task_id -> task lifecycle only"
+    ],
+    "remaining_open_edge": "paket_id -> tool_use_id",
+    "required_successor_behavior": [
+      "Create a deterministic package-to-Agent-call binding before or at Agent invocation; never infer it from time, order or semantic similarity.",
+      "Persist tool_use_id and agent_id as distinct fields; do not collapse them.",
+      "Keep task_id optional/UNKNOWN unless TaskCreate/TaskUpdate is actually part of the path.",
+      "Add or equivalently capture native child lifecycle if cancellation, completion and child provenance need stronger evidence than Agent PostToolUse alone.",
+      "Installed-host runtime capture remains required before runtime credit."
+    ]
+  },
+  "donor_crosscheck": {
+    "handoff_not_spawn": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py@5641dc6 lines 5680-5765",
+    "versioned_hooks_missing_child_lifecycle": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json@5641dc6 lines 1-81",
+    "governance_sequence": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md@5641dc6 lines 77-81"
+  },
+  "sparse_world_substrate_implication": "Execution/workpackage/agent identities and outcome provenance stay exact typed metadata outside vector/world-slice similarity. WorldSlice or Xeno maintenance may reference these IDs but cannot mint execution success, canonical truth or effect authority.",
+  "contradictions_preserved": [
+    "Donor SPEC says handoff -> spawn -> reconcile, while LIVE_CODE handoff explicitly does not spawn and donor CONFIG lacks child lifecycle hooks.",
+    "The immediately prior quarantine delta correctly quarantined the malformed packet but its 'tool_use_id -> agent_id open' external-doc interpretation is superseded by the current official Agent tool_response schema.",
+    "Official documentation establishes a capability ABI, not proof that the target installed host/version/config emits the same payload."
+  ],
+  "trigger4_feed": [
+    "Do not implement a synthetic tool_use_id-to-agent_id correlator; current documented Agent PostToolUse already provides agentId in the same event.",
+    "Spend implementation effort on the actual residual gap: deterministic paket_id -> tool_use_id binding, then persist tool_use_id -> agent_id from PostToolUse.",
+    "Optionally capture SubagentStart/SubagentStop for lifecycle/cancellation/completion evidence; do not force task_id into ordinary Agent paths.",
+    "Verify the installed host with one harmless Agent invocation before claiming runtime reachability or child-provenance PASS."
+  ],
+  "credits": {
+    "runtime": 0,
+    "provider": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

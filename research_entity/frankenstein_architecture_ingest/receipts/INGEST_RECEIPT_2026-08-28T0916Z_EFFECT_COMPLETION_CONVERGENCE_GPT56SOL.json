@@ -1,0 +1,98 @@
+{
+  "schema": "TRIGGERWORD5_REENTRY_CONVERGENCE_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/reentry-convergence",
+  "created_at": "2026-08-28T09:16:06Z",
+  "authority_epoch": "9.13",
+  "canonical_main_observed": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_observed_before_write": "97e53d406c896735bc960c06fb4d637bacf9f5ff",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "routing_self_test": {
+    "normalized_message": "triggerwort 5",
+    "directive_fetched": true,
+    "result": "PASS"
+  },
+  "packet_ingest": {
+    "new_unconsumed_packets_found_on_inspected_branch": 0,
+    "duplicate_packet_consumption_performed": false,
+    "newest_seen_packet": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "newest_seen_packet_already_consumed": true
+  },
+  "moving_head_reentry": {
+    "initial_design_head_seen_this_run": "13e9e76a9758e3295d07cb8f10c3a82538dc79f9",
+    "later_design_head_seen_this_run": "97e53d406c896735bc960c06fb4d637bacf9f5ff",
+    "parallel_delta_detected": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091311Z_EFFECT_COMPLETION_AUTHORITY_REBIND_GPT56SOL.json",
+    "parallel_delta_status": "SOURCE_GROUNDED_CURRENT_AUTHORITY_RUNTIME_CREDIT_ZERO",
+    "duplicate_architecture_delta_created": false
+  },
+  "independent_crosscheck": [
+    {
+      "source_kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3145,
+      "line_end": 3167,
+      "finding": "Pinned donor explicitly states that its named EffectGate never blocks a tool and that PreToolUse emits no deny/block decision; this path is bookkeeping, not containment.",
+      "converges_with_parallel_delta": true
+    },
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3260,
+      "line_end": 3415,
+      "finding": "zulassen creates a fresh effect_id and stores it in active_turns.effect_id selected only by session_id, establishing a mutable session-scoped correlation pointer.",
+      "converges_with_parallel_delta": true
+    },
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3468,
+      "line_end": 3578,
+      "finding": "merken/PostToolUse reads active_turns.effect_id by session_id and updates the resulting effect row, so exact call identity is not the sole correlation key.",
+      "converges_with_parallel_delta": true
+    },
+    {
+      "source_kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 5780,
+      "line_end": 5895,
+      "finding": "_beleg_pruefen accepts effect evidence unless status is exactly legacy lowercase 'fehler', and accepts textual test evidence when the asserted exit-code token is '0'; typed successful execution receipt binding is absent.",
+      "converges_with_parallel_delta": true
+    }
+  ],
+  "external_primary_crosscheck": {
+    "source": "https://code.claude.com/docs/en/hooks",
+    "finding": "Current Claude Code hook reference exposes call-scoped tool_use_id on PreToolUse and PostToolUse, and PreToolUse can deny before execution. The Agent SDK hook reference describes tool_use_id as the correlation identity for the same tool call.",
+    "design_consequence": "Frankenstein 2.0 effect lineage must bind the lifecycle to tool_use_id or an equally exact immutable invocation_id rather than a mutable session-wide current-effect pointer."
+  },
+  "architecture_result": {
+    "new_architecture_delta_needed": false,
+    "reason": "A parallel worker landed the same source-grounded effect/completion contract under current authority while this run was cross-checking it; creating another semantic authority would be duplication.",
+    "accepted_feed": "ARCHITECTURE_DELTA_2026-08-28T091311Z_EFFECT_COMPLETION_AUTHORITY_REBIND_GPT56SOL.json",
+    "trigger4_feed": "KEEP the landed current-authority contract: per-invocation identity, real pre-side-effect enforcement, typed completion receipts, and execution-vs-world-effect separation."
+  },
+  "contradictions_preserved": [
+    "The donor calls the mechanism EffectGate while its own source states it does not block tools.",
+    "Completion evidence is described as mechanically checked while effect status acceptance is broader than successful current statuses and test:0 is an unbound assertion.",
+    "The donor names an older global wache-koenig.py as blocking authority, but that installed host artifact is outside the pinned donor snapshot used for this source crosscheck and has no runtime/enforcement credit here."
+  ],
+  "next_exact_gates": [
+    "Bind the actually loaded host-global blocking guard/settings identity or preserve the enforcement provenance hole explicitly.",
+    "Run the admitted exact installed-runtime same-session two-mutating-call interleaving falsifier and bind Pre/Post events by tool_use_id; source inspection alone cannot establish whether pointer collapse is reachable.",
+    "Exercise a typed completion-receipt adversarial suite where DENIED, FAILED, UNCHECKED, UNKNOWN, stale, duplicate-unresolved, forged test:0 and receipt transplantation all fail closed."
+  ],
+  "credits": {
+    "source_crosscheck": "PASS",
+    "external_primary_crosscheck": "PASS",
+    "packet_ingest_delta": 0,
+    "runtime_reexecution": 0,
+    "effect_enforcement_runtime": 0,
+    "completion_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  }
+}

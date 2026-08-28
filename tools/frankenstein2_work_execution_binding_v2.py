@@ -80,6 +80,88 @@ class WorkExecutionLedger(v1.WorkExecutionLedger):
         self.db_path = Path(db_path)
         init_hardened_schema(self.db_path)
 
+    def record_invocation(
+        self,
+        *,
+        binding_id: str,
+        invocation_id: str,
+        invocation_kind: str,
+        request: Mapping[str, Any],
+        native_tool_use_id: str | None = None,
+        started_at: float | None = None,
+    ) -> str:
+        """Record a new invocation without reopening an UNKNOWN_OUTCOME binding.
+
+        UNKNOWN is intentionally sticky at this layer: a caller may not turn an
+        uncertain external result into an implicit retry merely by recording another
+        invocation on the same binding/generation.  Eventual reconciliation must happen
+        through an explicit evidence-bearing successor path, or through a new binding
+        whose lineage is separately justified.
+        """
+        binding_id = v1._require_text("binding_id", binding_id)
+        invocation_id = v1._require_text("invocation_id", invocation_id)
+        invocation_kind = v1._require_text("invocation_kind", invocation_kind)
+        request_digest = v1._digest(dict(request))
+
+        con = v1._connect(self.db_path)
+        try:
+            con.execute("BEGIN IMMEDIATE")
+            row = con.execute(
+                "SELECT status FROM fr2_work_execution_bindings WHERE binding_id=?",
+                (binding_id,),
+            ).fetchone()
+            if row is None:
+                raise ValueError("unknown binding_id")
+            status = str(row["status"])
+            if status in TERMINAL_BINDING_STATES:
+                raise ValueError(f"binding is terminal: {status}")
+            if status == "UNKNOWN_OUTCOME":
+                raise ValueError("UNKNOWN_OUTCOME_REQUIRES_RECONCILIATION")
+
+            con.execute(
+                """INSERT INTO fr2_work_invocations
+                   (invocation_id,binding_id,invocation_kind,native_tool_use_id,request_digest,started_at)
+                   VALUES(?,?,?,?,?,?)""",
+                (
+                    invocation_id,
+                    binding_id,
+                    invocation_kind,
+                    native_tool_use_id,
+                    request_digest,
+                    float(started_at if started_at is not None else time.time()),
+                ),
+            )
+            cur = con.execute(
+                """UPDATE fr2_work_execution_bindings
+                   SET status='RUNNING'
+                   WHERE binding_id=? AND status NOT IN ('COMPLETED','ABANDONED','UNKNOWN_OUTCOME')""",
+                (binding_id,),
+            )
+            if cur.rowcount != 1:
+                raise ValueError("INVOCATION_BINDING_STATUS_CAS_FAILED")
+            v1._append_event(
+                con,
+                binding_id,
+                "INVOCATION_OBSERVED",
+                {
+                    "invocation_id": invocation_id,
+                    "invocation_kind": invocation_kind,
+                    "native_tool_use_id": native_tool_use_id,
+                    "request_digest": request_digest,
+                    "binding_schema": SCHEMA,
+                },
+            )
+            con.execute("COMMIT")
+            return request_digest
+        except Exception:
+            try:
+                con.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
+            raise
+        finally:
+            con.close()
+
     def record_result(
         self,
         *,

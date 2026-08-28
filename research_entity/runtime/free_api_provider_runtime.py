@@ -27,13 +27,23 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.9"
-EXECUTION_RECEIPT_SCHEMA_VERSION = "1.7"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.10"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.8"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
 PAYMENT_LATCH_SCOPE = "process_local"
 COST_POLICY_PRINCIPAL_SCOPE = "process_local_credential_binding"
 _PROCESS_COST_PRINCIPAL_KEY = secrets.token_bytes(32)
+COST_POLICY_PRINCIPAL_FORK_ISOLATED = hasattr(os, "register_at_fork")
+
+
+def _reseed_cost_principal_key_after_fork() -> None:
+    global _PROCESS_COST_PRINCIPAL_KEY
+    _PROCESS_COST_PRINCIPAL_KEY = secrets.token_bytes(32)
+
+
+if COST_POLICY_PRINCIPAL_FORK_ISOLATED:
+    os.register_at_fork(after_in_child=_reseed_cost_principal_key_after_fork)
 MAX_PROVIDER_REQUEST_BYTES = 2_000_000
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_OUTPUT_TOKENS = 4_096
@@ -463,6 +473,9 @@ def receipt() -> dict:
             COST_POLICY_PRINCIPAL_SCOPE
         ),
         "execution_cost_policy_principal_restart_stable": False,
+        "execution_cost_policy_principal_fork_isolated": (
+            COST_POLICY_PRINCIPAL_FORK_ISOLATED
+        ),
         "unicode_database_version": UNICODE_DATABASE_VERSION,
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "inventory": rows,
@@ -1490,6 +1503,9 @@ def _execute_chat_locked(
         "endpoint_capability_id": endpoint_capability_id,
         "cost_policy_principal_id": cost_policy_principal_id,
         "cost_policy_principal_scope": COST_POLICY_PRINCIPAL_SCOPE,
+        "cost_policy_principal_fork_isolated": (
+            COST_POLICY_PRINCIPAL_FORK_ISOLATED
+        ),
         "budget_epoch_id": _budget_epoch_id(env),
         "semantic_request_id": semantic_request_id,
         "request_id": request_id,

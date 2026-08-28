@@ -203,6 +203,18 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(capability_receipt["route"]["selected"], "nvidia")
         self.assertEqual(environment_reads, ["NVIDIA_API_KEY"])
 
+    def test_capability_receipt_advertises_execution_schema_provenance(self):
+        capability_receipt = MOD.receipt()
+
+        self.assertEqual(capability_receipt["schema_version"], "1.2")
+        self.assertEqual(
+            capability_receipt["execution_receipt_schema_version"], "1.2"
+        )
+        self.assertEqual(
+            capability_receipt["unicode_database_version"],
+            MOD.unicodedata.unidata_version,
+        )
+
     def test_execution_receipt_pins_unicode_database_version(self):
         class Response:
             status = 200

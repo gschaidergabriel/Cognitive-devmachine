@@ -1,0 +1,50 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_COORDINATION_REPAIR/v1",
+  "trigger": "6",
+  "created_at_local": "2026-08-29T04:02:00+07:00",
+  "classification": "TRIGGER6_SAME_OBJECTIVE_FANOUT_STAMPEDE",
+  "status": "SOURCE_COORDINATION_REPAIR_COMMITTED_NO_RESEARCH_PROMOTION",
+  "research_id": "R6-SEED-005",
+  "claim_target": "E2_ARCHITECTURE_MAPPED",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "candidate": "eunomia-bpf/agentsight",
+  "source_pin": "934f441eff8ca210807333633f47b2efcb8cd020",
+  "observed_concurrent_same_objective_receipts": [
+    "bbcbe41c3b9b3fc5e434e3ae619640d448aa7b06",
+    "437a2e93f63b52a3d07f2b8b2a8080466282f738",
+    "30f0b2475400ceb3272ebb47e8115069bdae64ba",
+    "5730a25eeb395c742b32c1ca510b9829b3819be5"
+  ],
+  "prior_partial_reconciliation": "7f9aab7454a886b142504990ccca98434fa8e46b",
+  "finding": "At least four source-grounded workers produced the same R6-SEED-005 SOURCE_ARCHAEOLOGIST E2 objective against the same AgentSight source pin and substantially the same F2/Research-Entity architecture snapshot. The receipts contain complementary details but do not constitute four independent replications. The protocol previously said each invocation 'claims' a slot but exposed no atomic pre-work claim primitive, while the canonical Pending Research DB worker-cycle claim path was not being used as a cross-worker atomic mutex. This permitted fan-out duplication.",
+  "counterhypothesis": "The duplication could be harmless intentional independent review. Rejected for credit/accounting at this stage because the workers shared the same seed, source pin, role, architecture context and evidence objective, and none declared a pre-registered independent-replication design or distinct falsifier.",
+  "credit_resolution": {
+    "e2_research_results": 1,
+    "independent_replication_count": 0,
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "f2_ablation_credit": 0,
+    "build_candidate_credit": 0,
+    "accepted_credit": 0,
+    "preserve_all_receipts": true
+  },
+  "repair": {
+    "canonical_mutex_repository": "gschaidergabriel/frankenstein-2.0",
+    "claim_law_commit": "1597eace81a6fdec04bf4006b1725e18f9a4b66a",
+    "closed_e2_claim_commit": "7cfdb5d1a2db589ad087d65441acba459fd4ed2a",
+    "trigger6_protocol_commit": "5a6673ba4774d3089ca33f7ebf5bdcd4dd308fa6",
+    "research_entity_protocol_mirror_commit": "2ba16e72f78aeaf84cc537c57d45077960cab394",
+    "canonical_claim_path": "research/tool_intelligence/claims/R6-SEED-005/E2_ARCHITECTURE_MAPPED.json",
+    "law": "CREATE_ONLY_OBJECTIVE_CLAIM_BEFORE_MATERIAL_WORK; EXISTING_OR_UNPROVABLE_CREATE_ONLY_CLAIM_BLOCKS_DUPLICATE_OBJECTIVE; CLAIM_EXISTENCE_MINTS_ZERO_RESEARCH_CREDIT",
+    "split_brain_fence": "F2 is the only claim mutex authority. Research-Entity can mirror successful F2 claims as provenance but cannot originate a competing claim lock."
+  },
+  "db_boundary": {
+    "pending_research_sqlite": "CANONICAL_TRIGGER6_RESEARCH_DB",
+    "claim_files": "COORDINATION_MUTEX_AND_AUDIT_ONLY",
+    "unifieddb": "CANONICAL_FRANKENSTEIN_STATE_AUTHORITY",
+    "research_entity_private_actions_pre_step": "UNRESOLVED_CONTROL_PLANE_BLOCKER",
+    "db_mirror_runtime_credit": 0,
+    "reconciliation_required": "Synchronize the claim/result into the admitted Pending Research DB path when available; never treat the mutex files as a second research truth store."
+  },
+  "next_exact_action": "On the next Trigger-6 invocation, refresh both repos, read the canonical claim law, and atomically claim a different unclaimed bounded objective before material work. R6-SEED-005 E2 is closed; its next legitimate stage is a specifically claimed E3/E4 falsifier on an admitted execution surface, otherwise select another seed/slot."
+}

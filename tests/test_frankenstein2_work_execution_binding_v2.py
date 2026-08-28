@@ -3,8 +3,8 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 import sqlite3
-
-import pytest
+import tempfile
+import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,160 +33,155 @@ def _count(db_path: Path, table: str, where: str = "1=1", args: tuple[object, ..
     return int(_row(db_path, f"SELECT COUNT(*) AS n FROM {table} WHERE {where}", args)["n"])
 
 
-def _bind(ledger, binding: str = "b1") -> None:
-    ledger.bind_child(
-        binding_id=binding,
-        workpackage_id="wp1",
-        work_generation="g1",
-        child_runtime_kind="TEST_NATIVE_CHILD",
-        child_execution_id="child-1",
-        identity_provenance="deterministic-test-fixture",
-    )
+class WorkExecutionBindingV2Tests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.td = tempfile.TemporaryDirectory()
+        self.db = Path(self.td.name) / "binding.sqlite3"
+        self.ledger = WorkExecutionLedger(self.db)
+
+    def tearDown(self) -> None:
+        self.td.cleanup()
+
+    def _bind(self, ledger=None, binding: str = "b1") -> None:
+        ledger = ledger or self.ledger
+        ledger.bind_child(
+            binding_id=binding,
+            workpackage_id="wp1",
+            work_generation="g1",
+            child_runtime_kind="TEST_NATIVE_CHILD",
+            child_execution_id="child-1",
+            identity_provenance="deterministic-test-fixture",
+        )
+
+    def _invoke(self, invocation: str, ledger=None, binding: str = "b1") -> None:
+        ledger = ledger or self.ledger
+        ledger.record_invocation(
+            binding_id=binding,
+            invocation_id=invocation,
+            invocation_kind="TEST_CALL",
+            request={"binding": binding, "invocation": invocation},
+        )
+
+    def _result(
+        self,
+        invocation: str,
+        result: str,
+        outcome: str = "SUCCESS",
+        ledger=None,
+        binding: str = "b1",
+    ) -> None:
+        ledger = ledger or self.ledger
+        ledger.record_result(
+            result_id=result,
+            binding_id=binding,
+            invocation_id=invocation,
+            outcome=outcome,
+            result={"result_id": result, "outcome": outcome},
+            result_provenance="deterministic-test-fixture",
+        )
+
+    def _complete(
+        self,
+        invocation: str,
+        result: str,
+        completion: str = "c1",
+        ledger=None,
+        binding: str = "b1",
+    ) -> str:
+        ledger = ledger or self.ledger
+        return ledger.verify_completion(
+            completion_id=completion,
+            binding_id=binding,
+            invocation_id=invocation,
+            result_id=result,
+            expected_work_generation="g1",
+            evidence_kind="DETERMINISTIC_TEST_RECEIPT",
+            evidence_ref=f"fixture://{completion}",
+            evidence_payload={"verified": True, "binding": binding, "result": result},
+        )
+
+    def test_completion_fails_closed_while_any_invocation_is_unresolved(self) -> None:
+        self._bind()
+        self._invoke("inv-1")
+        self._invoke("inv-2")
+        self._result("inv-1", "r1")
+        with self.assertRaisesRegex(ValueError, "UNRESOLVED_INVOCATIONS:1"):
+            self._complete("inv-1", "r1")
+        self.assertEqual(_count(self.db, "fr2_completion_evidence"), 0)
+        self.assertEqual(
+            _row(self.db, "SELECT status FROM fr2_work_execution_bindings WHERE binding_id='b1'")["status"],
+            "RESULT_OBSERVED",
+        )
+
+    def test_completion_succeeds_after_all_invocations_are_resolved(self) -> None:
+        self._bind()
+        self._invoke("inv-1")
+        self._invoke("inv-2")
+        self._result("inv-1", "r1")
+        self._result("inv-2", "r2")
+        digest = self._complete("inv-2", "r2")
+        self.assertEqual(len(digest), 64)
+        self.assertEqual(
+            _row(self.db, "SELECT status FROM fr2_work_execution_bindings WHERE binding_id='b1'")["status"],
+            "COMPLETED",
+        )
+        self.assertEqual(_count(self.db, "fr2_completion_evidence", "binding_id=?", ("b1",)), 1)
+
+    def test_unknown_prior_invocation_blocks_later_success_completion(self) -> None:
+        self._bind()
+        self._invoke("inv-1")
+        self._invoke("inv-2")
+        self._result("inv-1", "r1", outcome="UNKNOWN")
+        self._result("inv-2", "r2", outcome="SUCCESS")
+        with self.assertRaisesRegex(ValueError, "UNKNOWN_INVOCATION_OUTCOME:1"):
+            self._complete("inv-2", "r2")
+        self.assertEqual(_count(self.db, "fr2_completion_evidence"), 0)
+
+    def test_late_result_cannot_regress_a_legacy_terminal_binding(self) -> None:
+        self._bind()
+        self._invoke("inv-1")
+        self._invoke("inv-2")
+        self._result("inv-1", "r1")
+        con = sqlite3.connect(str(self.db))
+        try:
+            con.execute("UPDATE fr2_work_execution_bindings SET status='COMPLETED' WHERE binding_id='b1'")
+            con.commit()
+        finally:
+            con.close()
+        with self.assertRaisesRegex(ValueError, "binding is terminal: COMPLETED"):
+            self._result("inv-2", "r2")
+        self.assertEqual(_count(self.db, "fr2_work_results", "result_id=?", ("r2",)), 0)
+        self.assertEqual(
+            _row(self.db, "SELECT status FROM fr2_work_execution_bindings WHERE binding_id='b1'")["status"],
+            "COMPLETED",
+        )
+
+    def test_second_completion_of_same_binding_is_forbidden(self) -> None:
+        self._bind()
+        self._invoke("inv-1")
+        self._result("inv-1", "r1")
+        self._complete("inv-1", "r1", completion="c1")
+        with self.assertRaisesRegex(ValueError, "binding is terminal: COMPLETED"):
+            self._complete("inv-1", "r1", completion="c2")
+        self.assertEqual(_count(self.db, "fr2_completion_evidence", "binding_id=?", ("b1",)), 1)
+
+    def test_v2_refuses_legacy_database_with_multiple_completions(self) -> None:
+        legacy_db = Path(self.td.name) / "legacy.sqlite3"
+        legacy = LegacyLedger(legacy_db)
+        self._bind(ledger=legacy)
+        self._invoke("inv-1", ledger=legacy)
+        self._invoke("inv-2", ledger=legacy)
+        self._result("inv-1", "r1", ledger=legacy)
+        self._complete("inv-1", "r1", completion="c1", ledger=legacy)
+        self._result("inv-2", "r2", ledger=legacy)
+        self._complete("inv-2", "r2", completion="c2", ledger=legacy)
+        self.assertEqual(_count(legacy_db, "fr2_completion_evidence", "binding_id=?", ("b1",)), 2)
+        with self.assertRaisesRegex(
+            ValueError,
+            "LEGACY_MULTIPLE_COMPLETIONS_REQUIRE_RECONCILIATION:b1:2",
+        ):
+            WorkExecutionLedger(legacy_db)
 
 
-def _invoke(ledger, invocation: str, binding: str = "b1") -> None:
-    ledger.record_invocation(
-        binding_id=binding,
-        invocation_id=invocation,
-        invocation_kind="TEST_CALL",
-        request={"binding": binding, "invocation": invocation},
-    )
-
-
-def _result(ledger, invocation: str, result: str, outcome: str = "SUCCESS", binding: str = "b1") -> None:
-    ledger.record_result(
-        result_id=result,
-        binding_id=binding,
-        invocation_id=invocation,
-        outcome=outcome,
-        result={"result_id": result, "outcome": outcome},
-        result_provenance="deterministic-test-fixture",
-    )
-
-
-def _complete(ledger, invocation: str, result: str, completion: str = "c1", binding: str = "b1") -> str:
-    return ledger.verify_completion(
-        completion_id=completion,
-        binding_id=binding,
-        invocation_id=invocation,
-        result_id=result,
-        expected_work_generation="g1",
-        evidence_kind="DETERMINISTIC_TEST_RECEIPT",
-        evidence_ref=f"fixture://{completion}",
-        evidence_payload={"verified": True, "binding": binding, "result": result},
-    )
-
-
-def test_completion_fails_closed_while_any_invocation_is_unresolved(tmp_path: Path) -> None:
-    db = tmp_path / "binding.sqlite3"
-    ledger = WorkExecutionLedger(db)
-    _bind(ledger)
-    _invoke(ledger, "inv-1")
-    _invoke(ledger, "inv-2")
-    _result(ledger, "inv-1", "r1")
-
-    with pytest.raises(ValueError, match="UNRESOLVED_INVOCATIONS:1"):
-        _complete(ledger, "inv-1", "r1")
-
-    assert _count(db, "fr2_completion_evidence") == 0
-    assert _row(
-        db,
-        "SELECT status FROM fr2_work_execution_bindings WHERE binding_id='b1'",
-    )["status"] == "RESULT_OBSERVED"
-
-
-def test_completion_succeeds_after_all_invocations_are_resolved(tmp_path: Path) -> None:
-    db = tmp_path / "binding.sqlite3"
-    ledger = WorkExecutionLedger(db)
-    _bind(ledger)
-    _invoke(ledger, "inv-1")
-    _invoke(ledger, "inv-2")
-    _result(ledger, "inv-1", "r1")
-    _result(ledger, "inv-2", "r2")
-
-    digest = _complete(ledger, "inv-2", "r2")
-
-    assert len(digest) == 64
-    assert _row(
-        db,
-        "SELECT status FROM fr2_work_execution_bindings WHERE binding_id='b1'",
-    )["status"] == "COMPLETED"
-    assert _count(db, "fr2_completion_evidence", "binding_id=?", ("b1",)) == 1
-
-
-def test_unknown_prior_invocation_blocks_later_success_completion(tmp_path: Path) -> None:
-    db = tmp_path / "binding.sqlite3"
-    ledger = WorkExecutionLedger(db)
-    _bind(ledger)
-    _invoke(ledger, "inv-1")
-    _invoke(ledger, "inv-2")
-    _result(ledger, "inv-1", "r1", outcome="UNKNOWN")
-    _result(ledger, "inv-2", "r2", outcome="SUCCESS")
-
-    with pytest.raises(ValueError, match="UNKNOWN_INVOCATION_OUTCOME:1"):
-        _complete(ledger, "inv-2", "r2")
-
-    assert _count(db, "fr2_completion_evidence") == 0
-
-
-def test_late_result_cannot_regress_a_legacy_terminal_binding(tmp_path: Path) -> None:
-    db = tmp_path / "binding.sqlite3"
-    ledger = WorkExecutionLedger(db)
-    _bind(ledger)
-    _invoke(ledger, "inv-1")
-    _invoke(ledger, "inv-2")
-    _result(ledger, "inv-1", "r1")
-
-    # Simulate the exact legacy/racy terminal shape v2 is designed to hard-off:
-    # a binding was marked complete while a second invocation remained in flight.
-    con = sqlite3.connect(str(db))
-    try:
-        con.execute("UPDATE fr2_work_execution_bindings SET status='COMPLETED' WHERE binding_id='b1'")
-        con.commit()
-    finally:
-        con.close()
-
-    with pytest.raises(ValueError, match="binding is terminal: COMPLETED"):
-        _result(ledger, "inv-2", "r2")
-
-    assert _count(db, "fr2_work_results", "result_id=?", ("r2",)) == 0
-    assert _row(
-        db,
-        "SELECT status FROM fr2_work_execution_bindings WHERE binding_id='b1'",
-    )["status"] == "COMPLETED"
-
-
-def test_second_completion_of_same_binding_is_forbidden(tmp_path: Path) -> None:
-    db = tmp_path / "binding.sqlite3"
-    ledger = WorkExecutionLedger(db)
-    _bind(ledger)
-    _invoke(ledger, "inv-1")
-    _result(ledger, "inv-1", "r1")
-    _complete(ledger, "inv-1", "r1", completion="c1")
-
-    with pytest.raises(ValueError, match="binding is terminal: COMPLETED"):
-        _complete(ledger, "inv-1", "r1", completion="c2")
-
-    assert _count(db, "fr2_completion_evidence", "binding_id=?", ("b1",)) == 1
-
-
-def test_v2_refuses_legacy_database_with_multiple_completions(tmp_path: Path) -> None:
-    db = tmp_path / "legacy.sqlite3"
-    legacy = LegacyLedger(db)
-    _bind(legacy)
-    _invoke(legacy, "inv-1")
-    _invoke(legacy, "inv-2")
-    _result(legacy, "inv-1", "r1")
-    _complete(legacy, "inv-1", "r1", completion="c1")
-
-    # v1 permits the terminal regression: a late result reopens the binding, then a
-    # second completion can be minted. Preserve this as a migration falsifier.
-    _result(legacy, "inv-2", "r2")
-    _complete(legacy, "inv-2", "r2", completion="c2")
-    assert _count(db, "fr2_completion_evidence", "binding_id=?", ("b1",)) == 2
-
-    with pytest.raises(
-        ValueError,
-        match="LEGACY_MULTIPLE_COMPLETIONS_REQUIRE_RECONCILIATION:b1:2",
-    ):
-        WorkExecutionLedger(db)
+if __name__ == "__main__":
+    unittest.main()

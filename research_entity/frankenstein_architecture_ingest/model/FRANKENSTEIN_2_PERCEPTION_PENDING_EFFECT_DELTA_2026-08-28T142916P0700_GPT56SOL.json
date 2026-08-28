@@ -1,0 +1,120 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_PERCEPTION_PENDING_EFFECT_ENFORCEMENT",
+  "recorded_at": "2026-08-28T14:29:16+07:00",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_commit_before_write": "d7869b9ba00beb7142565387a5753d1a22f1e775"
+  },
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "evidence_scope": "SOURCE_FORENSICS_PLUS_HISTORICAL_COMPONENT_RECEIPT_NO_NEW_RUNTIME_EXECUTION",
+  "packet_ingest": {
+    "newly_integrated_packet": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+    "deduplicated_already_durable_packets": [
+      "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT"
+    ],
+    "double_count_credit": false
+  },
+  "cross_checked_findings": [
+    {
+      "id": "TW5-PVE-001",
+      "classification": "CURRENT_SOURCE_ENFORCEMENT",
+      "finding": "perception_control.evaluate_head resolves dependencies from a central DAG; unknown, COMPUTE_OFF or taint-blocked heads return NOT_COMPUTED with value=null before compute_fn executes.",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:420-560",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.99
+    },
+    {
+      "id": "TW5-PVE-002",
+      "classification": "HISTORICAL_COMPONENT_RECEIPT",
+      "finding": "The archived Phase-43 ablation reports object.known.cup COMPUTE_OFF -> NOT_COMPUTED while person.presence remained OK on the same real frame. This is bounded component evidence only and was not rerun in this ingest.",
+      "source": "DEV_SOURCE_RESEARCH/repository/phase43/evidence/PERCEPTION_CONTROL_PLANE_ABLATION_2026-08-27.json",
+      "target_2_0_action": "KEEP",
+      "confidence": 0.97
+    },
+    {
+      "id": "TW5-PVE-003",
+      "classification": "CURRENT_SOURCE_ENFORCEMENT",
+      "finding": "Realtime function calls are queued until response.done; a non-completed response or barge-in clears queued calls before local tool dispatch, preventing execution of tool requests from a cancelled conversational turn.",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1300-1408",
+      "target_2_0_action": "KEEP_AND_GENERALIZE",
+      "confidence": 0.99
+    },
+    {
+      "id": "TW5-PVE-004",
+      "classification": "CURRENT_SOURCE",
+      "finding": "VoiceSessionCapsule is an ephemeral projection refreshed from several live sources; its useful role is a bounded compiled view, not a second state authority. Cross-source transactional consistency is not established by the inspected donor spans.",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py:250-450",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.97
+    }
+  ],
+  "frankenstein_2_required_delta": {
+    "world_substrate_epistemic_gate": {
+      "law": "NOT_COMPUTED is first-class and distinct from false, zero, UNKNOWN and negative evidence.",
+      "dependency_rule": "A protected variable/head disabled at COMPUTE_OFF or taint-blocked by a disabled dependency must remain NOT_COMPUTED through WorldNeed/WorldSlice expansion; inverse/decomposition logic may not silently reconstruct it as if measured.",
+      "control_surface": "Reuse a central dependency graph plus one enforcement adapter rather than caller-supplied dependency declarations.",
+      "acceptance": [
+        "Disable one protected upstream WorldSlice variable and prove downstream dependent variables remain NOT_COMPUTED.",
+        "Prove an unrelated control variable still computes in the same cycle.",
+        "Prove no persisted vector/projection for the protected dimension is emitted when computation is disabled."
+      ]
+    },
+    "pending_effect_cancellation": {
+      "law": "Cancellation before deterministic effect admission/dispatch must invalidate the pending candidate; cancellation after external submission must not be rewritten as definitely cancelled and may require outcome UNKNOWN.",
+      "required_identity": ["tool_use_id_or_invocation_id", "parent_response_or_turn_id", "generation", "causal_event_id"],
+      "states": ["CANDIDATE", "QUEUED", "CANCELLED_PRE_DISPATCH", "ADMITTED", "DISPATCHED", "OUTCOME_SUCCEEDED", "OUTCOME_FAILED", "OUTCOME_UNKNOWN"],
+      "acceptance": [
+        "Barge-in after function-call emission but before dispatch produces CANCELLED_PRE_DISPATCH and zero effect execution.",
+        "Non-completed model response cannot dispatch queued tool calls.",
+        "Cancellation after a mocked external submission cannot mint CANCELLED_PRE_DISPATCH; retain OUTCOME_UNKNOWN until verified."
+      ]
+    },
+    "voice_context_snapshot": {
+      "law": "Voice context remains a noncanonical compiled projection over canonical/current sources.",
+      "required_provenance": ["compiled_at", "state_generation_or_digest", "policy_generation_or_snapshot", "presence_or_perception_event_refs", "selected_goal_memory_refs"],
+      "freshness_rule": "If decision-relevant privacy/policy/generation changed after compilation, refresh or downgrade/withhold the affected field rather than presenting stale state as current.",
+      "minimality_rule": "Compile only the bounded fields causally needed for the current response; do not dump UnifiedDB or the full capsule into prompts."
+    }
+  },
+  "dedupe_note": "Effect admission, VERIFIED-overload and session-level effect-pointer findings are not credited again here because dedicated effect-path/effect-authority deltas already exist and canonical-main has a Triggerword-5 -> Triggerword-4 effect-contract handoff.",
+  "preserved_open_contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-HOST-ENFORCEMENT-005",
+      "status": "OPEN",
+      "question": "Whether the separately referenced historical/global wache-koenig path is present, ordered and authoritative in the actual host runtime remains artifact-unproven for the pinned donor."
+    },
+    {
+      "id": "TW5-CONTRADICTION-PERCEPTION-REACHABILITY-006",
+      "status": "OPEN",
+      "question": "The central evaluate_head gate is strong where used, but repository-wide reachability must still prove no live privacy-sensitive compute path bypasses it."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-SNAPSHOT-CONSISTENCY-007",
+      "status": "OPEN",
+      "question": "Capsule refresh reads multiple live sources without an established atomic cross-source snapshot; stronger autonomous use needs explicit provenance/freshness semantics."
+    }
+  ],
+  "next_exact_gate": [
+    "Trace current realtime_gespraech._tool_ausfuehren through the actual executor/permission/effect boundary and bind each transition to immutable invocation identity.",
+    "Audit perception/visual callers for raw compute-function bypass around evaluate_head and classify each reachable path.",
+    "Feed NOT_COMPUTED dependency-taint and pending-effect cancellation states into Triggerword-4 WorldSlice and executor regression contracts."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_execution": 0,
+    "effect_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

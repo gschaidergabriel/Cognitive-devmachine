@@ -1,0 +1,133 @@
+{
+  "packet_version": "INGEST_PACKET_SCHEMA/v2",
+  "packet_id": "TW5-PACKET-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/retrieval-identity-binding",
+  "created_at": "2026-08-28T10:55:32Z",
+  "source_repo": "gschaidergabriel/frankenstein",
+  "source_commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "directive_refs": [
+    "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md",
+    "research_entity/frankenstein_architecture_ingest/INGEST_PACKET_SCHEMA.json",
+    "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AC_DELTA_2026-08-28T1747P0700_GPT56SOL.json"
+  ],
+  "source_spans": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4261-4280",
+      "symbol": "MicroClay retrieval episode persistence",
+      "source_class": "LIVE_CODE"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4940-4970",
+      "symbol": "_transcript_nutzertext_lesen",
+      "source_class": "LIVE_CODE"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4995-5021",
+      "symbol": "_kognition_richten_hook",
+      "source_class": "ENFORCEMENT_CODE"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4374-4398",
+      "symbol": "MicroClay._apply_credit",
+      "source_class": "ENFORCEMENT_CODE"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "TW5-FIND-RETRIEVAL-IDENTITY-ALREADY-PRESENT",
+      "source_ref": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:4261-4280",
+      "source_class": "LIVE_CODE",
+      "symbol": "retrieval_episodes INSERT",
+      "behavior": "Every persisted retrieval episode already carries retrieval_id, turn_id, episode_id, causal_id, session_id and generation together with query_hash and selected memories.",
+      "side_effects": "Persists the identity/provenance tuple needed for exact later feedback binding.",
+      "persistence": "unified.db retrieval_episodes",
+      "external_dependencies": [],
+      "configuration": "None specific to identity persistence in the inspected span.",
+      "failure_mode": "Downstream consumers can still lose causal precision if they select by session/time instead of the already-persisted exact identities.",
+      "evidence_level": "DIRECT_SOURCE",
+      "frankenstein_2_implication": "Do not invent a new retrieval identity schema for this repair. Carry the existing retrieval_id/turn_id/episode_id/causal_id/generation tuple through Typed Entry, WorldSlice/GWT cognition work, and feedback reduction."
+    },
+    {
+      "finding_id": "TW5-FIND-STOP-QUERY-RECOVERED-BY-LATEST-TRANSCRIPT",
+      "source_ref": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:4940-4970",
+      "source_class": "LIVE_CODE",
+      "symbol": "_transcript_nutzertext_lesen",
+      "behavior": "The relevance judge reconstructs its query by scanning the transcript and returning the last user message, not by loading a query bound to the selected retrieval episode.",
+      "side_effects": "Provides text for model judging without an explicit retrieval/turn identity join.",
+      "persistence": "None; transcript read only.",
+      "external_dependencies": ["Claude transcript_path file"],
+      "configuration": "None in the inspected span.",
+      "failure_mode": "If Stop processing is reordered, duplicated, delayed, or multiple retrievals exist in one session, the last transcript user text can describe a different turn than the selected retrieval episode.",
+      "evidence_level": "DIRECT_SOURCE",
+      "frankenstein_2_implication": "The cognition work item must carry the exact query/turn identity at admission time; transcript-last-message recovery is at most a compatibility fallback, never canonical causal binding."
+    },
+    {
+      "finding_id": "TW5-FIND-STOP-SELECTS-SESSION-NEWEST-NOT-EXACT-ID",
+      "source_ref": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:4995-5021",
+      "source_class": "ENFORCEMENT_CODE",
+      "symbol": "_kognition_richten_hook",
+      "behavior": "The Stop relevance path selects one unjudged retrieval using session_id plus ORDER BY ts DESC LIMIT 1, then obtains the query from the transcript and applies model-derived credit to that selected row.",
+      "side_effects": "May write modell:relevanz feedback and update retrieval-entrypoint policy through MicroClay._apply_credit.",
+      "persistence": "unified.db retrieval_feedback and retrieval_entrypoint_policy through _apply_credit",
+      "external_dependencies": ["local Ollama via kognition_urteil", "transcript_path"],
+      "configuration": "kognition.aktiv and cognition/Ollama settings",
+      "failure_mode": "Session/time selection is weaker than the exact identities already present; interleaved same-session episodes can therefore be judged against the wrong turn/query before credit is durably attached.",
+      "evidence_level": "DIRECT_SOURCE",
+      "frankenstein_2_implication": "Replace newest-session selection with an exact cognition work item keyed by retrieval_id + turn_id + episode_id + causal_id + generation; reject mismatches fail-closed."
+    },
+    {
+      "finding_id": "TW5-FIND-CREDIT-RECEIPT-USES-CAUSAL-TUPLE-AFTER-SELECTION",
+      "source_ref": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:4374-4398",
+      "source_class": "ENFORCEMENT_CODE",
+      "symbol": "MicroClay._apply_credit",
+      "behavior": "Once a row has been selected, the credit receipt hash includes retrieval_id, causal_id, generation, signal_class and value, and duplicate receipt IDs are rejected.",
+      "side_effects": "Provides deterministic duplicate suppression for the chosen row.",
+      "persistence": "retrieval_feedback and retrieval_entrypoint_policy",
+      "external_dependencies": [],
+      "configuration": "Learning-rate and reward-policy constants outside this span.",
+      "failure_mode": "Strong receipt identity after selection does not repair a wrong-row selection made earlier; deterministic credit can be causally misattached with perfect deduplication.",
+      "evidence_level": "DIRECT_SOURCE",
+      "frankenstein_2_implication": "Move exact identity checking before cognition and before reduction; preserve the existing deterministic receipt idea downstream."
+    }
+  ],
+  "contradictions": [
+    {
+      "claim_a": "The donor already persists turn/retrieval/episode/causal/generation identity for each retrieval episode.",
+      "claim_b": "The Stop model-judge path selects by session plus newest timestamp and reconstructs the query from the latest transcript message.",
+      "resolution": "Preserve both as source facts. Frankenstein 2.0 should reuse the existing identity tuple and retire session-newest selection as canonical binding; runtime interleaving evidence is still required before claiming observed donor misattachment."
+    },
+    {
+      "claim_a": "_apply_credit produces a deterministic receipt bound to retrieval_id/causal_id/generation after a row is chosen.",
+      "claim_b": "That deterministic receipt cannot prove the chosen row matched the user query judged by the model.",
+      "resolution": "Separate selection correctness from receipt idempotency. Both gates are required."
+    }
+  ],
+  "recommended_delta": {
+    "reuse": [
+      "existing retrieval_id + turn_id + episode_id + causal_id + generation identity tuple",
+      "deterministic duplicate-suppressed credit receipt construction after exact row binding"
+    ],
+    "adapt": [
+      "create a typed RetrievalJudgementWorkItem carrying retrieval_id, turn_id, episode_id, causal_id, generation, query identity/text reference and candidate IDs",
+      "bind GRID/local cognition output to that exact work-item identity and reject mismatched/stale generation before reduction",
+      "emit relevance feedback as candidate/measurement evidence, then deterministically reduce only onto the exact retrieval row",
+      "retain transcript-last-user-message recovery only as an explicitly degraded compatibility path with no canonical causal-credit promotion"
+    ],
+    "retire": [
+      "session_id + ORDER BY ts DESC LIMIT 1 as canonical model-feedback target selection",
+      "implicit assumption that latest transcript user message and newest unjudged retrieval row are always the same turn"
+    ],
+    "inspect_next": [
+      "locate all writers/callers that create retrieval episodes and verify the existing identity tuple survives every active path",
+      "locate schema constraints/indexes for retrieval_episodes and retrieval_feedback to determine whether exact tuple uniqueness is enforced or only conventional",
+      "hand SameSessionRetrievalCreditBinding/v1 to Triggerword 4 as a deterministic interleaving acceptance test without provider execution"
+    ]
+  }
+}

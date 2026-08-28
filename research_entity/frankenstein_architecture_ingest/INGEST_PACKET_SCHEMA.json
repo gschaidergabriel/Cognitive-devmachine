@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Frankenstein Triggerword-5 Architecture Ingest Packet",
+  "type": "object",
+  "required": [
+    "packet_id",
+    "created_at",
+    "worker_id",
+    "donor_repo",
+    "donor_sha",
+    "scope",
+    "files_examined",
+    "atoms",
+    "hypotheses",
+    "counterhypotheses",
+    "contradictions",
+    "critical_unknowns",
+    "recommended_next_spans"
+  ],
+  "properties": {
+    "packet_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "minLength": 1},
+    "worker_id": {"type": "string", "minLength": 1},
+    "donor_repo": {"const": "gschaidergabriel/frankenstein"},
+    "donor_sha": {"type": "string", "minLength": 7},
+    "scope": {"type": "string", "minLength": 1},
+    "files_examined": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "sha_or_blob", "spans_examined"],
+        "properties": {
+          "path": {"type": "string"},
+          "sha_or_blob": {"type": "string"},
+          "spans_examined": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["line_start", "line_end"],
+              "properties": {
+                "line_start": {"type": "integer", "minimum": 1},
+                "line_end": {"type": "integer", "minimum": 1}
+              }
+            }
+          }
+        }
+      }
+    },
+    "atoms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "atom_id",
+          "subsystem",
+          "path",
+          "commit_sha",
+          "line_start",
+          "line_end",
+          "source_kind",
+          "what_it_does",
+          "runtime_reachable",
+          "target_2_0_action"
+        ],
+        "properties": {
+          "atom_id": {"type": "string", "minLength": 1},
+          "subsystem": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "commit_sha": {"type": "string", "minLength": 7},
+          "line_start": {"type": "integer", "minimum": 1},
+          "line_end": {"type": "integer", "minimum": 1},
+          "excerpt_hash": {"type": ["string", "null"]},
+          "source_kind": {
+            "enum": [
+              "LIVE_CODE",
+              "ENFORCEMENT_CODE",
+              "SCHEMA",
+              "CONFIG",
+              "SPEC",
+              "ARCHITECTURE_DOC",
+              "TEST",
+              "RUNTIME_RECEIPT",
+              "NEGATIVE_RESULT",
+              "HISTORICAL_ONLY",
+              "UI",
+              "INSTALLER",
+              "UNKNOWN"
+            ]
+          },
+          "what_it_does": {"type": "string"},
+          "why_it_exists": {"type": ["string", "null"]},
+          "inputs": {"type": "array", "items": {"type": "string"}},
+          "outputs": {"type": "array", "items": {"type": "string"}},
+          "reads": {"type": "array", "items": {"type": "string"}},
+          "writes": {"type": "array", "items": {"type": "string"}},
+          "dependencies": {"type": "array", "items": {"type": "string"}},
+          "authority_class": {"type": ["string", "null"]},
+          "failure_mode": {"type": ["string", "null"]},
+          "concurrency_implication": {"type": ["string", "null"]},
+          "privacy_implication": {"type": ["string", "null"]},
+          "latency_or_cost_implication": {"type": ["string", "null"]},
+          "state_lifetime": {"type": ["string", "null"]},
+          "runtime_reachable": {"type": ["boolean", "null"]},
+          "runtime_entrypoints": {"type": "array", "items": {"type": "string"}},
+          "tests_or_receipts": {"type": "array", "items": {"type": "string"}},
+          "known_counterevidence": {"type": "array", "items": {"type": "string"}},
+          "supersedes": {"type": "array", "items": {"type": "string"}},
+          "superseded_by": {"type": "array", "items": {"type": "string"}},
+          "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "target_2_0_action": {
+            "enum": [
+              "KEEP",
+              "REPAIR",
+              "ADAPT_TO_GRID",
+              "REPLACE_WITH_VERIFIED_SUCCESSOR",
+              "COMPATIBILITY_ONLY",
+              "RETIRE_WITH_EVIDENCE",
+              "UNDECIDED"
+            ]
+          },
+          "open_questions": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "hypotheses": {"type": "array", "items": {"type": "string"}},
+    "counterhypotheses": {"type": "array", "items": {"type": "string"}},
+    "contradictions": {"type": "array", "items": {"type": "string"}},
+    "critical_unknowns": {"type": "array", "items": {"type": "string"}},
+    "recommended_next_spans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "reason"],
+        "properties": {
+          "path": {"type": "string"},
+          "line_start": {"type": ["integer", "null"], "minimum": 1},
+          "line_end": {"type": ["integer", "null"], "minimum": 1},
+          "reason": {"type": "string"},
+          "priority": {"enum": ["P0", "P1", "P2", "P3"]}
+        }
+      }
+    },
+    "supersedes_packet_id": {"type": ["string", "null"]}
+  }
+}

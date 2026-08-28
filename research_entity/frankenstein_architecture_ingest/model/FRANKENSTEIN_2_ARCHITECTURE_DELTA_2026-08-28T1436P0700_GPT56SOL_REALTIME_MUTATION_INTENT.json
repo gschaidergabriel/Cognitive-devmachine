@@ -1,0 +1,100 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "recorded_at": "2026-08-28T14:36:20+07:00",
+  "evidence_scope": "CURRENT_SOURCE_FORENSICS_ONLY_NO_RUNTIME_REEXECUTION",
+  "authority_epoch_observed": "8.78",
+  "design_source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "head_observed_before_delta": "d0646b3e6a7613136cfbea48aad7b8110c4a4bd0"
+  },
+  "canonical_main_observed": "60ea32bca79caddfa7bc85d9afa668c25fe0611f",
+  "donor_source": {
+    "repository": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "ingest_packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T073512Z_5641dc6_GPT56SOL_REALTIME_MUTATION_INTENT_BOUNDARY.json",
+  "source_findings": [
+    {
+      "id": "TW5-DELTA-RTM-001",
+      "finding": "The donor distinguishes user-intent admission for external task dispatch from ordinary model function-call execution: frank_auftrag_stellen requires a second mechanically matched human utterance, while frank_erinnerung_schreiben commits a bounded persistent conversational-memory row immediately.",
+      "classification": "CURRENT_SOURCE"
+    },
+    {
+      "id": "TW5-DELTA-RTM-002",
+      "finding": "The direct memory writer is scoped to gespraech_erinnerung and explicitly avoids durable_memory. This is not arbitrary database write authority and does not itself prove an external EffectGate bypass.",
+      "classification": "CURRENT_SOURCE"
+    },
+    {
+      "id": "TW5-DELTA-RTM-003",
+      "finding": "Realtime call_id/pending-call lifecycle already supplies a useful per-invocation predecessor: function_call_output is keyed by call_id and queued calls are discarded on interrupted/cancelled turns. The current donor effect hook path separately loses per-call identity by correlating through session state, so Frankenstein 2.0 must preserve invocation identity across the bridge rather than only inside Realtime.",
+      "classification": "CURRENT_SOURCE_PLUS_EXISTING_INGEST_FUSION"
+    }
+  ],
+  "architecture_deltas_for_triggerword4": [
+    {
+      "id": "TW5-D-RTM-001",
+      "delta": "Introduce a typed HumanIntentDecision separate from EffectDecision. Every mutating Realtime tool must declare mutation_class = EPHEMERAL_STATE | CANONICAL_INTERNAL_MUTATION | EXTERNAL_EFFECT_REQUEST | SESSION_CONTROL, plus invocation_id, request_digest, session/generation/causal identity, policy_version and provenance."
+    },
+    {
+      "id": "TW5-D-RTM-002",
+      "delta": "HumanIntentDecision must state whether confirmation is IMPLICIT_ALLOWED, EXPLICIT_REQUIRED, EXPLICIT_CONFIRMED, DENIED or UNKNOWN. The confirmation policy may differ by mutation class, but it must be deterministic, inspectable and bound to the exact invocation; a model tool description is not authority."
+    },
+    {
+      "id": "TW5-D-RTM-003",
+      "delta": "External effects require both applicable human-intent admission and canonical EffectGate authorization. Human confirmation cannot substitute for EffectGate, and a successful effect cannot retroactively mint either admission decision."
+    },
+    {
+      "id": "TW5-D-RTM-004",
+      "delta": "Preserve the donor's useful cancellation invariant: pending function calls from a cancelled/barge-in response must become CANCELLED_BEFORE_SUBMISSION and must never execute later. After submission, uncertainty becomes OUTCOME_UNKNOWN rather than cancellation success."
+    },
+    {
+      "id": "TW5-D-RTM-005",
+      "delta": "Carry one immutable invocation identity from Realtime call_id/tool_use_id-equivalent through HumanIntentDecision -> EffectRequest/EffectDecision where applicable -> executor submission -> EffectJournal -> result/world verification -> causal re-entry. Reject identity or request-digest mismatch."
+    },
+    {
+      "id": "TW5-D-RTM-006",
+      "delta": "Do not grant VoiceSessionCapsule or Presence improvements from source existence alone. Add a provenance-bearing per-response context compiler and preserve missing Presence as UNKNOWN/None with WAIT/ASK/re-observe behavior; validate with field lesion/shuffle and missing-sensor regression tests."
+    }
+  ],
+  "preserved_contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-MUTATION-INTENT-008",
+      "status": "SOURCE_CONFIRMED_POLICY_CLASSIFICATION_OPEN",
+      "claim_a": "External task dispatch requires explicit second-utterance confirmation in the Realtime donor.",
+      "claim_b": "Bounded persistent conversational-memory mutation does not use that confirmation path.",
+      "resolution_boundary": "Source establishes different policies, not which policy Frankenstein 2.0 should adopt. Decide by mutation class, reversibility, provenance and user-expectation tests."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+      "status": "SOURCE_CORROBORATED_STILL_OPEN",
+      "note": "Inspected _response_erstellen instructions do not serialize self.capsule; indirect uninspected paths remain a falsifier."
+    },
+    {
+      "id": "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
+      "status": "SOURCE_CORROBORATED_STILL_OPEN",
+      "note": "Inspected missing-Presence fallbacks can map absence to user_present=True; Triggerword-4 successor must retain UNKNOWN."
+    }
+  ],
+  "acceptance_tests_for_triggerword4": [
+    "Mutation-class table covers every Realtime function-call tool; no mutating branch is unclassified.",
+    "Explicit-confirmation-required mutation cannot execute/commit with only model self-confirmation or replayed old transcript text.",
+    "Invocation/request-digest mismatch between HumanIntentDecision and downstream request is rejected.",
+    "Cancelled-before-submission call never executes after barge-in or response restart.",
+    "Submitted call with lost transport/result evidence becomes OUTCOME_UNKNOWN and is not blindly replayed.",
+    "Bounded conversational-memory mutation either carries an explicit approved implicit-policy receipt or requires confirmation; policy is visible and testable.",
+    "Presence missing yields UNKNOWN/None and does not silently become present.",
+    "VoiceSessionCapsule field lesion/shuffle changes only intended response-conditioning dimensions; if no measurable effect, capsule conditioning remains unproven."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "runtime_causal": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Audit the complete Realtime TOOLS declaration and all mutating _tool_ausfuehren branches, then trace immutable call_id across the bridge into host/executor identity; in parallel continue Git chronology of the historical blocking gate."
+}

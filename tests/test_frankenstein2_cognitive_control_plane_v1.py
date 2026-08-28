@@ -25,6 +25,14 @@ class ControlPlaneTests(unittest.TestCase):
         self.assertEqual(s.int("delegation.max_parallel"), 4)
         self.assertTrue(s.snapshot_digest)
 
+    def test_snapshot_values_are_immutable_and_digest_stable(self):
+        s = self.p.snapshot()
+        digest = s.snapshot_digest
+        with self.assertRaises(TypeError):
+            s.values["grid.orientation.mode"] = s.values["grid.goal.mode"]
+        self.assertEqual(s.snapshot_digest, digest)
+        self.assertEqual(s.mode("grid.orientation.mode"), ControlMode.ON)
+
     def test_atomic_batch_and_restart(self):
         s0 = self.p.snapshot()
         patch = self.p.build_patch(

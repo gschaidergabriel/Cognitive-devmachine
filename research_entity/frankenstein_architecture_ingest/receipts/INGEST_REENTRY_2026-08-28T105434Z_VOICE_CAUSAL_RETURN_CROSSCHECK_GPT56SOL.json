@@ -1,0 +1,86 @@
+{
+  "schema": "TRIGGERWORD5_DIRECT_SOURCE_CROSSCHECK_REENTRY/v1",
+  "created_at": "2026-08-28T10:54:34Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AC_DELTA_2026-08-28T1747P0700_GPT56SOL.json",
+    "steering_blob_sha": "bc67f57771a9a9c5ac96d9cd135927047066bc20",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "authority_change": false
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_observed_before_receipt": "802a085915222b41dc68176fd5467aa1bcbdf5f2",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "inbox_reentry": {
+    "new_unconsumed_packet_after_last_1048_ingest": false,
+    "basis": "The 10:51Z authority reentry receipt records zero packets after 10:48Z; the newest listed inbox packet is the already-consumed 10:42Z Stop-hook packet.",
+    "packet_consumption_minted_by_this_receipt": false
+  },
+  "source_delta_crosschecked": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_VOICE_ACTIVATION_ASYNC_RETURN_BINDING_GPT56SOL.json",
+    "blob_sha": "e43ba9cbcb48c563ce8253e107b30d73a2a312f2",
+    "disposition": "ADMITTED_SOURCE_SCOPE_AFTER_DIRECT_DONOR_CROSSCHECK",
+    "runtime_replication": false
+  },
+  "parallel_fusion_observed": {
+    "commit": "802a085915222b41dc68176fd5467aa1bcbdf5f2",
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_DEFERRED_CAUSAL_RETURN_FUSION_GPT56SOL.json",
+    "blob_sha": "382f0d9428a75f5606bfbce405556045e69bc3e0",
+    "disposition": "RETAINED_NON_DUPLICATE; THIS RECEIPT DOES_NOT_CREATE_SECOND_ARCHITECTURE_DELTA"
+  },
+  "direct_source_crosscheck": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "span": "870-980",
+      "finding": "With gespraech.aktiv on, any non-empty speech_end starts Realtime without calling the wake-word matcher. fuehren_gespraech receives API/config/session context but no dedicated activation_event_id, audio-segment identity, transcript digest or activation generation. After return, the status pulse still says it waits for Hey FranKenstein."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "span": "1688-1792",
+      "finding": "Immediate tool output is function_call_output bound to call_id. Later asynchronous completion preserves auftrag_id only in best-effort outcome/log context and re-enters the model-facing conversation as a role=user input_text item with no original call_id or typed task/result join."
+    }
+  ],
+  "architecture_disposition": {
+    "VoiceActivationBinding_v1": "KEEP_AS_TRIGGERWORD4_REPAIR_TARGET",
+    "VoiceAsyncReturnBinding_v1": "KEEP_AS_TRIGGERWORD4_REPAIR_TARGET",
+    "DeferredCausalReturnEnvelope_v1": "GENERATED_SHARED_ABI_CANDIDATE; KEEP_ONLY_IF_TRIGGERWORD4_DISCRIMINATES_LOWER_DUPLICATION_WITHOUT_ERASING_SUBSYSTEM_SEMANTICS",
+    "world_fact_promotion": "FORBIDDEN; transcript activation, model relevance and async textual return remain typed evidence/candidate returns until independently admitted observation/effect evidence exists"
+  },
+  "contradictions_preserved": [
+    "Live voice activation is wakewordless while post-session status text still names Hey FranKenstein.",
+    "Immediate Realtime tool return has call_id provenance while asynchronous completion loses that protocol-level call binding in model-facing re-entry.",
+    "The internal async result is transported with role=user even though its text explicitly says it was not spoken by Gabriel; transport role must not rewrite provenance class."
+  ],
+  "central_ingest_state": {
+    "exact_voice_delta_search_in_observed_state": "NOT_FOUND",
+    "mutation_by_this_receipt": "NOT_ATTEMPTED_DUE_CONCURRENT_APPEND_ONLY_RECONCILIATION_AND_TO_AVOID_OVERWRITING_MOVING_LEDGER",
+    "required_successor_action": "A later ledger reconciliation may reference this receipt and the 10:54Z fusion delta without changing their source/runtime evidence scope."
+  },
+  "credits": {
+    "donor_source_crosscheck": "PASS_AT_EXACT_DONOR_SHA",
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "voice_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "result": "REENTRY_PASS_SOURCE_SCOPE_VOICE_BINDINGS_CORROBORATED_NO_DUPLICATE_ARCHITECTURE_LANE",
+  "next_exact_gate": "Triggerword-4/non-provider verification lane: preserve exact VoiceActivationBinding/v1 and VoiceAsyncReturnBinding/v1 identities; run two overlapping background calls completing in reverse order plus two distinct activation replay events, and prove system-generated internal results cannot be misclassified as human-originated speech. Keep runtime credit zero until executable source/build-bound evidence exists."
+}

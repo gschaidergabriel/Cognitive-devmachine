@@ -1,10 +1,10 @@
 """Regressions for journaled EntityOS effect fencing."""
-import hashlib,json
+import hashlib,json,os,subprocess
 import pytest
 from clayverse.store import UnifiedDB,StaleGeneration,LeaseConflict
 from clayverse.identity import IdentityRouter
 from clayverse.effects import EffectGate,EffectRequest
-from clayverse.entityos_bridge import EntityOSIntegrityError
+from clayverse.entityos_bridge import EntityOSBridge,EntityOSIntegrityError,EntityOSOutcomeUnknown
 from clayverse.recovery import recover_incomplete_episodes
 
 def setup_db(tmp_path):
@@ -101,6 +101,26 @@ def test_failed_entityos_attempt_is_receipted(tmp_path):
     with pytest.raises(EntityOSIntegrityError): EffectGate(db,entityos_bridge=FakeBridge(run)).execute(EffectRequest(uid,sid,'entityos.exec','transport',['hello']))
     effect=db.db.execute('SELECT effect_id,status,outcome FROM effects').fetchone(); assert effect['status']=='FAILED' and 'EntityOSIntegrityError' in effect['outcome']
     assert db.db.execute('SELECT credit FROM causal_episodes WHERE effect_id=?',(effect['effect_id'],)).fetchone()[0]==0.0; db.close()
+
+def test_ambiguous_post_dispatch_attempt_is_canonical_unknown(tmp_path):
+    db,uid,sid=setup_db(tmp_path)
+    def run(argv): raise EntityOSOutcomeUnknown('lost terminal receipt')
+    with pytest.raises(EntityOSOutcomeUnknown):
+        EffectGate(db,entityos_bridge=FakeBridge(run)).execute(EffectRequest(uid,sid,'entityos.exec','transport',['hello']))
+    effect=db.db.execute('SELECT effect_id,status,outcome FROM effects').fetchone(); persisted=json.loads(effect['outcome'])
+    assert effect['status']=='UNKNOWN_AFTER_DISPATCH'
+    assert persisted['certainty']=='unknown' and persisted['reason']=='dispatch_may_have_started_without_terminal_receipt'
+    assert db.db.execute('SELECT credit FROM causal_episodes WHERE effect_id=?',(effect['effect_id'],)).fetchone()[0]==0.0
+    assert EffectGate(db).journal.recover_pending()==0
+    assert db.db.execute('SELECT status FROM effects WHERE effect_id=?',(effect['effect_id'],)).fetchone()[0]=='UNKNOWN_AFTER_DISPATCH'; db.close()
+
+def test_bridge_wraps_exception_after_dispatch_boundary_as_unknown(monkeypatch):
+    bridge=EntityOSBridge('/unused','a'*64,timeout=0.01)
+    monkeypatch.setattr(EntityOSBridge,'_open_verified',lambda self: os.open('/dev/null',os.O_RDONLY))
+    def timeout(*args,**kwargs): raise subprocess.TimeoutExpired(cmd='entityos',timeout=0.01)
+    monkeypatch.setattr(subprocess,'run',timeout)
+    with pytest.raises(EntityOSOutcomeUnknown,match='dispatch may have started'):
+        bridge.run(['probe'])
 
 def test_second_effect_gate_does_not_recover_another_live_pending_effect(tmp_path):
     p=tmp_path/'unified.db'; db1,uid,sid=setup_db(tmp_path); eid=EffectGate(db1).journal.begin(None,sid,uid,'state.noop','x',db1.session_generation(sid))

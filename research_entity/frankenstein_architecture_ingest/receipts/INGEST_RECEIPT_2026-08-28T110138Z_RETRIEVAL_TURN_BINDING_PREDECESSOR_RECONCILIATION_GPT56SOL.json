@@ -1,0 +1,74 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v2",
+  "created_at": "2026-08-28T11:01:38Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "routing_self_test": "PASS",
+  "authority": {
+    "canonical_main": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "epoch": "9.13",
+    "steering_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "observed_head_before_delta": "34246b5239846584ec075ae44433d8589d39ff33",
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T110138Z_RETRIEVAL_TURN_BINDING_PREDECESSOR_RECONCILIATION_GPT56SOL.json",
+    "commit": "f72bd0f256514a1dce5f531e13ea0640e47271c7"
+  },
+  "packet_disposition": [
+    {
+      "packet_id": "TW5-PACKET-20260828T105400Z-RETRIEVAL-TURN-BINDING-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105400Z_5641dc6_GPT56SOL_RETRIEVAL_TURN_BINDING_FORENSICS.json",
+      "blob_sha": "f59d0c73942987d94bde48bc7e7bef567476612c",
+      "status": "CONSUMED_CORROBORATING_PREDECESSOR",
+      "reason": "Direct donor and schema cross-check confirmed its causal-binding findings; the newer 10:55:32 packet and successor schema delta already contain the generalized architecture contract."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL",
+      "status": "NOT_RECONSUMED_ALREADY_CONSUMED_BY_PARALLEL_ORGAN",
+      "successor_commit": "34246b5239846584ec075ae44433d8589d39ff33"
+    }
+  ],
+  "crosscheck": {
+    "stern_exact_donor": "PASS",
+    "schema_leer_exact_donor": "PASS",
+    "retrieval_identity_exists": true,
+    "stop_drops_round_identity": true,
+    "stop_uses_session_newest_target": true,
+    "stop_query_is_independently_transcript_recovered": true,
+    "feedback_unique_retrieval_signal_class_constraint_visible": false,
+    "runtime_wrong_round_observed": false,
+    "runtime_double_credit_observed": false
+  },
+  "architecture_result": {
+    "contract": "SameSessionRetrievalCreditBinding/v1",
+    "work_item": "RetrievalJudgementWorkItem/v1",
+    "action": "REUSE_EXISTING_IDENTITY_AND_ADAPT_TO_GRID",
+    "new_competing_contract_created": false
+  },
+  "state_index": {
+    "INGEST_STATE_mutated": false,
+    "status": "SYNC_PENDING",
+    "reason": "Avoided a racing full-file mutable update while multiple Triggerword-5 commits were advancing the branch. This append-only receipt is the durable consumption checkpoint."
+  },
+  "triggerword4_handoff": "Implement and deterministically test exact retrieval-work-item binding, one-judgement cardinality, reverse same-session completion, query/payload mismatch rejection, stale-generation rejection and cognition-independent Stop bookkeeping.",
+  "credits": {
+    "source_forensics": "PASS",
+    "packet_ingest": "PASS",
+    "runtime": 0,
+    "provider": 0,
+    "vps": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "result": "INGEST_CHECKPOINT_COMMITTED_SOURCE_ONLY"
+}

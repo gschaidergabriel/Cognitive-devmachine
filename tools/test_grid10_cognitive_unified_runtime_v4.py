@@ -215,61 +215,37 @@ class UnifiedCognitiveRuntimeV4Tests(unittest.TestCase):
         self.assertEqual(agency.get_goal("g1").state, GoalState.ACTIVE)
         self.assertEqual(cycle.assurance_mode, "NORMAL")
 
-    def test_prewoken_goal_ids_preserve_wake_receipt_without_refiring(self):
-        _, _, agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)
-        goal = agency.create_goal(
-            goal_id="g-pre",
-            origin="AUTHENTICATED_USER",
-            semantic_goal="resume through scheduler wrapper",
-            state=GoalState.CANDIDATE,
-            success_criteria=("heartbeat",),
-            uncertainty=0.2,
-            priority=10,
-            event_id="pre:create",
-            now_ts=10.0,
-        )
-        active = agency.transition_goal(
-            goal.goal_id,
-            expected_generation=goal.generation,
-            new_state=GoalState.ACTIVE,
-            event_id="pre:activate",
-            reason="admitted",
-            now_ts=11.0,
-        )
-        agency.defer_goal(
-            goal.goal_id,
-            expected_generation=active.generation,
-            intent_id="pre:intent",
-            wake_kind=WakeKind.EVENT,
-            wake_value="event:resume",
-            event_id="pre:defer",
-            reason="wait",
-            now_ts=12.0,
-        )
+    def test_fabricated_prewoken_lineage_is_rejected_without_heartbeat_credit(self):
+        _, heartbeat, agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)
         agency.schedule_next_tick(
             not_before=999.0,
             mode="HOLD",
             event_id="pre:schedule",
             now_ts=13.0,
         )
-        awakened = agency.wake_due(
-            now_ts=20.0,
-            observed_events=("event:resume",),
-            event_id_prefix="prewake",
-        )
-        cycle = runtime.tick_once(
-            tick_id="t-prewoken",
-            now_ts=20.0,
-            prewoken_goal_ids=awakened,
-            trusted_axes=_trusted_normal_axes(),
-        )
-        self.assertEqual(cycle.woken_goal_ids, (goal.goal_id,))
-        checkpoint = json.loads(agency.snapshot().continuation_checkpoint)
-        self.assertEqual(checkpoint["woken_goal_ids"], [goal.goal_id])
+        before = agency.snapshot()
+        with self.assertRaisesRegex(RuntimeCycleError, "PREWOKEN_WAKE_LINEAGE_UNSUPPORTED"):
+            runtime.tick_once(
+                tick_id="t-fabricated-prewake",
+                now_ts=20.0,
+                prewoken_goal_ids=("fabricated-goal",),
+                trusted_axes=_trusted_normal_axes(),
+            )
+        after = agency.snapshot()
+        self.assertEqual(after.state_epoch, before.state_epoch)
+        self.assertEqual(after.next_tick_not_before, 999.0)
+        con = sqlite3.connect(str(heartbeat.path))
+        try:
+            tick_count = con.execute("SELECT COUNT(*) FROM ticks").fetchone()[0]
+            cycle_count = con.execute("SELECT COUNT(*) FROM grid10_cognitive_cycles").fetchone()[0]
+        finally:
+            con.close()
+        self.assertEqual(tick_count, 0)
+        self.assertEqual(cycle_count, 0)
 
-    def test_prewoken_and_observed_events_is_rejected_as_ambiguous(self):
+    def test_any_prewoken_argument_is_rejected_even_with_observed_events(self):
         _, _, _agency, runtime, _ = build_unified_cognitive_runtime_v4(self.db)
-        with self.assertRaisesRegex(RuntimeCycleError, "AMBIGUOUS_WAKE_INPUT"):
+        with self.assertRaisesRegex(RuntimeCycleError, "PREWOKEN_WAKE_LINEAGE_UNSUPPORTED"):
             runtime.tick_once(
                 tick_id="t-ambiguous",
                 now_ts=1.0,

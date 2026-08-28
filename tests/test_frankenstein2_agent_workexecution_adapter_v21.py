@@ -67,6 +67,17 @@ class AgentWorkExecutionAdapterTests(unittest.TestCase):
     def tearDown(self) -> None:
         self.tmp.cleanup()
 
+    def test_adapter_created_db_installs_v2_single_completion_invariant(self) -> None:
+        con = sqlite3.connect(str(self.db))
+        try:
+            indexes = {
+                row[1]: int(row[2])
+                for row in con.execute("PRAGMA index_list('fr2_completion_evidence')").fetchall()
+            }
+        finally:
+            con.close()
+        self.assertEqual(indexes.get("idx_fr2_single_completion_per_binding"), 1)
+
     def test_zero_handoff_marker_fails_closed_without_write(self) -> None:
         with self.assertRaisesRegex(
             AgentWorkExecutionIdentityError, "HANDOFF_MARKER_CARDINALITY:0"

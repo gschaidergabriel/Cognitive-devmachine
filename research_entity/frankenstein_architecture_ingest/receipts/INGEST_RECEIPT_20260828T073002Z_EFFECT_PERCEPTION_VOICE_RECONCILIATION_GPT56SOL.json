@@ -1,0 +1,73 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "created_at": "2026-08-28T07:30:02Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "routing": "TRIGGER_ROUTING_ACTIVE",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_before_ingest": "427e073dc0c18d62898e57978e4dd32618cac54c",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "consumed_or_reconciled": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "result": "RECONCILED_EXISTING_MODEL_DELTA_NO_DOUBLE_COUNT",
+      "existing_model_delta": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_AUTHORITY_DELTA_2026-08-28T142407P0700_GPT56SOL.json"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "result": "INGESTED_UNIQUE_CONTROL_FINDINGS_NO_DOUBLE_COUNT"
+    }
+  ],
+  "source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "result": "ordinary PreToolUse effect admission is source-confirmed nonblocking bookkeeping; PostToolUse outcome remains separate"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py",
+      "blob": "91a66ecf34a6486a6bf077dcb115fcc224e3119b",
+      "result": "central DAG + COMPUTE_OFF/taint gates return NOT_COMPUTED before compute_fn"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "result": "cancelled/non-completed responses and barge-in discard pending tool calls before local dispatch"
+    }
+  ],
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_PERCEPTION_VOICE_CONTROL_DELTA_2026-08-28T1430P0700_GPT56SOL.json",
+    "commit": "d0ddb5114876434fa0d800b0d0eed3b25532c13e"
+  },
+  "design_changes": [
+    "Promote NOT_COMPUTED plus dependency-taint propagation into sparse WorldNeed/WorldSlice controls so disabled protected variables cannot be reconstructed downstream.",
+    "Generalize Realtime pending-tool cancellation into a typed PendingEffect pre-dispatch state while preserving UNKNOWN for already-submitted external effects.",
+    "Keep VoiceSessionCapsule as a noncanonical ephemeral projection and require generation/freshness/provenance binding in the GRID context compiler.",
+    "Do not promote donor effect bookkeeping, pending-call cancellation or historical component receipts into whole-system EffectGate/runtime credit."
+  ],
+  "preserved_contradictions": [
+    "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+    "TW5-CONTRADICTION-PARALLEL-EFFECT-CORRELATION-003",
+    "TW5-CONTRADICTION-PERCEPTION-POLICY-VS-DETECTOR-QUALITY-005",
+    "TW5-CONTRADICTION-PENDING-CANCEL-VS-EFFECT-AUTHORITY-006"
+  ],
+  "runtime_reexecution": 0,
+  "credits": {
+    "effect_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "acceptance": "SOURCE_FORENSIC_INGEST_COMMITTED_RUNTIME_UNRESOLVED",
+  "next_exact_gate": "Re-enter shared INGEST_STATE with compare-and-swap, mark the two reconciled packets consumed without double-counting, then map the actual blocking wache-koenig/host permission path and audit perception evaluate_head bypass reachability."
+}

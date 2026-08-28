@@ -1,0 +1,77 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "recorded_at": "2026-08-28T14:42:09+07:00",
+  "authority": {
+    "canonical_epoch": "9.13",
+    "supervisor": "SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL",
+    "mode": "FREE_ONLY",
+    "note": "Packet/source forensics only; no runtime, canonical-semantics, HCU or training promotion."
+  },
+  "donor": {
+    "repository": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "ingested_packet_id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+  "evidence_scope": "CURRENT_DONOR_SOURCE_FORENSICS_ONLY_NO_RUNTIME_EXECUTION",
+  "architecture_findings": [
+    {
+      "id": "TW5-MEM-DELTA-001",
+      "classification": "SCHEMA",
+      "finding": "gespraech_erinnerung stores subject/value/quelle without explicit epistemic or transformation class, immutable source-event identity, admission identity, privacy tier or evidence provenance sufficient to distinguish verbatim claims from summaries/inferences.",
+      "action": "REPAIR_WITH_TYPED_MEMORY_CANDIDATE_AND_ADMISSION"
+    },
+    {
+      "id": "TW5-MEM-DELTA-002",
+      "classification": "LIVE_CODE",
+      "finding": "The direct Realtime read path returns conversation-memory and durable-memory rows in one result collection with source labels but no explicit fact/claim/summary/inference typing; the wrapper does not insert deterministic epistemic admission.",
+      "action": "REPAIR_READER_AND_WRITER_BOUNDARY"
+    },
+    {
+      "id": "TW5-MEM-DELTA-003",
+      "classification": "NEGATIVE_RESULT",
+      "finding": "The inspected direct Realtime path does not support the counterhypothesis that downstream retrieval already preserves an explicit claim-versus-fact distinction. This result is bounded to the inspected direct Realtime consumer and must not be generalized to all repository retrieval paths without audit.",
+      "action": "KEEP_BOUNDARY_AND_AUDIT_OTHER_CONSUMERS"
+    }
+  ],
+  "frankenstein_2_successor_contract": {
+    "MemoryCandidate_required_fields": [
+      "candidate_id",
+      "source_event_id_or_utterance_ref",
+      "source_actor",
+      "transformation_class",
+      "epistemic_class",
+      "generation",
+      "privacy_retention_tier",
+      "content_digest_or_reference",
+      "provenance"
+    ],
+    "transformation_class_minimum": ["VERBATIM", "SUMMARY", "INFERENCE", "INSTRUCTION", "OTHER"],
+    "epistemic_class_minimum": ["OBSERVED_CLAIM", "INFERRED", "UNKNOWN", "VERIFIED_EXTERNAL"],
+    "MemoryAdmission_law": "Model/function-call output proposes a MemoryCandidate. A deterministic admission step decides whether and how it is persisted. Remembering that an actor said X never promotes X itself to factual truth.",
+    "retrieval_law": "Every returned item preserves source, transformation, epistemic class and provenance; ranking or context compilation must not erase those classes.",
+    "canonical_fact_law": "Promotion to canonical factual evidence requires separately admissible evidence; memory is not observation authority."
+  },
+  "triggerword4_acceptance_tests": [
+    "VERBATIM user utterance and model SUMMARY remain structurally distinguishable after persistence and retrieval.",
+    "A model INFERENCE remains INFERRED/MODEL_CANDIDATE and cannot satisfy an OBSERVED/FACT evidence query.",
+    "Mixed conversation-memory and durable-memory retrieval returns explicit provenance/epistemic metadata on every item and ranking preserves it.",
+    "Sensitive spoken content rejected or redacted by policy leaves an auditable admission result without persisting disallowed raw content."
+  ],
+  "preserved_unknowns": [
+    "Other non-Realtime retrieval consumers may add stronger epistemic typing and require separate audit.",
+    "No runtime evidence here establishes the proposed successor contract is implemented or enforced."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED_WITH_REALTIME_MEMORY_READ_BOUNDARY",
+    "runtime_causal": 0,
+    "memory_runtime_acceptance": 0,
+    "canonical_semantics": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Audit all other gespraech_erinnerung/durable_memory consumers for epistemic typing, then feed the bounded MemoryCandidate/MemoryAdmission contract into Triggerword-4 assembly with fail-closed provenance-preservation tests."
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "checkpoint_id": "INGEST_CHECKPOINT_20260828T103357Z_GPT56SOL_WORK_EXECUTION_BINDING_CORRECTION",
+  "created_at": "2026-08-28T10:33:57Z",
+  "routing": {
+    "trigger": "triggerwort 5",
+    "status": "VERIFIED",
+    "organ": "GPT-5.6-Sol/triggerwort5/work-execution-binding-correction"
+  },
+  "authority": {
+    "canonical_main_sha_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "runtime_credit": 0
+  },
+  "pins": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_delta": "007131285ed54a706be2bca8a4160db1d0730a18",
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL"
+  },
+  "ingest_verdict": {
+    "status": "PARTIALLY_ADMITTED_WITH_CORRECTION",
+    "packet_schema_conformance": "FAIL",
+    "schema_failure": "target_2_0_action=RESEARCH is not an allowed enum value in the current INGEST_PACKET_SCHEMA.json.",
+    "fully_consumed": false,
+    "reason_not_fully_consumed": "The packet contains a schema-invalid action and one material claim was corrected by newer direct external-primary documentation. A corrected/superseding packet may later close packet-level consumption cleanly.",
+    "legacy_ingest_state_mutated": false,
+    "legacy_ingest_state_reason": "Fail closed against marking a schema-invalid packet fully consumed; preserve append-only checkpoint under concurrent branch movement."
+  },
+  "crosschecks": [
+    {
+      "kind": "CURRENT_DONOR_SOURCE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "5580-5845",
+      "result": "CONFIRMED",
+      "finding": "handoff() writes durable delegated-work package/capsule state and explicitly does not spawn/delegate a child itself."
+    },
+    {
+      "kind": "CURRENT_DONOR_CONFIG",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "span": "1-81",
+      "result": "CONFIRMED",
+      "finding": "Donor plugin lacks dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted hook registrations."
+    },
+    {
+      "kind": "CURRENT_DONOR_SPEC",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "result": "CONFIRMED",
+      "finding": "Architecture specification expects handoff before native spawn and reconcile after spawn, leaving spawn outside stern.py handoff."
+    },
+    {
+      "kind": "EXTERNAL_PRIMARY_CURRENT_DOCUMENTATION",
+      "source": "Claude Code hooks and Agent SDK documentation reviewed 2026-08-28",
+      "result": "MATERIAL_CORRECTION",
+      "finding": "Current docs expose call-scoped tool_use_id on tool hooks, unique agent_id on subagent lifecycle, separate task_id on task lifecycle, agent_id on tool hooks firing inside a subagent, and AgentOutput.agentId in the built-in Agent tool output contract. This supplies a documented ABI-level parent Agent tool_use_id -> child agent_id join candidate, but not installed-runtime proof."
+    }
+  ],
+  "architecture_write": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORK_EXECUTION_BINDING_DELTA_2026-08-28T103357Z_GPT56SOL.json",
+    "commit": "633480e1d65acdfee9f9a7896af84b39a7e24706",
+    "component": "WorkExecutionBinding/v1",
+    "status": "WRITTEN"
+  },
+  "design_change": {
+    "before": "Package identity and native child execution identity were not closed; packet treated the tool_use_id -> agent_id join as wholly unproven.",
+    "after": "Frankenstein 2.0 now has an explicit WorkExecutionBinding/v1 identity contract separating package_id, parent Agent tool_use_id, child agent_id, optional task_id, child tool_use_id and generation. The join is admitted only as documented ABI/source evidence until exact installed-runtime capture succeeds.",
+    "triggerword4_handoff": "Port donor handoff/reconcile semantics, add native subagent lifecycle capture, bind package + generation + parent tool_use_id + child agent_id append-only, bind child effects to child agent_id + child tool_use_id, and require typed completion evidence. Do not use time/order/session-only joins."
+  },
+  "epistemic_boundary": {
+    "source_crosscheck": true,
+    "external_primary_documentation_crosscheck": true,
+    "installed_target_runtime_observed": false,
+    "vps_execution_performed": false,
+    "provider_execution_performed": false,
+    "whole_product_runtime_credit": 0,
+    "work_execution_binding_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_discriminator": "When current execution authority explicitly admits the exact target surface, capture one harmless native Agent invocation with parent PreToolUse/PostToolUse, SubagentStart/SubagentStop and one harmless child tool event. Prove exact equality between parent PostToolUse.tool_response.agentId and lifecycle agent_id and preserve child agent_id + child tool_use_id. Until then source/documentation credit only."
+}

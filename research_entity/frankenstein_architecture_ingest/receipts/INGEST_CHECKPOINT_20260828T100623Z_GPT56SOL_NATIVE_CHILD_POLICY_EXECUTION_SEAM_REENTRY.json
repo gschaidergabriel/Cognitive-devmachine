@@ -1,0 +1,129 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "checkpoint_id": "TW5-CHECKPOINT-20260828T100623Z-NATIVE-CHILD-POLICY-EXECUTION-SEAM-REENTRY-GPT56SOL",
+  "created_at": "2026-08-28T10:06:23Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/native-child-policy-execution-seam-reentry",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "routing_status": "VERIFIED",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "source_identity": {
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "e0abc55adef5c4a4d65a6a50ac64ed455b6e09d5",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "hooks_blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+    "architekt_governance_blob_sha": "b578cc8651c50db1ef98c3d5c74f95f81ba24db9",
+    "architekt_tiefensitzung_blob_sha": "98039b4f3bcc8a9d8882f82521cb2e35a175f1a6"
+  },
+  "direct_source_crosscheck": [
+    {
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "classification": "ARCHITECTURE_DOC",
+      "finding": "The governance path explicitly requires user permission before an architect agent is spawned and requires stern.py handoff before spawning plus reconcile afterward; parallel build agents are preceded by lastschutz.",
+      "result": "PASS_SOURCE_SCOPE"
+    },
+    {
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_tiefensitzung.md",
+      "classification": "ARCHITECTURE_DOC",
+      "finding": "The seven-day deep-session path likewise states that the architect agent is spawned only after approval, with handoff before spawn and reconcile after; all substantive research/concept work is judgment of the spawned architect rather than deterministic code.",
+      "result": "PASS_SOURCE_SCOPE"
+    },
+    {
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "classification": "LIVE_CODE",
+      "finding": "handoff() persists entityos_arbeitspaket and returns a deterministic DB-derived capsule, but its executable-source docstring explicitly states stern delegates nothing itself.",
+      "result": "PASS_SOURCE_SCOPE"
+    },
+    {
+      "source": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "classification": "CONFIG",
+      "finding": "The pinned donor plugin registers seven generic lifecycle hooks and no dedicated SubagentStart/SubagentStop/Task lifecycle hooks in this versioned config.",
+      "result": "PASS_SOURCE_SCOPE_HOST_GLOBAL_SETTINGS_UNOBSERVED"
+    }
+  ],
+  "reconciliation": {
+    "semantic_result": "CORROBORATES_EXISTING_WORKEXECUTIONBINDING_NO_NEW_COMPETING_ARCHITECTURE_DELTA",
+    "existing_primary_deltas": [
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0838Z_NATIVE_CHILD_IDENTITY_BINDING_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0840Z_NATIVE_SUBAGENT_IDENTITY_BINDING_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T084125Z_NATIVE_SUBAGENT_IDENTITY_CROSSCHECK_GPT56SOL.json"
+    ],
+    "existing_contract": "WorkExecutionBinding/v1",
+    "preserved_boundary": "POLICY_EXPECTS_NATIVE_CHILD_SPAWN + DURABLE_HANDOFF_EXISTS + HANDOFF_IS_NOT_SPAWN + VERSIONED_DONOR_CHILD_LIFECYCLE_BINDING_ABSENT",
+    "new_information_gain": "Direct donor architecture-document corroboration pins the intended ordering handoff -> spawn -> child work -> reconcile while preserving that the concrete current spawn consumer remains outside the inspected deterministic donor path.",
+    "duplicate_packet_consumption": false,
+    "shared_ingest_state_overwrite": false,
+    "reason": "INGEST_STATE is a mixed-freshness concurrently moving aggregate; append-only checkpoints/deltas outrank destructive whole-file reconciliation for this reentry."
+  },
+  "parallel_reentry": {
+    "observed_branch_advance_from": "49a77cd74142048cd20de4aff5e40254392fbe71",
+    "observed_branch_head_before_write": "e0abc55adef5c4a4d65a6a50ac64ed455b6e09d5",
+    "observed_new_parallel_work": [
+      "effect/completion currentness packet and deltas",
+      "effect/completion invocation model/receipt",
+      "Triggerword-4 live cognitive control plane directive",
+      "Triggerword-4 VPS execution-surface override"
+    ],
+    "resolution": "DO_NOT_DUPLICATE_PARALLEL_EFFECT_OR_NATIVE_CHILD_DELTAS"
+  },
+  "trigger4_feed": {
+    "status": "WORKEXECUTIONBINDING_REMAINS_P0_FUNCTIONAL_INTERFACE",
+    "required_sequence": [
+      "persist workpackage/capsule",
+      "invoke the exact observed native or bounded successor spawn mechanism",
+      "bind workpackage_id + generation to observed child actor/task identity",
+      "bind each mutating call to immutable tool_use_id or equivalent invocation identity",
+      "return terminal result through typed invocation-bound completion evidence",
+      "preserve resume/replacement history instead of overwriting actor lineage"
+    ],
+    "direct_small_exception": "A DIRECT_SMALL coordinator action must be represented as direct execution, not fabricated as a child spawn.",
+    "runtime_discriminator": "Observe the exact installed Claude Code build/config and one harmless native child lifecycle from handoff through spawn/lifecycle/reconcile; documentation and donor policy are insufficient for runtime credit.",
+    "functional_priority": "Native child/task/lifecycle ABI and WorkExecutionBinding remain ahead of security-only archaeology under the current functional-core-first directive."
+  },
+  "execution_surface_note": {
+    "current_trigger4_override_observed": "research_entity/continuity/triggerword4/VPS_EXECUTION_SURFACE_OVERRIDE_CURRENT.json",
+    "override_status": "CURRENT_OWNER_DIRECTED_OVERRIDE",
+    "interpretation": "Triggerword-4 runtime work must self-resolve documented VPS/self-hosted routes rather than treat missing direct SSH as an external blocker.",
+    "this_trigger5_run": "SOURCE_FORENSICS_AND_APPEND_ONLY_CHECKPOINT_ONLY_NO_RUNTIME_PROBE"
+  },
+  "contradictions_preserved": [
+    "Donor architecture docs explicitly prescribe spawning architect/build agents, while the inspected deterministic handoff implementation explicitly performs no spawn.",
+    "The versioned donor plugin lacks dedicated child lifecycle hooks, while host/global/managed settings may add lifecycle capture outside the repository; installed-host behavior remains UNKNOWN.",
+    "Current platform capability documentation can make WorkExecutionBinding plausible but cannot substitute for installed-runtime observation.",
+    "Parallel branch activity has already persisted effect/completion successors; duplicate deltas would reduce evidence quality rather than add independence."
+  ],
+  "execution": {
+    "provider_calls": 0,
+    "runtime_tests": 0,
+    "vps_runtime_tests": 0,
+    "donor_writes": 0,
+    "external_effects": 0,
+    "unusual_experiment": false,
+    "source_only": true
+  },
+  "credits": {
+    "routing": "PASS",
+    "donor_source_crosscheck": "PASS",
+    "architecture_document_crosscheck": "PASS",
+    "dedupe_reentry": "PASS",
+    "native_child_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "completion_runtime": 0,
+    "physical_grid10": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "acceptance": "TRIGGER5_SOURCE_FORENSICS_REENTRY_CHECKPOINT_COMMITTED_RUNTIME_UNRESOLVED",
+  "next_exact_action": "Triggerword 4 should execute the current functional lane: observe the installed native child spawn/lifecycle ABI through the self-resolved authorized execution route and bind one harmless workpackage to exact agent/task/tool invocation identities before promoting any native-child runtime claim."
+}

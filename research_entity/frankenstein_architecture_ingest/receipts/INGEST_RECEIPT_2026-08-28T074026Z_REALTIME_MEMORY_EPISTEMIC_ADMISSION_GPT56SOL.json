@@ -1,0 +1,74 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T074026Z-REALTIME-MEMORY-EPISTEMIC-ADMISSION-GPT56SOL",
+  "trigger": "triggerwort 5",
+  "recorded_at": "2026-08-28T14:45:00+07:00",
+  "status": "SOURCE_PACKET_CONSUMED_DIRECT_CROSSCHECK_RUNTIME_CREDIT_ZERO",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF"
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "packet": {
+    "id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T074026Z_REALTIME_MEMORY_READ_EPISTEMIC_COLLAPSE_GPT56SOL.json",
+    "classification": "NEW_PACKET_DIRECTLY_CROSSCHECKED_AT_EXACT_DONOR"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_REALTIME_MEMORY_EPISTEMIC_ADMISSION_DELTA_2026-08-28T1445P0700_GPT56SOL.json",
+    "commit": "c0846c02d72a56269ab38dc9dd40306711ec4072",
+    "feeds_triggerword4": true
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "realtime_blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa"
+  },
+  "crosschecks": [
+    "Exact donor stern.py shows conversation-memory rows are stored as id/ts/subject/value/quelle and direct Realtime retrieval returns {ts,subject,value,quelle}.",
+    "For non-empty search, exact donor stern.py appends durable_memory rows into the same treffer list with quelle='durable_memory'; no explicit transformation/epistemic/admission class is returned on this path.",
+    "Exact donor realtime_gespraech.py forwards memory read directly to stern and memory write after only non-empty subject/value validation; wrapper-level MemoryAdmission is absent in the inspected path.",
+    "Storage remains separated and the writer remains narrow; this receipt does not claim arbitrary UnifiedDB mutation or repository-wide absence of stronger typing in other consumers."
+  ],
+  "dedupe": {
+    "prior_packets": "Earlier Realtime effect/task/memory packets established direct memory mutation and separate task/effect authority; they are not double-counted here.",
+    "unique_delta": "Direct reader epistemic under-typing is now closed against exact source: heterogeneous conversation/durable records share a common retrieval projection without explicit epistemic/transformation/admission identity."
+  },
+  "state_sync": {
+    "INGEST_STATE_updated_by_this_receipt": false,
+    "reason": "The shared branch is receiving concurrent Triggerword-5 writes. Append-only receipt avoids unsafe last-writer-wins state overwrite; a later exact-CAS reconciliation should register this packet/delta/receipt.",
+    "required_registration": [
+      "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+      "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_REALTIME_MEMORY_EPISTEMIC_ADMISSION_DELTA_2026-08-28T1445P0700_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T074026Z_REALTIME_MEMORY_EPISTEMIC_ADMISSION_GPT56SOL.json"
+    ]
+  },
+  "finding": "The direct Realtime memory path preserves separate storage tables but does not preserve explicit epistemic/transformation/admission classes in its returned record shape. Frankenstein-2.0 should introduce MemoryCandidate -> deterministic MemoryAdmission -> provenance-bearing MemoryRecord and typed retrieval; remembered/model-generated content cannot mint factual truth by persistence or retrieval.",
+  "next_exact_gate": "Audit all decision-relevant consumers of gespraech_erinnerung and durable_memory for stronger downstream typing, while Triggerword-4 implements typed memory admission/retrieval fixtures; independently continue exact host hook/enforcement proof for real external effects.",
+  "execution": {
+    "runtime_execution_performed": false,
+    "provider_execution": false,
+    "vps_execution": false,
+    "paid_execution": false,
+    "unusual_experiment": false
+  },
+  "credits": {
+    "source_forensics": "PASS_AT_DECLARED_SOURCE_SCOPE",
+    "memory_runtime_acceptance": 0,
+    "runtime_causal": 0,
+    "effect_runtime_acceptance": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "canonical_semantics": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

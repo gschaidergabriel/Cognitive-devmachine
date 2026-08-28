@@ -1,0 +1,112 @@
+{
+  "schema": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T08:11:00Z",
+  "status": "INGESTED_HISTORICAL_SETTINGS_INHERITANCE_SOURCE_ONLY",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_branch": {
+    "ref": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_before_ingest": "6d81876d2f6b12b98c30892b8d7dcea946686d25"
+  },
+  "consumed_packet_ids": [
+    "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL"
+  ],
+  "provenance_order": [
+    "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T074533Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_GPT56SOL.json"
+  ],
+  "direct_source_crosscheck": {
+    "sources": [
+      "Drive:UEBERGABE-A3.md?id=1EFjRYX_lYhbXcOab2zjQot9LMo7UBs_J",
+      "Drive:.antwort-A3.txt?id=1TUqIpiGJAWnSM65LvQf5X10i9kRXDpM9",
+      "Drive:UEBERGABE-KOORD.md?id=11pywfhKAlYbUEUR8Xhu9ypU7sJABIEoc"
+    ],
+    "observed": [
+      "A3 historical handoff explicitly reports a Claude session launched in a directory without its own .claude inheriting a blocking watcher through --settings and returning a block that names .claude/wache-befehl.py.",
+      "The A3 answer log independently restates that the inherited barrier blocked in the launched session and attributes the route to --settings.",
+      "The contemporaneous KOORD handoff reports the Schranke probe covering both directions at 34/34."
+    ],
+    "classification": "HISTORICAL_PROJECT_MEASUREMENT_CROSSCHECK_NO_CURRENT_RUNTIME_PROMOTION"
+  },
+  "forensic_finding": {
+    "proven": [
+      "The historical Frankenstein lineage had at least one cross-directory policy/barrier propagation mechanism that survived absence of a local working-directory .claude tree.",
+      "The historical barrier family had project-measured blocking behavior beyond policy prose."
+    ],
+    "not_proven": [
+      "Current host/global hook wiring at donor SHA 5641dc6b2df6ebed1df246ee7533134324f6c427.",
+      "Identity or byte-equivalence between .claude/wache-befehl.py and archived wache-koenig.py.",
+      "Exact historical --settings artifact bytes, matcher scope, hook ordering, source hash, or installation generation.",
+      "Coverage of every current state-changing Realtime/non-Bash mutation path by an equivalent pre-side-effect boundary."
+    ]
+  },
+  "architecture_delta": [
+    {
+      "id": "TW5-SETTINGS-INHERITANCE-DONOR-PATTERN",
+      "action": "ADAPT_TO_GRID",
+      "claim": "Preserve the useful donor property that enforcement policy can be bound outside the current working directory and inherited by child/helper sessions, but replace implicit hidden settings inheritance as an authority mechanism with an explicit typed launch-policy binding."
+    },
+    {
+      "id": "TW5-SETTINGS-INHERITANCE-NO-HIDDEN-AUTHORITY",
+      "action": "REPAIR",
+      "claim": "Frankenstein 2.0 must not rely on ambient .claude lookup or undocumented host/global --settings as final effect authority. A deterministic control-plane artifact should bind policy bundle identity, generation, matcher/order, capability scope and launch/session identity before any mutating tool path is admitted."
+    },
+    {
+      "id": "TW5-WACHE-KOENIG-IDENTITY-UNKNOWN",
+      "action": "COMPATIBILITY_ONLY",
+      "claim": "Keep wache-befehl and wache-koenig as separate historical lineage nodes until exact source identity/equivalence is recovered; naming similarity or shared project role is insufficient to merge them."
+    }
+  ],
+  "successor_contract": {
+    "conceptual_type": "LaunchPolicyBinding",
+    "minimum_fields": [
+      "policy_bundle_digest",
+      "policy_bundle_version",
+      "hook_matcher_and_order_digest",
+      "launch_or_session_id",
+      "generation",
+      "capability_scope",
+      "source_provenance",
+      "issued_at",
+      "expiry_or_lifetime",
+      "admission_decision_id"
+    ],
+    "authority_rule": "A LaunchPolicyBinding may constrain a child/helper session but cannot replace per-invocation HumanIntentDecision and one-shot EffectDecision where the operation class requires them."
+  },
+  "triggerword4_acceptance": [
+    "Launch the same bounded helper/session from a directory with no local .claude and prove the explicit policy bundle remains bound by digest and generation.",
+    "Changing cwd or adding/removing a local .claude tree cannot silently weaken the bound policy.",
+    "Missing, stale, mismatched or reordered policy bundle identity fails closed for mutating capability classes.",
+    "Acceptance receipt records exact policy bytes/digest, matcher/order identity, launch/session identity and source generation.",
+    "A valid launch-policy binding does not authorize an unbound child mutation; per-invocation effect authority remains independently required.",
+    "No test may promote current wache-koenig reachability from this historical --settings evidence alone."
+  ],
+  "contradiction_status": {
+    "historical_inheritance": "NARROWED_BY_PROJECT_MEASUREMENT",
+    "exact_scheduler_registration_and_order": "UNRESOLVED",
+    "current_host_global_reachability": "UNRESOLVED",
+    "wache_befehl_vs_wache_koenig_identity": "UNRESOLVED"
+  },
+  "credits": {
+    "source_forensics": "HISTORICAL_MEASUREMENT_CROSSCHECKED",
+    "new_runtime_credit": 0,
+    "effect_runtime_acceptance": 0,
+    "canonical_semantics_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Recover the exact historical --settings artifact or launcher registration that names .claude/wache-befehl.py, including matcher/order and source identity; separately continue current-donor Realtime mutation/effect-boundary audit without using this historical evidence as current runtime credit."
+}

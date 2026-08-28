@@ -1,0 +1,196 @@
+{
+  "schema": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:40:14Z",
+  "authority_epoch": "8.78",
+  "status": "MULTIPACKET_SOURCE_FORENSIC_FUSION_NO_RUNTIME_PROMOTION",
+  "source_snapshot": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "canonical_main_observed": "c770d0b16e64b965e8c4722f2f5696f6039a6566",
+    "design_branch_before_write": "27e8be761e0fe119902c5ec66659924b3c5b8a1b"
+  },
+  "ingested_packets": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+      "classification": "CORROBORATING_GIT_CHRONOLOGY_AND_DONOR_CLOSURE_NO_INDEPENDENT_RUNTIME_CREDIT"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
+      "classification": "PRIMARY_CURRENT_SOURCE_EFFECT_BOUNDARY"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
+      "classification": "CORROBORATING_CURRENT_SOURCE_MUTATION_POLICY_BOUNDARY"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+      "classification": "SCHEMA_VALIDATED_SUPERSEDING_HISTORICAL_SOURCE_IDENTITY_NO_RUNTIME_CREDIT"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073652Z-REALTIME-MEMORY-TASK-AUTHORITY-GPT56SOL",
+      "classification": "CORROBORATING_CURRENT_SOURCE_TASK_MEMORY_AUTHORITY_BOUNDARY"
+    }
+  ],
+  "direct_crosschecks_this_ingest": [
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "result": "CONFIRMED two-step task confirmation, call_id-scoped pending function calls, cancelled-response discard, direct memory dispatch, and capsule refresh without capsule serialization in response instructions"
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "result": "CONFIRMED delegated claude -p uses permission mode with Bash hard-disallowed while Read/Write/Edit/Grep/Glob remain available; this is defense-in-depth, not typed per-effect authority"
+    },
+    {
+      "source": "PACKET_20260828T073606Z + already-consumed independent PACKET_20260828T073722Z",
+      "result": "TWO SOURCE-IDENTITY CHECKS AGREE on historical wache-koenig/freigabe hashes and Bash-scoped one-shot pre-dispatch semantics; neither promotes current host reachability"
+    }
+  ],
+  "forensic_findings": [
+    {
+      "finding_id": "F2_VOICE_TASK_INTENT_IS_NOT_EFFECT_AUTHORITY",
+      "classification": "CURRENT_SOURCE_CROSSCHECKED",
+      "claim": "Realtime frank_auftrag_stellen has a real mechanical human-intent precursor: first call proposes, second call must match normalized task text, request bestaetigt=true, follow at least one new server-originated audio transcription, avoid explicit contradiction and remain within 300 seconds. This admits a high-level task request only. It does not bind or pre-authorize the concrete downstream Write/Edit or other state-changing calls performed by the delegated Claude process.",
+      "migration": "Keep the voice confirmation primitive, but mint a typed TaskAdmission bound to immutable invocation/task digest and require each downstream state-changing effect to obtain and atomically consume its own EffectDecision."
+    },
+    {
+      "finding_id": "F2_REALTIME_CALL_ID_IS_USEFUL_PREEXEC_INVOCATION_ID",
+      "classification": "CURRENT_SOURCE_CROSSCHECKED",
+      "claim": "Realtime buffers model function calls by call_id and discards them when a response completes with non-completed/cancelled status or barge-in clears the pending map. This is a strong pre-dispatch identity/cancellation donor, but call_id is not carried through the current delegated Claude sub-effects or stern effect journal.",
+      "migration": "Retain call_id as outer VoiceInvocation identity and derive/bind child TaskAdmission and per-effect invocation identities without conflating pre-dispatch cancellation with post-submission effect outcome."
+    },
+    {
+      "finding_id": "F2_MEMORY_MUTATION_NEEDS_SEPARATE_EPISTEMIC_ADMISSION",
+      "classification": "CURRENT_SOURCE_CROSSCHECKED",
+      "claim": "frank_erinnerung_schreiben directly persists model-selected conversation memory through stern's narrow conversation-memory writer without the task two-step gate. The bounded table scope reduces blast radius, but persistence does not prove factual truth and currently lacks the same explicit typed epistemic/admission boundary demanded by EntityOS authority law.",
+      "migration": "Introduce MemoryCandidate -> MemoryAdmission with source/causal/provenance/privacy/type fields; remembered quote, user claim, model summary, inference and verified observation remain distinguishable. MemoryAdmission is not EffectDecision and cannot mint world fact authority."
+    },
+    {
+      "finding_id": "F2_DELEGATED_CLAUDE_TASK_HAS_PARTIAL_TOOL_RESTRICTION_NOT_FINAL_GATE",
+      "classification": "CURRENT_SOURCE_CROSSCHECKED",
+      "claim": "The voice bridge delegates confirmed tasks to claude -p asynchronously. Bash is hard-disallowed, but file mutation tools remain available. Source inspection does not establish one executor-consumed typed decision for every downstream mutation, so high-level user confirmation plus Bash denial must not be reported as complete EffectGate coverage.",
+      "migration": "Place deterministic per-effect enforcement below modality/task delegation. Front-gates may differ by modality, but final effect authority must converge."
+    },
+    {
+      "finding_id": "F2_WACHE_PREDECESSOR_VALIDATED_BUT_HISTORICAL",
+      "classification": "HISTORICAL_SOURCE_IDENTITY_CORROBORATED",
+      "claim": "The schema-valid successor packet and an independent direct-source crosscheck agree that archived wache-koenig/freigabe implement Bash-scoped pre-dispatch blocking plus exact-command hash, expiry and one-shot ticket consumption. These are reusable enforcement principles, not current runtime proof and not non-Bash coverage.",
+      "migration": "Reuse pre-dispatch deny, separately minted grant, request binding, expiry and one-shot consumption; replace command-regex/raw-command identity with typed capability/resource/invocation/generation/policy identity."
+    },
+    {
+      "finding_id": "F2_DONOR_CLOSURE_REFINED_NOT_SOLVED",
+      "classification": "CORROBORATING_SOURCE_REFINEMENT",
+      "claim": "wegehierarchie source bytes are recoverable under _archiv-phase4, while the live paket.py relative import still targets .wegehierarchie. The problem is therefore executable package closure/retirement intent, not total source loss.",
+      "migration": "Triggerword 4 must either adapt the archived logic into an explicit tested successor or retire the caller branch with a regression proving no silent degradation."
+    }
+  ],
+  "frankenstein2_authority_model_delta": {
+    "typed_boundaries": [
+      "VoiceIntentEvidence",
+      "TaskAdmission",
+      "MemoryCandidate",
+      "MemoryAdmission",
+      "EffectRequest",
+      "EffectDecision",
+      "SubmissionReceipt",
+      "ExecutionReceipt",
+      "EffectOutcome",
+      "WorldEffectVerification",
+      "ResultReentry"
+    ],
+    "non_implication_rules": [
+      "VoiceIntentEvidence does not imply TaskAdmission",
+      "TaskAdmission does not imply EffectDecision",
+      "MemoryAdmission does not imply factual truth",
+      "EffectDecision does not imply successful submission",
+      "SubmissionReceipt does not imply known outcome",
+      "Execution success cannot retroactively create admission authority",
+      "cancelled before local dispatch is not equivalent to cancelled after submission"
+    ],
+    "task_admission_required_fields": [
+      "task_admission_id",
+      "voice_invocation_id_or_call_id",
+      "task_request_digest",
+      "session_id",
+      "causal_event_id",
+      "evidence_refs",
+      "decision",
+      "issued_at",
+      "expires_at"
+    ],
+    "effect_decision_required_fields": [
+      "decision_id",
+      "invocation_id_or_tool_use_id",
+      "parent_task_admission_id_if_any",
+      "request_digest",
+      "session_id",
+      "generation",
+      "causal_event_id",
+      "policy_version",
+      "capability_scope",
+      "resource_identity",
+      "decision",
+      "issued_at",
+      "expires_at"
+    ],
+    "memory_admission_rule": "Conversation memory remains typed remembered evidence/candidate with provenance and privacy policy; it cannot silently become canonical world fact or a capability grant.",
+    "executor_rule": "Every non-exempt state-changing effect must atomically consume exactly one matching EffectDecision at the actual execution boundary. Task-level approval, model tool choice, Bash denial, hook journaling and post-hoc success are insufficient substitutes.",
+    "cancellation_rule": "Realtime call cancellation may prove PRE_DISPATCH_CANCELLED only while the call is still buffered. Once a downstream task/effect is submitted, outcome transitions through SUBMITTED -> VERIFIED_SUCCESS/VERIFIED_FAILURE/OUTCOME_UNKNOWN and is never blindly replayed."
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-EFFECT-AUTHORITY-010",
+      "status": "OPEN",
+      "detail": "Realtime task confirmation is real but high-level; exact per-effect authorization across delegated mutations is not source-proven."
+    },
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-011",
+      "status": "OPEN",
+      "detail": "Model-selected conversation memory can become durable immediately; the table is narrow, but epistemic type/provenance/admission must be explicit so memory cannot become fact by persistence."
+    },
+    {
+      "id": "TW5-CONTRADICTION-MULTISPEAKER-CONFIRMATION-012",
+      "status": "OPEN",
+      "detail": "The current two-step voice gate has no speaker verification/full intent classifier; source itself admits unrelated second-speaker speech can satisfy the freshness condition if model interpretation and keyword veto align."
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-REACHABILITY-008",
+      "status": "OPEN",
+      "detail": "Historical source identity is now multiply corroborated, but current/historical scheduler registration, ordering and live reachability remain unproven."
+    }
+  ],
+  "triggerword4_handoff": {
+    "required_design_changes": [
+      "Compile voice confirmation into TaskAdmission, never blanket downstream effect permission.",
+      "Bind Realtime call_id/outer invocation identity through task and child effect lineage.",
+      "Classify every Realtime tool as READ_ONLY, EPHEMERAL_STATE, CANONICAL_INTERNAL_MUTATION, EXTERNAL_EFFECT_REQUEST or SESSION_CONTROL.",
+      "Add deterministic MemoryAdmission and preserve remembered-claim versus verified-fact distinction.",
+      "Require one-shot per-effect EffectDecision consumption at the actual executor across Bash and non-Bash mutations.",
+      "Preserve PRE_DISPATCH_CANCELLED versus SUBMITTED/OUTCOME_UNKNOWN semantics."
+    ],
+    "required_regressions": [
+      "same voice task text with wrong call_id/task digest is rejected",
+      "valid TaskAdmission cannot authorize an unbound child mutation",
+      "cancelled Realtime response cannot dispatch buffered function calls",
+      "post-submission transport loss produces OUTCOME_UNKNOWN not CANCELLED",
+      "memory entry remains typed remembered evidence and cannot satisfy a verified-fact predicate by persistence alone",
+      "parallel voice tasks cannot cross-assign shared Claude-session effects/results",
+      "Write/Edit and other non-Bash mutations traverse deterministic effect authority",
+      "one-shot EffectDecision reuse is rejected"
+    ]
+  },
+  "credits": {
+    "source_forensics": "ADVANCED_AND_CROSSCHECKED",
+    "historical_source_identity": "CORROBORATED",
+    "runtime_reexecution": 0,
+    "current_host_effect_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Trace the exact host/plugin enforcement loaded by gespraechsmodus.claude_frage and every mutating Realtime tool, then feed Triggerword 4 a tested TaskAdmission -> child EffectRequest -> one-shot EffectDecision executor contract; separately trace conversation-memory read paths to prove remembered evidence never becomes world fact by retrieval."
+}

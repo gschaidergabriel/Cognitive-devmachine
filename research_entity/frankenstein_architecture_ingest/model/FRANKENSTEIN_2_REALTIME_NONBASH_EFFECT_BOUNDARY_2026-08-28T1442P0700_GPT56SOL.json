@@ -1,0 +1,114 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_REALTIME_NONBASH_EFFECT_BOUNDARY",
+  "recorded_at": "2026-08-28T14:42:48+07:00",
+  "trigger": "triggerwort 5",
+  "status": "SOURCE_GROUNDED_NONBASH_EFFECT_BOUNDARY_GAP_RUNTIME_CREDIT_ZERO",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13AA_NON_AUTHORITY",
+    "mode": "FREE_ONLY_OWNER_EMERGENCY_STOP_HARD_OFF",
+    "evidence_scope": "SOURCE_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION"
+  },
+  "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "4b2524747c57a5c5dcd633bf71439acf8c18c760"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "finding": "Realtime _tool_ausfuehren receives the API call_id, but frank_erinnerung_schreiben dispatches directly in-process through _stern('gespraech-erinnerung-schreiben'), while frank_auftrag_stellen uses a two-step voice confirmation and then self.auftrag.stellen()."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "finding": "claude_frage launches headless Claude with --permission-mode acceptEdits and unconditionally --disallowedTools Bash. Its own source comment states Read/Write/Edit/Grep/Glob remain available. No --settings argument is passed by claude_frage."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "gespraech_erinnerung_schreiben inserts subject/value/source directly into unified.db table gespraech_erinnerung and commits. The tool is deliberately restricted to that table but is a durable state write."
+    },
+    {
+      "path": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ACTION_BOUNDARY_SUBMANIFEST.json",
+      "finding": "Historical wache-koenig is exact-byte pinned but is Bash-only; current scheduler registration/order remains unproven."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_REALTIME_MEMORY_DIRECT_DURABLE_WRITE_034",
+      "source_kind": "LIVE_CODE_PLUS_STATE_WRITE_CODE",
+      "claim": "A Realtime model function call can cause a durable write to unified.db without passing through Claude Code or the historical Bash watcher: frank_erinnerung_schreiben -> _tool_erinnerung_schreiben -> direct in-process stern.gespraech_erinnerung_schreiben -> INSERT+COMMIT into gespraech_erinnerung.",
+      "boundary": "This proves a source-level durable write path, not that arbitrary canonical facts are accepted. Frankenstein 2.0 must preserve the content as model/user conversation provenance and must not let a model-written memory row silently mint observed-world truth.",
+      "target_2_0_action": "ADAPT_TO_TYPED_MEMORY_WRITE_ADMISSION"
+    },
+    {
+      "atom_id": "F2_REALTIME_ACTION_BASH_BLOCKED_FILETOOLS_REMAIN_035",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "Voice-confirmed frank_auftrag_stellen eventually starts headless Claude with Bash hard-disabled, but Read/Write/Edit/Grep/Glob intentionally remain available under acceptEdits. Therefore historical wache-koenig cannot be the final authority for remaining voice-originated state-changing file effects because its source only gates Bash.",
+      "boundary": "Claude Code permission handling may still apply through its own settings stack; this Triggerword-5 source pass does not promote any current global scheduler registration or ordering. The narrower statement is source-proven: the archived Bash-only watcher cannot cover non-Bash Write/Edit effects.",
+      "target_2_0_action": "REPAIR_TO_ONE_TYPED_EXECUTOR_BOUND_EFFECT_GATE"
+    },
+    {
+      "atom_id": "F2_VOICE_CONFIRMATION_IS_INTENT_GATE_NOT_EFFECT_DECISION_036",
+      "source_kind": "ENFORCEMENT_CODE_WITH_DECLARED_LIMIT",
+      "claim": "The Realtime two-step order confirmation is a useful front-door intent discriminator: same normalized text, a later server-transcribed utterance, <=300s age and no simple contradiction keyword. It is not a canonical EffectDecision: it is not bound to the Realtime call_id, request_digest, generation, causal_event_id, capability/resource identity or final executor identity, and the source explicitly admits lack of speaker verification.",
+      "target_2_0_action": "PRESERVE_FRONT_GATE_BUT_REQUIRE_TYPED_EFFECT_DECISION_AFTER_IT"
+    },
+    {
+      "atom_id": "F2_REALTIME_CALL_ID_AVAILABLE_BUT_DROPPED_AT_AUTHORITY_BOUNDARY_037",
+      "source_kind": "LIVE_CODE",
+      "claim": "Realtime _tool_ausfuehren already receives call_id and uses it for function_call_output correlation, but the current memory-write and order-confirmation authority state do not bind their durable/external action identity to that call_id. Frankenstein 2.0 can reuse this available call-scoped identifier as one input to immutable invocation identity instead of correlating by free-form text or session-local mutable state.",
+      "target_2_0_action": "BIND_CALL_ID_TO_INVOCATION_ID_AND_REQUEST_DIGEST"
+    }
+  ],
+  "architecture_fusion": {
+    "voice_to_effect_contract": [
+      "VOICE_FUNCTION_CALL is candidate cognition, not authority.",
+      "A modality-specific confirmation may produce USER_INTENT_EVIDENCE but cannot by itself authorize an external or canonical state effect.",
+      "Durable conversation memory writes enter a typed MEMORY_WRITE_ADMISSION carrying call_id/invocation_id, request_digest, session_id, generation, causal_event_id when available, source modality, user/model provenance and epistemic class.",
+      "File/system/task effects converge after the voice front-gate on one executor-bound EffectRequest -> EffectDecision/CapabilityLease -> EnforcementDecision -> SubmissionReceipt -> ExecutionReceipt -> WorldEffectVerification -> ResultReentry -> CompletionEvidence chain.",
+      "Bash disallow remains useful defence in depth for voice-originated headless Claude, but cannot stand in for whole-effect authority because non-Bash state-changing tools remain available.",
+      "Successful tool completion or PostToolUse evidence never retroactively creates admission/enforcement authority."
+    ],
+    "triggerword4_handoff": [
+      "Route Realtime frank_erinnerung_schreiben through typed memory admission before durable commit; preserve model-generated versus user-observed provenance explicitly.",
+      "Keep the current two-step voice confirmation as a front-gate, then require an immutable one-shot EffectDecision bound to the actual call/invocation and exact requested effect before any state-changing executor path.",
+      "Prove Write/Edit and every other non-Bash state-changing tool cannot bypass the same deterministic EffectGate.",
+      "Add regressions: same text/new call_id cannot reuse a prior decision; wrong request_digest/generation/resource rejected; Bash blocked does not count as Write/Edit coverage; direct memory write without admission rejected; successful execution without prior admission remains ADMISSION_UNKNOWN."
+    ]
+  },
+  "contradiction_update": [
+    {
+      "id": "TW5-CONTRADICTION-WACHE-COVERAGE-009",
+      "status": "SOURCE_CONFIRMED_GAP",
+      "resolution_delta": "The current voice action bridge disables Bash but deliberately leaves file tools available, so the historical Bash-only watcher cannot provide whole-effect coverage for the voice path even if scheduler registration were later proven."
+    },
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-010",
+      "status": "SOURCE_CONFIRMED_ARCHITECTURE_REPAIR_OPEN",
+      "resolution_delta": "Realtime memory persistence is a direct durable unified.db write driven by model function-call arguments. Preserve it only as typed provenance-bearing memory admission, never as untyped canonical fact creation."
+    }
+  ],
+  "credits": {
+    "source_forensics": "PRESENT",
+    "new_runtime_execution": 0,
+    "effect_enforcement_runtime": 0,
+    "current_host_scheduler_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Enumerate the remaining Realtime/Claude state-changing tool classes and their final dispatch mechanisms, then require one typed non-Bash-capable executor boundary in the Triggerword-4 assembly; separately recover current global settings registration only as lineage/runtime-reachability evidence, not as the successor architecture."
+}

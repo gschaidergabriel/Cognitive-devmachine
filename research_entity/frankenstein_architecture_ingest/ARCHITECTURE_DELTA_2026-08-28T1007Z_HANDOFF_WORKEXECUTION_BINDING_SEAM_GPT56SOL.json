@@ -1,0 +1,157 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T10:07:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/handoff-workexecution-binding-seam",
+  "classification": "CURRENT_DONOR_SOURCE_FORENSICS_NO_RUNTIME_CREDIT",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_observed_before_write": "e0abc55adef5c4a4d65a6a50ac64ed455b6e09d5"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "source_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "packet_ingest": {
+    "new_packet_consumed_by_this_delta": false,
+    "reason": "The 09:14/09:17 effect-authority packets already have successor ingest/dedupe deltas and receipts on the moving design branch. This delta advances a distinct forensic frontier instead of duplicating packet consumption."
+  },
+  "material_finding": "The donor PHASE-5 handoff/reconcile mechanism gives Frankenstein a useful deterministic work-package and transition-capsule substrate, but the package-to-executor seam is not identity-bound in donor source. handoff() writes parent session/work intent and builds the capsule, while stern explicitly does not spawn the child. File leases are attached to the delegating parent session/generation. reconcile() later selects only package session/stand/order and validates evidence at session scope. No execution_actor_class, child actor/task/spawn identity, child generation, policy-envelope digest, worktree identity or terminal child receipt is bound by this source path. This is a source-grounded WorkExecutionBinding gap, not proof that an external/current host wrapper cannot supply such binding at runtime.",
+  "atoms": [
+    {
+      "atom_id": "TW5-HANDOFF-WEB-001-DETERMINISTIC-CAPSULE",
+      "subsystem": "delegation_workpackage",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5727,
+      "line_end": 5805,
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "handoff() creates a running entityos_arbeitspaket, derives affected files/open work/relevant memory from deterministic DB state, emits Room/theme state, and returns a textual transition capsule containing the package id and evidence requirement. The function explicitly states that stern itself does not delegate/spawn the child.",
+      "runtime_reachable": null,
+      "authority_class": "DETERMINISTIC_WORKPACKAGE_AND_CONTEXT_COMPILER",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 1.0,
+      "known_counterevidence": [],
+      "open_questions": [
+        "Which exact current native spawn call receives this capsule, and how is package_id carried into the child lifecycle?",
+        "Should the capsule itself receive a canonical digest bound into WorkExecutionBinding?"
+      ]
+    },
+    {
+      "atom_id": "TW5-HANDOFF-WEB-002-PACKAGE-EXECUTOR-IDENTITY-GAP",
+      "subsystem": "delegation_identity",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5740,
+      "line_end": 5756,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "The handoff write binds paket_id, owner, parent session, work intent, status and timestamps, but this source write does not bind a child actor class/id, native task id, spawn/invocation id, child generation, policy envelope, cwd/worktree or terminal child receipt.",
+      "runtime_reachable": null,
+      "authority_class": "WORKPACKAGE_IDENTITY_INCOMPLETE_FOR_CHILD_EXECUTION",
+      "failure_mode": "A package can be durable while the identity of the runtime child that actually executes it remains outside the package lineage.",
+      "concurrency_implication": "Parallel children cannot be distinguished from this package write alone.",
+      "target_2_0_action": "REPAIR",
+      "confidence": 1.0,
+      "known_counterevidence": [
+        "A current host/native wrapper outside this donor span may add actor/task binding; that remains runtime/current-host evidence to collect, not source-proven here."
+      ],
+      "open_questions": [
+        "Does the exact installed native Claude spawn ABI expose a stable agent_id/task_id/parent relation that can be bound atomically to paket_id?"
+      ]
+    },
+    {
+      "atom_id": "TW5-HANDOFF-WEB-003-PARENT-SESSION-LEASE-OWNERSHIP",
+      "subsystem": "delegation_concurrency",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5758,
+      "line_end": 5774,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "Before child execution is bound, affected-file leases are created with the delegating parent session_id and parent session generation; the mechanism is explicitly advisory rather than a lock.",
+      "runtime_reachable": null,
+      "authority_class": "ADVISORY_RESOURCE_COORDINATION",
+      "failure_mode": "Two native children under one parent session can be indistinguishable to lease ownership unless another layer binds child/workpackage ownership.",
+      "concurrency_implication": "The historical parallel-child contamination class cannot be excluded by parent-session lease identity alone.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 1.0,
+      "known_counterevidence": [
+        "Disjoint paths or serialized child execution can avoid the collision in particular runs; that does not establish actor attribution."
+      ],
+      "open_questions": [
+        "Should Frankenstein 2.0 derive lease ownership as workpackage_id + child_actor_id + generation, with parent session retained only as coordinator lineage?"
+      ]
+    },
+    {
+      "atom_id": "TW5-HANDOFF-WEB-004-RECONCILE-SESSION-SCOPE-NOT-CHILD-SCOPE",
+      "subsystem": "delegation_completion",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5905,
+      "line_end": 5974,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "reconcile() reads package session/stand/order, chooses pruef_sitzung from an optional caller session override or the package session, runs _beleg_pruefen at that session scope, then writes terminal package status/evidence. This source path does not require the evidence to originate from the child actor/task/generation that executed the package.",
+      "runtime_reachable": null,
+      "authority_class": "SESSION_SCOPED_COMPLETION_RECONCILIATION",
+      "failure_mode": "Valid evidence from the same session scope can be structurally detached from the exact child execution lineage; existing weak effect/test proof issues compound this but are tracked in separate deltas.",
+      "target_2_0_action": "REPAIR",
+      "confidence": 1.0,
+      "known_counterevidence": [
+        "Current host/native orchestration may conventionally pass only the intended child's evidence; convention is not deterministic source binding."
+      ],
+      "open_questions": [
+        "Bind completion to WorkExecutionBinding generation + actor/task/spawn identity + typed terminal receipt before terminal success."
+      ]
+    }
+  ],
+  "architecture_delta": {
+    "preserve": [
+      "One durable workpackage identity per delegated unit.",
+      "Deterministic DB-derived handoff capsule rather than model-authored hidden state transfer.",
+      "Explicit evidence requirement and fail-closed terminal status intent.",
+      "Predeclared affected-file/resource coordination as a collision signal."
+    ],
+    "repair": [
+      "Introduce one immutable WorkExecutionBinding created when a package is attached to a concrete runtime executor.",
+      "Bind package_id, parent_session_id, execution_actor_class, child_actor_id, native_task_id if present, spawn/invocation id, child generation, policy-envelope digest, cwd/worktree identity and capsule digest.",
+      "Make resource ownership attributable to workpackage + child actor/generation rather than parent session alone when children execute concurrently.",
+      "Require terminal completion evidence from the same WorkExecutionBinding lineage; do not transplant runtime credit across HEADLESS_SESSION_CHILD and NATIVE_SUBAGENT_CHILD."
+    ],
+    "do_not_overclaim": "The donor source proves a missing binding in this path. It does not prove that the current installed host/native runtime lacks additional out-of-repo binding, nor does it provide runtime failure/reproduction credit."
+  },
+  "hypotheses": [
+    "A single immutable WorkExecutionBinding between durable workpackage creation and native/headless spawn can preserve the donor's useful deterministic handoff while eliminating package-to-child attribution ambiguity."
+  ],
+  "counterhypotheses": [
+    "The exact current installed orchestration layer may already expose stable actor/task/parent identities and may bind them outside stern.py strongly enough that the donor gap is only a persistence/integration gap rather than an observed runtime attribution failure."
+  ],
+  "contradictions": [
+    "The donor claims structural delegation/evidence discipline, while stern intentionally stops at package/capsule creation and therefore cannot by itself prove which child executes the package.",
+    "Parent-session file leases are useful early collision hints, but they are not sufficient child-level ownership for parallel native actors."
+  ],
+  "trigger4_feed": {
+    "new_gate": "NCX-WORKEXECUTION-BINDING-SEAM",
+    "required_contract": "HANDOFF_PACKAGE -> IMMUTABLE_WORKEXECUTION_BINDING -> ACTOR_CLASS_SPECIFIC_SPAWN -> INVOCATION_BOUND_EFFECTS/EDITS -> TYPED_TERMINAL_RECEIPT -> RECONCILE",
+    "highest_information_discriminator": "On an authorized current host after standing control/quiescence prerequisites, create one harmless real handoff package, spawn the actual native child path, capture package_id + parent_session + child actor/task/spawn identity + policy/cwd/worktree provenance, perform one scratch transformation, and prove that the terminal receipt and reconcile all bind the same generation. Repeat with two disjoint children to test lease/actor separation."
+  },
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "packet_consumption": "NO_NEW_PACKET_CONSUMED",
+    "native_child_runtime": 0,
+    "headless_child_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  }
+}

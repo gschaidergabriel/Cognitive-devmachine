@@ -1,0 +1,61 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "created_at": "2026-08-28T10:05:14Z",
+  "trigger": "triggerwort 5",
+  "canonical_main_sha": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+  "authority_epoch": "9.13",
+  "design_sha_observed_before_write": "0f1b33af8c17a23d2bf7bce491c66f907e7c9f79",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T100514Z_EFFECT_INVOCATION_COMPLETION_AUTHORITY_REBIND_GPT56SOL.json",
+  "architecture_delta_commit": "8dd50f42b5973c1cbeea3f4a74cc6c5b8725b7a8",
+  "packet_provenance": {
+    "v1": {
+      "packet_id": "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
+      "blob_sha": "0a6d3d0b6622bcf423150cf530078cee9b4cf453",
+      "status": "SUPERSEDED_BY_V2_RETAINED_PROVENANCE"
+    },
+    "v2": {
+      "packet_id": "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
+      "blob_sha": "bde5d480a01f8c26b18df6ddab6e5fec3735cb4b",
+      "status": "SOURCE_CROSSCHECKED_PREFERRED_ENVELOPE",
+      "formal_v2_validator_execution_this_run": false
+    }
+  },
+  "direct_source_identity": [
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "spans": ["3100-3580", "5840-6008"]
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "spans": ["1-220"]
+    }
+  ],
+  "findings_crosschecked": [
+    "ordinary donor EffectGate is nonblocking bookkeeping",
+    "PreToolUse writes one mutable session-scoped active_turns.effect_id and PostToolUse reads it later",
+    "completion effect proof rejects only exact legacy lowercase fehler",
+    "textual test:0 claims are accepted without immutable execution identity",
+    "file/Bash hashes are bounded execution-result construction semantics, not generic world-effect verification"
+  ],
+  "runtime_boundary": {
+    "source_forensics_only": true,
+    "provider_execution": false,
+    "vps_execution": false,
+    "donor_runtime_execution": false,
+    "new_runtime_credit": 0,
+    "new_training_credit": 0
+  },
+  "ingest_result": "ARCHITECTURE_DELTA_WRITTEN_SOURCE_CROSSCHECKED",
+  "canonical_ingest_state_mutated": false,
+  "canonical_ingest_state_reason": "Shared INGEST_STATE is a moving convergence surface and the preferred v2 packet was not formally validator-executed in this run. Preserve an append-only checkpoint rather than over-promoting packet admission or overwriting concurrent state.",
+  "next_exact_gate": "Run the exact current packet admission validator against the v2 envelope/read-set or have a later converging ingestor incorporate this receipt; separately feed the functional EffectDecision/typed-completion contract to Triggerword 4."
+}

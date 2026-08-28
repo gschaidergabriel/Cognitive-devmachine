@@ -1,0 +1,125 @@
+{
+  "schema_version": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "FRANKENSTEIN_2_WORK_EXECUTION_BINDING_DELTA_2026-08-28T103357Z_GPT56SOL",
+  "created_at": "2026-08-28T10:33:57Z",
+  "trigger": "triggerwort 5",
+  "routing_status": "VERIFIED",
+  "organ": "GPT-5.6-Sol/triggerwort5/work-execution-binding-correction",
+  "authority": {
+    "canonical_main_sha_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "runtime_credit": 0,
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "007131285ed54a706be2bca8a4160db1d0730a18"
+  },
+  "pins": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_ref": "main",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "ingest_packet": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL"
+  },
+  "packet_assessment": {
+    "status": "PARTIALLY_ADMITTED_WITH_CORRECTION",
+    "schema_conformance": "FAIL",
+    "schema_issue": "Atom TW5-WORKEXEC-SUCC-005-TOOL-USE-TO-AGENT-JOIN-REMAINS-UNPROVEN uses target_2_0_action=RESEARCH, which is not an allowed enum value in the current INGEST_PACKET_SCHEMA.json.",
+    "source_crosscheck": "PASS_WITH_MATERIAL_CORRECTION",
+    "accepted_packet_atoms": [
+      "TW5-WORKEXEC-SUCC-001-DURABLE-HANDOFF-NOT-EXECUTION",
+      "TW5-WORKEXEC-SUCC-002-SPEC-EXPECTS-SPAWN-AFTER-HANDOFF",
+      "TW5-WORKEXEC-SUCC-003-CONFIG-DOES-NOT-CAPTURE-CHILD-LIFECYCLE",
+      "TW5-WORKEXEC-SUCC-004-AGENT-ID-AND-TASK-ID-ARE-DISTINCT-DOCUMENTED-IDENTITY-SPACES"
+    ],
+    "corrected_packet_atom": "TW5-WORKEXEC-SUCC-005-TOOL-USE-TO-AGENT-JOIN-REMAINS-UNPROVEN",
+    "correction": "The installed-runtime join remains unobserved, but current official Claude Code documentation now supplies a documented ABI-level join candidate: PostToolUse carries tool_use_id and structured tool_response; the documented Agent tool output contains agentId. Therefore parent Agent tool_use_id -> child agent_id is DOCUMENTED_ABI_CANDIDATE, not wholly undocumented. Runtime promotion still requires observing this shape on the exact installed target build."
+  },
+  "source_atoms": [
+    {
+      "classification": "LIVE_CODE",
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "5580-5845",
+      "finding": "handoff() creates durable entityos_arbeitspaket state and a deterministic handoff capsule; its docstring explicitly states stern itself delegates/spawns nothing.",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "classification": "CONFIG",
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "span": "1-81",
+      "finding": "The donor plugin registers SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact only; dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted hooks are absent.",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "classification": "SPEC",
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "span": "delegation workflow step 6",
+      "finding": "The donor specification requires stern.py handoff before spawning and stern.py reconcile afterwards, proving the documented architecture expects a separate native spawn step outside handoff().",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "classification": "EXTERNAL_PRIMARY",
+      "source": "https://code.claude.com/docs/en/hooks",
+      "finding": "Current hooks documentation defines SubagentStart/SubagentStop with agent_id, TaskCreated/TaskCompleted with task_id, tool events with tool_use_id, and states that hooks firing inside a subagent carry agent_id and agent_type.",
+      "evidence_scope": "DOCUMENTED_CAPABILITY_ONLY"
+    },
+    {
+      "classification": "EXTERNAL_PRIMARY",
+      "source": "https://code.claude.com/docs/en/agent-sdk/typescript",
+      "finding": "Current Agent SDK documentation defines AgentOutput with agentId for completed and async-launched Agent results; PostToolUse is documented with structured tool_response plus tool_use_id.",
+      "evidence_scope": "DOCUMENTED_ABI_ONLY"
+    }
+  ],
+  "architecture_delta_for_frankenstein_2": {
+    "component": "WorkExecutionBinding/v1",
+    "decision": "KEEP_DURABLE_WORKPACKAGE_SEPARATE_FROM_NATIVE_EXECUTION_IDS_AND_BIND_ONLY_BY_OBSERVED_OR_DOCUMENTED_SHARED_KEYS",
+    "identity_domains": {
+      "package_id": "durable EntityOS/UnifiedDB delegated-work intent identity",
+      "parent_agent_tool_use_id": "call-scoped identity of the parent Agent tool invocation",
+      "child_agent_id": "native subagent lifecycle identity",
+      "task_id": "separate TaskCreate/TaskCompleted task-system identity; OPTIONAL and never assumed equal to agent_id",
+      "child_tool_use_id": "call-scoped identity of each tool invocation performed inside the child",
+      "generation": "canonical execution/retry generation; must not be inferred from timestamps"
+    },
+    "required_binding_flow": [
+      "Create package_id through deterministic handoff and persist its generation/provenance.",
+      "Invoke the native Agent path with a call-scoped parent_agent_tool_use_id while preserving package_id as the delegated-work intent.",
+      "On parent PostToolUse for Agent, capture the structured AgentOutput.agentId together with that event's tool_use_id when the installed runtime actually emits the documented shape.",
+      "Bind package_id + generation + parent_agent_tool_use_id + child_agent_id in one append-only WorkExecutionBinding row/receipt.",
+      "Capture SubagentStart/SubagentStop for lifecycle closure and reject mismatched child_agent_id or generation.",
+      "For tool calls executed inside the child, persist child_agent_id + child_tool_use_id from the hook input; these are invocation identities for child effects, not replacements for package_id.",
+      "Attach task_id only when a TaskCreated/TaskCompleted lifecycle is actually present; absence is UNKNOWN/NOT_APPLICABLE, not failure for ordinary Agent delegation.",
+      "Reconcile package completion only from typed success evidence bound back to the same WorkExecutionBinding; free-text child completion is candidate evidence only."
+    ],
+    "anti_join_rules": [
+      "NO_TIMESTAMP_OR_EVENT_ORDER_JOIN",
+      "NO_SESSION_ID_AS_CHILD_IDENTITY",
+      "NO_TASK_ID_EQUALS_AGENT_ID_ASSUMPTION",
+      "NO_MODEL_TEXT_MINTS_BINDING",
+      "NO_POSTTOOLUSE_DOCUMENTATION_EQUALS_INSTALLED_RUNTIME_PASS",
+      "NO_RETRY_REUSES_STALE_GENERATION_BINDING"
+    ],
+    "effect_integration": "Every effect generated by a delegated child must preserve package_id, generation, child_agent_id and child_tool_use_id where available, then pass the deterministic effect authority path. Child success text cannot grant effect or completion authority.",
+    "grid_integration": "GRID10 may create/select delegated work and reason over WorkExecutionBinding state, but deterministic binding code owns identity admission. The model sees bounded projections, not authority-bearing mutable IDs as truth.",
+    "triggerword4_handoff": "Add WorkExecutionBinding/v1 as the native delegation provenance contract before enabling parallel child execution. Port donor handoff/reconcile semantics, add lifecycle hooks, then execute a harmless exact-build capture proving Agent PostToolUse.tool_use_id + tool_response.agentId and child tool-hook agent_id + tool_use_id correlation."
+  },
+  "hypothesis": {
+    "claim": "The documented Claude Code ABI is sufficient to close package -> Agent invocation -> child lifecycle -> child tool-call identity without a second spawn runtime, if the exact installed build emits the documented AgentOutput.agentId in PostToolUse and child hook common fields.",
+    "confidence": 0.93,
+    "level": "OPEN_HYPOTHESIS_WITH_EXTERNAL_PRIMARY_SUPPORT",
+    "falsifier": "On the exact installed target build, a harmless Agent invocation produces PostToolUse without a stable agentId in structured tool_response, or the child tool hooks omit/mismatch agent_id/tool_use_id such that concurrent calls cannot be deterministically correlated."
+  },
+  "counterhypothesis": {
+    "claim": "The installed target build or plugin/settings composition may differ from current docs, requiring a wrapper or transcript-derived deterministic join.",
+    "status": "OPEN"
+  },
+  "runtime_credit": {
+    "work_execution_binding_runtime": 0,
+    "frankenstein_2_runtime": 0,
+    "entityos_hcu_runtime": 0,
+    "training": 0
+  },
+  "next_exact_discriminator": "On the authorized exact installed target surface only when current execution authority permits, capture one harmless Agent invocation with parent PreToolUse/PostToolUse and SubagentStart/SubagentStop plus one harmless child tool event. Assert exact equality between PostToolUse.tool_response.agentId and lifecycle agent_id, and persist child agent_id + child tool_use_id. Until observed, keep this at documented ABI/source credit only."
+}

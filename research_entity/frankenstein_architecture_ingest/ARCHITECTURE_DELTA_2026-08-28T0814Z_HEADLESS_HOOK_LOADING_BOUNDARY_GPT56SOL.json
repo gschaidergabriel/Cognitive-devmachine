@@ -1,0 +1,146 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28T0814Z_HEADLESS_HOOK_LOADING_BOUNDARY_GPT56SOL",
+  "analysis_time_utc": "2026-08-28T08:14:16Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "9.13",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "CURRENT_DONOR_SOURCE_FORENSICS_PLUS_HISTORICAL_PRIMARY_CROSSCHECK_NO_RUNTIME_EXECUTION",
+  "source_pins": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "canonical_main_observed": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "b5df7cc77d622a8542eb2aa35f579531523e03bd"
+  },
+  "authority_binding": {
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "observations": [
+    {
+      "id": "TW5-HEADLESS-CLAUDE-CALLSITE-032",
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "span": [340, 395],
+      "claim": "claude_frage() launches the delegated headless Claude process with -p, output-format json, permission-mode, --disallowedTools Bash and append-system-prompt plus session-id/resume. The callsite does not explicitly pass --settings, --plugin-dir, a plugin identity, a settings digest, or a hook configuration identity.",
+      "runtime_credit": 0
+    },
+    {
+      "id": "TW5-HEADLESS-FILE-MUTATION-SURFACE-033",
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "span": [340, 395],
+      "claim": "The source intentionally blocks the entire Bash tool, but explicitly leaves Read/Write/Edit/Grep/Glob available. Therefore Bash denial narrows the delegated blast radius but cannot establish that all state-changing delegated tool classes cross a deterministic final effect boundary.",
+      "runtime_credit": 0
+    },
+    {
+      "id": "TW5-PLUGIN-HOOK-DECLARATION-034",
+      "source_kind": "CONFIG",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "span": [1, 70],
+      "claim": "The donor plugin declares wildcard PreToolUse and PostToolUse hooks routed through scripts/stern.py hook. This is a repository configuration declaration, not proof that the particular headless claude_frage() child loads or fires those hooks.",
+      "runtime_credit": 0
+    },
+    {
+      "id": "TW5-PLUGIN-LOAD-MODES-035",
+      "source_kind": "INSTALLER",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/install_terminal_help_icon.sh",
+      "blob_sha": "bf9bcf8a5a23e7091a58dc75742eb3bb131ff1c9",
+      "span": [1, 120],
+      "claim": "The donor's own launcher distinguishes two hook-wiring cases: marketplace plugin enabled through ~/.claude/settings.json enabledPlugins, where plain claude is expected to load hooks globally, and an underlab/dev installation where claude must be launched with --settings ~/.claude/star/settings.json. If neither is found it explicitly warns that hooks would not fire.",
+      "runtime_credit": 0
+    },
+    {
+      "id": "TW5-HOST-INSTALL-DOC-036",
+      "source_kind": "ARCHITECTURE_DOC",
+      "path": "DEV_SOURCE_RESEARCH/repository/INSTALL_HOST_STEPS.md",
+      "blob_sha": "38e48ad40d54fc43c5921714267f2148f393c5d1",
+      "span": [1, 190],
+      "claim": "The install documentation states that plugin-scoped hooks come from normal plugin installation, while global host hooks/settings are separate manual state. It also records a live case where a session launched without the plugin's own hook wiring failed to join the room, showing that hook availability depends on launch/install state rather than source presence alone.",
+      "runtime_credit": 0
+    },
+    {
+      "id": "TW5-HISTORICAL-SETTINGS-PRECEDENT-037",
+      "source_kind": "HISTORICAL_ONLY",
+      "path": "Google Drive UEBERGABE-A3.md id=1EFjRYX_lYhbXcOab2zjQot9LMo7UBs_J",
+      "source_identity": "modified_2026-08-06T09:39:08Z",
+      "claim": "A contemporaneous handoff reports that a session started in a directory without its own .claude inherited a blocking watcher via --settings and named .claude/wache-befehl.py. This is historical donor evidence for explicit settings inheritance, not current-headless-hook proof.",
+      "runtime_credit": 0
+    },
+    {
+      "id": "TW5-HISTORICAL-BARRIER-MEASUREMENT-038",
+      "source_kind": "HISTORICAL_ONLY",
+      "path": "Google Drive UEBERGABE-KOORD.md id=11pywfhKAlYbUEUR8Xhu9ypU7sJABIEoc",
+      "source_identity": "modified_2026-08-06T09:38:48Z",
+      "claim": "The contemporaneous KOORD handoff reports the historical Schranke mechanism as measured and probe.py as checking both directions at 34/34. Exact historical settings bytes and hook ordering remain unavailable.",
+      "runtime_credit": 0
+    }
+  ],
+  "forensic_conclusion": {
+    "classification": "SOURCE_GAP_NARROWED_NOT_RUNTIME_RESOLVED",
+    "claim": "The exact current donor contains a plausible hook declaration and documented installation mechanisms, but claude_frage() does not source-pin or attest the settings/plugin/hook identity consumed by its headless child. Consequently the strongest current claim is that hook loading is environment-dependent and unverified for this delegated path. Repository hook declarations plus historical --settings inheritance cannot be promoted into current headless containment credit.",
+    "target_2_0_action": "REPAIR"
+  },
+  "contradictions_preserved": [
+    {
+      "id": "TW5-CONTRADICTION-HEADLESS-HOOK-LOADING-015",
+      "status": "OPEN",
+      "claim_a": "Marketplace-enabled FranKenstein installs are documented to make hooks fire in any directory with plain claude, and hooks/hooks.json declares wildcard PreToolUse/PostToolUse.",
+      "claim_b": "The exact claude_frage() callsite neither checks enabledPlugins nor passes the dev --settings file, so the source alone cannot establish which wiring, if any, the spawned headless process consumes.",
+      "resolution_rule": "Require an exact-source, exact-install-generation headless acceptance receipt proving loaded hook/config identity and observed hook firing for the same delegated invocation before containment credit."
+    },
+    {
+      "id": "TW5-CONTRADICTION-HISTORICAL-CURRENT-WIRING-016",
+      "status": "OPEN",
+      "claim_a": "Historical project measurement supports inherited blocking via --settings.",
+      "claim_b": "The current donor callsite does not explicitly use --settings and historical .claude/wache-befehl.py is not proven identical to current plugin stern.py hooks or archived wache-koenig.py.",
+      "resolution_rule": "Keep historical inheritance as donor precedent only; do not infer present identity, ordering or reachability."
+    }
+  ],
+  "hypotheses": [
+    "On a marketplace-installed host where frankenstein is enabled in ~/.claude/settings.json, the delegated plain claude -p child may inherit and fire the plugin hooks without an explicit callsite flag.",
+    "On an underlab/dev host lacking enabledPlugins, claude_frage() may launch without the ~/.claude/star/settings.json wiring because it omits --settings, leaving its delegated non-Bash mutation path outside the intended plugin hook chain."
+  ],
+  "counterhypotheses": [
+    "A parent environment variable, wrapper binary, Claude Code global setting or other host mechanism could load equivalent hooks even though claude_frage() does not name them.",
+    "The production host may be marketplace-enabled, in which case explicit --settings is unnecessary; source inspection alone still cannot prove that exact runtime state."
+  ],
+  "triggerword4_handoff": [
+    "Before donor freeze/assembly credit, resolve the exact install mode for every delegated headless Claude launch: MARKETPLACE_ENABLED, EXPLICIT_SETTINGS, or BLOCKED_UNKNOWN.",
+    "Bind the loaded plugin/settings artifact identity and installation generation into TaskAdmission/EffectDecision provenance rather than relying on ambient host state.",
+    "Add a fail-closed preflight that refuses mutating delegated work when neither the expected enabledPlugins identity nor the expected settings artifact can be proven.",
+    "Acceptance must observe PreToolUse and PostToolUse with the same immutable tool_use_id/invocation identity on at least one non-Bash mutating tool and prove DENY prevents the mutation before submission.",
+    "Do not count Bash denial, hooks.json existence, plugin.json existence, historical --settings inheritance or post-hoc journaling as whole effect containment."
+  ],
+  "ingest_admission_note": {
+    "legacy_packet_id": "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL",
+    "semantic_status": "ALREADY_FUSED_BY_T5_2026-08-28T0750Z_AUTHORITY_REBIND_WACHE_SETTINGS_FUSION_GPT56SOL",
+    "v2_machine_admission_status": "NOT_PROMOTED_BY_THIS_DELTA",
+    "reason": "The newer v2 gate requires packet shape plus exact refreshed-main authority validation before a packet is added as consumed/current-authority-bound. This run did not execute validate_ingest_packet_v2.py in an exact repository-bound refreshed local checkout, so no validator PASS is claimed and consumed_packet_ids is not advanced here."
+  },
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "historical_primary_crosscheck": "PRESENT",
+    "new_runtime_execution": 0,
+    "effect_runtime_acceptance": 0,
+    "provider_runtime": 0,
+    "canonical_semantics": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Triggerword 4 must make delegated headless launch mode explicit and source-bound, then execute an exact-source non-Bash mutating-tool allow/deny acceptance showing the expected hook/config identity loaded, call-scoped hook correlation, DENY-before-side-effect and a typed execution/outcome receipt. Separately, Triggerword 5 packet producers must pass validate_ingest_packet_v2.py against a freshly fetched local main before advancing consumed_packet_ids."
+}

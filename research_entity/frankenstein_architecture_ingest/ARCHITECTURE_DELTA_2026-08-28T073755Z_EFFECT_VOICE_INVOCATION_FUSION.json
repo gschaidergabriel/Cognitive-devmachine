@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "delta_id": "TW5-DELTA-20260828T073755Z-EFFECT-VOICE-INVOCATION-FUSION-GPT56SOL",
+  "created_at": "2026-08-28T07:37:55Z",
+  "trigger": "triggerwort 5",
+  "classification": "SOURCE_GROUNDED_ARCHITECTURE_DELTA_NO_RUNTIME_PROMOTION",
+  "authority": {
+    "epoch": "8.78",
+    "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "mode": "FREE_ONLY"
+  },
+  "design_lane": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "head_before_ingest": "05d4129dc86935ab259f33e1300891a37915bfe2"
+  },
+  "donor": {
+    "repository": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree_sha": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "modified": false
+  },
+  "packets_ingested_in_provenance_order": [
+    "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
+    "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+    "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+    "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL"
+  ],
+  "source_cross_checks": [
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "spans": ["3120-3595", "8770-8865"],
+      "result": "CONFIRMED: ordinary PreToolUse calls zulassen() without generic deny; one session-scoped active_turns.effect_id is used to correlate state-changing PreToolUse/PostToolUse; PostToolUse fallback can create VERIFIED without a matching PreToolUse row; SEBUKKU is a separate explicit deny branch."
+    },
+    {
+      "repo": "gschaidergabriel/Project-Frankenstein",
+      "commit_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "agentic/executor.py",
+      "blob_sha": "2a87f8d58e5785fcd6b821141416f9dcd00433bf",
+      "spans": ["70-180", "555-685"],
+      "result": "CONFIRMED HISTORICAL SOURCE: approval can prevent ToolExecutor execution; approval_id tracks the UI/workflow request, but execute() consumes tool_name/tool_input/skip_approval rather than approval_id or an approved request digest."
+    },
+    {
+      "repo": "gschaidergabriel/Project-Frankenstein",
+      "commit_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "agentic/loop.py",
+      "blob_sha": "e39c0e9ad00843f62a0fea7dd881a80f3acc70dd",
+      "spans": ["440-525"],
+      "result": "CONFIRMED HISTORICAL SOURCE: fixed safe-tool name routing bypasses approval; approved risky calls later execute with skip_approval=True, preserving caller discipline but not a mechanically consumed execution-bound approval token."
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "spans": ["420-575", "740-1045", "1640-1745"],
+      "result": "NEW CONFIRMED CURRENT-SOURCE FINDING: Realtime function_call call_id reaches _tool_ausfuehren(), but is not passed into tool helpers, frank_auftrag_stellen confirmation, _HintergrundBruecke, or downstream execution. A confirmed voice assignment instead creates an unrelated short auftrag_id before asynchronous execution."
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "spans": ["220-410"],
+      "result": "CONFIRMED CURRENT-SOURCE BOUNDARY: voice-triggered claude_frage() uses headless Claude Code and unconditionally disallows Bash, but file tools remain available. This is a useful bounded guard, not proof that the voice call/confirmation identity is bound to each later state-changing tool invocation."
+    }
+  ],
+  "packet_only_historical_evidence": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+      "claim_scope": "Archived wache-koenig/freigabe source is reported as a Bash-only blocking gate with one-shot command-bound owner tickets.",
+      "admission": "INGEST_AS_HISTORICAL_DONOR_EVIDENCE_ONLY",
+      "runtime_reachability": "UNKNOWN",
+      "reason": "The exact current/historical scheduler registration was not independently recovered in this run; source capability does not establish live reachability or non-Bash coverage."
+    }
+  ],
+  "architecture_model_updates": [
+    {
+      "id": "TW5-MODEL-EFFECT-001-TYPED-LIFECYCLE",
+      "status": "ADOPT_FOR_TRIGGERWORD4_DESIGN",
+      "contract": "EffectRequest -> AdmissionDecision -> EnforcementDecision -> ExecutionReceipt -> WorldEffectVerification -> ResultReentry -> CompletionEvidence",
+      "binding": "Every stage binds immutable invocation_id, request_digest, generation, causal_parent_id and exact executor/tool identity. A later successful outcome never retroactively creates an earlier admission decision."
+    },
+    {
+      "id": "TW5-MODEL-EFFECT-002-VERIFIED-NOT-ADMISSION",
+      "status": "ADOPT_FOR_TRIGGERWORD4_DESIGN",
+      "contract": "Current donor effects.status=VERIFIED is outcome evidence only at some paths because PostToolUse fallback can mint it without a PreToolUse row. Migration must split outcome verification from admission/enforcement state."
+    },
+    {
+      "id": "TW5-MODEL-EFFECT-003-HISTORICAL-APPROVAL-DONOR",
+      "status": "ADAPT_NOT_COPY",
+      "contract": "Historical pre-execution human denial is a useful control-flow donor, but approval_id and skip_approval are not sufficient successor authority because the executor does not consume a request-bound one-shot decision token."
+    },
+    {
+      "id": "TW5-MODEL-VOICE-004-CALL-ID-CAUSAL-PARENT",
+      "status": "ADOPT_FOR_TRIGGERWORD4_DESIGN",
+      "contract": "Realtime call_id must become a causal parent or be deterministically mapped to an immutable successor invocation_id before local dispatch. The mapping must survive asynchronous bridge IDs, Claude session continuation, downstream tool calls, result return and completion evidence."
+    },
+    {
+      "id": "TW5-MODEL-VOICE-005-CONFIRMATION-EVIDENCE",
+      "status": "ADAPT_TO_GRID",
+      "contract": "The current two-step voice confirmation is valuable input evidence, not self-authorizing truth. Compile proposal_digest + transcript_event_refs + confirmation freshness/expiry + addressee/presence uncertainty into typed VoiceApprovalEvidence; deterministic policy produces the EffectDecision consumed at the actual executor boundary."
+    },
+    {
+      "id": "TW5-MODEL-VOICE-006-BASH-GUARD-SCOPE",
+      "status": "KEEP_UNTIL_VERIFIED_SUCCESSOR",
+      "contract": "Preserve the current unconditional Bash disallowance for the voice-to-Claude bridge until a stronger typed EffectGate successor proves equivalent or stronger prevention. Do not infer complete effect safety from it because non-Bash state-changing tools can remain available."
+    },
+    {
+      "id": "TW5-MODEL-WORLD-007-OUTCOME-LEARNING-BOUNDARY",
+      "status": "ADAPT_TO_SPARSE_WORLD_SUBSTRATE",
+      "contract": "World-substrate transform confidence may be updated as verified-outcome evidence only from WorldEffectVerification bound to the exact executed invocation. Function-call proposals, approval workflow state, journal labels, simulations and transport-ambiguous outcomes remain lower epistemic classes or UNKNOWN."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-ENFORCEMENT-003",
+      "status": "OPEN_REFINED",
+      "statement": "Donor prose says ordinary zulassen() never blocks, while cmd_hook has a separate SEBUKKU deny. Generic admission bookkeeping and special host-hook denial are distinct mechanisms."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VERIFIED-PREADMISSION-004",
+      "status": "OPEN_REFINED",
+      "statement": "VERIFIED may mean post-tool observed success without a corresponding PreToolUse row, so the legacy status cannot represent both admission and outcome authority."
+    },
+    {
+      "id": "TW5-CONTRADICTION-INVOCATION-IDENTITY-005",
+      "status": "OPEN_REFINED",
+      "statement": "Current hook and Realtime surfaces expose call-scoped identities, while legacy effect and asynchronous assignment paths replace or drop them before downstream execution correlation."
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-REACHABILITY-004",
+      "status": "OPEN",
+      "statement": "Historical packet evidence identifies a blocking Bash watcher, but exact scheduler registration/current reachability is unproven."
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-COVERAGE-005",
+      "status": "OPEN",
+      "statement": "The reported watcher is Bash-only and cannot establish a single complete effect authority for Write/Edit/NotebookEdit or other mutating surfaces."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-EFFECT-PARENT-007",
+      "status": "OPEN_NEW",
+      "statement": "Realtime call_id, voice confirmation evidence, generated auftrag_id, Claude session identity and eventual tool/effect identities are not one mechanically bound causal chain in the inspected donor source."
+    },
+    {
+      "id": "TW5-CONTRADICTION-INGEST-PATH-001",
+      "status": "OPEN_RECLASSIFIED",
+      "statement": "architecture_archaeology main feed and frankenstein_architecture_ingest branch inbox/state are both noncanonical research projections over the same donor. The problem is explicit synchronization/provenance routing, not competing canonical truth; do not alias, delete or silently overwrite either lineage."
+    }
+  ],
+  "triggerword4_required_regressions": [
+    "Two state-changing invocations in the same session may overlap and complete in reverse order without cross-attributing admission, execution, outcome or completion.",
+    "Mismatched invocation_id/tool_use_id/call_id mapping is rejected before effect execution or outcome promotion.",
+    "A denied AdmissionDecision/EnforcementDecision proves non-execution at the executor boundary; a journal ABGELEHNT label alone is insufficient.",
+    "PostToolUse/result fallback may record an observed outcome but cannot mint prior admission/enforcement evidence.",
+    "Voice confirmation evidence expires, is proposal-digest-bound, and a changed assignment text requires a new decision.",
+    "Barge-in/cancellation before submission yields CANCELLED; after submission or transport ambiguity yields OUTCOME_UNKNOWN until verified and is never blindly replayed.",
+    "Current voice Bash hard-deny remains effective until a tested successor replaces it; non-Bash file effects also require typed decision binding.",
+    "World-substrate learning ignores simulated/proposed/transport-ambiguous effects for verified-transition credit."
+  ],
+  "critical_unknowns": [
+    "Exact installed Claude Code hook scheduler ordering and same-session interleaving behavior on the current donor hosts.",
+    "Exact scheduler/settings registration and present reachability of the historical wache-koenig or any successor host gate.",
+    "All downstream consumers of effects.status and whether any treat VERIFIED as proof of pre-admission.",
+    "Exact propagation path from headless Claude Code voice assignments into each mutating tool invocation and host hook payload.",
+    "Formal one-way synchronization contract between main architecture_archaeology feed and owner-branch frankenstein_architecture_ingest state.",
+    "Separate existing P0s remain: UNKNOWN presence fallback and VoiceSessionCapsule per-response conditioning/compiler."
+  ],
+  "recommended_next_spans": [
+    {
+      "priority": "P0",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3588,
+      "line_end": 3900,
+      "reason": "Enumerate downstream effects.status consumers and distinguish admission/outcome assumptions."
+    },
+    {
+      "priority": "P0",
+      "path": "current host Claude Code settings/hook scheduler",
+      "line_start": null,
+      "line_end": null,
+      "reason": "Resolve actual PreToolUse/PostToolUse ordering, matcher scope, parallel interleaving and blocking gates before runtime claims."
+    },
+    {
+      "priority": "P0",
+      "path": "historical Project-Frankenstein approval responder/overlay",
+      "line_start": null,
+      "line_end": null,
+      "reason": "Determine whether approval responses were one-shot consumed or request-content revalidated outside ToolExecutor."
+    },
+    {
+      "priority": "P0",
+      "path": "Triggerword-4 effect/voice successor design",
+      "line_start": null,
+      "line_end": null,
+      "reason": "Implement one typed invocation identity chain from Realtime call through EffectGate, executor, verified outcome, result re-entry and completion."
+    }
+  ],
+  "credit": {
+    "source_forensics_delta": true,
+    "new_runtime_execution": false,
+    "new_provider_execution": false,
+    "new_vps_execution": false,
+    "unusual_experiment": false,
+    "whole_frankenstein2_runtime_pass": false,
+    "whole_entityos_hcu_runtime_credit_delta": 0,
+    "hcu_runtime_credit_delta": 0,
+    "jspace_model_credit_delta": 0,
+    "training_credit_delta": 0
+  }
+}

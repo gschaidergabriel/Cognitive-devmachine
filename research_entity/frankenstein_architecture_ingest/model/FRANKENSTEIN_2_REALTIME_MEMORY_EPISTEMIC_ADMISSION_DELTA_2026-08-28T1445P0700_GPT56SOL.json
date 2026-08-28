@@ -1,0 +1,125 @@
+{
+  "schema": "FRANKENSTEIN_TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T1445P0700-REALTIME-MEMORY-EPISTEMIC-ADMISSION-GPT56SOL",
+  "trigger": "triggerwort 5",
+  "recorded_at": "2026-08-28T14:45:00+07:00",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "22bdd196181e73eb9fe2e91aa6e07dbb19113258"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "realtime_blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa"
+  },
+  "packet": {
+    "id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T074026Z_REALTIME_MEMORY_READ_EPISTEMIC_COLLAPSE_GPT56SOL.json",
+    "classification": "NEW_SOURCE_PACKET_DIRECTLY_CROSSCHECKED"
+  },
+  "evidence_scope": "EXACT_DONOR_SOURCE_FORENSICS_DIRECT_REALTIME_MEMORY_READ_WRITE_PATH_ONLY_NO_RUNTIME_EXECUTION",
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_MEMORY_SCHEMA_EPISTEMIC_UNDERTYPING_036",
+      "source_kind": "SCHEMA",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:14300-14520@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "finding": "The dedicated gespraech_erinnerung table stores id, ts, subject, value and quelle. The inspected schema has no explicit transformation class, epistemic class, source-event/admission identity, privacy-retention class or content digest field.",
+      "boundary": "The table is deliberately narrow and separate from durable_memory. This finding does not imply arbitrary UnifiedDB write authority and does not prove other retrieval consumers lack later typing.",
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR_WITH_TYPED_MEMORY_ADMISSION"
+    },
+    {
+      "atom_id": "F2_REALTIME_MEMORY_RETRIEVAL_FLATTENING_037",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:14300-14520@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "finding": "gespraech_erinnerung_lesen returns conversation-memory rows as {ts,subject,value,quelle}; for non-empty queries it appends durable_memory rows to the same treffer list using the same structural shape, with quelle='durable_memory' as the principal visible discriminator. No explicit VERBATIM/SUMMARY/INFERENCE/OBSERVED/VERIFIED class is returned on this direct path.",
+      "boundary": "Separate storage tables remain intact; the collapse occurs at the direct Realtime retrieval projection. A source label is useful provenance but is not equivalent to epistemic status or transformation provenance.",
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR_RETRIEVAL_PROJECTION"
+    },
+    {
+      "atom_id": "F2_REALTIME_MEMORY_WRAPPER_DIRECT_BRIDGE_038",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:525-560@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "finding": "_tool_erinnerung_lesen forwards directly to stern gespraech-erinnerung-lesen and _tool_erinnerung_schreiben validates only non-empty subject/value before forwarding to stern with quelle=realtime-tool. The wrapper adds no deterministic MemoryAdmission or epistemic typing.",
+      "boundary": "This is a direct source property of the inspected Realtime tool bridge, not runtime proof of model behavior or a repository-wide claim about every memory consumer.",
+      "confidence": 1.0,
+      "target_2_0_action": "ADAPT_TO_TYPED_ENTRY"
+    }
+  ],
+  "contradiction_update": {
+    "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-011": "NARROWED_SOURCE_CONFIRMED: storage separation exists, but direct Realtime read/write projection lacks explicit epistemic/transformation/admission typing",
+    "fact_boundary": "REMEMBERED_CLAIM_OR_MODEL_GENERATED_MEMORY_DOES_NOT_BECOME_WORLD_FACT_BY_PERSISTENCE_OR_RETRIEVAL"
+  },
+  "counterhypotheses": [
+    {
+      "claim": "Other non-Realtime memory consumers may add stronger epistemic typing before decision use.",
+      "status": "OPEN_OUTSIDE_THIS_SOURCE_SCOPE",
+      "discriminator": "Audit every consumer of gespraech_erinnerung and durable_memory that can influence decisions; preserve any stronger downstream typing rather than generalizing this direct-reader result repository-wide."
+    },
+    {
+      "claim": "Prompt prose may instruct the Realtime model to treat retrieved memories cautiously.",
+      "status": "POSSIBLE_BUT_NONAUTHORITATIVE",
+      "discriminator": "Typed retrieval metadata and deterministic admission remain required for authority semantics because prompt compliance cannot create factual provenance."
+    }
+  ],
+  "frankenstein_2_design_delta": {
+    "MemoryCandidate": [
+      "immutable source_event_id or utterance_ref",
+      "source actor/producer",
+      "transformation_class in {VERBATIM,SUMMARY,INFERENCE,INSTRUCTION,OTHER}",
+      "epistemic_class in {OBSERVED_CLAIM,INFERRED,UNKNOWN,VERIFIED_EXTERNAL} where VERIFIED_EXTERNAL requires separately admitted evidence",
+      "generation and causal identity",
+      "privacy/retention tier",
+      "content digest or immutable content reference"
+    ],
+    "MemoryAdmission": "Deterministic admission decides whether and how a MemoryCandidate is persisted. Realtime model Function Calling proposes a candidate; it does not mint factual truth.",
+    "MemoryRecord": "Persist admitted provenance and epistemic/transformation class. Storage authority remains one canonical substrate; no second truth store is introduced.",
+    "RetrievalProjection": "When conversation-memory and durable-memory items are returned together, every item retains source, transformation, epistemic, admission and generation/provenance metadata. Ranking or formatting must not erase these classes.",
+    "PromotionLaw": "Remembering that actor A said X is evidence of the utterance/claim, not evidence that X is true. Canonical factual promotion requires independent admissible evidence."
+  },
+  "triggerword4_acceptance_tests": [
+    "Persist one verbatim user utterance and one model summary derived from it; retrieval distinguishes them structurally, not only through free text/source labels.",
+    "Persist a model inference proposed through Realtime Function Calling; retrieval marks it INFERRED/MODEL_CANDIDATE and it cannot satisfy an OBSERVED/VERIFIED fact query.",
+    "Retrieve matching conversation-memory and durable-memory rows together; every item keeps explicit provenance, transformation and epistemic class through ranking/serialization.",
+    "Reject or redact policy-disallowed sensitive spoken content while preserving an auditable MemoryAdmission result without persisting prohibited raw content.",
+    "Replay a stale/wrong-generation MemoryCandidate and reject admission; replay an already-consumed admission identity and prove idempotent/nonduplicating behavior."
+  ],
+  "next_exact_gate": [
+    "Audit all other gespraech_erinnerung/durable_memory consumers that can influence decisions and determine whether any already restore explicit epistemic typing.",
+    "Feed Triggerword-4 a typed MemoryCandidate -> MemoryAdmission -> MemoryRecord -> typed retrieval implementation and the acceptance fixtures above.",
+    "Separately continue P0 executor effect work: exact host hook registration/firing and immutable per-invocation EffectDecision consumption remain unresolved and are not solved by memory typing."
+  ],
+  "execution": {
+    "new_runtime_execution": false,
+    "provider_execution": false,
+    "vps_execution": false,
+    "paid_execution": false,
+    "unusual_experiment": false,
+    "donor_modified": false
+  },
+  "credits": {
+    "source_forensics": "ADVANCED_AT_DECLARED_SCOPE",
+    "memory_runtime_acceptance": 0,
+    "effect_runtime_acceptance": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "canonical_semantics": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_INGEST_RECEIPT/v1",
+  "receipt_id": "T5_INGEST_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR_5641dc6b",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "branch_head_observed_before_fusion": "cfddde323f457099c0fada68a3af5340d554c159",
+  "canonical_main_observed_before_fusion": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "fusion_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+    "commit": "bd1b51ff497ee4aff0a6d05ec43f100fe4e0aa7f"
+  },
+  "consumed_or_fused_ids": [
+    "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+    "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+    "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT"
+  ],
+  "dedupe_result": {
+    "effect_nonblocking_and_verified_overload": "CORROBORATION_ONLY_ALREADY_PRESENT_IN_REENTRY_AND_EFFECT_CONTRACT_DELTAS",
+    "mutable_session_effect_pointer": "CORROBORATION_ONLY_ALREADY_PRESENT_IN_REENTRY_AND_EFFECT_CONTRACT_DELTAS",
+    "unique_retained": [
+      "Perception Control COMPUTE_OFF/OUTPUT_OFF/MEMORY_OFF + dependency-taint + NOT_COMPUTED enforcement",
+      "bounded historical real-camera perception ablation receipt",
+      "effect/event secret-redaction boundary",
+      "Realtime pre-dispatch pending-tool cancellation on cancelled response/barge-in",
+      "VoiceSessionCapsule live policy-view/freshness semantics"
+    ]
+  },
+  "direct_source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py",
+      "ranges": ["96-143", "420-560"],
+      "result": "CONFIRMED_TIER_POLICY_DAG_TAINT_AND_NOT_COMPUTED_BEFORE_COMPUTE"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "range": "1300-1408",
+      "result": "CONFIRMED_PENDING_FUNCTION_CALLS_DISCARDED_ON_NONCOMPLETED_RESPONSE_AND_BARGEIN_BEFORE_LOCAL_DISPATCH"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py",
+      "range": "250-450",
+      "result": "CONFIRMED_RAM_ONLY_REFRESHED_POLICY_VIEW_AND_SHARED_DOWNSTREAM_TOOL_POLICY_REFERENCE"
+    }
+  ],
+  "historical_component_evidence": {
+    "path": "DEV_SOURCE_RESEARCH/repository/phase43/evidence/PERCEPTION_CONTROL_PLANE_ABLATION_2026-08-27.json",
+    "classification": "PROJECT_MEASUREMENT_COMPONENT_SCOPE_ONLY",
+    "result": "RECORDED_COMPUTE_OFF_TARGET_NOT_COMPUTED_WITH_ALLOWED_CONTROL_HEAD_OK",
+    "independent_reexecution_this_run": false
+  },
+  "preserved_or_added_contradictions": [
+    "TW5-CONTRADICTION-INGEST-PATH-001",
+    "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+    "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
+    "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+    "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004",
+    "TW5-CONTRADICTION-PERCEPTION-ENFORCEMENT-COVERAGE-005",
+    "TW5-CONTRADICTION-PENDING-EFFECT-UNKNOWN-006"
+  ],
+  "triggerword4_handoff": [
+    "Port Perception Control's tier/taint/NOT_COMPUTED semantics into deterministic GRID/WorldSlice control, but require a full protected-head bypass audit before system privacy credit.",
+    "Introduce typed PENDING_EFFECT cancellation before EffectGate submission; after possible external submission preserve OUTCOME_UNKNOWN until verified and never blind-replay.",
+    "Keep VoiceSessionCapsule as noncanonical context projection; add source-generation/provenance/freshness binding to the explicit per-response context compiler.",
+    "Apply one secret fence before durable persistence across EffectRequest, decision, execution receipt, outcome, re-entry and recovery records."
+  ],
+  "writes": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T0724Z_5641dc6_GPT56SOL_EFFECT_PERCEPTION_VOICE_ENFORCEMENT.json",
+      "commit": "bb699c55a949f952fda6d8305e4833cda54e4480"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+      "commit": "bd1b51ff497ee4aff0a6d05ec43f100fe4e0aa7f"
+    }
+  ],
+  "runtime_credit": {
+    "new_donor_runtime_execution": 0,
+    "whole_entityos_hcu_delta": 0,
+    "hcu_full_delta": 0,
+    "physical_grid10_delta": 0,
+    "jspace_model_delta": 0,
+    "training_delta": 0
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Audit protected-head reachability into evaluate_head and encode the PENDING_EFFECT/CANCELLED versus SUBMITTED/OUTCOME_UNKNOWN state boundary into Triggerword-4 design acceptance; continue exact donor closure and provenance-lane migration resolution."
+}

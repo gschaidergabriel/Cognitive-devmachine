@@ -1,0 +1,34 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:31:52Z",
+  "authority_epoch": "8.78",
+  "current_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "historical_repo": "gschaidergabriel/Project-Frankenstein",
+  "historical_commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "consumed_packet_id": "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL",
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_HISTORICAL_APPROVAL_BINDING.json",
+    "commit": "8f1ee02125f07c1e7f574e5e90fece264d134bb2"
+  },
+  "source_crosscheck": {
+    "result": "PASS_SOURCE_FINDING",
+    "files": [
+      {"path": "agentic/executor.py", "blob_sha": "2a87f8d58e5785fcd6b821141416f9dcd00433bf", "spans": ["70-180", "590-685"]},
+      {"path": "agentic/loop.py", "blob_sha": "e39c0e9ad00843f62a0fea7dd881a80f3acc70dd", "span": "430-530"}
+    ],
+    "finding": "Historical AgentLoop enforces a user-deny branch before execution, but ToolExecutor.execute does not consume approval_id/request_digest; approved execution uses caller-controlled skip_approval=True."
+  },
+  "design_change": "Keep human pre-execution denial as a donor concept, but require executor-consumed one-shot typed EffectDecision bound to invocation_id/tool_use_id, request_digest, generation, causal_id and policy version. Fuse this with current stern generation/idempotency/outcome evidence rather than preserving either incomplete lineage alone.",
+  "credits": {
+    "historical_source_forensics": "PRESENT",
+    "historical_runtime": 0,
+    "current_donor_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover wache-koenig and any approval wrapper/responder, then feed Triggerword 4 one-shot decision-consumption and mismatch/deny/stale-generation regressions."
+}

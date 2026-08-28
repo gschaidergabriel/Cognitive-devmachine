@@ -1,0 +1,43 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "created_at": "2026-08-28T10:35:00Z",
+  "trigger": "triggerwort 5",
+  "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_head_before_ingest": "39b1ec3e15ff8b00ccbac764ae5b44ee72ca1d59",
+  "authority_epoch": "9.13",
+  "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+  "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+  "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+  "packet_disposition": "CONSUMED_WITH_CURRENT_DOCS_REFINEMENT",
+  "supersedes_packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1035Z_WORKEXECUTION_BINDING_GPT56SOL.json",
+  "architecture_delta_commit": "c5e9d543fc64aeb15a8dca1fc4f577ea30f70180",
+  "semantic_result": "WORKEXECUTION_BINDING_V1_SHARPENED",
+  "source_crosscheck": {
+    "stern_handoff": "CONFIRMED_DURABLE_PACKAGE_AND_CAPSULE_NO_NATIVE_SPAWN",
+    "donor_hooks": "CONFIRMED_NO_SUBAGENT_OR_TASK_LIFECYCLE_REGISTRATION_IN_PLUGIN_HOOKS_JSON",
+    "official_docs": "CONFIRMED_AGENT_ID_TASK_ID_TOOL_USE_ID_ARE_DISTINCT_EVENT_IDENTITIES; SUBAGENT_TOOL_HOOKS_CAN_CARRY_AGENT_ID; PARENT_AGENT_TOOL_USE_ID_TO_CHILD_AGENT_ID_JOIN_REMAINS_UNPROVEN"
+  },
+  "architecture_change": [
+    "WorkExecutionBinding/v1 now preserves paket_id, spawn_tool_use_id, agent_id, optional task_id, child_tool_use_id, agent_run_generation and result_receipt_id as distinct identities.",
+    "task_id is optional/independent rather than a required alias for native child identity.",
+    "resumed subagent executions require run/generation identity beneath stable agent_id.",
+    "timing/order/session-only joins are explicitly forbidden.",
+    "reconcile success requires a typed result receipt bound to the exact WorkExecutionBinding."
+  ],
+  "runtime_boundary": {
+    "provider_execution": false,
+    "vps_execution": false,
+    "unusual_experiment": false,
+    "donor_runtime_execution": false,
+    "installed_host_hook_capture": false,
+    "runtime_credit": 0,
+    "training_credit": 0
+  },
+  "result": "PASS_SOURCE_INGEST_AND_EXTERNAL_PRIMARY_CROSSCHECK_ONLY",
+  "next_exact_gate": "Triggerword-4: capture exact installed Agent PreToolUse/PostToolUse plus SubagentStart/SubagentStop payloads for one harmless invocation and accept tool_use_id->agent_id only if an exact shared key is observed; then falsify the binding under two overlapping Agent invocations."
+}

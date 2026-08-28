@@ -1,0 +1,126 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T08:48:12Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/claude-frage-child-policy-envelope",
+  "classification": "CURRENT_DONOR_SOURCE_FORENSICS_NO_RUNTIME_CREDIT",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_observed_before_write": "e40b908f5ff352739a6bb6fa75f8f414b87d44d5"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "scope": "Exact current-donor source decomposition of the Realtime voice -> claude_frage delegated child policy envelope. No host/VPS/provider execution was performed.",
+  "atoms": [
+    {
+      "atom_id": "TW5-CHILD-POLICY-001-VOICE-CONFIG-PERMISSION-MODE",
+      "source_kind": "CONFIG",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "what_it_does": "gespraech.berechtigung defaults to acceptEdits and the setter explicitly accepts acceptEdits, bypassPermissions, auto and dontAsk. gespraech_status returns this value to the voice daemon.",
+      "evidence_scope": "CURRENT_DONOR_SOURCE",
+      "target_2_0_action": "REPAIR",
+      "reason": "A mutable runtime permission-mode string is input to child execution policy; it must not itself become canonical authorization."
+    },
+    {
+      "atom_id": "TW5-CHILD-POLICY-002-REALTIME-FORWARDS-PERMISSION-MODE",
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "what_it_does": "fuehren_gespraech constructs RealtimeSession with cfg.berechtigung (fallback acceptEdits), and _claude_taetigkeit forwards self._berechtigung to gespraechsmodus.claude_frage with timeout=600. It does not pass a cwd override in this path.",
+      "evidence_scope": "CURRENT_DONOR_SOURCE",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "reason": "The voice TaskAdmission and the effective child execution policy need an immutable binding across this bridge."
+    },
+    {
+      "atom_id": "TW5-CHILD-POLICY-003-CLAUDE-FRAGE-COMMAND-ENVELOPE",
+      "source_kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "what_it_does": "claude_frage constructs claude -p with --permission-mode <berechtigung>, hard-coded --disallowedTools Bash and --append-system-prompt. It supplies neither an explicit --settings argument nor an explicit settings artifact identity. If cwd is omitted, subprocess.run uses Path.home() as cwd.",
+      "evidence_scope": "CURRENT_DONOR_SOURCE",
+      "target_2_0_action": "REPAIR",
+      "reason": "A Bash denial is useful but is not a complete deterministic policy envelope for all state-changing child capabilities, and historical --settings inheritance cannot be assumed to be the explicit policy source for this invocation."
+    },
+    {
+      "atom_id": "TW5-CHILD-POLICY-004-HUMAN-INTENT-IS-SEPARATE-FROM-CHILD-POLICY",
+      "source_kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "what_it_does": "frank_auftrag_stellen has a mechanical two-step confirmation predecessor before dispatch, but after dispatch the child process policy is separately determined by the permission/tool/cwd/settings surfaces above.",
+      "evidence_scope": "CURRENT_DONOR_SOURCE_PLUS_ALREADY_INGESTED_TW5_MUTATION_INTENT_FORENSICS",
+      "target_2_0_action": "KEEP",
+      "reason": "Frankenstein 2.0 must preserve HumanIntentDecision as a distinct typed state rather than treating confirmation as a substitute for invocation-level effect authorization."
+    }
+  ],
+  "architecture_delta": {
+    "new_required_type": "ChildPolicyEnvelope",
+    "purpose": "Bind the exact delegated execution policy to TaskAdmission/workpackage and native child identity before any mutation/effect credit.",
+    "minimum_fields": [
+      "workpackage_id",
+      "task_admission_id",
+      "human_intent_decision_id",
+      "parent_session_or_agent_id",
+      "agent_id",
+      "task_id",
+      "generation",
+      "permission_mode",
+      "allowed_tools_or_capability_set_digest",
+      "disallowed_tools_digest",
+      "cwd_or_project_root_identity",
+      "settings_artifact_identity_or_explicit_none",
+      "host_or_managed_policy_generation",
+      "policy_version",
+      "envelope_digest"
+    ],
+    "execution_rule": "A delegated child may receive candidate work after TaskAdmission, but mutation/effect credit requires observed effective policy identity plus invocation-bound one-shot EffectDecision/CapabilityLease at the actual side-effect boundary. ChildPolicyEnvelope cannot self-grant capabilities.",
+    "historical_settings_rule": "Historical --settings/wache-befehl inheritance remains donor evidence only. It may inform the successor design but is not silently credited to the current claude_frage invocation because this donor command does not explicitly pass --settings.",
+    "bash_rule": "Hard Bash denial remains a useful narrow guard. It must not be promoted to whole-child containment because non-Bash mutating tools and host-managed policy surfaces are separate capability classes.",
+    "trigger4_handoff": "Before Triggerword-4 R2/child freeze, bind workpackage/native-child identity and ChildPolicyEnvelope, then prove effective installed-host policy with harmless source-bound lifecycle/tool-hook evidence."
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-VOICE-CONFIRMATION-VS-CHILD-PERMISSION-014",
+      "a": "Voice task dispatch has a mechanically evidenced two-step HumanIntent predecessor.",
+      "b": "The downstream child permission mode is independently configurable and may be bypassPermissions; the donor command only hard-denies Bash.",
+      "status": "SOURCE_CONFIRMED_ARCHITECTURE_BINDING_GAP"
+    },
+    {
+      "id": "TW5-CONTRADICTION-HISTORICAL-SETTINGS-VS-CURRENT-VOICE-BRIDGE-015",
+      "a": "Historical project evidence supports inherited --settings blocking in at least one helper-session lineage.",
+      "b": "Current donor claude_frage does not explicitly pass --settings or bind a settings artifact identity.",
+      "status": "PRESERVE_BOTH_CURRENT_HOST_EFFECTIVE_POLICY_UNKNOWN"
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "claim": "The installed Claude Code host/global/managed settings may automatically inject an equivalent deterministic policy even without an explicit --settings CLI argument.",
+      "falsifier_or_discriminator": "Observe the exact installed build plus effective settings/hook provenance for one harmless delegated child and bind lifecycle/tool-hook payloads to the workpackage and invocation."
+    },
+    {
+      "claim": "Hard --disallowedTools Bash plus the configured permission mode may be sufficient for the intended narrow voice-task capability envelope.",
+      "falsifier_or_discriminator": "Enumerate every non-Bash mutating tool reachable in the installed child and test whether each reaches deterministic HumanIntent/Capability/Effect admission before mutation."
+    }
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "donor_source_crosscheck": "PASS",
+    "installed_host_effective_policy": 0,
+    "delegated_child_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "On an authorized installed-host surface only: capture one harmless voice-confirmed delegated child invocation and attest workpackage_id + native agent/task/tool identity + effective permission/settings/cwd policy. Then enumerate non-Bash mutating capability classes and prove each converges on an invocation-bound deterministic admission/effect boundary before Triggerword-4 child-runtime credit."
+}

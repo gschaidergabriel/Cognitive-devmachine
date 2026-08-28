@@ -1,0 +1,98 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_F94_CANONICAL_ARCHIVE_CROSSCHECK_GPT56SOL",
+  "recorded_at": "2026-08-28T14:41:20+07:00",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "routing_self_test": "PASS",
+  "authority_epoch": "8.78",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_AND_PROVENANCE_FORENSICS_ONLY_NO_RUNTIME_EXECUTION",
+  "source_pins": {
+    "canonical_main_observed": "01da78bd43066e912410ed1d308f26dba0dae23c",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "5446a1ab56b53282006d6b388a63a310fe5d6a97",
+    "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+      "classification": "INGESTED_WITH_UNIQUE_CROSS_REPOSITORY_SOURCE_CROSSCHECK",
+      "unique_delta": "The exact F94 caller+implementation blob pair is preserved together on current canonical main under agentZero/code/udb/abruf, even though the pinned Frankenstein donor live package still imports a root sibling that is absent there."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
+      "classification": "DEDUPED_ALREADY_FUSED_BY_PARALLEL_TRIGGERWORD5_LANE",
+      "existing_delta_commit": "9c3f5132bc7a528f858bf2a90015007898ac493d",
+      "existing_receipt_commit": "4da1e9b32e7543700e6fd3f9c7503173bb1e2573",
+      "independent_runtime_credit": false
+    }
+  ],
+  "direct_crosschecks": [
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "ref": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/paket.py",
+      "blob_sha": "4381bca97d67c56df75bd6f16e6919b9d2151f3f",
+      "finding": "Current donor live caller imports from .wegehierarchie in the F94 carried-walk success path."
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "ref": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/_archiv-phase4/wegehierarchie.py",
+      "blob_sha": "83d1068bedc4b1fa7dd32aead7600484f8532e34",
+      "finding": "Exact F94 implementation bytes survive in the donor archive but not at the donor live import target."
+    },
+    {
+      "repo": "gschaidergabriel/clay-global-research-entity",
+      "ref": "01da78bd43066e912410ed1d308f26dba0dae23c",
+      "path": "agentZero/code/udb/abruf/paket.py",
+      "blob_sha": "4381bca97d67c56df75bd6f16e6919b9d2151f3f",
+      "finding": "Canonical research archive preserves the exact caller blob."
+    },
+    {
+      "repo": "gschaidergabriel/clay-global-research-entity",
+      "ref": "01da78bd43066e912410ed1d308f26dba0dae23c",
+      "path": "agentZero/code/udb/abruf/wegehierarchie.py",
+      "blob_sha": "83d1068bedc4b1fa7dd32aead7600484f8532e34",
+      "finding": "Canonical research archive preserves the exact implementation blob as the caller's sibling path."
+    }
+  ],
+  "architecture_delta": [
+    {
+      "atom_id": "F2_F94_DUAL_ARCHIVE_SOURCE_PAIR_036",
+      "source_kind": "HISTORICAL_SOURCE_PLUS_CURRENT_CANONICAL_ARCHIVE",
+      "claim": "The F94 source-recovery problem is narrower than previously stated: the exact caller blob 4381bca9 and implementation blob 83d1068b coexist as a sibling source pair in current canonical-main research archive agentZero/code/udb/abruf. Therefore the algorithm and its intended relative-import package shape are recoverable without reconstructing code from prose.",
+      "boundary": "This does not prove that the current Frankenstein donor live package is import-closed, that the archived pair is runtime-compatible with Frankenstein 2.0, or that historical F94 semantics should be re-admitted unchanged.",
+      "target_action": "ADAPT_OR_RETIRE_WITH_EXECUTABLE_REGRESSION"
+    },
+    {
+      "atom_id": "F2_F94_LIVE_DONOR_CLOSURE_STILL_OPEN_037",
+      "source_kind": "NEGATIVE_RESULT",
+      "claim": "At donor 5641dc6 the live paket.py still imports .wegehierarchie while the matching implementation is under _archiv-phase4; canonical archive recovery cannot silently repair that pinned donor runtime boundary.",
+      "target_action": "DO_NOT_GRANT_RUNTIME_CREDIT_FROM_ARCHIVE_PRESENCE"
+    }
+  ],
+  "contradiction_update": {
+    "id": "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004",
+    "status": "SOURCE_PAIR_RECOVERED_IN_CANONICAL_RESEARCH_ARCHIVE_DONOR_RUNTIME_CLOSURE_OPEN",
+    "preserve": true
+  },
+  "triggerword4_handoff": [
+    "If F94 is retained, use the exact canonical-archive blob pair as donor identity rather than recreating the mechanism from prose.",
+    "Do not copy it blindly into the live namespace: prove schema/dependency compatibility and run a source-bound carried-walk regression showing productive paths update vp_weg.",
+    "Add a negative regression proving missing/retired F94 dependency cannot silently degrade the retrieval path; explicit retirement is acceptable if the caller branch is removed and replacement behavior is tested.",
+    "Keep archive presence as provenance only until executable successor evidence exists."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_execution": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword 4 should decide ADAPT versus RETIRE for F94 and prove the choice with exact-source package/import/schema regression; Triggerword 5 should next continue live ingest from packets newer than 2026-08-28T07:35:12Z without double-consuming concurrent deltas."
+}

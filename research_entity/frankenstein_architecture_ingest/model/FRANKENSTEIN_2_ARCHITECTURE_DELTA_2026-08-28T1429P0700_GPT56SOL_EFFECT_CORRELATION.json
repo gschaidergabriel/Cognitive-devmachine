@@ -1,0 +1,114 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "recorded_at": "2026-08-28T14:29:01+07:00",
+  "evidence_scope": "SOURCE_FORENSICS_EXTERNAL_PRIMARY_HOOK_SEMANTICS_AND_INGEST_DEDUPE_ONLY",
+  "design_source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "head_before_ingest": "abe04a89844f8734754c7789736165cc60510262"
+  },
+  "canonical_main_observed_before_write": "45f46138db94e0228240ea15b586bf8be622410b",
+  "donor_source": {
+    "repository": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "packets_ingested_in_provenance_order": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "status": "INGESTED_DEDUPED_WITH_UNIQUE_CORRELATION_DELTA",
+      "double_count_credit": false,
+      "unique_delta": "The donor's PreToolUse/PostToolUse correlation uses one mutable active_turns.effect_id per session and does not bind the lifecycle pair to the host-provided per-call tool_use_id."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "status": "INGESTED_DEDUPED_NO_INDEPENDENT_CREDIT",
+      "double_count_credit": false,
+      "unique_delta": "No additional architectural promotion in this checkpoint: its nonblocking effect path, NOT_COMPUTED/taint control and VoiceSessionCapsule coupling materially overlap already-admitted current deltas and frontier items. Packet provenance is retained rather than counted as independent replication."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "status": "INGESTED_SOURCE_CROSSCHECKED",
+      "double_count_credit": false,
+      "unique_delta": "The donor can create VERIFIED post hoc when no PreToolUse row exists, while gw_absicht classifies status=VERIFIED as aussenwirkung; observed-success and admitted-then-verified execution are therefore not structurally distinct."
+    }
+  ],
+  "cross_checks": [
+    {
+      "id": "TW5-XCHECK-EFFECT-001",
+      "source": "gschaidergabriel/frankenstein@5641dc6 DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "spans": ["3200-3655", "8810-8895"],
+      "result": "CONFIRMED: zulassen() records capability/generation/precondition/idempotency findings but normal PreToolUse deliberately emits no deny/block; only the separate SEBUKKU condition emits permissionDecision=deny in the checked dispatcher."
+    },
+    {
+      "id": "TW5-XCHECK-EFFECT-002",
+      "source": "gschaidergabriel/frankenstein@5641dc6 DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "spans": ["3360-3655"],
+      "result": "CONFIRMED: merken() may create VERIFIED/FEHLGESCHLAGEN without a PreToolUse row and appends causal_episodes with credit=0,reentered=0; gw_absicht then selects effects.status='VERIFIED' as aussenwirkung."
+    },
+    {
+      "id": "TW5-XCHECK-CORRELATION-003",
+      "source": "donor stern.py plus current official Claude Code hook reference",
+      "spans": ["donor 3220-3565", "official PreToolUse/PostToolUse/PostToolBatch semantics"],
+      "result": "CONFIRMED DESIGN HAZARD: donor correlation is session-slot based; current host hook payloads expose tool_use_id for per-call correlation and PostToolUse can fire concurrently for parallel tool calls. A concrete donor mis-correlation has not been runtime reproduced in this run, so the race remains a reachable design hazard rather than a measured failure."
+    }
+  ],
+  "architecture_deltas_for_triggerword4": [
+    {
+      "id": "TW5-D-EFFECT-001",
+      "delta": "Do not migrate stern.zulassen() as the canonical EntityOS EffectGate. Preserve its useful checks and journal shape, but place deterministic allow/deny/hold enforcement at the actual executor/host boundary. Lifecycle hooks may be adapters/auditors, not the sole effect authority when they fail open or emit no deny."
+    },
+    {
+      "id": "TW5-D-EFFECT-002",
+      "delta": "Split the overloaded donor effect status into typed, independently evidenced states: ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, COMPLETION_EVIDENCE and CAUSAL_REENTRY. A single VERIFIED bit must never imply all six."
+    },
+    {
+      "id": "TW5-D-EFFECT-003",
+      "delta": "Bind every state-changing call with an immutable invocation_id/tool_use_id-equivalent to its effect_id. Do not correlate PreToolUse and PostToolUse through one mutable session slot. Require duplicate/reorder/parallel-call tests and exact mismatch rejection."
+    },
+    {
+      "id": "TW5-D-EFFECT-004",
+      "delta": "Make external effect outcome UNKNOWN a first-class state. Missing PostToolUse, cancellation, transport ambiguity or stale correlation cannot become VERIFIED and cannot trigger blind replay."
+    },
+    {
+      "id": "TW5-D-EFFECT-005",
+      "delta": "Downstream GWT/GRID intent-vs-effect logic must consume typed world-effect verification and causal re-entry, not effects.status='VERIFIED' alone."
+    }
+  ],
+  "preserved_contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-ENFORCEMENT-003",
+      "status": "SOURCE_RESOLVED_AS_SEMANTIC_SPLIT",
+      "resolution": "The normal donor zulassen path is pre-execution bookkeeping/assessment, not deterministic denial authority. The hook surface can deny in the separate SEBUKKU branch, proving that lack of denial in zulassen is an implementation choice rather than a host limitation."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VERIFIED-PREADMISSION-004",
+      "status": "SOURCE_CONFIRMED_OPEN_MIGRATION_HAZARD",
+      "resolution": "The donor can mint VERIFIED from PostToolUse fallback without a PreToolUse row and later treat VERIFIED as aussenwirkung. Frankenstein 2.0 must structurally separate pre-admission from observed result."
+    },
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-CORRELATION-005",
+      "status": "OPEN_REACHABLE_HAZARD_NOT_RUNTIME_REPRODUCED",
+      "claim_a": "Donor uses one active_turns.effect_id per session to correlate PreToolUse with PostToolUse.",
+      "claim_b": "Current host semantics provide per-call tool_use_id and permit concurrent PostToolUse for parallel tool calls.",
+      "falsifier": "A proven host-level serialization invariant for every state-changing call plus an executable correlation test showing the session slot cannot be overwritten/reordered; otherwise migrate to immutable per-call identity."
+    }
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "external_primary_host_semantics": "PRESENT",
+    "independent_runtime_reexecution": 0,
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Inspect donor realtime_gespraech.py tool bridge and any external blocking wache-koenig/executor path to locate the actual present-day enforcement boundary or prove it absent.",
+    "Recover Git introduction/supersession chronology for nonblocking zulassen(), missing-pre-row VERIFIED fallback and completion verification.",
+    "Carry immutable invocation_id -> effect_id and UNKNOWN outcome semantics into Triggerword-4 executor/effects assembly tests without modifying the donor."
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_REALTIME_MEMORY_EPISTEMIC_ADMISSION_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:42:00Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "CURRENT_DONOR_SOURCE_FORENSICS_NO_NEW_RUNTIME_EXECUTION",
+  "packet_id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "symbol": "_sicherstellen_gespraech_erinnerung_tabelle",
+      "result": "The dedicated table schema contains only id, ts, subject, value and quelle; there is no explicit epistemic/transformation/evidence class."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "symbol": "gespraech_erinnerung_lesen",
+      "result": "The direct Realtime reader searches the dedicated conversation-memory table and durable_memory; source labels exist, but the inspected interface does not establish typed claim/fact/transformation admission."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "result": "Realtime memory read/write wrappers call stern directly in-process; no wrapper-level deterministic MemoryAdmission or epistemic type is inserted before model context use."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_MEMORY_SCHEMA_UNTYPED_CLAIM_039",
+      "classification": "SCHEMA",
+      "claim": "Conversation memory is stored separately from durable_memory, but its row schema does not distinguish verbatim user claims, model summaries, inferences, instructions or independently verified external facts.",
+      "confidence": 1.0,
+      "target_action": "REPAIR_MEMORY_SCHEMA_OR_ADD_TYPED_ADMISSION_PROJECTION"
+    },
+    {
+      "atom_id": "F2_MEMORY_READ_EPISTEMIC_FLATTENING_040",
+      "classification": "LIVE_CODE",
+      "claim": "The direct Realtime memory reader exposes heterogeneous conversation-memory and durable-memory material to model context with source labels but without an explicit epistemic/transformation class. Storage separation therefore does not by itself prevent fact-like flattening at retrieval time.",
+      "confidence": 1.0,
+      "target_action": "REPAIR_AND_TYPE"
+    },
+    {
+      "atom_id": "F2_MEMORY_FUNCTION_CALL_NOT_FACT_AUTHORITY_041",
+      "classification": "ENFORCEMENT_GAP",
+      "claim": "Realtime Function Calling can propose conversation-memory content, but the inspected path lacks deterministic MemoryAdmission semantics that would prevent model-generated summary/inference content from being structurally indistinguishable from a remembered user claim.",
+      "confidence": 1.0,
+      "target_action": "REPAIR_MEMORY_ADMISSION"
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "id": "TW5-MEMORY-CANDIDATE-022",
+      "delta": "Introduce MemoryCandidate with immutable source_event_id/utterance_ref, source_actor, transformation_class {VERBATIM,SUMMARY,INFERENCE,INSTRUCTION,OTHER}, epistemic_class {OBSERVED_CLAIM,INFERRED,UNKNOWN,VERIFIED_EXTERNAL only when separately evidenced}, generation, privacy/retention tier and content digest/reference.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-MEMORY-ADMISSION-023",
+      "delta": "Model Function Calling proposes MemoryCandidate only. A deterministic MemoryAdmission decides persistence/redaction/rejection and writes an auditable admission result; it cannot mint factual truth from remembered content.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-MEMORY-RETRIEVAL-PROVENANCE-024",
+      "delta": "Retrieval must preserve source + transformation + epistemic + provenance metadata through ranking/context compilation; conversation claims and canonical evidence must never be silently flattened into one fact-like record shape.",
+      "feeds_triggerword4": true
+    }
+  ],
+  "epistemic_law": "Remembering that actor A said X proves at most OBSERVED_CLAIM(A,X) when the utterance/event is admissibly observed; it does not prove X. A model summary/inference remains SUMMARY/INFERRED until independent evidence promotes a separate factual claim.",
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-011",
+      "status": "REFINED_OPEN",
+      "claim_a": "Conversation memory is structurally separate from durable_memory in storage.",
+      "claim_b": "The direct Realtime retrieval interface lacks explicit epistemic/transformation typing and can return heterogeneous memory classes into one model context path.",
+      "resolution_rule": "Keep storage separation but add typed deterministic MemoryAdmission and provenance-preserving retrieval; do not treat source labels as factual authority."
+    }
+  ],
+  "counterhypotheses": [
+    "Other non-Realtime consumers may add stronger epistemic typing; this delta is scoped to the direct Realtime path and must not be generalized repository-wide without source audit.",
+    "Prompt instructions may tell the model to be cautious with memory, but prompt prose does not change row semantics and cannot replace typed admission/provenance."
+  ],
+  "triggerword4_acceptance_tests": [
+    "Persist a verbatim user utterance and a model summary of it; retrieval distinguishes them structurally, not only by free-text source labels.",
+    "Persist a model inference proposed through Realtime Function Calling; it remains INFERRED/MODEL_CANDIDATE and cannot satisfy an OBSERVED/FACT evidence query.",
+    "Retrieve matching conversation-memory and durable-memory records together; every item preserves explicit transformation/epistemic/provenance metadata after ranking/context compilation.",
+    "Rejected/redacted sensitive speech leaves an auditable admission result without persisting disallowed raw content."
+  ],
+  "credits": {
+    "source_forensics": "PASS_AT_DIRECT_REALTIME_MEMORY_SOURCE_SCOPE",
+    "new_runtime_execution": 0,
+    "memory_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Audit all other conversation/durable-memory consumers for epistemic typing, then feed Triggerword-4 a deterministic MemoryCandidate/MemoryAdmission ABI and provenance-preserving retrieval tests alongside the cross-modal EffectRequest/EffectDecision executor contract."
+}

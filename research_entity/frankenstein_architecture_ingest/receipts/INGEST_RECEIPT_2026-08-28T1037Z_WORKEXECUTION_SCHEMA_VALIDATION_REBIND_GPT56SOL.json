@@ -1,0 +1,49 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest-schema-validation",
+  "created_at": "2026-08-28T10:37:00Z",
+  "trigger": "triggerwort 5",
+  "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+  "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+  "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+  "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+  "packet_disposition": "CONSUMED_SEMANTICALLY_WITH_SCHEMA_DEFECT_PRESERVED",
+  "parallel_primary_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1035Z_WORKEXECUTION_BINDING_GPT56SOL.json",
+  "parallel_primary_delta_commit": "c5e9d543fc64aeb15a8dca1fc4f577ea30f70180",
+  "parallel_primary_receipt_commit": "8851207bdb3bc3a8115807959ddfc78bb134a60b",
+  "schema_validation_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1037Z_WORKEXECUTION_SCHEMA_VALIDATION_REBIND_GPT56SOL.json",
+  "schema_validation_delta_commit": "862b4fae7a5ddb4426b734b4e5078a1fd72de04a",
+  "schema_blob_sha": "8b2732394418e725067be52ee480ad1da649a9f7",
+  "validation_result": {
+    "valid_as_written": false,
+    "violations": 1,
+    "invalid_atom_id": "TW5-WORKEXEC-SUCC-005-TOOL-USE-TO-AGENT-JOIN-REMAINS-UNPROVEN",
+    "invalid_field": "target_2_0_action",
+    "invalid_value": "RESEARCH",
+    "model_normalization": "UNDECIDED",
+    "packet_mutated": false
+  },
+  "semantic_result": "NO_DUPLICATE_ARCHITECTURE; WORKEXECUTION_BINDING_V1_RETAINED; PACKET_SCHEMA_DEFECT_MADE_EXPLICIT",
+  "source_crosscheck": {
+    "stern_handoff": "CONFIRMED",
+    "donor_hooks": "CONFIRMED",
+    "current_docs_identity_separation": "CONFIRMED_AS_CAPABILITY_EVIDENCE_ONLY",
+    "parent_tool_use_id_to_agent_id_runtime_join": "UNKNOWN"
+  },
+  "runtime_boundary": {
+    "provider_execution": false,
+    "vps_execution": false,
+    "unusual_experiment": false,
+    "donor_runtime_execution": false,
+    "installed_host_hook_capture": false,
+    "runtime_credit": 0,
+    "training_credit": 0
+  },
+  "result": "PASS_SOURCE_INGEST_WITH_SCHEMA_DEFECT_PRESERVED",
+  "next_exact_gate": "Triggerword-4: capture one harmless installed Agent invocation with exact PreToolUse/PostToolUse and SubagentStart/SubagentStop payloads; admit parent tool_use_id -> agent_id only from an observed deterministic join and then test two overlapping invocations."
+}

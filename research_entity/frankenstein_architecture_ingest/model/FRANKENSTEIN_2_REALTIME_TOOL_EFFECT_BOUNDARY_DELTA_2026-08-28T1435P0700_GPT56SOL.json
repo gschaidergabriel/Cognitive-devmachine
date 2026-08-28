@@ -1,0 +1,107 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_REALTIME_TOOL_EFFECT_BOUNDARY",
+  "recorded_at": "2026-08-28T07:35Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "evidence_scope": "CURRENT_SOURCE_PLUS_HISTORICAL_GIT_RUNTIME_REPORTS; NO_NEW_RUNTIME_REEXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_REALTIME_CALL_ID_STOPS_AT_DISPATCH_024",
+      "source": {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+        "line_start": 1690,
+        "line_end": 1740,
+        "source_kind": "LIVE_CODE"
+      },
+      "claim": "Realtime function calls are queued by call_id and _tool_ausfuehren receives that call_id, but the identifier is used only when returning function_call_output to the Realtime conversation. It is not propagated into frank_erinnerung_schreiben, frank_auftrag_stellen, frank_forschung or their durable/downstream action records.",
+      "confidence": 0.995,
+      "target_2_0_action": "REPAIR",
+      "triggerword4_contract": "Carry immutable invocation_id/tool_use_id plus session/generation/causal identity through admission, downstream execution, outcome verification, result re-entry and completion evidence; protocol response correlation alone is insufficient effect identity."
+    },
+    {
+      "atom_id": "F2_REALTIME_MEMORY_DIRECT_DURABLE_WRITE_025",
+      "source": {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+        "line_start": 515,
+        "line_end": 560,
+        "source_kind": "ENFORCEMENT_CODE"
+      },
+      "downstream_source": {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+        "historical_introduction_commit": "0f79abd05cffee61375db693f063ee807249159b",
+        "source_kind": "LIVE_CODE"
+      },
+      "claim": "frank_erinnerung_schreiben directly enters stern.gespraech_erinnerung_schreiben through the in-process _stern dispatcher. That function inserts subject/value/source into the dedicated gespraech_erinnerung table and commits. The donor intentionally isolates this from durable_memory, but the Realtime model function-call path itself provides no independent user-confirmation or call-scoped effect/admission receipt before this persistent state mutation.",
+      "confidence": 0.99,
+      "boundary": "This is an internal durable memory/state write, not evidence of an external-world effect. The dedicated table is a useful donor boundary; Frankenstein-2.0 must still classify model-proposed memory as provenance-bearing candidate/user-communication state rather than letting model output silently mint canonical fact authority.",
+      "target_2_0_action": "ADAPT_WITH_TYPED_ADMISSION",
+      "triggerword4_contract": [
+        "Persist model-proposed memory only through a typed memory-entry/admission record carrying user/source provenance and immutable invocation identity.",
+        "Keep model interpretation distinct from observed user utterance and canonical fact status.",
+        "Preserve the donor's separation from generic durable_memory unless an explicit migration contract proves equivalent invariants."
+      ]
+    },
+    {
+      "atom_id": "F2_VOICE_CONFIRMED_CLAUDE_WRITE_PATH_026",
+      "source": {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+        "line_start": 1620,
+        "line_end": 1710,
+        "source_kind": "ENFORCEMENT_CODE"
+      },
+      "downstream_source": {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+        "line_start": 291,
+        "line_end": 390,
+        "source_kind": "ENFORCEMENT_CODE"
+      },
+      "claim": "frank_auftrag_stellen has a real voice-local two-stage gate: exact normalized task match, at least one new server-transcribed user utterance, 300-second expiry and explicit contradiction-keyword veto are required before dispatch. After that gate, the task is sent asynchronously to claude_frage(), which launches headless Claude Code. Current source hard-blocks the entire Bash tool, including under bypassPermissions, but explicitly retains file Read/Write/Edit/Grep/Glob capability; historical Git reports real verification that ordinary file writes still succeed.",
+      "confidence": 0.99,
+      "authority_boundary": "The confirmation state machine is real enforcement before this specific voice-to-Claude dispatch, but it is not by itself the canonical EntityOS EffectGate. Any later host hook/wache-koenig blocker remains unresolved and may add stricter authority downstream.",
+      "target_2_0_action": "KEEP_CONFIRMATION_REHOME_EFFECT_AUTHORITY",
+      "triggerword4_contract": [
+        "Retain the two-stage user-confirmation concept as an upstream human-intent admission signal.",
+        "Bind the confirmed utterance and exact normalized request digest to the immutable invocation/effect identity.",
+        "Route every state-changing downstream Write/Edit or other effect through one deterministic EffectGate/EffectJournal boundary; tool allow/deny lists are capability constraints, not completion/effect authority.",
+        "Prove actual DENY non-execution and wrong-call identity rejection under parallel and reverse-completion tests."
+      ]
+    },
+    {
+      "atom_id": "F2_REALTIME_CANCELLATION_BOUNDARY_027",
+      "source": {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+        "line_start": 1300,
+        "line_end": 1408,
+        "source_kind": "ENFORCEMENT_CODE"
+      },
+      "claim": "Barge-in/non-completed response cancellation is strong only before local dispatch: queued calls are discarded before _tool_ausfuehren. Once _tool_ausfuehren begins, current source has no call-scoped pending-effect lease propagated into the memory/Claude/research downstream paths. Therefore CANCELLED-before-dispatch and SUBMITTED/EXECUTING must remain distinct typed states.",
+      "confidence": 0.995,
+      "target_2_0_action": "ADAPT_TO_TYPED_PENDING_EFFECT"
+    }
+  ],
+  "architecture_changes": [
+    "Introduce a VoiceToolInvocation envelope carrying call/tool identity, request digest, session/generation/causal identity, transcript evidence and confirmation evidence into every state-changing downstream path.",
+    "Treat voice-local confirmation as an admission signal, not as canonical execution/completion authority.",
+    "Move persistent memory writes behind typed memory admission with explicit epistemic class; do not silently upgrade model-selected summary text into canonical facts.",
+    "Unify pre-dispatch cancellation with PENDING_EFFECT while preserving SUBMITTED -> OUTCOME_UNKNOWN/VERIFIED semantics after an irreversible boundary."
+  ],
+  "counterhypotheses": [
+    "The unresolved host-only wache-koenig or Claude Code hook chain may already block some downstream Write/Edit effects. If exact current source proves it, Frankenstein-2.0 should fuse that enforcement rather than duplicate it.",
+    "gespraech_erinnerung may be intentionally treated as noncanonical personal-note storage; even then provenance and invocation binding remain needed to distinguish user speech from model interpretation and to support replay/audit."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_execution": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Acquire or classify the host-only wache-koenig predecessor and trace Claude Code Write/Edit hook ordering so the voice confirmation signal can be placed relative to the actual deterministic effect boundary; separately audit perception callers for evaluate_head bypass."
+}

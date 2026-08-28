@@ -1,0 +1,158 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_REENTRY_FUSION_5641dc6b",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "reentry_reason": "Parallel Triggerword-5 writes appeared after the initial read. This successor fuses them instead of overwriting or treating the initial snapshot as current.",
+  "predecessor_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_INITIAL_PIN.json",
+  "inputs": {
+    "newly_ingested_inbox_packet": {
+      "packet_id": "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T071400Z_5641dc6_GPT56SOL_LIVE_FEED_BRIDGE.json",
+      "status": "CONSUMED_DEDUPLICATED"
+    },
+    "already_consumed_inbox_packet": "TW5-PACKET-20260828T0714Z-5641dc6-GPT56SOL-LIVE-FEED-BRIDGE",
+    "already_consumed_main_projection_runs": [
+      "triggerwort5-20260828T1404p0700-gpt56sol-frankenstein-v07-forensics",
+      "triggerwort5-20260828T1412p0700-gpt56sol-voice-visual-lineage"
+    ],
+    "newly_fused_main_projection_run": {
+      "run_id": "triggerwort5-20260828T1414p0700-gpt56sol-effect-completion-forensics",
+      "path": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_EFFECT_COMPLETION_FORENSIC_DELTA_2026-08-28_GPT56SOL.json",
+      "status": "FUSED_WITH_DONOR_CROSSCHECK"
+    }
+  },
+  "dedupe": [
+    {
+      "packet_atom": "TW5-A003-VOICE-HARD-GATE-WAIT-ARBITRATION",
+      "existing_atom": "F2_VOICE_GWT_ARBITRATION_007",
+      "action": "MERGED_AS_CORROBORATING_SOURCE_NOT_INDEPENDENT_REPLICATION"
+    },
+    {
+      "packet_atom": "TW5-A004-VISUAL-SHARED-ARBITRATION-RESOURCE-FANIN",
+      "existing_atom": "F2_VISUAL_CORTEX_SHARED_ARBITRATION_004",
+      "action": "MERGED_AS_CORROBORATING_SOURCE_NOT_INDEPENDENT_REPLICATION"
+    },
+    {
+      "packet_atom": "TW5-A005-TYPED-PERCEPTUAL-EPISTEMICS",
+      "existing_atom": "F2_TYPED_PERCEPTUAL_FIELD_005",
+      "action": "MERGED_AS_CORROBORATING_SOURCE_NOT_INDEPENDENT_REPLICATION"
+    }
+  ],
+  "new_or_strengthened_atoms": [
+    {
+      "atom_id": "F2_HOOK_LIFECYCLE_FANIN_013",
+      "source_kind": "CONFIG",
+      "source": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json:1-68@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "All seven declared Claude lifecycle hook classes route to the same stern.py hook dispatcher with per-hook timeouts.",
+      "evidence_origin": "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL",
+      "target_action": "ADAPT_TO_GRID",
+      "boundary": "Configuration establishes fan-in topology but not proof that every host/session fires every hook or that internal branches enforce their declared semantics.",
+      "grid10_delta": "Keep one deterministic lifecycle fan-in or one typed successor, but measure concurrency/backpressure and preserve per-event provenance rather than creating multiple hook authorities."
+    },
+    {
+      "atom_id": "F2_STERN_DECLARED_BOUNDARIES_SPEC_ONLY_014",
+      "source_kind": "SPEC",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:35-48@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "The source declares no LLM call in hooks, bounded hook execution, no identity lock and no direct model write to unified.db.",
+      "evidence_origin": "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL",
+      "target_action": "KEEP",
+      "boundary": "Header declaration is not executable proof. Each write, timeout and model-call boundary must be traced separately before promotion."
+    },
+    {
+      "atom_id": "F2_EFFECTGATE_IS_NONBLOCKING_BOOKKEEPING_015",
+      "source_kind": "ENFORCEMENT_CODE_PLUS_NEGATIVE_RESULT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3100-3195@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "The donor section named EffectGate explicitly never blocks a Claude Code tool. ABGELEHNT, WIEDERHOLUNG and UNGEPRUEFT are journal/bookkeeping states while the tool still runs; the source names an older external wache-koenig.py as the blocking guard.",
+      "crosscheck": "DIRECT_SOURCE_CONFIRMED_THIS_RUN",
+      "target_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "grid10_delta": "Do not map donor stern.zulassen() one-to-one onto canonical EntityOS EffectGate authority. Separate admission decision, actual enforcement, execution receipt, world-effect verification and completion evidence into typed identities behind the deterministic effect boundary."
+    },
+    {
+      "atom_id": "F2_EFFECT_COMPLETION_STATUS_VOCAB_BUG_016",
+      "source_kind": "NEGATIVE_RESULT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:5840-6008@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "_beleg_pruefen accepts an effect receipt unless status is exactly lowercase legacy 'fehler'. Current statuses such as FEHLGESCHLAGEN, ABGELEHNT, WIEDERHOLUNG and UNGEPRUEFT therefore are not rejected by this predicate and may close reconcile() as stand='fertig'.",
+      "crosscheck": "DIRECT_SOURCE_CONFIRMED_THIS_RUN",
+      "target_action": "REPAIR",
+      "grid10_delta": "Completion must use an explicit allowlist of exact admissible verified receipt states, bound to effect/invocation/generation identity; denied, failed, unchecked, stale, duplicate-unresolved and unknown outcomes fail closed."
+    },
+    {
+      "atom_id": "F2_UNBOUND_TEST_ZERO_COMPLETION_017",
+      "source_kind": "NEGATIVE_RESULT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:5840-6008@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "A textual test:<exit_code>:<description> proof is accepted solely when the supplied exit code string equals 0; it is not bound here to an observed runner, command hash, source SHA, environment, timestamp, output digest or immutable execution receipt.",
+      "crosscheck": "DIRECT_SOURCE_CONFIRMED_THIS_RUN",
+      "target_action": "REPAIR",
+      "grid10_delta": "Replace free-form test proof with exact repository/source/command/environment/result receipt identity before work-package completion credit."
+    },
+    {
+      "atom_id": "F2_EFFECT_INVOCATION_CORRELATION_RISK_018",
+      "source_kind": "OPEN_HYPOTHESIS_FROM_SOURCE_STRUCTURE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3180-3580@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "PreToolUse stores one effect_id in active_turns per session and PostToolUse reads that mutable slot. If same-session tool calls interleave, a later PreToolUse could overwrite the pointer before an earlier PostToolUse consumes it.",
+      "crosscheck": "SOURCE_STRUCTURE_CONFIRMED; RUNTIME_REACHABILITY_UNRESOLVED",
+      "counterhypothesis": "The real host hook scheduler serializes each PreToolUse/PostToolUse pair strongly enough that the interleaving cannot occur.",
+      "falsifier": "Trace overlapping same-session tool invocations under the real hook scheduler and prove immutable invocation-id to effect-id pairing.",
+      "target_action": "REPAIR",
+      "grid10_delta": "Prefer immutable call/invocation identity rather than one mutable session-wide current-effect pointer."
+    },
+    {
+      "atom_id": "F2_REALTIME_UNKNOWN_PRESENCE_DEFAULT_BUG_019",
+      "source_kind": "NEGATIVE_RESULT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1050-1600@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "The Realtime degraded path explicitly falls back to user_present=True when PresenceBridge is unavailable, even though the capsule can represent no signal.",
+      "crosscheck": "DIRECT_SOURCE_CONFIRMED_THIS_RUN",
+      "target_action": "REPAIR",
+      "grid10_delta": "Missing sensor evidence must remain UNKNOWN/None. Candidate hard gates must define explicit WAIT/ASK/re-observe behavior for UNKNOWN rather than minting presence."
+    }
+  ],
+  "architecture_fusion": {
+    "effect_plane": [
+      "Donor stern EffectGate supplies useful provenance/idempotency/journal ideas but not canonical blocking semantics.",
+      "Frankenstein-2.0 must type ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION and COMPLETION_EVIDENCE separately.",
+      "Any real effect remains behind deterministic EntityOS EffectGate/EffectJournal authority; action-grounded memory consumes outcome evidence, it does not own effect authority.",
+      "Completion requires exact admissible receipts and immutable invocation identity."
+    ],
+    "cognitive_plane": [
+      "Retain typed ObservedEvidence/InferredHypothesis/RetrievalPrior separation and NOT_COMPUTED semantics.",
+      "Retain explicit WAIT and hard gates in one shared GRID competition ABI, but allow modality-specific calibration rather than blindly forcing one weight vector onto every modality.",
+      "Unknown presence remains unknown and cannot be converted into a convenient True default.",
+      "VisualNeed is a strong donor pattern for sparse WorldNeed JIT materialization, not evidence that a world-model implementation already exists."
+    ],
+    "coordination_plane": [
+      "Preserve both append-only provenance lanes while migration is unresolved: canonical-main architecture archaeology feed and owner-branch inbox/state.",
+      "Use dedupe keys and semantic-atom merging so duplicated GPT56Sol observations count as consistency/reproducibility, not independent evidence.",
+      "Do not delete or rewrite earlier packets; successors reference and supersede only where exact provenance allows."
+    ]
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-INGEST-PATH-001",
+      "status": "OPEN",
+      "claim": "Canonical main has an active append-only architecture-archaeology feed while the newer owner branch mandates inbox/INGEST_STATE. Both are research projections; migration authority remains unresolved."
+    },
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "OPEN_STRENGTHENED",
+      "claim": "EntityOS requires deterministic EffectGate/EffectJournal real-effect authority, while donor stern.py's named EffectGate explicitly does not block tools and its completion predicate accepts non-verified current status vocabulary."
+    },
+    {
+      "id": "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
+      "status": "OPEN_REPAIR_REQUIRED",
+      "claim": "Current epistemic law requires unknown evidence to remain unknown, while degraded Realtime currently maps unavailable presence to user_present=True."
+    }
+  ],
+  "evidence_scope": {
+    "new_runtime_execution_this_fusion": false,
+    "whole_frankenstein_2_runtime_pass": false,
+    "whole_entityos_hcu_credit_delta": 0,
+    "provider_runtime_credit_delta": 0,
+    "training_credit_delta": 0,
+    "classification": "SOURCE_FORENSICS_AND_HISTORICAL_DONOR_RECEIPT_FUSION_ONLY"
+  },
+  "next_exact_gate": "Trace Git introduction/supersession of posttool-only logging -> Phase-2 nonblocking admission bookkeeping -> current completion verifier, then inspect actual blocking wache-koenig and real hook scheduling to resolve immutable invocation correlation; in parallel repair the UNKNOWN->user_present=True degraded voice path in the Triggerword-4 assembly design, not in the donor repo during this analysis lane."
+}

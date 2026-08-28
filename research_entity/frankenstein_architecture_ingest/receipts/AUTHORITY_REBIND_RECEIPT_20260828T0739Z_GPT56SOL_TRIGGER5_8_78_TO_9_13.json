@@ -1,0 +1,36 @@
+{
+  "schema": "TRIGGERWORD5_AUTHORITY_REBIND_RECEIPT/v1",
+  "receipt_id": "TW5-AUTHORITY-REBIND-20260828T0739Z-GPT56SOL-8.78-TO-9.13",
+  "recorded_at": "2026-08-28T07:39Z",
+  "trigger": "triggerwort 5",
+  "reason": "Canonical supervisor/provider authority advanced during this long-running Triggerword-5 source-forensics session. The append-only artifacts listed below were written while the previously observed authority surface still reported 8.78; they must not be treated as current-authority-bound evidence after 9.13 became canonical.",
+  "historical_source_epoch": "8.78",
+  "current_authority": {
+    "authority_epoch": "9.13",
+    "canonical_main": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN",
+    "new_runtime_credit": 0
+  },
+  "rebound_source_artifacts": [
+    {"delta_commit":"5be4008a2a818fab58280da67654803970f9b9e8","receipt_commit":"55e4c6e9ddc85c29c205d89a3791c47051894458","classification_under_9_13":"SOURCE_FORENSICS_ONLY_CURRENT_AUTHORITY_REBOUND_NO_RUNTIME_CREDIT"},
+    {"delta_commit":"9c3f5132bc7a528f858bf2a90015007898ac493d","receipt_commit":"4da1e9b32e7543700e6fd3f9c7503173bb1e2573","classification_under_9_13":"SOURCE_FORENSICS_ONLY_CURRENT_AUTHORITY_REBOUND_NO_RUNTIME_CREDIT"},
+    {"delta_commit":"d4856828a09801b831a7ac814d734a61acfe64f9","receipt_commit":"b3067a03081b2c0c6504aa7d7c15cd243a745041","classification_under_9_13":"SOURCE_FORENSICS_ONLY_CURRENT_AUTHORITY_REBOUND_NO_RUNTIME_CREDIT"},
+    {"checkpoint_commit":"ceb50db825997a4b288222970e1d6d6ebb7be038","classification_under_9_13":"REENTRY_CHECKPOINT_HISTORICAL_AUTHORITY_LABEL_SUPERSEDED_BY_THIS_RECEIPT"}
+  ],
+  "9_13_consistency": [
+    "No artifact above claims runtime, training, physical GRID10, HCU or whole-product credit.",
+    "The effect findings agree with 9.13 steering: session_id is insufficient for call-scoped identity, bookkeeping is not pre-side-effect enforcement, and source forensics are not runtime pass.",
+    "No provider execution occurred; current provider routes remain HARD_OFF.",
+    "Historical 8.78 labels are retained for provenance but are not admitted/current authority labels."
+  ],
+  "credits": {"whole_entityos_hcu":0,"hcu_full":0,"physical_grid10":0,"jspace_model":0,"training":0,"provider_runtime":0},
+  "next_exact_gate": "Bind future Triggerword-5 packets directly to current SUPERVISOR_INBOX selected steering and FREE_PROVIDER_ADMISSION hashes; for effect promotion execute the 9.13 same-session two-call interleaving falsifier and explicit pre-side-effect deny test only on a currently authorized non-provider validation surface."
+}

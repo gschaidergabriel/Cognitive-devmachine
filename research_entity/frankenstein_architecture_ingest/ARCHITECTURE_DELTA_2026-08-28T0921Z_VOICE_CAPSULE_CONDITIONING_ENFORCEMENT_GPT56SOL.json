@@ -1,0 +1,175 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T0921Z-VOICE-CAPSULE-CONDITIONING-ENFORCEMENT-GPT56SOL",
+  "created_at": "2026-08-28T09:21:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/voice-capsule-conditioning-forensics",
+  "classification": "CURRENT_DONOR_SOURCE_FORENSICS_NO_RUNTIME_CREDIT",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main_sha": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "source_identity": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_repo": "gschaidergabriel/clay-global-research-entity",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_sha_observed_before_write": "ed740a403b96b025131e16e7b46964e7d3799e18"
+  },
+  "files_examined": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "sha_or_blob": "CURRENT_AT_DONOR_SHA_5641dc6",
+      "spans_examined": [
+        {"line_start": 720, "line_end": 899},
+        {"line_start": 900, "line_end": 1119},
+        {"line_start": 1110, "line_end": 1289}
+      ]
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py",
+      "sha_or_blob": "763f59d201aa7a41ae0e55e7cc9e8b40e6f2b1c3",
+      "spans_examined": [
+        {"line_start": 90, "line_end": 349},
+        {"line_start": 350, "line_end": 552}
+      ]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-VOICE-CAPSULE-001-REAL-CAPSULE-ABI",
+      "source_kind": "LIVE_CODE",
+      "subsystem": "voice_context",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py",
+      "what_it_does": "VoiceSessionCapsule is a RAM-only typed aggregate containing identity_version, voice_identity, presence, current_visual_state, current_activity, expression_vector, winning_intent, relevant_memory_refs, tool_permissions, privacy_policy, session_reason, goals_effects and ts. bauen()/refresh() re-read live sources rather than creating a second persistent truth store.",
+      "authority_class": "NONCANONICAL_CONTEXT_AGGREGATE",
+      "runtime_reachable": null,
+      "target_2_0_action": "KEEP_AND_TYPE_MORE_STRICTLY",
+      "confidence": 1.0,
+      "failure_mode": "The aggregate can be mistaken for canonical truth or authority if its fields are passed downstream without provenance/epistemic/authority typing."
+    },
+    {
+      "atom_id": "TW5-VOICE-CAPSULE-002-BUILT-AND-REFRESHED",
+      "source_kind": "LIVE_CODE",
+      "subsystem": "voice_context",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "what_it_does": "RealtimeSession creates VoiceSessionCapsuleQuelle after PresenceBridge setup, immediately refreshes self.capsule before entering the WebSocket loop, and refreshes the capsule again after visual re-look and periodic state refresh paths.",
+      "authority_class": "CONTEXT_PRODUCTION",
+      "runtime_reachable": null,
+      "target_2_0_action": "KEEP",
+      "confidence": 1.0,
+      "failure_mode": "Building fresh context does not by itself prove the model consumes it."
+    },
+    {
+      "atom_id": "TW5-VOICE-CAPSULE-003-RESPONSE-INSTRUCTIONS-DO-NOT-CONSUME-CAPSULE",
+      "source_kind": "NEGATIVE_RESULT",
+      "subsystem": "voice_context_conditioning",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "what_it_does": "The actual _response_erstellen() enforcement path constructs response.instructions from _instruktion(self._zustandstext) plus an optional zusatz_hinweis. It does not serialize self.capsule or selected VoiceSessionCapsule fields. The initial session.update likewise receives _instruktion(self._zustandstext).",
+      "authority_class": "MODEL_CONDITIONING_BOUNDARY",
+      "runtime_reachable": null,
+      "target_2_0_action": "REPAIR",
+      "confidence": 1.0,
+      "failure_mode": "Presence, current_visual_state, winning_intent, memory refs, privacy state, goals/effects and other capsule fields can be freshly computed yet have no direct per-response conditioning effect unless they independently alter zustandstext through another path. No such alternate consumption path is established by the inspected spans."
+    },
+    {
+      "atom_id": "TW5-VOICE-CAPSULE-004-UNKNOWN-PRESENCE-COLLAPSES-TRUE-IN-ARBITRATION",
+      "source_kind": "NEGATIVE_RESULT",
+      "subsystem": "presence_epistemics",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py",
+      "what_it_does": "bauen() maps missing/unknown presence to user_present=True before calling winning_intent_snapshot(). The capsule itself preserves presence=None, but GWT voice arbitration receives a positive presence default.",
+      "authority_class": "NONCANONICAL_ARBITRATION_INPUT",
+      "runtime_reachable": null,
+      "target_2_0_action": "REPAIR",
+      "confidence": 1.0,
+      "failure_mode": "FACT_UNKNOWN is collapsed into a positive presence assumption inside arbitration, violating the desired open-set UNKNOWN semantics even before model conditioning."
+    }
+  ],
+  "contradiction_update": {
+    "id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+    "status": "SOURCE_CONFIRMED_OPEN_ENFORCEMENT_GAP",
+    "side_a": "VoiceSessionCapsule is materially populated and refreshed from current voice/perception/memory/policy signals.",
+    "side_b": "The executable response.create conditioning path does not consume the capsule; comments and construction timing therefore overstate direct model conditioning.",
+    "resolution_rule": "Do not mark resolved until a bounded deterministic compiler projects selected typed fields into the actual per-response context boundary and lesion/shuffle tests demonstrate field-specific uptake without authority/privacy leakage."
+  },
+  "architecture_delta": {
+    "new_required_component": "VoiceContextCompiler",
+    "role": "Compile a bounded, provenance-bearing, non-authoritative WorldSlice/voice context from VoiceSessionCapsule into the exact response conditioning boundary.",
+    "must_not_do": [
+      "must not dump the full capsule blindly",
+      "must not treat tool_permissions or permission_mode as self-granted authority",
+      "must not convert missing presence or missing visual state into positive facts",
+      "must not copy durable memory into a second truth store",
+      "must not allow stale visual/memory/effect state to survive without freshness labels"
+    ],
+    "minimum_compiled_field_metadata": [
+      "field_name",
+      "value_or_UNKNOWN",
+      "source_identity",
+      "epistemic_class",
+      "observed_at_or_source_time",
+      "freshness_or_ttl",
+      "generation",
+      "privacy_tier",
+      "authority_semantics",
+      "content_digest_or_reference",
+      "inclusion_reason"
+    ],
+    "selection_policy": [
+      "always preserve UNKNOWN explicitly",
+      "include only fields relevant to the current response/WorldNeed",
+      "prefer IDs/digests/references over copied durable rows",
+      "enforce privacy and retention policy before prompt projection",
+      "cap total context bytes/tokens deterministically",
+      "separate observed evidence, inferred hypothesis, retrieval prior and policy/config observations"
+    ],
+    "acceptance_tests": [
+      "field lesion: remove one eligible field and demonstrate only the intended response/context behavior changes",
+      "field shuffle: swap provenance/value pairs and require fail-closed rejection or detectable mismatch",
+      "UNKNOWN presence: missing signal remains UNKNOWN and leads to WAIT/ASK/re-observe compatible behavior, never user_present=True",
+      "stale visual state: expired state is omitted or labeled stale and cannot satisfy a current observation claim",
+      "privacy lesion: forbidden perception/memory field never enters response.instructions",
+      "authority lesion: changing capsule tool_permissions cannot grant an effect capability",
+      "token bound: compiler output stays within a declared deterministic budget",
+      "freshness: capsule refresh changes compiled context digest when an admitted source field changes"
+    ],
+    "trigger4_handoff": "Before Frankenstein-2.0 voice/cortex runtime credit, wire VoiceContextCompiler into the exact per-response conditioning path and run bounded source-bound lesion/shuffle/UNKNOWN/privacy tests. Runtime evidence must bind the compiled context digest to the Realtime response/invocation identity."
+  },
+  "counterhypotheses": [
+    {
+      "claim": "The capsule may still affect model behavior indirectly because some of the same source signals also feed _zustandstext.",
+      "discriminator": "Compare the field sets and provenance of _zustandstext versus VoiceSessionCapsule, then lesion capsule-only fields such as current_visual_state/last active VisualNeed/privacy_policy and observe whether the compiled response context changes after successor wiring."
+    },
+    {
+      "claim": "The capsule is intended only for logging/introspection, not model conditioning.",
+      "discriminator": "Reconcile the donor comments/build-plan requirement with executable call sites. If logging-only is authoritative, retire the conditioning claim; otherwise wire an explicit compiler."
+    }
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "design_fusion": "ADVANCED",
+    "runtime_reexecution": 0,
+    "voice_conditioning_runtime": 0,
+    "provider_execution": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "coordination": {
+    "central_ingest_state_mutated": false,
+    "reason": "Central INGEST_STATE is mixed-freshness under active parallel writes; append-only evidence is safer than destructive whole-file replacement.",
+    "duplicate_work_avoided": [
+      "9.13 effect-authority bridge/rebind work already present on the branch",
+      "Realtime mutating-tool taxonomy already present on the branch",
+      "ChildPolicyEnvelope source forensics already present on the branch"
+    ]
+  },
+  "next_exact_gate": "Triggerword 4: implement a minimal deterministic VoiceContextCompiler and bind compiled_context_digest to response/invocation identity; run field lesion/shuffle, UNKNOWN-presence, privacy and token-bound regressions. Separately preserve zero runtime credit until actual source-bound execution evidence exists."
+}

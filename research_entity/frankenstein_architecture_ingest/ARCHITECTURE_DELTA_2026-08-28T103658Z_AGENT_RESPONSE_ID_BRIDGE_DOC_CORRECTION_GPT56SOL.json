@@ -1,0 +1,90 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:36:58Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/agent-response-id-bridge-doc-correction",
+  "trigger": "triggerwort 5",
+  "delta_class": "WORK_EXECUTION_BINDING_EXTERNAL_PRIMARY_BRIDGE_CORRECTION",
+  "routing_selftest": "PASS",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch_pre_write_sha": "bf8faeb47e3e4dd8ac850a085ae95c6078f3c980",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "authority_binding": {
+    "epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "supersedes_or_refines": [
+    "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORK_EXECUTION_BINDING_DELTA_2026-08-28T1031Z_GPT56SOL.json",
+    "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1037Z_WORKEXECUTION_SCHEMA_VALIDATION_REBIND_GPT56SOL.json"
+  ],
+  "external_primary_evidence": [
+    {
+      "source": "Claude Code Hooks reference",
+      "observed_2026_08_28": true,
+      "span": "Agent tool response section around lines 1561-1585",
+      "finding": "PostToolUse for a completed or background-launched Agent call documents tool_response.agentId as the identifier for the subagent run. The same PostToolUse event also carries call-scoped tool_use_id."
+    },
+    {
+      "source": "Claude Code Hooks reference",
+      "observed_2026_08_28": true,
+      "span": "SubagentStart/SubagentStop around lines 2048-2109",
+      "finding": "SubagentStart and SubagentStop document unique agent_id for the subagent lifecycle."
+    },
+    {
+      "source": "Claude Code Hooks reference",
+      "observed_2026_08_28": true,
+      "span": "TaskCreated/TaskCompleted around lines 2114-2208",
+      "finding": "task_id remains a separate task-system identity namespace and must not be aliased to agent_id."
+    }
+  ],
+  "donor_source_provenance_correction": {
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+    "blob_sha": "b578cc8651c50db1ef98c3d5c74f95f81ba24db9",
+    "corrected_span": "76-77",
+    "finding": "The exact handoff-before-spawn/reconcile-after sentence is in Ablauf step 6, not packet lines 1-7."
+  },
+  "architecture_correction": {
+    "component": "WorkExecutionBinding/v1",
+    "previous_overbroad_claim": "Official documentation does not establish a parent Agent invocation to child identifier bridge.",
+    "corrected_claim": "Current official documentation exposes a documented candidate bridge on Agent PostToolUse: tool_use_id identifies the parent Agent invocation and tool_response.agentId identifies the returned/launched subagent run. Subagent lifecycle exposes agent_id. Documentation capability evidence materially narrows the gap, but exact equality and event behavior on the installed target build remain runtime-unverified.",
+    "candidate_join": "Agent PostToolUse(tool_use_id, tool_response.agentId) -> SubagentStart/SubagentStop(agent_id)",
+    "promotion_rule": "Promote candidate_join to VERIFIED_AT_EXACT_RUNTIME_IDENTITY only when the installed target build emits the fields and observed tool_response.agentId equals the lifecycle agent_id for the same child without timing/order inference.",
+    "concurrency_rule": "Two overlapping Agent calls remain separable by tool_use_id; never correlate children by session_id, timestamps, event order, agent_type, prompt similarity or task_id.",
+    "task_namespace_rule": "task_id remains optional and independent unless Task lifecycle actually participates.",
+    "completion_rule": "A child identifier or SubagentStop is execution evidence only; durable workpackage completion still requires bound reconcile/typed success evidence."
+  },
+  "contradictions_preserved": [
+    {
+      "id": "TW5-CONTRADICTION-PARENT-AGENT-INVOCATION-CHILD-ID-018-REFINED",
+      "branch_a": "External primary docs now document Agent PostToolUse tool_response.agentId alongside call-scoped tool_use_id and separately document lifecycle agent_id.",
+      "branch_b": "No installed-target runtime capture in this Triggerword-5 turn proves the exact value equality/event ordering for the target build.",
+      "status": "DOCUMENTED_BRIDGE_CANDIDATE_RUNTIME_UNVERIFIED"
+    }
+  ],
+  "credit_boundary": {
+    "external_primary_capability_evidence": "PASS",
+    "donor_source_forensics": "PASS_AT_PINNED_SHA",
+    "installed_native_child_runtime": 0,
+    "work_execution_binding_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "training": 0
+  },
+  "execution": {
+    "provider_calls": 0,
+    "vps_calls": 0,
+    "runtime_agent_capture": 0,
+    "unusual_experiment": "NOT_RUN",
+    "scope": "SOURCE_FORENSICS_EXTERNAL_PRIMARY_CORRECTION_ONLY"
+  },
+  "next_exact_gate": "Triggerword-4 or another currently authorized non-provider runtime validation lane should capture one harmless installed Agent call and verify exact tool_use_id + tool_response.agentId + SubagentStart/SubagentStop agent_id equality; then repeat with two overlapping disjoint children. Triggerword-5 does not grant runtime credit from docs."
+}

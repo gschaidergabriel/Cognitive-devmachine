@@ -1,0 +1,62 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T091830Z-EFFECT-AUTHORITY-BRIDGE-V2-RECONCILIATION-GPT56SOL",
+  "created_at": "2026-08-28T09:18:30Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/effect-authority-bridge-v2-reconciliation",
+  "status": "INGESTED_AUTHORITY_BOUND_SUCCESSOR_SOURCE_ONLY_RUNTIME_CREDIT_ZERO",
+  "routing": "VERIFIED",
+  "authority_epoch": "9.13",
+  "canonical_main_observed": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+  "execution_mode": "FREE_ONLY_HARD_OFF_NO_PROVIDER_EXECUTION",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "consumed_packet_id": "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
+  "supersedes_packet_id": "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
+  "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T091706Z_5641dc6_GPT56SOL_MAIN_ARCHAEOLOGY_EFFECT_AUTHORITY_BRIDGE_V2.json",
+  "packet_blob_sha": "bde5d480a01f8c26b18df6ddab6e5fec3735cb4b",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091830Z_EFFECT_AUTHORITY_BRIDGE_V2_RECONCILIATION_GPT56SOL.json",
+  "architecture_delta_commit": "38a90f2bbd3cf9de1a84a71983a2da0f4fb2b7f8",
+  "source_crosscheck": {
+    "result": "PASS_SOURCE_SCOPE",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "hooks_blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+    "validated": [
+      "ordinary donor EffectGate is nonblocking bookkeeping",
+      "mutating Pre/Post association uses session-scoped active_turns.effect_id",
+      "completion effect predicate lacks current explicit success allowlist",
+      "textual test:0 proof is not immutable execution-identity bound",
+      "PostTool evidence construction is source code, not an observed runtime receipt"
+    ]
+  },
+  "dedupe": {
+    "original_packet_already_ingested": true,
+    "v2_is_classification_and_authority_successor": true,
+    "independent_replication_claimed": false,
+    "central_ingest_state_whole_file_rewrite_performed": false,
+    "reason": "INGEST_STATE is mixed-freshness and concurrently moving; append-only receipt avoids destructive overwrite."
+  },
+  "accepted_architecture_delta": [
+    "EffectAdmission/Audit and deny-capable EffectDecision are separate authorities.",
+    "Effect lifecycle correlation must be call-scoped, not solely session-scoped.",
+    "ExecutionReceipt and WorldEffectVerification remain distinct.",
+    "Completion is fail-closed over typed invocation-bound success evidence.",
+    "Receipt-construction source receives no runtime receipt credit."
+  ],
+  "preserved_unknowns": [
+    "Exact installed scheduler interleaving behavior remains unobserved.",
+    "Exact host-global blocking predecessor artifact/config/order remains unresolved.",
+    "No provider, VPS or host runtime execution was performed by this ingestion."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "acceptance": "SOURCE_AND_DESIGN_INGEST_PASS_RUNTIME_UNRESOLVED",
+  "next_exact_gate": "Triggerword 4 may consume this source/design contract, but runtime promotion still requires authorized installed-surface evidence for call-scoped pairing, blocking enforcement and fail-closed completion."
+}

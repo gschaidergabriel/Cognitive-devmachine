@@ -1,0 +1,91 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T1042Z-STOP-HOOK-LLM-BOUNDARY-GPT56SOL",
+  "created_at": "2026-08-28T10:42:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/stop-hook-llm-boundary",
+  "authority": {
+    "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "supervisor_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "donor_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "design_head_before_packet": "9bf076fbb97b3c299300a5b8e4f6922b93ae9cfe",
+    "packet_commit": "8a102f51a844496429f30daa1b8e9e5b7ef634de",
+    "runtime_credit": 0
+  },
+  "source_packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T104200Z_5641dc6_GPT56SOL_STOP_HOOK_LLM_BOUNDARY.json",
+  "classification": "CURRENT_SOURCE_CONTRADICTION_WITH_LIVE_ENFORCEMENT_PATH",
+  "architecture_change": {
+    "subsystem": "LocalCognitionRelevanceFeedback/v1",
+    "previous_model": "Stop hook treated as deterministic/reactive bounded bookkeeping while top-level stern.py declares no hook LLM calls.",
+    "new_model": "Current donor Stop is a mixed reactive+cognitive critical path: it synchronously invokes local qwen2.5:0.5b through Ollama, reduces the result into modell:relevanz retrieval feedback, and only then continues later Stop bookkeeping. The model result is noncanonical candidate evidence, but the inference itself is live hook work.",
+    "status": "REPAIR_AND_ADAPT_TO_GRID",
+    "preserve": [
+      "Model output remains candidate evidence rather than canonical fact.",
+      "Model relevance feedback uses a distinct non-human signal class.",
+      "Model relevance feedback alone does not promote MicroClay SHADOW->ACTIVE.",
+      "Failure to obtain a model judgment produces no fabricated feedback."
+    ],
+    "repair": [
+      "Do not carry the contradictory invariant forward unchanged: Frankenstein 2.0 must either forbid model inference in deterministic hook paths or explicitly define a measured bounded exception; one authority surface must state the actual rule.",
+      "Preferred GRID adaptation: Stop/reactive plane records the exact retrieval/turn/candidate identity and enqueues or exposes a cognition work item; GRID/local cognition evaluates relevance outside the hook critical path; a deterministic reducer later binds the candidate result to the exact retrieval identity.",
+      "Bind model relevance feedback to exact turn/retrieval/generation identity rather than selecting only the newest session-scoped unjudged row at reduction time.",
+      "Preserve explicit model/runtime/build/endpoint identity if relevance evidence is used for learning or architecture measurements."
+    ]
+  },
+  "source_atoms": [
+    {
+      "kind": "SPEC",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "33-48",
+      "finding": "Top-level hard invariant says no LLM call in a hook, ever."
+    },
+    {
+      "kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4820-4962",
+      "finding": "PHASE 4b.2 defines synchronous local Ollama generation and relevance parsing/credit calculation."
+    },
+    {
+      "kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4994-5054",
+      "finding": "Stop relevance hook selects an unjudged retrieval episode, calls the local model and commits modell:relevanz credit through MicroClay._apply_credit."
+    },
+    {
+      "kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "8870-8898",
+      "finding": "cmd_hook event=Stop invokes _kognition_richten_hook before gw_absicht/governance/status waiting bookkeeping."
+    },
+    {
+      "kind": "ARCHITECTURE_DOC",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "5055-5065",
+      "finding": "PHASE 4c commentary still cites the no-LLM-in-hook rule for PostToolUse while describing PHASE 4b Stop inference as a conscious exception, confirming unresolved dual semantics."
+    }
+  ],
+  "hypothesis": "Separating deterministic Stop admission from request-scoped local cognition will preserve the useful relevance judge while reducing hook latency coupling and making provenance/turn binding explicit for GRID10.",
+  "counterhypothesis": "The current 1.3-second local-inference sub-budget may be operationally adequate and simpler than an asynchronous split; do not replace it until installed-runtime latency, timeout and ordering measurements falsify that cheaper design.",
+  "triggerword4_discriminators": [
+    {
+      "name": "StopHookCognitionBudgetTrace/v1",
+      "type": "BOUNDED_RUNTIME_TEST_TO_RUN_ONLY_ON_AUTHORIZED_BUILD_LANE",
+      "procedure": "At exact source/build identity, exercise Stop with kognition inactive, warm Ollama, cold/slow Ollama and unreachable Ollama; record per-substep start/end, global alarm outcome, retrieval feedback identity, gw_absicht/governance/status completion and total p50/p95/p99. No runtime credit is granted by this source delta."
+    },
+    {
+      "name": "SameSessionRetrievalCreditBinding/v1",
+      "type": "DETERMINISTIC_CAUSAL_TEST",
+      "procedure": "Create two same-session retrieval episodes with distinct exact turn/retrieval IDs and reorder/interleave Stop processing. Prove modell:relevanz feedback cannot attach to the wrong episode; current ORDER BY ts DESC LIMIT 1 design should be treated as unverified until this passes."
+    }
+  ],
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SOURCE_SCOPE",
+    "runtime": 0,
+    "full_frankenstein2": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

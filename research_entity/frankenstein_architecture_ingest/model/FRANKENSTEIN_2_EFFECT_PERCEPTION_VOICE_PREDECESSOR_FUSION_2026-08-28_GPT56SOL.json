@@ -1,0 +1,191 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "status": "SOURCE_GROUNDED_INGEST_DELTA_RUNTIME_CREDIT_ZERO",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_observed_before_write": "da83f8bc6952470aa7fca96dffd2eb1c510fc1ec",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "historical_predecessor": {
+    "repo": "gschaidergabriel/Project-Frankenstein",
+    "commit": "abba90a5767d85abc8a1ac340bae92842dab35c1"
+  },
+  "ingested_packets": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "disposition": "INGESTED_DEDUPED_WITH_UNIQUE_DOWNSTREAM_STATUS_FINDING",
+      "double_count_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "disposition": "INGESTED_WITH_UNIQUE_PERCEPTION_AND_PENDING_EFFECT_FINDINGS",
+      "double_count_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
+      "disposition": "INGESTED_COMPATIBILITY_BRIDGE_DEDUPED_AGAINST_CANONICAL_MAIN_EFFECT_CONTRACT",
+      "double_count_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+      "disposition": "INGESTED_WITH_HISTORICAL_LINEAGE_DELTA",
+      "double_count_credit": false
+    }
+  ],
+  "cross_checks": [
+    {
+      "id": "F2-CROSSCHECK-EFFECT-NONBLOCKING",
+      "source": "gschaidergabriel/frankenstein@5641dc6 DEV_SOURCE_RESEARCH/repository/scripts/stern.py:8810-8905",
+      "result": "PASS",
+      "finding": "Normal PreToolUse calls zulassen() but deliberately emits no deny/block response; the only explicit deny in this dispatch span is the session-bound DIGITAL-SEBUKKU path."
+    },
+    {
+      "id": "F2-CROSSCHECK-VOICE-PENDING-CANCEL",
+      "source": "gschaidergabriel/frankenstein@5641dc6 DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1211-1415",
+      "result": "PASS",
+      "finding": "Function calls are queued until response.done; non-completed responses clear them, and barge-in clears pending calls before truncate/cancel, preventing pre-dispatch execution from an interrupted response."
+    },
+    {
+      "id": "F2-CROSSCHECK-PERCEPTION-NOTCOMPUTED",
+      "source": "gschaidergabriel/frankenstein@5641dc6 DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:420-560",
+      "result": "PASS",
+      "finding": "evaluate_head resolves dependencies from the central DAG and returns NOT_COMPUTED/value=null before compute_fn for COMPUTE_OFF, unknown or taint-blocked heads."
+    },
+    {
+      "id": "F2-CROSSCHECK-PRESENCE-UNKNOWN-BUG",
+      "source": "gschaidergabriel/frankenstein@5641dc6 DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1408-1485",
+      "result": "PASS",
+      "finding": "When PresenceBridge is absent or yields no user_present value, proactive voice currently falls back to user_present=True. This converts missing evidence into positive presence and must not survive into Frankenstein 2.0."
+    },
+    {
+      "id": "F2-CROSSCHECK-HISTORICAL-PREEXEC-APPROVAL",
+      "source": "gschaidergabriel/Project-Frankenstein@abba90a agentic/executor.py:70-180 and agentic/loop.py:430-530",
+      "result": "PASS",
+      "finding": "The historical AgentLoop/ToolExecutor path had real pre-execution approval denial for non-safe tools, followed by execution only after approval; however caller-controlled skip_approval and a hand-maintained safe-name set weaken it as a successor authority model."
+    },
+    {
+      "id": "F2-CROSSCHECK-HISTORICAL-APPROVAL-IDENTITY",
+      "source": "gschaidergabriel/Project-Frankenstein@abba90a agentic/executor.py:470-620",
+      "result": "PASS_WITH_LIMIT",
+      "finding": "Approval requests receive a generated approval_id and are tracked by that id, but the inspected interface does not cryptographically bind approval to immutable request bytes/generation; Frankenstein 2.0 should bind approval_id to request_digest + invocation_id + generation."
+    }
+  ],
+  "architecture_decisions": [
+    {
+      "id": "F2-EFFECT-PIPELINE-STRICT-SEPARATION",
+      "decision": "ADOPT",
+      "contract": [
+        "CANDIDATE_EFFECT",
+        "PENDING_EFFECT",
+        "ADMISSION_DECISION",
+        "ENFORCEMENT_DECISION",
+        "SUBMISSION_RECEIPT",
+        "EXECUTION_RECEIPT",
+        "WORLD_EFFECT_VERIFICATION",
+        "RESULT_REENTRY",
+        "COMPLETION_EVIDENCE"
+      ],
+      "rule": "No later successful state may retroactively mint an earlier authority state. In particular, EXECUTION_RECEIPT success cannot create ADMISSION_DECISION or ENFORCEMENT_DECISION."
+    },
+    {
+      "id": "F2-PENDING-EFFECT-CANCELLATION",
+      "decision": "ADOPT_FROM_VOICE_DONOR",
+      "rule": "A model/tool proposal remains cancellable while it is only PENDING_EFFECT. Cancellation of the parent cognitive turn before submission yields CANCELLED_BEFORE_SUBMIT and no EffectGate submission. Once submission may have occurred, uncertainty becomes UNKNOWN_OUTCOME rather than replay."
+    },
+    {
+      "id": "F2-INVOCATION-IDENTITY",
+      "decision": "REPAIR",
+      "rule": "Bind each effect lifecycle to immutable tool_use_id or generated invocation_id plus request_digest, session_id, generation and causal_event_id. active_turns.effect_id may remain a convenience pointer but never authoritative correlation."
+    },
+    {
+      "id": "F2-WORLD-NOT-COMPUTED-TAINT",
+      "decision": "ADAPT_TO_GRID_AND_WORLD_SUBSTRATE",
+      "rule": "WorldNeed/WorldSlice and GRID cell controls inherit Perception Control semantics: COMPUTE_OFF and taint-blocked dependencies remain NOT_COMPUTED/value=null and may not be reconstructed downstream through alternate dependency paths."
+    },
+    {
+      "id": "F2-PRESENCE-EPISTEMIC",
+      "decision": "REPAIR",
+      "rule": "Unavailable or indeterminate presence is UNKNOWN/None, never user_present=True. Proactive voice must prefer WAIT, ASK or re-observe when presence/addressability evidence is missing."
+    },
+    {
+      "id": "F2-VOICE-CAPSULE",
+      "decision": "ADAPT_TO_GRID",
+      "rule": "Keep VoiceSessionCapsule as an ephemeral compiled projection over canonical sources. Add generation/freshness provenance and a bounded field-selective GRID context compiler; do not turn the capsule into a second memory authority."
+    },
+    {
+      "id": "F2-HISTORICAL-APPROVAL-LINEAGE",
+      "decision": "SALVAGE_PRINCIPLE_NOT_IMPLEMENTATION",
+      "rule": "Recover the historical principle that risky actions are denied before dispatch, but replace name allowlists and skip_approval booleans with typed capability/effect classification plus immutable approval identity and deterministic EffectGate enforcement."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "resolution": "stern.py generic effect admission is source-proven nonblocking. Whole-system enforcement remains unresolved because the separately referenced wache-koenig predecessor is not pinned in the donor artifact."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VERIFIED-PREADMISSION-004",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "resolution": "PostToolUse can create VERIFIED without a PreToolUse row; downstream status consumers must not interpret VERIFIED as admitted-and-enforced."
+    },
+    {
+      "id": "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
+      "status": "SOURCE_CONFIRMED_BUG_REPAIR_OPEN",
+      "resolution": "Realtime proactive arbitration explicitly maps missing presence to user_present=True; 2.0 must preserve UNKNOWN."
+    },
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-LINEAGE-006",
+      "status": "HISTORICAL_LINEAGE_RESOLVED_SCOPE_LIMITED",
+      "resolution": "Historical Project-Frankenstein implemented caller-side pre-execution approval while current stern generic admission is nonblocking. This is a semantic reversal/branching lineage, not a monotonic rename. Runtime reachability of every historical path remains unproven."
+    },
+    {
+      "id": "TW5-CONTRADICTION-INGEST-PATH-001",
+      "status": "OPEN",
+      "resolution": "Canonical-main architecture_archaeology and owner-branch frankenstein_architecture_ingest remain distinct research projections; provenance must be bridged explicitly, not silently aliased."
+    }
+  ],
+  "triggerword4_handoff": {
+    "mandatory": [
+      "Implement real EffectGate denial at the actual executor/host boundary, not only journal classification.",
+      "Use immutable per-invocation identity through admission, enforcement, execution, verification, re-entry and completion.",
+      "Add CANCELLED_BEFORE_SUBMIT and UNKNOWN_OUTCOME as distinct effect lifecycle states.",
+      "Port NOT_COMPUTED plus dependency-taint semantics into GRID/WorldSlice controls.",
+      "Remove user_present=True fallback for missing presence; use UNKNOWN with WAIT/ASK/re-observe.",
+      "Keep VoiceSessionCapsule noncanonical and compile only bounded provenance-bearing fields into each response when causally needed.",
+      "Test historical approval principle with typed request-bound approval rather than safe-name lists or skip booleans."
+    ],
+    "regressions": [
+      "two same-session parallel state-changing calls with reverse completion order",
+      "stale prior effect pointer after failed/missing PreToolUse",
+      "actual DENY proves non-execution",
+      "successful PostToolUse without admission remains ADMISSION_UNKNOWN",
+      "barge-in after function_call item but before response.done yields CANCELLED_BEFORE_SUBMIT and zero local tool dispatch",
+      "missing PresenceBridge yields UNKNOWN and cannot cross proactive SPEAK gate without independent evidence",
+      "COMPUTE_OFF upstream variable prevents downstream WorldSlice reconstruction and remains NOT_COMPUTED",
+      "wrong approval_id/request_digest/generation is rejected"
+    ]
+  },
+  "credits": {
+    "source_forensics": "PRESENT",
+    "historical_source_forensics": "PRESENT",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gates": [
+    "Locate/pin the referenced wache-koenig blocking predecessor or explicitly close it as unavailable provenance.",
+    "Audit every current downstream effects.status consumer for VERIFIED=>admitted assumptions.",
+    "Trace realtime_gespraech tool dispatch into stern/executor/effect authority and prove there is no direct bypass before Triggerword-4 assembly.",
+    "Specify the minimal generation-bound Voice/GRID context compiler and field-level lesion/shuffle tests."
+  ]
+}

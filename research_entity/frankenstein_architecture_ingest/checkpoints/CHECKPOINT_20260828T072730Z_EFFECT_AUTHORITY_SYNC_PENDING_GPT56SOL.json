@@ -1,0 +1,23 @@
+{
+  "schema":"TRIGGERWORD5_REENTRY_CHECKPOINT/v1",
+  "created_at":"2026-08-28T07:27:30Z",
+  "trigger":"triggerwort 5",
+  "donor_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_observed":"45f46138db94e0228240ea15b586bf8be622410b",
+  "durable_writes":[
+    {"path":"research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072407Z_5641dc6_GPT56SOL_EFFECT_AUTHORITY_ENFORCEMENT.json","commit":"9e8624de9e2efb0b2749887d44a850f3a365125a"},
+    {"path":"research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_AUTHORITY_DELTA_2026-08-28T142407P0700_GPT56SOL.json","commit":"be43e9916036545cf3d905f2094055bdd594e4ca"},
+    {"path":"research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_20260828T072407Z_EFFECT_AUTHORITY_GPT56SOL.json","commit":"16fc8b94dd707f563b26d34861abc80623102c3b"}
+  ],
+  "shared_ingest_state_update":"SYNC_PENDING",
+  "shared_ingest_state_reason":"Two compare-and-swap update attempts were rejected with HTTP 409 because parallel Triggerword-5 organs changed INGEST_STATE between read and write. No last-writer-wins overwrite was attempted.",
+  "packet_integration_status":"MODEL_DELTA_AND_RECEIPT_COMMITTED; mutable shared index not force-updated",
+  "new_findings":[
+    "Normal PreToolUse zulassen is admission bookkeeping, not proven host execution blocking.",
+    "PostToolUse can create VERIFIED without a PreToolUse row.",
+    "gw_absicht consumes VERIFIED as aussenwirkung, so status semantics are overloaded.",
+    "Frankenstein 2 must separate AdmissionDecision, ObservedOutcome and ReentryStatus and put the actual EffectGate at a boundary capable of preventing execution."
+  ],
+  "credits":{"runtime_causal":0,"physical_grid10":0,"hcu_runtime":0,"whole_entityos_hcu":0,"training":0},
+  "next_exact_gate":"Re-enter the moving shared ingest state on the next Triggerword-5 turn, dedupe this packet by packet_id, then trace realtime_gespraech Function-Calling into the actual host permission/executor/effect boundary and recover the Git chronology of nonblocking admission plus PostToolUse fallback."
+}

@@ -1,0 +1,75 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T082212Z-HISTORICAL-SETTINGS-V2-EXACT-ADMISSION-GPT56SOL",
+  "created_at": "2026-08-28T08:22:12Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/exact-v2-admission",
+  "routing_result": "PASS",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "packet": {
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T081600Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_V2_SUCCESSOR_GPT56SOL.json",
+    "blob_sha": "99ef8f48d49911ea2796963c9f0af0ae9dcf8358",
+    "packet_id": "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL",
+    "authority_classification": "HISTORICAL_SOURCE_EPOCH",
+    "supersedes_packet_id": "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL"
+  },
+  "validator": {
+    "path": "research_entity/frankenstein_architecture_ingest/validate_ingest_packet_v2.py",
+    "blob_sha": "7b19b41666c7fc6c7fd47091ef48f566509fa824",
+    "exact_validator_source_oid_verified": true,
+    "exact_packet_oid_verified": true,
+    "return_code": 0,
+    "admitted": true,
+    "errors": [],
+    "runtime_credit_delta": 0
+  },
+  "currentness_and_execution": {
+    "github_currentness_source": "connected GitHub surface",
+    "canonical_main_observed_immediately_before_validation": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "validator_read_set_oids_matched_connected_github": true,
+    "local_git_projection_scope": "validator read-set only",
+    "provider_execution": false,
+    "donor_runtime_execution": false,
+    "vps_execution": false,
+    "classification": "PACKET_SHAPE_AND_CURRENT_AUTHORITY_BINDING_ONLY"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T082212Z_HISTORICAL_SETTINGS_V2_EXACT_ADMISSION_GPT56SOL.json",
+    "commit": "513c0ab3de865bc580dfef54984abe0bb1ee3e5e"
+  },
+  "negative_evidence_preserved": {
+    "prior_blocked_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0818Z_HISTORICAL_SETTINGS_V2_VALIDATION_BLOCKED_GPT56SOL.json",
+    "status": "REMAINS_VALID_FOR_ITS_NO_TRANSPORT_EXECUTION_ENVIRONMENT",
+    "reconciliation": "Later exact-current validation adds packet admission evidence; it does not rewrite the earlier infrastructure block."
+  },
+  "result": [
+    "Triggerword-5 routing and current directive fetch passed.",
+    "The immutable 081600Z v2 successor passes the exact v2 packet validator against refreshed canonical-main authority identities.",
+    "The old 074533Z v1 envelope remains invalid as the current consumed envelope even though its source-crosschecked historical facts survive.",
+    "Historical inherited --settings/wache evidence remains historical donor provenance; current host/plugin reachability and full mutation coverage remain unresolved.",
+    "No provider, Together, donor runtime, VPS runtime, physical GRID10, HCU or training credit is created by this admission PASS."
+  ],
+  "credits": {
+    "packet_admission": "PASS",
+    "new_runtime_credit": 0,
+    "effect_enforcement_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Reconcile the append-only ingest ledger to supersede the invalid 074533Z v1 envelope with the validated 081600Z v2 successor, then continue current headless non-Bash mutation and call/invocation-bound EffectDecision forensics."
+}

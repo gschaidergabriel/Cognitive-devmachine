@@ -1,0 +1,66 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "lane": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_LIVE_INGEST",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "mode": "FREE_ONLY",
+  "runtime_credit_delta": 0,
+  "source_crosschecks": [
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3250,
+      "line_end": 3500,
+      "finding": "zulassen() creates a fresh effect_id for a state-changing PreToolUse and writes that id into active_turns.effect_id using session_id as the lookup key. active_turns therefore holds one mutable effect slot per session rather than one immutable slot per tool invocation.",
+      "confidence": 0.99
+    },
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3500,
+      "line_end": 3575,
+      "finding": "merken() handles PostToolUse by reading episode_id, effect_id and turn_id from active_turns WHERE session_id=?, then updates the effects row selected by that mutable effect_id. The PostToolUse payload's call-scoped tool_use_id is not used here as the correlation key.",
+      "confidence": 0.99
+    },
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 8780,
+      "line_end": 8890,
+      "finding": "cmd_hook() returns a deny decision only for the separate session-bound DIGITAL SEBUKKU branch. In the normal PreToolUse branch it calls zulassen(data) and deliberately prints no deny/block decision; PostToolUse calls merken(data). Thus the donor EffectGate path is observational/admission bookkeeping, not general pre-side-effect containment.",
+      "confidence": 0.99
+    }
+  ],
+  "mechanistic_counterexample": {
+    "classification": "SOURCE_GROUNDED_CONCURRENCY_FAILURE_CONSTRUCTION_NOT_RUNTIME_REPRODUCTION",
+    "sequence": [
+      "PreToolUse(A) creates effect_id=A and stores active_turns.effect_id=A for session S.",
+      "PreToolUse(B) in the same session S creates effect_id=B and overwrites active_turns.effect_id=B.",
+      "PostToolUse(A) reads active_turns.effect_id by session S and therefore can retrieve B rather than A.",
+      "merken() can then attach A's observed outcome to B's effect row unless another exact invocation binding prevents this outside the inspected path."
+    ],
+    "claim_boundary": "This proves a structural cross-wiring possibility in the inspected source under overlapping same-session calls. It is not a claim that such an interleaving has already been observed at runtime."
+  },
+  "frankenstein_2_action": {
+    "decision": "REPAIR_EFFECT_INVOCATION_CORRELATION_BEFORE_EFFECT_CAUSAL_CREDIT",
+    "required_primary_key": "call-scoped tool_use_id or an equivalently immutable invocation identity",
+    "session_id_role": "context only, never sole effect invocation identity",
+    "required_test": "same-session two-call interleaving A/B with Pre(A), Pre(B), Post(A), Post(B), asserting exact non-crosswired effect rows and receipts",
+    "effect_enforcement_boundary": "Do not label the normal donor EffectGate path as prevention/containment until a real pre-side-effect allow/deny contract and executable receipt exist."
+  },
+  "contradictions_preserved": [
+    "The code calls the phase EffectGate/Zulassung, but its own source explicitly states that the normal path never blocks the tool.",
+    "A session-scoped effect_id is sufficient for strictly serialized calls but is not a safe causal identity under same-session overlap.",
+    "Supervisor 9.13 already identified this as a frontier; this delta adds direct pinned donor-source confirmation rather than independent runtime replication."
+  ],
+  "credits": {
+    "runtime": 0,
+    "effect_invocation_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

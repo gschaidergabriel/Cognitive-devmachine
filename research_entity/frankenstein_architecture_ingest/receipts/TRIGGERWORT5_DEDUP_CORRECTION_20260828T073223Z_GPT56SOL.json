@@ -1,0 +1,44 @@
+{
+  "schema": "TRIGGERWORD5_CONCURRENT_INGEST_DEDUP_CORRECTION/v1",
+  "created_at": "2026-08-28T07:32:23Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "corrects_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_20260828T073002Z_EFFECT_PERCEPTION_VOICE_RECONCILIATION_GPT56SOL.json",
+  "reason": "The shared INGEST_STATE advanced concurrently after this organ's source checks and durable writes. The compare-and-swap state update correctly failed with HTTP 409. Re-entry showed that another Triggerword-5 organ had already consumed both target packets and persisted equivalent/superset architecture deltas. No last-writer-wins overwrite was attempted.",
+  "shared_state_after_reentry": {
+    "blob_sha": "e3fdf1925f3957d9312a15abdc6f2f6aa9858af9",
+    "consumed_packet_ids_confirmed": [
+      "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT"
+    ],
+    "parallel_primary_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+    "parallel_primary_delta_commit": "bd1b51ff497ee4aff0a6d05ec43f100fe4e0aa7f",
+    "parallel_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+    "parallel_receipt_commit": "fa6cb21abf216ba4d3167ee31142fdb583f93c48"
+  },
+  "this_organs_durable_writes": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_PERCEPTION_VOICE_CONTROL_DELTA_2026-08-28T1430P0700_GPT56SOL.json",
+      "commit": "d0ddb5114876434fa0d800b0d0eed3b25532c13e",
+      "status": "REDUNDANT_SUPPLEMENTAL_CORROBORATION_ONLY"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_20260828T073002Z_EFFECT_PERCEPTION_VOICE_RECONCILIATION_GPT56SOL.json",
+      "commit": "6f344d4883b2c054c02a16a3baffaf498f7ba079",
+      "status": "SUPERSEDED_FOR_SHARED_STATE_INSTRUCTION_BY_THIS_CORRECTION"
+    }
+  ],
+  "dedupe_rule": "Do not add the supplemental delta to INGEST_STATE and do not grant independent replication/runtime credit. Use the already-fused parallel successor as the shared architecture-model entry; retain this organ's files only as append-only corroborating provenance.",
+  "unique_finding_check": "The parallel PRIVACY_CANCELLATION_SUCCESSOR already covers NOT_COMPUTED/taint propagation, bounded historical perception ablation, effect-journal secret fence, pending-tool cancellation before dispatch, VoiceSessionCapsule noncanonical projection/freshness, PENDING_EFFECT versus SUBMITTED/OUTCOME_UNKNOWN, and the corresponding Triggerword-4 handoff. No unique architecture claim remained that justified a competing state write.",
+  "credits": {
+    "source_forensics": "CORROBORATION_ONLY",
+    "new_runtime_execution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Continue from shared INGEST_STATE frontier: map the actual blocking wache-koenig/host permission path, audit protected perception-head reachability through evaluate_head, and preserve the PENDING_EFFECT -> EffectGate -> SUBMITTED -> verified/UNKNOWN outcome boundary for Triggerword-4."
+}

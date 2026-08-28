@@ -1,0 +1,101 @@
+{
+  "packet_id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+  "created_at": "2026-08-28T07:40:26Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/realtime-memory-read-forensics",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Successor source forensics for the open Realtime conversation-memory epistemic authority question. Resolve whether the direct Realtime memory reader preserves an explicit fact/claim/summary/inference distinction before returning rows to the model.",
+  "files_examined": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "sha_or_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "spans_examined": [
+        {"symbol": "_sicherstellen_gespraech_erinnerung_tabelle"},
+        {"symbol": "gespraech_erinnerung_schreiben"},
+        {"symbol": "gespraech_erinnerung_lesen"}
+      ]
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "sha_or_blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "spans_examined": [
+        {"line_start": 535, "line_end": 552}
+      ]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-MEMREAD-A001-SCHEMA-HAS-NO-EPISTEMIC-CLASS",
+      "subsystem": "conversation memory storage",
+      "source_kind": "SCHEMA",
+      "what_it_does": "The dedicated gespraech_erinnerung table stores id, ts, subject, value and quelle. It has no explicit epistemic_class, transformation_class, observed_event_id, admission_id, privacy/retention tier or evidence-provenance fields beyond a free source label.",
+      "authority_class": "DEDICATED_NON_DURABLE_MEMORY_TABLE_BUT_UNTYPED_CLAIM_CONTENT",
+      "failure_mode": "A verbatim user statement, model summary, model inference or false remembered claim can have the same structural row shape.",
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR_MEMORY_SCHEMA_OR_ADD_TYPED_ADMISSION_PROJECTION"
+    },
+    {
+      "atom_id": "TW5-MEMREAD-A002-REALTIME-READ-MERGES-UNTYPED-CONVERSATION-AND-DURABLE-ROWS",
+      "subsystem": "conversation memory retrieval",
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "gespraech_erinnerung_lesen returns conversation-memory rows as {ts,subject,value,quelle}; for a non-empty query it also appends durable_memory rows into the same treffer list, labeling those only with quelle='durable_memory'. No explicit fact/observed/inferred/quoted/summary class is attached in this direct reader output.",
+      "authority_class": "MODEL_CONTEXT_RETRIEVAL_WITH_SOURCE_LABEL_NOT_EPISTEMIC_ADMISSION",
+      "failure_mode": "The Realtime model can receive heterogeneous remembered claims and durable-memory material in a common retrieval shape where source name is the only visible distinction; source label alone does not establish factual authority or transformation provenance.",
+      "known_counterevidence": ["The dedicated conversation table is structurally separate from durable_memory, so storage authority is not literally collapsed at the database table boundary."],
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR_AND_TYPE"
+    },
+    {
+      "atom_id": "TW5-MEMREAD-A003-REALTIME-WRAPPER-PASSES-READER-DIRECTLY",
+      "subsystem": "realtime voice tool boundary",
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "_tool_erinnerung_lesen dispatches stern gespraech-erinnerung-lesen directly; _tool_erinnerung_schreiben validates only non-empty subject/value and dispatches stern gespraech-erinnerung-schreiben with quelle=realtime-tool. No wrapper-level epistemic typing or deterministic MemoryAdmission is inserted in these paths.",
+      "authority_class": "REALTIME_MODEL_TOOL_TO_MEMORY_SUBSYSTEM_DIRECT_BRIDGE",
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR_MEMORY_ADMISSION"
+    }
+  ],
+  "hypothesis_update": "For the direct Realtime memory tool path, the counterhypothesis that existing downstream retrieval already preserves an explicit claim-versus-fact epistemic distinction is not supported by the inspected source. The table separation is useful, but the returned model context remains epistemically under-typed.",
+  "counterhypotheses": [
+    "Other non-Realtime retrieval paths may add stronger typing before using the same underlying rows; this packet does not generalize beyond the direct Realtime reader without auditing those consumers.",
+    "Prompts may verbally instruct the Realtime model to treat remembered content cautiously; prompt prose is weaker than typed data/admission and does not change the row semantics."
+  ],
+  "contradictions": [
+    "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-008 narrows: storage is separated from durable_memory, but the direct read/write tool bridge lacks explicit epistemic/admission typing and merges conversation and durable rows into a common retrieval shape."
+  ],
+  "triggerword4_required_delta": [
+    "Define MemoryCandidate with immutable source_event_id/utterance_ref, source actor, transformation_class {VERBATIM, SUMMARY, INFERENCE, INSTRUCTION, OTHER}, epistemic_class {OBSERVED_CLAIM, INFERRED, UNKNOWN, VERIFIED_EXTERNAL where separately established}, generation, privacy/retention tier and content digest/reference.",
+    "Define deterministic MemoryAdmission that decides whether/how a candidate is persisted; model Function Calling proposes candidates but does not mint factual truth.",
+    "Readers return source + transformation + epistemic + provenance metadata and do not silently flatten conversation claims and canonical evidence into one fact-like context record.",
+    "Any promotion to canonical factual evidence requires independent admissible evidence; remembering that somebody said X is not evidence that X is true."
+  ],
+  "acceptance_tests_for_triggerword4": [
+    "Persist a verbatim user utterance and a model summary of it; retrieval must distinguish them structurally, not only by text/source prose.",
+    "Persist a model inference through Realtime Function Calling; retrieval marks it INFERRED/MODEL_CANDIDATE and it cannot satisfy an OBSERVED/FACT evidence query.",
+    "Retrieve matching conversation-memory and durable-memory rows together; every returned item carries explicit provenance/epistemic class and downstream ranking cannot erase that class.",
+    "Sensitive spoken content rejected/redacted by policy leaves an auditable admission result without persisting disallowed raw content."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED_WITH_DIRECT_READ_PATH_CLOSURE",
+    "new_runtime_execution": 0,
+    "memory_runtime_acceptance": 0,
+    "effect_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "recommended_next_spans": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "reason": "Trace claude_frage permission/process/host hook path after TaskAdmission and determine exact downstream effect enforcement.",
+      "priority": "P0"
+    },
+    {
+      "path": "all other gespraech_erinnerung/durable_memory consumers",
+      "reason": "Bound whether any other reader already adds epistemic typing before decisions; do not generalize this Realtime-reader result repository-wide without evidence.",
+      "priority": "P1"
+    }
+  ],
+  "supersedes_packet_id": null
+}

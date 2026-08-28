@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "packet_id": "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
+  "created_at": "2026-08-28T07:35:12Z",
+  "worker_id": "GPT-5.6 Sol",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "SOURCE_FORENSICS_REALTIME_FUNCTION_CALL_MUTATION_AND_HUMAN_INTENT_BOUNDARY_ONLY",
+  "files_examined": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "spans": ["700-1055", "1330-1900"],
+      "source_kind": "LIVE_CODE"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "spans": ["13900-14510"],
+      "source_kind": "LIVE_CODE"
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-RTM-001",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "Realtime task dispatch has a mechanical two-step human-intent gate: frank_auftrag_stellen first records a proposal, then dispatches only after an exact normalized text match, bestaetigt=true, at least one new server-transcribed user utterance, no keyword contradiction, and a <=300s proposal age.",
+      "source_ref": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py::_auftrag_stellen_mit_bestaetigung",
+      "target_relevance": "KEEP_AS_HUMAN_INTENT_ADMISSION_DONOR_SEPARATE_FROM_EFFECT_AUTHORITY",
+      "evidence_class": "CURRENT_SOURCE"
+    },
+    {
+      "atom_id": "TW5-RTM-002",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "Realtime function-call execution retains the host/model call_id for function_call_output and clears pending tool calls on barge-in/cancelled turns, preventing an interrupted response's queued call from being executed later.",
+      "source_ref": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py::_tool_ausfuehren and pending-call lifecycle in fuehren",
+      "target_relevance": "KEEP_AND_BIND_TO_IMMUTABLE_INVOCATION_ID_IN_FRANKENSTEIN_2",
+      "evidence_class": "CURRENT_SOURCE"
+    },
+    {
+      "atom_id": "TW5-RTM-003",
+      "source_kind": "LIVE_CODE",
+      "claim": "frank_erinnerung_schreiben is dispatched directly to stern.gespraech_erinnerung_schreiben without the task dispatcher's two-step human confirmation. The stern writer inserts subject/value into the bounded gespraech_erinnerung table in the same unified.db and commits immediately.",
+      "source_ref": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py::_tool_ausfuehren + DEV_SOURCE_RESEARCH/repository/scripts/stern.py::gespraech_erinnerung_schreiben",
+      "target_relevance": "REDESIGN_MUTATING_REALTIME_TOOLS_NEED_TYPED_INTENT_POLICY",
+      "evidence_class": "CURRENT_SOURCE"
+    },
+    {
+      "atom_id": "TW5-RTM-004",
+      "source_kind": "SCHEMA",
+      "claim": "The realtime memory writer is intentionally bounded to a dedicated gespraech_erinnerung table and explicitly does not write durable_memory, preserving the donor's single durable_memory writer invariant. Therefore this finding is a mutation-intent inconsistency, not evidence that the realtime model has arbitrary UnifiedDB write access.",
+      "source_ref": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py::_sicherstellen_gespraech_erinnerung_tabelle and gespraech_erinnerung_schreiben",
+      "target_relevance": "KEEP_SCOPE_BOUNDARY_DO_NOT_OVERSTATE_EFFECTGATE_BYPASS",
+      "evidence_class": "CURRENT_SOURCE"
+    },
+    {
+      "atom_id": "TW5-RTM-005",
+      "source_kind": "LIVE_CODE",
+      "claim": "VoiceSessionCapsule is refreshed from live sources but _response_erstellen composes per-response instructions from _instruktion(self._zustandstext) plus optional hint; no inspected path serializes self.capsule into those instructions.",
+      "source_ref": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py::_response_erstellen plus capsule refresh call sites",
+      "target_relevance": "CONFIRMS_EXISTING_VOICE_CAPSULE_CONDITIONING_CONTRADICTION",
+      "evidence_class": "CURRENT_SOURCE"
+    },
+    {
+      "atom_id": "TW5-RTM-006",
+      "source_kind": "LIVE_CODE",
+      "claim": "When PresenceBridge data is unavailable in inspected realtime paths, donor fallback behavior can set user_present=True rather than preserving UNKNOWN/None.",
+      "source_ref": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py presence fallback paths",
+      "target_relevance": "CONFIRMS_EXISTING_UNKNOWN_PRESENCE_CONTRADICTION",
+      "evidence_class": "CURRENT_SOURCE"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "TW5-H-RTM-001",
+      "claim": "Frankenstein 2.0 will be safer and easier to reason about if every mutating Realtime function call is classified by mutation type and passes an explicit HumanIntentDecision before any canonical-state mutation or EffectRequest, while EffectGate remains a separate deterministic authority for external effects.",
+      "confidence": 0.93,
+      "falsifier": "A complete source audit proves every mutating Realtime path already receives equivalent mechanically bound user-intent admission before commit/dispatch, with tests covering memory writes, task dispatch, configuration/state writes, cancellation and replay."
+    },
+    {
+      "id": "TW5-H-RTM-002",
+      "claim": "The donor's call_id lifecycle is a useful predecessor for the immutable per-call invocation identity required by the current EffectDecision design, but it is not sufficient until that identity remains bound across Realtime dispatch, host executor, EffectGate/Journal and result re-entry.",
+      "confidence": 0.97,
+      "falsifier": "Executable end-to-end evidence shows a different immutable identity already provides collision-free binding across all those boundaries and call_id is intentionally discarded without loss."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "TW5-CH-RTM-001",
+      "claim": "Immediate bounded conversational-memory writes may be an intentionally low-risk mutation class that should not require the same explicit confirmation UX as external task execution.",
+      "discriminator": "Define mutation classes and user-expectation policy, then test whether memory writes are always semantically recoverable/reversible and whether model-misheard or third-party speech can create unwanted durable entries."
+    },
+    {
+      "id": "TW5-CH-RTM-002",
+      "claim": "VoiceSessionCapsule may influence response behavior indirectly through another path not covered by the inspected spans.",
+      "discriminator": "Search all reads/serializations of self.capsule/capsule_quelle and run a field lesion/shuffle test against emitted response.instructions before declaring the capsule behaviorally disconnected."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-MUTATION-INTENT-008",
+      "claim_a": "Task execution is treated as requiring a mechanically evidenced second human utterance and explicit confirmation before dispatch.",
+      "claim_b": "A model-issued conversational-memory mutation commits immediately to a durable UnifiedDB table without the same confirmation mechanism.",
+      "status": "SOURCE_CONFIRMED_POLICY_CLASSIFICATION_OPEN",
+      "note": "Do not collapse this into an external-effect bypass claim; the memory table is a bounded internal state surface. The unresolved issue is which mutation classes require which human-intent evidence and how that decision binds to invocation identity."
+    }
+  ],
+  "critical_unknowns": [
+    "Whether any additional mutating Realtime tools or indirect configuration writers exist outside the inspected dispatch table.",
+    "Whether product policy intends low-risk reversible memory writes to be implicitly authorized by normal conversation, or requires explicit confirmation/provenance tagging.",
+    "Whether VoiceSessionCapsule is serialized by an uninspected indirect path before websocket response.create.",
+    "Runtime behavior was not re-executed in this Triggerword-5 pass; all credit is source-forensics only."
+  ],
+  "recommended_next_spans": [
+    "Audit the complete TOOLS declaration and every _tool_ausfuehren mutating branch, then classify READ_ONLY / EPHEMERAL_STATE / CANONICAL_INTERNAL_MUTATION / EXTERNAL_EFFECT_REQUEST / SESSION_CONTROL.",
+    "Trace call_id from Realtime response.output_item.done through every bridge to Claude Code/host execution and prove where immutable identity is lost or preserved.",
+    "Search all self.capsule and capsule_quelle consumers to close the VoiceSessionCapsule conditioning contradiction with direct source evidence.",
+    "For Triggerword 4, specify HumanIntentDecision as a typed, invocation-bound input distinct from EffectDecision and WorldEffectVerification; define when explicit confirmation is mandatory versus implicit/reversible mutation policy."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "runtime_reexecution": 0,
+    "whole_product": 0,
+    "hcu_runtime": 0,
+    "training": 0
+  }
+}

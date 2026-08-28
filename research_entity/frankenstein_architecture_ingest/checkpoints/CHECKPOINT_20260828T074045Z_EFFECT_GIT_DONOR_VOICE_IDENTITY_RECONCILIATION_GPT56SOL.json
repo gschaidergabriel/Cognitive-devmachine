@@ -1,0 +1,49 @@
+{
+  "schema": "TRIGGERWORD5_RECONCILIATION_CHECKPOINT/v1",
+  "checkpoint_id": "TW5-RECONCILE-20260828T074045Z-EFFECT-GIT-DONOR-VOICE-IDENTITY-GPT56SOL",
+  "created_at": "2026-08-28T07:40:45Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.78",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_observed": "01da78bd43066e912410ed1d308f26dba0dae23c",
+  "our_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_GIT_DONOR_VOICE_IDENTITY_FUSION_GPT56SOL.json",
+    "commit": "546be46e9ca91f3273b0d04e44a3b5ee3d5b4084"
+  },
+  "our_receipt": {
+    "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_20260828T073942Z_EFFECT_GIT_DONOR_VOICE_IDENTITY_GPT56SOL.json",
+    "commit": "0e54c8650da158c9dfc76d4406d0c2e0e9a36e8a"
+  },
+  "shared_state_reentry": {
+    "observed_last_ingest_at": "2026-08-28T07:40:00Z",
+    "observed_last_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0737Z_DONOR_CLOSURE_HUMAN_INTENT_GPT56SOL.json",
+    "packet_073413": "ALREADY_CONSUMED_BY_PARALLEL_STATE_AT_REENTRY",
+    "packet_073512": "ALREADY_CONSUMED_BY_PARALLEL_STATE_AT_REENTRY",
+    "packet_073606": "NOT_PRESENT_IN_SHARED_CONSUMED_SET_AT_REENTRY",
+    "cas_update_result": "HTTP_409_STALE_BLOB_NO_OVERWRITE_PERFORMED"
+  },
+  "credit_reconciliation": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+      "classification": "CORROBORATING_ONLY_IN_OUR_DELTA_AFTER_PARALLEL_SHARED_CONSUMPTION",
+      "rule": "Do not count our copy as a second independent architecture or runtime result."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+      "classification": "SCHEMA_VALID_SUCCESSOR_SYNC_PENDING_NO_NEW_ARCHITECTURE_CREDIT",
+      "rule": "It supersedes the invalid 072938 packet structurally, but its substantive Wache claims are already corroborated by existing historical Wache deltas and the direct Drive crosscheck packet 073722. Mark consumed/superseded in shared state only through a later non-racing CAS fusion; do not grant duplicate evidence credit."
+    },
+    {
+      "finding": "Realtime parent-child invocation identity loss",
+      "classification": "UNIQUE_SOURCE_FORENSIC_EXTENSION",
+      "relationship_to_073512": "Packet 073512 already states call_id is insufficient and explicitly recommends tracing through the Claude/host bridge. Our direct source trace closes the next span: _tool_ausfuehren returns call_id only to Realtime, while local helpers/background task IDs and claude_frage session/tool descendants do not receive it as immutable parent identity.",
+      "runtime_credit": 0
+    }
+  ],
+  "shared_state_sync": "SYNC_PENDING_DUE_PARALLEL_MOVEMENT",
+  "no_retry_storm": true,
+  "no_unusual_experiment": true,
+  "no_runtime_execution": true,
+  "next_exact_gate": "Continue from the unique call_id parent-child gap: trace downstream Claude tool_use_id/host hook/effect journal binding and specify a typed parent_realtime_call_id -> child_task_id -> child_tool_use_id chain; separately let the next non-racing state fusion mark 073606 consumed and 072938 superseded without new credit."
+}

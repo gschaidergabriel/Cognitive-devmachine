@@ -1,0 +1,112 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T10:40:35Z",
+  "trigger": "triggerwort 5",
+  "lane": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/gwt-tool-provenance-crosscheck",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "analysis_lane_only": true
+  },
+  "identity": {
+    "canonical_main_sha_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "design_branch_pre_write_sha": "4dc7eb2424c57d82375aac9ad08736c474a0b810",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "authority_epoch": "9.13",
+    "execution_mode": "FREE_ONLY_HARD_OFF_PROVIDER_ROUTES"
+  },
+  "relation_to_existing_deltas": {
+    "typed_hook_identity_gap": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_TYPED_HOOK_CAPTURE_GAP_2026-08-28T1038Z_GPT56SOL.json",
+    "effect_invocation_gap": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_INVOCATION_CORRELATION_DIRECT_CROSSCHECK_GPT56SOL.json",
+    "nonduplicate_delta": "Existing deltas establish missing typed tool/child identity capture and session-scoped effect correlation. This delta traces that same missing identity into the Global Workspace intention/reflective measurement path, where tool ownership is reconstructed from session provenance plus a time window."
+  },
+  "source_crosschecks": [
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 3430,
+      "line_end": 3535,
+      "finding": "merken(payload) reads session_id/tool_name/tool_input/tool_response, writes durable_memory kind=ereignis, and stores provenance as hook:PostToolUse:session=<session_id>. The persisted event record does not preserve call-scoped tool_use_id or child agent_id/Agent agentId as typed identity fields.",
+      "confidence": 0.99
+    },
+    {
+      "source_kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 3620,
+      "line_end": 3695,
+      "finding": "gw_absicht reconstructs actually-fired tools by selecting all durable_memory ereignis rows in [started_at, now] whose provenance equals hook:PostToolUse:session=<session_id>, then reduces them to a set of tool names. It does not partition those observations by tool_use_id or child identity.",
+      "confidence": 0.99
+    },
+    {
+      "source_kind": "EXTERNAL_PRIMARY",
+      "path": "Claude Code official hooks documentation observed 2026-08-28",
+      "finding": "Current documentation exposes call-scoped tool_use_id on tool hooks and agent_id on tool hooks that execute inside a subagent; Agent PostToolUse also documents tool_response.agentId. These identity surfaces can support finer provenance than the donor currently retains.",
+      "confidence": 0.99
+    }
+  ],
+  "architecture_finding": {
+    "finding": "GLOBAL_WORKSPACE_TOOL_EVENT_OWNERSHIP_COLLAPSES_TO_SESSION_TIME_WINDOW",
+    "scope": "SOURCE_LEVEL_PROVENANCE_GAP_NOT_RUNTIME_COLLISION_PROOF",
+    "consequence": "If parent and/or multiple child tool events share the same session provenance and overlap the same active-turn window, gw_absicht can merge their tool observations before computing ANGEKUENDIGT_NICHT_AUSGEFUEHRT, WIRKUNG_OHNE_ANKUENDIGUNG or AUSGEFUEHRT_NICHT_ANGEKUENDIGT. That can contaminate reflective/agency measurements even when the underlying hook events carried exact invocation/child identity.",
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "mechanistic_counterexample": {
+    "classification": "SOURCE_GROUNDED_POSSIBILITY_NOT_RUNTIME_REPRODUCTION",
+    "sequence": [
+      "Parent turn S opens at started_at.",
+      "Child A and child B emit PostToolUse events that the donor persists only as hook:PostToolUse:session=S plus tool name.",
+      "gw_absicht selects both events by the same session provenance and time window.",
+      "The resulting werkzeuge set no longer preserves which actor/invocation produced each observation, so reflective mismatch labels can be attributed to the parent turn without exact child ownership."
+    ],
+    "claim_boundary": "This is a structural provenance-collapse construction. Actual collision frequency and exact session-id behavior on the installed target runtime remain unobserved."
+  },
+  "counterhypotheses": [
+    "The installed host may serialize all relevant tool activity or assign child executions distinct session_id values, preventing this collision in practice.",
+    "A host-private/global hook or coordinator path outside the pinned donor may already preserve child/invocation identity before these records are consumed.",
+    "Some intended Global Workspace metrics may deliberately aggregate child activity at parent-turn scope; even then, explicit actor/invocation provenance is still required so aggregation is a declared projection rather than irreversible source loss."
+  ],
+  "frankenstein_2_action": {
+    "decision": "PRESERVE_TYPED_TOOL_EVENT_IDENTITY_BEFORE_GWT_PROJECTION",
+    "required_event_identity": [
+      "session_id",
+      "turn_id_or_episode_id",
+      "generation",
+      "hook_event_name",
+      "tool_name",
+      "tool_use_id",
+      "agent_id_or_agentId_when_observed",
+      "observed_at",
+      "source_version_identity"
+    ],
+    "projection_rule": "Global Workspace/GWT may intentionally aggregate parent and child activity, but aggregation must occur after exact typed provenance is retained. Session_id plus time-window membership must not be the sole ownership key when finer identities are available.",
+    "required_nonprovider_test": "Synthetic same-session fixture with disjoint parent/child or child-A/child-B PostToolUse identities inside one turn window; assert raw typed events remain separable and gw_absicht/GWT projection only merges them under an explicit declared aggregation rule."
+  },
+  "feeds_triggerword_4": {
+    "priority": "P0_BEFORE_GRID_GWT_REFLECTION_CREDIT",
+    "actions": [
+      "Implement the typed hook identity capture already identified by the WorkExecutionBinding lane.",
+      "Carry tool_use_id and child identity through durable event provenance before computing gw_absicht/GWT summaries.",
+      "Make parent/child aggregation an explicit projection with retained raw provenance, not an irreversible session/time-window collapse.",
+      "Run synthetic non-provider concurrency regression before any installed-host/runtime credit claim."
+    ]
+  },
+  "execution": {
+    "provider_calls": 0,
+    "vps_calls": 0,
+    "installed_runtime_calls": 0,
+    "unusual_experiment": "NOT_RUN"
+  },
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "installed_host_runtime": 0,
+    "gwt_runtime": 0,
+    "work_execution_binding_runtime": 0,
+    "effect_invocation_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

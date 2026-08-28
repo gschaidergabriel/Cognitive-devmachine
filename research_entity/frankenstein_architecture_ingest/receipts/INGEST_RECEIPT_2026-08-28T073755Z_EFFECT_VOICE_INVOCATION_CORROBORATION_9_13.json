@@ -1,0 +1,85 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T073755Z-EFFECT-VOICE-INVOCATION-CORROBORATION-9_13",
+  "recorded_at": "2026-08-28T07:41:30Z",
+  "classification": "CORROBORATING_DIRECT_SOURCE_CROSSCHECK_NOT_PACKET_CONSUMPTION_OR_INDEPENDENT_RUNTIME_REPLICATION",
+  "trigger": "triggerwort 5",
+  "router": {
+    "directive_fetch": "PASS",
+    "sparse_world_directive_fetch": "PASS",
+    "packet_schema_fetch": "PASS",
+    "ingest_state_reentry": "PASS"
+  },
+  "current_authority": {
+    "epoch": "9.13",
+    "canonical_main": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY"
+  },
+  "delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T073755Z_EFFECT_VOICE_INVOCATION_FUSION.json",
+    "commit": "262d84d08f6a1376e62ddfa6b40eac29fc3b676b",
+    "authority_rebind_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T073755Z_EFFECT_VOICE_INVOCATION_FUSION_AUTHORITY_REBIND_9_13.json",
+    "authority_rebind_commit": "b3025ce72e8ed693ebe42e764be6aaa7b7d46422"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "modified": false
+  },
+  "source_packets_observed_not_claimed_as_consumed_by_this_receipt": [
+    "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
+    "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+    "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+    "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL"
+  ],
+  "state_reentry_result": "All four packet IDs were already present in the current consumed_packet_ids after parallel organ progress; this receipt therefore adds corroborating source evidence only and does not duplicate packet consumption.",
+  "exact_source_bindings": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "ordinary EffectGate bookkeeping is nonblocking; active_turns.effect_id is session-scoped; PostToolUse fallback can create VERIFIED without prior PreToolUse"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob_sha": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "finding": "function_call call_id reaches _tool_ausfuehren but is not propagated into helpers/confirmation/async bridge/downstream execution; _HintergrundBruecke creates a separate auftrag_id"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob_sha": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "finding": "voice-triggered headless Claude bridge hard-disallows Bash but does not bind Realtime call_id/confirmation evidence to each later non-Bash mutating tool invocation"
+    },
+    {
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/executor.py",
+      "blob_sha": "2a87f8d58e5785fcd6b821141416f9dcd00433bf",
+      "finding": "historical approval could deny execution, but ToolExecutor.execute does not consume approval_id or approved request digest"
+    },
+    {
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/loop.py",
+      "blob_sha": "e39c0e9ad00843f62a0fea7dd881a80f3acc70dd",
+      "finding": "approved path calls execute(skip_approval=True); fixed safe-name path also bypasses approval"
+    }
+  ],
+  "unique_increment": {
+    "contradiction_id": "TW5-CONTRADICTION-VOICE-CALL-ID-PROPAGATION-010",
+    "finding": "Realtime call identity, voice confirmation evidence, async assignment identity, Claude session identity and eventual tool/effect identities are not one mechanically bound causal chain in the inspected current donor source.",
+    "triggerword4_contract": "Map call_id/tool_use_id or a deterministic immutable invocation_id through proposal digest, confirmation evidence, EffectRequest, EffectDecision, executor consumption, verified outcome, result re-entry and completion receipt."
+  },
+  "credit": {
+    "new_runtime_execution": false,
+    "new_provider_execution": false,
+    "new_vps_execution": false,
+    "unusual_experiment": false,
+    "physical_grid10_credit_delta": 0,
+    "whole_entityos_hcu_credit_delta": 0,
+    "hcu_runtime_credit_delta": 0,
+    "jspace_model_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_exact_gate": "Execute only under admitted non-provider validation authority a repository-bound two-call interleaving/identity-transplant/deny-nonexecution test against the successor typed effect path; no runtime causal promotion before exact-source receipt evidence."
+}

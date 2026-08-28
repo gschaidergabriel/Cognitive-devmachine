@@ -1,0 +1,72 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CORRECTION/v1",
+  "correction_id": "TW5-CORRECTION-20260828T1038Z-WORKEXECUTION-DOCUMENTED-JOIN-GPT56SOL",
+  "created_at": "2026-08-28T10:38:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/forensic-ingest",
+  "corrects": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1031Z_WORKEXECUTION_BINDING_SCHEMA_REBIND_GPT56SOL.json",
+      "commit": "82ce27fa28d493629a75c87e8c2fcf8ce7596b0a",
+      "claim": "parent Agent tool_use_id -> child agent identity is wholly undocumented/unknown"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1031Z_WORKEXECUTION_BINDING_SCHEMA_REBIND_GPT56SOL.json",
+      "commit": "a859b3bf959969fb96090d2bfce9c19cd8595681",
+      "claim": "official docs do not provide a deterministic parent Agent tool_use_id -> agent identity join"
+    }
+  ],
+  "trigger_branch_head_observed_before_correction": "a859b3bf959969fb96090d2bfce9c19cd8595681",
+  "parallel_corroborating_correction": {
+    "commit": "fa891ff6bf037b1d154bbbc3d12be2b754f793df",
+    "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_CORRECTION_E9874EED_WORKEXECUTION_DOCUMENTED_AGENTID_JOIN_GPT56SOL.json",
+    "classification": "PARALLEL_SOURCE_CORRECTION_NOT_INDEPENDENT_RUNTIME_REPLICATION"
+  },
+  "external_primary": {
+    "source": "Claude Code official hooks documentation",
+    "url": "https://code.claude.com/docs/en/hooks",
+    "observed_at": "2026-08-28",
+    "verified_documented_fields": [
+      "PostToolUse.tool_use_id",
+      "Agent PostToolUse.tool_response.agentId",
+      "SubagentStart/SubagentStop.agent_id",
+      "TaskCreated/TaskCompleted.task_id"
+    ],
+    "source_scope": "DOCUMENTATION_CAPABILITY_SPEC_ONLY"
+  },
+  "corrected_architecture_claim": {
+    "documented_join_closed": "PostToolUse.tool_use_id -> PostToolUse.tool_response.agentId for the Agent tool",
+    "still_open_runtime_join": "PostToolUse.tool_response.agentId <-> SubagentStart/SubagentStop.agent_id on the exact installed target build/configuration",
+    "still_open_durable_join": "entityos durable package_id -> exact Agent tool_use_id",
+    "still_open_concurrency": "two concurrent Agent calls must not cross-wire package/tool/agent lifecycle identities",
+    "task_id_rule": "task_id remains an independent optional task-system identity and must not be required for ordinary Agent execution unless TaskCreated/TaskCompleted is actually in that path",
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "workexecution_binding_v1_refinement": {
+    "fields": [
+      "package_id",
+      "parent_session_id",
+      "generation",
+      "spawn_tool_use_id",
+      "agent_response_agentId",
+      "lifecycle_agent_id",
+      "task_id_optional_independent",
+      "binding_evidence_refs"
+    ],
+    "normalization_rule": "Do not collapse agent_response_agentId and lifecycle_agent_id into one canonical child identity until exact installed-runtime evidence demonstrates their equality/normalization relation.",
+    "causal_rule": "Use the documented call-scoped tool_use_id -> tool_response.agentId pair where applicable; never replace missing package or lifecycle joins with timestamps/event ordering."
+  },
+  "original_packet_disposition": {
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "status": "PARTIAL_ADMISSION_REMAINS",
+    "remaining_reasons": [
+      "packet target_2_0_action=RESEARCH is schema-invalid",
+      "governance atom source span 1-7 is wrong; verified span is 77-81",
+      "packet exact canonical-main binding is stale relative to 24389f873a775fd3af5fc3c896a58836d09a3bff",
+      "installed-runtime lifecycle equality and package-to-tool binding remain unverified"
+    ]
+  },
+  "runtime_credit_delta": 0,
+  "training_credit_delta": 0,
+  "acceptance": "SOURCE_FORENSIC_CORRECTION_PASS_NO_RUNTIME_PROMOTION"
+}

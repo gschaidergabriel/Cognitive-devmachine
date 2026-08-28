@@ -1,0 +1,89 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T0838Z-NATIVE-CHILD-IDENTITY-BINDING-GPT56SOL",
+  "created_at": "2026-08-28T08:38:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/native-child-identity-binding",
+  "routing_result": "PASS",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_before_write": "41bec098d4dc9992eb6a865277d131a172908ac5",
+    "architecture_delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0838Z_NATIVE_CHILD_IDENTITY_BINDING_GPT56SOL.json",
+    "architecture_delta_commit": "fa12d2d540711cc8b31f448eaa9e298fd5996a60"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "packet": {
+    "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T082628Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+    "blob_sha": "bad15660b245dfc33139736cd9857064c82812ef",
+    "prior_validator_admission": true,
+    "prior_admission_receipt_commit": "41bec098d4dc9992eb6a865277d131a172908ac5",
+    "runtime_credit_delta": 0
+  },
+  "source_crosscheck": {
+    "status": "PASS_AT_DECLARED_SOURCE_SCOPE",
+    "donor_handoff": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "span": "5690-5785",
+      "result": "Confirmed durable workpackage/capsule creation and explicit no-spawn behavior."
+    },
+    "donor_hooks": {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "span": "1-81",
+      "result": "Confirmed seven configured plugin event classes and absence of dedicated SubagentStart/SubagentStop/Task lifecycle hooks in this versioned plugin config."
+    },
+    "external_primary": {
+      "hooks_url": "https://code.claude.com/docs/en/hooks",
+      "subagents_url": "https://code.claude.com/docs/en/sub-agents",
+      "result": "Current documentation confirms agent_id/agent_type, task_id, tool_use_id, SubagentStart/SubagentStop, blocking PreToolUse semantics, resume-by-agent identity for supported agents and optional worktree isolation. Installed-host behavior remains unverified."
+    }
+  },
+  "architecture_change": {
+    "classification": "SOURCE_GROUNDED_BINDING_REFINEMENT_NO_RUNTIME_PROMOTION",
+    "added_boundary": "DELEGATED_EXECUTION_IDENTITY_BINDING",
+    "primary_invariant": "WORKPACKAGE_EXISTS != NATIVE_CHILD_EXISTS",
+    "binding_key_law": "workpackage_id + generation + agent_id + tool_use_id_or_equivalent_exact_invocation_id",
+    "design_decision": "Prefer a deterministic adapter onto the observed native child lifecycle before creating a duplicate spawn runtime. Treat native agent/task IDs as identity/provenance, never as effect or canonical-truth authority.",
+    "effect_interlock": "Mutating child calls must consume an invocation-bound pre-side-effect decision and return typed execution/completion receipts; session-scoped effect correlation is insufficient."
+  },
+  "sparse_world_substrate_impact": {
+    "changed": true,
+    "scope": "PROVENANCE_ONLY",
+    "rule": "Delegated WorldNeed/WorldSlice activity must carry the same workpackage/agent/invocation lineage. Child identity does not promote vector/world projections or Xeno maintenance output into canonical truth."
+  },
+  "central_ingest_state": {
+    "path": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "observed_last_ingest_at": "2026-08-28T08:08:00Z",
+    "native_packet_listed_consumed": false,
+    "reconciled_this_run": false,
+    "status": "INGEST_STATE_MERGE_PENDING",
+    "reason": "Fail-closed against destructive whole-file replacement of a moving shared JSON state. Append-only architecture delta and receipt preserve this run until a merge-safe reconciliation is performed."
+  },
+  "credits": {
+    "packet_admission": "PASS_PRIOR_RECEIPT",
+    "source_crosscheck": "PASS",
+    "new_runtime_credit": 0,
+    "native_child_runtime_credit": 0,
+    "effect_enforcement_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Merge-safely reconcile INGEST_STATE from its latest blob without dropping concurrent frontier work. Triggerword 4 may then, only under its current authorized execution contract, observe the installed Claude Code build/config and one bounded native child lifecycle to test workpackage_id-to-agent_id/task_id/tool_use_id binding."
+}

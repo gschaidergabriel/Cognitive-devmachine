@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "delta_id": "TW5-DELTA-20260828T1038Z-WORKEXECUTION-TYPED-HOOK-CAPTURE-GAP-GPT56SOL",
+  "created_at": "2026-08-28T10:38:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "classification": "CURRENT_DONOR_SOURCE_FORENSICS_PLUS_EXTERNAL_PRIMARY_NO_RUNTIME_CREDIT",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "analysis_lane_only": true
+  },
+  "identity": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "reentry_head_before_delta": "b5d76052311aff1e4eea3b302a7b830d42e405e6",
+    "canonical_main_sha_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "authority_epoch": "9.13",
+    "execution_mode": "FREE_ONLY_HARD_OFF_PROVIDER_ROUTES"
+  },
+  "relation_to_parallel_ingest": {
+    "predecessor_delta": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_BINDING_SUCCESSOR_CORRECTION_2026-08-28T1031Z_GPT56SOL.json",
+    "predecessor_status": "RETAINED",
+    "incoming_packet_status": "QUARANTINED_UNCONSUMED_PARTIAL_SALVAGE_ONLY",
+    "nonduplicate_delta": "The predecessor establishes the documented Agent tool_response.agentId bridge and corrects packet provenance. This delta asks whether the pinned donor actually captures those identity fields as typed state."
+  },
+  "source_forensics": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "spans": [
+        {"line_start": 3240, "line_end": 3405},
+        {"line_start": 3390, "line_end": 3575}
+      ],
+      "source_kind": "LIVE_CODE",
+      "findings": [
+        "zulassen(payload) extracts session_id, tool_name and tool_input but does not extract tool_use_id, agent_id or Agent tool_response.agentId.",
+        "zulassen correlates PreToolUse to PostToolUse by writing one active_turns.effect_id per session.",
+        "merken(payload) extracts session_id, tool_name, tool_input and tool_response but does not typed-extract tool_use_id, agent_id or tool_response.agentId.",
+        "merken stores a shortened/redacted representation of tool_response in durable_memory, which is opaque/lossy evidence rather than a typed child-execution identity binding.",
+        "For state-changing tools, merken resolves effect_id from active_turns by session_id, preserving the already-known same-session overlapping-call ambiguity."
+      ],
+      "literal_full_file_scan": {
+        "tool_use_id_occurrences": 0,
+        "agent_id_occurrences": 0,
+        "interpretation": "No explicit typed reader/writer for these field names exists in the pinned stern.py source."
+      },
+      "confidence": 0.99
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "spans": [{"line_start": 3000, "line_end": 3400}],
+      "source_kind": "CONFIG_IN_CODE",
+      "findings": [
+        "ZUSTANDSAENDERND contains Write/Edit/MultiEdit/NotebookEdit/Bash and does not contain Agent.",
+        "GW_WERKZEUG_NAMEN contains historical Task but not Agent."
+      ],
+      "confidence": 0.99
+    }
+  ],
+  "external_primary_revalidation": {
+    "source": "Claude Code official hooks and sub-agents documentation observed 2026-08-28",
+    "classification": "EXTERNAL_PRIMARY_CAPABILITY_NOT_INSTALLED_RUNTIME_EVIDENCE",
+    "findings": [
+      "Agent is the current native subagent-spawn tool; Task was renamed to Agent in Claude Code v2.1.63 and remains an alias.",
+      "Agent PostToolUse documents tool_response.agentId for completed and async-launched Agent calls.",
+      "Tool hooks carry call-scoped tool_use_id.",
+      "Subagent lifecycle hooks expose agent_id; task-system hooks expose separate task_id."
+    ]
+  },
+  "architecture_finding": {
+    "finding": "DOCUMENTED_IDENTITY_BRIDGE_EXISTS_BUT_PINNED_DONOR_DOES_NOT_TYPED_CAPTURE_IT",
+    "consequence": "Adding SubagentStart/SubagentStop hooks alone is insufficient. Frankenstein 2.0 needs a typed hook-ingest/reducer path that preserves call-scoped tool_use_id and child agent_id/agentId before WorkExecutionBinding can receive executable causal credit.",
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "work_execution_binding_v1_refinement": {
+    "required_capture_before_binding": [
+      "parent_session_id",
+      "hook_event_name",
+      "tool_name",
+      "tool_use_id",
+      "Agent PostToolUse.tool_response.agentId when present",
+      "SubagentStart/SubagentStop.agent_id when present",
+      "generation",
+      "observed_at",
+      "source/version identity"
+    ],
+    "normalization_rule": "agentId and agent_id may be normalized into one child identity only when equality is directly observed on the installed/version-pinned runtime path or guaranteed by the exact admitted version contract; never by timing/order.",
+    "task_id_rule": "task_id remains optional and separate from child agent identity.",
+    "opaque_memory_rule": "A truncated/redacted tool_response string is not sufficient typed causal identity evidence."
+  },
+  "contradictions_preserved": [
+    "Current official docs expose an exact Agent response child identifier, but the pinned donor does not typed-capture the relevant field names.",
+    "The donor still names Task in GW tool vocabulary while current Claude Code names the spawn tool Agent; Task compatibility does not prove the donor sees current Agent events as intended.",
+    "A host-private/global hook path may capture these fields outside the donor repository; repository absence is not host-runtime absence.",
+    "No installed-host event payload was executed or observed in this Triggerword-5 run because current provider routes are HARD_OFF."
+  ],
+  "feeds_triggerword_4": {
+    "priority": "P0_SOURCE_IMPLEMENTATION_PREREQUISITE",
+    "actions": [
+      "Introduce a typed hook identity capture record/reducer before attempting WorkExecutionBinding runtime promotion.",
+      "Read and preserve tool_use_id on PreToolUse/PostToolUse and agentId/agent_id on Agent/lifecycle events without session-scoped overwrite.",
+      "Version-gate Agent-vs-Task compatibility and inspect host/plugin/global hook registrations before adding duplicate lifecycle hooks.",
+      "Use synthetic/non-provider regression first; defer real Agent runtime capture until an explicitly admitted non-provider path is available under current authority."
+    ]
+  },
+  "credit_boundary": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "installed_host_runtime": 0,
+    "provider_execution": 0,
+    "vps_execution": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

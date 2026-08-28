@@ -1,0 +1,85 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:51:24Z",
+  "status": "APPEND_ONLY_PACKET_ADMISSION_CORRECTION_CURRENT_9_13",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main_sha": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "design_branch_observed_before_repair": "1027db369f3d7592e76d69fe49215807151a2b0f",
+  "machine_schema_v1": {
+    "path": "research_entity/frankenstein_architecture_ingest/INGEST_PACKET_SCHEMA.json",
+    "blob_sha": "8b2732394418e725067be52ee480ad1da649a9f7"
+  },
+  "corrected_ledger_interpretation": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
+      "state": "SOURCE_CONTENT_CROSSCHECKED_BUT_PACKET_NOT_CURRENT_AUTHORITY_BOUND",
+      "credit": 0
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+      "state": "V1_PACKET_SHAPE_INVALID_SOURCE_CONTENT_CROSSCHECKED_SEPARATELY",
+      "credit": 0
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0741Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-AUTHORITY-REBIND",
+      "state": "CUSTOM_AUTHORITY_REBIND_OBJECT_NOT_V1_PACKET_SOURCE_CONTENT_REUSED_ONLY",
+      "credit": 0
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0744Z-5641dc6-GPT56SOL-REALTIME-MEMORY-EPISTEMIC-AUTHORITY-9-13",
+      "state": "CUSTOM_AUTHORITY_REBIND_OBJECT_NOT_V1_PACKET_SOURCE_CONTENT_REUSED_ONLY",
+      "credit": 0
+    }
+  ],
+  "important_non_retraction": [
+    "The directly crosschecked Realtime research-dispatch, memory wrapper, Claude Bash-deny and hook-declaration source findings remain valid at donor SHA 5641dc6 and their stated source-only scope.",
+    "The directly crosschecked stern conversation-memory schema/read-path finding remains valid: storage tables are distinct but returned Realtime context lacks structural transformation/epistemic typing and may combine conversation and durable-memory matches in one treffer list.",
+    "The 9.13 design requirement MemoryCandidate -> MemoryAdmission and HumanIntentDecision distinct from EffectDecision remains a source-grounded design requirement, not runtime evidence."
+  ],
+  "repair_artifacts": {
+    "authority_binding_contract": {
+      "path": "research_entity/frankenstein_architecture_ingest/AUTHORITY_BINDING_CONTRACT_9_13.json",
+      "commit": "fea06639616adc5cb8a6703d366a71d2762e32c7"
+    },
+    "packet_schema_v2": {
+      "path": "research_entity/frankenstein_architecture_ingest/INGEST_PACKET_SCHEMA_V2.json",
+      "commit": "c8ae2db187694a1eb27b8b167c08744c38ac88cf"
+    },
+    "authority_validator": {
+      "path": "research_entity/frankenstein_architecture_ingest/validate_ingest_packet_v2.py",
+      "commit": "15c56e52405cdf8ee00640924e019e11a4981005"
+    },
+    "architecture_delta": {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0751Z_INGEST_ADMISSION_GATE_9_13_GPT56SOL.json",
+      "commit": "b0ad8d0239f88eb9fc625bbdc840d59b85a58ac6"
+    }
+  },
+  "admission_rule_after_repair": "New current Triggerword-5 evidence must pass packet shape + mandatory v2 authority binding + refreshed-main currentness before current-authority packet consumption. Malformed envelopes may still donate independently crosschecked source facts, but cannot mint packet validity, runtime credit, canonical semantics or training credit.",
+  "execution": {
+    "provider_execution": "NOT_ATTEMPTED_HARD_OFF",
+    "vps_runtime": "NOT_ATTEMPTED_TRIGGERWORD5_SOURCE_FORENSICS_ONLY",
+    "together": "NOT_ATTEMPTED_FORBIDDEN",
+    "paid_fallback": "NOT_ATTEMPTED_FORBIDDEN"
+  },
+  "credits": {
+    "runtime_credit_delta": 0,
+    "memory_runtime_acceptance_delta": 0,
+    "effect_runtime_acceptance_delta": 0,
+    "canonical_semantics_credit_delta": 0,
+    "physical_grid10_credit_delta": 0,
+    "whole_entityos_hcu_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "state_write": "NOT_FORCED_DURING_PARALLEL_MOVEMENT_APPEND_ONLY_RECEIPT_IS_REENTRY_CHECKPOINT",
+  "next_exact_gate": "Require v2 validator PASS for future packets before consumed_packet_ids mutation; migrate/replace malformed late packets only if their envelope itself is needed, otherwise preserve them as historical provenance and rely on current-authority-bound source deltas."
+}

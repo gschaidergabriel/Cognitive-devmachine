@@ -1,0 +1,131 @@
+{
+  "schema": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:40:46Z",
+  "authority_epoch": "9.13",
+  "status": "SOURCE_FORENSIC_REALTIME_EFFECT_BOUNDARY_DELTA",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "source_snapshot": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "realtime_blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+    "gespraechsmodus_blob": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+    "canonical_main_observed": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_before_write": "b15a047dfb355eb838ffddd77a00efe19d6b5bcb",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21"
+  },
+  "evidence_scope": "CURRENT_DONOR_SOURCE_FORENSICS_ONLY_NO_RUNTIME_EXECUTION_NO_PROVIDER_IO",
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-RT-EFFECT-001-PENDING-CALL-CANCEL-BARRIER",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "line_start": 1275,
+      "line_end": 1368,
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "Function calls are queued by call_id and execute only after response.done status=completed; barge-in and non-completed responses clear pending calls before dispatch.",
+      "authority_class": "PRE_DISPATCH_CANCELLATION_BARRIER_FOR_REALTIME_EXPRESSION_ONLY",
+      "target_2_0_action": "KEEP",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-RT-EFFECT-002-VOICE-DISPATCH-NOT-EFFECTGATE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "line_start": 1692,
+      "line_end": 1730,
+      "source_kind": "LIVE_CODE",
+      "finding": "_tool_ausfuehren directly dispatches memory writes, confirmed Auftrag creation, research and local state actions; it does not consume a canonical EffectDecision or CapabilityLease.",
+      "authority_class": "VOICE_TOOL_DISPATCH_NOT_CANONICAL_EFFECTGATE",
+      "target_2_0_action": "REPAIR",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-RT-EFFECT-003-VOICE-CONFIRMATION-PREFILTER",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "line_start": 1604,
+      "line_end": 1691,
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "frank_auftrag_stellen requires a second same-normalized-text call with bestaetigt=true, an intervening server-transcribed microphone utterance, <=300s age and no simple contradiction keyword hit before dispatch.",
+      "authority_class": "VOICE_ADMISSION_PREFILTER_NOT_EXECUTOR_AUTHORITY",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 1.0,
+      "known_counterevidence": "The source explicitly admits unrelated multi-person speech can still be misread as confirmation; there is no speaker verification or executor-consumed grant identity."
+    },
+    {
+      "atom_id": "TW5-RT-EFFECT-004-CLAUDE-BASH-DISALLOW-NARROW-GUARD",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "line_start": 340,
+      "line_end": 438,
+      "source_kind": "ENFORCEMENT_CODE",
+      "finding": "claude_frage unconditionally passes --disallowedTools Bash to headless Claude Code, preventing Bash on the voice Auftrag path while leaving file tools available.",
+      "authority_class": "NARROW_TOOL_CLASS_BLOCK_NOT_COMPLETE_EFFECT_AUTHORITY",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 1.0,
+      "known_counterevidence": "Write/Edit and other non-Bash state-changing tools remain available; exact host hook/settings enforcement for this headless launch is not established here."
+    },
+    {
+      "atom_id": "TW5-RT-EFFECT-005-MEMORY-WRITE-DIRECT-BRIDGE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "line_start": 500,
+      "line_end": 535,
+      "source_kind": "LIVE_CODE",
+      "finding": "frank_erinnerung_schreiben reaches stern.gespraech_erinnerung_schreiben through the in-process _stern bridge without an immutable effect/admission token at the Realtime dispatcher boundary.",
+      "authority_class": "DIRECT_STATE_WRITE_BRIDGE_REQUIRES_SUCCESSOR_TYPED_ADMISSION",
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.99,
+      "boundary": "This pass establishes the direct call boundary, not the complete downstream internals of stern.gespraech_erinnerung_schreiben."
+    }
+  ],
+  "architecture_fusion": {
+    "finding": "Realtime has a useful pre-dispatch cancellation barrier and voice-specific confirmation prefilter, but current source does not establish one deterministic EffectGate across memory writes, Claude file tools, research dispatch and all other state-changing calls.",
+    "required_successor_chain": [
+      "RealtimeFunctionCall(call_id,response_id,session_id,generation,request_digest)",
+      "PendingEffect(parent_response_id,invocation_id,cancellable=true)",
+      "VoiceAdmissionEvidence(optional_not_authority)",
+      "EffectRequest(invocation_id,causal_event_id,generation,request_digest,capability_scope,resource_identity)",
+      "EffectDecision(ALLOW|DENY|UNKNOWN)",
+      "CapabilityLease/OwnerGrant where required, one-shot atomic consume",
+      "EnforcementReceipt",
+      "ExecutionReceipt",
+      "WorldEffectVerification(SUCCEEDED|FAILED|UNKNOWN)",
+      "ResultReentry",
+      "CompletionEvidence"
+    ],
+    "preserve": [
+      "discard pending calls on barge-in or non-completed response before dispatch",
+      "two-step voice confirmation as defense-in-depth for Auftrag creation",
+      "whole-Bash disallow on voice-triggered headless Claude as narrow defense-in-depth"
+    ],
+    "repair": [
+      "voice confirmation is evidence/provenance, not executor authority",
+      "route durable memory writes and every state-changing non-Bash tool through typed deterministic admission/enforcement",
+      "bind exact current authority identities into new forensic/effect receipts"
+    ]
+  },
+  "contradictions": [
+    {"id": "TW5-CONTRADICTION-REALTIME-CONFIRMATION-VS-EFFECT-AUTHORITY-012", "status": "OPEN_REPAIR", "detail": "Mechanical voice confirmation reduces accidental dispatch but is not structurally consumed as canonical EffectDecision at executor boundary."},
+    {"id": "TW5-CONTRADICTION-REALTIME-BASH-BLOCK-VS-CROSS-TOOL-COVERAGE-013", "status": "OPEN_REPAIR", "detail": "Bash is hard-blocked on the voice Claude path while other state-changing tools remain available; this is not whole-effect containment."},
+    {"id": "TW5-CONTRADICTION-PENDING-CANCEL-VS-SUBMITTED-UNKNOWN-014", "status": "DESIGN_CONSTRAINT", "detail": "Pending calls can be discarded before dispatch; after external submission, ambiguous outcome remains UNKNOWN and must not be represented as successful cancellation or blindly replayed."}
+  ],
+  "triggerword4_delta": [
+    "Use Realtime call_id/response identity as ingress correlation, then bind immutable invocation_id across EffectGate/EffectJournal.",
+    "Retain cancellation only for PENDING_EFFECT before submission.",
+    "Treat voice confirmation as policy evidence, not authority; executor consumes a typed one-shot decision/lease.",
+    "Require one deterministic boundary for Bash, Write, Edit, NotebookEdit, durable-memory writes and every other state-changing tool class.",
+    "Test cancelled-response nonexecution, confirmation mismatch/staleness, same-session parallel non-cross-wiring, non-Bash DENY nonexecution, and zero admitted-effect credit for successful returns without bound admission."
+  ],
+  "credits": {
+    "source_forensics": "PASS_AT_DECLARED_SOURCE_SCOPE",
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover exact host/Claude hook scheduler/settings identity applied to claude_frage headless launches and trace stern.gespraech_erinnerung_schreiben to its durable-write admission. Then feed Triggerword-4 one repository-bound falsifier covering Realtime pending-call cancellation plus non-Bash state-changing DENY with immutable invocation identity; no runtime credit until executed."
+}

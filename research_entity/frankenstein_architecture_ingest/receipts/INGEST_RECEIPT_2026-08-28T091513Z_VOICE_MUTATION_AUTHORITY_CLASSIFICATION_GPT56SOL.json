@@ -1,0 +1,71 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T091513Z-VOICE-MUTATION-AUTHORITY-CLASSIFICATION-GPT56SOL",
+  "created_at": "2026-08-28T09:15:13Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/voice-mutation-authority-classification",
+  "routing_result": "PASS",
+  "classification": "SOURCE_FORENSIC_DELTA_COMMITTED_NO_RUNTIME_CREDIT",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "files": {
+      "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "DEV_SOURCE_RESEARCH/repository/scripts/stern.py": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json": "c483bc81cbae080a8175f7ce694ef657484614b5"
+    }
+  },
+  "ingest": {
+    "new_unconsumed_packet_found": false,
+    "latest_known_packet": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "latest_known_packet_status": "ALREADY_CONSUMED",
+    "shared_ingest_state_mutated": false,
+    "shared_state_reason": "Branch was advancing concurrently during this Triggerword-5 run. Append-only architecture delta + receipt preserve the new evidence without overwriting a moving INGEST_STATE; the next reconciler can fold both concurrent deltas deterministically."
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091513Z_VOICE_MUTATION_AUTHORITY_CLASSIFICATION_GPT56SOL.json",
+    "commit": "e91ad83c4329489a2c6748e9fd40140025fecdd7",
+    "trigger4_gate_added": "TW4-VOICE-EFFECT-CHAIN-SEPARATION"
+  },
+  "material_result": {
+    "voice_tool_classes_split": true,
+    "delegated_task_human_intent_gate_found": true,
+    "human_intent_gate_is_final_effect_gate": false,
+    "headless_bash_denial_is_full_mutation_containment": false,
+    "donor_effectgate_is_blocking": false,
+    "runtime_credit_change": 0
+  },
+  "evidence": [
+    "realtime_gespraech.py@5641dc6 lines 430-558: heterogeneous Realtime tool surface and direct memory/research dispatch paths",
+    "realtime_gespraech.py@5641dc6 lines 1583-1714: two-step delegated-task confirmation state machine and stated speaker/intent limitation",
+    "gespraechsmodus.py@5641dc6 lines 320-399: Bash-only hard denial with Read/Write/Edit/Grep/Glob retained; no explicit --settings binding in command",
+    "stern.py@5641dc6 EffectGate section: PreToolUse explicitly never returns deny/block and tools proceed on reject/unknown/timeout",
+    "SUPERVISOR_INBOX 9.13 + steering 9.13AB: bookkeeping/posthoc journal is not pre-side-effect enforcement"
+  ],
+  "cross_worker_reconciliation": {
+    "observed_concurrent_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091348Z_HEADLESS_SESSION_VS_NATIVE_SUBAGENT_ACTOR_CLASS_GPT56SOL.json",
+    "relationship": "COMPLEMENTARY",
+    "reason": "091348Z separates HEADLESS_SESSION_CHILD from NATIVE_SUBAGENT_CHILD. This receipt adds the orthogonal VoiceToolCallCandidate -> HumanIntentDecision -> TaskAdmission -> invocation-bound EffectDecision -> EffectReceipt authority chain and tool-class taxonomy."
+  },
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_credit": 0,
+    "effect_enforcement_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Triggerword-4: compile each Realtime tool into an explicit authority class; for delegated mutation bind HumanIntentDecision to immutable TaskAdmission and every downstream state-changing invocation to a one-shot EffectDecision/EffectReceipt. Separately obtain authorized installed-host settings/watcher evidence before claiming headless containment."
+}

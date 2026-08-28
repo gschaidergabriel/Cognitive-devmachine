@@ -1,0 +1,42 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "created_at": "2026-08-28T09:14:30Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/headless-vs-native-actor-class",
+  "classification": "SOURCE_FORENSIC_DELTA_COMMITTED_NO_RUNTIME_CREDIT",
+  "canonical_main_observed_before_write": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+  "authority_epoch": "9.13",
+  "mode": "FREE_ONLY",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_parent_before_delta": "f20248b6035b50c05525d5c481c27852e0d14b0c",
+    "delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091348Z_HEADLESS_SESSION_VS_NATIVE_SUBAGENT_ACTOR_CLASS_GPT56SOL.json",
+    "delta_commit": "3dd43aece3fef3aad808b5f43acdf4635ffe2c15"
+  },
+  "packet_ingest": {
+    "new_unconsumed_packet": false,
+    "latest_seen_packet": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "latest_seen_packet_status": "ALREADY_CONSUMED",
+    "action": "NO_PACKET_MUTATION; FORENSIC_CONTINUATION"
+  },
+  "result": {
+    "new_material_delta": true,
+    "finding": "Voice delegated work currently uses a direct/resumed headless claude -p session actor, while Triggerword-4 also targets native subagent actors. These execution actor classes require explicit separation until executable host evidence proves equivalent identity/policy/effect semantics.",
+    "trigger4_gate_added": "NCX-ACTORCLASS-SPLIT",
+    "runtime_credit_change": 0,
+    "hcu_credit_change": 0,
+    "training_credit_change": 0
+  },
+  "evidence": [
+    "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py lines 824-831",
+    "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py lines 355-376",
+    "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/hooks/hooks.json lines 1-81",
+    "research_entity/global/TRIGGERWORD_4_NATIVE_CHILD_EXECUTION_BINDING_AND_POLICY_ENVELOPE_ADDENDUM.md"
+  ],
+  "shared_state_update": "NOT_MUTATED; append-only delta+receipt used to avoid overwriting concurrently advancing INGEST_STATE",
+  "next_exact_gate": "Triggerword-4 paired harmless actor-class probe on an authorized host: run one direct HEADLESS_SESSION_CHILD and one NATIVE_SUBAGENT_CHILD for the same bounded intent, capture installed build/settings/hooks/cwd/actor/task/tool invocation lineage and terminal evidence, and compare containment/effect/completion semantics before either class receives runtime credit."
+}

@@ -1,0 +1,88 @@
+{
+  "schema": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:49:00Z",
+  "status": "CURRENT_9_13_AUTHORITY_REBIND_SOURCE_FORENSICS_ONLY",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "consumed_packet_ids": [
+    "TW5-PACKET-20260828T0741Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-AUTHORITY-REBIND",
+    "TW5-PACKET-20260828T0744Z-5641dc6-GPT56SOL-REALTIME-MEMORY-EPISTEMIC-AUTHORITY-9-13"
+  ],
+  "provenance_order": [
+    "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T0741Z_5641dc6_GPT56SOL_REALTIME_MUTATION_INTENT_AUTHORITY_REBIND.json",
+    "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T0744Z_5641dc6_GPT56SOL_REALTIME_MEMORY_EPISTEMIC_AUTHORITY_9_13.json"
+  ],
+  "direct_source_crosscheck": {
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "observed": [
+      "gespraech_erinnerung schema stores id, ts, subject, value, quelle with no explicit epistemic/transformation/admission fields",
+      "gespraech_erinnerung_lesen emits conversation rows as ts/subject/value/quelle and, for non-empty search, appends durable_memory rows to the same treffer list with quelle=durable_memory",
+      "table separation is preserved, but the direct returned Realtime context lacks a structural fact/claim/summary/inference distinction"
+    ],
+    "classification": "CURRENT_DONOR_SOURCE_CORROBORATION_NO_RUNTIME"
+  },
+  "re_admitted_constraints_under_9_13": [
+    {
+      "id": "TW5-913-HUMAN-INTENT",
+      "claim": "Realtime task confirmation is a source-grounded HumanIntentDecision precursor only. It must bind immutable invocation/request identity and remains distinct from executor-side EffectDecision and EffectJournal authority."
+    },
+    {
+      "id": "TW5-913-MEMORY-EPISTEMICS",
+      "claim": "Realtime conversational memory must enter as MemoryCandidate and pass deterministic MemoryAdmission carrying source/provenance, transformation_class and epistemic_class; persistence or retrieval never promotes remembered content into world truth."
+    },
+    {
+      "id": "TW5-913-RETRIEVAL-PRESERVATION",
+      "claim": "Retrieval/context compilation must preserve epistemic and transformation metadata across conversation-memory and durable-memory matches. Ranking or common treffer shape must not erase the distinction."
+    },
+    {
+      "id": "TW5-913-COMPLETION-BOUNDARY",
+      "claim": "CompletionEvidence remains a separate success-only typed receipt boundary bound to invocation/effect identity; textual test:0, stale evidence, non-success or unknown states do not promote completion under 9.13."
+    }
+  ],
+  "memory_candidate_minimum_fields": [
+    "source_event_id_or_utterance_ref",
+    "source_actor",
+    "transformation_class",
+    "epistemic_class",
+    "generation",
+    "privacy_retention_tier",
+    "content_digest_or_reference"
+  ],
+  "memory_transformation_classes_from_packet": ["VERBATIM", "SUMMARY", "INFERENCE", "INSTRUCTION", "OTHER"],
+  "memory_epistemic_classes_from_packet": ["OBSERVED_CLAIM", "INFERRED", "UNKNOWN", "VERIFIED_EXTERNAL_WHEN_SEPARATELY_ESTABLISHED"],
+  "hard_invariant": "Remembering that somebody said X establishes that memory event/claim provenance, not that X is true. Model Function Calling may propose a MemoryCandidate but cannot mint factual authority.",
+  "scope_boundary": "The direct Realtime memory path is source-closed for this finding. Do not generalize to every repository consumer until each consumer/context compiler is audited.",
+  "triggerword4_acceptance": [
+    "VERBATIM user utterance and MODEL SUMMARY of the same utterance remain structurally distinct after persistence and retrieval",
+    "MODEL INFERENCE cannot satisfy OBSERVED/VERIFIED fact query merely because it was persisted or retrieved",
+    "mixed conversation-memory and durable-memory retrieval preserves explicit source/provenance/transformation/epistemic metadata for every item",
+    "privacy/retention rejection or redaction produces auditable admission outcome without persisting disallowed raw content",
+    "HumanIntentDecision/request identity cannot be reused as EffectDecision for a different downstream mutation",
+    "non-success/unknown/stale/unbound completion evidence fails closed"
+  ],
+  "credits": {
+    "source_forensics": "AUTHORITY_REBOUND",
+    "new_runtime_credit": 0,
+    "memory_runtime_acceptance": 0,
+    "effect_runtime_acceptance": 0,
+    "canonical_semantics_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Audit all remaining gespraech_erinnerung/durable_memory consumers and context compilers for epistemic-class loss; in parallel, prove the non-provider same-session overlapping-call invocation/effect correlation path before any runtime containment credit."
+}

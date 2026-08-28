@@ -1,0 +1,138 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_UNCONSUMED_PACKET_RECONCILIATION_0729Z_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:29:27Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_PLUS_EXTERNAL_PRIMARY_NO_NEW_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "realtime_blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+    "voice_capsule_blob": "763f59d201aa7a41ae0e55e7cc9e8b40e6f2b1c3",
+    "perception_control_blob": "91a66ecf34a6486a6bf077dcb115fcc224e3119b"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "cfddde323f457099c0fada68a3af5340d554c159",
+    "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73"
+  },
+  "packet_reconciliation": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "status": "INGESTED_DEDUPED",
+      "double_count_credit": false,
+      "overlap": [
+        "ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
+        "canonical-main TRIGGERWORT5_HOOK_INVOCATION_IDENTITY_2026-08-28_GPT56SOL.json",
+        "canonical-main TRIGGERWORT5_TO_TRIGGERWORD4_EFFECT_CONTRACT_2026-08-28_GPT56SOL.json"
+      ],
+      "unique_retained": [
+        "Secret redaction before durable effect/durable_memory persistence is a donor invariant worth preserving as defense in depth.",
+        "The mutable active_turns.effect_id session slot is explicitly unsuitable as the Frankenstein-2.0 lifecycle identity; immutable tool_use_id or equivalent invocation_id is mandatory."
+      ]
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "status": "ALREADY_DURABLY_INTEGRATED_SHARED_INDEX_RECONCILED",
+      "double_count_credit": false,
+      "existing_checkpoint": "research_entity/frankenstein_architecture_ingest/checkpoints/CHECKPOINT_20260828T072730Z_EFFECT_AUTHORITY_SYNC_PENDING_GPT56SOL.json",
+      "existing_model_delta": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_AUTHORITY_DELTA_2026-08-28T142407P0700_GPT56SOL.json",
+      "existing_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_20260828T072407Z_EFFECT_AUTHORITY_GPT56SOL.json"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "status": "INGESTED_DEDUPED_WITH_UNIQUE_PERCEPTION_AND_CANCEL_INVARIANTS",
+      "double_count_credit": false,
+      "overlap": [
+        "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+        "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
+        "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003"
+      ],
+      "unique_retained": [
+        "Perception Control has one mechanical tier source of truth: COMPUTE_OFF prevents compute/inference/memory/persistence, OUTPUT_OFF allows internal compute but blocks egress/persistence, MEMORY_OFF allows inference but blocks memory matching/persistence.",
+        "Dependency taint is resolved from the central DEPENDENCY_DAG, not caller-supplied dependency claims; blocked dependencies propagate NOT_COMPUTED/value=None.",
+        "Realtime response cancellation and barge-in clear pending function calls before execution; cancelled model expression must not leak into real tool effects."
+      ]
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_INVOCATION_IDENTITY_RECONCILED_023",
+      "source_kind": "CURRENT_SOURCE_PLUS_EXTERNAL_PRIMARY",
+      "claim": "Claude Code supplies tool_use_id on tool lifecycle hooks and documents concurrent PostToolUse firing for parallel calls, while the donor correlates state-changing requests/results through one mutable active_turns.effect_id per session. Frankenstein 2.0 therefore requires immutable per-invocation identity from admission through execution, outcome, re-entry and completion.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_action": "REPAIR",
+      "feeds_triggerword4": true
+    },
+    {
+      "atom_id": "F2_PERCEPTION_NOT_COMPUTED_TAINT_024",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "perception_control.py makes disabled computation epistemically explicit: COMPUTE_OFF and taint-blocked dependencies produce NOT_COMPUTED/value=None before compute, and dependency truth comes from a central DAG. OUTPUT_OFF and MEMORY_OFF remain distinct from COMPUTE_OFF.",
+      "confidence": 0.99,
+      "runtime_credit": 0,
+      "target_action": "ADAPT_TO_GRID",
+      "feeds_triggerword4": true,
+      "world_substrate_delta": "WorldNeed/WorldSlice and GRID cell controls must preserve KNOWN/UNKNOWN/CONFLICT/NOT_COMPUTED separately and propagate protected-dimension taint through transformation chains; a disabled variable may not be silently reconstructed downstream."
+    },
+    {
+      "atom_id": "F2_CANCELLED_EXPRESSION_NO_EFFECT_025",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "realtime_gespraech.py keeps emitted function calls pending until response.done; any non-completed response clears pending calls, and barge-in clears them before truncating/cancelling the response. A cancelled spoken/model turn therefore has an explicit donor-side barrier against later executing already-emitted pending tools.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_action": "KEEP",
+      "feeds_triggerword4": true,
+      "boundary": "This protects the Realtime expression/tool bridge only; it is not the canonical EffectGate and does not prove global effect enforcement."
+    },
+    {
+      "atom_id": "F2_SECRET_FENCE_DONOR_INVARIANT_026",
+      "source_kind": "ENFORCEMENT_CODE_PLUS_HISTORICAL_NEGATIVE_RESULT",
+      "claim": "The donor effect journal applies redaction before durable persistence because prior raw tool input/argv persistence was recognized as a real secret-leak class. Frankenstein 2.0 should preserve redact-before-persist and prefer typed digests/metadata over raw payloads.",
+      "confidence": 0.98,
+      "runtime_credit": 0,
+      "target_action": "KEEP",
+      "feeds_triggerword4": true
+    }
+  ],
+  "contradiction_updates": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "note": "No longer an ambiguity about stern ordinary PreToolUse: it is bookkeeping, not blocking effect authority. Actual host-global blocker provenance remains unresolved."
+    },
+    {
+      "id": "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
+      "status": "OPEN_REPAIR",
+      "note": "Current realtime/VoiceSessionCapsule code still falls back to user_present=True when presence is unavailable; Triggerword 4 must change this to UNKNOWN/None with WAIT/ASK/re-observe semantics."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "note": "Capsule construction/refresh is real, but _response_erstellen() serializes only persona plus _zustandstext and optional hint, not a bounded capsule/GRID projection."
+    }
+  ],
+  "triggerword4_delta": [
+    "Use tool_use_id/equivalent invocation_id as the lifecycle primary key; session_id is context only.",
+    "Port Perception Control's NOT_COMPUTED and dependency-taint semantics into sparse WorldNeed/WorldSlice and GRID disabled-head behavior.",
+    "Preserve cancelled-response/barge-in pending-tool invalidation in the deterministic fast reactive plane.",
+    "Preserve redact-before-persist secret fencing across EffectJournal, re-entry and recovery paths.",
+    "Do not treat these source findings as runtime acceptance."
+  ],
+  "credits": {
+    "source_forensics": "PRESENT",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Acquire the actual wache-koenig host/source artifact or permanently classify it as unavailable provenance; then recover exact Git introduction/supersession windows for nonblocking admission and completion semantics, while Triggerword 4 implements per-invocation EffectGate state separation and UNKNOWN-presence/context-compiler repairs."
+}

@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "receipt_id": "TW5-INGEST-RECEIPT-20260828T1031Z-WORKEXECUTION-BINDING-SUCCESSOR-CORRECTION-GPT56SOL",
+  "created_at": "2026-08-28T10:31:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerword5-ingest",
+  "routing_self_test": "PASS",
+  "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_sha_before_ingest": "007131285ed54a706be2bca8a4160db1d0730a18",
+  "canonical_main_sha_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "authority_source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json -> SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+  "mode": "FREE_ONLY_HARD_OFF_PROVIDER_ROUTES",
+  "incoming_packet": {
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "ingest_disposition": "QUARANTINED_UNCONSUMED_PARTIAL_SALVAGE_ONLY",
+    "reason_codes": [
+      "INVALID_TARGET_2_0_ACTION_ENUM_RESEARCH",
+      "ARCHITEKT_GOVERNANCE_SOURCE_SPAN_MISMATCH_LINES_1_7_VS_76_81",
+      "CURRENT_CLAUDE_CODE_DOCS_NOW_DOCUMENT_AGENT_TOOL_RESPONSE_AGENTID"
+    ]
+  },
+  "crosschecks": [
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "result": "PASS_PARTIAL",
+      "finding": "handoff persists workpackage/capsule and explicitly does not spawn/delegate"
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "result": "PASS",
+      "finding": "donor plugin registers seven events and omits dedicated subagent/task lifecycle hooks"
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "result": "PACKET_PROVENANCE_FAIL_SOURCE_CLAIM_TRUE_AT_CORRECTED_SPAN",
+      "finding": "handoff before spawn and reconcile after is present at lines 76-81, not packet-declared lines 1-7"
+    },
+    {
+      "source": "EXTERNAL_PRIMARY_CURRENT_CLAUDE_CODE_HOOKS_REFERENCE_2026-08-28",
+      "result": "PACKET_COUNTEREVIDENCE",
+      "finding": "Agent PostToolUse documents tool_response.agentId; SubagentStart/SubagentStop document agent_id; TaskCreated/TaskCompleted use distinct task_id; tool hooks carry tool_use_id"
+    }
+  ],
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_BINDING_SUCCESSOR_CORRECTION_2026-08-28T1031Z_GPT56SOL.json",
+    "commit": "576a8dee5f704263c7fc5e0f6bf7530cdf3183bc",
+    "summary": "Promotes a version-gated candidate WorkExecutionBinding based on distinct package_id/tool_use_id/agent_id/optional task_id domains and current documented Agent response bridge, without runtime credit."
+  },
+  "state_update": {
+    "INGEST_STATE_json_modified": false,
+    "reason": "Incoming packet is intentionally left unconsumed because it violates the current packet schema and carries a material source-span/current-docs defect. This receipt is the durable checkpoint preventing silent acceptance; a corrected superseding packet or explicit state quarantine field should resolve it before marking consumed."
+  },
+  "next_exact_gate": "Capture one harmless Agent invocation on an authorized non-provider local/sandbox host with PreToolUse + PostToolUse + SubagentStart + SubagentStop; bind tool_use_id to PostToolUse.tool_response.agentId and lifecycle agent_id and verify the installed version emits the documented bridge without timing/order heuristics.",
+  "runtime_credit": 0,
+  "provider_credit": 0,
+  "whole_product_credit": 0,
+  "training_credit": 0
+}

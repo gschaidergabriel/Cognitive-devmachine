@@ -1,0 +1,148 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_INVOCATION_EFFECT_PERCEPTION_FUSION_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:29:11Z",
+  "trigger": "triggerwort 5",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_PLUS_EXTERNAL_PRIMARY_CROSSCHECK_NO_NEW_RUNTIME_EXECUTION",
+  "routing_self_test": {
+    "normalized_trigger": "triggerwort 5",
+    "expected_directive": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "directive_fetch": "PASS",
+    "shared_world_directive_fetch": "PASS",
+    "result": "TRIGGERWORD_5_ACTIVE"
+  },
+  "source_pins": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_ref": "main",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_repo": "gschaidergabriel/clay-global-research-entity",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "9975b1aff56348b3b11085f6e41b91e537862285",
+    "canonical_main_observed": "45f46138db94e0228240ea15b586bf8be622410b"
+  },
+  "ingested_evidence": {
+    "owner_branch_packets": [
+      "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT"
+    ],
+    "canonical_main_archaeology_runs_observed": [
+      "triggerwort5-20260828T1414p0700-gpt56sol-stern-effect-lineage",
+      "triggerwort5-20260828T1414p0700-gpt56sol-stern-effect-ingest-drift",
+      "triggerwort5-20260828T1414p0700-gpt56sol-hook-invocation-identity"
+    ],
+    "dedupe_note": "The three owner-branch packets overlap strongly on stern effect semantics. Repetition is treated as corroboration/source consistency, not independent replication. The archaeology runs remain a separate provenance surface until namespace migration authority is explicitly resolved."
+  },
+  "cross_checks": [
+    {
+      "id": "TW5-XCHECK-STERN-NONBLOCKING-001",
+      "classification": "CURRENT_SOURCE",
+      "source": "gschaidergabriel/frankenstein@5641dc6b:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3200-3575,8810-8895",
+      "result": "PASS",
+      "finding": "Normal PreToolUse calls zulassen(data) but deliberately emits no deny/block response. The only blocking branch in the inspected dispatcher is the session-bound SEBUKKU marker. Therefore stern's normal EffectGate-named path is bookkeeping/admission classification, not the real deterministic effect authority."
+    },
+    {
+      "id": "TW5-XCHECK-HOOK-INVOCATION-ID-002",
+      "classification": "EXTERNAL_PRIMARY",
+      "source": "Anthropic Claude Code Hooks reference observed 2026-08-28",
+      "result": "PASS",
+      "finding": "Current hook input exposes call-scoped tool_use_id, PreToolUse can actually block, and PostToolUse fires concurrently for parallel tool calls while PostToolBatch reports the full batch. A single mutable session-scoped active_turns.effect_id is therefore not an acceptable Frankenstein-2.0 correlation contract."
+    },
+    {
+      "id": "TW5-XCHECK-PRESENCE-FALLBACK-003",
+      "classification": "CURRENT_SOURCE",
+      "source": "gschaidergabriel/frankenstein@5641dc6b:DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:900-1560",
+      "result": "PASS_NEGATIVE_RESULT",
+      "finding": "When PresenceBridge/camera is unavailable or import fails, the current voice path logs and falls back to historical user_present=True semantics. This is incompatible with the current Triggerword-4 requirement that unavailable presence remain UNKNOWN/None."
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "id": "TW5-INVOCATION-IDENTITY-010",
+      "action": "REPAIR",
+      "feeds_triggerword4": true,
+      "delta": "Bind every effect lifecycle to immutable tool_use_id or an equally exact invocation_id. session_id is contextual identity only and must never be the sole PreToolUse->execution->PostToolUse pointer. Parallel/batched calls require per-invocation state and receipts."
+    },
+    {
+      "id": "TW5-EFFECT-STATE-SPLIT-011",
+      "action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "feeds_triggerword4": true,
+      "delta": "Split ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, RESULT_REENTRY and COMPLETION_EVIDENCE into distinct typed states. Do not let status=VERIFIED mean both observed execution success and admitted+verified effect."
+    },
+    {
+      "id": "TW5-REAL-BLOCKING-GATE-012",
+      "action": "REPAIR",
+      "feeds_triggerword4": true,
+      "delta": "Place deterministic EffectGate enforcement at the actual executor/host boundary and require a bound allow/deny receipt. The donor's nonblocking zulassen bookkeeping remains useful only as an audit/journal donor. The historical wache-koenig predecessor remains unresolved provenance until its actual source/host artifact is acquired."
+    },
+    {
+      "id": "TW5-PENDING-EFFECT-CANCELLATION-013",
+      "action": "KEEP_AND_GENERALIZE",
+      "feeds_triggerword4": true,
+      "delta": "Retain the Realtime pattern that discards queued tool calls when a response is cancelled/interrupted before local dispatch. Generalize it as a typed pending-effect lease/cancellation state before EffectGate submission; once an external effect may have been submitted, outcome becomes UNKNOWN rather than safely replayable."
+    },
+    {
+      "id": "TW5-NOT-COMPUTED-WORLD-014",
+      "action": "ADAPT_TO_GRID",
+      "feeds_triggerword4": true,
+      "delta": "Promote Perception Control's COMPUTE_OFF/OUTPUT_OFF/MEMORY_OFF plus dependency-taint semantics into GRID10 and sparse WorldNeed/WorldSlice contracts. Disabled or tainted dimensions must remain NOT_COMPUTED/value=None and must not be reconstructed downstream by dependency shortcuts."
+    },
+    {
+      "id": "TW5-VOICE-CAPSULE-GENERATION-015",
+      "action": "ADAPT_TO_GRID",
+      "feeds_triggerword4": true,
+      "delta": "Keep VoiceSessionCapsule as an ephemeral compiled projection over canonical state/presence/visual/memory/arbitration sources, not a second memory authority. Add explicit generation/freshness/provenance binding before stronger autonomous decisions and require per-response context compilation tests rather than assuming refresh alone conditions the model."
+    },
+    {
+      "id": "TW5-CONFIG-SCHEMA-GENERATION-016",
+      "action": "ADAPT_TO_GRID",
+      "feeds_triggerword4": true,
+      "delta": "Treat process-lifetime config caches, dispatcher field completeness and schema migration compatibility as typed generation contracts. In-process topology changes can change freshness semantics; successful writes do not prove full outcome payload re-entry."
+    },
+    {
+      "id": "TW5-PRESENCE-UNKNOWN-017",
+      "action": "REPAIR",
+      "feeds_triggerword4": true,
+      "delta": "Remove historical unavailable-presence=>True fallback from Frankenstein-2.0. Missing presence must remain UNKNOWN/None and route through WAIT/ASK/re-observe or reduced initiative pressure."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "PARTIALLY_RESOLVED",
+      "resolution": "The inspected stern normal PreToolUse path is definitely nonblocking bookkeeping. Remaining unresolved branch: whether the separately referenced historical wache-koenig host guard was/currently is reachable and how it composed with stern."
+    },
+    {
+      "id": "TW5-CONTRADICTION-INGEST-PATH-001",
+      "status": "OPEN",
+      "claim_a": "Owner branch defines research_entity/frankenstein_architecture_ingest/{inbox,state,receipts} as the live ingest lane.",
+      "claim_b": "Canonical main currently carries an active append-only research projection under research_entity/architecture_archaeology/TRIGGERWORD5_LIVE_FORENSIC_FEED.json and triggerword5_runs/.",
+      "resolution_rule": "Do not alias or delete either provenance chain. This delta consumes both as evidence but does not declare a migration authority. Triggerword-4 must not assume namespace equivalence until an explicit migration receipt binds dedupe/state semantics."
+    },
+    {
+      "id": "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
+      "status": "SOURCE_CONFIRMED_REPAIR_REQUIRED",
+      "resolution": "Current donor Realtime code still falls back to user_present=True when PresenceBridge is unavailable. Frankenstein-2.0 must replace this with UNKNOWN/None semantics."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+      "status": "OPEN",
+      "resolution_rule": "Capsule refresh is source-present, but refresh alone is not proof that fields causally condition each response. Require explicit compiled context wiring plus field-level lesion/shuffle tests."
+    }
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "external_primary_crosscheck": "PRESENT",
+    "new_runtime_reexecution": 0,
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Acquire the actual wache-koenig host/source artifact or permanently classify it as unavailable provenance; then map tool_use_id-bound effect enforcement/result re-entry into the Triggerword-4 assembly contract, remove unavailable-presence=>True fallback, and resolve the two Triggerword-5 ingest namespaces with an explicit migration/dedupe receipt before treating either feed as complete authority."
+}

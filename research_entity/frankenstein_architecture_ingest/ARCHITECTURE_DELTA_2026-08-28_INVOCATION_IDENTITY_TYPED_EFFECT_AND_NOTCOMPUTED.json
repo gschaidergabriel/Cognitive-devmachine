@@ -1,0 +1,169 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_INVOCATION_IDENTITY_TYPED_EFFECT_AND_NOTCOMPUTED_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:29:53Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_PLUS_EXTERNAL_PRIMARY_CROSSCHECK_NO_NEW_DONOR_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "cfddde323f457099c0fada68a3af5340d554c159",
+    "canonical_main_observed": "45f46138db94e0228240ea15b586bf8be622410b"
+  },
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "result": "INGESTED_DEDUPED_REINFORCING",
+      "independent_replication_credit": false,
+      "unique_promoted_findings": [
+        "single active_turns.effect_id session slot is a structural per-call correlation gap",
+        "PostToolUse outcome hashing is reusable only after separating it from authorization semantics",
+        "redaction-before-persistence is a donor invariant worth keeping",
+        "PostToolBatch may be aggregate telemetry only and must not replace per-tool identity"
+      ]
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "result": "INGESTED_DEDUPED_REINFORCING",
+      "independent_replication_credit": false,
+      "unique_promoted_findings": [
+        "normal PreToolUse admission does not exercise the available hook deny path",
+        "SEBUKKU is the inspected live branch that actually emits permissionDecision=deny",
+        "VERIFIED is semantically overloaded downstream because it can be minted after missing PreToolUse"
+      ]
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "result": "INGESTED_DEDUPED_REINFORCING",
+      "independent_replication_credit": false,
+      "unique_promoted_findings": [
+        "Perception Control COMPUTE_OFF/dependency taint preserves NOT_COMPUTED rather than false/zero",
+        "historical ablation receipt is component evidence only",
+        "VoiceSessionCapsule is an ephemeral live projection and needs generation/freshness binding before stronger steering",
+        "Realtime barge-in/non-completed responses discard pending tool calls before local dispatch"
+      ]
+    }
+  ],
+  "canonical_main_feed_reconciliation": {
+    "feed_path": "research_entity/architecture_archaeology/TRIGGERWORD5_LIVE_FORENSIC_FEED.json",
+    "run_id": "triggerwort5-20260828T1414p0700-gpt56sol-hook-invocation-identity",
+    "run_path": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_HOOK_INVOCATION_IDENTITY_2026-08-28_GPT56SOL.json",
+    "status": "INGESTED_BY_REFERENCE_AS_PROVENANCE_NOT_SECOND_AUTHORITY",
+    "contract": [
+      "canonical-main architecture_archaeology is a provenance/discovery ledger, not a second architecture authority",
+      "the owner-directive frankenstein_architecture_ingest/inbox path remains the append-only Triggerword-5 packet-admission lane",
+      "INGEST_STATE tracks branch-lane consumption checkpoints",
+      "high-impact canonical-main feed findings must be source-crosschecked and referenced or packetized before they change the branch architecture model",
+      "neither feed may overwrite or delete the other; provenance is preserved"
+    ],
+    "remaining_sync_gap": "No automatic bidirectional bridge is proven. The namespace contradiction is operationally bounded but remains open until synchronization/dedupe is mechanically enforced."
+  },
+  "source_crosschecks": [
+    {
+      "id": "DONOR_EFFECT_ACCOUNTING_NONBLOCKING",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "spans": ["3200-3655", "8810-8895"],
+      "result": "PASS_SOURCE_FINDING",
+      "finding": "zulassen() writes request-side effect classifications and one active_turns.effect_id per session, but normal PreToolUse emits no deny/block response. The inspected dispatcher emits deny only for the session-bound SEBUKKU branch; PostToolUse calls merken().",
+      "runtime_credit": 0
+    },
+    {
+      "id": "CLAUDE_CODE_PER_INVOCATION_IDENTITY_AND_PARALLELISM",
+      "source_kind": "EXTERNAL_PRIMARY",
+      "source": "https://code.claude.com/docs/en/hooks",
+      "observed_at": "2026-08-28",
+      "result": "PASS_EXTERNAL_PRIMARY",
+      "finding": "Current Claude Code hook documentation exposes tool_use_id in tool-use hook payloads, states that PreToolUse can block execution, and states that PostToolUse fires concurrently for parallel tool calls while PostToolBatch carries per-call tool_use_id entries.",
+      "implication": "session_id alone is contextual identity; it is not a safe sole request/result correlation key for Frankenstein-2.0"
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "id": "TW5-EFFECT-INVOCATION-ABI-010",
+      "delta": "Every state-changing invocation receives immutable invocation_id, preferring host tool_use_id when present. Correlation key = invocation_id + session_id + generation + causal_id; session_id may contextualize but never serve as the sole current-effect pointer.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-EFFECT-TYPED-LIFECYCLE-011",
+      "delta": "Split effect lifecycle into ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, RESULT_REENTRY and COMPLETION_EVIDENCE. Successful execution may not retroactively imply admission or enforcement.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-EFFECT-CANCEL-UNKNOWN-012",
+      "delta": "Generalize Realtime cancellation as a pending-effect state machine: PENDING may become CANCELLED_PRE_DISPATCH when the parent turn is cancelled. Once external submission may have occurred, outcome becomes SUBMITTED_UNKNOWN/UNKNOWN until verified and must not be blindly replayed.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-NOTCOMPUTED-TAINT-013",
+      "delta": "Transfer Perception Control's typed NOT_COMPUTED and dependency-taint rule into GRID10 and sparse WorldNeed/WorldSlice: a protected COMPUTE_OFF variable must not be reconstructed downstream through dependent heads/operators. NOT_COMPUTED is distinct from false, zero, absent and UNKNOWN observation.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-VOICE-CAPSULE-GENERATION-014",
+      "delta": "Retain VoiceSessionCapsule as a RAM-only compiled view, but bind each response-conditioning slice to source generations/freshness/provenance and a bounded compiler digest. Lesion/shuffle tests must prove which fields causally steer expression before expanding prompt payload.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-INGEST-NAMESPACE-CONTRACT-015",
+      "delta": "Treat canonical-main architecture_archaeology as provenance/discovery and the owner-branch frankenstein_architecture_ingest inbox/state as the Triggerword-5 packet-admission/checkpoint lane. Add a mechanical reference/dedupe bridge before declaring the path contradiction fully closed.",
+      "feeds_triggerword4": false
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "resolution": "The inspected donor admission path is nonblocking bookkeeping; the remaining task is to locate/fuse the actual blocking predecessor or build one verified successor without creating a second effect authority."
+    },
+    {
+      "id": "TW5-CONTRADICTION-PARALLEL-CORRELATION-005",
+      "status": "STRUCTURAL_GAP_RUNTIME_RACE_NOT_REPRODUCED",
+      "claim_a": "donor completion uses one mutable active_turns.effect_id per session",
+      "claim_b": "current host hook contract provides per-call tool_use_id and concurrent PostToolUse under parallel calls",
+      "resolution_rule": "Frankenstein-2.0 must use per-invocation identity regardless of whether one current host configuration happens to serialize a particular run."
+    },
+    {
+      "id": "TW5-CONTRADICTION-INGEST-PATH-001",
+      "status": "OPERATIONALLY_BOUNDED_SYNC_OPEN",
+      "resolution": "The two paths have distinct roles: canonical-main provenance/discovery versus owner-branch packet admission/checkpoint. Automatic synchronization/dedupe remains unproven."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "resolution": "The capsule is real and refreshed, but whole-capsule per-response conditioning is absent; add a bounded provenance-bearing compiler rather than dumping the full capsule."
+    }
+  ],
+  "hypotheses": [
+    "A typed per-invocation effect lifecycle will eliminate the donor's VERIFIED/admission ambiguity and make parallel execution causally inspectable without sacrificing the useful journal/outcome-hash donor mechanisms.",
+    "The same NOT_COMPUTED/taint invariant used in perception is a high-value cross-domain primitive for sparse world materialization because it prevents disabled dimensions from reappearing through indirect reconstruction.",
+    "Generation-stamped selective Voice context will provide stronger measurable state-to-expression coupling than whole-capsule prompt injection at lower latency/privacy cost."
+  ],
+  "counterhypotheses": [
+    "The external wache-koenig predecessor may already implement a subset of the required enforcement checks and should be fused if exact source/reachability is recovered.",
+    "A strictly serialized host configuration could hide the active_turns.effect_id race in practice, but that would be deployment-specific evidence and not a safe architecture invariant.",
+    "Overusing NOT_COMPUTED taint could suppress legitimate evidence-independent computation; dependency metadata must distinguish protected dependence from merely correlated features.",
+    "Voice generation stamping across too many sources could add synchronization cost; the smallest causally necessary source set should be determined experimentally."
+  ],
+  "credits": {
+    "source_forensics": "PRESENT",
+    "external_primary_crosscheck": "PRESENT",
+    "new_donor_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Recover the actual wache-koenig source/reachability and historical effect Git windows; then feed Triggerword 4 a source-bound per-invocation EffectRequest/Decision/Outcome regression set covering parallel calls, missing PreToolUse, stale pointers, deny, cancellation-before-dispatch and UNKNOWN-after-submission, while separately wiring NOT_COMPUTED taint into WorldSlice acceptance tests."
+}

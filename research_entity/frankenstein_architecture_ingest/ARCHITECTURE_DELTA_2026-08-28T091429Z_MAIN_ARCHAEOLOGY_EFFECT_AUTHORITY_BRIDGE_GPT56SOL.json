@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "delta_id": "TW5-DELTA-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
+  "created_at": "2026-08-28T09:14:29Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/main-archaeology-bridge",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "authority": {
+    "selected_supervisor_schema": "9.13",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json@92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "hooks_blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5"
+  },
+  "bridge_provenance": {
+    "canonical_main_feed": "research_entity/architecture_archaeology/TRIGGERWORD5_LIVE_FORENSIC_FEED.json",
+    "canonical_main_feed_blob_sha": "293c357d80cdfb2b8d621ac77cb9b8f976352bcb",
+    "source_run_effect_completion": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_EFFECT_COMPLETION_FORENSIC_DELTA_2026-08-28_GPT56SOL.json",
+    "source_run_effect_completion_blob_sha": "3b3f2a44b0de28bbbf337df93e74aab27640c7cc",
+    "source_run_invocation_identity": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_HOOK_INVOCATION_IDENTITY_2026-08-28_GPT56SOL.json",
+    "source_run_invocation_identity_blob_sha": "6be875b2a0da7db9005a850c3d0fc1d8d59e36ac",
+    "prior_trigger4_effect_contract": "research_entity/architecture_archaeology/triggerword5_ingest_receipts/TRIGGERWORT5_TO_TRIGGERWORD4_EFFECT_CONTRACT_2026-08-28_GPT56SOL.json",
+    "prior_trigger4_effect_contract_blob_sha": "c0f0cb40966f48f4b6e3634ab052b46859e939ba",
+    "owner_branch_packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T091429Z_5641dc6_GPT56SOL_MAIN_ARCHAEOLOGY_EFFECT_AUTHORITY_BRIDGE.json",
+    "owner_branch_packet_commit": "94350253f62d29db9f94550b03f1c56f39ff31e9",
+    "classification": "PROVENANCE_BRIDGE_NOT_SECOND_AUTHORITY"
+  },
+  "architecture_findings": [
+    {
+      "id": "TW5-BRIDGE-FINDING-001",
+      "classification": "CURRENT_SOURCE_NEGATIVE_RESULT",
+      "claim": "The donor component named EffectGate is nonblocking audit/admission bookkeeping for ordinary tool calls; it cannot receive pre-side-effect containment credit.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR"
+    },
+    {
+      "id": "TW5-BRIDGE-FINDING-002",
+      "classification": "CURRENT_SOURCE_NEGATIVE_RESULT",
+      "claim": "Completion proof uses a legacy status predicate that can accept current non-success effect states and an unbound textual test:0 assertion.",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "id": "TW5-BRIDGE-FINDING-003",
+      "classification": "CURRENT_SOURCE_PLUS_PLATFORM_LIFECYCLE_BOUNDARY",
+      "claim": "Effect correlation currently relies on mutable session-scoped active_turns.effect_id despite call-scoped tool_use_id availability; exact runtime race remains unexecuted.",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "id": "TW5-BRIDGE-FINDING-004",
+      "classification": "CURRENT_SOURCE_SCOPE_BOUNDARY",
+      "claim": "PostTool file/process verification is bounded execution-result evidence and must remain distinct from arbitrary world-effect verification.",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    }
+  ],
+  "frankenstein_2_contract_delta": {
+    "state_separation": [
+      "ADMISSION_DECISION",
+      "ENFORCEMENT_DECISION",
+      "EXECUTION_RECEIPT",
+      "WORLD_EFFECT_VERIFICATION",
+      "RESULT_REENTRY",
+      "COMPLETION_EVIDENCE"
+    ],
+    "invocation_identity": "Use immutable tool_use_id or equivalently exact invocation_id as the primary effect lifecycle key; session_id is context only.",
+    "enforcement": "Blocking credit requires exact pre-side-effect host enforcement and invocation-bound allow/deny receipt; bookkeeping status alone is not enforcement.",
+    "completion": "Only typed, generation/provenance-bound success receipts may close work. DENIED, FAILED, UNCHECKED, UNKNOWN, stale, duplicate-unresolved and unbound textual claims fail closed.",
+    "world_effect": "Successful tool return does not mint arbitrary external-world truth; unknown external outcome remains UNKNOWN until effect-appropriate verification re-enters canonical state.",
+    "parallel_calls": "Parallel calls require independent per-invocation lifecycle state; no shared mutable current-effect slot."
+  },
+  "contradictions_preserved": [
+    "EntityOS real-effect authority requires deterministic enforcement, but donor stern.py EffectGate explicitly does not block ordinary tools.",
+    "Completion comments promise stricter Phase-2 behavior while executable legacy status checking remains weaker.",
+    "The host-only wache-koenig blocking predecessor is referenced but its exact artifact/config/order remain unresolved."
+  ],
+  "namespace_resolution": {
+    "architecture_archaeology": "CANONICAL_MAIN_APPEND_ONLY_RESEARCH_PROJECTION",
+    "frankenstein_architecture_ingest": "OWNER_BRANCH_TRIGGERWORD5_LIVE_INGEST_PROJECTION",
+    "resolution": "Bridge by immutable provenance-bound packet; neither projection becomes canonical runtime truth or a second EntityOS state authority.",
+    "duplicate_policy": "Main feed run IDs remain source provenance; owner-branch packet is consumed once by packet_id and does not claim independent replication."
+  },
+  "trigger4_feed": {
+    "mandatory": [
+      "tool_use_id/invocation_id-bound effect lifecycle",
+      "real pre-side-effect enforcement adapter with bound ALLOW/DENY receipts",
+      "typed success-only completion verifier",
+      "execution receipt separated from world-effect verification",
+      "UNKNOWN preserved for unresolved external outcomes"
+    ],
+    "runtime_credit_change": 0,
+    "whole_product_credit_change": 0,
+    "hcu_credit_change": 0,
+    "training_credit_change": 0
+  },
+  "next_exact_gate": "Acquire exact wache-koenig/global-hook artifact or preserve the source hole; execute a harmless same-session overlapping-call falsifier on an authorized non-provider surface only when Triggerword-4/runtime authority permits; then bind observed invocation lifecycle into the executor effect contract."
+}

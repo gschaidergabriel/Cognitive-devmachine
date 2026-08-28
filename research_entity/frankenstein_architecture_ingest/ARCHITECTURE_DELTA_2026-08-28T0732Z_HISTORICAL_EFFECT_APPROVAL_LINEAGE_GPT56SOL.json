@@ -1,0 +1,35 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28T0732Z_HISTORICAL_EFFECT_APPROVAL_LINEAGE_5641dc6b_GPT56SOL",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "status": "REDUNDANT_PARALLEL_DONOR_DO_NOT_DOUBLE_COUNT",
+  "evidence_scope": "SOURCE_FORENSICS_PARALLEL_DONOR_NO_NEW_RUNTIME_EXECUTION",
+  "canonical_ingest_winner": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_HISTORICAL_APPROVAL_BINDING.json",
+  "canonical_ingest_winner_commit": "8f1ee02125f07c1e7f574e5e90fece264d134bb2",
+  "canonical_state_observed_after_race": "INGEST_STATE already consumed TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE, TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL and a newer approval-identity packet before this donor could update state.",
+  "preserved_provenance": {
+    "current_donor": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "historical_source": "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "source_crosschecks": [
+      "agentic/executor.py:70-180",
+      "agentic/loop.py:430-530",
+      "agentic/executor.py:470-730"
+    ]
+  },
+  "corroborating_findings_only": [
+    "Historical AgentLoop/ToolExecutor provided source-level pre-execution approval denial on that path.",
+    "After approval, ToolExecutor.execute did not consume approval_id or a digest-bound EffectDecision; caller discipline used skip_approval=True.",
+    "Frankenstein-2.0 should fuse pre-execution deny semantics with current journal/outcome evidence through an executor-consumed one-shot typed EffectDecision bound to exact invocation_id/tool_use_id + request_digest + generation + causal identity.",
+    "wache-koenig remains unresolved provenance and repository absence cannot prove runtime absence."
+  ],
+  "credit": {
+    "independent_architecture_credit": 0,
+    "new_runtime_execution": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Follow canonical INGEST_STATE and ARCHITECTURE_DELTA_2026-08-28_HISTORICAL_APPROVAL_BINDING.json; recover wache-koenig/approval responder provenance and hand the one-shot typed EffectDecision acceptance tests to Triggerword 4."
+}

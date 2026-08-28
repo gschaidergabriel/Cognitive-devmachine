@@ -1,0 +1,106 @@
+{
+  "schema": "TRIGGERWORD5_EVIDENCE_AUTHORITY_REBIND/v1",
+  "recorded_at": "2026-08-28T07:47:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol / Triggerword-5 forensic ingest",
+  "purpose": "Append-only correction for fresh Triggerword-5 artifacts written with stale authority_epoch=8.78 before re-entry discovered that SUPERVISOR_INBOX had advanced to current authority 9.13. Preserve source findings and historical bytes; do not silently rewrite old receipts.",
+  "current_authority_binding": {
+    "canonical_main": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "authority_epoch": "9.13",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "together": "FORBIDDEN",
+    "provider_routes_admitted": false
+  },
+  "stale_label_rule": "Every listed predecessor artifact's authority_epoch=8.78 field is superseded for current-authority interpretation. It may be retained only as the exact historical label written at creation time. The source-forensic observations are re-admitted here at current 9.13 authority solely at their declared source/config/archive scope. No runtime/base/canonical-semantics/training/provider credit is created.",
+  "predecessor_artifacts": [
+    {
+      "commit": "1d8a17c1aa0fe4635b0c92b0ab87f78a12a761bd",
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_WACHE_KOENIG_TYPED_OWNER_GATE.json",
+      "rebound_scope": "EXACT_ARCHIVED_SOURCE_FORENSICS_ONLY"
+    },
+    {
+      "commit": "6dcbd0d25b624ccc37b3d4693e5637cdb4b6fbe6",
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_WACHE_KOENIG_TYPED_OWNER_GATE.json",
+      "rebound_scope": "INGEST_RECEIPT_SOURCE_SCOPE_ONLY"
+    },
+    {
+      "commit": "52dfe4b68d00f481d00338c430c513b79dcf2342",
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0733Z_STATE_CATCHUP_SUCCESSOR_AND_EFFECT_LINEAGE_GPT56SOL.json",
+      "rebound_scope": "PROVENANCE_DEDUPE_CHECKPOINT_ONLY"
+    },
+    {
+      "commit": "2e158c9301ba87d333951799307d8f4fb830cc8e",
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REALTIME_EFFECT_AUTHORITY_CONVERGENCE.json",
+      "rebound_scope": "CURRENT_DONOR_SOURCE_FORENSICS_ONLY"
+    },
+    {
+      "commit": "1dedfdefa34e3e19d5e705356495664150f9cd77",
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_REALTIME_EFFECT_AUTHORITY_CONVERGENCE.json",
+      "rebound_scope": "INGEST_RECEIPT_SOURCE_SCOPE_ONLY"
+    },
+    {
+      "commit": "a6ef008fd6e6f384eae3e45722cb0b3c5e6821fa",
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REALTIME_MEMORY_EPISTEMIC_ADMISSION.json",
+      "rebound_scope": "DIRECT_REALTIME_MEMORY_SOURCE_FORENSICS_ONLY"
+    },
+    {
+      "commit": "7f4ba5ce3df0286c59015b10e841a31ba46a2166",
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_REALTIME_MEMORY_EPISTEMIC_ADMISSION.json",
+      "rebound_scope": "INGEST_RECEIPT_SOURCE_SCOPE_ONLY"
+    },
+    {
+      "commit": "6fc5f6a1dacdcb4cc4bc64346d4db3d704eacc47",
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REALTIME_RESEARCH_AND_HOOK_AUTHORITY.json",
+      "rebound_scope": "CURRENT_DONOR_SOURCE_AND_CONFIG_FORENSICS_ONLY"
+    },
+    {
+      "commit": "84054b40a6dea24d9eb4c1ac255a34525a18ee25",
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0744Z_REALTIME_WACHE_MEMORY_CLOSURE_GPT56SOL.json",
+      "rebound_scope": "PACKET_CLOSURE_AND_DEDUPE_CHECKPOINT_ONLY"
+    }
+  ],
+  "re_admitted_findings": [
+    "Donor stern generic EffectGate is nonblocking bookkeeping and must not receive prevention/containment credit without executable pre-side-effect denial.",
+    "Session-scoped mutable effect_id is structurally insufficient when call-scoped tool_use_id/invocation identity exists; successor primary correlation must be immutable per invocation.",
+    "Historical wache-koenig exact archived bytes establish Bash-scoped blocking semantics when registered, but do not establish scheduler registration/order/current reachability or non-Bash coverage.",
+    "Realtime voice task confirmation is TaskAdmission evidence, not blanket downstream EffectDecision authority; direct conversation-memory mutation and research submission are separate classes.",
+    "Direct Realtime memory retrieval is epistemically under-typed: storage separation exists, but retrieved claim/summary/inference/fact transformations are not structurally distinguished on the inspected path.",
+    "Repository hook declaration is configuration evidence only; FILE_EXISTS does not prove exact headless-process runtime hook firing or executor consumption."
+  ],
+  "required_successor_contract": [
+    "VoiceIntentEvidence/HumanIntentDecision -> typed TaskAdmission or ResearchRequestAdmission",
+    "MemoryCandidate -> deterministic MemoryAdmission -> provenance-preserving retrieval",
+    "effect candidate -> immutable one-shot EffectDecision/CapabilityLease bound to tool_use_id/invocation_id + request_digest + generation + causal identity + policy + capability/resource + executor identity",
+    "DENY must produce zero dispatch at the real executor boundary",
+    "ADMISSION_DECISION, ENFORCEMENT_DECISION, SUBMISSION_RECEIPT, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, RESULT_REENTRY and COMPLETION_EVIDENCE remain distinct typed states",
+    "post-submission uncertainty remains OUTCOME_UNKNOWN and is never converted to cancellation success or blind replay"
+  ],
+  "credits_after_rebind": {
+    "source_forensics": "CURRENT_AUTHORITY_BOUND_AT_DECLARED_SOURCE_SCOPE",
+    "provider_runtime_credit": 0,
+    "effect_runtime_acceptance": 0,
+    "memory_runtime_acceptance": 0,
+    "physical_grid10_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "execution_in_this_trigger": {
+    "provider_execution": false,
+    "paid_execution": false,
+    "vps_runtime_execution": false,
+    "unusual_experiment": false,
+    "github_source_reads_and_writes_only": true
+  },
+  "next_exact_gate": "Keep all further Triggerword-5 evidence bound to the exact current SUPERVISOR_INBOX/selected-steering/FREE_PROVIDER_ADMISSION identities. Resolve headless claude -p hook/settings reachability, non-Bash executor enforcement, research provider/privacy/economic admission and repository-wide memory epistemic typing before Triggerword-4 runtime promotion."
+}

@@ -1,0 +1,103 @@
+{
+  "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+  "created_at": "2026-08-28T07:24:07Z",
+  "worker_id": "chatgpt-gpt56sol-triggerword5-ingestor",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Successor cross-check of the current Triggerword-5 P0 effect frontier: exact cmd_hook PreToolUse behavior, zulassen admission bookkeeping, PostToolUse outcome verification/fallback, causal_episodes creation and downstream gw_absicht interpretation of VERIFIED effects.",
+  "files_examined": [
+    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/stern.py","sha_or_blob":"8b413ed8b55de67b1c9450a4149951ec7676a947","spans_examined":[{"line_start":3200,"line_end":3365},{"line_start":3360,"line_end":3655},{"line_start":8810,"line_end":8895}]},
+    {"path":"DEV_SOURCE_RESEARCH/repository/hooks/hooks.json","sha_or_blob":"c483bc81cbae080a8175f7ce694ef657484614b5","spans_examined":[{"line_start":1,"line_end":70}]}
+  ],
+  "atoms": [
+    {
+      "atom_id":"TW5-EFFECT-A001-ADMISSION-IS-BOOKKEEPING",
+      "subsystem":"effect_admission",
+      "path":"DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start":3200,
+      "line_end":3365,
+      "source_kind":"ENFORCEMENT_CODE",
+      "what_it_does":"zulassen() evaluates capability, session generation, target preconditions and same-session idempotency, then records ZUGELASSEN/ABGELEHNT/WIEDERHOLUNG in effects and stores effect_id on active_turns. Unknown tool capabilities auto-register allowed. The function itself does not stop host execution.",
+      "runtime_reachable":true,
+      "runtime_entrypoints":["cmd_hook PreToolUse -> zulassen"],
+      "known_counterevidence":["The checked cmd_hook branch explicitly avoids emitting a normal deny/block decision after zulassen()."],
+      "confidence":1.0,
+      "target_2_0_action":"REPAIR",
+      "open_questions":["Whether a separate host/executor authority consumes this decision before execution remains unproven.","Whether one active_turns.effect_id slot is safe under overlapping state-changing tool calls remains unproven."]
+    },
+    {
+      "atom_id":"TW5-EFFECT-A002-HOOK-BLOCKS-ONLY-SEBUKKU",
+      "subsystem":"hook_execution_authority",
+      "path":"DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start":8810,
+      "line_end":8895,
+      "source_kind":"ENFORCEMENT_CODE",
+      "what_it_does":"The live PreToolUse dispatcher emits permissionDecision=deny only for a session-bound SEBUKKU marker. Otherwise it calls zulassen(data) as pre-execution bookkeeping and deliberately emits no deny/block response. PostToolUse then calls merken(data).",
+      "runtime_reachable":true,
+      "runtime_entrypoints":["hooks.json PreToolUse","hooks.json PostToolUse"],
+      "known_counterevidence":["Because SEBUKKU can deny, the hook surface is technically capable of blocking; normal effect admission simply does not use that capability in this donor implementation."],
+      "confidence":1.0,
+      "target_2_0_action":"REPAIR",
+      "open_questions":["Triggerword 4 must choose the real deterministic successor gate at the executor/host boundary rather than assuming the donor journal is already an EffectGate."]
+    },
+    {
+      "atom_id":"TW5-EFFECT-A003-POSTHOC-VERIFIED-WITHOUT-PREADMISSION",
+      "subsystem":"effect_outcome_journal",
+      "path":"DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start":3360,
+      "line_end":3575,
+      "source_kind":"ENFORCEMENT_CODE",
+      "what_it_does":"merken() hashes/inspects the observed PostToolUse result. If a pre-row exists and was ZUGELASSEN it becomes VERIFIED or FEHLGESCHLAGEN; non-ZUGELASSEN statuses are preserved with an outcome append. If no PreToolUse row exists, merken() creates a new effects row directly as VERIFIED or FEHLGESCHLAGEN and notes the missing pre-row. It then creates causal_episodes with credit=0 and reentered=0.",
+      "runtime_reachable":true,
+      "runtime_entrypoints":["cmd_hook PostToolUse -> merken"],
+      "known_counterevidence":["PostToolUse success proves an observed tool outcome only to the strength of _wirkung_pruefen; it does not prove prior deterministic admission."],
+      "confidence":1.0,
+      "target_2_0_action":"REPAIR",
+      "open_questions":["UNKNOWN/transport-ambiguous outcomes need a first-class successor state; blind replay must remain forbidden.","causal_episodes reentered=0 here does not itself prove later observed re-entry."]
+    },
+    {
+      "atom_id":"TW5-EFFECT-A004-VERIFIED-SEMANTIC-OVERLOAD-DOWNSTREAM",
+      "subsystem":"global_workspace_effect_interpretation",
+      "path":"DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start":3575,
+      "line_end":3655,
+      "source_kind":"ENFORCEMENT_CODE",
+      "what_it_does":"_gw_absicht_schreiben treats effects rows with status='VERIFIED' as the state-changing outside-effect set (aussenwirkung) for the turn. Because merken() can mint VERIFIED when no PreToolUse row exists, VERIFIED is semantically overloaded between observed-success and admitted-then-verified execution.",
+      "runtime_reachable":true,
+      "runtime_entrypoints":["cmd_hook Stop -> _gw_absicht_schreiben"],
+      "known_counterevidence":["If the host separately guaranteed admission for every PostToolUse event, the semantic risk would be reduced, but that external guarantee is not established by the inspected donor source."],
+      "confidence":0.99,
+      "target_2_0_action":"REPAIR",
+      "open_questions":["Audit every downstream consumer of effects.status to prevent the same semantic collapse during migration."]
+    }
+  ],
+  "hypotheses":[
+    "Frankenstein 2.0 should preserve the donor's useful two-phase request/outcome journal shape while splitting admission decision from observed outcome and causal re-entry into distinct typed fields/receipts.",
+    "The deterministic successor EffectGate belongs at the actual executor/host boundary; lifecycle hooks may remain audit/journal adapters but must not be mistaken for the effect authority when they fail open or emit no deny."
+  ],
+  "counterhypotheses":[
+    "A host permission layer outside stern.py may already enforce execution admission, making the donor journal intentionally observational; this must be proven from exact host integration rather than inferred.",
+    "The single active_turns.effect_id slot may be safe if host execution is strictly serialized per session; concurrency risk remains OPEN rather than a proven bug."
+  ],
+  "contradictions":[
+    "TW5-CONTRADICTION-EFFECT-ENFORCEMENT-003: the donor calls zulassen() an admission path and stores ABGELEHNT/WIEDERHOLUNG, but the live normal PreToolUse branch deliberately emits no deny/block decision; therefore donor admission-record semantics are not equivalent to deterministic EffectGate enforcement.",
+    "TW5-CONTRADICTION-VERIFIED-PREADMISSION-004: PostToolUse fallback may create status=VERIFIED without any PreToolUse row, while downstream gw_absicht interprets VERIFIED as aussenwirkung; observed-success and admitted-then-verified execution are therefore not structurally distinct in the current donor status field."
+  ],
+  "critical_unknowns":[
+    "Exact host permission/executor path outside stern.py and whether it enforces star_faehigkeit/generation/precondition/idempotency before tool execution.",
+    "All downstream consumers of effects.status and whether any assume VERIFIED implies pre-admission.",
+    "Overlap/serialization guarantees for state-changing tool calls sharing active_turns.effect_id.",
+    "Exact unknown-outcome behavior for cancelled/truncated/transport-failed external effects.",
+    "First/last Git commit windows for the nonblocking admission design and missing-pre-row VERIFIED fallback."
+  ],
+  "recommended_next_spans":[
+    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py","line_start":1050,"line_end":1600,"reason":"Trace Realtime Function-Calling/tool bridge into stern/executor/effect paths and identify any direct bypass or independent permission boundary.","priority":"P0"},
+    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/stern.py","line_start":3655,"line_end":3900,"reason":"Enumerate downstream status consumers and causal/re-entry interpretation after gw_absicht.","priority":"P1"},
+    {"path":"Git history for stern.py effect functions","line_start":null,"line_end":null,"reason":"Recover first/last commit windows for zulassen, merken fallback and effect-status semantics before Triggerword-4 migration.","priority":"P0"}
+  ],
+  "supersedes_packet_id":null
+}

@@ -1,0 +1,52 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T072919Z-PERCEPTION-VOICE-EFFECT-FUSION",
+  "created_at": "2026-08-28T07:29:19Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_repo": "gschaidergabriel/clay-global-research-entity",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_observed_before_ingest": "ea0a1b95c973736fdf24d10bfaaec3474b4d8541",
+  "canonical_main_observed": "45f46138db94e0228240ea15b586bf8be622410b",
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PERCEPTION_VOICE_EFFECT_FUSION_0724Z.json",
+    "commit": "c36c964ea0c7367ec0e6b47814cdf2ae6210a2e8"
+  },
+  "consumed_packets": [
+    "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+    "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT"
+  ],
+  "dedupe_and_credit": {
+    "same_pipeline_corroboration": true,
+    "independent_replication_credit": false,
+    "new_runtime_execution": false,
+    "whole_product_credit_delta": 0,
+    "hcu_credit_delta": 0,
+    "jspace_model_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "direct_source_checks": [
+    "stern.py:3200-3655,8810-8895 confirms normal PreToolUse bookkeeping does not block and PostToolUse records outcomes",
+    "perception_control.py:420-560 confirms NOT_COMPUTED/value=None before compute on COMPUTE_OFF or tainted dependencies",
+    "voice_session_capsule.py:250-450 confirms fresh RAM-only projection over current policy/state sources",
+    "realtime_gespraech.py:700-900,1200-1408 confirms capsule omission from normal response.instructions, UNKNOWN presence fallback to True, and pending-tool cancellation on cancelled/barge-in responses"
+  ],
+  "architecture_changes": [
+    "Promote Perception Control NOT_COMPUTED plus dependency-taint semantics as the direct donor for sparse WorldNeed/WorldSlice and GRID head control.",
+    "Keep VoiceSessionCapsule noncanonical and add cross-source generation/provenance binding plus a minimal lesion-tested per-response context compiler.",
+    "Replace unavailable-presence -> True with explicit UNKNOWN plus WAIT/ASK/re-observe behavior.",
+    "Generalize Realtime pre-dispatch tool cancellation into a typed candidate-effect lifecycle while preserving UNKNOWN for already-submitted external effects.",
+    "Keep admission decision, enforcement decision, execution receipt, world-effect verification and completion evidence as separate typed identities; successful execution never retroactively creates admission authority."
+  ],
+  "unresolved": [
+    "Actual historical/current blocking wache-koenig or successor and its live reachability are still unresolved.",
+    "Real hook scheduler ordering/interleaving remains unresolved; 2.0 must use immutable per-call identity regardless.",
+    "Source-wide proof that every sensitive perception computation goes through evaluate_head remains unresolved.",
+    "Voice capsule cross-source consistency and per-response conditioning remain implementation tasks for Triggerword 4, not runtime-proven behavior."
+  ],
+  "next_exact_gate": "Map the actual blocker plus scheduler and close immutable request->admission->enforcement->execution->verification->completion identity; port NOT_COMPUTED dependency taint and repair UNKNOWN presence plus bounded voice context compilation in the Triggerword-4 design lane."
+}

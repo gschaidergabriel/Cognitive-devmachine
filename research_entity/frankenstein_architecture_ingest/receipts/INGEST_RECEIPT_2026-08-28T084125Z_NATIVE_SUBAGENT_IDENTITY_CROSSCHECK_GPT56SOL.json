@@ -1,0 +1,94 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T084125Z-NATIVE-SUBAGENT-IDENTITY-CROSSCHECK-GPT56SOL",
+  "created_at": "2026-08-28T08:41:25Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/native-subagent-direct-crosscheck",
+  "routing_result": "PASS",
+  "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "directive_fetch_result": "PASS",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_observed_before_write": "e7a97a127f62f8ab9bbac6d3cf141879d9cea286"
+  },
+  "packet": {
+    "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T082628Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+    "blob_sha": "bad15660b245dfc33139736cd9857064c82812ef",
+    "prior_validator_admission_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json",
+    "prior_validator_admitted": true,
+    "runtime_credit_delta": 0
+  },
+  "crosschecks": [
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py#L5690-L5985",
+      "result": "PASS",
+      "finding": "handoff creates durable workpackage/capsule state but explicitly does not delegate/spawn itself."
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/hooks/hooks.json#L1-L81",
+      "result": "PASS",
+      "finding": "Pinned donor plugin contains seven generic hook event classes and no dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted registration."
+    },
+    {
+      "source": "https://code.claude.com/docs/en/hooks",
+      "result": "PASS_EXTERNAL_PRIMARY",
+      "finding": "Current official docs expose SubagentStart/SubagentStop and agent_id/agent_type lifecycle/tool-hook identity fields; capability only, not installed-host evidence."
+    },
+    {
+      "source": "https://code.claude.com/docs/en/sub-agents",
+      "result": "PASS_EXTERNAL_PRIMARY",
+      "finding": "Current official docs expose resumable agent identity for resumable subagent types, worktree isolation and bounded nested subagents; capability only, not installed-host evidence."
+    }
+  ],
+  "writes": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T084125Z_NATIVE_SUBAGENT_IDENTITY_CROSSCHECK_GPT56SOL.json",
+      "commit": "067da16fee3d63bd9c861317344e2433a3af8fea"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/INGEST_STATE_CHECKPOINT_2026-08-28T084125Z_NATIVE_SUBAGENT_IDENTITY_CROSSCHECK_GPT56SOL.json",
+      "commit": "e974afddae7bbf1ca655bad080dc6f66e56fd369"
+    }
+  ],
+  "ledger_reconciliation": {
+    "central_ingest_state_blob": "d0af3803a9b56e958b010e64d8ac0cbd628bfaf3",
+    "central_state_last_ingest_at": "2026-08-28T08:08:00Z",
+    "classification": "SYNC_PENDING_APPEND_ONLY_CHECKPOINT_CREATED",
+    "reason": "The central ledger predates the already admitted 081406Z, 081600Z and 082628Z packets. It was not blindly overwritten because concurrent frontier work must be preserved exactly."
+  },
+  "architecture_delta_summary": [
+    "Workpackage/capsule persistence is useful donor state but not child-spawn proof.",
+    "Dedicated child lifecycle identity is not captured by the pinned donor plugin configuration.",
+    "Current Claude native subagent identity/lifecycle primitives are plausible reuse targets but require exact installed-host observation before adoption/runtime credit.",
+    "Frankenstein 2.0 child execution must bind immutable workpackage_id, agent_id, parent_agent_id, task_id, tool_use_id/effect lineage and generation before parallel attribution/effect credit."
+  ],
+  "credits": {
+    "trigger_routing": "PASS",
+    "packet_admission": "PASS_PRIOR_VALIDATOR_RECEIPT",
+    "donor_source_crosscheck": "PASS",
+    "external_primary_capability_crosscheck": "PASS",
+    "installed_host_native_child_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Reconcile central INGEST_STATE against the 083520Z admission receipt and the 084125Z checkpoint without dropping concurrent frontier work. Separately, on an authorized installed-host surface only, observe one harmless native child lifecycle and bind workpackage_id to agent_id/task_id/tool_use_id/generation before Triggerword-4 runtime promotion."
+}

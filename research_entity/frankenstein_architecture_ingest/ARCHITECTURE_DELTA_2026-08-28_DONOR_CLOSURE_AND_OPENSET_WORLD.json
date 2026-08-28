@@ -1,0 +1,129 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_DONOR_CLOSURE_AND_OPENSET_WORLD_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:24:27Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "62103b7aca5d1f799fb0c56ca917fb33f77aded2",
+    "canonical_main_observed_near_write": "86f74e6350d81c2fa2f55da83cfdbe2e6e9758e9",
+    "note": "Both refs are moving parallel-work snapshots, not frozen authority substitutes."
+  },
+  "coordination_reentry": {
+    "latest_ingest_state_observed": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "unconsumed_schema_packets_after_reentry": [],
+    "dedupe_action": "No already-consumed packet was re-counted. The parallel effect/voice-conditioning and reentry-fusion deltas already contained the nonblocking EffectGate findings, so this successor records only additional source-closure and open-set-world information."
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_DONOR_SOURCE_CLOSURE_UNPROVEN_020",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/paket.py",
+        "line_start": 2000,
+        "line_end": 2095,
+        "source_kind": "LIVE_CODE"
+      },
+      "claim": "paket.py's live success-mark path imports `.wegehierarchie` at runtime before reinforcing carried paths, while stern.py independently documents that this dependency had to remain because removing it previously degraded F94. At the same pinned donor commit, connector reads for the expected scripts/udb/abruf/wegehierarchie.py path and two plausible alternate repository locations returned 404, and repository code search returned no wegehierarchie.py result.",
+      "classification": "NEGATIVE_RESULT_SOURCE_TREE_CLOSURE_NOT_RUNTIME_FAILURE",
+      "confidence": 0.99,
+      "runtime_reachability": "The import statement is reachable in paket() when carried walk paths exist; actual installed-host file presence was not executed or inspected in this analysis lane.",
+      "known_counterevidence": [
+        "The compressed research repository may intentionally omit a file that exists in a live installation or historical commit.",
+        "A GitHub connector 404/search miss proves absence at the queried repository paths/index, not absence from every deployed filesystem."
+      ],
+      "target_action": "REPAIR",
+      "grid10_adaptation": "Triggerword-4 donor freeze must prove dependency closure for every dynamically imported runtime module before copying or deleting donor code. Either recover the exact source/hash of wegehierarchie.py from authoritative donor history/live installation or replace the F94 reinforcement branch with a tested successor; do not silently drop it.",
+      "acceptance_falsifier": "At one exact donor identity, enumerate the import closure, resolve wegehierarchie.py to an exact byte hash or a declared tested replacement, and run a source-bound regression in which a carried walk causes the intended reinforcement without ModuleNotFoundError or silent feature loss."
+    },
+    {
+      "atom_id": "F2_FAMILIARITY_OPENSET_ANTI_SELF_CONFIRMATION_021",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/familiarity.py",
+        "line_start": 1,
+        "line_end": 460,
+        "source_kind": "ENFORCEMENT_CODE"
+      },
+      "claim": "Familiarity is explicitly open-set rather than forced-nearest: cheap certainty can accept, clear distance returns UNKNOWN, ambiguous cases escalate to a linear readout, and confidence/tier promotion is driven only by independent expensive confirmations. Cheap self-matches increment a separate counter and cannot refresh the prototype or promote it to GOLD. Dense 8x8 prototype grids remain RAM-only while only metadata/counters are persisted.",
+      "confidence": 0.98,
+      "authority": "scene/object familiarity candidate evidence only; never person identity and never canonical world truth",
+      "privacy_implication": "person.identity remains COMPUTE_OFF; no face embeddings/crops are introduced by this mechanism; dense prototype vectors are not durable DB state",
+      "failure_mode": "If the expensive confirmation source is itself correlated or wrong, promotion can still be mistaken; independence/provenance must be measured rather than assumed from the word 'expensive'.",
+      "target_action": "ADAPT_TO_GRID",
+      "world_substrate_delta": "Use the same epistemic pattern for sparse WorldNeed/WorldSlice hypotheses: UNKNOWN is a first-class valid output, low-cost recurrence cannot self-promote a hypothesis, promotion requires an independently provenance-bound discriminator, and high-dimensional working vectors may stay ephemeral while exact typed metadata/provenance remain canonical outside the vector plane.",
+      "acceptance_falsifier": "Construct a wrong candidate hypothesis, replay only its own cheap derived matches, and prove its canonical confidence/promotion state cannot increase; then supply independent evidence and prove promotion occurs only through the admitted evidence path."
+    },
+    {
+      "atom_id": "F2_SOURCE_REFERENCED_SELFTEST_NOT_IN_QUERIED_TREE_022",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/familiarity.py",
+        "line_start": 1,
+        "line_end": 80,
+        "source_kind": "NEGATIVE_RESULT"
+      },
+      "claim": "familiarity.py cites familiarity_self_test.py as mechanical proof of anti-self-label poisoning, but a read of the expected DEV_SOURCE_RESEARCH/repository/scripts/familiarity_self_test.py path returned 404 in this pinned source tree.",
+      "confidence": 0.99,
+      "boundary": "This does not negate the source mechanism; it means the referenced test is not reconstructible from the queried path at this donor commit and must not be counted as newly executable evidence here.",
+      "target_action": "REPAIR",
+      "grid10_adaptation": "Any migrated open-set primitive needs a colocated, source-bound regression rather than relying on a comment that names an unavailable historical test."
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "id": "TW5-DONOR-CLOSURE-007",
+      "delta": "Add a donor-freeze dependency-closure gate before Triggerword-4 assembly: dynamic imports, generated files, plugin-installed compatibility modules and referenced tests must resolve to exact source identities or explicit tested replacements.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-WORLD-OPENSET-008",
+      "delta": "Make UNKNOWN/open-set rejection and anti-self-confirmation explicit in WorldNeed/WorldSlice and Hyperposition promotion. Recurrence, cheap similarity and self-derived matches cannot mint truth or promote canonical confidence without independent evidence.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-VECTOR-LIFETIME-009",
+      "delta": "Preserve a split between ephemeral dense working vectors and durable typed provenance/epistemic metadata. Familiarity's RAM-only prototype-grid pattern is a concrete donor example; it is not itself the final J-Space implementation.",
+      "feeds_triggerword4": true
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004",
+      "status": "OPEN",
+      "claim_a": "Current donor code imports wegehierarchie as a required reinforcement dependency and stern's source commentary says it must remain.",
+      "claim_b": "The expected module and two plausible alternate locations were not present through repository reads at the pinned donor SHA; code search also found no file.",
+      "resolution_rule": "Do not call this a live runtime failure. Resolve exact installed/historical source identity or replace the branch with a tested successor before assembly credit."
+    }
+  ],
+  "hypotheses": [
+    "The donor repository is a compressed research/source projection rather than a fully dependency-closed executable mirror for every historical/runtime compatibility path.",
+    "Open-set familiarity is a stronger donor for sparse-world epistemics than forced top-1 retrieval because it already separates cheap recurrence from evidence-bearing promotion."
+  ],
+  "counterhypotheses": [
+    "wegehierarchie.py may exist only in the installed plugin/runtime tree or an earlier commit, making repository-source closure incomplete without implying the live feature is broken.",
+    "The familiarity mechanism may be too scene-specific for direct reuse; only its UNKNOWN/promotion/provenance invariants should transfer unless cross-domain tests support more."
+  ],
+  "credits": {
+    "source_forensics": "PRESENT",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Resolve donor dependency closure for wegehierarchie and other dynamic imports at an exact executable donor identity, then encode the open-set/anti-self-confirmation invariants as typed WorldNeed/WorldSlice acceptance tests on the Triggerword-4 design lane."
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T073941Z-REALTIME-MUTATION-BOUNDARY-GPT56SOL",
+  "recorded_at": "2026-08-28T14:39:41+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_observed": "55f2c9daa55ffe30392585c08d48d0659d2d33a3",
+  "packet": {
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T073941Z_5641dc6_GPT56SOL_REALTIME_MUTATION_CLASSIFICATION.json",
+    "commit": "78741c363e72a8d49e3816d8ceca9dd76c9ac395",
+    "classification": "NEW_NON_DUPLICATE_SOURCE_PACKET"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_REALTIME_MUTATION_BOUNDARY_DELTA_2026-08-28T1439P0700_GPT56SOL.json",
+    "commit": "8d9e84bbcaa1a78bc7e10a39c1fca94188602740",
+    "feeds_triggerword4": true
+  },
+  "crosschecks": [
+    "Existing parallel Realtime packets already established direct memory mutation, two-step task confirmation and pre-dispatch cancellation; this receipt does not double-credit those findings.",
+    "This run uniquely closed the source-level claude_frage permission boundary: Bash is unconditionally disallowed while non-Bash file tools remain available under the configured permission mode.",
+    "This run uniquely classified frank_forschung:neu_anstossen as an external/background research request submission that lacks the two-step local task-confirmation gate.",
+    "hooks/hooks.json declares PreToolUse/PostToolUse matcher '*', but host registration and actual headless voice-delegated hook firing remain runtime-unknown from repository source alone."
+  ],
+  "state_sync": {
+    "INGEST_STATE_updated_by_this_receipt": false,
+    "reason": "High concurrent Triggerword-5 write activity and an immediately preceding recorded compare-and-swap conflict make append-only checkpointing safer than a last-writer-wins rewrite. A later safe CAS must deduplicate and register this packet/delta/receipt while preserving concurrent entries.",
+    "required_registration": [
+      "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
+      "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_REALTIME_MUTATION_BOUNDARY_DELTA_2026-08-28T1439P0700_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T073941Z_REALTIME_MUTATION_BOUNDARY_GPT56SOL.json"
+    ]
+  },
+  "runtime_execution": "NOT_PERFORMED_SOURCE_FORENSICS_ONLY",
+  "unusual_experiment": "NOT_PERFORMED",
+  "runtime_credit": {
+    "provider_runtime": 0,
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Prove exact installed hook registration/firing for the headless voice-delegated claude -p path and bind one non-Bash mutation from PreToolUse decision through executor submission, PostToolUse/EffectJournal and verified result re-entry; separately trace chatgpt_senden economic/privacy admission."
+}

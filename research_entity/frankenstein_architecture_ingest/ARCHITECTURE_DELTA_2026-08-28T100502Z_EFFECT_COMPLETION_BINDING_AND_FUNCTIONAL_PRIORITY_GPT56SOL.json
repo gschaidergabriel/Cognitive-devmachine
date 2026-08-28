@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "kind": "TRIGGERWORD5_ARCHITECTURE_DELTA",
+  "created_at": "2026-08-28T10:05:02Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "routing": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "authority": {
+    "canonical_main_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "authority_epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_sha_before_ingest": "49a77cd74142048cd20de4aff5e40254392fbe71",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_ref": "main",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes_admitted": false
+  },
+  "packet_ingest": {
+    "accepted_packet_id": "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
+    "accepted_packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T091706Z_5641dc6_GPT56SOL_MAIN_ARCHAEOLOGY_EFFECT_AUTHORITY_BRIDGE_V2.json",
+    "packet_blob_sha": "bde5d480a01f8c26b18df6ddab6e5fec3735cb4b",
+    "supersedes_packet_id": "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
+    "superseded_packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T091429Z_5641dc6_GPT56SOL_MAIN_ARCHAEOLOGY_EFFECT_AUTHORITY_BRIDGE.json",
+    "admission": "ACCEPT_V2_AS_ACTIVE_SOURCE_EVIDENCE; MARK_ORIGINAL_SUPERSEDED",
+    "authority_revalidation": "Packet was created against canonical main 92c3b67..., but current main 5a953eb... still exposes the identical supervisor inbox blob de2ba445... at authority 9.13; authority binding therefore remains semantically current while the packet's recorded main SHA remains historical provenance.",
+    "runtime_credit": 0
+  },
+  "source_crosschecks": [
+    {
+      "id": "TW5-XCHECK-EFFECT-NONBLOCKING-001",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "3100-3195",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "result": "CONFIRMED",
+      "finding": "The donor explicitly states ordinary PreToolUse EffectGate bookkeeping never returns deny/block; failures become UNGEPRUEFT or no row and the tool proceeds.",
+      "classification": "ENFORCEMENT_CODE_DESCRIBES_NON_ENFORCEMENT_BOUNDARY"
+    },
+    {
+      "id": "TW5-XCHECK-INVOCATION-IDENTITY-002",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "3180-3585",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "result": "CONFIRMED_STRUCTURAL_GAP_RUNTIME_RACE_UNPROVEN",
+      "finding": "zulassen() stores one effect_id in active_turns keyed by session_id; merken() later reads that mutable slot to select the effect row. This is structurally ambiguous if same-session calls interleave, but actual installed scheduler interleaving remains a runtime unknown.",
+      "classification": "FUNCTIONAL_IDENTITY_CONCURRENCY_GAP"
+    },
+    {
+      "id": "TW5-XCHECK-RECEIPT-BUILDER-003",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "3360-3585",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "result": "CONFIRMED_WITH_SCOPE_NARROWING",
+      "finding": "PostToolUse code constructs bounded evidence by hashing file bytes or Bash stdout/stderr and recording exit status. This is reusable receipt-construction logic, not a runtime receipt by source inspection and not arbitrary world-effect verification.",
+      "classification": "EXECUTION_RECEIPT_CONSTRUCTION_SOURCE"
+    },
+    {
+      "id": "TW5-XCHECK-COMPLETION-004",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "5840-6010",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "result": "CONFIRMED",
+      "finding": "effect evidence rejects only exact lowercase status 'fehler'; other current non-success states are not rejected. test:<exit_code>:<description> accepts any textual claim with exit_code string '0' without execution/source/environment/output identity binding, and reconcile maps an ok predicate to stand='fertig'.",
+      "classification": "FUNCTIONAL_COMPLETION_TRUTH_GAP"
+    },
+    {
+      "id": "TW5-XCHECK-HOOK-SURFACE-005",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "lines": "1-220",
+      "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "result": "CONFIRMED_DONOR_SURFACE_ONLY",
+      "finding": "The donor plugin routes SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact through stern.py. It does not declare dedicated native child lifecycle hooks in this file.",
+      "classification": "CONFIG_SOURCE_NOT_HOST_RUNTIME_PROOF"
+    }
+  ],
+  "architecture_changes": [
+    {
+      "change_id": "F2-EFFECT-BOUNDARY-001",
+      "decision": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "change": "Do not transplant donor EffectGate as Frankenstein-2.0 containment authority. Preserve only useful provenance/idempotency/journal ideas behind a deterministic pre-side-effect EffectDecision boundary.",
+      "reason": "Donor code is explicitly nonblocking bookkeeping."
+    },
+    {
+      "change_id": "F2-WORK-EXECUTION-BINDING-002",
+      "decision": "ADAPT_TO_GRID",
+      "change": "Introduce immutable call-scoped WorkExecutionBinding linking durable workpackage identity to native agent/task/tool invocation identity and generation; never correlate effects through a single mutable session pointer.",
+      "required_fields": [
+        "workpackage_id",
+        "agent_id_or_native_worker_id",
+        "task_id_or_native_task_id",
+        "tool_use_id_or_invocation_id",
+        "session_id",
+        "generation",
+        "request_digest",
+        "effect_id",
+        "created_at"
+      ],
+      "runtime_boundary": "Official host APIs may expose call/subagent identifiers, but installed Frankenstein runtime reachability remains unproven until observed."
+    },
+    {
+      "change_id": "F2-EXECUTION-RECEIPT-003",
+      "decision": "ADAPT_TO_GRID",
+      "change": "Generalize donor PostToolUse hashing into a typed ExecutionReceipt bound to immutable invocation/source/environment/result identity. Keep ExecutionReceipt distinct from EffectOutcome and WORLD_EFFECT_VERIFICATION."
+    },
+    {
+      "change_id": "F2-COMPLETION-004",
+      "decision": "REPAIR",
+      "change": "Completion must use a typed success allowlist and structured immutable receipts. FAILED, DENIED, REPEATED, UNCHECKED, UNKNOWN, STALE, source-drifted, transplanted or unbound test claims fail closed and cannot set durable work to complete."
+    },
+    {
+      "change_id": "F2-FORENSIC-PRIORITY-005",
+      "decision": "KEEP_FUNCTIONAL_CORE_FIRST",
+      "change": "Security-only Wache/Schranke archaeology remains DEFERRED_SECURITY_REFERENCE. The effect packet stays high-value only where it reveals functional identity, concurrency and completion-truth defects. The next forensic budget returns to native child spawn/task/lifecycle ABI and WorkExecutionBinding, followed by cognition/memory/world-model mechanisms."
+    }
+  ],
+  "contradictions_preserved": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-NAME-VS-AUTHORITY-014",
+      "left": "Donor names the section EffectGate and records admission-like statuses.",
+      "right": "Executable/comments explicitly say ordinary PreToolUse never blocks the tool.",
+      "resolution": "Name is not enforcement authority; successor must prove pre-side-effect deny."
+    },
+    {
+      "id": "TW5-CONTRADICTION-COMPLETION-INTENT-VS-PREDICATE-015",
+      "left": "Reconcile documentation claims mechanically proven completion.",
+      "right": "Current predicate can accept non-success effect states and unbound textual test:0 claims.",
+      "resolution": "Treat as source-level soundness defect; no completion runtime credit."
+    },
+    {
+      "id": "TW5-CONTRADICTION-SESSION-POINTER-RACE-016",
+      "left": "One active_turns.effect_id per session is used for Pre/Post correlation.",
+      "right": "Same-session overlapping call ordering may permit pointer overwrite before the earlier PostToolUse.",
+      "resolution": "Structural risk confirmed; real overlap remains unproven until runtime trace/falsifier."
+    }
+  ],
+  "next_forensic_frontier": [
+    {
+      "priority": "P0",
+      "target": "CURRENT_HOST_NATIVE_CHILD_SPAWN_TASK_LIFECYCLE_ABI",
+      "goal": "Bind durable entityos_arbeitspaket/workpackage identity to observed native agent/task/tool invocation/generation without assuming donor hooks prove installed host lifecycle.",
+      "evidence_needed": [
+        "installed/native spawn entrypoint",
+        "SubagentStart/SubagentStop or equivalent lifecycle payload",
+        "agent_id/task_id/tool_use_id correlation",
+        "parallel completion ordering",
+        "resume/replacement identity semantics"
+      ]
+    },
+    {
+      "priority": "P1",
+      "target": "AGENT_ZERO_AND_CONSCIOUSNESS_PULSE_FUNCTIONAL_DONORS",
+      "goal": "Resume functional-core archaeology per current owner priority after the invocation/completion delta is consumed."
+    }
+  ],
+  "credits": {
+    "source_forensics": "PASS_AT_PINNED_SOURCE_SCOPE",
+    "runtime_effect_invocation": 0,
+    "runtime_effect_enforcement": 0,
+    "runtime_completion": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

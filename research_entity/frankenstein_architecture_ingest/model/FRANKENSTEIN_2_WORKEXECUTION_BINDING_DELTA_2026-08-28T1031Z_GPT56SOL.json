@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "delta_id": "TW5-DELTA-20260828T1031Z-WORKEXECUTION-BINDING-GPT56SOL",
+  "created_at": "2026-08-28T10:31:00Z",
+  "organ": "GPT-5.6-Sol/triggerwort5/forensic-ingest",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_write": "007131285ed54a706be2bca8a4160db1d0730a18",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority": {
+    "epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "packet_review": {
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "status": "PARTIAL_SOURCE_ASSIMILATION_SCHEMA_QUARANTINED_NOT_MARKED_CONSUMED",
+    "authority_rebind": "Packet names canonical main 5a953ebf824bbdc17091a638eb2b4a376aa8567e, which is stale versus observed 24389f873a775fd3af5fc3c896a58836d09a3bff. Its exact supervisor and provider-authority blob hashes were re-fetched at current main and remain unchanged, so authority-content claims are corroborated but packet main identity is stale.",
+    "schema_issue": {
+      "field": "atoms[4].target_2_0_action",
+      "observed": "RESEARCH",
+      "allowed": [
+        "KEEP",
+        "REPAIR",
+        "ADAPT_TO_GRID",
+        "REPLACE_WITH_VERIFIED_SUCCESSOR",
+        "COMPATIBILITY_ONLY",
+        "RETIRE_WITH_EVIDENCE",
+        "UNDECIDED"
+      ],
+      "normalized_for_this_delta": "UNDECIDED",
+      "packet_mutated": false
+    }
+  },
+  "source_corroboration": [
+    {
+      "claim": "stern.py handoff creates durable entityos_arbeitspaket state and a deterministic handoff capsule but explicitly does not spawn/delegate a child itself.",
+      "classification": "CURRENT_DONOR_SOURCE",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 5667,
+      "line_end": 5735,
+      "runtime_credit": 0
+    },
+    {
+      "claim": "architekt_governance requires stern.py handoff before spawning and reconcile afterwards, while stating that the architect agent is spawned only after approval.",
+      "classification": "CURRENT_DONOR_SPEC",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "line_start": 19,
+      "line_end": 59,
+      "runtime_credit": 0
+    },
+    {
+      "claim": "The donor plugin hook configuration contains SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact, but no dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted lifecycle hooks.",
+      "classification": "CURRENT_DONOR_CONFIG",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "line_start": 1,
+      "line_end": 81,
+      "runtime_credit": 0
+    },
+    {
+      "claim": "Current Claude Code primary documentation exposes SubagentStart/SubagentStop with agent_id and TaskCreated/TaskCompleted with task_id as separate event-local identity domains. Common hook input also carries agent_id when a hook runs inside a subagent call. This is capability/spec evidence, not installed-host runtime proof.",
+      "classification": "EXTERNAL_PRIMARY",
+      "source": "Claude Code hooks documentation, observed 2026-08-28",
+      "runtime_credit": 0
+    }
+  ],
+  "architecture_delta": {
+    "new_contract": "WorkExecutionBinding/v1",
+    "purpose": "Bind a durable Frankenstein/EntityOS workpackage to the exact native child execution and, once established, bind child tool invocations/effects without timing-based or session-only inference.",
+    "fields": {
+      "workpackage_id": "required durable entityos_arbeitspaket identity",
+      "parent_session_id": "required",
+      "generation": "required",
+      "workpackage_digest": "required immutable digest of delegated request/material",
+      "spawn_tool_use_id": "optional until directly observed; never synthesized",
+      "agent_id": "required before claiming native-child runtime attribution",
+      "task_id": "optional distinct task-system identity; never treated as agent_id alias",
+      "agent_type": "optional observed metadata",
+      "subagent_transcript_path": "optional observed metadata",
+      "binding_method": "required enum: OBSERVED_SHARED_KEY | HOOK_INJECTED_NONCE | WRAPPER_RECEIPT | UNKNOWN",
+      "binding_evidence_refs": "required exact source/runtime evidence references",
+      "runtime_observed": "required boolean"
+    },
+    "invariants": [
+      "SESSION_ID_IS_NOT_NATIVE_CHILD_IDENTITY",
+      "TASK_ID_IS_NOT_AGENT_ID",
+      "TIMING_OR_EVENT_ORDER_ALONE_MUST_NOT_BIND_WORKPACKAGE_TO_AGENT_ID",
+      "NO_NATIVE_CHILD_RUNTIME_CREDIT_WITH_BINDING_METHOD_UNKNOWN",
+      "NO_WORKPACKAGE_COMPLETION_CREDIT_FROM_CHILD_NARRATION_WITHOUT_TYPED_RESULT_AND_EFFECT_EVIDENCE",
+      "CHILD_TOOL_MUTATIONS_MUST_BIND_AGENT_ID_PLUS_CALL_SCOPED_TOOL_USE_ID_WHEN THOSE IDENTITIES ARE OBSERVED",
+      "MODEL_OR_DOC_CAPABILITY_EVIDENCE_DOES_NOT_PROVE_INSTALLED_RUNTIME_HOOK_FIRING"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID",
+    "design_change": "Frankenstein 2.0 should preserve donor handoff as durable work-intent provenance, but add an explicit native execution binding layer. Add subagent lifecycle/tool-hook ingestion only as evidence capture; do not let the hook event itself become canonical execution authority. Once a child agent_id is deterministically joined to workpackage_id, child tool calls can carry agent_id plus tool_use_id into the same call-scoped EffectRequest/EffectDecision/ExecutionReceipt chain already required by the effect-authority frontier.",
+    "not_adopted": [
+      "No assumption that Agent PostToolUse tool_response necessarily contains agent_id on the installed target build.",
+      "No assumption that TaskCreated/TaskCompleted participates in ordinary subagent delegation.",
+      "No timestamp-proximity join between handoff, Agent invocation and SubagentStart.",
+      "No runtime PASS or installed-host hook-firing credit."
+    ]
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-WORKPACKAGE-NATIVE-CHILD-BINDING-017",
+      "statement": "Donor specification expects handoff -> spawn -> reconcile, but current donor handoff explicitly does not spawn and its versioned hooks do not capture native child lifecycle. The durable workpackage therefore lacks a source-proven deterministic join to the concrete native child execution.",
+      "status": "OPEN",
+      "preserve_until": "Exact installed-runtime or wrapper evidence establishes a reproducible immutable workpackage_id -> agent_id binding."
+    }
+  ],
+  "counterhypotheses": [
+    "The installed host may already provide an unversioned native binding outside the donor repository; if proven, 2.0 should import/adapt it rather than duplicate it.",
+    "The installed Agent tool response may expose a stable child identifier sufficient for a direct join; this cannot be assumed from generic tool-hook documentation and requires exact observed payload evidence.",
+    "Ordinary delegated subagents may never require task_id; making task_id mandatory would create false failures and conflate two native identity spaces."
+  ],
+  "next_discriminator": {
+    "priority": "P0_FOR_TRIGGERWORD_4_DONOR_FREEZE",
+    "action": "Capture one exact native Agent/subagent lifecycle on the authorized target using a non-mutating task, recording PreToolUse/PostToolUse/SubagentStart/SubagentStop common fields and Agent-specific tool_response. Prove or falsify an immutable shared key from workpackage/Agent invocation to agent_id; do not use timestamps as the join.",
+    "execution_this_trigger": "NOT_RUN",
+    "reason": "Triggerword 5 is the forensic/ingest lane and current authority has all provider routes HARD_OFF. This delta records the discriminator without granting runtime credit or invoking a provider/VPS path."
+  },
+  "credit": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "native_subagent_workexecution_binding_runtime": 0,
+    "training": 0
+  }
+}

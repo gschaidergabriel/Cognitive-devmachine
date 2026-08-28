@@ -1,0 +1,78 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CORRECTION/v1",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/workexecution-documentation-crosscheck",
+  "authority": {
+    "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "authority_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "corrects_commit": "e9874eedd559d19962a5866f64734af42ae9d4aa",
+  "corrects_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1036Z_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_PACKET_QUARANTINE_GPT56SOL.json",
+  "corrects_atom": "TW5-DELTA-1036-005-TOOLUSE-AGENT-JOIN-OPEN",
+  "correction_class": "EXTERNAL_PRIMARY_DOCUMENTATION_CROSSCHECK",
+  "finding": {
+    "old_claim": "A deterministic tool_use_id-to-agent_id join is not established by current documentation alone because Agent-specific tool_response identity is unknown.",
+    "corrected_claim": "Current official Claude Code hook documentation gives PostToolUse a call-scoped tool_use_id and documents the Agent tool's PostToolUse tool_response as containing agentId. Therefore the same documented PostToolUse event supplies a deterministic specification-level pair tool_use_id -> tool_response.agentId. This closes the tool invocation to Agent-response identity gap at documentation/capability scope only.",
+    "still_open": "SubagentStart/SubagentStop use the field name agent_id. Exact installed-runtime evidence is still required to prove the emitted Agent tool_response.agentId and lifecycle agent_id normalize to the same child identity on the target build/configuration. Hook firing, plugin/host configuration, concurrency behavior and durable package_id linkage remain runtime-unverified.",
+    "task_identity": "TaskCreated/TaskCompleted task_id remains a separate task-system identity and must stay optional for ordinary Agent-subagent execution unless that task lifecycle is actually observed."
+  },
+  "external_primary": [
+    {
+      "source": "Claude Code official hooks documentation",
+      "url": "https://code.claude.com/docs/en/hooks",
+      "observed_date": "2026-08-28",
+      "scope": "PostToolUse common input includes tool_use_id; Agent-specific tool_response contains agentId; SubagentStart/SubagentStop lifecycle exposes agent_id; TaskCreated/TaskCompleted exposes task_id."
+    },
+    {
+      "source": "Claude Code official sub-agents documentation",
+      "url": "https://code.claude.com/docs/en/sub-agents",
+      "observed_date": "2026-08-28",
+      "scope": "Agent is the native subagent execution surface described by current documentation."
+    }
+  ],
+  "architecture_consequence": {
+    "work_execution_binding_v1": {
+      "identity_domains": [
+        "durable_workpackage_id",
+        "tool_use_id",
+        "agent_id",
+        "optional_task_id"
+      ],
+      "documented_join_now_available": "PostToolUse.tool_use_id -> PostToolUse.tool_response.agentId",
+      "runtime_join_still_required": "PostToolUse.tool_response.agentId <-> SubagentStart/SubagentStop.agent_id",
+      "package_join_still_required": "durable_workpackage_id -> exact Agent tool_use_id",
+      "rules": [
+        "Do not use timestamp or event order as a concurrency join when call-scoped identity exists.",
+        "Preserve camelCase agentId and snake_case agent_id as separate source fields until an installed-runtime receipt demonstrates their identity relationship.",
+        "Do not require task_id for ordinary Agent execution unless TaskCreated/TaskCompleted is observed in that path.",
+        "A documentation-level join is capability/spec evidence, not installed-host runtime proof."
+      ],
+      "target_2_0_action": "ADAPT_TO_GRID"
+    }
+  },
+  "packet_disposition": {
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "status": "REMAINS_QUARANTINED_PARTIAL_ACCEPT_NOT_CONSUMED",
+    "reason": "The prior quarantine remains correct because the packet still has stale canonical-main binding, an invalid target_2_0_action enum, and a wrong governance source span. This correction only narrows one external-documentation unknown."
+  },
+  "next_discriminator": {
+    "priority": "P0_WHEN_EXECUTION_AUTHORITY_AND_TARGET_ENVIRONMENT_ADMIT_IT",
+    "test": "Capture one harmless native Agent invocation with PreToolUse/PostToolUse plus SubagentStart/SubagentStop. Assert exact equality/normalization between PostToolUse.tool_response.agentId and lifecycle agent_id, and bind the originating durable_workpackage_id to the exact Agent tool_use_id without time/order heuristics.",
+    "execution_this_trigger": "NOT_RUN_SOURCE_AND_EXTERNAL_PRIMARY_ONLY",
+    "unusual_experiment": false
+  },
+  "credits": {
+    "source_crosscheck": "PASS_WITH_CORRECTION",
+    "installed_host_runtime": 0,
+    "provider": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

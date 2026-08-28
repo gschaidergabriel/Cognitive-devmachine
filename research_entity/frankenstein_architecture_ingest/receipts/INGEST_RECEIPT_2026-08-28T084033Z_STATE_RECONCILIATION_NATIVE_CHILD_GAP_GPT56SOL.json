@@ -1,0 +1,85 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T084033Z-STATE-RECONCILIATION-NATIVE-CHILD-GAP-GPT56SOL",
+  "created_at": "2026-08-28T08:40:33Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/state-reconciliation",
+  "routing_result": "PASS",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "ref": "main",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_before_state_reconciliation": "41bec098d4dc9992eb6a865277d131a172908ac5"
+  },
+  "validated_packet_evidence": {
+    "source_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json",
+    "source_receipt_blob_sha": "49a017c71c28458a104e358894ed65019f10f43b",
+    "packets": [
+      {
+        "packet_id": "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+        "blob_sha": "660fee9248758a73bd6a040830127632c53b055b",
+        "admitted": true,
+        "runtime_credit_delta": 0
+      },
+      {
+        "packet_id": "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL",
+        "blob_sha": "99ef8f48d49911ea2796963c9f0af0ae9dcf8358",
+        "admitted": true,
+        "runtime_credit_delta": 0
+      },
+      {
+        "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+        "blob_sha": "bad15660b245dfc33139736cd9857064c82812ef",
+        "admitted": true,
+        "runtime_credit_delta": 0
+      }
+    ]
+  },
+  "state_reconciliation": {
+    "path": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "old_blob_sha": "d0af3803a9b56e958b010e64d8ac0cbd628bfaf3",
+    "new_blob_sha": "98b83296c20c248bca969d6e0a062acd24944886",
+    "commit": "0018d97a217332dceeccb8e45173734180974dab",
+    "operations": [
+      "advance canonical_main_observed to 97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+      "advance last_resolved_design_sha_before_ingest to 41bec098d4dc9992eb6a865277d131a172908ac5",
+      "bind last architecture delta/receipt to the 083520Z exact validator reconciliation",
+      "append the 083520Z architecture delta to additional_architecture_deltas",
+      "append both admitted Wache-v2 successors and the admitted native-subagent identity packet to consumed_packet_ids",
+      "mark the 074533Z v1 Wache packet superseded as a current admission envelope while retaining historical provenance",
+      "add the native workpackage-to-agent identity binding gap as the highest-priority Triggerword-4 frontier item",
+      "preserve all pre-existing contradiction IDs and concurrent frontier items"
+    ]
+  },
+  "architecture_consequence": [
+    "Historical --settings inheritance remains donor evidence for policy-envelope transport, not current effect authority.",
+    "Both immutable Wache-v2 successors remain admitted complementary provenance; no timestamp winner or mutual supersession is invented.",
+    "The Frankenstein donor has durable delegated-work state but no source-proven native spawn binding in handoff(); the current donor plugin also lacks dedicated SubagentStart/SubagentStop/Task hooks.",
+    "Triggerword 4 should bind durable workpackage identity to observed native agent_id/task_id/tool_use_id/generation before freezing the R2 child harness.",
+    "Official Claude Code child-agent lifecycle documentation remains capability evidence only until installed-host behavior is observed on an authorized runtime surface."
+  ],
+  "credits": {
+    "packet_admission": "PASS_AT_THREE_PACKET_SCOPE",
+    "new_runtime_credit": 0,
+    "native_child_runtime_credit": 0,
+    "effect_enforcement_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "On an authorized installed-host/non-provider execution surface, capture one harmless native child lifecycle from durable workpackage creation through spawn/lifecycle hooks/reconcile and prove stable binding of workpackage_id to agent_id/task_id/tool_use_id/generation; until then native child runtime credit remains zero."
+}

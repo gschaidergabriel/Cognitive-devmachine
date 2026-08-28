@@ -1,0 +1,65 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:39:45Z",
+  "authority_epoch": "9.13",
+  "status": "CORROBORATING_SUCCESSOR_CORRECTION_NO_PACKET_RECONSUMPTION",
+  "canonical_main_observed": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+  "current_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "packet": {
+    "packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+    "already_consumed": true,
+    "reconsumed": false,
+    "schema_validation": "FAIL_AT_LEAST_ONE_ENUM_VIOLATION",
+    "violation": "atoms[TW5-WK-A002-COMMAND-POSITION-AND-NESTED-SHELL-CLASSIFIER].target_2_0_action='REPLACE' is outside the current enum",
+    "preservation": "ORIGINAL_PACKET_LEFT_UNCHANGED"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_WACHE_DIRECT_SOURCE_AND_9_13_SCHEMA_CORRECTION.json",
+    "commit": "107dac4469b3cc85e7f2b9d96a092679bbe7880c",
+    "supersedes_delta_commit": "b15a047dfb355eb838ffddd77a00efe19d6b5bcb",
+    "contradiction_ids": [
+      "TW5-CONTRADICTION-WACHE-PACKET-SCHEMA-012",
+      "TW5-CONTRADICTION-EVIDENCE-AUTHORITY-CURRENTNESS-013"
+    ]
+  },
+  "current_authority_binding": {
+    "canonical_main": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "rule": "Older 8.78 labels on fresh archaeology outputs are historical/source epoch metadata only; no current authority or runtime credit derives from them."
+  },
+  "direct_source_crosscheck": {
+    "wache_koenig": {
+      "drive_file_id": "10z1K5hKV9t9wBu1k5zXEvxSjaCZy3TUH",
+      "sha256": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "manifest_match": true
+    },
+    "freigabe": {
+      "drive_file_id": "1xi-hFPSWJ6NC8ruDV6iTttw_-wMv08dI",
+      "sha256": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "manifest_match": true
+    },
+    "scope": "Direct historical source identity/semantics only; scheduler reachability not established."
+  },
+  "result": {
+    "parallel_wache_architecture_delta_semantics_reused": true,
+    "duplicate_architecture_lane_created": false,
+    "new_ingest_integrity_delta": true,
+    "packet_schema_error_preserved": true,
+    "authority_currentness_rebound_to_9_13": true,
+    "parallel_contradiction_id_collision_resolved": true
+  },
+  "credits": {
+    "historical_direct_source_crosscheck": "PRESENT",
+    "new_runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Add fail-closed packet-admission validation for target_2_0_action and exact current authority binding, while continuing the source/runtime frontier: prove historical scheduler registration/order and execute the authorized immutable invocation/effect identity falsifier before any effect-enforcement credit."
+}

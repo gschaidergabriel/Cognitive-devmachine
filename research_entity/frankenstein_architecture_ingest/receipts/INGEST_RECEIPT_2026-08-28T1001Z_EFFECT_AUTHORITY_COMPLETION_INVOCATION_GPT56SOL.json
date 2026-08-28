@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "receipt_type": "TRIGGERWORD_5_INGEST_RECEIPT",
+  "created_at": "2026-08-28T10:01:00Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "routing": "PASS",
+  "directive_ref": "chatgpt/grid10-cognitive-envelope-control-20260828@49a77cd74142048cd20de4aff5e40254392fbe71",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+  "authority_epoch": "9.13",
+  "authority_source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json@de2ba445a3e3896426957e6b3a37be047462d58c",
+  "execution_mode": "FREE_ONLY",
+  "provider_execution": "NOT_ATTEMPTED",
+  "unusual_experiment": "NOT_USED",
+  "packets_examined": [
+    {
+      "packet_id": "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T091429Z_5641dc6_GPT56SOL_MAIN_ARCHAEOLOGY_EFFECT_AUTHORITY_BRIDGE.json",
+      "disposition": "CONSUMED_AS_SUPERSEDED_PROVENANCE"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T091706Z_5641dc6_GPT56SOL_MAIN_ARCHAEOLOGY_EFFECT_AUTHORITY_BRIDGE_V2.json",
+      "disposition": "ACCEPTED_WITH_CURRENT_9_13_REBIND"
+    }
+  ],
+  "source_crosscheck": {
+    "status": "PASS_AT_SOURCE_SCOPE",
+    "checked": [
+      "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3100-3198",
+      "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3180-3585",
+      "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:5840-6008",
+      "gschaidergabriel/frankenstein@5641dc6:DEV_SOURCE_RESEARCH/repository/hooks/hooks.json:1-220"
+    ],
+    "confirmed": [
+      "ordinary donor EffectGate is explicitly nonblocking bookkeeping",
+      "PreToolUse writes one session-scoped active_turns.effect_id and PostToolUse later reads the current slot",
+      "completion effect proof rejects only exact lowercase fehler",
+      "textual test:0 proof is accepted without bound execution identity",
+      "PostTool result hashing is source-level receipt-construction logic, not runtime receipt evidence"
+    ],
+    "runtime_reachability": "UNVERIFIED"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_AUTHORITY_COMPLETION_INVOCATION_DELTA_2026-08-28T1001Z_GPT56SOL.json",
+    "commit": "5d2548bd26cd92d5b4005fc5101a3a7d235aad6b",
+    "classification": "SOURCE_DELTA_ACCEPTED_RUNTIME_UNVERIFIED"
+  },
+  "design_changes": [
+    "Split effect path into deterministic EffectDecision enforcement, call-scoped invocation identity, ExecutionReceipt, EffectOutcome/WORLD_EFFECT_VERIFICATION and CompletionEvidence.",
+    "Replace session-scoped effect pointer as successor join key with immutable tool_use_id/invocation_id equivalent.",
+    "Replace permissive completion predicate with typed success allowlist and exact receipt identity binding.",
+    "Preserve donor hashing ideas only as bounded execution-receipt construction; do not treat source or successful tool return as universal world-effect proof.",
+    "Only verified observed transitions may receive high-credit sparse-world operator learning updates."
+  ],
+  "negative_evidence_preserved": [
+    "No donor runtime race reproduction was executed.",
+    "Installed hook scheduler serialization remains an unresolved counterhypothesis.",
+    "Host-global blocking predecessor source/config/order remains unresolved.",
+    "No Frankenstein-2.0 runtime successor PASS exists from this ingest."
+  ],
+  "credits": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "frankenstein_effect_enforcement_runtime": 0,
+    "frankenstein_completion_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 should implement repository-bound call-scoped one-shot EffectDecision plus typed CompletionEvidence regressions, then run an admitted non-provider same-session overlapping-call falsifier before any runtime promotion.",
+  "result": "PASS_SOURCE_INGEST_ONLY"
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T091524Z-ACTOR-CLASS-RECONCILIATION-GPT56SOL",
+  "created_at": "2026-08-28T09:15:24Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/actor-class-reconciliation",
+  "routing": "VERIFIED",
+  "authority_epoch": "9.13",
+  "canonical_main_observed": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+  "execution_mode": "FREE_ONLY_HARD_OFF_NO_PROVIDER_EXECUTION",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_delta": "97e53d406c896735bc960c06fb4d637bacf9f5ff",
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091524Z_ACTOR_CLASS_RECONCILIATION_GPT56SOL.json",
+    "commit_sha": "e0ada9d7acdd290689059099521f94de27a6258a"
+  },
+  "packet_result": {
+    "new_unconsumed_packets": [],
+    "latest_packet_status": "ALREADY_CONSUMED",
+    "mode": "APPEND_ONLY_DELTA_RECONCILIATION"
+  },
+  "evidence": [
+    "Current donor realtime_gespraech.py voice bridge directly calls claude_frage without workpackage/agent/task/tool/cwd binding.",
+    "Current donor gespraechsmodus.py claude_frage directly executes claude -p with --session-id/--resume, permission mode, Bash denial and Path.home() cwd fallback.",
+    "Parallel Trigger-5 actor-class delta distinguishes HEADLESS_SESSION_CHILD from NATIVE_SUBAGENT_CHILD.",
+    "Prior Realtime mutation/ChildPolicy fusion remains valid but its native-child-only immediate gate is refined to an actor-class paired differential."
+  ],
+  "result": "PASS_AT_SOURCE_AND_DESIGN_RECONCILIATION_SCOPE",
+  "runtime_credit_delta": 0,
+  "provider_execution_credit_delta": 0,
+  "training_credit_delta": 0,
+  "acceptance": "SOURCE_AND_DESIGN_RECONCILIATION_PASS_RUNTIME_UNRESOLVED",
+  "next_exact_gate": "After 9.13 control-sync/quiescence prerequisites, execute paired harmless HEADLESS_SESSION_CHILD vs NATIVE_SUBAGENT_CHILD probes and bind actor-class-specific WorkExecutionBinding, ChildPolicyEnvelope, invocation enforcement and completion receipts."
+}

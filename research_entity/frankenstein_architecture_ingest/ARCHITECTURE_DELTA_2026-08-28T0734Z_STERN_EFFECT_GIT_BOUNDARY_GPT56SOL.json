@@ -1,0 +1,120 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28T0734Z_STERN_EFFECT_GIT_BOUNDARY_5641dc6b_GPT56SOL",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "analysis_time_utc": "2026-08-28T07:34:00Z",
+  "evidence_scope": "ACCESSIBLE_GIT_SOURCE_CHRONOLOGY_ONLY_NO_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "current_commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "27550655a8a80e531edc5a564f2731532894888f",
+    "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73"
+  },
+  "question": "What can accessible Git actually establish about the transition from posttool-only effect logging to the current Phase-2 nonblocking zulassen()/merken() effect bookkeeping path in stern.py?",
+  "chronology": [
+    {
+      "order": 1,
+      "commit": "6cc5a3f3e23451c2275463bde407912e2d46b8f7",
+      "classification": "HISTORICAL_SOURCE_BOUNDARY_NEGATIVE",
+      "finding": "The recursive repository tree contains no stern.py path. Accessible repository source therefore does not expose a predecessor stern implementation at this parent commit.",
+      "boundary": "Absence from this repository tree does not prove that no host-only stern.py or predecessor mechanism existed elsewhere."
+    },
+    {
+      "order": 2,
+      "commit": "4f55d688fe27e9361374ea912e57319bfb566407",
+      "committed_at": "2026-08-25T21:37:33Z",
+      "path": "windows/quelle/stern.py",
+      "blob_sha": "0f30287f78e9be3c0ed86978d8ddf1cd1eeb5062",
+      "classification": "FIRST_VERIFIED_IN_ACCESSIBLE_GIT",
+      "finding": "The first verified accessible Git stern.py in the inspected lineage already contains def zulassen(payload), the Phase-2 pre-tool admission/bookkeeping mechanism paired with merken().",
+      "boundary": "This is first verified in accessible Git, not a creation-date claim. The mechanism may have existed earlier on a host or in unavailable provenance."
+    },
+    {
+      "order": 3,
+      "commit": "b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a",
+      "committed_at": "2026-08-25T22:18:41Z",
+      "path": "scripts/stern.py",
+      "classification": "LINUX_PLUGIN_PAYLOAD_SOURCE_READY",
+      "finding": "The installable Linux plugin payload is added to repository Git and its scripts/stern.py also contains def zulassen(payload).",
+      "boundary": "Repository packaging/source-ready does not by itself prove host activation or runtime reachability at this commit."
+    },
+    {
+      "order": 4,
+      "commit": "ccf2264f23b65ed796f9ed44a38c8c55bd379345",
+      "committed_at": "2026-08-27T12:22:13Z",
+      "path_transition": "scripts/stern.py -> DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "classification": "REPOSITORY_REORGANIZATION",
+      "finding": "The three-layer repository restructuring relocates the source lineage into DEV_SOURCE_RESEARCH/repository without establishing a new effect-authority semantic transition by itself."
+    },
+    {
+      "order": 5,
+      "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "classification": "CURRENT_DONOR_SOURCE",
+      "finding": "Current donor source explicitly documents zulassen() as nonblocking bookkeeping, stores one active_turns.effect_id per session, and lets PostToolUse merken() add/verify outcome evidence including a fallback row when no PreToolUse row exists."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_STERN_EFFECT_FIRST_ACCESSIBLE_GIT_BOUNDARY_032",
+      "source_kind": "HISTORICAL_ONLY",
+      "sources": [
+        "gschaidergabriel/frankenstein tree@6cc5a3f3e23451c2275463bde407912e2d46b8f7",
+        "windows/quelle/stern.py@4f55d688fe27e9361374ea912e57319bfb566407 blob 0f30287f78e9be3c0ed86978d8ddf1cd1eeb5062"
+      ],
+      "claim": "The earliest stern.py verified in the accessible inspected Git lineage already contains the Phase-2 zulassen() mechanism. Therefore accessible Git cannot support a claim that commit 4f55d688 created the transition from posttool-only logging to Phase-2 admission bookkeeping; it only bounds the transition as no later than the first verified source appearance.",
+      "confidence": 1.0,
+      "target_action": "KEEP",
+      "frankenstein2_impact": "Use first-verified-in-accessible-Git language in architecture history and keep earlier host-only transition provenance explicitly unresolved."
+    },
+    {
+      "atom_id": "F2_STERN_SOURCE_READY_VS_RUNTIME_WIRED_SPLIT_033",
+      "source_kind": "HISTORICAL_ONLY",
+      "sources": [
+        "scripts/stern.py@b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a",
+        "repository restructure@ccf2264f23b65ed796f9ed44a38c8c55bd379345"
+      ],
+      "claim": "The Git lineage can establish repository packaging and path migration, but these commits do not by themselves establish the exact host activation moment or runtime reachability of the effect hook path.",
+      "confidence": 1.0,
+      "target_action": "KEEP",
+      "frankenstein2_impact": "Keep SOURCE_READY, LIVE_WIRED and RUNTIME_OBSERVED as distinct evidence states in reconstruction and acceptance reporting."
+    },
+    {
+      "atom_id": "F2_POSTTOOL_ONLY_TRANSITION_NOT_RECOVERABLE_FROM_CURRENT_REPO_034",
+      "source_kind": "NEGATIVE_RESULT",
+      "claim": "The requested posttool-only -> Phase-2 transition is not reconstructable from the currently accessible gschaidergabriel/frankenstein Git history because the earliest verified stern.py snapshot already contains zulassen(), while its inspected parent tree contains no stern.py source.",
+      "confidence": 0.99,
+      "target_action": "UNDECIDED",
+      "counterhypothesis": "An earlier host-only file, another repository/path, or an uninspected historical artifact may contain the pre-zulassen stern implementation.",
+      "falsifier": "Produce an earlier provenance-bound stern/effect source artifact with an exact timestamp/commit/path that contains merken()/PostToolUse effect logging without zulassen()/PreToolUse admission bookkeeping."
+    }
+  ],
+  "frontier_delta": {
+    "resolved": [
+      "Accessible-Git lower boundary: first verified stern.py with zulassen() is windows/quelle/stern.py@4f55d688fe27e9361374ea912e57319bfb566407; parent 6cc5a3f3 has no stern.py.",
+      "Linux plugin source-ready appearance is bounded at b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a.",
+      "Repository reorganization path transition is bounded at ccf2264f23b65ed796f9ed44a38c8c55bd379345."
+    ],
+    "still_open": [
+      "Exact earlier host/source artifact showing posttool-only effect logging before zulassen(), if one exists.",
+      "Exact runtime activation/wiring chronology; source-ready commits do not prove live hook firing.",
+      "Actual wache-koenig source and its relation to the current nonblocking stern path."
+    ]
+  },
+  "evidence_credit": {
+    "new_runtime_execution": 0,
+    "whole_frankenstein_2_runtime_pass": false,
+    "entityos_whole_runtime_credit_delta": 0,
+    "hcu_runtime_credit_delta": 0,
+    "physical_grid10_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_exact_gate": "Search provenance-bearing host/archive/repository artifacts for a pre-4f55 stern/effect source. If none is accessible, record EARLIER_POSTTOOL_ONLY_TRANSITION_UNAVAILABLE_FROM_ACCESSIBLE_REPOSITORY rather than inventing a creation date; then continue with wache-koenig provenance and exact runtime hook-wiring chronology."
+}

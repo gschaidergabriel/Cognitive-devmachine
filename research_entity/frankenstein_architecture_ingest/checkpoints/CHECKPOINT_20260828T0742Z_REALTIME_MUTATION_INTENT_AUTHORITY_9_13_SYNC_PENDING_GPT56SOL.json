@@ -1,0 +1,40 @@
+{
+  "schema": "TRIGGERWORD5_SYNC_CHECKPOINT/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "9.13",
+  "authority_binding": {
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF"
+  },
+  "status": "SYNC_PENDING_SHARED_INGEST_STATE_ONLY",
+  "reason": "Shared INGEST_STATE changed repeatedly under parallel Triggerword-5 writers. Two compare-and-swap attempts on the predecessor ingest failed with HTTP 409 and no force-write. The source result has been rebound append-only to current 9.13 authority; shared state remains intentionally unforced.",
+  "current_durable_artifacts": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T0741Z_5641dc6_GPT56SOL_REALTIME_MUTATION_INTENT_AUTHORITY_REBIND.json",
+      "commit": "01c593060d10b4d010188100a398ae2318910736"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T0741Z_REALTIME_MUTATION_INTENT_AUTHORITY_REBIND_GPT56SOL.json",
+      "commit": "efcb5f512b61283d423d57e3ee060e1e14a43a4a"
+    }
+  ],
+  "historical_predecessor_artifacts": [
+    "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T073512Z_5641dc6_GPT56SOL_REALTIME_MUTATION_INTENT_BOUNDARY.json",
+    "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_ARCHITECTURE_DELTA_2026-08-28T1436P0700_GPT56SOL_REALTIME_MUTATION_INTENT.json",
+    "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1436P0700_REALTIME_MUTATION_INTENT_GPT56SOL.json"
+  ],
+  "historical_source_epoch": "8.78",
+  "packet_id_to_consume_when_state_stabilizes": "TW5-PACKET-20260828T0741Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-AUTHORITY-REBIND",
+  "contradiction_id": "TW5-CONTRADICTION-REALTIME-MUTATION-INTENT-008",
+  "credits": {
+    "new_runtime_credit": 0,
+    "new_training_credit": 0,
+    "new_canonical_semantics_credit": 0,
+    "new_physical_grid10_credit": 0,
+    "new_whole_hcu_credit": 0
+  },
+  "next_exact_action": "Re-enter current shared INGEST_STATE, deduplicate this packet id, then add one state pointer only if compare-and-swap can succeed without overwriting parallel deltas. Otherwise leave append-only artifacts authoritative for this forensic result and keep sync pending."
+}

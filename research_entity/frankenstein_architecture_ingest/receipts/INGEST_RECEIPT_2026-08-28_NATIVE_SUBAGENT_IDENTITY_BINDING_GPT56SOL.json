@@ -1,0 +1,38 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "worker": "GPT-5.6-Sol/triggerwort5",
+  "trigger_routing": "PASS",
+  "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+  "authority_epoch": "9.13",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "architecture_delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_NATIVE_SUBAGENT_IDENTITY_BINDING_GPT56SOL.json",
+  "architecture_delta_commit": "f51562d952a7b412b553b54cba15d10112e11dc1",
+  "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+  "packet_consumed": false,
+  "packet_admission": "BLOCKED_PENDING_DECLARED_EXECUTABLE_VALIDATOR_PASS",
+  "crosscheck_result": "SOURCE_AND_EXTERNAL_PRIMARY_CLAIMS_CORROBORATED_WITH_RUNTIME_BOUNDARY_PRESERVED",
+  "findings": [
+    "Pinned donor handoff() creates durable workpackage/capsule state but explicitly does not spawn a child.",
+    "Pinned donor plugin hooks do not register SubagentStart/SubagentStop/Task lifecycle events.",
+    "Pinned donor stern.py contains no agent_id or tool_use_id handling.",
+    "Current official Claude Code docs expose agent_id/agent_type in subagent lifecycle/tool hooks, tool_use_id in PreToolUse, resumable native subagents, nested delegation and optional worktree isolation.",
+    "Official docs are capability evidence only; installed host build/config/runtime firing remains unobserved.",
+    "Native child runtime probing is not executed under current 9.13 HARD_OFF provider authority."
+  ],
+  "trigger4_handoff": "Prefer adapting workpackage identity to an observed native lifecycle ABI before building a second spawn runtime. Require workpackage_id -> agent_id -> tool_use_id/effect lineage, explicit parent/child metadata, one-shot pre-effect authority and typed completion receipts. Worktree isolation is not effect authority.",
+  "negative_evidence": [
+    "NO_INSTALLED_HOST_NATIVE_ABI_PROOF",
+    "NO_DONOR_AGENT_ID_CAPTURE",
+    "NO_DONOR_TOOL_USE_ID_CAPTURE",
+    "NO_EXECUTABLE_V2_PACKET_ADMISSION_PASS",
+    "NO_PROVIDER_RUNTIME_PROBE_UNDER_HARD_OFF"
+  ],
+  "credit_delta": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_action": "First obtain executable v2 packet-admission PASS on a freshly refreshed canonical-main checkout. Runtime child probing remains deferred until a newer authority admits that provider/runtime path; then pin installed Claude Code version and capture one harmless native child lifecycle with exact identity binding."
+}

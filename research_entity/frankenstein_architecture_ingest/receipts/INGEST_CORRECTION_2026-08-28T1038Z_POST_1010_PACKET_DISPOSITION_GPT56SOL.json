@@ -1,0 +1,71 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CORRECTION/v1",
+  "correction_id": "TW5-CORRECTION-20260828T1038Z-POST-1010-PACKET-DISPOSITION-GPT56SOL",
+  "created_at": "2026-08-28T10:38:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/live-ingest-reconciliation",
+  "authority": {
+    "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "supervisor_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "corrects": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1032Z_POST_1010_LIVE_INGEST_RECONCILIATION_GPT56SOL.json",
+      "commit": "ecc909565b166f5dd037a2eb7097155836522dbb"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1032Z_POST_1010_LIVE_INGEST_RECONCILIATION_GPT56SOL.json",
+      "commit": "e0a4b42df1b66f7ffcce7c2baabfcc3a7a8cb9f1"
+    }
+  ],
+  "reason": "Re-entry observed later parallel Triggerword-5 admission review and ABI reconciliation. Those artifacts exposed a schema-invalid atom action and a wrong line-span provenance binding in the incoming immutable packet. The packet therefore must remain REJECTED_NOT_CONSUMED even though several independently rechecked source findings are valid. Historical records are preserved; this correction narrows their packet-disposition claim.",
+  "packet": {
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "final_disposition_for_this_run": "REJECTED_NOT_CONSUMED",
+    "rejection_reasons": [
+      "SCHEMA_VIOLATION: atom TW5-WORKEXEC-SUCC-005 uses target_2_0_action=RESEARCH, which is outside the canonical INGEST_PACKET_SCHEMA enum.",
+      "PROVENANCE_SPAN_MISMATCH: atom TW5-WORKEXEC-SUCC-002 binds its spawn-after-approval semantic claim to architekt_governance.md lines 1-7, but that exact span is cadence preamble rather than the claimed spawn paragraph."
+    ],
+    "rule": "INVALID_IMMUTABLE_PACKET_IS_EVIDENCE_NOT_AUTHORITY_AND_MUST_NOT_BE_SILENTLY_REPAIRED_OR_MARKED_CONSUMED"
+  },
+  "independently_retained_source_findings": [
+    "At donor SHA 5641dc6b2df6ebed1df246ee7533134324f6c427, stern.py handoff() durably records workpackage intent/capsule and explicitly does not itself spawn/delegate a child.",
+    "At the same donor SHA, repository hooks.json lacks dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted registrations in the inspected file.",
+    "workpackage_id, parent tool invocation identity, child agent_id, optional task_id, session/generation and completion identity must remain distinct until an observed deterministic join establishes relationships."
+  ],
+  "abi_reconciliation": {
+    "documentation_level": "DOCUMENTED_ABI_JOIN_CANDIDATE_PRESENT",
+    "candidate": "parent Agent PostToolUse exposes tool_use_id and documented tool_response.agentId; Subagent lifecycle exposes agent_id; task_id is separate",
+    "installed_runtime_level": "UNVERIFIED",
+    "correction_to_prior_interpretation": "Do not claim the tool_use_id -> agent_id bridge is undocumented. Treat it as documented external-primary ABI candidate only; target-host firing, exact installed build behavior and lifecycle equality remain unverified.",
+    "runtime_credit": 0
+  },
+  "architecture_status": {
+    "WorkExecutionBinding/v1": "RETAIN_AS_DESIGN_CONSTRAINT_FROM_INDEPENDENT_SOURCE_AND_DOCUMENTED_ABI_CROSSCHECK_NOT_FROM_PACKET_WHOLESALE_CONSUMPTION",
+    "CausalWorkspaceFrame/v1": "UNCHANGED",
+    "UnifiedMemoryEvolution/v1": "UNCHANGED",
+    "CausalWorldModelFrame/v1": "UNCHANGED",
+    "GRIDLocalDeliberation/v1": "UNCHANGED",
+    "ScientificMicroLab/v1": "UNCHANGED",
+    "TypedVisualPerception/v1": "UNCHANGED"
+  },
+  "central_ingest_state": {
+    "updated": false,
+    "reason": "Shared state remains stale/mixed-freshness and concurrent workers are active; append-only correction is safer than clobbering state from a stale snapshot."
+  },
+  "credits": {
+    "source_forensic_reconciliation": "PASS_WITH_PACKET_REJECTION_CORRECTION",
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "native_subagent_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "On an authorized non-provider local/sandbox target, harmlessly capture one Agent PreToolUse/PostToolUse plus SubagentStart/SubagentStop lifecycle and verify parent tool_use_id + PostToolUse.tool_response.agentId against lifecycle agent_id; then run a two-concurrent-child anti-crosswire fixture. No runtime credit before this exact gate."
+}

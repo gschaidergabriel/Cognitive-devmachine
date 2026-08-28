@@ -1,0 +1,69 @@
+{
+  "receipt_type": "TRIGGERWORD5_ARCHITECTURE_INGEST_RECEIPT/v1",
+  "created_at": "2026-08-28T07:28:28Z",
+  "trigger": "triggerwort 5",
+  "worker": "chatgpt-gpt56sol-triggerword5-ingestor",
+  "authority_epoch_observed": "8.78",
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_write": "4034659cc56fef540a89516642e930d162031b64",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "routing_status": "TRIGGER_ROUTING_ACTIVE",
+  "consumed_packet_ids": [
+    "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+    "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+    "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT"
+  ],
+  "direct_crosschecks": [
+    {
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3090-3600@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "status": "CONFIRMED",
+      "finding": "Normal zulassen/PreToolUse is nonblocking bookkeeping; PostToolUse outcome can be recorded independently of successful pre-admission, and causal_episodes is initialized with credit=0/reentered=0."
+    },
+    {
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:cmd_hook@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "status": "CONFIRMED",
+      "finding": "Normal PreToolUse emits no deny/block after zulassen; a separate SEBUKKU branch demonstrates narrow deny capability."
+    },
+    {
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:420-560@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "status": "CONFIRMED",
+      "finding": "Central DAG-based COMPUTE_OFF and dependency taint return NOT_COMPUTED/value=None before compute_fn execution."
+    },
+    {
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1300-1560@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "status": "CONFIRMED",
+      "finding": "Pending Realtime function calls are discarded on non-completed response and on barge-in before local tool dispatch."
+    }
+  ],
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_LATE_PACKET_ASSIMILATION.json",
+    "commit_sha": "0d7550364b8a502e1e376bbdff9430e19b357a85"
+  },
+  "architecture_rules_promoted_as_design_inputs": [
+    "F2_EFFECT_IDENTITY_PER_INVOCATION_020",
+    "F2_EFFECT_STATE_TYPE_SPLIT_021",
+    "F2_PERCEPTION_NOT_COMPUTED_TAINT_022",
+    "F2_PENDING_EFFECT_CANCELLATION_023"
+  ],
+  "preserved_contradictions": [
+    "TW5-CONTRADICTION-INGEST-PATH-001",
+    "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+    "TW5-CONTRADICTION-EFFECT-ENFORCEMENT-003",
+    "TW5-CONTRADICTION-VERIFIED-PREADMISSION-004"
+  ],
+  "credits": {
+    "source_forensics": "PRESENT_STRENGTHENED",
+    "historical_component_receipt_reuse": "PERCEPTION_ABLATION_ONLY_NO_RERUN",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "donor_modified": false,
+  "acceptance": "SOURCE_INGEST_CHECKPOINT_COMPLETE_RUNTIME_UNRESOLVED",
+  "next_exact_gate": "Resolve the artifact-bound blocking wache-koenig/host permission ordering and immutable per-invocation effect lifecycle, recover Git introduction/supersession chronology for the effect path, and feed the typed effect-state split, NOT_COMPUTED taint and pending-effect cancellation rules into Triggerword-4 assembly without modifying the donor in this analysis lane."
+}

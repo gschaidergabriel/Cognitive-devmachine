@@ -1,0 +1,78 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "checkpoint_id": "INGEST_CHECKPOINT_20260828T102100Z_GPT56SOL_RETINA_VISUAL_CAUSAL_CONDITIONING",
+  "created_at": "2026-08-28T10:21:00Z",
+  "routing": {"trigger": "triggerwort 5", "status": "VERIFIED", "organ": "GPT-5.6-Sol/triggerwort5/retina-visual-causal-conditioning"},
+  "authority": {
+    "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "runtime_credit": 0,
+    "design_head_observed_before_frontier": "698497d6fac89a26af5df0ca306cda855d4f2b4c"
+  },
+  "pins": {
+    "current_frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "project_frankenstein_main_sha": "39c5423e0bfae54b971aab0be82f225f7a5890b8",
+    "source": "tools/frank_eye.py"
+  },
+  "semantic_atoms": [
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "tools/frank_eye.py :: module contract",
+      "observed": "FrankEye unifies Digital Retina v8 CNN classification, DINOv2 scene analysis, GOLPU feature extraction, Tesseract OCR, OpenCV face detection and hand-crafted HOG/color/spatial/texture features into a CPU-only vision pipeline.",
+      "evidence_scope": "Project-Frankenstein source only"
+    },
+    {
+      "classification": "CONFIG",
+      "source_span": "tools/frank_eye.py :: model/weight paths",
+      "observed": "The inspected module resolves Retina weights, GOLPU library and DINO ONNX/config from concrete host paths and lazy-loads dependencies. These paths are environment bindings, not portable artifact attestations by themselves.",
+      "evidence_scope": "source only"
+    },
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "tools/frank_eye.py :: analyze",
+      "observed": "The public analyze(image_path, deep=False) interface ultimately returns a natural-language description, optionally enriched by deeper GoL analysis, rather than a typed causal perception packet as its primary API result.",
+      "evidence_scope": "source only"
+    },
+    {
+      "classification": "NEGATIVE_RESULT",
+      "source_span": "FrankEye output contract versus current Typed Entry/evidence law",
+      "observed": "A natural-language image description collapses multiple detector/model outputs and can lose exact uncertainty, bounding geometry, model identity, source image identity and disagreements. It cannot serve as canonical observation evidence by itself.",
+      "evidence_scope": "architecture compatibility inference"
+    }
+  ],
+  "architecture_delta_for_frankenstein_2": {
+    "component": "TypedVisualPerception/v1",
+    "decision": "PORT_RETINA_AS_STRUCTURED_MULTI_DETECTOR_OBSERVATION_WITH_TEXT_AS_DERIVED_PROJECTION",
+    "preserve": [
+      "multi-detector visual fusion",
+      "fast/deep mode separation",
+      "CPU-safe fallback intent",
+      "OCR and face/scene/texture feature diversity",
+      "explicit feature extraction useful for downstream causal conditioning"
+    ],
+    "change": [
+      "Admit each image/frame through Typed Entry with causal_event_id, admission_id, observed/received times, source device/path identity, frame sequence/generation and raw payload digest before cognition.",
+      "Emit a structured VisualObservation containing detector/model artifact identities, feature vectors or typed summaries, OCR spans, face/object detections, confidence/uncertainty and per-detector provenance.",
+      "Keep raw image/frame reference or digest-addressed evidence according to retention policy so natural-language descriptions can be audited or regenerated.",
+      "Natural-language scene description is a DerivedPerceptionNarrative projection for GRID/GWT context, never the sole observation record.",
+      "Preserve detector disagreement instead of smoothing it into one description; unresolved visual alternatives enter Hyperposition/candidate space.",
+      "Any behavior triggered by visual inference still yields ActionCandidate and requires EffectGate/EffectJournal for effects; verified consequences return as new Typed Entry observations."
+    ],
+    "recommended_flow": "image/frame -> Typed Entry -> VisualObservation multi-detector packet -> DerivedPerceptionNarrative/feature projection -> CausalWorkspaceFrame -> GRID/GWT/HCU -> ActionCandidate -> EffectGate -> EffectJournal -> outcome re-entry",
+    "truth_law": "VISION_MODEL_DESCRIPTION_NEQ_CANONICAL_WORLD_FACT"
+  },
+  "hypotheses_and_falsifiers": [
+    {
+      "hypothesis": "Keeping structured detector outputs plus raw-frame digest will improve auditability and causal learning compared with storing only the generated scene narrative.",
+      "confidence": 0.99,
+      "falsifier": "A replay/audit benchmark shows the natural-language description alone recovers all detector confidence, disagreement, spatial identity, model identity and source-frame provenance needed for every downstream decision."
+    }
+  ],
+  "triggerword4_handoff": {
+    "status": "READY_AS_ARCHITECTURE_INPUT",
+    "instruction": "Port FrankEye as a Visual Cortex donor behind Typed Entry. Freeze image/frame and model identities, keep structured detector outputs, then derive language for workspace context. Never use the language description as the sole visual evidence."
+  },
+  "credits": {"whole_entityos_hcu_runtime": 0, "hcu_full_runtime": 0, "visual_runtime": 0, "jspace_model_runtime": 0, "training": 0},
+  "next_frontier": "Voice/presence input-output causal binding and verified outcome re-entry; if no high-value exact source is discoverable, move to UnifiedDB defect convergence and GWT/workspace integration."
+}

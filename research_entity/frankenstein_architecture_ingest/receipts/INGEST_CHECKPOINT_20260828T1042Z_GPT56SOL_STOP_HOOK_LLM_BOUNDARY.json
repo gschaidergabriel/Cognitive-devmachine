@@ -1,0 +1,67 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "checkpoint_id": "TW5-CHECKPOINT-20260828T1042Z-STOP-HOOK-LLM-BOUNDARY-GPT56SOL",
+  "created_at": "2026-08-28T10:42:00Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/stop-hook-llm-boundary",
+  "trigger": "triggerwort 5",
+  "routing": {
+    "normalized_trigger": "triggerwort 5",
+    "directive_fetch": "PASS",
+    "lane": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_PLUS_LIVE_INGEST",
+    "assembly_or_vps_execution": false
+  },
+  "authority": {
+    "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "supervisor_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_head_observed_before_write": "9bf076fbb97b3c299300a5b8e4f6922b93ae9cfe"
+  },
+  "deduplication": {
+    "workexecution_parallel_lane_observed": true,
+    "workexecution_lane_action": "NO_DUPLICATE_INGEST",
+    "selected_nonoverlap": "current donor local cognition / Stop-hook LLM boundary",
+    "existing_exact_ingest_match_found": false
+  },
+  "ingested_packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T104200Z_5641dc6_GPT56SOL_STOP_HOOK_LLM_BOUNDARY.json",
+  "packet_commit": "8a102f51a844496429f30daa1b8e9e5b7ef634de",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1042Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+  "architecture_delta_commit": "62e10c43a20b4eb3db943d6868d8d846f5df154d",
+  "source_crosscheck": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "spans": ["33-48", "4820-5065", "8870-8898"],
+    "result": "PASS_SOURCE_CONTRADICTION_CONFIRMED",
+    "finding": "The top-level source declares no LLM call in any hook, while the live Stop path synchronously invokes a local Ollama qwen2.5:0.5b relevance judge and reduces its output to modell:relevanz feedback before later Stop bookkeeping. The model remains candidate evidence and cannot independently promote SHADOW->ACTIVE, but inference is nevertheless in the hook critical path."
+  },
+  "architecture_decision": {
+    "action": "REPAIR_AND_ADAPT_TO_GRID",
+    "preserve": [
+      "candidate-evidence-only model authority",
+      "non-human signal class cannot independently promote retrieval policy",
+      "fail-closed no-judgment-on-model-failure behavior"
+    ],
+    "change": [
+      "make hook-vs-cognition boundary internally consistent",
+      "prefer exact turn/retrieval-bound cognition work outside deterministic Stop critical path unless runtime evidence justifies a bounded explicit exception",
+      "require exact causal identity before applying model relevance credit"
+    ]
+  },
+  "negative_evidence": [
+    "No installed-runtime hook trace was run in this Triggerword-5 source-forensic lane.",
+    "No evidence yet proves that Stop budget exhaustion actually skips later gw_absicht/governance/status operations; that is a falsifiable source-derived risk only.",
+    "No evidence yet proves wrong-round relevance credit under concurrent/reordered Stop events; the current session-scoped newest-row selector makes it an open causal-binding risk."
+  ],
+  "next_exact_gate_for_triggerword4": "Run StopHookCognitionBudgetTrace/v1 plus SameSessionRetrievalCreditBinding/v1 at exact build identity before deciding whether to retain a bounded hook exception or move relevance inference fully behind GRID cognition scheduling.",
+  "shared_state_write_policy": "APPEND_ONLY_CHECKPOINT_USED; INGEST_STATE.json not overwritten in this commit to avoid clobbering concurrent Triggerword-5 workers. Reconciliation may append this delta after head re-entry.",
+  "credits": {
+    "source_forensics": "PASS",
+    "runtime": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_entityos_hcu": 0
+  }
+}

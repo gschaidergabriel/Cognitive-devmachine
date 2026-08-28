@@ -1,0 +1,64 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T072916Z-PERCEPTION-PENDING-EFFECT-GPT56SOL",
+  "created_at": "2026-08-28T07:29:16Z",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "authority_epoch": "8.78",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_before_delta": "d7869b9ba00beb7142565387a5753d1a22f1e775",
+    "delta_commit": "c04238fdd0b6368f81dbeb417457120f22b4a8f5",
+    "delta_path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_PERCEPTION_PENDING_EFFECT_DELTA_2026-08-28T142916P0700_GPT56SOL.json"
+  },
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "packet_disposition": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "status": "DEDUPED_ALREADY_DURABLE",
+      "evidence": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_PATH_DELTA_2026-08-28T1421P0700_GPT56SOL.json"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "status": "DEDUPED_ALREADY_DURABLE_SYNC_STATE_PENDING_BEFORE_THIS_RUN",
+      "evidence": "research_entity/frankenstein_architecture_ingest/checkpoints/CHECKPOINT_20260828T072730Z_EFFECT_AUTHORITY_SYNC_PENDING_GPT56SOL.json"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "status": "INGESTED_UNIQUE_ATOMS",
+      "unique_atoms": [
+        "perception dependency taint + NOT_COMPUTED enforcement",
+        "historical bounded ablation evidence",
+        "Realtime pre-dispatch pending-tool cancellation on barge-in/non-completed response",
+        "VoiceSessionCapsule as ephemeral multi-source projection requiring freshness/provenance"
+      ]
+    }
+  ],
+  "source_cross_checks": [
+    "stern.py 3200-3655 and 8800-8905: ordinary zulassen bookkeeping remains nonblocking and PostToolUse fallback may create VERIFIED without pre-admission",
+    "perception_control.py 420-560: central DAG taint/COMPUTE_OFF returns NOT_COMPUTED before compute_fn",
+    "realtime_gespraech.py 1300-1408: response cancellation/barge-in clears pending function calls before local dispatch"
+  ],
+  "architecture_change": [
+    "Promote NOT_COMPUTED and dependency-taint into the sparse WorldNeed/WorldSlice control contract; protected dimensions cannot be silently reconstructed as measured values.",
+    "Generalize Realtime queued-tool cancellation into a typed pending-effect lifecycle before deterministic EffectGate dispatch; after external submission, ambiguity remains OUTCOME_UNKNOWN.",
+    "Keep VoiceSessionCapsule successor noncanonical and bind compiled fields to explicit freshness/provenance instead of turning the capsule into a second memory authority."
+  ],
+  "runtime_claim": "NO_NEW_RUNTIME_EXECUTION_OR_WHOLE_PRODUCT_PROMOTION",
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Trace realtime_gespraech._tool_ausfuehren into the actual executor/permission boundary and audit all live perception callers for evaluate_head bypass; then hand the resulting invocation-identity and NOT_COMPUTED regressions to Triggerword 4."
+}

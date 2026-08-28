@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "INGEST_PACKET_SCHEMA_V2.json",
+  "title": "Frankenstein Triggerword-5 Architecture Ingest Packet v2",
+  "$comment": "v2 extends the v1 packet shape with mandatory ingest-time authority binding. Structural schema validation is necessary but not sufficient: validate_ingest_packet_v2.py must compare the binding against the refreshed canonical main before CURRENT_AUTHORITY_BOUND admission.",
+  "allOf": [
+    {"$ref": "INGEST_PACKET_SCHEMA.json"},
+    {
+      "type": "object",
+      "required": ["schema_version", "authority_classification", "authority_binding"],
+      "properties": {
+        "schema_version": {"const": 2},
+        "authority_classification": {
+          "enum": ["CURRENT_AUTHORITY_BOUND", "HISTORICAL_SOURCE_EPOCH"]
+        },
+        "authority_binding": {
+          "type": "object",
+          "required": [
+            "authority_epoch",
+            "canonical_main_sha",
+            "supervisor_inbox_path",
+            "supervisor_inbox_blob_sha",
+            "selected_steering_path",
+            "selected_steering_blob_sha",
+            "free_provider_admission_path",
+            "free_provider_admission_blob_sha",
+            "provider_execution_state",
+            "mode",
+            "provider_routes_admitted",
+            "together"
+          ],
+          "properties": {
+            "authority_epoch": {"type": "string", "minLength": 1},
+            "canonical_main_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            "supervisor_inbox_path": {"const": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"},
+            "supervisor_inbox_blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            "selected_steering_path": {"type": "string", "minLength": 1},
+            "selected_steering_blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            "free_provider_admission_path": {"const": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"},
+            "free_provider_admission_blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            "provider_execution_state": {"type": "string", "minLength": 1},
+            "mode": {"type": "string", "minLength": 1},
+            "provider_routes_admitted": {"type": "boolean"},
+            "together": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/native-child-identity-binding",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T08:38:00Z",
+  "routing_result": "PASS",
+  "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+  "authority_epoch": "9.13",
+  "authority_mode": "FREE_ONLY",
+  "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_delta": "41bec098d4dc9992eb6a865277d131a172908ac5",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_ref": "main",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "inputs": {
+    "trigger5_directive": {
+      "path": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+      "blob_sha": "9f9a2fcb36a6129216af08a742f7449fd8c14f6f"
+    },
+    "sparse_world_directive": {
+      "path": "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md",
+      "blob_sha": "d0e6b698193f75099df57d4db31c22c5fb90589b"
+    },
+    "packet_schema": {
+      "path": "research_entity/frankenstein_architecture_ingest/INGEST_PACKET_SCHEMA.json",
+      "blob_sha": "8b2732394418e725067be52ee480ad1da649a9f7"
+    },
+    "admitted_packet": {
+      "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T082628Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+      "blob_sha": "bad15660b245dfc33139736cd9857064c82812ef",
+      "prior_admission_receipt_commit": "41bec098d4dc9992eb6a865277d131a172908ac5",
+      "admitted": true,
+      "runtime_credit_delta": 0
+    }
+  },
+  "source_crosschecks": [
+    {
+      "source": "CURRENT_DONOR_SOURCE",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 5690,
+      "line_end": 5785,
+      "finding": "handoff() creates and persists entityos_arbeitspaket plus a deterministic DB-derived capsule and advisory file-lease hints; its executable-source docstring explicitly states that stern delegates nothing itself.",
+      "classification": "LIVE_CODE",
+      "confidence": 0.99
+    },
+    {
+      "source": "CURRENT_DONOR_SOURCE",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "line_start": 1,
+      "line_end": 81,
+      "finding": "The versioned donor plugin registers SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact only; dedicated SubagentStart/SubagentStop/Task lifecycle hooks are absent from this plugin config.",
+      "classification": "CONFIG",
+      "confidence": 0.99
+    },
+    {
+      "source": "EXTERNAL_PRIMARY",
+      "provider": "Claude Code Docs",
+      "url": "https://code.claude.com/docs/en/hooks",
+      "spans": ["399", "781-803", "2049-2140"],
+      "finding": "Current official documentation exposes agent_id/agent_type in subagent tool hooks, unique agent_id in SubagentStart/SubagentStop, task_id in task lifecycle hooks and call-scoped tool_use_id in tool hooks. PreToolUse can make a blocking decision.",
+      "classification": "SPEC_NOT_INSTALLED_RUNTIME_EVIDENCE",
+      "confidence": 0.98
+    },
+    {
+      "source": "EXTERNAL_PRIMARY",
+      "provider": "Claude Code Docs",
+      "url": "https://code.claude.com/docs/en/sub-agents",
+      "spans": ["312-338", "891-904"],
+      "finding": "Current official documentation describes worktree isolation and resuming supported subagents under their agent ID. This is capability documentation only until the target installed build/config is observed.",
+      "classification": "SPEC_NOT_INSTALLED_RUNTIME_EVIDENCE",
+      "confidence": 0.98
+    }
+  ],
+  "forensic_findings": [
+    {
+      "id": "TW5-FINDING-WORKPACKAGE-NOT-CHILD",
+      "claim": "WORKPACKAGE_EXISTS != NATIVE_CHILD_EXISTS",
+      "evidence_class": "CURRENT_SOURCE_PLUS_PACKET_CROSSCHECK",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "id": "TW5-FINDING-DONOR-CHILD-IDENTITY-BLINDNESS",
+      "claim": "The pinned donor has durable delegated-work state but the inspected plugin path does not durably bind dedicated native child lifecycle identity.",
+      "evidence_class": "CURRENT_SOURCE",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "id": "TW5-FINDING-NATIVE-IDENTITY-ABI-AVAILABLE-IN-SPEC",
+      "claim": "The current platform specification exposes actor/task/call identifiers sufficient to attempt an exact binding layer before inventing a duplicate spawn runtime.",
+      "evidence_class": "EXTERNAL_PRIMARY",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "id": "TW5-FINDING-HOST-ABI-UNVERIFIED",
+      "claim": "Installed-host support, exact build behavior, loaded hook configuration and actual lifecycle firing remain UNKNOWN.",
+      "evidence_class": "NEGATIVE_RESULT_UNKNOWN_RUNTIME",
+      "target_2_0_action": "UNDECIDED"
+    }
+  ],
+  "architecture_model_delta": {
+    "new_boundary": "DELEGATED_EXECUTION_IDENTITY_BINDING",
+    "invariants": [
+      "WORKPACKAGE_EXISTS != CHILD_EXISTS",
+      "AGENT_ID_IS_ACTOR_IDENTITY_NOT_EFFECT_AUTHORITY",
+      "TASK_ID_IS_TASK_LIFECYCLE_IDENTITY_NOT_EFFECT_AUTHORITY",
+      "TOOL_USE_ID_OR_EQUIVALENT_EXACT_INVOCATION_ID_IS_REQUIRED_FOR_MUTATING_CALL_CORRELATION",
+      "SESSION_ID_IS_CONTEXT_NOT_SUFFICIENT_INVOCATION_IDENTITY",
+      "DOCUMENTED_PLATFORM_CAPABILITY != INSTALLED_RUNTIME_BEHAVIOR",
+      "NATIVE_CHILD_OUTPUT != CANONICAL_TRUTH",
+      "NO_DUPLICATE_SPAWN_RUNTIME_UNTIL_NATIVE_PATH_IS_EXECUTABLY_SHOWN_INSUFFICIENT"
+    ],
+    "successor_record": {
+      "name": "DelegatedExecutionIdentity",
+      "required_when_observed": [
+        "workpackage_id",
+        "parent_session_id",
+        "generation",
+        "agent_id",
+        "agent_type",
+        "source_sha_or_capsule_digest",
+        "started_at",
+        "lifecycle_state"
+      ],
+      "optional_or_runtime_dependent": [
+        "task_id",
+        "parent_agent_id",
+        "tool_use_id",
+        "worktree_identity",
+        "runtime_build_id",
+        "agent_transcript_ref",
+        "stopped_at",
+        "resume_generation"
+      ],
+      "authority": "IDENTITY_AND_PROVENANCE_ONLY"
+    },
+    "binding_sequence": [
+      "persist workpackage/capsule",
+      "request native child creation through the host-supported coordinator path",
+      "capture SubagentStart or equivalent native lifecycle identity",
+      "atomically bind workpackage_id + generation to agent_id",
+      "capture task_id where Task lifecycle is used",
+      "for each mutating tool call bind agent_id + workpackage_id + generation + tool_use_id to one pre-side-effect EffectDecision",
+      "consume the decision once before side effect",
+      "bind PostToolUse/PostToolUseFailure and typed execution receipt back to the same tool_use_id",
+      "reconcile child/task completion only from structured success evidence",
+      "return completion/outcome to UnifiedDB/GRID without making child memory canonical"
+    ],
+    "effect_path_interlock": {
+      "reason": "Supervisor 9.13 independently classifies the donor EffectGate as nonblocking bookkeeping and the current completion verifier as too permissive. Native child identity must therefore be joined to the invocation-bound enforcement successor rather than added as an isolated agent feature.",
+      "required_primary_key": "tool_use_id_or_equivalent_exact_invocation_id",
+      "pre_side_effect_enforcement_required": true,
+      "typed_success_receipt_required": true
+    },
+    "grid10_role": "GRID10 decides whether/why to delegate and what bounded workpackage/capability envelope is issued; deterministic control binds native runtime identities and effect permissions; child models remain candidate cognition/execution organs.",
+    "world_substrate_role": "If delegated work requests WorldNeed/WorldSlice operations, the same workpackage/agent/invocation lineage must be attached as provenance. Native child identity never upgrades WorldSlice projections or Xeno maintenance output into canonical truth/effect authority."
+  },
+  "contradictions_preserved": [
+    "Owner/project architecture expects delegated build agents while donor handoff() explicitly performs no spawn.",
+    "Current platform docs expose dedicated subagent/task identities while the pinned donor plugin config does not register those lifecycle events.",
+    "Platform documentation makes the binding design plausible, but target installed-host capability remains unobserved.",
+    "Durable donor file leases are advisory hints, while safe parallel child ownership needs executable actor/worktree/invocation attribution."
+  ],
+  "trigger4_port_tests": [
+    "A persisted workpackage with no observed native child remains NOT_SPAWNED/UNBOUND and cannot be credited as delegated execution.",
+    "Observed SubagentStart binds exactly one current generation of workpackage_id to agent_id; stale generation is rejected.",
+    "Two same-session child tool calls A/B interleaved as Pre(A), Pre(B), Post(A), Post(B) retain distinct tool_use_id/effect lineage with no cross-wire.",
+    "When Task lifecycle is used, TaskCreated/TaskCompleted retain the same task_id and cannot complete a different workpackage generation.",
+    "If worktree isolation is enabled, observed child working-tree identity is distinct from the protected main checkout and cleanup semantics are measured.",
+    "Resume behavior preserves or explicitly versions child identity according to the installed runtime; do not infer from docs.",
+    "A denied mutating child call is blocked before side effect and emits an invocation-bound deny receipt.",
+    "Child completion cannot be promoted from FAILED/DENIED/UNKNOWN/stale states or unbound textual test:0 claims."
+  ],
+  "ingest_state_status": {
+    "central_path": "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json",
+    "observed_last_ingest_at": "2026-08-28T08:08:00Z",
+    "observed_last_resolved_design_sha_before_ingest": "6d81876d2f6b12b98c30892b8d7dcea946686d25",
+    "native_packet_present_in_consumed_packet_ids": false,
+    "status": "INGEST_STATE_MERGE_PENDING",
+    "reason": "The connected GitHub write surface replaces whole files rather than performing a semantic JSON merge. Rewriting the moving shared state without a merge-safe primitive risks dropping concurrent frontier entries, so this run fails closed and persists append-only delta/receipt evidence instead of destructive reconciliation."
+  },
+  "credits": {
+    "packet_admission": "PASS_FROM_PRIOR_EXACT_VALIDATOR_RECEIPT",
+    "source_crosscheck": "PASS_AT_DECLARED_SOURCE_SCOPE",
+    "native_child_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Perform a merge-safe reconciliation of the latest INGEST_STATE so both admitted Wache v2 successors and the native-subagent packet are represented without dropping concurrent entries. Separately, only in the authorized Triggerword-4 execution lane, observe the installed Claude Code build/config and one bounded harmless native child lifecycle before any runtime promotion."
+}

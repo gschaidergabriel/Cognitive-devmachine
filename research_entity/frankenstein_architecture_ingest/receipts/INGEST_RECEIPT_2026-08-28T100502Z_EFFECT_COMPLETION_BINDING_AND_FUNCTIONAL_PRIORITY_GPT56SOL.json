@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "kind": "TRIGGERWORD5_INGEST_RECEIPT",
+  "created_at": "2026-08-28T10:05:02Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "routing_self_test": "PASS",
+  "trigger": "triggerwort 5",
+  "directive_path": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+  "sparse_world_directive_path": "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md",
+  "functional_priority_path": "research_entity/global/TRIGGERWORD_5_NATIVE_SUBAGENT_ORCHESTRATION_FORENSIC_PRIORITY.md",
+  "canonical_main_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+  "authority_epoch": "9.13",
+  "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_ingest": "49a77cd74142048cd20de4aff5e40254392fbe71",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packets": {
+    "accepted": [
+      {
+        "packet_id": "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
+        "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T091706Z_5641dc6_GPT56SOL_MAIN_ARCHAEOLOGY_EFFECT_AUTHORITY_BRIDGE_V2.json",
+        "blob_sha": "bde5d480a01f8c26b18df6ddab6e5fec3735cb4b",
+        "classification": "CURRENT_9_13_SOURCE_EVIDENCE_REVALIDATED_AT_NEWER_MAIN_HEAD",
+        "runtime_credit": 0
+      }
+    ],
+    "superseded": [
+      {
+        "packet_id": "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
+        "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T091429Z_5641dc6_GPT56SOL_MAIN_ARCHAEOLOGY_EFFECT_AUTHORITY_BRIDGE.json",
+        "reason": "Superseded by v2 authority-bound envelope and corrected receipt-construction classification."
+      }
+    ]
+  },
+  "source_crosscheck": {
+    "status": "PASS_AT_SOURCE_SCOPE",
+    "checked": [
+      "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3100-3195",
+      "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3180-3585",
+      "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:5840-6010",
+      "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json:1-220"
+    ],
+    "confirmed": [
+      "ordinary donor EffectGate is nonblocking bookkeeping",
+      "Pre/Post effect correlation uses one mutable session-scoped active_turns.effect_id",
+      "PostToolUse contains reusable bounded result-hash receipt construction",
+      "completion effect predicate accepts statuses other than exact lowercase fehler",
+      "textual test:0 evidence is unbound to observed execution identity",
+      "donor hook config does not itself expose dedicated native child lifecycle hooks"
+    ],
+    "still_unknown": [
+      "actual installed same-session overlapping tool-call reachability",
+      "installed host/native child lifecycle runtime ABI",
+      "world-effect-specific verification semantics"
+    ]
+  },
+  "external_primary_capability_note": "Current Claude Code documentation exposes tool_use_id for PreToolUse/PostToolUse correlation and native subagent lifecycle hooks/callback identifiers. This is capability evidence only; it is not proof that the installed Frankenstein runtime currently wires those identifiers into durable work/effect identity.",
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T100502Z_EFFECT_COMPLETION_BINDING_AND_FUNCTIONAL_PRIORITY_GPT56SOL.json",
+    "commit": "56be2324a341b9278237c75276da0d2d02cc66ba"
+  },
+  "design_effect": [
+    "demote donor EffectGate from enforcement donor to provenance/idempotency/journal donor",
+    "require immutable call-scoped WorkExecutionBinding",
+    "separate ExecutionReceipt from EffectOutcome and WORLD_EFFECT_VERIFICATION",
+    "replace permissive completion proof with typed success allowlist and structured immutable receipts",
+    "return next forensic budget to native child spawn/task/lifecycle ABI and functional-core mechanisms; security-only archaeology remains deferred"
+  ],
+  "credit": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "effect_invocation_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "completion_runtime": 0,
+    "training": 0
+  },
+  "next_exact_action": "Resolve the current host/native child spawn-task-lifecycle ABI and bind observed agent/task/tool invocation identity to durable workpackage generation before Triggerword-4 freezes the worker interface."
+}

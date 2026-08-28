@@ -1,0 +1,112 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:38:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest-refinement",
+  "trigger": "triggerwort 5",
+  "delta_class": "CORROBORATING_REFINEMENT_NO_NEW_RUNTIME_CREDIT",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_write": "799de91ef2e1124b900152ee462f58f59f733813",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "packet_context": {
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "disposition": "SCHEMA_QUARANTINED_NOT_MARKED_CONSUMED",
+    "schema_reason": "atoms[4].target_2_0_action=RESEARCH is outside INGEST_PACKET_SCHEMA.json enum",
+    "packet_mutated": false
+  },
+  "prior_architecture_fusion": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_BINDING_DELTA_2026-08-28T1031Z_GPT56SOL.json",
+    "commit_sha": "38dd0b0c10ece5f3f19275897fc2f877ff09cc15",
+    "role": "PRIMARY_WORKEXECUTION_BINDING_V1_DELTA",
+    "relation": "THIS_DELTA_REFINES_IMPLEMENTATION_SCOPE_WITHOUT_CREATING_A_SECOND_CONTRACT"
+  },
+  "source_revalidation": [
+    {
+      "classification": "CURRENT_DONOR_CONFIG",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "finding": "The donor already registers wildcard PreToolUse and PostToolUse hooks through stern.py, while dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted hooks are absent.",
+      "runtime_credit": 0
+    },
+    {
+      "classification": "CURRENT_DONOR_SOURCE_NEGATIVE_FINDING",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "A direct exact-source search finds no agent_id handling in stern.py, so the current donor does not persist or use subagent identity from hook payloads even if the runtime supplies it.",
+      "runtime_credit": 0
+    },
+    {
+      "classification": "EXTERNAL_PRIMARY_CAPABILITY_ONLY",
+      "source": "Claude Code official hooks documentation observed 2026-08-28",
+      "finding": "Plugin/settings hooks also run for tool calls made inside subagents, and common hook input carries agent_id and agent_type when the hook executes inside a subagent. PostToolUse carries call-scoped tool_use_id. This does not prove the installed target version or exact Agent parent-tool response schema.",
+      "runtime_credit": 0
+    }
+  ],
+  "architecture_refinement": {
+    "contract": "WorkExecutionBinding/v1",
+    "new_competing_contract": false,
+    "target_2_0_action": "ADAPT_TO_GRID",
+    "refined_design": [
+      "Do not require dedicated SubagentStart/SubagentStop hooks merely to obtain child identity on child tool calls: first reuse the already-configured PreToolUse/PostToolUse path and preserve observed agent_id, agent_type and tool_use_id as typed evidence fields.",
+      "Extend stern.py/common hook admission so optional agent_id and agent_type are never silently dropped. Their absence remains UNKNOWN, not parent identity and not a fabricated child identity.",
+      "Dedicated SubagentStart/SubagentStop remains useful for lifecycle boundaries, child-without-tool cases and transcript continuity, but is not the only possible source of agent_id evidence.",
+      "This refinement improves child tool/effect attribution after an agent is identified, but it does not close the durable workpackage_id -> parent Agent invocation -> child agent_id causal join.",
+      "The parent-to-child join still requires an observed immutable shared key, a deliberately injected nonce, or a wrapper receipt. Timing, event order, session_id and narration remain forbidden join methods.",
+      "task_id stays an independent optional task-system identity and must never be substituted for agent_id."
+    ],
+    "minimum_typed_tool_event_fields": [
+      "session_id",
+      "prompt_or_turn_identity_if_observed",
+      "tool_use_id",
+      "tool_name",
+      "agent_id_if_observed",
+      "agent_type_if_observed",
+      "generation",
+      "payload_or_request_digest",
+      "source_event_type"
+    ],
+    "unknown_preservation": "Missing agent_id/agent_type/task_id or parent-child join evidence remains explicit UNKNOWN and cannot receive native-child execution credit."
+  },
+  "contradiction_refinement": {
+    "id": "TW5-CONTRADICTION-WORKPACKAGE-NATIVE-CHILD-BINDING-017",
+    "status": "OPEN_REFINED_NOT_RESOLVED",
+    "previous_overbroad_reading_rejected": "NO_CHILD_IDENTITY_SURFACE_EXISTS",
+    "current_statement": "The versioned donor lacks dedicated native child lifecycle hooks and stern.py does not ingest agent_id, but the configured wildcard tool hooks may already receive agent_id/agent_type for child tool calls under current Claude Code semantics. Therefore child tool identity capture is a smaller repair than full lifecycle invention, while deterministic workpackage-to-spawn-to-agent binding remains unproven."
+  },
+  "counterhypotheses": [
+    "The installed target Claude Code build may not match current documented hook payload semantics; source adaptation must remain optional-field tolerant until exact target payloads are observed.",
+    "A host-private lifecycle hook or wrapper may already close workpackage-to-agent binding; if observed, import/adapt it rather than creating duplicate authority.",
+    "The Agent parent tool_response may contain a stable child identifier, making a nonce/wrapper unnecessary; this remains unproven until exact target payload evidence exists."
+  ],
+  "feeds_triggerword_4": {
+    "source_ready_change": "Add optional child identity preservation to the existing tool-hook admission path and unit-test absent/present/mismatched agent_id fields without granting runtime credit.",
+    "runtime_discriminator": "On an explicitly admitted target runtime lane, capture one non-mutating Agent invocation plus child tool event/lifecycle payloads and prove or falsify an immutable parent invocation -> agent_id join.",
+    "forbidden_inference": "Never join by time proximity, event ordering, session identity or model narration."
+  },
+  "credit_boundary": {
+    "source_forensics": "PASS_REFINEMENT_AT_EXACT_DONOR_SHA",
+    "native_subagent_workexecution_binding_runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

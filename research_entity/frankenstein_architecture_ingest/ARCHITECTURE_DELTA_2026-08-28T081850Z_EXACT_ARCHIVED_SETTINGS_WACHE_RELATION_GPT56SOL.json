@@ -1,0 +1,121 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T081850Z-EXACT-ARCHIVED-SETTINGS-WACHE-RELATION-GPT56SOL",
+  "created_at": "2026-08-28T08:18:50Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/archive-artifact-forensics",
+  "routing_result": "PASS",
+  "authority_epoch": "9.13",
+  "execution_mode": "FREE_ONLY_SOURCE_FORENSICS_ONLY",
+  "authority_binding": {
+    "canonical_main": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "design_branch_head_before_delta": "6e39734e07af16ad4832aef9c3c7421b89b83569",
+    "provider_execution": "HARD_OFF",
+    "together": "FORBIDDEN",
+    "runtime_credit": 0
+  },
+  "resolved_source": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "donor_tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "archive_root": "Google Drive synteq-umbau",
+    "archive_root_id": "1fWUuy1oxoOAOHEQGZhhF00SUxISV4qzr",
+    "archive_claude_folder_id": "1J1yJME8gP1hnknuJnhxc55ur2X59PADg"
+  },
+  "source_classification": "DIRECT_ARCHIVED_PRIMARY_SOURCE",
+  "artifacts": [
+    {
+      "path": ".claude/settings.json",
+      "drive_file_id": "1yAZ1EKocHJDiuIx3bzxSyrF4l56FJRpC",
+      "size_bytes": 3337,
+      "modified_at": "2026-08-06T14:09:08Z",
+      "sha256": "5bec46ce922f0cc268188d3c91068e0922df4a5deb9f681dddea57f0f091c07a",
+      "semantic_kind": ["CONFIG", "HISTORICAL_ONLY"]
+    },
+    {
+      "path": ".claude/wache-befehl.py",
+      "drive_file_id": "1q0U8-ZJoYyrGZ91FutRUeINxCo91jX8C",
+      "size_bytes": 4317,
+      "modified_at": "2026-08-06T03:58:25Z",
+      "sha256": "c4e4343aa78f73eb5bf27fdb2c99d81663190b7236b343e34c002eb14db4695b",
+      "semantic_kind": ["ENFORCEMENT_CODE", "HISTORICAL_ONLY"]
+    }
+  ],
+  "forensic_facts": [
+    {
+      "claim": "The exact archived settings artifact contains one PreToolUse hook entry with matcher Bash and command ~/synteq-umbau/.claude/wache-befehl.py.",
+      "status": "SOURCE_DIRECT",
+      "scope": "ARCHIVED_SETTINGS_ARTIFACT_ONLY"
+    },
+    {
+      "claim": "The exact archived settings artifact therefore establishes Bash-only coverage for this hook registration; it provides no source basis by itself for non-Bash mutating-tool coverage.",
+      "status": "SOURCE_DIRECT_NEGATIVE_SCOPE",
+      "scope": "ARCHIVED_SETTINGS_ARTIFACT_ONLY"
+    },
+    {
+      "claim": "Archived wache-befehl.py dynamically loads ~/aicore/opt/aicore/tools/schranke/wache-koenig.py as module wk, neutralizes wk.main, and reuses wk.ANFANG, wk.pruefen, wk.entkleiden and wk.unterschalen.",
+      "status": "SOURCE_DIRECT",
+      "scope": "ARCHIVED_WACHE_BEFEHL_ARTIFACT_ONLY"
+    },
+    {
+      "claim": "Archived wache-befehl.py is not an independent duplicate of wache-koenig.py; it is a downstream wrapper/extension that delegates the king-watcher decomposition/rules and adds helper-specific NUR_KOORD restrictions before allow/block exit semantics.",
+      "status": "SOURCE_DIRECT_STRUCTURAL_INTERPRETATION",
+      "scope": "ARCHIVED_WACHE_BEFEHL_ARTIFACT_ONLY"
+    },
+    {
+      "claim": "Current Frankenstein donor hook configuration routes plugin hook events through scripts/stern.py and does not establish current wache-befehl.py reachability.",
+      "status": "CURRENT_SOURCE",
+      "scope": "DONOR_SHA_5641dc6"
+    }
+  ],
+  "historical_corroboration": {
+    "a3": "Historical A3 reports inherited --settings barrier behavior and names .claude/wache-befehl.py.",
+    "meldungen": "Historical message stream records the launcher shape --settings schranke --permission-mode acceptEdits.",
+    "koord": "Historical KOORD evidence reports a 34/34 barrier probe for the barrier family.",
+    "promotion_limit": "These corroborate historical semantics but do not bind the exact archived bytes to a particular measured launch."
+  },
+  "temporal_provenance_caveat": {
+    "status": "OPEN",
+    "claim": "The recovered settings.json is an exact archived artifact, but its 2026-08-06T14:09:08Z modification time means it must not be silently treated as the byte-identical settings artifact used by every earlier historical measurement.",
+    "required_for_launch_identity": "Recover the exact launcher/source or invocation receipt that resolves --settings schranke to a concrete artifact identity/hash at the measured invocation."
+  },
+  "contradiction_updates": [
+    {
+      "id": "TW5-CONTRADICTION-WACHE-REACHABILITY-008",
+      "previous": "NARROWED_NOT_RESOLVED",
+      "current": "NARROWED_NOT_RESOLVED",
+      "resolved_subquestions": [
+        "Exact archived settings path/order for the recovered snapshot",
+        "Archived wache-befehl.py to wache-koenig.py structural relationship"
+      ],
+      "remaining_unknowns": [
+        "Exact archived bytes bound to the exact historical measured launcher invocation",
+        "Current host/global wache reachability",
+        "Current Frankenstein donor wache reachability"
+      ]
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-COVERAGE-009",
+      "previous": "OPEN_OR_PARTIALLY_NARROWED",
+      "current": "NARROWED_BASH_ONLY_FOR_EXACT_ARCHIVED_SETTINGS_ARTIFACT",
+      "remaining_unknowns": [
+        "Whether other historical settings/hook layers covered non-Bash mutating tools",
+        "Whether any current runtime reproduces equivalent coverage"
+      ]
+    }
+  ],
+  "frankenstein_2_design_implication": {
+    "status": "INFERENCE",
+    "claim": "Reuse the historical fail-closed pre-side-effect policy semantics, not the host-relative path topology. Frankenstein 2 should bind policy artifact identity/provenance/order/hash at the effect boundary and cover all mutating tool classes rather than assuming Bash-only interception is complete.",
+    "authority_boundary": "EffectGate and EffectJournal remain the only real-effect authority under EntityOS/HCU."
+  },
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "physical_grid10": 0,
+    "runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover the exact launcher/kern source or invocation receipt that materializes --settings schranke and binds that argument to a concrete settings artifact/hash at invocation time; then audit non-Bash mutating-tool coverage separately from current donor/runtime reachability."
+}

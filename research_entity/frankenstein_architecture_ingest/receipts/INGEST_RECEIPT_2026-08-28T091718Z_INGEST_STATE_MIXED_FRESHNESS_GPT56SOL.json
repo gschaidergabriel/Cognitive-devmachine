@@ -1,0 +1,46 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T091718Z-INGEST-STATE-MIXED-FRESHNESS-GPT56SOL",
+  "created_at": "2026-08-28T09:17:18Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/ingest-state-mixed-freshness",
+  "routing": "VERIFIED",
+  "directive_path": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+  "directive_blob_sha": "9f9a2fcb36a6129216af08a742f7449fd8c14f6f",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_initially_observed": "97e53d406c896735bc960c06fb4d637bacf9f5ff",
+  "canonical_main_observed": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+  "authority_epoch": "9.13",
+  "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+  "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+  "execution_mode": "FREE_ONLY_HARD_OFF_NO_PROVIDER_EXECUTION",
+  "packet_result": {
+    "new_unconsumed_packets": [],
+    "latest_inbox_packet": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "latest_inbox_packet_status": "ALREADY_CONSUMED",
+    "duplicate_ingest": false
+  },
+  "parallel_work_reconciled": {
+    "latest_fusion_before_this_finding": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091233Z_REALTIME_MUTATION_CHILD_POLICY_REENTRY_FUSION_GPT56SOL.json",
+    "latest_fusion_receipt_commit_observed": "97e53d406c896735bc960c06fb4d637bacf9f5ff",
+    "concurrent_parent_before_write": "e91ad83c4329489a2c6748e9fd40140025fecdd7",
+    "concurrent_parent_subject": "trigger5: classify voice mutation authority boundaries",
+    "action": "PRESERVED_AND_EXTENDED_WITH_NONOVERLAPPING_COORDINATION_FINDING"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T091531Z_INGEST_STATE_MIXED_FRESHNESS_GPT56SOL.json",
+    "commit_sha": "6865e6c9b175fcf3f8f42876893441ee5c0b9089",
+    "classification": "NEGATIVE_RESULT_AND_COORDINATION_STATE_NO_RUNTIME_CREDIT"
+  },
+  "finding": "At the observed branch head, central INGEST_STATE is mixed-freshness: consumed_packet_ids reaches the newest packet, while last_ingest_at/last_architecture_delta/canonical_main_observed remain at an older reconciliation epoch than admitted append-only deltas/receipts on the same branch.",
+  "safety_action": "CENTRAL_INGEST_STATE_NOT_REWRITTEN",
+  "safety_reason": "The connected write surface replaces the whole JSON file and concurrent Triggerword-5 commits are active. Append-only evidence avoids dropping parallel state.",
+  "trigger4_feed": "Until a merge-safe reconciler/watermark exists, reconstruct Triggerword-5 freshness from current branch HEAD plus append-only deltas/receipts, not from last_ingest_at or last_architecture_delta alone.",
+  "runtime_credit_delta": 0,
+  "provider_execution_credit_delta": 0,
+  "training_credit_delta": 0,
+  "acceptance": "SOURCE_COORDINATION_DELTA_COMMITTED_RUNTIME_UNRESOLVED",
+  "next_exact_gate": "Prove or implement a merge-safe monotonic ingest-state reconciliation/watermark path; keep Triggerword-4 installed native-child lifecycle/effect enforcement as a separate executable gate."
+}

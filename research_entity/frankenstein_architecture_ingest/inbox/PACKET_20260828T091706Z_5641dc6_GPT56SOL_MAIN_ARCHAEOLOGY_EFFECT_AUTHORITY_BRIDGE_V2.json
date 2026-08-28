@@ -1,0 +1,149 @@
+{
+  "schema_version": 2,
+  "packet_id": "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
+  "created_at": "2026-08-28T09:17:06Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/authority-rebind-ingestor",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Append-only v2 authority-bound successor envelope for TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL. Preserves the original packet unchanged, rebinds its source-only findings to exact current 9.13 authority, and corrects receipt-construction code classification without minting runtime credit.",
+  "authority_classification": "CURRENT_AUTHORITY_BOUND",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_sha": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "files_examined": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "sha_or_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "spans_examined": [
+        {"line_start": 3100, "line_end": 3195},
+        {"line_start": 3180, "line_end": 3580},
+        {"line_start": 5840, "line_end": 6008}
+      ]
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "sha_or_blob": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "spans_examined": [{"line_start": 1, "line_end": 220}]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-BRIDGE-V2-EFFECT-001",
+      "subsystem": "effects",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 3100,
+      "line_end": 3195,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "The donor section named EffectGate records admission/idempotency bookkeeping but ordinary PreToolUse does not consume the result as a blocking deny decision.",
+      "runtime_reachable": null,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "authority_class": "AUDIT_ADMISSION_BOOKKEEPING_NOT_BLOCKING_ENFORCEMENT",
+      "failure_mode": "Historical naming can be over-promoted into containment authority.",
+      "known_counterevidence": ["SEBUKKU uses the same hook surface to emit deny, proving the surface can block while ordinary zulassen does not."],
+      "confidence": 1.0,
+      "open_questions": ["Recover exact blocking predecessor provenance or preserve it as unavailable historical provenance."]
+    },
+    {
+      "atom_id": "TW5-BRIDGE-V2-COMPLETION-002",
+      "subsystem": "completion",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5840,
+      "line_end": 6008,
+      "source_kind": "NEGATIVE_RESULT",
+      "what_it_does": "_beleg_pruefen accepts an effect reference unless its status is exactly legacy lowercase 'fehler'; current statuses FEHLGESCHLAGEN, ABGELEHNT, WIEDERHOLUNG and UNGEPRUEFT are therefore not rejected by this predicate and an ok result makes reconcile set stand='fertig'.",
+      "runtime_reachable": null,
+      "target_2_0_action": "REPAIR",
+      "authority_class": "COMPLETION_EVIDENCE_VERIFIER",
+      "failure_mode": "Non-success current effect states can structurally satisfy completion evidence.",
+      "confidence": 1.0,
+      "open_questions": ["Replace with an explicit typed success allowlist and adversarial regression suite."]
+    },
+    {
+      "atom_id": "TW5-BRIDGE-V2-TEST-003",
+      "subsystem": "completion",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5840,
+      "line_end": 6008,
+      "source_kind": "NEGATIVE_RESULT",
+      "what_it_does": "A textual test:<exit_code>:<description> proof is accepted whenever the supplied exit-code string equals '0'; no runner, command digest, source identity, environment identity, timestamp or output digest is bound by this predicate.",
+      "runtime_reachable": null,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "authority_class": "UNBOUND_TEST_ASSERTION",
+      "failure_mode": "Forged or transplanted text can satisfy completion without execution identity.",
+      "confidence": 1.0,
+      "open_questions": ["Bind completion tests to immutable execution receipts and exact source/command/environment/output identities."]
+    },
+    {
+      "atom_id": "TW5-BRIDGE-V2-HOOK-ID-004",
+      "subsystem": "effects",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 3180,
+      "line_end": 3580,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "PreToolUse stores the newly created effect_id in one mutable active_turns.effect_id slot keyed by session_id; PostToolUse later reads that same current slot to find the effect row.",
+      "runtime_reachable": null,
+      "target_2_0_action": "REPAIR",
+      "authority_class": "EFFECT_INVOCATION_IDENTITY",
+      "failure_mode": "If same-session calls interleave, a later PreToolUse can overwrite the pointer before an earlier PostToolUse consumes it.",
+      "concurrency_implication": "Structural race risk; actual reachability remains unproven until scheduler tracing.",
+      "known_counterevidence": ["Counterhypothesis: the exact installed scheduler may serialize relevant PreToolUse/tool/PostToolUse triplets."],
+      "confidence": 0.98,
+      "open_questions": ["Capture overlapping-call order and bind call-scoped tool_use_id -> effect_id -> PostToolUse receipt."]
+    },
+    {
+      "atom_id": "TW5-BRIDGE-V2-POSTTOOL-005",
+      "subsystem": "effects",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 3360,
+      "line_end": 3580,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "The donor contains code that constructs bounded tool-result evidence: file operations hash resulting file bytes, while Bash checks exit status and hashes stdout/stderr. This is receipt-construction code, not itself a runtime receipt and not arbitrary external-world effect verification.",
+      "runtime_reachable": null,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "authority_class": "EXECUTION_RECEIPT_CONSTRUCTION_BOUNDARY",
+      "failure_mode": "Source semantics can be mislabeled as observed runtime evidence or successful tool return can be over-promoted to world-effect verification.",
+      "concurrency_implication": "Successor receipts require immutable per-invocation binding.",
+      "confidence": 1.0,
+      "open_questions": ["Define effect-class-specific WORLD_EFFECT_VERIFICATION and first-class UNKNOWN outcomes."]
+    }
+  ],
+  "hypotheses": [
+    "Binding immutable tool_use_id or equivalent call-scoped invocation identity to EffectDecision and PostToolUse receipts removes the session-pointer ambiguity without requiring serialization."
+  ],
+  "counterhypotheses": [
+    "The exact installed scheduler may serialize all relevant same-session mutating calls, making the current pointer safe in practice despite its structural ambiguity."
+  ],
+  "contradictions": [
+    "EntityOS requires deterministic real-effect authority while donor ordinary EffectGate semantics are nonblocking bookkeeping.",
+    "Completion comments describe stronger proof intent while the executable status predicate remains legacy and permissive.",
+    "Original bridge atom TW5-BRIDGE-POSTTOOL-005 labeled source code as RUNTIME_RECEIPT; this successor narrows it to ENFORCEMENT_CODE/receipt-construction semantics so source does not mint runtime credit.",
+    "Canonical-main architecture archaeology and the owner-branch ingest tree are research projections only; this bridge does not create a second canonical truth authority."
+  ],
+  "critical_unknowns": [
+    "Exact host-global blocking predecessor source/config/order.",
+    "Installed hook scheduler interleaving behavior for parallel same-session state-changing calls.",
+    "Effect-class-specific world verification semantics and unknown-outcome handling."
+  ],
+  "recommended_next_spans": [
+    {"path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py", "line_start": 3100, "line_end": 3580, "reason": "Port only provenance/idempotency/result-journal ideas after separating admission, enforcement, execution receipt and world-effect verification.", "priority": "P0"},
+    {"path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py", "line_start": 5840, "line_end": 6008, "reason": "Replace legacy completion predicate with typed success allowlist and immutable execution-receipt binding.", "priority": "P0"},
+    {"path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json", "line_start": 1, "line_end": 220, "reason": "Bind exact hook lifecycle/call identity and reconstruct host-global composition/order before enforcement credit.", "priority": "P0"}
+  ],
+  "supersedes_packet_id": "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL"
+}

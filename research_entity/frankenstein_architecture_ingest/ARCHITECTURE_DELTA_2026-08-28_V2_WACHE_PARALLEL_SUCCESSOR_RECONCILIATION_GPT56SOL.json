@@ -1,0 +1,65 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5",
+  "trigger": "triggerwort 5",
+  "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+  "authority_epoch": "9.13",
+  "design_sha_before_delta": "5940c45248966a3706ab0ffa327d72bf48c140e9",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "finding": "Two immutable schema-v2 packets independently supersede the same 074533Z predecessor but do not supersede each other. They must remain an explicit parallel-successor fork until executable admission and provenance reconciliation; do not silently merge or choose by timestamp.",
+  "parallel_successors": [
+    {
+      "packet_id": "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T081406Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_V2_GPT56SOL.json",
+      "supersedes_packet_id": "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL",
+      "status": "UNCONSUMED_EXECUTABLE_ADMISSION_PENDING"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T081600Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_V2_SUCCESSOR_GPT56SOL.json",
+      "supersedes_packet_id": "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL",
+      "status": "UNCONSUMED_EXECUTABLE_ADMISSION_PENDING",
+      "additional_architecture_signal": "For recursive/delegated successors, derive child policy envelopes from parent authority but bind each mutating invocation to an independently consumable one-shot invocation-level EffectDecision; sibling calls must not replay/share authority tokens."
+    }
+  ],
+  "authority_crosscheck": {
+    "authority_epoch": "9.13",
+    "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN",
+    "manual_source_crosscheck": "MATCH",
+    "executable_validator_pass": false
+  },
+  "validator": {
+    "path": "research_entity/frankenstein_architecture_ingest/validate_ingest_packet_v2.py",
+    "blob_sha": "7b19b41666c7fc6c7fd47091ef48f566509fa824",
+    "rule": "PASS requires minimum packet shape plus exact authority binding resolved from a freshly refreshed local main ref; PASS itself grants runtime_credit_delta=0.",
+    "current_result": "NOT_EXECUTED_TO_PASS_IN_THIS_ORGAN"
+  },
+  "contradictions_preserved": [
+    "Both v2 packets can preserve valid historical source facts while their mutual successor relation remains unspecified.",
+    "A later timestamp does not create authority to erase the earlier immutable v2 packet when neither declares supersession of the other.",
+    "Historical settings inheritance is donor evidence only and does not prove current host/plugin enforcement reachability.",
+    "Parent-derived child policy transport is not equivalent to invocation-level effect authority; sibling isolation and one-shot consumption remain separate requirements."
+  ],
+  "trigger4_handoff_delta": {
+    "retain": "Historical proof that policy configuration could be inherited across helper launch boundaries is useful donor lineage.",
+    "repair": "Do not reuse inherited settings as effect authority. Compile a child policy envelope from canonical parent authority, then require an immutable call-scoped invocation identity and one-shot bound ALLOW/DENY decision before each mutation.",
+    "test": "Create two sibling/overlapping calls under one parent/session; prove one child's decision/token cannot authorize the other and that Pre(A), Pre(B), Post(A), Post(B) remain correctly invocation-bound."
+  },
+  "credits": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Execute validate_ingest_packet_v2.py against a freshly refreshed canonical-main checkout for each v2 successor independently. If both PASS shape/current-authority binding, preserve both as historical evidence and issue an explicit provenance reconciliation deciding whether one supersedes the other or they remain complementary; only then update consumed_packet_ids."
+}

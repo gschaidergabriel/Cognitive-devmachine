@@ -1,0 +1,161 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T091932Z-WACHE-KOENIG-EXACT-HISTORICAL-ENFORCEMENT-SOURCE-GPT56SOL",
+  "created_at": "2026-08-28T09:19:32Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/wache-koenig-exact-source-recovery",
+  "classification": "HISTORICAL_SOURCE_EXACT_BYTES_RECOVERED_NO_CURRENT_HOST_OR_RUNTIME_CREDIT",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92c3b67be5c7d9c5553d71842fa1baa562a728d0",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_observed_before_write": "44720795bec3c93933ebc8e4c824485f2ade273a"
+  },
+  "current_donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "relationship": "The current donor names an older external wache-koenig.py as the blocking predecessor, but the pinned donor does not contain that installed-host artifact. This delta recovers the exact historical precursor bytes from the archived Drive identity only."
+  },
+  "archive_provenance": {
+    "manifest_path": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ACTION_BOUNDARY_SUBMANIFEST.json",
+    "manifest_blob_sha": "b3bceb16a1c0038d0d719b44bfec7295170a3dd7",
+    "manifest_status": "ROUTER_WRITER_EXACT_TOOLS_BOUNDARY_BOUNDED_FROZEN",
+    "wache_koenig": {
+      "drive_id": "10z1K5hKV9t9wBu1k5zXEvxSjaCZy3TUH",
+      "size_bytes": 8373,
+      "sha256_manifest": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "sha256_recovered": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23",
+      "exact_byte_identity_verified": true
+    },
+    "freigabe": {
+      "drive_id": "1xi-hFPSWJ6NC8ruDV6iTttw_-wMv08dI",
+      "size_bytes": 5512,
+      "sha256_manifest": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "sha256_recovered": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d",
+      "exact_byte_identity_verified": true
+    }
+  },
+  "atoms": [
+    {
+      "atom_id": "TW5-WACHE-EXACT-001-BASH-ONLY-PRETOOL-GUARD",
+      "source_kind": "HISTORICAL_ONLY",
+      "source_role": "ENFORCEMENT_CODE",
+      "source": "wache-koenig.py",
+      "lines": "141-168",
+      "what_it_does": "Parses hook JSON and gates only tool_name == Bash. Malformed hook JSON exits 0, non-Bash tools exit 0, /tmp/claude-* scratch deletions matching KRITZEL exit 0. Hard-deny or missing-ticket decisions exit 2 before Bash execution when this script is actually installed as a blocking PreToolUse guard.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "why": "Useful historical blocking semantics exist, but the guard is Bash-scoped and includes deliberate fail-open/bypass classes. It is not a complete EntityOS effect authority."
+    },
+    {
+      "atom_id": "TW5-WACHE-EXACT-002-COMMAND-POSITION-CLASSIFIER",
+      "source_kind": "HISTORICAL_ONLY",
+      "source_role": "ENFORCEMENT_CODE",
+      "source": "wache-koenig.py",
+      "lines": "42-120",
+      "what_it_does": "Classifies unconditional hard-deny operations (format/raw-device writes), ticket-required destructive operations, destructive DB statements, and destructive commands nested inside ssh/bash-c style command strings. Heredoc bodies and ordinary quoted arguments are stripped before ordinary command-position matching to reduce false positives.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "why": "Command-position parsing and nested-command reinspection are reusable historical ideas, but regex command parsing must remain a narrow adapter rather than canonical capability semantics."
+    },
+    {
+      "atom_id": "TW5-WACHE-EXACT-003-COMMAND-HASH-SINGLE-USE-TICKET",
+      "source_kind": "HISTORICAL_ONLY",
+      "source_role": "ENFORCEMENT_CODE",
+      "source": "wache-koenig.py",
+      "lines": "123-138",
+      "what_it_does": "Looks up a ticket by the first 16 hex chars of sha256(command), verifies the full stored command hash and validity window, deletes expired tickets, and deletes a valid ticket before returning allow. The permit is therefore command-bound and one-shot at source level.",
+      "target_2_0_action": "KEEP",
+      "why": "Exact-operation binding plus consume-before-execution is a strong predecessor invariant. Frankenstein 2.0 should generalize it to immutable invocation identity, generation, capability and policy provenance rather than command text alone."
+    },
+    {
+      "atom_id": "TW5-WACHE-EXACT-004-HUMAN-TTY-TICKET-ISSUER",
+      "source_kind": "HISTORICAL_ONLY",
+      "source_role": "ENFORCEMENT_CODE",
+      "source": "freigabe",
+      "lines": "32-54,78-112",
+      "what_it_does": "Requires /dev/tty, requests two sequential fresh random transcription challenges, rejects too-fast challenge entry and nearly identical challenge timings, then writes a chmod-0600 command-hash-bound ticket with valid_from = issue+600s and valid_until = issue+1800s.",
+      "target_2_0_action": "COMPATIBILITY_ONLY",
+      "why": "The /dev/tty separation is a useful historical human-presence barrier. Typing-time heuristics are convenience/anti-self-approval measures, not identity authority, and should not become a canonical authorization primitive."
+    },
+    {
+      "atom_id": "TW5-WACHE-EXACT-005-LOCAL-RM-SIZE-BOUND",
+      "source_kind": "HISTORICAL_ONLY",
+      "source_role": "ENFORCEMENT_CODE",
+      "source": "freigabe",
+      "lines": "56-76,90-97",
+      "what_it_does": "For local rm, attempts to measure named targets with du -sb, refuses unmeasurable wildcard/shell targets, and rejects requests above 300 MB per approval. Remote ssh deletion is not subject to this local size calculation.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "why": "Bounded blast-radius policy is reusable, but must be expressed as typed effect budget/capability policy rather than filename heuristics."
+    },
+    {
+      "atom_id": "TW5-WACHE-EXACT-006-SELF-MUTABILITY-AND-SCRATCH-EXEMPTION",
+      "source_kind": "HISTORICAL_ONLY",
+      "source_role": "NEGATIVE_RESULT",
+      "source": "wache-koenig.py",
+      "lines": "27-34,39-40,149-150",
+      "what_it_does": "The source explicitly states that /tmp/claude-* scratch remains ungated and that the guard can be modified by its own user unless file ownership/mode is externally hardened (suggested root:root 0644).",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "why": "A guard writable by the same execution principal and scoped away from some mutation classes cannot by itself establish tamper-resistant canonical effect authority."
+    }
+  ],
+  "architecture_consequences": {
+    "historical_predecessor_status": "EXACT_SOURCE_RECOVERED",
+    "current_loaded_host_status": "UNKNOWN",
+    "current_enforcement_credit": 0,
+    "rule": "Do not collapse HISTORICAL_SOURCE_EXACT_BYTES into CURRENT_HOST_ENFORCEMENT. Current enforcement credit requires exact installed settings/hook order/artifact digest plus an observed blocking receipt at invocation identity.",
+    "useful_donor_primitives": [
+      "command/operation digest binding",
+      "consume-once permit before execution",
+      "hard deny vs permit-required distinction",
+      "nested command reinspection",
+      "explicit blast-radius bound",
+      "human-channel separation from the AI tool invocation"
+    ],
+    "must_not_promote": [
+      "Bash-only coverage to whole effect coverage",
+      "regex classifier to canonical capability semantics",
+      "typing heuristics to authenticated human identity",
+      "historical Drive source to current installed-host source",
+      "source exit-2 path to runtime-observed blocking without loaded-hook evidence"
+    ],
+    "frankenstein_2_successor_contract": "HumanIntentDecision -> Task/CapabilityAdmission -> invocation-bound pre-side-effect EnforcementDecision -> one-shot EnforcementReceipt -> ExecutionReceipt -> effect-class-specific WorldEffectVerification -> ResultReentry -> typed CompletionEvidence. Historical command-hash tickets may inform the one-shot binding but cannot replace tool_use_id/invocation_id, generation or policy provenance."
+  },
+  "counterhypotheses": [
+    {
+      "claim": "The currently installed host-global guard may still be byte-identical to recovered wache-koenig.py and therefore provide real Bash blocking today.",
+      "discriminator": "Resolve loaded Claude settings/hook order and hash the actually invoked host artifact; then run only an authorized harmless deny/non-execution probe in Triggerword-4/runtime lane."
+    },
+    {
+      "claim": "Bash may be the only mutating child capability on the installed runtime, making Bash-only coverage sufficient for that specific actor class.",
+      "discriminator": "Enumerate installed mutating tool/capability classes for HEADLESS_SESSION_CHILD and NATIVE_SUBAGENT_CHILD separately; any non-Bash mutation path falsifies whole-child coverage."
+    }
+  ],
+  "contradictions_preserved": [
+    "The historical external guard contains real source-level blocking semantics, while the current donor-internal EffectGate explicitly does not block ordinary tools. These are different mechanisms and must not be conflated.",
+    "Exact historical bytes are now recovered, but current host installation, settings composition and hook ordering remain unresolved.",
+    "The historical guard deliberately fails open for malformed input/non-Bash/scratch cases while current EntityOS effect authority aims for typed fail-closed state-changing boundaries."
+  ],
+  "trigger4_feed": {
+    "status": "NEW_HIGH_VALUE_HISTORICAL_SOURCE_BINDING",
+    "required_update": "Treat wache-koenig/freigabe as an exact historical precursor, not missing folklore. Reuse operation-digest/one-shot/hard-deny ideas, but preserve current-host unknown until installed settings/order/artifact identity are proven.",
+    "next_exact_gate": "Locate and bind the historical/current settings entry that invokes wache-koenig.py, including hook event, matcher/order, absolute path and artifact digest. Runtime blocking proof remains Triggerword-4 work, not Triggerword-5 source credit."
+  },
+  "credits": {
+    "historical_source_identity": "PASS_EXACT_BYTES",
+    "historical_enforcement_source_decomposition": "PASS",
+    "current_host_enforcement": 0,
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  }
+}

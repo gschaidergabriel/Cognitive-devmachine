@@ -1,0 +1,43 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CORRECTION/v1",
+  "correction_id": "TW5-CORRECTION-20260828T1045Z-STOP-HOOK-TIMEOUT-CONTROLFLOW-GPT56SOL",
+  "created_at": "2026-08-28T10:45:00Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/stop-hook-llm-boundary",
+  "corrects_checkpoint": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_CHECKPOINT_20260828T1042Z_GPT56SOL_STOP_HOOK_LLM_BOUNDARY.json",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "blob": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "source_closure": {
+    "previous_statement": "Global-budget exhaustion could prevent later Stop bookkeeping; consequence was left as source-inferred and runtime-unobserved.",
+    "new_statement": "The conditional control-flow consequence is source-determined: _hook_alarm raises _HookTimeout; cmd_hook catches _HookTimeout outside the event dispatch and returns after logging, so any statements later in the Stop branch are not executed in that invocation once the global alarm interrupts an earlier statement. What remains runtime-unobserved is whether/with what frequency the installed system actually reaches that timeout during _kognition_richten_hook or another earlier Stop substep.",
+    "classification": "CURRENT_SOURCE_CONDITIONAL_CONTROL_FLOW_CONFIRMED_RUNTIME_FREQUENCY_UNKNOWN"
+  },
+  "source_spans": [
+    {
+      "kind": "ENFORCEMENT_CODE",
+      "lines": "hook timeout helper immediately preceding cmd_hook",
+      "finding": "_hook_alarm raises _HookTimeout."
+    },
+    {
+      "kind": "ENFORCEMENT_CODE",
+      "lines": "9009-9030",
+      "finding": "cmd_hook catches _HookTimeout outside the event dispatch, logs a silent abort, clears the timer in finally and returns 0; it does not resume the interrupted Stop branch."
+    },
+    {
+      "kind": "CONFIG",
+      "lines": "_KONFIG_DEFAULTS",
+      "finding": "Default Stop global budget is 2.0 seconds; local cognition is enabled by default and has a 1.3-second inference timeout."
+    }
+  ],
+  "architecture_implication": "Later Stop duties such as gw_absicht, governance-turn accounting and waiting-status update are conditionally coupled to all earlier Stop latency. Frankenstein 2.0 should not treat those duties as independently guaranteed unless the hook is decomposed or each required duty has explicit completion/continuation semantics.",
+  "next_runtime_discriminator": "StopHookCognitionBudgetTrace/v1 remains required to measure actual timeout incidence and ordering at exact installed build identity.",
+  "credits": {
+    "source_forensics": "PASS_CONDITIONAL_CONTROL_FLOW",
+    "runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

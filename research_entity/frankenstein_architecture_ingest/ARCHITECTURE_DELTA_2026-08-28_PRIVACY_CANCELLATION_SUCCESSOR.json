@@ -1,0 +1,133 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:28:00Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_PLUS_HISTORICAL_COMPONENT_RECEIPT_FUSION_NO_NEW_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "cfddde323f457099c0fada68a3af5340d554c159",
+    "canonical_main_observed_near_write": "4a4287d0935d4dd19d122b1027716a569d331a73"
+  },
+  "packets_ingested": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "action": "INGESTED_DEDUPED",
+      "note": "Nonblocking-effect and mutable-effect-pointer findings already exist in earlier deltas; secret-redaction boundary retained as a distinct migration invariant."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "action": "INGESTED_DEDUPED",
+      "note": "Normal PreToolUse non-enforcement, SEBUKKU-only deny and VERIFIED semantic overload corroborate existing effect-contract deltas; no independent replication credit."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "action": "INGESTED_WITH_UNIQUE_ATOMS",
+      "note": "Unique useful deltas are Perception Control tier/taint enforcement, bounded ablation evidence, live policy projection semantics and pre-dispatch cancellation on voice barge-in."
+    }
+  ],
+  "dedupe": [
+    {
+      "finding": "stern.zulassen ordinary PreToolUse is nonblocking bookkeeping",
+      "action": "CORROBORATION_ONLY_ALREADY_FUSED"
+    },
+    {
+      "finding": "PostToolUse fallback may create VERIFIED without a pre-admission row and VERIFIED is overloaded downstream",
+      "action": "CORROBORATION_ONLY_ALREADY_FUSED"
+    },
+    {
+      "finding": "one mutable active_turns.effect_id per session is weaker than immutable per-invocation correlation",
+      "action": "CORROBORATION_ONLY_ALREADY_FUSED"
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_PERCEPTION_TIER_TAINT_NOTCOMPUTED_023",
+      "source_kind": "ENFORCEMENT_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:96-560@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "HeadPolicy mechanically derives compute/inference/memory/persistence permissions from ON, COMPUTE_OFF, OUTPUT_OFF and MEMORY_OFF. evaluate_head resolves semantic dependencies from the central DAG rather than trusting caller-supplied dependency lists. Unknown heads, COMPUTE_OFF heads and heads tainted by unavailable/disabled upstream dependencies return status=NOT_COMPUTED with value=None before compute_fn runs.",
+      "authority": "LOCAL_COMPUTE_EGRESS_POLICY_ENFORCEMENT_ONLY",
+      "confidence": 0.99,
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_delta": "Use the same typed distinction in GRID10 and sparse WorldNeed/WorldSlice materialization: NOT_COMPUTED is not false, zero or negative evidence; upstream policy/taint must propagate before cell compute, output and persistence. Keep policy authority deterministic and external to model proposals.",
+      "failure_boundary": "System-wide privacy credit requires source-reachability proof that every protected live head enters through the enforcement point; raw compute function bypasses remain an open audit target."
+    },
+    {
+      "atom_id": "F2_PERCEPTION_ABLATION_COMPONENT_RECEIPT_024",
+      "source_kind": "RUNTIME_RECEIPT_HISTORICAL_COMPONENT_SCOPE",
+      "source": "DEV_SOURCE_RESEARCH/repository/phase43/evidence/PERCEPTION_CONTROL_PLANE_ABLATION_2026-08-27.json@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "The archived project receipt records a real camera-frame run with object.known.cup set COMPUTE_OFF: the target returned NOT_COMPUTED/value=null while the control person.presence head on the same frame returned OK, and the persisted status table was reported consistent.",
+      "confidence": 0.97,
+      "credit": "BOUNDED_HISTORICAL_PERCEPTION_CONTROL_COMPONENT_EVIDENCE_ONLY",
+      "target_action": "KEEP_AS_DONOR_EVIDENCE",
+      "boundary": "This Triggerword-5 run did not independently execute the camera or provider path; the receipt does not establish whole Visual Cortex, Frankenstein-2.0, GRID10, HCU or EntityOS runtime acceptance."
+    },
+    {
+      "atom_id": "F2_EFFECT_JOURNAL_SECRET_FENCE_025",
+      "source_kind": "ENFORCEMENT_CODE_PLUS_RECORDED_NEGATIVE_RESULT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:250-360,3130-3565@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Current effect/event persistence applies redaction before bounded journal persistence, and source history records that unfiltered tool input/argv/target previously risked becoming a durable secret sink.",
+      "confidence": 0.98,
+      "target_action": "KEEP_AND_STRENGTHEN",
+      "grid10_delta": "Every typed EffectRequest, decision, execution receipt, result-reentry and recovery record needs one pre-persistence secret fence; prefer exact typed identifiers and digests over raw command/result payloads. Pattern redaction remains defense-in-depth rather than proof against arbitrary secret forms."
+    },
+    {
+      "atom_id": "F2_VOICE_PENDING_EFFECT_CANCEL_ON_BARGEIN_026",
+      "source_kind": "ENFORCEMENT_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1300-1408@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Realtime function calls are held in a session-local pending queue until response.done. Non-completed responses discard the queue, and barge-in clears pending tool calls before conversation truncation/cancellation, preventing an interrupted model turn from dispatching its still-pending local tool call.",
+      "confidence": 0.99,
+      "authority": "PRE_DISPATCH_CANCELLATION_ONLY_NOT_CANONICAL_EFFECT_AUTHORITY",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_delta": "Introduce a typed PENDING_EFFECT state bound to the parent cognition/invocation identity. Cancellation or supersession before EffectGate submission invalidates it deterministically. Once an external effect may have been submitted, transport uncertainty must transition to OUTCOME_UNKNOWN rather than cancellation-success or blind replay."
+    },
+    {
+      "atom_id": "F2_VOICE_CAPSULE_POLICY_VIEW_FRESHNESS_027",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py:250-450@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "VoiceSessionCapsule is rebuilt from live state/presence/visual/memory/arbitration sources, reads privacy policy from the Perception Control registry, and references the same downstream disallowed-tools policy object rather than owning a copied permission list. It remains RAM-only and noncanonical.",
+      "confidence": 0.97,
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_delta": "Preserve the capsule as a compiled noncanonical context view, but bind its selected fields to source generation/provenance/freshness in the successor context compiler. A multi-source refresh without a generation contract must not silently become decision authority."
+    }
+  ],
+  "triggerword4_handoff": [
+    "Treat Perception Control tier/DAG/taint semantics as a concrete donor for GRID cell and WorldSlice controls: COMPUTE_OFF prevents compute; OUTPUT_OFF prevents egress; MEMORY_OFF prevents memory/persistence; NOT_COMPUTED remains first-class UNKNOWN-like evidence rather than zero.",
+    "Add a protected-head bypass audit before privacy/system credit: every sensitive live compute edge must either route through the deterministic policy boundary or be explicitly retired/replaced.",
+    "Generalize Realtime barge-in into typed pending-effect cancellation only before actual effect submission; after possible submission preserve OUTCOME_UNKNOWN until verified.",
+    "Keep VoiceSessionCapsule as a noncanonical projection and add generation/provenance/freshness binding in the explicit context compiler already required by the preceding Triggerword-5 delta.",
+    "Carry the donor effect-journal redaction boundary into every new effect/request/result/recovery record; do not persist raw secrets merely for provenance convenience."
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-PERCEPTION-ENFORCEMENT-COVERAGE-005",
+      "status": "OPEN",
+      "claim": "Perception Control's local enforcement is explicit and has bounded historical ablation evidence, but whole-source reachability proving that every protected live head passes through evaluate_head has not yet been established."
+    },
+    {
+      "id": "TW5-CONTRADICTION-PENDING-EFFECT-UNKNOWN-006",
+      "status": "OPEN_DESIGN_BOUNDARY",
+      "claim": "The voice path can safely cancel local pending calls before dispatch, but the same semantics cannot be applied after an external effect may already have been submitted; Frankenstein-2.0 needs an explicit PENDING/CANCELLED versus SUBMITTED/OUTCOME_UNKNOWN boundary."
+    }
+  ],
+  "credits": {
+    "source_forensics": "PRESENT",
+    "historical_perception_component_receipt": "PRESENT_BOUNDED",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Source-reachability audit every protected perception head to evaluate_head and map the PENDING_EFFECT -> deterministic EffectGate submission -> SUBMITTED -> verified outcome/OUTCOME_UNKNOWN state machine into the Triggerword-4 assembly contract; continue preserving feed/inbox migration and donor-closure contradictions."
+}

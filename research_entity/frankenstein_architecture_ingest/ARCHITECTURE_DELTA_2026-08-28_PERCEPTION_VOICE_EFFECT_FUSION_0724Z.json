@@ -1,0 +1,169 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_PERCEPTION_VOICE_EFFECT_FUSION_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:29:19Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_commit_before_write": "ea0a1b95c973736fdf24d10bfaaec3474b4d8541"
+  },
+  "canonical_clay_main_observed": "45f46138db94e0228240ea15b586bf8be622410b",
+  "predecessor_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REENTRY_FUSION.json",
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T0724Z_5641dc6_GPT56SOL_EFFECT_PERCEPTION_VOICE_ENFORCEMENT.json",
+      "status": "INGESTED_WITH_DIRECT_DONOR_CROSSCHECK",
+      "independence_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072407Z_5641dc6_GPT56SOL_EFFECT_AUTHORITY_ENFORCEMENT.json",
+      "status": "INGESTED_AS_SUCCESSOR_CROSSCHECK",
+      "independence_credit": false
+    }
+  ],
+  "source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "spans": ["3200-3655", "8810-8895"],
+      "result": "CONFIRMED_NORMAL_PRETOOLUSE_ADMISSION_IS_NONBLOCKING_BOOKKEEPING_AND_POSTTOOLUSE_IS_OUTCOME_JOURNALING; ONLY_SEBUKKU_BRANCH_EMITS_DENY_IN_THE_INSPECTED_DISPATCH"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py",
+      "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "spans": ["420-560"],
+      "result": "CONFIRMED_COMPUTE_OFF_AND_DEPENDENCY_TAINT_RETURN_NOT_COMPUTED_VALUE_NONE_BEFORE_COMPUTE_FN_RUNS"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py",
+      "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "spans": ["250-450"],
+      "result": "CONFIRMED_CAPSULE_IS_FRESH_RAM_ONLY_COMPILED_PROJECTION_AND_REUSES_CURRENT_PERMISSION_AND_PRIVACY_SOURCES"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "spans": ["700-900", "1200-1408"],
+      "result": "CONFIRMED_RESPONSE_CREATE_SERIALIZES_PERSONA_PLUS_ZUSTANDSTEXT_NOT_THE_CAPSULE; PRESENCE_UNAVAILABLE_PATH_MINTS_USER_PRESENT_TRUE; CANCELLED_RESPONSE_OR_BARGE_IN_CLEARS_PENDING_UNDISPATCHED_TOOL_CALLS"
+    }
+  ],
+  "new_or_strengthened_atoms": [
+    {
+      "atom_id": "F2_PERCEPTION_NOT_COMPUTED_TAINT_PATTERN_020",
+      "source_kind": "ENFORCEMENT_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:420-560@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Perception Control has a real central enforcement primitive: unknown heads, COMPUTE_OFF heads, and heads tainted by an upstream COMPUTE_OFF or unknown dependency return status=NOT_COMPUTED and value=None before compute_fn executes. Caller-supplied dependency lists do not override the central dependency DAG.",
+      "crosscheck": "DIRECT_SOURCE_CONFIRMED_THIS_RUN",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_delta": "Port the semantic invariant into WorldNeed/WorldSlice and GRID head evaluation: protected or unknown variables must remain NOT_COMPUTED through downstream transformation chains; no vector similarity, inverse decomposition, or cached projection may silently reconstruct a disabled axis.",
+      "boundary": "System-wide privacy credit is not granted until source-wide live reachability proves sensitive callers cannot bypass evaluate_head and call raw compute functions directly."
+    },
+    {
+      "atom_id": "F2_VOICE_CAPSULE_IS_NONCANONICAL_VIEW_NEEDS_GENERATION_BINDING_021",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py:250-450@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "VoiceSessionCapsule refreshes live presence, visual state, cognition/arbitration, memory references, privacy policy and tool policy into RAM only and therefore is a useful noncanonical compiler/view rather than a second memory authority. Its inputs are read from multiple sources without one explicit cross-source generation/transaction identity.",
+      "crosscheck": "DIRECT_SOURCE_CONFIRMED_THIS_RUN",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_delta": "Keep the capsule successor ephemeral. Add a bounded source-generation/provenance digest so a voice projection can be rejected or refreshed when decision-relevant source generations disagree, rather than treating a mixed-time snapshot as one coherent fact."
+    },
+    {
+      "atom_id": "F2_VOICE_CAPSULE_CONDITIONING_EDGE_STILL_MISSING_022",
+      "source_kind": "NEGATIVE_RESULT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:700-900,1200-1300@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "RealtimeSession constructs and refreshes the capsule, but _response_erstellen() still builds response.instructions from _instruktion(self._zustandstext) plus an optional hint. The capsule itself is not compiled into normal per-response conditioning.",
+      "crosscheck": "DIRECT_SOURCE_CONFIRMED_THIS_RUN",
+      "target_action": "REPAIR",
+      "grid10_delta": "Triggerword-4 should add one minimal provenance-bearing Voice/GRID context compiler with bounded token/privacy/freshness rules. Measure the intended causal edge with field-level lesion/shuffle controls instead of injecting the whole capsule blindly."
+    },
+    {
+      "atom_id": "F2_UNKNOWN_PRESENCE_TRUE_DEFAULT_STRENGTHENED_023",
+      "source_kind": "NEGATIVE_RESULT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py:320-370 and DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:700-1250@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "When PresenceBridge is unavailable or yields no user_present value, the donor path explicitly falls back to user_present=True even though the capsule can otherwise represent missing presence signal. This converts UNKNOWN sensor evidence into a positive presence fact for arbitration.",
+      "crosscheck": "DIRECT_SOURCE_CONFIRMED_THIS_RUN",
+      "target_action": "REPAIR",
+      "grid10_delta": "Unavailable presence must remain UNKNOWN/None. GRID/voice gating must choose WAIT, ASK, re-observe, or a non-presence-dependent path explicitly; missing evidence must never mint presence."
+    },
+    {
+      "atom_id": "F2_PENDING_TOOL_CANCELLATION_BEFORE_DISPATCH_024",
+      "source_kind": "ENFORCEMENT_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1300-1408@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Realtime stores emitted function calls as pending and discards them when the parent response is cancelled or the user barges in before dispatch. Only completed responses dispatch those pending calls.",
+      "crosscheck": "DIRECT_SOURCE_CONFIRMED_THIS_RUN",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_delta": "Generalize this into a typed candidate-effect lifecycle: CANCELLED or SUPERSEDED parent cognition invalidates undelivered EffectRequests before EffectGate. Once an external effect has been submitted, cancellation cannot be treated as non-execution; outcome may remain UNKNOWN and must be verified rather than replayed."
+    },
+    {
+      "atom_id": "F2_EFFECT_AUTHORITY_STATUS_OVERLOAD_STRENGTHENED_025",
+      "source_kind": "ENFORCEMENT_CODE_PLUS_NEGATIVE_RESULT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3200-3655,8810-8895@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "The normal PreToolUse path records ZUGELASSEN/ABGELEHNT/WIEDERHOLUNG/UNGEPRUEFT but emits no block decision. PostToolUse may create VERIFIED/FEHLGESCHLAGEN evidence even when no pre-row existed. Downstream semantics therefore must not infer prior admission authority from successful execution or one overloaded status field.",
+      "crosscheck": "DIRECT_SOURCE_CONFIRMED_THIS_RUN_AND_SAME_PIPELINE_PACKET_CORROBORATION",
+      "target_action": "REPAIR",
+      "grid10_delta": "Maintain distinct EffectRequest, ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION and COMPLETION_EVIDENCE identities. Successful execution never retroactively creates admission authority."
+    }
+  ],
+  "architecture_fusion": {
+    "effect_plane": [
+      "Keep donor redaction, generation/precondition checks, outcome hashing and append-only evidence ideas, but not its nonblocking admission semantics as the final EffectGate.",
+      "Use immutable per-call invocation identity rather than one mutable session-wide active_turns.effect_id pointer.",
+      "Cancellation before dispatch is a useful donor invariant; post-submission uncertainty is a different state and remains UNKNOWN until verified."
+    ],
+    "world_substrate": [
+      "Use Perception Control's NOT_COMPUTED plus dependency-taint rule as the direct control-plane donor for sparse WorldNeed/WorldSlice generation.",
+      "A disabled or unknown primitive cannot be reconstructed indirectly by decomposition, transform chains, vector nearest-neighbor retrieval or downstream heads.",
+      "Preserve typed provenance/epistemics outside vectors; similarity and model projection remain candidate structure only."
+    ],
+    "voice_plane": [
+      "Keep VoiceSessionCapsule as an ephemeral compiler/view over canonical sources, never a second state store.",
+      "Add generation/provenance binding across capsule inputs before using the projection for stronger autonomous decisions.",
+      "Compile only a minimal tested slice into per-response expression conditioning.",
+      "Replace UNKNOWN->True presence fallback with explicit UNKNOWN and WAIT/ASK/re-observe semantics."
+    ]
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "STERN_SOURCE_RESOLVED_WHOLE_EFFECT_PATH_OPEN",
+      "resolution": "stern.py normal PreToolUse is conclusively nonblocking bookkeeping. The separately referenced historical/external blocker and its current reachability still must be mapped before describing the whole donor effect architecture."
+    },
+    {
+      "id": "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
+      "status": "SOURCE_CONFIRMED_REPAIR_OPEN",
+      "resolution": "The degraded voice path explicitly maps absent PresenceBridge evidence to user_present=True; Triggerword-4 must remove this epistemic promotion."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+      "status": "SOURCE_CONFIRMED_REPAIR_OPEN",
+      "resolution": "Capsule refresh is real, but normal response.create instructions still omit the capsule projection; an explicit bounded context compiler is required."
+    },
+    {
+      "id": "TW5-CONTRADICTION-PARALLEL-EFFECT-CORRELATION-003",
+      "status": "OPEN_RUNTIME_DISCRIMINATOR_REQUIRED",
+      "resolution": "Source structure still uses one session pointer. Keep this as an open concurrency defect candidate until the real scheduler is traced or an admitted parallel-call regression demonstrates interleaving; 2.0 design should not depend on that ambiguity and should bind immutable per-call identity."
+    }
+  ],
+  "evidence_scope": {
+    "new_runtime_execution_this_fusion": false,
+    "source_forensics": "PRESENT",
+    "same_pipeline_packet_corroboration_is_independent_replication": false,
+    "whole_frankenstein_2_runtime_pass": false,
+    "whole_entityos_hcu_credit_delta": 0,
+    "hcu_runtime_credit_delta": 0,
+    "jspace_model_credit_delta": 0,
+    "training_credit_delta": 0,
+    "classification": "SOURCE_FORENSICS_AND_PACKET_FUSION_ONLY"
+  },
+  "next_exact_gate": "Recover the actual historical/current blocking wache-koenig or successor and real hook scheduler ordering, then bind the complete request->admission->enforcement->execution->verification->completion graph to immutable per-call identity. In parallel, Triggerword-4 should port NOT_COMPUTED dependency taint into WorldSlice/GRID controls and repair UNKNOWN presence plus the missing bounded Voice/GRID per-response context compiler."
+}

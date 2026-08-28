@@ -1,0 +1,74 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-2026-08-28-REALTIME-MEMORY-INTENT-DONOR-CLOSURE-9.13",
+  "created_at_utc": "2026-08-28T07:43:30Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "9.13",
+  "authority_binding": {
+    "canonical_main": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF"
+  },
+  "evidence_scope": "SOURCE_FORENSICS_AND_PACKET_FUSION_ONLY_NO_RUNTIME_PASS",
+  "source_pins": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_before_fusion": "5446a1ab56b53282006d6b388a63a310fe5d6a97"
+  },
+  "authority_rebind_receipt": {
+    "path": "research_entity/frankenstein_architecture_ingest/receipts/AUTHORITY_REBIND_2026-08-28_VOICE_MEMORY_ADMISSION_SUCCESSOR_9_13.json",
+    "commit": "0f7d927089e495d1ccd8bf0c36298d766a3826e7",
+    "effect": "Earlier 8.78 metadata is historical_source_epoch only; source findings preserved but no current authority/runtime credit derives from the stale label."
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REALTIME_MEMORY_INTENT_DONOR_CLOSURE_FUSION_9_13.json",
+    "commit": "8b14fcca0a28e074ac1444c84828c22dc60188d8"
+  },
+  "packets_requested_for_consumption_if_still_unconsumed_at_state_reentry": [
+    "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+    "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
+    "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
+    "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+    "TW5-PACKET-20260828T073652Z-REALTIME-MEMORY-TASK-AUTHORITY-GPT56SOL",
+    "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
+    "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL"
+  ],
+  "direct_crosschecks": [
+    "Pinned donor paket.py imports .wegehierarchie while the exact implementation is archived under _archiv-phase4.",
+    "Pinned donor realtime_gespraech.py directly dispatches conversation-memory writes and separately starts research requests without the task-confirmation mechanism.",
+    "Pinned donor gespraechsmodus.py hard-blocks Bash for voice-delegated claude -p but leaves Read/Write/Edit/Grep/Glob available, so Bash denial is not whole-effect authority."
+  ],
+  "primary_successor_deltas": [
+    "HumanIntentDecision/TaskAdmission is distinct from MemoryAdmission and EffectDecision.",
+    "MemoryCandidate/MemoryAdmission carries structural transformation, epistemic, provenance, privacy/retention and causal identity fields.",
+    "ResearchRequestCandidate requires explicit intent plus provider/economic/privacy admission; current 9.13 provider HARD_OFF yields zero runtime/provider credit.",
+    "Final external effects require one-shot executor-consumed EffectDecision/CapabilityLease below modality/plugin front gates.",
+    "F94 archived donor must be explicitly adapted or retired with regression evidence; no silent import degradation.",
+    "Historical wache one-shot Bash ticket is donor-only until exact registration/order/runtime reachability is proved."
+  ],
+  "contradictions_preserved": [
+    "TW5-CONTRADICTION-REALTIME-EFFECT-AUTHORITY-007",
+    "TW5-CONTRADICTION-REALTIME-MUTATION-INTENT-008",
+    "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-008",
+    "TW5-CONTRADICTION-TASK-VS-EFFECT-AUTHORITY-009",
+    "TW5-CONTRADICTION-MULTISPEAKER-CONFIRMATION-010",
+    "TW5-CONTRADICTION-REALTIME-RESEARCH-INTENT-011",
+    "TW5-CONTRADICTION-DELEGATED-EFFECT-COVERAGE-012",
+    "TW5-CONTRADICTION-HOOK-REACHABILITY-013",
+    "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004"
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Re-enter moving INGEST_STATE; record only packets not already consumed by parallel organs; then keep headless Claude hook reachability and per-effect non-Bash enforcement unresolved until source-bound execution evidence exists."
+}

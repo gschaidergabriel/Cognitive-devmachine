@@ -1,0 +1,92 @@
+name: GRID10 Cognitive Envelope CI
+
+on:
+  push:
+    branches: [chatgpt/grid10-cognitive-envelope-control-20260828]
+    paths:
+      - 'tools/grid10_cognitive_*'
+      - 'tools/grid10_persistent_*'
+      - 'tools/test_grid10_persistent_*'
+      - 'tools/grid10_assurance_*'
+      - 'tools/grid10_executor_*'
+      - 'tools/grid10_glm_*'
+      - 'research_entity/topic_packets/grid10-cognitive-envelope-control-v1/**'
+      - '.github/workflows/grid10-cognitive-envelope-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: |
+          python -m py_compile \
+            tools/grid10_fabric.py \
+            tools/grid10_cognitive_envelope_control_v1.py \
+            tools/grid10_cognitive_regulator_port_v1.py \
+            tools/grid10_cognitive_fabric_adapter_v1.py \
+            tools/grid10_cognitive_heartbeat_v1.py \
+            tools/grid10_cognitive_unified_runtime_v2.py \
+            tools/grid10_cognitive_unified_runtime_v3.py \
+            tools/grid10_cognitive_unified_runtime_v4.py \
+            tools/grid10_persistent_agency_v1.py \
+            tools/grid10_persistent_scheduler_v1.py \
+            tools/grid10_cognitive_twin_server_v1.py \
+            tools/grid10_assurance_monitors_v1.py \
+            tools/grid10_executor_governor_v1.py \
+            tools/grid10_glm_inference_provider_v1.py \
+            tools/grid10_glm_cognitive_cycle_v1.py \
+            tools/grid10_glm_benchmark_v1.py \
+            tools/grid10_glm_cognitive_stress_v1.py
+      - name: Unit and integration tests
+        working-directory: tools
+        run: |
+          python test_grid10_cognitive_envelope_control_v1.py -v
+          python test_grid10_cognitive_runtime_v1.py -v
+          python test_grid10_cognitive_unified_runtime_v2.py -v
+          python test_grid10_cognitive_unified_runtime_v3.py -v
+          python test_grid10_cognitive_unified_runtime_v4.py -v
+          python test_grid10_persistent_agency_v1.py -v
+          python test_grid10_persistent_scheduler_v1.py -v
+          python test_grid10_glm_inference_provider_v1.py -v
+          python test_grid10_glm_cognitive_cycle_v1.py -v
+      - name: Bounded agency-coupled unified-runtime CLI smoke
+        env:
+          PYTHONPATH: tools
+        run: |
+          TD=$(mktemp -d)
+          python tools/grid10_cognitive_unified_runtime_v4.py \
+            --unified-db "$TD/unified.sqlite" \
+            --frames-jsonl "$TD/frames.jsonl" \
+            --ticks 2 --interval 0.05 --trusted-normal-test-fixture
+          python - <<'PY' "$TD/unified.sqlite" "$TD/frames.jsonl"
+          import json,sqlite3,sys
+          db,frames=sys.argv[1:]
+          rows=[json.loads(x) for x in open(frames) if x.strip()]
+          assert len(rows)==2
+          assert all(x['schema']=='COGNITIVE_LOOP_FRAME/v1' for x in rows)
+          assert all(x['assurance_mode']=='NORMAL' for x in rows)
+          con=sqlite3.connect(db)
+          try:
+              names={r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+              required={'nodes','regulators','ticks','meta','agency_meta','goals','deferred_intents','agency_events','grid10_cognitive_cycles'}
+              assert required <= names,(required-names)
+              assert con.execute("SELECT COUNT(*) FROM ticks").fetchone()[0] == 2
+              assert con.execute("SELECT COUNT(*) FROM grid10_cognitive_cycles").fetchone()[0] == 2
+              mode,next_due,checkpoint=con.execute("SELECT mode,next_tick_not_before,continuation_checkpoint FROM agency_meta WHERE singleton=1").fetchone()
+              assert mode == 'NORMAL'
+              cp=json.loads(checkpoint)
+              assert cp['schema']=='GRID10_COGNITIVE_CYCLE_CHECKPOINT/v1'
+              assert next_due is not None
+          finally:
+              con.close()
+          print(json.dumps({'pass':True,'frames':len(rows),'cycles':2,'agency_checkpoint':True,'last_frame':rows[-1]['frame_id']}))
+          PY

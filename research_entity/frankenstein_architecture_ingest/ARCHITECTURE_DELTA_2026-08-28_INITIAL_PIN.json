@@ -1,0 +1,228 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_INITIAL_PIN_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:14Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_commit_before_write": "099340237fad4b52187a77ef21a6ff93ae98287a"
+  },
+  "canonical_clay_main_observed": "4f4a7088a54dd21e1848f090446590efa05a2ac1",
+  "packet_ingest": {
+    "inbox_path": "research_entity/frankenstein_architecture_ingest/inbox/",
+    "status": "ABSENT_404_ON_DESIGN_BRANCH",
+    "unconsumed_packet_ids": [],
+    "interpretation": "negative coordination evidence only; no worker packet was available to consume in this run"
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_STERN_DB_PATH_AUTHORITY_001",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py", "line_start": 1, "line_end": 220, "source_kind": "ENFORCEMENT_CODE"},
+      "claim": "stern resolves one canonical unified.db location through pointer/env/XDG/legacy precedence and fresh-install fallback deliberately avoids creating the DB in the plugin tree.",
+      "runtime_reachability": "MODULE_IMPORT_AND_DB_ACCESS_PATH",
+      "confidence": 0.98,
+      "reads": ["~/.config/agentzero/db_pfad.txt", "AGENTZERO_DB", "UDB_DB_PATH", "$XDG_DATA_HOME/agentzero/unified.db", "legacy STERN_DIR/unified.db"],
+      "writes": [],
+      "authority": "path selection only; does not grant truth or effect authority",
+      "failure_behavior": "invalid pointer falls through; fresh install selects XDG target",
+      "target_action": "KEEP",
+      "grid10_adaptation": "Preserve single canonical state-location resolution; expose it as deterministic state-fabric binding rather than duplicate DB ownership.",
+      "open_questions": ["Cross-check migration/self-healing write path and schema generation in later stern.py spans."]
+    },
+    {
+      "atom_id": "F2_STERN_HIDDEN_PAKET_DEP_002",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py", "line_start": 1, "line_end": 220, "source_kind": "LIVE_CODE"},
+      "claim": "stern still depends on external udb.abruf.paket and, transitively, udb.abruf.wegehierarchie; comments record a prior self-test where deleting wegehierarchie silently disabled F94 path reinforcement behind paket's fail-closed exception handling.",
+      "runtime_reachability": "IMPORT_TIME_OPTIONAL_DEPENDENCY",
+      "confidence": 0.95,
+      "counterevidence": ["The source comment records the prior failure, but this Triggerword-5 run did not re-execute the historical self-test."],
+      "failure_behavior": "imports degrade to _PAKET_OK/_WEGE_OK false and logging rather than hard process failure",
+      "target_action": "REPAIR",
+      "grid10_adaptation": "Do not delete compatibility modules during assembly. First make dependency explicit, test it, then fold or replace only with a verified successor.",
+      "open_questions": ["Map paket.py reachable feature set and prove which branches remain live under current schema."]
+    },
+    {
+      "atom_id": "F2_RETINA_POLICY_TIER_ENFORCEMENT_003",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py", "line_start": 1, "line_end": 760, "source_kind": "ENFORCEMENT_CODE"},
+      "claim": "Perception policy has distinct ON, COMPUTE_OFF, OUTPUT_OFF and MEMORY_OFF semantics; evaluate_head is the egress-safe enforcement point; a declarative dependency DAG drives taint blocking and persistence propagation; one snapshot can bind a whole visual cycle to one policy view.",
+      "runtime_reachability": "VISUAL_CORTEX_AND_ACTIVE_SENSING_HEAD_GATE",
+      "confidence": 0.99,
+      "tests": ["DEV_SOURCE_RESEARCH/repository/phase43/evidence/P0_CONTROL_PLANE_FUSION_2026-08-27.json", "DEV_SOURCE_RESEARCH/repository/phase43/evidence/PERCEPTION_CONTROL_PLANE_ABLATION_2026-08-27.json"],
+      "runtime_evidence": "component evidence shows COMPUTE_OFF does not call compute_fn, OUTPUT_OFF blocks egress/persistence, MEMORY_OFF permits moment behavior without persistence, and retina.global COMPUTE_OFF skips capture",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_adaptation": "Use the tier/DAG/snapshot mechanism as the donor for adjustable cognitive-envelope controls. Preserve NOT_COMPUTED as distinct from false/zero.",
+      "open_questions": ["Generalize dependency taint from Retina heads to GRID10 cognitive/effect candidate dependencies without creating a second policy authority."]
+    },
+    {
+      "atom_id": "F2_VISUAL_CORTEX_SHARED_ARBITRATION_004",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/visual_cortex.py", "line_start": 1, "line_end": 320, "source_kind": "LIVE_CODE"},
+      "claim": "Visual Cortex is a coupled pipeline: shared CaptureWorker -> UnifiedDB memory context -> perception-gated visual candidates -> the same voice_loop_core score/arbitration machinery -> structured visual_event/presence_episode persistence. It explicitly reuses policy, GWT scoring and shared capture instead of inventing parallel mechanisms.",
+      "runtime_reachability": "VISUELLER_ZYKLUS",
+      "confidence": 0.96,
+      "dependencies": ["capture_worker", "stern", "voice_loop_core", "perception_control", "perceptual_field", "familiarity"],
+      "counterevidence": ["USER_BUSY exists as a category but is not produced by the base visual candidate generator; richer busy sensing is separate."],
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_adaptation": "Retain shared arbitration primitives and route visual events into GRID/GWT as typed evidence rather than as a separate visual sovereign.",
+      "open_questions": ["Trace exact visual_event/presence_episode write spans and generation/provenance guards."]
+    },
+    {
+      "atom_id": "F2_TYPED_PERCEPTUAL_FIELD_005",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/perceptual_field.py", "line_start": 1, "line_end": 430, "source_kind": "ENFORCEMENT_CODE"},
+      "claim": "ObservedEvidence, InferredHypothesis and RetrievalPrior are separate types; RetrievalPrior cannot override the current observed presence value and may only add a small agreement-only confidence nudge. Salience gates determine what reaches GWT and VisualNeed provides a top-down request shape.",
+      "runtime_reachability": "PERCEPT_EVENT_AND_VISUAL_NEED_PATHS",
+      "confidence": 0.99,
+      "authority": "observation outranks retrieval prior within this component",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_adaptation": "Direct donor for Typed Entry/J-Space evidence classes: keep observed, inferred and retrieval-prior channels structurally separable and preserve conflicts.",
+      "open_questions": ["Bind these local percept IDs to the canonical Typed Entry causal/admission identity envelope during Triggerword 4 assembly."]
+    },
+    {
+      "atom_id": "F2_PRESENCE_CAUSAL_BRIDGE_006",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/presence_bridge.py", "line_start": 1, "line_end": 420, "source_kind": "LIVE_CODE"},
+      "claim": "PresenceBridge owns the shared camera reference for an active voice session, derives local presence plus interruptibility, and mints a new causal_event_id on first reading, presence transitions or new track appearance while stable ticks retain the prior event id.",
+      "runtime_reachability": "REALTIME_SESSION_SCOPED_BACKGROUND_TICK_LOOP",
+      "confidence": 0.98,
+      "tests": ["DEV_SOURCE_RESEARCH/repository/phase43/evidence/P0V_VOICE_PRESENCE_2026-08-27.json"],
+      "runtime_evidence": "component receipt records absent->WAIT behavior, busy-driven interruption-cost increase, and distinct causal_event_ids across observed presence changes",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_adaptation": "Map causal_event_id into Typed Entry causal identity and keep admission/transport identity separate in the final fabric.",
+      "open_questions": ["Verify lifecycle when a future always-on camera daemon exists; current code itself documents that as a seam, not a solved deployment state."]
+    },
+    {
+      "atom_id": "F2_VOICE_GWT_ARBITRATION_007",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_loop_core.py", "line_start": 1, "line_end": 420, "source_kind": "ENFORCEMENT_CODE"},
+      "claim": "Voice uses explicit candidate scoring with hard user-present/self-resolvable gates, weighted benefit-cost terms, chatter debt for initiative acts, and WAIT as a first-class default winner unless a real candidate reaches threshold.",
+      "runtime_reachability": "REALTIME_SILENCE_REOPEN_AND_CAPSULE_INTENT_PATHS",
+      "confidence": 0.98,
+      "counterevidence": ["The module explicitly states that the full 16-type candidate universe and Needle/Embedding/Hyperposition integration are not implemented; repetition checking is coarse."],
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_adaptation": "Reuse one arbitration service for voice and visual/cognitive candidates; extend candidate sources through GRID10 rather than creating a second scoring formula.",
+      "open_questions": ["Define how Hyperposition unresolved alternatives enter candidate scoring without converting recurrence or majority into truth."]
+    },
+    {
+      "atom_id": "F2_VOICE_SESSION_CAPSULE_SINGLE_TRUTH_008",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py", "line_start": 1, "line_end": 430, "source_kind": "LIVE_CODE"},
+      "claim": "VoiceSessionCapsule is session-lifetime RAM state assembled by fresh reads from Presence, UnifiedDB-backed context, chatter debt and perception policy; it references durable memory rows instead of creating a second Voice database.",
+      "runtime_reachability": "REALTIME_SESSION_INIT_PERIODIC_REFRESH_AND_REOPEN_REFRESH",
+      "confidence": 0.96,
+      "authority": "projection/capsule only; UnifiedDB remains durable state source",
+      "target_action": "KEEP",
+      "grid10_adaptation": "Treat the capsule as a bounded working-set projection generated from canonical state and current observations, never as an independent truth store.",
+      "open_questions": ["Cross-check the exact tool-permission reference and every capsule field refresh caller before promotion to a generic GRID10 working-set ABI."]
+    },
+    {
+      "atom_id": "F2_REALTIME_UNKNOWN_PRESENCE_DEFAULT_BUG_009",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py", "line_start": 1050, "line_end": 1600, "source_kind": "NEGATIVE_RESULT"},
+      "claim": "When PresenceBridge cannot import, start, or access the camera, the live Realtime path explicitly falls back to the old user_present=True default while the VoiceSessionCapsule can separately represent no presence signal.",
+      "runtime_reachability": "REALTIME_SESSION_START_DEGRADED_PATH",
+      "confidence": 1.0,
+      "contradiction": "This conflicts with the desired FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT discipline: missing sensor evidence is not evidence that the user is present.",
+      "target_action": "REPAIR",
+      "grid10_adaptation": "Replace True fallback with UNKNOWN/None and make candidate hard gates define explicit behavior for UNKNOWN (normally WAIT/ASK/re-observe depending on act), preserving a provenance reason for degradation.",
+      "open_questions": ["Audit all vlc.kandidaten_bauen call sites for implicit True defaults and add an unknown-presence regression test."]
+    },
+    {
+      "atom_id": "F2_ACTION_GROUNDED_REENTRY_010",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/action_grounded_memory.py", "line_start": 1, "line_end": 430, "source_kind": "LIVE_CODE"},
+      "claim": "Action-grounded memory implements a pre-evidence -> action -> post-evidence -> outcome loop, reuses perception policy and typed evidence, records provenance, and structurally prevents memory priors from overwriting fresh post-action evidence.",
+      "runtime_reachability": "ACTION_GROUNDING_ORCHESTRATOR",
+      "confidence": 0.95,
+      "counterevidence": ["The donor lacks a physical actuator for the positive moved/deleted-object case; that positive mechanism test uses distinct existing photographs while the unenacted-action negative control is real."],
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_adaptation": "Retain post-effect re-observation/outcome binding but route any real effect request through canonical deterministic EffectGate/EffectJournal authority; this module must not become an alternate effect authority.",
+      "open_questions": ["Map action IDs to EffectJournal request/result identities and test unknown external-effect outcomes without blind replay."]
+    },
+    {
+      "atom_id": "F2_VOICE_OUTCOME_CORTEX_REENTRY_011",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_outcome_events.py", "line_start": 1, "line_end": 430, "source_kind": "LIVE_CODE"},
+      "claim": "Voice dialogue outcomes are re-entered as structured events; disagreement can trigger a bounded visual re-look only when the previous claim is visually checkable, reusing VisualNeed and active sensing rather than a new perception path.",
+      "runtime_reachability": "REALTIME_TRANSCRIPT_AND_OUTCOME_HANDLERS",
+      "confidence": 0.94,
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_adaptation": "Preserve outcome re-entry as a causal feedback edge into GRID/GWT. Keep re-look bounded, typed and provenance-bearing.",
+      "open_questions": ["Inspect P3V execution receipts and exact initiative_episode schema migration before claiming runtime coverage for all five voice outcome kinds."]
+    },
+    {
+      "atom_id": "F2_HARNESS_CALIBRATION_012",
+      "source": {"repo": "gschaidergabriel/frankenstein", "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427", "path": "DEV_SOURCE_RESEARCH/repository/phase43/evidence/ABC_VERGLEICHSTEST_RUNDE3_2026-08-27.json", "line_start": 1, "line_end": 9999, "source_kind": "RUNTIME_RECEIPT"},
+      "claim": "The third A/B/C receipt records a real difficult frame where the bare external vision baseline hallucinated a map, while the context/harness path explicitly hedged, reported confidence 0.05, and WAIT won; the receipt also preserves an earlier blind-test failure rather than erasing it.",
+      "runtime_reachability": "HISTORICAL_DONOR_COMPONENT_RUN",
+      "confidence": 0.93,
+      "target_action": "KEEP",
+      "grid10_adaptation": "Keep calibrated abstention and negative evidence as design constraints; do not treat the external provider result or receipt as current Clay provider runtime credit.",
+      "open_questions": ["Reproduce equivalent abstention/grounding behavior on the final Frankenstein-2.0 runtime with exact-source receipts, not by reusing this historical donor credit."]
+    }
+  ],
+  "contradictions_and_boundaries": [
+    {
+      "id": "C_T5_001",
+      "left": "realtime_gespraech degraded presence path assumes user_present=True",
+      "right": "current EntityOS/HCU epistemic invariant requires unknown evidence to remain unknown",
+      "status": "OPEN_REPAIR_REQUIRED",
+      "recommended_resolution": "Represent unavailable presence as None/UNKNOWN through the candidate ABI and test WAIT/ASK/re-observe behavior."
+    },
+    {
+      "id": "C_T5_002",
+      "left": "Frankenstein donor evidence contains historical external-provider executions",
+      "right": "Clay supervisor 8.78 gives provider runtime credit 0 and requires current exact FREE credential/model/route provenance before provider model network I/O",
+      "status": "PRESERVE_AS_HISTORICAL_DONOR_EVIDENCE_ONLY",
+      "recommended_resolution": "Use these receipts to understand architecture and failure modes, never as current execution authorization or provider runtime credit."
+    },
+    {
+      "id": "C_T5_003",
+      "left": "Voice GWT arbitration is real but reduced",
+      "right": "Frankenstein-2.0 target requires GRID/GWT integration including Hyperposition and broader candidate sources",
+      "status": "OPEN_ADAPTATION",
+      "recommended_resolution": "Extend source adapters into one shared arbitration layer; do not duplicate weights/formulas per subsystem."
+    }
+  ],
+  "architecture_delta_for_triggerword_4": {
+    "keep": [
+      "single canonical UnifiedDB binding",
+      "Perception Control Plane tier semantics and dependency taint",
+      "shared CaptureWorker ownership",
+      "typed observed/inferred/retrieval-prior separation",
+      "WAIT-first shared candidate arbitration",
+      "RAM-only VoiceSessionCapsule projection",
+      "causal event IDs across presence transitions",
+      "action/outcome and voice-outcome re-entry",
+      "negative evidence and calibrated abstention"
+    ],
+    "repair_before_assembly_promotion": [
+      "unknown presence must not become user_present=True",
+      "make paket/wegehierarchie compatibility dependency explicit and regression-tested",
+      "bind donor causal IDs into canonical Typed Entry causal/admission identity separation",
+      "bind action grounding to EffectGate/EffectJournal rather than treating donor action code as effect authority"
+    ],
+    "adapt_to_grid": [
+      "Perception tier/DAG controls -> adjustable GRID10 cognitive envelope",
+      "PerceptEvent/VisualNeed -> typed GRID/GWT ingress and top-down sensing",
+      "voice/visual candidate scoring -> one shared GWT arbitration service",
+      "Presence/Voice/Action outcomes -> causal re-entry edges",
+      "sparse world substrate -> noncanonical external projection fed by typed evidence, never a second truth store"
+    ]
+  },
+  "evidence_scope": {
+    "whole_frankenstein_2_runtime_pass": false,
+    "whole_entityos_hcu_credit_changed": false,
+    "provider_runtime_credit_changed": false,
+    "scope": "source forensics plus bounded historical donor component receipts only"
+  },
+  "next_unexamined_spans": [
+    "stern.py schema/self-healing/effect/task/room write paths beyond initial DB resolver",
+    "udb/abruf/paket.py reachable retrieval/graph/needle features and hidden schema dependencies",
+    "realtime_gespraech.py exact initiative/reopen/tool-confirmation/effect boundaries beyond the inspected session loop span",
+    "voice_session_capsule.py tool-permission enforcement reference and privacy-policy construction",
+    "phase43 P1/P2/P3/P3V/P7 evidence receipts and tests",
+    "installer/service lifecycle and current production-vs-plugin source supersession",
+    "explicit GRID10 attachment points and effect-journal bridge"
+  ]
+}

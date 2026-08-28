@@ -1,0 +1,100 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:42:12Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/workexecution-v2-admission-currentness-correction",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "delta_class": "WORKEXECUTION_V2_ADMISSION_CURRENTNESS_CORRECTION",
+  "canonical_main_observed": "4792b1ba4186e21b60c6eb051a6d47b6510a31f6",
+  "design_branch_head_observed_before_write": "744e6dd833ff785609b1b43eb260596ad2b2696c",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "authority": {
+    "authority_epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "packet_under_review": {
+    "packet_id": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T103555Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_V2.json",
+    "blob_sha": "e4283250db4cef25fec50aff9adcbfc5364c7e21",
+    "declared_schema_version": 2,
+    "declared_scope_claim": "schema-valid successor",
+    "observed_authority_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff"
+  },
+  "validation_crosscheck": {
+    "schema_v2_path": "research_entity/frankenstein_architecture_ingest/INGEST_PACKET_SCHEMA_V2.json",
+    "schema_v2_blob_sha": "f19f1586ddd975f2cdb6d55e97374aa3bbdc6f90",
+    "validator_path": "research_entity/frankenstein_architecture_ingest/validate_ingest_packet_v2.py",
+    "validator_blob_sha": "7b19b41666c7fc6c7fd47091ef48f566509fa824",
+    "observed_failures": [
+      "INGEST_PACKET_SCHEMA_V2.json requires authority_classification, but the exact packet blob does not contain authority_classification.",
+      "validate_ingest_packet_v2.py explicitly rejects missing/invalid authority_classification.",
+      "The packet binds canonical_main_sha=24389f873a775fd3af5fc3c896a58836d09a3bff while refreshed canonical main is 4792b1ba4186e21b60c6eb051a6d47b6510a31f6; the current validator requires exact equality to refreshed main."
+    ],
+    "validator_execution": "NOT_RUN_LOCAL_GIT_REFRESH_SURFACE_UNAVAILABLE",
+    "static_result": "FAIL_CLOSED_PACKET_NOT_CURRENT_AUTHORITY_BOUND_ADMISSIBLE",
+    "runtime_credit_delta": 0
+  },
+  "main_currentness_crosscheck": {
+    "base": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "head": "4792b1ba4186e21b60c6eb051a6d47b6510a31f6",
+    "changed_paths": ["agentZero/bewertung/bewertungen.jsonl.meta.json"],
+    "authority_files_changed": false,
+    "interpretation": "The authority tuple observed above remains semantically unchanged, but the current validator intentionally binds admission to exact canonical main, so unrelated main movement still invalidates CURRENT_AUTHORITY_BOUND admission."
+  },
+  "claims_corrected": [
+    {
+      "source": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T103555Z_WORKEXECUTION_AGENT_POSTTOOLUSE_JOIN_CORRECTION_GPT56SOL.json",
+      "prior_claim": "ACCEPTED_SCHEMA_VALID_SOURCE_PACKET",
+      "corrected_claim": "SCHEMA_INVALID_AND_CURRENTNESS_STALE_AS_CURRENT_AUTHORITY_BOUND_PACKET"
+    },
+    {
+      "source": "research_entity/frankenstein_architecture_ingest/receipts/TRIGGERWORD5_REENTRY_CHECKPOINT_2026-08-28T103945Z_GPT56SOL.json",
+      "prior_claim": "ACCEPTED_SCHEMA_VALID_SOURCE_PACKET_NO_RUNTIME_CREDIT",
+      "corrected_claim": "SEMANTIC_FINDINGS_RETAINED_BUT_PACKET_ADMISSION_CLAIM_WITHDRAWN"
+    }
+  ],
+  "semantic_findings_retained": [
+    "Donor handoff creates durable paket_id/capsule state but does not itself spawn the child.",
+    "Current official Claude Code documentation provides a documentation-level Agent PostToolUse candidate bridge from tool_use_id to tool_response.agentId; installed-target equality remains runtime-unverified.",
+    "The newer source/ABI design identifies an exact HANDOFF <paket_id> marker in the Agent prompt as a candidate deterministic paket_id -> Agent tool_use_id join, but installed-target hook evidence is still required.",
+    "task_id remains an independent optional namespace and must not be coerced into agent_id."
+  ],
+  "disposition": {
+    "packet": "QUARANTINE_FAIL_CLOSED_UNTIL_SCHEMA_VALID_CURRENT_SUCCESSOR_AND_VALIDATOR_PASS",
+    "original_packet_mutation": false,
+    "ingest_state_mutation_in_this_delta": false,
+    "reason": "Do not convert semantic usefulness into packet admission. Preserve negative evidence and avoid racing INGEST_STATE while parallel Triggerword-5 writers are active."
+  },
+  "currentness_hazard": {
+    "id": "TW5-WORKEXEC-V2-EXACT-MAIN-TOCTOU",
+    "status": "OPEN_ENGINEERING_HAZARD",
+    "statement": "An otherwise authority-equivalent packet can become inadmissible after an unrelated main commit because the validator requires exact canonical_main_sha. This is fail-closed but creates high admission churn under a fast-moving main.",
+    "do_not_weaken_gate_here": true,
+    "future_discriminator": "Measure how often exact-main churn invalidates packets without authority-tuple changes before proposing any successor admission law."
+  },
+  "feeds_triggerword_4": {
+    "architecture_semantics_changed": false,
+    "surviving_chain": "paket_id -> Agent tool_use_id via exact observed HANDOFF marker candidate -> tool_response.agentId/documented Agent bridge -> child lifecycle agent_id",
+    "runtime_status": "UNVERIFIED",
+    "next_exact_gate": "In the authorized build/verification lane, capture exact installed Agent PreToolUse/PostToolUse plus SubagentStart/SubagentStop for one harmless real handoff and prove paket_id -> tool_use_id -> agentId without timing/order inference; then repeat with two overlapping children."
+  },
+  "credits": {
+    "source_forensics": "PASS_AT_PINNED_SOURCE_SCOPE",
+    "packet_current_authority_admission": 0,
+    "installed_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false
+}

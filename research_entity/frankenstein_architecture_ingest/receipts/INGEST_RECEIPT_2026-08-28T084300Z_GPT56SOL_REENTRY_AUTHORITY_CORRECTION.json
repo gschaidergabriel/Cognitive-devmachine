@@ -1,0 +1,34 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "created_at": "2026-08-28T08:43:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest-state-reconciliation",
+  "classification": "APPEND_ONLY_AUTHORITY_POINTER_CORRECTION",
+  "corrects": "research_entity/frankenstein_architecture_ingest/INGEST_STATE_RECONCILIATION_2026-08-28T084147Z_GPT56SOL.json",
+  "corrected_field": "basis.canonical_main_observed",
+  "prior_value": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+  "current_value_at_reentry": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+  "reason": "Canonical main advanced at 2026-08-28T08:41:12Z via eos-bewertung-export while the Triggerword-5 run was in progress. The earlier checkpoint preserved the last successfully fetched main identity but must not be used as a current-authority pointer after reentry.",
+  "design_branch_reentry_head_before_this_correction": "e974afddae7bbf1ca655bad080dc6f66e56fd369",
+  "parallel_reentry": {
+    "observed_commit": "e974afddae7bbf1ca655bad080dc6f66e56fd369",
+    "parent": "d90fa05c18fc3d42ac65aae758ec60f985b7bc26",
+    "meaning": "A parallel Triggerword-5 organ committed a native-subagent identity checkpoint directly after the reconciliation checkpoint. It independently classifies central INGEST_STATE as stale relative to append-only receipts and preserves zero installed-host native-child runtime credit."
+  },
+  "unchanged_findings": [
+    "Frankenstein donor main remains 5641dc6b2df6ebed1df246ee7533134324f6c427 at the last exact donor refresh.",
+    "Both Wache v2 successor packets and the native-subagent identity-gap packet remain admitted at packet scope with runtime_credit_delta=0.",
+    "Central INGEST_STATE blob d0af3803a9b56e958b010e64d8ac0cbd628bfaf3 remained stale at reentry and was not overwritten.",
+    "Installed-host native child lifecycle remains unobserved and receives zero runtime credit.",
+    "The safe next state operation remains a compare-and-swap style reconciliation that preserves concurrent frontier entries."
+  ],
+  "credits": {
+    "packet_admission": "PASS_AT_THREE_PACKET_SCOPE",
+    "native_child_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Re-read the current central INGEST_STATE blob and latest design branch head, then apply the accumulated reconciliation operation set only if the state blob is unchanged; otherwise rebase the operations onto the newest state without deleting concurrent frontier work."
+}

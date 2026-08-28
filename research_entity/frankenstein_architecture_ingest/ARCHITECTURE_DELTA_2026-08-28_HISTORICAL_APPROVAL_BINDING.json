@@ -1,0 +1,107 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_HISTORICAL_APPROVAL_BINDING_abba90a5",
+  "analysis_time_utc": "2026-08-28T07:31:52Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "HISTORICAL_SOURCE_FORENSICS_ONLY_NO_RUNTIME_PROMOTION",
+  "current_donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "historical_source": {
+    "repo": "gschaidergabriel/Project-Frankenstein",
+    "commit": "abba90a5767d85abc8a1ac340bae92842dab35c1"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "b4dd77d94394e3144a7b58c53dd85bc40b9c4904"
+  },
+  "packet_ingest": {
+    "packet_id": "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL",
+    "result": "INGESTED_SOURCE_CROSSCHECKED",
+    "independent_runtime_credit": false
+  },
+  "source_crosschecks": [
+    {
+      "id": "HIST_EXECUTOR_DOES_NOT_CONSUME_APPROVAL_ID",
+      "path": "agentic/executor.py",
+      "spans": ["70-180", "590-685"],
+      "blob_sha": "2a87f8d58e5785fcd6b821141416f9dcd00433bf",
+      "result": "PASS_SOURCE_FINDING",
+      "finding": "ToolExecutor.execute(tool_name, tool_input, skip_approval) has no approval_id/request_digest parameter. Approval polling is keyed by approval_id, but successful approval is later represented only by caller-set skip_approval=True at execution."
+    },
+    {
+      "id": "HIST_AGENT_LOOP_PRESERVES_INPUT_BY_CALLER_CONVENTION",
+      "path": "agentic/loop.py",
+      "span": "430-530",
+      "blob_sha": "e39c0e9ad00843f62a0fea7dd881a80f3acc70dd",
+      "result": "PASS_SOURCE_FINDING",
+      "finding": "AgentLoop passes the same in-memory tool_call action/input after approval, which reduces accidental mismatch in this caller, but both safe and approved-risky paths call execute(..., skip_approval=True); the executor boundary does not mechanically consume a typed approval decision."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_HIST_APPROVAL_PREEXEC_DENY_USEFUL_BUT_UNBOUND_030",
+      "source_kind": "HISTORICAL_ONLY",
+      "claim": "Historical Project-Frankenstein contained genuine pre-execution human denial in the normal AgentLoop path, but approval identity was a workflow/UI correlation key rather than an executor-consumed capability bound to exact request bytes, generation and invocation identity.",
+      "confidence": 0.995,
+      "target_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "preserve": [
+        "human pre-execution deny semantics",
+        "risk-sensitive fast path versus approval path",
+        "separate approval-request identity for UI/provenance"
+      ],
+      "do_not_preserve": [
+        "caller-controlled skip_approval as the final authorization boundary",
+        "approval queue persistence of unrestricted full tool_input",
+        "tool-name-only safety classification as sufficient effect policy"
+      ]
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "id": "TW5-EFFECT-DECISION-CONSUMPTION-016",
+      "delta": "A Frankenstein-2.0 EffectDecision must be consumed at the actual executor boundary. It binds immutable invocation_id/tool_use_id + request_digest + generation + causal_id + policy version + expiry/one-shot state. The executor rejects missing, stale, mismatched or already-consumed decisions before a state-changing effect.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-HUMAN-APPROVAL-AS-DECISION-INPUT-017",
+      "delta": "Human approval remains a useful decision input and UI workflow, but approval_id itself is not canonical effect authority. Approval must produce or update the typed EffectDecision that the executor consumes; UI approval storage must be redacted/digest-bound and cannot bypass deterministic policy."
+    },
+    {
+      "id": "TW5-EFFECT-LINEAGE-FUSION-018",
+      "delta": "Fuse complementary lineages rather than choosing one: historical AgentLoop contributes real pre-execution deny semantics; current stern.py contributes generation/idempotency bookkeeping and post-execution outcome evidence. Frankenstein-2.0 must combine both behind one typed EffectGate/EffectJournal authority with immutable per-invocation binding."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-HISTORICAL-APPROVAL-BINDING-007",
+      "status": "SOURCE_RESOLVED_RUNTIME_LINEAGE_OPEN",
+      "claim_a": "Historical AgentLoop can stop a risky action before execute when approval is denied.",
+      "claim_b": "After approval, executor invocation does not consume approval_id or a digest-bound decision and relies on caller skip_approval=True.",
+      "resolution": "Preserve the pre-execution human-deny concept but replace the binding mechanism with executor-consumed typed EffectDecision. Production/runtime reachability of the historical path remains unpromoted."
+    }
+  ],
+  "hypotheses": [
+    "The missing wache-koenig lineage may contain the transition from historical caller-side approval enforcement to later hook-side bookkeeping; recovering it could reveal reusable checks or explain why blocking was separated from stern.py.",
+    "Exact decision consumption at the executor boundary will make both human approval and automatic policy auditable without allowing either UI state or model output to become a second effect authority."
+  ],
+  "counterhypotheses": [
+    "A historical wrapper may have revalidated approval contents before ToolExecutor.execute(); no such binding is established in the inspected executor/loop source.",
+    "If historical runtime had only one trusted AgentLoop caller, caller discipline may have made mismatches rare, but that does not satisfy the successor's explicit causal/effect authority contract."
+  ],
+  "credits": {
+    "historical_source_forensics": "PRESENT",
+    "historical_runtime_reexecution": 0,
+    "current_donor_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover wache-koenig and any historical approval responder/wrapper that could revalidate or consume approvals, then require Triggerword-4 executor tests proving decision one-shot consumption, request-digest mismatch rejection, stale-generation rejection, deny non-execution and exact result re-entry."
+}

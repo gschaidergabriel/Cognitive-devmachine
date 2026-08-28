@@ -1,0 +1,94 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T073001Z-INVOCATION-TAINT-CANCELLATION-FUSION",
+  "recorded_at": "2026-08-28T07:30:01Z",
+  "trigger_raw": "triggerwort 5",
+  "trigger_normalized": "triggerwort 5",
+  "trigger_router_result": {
+    "matched_macro": "5",
+    "kind": "frankenstein_architecture_forensics_live_ingest",
+    "fetch_before_execute": true,
+    "directive_fetch": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sparse_world_extension_fetch": "PASS"
+  },
+  "authority": {
+    "epoch": "8.78",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_before_write": "4a4287d0935d4dd19d122b1027716a569d331a73",
+    "bootstrap_source": "main:research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "program_state_source": "main:research_entity/rooms/PROGRAM_STATE.json",
+    "supervisor_source": "main:research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f"
+  },
+  "design_lane": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "head_observed_before_delta_write": "cfddde323f457099c0fada68a3af5340d554c159",
+    "parallel_movement_observed": true,
+    "reentry_policy": "Fuse/dedupe exact current state and preserve append-only provenance."
+  },
+  "packet_ingest": {
+    "consumed_packet_ids": [
+      "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT"
+    ],
+    "dedupe_rule": "Repeated exact-source observations were treated as consistency/corroboration only, never as independent replication.",
+    "new_semantic_value": [
+      "call-scoped invocation identity is mandatory in the 2.0 effect lifecycle contract",
+      "Perception Control NOT_COMPUTED/dependency-taint enforcement is a donor for GRID/WorldSlice protected-variable semantics",
+      "VoiceSessionCapsule requires explicit generation/freshness binding as an ephemeral compiled view",
+      "Realtime barge-in/non-completed response cancellation supplies a reusable pre-dispatch pending-effect cancellation pattern"
+    ]
+  },
+  "cross_checks": [
+    {
+      "source": "owner-branch INGEST_STATE.json",
+      "result": "The three packet IDs were present in inbox but absent from consumed_packet_ids before this receipt."
+    },
+    {
+      "source": "main TRIGGERWORD5_LIVE_FORENSIC_FEED.json plus TRIGGERWORT5_HOOK_INVOCATION_IDENTITY_2026-08-28_GPT56SOL.json",
+      "result": "Effect identity/enforcement findings were already independently represented in the canonical-main research projection and Triggerword-4 effect-contract handoff; this receipt does not double-count them."
+    },
+    {
+      "source": "owner-branch PACKET_20260828T0724Z_5641dc6_GPT56SOL_EFFECT_PERCEPTION_VOICE_ENFORCEMENT.json",
+      "result": "Unique Perception Taint, Voice capsule generation-boundary and pending-tool cancellation atoms were preserved into the new delta."
+    }
+  ],
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_INVOCATION_TAINT_CANCELLATION_FUSION.json",
+    "commit": "cdccf774161d8adc054b254fbb9ded5ecf28c0de",
+    "new_or_strengthened_atoms": [
+      "F2_EFFECT_INVOCATION_IDENTITY_REQUIRED_023",
+      "F2_PERCEPTION_TAINT_TO_WORLD_SUBSTRATE_024",
+      "F2_VOICE_CAPSULE_GENERATION_BINDING_025",
+      "F2_PENDING_EFFECT_CANCELLATION_026"
+    ]
+  },
+  "triggerword4_handoff": [
+    "per-invocation effect identity and explicit typed effect-state separation",
+    "NOT_COMPUTED plus dependency-taint propagation into GRID/WorldNeed/WorldSlice",
+    "generation/freshness/privacy/provenance-bound Voice/GRID context compiler",
+    "pre-dispatch pending-effect cancellation with UNKNOWN preserved after possible external submission",
+    "no host-only wache-koenig enforcement credit without exact source/config/order/runtime reachability"
+  ],
+  "evidence_scope": {
+    "source_forensics": true,
+    "historical_component_receipt_fused": true,
+    "new_runtime_execution": false,
+    "new_provider_execution": false,
+    "unusual_experiment": false,
+    "whole_frankenstein2_runtime_pass": false,
+    "whole_entityos_hcu_credit_delta": 0,
+    "hcu_runtime_credit_delta": 0,
+    "jspace_model_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_exact_gate": "Recover or permanently classify the host-only wache-koenig predecessor; audit live sensitive perception callsites for evaluate_head bypass; encode the fused invocation/taint/generation/cancellation rules as executable Triggerword-4 acceptance contracts."
+}

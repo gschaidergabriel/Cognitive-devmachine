@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "receipt_id": "TW5-INGEST-RECEIPT-20260828T103610Z-WORKEXECUTION-DOCUMENTED-ABI-RECONCILIATION-GPT56SOL",
+  "created_at": "2026-08-28T10:36:10Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/documented-abi-reconciliation",
+  "routing_self_test": "PASS",
+  "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "canonical_main_sha_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_head_observed_before_delta": "a859b3bf959969fb96090d2bfce9c19cd8595681",
+  "design_delta_commit": "38abf40b361358e0d3e0074f742039880d918889",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority_epoch": "9.13",
+  "mode": "FREE_ONLY_HARD_OFF_PROVIDER_ROUTES",
+  "incoming_packet": {
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "disposition": "QUARANTINED_UNCONSUMED_PARTIAL_SALVAGE_ONLY",
+    "schema_valid": false,
+    "provenance_valid_wholesale": false
+  },
+  "reconciliation_result": {
+    "status": "SOURCE_FORENSIC_CORRECTION_COMMITTED",
+    "documented_parent_join_candidate": "PostToolUse.tool_use_id + PostToolUse.tool_response.agentId for Agent",
+    "lifecycle_identity": "SubagentStart/SubagentStop.agent_id",
+    "task_identity": "TaskCreated/TaskCompleted.task_id is distinct and optional for ordinary Agent delegation",
+    "installed_target_runtime": "UNVERIFIED",
+    "runtime_credit_delta": 0
+  },
+  "external_primary_evidence": [
+    "Claude Code hooks reference: PostToolUse carries tool_use_id and tool_response; SubagentStart carries unique agent_id; TaskCreated carries separate task_id.",
+    "Claude Agent SDK TypeScript reference: AgentOutput carries agentId for completed and async_launched Agent outputs.",
+    "Current hooks reference explicitly describes completed Agent PostToolUse tool_response with agentId."
+  ],
+  "donor_crosschecks_preserved": [
+    "stern.py handoff persists durable work intent/capsule and explicitly does not spawn/delegate itself.",
+    "hooks/hooks.json registers seven existing events and omits dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted hooks.",
+    "architekt_governance.md requires handoff before spawn and reconcile after at corrected source span 77-81."
+  ],
+  "shared_ingest_state_mutated": false,
+  "state_reason": "The malformed source packet remains intentionally unconsumed; append-only correction delta and this receipt preserve the resolved documentation-level contradiction without rewriting the shared moving aggregate.",
+  "next_exact_gate": "Authorized non-provider installed-host capture of one harmless Agent call with PreToolUse/PostToolUse/SubagentStart/SubagentStop, verifying tool_use_id + tool_response.agentId == lifecycle agent_id, followed by a two-concurrent-child anti-crosswire test.",
+  "credits": {
+    "runtime": 0,
+    "provider": 0,
+    "entityos_whole": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "training": 0
+  },
+  "acceptance": "INGEST_RECONCILIATION_ACCEPTED_AT_SOURCE_FORENSIC_SCOPE_ONLY"
+}

@@ -1,0 +1,214 @@
+{
+  "packet_id": "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+  "created_at": "2026-08-28T14:28:16+07:00",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/architecture-forensics",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Historical effect-authority predecessor forensics across the pinned Project-Frankenstein source and the current Frankenstein donor. Source-only; no runtime, provider, GRID10, HCU, EntityOS or training promotion.",
+  "files_examined": [
+    {
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/executor.py",
+      "sha_or_blob": "2a87f8d58e5785fcd6b821141416f9dcd00433bf@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "spans_examined": [
+        {"line_start": 70, "line_end": 180},
+        {"line_start": 330, "line_end": 470}
+      ]
+    },
+    {
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/loop.py",
+      "sha_or_blob": "e39c0e9ad00843f62a0fea7dd881a80f3acc70dd@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "spans_examined": [
+        {"line_start": 430, "line_end": 530}
+      ]
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "sha_or_blob": "8b413ed8-current-donor-blob@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "spans_examined": [
+        {"line_start": 3100, "line_end": 3195},
+        {"line_start": 5840, "line_end": 6008}
+      ]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-HIST-EFFECT-001-PREEXEC-APPROVAL-GATE",
+      "subsystem": "historical-agentic-effect-authority",
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/executor.py",
+      "commit_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "line_start": 70,
+      "line_end": 180,
+      "excerpt_hash": null,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "The historical ToolExecutor checks tool risk/approval before dispatch. When approval is required and skip_approval is false, execute() returns an approval_required failure instead of calling the tool. This is causally prior to execution, unlike the later stern.py bookkeeping-only EffectGate section.",
+      "why_it_exists": "Prevent high-risk agentic actions from executing without an approval decision while still permitting low-risk automation.",
+      "inputs": ["tool_name", "tool_input", "skip_approval", "tool risk metadata"],
+      "outputs": ["ToolResult approval_required or executed ToolResult"],
+      "reads": ["ToolRegistry", "ExecutionConfig.require_approval_above_risk", "Tool.requires_approval", "Tool.risk_level"],
+      "writes": ["execution result telemetry/activity log after actual execution"],
+      "dependencies": ["ToolRegistry", "ToolExecutor", "approval flow"],
+      "authority_class": "HISTORICAL_PRE_EXECUTION_ADMISSION_ENFORCEMENT",
+      "failure_mode": "skip_approval is an explicit bypass parameter; correctness therefore depends on trusted callers and correct risk classification.",
+      "concurrency_implication": "Approval identity must remain bound to the exact invocation; a reusable boolean bypass is weaker than a typed immutable approval/effect token.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": "High-risk actions can block waiting for human approval; low-risk paths avoid that latency.",
+      "state_lifetime": "per tool invocation plus external approval queue state",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["AgentLoop -> ToolExecutor.execute"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["Pinned source proves implementation, not that every historical runtime path used this executor."],
+      "supersedes": [],
+      "superseded_by": ["current Frankenstein stern.py hook/effect bookkeeping path is a later architecture with different semantics"],
+      "confidence": 0.98,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "open_questions": ["Which historical runtime surfaces bypassed AgentLoop/ToolExecutor entirely?", "Was approval queue identity immutable per invocation under concurrent requests?"]
+    },
+    {
+      "atom_id": "TW5-HIST-EFFECT-002-SMART-APPROVAL-ROUTER",
+      "subsystem": "historical-agentic-loop",
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/loop.py",
+      "commit_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "line_start": 430,
+      "line_end": 530,
+      "excerpt_hash": null,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "The historical AgentLoop classifies a fixed safe-tool set for direct execution with skip_approval=True. All other tools request user approval, wait up to 120 seconds, and only call the executor with skip_approval=True after approval; denial produces a failed ToolResult without tool execution.",
+      "why_it_exists": "Keep low-risk agentic work autonomous while forcing human approval for mutating/high-risk operations.",
+      "inputs": ["ParsedToolCall", "fixed _SAFE_AUTO_APPROVE set", "Tool.risk_level", "approval response"],
+      "outputs": ["executed ToolResult", "waiting_approval event", "denied ToolResult"],
+      "reads": ["ToolRegistry", "approval response"],
+      "writes": ["AgentState tool-call outcome/context"],
+      "dependencies": ["ToolExecutor.request_approval", "ToolExecutor.wait_for_approval", "ToolExecutor.execute"],
+      "authority_class": "HISTORICAL_CALLER_SIDE_ENFORCEMENT_ROUTER",
+      "failure_mode": "The safe set is hand-maintained and grants bypass by name; semantic mutation risk can drift from the classification.",
+      "concurrency_implication": "Approval must bind to call identity, not only tool name/session state, if requests can overlap.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": "Potential 120-second human approval wait for non-safe tools.",
+      "state_lifetime": "one agentic tool-call decision",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["AgentLoop._run_loop"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["Source presence alone does not prove production/runtime use at the pinned commit."],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 0.99,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "open_questions": ["Replace tool-name allowlisting with typed capability/effect classification and immutable approval identity in Frankenstein 2.0."]
+    },
+    {
+      "atom_id": "TW5-HIST-EFFECT-003-DEFENCE-IN-DEPTH-HARD-GUARDS",
+      "subsystem": "historical-agentic-executor",
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/executor.py",
+      "commit_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "line_start": 330,
+      "line_end": 470,
+      "excerpt_hash": null,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "The historical executor applies Firejail restrictions and explicit pre-execution hard guards for Python and shell deletion patterns. These guards run independently of the approval decision and can return a failed ToolResult before destructive code executes.",
+      "why_it_exists": "Defence in depth for destructive actions even if approval/risk routing is wrong.",
+      "inputs": ["generated Python code or bash command"],
+      "outputs": ["blocked ToolResult or sandboxed subprocess execution"],
+      "reads": ["command/code text", "Firejail availability"],
+      "writes": ["temporary code file during code execution"],
+      "dependencies": ["regex guards", "subprocess", "optional Firejail"],
+      "authority_class": "HISTORICAL_STATIC_PRE_EXECUTION_GUARD",
+      "failure_mode": "Regex pattern matching is incomplete by construction; Firejail absence explicitly permits unsandboxed execution and therefore cannot serve as sole canonical effect authority.",
+      "concurrency_implication": null,
+      "privacy_implication": "Firejail blacklists sensitive user paths when available.",
+      "latency_or_cost_implication": "Low local overhead; sandbox startup cost when Firejail is present.",
+      "state_lifetime": "per execution",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["ToolExecutor._execute_code", "ToolExecutor._execute_bash"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["Executor logs a warning and continues unsandboxed if Firejail is unavailable."],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 0.99,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "open_questions": ["Which invariants belong in canonical EffectGate versus a lower-level execution sandbox?"]
+    },
+    {
+      "atom_id": "TW5-HIST-EFFECT-004-SEMANTIC-REVERSAL-TO-STERN",
+      "subsystem": "effect-lineage",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 3100,
+      "line_end": 3195,
+      "excerpt_hash": null,
+      "source_kind": "NEGATIVE_RESULT",
+      "what_it_does": "Current donor stern.py names a Phase-2 EffectGate but explicitly states zulassen() never blocks a Claude Code tool; ABGELEHNT/WIEDERHOLUNG/UNGEPRUEFT are bookkeeping states. This is a semantic reversal from the historical AgentLoop/ToolExecutor pre-execution approval gate, not a simple rename of the same mechanism.",
+      "why_it_exists": "Phase-2 adds pre-execution checks and effect journaling while preserving fail-silent hook behavior; the actual blocking guard is referenced as an external predecessor.",
+      "inputs": ["PreToolUse payload", "generation/capability/precondition/idempotence state"],
+      "outputs": ["effect journal status; no generic deny/block output"],
+      "reads": ["canonical/compatibility DB state"],
+      "writes": ["effects bookkeeping", "active_turns effect pointer"],
+      "dependencies": ["stern.py hook dispatcher"],
+      "authority_class": "OBSERVATIONAL_ADMISSION_BOOKKEEPING_NOT_GENERIC_ENFORCEMENT",
+      "failure_mode": "A caller can mistake an ABGELEHNT journal state for actual prevention even though the tool still executes.",
+      "concurrency_implication": "Session-wide mutable effect pointer requires explicit invocation correlation if hooks can interleave.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": "Bounded hook budget; no human approval wait in this path.",
+      "state_lifetime": "PreToolUse -> PostToolUse journal lifecycle",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["Claude lifecycle hook -> stern.py cmd_hook -> zulassen/merken"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["A separate SEBUKKU special path can block; this atom concerns generic effect admission only."],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 1.0,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "open_questions": ["Locate and pin the referenced external wache-koenig blocking predecessor if it survives in accessible history."]
+    }
+  ],
+  "hypotheses": [
+    "Frankenstein's effect-authority lineage is not monotonic consolidation: the April Project-Frankenstein agentic path had real caller-side pre-execution approval enforcement, while the August stern.py Phase-2 path intentionally retained nonblocking hook semantics and shifted toward journaling/verification.",
+    "Frankenstein 2.0 should recombine the strongest parts of both lineages: immutable typed pre-execution enforcement plus exact post-effect verification/journaling, without reintroducing tool-name allowlist authority or mutable session-wide effect identity."
+  ],
+  "counterhypotheses": [
+    "The historical AgentLoop/ToolExecutor may have been a secondary/unused path, so source-level enforcement does not prove it was the actual runtime effect authority.",
+    "A separate wache-koenig mechanism may have remained the true blocking authority during the stern.py era; without its exact source/runtime wiring, the full transition cannot yet be called a loss of enforcement at whole-system scope.",
+    "Claude Code hook scheduling may serialize tool calls tightly enough that stern.py's mutable active_turns effect pointer never miscorrelates in practice; this requires runtime evidence rather than source inference."
+  ],
+  "contradictions": [
+    "Historical Project-Frankenstein source implements real pre-execution approval denial, while current donor stern.py's named EffectGate explicitly does not deny generic tool execution.",
+    "Current EntityOS authority requires deterministic EffectGate/EffectJournal real-effect authority, so neither a caller-controlled skip_approval boolean nor nonblocking admission bookkeeping is sufficient as a direct Frankenstein-2.0 authority mapping.",
+    "The current stern.py source references an older external wache-koenig.py as blocking guard, but that exact file was not found in the accessible current Frankenstein tree or pinned Project-Frankenstein tree during this pass."
+  ],
+  "critical_unknowns": [
+    "Exact source/commit/runtime wiring of the referenced wache-koenig blocking predecessor.",
+    "Whether the historical AgentLoop/ToolExecutor was reached by the production execution path at abba90a5767d85abc8a1ac340bae92842dab35c1.",
+    "Whether same-session PreToolUse/PostToolUse can interleave in the real Claude hook scheduler and therefore expose stern.py's mutable effect-id correlation risk.",
+    "Exact Git transition before the first accessible public scripts/stern.py commit: the first path commit visible on 2026-08-25 already contains the Phase-2 two-sided effect section, so pre-Phase-2 stern chronology is not recoverable from that path history alone."
+  ],
+  "recommended_next_spans": [
+    {
+      "path": "historical://gschaidergabriel/Project-Frankenstein/agentic/executor.py",
+      "line_start": 470,
+      "line_end": 620,
+      "reason": "Pin request_approval/wait_for_approval storage and identity semantics to determine whether approval was immutable-call-bound or mutable/shared.",
+      "priority": "P0"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 3100,
+      "line_end": 3600,
+      "reason": "Finish exact invocation/effect-id correlation mapping around zulassen(), active_turns and merken().",
+      "priority": "P0"
+    },
+    {
+      "path": "git-history://gschaidergabriel/frankenstein/scripts/stern.py",
+      "line_start": null,
+      "line_end": null,
+      "reason": "The first accessible path commit is 2026-08-25 and already contains Phase-2. Search live-host provenance, archived bundles or predecessor files rather than fabricating an earlier Git chronology.",
+      "priority": "P0"
+    },
+    {
+      "path": "historical://wache-koenig.py",
+      "line_start": null,
+      "line_end": null,
+      "reason": "Locate the exact blocking predecessor referenced by current stern.py; absence in the two inspected repository trees is negative evidence, not proof the mechanism never existed.",
+      "priority": "P0"
+    }
+  ],
+  "supersedes_packet_id": null
+}

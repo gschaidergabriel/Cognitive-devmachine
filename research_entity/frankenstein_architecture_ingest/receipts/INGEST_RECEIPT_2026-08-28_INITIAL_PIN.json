@@ -1,0 +1,80 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_INGEST_RECEIPT/v1",
+  "receipt_id": "T5_INGEST_2026-08-28_INITIAL_PIN_5641dc6b",
+  "trigger": "triggerwort 5",
+  "ingest_time_utc": "2026-08-28T07:14Z",
+  "time_precision": "minute",
+  "authority_epoch": "8.78",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_repo": "gschaidergabriel/clay-global-research-entity",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_run": "099340237fad4b52187a77ef21a6ff93ae98287a",
+  "canonical_main_observed_during_run": "4f4a7088a54dd21e1848f090446590efa05a2ac1",
+  "routing": {
+    "normalized_trigger": "triggerwort 5",
+    "directive_fetch": "PASS",
+    "directive_path": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "sparse_world_directive_fetch": "PASS",
+    "packet_schema_fetch": "PASS",
+    "ingest_state_fetch": "PASS",
+    "classification": "TRIGGERWORD_5_ACTIVE"
+  },
+  "worker_packet_ingest": {
+    "inbox_path": "research_entity/frankenstein_architecture_ingest/inbox/",
+    "inbox_observed": false,
+    "observation": "GitHub contents read returned 404; parent directory contained schema/state/README only",
+    "consumed_packet_ids": [],
+    "interpretation": "NO_PACKET_AVAILABLE; negative coordination evidence only"
+  },
+  "source_forensics": {
+    "architecture_delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_INITIAL_PIN.json",
+    "architecture_delta_commit": "8902c0453a55cfadbdf417ca0769ceed479a0464",
+    "semantic_atoms_written": 12,
+    "open_contradictions": ["C_T5_001", "C_T5_002", "C_T5_003"],
+    "source_spans_cross_checked": [
+      "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:1-220",
+      "DEV_SOURCE_RESEARCH/repository/scripts/visual_cortex.py:1-320",
+      "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:1-760",
+      "DEV_SOURCE_RESEARCH/repository/scripts/voice_loop_core.py:1-420",
+      "DEV_SOURCE_RESEARCH/repository/scripts/presence_bridge.py:1-420",
+      "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py:1-430",
+      "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1-520,520-1050,1050-1600",
+      "DEV_SOURCE_RESEARCH/repository/scripts/perceptual_field.py:1-430",
+      "DEV_SOURCE_RESEARCH/repository/scripts/action_grounded_memory.py:1-430",
+      "DEV_SOURCE_RESEARCH/repository/scripts/voice_outcome_events.py:1-430"
+    ],
+    "runtime_receipts_cross_checked": [
+      "DEV_SOURCE_RESEARCH/repository/phase43/evidence/PERCEPTION_CONTROL_PLANE_ABLATION_2026-08-27.json",
+      "DEV_SOURCE_RESEARCH/repository/phase43/evidence/P0_CONTROL_PLANE_FUSION_2026-08-27.json",
+      "DEV_SOURCE_RESEARCH/repository/phase43/evidence/P0V_VOICE_PRESENCE_2026-08-27.json",
+      "DEV_SOURCE_RESEARCH/repository/phase43/evidence/ABC_VERGLEICHSTEST_RUNDE3_2026-08-27.json"
+    ]
+  },
+  "high_impact_findings": [
+    "KEEP single canonical UnifiedDB binding and RAM-only voice working-set projection",
+    "ADAPT perception tier/DAG/snapshot controls into GRID10 cognitive-envelope control",
+    "ADAPT typed Observed/Inference/RetrievalPrior separation and VisualNeed into Typed Entry/GWT interfaces",
+    "ADAPT shared WAIT-first voice/visual arbitration into one GRID/GWT arbitration service",
+    "ADAPT presence causal_event_id and outcome re-entry into canonical causal packet identities",
+    "REPAIR realtime degraded presence fallback: unavailable sensor currently becomes user_present=True",
+    "REPAIR and explicitly test stern -> paket -> wegehierarchie compatibility dependency before any consolidation",
+    "ADAPT action-grounded re-observation behind canonical EffectGate/EffectJournal rather than treating donor action code as effect authority",
+    "KEEP historical donor provider receipts as architecture evidence only; current supervisor 8.78 provider runtime credit remains zero"
+  ],
+  "evidence_scope": {
+    "source_forensics_completed_for_initial_spans": true,
+    "historical_donor_component_receipts_observed": true,
+    "frankenstein_2_runtime_executed_this_run": false,
+    "whole_entityos_hcu_runtime_credit_delta": 0,
+    "provider_runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_exact_frontier": [
+    "forensically map stern.py schema/self-healing/effects/tasks/Room spans beyond line 220",
+    "decompose udb/abruf/paket.py reachable retrieval/Needle/graph behavior and actual schema dependencies",
+    "audit realtime initiative/reopen/tool-confirmation boundaries and eliminate UNKNOWN->present default",
+    "ingest any worker packets if inbox appears, in provenance order, without overwriting this receipt",
+    "bind retained donor primitives to GRID10 Typed Entry + EffectGate interfaces for Triggerword 4"
+  ]
+}

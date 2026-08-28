@@ -1,0 +1,48 @@
+{
+  "schema": "TRIGGERWORD5_REENTRY_CHECKPOINT/v1",
+  "checkpoint_id": "TW5-REENTRY-20260828T1450P0700-GPT56SOL",
+  "recorded_at": "2026-08-28T14:50:00+07:00",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "authority_epoch": "9.13",
+  "supersedes_checkpoint": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_REENTRY_CHECKPOINT_2026-08-28T1448P0700_GPT56SOL.json",
+  "supersession_reason": "Concurrent Triggerword-5 state movement had already folded packets 073941 and 074026 by the time the prior checkpoint committed; this successor corrects only the shared-state synchronization claim and preserves the prior checkpoint as historical evidence of the race.",
+  "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+  "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+  "design_head_observed_before_checkpoint": "6c0200d26f4ca3679260e6d166b84d07c36b5711",
+  "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "shared_ingest_state_observed": {
+    "last_ingest_at": "2026-08-28T07:46:25Z",
+    "last_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REALTIME_MEMORY_EFFECT_FUSION.json",
+    "confirmed_consumed_from_this_lane": [
+      "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
+      "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL"
+    ],
+    "confirmed_absent_from_shared_consumed_list": [
+      "TW5-PACKET-20260828T0741Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-AUTHORITY-REBIND",
+      "TW5-PACKET-20260828T0744Z-5641dc6-GPT56SOL-REALTIME-MEMORY-EPISTEMIC-AUTHORITY-9-13",
+      "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL"
+    ],
+    "note": "The first two absent ids are already consumed by durable architecture delta commit 412a9bae053d4e8e6b63442a5ec6c84aef3ce53d. The historical watcher packet is already consumed by durable architecture delta commit dee4287c3054100ebff371326f089e4d7bc3da85. Shared-state folding remains bookkeeping synchronization, not missing architecture analysis.",
+    "sync_status": "SYNC_PENDING_SHARED_INDEX_ONLY"
+  },
+  "durable_triggerword5_results": [
+    "Current authority rebound to exact 9.13 supervisor/provider identities; stale 8.78 labels retained only as historical source epochs.",
+    "Direct Realtime conversation-memory path is source-closed as epistemically under-typed; Frankenstein 2.0 requires MemoryCandidate -> deterministic MemoryAdmission and retrieval-time preservation of transformation/epistemic/provenance metadata.",
+    "HumanIntent/TaskAdmission, ResearchRequestAdmission, per-invocation EffectDecision, ExecutionReceipt, WorldEffectVerification and CompletionEvidence remain distinct typed states.",
+    "Delegated claude -p hard-denies Bash in source but leaves file mutation tools available; hook declaration is not host/headless runtime firing proof.",
+    "Historical watcher settings inheritance is strengthened only at historical project-measurement scope; exact wache-befehl versus wache-koenig identity, settings bytes/order/hash and current runtime reachability remain unresolved."
+  ],
+  "credits": {
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "memory_runtime_acceptance": 0,
+    "effect_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_full": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_action": "Fold the three already-durably-consumed successor packet ids into the shared INGEST_STATE with a fresh compare-and-swap-safe full-state write when a complete current state payload is available; meanwhile continue exact consumer/context-compiler audit and non-provider invocation/effect correlation falsifier work."
+}

@@ -1,0 +1,139 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_INVOCATION_TAINT_CANCELLATION_FUSION_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:28:28Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_AND_HISTORICAL_COMPONENT_RECEIPT_FUSION_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "routing_self_test": {
+    "normalized_message": "triggerwort 5",
+    "directive": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "directive_fetch": "PASS",
+    "sparse_world_extension_fetch": "PASS",
+    "result": "TRIGGERWORD5_ACTIVE"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "cfddde323f457099c0fada68a3af5340d554c159",
+    "canonical_main_observed_before_write": "4a4287d0935d4dd19d122b1027716a569d331a73",
+    "parallel_movement_observed": true
+  },
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072106Z_5641dc6_GPT56SOL_EFFECT_PATH_FORENSICS.json",
+      "status": "CONSUMED_DEDUPLICATED",
+      "dedupe_against": [
+        "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REENTRY_FUSION.json",
+        "research_entity/architecture_archaeology/triggerword5_ingest_receipts/TRIGGERWORT5_TO_TRIGGERWORD4_EFFECT_CONTRACT_2026-08-28_GPT56SOL.json"
+      ],
+      "unique_value_retained": "Explicitly binds the active_turns.effect_id race hypothesis to the stronger call-scoped tool_use_id platform identity and keeps the race as OPEN until runtime ordering is measured."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072407Z_5641dc6_GPT56SOL_EFFECT_AUTHORITY_ENFORCEMENT.json",
+      "status": "CONSUMED_DEDUPLICATED",
+      "dedupe_against": [
+        "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
+        "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REENTRY_FUSION.json"
+      ],
+      "unique_value_retained": "Confirms that the live normal PreToolUse path uses nonblocking admission bookkeeping while the same hook surface can emit a real deny only for the narrow SEBUKKU branch; normal admission status is therefore not effect enforcement."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T0724Z_5641dc6_GPT56SOL_EFFECT_PERCEPTION_VOICE_ENFORCEMENT.json",
+      "status": "CONSUMED_MIXED_DEDUPE_PLUS_NEW_ARCHITECTURE_DELTA",
+      "dedupe_effect_findings_against": [
+        "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
+        "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REENTRY_FUSION.json"
+      ],
+      "new_value_retained": [
+        "Perception Control mechanically preserves NOT_COMPUTED through COMPUTE_OFF and dependency taint when callers route through evaluate_head.",
+        "A historical component receipt reports a real-camera ablation with object.known.cup COMPUTE_OFF -> NOT_COMPUTED while person.presence remained OK; scope remains component-only and was not rerun here.",
+        "VoiceSessionCapsule is an ephemeral cross-source projection and needs generation/consistent-read binding before stronger autonomous conditioning.",
+        "Realtime response cancellation/barge-in clears pending tool calls before dispatch, supplying a concrete donor pattern for pre-dispatch effect cancellation without solving already-submitted UNKNOWN outcomes."
+      ]
+    }
+  ],
+  "new_or_strengthened_atoms": [
+    {
+      "atom_id": "F2_EFFECT_INVOCATION_IDENTITY_REQUIRED_023",
+      "classification": "STRENGTHENED_DESIGN_INVARIANT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3220-3565 + hooks.json:1-68 @ 5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Frankenstein-2.0 must bind PreToolUse -> enforcement -> execution -> PostToolUse/PostToolUseFailure -> result re-entry to immutable tool_use_id or an equally exact invocation_id. session_id is context only and cannot be the sole mutable effect pointer.",
+      "counterhypothesis": "The installed host may serialize relevant calls strongly enough that the donor race is latent rather than observed.",
+      "falsifier": "Capture at least two same-session state-changing tool calls and prove exact tool_use_id/effect_id lifecycle ordering. A mismatch confirms the donor race; strict serialization bounds current-host risk but does not justify discarding call identity in 2.0.",
+      "target_action": "REPAIR"
+    },
+    {
+      "atom_id": "F2_PERCEPTION_TAINT_TO_WORLD_SUBSTRATE_024",
+      "classification": "ENFORCEMENT_PATTERN_PLUS_COMPONENT_RECEIPT",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:96-560 + phase43/evidence/PERCEPTION_CONTROL_PLANE_ABLATION_2026-08-27.json @ 5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "COMPUTE_OFF, OUTPUT_OFF and MEMORY_OFF are useful because they alter computation/egress/persistence rather than merely tagging output. Central dependency resolution can propagate taint and return NOT_COMPUTED/value=None before a prohibited compute_fn runs.",
+      "boundary": "System-wide privacy credit is not established until all live sensitive callers are shown to pass through evaluate_head or an equivalent enforced adapter; several detector functions remain simple scaffolds and detector quality is separate from policy-enforcement quality.",
+      "world_substrate_delta": "WorldNeed/WorldSlice and GRID cell controls must preserve NOT_COMPUTED through dependency chains. A disabled protected variable cannot be reconstructed by a downstream operator or similarity path.",
+      "target_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "F2_VOICE_CAPSULE_GENERATION_BINDING_025",
+      "classification": "LIVE_CODE_DESIGN_DELTA",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py:250-450 @ 5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "VoiceSessionCapsule is correctly shaped as a RAM/session-scoped compiled projection over canonical sources, but it reads several sources without an explicit common generation or transactional snapshot.",
+      "grid10_delta": "The Frankenstein-2.0 Voice/GRID context compiler should carry source refs plus a generation/freshness boundary, preserve UNKNOWN/conflict, enforce privacy tiers and emit a conditioning digest/receipt. The capsule must not become a second durable state authority.",
+      "target_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "F2_PENDING_EFFECT_CANCELLATION_026",
+      "classification": "ENFORCEMENT_CODE_DONOR_PATTERN",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1300-1408 @ 5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Realtime queues tool calls until response completion and clears pending calls when the response is cancelled/non-completed or barge-in truncates the parent response, preventing an interrupted candidate from executing after its parent thought was invalidated.",
+      "boundary": "This only protects pre-dispatch pending calls in the Realtime path. It is not canonical EffectGate authority and cannot convert an already-submitted ambiguous external effect into FAILED or SAFE_TO_RETRY.",
+      "grid10_delta": "Introduce a typed candidate/pending-effect lifecycle where cancellation or supersession can invalidate an effect before deterministic EffectGate submission; after submission, transport ambiguity becomes UNKNOWN and cannot be blindly replayed.",
+      "target_action": "KEEP_AND_GENERALIZE"
+    }
+  ],
+  "contradictions_and_open_boundaries": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "resolution": "Donor stern normal effect admission is nonblocking bookkeeping; 2.0 still requires exact deterministic enforcement at the real effect boundary."
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-PROVENANCE-006",
+      "status": "OPEN",
+      "claim": "stern points to an older host-only wache-koenig blocker, but exact source/config/order/runtime reachability are unavailable in the pinned donor artifact. Repository absence does not prove host absence."
+    },
+    {
+      "id": "TW5-CONTRADICTION-PERCEPTION-POLICY-REACHABILITY-005",
+      "status": "OPEN",
+      "claim": "Perception Control enforcement is mechanically strong at the evaluated adapter, but source-wide caller compliance is not yet proven; policy-enforcement credit and detector-quality credit remain separate."
+    }
+  ],
+  "triggerword4_handoff_delta": [
+    "Require immutable per-invocation effect identity; never use one session-wide mutable current-effect slot as the authority contract.",
+    "Keep ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, RESULT_REENTRY and COMPLETION_EVIDENCE distinct and generation/provenance bound.",
+    "Port NOT_COMPUTED plus dependency-taint propagation into sparse WorldNeed/WorldSlice and GRID control; prohibited variables cannot be reconstructed downstream.",
+    "Treat VoiceSessionCapsule as an ephemeral compiler view with generation/freshness/privacy/provenance binding, not a memory authority.",
+    "Generalize Realtime pending-tool cancellation into a pre-dispatch candidate-effect cancellation state; preserve UNKNOWN after possible external submission.",
+    "Do not award blocking-effect credit to wache-koenig until exact source/config/order and executable reachability are recovered."
+  ],
+  "credits": {
+    "new_runtime_execution": 0,
+    "new_provider_execution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Recover or permanently classify the host-only wache-koenig enforcement predecessor; audit every live sensitive perception caller for evaluate_head bypass; then encode tool_use_id-bound effect lifecycle, NOT_COMPUTED taint propagation, Voice/GRID generation binding and pre-dispatch cancellation as explicit Triggerword-4 acceptance contracts."
+}

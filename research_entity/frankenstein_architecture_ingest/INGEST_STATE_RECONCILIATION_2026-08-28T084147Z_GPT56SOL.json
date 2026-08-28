@@ -1,0 +1,69 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_STATE_RECONCILIATION/v1",
+  "created_at": "2026-08-28T08:41:47Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest-state-reconciliation",
+  "routing_result": "PASS",
+  "basis": {
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_branch_head_observed_before_checkpoint": "5f87f5a7d7bf3526a1c6f7f81e2957efd8f9d547",
+    "canonical_main_observed": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "authority_epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "ingest_state_blob_sha": "d0af3803a9b56e958b010e64d8ac0cbd628bfaf3"
+  },
+  "admitted_evidence": {
+    "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json",
+    "receipt_commit": "41bec098d4dc9992eb6a865277d131a172908ac5",
+    "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json",
+    "architecture_delta_commit": "21b85a28878147f42141925cb384e0990f5db990",
+    "packets": [
+      {
+        "packet_id": "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+        "blob_sha": "660fee9248758a73bd6a040830127632c53b055b",
+        "admitted": true,
+        "runtime_credit_delta": 0
+      },
+      {
+        "packet_id": "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL",
+        "blob_sha": "99ef8f48d49911ea2796963c9f0af0ae9dcf8358",
+        "admitted": true,
+        "runtime_credit_delta": 0
+      },
+      {
+        "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+        "blob_sha": "bad15660b245dfc33139736cd9857064c82812ef",
+        "admitted": true,
+        "runtime_credit_delta": 0
+      }
+    ]
+  },
+  "reconciliation_operations": [
+    "PRESERVE every existing additional_architecture_deltas entry, corroborating_ingest_receipts entry, unresolved_contradiction_id and current_frontier item unless separately superseded by explicit evidence.",
+    "SET canonical_main_observed to 97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc.",
+    "SET last_ingest_at to 2026-08-28T08:35:20Z, the exact admitted reconciliation receipt time.",
+    "SET last_architecture_delta to research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json and last_architecture_delta_commit to 21b85a28878147f42141925cb384e0990f5db990.",
+    "SET last_ingest_receipt to research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T083520Z_PARALLEL_WACHE_V2_BOTH_ADMITTED_RECONCILIATION_GPT56SOL.json.",
+    "APPEND the 083520Z architecture delta/receipt pair to additional_architecture_deltas if absent.",
+    "APPEND all three admitted packet IDs to consumed_packet_ids if absent.",
+    "APPEND TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL to superseded_packet_ids if absent; retain historical provenance.",
+    "DO NOT mark the two v2 Wache successors as superseding each other; they are complementary admitted parallel successors of the same v1 predecessor.",
+    "ADD/retain a P0 frontier item binding durable workpackage_id to observed installed-runtime agent_id/task_id/tool_use_id/generation before native-child runtime or Triggerword-4 R2 credit.",
+    "KEEP native_child_runtime_credit, effect_enforcement_runtime_credit, physical_grid10_credit, whole EntityOS/HCU credit and training credit at zero from these packets."
+  ],
+  "architecture_consequence": [
+    "Historical --settings inheritance is donor evidence for policy-envelope transport only, not current effect authority.",
+    "The pinned donor handoff path creates durable workpackages but does not itself spawn a child; the versioned hook config also lacks dedicated native child lifecycle hooks.",
+    "Current official native child lifecycle capabilities are promising external-primary primitives, but installed-host reachability remains UNKNOWN until exact build/config/hook payload evidence exists.",
+    "Frankenstein 2.0 should prefer binding durable workpackage identity to a verified installed native child ABI rather than building a duplicate spawn runtime from documentation alone.",
+    "Every mutating child path still requires one-shot invocation-bound EffectDecision consumption and typed submission/execution/outcome/completion receipts."
+  ],
+  "state_write_decision": {
+    "ingest_state_overwrite_attempted": false,
+    "reason": "The design branch moved during this Triggerword-5 run while INGEST_STATE itself remained unchanged. The available GitHub write surface replaces whole files rather than applying field-level atomic patches; an append-only exact patchset checkpoint preserves concurrent frontier work and avoids accidental loss. The moving INGEST_STATE remains the next safe merge target.",
+    "status": "SYNC_PENDING_SAFE_APPEND_ONLY_CHECKPOINT_COMMITTED"
+  },
+  "next_exact_gate": "Re-read current INGEST_STATE blob and branch head, then apply this reconciliation operation set as a whole-file compare-and-swap update only if no concurrent INGEST_STATE change occurred; otherwise rebase the operation set onto the new state without deleting concurrent frontier work. Installed-host native child runtime proof remains a separate later gate."
+}

@@ -1,0 +1,141 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T10:36:00Z",
+  "trigger": "triggerwort 5",
+  "lane": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_LIVE_INGEST",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_write": "39b1ec3e15ff8b00ccbac764ae5b44ee72ca1d59",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_ref": "main",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority_resolution": {
+    "bootstrap_minimal_schema_observed": "8.78",
+    "supervisor_inbox_schema_observed": "9.13",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_authority_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "resolution": "SUPERVISOR_INBOX_SELECTED_STEERING_OUTRANKS_STALE_BOOTSTRAP_CORRECTION_POINTER",
+    "runtime_credit_delta": 0
+  },
+  "candidate_packet": {
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "created_at": "2026-08-28T10:12:00Z",
+    "status": "QUARANTINED_PARTIAL_ACCEPT_NOT_CONSUMED",
+    "reasons": [
+      "Packet binds canonical_main_sha=5a953ebf824bbdc17091a638eb2b4a376aa8567e, but current canonical main is 24389f873a775fd3af5fc3c896a58836d09a3bff; current 9.13 evidence law requires exact-current authority binding for new evidence.",
+      "Atom TW5-WORKEXEC-SUCC-005-TOOL-USE-TO-AGENT-JOIN-REMAINS-UNPROVEN uses target_2_0_action=RESEARCH, which is not an allowed enum in INGEST_PACKET_SCHEMA.json.",
+      "Atom TW5-WORKEXEC-SUCC-002 cites architekt_governance.md lines 1-7 for handoff-before-spawn/reconcile-after semantics; direct donor source shows that semantics at lines 77-81 instead. The claim is materially supported but the packet span provenance is wrong.",
+      "Installed-host lifecycle firing and exact Agent tool_response correlation remain unobserved; official platform documentation is capability evidence, not target-host runtime evidence."
+    ],
+    "salvage_rule": "Only directly cross-checked claims below are admitted into this architecture delta. The packet itself remains unconsumed until a schema-valid successor with corrected exact-current provenance is produced."
+  },
+  "verified_atoms": [
+    {
+      "atom_id": "TW5-DELTA-1036-001-HANDOFF-DURABLE-INTENT-NOT-SPAWN",
+      "source_kind": "LIVE_CODE",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 5680,
+      "line_end": 5765,
+      "claim": "handoff() creates durable entityos_arbeitspaket/capsule state and explicitly states that stern itself delegates/spawns nothing; native child execution therefore requires an external coordinator/runtime binding.",
+      "runtime_reachability": "DONOR_HANDOFF_REACHABLE_CHILD_SPAWN_NOT_PROVEN",
+      "confidence": 0.99,
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "TW5-DELTA-1036-002-DONOR-HOOKS-LACK-CHILD-LIFECYCLE",
+      "source_kind": "CONFIG",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "line_start": 1,
+      "line_end": 81,
+      "claim": "The donor plugin config registers SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact; it does not register SubagentStart, SubagentStop, TaskCreated or TaskCompleted.",
+      "runtime_reachability": "CONFIG_PRESENT_HOST_LOAD_NOT_PROVEN",
+      "confidence": 0.99,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-DELTA-1036-003-GOVERNANCE-SEQUENCE-CORRECTED-SPAN",
+      "source_kind": "SPEC",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "line_start": 77,
+      "line_end": 81,
+      "claim": "The donor specification requires stern.py handoff before spawning and stern.py reconcile afterwards, with lastschutz before parallel build-agent spawning.",
+      "runtime_reachability": "SPEC_ONLY",
+      "confidence": 0.99,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-DELTA-1036-004-PLATFORM-IDENTITY-DOMAINS-DISTINCT",
+      "source_kind": "EXTERNAL_PRIMARY",
+      "source": "Claude Code official hooks/subagents documentation observed 2026-08-28",
+      "claim": "Current platform documentation exposes call-scoped tool_use_id on PostToolUse, unique agent_id on SubagentStart/SubagentStop, and task_id on TaskCreated/TaskCompleted. The documented fields are separate identity surfaces; no direct documented rule makes task_id an alias of agent_id.",
+      "runtime_reachability": "CAPABILITY_DOCUMENTED_INSTALLED_HOST_UNOBSERVED",
+      "confidence": 0.99,
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "TW5-DELTA-1036-005-TOOLUSE-AGENT-JOIN-OPEN",
+      "source_kind": "EXTERNAL_PRIMARY",
+      "source": "Claude Code official hooks documentation observed 2026-08-28",
+      "claim": "PostToolUse includes tool_input, tool_response and tool_use_id, while SubagentStart documents agent_id but not tool_use_id. The Agent-specific tool_response schema is tool-dependent; therefore a deterministic tool_use_id-to-agent_id join is not yet established by documentation alone.",
+      "runtime_reachability": "OPEN_JOIN_INSTALLED_RUNTIME_FALSIFIER_REQUIRED",
+      "confidence": 0.98,
+      "target_2_0_action": "UNDECIDED"
+    }
+  ],
+  "architecture_effect": {
+    "work_execution_binding_v1": {
+      "required_identity_domains": [
+        "durable_workpackage_id",
+        "tool_use_id",
+        "agent_id",
+        "optional_task_id"
+      ],
+      "rules": [
+        "Do not collapse package_id, tool_use_id, agent_id and task_id into one synthetic identity.",
+        "Do not join concurrent child execution by timestamp or event order alone.",
+        "task_id must remain optional/UNKNOWN for ordinary subagent paths unless the task system is actually observed in that path.",
+        "A package-to-child binding is candidate provenance until an exact shared key or otherwise deterministic runtime join is observed.",
+        "The donor plugin needs dedicated child lifecycle capture or an equivalently exact native execution binding before Frankenstein-2.0 receives child-provenance runtime credit."
+      ]
+    }
+  },
+  "contradictions_preserved": [
+    "SPEC requires handoff -> spawn -> reconcile, while LIVE_CODE handoff explicitly does not spawn and current plugin CONFIG does not capture child lifecycle.",
+    "The candidate packet is semantically useful but structurally invalid against the current ingest schema and contains a wrong source span; accepting it wholesale would violate provenance discipline.",
+    "Current official platform capabilities expose useful identities, but target-host hook firing and Agent response correlation are still unobserved."
+  ],
+  "highest_value_next_spans": [
+    {
+      "priority": "P0",
+      "target": "schema-valid successor packet for TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+      "reason": "Correct canonical_main_sha to exact current main, replace invalid target_2_0_action enum, and correct architekt_governance.md span to 77-81 while preserving the same semantic finding."
+    },
+    {
+      "priority": "P0",
+      "target": "installed non-production Claude Code host lifecycle capture: one harmless Agent invocation with PreToolUse/PostToolUse + SubagentStart/SubagentStop",
+      "reason": "Observe exact Agent tool_response and any deterministic shared key between tool_use_id and agent_id. This is a proposed discriminator only; no runtime execution was performed in this Triggerword-5 run."
+    },
+    {
+      "priority": "P1",
+      "target": "donor stern.py cmd_hook PreToolUse/PostToolUse invocation correlation path",
+      "reason": "Align child-execution provenance work with current supervisor 9.13 effect-invocation identity frontier; verify whether call-scoped tool_use_id is ignored, transformed, or persisted elsewhere."
+    }
+  ],
+  "credits": {
+    "runtime": 0,
+    "provider": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

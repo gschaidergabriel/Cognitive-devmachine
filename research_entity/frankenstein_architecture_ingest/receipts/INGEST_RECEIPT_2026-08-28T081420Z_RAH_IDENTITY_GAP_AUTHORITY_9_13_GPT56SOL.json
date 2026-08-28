@@ -1,0 +1,73 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T081420Z-RAH-IDENTITY-AUTHORITY-9-13-GPT56SOL",
+  "created_at": "2026-08-28T08:14:20Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerword5/architecture-forensics-live-ingest",
+  "routing_result": "PASS",
+  "authority_epoch": "9.13",
+  "authority_binding": {
+    "canonical_main": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "resolved_source": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "donor_tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "grid_design_evidence_sha": "6d81876d2f6b12b98c30892b8d7dcea946686d25",
+    "design_branch_head_before_receipt": "c6f951286f2268beacf593a29b7211164c23b886"
+  },
+  "live_ingest": {
+    "new_unconsumed_v2_packet": false,
+    "consumed_packet_ids_changed": false,
+    "note": "No inbox packet newer than the prior 2026-08-28T07:49:10Z ingest was observed. Historical 07:45:33Z packet has separate v2-admission correction and was not re-consumed."
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T081420Z_RAH_IDENTITY_GAP_AUTHORITY_9_13_GPT56SOL.json",
+    "commit": "c6f951286f2268beacf593a29b7211164c23b886",
+    "classification": "CURRENT_AUTHORITY_BOUND_SOURCE_FORENSICS_NO_RUNTIME_PROMOTION"
+  },
+  "parallel_coordination": {
+    "parallel_predecessor_delta_commit": "852062e25c92a07801f6b2dd60cd222d40e58e34",
+    "parallel_predecessor_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0816Z_RAH_AUTHORITY_REBIND_9_13_GPT56SOL.json",
+    "relationship": "SAME_REBIND_TOPIC_CONCURRENT_PREDECESSOR",
+    "resolution": "Do not create a competing authority. Preserve both append-only; use c6f9512 as the later, richer source-forensics successor for this RAH identity topic."
+  },
+  "forensic_spans": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "lines": "719-730",
+      "source_kind": "LIVE_CODE",
+      "claim": "RealtimeSession establishes conversation/session context including mutable claude_session_id reference and optional raum_session_id."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "lines": "1307-1309",
+      "source_kind": "LIVE_CODE",
+      "claim": "Realtime provider function-call call_id is captured as the key of the pending tool-call map before later dispatch."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "lines": "FULL_FILE_NEGATIVE_TOKEN_SEARCH",
+      "source_kind": "NEGATIVE_RESULT",
+      "claim": "No agent_id, parent_agent_id, task_id, recursive_call_id or generation token is present in the examined live module. This does not prove absence repository-wide; it proves the RAH contract is not implemented in this donor Realtime path."
+    }
+  ],
+  "design_change": "Triggerword-4 must treat R0/R1/R2/R3 recursion as a design taxonomy only. R2/R3 full-harness/adaptive recursion is fail-closed for whole-system credit until immutable child actor/task/parent/recursive-call/generation identity is bound to tool/effect/result/completion receipts.",
+  "hypothesis": "Adaptive GRID recursion can outperform fixed RLM-only or RAH-only strategies on mixed workloads after identity/receipt soundness is solved.",
+  "counterhypothesis": "Router overhead and duplicated state management erase the gains; a simpler fixed strong harness wins on verifier-adjusted score, latency and coordination reliability.",
+  "runtime_credit": 0,
+  "physical_grid10_credit": 0,
+  "whole_entityos_hcu_credit": 0,
+  "training_credit": 0,
+  "next_exact_gate": "Hand Triggerword 4 a fail-closed child/invocation identity contract, then implement source-level interleaving/transplant rejection tests and only after executable receipts run RLM-only vs RAH-only vs GRID-adaptive mixed-workload ablation."
+}

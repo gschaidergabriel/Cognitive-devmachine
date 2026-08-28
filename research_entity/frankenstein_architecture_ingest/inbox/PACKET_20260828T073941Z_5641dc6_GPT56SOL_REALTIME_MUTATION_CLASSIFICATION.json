@@ -1,0 +1,187 @@
+{
+  "packet_id": "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
+  "created_at": "2026-08-28T07:39:41Z",
+  "worker_id": "chatgpt-gpt56sol-triggerwort5-realtime-boundary",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Close the remaining source-level classification of mutating Realtime voice tools: direct durable memory mutation, research-request submission, confirmed task delegation into Claude Code, and the difference between repository-declared hooks and proved host/runtime EffectGate reachability. No donor execution was performed.",
+  "files_examined": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "sha_or_blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "spans_examined": [
+        {"line_start": 480, "line_end": 620},
+        {"line_start": 800, "line_end": 850},
+        {"line_start": 1590, "line_end": 1755}
+      ]
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "sha_or_blob": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "spans_examined": [
+        {"line_start": 300, "line_end": 420}
+      ]
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "sha_or_blob": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "spans_examined": [
+        {"line_start": 1, "line_end": 70}
+      ]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-RT-MUT-001-MEMORY-DIRECT",
+      "subsystem": "realtime voice / memory mutation",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 535,
+      "line_end": 546,
+      "excerpt_hash": null,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "frank_erinnerung_schreiben validates only non-empty subject/value and directly dispatches stern gespraech-erinnerung-schreiben with quelle=realtime-tool; it does not use the two-step voice task confirmation gate.",
+      "why_it_exists": "Low-latency durable conversation memory from the live voice session.",
+      "inputs": ["subject", "value"],
+      "outputs": ["stern memory-write result"],
+      "reads": [],
+      "writes": ["durable conversation-memory substrate through stern.py"],
+      "dependencies": ["realtime_gespraech._stern", "stern.gespraech_erinnerung_schreiben"],
+      "authority_class": "MEMORY_MUTATION_REQUIRES_TYPED_MEMORY_ADMISSION_NOT_WORLD_FACT_PROMOTION",
+      "failure_mode": "Model-selected wording may become durable memory without an explicit typed distinction among quote, summary, inference, instruction and verified fact.",
+      "concurrency_implication": "No immutable Realtime call_id/request_digest is visibly carried into the memory-admission wrapper.",
+      "privacy_implication": "Spoken content can be persisted; retention and sensitivity policy are not enforced in this wrapper.",
+      "latency_or_cost_implication": "Local in-process dispatch.",
+      "state_lifetime": "durable",
+      "runtime_reachable": true,
+      "runtime_entrypoints": ["Realtime function_call frank_erinnerung_schreiben"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["The downstream writer is narrow and may intentionally represent remembered conversation rather than canonical world fact; end-to-end read semantics still need proof."],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 0.995,
+      "target_2_0_action": "REPAIR",
+      "open_questions": ["Define MemoryCandidate/MemoryAdmission and bind provenance plus causal/admission identity before durable promotion or factual use."]
+    },
+    {
+      "atom_id": "TW5-RT-MUT-002-RESEARCH-SUBMISSION",
+      "subsystem": "realtime voice / external research request",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 519,
+      "line_end": 565,
+      "excerpt_hash": null,
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "frank_forschung with aktion=neu_anstossen accepts one Realtime model function call, validates only a non-empty question, then starts a background bridge whose worker calls stern chatgpt-senden. The two-step frank_auftrag_stellen confirmation mechanism is not applied to this submission path.",
+      "why_it_exists": "Allow explicit spoken requests to launch asynchronous research without blocking the live conversation.",
+      "inputs": ["aktion=neu_anstossen", "frage"],
+      "outputs": ["background research request id and later result"],
+      "reads": [],
+      "writes": ["external/background research request submission"],
+      "dependencies": ["_HintergrundBruecke", "RealtimeSession._forschung_taetigkeit", "stern.chatgpt_senden"],
+      "authority_class": "EXTERNAL_REQUEST_SUBMISSION_WITH_MODEL_LEVEL_USAGE_INSTRUCTION_BUT_NO_PARALLEL_TWO_STEP_GATE",
+      "failure_mode": "The schema/persona says the tool is only for explicit user requests, but the local dispatcher does not independently prove or bind that human intent before submission.",
+      "concurrency_implication": "Each request receives a background bridge id, but that id is not shown as a canonical EffectDecision or request-digest capability.",
+      "privacy_implication": "The spoken research question is forwarded to the research bridge/provider surface.",
+      "latency_or_cost_implication": "Asynchronous; exact provider/economic route is outside this span and must remain independently governed.",
+      "state_lifetime": "background request plus returned result",
+      "runtime_reachable": true,
+      "runtime_entrypoints": ["Realtime function_call frank_forschung action=neu_anstossen"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["The persona/tool description explicitly instructs use only after an explicit user research request; that is behavioral guidance, not a deterministic local intent gate."],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 0.99,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "open_questions": ["Classify research submission as a typed capability/effect class and bind explicit HumanIntentDecision plus economic/provider admission where network execution is possible."]
+    },
+    {
+      "atom_id": "TW5-RT-MUT-003-CLAUDE-DELEGATED-PERMISSION-BOUNDARY",
+      "subsystem": "realtime voice / delegated Claude Code executor",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 345,
+      "line_end": 399,
+      "excerpt_hash": null,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "After the separate voice task-confirmation gate dispatches work, claude_frage launches claude -p with --permission-mode set from berechtigung and unconditionally --disallowedTools Bash. Bash is therefore source-level blocked for this voice-delegated worker even if permissions.allow is broad. The source explicitly states Read/Write/Edit/Grep/Glob remain available.",
+      "why_it_exists": "Prevent speech-triggered destructive shell execution while retaining file-oriented Claude Code work.",
+      "inputs": ["confirmed task text", "session id", "berechtigung"],
+      "outputs": ["Claude Code task result"],
+      "reads": ["Claude session lineage", "host Claude configuration indirectly"],
+      "writes": ["possible downstream file edits through allowed non-Bash tools"],
+      "dependencies": ["claude CLI", "host/plugin permission configuration"],
+      "authority_class": "TOOL_CLASS_DENYLIST_PLUS_PERMISSION_MODE_NOT_PER_EFFECT_DECISION_CONSUMPTION",
+      "failure_mode": "Blocking Bash narrows blast radius but does not make task confirmation equivalent to executor-consumed authorization for every allowed Write/Edit or other state-changing tool call.",
+      "concurrency_implication": "A resumed Claude session may produce multiple state-changing tool calls from one admitted voice task; no immutable voice call_id/request_digest is visibly consumed per downstream effect at this function boundary.",
+      "privacy_implication": "Confirmed task text enters the Claude Code process and may be exposed to its configured tools/context.",
+      "latency_or_cost_implication": "Headless subprocess with up to configured timeout; cost_usd is returned by the CLI result but does not itself establish authorization/economic admission.",
+      "state_lifetime": "delegated task/session lineage",
+      "runtime_reachable": true,
+      "runtime_entrypoints": ["valid frank_auftrag_stellen -> _claude_taetigkeit -> gespraechsmodus.claude_frage"],
+      "tests_or_receipts": ["Source comments record historical local tests of --disallowedTools precedence; this Triggerword-5 run did not re-execute them."],
+      "known_counterevidence": ["A separately installed PreToolUse hook may add stronger enforcement downstream; its actual registration and invocation for this headless process is not established by claude_frage source alone."],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 1.0,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "open_questions": ["Require every downstream mutation to consume one-shot EffectDecision bound to invocation/tool_use id, request digest, generation, capability/resource and policy version."]
+    },
+    {
+      "atom_id": "TW5-RT-MUT-004-REPO-HOOK-DECLARATION-NOT-HOST-PROOF",
+      "subsystem": "Claude Code hook registration",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 1,
+      "line_end": 70,
+      "excerpt_hash": null,
+      "source_kind": "CONFIG",
+      "what_it_does": "The donor hook manifest declares PreToolUse and PostToolUse matchers '*' that invoke scripts/stern.py hook, alongside session/prompt/stop hooks.",
+      "why_it_exists": "Route Claude Code lifecycle events through the consolidated stern dispatcher.",
+      "inputs": ["Claude Code lifecycle events"],
+      "outputs": ["stern.py hook invocation when this manifest is actually installed and active"],
+      "reads": [],
+      "writes": [],
+      "dependencies": ["installed Claude plugin lifecycle", "CLAUDE_PLUGIN_ROOT", "stern.py"],
+      "authority_class": "DECLARED_HOOK_COVERAGE_SOURCE_ONLY",
+      "failure_mode": "FILE_EXISTS != LIVE_RUNTIME: repository presence of hooks.json cannot prove that the current host, plugin version, headless claude -p process and exact delegated call actually load/fire it or that its decision is executor-consumed.",
+      "concurrency_implication": "Matcher '*' is broad by declaration; exact invocation correlation still requires immutable per-call identity and runtime receipt.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": "Declared 2s PreToolUse and 3s PostToolUse hook timeouts.",
+      "state_lifetime": "configuration/source",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["Claude Code lifecycle if plugin manifest is registered"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["Other project evidence may show live hook firing on specific hosts, but that evidence must be exact-version/source-bound and cannot be inferred from this file."],
+      "supersedes": [],
+      "superseded_by": [],
+      "confidence": 1.0,
+      "target_2_0_action": "KEEP",
+      "open_questions": ["Recover exact current host/plugin registration plus a source-bound headless voice-delegation receipt proving PreToolUse -> decision -> allowed/denied executor behavior."]
+    }
+  ],
+  "hypotheses": [
+    "Frankenstein-2.0 should classify Realtime outputs into read-only observation, MemoryCandidate, TaskCandidate, ResearchRequestCandidate and SessionControl before any mutating path is admitted.",
+    "Human task confirmation and Bash denial are useful orthogonal controls but neither is a substitute for one-shot executor-consumed EffectDecision per real mutation."
+  ],
+  "counterhypotheses": [
+    "The installed Claude plugin may already fire stern PreToolUse for every allowed Write/Edit and may already deny unauthorized mutations; exact host/runtime evidence could reduce the implementation delta, but source/config files alone cannot establish that.",
+    "Research submission might be intentionally classified as non-world-effect coordination; even then it can consume provider/browser resources and transmit user text, so its capability/economic/privacy admission still needs an explicit class rather than silent equivalence to a read."
+  ],
+  "contradictions": [
+    "TW5-CONTRADICTION-REALTIME-RESEARCH-INTENT-011 OPEN: frank_forschung neu_anstossen relies on model/tool-description compliance for explicit-user-request intent and has no local two-step confirmation equivalent to frank_auftrag_stellen.",
+    "TW5-CONTRADICTION-DELEGATED-EFFECT-COVERAGE-012 OPEN: claude_frage hard-blocks Bash but leaves state-changing file tools available; source does not bind voice intent/call identity to an executor-consumed EffectDecision per downstream mutation.",
+    "TW5-CONTRADICTION-HOOK-REACHABILITY-013 OPEN: hooks.json declares PreToolUse '*' but current exact host/headless-process registration and firing are not proved by repository source."
+  ],
+  "critical_unknowns": [
+    "Exact installed hook/plugin version and PreToolUse firing for the current headless claude -p process spawned from voice.",
+    "Exact downstream stern PreToolUse decision semantics for allowed non-Bash mutation tools at the current donor/version.",
+    "Exact provider/economic/privacy admission path for stern.chatgpt_senden when frank_forschung starts new work."
+  ],
+  "recommended_next_spans": [
+    {"path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py", "line_start": null, "line_end": null, "reason": "Bind PreToolUse zulassen/decision state and PostToolUse journal semantics to the current hook manifest, especially non-Bash Write/Edit coverage.", "priority": "P0"},
+    {"path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py", "line_start": null, "line_end": null, "reason": "Trace chatgpt_senden route and economic/privacy guard semantics for frank_forschung neu_anstossen.", "priority": "P0"},
+    {"path": "current host/plugin registration evidence", "line_start": null, "line_end": null, "reason": "Prove hooks.json is actually loaded for the headless voice-delegated claude -p path; do not infer runtime coverage from repository presence.", "priority": "P0"}
+  ],
+  "supersedes_packet_id": null
+}

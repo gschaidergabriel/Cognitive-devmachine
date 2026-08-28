@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "checkpoint_id": "TW5-INGEST-CHECKPOINT-20260828T0714Z-GPT56SOL",
+  "created_at": "2026-08-28T07:14:00Z",
+  "routing": {
+    "normalized_message": "triggerwort 5",
+    "router_ref": "chatgpt/grid10-cognitive-envelope-control-20260828@099340237fad4b52187a77ef21a6ff93ae98287a",
+    "routing_result": "5 -> frankenstein_architecture_forensics_live_ingest",
+    "directive_fetch": "PASS"
+  },
+  "source_pins": {
+    "frankenstein_donor": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "frankenstein_tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "grid_design_branch_before_write": "chatgpt/grid10-cognitive-envelope-control-20260828@099340237fad4b52187a77ef21a6ff93ae98287a",
+    "canonical_main_observed": "4f4a7088a54dd21e1848f090446590efa05a2ac1"
+  },
+  "ingested_evidence": [
+    {
+      "source": "canonical-main architecture archaeology feed",
+      "run_id": "triggerwort5-20260828T1404p0700-gpt56sol-frankenstein-v07-forensics",
+      "commit": "f031f4d6864e11cd5fc4a6d13aa4c985a8307600",
+      "status": "BRIDGED_AS_EVIDENCE_NOT_RUNTIME_CREDIT"
+    },
+    {
+      "source": "canonical-main architecture archaeology feed",
+      "run_id": "triggerwort5-20260828T1412p0700-gpt56sol-voice-visual-lineage",
+      "commit": "8c04e88c7315995ff5b13cacfd24ce43c7d08054",
+      "feed_append_commit": "4f4a7088a54dd21e1848f090446590efa05a2ac1",
+      "status": "BRIDGED_AS_EVIDENCE_NOT_RUNTIME_CREDIT"
+    },
+    {
+      "source": "owner-schema bridge packet",
+      "packet_id": "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T071400Z_5641dc6_GPT56SOL_LIVE_FEED_BRIDGE.json",
+      "status": "CONSUMED_BY_THIS_CHECKPOINT"
+    }
+  ],
+  "source_crosschecks": [
+    "hooks.json shows seven lifecycle hooks routed to one stern.py hook command with bounded per-hook timeouts",
+    "stern.py lines 35-48 are a declared hard-boundary SPEC and are not promoted to enforcement without executable-span extraction",
+    "voice_loop_core.py lines 124-195 implement hard gates before weighted scoring, explicit WAIT, and decision-margin telemetry",
+    "visual_cortex.py lines 91-106 imports shared arbitration, shared capture ownership and perception-control/perceptual-field dependencies",
+    "perceptual_field.py lines 82-180 structurally separates observation, inference and retrieval prior and prevents prior from directly replacing observed value"
+  ],
+  "architecture_deltas_for_triggerword4": [
+    {
+      "delta": "GRID competition ABI should inherit deterministic pre-score gates, explicit WAIT/SELF_RESOLVE, and margin telemetry.",
+      "status": "SOURCE_SUPPORTED_DESIGN_DELTA",
+      "caution": "Share ABI semantics first; do not assume one fixed weight vector is valid for every modality."
+    },
+    {
+      "delta": "Typed Entry / World Substrate should preserve separate OBSERVED / INFERRED / RETRIEVAL_PRIOR classes with exact provenance outside vectors.",
+      "status": "SOURCE_SUPPORTED_DESIGN_DELTA",
+      "caution": "System-wide non-override still needs end-to-end tracing through serialization and GWT."
+    },
+    {
+      "delta": "VisualNeed + salience-gated GWT is a donor pattern for bounded WorldNeed -> WorldSlice JIT materialization.",
+      "status": "INFERENCE_FOR_DESIGN",
+      "caution": "Current source proves a perception path, not a general world-model implementation."
+    },
+    {
+      "delta": "Shared scarce-resource ownership is an architecture invariant candidate for camera/sensors and should be explicit in Frankenstein-2.0 process topology.",
+      "status": "SOURCE_PLUS_HISTORICAL_NEGATIVE_EVIDENCE",
+      "caution": "Backpressure and single-owner failure domain remain unmeasured here."
+    },
+    {
+      "delta": "A module receives no system credit until scheduler/caller -> input state -> module uptake -> downstream decision/state change -> outcome/re-entry is evidenced.",
+      "status": "FORENSIC_ACCEPTANCE_RULE",
+      "caution": "No new runtime causal credit was minted in this run."
+    }
+  ],
+  "preserved_contradictions": [
+    {
+      "id": "TW5-C001-INGEST-LANE-DIVERGENCE",
+      "state": "OPEN",
+      "detail": "Owner branch defines frankenstein_architecture_ingest/inbox + INGEST_STATE; canonical main simultaneously contains architecture_archaeology/TRIGGERWORD5_LIVE_FORENSIC_FEED.json. This run bridges main evidence into the owner schema rather than deleting or averaging either lane."
+    },
+    {
+      "id": "TW5-C002-SOURCE-VS-RUNTIME",
+      "state": "OPEN_BOUNDARY",
+      "detail": "Historical commit packets include reported measurements, but no independent reexecution occurred in this run."
+    },
+    {
+      "id": "TW5-C003-LOCAL-SPARSE-TARGET-VS-CURRENT-EXTERNAL-VISION",
+      "state": "OPEN_MIGRATION_DELTA",
+      "detail": "Current Visual Cortex still has external semantic vision paths; sparse/local JIT target is not yet equivalent implementation."
+    }
+  ],
+  "credits": {
+    "source_forensics": "PARTIAL_ADVANCED",
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Extract stern.py executable PreToolUse/PostToolUse/effect-state spans plus presence_bridge.py live voice call-site, then atomize VoiceSessionCapsule conditioning and update the architecture delta without merging SPEC into enforcement."
+}

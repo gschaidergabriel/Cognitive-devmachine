@@ -1,0 +1,144 @@
+{
+  "schema_version": 2,
+  "packet_id": "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+  "created_at": "2026-08-28T08:14:06Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/historical-settings-inheritance-v2",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Immutable v2 successor for the crosschecked historical Claude hook/settings inheritance evidence. Preserves the 2026-08-06 project measurement while binding ingest-time authority to current 9.13 HARD_OFF and refusing current-host/runtime promotion.",
+  "authority_classification": "HISTORICAL_SOURCE_EPOCH",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "supersedes_packet_id": "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL",
+  "supersedes_packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T074533Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_GPT56SOL.json",
+  "admission_status": "PREPARED_NOT_VALIDATED",
+  "files_examined": [
+    {
+      "path": "Drive:UEBERGABE-A3.md?id=1EFjRYX_lYhbXcOab2zjQot9LMo7UBs_J",
+      "sha_or_blob": "DRIVE_ID_1EFjRYX_lYhbXcOab2zjQot9LMo7UBs_J_MODIFIED_2026-08-06T09:39:08Z",
+      "spans_examined": [{"line_start": 1, "line_end": 1}]
+    },
+    {
+      "path": "Drive:UEBERGABE-KOORD.md?id=11pywfhKAlYbUEUR8Xhu9ypU7sJABIEoc",
+      "sha_or_blob": "DRIVE_ID_11pywfhKAlYbUEUR8Xhu9ypU7sJABIEoc_MODIFIED_2026-08-06T09:38:48Z",
+      "spans_examined": [{"line_start": 1, "line_end": 1}]
+    },
+    {
+      "path": "Drive:.antwort-A3.txt?id=1TUqIpiGJAWnSM65LvQf5X10i9kRXDpM9",
+      "sha_or_blob": "DRIVE_ID_1TUqIpiGJAWnSM65LvQf5X10i9kRXDpM9_SEARCH_SNIPPET_2026-08-28",
+      "spans_examined": [{"line_start": 1, "line_end": 1}]
+    },
+    {
+      "path": "gschaidergabriel/frankenstein:DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "sha_or_blob": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "spans_examined": [{"line_start": 1, "line_end": 1}]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-WACHE-SETTINGS-001-HISTORICAL-INHERITED-BLOCKING-V2",
+      "subsystem": "historical_hook_scheduler",
+      "path": "Drive:UEBERGABE-A3.md?id=1EFjRYX_lYhbXcOab2zjQot9LMo7UBs_J",
+      "commit_sha": "DRIVE-REV-20260806T093908Z",
+      "line_start": 1,
+      "line_end": 1,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "The 2026-08-06 A3 handoff records a measured check named 'Schranke wird vererbt (--settings)': a Claude session launched in a directory without its own .claude reportedly returned a blocking message while naming .claude/wache-befehl.py. This supports historical external-settings inheritance into at least one helper session, but it is not an exact current runtime receipt.",
+      "why_it_exists": "Cross-directory safety-policy inheritance for helper sessions.",
+      "inputs": ["Claude session launch", "external --settings configuration", "tool request affecting protected services/system state"],
+      "outputs": ["blocking decision/message"],
+      "reads": ["external settings/hook configuration as reported by handoff"],
+      "writes": [],
+      "dependencies": ["historical Claude --settings launch path", ".claude/wache-befehl.py as named in observed block message"],
+      "authority_class": "HISTORICAL_PROJECT_MEASUREMENT_NOT_CURRENT_AUTHORITY",
+      "failure_mode": "The handoff does not preserve the exact settings artifact, hook order, source hash, installation generation, command transcript, or a cryptographically bound runtime receipt.",
+      "concurrency_implication": null,
+      "privacy_implication": null,
+      "latency_or_cost_implication": null,
+      "state_lifetime": "historical session launch",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["historical Claude session launched with inherited --settings"],
+      "tests_or_receipts": ["UEBERGABE-A3.md measurement table", ".antwort-A3.txt corroborating search snippet"],
+      "known_counterevidence": ["Pinned donor hooks.json routes seven current plugin events through scripts/stern.py and contains no wache-koenig or wache-befehl binding.", "The named historical path is .claude/wache-befehl.py, not the separately archived aicore/tools/schranke/wache-koenig.py."],
+      "confidence": 0.93,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "open_questions": ["What exact settings file was passed?", "Was wache-befehl.py identical, a wrapper, or a separate predecessor/sibling of wache-koenig.py?", "What was hook ordering relative to other PreToolUse hooks?"]
+    },
+    {
+      "atom_id": "TW5-WACHE-SETTINGS-002-KOORD-BARRIER-CORROBORATION-V2",
+      "subsystem": "historical_effect_enforcement",
+      "path": "Drive:UEBERGABE-KOORD.md?id=11pywfhKAlYbUEUR8Xhu9ypU7sJABIEoc",
+      "commit_sha": "DRIVE-REV-20260806T093848Z",
+      "line_start": 1,
+      "line_end": 1,
+      "source_kind": "HISTORICAL_ONLY",
+      "what_it_does": "The contemporaneous KOORD handoff describes 'Schranken' as finished/measured, helpers as restricted, the Koenig path as requiring a ticket from a real terminal, and probe.py covering both directions at 34/34. This corroborates a historical blocking-barrier mechanism without proving exact current wiring.",
+      "why_it_exists": "Mechanically enforce worker/owner capability separation.",
+      "inputs": ["helper/Koenig action classes", "ticket path", "probe cases"],
+      "outputs": ["restricted or permitted action path"],
+      "reads": [],
+      "writes": [],
+      "dependencies": ["historical Schranke subsystem", "aicore tools/schranke/probe.py as reported by handoff"],
+      "authority_class": "HISTORICAL_PROJECT_MEASUREMENT_NOT_CURRENT_AUTHORITY",
+      "failure_mode": "The handoff does not identify the exact hook file/version that produced each measurement and cannot promote current-host reachability.",
+      "concurrency_implication": null,
+      "privacy_implication": null,
+      "latency_or_cost_implication": null,
+      "state_lifetime": "historical project snapshot",
+      "runtime_reachable": null,
+      "runtime_entrypoints": [],
+      "tests_or_receipts": ["UEBERGABE-KOORD.md reported probe 34/34"],
+      "known_counterevidence": ["Exact current/global scheduler configuration remains unavailable in the pinned Frankenstein donor."],
+      "confidence": 0.9,
+      "target_2_0_action": "COMPATIBILITY_ONLY",
+      "open_questions": ["Recover exact probe fixture/source and hook scheduler configuration if available."]
+    }
+  ],
+  "hypotheses": [
+    "A host/global or explicitly passed Claude settings artifact historically propagated a blocking PreToolUse watcher into helper sessions independent of the working directory's local .claude tree.",
+    "The named .claude/wache-befehl.py belongs to the same historical safety lineage as the archived wache-koenig/freigabe pair, but identity/equivalence is not established."
+  ],
+  "counterhypotheses": [
+    "A wrapper or launcher other than Claude --settings could have injected the blocking watcher while the handoff author attributed it to --settings.",
+    ".claude/wache-befehl.py may be a distinct predecessor/sibling with different policy and semantics from archived wache-koenig.py.",
+    "Historical successful inheritance says nothing about the pinned 2026-08-28 Frankenstein donor's current host/global hook installation."
+  ],
+  "contradictions": [
+    "Historical inherited blocking is supported while exact historical settings bytes/order and current host wiring remain UNKNOWN.",
+    "The pinned donor's current plugin hooks route through stern.py and do not contain the historical wache binding; do not smooth this into a continuity claim.",
+    "The earlier 08:08Z v1 consumption claim was superseded by the 08:11Z admission correction because the pre-existing v2 gate governs current-authority packet admission."
+  ],
+  "critical_unknowns": [
+    "Exact historical --settings artifact bytes/path/hash and hook ordering.",
+    "Identity relation between .claude/wache-befehl.py and archived wache-koenig.py.",
+    "Exact current host/global hook configuration outside the pinned donor repository.",
+    "Whether every state-changing non-Bash Realtime/tool path converges on an equivalent deterministic pre-side-effect boundary."
+  ],
+  "recommended_next_spans": [
+    {
+      "path": "historical Drive/archive: settings launcher/config containing --settings and .claude/wache-befehl.py registration",
+      "reason": "Resolve exact hook file identity, matcher scope, ordering and source hash without inferring wache-koenig equivalence from naming/lineage.",
+      "priority": "P0"
+    },
+    {
+      "path": "Triggerword-4 successor executor/effect boundary",
+      "reason": "Use the historical inheritance result only as donor evidence; require explicit typed invocation-bound EffectDecision consumption and denial-before-submission for every mutating capability class.",
+      "priority": "P0"
+    }
+  ],
+  "runtime_credit_delta": 0,
+  "training_credit_delta": 0,
+  "note": "Prepared under exact current 9.13/HARD_OFF authority binding. Do not append to consumed_packet_ids until validate_ingest_packet_v2.py passes against a freshly refreshed canonical main checkout."
+}

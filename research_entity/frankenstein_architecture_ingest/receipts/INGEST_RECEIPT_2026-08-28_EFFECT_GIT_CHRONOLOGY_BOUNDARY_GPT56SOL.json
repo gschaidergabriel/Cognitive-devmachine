@@ -1,0 +1,83 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T143607P0700-EFFECT-GIT-CHRONOLOGY-BOUNDARY",
+  "recorded_at": "2026-08-28T14:36:07+07:00",
+  "corrected_at": "2026-08-28T14:39:24+07:00",
+  "status": "CORRECTED_AFTER_REENTRY",
+  "trigger_raw": "triggerwort 5",
+  "trigger_normalized": "triggerwort 5",
+  "trigger_router_result": {
+    "matched_macro": "5",
+    "kind": "frankenstein_architecture_forensics_live_ingest",
+    "directive_fetch": "PASS",
+    "directive": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "sparse_world_directive": "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+  },
+  "correction": {
+    "initial_receipt_commit": "e5d9cdc35b06b2250cde302386a3256ae60e9cca",
+    "initial_architecture_delta_commit": "870517bfcabdd1b08a066ee2a89843f16b864af0",
+    "corrected_architecture_delta_commit": "27e8be761e0fe119902c5ec66659924b3c5b8a1b",
+    "reason": "Re-entry of the concurrently moving INGEST_STATE exposed the already-existing 0734Z chronology delta proving an earlier windows/quelle/stern.py snapshot.",
+    "corrected_claim": "4f55d688 windows/quelle/stern.py is earliest verified stern.py in the inspected accessible Git lineage; b0be33f is earliest verified Linux scripts/stern.py source-ready payload. Neither commit is a proven creation date for PHASE-2 semantics."
+  },
+  "source_identity": {
+    "canonical_main_observed_during_initial_write": "01da78bd43066e912410ed1d308f26dba0dae23c",
+    "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "earliest_verified_stern_commit": "4f55d688fe27e9361374ea912e57319bfb566407",
+    "earliest_verified_stern_path": "windows/quelle/stern.py",
+    "earliest_verified_stern_blob": "0f30287f78e9be3c0ed86978d8ddf1cd1eeb5062",
+    "inspected_parent_without_stern": "6cc5a3f3e23451c2275463bde407912e2d46b8f7",
+    "first_verified_linux_plugin_commit": "b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a",
+    "first_verified_linux_stern_blob": "777cc14c695a504b74dc6f8a425b6f9de82a41ab",
+    "path_relocation_commit": "ccf2264f23b65ed796f9ed44a38c8c55bd379345"
+  },
+  "cross_checks": [
+    {
+      "source": "owner-branch ARCHITECTURE_DELTA_2026-08-28T0734Z_STERN_EFFECT_GIT_BOUNDARY_GPT56SOL.json",
+      "result": "PASS_CORRECTION_AUTHORITY_FOR_THIS_FACT",
+      "finding": "The earlier chronology delta pins windows/quelle/stern.py@4f55d688 as first verified accessible stern.py and parent 6cc5a3f3 as containing no stern.py."
+    },
+    {
+      "source": "b0be33f scripts/stern.py",
+      "result": "PASS_RECLASSIFIED",
+      "finding": "Linux plugin source-ready appearance already contains PHASE-2 nonblocking zulassen() and PostToolUse merken(); it is not the earliest stern.py in the accessible lineage."
+    },
+    {
+      "source": "current donor 5641dc6 stern.py",
+      "result": "PASS",
+      "finding": "Current source still explicitly says normal STAR zulassen() is nonblocking bookkeeping and distinguishes the older blocking global watcher."
+    }
+  ],
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_GIT_CHRONOLOGY_BOUNDARY_2026-08-28T1436P0700_GPT56SOL.json",
+    "corrected_commit": "27e8be761e0fe119902c5ec66659924b3c5b8a1b",
+    "current_atoms": [
+      "F2_EFFECT_GIT_FIRST_VERIFIED_BOUNDARY_CORRECTED_036",
+      "F2_LINUX_SOURCE_READY_NOT_RUNTIME_WIRED_037",
+      "F2_EFFECT_GATE_NAMING_NOT_AUTHORITY_038"
+    ]
+  },
+  "dedupe": {
+    "prior_0734z_git_boundary_delta": "CORROBORATING_PRIOR_EVIDENCE_AND_CORRECTION_BASIS",
+    "wache_koenig_source_pin": "NOT_REPEATED",
+    "independent_replication_credit": 0,
+    "unique_retained_delta": "Correction trail plus explicit Windows-first/Linux-source-ready distinction."
+  },
+  "execution": {
+    "new_runtime_execution": false,
+    "vps_execution": false,
+    "provider_execution": false,
+    "paid_execution": false,
+    "unusual_experiment": false
+  },
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Search provenance-bearing host/archive/other-repository artifacts for a pre-4f55d688 stern/effect source; if none is recoverable, classify the post-hoc-only to PHASE-2 transition as PRE_GIT_HOST_PROVENANCE_UNRESOLVED and continue current/historical hook-registration ordering for enforcement reachability."
+}

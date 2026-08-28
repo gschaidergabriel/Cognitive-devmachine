@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "receipt_type": "TRIGGERWORD_5_FORENSIC_CHECKPOINT",
+  "created_at": "2026-08-28T10:05:15Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/work-execution-binding-forensics",
+  "trigger": "triggerwort 5",
+  "routing": "PASS",
+  "canonical_main_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+  "authority_epoch": "9.13",
+  "execution_mode": "FREE_ONLY",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "prior_checkpoint_ingested": {
+    "commit": "0a24a19015cbb5d10efef17518cb1684e1e83507",
+    "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1001Z_EFFECT_AUTHORITY_COMPLETION_INVOCATION_GPT56SOL.json",
+    "disposition": "REUSED_NOT_DUPLICATED",
+    "reason": "A parallel organ completed the effect/completion source ingest during this run, so this worker advanced the next nonduplicate functional frontier instead."
+  },
+  "source_evidence": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "5700-6100",
+      "classification": "LIVE_CODE+ENFORCEMENT_CODE",
+      "finding": "handoff creates deterministic workpackage/capsule state but explicitly does not spawn; reconcile lacks a native child execution-attempt join."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "span": "1-160",
+      "classification": "ARCHITECTURE_DOC",
+      "finding": "governance requires handoff before spawned architect/build agents and reconcile after them, leaving the actual native spawn mechanism outside the workpackage implementation."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "span": "1-75",
+      "classification": "CONFIG",
+      "finding": "checked-in donor plugin has seven generic/session/tool hooks and no child/task lifecycle hook subscription; installed runtime capability remains unknown."
+    }
+  ],
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORK_EXECUTION_BINDING_NATIVE_CHILD_DELTA_2026-08-28T1005Z_GPT56SOL.json",
+    "commit": "1fb73164db04ff0e0306b344281122a51ae0c0fc",
+    "classification": "SOURCE_GAP_CONFIRMED_RUNTIME_ABI_UNKNOWN"
+  },
+  "material_result": [
+    "Introduced WorkExecutionBinding/v1 as the typed bridge between durable work intent and concrete executor attempt.",
+    "Separated work_package_id, execution binding_id and call-scoped tool invocation identity instead of overloading session_id.",
+    "Preserved owner DIRECT_SMALL exception via executor_kind=COORDINATOR_DIRECT without inventing child execution.",
+    "Bound replacement/resume to explicit attempt lineage rather than silently reusing a stale child identity.",
+    "Required completion/effect/world-model causal credit to join through the same concrete execution binding.",
+    "Defined failure tests for cross-child result transplant, shared-worktree contamination, parent restart and text-only DONE."
+  ],
+  "runtime_probe": "NOT_ATTEMPTED_NO_AUTHORIZED_NATIVE_HOST_EXECUTION_SURFACE_IN_THIS_SESSION",
+  "provider_execution": "NOT_ATTEMPTED",
+  "unusual_experiment": "NOT_USED",
+  "runtime_credit": 0,
+  "negative_evidence": [
+    "No installed Claude Code build/version was observed.",
+    "No native child/task lifecycle event was observed.",
+    "No concurrency, nesting, cancellation, resume or context-saving claim is promoted to runtime fact.",
+    "Absence of child lifecycle hooks from donor hooks.json is not treated as proof the installed host/runtime lacks them."
+  ],
+  "next_exact_gate": "On an authorized host/native-runtime observation path, pin the exact installed Claude Code build and capture a bounded child lifecycle trace from real handoff through native spawn/task identity, tool invocation, return and reconcile; repeat with two disjoint children before freezing the Triggerword-4 worker ABI.",
+  "result": "PASS_SOURCE_FORENSICS_CHECKPOINT"
+}

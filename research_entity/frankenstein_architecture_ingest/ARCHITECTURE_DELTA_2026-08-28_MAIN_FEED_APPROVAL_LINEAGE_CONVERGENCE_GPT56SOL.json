@@ -1,0 +1,127 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_MAIN_FEED_APPROVAL_LINEAGE_CONVERGENCE_GPT56SOL",
+  "analysis_time_utc": "2026-08-28T07:33Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "CURRENT_DONOR_SOURCE_PLUS_HISTORICAL_SOURCE_FORENSICS_NO_RUNTIME_PROMOTION",
+  "source_pins": {
+    "current_donor_repo": "gschaidergabriel/frankenstein",
+    "current_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "historical_repo": "gschaidergabriel/Project-Frankenstein",
+    "historical_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "design_branch_observed_before_write": "ee9409776e8ee29565e100460f3a9c24baaaf0d7",
+    "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73"
+  },
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
+      "classification": "CORROBORATING_SUCCESSOR_BRIDGE",
+      "result": "INGESTED_DEDUPED",
+      "unique_value": "Makes the canonical-main archaeology feed explicit provenance input while preserving the unresolved namespace migration boundary; reconfirms call-scoped identity gap and VERIFIED semantic overload.",
+      "independent_runtime_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+      "classification": "HISTORICAL_LINEAGE_PRECURSOR",
+      "result": "INGESTED_SOURCE_CROSSCHECKED",
+      "unique_value": "Establishes a historical pre-execution approval/deny lineage and shows that the later stern.py nonblocking EffectGate bookkeeping is a semantic reversal rather than a direct equivalent replacement.",
+      "independent_runtime_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL",
+      "classification": "HISTORICAL_LINEAGE_SUCCESSOR",
+      "result": "INGESTED_SOURCE_CROSSCHECKED",
+      "unique_value": "Refines the predecessor finding: approval_id is a UI/workflow correlation key, not an executor-consumed request-bound capability; execute() receives caller-controlled skip_approval instead.",
+      "independent_runtime_credit": false
+    }
+  ],
+  "source_crosschecks": [
+    {
+      "id": "T5-XCHECK-HIST-PREEXEC-DENY-001",
+      "source": "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1:agentic/executor.py:70-180",
+      "result": "PASS_SOURCE",
+      "finding": "ToolExecutor.execute returns approval_required before dispatch when approval is required and skip_approval is false. This is genuine source-level pre-execution denial semantics, not posthoc journaling."
+    },
+    {
+      "id": "T5-XCHECK-HIST-APPROVAL-BINDING-002",
+      "source": "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1:agentic/executor.py:540-685 and agentic/loop.py:440-520",
+      "result": "PASS_SOURCE_NEGATIVE",
+      "finding": "request_approval persists approval_id plus full tool_input and wait_for_approval polls by id, but execute() has no approval_id/request_digest argument. AgentLoop executes the approved call with skip_approval=True. The same in-memory tool_call is preserved by caller convention, not enforced at the executor boundary."
+    },
+    {
+      "id": "T5-XCHECK-CURRENT-STERN-SEMANTIC-REVERSAL-003",
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:3200-3655,8810-8895",
+      "result": "PASS_SOURCE",
+      "finding": "Current donor ordinary PreToolUse admission is deliberately nonblocking bookkeeping; PostToolUse can synthesize VERIFIED without a PreToolUse row. The historical and current mechanisms therefore contribute complementary but individually insufficient halves of the successor effect contract."
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "id": "TW5-EFFECT-LINEAGE-CONVERGENCE-019",
+      "feeds_triggerword4": true,
+      "action": "FUSE",
+      "delta": "Frankenstein 2.0 must combine historical pre-execution deny semantics with current-donor generation/idempotency checks and post-effect hashing/journaling. Neither caller-side skip_approval nor nonblocking stern admission is sufficient canonical effect authority."
+    },
+    {
+      "id": "TW5-EXECUTOR-CONSUMED-DECISION-020",
+      "feeds_triggerword4": true,
+      "action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "delta": "EffectDecision is an immutable one-shot capability consumed at the actual executor boundary and bound to invocation_id/tool_use_id + request_digest + generation + causal_event_id + policy_generation + expiry. Missing, stale, mismatched, denied or already-consumed decisions reject execution before state change."
+    },
+    {
+      "id": "TW5-HUMAN-APPROVAL-INPUT-NOT-AUTHORITY-021",
+      "feeds_triggerword4": true,
+      "action": "ADAPT",
+      "delta": "Human approval remains a decision input and UI workflow, but approval_id is not itself canonical authority. It must cause a typed EffectDecision that the executor independently validates and consumes. Approval storage should be redacted/digest-bound rather than persisting unrestricted raw tool_input."
+    },
+    {
+      "id": "TW5-INGEST-NAMESPACE-BRIDGE-022",
+      "feeds_triggerword4": false,
+      "action": "PRESERVE_CONTRADICTION",
+      "delta": "Canonical-main architecture_archaeology and owner-branch frankenstein_architecture_ingest remain separate provenance projections until an explicit migration/dedupe authority binds them. Main-feed bridge packets may be ingested as corroborating evidence without silently aliasing namespaces."
+    }
+  ],
+  "required_triggerword4_tests": [
+    "DENY decision prevents the actual tool/executor dispatch, not merely journal classification.",
+    "ALLOW decision is one-shot and consumed exactly once by the matching invocation_id/tool_use_id.",
+    "Request-digest mismatch rejects execution even when an approval/decision exists for the same tool name.",
+    "Stale generation, stale policy generation, expired decision and already-consumed decision all fail closed.",
+    "Parallel and reverse-order tool completion preserve exact per-invocation request/decision/outcome correlation.",
+    "PreToolUse/admission failure followed by observed PostToolUse cannot retroactively mint ALLOW; admission remains UNKNOWN while outcome is recorded independently.",
+    "Approval/effect durable records pass a secret fence and do not persist unrestricted raw tool_input by default."
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-HISTORICAL-APPROVAL-BINDING-007",
+      "status": "SOURCE_RESOLVED_RUNTIME_LINEAGE_OPEN",
+      "resolution": "Historical normal AgentLoop can deny before execution, but approved execution is not mechanically bound to approval_id/request bytes at ToolExecutor.execute. Preserve the deny concept; replace binding with executor-consumed typed EffectDecision."
+    },
+    {
+      "id": "TW5-CONTRADICTION-INGEST-PATH-001",
+      "status": "OPEN",
+      "resolution_rule": "Do not alias architecture_archaeology and frankenstein_architecture_ingest without an explicit migration/dedupe receipt."
+    }
+  ],
+  "remaining_p0": [
+    "Recover exact wache-koenig source/host artifact or permanently classify it unavailable provenance; map its position between historical approval enforcement and current stern bookkeeping.",
+    "Resolve explicit migration/dedupe authority between the two Triggerword-5 research projection namespaces.",
+    "Resolve current donor dynamic dependency closure including wegehierarchie before Triggerword-4 donor freeze.",
+    "Feed executor-consumed EffectDecision ABI and fail-closed regressions into Triggerword-4 executor/effects assembly."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "historical_source_forensics": "PRESENT",
+    "new_runtime_execution": 0,
+    "effect_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Recover or formally retire the missing wache-koenig lineage, then consume the executor-bound EffectDecision contract in Triggerword-4 with one-shot/digest/generation/DENY/parallel-correlation/secret-fence regressions; separately resolve the dual Triggerword-5 ingest namespace migration authority."
+}

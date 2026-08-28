@@ -1,0 +1,134 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6 Sol",
+  "recorded_at": "2026-08-28T14:28:16+07:00",
+  "evidence_scope": "SOURCE_FORENSICS_AND_HISTORICAL_EXACT_COMMIT_LINEAGE_ONLY_NO_RUNTIME_EXECUTION",
+  "current_donor": {
+    "repository": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "historical_predecessor": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "tree": "ec21e66c4672fde1f0a5d948ebc51457b69b620a",
+    "executor_blob": "2a87f8d58e5785fcd6b821141416f9dcd00433bf",
+    "loop_blob": "e39c0e9ad00843f62a0fea7dd881a80f3acc70dd"
+  },
+  "ingested_packet": "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+  "architecture_findings": [
+    {
+      "id": "TW5-EFFECT-LINEAGE-D001",
+      "classification": "HISTORICAL_SOURCE",
+      "finding": "At pinned Project-Frankenstein commit abba90a5767d85abc8a1ac340bae92842dab35c1, agentic/executor.py performs a causally pre-execution risk/approval check: when approval is required and skip_approval is false, execute() returns approval_required instead of dispatching the tool.",
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.99
+    },
+    {
+      "id": "TW5-EFFECT-LINEAGE-D002",
+      "classification": "HISTORICAL_SOURCE",
+      "finding": "The historical AgentLoop separates a fixed safe-tool allowlist from all other tools. Safe tools execute with skip_approval=True; non-safe tools enter request_approval/wait_for_approval and only execute after approval. User denial returns a failed ToolResult without invoking the tool.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "confidence": 0.99
+    },
+    {
+      "id": "TW5-EFFECT-LINEAGE-D003",
+      "classification": "HISTORICAL_SOURCE",
+      "finding": "The historical executor also has independent pre-execution hard guards and optional Firejail restrictions. Deletion-pattern guards can stop Python/bash execution even after caller-side approval routing; if Firejail is absent, the source explicitly continues unsandboxed, so sandbox presence was not itself fail-closed authority.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "confidence": 0.99
+    },
+    {
+      "id": "TW5-EFFECT-LINEAGE-D004",
+      "classification": "CURRENT_SOURCE_PLUS_HISTORICAL_SOURCE",
+      "finding": "The later current donor stern.py EffectGate is not a consolidation of the same enforcement semantics. Its generic Phase-2 zulassen() path explicitly never blocks tools and instead records admission/bookkeeping states. The effect lineage therefore contains a semantic split: historical caller-side enforcement -> later hook-side nonblocking admission/journal plus post-effect verification.",
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "confidence": 1.0
+    },
+    {
+      "id": "TW5-EFFECT-LINEAGE-D005",
+      "classification": "NEGATIVE_RESULT",
+      "finding": "The first accessible git history entry for gschaidergabriel/frankenstein path scripts/stern.py is b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a on 2026-08-25; that snapshot already contains the Phase-2 two-sided EffectGate section. Querying the path before 2026-08-25 returned no commits. Therefore an exact posttool-only -> Phase-2 transition cannot be reconstructed from that public path history alone and must not be fabricated from comments.",
+      "target_2_0_action": "KEEP",
+      "confidence": 1.0
+    },
+    {
+      "id": "TW5-EFFECT-LINEAGE-D006",
+      "classification": "OPEN_HYPOTHESIS",
+      "finding": "The exact wache-koenig.py blocking predecessor referenced by current stern.py was not found in the inspected current Frankenstein tree or pinned Project-Frankenstein tree. Its existence as a historical external mechanism is source-referenced but its exact bytes, commit identity and runtime wiring remain unresolved.",
+      "target_2_0_action": "UNDECIDED",
+      "confidence": 0.9
+    }
+  ],
+  "frankenstein_2_effect_lineage_fusion": {
+    "law": "Do not choose between the historical pre-execution gate and the current post-effect verifier. Frankenstein-2.0 needs both, separated into typed causal states with one deterministic real-effect authority.",
+    "required_chain": [
+      "EffectRequest(tool_use_id, session_id, generation, causal_event_id, request_digest, capability_scope)",
+      "EffectAdmissionDecision(ALLOW|DENY|UNKNOWN) bound to immutable request identity",
+      "EffectEnforcementReceipt proving DENY => no execution and ALLOW => exactly the admitted request may execute",
+      "ExecutionReceipt bound to exact tool_use_id/request_digest/source/environment",
+      "WorldEffectVerification(SUCCEEDED|FAILED|UNKNOWN) independent of authorization",
+      "CompletionEvidence accepted only from explicit verified admissible states",
+      "EffectJournal append-only causal chain; no mutable session-global current effect pointer and no caller boolean can mint authority"
+    ],
+    "historical_parts_to_salvage": [
+      "causally prior approval decision",
+      "explicit denial before dispatch",
+      "defence-in-depth destructive-operation guards",
+      "human approval event as a separate state"
+    ],
+    "current_donor_parts_to_salvage": [
+      "generation/precondition/idempotence checks",
+      "post-execution result/hash verification",
+      "effect journaling and causal episode re-entry",
+      "secret redaction regression boundary"
+    ],
+    "parts_to_retire_or_replace": [
+      "tool-name safe allowlist as authority",
+      "skip_approval boolean as authorization token",
+      "nonblocking ABGELEHNT state presented under an EffectGate name",
+      "mutable active_turns.effect_id as cross-hook correlation authority",
+      "completion predicates that accept ambiguous/failed/unverified effect statuses"
+    ]
+  },
+  "preserved_contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-LINEAGE-005",
+      "status": "OPEN_AS_DESIGN_CONSTRAINT",
+      "claim_a": "Historical Project-Frankenstein has real caller-side pre-execution approval enforcement.",
+      "claim_b": "Current stern.py generic EffectGate path intentionally does not block ordinary tool execution.",
+      "resolution": "Treat them as distinct architectural lineages and fuse their useful primitives behind canonical EntityOS EffectGate/EffectJournal rather than declaring either one-to-one inherited authority."
+    },
+    {
+      "id": "TW5-CONTRADICTION-WACHE-KOENIG-PROVENANCE-006",
+      "status": "OPEN",
+      "claim_a": "Current stern.py comments reference an external historical wache-koenig.py as the actual blocking guard.",
+      "claim_b": "The file was not present in either inspected repository tree at the pinned/current snapshots.",
+      "resolution": "Preserve as unresolved provenance. Search archived/live-host/git objects or historical bundles; absence in these two snapshots is not proof of nonexistence."
+    }
+  ],
+  "runtime_evidence_boundary": {
+    "historical_runtime_reachability_proven": false,
+    "wache_koenig_runtime_reachability_proven": false,
+    "frankenstein_2_effect_runtime_acceptance": false,
+    "new_runtime_execution": false,
+    "credit_delta": 0
+  },
+  "next_exact_gate": [
+    "Inspect historical Project-Frankenstein agentic/executor.py request_approval and wait_for_approval spans to determine approval-id persistence/correlation semantics and race behavior.",
+    "Locate exact wache-koenig.py bytes/commit/runtime wiring from archive, live-host provenance or git objects; fail closed if unavailable.",
+    "Feed the fused pre-enforcement + post-verification chain into Triggerword-4 executor/effects assembly and require an executable DENY non-execution receipt plus reversed/concurrent tool-call correlation tests.",
+    "Do not claim the posttool-only -> Phase-2 transition from public scripts/stern.py Git history; first accessible path snapshot already contains Phase-2."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED_HISTORICAL_EFFECT_LINEAGE",
+    "runtime_causal": 0,
+    "effect_runtime_acceptance": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

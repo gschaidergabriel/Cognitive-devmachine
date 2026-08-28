@@ -1,0 +1,109 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_MEMORY_CONTEXT_INJECTION_BOUNDARY_GPT56SOL",
+  "recorded_at": "2026-08-28T14:51:00+07:00",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "status": "SOURCE_FORENSICS_CONTEXT_BOUNDARY_PINNED_NO_RUNTIME_CREDIT",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes_admitted": false
+  },
+  "source_identity": {
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "688d6e7693e189a05586211fdbafdd4ecf221e43",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "forensic_question": "Where exactly can direct Realtime memory epistemic metadata be preserved, stripped or invented before cognition, and is the asynchronous claude_frage action carrier the same consumer path?",
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_REALTIME_MEMORY_TOOL_OUTPUT_PASS_THROUGH_050",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py::_tool_ausfuehren",
+      "claim": "After frank_erinnerung_lesen dispatch, the returned dict is JSON-serialized directly into a Realtime conversation.item.create function_call_output using the provider call_id, then response generation is requested. There is no intervening epistemic/provenance enrichment or validation wrapper at this serializer boundary.",
+      "confidence": 1.0,
+      "implication": "Any epistemic/provenance field absent from the reader result is still absent at model-context injection. Any future typed MemoryView must be constructed before this serializer or validated here without converting retrieval into truth authority."
+    },
+    {
+      "atom_id": "F2_REALTIME_CALL_ID_NOT_MEMORY_CAUSAL_ID_051",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py::_tool_ausfuehren",
+      "claim": "The Realtime function_call_output binds the tool response to the provider call_id. This is useful invocation correlation but does not identify the canonical memory source event, transformation lineage, verification state or state generation of each returned memory item.",
+      "confidence": 1.0,
+      "implication": "Keep provider call_id as invocation provenance, but do not substitute it for source_event_id/memory_admission_id/generation in the typed memory ABI."
+    },
+    {
+      "atom_id": "F2_CLAUDE_FRAGE_ACTION_CARRIER_SEPARATE_PATH_052",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py::_claude_taetigkeit + DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py::claude_frage",
+      "claim": "The asynchronous frank_auftrag_stellen carrier passes only the confirmed auftrag string into gespraechsmodus.claude_frage(). claude_frage constructs a claude -p command from that text, an end-intent system prompt, permission mode, disallowed Bash, and session resume/id. Its function body does not receive the direct frank_erinnerung_lesen result or call gespraech_zustandskontext as part of prompt construction.",
+      "confidence": 1.0,
+      "boundary": "A resumed Claude Code session may retain its own session context and hooks may observe system state, but this source does not prove typed direct-memory injection into that action carrier.",
+      "implication": "Do not conflate Realtime memory-context epistemic repair with the action-carrier prompt path. Audit them as separate causal lanes."
+    },
+    {
+      "atom_id": "F2_EXISTING_STATE_CONTEXT_GUARD_REMAINS_SEPARATE_053",
+      "source_kind": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py::gespraech_zustandskontext + DEV_SOURCE_RESEARCH/repository/scripts/voice_loop_core.py::kandidaten_bauen",
+      "claim": "The existing lehre_unsicher uncertainty guard remains a separate state/GWT path and must not be lost when direct Realtime memory reads gain typed MemoryView metadata.",
+      "confidence": 1.0
+    }
+  ],
+  "bounded_conclusion": {
+    "direct_realtime_memory_context_injection": "PASS_THROUGH_JSON_NO_EPISTEMIC_ENRICHMENT",
+    "headless_claude_frage_relation": "SEPARATE_ACTION_CARRIER_NOT_DIRECT_MEMORY_TOOL_RESULT_CONSUMER_IN_OBSERVED_SOURCE",
+    "repair_location": "READER_OR_DETERMINISTIC_MEMORY_VIEW_COMPILER_BEFORE_FUNCTION_CALL_OUTPUT_SERIALIZATION_PLUS_FAIL_CLOSED_SCHEMA_VALIDATION_AT_BOUNDARY",
+    "non_goal": "Do not make the model or serializer decide whether a remembered claim is fact."
+  },
+  "frankenstein_2_0_contract_delta": {
+    "write_path": "MemoryCandidate -> deterministic MemoryAdmission -> canonical state",
+    "read_path": "canonical row/source event -> deterministic MemoryView/MemoryReference -> ranking/context selection -> function_call_output/reference injection",
+    "required_read_fields": [
+      "memory_reference_id_or_canonical_table_row_ref",
+      "source_event_id_if_available",
+      "memory_admission_id_if_available",
+      "generation",
+      "source_actor_or_system",
+      "transformation_class",
+      "epistemic_class",
+      "verification_state",
+      "provenance",
+      "content_digest_or_reference",
+      "provider_tool_call_id_as_invocation_provenance_when_applicable"
+    ],
+    "preserve": [
+      "VoiceSessionCapsule no-second-durable-memory-authority rule",
+      "compact table/id references",
+      "lehre_unsicher uncertainty propagation",
+      "provider call_id only as call correlation, not truth identity"
+    ]
+  },
+  "acceptance_tests_for_triggerword4": [
+    "A user-stated claim, a model summary, and an inference with identical surface text remain distinguishable after frank_erinnerung_lesen -> MemoryView -> function_call_output serialization.",
+    "Sorting or top-k selection cannot drop epistemic_class/transformation_class/provenance/generation.",
+    "Provider call_id correlation cannot overwrite canonical source_event_id or memory_admission_id.",
+    "The async frank_auftrag_stellen -> claude_frage lane receives only its admitted task input unless a separately typed state/context contract is explicitly added.",
+    "Existing NULL-confidence folgerung remains uncertain in state/GWT after the new read ABI."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "memory_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_full": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword 4 should implement a deterministic typed MemoryView/MemoryReference compiler immediately before Realtime function_call_output/context injection, preserve existing uncertainty guards, and test identical-text/different-epistemic-class adversarial cases. Separately keep effect invocation/enforcement/completion P1 gates open."
+}

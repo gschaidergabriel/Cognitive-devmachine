@@ -1,0 +1,68 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_PACKET_CONSUMPTION_PERCEPTION_CANCEL_FRESHNESS_5641dc6b",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_PARALLEL_DONOR_NO_NEW_RUNTIME_EXECUTION",
+  "parallel_reentry_status": "REDUNDANT_PARALLEL_DONOR_DO_NOT_DOUBLE_COUNT",
+  "canonical_ingest_winner_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+  "canonical_ingest_state_observed_after_race": "Packets were already marked consumed by the newer INGEST_STATE before this donor could update state; this file remains provenance only and is intentionally not indexed as an additional canonical architecture delta.",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "d7869b9ba00beb7142565387a5753d1a22f1e775",
+    "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73"
+  },
+  "packets_examined_during_parallel_race": [
+    "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+    "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+    "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT"
+  ],
+  "dedupe": {
+    "effect_findings": "REINFORCE_EXISTING_NOT_INDEPENDENT_CREDIT",
+    "existing_branch_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
+    "existing_main_handoff_commit": "4a4287d0935d4dd19d122b1027716a569d331a73",
+    "parallel_winner_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+    "note": "The parallel winner already ingested and indexed the same packets with equal or broader coverage. No finding in this donor receives separate architecture or evidence credit."
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_PERCEPTION_DAG_TAINT_NOT_COMPUTED_023_DONOR",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:420-560@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Central DAG dependency resolution plus COMPUTE_OFF/unknown/taint returns NOT_COMPUTED/value=None before compute_fn.",
+      "target_action": "ADAPT_TO_GRID",
+      "credit": "REDUNDANT_WITH_CANONICAL_INGEST_WINNER"
+    },
+    {
+      "atom_id": "F2_REALTIME_PENDING_EFFECT_CANCEL_BEFORE_DISPATCH_024_DONOR",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1300-1410@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Pending Realtime function calls are discarded for non-completed responses and on barge-in before local dispatch.",
+      "target_action": "KEEP_AND_ADAPT_TO_GRID",
+      "credit": "REDUNDANT_WITH_CANONICAL_INGEST_WINNER"
+    },
+    {
+      "atom_id": "F2_VOICE_PROJECTION_REQUIRES_CONSISTENT_GENERATION_025_DONOR",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py:250-450@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "VoiceSessionCapsule is a multi-source ephemeral projection without one shared generation contract; missing presence is converted to user_present=True for arbitration.",
+      "target_action": "REPAIR_AND_ADAPT_TO_GRID",
+      "credit": "DONOR_DETAIL_ONLY; UNKNOWN-presence repair already exists in current frontier"
+    }
+  ],
+  "credits": {
+    "source_forensics": "REDUNDANT_PROVENANCE_ONLY",
+    "new_independent_evidence": 0,
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Follow the canonical winner/current INGEST_STATE frontier; do not use this parallel donor to create a second implementation or evidence count."
+}

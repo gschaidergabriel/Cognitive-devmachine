@@ -1,0 +1,88 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T0744Z-GPT56SOL-REENTRY-LEDGER-DRIFT",
+  "trigger": "triggerwort 5",
+  "classification": "SOURCE_FORENSICS_REENTRY_CHECKPOINT_STATE_SYNC_REQUIRED_NO_DUPLICATE_SEMANTIC_CREDIT",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_execution": "HARD_OFF",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN"
+  },
+  "source_identity": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_receipt": "bb8532d06afe6040b032c106b7cf30bf56c967fb",
+    "ingest_state_last_ingest_at_observed": "2026-08-28T07:40:00Z",
+    "ingest_state_canonical_main_observed": "01da78bd43066e912410ed1d308f26dba0dae23c"
+  },
+  "routing_self_test": {
+    "normalized_trigger": "triggerwort 5",
+    "expected_route": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+    "directive_fetch": "PASS",
+    "shared_world_substrate_directive_fetch": "PASS",
+    "packet_schema_fetch": "PASS",
+    "ingest_state_fetch": "PASS"
+  },
+  "reentry_observation": {
+    "result": "LEDGER_LAGS_ALREADY_PERSISTED_PARALLEL_FORENSICS",
+    "design_branch_moved_during_this_organ": true,
+    "semantic_duplicate_write_avoided": true,
+    "shared_ingest_state_rewrite_attempted": false,
+    "reason_no_shared_state_rewrite": "INGEST_STATE is a moving shared file and prior branch history records CAS conflict; append-only checkpoint preserves the observed lag without clobbering concurrent packet ingestion.",
+    "observed_gap": [
+      "INGEST_STATE still reports last_ingest_at 2026-08-28T07:40:00Z while the design branch contains later Triggerword-5 semantic deltas and receipts.",
+      "Current branch history includes 9.13 authority rebound/fusion for Realtime mutation, voice/memory forensics and non-Bash effect boundaries beyond the advertised state checkpoint.",
+      "A later Realtime memory epistemic receipt was initially labeled authority_epoch 8.78 even though current canonical authority is 9.13; currentness must be represented by a 9.13-bound successor/rebound rather than silently rewriting historical evidence.",
+      "The shared state consumed_packet_ids therefore cannot be treated as a complete index of all already-assimilated Triggerword-5 work at this observed branch head."
+    ]
+  },
+  "packet_disposition_boundary": {
+    "this_receipt_consumes_packets": false,
+    "this_receipt_supersedes_packets": false,
+    "rule": "Do not mint packet-consumption credit from commit-message similarity alone. Reconcile packet IDs only after exact packet-to-delta/receipt provenance is verified at the then-current design head.",
+    "known_state_gap_candidates_for_exact_reconciliation": [
+      "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
+      "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+      "TW5-PACKET-20260828T073652Z-REALTIME-MEMORY-TASK-AUTHORITY-GPT56SOL",
+      "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL"
+    ]
+  },
+  "architecture_forensics_convergence": {
+    "current_effect_identity_finding": "Session-scoped effect correlation is structurally weaker than immutable call-scoped tool_use_id/invocation identity.",
+    "current_effect_enforcement_finding": "Donor EffectGate bookkeeping is not pre-side-effect containment; blocking authority needs explicit executable enforcement and bound allow/deny receipts.",
+    "current_voice_memory_finding": "Realtime memory/task paths require typed separation of HumanIntentDecision, MemoryCandidate/MemoryAdmission and EffectDecision; model/tool output does not mint canonical truth.",
+    "historical_wache_finding": "Archived wache-koenig is a genuine Bash-only predispatch deny/one-shot human grant predecessor, but source identity does not prove scheduler reachability or whole-effect coverage.",
+    "triggerword4_handoff": "Converge all state-changing paths on one typed deterministic executor boundary keyed by immutable invocation identity; preserve separate human-intent, memory-admission, effect-decision and completion-receipt semantics."
+  },
+  "execution": {
+    "runtime_execution": false,
+    "vps_execution": false,
+    "provider_execution": false,
+    "paid_execution": false,
+    "unusual_experiment": false,
+    "source_only": true
+  },
+  "credits": {
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_full": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "canonical_semantics": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "At one exact current design head, reconcile each candidate packet ID to its exact architecture delta and ingest receipt, then CAS-update INGEST_STATE once with current 9.13 authority binding and no double credit; if the head moves, re-enter rather than clobber concurrent state."
+}

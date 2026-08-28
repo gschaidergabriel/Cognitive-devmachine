@@ -1,0 +1,73 @@
+{
+  "schema": "TRIGGERWORD5_PACKET_ADMISSION_INTEGRITY_CHECKPOINT/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:49:00Z",
+  "organ": "GPT-5.6 Sol",
+  "routing": "TRIGGER_ROUTING_ACTIVE",
+  "authority": {
+    "epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "provider_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY",
+    "together": "FORBIDDEN",
+    "provider_routes_admitted": false
+  },
+  "source_identity": {
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_before_checkpoint": "70e46371b8b542ea83925b2f9ff4e5f895dd8cbc",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "ingest_schema_blob_sha": "8b2732394418e725067be52ee480ad1da649a9f7"
+  },
+  "purpose": "Preserve fail-closed disposition of the newest Triggerword-5 packets without last-writer-wins mutation of the rapidly moving shared INGEST_STATE.",
+  "packet_disposition": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
+      "disposition": "DURABLY_FUSED_STATE_REGISTRATION_SYNC_PENDING",
+      "evidence": "INGEST_RECEIPT_2026-08-28T073941Z_REALTIME_MUTATION_BOUNDARY_GPT56SOL.json explicitly records that INGEST_STATE was not updated because of concurrent compare-and-swap contention.",
+      "admission_note": "Source packet uses schema-enum actions and its semantic delta is already persisted; no duplicate architecture credit is created here."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+      "disposition": "PACKET_ADMISSION_QUARANTINED_SCHEMA_INVALID_SEMANTIC_FINDINGS_RETAINED_VIA_SUCCESSOR_DELTAS",
+      "evidence": "Current INGEST_PACKET_SCHEMA requires files_examined spans with integer line_start/line_end and atoms with path, commit_sha, line_start, line_end plus target_2_0_action from the fixed enum. This packet uses symbol-only spans, omits multiple required atom fields, and uses non-enum target action strings. An older 8.78 receipt labels it INGESTED, but that label cannot establish schema-valid admission under current 9.13 fail-closed evidence law.",
+      "preserve": "Do not rewrite the packet. Keep byte-identical provenance. The source findings about under-typed direct Realtime memory retrieval remain usable through current 9.13 architecture deltas and direct source crosschecks, but the packet itself must not mint admitted-packet credit until a schema-valid successor is produced.",
+      "contradiction_id": "TW5-CONTRADICTION-MEMORY-PACKET-ADMISSION-SCHEMA-015"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0741Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-AUTHORITY-REBIND",
+      "disposition": "AUTHORITY_REBIND_DURABLY_RECEIPTED_SHARED_STATE_SYNC_PENDING",
+      "evidence": "INGEST_RECEIPT_2026-08-28T0741Z_REALTIME_MUTATION_INTENT_AUTHORITY_REBIND_GPT56SOL.json binds the source findings to 9.13 and explicitly records shared INGEST_STATE SYNC_PENDING due parallel CAS contention.",
+      "admission_note": "Treat as an authority-rebind evidence artifact; do not infer runtime reexecution or containment credit."
+    }
+  ],
+  "architecture_boundary": {
+    "preserved_source_findings": [
+      "Realtime task confirmation is HumanIntent/TaskAdmission evidence, not EffectDecision authority.",
+      "Direct conversation-memory writes and reads require typed MemoryCandidate/MemoryAdmission/MemoryView provenance and epistemic classes.",
+      "Bash denial on delegated claude -p is narrow defense-in-depth; non-Bash mutation remains outside proven whole-effect containment.",
+      "Donor stern.py normal PreToolUse zulassen is nonblocking bookkeeping; only executable pre-side-effect denial can earn enforcement credit.",
+      "Repository hook declaration is not exact host/headless-process reachability proof."
+    ],
+    "triggerword4_handoff": [
+      "Bind immutable call-scoped tool_use_id/invocation_id and request digest from HumanIntentDecision through one-shot EffectDecision consumption and typed completion receipts.",
+      "Keep memory fact authority separate from remembered claim content; preserve transformation, epistemic and provenance metadata through retrieval/context compilation.",
+      "Add repository-bound overlapping-call and non-Bash DENY falsifiers before any runtime causal or containment promotion."
+    ]
+  },
+  "credits": {
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "memory_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_full": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  },
+  "shared_state_write": "NOT_ATTEMPTED_TO_AVOID_STALE_OVERWRITE_DURING_ACTIVE_PARALLEL_WRITES",
+  "next_exact_gate": "Reconcile INGEST_STATE with append-only receipts using a safe compare-and-swap writer; register 073941 and 0741 exactly once, keep 074026 packet admission quarantined unless a schema-valid successor supersedes it, then hand Triggerword-4 the invocation-identity/effect-enforcement and typed-memory acceptance tests."
+}

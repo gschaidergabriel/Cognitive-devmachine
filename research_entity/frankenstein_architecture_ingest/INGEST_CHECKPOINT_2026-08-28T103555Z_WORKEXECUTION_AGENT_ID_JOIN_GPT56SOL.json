@@ -1,0 +1,30 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "created_at": "2026-08-28T10:35:55Z",
+  "trigger": "triggerwort 5",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "base_ingest_state_last_ingest_at_observed": "2026-08-28T10:35:00Z",
+  "base_ingest_state_last_delta_observed": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1035Z_WORKEXECUTION_BINDING_GPT56SOL.json",
+  "consumption_overlay": {
+    "packets_assimilated_by_this_checkpoint": [
+      "TW5-PACKET-20260828T103200Z-WORKEXECUTION-BINDING-SCHEMA-PROVENANCE-CORRECTION-GPT56SOL",
+      "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL"
+    ],
+    "superseded_or_corrected_packet": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T103555Z_WORKEXECUTION_AGENT_POSTTOOLUSE_JOIN_CORRECTION_GPT56SOL.json",
+    "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T103555Z_WORKEXECUTION_AGENT_POSTTOOLUSE_JOIN_CORRECTION_GPT56SOL.json"
+  },
+  "material_state": {
+    "documented_native_join": "Agent PostToolUse co-presents tool_use_id and tool_response.agentId; documentation-level tool_use_id -> agent_id join is CLOSED",
+    "remaining_open_join": "paket_id -> tool_use_id",
+    "target_host_runtime": "UNVERIFIED",
+    "runtime_credit_delta": 0,
+    "trigger4_feed": "Implement deterministic paket_id -> tool_use_id binding; persist PostToolUse agentId; optionally add SubagentStart/SubagentStop lifecycle capture; never infer by timing/order."
+  },
+  "aggregate_state_note": "This append-only checkpoint records the post-10:35 corrective ingest under concurrent branch movement. It is the exact re-entry overlay for these two packets even if the monolithic INGEST_STATE.json has not yet folded this overlay into its arrays.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false
+}

@@ -1,0 +1,133 @@
+{
+  "schema_version": "1",
+  "kind": "FRANKENSTEIN_2_ARCHITECTURE_DELTA",
+  "created_at": "2026-08-28T08:12:22Z",
+  "worker_id": "GPT-5.6-Sol_TRIGGERWORD5_FORENSIC_INGEST",
+  "trigger": "triggerwort 5",
+  "evidence_scope": "SOURCE_AND_DESIGN_ONLY_NO_RUNTIME_PROMOTION",
+  "authority": {
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor": "8.78",
+    "mode": "FREE_ONLY"
+  },
+  "resolved_heads": {
+    "frankenstein_donor_repo": "gschaidergabriel/frankenstein",
+    "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "frankenstein_donor_tree": "9f529a1ea8896cf9988298ea58e827c241d6949f",
+    "grid_design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "grid_design_sha": "6d81876d2f6b12b98c30892b8d7dcea946686d25",
+    "prior_ingest_design_sha": "55f8b422faf06bd3b23ed47d32871169cee8db47"
+  },
+  "live_ingest": {
+    "prior_last_ingest_at": "2026-08-28T07:49:10Z",
+    "new_unconsumed_worker_packets_after_prior_ingest": 0,
+    "latest_inbox_packet_observed": "PACKET_20260828T074533Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_GPT56SOL.json",
+    "classification": "NO_NEW_PACKET_BUT_NEW_DESIGN_SUCCESSOR_EVIDENCE"
+  },
+  "files_examined": [
+    {
+      "repo": "gschaidergabriel/clay-global-research-entity",
+      "ref": "6d81876d2f6b12b98c30892b8d7dcea946686d25",
+      "path": "research_entity/global/TRIGGERWORD_4_RECURSIVE_AGENT_HARNESS_RAH_ADDENDUM.md",
+      "sha_or_blob": "f8b5c7b1631d20f4967b1eb02f0a86945f6b2b76",
+      "spans_examined": ["R0-R3 recursion taxonomy", "adaptive recursion router", "coordination interaction", "result fusion law"]
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "ref": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "sha_or_blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "spans_examined": ["RealtimeSession.__init__", "_claude_taetigkeit", "_tool_ausfuehren", "_stille_reopen_pruefen", "fuehren"]
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "ref": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py",
+      "sha_or_blob": "763f59d201aa7a41ae0e55e7cc9e8b40e6f2b1c3",
+      "spans_examined": ["VoiceSessionCapsule ABI", "voice_identity_snapshot", "memory_refs_und_goals"]
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "ref": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_outcome_events.py",
+      "sha_or_blob": "b85ea8e8395d10a9b968cc6a77aac4723e57a6a4",
+      "spans_examined": ["log_voice_outcome_event", "maybe_post_action_relook"]
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "id": "RAH_SPEC_R0_R3",
+      "source_kind": "SPEC",
+      "what_it_does": "Defines four distinct recursion levels: deterministic data recursion, recursive model calls, recursive full harnesses, and GRID-controlled adaptive routing.",
+      "runtime_reachable": false,
+      "target_2_0_action": "ADOPT_AS_ROUTING_TAXONOMY_NOT_AS_RUNTIME_CREDIT"
+    },
+    {
+      "id": "DONOR_SESSION_IDENTITY",
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "RealtimeSession carries a mutable Claude session reference and an optional room session identifier across a live conversation.",
+      "runtime_reachable": true,
+      "target_2_0_action": "REUSE_AS_SESSION_SCOPE_ONLY"
+    },
+    {
+      "id": "DONOR_TOOL_CALL_IDENTITY",
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "Realtime function calls preserve provider call_id through pending-tool dispatch and function_call_output re-entry.",
+      "runtime_reachable": true,
+      "target_2_0_action": "REUSE_AS_TOOL_INVOCATION_IDENTITY_DONOR"
+    },
+    {
+      "id": "DONOR_CAUSAL_EVENT_IDENTITY",
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "Presence-derived causal_event_id can be propagated into initiative episode logging and voice outcome events.",
+      "runtime_reachable": true,
+      "target_2_0_action": "REUSE_BUT_DO_NOT_CONFUSE_WITH_AGENT_TASK_RECURSION_IDENTITY"
+    },
+    {
+      "id": "RAH_REQUIRED_IDENTITY_GAP",
+      "source_kind": "NEGATIVE_RESULT",
+      "what_it_does": "The examined live Realtime module contains no agent_id, parent_agent_id, task_id, recursive_call_id, or generation fields required by the new full-harness recursion contract.",
+      "runtime_reachable": false,
+      "target_2_0_action": "BLOCK_R2_R3_WHOLE_SYSTEM_CREDIT_UNTIL_FIXED_IDENTITY_AND_EFFECT_LINEAGE_EXIST"
+    },
+    {
+      "id": "VOICE_CAPSULE_NOT_RECURSION_IDENTITY",
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "VoiceSessionCapsule identity_version fingerprints the voice persona/configuration and references UnifiedDB state; it is not an actor/parent/task/recursive-call lineage mechanism.",
+      "runtime_reachable": true,
+      "target_2_0_action": "KEEP_SEPARATE_FROM_AGENT_LINEAGE"
+    }
+  ],
+  "architecture_delta": {
+    "before": "GRID/design already had bounded recursive-harness research, while current Frankenstein donor exposed session/tool/causal identities without a complete recursive actor lineage.",
+    "after": "The design successor explicitly promotes R0/R1/R2/R3 adaptive recursion as a target primitive, but forensic donor evidence shows R2/R3 must remain source-level SPEC until stable actor/task/parent/recursive-call/generation plus effect/result lineage are implemented and tested.",
+    "required_child_identity_minimum": [
+      "session_id",
+      "agent_id",
+      "parent_agent_id",
+      "task_id",
+      "recursive_call_id",
+      "turn_id_or_tool_use_id",
+      "causal_id",
+      "generation"
+    ],
+    "fusion_law": "CHILD_RESULTS_ARE_CANDIDATES; preserve evidence provenance, correlated derivation, contradiction, negative results and unresolved alternatives; majority does not mint truth."
+  },
+  "hypothesis": {
+    "id": "H_GRID_RAH_1",
+    "claim": "Adaptive GRID routing across deterministic computation, model recursion and full-harness recursion can outperform one fixed recursion strategy on mixed workloads.",
+    "status": "OPEN_HYPOTHESIS",
+    "confidence": 0.66,
+    "falsifier": "A matched-model fixed-budget mixed benchmark shows routing overhead and state duplication eliminate score/verifier gains or materially increase coordination failures versus a simpler fixed harness."
+  },
+  "counterhypothesis": "A single strong harness with simple bounded spawning will be cheaper and more reliable because adaptive routing overhead plus duplicated state management offsets specialization gains.",
+  "next_exact_gate": "Before any R2/R3 whole-system runtime claim, add/test stable child actor/task/parent/recursive-call/generation identity and bind every child tool/effect/result receipt to that lineage; then run the preregistered mixed-workload RLM-only vs RAH-only vs GRID-adaptive ablation.",
+  "credit": {
+    "new_architecture_source_delta": 1,
+    "new_worker_packet_ingested": 0,
+    "donor_runtime_credit_added": 0,
+    "whole_frankenstein_2_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "training_credit_added": 0
+  }
+}

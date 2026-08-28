@@ -1,0 +1,27 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-20260828T073652Z-REALTIME-MEMORY-TASK-AUTHORITY-GPT56SOL",
+  "created_at": "2026-08-28T07:36:52Z",
+  "trigger": "triggerwort 5",
+  "donor": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T073652Z_REALTIME_MEMORY_TASK_AUTHORITY_GPT56SOL.json",
+  "packet_commit": "1a69f10e5155db803c48144433a7fd361a460892",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_REALTIME_MEMORY_TASK_AUTHORITY_DELTA_2026-08-28T143652P0700_GPT56SOL.json",
+  "architecture_delta_commit": "da7fc965de7135444e03e2548e24df1058713c03",
+  "evidence_scope": "SOURCE_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "verified_source_findings": [
+    "Realtime memory-write wrapper directly dispatches non-empty model-supplied subject/value to stern conversation-memory persistence.",
+    "Voice task dispatch is mechanically two-step and freshness/text/contradiction gated, but source admits unresolved multi-speaker ambiguity.",
+    "Cancelled/non-completed Realtime responses discard pending tool calls before local dispatch.",
+    "Confirmed tasks delegate asynchronously to the Claude action layer; downstream per-effect host authority remains separately unresolved."
+  ],
+  "architecture_result": "Separate VoiceIntentEvidence, TaskAdmission, MemoryCandidate/MemoryAdmission, PendingEffect, EffectDecision, EffectOutcome and Reentry. No boundary implies another.",
+  "contradictions_preserved": [
+    "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-008",
+    "TW5-CONTRADICTION-TASK-VS-EFFECT-AUTHORITY-009",
+    "TW5-CONTRADICTION-MULTISPEAKER-CONFIRMATION-010"
+  ],
+  "runtime_credit": 0,
+  "whole_product_credit": 0,
+  "next_exact_gate": "Trace all gespraech_erinnerung read consumers and the delegated gespraechsmodus.claude_frage/host execution boundary; test epistemic memory separation and per-call EffectDecision consumption in Triggerword-4 assembly, not in this forensic lane."
+}

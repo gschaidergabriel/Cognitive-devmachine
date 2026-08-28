@@ -1,0 +1,96 @@
+{
+  "receipt_type": "TRIGGERWORD_5_ARCHITECTURE_FORENSICS_INGEST_CHECKPOINT",
+  "receipt_version": 1,
+  "created_at": "2026-08-28T10:12:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/native-subagent-workexecution-binding-successor",
+  "trigger": "triggerwort 5",
+  "routing": {
+    "status": "PASS",
+    "directive": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "sparse_world_directive": "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+  },
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main_sha": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "pins": {
+    "frankenstein_donor_repo": "gschaidergabriel/frankenstein",
+    "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_before_successor_write": "e47b12ddc382e47ead2127b1e95e3f09be54551f"
+  },
+  "nonduplication": {
+    "predecessor_packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T082628Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+    "predecessor_blob_sha": "bad15660b245dfc33139736cd9857064c82812ef",
+    "relationship": "REFINES_NOT_INVALIDATES",
+    "new_information": [
+      "agent_id and task_id are modeled as distinct identity namespaces instead of being implicitly grouped",
+      "task_id is optional/independent for ordinary subagent execution unless Task lifecycle evidence is actually observed",
+      "tool_use_id -> agent_id is explicitly OPEN/UNKNOWN until Agent-specific tool_response or another deterministic shared key is observed",
+      "event order/timestamp/agent_type are explicitly forbidden as causal join keys under concurrency"
+    ]
+  },
+  "writes": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+      "blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+      "commit_sha": "57228d9dfe686f6f1a25a1ce3814e3fa8a903821",
+      "scope": "CURRENT_AUTHORITY_BOUND_SOURCE_PACKET"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORK_EXECUTION_BINDING_SUCCESSOR_2026-08-28T171200P0700_GPT56SOL.json",
+      "blob_sha": "d47ddd034f2b72fe0c45f12f2b2a1ab25e0a7763",
+      "commit_sha": "2b36d77015fee2a0c07975097c90f445f6e4635b",
+      "scope": "FRANKENSTEIN_2_ARCHITECTURE_DELTA"
+    }
+  ],
+  "evidence_classification": {
+    "donor_handoff": "CURRENT_SOURCE/LIVE_CODE",
+    "donor_hooks": "CURRENT_SOURCE/CONFIG",
+    "donor_architect_governance": "CURRENT_SOURCE/SPEC",
+    "claude_code_docs": "EXTERNAL_PRIMARY",
+    "installed_host_native_child_capture": "NOT_OBSERVED",
+    "runtime_receipt": "NOT_PRODUCED",
+    "vps_execution": "NOT_EXECUTED",
+    "provider_execution": "NOT_EXECUTED"
+  },
+  "source_findings": [
+    "stern.py handoff creates durable entityos_arbeitspaket/capsule and explicitly does not spawn a child.",
+    "The pinned donor hooks config registers seven event classes and does not register dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted lifecycle capture.",
+    "The donor architect-governance spec expects handoff before spawn and reconcile after spawn, leaving a machine-readable execution-binding gap between durable work intent and actual child execution.",
+    "Current official Claude Code docs describe Agent as the native subagent tool, unique agent_id on SubagentStart/SubagentStop, distinct task_id on TaskCreated/TaskCompleted, and tool_use_id plus schema-dependent tool_response on tool hooks.",
+    "The reviewed docs do not establish a deterministic tool_use_id -> agent_id join for the installed target host; therefore that edge remains UNKNOWN."
+  ],
+  "architecture_decision": {
+    "component": "WorkExecutionBinding/v1",
+    "decision": "PRESERVE_DISTINCT_IDENTITY_DOMAINS_AND_ONLY_PROMOTE_OBSERVED_JOINS",
+    "required": ["workpackage_id", "session_id", "generation", "event_kind", "provenance", "authority_epoch"],
+    "observed_nullable": ["agent_tool_use_id", "agent_id", "task_id", "agent_type", "agent_transcript_path", "result_candidate_digest", "reconcile_evidence_ref"],
+    "completion_law": "SubagentStop/last_assistant_message is RESULT_CANDIDATE only; durable completion requires explicit reconcile/evidence acceptance at declared scope."
+  },
+  "validation": {
+    "schema_validator_cli": "NOT_EXECUTED_IN_THIS_TURN",
+    "reason": "The source-only successor was structurally constructed against the existing v2 packet shape, but the unchanged repository validator was not run against a real local checkout in this turn. This receipt therefore does not mutate INGEST_STATE consumed state or claim validator/runtime PASS.",
+    "ingest_state_mutated": false,
+    "source_checkpoint": "PASS",
+    "runtime_acceptance": "NOT_CLAIMED"
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "frankenstein_2_installed_native_child_runtime": 0
+  },
+  "next_exact_gate": {
+    "name": "ONE_HARMLESS_NATIVE_CHILD_CAUSAL_CAPTURE",
+    "purpose": "Observe the exact installed Claude Code build plus Agent PreToolUse/PostToolUse and SubagentStart/SubagentStop payloads, and determine whether a stable non-timing shared key joins tool_use_id to agent_id. Record whether TaskCreated/TaskCompleted participates in the ordinary subagent path.",
+    "acceptance": "Deterministic package -> invocation -> child join proven without timestamp/order heuristics; otherwise direct hook-only WorkExecutionBinding remains UNKNOWN/falsified for that build.",
+    "execution_performed": false
+  },
+  "triggerword4_feed": "Before R2 child-harness freeze, consume this successor architecture law: never alias package/agent/task/tool identities; prove installed native join first, then implement the smallest fail-closed binding reducer."
+}

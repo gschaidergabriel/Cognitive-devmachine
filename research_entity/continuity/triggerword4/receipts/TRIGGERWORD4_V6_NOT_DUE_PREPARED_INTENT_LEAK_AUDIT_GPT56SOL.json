@@ -1,0 +1,73 @@
+{
+  "schema": "TRIGGERWORD4_SOURCE_AUDIT_RECEIPT/v1",
+  "organ": "GPT-5.6 Sol / ChatGPT triggerword-4 continuation",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "GRID10_V6_RUNTIME_NOT_DUE_PREPARED_INTENT_TERMINALIZATION_SOURCE_AUDIT_ONLY",
+  "authority": {
+    "canonical_main_observed": "2d45c692e47b27e7a20d8ba7b3db6e82ca2ee3ca",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AF_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_execution": "HARD_OFF",
+    "together": "FORBIDDEN"
+  },
+  "continuation": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "branch_head_observed": "7944d9038df0e0f9076f1adfd73206a40ebf1ee0",
+    "single_existing_pr": 2118
+  },
+  "exact_source": {
+    "v6_runtime_path": "tools/grid10_cognitive_unified_runtime_v6.py",
+    "v6_runtime_blob_sha": "09b5d8507799aba8bda0fbd8128d2eb9f1a8a125",
+    "reconciliation_path": "tools/grid10_v6_crash_reconciliation_v1.py",
+    "reconciliation_blob_sha": "d93f990a3b2ce32f04ee46c8103c1a17927efd0e",
+    "scheduler_test_path": "tools/test_grid10_persistent_scheduler_v2.py",
+    "scheduler_test_blob_sha_observed_before_parallel_reentry": "e613eb9f28225503732b8bb9013112f68419a053"
+  },
+  "finding": {
+    "class": "SOURCE_GAP",
+    "summary": "V6 persists a create-once PREPARED crash-reconciliation intent before entering V4. V4 may then raise RuntimeCycleNotDue before any grid10_cognitive_cycles row is committed. Scheduler-v2 catches RuntimeCycleNotDue and returns NOT_DUE, but V6 does not terminalize the already-written intent. The result can be a durable PREPARED intent representing ordinary cadence rather than a crash window.",
+    "why_it_matters": "A PREPARED row is part of the crash/recovery observability substrate. Leaving ordinary NOT_DUE attempts in PREPARED can inflate apparent unresolved recovery work and blur expected cadence with interruption evidence. It also leaves cleanup/reconciliation to a later recovery mutator even though the originating process already knows the exact expected control-flow exit.",
+    "related_prior_evidence": "The retired V7 lane already identified the same semantic class: expected RuntimeCycleNotDue must not be typed as crash-like recovery UNKNOWN. V7 was retired in favor of the tighter V6 lane, so the invariant must be closed in V6 rather than reintroducing V7."
+  },
+  "hypothesis": "When V4 raises RuntimeCycleNotDue after V6 has written PREPARED and before a V4 cycle row exists, the current V6 caller should terminalize only that exact attempt as ABORTED_BEFORE_V4_COMMIT (or an equivalently explicit NOT_DUE terminal state) and then re-raise RuntimeCycleNotDue unchanged to scheduler policy.",
+  "counterhypothesis": "All PREPARED rows may intentionally be left for later reconciliation even for expected NOT_DUE control flow. If that is intended, dashboards/recovery scans must mechanically exclude no-V4 expected-NOT_DUE attempts; otherwise PREPARED ceases to be a high-signal crash-window indicator.",
+  "safety_constraints": [
+    "Do not mark CLOSED; no V6 receipt exists.",
+    "Do not claim provider-call evidence beyond the ordering invariant.",
+    "Do not mutate a PREPARED row if a V4 cycle or V6 closure has appeared.",
+    "Do not require or consume provider/model credentials.",
+    "Do not create a new recovery authority or revive the retired V7 lane.",
+    "Do not weaken canonical recovery-lease requirements for post-crash mutation."
+  ],
+  "cheapest_discriminator": {
+    "test": "Seed one active goal, execute one normal scheduler-v2 heartbeat to commit next_tick_not_before, then call cycle_once with a fresh cycle/tick id before that due time. Assert scheduler returns NOT_DUE; no second grid10_cognitive_cycles row exists; the second V6 intent is terminal ABORTED_BEFORE_V4_COMMIT or explicit NOT_DUE; terminal_ts/classification are present; no V6 closure exists; same-tick retry remains unauthorized; provider/model calls remain zero.",
+    "provider_calls_required": 0,
+    "provider_secret_lookups_required": 0,
+    "vps_required": false,
+    "runtime_promotion": false
+  },
+  "implementation_shape": [
+    "Add one narrow pre-V4 expected-exit terminalization helper in grid10_v6_crash_reconciliation_v1.py that CAS-updates only PREPARED with verified absence of the V4 cycle and V6 closure.",
+    "Catch RuntimeCycleNotDue around the V4 call in grid10_cognitive_unified_runtime_v6.py, invoke that helper, then re-raise the original RuntimeCycleNotDue.",
+    "Add a deterministic scheduler-v2 regression for active-goal early cadence invocation.",
+    "Keep post-V4 crash recovery mutation behind the existing canonical exclusive lease; this expected in-process pre-V4 closure is not a substitute for recovery authority."
+  ],
+  "runtime_singletons": {
+    "quiescence_v2_issue_2122": "QUEUED_NO_RUNNER_ZERO_STEPS_RESULT_ABSENT_DO_NOT_DUPLICATE",
+    "sigkill_v3_issue_2121": "QUEUED_NO_RUNNER_ZERO_STEPS_RESULT_ABSENT_DO_NOT_DUPLICATE"
+  },
+  "credits": {
+    "source_audit_delta": 1,
+    "deterministic_test_runtime": 0,
+    "runtime_quiescence": 0,
+    "crash_independent_replacement": 0,
+    "physical_grid10": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "frankenstein2_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Implement the narrow V6 expected-NOT_DUE terminalization plus deterministic regression on the existing V6/scheduler-v2 lane, without touching the two queued singleton runtime generations. Separately, restore/assign the existing authorized self-hosted Linux/X64 runner so issues 2122 and 2121 can execute; do not replace or duplicate them."
+}

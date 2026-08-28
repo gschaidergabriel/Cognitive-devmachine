@@ -1,0 +1,84 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "EXACT_BOUND_ZERO_REAL_EFFECT_COMPONENT_RUNTIME_PASS",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "workpackage": "F2-WP-105",
+  "research_main_observed_before_write": "ed33f796e201379ebd5395f57fcbb7362565a0a2",
+  "authority": {
+    "admitted_supervisor_epoch": "8.78",
+    "admitted_supervisor": "SUPERVISOR_STEERING_8_78",
+    "mode": "FREE_ONLY",
+    "non_authority_surface_observed": "9.13AL_NON_AUTHORITY",
+    "effect_authority": "EffectGate+EffectJournal"
+  },
+  "f2_execution": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "tested_head": "d334dd1c2f5433ac96ba5fa006d661f61dc884c7",
+    "workflow": ".github/workflows/bound-entityos-effect-runtime-ci.yml",
+    "workflow_run_id": 33211745166,
+    "job_id": 98986324392,
+    "conclusion": "SUCCESS",
+    "runner": "ubuntu-24.04",
+    "python": "3.12.14",
+    "real_external_effect": false
+  },
+  "exact_identity": {
+    "binding_record_blob": "b4d91a0dd233c9dc15ff8218feea9248ac1c13c5",
+    "admitted_8_78_attestation_blob": "85c20e32013df297e185fa360e29dc0f4840f919",
+    "implementation_bound_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+    "effect_gate_blob": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+    "effect_journal_blob": "cda63471f1467481f2ff79032d3931730a334a20",
+    "unifieddb_blob": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "entityos_bridge_blob": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+    "fixture_bytes_verified_with_git_hash_object": true,
+    "private_cross_repository_checkout_used": false
+  },
+  "executed_tests": [
+    {
+      "name": "test_current_binding_resolves_exact_runtime_tuple",
+      "result": "PASS",
+      "claim": "The runtime consumer resolves the exact bound implementation under admitted supervisor 8.78."
+    },
+    {
+      "name": "test_exact_effectgate_state_noop_journals_pending_then_verified",
+      "result": "PASS",
+      "claim": "The exact bound EffectGate executes a zero-real-effect state.noop, journals it, reaches VERIFIED and re-enters causal evidence."
+    },
+    {
+      "name": "test_exact_journal_restart_converts_pending_to_unknown_without_replay",
+      "result": "PASS",
+      "claim": "The exact bound EffectJournal converts a recovered PENDING row to UNKNOWN_AFTER_RESTART exactly once and does not duplicate/replay it."
+    }
+  ],
+  "transport_repair": {
+    "prior_blocker": "public F2 runner attempted cross-repository access to the private canonical research repository and failed before runtime",
+    "repair": "assemble only already-vendored exact source fixtures plus the exact admitted 8.78 attestation, verify every canonical Git blob before import/execution, and run without a new secret or provider path",
+    "result": "BLOCKER_CLOSED_FOR_CURRENT_EXACT_BOUND_ZERO_EFFECT_PROBE"
+  },
+  "negative_boundary": {
+    "canonical_post_process_start_unknown_semantics": "STILL_OPEN_ON_CURRENT_BOUND_IMPLEMENTATION",
+    "reason": "Current bound EffectGate blob still converts generic EntityOSBridge.run exceptions to FAILED; the retained PR430 donor carries UNKNOWN_OUTCOME semantics but is not admitted canonical authority and lacks an actually-started exact-head donor test on the private repository.",
+    "do_not_infer": [
+      "no real external-effect PASS",
+      "no PR430 successor-authority admission",
+      "no whole Frankenstein-2.0 PASS",
+      "no physical GRID10/VPS assembly PASS",
+      "no whole EntityOS/HCU PASS",
+      "no training credit"
+    ]
+  },
+  "credit_boundary": {
+    "exact_bound_effectgate_zero_effect_component_runtime_credit": 1,
+    "exact_bound_effectjournal_restart_component_runtime_credit": 1,
+    "canonical_post_dispatch_unknown_semantics_runtime_credit": 0,
+    "real_effect_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Use the now-working exact-bound public F2 runner only for already-public exact fixtures; preserve PR430 as the single donor for post-process-start UNKNOWN_OUTCOME. Do not promote the donor until its exact head is actually tested and admitted under current 8.78 authority with an explicit successor EffectGate/EffectJournal implementation binding."
+}

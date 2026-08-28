@@ -1,0 +1,63 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v2",
+  "created_at": "2026-08-28T10:54:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "directive_fetched": true,
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_epoch": "9.13",
+  "authority_delta": "9.13AC_NON_AUTHORITY",
+  "mode": "FREE_ONLY",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_before_delta": "4ebdcbffff35e85d9d09e9fa92f0de2c15d8402c",
+  "delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1054Z_RETRIEVAL_FEEDBACK_ROUND_IDENTITY_GPT56SOL.json",
+  "delta_commit": "cccd0372185bbe260c7b60e96377e97e3b12d518",
+  "packet_ingest": {
+    "new_packets_after_2026-08-28T10:48:00Z": 0,
+    "status": "QUIESCENT_AT_CHECK",
+    "action": "DIRECT_SOURCE_FORENSICS_CONTINUATION"
+  },
+  "source_crosscheck": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "spans": [
+      "4135-4319",
+      "4375-4559",
+      "4670-4829",
+      "4815-5084"
+    ],
+    "result": "PASS_SOURCE_SCOPE"
+  },
+  "material_delta": [
+    "retrieval_episodes already persists retrieval_id, turn_id, episode_id, causal_id, generation and query_hash",
+    "_microclay_schatten creates synthetic round-local turn/episode identities but they are not the exact transcript user-message identity",
+    "mechanical feedback applies one transcript suffix and session-level effect context across up to 20 open same-session retrieval rows",
+    "model feedback independently chooses newest-open same-session retrieval row and latest user transcript text without enforcing query_hash or round-identity equality",
+    "_apply_credit binds the selected row deterministically but cannot detect an upstream wrong-round evidence pairing"
+  ],
+  "contradictions_added": [
+    "TW5-CONTRADICTION-RETRIEVAL-FEEDBACK-ROUND-IDENTITY-020",
+    "TW5-CONTRADICTION-MODEL-QUERY-ROW-JOIN-021"
+  ],
+  "architecture_model_update": "RetrievalFeedbackIdentity/v1 added as a required Frankenstein-2.0/GRID boundary. All retrieval policy feedback must carry exact retrieval/round/query/candidate identity; session recency cannot be an authority-bearing join.",
+  "feeds_triggerword_4": true,
+  "triggerword_4_gate": "Build a typed RetrievalFeedbackCandidate/Result bound to retrieval_id+turn_id+episode_id+causal_id+generation+query_hash+candidate_set_digest; prove two disjoint same-session rounds cannot cross-credit under reverse/interleaved completion and prove slow/unreachable model cannot skip deterministic Stop bookkeeping.",
+  "evidence_boundary": {
+    "source_forensics": "PASS",
+    "runtime_reproduction": 0,
+    "installed_host_credit": 0,
+    "provider_execution_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu": 0,
+    "frank_harness_modified": false
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "runtime_execution": false,
+  "unusual_experiment": false,
+  "result": "INGEST_CHECKPOINT_COMMITTED_SOURCE_SCOPE_ONLY"
+}

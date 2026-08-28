@@ -1,0 +1,59 @@
+{
+  "schema": "TRIGGERWORD5_EVIDENCE_AUTHORITY_BINDING_CONTRACT/v1",
+  "authority_epoch": "9.13",
+  "created_at": "2026-08-28T07:43:02Z",
+  "reason": "Canonical supervisor 9.13 requires every new forensic evidence packet to bind exact current FREE_PROVIDER_ADMISSION and SUPERVISOR_INBOX/selected-steering identity. Existing INGEST_PACKET_SCHEMA.json validates packet structure but does not encode this currentness check.",
+  "canonical_authority_sources": {
+    "supervisor_inbox": {
+      "path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+      "schema_version": "9.13",
+      "supervisor_delta": "9.13AB_NON_AUTHORITY"
+    },
+    "selected_steering": {
+      "path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+      "blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+      "authority_epoch": "9.13"
+    },
+    "provider_authority": {
+      "path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+      "blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+      "authority_epoch": "9.13",
+      "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF"
+    }
+  },
+  "required_packet_authority_binding": [
+    "authority_epoch",
+    "canonical_main_sha",
+    "supervisor_inbox.path",
+    "supervisor_inbox.blob_sha",
+    "selected_steering.path",
+    "selected_steering.blob_sha",
+    "provider_authority.path",
+    "provider_authority.blob_sha",
+    "provider_authority.execution_state",
+    "authority_classification"
+  ],
+  "authority_classification_values": [
+    "CURRENT_AUTHORITY_BOUND",
+    "HISTORICAL_SOURCE_EPOCH"
+  ],
+  "semantic_validation": [
+    "For CURRENT_AUTHORITY_BOUND, all authority source identities must equal the newest canonical main identities at ingest time.",
+    "A stale, missing or mismatched authority binding may preserve source/historical forensic value but mints no runtime, base, canonical semantics or training credit.",
+    "HISTORICAL_SOURCE_EPOCH must never be represented as admitted/current authority.",
+    "Packet schema validity and authority currentness are separate gates; both are required for current evidence admission.",
+    "Worker packet repetition or cross-model agreement does not create independent runtime evidence."
+  ],
+  "known_schema_drift": {
+    "directive_target_action_vocabulary": "The current Triggerword-5 directive text uses shorthand REPLACE/RETIRE in one descriptive list, while INGEST_PACKET_SCHEMA.json permits REPLACE_WITH_VERIFIED_SUCCESSOR and RETIRE_WITH_EVIDENCE. Packet producers must obey the machine schema until the prose directive is versioned/reconciled.",
+    "authority_binding_not_machine_required_in_v1": "INGEST_PACKET_SCHEMA.json currently has no required authority_binding field. This contract is therefore a semantic admission gate pending a versioned machine-schema successor; do not silently retrofit old immutable packets."
+  },
+  "execution_boundary": {
+    "mode": "FREE_ONLY",
+    "provider_execution": "HARD_OFF",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "source_forensics_allowed": true
+  }
+}

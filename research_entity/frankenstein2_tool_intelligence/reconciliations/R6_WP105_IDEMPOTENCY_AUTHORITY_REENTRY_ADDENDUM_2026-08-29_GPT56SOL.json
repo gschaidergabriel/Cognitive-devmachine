@@ -1,0 +1,35 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_AUTHORITY_REENTRY_ADDENDUM/v1",
+  "trigger": "6",
+  "status": "AUTHORITY_PROVENANCE_CORRECTED_CONCLUSION_UNCHANGED",
+  "applies_to": [
+    "research_entity/frankenstein2_tool_intelligence/deltas/R6_DISCOVERY_WP105_POSTSTART_UNKNOWN_IDEMPOTENCY_2026-08-29_GPT56SOL.json",
+    "research_entity/frankenstein2_tool_intelligence/reconciliations/R6_WP105_IDEMPOTENCY_PARALLEL_SCOUT_FUSION_2026-08-29_GPT56SOL.json"
+  ],
+  "authority_reentry": {
+    "admitted_supervisor_epoch": "8.78",
+    "admitted_supervisor_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "admitted_supervisor_blob_sha": "da92d51c52fcf1c4f965f89abae5c3866f0e10cc",
+    "mode": "FREE_ONLY",
+    "non_authority_research_surface": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AL_DELTA_2026-08-29T0343P0700_GPT56SOL.json",
+    "non_authority_rule": "9.13AL may contribute research evidence but cannot grant or re-attest authority merely because its numeric label is newer.",
+    "attestation_path": "research_entity/continuity/ENTITYOS_EFFECT_AUTHORITY_BINDING_8_78_ADMITTED_AUTHORITY_REENTRY_2026-08-29.json"
+  },
+  "effect_authority": {
+    "authority_changed": false,
+    "current_value": "EffectGate+EffectJournal",
+    "implementation_bound_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+    "effect_gate_blob_sha": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+    "effect_journal_blob_sha": "cda63471f1467481f2ff79032d3931730a334a20",
+    "unifieddb_blob_sha": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "unifieddb_schema_version": "6",
+    "api_version": "ENTITYOS_EFFECT_AUTHORITY_PY_API/v1"
+  },
+  "research_conclusion_effect": "UNCHANGED: the bound EffectGate still catches bridge exceptions as FAILED; the bound journal still lacks a distinct post-dispatch UNKNOWN finalization state. The Trigger6 finding that semantic request digest must remain distinct from retry/operation identity and that ambiguous post-start non-idempotent effects must not be blindly replayed remains source-grounded.",
+  "promotion": {
+    "new_architecture_credit": 0,
+    "runtime_credit": 0,
+    "build_candidate": 0,
+    "f2_accepted": 0
+  }
+}

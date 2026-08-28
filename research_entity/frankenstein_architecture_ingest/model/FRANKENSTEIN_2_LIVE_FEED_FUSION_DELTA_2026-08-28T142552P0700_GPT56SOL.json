@@ -1,0 +1,84 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_MAIN_FEED_SUCCESSOR_FUSION",
+  "recorded_at": "2026-08-28T07:25:52Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "canonical_main_observed_before_fusion": "45f46138db94e0228240ea15b586bf8be622410b",
+  "design_branch_parent_observed": "0ef0b4ad801b4a0b5d3d44a445abbd873f18ee6d",
+  "evidence_scope": "SOURCE_FORENSICS_PLUS_EXTERNAL_PRIMARY_PROTOCOL_CROSSCHECK; NO_DONOR_RUNTIME_REEXECUTION",
+  "inputs": [
+    "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+    "triggerwort5-20260828T1414p0700-gpt56sol-stern-effect-lineage",
+    "triggerwort5-20260828T1414p0700-gpt56sol-stern-effect-ingest-drift",
+    "triggerwort5-20260828T1414p0700-gpt56sol-hook-invocation-identity",
+    "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE"
+  ],
+  "design_changes": [
+    {
+      "id": "F2-EFFECT-ID-001",
+      "change": "Make immutable call-scoped invocation identity mandatory across the full effect lifecycle. Prefer host tool_use_id when present; otherwise mint an equally exact invocation_id at deterministic ingress. session_id remains context only and must not be the sole effect correlation key.",
+      "reason": "Current donor writes one active_turns.effect_id selected by session_id, while the current Claude Code hook contract exposes call-scoped tool_use_id and parallel tool execution semantics.",
+      "target": "Triggerword-4 effect/executor ABI"
+    },
+    {
+      "id": "F2-EFFECT-STATE-002",
+      "change": "Replace overloaded donor effects.status semantics with distinct typed states/receipts: ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, RESULT_REENTRY and COMPLETION_EVIDENCE.",
+      "reason": "Donor PostToolUse fallback can mint VERIFIED without any PreToolUse row; VERIFIED therefore does not prove prior admission.",
+      "target": "EntityOS EffectGate/EffectJournal-compatible successor"
+    },
+    {
+      "id": "F2-EFFECT-BLOCK-003",
+      "change": "Place real deny/allow authority at the deterministic host/executor boundary that can actually prevent execution. Lifecycle hooks may remain adapters/audit surfaces, but bookkeeping statuses are never enforcement authority.",
+      "reason": "Current cmd_hook proves the hook surface can deny for session-bound SEBUKKU, yet ordinary zulassen() deliberately emits no blocking decision.",
+      "target": "Triggerword-4 executor/effect boundary"
+    },
+    {
+      "id": "F2-GENERATION-FRESHNESS-004",
+      "change": "Treat process-topology changes, long-lived module caches, dispatcher field completeness and schema generation as explicit typed compatibility/freshness contracts rather than incidental implementation details.",
+      "reason": "Historical donor lineage reports failures after subprocess-to-in-process transition, dropped outcome payload fields and unified.db schema lag. These remain historical evidence, not current runtime promotion.",
+      "target": "GRID10 persistent runtime and UnifiedDB adapters"
+    },
+    {
+      "id": "F2-INGEST-PROVENANCE-005",
+      "change": "Keep both Triggerword-5 append-only provenance lanes readable until a migration receipt explicitly resolves architecture_archaeology versus frankenstein_architecture_ingest authority. Consume by immutable packet/run IDs with semantic dedupe rather than path aliasing.",
+      "reason": "Both namespaces are actively moving and contain non-identical successor packets.",
+      "target": "Triggerword-5 -> Triggerword-4 research handoff"
+    }
+  ],
+  "preserved_contradictions": [
+    "TW5-CONTRADICTION-INGEST-PATH-001",
+    "TW5-CONTRADICTION-EFFECT-ENFORCEMENT-003",
+    "TW5-CONTRADICTION-VERIFIED-PREADMISSION-004",
+    "TW5-CONTRADICTION-INVOCATION-IDENTITY-005",
+    "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003"
+  ],
+  "counterhypotheses": [
+    "The exact installed Claude Code scheduler may serialize the relevant state-changing calls; this can bound runtime race exposure but does not justify a weaker Frankenstein-2.0 identity ABI when call-scoped identity is already available.",
+    "A host-only wache-koenig predecessor may already be the actual blocking gate. If exact source proves this, adapt its enforcement role rather than forcing stern.py itself to become the gate."
+  ],
+  "triggerword4_acceptance_contract_delta": [
+    "Two same-session state-changing tool calls must retain distinct invocation/effect identities from PreToolUse through result/re-entry even when executed in one parallel batch.",
+    "DENY/UNKNOWN admission cannot be upgraded by a later successful tool return.",
+    "Observed successful outcome without a bound admission receipt remains observed outcome with zero admitted-effect credit.",
+    "Unknown or transport-ambiguous external effect outcome remains UNKNOWN and is never blindly replayed.",
+    "A real deny decision must be proven at the host/executor boundary, not inferred from a journal status.",
+    "Schema/config generation mismatch must fail closed or produce explicit degraded/unknown state rather than silent stale behavior."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "external_primary_protocol_crosscheck": "PASS_AT_DOCUMENTATION_SCOPE",
+    "donor_runtime_reexecution": 0,
+    "runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Acquire or definitively classify unavailable the host-only wache-koenig artifact; then trace realtime_gespraech tool execution and all downstream effects.status consumers, and recover exact Git windows for effect/config/schema semantics before Triggerword-4 implementation promotion."
+}

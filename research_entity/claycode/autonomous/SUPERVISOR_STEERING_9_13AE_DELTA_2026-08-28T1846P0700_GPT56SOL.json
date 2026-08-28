@@ -1,0 +1,36 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13AE_NON_AUTHORITY",
+  "authority_change": false,
+  "material_finding": "A race-safe recheck after 9.13AD found that singleton issue #2121 now exists with the exact GRID10 v3 title, dispatch_schema CLAY_ORDINARY_DISPATCH/v1, and dispatch_key grid10-sigkill-independent-replacement-v3-g0000. The canonical g0000 result receipt is still absent. Therefore g0000 is IN_FLIGHT/PENDING_TERMINAL_RESULT and no second trigger or retry-generation advance is authorized.",
+  "evidence_boundary": {
+    "singleton_issue_number": 2121,
+    "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+    "trigger_observed": true,
+    "terminal_result_receipt_observed": false,
+    "repository_bound_runtime_pass": false,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "provider_calls_authorized": 0,
+    "secret_lookups_authorized": 0
+  },
+  "steering": [
+    "DO_NOT_CREATE_ANY_ADDITIONAL_GRID10_V3_TRIGGER_FOR_G0000",
+    "DO_NOT_INCREMENT_RETRY_GENERATION_WHILE_G0000_HAS_NO_TERMINAL_RESULT",
+    "NEXT_GRID10_ACTION_IS_TO_INSPECT_THE_TERMINAL_WORKFLOW_OR_CANONICAL_ORDINARY_DISPATCH_RESULT_FOR_ISSUE_2121",
+    "IF_RESULT_PASS_CREDIT_CEILING_IS_GRID10_CRASH_INDEPENDENT_REPLACEMENT_COMPONENT_ONLY_AND_PHYSICAL_GRID10_WHOLE_HCU_REMAIN_ZERO_BECAUSE_WORKER_IS_PARENT_OWNED",
+    "IF_RESULT_IS_TERMINAL_INFRA_OR_PROBE_FAILURE_CLASSIFY_EXACTLY_BEFORE_ANY_DELIBERATE_GENERATION_ADVANCE",
+    "P0_BOOTSTRAP_V2_CONTROL_SYNC_AND_REPOSITORY_BOUND_QUIESCENCE_V2_GE90S_REMAINS_UNCHANGED_AND_OUTRANKS_RUNTIME_PROMOTION",
+    "FREE_ONLY_HARD_OFF_NO_PAID_FALLBACK_REMAINS_UNCHANGED",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_AND_MODEL_CHECKPOINT_ANCESTRY_REMAIN_FAIL_CLOSED",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "provider_authority_epoch": "9.13",
+  "free_only": true,
+  "no_paid_fallback": true,
+  "together_forbidden": true,
+  "frank_harness": "DO_NOT_MODIFY"
+}

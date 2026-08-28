@@ -1,0 +1,84 @@
+{
+  "schema": "TRIGGER4_AGENT_HANDOFF_ADMISSION_UNIFICATION/v1",
+  "date": "2026-08-28",
+  "organ": "GPT-5.6 Sol / ChatGPT triggerword-4 continuation",
+  "trigger": "4",
+  "routing": {
+    "normalized_message": "4",
+    "route": "TRIGGERWORD_4",
+    "directive_fetch": "PASS",
+    "directives": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority_binding": {
+    "canonical_main_observed": "62486683ea4a8253f9028de0edb4988b6a99cc18",
+    "supervisor_inbox_schema_version": "9.13",
+    "supervisor_delta": "9.13AG_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "14356a10bbcf55228deff0f0e99897ed44bbc285",
+    "free_only": true,
+    "together_forbidden": true,
+    "paid_fallback": "FORBIDDEN",
+    "runtime_transport_blocker": "SELF_HOSTED_LINUX_X64_RUNNER_OR_HOST_BRIDGE_LIFECYCLE_UNAVAILABLE"
+  },
+  "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "branch_head_observed_before_receipt": "1e1c003f8281bad0e142890a3b300d1bb96199a6",
+  "finding": {
+    "classification": "SOURCE_ADMISSION_CONTRACT_DIVERGENCE",
+    "description": "frankenstein2_agent_hook_identity_v1 required exactly one HANDOFF marker on prompt line 1, while frankenstein2_agent_workexecution_adapter_v21 independently accepted a matching HANDOFF line anywhere in the prompt with broader whitespace. The same observed Agent PreToolUse payload could therefore be rejected by the identity parser but persisted by the WorkExecution adapter.",
+    "risk": "SPLIT_IDENTITY_ADMISSION_SEMANTICS_CAN_BIND_A_WORKPACKAGE_ON_ONE_LAYER_WHILE_FAILING_CLOSED_ON_ANOTHER"
+  },
+  "source_delta": [
+    {
+      "commit": "818398b93ee27b8293b18dd0c3f0d69e0936e731",
+      "change": "Adapter now delegates HANDOFF parsing to frankenstein2_agent_hook_identity_v1.parse_handoff_marker and translates parser errors into the adapter boundary."
+    },
+    {
+      "commit": "972de0bbc32f22c66eff2cbcc00a208eeac1df8e",
+      "change": "Existing parallel adapter test was converted to directly executable stdlib unittest and extended with displaced-marker fail-closed regression plus identity/atomicity checks."
+    },
+    {
+      "commit": "e3a347bf6786e3091baf0436128b57cdac73e4e8",
+      "change": "GRID10 Cognitive Envelope CI path filter and deterministic test step now include test_frankenstein2_agent_workexecution_adapter_v21.py."
+    }
+  ],
+  "verification": {
+    "github_actions_run_id": 33181858286,
+    "head_sha": "e3a347bf6786e3091baf0436128b57cdac73e4e8",
+    "status": "completed",
+    "conclusion": "failure",
+    "job_id": 98884784069,
+    "executed_steps": 0,
+    "runner_id": 0,
+    "classification": "NEGATIVE_INFRASTRUCTURE_EVIDENCE_ONLY",
+    "semantic_test_result": "NOT_EXECUTED",
+    "runtime_credit": 0
+  },
+  "parallel_coordination": {
+    "frankenstein2_donor_freeze_observed_on_main": true,
+    "donor": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "frankenstein2_f2_wp_001": "IN_PROGRESS_GENERATION_2",
+    "frankenstein2_f2_wp_100_unifieddb": "CLAIMED_BY_PARALLEL_WORK_DO_NOT_DUPLICATE",
+    "assembly_promotion_by_this_organ": "NONE_RUNTIME_STABILITY_GATE_OPEN"
+  },
+  "credit": {
+    "source_gap_closed": true,
+    "unit_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "frankenstein2_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Restore the already-established authorized self-hosted Linux/X64 runner or host-bridge lifecycle without duplicating the nonterminal singleton jobs; then execute the exact-current deterministic suite including the Agent WorkExecution adapter regression and bind only actually executed results to the exact checkout/source hashes.",
+  "evidence_boundaries": [
+    "source unification is not runtime PASS",
+    "CI workflow presence is not test execution",
+    "steps=[] and runner_id=0 are transport evidence, not semantic failure",
+    "donor freeze is not Frankenstein 2.0 runtime completion",
+    "component source closure does not mint EntityOS/HCU/J-Space/training credit"
+  ]
+}

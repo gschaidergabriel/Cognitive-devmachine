@@ -1,0 +1,45 @@
+{
+  "schema": "TRIGGER4_F2_COMPONENT_RECONCILIATION/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "created_at_local": "2026-08-29T06:59:11+07:00",
+  "project": "Frankenstein 2.0",
+  "repository": "gschaidergabriel/frankenstein-2.0",
+  "workpackage": "F2-WP-302",
+  "generation": 2,
+  "prior_negative_evidence": {
+    "research_ref": "research_entity/trigger_runs/4/2026-08-29T0651p0700_GPT56SOL_F2_WP302_G2_PREBINDING_PLAN_SCORE_FALSIFIER.json",
+    "finding": "Caller-fenced RetrievalPlan identity alone did not close prebinding derived-score forgeries; weighted/bottleneck/overlap/rank values had to be reconstructed from underlying signals plus exact RetrievalNeed weights."
+  },
+  "repair_evidence": {
+    "repair_commit": "63e725a7e64d5dbb9c91f518810ee2e6ce64f5be",
+    "source": "src/frankenstein2/familiarity_prediction_binding.py",
+    "source_blob_sha": "9519438f1587d7a9314ded1efbd0b87ed3d12152",
+    "regression": "tests/test_wp302_prebinding_derived_score_falsifier.py",
+    "regression_blob_sha": "3ff6645e951270cb03b78df4b21341226a36dd47",
+    "github_actions_run_id": 33222038157,
+    "github_actions_job_id": 99017930160,
+    "head_sha": "63e725a7e64d5dbb9c91f518810ee2e6ce64f5be",
+    "conclusion": "success",
+    "canonical_suite": "13/13 PASS",
+    "prebinding_falsifier_suite": "5/5 PASS"
+  },
+  "f2_durable_reconciliation": {
+    "receipt": "workpackages/receipts/F2-WP-302_G2_PREBINDING_DERIVED_SCORE_REPAIR_GHA_33222038157.json",
+    "reconciliation": "workpackages/reconciliations/F2-WP-302/2-F2-WP-302-G2-GPT56SOL-WP301-PROVENANCE-HARDENING-20260829-02.json",
+    "active_claim_commit": "2e0c8531d50b512d94708397471098fda3409798",
+    "state": "ACCEPTED_AT_REPOSITORY_HOSTED_COMPONENT_CI_SCOPE"
+  },
+  "accepted_scope": "WP301_RETRIEVAL_NEED_PLAN_PROVENANCE_PLUS_PREBINDING_DERIVED_SCORE_RECONSTRUCTION_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+  "credit_boundary": {
+    "target_vps_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_gwt_runtime_credit": 0,
+    "effect_completion_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "historical_evidence_policy": "Preserve G1 and earlier G2 acceptance receipts only at their actually exercised scope; preserve both post-acceptance falsifiers. The successful repair does not erase the negative evidence that forced the stronger invariant.",
+  "authority_note": "Current SUPERVISOR_INBOX is schema 9.13 and selects a NON_AUTHORITY_STEERING_ONLY 9.13AN delta while preserving FREE_ONLY/HARD_OFF provider policy. This packet records executable repository-CI evidence and does not mint broader authority.",
+  "next_exact_action": "Re-enter exact current supervisor and F2 main, avoid duplicate active claims, and continue the smallest dependency-correct Triggerword-4 build step."
+}

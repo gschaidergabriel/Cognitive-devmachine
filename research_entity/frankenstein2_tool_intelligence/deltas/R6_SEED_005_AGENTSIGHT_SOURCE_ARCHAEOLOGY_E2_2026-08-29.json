@@ -1,0 +1,143 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_DELTA/v1",
+  "research_id": "R6-SEED-005-SOURCE-ARCHAEOLOGY-934f441-738df27-9d34ad0",
+  "trigger": "6",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "created_at_local": "2026-08-29T03:56:00+07:00",
+  "status": "E2_ARCHITECTURE_MAPPED_NOT_BUILD_CANDIDATE",
+  "evidence_ladder": {
+    "current": "E2_ARCHITECTURE_MAPPED",
+    "not_granted": ["E3_CLAIM_REPRODUCED", "E4_F2_ABLATION", "E5_BUILD_CANDIDATE", "E6_F2_ACCEPTED"]
+  },
+  "architecture_delta_fusion": {
+    "schema": "ArchitectureDeltaFusion/v1",
+    "f2_main": "738df2763bcb89d3d0386eb99cf2ec3c6bf664b5",
+    "research_entity_main": "9d34ad079a59a22ff1469d86b36a0f940c5a5efb",
+    "authority_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "trigger4_delta": {
+      "source": "checkpoints/F2-WP-005_G1_COMPONENT_SCOPE_20260828T1456Z.json",
+      "finding": "F2-WP-005 telemetry initializer has bounded repository runtime evidence, but reusable structured emitters/collectors, run finalization/source-completeness, internal latency/resource collectors and integrated coverage remain open."
+    },
+    "trigger5_delta": {
+      "source": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_EFFECT_COMPLETION_FORENSIC_DELTA_2026-08-28_GPT56SOL.json",
+      "finding": "Effect/completion evidence must bind immutable invocation/effect/generation identities and fail closed on failed, denied, unchecked, unbound or unknown outcomes. Observation cannot become effect authority."
+    },
+    "trigger6_control_delta": {
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AL_DELTA_2026-08-29T0343P0700_GPT56SOL.json",
+      "finding": "Private clay-global-research-entity GitHub Actions currently exhibit a zero-step pre-admission blocker. This is transport/admission evidence, not a semantic negative for the Trigger6 SQLite materializer. Trigger6 seeds remain pending/nonpromoting."
+    },
+    "conflicts": [
+      "AgentSight has its own SQLite session storage; F2 UnifiedDB must remain canonical and any AgentSight DB must be witness/derived evidence only.",
+      "AgentSight raw events are process/time/source centric and do not natively carry F2 causal_event_id, invocation_id, generation or EffectJournal identity.",
+      "Kernel/TLS observation can strengthen effect evidence but cannot establish that an F2 effect was authorized, semantically correct or externally complete."
+    ],
+    "supersessions": [],
+    "unresolved_gaps": [
+      "No exact F2 ablation has measured AgentSight coverage, overhead, event loss, timestamp skew, duplicate rate or secret exposure.",
+      "No mapping is yet accepted from AgentSight event rows into F2 typed telemetry envelopes.",
+      "No E3 source/runtime reproduction has been executed by this Trigger6 worker."
+    ]
+  },
+  "candidate": {
+    "seed_id": "R6-SEED-005",
+    "repo": "eunomia-bpf/agentsight",
+    "source_pin": "934f441eff8ca210807333633f47b2efcb8cd020",
+    "release_at_pin": "1.0.30",
+    "license": "MIT",
+    "targets": ["F2-WP-005", "F2-WP-605", "F2-WP-902", "F2-WP-904"]
+  },
+  "source_audit": {
+    "observed_architecture": "eBPF programs -> JSON event stream -> native capture core -> analyzer chain/materialized view -> SQLite/OTel/CLI/web sinks, with agent-native session sources as a non-eBPF path.",
+    "observed_capture_surfaces": [
+      "process lifecycle/system activity",
+      "file activity",
+      "SSL/TLS plaintext at instrumented library boundaries where supported",
+      "stdio/system/resource signals",
+      "agent-native session files and saved SQLite sessions"
+    ],
+    "raw_event_core": {
+      "fields": ["timestamp", "source", "pid", "comm", "data"],
+      "f2_implication": "Useful as an external witness envelope, but insufficient as canonical F2 causal identity. F2 must add/bind causal_event_id, invocation_id, generation, source identity, admission identity and EffectJournal/effect receipt identity."
+    },
+    "operational_boundaries": [
+      "eBPF-backed capture is Linux-specific and requires elevated BPF privileges; portable report/native-session paths can work without eBPF.",
+      "Static BoringSSL/OpenSSL binaries require binary discovery or explicit target binding; thread/process naming can break naive comm filters.",
+      "Electron/IDE agents can be outside the eBPF/TLS capture path; some use protobuf payloads that do not yield recognized LLM events.",
+      "Captured data can include prompts, responses, headers, paths and network targets and therefore is security/privacy sensitive."
+    ],
+    "upstream_evaluation_claim": {
+      "paper": "AgentSight: System-Level Observability for AI Agents Using eBPF, arXiv:2508.02736",
+      "claim": "Authors report less than 3% overhead in their evaluated workloads and demonstrate prompt-injection, reasoning-loop and multi-agent bottleneck detection.",
+      "classification": "UPSTREAM_BENCHMARK_NOT_F2_BENCHMARK"
+    }
+  },
+  "hypothesis": "A bounded AgentSight-derived witness adapter can materially improve F2 telemetry coverage and root-cause closure for child processes, file/network effects, tool/model activity and resource use without modifying F2 agent code.",
+  "counterhypotheses": [
+    "F2-native telemetry may already cover the useful signals with lower privilege, lower sensitivity and cleaner causal identity.",
+    "TLS/eBPF capture fragility across runtimes may make evidence coverage nonuniform and version-sensitive.",
+    "An extra observer may increase overhead, duplicate events or leak sensitive payloads without improving causal discrimination.",
+    "AgentSight correlation may look causal while still lacking F2's immutable invocation/effect/generation identity."
+  ],
+  "integration_design": {
+    "decision": "DO_NOT_VENDOR_OR_ADOPT_WHOLE_TOOL_YET",
+    "preferred_shape": "OPTIONAL_EXTERNAL_WITNESS_ADAPTER",
+    "authority_boundary": "AgentSight emits witness observations only. It may corroborate or contradict F2 telemetry and EffectJournal receipts, but cannot mint canonical state, authorize effects, close workpackages or turn UNKNOWN outcomes into success.",
+    "storage_boundary": "AgentSight SQLite remains ephemeral/derived witness storage. Canonical admitted evidence is normalized through F2 typed telemetry/UnifiedDB with provenance to the exact AgentSight source/version/session artifact.",
+    "minimum_adapter_fields": [
+      "witness_source=agentsight",
+      "agentsight_version/source_pin",
+      "capture_mode",
+      "raw_event_digest",
+      "observed_timestamp",
+      "pid/process lineage",
+      "event class",
+      "F2 invocation/effect/generation binding when deterministically resolvable",
+      "binding_confidence/status",
+      "sensitivity/redaction state"
+    ]
+  },
+  "trigger4_discriminator": {
+    "goal": "Determine whether AgentSight provides independent evidence gain worth its privilege/overhead/sensitivity cost.",
+    "arms": [
+      "A: F2 telemetry only baseline",
+      "B: F2 telemetry + AgentSight native-session/process-snapshot path where available without eBPF",
+      "C: F2 telemetry + AgentSight eBPF/TLS witness on an admitted isolated Linux test surface"
+    ],
+    "required_measurements": [
+      "matched invocation/effect coverage",
+      "new independently observed subprocess/file/network events",
+      "false-positive and false-negative witness rate against deterministic fixtures",
+      "duplicate/replayed event rate",
+      "timestamp/correlation skew",
+      "event loss under bounded concurrency",
+      "CPU, RSS and wall-time overhead with p50/p95/p99",
+      "secret/sensitive-payload exposure using synthetic canaries",
+      "failure behavior for static SSL, unsupported IDE/protobuf and no-privilege paths"
+    ],
+    "fail_closed_tests": [
+      "AgentSight-only observation cannot satisfy F2 completion.",
+      "AgentSight-only observation cannot authorize an effect.",
+      "Unbound pid/timestamp similarity cannot be promoted to exact invocation identity.",
+      "Redaction failure or ambiguous provenance blocks canonical admission of captured payload fields.",
+      "Observer disagreement preserves UNKNOWN/CONFLICT rather than selecting the convenient source."
+    ],
+    "promotion_rule": "Only a Trigger4 exact-source measured ablation may promote this research beyond E2. E5 requires a reproducible handoff with baseline, measurement receipts and exact source pins; E6 requires actual F2 acceptance evidence."
+  },
+  "result": {
+    "verdict": "PROMISING_BOUNDED_WITNESS_DONOR",
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "whole_f2_credit": 0,
+    "next_exact_action": "Trigger4 should implement the smallest noncanonical AgentSight witness adapter behind the existing telemetry spine and run the A/B/C ablation above on exact admitted source identity. If the no-eBPF arm yields most of the independent evidence, prefer it over privileged capture."
+  },
+  "mirror": {
+    "epoch": "R6-MIRROR-2026-08-29-005-E2-01",
+    "source_repo": "gschaidergabriel/clay-global-research-entity",
+    "source_prewrite_sha": "9d34ad079a59a22ff1469d86b36a0f940c5a5efb",
+    "target_repo": "gschaidergabriel/frankenstein-2.0",
+    "target_prewrite_sha": "738df2763bcb89d3d0386eb99cf2ec3c6bf664b5",
+    "target_path": "research/tool_intelligence/R6_SEED_005_AGENTSIGHT_SOURCE_ARCHAEOLOGY_E2_2026-08-29.json",
+    "state": "SOURCE_WRITE_PENDING_TARGET_MIRROR"
+  }
+}

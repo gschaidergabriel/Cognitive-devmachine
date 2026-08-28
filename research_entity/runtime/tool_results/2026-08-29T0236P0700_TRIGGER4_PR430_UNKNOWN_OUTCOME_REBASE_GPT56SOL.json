@@ -1,0 +1,49 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_MIRROR/v1",
+  "trigger": "4",
+  "classification": "RETAINED_DONOR_REBASE_EVIDENCE",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "9.13",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "676fcb87df81ba792bf4f86a1128b9be0d0dbe7f",
+  "retained_lane": {
+    "pull_request": 430,
+    "branch": "go/effect-unknown-outcome-gpt56sol-20260817",
+    "old_head": "4a10d453eb6b5477003f5e4a0804af7721143fec",
+    "new_head": "2ae4e574da695129c71e92f112a3bbd98e784a90",
+    "incorporated_main": "676fcb87df81ba792bf4f86a1128b9be0d0dbe7f",
+    "status": "DRAFT_CANDIDATE_NOT_AUTHORITY"
+  },
+  "finding": "Current canonical EffectGate source can classify a post-launch subprocess timeout as FAILED even though a real effect may already have occurred. The retained PR430 donor already carried a typed UNKNOWN outcome mechanism, but its old full journal/source state was stale relative to current active-intent, causal-spine, autonomy replay, generation and lease fences.",
+  "delta": [
+    "rebased the retained PR430 lane onto current source instead of creating a duplicate lane",
+    "ported only typed EntityOSOutcomeUnknown for subprocess.TimeoutExpired after child creation",
+    "added UNKNOWN_OUTCOME to the current EffectJournal final vocabulary without replacing current journal guards",
+    "split EffectGate handling into UNKNOWN_OUTCOME versus known integrity/definite failure while preserving current replay/generation/lease fences",
+    "carried focused deterministic no-real-effect regression source for UNKNOWN receipt, timeout typing, definite prelaunch failure, retry no-reexecution and restart stability"
+  ],
+  "hosted_evidence": {
+    "workflow_run": 33204534160,
+    "job": 98962106120,
+    "conclusion": "FAILURE_BEFORE_STEPS",
+    "steps": 0,
+    "classification": "EXECUTION_ADMISSION_OR_RUNNER_PRESTEP_FAILURE_ZERO_TEST_CREDIT",
+    "product_test_negative": false
+  },
+  "authority_boundary": "The PR head is candidate source only. Canonical main effect-authority bytes and their current admission tuple are unchanged by the PR rebase; no F2 consumer may treat the candidate as admitted authority before successor binding/admission.",
+  "credits": {
+    "source_candidate_delta": 1,
+    "fresh_component_test_credit": 0,
+    "real_effect_runtime_credit": 0,
+    "vps_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Obtain an actually-started authorized deterministic test of exact PR430 head 2ae4e574da695129c71e92f112a3bbd98e784a90; if it passes, re-enter current authority and create an explicit successor EffectGate/EffectJournal implementation binding before connecting the F2 single-canonical-transaction path. Preserve UNKNOWN/no-blind-replay and then test semantic request plus episode/execution-context identity end to end.",
+  "whole_system_acceptance": false
+}

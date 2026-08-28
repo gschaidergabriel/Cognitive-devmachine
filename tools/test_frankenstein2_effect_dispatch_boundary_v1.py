@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import tempfile
+from pathlib import Path
 import unittest
 
 from frankenstein2_effect_dispatch_boundary_v1 import (
@@ -7,6 +9,12 @@ from frankenstein2_effect_dispatch_boundary_v1 import (
     ExecutionObservation,
     guarded_dispatch,
 )
+from frankenstein2_effect_lifecycle_v1 import (
+    AdmissionDecision,
+    EffectLifecycleError,
+    EffectLifecycleStore,
+)
+from frankenstein2_execution_receipt_atomicity_v1 import record_execution_bundle_atomic
 
 
 class FakeStore:
@@ -32,7 +40,9 @@ class FakeStore:
     def record_execution_v2_metadata(self, invocation_id, **kwargs):
         self.events.append(("execution_v2", invocation_id, kwargs["status"], kwargs["duplicate_state"]))
 
-    def record_execution_bundle(self, invocation_id, **kwargs):
+    # Logical atomic-bundle seam used only by this deterministic boundary fake. The real
+    # EffectLifecycleStore path is exercised separately below and uses one SQLite txn.
+    def record_execution_bundle_atomic(self, invocation_id, **kwargs):
         self.record_execution(
             invocation_id,
             executable_id=kwargs["executable_id"],
@@ -49,6 +59,7 @@ class FakeStore:
             status=kwargs["status"],
             now_ts=kwargs.get("now_ts"),
         )
+        return "fake-request-digest"
 
 
 def obs(exit_code=0, status=None):
@@ -61,6 +72,33 @@ def obs(exit_code=0, status=None):
         source_digest="s" * 64,
         status=status,
     )
+
+
+def prepare_submitted_store(db: Path, invocation_id: str = "inv-atomic"):
+    store = EffectLifecycleStore(db)
+    req = store.build_request(
+        invocation_id=invocation_id,
+        session_id="session-atomic",
+        agent_id="frankenstein-2",
+        task_id="task-atomic",
+        turn_id="turn-atomic",
+        causal_id="cause-atomic",
+        generation=17,
+        tool_name="bounded-tool",
+        normalized_arguments={"x": 1},
+        effect_scope="TEST_ONLY",
+    )
+    store.create_request(req, now_ts=1.0)
+    store.bind_completion_source(invocation_id, source_digest="s" * 64, now_ts=2.0)
+    store.decide(invocation_id, AdmissionDecision.ALLOW, reason="atomic regression", now_ts=3.0)
+    store.record_enforcement(
+        invocation_id,
+        boundary_id="atomic-regression-boundary",
+        dispatch_permitted=True,
+        now_ts=4.0,
+    )
+    store.mark_submitted(invocation_id, now_ts=5.0)
+    return store, req
 
 
 class EffectDispatchBoundaryTests(unittest.TestCase):
@@ -181,6 +219,151 @@ class EffectDispatchBoundaryTests(unittest.TestCase):
                 dispatch=lambda: obs(),
             )
         self.assertEqual(store.events, [])
+
+
+class EffectReceiptAtomicityIntegrationTests(unittest.TestCase):
+    def test_injected_failure_after_base_insert_rolls_back_both_logical_records(self):
+        with tempfile.TemporaryDirectory() as td:
+            db = Path(td) / "effects.sqlite"
+            store, _ = prepare_submitted_store(db)
+
+            with self.assertRaisesRegex(
+                EffectLifecycleError,
+                "INJECTED_FAILURE_AFTER_BASE_EXECUTION_RECEIPT",
+            ):
+                record_execution_bundle_atomic(
+                    store,
+                    "inv-atomic",
+                    executable_id="tool:fixture",
+                    command_digest="c" * 64,
+                    environment_id="env:test",
+                    exit_code=0,
+                    result_digest="r" * 64,
+                    source_digest="s" * 64,
+                    duplicate_state="UNIQUE",
+                    status="SUCCEEDED",
+                    now_ts=6.0,
+                    _inject_failure_after_base_insert=True,
+                )
+
+            snap = store.snapshot("inv-atomic")
+            self.assertIsNone(snap["execution"])
+            self.assertIsNone(snap["execution_v2"])
+
+            con = store._con()
+            try:
+                event_types = {
+                    row[0]
+                    for row in con.execute(
+                        "SELECT event_type FROM effect_lifecycle_events WHERE invocation_id=?",
+                        ("inv-atomic",),
+                    )
+                }
+            finally:
+                con.close()
+            self.assertNotIn("EXECUTION_RECORDED", event_types)
+            self.assertNotIn("EXECUTION_V2_METADATA_RECORDED", event_types)
+
+    def test_success_path_commits_base_and_v2_with_one_bound_lineage(self):
+        with tempfile.TemporaryDirectory() as td:
+            db = Path(td) / "effects.sqlite"
+            store, req = prepare_submitted_store(db)
+            record_execution_bundle_atomic(
+                store,
+                "inv-atomic",
+                executable_id="tool:fixture",
+                command_digest="c" * 64,
+                environment_id="env:test",
+                exit_code=0,
+                result_digest="r" * 64,
+                source_digest="s" * 64,
+                duplicate_state="UNIQUE",
+                status="SUCCEEDED",
+                now_ts=6.0,
+            )
+            snap = store.snapshot("inv-atomic")
+            self.assertIsNotNone(snap["execution"])
+            self.assertIsNotNone(snap["execution_v2"])
+            self.assertEqual(snap["execution"]["invocation_id"], "inv-atomic")
+            self.assertEqual(snap["execution_v2"]["invocation_id"], "inv-atomic")
+            self.assertEqual(snap["execution"]["request_digest"], req.request_digest)
+            self.assertEqual(snap["execution_v2"]["source_digest"], "s" * 64)
+            self.assertEqual(snap["execution_v2"]["status"], "SUCCEEDED")
+            self.assertEqual(req.generation, 17)
+
+    def test_legacy_partial_bundle_fails_closed_instead_of_silent_completion(self):
+        with tempfile.TemporaryDirectory() as td:
+            db = Path(td) / "effects.sqlite"
+            store, _ = prepare_submitted_store(db)
+            # Reproduce the historical partial state: base row exists, v2 metadata absent.
+            store.record_execution(
+                "inv-atomic",
+                executable_id="tool:fixture",
+                command_digest="c" * 64,
+                environment_id="env:test",
+                exit_code=0,
+                result_digest="r" * 64,
+                now_ts=6.0,
+            )
+            self.assertIsNotNone(store.snapshot("inv-atomic")["execution"])
+            self.assertIsNone(store.snapshot("inv-atomic")["execution_v2"])
+
+            with self.assertRaisesRegex(EffectLifecycleError, "PARTIAL_EXECUTION_BUNDLE_STATE"):
+                record_execution_bundle_atomic(
+                    store,
+                    "inv-atomic",
+                    executable_id="tool:fixture",
+                    command_digest="c" * 64,
+                    environment_id="env:test",
+                    exit_code=0,
+                    result_digest="r" * 64,
+                    source_digest="s" * 64,
+                    duplicate_state="UNIQUE",
+                    status="SUCCEEDED",
+                    now_ts=7.0,
+                )
+            self.assertIsNone(store.snapshot("inv-atomic")["execution_v2"])
+
+    def test_guarded_dispatch_real_store_commits_the_atomic_bundle(self):
+        with tempfile.TemporaryDirectory() as td:
+            db = Path(td) / "effects.sqlite"
+            store = EffectLifecycleStore(db)
+            req = store.build_request(
+                invocation_id="inv-dispatch",
+                session_id="session-dispatch",
+                agent_id="frankenstein-2",
+                task_id="task-dispatch",
+                turn_id="turn-dispatch",
+                causal_id="cause-dispatch",
+                generation=18,
+                tool_name="bounded-tool",
+                normalized_arguments={"x": 2},
+                effect_scope="TEST_ONLY",
+            )
+            store.create_request(req, now_ts=1.0)
+            store.bind_completion_source("inv-dispatch", source_digest="s" * 64, now_ts=2.0)
+            store.decide(
+                "inv-dispatch",
+                AdmissionDecision.ALLOW,
+                reason="guarded dispatch atomic regression",
+                now_ts=3.0,
+            )
+
+            out = guarded_dispatch(
+                store,
+                invocation_id="inv-dispatch",
+                admission_decision="ALLOW",
+                boundary_id="host-boundary",
+                dispatch=lambda: obs(),
+                now_ts=4.0,
+            )
+            self.assertTrue(out.dispatched)
+            snap = store.snapshot("inv-dispatch")
+            self.assertEqual(snap["request"]["pending_state"], "SUBMITTED")
+            self.assertEqual(snap["execution"]["request_digest"], req.request_digest)
+            self.assertEqual(snap["execution_v2"]["source_digest"], "s" * 64)
+            self.assertEqual(snap["execution_v2"]["duplicate_state"], "UNIQUE")
+            self.assertEqual(snap["execution_v2"]["status"], "SUCCEEDED")
 
 
 if __name__ == "__main__":

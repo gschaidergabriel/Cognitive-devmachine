@@ -1,0 +1,34 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_epoch": "9.13",
+  "supervisor_delta": "9.13AF_NON_AUTHORITY",
+  "created_at_local": "2026-08-28T19:55:00+07:00",
+  "mode": "FREE_ONLY",
+  "authority_change": false,
+  "material_finding": "A distinct zero-cost read-only GRID10 runtime-quiescence-v2 singleton has been source-defined, claimed as g0000, and dispatched as issue #2122. No terminal ordinary-dispatch result is present. Fresh VPS telemetry still shows only historical defunct/zombie Clay processes plus the container keepalive, but that telemetry is not the repository-bound >=90s quiescence-v2 receipt. The latest telemetry workflow itself produced zero jobs and is infrastructure evidence only.",
+  "steering": {
+    "p0_runtime_quiescence": "ISSUE_2122_G0000_IN_FLIGHT_PENDING_TERMINAL_RESULT",
+    "p0_action": "DO_NOT_DUPLICATE_TRIGGER_OR_ADVANCE_GENERATION; CLASSIFY_ONLY_TERMINAL_CANONICAL_RESULT",
+    "p0_pass_credit_ceiling": "RUNTIME_QUIESCENCE_COMPONENT_ONLY",
+    "grid10_sigkill_v3": "ISSUE_2121_G0000_REMAINS_DISTINCT_IN_FLIGHT_PENDING_TERMINAL_RESULT",
+    "provider_execution": "HARD_OFF",
+    "paid_fallback": false,
+    "together": "FORBIDDEN",
+    "base_promotion": false,
+    "canonical_semantics_promotion": false,
+    "training_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "evidence_boundary": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "ISSUE_OR_DISPATCH_EXISTENCE_IS_NOT_RUNTIME_PASS",
+    "ZOMBIE_ONLY_POINT_TELEMETRY_IS_NOT_A_REPOSITORY_BOUND_90S_QUIESCENCE_RECEIPT",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_ANTI_ECHO_AND_MODEL_FAMILY_ANCESTRY_REMAIN_REQUIRED",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

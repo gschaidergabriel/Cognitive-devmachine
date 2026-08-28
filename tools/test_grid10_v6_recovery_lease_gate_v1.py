@@ -181,6 +181,43 @@ class RecoveryLeaseGateTests(unittest.TestCase):
         with self.assertRaisesRegex(RecoveryLeaseNotAuthorized, "LEASE_TIME_WINDOW"):
             self._verify()
 
+    def test_claimed_at_in_future_fails_closed(self):
+        _seed(self.db, claimed_at="2026-08-28T12:30:01Z")
+        with self.assertRaisesRegex(RecoveryLeaseNotAuthorized, "LEASE_TIME_WINDOW"):
+            self._verify()
+
+    def test_exact_expiry_boundary_fails_closed(self):
+        _seed(self.db, expires_at=NOW)
+        with self.assertRaisesRegex(RecoveryLeaseNotAuthorized, "LEASE_TIME_WINDOW"):
+            self._verify()
+
+    def test_inactive_lease_state_fails_closed(self):
+        _seed(self.db, state="RELEASED")
+        with self.assertRaisesRegex(RecoveryLeaseNotAuthorized, "LEASE_NOT_ACTIVE_STATE"):
+            self._verify()
+
+    def test_unknown_lease_token_fails_closed(self):
+        _seed(self.db)
+        with self.assertRaisesRegex(RecoveryLeaseNotAuthorized, "LEASE_TOKEN_NOT_FOUND"):
+            self._verify(lease_token="not-the-bound-token")
+
+    def test_wrong_spec_revision_fails_closed(self):
+        _seed(self.db)
+        with self.assertRaisesRegex(RecoveryLeaseNotAuthorized, "LEASE_SPEC_REV_MISMATCH"):
+            self._verify(spec_rev=2)
+
+    def test_empty_executor_and_token_fail_closed(self):
+        _seed(self.db)
+        with self.assertRaisesRegex(RecoveryLeaseNotAuthorized, "EMPTY_EXECUTOR_NODE"):
+            self._verify(executor_node="")
+        with self.assertRaisesRegex(RecoveryLeaseNotAuthorized, "EMPTY_LEASE_TOKEN"):
+            self._verify(lease_token="")
+
+    def test_invalid_tick_identity_fails_closed(self):
+        _seed(self.db)
+        with self.assertRaisesRegex(RecoveryLeaseNotAuthorized, "INVALID_TICK_ID"):
+            self._verify(tick_id="")
+
     def test_terminal_work_fails_closed(self):
         _seed(self.db, terminal_status="COMPLETE")
         with self.assertRaisesRegex(RecoveryLeaseNotAuthorized, "WORK_ITEM_TERMINAL"):

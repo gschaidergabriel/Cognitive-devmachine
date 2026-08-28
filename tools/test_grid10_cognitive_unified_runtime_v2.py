@@ -15,6 +15,7 @@ from grid10_cognitive_unified_runtime_v2 import (
     fingerprint_sqlite,
     run_bounded,
 )
+from grid10_persistent_agency_v1 import DeferredIntentState, GoalState, WakeKind
 
 
 class UnifiedRuntimeV2Tests(unittest.TestCase):
@@ -89,6 +90,89 @@ class UnifiedRuntimeV2Tests(unittest.TestCase):
         self.assertEqual(tick_ids, ["restart-before", "restart-after"])
         self.assertEqual(last, "restart-after")
         self.assertEqual(event_count, 1)
+
+    def test_hold_wake_resume_survives_unified_runtime_restart(self):
+        db = self.root / "unified.sqlite"
+        _, _, agency1, runtime1, fp1 = build_shared_runtime(db)
+        goal = agency1.create_goal(
+            goal_id="goal-hold-wake",
+            origin="AUTHENTICATED_USER",
+            semantic_goal="resume after a deferred evidence condition",
+            success_criteria=("wake from exact condition", "continue cognition"),
+            uncertainty=0.3,
+            event_id="evt-hold-create",
+            now_ts=200.0,
+        )
+        goal = agency1.transition_goal(
+            goal.goal_id,
+            expected_generation=goal.generation,
+            new_state=GoalState.ACTIVE,
+            event_id="evt-hold-activate",
+            reason="goal admitted",
+            now_ts=201.0,
+        )
+        agency1.set_continuation_checkpoint(
+            {"goal_id": goal.goal_id, "phase": "before-hold", "open_deficit": "new-evidence"},
+            event_id="evt-hold-checkpoint",
+            now_ts=202.0,
+        )
+        intent = agency1.defer_goal(
+            goal.goal_id,
+            expected_generation=goal.generation,
+            intent_id="intent-hold-wake",
+            wake_kind=WakeKind.EVENT,
+            wake_value="evidence:new-material-result",
+            event_id="evt-hold-defer",
+            reason="no useful action until exact new evidence arrives",
+            now_ts=203.0,
+        )
+        self.assertEqual(intent.state, DeferredIntentState.PENDING)
+        self.assertEqual(agency1.get_goal(goal.goal_id).state, GoalState.DORMANT)
+        before = runtime1.tick_once(tick_id="hold-before-restart", trusted_axes=_trusted_normal_axes())
+        self.assertEqual(before.assurance_mode.value, "NORMAL")
+
+        # Re-open the full runtime from the same physical DB, then prove unrelated events do
+        # not wake the goal and the exact condition does. This is process/session re-entry,
+        # not reuse of in-memory AgencyState.
+        _, _, agency2, runtime2, fp2 = build_shared_runtime(db)
+        self.assertEqual(fp1, fp2)
+        self.assertEqual(agency2.snapshot().goals[0].state, GoalState.DORMANT)
+        self.assertIn('"phase":"before-hold"', agency2.snapshot().continuation_checkpoint)
+        self.assertEqual(
+            agency2.wake_due(now_ts=204.0, observed_events=("evidence:irrelevant",)),
+            (),
+        )
+        self.assertEqual(agency2.get_goal(goal.goal_id).state, GoalState.DORMANT)
+        self.assertEqual(
+            agency2.wake_due(
+                now_ts=205.0,
+                observed_events=("evidence:new-material-result",),
+                event_id_prefix="restart-wake",
+            ),
+            (goal.goal_id,),
+        )
+        resumed = agency2.get_goal(goal.goal_id)
+        self.assertEqual(resumed.state, GoalState.ACTIVE)
+        self.assertEqual(agency2.get_intent("intent-hold-wake").state, DeferredIntentState.FIRED)
+
+        after = runtime2.tick_once(tick_id="hold-after-resume", trusted_axes=_trusted_normal_axes())
+        self.assertEqual(after.assurance_mode.value, "NORMAL")
+        con = sqlite3.connect(str(db))
+        try:
+            events = [r[0] for r in con.execute(
+                "SELECT event_type FROM agency_events WHERE goal_id=? ORDER BY event_seq",
+                (goal.goal_id,),
+            )]
+            tick_ids = [r[0] for r in con.execute(
+                "SELECT tick_id FROM ticks WHERE tick_id LIKE 'hold-%' ORDER BY created_ts"
+            )]
+        finally:
+            con.close()
+        self.assertEqual(
+            events,
+            ["GOAL_CREATED", "GOAL_TRANSITION", "GOAL_DEFERRED", "DEFERRED_INTENT_FIRED"],
+        )
+        self.assertEqual(tick_ids, ["hold-before-restart", "hold-after-resume"])
 
     def test_bounded_entry_emits_two_replayable_frames_on_shared_db(self):
         db = self.root / "unified.sqlite"

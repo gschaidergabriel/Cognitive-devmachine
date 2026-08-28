@@ -203,6 +203,45 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(capability_receipt["route"]["selected"], "nvidia")
         self.assertEqual(environment_reads, ["NVIDIA_API_KEY"])
 
+    def test_execution_receipt_pins_unicode_database_version(self):
+        class Response:
+            status = 200
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion","id":"chatcmpl-test",'
+                    b'"created":1,"model":"mock","usage":{'
+                    b'"prompt_tokens":1,"completion_tokens":1,'
+                    b'"total_tokens":2},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":{'
+                    b'"role":"assistant","content":"ok"}}]}'
+                )
+
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ={
+                "NVIDIA_API_KEY": "secret",
+                "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+                "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+            },
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((1.0, 1.01)).__next__,
+        )
+
+        self.assertEqual(result["receipt"]["schema_version"], "1.2")
+        self.assertEqual(
+            result["receipt"]["unicode_database_version"],
+            MOD.unicodedata.unidata_version,
+        )
+
     def test_text_request_rejects_active_string_subclasses(self):
         leaked_text = "request-string-method-must-not-run"
 

@@ -1,0 +1,52 @@
+{
+  "schema": "TRIGGERWORD5_AUTHORITY_REBIND/v1",
+  "rebind_id": "TW5-AUTHORITY-REBIND-2026-08-28-VOICE-MEMORY-9.13",
+  "created_at_utc": "2026-08-28T07:42:00Z",
+  "reason": "Canonical supervisor authority advanced during the same Triggerword-5 run. Preserve the earlier source-forensics artifacts append-only, but quarantine their authority_epoch=8.78 metadata as a historical observation rather than current/admitted authority.",
+  "historical_source_epoch": "8.78",
+  "current_authority_epoch": "9.13",
+  "supersedes_authority_metadata_only": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_VOICE_MEMORY_ADMISSION_SUCCESSOR.json",
+      "blob_sha": "e41e61813b92343f4a025687d5ce0736af96140c",
+      "original_commit": "e031d82e3a09df89acd63921be7985d6f7c7fa0d"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_VOICE_MEMORY_ADMISSION_SUCCESSOR.json",
+      "blob_sha": "b56000c70b8ea76397630df6f1e337515b1fe498",
+      "original_commit": "84210fd3907280ab9dac9bac3ca73ab11b9c2987"
+    }
+  ],
+  "current_authority_binding": {
+    "canonical_main": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "supervisor_inbox": {
+      "path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+      "schema_version": "9.13",
+      "selected_delta": "9.13AB_NON_AUTHORITY"
+    },
+    "selected_steering": {
+      "path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+      "blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+      "authority_epoch": "9.13"
+    },
+    "free_provider_admission": {
+      "path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+      "blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+      "authority_epoch": "9.13",
+      "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+      "provider_routes_admitted": false
+    }
+  },
+  "evidence_classification": "SOURCE_FORENSICS_ONLY_NO_RUNTIME_PASS",
+  "source_findings_status": "PRESERVED_UNCHANGED_AND_RECORROBORATED_BY_LATER_PACKETS",
+  "current_credit": {
+    "runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "hcu": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "law": "The earlier 8.78 label is historical_source_epoch only. It must not be used as current authority. This rebind does not promote source forensics to runtime evidence."
+}

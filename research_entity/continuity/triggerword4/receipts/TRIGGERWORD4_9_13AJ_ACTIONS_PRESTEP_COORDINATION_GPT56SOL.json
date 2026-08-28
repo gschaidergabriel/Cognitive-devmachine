@@ -25,22 +25,55 @@
     "counterhypothesis_rejected": "A stopped self-hosted runner alone explains the shared failure.",
     "runtime_credit": 0
   },
+  "read_only_runtime_transport_verification": [
+    {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "run_id": 33181911240,
+      "job_id": 98884969346,
+      "job_name": "deterministic",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "PRESTEP_FAILURE_NOT_PRODUCT_TEST_RESULT"
+    },
+    {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "run_id": 33182697914,
+      "job_id": 98887677431,
+      "job_name": "deterministic",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "PRESTEP_FAILURE_NOT_PRODUCT_TEST_RESULT"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "run_id": 33174696352,
+      "job_id": 98860160195,
+      "job_name": "integrity",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "PRESTEP_FAILURE_NOT_PRODUCT_TEST_RESULT"
+    }
+  ],
   "coordination_writes": [
     {
       "issue": 2121,
-      "action": "ASSIGN_AND_COMMENT",
+      "action": "ASSIGN_AND_COMMENT_CORRECTED",
       "assignee": "gschaidergabriel",
       "comment_id": 5456375392,
-      "instruction": "Do not restart runner or retry until first repository/org/Actions policy, billing/quota, concurrency, disablement, or equivalent UI/API cause is captured for runs 22395268107 / 22395074062."
+      "instruction": "Do not restart runner or retry until the common Actions account/repository/pre-step control-plane cause is isolated; retain this bounded GRID10 replacement lane without duplicate dispatch."
     },
     {
       "issue": 2122,
-      "action": "ASSIGN_AND_COMMENT",
+      "action": "ASSIGN_AND_COMMENT_CORRECTED",
       "assignee": "gschaidergabriel",
       "comment_id": 5456378733,
-      "instruction": "Keep existing zero-cost read-only owning-VPS quiescence lane; do not retry/restart while shared Actions pre-step failure is unresolved."
+      "instruction": "Keep the existing zero-cost read-only owning-VPS quiescence lane and do not retry/restart while the shared Actions pre-step failure is unresolved."
     }
   ],
+  "correction_note": "An earlier draft of this receipt and the initial issue comments carried incorrect 2239... run identifiers from an intermediate summary. The issue comments were corrected in place after direct read of 9.13AJ and this receipt now records only the directly verified 3318... run identities above.",
   "duplication_guard": {
     "new_dispatch_created": false,
     "new_generation_advanced": false,
@@ -56,6 +89,6 @@
     "training": 0,
     "frankenstein2_runtime": 0
   },
-  "next_exact_gate": "Capture the first repository/org/Actions policy, billing/quota, concurrency, disablement, or equivalent control-plane cause visible for workflow runs 22395268107 and 22395074062; only then decide whether the existing 2121/2122 execution lanes can resume. Continue only non-conflicting source/test assembly meanwhile.",
-  "evidence_boundary": "This receipt proves GitHub coordination writes and branch/main reentry observations only. It is not execution evidence and mints no GRID10/HCU/EntityOS/Frankenstein runtime credit."
+  "next_exact_gate": "Discriminate the common GitHub Actions account/repository/pre-step admission or assignment cause using low-risk read-only/UI/API evidence. Only after that evidence should the existing 2121/2122 execution lanes resume. Continue only non-conflicting source/test assembly meanwhile.",
+  "evidence_boundary": "This receipt proves GitHub coordination writes, read-only workflow-job observations, and branch/main reentry observations only. The failed jobs expose no initialized test steps and therefore do not count as product-test failures or runtime PASS. No GRID10/HCU/EntityOS/Frankenstein runtime credit is minted."
 }

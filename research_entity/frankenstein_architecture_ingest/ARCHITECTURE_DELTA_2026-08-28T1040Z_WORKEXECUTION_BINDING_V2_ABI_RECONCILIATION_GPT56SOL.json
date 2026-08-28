@@ -1,0 +1,144 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:40:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "WORKEXECUTION_BINDING_V2_ABI_RECONCILIATION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "packet_reconciliation": {
+    "rejected_packet": {
+      "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+      "disposition": "REJECTED_NOT_CONSUMED",
+      "reasons": [
+        "schema-invalid target_2_0_action=RESEARCH",
+        "wrong provenance span for architekt_governance spawn sequence"
+      ],
+      "note": "its independently source-verified mechanism claims may survive, but the immutable packet is not admitted wholesale"
+    },
+    "correction_packet": {
+      "packet_id": "TW5-PACKET-20260828T103200Z-WORKEXECUTION-BINDING-SCHEMA-PROVENANCE-CORRECTION-GPT56SOL",
+      "blob_sha": "5e2dce1b6e59a7e8c803da5a1b16cc9be62e37a4",
+      "disposition": "CORROBORATING_PROVENANCE_CORRECTION_PARTIALLY_SUPERSEDED_BY_V2",
+      "retained": [
+        "correct donor governance span 77-81",
+        "packet-wholesale rejection rule",
+        "durable handoff is not native execution proof",
+        "distinct tool/agent/task identity domains"
+      ],
+      "superseded_claim": "its assertion that the parent Agent tool_use_id -> child agent_id join is undocumented"
+    },
+    "accepted_successor": {
+      "packet_id": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
+      "blob_sha": "e4283250db4cef25fec50aff9adcbfc5364c7e21",
+      "disposition": "CONSUMED_SCHEMA_VALID_SUCCESSOR",
+      "supersedes": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL"
+    }
+  },
+  "direct_source_crosscheck": {
+    "handoff": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "handoff creates durable entityos_arbeitspaket/capsule state and explicitly does not itself spawn/delegate the native child"
+    },
+    "governance": {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "blob_sha": "b578cc8651c50db1ef98c3d5c74f95f81ba24db9",
+      "span": "77-81",
+      "finding": "spec explicitly requires stern.py handoff before spawning, stern.py reconcile after, and lastschutz before parallel build-agent spawning"
+    },
+    "hooks": {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "finding": "versioned donor config lacks dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted registrations"
+    }
+  },
+  "external_primary_reconciliation": {
+    "source": "current official Claude Code hooks documentation observed 2026-08-28",
+    "documented_agent_posttool_join": {
+      "parent_call_identity": "PostToolUse.tool_use_id",
+      "child_run_identity": "PostToolUse.tool_response.agentId",
+      "status": "DOCUMENTED_SAME_EVENT_JOIN",
+      "runtime_scope": "EXTERNAL_PRIMARY_ABI_ONLY_NOT_TARGET_HOST_RUNTIME_PROOF"
+    },
+    "subagent_lifecycle": "SubagentStart/SubagentStop expose agent_id; installed-host equality to Agent tool_response.agentId still requires observed target payload",
+    "task_lifecycle": "TaskCreated/TaskCompleted expose separate task_id; task_id is optional/independent for ordinary delegated Agent execution",
+    "pretool_enforcement": "PreToolUse documentation explicitly supports permissionDecision deny to prevent the tool call; this is capability evidence, not proof the donor currently enforces it"
+  },
+  "architecture_effect": {
+    "mechanism": "WorkExecutionBinding/v2",
+    "causal_chain": [
+      "paket_id",
+      "package_generation",
+      "spawn_tool_use_id",
+      "agent_id",
+      "agent_run_generation",
+      "optional task_id",
+      "child_tool_use_id(s)",
+      "typed result_receipt_id",
+      "reconcile"
+    ],
+    "closed_at_documentation_level": [
+      "Agent invocation tool_use_id -> Agent PostToolUse tool_response.agentId"
+    ],
+    "still_open": [
+      "paket_id -> exact Agent spawn tool_use_id in the actual coordinator path",
+      "installed target build/config emits documented Agent PostToolUse fields",
+      "installed SubagentStart/SubagentStop agent_id equals the Agent tool_response.agentId for the same run",
+      "resume/background/replacement generation semantics on target",
+      "typed child result receipt -> exact WorkExecutionBinding -> reconcile success"
+    ],
+    "join_law": [
+      "never infer paket_id->tool_use_id by timing, description similarity, session order or child completion order",
+      "once observed on target, tool_use_id and Agent tool_response.agentId may be joined from the same PostToolUse event",
+      "task_id remains a separate optional namespace",
+      "agent_id remains distinct from agent run/resume generation",
+      "reconcile cannot promote completion without an immutable typed result receipt bound to the exact work execution binding"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "contradictions_preserved": [
+    "Donor source records handoff intent but does not issue the native Agent call; governance expects an external spawn step.",
+    "Current platform docs provide a direct invocation-to-agent ABI join, but installed target-host behavior is unobserved.",
+    "Donor hooks.json lacks child lifecycle hooks, while user/managed/host configuration may add them outside the repository; host composition remains UNKNOWN."
+  ],
+  "feeds_triggerword_4": {
+    "required_actions": [
+      "bind paket_id deterministically to the exact Agent spawn tool_use_id before/at invocation",
+      "capture target Agent PostToolUse and verify tool_response.agentId under the installed build",
+      "capture SubagentStart/SubagentStop and verify same-run identity against Agent PostToolUse agentId",
+      "persist WorkExecutionBinding before accepting child tool/effect or completion evidence",
+      "run two overlapping Agent invocations and reverse completion order to falsify timing/order cross-wire",
+      "keep task_id optional and distinct",
+      "preserve agent run generation across resume/background transitions",
+      "require typed result receipt binding before reconcile success"
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "external_primary_abi_crosscheck": "PASS_CURRENT_DOCS_2026-08-28",
+    "installed_native_subagent_runtime": 0,
+    "workexecutionbinding_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 build/verification lane: deterministically carry paket_id into the exact Agent invocation binding, then on an authorized non-provider target capture Agent PreToolUse/PostToolUse plus SubagentStart/SubagentStop for one harmless call and verify tool_use_id + tool_response.agentId + lifecycle agent_id; immediately repeat with two overlapping children and reverse completion order before runtime credit.",
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "feeds_triggerword_4_boolean": true
+}

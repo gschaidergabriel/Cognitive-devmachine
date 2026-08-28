@@ -9,10 +9,13 @@
   "design_sha_before_ingest": "5bfef3cca0b1bba75c790d2f04e0aa76a5109d30",
   "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
   "authority_observed": "SUPERVISOR_INBOX schema 9.13; FREE_ONLY; provider routes not admitted",
-  "consumed_packet_ids": [
+  "classification": "CORROBORATING_PARALLEL_SOURCE_CROSSCHECK_NOT_PACKET_CONSUMPTION_OR_INDEPENDENT_RUNTIME_REPLICATION",
+  "parallel_resolution": "After the architecture delta was committed, re-entry showed that another organ had already consumed both examined packets into INGEST_STATE and had additionally consumed a newer approval-identity packet. This receipt therefore claims zero packet-consumption credit and preserves this lane only as corroborating provenance.",
+  "packet_ids_examined": [
     "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
     "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL"
   ],
+  "packet_ids_consumed_by_this_receipt": [],
   "crosschecks": [
     "Pinned donor stern.py normal PreToolUse path calls zulassen without generic deny; separate SEBUKKU branch can emit permissionDecision=deny.",
     "Pinned donor effect correlation uses active_turns.effect_id per session and contains no tool_use_id binding in the inspected path.",
@@ -21,10 +24,12 @@
   ],
   "delta": {
     "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_LINEAGE_INVOCATION_SUCCESSOR.json",
-    "commit": "bc9132205fb23f1622aad058912d2af8e0d04948"
+    "original_commit": "bc9132205fb23f1622aad058912d2af8e0d04948"
   },
   "promotion": {
-    "source_forensics_delta": 1,
+    "source_forensics_corroboration": 1,
+    "packet_consumption_credit": 0,
+    "independent_replication_credit": 0,
     "new_runtime_execution": 0,
     "whole_frankenstein_2_runtime_credit": 0,
     "entityos_whole_runtime_credit": 0,
@@ -32,12 +37,11 @@
     "physical_grid10_runtime_credit": 0,
     "training_credit": 0
   },
-  "unresolved": [
+  "unresolved_after_parallel_fusion": [
     "wache-koenig exact predecessor source and runtime wiring",
-    "historical approval request/wait call identity",
     "current effects.status downstream semantic consumers",
     "Realtime Function-Calling effect-boundary bypass audit",
     "runtime manifestation of overlapping same-session effect correlation"
   ],
-  "next_exact_gate": "Recover/pin wache-koenig and historical approval identity, then trace current Realtime tool dispatch and effects.status consumers before Triggerword-4 effect-boundary implementation."
+  "next_exact_gate": "Continue from the newer canonical frontier: recover/pin wache-koenig and approval responder lineage, then audit current Realtime dispatch/effects.status consumers; do not re-consume already-admitted packets."
 }

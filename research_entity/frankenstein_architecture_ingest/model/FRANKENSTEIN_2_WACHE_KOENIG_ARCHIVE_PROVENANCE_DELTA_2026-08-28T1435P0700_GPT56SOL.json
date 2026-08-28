@@ -1,0 +1,80 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_WACHE_KOENIG_ARCHIVE_PROVENANCE",
+  "recorded_at": "2026-08-28T14:35:18+07:00",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "evidence_scope": "HISTORICAL_ARCHIVE_MANIFEST_PLUS_CURRENT_SOURCE_CROSSCHECK_NO_RUNTIME_EXECUTION",
+  "current_donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "current_reference": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py explicitly names ~/aicore/opt/aicore/tools/schranke/wache-koenig.py as an older separate blocking watcher"
+  },
+  "archive_source": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "ref": "4f4a7088a54dd21e1848f090446590efa05a2ac1",
+    "path": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ACTION_BOUNDARY_SUBMANIFEST.json",
+    "blob_sha": "b3bceb16a1c0038d0d719b44bfec7295170a3dd7",
+    "manifest_id": "DRIVE-AICORE-ACTION-BOUNDARY-20260809T0520p0700",
+    "frozen_at": "2026-08-09T05:20:00+07:00"
+  },
+  "historical_artifact_identity": {
+    "wache_koenig": {
+      "logical_path": "tools/schranke/wache-koenig.py",
+      "drive_id": "10z1K5hKV9t9wBu1k5zXEvxSjaCZy3TUH",
+      "size_bytes": 8373,
+      "sha256": "7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23"
+    },
+    "freigabe": {
+      "logical_path": "tools/schranke/freigabe",
+      "drive_id": "1xi-hFPSWJ6NC8ruDV6iTttw_-wMv08dI",
+      "size_bytes": 5512,
+      "sha256": "23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d"
+    }
+  },
+  "historical_mechanism": {
+    "classification": "HISTORICAL_SOURCE_MANIFEST_AND_REPORTED_SAFE_PROBE",
+    "wache": "Pre-tool command-position parser classifies hard-deny versus command-hash-ticket actions, rechecks nested ssh/bash/sh shells, and uses single-use command-bound tickets.",
+    "freigabe": "Human approval requires a controllable /dev/tty, two newly generated typed challenges, typing-timing checks, command SHA-256 binding, delay and expiry window.",
+    "hard_deny_example": "Formatting/raw block-device writes are reported as hard deny and cannot receive a ticket.",
+    "safe_probe": "The frozen manifest reports classifier-only probes: benign quoted destructive word -> free; benign playwright path -> free; direct delete -> ticket required; block-device format -> hard deny; nested ssh delete and nested bash-c delete -> ticket required. No destructive command was executed by that probe.",
+    "declared_limits": [
+      "The watcher can be modified by its own user unless ownership/mode is hardened.",
+      "/tmp/claude-* scratch is intentionally ungated.",
+      "The human approval helper is designed to stop AI self-approval, not a deliberate human."
+    ]
+  },
+  "contradiction_resolution": {
+    "id": "TW5-CONTRADICTION-EFFECT-HOST-ENFORCEMENT-005",
+    "previous": "wache-koenig exact source/host artifact and current wiring unresolved",
+    "now": "PARTIALLY_RESOLVED_ARCHIVAL_IDENTITY_PRESENT",
+    "resolved": "A frozen historical archive manifest supplies a stable file identity (Drive object, byte size, SHA-256), mechanism summary, declared limitations and bounded classifier probe evidence for wache-koenig plus freigabe.",
+    "still_unresolved": [
+      "The exact wache-koenig source bytes are not present in the inspected Git tree and were not recovered in this pass.",
+      "No Git commit identity for those Drive bytes is established.",
+      "Current host bytes, settings.json hook composition/order, process ownership and runtime reachability are not observed here.",
+      "Historical classifier probe evidence is not current Frankenstein runtime enforcement evidence."
+    ]
+  },
+  "frankenstein_2_design_delta": {
+    "keep_principle": "A causally prior enforcement decision must be consumed before real effect dispatch, and high-risk classes may require a non-self-grantable human capability.",
+    "do_not_copy_as_authority": "Regex/command-name parsing, typing heuristics, mutable user-owned guard files and path exceptions are historical donor mechanisms, not the EntityOS authority primitive.",
+    "successor_contract": "Bind EffectRequest -> AdmissionDecision -> EnforcementReceipt -> ExecutionReceipt -> WorldEffectVerification -> ResultReentry -> CompletionEvidence to one immutable per-invocation identity, exact request digest, generation and provenance. Missing or stale enforcement identity fails closed at the effect boundary; post-submission ambiguity remains OUTCOME_UNKNOWN until verified.",
+    "triggerword4_acceptance_addition": [
+      "Pin the exact blocking adapter bytes/config/order used by the assembled host and bind its allow/deny result to invocation identity.",
+      "DENY must prove non-dispatch for that invocation.",
+      "A human capability receipt, when required, must be request-bound, single-use or narrowly scoped, expiring, non-self-grantable by model output and journaled separately from execution outcome.",
+      "Nested/indirect command paths must not bypass the same effect policy merely by changing shell/container/transport shape."
+    ]
+  },
+  "credit": {
+    "historical_archive_identity": 1,
+    "current_host_enforcement_runtime": 0,
+    "new_runtime_execution": 0,
+    "whole_entityos": 0,
+    "whole_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover the referenced Drive wache-koenig.py bytes or an independently hash-matching archived copy, then bind any current host settings/hook ordering to the same or successor artifact identity; until both artifact bytes and current wiring are observed, retain current-host enforcement as UNKNOWN."
+}

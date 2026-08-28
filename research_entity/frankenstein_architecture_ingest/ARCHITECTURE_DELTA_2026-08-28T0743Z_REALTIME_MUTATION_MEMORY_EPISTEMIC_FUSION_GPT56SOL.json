@@ -1,0 +1,161 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28T0743Z_REALTIME_MUTATION_MEMORY_EPISTEMIC_5641dc6b_GPT56SOL",
+  "trigger": "triggerwort 5",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY_OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "evidence_scope": "SOURCE_FORENSICS_AND_PACKET_FUSION_ONLY_NO_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "fea06639616adc5cb8a6703d366a71d2762e32c7"
+  },
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
+      "status": "INGESTED_SOURCE_CROSSCHECKED",
+      "independent_runtime_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+      "status": "INGESTED_SOURCE_CROSSCHECKED",
+      "independent_runtime_credit": false
+    }
+  ],
+  "source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "blob": "37b972474d80d827fdef64fbbb79c1c31e173aaa",
+      "finding": "Realtime read/write wrappers call stern directly; frank_forschung neu_anstossen validates only a non-empty question and queues background research; task confirmation is a separate stronger path."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "gespraech_erinnerung stores only id, ts, subject, value, quelle; read results merge conversation-memory rows with durable_memory rows into one treffer list, distinguished by source label but without explicit transformation/epistemic class."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "blob": "d922408b644efe6b7f0c06f8f7c794c39fdab8bf",
+      "finding": "Voice-delegated claude -p hard-disallows Bash but retains non-Bash file tools; this narrows blast radius but is not executor-consumed per-effect authorization."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "blob": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "finding": "Repository config declares PreToolUse/PostToolUse '*' -> stern.py hook, but file presence does not prove current host/headless process registration or runtime firing."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_REALTIME_MUTATION_CLASSIFICATION_039",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "Realtime outputs must not be treated as one mutation class: task delegation has mechanically stronger human-intent confirmation, conversational memory writes directly mutate a bounded internal table, new research submission launches an asynchronous external/background request, and session-control/read-only paths have different effect semantics.",
+      "confidence": 1.0,
+      "target_action": "ADAPT_TO_TYPED_MUTATION_CLASSES"
+    },
+    {
+      "atom_id": "F2_REALTIME_RESEARCH_INTENT_GAP_040",
+      "source_kind": "LIVE_CODE",
+      "claim": "frank_forschung action=neu_anstossen relies on persona/tool-description compliance for explicit-user-request intent; the dispatcher itself validates only the question and starts the background bridge. This is not equivalent to deterministic HumanIntentDecision or provider/economic admission.",
+      "confidence": 0.99,
+      "target_action": "REPAIR_WITH_HUMAN_INTENT_AND_CAPABILITY_ADMISSION"
+    },
+    {
+      "atom_id": "F2_DELEGATED_EFFECT_COVERAGE_GAP_041",
+      "source_kind": "ENFORCEMENT_CODE",
+      "claim": "The voice-delegated Claude worker hard-blocks Bash but can retain Read/Write/Edit/Grep/Glob. One confirmed voice task may therefore lead to multiple downstream mutations; source alone does not show one-shot EffectDecision consumption for each mutation.",
+      "confidence": 1.0,
+      "target_action": "REPAIR_WITH_EXECUTOR_CONSUMED_EFFECT_DECISION"
+    },
+    {
+      "atom_id": "F2_HOOK_DECLARATION_NOT_RUNTIME_REACHABILITY_042",
+      "source_kind": "CONFIG",
+      "claim": "hooks.json declares broad PreToolUse/PostToolUse stern.py routing, but repository configuration is not proof that the exact current host, plugin version and headless claude -p path load and fire those hooks.",
+      "confidence": 1.0,
+      "target_action": "REQUIRE_SOURCE_BOUND_RUNTIME_RECEIPT"
+    },
+    {
+      "atom_id": "F2_MEMORY_SCHEMA_EPISTEMIC_UNDERTYPING_043",
+      "source_kind": "SCHEMA",
+      "claim": "The dedicated conversation-memory schema structurally separates storage from durable_memory but contains no explicit transformation class, epistemic class, source-event/admission identity, privacy/retention tier or evidence provenance beyond a free source label.",
+      "confidence": 1.0,
+      "target_action": "REPAIR_MEMORY_ADMISSION_SCHEMA"
+    },
+    {
+      "atom_id": "F2_MEMORY_READ_EPISTEMIC_COLLAPSE_044",
+      "source_kind": "LIVE_CODE",
+      "claim": "The direct Realtime reader returns conversation-memory and matching durable_memory material in one result list; source labels remain, but explicit VERBATIM/SUMMARY/INFERENCE/OBSERVED/VERIFIED distinctions are absent. Remembering that somebody said X must not become evidence that X is true.",
+      "confidence": 1.0,
+      "target_action": "RETURN_TYPED_PROVENANCE_AND_EPISTEMIC_METADATA"
+    }
+  ],
+  "frankenstein2_architecture_delta": {
+    "typed_realtime_classes": [
+      "READ_ONLY_OBSERVATION",
+      "MEMORY_CANDIDATE",
+      "TASK_CANDIDATE",
+      "RESEARCH_REQUEST_CANDIDATE",
+      "SESSION_CONTROL"
+    ],
+    "memory_contract": [
+      "Function Calling produces MemoryCandidate, never factual truth.",
+      "MemoryCandidate binds source_event_id/utterance_ref, source actor, transformation_class {VERBATIM,SUMMARY,INFERENCE,INSTRUCTION,OTHER}, epistemic_class {OBSERVED_CLAIM,INFERRED,UNKNOWN,VERIFIED_EXTERNAL only when separately established}, generation, content digest/reference, privacy and retention tier.",
+      "Deterministic MemoryAdmission decides whether and how a candidate is persisted.",
+      "Retrieval returns source + transformation + epistemic + provenance metadata; downstream ranking may not erase those classes.",
+      "Canonical factual promotion requires independent admissible evidence; memory presence is not observation."
+    ],
+    "intent_and_effect_contract": [
+      "HumanIntentDecision is distinct from EffectDecision and from MemoryAdmission.",
+      "ResearchRequestCandidate requires explicit deterministic intent/capability/economic/privacy admission before any external submission; current 9.13 provider routes are HARD_OFF.",
+      "Task confirmation authorizes at most the admitted task intent; each real downstream mutation still requires an executor-consumed one-shot EffectDecision bound to immutable invocation identity and request/resource/policy/generation digests.",
+      "Repository hook declaration cannot be credited as runtime containment until exact host/headless-process hook firing and deny/non-execution are source-bound and observed."
+    ]
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-RESEARCH-INTENT-011",
+      "status": "SOURCE_CONFIRMED_OPEN",
+      "claim": "Research submission lacks the task path's deterministic two-step HumanIntentDecision and requires explicit provider/economic/privacy admission."
+    },
+    {
+      "id": "TW5-CONTRADICTION-DELEGATED-EFFECT-COVERAGE-012",
+      "status": "SOURCE_CONFIRMED_OPEN",
+      "claim": "Bash denial narrows the delegated worker but non-Bash state changes remain possible without proven per-effect executor-consumed decisions."
+    },
+    {
+      "id": "TW5-CONTRADICTION-HOOK-REACHABILITY-013",
+      "status": "CONFIG_CONFIRMED_RUNTIME_UNKNOWN",
+      "claim": "PreToolUse/PostToolUse hook wiring is declared in the repository but exact installed/headless runtime reachability is unproved."
+    },
+    {
+      "id": "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-014",
+      "status": "SOURCE_CONFIRMED_EPISTEMIC_TYPING_OPEN",
+      "claim": "Conversation storage is separate, yet direct Realtime retrieval flattens heterogeneous remembered/durable material into a common result shape without explicit epistemic/transformation typing."
+    }
+  ],
+  "promotion_boundary": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_execution": 0,
+    "provider_runtime_credit_delta": 0,
+    "whole_entityos_hcu_credit_delta": 0,
+    "hcu_runtime_credit_delta": 0,
+    "physical_grid10_credit_delta": 0,
+    "jspace_model_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_exact_gate": "Trace exact installed/headless Claude hook registration and fire order without inferring it from hooks.json; audit remaining conversation/durable-memory consumers for epistemic typing; then hand Triggerword-4 source-bound regressions for MemoryAdmission classes, research-request HARD_OFF behavior, per-effect decision consumption, and deny/non-execution."
+}

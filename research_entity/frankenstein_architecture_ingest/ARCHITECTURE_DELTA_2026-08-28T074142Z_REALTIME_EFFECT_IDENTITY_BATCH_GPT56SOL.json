@@ -1,0 +1,115 @@
+{
+  "schema": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T074142Z-REALTIME-EFFECT-IDENTITY-BATCH-GPT56SOL",
+  "trigger": "triggerwort 5",
+  "recorded_at": "2026-08-28T14:41:42+07:00",
+  "authority_epoch": "9.13",
+  "authority_binding": {
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor_selection_commit": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4",
+    "mode": "FREE_ONLY_HARD_OFF_PROVIDER_EXECUTION",
+    "runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_observed_before_write": "26ebf78c1d9a17dcf53f47a63dfcf4580307d02f",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packets_fused": [
+    "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+    "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
+    "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
+    "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+    "TW5-PACKET-20260828T073652Z-REALTIME-MEMORY-TASK-AUTHORITY-GPT56SOL"
+  ],
+  "source_crosschecks": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "donor_blob": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "finding": "All seven current plugin hook events route through scripts/stern.py hook; PreToolUse and PostToolUse use matcher=* where applicable."
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "donor_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "PreToolUse calls zulassen() but does not emit an allow/deny decision except the separate SEBUKKU path. zulassen() stores one mutable active_turns.effect_id keyed by session_id; PostToolUse merken() reads the current session effect_id and updates it, with a post-hoc fallback if no pre-row exists. This is bookkeeping/correlation, not source-proven pre-side-effect containment."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-FUSION-INVOCATION-001",
+      "source_kind": "ENFORCEMENT_CODE",
+      "evidence_class": "CURRENT_SOURCE",
+      "finding": "The donor effect correlation is session-scoped and mutable while call-scoped identity is required by current 9.13 evidence law. Parallel or reverse-order same-session effects therefore remain structurally ambiguous until an executable interleaving falsifier is run.",
+      "target_2_0_action": "REPLACE_WITH_IMMUTABLE_INVOCATION_IDENTITY"
+    },
+    {
+      "atom_id": "TW5-FUSION-REALTIME-CALL-ID-002",
+      "source_kind": "ENFORCEMENT_CODE",
+      "evidence_class": "CURRENT_SOURCE",
+      "finding": "Realtime function-call handling already preserves call_id for function_call_output and clears buffered calls on cancelled/non-completed responses. call_id is a useful donor primitive but is not yet bound through Entry, task/memory admission, EffectDecision, executor, EffectJournal and result re-entry.",
+      "target_2_0_action": "ADAPT_TO_GLOBAL_INVOCATION_IDENTITY"
+    },
+    {
+      "atom_id": "TW5-FUSION-HUMAN-INTENT-003",
+      "source_kind": "ENFORCEMENT_CODE",
+      "evidence_class": "CURRENT_SOURCE_PLUS_DESIGN_INFERENCE",
+      "finding": "The voice two-step gate is HumanIntent/TaskAdmission evidence, not per-effect authorization. It must mint a bounded task_admission_id/request_digest and never authorize all downstream state-changing calls.",
+      "target_2_0_action": "SEPARATE_HUMAN_INTENT_DECISION_FROM_EFFECT_DECISION"
+    },
+    {
+      "atom_id": "TW5-FUSION-MEMORY-004",
+      "source_kind": "SCHEMA",
+      "evidence_class": "CURRENT_SOURCE_PLUS_DESIGN_INFERENCE",
+      "finding": "Realtime conversation memory writes are narrow direct internal mutations into the dedicated gespraech_erinnerung table, not arbitrary UnifiedDB writes or verified world facts. Frankenstein 2.0 must type them as MemoryCandidate/MemoryAdmission with causal provenance; model output may not silently become canonical factual evidence.",
+      "target_2_0_action": "TYPED_MEMORY_ADMISSION_WITH_NONFACT_DEFAULT"
+    },
+    {
+      "atom_id": "TW5-FUSION-WACHE-005",
+      "source_kind": "HISTORICAL_ONLY",
+      "evidence_class": "DIRECT_ARCHIVE_SOURCE",
+      "finding": "Historical wache-koenig is a genuine Bash-scoped blocking donor with one-shot command-bound tickets when registered, but exact scheduler registration/order and current runtime reachability are unproven and non-Bash coverage is absent.",
+      "target_2_0_action": "SALVAGE_ONE_SHOT_LEASE_SEMANTICS_NOT_RUNTIME_AUTHORITY"
+    },
+    {
+      "atom_id": "TW5-FUSION-DONOR-CLOSURE-006",
+      "source_kind": "LIVE_CODE",
+      "evidence_class": "CURRENT_SOURCE",
+      "finding": "Exact wegehierarchie implementation bytes survive only under _archiv-phase4 while live paket.py imports .wegehierarchie. Source recovery is resolved; executable package closure at the pinned donor remains unresolved.",
+      "target_2_0_action": "REPAIR_OR_RETIRE_WITH_REGRESSION"
+    }
+  ],
+  "architecture_decisions_for_triggerword4": [
+    "Use immutable invocation_id/tool_use_id/call_id as the primary effect correlation key; session_id is context only.",
+    "Carry one causal identity across Typed Entry -> HumanIntentDecision or MemoryAdmission -> EffectRequest -> EffectDecision -> executor -> EffectJournal -> WorldEffectVerification -> result re-entry.",
+    "Keep HumanIntentDecision, TaskAdmission, MemoryAdmission and EffectDecision as distinct typed states; none implies another.",
+    "Treat pre-dispatch cancellation separately from submitted-effect outcome; after submission, uncertainty remains OUTCOME_UNKNOWN until verified and is never blindly replayed.",
+    "Do not credit donor stern EffectGate as containment: source proves nonblocking bookkeeping. Frankenstein 2.0 needs executable pre-side-effect allow/deny enforcement with bound receipts.",
+    "Donor freeze must either restore/adapt wegehierarchie under an exact tested active import or explicitly retire its caller path with no-silent-degradation regression."
+  ],
+  "contradictions": [
+    {"id": "TW5-CONTRADICTION-PARALLEL-EFFECT-CORRELATION-003", "status": "STRENGTHENED_BY_DIRECT_SOURCE_9_13_GATE"},
+    {"id": "TW5-CONTRADICTION-REALTIME-EFFECT-AUTHORITY-007", "status": "OPEN"},
+    {"id": "TW5-CONTRADICTION-REALTIME-MUTATION-INTENT-008", "status": "OPEN_POLICY_CLASSIFICATION"},
+    {"id": "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-008", "status": "OPEN"},
+    {"id": "TW5-CONTRADICTION-TASK-VS-EFFECT-AUTHORITY-009", "status": "OPEN"},
+    {"id": "TW5-CONTRADICTION-MULTISPEAKER-CONFIRMATION-010", "status": "OPEN"},
+    {"id": "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003", "status": "SOURCE_RECONFIRMED_OPEN"},
+    {"id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003", "status": "SOURCE_RECONFIRMED_OPEN"},
+    {"id": "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004", "status": "REFINED_SOURCE_RECOVERED_IMPORT_CLOSURE_OPEN"},
+    {"id": "TW5-CONTRADICTION-WACHE-REACHABILITY-008", "status": "OPEN"},
+    {"id": "TW5-CONTRADICTION-INGEST-PATH-001", "status": "OPEN_PROVENANCE_PRESERVED"}
+  ],
+  "runtime_credit": {
+    "new_runtime_execution": false,
+    "frankenstein_2_runtime_credit": 0,
+    "entityos_whole_runtime_credit_delta": 0,
+    "hcu_full_runtime_credit_delta": 0,
+    "jspace_model_runtime_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_exact_gate": "Build and repository-bind a deterministic same-session A/B state-changing-call interleaving falsifier that records Pre(A), Pre(B), Post(A), Post(B), invocation/tool_use identity and effect_id; in parallel audit gespraechsmodus.claude_frage plus every Realtime mutating tool class, then feed the resulting immutable invocation-bound Effect ABI and adversarial regressions into Triggerword 4."
+}

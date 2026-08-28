@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "status": "CURRENT_SUCCESSOR_TRIGGER_ROUTER",
+  "matching": "trimmed_full_message_case_insensitive_exact",
+  "legacy_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+  "legacy_registry_scope": "historical FRANK_V0_1 trigger family; do not use it as authority for triggerwords 4/5",
+  "macros": {
+    "3": {
+      "aliases": ["3", "triggerword 3", "triggerwort 3"],
+      "kind": "frankenstein_repo_research_synthesis",
+      "bootstrap_inline": true,
+      "continuation": true
+    },
+    "4": {
+      "aliases": ["4", "triggerword 4", "triggerwort 4"],
+      "kind": "grid10_frankenstein2_build_assembly_continuation",
+      "continuation": true,
+      "fetch_before_execute": true,
+      "protocols": [
+        "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+        "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+        "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+      ],
+      "failure_behavior": "TRIGGER_ROUTING_FAILED"
+    },
+    "5": {
+      "aliases": ["5", "triggerword 5", "triggerwort 5"],
+      "kind": "frankenstein_architecture_forensics_live_ingest",
+      "continuation": true,
+      "fetch_before_execute": true,
+      "protocols": [
+        "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+        "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md",
+        "research_entity/frankenstein_architecture_ingest/INGEST_PACKET_SCHEMA.json",
+        "research_entity/frankenstein_architecture_ingest/INGEST_STATE.json"
+      ],
+      "inbox": "research_entity/frankenstein_architecture_ingest/inbox/",
+      "feeds_macro": "4",
+      "failure_behavior": "TRIGGER_ROUTING_FAILED"
+    }
+  },
+  "invariants": [
+    "NEW_SESSION != NEW_PROJECT",
+    "NEW_WORKER != NEW_TRUTH",
+    "SPECIFICATION != IMPLEMENTATION",
+    "IMPLEMENTATION != VERIFIED_BEHAVIOR",
+    "MODEL_OUTPUT != ARCHITECTURE_AUTHORITY",
+    "triggerword 4 is build/assembly/verification",
+    "triggerword 5 is forensic analysis/live ingest",
+    "4 and 5 must fetch their current protocols before substantive execution"
+  ],
+  "updated_at": "2026-08-28T14:00:00+07:00"
+}

@@ -65,7 +65,7 @@ def test_entityos_post_launch_uncertainty_reenters_as_unknown(tmp_path):
     db.close()
 
 
-def test_entityos_bridge_types_subprocess_timeout_as_unknown(monkeypatch):
+def test_entityos_bridge_popen_failure_remains_definite(monkeypatch):
     bridge = EntityOSBridge("/unused", "a" * 64, timeout=0.01)
     monkeypatch.setattr(
         EntityOSBridge,
@@ -73,12 +73,84 @@ def test_entityos_bridge_types_subprocess_timeout_as_unknown(monkeypatch):
         lambda self: os.open("/dev/null", os.O_RDONLY),
     )
 
-    def timeout(*args, **kwargs):
-        raise subprocess.TimeoutExpired(cmd=["EntityOS"], timeout=0.01)
+    def fail_before_child(*_args, **_kwargs):
+        raise OSError("spawn denied before child exists")
 
-    monkeypatch.setattr(subprocess, "run", timeout)
-    with pytest.raises(EntityOSOutcomeUnknown):
+    monkeypatch.setattr(subprocess, "Popen", fail_before_child)
+    with pytest.raises(OSError, match="spawn denied before child exists"):
         bridge.run(["hello"])
+
+
+def test_entityos_bridge_types_timeout_after_popen_as_unknown(monkeypatch):
+    bridge = EntityOSBridge("/unused", "a" * 64, timeout=0.01)
+    monkeypatch.setattr(
+        EntityOSBridge,
+        "_open_verified",
+        lambda self: os.open("/dev/null", os.O_RDONLY),
+    )
+
+    class StartedProcess:
+        returncode = None
+
+        def __init__(self):
+            self.killed = False
+            self.waited = False
+
+        def communicate(self, *, timeout):
+            assert timeout == 0.01
+            raise subprocess.TimeoutExpired(cmd=["EntityOS"], timeout=timeout)
+
+        def kill(self):
+            self.killed = True
+
+        def wait(self, *, timeout):
+            assert timeout == 1.0
+            self.waited = True
+            self.returncode = -9
+            return self.returncode
+
+    proc = StartedProcess()
+    monkeypatch.setattr(subprocess, "Popen", lambda *_args, **_kwargs: proc)
+    with pytest.raises(EntityOSOutcomeUnknown, match="TimeoutExpired") as raised:
+        bridge.run(["hello"])
+    assert raised.value.replay_permitted is False
+    assert proc.killed is True
+    assert proc.waited is True
+
+
+def test_entityos_bridge_types_other_return_path_error_after_popen_as_unknown(monkeypatch):
+    bridge = EntityOSBridge("/unused", "a" * 64, timeout=0.01)
+    monkeypatch.setattr(
+        EntityOSBridge,
+        "_open_verified",
+        lambda self: os.open("/dev/null", os.O_RDONLY),
+    )
+
+    class StartedProcess:
+        returncode = None
+
+        def __init__(self):
+            self.killed = False
+            self.waited = False
+
+        def communicate(self, *, timeout):
+            raise OSError("result channel lost")
+
+        def kill(self):
+            self.killed = True
+
+        def wait(self, *, timeout):
+            self.waited = True
+            self.returncode = -9
+            return self.returncode
+
+    proc = StartedProcess()
+    monkeypatch.setattr(subprocess, "Popen", lambda *_args, **_kwargs: proc)
+    with pytest.raises(EntityOSOutcomeUnknown, match="OSError") as raised:
+        bridge.run(["hello"])
+    assert raised.value.replay_permitted is False
+    assert proc.killed is True
+    assert proc.waited is True
 
 
 def test_entityos_bridge_real_harmless_child_start_then_timeout_is_unknown(tmp_path):
@@ -103,6 +175,7 @@ def test_entityos_bridge_real_harmless_child_start_then_timeout_is_unknown(tmp_p
         bridge.run([str(marker)])
 
     assert isinstance(raised.value.__cause__, subprocess.TimeoutExpired)
+    assert raised.value.replay_permitted is False
     assert marker.read_text() == "PROCESS_STARTED\n"
     assert "PROCESS_FINISHED" not in marker.read_text()
 

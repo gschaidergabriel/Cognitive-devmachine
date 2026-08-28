@@ -32,6 +32,24 @@ class FakeStore:
     def record_execution_v2_metadata(self, invocation_id, **kwargs):
         self.events.append(("execution_v2", invocation_id, kwargs["status"], kwargs["duplicate_state"]))
 
+    def record_execution_bundle(self, invocation_id, **kwargs):
+        self.record_execution(
+            invocation_id,
+            executable_id=kwargs["executable_id"],
+            command_digest=kwargs["command_digest"],
+            environment_id=kwargs["environment_id"],
+            exit_code=kwargs["exit_code"],
+            result_digest=kwargs["result_digest"],
+            now_ts=kwargs.get("now_ts"),
+        )
+        self.record_execution_v2_metadata(
+            invocation_id,
+            source_digest=kwargs["source_digest"],
+            duplicate_state=kwargs["duplicate_state"],
+            status=kwargs["status"],
+            now_ts=kwargs.get("now_ts"),
+        )
+
 
 def obs(exit_code=0, status=None):
     return ExecutionObservation(

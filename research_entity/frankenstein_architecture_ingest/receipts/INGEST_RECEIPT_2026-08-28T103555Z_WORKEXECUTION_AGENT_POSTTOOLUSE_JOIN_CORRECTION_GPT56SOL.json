@@ -1,0 +1,46 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "created_at": "2026-08-28T10:35:55Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol",
+  "status": "COMMITTED_SOURCE_FORENSICS_NO_RUNTIME_CREDIT",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+  "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+  "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "ingested_packet_id": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
+  "ingested_packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T103555Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_V2.json",
+  "superseded_packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T103555Z_WORKEXECUTION_AGENT_POSTTOOLUSE_JOIN_CORRECTION_GPT56SOL.json",
+  "ingest_decision": {
+    "successor_packet": "ACCEPTED_SCHEMA_VALID_SOURCE_PACKET",
+    "superseded_packet": "QUARANTINED_SUPERSEDED_NOT_CONSUMED_AS_VALID_PACKET",
+    "material_change": "tool_use_id -> agent_id is documented directly on Agent PostToolUse via tool_response.agentId; remaining open causal edge is paket_id -> tool_use_id",
+    "runtime_reachability": "UNVERIFIED_TARGET_HOST",
+    "runtime_credit_delta": 0
+  },
+  "crosschecks": [
+    "Donor stern.py handoff explicitly records durable workpackage/capsule state but does not spawn.",
+    "Donor hooks.json registers seven events and lacks versioned SubagentStart/SubagentStop/Task lifecycle hooks.",
+    "Donor architekt_governance.md requires handoff before spawn and reconcile afterward at corrected span 77-81.",
+    "Current official Claude Code hooks documentation states PostToolUse carries tool_use_id and Agent tool_response carries agentId for completed and async_launched calls.",
+    "Current official Claude Code hooks documentation keeps agent_id and task_id as distinct lifecycle surfaces."
+  ],
+  "contradictions_preserved": [
+    "Specification expects spawn after handoff, but handoff implementation itself does not spawn.",
+    "Prior packet/quarantine interpretation left tool_use_id -> agent_id open; newer direct official documentation closes that documentation-level join.",
+    "Documentation-level capability does not prove installed-host payload firing."
+  ],
+  "next_exact_gate": "Triggerword-4/build lane: deterministically bind paket_id -> Agent tool_use_id and capture one harmless installed-host Agent PostToolUse plus SubagentStart/SubagentStop to verify the documented agentId join; no timing/order inference.",
+  "credits": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "provider_runtime": 0,
+    "training": 0
+  }
+}

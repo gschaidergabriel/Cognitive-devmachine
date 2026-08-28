@@ -165,6 +165,39 @@ class UnifiedRuntimeV6Tests(unittest.TestCase):
         self.assertTrue(cycle.checkpoint["workspace_ignited"])
         self.assertEqual(cycle.checkpoint["workspace_ignition_threshold"], 0.5)
 
+    def test_caller_context_cannot_override_reserved_causal_identity(self):
+        fake = FakeInference()
+        _, _, _, runtime, _ = build_unified_cognitive_runtime_v6(
+            self.db,
+            inference_fn=fake,
+            cognitive_config=CognitiveCycleConfig(thinking_for_deep_roles=False),
+        )
+        cycle = runtime.tick_once(
+            tick_id="v6-causal-binding",
+            now_ts=250.0,
+            trusted_axes=_trusted_normal_axes(),
+            cognitive_context={
+                "goal": "g",
+                "tick_id": "forged-tick",
+                "woken_goal_ids": ["forged-goal"],
+                "controller_action": "FORGED_ACTION",
+            },
+        )
+
+        self.assertEqual(
+            cycle.checkpoint["reserved_cognitive_context_overrides"],
+            ["controller_action", "tick_id", "woken_goal_ids"],
+        )
+        prompts = "\n".join(
+            str(message.get("content", ""))
+            for messages, _config in fake.calls
+            for message in messages
+        )
+        self.assertNotIn("forged-tick", prompts)
+        self.assertNotIn("forged-goal", prompts)
+        self.assertNotIn("FORGED_ACTION", prompts)
+        self.assertIn("v6-causal-binding", prompts)
+
     def test_no_inference_function_means_zero_provider_calls(self):
         _, _, _, runtime, _ = build_unified_cognitive_runtime_v6(self.db)
         cycle = runtime.tick_once(

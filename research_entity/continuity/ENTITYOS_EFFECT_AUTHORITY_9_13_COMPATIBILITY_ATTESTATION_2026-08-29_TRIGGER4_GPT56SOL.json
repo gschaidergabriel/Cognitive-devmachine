@@ -1,0 +1,115 @@
+{
+  "schema": "ENTITYOS_EFFECT_AUTHORITY_EPOCH_COMPATIBILITY_ATTESTATION/v1",
+  "status": "CURRENT_9_13_NON_AUTHORITY_COMPATIBILITY_ATTESTATION",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "observed_current_main": "ff6005fa35d3e8aa3684a78fef7eeac02b6f5c94",
+  "purpose": "Bind the already-existing exact EffectGate+EffectJournal implementation identity to the current 9.13 inbox-selected authority surface without creating, broadening, replacing, or self-granting effect authority.",
+  "current_authority_surface": {
+    "inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "inbox_blob_sha": "b8681e633a3a94f5e8ab00472ec4c3e321a2dcc1",
+    "schema_version": "9.13",
+    "selected_delta": "9.13AJ_NON_AUTHORITY",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AJ_DELTA_2026-08-29T0038P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "9ae9dd8e0c21d1171e0d986ee6a4e901d1dc40c4",
+    "authority_change": false,
+    "mode": "FREE_ONLY",
+    "evidence_rule": "NEW_EVIDENCE_MUST_BIND_CURRENT_CANONICAL_AUTHORITY_OR_LABEL_OLDER_EPOCH_AS_HISTORICAL_ONLY"
+  },
+  "prior_exact_source_binding": {
+    "path": "research_entity/continuity/ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_V1.json",
+    "blob_sha": "b4d91a0dd233c9dc15ff8218feea9248ac1c13c5",
+    "declared_status": "CURRENT_EXACT_SOURCE_IDENTITY_BINDING_NO_NEW_AUTHORITY",
+    "resolved_from_main": "2b68aad14bf7824d513b52898904909256e3522d",
+    "historical_resolution_supervisor_epoch": "8.78",
+    "historical_resolution_supervisor_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "classification_under_9_13": "HISTORICAL_SOURCE_RESOLUTION_PROVENANCE_WITH_UNCHANGED_EFFECT_AUTHORITY_IDENTITY"
+  },
+  "current_semantic_authority_evidence": {
+    "artifact_manifest_path": "the artefact/manifest.json",
+    "artifact_manifest_blob_sha": "c1969463d378f828bac7bbb44c55a2851b61c273",
+    "artifact_manifest_effect_authority": "EffectGate+EffectJournal",
+    "execution_authority_pointer_path": "CLAY_EXECUTION_AUTHORITY.md",
+    "execution_authority_pointer_blob_sha": "b850dbdf0ec5b4c04aa0c7f6e6a98a07f6f9d2f9",
+    "note": "The manifest still names EffectGate+EffectJournal as effect authority. Its embedded 8.78 authority_correction is a stale current-facing mirror relative to the inbox-selected 9.13 NON_AUTHORITY delta and is not used here to downgrade the current inbox."
+  },
+  "source_identity_stability": {
+    "base_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+    "current_observation_commit": "ff6005fa35d3e8aa3684a78fef7eeac02b6f5c94",
+    "comparison_result": "DESCENDANT_WITH_NO_CHANGES_TO_BOUND_EFFECT_GATE_EFFECT_JOURNAL_UNIFIEDDB_MANIFEST_OR_EXECUTION_AUTHORITY_POINTER_FILES",
+    "comparison_segments": [
+      {
+        "base": "2b68aad14bf7824d513b52898904909256e3522d",
+        "head": "fe27ffb47db124e186ec321b92f171b2435b86af",
+        "ahead_by": 4,
+        "changed_files": [
+          "research_entity/continuity/ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_V1.json",
+          "research_entity/continuity/triggerword4/receipts/TRIGGERWORD4_ACTIONS_EVENT_FILTER_CONTROL_PLANE_CONTRADICTION_GPT56SOL_20260829T0215P0700.json",
+          "research_entity/runtime/tool_results/2026-08-29T0216P0700_TRIGGER4_F2_WP105_AUTHORITY_BINDING_SHAPE_DISCRIMINATOR_GPT56SOL.json",
+          "research_entity/runtime/tool_results/2026-08-29_TRIGGER4_ACTIONS_PRESTEP_ACCOUNT_SCOPE_DISCRIMINATOR_GPT56SOL.json"
+        ]
+      },
+      {
+        "base": "fe27ffb47db124e186ec321b92f171b2435b86af",
+        "head": "ff6005fa35d3e8aa3684a78fef7eeac02b6f5c94",
+        "ahead_by": 1,
+        "changed_files": [
+          "research_entity/runtime/tool_results/2026-08-29_TRIGGER4_F2_PUBLIC_ACTIONS_CONTROL_PLANE_COUNTEREVIDENCE_GPT56SOL.json"
+        ]
+      }
+    ],
+    "effect_gate": {
+      "path": "the artefact/clayverse/effects.py",
+      "blob_sha": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4"
+    },
+    "effect_journal": {
+      "path": "the artefact/clayverse/effect_journal.py",
+      "blob_sha": "cda63471f1467481f2ff79032d3931730a334a20"
+    },
+    "canonical_state_schema": {
+      "path": "the artefact/clayverse/store.py",
+      "blob_sha": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+      "state_symbol": "UnifiedDB",
+      "schema_version": "6"
+    }
+  },
+  "current_epoch_consumption_identity": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "commit_sha": "ff6005fa35d3e8aa3684a78fef7eeac02b6f5c94",
+    "effect_gate_path": "the artefact/clayverse/effects.py",
+    "effect_gate_blob_sha": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+    "effect_journal_path": "the artefact/clayverse/effect_journal.py",
+    "effect_journal_blob_sha": "cda63471f1467481f2ff79032d3931730a334a20",
+    "unifieddb_path": "the artefact/clayverse/store.py",
+    "unifieddb_blob_sha": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "state_schema": "UnifiedDB/schema_version=6",
+    "api_version": "ENTITYOS_EFFECT_AUTHORITY_PY_API/v1"
+  },
+  "compatibility_conclusion": {
+    "effect_authority_changed_by_9_13AJ": false,
+    "implementation_source_tuple_changed_since_prior_binding": false,
+    "prior_8_78_basis_may_be_used_as_current_authority_surface": false,
+    "prior_8_78_basis_role": "HISTORICAL_PROVENANCE_ONLY",
+    "current_consumption_must_bind_9_13_surface": true,
+    "new_authority_created": false,
+    "authority_broadened": false,
+    "second_effect_authority_created": false
+  },
+  "frankenstein2_consumption": {
+    "target_workpackage": "F2-WP-105",
+    "active_mutation_authority_must_remain_existing_claim": true,
+    "rule": "The existing active F2-WP-105 lane may consume the current_epoch_consumption_identity only as the externally resolved canonical authority source identity. The F2 adapter remains non-authoritative, must verify the exact tuple and current 9.13 attestation, and must fail closed on stale epoch, path, blob, schema, API, call-identity or caller-authored effect_id mismatch."
+  },
+  "credit_boundary": {
+    "source_identity_epoch_compatibility": "ATTESTED_AT_SOURCE_AUTHORITY_METADATA_SCOPE_ONLY",
+    "effectgate_runtime_credit_added": 0,
+    "effectjournal_runtime_credit_added": 0,
+    "real_effect_runtime_credit_added": 0,
+    "completion_runtime_credit_added": 0,
+    "physical_grid10_runtime_credit_added": 0,
+    "whole_frankenstein2_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "next_exact_gate": "Existing active F2-WP-105 mutation authority consumes this exact current-epoch tuple and executes a deterministic no-real-effect integration matrix proving canonical authority -> journal PENDING -> exact result-free F2 call binding -> permitted stub dispatch -> VERIFIED or UNKNOWN transition; DENY/REQUIRE_CONFIRMATION/DEGRADE/UNKNOWN/stale-epoch/source-identity/call-identity mismatches dispatch zero times; restart uncertainty remains UNKNOWN and cannot blind-replay."
+}

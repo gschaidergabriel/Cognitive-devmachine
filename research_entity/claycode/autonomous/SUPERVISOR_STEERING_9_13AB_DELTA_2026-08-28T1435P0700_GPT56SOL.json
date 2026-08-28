@@ -1,0 +1,61 @@
+{
+  "schema_version": "CLAYCODE_SUPERVISOR_STEERING/9.13AB_NON_AUTHORITY",
+  "authority_epoch": "9.13",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "provider_authority_change": false,
+  "material_trigger": "Trigger-5 current-donor forensics exposed stale authority labeling plus effect-invocation and completion-evidence soundness gaps.",
+  "evidence_boundary": {
+    "new_runtime_credit": 0,
+    "new_training_credit": 0,
+    "new_base_credit": 0,
+    "new_canonical_semantics_credit": 0,
+    "new_physical_grid10_credit": 0,
+    "new_whole_hcu_credit": 0,
+    "source_forensics_are_not_runtime_pass": true
+  },
+  "preserve_existing_p0": [
+    "Complete bootstrap-v2/control-sync so the owning VPS is current, clean and authority-bound.",
+    "Repository-bound execute quiescence-v2 and then observe >=90s read-only with stable pre/post main HEAD/tree, dirty=false, authority/source hashes, zero live forbidden roots, zero active provider leases and zero relevant counter movement.",
+    "Repository-bound execute GRID10 SIGKILL independent replacement v3 on a clean current non-provider checkout before any Physical-GRID10/HCU promotion."
+  ],
+  "new_fail_closed_gates": {
+    "evidence_authority_currentness": {
+      "finding": "Fresh Trigger-5 archaeology packets label authority_epoch/admitted_supervisor_epoch 8.78 while canonical FREE_PROVIDER_ADMISSION is 9.13 HARD_OFF.",
+      "rule": "New evidence packets must bind the exact current FREE_PROVIDER_ADMISSION and SUPERVISOR_INBOX/selected-steering identity. Historical epochs must be labeled historical_source_epoch, never admitted/current authority.",
+      "stale_missing_or_mismatched_authority": "NO_RUNTIME_NO_BASE_NO_CANONICAL_NO_TRAINING_CREDIT"
+    },
+    "effect_invocation_identity": {
+      "finding": "Current donor correlates PreToolUse/PostToolUse through one mutable session-scoped active_turns.effect_id although the platform exposes call-scoped tool_use_id.",
+      "next_executable_falsifier": "Interleave two same-session state-changing calls A/B and bind Pre(A), Pre(B), Post(A), Post(B), tool_use_id and effect_id. Demonstrate or falsify cross-wiring on the old path before successor credit.",
+      "successor_rule": "Use immutable tool_use_id or equivalently exact invocation identity as primary correlation key; session_id is context only."
+    },
+    "effect_enforcement_semantics": {
+      "finding": "Donor EffectGate is bookkeeping/nonblocking; tools proceed regardless.",
+      "rule": "Classify it as observational/admission-journal evidence unless executable pre-side-effect denial is demonstrated. A prevention claim requires a real PreToolUse/equivalent blocking decision and a bound allow/deny receipt."
+    },
+    "completion_evidence_truth": {
+      "finding": "Current verifier can accept non-success states because it rejects only legacy lowercase 'fehler'; textual test:0 claims are unbound assertions.",
+      "rule": "Completion must use an explicit allowlist of successful structured receipt states. FEHLGESCHLAGEN, ABGELEHNT, WIEDERHOLUNG, UNGEPRUEFT, unknown/stale states and forged textual test claims fail closed.",
+      "required_receipt_binding": ["invocation/effect identity", "command or operation digest", "cwd/runtime identity", "exit/outcome", "HEAD/tree/source hashes", "dirty state", "stdout/stderr or effect-output digests"],
+      "required_adversarial_tests": ["each non-success status", "forged test:0", "receipt transplant", "source drift", "invocation-id transplant"]
+    }
+  },
+  "base_release_boundary": "CC-WP-01 and CC-WP-02 remain the only PASS packages. CC-WP-03..14, GENERAL_PURPOSE_GATE and CLAYCODE_RELEASE_GATE remain open/not-pass unless their stated target-VPS executable receipts pass.",
+  "goodman_and_ancestry": [
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_MUST_REMAIN_DISJOINT_FOR_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT"
+  ],
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

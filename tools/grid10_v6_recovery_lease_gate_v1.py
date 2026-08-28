@@ -242,12 +242,18 @@ def persist_recovery_classification_with_canonical_lease(
     A mutating caller may not supply `checked_at`. Lease freshness for persistence is
     evaluated from SQLite/runtime time inside the same writer transaction. This prevents a
     stale or compromised caller from authorizing mutation by replaying a historical time.
+
+    The first recovery classification is immutable. Re-entry against an already classified
+    intent fails closed instead of replacing the original lease/time evidence with a later
+    proof. Recovery state evolution must use an explicit successor event/path rather than
+    rewriting the first observed recovery boundary.
     """
     if checked_at is not None:
         raise RecoveryLeaseNotAuthorized("EXTERNAL_CHECKED_AT_OVERRIDE_FORBIDDEN")
 
     from grid10_v6_crash_reconciliation_v1 import (
         INTENT_TABLE,
+        STATUS_PREPARED,
         STATUS_RECOVERY_REQUIRED,
         classify_cycle_intent,
     )
@@ -277,6 +283,10 @@ def persist_recovery_classification_with_canonical_lease(
         ).fetchone()
         if row is None:
             raise RecoveryLeaseNotAuthorized(f"MISSING_CYCLE_INTENT:{tick_id}")
+        if str(row["status"]) != STATUS_PREPARED:
+            raise RecoveryLeaseNotAuthorized(
+                f"RECOVERY_INTENT_NOT_PREPARED:{row['status']}:{tick_id}"
+            )
 
         envelope = {
             "schema": "GRID10_V6_RECOVERY_CLASSIFICATION_WITH_LEASE/v1",
@@ -302,19 +312,20 @@ def persist_recovery_classification_with_canonical_lease(
             "completion_minted": False,
         }
         envelope_digest = _digest(envelope)
-        con.execute(
+        changed = con.execute(
             f"""UPDATE {INTENT_TABLE}
                 SET status=?,terminal_ts=?,classification_json=?,classification_digest=?
-                WHERE tick_id=? AND status!='CLOSED'""",
+                WHERE tick_id=? AND status=?""",
             (
                 STATUS_RECOVERY_REQUIRED,
                 time.time() if terminal_ts is None else float(terminal_ts),
                 _canon(envelope),
                 envelope_digest,
                 tick_id,
+                STATUS_PREPARED,
             ),
-        )
-        if con.total_changes != 1:
+        ).rowcount
+        if changed != 1:
             raise RecoveryLeaseNotAuthorized(
                 f"RECOVERY_INTENT_UPDATE_CONFLICT:{tick_id}"
             )

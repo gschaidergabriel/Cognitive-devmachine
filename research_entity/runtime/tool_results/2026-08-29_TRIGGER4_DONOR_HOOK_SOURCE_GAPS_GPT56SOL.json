@@ -1,0 +1,36 @@
+{
+  "schema": "TRIGGER4_DONOR_HOOK_SOURCE_GAPS/v1",
+  "evidence_class": "SOURCE_ONLY_NO_RUNTIME_CREDIT",
+  "donor": {
+    "repository": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "hooks_path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+    "hooks_blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+    "stern_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "observed": [
+    {
+      "finding": "HOOK_LLM_BOUNDARY_CONTRADICTION",
+      "detail": "hooks.json states no LLM call in any hook, while donor stern.py Stop dispatch calls _kognition_richten_hook and the same source implements a blocking local Ollama /api/generate call for that cognition path."
+    },
+    {
+      "finding": "SESSION_SCOPED_EFFECT_CORRELATION",
+      "detail": "PreToolUse stores one effect_id in active_turns.effect_id per session and PostToolUse reads that mutable session-scoped pointer; donor stern.py contains no tool_use_id binding."
+    },
+    {
+      "finding": "PRETOOL_GATE_BOOKKEEPING_ONLY",
+      "detail": "Donor source explicitly states zulassen() never blocks a tool and PreToolUse emits no deny/block decision."
+    }
+  ],
+  "existing_trigger4_staging_counterparts": [
+    "tools/frankenstein2_hook_invocation_adapter_v1.py",
+    "tests/test_frankenstein2_hook_invocation_adapter_v1.py",
+    "tools/frankenstein2_completion_verifier_v2.py",
+    "tests/test_frankenstein2_completion_verifier_v2.py"
+  ],
+  "assembly_decision": "DONOR_DIRECT_HOOK_REUSE_FAIL_CLOSED; MIGRATE_OR_WRAP_WITH_CALL_SCOPED_IDENTITY_AND_REAL_ENFORCEMENT_BEFORE_PROMOTION",
+  "runtime_credit": 0,
+  "whole_product_credit": 0,
+  "notes": "No Frankenstein donor or harness file was modified. This receipt records source observations only; exact-source executed regression remains blocked by current GitHub Actions pre-step failure."
+}

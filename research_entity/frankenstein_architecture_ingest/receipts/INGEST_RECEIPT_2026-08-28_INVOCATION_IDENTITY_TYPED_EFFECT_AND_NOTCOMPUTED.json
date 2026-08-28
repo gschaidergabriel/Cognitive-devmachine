@@ -1,0 +1,78 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:29:53Z",
+  "authority_epoch": "8.78",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_observed": "45f46138db94e0228240ea15b586bf8be622410b",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_observed_before_delta": "cfddde323f457099c0fada68a3af5340d554c159",
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_INVOCATION_IDENTITY_TYPED_EFFECT_AND_NOTCOMPUTED.json",
+    "commit": "6ff9f2a97ee154942e75d023d1a7b5f2c1d0eb88"
+  },
+  "consumed_or_reconciled": [
+    {
+      "packet_id": "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
+      "result": "INGESTED_DEDUPED_REINFORCING",
+      "independent_replication_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "result": "INGESTED_DEDUPED_REINFORCING",
+      "independent_replication_credit": false
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "result": "INGESTED_DEDUPED_REINFORCING",
+      "independent_replication_credit": false
+    },
+    {
+      "run_id": "triggerwort5-20260828T1414p0700-gpt56sol-hook-invocation-identity",
+      "path": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_HOOK_INVOCATION_IDENTITY_2026-08-28_GPT56SOL.json",
+      "result": "RECONCILED_BY_REFERENCE",
+      "authority": "PROVENANCE_DISCOVERY_NOT_SECOND_ARCHITECTURE_AUTHORITY"
+    }
+  ],
+  "source_crosschecks": [
+    {
+      "id": "STERN_NONBLOCKING_NORMAL_PRETOOLUSE",
+      "result": "PASS_SOURCE_FINDING",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "spans": ["3200-3655", "8810-8895"],
+      "finding": "normal zulassen() is request-side bookkeeping and does not emit deny; the inspected PreToolUse dispatcher emits deny only for SEBUKKU",
+      "scope": "source only; no donor runtime execution"
+    },
+    {
+      "id": "CLAUDE_HOOK_INVOCATION_IDENTITY",
+      "result": "PASS_EXTERNAL_PRIMARY",
+      "source": "https://code.claude.com/docs/en/hooks",
+      "finding": "tool_use_id is call-scoped in tool-use hook payloads; PostToolUse can fire concurrently for parallel tool calls; PreToolUse can block",
+      "scope": "current provider contract crosscheck"
+    }
+  ],
+  "promoted_design_invariants": [
+    "immutable per-invocation correlation identity; session_id is context only",
+    "ADMISSION_DECISION != ENFORCEMENT_DECISION != EXECUTION_RECEIPT != WORLD_EFFECT_VERIFICATION != RESULT_REENTRY != COMPLETION_EVIDENCE",
+    "pending cancellation before dispatch is distinct from unknown outcome after possible submission",
+    "COMPUTE_OFF dependency taint preserves NOT_COMPUTED through GRID/WorldSlice descendants",
+    "VoiceSessionCapsule remains noncanonical RAM projection and requires bounded generation/provenance binding before response steering",
+    "architecture_archaeology and frankenstein_architecture_ingest have distinct provenance versus packet-admission roles; mechanical sync remains open"
+  ],
+  "contradiction_status": [
+    {"id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002", "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN"},
+    {"id": "TW5-CONTRADICTION-PARALLEL-CORRELATION-005", "status": "STRUCTURAL_GAP_RUNTIME_RACE_NOT_REPRODUCED"},
+    {"id": "TW5-CONTRADICTION-INGEST-PATH-001", "status": "OPERATIONALLY_BOUNDED_SYNC_OPEN"},
+    {"id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003", "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN"}
+  ],
+  "credits": {
+    "new_runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover wache-koenig and historical effect Git windows; then require Triggerword-4 source-bound per-invocation effect regressions plus WorldSlice NOT_COMPUTED/taint acceptance tests."
+}

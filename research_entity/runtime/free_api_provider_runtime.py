@@ -27,11 +27,13 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.7"
-EXECUTION_RECEIPT_SCHEMA_VERSION = "1.6"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.8"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.7"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
 PAYMENT_LATCH_SCOPE = "process_local"
+COST_POLICY_PRINCIPAL_SCOPE = "process_local_credential_binding"
+_PROCESS_COST_PRINCIPAL_KEY = secrets.token_bytes(32)
 MAX_PROVIDER_REQUEST_BYTES = 2_000_000
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_OUTPUT_TOKENS = 4_096
@@ -468,6 +470,7 @@ def receipt() -> dict:
             "payment_required_is_hard_stop": True,
             "payment_latch_restart_durable": False,
             "provider_account_identity_verified": False,
+            "cost_policy_principal_restart_stable": False,
             "semantic_request_identity_authorizes_replay": False,
             "model_availability_inferred_without_probe": False,
             "network_probe_performed": False,
@@ -815,14 +818,16 @@ def _cost_policy_principal_id(
     spec: ProviderSpec, key_name: str, environ: dict[str, str]
 ) -> str:
     evidence = _zero_cost_evidence_for(spec, environ) or "NONE"
-    # Bind cost authority to the exact credential without serializing it or an
-    # unsalted raw-key digest. HMAC uses the validated bearer token as its key
-    # and a domain-separated provider/key-name context as the message.
+    # Bind cost authority to the exact credential without publishing an
+    # offline verifier for credential guesses. The per-process random key is
+    # the HMAC key; the validated credential is part of the authenticated,
+    # domain-separated message and is never serialized into the receipt.
     credential_binding_id = hmac.new(
-        environ[key_name].encode("ascii"),
-        f"frank-cost-principal-v1:{spec.provider_id}:{key_name}".encode(
-            "ascii"
-        ),
+        _PROCESS_COST_PRINCIPAL_KEY,
+        (
+            f"frank-cost-principal-v2:{spec.provider_id}:{key_name}:"
+            f"{environ[key_name]}"
+        ).encode("ascii"),
         hashlib.sha256,
     ).hexdigest()[:16]
     value = (
@@ -1480,7 +1485,7 @@ def _execute_chat_locked(
         "model_availability_verified": outcome == "success",
         "endpoint_capability_id": endpoint_capability_id,
         "cost_policy_principal_id": cost_policy_principal_id,
-        "cost_policy_principal_scope": "credential_binding",
+        "cost_policy_principal_scope": COST_POLICY_PRINCIPAL_SCOPE,
         "budget_epoch_id": _budget_epoch_id(env),
         "semantic_request_id": semantic_request_id,
         "request_id": request_id,

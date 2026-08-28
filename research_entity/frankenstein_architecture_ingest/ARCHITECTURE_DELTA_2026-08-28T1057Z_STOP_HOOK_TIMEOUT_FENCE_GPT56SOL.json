@@ -1,0 +1,144 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:57:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/stop-hook-timeout-fence",
+  "delta_class": "STOP_HOOK_DEADLINE_PROPAGATION_AND_CAUSAL_TAIL_FENCE",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "design_branch_head_observed_before_write": "b074bcad4c382ba2b5cbb303b69baaf00c3b0876",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "source_atoms": [
+    {
+      "atom_id": "stern-hook-deadline-001-declared-hard-budget",
+      "source_kind": "SPEC",
+      "span": "stern.py:1-55",
+      "finding": "The file-level contract declares hard per-hook time budgets, a SIGALRM upper bound, fail-silent behavior and an unconditional no-LLM-in-hook rule.",
+      "authority_class": "DECLARED_INVARIANT_NOT_SELF_ENFORCING",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "stern-hook-deadline-002-default-stop-and-model-budgets",
+      "source_kind": "CONFIG",
+      "span": "stern.py:300-520",
+      "finding": "Defaults make Stop a 2.0s hook, enable kognition by default, use local qwen2.5:0.5b and give the synchronous model call a 1.3s timeout. The comments explicitly intend the model timeout to leave room for later Stop work.",
+      "authority_class": "LIVE_DEFAULT_CONFIGURATION",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    },
+    {
+      "atom_id": "stern-hook-deadline-003-catchable-global-timeout",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "stern.py:8400-8465",
+      "finding": "_HookTimeout subclasses Exception; the SIGALRM handler raises _HookTimeout; cmd_hook installs ITIMER_REAL for the whole hook and expects the outer except _HookTimeout boundary to abort the event.",
+      "authority_class": "GLOBAL_DEADLINE_CONTROL_PATH",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "stern-hook-deadline-004-nested-ollama-swallow-path",
+      "source_kind": "LIVE_CODE",
+      "span": "stern.py:4800-4935",
+      "finding": "_ollama_generate wraps the blocking urllib Ollama call in operational error handling followed by a broad except Exception that logs and returns None. Because _HookTimeout is an Exception, a SIGALRM delivered while execution is inside this try can be consumed at this nested boundary instead of reaching cmd_hook's outer timeout handler.",
+      "authority_class": "SOURCE_GROUNDED_DEADLINE_PROPAGATION_GAP",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "stern-hook-deadline-005-post-cognition-tail",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "stern.py:8838-8915",
+      "finding": "The Stop path performs model relevance judging before gw_absicht bookkeeping, governance-turn accounting and waiting-status update. Therefore swallowing the global timeout inside cognition can permit execution to return to later Stop tail work instead of source-enforcing immediate global-deadline abort.",
+      "authority_class": "LIVE_HOOK_CONTROL_FLOW",
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "stern-hook-deadline-006-outer-timeout-receipt-gap",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "stern.py:9009-9045",
+      "finding": "cmd_hook separately handles _HookTimeout only at its outer boundary, logs timeout, disarms the timer in cleanup, logs total duration and returns 0. The source does not provide a typed receipt proving which Stop substeps completed when a nested handler consumes the timeout signal.",
+      "authority_class": "FAIL_SILENT_COMPLETION_EVIDENCE_GAP",
+      "target_2_0_action": "ADAPT_TO_GRID"
+    }
+  ],
+  "deterministic_language_semantic_probe": {
+    "classification": "LOCAL_LANGUAGE_SEMANTICS_ONLY_NOT_FRANK_RUNTIME",
+    "result": "PASS",
+    "observed_behavior": "A custom timeout exception subclassing Exception, raised by SIGALRM while inside a nested try/except Exception, was caught by that nested handler and execution continued after the nested call.",
+    "runtime_credit": 0,
+    "purpose": "Discriminate Python exception-propagation semantics only; does not establish installed Frankenstein timing or failure frequency."
+  },
+  "corroborates_without_duplicating": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+      "relation": "SHARPENS_STOP_HOOK_BOUNDARY_WITH_DEADLINE_PROPAGATION_MECHANISM"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1053Z_RETRIEVAL_CREDIT_ROUND_BINDING_GPT56SOL.json",
+      "relation": "COMPLEMENTS_ROUND_BINDING; timeout/error paths are one mechanism that can leave earlier retrieval work open, but no runtime occurrence is claimed"
+    },
+    {
+      "path": "research_entity/global/TRIGGERWORD_4_DEFERRED_CAUSAL_RETURN_RETRIEVAL_VOICE_FUSION_ADDENDUM.md",
+      "relation": "ADDS_HOOK_DEADLINE_FENCE_REQUIREMENT_TO_EXTERNAL_TEST_LANE_WITHOUT_MODIFYING_FRANK_HARNESS"
+    }
+  ],
+  "architecture_effect": {
+    "candidate_primitive": "HookDeadlineFence/v1",
+    "status": "GENERATED_ARCHITECTURE_CANDIDATE_FOR_TRIGGERWORD4",
+    "minimum_invariants": [
+      "GLOBAL_HOOK_DEADLINE_SIGNAL_MUST_NOT_BE_CONSUMED_AS_AN_ORDINARY_SUBSTEP_FAILURE",
+      "NESTED_FAIL_SILENT_HANDLERS_MAY_HANDLE_OPERATIONAL_ERRORS_BUT_MUST_PROPAGATE_GLOBAL_DEADLINE",
+      "HOOK_EXIT_ZERO_DOES_NOT_IMPLY_ALL_REQUIRED_STOP_SUBSTEPS_COMPLETED",
+      "STOP_COMPLETION_REQUIRES_TYPED_SUBSTEP_OR_COMPLETION_RECEIPT_IF_USED_AS_EVIDENCE",
+      "MODEL_TIMEOUT_AND_GLOBAL_HOOK_DEADLINE_ARE_DISTINCT CONTROL_SCOPES",
+      "FRANK_HARNESS_REMAINS_UNMODIFIED_FOR_EVIDENCE_COLLECTION"
+    ],
+    "implementation_options_for_triggerword4": [
+      "Explicitly re-raise the global hook-deadline exception before broad Exception handlers in hook-reachable substeps.",
+      "Move model cognition out of the deterministic Stop critical path and return through the already-proposed exact causal-return binding.",
+      "If cognition remains in-hook for comparison, isolate it behind a parent-enforced bounded execution boundary and emit substep timing/completion receipts."
+    ],
+    "preferred_direction": "TEST_FIRST_THEN_MOVE_SLOW_MODEL_WORK_OUT_OF_DETERMINISTIC_HOOK_PATH_IF_LATENCY_OR_DEADLINE_TAIL_EVIDENCE_SUPPORTS_IT"
+  },
+  "contradictions_preserved": [
+    "Declared hard SIGALRM upper bound versus a global deadline exception that is an ordinary Exception and can be caught by nested fail-silent handlers.",
+    "Declared no-LLM-in-hook invariant versus default-enabled synchronous local Ollama inference in Stop.",
+    "Fail-silent Exit 0 semantics versus absence of a typed receipt proving completion of later Stop bookkeeping after timeout/error paths."
+  ],
+  "counterhypotheses": [
+    "The 1.3s urllib timeout may normally terminate the local Ollama call before the 2.0s global hook alarm, making the nested global-timeout swallow path uncommon in steady-state; this requires exact runtime timing evidence.",
+    "Installed configuration may disable kognition or use a sufficiently fast local model so the source-level deadline propagation gap is not exercised; source/current-config identity must be bound before operational severity is assigned.",
+    "A broader audit may show every other hook-reachable broad Exception handler completes quickly enough that only the Ollama boundary matters; do not generalize beyond directly inspected paths without source crosscheck."
+  ],
+  "required_discriminators": [
+    "Exact-source/build Stop run with cognition disabled, warm local Ollama, slow/cold local Ollama and unreachable local Ollama; record model substep, global deadline delivery, later Stop substep completion and total duration.",
+    "Deterministic injected-delay external test proving whether a global deadline raised inside cognition reaches cmd_hook outer _HookTimeout handling or is swallowed by nested fail-silent handling.",
+    "Two same-session retrieval rounds with one older row still open; bind exact retrieval/turn/generation and verify timeout/error of the newer judge cannot cause later feedback to target the older round by ordering heuristic.",
+    "Audit hook-reachable broad Exception boundaries for explicit global-deadline propagation; preserve exact source spans and do not infer runtime failure from source alone."
+  ],
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "language_semantics": "PASS_LOCAL_NON_PRODUCT_PROBE",
+    "runtime": 0,
+    "provider_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "next_exact_gate": "Triggerword-4 external non-provider source/build-bound Stop deadline test: preserve Frank Harness, instrument or externally observe deadline delivery plus later substep completion across cognition-disabled/warm/slow/unreachable local model conditions, and require exact retrieval round binding before any causal/runtime promotion."
+}

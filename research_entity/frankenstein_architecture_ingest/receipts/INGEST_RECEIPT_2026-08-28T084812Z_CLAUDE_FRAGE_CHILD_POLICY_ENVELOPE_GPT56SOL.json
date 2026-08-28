@@ -1,0 +1,76 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T084812Z-CLAUDE-FRAGE-CHILD-POLICY-ENVELOPE-GPT56SOL",
+  "created_at": "2026-08-28T08:48:12Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/claude-frage-child-policy-envelope",
+  "routing_result": "PASS",
+  "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "directive_fetch_result": "PASS",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_observed_before_delta": "e40b908f5ff352739a6bb6fa75f8f414b87d44d5"
+  },
+  "write": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T084812Z_CLAUDE_FRAGE_CHILD_POLICY_ENVELOPE_GPT56SOL.json",
+    "commit": "a03c13d94df908b882493ee860b75d09bbbb7a5f"
+  },
+  "crosschecks": [
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "result": "PASS_SOURCE",
+      "finding": "gespraech.berechtigung defaults to acceptEdits, is returned by gespraech_status, and the setter accepts acceptEdits, bypassPermissions, auto and dontAsk."
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "result": "PASS_SOURCE",
+      "finding": "RealtimeSession receives cfg.berechtigung and _claude_taetigkeit forwards it to claude_frage; no cwd override is passed by this bridge."
+    },
+    {
+      "source": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "result": "PASS_SOURCE",
+      "finding": "claude_frage invokes claude -p with --permission-mode, hard --disallowedTools Bash and --append-system-prompt; the inspected command contains no explicit --settings and falls back to Path.home() as cwd when none is provided."
+    }
+  ],
+  "architecture_result": {
+    "new_required_type": "ChildPolicyEnvelope",
+    "classification": "SOURCE_GROUNDED_SUCCESSOR_REQUIREMENT",
+    "summary": "Bind workpackage/task admission + native child identity to effective permission mode, tool capability set, cwd/project identity, settings artifact identity or explicit none, host/managed policy generation and policy digest. HumanIntentDecision remains distinct from invocation-level EffectDecision.",
+    "historical_settings_inheritance": "DONOR_EVIDENCE_ONLY_NOT_SILENTLY_CREDITED_TO_CURRENT_VOICE_CHILD",
+    "bash_denial": "NARROW_GUARD_NOT_WHOLE_CHILD_CONTAINMENT"
+  },
+  "coordination": {
+    "parallel_ingest_detected": true,
+    "central_ingest_state_action": "NOT_OVERWRITTEN",
+    "classification": "APPEND_ONLY_DELTA_RECEIPT; CENTRAL_LEDGER_RECONCILIATION_PENDING",
+    "reason": "The shared design branch moved repeatedly during this Trigger-5 macrocycle. Existing 081406Z/081600Z/082628Z packet assimilation and native-child frontier work were preserved rather than duplicated or replaced."
+  },
+  "credits": {
+    "trigger_routing": "PASS",
+    "donor_source_crosscheck": "PASS",
+    "source_architecture_delta": "COMMITTED",
+    "installed_host_effective_policy": 0,
+    "delegated_child_runtime": 0,
+    "effect_enforcement_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Observe one harmless delegated child on an authorized installed-host surface and bind workpackage_id + agent/task/tool invocation identity + effective permission/settings/cwd policy. Enumerate every reachable non-Bash mutating capability and prove deterministic admission/effect convergence before Triggerword-4 child-runtime promotion."
+}

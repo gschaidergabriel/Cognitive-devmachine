@@ -147,6 +147,37 @@ class AgentWorkExecutionAdapterTests(unittest.TestCase):
         self.assertIsNone(snap["binding_id"])
         self.assertEqual(_count(self.db, "fr2_work_execution_bindings"), 0)
 
+    def test_unknown_agent_id_is_sticky_and_late_post_cannot_mint_binding(self) -> None:
+        self.adapter.record_agent_pretool(
+            _pre("spawn-a", "wp-a"),
+            expected_workpackage_id="wp-a",
+            expected_work_generation="g7",
+        )
+        self.assertIsNone(
+            self.adapter.record_agent_posttool(
+                _post("spawn-a", None),
+                binding_id="binding-a",
+                child_runtime_kind="CLAUDE_AGENT",
+                identity_provenance="test-first-post-unknown",
+            )
+        )
+        with self.assertRaisesRegex(
+            AgentWorkExecutionIdentityError,
+            "AGENT_ID_UNKNOWN_REQUIRES_RECONCILIATION",
+        ):
+            self.adapter.record_agent_posttool(
+                _post("spawn-a", "agent-late"),
+                binding_id="binding-a",
+                child_runtime_kind="CLAUDE_AGENT",
+                identity_provenance="test-late-post-replay",
+            )
+        snap = self.adapter.spawn_snapshot("spawn-a")
+        self.assertEqual(snap["status"], "AGENT_ID_UNKNOWN")
+        self.assertEqual(snap["agent_identity_state"], "UNKNOWN")
+        self.assertIsNone(snap["agent_id"])
+        self.assertIsNone(snap["binding_id"])
+        self.assertEqual(_count(self.db, "fr2_work_execution_bindings"), 0)
+
     def test_same_session_interleave_reverse_post_preserves_identity(self) -> None:
         self.adapter.record_agent_pretool(
             _pre("spawn-a", "wp-a"),

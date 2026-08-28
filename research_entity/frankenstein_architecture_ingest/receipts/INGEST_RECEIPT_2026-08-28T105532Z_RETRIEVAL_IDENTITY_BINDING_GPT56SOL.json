@@ -1,0 +1,68 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL",
+  "created_at": "2026-08-28T10:55:32Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/retrieval-identity-binding",
+  "routing": "VERIFIED",
+  "directive_fetched": true,
+  "authority_epoch": "9.13",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_ingest": "b3f236de5fb44438367987997eea6eb6cf53665f",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_before_ingest": "4ebdcbffff35e85d9d09e9fa92f0de2c15d8402c",
+  "packet": {
+    "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105532Z_5641dc6_GPT56SOL_RETRIEVAL_IDENTITY_BINDING.json",
+    "commit": "c06aab6bae35f1282487d92820dba37448687474",
+    "packet_id": "TW5-PACKET-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T105532Z_RETRIEVAL_IDENTITY_BINDING_GPT56SOL.json",
+    "commit": "dc06706b74cc5caaded4920f38e7cbea9d8abd10",
+    "delta_id": "TW5-DELTA-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL"
+  },
+  "observed": [
+    "The donor retrieval_episodes insert already persists retrieval_id, turn_id, episode_id, causal_id and generation.",
+    "The Stop relevance path selects the newest unjudged retrieval by session/time rather than exact retrieval/turn identity.",
+    "The judged query is reconstructed from the transcript's latest user message.",
+    "The downstream credit receipt is deterministic and retrieval/causal/generation-bound only after the target row has already been selected."
+  ],
+  "inferred": [
+    "Frankenstein 2.0 can repair this boundary by propagating existing donor identities rather than creating a new identity substrate.",
+    "A typed RetrievalJudgementWorkItem is the minimal architecture adapter between retrieval admission and GRID/local cognition."
+  ],
+  "not_established": [
+    "No runtime misattachment has been observed in this cycle.",
+    "No latency or ordering benchmark was run.",
+    "No provider or local-model execution was performed.",
+    "No whole Frankenstein 2.0, EntityOS/HCU or training credit is granted."
+  ],
+  "contradictions_preserved": [
+    "Existing exact identity persistence coexists with weaker session-newest target selection.",
+    "Deterministic receipt idempotency does not prove correct target-row/query pairing."
+  ],
+  "triggerword4_handoff": [
+    "Implement/define RetrievalJudgementWorkItem with retrieval_id + turn_id + episode_id + causal_id + generation + immutable query identity/reference + candidate IDs.",
+    "Run SameSessionRetrievalCreditBinding/v1 as deterministic non-provider interleaving test.",
+    "Run RetrievalJudgementGenerationFence/v1 and require zero writes on mismatched tuple."
+  ],
+  "execution": {
+    "runtime_test": false,
+    "provider_call": false,
+    "unusual_experiment": false,
+    "lease_consumed": false,
+    "frank_harness_modified": false
+  },
+  "credit": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SOURCE_SCOPE",
+    "runtime": 0,
+    "provider": 0,
+    "training": 0,
+    "whole_product": 0
+  }
+}

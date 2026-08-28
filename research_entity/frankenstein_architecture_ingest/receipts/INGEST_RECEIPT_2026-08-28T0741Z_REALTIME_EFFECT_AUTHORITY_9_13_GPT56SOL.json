@@ -1,0 +1,57 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T0741Z-REALTIME-EFFECT-AUTHORITY-9_13-GPT56SOL",
+  "trigger": "triggerwort 5",
+  "recorded_at": "2026-08-28T14:40:03+07:00",
+  "status": "SOURCE_GROUNDED_INGEST_COMPLETE_RUNTIME_CREDIT_ZERO",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_observed": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY_OWNER_EMERGENCY_STOP_HARD_OFF"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T0741Z_REALTIME_EFFECT_AUTHORITY_9_13_GPT56SOL.json",
+    "commit": "cba3d7184e9fa5aeb27a3d70495c71452e1570e2"
+  },
+  "consumed_packets": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
+      "result": "CONSUMED_SOURCE_CROSSCHECKED_NO_RUNTIME_PROMOTION"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+      "result": "CONSUMED_SCHEMA_VALID_SUCCESSOR_NO_RUNTIME_PROMOTION",
+      "supersedes": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL"
+    }
+  ],
+  "source_crosschecks": [
+    "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py@blob:37b972474d80d827fdef64fbbb79c1c31e173aaa spans response.done/barge-in and 1610-1795",
+    "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py effect hook spans",
+    "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ACTION_BOUNDARY_SUBMANIFEST.json exact historical wache/freigabe hashes"
+  ],
+  "accepted_design_change": "Frankenstein 2.0 keeps modality-specific front-gates such as voice confirmation, but every state-changing execution must converge on one typed executor-bound EffectDecision/CapabilityLease with immutable invocation identity and one-shot consumption. Direct Realtime memory writes remain a distinct typed MEMORY_WRITE_ADMISSION class inside the same canonical state/provenance authority, not a second effect authority.",
+  "negative_evidence_preserved": [
+    "The historical wache source is exact but scheduler/current-host reachability remains unknown.",
+    "Historical wache is Bash-only and cannot prove whole-effect coverage.",
+    "Current donor normal stern EffectGate path is nonblocking bookkeeping.",
+    "Realtime call_id/function output correlation is not proof that a canonical EffectDecision is consumed at the final executor.",
+    "No donor runtime or Triggerword-4 runtime was executed in this ingest."
+  ],
+  "credits": {
+    "new_runtime_execution": 0,
+    "effect_enforcement_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover exact hook scheduler registration/order and inspect gespraechsmodus.claude_frage command/settings reachability, then feed Triggerword 4 the executor-bound effect regression bundle defined by the paired architecture delta."
+}

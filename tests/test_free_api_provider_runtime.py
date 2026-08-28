@@ -219,6 +219,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertFalse(capability_receipt["invariants"][
             "semantic_request_identity_authorizes_replay"
         ])
+        self.assertFalse(capability_receipt["invariants"][
+            "cost_policy_principal_restart_stable"
+        ])
 
     def test_capability_receipt_does_not_infer_model_availability(self):
         capability_receipt = MOD.receipt()
@@ -349,6 +352,28 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotEqual(
             guessed_principal_id,
             receipts[0]["cost_policy_principal_id"],
+        )
+        restart_spec = importlib.util.spec_from_file_location(
+            "free_api_provider_runtime_restart_probe",
+            PATH,
+        )
+        restarted = importlib.util.module_from_spec(restart_spec)
+        sys.modules[restart_spec.name] = restarted
+        try:
+            restart_spec.loader.exec_module(restarted)
+            restarted_principal_id = restarted._cost_policy_principal_id(
+                restarted.PROVIDERS[0],
+                "NVIDIA_API_KEY",
+                {
+                    "NVIDIA_API_KEY": credentials[0],
+                    "FRANK_FREE_ONLY_BUDGET_EPOCH": "rotation-regression",
+                },
+            )
+        finally:
+            sys.modules.pop(restart_spec.name, None)
+        self.assertNotEqual(
+            receipts[0]["cost_policy_principal_id"],
+            restarted_principal_id,
         )
         self.assertTrue(all(
             receipt["cost_policy_principal_scope"]

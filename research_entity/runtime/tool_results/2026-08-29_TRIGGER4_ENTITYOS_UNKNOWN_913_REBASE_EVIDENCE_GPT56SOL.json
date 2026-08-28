@@ -9,21 +9,22 @@
   "mode": "FREE_ONLY",
   "authority": {
     "current_epoch": "9.13",
-    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
-    "supervisor_inbox_blob_sha": "f77bed7d4394f418bdde9c5769a48c7824b5391a",
     "steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AM_DELTA_2026-08-29T0440P0700_GPT56SOL.json",
     "steering_blob_sha": "f0e1ada88e6f0537cbf2083f4c50fdd336d27e9a",
     "provider_routes_admitted": false,
     "together_forbidden": true,
-    "paid_fallback": false
+    "paid_fallback": false,
+    "historical_8_78_component_evidence_rule": "8.78-labeled source-bound execution may earn narrowly scoped non-authority component evidence only; it cannot mint current 9.13 canonical semantics, provider, BASE, training, physical GRID10 or whole-system authority"
   },
   "current_base": {
     "repository": "gschaidergabriel/clay-global-research-entity",
     "branch": "main",
-    "base_commit": "04286057aca3d87f5c0759e2c5f93088b3e2b032",
-    "previous_observed_base": "d81d31b34d2abb98bf2f0bc80c46decbfd23c8b0",
-    "concurrent_main_delta": "repository-bound acceptance workflow/spec/claim only; no EffectGate/EffectJournal/EntityOSBridge/test overlap",
-    "review_branch": "chatgpt/trigger4-effect-unknown-913-rebase-20260829"
+    "base_commit": "b221f1e69b5fc51f1b660a75f9581bb9acbc3f32",
+    "base_tree": "44196d985f18f7fa9ca7a9b1ee7043be81c9f3a5",
+    "previous_rebase_base": "04286057aca3d87f5c0759e2c5f93088b3e2b032",
+    "concurrent_main_delta": "singleton PR430 UNKNOWN_OUTCOME ordinary-dispatch claim/spec/workflow/acceptance runner plus unrelated metadata; no EffectGate/EffectJournal/EntityOSBridge/test overlap",
+    "review_branch": "chatgpt/trigger4-effect-unknown-913-rebase-20260829",
+    "review_rebase_commit_before_this_evidence_update": "118992777aebec7e7729264dd928298086e1033a"
   },
   "reused_candidate_source": {
     "origin_pr": "gschaidergabriel/clay-global-research-entity#430",
@@ -62,12 +63,28 @@
     "supports_unknown_outcome_terminal_state": false,
     "finding": "F2 cannot safely promote its already-tested adapter while its exact canonical authority binding still resolves to the historical 8.78 implementation that terminalizes generic bridge exceptions as FAILED."
   },
-  "rebase_paths": [
-    {"path": "the artefact/clayverse/effects.py", "blob": "ae1b8db9111868374258435e97c7dfeda41bc318"},
-    {"path": "the artefact/clayverse/effect_journal.py", "blob": "4615150638dc4409317550d44b84d942a260de58"},
-    {"path": "the artefact/clayverse/entityos_bridge.py", "blob": "7781580f4e862c23491cc862e19c5d1f62b3ada6"},
-    {"path": "the artefact/tests/test_effect_unknown_outcome.py", "blob": "67d40b2cb2b38540da8b03e25b37f9af8f69da3b"}
-  ],
+  "current_singleton_probe": {
+    "dispatch_key": "trigger4-pr430-unknown-outcome-v1-g0000",
+    "claim_state": "CLAIMED_TRIGGER_PENDING",
+    "claim_path": "research_entity/continuity/ordinary_dispatch_claims/trigger4-pr430-unknown-outcome-v1-g0000.json",
+    "spec_path": "research_entity/continuity/ordinary_dispatch_specs/trigger4-pr430-unknown-outcome-v1.json",
+    "workflow_path": ".github/workflows/trigger4-pr430-unknown-outcome-vps.yml",
+    "runner": "tools/run_trigger4_pr430_unknown_outcome_acceptance_v1.py",
+    "candidate_head": "2f99e400f1c0ea1b8598573ab0fab993885cba5e",
+    "expected_tests": 8,
+    "sandbox": "clay-direct-dev",
+    "transport": "SELF_HOSTED_LINUX_X64",
+    "issue": 2134,
+    "workflow_run": 33219725633,
+    "workflow_head": "b221f1e69b5fc51f1b660a75f9581bb9acbc3f32",
+    "observed_status": "queued",
+    "observed_job_id": 99011039821,
+    "observed_job_status": "queued",
+    "tests_started": false,
+    "result_path": "research_entity/continuity/ordinary_dispatch_results/trigger4-pr430-unknown-outcome-v1-g0000.json",
+    "result_present_at_observation": false,
+    "authority_note": "claim/spec label 8.78; under current 9.13 steering any successful result is historical/source-bound component evidence only and has zero canonical-semantics promotion credit"
+  },
   "ci_baseline_negative_evidence": {
     "classification": "INHERITED_BASELINE_CI_GUARD_FAILURE_NOT_UNKNOWN_SEMANTIC_NEGATIVE",
     "base_identity_guard": {
@@ -76,7 +93,7 @@
       "conclusion": "failure",
       "annotations_count": 1
     },
-    "review_head_identity_guard": {
+    "review_head_identity_guard_before_latest_rebase": {
       "commit": "a9622e2977ad8f18d9485f7f6ee492b579bdc86e",
       "workflow_run_id": 33219336791,
       "check_run_id": 99009885532,
@@ -86,14 +103,14 @@
       "job_log_retrieval": "BlobNotFound"
     },
     "guard_scope": "research-identity-guard.yml runs tools/research_identity_guard_check.py; that checker reads Research Entity identity/bootstrap/RAE stack/turn/hook surfaces and does not read the four UNKNOWN product/test paths changed by this review lane",
-    "finding": "The current review-head red identity guard is inherited from its exact base and cannot be counted as a product-level falsification of the typed UNKNOWN candidate. It remains first-class negative CI/repository infrastructure evidence and still blocks treating GitHub CI as successful execution evidence for this exact review head."
+    "finding": "The prior review-head red identity guard was inherited from its exact base and cannot be counted as a product-level falsification of the typed UNKNOWN candidate. It remains first-class negative CI/repository infrastructure evidence."
   },
   "evidence_boundary": {
-    "source_rebase_present": true,
+    "source_rebase_present_on_current_main_parent": true,
     "exact_candidate_blobs_previously_ci_executed_through_f2_adapter": true,
-    "github_ci_execution_attempted_for_review_head": true,
-    "review_head_unknown_regression_steps_observed_executing": false,
-    "this_review_branch_exact_head_executed": false,
+    "current_singleton_probe_triggered": true,
+    "current_singleton_probe_tests_started": false,
+    "current_singleton_probe_result_present": false,
     "current_9_13_canonical_effect_authority_promoted": false,
     "real_external_effect_runtime_credit": 0,
     "physical_grid10_runtime_credit": 0,
@@ -103,12 +120,13 @@
     "training_credit": 0
   },
   "next_exact_gate": [
-    "obtain an authorized zero-cost no-real-effect execution of the exact current review-branch UNKNOWN regression suite with bound head/tree/source hashes; the inherited baseline GitHub identity-guard failure cannot satisfy or refute this gate",
-    "review/admit one successor ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING under current 9.13 authority that explicitly includes UNKNOWN_OUTCOME and exact product blobs without creating a second effect authority",
+    "consume the singleton PR430 UNKNOWN_OUTCOME dispatch result only after a terminal persisted result exists; queued issue/workflow state grants zero execution credit",
+    "if exact PR430 component evidence becomes terminal PASS, review/admit one successor ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING under current 9.13 authority that explicitly includes UNKNOWN_OUTCOME and exact product blobs without creating a second effect authority",
     "only then let the already-active F2-WP-105 mutation authority fuse the narrow F2 ExecutorOutcomeUnknown adapter and rerun its exact source-bound integration gate against that admitted binding"
   ],
   "forbidden_promotions": [
-    "do not merge or promote merely because the reused candidate blobs passed an older/current-candidate CI lane",
+    "do not create a duplicate issue/dispatch while g0000 is nonterminal",
+    "do not treat queued workflow state as execution evidence",
     "do not treat inherited baseline CI failure as a typed UNKNOWN semantic negative",
     "do not treat this review branch as canonical effect authority",
     "do not mint whole EntityOS/HCU, physical GRID10, J-Space, training or real-effect credit",

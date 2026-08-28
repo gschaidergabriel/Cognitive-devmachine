@@ -27,8 +27,8 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.16"
-EXECUTION_RECEIPT_SCHEMA_VERSION = "1.12"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.17"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.13"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
 PAYMENT_LATCH_SCOPE = "process_local"
@@ -43,7 +43,15 @@ EXECUTION_LOCK_FORK_ISOLATED = hasattr(os, "register_at_fork")
 FORK_ACTIVE_EXECUTION_QUARANTINE_SUPPORTED = hasattr(
     os, "register_at_fork"
 )
-PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED = False
+FORK_ACTIVE_EXECUTION_QUARANTINE_SCOPE = "python_interpreter_shared_state"
+_FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR = (
+    "_frank_free_api_fork_active_execution_quarantined"
+)
+if not hasattr(threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR):
+    setattr(threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR, False)
+PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED = getattr(
+    threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR
+)
 
 
 def _prepare_process_state_for_fork() -> None:
@@ -58,6 +66,7 @@ def _reinitialize_process_state_after_fork() -> None:
     PROCESS_EXECUTION_LOCK = threading.Lock()
     if inherited_active_execution:
         PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED = True
+        setattr(threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR, True)
     _PROCESS_COST_PRINCIPAL_KEY = hmac.new(
         _PROCESS_COST_PRINCIPAL_KEY,
         b"FRANK_PROCESS_COST_PRINCIPAL_FORK_V2\0"
@@ -528,6 +537,9 @@ def receipt() -> dict:
         "execution_lock_fork_isolated": EXECUTION_LOCK_FORK_ISOLATED,
         "fork_active_execution_quarantine_supported": (
             FORK_ACTIVE_EXECUTION_QUARANTINE_SUPPORTED
+        ),
+        "fork_active_execution_quarantine_scope": (
+            FORK_ACTIVE_EXECUTION_QUARANTINE_SCOPE
         ),
         "fork_active_execution_quarantined": (
             PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
@@ -1570,6 +1582,9 @@ def _execute_chat_locked(
         "execution_lock_fork_isolated": EXECUTION_LOCK_FORK_ISOLATED,
         "fork_active_execution_quarantine_supported": (
             FORK_ACTIVE_EXECUTION_QUARANTINE_SUPPORTED
+        ),
+        "fork_active_execution_quarantine_scope": (
+            FORK_ACTIVE_EXECUTION_QUARANTINE_SCOPE
         ),
         "fork_active_execution_quarantined": False,
         "budget_epoch_id": _budget_epoch_id(env),

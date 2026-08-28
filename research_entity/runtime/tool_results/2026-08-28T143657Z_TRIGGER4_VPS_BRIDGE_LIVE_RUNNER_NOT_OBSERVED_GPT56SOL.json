@@ -1,0 +1,39 @@
+{
+  "schema": "TRIGGER4_VPS_RUNNER_LIFECYCLE_EVIDENCE/v1",
+  "trigger": "4",
+  "observer": "GPT-5.6 Sol / Triggerword-4 continuation organ",
+  "observed_at_utc": "2026-08-28T14:36:57Z",
+  "canonical_main_sha_before_write": "127041598242dd4ab755e3096e8d5c2484ea23d4",
+  "trigger_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "trigger_branch_sha_observed_before_write": "9e53c2ac9b019dc2daf1d0002246ecec256c14dc",
+  "telemetry_branch": "chatgpt-vps-results",
+  "telemetry_commit": "9d4927a0b8e7e74e8ce66d45f0e21d4bac6ccdd9",
+  "telemetry_path": "vps_bridge/results/LIVE.json",
+  "host": "clay-direct-dev",
+  "observed": {
+    "host_telemetry": "PASS",
+    "git_telemetry_bridge": "PASS",
+    "github_actions_runner_process": "NOT_OBSERVED",
+    "existing_runtime_singleton_issues": [2122, 2121]
+  },
+  "inference": "The host and Git telemetry bridge are live, while a GitHub Actions self-hosted runner process was not observed in the captured process telemetry. The current P0 is therefore narrowed to Actions runner lifecycle/registration/startup rather than total host loss or GRID10 semantic correctness.",
+  "scope": "TRANSPORT_LIFECYCLE_ONLY",
+  "runtime_credit": {
+    "grid10_runtime_acceptance": 0,
+    "frankenstein2_runtime_acceptance": 0,
+    "whole_entityos_hcu_runtime_acceptance": 0
+  },
+  "duplicate_runtime_trigger": "FORBIDDEN",
+  "next_exact_action": "Restore/restart the already-established self-hosted Linux/X64 GitHub Actions runner on clay-direct-dev through the authorized host bridge, then allow the already-existing #2122/#2121 singleton gates to dispatch without creating a duplicate singleton.",
+  "negative_evidence": [
+    "No Runner.Listener or otherwise identifiable live GitHub Actions runner process was observed in the captured telemetry process list.",
+    "This ChatGPT execution surface has GitHub access but no configured direct SSH identity or installed SSH/VPS connector, so no host-side runner restart was executed in this observation cycle."
+  ],
+  "epistemic_boundary": {
+    "host_and_git_bridge_liveness": "OBSERVED",
+    "actions_runner_liveness": "NOT_OBSERVED",
+    "runner_absence_as_root_cause": "INFERENCE",
+    "grid10_semantic_failure": "NOT_ESTABLISHED",
+    "grid10_runtime_pass": "NOT_ESTABLISHED"
+  }
+}

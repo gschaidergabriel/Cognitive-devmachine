@@ -1,0 +1,56 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "clay_supervisor_epoch": "8.78",
+  "canonical_main_sha_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_observed_before_delta": "39b1ec3e15ff8b00ccbac764ae5b44ee72ca1d59",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+  "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+  "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+  "packet_schema_blob_sha": "8b2732394418e725067be52ee480ad1da649a9f7",
+  "packet_disposition": "REJECTED_NOT_CONSUMED_SOURCE_FINDINGS_DOWNGRADED_AND_PRESERVED",
+  "rejection_evidence": [
+    "Atom TW5-WORKEXEC-SUCC-005 uses target_2_0_action=RESEARCH, which is outside the current INGEST_PACKET_SCHEMA enum.",
+    "Atom TW5-WORKEXEC-SUCC-002 attributes the post-approval spawn specification to architekt_governance.md lines 1-7, but direct inspection of that span shows the Phase-17 cadence preamble; the spawn wording occurs later and therefore requires a corrected exact span."
+  ],
+  "accepted_source_findings_only": [
+    "Pinned donor stern.py handoff() durably creates an entityos_arbeitspaket and deterministic capsule and explicitly states stern itself delegates/spawns nothing.",
+    "Pinned repository hooks.json inspected at lines 1-81 does not contain SubagentStart/SubagentStop entries.",
+    "A later architekt_governance.md paragraph semantically says the architect agent is spawned only after user approval, but the packet's exact line identity for that claim is wrong and was not admitted."
+  ],
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_BINDING_ADMISSION_REVIEW_PACKET_20260828T101200Z_GPT56SOL.json",
+  "architecture_delta_commit": "408ee81f5893e20afc77edbfdcb6425965ff690b",
+  "semantic_result": "WORKEXECUTION_BINDING_REQUIRED_AS_EXPLICIT_OBSERVED_CAUSAL_JOIN; HANDOFF_PERSISTENCE_IS_NOT_NATIVE_EXECUTION",
+  "state_handling": {
+    "ingest_state_updated": false,
+    "reason": "INGEST_STATE.json is stale relative to observed current main/design heads and omits later parallel architecture artifacts. Overwriting it from this stale snapshot could erase currentness/coordination information.",
+    "state_design_sha_recorded": "38741e6ea28c746fd7faffa3e2aa095f5418119e",
+    "state_main_sha_recorded": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "observed_design_sha_before_write": "39b1ec3e15ff8b00ccbac764ae5b44ee72ca1d59",
+    "observed_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "required_repair": "Reconcile the state index against all later branch deltas/model artifacts before advancing the canonical consumption checkpoint."
+  },
+  "trigger4_feed": {
+    "design_constraint": "WorkExecutionBinding/v1 must bind durable paket_id to actually observed native invocation/child/completion identities without conflating ID domains or inferring joins from timing/text.",
+    "acceptance_gate": "One paket_id -> one observed native invocation -> one observed child/task identity where emitted -> one completion/result, with fail-closed tests for missing, ambiguous, duplicate and stale-generation joins.",
+    "world_substrate_boundary": "Handoff-only records cannot train/assimilate an executed transition; world-substrate/Xeno updates require observed completion/outcome provenance."
+  },
+  "runtime_boundary": {
+    "provider_execution": false,
+    "vps_execution": false,
+    "donor_runtime_execution": false,
+    "native_subagent_runtime_execution": false,
+    "unusual_experiment": false,
+    "whole_entityos_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "result": "PASS_FAIL_CLOSED_PACKET_REVIEW_WITH_DURABLE_ARCHITECTURE_DELTA",
+  "next_exact_gate": "Correct/reissue the invalid packet with schema-valid action and exact governance source span, then separately obtain installed-runtime lifecycle evidence before promoting any WorkExecutionBinding runtime claim. Reconcile INGEST_STATE currentness before marking that corrected packet consumed."
+}

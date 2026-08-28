@@ -17,7 +17,7 @@
   "research_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
   "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-  "continuation_head_observed_before_update": "f798db9de9d44397d59a5f3b3978b37bc53d97ef",
+  "continuation_head_observed_before_update": "42b6ec5911184724d94ba323271138eef9b90c84",
   "continuation_sync": {
     "main_behind_by": 0,
     "merge_receipt_pr": 2119,
@@ -81,7 +81,7 @@
     {
       "id": "PENDING_EFFECT_PARENT_CAUSAL_INVALIDATION_REQUIRED",
       "class": "TRIGGERWORD5_EFFECT_PATH_REQUIREMENT",
-      "effect": "Pre-dispatch EffectCandidate/tool proposals must be invocation- and parent-cycle-bound and become non-dispatchable when their parent is cancelled, superseded or generation-stale; post-dispatch ambiguity remains UNKNOWN until verification."
+      "effect": "Pre-dispatch EffectCandidate/tool proposals must be invocation- and parent-cycle-bound and become non-dispatchable when their parent is cancelled, superseded or generation-stale; after possible submission the state must be SUBMITTED/OUTCOME_UNKNOWN until verified rather than cancelled or blindly replayed."
     }
   ],
   "latest_trigger5_evidence": [
@@ -91,30 +91,37 @@
       "classification": "INGESTED_SOURCE_GROUNDED_DESIGN_CONTRACT_RUNTIME_CREDIT_ZERO"
     },
     {
-      "commit": "f798db9de9d44397d59a5f3b3978b37bc53d97ef",
-      "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_PERCEPTION_VOICE_PENDING_EFFECT_DELTA_2026-08-28T1430P0700_GPT56SOL.json",
-      "classification": "SOURCE_FORENSICS_PLUS_HISTORICAL_COMPONENT_RECEIPT_INGEST_NO_NEW_RUNTIME_EXECUTION",
+      "commit": "bd1b51ff497ee4aff0a6d05ec43f100fe4e0aa7f",
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+      "classification": "SHARED_PRIMARY_SOURCE_FORENSICS_PLUS_HISTORICAL_COMPONENT_RECEIPT_FUSION_NO_NEW_RUNTIME_EXECUTION",
       "assembly_constraints": [
         "WorldNeed/WorldSlice inherit typed NOT_COMPUTED plus dependency-taint propagation",
-        "pending effects inherit parent-cycle cancellation and generation invalidation before dispatch",
-        "response context compiler carries provenance/freshness/generation plus bounded digest"
+        "pending effects use PENDING/CANCELLED only before deterministic EffectGate submission and SUBMITTED/OUTCOME_UNKNOWN after possible submission until verified",
+        "response context compiler carries provenance/freshness/generation plus bounded digest",
+        "all new effect/request/result/recovery persistence retains a pre-persistence secret fence"
       ]
+    },
+    {
+      "commit": "42b6ec5911184724d94ba323271138eef9b90c84",
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/TRIGGERWORT5_DEDUP_CORRECTION_20260828T073223Z_GPT56SOL.json",
+      "classification": "CONCURRENT_INGEST_DEDUPE_CORRECTION",
+      "effect": "Use the shared PRIVACY_CANCELLATION_SUCCESSOR as primary state; supplemental parallel deltas are corroboration only and grant no independent runtime/replication credit."
     }
   ],
   "last_discriminator": {
     "type": "COMMIT_STATUS_PLUS_BRANCH_LINEAGE_CHECK",
     "result": "NO_REPOSITORY_BOUND_RUNTIME_STATUS_EVIDENCE",
     "main": "4a4287d0935d4dd19d122b1027716a569d331a73",
-    "branch": "f798db9de9d44397d59a5f3b3978b37bc53d97ef",
+    "branch": "42b6ec5911184724d94ba323271138eef9b90c84",
     "branch_was_behind_main_after_sync": false,
-    "combined_status_count": 0,
+    "combined_status_count_on_recent_checked_branch_head": 0,
     "runtime_credit": 0
   },
   "last_receipt": {
     "type": "GITHUB_SOURCE_COORDINATION_AND_CHECKPOINT",
     "sync_pr": 2119,
     "sync_merge_commit": "9cc2b6b026e725a8b7ca189bf6fd18e67564a163",
-    "previous_checkpoint_commit": "da83f8bcdf1387a0fe3291bac0e5fd73eca71fe4"
+    "previous_checkpoint_commit": "4ac95e32b6debbfee9182cbb0d9e36883e5898c2"
   },
   "credits": {
     "physical_grid10": 0,
@@ -123,7 +130,7 @@
     "jspace_model": 0,
     "training": 0
   },
-  "next_exact_action": "On an authorized zero-cost repository-bound non-provider execution surface, run the exact-current v3 acceptance plus its regression test from a clean checkout. Require distinct real parent/coord-old/coord-new PIDs; SIGKILL coord-old after durable admission and before ACK; pre-TTL replacement blocked; post-TTL automatic coord-new election and recovery/replay executed by coord-new; exactly one admission; outbox consumed 0->1; S1 unchanged; replay +0; no provider calls. Only if that exact gate passes, move the worker out of the parent into a distinct real process and repeat under normal decode-safe node loops before any Physical-GRID10 credit. Downstream Frankenstein-2.0 assembly must also carry forward the Triggerword-5 perception taint, context freshness/generation and parent-causal pending-effect constraints recorded here.",
+  "next_exact_action": "On an authorized zero-cost repository-bound non-provider execution surface, run the exact-current v3 acceptance plus its regression test from a clean checkout. Require distinct real parent/coord-old/coord-new PIDs; SIGKILL coord-old after durable admission and before ACK; pre-TTL replacement blocked; post-TTL automatic coord-new election and recovery/replay executed by coord-new; exactly one admission; outbox consumed 0->1; S1 unchanged; replay +0; no provider calls. Only if that exact gate passes, move the worker out of the parent into a distinct real process and repeat under normal decode-safe node loops before any Physical-GRID10 credit. Downstream Frankenstein-2.0 assembly must carry forward the shared Triggerword-5 NOT_COMPUTED/taint, context freshness/generation, secret-fence and PENDING_EFFECT->EffectGate->SUBMITTED->verified/OUTCOME_UNKNOWN constraints.",
   "rollback_point": "9cc2b6b026e725a8b7ca189bf6fd18e67564a163",
-  "work_generation": "triggerwort4-20260828-main-sync-gate-checkpoint-trigger5-fusion-2"
+  "work_generation": "triggerwort4-20260828-main-sync-gate-checkpoint-trigger5-primary-dedupe-fusion-3"
 }

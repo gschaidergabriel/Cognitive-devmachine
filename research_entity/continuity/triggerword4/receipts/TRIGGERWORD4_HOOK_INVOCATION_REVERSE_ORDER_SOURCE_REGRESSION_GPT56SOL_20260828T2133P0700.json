@@ -1,0 +1,92 @@
+{
+  "schema": "TRIGGERWORD4_SOURCE_DELTA_RECEIPT/v1",
+  "trigger": "triggerwort 4",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "observed_at_local": "2026-08-28T21:33:00+07:00",
+  "routing_self_test": "PASS",
+  "authority": {
+    "canonical_main_observed": "127041598242dd4ab755e3096e8d5c2484ea23d4",
+    "supervisor_schema": "9.13",
+    "supervisor_delta": "9.13AG_NON_AUTHORITY",
+    "free_only": true,
+    "provider_routes_admitted": false,
+    "paid_fallback": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "directive_blobs": {
+    "triggerword4_grid10_runtime": "9469f0a6be99c2af2dfad25386c4196ffc9101a4",
+    "triggerword4_frankenstein2_assembly": "94cc8b6c3f1f03bfacb48d4a24d11429d0bad6cb",
+    "triggerword4_5_sparse_world_substrate": "d0e6b698193f75099df57d4db31c22c5fb90589b"
+  },
+  "continuation": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "pr": 2118,
+    "branch_head_before_receipt": "3f5a2405299655bb9eb8e04289b5325c848dff52",
+    "source_delta_commit": "7784222dfd614c27c0f616d3ad015ab854a8f785",
+    "parallel_commits_after_source_delta_observed": 3,
+    "source_delta_retained_at_reentry": true
+  },
+  "finding": {
+    "id": "FRANKENSTEIN2_HOOK_INVOCATION_REVERSE_ORDER_FALSIFIER_GAP",
+    "classification": "SOURCE_TEST_GAP",
+    "description": "The branch already had call-scoped effect re-entry binding and a PreToolUse/PostToolUse adapter keyed by tool_use_id, but no dedicated regression exercised two semantically identical calls in one session whose PostToolUse events close in reverse order. That is the minimal source falsifier for a hidden mutable session-scoped current-effect router.",
+    "counterhypothesis": "The existing call-scoped adapter is sufficient and reverse-order same-session completion remains correctly bound without a dedicated regression.",
+    "discriminator": "Create two same-session same-tool same-input PreToolUse requests with distinct tool_use_id values, close B before A, and require a transplanted B post-event against A to fail closed on INVOCATION_ID_MISMATCH."
+  },
+  "delta": {
+    "path": "tests/test_frankenstein2_hook_invocation_adapter_v1.py",
+    "blob_at_reentry": "6cf732ce2184b7366efd19317283f3a97822b591",
+    "tests_defined": 3,
+    "cases": [
+      "same-session identical calls close in reverse order without cross-talk",
+      "PostToolUseFailure preserves exact call-scoped invocation identity",
+      "missing PreToolUse tool_use_id fails closed without session fallback"
+    ]
+  },
+  "verification": {
+    "github_source_reentry": "PASS",
+    "local_python_py_compile": "PASS",
+    "local_py_compile_scope": "SYNTAX_ONLY_NOT_PROJECT_RUNTIME_EVIDENCE",
+    "repository_bound_test_execution_observed": false,
+    "vps_runtime_execution_observed": false,
+    "provider_calls": 0,
+    "runtime_credit": 0
+  },
+  "active_runtime_gates": [
+    {
+      "issue": 2122,
+      "dispatch_key": "grid10-runtime-quiescence-v2-g0000",
+      "state": "OPEN_NO_TERMINAL_RESULT_OBSERVED",
+      "duplicate_dispatch_allowed": false
+    },
+    {
+      "issue": 2121,
+      "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+      "workflow_run_id": 33168491753,
+      "job_id": 98839547140,
+      "state": "QUEUED_ZERO_EXECUTED_STEPS_AT_REENTRY",
+      "duplicate_dispatch_allowed": false
+    }
+  ],
+  "transport_boundary": {
+    "best_supported_blocker": "SELF_HOSTED_LINUX_X64_RUNNER_OR_HOST_BRIDGE_UNAVAILABLE",
+    "direct_host_process_introspection": false,
+    "current_connected_surface_can_restart_runner": false,
+    "ssh_or_vps_plugin_found_in_session": false,
+    "effect": "Do not bypass with a duplicate dispatch, generation advance, provider call, or paid fallback."
+  },
+  "credits": {
+    "runtime_control_transport": 0,
+    "runtime_quiescence": 0,
+    "grid10_crash_replacement": 0,
+    "physical_grid10": 0,
+    "frankenstein2_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_action": "Preserve issues 2122 and 2121 as the singleton runtime gates. Restore the already-established self-hosted Linux/X64 runner/host bridge when an authorized host-control surface is actually available, then consume the existing queued results rather than redispatching. In the non-conflicting source lane, bind the new hook invocation reverse-order regression into the next explicitly admitted deterministic Frankenstein-2.0 regression capsule and execute it only on an admitted zero-cost surface; no runtime credit until that execution exists."
+}

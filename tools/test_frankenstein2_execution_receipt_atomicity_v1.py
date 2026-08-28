@@ -106,6 +106,77 @@ class ExecutionReceiptAtomicityTests(unittest.TestCase):
             con.close()
         self.assertEqual(execution_events, 0)
 
+    def test_injected_failure_then_same_identity_retry_succeeds_atomically(self) -> None:
+        con = sqlite3.connect(str(self.db))
+        try:
+            con.execute(
+                """CREATE TRIGGER inject_execution_v2_failure
+                   BEFORE INSERT ON execution_v2_metadata
+                   BEGIN
+                     SELECT RAISE(ABORT, 'INJECTED_V2_METADATA_FAILURE');
+                   END"""
+            )
+            con.commit()
+        finally:
+            con.close()
+
+        with self.assertRaisesRegex(
+            EffectLifecycleError,
+            "EXECUTION_BUNDLE_PERSISTENCE_CONFLICT",
+        ):
+            self._record_bundle()
+
+        self.assertEqual(self._count("execution_receipts"), 0)
+        self.assertEqual(self._count("execution_v2_metadata"), 0)
+
+        con = sqlite3.connect(str(self.db))
+        try:
+            con.execute("DROP TRIGGER inject_execution_v2_failure")
+            con.commit()
+        finally:
+            con.close()
+
+        # Retry the exact same intended local receipt bundle after the failed SQLite
+        # transaction.  No new invocation/generation/source/result identity is minted.
+        self._record_bundle()
+
+        self.assertEqual(self._count("execution_receipts"), 1)
+        self.assertEqual(self._count("execution_v2_metadata"), 1)
+        con = sqlite3.connect(str(self.db))
+        con.row_factory = sqlite3.Row
+        try:
+            row = con.execute(
+                """SELECT r.invocation_id,r.request_digest,r.generation,
+                          e.request_digest AS execution_request_digest,e.command_digest,
+                          e.result_digest,m.source_digest,m.duplicate_state,m.status
+                   FROM effect_requests r
+                   JOIN execution_receipts e USING(invocation_id)
+                   JOIN execution_v2_metadata m USING(invocation_id)
+                   WHERE r.invocation_id=?""",
+                (self.req.invocation_id,),
+            ).fetchone()
+            execution_events = con.execute(
+                "SELECT event_type FROM effect_lifecycle_events WHERE invocation_id=? AND event_type IN ('EXECUTION_RECORDED','EXECUTION_V2_METADATA_RECORDED') ORDER BY seq",
+                (self.req.invocation_id,),
+            ).fetchall()
+        finally:
+            con.close()
+
+        self.assertIsNotNone(row)
+        self.assertEqual(row["invocation_id"], "inv-atomic")
+        self.assertEqual(row["request_digest"], self.req.request_digest)
+        self.assertEqual(row["execution_request_digest"], self.req.request_digest)
+        self.assertEqual(row["generation"], 7)
+        self.assertEqual(row["command_digest"], "c" * 64)
+        self.assertEqual(row["result_digest"], "r" * 64)
+        self.assertEqual(row["source_digest"], SOURCE_DIGEST)
+        self.assertEqual(row["duplicate_state"], "UNIQUE")
+        self.assertEqual(row["status"], "SUCCEEDED")
+        self.assertEqual(
+            [row["event_type"] for row in execution_events],
+            ["EXECUTION_RECORDED", "EXECUTION_V2_METADATA_RECORDED"],
+        )
+
     def test_success_commits_one_bound_identity_bundle(self) -> None:
         self._record_bundle()
         con = sqlite3.connect(str(self.db))

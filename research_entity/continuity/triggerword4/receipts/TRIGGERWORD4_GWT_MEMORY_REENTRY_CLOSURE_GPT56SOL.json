@@ -1,0 +1,60 @@
+{
+  "schema": "TRIGGERWORD4_SOURCE_CLOSURE_RECEIPT/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "GRID10_GWT_TO_MEMORY_REENTRY_SOURCE_CLOSURE_ONLY",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
+  "authority_observed": "SUPERVISOR_9.13AE_SINGLETON_GRID10_V3_G0000_IN_FLIGHT",
+  "source_delta": {
+    "implementation_commit": "7f17f3a6339fa13d4434fee5ee7677343d29ecf1",
+    "regression_commit": "22dce06c98d5597487fcba307ab6b219f207a6cf",
+    "implementation_file": "tools/grid10_live_control_binding_v2.py",
+    "regression_file": "tools/test_grid10_live_control_binding_v2.py",
+    "finding": "memory_reentry_eligible_cell_ids previously ignored grid.workspace_ignition_threshold and could advertise sub-threshold specialist cells as normal memory-reentry eligible even when their payload was deliberately redacted from GWT fan-in",
+    "change": "normal specialist memory re-entry eligibility is now intersected with the same gwt_eligible cell set used for workspace ignition",
+    "regressions_added": [
+      "default ignited profile keeps memory reentry aligned with GWT eligibility",
+      "all-subthreshold profile yields zero GWT eligibility and zero memory-reentry eligibility",
+      "mixed profile excludes a subthreshold planner from both GWT eligibility and normal memory reentry",
+      "sanitized receipt records an empty memory-reentry list for all-subthreshold cognition"
+    ]
+  },
+  "scientific_frame": {
+    "hypothesis": "normal memory re-entry should be causally downstream of the same specialist ignition gate that authorizes GWT broadcast",
+    "counterhypothesis": "private sub-threshold specialist computation may legitimately persist independently of broadcast",
+    "decision": "retain private computation as execution evidence but do not advertise it through the normal memory-reentry eligibility channel; any future private-memory lane requires an explicit separately typed mechanism"
+  },
+  "parallel_coordination": {
+    "single_existing_pr": 2118,
+    "duplicate_lane_created": false,
+    "latest_parallel_reentry_receipt_commit_observed": "9ce7ffcf7feffe28e603f58d4525f4ef0afc3637",
+    "frankenstein_donor_sha_verified": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "runtime_evidence": {
+    "github_actions_run_for_regression_commit": 33169505823,
+    "github_actions_conclusion": "failure",
+    "job_steps_observed": [],
+    "classification": "ZERO_STEP_CI_INFRASTRUCTURE_FAILURE_NOT_CODE_TEST_RESULT",
+    "tests_executed_by_this_receipt": false,
+    "runtime_pass_claimed": false
+  },
+  "singleton_dispatch": {
+    "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+    "workflow_run_id": 33168491753,
+    "state_last_observed": "queued",
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false
+  },
+  "credit": {
+    "source_closure": 1,
+    "physical_grid10_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "frankenstein2_runtime": 0
+  },
+  "next_exact_gate": "Obtain an admitted deterministic compile/test receipt for the current Triggerword-4 source and observe terminal state plus canonical result for singleton run 33168491753 before any retry, generation advance, or Frankenstein-2.0 runtime-pass promotion."
+}

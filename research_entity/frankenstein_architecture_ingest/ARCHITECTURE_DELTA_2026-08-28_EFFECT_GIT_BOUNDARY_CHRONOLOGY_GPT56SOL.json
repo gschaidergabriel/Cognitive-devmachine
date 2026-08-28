@@ -1,0 +1,113 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_EFFECT_GIT_BOUNDARY_CHRONOLOGY_GPT56SOL",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "ACCESSIBLE_GIT_AND_SOURCE_FORENSICS_ONLY_NO_RUNTIME_EXECUTION",
+  "coordination_snapshot": {
+    "canonical_main_observed": "4e1d545d7522f678dcd111d4b3394d18c994676c",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "5be4008a2a818fab58280da67654803970f9b9e8",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "forensic_question": "What can accessible Git actually prove about the transition from post-effect logging to the current Phase-2 PreToolUse bookkeeping plus PostToolUse verification design?",
+  "semantic_atoms": [
+    {
+      "atom_id": "TW5-EFFECT-GIT-001-HOST-ONLY-PREPACKAGE-BOUNDARY",
+      "source_kind": "HISTORICAL_SOURCE",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "9051cb5938a713c84a9670275beb449cd93ebb71",
+        "path": "README.md"
+      },
+      "claim": "Immediately before the first shipped plugin payload, the repository explicitly says the actual harness, including hooks and effect journal, runs locally outside the repository. The scripts/stern.py path is absent at this commit.",
+      "classification": "ACCESSIBLE_GIT_BOUNDARY_HOST_ONLY_IMPLEMENTATION_NOT_SOURCE_VISIBLE",
+      "confidence": 1.0,
+      "implication": "The true mechanism introduction predates source visibility in this repository. A Git commit timestamp after this point must not be presented as the invention date of the effect journal or Phase-2 mechanism."
+    },
+    {
+      "atom_id": "TW5-EFFECT-GIT-002-FIRST-SHIPPED-SOURCE-SNAPSHOT",
+      "source_kind": "LIVE_CODE",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a",
+        "path": "scripts/stern.py"
+      },
+      "claim": "Commit b0be33f is the first verified accessible-Git commit on the shipped scripts/stern.py path. Its source already contains the Phase-2 EFFECTGATE section, including PreToolUse zulassen(), PostToolUse verification through merken(), a mutable active_turns.effect_id session slot, and the explicit invariant that ordinary zulassen() never blocks tool execution.",
+      "classification": "FIRST_VERIFIED_ACCESSIBLE_GIT_SOURCE_NOT_TRUE_INTRODUCTION_DATE",
+      "confidence": 1.0,
+      "failure_boundary": "Because the parent repository did not contain the host source, this commit proves packaging/source publication, not when the mechanism was first built on the host."
+    },
+    {
+      "atom_id": "TW5-EFFECT-GIT-003-LIVE-MIRROR-RESYNC-BOUNDARY",
+      "source_kind": "HISTORICAL_SOURCE",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "4901b894249c93e766bab946edfd7b37c01f71f3",
+        "path": "scripts/stern.py"
+      },
+      "claim": "Commit 4901b89 explicitly resynchronizes a substantially larger live ~/.claude/star/stern.py into the repository after host-side PHASE 9-24 work. This is a provenance/mirror boundary. This delta does not infer which effect semantics changed inside that interval without line-level comparison.",
+      "classification": "SOURCE_MIRROR_REFRESH_BOUNDARY_NOT_SEMANTIC_CHANGE_PROOF",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "TW5-EFFECT-GIT-004-REPOSITORY-REORGANIZATION-BOUNDARY",
+      "source_kind": "HISTORICAL_SOURCE",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "ccf2264f23b65ed796f9ed44a38c8c55bd379345",
+        "old_path": "scripts/stern.py",
+        "new_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py"
+      },
+      "claim": "The three-layer repository reorganization moves the canonical research copy of stern.py under DEV_SOURCE_RESEARCH/repository/. Path movement is provenance continuity, not evidence of a new effect architecture.",
+      "classification": "PATH_REORGANIZATION_ONLY_UNLESS_DIFF_PROVES_MORE",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-EFFECT-GIT-005-CURRENT-DONOR-SEMANTIC-BOUNDARY",
+      "source_kind": "ENFORCEMENT_CODE",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py"
+      },
+      "claim": "At the current pinned donor, ordinary PreToolUse still calls nonblocking zulassen(), PostToolUse calls merken(), and a separate SEBUKKU branch is the explicit local deny-capable branch. The current effect bookkeeping therefore must not be credited as the canonical blocking effect authority.",
+      "classification": "CURRENT_SOURCE_CONFIRMED",
+      "confidence": 1.0
+    }
+  ],
+  "chronology_result": {
+    "first_verified_accessible_git_source_snapshot": "b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a",
+    "first_verified_accessible_git_source_snapshot_meaning": "first shipped/source-visible snapshot containing the Phase-2 effect design",
+    "true_phase2_introduction_commit": "UNRESOLVED_HOST_ONLY_PREHISTORY",
+    "pre_phase2_posttool_only_source_commit": "UNRESOLVED_NOT_PRESENT_IN_CURRENT_ACCESSIBLE_REPOSITORY_LINEAGE",
+    "current_donor": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-GIT-CREATION-DATE-007",
+      "status": "RESOLVED_AS_BOUNDARY_NOT_DATE",
+      "claim_a": "Current stern.py comments describe a transition from a prior post-effect-only journal to Phase-2 PreToolUse bookkeeping plus verification.",
+      "claim_b": "The repository parent before b0be33f states the effect journal is already live outside the repo, while the implementation source itself is absent there.",
+      "resolution_rule": "Report b0be33f only as first verified accessible-Git source snapshot. Do not claim it is the mechanism's creation commit. Recover host-side history/archived source for a stronger date claim."
+    }
+  ],
+  "frankenstein_2_0_delta": {
+    "lineage_rule": "Triggerword-4 documentation must distinguish FIRST_VERIFIED_IN_ACCESSIBLE_GIT from CREATED/INTRODUCED_ON_DATE.",
+    "effect_rule": "Do not inherit the historical name EffectGate as authority semantics. Frankenstein-2.0 requires typed ADMISSION_DECISION -> ENFORCEMENT_DECISION -> EXECUTION_RECEIPT -> WORLD_EFFECT_VERIFICATION -> RESULT_REENTRY/COMPLETION with immutable per-invocation identity.",
+    "migration_rule": "Path reorganizations and live-to-repo mirror refreshes preserve provenance but do not by themselves prove behavior changes."
+  },
+  "credits": {
+    "source_forensics": "PRESENT",
+    "new_runtime_execution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Acquire host-side archived stern.py/wache-koenig history if available to resolve the real pre-Phase2 -> Phase-2 transition; otherwise preserve UNRESOLVED_HOST_ONLY_PREHISTORY and stop assigning invention dates from packaging commits. Independently continue the current Triggerword-4 invocation-bound typed effect contract."
+}

@@ -5,7 +5,14 @@ v3 proved that Fabric, heartbeat telemetry and PersistentAgencyStore can share o
 SQLite authority. v4 closes the next bounded Triggerword-4 gap by coupling the deterministic
 runtime cycle to the durable AgencyState scheduler:
 
-    due/wake -> heartbeat -> continuation checkpoint -> next-tick schedule
+    due/wake -> live ControlSnapshot -> heartbeat -> GRID action gate
+    -> continuation checkpoint -> next-tick schedule
+
+The ControlSnapshot is latched exactly once at the cognitive pulse boundary. Pulse cadence
+uses the live control plane unless an explicit compatibility/test override is supplied.
+Material action paths consume the corresponding GRID cell mode/gain controls before the
+runtime publishes its next-action candidate. Control writes remain owner-mediated and apply
+to later ticks; this module never mutates controls during a tick.
 
 The cycle commit is generation-like CAS guarded by the AgencyState epoch and lands in the
 same SQLite/WAL file. This module never grants canonical truth or external-effect authority.
@@ -27,6 +34,11 @@ import sqlite3
 import time
 from typing import Any, Iterable, Mapping
 
+from frankenstein2_cognitive_control_plane_v1 import (
+    CognitiveControlPlane,
+    ControlMode,
+    ControlSnapshot,
+)
 from grid10_cognitive_heartbeat_v1 import _trusted_normal_axes, append_frame_jsonl
 from grid10_cognitive_unified_runtime_v3 import (
     build_unified_agency_runtime,
@@ -37,6 +49,16 @@ from grid10_persistent_agency_v1 import PersistentAgencyStore
 SCHEMA = "GRID10_UNIFIED_COGNITIVE_RUNTIME/v4"
 CHECKPOINT_SCHEMA = "GRID10_COGNITIVE_CYCLE_CHECKPOINT/v1"
 IDLE_CHECKPOINT_SCHEMA = "GRID10_IDLE_HOLD_CHECKPOINT/v1"
+
+# These are routing requirements, not claims that the cells themselves are canonical truth.
+# The live control plane can attenuate or disable the compute/output path that would otherwise
+# publish the heartbeat's cognitive action candidate.
+ACTION_GRID_CELLS: Mapping[str, tuple[str, ...]] = {
+    "OBSERVE": ("orientation",),
+    "SEARCH": ("epistemic", "retrieval"),
+    "SIMULATE": ("hypothesis", "world"),
+    "ACT_CANDIDATE": ("planning", "critic"),
+}
 
 
 class RuntimeCycleError(RuntimeError):
@@ -94,6 +116,63 @@ def _init_cycle_schema(path: Path) -> None:
         )
     finally:
         con.close()
+
+
+def _grid_control_view(snapshot: ControlSnapshot, action: str) -> tuple[Mapping[str, Any], ...]:
+    rows: list[Mapping[str, Any]] = []
+    for cell in ACTION_GRID_CELLS.get(action, ()):
+        mode = snapshot.mode(f"grid.{cell}.mode")
+        gain = snapshot.float(f"grid.{cell}.gain")
+        rows.append(
+            {
+                "cell": cell,
+                "mode": mode.value,
+                "gain": gain,
+                "compute_enabled": mode != ControlMode.COMPUTE_OFF and gain > 0.0,
+                "output_enabled": mode not in {ControlMode.COMPUTE_OFF, ControlMode.OUTPUT_OFF} and gain > 0.0,
+                "memory_enabled": mode != ControlMode.MEMORY_OFF,
+            }
+        )
+    return tuple(rows)
+
+
+def _apply_grid_action_controls(
+    snapshot: ControlSnapshot,
+    raw_action: str,
+) -> tuple[str, tuple[str, ...], tuple[Mapping[str, Any], ...]]:
+    """Consume live GRID modes/gains before publishing a cognitive action candidate.
+
+    A cell that is COMPUTE_OFF/OUTPUT_OFF cannot support an action requiring that cell.
+    Gain is a live admission weight: the weakest required cell must meet the live pulse
+    salience threshold. This is deliberately bounded and deterministic; it does not invent
+    world facts or execute an effect.
+    """
+    cells = _grid_control_view(snapshot, raw_action)
+    if not cells or raw_action == "HOLD":
+        return raw_action, (), cells
+
+    reasons: list[str] = []
+    blocked = [r["cell"] for r in cells if not r["compute_enabled"] or not r["output_enabled"]]
+    threshold = snapshot.float("pulse.salience_threshold")
+    min_gain = min(float(r["gain"]) for r in cells)
+    if blocked:
+        reasons.append("GRID_MODE_BLOCK:" + ",".join(str(x) for x in blocked))
+    if min_gain < threshold:
+        reasons.append(f"GRID_GAIN_BELOW_SALIENCE:{min_gain:.6f}<{threshold:.6f}")
+
+    if not reasons:
+        return raw_action, (), cells
+
+    # Fail toward a lower-authority observation candidate. If even orientation is disabled,
+    # hold rather than silently bypassing the live control frame.
+    orientation = _grid_control_view(snapshot, "OBSERVE")
+    orientation_ok = bool(orientation) and all(
+        bool(r["compute_enabled"]) and bool(r["output_enabled"])
+        and float(r["gain"]) >= threshold
+        for r in orientation
+    )
+    fallback = "OBSERVE" if raw_action != "OBSERVE" and orientation_ok else "HOLD"
+    return fallback, tuple(reasons), cells
 
 
 def _atomic_commit_cycle(
@@ -295,16 +374,23 @@ def _atomic_commit_idle_hold(
 class UnifiedCognitiveRuntimeV4:
     """One-cycle deterministic bridge between PersistentAgencyStore and the v3 heartbeat."""
 
-    def __init__(self, heartbeat_runtime: Any, agency: PersistentAgencyStore):
+    def __init__(
+        self,
+        heartbeat_runtime: Any,
+        agency: PersistentAgencyStore,
+        *,
+        control_plane: CognitiveControlPlane | None = None,
+    ):
         self.heartbeat_runtime = heartbeat_runtime
         self.agency = agency
+        self.control_plane = control_plane or CognitiveControlPlane(Path(agency.path))
         _init_cycle_schema(Path(agency.path))
 
     def tick_once(
         self,
         *,
         tick_id: str,
-        interval: float = 1.0,
+        interval: float | None = None,
         hold_interval: float | None = None,
         now_ts: float | None = None,
         observed_events: Iterable[str] = (),
@@ -331,27 +417,52 @@ class UnifiedCognitiveRuntimeV4:
                 f"NEXT_TICK_NOT_DUE:{before.next_tick_not_before}"
             )
 
+        # Exactly one immutable dynamic-frame snapshot is latched for this cognitive tick.
+        # No control mutation occurs below; later commits become visible on a later tick.
+        control = self.control_plane.snapshot()
+
         heartbeat = self.heartbeat_runtime.tick_once(
             tick_id=tick_id,
             trusted_axes=trusted_axes,
             extra_variables=extra_variables,
         )
         assurance_mode = getattr(heartbeat.assurance_mode, "value", str(heartbeat.assurance_mode))
-        next_action = str(heartbeat.next_action)
-        selected_interval = (
-            float(hold_interval)
-            if next_action == "HOLD" and hold_interval is not None
-            else float(interval)
+        raw_next_action = str(heartbeat.next_action)
+        next_action, control_reasons, grid_controls = _apply_grid_action_controls(
+            control,
+            raw_next_action,
         )
+
+        if raw_next_action == "HOLD":
+            selected_interval = (
+                float(hold_interval)
+                if hold_interval is not None
+                else control.float("pulse.hold_interval_seconds")
+            )
+        else:
+            selected_interval = (
+                float(interval)
+                if interval is not None
+                else control.float("pulse.active_interval_seconds")
+            )
         next_tick_not_before = now + max(0.05, selected_interval)
         checkpoint = {
             "schema": CHECKPOINT_SCHEMA,
             "tick_id": tick_id,
             "source_state_epoch": int(heartbeat.state_epoch),
             "assurance_mode": assurance_mode,
+            "raw_next_action": raw_next_action,
             "next_action": next_action,
             "woken_goal_ids": list(woken),
             "heartbeat_reasons": list(getattr(heartbeat, "reasons", ())),
+            "control_snapshot": {
+                "schema": control.schema,
+                "control_epoch": int(control.control_epoch),
+                "snapshot_digest": control.snapshot_digest,
+            },
+            "pulse_interval_seconds_consumed": float(selected_interval),
+            "grid_controls_consumed": list(grid_controls),
+            "control_reasons": list(control_reasons),
         }
         after_epoch = _atomic_commit_cycle(
             self.agency,
@@ -387,7 +498,8 @@ def build_unified_cognitive_runtime_v4(
         unified_db,
         allow_regulator_writes=allow_regulator_writes,
     )
-    runtime = UnifiedCognitiveRuntimeV4(base_runtime, agency)
+    control_plane = CognitiveControlPlane(Path(unified_db))
+    runtime = UnifiedCognitiveRuntimeV4(base_runtime, agency, control_plane=control_plane)
     return fabric, heartbeat, agency, runtime, fingerprint
 
 
@@ -396,7 +508,7 @@ def run_bounded(
     unified_db: Path,
     frames_jsonl: Path,
     ticks: int,
-    interval: float,
+    interval: float | None,
     allow_regulator_writes: bool = False,
     trusted_normal_test_fixture: bool = False,
 ) -> list[dict[str, Any]]:
@@ -429,11 +541,16 @@ def run_bounded(
             "next_action": cycle.next_action,
             "woken_goal_ids": list(cycle.woken_goal_ids),
             "next_tick_not_before": cycle.next_tick_not_before,
+            "control_snapshot": cycle.checkpoint.get("control_snapshot"),
+            "pulse_interval_seconds_consumed": cycle.checkpoint.get("pulse_interval_seconds_consumed"),
         }
         rows.append(row)
         print(json.dumps(row, sort_keys=True))
         if i + 1 < ticks:
-            time.sleep(max(0.05, float(interval)))
+            sleep_interval = interval
+            if sleep_interval is None:
+                sleep_interval = float(cycle.checkpoint["pulse_interval_seconds_consumed"])
+            time.sleep(max(0.05, float(sleep_interval)))
     return rows
 
 
@@ -442,7 +559,7 @@ def main() -> int:
     p.add_argument("--unified-db", required=True)
     p.add_argument("--frames-jsonl", required=True)
     p.add_argument("--ticks", type=int, default=1)
-    p.add_argument("--interval", type=float, default=1.0)
+    p.add_argument("--interval", type=float, default=None)
     p.add_argument("--allow-regulator-writes", action="store_true")
     p.add_argument("--trusted-normal-test-fixture", action="store_true")
     args = p.parse_args()

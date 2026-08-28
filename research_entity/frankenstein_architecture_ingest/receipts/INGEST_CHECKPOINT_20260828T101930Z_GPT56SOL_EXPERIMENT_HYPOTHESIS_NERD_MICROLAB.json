@@ -1,0 +1,111 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "checkpoint_id": "INGEST_CHECKPOINT_20260828T101930Z_GPT56SOL_EXPERIMENT_HYPOTHESIS_NERD_MICROLAB",
+  "created_at": "2026-08-28T10:19:30Z",
+  "routing": {"trigger": "triggerwort 5", "status": "VERIFIED", "organ": "GPT-5.6-Sol/triggerwort5/experiment-hypothesis-nerd-microlab"},
+  "authority": {
+    "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "runtime_credit": 0,
+    "design_head_observed_pre_create": "9684ac50249f8279341f3761b82bfe917c12524c"
+  },
+  "pins": {
+    "current_frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "project_frankenstein_main_sha": "39c5423e0bfae54b971aab0be82f225f7a5890b8",
+    "experiment_lab": "services/experiment_lab.py",
+    "hypothesis_service": "services/hypothesis_engine/service.py",
+    "hypothesis_lab_connector": "services/hypothesis_engine/lab_connector.py",
+    "hypothesis_evaluator": "services/hypothesis_engine/evaluator.py",
+    "hypothesis_store": "services/hypothesis_engine/store.py",
+    "nerd_main": "services/nerd_physics/main.py",
+    "nerd_engine": "services/nerd_physics/engine.py"
+  },
+  "semantic_atoms": [
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "services/experiment_lab.py :: module contract/BaseStation",
+      "observed": "Experiment Lab exposes seven simulation stations behind parse -> simulate -> narrate, declares no LLM/subprocess/external HTTP for station computation, bounds a simulation to 10 seconds, applies daily and 48-hour dedup budgets, and rejects known imagination-leak narrative patterns. The station simulation claim is deterministic for identical parameters.",
+      "evidence_scope": "source only; no runtime execution in this macro"
+    },
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "services/hypothesis_engine/service.py",
+      "observed": "Hypothesis Engine implements Observe -> Hypothesize -> Predict -> Test -> Revise hooks, daily/active budgets, experiment linkage, passive evaluation, stale expiry and bounded auto-revision depth.",
+      "evidence_scope": "source only"
+    },
+    {
+      "classification": "ENFORCEMENT_CODE",
+      "source_span": "services/hypothesis_engine/lab_connector.py :: run_experiment/_randomize_defaults/interpret_result",
+      "observed": "If parsing fails, Tier-3 defaults are randomized with Python random without an explicit hypothesis-bound seed in the inspected path. Result interpretation can then classify confirmed/refuted from narration markers or keyword counts rather than a station-specific structured assertion comparator.",
+      "evidence_scope": "source only"
+    },
+    {
+      "classification": "NEGATIVE_RESULT",
+      "source_span": "services/hypothesis_engine/store.py :: check_and_increment_budget",
+      "observed": "Atomic budget update exists, but database exceptions return True (fail-open). Under current fail-closed experiment/effect/resource authority this cannot be carried forward as an admitted experimental budget gate.",
+      "evidence_scope": "source only"
+    },
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "services/nerd_physics/main.py + engine.py",
+      "observed": "NeRD Physics runs an analytical 100 Hz simulation service with optional neural dynamics, persists physics snapshots/training_data to a dedicated nerd_physics.db, maintains thread-safe avatar/action state, and can collect state_in/state_out training pairs. Engine state includes mood/coherence-conditioned dynamics; idle joint targets may use numpy random noise when coherence noise is nonzero.",
+      "evidence_scope": "source only; service not executed"
+    },
+    {
+      "classification": "NEGATIVE_RESULT",
+      "source_span": "end-to-end hypothesis -> experiment -> verdict pipeline",
+      "observed": "Identical hypothesis text is not sufficient to guarantee identical fallback experiment parameters, and narration wording can influence verdict. Therefore current end-to-end hypothesis resolution is not yet a replay-stable scientific evidence pipeline even though an individual station simulation can be deterministic for fixed parameters.",
+      "evidence_scope": "source-forensic inference"
+    },
+    {
+      "classification": "NEGATIVE_RESULT",
+      "source_span": "historical storage topology",
+      "observed": "experiment_lab.db, hypothesis_engine.db and nerd_physics.db are independent durable stores. Porting them wholesale would violate current single canonical UnifiedDB authority; their tables/records must become typed canonical rows or explicitly rebuildable projections.",
+      "evidence_scope": "current-authority compatibility analysis"
+    }
+  ],
+  "architecture_delta_for_frankenstein_2": {
+    "component": "ScientificMicroLab/v1",
+    "decision": "PORT_DETERMINISTIC_SIMULATION_AND_HYPOTHESIS_LIFECYCLE_WITH_STRUCTURED_EVIDENCE_GATES",
+    "preserve": [
+      "bounded pure-compute simulation stations",
+      "imagination-leak rejection",
+      "hypothesis observation/prediction/test/revision lineage",
+      "daily experiment budgets and dedup intent",
+      "station-specific parameter validation/clamping",
+      "NeRD analytical physics and optional validated neural surrogate",
+      "training-pair capture as candidate dataset material"
+    ],
+    "change": [
+      "Create canonical HypothesisRecord, ExperimentPlan, ExperimentRun and SimulationResult typed rows in UnifiedDB with hypothesis_id, experiment_id, causal_frame_id, station/build/source digest, normalized params, seed, assumptions, units, result digest and provenance.",
+      "Derive experiment identity from hypothesis version + station version + normalized parameters + seed. If parse/default generation is stochastic, persist and bind the seed before execution; replay must recover the exact parameter set.",
+      "Replace narration-keyword verdicts with a station-specific TestAssertion contract containing predicted observable, comparator, tolerance, units and acceptance rule. Narration becomes explanation only.",
+      "Experiment budget and dedup gates fail closed on storage/authority uncertainty; database errors cannot authorize additional experiments.",
+      "SimulationResult is SIMULATION_EVIDENCE, never WORLD_OBSERVATION or INTERVENTIONAL_CAUSAL_PROOF. Only admitted real-effect outcome re-entry can provide world intervention evidence.",
+      "NeRD random/noise sources must be seed-bound for dataset or replay credit; analytical-vs-neural validation receipts must bind exact model/build and input frame.",
+      "Do not instantiate experiment_lab.db/hypothesis_engine.db/nerd_physics.db as competing canonical authorities in Frankenstein 2.0."
+    ],
+    "test_assertion_minimum": ["observable", "predicted_relation", "expected_value_or_range", "comparator", "tolerance", "units", "assumptions", "station_version", "params_digest", "seed"],
+    "evidence_ladder": "ANALYTIC_OR_SIMULATION_RESULT -> CANDIDATE_EVIDENCE; VERIFIED_WORLD_OBSERVATION -> OBSERVATIONAL_EVIDENCE; EFFECTGATE_EFFECTJOURNAL_OUTCOME_REENTRY -> INTERVENTIONAL_EVIDENCE",
+    "truth_law": "SIMULATION_OR_NARRATION_VERDICT_NEQ_WORLD_FACT"
+  },
+  "hypotheses_and_falsifiers": [
+    {
+      "hypothesis": "Structured station-specific assertions will sharply reduce false confirmation/refutation caused by narration wording while making experiment replay exact.",
+      "confidence": 0.98,
+      "falsifier": "A blinded corpus shows the existing narration keyword interpreter has equivalent verdict accuracy and replay stability to structured numeric/boolean assertions across all stations."
+    },
+    {
+      "hypothesis": "NeRD can supply useful counterfactual embodied dynamics and training pairs without becoming world truth if every run is frame/model/seed bound.",
+      "confidence": 0.91,
+      "falsifier": "Exact tests show training or cognition downstream cannot distinguish simulated NeRD state from admitted sensor/effect outcomes even when provenance tags are preserved."
+    }
+  ],
+  "triggerword4_handoff": {
+    "status": "READY_AS_ARCHITECTURE_INPUT",
+    "instruction": "Build the research micro-lab as noncanonical deterministic compute over typed hypotheses. Freeze parameters+seed+station identity before run; verdict comes from structured assertions, never narration keywords. All results re-enter UnifiedDB as simulation evidence with explicit evidence class."
+  },
+  "credits": {"whole_entityos_hcu_runtime": 0, "hcu_full_runtime": 0, "jspace_model_runtime": 0, "training": 0, "experiment_runtime": 0, "nerd_runtime": 0},
+  "next_frontier": "Retina/Presence/Voice causal conditioning and verified outcome re-entry, unless a newer concurrent checkpoint already covers it."
+}

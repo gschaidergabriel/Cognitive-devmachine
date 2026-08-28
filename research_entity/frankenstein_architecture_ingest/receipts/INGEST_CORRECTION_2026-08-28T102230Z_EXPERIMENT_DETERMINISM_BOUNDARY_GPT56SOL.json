@@ -1,0 +1,54 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CORRECTION/v1",
+  "correction_id": "INGEST_CORRECTION_20260828T102230Z_GPT56SOL_EXPERIMENT_DETERMINISM_BOUNDARY",
+  "created_at": "2026-08-28T10:22:30Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/experiment-determinism-crosscheck",
+  "trigger": "triggerwort 5",
+  "authority": {
+    "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "design_head_observed_pre_create": "50ff4ee3b2e23ca7fe7ed75377208ac5b8be4920",
+    "runtime_credit": 0
+  },
+  "corrects_or_narrows": {
+    "checkpoint_commit": "698497d6fac89a26af5df0ca306cda855d4f2b4c",
+    "checkpoint_path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_CHECKPOINT_20260828T101930Z_GPT56SOL_EXPERIMENT_HYPOTHESIS_NERD_MICROLAB.json",
+    "statement_to_narrow": "The Experiment Lab module contract says station results are deterministic for identical parameters; the checkpoint correctly identifies nondeterministic fallback parameter generation but does not explicitly record a second nondeterminism inside an individual station path."
+  },
+  "source_crosscheck": {
+    "repo": "gschaidergabriel/Project-Frankenstein",
+    "sha": "39c5423e0bfae54b971aab0be82f225f7a5890b8",
+    "path": "services/experiment_lab.py",
+    "source_blob_sha": "783d65fcd8893cc223ccf865cf2ba1c1eae0df49",
+    "module_contract": "Results are deterministic given the same parameters.",
+    "counterexample": "QuantumStation world_model simulation initializes numpy RandomState from int(time.time()) % 10000, so the same explicit params can produce different world_model trajectories across runs unless time happens to map to the same seed.",
+    "classification": "NEGATIVE_RESULT_SOURCE_CONTRADICTION",
+    "runtime_status": "NOT_RUN"
+  },
+  "architecture_consequence": {
+    "component": "ScientificMicroLab/v1",
+    "decision": "KEEP_EXISTING_SUCCESSOR_AND_STRENGTHEN_DETERMINISM_GATE",
+    "changes": [
+      "Do not grant deterministic-simulation credit from module-level prose or station class identity.",
+      "Every stochastic source, including internal station RNG construction, must be explicit in ExperimentPlan as seed + RNG algorithm/build identity before execution.",
+      "A simulator that reads wall-clock time, ambient randomness, mutable global state or unbound external state is NON_REPLAYABLE until those inputs are captured and bound.",
+      "Replay acceptance requires identical normalized params + seed + simulator/build/source digest + assumptions to reproduce the declared structured observable within its predeclared tolerance.",
+      "Narration remains presentation only and cannot repair or hide nondeterministic result identity."
+    ],
+    "truth_law": "DECLARED_DETERMINISM_NEQ_REPLAY_STABLE_EXECUTION"
+  },
+  "cheap_discriminator_for_triggerword4": {
+    "name": "SimulationReplayIdentityTest/v1",
+    "procedure": "For each retained station/submode, static-scan and runtime-instrument all RNG/time/ambient-state reads; require a bound seed/input manifest, then repeat exact TestPlan twice and compare structured result digest or declared numeric tolerance. The world_model time-seed path must fail before repair.",
+    "unusual_experiment": false,
+    "execution_this_turn": "NOT_RUN_SOURCE_ONLY"
+  },
+  "credits": {
+    "source_crosscheck": "PASS",
+    "experiment_runtime": 0,
+    "scientific_micro_lab_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0
+  }
+}

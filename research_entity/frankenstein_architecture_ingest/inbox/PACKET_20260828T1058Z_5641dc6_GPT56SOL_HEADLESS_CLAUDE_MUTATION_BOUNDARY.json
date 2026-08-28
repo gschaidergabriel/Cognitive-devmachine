@@ -1,0 +1,118 @@
+{
+  "packet_id": "TW5-PACKET-20260828T105800Z-HEADLESS-CLAUDE-MUTATION-BOUNDARY-GPT56SOL",
+  "created_at": "2026-08-28T10:58:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "VOICE_HEADLESS_CLAUDE_SETTINGS_HOOK_BINDING_AND_NON_TASK_MUTATION_ADMISSION",
+  "files_examined": [
+    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py","sha_or_blob":"d922408b644efe6b7f0c06f8f7c794c39fdab8bf","spans_examined":[{"line_start":340,"line_end":430}]},
+    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py","sha_or_blob":"37b972474d80d827fdef64fbbb79c1c31e173aaa","spans_examined":[{"line_start":400,"line_end":610},{"line_start":820,"line_end":900},{"line_start":1650,"line_end":1745}]},
+    {"path":"DEV_SOURCE_RESEARCH/repository/hooks/hooks.json","sha_or_blob":"c483bc81cbae080a8175f7ce694ef657484614b5","spans_examined":[{"line_start":1,"line_end":53}]},
+    {"path":"DEV_SOURCE_RESEARCH/repository/.claude-plugin/plugin.json","sha_or_blob":"448dafc8ba4f5c491c5c06d9578549634ad42354","spans_examined":[{"line_start":1,"line_end":14}]}
+  ],
+  "atoms": [
+    {
+      "atom_id":"TW5-HEADLESS-CLAUDE-UNPINNED-HOOK-SETTINGS-020",
+      "subsystem":"voice.claude_delegation.runtime_enforcement_binding",
+      "path":"DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "commit_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start":340,"line_end":405,"excerpt_hash":null,"source_kind":"ENFORCEMENT_CODE",
+      "what_it_does":"claude_frage launches headless claude -p with JSON output, permission mode and unconditional --disallowedTools Bash. It does not pin --settings, plugin/hook source, or repository root; absent an explicit cwd it executes from Path.home().",
+      "why_it_exists":"The Bash-wide deny was added after a demonstrated command-specific/interpreter bypass.",
+      "inputs":["task text","Claude session id","permission mode","optional cwd"],
+      "outputs":["Claude Code result","ambient non-Bash tool execution"],
+      "reads":["ambient Claude installation/settings/plugin state"],"writes":[],
+      "dependencies":["claude CLI","ambient host configuration"],
+      "authority_class":"PARTIAL_LOCAL_TOOL_DENIAL_NOT_SOURCE_BOUND_FINAL_EFFECT_AUTHORITY",
+      "failure_mode":"The exact hook/plugin/effect-enforcement bytes used by voice-delegated claude -p are not bound by this invocation, so repository manifest presence is not runtime hook evidence.",
+      "concurrency_implication":"Resumed Claude session identity remains session-scoped and does not create a call-scoped effect identity.",
+      "privacy_implication":"Read/Write/Edit and other non-Bash capabilities remain governed by ambient policy whose exact installed identity is unobserved here.",
+      "latency_or_cost_implication":"Caller permits a long delegated timeout; no provider execution was attempted in this source-only run.",
+      "state_lifetime":"Claude session may persist across voice tasks","runtime_reachable":true,
+      "runtime_entrypoints":["RealtimeSession._claude_taetigkeit -> gespraechsmodus.claude_frage"],
+      "tests_or_receipts":[],
+      "known_counterevidence":["Donor comments say ~/.claude/settings.local.json applies to headless claude -p, but that is ambient-host policy rather than an invocation-bound settings identity."],
+      "supersedes":[],"superseded_by":[],"confidence":0.99,"target_2_0_action":"REPAIR",
+      "open_questions":["Which exact settings/plugin/hook bytes load for this installed invocation?","Do all mutating non-Bash tools reach deterministic pre-side-effect authority?"]
+    },
+    {
+      "atom_id":"TW5-PLUGIN-HOOK-MANIFEST-NOT-INVOCATION-RECEIPT-021",
+      "subsystem":"claude_plugin.hook_manifest",
+      "path":"DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "commit_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start":1,"line_end":53,"excerpt_hash":null,"source_kind":"CONFIG",
+      "what_it_does":"Declares seven Claude hook events including PreToolUse(*) and Stop, all routing to ${CLAUDE_PLUGIN_ROOT}/scripts/stern.py hook.",
+      "why_it_exists":"Single-dispatch donor hook architecture.",
+      "inputs":["Claude hook events"],"outputs":["stern.py hook invocation if plugin is actually loaded"],"reads":["CLAUDE_PLUGIN_ROOT"],"writes":[],
+      "dependencies":["Claude plugin loader","stern.py"],"authority_class":"DECLARED_PLUGIN_CONFIG_NOT_RUNTIME_LOAD_RECEIPT",
+      "failure_mode":"The manifest can exist in the donor repository without being loaded by the voice-delegated headless process.",
+      "concurrency_implication":null,"privacy_implication":null,"latency_or_cost_implication":"Hook timeouts are configured but firing is unobserved here.",
+      "state_lifetime":"repository configuration","runtime_reachable":null,"runtime_entrypoints":["Claude plugin loader if installed/enabled"],"tests_or_receipts":[],
+      "known_counterevidence":["The preceding exact-current Triggerword-5 Stop crosscheck found synchronous local Ollama inside Stop despite this manifest description saying no LLM in any hook."],
+      "supersedes":[],"superseded_by":[],"confidence":0.99,"target_2_0_action":"KEEP",
+      "open_questions":["What exact installed plugin/settings path binds this manifest to the delegated process?"]
+    },
+    {
+      "atom_id":"TW5-VOICE-MEMORY-MUTATION-BYPASSES-TASK-GATE-022",
+      "subsystem":"voice.memory_mutation_admission",
+      "path":"DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start":400,"line_end":610,"excerpt_hash":null,"source_kind":"LIVE_CODE",
+      "what_it_does":"frank_erinnerung_schreiben directly forwards model-produced subject/value to stern.py gespraech-erinnerung-schreiben with quelle=realtime-tool; it does not pass through the two-stage voice task confirmation gate.",
+      "why_it_exists":"Voice is intended to share Frankenstein durable memory rather than remain a disconnected persona.",
+      "inputs":["model-produced subject","model-produced value"],"outputs":["stern memory-write request"],"reads":[],"writes":["intended durable memory; exact stern write body not re-audited in this packet"],
+      "dependencies":["stern.gespraech_erinnerung_schreiben"],"authority_class":"MODEL_TOOL_MUTATION_REQUEST_WITHOUT_TYPED_MEMORY_ADMISSION",
+      "failure_mode":"No examined immutable MemoryCandidate/MemoryAdmission binds originating call_id, utterance evidence, transformation/epistemic class, generation, privacy/retention and digest.",
+      "concurrency_implication":"Realtime call_id is not carried into the helper call.","privacy_implication":"Voice content may be selected for durable storage without a typed retention/privacy admission envelope.",
+      "latency_or_cost_implication":null,"state_lifetime":"intended durable","runtime_reachable":true,"runtime_entrypoints":["RealtimeSession._tool_ausfuehren -> frank_erinnerung_schreiben"],"tests_or_receipts":[],
+      "known_counterevidence":["Persona/tool text instructs selective important-memory use, but behavioral instruction is not deterministic admission enforcement."],
+      "supersedes":[],"superseded_by":[],"confidence":0.98,"target_2_0_action":"ADAPT_TO_GRID",
+      "open_questions":["Which stern-side canonical write rules should survive behind MemoryAdmission?"]
+    },
+    {
+      "atom_id":"TW5-VOICE-RESEARCH-DISPATCH-BEHAVIORAL-ONLY-GATE-023",
+      "subsystem":"voice.research_request_admission",
+      "path":"DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha":"5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start":400,"line_end":610,"excerpt_hash":null,"source_kind":"LIVE_CODE",
+      "what_it_does":"frank_forschung is described as explicit-user-request-only, but aktion=neu_anstossen mechanically needs only a nonempty question before background dispatch; _forschung_taetigkeit then calls stern chatgpt-senden. No equivalent two-step HumanIntent gate is source-visible in this path.",
+      "why_it_exists":"Expose research through voice asynchronously.",
+      "inputs":["model-selected action","research question"],"outputs":["cached read or new asynchronous research request"],"reads":["latest cached result for lesen"],"writes":["research dispatch intent for neu_anstossen"],
+      "dependencies":["_HintergrundBruecke","RealtimeSession._forschung_taetigkeit","stern.chatgpt_senden"],"authority_class":"BEHAVIORAL_USER_INTENT_POLICY_NOT_DETERMINISTIC_ADMISSION",
+      "failure_mode":"Explicit-user-request restriction is model-facing policy rather than deterministic HumanIntent/Capability/Privacy/Economic admission.",
+      "concurrency_implication":"Background auftrag_id does not preserve the originating Realtime call_id.","privacy_implication":"Research text can enter downstream automation; exact egress is unobserved here.",
+      "latency_or_cost_implication":"Potentially long downstream work; current Clay FREE_ONLY authority kept provider execution disabled in this run.","state_lifetime":"background task plus downstream research state","runtime_reachable":true,
+      "runtime_entrypoints":["RealtimeSession._tool_ausfuehren -> frank_forschung","RealtimeSession._forschung_taetigkeit"],"tests_or_receipts":[],
+      "known_counterevidence":["The persona/tool description strongly says explicit request only; model compliance is not an enforcement receipt."],
+      "supersedes":[],"superseded_by":[],"confidence":0.99,"target_2_0_action":"REPAIR",
+      "open_questions":["What downstream provider/economic gate is actually installed for chatgpt_senden?","How should ResearchRequestCandidate bind exact HumanIntent evidence and current FREE_ONLY authority?"]
+    }
+  ],
+  "hypotheses":[
+    "A source-bound TaskAdmission/WorkExecutionBinding should carry Realtime call identity through delegated Claude work while pinning the exact settings/plugin/hook identity used for enforcement.",
+    "Memory and research require distinct typed admissions rather than blindly reusing the external-task confirmation state machine."
+  ],
+  "counterhypotheses":[
+    "Ambient Claude user settings or an installed Frankenstein plugin may already fire the intended final hooks. Even if true, the examined invocation does not bind those bytes, so reproducibility/runtime credit remains open.",
+    "Model-facing tool descriptions may be reliable enough in ordinary use, but this does not satisfy deterministic fail-closed state/effect authority requirements."
+  ],
+  "contradictions":[
+    "Repository plugin config declares PreToolUse(*) and Stop hooks, but claude_frage does not source-bind a plugin/settings identity or repo cwd.",
+    "Voice tasks have a mechanical two-stage confirmation gate while memory-write and new-research tool paths do not use an equivalent typed admission.",
+    "Hook config/plugin metadata state no LLM call inside hooks while the preceding current-donor Stop crosscheck found synchronous local Ollama."
+  ],
+  "critical_unknowns":[
+    "Exact installed Claude settings/plugin bytes and hook firing for headless voice delegation.",
+    "Whether non-Bash mutations traverse deterministic pre-side-effect final authority on the actual host.",
+    "Exact stern-side memory-write admission semantics.",
+    "Exact downstream provider/egress/economic behavior of chatgpt_senden; no provider execution was attempted.",
+    "Runtime preservation of Realtime call identity into downstream work/effect receipts."
+  ],
+  "recommended_next_spans":[
+    {"path":"DEV_SOURCE_RESEARCH/repository/INSTALL_HOST_STEPS.md","line_start":null,"line_end":null,"reason":"Recover exact documented Claude plugin/settings installation/launch path and separate install spec from runtime load evidence.","priority":"P0"},
+    {"path":"DEV_SOURCE_RESEARCH/repository/scripts/stern.py","line_start":null,"line_end":null,"reason":"Trace memory-write and chatgpt_senden to the actual canonical-state/effect/provider boundaries.","priority":"P0"},
+    {"path":"DEV_SOURCE_RESEARCH/repository/tests","line_start":null,"line_end":null,"reason":"Locate existing headless claude -p hook-firing/effect-boundary tests before creating any duplicate lane.","priority":"P1"}
+  ],
+  "supersedes_packet_id":null
+}

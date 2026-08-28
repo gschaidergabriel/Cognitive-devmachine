@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import sqlite3
 import tempfile
 from pathlib import Path
 import unittest
 
 from tools.frankenstein2_effect_lifecycle_v1 import (
     AdmissionDecision,
+    EffectLifecycleError,
     EffectLifecycleStore,
     V2_COMPLETION_EVIDENCE_CLASS,
     WorldOutcome,
@@ -56,7 +58,7 @@ class EffectLifecycleAtomicBundleRollbackIntegrationTests(unittest.TestCase):
         )
         self.store.mark_submitted(invocation_id, now_ts=5.0)
 
-    def _record_bundle(self, *, fail_after_base_insert: bool = False) -> None:
+    def _record_bundle(self) -> None:
         self.store.record_execution_bundle(
             "call-atomic",
             executable_id="tool-v1",
@@ -68,14 +70,37 @@ class EffectLifecycleAtomicBundleRollbackIntegrationTests(unittest.TestCase):
             duplicate_state="UNIQUE",
             status="SUCCEEDED",
             now_ts=6.0,
-            fail_after_base_insert=fail_after_base_insert,
         )
+
+    def _install_second_insert_fault(self) -> None:
+        """Abort the v2 metadata insert after the base receipt insert in the same transaction."""
+        con = sqlite3.connect(str(self.db))
+        try:
+            con.execute(
+                """CREATE TRIGGER fail_execution_v2_insert
+                   BEFORE INSERT ON execution_v2_metadata
+                   BEGIN
+                     SELECT RAISE(ABORT, 'fault_after_base_execution_receipt');
+                   END"""
+            )
+            con.commit()
+        finally:
+            con.close()
+
+    def _remove_second_insert_fault(self) -> None:
+        con = sqlite3.connect(str(self.db))
+        try:
+            con.execute("DROP TRIGGER fail_execution_v2_insert")
+            con.commit()
+        finally:
+            con.close()
 
     def test_fault_after_base_insert_rolls_back_then_retry_closes_same_completion_chain(self) -> None:
         self._prepare_submitted()
+        self._install_second_insert_fault()
 
-        with self.assertRaisesRegex(RuntimeError, "FAULT_INJECTION_AFTER_BASE_RECEIPT"):
-            self._record_bundle(fail_after_base_insert=True)
+        with self.assertRaisesRegex(EffectLifecycleError, "EXECUTION_BUNDLE_PERSISTENCE_CONFLICT"):
+            self._record_bundle()
 
         failed = self.store.snapshot("call-atomic")
         self.assertEqual(failed["request"]["pending_state"], "SUBMITTED")
@@ -83,6 +108,7 @@ class EffectLifecycleAtomicBundleRollbackIntegrationTests(unittest.TestCase):
         self.assertIsNone(failed["execution_v2"])
         self.assertIsNone(failed["completion"])
 
+        self._remove_second_insert_fault()
         self._record_bundle()
         self.store.verify_world_effect(
             "call-atomic",

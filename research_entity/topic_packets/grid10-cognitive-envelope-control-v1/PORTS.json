@@ -1,0 +1,178 @@
+{
+  "schema": "GRID10_COGNITIVE_ENVELOPE_PORTS/v1",
+  "status": "RESEARCH_CANDIDATE_INTEGRATION_SKELETON",
+  "authority_note": "Ports are logical contracts. They do not create a second canonical state or effect path.",
+  "ports": [
+    {
+      "id": "cognition.signal.read",
+      "direction": "READ",
+      "payload": "CognitiveSignalBatch/v1",
+      "sources": ["GRID10", "GWT", "Hyperposition", "GoalState", "WorkState", "EffectReceipts"],
+      "authority": "OBSERVATION_ONLY"
+    },
+    {
+      "id": "cognition.envelope.read",
+      "direction": "READ",
+      "payload": "CognitiveEnvelopeSnapshot/v1",
+      "authority": "OBSERVATION_ONLY"
+    },
+    {
+      "id": "cognition.regulator.read",
+      "direction": "READ",
+      "payload": "CognitiveRegulatorSnapshot/v1",
+      "authority": "OBSERVATION_ONLY"
+    },
+    {
+      "id": "cognition.regulator.command",
+      "direction": "WRITE_REQUEST",
+      "payload": "RegulatorCommand/v1",
+      "required_checks": [
+        "writer_authority",
+        "regulator_class",
+        "allowed_range",
+        "slew_rate",
+        "expected_version",
+        "assurance_mode",
+        "reason_and_provenance"
+      ],
+      "authority": "POLICY_GATED_NO_EFFECT_AUTHORITY"
+    },
+    {
+      "id": "cognition.loop.frame",
+      "direction": "APPEND_OR_STREAM",
+      "payload": "CognitiveLoopFrame/v1",
+      "authority": "READ_ONLY_VISUAL_TWIN_PROJECTION"
+    },
+    {
+      "id": "cognition.goal.contract",
+      "direction": "READ",
+      "payload": "GoalContract/v1",
+      "authority": "CANONICAL_GOAL_LINEAGE_VIEW"
+    },
+    {
+      "id": "cognition.context.compile",
+      "direction": "REQUEST_RESPONSE",
+      "request": "ContextCompileRequest/v1",
+      "response": "TaskContextCapsule/v1",
+      "authority": "CONTEXT_PROJECTION_ONLY"
+    },
+    {
+      "id": "cognition.executor.directive",
+      "direction": "OUT",
+      "payload": "ExecutorWorkDirective/v1",
+      "executor_aliases": ["ClaudeCode", "ChatGPT", "local_model", "tool_runner"],
+      "authority": "BOUNDED_WORK_SPEC_REVISION"
+    },
+    {
+      "id": "cognition.executor.result",
+      "direction": "IN",
+      "payload": "ExecutorWorkResult/v1",
+      "authority": "CANDIDATE_PLUS_RECEIPTS_NOT_COMPLETION_TRUTH"
+    },
+    {
+      "id": "cognition.completion.evaluate",
+      "direction": "REQUEST_RESPONSE",
+      "request": "CompletionEvaluationRequest/v1",
+      "response": "CompletionVerdict/v1",
+      "authority": "WORK_COMPLETION_GATE"
+    },
+    {
+      "id": "cognition.effect.candidate",
+      "direction": "OUT",
+      "payload": "ActionCandidate/v1",
+      "destination": "EffectGate",
+      "authority": "CANDIDATE_ONLY"
+    }
+  ],
+  "regulator_classes": {
+    "L0_HARD_INVARIANT": {
+      "live_writable": false,
+      "examples": [
+        "authority_boundary",
+        "single_canonical_state",
+        "single_effect_path",
+        "no_truth_from_internal_simulation"
+      ]
+    },
+    "L1_ENVELOPE": {
+      "live_writable": "ADMIN_POLICY_ONLY",
+      "purpose": "hard/soft bands, derivative limits, hysteresis and violation response"
+    },
+    "L2_SETPOINT": {
+      "live_writable": "AUTHORIZED_OPERATOR_OR_CONTROLLER_WITHIN_L1",
+      "purpose": "desired cognitive operating point"
+    },
+    "L3_ACTUATOR": {
+      "live_writable": "CONTROLLER_OR_EXPLICIT_OPERATOR_WITHIN_POLICY",
+      "purpose": "concrete GRID10/scheduler/retrieval parameters"
+    }
+  },
+  "assurance_modes": [
+    "NORMAL",
+    "CAUTION",
+    "CONTAINED",
+    "HOLD",
+    "RECOVERY"
+  ],
+  "initial_axes": [
+    "authority_integrity",
+    "goal_lineage_alignment",
+    "goal_drift_rate",
+    "containment_margin",
+    "epistemic_grounding",
+    "self_reinforcement_ratio",
+    "autonomy_intensity",
+    "exploration_pressure",
+    "convergence_pressure",
+    "uncertainty_load",
+    "hyperposition_width",
+    "cognitive_diversity",
+    "reflection_depth",
+    "stagnation_pressure",
+    "retrieval_load",
+    "retrieval_relevance",
+    "execution_pressure",
+    "completion_confidence",
+    "resource_pressure",
+    "recovery_margin"
+  ],
+  "initial_actuators": [
+    "cog.temperature",
+    "cog.top_p",
+    "cog.poll_intensity",
+    "cog.max_reflection_rounds",
+    "cog.route_diversity_target",
+    "cog.workspace_ignition_threshold",
+    "cog.counterhypothesis_pressure",
+    "goal.adoption_threshold",
+    "goal.max_drift_per_tick",
+    "goal.initiative_ceiling",
+    "goal.concurrent_active_limit",
+    "goal.progress_evidence_min",
+    "hyper.max_branches_per_variable",
+    "hyper.collapse_confidence_min",
+    "hyper.safety_projection_mode",
+    "hyper.branch_persistence_ticks",
+    "memory.context_token_budget",
+    "memory.max_items",
+    "memory.semantic_threshold",
+    "memory.causal_depth",
+    "memory.counterevidence_quota",
+    "memory.unresolved_branch_quota",
+    "memory.dedupe_similarity_ceiling",
+    "exec.max_parallel_work",
+    "exec.continuation_bias",
+    "exec.max_replan_without_new_evidence",
+    "exec.completion_metric_threshold",
+    "exec.require_execution_receipt",
+    "exec.require_test_receipt",
+    "exec.delta_directive_only_after_partial",
+    "contain.external_action_concurrency",
+    "contain.effect_risk_ceiling",
+    "contain.required_margin",
+    "contain.safe_mode_read_only"
+  ],
+  "visual_twin_rule": "CognitiveLoopFrame must be derived from the same admitted signal/event stream used by the controller. Visualization cannot mint or modify cognitive/canonical state.",
+  "claude_rule": "ClaudeCode owns only the currently claimed bounded work revision. Claimed DONE is a candidate until CompletionGate verifies all mandatory metrics and receipts.",
+  "hyperposition_rule": "Preserve alternatives and provenance. Safety/containment projections are conservative; factual alternatives do not collapse by consensus alone."
+}

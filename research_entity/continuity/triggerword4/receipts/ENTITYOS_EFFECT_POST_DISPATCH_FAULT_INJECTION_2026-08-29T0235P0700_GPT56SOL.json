@@ -1,0 +1,67 @@
+{
+  "schema": "ENTITYOS_EFFECT_POST_DISPATCH_FAULT_INJECTION/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "observed_at_local": "2026-08-29T02:35:53+07:00",
+  "classification": "EXACT_SOURCE_LOCAL_ZERO_REAL_EFFECT_COUNTEREVIDENCE",
+  "canonical_main_observed_before_write": "676fcb87df81ba792bf4f86a1128b9be0d0dbe7f",
+  "authority": {
+    "supervisor_schema": "9.13",
+    "mode": "FREE_ONLY",
+    "effect_authority": "EffectGate+EffectJournal",
+    "owner_execution_authority_pointer": "CLAY_EXECUTION_AUTHORITY.md"
+  },
+  "source_under_test": {
+    "binding_implementation_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+    "path": "the artefact/clayverse/entityos_bridge.py",
+    "git_blob_sha": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+    "git_blob_reconstructed_locally": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+    "git_blob_match": true,
+    "sha256": "04df9dce41ca50bf3b68075ea60463273dfbaa4b54b304dc82c6b504044aeb11"
+  },
+  "harmless_fixture": {
+    "type": "exact-byte local shell executable",
+    "sha256": "50cfade1d7a0485e99f27db631b0379814b29ae0bceeae5b580abd3bb312c381",
+    "behavior": "write PROCESS_STARTED marker, sleep 2 seconds, then attempt PROCESS_FINISHED marker",
+    "external_or_production_effect": false
+  },
+  "intervention": {
+    "bridge_timeout_seconds": 0.2,
+    "execution_surface": "authorized isolated non-production OpenAI container",
+    "network_or_provider_execution": false
+  },
+  "observed_result": {
+    "exception_type": "subprocess.TimeoutExpired",
+    "elapsed_seconds": 0.201171,
+    "marker_exists_after_exception": true,
+    "marker_content": "PROCESS_STARTED\n",
+    "finished_marker_present": false,
+    "discriminator_pass": true
+  },
+  "source_fusion": {
+    "current_effects_blob": "4a6413b3f3c752c6327e67233bdd8097f3cf0ba4",
+    "current_effect_gate_behavior": "the catch-all Exception path journals FAILED after EntityOSBridge.run raises",
+    "current_effect_journal_blob": "cda63471f1467481f2ff79032d3931730a334a20",
+    "current_effect_journal_gap": "no explicit post-dispatch unresolved status",
+    "historical_donor_pr": 430,
+    "historical_donor_status": "OPEN_DRAFT_STALE_BASE_DONOR_ONLY",
+    "historical_mechanism": "typed EntityOSOutcomeUnknown -> UNKNOWN_OUTCOME; preserve pre-launch FAILED; zero credit; no automatic replay"
+  },
+  "adjudication": {
+    "hypothesis": "EntityOSBridge.run can raise after the child has crossed the process-start boundary, so a bridge exception cannot always be interpreted as NOT_APPLIED/definite failure.",
+    "counterhypothesis": "All bridge exceptions occur before process start, so FAILED is always sound.",
+    "counterhypothesis_falsified": true,
+    "reason": "The exact current bound bridge blob raised TimeoutExpired after the fixture had already created the PROCESS_STARTED marker.",
+    "semantic_consequence": "The canonical authority must preserve this path as unresolved/unknown and non-replayable rather than mint definite FAILED world semantics."
+  },
+  "credit_boundary": {
+    "exact_bridge_fault_injection_component_evidence": "PASS",
+    "integrated_effectgate_journal_runtime": 0,
+    "real_effect_runtime": 0,
+    "external_world_verification_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Salvage the minimal typed unknown-outcome mechanism from stale donor PR #430 onto current main without regressing the fixed PATH, active-turn causal fencing, managed lease, current completion-identity, or current 9.13 authority boundaries; add current regressions for post-start timeout -> unresolved, pre-dispatch integrity failure -> FAILED, zero automatic replay, and a separately authorized verifier path before claiming semantic closure."
+}

@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
 CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.3"
-EXECUTION_RECEIPT_SCHEMA_VERSION = "1.2"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.3"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_REQUEST_BYTES = 2_000_000
@@ -1454,6 +1454,7 @@ def _execute_chat_locked(
         "unicode_database_version": UNICODE_DATABASE_VERSION,
         "provider": selected,
         "model": model,
+        "model_availability_verified": outcome == "success",
         "endpoint_capability_id": endpoint_capability_id,
         "cost_policy_principal_id": cost_policy_principal_id,
         "budget_epoch_id": _budget_epoch_id(env),

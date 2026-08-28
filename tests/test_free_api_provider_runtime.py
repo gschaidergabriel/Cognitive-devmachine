@@ -599,6 +599,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 raise RuntimeError("child reached authenticated transport")
 
             try:
+                MOD.os.environ = env
+                capability_receipt = MOD.receipt()
                 try:
                     child_result = MOD.execute_chat(
                         VALID_MESSAGES,
@@ -609,7 +611,11 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     outcome = child_result["receipt"]["outcome"]
                 except RuntimeError as exc:
                     outcome = str(exc)
-                payload = f"{outcome}:{child_opener_called}".encode("ascii")
+                payload = (
+                    f"{outcome}:{child_opener_called}:"
+                    f"{capability_receipt['route']['selected']}:"
+                    f"{capability_receipt['route']['reason']}"
+                ).encode("ascii")
                 os.close(read_fd)
                 os.write(write_fd, payload)
             finally:
@@ -628,7 +634,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(len(parent_results), 1)
         self.assertEqual(
             child_evidence,
-            "forked_during_active_execution:False",
+            "forked_during_active_execution:False:None:"
+            "forked_during_active_execution",
         )
 
     def test_execution_receipt_pins_unicode_database_version(self):

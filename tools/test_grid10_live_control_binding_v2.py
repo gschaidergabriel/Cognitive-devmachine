@@ -119,6 +119,7 @@ class LiveControlBindingV2Tests(unittest.TestCase):
             self.assertIn(9, result.cycle.workspace.active_cells)
             self.assertEqual(len(fake.calls), 10)  # nine specialists + one GWT workspace
             self.assertTrue(any("ROLE=workspace/GWT fan-in" in m[-1]["content"] for m, _ in fake.calls))
+            self.assertEqual(result.memory_reentry_eligible_cell_ids, result.gwt_eligible_cell_ids)
 
     def test_subthreshold_specialists_compute_but_workspace_is_not_called(self):
         with tempfile.TemporaryDirectory() as td:
@@ -130,6 +131,7 @@ class LiveControlBindingV2Tests(unittest.TestCase):
             result = self.run_cycle(fabric, snapshot, fake)
             self.assertFalse(result.workspace_ignited)
             self.assertEqual(result.gwt_eligible_cell_ids, ())
+            self.assertEqual(result.memory_reentry_eligible_cell_ids, ())
             self.assertNotIn(9, result.cycle.workspace.active_cells)
             self.assertEqual(result.cycle.workspace.evidence_requests, ("GWT_NOT_IGNITED",))
             self.assertEqual(len(fake.calls), 9)  # specialist compute still happened
@@ -153,6 +155,7 @@ class LiveControlBindingV2Tests(unittest.TestCase):
             self.assertEqual(planner.status, "IGNITION_BELOW_THRESHOLD")
             self.assertEqual(planner.candidate, "")
             self.assertNotIn(planner.cell_id, result.gwt_eligible_cell_ids)
+            self.assertNotIn(planner.cell_id, result.memory_reentry_eligible_cell_ids)
             workspace_prompts = [
                 m[-1]["content"] for m, _ in fake.calls
                 if "ROLE=workspace/GWT fan-in" in m[-1]["content"]
@@ -171,6 +174,7 @@ class LiveControlBindingV2Tests(unittest.TestCase):
             text = json.dumps(receipt, sort_keys=True)
             self.assertFalse(receipt["workspace_ignited"])
             self.assertEqual(receipt["workspace_ignition_threshold"], 0.5)
+            self.assertEqual(receipt["memory_reentry_eligible_cell_ids"], [])
             self.assertNotIn("candidate-secret", text)
             self.assertNotIn("workspace-secret", text)
             self.assertFalse(receipt["canonical_truth_minted"])

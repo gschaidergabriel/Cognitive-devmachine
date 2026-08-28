@@ -1,0 +1,47 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "delta": "9.13Z_NON_AUTHORITY",
+  "timestamp_local": "2026-08-28T08:50:59+07:00",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "material_finding": "GRID10 SIGKILL acceptance v2 closes the old-coordinator synthetic-PID and manual-revoke proof-splices, but it still does not prove independent automatic replacement execution. In run_acceptance(), both worker and coord-new are registered with the parent os.getpid(), and after elect_coordinator() returns a lease for coord-new the parent process itself calls DecodeSafeFabric.coordinator_drain_and_commit(). Therefore 'replacement_is_different_node' currently proves only a different node_id/lease, not a distinct replacement OS process executing the retained coordinator path. The fresh execution attempt was additionally blocked before checkout by DNS resolution failure, so no repository-bound runtime PASS exists.",
+  "source_evidence": {
+    "v2_acceptance_commit": "51914c30d6323185de4a574c04ae100d4b1e3841",
+    "v2_test_commit": "b2f425d800d3f7c3a1ac91a851e6a5c78bb1434d",
+    "v2_frontier_commit": "426e0a4f175afbdd0a897e6de611ac2b954a6f60",
+    "execution_attempt_receipt_commit": "f802113973caa8ed283fca0efdda7f45045191a8",
+    "execution_attempt_result": "INFRASTRUCTURE_BLOCKED_BEFORE_CHECKOUT_DNS_RESOLUTION_FAILURE"
+  },
+  "evidence_boundary": {
+    "source_candidate_present": true,
+    "repository_bound_execution_pass": false,
+    "semantic_fail_observed": false,
+    "runtime_credit_delta": 0,
+    "physical_grid10_credit_delta": 0,
+    "whole_hcu_credit_delta": 0,
+    "training_credit_delta": 0,
+    "base_credit_delta": 0,
+    "canonical_semantics_credit_delta": 0
+  },
+  "next_focus": [
+    "P0 preserve FREE_ONLY/HARD_OFF with no paid fallback and complete bootstrap-v2/control-sync plus quiescence-v2 before any provider path",
+    "P1 strengthen the GRID10 failover falsifier before runtime promotion: coord-new must be a distinct real child process with its own observed PID/incarnation, not the parent PID",
+    "P1 execute retained replacement coordinator recovery inside the coord-new child process itself; parent may orchestrate SIGKILL/timing and observe receipts but must not execute coordinator_drain_and_commit using the replacement lease/token",
+    "P1 bind replacement child PID, node_id, membership/incarnation, lease/token and recovery receipt; reject parent/worker PID reuse and receipt transplant",
+    "P1 for Physical-GRID10 credit, also use a distinct worker process or explicitly keep the acceptance scoped below physical-node independence credit",
+    "P1 retain no-manual-revoke invariant, replacement blocked before TTL, automatic electability only after retained TTL, exactly one admitted result, consumed 0->1 repair only, unchanged S1 epoch/digest and identical replay +0",
+    "P1 repository-bound execute the strengthened falsifier on a clean current non-provider checkout; DNS/client failures remain infrastructure evidence only",
+    "KEEP BASE WP promotions, canonical semantics, training, Physical-GRID10 and Whole-HCU credit at zero unless their existing executable gates pass"
+  ],
+  "evidence_law": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

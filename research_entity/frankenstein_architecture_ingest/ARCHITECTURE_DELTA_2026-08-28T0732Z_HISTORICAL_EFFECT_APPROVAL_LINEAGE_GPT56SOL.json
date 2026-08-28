@@ -3,121 +3,33 @@
   "delta_id": "T5_2026-08-28T0732Z_HISTORICAL_EFFECT_APPROVAL_LINEAGE_5641dc6b_GPT56SOL",
   "trigger": "triggerwort 5",
   "authority_epoch": "8.78",
-  "canonical_product": "EntityOS",
-  "canonical_compute_architecture": "HCU",
-  "evidence_scope": "SOURCE_FORENSICS_AND_PROVENANCE_FUSION_ONLY_NO_NEW_RUNTIME_EXECUTION",
-  "donor": {
-    "repo": "gschaidergabriel/frankenstein",
-    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
-  },
-  "historical_source": {
-    "repo": "gschaidergabriel/Project-Frankenstein",
-    "commit": "abba90a5767d85abc8a1ac340bae92842dab35c1"
-  },
-  "design_lane": {
-    "repo": "gschaidergabriel/clay-global-research-entity",
-    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-    "observed_head_before_write": "7ef999d96b80759830a7edc138f3feb04509d3bf",
-    "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73"
-  },
-  "packet_ingest": [
-    {
-      "packet_id": "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
-      "status": "CONSUMED_DEDUPED",
-      "credit": "NO_INDEPENDENT_CREDIT",
-      "reason": "The call-identity, nonblocking-effect-admission and VERIFIED-without-preadmission findings are already represented in canonical-main architecture archaeology and existing owner-branch successor deltas. This packet is retained as a provenance bridge, not counted as a new independent architecture finding."
-    },
-    {
-      "packet_id": "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
-      "status": "CONSUMED_SOURCE_CROSSCHECKED",
-      "credit": "HISTORICAL_SOURCE_LINEAGE_ONLY",
-      "crosschecks": [
-        "Project-Frankenstein agentic/executor.py:70-180@abba90a5767d85abc8a1ac340bae92842dab35c1",
-        "Project-Frankenstein agentic/loop.py:430-530@abba90a5767d85abc8a1ac340bae92842dab35c1",
-        "Project-Frankenstein agentic/executor.py:470-730@abba90a5767d85abc8a1ac340bae92842dab35c1",
-        "current Frankenstein stern.py effect/hook spans@5641dc6b2df6ebed1df246ee7533134324f6c427"
-      ]
-    }
-  ],
-  "semantic_atoms": [
-    {
-      "atom_id": "F2_HISTORICAL_PREEXEC_APPROVAL_ENFORCEMENT_028",
-      "source_kind": "HISTORICAL_ONLY",
-      "source": "gschaidergabriel/Project-Frankenstein/agentic/executor.py:70-180@abba90a5767d85abc8a1ac340bae92842dab35c1",
-      "claim": "Historical ToolExecutor.execute checked whether approval was required before dispatch and returned approval_required without executing when approval was missing. This was real source-level pre-execution gating on that path, unlike current stern.zulassen() generic bookkeeping which intentionally does not block normal Claude Code tool execution.",
-      "runtime_reachability": "UNRESOLVED_HISTORICAL_SOURCE_ONLY",
-      "confidence": 0.99,
-      "target_action": "ADAPT_TO_GRID",
-      "boundary": "Source presence does not prove all historical runtime paths used this executor. skip_approval is a caller-controlled bypass and therefore is not acceptable as canonical Frankenstein-2.0 effect authority."
-    },
-    {
-      "atom_id": "F2_HISTORICAL_APPROVAL_ROUTER_NAME_ALLOWLIST_029",
-      "source_kind": "HISTORICAL_ONLY",
-      "source": "gschaidergabriel/Project-Frankenstein/agentic/loop.py:430-530@abba90a5767d85abc8a1ac340bae92842dab35c1",
-      "claim": "Historical AgentLoop used a fixed _SAFE_AUTO_APPROVE tool-name set. Listed tools called executor.execute(..., skip_approval=True); other tools obtained an approval_id, waited for a response, and executed with skip_approval=True only after approval.",
-      "runtime_reachability": "UNRESOLVED_HISTORICAL_SOURCE_ONLY",
-      "confidence": 1.0,
-      "target_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
-      "boundary": "Tool-name allowlisting can drift from semantic effect risk and cannot replace typed capability/effect classification."
-    },
-    {
-      "atom_id": "F2_HISTORICAL_APPROVAL_IDENTITY_030",
-      "source_kind": "LIVE_CODE",
-      "source": "gschaidergabriel/Project-Frankenstein/agentic/executor.py:550-680@abba90a5767d85abc8a1ac340bae92842dab35c1",
-      "claim": "Historical approval requests carried an approval_id plus tool_name, full tool_input, risk, reason and timestamp; responses were keyed by approval_id and queue files used file locks. The caller then executed its current tool call after the approval boolean returned.",
-      "runtime_reachability": "UNRESOLVED_HISTORICAL_SOURCE_ONLY",
-      "confidence": 0.99,
-      "target_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
-      "boundary": "The approval decision was not shown here to be cryptographically or structurally bound into the eventual executor invocation as an immutable request digest/token. Frankenstein-2.0 should bind approval/enforcement to exact invocation_id + request_digest + generation rather than rely on a boolean skip_approval handoff."
-    },
-    {
-      "atom_id": "F2_EFFECT_AUTHORITY_LINEAGE_IS_NONMONOTONIC_031",
-      "source_kind": "NEGATIVE_RESULT",
-      "source": "historical Project-Frankenstein approval path contrasted with current Frankenstein stern.py@5641dc6b2df6ebed1df246ee7533134324f6c427",
-      "claim": "Effect-authority lineage is not a monotonic rename or consolidation: the historical agentic path contains pre-execution denial on that path, while the current donor's generic stern EffectGate-named path is explicitly nonblocking bookkeeping plus post-effect observation. A separate wache-koenig blocker is referenced by current source but remains unavailable provenance in the inspected repositories.",
-      "confidence": 0.99,
-      "target_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
-      "boundary": "Do not infer that the whole August system lacked a real blocker; wache-koenig may have supplied one. Do not infer historical runtime use merely from source presence."
-    }
-  ],
-  "frankenstein2_architecture_delta": {
-    "effect_contract": [
-      "Keep the strongest historical idea: a mutating action can be stopped before dispatch.",
-      "Keep the strongest current-donor idea: request/outcome journaling with generation, idempotency, redaction and post-effect evidence.",
-      "Reject both weak handoffs: caller-controlled skip_approval booleans and a mutable session-wide current effect_id.",
-      "Bind one immutable invocation identity end-to-end: tool_use_id or generated invocation_id + request_digest + session_id + generation + causal_event_id.",
-      "Represent ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, RESULT_REENTRY and COMPLETION_EVIDENCE as distinct typed states. Successful execution can never retroactively mint prior admission authority.",
-      "An approval/enforcement token is valid only for the exact invocation/request digest and generation; stale, mismatched or replayed decisions fail closed."
-    ],
-    "cancellation_contract": [
-      "Preserve the current Realtime donor invariant that an interrupted/cancelled response discards still-pending function calls before local dispatch.",
-      "Generalize it to GRID: CANCELLED_BEFORE_SUBMISSION may prove non-dispatch only when no executor submission receipt exists; after possible submission, transport uncertainty becomes OUTCOME_UNKNOWN and is verified rather than blindly replayed."
-    ],
-    "world_substrate_contract": [
-      "Carry KNOWN, UNKNOWN, CONFLICT and NOT_COMPUTED as typed epistemic states outside vectors.",
-      "Adopt the current Perception Control pattern: protected COMPUTE_OFF or taint-blocked dependencies remain NOT_COMPUTED through derived operators; downstream vector similarity/decomposition may not reconstruct a disabled variable as a policy bypass."
+  "status": "REDUNDANT_PARALLEL_DONOR_DO_NOT_DOUBLE_COUNT",
+  "evidence_scope": "SOURCE_FORENSICS_PARALLEL_DONOR_NO_NEW_RUNTIME_EXECUTION",
+  "canonical_ingest_winner": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_HISTORICAL_APPROVAL_BINDING.json",
+  "canonical_ingest_winner_commit": "8f1ee02125f07c1e7f574e5e90fece264d134bb2",
+  "canonical_state_observed_after_race": "INGEST_STATE already consumed TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE, TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL and a newer approval-identity packet before this donor could update state.",
+  "preserved_provenance": {
+    "current_donor": "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "historical_source": "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "source_crosschecks": [
+      "agentic/executor.py:70-180",
+      "agentic/loop.py:430-530",
+      "agentic/executor.py:470-730"
     ]
   },
-  "contradictions": [
-    {
-      "id": "TW5-CONTRADICTION-EFFECT-LINEAGE-007",
-      "status": "OPEN_PROVENANCE_BOUNDARY",
-      "claim": "Historical Project-Frankenstein source has pre-execution approval enforcement, current stern generic effect admission is nonblocking, and the intervening/parallel wache-koenig blocking lineage is still unresolved."
-    },
-    {
-      "id": "TW5-CONTRADICTION-INGEST-PATH-001",
-      "status": "OPEN",
-      "claim": "canonical-main architecture_archaeology and owner-branch frankenstein_architecture_ingest remain separate research projections until explicit migration authority reconciles them."
-    }
+  "corroborating_findings_only": [
+    "Historical AgentLoop/ToolExecutor provided source-level pre-execution approval denial on that path.",
+    "After approval, ToolExecutor.execute did not consume approval_id or a digest-bound EffectDecision; caller discipline used skip_approval=True.",
+    "Frankenstein-2.0 should fuse pre-execution deny semantics with current journal/outcome evidence through an executor-consumed one-shot typed EffectDecision bound to exact invocation_id/tool_use_id + request_digest + generation + causal identity.",
+    "wache-koenig remains unresolved provenance and repository absence cannot prove runtime absence."
   ],
-  "credits": {
+  "credit": {
+    "independent_architecture_credit": 0,
     "new_runtime_execution": 0,
-    "provider_runtime": 0,
-    "physical_grid10": 0,
     "hcu_runtime": 0,
     "whole_entityos_hcu": 0,
     "jspace_model": 0,
     "training": 0
   },
-  "next_exact_gate": "Acquire the actual wache-koenig source/host artifact or permanently preserve it as unavailable provenance; then trace whether its decision identity was invocation-bound. In Triggerword-4, test the successor effect ABI with parallel same-session calls, reverse completion order, stale/wrong approval identity, true DENY non-execution, cancellation-before-submission, and post-submission OUTCOME_UNKNOWN behavior."
+  "next_exact_gate": "Follow canonical INGEST_STATE and ARCHITECTURE_DELTA_2026-08-28_HISTORICAL_APPROVAL_BINDING.json; recover wache-koenig/approval responder provenance and hand the one-shot typed EffectDecision acceptance tests to Triggerword 4."
 }

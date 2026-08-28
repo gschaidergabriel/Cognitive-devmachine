@@ -225,7 +225,7 @@
   },
   "payment_latch_durability_scope": {
     "checked_at": "2026-08-28",
-    "claim": "Capability schema 1.9 and execution schema 1.7 explicitly publish payment_latch_scope=process_local. payment_latch_active=true therefore proves only that the current interpreter process retained the provider and budget-epoch hard stop; it makes no restart-durability claim.",
+    "claim": "Capability schema 1.10 and execution schema 1.8 explicitly publish payment_latch_scope=process_local. payment_latch_active=true therefore proves only that the current interpreter process retained the provider and budget-epoch hard stop; it makes no restart-durability claim.",
     "sources": [
       "https://docs.python.org/3/library/threading.html",
       "https://www.freedesktop.org/software/systemd/man/systemd.exec.html",
@@ -407,7 +407,7 @@
   },
   "unicode_database_receipt_provenance": {
     "checked_at": "2026-08-28",
-    "claim": "Every FREE_API_EXECUTION_RECEIPT schema 1.7 record names the exact Unicode Character Database version used by the runtime's semantic-text classifier. A host upgrade cannot silently present version-dependent Cn decisions as equivalent execution provenance.",
+    "claim": "Every FREE_API_EXECUTION_RECEIPT schema 1.8 record names the exact Unicode Character Database version used by the runtime's semantic-text classifier. A host upgrade cannot silently present version-dependent Cn decisions as equivalent execution provenance.",
     "sources": [
       "https://docs.python.org/3/library/unicodedata.html#unicodedata.unidata_version",
       "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/",
@@ -422,29 +422,43 @@
   },
   "receipt_schema_capability_advertisement": {
     "checked_at": "2026-08-28",
-    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.9 advertises the execution receipt schema version and active Unicode Character Database version before credential use, network access or model execution. Consumers can reject an unsupported provenance contract during capability inspection instead of discovering it only after execution.",
+    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.10 advertises the execution receipt schema version and active Unicode Character Database version before credential use, network access or model execution. Consumers can reject an unsupported provenance contract during capability inspection instead of discovering it only after execution.",
     "sources": [
       "https://docs.python.org/3/library/unicodedata.html#unicodedata.unidata_version",
       "https://www.unicode.org/versions/"
     ],
     "external_evidence": "Python exposes the exact UCD version used by unicodedata. Unicode states that version changes can alter property-dependent program behavior and recommends a full three-field version when precise character-property behavior matters. Advertising the execution schema in the capability record is a local FRANK protocol rule derived from those versioned dependencies, not an external Unicode or NVIDIA requirement.",
-    "internal_measurement": "After execution receipts moved to schema 1.2, the capability receipt remained schema 1.1 and exposed neither the execution_receipt_schema_version nor unicode_database_version. A consumer inspecting only capabilities therefore could not determine the post-execution record contract. Shared schema constants now prevent literal drift, and capability schema 1.9 retains both values from the same runtime that constructs execution receipts.",
+    "internal_measurement": "After execution receipts moved to schema 1.2, the capability receipt remained schema 1.1 and exposed neither the execution_receipt_schema_version nor unicode_database_version. A consumer inspecting only capabilities therefore could not determine the post-execution record contract. Shared schema constants now prevent literal drift, and capability schema 1.10 retains both values from the same runtime that constructs execution receipts.",
     "executable_evidence": "test_capability_receipt_advertises_execution_schema_provenance",
     "counterhypothesis": "Capability and execution receipts are independently versioned, so consumers can infer the execution contract from source code; rejected because capability inspection is the runtime contract, the source or runtime version is absent from that receipt, and a remote consumer need not possess identical source bytes.",
-    "uncertainty": "This is one-way advertisement, not bidirectional negotiation, consumer acknowledgement, host authentication or proof that deployed code matches reviewed source. Older capability consumers must explicitly accept the additive schema-1.9 contract."
+    "uncertainty": "This is one-way advertisement, not bidirectional negotiation, consumer acknowledgement, host authentication or proof that deployed code matches reviewed source. Older capability consumers must explicitly accept the additive schema-1.10 contract."
   },
   "cost_principal_capability_advertisement": {
     "checked_at": "2026-08-28",
-    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.9 advertises execution_cost_policy_principal_scope=process_local_credential_binding and execution_cost_policy_principal_restart_stable=false before any credential use or model execution. A consumer can therefore reject cross-restart cost-lineage assumptions during capability inspection.",
+    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.10 advertises execution_cost_policy_principal_scope=process_local_credential_binding, execution_cost_policy_principal_restart_stable=false and fork isolation support before any credential use or model execution. A consumer can therefore reject cross-restart cost-lineage assumptions during capability inspection.",
     "sources": [
       "https://docs.python.org/3/library/secrets.html",
       "https://www.freedesktop.org/software/systemd/man/systemd.exec.html"
     ],
     "external_evidence": "Python documents token_bytes as cryptographically strong operating-system randomness and identifies 32 bytes as sufficient for typical token use. systemd provides StateDirectory as a distinct persistent service-state mechanism. Those sources support the measured distinction between the current ephemeral process key and a future durable service key; the capability field itself is a local FRANK contract.",
-    "internal_measurement": "Execution schema 1.7 already emitted cost_policy_principal_scope=process_local_credential_binding and a module reload produced a different principal ID for the same credential. The prior capability receipt advertised only the execution schema and UCD version; reading execution_cost_policy_principal_scope raised KeyError, so pre-execution consumers could not discover the cost-lineage boundary. The repaired capability receipt exposes both scope and false restart stability.",
+    "internal_measurement": "Execution schema 1.8 emits cost_policy_principal_scope=process_local_credential_binding and a module reload produces a different principal ID for the same credential. The prior capability receipt advertised only the execution schema and UCD version; reading execution_cost_policy_principal_scope raised KeyError, so pre-execution consumers could not discover the cost-lineage boundary. The repaired capability receipt exposes scope, false restart stability and the host's fork-isolation support.",
     "executable_evidence": "test_capability_receipt_advertises_execution_schema_provenance",
     "counterhypothesis": "Advertising the execution schema version is sufficient because consumers can infer every nested field's lifetime from source code; rejected because the capability receipt is the pre-execution protocol boundary and neither source availability nor schema-specific inference proves process lifetime.",
     "uncertainty": "This is disclosure, not persistence, key attestation or negotiation. It does not authenticate the process, prove that the key remained secret, or provide a stable identifier across service restart."
+  },
+  "fork_isolated_cost_principal": {
+    "checked_at": "2026-08-28",
+    "claim": "On POSIX hosts supporting os.register_at_fork, every child process reseeds the 256-bit cost-principal HMAC key in after_in_child before Python execution resumes. Parent and forked child therefore cannot emit the same credential-bound cost principal solely because fork copied the parent's runtime memory.",
+    "sources": [
+      "https://docs.python.org/3/library/os.html#os.register_at_fork",
+      "https://man7.org/linux/man-pages/man2/fork.2.html",
+      "https://docs.python.org/3/library/secrets.html"
+    ],
+    "external_evidence": "Linux implements fork with copy-on-write copies of the parent's address space. Python provides os.register_at_fork(after_in_child=...) specifically to run a callable in the child after fork. Python secrets provides operating-system cryptographic randomness for the replacement key.",
+    "internal_measurement": "Before repair, a real Ubuntu os.fork probe produced identical parent and child cost_policy_principal_id 530d72f70db91014 for the same credential, proving that the supposedly process-local key was inherited. After registering the child reseed callback, the parent and child identifiers differ and capability plus execution receipts report fork isolation support.",
+    "executable_evidence": "test_cost_principal_process_key_is_reseeded_after_fork",
+    "counterhypothesis": "A module-global random key is automatically process-local because parent and child have different PIDs; falsified because fork retains the calling thread's address space and the untouched key bytes produced identical HMAC lineage in both processes.",
+    "uncertainty": "The guarantee applies only when Python's register_at_fork hook is available and control returns to the Python interpreter. It is not cross-restart durability, protection against an already compromised parent, or a substitute for a durable host key. Multi-threaded fork remains subject to Python and operating-system restrictions."
   },
   "model_availability_capability_scope": {
     "checked_at": "2026-08-28",
@@ -463,7 +477,7 @@
   },
   "provider_route_scope": {
     "checked_at": "2026-08-28",
-    "claim": "A configured route selects only an eligible provider endpoint, not a concrete available model. FREE_API_CAPABILITY_RECEIPT schema 1.9 therefore marks every route with selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
+    "claim": "A configured route selects only an eligible provider endpoint, not a concrete available model. FREE_API_CAPABILITY_RECEIPT schema 1.10 therefore marks every route with selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/latest/api-reference.html",
       "https://docs.api.nvidia.com/nim/reference/models-1",
@@ -477,7 +491,7 @@
   },
   "model_availability_execution_evidence": {
     "checked_at": "2026-08-28",
-    "claim": "FREE_API_EXECUTION_RECEIPT schema 1.7 sets model_availability_verified=true only when the requested model produced a fully typed success response that crossed VERIFIED and DONE. Provider errors, rate limits, pending responses, malformed bodies and transport failures retain false because none proves successful availability of that model.",
+    "claim": "FREE_API_EXECUTION_RECEIPT schema 1.8 sets model_availability_verified=true only when the requested model produced a fully typed success response that crossed VERIFIED and DONE. Provider errors, rate limits, pending responses, malformed bodies and transport failures retain false because none proves successful availability of that model.",
     "sources": [
       "https://build.nvidia.com/openai/gpt-oss-20b",
       "https://docs.nvidia.com/nim/large-language-models/latest/api-reference.html"
@@ -522,7 +536,7 @@
   },
   "credential_cost_principal_binding": {
     "checked_at": "2026-08-28",
-    "claim": "Execution schema 1.7 binds cost_policy_principal_id to the exact validated credential through a domain-separated HMAC-SHA-256 pseudonym keyed by a fresh 256-bit process secret. Rotating a credential changes cost lineage without serializing it, while a receipt alone no longer supplies a deterministic offline verifier for guessed credential values. Receipts explicitly scope the handle as process_local_credential_binding rather than a verified provider account identity.",
+    "claim": "Execution schema 1.8 binds cost_policy_principal_id to the exact validated credential through a domain-separated HMAC-SHA-256 pseudonym keyed by a fresh 256-bit process secret that is reseeded in forked children. Rotating a credential changes cost lineage without serializing it, while a receipt alone no longer supplies a deterministic offline verifier for guessed credential values. Receipts explicitly scope the handle as process_local_credential_binding rather than a verified provider account identity.",
     "sources": [
       "https://www.rfc-editor.org/info/rfc2104/",
       "https://docs.python.org/3/library/hmac.html",
@@ -538,7 +552,7 @@
   },
   "dual_request_cost_identity": {
     "checked_at": "2026-08-28",
-    "claim": "Execution schema 1.7 separates a credential-independent semantic_request_id from the process-local credential-bound request_id and cost_policy_principal_id. Equal serialized requests to the same provider endpoint retain semantic correlation across credential rotation, while different payloads and different cost authorities retain distinct execution lineage.",
+    "claim": "Execution schema 1.8 separates a credential-independent semantic_request_id from the process-local credential-bound request_id and cost_policy_principal_id. Equal serialized requests to the same provider endpoint retain semantic correlation across credential rotation, while different payloads and different cost authorities retain distinct execution lineage.",
     "sources": [
       "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
       "https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-idempotency-key-header-07",
@@ -1196,14 +1210,15 @@
     "Provider endpoint URLs containing userinfo are rejected before request construction or network access.",
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
-    "Every FREE_API_EXECUTION_RECEIPT schema 1.7 record includes the exact Unicode Character Database version used for General_Category-based semantic admission; version-dependent classification cannot remain implicit provenance.",
-    "Every FREE_API_CAPABILITY_RECEIPT schema 1.9 record advertises the execution receipt schema and active Unicode Character Database version before execution; an unsupported provenance contract can fail during capability inspection.",
+    "Every FREE_API_EXECUTION_RECEIPT schema 1.8 record includes the exact Unicode Character Database version used for General_Category-based semantic admission; version-dependent classification cannot remain implicit provenance.",
+    "Every FREE_API_CAPABILITY_RECEIPT schema 1.10 record advertises the execution receipt schema and active Unicode Character Database version before execution; an unsupported provenance contract can fail during capability inspection.",
     "Every capability receipt advertises the execution cost-principal scope and false restart stability before credential use; consumers must not infer cross-restart cost lineage from schema version alone.",
     "Provider-level zero-cost endpoint evidence never proves concrete model availability; every unprobed capability inventory row records model_availability_verified=false.",
     "A selected capability route identifies only an eligible provider endpoint; it records selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
     "Execution model availability is verified only by a fully typed success response reaching VERIFIED and DONE; every other outcome records model_availability_verified=false.",
     "Capability inventory, route and every execution receipt explicitly identify payment-latch scope as process_local; an active latch cannot be interpreted as restart-durable enforcement.",
     "Every execution cost-policy principal is bound to the exact validated credential by a process-secret-keyed, domain-separated HMAC pseudonym; receipt-only credential guesses cannot reproduce the handle, restart stability and provider account identity remain explicitly false.",
+    "On POSIX hosts with os.register_at_fork, forked children reseed the process cost-principal key before Python resumes; capability and execution receipts explicitly report whether this fork-isolation mechanism is active.",
     "Every execution receipt separates credential-independent semantic request correlation from credential-bound cost and execution lineage; semantic_request_id never authorizes replay or claims provider idempotency.",
     "The serialized UTF-8 text-chat JSON request is at most 2000000 bytes; oversized payloads fail before runtime-environment snapshot, credential lookup or network access, while the exact boundary remains accepted.",
     "Every Chat Completions request explicitly sets max_tokens to 4096, bounding the combined reasoning and visible generation budget; finish_reason length remains unverified and requires changed input or budget rather than blind replay.",

@@ -1,0 +1,134 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_DELTA/v1",
+  "trigger": "6",
+  "role": "SOURCE_ARCHAEOLOGIST",
+  "research_id": "R6-SEED-005",
+  "candidate": "eunomia-bpf/agentsight",
+  "status": "E2_ARCHITECTURE_MAPPED_NOT_REPRODUCED",
+  "evidence_ladder": {
+    "before": "E0_SEED",
+    "after": "E2_ARCHITECTURE_MAPPED",
+    "e3_claim_reproduced": false,
+    "e4_f2_ablation": false,
+    "e5_build_candidate": false,
+    "e6_f2_accepted": false
+  },
+  "architecture_delta_fusion": {
+    "frankenstein2_main": "738df2763bcb89d3d0386eb99cf2ec3c6bf664b5",
+    "research_entity_main": "9d34ad079a59a22ff1469d86b36a0f940c5a5efb",
+    "authority_epoch": "9.13",
+    "supervisor_delta": "9.13AL_NON_AUTHORITY",
+    "trigger4_latest_evidence": "research_entity/trigger_runs/4/2026-08-29T0240p0700_GPT56SOL_PR430_CAUSAL_BOUNDARY_REVIEW.json",
+    "trigger5_latest_effect_contract": "research_entity/architecture_archaeology/triggerword5_ingest_receipts/TRIGGERWORT5_TO_TRIGGERWORD4_EFFECT_CONTRACT_2026-08-28_GPT56SOL.json",
+    "material_current_gap": "F2 needs independent process/file/network/resource/tool-call witness evidence for WP005/WP605/WP902/WP904, while canonical effect outcome and completion authority must remain in the EntityOS EffectGate/EffectJournal lane.",
+    "control_plane_constraint": "Private clay-global-research-entity GitHub Actions remains a zero-step pre-admission blocker; no AgentSight or F2 runtime claim is derived from that transport state."
+  },
+  "source_lock": {
+    "repository": "eunomia-bpf/agentsight",
+    "commit_sha": "934f441eff8ca210807333633f47b2efcb8cd020",
+    "tree_sha": "08502f4a5dece20ed78ef9b52bf1b80d4ad140f5",
+    "release_observed": "1.0.30",
+    "license": "MIT",
+    "source_surfaces_read": [
+      "README.md",
+      "docs/snapshot-schema.md",
+      "ext/analysis/src/model.rs",
+      "LICENSE",
+      "issue#44 plus comments"
+    ]
+  },
+  "source_grounded_findings": [
+    {
+      "id": "R6-005-F01",
+      "classification": "SOURCE_READ",
+      "finding": "AgentSight is a local-first system-level observability tool that can correlate agent/model/tool activity with process, file, network and resource events; live eBPF/TLS capture is external to the target application rather than an SDK-only integration."
+    },
+    {
+      "id": "R6-005-F02",
+      "classification": "SOURCE_READ",
+      "finding": "The current report-export snapshot has explicit schema_version=1 and exposes process_nodes, audit_events, resource_samples, sessions and tool_calls; consumers are instructed to reject unsupported schema versions and tolerate additive fields."
+    },
+    {
+      "id": "R6-005-F03",
+      "classification": "SOURCE_READ",
+      "finding": "Current AuditEventRow, ProcessNodeRow and ToolCallRow carry view_source and confidence; ToolCallRow additionally carries tool_call_id, related_pid and related_event_id. This materially improves provenance-safe external consumption compared with the earlier AgentSight state discussed in issue#44."
+    },
+    {
+      "id": "R6-005-F04",
+      "classification": "SOURCE_BOUNDARY",
+      "finding": "AgentSight explicitly states that view_source is row lineage, not logical-operation identity, and confidence is source-specific rather than a globally comparable probability. F2 must not upgrade these fields into canonical causal identity or truth confidence."
+    },
+    {
+      "id": "R6-005-F05",
+      "classification": "SOURCE_BOUNDARY",
+      "finding": "Live eBPF-backed record/debug capture is Linux- and privilege-sensitive; non-eBPF modes can fall back to native agent session files or process snapshots. Therefore a F2 witness adapter must preserve capture mode and must never label transcript/native-session fallback as kernel-observed evidence."
+    },
+    {
+      "id": "R6-005-F06",
+      "classification": "SOURCE_BOUNDARY",
+      "finding": "Exported snapshots may contain command lines, argv, paths, network destinations, audit details and tool inputs/outputs, including secrets or user data. Any F2 ingestion requires field minimization, redaction policy and explicit retention boundaries."
+    },
+    {
+      "id": "R6-005-F07",
+      "classification": "EXTERNAL_PRIMARY_UPSTREAM_CLAIM_NOT_REPRODUCED",
+      "finding": "AgentSight's paper/README reports less than 3 percent overhead for typical traced workloads. This remains an upstream claim only and receives zero F2 performance credit until an equivalent F2 workload is measured."
+    },
+    {
+      "id": "R6-005-F08",
+      "classification": "SOURCE_ECOSYSTEM_SIGNAL",
+      "finding": "AgentSight issue#44 explicitly separates live/persisted observability from deterministic signed/digested proof bundles and release-governance artifacts. This supports using AgentSight as a witness source rather than as F2 EffectAuthority or completion proof. The relevant maintainer-side comment was marked AI-generated and pending maintainer review, so it is retained as discussion evidence rather than authoritative product contract."
+    }
+  ],
+  "f2_architecture_mapping": {
+    "integration_class": "CONCEPT_DISTILL_FIRST",
+    "preferred_surface": "VERSIONED_SNAPSHOT_OR_MINIMAL_CAPTURE_LIBRARY_ADAPTER",
+    "target_workpackages": ["F2-WP-005", "F2-WP-605", "F2-WP-902", "F2-WP-904"],
+    "do_not_grant": [
+      "UNIFIEDDB_SOURCE_OF_TRUTH_AUTHORITY",
+      "EFFECTGATE_OR_EFFECTJOURNAL_AUTHORITY",
+      "COMPLETION_AUTHORITY",
+      "F2_RUNTIME_PASS",
+      "PHYSICAL_GRID10_RUNTIME_CREDIT",
+      "WHOLE_HCU_RUNTIME_CREDIT"
+    ],
+    "proposed_thin_boundary": [
+      "Ingest only an explicitly pinned AgentSight snapshot/schema version or a deliberately narrow capture API.",
+      "Map AgentSight rows into typed witness evidence while preserving view_source, confidence, capture mode, source commit and snapshot digest.",
+      "Bind tool_call_id/related_pid/related_event_id to F2 invocation identity only when an explicit deterministic adapter proves the mapping; otherwise retain as foreign witness identifiers.",
+      "Keep all world-effect verdicts and canonical completion decisions outside AgentSight and inside the existing EntityOS EffectGate/EffectJournal path.",
+      "Prefer structural distillation over wholesale dependency adoption unless a later F2 ablation shows positive marginal value."
+    ]
+  },
+  "counterhypotheses": [
+    "F2-native telemetry can provide the same useful witness coverage with lower privilege/dependency/privacy cost.",
+    "AgentSight correlation identifiers may be insufficient to establish exact F2 per-invocation causal identity across child/tool/process boundaries.",
+    "eBPF/TLS capture and sensitive payload retention may introduce more operational risk than diagnostic value for normal F2 runs.",
+    "A deterministic proof-bundle or narrower syscall/process witness may be a better complement to F2 than the full AgentSight stack."
+  ],
+  "required_next_discriminator": {
+    "slot": "EXPERIMENTAL_FALSIFIER",
+    "experiment": "Build a minimal read-only adapter against a pinned AgentSight v1 snapshot fixture, including one kernel/view row and one agent_native_session/fallback row, and verify that F2 preserves provenance class without minting canonical effect/completion credit.",
+    "acceptance": [
+      "Unsupported snapshot schema fails closed.",
+      "view_source and confidence survive losslessly.",
+      "fallback/native-session evidence is never reclassified as kernel-observed.",
+      "foreign tool_call_id remains noncanonical unless an explicit bijection is proven.",
+      "sensitive payload fields can be excluded while retaining measurement utility.",
+      "No AgentSight observation can directly finalize EffectJournal or completion state."
+    ],
+    "measure_later_on_f2": [
+      "p50_p95_p99 latency overhead",
+      "CPU and RSS/PSS overhead",
+      "I/O volume and SQLite/export size",
+      "coverage of process/file/network/tool effects",
+      "false correlation and missing-correlation rate",
+      "diagnostic value on F2-WP-904 failure injection"
+    ]
+  },
+  "upstream_claims_reproduced": [],
+  "runtime_credit_added": 0,
+  "architecture_credit_added": 0,
+  "training_credit_added": 0,
+  "pending_db_sync": "NOT_ATTEMPTED_BY_THIS_ORGAN; text delta is append-only provenance evidence. Research-Entity private Actions materialization remains transport-blocked under 9.13AL and must not be mistaken for a materializer semantic failure.",
+  "promotion_decision": "KEEP_ACTIVE_AT_E2; DO_NOT_HANDOFF_TO_TRIGGER4_AS_BUILD_CANDIDATE_YET"
+}

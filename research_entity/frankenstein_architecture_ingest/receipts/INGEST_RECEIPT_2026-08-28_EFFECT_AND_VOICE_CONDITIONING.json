@@ -1,0 +1,61 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T07:14Z",
+  "authority_epoch": "8.78",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "canonical_main_observed": "4f4a7088a54dd21e1848f090446590efa05a2ac1",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_observed_after_concurrent_fusion": "aa882f19ad9e99d9e3ff94bb55caf402d9fa688f",
+  "consumed_or_reconciled": [
+    {
+      "packet_id": "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL",
+      "result": "INGESTED_DEDUPED",
+      "overlap": "TW5-PACKET-20260828T0714Z-5641dc6-GPT56SOL-LIVE-FEED-BRIDGE",
+      "double_count_credit": false
+    }
+  ],
+  "source_crosschecks": [
+    {
+      "id": "EFFECT_NONBLOCKING_SOURCE_CROSSCHECK",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "span": "3238-3517",
+      "result": "PASS_SOURCE_FINDING",
+      "finding": "zulassen() records admission findings but does not return a blocking PreToolUse decision; exception/uncertainty is fail-silent and execution proceeds; merken() observes/hashes the later outcome.",
+      "scope": "source semantics only; no new runtime execution"
+    },
+    {
+      "id": "VOICE_CAPSULE_CONDITIONING_SOURCE_CROSSCHECK",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "span": "800-1800",
+      "result": "PASS_SOURCE_FINDING",
+      "finding": "VoiceSessionCapsule is constructed/refreshed, but _response_erstellen() sends _instruktion(self._zustandstext) plus optional hint without serializing the capsule; capsule-wide per-response conditioning is absent.",
+      "scope": "source semantics only; underlying state may still couple through separate paths"
+    }
+  ],
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
+    "commit": "5f80aa47633bbff8280bef7d4d5f6ee58ab514d3"
+  },
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "source_status": "RESOLVED",
+      "architecture_status": "REPAIR_OPEN"
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+      "source_status": "RESOLVED",
+      "architecture_status": "REPAIR_OPEN"
+    }
+  ],
+  "credits": {
+    "new_runtime_causal": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Keep the concurrent effect-completion lineage intact; map the separate blocking watcher/cmd_hook ordering, and add a minimal provenance-bearing VoiceSessionCapsule/GRID context compiler design with lesion/shuffle acceptance before Triggerword-4 assembly promotion."
+}

@@ -1,35 +1,33 @@
 #!/usr/bin/env python3
-"""GRID10 unified cognitive runtime v5: one latched control frame across Pulse + GRID/GWT.
+"""GRID10 unified cognitive runtime v5: one control basis across Pulse + GRID/GWT.
 
-v5 is a narrow successor to v4, not a competing state authority. It reuses v4's Agency
-transaction and the same physical UnifiedDB, but fixes one important control-law ambiguity:
-``gain == 0`` is *not* COMPUTE_OFF. Mode decides whether computation/output is permitted;
-gain decides how strongly an otherwise permitted result may influence the action path.
+v5 is a thin successor integration layer, not a second state/wake authority. V4 remains the
+sole owner of wake_due, heartbeat, Agency checkpoint and pulse scheduling. V5 latches one
+immutable ControlSnapshot, passes that exact object into v4, and then passes the same object
+into ``grid10_live_control_binding_v1`` for specialist compute/GWT/memory semantics.
 
-When an explicit admitted ``inference_fn`` is supplied, the same immutable ControlSnapshot
-is also passed into ``grid10_live_control_binding_v1`` so specialist execution and GWT fan-in
-consume the exact same control epoch/digest as the persistent Pulse/Agency checkpoint.
-There is deliberately no default provider call.
+This deliberately removes the former second action-gate interpretation from v5. GRID mode
+semantics have one home: the live control binding. Gain influences specialist compute budget
+and downstream feed there; it does not masquerade as COMPUTE_OFF in the pulse controller.
+
+There is no default provider call. An explicit admitted inference_fn is required to run the
+GRID/GWT burst. The v5 augmented receipt is noncanonical and does not grant effect/completion
+or whole-runtime credit.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping
+import hashlib
+import json
+import sqlite3
 import time
 
-from frankenstein2_cognitive_control_plane_v1 import (
-    CognitiveControlPlane,
-    ControlMode,
-    ControlSnapshot,
-)
-from grid10_cognitive_unified_runtime_v3 import build_unified_agency_runtime
+from frankenstein2_cognitive_control_plane_v1 import CognitiveControlPlane, ControlSnapshot
 from grid10_cognitive_unified_runtime_v4 import (
-    ACTION_GRID_CELLS,
-    CHECKPOINT_SCHEMA,
-    RuntimeCycleNotDue,
-    _atomic_commit_cycle,
-    _init_cycle_schema,
+    UnifiedCognitiveRuntimeV4,
+    build_unified_cognitive_runtime_v4,
 )
 from grid10_glm_cognitive_cycle_v1 import CognitiveCycleConfig
 from grid10_glm_inference_provider_v1 import GLMInferenceResult
@@ -38,9 +36,9 @@ from grid10_live_control_binding_v1 import (
     run_control_bound_cognitive_cycle,
     sanitized_control_receipt,
 )
-from grid10_persistent_agency_v1 import PersistentAgencyStore
 
 SCHEMA = "GRID10_UNIFIED_COGNITIVE_RUNTIME/v5"
+RECEIPT_SCHEMA = "GRID10_V5_CONTROL_BOUND_RECEIPT/v1"
 
 
 @dataclass(frozen=True)
@@ -58,86 +56,65 @@ class UnifiedCycleResultV5:
     control_snapshot_digest: str
     checkpoint: Mapping[str, Any]
     controlled_cognitive_cycle: ControlledCognitiveCycleResult | None
+    receipt_digest: str
 
 
-def _grid_control_view_v5(
-    snapshot: ControlSnapshot,
-    action: str,
-) -> tuple[Mapping[str, Any], ...]:
-    """Report mode and influence separately; gain never impersonates COMPUTE_OFF."""
-    rows: list[Mapping[str, Any]] = []
-    for cell in ACTION_GRID_CELLS.get(action, ()):
-        mode = snapshot.mode(f"grid.{cell}.mode")
-        gain = snapshot.float(f"grid.{cell}.gain")
-        rows.append(
-            {
-                "cell": cell,
-                "mode": mode.value,
-                "gain": float(gain),
-                "compute_enabled": mode != ControlMode.COMPUTE_OFF,
-                "output_enabled": mode not in {
-                    ControlMode.COMPUTE_OFF,
-                    ControlMode.OUTPUT_OFF,
-                },
-                "normal_memory_reentry_enabled": mode == ControlMode.ON,
-            }
+def _canon(value: Any) -> str:
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str)
+
+
+def _digest(value: Any) -> str:
+    return hashlib.sha256(_canon(value).encode("utf-8")).hexdigest()
+
+
+def _connect(path: Path) -> sqlite3.Connection:
+    con = sqlite3.connect(str(path), isolation_level=None, timeout=10.0)
+    con.row_factory = sqlite3.Row
+    con.execute("PRAGMA journal_mode=WAL")
+    con.execute("PRAGMA busy_timeout=10000")
+    con.execute("PRAGMA synchronous=NORMAL")
+    return con
+
+
+def _init_v5_schema(path: Path) -> None:
+    con = _connect(path)
+    try:
+        con.execute(
+            """
+            CREATE TABLE IF NOT EXISTS grid10_v5_control_bound_receipts(
+              tick_id TEXT PRIMARY KEY,
+              receipt_schema TEXT NOT NULL,
+              agency_epoch_after INTEGER NOT NULL,
+              control_epoch INTEGER NOT NULL,
+              control_snapshot_digest TEXT NOT NULL,
+              receipt_json TEXT NOT NULL,
+              receipt_digest TEXT NOT NULL,
+              created_ts REAL NOT NULL
+            )
+            """
         )
-    return tuple(rows)
-
-
-def _apply_grid_action_controls_v5(
-    snapshot: ControlSnapshot,
-    raw_action: str,
-) -> tuple[str, tuple[str, ...], tuple[Mapping[str, Any], ...]]:
-    cells = _grid_control_view_v5(snapshot, raw_action)
-    if not cells or raw_action == "HOLD":
-        return raw_action, (), cells
-
-    reasons: list[str] = []
-    mode_blocked = [
-        str(row["cell"])
-        for row in cells
-        if not bool(row["compute_enabled"]) or not bool(row["output_enabled"])
-    ]
-    threshold = snapshot.float("pulse.salience_threshold")
-    min_gain = min(float(row["gain"]) for row in cells)
-    if mode_blocked:
-        reasons.append("GRID_MODE_BLOCK:" + ",".join(mode_blocked))
-    if min_gain < threshold:
-        reasons.append(f"GRID_GAIN_BELOW_SALIENCE:{min_gain:.6f}<{threshold:.6f}")
-
-    if not reasons:
-        return raw_action, (), cells
-
-    orientation = _grid_control_view_v5(snapshot, "OBSERVE")
-    orientation_ok = bool(orientation) and all(
-        bool(row["compute_enabled"])
-        and bool(row["output_enabled"])
-        and float(row["gain"]) >= threshold
-        for row in orientation
-    )
-    fallback = "OBSERVE" if raw_action != "OBSERVE" and orientation_ok else "HOLD"
-    return fallback, tuple(reasons), cells
+    finally:
+        con.close()
 
 
 class UnifiedCognitiveRuntimeV5:
-    """One cycle boundary owns wake lineage, ControlSnapshot, heartbeat and GRID/GWT binding."""
+    """Reuse v4's state transition and bind the same snapshot into live GRID/GWT compute."""
 
     def __init__(
         self,
-        heartbeat_runtime: Any,
-        agency: PersistentAgencyStore,
+        runtime_v4: UnifiedCognitiveRuntimeV4,
         *,
         control_plane: CognitiveControlPlane | None = None,
         inference_fn: Callable[..., GLMInferenceResult] | None = None,
         cognitive_config: CognitiveCycleConfig = CognitiveCycleConfig(),
     ):
-        self.heartbeat_runtime = heartbeat_runtime
-        self.agency = agency
-        self.control_plane = control_plane or CognitiveControlPlane(Path(agency.path))
+        self.runtime_v4 = runtime_v4
+        self.agency = runtime_v4.agency
+        self.control_plane = control_plane or runtime_v4.control_plane
         self.inference_fn = inference_fn
         self.cognitive_config = cognitive_config
-        _init_cycle_schema(Path(agency.path))
+        self.unified_db = Path(self.agency.path)
+        _init_v5_schema(self.unified_db)
 
     def tick_once(
         self,
@@ -151,50 +128,21 @@ class UnifiedCognitiveRuntimeV5:
         extra_variables: Mapping[str, Any] | None = None,
         cognitive_context: Mapping[str, Any] | None = None,
     ) -> UnifiedCycleResultV5:
-        now = time.time() if now_ts is None else float(now_ts)
-
-        # v4/f5 continuation law: this runtime is the sole wake_due owner.
-        woken = self.agency.wake_due(
-            now_ts=now,
-            observed_events=tuple(observed_events),
-            event_id_prefix=f"{tick_id}:wake",
-        )
-        before = self.agency.snapshot()
-        if not woken and not self.agency.due_for_tick(now_ts=now):
-            raise RuntimeCycleNotDue(f"NEXT_TICK_NOT_DUE:{before.next_tick_not_before}")
-
-        # Exactly one control snapshot for the whole burst.
-        control = self.control_plane.snapshot()
-
-        heartbeat = self.heartbeat_runtime.tick_once(
+        # One current-cycle basis. V4 is explicitly told to reuse it and therefore performs no
+        # second control-plane snapshot read for pulse scheduling.
+        control: ControlSnapshot = self.control_plane.snapshot()
+        base = self.runtime_v4.tick_once(
             tick_id=tick_id,
+            interval=interval,
+            hold_interval=hold_interval,
+            now_ts=now_ts,
+            observed_events=tuple(observed_events),
+            control_snapshot=control,
             trusted_axes=trusted_axes,
             extra_variables=extra_variables,
         )
-        assurance_mode = getattr(
-            heartbeat.assurance_mode,
-            "value",
-            str(heartbeat.assurance_mode),
-        )
-        raw_next_action = str(heartbeat.next_action)
-        next_action, control_reasons, grid_controls = _apply_grid_action_controls_v5(
-            control,
-            raw_next_action,
-        )
-
-        if raw_next_action == "HOLD":
-            selected_interval = (
-                float(hold_interval)
-                if hold_interval is not None
-                else control.float("pulse.hold_interval_seconds")
-            )
-        else:
-            selected_interval = (
-                float(interval)
-                if interval is not None
-                else control.float("pulse.active_interval_seconds")
-            )
-        next_tick_not_before = now + max(0.05, float(selected_interval))
+        raw_next_action = str(base.heartbeat_result.next_action)
+        next_action = str(base.next_action)
 
         controlled: ControlledCognitiveCycleResult | None = None
         cognitive_receipt: Mapping[str, Any]
@@ -217,13 +165,13 @@ class UnifiedCognitiveRuntimeV5:
         else:
             context = dict(cognitive_context or {})
             context.setdefault("tick_id", tick_id)
-            context.setdefault("woken_goal_ids", list(woken))
+            context.setdefault("woken_goal_ids", list(base.woken_goal_ids))
             context.setdefault("controller_action", next_action)
             controlled = run_control_bound_cognitive_cycle(
                 tick_id=tick_id,
-                assurance_mode=heartbeat.assurance_mode,
+                assurance_mode=base.heartbeat_result.assurance_mode,
                 controller_action=next_action,
-                fabric=self.heartbeat_runtime.fabric,
+                fabric=self.runtime_v4.heartbeat_runtime.fabric,
                 context=context,
                 control_snapshot=control,
                 config=self.cognitive_config,
@@ -231,53 +179,72 @@ class UnifiedCognitiveRuntimeV5:
             )
             cognitive_receipt = sanitized_control_receipt(controlled)
 
-        checkpoint = {
-            "schema": CHECKPOINT_SCHEMA,
+        # V4's durable Agency checkpoint already committed the wake/pulse state transition.
+        # This is an append-only causal binding receipt, not a second canonical checkpoint.
+        receipt = {
+            "schema": RECEIPT_SCHEMA,
             "runtime_schema": SCHEMA,
             "tick_id": tick_id,
-            "source_state_epoch": int(heartbeat.state_epoch),
-            "assurance_mode": assurance_mode,
+            "agency_epoch_before": base.agency_epoch_before,
+            "agency_epoch_after": base.agency_epoch_after,
+            "assurance_mode": base.assurance_mode,
             "raw_next_action": raw_next_action,
             "next_action": next_action,
-            "woken_goal_ids": list(woken),
-            "heartbeat_reasons": list(getattr(heartbeat, "reasons", ())),
-            "control_snapshot": {
-                "schema": control.schema,
-                "control_epoch": int(control.control_epoch),
-                "snapshot_digest": control.snapshot_digest,
-            },
-            "pulse_interval_seconds_consumed": float(selected_interval),
-            "grid_controls_consumed": list(grid_controls),
-            "control_reasons": list(control_reasons),
+            "woken_goal_ids": list(base.woken_goal_ids),
+            "next_tick_not_before": base.next_tick_not_before,
+            "control_epoch": int(control.control_epoch),
+            "control_snapshot_digest": control.snapshot_digest,
+            "v4_checkpoint_control_snapshot": dict(base.checkpoint["control_snapshot"]),
+            "v4_control_snapshot_source": base.checkpoint.get("control_snapshot_source"),
             "controlled_cognitive_cycle_receipt": cognitive_receipt,
+            "canonical_truth_minted": False,
             "external_effect_executed": False,
+            "completion_minted": False,
         }
-        after_epoch = _atomic_commit_cycle(
-            self.agency,
-            expected_agency_epoch=before.state_epoch,
-            tick_id=tick_id,
-            source_state_epoch=int(heartbeat.state_epoch),
-            assurance_mode=assurance_mode,
-            next_action=next_action,
-            woken_goal_ids=tuple(woken),
-            checkpoint=checkpoint,
-            next_tick_not_before=next_tick_not_before,
-            now_ts=now,
-        )
+        receipt_digest = _digest(receipt)
+        receipt["receipt_digest"] = receipt_digest
+
+        con = _connect(self.unified_db)
+        try:
+            con.execute("BEGIN IMMEDIATE")
+            con.execute(
+                "INSERT INTO grid10_v5_control_bound_receipts VALUES(?,?,?,?,?,?,?,?)",
+                (
+                    tick_id,
+                    RECEIPT_SCHEMA,
+                    int(base.agency_epoch_after),
+                    int(control.control_epoch),
+                    control.snapshot_digest,
+                    _canon(receipt),
+                    receipt_digest,
+                    time.time(),
+                ),
+            )
+            con.execute("COMMIT")
+        except Exception:
+            try:
+                con.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
+            raise
+        finally:
+            con.close()
+
         return UnifiedCycleResultV5(
             tick_id=tick_id,
-            heartbeat_result=heartbeat,
-            woken_goal_ids=tuple(woken),
-            agency_epoch_before=before.state_epoch,
-            agency_epoch_after=after_epoch,
-            assurance_mode=assurance_mode,
+            heartbeat_result=base.heartbeat_result,
+            woken_goal_ids=base.woken_goal_ids,
+            agency_epoch_before=base.agency_epoch_before,
+            agency_epoch_after=base.agency_epoch_after,
+            assurance_mode=base.assurance_mode,
             raw_next_action=raw_next_action,
             next_action=next_action,
-            next_tick_not_before=next_tick_not_before,
+            next_tick_not_before=base.next_tick_not_before,
             control_epoch=int(control.control_epoch),
             control_snapshot_digest=control.snapshot_digest,
-            checkpoint=checkpoint,
+            checkpoint=receipt,
             controlled_cognitive_cycle=controlled,
+            receipt_digest=receipt_digest,
         )
 
 
@@ -288,15 +255,13 @@ def build_unified_cognitive_runtime_v5(
     inference_fn: Callable[..., GLMInferenceResult] | None = None,
     cognitive_config: CognitiveCycleConfig = CognitiveCycleConfig(),
 ):
-    fabric, heartbeat_store, agency, heartbeat_runtime, fingerprint = build_unified_agency_runtime(
-        unified_db,
+    fabric, heartbeat_store, agency, runtime_v4, fingerprint = build_unified_cognitive_runtime_v4(
+        Path(unified_db),
         allow_regulator_writes=allow_regulator_writes,
     )
-    control_plane = CognitiveControlPlane(Path(unified_db))
     runtime = UnifiedCognitiveRuntimeV5(
-        heartbeat_runtime,
-        agency,
-        control_plane=control_plane,
+        runtime_v4,
+        control_plane=runtime_v4.control_plane,
         inference_fn=inference_fn,
         cognitive_config=cognitive_config,
     )

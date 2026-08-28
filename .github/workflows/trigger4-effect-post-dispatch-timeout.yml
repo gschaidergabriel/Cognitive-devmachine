@@ -1,0 +1,47 @@
+name: Trigger4 effect post-dispatch timeout falsifier
+
+on:
+  push:
+    branches:
+      - chatgpt/trigger4-effect-unknown-fault-injection-20260829
+    paths:
+      - 'the artefact/tests/test_effect_post_dispatch_timeout_semantics.py'
+      - '.github/workflows/trigger4-effect-post-dispatch-timeout.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zero-real-effect-fault-injection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: 'the artefact'
+    steps:
+      - name: Checkout exact branch commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install test dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -q -r requirements.txt pytest
+
+      - name: Verify exact canonical source blobs before test
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object 'clayverse/effects.py')" = '4a6413b3f3c752c6327e67233bdd8097f3cf0ba4'
+          test "$(git hash-object 'clayverse/effect_journal.py')" = 'cda63471f1467481f2ff79032d3931730a334a20'
+          test "$(git hash-object 'clayverse/entityos_bridge.py')" = '3118cb6a6758ec1612a33ff3c6766c937d79d4ac'
+
+      - name: Run zero-real-effect executable counterexample
+        run: |
+          set -euo pipefail
+          python -m pytest -q -s tests/test_effect_post_dispatch_timeout_semantics.py

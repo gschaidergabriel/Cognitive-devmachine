@@ -1,0 +1,139 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T1043Z-F94-WEGEHIERARCHIE-SOURCE-CLOSURE-GPT56SOL",
+  "created_at": "2026-08-28T10:43:00Z",
+  "trigger": "triggerwort 5",
+  "lane": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_LIVE_INGEST",
+  "organ": "GPT-5.6-Sol/triggerwort5/f94-source-closure-direct-crosscheck",
+  "routing": {
+    "status": "PASS",
+    "primary_directive": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "sparse_world_directive": "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md",
+    "analysis_ingest_lane_only": true
+  },
+  "authority": {
+    "canonical_main_sha_observed": "4792b1ba4186e21b60c6eb051a6d47b6510a31f6",
+    "supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "runtime_credit_delta": 0
+  },
+  "pins": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_sha_before_write": "17a04890de8bdbc9177ee7309e8dcfcb4765ad21"
+  },
+  "classification": "DIRECT_SOURCE_FORENSICS_NO_RUNTIME_CREDIT",
+  "finding_summary": "The pinned Frankenstein donor has an exact source-closure contradiction around F94 wegehierarchie: live paket.py still imports udb.abruf.wegehierarchie, but the root module is absent and the only wegehierarchie.py is archived under _archiv-phase4. stern.py simultaneously preserves an older comment explaining that removing the module caused ModuleNotFoundError and a later PHASE-4 kill-decision comment saying the module was removed/archived. The current tree therefore encodes a retired implementation without fully retiring its live caller.",
+  "source_atoms": [
+    {
+      "atom_id": "TW5-F94-1043-001-ROOT-MODULE-ABSENT",
+      "source_kind": "CONFIG",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/",
+      "claim": "The directory contains __init__.py, paket.py and _archiv-phase4; there is no root wegehierarchie.py.",
+      "runtime_reachability": "SOURCE_TREE_OBSERVED_RUNTIME_UNEXECUTED",
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-F94-1043-002-ARCHIVED-IMPLEMENTATION-EXISTS",
+      "source_kind": "HISTORICAL_ONLY",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/_archiv-phase4/wegehierarchie.py",
+      "claim": "The exact retained implementation bytes exist only below _archiv-phase4, preserving donor lineage but not satisfying the live relative import path.",
+      "runtime_reachability": "ARCHIVED_NOT_LIVE_IMPORT_TARGET",
+      "confidence": 1.0,
+      "target_2_0_action": "COMPATIBILITY_ONLY"
+    },
+    {
+      "atom_id": "TW5-F94-1043-003-LIVE-PACKET-IMPORTS-RETIRED-ROOT",
+      "source_kind": "LIVE_CODE",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/paket.py",
+      "line_start": 2051,
+      "line_end": 2079,
+      "claim": "F94 live bookkeeping executes 'from .wegehierarchie import befahren, sicherstellen'; when this region throws, the outer handler reports 'Erfolgsmarke nicht gesetzt' and paket() still returns its result.",
+      "runtime_reachability": "LIVE_CALLER_SOURCE_PRESENT_EXACT_RUNTIME_NOT_RUN",
+      "confidence": 1.0,
+      "target_2_0_action": "REPAIR"
+    },
+    {
+      "atom_id": "TW5-F94-1043-004-OLDER-SELFTEST-KNEW-MODULE-WAS-REQUIRED",
+      "source_kind": "NEGATIVE_RESULT",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 178,
+      "line_end": 220,
+      "claim": "stern.py records that an earlier attempt to inline/delete wegehierarchie.py caused paket() to emit ModuleNotFoundError and lose F94 behavior, and therefore says the external module must remain.",
+      "runtime_reachability": "HISTORICAL_PROJECT_NEGATIVE_RESULT_EMBEDDED_IN_CURRENT_SOURCE",
+      "confidence": 0.99,
+      "target_2_0_action": "KEEP"
+    },
+    {
+      "atom_id": "TW5-F94-1043-005-LATER-KILL-DECISION-ARCHIVES-MODULE",
+      "source_kind": "NEGATIVE_RESULT",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "line_start": 939,
+      "line_end": 956,
+      "claim": "A later PHASE-4 comment records measured GLEICHVERTEILT behavior (1.79x vs required >2x), applies a predeclared kill criterion, declares wegehierarchie removed without replacement, and says the module was moved to _archiv-phase4.",
+      "runtime_reachability": "PROJECT_MEASUREMENT_CLAIM_EMBEDDED_IN_CURRENT_SOURCE_RUNTIME_RECEIPT_NOT_REEXECUTED",
+      "confidence": 0.98,
+      "target_2_0_action": "RETIRE_WITH_EVIDENCE"
+    },
+    {
+      "atom_id": "TW5-F94-1043-006-SUCCESS-MARK-COMMIT-IS-AFTER-BROKEN-IMPORT",
+      "source_kind": "LIVE_CODE",
+      "repo": "gschaidergabriel/frankenstein",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/udb/abruf/paket.py",
+      "line_start": 2004,
+      "line_end": 2079,
+      "claim": "The main paket result/lernen path commits before F92b/F94. F92b then writes success marks, the missing-module import occurs, and the next commit is after that import. Source therefore supports a likely rollback/loss boundary for F92b success-mark writes when the import fails, while the already committed main result/lernen path remains intact.",
+      "runtime_reachability": "SOURCE_LEVEL_TRANSACTION_INFERENCE_RUNTIME_UNEXECUTED",
+      "confidence": 0.94,
+      "target_2_0_action": "REPAIR"
+    }
+  ],
+  "contradictions_preserved": [
+    "Current stern.py contains both 'wegehierarchie.py must remain because deletion broke paket()' and the later kill decision 'wegehierarchie removed without replacement'.",
+    "The implementation was archived, but its live relative import in paket.py was not retired or redirected.",
+    "The PHASE-4 measurement argues against preserving the old reinforcement algorithm as-is, while source closure argues against leaving its caller active. These imply ADAPT-or-RETIRE, not blind restoration."
+  ],
+  "architecture_effect_for_frankenstein_2": {
+    "decision": "F94_ADAPT_OR_RETIRE_BEFORE_DONOR_FREEZE",
+    "rules": [
+      "Do not restore archived wegehierarchie.py merely to make imports green; the recorded kill criterion is negative evidence against keeping that algorithm unchanged.",
+      "Do not preserve a live import to a retired module.",
+      "If successor path still needs carried-walk reinforcement, port only the required interface/behavior behind a typed successor and rerun the declared usefulness discriminator.",
+      "If reinforcement is intentionally retired, remove/replace the paket.py F94 caller and preserve F92b success-mark bookkeeping independently.",
+      "Add a source-closure regression asserting no live import targets a retired/archive-only module.",
+      "Add a bookkeeping regression proving success-mark persistence is not contingent on an optional retired reinforcement module."
+    ]
+  },
+  "hypothesis": {
+    "claim": "At the pinned donor source identity, ordinary paket() results can still be returned while the F92b/F94 post-result bookkeeping path reports ModuleNotFoundError because the live relative import cannot resolve.",
+    "level": "SOURCE_SUPPORTED_RUNTIME_UNVERIFIED",
+    "confidence": 0.97,
+    "falsifier": "An exact-source authorized import/runtime probe demonstrates that a separate installed root udb.abruf.wegehierarchie module is injected from outside the pinned donor tree and is the intended current dependency, with provenance and version binding."
+  },
+  "counterhypothesis": {
+    "claim": "The intended installed host may carry an out-of-repo compatibility module at udb.abruf.wegehierarchie, so the source tree alone may not reproduce installed runtime resolution.",
+    "status": "OPEN_HOST_PROVENANCE_UNKNOWN"
+  },
+  "triggerword4_handoff": "Before Frankenstein-2.0 donor freeze, resolve F94 explicitly: either remove/replace the stale live import and preserve independent success-mark bookkeeping, or introduce a measured successor interface. Do not restore archived algorithm bytes without rerunning the usefulness discriminator. Runtime credit remains zero until exact installed-source behavior is observed.",
+  "credits": {
+    "runtime": 0,
+    "provider": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

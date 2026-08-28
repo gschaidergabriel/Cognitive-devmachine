@@ -1,0 +1,106 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "checkpoint_id": "INGEST_CHECKPOINT_20260828T101437Z_GPT56SOL_TITAN_LCME_MEMORY_EVOLUTION",
+  "created_at": "2026-08-28T10:14:37Z",
+  "routing": {
+    "trigger": "triggerwort 5",
+    "status": "VERIFIED",
+    "organ": "GPT-5.6-Sol/triggerwort5/titan-lcme-memory-evolution"
+  },
+  "authority": {
+    "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "runtime_credit": 0,
+    "design_head_observed_pre_create": "4a2a7cb7e440c4df453696c25b33872f1a04a764"
+  },
+  "pins": {
+    "current_frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "project_frankenstein_repo": "gschaidergabriel/Project-Frankenstein",
+    "project_frankenstein_main_sha": "39c5423e0bfae54b971aab0be82f225f7a5890b8"
+  },
+  "semantic_atoms": [
+    {
+      "classification": "CONFIG",
+      "source_span": "tools/titan/__init__.py",
+      "observed": "Titan is deprecated and redirects to LCME; Titan/TitanConfig/get_titan/TITAN_DB are compatibility aliases over LCME components.",
+      "evidence_scope": "Project-Frankenstein source at pinned main"
+    },
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "tools/lcme/lcme_core.py :: LCME.__init__/ingest/retrieve",
+      "observed": "LCME composes SQLite storage, a vector store and a knowledge graph, runs background maintenance, invalidates retrieval cache on ingest, maintains a hot buffer for non-chat origins, and routes retrieval through a mature neural Hippocampus when available before deterministic fallback retrieval.",
+      "evidence_scope": "Project-Frankenstein source at pinned main"
+    },
+    {
+      "classification": "ENFORCEMENT_CODE",
+      "source_span": "tools/lcme/maintenance.py :: run_maintenance/_decay_confidence/_find_prune_candidates",
+      "observed": "Unprotected node confidence decays exponentially with a seven-day half-life; old orphan or low-confidence nodes can be pruned; protected/high-utility frequently accessed memories may graduate to permanent protection; edge confidence decays by 5% per maintenance cycle and weak old edges are deleted.",
+      "evidence_scope": "Project-Frankenstein source at pinned main"
+    },
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "tools/lcme/retrieval.py :: ContextBuilder.retrieve",
+      "observed": "Retrieval combines vector and FTS rankings, time-decayed confidence, recency and graph degree. A mature Neural Cortex may learn retrieval weights after the configured maturity threshold; otherwise fixed relevance-dominant warm/cold weights are used.",
+      "evidence_scope": "Project-Frankenstein source at pinned main"
+    },
+    {
+      "classification": "NEGATIVE_RESULT",
+      "source_span": "tools/lcme/maintenance.py :: compact_if_needed/_aggressive_prune plus inspected core maintenance path",
+      "observed": "The inspected LCME 'compaction' mechanism is deletion/pruning toward a node-count target. No semantic summary/compression transform that preserves a causal source set was established in the inspected path, and compact_if_needed was only found at its definition in repository search.",
+      "evidence_scope": "source forensics; absence claim limited to inspected/searchable paths"
+    },
+    {
+      "classification": "NEGATIVE_RESULT",
+      "source_span": "LCME storage architecture versus current EntityOS authority law",
+      "observed": "LCME owns a dedicated SQLiteStore/vector/graph stack and historically points at titan/LCME storage. Porting that storage authority wholesale would create a second durable memory/truth authority beside UnifiedDB; only the mechanisms should be transplanted into the canonical substrate.",
+      "evidence_scope": "architecture compatibility inference grounded in current authority"
+    }
+  ],
+  "architecture_delta_for_frankenstein_2": {
+    "component": "UnifiedMemoryEvolution/v1",
+    "decision": "PORT_TITAN_LCME_MEMORY_DYNAMICS_NOT_TITAN_DATABASE_AUTHORITY",
+    "preserve": [
+      "confidence/utility decay as retrieval salience",
+      "access/co-retrieval statistics",
+      "graph edge strengthening and decay",
+      "protected-memory policy",
+      "relevance-dominant multi-signal retrieval",
+      "hot working-memory layer",
+      "bounded pruning pressure"
+    ],
+    "change": [
+      "Store canonical observations/claims/events only in UnifiedDB typed tables with causal identity and provenance.",
+      "Represent effective_confidence, recency, activation and learned retrieval weights as derived/rebuildable retrieval projections, not fact truth.",
+      "Require promotion to protected/permanent memory to preserve source identities and authority class; repeated access cannot convert an uncertain claim into fact.",
+      "Replace destructive semantic 'compression' claims with an explicit SourceSet -> DerivedSummary projection only when a summary mechanism exists and retains source lineage; until then call current mechanism pruning/compaction.",
+      "Keep vector and graph indexes rebuildable from canonical rows; learned retrieval controllers may rank candidates but may not delete protected evidence or mint canonical claims without deterministic policy gates."
+    ],
+    "retrieval_score_contract": "score = relevance/similarity + confidence-salience + recency + graph/activation signals under a versioned policy; score controls retrieval order only, never epistemic truth",
+    "forgetting_contract": "forget/prune affects retrieval/storage retention under explicit policy and provenance; negative evidence, effect journals, authority records and protected causal receipts are outside autonomous learned forgetting",
+    "consolidation_contract": "graduation/protection is a retention-policy transition, not epistemic promotion; semantic consolidation remains OPEN until a lineage-preserving transform is source-proven and tested"
+  },
+  "hypotheses_and_falsifiers": [
+    {
+      "hypothesis": "LCME's strongest reusable contribution is memory salience dynamics, not its standalone database topology.",
+      "confidence": 0.95,
+      "falsifier": "A current-authority source proves LCME/titan.db is the admitted canonical UnifiedDB substrate rather than a historical separate store."
+    },
+    {
+      "hypothesis": "Separating retrieval salience from epistemic confidence prevents access-frequency feedback from hardening repeated but false memories into facts.",
+      "confidence": 0.93,
+      "falsifier": "A controlled replay shows a coupled score safely improves retrieval while never altering truth/effect authority across contradictory and repeated false claims."
+    }
+  ],
+  "triggerword4_handoff": {
+    "status": "READY_AS_ARCHITECTURE_INPUT",
+    "instruction": "Implement Titan/LCME-derived decay, activation and retrieval ranking inside UnifiedDB projections. Do not instantiate titan.db/LCME as a second canonical memory authority. Preserve source/provenance for every retained or derived memory object."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_frontier": "World-model lineage / WorldExperience / QUBO / fusion, unless a newer concurrent checkpoint already covers it."
+}

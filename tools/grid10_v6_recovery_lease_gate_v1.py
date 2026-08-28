@@ -103,6 +103,9 @@ def verify_active_recovery_lease_in_transaction(
 
     The caller must already hold the transaction used for the recovery mutation.
     This verifier never grants authority and never changes lease state.
+
+    `checked_at` exists for deterministic verifier tests and read-only audit callers.
+    Mutating recovery persistence must not accept an externally supplied time override.
     """
     _require_tables(con)
     expected_work_id = recovery_work_id_for_tick(tick_id)
@@ -235,7 +238,14 @@ def persist_recovery_classification_with_canonical_lease(
     This is intentionally narrower than the legacy boolean-gated mutator. It can persist
     only RECOVERY_REQUIRED_POST_V4_COMMIT and records the lease proof in the classification
     envelope. It never creates or renews a lease.
+
+    A mutating caller may not supply `checked_at`. Lease freshness for persistence is
+    evaluated from SQLite/runtime time inside the same writer transaction. This prevents a
+    stale or compromised caller from authorizing mutation by replaying a historical time.
     """
+    if checked_at is not None:
+        raise RecoveryLeaseNotAuthorized("EXTERNAL_CHECKED_AT_OVERRIDE_FORBIDDEN")
+
     from grid10_v6_crash_reconciliation_v1 import (
         INTENT_TABLE,
         STATUS_RECOVERY_REQUIRED,
@@ -252,7 +262,7 @@ def persist_recovery_classification_with_canonical_lease(
             spec_rev=spec_rev,
             executor_node=executor_node,
             lease_token=lease_token,
-            checked_at=checked_at,
+            checked_at=None,
         )
         # BEGIN IMMEDIATE holds the writer lock while this separate read connection
         # classifies exact committed V4/V6 evidence; competing writers cannot change it.

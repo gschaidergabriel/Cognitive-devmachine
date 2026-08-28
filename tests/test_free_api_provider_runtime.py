@@ -210,7 +210,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         capability_receipt = MOD.receipt()
 
         self.assertEqual(
-            capability_receipt["execution_receipt_schema_version"], "1.8"
+            capability_receipt["execution_receipt_schema_version"], "1.9"
         )
         self.assertEqual(
             capability_receipt["unicode_database_version"],
@@ -228,7 +228,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertTrue(capability_receipt[
             "execution_cost_policy_principal_fork_isolated"
         ])
-        self.assertEqual(capability_receipt["schema_version"], "1.10")
+        self.assertTrue(capability_receipt["execution_lock_fork_isolated"])
+        self.assertEqual(capability_receipt["schema_version"], "1.11")
         self.assertFalse(capability_receipt["invariants"][
             "semantic_request_identity_authorizes_replay"
         ])
@@ -490,7 +491,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             now=iter((1.0, 1.01)).__next__,
         )
 
-        self.assertEqual(result["receipt"]["schema_version"], "1.8")
+        self.assertEqual(result["receipt"]["schema_version"], "1.9")
+        self.assertTrue(result["receipt"]["execution_lock_fork_isolated"])
         self.assertEqual(
             result["receipt"]["unicode_database_version"],
             MOD.unicodedata.unidata_version,

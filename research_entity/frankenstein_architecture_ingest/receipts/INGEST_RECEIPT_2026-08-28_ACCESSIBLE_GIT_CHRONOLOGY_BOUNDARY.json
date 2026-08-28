@@ -1,0 +1,23 @@
+{
+  "schema": "FRANKENSTEIN_INGEST_RECEIPT/v1",
+  "receipt_id": "T5_RECEIPT_2026-08-28_ACCESSIBLE_GIT_CHRONOLOGY_BOUNDARY",
+  "created_at_utc": "2026-08-28T07:36:20Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "delta_path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_ACCESSIBLE_GIT_CHRONOLOGY_BOUNDARY.json",
+  "delta_commit": "76f016088ac34160a9114193e648384c111c9264",
+  "evidence_scope": "SOURCE_AND_GIT_HISTORY_ONLY",
+  "checks": [
+    {"check": "windows_source_first_accessible_commit", "result": "PASS", "detail": "windows/quelle/stern.py is present at 4f55d688fe27e9361374ea912e57319bfb566407 and absent at parent 6cc5a3f3e23451c2275463bde407912e2d46b8f7."},
+    {"check": "phase2_and_completion_coexist_at_first_snapshot", "result": "PASS", "detail": "The first accessible Windows stern snapshot contains Phase-2 zulassen()/merken() effect bookkeeping and _beleg_pruefen completion-evidence verification."},
+    {"check": "linux_payload_import_boundary", "result": "PASS", "detail": "scripts/stern.py first appears as installable Linux payload at b0be33fb6b223cd0a34f0fabc00b71dc57c5cb6a; parent 9051cb5938a713c84a9670275beb449cd93ebb71 lacks that path."},
+    {"check": "current_path_is_reorganization", "result": "PASS", "detail": "ccf2264f23b65ed796f9ed44a38c8c55bd379345 is a three-layer repository reorganization and must not be interpreted as the feature-introduction commit."}
+  ],
+  "negative_result": "Accessible Git collapses the requested pre-import internal effect chronology; exact original creation/supersession ordering remains UNKNOWN without external provenance.",
+  "runtime_credit": 0,
+  "whole_product_credit": 0,
+  "next_exact_gate": "Recover ancestry-bound underlab/original source history or explicitly close pre-import chronology as unavailable provenance."
+}

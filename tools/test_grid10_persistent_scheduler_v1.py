@@ -82,6 +82,45 @@ class PersistentSchedulerTests(unittest.TestCase):
         self.assertEqual(due.heartbeat_tick_id, "cycle-2:heartbeat")
         self.assertEqual(s2.agency.get_goal("g1").state, GoalState.ACTIVE)
 
+    def test_live_control_defaults_drive_active_and_idle_scheduler_cadence(self):
+        config = SchedulerConfig(trusted_normal_test_fixture=True)
+        s = PersistentCognitiveScheduler(self.db, self.frames, config=config)
+        base = s.runtime.control_plane.snapshot()
+        patch = s.runtime.control_plane.build_patch(
+            patch_id="scheduler:live-cadence",
+            writer="unit-test",
+            writer_kind="EXPERIMENT",
+            reason="prove scheduler consumes dynamic frame",
+            changes={
+                "pulse.active_interval_seconds": 0.4,
+                "pulse.idle_interval_seconds": 7.0,
+            },
+            base=base,
+        )
+        self.assertTrue(s.runtime.control_plane.apply_patch(patch).accepted)
+        self.seed_active(s, now=10.0)
+        active = s.cycle_once(cycle_id="live-active", now_ts=20.0)
+        self.assertEqual(active.status, "HEARTBEAT_RAN")
+        self.assertEqual(active.next_tick_not_before, 20.4)
+
+        # Fresh DB path for the idle case so the active goal above cannot manufacture work.
+        idle_db = self.root / "idle-live.sqlite"
+        idle_frames = self.root / "idle-live.jsonl"
+        idle_s = PersistentCognitiveScheduler(idle_db, idle_frames, config=SchedulerConfig())
+        idle_base = idle_s.runtime.control_plane.snapshot()
+        idle_patch = idle_s.runtime.control_plane.build_patch(
+            patch_id="scheduler:idle-cadence",
+            writer="unit-test",
+            writer_kind="EXPERIMENT",
+            reason="prove idle pulse control",
+            changes={"pulse.idle_interval_seconds": 7.0},
+            base=idle_base,
+        )
+        self.assertTrue(idle_s.runtime.control_plane.apply_patch(idle_patch).accepted)
+        idle = idle_s.cycle_once(cycle_id="live-idle", now_ts=30.0)
+        self.assertEqual(idle.status, "HOLD_NO_ACTIVE_GOAL")
+        self.assertEqual(idle.next_tick_not_before, 37.0)
+
     def test_no_active_goal_enters_hold_with_one_atomic_state_transition(self):
         s = self.scheduler()
         before_epoch = s.agency.snapshot().state_epoch
@@ -127,7 +166,6 @@ class PersistentSchedulerTests(unittest.TestCase):
             reason="wait instead of busy-loop",
             now_ts=303.0,
         )
-        # With no active goal, scheduler backs off to a later idle poll.
         idle = s1.cycle_once(cycle_id="wake-idle", now_ts=304.0)
         self.assertEqual(idle.status, "HOLD_NO_ACTIVE_GOAL")
         self.assertEqual(idle.next_tick_not_before, 334.0)
@@ -141,7 +179,6 @@ class PersistentSchedulerTests(unittest.TestCase):
         self.assertEqual(irrelevant.status, "NOT_DUE")
         self.assertEqual(s2.agency.get_goal(active.goal_id).state, GoalState.DORMANT)
 
-        # Exact new evidence wakes immediately even though 334.0 was the prior idle schedule.
         resumed = s2.cycle_once(
             cycle_id="wake-exact",
             now_ts=306.0,

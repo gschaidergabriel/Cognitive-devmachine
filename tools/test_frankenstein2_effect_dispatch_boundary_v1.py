@@ -42,7 +42,7 @@ class FakeStore:
 
     # Logical atomic-bundle seam used only by this deterministic boundary fake. The real
     # EffectLifecycleStore path is exercised separately below and uses one SQLite txn.
-    def record_execution_bundle_atomic(self, invocation_id, **kwargs):
+    def record_execution_bundle(self, invocation_id, **kwargs):
         self.record_execution(
             invocation_id,
             executable_id=kwargs["executable_id"],

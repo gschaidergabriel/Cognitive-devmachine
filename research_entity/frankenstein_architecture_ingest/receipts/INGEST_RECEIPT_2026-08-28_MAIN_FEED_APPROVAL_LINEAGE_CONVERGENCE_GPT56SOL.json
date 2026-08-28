@@ -1,0 +1,63 @@
+{
+  "schema": "FRANKENSTEIN_TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "T5_RECEIPT_2026-08-28_MAIN_FEED_APPROVAL_LINEAGE_CONVERGENCE_GPT56SOL",
+  "trigger": "triggerwort 5",
+  "ingest_time_utc": "2026-08-28T07:33Z",
+  "authority_epoch": "8.78",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "historical_repo": "gschaidergabriel/Project-Frankenstein",
+  "historical_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "design_repo": "gschaidergabriel/clay-global-research-entity",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_observed_before_delta": "ee9409776e8ee29565e100460f3a9c24baaaf0d7",
+  "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_MAIN_FEED_APPROVAL_LINEAGE_CONVERGENCE_GPT56SOL.json",
+  "architecture_delta_commit": "311249afc1f85677b2f8f0a6d707b8fd022fb4bd",
+  "ingested_packet_ids": [
+    "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
+    "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+    "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL"
+  ],
+  "dedupe": {
+    "main_feed_successor_bridge": "CORROBORATING_DEDUPED_NO_INDEPENDENT_RUNTIME_CREDIT",
+    "effect_predecessor_packet": "HISTORICAL_LINEAGE_PRECURSOR",
+    "approval_identity_packet": "HISTORICAL_LINEAGE_SUCCESSOR_REFINEMENT",
+    "namespace_migration_declared": false
+  },
+  "direct_source_crosschecks": {
+    "historical_preexecution_approval_deny": "PASS_SOURCE",
+    "approval_id_consumed_by_executor": "FAIL_SOURCE_INVARIANT_NOT_PRESENT",
+    "same_in_memory_tool_call_preserved_by_agentloop": "PASS_SOURCE_CALLER_CONVENTION_ONLY",
+    "current_stern_generic_effect_admission_blocks": "FAIL_SOURCE_GENERIC_PATH_IS_NONBLOCKING"
+  },
+  "new_design_requirements": [
+    "EffectDecision is consumed exactly once at the actual executor boundary",
+    "EffectDecision binds invocation_id/tool_use_id + request_digest + generation + causal_event_id + policy_generation + expiry",
+    "human approval is decision input/UI provenance, not a standalone canonical execution capability",
+    "historical pre-execution deny semantics are fused with current generation/idempotency/outcome-journal strengths",
+    "raw approval/effect payload persistence is replaced by typed redacted/digest-bound durable evidence",
+    "dual Triggerword-5 research namespaces remain separate provenance until explicit migration/dedupe authority"
+  ],
+  "execution": {
+    "donor_modified": false,
+    "historical_repo_modified": false,
+    "new_runtime_execution": 0,
+    "provider_execution": 0,
+    "vps_execution": 0,
+    "unusual_experiment": false,
+    "paid_execution": 0
+  },
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "historical_source_forensics": "PRESENT",
+    "runtime_causal": 0,
+    "effect_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover or formally retire wache-koenig provenance; feed executor-consumed EffectDecision plus one-shot/digest/generation/DENY/parallel-correlation/secret-fence tests into Triggerword-4; resolve ingest-namespace migration separately."
+}

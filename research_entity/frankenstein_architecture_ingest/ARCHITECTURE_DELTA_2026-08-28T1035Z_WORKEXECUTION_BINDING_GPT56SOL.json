@@ -1,0 +1,147 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:35:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "WORK_EXECUTION_BINDING_SUCCESSOR",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "branch": "main"
+  },
+  "design_branch": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "head_before_ingest": "39b1ec3e15ff8b00ccbac764ae5b44ee72ca1d59"
+  },
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "packet_provenance": {
+    "accepted_packet": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
+    "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+    "supersedes_packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "disposition": "ACCEPTED_WITH_CURRENT_DOCS_REFINEMENT_NO_RUNTIME_CREDIT"
+  },
+  "direct_source_crosscheck": {
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "stern_span": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:5580-5845",
+    "stern_finding": "handoff() durably creates entityos_arbeitspaket and a deterministic capsule but explicitly does not delegate/spawn a child itself.",
+    "hooks_blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+    "hooks_span": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json:1-81",
+    "hooks_finding": "the donor plugin registers SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact; it does not itself register SubagentStart, SubagentStop, TaskCreated or TaskCompleted."
+  },
+  "external_primary_crosscheck": {
+    "source": "Claude Code official documentation, checked 2026-08-28",
+    "hooks_url": "https://code.claude.com/docs/en/hooks",
+    "subagents_url": "https://code.claude.com/docs/en/sub-agents",
+    "confirmed": [
+      "SubagentStart fires when an Agent-tool subagent is spawned and exposes unique agent_id plus agent_type.",
+      "TaskCreated/TaskCompleted expose task_id in a separate TaskCreate/TaskUpdate lifecycle; documentation does not define task_id as agent_id.",
+      "PreToolUse/PostToolUse carry call-scoped tool_use_id; PostToolUse additionally carries tool_response whose schema is tool-specific.",
+      "plugin/settings hooks also run inside subagents, and subagent tool-hook input carries agent_id/agent_type, giving a deterministic identity for tool calls performed by an already-started child.",
+      "completed resumable subagents expose an agent ID and resume under the same agent ID; therefore run/generation identity must remain separate from long-lived agent identity."
+    ],
+    "still_unproven": [
+      "the exact installed Claude Code build and enabled hook composition on the target host",
+      "the exact Agent PostToolUse tool_response schema on that installed build",
+      "a documented stable shared key directly joining the parent Agent tool_use_id to the spawned SubagentStart agent_id",
+      "whether TaskCreated/TaskCompleted participates in the ordinary donor delegation path"
+    ],
+    "classification": "EXTERNAL_PRIMARY_CAPABILITY_EVIDENCE_NOT_INSTALLED_RUNTIME_EVIDENCE"
+  },
+  "architecture_effect": {
+    "mechanism": "WorkExecutionBinding/v1",
+    "purpose": "close durable workpackage -> native child execution -> result re-entry provenance without inventing joins from timing or session order",
+    "identity_domains": {
+      "paket_id": "durable EntityOS delegated-work identity",
+      "package_generation": "durable workpackage attempt/supersession generation",
+      "parent_session_id": "context identity only; never sufficient execution identity",
+      "spawn_tool_use_id": "parent call-scoped Agent invocation identity when observed",
+      "agent_id": "native Claude Code subagent identity when observed",
+      "agent_run_generation": "run/resume generation beneath an agent_id; required because one agent_id may resume",
+      "task_id": "optional independent Task-system identity only when an actual TaskCreate/TaskUpdate lifecycle is observed",
+      "child_tool_use_id": "call-scoped identity for each tool executed inside the child",
+      "result_receipt_id": "typed immutable child result/completion receipt identity"
+    },
+    "minimum_record": {
+      "binding_id": "required immutable id",
+      "paket_id": "required",
+      "package_generation": "required",
+      "parent_session_id": "required context",
+      "spawn_tool_use_id": "observed value or UNKNOWN",
+      "agent_id": "observed value or UNKNOWN",
+      "agent_run_generation": "observed/derived only from deterministic lifecycle, else UNKNOWN",
+      "task_id": "optional; absent/UNKNOWN is valid for ordinary subagents",
+      "spawn_request_digest": "required once a spawn request is observed",
+      "child_result_digest": "required before result admission",
+      "result_receipt_id": "required before reconcile success",
+      "source_runtime_identity": "required before runtime promotion",
+      "status": "HANDOFF_ONLY|SPAWN_OBSERVED|CHILD_STARTED|CHILD_RESULT_OBSERVED|RECONCILED|FAILED|UNKNOWN",
+      "provenance_refs": "required exact event/source refs",
+      "supersedes_binding_id": "optional"
+    },
+    "join_law": [
+      "never join by timestamp proximity, list order, session_id alone, agent type/name alone or narrative similarity",
+      "task_id and agent_id are distinct namespaces and must not be coerced into one field",
+      "if no deterministic parent Agent-call -> child agent_id key is observed, keep that edge UNKNOWN rather than synthesizing closure",
+      "child tool events may bind directly to agent_id when the runtime emits agent_id in hook common fields",
+      "resuming an existing subagent preserves agent_id but creates a new run; therefore agent_run_generation must distinguish executions",
+      "reconcile success requires a typed result receipt bound to the exact WorkExecutionBinding, not merely package text plus a plausible result"
+    ],
+    "state_machine": [
+      "HANDOFF_ONLY",
+      "SPAWN_OBSERVED",
+      "CHILD_STARTED",
+      "CHILD_RESULT_OBSERVED",
+      "RECONCILED"
+    ],
+    "failure_states": [
+      "FAILED",
+      "UNKNOWN"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "contradictions_preserved": [
+    "Donor governance expects handoff -> spawn -> reconcile, while live handoff code explicitly does not spawn.",
+    "Official current docs expose child lifecycle identities, but the donor plugin does not register those lifecycle hooks itself and host/global settings may still add them.",
+    "Current docs prove agent_id for SubagentStart and task_id for Task lifecycle separately, but do not by themselves prove the parent Agent tool_use_id -> agent_id join.",
+    "A host-private or transcript-derived binding may already exist outside the repository; this remains unobserved rather than denied."
+  ],
+  "feeds_triggerword_4": {
+    "required_actions": [
+      "preserve entityos_arbeitspaket as durable work-intent provenance but do not treat paket_id existence as execution proof",
+      "capture SubagentStart/SubagentStop on the installed target only through the build/verification lane and bind agent_id explicitly",
+      "capture Agent PreToolUse/PostToolUse with spawn_tool_use_id and inspect the exact installed tool_response before defining the parent-child join",
+      "treat TaskCreated/TaskCompleted as optional independent evidence rather than a mandatory alias for subagent identity",
+      "record agent run/resume generation separately from agent_id",
+      "require typed result receipt binding before reconcile can promote delegated work to verified completion",
+      "add concurrency tests with at least two overlapping Agent invocations so timing/order joins fail visibly"
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "external_primary_capability_crosscheck": "PASS_CURRENT_DOCS_2026-08-28",
+    "installed_runtime_child_lifecycle": 0,
+    "parent_agent_call_to_child_join_runtime": 0,
+    "workexecutionbinding_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 build/verification lane: on the authorized current non-provider target, capture one harmless Agent invocation with PreToolUse/PostToolUse plus SubagentStart/SubagentStop using exact payloads; accept a parent spawn_tool_use_id -> agent_id join only if a deterministic shared key or exact tool_response field is actually observed. Then run the same mechanism under two overlapping Agent invocations before runtime credit.",
+  "unusual_experiment": false,
+  "provider_execution": false,
+  "vps_execution": false,
+  "feeds_triggerword_4_boolean": true
+}

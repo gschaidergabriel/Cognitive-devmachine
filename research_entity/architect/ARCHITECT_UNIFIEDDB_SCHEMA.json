@@ -1,0 +1,46 @@
+{
+  "schema": "ARCHITECT_UNIFIEDDB_SCHEMA/v1",
+  "database": "architect.sqlite",
+  "mode": "SEPARATE_STATE_SHARED_DIRECTION",
+  "tables": {
+    "direction_binding": {
+      "purpose": "Typed links from Architect-local objects into canonical external project state without copying authority.",
+      "fields": ["binding_id", "local_object_type", "local_object_id", "external_system", "external_object_type", "external_object_id", "repository", "ref", "commit_sha", "tree_sha", "blob_sha", "direction_role", "observed_generation", "epistemic_type", "confidence", "reconciliation_status", "observed_at", "last_reconciled_at"]
+    },
+    "architect_episode": {
+      "fields": ["episode_id", "generation", "started_at", "ended_at", "focus", "situation_fingerprint", "trigger", "processing_mode", "summary", "outcome", "evidence_refs_json", "worker_refs_json", "test_refs_json", "external_heads_json", "next_actions_json"]
+    },
+    "architect_decision": {
+      "fields": ["decision_id", "episode_id", "generation", "created_at", "decision_type", "subject", "decision", "rationale_summary", "status", "confidence", "evidence_refs_json", "supersedes_decision_id"]
+    },
+    "architect_hypothesis": {
+      "fields": ["hypothesis_id", "episode_id", "generation", "created_at", "kind", "parent_hypothesis_id", "statement", "target_gap", "falsification_plan", "status", "confidence", "evidence_for_json", "evidence_against_json", "assigned_workpackage_ids_json"]
+    },
+    "architect_method_episode": {
+      "fields": ["method_episode_id", "architect_episode_id", "generation", "created_at", "situation_fingerprint", "processing_plan_json", "selected_workers_json", "selected_tools_json", "selected_retrieval_json", "selected_recursion_json", "latency_ms", "token_cost", "external_action_cost", "quality_metric_json", "result_status", "outcome_evidence_json", "credit_assignment_json"]
+    },
+    "architect_method_rule": {
+      "fields": ["method_rule_id", "created_at", "updated_at", "applicability", "rule_json", "status", "support_count", "counterexample_count", "evidence_refs_json", "rollback_rule_id"]
+    },
+    "architect_contradiction": {
+      "fields": ["contradiction_id", "created_at", "updated_at", "subject", "claim_a_json", "claim_b_json", "source_a_refs_json", "source_b_refs_json", "discriminator", "status", "resolution_evidence_json"]
+    },
+    "architect_observation": {
+      "fields": ["observation_id", "observed_at", "source_system", "source_type", "source_id", "event_type", "payload_json", "epistemic_type", "causal_id", "generation", "evidence_ref"]
+    },
+    "architect_context_compile": {
+      "fields": ["compile_id", "compiled_at", "architect_generation", "requested_focus", "token_budget", "source_heads_json", "included_episode_ids_json", "included_decision_ids_json", "included_hypothesis_ids_json", "included_method_rule_ids_json", "included_binding_ids_json", "omitted_due_budget_json", "context_sha256", "output_path"]
+    },
+    "architect_checkpoint": {
+      "fields": ["checkpoint_id", "generation", "created_at", "state_json", "state_sha256", "source_heads_json", "active_goal_ids_json", "active_workpackage_ids_json", "active_hypothesis_ids_json", "open_contradiction_ids_json", "next_exact_actions_json", "resume_condition_json"]
+    }
+  },
+  "required_invariants": [
+    "ARCHITECT_MEMORY != PROJECT_CANONICAL_TRUTH",
+    "ARCHITECT_DIRECTION_BINDING != DATA_COPY",
+    "SEPARATE_DB != SEPARATE_PROJECT",
+    "STALE_BINDING_MUST_NOT_BE_TREATED_AS_CURRENT",
+    "CONTRADICTIONS_ARE_PRESERVED_UNTIL_RECONCILED",
+    "NEW_SESSION != NEW_ARCHITECT"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "trigger": "triggerwort 5",
+  "receipt_id": "triggerwort5-20260828T073314Z-gpt56sol-historical-policy-effect-wiring-ingest",
+  "status": "INGEST_CHECKPOINT_COMMITTED",
+  "authority": {
+    "admitted_supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "source_packet": {
+    "path": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_HISTORICAL_POLICY_EFFECT_WIRING_LINEAGE_2026-08-28_GPT56SOL.json",
+    "commit": "4e1d545d7522f678dcd111d4b3394d18c994676c",
+    "historical_repository": "gschaidergabriel/Project-Frankenstein",
+    "historical_commit": "39c5423e0bfae54b971aab0be82f225f7a5890b8",
+    "historical_path": "services/project_engine.py",
+    "historical_blob_sha": "28e927950f7112feb3960acf2633f660a343e341"
+  },
+  "admitted_findings": [
+    "Historical source contains persistent project policy state plus check_policy(project_id, action).",
+    "The same pinned source contains direct Bash/Python execution through subprocess.run().",
+    "Within the same source-local call graph, check_policy() is defined but no invocation edge from the direct tool execution path to check_policy() was found.",
+    "Therefore METHOD_PRESENT does not receive ENFORCEMENT_PRESENT credit at this historical source boundary.",
+    "External caller/wrapper/hook enforcement remains an open counterhypothesis until repository-wide pinned call tracing resolves it."
+  ],
+  "triggerword4_handoff": {
+    "architecture_delta": "Require a direct fail-closed policy-authority -> real-effect edge and prove denial/unknown states suppress the concrete effect. Keep hard blocking, non-blocking effect journaling and postcondition verification as separate roles bound by stable invocation identity.",
+    "do_not_inherit": [
+      "policy schema/method presence as containment proof",
+      "unknown-capability auto-admission from the current donor bookkeeping path",
+      "postcondition verification as a substitute for pre-effect blocking"
+    ],
+    "candidate_failure_atlas_id": "FA-010-POLICY-ENFORCEMENT-DECLARED-BUT-UNWIRED-AT-EFFECT-BOUNDARY"
+  },
+  "contradictions_preserved": [
+    "Historical policy declaration vs source-local direct execution without an observed policy invocation edge.",
+    "Design-branch frankenstein_architecture_ingest namespace vs current-main architecture_archaeology live-feed namespace remain unreconciled."
+  ],
+  "evidence_credit": {
+    "source_lineage": "PARTIAL_ADVANCED",
+    "runtime": 0,
+    "effect_causality": 0,
+    "physical_grid10": 0,
+    "hcu": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "execution_receipt": {
+    "runtime_execution": false,
+    "vps_execution": false,
+    "provider_execution": false,
+    "paid_execution": false,
+    "training": false,
+    "unusual_experiment": false
+  },
+  "live_feed_index_update": "NOT_MUTATED_TO_AVOID_RACY_FULL_FILE_REPLACEMENT; this receipt is the append-only ingestion checkpoint and should be projected into TRIGGERWORD5_LIVE_FORENSIC_FEED.json by a conflict-safe feed updater.",
+  "next_exact_gate": "Trace repository-wide pinned callers/entrypoints around services/project_engine.py at 39c5423e0bfae54b971aab0be82f225f7a5890b8, then promote or falsify the external-enforcement counterhypothesis and merge the result into FAILURE_ATLAS.json and EMERGENT_COUPLING_GRAPH.json."
+}

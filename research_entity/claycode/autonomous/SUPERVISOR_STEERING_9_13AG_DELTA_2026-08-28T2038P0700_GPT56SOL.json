@@ -1,0 +1,47 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13AG_NON_AUTHORITY",
+  "observed_at_local": "2026-08-28T20:38:59+07:00",
+  "authority_effect": "NONE",
+  "material_finding": "Both active ClayCode singleton runtime gates remain queued with zero executed steps and no runner assignment. Cross-repository evidence now shows the established controller-repository self-hosted probe also obtained zero executable steps before cancellation, materially disfavoring repository scoping as a sufficient explanation. GitHub public status currently reports Actions operational, and the August 26 Actions incident was resolved well before the August 28 singleton creations. The best-supported current blocker is therefore the retained self-hosted Linux/X64 runner or host-bridge lifecycle, not GRID10 probe semantics. No terminal ordinary-dispatch result exists for issue #2121 or #2122.",
+  "evidence": {
+    "queue_audit": "research_entity/runtime/tool_results/2026-08-28T2000P0700_TRIGGER4_SELF_HOSTED_RUNNER_QUEUE_AUDIT_GPT56SOL.json",
+    "cross_repo_discriminator": "research_entity/runtime/tool_results/2026-08-28_TRIGGER4_SELF_HOSTED_RUNNER_CROSS_REPO_DISCRIMINATOR_GPT56SOL.json",
+    "grid10_quiescence_issue": 2122,
+    "grid10_sigkill_issue": 2121,
+    "github_actions_public_status": "OPERATIONAL_AT_REVIEW_TIME",
+    "runtime_semantics_exercised": false
+  },
+  "classification": {
+    "blocker": "SELF_HOSTED_LINUX_X64_RUNNER_OR_HOST_BRIDGE_UNAVAILABLE",
+    "confidence": "HIGH_BUT_NO_DIRECT_HOST_PROCESS_INTROSPECTION",
+    "runtime_failure_credit": 0,
+    "runtime_pass_credit": 0,
+    "base_credit": 0,
+    "canonical_semantics_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "steering": [
+    "P0_RESTORE_OR_RESTART_THE_ALREADY_ESTABLISHED_SELF_HOSTED_LINUX_X64_RUNNER_HOST_BRIDGE_LIFECYCLE_USING_EXISTING_AUTHORIZED_NON_PROVIDER_CONTROL_SURFACE",
+    "P0_DO_NOT_CREATE_DUPLICATE_ISSUES_OR_INCREMENT_GENERATION_FOR_GRID10_RUNTIME_QUIESCENCE_V2_G0000_OR_GRID10_SIGKILL_V3_G0000_WHILE_EXISTING_JOBS_REMAIN_NONTERMINAL",
+    "P0_AFTER_RUNNER_ASSIGNMENT_CONSUME_EXISTING_SINGLETON_RESULTS_AND_CLASSIFY_EXECUTABLE_SEMANTICS_ONLY_FROM_EXECUTED_STEPS_AND_BOUND_RECEIPTS",
+    "P0_QUIESCENCE_PASS_IF_ANY_MINTS_ONLY_RUNTIME_QUIESCENCE_COMPONENT_CREDIT_AFTER_GE90S_BOUND_WINDOW_AND_ALL_PRE_POST_INVARIANTS_PASS",
+    "P1_GRID10_SIGKILL_V3_PASS_IF_ANY_MINTS_ONLY_CRASH_INDEPENDENT_REPLACEMENT_COMPONENT_CREDIT; PHYSICAL_GRID10_REMAINS_ZERO_UNTIL_WORKER_PROCESS_INDEPENDENCE_IS_EXECUTABLY_PROVEN",
+    "PRESERVE_FREE_ONLY_HARD_OFF_NO_PAID_FALLBACK_AND_DO_NOT_USE_PROVIDER_MODEL_CALLS_TO_BYPASS_TRANSPORT_OUTAGE",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "unchanged_constraints": {
+    "goodman_anti_echo": true,
+    "explicit_model_family_checkpoint_ancestry": true,
+    "ubuntu_only_frank_v0_1": true,
+    "free_only": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_DISCOVERY_SCOUT/v1",
+  "trigger": "6",
+  "slot": "DISCOVERY_SCOUT",
+  "research_id": "R6-DISCOVERY-WP105-POSTSTART-UNKNOWN-IDEMPOTENCY-001",
+  "status": "SOURCE_GROUNDED_DISCOVERY_COMPLETE_HANDOFF_NOT_PROMOTED",
+  "purpose": "Find the smallest primary-source-grounded mechanisms that can close the current Frankenstein-2.0 WP105 post-dispatch ambiguity/idempotency gap without duplicating already-implemented semantic request hashing and without introducing a second truth store or effect authority.",
+  "architecture_delta_fusion": {
+    "research_entity_main_observed_prewrite": "be13148a5323f0094442e1a7e59e2db340d140c1",
+    "frankenstein2_main_observed": "efd94028ae871f8cd5372d0bc9da040b38a06dc3",
+    "supervisor": "9.13AL_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "consumed_trigger6_reconciliation": "research_entity/frankenstein2_tool_intelligence/reconciliations/20260829T0401P0700_TRIGGER6_PARALLEL_FUSION_RECONCILIATION_GPT56SOL.json",
+    "trigger6_reconciliation_rule": "Do not duplicate AgentSight E2 or same-snapshot architecture fuser work; move to DISCOVERY_SCOUT.",
+    "material_f2_delta_since_reconciliation": {
+      "classification": "CURRENT_SOURCE_AND_REPOSITORY_CI_COMPONENT_ONLY",
+      "finding": "The earlier semantic-request-binding gap is no longer the active source gap. Current F2 source now carries immutable EffectRequestIdentity and request_sha256 through intent, canonical authority evidence, PRE/POST correlation and executor evidence. The newest Trigger-4 delta instead freezes a post-process-start timeout mismatch: F2 classifies the executor outcome as unknown, while the exact bound EntityOS EffectGate catches the exception and journals FAILED.",
+      "f2_current_checkpoint": "checkpoints/CURRENT.json",
+      "f2_current_head": "efd94028ae871f8cd5372d0bc9da040b38a06dc3",
+      "poststart_falsifier": "tests/test_bound_entityos_effect_poststart_timeout.py"
+    },
+    "canonical_effect_authority_bound_source": {
+      "binding_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+      "effects_path": "the artefact/clayverse/effects.py",
+      "effect_journal_path": "the artefact/clayverse/effect_journal.py",
+      "observed_behavior": "EffectGate begins a PENDING journal row, calls entityos_bridge.run, and catches any bridge exception as FAILED. EffectJournal has UNKNOWN_AFTER_RESTART recovery for still-PENDING effects, but no distinct post-dispatch UNKNOWN finalization path in the bound source."
+    },
+    "affected_modules": [
+      "F2-WP-105",
+      "src/frankenstein2/effect_request_identity.py",
+      "src/frankenstein2/canonical_effect_authority_bridge.py",
+      "src/frankenstein2/effect_executor_interlock.py",
+      "EntityOS EffectGate",
+      "EntityOS EffectJournal"
+    ]
+  },
+  "research_question": "After immutable semantic request hashing is already present, what minimal mechanism should distinguish semantic equality, retry identity, invocation identity and ambiguous post-start outcome so F2 never duplicates a non-idempotent effect and never upgrades uncertainty to a negative world fact?",
+  "primary_sources": [
+    {
+      "source_id": "RFC9110-9.2.2",
+      "type": "EXTERNAL_PRIMARY_STANDARD",
+      "title": "RFC 9110 HTTP Semantics, Section 9.2.2 Idempotent Methods",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
+      "direct_mechanism": "Automatic retry is justified for idempotent semantics after communication failure. A client SHOULD NOT automatically retry a non-idempotent request unless it knows the semantics are idempotent or can detect that the original request was never applied.",
+      "f2_relevance": "A post-start timeout/transport exception is insufficient evidence that a non-idempotent world effect did not happen. Default action must be UNKNOWN/no automatic replay unless an operation-specific idempotency or verifier contract closes the uncertainty."
+    },
+    {
+      "source_id": "PYTHON-SUBPROCESS-TIMEOUT",
+      "type": "EXTERNAL_PRIMARY_RUNTIME_DOC",
+      "title": "Python subprocess documentation",
+      "url": "https://docs.python.org/3/library/subprocess.html",
+      "direct_mechanism": "Popen.wait/communicate can raise TimeoutExpired after process start; timeout is a waiting/termination condition, not an attestation that earlier child side effects did not occur. subprocess.run kills and waits for the child on timeout, but already-performed external effects are outside that cleanup guarantee.",
+      "f2_relevance": "The current F2 post-start timeout falsifier is correctly conservative at the executor boundary; EntityOS FAILED journal classification cannot be interpreted as certain non-application."
+    },
+    {
+      "source_id": "AWS-BUILDERS-LIBRARY-IDEMPOTENT-APIS",
+      "type": "EXTERNAL_PRIMARY_PROVIDER_ENGINEERING",
+      "title": "Making retries safe with idempotent APIs",
+      "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+      "direct_mechanism": "Amazon prefers a unique caller-provided client request identifier instead of inferring retry identity solely from a hash of request parameters. Identical parameters can represent two intentionally separate operations. The service records the token with request parameters; same token with changed intent is a mismatch. Atomic storage of the token and service mutation is required when both belong to one transactional boundary.",
+      "f2_relevance": "EffectRequestIdentity/request_sha256 is semantic identity, not retry identity. F2 needs a separately scoped stable operation/retry identity if it ever supports safe retry. Existing invocation_id or durable autonomy goal/step identity may be reusable only if their stability/semantics are proven; do not silently redefine them."
+    },
+    {
+      "source_id": "AWS-EC2-CLIENT-TOKEN",
+      "type": "EXTERNAL_PRIMARY_PROVIDER_DOC",
+      "title": "Ensuring idempotency in Amazon EC2 API requests",
+      "url": "https://docs.aws.amazon.com/ec2/latest/devguide/ec2-api-idempotency.html",
+      "direct_mechanism": "A repeated request with the same client token and same parameters can succeed without another action; reuse of the same token with changed parameters fails with IdempotentParameterMismatch.",
+      "f2_relevance": "Supports an explicit tuple of stable retry key plus immutable semantic request digest, with mismatch rejection before dispatch."
+    },
+    {
+      "source_id": "STRIPE-IDEMPOTENCY",
+      "type": "EXTERNAL_PRIMARY_PROVIDER_DOC",
+      "title": "Stripe API idempotent requests",
+      "url": "https://docs.stripe.com/api/idempotent_requests",
+      "direct_mechanism": "The first executed request result is associated with an idempotency key; later same-key requests return the prior result, and changed parameters are rejected. Results are recorded only once endpoint execution begins; validation/concurrent conflicts are treated separately.",
+      "f2_relevance": "Useful donor for separating pre-execution validation/conflict from post-start operation identity and for avoiding duplicate execution, but it is not itself evidence that arbitrary subprocess effects are retry-safe."
+    }
+  ],
+  "discovery_findings": [
+    {
+      "finding_id": "R6-WP105-D1",
+      "classification": "R1_INFERRED_FROM_CURRENT_AND_PRIMARY_SOURCES",
+      "claim": "request_sha256 must remain semantic identity only. It must not become the retry/idempotency key because two intentional invocations may have identical semantic payloads.",
+      "confidence": 0.98,
+      "falsifier": "A current F2 contract explicitly proves that identical semantic payloads are forbidden from representing distinct intentional effects and defines request_sha256 as the stable operation identity. No such contract was observed in the current source."
+    },
+    {
+      "finding_id": "R6-WP105-D2",
+      "classification": "R1_INFERRED_FROM_PRIMARY_STANDARD_AND_BOUND_SOURCE",
+      "claim": "After executor entry, TimeoutExpired or an analogous transport exception cannot justify automatic replay for a potentially non-idempotent effect unless F2 has an operation-specific idempotency contract or authoritative verifier that proves non-application.",
+      "confidence": 0.99,
+      "falsifier": "The exact target operation is proven idempotent for the same stable operation key, or an authority-owned verifier deterministically proves the first attempt was not applied."
+    },
+    {
+      "finding_id": "R6-WP105-D3",
+      "classification": "CURRENT_SOURCE_CONTRADICTION",
+      "claim": "The bound EntityOS EffectGate currently maps any bridge exception to journal status FAILED, while current F2 deliberately raises ExecutorOutcomeUnknown for a post-start timeout. This collapses uncertainty at the canonical journal boundary and is the current semantic mismatch to resolve; it does not mean the external effect failed to occur.",
+      "confidence": 1.0,
+      "falsifier": "A newer admitted EffectGate/EffectJournal source changes the bound behavior or exact runtime evidence proves the relevant exception can only happen before any effect application."
+    },
+    {
+      "finding_id": "R6-WP105-D4",
+      "classification": "R2_GENERATED_DESIGN_CANDIDATE",
+      "claim": "The minimal donor composition is an F2/EntityOS-native retry envelope, not a new workflow/event database: keep request_sha256 for semantic equality; use a separate stable operation/retry key; bind both to effect/invocation identity and generation; reject same retry key with different request_sha256; prevent second dispatch while outcome is PENDING/DISPATCH_STARTED/UNKNOWN; permit automatic retry only for explicitly idempotent/verifiably-not-applied targets; preserve ambiguous post-start outcomes as UNKNOWN pending authority-owned verification.",
+      "confidence": 0.93,
+      "falsifier": "A smaller existing canonical primitive already provides equivalent stable retry identity, semantic mismatch rejection and post-start uncertainty handling without semantic overloading."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "R6-WP105-CH1",
+      "claim": "Existing invocation_id is already a stable retry/idempotency key and no new field/contract is necessary.",
+      "assessment": "UNPROVEN",
+      "discriminator": "Trace invocation_id creation across retry/restart/deferred-return paths. It is reusable only if the same logical operation retains the same invocation_id across admissible retries while intentionally repeated identical operations receive distinct IDs."
+    },
+    {
+      "id": "R6-WP105-CH2",
+      "claim": "Current durable autonomy goal_id + autonomy_step_id replay fence is sufficient for all effect callers.",
+      "assessment": "PARTIAL_ONLY",
+      "discriminator": "Enumerate EffectGate callers. Bound source explicitly excludes non-workspace/direct callers from this autonomy-specific replay fence, so general coverage is not established."
+    },
+    {
+      "id": "R6-WP105-CH3",
+      "claim": "Killing a timed-out subprocess proves its effect did not occur.",
+      "assessment": "REJECTED_BY_SEMANTICS",
+      "discriminator": "A deterministic child can perform a local side effect before sleeping past the timeout; process termination cannot retroactively undo that already-applied effect. Trigger-4 may run this as a bounded falsifier if useful."
+    },
+    {
+      "id": "R6-WP105-CH4",
+      "claim": "Importing a full durable workflow/event-sourcing framework is the safest solution.",
+      "assessment": "LOWER_VALUE_AT_CURRENT_FRONTIER",
+      "discriminator": "Compare against a native UnifiedDB/EffectJournal implementation on duplicate-dispatch prevention, semantic mismatch rejection, restart behavior, latency, dependency surface and authority duplication. Current evidence does not justify a second truth/effect substrate."
+    }
+  ],
+  "minimal_handoff_candidate": {
+    "name": "UNKNOWN_SAFE_EFFECT_RETRY_ENVELOPE/v0",
+    "classification": "R2_GENERATED_NOT_BUILD_CANDIDATE",
+    "invariants": [
+      "semantic_request_digest != retry_identity",
+      "retry_identity + changed semantic_request_digest => reject before dispatch",
+      "post_dispatch_exception != negative world fact",
+      "ambiguous post-start outcome => UNKNOWN until authoritative verification",
+      "UNKNOWN => no automatic replay for non-idempotent/unverified operations",
+      "idempotent/verifiably-not-applied operations may define an explicit retry policy",
+      "all durable evidence remains in canonical UnifiedDB/EffectJournal; no second effect authority"
+    ],
+    "candidate_fields": [
+      "request_sha256 (already implemented; unchanged semantic role)",
+      "operation_retry_id (new only if no existing stable identifier proves the required semantics)",
+      "effect_id (canonical authority minted)",
+      "invocation_id (existing occurrence/call identity; role must not be silently redefined)",
+      "generation",
+      "dispatch_started evidence",
+      "outcome_certainty"
+    ],
+    "candidate_state_rule": "A distinct post-dispatch UNKNOWN semantic state is preferable to overloading FAILED or UNKNOWN_AFTER_RESTART. Trigger6 does not authorize the canonical status change; Trigger4/current authority must integrate and test any schema/API change.",
+    "no_new_dependency_required": true
+  },
+  "recommended_next_discriminator": {
+    "slot": "INTEGRATION_DISTILLER",
+    "task": "Inspect exact current F2 invocation/retry/deferred-return IDs and the bound EntityOS journal schema to determine whether an existing stable identity can serve operation_retry_id. Produce a minimal ABI/state-transition patch contract and a deterministic no-real-effect matrix. Include a child-process falsifier that performs a bounded local marker mutation before timing out, proving why post-start timeout must remain UNKNOWN; do not execute or promote it from Trigger6 unless the admitted experimental slot/authority permits.",
+    "required_matrix": [
+      "same retry id + same digest + prior VERIFIED => no second dispatch / prior semantic result",
+      "same retry id + different digest => zero dispatch mismatch",
+      "same retry id + PENDING or DISPATCH_STARTED => zero concurrent duplicate dispatch",
+      "post-start timeout after observable marker => UNKNOWN, not FAILED-as-nonapplication",
+      "UNKNOWN + non-idempotent target => no automatic replay",
+      "UNKNOWN + authoritative verifier proves not applied => retry may be considered under explicit policy",
+      "intentional second identical semantic request + distinct operation id => remains independently executable"
+    ]
+  },
+  "evidence_ladder": {
+    "current_trigger6_level": "E1_SOURCE_READ_PLUS_CURRENT_ARCHITECTURE_FUSION",
+    "E2_architecture_mapped_for_this_new_composite": false,
+    "E3_claim_reproduced": false,
+    "E4_f2_ablation": false,
+    "E5_build_candidate": false,
+    "E6_f2_accepted": false
+  },
+  "credits": {
+    "agentsight_e2_logical_credit": 1,
+    "this_discovery_external_runtime_credit": 0,
+    "build_candidate_credit": 0,
+    "f2_acceptance_credit": 0,
+    "whole_f2_runtime_credit": 0,
+    "entityos_hcu_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "training_credit": 0
+  },
+  "execution_receipt": {
+    "source_and_web_research_only": true,
+    "provider_calls": 0,
+    "vps_execution": 0,
+    "real_effect_experiment": 0,
+    "unusual_experiment": false,
+    "private_actions_db_materializer_runtime_credit": 0
+  }
+}

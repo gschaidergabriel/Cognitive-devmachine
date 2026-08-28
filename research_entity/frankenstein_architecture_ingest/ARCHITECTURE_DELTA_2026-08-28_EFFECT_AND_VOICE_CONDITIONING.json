@@ -1,0 +1,107 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_EFFECT_AND_VOICE_CONDITIONING_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:14Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_commit_before_write": "9a77063683ab76cbd82ca4d43a62f548cbeb444a"
+  },
+  "canonical_clay_main_observed": "4f4a7088a54dd21e1848f090446590efa05a2ac1",
+  "packet_ingest": {
+    "packet_id": "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL",
+    "status": "INGESTED_DEDUPED",
+    "overlap_with_consumed": "TW5-PACKET-20260828T0714Z-5641dc6-GPT56SOL-LIVE-FEED-BRIDGE",
+    "double_count_credit": false,
+    "unique_open_question_resolved": "VoiceSessionCapsule per-response conditioning versus merely constructed/refreshed capsule state"
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_STERN_EFFECT_ADMISSION_IS_NONBLOCKING_012",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+        "line_start": 3238,
+        "line_end": 3517,
+        "source_kind": "ENFORCEMENT_CODE"
+      },
+      "claim": "The current stern.py PreToolUse 'zulassen' path evaluates capability, generation, preconditions and same-session verified repetition and writes an effects row, but it does not block execution. ABGELEHNT/WIEDERHOLUNG/UNGEPRUEFT are journal findings; source commentary explicitly states that PreToolUse returns no deny/block and that the tool runs even on doubt, timeout or error. PostToolUse then hashes/records the observed outcome through merken().",
+      "runtime_reachability": "PRETOOLUSE_AND_POSTTOOLUSE_HOOK_PATH",
+      "confidence": 1.0,
+      "authority": "journal/assessment and post-effect observation only; this span is not a deterministic blocking EffectGate",
+      "failure_behavior": "admission exceptions fail silent; best-effort UNGEPRUEFT can be written, otherwise the tool still runs",
+      "known_counterevidence": [
+        "Source comments mention an older separate blocking watcher outside this stern.py path. That separate mechanism was not mapped in this run and cannot be used to upgrade stern.py itself into a blocking gate."
+      ],
+      "target_action": "REPAIR",
+      "grid10_adaptation": "Preserve the useful request/result journal, generation checks, redaction and outcome hashing, but put real state-changing execution behind one source-bound deterministic EffectGate/EffectJournal authority. A rejected or unknown admission must not execute merely because the observer is fail-silent.",
+      "open_questions": [
+        "Map cmd_hook's exact PreToolUse/PostToolUse dispatch plus any external blocking watcher before Triggerword-4 assembly.",
+        "Define UNKNOWN external-effect outcome semantics so transport ambiguity is never blindly replayed."
+      ]
+    },
+    {
+      "atom_id": "F2_VOICE_CAPSULE_NOT_PER_RESPONSE_CONDITIONED_013",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+        "line_start": 800,
+        "line_end": 1800,
+        "source_kind": "LIVE_CODE"
+      },
+      "claim": "RealtimeSession constructs and repeatedly refreshes VoiceSessionCapsule from presence, visual state, winning intent, memory refs, policy and related state, but _response_erstellen() creates each normal model response from _instruktion(self._zustandstext) plus an optional hint only. No capsule serialization or capsule-derived context compiler is present in that per-response instruction path. Therefore the capsule is a real refreshed projection, but as a whole it is not yet direct per-response model conditioning.",
+      "runtime_reachability": "REALTIME_SESSION_INIT_REFRESH_RELOOK_REOPEN_AND_RESPONSE_CREATE",
+      "confidence": 1.0,
+      "authority": "VoiceSessionCapsule remains RAM projection only; it has no canonical state authority",
+      "known_counterevidence": [
+        "Some underlying state can still affect voice indirectly through _zustandstext, explicit arbitration, deictic re-look and initiative hints. This finding is specifically about the capsule projection not being compiled into every response, not about total absence of state coupling."
+      ],
+      "target_action": "REPAIR",
+      "grid10_adaptation": "Add one deterministic bounded Voice/GRID context compiler that selects provenance-bearing capsule/GRID fields for response conditioning. Keep the capsule noncanonical, preserve UNKNOWN, respect privacy/output tiers, and emit a conditioning receipt or digest so state->response coupling is measurable rather than assumed.",
+      "open_questions": [
+        "Which capsule fields are necessary for ordinary replies versus initiative-only arbitration?",
+        "How should context compilation enforce token budget, freshness, privacy tier, provenance and conflict preservation without copying UnifiedDB into the prompt?",
+        "Add a lesion/shuffle test: same transcript with capsule field removed or permuted must produce the preregistered measurable decision delta only where that field is causally intended."
+      ]
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "resolution": "stern.py's current EffectGate-named admission is conclusively nonblocking at source level; retain its journal value but do not treat it as final 2.0 effect authority. Separate external blocker remains to be mapped."
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "resolution": "VoiceSessionCapsule construction/refresh is real, while direct per-response capsule conditioning is absent from _response_erstellen(); 2.0 needs an explicit bounded context-compiler edge."
+    }
+  ],
+  "hypotheses": [
+    "The donor effect journal can survive largely intact if execution authority is moved in front of the real effect boundary instead of trying to reinterpret journal statuses as enforcement.",
+    "Voice coupling will become measurably stronger and less prompt-fragile if a small typed context compiler serializes only the winning/current capsule slice rather than expanding the static persona or dumping full state."
+  ],
+  "counterhypotheses": [
+    "A separate existing blocking watcher may already provide part of the real effect gate; if exact current source and call ordering prove that, 2.0 should fuse it rather than build a duplicate blocker.",
+    "Injecting the entire VoiceSessionCapsule every turn could increase latency/context contamination without causal benefit; field-level lesion tests should determine the minimal conditioning slice."
+  ],
+  "credits": {
+    "source_forensics": "PRESENT",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Map stern.py cmd_hook plus any separate blocking watcher into one request->admission->execution->verification graph, then specify/test the minimal provenance-bearing VoiceSessionCapsule/GRID context compiler with lesion/shuffle controls."
+}

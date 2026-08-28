@@ -1,0 +1,171 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "created_at": "2026-08-28T09:15:13Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/voice-mutation-authority-classification",
+  "classification": "CURRENT_DONOR_SOURCE_FORENSICS_NO_RUNTIME_CREDIT",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "design": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "sha_observed_before_write": "3b106b316535fb5806cd97750e598b019892a3b1",
+    "concurrent_delta_observed": "ARCHITECTURE_DELTA_2026-08-28T091348Z_HEADLESS_SESSION_VS_NATIVE_SUBAGENT_ACTOR_CLASS_GPT56SOL.json",
+    "duplication_policy": "COMPLEMENT_NOT_DUPLICATE: actor-class split is preserved; this delta classifies the voice-side mutation/intent/enforcement chain."
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "packet_ingest": {
+    "new_unconsumed_packet": false,
+    "latest_seen_packet": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "latest_seen_packet_status": "ALREADY_CONSUMED",
+    "action": "FORENSIC_CONTINUATION_APPEND_ONLY"
+  },
+  "material_finding": "The voice surface is not one mutation class. It exposes read-only status/memory reads, direct durable memory mutation, asynchronous research dispatch, session control, and a separately confirmed delegated task path. Only frank_auftrag_stellen has the donor's mechanical two-step voice confirmation gate. After that gate, the delegated headless claude -p child hard-denies Bash but deliberately leaves Read/Write/Edit/Grep/Glob available, while the donor stern.py PreToolUse EffectGate is explicitly nonblocking bookkeeping. Therefore voice confirmation proves at most a HumanIntent-to-TaskAdmission boundary; it does not prove per-mutation EffectDecision enforcement or final effect containment.",
+  "atoms": [
+    {
+      "atom_id": "TW5-VOICEAUTH-001-TOOL-CLASS-SPLIT",
+      "subsystem": "realtime_voice_tool_surface",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 430,
+      "line_end": 558,
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "The Realtime tool surface contains distinct authority classes: status/memory reads; durable memory write; delegated task request; research read/new-dispatch; and session termination. _tool_erinnerung_schreiben forwards directly to stern memory write. The two-step confirmation contract is specified only for frank_auftrag_stellen.",
+      "authority_class": "MODEL_TOOL_REQUESTS_WITH_HETEROGENEOUS_MUTATION_SCOPE",
+      "failure_mode": "Treating all Realtime tools as one generic 'voice tool' hides that some paths mutate durable state or launch work without the same confirmation/enforcement chain.",
+      "runtime_reachable": true,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-VOICEAUTH-002-HUMAN-INTENT-GATE-IS-TASK-SCOPED",
+      "subsystem": "voice_human_intent_gate",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 1583,
+      "line_end": 1714,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "frank_auftrag_stellen uses a mechanical proposal/confirmation state machine: same normalized task text, a later server-transcribed audio utterance, <=300s age and no keyword-veto contradiction. On success it calls self.auftrag.stellen(). The donor itself states this is not full intent classification or speaker verification.",
+      "authority_class": "HUMAN_INTENT_CANDIDATE_GATE_FOR_DELEGATED_TASK_ONLY",
+      "failure_mode": "An unrelated second utterance can still be interpreted by the model as confirmation; even a valid confirmation authorizes only the task dispatch and carries no invocation-bound downstream mutation decision.",
+      "runtime_reachable": true,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-VOICEAUTH-003-HEADLESS-BASH-DENY-NOT-FILE-EFFECT-BOUNDARY",
+      "subsystem": "voice_headless_child_policy",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 320,
+      "line_end": 399,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "claude_frage launches/resumes `claude -p`, passes the configured permission mode, and unconditionally disallows the whole Bash tool. The source explicitly states Read/Write/Edit/Grep/Glob remain available. The command line does not bind a specific --settings artifact.",
+      "authority_class": "PARTIAL_TOOL_SURFACE_RESTRICTION_NOT_FINAL_EFFECT_AUTHORITY",
+      "failure_mode": "A confirmed voice task can still cause file mutations via Write/Edit; their actual host policy/settings/hook containment is not source-bound by this command line.",
+      "runtime_reachable": true,
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "TW5-VOICEAUTH-004-DONOR-EFFECTGATE-OBSERVATIONAL",
+      "subsystem": "effectgate_semantics",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 8140,
+      "line_end": 8360,
+      "source_kind": "ENFORCEMENT_CODE",
+      "what_it_does": "The donor EffectGate section explicitly says zulassen()/PreToolUse never blocks a tool and cmd_hook emits no deny/block decision; failure/timeout records UNGEPRUEFT or nothing and the tool proceeds. PostToolUse then journals/verifies observed outcome.",
+      "authority_class": "OBSERVATIONAL_ADMISSION_AND_EFFECT_JOURNAL_NOT_PRE_SIDE_EFFECT_CONTAINMENT",
+      "failure_mode": "ABGELEHNT or UNGEPRUEFT can coexist with an executed tool, so this mechanism cannot be promoted to final EffectGate authority without a blocking successor.",
+      "runtime_reachable": null,
+      "target_2_0_action": "REPLACE_WITH_VERIFIED_SUCCESSOR",
+      "confidence": 0.99
+    }
+  ],
+  "architecture_delta": {
+    "required_voice_authority_chain": [
+      "VoiceToolCallCandidate(call_id, tool_class, transcript evidence)",
+      "HumanIntentDecision(intent_id, decision, evidence, speaker/ambiguity state)",
+      "TaskAdmission(task_id, digest, actor_class, generation) for delegated work",
+      "InvocationIdentity(tool_use_id/equivalent) for every state-changing child call",
+      "EffectDecision(effect_id, invocation_id, capability, target, allow|deny, one-shot consumption)",
+      "EffectReceipt(effect_id, invocation_id, observed outcome, verification binding)"
+    ],
+    "tool_class_policy": {
+      "frank_status_lesen": "READ_ONLY",
+      "frank_erinnerung_lesen": "READ_ONLY",
+      "frank_erinnerung_schreiben": "CANONICAL_INTERNAL_MUTATION_CANDIDATE_REQUIRES_TYPED_MEMORY_ADMISSION",
+      "frank_auftrag_stellen": "DELEGATED_MUTATION_REQUEST_REQUIRES_HUMAN_INTENT_THEN_PER_INVOCATION_EFFECT_DECISIONS",
+      "frank_forschung:lesen": "READ_ONLY",
+      "frank_forschung:neu_anstossen": "RESEARCH_REQUEST_CANDIDATE_REQUIRES_TYPED_ADMISSION_AND_EXECUTION_POLICY",
+      "frank_gespraech_beenden": "SESSION_CONTROL"
+    },
+    "trigger4_feed_gate": "TW4-VOICE-EFFECT-CHAIN-SEPARATION",
+    "rule": "Voice confirmation is not EffectDecision. Bash denial is not file-mutation containment. Nonblocking PreToolUse bookkeeping is not final enforcement."
+  },
+  "hypotheses": [
+    "A typed split between HumanIntentDecision, TaskAdmission and per-invocation EffectDecision will preserve the donor's useful voice confirmation UX while eliminating authority ambiguity.",
+    "The existing voice confirmation mechanism is reusable as an evidence producer for intent, not as the final side-effect gate."
+  ],
+  "counterhypotheses": [
+    "A currently loaded host/global Claude Code watcher may already block Write/Edit or other mutating tools, making the source-level gap a visibility gap rather than a runtime containment gap.",
+    "Managed/current host settings may restrict the headless child more strongly than the donor command line reveals.",
+    "Some durable memory writes may be intentionally low-risk canonical internal mutations that should use MemoryAdmission rather than a full external EffectGate, but they still require explicit typed authority and provenance."
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-VOICE-CONFIRMATION-VS-FINAL-EFFECT-017",
+      "a": "frank_auftrag_stellen mechanically requires a later real audio utterance before dispatch.",
+      "b": "After dispatch, the child retains Write/Edit while the donor EffectGate never blocks tools.",
+      "status": "SOURCE_CONFIRMED_SEPARATE_AUTHORITY_BOUNDARIES"
+    },
+    {
+      "id": "TW5-CONTRADICTION-VOICE-TOOL-HETEROGENEITY-018",
+      "a": "The Realtime surface is often described as one tool-enabled voice interface.",
+      "b": "Its individual tools have materially different mutation/effect semantics and do not share one enforcement path.",
+      "status": "SOURCE_CONFIRMED_TOOL_CLASS_SPLIT"
+    }
+  ],
+  "critical_unknowns": [
+    "Exact installed host/settings artifact inherited by direct headless `claude -p` and its hash/provenance.",
+    "Whether the older external blocking watcher named by stern.py is currently loaded, which tool classes it denies and whether its decisions are invocation-bound.",
+    "Whether direct Realtime memory writes are intended canonical truth writes or candidate memory awaiting explicit admission in Frankenstein 2.0.",
+    "Exact tool_use_id/equivalent available on the headless actor-class path for per-invocation EffectDecision binding."
+  ],
+  "recommended_next_spans": [
+    {
+      "path": "authorized installed-host Claude settings/hooks relevant subset + hashes",
+      "reason": "Resolve policy inheritance without inferring runtime containment from donor source.",
+      "priority": "P0"
+    },
+    {
+      "path": "Triggerword-4 TaskAdmission/HumanIntentDecision/EffectDecision successor schemas",
+      "reason": "Compile the source-confirmed boundary split into one explicit causal chain before assembly.",
+      "priority": "P0"
+    },
+    {
+      "path": "stern.py gespraech_erinnerung_schreiben + destination table admission semantics",
+      "reason": "Decide whether voice memory write is direct canonical mutation or candidate-to-admission flow in 2.0.",
+      "priority": "P1"
+    }
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "new_runtime_credit": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword-4 should compile the six Realtime tool paths into typed authority classes and require an explicit HumanIntentDecision -> TaskAdmission -> invocation-bound EffectDecision -> EffectReceipt chain for delegated mutation; separately resolve installed headless settings/blocking-watcher reachability before any containment claim."
+}

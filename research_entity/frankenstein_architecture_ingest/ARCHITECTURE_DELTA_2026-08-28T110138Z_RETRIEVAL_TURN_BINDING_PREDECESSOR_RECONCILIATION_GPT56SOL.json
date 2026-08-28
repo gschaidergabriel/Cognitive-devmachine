@@ -1,0 +1,123 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T11:01:38Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "RETRIEVAL_TURN_BINDING_PREDECESSOR_RECONCILIATION",
+  "routing_self_test": "PASS",
+  "authority": {
+    "operative_epoch": "9.13",
+    "selected_steering_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "authority_change": false,
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "source_identity": {
+    "canonical_main": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "donor_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "donor_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "schema_path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/schema_leer.sql",
+    "schema_blob_sha": "12ad7f4511d365b327cdbee34f5471829198c203",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "34246b5239846584ec075ae44433d8589d39ff33"
+  },
+  "packet_provenance": {
+    "consumed_packet_id": "TW5-PACKET-20260828T105400Z-RETRIEVAL-TURN-BINDING-GPT56SOL",
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105400Z_5641dc6_GPT56SOL_RETRIEVAL_TURN_BINDING_FORENSICS.json",
+    "packet_blob_sha": "f59d0c73942987d94bde48bc7e7bef567476612c",
+    "created_at": "2026-08-28T10:54:00Z",
+    "disposition": "CONSUMED_AS_CORROBORATING_PREDECESSOR_SUBSUMED_BY_NEWER_SCHEMA_CROSSCHECK",
+    "newer_packet": "TW5-PACKET-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL",
+    "newer_packet_disposition": "ALREADY_CONSUMED_BY_PARALLEL_ORGAN",
+    "successor_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1100Z_RETRIEVAL_IDENTITY_BINDING_SCHEMA_GPT56SOL.json",
+    "successor_commit": "34246b5239846584ec075ae44433d8589d39ff33"
+  },
+  "semantic_reconciliation": [
+    {
+      "class": "LIVE_CODE",
+      "source_span": "stern.py:4210-4310",
+      "finding": "Retrieval admission already persists retrieval_id, turn_id, episode_id, causal_id, session_id, generation and query_hash; the identity substrate is present upstream.",
+      "status": "CONFIRMED_AND_PRESERVED"
+    },
+    {
+      "class": "LIVE_CODE",
+      "source_span": "stern.py:4725-4808",
+      "finding": "Each UserPromptSubmit creates fresh round-scoped causal_id, turn_id and episode_id and passes them into retrieval, so distinct same-session rounds are intentionally representable.",
+      "status": "CONFIRMED_AND_PRESERVED"
+    },
+    {
+      "class": "ENFORCEMENT_CODE",
+      "source_span": "stern.py:4960-5045",
+      "finding": "Stop relevance receives session/transcript context, chooses the newest same-session unjudged retrieval, independently recovers the last transcript user message and then applies model-derived credit.",
+      "status": "CONFIRMED_AND_PRESERVED"
+    },
+    {
+      "class": "CONTROL_FLOW",
+      "source_span": "stern.py:8840-8898",
+      "finding": "The Stop call boundary does not carry retrieval_id, turn_id, episode_id, causal_id or generation into relevance cognition; already-created round identity is therefore dropped and later rediscovered indirectly.",
+      "status": "CONFIRMED_AND_PRESERVED"
+    },
+    {
+      "class": "SCHEMA",
+      "source_span": "scripts/daten/schema_leer.sql retrieval_episodes/retrieval_feedback definitions",
+      "finding": "retrieval_episodes schema-enforces retrieval_id primary identity plus unique turn_id, episode_id and causal_id. retrieval_feedback uses receipt_id as primary key but exposes no UNIQUE(retrieval_id, signal_class) cardinality guard.",
+      "status": "CONFIRMED_BY_DIRECT_SCHEMA_CROSSCHECK"
+    }
+  ],
+  "design_effect": {
+    "new_competing_mechanism_created": false,
+    "canonical_successor_mechanism": "SameSessionRetrievalCreditBinding/v1",
+    "canonical_work_item": "RetrievalJudgementWorkItem/v1",
+    "why_no_second_design": "The later 10:55:32 packet plus direct schema inspection already generalizes and strengthens every material claim in the 10:54 predecessor. Duplicating the contract would create needless competing nomenclature.",
+    "preserved_requirement": "Carry retrieval_id + turn_id + episode_id + causal_id + generation + exact query/payload identity end-to-end from retrieval admission through noncanonical cognition result and deterministic reduction; session-newest and transcript-latest recovery are DEGRADED compatibility only.",
+    "cardinality_requirement": "If semantics are one model relevance judgement per retrieval, claim/finalization must be transactional and stable-logical-job keyed; value-dependent receipt identity alone is not sufficient exactly-once enforcement."
+  },
+  "contradictions_preserved": [
+    "Strong round identity exists and is schema-enforced upstream, while automatic Stop relevance deliberately uses the weaker session-newest discovery path.",
+    "Source topology permits a same-session misbinding scenario, but no wrong-round runtime attachment has been observed in this Triggerword-5 run.",
+    "Deterministic receipt hashing occurs only after target selection and therefore cannot repair a previously misselected retrieval row.",
+    "The schema does not expose per-retrieval model-feedback cardinality uniqueness; practical double-credit reachability remains a runtime/concurrency question rather than a source-proven occurrence."
+  ],
+  "counterhypotheses": [
+    "Installed host hook serialization may keep same-session UserPromptSubmit/Stop ordering strict enough that the source-visible misbinding path is not runtime reachable.",
+    "SQLite locking or higher-level ordering may suppress practical competing feedback even though no dedicated model-feedback cardinality constraint is visible.",
+    "Transcript-last-user and newest-open retrieval may remain aligned in normal single-flight use despite the weaker binding contract."
+  ],
+  "feeds_triggerword_4": {
+    "contract": "SameSessionRetrievalCreditBinding/v1",
+    "required_acceptance": [
+      "two same-session retrieval rounds with reverse/deferred judgement completion produce zero cross-credit",
+      "exact query/payload mutation or transplant is rejected before policy reduction",
+      "two competing judgements for one retrieval satisfy the declared one-judgement cardinality without double policy update",
+      "stale generation or mismatched retrieval/turn/episode/causal tuple fails closed",
+      "transcript-last-user fallback cannot receive exact causal-credit promotion",
+      "slow/unavailable cognition cannot prevent deterministic Stop lifecycle bookkeeping"
+    ],
+    "build_here": false
+  },
+  "ingest_state_policy": {
+    "mutable_state_updated": false,
+    "reason": "The design branch is moving under parallel Triggerword-5 organs. This append-only reconciliation is the packet-consumption checkpoint and avoids racing replacement of INGEST_STATE.json; the next serialized state-index sync should absorb this packet id and the already-consumed 10:55:32 successor."
+  },
+  "credit_boundary": {
+    "packet_ingest": "PASS_SOURCE_SCOPE",
+    "direct_source_crosscheck": "PASS_AT_EXACT_DONOR_SHA",
+    "schema_crosscheck": "PASS_AT_EXACT_DONOR_SHA",
+    "installed_runtime": 0,
+    "runtime_wrong_round_credit": 0,
+    "runtime_double_credit": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "runtime_execution": false,
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "frank_harness_modified": false,
+  "result": "PACKET_CONSUMED_CORROBORATING_PREDECESSOR_NO_DUPLICATE_ARCHITECTURE_CREATED"
+}

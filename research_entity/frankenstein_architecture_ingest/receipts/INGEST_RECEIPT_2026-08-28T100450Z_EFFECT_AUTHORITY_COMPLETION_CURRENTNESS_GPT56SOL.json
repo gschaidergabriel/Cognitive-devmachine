@@ -1,0 +1,73 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "created_at": "2026-08-28T10:04:50Z",
+  "worker": "GPT-5.6-Sol/triggerwort5/currentness-rebind-direct-source-crosscheck",
+  "trigger": "triggerwort 5",
+  "canonical_main_sha_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+  "authority_epoch": "9.13",
+  "design_sha_before_ingest": "0f1b33af8c17a23d2bf7bce491c66f907e7c9f79",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_ref": "main",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority_read_set": {
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "packets_seen_in_provenance_order": [
+    {
+      "packet_id": "TW5-PACKET-20260828T091429Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-GPT56SOL",
+      "status": "SUPERSEDED_BY_V2_RETAIN_HISTORICAL_PROVENANCE"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T091706Z-MAIN-ARCHAEOLOGY-EFFECT-AUTHORITY-BRIDGE-V2-GPT56SOL",
+      "status": "SOURCE_FINDINGS_VALID_BUT_AUTHORITY_BINDING_STALE_AFTER_MAIN_ADVANCED_TO_5a953eb"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T100450Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-COMPLETION-V3-CURRENTNESS-REBIND",
+      "status": "CURRENT_AUTHORITY_BOUND_SOURCE_CROSSCHECK_ADMITTED_AT_SOURCE_SCOPE"
+    }
+  ],
+  "source_crosscheck": {
+    "donor_stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "donor_hooks_blob_sha": "c483bc81cbae080a8175f7ce694ef657484614b5",
+    "confirmed": [
+      "ordinary EffectGate is explicitly nonblocking",
+      "active_turns.effect_id is session-scoped mutable correlation state",
+      "PostToolUse reads the current session effect_id",
+      "receipt hashes/exit status are construction semantics not observed runtime receipt credit",
+      "completion effect status check rejects only exact lowercase fehler",
+      "textual test:0 is accepted without immutable execution identity"
+    ],
+    "external_primary_support": "Claude Code hooks documentation exposes tool_use_id on PreToolUse and PostToolUse and documents same-tool-call correlation.",
+    "classification": "SOURCE_DIRECT_PLUS_EXTERNAL_PRIMARY_INTERFACE_SUPPORT",
+    "runtime_credit_delta": 0
+  },
+  "writes": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T100450Z_5641dc6_GPT56SOL_EFFECT_AUTHORITY_COMPLETION_V3_CURRENTNESS_REBIND.json",
+      "commit": "e68727792fd1e097f0582bd66872b00774a8fe37"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T100450Z_EFFECT_AUTHORITY_COMPLETION_CURRENTNESS_GPT56SOL.json",
+      "commit": "81a5c043bff54d7911b73ebf2fdcec3409a82537"
+    }
+  ],
+  "design_change_summary": [
+    "Effect authority successor must use explicit pre-side-effect decisions rather than donor bookkeeping semantics.",
+    "Effect/receipt correlation must be immutable per invocation; session_id alone is insufficient.",
+    "Completion must require typed success-only receipts and reject non-success/unknown/unbound assertions.",
+    "World-substrate cognition remains separate from effect authority and only learns from canonically verified outcomes."
+  ],
+  "contradictions_preserved": true,
+  "runtime_executed": false,
+  "provider_or_vps_executed": false,
+  "whole_product_credit_delta": 0,
+  "training_credit_delta": 0,
+  "next_exact_gate": "Build and repository-test the immutable invocation EffectDecision/receipt successor plus fail-closed completion adversarial suite; execute the overlapping same-session call falsifier only on an authorized current surface before runtime promotion."
+}

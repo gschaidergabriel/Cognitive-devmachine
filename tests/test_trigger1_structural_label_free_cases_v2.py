@@ -19,7 +19,12 @@ class StructuralCaseV2Test(unittest.TestCase):
                 (r["semantic_target"], r["output_code_identity"], r["probe_query_negated"])
                 for r in rows
             )
-            expected = {(t, c, p) for t in cases.TARGETS for c in cases.CODES for p in (False, True)}
+            expected = {
+                (target, code, polarity)
+                for target in cases.TARGETS
+                for code in cases.CODES
+                for polarity in (False, True)
+            }
             self.assertEqual(set(counts), expected)
             self.assertTrue(all(v == 1 for v in counts.values()))
 
@@ -27,15 +32,22 @@ class StructuralCaseV2Test(unittest.TestCase):
         b = cases.build_bundle()
         for split in ("calibration", "holdout"):
             rows = b[split]["cases"]
-            target_code = Counter((r["semantic_target"], r["output_code_identity"]) for r in rows)
-            target_polarity = Counter((r["semantic_target"], r["probe_query_negated"]) for r in rows)
+            target_code = Counter(
+                (r["semantic_target"], r["output_code_identity"])
+                for r in rows
+            )
+            target_polarity = Counter(
+                (r["semantic_target"], r["probe_query_negated"])
+                for r in rows
+            )
             for target in cases.TARGETS:
                 for code in cases.CODES:
                     self.assertEqual(target_code[(target, code)], 2)
                     polarities = {
                         r["probe_query_negated"]
                         for r in rows
-                        if r["semantic_target"] == target and r["output_code_identity"] == code
+                        if r["semantic_target"] == target
+                        and r["output_code_identity"] == code
                     }
                     self.assertEqual(polarities, {False, True})
                 self.assertEqual(target_polarity[(target, False)], 3)
@@ -50,24 +62,81 @@ class StructuralCaseV2Test(unittest.TestCase):
                     self.assertNotIn(word, tokens)
                 self.assertNotIn(row["semantic_target"].lower(), tokens)
 
-    def test_probe_lexical_identity_is_target_neutral_within_scenario(self):
+    def test_demo_and_probe_lexical_context_are_shared_across_polarities_and_targets(self):
         b = cases.build_bundle()
         for split in ("calibration", "holdout"):
             rows = b[split]["cases"]
             by_scenario = {}
             for row in rows:
                 by_scenario.setdefault(row["scenario_family_sha256"], []).append(row)
-            self.assertEqual(len(by_scenario), 6)
+            self.assertEqual(len(by_scenario), 3)
             for group in by_scenario.values():
-                self.assertEqual(len(group), 3)
-                self.assertEqual({r["semantic_target"] for r in group}, set(cases.TARGETS))
-                self.assertEqual({r["output_code_identity"] for r in group}, set(cases.CODES))
+                self.assertEqual(len(group), 6)
+                self.assertEqual(
+                    Counter(r["semantic_target"] for r in group),
+                    Counter({target: 2 for target in cases.TARGETS}),
+                )
+                self.assertEqual(
+                    Counter(r["probe_query_negated"] for r in group),
+                    Counter({False: 3, True: 3}),
+                )
+                self.assertEqual(len({r["demo_context_sha256"] for r in group}), 1)
                 self.assertEqual(len({r["lexical_family_sha256"] for r in group}), 1)
+                for target in cases.TARGETS:
+                    polarities = {
+                        r["probe_query_negated"]
+                        for r in group
+                        if r["semantic_target"] == target
+                    }
+                    self.assertEqual(polarities, {False, True})
 
-    def test_deterministic_bundle_hash(self):
+    def test_joint_demo_context_plus_query_polarity_has_zero_target_information(self):
+        b = cases.build_bundle()
+        for split in ("calibration", "holdout"):
+            audit = b[split]["joint_nuisance_audit"]
+            self.assertAlmostEqual(
+                audit["target_query_polarity_mutual_information_bits"],
+                0.0,
+                places=12,
+            )
+            self.assertAlmostEqual(
+                audit["target_joint_demo_context_query_polarity_mutual_information_bits"],
+                0.0,
+                places=12,
+            )
+            self.assertAlmostEqual(
+                audit["best_target_accuracy_using_demo_context_plus_query_polarity"],
+                audit["balanced_target_prior_accuracy"],
+                places=12,
+            )
+            self.assertTrue(
+                audit["every_demo_context_x_query_polarity_stratum_contains_all_targets_once"]
+            )
+
+    def test_joint_nuisance_audit_rejects_old_six_scenario_phase_coupling(self):
+        bad = []
+        for scenario in range(6):
+            for target_index, target in enumerate(cases.TARGETS):
+                bad.append(
+                    {
+                        "semantic_target": target,
+                        "demo_context_sha256": f"demo-{scenario}",
+                        "probe_query_negated": bool((scenario + target_index) % 2),
+                    }
+                )
+        with self.assertRaisesRegex(
+            AssertionError,
+            "JOINT_DEMO_QUERY_TARGET_IMBALANCE|TARGET_JOINT_DEMO_QUERY_POLARITY_MI_NONZERO",
+        ):
+            cases._joint_nuisance_audit(bad)
+
+    def test_deterministic_bundle_hash_and_nonpromotion_boundary(self):
         a = cases.build_bundle()
         b = cases.build_bundle()
         self.assertEqual(a["bundle_sha256"], b["bundle_sha256"])
+        self.assertFalse(a["model_executed"])
+        self.assertFalse(a["runtime_credit_minted"])
+        self.assertFalse(a["canonical_semantic_jspace_promotion"])
 
 
 if __name__ == "__main__":

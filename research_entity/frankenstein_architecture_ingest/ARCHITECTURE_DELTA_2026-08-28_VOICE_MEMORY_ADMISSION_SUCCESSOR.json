@@ -1,0 +1,127 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_VOICE_MEMORY_ADMISSION_SUCCESSOR_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:36:00Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "routing_self_test": {
+    "normalized_trigger": "triggerwort 5",
+    "expected_directive": "research_entity/global/TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST_DIRECTIVE.md",
+    "directive_fetch": "PASS",
+    "shared_world_directive_fetch": "PASS",
+    "result": "TRIGGERWORD_5_ACTIVE"
+  },
+  "source_pins": {
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "design_repo": "gschaidergabriel/clay-global-research-entity",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "c47bad37ba45bb60334169cd48b0122987330366",
+    "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73"
+  },
+  "coordination_reentry": {
+    "ingest_state_blob_observed": "4d13854b07ccdd3053e246abfa993eb0637d2a9d",
+    "unconsumed_schema_packets_after_final_reentry": [],
+    "note": "The 07:25 successor bridge and subsequent 07:28/07:30 predecessor/approval packets were already consumed by parallel Triggerword-5 work before this durable write. This delta therefore does not re-count them and records only a new direct-source architecture gap outside those packet claims."
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_VOICE_MEMORY_DIRECT_DURABLE_WRITE_031",
+      "source_kind": "ENFORCEMENT_CODE",
+      "sources": [
+        "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:_tool_erinnerung_schreiben/_stern/_tool_ausfuehren",
+        "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:gespraech_erinnerung_schreiben"
+      ],
+      "claim": "The Realtime function tool frank_erinnerung_schreiben accepts model-selected subject/value, dispatches in-process through realtime_gespraech._stern('gespraech-erinnerung-schreiben'), and stern.gespraech_erinnerung_schreiben inserts the values into the dedicated gespraech_erinnerung table in unified.db and commits. This path is not a Claude Code tool invocation and therefore does not traverse the donor PreToolUse -> zulassen -> PostToolUse -> merken hook journal by itself.",
+      "authority_boundary": "INTERNAL_DURABLE_STATE_MUTATION_NOT_EXTERNAL_WORLD_EFFECT",
+      "confidence": 1.0,
+      "failure_mode": "A model-generated memory payload can become durable state with only non-empty subject/value checks and coarse quelle provenance. The row itself does not bind the exact Realtime function-call id, source transcript/causal event, session generation, policy version or an epistemic assertion class.",
+      "known_counterevidence": [
+        "The actual DB writer is deterministic stern.py rather than the model directly.",
+        "The write is deliberately limited to one dedicated table and is materially lower-risk than an arbitrary filesystem/shell effect.",
+        "A dedicated memory-write capability can be valid architecture if it has typed admission/provenance and does not silently become factual truth."
+      ],
+      "target_action": "REPAIR",
+      "grid10_adaptation": "Treat Realtime memory writes as MemoryWriteCandidate objects. A deterministic MemoryAdmission boundary should validate capability, invocation identity, session/generation, source transcript or causal event, memory kind, provenance, secret fence and replay/idempotency before the single canonical writer commits durable state."
+    },
+    {
+      "atom_id": "F2_VOICE_MEMORY_RETRIEVAL_REENTRY_032",
+      "source_kind": "LIVE_CODE",
+      "sources": [
+        "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/stern.py:gespraech_erinnerung_lesen",
+        "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:_tool_erinnerung_lesen"
+      ],
+      "claim": "Realtime memory retrieval searches the model-triggered gespraech_erinnerung table together with durable_memory, so a previously written Realtime memory can re-enter later cognition. The donor schema stores subject/value/quelle/time but does not itself encode whether the content is USER_STATED, MODEL_DERIVED, OBSERVED, DECISION, PREFERENCE, HYPOTHESIS or independently verified fact.",
+      "authority_boundary": "RETRIEVAL_PRIOR_ONLY_UNLESS_INDEPENDENTLY_ADMITTED_AS_FACT",
+      "confidence": 0.99,
+      "failure_mode": "Without an epistemic type, later retrieval can present attributed conversational memory with fact-like salience even though the original payload was selected by a model function call.",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_adaptation": "Return provenance-bearing memory assertions to GRID/WorldSlice as RetrievalPrior or attributed evidence. FACT_UNKNOWN + METHOD/MEMORY_PRESENT must remain FACT_UNKNOWN until an evidence-bearing admission path promotes the claim."
+    },
+    {
+      "atom_id": "F2_VOICE_TOOL_CAPABILITY_DIFFERENTIAL_033",
+      "source_kind": "ENFORCEMENT_CODE",
+      "sources": [
+        "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:_auftrag_stellen_mit_bestaetigung",
+        "gschaidergabriel/frankenstein@5641dc6b2df6ebed1df246ee7533134324f6c427:DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:_tool_erinnerung_schreiben"
+      ],
+      "claim": "The external-action bridge frank_auftrag_stellen has a mechanical two-step confirmation gate tied to intervening real transcribed user audio and contradiction vetoes, while frank_erinnerung_schreiben has no analogous confirmation cycle. The asymmetry is not automatically a bug: it shows that the donor already distinguishes capability risk classes, but the durable-memory class lacks the exact typed admission/provenance contract required by the EntityOS successor.",
+      "confidence": 0.99,
+      "target_action": "KEEP_AND_FORMALIZE",
+      "grid10_adaptation": "Define explicit capability classes for INTERNAL_DURABLE_MEMORY, EXTERNAL_EFFECT and READ_ONLY_OBSERVATION. Confirmation policy may differ by class, but every state-changing class must bind exact invocation identity, deterministic authority and a receipt at its own scope."
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "id": "TW5-VOICE-MEMORY-CANDIDATE-018",
+      "action": "REPAIR",
+      "feeds_triggerword4": true,
+      "delta": "Replace direct model-selected durable memory insertion in Frankenstein-2.0 with MemoryWriteCandidate -> deterministic MemoryAdmission -> canonical write receipt. Bind invocation_id/tool-call id, causal transcript/event, generation, capability, policy version, memory kind, provenance, secret fence and idempotency."
+    },
+    {
+      "id": "TW5-VOICE-MEMORY-EPISTEMIC-TYPE-019",
+      "action": "ADAPT_TO_GRID",
+      "feeds_triggerword4": true,
+      "delta": "Persist and retrieve an explicit epistemic/assertion class for conversational memory. USER_STATED/MODEL_DERIVED/HYPOTHESIS/DECISION/PREFERENCE/OBSERVED/VERIFIED must not collapse into one untyped subject/value row. Retrieval remains attributed prior/evidence, not automatic world truth."
+    },
+    {
+      "id": "TW5-VOICE-CAPABILITY-CLASS-020",
+      "action": "KEEP_AND_GENERALIZE",
+      "feeds_triggerword4": true,
+      "delta": "Formalize the donor's implicit risk distinction: read-only observation, internal durable-memory mutation and external effects are different capability classes. Use one canonical authority substrate but scope admission/confirmation/effect rules by capability rather than treating every write as either harmless memory or a full external effect."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-VOICE-MEMORY-ADMISSION-008",
+      "status": "OPEN_SUCCESSOR_GAP",
+      "claim_a": "The donor intentionally permits Realtime to persist selected conversation memory through a narrowly scoped stern.py writer.",
+      "claim_b": "Current EntityOS/HCU authority requires model outputs to remain candidate/projection/measurement until deterministic typed admission; durable canonical state must preserve exact provenance and cannot silently upgrade model-selected content into fact authority.",
+      "resolution_rule": "Keep the useful dedicated memory capability, but interpose typed MemoryAdmission and retain epistemic provenance. Do not route internal memory through the external EffectGate merely by name, and do not leave it as an untyped direct commit either."
+    }
+  ],
+  "counterhypotheses": [
+    "The dedicated gespraech_erinnerung table may intentionally be treated as noncanonical conversational scratch memory. If so, Frankenstein-2.0 should state and enforce that noncanonical status explicitly and prevent it from entering canonical factual retrieval without admission.",
+    "User confirmation for every memory write would likely be excessive; the stronger successor need is typed provenance/capability admission rather than blindly copying the external-action two-step confirmation gate."
+  ],
+  "triggerword4_handoff": [
+    "Add MemoryWriteCandidate/MemoryAdmission as an internal-state boundary distinct from external EffectGate, but backed by the same canonical identity/provenance discipline.",
+    "Bind every Realtime write to exact invocation/session/generation/causal transcript identity and emit a durable receipt.",
+    "Make conversational memory epistemically typed and retrieval-attributed; a stored assertion is not a world fact merely because it survived in UnifiedDB.",
+    "Regression: model attempts to write an unbound MODEL_DERIVED claim -> canonical admission rejects or stores it as explicitly non-factual candidate memory; replay of the same invocation is idempotent; stale generation and mismatched transcript digest fail closed."
+  ],
+  "credits": {
+    "source_forensics": "PRESENT",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Audit every Realtime and Visual/Voice path that writes unified.db outside Claude Code hook execution; classify each as canonical state, journal, candidate memory or projection, then define the minimal typed MemoryAdmission ABI and bind it into the Triggerword-4 assembly tests without conflating internal memory with external effects."
+}

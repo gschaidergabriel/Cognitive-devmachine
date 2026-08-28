@@ -5,7 +5,10 @@
   "authority_epoch": "8.78",
   "canonical_product": "EntityOS",
   "canonical_compute_architecture": "HCU",
-  "evidence_scope": "SOURCE_FORENSICS_AND_PACKET_FUSION_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "evidence_scope": "SOURCE_FORENSICS_PARALLEL_DONOR_NO_NEW_RUNTIME_EXECUTION",
+  "parallel_reentry_status": "REDUNDANT_PARALLEL_DONOR_DO_NOT_DOUBLE_COUNT",
+  "canonical_ingest_winner_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+  "canonical_ingest_state_observed_after_race": "Packets were already marked consumed by the newer INGEST_STATE before this donor could update state; this file remains provenance only and is intentionally not indexed as an additional canonical architecture delta.",
   "donor": {
     "repo": "gschaidergabriel/frankenstein",
     "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427"
@@ -16,7 +19,7 @@
     "observed_head_before_write": "d7869b9ba00beb7142565387a5753d1a22f1e775",
     "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73"
   },
-  "packets_consumed": [
+  "packets_examined_during_parallel_race": [
     "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
     "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
     "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT"
@@ -25,104 +28,41 @@
     "effect_findings": "REINFORCE_EXISTING_NOT_INDEPENDENT_CREDIT",
     "existing_branch_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_EFFECT_AND_VOICE_CONDITIONING.json",
     "existing_main_handoff_commit": "4a4287d0935d4dd19d122b1027716a569d331a73",
-    "note": "Nonblocking stern admission, overloaded VERIFIED semantics and immutable per-invocation effect correlation are already represented by earlier branch/main deltas. These packets strengthen provenance but are not double-counted as independent evidence."
+    "parallel_winner_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_PRIVACY_CANCELLATION_SUCCESSOR.json",
+    "note": "The parallel winner already ingested and indexed the same packets with equal or broader coverage. No finding in this donor receives separate architecture or evidence credit."
   },
   "semantic_atoms": [
     {
-      "atom_id": "F2_PERCEPTION_DAG_TAINT_NOT_COMPUTED_023",
-      "source": {
-        "repo": "gschaidergabriel/frankenstein",
-        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
-        "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py",
-        "line_start": 420,
-        "line_end": 560,
-        "source_kind": "ENFORCEMENT_CODE"
-      },
-      "claim": "evaluate_head resolves dependencies from a central DAG, returns NOT_COMPUTED/value=None for unknown or COMPUTE_OFF heads and for taint-blocked dependencies, and does so before compute_fn executes. Caller-supplied dependency lists cannot override the DAG.",
-      "confidence": 0.99,
-      "authority": "local perception compute/egress policy enforcement only",
-      "known_counterevidence": [
-        "System-wide privacy credit remains unproven until source-wide reachability shows all live perception callers pass through evaluate_head rather than raw compute functions."
-      ],
+      "atom_id": "F2_PERCEPTION_DAG_TAINT_NOT_COMPUTED_023_DONOR",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py:420-560@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Central DAG dependency resolution plus COMPUTE_OFF/unknown/taint returns NOT_COMPUTED/value=None before compute_fn.",
       "target_action": "ADAPT_TO_GRID",
-      "world_substrate_delta": "WorldNeed/WorldSlice must carry typed KNOWN/UNKNOWN/CONFLICT/NOT_COMPUTED states. Protected COMPUTE_OFF variables and any derived dependency chain remain NOT_COMPUTED; downstream vector similarity, decomposition or model inference may not reconstruct them as a policy bypass.",
-      "acceptance_falsifier": "Disable one protected world variable, request a downstream derived variable whose operator depends on it, and prove the derived variable remains NOT_COMPUTED and the protected compute/operator is never invoked."
+      "credit": "REDUNDANT_WITH_CANONICAL_INGEST_WINNER"
     },
     {
-      "atom_id": "F2_REALTIME_PENDING_EFFECT_CANCEL_BEFORE_DISPATCH_024",
-      "source": {
-        "repo": "gschaidergabriel/frankenstein",
-        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
-        "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
-        "line_start": 1300,
-        "line_end": 1410,
-        "source_kind": "ENFORCEMENT_CODE"
-      },
-      "claim": "Realtime function calls are held in a session-local pending queue and dispatched only after response.done with status completed. Non-completed responses clear the queue; barge-in also clears pending calls before truncate/cancel, preventing an interrupted thought from dispatching its still-pending tool call.",
-      "confidence": 0.99,
-      "authority": "pending pre-dispatch voice-effect cancellation only; not canonical EffectGate and not proof about already-submitted external effects",
+      "atom_id": "F2_REALTIME_PENDING_EFFECT_CANCEL_BEFORE_DISPATCH_024_DONOR",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py:1300-1410@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "Pending Realtime function calls are discarded for non-completed responses and on barge-in before local dispatch.",
       "target_action": "KEEP_AND_ADAPT_TO_GRID",
-      "grid10_delta": "Generalize this as typed candidate/effect lifecycle: CANDIDATE -> PENDING_DISPATCH -> CANCELLED_BEFORE_DISPATCH when the parent cognitive turn is cancelled/superseded. Once an external effect may have been submitted, cancellation cannot mint NOT_EXECUTED; outcome becomes UNKNOWN until verified.",
-      "acceptance_falsifier": "Emit a pending tool candidate, cancel/supersede its parent turn before dispatch, and prove zero executor submission receipts for that invocation; separately simulate transport ambiguity after submission and prove state remains UNKNOWN rather than CANCELLED or blindly replayed."
+      "credit": "REDUNDANT_WITH_CANONICAL_INGEST_WINNER"
     },
     {
-      "atom_id": "F2_VOICE_PROJECTION_REQUIRES_CONSISTENT_GENERATION_025",
-      "source": {
-        "repo": "gschaidergabriel/frankenstein",
-        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
-        "path": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py",
-        "line_start": 250,
-        "line_end": 450,
-        "source_kind": "LIVE_CODE"
-      },
-      "claim": "VoiceSessionCapsule is rebuilt from multiple fresh sources and is intentionally an ephemeral projection, but the inspected builder does not provide one shared generation/transaction identity across presence, visual state, memory refs, permissions, privacy policy and winning intent. Missing presence is converted to user_present=True for arbitration.",
-      "confidence": 0.97,
-      "authority": "ephemeral voice projection only",
-      "known_counterevidence": [
-        "Fresh per-refresh reads reduce long-lived staleness but do not by themselves prove cross-source consistency."
-      ],
+      "atom_id": "F2_VOICE_PROJECTION_REQUIRES_CONSISTENT_GENERATION_025_DONOR",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py:250-450@5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "claim": "VoiceSessionCapsule is a multi-source ephemeral projection without one shared generation contract; missing presence is converted to user_present=True for arbitration.",
       "target_action": "REPAIR_AND_ADAPT_TO_GRID",
-      "grid10_delta": "The Voice/GRID context compiler must use a bounded consistent-read contract or explicit generation/freshness stamps across selected fields. Presence unavailable stays UNKNOWN/None and can drive WAIT/ASK/re-observe; it must not default to present=True.",
-      "acceptance_falsifier": "Force one capsule source to stale generation and another to current generation; prove the compiler marks/rejects the mixed projection rather than silently producing a high-confidence speech decision."
-    }
-  ],
-  "architecture_deltas": [
-    {
-      "id": "TW5-WORLD-TAINT-010",
-      "delta": "Port Perception Control's central DAG taint plus NOT_COMPUTED semantics into sparse WorldNeed/WorldSlice materialization and Cognitive-Twin controls.",
-      "feeds_triggerword4": true
-    },
-    {
-      "id": "TW5-PENDING-EFFECT-CANCEL-011",
-      "delta": "Add explicit pre-dispatch cancellation state bound to immutable invocation identity; cancellation of a parent cognitive turn invalidates only not-yet-submitted candidates. Submitted-but-unverified external effects remain UNKNOWN until verified.",
-      "feeds_triggerword4": true
-    },
-    {
-      "id": "TW5-VOICE-FRESHNESS-012",
-      "delta": "Compile voice context from provenance-bearing, generation/freshness-checked GRID slices; preserve UNKNOWN presence and disallow default-present fallback in Frankenstein 2.0.",
-      "feeds_triggerword4": true
-    }
-  ],
-  "contradictions": [
-    {
-      "id": "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
-      "status": "SOURCE_CONFIRMED_REPAIR_OPEN",
-      "resolution": "The donor VoiceSessionCapsule builder explicitly falls back to user_present=True when presence is unavailable. Frankenstein 2.0 must preserve UNKNOWN instead; source confirmation does not close the migration repair."
-    },
-    {
-      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
-      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
-      "resolution": "The new packets reinforce the existing conclusion that stern admission bookkeeping is nonblocking and VERIFIED overloads admission/outcome semantics. Do not grant new independent evidence credit; use the already-persisted effect contract as Triggerword-4 authority input."
+      "credit": "DONOR_DETAIL_ONLY; UNKNOWN-presence repair already exists in current frontier"
     }
   ],
   "credits": {
-    "source_forensics": "PRESENT",
-    "new_independent_runtime_reexecution": 0,
+    "source_forensics": "REDUNDANT_PROVENANCE_ONLY",
+    "new_independent_evidence": 0,
+    "new_runtime_reexecution": 0,
     "physical_grid10": 0,
     "hcu_runtime": 0,
     "whole_entityos_hcu": 0,
     "training": 0,
     "whole_product_pass": false
   },
-  "next_exact_gate": "Audit source-wide evaluate_head reachability and encode three Triggerword-4 regressions: protected WorldSlice dependency remains NOT_COMPUTED, cancelled parent turn yields zero pre-dispatch effect submissions, and mixed-generation/unknown-presence Voice context cannot become a high-confidence proactive SPEAK decision."
+  "next_exact_gate": "Follow the canonical winner/current INGEST_STATE frontier; do not use this parallel donor to create a second implementation or evidence count."
 }

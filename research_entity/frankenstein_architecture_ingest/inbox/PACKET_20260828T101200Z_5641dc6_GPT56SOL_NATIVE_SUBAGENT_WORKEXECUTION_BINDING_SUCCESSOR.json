@@ -1,0 +1,246 @@
+{
+  "schema_version": 2,
+  "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+  "created_at": "2026-08-28T10:12:00Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/native-subagent-workexecution-binding-successor",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "scope": "Nonduplicate successor to TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL. Re-crosschecks the pinned donor handoff/config/spec boundary and sharpens the candidate WorkExecutionBinding by separating durable workpackage identity, native subagent agent_id, task-system task_id and tool invocation tool_use_id. Current official Claude Code documentation is EXTERNAL_PRIMARY capability evidence only; installed-host runtime firing and Agent tool_response correlation remain unobserved. No runtime/provider/VPS execution credit is claimed.",
+  "authority_classification": "CURRENT_AUTHORITY_BOUND",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_sha": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_path": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "files_examined": [
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "sha_or_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "spans_examined": [{"line_start": 5580, "line_end": 5845}]
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "sha_or_blob": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "spans_examined": [{"line_start": 1, "line_end": 81}]
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "sha_or_blob": "b578cc8651c50db1ef98c3d5c74f95f81ba24db9",
+      "spans_examined": [{"line_start": 1, "line_end": 7}]
+    },
+    {
+      "path": "ExternalPrimary:ClaudeCodeDocs/sub-agents",
+      "sha_or_blob": "WEB_PRIMARY_SNAPSHOT_2026-08-28",
+      "spans_examined": [{"line_start": 415, "line_end": 430}]
+    },
+    {
+      "path": "ExternalPrimary:ClaudeCodeDocs/hooks",
+      "sha_or_blob": "WEB_PRIMARY_SNAPSHOT_2026-08-28",
+      "spans_examined": [
+        {"line_start": 1753, "line_end": 1817},
+        {"line_start": 2048, "line_end": 2109},
+        {"line_start": 2114, "line_end": 2208}
+      ]
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T082628Z_NATIVE_SUBAGENT_IDENTITY_GAP_GPT56SOL.json",
+      "sha_or_blob": "bad15660b245dfc33139736cd9857064c82812ef",
+      "spans_examined": [{"line_start": 1, "line_end": 1}]
+    }
+  ],
+  "atoms": [
+    {
+      "atom_id": "TW5-WORKEXEC-SUCC-001-DURABLE-HANDOFF-NOT-EXECUTION",
+      "subsystem": "delegation_workpackage",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 5580,
+      "line_end": 5845,
+      "source_kind": "LIVE_CODE",
+      "what_it_does": "handoff() durably creates entityos_arbeitspaket plus a deterministic capsule and explicitly does not spawn/delegate a child itself.",
+      "why_it_exists": "Provide durable delegated-work intent and compact transition context without embedding a second execution runtime in stern.py.",
+      "inputs": ["session_id", "auftrag", "womit", "warum", "optional thema"],
+      "outputs": ["paket_id", "handoff capsule", "advisory collision/lease hints"],
+      "reads": ["UnifiedDB workpackage/memory/session state"],
+      "writes": ["entityos_arbeitspaket", "handoff-related durable state"],
+      "dependencies": ["external coordinator/native spawn path"],
+      "authority_class": "CURRENT_DONOR_SOURCE_NOT_CHILD_EXECUTION_PROOF",
+      "failure_mode": "paket_id can exist with no observed native child identity or child execution.",
+      "concurrency_implication": "session-level or advisory-lease attribution cannot uniquely identify parallel children.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": null,
+      "state_lifetime": "durable",
+      "runtime_reachable": true,
+      "runtime_entrypoints": ["stern.py handoff"],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["A coordinator outside this function may perform the actual spawn, but that path is not bound here."],
+      "confidence": 0.99,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "open_questions": ["What exact installed runtime event deterministically joins paket_id to a native child invocation?"]
+    },
+    {
+      "atom_id": "TW5-WORKEXEC-SUCC-002-SPEC-EXPECTS-SPAWN-AFTER-HANDOFF",
+      "subsystem": "architect_delegation_spec",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/daten/architekt_governance.md",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 1,
+      "line_end": 7,
+      "source_kind": "SPEC",
+      "what_it_does": "The architect-governance specification requires stern.py handoff before spawning and stern.py reconcile afterwards, while describing the architect as an agent spawned only after approval.",
+      "why_it_exists": "Separate durable work delegation bookkeeping from the spawned specialist lifecycle.",
+      "inputs": ["approved architect/delegated work"],
+      "outputs": ["expected handoff -> spawn -> reconcile sequence"],
+      "reads": ["handoff/reconcile contract"],
+      "writes": [],
+      "dependencies": ["an actual native spawn mechanism outside handoff()"],
+      "authority_class": "CURRENT_DONOR_SPEC_NOT_LIVE_SPAWN_IMPLEMENTATION",
+      "failure_mode": "The documented sequence can be followed narratively without a machine-readable binding proving which child executed which workpackage.",
+      "concurrency_implication": "Parallel spawns require unique child and invocation identities to avoid package/result cross-wiring.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": null,
+      "state_lifetime": "specification",
+      "runtime_reachable": null,
+      "runtime_entrypoints": [],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["No direct spawn operation was observed in the inspected stern.py handoff implementation."],
+      "confidence": 0.98,
+      "target_2_0_action": "REPAIR",
+      "open_questions": ["Which coordinator action instantiates the documented spawn step on the target host?"]
+    },
+    {
+      "atom_id": "TW5-WORKEXEC-SUCC-003-CONFIG-DOES-NOT-CAPTURE-CHILD-LIFECYCLE",
+      "subsystem": "hook_lifecycle_identity",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+      "line_start": 1,
+      "line_end": 81,
+      "source_kind": "CONFIG",
+      "what_it_does": "The pinned donor registers SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SessionEnd and PreCompact only; dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted hooks are absent.",
+      "why_it_exists": "Current donor consolidates seven events through one stern.py dispatcher.",
+      "inputs": ["configured hook events"],
+      "outputs": ["stern.py hook calls"],
+      "reads": [],
+      "writes": [],
+      "dependencies": ["loaded Claude Code plugin configuration"],
+      "authority_class": "CURRENT_DONOR_CONFIG_NOT_HOST_LOAD_PROOF",
+      "failure_mode": "The versioned plugin cannot itself prove native child start/stop or task lifecycle identity.",
+      "concurrency_implication": "Child attribution can collapse if only parent/session events are persisted.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": null,
+      "state_lifetime": "plugin config generation",
+      "runtime_reachable": null,
+      "runtime_entrypoints": [],
+      "tests_or_receipts": [],
+      "known_counterevidence": ["Host/global settings might register additional lifecycle hooks; this source packet does not observe host-private configuration."],
+      "confidence": 0.99,
+      "target_2_0_action": "REPAIR",
+      "open_questions": ["Does the installed target host register child lifecycle hooks elsewhere?"]
+    },
+    {
+      "atom_id": "TW5-WORKEXEC-SUCC-004-AGENT-ID-AND-TASK-ID-ARE-DISTINCT-DOCUMENTED-IDENTITY-SPACES",
+      "subsystem": "native_claude_subagent_task_abi",
+      "path": "ExternalPrimary:ClaudeCodeDocs/hooks+sub-agents",
+      "commit_sha": "EXTERNAL-PRIMARY-2026-08-28",
+      "line_start": 2048,
+      "line_end": 2208,
+      "source_kind": "SPEC",
+      "what_it_does": "Current official docs describe Agent as the native subagent spawn tool; SubagentStart/SubagentStop expose a unique agent_id, while TaskCreated/TaskCompleted expose a separate task_id belonging to the task system. The docs do not define task_id as an alias of agent_id.",
+      "why_it_exists": "Expose distinct native execution-child and task-management lifecycles.",
+      "inputs": ["Agent spawn", "task-system operations"],
+      "outputs": ["agent_id lifecycle", "task_id lifecycle"],
+      "reads": [],
+      "writes": [],
+      "dependencies": ["installed Claude Code build/config exposing these documented events"],
+      "authority_class": "EXTERNAL_PRIMARY_CAPABILITY_NOT_INSTALLED_RUNTIME_EVIDENCE",
+      "failure_mode": "Conflating task_id and agent_id creates false causal closure and can misattribute work/results under concurrency.",
+      "concurrency_implication": "WorkExecutionBinding must model agent_id and task_id separately and allow task_id to remain absent/UNKNOWN for ordinary subagent execution.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": null,
+      "state_lifetime": "runtime/version dependent",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["documented Agent/SubagentStart/SubagentStop/Task lifecycle"],
+      "tests_or_receipts": ["official Claude Code docs snapshot reviewed 2026-08-28"],
+      "known_counterevidence": ["Installed target build and actual emitted payloads remain unobserved."],
+      "confidence": 0.99,
+      "target_2_0_action": "ADAPT_TO_GRID",
+      "open_questions": ["Does the target host emit task hooks for the intended delegation path or only subagent hooks?"]
+    },
+    {
+      "atom_id": "TW5-WORKEXEC-SUCC-005-TOOL-USE-TO-AGENT-JOIN-REMAINS-UNPROVEN",
+      "subsystem": "native_spawn_causal_join",
+      "path": "ExternalPrimary:ClaudeCodeDocs/hooks",
+      "commit_sha": "EXTERNAL-PRIMARY-2026-08-28",
+      "line_start": 1753,
+      "line_end": 1817,
+      "source_kind": "SPEC",
+      "what_it_does": "Current official docs state that PostToolUse receives tool_input, tool_response and tool_use_id, but the exact tool_input/tool_response schema depends on the tool. SubagentStart documents agent_id but does not document tool_use_id in that lifecycle payload.",
+      "why_it_exists": "Tool hooks and subagent lifecycle hooks expose different event-local evidence surfaces.",
+      "inputs": ["successful tool execution", "subagent lifecycle event"],
+      "outputs": ["tool_use_id on tool event", "agent_id on subagent lifecycle event"],
+      "reads": [],
+      "writes": [],
+      "dependencies": ["Agent-specific tool_response shape on installed build or another deterministic join"],
+      "authority_class": "EXTERNAL_PRIMARY_OPEN_JOIN_NOT_RUNTIME_PROOF",
+      "failure_mode": "Inventing a direct tool_use_id -> agent_id relationship without observing a stable shared key or Agent tool_response field creates a synthetic provenance edge.",
+      "concurrency_implication": "Two concurrent Agent calls cannot safely be joined to SubagentStart events by timing/order alone.",
+      "privacy_implication": null,
+      "latency_or_cost_implication": null,
+      "state_lifetime": "event-local",
+      "runtime_reachable": null,
+      "runtime_entrypoints": ["documented Pre/PostToolUse and SubagentStart/Stop hooks"],
+      "tests_or_receipts": ["official Claude Code docs snapshot reviewed 2026-08-28"],
+      "known_counterevidence": ["The installed Agent tool_response may contain a child identifier, but that Agent-specific response schema was not established by the reviewed documentation."],
+      "confidence": 0.98,
+      "target_2_0_action": "RESEARCH",
+      "open_questions": ["What exact Agent PostToolUse tool_response is emitted on the installed target build?", "Is there a documented or observed parent_tool_use_id/shared invocation key inside the child transcript or lifecycle event?"]
+    }
+  ],
+  "hypotheses": [
+    "A safe WorkExecutionBinding/v1 can close the durable-workpackage/native-child gap without building a second spawn runtime if it preserves distinct identity domains and admits only observed joins.",
+    "The cheapest high-information discriminator is a bounded installed-runtime capture of one Agent tool invocation plus SubagentStart/SubagentStop and PostToolUse, recording the exact payload fields without production effects."
+  ],
+  "counterhypotheses": [
+    "The installed runtime may not expose the documented lifecycle hooks or may expose a materially different Agent tool_response, so the proposed binding could require a headless wrapper or transcript-derived join.",
+    "The host may already have an unversioned binding mechanism outside the donor plugin, making this a repository-visibility gap rather than an implementation gap.",
+    "Task-system task_id may be unnecessary for ordinary delegated subagents; forcing it into the required key would reduce compatibility and create false UNKNOWN failures."
+  ],
+  "contradictions": [
+    "Donor SPEC expects handoff -> spawn -> reconcile, but LIVE_CODE handoff explicitly does not spawn and CONFIG does not capture dedicated child lifecycle; preserve this as an unresolved executable binding boundary.",
+    "The previous native-subagent packet grouped package_id + agent_id + task_id + generation + tool_use_id as a desired successor set; current primary documentation shows agent_id and task_id are different lifecycle namespaces, so task_id must be optional/independent rather than assumed synonymous.",
+    "Official docs provide capability evidence for lifecycle fields, but no installed-host payload has been observed, so no runtime credit or exact tool_use_id -> agent_id join is admitted."
+  ],
+  "critical_unknowns": [
+    "Exact installed Claude Code version/build and enabled lifecycle hooks on the target host.",
+    "Actual Agent PostToolUse tool_response schema on that installed build.",
+    "A deterministic shared key, if any, joining Agent tool_use_id to SubagentStart agent_id without timestamp/order heuristics.",
+    "Whether TaskCreated/TaskCompleted participates in the target ordinary subagent path at all.",
+    "Whether host/private settings already capture child lifecycle outside the donor plugin.",
+    "How resume/replacement/retry preserves or supersedes package-to-child bindings across generations."
+  ],
+  "recommended_next_spans": [
+    {
+      "path": "installed host: one harmless Agent invocation with PreToolUse/PostToolUse + SubagentStart/SubagentStop capture",
+      "reason": "Falsify or prove the exact join keys and Agent tool_response shape before implementing WorkExecutionBinding.",
+      "priority": "P0"
+    },
+    {
+      "path": "WorkExecutionBinding/v1 source schema and reducer",
+      "reason": "Implement distinct package/agent/task/tool identity fields with UNKNOWN-preserving state transitions only after the installed ABI is pinned.",
+      "priority": "P0"
+    },
+    {
+      "path": "concurrent two-child disjoint scratch replay",
+      "reason": "Prove the join cannot cross-wire two Agent invocations under concurrency; never use event ordering as identity.",
+      "priority": "P1"
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T11:00:25Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/retrieval-identity-schema-ingest",
+  "trigger": "triggerwort 5",
+  "delta_class": "RETRIEVAL_JUDGEMENT_IDENTITY_AND_FEEDBACK_CARDINALITY_BINDING",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "design_branch_observed_before_write": "chatgpt/grid10-cognitive-envelope-control-20260828@0f82da4b293cbd7323b6040ec8f7faea3205ab79",
+  "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AC_DELTA_2026-08-28T1747P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "provider_execution": false,
+    "vps_execution": false
+  },
+  "packet_provenance": {
+    "packet_id": "TW5-PACKET-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL",
+    "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105532Z_5641dc6_GPT56SOL_RETRIEVAL_IDENTITY_BINDING.json",
+    "packet_blob_sha": "bd9949e7f4e366d18c1fbefe154668883ab8802a",
+    "disposition": "CONSUMED_AFTER_DIRECT_SOURCE_AND_SCHEMA_CROSSCHECK"
+  },
+  "semantic_atoms": [
+    {
+      "class": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:4261-4280",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "retrieval episode creation persists retrieval_id, turn_id, episode_id, causal_id, session_id, generation and query_hash together before later credit reduction"
+    },
+    {
+      "class": "ENFORCEMENT_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:4995-5021",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "model relevance Stop path chooses the newest same-session unjudged retrieval by session_id plus ORDER BY ts DESC LIMIT 1 instead of an exact retrieval/turn/episode/causal identity"
+    },
+    {
+      "class": "LIVE_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:4940-4970",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "the model relevance query text is reconstructed as the latest user transcript message rather than loaded through an exact join to the selected retrieval episode"
+    },
+    {
+      "class": "ENFORCEMENT_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:4388-4430",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "credit receipt identity includes retrieval_id, causal_id, generation, signal_class and credit value; deduplication is receipt-id based and policy state is updated before feedback insertion"
+    },
+    {
+      "class": "SCHEMA",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/daten/schema_leer.sql",
+      "blob_sha": "12ad7f4511d365b327cdbee34f5471829198c203",
+      "finding": "retrieval_episodes enforces retrieval_id PRIMARY KEY and turn_id, episode_id and causal_id individually UNIQUE, so the exact causal identity needed by a future work item already has schema-level support"
+    },
+    {
+      "class": "SCHEMA",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/daten/schema_leer.sql",
+      "blob_sha": "12ad7f4511d365b327cdbee34f5471829198c203",
+      "finding": "retrieval_feedback has receipt_id PRIMARY KEY and a retrieval_id foreign key but no schema-visible UNIQUE(retrieval_id, signal_class); the schema also contains idx_retrieval_session_ts, matching the current newest-session access pattern"
+    },
+    {
+      "class": "ENFORCEMENT_CODE",
+      "source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py:4530-4560",
+      "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "the donor already contains a stronger exact-id precedent: human relevance feedback explicitly selects retrieval_episodes WHERE retrieval_id=? before calling the same deterministic credit reducer"
+    }
+  ],
+  "direct_crosscheck_result": {
+    "packet_core_claims": "CONFIRMED_AT_EXACT_DONOR_SHA",
+    "schema_identity_strength": "CONFIRMED",
+    "feedback_cardinality_gap": "SOURCE_VISIBLE",
+    "runtime_wrong_round_credit": "NOT_OBSERVED",
+    "runtime_double_model_credit": "NOT_OBSERVED"
+  },
+  "architecture_effect": {
+    "mechanism": "SameSessionRetrievalCreditBinding/v1",
+    "work_item": "RetrievalJudgementWorkItem/v1",
+    "rule": "Model-derived retrieval relevance must be admitted against one immutable retrieval work item keyed by retrieval_id + turn_id + episode_id + causal_id + generation and a query identity/reference. Session-newest selection and transcript-latest reconstruction are compatibility fallbacks only and cannot establish canonical causal binding.",
+    "reuse": [
+      "existing retrieval_id/turn_id/episode_id/causal_id/generation identity tuple",
+      "existing schema uniqueness on retrieval_id, turn_id, episode_id and causal_id",
+      "existing retrieval_id-exact human-feedback lookup as a donor pattern",
+      "existing deterministic credit receipt/reducer concept after exact target admission"
+    ],
+    "adapt": [
+      "create RetrievalJudgementWorkItem/v1 at retrieval admission with immutable identity tuple, query_hash or payload reference, candidate identity set and generation",
+      "bind GRID/local cognition request and returned candidate measurement to the same work_item_id and full tuple",
+      "reject stale generation, mismatched query identity, mismatched candidate set, mismatched retrieval tuple and already-finalized model-judgement claim fail-closed before policy reduction",
+      "make model-feedback cardinality explicit instead of relying only on receipt-id deduplication; if semantics are one model relevance judgement per retrieval, enforce that invariant transactionally or through an equivalent deterministic claim ledger",
+      "keep transcript-last-user recovery explicitly DEGRADED and ineligible for exact causal-credit promotion"
+    ],
+    "retire_as_canonical": [
+      "session_id + ORDER BY ts DESC LIMIT 1 retrieval target selection for model relevance",
+      "latest transcript user message as implicit query/retrieval join",
+      "receipt-id idempotency as a substitute for pre-cognition target identity and feedback-cardinality admission"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID"
+  },
+  "contradictions_preserved": [
+    "The donor already stores and schema-enforces strong per-retrieval causal identities, yet the Stop model-judge path discards those stronger keys during target selection and falls back to session plus recency.",
+    "The donor has an exact retrieval_id lookup for explicit human judgement, showing exact target binding is already a working local pattern, while automatic model relevance uses the weaker newest-session path.",
+    "Receipt hashing is deterministic after row selection, but the credit value participates in the hash and retrieval_feedback lacks a visible UNIQUE(retrieval_id, signal_class); therefore two different model judgements for the same retrieval are not proven impossible by schema or receipt identity alone. Runtime reachability remains unmeasured."
+  ],
+  "counterhypotheses": [
+    "Host hook serialization may make concurrent same-session Stop selection unreachable in the installed runtime.",
+    "SQLite write locking or higher-level host ordering may suppress practical double-credit even though no dedicated per-retrieval model-judgement uniqueness constraint is visible.",
+    "A single retrieval per user turn plus strictly ordered Stop delivery may keep transcript-latest and newest retrieval aligned in normal operation."
+  ],
+  "feeds_triggerword_4": {
+    "contract": "SameSessionRetrievalCreditBinding/v1",
+    "required_actions": [
+      "implement an immutable RetrievalJudgementWorkItem keyed by retrieval_id + turn_id + episode_id + causal_id + generation + query identity",
+      "make model-judgement claim/admission transactional and cardinality-explicit before invoking or reducing cognition output",
+      "return model relevance only as noncanonical candidate/measurement evidence bound to the same work item",
+      "reduce only onto the exact retrieval row after full identity and generation match",
+      "test two retrieval episodes in one session with reversed/deferred completion and prove each credit lands on its originating retrieval",
+      "test two competing model-judgement completions for one retrieval and prove the declared cardinality invariant is enforced without double policy update",
+      "test transcript-last-user mismatch and prove degraded fallback cannot receive exact causal-credit promotion"
+    ],
+    "do_not_build_in_trigger5": true
+  },
+  "credit_boundary": {
+    "donor_source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "packet_ingest": "PASS_SOURCE_AND_SCHEMA_SCOPE",
+    "installed_runtime": 0,
+    "concurrency_acceptance": 0,
+    "same_session_binding_acceptance": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Triggerword 4: implement SameSessionRetrievalCreditBinding/v1 and run deterministic local tests for reversed same-session completion, competing same-retrieval model judgements, and transcript/query mismatch; only exact work-item-bound reduction may update retrieval policy. No runtime credit from this Triggerword-5 source ingest.",
+  "provider_execution": false,
+  "unusual_experiment": false,
+  "feeds_triggerword_4_boolean": true
+}

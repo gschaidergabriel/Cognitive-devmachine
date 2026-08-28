@@ -1,0 +1,53 @@
+{
+  "schema": "TRIGGERWORD5_REENTRY_AUTHORITY_BINDING/v1",
+  "created_at": "2026-08-28T10:51:00Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "canonical_main_reentered": "b3f236d4c5169169d3e63d455145ba310e14474d",
+  "design_branch_head_before_receipt": "65b62d3e93f16213b3d010c57f6828529070cd37",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "supervisor": {
+    "epoch": "9.13",
+    "delta": "9.13AC_NON_AUTHORITY",
+    "inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "steering_path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AC_DELTA_2026-08-28T1747P0700_GPT56SOL.json",
+    "steering_blob_sha": "bc67f57771a9a9c5ac96d9cd135927047066bc20",
+    "authority_change": false,
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "free_swarm_owner_emergency_stop": true
+  },
+  "reentered_artifacts": [
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1040Z_WORKEXECUTION_BINDING_V2_ABI_RECONCILIATION_GPT56SOL.json",
+      "commit": "a29aea21ac1f111b65a5e28b25c6b43a4284d6a6",
+      "status": "RETAINED_NO_AUTHORITY_CONFLICT"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+      "commit": "efc62c7453d99ea77d8cc8a88d00863042d96e22",
+      "status": "RETAINED_AND_DIRECTLY_CORROBORATED_BY_SUPERVISOR_9_13AC"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+      "commit": "101a76c7e3c3f30c6f9b25d1573065ad236aae30",
+      "status": "SOURCE_SCOPE_ONLY_RUNTIME_CREDIT_ZERO"
+    }
+  ],
+  "supervisor_alignment": {
+    "stop_hook_contradiction": "MATCH",
+    "latency_ordering_discriminator": "MATCH; supervisor requires cognition-disabled, warm local, slow/cold local and unreachable local model conditions with exact source/build/runtime identity",
+    "retrieval_identity_discriminator": "MATCH; supervisor requires two same-session distinct retrieval/turn IDs under reordered/interleaved Stop processing",
+    "frank_harness": "DO_NOT_MODIFY",
+    "runtime_credit": 0,
+    "training_credit": 0
+  },
+  "inbox_reentry": {
+    "new_packets_after_2026-08-28T10:48:00Z": 0,
+    "status": "QUIESCENT_AT_CHECK"
+  },
+  "result": "REENTRY_PASS_CURRENT_AUTHORITY_BOUND_NO_RUNTIME_PROMOTION",
+  "next_exact_gate": "Triggerword-4/external test lane under current non-provider authority: preserve Frank Harness; build exact retrieval/turn identity binding and execute source/build-bound Stop timing+ordering conditions plus two-retrieval interleaving before any runtime credit."
+}

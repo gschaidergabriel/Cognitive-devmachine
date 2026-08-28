@@ -1,0 +1,52 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-RECEIPT-20260828T1039Z-WORKEXECUTION-TYPED-HOOK-CAPTURE-GAP-GPT56SOL",
+  "created_at": "2026-08-28T10:39:00Z",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "authority_mode": "FREE_ONLY_HARD_OFF_PROVIDER_ROUTES",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "parallel_ingest_reentered_at": "b5d76052311aff1e4eea3b302a7b830d42e405e6",
+  "parallel_predecessor": {
+    "delta": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_BINDING_SUCCESSOR_CORRECTION_2026-08-28T1031Z_GPT56SOL.json",
+    "relation": "RETAINED_AND_EXTENDED_NON-DUPLICATIVELY",
+    "incoming_packet_disposition": "QUARANTINED_UNCONSUMED_PARTIAL_SALVAGE_ONLY"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_TYPED_HOOK_CAPTURE_GAP_2026-08-28T1038Z_GPT56SOL.json",
+    "commit": "27778323f54fed741c698dface465f97c1f231a8"
+  },
+  "source_findings": [
+    "Pinned donor stern.py contains no explicit tool_use_id or agent_id field reader/writer.",
+    "zulassen() reads session_id/tool_name/tool_input and correlates through one session-scoped active_turns.effect_id.",
+    "merken() reads session_id/tool_name/tool_input/tool_response and stores only a shortened/redacted opaque tool_response representation in durable_memory; it does not typed-extract Agent tool_response.agentId.",
+    "Agent is absent from ZUSTANDSAENDERND and from GW_WERKZEUG_NAMEN, which still contains historical Task.",
+    "Current official Claude Code docs document Agent PostToolUse.tool_response.agentId and the Task->Agent rename, so the missing bridge is now a donor typed-capture gap rather than a platform-spec unknown."
+  ],
+  "semantic_result": "NEW_NONRUNTIME_ARCHITECTURE_DELTA_TYPED_HOOK_IDENTITY_CAPTURE_REQUIRED",
+  "packet_state": {
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "consumed": false,
+    "reason": "Existing parallel correction quarantined the packet for schema/provenance/current-doc defects; this receipt does not override that disposition."
+  },
+  "ingest_state_update": {
+    "modified": false,
+    "reason": "Do not mark a quarantined packet consumed. The durable predecessor quarantine receipt plus this additive source-forensics receipt preserve the checkpoint without mutating consumption state."
+  },
+  "runtime_boundary": {
+    "provider_execution": false,
+    "vps_execution": false,
+    "installed_host_agent_invocation": false,
+    "unusual_experiment": false,
+    "runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Triggerword-4: add a version-gated typed hook identity capture/reducer for tool_use_id and agentId/agent_id with UNKNOWN-preserving distinct identity domains, then run synthetic non-provider regressions. Do not claim or attempt provider-backed Agent runtime capture while current 9.13 provider routes remain HARD_OFF.",
+  "result": "PASS_SOURCE_FORENSICS_AND_DURABLE_NON-DUPLICATE_DELTA"
+}

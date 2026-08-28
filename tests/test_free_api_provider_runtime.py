@@ -430,6 +430,33 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(os.waitstatus_to_exitcode(status), 0)
         self.assertNotEqual(parent_principal_id, child_principal_id)
 
+    @unittest.skipUnless(hasattr(os, "fork"), "requires POSIX fork")
+    def test_execution_lock_is_reinitialized_after_fork(self):
+        read_fd, write_fd = os.pipe()
+        MOD.PROCESS_EXECUTION_LOCK.acquire()
+        try:
+            pid = os.fork()
+            if pid == 0:
+                try:
+                    os.close(read_fd)
+                    acquired = MOD.PROCESS_EXECUTION_LOCK.acquire(timeout=0.1)
+                    if acquired:
+                        MOD.PROCESS_EXECUTION_LOCK.release()
+                    os.write(write_fd, b"1" if acquired else b"0")
+                finally:
+                    os._exit(0)
+        finally:
+            MOD.PROCESS_EXECUTION_LOCK.release()
+
+        os.close(write_fd)
+        try:
+            child_acquired = os.read(read_fd, 1)
+        finally:
+            os.close(read_fd)
+        _, status = os.waitpid(pid, 0)
+        self.assertEqual(os.waitstatus_to_exitcode(status), 0)
+        self.assertEqual(child_acquired, b"1")
+
     def test_execution_receipt_pins_unicode_database_version(self):
         class Response:
             status = 200

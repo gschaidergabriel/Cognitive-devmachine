@@ -1,0 +1,116 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_CVEC_CARRIER_DECOMPOSITION/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "scope": "QWEN3_0_6B_NATIVE_CVEC_BROADCAST_VS_POSITION_LOCAL_CAUSAL_CARRIER_DECOMPOSITION",
+  "observed_current_evidence": {
+    "native_cvec_component_runtime_credit": 1,
+    "structural_label_free_native_runtime_credit": 0,
+    "canonical_semantics_promotion": false,
+    "jspace_model_runtime_credit": 0,
+    "queued_structural_run": 32810213066,
+    "queued_job_runner_id": 0,
+    "queued_job_labels": ["self-hosted", "Linux", "X64"],
+    "transport_classification": "RUNNER_LIVENESS_OR_CAPACITY_BLOCKED"
+  },
+  "source_mechanism_finding": {
+    "llama_cpp_native_cvec": "llama_adapter_cvec::apply_to obtains one layer direction and applies ggml_add(cur, layer_dir)",
+    "existing_clay_harness": "tools/trigger1_native_llamacpp_cvec_logits.cpp activates llama_set_adapter_cvec before decoding the entire prompt batch",
+    "consequence": "The native intervention is broader than the earlier last-token witness; causal identity must not be asserted from similar output effects.",
+    "claim_correction": "Replace CAUSALLY_IDENTICAL with the weaker falsifiable target CARRIER_ROBUST_ACROSS_BROADCAST_AND_LAST_TOKEN_LOCAL_INTERVENTIONS if paired evidence supports it."
+  },
+  "parallel_run2_fusion": {
+    "finding": "The current 9-case structural label-free generator has query-polarity coverage but not exact factorial orthogonality; target_index+scenario drives both code rotation mod 3 and negation mod 2, and output code C is always unnegated.",
+    "source_receipt": "research_entity/global/j-space/research/2026-08-25_FORSCHUNGSRUN_2_POLARITY_FACTORIAL_CORRECTION_GPT56SOL.json",
+    "required_predecessor_fix": "SEMANTIC_TARGET_3 x OUTPUT_CODE_3 x QUERY_POLARITY_2 = 18 cells per split before stronger semantic promotion.",
+    "duplication_policy": "Fuse this finding; do not create a competing polarity-audit lane."
+  },
+  "new_discriminator": {
+    "name": "NATIVE_CVEC_POSITION_CARRIER_DECOMPOSITION_GATE",
+    "modes": [
+      "BASELINE_FULL",
+      "BASELINE_SPLIT",
+      "BROADCAST_FULL",
+      "BROADCAST_SPLIT",
+      "LAST_TOKEN_ONLY_SPLIT",
+      "PREFIX_ONLY_SPLIT"
+    ],
+    "why_two_baselines": "Splitting prompt decode into prefix then final token can itself change floating-point/logit behavior. BASELINE_FULL vs BASELINE_SPLIT measures that scheduling drift instead of misclassifying it as a cvec effect.",
+    "why_two_broadcasts": "BROADCAST_FULL vs BROADCAST_SPLIT measures cvec plus batch-schedule sensitivity while preserving the same all-token intervention semantics.",
+    "last_token_only_semantics": "Decode prefix with cvec disabled, synchronize, then enable cvec and decode the final prompt token alone.",
+    "prefix_only_semantics": "Enable cvec for prefix, decode and synchronize, clear cvec, then decode final prompt token baseline. This isolates persistent prefix/KV-mediated influence.",
+    "paired_metrics": [
+      "batch_baseline_drift = BASELINE_SPLIT - BASELINE_FULL",
+      "batch_broadcast_drift = BROADCAST_SPLIT - BROADCAST_FULL",
+      "delta_broadcast_split = BROADCAST_SPLIT - BASELINE_SPLIT",
+      "delta_last = LAST_TOKEN_ONLY_SPLIT - BASELINE_SPLIT",
+      "delta_prefix = PREFIX_ONLY_SPLIT - BASELINE_SPLIT",
+      "nonadditive_interaction = delta_broadcast_split - delta_last - delta_prefix"
+    ],
+    "promotion_language": "Even perfect agreement does not prove the interventions are causally identical. It can support carrier robustness of the measured target-specific effect under two intervention scopes."
+  },
+  "implementation_delta": {
+    "new_native_harness": {
+      "path": "tools/trigger1_native_llamacpp_cvec_carrier_modes.cpp",
+      "sha256": "80f01eb20f49284560783f300c57d54dfa4b5237fcba94db17c15d81284354f1",
+      "status": "SOURCE_READY_NOT_MODEL_EXECUTED"
+    },
+    "new_evaluator": {
+      "path": "tools/trigger1_cvec_carrier_decomposition.py",
+      "sha256": "d789b8c100e2e86987699eaad5179be48d1810b2f09839a182260e1a0b784f14",
+      "status": "STATIC_UNIT_TESTED"
+    },
+    "new_tests": {
+      "path": "tests/test_trigger1_cvec_carrier_decomposition.py",
+      "sha256": "831be0b03b0ce51da5870215d5d43b168139aa9a1163de69e9a74dbaf5e7c3e5",
+      "observed": "4/4 PASS"
+    },
+    "cpp_validation": "C++17 -Wall -Wextra -Werror syntax check PASS against minimal API stubs matching the used llama.cpp signatures; this is not an exact llama.cpp build or runtime pass."
+  },
+  "external_primary_inputs": [
+    {
+      "source": "ggml-org/llama.cpp src/llama-adapter.cpp",
+      "use": "Native control-vector layer direction is added to the current layer tensor, motivating explicit token-position carrier decomposition."
+    },
+    {
+      "source": "ggml-org/llama.cpp include/llama.h and src/llama-batch.cpp",
+      "use": "Positions are automatically tracked when batch.pos is null, supporting prefix-then-last decode while preserving sequence positions."
+    },
+    {
+      "source": "Braun et al., Understanding (Un)Reliability of Steering Vectors in Language Models, arXiv:2505.22637",
+      "use": "Prompt-dependent steering and direction-coherence variability motivate treating carrier/prompt geometry as an empirical factor rather than assuming invariance."
+    }
+  ],
+  "sequencing": [
+    "Do not alter or redispatch queued run 32810213066 merely to add this carrier test.",
+    "Preserve queued run outcome as bounded evidence at its frozen design; current polarity confound prevents it from closing semantic promotion by itself.",
+    "Before a new promotion-grade semantic run, construct exact 3 x 3 x 2 target-code-polarity factorial cases and extend the polarity nuisance fence.",
+    "Run the carrier-decomposition modes on the corrected factorial cases under exact same Qwen3-0.6B Q8_0, llama.cpp commit, layer and vector identities.",
+    "Require carrier-robust target-specific effects only after batch-schedule drift is explicitly measured; never relabel robustness as causal identity."
+  ],
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "new_dispatch_created": false,
+    "reason": "Existing structural self-hosted run is queued and current authority says not to spawn duplicates; no canonical shared unusual-experiment lease for a new intervention is exposed."
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_runtime_credit": 1,
+    "structural_label_free_native_runtime_credit": 0,
+    "carrier_robustness_runtime_credit": 0,
+    "canonical_semantics_promotion": false,
+    "jspace_model_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "research_delta": "Adds a nonduplicate causal-carrier decomposition that separates all-token broadcast, prefix-mediated and final-token-local cvec effects while explicitly controlling prompt-decode batch-shape drift. Fuses the parallel Run-2 polarity-factorial correction instead of competing with it.",
+  "next_exact_action": "After runner capacity is restored, preserve the existing queued run as bounded evidence; then, only under valid coordination for a new intervention, execute a corrected 18-cell target x code x polarity structural successor with carrier decomposition and immutable exact-source receipts."
+}

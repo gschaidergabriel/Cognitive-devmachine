@@ -1,0 +1,89 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T1041Z-HOOK-SELFTEST-WORKEXECUTION-EFFECT-IDENTITY-GPT56SOL",
+  "created_at": "2026-08-28T10:41:22Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/forensic-ingest",
+  "delta_class": "NON_DUPLICATE_TEST_AND_CAUSAL_IDENTITY_REFINEMENT",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_before_write": "4ad1ca906627931a3127f8226e09864bcac7288b",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "stern_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "authority": {
+    "epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "deduplication": {
+    "already_admitted_finding": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_HOOK_INVOCATION_IDENTITY_2026-08-28_GPT56SOL.json already establishes that donor effect lifecycle correlation uses session-scoped active_turns.effect_id while Claude Code exposes call-scoped tool_use_id.",
+    "already_admitted_trigger4_contract": "research_entity/architecture_archaeology/triggerword5_ingest_receipts/TRIGGERWORT5_TO_TRIGGERWORD4_EFFECT_CONTRACT_2026-08-28_GPT56SOL.json already requires per-invocation effect lifecycle identity.",
+    "parallel_successor": "WorkExecutionBinding/v2 reconciliation on this branch already establishes the documented Agent PostToolUse tool_use_id -> tool_response.agentId join and leaves paket_id -> exact Agent tool_use_id open.",
+    "new_delta_only": "This checkpoint does not restate those claims as new architecture discovery. It records the previously unclosed regression-test blind spot and makes the WorkExecutionBinding/effect-identity test boundary one shared causal contract."
+  },
+  "source_observations": [
+    {
+      "classification": "CURRENT_DONOR_LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "cmd_hook parses the full hook JSON and forwards the PreToolUse payload to zulassen(data) and the PostToolUse payload to merken(data)."
+    },
+    {
+      "classification": "CURRENT_DONOR_SOURCE_NEGATIVE_RESULT",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "Exact token search over the pinned stern.py blob found zero occurrences of tool_use_id and zero occurrences of agent_id. The hook payload is forwarded, but those native identities are not explicitly modeled by this versioned source."
+    },
+    {
+      "classification": "CURRENT_DONOR_LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "finding": "zulassen()/merken() document their PreToolUse->PostToolUse correlation through active_turns.effect_id, explicitly described as a session-bound single field."
+    },
+    {
+      "classification": "TEST_GAP",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py::_selbsttest_payload",
+      "finding": "The current selftest payload for PreToolUse/PostToolUse contains tool_name, tool_input and tool_response but no tool_use_id. Therefore this selftest can remain green while call-scoped invocation identity is absent or cross-wired."
+    }
+  ],
+  "architecture_refinement": {
+    "contract": "WorkExecutionBinding/v2 + EffectInvocationIdentity/v1 share the same immutable call-scoped identity boundary.",
+    "causal_chain": [
+      "paket_id",
+      "package_generation",
+      "Agent spawn tool_use_id",
+      "Agent PostToolUse tool_response.agentId",
+      "target lifecycle agent_id when observed and normalized",
+      "child tool_use_id(s)",
+      "effect decision/execution/result receipt",
+      "typed result receipt",
+      "reconcile"
+    ],
+    "identity_rule": "tool_use_id is the primary hook-call correlation key whenever the host supplies it; session_id is context only and active_turns.effect_id must not remain the sole primary correlation pointer for potentially overlapping calls.",
+    "package_rule": "paket_id must be deterministically bound to the exact Agent spawn tool_use_id before or at invocation; timestamp, description similarity, session order and completion order are forbidden join substitutes.",
+    "lifecycle_rule": "Do not collapse Agent PostToolUse tool_response.agentId and SubagentStart/SubagentStop agent_id into one canonical identity until target-runtime evidence establishes their equality/normalization relation for the installed build.",
+    "task_rule": "task_id remains an optional independent task-system namespace and is not an agent_id alias.",
+    "sparse_world_rule": "These identities are causal provenance, not world facts. Sparse WorldSlice/WorldNeed structures may reference bound receipts but must not synthesize a missing identity edge.",
+    "target_2_0_action": "REPAIR"
+  },
+  "required_regressions_for_triggerword4": [
+    "Add a distinct tool_use_id to every synthetic PreToolUse/PostToolUse hook fixture.",
+    "Add same-session A/B interleaving: Pre(A), Pre(B), Post(A), Post(B); A and B must update only their own invocation/effect records.",
+    "Add reverse completion order: Pre(A), Pre(B), Post(B), Post(A); correlation must remain exact.",
+    "Add missing-tool_use_id fail-closed behavior at any effect-authority boundary that requires exact invocation attribution.",
+    "For Agent delegation, test paket_id -> Agent tool_use_id -> response agentId with two concurrent delegated calls and prove no cross-wire.",
+    "Keep runtime-host lifecycle equality as a separate acceptance gate; repository unit tests must not manufacture target-host runtime credit."
+  ],
+  "counterhypothesis": "The installed runtime may serialize relevant calls strongly enough that the current single session pointer does not mis-correlate in one observed version. That would bound a current runtime race but would not validate the present selftest or justify discarding the stronger documented tool_use_id contract for Frankenstein 2.0.",
+  "falsifier": "A deterministic repository regression that exercises same-session interleaving with unique tool_use_id values and shows exact independent Pre/Post correlation closes the source-level identity-test gap. Installed-host behavior remains a separate Triggerword-4 runtime gate.",
+  "runtime_execution": "NONE",
+  "provider_execution": "NONE",
+  "vps_execution": "NONE",
+  "runtime_credit_delta": 0,
+  "training_credit_delta": 0,
+  "next_exact_gate": "Triggerword 4 implements call-scoped tool_use_id persistence/correlation plus the A/B interleaving regressions, then under an explicitly admitted target-runtime lane captures one harmless Agent PostToolUse and SubagentStart/SubagentStop sequence to verify the installed identity normalization."
+}

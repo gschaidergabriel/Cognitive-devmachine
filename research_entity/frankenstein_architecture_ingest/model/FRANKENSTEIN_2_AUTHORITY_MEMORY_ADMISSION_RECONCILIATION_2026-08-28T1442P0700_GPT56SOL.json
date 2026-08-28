@@ -1,0 +1,172 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5_20260828_AUTHORITY_MEMORY_ADMISSION_RECONCILIATION_GPT56SOL",
+  "recorded_at": "2026-08-28T14:42:24+07:00",
+  "trigger": "triggerwort 5",
+  "routing_self_test": "PASS",
+  "status": "SOURCE_FORENSICS_RECONCILED_CURRENT_9_13_AUTHORITY_BOUND",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "current_authority_epoch": "9.13",
+    "supervisor_inbox_schema": "9.13",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "free_provider_admission_blob_sha": "19e8efa229dc41abdb133458e7b326464d0afc21",
+    "execution_mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "historical_source_epochs": ["8.78"],
+    "authority_binding_rule": "Any earlier Triggerword-5 packet or receipt that names 8.78 as admitted/current authority is preserved as historical source metadata only. New evidence is bound to the exact current 9.13 supervisor/provider-authority identities above.",
+    "evidence_scope": "SOURCE_GIT_AND_ARCHIVE_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION"
+  },
+  "source_identity": {
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "design_head_observed_before_write": "2b102b339bbceb21fcb4a8996c84f439b7b750a3",
+    "frankenstein_donor_repo": "gschaidergabriel/frankenstein",
+    "frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "direct_source_crosscheck": [
+      {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+        "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "result": "DIRECTLY_READ; in-process stern bridge exposes conversation-memory read/write and Realtime function-call dispatch; source also preserves pre-dispatch cancellation of buffered tool calls."
+      },
+      {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+        "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "result": "DIRECTLY_READ; donor documents dedicated conversation-memory functions and external wegehierarchie dependency caveat; direct reader semantics are further closed by packet TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL."
+      }
+    ]
+  },
+  "ingest_reconciliation": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+      "action": "INGEST_WITHOUT_DUPLICATE_CREDIT",
+      "classification": "CURRENT_SOURCE_PLUS_GIT_NEGATIVE_RESULT",
+      "durable_prior": "commit 870517bfcabdd1b08a066ee2a89843f16b864af0 already pins the accessible-Git chronology boundary; retain first-verified-versus-created distinction."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
+      "action": "INGEST_WITHOUT_DUPLICATE_CREDIT",
+      "classification": "LIVE_CODE_PLUS_ENFORCEMENT_CODE_SOURCE_ONLY",
+      "durable_prior": "delta commit 9c3f5132bc7a528f858bf2a90015007898ac493d and receipt commit 4da1e9b32e7543700e6fd3f9c7503173bb1e2573 already capture the Realtime effect boundary under historical 8.78 labeling; this reconciliation rebonds the finding to current 9.13 authority without rewriting history."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
+      "action": "INGEST_WITHOUT_DUPLICATE_CREDIT",
+      "classification": "LIVE_CODE_PLUS_ENFORCEMENT_CODE_SOURCE_ONLY",
+      "durable_prior": "Parallel Triggerword-5 delta/receipt already exist; preserve as source evidence and do not count as independent replication."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+      "action": "INGEST_AS_SCHEMA_VALID_SUCCESSOR",
+      "classification": "HISTORICAL_ONLY_EXACT_ARCHIVE_SOURCE",
+      "supersedes_packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
+      "credit_rule": "Keep predecessor provenance but use the source-validated successor for claims; no runtime reachability or non-Bash coverage credit."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073652Z-REALTIME-MEMORY-TASK-AUTHORITY-GPT56SOL",
+      "action": "INGEST",
+      "classification": "LIVE_CODE_PLUS_ENFORCEMENT_CODE_SOURCE_ONLY",
+      "unique_delta": "Separates VoiceIntentEvidence->TaskAdmission, MemoryCandidate->MemoryAdmission, PendingEffect->EffectDecision and EffectOutcome/Reentry instead of collapsing them into one authority."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073941Z-5641dc6-GPT56SOL-REALTIME-MUTATION-CLASSIFICATION",
+      "action": "INGEST",
+      "classification": "LIVE_CODE_PLUS_CONFIG_SOURCE_ONLY",
+      "unique_delta": "Classifies frank_forschung neu_anstossen as an asynchronous research-request submission whose explicit-user-intent rule is behavioral guidance, not a deterministic local two-step admission gate; repository hooks.json declaration is not host/runtime hook proof."
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T074026Z-REALTIME-MEMORY-READ-EPISTEMIC-COLLAPSE-GPT56SOL",
+      "action": "INGEST",
+      "classification": "SCHEMA_PLUS_LIVE_CODE_SOURCE_ONLY",
+      "unique_delta": "Direct Realtime memory retrieval returns conversation-memory and durable-memory material in a common result shape without explicit transformation/epistemic class; table separation exists, but model-context epistemic typing is under-specified."
+    }
+  ],
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_AUTHORITY_CURRENTNESS_9_13_041",
+      "source_kind": "CURRENT_AUTHORITY",
+      "claim": "Current Triggerword-5 evidence must bind authority epoch 9.13 plus exact SUPERVISOR_INBOX, selected steering and FREE_PROVIDER_ADMISSION identities. Fresh evidence labeled 8.78 is stale-currentness metadata and receives no runtime/base/canonical/training promotion.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_2_0_action": "BIND_EVIDENCE_TO_CURRENT_AUTHORITY_DIGEST"
+    },
+    {
+      "atom_id": "F2_MEMORY_ADMISSION_BOUNDARY_042",
+      "source_kind": "CURRENT_SOURCE",
+      "claim": "Realtime model Function Calling can propose durable conversation-memory content through a narrow in-process writer, but the inspected write/read path lacks a structural distinction among verbatim user claim, model summary, inference, instruction and independently verified fact. Frankenstein 2.0 therefore needs deterministic MemoryCandidate->MemoryAdmission with provenance/epistemic metadata; memory persistence must not mint factual truth.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_2_0_action": "ADD_TYPED_MEMORY_CANDIDATE_AND_ADMISSION"
+    },
+    {
+      "atom_id": "F2_TASK_EFFECT_SEPARATION_043",
+      "source_kind": "CURRENT_SOURCE",
+      "claim": "The two-step voice task-confirmation gate is useful HumanIntent/TaskAdmission evidence but does not authorize every downstream mutation. Each state-changing executor call still requires immutable per-invocation EffectDecision consumption and a separate outcome/completion receipt.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_2_0_action": "KEEP_TASK_GATE_SEPARATE_FROM_EFFECT_AUTHORITY"
+    },
+    {
+      "atom_id": "F2_RESEARCH_REQUEST_ADMISSION_044",
+      "source_kind": "CURRENT_SOURCE",
+      "claim": "Realtime frank_forschung neu_anstossen can submit asynchronous research work without the task two-step confirmation path; model/tool-description prose requiring an explicit user request is not deterministic HumanIntentDecision. Treat research submission as its own typed request/capability/economic/privacy admission class.",
+      "confidence": 0.99,
+      "runtime_credit": 0,
+      "target_2_0_action": "ADD_TYPED_RESEARCH_REQUEST_ADMISSION"
+    },
+    {
+      "atom_id": "F2_MEMORY_RETRIEVAL_EPISTEMIC_TYPING_045",
+      "source_kind": "CURRENT_SOURCE",
+      "claim": "Storage-table separation alone is insufficient: the direct Realtime reader exposes conversation-memory and durable-memory hits through a common model-context result form where source label is the primary structural distinction. Retrieval must preserve explicit source, transformation, epistemic class and provenance so ranking/context compilation cannot silently flatten claims into facts.",
+      "confidence": 1.0,
+      "runtime_credit": 0,
+      "target_2_0_action": "TYPE_MEMORY_READ_RESULTS_AND_PREVENT_EPISTEMIC_FLATTENING"
+    }
+  ],
+  "contradictions_preserved": [
+    "TW5-CONTRADICTION-EFFECT-GIT-CHRONOLOGY-006: first verified accessible Git is not creation date; pre-Git/host transition remains open.",
+    "TW5-CONTRADICTION-REALTIME-EFFECT-AUTHORITY-007: donor has multiple write/action control surfaces and no source-proven single current cross-modal executor authority.",
+    "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-008: dedicated table separation exists, but direct Realtime memory admission/read semantics are epistemically under-typed.",
+    "TW5-CONTRADICTION-TASK-VS-EFFECT-AUTHORITY-009: task confirmation is not per-effect authorization.",
+    "TW5-CONTRADICTION-MULTISPEAKER-CONFIRMATION-010: mechanical fresh-utterance confirmation lacks speaker verification.",
+    "TW5-CONTRADICTION-REALTIME-RESEARCH-INTENT-011: research submission lacks deterministic local explicit-user-intent admission equivalent to the task gate.",
+    "TW5-CONTRADICTION-DELEGATED-EFFECT-COVERAGE-012: Bash deny narrows risk but allowed mutation tools are not source-proven to consume per-call EffectDecision.",
+    "TW5-CONTRADICTION-HOOK-REACHABILITY-013: repository hook declaration is not exact host/headless-process runtime proof.",
+    "TW5-CONTRADICTION-WACHE-REACHABILITY-008 and TW5-CONTRADICTION-WACHE-COVERAGE-009 remain open: archived wache-koenig is exact-source Bash-only predecessor, not whole-effect runtime authority."
+  ],
+  "triggerword4_handoff": [
+    "Bind the Triggerword-4 assembly to current authority epoch 9.13; do not copy stale 8.78 admitted-authority labels from archaeology packets.",
+    "Introduce MemoryCandidate + deterministic MemoryAdmission. Minimum metadata: immutable source_event_id/utterance_ref, source actor, transformation_class, epistemic_class, generation, privacy/retention tier and content digest/reference.",
+    "Return memory retrieval items with source + transformation + epistemic + provenance metadata; remembering that somebody said X is not evidence that X is true.",
+    "Keep HumanIntentDecision/TaskAdmission, ResearchRequestAdmission, EffectDecision, ExecutionReceipt, WorldEffectVerification and CompletionEvidence as distinct typed states.",
+    "Propagate immutable Realtime call_id/task_admission_id into downstream invocation/tool_use identity; never use session identity alone as effect correlation.",
+    "Preserve the historical wache one-shot/digest/out-of-model grant ideas only as donor regression principles; build canonical enforcement at the typed executor boundary and test non-Bash mutations.",
+    "Do not treat hooks.json existence, nonblocking EffectGate bookkeeping, source comments or test:0 text as runtime containment/completion proof."
+  ],
+  "acceptance_tests_for_triggerword4": [
+    "Memory: persist a verbatim utterance and a model summary; retrieval distinguishes them structurally.",
+    "Memory: persist a model inference; it cannot satisfy OBSERVED/FACT evidence queries.",
+    "Memory: mixed conversation/durable retrieval retains epistemic/provenance class after ranking/context compilation.",
+    "Memory privacy: rejected/redacted sensitive candidate leaves an admission receipt without persisting disallowed raw content.",
+    "Invocation: interleave two same-session state-changing calls and prove immutable per-call correlation through decision and outcome.",
+    "Enforcement: actual DENY prevents the mutation; bookkeeping-only paths receive zero containment credit.",
+    "Completion: failed/denied/unknown/stale/forged textual test claims fail closed unless a structured success receipt is bound to invocation, operation digest, runtime/source identity and outcome."
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED_AND_AUTHORITY_REBOUND",
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "memory_runtime_acceptance": 0,
+    "effect_runtime_acceptance": 0,
+    "physical_grid10": 0,
+    "hcu_full": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  },
+  "next_exact_gate": "On the live Triggerword-5 lane, bind each subsequent packet to current 9.13 authority identities and continue direct-source consumer audit for all gespraech_erinnerung/durable_memory readers plus exact claude_frage/headless-hook enforcement. Triggerword 4 should implement typed MemoryAdmission and per-invocation executor EffectDecision tests rather than waiting for historical chronology to become complete."
+}

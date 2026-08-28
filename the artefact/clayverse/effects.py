@@ -5,7 +5,7 @@ import uuid
 from dataclasses import dataclass
 
 from .effect_journal import EffectJournal
-from .entityos_bridge import EntityOSBridge
+from .entityos_bridge import EntityOSBridge, EntityOSOutcomeUnknown
 from .store import Lease, StaleGeneration, UnifiedDB
 
 
@@ -217,6 +217,19 @@ class EffectGate:
                 outcome = dict(self.entityos_bridge.run(req.argv))
                 outcome["boundary"] = "EntityOS"
                 outcome["entityos_sha256"] = self.entityos_bridge.sha256.lower()
+            except EntityOSOutcomeUnknown as exc:
+                self.journal.complete(
+                    effect_id,
+                    {
+                        "ok": False,
+                        "error": type(exc).__name__,
+                        "boundary": "EntityOS",
+                        "certainty": "unknown",
+                        "reason": "dispatch_may_have_started_without_terminal_receipt",
+                    },
+                    "UNKNOWN_AFTER_DISPATCH",
+                )
+                raise
             except Exception as exc:
                 self.journal.complete(
                     effect_id,

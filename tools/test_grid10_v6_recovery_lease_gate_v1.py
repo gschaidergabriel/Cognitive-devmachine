@@ -6,6 +6,7 @@ import json
 import sqlite3
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from grid10_v6_crash_reconciliation_v1 import (
     STATUS_PREPARED,
@@ -364,6 +365,42 @@ class RecoveryLeaseGateTests(unittest.TestCase):
         self.assertEqual(second["terminal_ts"], 1.0)
         self.assertEqual(second["classification_json"], first_json)
         self.assertEqual(second["classification_digest"], first_digest)
+
+    def test_persist_rechecks_lease_at_mutation_boundary_and_rolls_back(self):
+        _seed(self.db, claimed_at="2020-01-01T00:00:00Z", expires_at="2099-01-01T00:00:00Z")
+        _seed_recovery_required_evidence(self.db)
+        first_proof = self._verify(checked_at=NOW)
+        with patch(
+            "grid10_v6_recovery_lease_gate_v1.verify_active_recovery_lease_in_transaction",
+            side_effect=[
+                first_proof,
+                RecoveryLeaseNotAuthorized("LEASE_TIME_WINDOW_INVALID_OR_EXPIRED"),
+            ],
+        ) as verifier:
+            with self.assertRaisesRegex(
+                RecoveryLeaseNotAuthorized,
+                "LEASE_TIME_WINDOW_INVALID_OR_EXPIRED",
+            ):
+                persist_recovery_classification_with_canonical_lease(
+                    self.db,
+                    tick_id="t1",
+                    work_id=recovery_work_id_for_tick("t1"),
+                    spec_rev=1,
+                    executor_node="worker-a",
+                    lease_token="lease-a",
+                )
+        self.assertEqual(verifier.call_count, 2)
+        con = _connect(self.db)
+        try:
+            row = con.execute(
+                "SELECT status,classification_json,classification_digest FROM grid10_v6_cycle_intents WHERE tick_id=?",
+                ("t1",),
+            ).fetchone()
+        finally:
+            con.close()
+        self.assertEqual(row["status"], STATUS_PREPARED)
+        self.assertIsNone(row["classification_json"])
+        self.assertIsNone(row["classification_digest"])
 
     def test_persist_recovery_classification_rejects_external_time_override_before_mutation(self):
         _seed(self.db, claimed_at="2020-01-01T00:00:00Z", expires_at="2099-01-01T00:00:00Z")

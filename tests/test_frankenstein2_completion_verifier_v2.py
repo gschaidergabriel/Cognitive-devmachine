@@ -45,7 +45,19 @@ class CompletionVerifierV2Tests(unittest.TestCase):
             REENTRY_SCHEMA, "call-A", 7, "result-A", "task-1", "turn-1", "cause-1"
         )
         self.test_receipt = TestReceipt(
-            TEST_SCHEMA, "call-A", 7, "src-abc", "PASS", 4, 4, "tests-A"
+            TEST_SCHEMA,
+            "call-A",
+            7,
+            "src-abc",
+            "PASS",
+            4,
+            4,
+            "tests-A",
+            request_digest="req-A",
+            result_digest="result-A",
+            test_plan_digest="test-plan-A",
+            executable_id="pytest-v1",
+            environment_id="sandbox-1",
         )
 
     def decide(self, **overrides):
@@ -100,6 +112,38 @@ class CompletionVerifierV2Tests(unittest.TestCase):
     def test_test_source_drift_rejected(self):
         self.assertBlocked(self.decide(test_receipt=replace(self.test_receipt, source_digest="src-other")), "TEST_SOURCE_DRIFT")
 
+    def test_test_request_transplant_rejected(self):
+        self.assertBlocked(
+            self.decide(test_receipt=replace(self.test_receipt, request_digest="req-other")),
+            "TEST_REQUEST_MISMATCH",
+        )
+
+    def test_test_result_transplant_rejected(self):
+        self.assertBlocked(
+            self.decide(test_receipt=replace(self.test_receipt, result_digest="result-other")),
+            "TEST_RESULT_TRANSPLANT",
+        )
+
+    def test_missing_test_plan_binding_rejected(self):
+        self.assertBlocked(
+            self.decide(test_receipt=replace(self.test_receipt, test_plan_digest="")),
+            "MISSING_TEST_PLAN_DIGEST",
+        )
+
+    def test_missing_test_provenance_rejected(self):
+        self.assertBlocked(
+            self.decide(test_receipt=replace(self.test_receipt, environment_id="")),
+            "MISSING_TEST_PROVENANCE",
+        )
+
+    def test_legacy_unbound_test_receipt_fails_closed(self):
+        legacy = TestReceipt(TEST_SCHEMA, "call-A", 7, "src-abc", "PASS", 4, 4, "tests-A")
+        d = self.decide(test_receipt=legacy)
+        self.assertBlocked(d, "TEST_REQUEST_MISMATCH")
+        self.assertIn("TEST_RESULT_TRANSPLANT", d.reasons)
+        self.assertIn("MISSING_TEST_PLAN_DIGEST", d.reasons)
+        self.assertIn("MISSING_TEST_PROVENANCE", d.reasons)
+
     def test_invocation_transplant_rejected(self):
         self.assertBlocked(self.decide(execution=replace(self.execution, invocation_id="call-B")), "EXECUTION_INVOCATION_MISMATCH")
 
@@ -117,6 +161,12 @@ class CompletionVerifierV2Tests(unittest.TestCase):
 
     def test_missing_execution_provenance_rejected(self):
         self.assertBlocked(self.decide(execution=replace(self.execution, environment_id="")), "MISSING_EXECUTION_PROVENANCE")
+
+    def test_nonzero_exit_rejected_even_when_status_succeeded(self):
+        self.assertBlocked(
+            self.decide(execution=replace(self.execution, exit_code=1)),
+            "EXECUTION_EXIT_NONZERO",
+        )
 
     def test_missing_world_evidence_rejected(self):
         self.assertBlocked(self.decide(world=replace(self.world, evidence_digest=None)), "MISSING_WORLD_EVIDENCE")

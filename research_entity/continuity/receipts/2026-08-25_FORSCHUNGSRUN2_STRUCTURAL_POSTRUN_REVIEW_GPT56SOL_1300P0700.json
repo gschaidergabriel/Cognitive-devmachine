@@ -1,0 +1,61 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN2_STRUCTURAL_POSTRUN_REVIEW_RECEIPT/v1",
+  "authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU"
+  },
+  "trigger": "forschungsrun 2",
+  "base_main_sha": "23308181f631fbf1c7a19b4584a9c825cc90196e",
+  "branch": "gpt56sol/forschungsrun2-structural-postrun-review-878",
+  "branch_head_before_receipt": "8059afe25a4e19c58b7b948d28c0777da5f3f6c6",
+  "writes": {
+    "review_source": "tools/trigger1_structural_native_postrun_review_v1.py",
+    "review_source_blob_sha": "6685fc20a94ab5c52813d365c5e3b8f2c2041a3e",
+    "review_source_commit": "5f595bf0bcde52358df18c727116a98abbe34162",
+    "test_source": "tests/test_trigger1_structural_native_postrun_review_v1.py",
+    "test_source_blob_sha": "f9833f67aa3d723fe5e606323002bfd786f635e5",
+    "test_source_commit": "8059afe25a4e19c58b7b948d28c0777da5f3f6c6"
+  },
+  "observed_findings": [
+    "The frozen structural native runtime computes diagonal_each_positive but its aggregate behavior PASS predicate does not require it, so a failed semantic class can in principle be masked by stronger aggregate effects.",
+    "The current structural case generator makes calibration and holdout content-symbol vocabularies disjoint while retaining the same formal logical prompt-template family; split membership is also included in the family descriptor digest, so digest-family separation alone is not evidence of template-invariant abstraction.",
+    "Existing frozen structural runtime dispatches remain queued on self-hosted Linux X64 transport; no scientific negative has been observed from those queued jobs."
+  ],
+  "review_contract": {
+    "strong_structural_native_component_candidate_requires": [
+      "frozen runtime PASS",
+      "declared lexical disjointness",
+      "every class matched diagonal > 0",
+      "matched intervention row-selective for every class",
+      "matched intervention column-selective for every class"
+    ],
+    "template_invariant_abstract_semantic_candidate_additionally_requires": "normalized calibration/holdout structural-template disjointness",
+    "semantic_jspace_promotion_candidate": false,
+    "frozen_scientific_design_modified": false,
+    "new_model_intervention_executed": false
+  },
+  "execution_evidence": {
+    "exact_branch_checkout_test": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "scientific_negative": false,
+    "model_execution": false,
+    "provider_execution": false,
+    "paid_execution": false,
+    "together_execution": false,
+    "note": "The checkout/test transport failure is infrastructure evidence only. It is not a source-test failure and grants no PASS credit. The review/test bytes were independently fetched from GitHub after write for source inspection."
+  },
+  "queued_runtime": {
+    "primary_run_id": 32810213066,
+    "recovery_run_id": 32811360359,
+    "structural_label_free_native_runtime_credit": 0
+  },
+  "credits": {
+    "canonical_semantics": 0,
+    "jspace_model_runtime": 0,
+    "whole_hcu": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Restore eligible self-hosted Linux X64 runner capacity without changing the frozen scientific design; let an already-dispatched structural run execute once; apply this post-run review to its persisted result and case bundle; retain structural component evidence separately from any stronger template-invariant semantic claim."
+}

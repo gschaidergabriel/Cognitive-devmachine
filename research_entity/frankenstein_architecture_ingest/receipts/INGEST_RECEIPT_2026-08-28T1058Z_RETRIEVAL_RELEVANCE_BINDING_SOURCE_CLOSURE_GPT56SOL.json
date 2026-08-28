@@ -1,0 +1,87 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v2",
+  "created_at": "2026-08-28T10:58:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "routing_self_test": "PASS",
+  "authority": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "supervisor_steering_blob_sha": "bc67f57771a9a9c5ac96d9cd135927047066bc20",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "source_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "source_blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "design_branch": {
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "head_reentered_before_receipt": "ea5a8b94a59d814df4b7a14dae732ef221a99437",
+    "parallel_movement_observed": true
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1056Z_RETRIEVAL_RELEVANCE_BINDING_SOURCE_CLOSURE_GPT56SOL.json",
+    "creation_commit": "d823626c7277d54e4555424edb6e1c2cb485bed8",
+    "blob_sha_at_reentry": "f5886a35e20372cf67edd0589d56aeff62ffc937",
+    "classification": "SOURCE_GROUNDED_ARCHITECTURE_REFINEMENT_NO_RUNTIME_PROMOTION"
+  },
+  "packet_accounting": {
+    "new_packet_consumed": false,
+    "duplicate_consumption_avoided": true,
+    "reason": "The inbox was quiescent after the already-accounted Stop-hook packet; this run added direct pinned-donor source closure only."
+  },
+  "source_crosschecks": [
+    {
+      "span": "4235-4290",
+      "result": "PASS: retrieval_episodes already persists retrieval_id, turn_id, episode_id, causal_id, generation and query_hash together."
+    },
+    {
+      "span": "4710-4795",
+      "result": "PASS: _microclay_schatten creates fresh round-sharp causal_id, turn_id and episode_id per UserPromptSubmit and passes the actual user query to retrieve."
+    },
+    {
+      "span": "4970-5055",
+      "result": "PASS: _kognition_richten_hook chooses newest same-session open retrieval, separately reads latest transcript user text, and does not enforce retrieval/turn/causal/generation/query-hash equality before model judgment."
+    },
+    {
+      "span": "4340-4425",
+      "result": "PASS: _apply_credit receipt/write path is already exact-row identity-capable once the correct retrieval row is supplied."
+    }
+  ],
+  "design_delta": [
+    "Classified the primary defect as an upstream binding/selection gap rather than a missing retrieval schema or reducer identity gap.",
+    "Refined RetrievalRelevanceCandidate into RetrievalRelevanceBinding/v2: emit at retrieval creation, defer model relevance outside Stop, and return the exact retrieval_id/turn/causal/generation/query_hash plus model runtime/build identity to the deterministic reducer.",
+    "Preserved retrieval_id as the primary join key; query_hash is only a consistency check because repeated identical prompts can share it.",
+    "Added a privacy/lifetime constraint: deferred model work should preserve full query/candidate text only as short-lived bounded payload/ref where possible, with durable receipts keeping identity/digests/provenance.",
+    "Kept the existing DeferredCausalReturnEnvelope/v1 decision open; this refinement can be a subsystem specialization without forcing a shared ABI."
+  ],
+  "contradictions_preserved": [
+    "Strong retrieval identity is stored at creation but discarded by Stop ownership selection.",
+    "An exact-row reducer cannot repair wrong-row selection upstream.",
+    "No-LLM-in-hook declared invariant remains inconsistent with synchronous Stop Ollama inference until executable discrimination."
+  ],
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "architecture_refinement": "PASS_SOURCE_SCOPE",
+    "runtime": 0,
+    "provider_runtime": 0,
+    "stop_hook_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "result": "COMMITTED_SOURCE_CLOSURE_NO_RUNTIME_PROMOTION",
+  "next_exact_gate": "Triggerword-4 external non-provider test lane: implement exact retrieval_id-bound deferred relevance and execute two same-session reverse-order completions including repeated identical queries; separately test cognition-disabled/warm/slow-or-cold/unreachable local-model Stop conditions and prove deterministic later Stop bookkeeping remains complete, without modifying Frank Harness."
+}

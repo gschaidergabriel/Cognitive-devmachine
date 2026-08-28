@@ -2,12 +2,14 @@
   "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
   "trigger": "triggerwort 5",
   "created_at": "2026-08-28T07:41:10Z",
-  "status": "INGESTED_CURRENT_AUTHORITY_BOUND_SOURCE_FORENSICS_ONLY",
+  "corrected_at": "2026-08-28T07:42:10Z",
+  "status": "INGESTED_CURRENT_AUTHORITY_BOUND_SOURCE_FORENSICS_ONLY_DEDUPED",
   "authority_binding": {
     "epoch": "9.13",
     "mode": "FREE_ONLY",
     "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
-    "canonical_main": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "authority_selection_main": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "current_main_observed_after_selection": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
     "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
     "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
     "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c"
@@ -15,38 +17,29 @@
   "donor_repo": "gschaidergabriel/frankenstein",
   "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
   "consumed_packet_ids": [
+    "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY"
+  ],
+  "corroborating_packet_ids_already_consumed_by_parallel_state": [
     "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
-    "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
     "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY"
   ],
+  "duplicate_credit": 0,
   "architecture_delta": {
     "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_9_13_REALTIME_EFFECT_INTENT_AND_DONOR_CLOSURE.json",
-    "commit": "37b0381ebd43244defc845edc87788ff31f267cc"
+    "latest_commit": "2634a67c019def810948d185ece3d0d5b542659a"
   },
   "crosschecks": [
     "paket.py blob 4381bca97d67c56df75bd6f16e6919b9d2151f3f imports .wegehierarchie in the current donor path",
-    "archived F94 wegehierarchie blob 83d1068bedc4b1fa7dd32aead7600484f8532e34 is present only under _archiv-phase4 in the inspected donor tree",
-    "realtime_gespraech.py blob 37b972474d80d827fdef64fbbb79c1c31e173aaa preserves call_id, implements two-step task confirmation and uses a distinct direct bounded memory-write path"
+    "archived F94 wegehierarchie blob 83d1068bedc4b1fa7dd32aead7600484f8532e34 survives under _archiv-phase4",
+    "realtime_gespraech.py blob 37b972474d80d827fdef64fbbb79c1c31e173aaa preserves call_id, implements two-step task confirmation and exposes a distinct bounded internal-memory mutation"
   ],
-  "authority_correction": "Any 8.78 authority labels emitted by earlier same-session source-forensic artifacts are historical provenance only. This receipt binds the consumed findings to current 9.13 HARD_OFF evidence law without retroactively rewriting historical artifacts.",
-  "novel_delta": [
-    "HumanIntentDecision is a separate typed state from EffectDecision.",
-    "Immutable call identity must survive cross-modal async delegation and result re-entry.",
-    "Internal canonical mutation classes may use different front-policy semantics from external world effects but cannot create a second authority.",
-    "Recoverable archived F94 bytes do not equal live package closure; Triggerword 4 must adapt or retire the dependency with regression evidence.",
-    "Current 9.13 completion promotion requires structured bound success receipts; non-success/unknown/stale/textual success claims fail closed."
+  "authority_correction": "8.78 labels from earlier same-session source-forensic artifacts are historical provenance only. Current evidence interpretation is bound to 9.13 HARD_OFF. No provider/runtime action was taken.",
+  "novel_ingested_delta": [
+    "Realtime call-scoped identity is a useful donor for immutable cross-modal invocation binding.",
+    "No single source-proven cross-modal current EffectGate exists across Realtime, delegated Claude Code, nonblocking stern bookkeeping and historical Bash-only wache.",
+    "HumanIntentDecision, EffectDecision and CompletionEvidence must remain distinct typed states; the first two related packets already established HumanIntentDecision and F94 donor-closure constraints and are only corroborated here."
   ],
   "runtime_execution_performed": false,
-  "credits": {
-    "runtime_provider": 0,
-    "effect_invocation_runtime": 0,
-    "effect_enforcement_runtime": 0,
-    "completion_receipt_runtime": 0,
-    "physical_grid10": 0,
-    "entityos_whole_runtime": 0,
-    "hcu_full_runtime": 0,
-    "canonical_semantics": 0,
-    "training": 0
-  },
-  "next_exact_gate": "With provider routes HARD_OFF, use a non-provider executable same-session overlapping-call falsifier for immutable effect correlation and a fail-closed typed CompletionEvidence verifier before any runtime credit."
+  "credits": {"runtime_provider":0,"effect_invocation_runtime":0,"effect_enforcement_runtime":0,"completion_receipt_runtime":0,"physical_grid10":0,"entityos_whole_runtime":0,"hcu_full_runtime":0,"canonical_semantics":0,"training":0},
+  "next_exact_gate": "Keep provider routes HARD_OFF; execute only an authority-admitted non-provider overlapping-call falsifier and typed completion-receipt tests before any runtime credit."
 }

@@ -1,8 +1,11 @@
 """Regressions for definite versus uncertain EntityOS execution outcomes.
 
-Candidate-only coverage for the retained PR #430 lane.  The tests exercise no real
-external effect: bridge execution is replaced by deterministic fakes/monkeypatches.
+Candidate-only coverage for the retained PR #430 lane. The tests exercise no real
+external effect. Most bridge execution is replaced by deterministic fakes; one focused
+zero-real-effect test runs an exact local marker fixture solely to prove that the child
+can cross process start before a timeout destroys outcome certainty.
 """
+import hashlib
 import json
 import os
 import subprocess
@@ -76,6 +79,32 @@ def test_entityos_bridge_types_subprocess_timeout_as_unknown(monkeypatch):
     monkeypatch.setattr(subprocess, "run", timeout)
     with pytest.raises(EntityOSOutcomeUnknown):
         bridge.run(["hello"])
+
+
+def test_entityos_bridge_real_harmless_child_start_then_timeout_is_unknown(tmp_path):
+    """Executable falsifier: timeout can happen after the child crossed start."""
+
+    marker = tmp_path / "marker.txt"
+    fixture = tmp_path / "marker-fixture.sh"
+    fixture_bytes = (
+        b"#!/bin/sh\n"
+        b"set -eu\n"
+        b"marker=\"$1\"\n"
+        b"printf 'PROCESS_STARTED\\n' > \"$marker\"\n"
+        b"sleep 2\n"
+        b"printf 'PROCESS_FINISHED\\n' >> \"$marker\"\n"
+    )
+    fixture.write_bytes(fixture_bytes)
+    fixture.chmod(0o755)
+    digest = hashlib.sha256(fixture_bytes).hexdigest()
+    bridge = EntityOSBridge(str(fixture), digest, timeout=0.2)
+
+    with pytest.raises(EntityOSOutcomeUnknown) as raised:
+        bridge.run([str(marker)])
+
+    assert isinstance(raised.value.__cause__, subprocess.TimeoutExpired)
+    assert marker.read_text() == "PROCESS_STARTED\n"
+    assert "PROCESS_FINISHED" not in marker.read_text()
 
 
 def test_entityos_pre_launch_validation_failure_remains_definite(tmp_path):

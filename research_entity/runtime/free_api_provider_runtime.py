@@ -27,23 +27,23 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.10"
-EXECUTION_RECEIPT_SCHEMA_VERSION = "1.8"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.11"
+EXECUTION_RECEIPT_SCHEMA_VERSION = "1.9"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
 PAYMENT_LATCH_SCOPE = "process_local"
 COST_POLICY_PRINCIPAL_SCOPE = "process_local_credential_binding"
 _PROCESS_COST_PRINCIPAL_KEY = secrets.token_bytes(32)
 COST_POLICY_PRINCIPAL_FORK_ISOLATED = hasattr(os, "register_at_fork")
+EXECUTION_LOCK_FORK_ISOLATED = hasattr(os, "register_at_fork")
 
 
-def _reseed_cost_principal_key_after_fork() -> None:
-    global _PROCESS_COST_PRINCIPAL_KEY
+def _reinitialize_process_state_after_fork() -> None:
+    global _PROCESS_COST_PRINCIPAL_KEY, PROCESS_EXECUTION_LOCK
     _PROCESS_COST_PRINCIPAL_KEY = secrets.token_bytes(32)
+    PROCESS_EXECUTION_LOCK = threading.Lock()
 
 
-if COST_POLICY_PRINCIPAL_FORK_ISOLATED:
-    os.register_at_fork(after_in_child=_reseed_cost_principal_key_after_fork)
 MAX_PROVIDER_REQUEST_BYTES = 2_000_000
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_OUTPUT_TOKENS = 4_096
@@ -138,6 +138,8 @@ BEARER_TOKEN_CHARACTERS = frozenset(
 )
 PROCESS_PAYMENT_LATCHES: set[str] = set()
 PROCESS_EXECUTION_LOCK = threading.Lock()
+if COST_POLICY_PRINCIPAL_FORK_ISOLATED:
+    os.register_at_fork(after_in_child=_reinitialize_process_state_after_fork)
 
 
 @dataclass(frozen=True)
@@ -476,6 +478,7 @@ def receipt() -> dict:
         "execution_cost_policy_principal_fork_isolated": (
             COST_POLICY_PRINCIPAL_FORK_ISOLATED
         ),
+        "execution_lock_fork_isolated": EXECUTION_LOCK_FORK_ISOLATED,
         "unicode_database_version": UNICODE_DATABASE_VERSION,
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "inventory": rows,
@@ -1506,6 +1509,7 @@ def _execute_chat_locked(
         "cost_policy_principal_fork_isolated": (
             COST_POLICY_PRINCIPAL_FORK_ISOLATED
         ),
+        "execution_lock_fork_isolated": EXECUTION_LOCK_FORK_ISOLATED,
         "budget_epoch_id": _budget_epoch_id(env),
         "semantic_request_id": semantic_request_id,
         "request_id": request_id,

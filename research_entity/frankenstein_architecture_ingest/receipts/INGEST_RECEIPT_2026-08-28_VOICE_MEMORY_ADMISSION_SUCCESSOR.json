@@ -1,0 +1,69 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-RECEIPT-2026-08-28-VOICE-MEMORY-ADMISSION-SUCCESSOR",
+  "analysis_time_utc": "2026-08-28T07:36:00Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "evidence_scope": "SOURCE_FORENSICS_ONLY_NO_NEW_RUNTIME_EXECUTION",
+  "source_pins": {
+    "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
+    "design_head_before_delta": "c47bad37ba45bb60334169cd48b0122987330366",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
+  },
+  "routing": {
+    "normalized_message": "triggerwort 5",
+    "directive_fetch": "PASS",
+    "shared_world_directive_fetch": "PASS",
+    "status": "TRIGGERWORD_5_ACTIVE"
+  },
+  "coordination": {
+    "state_reentered_before_write": true,
+    "parallel_work_observed": true,
+    "newest_packet_state": "NO_UNCONSUMED_SCHEMA_PACKET_AFTER_FINAL_REENTRY",
+    "dedupe": "07:25 successor bridge and 07:28/07:30 predecessor/approval packets were already consumed by parallel workers and were not re-counted."
+  },
+  "source_crosschecks": [
+    {
+      "source": "realtime_gespraech.py:_tool_erinnerung_schreiben/_stern/_tool_ausfuehren@5641dc6b",
+      "result": "PASS",
+      "finding": "frank_erinnerung_schreiben dispatches model-selected subject/value directly in-process to stern.gespraech_erinnerung_schreiben."
+    },
+    {
+      "source": "stern.py:gespraech_erinnerung_schreiben@5641dc6b",
+      "result": "PASS",
+      "finding": "The dedicated writer inserts subject/value/quelle into unified.db.gespraech_erinnerung and commits; validation is limited to non-empty values at this boundary."
+    },
+    {
+      "source": "stern.py:gespraech_erinnerung_lesen@5641dc6b",
+      "result": "PASS",
+      "finding": "Realtime retrieval searches the dedicated conversational-memory table alongside durable_memory, so written content can re-enter later cognition."
+    },
+    {
+      "source": "realtime_gespraech.py:_auftrag_stellen_mit_bestaetigung@5641dc6b",
+      "result": "PASS",
+      "finding": "External-action dispatch has a separate mechanical confirmation gate, demonstrating an intentional capability-risk distinction rather than a universal one-size-fits-all gate."
+    }
+  ],
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_VOICE_MEMORY_ADMISSION_SUCCESSOR.json",
+    "commit": "e031d82e3a09df89acd63921be7985d6f7c7fa0d",
+    "new_semantic_atoms": [
+      "F2_VOICE_MEMORY_DIRECT_DURABLE_WRITE_031",
+      "F2_VOICE_MEMORY_RETRIEVAL_REENTRY_032",
+      "F2_VOICE_TOOL_CAPABILITY_DIFFERENTIAL_033"
+    ],
+    "new_contradiction": "TW5-CONTRADICTION-VOICE-MEMORY-ADMISSION-008"
+  },
+  "triggerword4_handoff": "Introduce typed MemoryWriteCandidate -> deterministic MemoryAdmission -> canonical write receipt; bind exact invocation/session/generation/causal transcript identity; preserve epistemic type so conversational memory does not silently become world fact; keep internal durable memory distinct from external EffectGate while sharing canonical provenance discipline.",
+  "credits": {
+    "source_forensics": "PRESENT",
+    "new_runtime_reexecution": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_runtime": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Enumerate all Realtime/Visual/Voice direct unified.db writers outside Claude Code hook execution and classify them before Triggerword-4 assembly; then define and test the minimal MemoryAdmission ABI."
+}

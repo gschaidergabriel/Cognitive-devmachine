@@ -1,0 +1,122 @@
+{
+  "schema_version": "FRANKENSTEIN_2_REALTIME_TOOL_MUTATION_MATRIX/v1",
+  "created_at": "2026-08-28T08:51:42Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/realtime-tool-mutation-matrix",
+  "classification": "CURRENT_DONOR_SOURCE_MODEL_NO_RUNTIME_CREDIT",
+  "authority": {
+    "epoch": "9.13",
+    "canonical_main": "92d4d08f1502d85ab2dfa0ca3e2921e1e6d3fef2",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "primary_source": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+    "supporting_source": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py"
+  },
+  "taxonomy": [
+    "READ_ONLY",
+    "EPHEMERAL_STATE",
+    "CANONICAL_INTERNAL_MUTATION",
+    "DELEGATED_EXECUTION_REQUEST",
+    "EXTERNAL_EFFECT_REQUEST",
+    "SESSION_CONTROL"
+  ],
+  "tools": [
+    {
+      "tool": "frank_status_lesen",
+      "class": ["READ_ONLY"],
+      "source_path": "_tool_status_lesen -> stern.gespraech_status_lesen",
+      "human_intent_requirement": "NORMAL_QUERY_CONTEXT",
+      "effect_decision_requirement": "NONE_FOR_READ",
+      "notes": "Reads live/task/room status; does not itself request a state change."
+    },
+    {
+      "tool": "frank_erinnerung_lesen",
+      "class": ["READ_ONLY"],
+      "source_path": "_tool_erinnerung_lesen -> stern.gespraech_erinnerung_lesen",
+      "human_intent_requirement": "NORMAL_QUERY_CONTEXT",
+      "effect_decision_requirement": "NONE_FOR_READ",
+      "notes": "Read path only; epistemic provenance of returned rows remains a separate issue."
+    },
+    {
+      "tool": "frank_erinnerung_schreiben",
+      "class": ["CANONICAL_INTERNAL_MUTATION"],
+      "source_path": "_tool_erinnerung_schreiben -> stern.gespraech_erinnerung_schreiben",
+      "human_intent_requirement": "TYPED_MEMORY_ADMISSION_REQUIRED_IN_2_0",
+      "effect_decision_requirement": "INTERNAL_MUTATION_POLICY_NOT_EXTERNAL_EFFECTGATE_BY_DEFAULT",
+      "notes": "Donor commits a bounded gespraech_erinnerung row immediately and does not use the task two-step confirmation state machine. Frankenstein 2.0 should type this as MemoryCandidate -> MemoryAdmission with provenance/epistemic/privacy/generation binding."
+    },
+    {
+      "tool": "frank_auftrag_stellen",
+      "class": ["EPHEMERAL_STATE", "DELEGATED_EXECUTION_REQUEST"],
+      "source_path": "RealtimeSession._auftrag_stellen_mit_bestaetigung -> _HintergrundBruecke -> gespraechsmodus.claude_frage",
+      "human_intent_requirement": "MECHANICAL_TWO_STEP_PREDECESSOR_PRESENT",
+      "effect_decision_requirement": "REQUIRED_PER_ACTUAL_MUTATING_CHILD_INVOCATION",
+      "notes": "First call creates/maintains a proposal confirmation state; second matching confirmed call can dispatch a headless Claude child. HumanIntentDecision does not substitute for ChildPolicyEnvelope or invocation-bound EffectDecision."
+    },
+    {
+      "tool": "frank_forschung",
+      "submodes": [
+        {
+          "aktion": "lesen",
+          "class": ["READ_ONLY"],
+          "source_path": "_tool_forschung -> chatgpt-zusammenfassung-neueste",
+          "effect_decision_requirement": "NONE_FOR_CACHED_READ"
+        },
+        {
+          "aktion": "neu_anstossen",
+          "class": ["EXTERNAL_EFFECT_REQUEST"],
+          "source_path": "_tool_forschung -> _HintergrundBruecke -> _forschung_taetigkeit -> stern.chatgpt_senden -> chatgpt_burst_worker_v2.sh",
+          "human_intent_requirement": "DETERMINISTIC_RESEARCH_REQUEST_ADMISSION_REQUIRED_IN_2_0",
+          "effect_decision_requirement": "ECONOMIC_PROVIDER_PRIVACY_CAPABILITY_ADMISSION_BEFORE_EXTERNAL_SUBMISSION",
+          "notes": "Donor tool description says explicit-user-request only, but _tool_forschung mechanically dispatches neu_anstossen directly when the model issues the tool call and a nonempty question is present. Tool-description prose is not deterministic authority. No such external request was executed in this Trigger-5 pass."
+        }
+      ]
+    },
+    {
+      "tool": "frank_gespraech_beenden",
+      "class": ["SESSION_CONTROL"],
+      "source_path": "_tool_ausfuehren sets ende_gewuenscht/gr und returns confirmed",
+      "human_intent_requirement": "CONVERSATIONAL_END_INTENT_PLUS_MECHANICAL_SILENCE_FALLBACK",
+      "effect_decision_requirement": "NONE_FOR_SESSION_TERMINATION_UNLESS_FUTURE_PATH_ADDS_EXTERNAL_EFFECT",
+      "notes": "Terminates the current voice session state; distinct from durable/economic/world effects."
+    }
+  ],
+  "matrix_conclusions": [
+    "The Realtime tool surface is not one authority class: read-only, internal durable mutation, delegated execution, external research submission and session control must remain typed separately.",
+    "frank_auftrag_stellen has a mechanical human-intent predecessor, but child execution still requires WorkExecutionBinding + ChildPolicyEnvelope + invocation-level effect/completion lineage.",
+    "frank_erinnerung_schreiben is a bounded internal durable mutation and needs MemoryAdmission rather than being mislabeled as an external EffectGate bypass.",
+    "frank_forschung/neu_anstossen is an external submission path whose explicit-user-only rule currently lives in model-facing tool prose, not an equivalent deterministic two-step admission state machine.",
+    "Current 9.13 HARD_OFF means this Trigger-5 pass grants no provider/external execution credit and performs no research submission."
+  ],
+  "trigger4_required_gates": [
+    "NCX-06 inventory must include all non-Bash mutating child capabilities, not only Bash.",
+    "ResearchRequestCandidate -> deterministic HumanIntent/Capability/Privacy/Economic admission before chatgpt_senden or any successor external research submission.",
+    "MemoryCandidate -> MemoryAdmission before durable conversational-memory commit, preserving provenance/epistemic/privacy/generation.",
+    "Session control remains separate from canonical/economic effect authority."
+  ],
+  "counterhypotheses": [
+    {
+      "claim": "Model-facing frank_forschung tool instructions plus Realtime conversation context may be sufficient product policy for research submission.",
+      "discriminator": "Adversarially issue a model tool call without a fresh matching user research request; successor must deterministically deny before any external submission."
+    },
+    {
+      "claim": "Conversational memory writes are low-risk enough to remain implicit mutations.",
+      "discriminator": "Inject/misrecognize third-party speech and test whether provenance/privacy/generation-aware MemoryAdmission prevents an unwanted durable row without degrading normal memory capture."
+    }
+  ],
+  "credits": {
+    "source_forensics": "ADVANCED",
+    "tool_surface_classification": "COMPLETE_FOR_CURRENT_DECLARED_REALTIME_TOOLS",
+    "runtime_reexecution": 0,
+    "external_research_execution": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0
+  }
+}

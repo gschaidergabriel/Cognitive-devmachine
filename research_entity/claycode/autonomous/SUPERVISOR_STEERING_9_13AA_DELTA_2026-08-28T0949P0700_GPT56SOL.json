@@ -1,0 +1,25 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13AA_NON_AUTHORITY",
+  "timestamp_local": "2026-08-28T09:49:00+07:00",
+  "program": "ENTITYOS_HCU",
+  "finding": "GRID10 SIGKILL replacement acceptance v3 closes the remaining v2 source proof splice by making coord-new a second distinct OS child process with its own observed PID. coord-new itself performs pre-TTL election probing, post-TTL automatic election, retained DecodeSafeFabric recovery, and replay. The parent orchestrates and observes only and never receives or executes with the replacement lease token. Worker remains parent-owned, so the acceptance deliberately remains component scope below Physical-GRID10 independence. Repository-bound execution is still pending; no runtime or promotion credit is granted.",
+  "source_commits": {
+    "v3_acceptance": "6ed5646ed01b8ca99947d8e3ca6325ad9b8cb4c1",
+    "v3_test": "9fb25d7b650eb889b4936e66090695651e587bc5"
+  },
+  "closed_source_gap": "INDEPENDENT_REPLACEMENT_COORDINATOR_PROCESS_AND_PARENT_TOKEN_NON_USE",
+  "runtime_credit": 0,
+  "physical_grid10_credit": 0,
+  "whole_hcu_credit": 0,
+  "training_credit": 0,
+  "next": [
+    "repository-bound execute v3 on a clean current non-provider checkout",
+    "require distinct parent/coord-old/coord-new PIDs and receipt PID binding",
+    "require real SIGKILL after durable admission and before outbox ACK",
+    "require replacement blocked before TTL and automatically elected after TTL without manual revoke",
+    "require coord-new child itself to perform recovery and replay",
+    "require exactly one admission, consumed 0->1, unchanged S1 during recovery, replay +0",
+    "if PASS, move the worker into a distinct real process and repeat under normal decode-safe node loops before any Physical-GRID10 credit"
+  ]
+}

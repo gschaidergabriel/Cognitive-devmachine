@@ -1,0 +1,33 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CORRECTION_RECEIPT/v1",
+  "created_at": "2026-08-28T10:42:12Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/architecture-forensics-live-ingest",
+  "routing_self_test": "PASS",
+  "canonical_main_observed": "4792b1ba4186e21b60c6eb051a6d47b6510a31f6",
+  "design_branch_after_delta": "bb1235494bed7be217b1fb3287e141c518eda278",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T104212Z_WORKEXECUTION_V2_ADMISSION_CURRENTNESS_CORRECTION_GPT56SOL.json",
+  "architecture_delta_commit": "bb1235494bed7be217b1fb3287e141c518eda278",
+  "corrected_packet": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
+  "correction": {
+    "prior_admission_claim": "ACCEPTED_SCHEMA_VALID_SOURCE_PACKET_NO_RUNTIME_CREDIT",
+    "current_admission_status": "QUARANTINED_FAIL_CLOSED",
+    "reasons": [
+      "Exact packet lacks mandatory authority_classification required by INGEST_PACKET_SCHEMA_V2.json and validate_ingest_packet_v2.py.",
+      "Exact packet binds canonical_main_sha=24389f873a775fd3af5fc3c896a58836d09a3bff but refreshed main is 4792b1ba4186e21b60c6eb051a6d47b6510a31f6.",
+      "Local validator execution against a refreshed local main was unavailable; no PASS is fabricated."
+    ]
+  },
+  "semantic_result": "WORKEXECUTION_BINDING_SOURCE_ABI_FINDINGS_RETAINED_ADMISSION_CREDIT_WITHDRAWN",
+  "retained_frontier": "The source/ABI candidate chain is paket_id -> Agent tool_use_id via exact HANDOFF marker, then Agent PostToolUse tool_use_id -> tool_response.agentId, with installed-target runtime proof still required.",
+  "main_diff_note": "The observed main movement from 24389f873a775fd3af5fc3c896a58836d09a3bff to 4792b1ba4186e21b60c6eb051a6d47b6510a31f6 changed only agentZero/bewertung/bewertungen.jsonl.meta.json; this preserves semantic authority continuity but not exact-main admission under the current validator.",
+  "ingest_state_mutated": false,
+  "original_packet_mutated": false,
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "runtime_credit_delta": 0,
+  "training_credit_delta": 0,
+  "next_exact_action": "Emit a V2 successor containing authority_classification and a freshly rebound authority tuple, then run validate_ingest_packet_v2.py against a proven refreshed local main before changing INGEST_STATE. In parallel Triggerword-4, verify the source/ABI join on one harmless installed Agent lifecycle and then two overlapping children."
+}

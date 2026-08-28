@@ -13,6 +13,10 @@ class EntityOSIntegrityError(PermissionError):
     pass
 
 
+class EntityOSOutcomeUnknown(RuntimeError):
+    """Execution may have started, but no trustworthy terminal receipt returned."""
+
+
 @dataclass(frozen=True)
 class EntityOSBridge:
     """Execute an exact SHA-256 pinned EntityOS snapshot, not a mutable path inode."""
@@ -134,8 +138,13 @@ class EntityOSBridge:
         if not isinstance(argv, list) or not argv or any(not isinstance(x, str) or "\x00" in x for x in argv):
             raise ValueError("explicit non-empty string argv required")
         fd = self._open_verified()
+        dispatch_attempted = False
         try:
             executable = f"/proc/self/fd/{fd}"
+            # From this point onward the child may have started. Any missing terminal
+            # receipt must therefore remain UNKNOWN rather than being promoted to a
+            # definite negative fact that could make a blind retry look safe.
+            dispatch_attempted = True
             cp = subprocess.run(
                 [executable, *argv],
                 executable=executable,
@@ -146,13 +155,19 @@ class EntityOSBridge:
                 timeout=self.timeout,
                 env={"PATH": self._EXEC_PATH},
             )
+            return {
+                "ok": cp.returncode == 0,
+                "exit": cp.returncode,
+                "stdout_sha256": hashlib.sha256(cp.stdout).hexdigest(),
+                "stderr_sha256": hashlib.sha256(cp.stderr).hexdigest(),
+                "stdout": cp.stdout[:4096].decode(errors="replace"),
+                "stderr": cp.stderr[:4096].decode(errors="replace"),
+            }
+        except Exception as exc:
+            if dispatch_attempted:
+                raise EntityOSOutcomeUnknown(
+                    "EntityOS dispatch may have started without a terminal receipt"
+                ) from exc
+            raise
         finally:
             os.close(fd)
-        return {
-            "ok": cp.returncode == 0,
-            "exit": cp.returncode,
-            "stdout_sha256": hashlib.sha256(cp.stdout).hexdigest(),
-            "stderr_sha256": hashlib.sha256(cp.stderr).hexdigest(),
-            "stdout": cp.stdout[:4096].decode(errors="replace"),
-            "stderr": cp.stderr[:4096].decode(errors="replace"),
-        }

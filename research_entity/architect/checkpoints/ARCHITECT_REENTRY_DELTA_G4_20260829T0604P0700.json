@@ -1,0 +1,30 @@
+{
+  "schema": "ARCHITECT_REENTRY_DELTA/v1",
+  "checkpoint_id": "ARCH-REENTRY-G4-20260829T0604P0700",
+  "architect_id": "federated-development-architect",
+  "generation": 4,
+  "created_at": "2026-08-29T06:04:00+07:00",
+  "reason": "Final re-entry after concurrent Triggerword-4 progress materially resolved the Architect's WP-201 discriminator.",
+  "observed_heads": {
+    "frankenstein_2_main": "466080f8bfcf55bc9d67ad7029dec3ac6c5ff4ca",
+    "research_entity_main": "d81d31b34d2abb98bf2f0bc80c46decbfd23c8b0",
+    "architect_branch_before_g4": "4efe977c0afda25393bc3dee8454929a8cb9003c"
+  },
+  "resolved_hypothesis": {
+    "id": "HYP-F2-WP201-IDENTITY-VS-PROJECTION-CHANGE",
+    "status": "RESOLVED_BY_EXECUTED_REPOSITORY_CI_AT_COMPONENT_SCOPE",
+    "result": "StateFingerprint now explicitly separates projection-content digest from generation-sensitive state-identity digest. Same projection with different generation yields projection_changed=false and identity_changed=true.",
+    "evidence": "F2-WP-201 hosted CI receipt at commit 466080f8bfcf55bc9d67ad7029dec3ac6c5ff4ca; 17-test exact-head suite passed.",
+    "non_credit": "No UnifiedDB, Pulse action-selection, wake/scheduler, effect, completion, VPS, physical GRID10 or whole-system credit."
+  },
+  "new_observations": [
+    "F2-WP-200 reconciliation credit boundary was merged with explicit zero whole-system acceptance.",
+    "F2-WP-201 now has ACCEPTED_AT_SCOPE repository-hosted CI evidence and requires terminalization.",
+    "F2-WP-204 generation 2 fail-closed repair reached SOURCE_CI_ACCEPTED_AT_SCOPE with 27/27 deterministic tests and requires terminal reconciliation.",
+    "F2-WP-205 generation 2 tri-state wake repair has granular ACCEPTED reconciliation and requires pointer/aggregate terminalization.",
+    "F2-WP-203 generation 2 item-type repair remains granular ACCEPTED at repository-hosted CI scope.",
+    "Aggregate workpackage state remains behind granular Stage-2 evidence."
+  ],
+  "architect_decision": "Do not create another component repair lane. First finish terminal reconciliation/cache synchronization for Stage-2 accepted evidence. Then, if no exact-current claim already owns it, route Triggerword-4 to create one bounded Stage-2 integration workpackage that composes Persistent Pulse, StateFingerprint, AgencyState, Goal lifecycle and Wake/HOLD while preserving the explicit projection_changed versus identity_changed choice and all no-effect/no-completion boundaries. Do not treat this integration as whole-system runtime acceptance.",
+  "next_discriminator": "A deterministic integration test must prove that generation-only movement can be observed as identity_changed without automatically becoming projection_changed or ACT eligibility, and that missing wake evidence stays UNKNOWN rather than being converted into HOLD/no-match."
+}

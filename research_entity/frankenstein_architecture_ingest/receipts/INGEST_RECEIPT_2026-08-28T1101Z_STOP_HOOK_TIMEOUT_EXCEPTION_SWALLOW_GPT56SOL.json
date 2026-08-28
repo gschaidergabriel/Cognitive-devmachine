@@ -1,0 +1,89 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v2",
+  "created_at": "2026-08-28T11:01:00Z",
+  "trigger": "triggerwort 5",
+  "organ": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "routing_self_test": "PASS",
+  "authority_binding": {
+    "canonical_main_sha": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "supervisor_inbox_blob_sha": "ae841294a222445ddde62c5412cfed065da97c5c",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "owner_emergency_stop": true,
+    "together_forbidden": true,
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py"
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1059Z_STOP_HOOK_TIMEOUT_EXCEPTION_SWALLOW_GPT56SOL.json",
+    "blob_sha": "aedffd520ee06551c290b1938887c10ea2f4e554",
+    "commit": "f7adbfb3949f4238e50459d7632e0d4e67db96ae",
+    "actual_commit_parent": "8fed7bfb9c32862990e05265a49652cd0c5fec16",
+    "result": "SOURCE_FORENSICS_PASS_PRIOR_TIMEOUT_CONTROL_FLOW_CORRECTED"
+  },
+  "provenance_correction": {
+    "delta_field": "source_identity.design_head_before_write",
+    "delta_value": "464a94d00850673ccf732c61fd88af342a243fc9",
+    "meaning_after_concurrent_branch_movement": "CALLER_OBSERVED_HEAD_BEFORE_CREATE_REQUEST_NOT_ACTUAL_COMMIT_PARENT",
+    "actual_commit_parent": "8fed7bfb9c32862990e05265a49652cd0c5fec16",
+    "reason": "The shared Triggerword-5 branch advanced concurrently between the pre-write head read and GitHub create-file commit. This receipt preserves both the caller-observed pre-request head and the actual Git parent rather than rewriting the already-committed delta."
+  },
+  "parallel_ingest_reentry": {
+    "latest_packet_present_at_actual_parent": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T1058Z_5641dc6_GPT56SOL_HEADLESS_CLAUDE_MUTATION_BOUNDARY.json",
+    "latest_packet_id": "TW5-PACKET-20260828T105800Z-HEADLESS-CLAUDE-MUTATION-BOUNDARY-GPT56SOL",
+    "latest_packet_disposition_by_parallel_receipt": "CONSUMED_AFTER_DIRECT_SOURCE_CROSSCHECK",
+    "parallel_receipt_commit": "8fed7bfb9c32862990e05265a49652cd0c5fec16",
+    "own_timeout_delta_is_not_packet_consumption": true,
+    "central_ingest_state_mutation": "NOT_ATTEMPTED_DUE_MOVING_PARALLEL_LEDGER",
+    "reason": "Concurrent append-only Triggerword-5 workers are advancing packet/delta/receipt state. Full-file INGEST_STATE replacement risks dropping concurrent provenance; current branch already records state-sync pending for another parallel packet."
+  },
+  "material_correction": {
+    "finding_id": "TW5-FINDING-STOP-CANCELLATION-SWALLOW-024",
+    "classification": "SOURCE_INFERENCE_NOT_RUNTIME_OBSERVATION",
+    "finding": "_HookTimeout subclasses Exception while _ollama_generate and the cognition path contain broad except Exception fail-silent handling. Therefore a Stop SIGALRM raised during those protected regions can be consumed before the outer cmd_hook timeout handler receives it.",
+    "superseded_narrow_claim": "The prior deltas' unconditional statement that timeout during cognition necessarily transfers to the outer handler and skips all later Stop statements.",
+    "preserved_claims": [
+      "synchronous local model work remains inside the Stop critical path",
+      "the no-LLM-in-hooks specification remains contradicted by live Stop code",
+      "native retrieval identity exists but model relevance attachment must remain exact-round bound",
+      "model-derived relevance remains noncanonical candidate evidence",
+      "runtime behavior is still unmeasured at exact installed identity"
+    ]
+  },
+  "architecture_handoff": {
+    "mechanism": "HardDeadlineIntegrity/v1",
+    "preferred_trigger4_action": "Defer/remove model relevance inference from deterministic Stop and run it as retrieval_id-bound noncanonical GRID/HCU cognition work.",
+    "compatibility_minimum": "Explicitly re-raise _HookTimeout before every relevant generic Exception handler or use an equivalent non-swallowable cancellation channel, then prove it with cancellation injection.",
+    "acceptance": [
+      "hard-deadline cancellation injected inside _ollama_generate is not swallowed",
+      "hard-deadline cancellation injected inside the outer cognition helper is not swallowed",
+      "slow/cold/unreachable local cognition cannot suppress required deterministic Stop lifecycle evidence",
+      "reverse/interleaved same-session retrieval completion yields zero cross-credit",
+      "exact build/source/runtime identity is bound and Frank's own Harness is not modified for evidence"
+    ]
+  },
+  "credits": {
+    "donor_source_forensics": "PASS_WITH_SUCCESSOR_CORRECTION",
+    "packet_ingest_by_this_receipt": 0,
+    "new_runtime_execution": 0,
+    "provider_runtime": 0,
+    "stop_hook_runtime": 0,
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "training": 0
+  },
+  "runtime_execution": false,
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false,
+  "frank_harness_modified": false,
+  "result": "SOURCE_FORENSICS_DELTA_AND_APPEND_ONLY_CHECKPOINT_COMMITTED",
+  "next_exact_gate": "Triggerword-4 build/verification lane: implement HardDeadlineIntegrity/v1 together with exact RetrievalFeedbackIdentity binding, then execute non-provider exact-build cancellation-injection and slow/unreachable cognition tests without modifying Frank's Harness."
+}

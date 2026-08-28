@@ -4,6 +4,7 @@ import hmac
 import importlib.util
 import http.client
 import json
+import os
 import ssl
 import sys
 import threading
@@ -209,7 +210,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         capability_receipt = MOD.receipt()
 
         self.assertEqual(
-            capability_receipt["execution_receipt_schema_version"], "1.7"
+            capability_receipt["execution_receipt_schema_version"], "1.8"
         )
         self.assertEqual(
             capability_receipt["unicode_database_version"],
@@ -224,7 +225,10 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 "execution_cost_policy_principal_restart_stable"
             ]
         )
-        self.assertEqual(capability_receipt["schema_version"], "1.9")
+        self.assertTrue(capability_receipt[
+            "execution_cost_policy_principal_fork_isolated"
+        ])
+        self.assertEqual(capability_receipt["schema_version"], "1.10")
         self.assertFalse(capability_receipt["invariants"][
             "semantic_request_identity_authorizes_replay"
         ])
@@ -392,6 +396,40 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         for credential in credentials:
             self.assertNotIn(credential, repr(receipts))
 
+    @unittest.skipUnless(hasattr(os, "fork"), "requires POSIX fork")
+    def test_cost_principal_process_key_is_reseeded_after_fork(self):
+        env = {
+            "NVIDIA_API_KEY": "fork-isolation-credential",
+            "FRANK_FREE_ONLY_BUDGET_EPOCH": "fork-regression",
+        }
+        parent_principal_id = MOD._cost_policy_principal_id(
+            MOD.PROVIDERS[0],
+            "NVIDIA_API_KEY",
+            env,
+        )
+        read_fd, write_fd = os.pipe()
+        pid = os.fork()
+        if pid == 0:
+            try:
+                os.close(read_fd)
+                child_principal_id = MOD._cost_policy_principal_id(
+                    MOD.PROVIDERS[0],
+                    "NVIDIA_API_KEY",
+                    env,
+                )
+                os.write(write_fd, child_principal_id.encode("ascii"))
+            finally:
+                os._exit(0)
+
+        os.close(write_fd)
+        try:
+            child_principal_id = os.read(read_fd, 128).decode("ascii")
+        finally:
+            os.close(read_fd)
+        _, status = os.waitpid(pid, 0)
+        self.assertEqual(os.waitstatus_to_exitcode(status), 0)
+        self.assertNotEqual(parent_principal_id, child_principal_id)
+
     def test_execution_receipt_pins_unicode_database_version(self):
         class Response:
             status = 200
@@ -425,7 +463,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             now=iter((1.0, 1.01)).__next__,
         )
 
-        self.assertEqual(result["receipt"]["schema_version"], "1.7")
+        self.assertEqual(result["receipt"]["schema_version"], "1.8")
         self.assertEqual(
             result["receipt"]["unicode_database_version"],
             MOD.unicodedata.unidata_version,

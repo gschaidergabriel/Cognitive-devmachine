@@ -1,26 +1,13 @@
 #!/usr/bin/env python3
 """ControlSnapshot-bound persistent GRID10 runtime integration for Triggerword 4.
 
-This module closes a bounded functional seam between the source-ready Frankenstein 2.0
-live cognitive control plane and the persistent GRID10 v4 heartbeat/Agency runtime.
-It is deliberately provider-neutral and noncanonical.
+One immutable ControlSnapshot is latched before the cycle. That same object conditions the
+v4 wake/heartbeat/pulse checkpoint and the downstream GRID cell/GWT/memory consumers.
+Control changes during a cycle are observed only as an end-of-cycle change detector and do
+not alter the current basis. Wake lineage remains owned exclusively by v4.
 
-Per cognitive cycle it:
-
-1. latches exactly one immutable ControlSnapshot before the cycle starts;
-2. uses that snapshot's pulse cadence for the v4 heartbeat/Agency transition;
-3. applies the same latched GRID cell mode/gain values to provider-neutral cell runners;
-4. gives COMPUTE_OFF, OUTPUT_OFF and MEMORY_OFF observable causal semantics;
-5. uses workspace ignition threshold + cell gain to determine GWT feed eligibility;
-6. records whether control changed during the cycle without changing the latched basis;
-7. stores a deterministic integration receipt keyed by tick_id in the same SQLite file.
-
-Control changes made while a cycle is running become visible only on the next cycle.
-That is the functional meaning of LIVE_ADJUSTABLE != MID_CYCLE_MUTABLE.
-
-This adapter does not authorize providers, effects, completion, canonical truth or model
-outputs. Cell runner outputs remain candidate cognition. EffectGate/EffectJournal and
-CompletionGate retain their separate authority boundaries.
+This adapter is provider-neutral and noncanonical. It never authorizes providers, effects,
+completion, canonical truth, or model output as fact.
 """
 from __future__ import annotations
 
@@ -33,7 +20,11 @@ import time
 from typing import Any, Callable, Mapping
 
 from frankenstein2_cognitive_control_plane_v1 import CognitiveControlPlane, ControlMode, ControlSnapshot
-from grid10_cognitive_unified_runtime_v4 import UnifiedCognitiveRuntimeV4, build_unified_cognitive_runtime_v4
+from grid10_cognitive_unified_runtime_v4 import (
+    RuntimeCycleError,
+    UnifiedCognitiveRuntimeV4,
+    build_unified_cognitive_runtime_v4,
+)
 
 SCHEMA = "GRID10_CONTROLLED_COGNITIVE_RUNTIME/v1"
 CELL_SCHEMA = "GRID10_CONTROLLED_CELL_EXECUTION/v1"
@@ -166,8 +157,13 @@ class ControlledGridRuntimeV1:
     ) -> ControlledCycleResult:
         if not tick_id.strip():
             raise ValueError("tick_id required")
+        if prewoken_goal_ids is not None:
+            raise RuntimeCycleError(
+                "PREWOKEN_WAKE_LINEAGE_UNSUPPORTED:runtime_owns_wake_due"
+            )
 
-        # Single immutable cycle basis. No later read may alter current-cycle decisions.
+        # The one immutable current-cycle basis. v4 receives this exact object rather than
+        # independently re-reading the control plane.
         latched = self.control_plane.snapshot()
         active_interval = latched.float("pulse.active_interval_seconds")
         hold_interval = latched.float("pulse.hold_interval_seconds")
@@ -191,7 +187,7 @@ class ControlledGridRuntimeV1:
             hold_interval=hold_interval,
             now_ts=now_ts,
             observed_events=observed_events,
-            prewoken_goal_ids=prewoken_goal_ids,
+            control_snapshot=latched,
             trusted_axes=trusted_axes,
             extra_variables=control_variables,
         )
@@ -232,7 +228,7 @@ class ControlledGridRuntimeV1:
             else:
                 try:
                     candidate = cell_runner(cell, gain, basis)
-                except Exception as exc:  # receipt the failure; never mint a candidate.
+                except Exception as exc:
                     error = f"{type(exc).__name__}:{exc}"[:500]
 
             computed = cell_runner is not None
@@ -264,6 +260,7 @@ class ControlledGridRuntimeV1:
             if memory_eligible:
                 memory_feed.append(candidate_row)
 
+        # This is change detection only. It cannot alter the already-completed cycle basis.
         after = self.control_plane.snapshot()
         changed_during = bool(
             after.control_epoch != latched.control_epoch
@@ -298,7 +295,7 @@ class ControlledGridRuntimeV1:
         try:
             con.execute("BEGIN IMMEDIATE")
             con.execute(
-                """INSERT INTO grid10_controlled_cycle_receipts VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                "INSERT INTO grid10_controlled_cycle_receipts VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     tick_id,
                     RECEIPT_SCHEMA,
@@ -358,6 +355,7 @@ def build_controlled_grid_runtime_v1(
         Path(unified_db),
         allow_regulator_writes=allow_regulator_writes,
     )
-    control = CognitiveControlPlane(Path(unified_db))
+    # Reuse the exact control-plane object already attached to v4. One data plane, one catalog.
+    control = runtime.control_plane
     controlled = ControlledGridRuntimeV1(runtime, control, Path(unified_db))
     return fabric, heartbeat, agency, control, controlled, fingerprint

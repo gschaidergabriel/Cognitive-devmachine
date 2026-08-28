@@ -3,9 +3,9 @@
   "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
   "donor_repo": "gschaidergabriel/frankenstein",
   "last_resolved_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
-  "last_resolved_design_sha_before_ingest": "cfddde323f457099c0fada68a3af5340d554c159",
+  "last_resolved_design_sha_before_ingest": "0173dbce2ad76ad52b34db38a17708a466c778c2",
   "canonical_main_observed": "4a4287d0935d4dd19d122b1027716a569d331a73",
-  "last_ingest_at": "2026-08-28T07:31:04Z",
+  "last_ingest_at": "2026-08-28T07:32:37Z",
   "last_architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_REENTRY_FUSION.json",
   "last_architecture_delta_commit": "e54601f01161c222c814c999af4641eb71d233ff",
   "last_ingest_receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_REENTRY_FUSION.json",
@@ -39,6 +39,18 @@
       "commit": "3d80993e6f47a411259cc054f25507613930bde5",
       "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_INVOCATION_EFFECT_PERCEPTION_FUSION.json",
       "receipt_commit": "5f3605212ba19efcbf8aa6ac721a34265183984a"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_EFFECT_PERCEPTION_VOICE_PREDECESSOR_FUSION_2026-08-28_GPT56SOL.json",
+      "commit": "bc64fc5fba996bb19444add172dec84167a5f7a3",
+      "receipt": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T072816Z_PROJECT_FRANKENSTEIN_EFFECT_PREDECESSOR_GPT56SOL.json",
+      "receipt_commit": "bc64fc5fba996bb19444add172dec84167a5f7a3"
+    },
+    {
+      "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_HISTORICAL_APPROVAL_BINDING.json",
+      "commit": "8f1ee02125f07c1e7f574e5e90fece264d134bb2",
+      "receipt": "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_HISTORICAL_APPROVAL_BINDING.json",
+      "receipt_commit": "0173dbce2ad76ad52b34db38a17708a466c778c2"
     }
   ],
   "corroborating_ingest_receipts": [
@@ -65,7 +77,10 @@
     "triggerwort5-20260828T1414p0700-gpt56sol-effect-completion-forensics",
     "TW5-PACKET-20260828T072106Z-5641dc6-GPT56SOL-EFFECT-PATH-FORENSICS",
     "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
-    "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT"
+    "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+    "TW5-PACKET-20260828T072552Z-5641dc6-GPT56SOL-MAIN-FEED-SUCCESSOR-BRIDGE",
+    "TW5-PACKET-20260828T072816Z-PROJECT-FRANKENSTEIN-EFFECT-PREDECESSOR-GPT56SOL",
+    "TW5-PACKET-20260828T073038Z-PROJECT-FRANKENSTEIN-APPROVAL-IDENTITY-GPT56SOL"
   ],
   "superseded_packet_ids": [
     "TW5-BRIDGE-20260828T071400Z-5641dc6-GPT56SOL"
@@ -78,11 +93,13 @@
     "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004",
     "TW5-CONTRADICTION-PARALLEL-EFFECT-CORRELATION-003",
     "TW5-CONTRADICTION-PERCEPTION-ENFORCEMENT-COVERAGE-005",
-    "TW5-CONTRADICTION-PENDING-EFFECT-UNKNOWN-006"
+    "TW5-CONTRADICTION-PENDING-EFFECT-UNKNOWN-006",
+    "TW5-CONTRADICTION-HISTORICAL-APPROVAL-BINDING-007"
   ],
   "current_frontier": [
     "P0 recover Git introduction/supersession chronology for posttool-only effect logging -> Phase-2 nonblocking admission bookkeeping -> current completion verifier; preserve source-ready versus live-wired transitions",
-    "P0 inspect the actual blocking wache-koenig predecessor and real hook scheduler to determine whether same-session PreToolUse/PostToolUse can interleave; Frankenstein-2.0 must use immutable per-call tool_use_id + request_digest + session/generation/causal identity rather than one active_turns.effect_id pointer",
+    "P0 recover the actual blocking wache-koenig predecessor plus any historical approval responder/wrapper; determine whether any layer revalidated approval contents before execution and preserve exact source/runtime lineage rather than inference",
+    "P0 make Frankenstein-2.0 executor consume a one-shot typed EffectDecision bound to immutable tool_use_id/invocation_id + request_digest + session/generation/causal identity + policy version; caller-controlled skip_approval cannot be final authority",
     "P0 resolve exact donor dependency closure for dynamically imported wegehierarchie and other runtime compatibility modules before Triggerword-4 donor freeze; require exact source/hash or an explicit tested successor and preserve silent-degradation regression coverage",
     "P0 repair the Triggerword-4 assembly design so unavailable Presence remains UNKNOWN/None rather than falling back to user_present=True; add explicit WAIT/ASK/re-observe semantics and a regression test",
     "P0 specify a minimal provenance-bearing VoiceSessionCapsule/GRID context compiler because current realtime _response_erstellen() refreshes the capsule but does not serialize it into per-response instructions; require field-level lesion/shuffle tests and bounded token/privacy/freshness rules",
@@ -90,9 +107,8 @@
     "P1 map typed ObservedEvidence/InferredHypothesis/RetrievalPrior, NOT_COMPUTED, open-set UNKNOWN and anti-self-confirmation semantics into the Triggerword-4/5 sparse WorldNeed/WorldSlice substrate contract",
     "P1 audit every protected perception-head call path for deterministic evaluate_head admission or explicit retirement/replacement before any system-wide privacy credit",
     "P1 turn shared voice/visual arbitration plus WAIT-margin telemetry into a typed GRID competition ABI with modality-specific calibration and lesion/shuffle acceptance requirements",
-    "P1 bind EffectRequest/EffectDecision/EffectOutcome and ADMISSION_DECISION/ENFORCEMENT_DECISION/EXECUTION_RECEIPT/WORLD_EFFECT_VERIFICATION/COMPLETION_EVIDENCE as distinct typed states behind canonical EntityOS EffectGate/EffectJournal authority; successful execution must never retroactively create admission authority",
+    "P1 bind EffectRequest/EffectDecision/EffectOutcome and ADMISSION_DECISION/ENFORCEMENT_DECISION/SUBMISSION_RECEIPT/EXECUTION_RECEIPT/WORLD_EFFECT_VERIFICATION/RESULT_REENTRY/COMPLETION_EVIDENCE as distinct typed states behind canonical EntityOS EffectGate/EffectJournal authority; successful execution must never retroactively create admission authority",
     "P1 add a typed PENDING_EFFECT -> CANCELLED-before-submission versus SUBMITTED -> OUTCOME_UNKNOWN/VERIFIED state boundary; never map post-submission transport uncertainty to cancellation success or blind replay",
-    "P1 add Triggerword-4 regressions for parallel state-changing tool calls, reverse completion order, forced PreToolUse failure with stale prior pointer, actual DENY non-execution, wrong-call identity rejection, perception-policy bypass and secret-fence coverage",
-    "P1 map historical Project-Frankenstein predecessor effect/state boundaries at exact commits rather than relying on synthesis prose"
+    "P1 add Triggerword-4 regressions for one-shot decision consumption, request-digest mismatch, stale generation, parallel state-changing tool calls, reverse completion order, forced PreToolUse failure with stale prior pointer, actual DENY non-execution, wrong-call identity rejection, perception-policy bypass and secret-fence coverage"
   ]
 }

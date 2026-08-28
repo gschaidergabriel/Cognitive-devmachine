@@ -1,0 +1,86 @@
+{
+  "schema": "FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/exact-parallel-v2-reconciliation",
+  "trigger": "triggerwort 5",
+  "created_at": "2026-08-28T08:35:20Z",
+  "canonical_main_sha": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+  "authority_epoch": "9.13",
+  "design_sha_before_delta": "f51562d952a7b412b553b54cba15d10112e11dc1",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "corrects_append_only": [
+    "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28_V2_WACHE_PARALLEL_SUCCESSOR_RECONCILIATION_GPT56SOL.json",
+    "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28_V2_WACHE_PARALLEL_SUCCESSOR_RECONCILIATION_GPT56SOL.json",
+    "research_entity/frankenstein_architecture_ingest/INGEST_STATE_CHECKPOINT_2026-08-28T082945Z_GPT56SOL.json"
+  ],
+  "correction_reason": "The parallel organ correctly preserved the fork but had no executable validator PASS. This organ independently refreshed canonical main through the connected GitHub surface, reproduced the exact validator source/read-set Git identities locally, and executed the same v2 validator on both immutable successors. Both PASS. The earlier no-PASS observations remain true for their environments but no longer describe the aggregate evidence state.",
+  "validator": {
+    "path": "research_entity/frankenstein_architecture_ingest/validate_ingest_packet_v2.py",
+    "blob_sha": "7b19b41666c7fc6c7fd47091ef48f566509fa824",
+    "result_schema": "TRIGGERWORD5_PACKET_ADMISSION_RESULT/v2",
+    "currentness_method": "Connected GitHub surface refreshed main immediately before validation; exact authority read-set blob OIDs and canonical main identity were reproduced in the local validator projection. No provider/model/donor/VPS runtime was invoked."
+  },
+  "parallel_successors": [
+    {
+      "packet_id": "TW5-PACKET-20260828T081406Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T081406Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_V2_GPT56SOL.json",
+      "blob_sha": "660fee9248758a73bd6a040830127632c53b055b",
+      "supersedes_packet_id": "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL",
+      "validator_return_code": 0,
+      "admitted": true,
+      "errors": [],
+      "runtime_credit_delta": 0
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T081600Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-V2-SUCCESSOR-GPT56SOL",
+      "path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T081600Z_HISTORICAL_WACHE_SETTINGS_INHERITANCE_V2_SUCCESSOR_GPT56SOL.json",
+      "blob_sha": "99ef8f48d49911ea2796963c9f0af0ae9dcf8358",
+      "supersedes_packet_id": "TW5-PACKET-20260828T074533Z-HISTORICAL-WACHE-SETTINGS-INHERITANCE-GPT56SOL",
+      "validator_return_code": 0,
+      "admitted": true,
+      "errors": [],
+      "runtime_credit_delta": 0
+    }
+  ],
+  "provenance_reconciliation": {
+    "classification": "PARALLEL_V2_SUCCESSORS_BOTH_ADMITTED_COMPLEMENTARY_PROVENANCE",
+    "timestamp_winner": false,
+    "mutual_supersession": false,
+    "reason": "Both immutable v2 packets explicitly supersede the same v1 predecessor and neither declares supersession of the other. Admission establishes envelope/current-authority validity, not dominance. Preserve both until a future explicit successor/reconciler states otherwise.",
+    "predecessor_status": "SUPERSEDED_AS_CURRENT_ADMISSION_ENVELOPE_BY_PARALLEL_V2_FORK_HISTORICAL_PROVENANCE_RETAINED",
+    "ledger_semantics": [
+      "074533Z v1 must not remain the current consumed/admitted envelope.",
+      "081406Z and 081600Z may both be represented as admitted/consumed historical-source packets without implying mutual supersession.",
+      "Do not choose one by later timestamp, confidence score or richer prose.",
+      "The 081600Z packet's child-policy/effect-lineage refinement is additive architecture signal, not authority over the 081406Z packet."
+    ]
+  },
+  "native_subagent_packet_status": {
+    "packet_id": "TW5-PACKET-20260828T082628Z-NATIVE-SUBAGENT-IDENTITY-GAP-GPT56SOL",
+    "blob_sha": "bad15660b245dfc33139736cd9857064c82812ef",
+    "validator_return_code": 0,
+    "admitted": true,
+    "runtime_credit_delta": 0,
+    "note": "This separate packet was also exactly validator-PASSed in this organ; current installed native child lifecycle runtime remains unproven."
+  },
+  "architecture_consequence_for_trigger4": [
+    "Treat historical --settings inheritance as donor evidence for policy-envelope transport only, not effect authority.",
+    "Preserve exact parallel-source provenance instead of collapsing forks by timestamp.",
+    "Prioritize binding durable workpackage_id to observed native agent_id/task_id/tool_use_id/generation before freezing R2.",
+    "Require one-shot invocation-bound EffectDecision consumption and typed execution/completion receipts for every mutating child path.",
+    "Prefer the installed native Claude child ABI when actually observed sufficient; do not build a duplicate spawn runtime from documentation alone."
+  ],
+  "credits": {
+    "packet_admission_081406": "PASS",
+    "packet_admission_081600": "PASS",
+    "packet_admission_native_identity": "PASS",
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "native_child_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Merge these append-only admission/provenance operations into the moving INGEST_STATE without deleting concurrent frontier work; separately obtain authorized installed-host evidence for Claude Code build/config/native child lifecycle before runtime promotion."
+}

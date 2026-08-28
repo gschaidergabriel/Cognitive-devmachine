@@ -1,0 +1,70 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_SOURCE_RESULT_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-SEED-007",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "MIRRORED_E2_ARCHITECTURE_MAPPED_STATIC_ONLY",
+  "canonical_result_authority": "gschaidergabriel/frankenstein-2.0",
+  "canonical_result_path": "research/tool_intelligence/deltas/R6-20260829-SRCARCH-UNIPROF-GPT56SOL-01.json",
+  "canonical_result_commit": "edca66363363f43ca1ffbea7af0339ce4da1117a",
+  "canonical_claim_path": "research/tool_intelligence/claims/R6-SEED-007/E2_ARCHITECTURE_MAPPED.json",
+  "canonical_claim_commit": "e8a6c027d4103903d2501cb4195fea19534d9613",
+  "source": {
+    "repository": "indragiek/uniprof",
+    "commit": "e0885475540fe8ff534393cdefda99ccdfeb545b",
+    "package_version": "0.3.4",
+    "license_repository_code": "MIT"
+  },
+  "retained_findings": [
+    "UniProf's strongest transferable value is its cross-runtime profiler plugin/normalization layer and common hotspot-analysis contract, not a new state or effect authority.",
+    "ProfileContext/ProfileAnalysis preserve useful profiler/artifact/sampling/profile-type dimensions but lack F2 causal identity, immutable image/profiler/target/artifact digests and explicit coverage/confidence semantics.",
+    "Container images are selected with mutable :latest tags; exact-source runtime evidence therefore requires digest pinning or exact-source rebuild before any E3 credit.",
+    "Linux perf requests SYS_ADMIN+SYS_PTRACE and the generic runner maps SYS_ADMIN to --privileged; Python container profiling requests SYS_PTRACE. These privileges are not suitable as implicit/default F2 authority.",
+    "Container profiling mounts the working directory read-write and can optionally use host networking; profiling still executes the target and is not intrinsically read-only observation.",
+    "The MCP run_profiler surface accepts command+cwd and executes the profiling target, so direct model-side adoption would create an execution-capable path. F2 must keep EffectGate/authorized execution authority outside UniProf.",
+    "Several profilers default near 999 Hz and evented profiles are normalized into synthetic weighted samples. Observer overhead and cross-profiler semantic equivalence must be measured, not assumed.",
+    "Repository code is MIT, while bundled profiler images contain third-party components under separate licenses."
+  ],
+  "architecture_recommendation": {
+    "classification": "CONCEPT_DISTILL_PLUS_OPTIONAL_BOUND_PROFILE_ADAPTER",
+    "whole_runtime_import": "REJECT_AT_E2",
+    "direct_mcp_adoption": "REJECT_AS_EXECUTOR_AUTHORITY",
+    "preferred_contract": "ProfileObservationEnvelope as noncanonical measurement input to F2 telemetry, with exact target/observer/profiler/image/artifact identity, privilege scope, sampling/profile type, coverage/symbol quality, analysis parameters and observer-overhead fields."
+  },
+  "next_discriminator": {
+    "required_claim": "R6-SEED-007/E3_CLAIM_REPRODUCED_PYSPY_LOW_PRIVILEGE_FIXTURE",
+    "summary": "Use a deterministic local Python hotspot+child fixture on an admitted zero-cost isolated Linux surface; pin exact UniProf/py-spy/image identities, forbid SYS_ADMIN/--privileged, compare unprofiled vs lower-rate vs 999 Hz profiling, and measure diagnostic accuracy, child coverage, run-to-run variance, wall/CPU/RSS overhead, artifact cost, symbol coverage, path/secret exposure and behavior when SYS_PTRACE is unavailable."
+  },
+  "authority": {
+    "admitted_supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "9_13AL": "NON_AUTHORITY_RESEARCH_SURFACE",
+    "unifieddb": "SOLE_CANONICAL_STATE_AUTHORITY",
+    "effect_authority": "EffectGate+EffectJournal"
+  },
+  "database_materialization": {
+    "pending_research_sqlite_updated": false,
+    "reason": "No direct binary DB rewrite was attempted through the source connector. This mirror is provenance/indexing only and cannot replace the F2 canonical result or pending_research.sqlite."
+  },
+  "credits": {
+    "source_read": 1,
+    "architecture_mapped": 1,
+    "claim_reproduced": 0,
+    "f2_ablation": 0,
+    "build_candidate": 0,
+    "f2_accepted": 0,
+    "runtime": 0,
+    "whole_system": 0,
+    "training": 0
+  },
+  "execution": {
+    "source_only": true,
+    "provider_calls": 0,
+    "profiler_runs": 0,
+    "docker_runs": 0,
+    "vps_runs": 0,
+    "sudo_or_root": 0,
+    "real_external_effects": 0,
+    "unusual_experiment": false
+  }
+}

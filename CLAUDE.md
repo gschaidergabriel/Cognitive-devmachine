@@ -11,21 +11,27 @@ This root file is a repository-organ routing shim, not canonical durable product
 
 ## Read first — current authority
 
-1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
-2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-4. `research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json`
-5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
-6. `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
-7. `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
-8. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
-9. `research_entity/continuity/TRIGGER_ONE_JSPACE_STEERING_CONTRACT.md`
-10. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
-11. `the artefact/manifest.json`
-12. `the artefact/README.md`
-13. task-relevant current or compatibility implementation files.
+1. `CLAY_EXECUTION_AUTHORITY.md`
+2. `governance/EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md`
+3. `governance/EXECUTION_SURFACE_REGISTRY_V1.json`
+4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
+5. the exact steering file selected by that inbox
+6. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
+7. `research_entity/rooms/PROGRAM_STATE.json`
+8. `research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json`
+9. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
+10. `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
+11. `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
+12. `research_entity/continuity/GO_ZERO_FREE_SWARM_TRIGGER_CONTRACT.md`
+13. `research_entity/continuity/TRIGGER_ONE_JSPACE_STEERING_CONTRACT.md`
+14. `research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md`
+15. `the artefact/manifest.json`
+16. `the artefact/README.md`
+17. task-relevant current or compatibility implementation files.
 
 Newest explicit owner authority plus the newest admitted supervisor and verified current `main` outrank cached/historical program material. If current files disagree, do not average them: resolve the newest admitted authority, fail closed on execution/spend/effect ambiguity, and repair lower current-facing surfaces without rewriting historical receipts. Never infer current authority from an old receipt, old branch, path name or compatibility filename.
+
+For any execution/tool/VPS/sandbox/capability question, direct tool visibility is only one observation surface. Apply the execution-surface resolver before any global `NO_EXECUTOR`/`NO_SHELL`/unavailable claim. `DIRECT_TOOL_NOT_OBSERVED != PROJECT_CAPABILITY_ABSENT`; known bridge/runner routes must be reconciled first and authority generation must be revalidated before effectful/runtime-credit-bearing use.
 
 ## Current naming law
 
@@ -111,7 +117,8 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 ## Execution and safety — dynamic supervisor
 
 - autonomous mode is `FREE_ONLY` unless a newer explicit owner directive changes it;
-- resolve current execution truth from `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`, not this routing shim's historical prose;
+- owner execution-surface authority comes from `CLAY_EXECUTION_AUTHORITY.md`; provider/supervisor policy is resolved from the current inbox/selected steering for the plane it actually governs;
+- before any global execution blocker, compile current direct + federated route state through `EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md`; a missing direct tool is not global capability absence;
 - external FREE provider execution requires the current typed provider admission plus credential/model/route economic provenance and immediate pre-network revalidation;
 - provider-global FREE statements, key presence, model labels, successful HTTP responses or historical traffic cannot self-admit a concrete lane;
 - Together general inference/training/preflight/key lookup and all paid/subscription/unknown provider fallback remain forbidden under the current owner directive;

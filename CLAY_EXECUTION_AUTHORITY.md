@@ -16,6 +16,11 @@ Current bridge/access documentation:
 
 `governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`
 
+Current execution-surface reconciliation protocol and non-authoritative discovery registry:
+
+- `governance/EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md`
+- `governance/EXECUTION_SURFACE_REGISTRY_V1.json`
+
 External solution discovery/reproduction/adaptation is defined operationally in:
 
 `governance/CLAY_EXTERNAL_SOLUTION_HARVEST_LOOP.md`
@@ -25,6 +30,33 @@ Mandatory end-of-`go` collective recursive-improvement measurement is defined in
 `governance/CLAY_GO_COLLECTIVE_RECURSIVE_IMPROVEMENT_METRICS_2026-08-24.md`
 
 All ChatGPT/local/VPS development lanes must resolve this file before coordinated `go`/`zero`/trigger execution.
+
+## Mandatory execution-surface reconciliation — owner-policy projection 2026-08-29
+
+Before any material execution attempt, and before any global conclusion equivalent to `NO_EXECUTOR`, `NO_SHELL`, `VPS_UNAVAILABLE`, `SANDBOX_UNAVAILABLE`, `SELF_HOSTED_UNAVAILABLE`, `CANNOT_RUN`, or `BLOCKED_BY_TOOLING`, workers MUST apply `governance/EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md` against `governance/EXECUTION_SURFACE_REGISTRY_V1.json` plus freshly observed session/route state.
+
+This is a routing/reconciliation requirement, not a new authority source. The registry cannot grant permission and does not mint runtime credit.
+
+The mandatory epistemic rule is:
+
+```text
+DIRECT_TOOL_NOT_OBSERVED
+!= PROJECT_CAPABILITY_ABSENT
+
+ATTENTION_SURFACE
+!= NATIVE_INVOCATION_SURFACE
+!= FEDERATED_REACHABILITY
+!= EXECUTION_AUTHORITY
+!= TARGET_HEALTH
+!= ECONOMIC_PROVIDER_BOUNDARY
+!= EVIDENCE_ADMISSION
+```
+
+A direct/local negative observation MUST remain scoped to the surface actually observed. A project-wide capability-absence conclusion requires exhaustive current resolution of every registered applicable route at one bound authority generation, with no remaining unknown/unprobed or merely transient route.
+
+Transport/control-plane failures such as a missing local SSH binary, queued/offline runner, DNS failure, rate limit, missing connector method, or bridge-auth failure remain transport-scoped and do not establish product/scientific failure.
+
+Before an effectful, cost-bearing, promotion-bearing or runtime-credit-bearing use of a previously selected route, workers MUST revalidate the current owner-authority generation and route observation freshness. A stale resolution is discarded and reconciled again.
 
 ## FREE_ONLY semantics — owner clarification 2026-08-29
 

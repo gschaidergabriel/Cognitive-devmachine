@@ -1,0 +1,80 @@
+{
+  "schema": "CURRENT_EXECUTION_SURFACE_PROJECTIONS/v1",
+  "canonical_authority": "CLAY_EXECUTION_AUTHORITY.md",
+  "resolver_protocol": "governance/EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md",
+  "registry": "governance/EXECUTION_SURFACE_REGISTRY_V1.json",
+  "projections": [
+    {
+      "path": "CLAY_EXECUTION_AUTHORITY.md",
+      "role": "CANONICAL_CURRENT_AUTHORITY",
+      "required_markers": [
+        "FREE_ONLY is a **token/provider/spend policy**, not an owner-infrastructure ban",
+        "Absence of a direct chat SSH tool is not `NO_EXECUTOR`",
+        "EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md"
+      ]
+    },
+    {
+      "path": "AGENTS.md",
+      "role": "CURRENT_WORKER_ROUTING_SHIM",
+      "required_markers": [
+        "For execution-surface questions, `CLAY_EXECUTION_AUTHORITY.md` is the owner-level resolver",
+        "FREE_ONLY != NO_VPS"
+      ]
+    },
+    {
+      "path": "CLAUDE.md",
+      "role": "CURRENT_WORKER_ROUTING_SHIM",
+      "required_markers": [
+        "1. `CLAY_EXECUTION_AUTHORITY.md`",
+        "2. `governance/EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md`",
+        "DIRECT_TOOL_NOT_OBSERVED != PROJECT_CAPABILITY_ABSENT"
+      ]
+    },
+    {
+      "path": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+      "role": "CURRENT_CACHE_LOWER_THAN_AUTHORITY",
+      "required_markers": [
+        "owner_authority_pointer",
+        "FREE_ONLY is a token/provider/spend policy"
+      ]
+    },
+    {
+      "path": "research_entity/rooms/PROGRAM_STATE.json",
+      "role": "CURRENT_PROGRAM_CACHE_LOWER_THAN_AUTHORITY",
+      "required_markers": [
+        "owner_authority_pointer",
+        "authorized_clay_direct_dev_vps_sandbox_execution"
+      ]
+    },
+    {
+      "path": "AUTHORITATIVE_STATE_RESOLUTION.md",
+      "role": "SUPERSEDED_HISTORICAL_SNAPSHOT",
+      "required_markers": [
+        "SUPERSEDED CURRENT-FACING SHIM",
+        "CURRENT EXECUTION/AUTHORITY ROUTING",
+        "That execution-policy statement is superseded"
+      ]
+    },
+    {
+      "path": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
+      "role": "HISTORICAL_SCOPED_PATH_RECORD",
+      "required_markers": [
+        "HISTORICAL 2026-08-24 VERCEL PATH SNAPSHOT",
+        "CURRENT GLOBAL EXECUTION/AUTHORITY ROUTING",
+        "global no-VPS/self-hosted/provider rule below is historical"
+      ]
+    }
+  ],
+  "forbidden_current_claims": [
+    "VPS/self-hosted/production-host testing is forbidden under current control",
+    "VPS testing: FORBIDDEN",
+    "self-hosted VPS test runners: FORBIDDEN"
+  ],
+  "roles_may_quote_forbidden_only_with_local_supersession_context": [
+    "CANONICAL_CURRENT_AUTHORITY"
+  ],
+  "historical_roles_may_contain_forbidden_claims_only_when_supersession_marked": [
+    "SUPERSEDED_HISTORICAL_SNAPSHOT",
+    "HISTORICAL_SCOPED_PATH_RECORD"
+  ]
+}

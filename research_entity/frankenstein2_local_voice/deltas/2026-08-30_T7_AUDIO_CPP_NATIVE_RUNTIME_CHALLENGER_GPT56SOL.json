@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "date_local": "2026-08-30",
+  "mirror_role": "PROVENANCE_ONLY_NOT_CLAIM_AUTHORITY",
+  "f2_canonical_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_claim": "T7-SYS-004/E2_AUDIO_CPP_NATIVE_RUNTIME_CHALLENGER_AUDIT",
+  "f2_result_path": "research/local_voice/sources/2026-08-30_AUDIO_CPP_V070_NATIVE_RUNTIME_CHALLENGER_AUDIT.json",
+  "f2_result_commit": "476b91dfb29cfbbccfa094b432f6688bb237946c",
+  "f2_claim_completion_commit": "21e7bcab34651949860a86675bc6df28b1685637",
+  "f2_reentry_checkpoint_commit": "32756ec4f88c96f03d0019ca82e1907f4297fd67",
+  "upstream": {
+    "repository": "0xShug0/audio.cpp",
+    "release": "v0.7.0",
+    "release_commit": "d2ff37009c69d464bcab6aa4a44a13746e84a914",
+    "main_observed": "e73c980fe259aa2b3931c8b6ea53517e769877ec",
+    "runtime_license": "Apache-2.0",
+    "model_license_boundary": "SEPARATE_PER_MODEL_ARTIFACT"
+  },
+  "stable_finding": "audio.cpp is a source-level second native C++/ggml/GGUF speech-runtime challenger because its released surface includes German Qwen3-ASR plus multiple German-capable TTS/VAD candidates in one framework. Source breadth does not prove shared model memory, lower concurrent residency, lower p95/p99 or German quality.",
+  "critical_gap": "Qwen3-TTS is not marked Stream in the v0.7.0 support table, so a complete low-latency Qwen3-ASR + Qwen3-TTS Frankenstein path is not source-proven.",
+  "counterhypothesis": "Model-specific NeMo-Speech.cpp/CrispASR/reference paths remain superior; audio.cpp may add integration breadth without target latency/residency advantage or may still require a mixed runtime because of streaming gaps.",
+  "next_discriminator": "Only after a real clay-direct-dev hardware/resource receipt: compare pinned audio.cpp v0.7.0 against pinned NeMo-Speech.cpp/CrispASR/reference paths under equivalent model identities and German fixtures; measure combined RSS/VRAM, p50/p95/p99, ASR/TTS concurrency, German quality, cancellation correctness and network-blocked operation.",
+  "credits": {
+    "source_research": 1,
+    "vps_hardware": 0,
+    "model_download": 0,
+    "model_runtime": 0,
+    "german_voice": 0,
+    "trigger4": 0
+  }
+}

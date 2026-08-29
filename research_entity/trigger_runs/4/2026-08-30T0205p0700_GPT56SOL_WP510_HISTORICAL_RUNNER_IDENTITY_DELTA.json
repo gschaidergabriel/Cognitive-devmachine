@@ -1,0 +1,62 @@
+{
+  "schema": "TRIGGER4_DIAGNOSTIC_EVIDENCE_DELTA/v1",
+  "trigger": "4",
+  "observed_local_time": "2026-08-30T02:05:41+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "CONTROL_PLANE_DIAGNOSTIC_ONLY",
+  "reentry": {
+    "research_main_observed_before_write": "6810a2d241fadcd52a159f27ff7e50bac5e28515",
+    "frankenstein2_main_observed": "bfc6d9455aea4e8247692cc4cadb367f5bf83111",
+    "controller_main_observed": "4886bb4e559ba824efc686350ba1aa12d65ba325",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13BC_NON_AUTHORITY"
+  },
+  "wp510_current_singleton": {
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "status": "queued",
+    "steps_count": 0,
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "runner_id": 0,
+    "runner_name": "",
+    "exact_f2_source_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+    "duplicate_dispatch_performed": false
+  },
+  "historical_same_label_execution": {
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "workflow_run_id": 32058854197,
+    "job_id": 95475201824,
+    "workflow_name": "ClayVerse VPS disposable guest capability probe",
+    "job_name": "probe",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-08-17T19:10:16Z",
+    "started_at": "2026-08-17T19:10:18Z",
+    "completed_at": "2026-08-17T19:10:24Z",
+    "runner_labels": ["self-hosted", "Linux", "X64"],
+    "runner_id": 23,
+    "runner_name": "clay-3",
+    "runner_group_id": 1,
+    "runner_group_name": "Default"
+  },
+  "finding": "The controller repository has exact historical evidence that the same self-hosted/Linux/X64 label set was serviced by runner clay-3 (runner_id 23). This supplies a concrete historical runner identity for the current WP510 runner-lifecycle investigation; it does not prove that clay-3 is still registered, online, eligible, or the only possible current runner.",
+  "hypothesis": "If the current controller still expects the historical runner lineage, inspecting the clay-3 service/listener registration on the owner-authorized host is a higher-information discriminator than dispatching another WP510 job.",
+  "counterhypothesis": "The historical runner may have been removed, renamed, replaced, re-registered with a different runner_id, moved to another group, or superseded by a different eligible runner; historical identity alone cannot establish current runner state.",
+  "evidence_boundary": [
+    "No host-local service status was observed in this delta.",
+    "No listener process, runner version, connectivity log or current registration roster was observed.",
+    "The available GitHub connector does not expose the repository runner-roster endpoint in this session.",
+    "The current WP510 job still has zero executed steps and therefore no target-runtime execution evidence."
+  ],
+  "credits": {
+    "wp510_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Do not duplicate-dispatch WP510. On the existing owner-authorized target-host surface, first inspect the historical clay-3 runner service/listener (or establish that it has been replaced), current registration/eligibility, exact runner version and diagnostics. If an eligible runner is restored, allow existing run 33265772059/job 99135457584 to take assignment; keep registration, service liveness, assignment, step execution and target-runtime receipt as separate evidence credits."
+}

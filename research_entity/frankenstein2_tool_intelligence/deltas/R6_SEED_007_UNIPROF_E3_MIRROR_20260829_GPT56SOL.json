@@ -1,0 +1,42 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-SEED-007",
+  "candidate": "indragiek/uniprof",
+  "evidence_stage": "E3_PARTIALLY_REPRODUCED_WITH_CONSTRAINTS_AND_NEGATIVE_RESULTS",
+  "mirror_role": "NONCANONICAL_RESEARCH_ENTITY_PROVENANCE_MIRROR",
+  "canonical_f2_result": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/R6-20260829-E3-UNIPROF-PYSPY-LOWPRIV-GPT56SOL-01.json",
+    "commit": "ccb9f7f1762a502d0979c25aea30afca10691f85"
+  },
+  "canonical_claim": {
+    "path": "research/tool_intelligence/claims/R6-SEED-007/E3_CLAIM_REPRODUCED_PYSPY_LOW_PRIVILEGE_FIXTURE.json",
+    "commit": "c27367d2d385bd919d565e728dc6de7be7c441bc"
+  },
+  "research_entity_main_observed_before_mirror": "56bd53d6974c95373c7c28b65ae799bb1fd659b4",
+  "authority": {
+    "schema_version": "9.13",
+    "supervisor_delta": "9.13AQ_NON_AUTHORITY",
+    "mode": "FREE_ONLY"
+  },
+  "bounded_findings": [
+    "100 Hz child-launched py-spy 0.4.2 reproduced parent+child hotspot visibility 3/3 on the terminal low-privilege fixture with median wall overhead 1.0781671159029615% versus baseline.",
+    "999 Hz was operationally unstable: terminal run 0/3 successful, each returned ECHILD ('No child process') while still writing parseable profile artifacts; prior comparable run observed 2/3 success.",
+    "At ptrace_scope=1, attaching to an already-running sibling process failed Permission Denied without privilege elevation.",
+    "Successful profile artifacts exposed absolute source paths including GitHub workspace paths.",
+    "Artifact existence cannot mint profiling success when the profiler exits nonzero."
+  ],
+  "architecture_consequence": "Retain only a bounded profile-observation adapter concept: explicit low sampling-rate budget, exact profiler/target/artifact identity, nonzero-exit fail-closed semantics, path redaction/classification, no automatic ptrace/SYS_ADMIN escalation, and no second executor/effect authority.",
+  "credits": {
+    "e3_research": "PARTIAL_CONSTRAINED",
+    "e4_f2_ablation": 0,
+    "build_candidate": 0,
+    "f2_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_causal": 0,
+    "whole_system": 0,
+    "training": 0
+  },
+  "next_gate": "Trigger-4 may optionally consume the result as a bounded low-rate profiling-adapter ablation; Trigger-6 does not self-promote it."
+}

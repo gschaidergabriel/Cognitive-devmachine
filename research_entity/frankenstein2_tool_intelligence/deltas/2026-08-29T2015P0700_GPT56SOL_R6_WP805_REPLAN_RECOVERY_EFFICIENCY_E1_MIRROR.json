@@ -1,0 +1,41 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-20260829-WP805-REPLAN-RECOVERY-EFFICIENCY-GPT56SOL-01",
+  "evidence_stage": "E1_SOURCE_READ",
+  "created_at": "2026-08-29T20:16:00+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "canonical_coordination_authority": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2": {
+    "claim_path": "research/tool_intelligence/claims/R6-20260829-WP805-REPLAN-RECOVERY-EFFICIENCY-GPT56SOL-01/E1_SOURCE_READ.json",
+    "claim_commit": "8daae04dee6c5ced9d42df6cf666c6e0024bc066",
+    "result_path": "research/tool_intelligence/deltas/2026-08-29T2015P0700_GPT56SOL_R6_WP805_REPLAN_RECOVERY_EFFICIENCY_E1.json",
+    "result_commit": "2e80f5a75b1b2906a11f0765f7863b2b95304342"
+  },
+  "research_entity_main_before_mirror": "cec930e264adf0ca4870f5c93e45cce9f4ff0110",
+  "finding_summary": [
+    "Recovery must be scored jointly with recovery cost; success alone cannot distinguish local repair from full restart.",
+    "Reuse earns credit only when retained plan/dependency material remains valid after the change.",
+    "Benchmark against from-scratch replanning and, where deterministically available, a post-change oracle/shortest valid plan.",
+    "Transfer should cross explicit structural/family boundaries rather than merely random seeds.",
+    "Evaluator owns perturbation/ground truth; SUT receives only admitted public change/observation.",
+    "For small micro-worlds, full replanning may legitimately outperform incremental repair; preserve that negative result if measured."
+  ],
+  "external_basis": [
+    "Lifelong Planning A* DOI:10.1016/j.artint.2003.12.001",
+    "D* Lite / AAAI",
+    "Repair the Amplifier, Not the Symptom arXiv:2607.01767",
+    "A Close Look At World Model Recovery arXiv:2606.03685",
+    "ActSWM arXiv:2607.26712"
+  ],
+  "decision": "E1_ONLY_WAIT_FOR_STABLE_WP804_INTERFACE_BEFORE_E2_MAPPING",
+  "reason": "WP804 goal-inference research/build evidence is actively moving in parallel; mapping WP805 recovery against an unstable goal interface would create avoidable staleness.",
+  "credits": {
+    "trigger6_E1": 1,
+    "architecture_acceptance_credit": 0,
+    "runtime_credit": 0,
+    "whole_system_credit": 0,
+    "training_credit": 0
+  },
+  "mirror_policy": "Provenance mirror only. F2 owns the claim mutex and canonical result."
+}

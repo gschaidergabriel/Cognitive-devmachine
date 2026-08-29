@@ -1,0 +1,85 @@
+{
+  "schema": "TRIGGER4_RESEARCH_DELTA_RECEIPT/v1",
+  "trigger": "4",
+  "normalized_trigger": "4",
+  "routing_self_test": "PASS",
+  "organ": "GPT-5.6-Sol",
+  "authority": {
+    "bootstrap_schema": "8.78",
+    "bootstrap_ref": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13BC_NON_AUTHORITY",
+    "owner_vps_execution_authorized": true,
+    "free_only_external_provider_policy": true,
+    "together_forbidden": true
+  },
+  "canonical_research_main_observed_before_write": "bb293097fef463455a45d7d0087733308318e5d0",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "main_reentry_sha": "0726a23512c5bcfe974574ce3f3c90cedfe04adc",
+    "wp1110_generation_2": {
+      "claim_id": "F2-WP-1110-G2-GPT56SOL-OUTER-ARTIFACT-SUBJECT-20260829T1902Z",
+      "terminal_state": "ACCEPTED",
+      "accepted_scope": "OUTER_RELEASE_ARTIFACT_SUBJECT_BINDING_REPOSITORY_HOSTED_CI_ONLY",
+      "implementation_pr": 596,
+      "pr_head_sha": "6e39fe4c37f3a073f03a5b6deb7ecd4ca4dd7f91",
+      "merge_sha": "a1fcf0987fed8bc307ea2433684f2a9b78e18ff9",
+      "pr_ci_run_id": 33270156306,
+      "pr_ci_job_id": 99147087338,
+      "merged_main_ci_run_id": 33270175751,
+      "merged_main_ci_job_id": 99147139821,
+      "terminalization_commit": "fcc128f3f2b6c61f4eba4750fd34059f5acedd9a",
+      "accepted_surfaces": [
+        "src/frankenstein2/release_artifact_subject.py",
+        "src/frankenstein2/artifact_bound_clean_machine.py",
+        "tests/test_release_artifact_subject.py",
+        "tests/test_artifact_bound_clean_machine.py",
+        ".github/workflows/wp1110-pre-handoff-release-ci.yml"
+      ],
+      "finding": "The exact unopened deterministic release ZIP can now be bound by filename, SHA-256 and byte size before extraction while reusing the accepted WP1107 archive verifier and WP1110 generation-1 manifest/route/clean-machine validators. Every successor clean-machine row can be required to carry the same exact artifact subject plus manifest SHA-256 and prehandoff receipt reference.",
+      "negative_evidence": [
+        "no final production release ZIP observed",
+        "no external final-artifact prehandoff receipt observed",
+        "no real clean-machine execution observed",
+        "no target/VPS runtime observed",
+        "no effect/completion/whole-system credit minted"
+      ],
+      "runtime_credit": 0,
+      "physical_host_credit": 0,
+      "completion_credit": 0,
+      "whole_system_acceptance": false
+    },
+    "phase12_coordination": {
+      "wp1207_generation_2": "ACCEPTED_REPOSITORY_CI_ONLY",
+      "decision": "NO_DUPLICATE_WP1207_OR_WP1110_G3_MUTATION_LANE",
+      "reason": "WP1207 already owns the release transaction/readback successor and names exact hostile-target-twin execution as its next runtime gate."
+    }
+  },
+  "wp510_reentry": {
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "run_status": "queued",
+    "job_status": "queued",
+    "executed_steps": 0,
+    "assigned_runner_observed": false,
+    "duplicate_dispatch_performed": false,
+    "runtime_credit": 0,
+    "classification": "RUNNER_LIFECYCLE_CONTROL_PLANE_BLOCKED_NOT_PRODUCT_FAILURE",
+    "historical_runner_identity": "clay-3 / runner_id 23 is historical evidence only, not current liveness proof"
+  },
+  "decision": "TRIGGER4_ADVANCED_WP1110_EXACT_OUTER_ARTIFACT_BINDING_TO_MERGED_MAIN_REPOSITORY_CI_ACCEPTANCE_AND_REENTERED_CURRENT_WP510_P0_WITHOUT_DUPLICATE_DISPATCH",
+  "current_blocker": "The existing WP510 job still has no assigned runner and zero executed steps. Current authority requires direct observation of the owner-host runner service/listener/logs/version and current eligibility before successor dispatch or runtime promotion. This session exposes GitHub control-plane state but no direct owner-VPS host shell/runner-lifecycle surface, so target-runtime evidence cannot be manufactured here.",
+  "next_exact_action": "On an owner-authorized host/VPS surface, inspect the current self-hosted runner service/listener, diagnostic/connectivity logs, exact runner version and eligibility/registration lineage. If an eligible runner is restored or verified, let existing run 33265772059/job 99135457584 take assignment without duplicate dispatch; then require executed steps and an exact-source bound runtime receipt before bounded target-runtime credit. Separately, keep WP1110 generation 2 terminal and route final ZIP execution through the already-admitted WP1207 transaction/readback lane rather than inventing a second release authority.",
+  "credits": {
+    "wp1110_repository_component": 1,
+    "wp510_target_runtime": 0,
+    "physical_grid10": 0,
+    "semantic_gwt": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_entityos_hcu": 0,
+    "whole_frankenstein2": false
+  },
+  "unusual_experiment_executed": false
+}

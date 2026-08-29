@@ -23,6 +23,7 @@ class CurrentExecutionAuthorityLintTests(unittest.TestCase):
         authority = (
             "absence of a direct chat SSH tool is not `NO_EXECUTOR`\n"
             "FREE_ONLY_PROVIDER_POLICY != NO_VPS\n"
+            "EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md\n"
         )
         (root / "CLAY_EXECUTION_AUTHORITY.md").write_text(authority)
         (root / "governance" / "EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md").write_text("protocol")

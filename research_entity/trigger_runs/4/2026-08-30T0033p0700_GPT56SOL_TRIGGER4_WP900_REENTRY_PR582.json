@@ -1,0 +1,69 @@
+{
+  "schema": "TRIGGER4_RUN_RECEIPT/v1",
+  "trigger": "4",
+  "normalized_trigger": "4",
+  "trigger_routing": "PASS",
+  "worker": "GPT-5.6-Sol-TRIGGER4",
+  "authority_epoch": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "research_main_observed_before_write": "6ba798576933654ac86ffb4e51fee65f97e6f80b",
+  "f2": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "main_observed": "80248a18ff3e01f01eb7ac8398933a2f9bad981c",
+    "retained_lane": "trigger4/wp900-whole-persistent-loop-20260829",
+    "lane_head_evidenced": "8b4c89e04bec2821f9b6443662d4039905c7d97f",
+    "pr": 582,
+    "pr_state": "OPEN",
+    "mergeability_at_last_raw_check": "UNKNOWN",
+    "changed_files": 4
+  },
+  "workpackage": {
+    "id": "F2-WP-900",
+    "scope": "WHOLE_PERSISTENT_LOOP_REPOSITORY_COMPONENT_ONLY",
+    "delta": "Re-entered the retained whole-loop causal-seal lane on moving F2 main, preserved the WP510 factory/source-lineage closure guard, obtained exact green repository CI, and opened PR 582 without creating a competing implementation lane."
+  },
+  "evidence": {
+    "negative_run": {
+      "actions_run_id": 33265673829,
+      "head_sha": "806b1182300708f96651c349ca03a205b30cc756",
+      "compile": "PASS",
+      "whole_loop_repository_component_suite": "FAIL",
+      "nonfactory_gwt_closure_guard": "SKIPPED",
+      "classification": "NEGATIVE_REPOSITORY_COMPONENT_CI_EVIDENCE",
+      "causal_boundary": "Root cause is not attributed solely to PYTHONPATH from current evidence."
+    },
+    "temporary_discriminator_run": {
+      "actions_run_id": 33265751530,
+      "head_sha": "6881cd6a3160dc1c585eccc83efbb8c272d77ad0",
+      "result": "PASS",
+      "note": "Temporary workflow import-path discriminator; not the retained current branch head."
+    },
+    "current_positive_run": {
+      "actions_run_id": 33265793855,
+      "head_sha": "8b4c89e04bec2821f9b6443662d4039905c7d97f",
+      "compile": "PASS",
+      "whole_loop_repository_component_suite": "PASS",
+      "nonfactory_gwt_closure_guard": "PASS",
+      "scope": "REPOSITORY_CI_COMPONENT_ONLY"
+    }
+  },
+  "coordination": {
+    "candidate_pr_568": "CANDIDATE_FALSIFIER_ONLY_NOT_MUTATION_AUTHORITY",
+    "review_pr_566": "COUNTEREVIDENCE_ABSORBED_INTO_RETAINED_LANE",
+    "aggregate_projection_writer": "F2-WP-002_ACTIVE_NO_DUPLICATE_PROJECTION_WRITE",
+    "parallel_branch_movement": "OBSERVED_AND_PRESERVED_NO_FORCE_OVERWRITE",
+    "unusual_experiment": "NONE_EXECUTED"
+  },
+  "credits": {
+    "repository_component_ci": 1,
+    "target_runtime": 0,
+    "vps_runtime": 0,
+    "physical_grid10": 0,
+    "provider_model": 0,
+    "real_effect": 0,
+    "completion": 0,
+    "training": 0,
+    "whole_system_runtime": 0
+  },
+  "next_exact_action": "Re-enter PR 582 against exact current F2 main and resolve mergeability/admission without creating a duplicate lane. If admitted at repository-component scope, the next promotion requires an actual authorized target/host runtime receipt; this session had no VPS Bridge surface and therefore grants zero VPS or target-runtime credit."
+}

@@ -49,16 +49,18 @@ _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR = (
 )
 if not hasattr(threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR):
     setattr(threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR, False)
-PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED = getattr(
-    threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR
-)
-
-
 def _fork_active_execution_quarantined() -> bool:
     """Read the interpreter-shared latch, never a module-instance snapshot."""
     return getattr(
         threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR, False
     ) is True
+
+
+def __getattr__(name: str):
+    """Expose the legacy quarantine name without a stale module snapshot."""
+    if name == "PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED":
+        return _fork_active_execution_quarantined()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 def _prepare_process_state_for_fork() -> None:
@@ -68,11 +70,9 @@ def _prepare_process_state_for_fork() -> None:
 
 def _reinitialize_process_state_after_fork() -> None:
     global _PROCESS_COST_PRINCIPAL_KEY, PROCESS_EXECUTION_LOCK
-    global PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
     inherited_active_execution = PROCESS_EXECUTION_LOCK.locked()
     PROCESS_EXECUTION_LOCK = threading.Lock()
     if inherited_active_execution:
-        PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED = True
         setattr(threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR, True)
     _PROCESS_COST_PRINCIPAL_KEY = hmac.new(
         _PROCESS_COST_PRINCIPAL_KEY,

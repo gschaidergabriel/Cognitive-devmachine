@@ -1,0 +1,81 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_STAGE5_WP506_CANONICAL_FRONTIER_REENTRY",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 coordination and review organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger_routing": {
+    "normalized_message": "4",
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_blobs": {
+      "TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md": "9469f0a6be99c2af2dfad25386c4196ffc9101a4",
+      "TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md": "94cc8b6c3f1f03bfacb48d4a24d11429d0bad6cb",
+      "TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md": "d0e6b698193f75099df57d4db31c22c5fb90589b"
+    }
+  },
+  "observed_heads_before_write": {
+    "research_main": "4ef44a3e8e8b733096d45b93fc1f75a8fb7de689",
+    "frankenstein2_main": "2918f1f580b9c683ce7336ad46b57e922294c73a"
+  },
+  "coordination_reentry": {
+    "retired_dependency_lane": {
+      "workpackage": "F2-WP-507",
+      "former_pr": 166,
+      "status": "CLOSED_RETIRED_DEPENDENCY",
+      "reason": "WP507 depended on WP506 selection/broadcast before WP506 had canonical acceptance; the duplicate WP506 merge was removed from main, so WP507 remains donor evidence only until a successor is dependency-valid."
+    },
+    "sole_current_mutation_lane": {
+      "workpackage": "F2-WP-506",
+      "pr": 149,
+      "branch": "trigger4/wp506-gwt-selection-broadcast-20260829",
+      "head": "3daf91bbd3a7d9f61d15ab4c2cf9fd17c082258b",
+      "source": "src/frankenstein2/gwt_workspace.py",
+      "source_blob": "8babb109a2d9969fb35ebe6765e7f8d301b49931",
+      "baseline_repository_ci": "PASS_AT_EXISTING_SUITE_SCOPE_ONLY"
+    }
+  },
+  "blocking_negative_evidence": [
+    {
+      "pr": 151,
+      "head": "43f25ef1eda3b99329caf8834ca371cf4217f0a2",
+      "classification": "CANDIDATE_ORIGIN_AND_ALIAS_SYBIL_FALSIFIER",
+      "observed_ci": "FAILURE_REPRODUCED",
+      "finding": "WorkspaceCandidate admits caller-supplied candidate/payload/provenance without exact producer output/admission identity, and distinct candidate ids can alias one producer/payload while consuming multiple selection slots."
+    },
+    {
+      "pr": 162,
+      "head": "f14fca402eb15f0a194dc0608810be5dff61855d",
+      "classification": "WORKSPACE_SELECTION_DIRECT_CONSTRUCTOR_BYPASS_FALSIFIER",
+      "observed_ci": "FAILURE_REPRODUCED",
+      "finding": "WorkspaceSelection is directly constructible and create_broadcast accepts a self-consistent caller-computed selection digest, so builder/policy lineage can be bypassed before broadcast."
+    }
+  ],
+  "interpretation": [
+    "The green PR149 baseline suite is insufficient for WP506 acceptance because two distinct exact-head review falsifiers reproduce missing causal/provenance invariants.",
+    "The correct current dependency frontier is WP506, not WP507; continuing WP507 before WP506 closes would recreate a stale dependency island.",
+    "No VPS or target-runtime execution was performed in this reentry. Source/CI component evidence does not mint physical GRID10, GWT uptake, causal runtime, training, effect, completion, whole-Frankenstein2, or whole-EntityOS/HCU credit."
+  ],
+  "required_repair_contract": [
+    "Bind every selectable candidate to exact producer identity/digest such as GRID10 plan generation plus cell input/output identity, or an independently admitted equivalent producer receipt.",
+    "Reject foreign/stale producer lineage and candidate aliases that would amplify one producer/payload into multiple selection slots unless an explicit typed multiplicity rule authorizes it.",
+    "Make broadcast admission depend on a selection whose sanctioned construction lineage is verifiable, rather than accepting only a self-consistent caller-computed selection digest.",
+    "Absorb PR151 and PR162 regressions into the sole WP506 mutation lane and require exact-repaired-head repository-hosted CI PASS for both before component acceptance/merge.",
+    "Only after WP506 canonical acceptance should a dependency-valid successor WP507 be instantiated and its subset-recipient/forged-summary donor falsifiers replayed."
+  ],
+  "credit_boundary": {
+    "research_delta": 1,
+    "wp506_acceptance_delta": 0,
+    "wp507_acceptance_delta": 0,
+    "runtime_execution_observed": false,
+    "vps_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "mutation_authority": false,
+  "next_exact_action": "The sole F2-WP-506 claimant should absorb PR151 and PR162, implement exact producer lineage plus sanctioned-selection provenance, and demonstrate exact-head hosted CI rescue of both falsifiers before merge; then re-enter Stage 5 with a successor WP507."
+}

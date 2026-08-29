@@ -1,0 +1,109 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_ARCHITECTURE_DELTA_FUSION/v1",
+  "fusion_id": "ADF-20260829T1835P0700-GPT56SOL-TRIGGER6-BROWSER-STRUCTURAL-SELECTIVE",
+  "trigger": "6",
+  "slot": "ARCHITECTURE_DELTA_FUSER",
+  "status": "COMPLETED_LIVE_FUSION_POLICY_HYPOTHESIS_NO_RUNTIME_PROMOTION",
+  "created_at_local": "2026-08-29T18:35:00+07:00",
+  "provenance": {
+    "worker": "gpt-5.6-sol",
+    "prior_same_macrocycle_fusion": "research_entity/frankenstein2_tool_intelligence/deltas/ADF-20260829T1827P0700-GPT56SOL-TRIGGER6-CDP-DUALCHANNEL.json",
+    "prior_same_macrocycle_fusion_commit": "9d946416bd11069f722087868b7c93915d49c987",
+    "canonical_f2_e1_receipt": "research/tool_intelligence/receipts/R6-LIVE-BROWSER-STRUCTURAL-AX-VS-DOMSNAPSHOT_E1_SOURCE_READ_20260829T1831P0700.json",
+    "canonical_f2_e2_receipt": "research/tool_intelligence/receipts/R6-LIVE-BROWSER-STRUCTURAL-AX-VS-DOMSNAPSHOT_E2_ARCHITECTURE_MAPPED_20260829T1834P0700.json",
+    "external_source_repo": "ChromeDevTools/devtools-protocol",
+    "external_source_commit": "ea39a11d80de9a08ce2af03f52125ed2e462cf84"
+  },
+  "architecture_snapshot": {
+    "frankenstein_2_head_at_final_pre_fusion_refresh": "d4e14c9be972a40af1e7a8b85a96880a291f6613",
+    "research_entity_head_at_prewrite_refresh": "92c2f802283594c3e412e6d7afa384c4f0f0dd4b",
+    "authority_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "browser_capture_base_delta": "BROWSER_CDP_DUALCHANNEL_PROVENANCE_HARDENING/v1"
+  },
+  "fusion_findings": [
+    {
+      "id": "ADF-BS-01-STRUCTURAL-SOURCE-IS-POLICY-SEAM",
+      "classification": "CURRENT_ARCHITECTURE_REFINEMENT",
+      "finding": "F2 already has one logical browser/structural/<target_id> source. External primary evidence does not justify splitting it into competing persistent sources; the useful choice is which capture subtype populates that source for a given evidence need."
+    },
+    {
+      "id": "ADF-BS-02-AX-SEMANTIC-SURFACE",
+      "classification": "EXTERNAL_PRIMARY_E1",
+      "finding": "CDP Accessibility exposes interaction-oriented semantic structure: role, accessible name/description/value, widget and focus/selection states, DOM backend linkage and frame identity, with full-depth-bounded, partial and query APIs."
+    },
+    {
+      "id": "ADF-BS-03-DOMSNAPSHOT-RICH-SURFACE",
+      "classification": "EXTERNAL_PRIMARY_E1",
+      "finding": "CDP DOMSnapshot exposes the full flattened DOM plus layout and selected style/rectangle/paint information, and therefore covers evidence that AX cannot represent exactly."
+    },
+    {
+      "id": "ADF-BS-04-NO-UNMEASURED-EFFICIENCY-CREDIT",
+      "classification": "FAIL_CLOSED_RULE",
+      "finding": "Schema breadth is not a benchmark. Although AX permits narrower retrieval and DOMSnapshot returns a richer full-document surface, no token/bytes/latency/CPU/RSS efficiency credit is granted until exact target-browser measurements exist. CDP also explicitly warns that Accessibility.enable can impact performance while enabled."
+    },
+    {
+      "id": "ADF-BS-05-SELECTIVE-CAPTURE-POLICY",
+      "classification": "ARCHITECTURE_DELTA",
+      "finding": "Best-supported E2 hypothesis is AX-first structural capture for interaction semantics, with deterministic escalation to DOMSnapshot only when exact DOM attributes, layout/style/rectangles, AX ambiguity or an explicit downstream contract requires richer structure."
+    }
+  ],
+  "architecture_delta": {
+    "delta_id": "BROWSER_STRUCTURAL_SELECTIVE_CAPTURE/v1",
+    "decision": "ADOPT_AS_BOUNDED_POLICY_HYPOTHESIS_PENDING_MEASUREMENT",
+    "default_candidate": "AX_SNAPSHOT_OR_QUERY",
+    "escalation_candidate": "DOM_SNAPSHOT",
+    "same_logical_source": "browser/structural/<target_id>",
+    "required_subtype_provenance": "structural_capture_kind=AX_FULL|AX_PARTIAL|AX_QUERY|DOM_SNAPSHOT",
+    "preserved_invariants": [
+      "CDP target/session/frame identities remain typed and distinct",
+      "source_generation/epoch fences navigation/reconnect",
+      "each observation has its own monotonic capture time",
+      "capture broker and temporal fusion remain existing authorities",
+      "browser structure remains observational candidate data only"
+    ],
+    "deterministic_dom_escalation": [
+      "exact DOM attributes/markup required",
+      "layout bounds/paint/rectangles/computed style required",
+      "AX absent/ignored/ambiguous while rendered evidence remains relevant",
+      "semantic AX state must be cross-checked against underlying DOM/layout",
+      "downstream typed contract declares DOM_SNAPSHOT_REQUIRED"
+    ],
+    "anti_overbuild": "Do not add a second browser service or mandatory browser automation framework merely to implement this policy."
+  },
+  "counterhypotheses": [
+    "High fallback frequency can erase any savings and make AX-first slower/more complex.",
+    "AX computation or persistent enablement can cost more than DOMSnapshot at the target cadence.",
+    "Accessibility-poor pages can make AX too incomplete for primary structural perception.",
+    "A thinner direct DOM projection can outperform both candidates."
+  ],
+  "acceptance_measurements": [
+    "serialized bytes and node counts",
+    "p50/p95 capture latency",
+    "browser CPU/RSS under stateless AX and persistent Accessibility.enable modes",
+    "DOMSnapshot CPU/RSS/latency at matched cadence",
+    "semantic task coverage and fallback rate",
+    "accessibility-poor and dynamic-page failure cases",
+    "rendered/structural skew",
+    "navigation/detach/reconnect generation behavior"
+  ],
+  "handoff": {
+    "to": "Trigger-4 measurement/build lane",
+    "status": "NOT_E5",
+    "instruction": "Benchmark AX-first versus DOMSnapshot on the exact target browser/runtime before making it a default production policy. Preserve the same browser/structural source and the previously fused CDP provenance hardening contract."
+  },
+  "credit_boundary": {
+    "e1_source_read": 1,
+    "e2_architecture_mapping": 1,
+    "architecture_policy_delta": 1,
+    "efficiency_credit": 0,
+    "e3": 0,
+    "e4": 0,
+    "e5": 0,
+    "e6": 0,
+    "runtime_credit": 0,
+    "physical_browser_capture_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  }
+}

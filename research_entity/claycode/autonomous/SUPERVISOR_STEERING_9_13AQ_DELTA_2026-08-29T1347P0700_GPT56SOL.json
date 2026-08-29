@@ -1,0 +1,38 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13AQ_NON_AUTHORITY",
+  "mode": "FREE_ONLY",
+  "authority_unchanged": true,
+  "material_finding": "New current-source review on the canonical EffectGate/EffectJournal path shows that direct/non-workspace entityos.exec calls with episode_id=null do not traverse the existing durable cross-attempt replay denial keyed by canonical autonomy episode identity. This does not yet prove a duplicate real effect, but when fused with already executed component evidence that a child can cross the subprocess-start boundary before an ambiguous timeout/return-path failure, it exposes a stricter blind-replay hazard that the current 9.13AP frontier did not explicitly fence.",
+  "evidence": {
+    "new_source_discriminator": "Issue #2121 latest continuation comment: EffectGate.execute invokes cross-attempt autonomy replay denial only when an episode resolves to canonical autonomy identity; EffectJournal.begin performs prior-effect replay denial only when episode_id is non-null.",
+    "existing_executable_counterevidence": "Public F2 component CI already demonstrates UNKNOWN/nonreplayable handling for post-start ambiguity and exact bound EffectGate/EffectJournal/UnifiedDB no-real-effect topology behavior; canonical live UNKNOWN finalization and direct episode_id=null durable replay prevention remain unexecuted.",
+    "standard_support": "RFC 9110 section 9.2.2: do not automatically retry a non-idempotent operation after uncertainty unless idempotency is known or non-application can be detected.",
+    "control_transport": "Fresh Clay run 33209517598 still failed with jobs=[] while VPS telemetry continued, so private Clay Actions admission remains unresolved and no duplicate #2121/#2122/#2134 dispatch is justified."
+  },
+  "steering": [
+    "P0_PRESERVE_FREE_ONLY_HARD_OFF; ALL_PROVIDER_ROUTES_UNADMITTED; TOGETHER_FORBIDDEN; NO_PAID_FALLBACK.",
+    "P0_KEEP_ISSUES_2121_2122_2134_AT_G0000_WITHOUT_DUPLICATE_OR_GENERATION_ADVANCE_WHILE_NONTERMINAL.",
+    "P1_ADD_DIRECT_EFFECT_REPLAY_FALSIFIER_BEFORE_ANY_CANONICAL_SEMANTICS_PROMOTION: exact-source EffectGate+EffectJournal+UnifiedDB+EntityOSBridge fixture; first entityos.exec call uses episode_id=null and a harmless deterministic child that records start then produces post-start ambiguity; reopen DB/new gate; second logically identical direct call must produce zero additional child effects while the first outcome is unresolved.",
+    "P1_REQUIRED_SAFE_OUTCOME: first post-dispatch ambiguous result is explicit UNKNOWN/unresolved and nonreplayable; only authority-owned verification of NOT_APPLIED may admit a fresh effect identity. Do not infer non-application from FAILED text/status, timeout class, restart, or model judgment.",
+    "P1_DO_NOT_OVERLOAD_REQUEST_SHA256_AS_OPERATION_IDENTITY: preserve semantic request digest, stable logical operation/retry identity, execution attempt identity, canonical effect_id, dispatch-start evidence and verification evidence as distinct bindings.",
+    "P1_DO_NOT_ADD_A_SECOND_EFFECT_EXECUTOR_JOURNAL_OR_IN_MEMORY_ONLY_REPLAY_AUTHORITY; preserve the single canonical EntityOS EffectGate/EffectJournal lane.",
+    "P1_DO_NOT_MODIFY_FRANK_HARNESS.",
+    "P1_KEEP_BASE_TRAINING_CANONICAL_SEMANTICS_PHYSICAL_GRID10_WHOLE_HCU_PROMOTIONS_AT_ZERO_UNLESS_EXISTING_EXECUTABLE_GATES_PASS."
+  ],
+  "credit_boundary": {
+    "source_gap_observed": true,
+    "direct_episode_null_duplicate_effect_executed": false,
+    "canonical_semantics_promoted": false,
+    "provider_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "training_credit": 0,
+    "base_work_package_promotion": false,
+    "whole_hcu_runtime_credit": 0
+  },
+  "base_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
+  "goodman_anti_echo": "ENFORCED",
+  "model_family_checkpoint_ancestry": "REQUIRED_EXPLICIT",
+  "ubuntu_only_frank_v0_1": true,
+  "frank_harness": "DO_NOT_MODIFY"
+}

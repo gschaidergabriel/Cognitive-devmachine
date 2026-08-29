@@ -1,0 +1,94 @@
+{
+  "schema": "CLAY_TRIGGER4_CROSS_WORKFLOW_RUNNER_DISCRIMINATOR/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "date": "2026-08-30",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_head_observed": "6d97591abf77dcf397c740e16f8633d094b0e630",
+    "directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "bootstrap_schema_observed": "8.78",
+    "supervisor_inbox_schema_observed": "9.13",
+    "selected_delta": "9.13BC_NON_AUTHORITY",
+    "vps_execution": "OWNER_AUTHORIZED_AND_EXPECTED_VIA_ESTABLISHED_BRIDGE",
+    "external_provider_policy": "FREE_ONLY_HARD_OFF_ALL_CLAYCODE_EXTERNAL_PROVIDER_ROUTES_UNADMITTED",
+    "together": "FORBIDDEN"
+  },
+  "primary_wp510_observation": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "status": "queued",
+    "steps_observed": 0,
+    "labels": ["self-hosted", "Linux", "X64"],
+    "runner_id": 0,
+    "runner_name": "",
+    "exact_f2_source_sha": "656b57bded655e64a25d7e205b599becce3d4989"
+  },
+  "cross_workflow_controls": [
+    {
+      "workflow": "Bootstrap and Mirror Frankenstein 2.0 Repository",
+      "run_id": 33268035045,
+      "job_id": 99141486255,
+      "status": "queued",
+      "steps_observed": 0,
+      "labels": ["self-hosted", "Linux", "X64"],
+      "runner_id": 0,
+      "runner_name": ""
+    },
+    {
+      "workflow": "Frank SQLite productive path readonly v1",
+      "run_id": 33266856623,
+      "job_id": 99138325012,
+      "status": "queued",
+      "steps_observed": 0,
+      "labels": ["self-hosted", "Linux", "X64"],
+      "runner_id": 0,
+      "runner_name": ""
+    }
+  ],
+  "repository_window_observation": {
+    "window_start_utc": "2026-08-29T17:29:45Z",
+    "successful_workflow_runs_observed": 0,
+    "note": "Repository-wide run status is supporting control-plane evidence only; skipped or hosted workflows are not equivalent to self-hosted runner liveness evidence."
+  },
+  "hypothesis_update": {
+    "leading_hypothesis": "REPOSITORY_WIDE_SELF_HOSTED_RUNNER_LIFECYCLE_OR_AVAILABILITY_BLOCKER",
+    "counterhypothesis_weakened": "WP510_SPECIFIC_SCHEDULING_OR_LABEL_DEFECT",
+    "reason": "Multiple independent later jobs requiring the same self-hosted/Linux/X64 labels remain unassigned with runner_id=0 and zero executed steps.",
+    "epistemic_boundary": "This does not prove bare-host liveness, service state, registration state, installed runner version, connectivity-log root cause, or a specific repair. Direct host observation remains required before service mutation."
+  },
+  "coordination": {
+    "existing_blocker_issue": "gschaidergabriel/Dr.-Unterweger#873",
+    "issue_comment_id": 5464300633,
+    "duplicate_dispatch_created": false,
+    "duplicate_workpackage_claim_created": false,
+    "parallel_f2_wp1110_g2_observed": "ACTIVE_SINGLETON_DO_NOT_DUPLICATE"
+  },
+  "access_boundary": {
+    "direct_shell_from_current_organ": false,
+    "local_container_ssh_binary_observed": false,
+    "local_container_ssh_config_observed": false,
+    "github_runner_roster_endpoint_from_connector": "UNAVAILABLE_INVALID_ARGUMENT",
+    "consequence": "Do not generalize current-organ access limitations into VPS absence. Host-local runner service/listener/log/version inspection remains unexecuted."
+  },
+  "credits": {
+    "wp510_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "On an organ with the established owner-authorized VPS/bridge shell surface, inspect the self-hosted runner service start/status, Runner.Listener process, connectivity/diagnostic logs, exact installed runner version, and non-privilege-expanding eligibility. Do not create another WP510 dispatch while run 33265772059/job 99135457584 is unresolved."
+}

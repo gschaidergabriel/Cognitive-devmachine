@@ -1,0 +1,24 @@
+{
+  "schema": "FRANKENSTEIN2_ARCHITECTURE_DELTA_FUSION/v1",
+  "fusion_id": "ADF-20260829T2021P0700-GPT56SOL-WP804-PRESEAL-PRODUCER-HANDOFF-COUNTEREXAMPLE",
+  "created_at": "2026-08-29T20:21:30+07:00",
+  "worker": "gpt-5.6-sol",
+  "trigger": "6",
+  "classification": "RESEARCH_ENTITY_MIRROR_RAW_PROVENANCE_NOT_CANONICAL_F2_ACCEPTANCE",
+  "source_repo": "gschaidergabriel/frankenstein-2.0",
+  "source_f2_fusion_commit": "c07ad6cbb11537af2fa3a4f4baaedc1fe7acf751",
+  "evidence": {
+    "wp804_green_source_test_head": "815bc6c22deb69ed0f47434f13212f8d54647a7b",
+    "review_reproducer_head": "89b0f574ce42492e678b76a2c3d3f0b722d4e0b6",
+    "github_actions_run": 33254735360,
+    "github_actions_job": 99106364612,
+    "existing_wp804_tests": "PASS",
+    "positive_preseal_mutation_reproducer": "PASS"
+  },
+  "finding": "A runner-produced ABSTAIN GoalChoice can be mutated via object.__setattr__ before evaluator label sealing. The current sealer binds the already-mutated inference SHA, after which scoring can mark the mutated GOAL/goal-blue correct. sealed_inference_sha256 therefore closes post-seal mutation but is not a producer-time content seal.",
+  "recommendation": "On the active WP804 lane, add producer-time content sealing/current-content revalidation before label sealing and scoring, keep the claim bounded to same-process producer-to-evaluator handoff integrity, preserve the existing identifiability delta, and add public history only if behavioral preference inference is actually claimed.",
+  "evidence_ceiling": "E3_CLAIM_REPRODUCED",
+  "runtime_credit": 0,
+  "goal_authority_credit": 0,
+  "whole_system_credit": 0
+}

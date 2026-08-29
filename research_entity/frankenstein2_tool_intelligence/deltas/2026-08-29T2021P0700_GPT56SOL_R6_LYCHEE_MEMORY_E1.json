@@ -1,0 +1,39 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_RESULT/v1",
+  "trigger": "6",
+  "research_id": "R6-20260829-LYCHEE-SEGMENT-CONSOLIDATION-GPT56SOL-01",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "evidence_stage": "E1_SOURCE_READ",
+  "status": "COMPLETED_E1_SOURCE_AUDIT_NO_ARCHITECTURE_OR_RUNTIME_CREDIT",
+  "created_at": "2026-08-29T20:21:30+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "mirror_of": "gschaidergabriel/frankenstein-2.0@c82caae5c9a2643a9056540c70864d5a61e9e080:research/tool_intelligence/deltas/2026-08-29T2021P0700_GPT56SOL_R6_LYCHEE_MEMORY_E1.json",
+  "claim": "gschaidergabriel/frankenstein-2.0@030b90e166e43bc57b20521c74fa68b8d7f8bc1f:research/tool_intelligence/claims/R6-20260829-LYCHEE-SEGMENT-CONSOLIDATION-GPT56SOL-01/E1_SOURCE_READ.json",
+  "source_snapshot": {
+    "f2_main_before_result": "da10ef7f939e9a2322d4bf2e7e8198cc17c4d13d",
+    "research_entity_main_before_mirror": "808d79780d057c6a9152708bbe1cc5bfad293c33",
+    "lycheemem_repo": "LycheeMem/LycheeMem@9c4ba5e5c046d06063cb5159297a73a3ec1eb112",
+    "arxiv": "2608.12990"
+  },
+  "result_summary": "Primary source and exact repository inspection support an LLM-free semantic segmenter followed by single-call typed memory encoding and structured query planning. For F2, reuse only the thin batching/segmentation and typed-derived-record mechanism over immutable UnifiedDB provenance; do not import a second truth store or treat similarity as context-admission authority.",
+  "key_source_observations": [
+    "OnlineSemanticChunker is LLM-free, tracks one open chunk per session, uses embedding-distribution change plus bounded length hazards, and records boundary decisions.",
+    "Default 1000/1500/2000 token preferences bound chunk size; session flush and oversized/capacity paths are explicit.",
+    "CompactSemanticEncoder makes one LLM call per finalized chunk and outputs typed MemoryRecord objects with temporal/provenance fields.",
+    "SearchPlan supports temporal constraints and independent evidence routes.",
+    "LycheeMemory V2 reports 89.22% LoCoMo, 92.20% LongMemEval-S, and 86.0%/75.9% construction-token reductions versus A-Mem; these are paper claims, not reproduced F2 evidence."
+  ],
+  "cross_research": {
+    "LongMemEval-V2": "Use environment-experience abilities—state tracking, workflows, gotchas, premise awareness—as F2 evaluation dimensions.",
+    "MemGate_arXiv_2606.06054": "Treat retrieval as a trust boundary; similarity alone is not sufficient for prompt admission."
+  },
+  "candidate_f2_architecture": "UnifiedDB causal events -> hard causal/lifecycle/generation fences -> optional LLM-free semantic subsegmentation -> DerivedMemorySegmentEnvelope (noncanonical) -> typed extraction/provenance -> deterministic retrieval admission -> semantic/rerank selection -> bounded ContextView",
+  "counterhypotheses": [
+    "Semantic boundaries can split action/outcome causality or merge distinct events.",
+    "Delayed segment finalization can hide a critical observation at decision time.",
+    "Derived records can become a second truth authority if provenance/admission is weak.",
+    "Conversation-style segmentation may underperform deterministic causal boundaries on action-heavy F2 traces."
+  ],
+  "next_exact_gate": "Acquire E2_ARCHITECTURE_MAPPED create-only claim in F2, map exact WP300/WP301/WP303/WP306 interfaces and define a falsifiable four-arm segmentation benchmark before any build-candidate handoff.",
+  "credit": {"E1": true, "E2": 0, "E3": 0, "E4": 0, "E5": 0, "E6": 0, "runtime": 0, "whole_system": 0}
+}

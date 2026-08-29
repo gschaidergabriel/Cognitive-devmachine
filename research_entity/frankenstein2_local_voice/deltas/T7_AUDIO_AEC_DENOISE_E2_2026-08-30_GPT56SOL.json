@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "worker": "GPT-5.6-Sol-TRIGGER7",
+  "research_id": "T7-AUDIO-001",
+  "status": "MIRROR_OF_F2_E2_SOURCE_RESULT",
+  "date": "2026-08-30",
+  "canonical_build_repo": "gschaidergabriel/frankenstein-2.0",
+  "canonical_claim": "research/local_voice/claims/T7-AUDIO-001/E2_LOCAL_AEC_DENOISE_DUPLEX_FRONTIER.json",
+  "f2_result_commits": {
+    "claim_created": "47c54f4a5e605e4d1712401b8e9c52394e1af487",
+    "source_pins": "501bd8fa25ca873c505f3ca8387f6aeb82c75f58",
+    "frontier": "a28d5fbff8a0c079fa031ad433ccef37c80d0383",
+    "benchmark_contract": "21ff40bff3124b34436dca1fa55af600493ea5f4",
+    "claim_closed": "470067bfa55e69f8031676dab068161f5eeceeb3",
+    "lane_checkpoint": "57b3266319895f422f8c13ed0de73fcd153a3007"
+  },
+  "result": "Separate AEC from denoise. PipeWire/WebRTC AEC is the first low-integration Linux baseline; embedded WebRTC APM/AEC3 is the controlled challenger; RNNoise and DeepFilterNet are post-AEC denoise candidates. Preserve actual playback/render reference and raw/AEC/clean capture lineage for German duplex/barge-in evidence.",
+  "receipt_gap": "Trigger-7 voice receipt schema v1 lacks AEC/denoise identity and frame lineage; a target-log-validated extension is needed before claiming exact duplex causal closure.",
+  "runtime_observed": false,
+  "runtime_credit": 0,
+  "trigger4_acceptance_credit": 0,
+  "next_discriminator": "Consume terminal T7-SYS-002 target hardware/audio evidence, then execute the predeclared German duplex AEC benchmark on clay-direct-dev without duplicating the active hardware claim."
+}

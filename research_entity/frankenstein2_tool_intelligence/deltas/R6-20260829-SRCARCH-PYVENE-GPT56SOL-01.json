@@ -1,0 +1,45 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "research_id": "R6-20260829-SRCARCH-PYVENE-GPT56SOL-01",
+  "trigger": "6",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "E2_ARCHITECTURE_MAPPED",
+  "mirror_epoch": "2026-08-29T15:02:00+07:00",
+  "canonical_source": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/R6-20260829-SRCARCH-PYVENE-GPT56SOL-01.json",
+    "commit": "a0b7696c31af77e4ef9f42d26c7b3699d3c90c49",
+    "claim_path": "research/tool_intelligence/claims/R6-20260829-SRCARCH-PYVENE-GPT56SOL-01/E2_ARCHITECTURE_MAPPED.json"
+  },
+  "prewrite_research_entity_main": "3e0248589c770ca45abe8d204a57445989210890",
+  "candidate": {
+    "repo": "stanfordnlp/pyvene",
+    "source_commit": "9e333904dcf9e597ca76170010d17f4d4580de8d",
+    "license": "Apache-2.0"
+  },
+  "finding": "pyvene is not a direct WP507 core replacement. Its model-internal intervention machinery crosses the current WP507 scope boundary, which intentionally does not observe hidden model state. Strongest fit is concept distillation plus a later isolated model/J-Space lesion-rescue ablation, especially for F2-WP-806, after an exact local model/J-Space ABI exists.",
+  "recommended_adoption_class": "CONCEPT_DISTILL_PLUS_LATER_ISOLATED_MODEL_ABLATION",
+  "counterhypotheses": [
+    "A thin F2-native forward-hook lesion harness may provide the required discriminators at much lower dependency/maintenance cost.",
+    "Model-internal intervention may be the wrong causal layer for proving software-level GWT uptake.",
+    "Target approximately-0.8B model hook mappings may be unsupported or brittle.",
+    "Output changes after intervention may be generic damage rather than mechanism-specific causal influence."
+  ],
+  "next_discriminator": "After an exact local model/J-Space ABI exists, reproduce a minimal collect plus zero/swap intervention and compare pyvene against a thin F2-native hook baseline with sham/random/equal-norm-noise/rescue controls and resource measurements.",
+  "evidence_ceiling": "E2_ARCHITECTURE_MAPPED",
+  "promotion": {
+    "E3": false,
+    "E4": false,
+    "E5_BUILD_CANDIDATE": false,
+    "E6_F2_ACCEPTED": false
+  },
+  "credits": {
+    "research_runtime": 0,
+    "f2_runtime": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_system": 0,
+    "training": 0
+  },
+  "mirror_law": "This is a provenance mirror of one F2 Trigger-6 research result, not independent replication and not a competing claim/truth authority."
+}

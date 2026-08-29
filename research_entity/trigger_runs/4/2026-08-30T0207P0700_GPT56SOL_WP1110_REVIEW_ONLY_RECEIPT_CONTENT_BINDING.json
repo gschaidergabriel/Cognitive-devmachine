@@ -1,0 +1,57 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at": "2026-08-30T02:07:00+07:00",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_head_observed": "6d97591abf77dcf397c740e16f8633d094b0e630",
+    "directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "current_authority": {
+    "clay_main_observed": "1f65d9cf151734bd069f70872a59347aa3bec85e",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13BC_NON_AUTHORITY",
+    "execution_policy": "FREE_ONLY_EXTERNAL_PROVIDER_POLICY; OWNER_VPS_ALLOWED; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK"
+  },
+  "frankenstein2": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "main_observed_after_review": "144791f4799f39a3ebd2bf9f5b63f2db5ad798e1",
+    "stage": "STAGE11_PORTABLE_HOST_HARNESS",
+    "wp1110": {
+      "generation": 2,
+      "claim_id": "F2-WP-1110-G2-GPT56SOL-OUTER-ARTIFACT-SUBJECT-20260829T1902Z",
+      "state": "ACTIVE",
+      "active_pointer_blob_sha": "789801f0cc756f1e0afb92420e23a89df18d4acf",
+      "mutation_authority_owner": "OTHER_ACTIVE_ORGAN",
+      "duplicate_mutation_created": false
+    },
+    "review_only": {
+      "branch": "review/trigger4-wp1110-receipt-content-binding-20260830",
+      "head": "bd0ab39516961391ad40edfcc212e1959a096507",
+      "draft_pr": 592,
+      "classification": "REVIEW_ONLY_CANDIDATE_FALSIFIER",
+      "finding": "MUTABLE_PREHANDOFF_RECEIPT_REFERENCE_CONTENT_UNBOUND",
+      "candidate_test": "tests/review_only/test_wp1110_prehandoff_receipt_content_binding.py",
+      "review_artifact": "research/reviews/trigger4/2026-08-30_WP1110_G2_PREHANDOFF_RECEIPT_CONTENT_BINDING_REVIEW.json"
+    }
+  },
+  "finding": "The active WP1110 G2 correctly targets outer unopened ZIP identity. A separate evidence-lineage gap remains: current pre-handoff and clean-machine APIs bind prehandoff_receipt_ref as text but do not bind immutable external receipt content. The review falsifier requires either mechanically content-addressed/immutable receipt dereference or an explicit canonical receipt-content digest/equivalent subject binding.",
+  "counterhypothesis": "If prehandoff_receipt_ref is already mechanically immutable/content-addressed at an admitted storage boundary and clean-machine dereference verifies that property, an additional receipt digest field may be redundant.",
+  "next_exact_action": "Do not mutate WP1110 while generation 2 remains active. The active owner should either prove immutable/content-addressed prehandoff receipt dereference or absorb the receipt-content digest invariant, then run the outer-artifact mismatch and same-ref/different-content falsifiers before terminal reconciliation. Separately continue WP510 runner-lifecycle observation without duplicate dispatch.",
+  "credits": {
+    "target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "training": 0,
+    "effect": 0,
+    "completion": 0,
+    "whole_system": 0
+  }
+}

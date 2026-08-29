@@ -1,0 +1,45 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "research_id": "R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01",
+  "trigger": "6",
+  "organ": "GPT-5.6-Sol",
+  "created_at_local": "2026-08-29T19:53:00+07:00",
+  "mirror_epoch": "MIRROR-20260829T1953P0700-HOST-PROFILE-E4",
+  "canonical_f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "research_entity_main_before_write": "af7d7b448fc2cffd680124d70474a19d04fea3ca",
+  "f2_main_reentered_after_e4": "0e995ac23ad00b2ef6687bf15ec59b5e5273a18a",
+  "canonical_f2_artifacts": {
+    "live_fusion": "research/tool_intelligence/deltas/ADF-20260829T1946P0700_GPT56SOL_HOST_PROFILE_E4_LIVE_FUSION.json@62c11dba9fb4c4a2e4e706d9dd3caa82c126549a",
+    "e4_claim": "research/tool_intelligence/claims/R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01/E4_F2_ABLATION_REQUIREMENT_SCOPED_INVALIDATION_V1.json@44bc55427daacf982d6133c9cd4e8a9de7dafc10",
+    "e4_experiment": "research/tool_intelligence/experiments/R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01_E4_REQUIREMENT_SCOPED_INVALIDATION_ABLATION.json@4d2bdb7b2fb2fb64bed2091ae48832f49c56ea38",
+    "architecture_delta": "research/tool_intelligence/deltas/ADF-20260829T1950P0700_GPT56SOL_HOST_PROFILE_REQUIREMENT_BINDING_E4_DELTA.json@16b969e8ff73c4709f5051163f102003b83801f0",
+    "e4_receipt": "research/tool_intelligence/receipts/R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01_E4_F2_ABLATION.json@80cfa2a3a586a7e318f6ae228e38ea5dc8bb9b93"
+  },
+  "measured_result": {
+    "requirement_x_mutation_cases": 96,
+    "monolithic_invalidations": 96,
+    "scoped_invalidations": 53,
+    "scoped_preservations": 43,
+    "irrelevant_invalidation_reduction_fraction": 0.4479166666666667,
+    "false_preserve_relative_to_declared_research_maps": 0,
+    "false_invalidate_relative_to_declared_research_maps": 0
+  },
+  "critical_falsifier": "A scoped digest is not safe merely because it hashes selected fields correctly. The expected dependency manifest must itself be canonical and digest-pinned by the consumer; otherwise a narrowed map can silently preserve stale evidence.",
+  "architecture_delta": "Keep the WP1201 whole-profile digest as provenance/fallback. After actual consumer dependency audit, consider a canonical RequirementManifest + pinned manifest digest + domain-separated RequirementBindingDigest, requirement-local UNKNOWN/freshness policy, separate HostScopeIdentity/BootScopeIdentity, and reclassification of volatile session topology as HostRuntimeWitness rather than long-lived host identity.",
+  "parallel_reentry": {
+    "f2_wp1202_g2_rationale_commit": "0e995ac23ad00b2ef6687bf15ec59b5e5273a18a",
+    "impact": "RELEVANT_NEXT_GATE_NOT_E4_INVALIDATION",
+    "note": "WP1202 G2 now explicitly targets canonical WP1201 ABI/digest binding. Trigger-6 must consume that successor result before deriving any canonical requirement manifest for WP1202. The E4 mechanism result remains bounded to synthetic declared-map behavior."
+  },
+  "promotion": "E5_WITHHELD",
+  "reason": "Real F2 consumer dependency universes are not yet source-derived and pinned; the four research maps are not canonical policy.",
+  "next_exact_gate": "Consume WP1202 G2 canonical-profile repair when source/CI lands, enumerate actual WP1201 consumers, derive exact dependency manifests from current source/tests, pin manifest identity, then execute relevant/irrelevant/UNKNOWN/tamper integration falsifiers before reconsidering E5.",
+  "credits": {
+    "trigger6_research": "E4_F2_ABLATION_RESEARCH_SCOPE_ONLY",
+    "architecture_acceptance": 0,
+    "f2_runtime": 0,
+    "physical_host": 0,
+    "whole_system": 0
+  },
+  "pending_research_sqlite_sync": "PENDING_BINARY_DB_PATH_NOT_MUTATED_BY_THIS_ORGAN"
+}

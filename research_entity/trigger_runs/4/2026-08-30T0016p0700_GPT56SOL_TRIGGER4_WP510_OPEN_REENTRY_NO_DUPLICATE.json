@@ -1,0 +1,76 @@
+{
+  "schema": "TRIGGER4_WP510_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "observed_at_local": "2026-08-30T00:16:00+07:00",
+  "routing": {
+    "normalized_message": "4",
+    "result": "TRIGGERWORD_4",
+    "self_test": "PASS",
+    "required_directives_fetched": true
+  },
+  "authority": {
+    "supervisor_inbox_selected": "9.13BA",
+    "execution_mode": "FREE_ONLY",
+    "owner_provisioned_vps": "AUTHORIZED_INCLUDED_INFRASTRUCTURE_WITH_CURRENT_GUARDS",
+    "external_provider_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "heads_before_write": {
+    "clay_global_research_entity_main": "4a5f3c5ff7c2e972d01000472ff134443d2cfadc",
+    "frankenstein_2_main": "3fdcb5feaede5c1c3d8b4733bafc868cf9a62a77",
+    "controller_main": "a542dfdd4f1b84d62c125970b3a5297389bb7697"
+  },
+  "wp510_reentry": {
+    "required_classification_set": ["OPEN", "TERMINAL", "ORPHANED", "ABSENT"],
+    "classification": "OPEN",
+    "existing_run_id": 33260557990,
+    "existing_job_id": 99121648423,
+    "workflow": ".github/workflows/frank-self-hosted-probe.yml",
+    "workflow_snapshot_head_sha": "c3fa73f4a2e35e6041de3c7f1598d799b23fe9a3",
+    "run_status_observed": "queued",
+    "run_conclusion_observed": null,
+    "job_status_observed": "queued",
+    "job_conclusion_observed": null,
+    "runner_id": 0,
+    "runner_name": "",
+    "steps_observed": [],
+    "target_runtime_evidence_present": false,
+    "duplicate_dispatch_allowed": false,
+    "decision": "DO_NOT_DISPATCH_DUPLICATE_WHILE_EXISTING_RUN_IS_OPEN"
+  },
+  "concurrent_controller_head_check": {
+    "controller_main_head": "a542dfdd4f1b84d62c125970b3a5297389bb7697",
+    "head_message": "trigger4: dispatch exact-source WP510 G3 target-runtime probe",
+    "self_hosted_probe_trigger_mode": "workflow_dispatch_only",
+    "workflow_dispatch_runs_at_controller_head": 0,
+    "interpretation": "The newer controller commit did not establish a second manual WP510 self-hosted workflow_dispatch at that exact head. The older run remains the singleton OPEN WP510 attempt observed by this receipt."
+  },
+  "parallel_authority": {
+    "wp002": "ACTIVE_G5_AGGREGATE_PROJECTION_REPAIR_DO_NOT_DUPLICATE",
+    "wp004": "ACTIVE_G3_ABI_AUTHORITY_SINGLETON_DO_NOT_DUPLICATE",
+    "wp507": "ACCEPTED_G4_REPOSITORY_COMPONENT_ONLY",
+    "wp508": "ACCEPTED_G4_REPOSITORY_COMPONENT_ONLY"
+  },
+  "credits": {
+    "new_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_runtime_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "whole_system_acceptance": false,
+    "whole_entityos_hcu_credit": 0
+  },
+  "classification": {
+    "blocker": "EXISTING_SELF_HOSTED_WP510_RUN_OPEN_WITH_NO_ASSIGNED_RUNNER",
+    "epistemic_type": "INFRASTRUCTURE_COORDINATION_BLOCKER",
+    "product_logic_failure": false,
+    "scientific_negative_result": false
+  },
+  "next_exact_action": "Re-enter run 33260557990/job 99121648423 before any WP510 dispatch. If OPEN, preserve singleton and do not dispatch. If TERMINAL, ingest exact evidence and classify only at its recorded obligations. If ORPHANED, reconcile fail-closed. Only if ABSENT under current controller state may one hardened manual workflow_dispatch be considered. Do not duplicate active WP002 or WP004 writers. After admitted WP510 target-component evidence, proceed to the separate provider-free physical GRID10/GWT runtime gate without minting semantic GWT/J-Space credit from component execution alone.",
+  "unusual_experiment_executed": false,
+  "provider_execution_performed": false,
+  "vps_execution_performed_by_this_organ": false
+}

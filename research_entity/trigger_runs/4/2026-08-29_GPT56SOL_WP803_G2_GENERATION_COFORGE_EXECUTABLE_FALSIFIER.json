@@ -1,0 +1,57 @@
+{
+  "schema": "TRIGGERWORD4_EXECUTABLE_FALSIFIER/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "authority_epoch": "8.78",
+  "research_entity_main_before_write": "210c60f704520921d2bbcb67c65a572becd3727c",
+  "target": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-803",
+    "generation_under_test": 2,
+    "claim_id": "F2-WP-803-G2-GPT56SOL-RUN-DESCRIPTOR-BINDING-20260829",
+    "owner_branch": "trigger4/wp803-g2-run-descriptor-binding-20260829",
+    "owner_head_under_test": "16c7a9bcfd62befb09f15594f4bd76471f5bbe28",
+    "scope": "RUN_DESCRIPTOR_BINDING_REPOSITORY_COMPONENT_ONLY"
+  },
+  "review": {
+    "classification": "CANDIDATE_FALSIFIER_REVIEW_ONLY",
+    "branch": "review/wp803-g2-posthoc-coforge-falsifier-20260829",
+    "draft_pr": 481,
+    "head_sha": "c50a39384c7e0de28b79893272183bbc9e920cf9",
+    "test_path": "tests/review/test_wp803_g2_generation_and_coforge_falsifier.py",
+    "workflow_path": ".github/workflows/review-wp803-g2-generation-coforge-falsifier-ci.yml",
+    "workflow_run_id": 33254898298,
+    "result": "PASS_REPRODUCED_NEGATIVE_CONTROLS"
+  },
+  "observations": [
+    "The G2 owner source closes the generation-1 prediction-only run-id relabel by requiring an exact builder-originated WP800 RunDescriptor, descriptor/fixture match, prediction run-id match, and prediction policy-id to descriptor system-under-test match before step_episode.",
+    "benchmark_generation remains caller-controlled on PredictionCandidate and is not bound to RunDescriptor or another evaluator-side admitted generation identity. Replacing benchmark_generation with 999999 is still accepted and copied into PredictionEvaluation.",
+    "RunDescriptor.for_fixture remains available as a fresh builder-originated descriptor factory. A prediction whose benchmark_run_id and policy_id are jointly relabeled can be paired with a freshly built descriptor carrying the same forged run-id/SUT identity; the G2 evaluator accepts the pair because no predeclared/admitted run-manifest identity or digest is supplied independently of the pair under evaluation."
+  ],
+  "epistemic_result": {
+    "generation1_single_run_id_relabel": "CLOSED_BY_G2_SOURCE_AT_REVIEWED_SOURCE_SCOPE",
+    "benchmark_generation_binding": "FALSIFIED_AT_EXACT_G2_SOURCE_PLUS_REPOSITORY_HOSTED_NEGATIVE_CONTROL_SCOPE",
+    "predeclared_run_ancestry_binding": "FALSIFIED_AT_EXACT_G2_SOURCE_PLUS_REPOSITORY_HOSTED_NEGATIVE_CONTROL_SCOPE",
+    "fixture_episode_observation_action_binding": "NOT_FALSIFIED_BY_THIS_REVIEW",
+    "runtime_or_physical_claim": "NOT_TESTED"
+  },
+  "counterhypothesis": "If the benchmark contract intentionally treats benchmark_generation and the RunDescriptor factory output as self-declared per-evaluation metadata rather than authenticated predeclared run provenance, the observed acceptance is not a source bug; in that case the generation-2 claim language must be narrowed so it does not imply independently rooted exact run/generation ancestry.",
+  "recommended_discriminator": "Require an evaluator-side predeclared RunManifest/RunAdmission identity with generation plus descriptor digest, or another independently rooted immutable run binding, created before candidate scoring. Then add regressions proving that relabeling benchmark_generation or jointly replacing candidate run/SUT plus descriptor cannot be accepted by minting a fresh matching descriptor.",
+  "coordination": {
+    "wp803_owner_source_modified": false,
+    "new_wp803_mutation_authority_created": false,
+    "draft_pr_is_review_only": true,
+    "rule": "Existing generation-2 owner absorbs or explicitly narrows this evidence; no duplicate successor is created by this organ."
+  },
+  "credits": {
+    "executable_repository_falsifier_credit": 1,
+    "wp803_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_jspace_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_credit": 0
+  },
+  "next_exact_action": "Route this review evidence to the sole F2-WP-803 generation-2 mutation authority. The owner should either bind benchmark_generation and a predeclared immutable run-manifest/admission digest before evaluator scoring, or narrow the accepted provenance claim. Re-run the exact negative controls on the repaired owner head before bounded G2 acceptance."
+}

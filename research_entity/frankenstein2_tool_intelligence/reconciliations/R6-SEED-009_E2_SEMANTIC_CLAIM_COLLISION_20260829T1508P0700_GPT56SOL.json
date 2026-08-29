@@ -1,0 +1,24 @@
+{
+  "schema": "RESEARCH_ENTITY_TRIGGER6_RECONCILIATION_MIRROR/v1",
+  "research_id": "R6-SEED-009",
+  "status": "MIRRORED_F2_SEMANTIC_CLAIM_COLLISION_RECONCILIATION",
+  "created_at_local": "2026-08-29T15:08:00+07:00",
+  "canonical_f2_reconciliation": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "commit": "452eaaf54bc43831f2740a5222f69dca7a1cb3a1",
+    "path": "research/tool_intelligence/reconciliations/R6-SEED-009_E2_SEMANTIC_CLAIM_COLLISION_20260829T1508P0700_GPT56SOL.json"
+  },
+  "finding": "R6-SEED-009 was semantically claimed twice at E2 under literal target aliases E2_ARCHITECTURE_MAPPED and E2_ARCHITECTURE_MAPPING. Both results converge on the same thin-donor/no-second-authority conclusion and must be counted as one E2 result family, not independent replication.",
+  "protocol_gap": "Create-only path semantics are insufficient when the mutex identity contains an unconstrained human-readable claim_target alias.",
+  "repair_candidate": "Canonical evidence-level claim target enum or normalized objective digest in the mutex key; aliases remain metadata only.",
+  "repair_status": "PROPOSED_NOT_IMPLEMENTED",
+  "credits": {
+    "e2_result_count": 1,
+    "independent_replication": 0,
+    "architecture_acceptance": 0,
+    "runtime": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "mirror_law": "This mirror is provenance/research synthesis only and cannot replace the canonical F2 claim or reconciliation authority."
+}

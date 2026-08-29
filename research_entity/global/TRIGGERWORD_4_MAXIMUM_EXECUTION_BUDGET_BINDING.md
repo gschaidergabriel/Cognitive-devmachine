@@ -1,153 +1,176 @@
 # TRIGGERWORT 4 — Maximum Execution Budget Binding
 
-Status: PROJECT-OWNER BINDING / ACTIVE
+Status: **PROJECT-OWNER BINDING / ACTIVE**
 Date: 2026-08-29
 Applies to: exact `4`, `triggerword 4`, and `triggerwort 4`
 Parent directive: `TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md`
+Global execution authority: `CLAY_EXECUTION_AUTHORITY.md`
+VPS authority: `governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md`
+Bridge documentation: `governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`
 
-## Owner clarification
+## 1. Owner clarification: do not conflate provider spend with VPS compute
 
-Triggerword 4 is **not** a resource-conservation mode for the worker performing the build, integration, testing, measurement, falsification, debugging or architecture work.
+`FREE_ONLY` means **free external model/API tokens only**. It is not a ban on owner-provisioned compute.
 
-The execution budget of Trigger 4 and the runtime-efficiency target of Frankenstein 2.0 are separate budgets.
+For Triggerword 4 the following interpretation is normative:
+
+```text
+FREE_ONLY = NO PAID / SUBSCRIPTION / UNKNOWN-COST PROVIDER TOKENS
+FREE_ONLY != NO VPS
+FREE_ONLY != NO VPS BRIDGE
+FREE_ONLY != NO SELF-HOSTED RUNNER
+FREE_ONLY != NO LOCAL MODEL
+```
+
+The designated sandbox `clay-direct-dev` and the established VPS Bridge/self-hosted runner path are **authorized and expected** Triggerword-4 build/test/runtime surfaces.
+
+Do not stop with `VPS_AUTHORITY_AMBIGUOUS`, `VPS_FORBIDDEN`, `SELF_HOSTED_FORBIDDEN`, `NO_EXECUTOR`, or a request for supervisor re-authorization merely because an older bootstrap/cache contains FREE_ONLY wording. Resolve `CLAY_EXECUTION_AUTHORITY.md`; when it is current and reachable, the ordinary sandbox execution question is already resolved.
+
+Only a newer explicit owner instruction may modify or revoke this authority. A stale bootstrap/cache or an artifact explicitly marked `NON_AUTHORITY` cannot do so.
+
+## 2. Provider-token law
+
+External model/API routes are a separate axis from VPS execution.
+
+Allowed under `FREE_ONLY`:
+
+- owner VPS/local compute;
+- local models and downloaded public models running on owner infrastructure;
+- an external model/API route only when the exact concrete route is admitted and guaranteed zero-monetary-cost by current economic provenance.
+
+Forbidden under `FREE_ONLY`:
+
+- paid API/model tokens;
+- subscription-token usage merely because an owner subscription exists;
+- unknown-cost or potentially billable fallback;
+- hidden paid external cloud/model compute.
+
+Any older Triggerword-4 directive text permitting GLM/Z.AI or another provider under an `owner-authorized subscription context` is superseded for token execution. Such a provider may be used only if the exact route used is currently admitted as free/zero-cost.
+
+Together API remains unused/forbidden under the current free-token policy unless a newer explicit owner instruction changes that policy.
+
+## 3. Triggerword-4 work budget
+
+Triggerword 4 is **not** a resource-conservation mode for the worker performing build, integration, testing, measurement, falsification, debugging or architecture work.
+
+The engineering budget and the finished runtime-efficiency target are separate:
 
 ```text
 TRIGGER4_WORK = MAXIMUM_USEFUL_BUILD_TEST_MEASUREMENT_DEPTH
-TRIGGER6_RESEARCH = MAXIMUM_USEFUL_RESEARCH_DEPTH
-FRANKENSTEIN2_RUNTIME = MINIMUM_NECESSARY_TOKENS_AND_RESOURCES_FOR_REQUIRED_QUALITY
+FRANKENSTEIN2_RUNTIME = MINIMUM_NECESSARY_RESOURCES_FOR_REQUIRED_QUALITY
 ```
 
-## Maximum-execution law
+Within platform/safety/claim boundaries:
 
-On an exact Triggerword-4 invocation, subject to current platform, safety, authority, provider and claim constraints:
+1. use the largest useful reasoning, source-reading, tool, test, benchmark, falsification and debugging budget available;
+2. do not stop merely to save ChatGPT tokens, CI attempts, sandbox compute, local CPU/RAM or analysis effort;
+3. continue through additional dependency-correct nonduplicate work when a bounded objective closes and meaningful work remains;
+4. preserve exact evidence separating source presence, hosted/component CI, target-runtime execution, causal uptake, effects and whole-system acceptance;
+5. when a hard invocation limit ends work, preserve the exact continuation frontier instead of restarting next time.
 
-1. Use the largest useful reasoning, source-reading, tool, test, benchmark, falsification, debugging and visible-output budget available.
-2. Do not stop early merely to save ChatGPT tokens, tool calls, CI attempts, sandbox compute, local CPU/RAM, analysis effort or execution time.
-3. Continue through additional dependency-correct, non-duplicate build/test/integration objectives in the same invocation when the current objective reaches a useful terminal state and meaningful work remains.
-4. If one objective is already claimed or blocked, respect the claim/authority boundary and move to another useful non-duplicate objective rather than ending the Trigger-4 run solely to conserve resources.
-5. Run the strongest useful matched tests, negative tests, failure injection, restart/replay checks, concurrency checks, exact-head CI checks and runtime measurements that are available and relevant to the claim.
-6. Preserve full evidence needed to distinguish source presence, component CI, hosted CI, target-runtime behavior, causal uptake, effect correctness and end-to-end acceptance.
-7. Produce architecture deltas when build/test evidence materially changes the best-supported Frankenstein-2.0 architecture, integration order, authority boundary, resource strategy or component selection.
-8. More output is useful when it carries evidence, measurements, hypotheses/counterhypotheses, exact source identity, failure analysis, architectural implications or continuation state. Do not pad with repetition or fabricate detail merely to consume tokens.
-9. When a hard platform/context/output limit ends the invocation, persist or state the exact continuation frontier so the next `4` continues rather than restarts.
+## 4. Coordinated VPS load envelope — owner authorization
 
-## Coordinated VPS load envelope — owner authorization
+Triggerword-4 workers may deliberately load the authorized Frankenstein-2.0 VPS/sandbox and run useful tests in parallel when this improves information gain, throughput or coverage.
 
-Triggerword-4 workers may deliberately place the authorized Frankenstein-2.0 VPS/sandbox under meaningful load and may run useful tests in parallel when parallelism increases information gain, throughput or coverage.
+The owner authorizes **up to approximately 70% aggregate usable compute performance** for coordinated Triggerword-4 build/test/benchmark/runtime-development activity.
 
-The owner authorizes **up to approximately 70% aggregate usable compute performance** for coordinated Trigger-4 test/build/benchmark activity, subject to the safety rules below.
-
-This is one shared machine-level envelope, not a per-worker allowance:
+This is one shared machine-level ceiling, not a per-worker allowance:
 
 ```text
 SUM(TRIGGER4_WORKER_LOAD) <= 70% OF CURRENT USABLE VPS COMPUTE CAPACITY
-NOT:
-EACH_WORKER <= 70%
+NOT: EACH_WORKER <= 70%
 ```
 
-The 70% value is a ceiling, not a target. Use less when the workload does not benefit from more parallelism.
+The 70% value is a ceiling, not a target. Use less when more parallelism is not useful.
 
-### Central coordination law
-
-Parallel VPS work must be intelligently and centrally coordinated. Independent workers must not infer capacity from their own process alone.
+### Shared-capacity law
 
 Before admitting or expanding parallel load, resolve at minimum:
 
-- currently running Trigger-4 jobs/tests/builds and their work/claim identities;
+- currently active Triggerword-4 jobs and work/claim identities;
 - CPU/compute utilization and runnable pressure;
-- RAM availability and memory pressure;
-- swap activity / OOM indicators;
+- RAM availability, swap/OOM indicators and memory pressure;
 - disk and DB/WAL I/O pressure where relevant;
-- self-hosted runner / bridge health;
-- heartbeat, control-loop or DB latency/jitter that could indicate service degradation;
+- self-hosted runner / VPS Bridge health;
+- heartbeat/control-loop/DB latency or jitter;
 - mutation/path/workpackage conflicts;
-- expected duration and peak footprint of the proposed test.
+- expected duration and peak footprint of the proposed job.
 
-Capacity should be allocated from one shared coordination view by leases/tokens/reservations or an equivalent single capacity authority. A worker may consume only its admitted slice and should release it when the job completes or aborts.
+Use one shared coordination view/reservation mechanism where available:
 
 `MANY_TEST_WORKERS -> ONE_SHARED_CAPACITY_BUDGET -> BOUNDED_PARALLELISM`
 
 Do not create competing capacity authorities.
 
-### Intelligent ramping and backpressure
+### Ramping and backpressure
 
-Prefer progressive admission rather than immediately launching maximum parallelism. A useful default shape is approximately:
+Prefer progressive admission, for example:
 
-```text
-PRECHECK -> ~40% -> OBSERVE -> ~55% -> OBSERVE -> <=70%
-```
+`PRECHECK -> ~40% -> OBSERVE -> ~55% -> OBSERVE -> <=70%`
 
-The exact intermediate levels are heuristic, not mandatory. Increase load only when measurements remain healthy and additional parallelism is useful.
+Intermediate values are heuristics. Throttle, pause admission, serialize or terminate expendable test load when instability appears, including resource use near the ceiling, falling memory headroom, swap/OOM, severe I/O or WAL stalls, bridge/runner degradation, control-loop jitter, crashes or a higher-priority recovery/evidence task needing headroom.
 
-Automatically throttle, pause admission, serialize work, or terminate expendable test load when any material instability appears, including:
+Keep reserve for OS, DB, coordination/control plane, runner/bridge, monitoring, evidence persistence and recovery. Recoverability is harder than throughput.
 
-- sustained resource use approaching/exceeding the shared 70% compute ceiling;
-- rapidly falling free/available memory or meaningful memory pressure;
-- growing swap activity, OOM events or allocation failures;
-- severe disk I/O queueing, DB/WAL stalls or lock/contention amplification;
-- material heartbeat/control-loop/runner latency or jitter regression;
-- repeated process crashes, thermal/host throttling evidence where observable, or kernel/service instability;
-- a higher-priority recovery, control, DB or evidence-preservation task needing headroom.
+The compute ceiling never authorizes pathological RAM, swap, storage, DB/WAL or network pressure. The first constraining resource sets the real concurrency limit.
 
-Keep enough reserve for the OS, database, coordination/control plane, runners/bridges, monitoring, evidence persistence and emergency recovery. **The server remaining recoverable is a harder constraint than maximizing instantaneous throughput.**
+## 5. Parallel-test admission
 
-### Memory and I/O are safety constraints, not disposable capacity
+Parallel execution is preferred for independent tests or deliberate concurrency/load falsifiers when mutation/effect/claim ownership remains safe.
 
-The 70% authorization primarily describes aggregate usable compute performance. It does not authorize driving RAM, swap, storage, DB/WAL or network into pathological pressure merely because CPU remains below 70%.
+Good candidates include read-only benchmarks, isolated sandboxes, independent matrices, bounded fuzz/property tests, matched A/B jobs and instrumented load tests.
 
-For memory-heavy or I/O-heavy tests, the safe concurrency limit may therefore be substantially below the compute ceiling. Admission must follow the first constraining resource.
+Serialize or isolate destructive shared fixtures, canonical mutable state, exclusive DB/schema operations, deployment authority, effect identity or workpackage mutation ownership unless concurrency itself is the explicit experiment and rollback/recovery is proven.
 
-### Parallel-test admission rule
+## 6. Evidence requirement
 
-Parallel execution is preferred only when tests are independent or deliberately designed as a concurrency/load experiment and when their combined execution cannot violate mutation/claim/effect authority.
-
-Good parallel candidates include read-only benchmarks, isolated sandboxes, independent test matrices, bounded fuzz/property tests, matched A/B jobs and intentionally instrumented concurrency/load tests.
-
-Serialize or isolate tests that share destructive fixtures, mutable canonical state, exclusive DB/schema operations, deployment authority, effect identity or workpackage mutation ownership unless the concurrency itself is the explicit falsifier and rollback/recovery is proven.
-
-### Evidence requirement
-
-A material high-load Trigger-4 run should preserve enough telemetry to reconstruct:
+A material high-load Triggerword-4 run should preserve enough telemetry to reconstruct:
 
 - admitted jobs and capacity slices;
-- start/end times and claim/work identities;
-- CPU/compute utilization;
-- memory pressure/usage;
+- start/end and claim/work identities;
+- CPU/compute and memory pressure;
 - I/O/DB pressure where relevant;
 - achieved parallelism/throughput;
 - throttling/abort decisions;
 - failures/retries;
 - whether the 70% ceiling and recovery reserve were respected.
 
-A faster test run without enough evidence to determine whether it destabilized the machine is not a valid optimization result.
+Execution through the self-hosted runner/VPS Bridge is real target-environment execution evidence when exact source SHA, runtime/model identity, command/job identity and result receipt are captured. It must not be downgraded merely because the transport is a bridge.
 
-## What must remain resource-efficient
+A queued/pending runner job with no executed steps remains control-plane evidence only; that distinction concerns **whether execution happened**, not whether VPS execution was authorized.
 
-The no-sparing rule applies to the **Trigger-4 engineering process**, not to the final runtime design.
+## 7. Runtime efficiency remains a product objective
 
-Frankenstein 2.0 itself remains an efficiency target. When required quality, authority, evidence, replayability and capability are preserved or improved, prefer architectures with:
+Frankenstein 2.0 should still prefer, when quality/evidence/safety are preserved:
 
 - fewer model calls;
-- smaller prompts and context payloads;
-- smallest-sufficient retrieval;
-- compact typed state instead of repeated prose;
-- deterministic routing/gates instead of unnecessary LLM arbitration;
-- caching and reuse of stable computations;
-- incremental deltas instead of repeated full-state transmission;
+- smaller task-relevant context;
+- compact typed state;
+- deterministic routing where an LLM is unnecessary;
+- caching/reuse and incremental deltas;
 - bounded resident-model/decode concurrency;
-- lower CPU/RAM/GPU/VRAM/I/O and latency per useful result;
-- structural distillation instead of avoidable heavyweight dependencies.
+- lower CPU/RAM/GPU/VRAM/I/O and latency per useful result.
 
 Therefore:
 
 ```text
 SPEND ENGINEERING RESOURCES TO PROVE A CHEAPER/BETTER RUNTIME.
-DO NOT SAVE ENGINEERING RESOURCES BY UNDER-TESTING OR UNDER-ANALYZING THE BUILD.
-USE VPS PARALLELISM AGGRESSIVELY WHEN USEFUL, BUT KEEP THE SHARED MACHINE WITHIN A RECOVERABLE <=70% COMPUTE ENVELOPE.
+USE THE VPS BRIDGE AS THE ORDINARY EXECUTION PATH.
+USE FREE PROVIDER TOKENS ONLY.
+DO NOT TURN FREE_ONLY INTO A VPS BAN.
+KEEP AGGREGATE TRIGGER4 VPS COMPUTE WITHIN THE RECOVERABLE <=70% ENVELOPE.
 ```
 
-## Relationship to existing Trigger-4 optimization laws
+## 8. Precedence and stale-text handling
 
-Any existing Trigger-4 instruction to minimize RAM, compute, token/context use, redundant cognition, latency or other cost is interpreted as an objective for the **Frankenstein-2.0 product/runtime and measured architecture**, not as an instruction to prematurely limit the Trigger-4 worker's own investigation or validation effort.
+This owner binding resolves the Triggerword-4 execution ambiguity.
 
-Hard authority, safety, provider restrictions, claim/mutation ownership and external-spend constraints remain hard boundaries. Maximum useful effort and the 70% VPS load envelope do not create permission for forbidden providers, paid spending, duplicate mutation authority or unrelated production effects.
+Where older bootstrap, supervisor, trigger, status-template or historical text conflicts with this binding on the narrow question of `FREE_ONLY` versus owner VPS execution, the older conflicting text is superseded. Preserve it as history if needed, but do not use it as current execution authority.
+
+Current interpretation:
+
+`OWNER VPS / BRIDGE = AUTHORIZED COMPUTE SURFACE`
+
+`FREE_ONLY = FREE EXTERNAL PROVIDER TOKENS / NO PAID TOKEN FALLBACK`
+
+All unrelated canonical truth, EffectGate, CompletionGate, evidence, secret-handling, platform safety and claim/mutation boundaries remain unchanged.

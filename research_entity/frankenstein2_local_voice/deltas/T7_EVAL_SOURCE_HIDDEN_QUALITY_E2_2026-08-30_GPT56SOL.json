@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "worker": "GPT-5.6-Sol-TRIGGER7",
+  "research_id": "T7-EVAL-001",
+  "status": "MIRROR_OF_F2_E2_SOURCE_METHOD_RESULT",
+  "date": "2026-08-30",
+  "canonical_build_repo": "gschaidergabriel/frankenstein-2.0",
+  "canonical_claim": "research/local_voice/claims/T7-EVAL-001/E2_GERMAN_SOURCE_HIDDEN_CONVERSATION_QUALITY_PROTOCOL.json",
+  "canonical_results": [
+    "research/local_voice/sources/T7_EVAL_SOURCE_PINS_2026-08-30.json",
+    "research/local_voice/benchmarks/T7_GERMAN_SOURCE_HIDDEN_CONVERSATION_QUALITY_V1.md",
+    "research/local_voice/checkpoints/2026-08-30_T7_EVAL_001_REENTRY.json"
+  ],
+  "f2_commits": {
+    "claim_created": "1d643a3aa10a068efa28cefe2c7f3b9d98ecf2a9",
+    "source_pins_initial": "b8859f061d499322283ad2ae1729fb861349aa74",
+    "source_pins_extended": "f0f2b34880f3350da32ccae0557a5f47f970d8d6",
+    "evaluation_protocol": "9ff8456a91d66dce413761137369278546de4302",
+    "claim_closed": "d3bcc884ae964e6747055ec2816d5d2e3d1d93e2",
+    "checkpoint": "8c5069ab008197cf2ebe616126bb4390cdcb29a7"
+  },
+  "result": "German-first source-hidden conversational evaluation now separates hard causal validity, acoustic listening quality, P.804-style listening/speaking/interaction phases, semantic/entity quality, interruption/backchannel/disfluency behavior, and P.835 SIG/BAK/OVRL for AEC/denoise. Automated speech-quality predictors remain diagnostic only. Pair every serious executed candidate with the causal Trigger-7 receipt plus this human/source-hidden quality layer.",
+  "source_basis": [
+    "ITU-T P.804",
+    "ITU-T P.805",
+    "ITU-T P.808",
+    "ITU-T P.835 (07/2026)",
+    "Full-Duplex-Bench",
+    "HumDial 2026",
+    "Full-Duplex-Bench-v3",
+    "FLEXI",
+    "NISQA as diagnostic proxy only"
+  ],
+  "runtime_observed": false,
+  "runtime_credit": 0,
+  "german_e2e_credit": 0,
+  "parity_credit": 0,
+  "trigger4_acceptance_credit": 0,
+  "whole_system_acceptance": false,
+  "next_discriminator": "Consume terminal T7-SYS-002 clay-direct-dev hardware receipt; then evaluate the first official Qwen3.5-4B LOCAL_SOLO German run and serious ASR/TTS/turn-controller bundles with both causal and source-hidden quality receipts."
+}

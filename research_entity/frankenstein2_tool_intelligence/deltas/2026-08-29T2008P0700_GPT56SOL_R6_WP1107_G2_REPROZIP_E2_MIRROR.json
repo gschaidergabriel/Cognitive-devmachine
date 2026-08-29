@@ -1,0 +1,34 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_MIRROR_DELTA/v1",
+  "research_id": "R6-WP1107-REPROZIP",
+  "evidence_stage": "E2_ARCHITECTURE_MAPPED",
+  "created_at": "2026-08-29T20:08:00+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "mirror_epoch": "MIRROR-20260829T2008P0700-WP1107-G2-REPROZIP-E2",
+  "canonical_f2": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "claim_commit": "354439e40affa08cf906adf80d2765968a96b41c",
+    "e2_outcome_commit": "78b0bdcd045b3a525c0a21b22fc92da0db9993c7",
+    "architecture_delta_fusion_commit": "159109c31ae21fdb640c3171b08e25b84ebfd651",
+    "implementation_commit": "f9a1b7a8c9a8492655323e8ddb7556910587eeeb"
+  },
+  "finding_summary": [
+    "Generation-2 release ZIP already adopts the main prior reproducible-build findings: sorted members, SOURCE_DATE_EPOCH-derived fixed timestamps, explicit modes/create_system, ZIP_STORED, empty comments/extra inputs and manifest/payload hash verification.",
+    "Residual gap 1: allowZip64=True is broader than verifier policy that rejects member extra metadata; either prove ZIP64 unreachable and fail closed or canonically admit/verify ZIP64.",
+    "Residual gap 2: serialized create_version/extract_version remain zipfile runtime defaults; make them explicit or bind/test the supported builder-runtime perimeter.",
+    "Residual low-priority falsifier: cross-runtime non-ASCII member encoding/UTF-8 flag identity."
+  ],
+  "external_basis": [
+    "https://reproducible-builds.org/docs/definition/",
+    "https://reproducible-builds.org/docs/stable-inputs/",
+    "https://reproducible-builds.org/docs/source-date-epoch/",
+    "https://docs.python.org/3.13/library/zipfile.html",
+    "https://github.com/python/cpython/blob/main/Lib/zipfile/__init__.py"
+  ],
+  "coordination_note": "Initial WP803 objective in this run was stopped after semantic duplicate claims were observed. Concurrent canonical F2 coordination delta 77778eb5ec5c127f8a532aa8cf80ad453017642d is consumed rather than duplicated.",
+  "trigger4_handoff": "Small fail-closed WP1107 G2 hardening only; Trigger 4 must reproduce/falsify and owns any acceptance promotion.",
+  "research_credit": "E2_ARCHITECTURE_MAPPED_ONLY",
+  "architecture_acceptance_credit": 0,
+  "runtime_credit": 0,
+  "whole_system_credit": 0
+}

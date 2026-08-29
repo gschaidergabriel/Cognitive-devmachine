@@ -1,0 +1,36 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_DELTA/v1",
+  "research_id": "R6-20260829-WP807-AGENTBOARD-PROGRESS-METRICS-GPT56SOL-01",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "E1_SOURCE_READ_COMPLETED_MIRRORED",
+  "recorded_at": "2026-08-29T20:21:00+07:00",
+  "mirror_role": "FULL_PROVENANCE_NON_MUTEX",
+  "source_f2": {
+    "claim_commit": "33d900a80ba98d4fbd57a24aa7e8b4a52a26f4e2",
+    "outcome_commit": "e625a1cf536221033bf9319feea7dd724ed21810",
+    "outcome_path": "research/tool_intelligence/claims/R6-20260829-WP807-AGENTBOARD-PROGRESS-METRICS-GPT56SOL-01/E1_SOURCE_READ_OUTCOME.json"
+  },
+  "research_entity_head_before_mirror": "4abe448cf5edef9f42293dfafabd769a50d1a93f",
+  "external_source": {
+    "repo": "hkust-nlp/AgentBoard",
+    "commit": "bb7255e2daf1989069a186dad9e53f70680961db",
+    "paper": "AgentBoard: An Analytical Evaluation Board of Multi-turn LLM Agents",
+    "paper_id": "arXiv:2401.13178"
+  },
+  "finding": "AgentBoard provides a useful diagnostic decomposition for WP807: binary success, evaluator-derived progress, grounding/validity, trajectory and difficulty/horizon slices should not be collapsed into one opaque score. However its progress definition is a running maximum and therefore suppresses regressions; its heterogeneous task scorers and heavyweight harness should not become F2 authority.",
+  "f2_architecture_observation": "Current WP807 stores baseline/intervention score, samples, successes and actions per capability, then gates on minimum capability score, delta and matched holdout. It does not independently preserve progress, grounding, regression or recovery dimensions.",
+  "recommended_nonbinding_delta": "Retain WP807's receipt-bound fail-closed envelope. Distill only orthogonal evaluator measurements that increase falsification power on sealed held-out fixtures. In particular, if recovery is claimed, preserve raw signed progress changes or explicit regression/rescue events rather than AgentBoard's running-max progress alone.",
+  "counterhypothesis": "WP802-WP805 already encode the relevant progress/recovery semantics in their accepted benchmark scores, so additional WP807 fields may only duplicate evidence and increase aggregation ambiguity.",
+  "next_discriminator": "Compare exact WP802-WP805 evidence schemas and WP807 tests; require a sealed fixture where the proposed metric distinguishes two trajectories that current score/delta/sample/action evidence treats identically before promoting any schema change.",
+  "evidence_ceiling": "E1_SOURCE_READ_ONLY",
+  "credits": {
+    "research_source_delta": 1,
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "integration_credit": 0,
+    "whole_f2_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "research_db_sync": "SYNC_PENDING_APPEND_ONLY_JSON_PRESERVED"
+}

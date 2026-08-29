@@ -1,0 +1,203 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_DISCOVERY_SCOUT/v1",
+  "trigger": "6",
+  "slot": "DISCOVERY_SCOUT",
+  "research_id": "R6-DISCOVERY-GWT-CAUSAL-TRACE-PROVENANCE-20260829-001",
+  "status": "SOURCE_GROUNDED_DISCOVERY_COMPLETE_PENDING_DB_SYNC_NO_ARCHITECTURE_PROMOTION",
+  "created_at_local": "2026-08-29T14:55:00+07:00",
+  "purpose": "Find nonduplicate external mechanisms that can improve exact causal trace binding, matched intervention/control evaluation, evidence provenance and agent-run falsification around the current Frankenstein-2.0 GWT uptake frontier without granting observability or model outputs canonical truth authority.",
+  "architecture_delta_fusion": {
+    "frankenstein2_main_observed": "46aee3bf37a938dbea5936b9c935ffb7bd74cdf3",
+    "research_entity_main_observed": "5f14068837cd5b3ed389f88891cacb46fee4c588",
+    "supervisor_schema": "9.13",
+    "supervisor_delta": "9.13AQ_NON_AUTHORITY",
+    "execution_mode": "FREE_ONLY",
+    "trigger6_protocol_ref": "research/tool_intelligence/TRIGGERWORD_6_PROTOCOL.md",
+    "current_frontier": "WP507 G3 has repository-component CI evidence but actual GWT uptake, hidden-state causality, physical GRID10 and whole-system runtime credit remain zero/unproven.",
+    "wp507_claim": "F2-WP-507-G3-GPT56SOL-GWT-UPTAKE-CAUSAL-EVIDENCE-20260829",
+    "wp507_active_pr": 226,
+    "wp507_pr_head": "1c2037e97c9c6cf2c909764e142538028abc6e52",
+    "existing_seed_set": [
+      "R6-SEED-001 headroom",
+      "R6-SEED-002 Supercompress",
+      "R6-SEED-003 total-agent-memory",
+      "R6-SEED-004 Graphiti",
+      "R6-SEED-005 AgentSight",
+      "R6-SEED-006 AgentCgroup",
+      "R6-SEED-007 UniProf",
+      "R6-SEED-008 agenttop",
+      "R6-SEED-009 perf-skills"
+    ],
+    "nonduplication_result": "Repository search found no existing Trigger-6 records for OpenTelemetry, OpenInference, Inspect AI, in-toto Attestation or DoWhy in the Research-Entity tool-intelligence corpus. This scout remains E0 discovery only; no E1/E2 claim is created here."
+  },
+  "research_question": "Which external mechanisms can strengthen F2's exact matched intervention/control traceability and falsification discipline while keeping observation distinct from semantic uptake and keeping telemetry distinct from causal/world truth?",
+  "primary_sources": [
+    {
+      "candidate_id": "R6-SEED-010",
+      "repo": "open-telemetry/opentelemetry-specification",
+      "pinned_head": "8057bf6d5cf0ab10891b9e6f7b928cded76ab2f7",
+      "source_refs": [
+        "specification/trace/api.md",
+        "specification/context/api-propagators.md"
+      ],
+      "source_type": "EXTERNAL_PRIMARY_SPECIFICATION",
+      "observed_mechanism": "SpanContext is immutable and propagates TraceId/SpanId; spans provide parent-child structure, timestamped events and explicit Links to other SpanContexts, including cross-trace links. Context propagation is standardized through propagators.",
+      "evidence_level": "E0_SEED_SOURCE_DISCOVERY",
+      "architecture_credit": 0
+    },
+    {
+      "candidate_id": "R6-SEED-011",
+      "repo": "Arize-ai/openinference",
+      "pinned_head": "d773c1ac1c7bcfef565e6280932af68d388531e7",
+      "source_refs": [
+        "spec/traces.md",
+        "spec/README.md",
+        "spec/llm_spans.md"
+      ],
+      "license_observed": "Apache-2.0",
+      "source_type": "EXTERNAL_PRIMARY_REPOSITORY_SPEC",
+      "observed_mechanism": "OpenInference layers AI-specific Agent, Tool, LLM, Retriever, Guardrail and Evaluator span kinds plus typed input/output/model/token attributes on OpenTelemetry traces.",
+      "evidence_level": "E0_SEED_SOURCE_DISCOVERY",
+      "architecture_credit": 0
+    },
+    {
+      "candidate_id": "R6-SEED-012",
+      "repo": "UKGovernmentBEIS/inspect_ai",
+      "pinned_head": "3712507590dc4e6e678114194ac9844fd3a6fd6c",
+      "source_refs": [
+        "README.md",
+        "https://inspect.aisi.org.uk/scoring.html"
+      ],
+      "license_observed_from_readme": "MIT",
+      "source_type": "EXTERNAL_PRIMARY_REPOSITORY_AND_OFFICIAL_DOCS",
+      "observed_mechanism": "Inspect is an evaluation framework with multi-turn/tool-use support, extensible scorers, re-scoring of logs and transcript/scanner workflows suitable for evaluating agent behavior without embedding the evaluator into the agent runtime.",
+      "evidence_level": "E0_SEED_SOURCE_DISCOVERY",
+      "architecture_credit": 0
+    },
+    {
+      "candidate_id": "R6-SEED-013",
+      "repo": "in-toto/attestation",
+      "pinned_head": "2dcd055e9f72e746687c306e35f4e59720ff45be",
+      "source_refs": [
+        "spec/v1/README.md",
+        "spec/predicates/link.md",
+        "spec/predicates/test-result.md",
+        "spec/predicates/runtime-trace.md",
+        "spec/predicates/svr.md"
+      ],
+      "source_type": "EXTERNAL_PRIMARY_ATTESTATION_SPEC",
+      "observed_mechanism": "Attestation Statements bind subject artifacts to typed predicates; Link predicates bind materials/products and execution steps; test-result predicates bind test outcomes to tested source; runtime-trace predicates can carry monitor identity/config plus process/network/file-access traces; SVR can summarize verified properties while keeping verifier/policy identity explicit.",
+      "evidence_level": "E0_SEED_SOURCE_DISCOVERY",
+      "architecture_credit": 0
+    },
+    {
+      "candidate_id": "R6-SEED-014",
+      "repo": "py-why/dowhy",
+      "pinned_head": "5a9c401f11df863c39d046ca55743f250e47a0f7",
+      "source_refs": [
+        "dowhy/causal_model.py"
+      ],
+      "source_type": "EXTERNAL_PRIMARY_REPOSITORY_SOURCE",
+      "observed_mechanism": "DoWhy exposes explicit causal refuters including random common cause, unobserved common cause, placebo treatment, data subset, bootstrap and dummy-outcome refuters, with reproducible random seeds supported by the API.",
+      "evidence_level": "E0_SEED_SOURCE_DISCOVERY",
+      "architecture_credit": 0
+    }
+  ],
+  "proposed_pending_research_rows": [
+    {
+      "seed_id": "R6-SEED-010",
+      "repo": "open-telemetry/opentelemetry-specification",
+      "priority": 97,
+      "hypothesis": "A thin F2-native adoption of immutable trace/span identity plus explicit Span-Link-like relationships can bind GRID/GWT broadcast, receipt, intervention and control evidence across asynchronous boundaries without making telemetry canonical state.",
+      "counterhypothesis": "Trace graphs only encode instrumentation relationships; sampling, missing spans or late attributes can create false completeness, and a full OpenTelemetry SDK may add more overhead than a small F2-native schema.",
+      "preferred_integration_mode": "DISTILL_SCHEMA_AND_IDENTITY_RULES_FIRST_NOT_FULL_STACK",
+      "targets": ["F2-WP-507", "F2-WP-605", "F2-WP-902"],
+      "next_objective": "E1_SOURCE_READ"
+    },
+    {
+      "seed_id": "R6-SEED-011",
+      "repo": "Arize-ai/openinference",
+      "priority": 90,
+      "hypothesis": "AI-aware span kinds and typed model/tool/token attributes may reduce bespoke telemetry schema work and make F2 agent/tool traces easier to compare across implementations while reusing OpenTelemetry identity semantics.",
+      "counterhypothesis": "It overlaps AgentSight/agenttop and F2-native telemetry, may capture sensitive payloads, and cannot distinguish delivered information from semantic uptake or establish causality by itself.",
+      "preferred_integration_mode": "SCHEMA_DONOR_ONLY_UNTIL_OVERLAP_AND_PRIVACY_COST_ARE_MAPPED",
+      "targets": ["F2-WP-507", "F2-WP-605", "F2-WP-902"],
+      "next_objective": "E1_SOURCE_READ"
+    },
+    {
+      "seed_id": "R6-SEED-012",
+      "repo": "UKGovernmentBEIS/inspect_ai",
+      "priority": 99,
+      "hypothesis": "Inspect can serve as a noncanonical external E4-style ablation harness for matched GWT intervention/control runs, deterministic custom scorers, transcript inspection and re-scoring, improving falsification quality without entering F2 truth/effect authority.",
+      "counterhypothesis": "The full framework may be heavy, provider/model-grading paths can contaminate deterministic evidence, and a small F2-native fixture runner may reproduce the needed functionality at lower complexity.",
+      "preferred_integration_mode": "TEST_HARNESS_DONOR_DETERMINISTIC_SCORERS_FIRST",
+      "targets": ["F2-WP-507", "F2-WP-902", "F2-WP-904"],
+      "next_objective": "E1_SOURCE_READ"
+    },
+    {
+      "seed_id": "R6-SEED-013",
+      "repo": "in-toto/attestation",
+      "priority": 98,
+      "hypothesis": "A thin in-toto-compatible receipt envelope can bind exact source/material digests, test/runtime monitor identity and result predicates so F2/Trigger-6 evidence remains self-describing and harder to detach from the artifact actually evaluated.",
+      "counterhypothesis": "Supply-chain attestation semantics do not prove runtime cognition or world truth; full signing/verification infrastructure may be unnecessary overhead if current hash-bound receipts already cover the same integrity properties.",
+      "preferred_integration_mode": "DISTILL_STATEMENT_LINK_TEST_RESULT_RUNTIME_TRACE_FIELDS_BEFORE_IMPORT",
+      "targets": ["F2-WP-507", "F2-WP-902", "F2-WP-904"],
+      "next_objective": "E1_SOURCE_READ"
+    },
+    {
+      "seed_id": "R6-SEED-014",
+      "repo": "py-why/dowhy",
+      "priority": 84,
+      "hypothesis": "DoWhy's placebo/dummy-outcome/random-confounder/subset refuter patterns can donate stronger negative-control designs for repeated GWT causal experiments and help detect spurious intervention effects.",
+      "counterhypothesis": "DoWhy assumes an explicit causal/statistical model over observed variables and does not convert a deterministic matched-pair trace into hidden-state causality; importing the library would likely be heavier than copying the falsifier patterns.",
+      "preferred_integration_mode": "METHOD_MEMORY_ONLY_UNLESS_MULTI_SAMPLE_CAUSAL_ESTIMATION_BECOMES_REQUIRED",
+      "targets": ["F2-WP-507", "F2-WP-902"],
+      "next_objective": "E1_SOURCE_READ"
+    }
+  ],
+  "fusion_findings": [
+    {
+      "finding_id": "R6-GWT-D1",
+      "classification": "R1_INFERENCE",
+      "claim": "The highest-value near-term combination is not a new runtime agent framework. It is a thin exact-trace envelope (OpenTelemetry-like identity/links plus in-toto-like subject/material/result binding) paired with an external deterministic ablation harness (Inspect-like).",
+      "confidence": 0.91,
+      "falsifier": "E1/E2 source archaeology shows that the required fields cannot be isolated without importing substantial runtime machinery, or current F2 receipts already provide equivalent immutable cross-run linkage and exact subject/material binding with lower complexity."
+    },
+    {
+      "finding_id": "R6-GWT-D2",
+      "classification": "R1_INFERENCE",
+      "claim": "OpenInference is useful mainly as an interoperability/schema donor; it must not be promoted ahead of AgentSight/agenttop/F2-native telemetry until duplication and payload-privacy costs are mapped.",
+      "confidence": 0.94,
+      "falsifier": "E2 mapping shows a uniquely required AI semantic convention or integration surface absent from the existing telemetry donors and cheaper than a small F2-native extension."
+    },
+    {
+      "finding_id": "R6-GWT-D3",
+      "classification": "R1_INFERENCE",
+      "claim": "DoWhy should not be used to claim GWT hidden-state causality from current WP507 contract evidence. Its immediate value is negative-control methodology, not architecture/runtime proof.",
+      "confidence": 0.98,
+      "falsifier": "A future F2 experiment exposes a sufficiently large, well-defined repeated-sample causal model with observed treatment/outcome/confounder variables and predeclared assumptions that DoWhy can test without substituting statistical association for the hidden-state claim."
+    }
+  ],
+  "credit_boundary": {
+    "new_e0_candidates": 5,
+    "e1_source_read_credit": 0,
+    "e2_architecture_mapped_credit": 0,
+    "e3_claim_reproduction_credit": 0,
+    "e4_f2_ablation_credit": 0,
+    "e5_build_candidate_credit": 0,
+    "f2_acceptance_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "hidden_state_causal_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "coordination": {
+    "discovery_claim_required": false,
+    "reason": "This run creates E0 discovery hypotheses only. Per Trigger-6 protocol, create-only objective claims are required before source archaeology/experiment/integration evidence-stage work. Each E1/E2 successor must first inspect claims/README.md and atomically claim its exact objective in canonical F2.",
+    "pending_research_sqlite_sync": "PENDING",
+    "research_entity_mirror_state": "THIS_DELTA_IS_PROVENANCE_SIDE_ONLY; DO_NOT_TREAT_AS_CANONICAL_F2_DB_ROW_UNTIL MATERIALIZED/RECONCILED"
+  },
+  "next_recommended_trigger6_slot": "SOURCE_ARCHAEOLOGIST",
+  "next_information_target": "Claim and perform E1/E2 on R6-SEED-012 Inspect AI first, then R6-SEED-013 in-toto Attestation. The discriminator is whether a thin deterministic ablation/receipt layer gives more causal-evidence quality per dependency and token/runtime cost than existing F2-native test/receipt machinery."
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "TRIGGERWORD4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "routing": "PASS",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "authority_epoch": "8.78",
+  "recorded_at_utc": "2026-08-29T17:38:30Z",
+  "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "directive_branch_observed_head_before_write": "bc695d74739f514eee1dcc33b653ab45d3f5b563",
+  "frankenstein2": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "observed_main_after_terminalization": "45a8ccb35b49ebd7c2afa04d25792c89d922e8a1",
+    "wp1104_generation": 2,
+    "claim_id": "F2-WP-1104-G2-GPT56SOL-PRODUCER-LINEAGE-REPAIR-20260830",
+    "accepted_scope": "GENERIC_AGENT_ROUTE_PRODUCER_LINEAGE_REPAIR_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "counterevidence": {
+      "review_pr": 495,
+      "tested_base_sha": "e261c8b924f2a11e8f2c075a2347b5fa3349907d",
+      "run_id": 33255331615,
+      "job_id": 99107914912,
+      "finding": "A directly constructed internally self-consistent HostCapabilityReport could grant an ADAPTED generic-agent route without proving canonical assess_host_adapter producer lineage."
+    },
+    "repair": {
+      "active_publish_commit": "1fd867676ef056922711c90b216f6bbbc27cb476",
+      "terminal_reconciliation_commit": "cb8e1fae9d164d05c41e6df64b61fe3896b9ac3a",
+      "canonical_source": "src/frankenstein2/generic_agent_route.py",
+      "canonical_source_blob_sha": "4e01fd9f2f65fdba507d31a962b7d1ae04f86ef5",
+      "canonical_test": "tests/test_generic_agent_route.py",
+      "canonical_test_blob_sha": "15a21878ddd516136c701105e521c6701d69c434",
+      "canonical_ci": ".github/workflows/wp1104-generic-agent-route-ci.yml",
+      "canonical_ci_blob_sha": "bafd5b00aae595d4955f1434dd6e2014448ac952",
+      "behavior": [
+        "Positive generic-agent routes require producer-bound AssessedHostCapabilityEvidence created from explicit TargetEnvironmentBinding, LifecycleBinding and CapabilityObservation inputs.",
+        "The WP1104 consumer recomputes canonical assess_host_adapter output and requires exact report equality before granting positive compatibility.",
+        "Direct report-only positive routing fails closed; report tampering after canonical assessment fails closed.",
+        "BLOCKED report-only input remains non-positive and cannot mint compatibility.",
+        "WP1101-owned host_adapter_abi.py was not modified."
+      ]
+    },
+    "ci": {
+      "pre_terminal_main_wp1104_run": 33265980963,
+      "pre_terminal_main_state_view_run": 33265980941,
+      "pre_terminal_main_state_consistency_run": 33265980957,
+      "terminal_wp1104_run": 33266098013,
+      "terminal_state_view_run": 33266097995,
+      "terminal_state_consistency_run": 33266098025,
+      "all_relevant_conclusions": "SUCCESS"
+    },
+    "state_v2": {
+      "active_event": "workpackages/state_events/F2-WP-1104/000002.json",
+      "active_event_file_sha256": "9f59ba50992ad46303126b5d01e99b94204e6be077737708f7682f4d7577f723",
+      "terminal_event": "workpackages/state_events/F2-WP-1104/000003.json",
+      "terminal_active_pointer_blob": "552179d933dae462caedd640e0c6b80c4efa776e",
+      "terminal_reconciliation_blob": "40f79684c11158657c24729b26b9540c1d3cbee8",
+      "terminal_transition_published_atomically": true,
+      "force_update_used": false,
+      "cas_conflicts_observed_and_reentered": true
+    },
+    "transport_lane": {
+      "repair_pr": 576,
+      "state": "CLOSED_SUPERSEDED_NOT_MERGED",
+      "reason": "Direct state-v2 CAS publication already established the canonical main source and terminal reconciliation; closing avoids duplicate implementation authority."
+    }
+  },
+  "runtime_boundary": {
+    "runtime_execution_observed_for_wp1104": false,
+    "physical_host_credit": 0,
+    "vps_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "grid10_runtime_bridge": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "workflow": ".github/workflows/frank-self-hosted-probe.yml",
+    "wp510_run_id": 33252978899,
+    "observed_status": "queued",
+    "duplicate_dispatch_created_this_macrocycle": false,
+    "interpretation": "Runner/transport degradation only; not GRID10/F2 semantic negative evidence and not runtime credit."
+  },
+  "hypothesis": "Repository-side generic-host adaptation could still overclaim compatibility if a consumer accepts a semantically clean report without binding it to the canonical deterministic producer and explicit raw evidence inputs.",
+  "counterhypothesis": "Generation-1 internal report consistency was sufficient because all legitimate callers would voluntarily use assess_host_adapter.",
+  "discriminator": "Executable REVIEW_ONLY PR495 direct-constructor bypass followed by exact-main regression and state-v2 CI.",
+  "result": "Counterhypothesis falsified at repository component scope; producer-lineage fence added and accepted.",
+  "next_exact_action": "At the Stage-11 concrete-host/clean-machine boundary, construct generation-2 producer-bound assessment evidence from actually observed lifecycle/capability surfaces and verify lifecycle firing, multiplicity/timing, durable-state lineage and readback before promoting any generic-host or runtime credit. Separately, re-enter the existing WP510 self-hosted bridge run rather than creating a duplicate dispatch.",
+  "evidence_boundary": "This checkpoint records source, repository CI, concurrency and transport observations. It does not establish actual generic-host installation, live lifecycle firing, clean-machine acceptance, VPS/HCU execution, physical GRID10/GWT/J-Space behavior, provider/model behavior, effects, completion or whole-system acceptance."
+}

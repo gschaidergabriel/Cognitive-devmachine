@@ -1,0 +1,66 @@
+{
+  "schema": "TRIGGER4_RESEARCH_DELTA_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "date_local": "2026-08-29",
+  "authority_epoch": "8.78",
+  "routing": {
+    "normalized_message": "4",
+    "result": "TRIGGERWORD_4",
+    "directive_fetch": "PASS"
+  },
+  "observed_heads": {
+    "clay_global_research_entity_main_before_write": "edb000286010d9601f08c748a0e5b0f42e691c94",
+    "frankenstein_2_main": "f4e8be7cd8c9ab038fd1622be1eb478f1643bcfc",
+    "controller_main": "addbe2f0808fd5001e1122d443ed3b41cf7f3864"
+  },
+  "wp510": {
+    "canonical_component_merge_sha": "3e5b05f95b1cef80ff781152fa430f7916736746",
+    "component_state": "ACCEPTED_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "target_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "target_runtime_reentry": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "workflow": ".github/workflows/frank-self-hosted-probe.yml",
+    "current_probe_run_id": 33254381280,
+    "current_probe_job_id": 99105445603,
+    "current_probe_head_sha": "addbe2f0808fd5001e1122d443ed3b41cf7f3864",
+    "current_probe_status": "queued",
+    "current_probe_conclusion": null,
+    "older_probe_run_id": 33252978899,
+    "older_probe_job_id": 99101748230,
+    "older_probe_status": "queued",
+    "workflow_runner_selector": "self-hosted",
+    "workflow_timeout_minutes": 15,
+    "target_receipt_path": "runtime/vps_probe/wp510_target_runtime_latest.json",
+    "target_receipt_present_on_controller_main": false,
+    "duplicate_dispatch_created_by_this_organ": false
+  },
+  "transport_observation": {
+    "classification": "SELF_HOSTED_TARGET_RUNTIME_TRANSPORT_NOT_YET_ASSIGNED_OR_EXECUTED",
+    "evidence": [
+      "The exact current WP510 G2 controller push created run 33254381280 and job 99105445603; both remained queued at reentry.",
+      "The older run 33252978899 / job 99101748230 also remained queued.",
+      "The workflow explicitly requires runs-on: self-hosted and only writes the target-runtime receipt after runner execution.",
+      "No wp510_target_runtime_latest.json receipt was present on current controller main."
+    ],
+    "inference_boundary": "Queued status does not prove why no compatible runner has taken the job; runner offline/unregistered/busy/label mismatch or other transport causes remain unresolved without runner-administration evidence."
+  },
+  "decision": {
+    "duplicate_runtime_dispatch": "REJECTED",
+    "reason": "A current exact-WP510-G2 self-hosted run already exists and is queued. Another dispatch would add queue pressure without new evidence.",
+    "source_mutation": "NO_DUPLICATE_MUTATION",
+    "reason_source": "WP510 generation 2 is already accepted at repository component scope; current promotion gate is target-environment execution, not another source implementation."
+  },
+  "negative_evidence": [
+    "No target-environment execution observed.",
+    "No persisted WP510 target-runtime receipt observed.",
+    "No physical GRID10 or semantic GWT/J-Space runtime evidence observed."
+  ],
+  "unusual_experiment_executed": false,
+  "next_exact_action": "Do not redispatch WP510 while run 33254381280 remains nonterminal. The next executable discriminator is self-hosted runner/bridge administration evidence that can establish whether a compatible registered runner can claim the queued job; once the existing run becomes terminal, ingest only its exact persisted receipt and credit only the demonstrated target-environment component scope."
+}

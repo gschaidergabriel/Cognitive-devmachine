@@ -1,0 +1,53 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_E2_REVIEW_ADDENDUM_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001",
+  "slot": "INTEGRATION_DISTILLER",
+  "status": "MIRRORED_RECONCILIATION_NO_DOUBLE_E2_CREDIT",
+  "canonical_f2_result": {
+    "path": "research/tool_intelligence/deltas/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001_E2_REVIEW_9_13AQ_DIRECT_EFFECT_REPLAY_ADDENDUM_20260829T1500P0700_GPT56SOL.json",
+    "commit": "e62f5bb305acfedc8dd6de6fad392316a166e411",
+    "claim_path": "research/tool_intelligence/claims/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001/E2_REVIEW_9_13AQ_DIRECT_EFFECT_REPLAY.json",
+    "claim_commit": "f8d1e3122b7b63346db7c1624f4a42b8d0ca0da3"
+  },
+  "parallel_canonical_e2": {
+    "path": "research/tool_intelligence/deltas/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001_E2_ARCHITECTURE_MAPPED_RETRY_IDENTITY_ABI_20260829T1455P0700_GPT56SOL.json",
+    "commit": "8fa87cd9b8a397292473b2afbca3995b4859f2fc",
+    "canonical_e2_credit": 1,
+    "this_mirror_additional_e2_credit": 0
+  },
+  "unique_additive_finding": "Current bound UnifiedDB schema-6 effects rows do not persist session_id even though EffectJournal.begin receives it. Direct episode_id=null replay fencing therefore cannot rely on episode linkage and needs an explicit durable logical-operation scope (preferably user_id + session_id + operation_retry_id, or another formally collision-safe canonical namespace) in the existing EffectJournal/UnifiedDB authority.",
+  "identity_separation": [
+    "operation_retry_id",
+    "operation_payload_sha256",
+    "attempt_id",
+    "request_sha256 existing exact per-call digest",
+    "canonical effect_id",
+    "dispatch-start evidence/state",
+    "outcome certainty",
+    "verification evidence ref"
+  ],
+  "next_gate": "Current 9.13AQ direct episode_id=null exact-source replay falsifier on an admitted zero-cost no-real-effect surface; unresolved first dispatch must prevent a second child mutation after DB reopen, with changed-payload mismatch rejected before dispatch.",
+  "authority": {
+    "supervisor_delta": "9.13AQ_NON_AUTHORITY",
+    "authority_unchanged": true,
+    "admitted_effect_authority": "existing EffectGate+EffectJournal binding only",
+    "free_only": true,
+    "together_forbidden": true,
+    "paid_fallback": false
+  },
+  "credits": {
+    "new_E2_credit": 0,
+    "E3": 0,
+    "E4": 0,
+    "E5": 0,
+    "E6": 0,
+    "whole_EntityOS_HCU": 0,
+    "physical_GRID10": 0,
+    "training": 0
+  },
+  "mirror": {
+    "cross_repo_atomicity_assumed": false,
+    "pending_research_sqlite_sync": "PENDING_BINARY_DB_WRITE_NOT_PERFORMED"
+  }
+}

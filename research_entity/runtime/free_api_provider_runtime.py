@@ -54,6 +54,13 @@ PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED = getattr(
 )
 
 
+def _fork_active_execution_quarantined() -> bool:
+    """Read the interpreter-shared latch, never a module-instance snapshot."""
+    return getattr(
+        threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR, False
+    ) is True
+
+
 def _prepare_process_state_for_fork() -> None:
     global _PROCESS_FORK_GENERATION
     _PROCESS_FORK_GENERATION += 1
@@ -438,14 +445,14 @@ def inventory(
                     latch_capacity_exhausted
                 ),
                 "fork_active_execution_quarantined": (
-                    PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+                    _fork_active_execution_quarantined()
                 ),
                 "eligible_before_payment_latch": eligible_before_latch,
                 "eligible": bool(
                     eligible_before_latch
                     and not payment_blocked
                     and not latch_capacity_exhausted
-                    and not PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+                    and not _fork_active_execution_quarantined()
                 ),
             }
         )
@@ -470,7 +477,7 @@ def _route_from_inventory(rows: list[dict]) -> dict:
         and row["payment_latch_capacity_exhausted"]
         for row in rows
     )
-    if PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED:
+    if _fork_active_execution_quarantined():
         reason = "forked_during_active_execution"
     elif eligible:
         reason = "highest_priority_configured_zero_cost_provider"
@@ -491,14 +498,14 @@ def _route_from_inventory(rows: list[dict]) -> dict:
         "payment_blocked_providers": blocked,
         "payment_latch_capacity_exhausted": capacity_exhausted,
         "fork_active_execution_quarantined": (
-            PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+            _fork_active_execution_quarantined()
         ),
         "retryable_in_process": (
-            False if PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED else None
+            False if _fork_active_execution_quarantined() else None
         ),
         "recovery_action": (
             "exec_or_process_restart"
-            if PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+            if _fork_active_execution_quarantined()
             else None
         ),
         "reason": reason,
@@ -542,7 +549,7 @@ def receipt() -> dict:
             FORK_ACTIVE_EXECUTION_QUARANTINE_SCOPE
         ),
         "fork_active_execution_quarantined": (
-            PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+            _fork_active_execution_quarantined()
         ),
         "unicode_database_version": UNICODE_DATABASE_VERSION,
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -990,7 +997,7 @@ def execute_chat(
     payment_latches: set[str] | None = None,
 ) -> dict:
     """Serialize authorization through receipt so payment latches are atomic."""
-    if PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED:
+    if _fork_active_execution_quarantined():
         raise RuntimeError("forked_during_active_execution")
     _enforce_pre_snapshot_message_bound(messages)
     _enforce_pre_lock_text_size_lower_bound(messages, model)

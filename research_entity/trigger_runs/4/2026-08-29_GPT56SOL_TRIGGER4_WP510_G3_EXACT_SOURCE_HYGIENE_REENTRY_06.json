@@ -1,0 +1,108 @@
+{
+  "schema": "TRIGGERWORD4_WP510_G3_EXACT_SOURCE_HYGIENE_REENTRY/v1",
+  "date_local": "2026-08-29",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "4",
+  "routing_self_test": {
+    "normalized_message": "4",
+    "expected_macro": "TRIGGERWORD_4_GRID10_RUNTIME_TO_FRANKENSTEIN_2_ASSEMBLY",
+    "result": "PASS",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "canonical_supervisor_epoch": "8.78",
+    "latest_inbox_schema": "9.13",
+    "latest_non_authority_steering": "9.13AY_NON_AUTHORITY",
+    "owner_vps_via_established_bridge_allowed": true,
+    "free_only_external_provider_spend_policy": true,
+    "together_forbidden": true,
+    "paid_subscription_unknown_external_fallback_forbidden": true
+  },
+  "observed_heads": {
+    "research_main": "620143175f57985aae488660a14eca28fe9d13e3",
+    "frankenstein2_main": "affe9d4f6b22177e681169089f231695a179df11",
+    "trigger4_branch_before_checkpoint": "7b10321c187c5d21e722dd9ceb61ebc5302035a6"
+  },
+  "wp510_g3_terminal_pointer": {
+    "state": "ACCEPTED",
+    "terminal_scope": "GWT_CAUSAL_PATH_G3_NOT_COMPUTED_POSITIVE_SEAL_FENCE_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "implementation_pr": 535,
+    "implementation_head_sha": "731816a370a0c4fa9bcd63ba05fbf6013433acfe",
+    "implementation_pr_ci_run_id": 33259880985,
+    "implementation_pr_ci_job_id": 99119883398,
+    "source_fusion_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+    "source_fusion_tree_sha": "f9aa0811bedc35efe8288bcbc08351c048780113",
+    "merged_main_ci_run_id": 33260032640,
+    "merged_main_ci_job_id": 99120269910,
+    "canonical_source_blob_sha": "aa24abf742612240ef3acf117962fc03958f9787",
+    "canonical_regression_test_blob_sha": "7396a6bba021855b8c2cdb760a3f39c02f7bab26",
+    "canonical_prior_test_blob_sha": "ad1ed6c774bf6ad960a7288b2c20f891d88bf58d",
+    "canonical_workflow_blob_sha": "5f2eb4556eaf81590c8d369d977082adf1e59c3c",
+    "runtime_execution_observed": false,
+    "runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "stale_state_correction": {
+    "prior_g2_vps_capsule": "SUPERSEDED_FOR_NEW_PROMOTION_ATTEMPTS",
+    "reason": "WP510 generation 3 closed a later executable NOT_COMPUTED positive-seal falsifier after the generation-2 target-runtime preparation was written.",
+    "g3_source_delta": "Positive causal sealing now rejects downstream CellOutput.status == NOT_COMPUTED.",
+    "g3_regression": "tests/test_wp510_g3_not_computed_status.py"
+  },
+  "durable_delta": {
+    "path": "tools/trigger4_wp510_exact_source_vps_hygiene_capsule.py",
+    "commit": "7b10321c187c5d21e722dd9ceb61ebc5302035a6",
+    "content_blob_sha": "309d7d016e6501d9c5e771640423e4ebb3c5f96f",
+    "binding": {
+      "requested_implementation_head_sha": "731816a370a0c4fa9bcd63ba05fbf6013433acfe",
+      "requested_implementation_tree_sha": "156953a665a451f6307c4c3e89de0e365f90bcdc",
+      "terminal_pointer_source_fusion_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+      "admission_note": "The capsule is bound to the exact accepted implementation head named by the terminal pointer. Promotion remains contingent on receipt-time component blob identities matching the canonical source-fusion blobs and on separately admitted target-environment identity; otherwise fail closed."
+    },
+    "fixed_probes": [
+      "test_positive_exact_chain_seals_without_minting_runtime_or_truth_credit",
+      "test_not_computed_downstream_cannot_seal_positive_causal_path"
+    ],
+    "properties": [
+      "preserves the existing dirty /workspace non-destructively",
+      "uses a disposable detached exact-source clone",
+      "checks exact requested commit and tree and clean status before and after the fixed probes",
+      "runs no caller-supplied arbitrary command",
+      "invokes no external provider/model/effect path",
+      "keeps missing cgroup isolation telemetry UNKNOWN",
+      "mints no target-runtime, physical GRID10, semantic GWT/J-Space, training, completion or whole-system credit by itself"
+    ]
+  },
+  "validation": {
+    "local_source_preparation": "python -m py_compile PASS; --help PASS",
+    "local_container_network": "UNAVAILABLE_FOR_GITHUB_CLONE_DURING_THIS_ORGAN; NOT_PRODUCT_EVIDENCE",
+    "target_vps_execution": "NOT_RUN",
+    "target_vps_reason": "No direct VPS/SSH execution connector is available in this organ; duplicate self-hosted dispatches are explicitly quarantined by current steering."
+  },
+  "coordination": {
+    "unusual_experiment_executed": false,
+    "self_hosted_duplicate_dispatch": "NOT_CREATED",
+    "wp002_aggregate_projection": "ROUTE_AROUND_ACTIVE_SINGLE_WRITER",
+    "wp710_postacceptance_counterevidence": "RETAINED_OPEN",
+    "dirty_vps_workspace": "PRESERVE_NON_DESTRUCTIVELY"
+  },
+  "next_exact_gate": "Through the already-authorized direct VPS/bridge surface in clay-direct-dev, run the G3 exact-source hygiene capsule in a clean disposable checkout while preserving the existing dirty workspace. Persist the JSON receipt and bind target-environment identity. Require receipt-time canonical component blob identities to match the WP510 G3 source-fusion pointer; keep container cgroup health UNKNOWN if still unobservable. Only bounded WP510 target-environment component credit may then be considered. Physical GRID10, semantic GWT/J-Space, effects, completion, training and whole-system acceptance remain separate gates.",
+  "decision": "ADVANCED_TRIGGER4_BY_REBINDING_STALE_G2_RUNTIME_PREPARATION_TO_TERMINAL_WP510_G3_WITHOUT_DUPLICATE_RUNTIME_DISPATCH",
+  "credits": {
+    "source_preparation": 1,
+    "repository_component": "WP510_G3_ACCEPTED_AT_REPOSITORY_HOSTED_COMPONENT_CI_SCOPE_BY_CANONICAL_F2_POINTER",
+    "target_runtime": 0,
+    "physical_grid10": 0,
+    "semantic_gwt_jspace_runtime": 0,
+    "training": 0,
+    "whole_frankenstein2": 0,
+    "whole_entityos_hcu": 0
+  }
+}

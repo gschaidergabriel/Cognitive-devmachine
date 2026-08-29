@@ -1,0 +1,107 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_ARCHITECTURE_DELTA_FUSION/v1",
+  "fusion_id": "ADF-20260829T1457P0700-GPT56SOL",
+  "trigger": "6",
+  "slot": "ARCHITECTURE_DELTA_FUSER_PREWORK",
+  "status": "COMPLETED_SOURCE_GROUNDED_NO_RUNTIME_PROMOTION",
+  "created_at_local": "2026-08-29T14:57:32+07:00",
+  "architecture_snapshot": {
+    "frankenstein_2_head": "f8d1e3122b7b63346db7c1624f4a42b8d0ca0da3",
+    "research_entity_head_before_fusion_write": "5f14068837cd5b3ed389f88891cacb46fee4c588",
+    "authority_epoch": "9.13",
+    "supervisor_delta": "9.13AQ_NON_AUTHORITY"
+  },
+  "inputs": [
+    {
+      "kind": "TRIGGER6_PROTOCOL",
+      "ref": "research_entity/frankenstein2_tool_intelligence/TRIGGERWORD_6_PROTOCOL.md",
+      "source_commit": "5f14068837cd5b3ed389f88891cacb46fee4c588"
+    },
+    {
+      "kind": "PRIOR_TRIGGER6_FUSION",
+      "ref": "research_entity/frankenstein2_tool_intelligence/deltas/ADF-20260829T0401P0700-GPT56SOL-REENTRY1.json",
+      "source_commit": "5f14068837cd5b3ed389f88891cacb46fee4c588"
+    },
+    {
+      "kind": "SUPERVISOR",
+      "ref": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "source_commit": "5f14068837cd5b3ed389f88891cacb46fee4c588",
+      "authority_epoch": "9.13",
+      "supervisor_delta": "9.13AQ_NON_AUTHORITY"
+    },
+    {
+      "kind": "TRIGGER5_FEED",
+      "ref": "research_entity/architecture_archaeology/TRIGGERWORD5_LIVE_FORENSIC_FEED.json",
+      "source_commit": "5f14068837cd5b3ed389f88891cacb46fee4c588"
+    },
+    {
+      "kind": "F2_MAIN",
+      "ref": "gschaidergabriel/frankenstein-2.0@f8d1e3122b7b63346db7c1624f4a42b8d0ca0da3"
+    }
+  ],
+  "observed_deltas": [
+    {
+      "id": "ADF-1457-D01-WP502-WP506-COMPONENT-ACCEPTED",
+      "classification": "TRIGGER4_REPOSITORY_COMPONENT_EVIDENCE",
+      "finding": "F2 main now contains terminal component-scope acceptance for WP502 Hyperposition G1 and WP506 frame-version G2 after exact SituationFrame id+generation+digest binding and repository CI.",
+      "affected_modules": ["F2-WP-502", "F2-WP-506"],
+      "runtime_credit": 0,
+      "whole_system_credit": 0
+    },
+    {
+      "id": "ADF-1457-D02-WP507-G3-CI-PASS-UPTAKE-OPEN",
+      "classification": "TRIGGER4_REPOSITORY_COMPONENT_EVIDENCE",
+      "finding": "Supervisor 9.13AQ records WP507 G3 repository component CI PASS (18/18), while actual GWT uptake and hidden/world-state causal influence remain unproven.",
+      "affected_modules": ["F2-WP-507", "GWT_UPTAKE_CAUSALITY"],
+      "runtime_credit": 0,
+      "gwt_causal_credit": 0
+    },
+    {
+      "id": "ADF-1457-D03-DIRECT-EFFECT-NULL-EPISODE-REPLAY-GAP",
+      "classification": "CURRENT_SOURCE_GAP",
+      "finding": "Supervisor 9.13AQ identifies a direct/non-workspace entityos.exec replay gap for episode_id=null across reopen/retry boundaries. Duplicate real effect has not been executed; an exact-source zero-cost falsifier remains required.",
+      "affected_modules": ["ENTITYOS_EFFECT_IDENTITY", "F2-WP-105"],
+      "runtime_credit": 0,
+      "canonical_semantics_credit": 0
+    },
+    {
+      "id": "ADF-1457-D04-TRIGGER6-WP105-CLAIM-ACTIVE",
+      "classification": "COORDINATION_STATE",
+      "finding": "F2 main head f8d1e312 is itself a Trigger-6 claim for a WP105 9.13AQ retry-identity E2 review. This objective is therefore treated as already owned and MUST NOT be duplicated by this Trigger-6 invocation.",
+      "affected_modules": ["TRIGGER6_COORDINATION", "F2-WP-105"],
+      "research_credit": 0
+    },
+    {
+      "id": "ADF-1457-D05-AGENTSIGHT-E3-CLAIMS-PRESENT",
+      "classification": "TRIGGER6_COORDINATION_STATE",
+      "finding": "R6-SEED-005 now has multiple E3 objective claims in canonical F2 in addition to E2 architecture mapping; the previous generic AgentSight E3 next-action is no longer a safe duplicate-free default.",
+      "affected_modules": ["R6-SEED-005", "TRIGGER6_COORDINATION"],
+      "research_credit": 0
+    },
+    {
+      "id": "ADF-1457-D06-TRIGGER5-DRIFT-STILL-OPEN",
+      "classification": "TRIGGER5_OPEN_CONTRADICTION",
+      "finding": "The Trigger-5 live feed remains an append-only research projection and still carries unresolved ingest/provenance boundaries; no newer evidence observed here promotes it into canonical runtime authority.",
+      "affected_modules": ["TRIGGER5_INGEST", "ARCHITECTURE_ARCHAEOLOGY"],
+      "runtime_credit": 0
+    }
+  ],
+  "selection": {
+    "duplicate_avoidance": [
+      "DO_NOT_DUPLICATE_ACTIVE_WP105_9_13AQ_RETRY_IDENTITY_REVIEW",
+      "DO_NOT_DUPLICATE_EXISTING_R6_SEED_005_E3_OBJECTIVES"
+    ],
+    "highest_value_open_research_gap": "F2-WP-507 actual GWT uptake causality is unproven despite repository component CI success.",
+    "next_slot": "DISCOVERY_SCOUT",
+    "next_objective": "Discover and source-audit external tracing/intervention mechanisms that could strengthen exact GWT broadcast->receipt->uptake causal identity without mistaking correlation for causation or creating a second state/effect authority."
+  },
+  "credit_boundary": {
+    "architecture_fusion_delta": 1,
+    "external_tool_architecture_credit": 0,
+    "build_candidate_credit": 0,
+    "f2_runtime_credit": 0,
+    "gwt_causal_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  }
+}

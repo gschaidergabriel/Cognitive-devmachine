@@ -1,0 +1,25 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_ARCHITECTURE_DELTA_FUSION_MIRROR/v1",
+  "research_id": "ADF-20260829T1507P0700-GPT56SOL-BAUKIT-WP507-E1",
+  "status": "MIRRORED_PROVENANCE_ONLY",
+  "created_at": "2026-08-29T15:08:00+07:00",
+  "canonical_f2_fusion": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/ADF-20260829T1507P0700-GPT56SOL-BAUKIT-WP507-E1.json",
+    "write_commit": "bce12df24984847e962e8f9bfc7e9d48b91f5cc8"
+  },
+  "f2_main_observed_after_write": "9efd5d79d2724589c609b92506a6deeb68496a46",
+  "candidate": "davidbau/baukit@9d51abd51ebf29769aecc38c4cbef459b731a36e",
+  "fused_hypothesis": "Use a tiny F2-native direct PyTorch forward-hook ActivationTap as the lowest-resource model-internal intervention baseline; keep baukit itself out of runtime dependency closure at E1.",
+  "unresolved": [
+    "generation/re-entrancy semantics",
+    "torch.compile compatibility",
+    "quantized/offloaded model visibility",
+    "VRAM/latency measurement",
+    "license clarification before any direct vendoring"
+  ],
+  "research_credit": "BAUKIT_E1_ONLY",
+  "architecture_credit": 0,
+  "runtime_credit": 0,
+  "whole_system_credit": 0
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-20260829-WP805-REPLAN-RECOVERY-EFFICIENCY-GPT56SOL-01",
+  "evidence_stage": "E2_ARCHITECTURE_MAPPED",
+  "created_at": "2026-08-29T20:16:56+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "canonical_coordination_authority": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2": {
+    "claim_path": "research/tool_intelligence/claims/R6-20260829-WP805-REPLAN-RECOVERY-EFFICIENCY-GPT56SOL-01/E2_ARCHITECTURE_MAPPED.json",
+    "claim_commit": "557dbf46887a0291d2c25304afe04de1f0b9a594",
+    "result_path": "research/tool_intelligence/deltas/2026-08-29T2016P0700_GPT56SOL_R6_WP805_REPLAN_RECOVERY_EFFICIENCY_E2.json",
+    "result_commit": "ea639276db12480b0344a634ca39573c716928e5"
+  },
+  "research_entity_main_before_mirror": "101bd5908b19625ed63c70fe509f8b40ede4aea3",
+  "finding_summary": [
+    "WP805 generation 1 should be a thin evaluator layer over WP800, not a new planner, model, truth store or effect path.",
+    "Use two immutable matched WP800 fixtures for before/after change rather than mutating a live EpisodeState; this preserves fixture/generation/provenance fences.",
+    "Compare SELECTIVE_REPAIR against the same policy/planner class doing FULL_REPLAN from identical post-change public inputs and budget.",
+    "Compute a post-change evaluator-only shortest-valid-action oracle only for regret/path-length measurement; never expose oracle path or changed-edge truth to the SUT.",
+    "Reuse WP800 holdout_set_id/evidence_source_family/donor_path_family/method_family; add perturbation/topology family axes only as WP805 evaluator metadata unless later evidence justifies a shared schema change.",
+    "WP802 information seeking and WP803 action-bound prediction are optional comparator/diagnostic adapters, not WP805 authorities.",
+    "WP804 goal-change recovery stays conditional until its public consumer boundary is admitted.",
+    "Mandatory falsifiers include early dependency break, irrelevant local change, small-world full-replan-wins, generation/digest drift rejection, family leakage rejection and hidden-oracle leakage rejection.",
+    "High reuse fraction is not success; only validated retained actions count, and full replanning is allowed to win."
+  ],
+  "external_basis": [
+    "Lifelong Planning A* DOI:10.1016/j.artint.2003.12.001",
+    "D* Lite / AAAI-02 paper 072",
+    "WM-SAR arXiv:2607.01767",
+    "World Model Recovery in SFT LLM Planners arXiv:2606.03685",
+    "ActSWM arXiv:2607.26712"
+  ],
+  "architecture_delta": {
+    "id": "ADF-20260829T2016P0700-GPT56SOL-WP805-RECOVERY-EFFICIENCY",
+    "decision": "THIN_PAIRED_FIXTURE_EVALUATOR_OVER_WP800",
+    "affected_workpackages": ["F2-WP-800", "F2-WP-802", "F2-WP-803", "F2-WP-804", "F2-WP-805"],
+    "aggregate_state_conflict": "workpackages/STATE.json generation 15 still reports WP800-WP805 NOT_STARTED despite granular progress; granular source/claim/receipt evidence outranks the stale aggregate cache."
+  },
+  "handoff": "Trigger 4 should implement only the bounded paired-fixture evaluator/candidate contract and falsifiers, or record a dependency-correct hold. Trigger 6 grants no build/runtime acceptance.",
+  "credits": {
+    "trigger6_research": "E2_ARCHITECTURE_MAPPED",
+    "architecture_acceptance_credit": 0,
+    "runtime_credit": 0,
+    "whole_system_credit": 0,
+    "training_credit": 0
+  },
+  "mirror_policy": "Provenance mirror only. F2 owns the claim mutex and canonical result."
+}

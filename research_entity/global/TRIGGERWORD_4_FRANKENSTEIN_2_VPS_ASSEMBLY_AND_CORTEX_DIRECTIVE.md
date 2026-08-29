@@ -250,3 +250,43 @@ A system that only reacts while a Claude session is open, only stores history wi
 Every later `triggerwort 4` run continues from the newest verified Frankenstein-2.0 checkpoint. It must prefer delta work: inspect current evidence, find the most important remaining defect/bottleneck, form hypothesis + counterhypothesis, change a bounded component, test, retain only supported improvement, persist receipts, then set the next frontier.
 
 Do not restart from architecture prose. Do not repeatedly clone a fresh Frankenstein 2.0 once a verified lineage exists. Update donor inputs deliberately and merge only after compatibility tests.
+
+## 12. OWNER CORRECTION — final product is a portable local host harness, not a VPS product
+
+This section is a project-owner correction dated 2026-08-29 and overrides any interpretation of earlier wording such as “assembly happens on the VPS” as a statement about the final deployment topology.
+
+The VPS is the authorized **development/compute sandbox and optional remote organ**. It is not the canonical product location and it is not a prerequisite for baseline Frankenstein 2.0 installation.
+
+The final Frankenstein 2.0 must preserve the strongest distribution property of the current Frankenstein donor: a normal user can hand a release ZIP (or development repository URL) to a capable local coding agent such as Claude Code, OpenAI Codex CLI or another supported coding-agent host, and that host can discover its real capabilities, install the local Frankenstein harness/runtime, attach the correct lifecycle/tool adapters, preserve one durable state lineage, verify the integration by readback, and then run with Frankenstein as the persistent cognitive body around that host.
+
+Mandatory product laws:
+
+- `LOCAL_USER_MACHINE = BASELINE_PRODUCT_RUNTIME`;
+- `VPS/HCU/REMOTE_COMPUTE = OPTIONAL_EXTENSION_OR_ACCELERATOR`;
+- `VPS_BRIDGE != CANONICAL_PRODUCT_LOCATION`;
+- `HOST_ADAPTER != COGNITIVE_STATE_AUTHORITY`;
+- `CLAUDE_CODE`, `CODEX_CLI` and other supported coding agents must bind to one semantic host ABI rather than creating separate Frankensteins;
+- durable canonical user state must live outside disposable plugin/cache directories and survive host/plugin update/reinstall;
+- switching host adapters must not create competing memories/truths;
+- release packaging must expose a deterministic AI installer entry analogous to the donor's `AI_START_HERE_DO_NOT_SCAN_REPO/` flow;
+- installer/runtime capability must be verified as `NATIVE`, `ADAPTED`, `DEGRADED` or `BLOCKED`; copied files or a zero exit code are not sufficient proof;
+- owner-approved VPS bridge attachment may happen after local install and must preserve the same entity/state lineage;
+- no-VPS operation must still permit baseline local boot, state continuity and admitted local cognition, with remote-only optional capabilities explicitly degraded rather than making the whole product fail.
+
+The canonical F2 repository now carries the binding product references:
+
+- `PRODUCT_COMPLETION_LAW.md`;
+- `architecture/PORTABLE_HOST_HARNESS_AND_DISTRIBUTION_CONTRACT.md`;
+- `workpackages/PORTABLE_DELIVERY_PHASE.json`;
+- `AI_START_HERE_DO_NOT_SCAN_REPO/`;
+- `provenance/frankenstein1-portable-installer-audit-20260829.json`.
+
+Every Triggerword-4 run that operates on Frankenstein 2.0 must preserve and consult these product constraints when choosing architecture, state placement, runtime topology and workpackage completion.
+
+Add a final distribution stage after architecture/security convergence:
+
+### Stage 11 — Portable host-harness packaging and clean-machine release acceptance
+
+Build the reproducible release ZIP, manifest/hashes, host capability discovery, semantic lifecycle ABI, Claude Code route, Codex route, generic-agent adapter, persistent local state migration/update/rollback, optional VPS bridge attach/detach, uninstall/permission withdrawal and clean-machine one-handoff tests.
+
+Final whole-product completion is false until the portable one-handoff release gate passes. A system that works only in GitHub Actions, only in the development checkout, only on `clay-direct-dev`, or only while the VPS bridge is attached is not a completed Frankenstein 2.0 product.

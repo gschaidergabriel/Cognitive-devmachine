@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_TRIGGER4_CROSS_REPO_CHECKPOINT/v1",
+  "created_at": "2026-08-29T16:15:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "4",
+  "authority_epoch": "8.78",
+  "research_base": "f9eeca4a071c63cd2e0592224de9078d2d16d38a",
+  "frankenstein2_repository": "gschaidergabriel/frankenstein-2.0",
+  "frankenstein2_terminal_pointer_commit": "1441cca1d319564b68aed7476bc2d928d681d2c1",
+  "workpackage": "F2-WP-508",
+  "generation": 4,
+  "claim_id": "F2-WP-508-G4-GPT56SOL-BROADCAST-BUILDER-LINEAGE-REPAIR-20260829",
+  "terminal_state": "ACCEPTED",
+  "terminal_scope": "GWT_REENTRY_UPTAKE_BINDING_G4_BROADCAST_BUILDER_LINEAGE_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+  "triggering_negative_evidence": {
+    "generation": 3,
+    "reconciliation": "workpackages/reconciliations/F2-WP-508/3-F2-WP-508-G3-FORGED-BROADCAST-PAYLOAD-LINEAGE-FAILURE-20260829.json",
+    "review_pr": 257,
+    "workflow_run_id": 33244351377,
+    "job_id": 99079105335,
+    "result": "FAILURE_AS_EXPECTED"
+  },
+  "canonical_repair": {
+    "implementation_pr": 268,
+    "implementation_head_sha": "ae4089082c235a469f1a5e433ea55651a4d0f894",
+    "implementation_merge_sha": "74d68f4a32754ecc4a2cdd05e3760a28fdeafc38",
+    "repair": [
+      "derive exact candidate_ids from WorkspaceSelection.selected",
+      "derive exact candidate_payload_refs from WorkspaceSelection.selected",
+      "reject BroadcastEnvelope candidate-id lineage detached from the exact selection",
+      "reject BroadcastEnvelope payload lineage detached from the exact selection",
+      "evaluate re-entry payload overlap against the exact selected payload tuple"
+    ]
+  },
+  "g4_provenance_rebind": {
+    "commit": "c1be08dc3a42d4a1504e21048649c1fa26f37050",
+    "source_blob_sha": "ad43246c0d56903c842eaa4409a0f7a1600d1b4f",
+    "test_blob_sha": "20e3df69745cbda32cc663d8ad0edad2e8f7beff",
+    "workflow_blob_sha": "f3e9e316a52c170a797e6ae28c7a64203db9b74b",
+    "main_ci_run_id": 33244896581,
+    "main_ci_job_id": 99080567770,
+    "result": "SUCCESS",
+    "tests": "12 passed in 0.10s"
+  },
+  "frankenstein2_evidence": {
+    "acceptance_receipt": "workpackages/receipts/F2-WP-508_G4_BROADCAST_BUILDER_LINEAGE_MAIN_CI_33244896581.json",
+    "reconciliation": "workpackages/reconciliations/F2-WP-508/4-F2-WP-508-G4-GPT56SOL-BROADCAST-BUILDER-LINEAGE-REPAIR-20260829.json",
+    "active_pointer": "workpackages/active/F2-WP-508.json"
+  },
+  "coordination": {
+    "parallel_reconciliation_absorbed": true,
+    "duplicate_implementation_created": false,
+    "wp506_g3_active_claim": "F2-WP-506-G3-GPT56SOL-EXACT-CONCRETE-SELECTION-TYPE-REPAIR-20260829",
+    "wp506_g3_single_writer_branch": "trigger4/wp506-g3-exact-concrete-selection-type-repair-20260829",
+    "wp506_g3_action_this_checkpoint": "NO_SECOND_IMPLEMENTATION_CREATED"
+  },
+  "evidence_boundary": {
+    "runtime_execution_observed": false,
+    "runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "negative_evidence_preserved": [
+    "WP508 generation 3 remains terminally failed at forged BroadcastEnvelope payload-lineage scope",
+    "historical G3 naming on PR #268 is implementation provenance only; G4 terminal evidence is bound to the later explicit source-scope rebind and exact-main CI",
+    "a later WP506 G3 public exact-digest boundary repair remains independently active and prevents broader dependency promotion"
+  ],
+  "next_exact_action": "Re-enter current Frankenstein-2.0 main and the existing WP506 G3 single-writer branch. Do not duplicate the implementation lane. Require exact PR-head and merged-main hosted CI for the concrete WorkspaceSelection type repair before bounded WP506 reconciliation; require separate admitted target-runtime evidence before any physical GRID10 or GWT/J-Space causal promotion."
+}

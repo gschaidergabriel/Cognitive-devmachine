@@ -1,0 +1,102 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at_utc": "2026-08-29T17:39:00Z",
+  "authority_epoch": "8.78",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "frankenstein2": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "wp1202_generation": 3,
+    "wp1202_claim_id": "F2-WP-1202-G3-GPT56SOL-OS-RELEASE-LF-BOUNDARY-20260829T1727Z",
+    "implementation_merge_pr": 580,
+    "implementation_merge_sha": "9017b74c39e9c1131c066dd287fb4f7230fa358d",
+    "terminalization_pr": 586,
+    "terminalization_merge_sha": "45a8ccb35b49ebd7c2afa04d25792c89d922e8a1",
+    "terminal_scope": "T1_USERSPACE_TWIN_OS_RELEASE_LF_BOUNDARY_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "runtime_execution_observed": false,
+    "runtime_credit": 0,
+    "physical_target_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "falsifier_to_fix_chain": {
+    "review_pr": 575,
+    "review_pr_final_state": "CLOSED_UNMERGED_HISTORICAL_FALSIFIER",
+    "falsifier_commit": "3f5cc640914971407cffa3443d5de13344ba39ea",
+    "falsifier_run_id": 33265525249,
+    "falsifier_job_id": 99134790791,
+    "falsifier_result": "COMPILE_PASS_THEN_WP1201_WP1202_INTEGRATION_FAIL_AS_PREDICTED",
+    "candidate_fix_commit": "82fb6be61e22039feefcaa345209ceb030a0c3e2",
+    "candidate_fix_run_id": 33265592419,
+    "candidate_fix_job_id": 99134968940,
+    "candidate_fix_result": "PASS",
+    "finding": "Canonical WP1201 os_release preserves the bounded multi-line /etc/os-release text. Accepted WP1202 G2 rejected LF as a control character. G3 permits LF only for the exact digest-bound os_release projection field while retaining fail-closed C0/DEL rejection elsewhere."
+  },
+  "g3_evidence": {
+    "source_blob_sha": "f1082e223b3a3e0118824d976f7265fe27c8879f",
+    "test_blob_sha": "0642cda05546d924c3d73a62874d94e2e9e13cb9",
+    "workflow_blob_sha": "6d7cabcf9e57d6c538c51e52205a871be33432dc",
+    "implementation_pr_head": "1e1f6ecac670d7502f4b1dc454a45e8f34cf4a4c",
+    "implementation_pr_run_id": 33265836259,
+    "implementation_pr_job_id": 99135626032,
+    "implementation_pr_result": "PASS",
+    "implementation_main_run_id": 33265879293,
+    "implementation_main_job_id": 99135742526,
+    "implementation_main_result": "PASS",
+    "terminalization_pr_head": "ba7318d239db6749cc36d0a864029b60a255ff3f",
+    "terminalization_pr_wp1202_run_id": 33266132873,
+    "terminalization_pr_state_view_run_id": 33266132876,
+    "terminalization_pr_state_consistency_run_id": 33266132887,
+    "terminalization_pr_all_relevant_gates": "PASS",
+    "terminalization_main_wp1202_run_id": 33266160383,
+    "terminalization_main_state_view_run_id": 33266160401,
+    "terminalization_main_state_consistency_run_id": 33266160393,
+    "terminalization_main_checkpoint_continuity_run_id": 33266160382,
+    "terminalization_main_all_four_gates": "PASS"
+  },
+  "canonical_artifacts": {
+    "receipt": "workpackages/receipts/F2-WP-1202_G3_OS_RELEASE_LF_BOUNDARY_MAIN_CI_33265879293.json",
+    "reconciliation": "workpackages/reconciliations/F2-WP-1202/3-F2-WP-1202-G3-GPT56SOL-OS-RELEASE-LF-BOUNDARY-20260829T1727Z.json",
+    "terminal_active_pointer": "workpackages/active/F2-WP-1202.json",
+    "terminal_state_event": "workpackages/state_events/F2-WP-1202/000003.json"
+  },
+  "global_continuity": {
+    "prior_negative_run_id": 33265879307,
+    "prior_negative_job_id": 99135742663,
+    "prior_classification": "CURRENT_WP002_G5_TERMINAL_DRIFT_NOT_WP1202_LOGIC_FAILURE",
+    "parallel_repair_main_sha": "6f15c371e01eaf8526482e3fc5311f67d16ef0b7",
+    "repair": "WP002 generation 6 opened as explicit checkpoint-successor continuity scope",
+    "post_wp1202_terminal_checkpoint_continuity_run_id": 33266160382,
+    "post_wp1202_terminal_checkpoint_continuity_result": "PASS"
+  },
+  "runtime_frontier": {
+    "existing_self_hosted_run": 33254381280,
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "observed_status_at_checkpoint": "queued",
+    "duplicate_dispatch_created": false,
+    "classification": "INFRASTRUCTURE_QUEUE_NEGATIVE_EVIDENCE_NOT_PRODUCT_FAILURE",
+    "runtime_credit": 0
+  },
+  "credits": {
+    "t1_userspace_twin_runtime": 0,
+    "vps_runtime": 0,
+    "physical_target": 0,
+    "grid10_runtime": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "provider_model": 0,
+    "training": 0,
+    "effect": 0,
+    "completion": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Use an exact observed canonical F2-WP-1201 TargetHostProfile in an admitted T1 userspace-twin materialization/runtime path and execute the declared systemd/user/XDG/session/service one-handoff readbacks. Persist exact fidelity gaps and preserve T1-vs-T4 evidence separation. Do not create a duplicate WP510 self-hosted dispatch while run 33254381280 remains queued."
+}

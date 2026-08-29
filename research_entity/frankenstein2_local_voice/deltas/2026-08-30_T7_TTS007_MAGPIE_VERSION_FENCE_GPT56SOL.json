@@ -1,0 +1,35 @@
+{
+  "schema": "CLAY_TRIGGER7_RESEARCH_DELTA/v1",
+  "date": "2026-08-30",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "7",
+  "research_id": "T7-TTS-007",
+  "objective": "E2_MAGPIE_V2602_V2607_NATIVE_RUNTIME_VERSION_FENCE",
+  "state": "COMPLETED_SOURCE_AUDIT",
+  "f2_result": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/local_voice/claims/T7-TTS-007/E2_MAGPIE_V2602_V2607_NATIVE_RUNTIME_VERSION_FENCE.json",
+    "result_commit": "0cb5778bc466f1e0b85689a21054284705607750",
+    "semantic_claim_commit": "d0c3b4fafe984a59c458bcbf7415934735112a84",
+    "semantic_claim_key": "2d90946ce1c8df466d04a91c797130b317550da0b13dbdd659d2e2266290090d"
+  },
+  "finding": "NeMo-Speech.cpp's documented native Magpie GGUF reference is exact v2602. Magpie v2607 is a distinct latest-model identity and must not inherit v2602 native compatibility or runtime metrics until exact v2607 conversion and load are independently demonstrated.",
+  "source_pin": {
+    "nemo_speech_cpp_sha": "4f9676226f667d14608487df744f375db87127f8",
+    "documented_native_magpie_tag": "v2602",
+    "latest_magpie_tag": "v2607"
+  },
+  "runtime_execution_observed": false,
+  "runtime_credit": 0,
+  "quality_credit": 0,
+  "acceptance_credit": 0,
+  "hardware_gate": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "workflow_run_id": 33266856557,
+    "last_observed_status": "pending",
+    "credit": 0,
+    "dispatch_action": "NO_DUPLICATE_DISPATCH"
+  },
+  "next_exact_action": "After the first admissible clay-direct-dev hardware receipt, run the fixed German corpus on exact Magpie v2602 through the pinned NeMo-Speech.cpp GGUF path, then attempt exact v2607 conversion+load as a separate challenger before any cross-version performance comparison.",
+  "evidence_boundary": "SOURCE_PINNED_ONLY; no runtime, audio-quality, hardware, Trigger-4 acceptance, EntityOS/HCU or training promotion."
+}

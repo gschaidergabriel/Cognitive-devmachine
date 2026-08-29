@@ -264,6 +264,27 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             dir(MOD),
         )
 
+    def test_capability_announces_live_quarantine_state_accessor(self):
+        accessor = MOD.is_fork_active_execution_quarantined
+        self.assertEqual(
+            MOD.receipt()["fork_active_execution_quarantine_live_accessor"],
+            "is_fork_active_execution_quarantined",
+        )
+        self.assertFalse(accessor())
+        setattr(
+            threading,
+            MOD._FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR,
+            True,
+        )
+        try:
+            self.assertTrue(accessor())
+        finally:
+            setattr(
+                threading,
+                MOD._FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR,
+                False,
+            )
+
     def test_capability_receipt_does_not_infer_model_availability(self):
         capability_receipt = MOD.receipt()
 

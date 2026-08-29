@@ -1,0 +1,71 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_STAGE5_NEGATIVE_RESULT_GWT_SELECTION_ADMISSION_BOUNDARY",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "created_at_local": "2026-08-29T07:00:00+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch_observed": "9.13",
+  "research_main_observed_before_write": "b45d85bea896b18c06f36b1b586802c70002f2cd",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-506",
+    "generation": 1,
+    "claim_id": "F2-WP-506-G1-GPT56SOL-GWT-SELECTION-BROADCAST-20260829",
+    "claim_pr": 149,
+    "claim_head_observed": "3daf91bbd3a7d9f61d15ab4c2cf9fd17c082258b",
+    "review_pr": 162,
+    "review_branch": "review/wp506-selection-constructor-bypass-falsifier-20260829",
+    "review_head": "f14fca402eb15f0a194dc0608810be5dff61855d"
+  },
+  "source_observation": {
+    "selection_representation": "SelectedCandidate and WorkspaceSelection are public directly constructible immutable dataclasses.",
+    "broadcast_gate": "create_broadcast verifies isinstance(selection, WorkspaceSelection) and compares selection.sha256() with caller-supplied expected_selection_sha256.",
+    "counterexample": "A caller can directly construct a self-consistent WorkspaceSelection with caller-chosen selected scores/policy/candidate SHA fields, calculate that object's own digest, and supply the same digest to create_broadcast without demonstrating traversal through build_workspace_selection().",
+    "distinction_from_other_wp506_reviews": "This is separate from producer-origin admission at build_workspace_selection input and separate from candidate_id/payload_ref positional pair preservation."
+  },
+  "executable_falsifier": {
+    "workflow_run_id": 33222194773,
+    "job_id": 99018409861,
+    "review_head": "f14fca402eb15f0a194dc0608810be5dff61855d",
+    "job_conclusion": "failure",
+    "checkout": "success",
+    "python_setup": "success",
+    "dependency_install": "success",
+    "exact_reviewed_source_binding": "success",
+    "compile": "success",
+    "require_direct_constructor_selection_rejection": "failure",
+    "infrastructure_classification": "NOT_INFRASTRUCTURE_FAILURE"
+  },
+  "hypothesis": "The broadcast consumer boundary currently authenticates object self-consistency, not selection admission provenance. A self-minted selection digest cannot prove that deterministic WP506 selection policy produced the selection.",
+  "counterhypothesis": "WorkspaceSelection is merely a value object and create_broadcast intentionally accepts any structurally valid caller-supplied selection; builder provenance is outside WP506.",
+  "discriminator_result": "EXPLICIT_RECONCILIATION_REQUIRED: the executable review proves the current code does not distinguish builder-produced from directly constructed selections. Any bounded WP506 acceptance that claims deterministic selection->broadcast causal/admission continuity must repair this; alternatively the contract must explicitly narrow broadcast to a pure transform over caller-supplied WorkspaceSelection and must not present the expected digest as producer/admission evidence.",
+  "repair_options": [
+    "Canonical claimant may add an unforgeable-within-contract builder/admission token or equivalent exact selection admission receipt generated only by the selection builder and required by create_broadcast.",
+    "A stronger upstream/downstream identity contract may bind selection_id/generation/digest to an independently admitted receipt outside the caller-controlled object.",
+    "Do not rely on caller-supplied expected_selection_sha256 alone as proof of builder traversal.",
+    "Absorb the exact constructor-bypass regression into the sole WP506 mutation lane and rerun canonical plus adversarial repository-hosted CI."
+  ],
+  "coordination": {
+    "mutation_authority": false,
+    "duplicate_implementation_opened": false,
+    "sole_claimant_pr": 149,
+    "review_only_pr": 162
+  },
+  "credit_boundary": {
+    "research_delta": 1,
+    "component_negative_evidence": 1,
+    "selection_builder_admission_credit": 0,
+    "runtime_execution_observed": false,
+    "vps_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "causal_uptake_credit": 0,
+    "effect_or_completion_credit": 0,
+    "training_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Before terminal WP506 reconciliation, the sole claimant must either close the exact direct-constructor bypass with a fail-closed admission binding and green exact-head CI, or explicitly narrow the broadcast contract so no builder/provenance guarantee is claimed. Do not use caller-minted selection digests as causal GWT/J-Space evidence."
+}

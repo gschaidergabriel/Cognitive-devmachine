@@ -6,21 +6,23 @@
   "worker": "GPT-5.6-Sol-TRIGGER4",
   "authority_epoch": "8.78",
   "execution_mode": "FREE_ONLY",
-  "research_main_observed_before_write": "6ba798576933654ac86ffb4e51fee65f97e6f80b",
+  "research_main_observed_before_first_write": "6ba798576933654ac86ffb4e51fee65f97e6f80b",
   "f2": {
     "repo": "gschaidergabriel/frankenstein-2.0",
-    "main_observed": "80248a18ff3e01f01eb7ac8398933a2f9bad981c",
+    "main_observed_after_admission": "98a3d3715e8da627ee20a240f7bbd6717799cf96",
     "retained_lane": "trigger4/wp900-whole-persistent-loop-20260829",
-    "lane_head_evidenced": "8b4c89e04bec2821f9b6443662d4039905c7d97f",
+    "final_evidenced_lane_head": "d0687b4c44eb46bf07fe5d888c777bf6b83153de",
     "pr": 582,
-    "pr_state": "OPEN",
-    "mergeability_at_last_raw_check": "UNKNOWN",
-    "changed_files": 4
+    "pr_state": "MERGED",
+    "merged_at": "2026-08-29T17:33:20Z",
+    "merge_commit_sha": "98b61168e1ca0d7c8869934d84af8725f4d8cfe5",
+    "changed_files": 4,
+    "main_source_presence_after_merge": "VERIFIED"
   },
   "workpackage": {
     "id": "F2-WP-900",
     "scope": "WHOLE_PERSISTENT_LOOP_REPOSITORY_COMPONENT_ONLY",
-    "delta": "Re-entered the retained whole-loop causal-seal lane on moving F2 main, preserved the WP510 factory/source-lineage closure guard, obtained exact green repository CI, and opened PR 582 without creating a competing implementation lane."
+    "delta": "The retained whole-loop causal-seal lane was re-entered on moving F2 main, preserved the WP510 factory/source-lineage closure guard, passed exact repository CI, and was admitted to main through PR 582 without creating a competing implementation lane."
   },
   "evidence": {
     "negative_run": {
@@ -36,15 +38,27 @@
       "actions_run_id": 33265751530,
       "head_sha": "6881cd6a3160dc1c585eccc83efbb8c272d77ad0",
       "result": "PASS",
-      "note": "Temporary workflow import-path discriminator; not the retained current branch head."
+      "note": "Temporary workflow import-path discriminator; not the final retained/admitted head."
     },
-    "current_positive_run": {
+    "intermediate_positive_run": {
       "actions_run_id": 33265793855,
       "head_sha": "8b4c89e04bec2821f9b6443662d4039905c7d97f",
       "compile": "PASS",
       "whole_loop_repository_component_suite": "PASS",
       "nonfactory_gwt_closure_guard": "PASS",
       "scope": "REPOSITORY_CI_COMPONENT_ONLY"
+    },
+    "final_positive_run_before_merge": {
+      "actions_run_id": 33265907711,
+      "head_sha": "d0687b4c44eb46bf07fe5d888c777bf6b83153de",
+      "result": "PASS",
+      "scope": "REPOSITORY_CI_COMPONENT_ONLY"
+    },
+    "main_source_verification": {
+      "main_sha": "98a3d3715e8da627ee20a240f7bbd6717799cf96",
+      "path": "src/frankenstein2/whole_persistent_loop.py",
+      "blob_sha": "cccdc8928235e10a2d1d0ceb0722612c6600aa4d",
+      "status": "PRESENT_ON_MAIN_AFTER_MERGE"
     }
   },
   "coordination": {
@@ -52,10 +66,13 @@
     "review_pr_566": "COUNTEREVIDENCE_ABSORBED_INTO_RETAINED_LANE",
     "aggregate_projection_writer": "F2-WP-002_ACTIVE_NO_DUPLICATE_PROJECTION_WRITE",
     "parallel_branch_movement": "OBSERVED_AND_PRESERVED_NO_FORCE_OVERWRITE",
+    "pr582_initial_observation": "OPEN_MERGEABILITY_UNKNOWN_BEFORE_PARALLEL_ADMISSION",
+    "pr582_final_observation": "MERGED",
     "unusual_experiment": "NONE_EXECUTED"
   },
   "credits": {
     "repository_component_ci": 1,
+    "repository_main_admission": 1,
     "target_runtime": 0,
     "vps_runtime": 0,
     "physical_grid10": 0,
@@ -65,5 +82,5 @@
     "training": 0,
     "whole_system_runtime": 0
   },
-  "next_exact_action": "Re-enter PR 582 against exact current F2 main and resolve mergeability/admission without creating a duplicate lane. If admitted at repository-component scope, the next promotion requires an actual authorized target/host runtime receipt; this session had no VPS Bridge surface and therefore grants zero VPS or target-runtime credit."
+  "next_exact_action": "WP900 repository-component admission is complete. The next nonduplicate promotion gate is an actual authorized target/host runtime receipt for the integrated whole persistent loop, preserving exact checkpoint/frame/GRID10/WP510-GWT/effect-outcome/reentry identity and UNKNOWN fail-closed behavior. This session had no VPS Bridge surface, so target/VPS/physical GRID10/provider/training/whole-system runtime credit remains zero."
 }

@@ -1,0 +1,28 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_MIRROR_DELTA/v1",
+  "research_id": "R6-WP507-BAUKIT-INPLACE-HOOKS-001",
+  "evidence_stage": "E1_SOURCE_READ",
+  "status": "MIRRORED_PROVENANCE_ONLY",
+  "mirror_epoch": "2026-08-29T15:06:45+07:00",
+  "canonical_f2_result": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/2026-08-29T1506P0700_GPT56SOL_R6_WP507_BAUKIT_E1_SOURCE_READ.json",
+    "write_commit": "6a14877458d8cfa743911780550ee22998d0d752"
+  },
+  "claim_authority": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/claims/R6-WP507-BAUKIT-INPLACE-HOOKS-001/E1_SOURCE_READ.json",
+    "claim_commit": "61f3dff093a6e2bbef38db87f19756270cc17c16"
+  },
+  "candidate": {
+    "repo": "davidbau/baukit",
+    "head": "9d51abd51ebf29769aecc38c4cbef459b731a36e"
+  },
+  "distilled_hypothesis": "Use baukit only as a mechanism donor for a tiny F2-native context-managed direct PyTorch forward-hook ActivationTap. Do not add baukit as a runtime dependency at E1. Bind exact F2 model/loader and causal experiment identities around the hook and keep all resulting activation/output observations as measurements, never truth/effect authority.",
+  "counterhypothesis": "Native direct hooks may fail on generation/re-entrancy/compiled/distributed or quantized-offloaded runtimes; maintained intervention frameworks may prove worth their extra machinery after explicit E2/E3 measurement.",
+  "license_note": "setup.cfg declares an MIT classifier, while GitHub metadata reports license=null and the pinned root listing exposes no LICENSE file; direct vendoring requires clarification.",
+  "research_credit": "E1_SOURCE_READ_ONLY",
+  "architecture_credit": 0,
+  "runtime_credit": 0,
+  "whole_system_credit": 0
+}

@@ -1,0 +1,69 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_STAGE5_NEGATIVE_RESULT_GWT_UPTAKE_SUBSET_RECIPIENT_ACCOUNTING",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 REVIEW_ONLY falsifier organ",
+  "created_at_local": "2026-08-29T07:04:00+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "research_main_observed_before_write": "66786400703082428bb75d3e789113f804fa7eef",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-507",
+    "generation": 1,
+    "claim_id": "F2-WP-507-G1-CLAUDE-GWT-UPTAKE-CAUSAL-20260829",
+    "claim_branch": "chatgpt/f2-wp507-gwt-uptake-g1-20260829",
+    "claim_head_reviewed": "4771f73f0ed57adc99069668b560fe01195ef7a2",
+    "source_commit": "f9e161831b48db1af47518d3c1cd7ff623afe891",
+    "source_path": "src/frankenstein2/gwt_uptake.py",
+    "test_commit": "56f0aab8c6928ca894ab56b6a57906f2aebba2e5",
+    "test_path": "tests/test_gwt_uptake.py",
+    "workflow_commit": "4771f73f0ed57adc99069668b560fe01195ef7a2",
+    "workflow_path": ".github/workflows/wp507-gwt-uptake-ci.yml"
+  },
+  "source_observation": {
+    "receipt_boundary": "CellUptakeReceipt.observe correctly rejects a cell that is not in broadcast.recipient_cell_ids.",
+    "summary_boundary": "summarize_uptake computes unknown/missing cells relative to all GRID10_CELL_IDS rather than the exact broadcast.recipient_cell_ids.",
+    "counterexample": "For a valid broadcast addressed only to G1, a complete DELIVERED+UPTAKEN G1 receipt still leaves G2..G10 classified as unknown even though they were never recipients, preventing a complete UPTAKE_OBSERVED summary."
+  },
+  "existing_test_gap": "The claimant suite constructs make_broadcast() with recipient_cell_ids=GRID10_CELL_IDS and therefore tests partial receipts only for a full ten-cell broadcast; it does not exercise a legal subset-recipient broadcast.",
+  "executable_falsifier": {
+    "draft_pr": 172,
+    "branch": "review/wp507-subset-recipient-uptake-falsifier-20260829",
+    "head_sha": "8da468dfdf6cb2d823a4fc19d4b108fb430d7cbb",
+    "test_path": "tests/test_wp507_subset_recipient_falsifier.py",
+    "test": "WP507SubsetRecipientFalsifier.test_complete_single_recipient_broadcast_can_observe_uptake",
+    "setup": "Broadcast recipient_cell_ids=(G1,), one exact delivered/UPTAKEN G1 receipt with downstream evidence",
+    "required_invariant": "summary.unknown_cell_ids == (); summary.uptaken_cell_ids == (G1,); summary.status == UPTAKE_OBSERVED",
+    "workflow_run_id": 33222430458,
+    "job_id": 99019116194,
+    "compile_conclusion": "success",
+    "falsification_suite_conclusion": "failure",
+    "job_conclusion": "failure",
+    "infrastructure_classification": "NOT_INFRASTRUCTURE_FAILURE; checkout/setup-python/compile all succeeded before the falsification suite failed"
+  },
+  "interpretation": [
+    "This is bounded negative repository-component evidence against WP507 generation-1 uptake-summary completeness semantics for subset-recipient broadcasts.",
+    "It does not establish target runtime, physical GRID10, hidden-state uptake, causal influence, training, or whole-system failure.",
+    "A legal nonrecipient must not be treated as a missing recipient; completeness must be evaluated against the exact broadcast recipient set."
+  ],
+  "recommended_repair": [
+    "Compute observed/missing/unknown recipient sets relative to set(broadcast.recipient_cell_ids), not set(GRID10_CELL_IDS).",
+    "Continue rejecting receipts from cells outside broadcast.recipient_cell_ids fail-closed.",
+    "Absorb the subset-recipient regression into the sole WP507 mutation lane and require repository-hosted CI PASS before component acceptance."
+  ],
+  "mutation_authority": false,
+  "credit_boundary": {
+    "research_delta": 1,
+    "component_negative_evidence": 1,
+    "wp507_acceptance_delta": 0,
+    "runtime_execution_observed": false,
+    "physical_grid10_runtime_credit": 0,
+    "gwt_uptake_runtime_credit": 0,
+    "causal_influence_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "The sole WP507 claimant should repair summary completeness to use the exact recipient set, absorb the regression, and demonstrate exact-head repository-hosted CI rescue before claim-scoped component reconciliation."
+}

@@ -1,0 +1,47 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_DELTA/v1",
+  "research_id": "R6-20260829-PYTORCH-NATIVE-HOOKS-WP507-GPT56SOL-01",
+  "trigger": "6",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "COMPLETED_E2_ARCHITECTURE_MAPPING",
+  "created_at_local": "2026-08-29T15:07:00+07:00",
+  "coordination": {
+    "canonical_f2_claim_commit": "68fda005fd72d8ede297d3f92d234be5d5113b17",
+    "canonical_f2_result_commit": "059d33a7f0b27310dd23429d354501dda6feb536",
+    "claim_path": "research/tool_intelligence/claims/R6-20260829-PYTORCH-NATIVE-HOOKS-WP507-GPT56SOL-01/E2_ARCHITECTURE_MAPPED.json",
+    "result_path": "research/tool_intelligence/deltas/R6-20260829-PYTORCH-NATIVE-HOOKS-WP507-GPT56SOL-01_E2_ARCHITECTURE_MAP.json"
+  },
+  "external_source": {
+    "repo": "pytorch/pytorch",
+    "commit": "0cfc9e7c89f705d8a39fcedc7a4570c559ddd0d4",
+    "file": "torch/nn/modules/module.py"
+  },
+  "f2_source_basis": {
+    "wp507_pr": 226,
+    "head": "1c2037e97c9c6cf2c909764e142538028abc6e52",
+    "source_blob": "381493eb916cd734341c1c64caf520085bde4ef1",
+    "canonical_main_status_at_mapping": "SOURCE_NOT_ON_MAIN"
+  },
+  "findings": [
+    "Specific-module register_forward_pre_hook can replace declared module inputs and register_forward_hook can replace outputs.",
+    "Both use RemovableHandle, allowing explicit teardown and a post-removal equivalence test.",
+    "PyTorch skips the hook path when no hooks exist, supporting a low-persistent-overhead experiment shape.",
+    "Global hooks are the wrong integration shape because they introduce global state; use exact specific-module hooks only.",
+    "Historical PyTorch compile/hook issues mean exact target runtime/build compatibility must be tested; eager mode is the safer first falsifier.",
+    "Native hooks provide tensor intervention only and cannot replace WP507 GWT recipient receipts, canonical truth/state, effect authority or checkpoint-consumption evidence."
+  ],
+  "hypothesis": "If the exact local approximately-0.8B target already executes through a compatible PyTorch eager module path, a thin F2-owned native-hook adapter should be the lowest-resource first mechanism for lesion/rescue testing of model-internal GWT/J-Space influence, and should be compared against TransformerLens/pyvene only after an exact-model E3 reversibility/equivalence falsifier.",
+  "counterhypothesis": "A compiled/fused/non-PyTorch target may make Python module hooks incomplete or semantically perturbing, in which case a dedicated intervention framework or lower-level runtime hook is preferable despite higher dependency cost.",
+  "next_gate": "Acquire a new E3 claim only when exact checkpoint/tokenizer/runtime/build identity exists; run baseline -> no-op hook -> one predeclared lesion/rescue -> remove hook -> post-removal baseline, binding module path, intervention digest and raw output receipt. No E5 candidate from E2 alone.",
+  "evidence_ceiling": "E2_SOURCE_ARCHITECTURE_MAPPED_ONLY",
+  "credits": {
+    "research_delta": 1,
+    "runtime": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "physical_grid10": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_system": 0
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_E2_PROVENANCE_MIRROR/v1",
+  "status": "NON_AUTHORITY_PROVENANCE_MIRROR",
+  "mirrored_at": "2026-08-29T15:05:24+07:00",
+  "canonical_f2_source": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/R6-COORDINATION-GITHUB-REFS-V2-E2-20260829T1504P0700.json",
+    "commit": "a8ecf3b76a84ae6fff750c93c98d5b730875347a"
+  },
+  "claim_commit": "7b077fa16ef759d92ab2033aae2d52127e68c50d",
+  "research_entity_prewrite_snapshot": "5f2bd91ee52a7c9ae70894fc80d4064152f7e7da",
+  "finding": "GitHub native per-objective refs are an E2 protocol-v2 candidate for Trigger-6 create-only claims: prefer GraphQL updateRefs with beforeOid all-zero for explicit nonexistence CAS; REST createRef or git push with explicit empty force-with-lease expectation are fallbacks. Main claim/result JSON remains audit materialization, not the mutex.",
+  "counterhypothesis": "Bounded retries on the existing Contents-API claim protocol may be sufficient and materially simpler.",
+  "next_gate": "E3 no-effect controlled fan-out comparison of current file claims versus objective-ref acquisition; measure success, latency, retries/API calls, duplicate exclusion and main-head write amplification.",
+  "authority_fence": "Mirror only. pending_research.sqlite and canonical F2 evidence outrank this file; UnifiedDB remains Frankenstein canonical state authority.",
+  "credits": {
+    "research_credit": 0,
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "integration_credit": 0,
+    "whole_system_credit": 0
+  }
+}

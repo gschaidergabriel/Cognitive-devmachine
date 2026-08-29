@@ -63,6 +63,13 @@ def __getattr__(name: str):
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
+def __dir__():
+    """Keep the dynamic compatibility attribute discoverable."""
+    return sorted(
+        set(globals()) | {"PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED"}
+    )
+
+
 def _prepare_process_state_for_fork() -> None:
     global _PROCESS_FORK_GENERATION
     _PROCESS_FORK_GENERATION += 1

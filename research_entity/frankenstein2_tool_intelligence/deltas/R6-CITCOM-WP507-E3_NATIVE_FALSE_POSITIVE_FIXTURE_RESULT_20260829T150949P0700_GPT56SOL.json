@@ -1,0 +1,65 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "research_id": "R6-20260829-SRCARCH-CITCOM-CAUSALTEST-GPT56SOL-01",
+  "trigger": "6",
+  "mirror_only": true,
+  "status": "E3_SOURCE_DERIVED_CONCEPT_FIXTURE_REPRODUCED_WITH_ORDER_CONTAMINATION_COUNTEREXAMPLE_MIRROR",
+  "created_at": "2026-08-29T15:09:49+07:00",
+  "authority": "F2_TRIGGER6_RESEARCH_STATE_REMAINS_CANONICAL_FOR_THIS_RESULT; THIS_FILE_IS_A_REUSABLE_FINDING_MIRROR_ONLY",
+  "source_f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "source_f2_commit": "c9efe0e031e33a7eb2fab3c3bc886bc96bd6515f",
+  "source_f2_path": "research/tool_intelligence/deltas/R6-CITCOM-WP507-E3_NATIVE_FALSE_POSITIVE_FIXTURE_RESULT_20260829T150949P0700_GPT56SOL.json",
+  "coordination_claim_commit": "a0c0fef09d087314479d776de19b49e42003ec61",
+  "upstream": {
+    "repo": "CITCOM-project/CausalTestingFramework",
+    "commit": "9ee3e7c92d07a682a4caf16e2ca98c484c80ac65",
+    "experimental_estimator_blob": "773a5703aa23c1ab0429cd9b0dc5b7e6a477c0fc",
+    "upstream_test_blob": "394afde717e396f519a987033efeaadfaabf3caa"
+  },
+  "fixture": {
+    "path": "research/tool_intelligence/experiments/R6-CITCOM-WP507-E3_NATIVE_FALSE_POSITIVE_FIXTURE_GPT56SOL.py",
+    "commit": "0d18de7f091b1f52a2c0597290f01017bf8677b6",
+    "git_blob_sha": "3ae7db7951dcc866590150bbb42406087ef5d2d1",
+    "sha256": "571b40b9595618d95721053ef71cec5b85e236a80ef599a895a24e834a259c2a",
+    "result_sha256": "59ac048c789fe90499fac0dd5bdf0f0886e4cffed312d0379e750c9ebd9d3843",
+    "identical_repetitions": 2,
+    "assertions_passed_per_run": 8
+  },
+  "findings": [
+    "Pinned CITCOM treatment/control semantics were reproduced narrowly: deterministic Y=2X gives ATE=2.0 for control X=1 and treatment X=2.",
+    "A deterministic stateful drift counterexample makes the same all-control-then-all-treatment schedule report naive ATE=5.0 while the fixture treatment contribution remains 2.0.",
+    "A thin F2-native matched causal probe rejected frozen-input mismatch, incomplete recipient uptake, sham/control drift and order/state contamination as INESTIMABLE.",
+    "A fully matched changed-output pair remained POSITIVE and a fully matched no-change pair remained NEGATIVE."
+  ],
+  "architecture_delta": {
+    "adoption_class": "DISTILL_THIN_MATCHED_CAUSAL_PROBE_CONTRACT_ONLY",
+    "direct_dependency": false,
+    "new_or_strengthened_fences": [
+      "pre-state/order/seed witness",
+      "sham/no-broadcast stability witness",
+      "explicit POSITIVE/NEGATIVE/INESTIMABLE adjudication"
+    ],
+    "preserve_existing_fences": [
+      "causal_probe_id",
+      "non_broadcast_input_digest",
+      "generation/frame/provenance",
+      "intervention broadcast identity",
+      "complete recipient uptake",
+      "downstream output digest"
+    ]
+  },
+  "next_discriminator": "Wait for canonical WP507 source reconciliation onto F2 main, then acquire a distinct E4 ablation claim and test whether the E3 order/state and sham-stability fences reject a real gap not already covered by G3.",
+  "pending_research_sqlite_sync": "PENDING",
+  "credits": {
+    "independent_research_credit_from_mirror": 0,
+    "F2_ablation": 0,
+    "build_candidate": 0,
+    "runtime": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_system": 0
+  },
+  "evidence_boundary": "Mirror of F2 E3 narrow source-derived concept reproduction/falsification; no independent replication and no higher-scope promotion."
+}

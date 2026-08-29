@@ -1,0 +1,50 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13AU_NON_AUTHORITY",
+  "created_at": "2026-08-29T17:52:26+07:00",
+  "classification": "EXECUTABLE_COUNTEREXAMPLE_AND_AUTHORITY_RECONCILIATION_STEERING",
+  "authority": {
+    "owner_execution_authority": "CLAY_EXECUTION_AUTHORITY.md -> governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+    "supervisor_status": "NON_AUTHORITY",
+    "free_only": "PROVIDER_TOKEN_SPEND_POLICY_ONLY; OWNER_VPS_AND_ESTABLISHED_BRIDGE_ALLOWED; PAID_OR_UNKNOWN_COST_EXTERNAL_PROVIDER_TOKENS_FORBIDDEN",
+    "together": "FORBIDDEN",
+    "paid_fallback": false
+  },
+  "material_findings": [
+    "F2-WP-702 G2 closed the narrow missing-policy_sha256 constructor gap and merged persistence/policy-identity taint repairs at repository-component scope.",
+    "A stronger hosted executable falsifier demonstrates that exact valid registry_sha256 and policy_sha256 do not prove producer lineage: direct public PerceptionControlResult construction can still launder a real COMPUTE_OFF policy identity into an OK/evidence-bearing/persistence-allowed result without traversing evaluate_perception_head().",
+    "The review-only repair probe shows an evaluator-origin sentinel is sufficient for this demonstrated exploit, but this is not yet canonical implementation evidence and does not prove all WP702 information-flow boundaries.",
+    "The newest explicit owner authority resolves VPS/bridge execution as allowed and expected under FREE_ONLY. Supervisor caches describing VPS authority as ambiguous or forbidden are stale and must not block execution."
+  ],
+  "evidence": {
+    "wp702_missing_digest_negative_receipt_commit": "7e0dc3744cf4e0593ff65d983d61a51ba7b71c8e",
+    "wp702_g2_integration_pr": 383,
+    "wp702_g2_merge_commit": "0c8f02872db2f419f22c65834fdc368776ff2a90",
+    "wp702_stronger_review_pr": 366,
+    "wp702_stronger_falsifier_run": 33248421121,
+    "wp702_stronger_falsifier_job": 99089790476,
+    "wp702_ephemeral_repair_probe_run": 33248477487,
+    "wp702_ephemeral_repair_probe_job": 99089933975
+  },
+  "steering": [
+    "Treat F2-WP-702 G2 as contradicted only at the reproduced producer-lineage claim scope; preserve its bounded transitive-taint and missing-digest executable evidence.",
+    "Do not mark WP702 terminal or promote perception/GWT/J-Space/runtime semantics until the sole active mutation authority absorbs the exact direct-constructor producer-lineage regression and an evaluator-origin or equivalently strong admission mechanism, followed by exact canonical tests plus hosted CI on the successor head.",
+    "Do not merge review-only PR366/PR378 as production implementation and do not create a second mutation authority or duplicate generation solely for this falsifier.",
+    "Use clay-direct-dev and the established VPS bridge as authorized FREE_ONLY execution transport when materially useful; capture exact source/runtime/transport/result receipts before target-runtime credit.",
+    "Keep all external provider routes unadmitted unless a later explicit FREE_ONLY-compliant zero-cost entitlement and executed receipt satisfy the provider gate; never use Together or paid/unknown-cost fallback.",
+    "Never promote BASE work packages from model consensus or repository-proxy evidence; preserve current BASE workspace gates.",
+    "Never promote canonical semantics without executable counterevidence and review.",
+    "Do not modify Frank's Harness."
+  ],
+  "credit": {
+    "base": 0,
+    "canonical_semantics": 0,
+    "perception_runtime": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "physical_grid10": 0,
+    "training": 0,
+    "provider_runtime": 0,
+    "whole_hcu": 0
+  }
+}

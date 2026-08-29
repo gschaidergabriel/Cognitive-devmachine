@@ -1,0 +1,81 @@
+{
+  "schema": "TRIGGERWORD4_BUILD_ACCEPTANCE_MIRROR/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "authority_epoch": "8.78",
+  "research_entity_main_before_write": "9752a54dbec7f00d7ecfa5397a66e7f1508d87d9",
+  "target": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-803",
+    "generation": 2,
+    "claim_id": "F2-WP-803-G2-GPT56SOL-RUN-DESCRIPTOR-BINDING-20260829",
+    "terminal_state": "ACCEPTED",
+    "terminal_scope": "RUN_DESCRIPTOR_BOUND_WORLD_MODEL_PREDICTION_REPOSITORY_HOSTED_COMPONENT_CI_ONLY"
+  },
+  "causal_chain": {
+    "generation1_acceptance": "HELDOUT_WORLD_MODEL_PREDICTION_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "new_exact_falsifier": {
+      "draft_pr": 467,
+      "head_sha": "f2781180b6b34d5399534308982e73d473625ebf",
+      "workflow_run_id": 33254440406,
+      "workflow_job_id": 99105597318,
+      "result": "PASS_REPRODUCED_RUN_ID_RELABEL_GAP"
+    },
+    "generation2_claim_commit": "3ac3f0a420f6135b01f6b4959facedb9b79b2e10",
+    "generation2_source_commit": "31c80ce3957512bdd401409e00712b57db426659",
+    "generation2_test_commit": "16c7a9bcfd62befb09f15594f4bd76471f5bbe28",
+    "generation2_delta_head": "90143119be01566ab118ccb5c8326d32c45b68da",
+    "pull_request": 479,
+    "merge_commit": "ef386c75b297c5d276860ae17c75df75d4c07290"
+  },
+  "canonical_implementation": {
+    "source_path": "src/frankenstein2/cognitive_world_model_prediction_benchmark.py",
+    "source_blob_sha": "5fd9e0b0cf1f40ca9fe1c6709dd47749af342d8d",
+    "test_path": "tests/test_cognitive_world_model_prediction_benchmark.py",
+    "test_blob_sha": "02023d88646e852ffb375d486859fc3d666cfdee",
+    "workflow_path": ".github/workflows/wp803-cognitive-world-model-prediction-ci.yml",
+    "workflow_blob_sha": "94e7b82371c1177e7a83bfa6b994b2fc8462364d"
+  },
+  "repair": [
+    "PredictionCandidate remains public-only; full WP800 RunDescriptor stays evaluator-only.",
+    "Evaluator requires exact concrete builder-originated RunDescriptor before step_episode.",
+    "RunDescriptor must match exact fixture/provenance.",
+    "Prediction benchmark_run_id must equal RunDescriptor.run_id.",
+    "Prediction policy_id must equal RunDescriptor.system_under_test_ref.",
+    "PredictionEvaluation v2 binds run_descriptor_sha256.",
+    "Generation-1 run-id relabel and non-builder descriptor falsifiers now fail closed before evaluator transition."
+  ],
+  "evidence": {
+    "initial_branch_ci_run_id": 33254772669,
+    "initial_branch_ci_job_id": 99106457538,
+    "initial_branch_test_count": 20,
+    "initial_branch_result": "20/20 PASS",
+    "pr_head_ci_run_id": 33254846695,
+    "pr_head_ci_job_id": 99106644069,
+    "pr_head_ci_result": "PASS",
+    "merged_main_ci_run_id": 33254865193,
+    "merged_main_ci_job_id": 99106692958,
+    "merged_main_ci_result": "PASS",
+    "f2_reconciliation": "workpackages/reconciliations/F2-WP-803/2-F2-WP-803-G2-GPT56SOL-RUN-DESCRIPTOR-BINDING-20260829.json",
+    "f2_acceptance_receipt": "workpackages/receipts/F2-WP-803_G2_RUN_DESCRIPTOR_BINDING_MAIN_CI_33254865193.json"
+  },
+  "coordination": {
+    "duplicate_mutation_lane_created": false,
+    "parallel_review_falsifiers": "absorbed/closed as review evidence",
+    "stage8_reentry": "WP801 active; WP802 accepted; WP803 G2 accepted; WP804 G2 active; WP805 G2 active; WP806 G2 active; WP807 active",
+    "next_action_for_this_organ": "NO_NEW_SOURCE_CLAIM_DUE_ACTIVE_OWNER_COVERAGE"
+  },
+  "credits": {
+    "wp803_repository_component_acceptance": 1,
+    "runtime_credit": 0,
+    "vps_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_jspace_credit": 0,
+    "provider_model_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_credit": 0
+  },
+  "next_exact_action": "Re-enter current Frankenstein-2.0 main and consume the terminal WP803 G2 receipt only where a dependency explicitly requires authenticated run provenance. Do not open another WP803 generation unless a new exact falsifier appears; do not duplicate active WP801/WP804/WP805/WP806/WP807 mutation lanes."
+}

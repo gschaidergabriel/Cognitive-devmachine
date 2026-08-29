@@ -262,3 +262,17 @@ and:
 ```text
 STALE CURRENT-FACING TEXT MUST NEVER OUTRANK A FRESH AUTHORITY POINTER.
 ```
+
+## 15. Long-run durability binding
+
+Execution-surface correctness and run durability are separate requirements. Any multi-step material run that can outlive one fragile interaction/tool/transport boundary MUST additionally apply `governance/DURABLE_WORK_REENTRY_PROTOCOL_V1.md` and persist a `DURABLE_WORK_CURSOR/v1` checkpoint through `tools/durable_work_cursor_v1.py` or an evidence-equivalent implementation.
+
+Mandatory law:
+
+```text
+THE FINAL CHAT MESSAGE IS NEVER THE CHECKPOINT.
+RUNNING_UNCONFIRMED -> VERIFY_EXTERNAL_RESULT_BEFORE_RETRY.
+COMPLETED MATERIAL WORK -> DURABLE EVIDENCE BEFORE THE NEXT FAILURE-PRONE STEP.
+```
+
+A response-delivery failure or worker interruption may leave presentation incomplete while durable work is already complete. The next worker must re-enter the durable cursor, preserve completed evidence, revalidate authority/route freshness for future execution, verify unconfirmed external effects, and resume from the first incomplete node. It must not describe this as invisible background work and must not restart completed nodes merely because the previous visible response failed.

@@ -1,0 +1,80 @@
+{
+  "schema": "TRIGGER4_RESEARCH_DELTA_RECEIPT/v1",
+  "trigger": "4",
+  "normalized_trigger": "4",
+  "routing_self_test": "PASS",
+  "organ": "GPT-5.6-Sol",
+  "authority": {
+    "execution_authority_ref": "CLAY_EXECUTION_AUTHORITY.md",
+    "owner_vps_execution_authorized": true,
+    "free_only_external_provider_policy": true,
+    "together_forbidden_without_newer_explicit_provider_spend_authority": true
+  },
+  "canonical_research_main_observed_before_write": "b22de2912f95a9d74e388c05651323ccf5deae23",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "main_reentry_sha": "ea6a9bbcc9264763d05561a7ffbdebb14acdd65a",
+    "wp1202_generation_4": {
+      "claim_id": "F2-WP-1202-G4-GPT56SOL-T1-RUNTIME-READBACK-20260830T0202P0700",
+      "terminal_state": "ACCEPTED",
+      "accepted_scope": "T1_USERSPACE_RUNTIME_READBACK_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "implementation_pr": 600,
+      "implementation_pr_head_sha": "78b3b7193e61ba3e3dd551075281ecce46205995",
+      "implementation_merge_sha": "2ef6e5591a0b272b9fb653fee7bd73b8ac21bf52",
+      "terminalization_main_sha": "ea6a9bbcc9264763d05561a7ffbdebb14acdd65a",
+      "pr_component_ci_run_id": 33270395358,
+      "merged_main_component_ci_run_id": 33270469108,
+      "terminal_main_component_ci_run_id": 33270636034,
+      "terminal_main_state_consistency_run_id": 33270636003,
+      "terminal_main_state_view_v2_run_id": 33270635973,
+      "terminal_main_checkpoint_continuity_run_id": 33270635977,
+      "finding": "WP1202 now has an exact profile+plan-bound bounded T1 userspace runtime-readback executor and receipt surface covering the accepted runtime-check identifiers with PASS/FAIL/UNKNOWN separation, explicit fidelity gaps and no self-minted runtime/higher-scope credit.",
+      "negative_evidence_preserved": [
+        "initial G4 PR state-consistency run failed closed on event/active generation mismatch before append-only state-event repair",
+        "no target-like T1 runtime execution observed",
+        "no physical T4 target execution observed",
+        "no VPS runtime receipt observed for this WP1202 readback",
+        "no effect/completion/whole-system credit minted"
+      ],
+      "runtime_execution_observed": false,
+      "runtime_credit": 0,
+      "target_twin_runtime_credit": 0,
+      "physical_target_credit": 0,
+      "whole_system_acceptance": false
+    },
+    "duplicate_coordination": {
+      "duplicate_terminalization_pr": 605,
+      "state": "CLOSED_UNMERGED_AS_SUPERSEDED",
+      "reason": "Canonical main advanced with the same WP1202 G4 terminalization scope and green state checks; duplicate was closed rather than creating a competing reconciliation/state authority."
+    }
+  },
+  "wp510_reentry": {
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "run_status": "queued",
+    "job_status": "queued",
+    "executed_steps": 0,
+    "assigned_runner_observed": false,
+    "runner_id": 0,
+    "required_labels": ["self-hosted", "Linux", "X64"],
+    "duplicate_dispatch_performed": false,
+    "runtime_credit": 0,
+    "classification": "RUNNER_ASSIGNMENT_OR_LIFECYCLE_CONTROL_PLANE_BLOCKED_NOT_PRODUCT_FAILURE"
+  },
+  "decision": "TRIGGER4_ADVANCED_WP1202_T1_READBACK_MECHANISM_TO_CANONICAL_MERGED_AND_TERMINAL_REPOSITORY_CI_ACCEPTANCE_PRESERVED_FAIL_CLOSED_STATE_EVIDENCE_CLOSED_DUPLICATE_TERMINALIZATION_AND_REENTERED_EXISTING_WP510_WITHOUT_DUPLICATE_DISPATCH",
+  "current_blocker": "Actual T1/target-runtime promotion still requires admitted execution of the exact profile+plan-bound readback on the target-like userspace or restored assignment of the existing WP510 self-hosted lane. Current WP510 remains queued with zero steps and runner_id 0; this is transport/control-plane evidence, not target health or product failure.",
+  "next_exact_action": "On an owner-authorized execution surface, restore or verify the existing self-hosted runner service/listener/eligibility so run 33265772059/job 99135457584 can take assignment without duplicate dispatch, or execute the exact WP1202 profile+plan-bound T1 readback through another currently registered admitted route. Require exact source/profile/plan/runtime receipt identity before any T1/T4 runtime credit.",
+  "credits": {
+    "wp1202_repository_component": 1,
+    "wp1202_target_runtime": 0,
+    "wp510_target_runtime": 0,
+    "physical_grid10": 0,
+    "semantic_gwt": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_entityos_hcu": 0,
+    "whole_frankenstein2": false
+  },
+  "unusual_experiment_executed": false
+}

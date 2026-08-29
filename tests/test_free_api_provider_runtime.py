@@ -674,6 +674,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     f"{preloaded_outcome}:{preloaded_opener_called}:"
                     f"{preloaded_receipt['route']['selected']}:"
                     f"{preloaded_receipt['route']['reason']}:"
+                    f"{preloaded_mod.PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED}:"
                     f"{reimported_outcome}:{reimported_opener_called}:"
                     f"{reimported_receipt['route']['selected']}:"
                     f"{reimported_receipt['route']['reason']}"
@@ -699,7 +700,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "forked_during_active_execution:False:None:"
             "forked_during_active_execution:False:exec_or_process_restart:"
             "forked_during_active_execution:False:None:"
-            "forked_during_active_execution:"
+            "forked_during_active_execution:True:"
             "forked_during_active_execution:False:None:"
             "forked_during_active_execution",
         )

@@ -1,0 +1,49 @@
+{
+  "schema": "TRIGGER6_RESEARCH_ENTITY_RESULT_MIRROR/v1",
+  "research_id": "R6-WP509-CAND-AGENTEXIT",
+  "trigger": "6",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "E1_SOURCE_READ_COMPLETE_MIRRORED",
+  "mirror_epoch": "2026-08-29T15:14:00+07:00",
+  "canonical_f2": {
+    "claim_path": "research/tool_intelligence/claims/R6-WP509-CAND-AGENTEXIT/E1_SOURCE_READ_AGENTEXIT_PIN_9747F023.json",
+    "claim_commit": "28edf97782f7760af6167c2aeafb61a2fad6c066",
+    "result_path": "research/tool_intelligence/deltas/R6-WP509-CAND-AGENTEXIT-E1-SOURCE-READ-GPT56SOL.json",
+    "result_commit": "09bf52ac96b0a2535b282abdf0d185a4ebc5514c",
+    "fusion_path": "research/tool_intelligence/deltas/ADF-20260829T1513P0700-GPT56SOL-WP509-AGENTEXIT-E1.json",
+    "fusion_commit": "353af5010ab5022c3480485591d562c2201cb5ef",
+    "claim_authority": "F2_ONLY"
+  },
+  "external_source": {
+    "repository": "Coldmist-Lu/AgentExit",
+    "commit": "9747f0237fc91aa0445d4cc8630bf0fa4c22022c",
+    "license": "MIT"
+  },
+  "mirrored_findings": {
+    "verdict": "DISTILL_PROGRESS_AWARE_HANDOFF_PATTERN; REJECT_FULL_AGENTEXIT_IMPORT_FOR_WP509",
+    "novel_pattern": "Explicit early handoff/delegation when observed trajectory evidence suggests poor marginal progress, preserving state/history for continuation.",
+    "parallel_fit": "Complementary to LangGraph WP509 E1: LangGraph contributes deterministic remaining-budget/pre-dispatch/drain patterns; AgentExit contributes expected-poor-progress handoff semantics.",
+    "rejected_mechanisms": [
+      "provider-backed LLM verifier as stop/completion authority",
+      "fixed action-count thresholds as general rumination semantics",
+      "heavy FAISS/transformers/InstructorEmbedding/CUDA history retrieval for the WP509 core",
+      "full benchmark/evaluation framework import"
+    ],
+    "native_hypothesis": "ProgressAwareExitGate consumes deterministic provenance-bound progress/stagnation evidence and remaining budget, emitting only CONTINUE/HOLD/ASK/DELEGATE/STOP candidates; it cannot mint completion, world truth, effects or canonical state.",
+    "counterhypothesis": "Legitimate long-horizon reasoning can contain low-novelty plateaus, so progress gating may over-stop useful trajectories or reward superficial churn.",
+    "next_objective": "Fresh create-only E2 claim, then provider-free isolated reproduction with a pure stub verifier before any native F2 wrapper proposal."
+  },
+  "cross_repo_provenance": {
+    "research_entity_main_observed_before_f2_result": "cf5f433597b419278fb2b3e07575e90edef597a8",
+    "divergence_state": "MIRRORED_AT_REFERENCED_F2_RESULT_AND_FUSION_COMMITS"
+  },
+  "credits": {
+    "trigger6_evidence_stage": "E1_SOURCE_READ",
+    "architecture_acceptance_credit": 0,
+    "runtime_credit": 0,
+    "integration_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_system_credit": 0,
+    "training_credit": 0
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13AO_NON_AUTHORITY",
+  "observed_at_local": "2026-08-29T07:47:00+07:00",
+  "execution_mode": "FREE_ONLY",
+  "authority": {
+    "canonical_epoch": "9.13",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "paid_fallback_forbidden": true,
+    "paid_actions_fallback_forbidden": true,
+    "provider_runtime_credit": 0
+  },
+  "material_findings": [
+    {
+      "id": "F2_WP202_G4_ABI_REPAIR_EXECUTED",
+      "classification": "REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "finding": "The WP202 numeric_l1 zero-type ABI contradiction is repaired by float normalization. The exact downstream WP302 recovery suite moved from 10/14 to 14/14, and canonical producer plus downstream compatibility CI are green. This closes only the observed producer-consumer ABI defect."
+    },
+    {
+      "id": "F2_WP302_G2_PROVENANCE_DERIVED_SCORE_REPAIR_EXECUTED",
+      "classification": "REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "finding": "WP302 generation 2 now reconstructs derived plan-score fields before digest capture and closes the recorded prebinding forged-score counterexample with 13/13 canonical tests plus 5/5 falsifier regressions. It does not prove that canonical WP301 runtime produced the supplied plan and grants no runtime/world/effect authority."
+    },
+    {
+      "id": "F2_WP502_WP506_FRAME_VERSION_REPAIR_EXECUTED",
+      "classification": "REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "finding": "The same-frame-id stale-generation/digest counterexample is repaired by exact SituationFrame id+generation+digest binding. WP502 G1 and WP506 G2 are accepted only at repository component scope after exact hosted CI; the prior executable negative remains preserved."
+    },
+    {
+      "id": "F2_WP507_G3_EXECUTED_CANDIDATE",
+      "classification": "REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "finding": "PR 226 on the deliberate WP507 G3 claim executed on Ubuntu 24.04, compiled current WP506 plus WP507, and passed 18/18 stdlib unittest cases. Covered evidence includes recipient completeness, nonrecipient rejection, OFFERED/DELIVERED/UPTAKEN separation, stale broadcast binding rejection, constructor-bypass rejection, and matched intervention/control contract-scope influence. This is not actual GWT runtime uptake or world/hidden-state causality."
+    },
+    {
+      "id": "F2_WP507_PARALLEL_PR227_BOOTSTRAP_FAILURE",
+      "classification": "CI_BOOTSTRAP_FAILURE_NOT_SEMANTIC_NEGATIVE",
+      "finding": "PR 227 is a parallel donor-transplant lane over the same G3 claim. Its Ubuntu job reached checkout/setup/compile successfully but never executed semantic tests because the workflow invoked python -m pytest without installing pytest. The exact failure is 'No module named pytest'. Do not treat this as WP507 semantic counterevidence and do not create another mutation authority merely to repair this duplicate lane."
+    }
+  ],
+  "steering": [
+    "P1_TREAT_PR226_AS_THE_EXECUTED_WP507_G3_CANDIDATE_LANE_FOR_RECONCILIATION_UNLESS_NEW_STRONGER_EXECUTABLE_COUNTEREVIDENCE_APPEARS",
+    "P1_DO_NOT_MINT_ACTUAL_GWT_UPTAKE_CAUSAL_RUNTIME_JSPACE_PHYSICAL_GRID10_EFFECT_TRAINING_OR_WHOLE_SYSTEM_CREDIT_FROM_PR226_COMPONENT_CI",
+    "P1_TREAT_PR227_AS_PARALLEL_DUPLICATE_BOOTSTRAP_FAILURE_NOT_SEMANTIC_FAILURE; DO_NOT_OPEN_A_THIRD_WP507_IMPLEMENTATION_LANE",
+    "P1_IF_PR227_IS_RETAINED_FOR_HISTORY_PREFER_RETIRE_OR_SUPERSEDE_IT_IN_F2_COORDINATION_RATHER_THAN_SPENDING_A_NEW_CLAIM_GENERATION_ON_PYTEST_BOOTSTRAP",
+    "P1_PRESERVE_WP502_WP506_EXECUTABLE_NEGATIVE_HISTORY_WHILE_ACCEPTING_ONLY_THE_REPAIRED_EXACT_FRAME_VERSION_COMPONENT_SCOPE",
+    "P1_TREAT_WP302_G2_AS_CLOSED_ONLY_FOR_THE_EXECUTED_REPOSITORY_COMPONENT_CONTRACT; DO_NOT_INFER_WP301_RUNTIME_PRODUCER_AUTHENTICITY",
+    "P0_KEEP_PRIVATE_CLAY_ACTIONS_ADMISSION_UNRESOLVED_UNLESS_DIRECT_ACCOUNT_OR_EXECUTED_PRIVATE_REPO_EVIDENCE_CHANGES_IT",
+    "P0_PRESERVE_QUIESCENCE_V2_ISSUE_2122_G0000_AND_SIGKILL_V3_ISSUE_2121_G0000_WITHOUT_DUPLICATE_OR_GENERATION_ADVANCE_WHILE_NONTERMINAL",
+    "P0_PRESERVE_PR430_G0000_ISSUE_2134_WITHOUT_DUPLICATE_WHILE_NONTERMINAL",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "GOODMAN_ANTI_ECHO_REMAINS_BINDING",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "promotion_state": {
+    "f2_wp202_g4_repository_component_ci_pass": true,
+    "f2_wp302_g2_repository_component_ci_pass": true,
+    "f2_wp502_g1_frame_version_component_ci_pass": true,
+    "f2_wp506_g2_frame_version_component_ci_pass": true,
+    "f2_wp507_g3_pr226_repository_component_ci_pass": true,
+    "f2_wp507_g3_actual_runtime_uptake_pass": false,
+    "f2_wp507_g3_world_or_hidden_state_causality_pass": false,
+    "runtime_control_transport_pass": false,
+    "runtime_quiescence_pass": false,
+    "grid10_outbox_crash_recovery_runtime_pass": false,
+    "physical_grid10_runtime_pass": false,
+    "base_work_package_promotion": false,
+    "canonical_semantics_promotion": false,
+    "canonical_dataset_rows_admitted": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "base_projection": "CC-WP-01 PASS; CC-WP-02 PASS; CC-WP-03..CC-WP-14 OPEN; GENERAL_PURPOSE_GATE NOT_PASS; CLAYCODE_RELEASE_GATE NOT_PASS",
+  "frank_harness": "DO_NOT_MODIFY"
+}

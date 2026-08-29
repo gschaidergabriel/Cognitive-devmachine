@@ -1,0 +1,40 @@
+{
+  "schema": "CLAY_TRIGGER6_F2_E2_MIRROR/v1",
+  "research_id": "R6-WP507-OTEL-TRACE-ATTRIBUTION-001",
+  "status": "MIRRORED_E2_ARCHITECTURE_MAPPING",
+  "created_at": "2026-08-29T15:03:00+07:00",
+  "canonical_f2_result": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/R6-WP507-OTEL-TRACE-ATTRIBUTION-001-E2-GPT56SOL.json",
+    "commit": "a6c3fb4e1822a8b18cc011dfebe0b84ff1751508"
+  },
+  "claim": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/claims/R6-WP507-OTEL-TRACE-ATTRIBUTION-001/E2_ARCHITECTURE_MAPPED.json",
+    "commit": "46fd2122232df54749525af8d23293b4ae93fa07"
+  },
+  "research_entity_parent_observed": "52279fd9d6370ba8efce3dfaa0af397911c51e6a",
+  "source_locks": {
+    "opentelemetry_specification": "8057bf6d5cf0ab10891b9e6f7b928cded76ab2f7",
+    "opentelemetry_python": "251d01a9b65b9a9386c8483de5a8065d9abce4de"
+  },
+  "bounded_conclusion": "OpenTelemetry Span parent/Link structure is a useful provenance-shape donor for WP507, but OpenTelemetry identifiers, sampling and telemetry relationships are not canonical semantic identity or proof of uptake/causal influence. Prefer a tiny F2-native deterministic witness-link projection over importing the OpenTelemetry SDK.",
+  "recommendation": "THIN_DISTILLATION_ONLY_NOT_SDK_IMPORT",
+  "integration_guard": "Do not write WP507-owned implementation paths while the Trigger-4 WP507 G3 claim owns them and src/frankenstein2/gwt_uptake.py is absent from current main. First stabilize WP507 G3 source/component tests; then compare native receipts versus a deterministic witness-link projection with fail-closed completeness, replay equality, bytes, CPU and latency measurements.",
+  "counterhypotheses": [
+    "Native WP507 receipts may already make the proposed link projection redundant.",
+    "A later standardized telemetry/export requirement could justify an adapter outside the acceptance-authority path.",
+    "Causal-research packages should supply causal discriminators; OpenTelemetry remains provenance scaffolding only."
+  ],
+  "credits": {
+    "research_evidence_level": "E2_ARCHITECTURE_MAPPED",
+    "external_architecture_credit": 0,
+    "f2_integration_credit": 0,
+    "runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "effect_credit": 0,
+    "whole_system_credit": 0
+  },
+  "database_sync": "NOT_ATTEMPTED_FROM_GITHUB_CONNECTOR; do not pretend a safe atomic SQLite mutation occurred"
+}

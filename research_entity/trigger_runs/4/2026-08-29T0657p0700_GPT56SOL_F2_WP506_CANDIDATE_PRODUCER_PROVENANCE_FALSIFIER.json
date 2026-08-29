@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_STAGE5_NEGATIVE_RESULT_GWT_CANDIDATE_PRODUCER_PROVENANCE",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "created_at_local": "2026-08-29T06:57:00+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch_observed": "9.13",
+  "research_main_observed_before_write": "c2fbdc8b7086260cdaaba232326dd13ddd521c3e",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-506",
+    "generation": 1,
+    "claim_id": "F2-WP-506-G1-GPT56SOL-GWT-SELECTION-BROADCAST-20260829",
+    "claim_branch": "trigger4/wp506-gwt-selection-broadcast-20260829",
+    "review_pr": 151,
+    "review_branch": "review/wp506-producer-origin-executable-falsifier-20260829-0651",
+    "review_head_sha": "43f25ef1eda3b99329caf8834ca371cf4217f0a2",
+    "reviewed_claim_base_sha": "9e9bd5226ee32881501f928a808077b5608b0f7f"
+  },
+  "source_observation": {
+    "workspace_candidate_boundary": "WorkspaceCandidate accepts caller-supplied payload_ref and provenance_refs; build_workspace_selection validates candidate identity, score/cost bounds and outer frame/GRID-plan bindings but does not require an exact producing Grid10 CellInput/CellOutput identity+digest or independently admitted equivalent producer receipt.",
+    "upstream_available_identity": "The existing GRID10 ABI has exact plan identity/generation/digest, CellInput digest binding, CellOutput cell identity, output refs, evidence refs, provenance refs and output digest surfaces that can support a stronger producer-binding contract.",
+    "pair_binding_status": "SEPARATELY_REPAIRED_AT_REPOSITORY_COMPONENT_SCOPE; this record does not reopen the candidate_id/payload_ref ordering defect."
+  },
+  "executable_falsifier": {
+    "workflow": "Review WP506 candidate-origin falsifier",
+    "workflow_run_id": 33222050630,
+    "job_id": 99017967232,
+    "head_sha": "43f25ef1eda3b99329caf8834ca371cf4217f0a2",
+    "compile_step": "success",
+    "falsifier_step": "failure",
+    "job_conclusion": "failure",
+    "infrastructure_classification": "NOT_INFRASTRUCTURE_FAILURE; checkout, Python setup and compile completed successfully before the review-only falsifier failed",
+    "tests_declared_by_review": [
+      "foreign candidate with only caller-supplied unbound provenance text must fail closed",
+      "distinct candidate IDs aliasing one payload/source must not amplify one producer into multiple selection slots"
+    ],
+    "per_test_runtime_breakdown_observed": false,
+    "interpretation": "The executable suite establishes a bounded product counterexample at the reviewed component boundary. Because per-test log output was not retrieved here, this record does not claim which individual assertion(s) failed beyond the suite-level failure."
+  },
+  "hypothesis": "Outer SituationFrame/GRID10-plan binding is insufficient producer provenance. A candidate may cross the selection boundary without proof that the bound plan/cell actually produced its payload.",
+  "counterhypothesis": "Caller-supplied provenance_refs plus the outer plan digest are sufficient because downstream selection only coordinates candidates and does not claim truth or uptake.",
+  "discriminator_result": "COUNTERHYPOTHESIS_NOT_SUFFICIENT_FOR_THE_DECLARED_FAIL_CLOSED_PROVENANCE_BOUNDARY; repository-hosted review CI produced a non-infrastructure falsifier failure, while source inspection shows no exact candidate-to-producing-cell-output binding.",
+  "required_repair_direction": [
+    "Do not open a second mutation authority; the sole active WP506 claimant owns any production repair.",
+    "Bind each selectable candidate to an exact producer identity/digest, preferably the existing GRID10 plan + cell + CellInput/CellOutput lineage or an independently admitted equivalent receipt.",
+    "Reject stale/foreign producer generation, mismatched plan/output digest and unsupported producer status fail closed.",
+    "Prevent alias/Sybil amplification by making producer/payload lineage identity explicit and testable rather than trusting candidate_id uniqueness alone.",
+    "Preserve UNKNOWN/CONFLICT and no-uptake/no-effect authority semantics."
+  ],
+  "coordination": {
+    "mutation_authority": false,
+    "existing_claimant_pr": 149,
+    "existing_preregister_review_pr": 146,
+    "existing_executable_review_pr": 151,
+    "duplicate_implementation_opened": false
+  },
+  "credit_boundary": {
+    "research_delta": 1,
+    "component_negative_evidence": 1,
+    "wp506_acceptance": 0,
+    "runtime_execution_observed": false,
+    "vps_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "causal_uptake_credit": 0,
+    "effect_or_completion_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "The sole F2-WP-506 mutation lane should absorb the producer-origin/alias regressions, add exact producer lineage binding against the GRID10 CellInput/CellOutput ABI or a separately admitted equivalent receipt, then require exact-head repository-hosted CI before bounded component reconciliation. Do not start WP507 causal-uptake promotion from caller-unbound candidates."
+}

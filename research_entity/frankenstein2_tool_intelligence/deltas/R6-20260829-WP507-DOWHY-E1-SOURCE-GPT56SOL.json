@@ -1,0 +1,35 @@
+{
+  "schema": "CLAY_RESEARCH_ENTITY_TRIGGER6_PROVENANCE_MIRROR/v1",
+  "research_id": "R6-WP507-DOWHY-REFUTATION-001",
+  "claim_target": "E1_SOURCE_READ",
+  "status": "MIRRORED_E1_SOURCE_EVIDENCE_ZERO_RUNTIME_CREDIT",
+  "mirrored_at": "2026-08-29T15:02:00+07:00",
+  "worker": "GPT-5.6-Sol",
+  "canonical_build_consumer": "gschaidergabriel/frankenstein-2.0",
+  "f2_evidence_path": "research/tool_intelligence/deltas/R6-20260829-WP507-DOWHY-E1-SOURCE-GPT56SOL.json",
+  "f2_evidence_commit": "80c914fd2bf146a3c3a241d826aae6ba7d79a172",
+  "f2_claim_path": "research/tool_intelligence/claims/R6-WP507-DOWHY-REFUTATION-001/E1_SOURCE_READ.json",
+  "research_entity_main_observed_before_mirror": "7a111da0cd70cda72d254f0d2f1023bd57563ba3",
+  "upstream_source": {
+    "repo": "py-why/dowhy",
+    "commit_sha": "5a9c401f11df863c39d046ca55743f250e47a0f7",
+    "tree_sha": "c2cd8ef034e1ce9d501f38f5f9c37f32f0740961",
+    "license": "MIT"
+  },
+  "source_findings": [
+    "Placebo treatment refutation deliberately severs treatment-outcome association by randomization/permutation, re-estimates, and checks the induced null distribution.",
+    "Data-subset refutation repeatedly re-estimates on independently sampled subsets with reproducible per-simulation seeds.",
+    "Random-common-cause refutation injects a nuisance adjustment variable and measures estimate robustness.",
+    "Pinned upstream placebo regression tests explicitly expect placebo effects to collapse toward null relative to the original effect, including IV and multi-treatment cases."
+  ],
+  "f2_interpretation": "For F2-WP-507, the transferable donor is a deterministic refutation family: matched null intervention, subset stability, and nuisance-variable perturbation. These are falsifiers around a causal-uptake claim, not a truth source and not evidence that GWT uptake exists.",
+  "counterhypothesis": "A small F2-native refuter contract may capture the useful semantics more safely and cheaply than importing DoWhy; null transforms are invalid unless routing/recipient/provenance envelopes remain matched.",
+  "coordination": "A separate R6-WP507-DOWHY-REFUTER-001 E2 objective was concurrently claimed. This mirror preserves only the completed E1 source-read result and intentionally grants no E2 credit.",
+  "evidence_ceiling": "E1_SOURCE_READ",
+  "research_credit": 1,
+  "architecture_credit": 0,
+  "runtime_credit": 0,
+  "integration_credit": 0,
+  "whole_system_credit": 0,
+  "next_gate": "Consume the separately owned E2 DoWhy architecture mapping; only after reconciliation should Trigger 6 define an F2-native refuter contract or E4 ablation candidate."
+}

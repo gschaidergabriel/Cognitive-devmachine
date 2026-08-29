@@ -1,0 +1,104 @@
+{
+  "schema": "TRIGGERWORD4_WP510_G3_CGROUP_WITNESS_REENTRY/v1",
+  "created_at_local": "2026-08-29T22:31:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "4",
+  "routing_self_test": {
+    "normalized_message": "4",
+    "expected_macro": "TRIGGERWORD_4_GRID10_RUNTIME_TO_FRANKENSTEIN_2_ASSEMBLY",
+    "result": "PASS",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "canonical_supervisor_epoch": "8.78",
+    "free_only": true,
+    "owner_vps_via_established_bridge_allowed": true,
+    "together_forbidden": true,
+    "paid_or_unknown_cost_fallback_forbidden": true
+  },
+  "observed_heads": {
+    "research_main": "620143175f57985aae488660a14eca28fe9d13e3",
+    "frankenstein2_main": "f9343fc83ce83a537d3258436ca5c34b002551c6",
+    "trigger4_branch": "7b10321c187c5d21e722dd9ceb61ebc5302035a6",
+    "wp510_g3_source": "731816a370a0c4fa9bcd63ba05fbf6013433acfe",
+    "wp510_g3_tree": "156953a665a451f6307c4c3e89de0e365f90bcdc"
+  },
+  "wp510_g3_repository_ci": {
+    "workflow_run_id": 33259880985,
+    "workflow": "F2 WP510 GWT Causal Path CI",
+    "status": "completed",
+    "conclusion": "success",
+    "scope": "REPOSITORY_CI_COMPONENT_ONLY",
+    "target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "semantic_gwt_jspace_runtime_credit": 0
+  },
+  "new_trigger4_delta": {
+    "commit": "67798d13cefddf0649bf08e084022bd0943d2239",
+    "path": "tools/trigger4_cgroup_witness_discriminator.py",
+    "purpose": "Read-only companion discriminator for the current Podman/cgroup-v2 target-runtime telemetry gap.",
+    "source_basis": [
+      "trigger4/inbox/tool_research/R6-CGROUPLESS-RESOURCE-WITNESS-E2-FUSION-TRIGGER4-HANDOFF-GPT56SOL.json",
+      "research_entity/frankenstein2_tool_intelligence/deltas/ADF-20260829T2225P0700-GPT56SOL-CGROUP-RESOURCE-WITNESS_MIRROR.json"
+    ],
+    "behavior": [
+      "accepts only one bounded Podman container reference",
+      "performs read-only podman inspect/top and procfs/cgroup-v2 reads",
+      "binds payload PID incarnation by proc starttime before/after",
+      "resolves host-visible cgroup-v2 path and recursively snapshots subtree membership with hard caps",
+      "requires plain domain cgroup type for exact-candidate process-set comparison",
+      "compares complete subtree process membership with an independent Podman host-PID set",
+      "classifies DEDICATED_SUBTREE, SHARED_PARENT_SUPERSET, ROOT or UNRESOLVED",
+      "records cpu.stat, memory.current, memory.peak, memory.events, memory.events.local, io.stat and pids.current only when present",
+      "keeps missing or ambiguous data UNKNOWN rather than zero",
+      "grants zero target-runtime, container-resource-attribution, physical GRID10, semantic GWT/J-Space and whole-system credit"
+    ],
+    "local_validation": {
+      "python_compile": "PASS",
+      "help": "PASS",
+      "pure_classification_tests": "PASS",
+      "target_runtime_execution": "NOT_RUN"
+    }
+  },
+  "parallel_reentry": {
+    "observed_after_delta": true,
+    "newer_branch_commit": "7b10321c187c5d21e722dd9ceb61ebc5302035a6",
+    "effect": "The existing exact-source hygiene capsule was independently rebound from WP510 G2 to canonical WP510 G3. This commit is a descendant of the cgroup discriminator commit, so both deltas coexist without duplication.",
+    "decision": "ADOPT_WP510_G3_AS_CURRENT_EXACT_SOURCE_GATE"
+  },
+  "current_runtime_evidence": {
+    "target_surface_alive_from_prior_telemetry": true,
+    "current_observed_workspace_exact_source_admissible": false,
+    "container_cgroup_resource_scope": "UNKNOWN_UNTIL_TARGET_DISCRIMINATOR_RUN",
+    "target_runtime_wp510_credit": 0,
+    "physical_grid10_credit": 0,
+    "semantic_gwt_jspace_runtime_credit": 0,
+    "whole_system_credit": 0
+  },
+  "execution_boundary": {
+    "direct_vps_bridge_tool_available_to_this_organ": false,
+    "duplicate_self_hosted_dispatch": "QUARANTINED_DO_NOT_REDISPATCH",
+    "runtime_action_taken": "NONE",
+    "reason": "No admitted direct VPS/bridge invocation surface is exposed to this organ; creating another workflow/issue dispatch would duplicate the quarantined lane."
+  },
+  "next_exact_gate": {
+    "action": "Through the established owner-authorized clay-direct-dev VPS Bridge, execute tools/trigger4_wp510_exact_source_vps_hygiene_capsule.py at the current Trigger-4 branch so it clones/detaches exact WP510 G3 source 731816a370a0c4fa9bcd63ba05fbf6013433acfe and verifies tree 156953a665a451f6307c4c3e89de0e365f90bcdc, then execute tools/trigger4_cgroup_witness_discriminator.py against the exact running Podman container reference. Persist both JSON receipts and bind them to one independently observed target-environment identity. Shared-parent evidence remains SUPERSET; root/unresolved remains UNKNOWN; only a stable plain-domain dedicated subtree whose complete process set equals the independent Podman host-PID set may be called EXACT_CANDIDATE resource scope. Even then, physical GRID10 and semantic GWT/J-Space remain separate gates.",
+    "requires_direct_vps_bridge_surface": true
+  },
+  "decision": "ADVANCED_WP510_G3_TARGET_RUNTIME_DISCRIMINATOR_WITHOUT_DUPLICATE_RUNTIME_DISPATCH",
+  "credits": {
+    "source_preparation": 1,
+    "wp510_g3_repository_ci_component": 1,
+    "target_runtime": 0,
+    "container_resource_attribution": 0,
+    "physical_grid10": 0,
+    "semantic_gwt_jspace_runtime": 0,
+    "training": 0,
+    "whole_frankenstein2": 0,
+    "whole_entityos_hcu": 0
+  }
+}

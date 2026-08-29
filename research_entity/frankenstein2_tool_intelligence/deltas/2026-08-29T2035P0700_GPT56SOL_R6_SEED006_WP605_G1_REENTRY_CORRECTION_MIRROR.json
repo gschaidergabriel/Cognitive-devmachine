@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_RESEARCH_ENTITY_TRIGGER6_PROVENANCE_MIRROR/v1",
+  "status": "PROVENANCE_ONLY_NOT_CLAIM_AUTHORITY",
+  "trigger": "6",
+  "research_id": "R6-SEED-006",
+  "created_at": "2026-08-29T20:35:00+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "claim_authority": "gschaidergabriel/frankenstein-2.0",
+  "correction": {
+    "kind": "GRANULAR_REENTRY_OVERRIDES_STALE_AGGREGATE",
+    "stale_surface": "workpackages/STATE.json had previously exposed F2-WP-605 as NOT_STARTED",
+    "granular_current_surface": "workpackages/active/F2-WP-605.json",
+    "granular_state": "ACCEPTED",
+    "terminal_scope": "CHILD_TELEMETRY_MEASUREMENT_EVIDENCE_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "canonical_wp605_g1_merge": "8443f2fb8391e40007a6ea9fd97bfe25ac65b3a5",
+    "runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "supersession": {
+    "initial_candidate": "trigger4/inbox/tool_research/R6-SEED006-F2-WP605-RESOURCE-OBSERVATION-V1.json",
+    "initial_candidate_commit": "39d2106e9e9556c38dbdae7abf59177bbc3abefc",
+    "initial_candidate_status": "SUPERSEDED_STALE_BASELINE_DO_NOT_BUILD_AS_NEW_WP605",
+    "current_candidate": "trigger4/inbox/tool_research/R6-SEED006-F2-WP605-G2-TOOL-RESOURCE-SUBOBSERVATION-V2.json",
+    "current_candidate_commit": "ea1cf72002739d011dc48f485c72069cc3c24ff3",
+    "current_candidate_status": "E5_BUILD_CANDIDATE_ONLY_NOT_IMPLEMENTED_NOT_ACCEPTED"
+  },
+  "nonredundant_delta": {
+    "preserve": "WP605 G1 whole-child deterministic telemetry and exact ChildReconcileEvidence binding",
+    "candidate_only": "Optional generation-2 per-tool/effect resource sub-observation if it proves unique causal-localization value beyond G1 plus existing tool/effect evidence",
+    "reject_if": "G1 plus existing evidence already answers the causal attribution question, or accurate per-tool collection cost/complexity outweighs unique value"
+  },
+  "donor_negative_results_retained": [
+    "exit 137 alone is not sufficient OOM evidence",
+    "shell-interpolated JSONL is not robust canonical evidence serialization",
+    "parent before/after RSS is not a valid transient child peak measurement",
+    "agent resource hints must remain candidate input and cannot self-grant canonical budget/capability"
+  ],
+  "credit_boundary": {
+    "trigger6_stage": "E5_BUILD_CANDIDATE_HANDOFF_CORRECTED",
+    "E6_F2_accepted": false,
+    "wp605_g1_repository_component_ci_credit": true,
+    "target_runtime": 0,
+    "resource_controller": 0,
+    "physical_grid10": 0,
+    "gwt_jspace": 0,
+    "training": 0,
+    "effects": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Trigger4 must refresh current F2 and first prove the G2 sub-observation is nonredundant against accepted WP605 G1 plus existing tool/effect evidence. If redundant, reject the E5 candidate and preserve only the donor falsifiers as test/method knowledge."
+}

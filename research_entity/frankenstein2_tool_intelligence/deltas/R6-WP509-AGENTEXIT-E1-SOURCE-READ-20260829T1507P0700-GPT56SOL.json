@@ -1,0 +1,43 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "6",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "research_id": "R6-WP509-RUMINATION-STOPPING-SCOUT-001",
+  "candidate_id": "R6-WP509-CAND-AGENTEXIT",
+  "status": "MIRRORED_E1_SOURCE_READ_COMPLETE",
+  "mirror_epoch": "2026-08-29T15:09:00+07:00",
+  "canonical_f2_claim": {
+    "path": "research/tool_intelligence/claims/R6-WP509-RUMINATION-STOPPING-SCOUT-001/E1_SOURCE_READ_AGENTEXIT_PIN_9747F023.json",
+    "commit": "134b1dbacd67544e119882e0caa3e4e589dbf7f9"
+  },
+  "canonical_f2_result": {
+    "path": "research/tool_intelligence/deltas/R6-WP509-AGENTEXIT-E1-SOURCE-READ-20260829T1507P0700-GPT56SOL.json",
+    "commit": "623b7d65888442a4c1100418a46a51deb6bb12e0"
+  },
+  "canonical_f2_reconciliation": {
+    "path": "research/tool_intelligence/reconciliations/R6-WP509-AGENTEXIT-E1-DUPLICATE-CLAIM-RECONCILIATION-20260829T1508P0700.json",
+    "commit": "ecca1f8a92dad9e703673b18cac3db9c5ac54b1b"
+  },
+  "research_entity_main_before_mirror": "4dd969af7cf4817b27e537fa19a6c33719591ea8",
+  "external_source": {
+    "repo": "Coldmist-Lu/AgentExit",
+    "commit": "9747f0237fc91aa0445d4cc8630bf0fa4c22022c",
+    "evidence_stage": "E1_SOURCE_READ_ONLY"
+  },
+  "distilled_hypothesis": "Adopt AgentExit only as a donor pattern: deterministic repetition/progress/resource signals should create a typed non-authoritative StopCandidate; semantic verification stays advisory; HOLD/ASK/DELEGATE/REOBSERVE remain distinct from COMPLETE; no new truth/effect authority is created.",
+  "key_negative_findings": [
+    "free-form verifier uses substring YES detection",
+    "combined agent contains short_thought/thought_short static key mismatch",
+    "intrinsic_using_flag has a source-visible initialization hazard",
+    "stuck/complete/infeasible reasons are collapsed into one stop bit"
+  ],
+  "coordination_finding": "A later semantic-alias E1 claim was created under a different research_id/path; it is reconciled as the same objective and receives no independent replication credit.",
+  "next_stage": "E2_ARCHITECTURE_MAPPED_REQUIRES_NEW_F2_CREATE_ONLY_CLAIM",
+  "credits": {
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "integration_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0
+  }
+}

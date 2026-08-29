@@ -1,0 +1,56 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_E2_ARCHITECTURE_MAPPED_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "evidence_level": "E2_ARCHITECTURE_MAPPED",
+  "status": "MIRRORED_SOURCE_RESULT_NO_RUNTIME_PROMOTION",
+  "canonical_f2_result": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001_E2_ARCHITECTURE_MAPPED_RETRY_IDENTITY_ABI_20260829T1455P0700_GPT56SOL.json",
+    "commit": "8fa87cd9b8a397292473b2afbca3995b4859f2fc",
+    "claim_path": "research/tool_intelligence/claims/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001/E2_ARCHITECTURE_MAPPED_RETRY_IDENTITY_ABI.json",
+    "claim_commit": "d59281bbca61af19d05025ee4b4e1af8faaeac41"
+  },
+  "architecture_snapshot": {
+    "f2_preclaim_main": "46aee3bf37a938dbea5936b9c935ffb7bd74cdf3",
+    "research_entity_observed_before_work": "5f14068837cd5b3ed389f88891cacb46fee4c588",
+    "supervisor": "9.13AQ_NON_AUTHORITY"
+  },
+  "retained_findings": [
+    "Current F2 request_sha256 is an exact per-call authority-request digest, not a proven cross-attempt semantic digest, because canonical_entityos_call_target embeds binding_id, invocation_id, tool_use_id, delegation_id and child identity.",
+    "Current invocation_id is source-contracted as part of one delegated execution lineage. It may become an attempt identity only through an explicit future contract; it is not proven to be a stable logical retry identity.",
+    "Current EntityOS EffectGate cross-attempt replay protection is autonomy-episode specific; episode_id=null direct callers bypass that fence, while EffectJournal.begin creates a fresh UUID effect_id.",
+    "Current EffectJournal lacks distinct DISPATCH_STARTED and UNKNOWN_POST_DISPATCH states; live bridge exceptions are finalized FAILED even when F2 has component evidence that executor entry preceded TimeoutExpired.",
+    "AWS Powertools commit a39e1018e36b7965b08313288bea3b7420df5220 is retained only as a structural donor: separate stable idempotency key from payload validation hash, INPROGRESS exclusion, fail closed when active-vs-orphan is uncertain, and mismatch rejection. No Redis/DynamoDB side authority is adopted.",
+    "The minimal generated ABI therefore separates operation_retry_id, retry-stable operation_payload_sha256, per-attempt identity, existing request_sha256, canonical effect_id, dispatch state, outcome certainty and verification evidence."
+  ],
+  "counterevidence_preserved": [
+    "request_sha256 alone cannot safely be promoted to logical retry identity in current F2",
+    "goal_id + autonomy_step_id does not cover direct episode_id=null calls",
+    "FAILED after post-start exception is not evidence that the world effect did not occur",
+    "a full external idempotency runtime would introduce an unnecessary competing persistence/effect substrate"
+  ],
+  "next_discriminator": {
+    "slot": "EXPERIMENTAL_FALSIFIER",
+    "target": "E3_CLAIM_REPRODUCED_FAIL_CLOSED_RETRY_FENCE",
+    "summary": "Use an admitted zero-cost no-real-effect miniature with UnifiedDB persistence, reopen between attempts, and prove zero second child mutation under one unresolved operation_retry_id plus mismatch rejection for changed operation_payload_sha256."
+  },
+  "mirror": {
+    "cross_repo_atomicity_assumed": false,
+    "canonical_claim_authority": "F2_ONLY",
+    "pending_research_sqlite_sync": "PENDING",
+    "runtime_credit": 0
+  },
+  "credits": {
+    "E2_architecture_mapped": 1,
+    "E3_claim_reproduced": 0,
+    "E4_f2_ablation": 0,
+    "E5_build_candidate": 0,
+    "E6_f2_accepted": 0,
+    "whole_f2_runtime": 0,
+    "entityos_hcu_runtime": 0,
+    "physical_grid10": 0,
+    "training": 0
+  }
+}

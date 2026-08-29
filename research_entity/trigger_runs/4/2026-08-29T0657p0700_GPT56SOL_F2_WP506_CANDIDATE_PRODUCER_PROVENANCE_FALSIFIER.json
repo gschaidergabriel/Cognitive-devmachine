@@ -1,19 +1,22 @@
 {
   "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
   "trigger": "4",
-  "classification": "FRANKENSTEIN2_STAGE5_NEGATIVE_RESULT_GWT_CANDIDATE_PRODUCER_PROVENANCE",
+  "classification": "FRANKENSTEIN2_STAGE5_NEGATIVE_RESULT_GWT_CANDIDATE_PRODUCER_PROVENANCE_INTEGRATION_BOUNDARY",
   "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
   "created_at_local": "2026-08-29T06:57:00+07:00",
+  "reconciled_at_local": "2026-08-29T07:03:00+07:00",
   "product": "EntityOS",
   "architecture": "HCU",
   "supervisor_epoch_observed": "9.13",
-  "research_main_observed_before_write": "c2fbdc8b7086260cdaaba232326dd13ddd521c3e",
+  "research_main_observed_before_initial_write": "c2fbdc8b7086260cdaaba232326dd13ddd521c3e",
+  "scope_correction_reason": "Exact reread of the active WP506 claim shows the component explicitly consumes caller-supplied candidates and denies uptake/truth/effect authority. Therefore the producer-origin falsifier is decisive against stronger producer-attested or causal-uptake interpretations, but does not by itself falsify the narrower deterministic coordination contract if reconciliation keeps that boundary explicit.",
   "frankenstein2": {
     "repository": "gschaidergabriel/frankenstein-2.0",
     "workpackage": "F2-WP-506",
     "generation": 1,
     "claim_id": "F2-WP-506-G1-GPT56SOL-GWT-SELECTION-BROADCAST-20260829",
     "claim_branch": "trigger4/wp506-gwt-selection-broadcast-20260829",
+    "claim_head_observed": "3daf91bbd3a7d9f61d15ab4c2cf9fd17c082258b",
     "review_pr": 151,
     "review_branch": "review/wp506-producer-origin-executable-falsifier-20260829-0651",
     "review_head_sha": "43f25ef1eda3b99329caf8834ca371cf4217f0a2",
@@ -21,8 +24,9 @@
   },
   "source_observation": {
     "workspace_candidate_boundary": "WorkspaceCandidate accepts caller-supplied payload_ref and provenance_refs; build_workspace_selection validates candidate identity, score/cost bounds and outer frame/GRID-plan bindings but does not require an exact producing Grid10 CellInput/CellOutput identity+digest or independently admitted equivalent producer receipt.",
-    "upstream_available_identity": "The existing GRID10 ABI has exact plan identity/generation/digest, CellInput digest binding, CellOutput cell identity, output refs, evidence refs, provenance refs and output digest surfaces that can support a stronger producer-binding contract.",
-    "pair_binding_status": "SEPARATELY_REPAIRED_AT_REPOSITORY_COMPONENT_SCOPE; this record does not reopen the candidate_id/payload_ref ordering defect."
+    "upstream_available_identity": "The existing GRID10 ABI has exact plan identity/generation/digest, CellInput digest binding, CellOutput cell identity, output refs, evidence refs, provenance refs and output digest surfaces that can support a stronger producer-binding integration contract.",
+    "pair_binding_status": "SEPARATELY_REPAIRED_AT_REPOSITORY_COMPONENT_SCOPE; this record does not reopen the candidate_id/payload_ref ordering defect.",
+    "narrow_claim_scope": "WP506 coordinates explicitly caller-supplied candidates and explicitly states broadcast is OFFERED_NOT_ACKED with no uptake, truth, effect, completion or causal-influence authority."
   },
   "executable_falsifier": {
     "workflow": "Review WP506 candidate-origin falsifier",
@@ -38,29 +42,31 @@
       "distinct candidate IDs aliasing one payload/source must not amplify one producer into multiple selection slots"
     ],
     "per_test_runtime_breakdown_observed": false,
-    "interpretation": "The executable suite establishes a bounded product counterexample at the reviewed component boundary. Because per-test log output was not retrieved here, this record does not claim which individual assertion(s) failed beyond the suite-level failure."
+    "interpretation": "The suite is bounded executable negative evidence that current WP506 does not enforce producer-origin/alias admission. It is not evidence that the narrower caller-supplied-candidate coordination semantics are incorrect, because those semantics do not claim independent producer attestation."
   },
-  "hypothesis": "Outer SituationFrame/GRID10-plan binding is insufficient producer provenance. A candidate may cross the selection boundary without proof that the bound plan/cell actually produced its payload.",
-  "counterhypothesis": "Caller-supplied provenance_refs plus the outer plan digest are sufficient because downstream selection only coordinates candidates and does not claim truth or uptake.",
-  "discriminator_result": "COUNTERHYPOTHESIS_NOT_SUFFICIENT_FOR_THE_DECLARED_FAIL_CLOSED_PROVENANCE_BOUNDARY; repository-hosted review CI produced a non-infrastructure falsifier failure, while source inspection shows no exact candidate-to-producing-cell-output binding.",
-  "required_repair_direction": [
-    "Do not open a second mutation authority; the sole active WP506 claimant owns any production repair.",
-    "Bind each selectable candidate to an exact producer identity/digest, preferably the existing GRID10 plan + cell + CellInput/CellOutput lineage or an independently admitted equivalent receipt.",
+  "hypothesis": "Outer SituationFrame/GRID10-plan binding is insufficient to support later claims that selected candidates were actually produced by the bound GRID10 plan/cells.",
+  "counterhypothesis": "Producer attestation is unnecessary inside WP506 because WP506 is only a deterministic coordination transform over caller-supplied candidates and makes no uptake/truth/causal claim.",
+  "discriminator_result": "BOTH_BOUNDARIES_SEPARATED: the counterhypothesis remains viable for narrow WP506 component acceptance, while the executable falsifier rejects promotion from current caller-supplied candidates to producer-attested, causal-uptake, J-Space training-trace or stronger GWT evidence without an additional lineage gate.",
+  "promotion_gate": [
+    "Before WP507 or any causal-uptake promotion consumes WP506 outputs as producer-grounded evidence, bind each selectable candidate to exact producer identity/digest using the existing GRID10 CellInput/CellOutput ABI or an independently admitted equivalent receipt.",
     "Reject stale/foreign producer generation, mismatched plan/output digest and unsupported producer status fail closed.",
-    "Prevent alias/Sybil amplification by making producer/payload lineage identity explicit and testable rather than trusting candidate_id uniqueness alone.",
-    "Preserve UNKNOWN/CONFLICT and no-uptake/no-effect authority semantics."
+    "Prevent alias/Sybil amplification when producer-grounded weighting or slot accounting matters.",
+    "Preserve UNKNOWN/CONFLICT and no-effect/no-truth authority semantics."
   ],
   "coordination": {
     "mutation_authority": false,
     "existing_claimant_pr": 149,
     "existing_preregister_review_pr": 146,
     "existing_executable_review_pr": 151,
-    "duplicate_implementation_opened": false
+    "duplicate_implementation_opened": false,
+    "canonical_claim_mutated_by_this_record": false
   },
   "credit_boundary": {
     "research_delta": 1,
-    "component_negative_evidence": 1,
-    "wp506_acceptance": 0,
+    "producer_origin_integration_negative_evidence": 1,
+    "wp506_narrow_component_acceptance_delta_from_this_record": 0,
+    "wp506_narrow_component_acceptance_blocked_by_this_record": false,
+    "producer_attestation_credit": 0,
     "runtime_execution_observed": false,
     "vps_runtime_credit": 0,
     "physical_grid10_runtime_credit": 0,
@@ -71,5 +77,5 @@
     "whole_entityos_hcu_runtime_credit": 0,
     "training_credit": 0
   },
-  "next_exact_action": "The sole F2-WP-506 mutation lane should absorb the producer-origin/alias regressions, add exact producer lineage binding against the GRID10 CellInput/CellOutput ABI or a separately admitted equivalent receipt, then require exact-head repository-hosted CI before bounded component reconciliation. Do not start WP507 causal-uptake promotion from caller-unbound candidates."
+  "next_exact_action": "Allow the sole WP506 lane to reconcile only at its explicit caller-supplied deterministic coordination scope if all claim-scoped CI/falsifiers for that scope pass. Keep producer-origin/alias evidence open as a mandatory integration gate before WP507 causal uptake, producer-grounded GWT/J-Space traces, or training-data promotion."
 }

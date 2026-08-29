@@ -1,0 +1,109 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_ARCHITECTURE_DELTA_FUSION/v1",
+  "fusion_id": "ADF-20260829T1503P0700-GPT56SOL-WP105-AQ-RECONCILIATION",
+  "trigger": "6",
+  "status": "COMPLETED_SUCCESSOR_FUSION_NO_RUNTIME_PROMOTION",
+  "created_at_local": "2026-08-29T15:03:00+07:00",
+  "selected_research_slot": "INTEGRATION_DISTILLER",
+  "inputs": {
+    "prior_live_fusion": "research_entity/frankenstein2_tool_intelligence/deltas/ADF-20260829T1501P0700-GPT56SOL-TRIGGER6-LIVE-FUSION.json",
+    "canonical_wp105_e2": "gschaidergabriel/frankenstein-2.0@8fa87cd9b8a397292473b2afbca3995b4859f2fc:research/tool_intelligence/deltas/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001_E2_ARCHITECTURE_MAPPED_RETRY_IDENTITY_ABI_20260829T1455P0700_GPT56SOL.json",
+    "wp105_review_claim": "gschaidergabriel/frankenstein-2.0@f8d1e3122b7b63346db7c1624f4a42b8d0ca0da3:research/tool_intelligence/claims/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001/E2_REVIEW_9_13AQ_DIRECT_EFFECT_REPLAY.json",
+    "wp105_review_addendum": "gschaidergabriel/frankenstein-2.0@e62f5bb305acfedc8dd6de6fad392316a166e411:research/tool_intelligence/deltas/R6-WP105-EFFECT-IDEMPOTENCY-SCOUT-001_E2_REVIEW_9_13AQ_DIRECT_EFFECT_REPLAY_ADDENDUM_20260829T1500P0700_GPT56SOL.json",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_delta": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AQ_DELTA_2026-08-29T1347P0700_GPT56SOL.json"
+  },
+  "architecture_reentry": {
+    "f2_head_observed_after_addendum": "a6c3fb4e1822a8b18cc011dfebe0b84ff1751508",
+    "research_entity_head_observed_before_successor_fusion": "850730c53248d0df4153ce259b1f3149b5a6bb4c",
+    "execution_mode": "FREE_ONLY",
+    "admitted_effect_authority_unchanged": true,
+    "current_research_steering": "9.13AQ_NON_AUTHORITY"
+  },
+  "reconciliations": [
+    {
+      "id": "ADF-WP105-AQ-01-SUPERVISOR-DRIFT",
+      "classification": "STALE_FUSION_FIELD_CORRECTED",
+      "finding": "The 15:01 live fusion recorded 9.13AP_NON_AUTHORITY, but current SUPERVISOR_INBOX and the newer steering delta identify 9.13AQ_NON_AUTHORITY. AQ remains non-authority and does not change the admitted EffectGate+EffectJournal authority; it adds the direct episode_id=null durable replay-gap discriminator."
+    },
+    {
+      "id": "ADF-WP105-AQ-02-E2-DEDUPE",
+      "classification": "PARALLEL_RESULT_RECONCILED",
+      "finding": "A canonical WP105 E2 architecture mapping completed while the integration-distiller review was in progress. It remains the single E2 credit. The later review contributes only a nonduplicate schema-scope finding and adds zero E2 credit."
+    },
+    {
+      "id": "ADF-WP105-AQ-03-DIRECT-SCOPE-GAP",
+      "classification": "CURRENT_BOUND_SOURCE_SCHEMA_GAP",
+      "finding": "For episode_id=null calls, current schema-6 effects rows do not persist session_id, operation_retry_id, retry-stable operation payload digest, attempt identity or dispatch-start state. EffectJournal.begin receives session_id but does not store it. Therefore direct retry fencing needs an explicit durable logical-operation scope inside the existing canonical UnifiedDB/EffectJournal lane."
+    },
+    {
+      "id": "ADF-WP105-AQ-04-REQUEST-DIGEST-ROLE",
+      "classification": "IDENTITY_ROLE_BOUNDARY",
+      "finding": "Current F2 request_sha256 must remain the exact per-call authority-request digest. The EntityOS target includes binding/invocation/tool/delegation/child occurrence identity, so request_sha256 is not a retry-stable operation payload digest and cannot be operation_retry_id."
+    },
+    {
+      "id": "ADF-WP105-AQ-05-EXTERNAL-STRUCTURE",
+      "classification": "EXTERNAL_PRIMARY_STRUCTURE_ONLY",
+      "finding": "RFC 9110 and current AWS idempotency documentation independently support fail-closed retry after uncertainty and stable operation token plus changed-parameter mismatch. This supports the thin identity split but does not justify importing an external runtime or persistence authority."
+    }
+  ],
+  "fused_architecture_delta": {
+    "status": "RESEARCH_DESIGN_ONLY",
+    "required_distinct_bindings": [
+      "operation_retry_id",
+      "operation_payload_sha256",
+      "attempt_id",
+      "existing request_sha256",
+      "canonical effect_id",
+      "dispatch-start evidence/state",
+      "outcome certainty",
+      "verification evidence reference"
+    ],
+    "durable_scope_preference": "user_id + session_id + operation_retry_id persisted transactionally in existing UnifiedDB/EffectJournal authority",
+    "negative_rules": [
+      "same operation id + changed operation payload => reject before dispatch",
+      "same operation id + unresolved prior dispatch => zero duplicate child mutation",
+      "UNKNOWN non-idempotent effect => no automatic replay",
+      "distinct operation id + identical semantics => do not deduplicate",
+      "FAILED text/status after possible dispatch does not prove NOT_APPLIED",
+      "no second journal, second executor, Redis/DynamoDB side authority or in-memory-only replay fence"
+    ]
+  },
+  "hypothesis": "A minimal native operation/retry identity plus retry-stable payload digest, persisted in the existing EffectJournal/UnifiedDB authority and kept distinct from F2 call identity and canonical effect_id, is sufficient to close the direct episode_id=null duplicate-dispatch class without importing a durable workflow runtime.",
+  "counterhypothesis": "The proposed fields are insufficient because safe retry also requires a stronger authority-owned dispatch-start/verification state machine; the exact-source reopen falsifier should expose this if a duplicate can still pass or UNKNOWN cannot be resolved safely.",
+  "next_exact_discriminator": {
+    "preferred_owner": "EXPERIMENTAL_FALSIFIER_OR_TRIGGER4_CURRENT_AUTHORITY_TEST_LANE",
+    "evidence_target": "DIRECT_EPISODE_NULL_REOPEN_REPLAY_FENCE",
+    "requirements": [
+      "admitted zero-cost no-real-effect exact-source fixture",
+      "first direct entityos.exec uses episode_id=null and crosses a harmless child start boundary before ambiguity",
+      "reopen UnifiedDB and construct a new gate",
+      "second logically identical operation executes zero additional child mutation while first is unresolved",
+      "changed operation payload under same operation id rejects before dispatch",
+      "identical semantics under distinct operation id remains independently admissible",
+      "preserve explicit UNKNOWN/nonreplayable outcome until authority-owned verification"
+    ]
+  },
+  "credits": {
+    "architecture_fusion_delta": 1,
+    "canonical_wp105_E2": 1,
+    "this_review_additional_E2": 0,
+    "E3": 0,
+    "E4": 0,
+    "E5": 0,
+    "E6": 0,
+    "F2_runtime": 0,
+    "EntityOS_runtime": 0,
+    "physical_GRID10": 0,
+    "whole_EntityOS_HCU": 0,
+    "training": 0
+  },
+  "execution": {
+    "real_effect_execution": 0,
+    "provider_calls": 0,
+    "vps_execution": 0,
+    "paid_fallback": false,
+    "unusual_experiment": false,
+    "pending_research_sqlite_sync": "PENDING_BINARY_DB_WRITE_NOT_PERFORMED"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "FRANKENSTEIN2_ARCHITECTURE_DELTA_MIRROR/v1",
+  "mirror_status": "PROVENANCE_MIRROR_ONLY_NOT_ACCEPTANCE_AUTHORITY",
+  "trigger": "6",
+  "research_id": "R6-20260829-CGROUPLESS-CONTAINER-RESOURCE-WITNESS-GPT56SOL-01",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "source_fusion_commit": "29583bfa582061b7947bb90c6141f59a7ae5f356",
+  "source_fusion_path": "research/tool_intelligence/deltas/ARCHITECTURE_DELTA_FUSION_20260829T2225P0700_GPT56SOL_CGROUP_RESOURCE_WITNESS.json",
+  "source_e3_path": "research/tool_intelligence/deltas/R6-20260829-CGROUPLESS-CONTAINER-RESOURCE-WITNESS-GPT56SOL-01_E3_PROCFS_PARENT_UNDERCOUNT_REPRODUCTION.json",
+  "source_e2_review_path": "research/tool_intelligence/deltas/R6-20260829-CGROUPLESS-CONTAINER-RESOURCE-WITNESS-GPT56SOL-01_E2_REVIEW_CGROUP_SUBTREE_MEMBERSHIP_PROOF.json",
+  "fused_conclusion": "Keep one CgroupWitness/v1 candidate. Exact container-resource attribution requires bound host cgroup-namespace perspective, cgroup type, type-correct complete subtree membership, an independently observed Podman host-PID set, lifecycle fencing, and readable cgroup-v2 counters. Process-only procfs fallback is degraded evidence and may not mint container totals.",
+  "e3_local_reproduction": {
+    "fresh_runs": [
+      {"parent_cpu_seconds":0.0,"child_cpu_seconds":0.44},
+      {"parent_cpu_seconds":0.0,"child_cpu_seconds":0.45}
+    ],
+    "unit_regression": "4/4 PASS",
+    "scope": "LOCAL_NON_F2_ONLY"
+  },
+  "existing_trigger4_handoff": "trigger4/inbox/tool_research/R6-CGROUPLESS-RESOURCE-WITNESS-E2-FUSION-TRIGGER4-HANDOFF-GPT56SOL.json",
+  "next_owner": "TRIGGER4_TARGET_RUNTIME_DISCRIMINATOR",
+  "credits": {"e2":1,"e3_local":1,"e4":0,"e5":0,"e6":0,"target_runtime":0,"whole_system":0}
+}

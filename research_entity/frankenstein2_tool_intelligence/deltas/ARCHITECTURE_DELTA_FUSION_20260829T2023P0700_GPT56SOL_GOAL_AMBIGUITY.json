@@ -1,0 +1,77 @@
+{
+  "schema": "FRANKENSTEIN2_ARCHITECTURE_DELTA_FUSION/v1",
+  "trigger": "6",
+  "fusion_id": "ADF-20260829T2023P0700-GPT56SOL-GOAL-AMBIGUITY",
+  "created_at": "2026-08-29T20:23:00+07:00",
+  "worker": "GPT-5.6 Sol / ChatGPT Trigger-6 organ",
+  "research_id": "R6-20260829-GOAL-INFERENCE-IDENTIFIABILITY-GPT56SOL-01",
+  "source_snapshot": {
+    "f2_main_observed_post_e2": "198fb186389bebf42c7f59708b1c60b9befcb192",
+    "research_entity_main_pre_fusion": "6575d949e5c871a63bb92c77ac4a0235ca2a0173",
+    "trigger6_protocol_blob": "08571526d33f9a0c06577e2f119bdaf4297ef1c8",
+    "wp804_merge": "97759336490f61a3e7036c8bf6d6aebef01f87fd",
+    "goal_inference_blob": "6afe19c24f5abb60196cdeab334827204d2a73ae",
+    "hyperposition_blob": "d49392f5b60ce377373c1ecbe282ae2410557c98",
+    "epistemic_action_selection_blob": "dd8cf8a30f50f6e04d9549bf9589b6207fde7eb4",
+    "active_sensing_blob": "ab006fac3757b617f59195bddaaa25823bef2587",
+    "information_seeking_benchmark_blob": "55f08d4f8bd4d691e96ede1d9439fa9683ca6980"
+  },
+  "f2_evidence_refs": {
+    "e1_claim_commit": "ec494fc53a6264d125f6b5ddfdc0a251f02825ed",
+    "e1_receipt_commit": "d786873ad454dd44eb07538dc522a620bb4fdea5",
+    "e2_claim_commit": "625cb7026b3272679822dd1b434d9c77e53f3047",
+    "e2_delta_commit": "daf2e062166160e17d38a10cf39cdaabc2e59cfb",
+    "e2_receipt_commit": "229829f145f52a81cd68cd33672cd8568b456f1b"
+  },
+  "live_fusion": {
+    "superseded_assumption": "WP804 needs basic abstention/identifiability repair.",
+    "replacement_observation": "WP804 already enforces exact-goal output only under unique declared public evidence and otherwise expects ABSTAIN.",
+    "remaining_gap": "Binary ABSTAIN discards which candidate goals remain publicly compatible; current WP802 probes from a predeclared policy rather than from that ambiguity structure.",
+    "reuse_discovery": "Existing Hyperposition, DiscriminatorCandidate and Epistemic Action Selection already implement the generic unresolved-alternative and information-gain machinery, so a new goal-hypothesis subsystem would be redundant.",
+    "parallel_movement": "F2 main moved repeatedly during this run, including concurrent WP803/WP807 Trigger-4/6 work. This fusion is bound to exact source blobs and observed heads rather than assuming a stationary main."
+  },
+  "affected_modules": [
+    "F2-WP-804 held-out goal inference benchmark",
+    "F2-WP-502 Hyperposition representation/discriminator",
+    "F2-WP-504 Epistemic Action Selection",
+    "F2-WP-406 Active sensing",
+    "F2-WP-802 held-out information-seeking benchmark"
+  ],
+  "architecture_delta": {
+    "type": "MERGE_REUSE_NOT_NEW_AUTHORITY",
+    "candidate": "F2_PUBLIC_GOAL_AMBIGUITY_HYPERPOSITION_ADAPTER/v0",
+    "status": "RESEARCH_ONLY_E2_NO_BUILD_PROMOTION",
+    "shape": "Derive the public-compatible goal set using only WP804-visible inputs; for cardinality >1, project each compatible candidate into existing Hyperposition Alternatives with exact public provenance; use existing DiscriminatorCandidate and Epistemic Action Selection for candidate information-seeking; optionally terminate through existing Active Sensing. No new persistent goal state.",
+    "authority": "Projection/candidate only; no world-truth, goal-adoption, canonical-state, effect or completion authority.",
+    "expected_token_effect": "No additional model call required; typed deterministic bridge should add near-zero model-token consumption if validated.",
+    "expected_resource_effect": "Linear set/adaptor work in candidate-goal count; unmeasured until ablation."
+  },
+  "contradictions": [
+    {
+      "claim": "Non-identifiable goal inference needs a new ambiguity representation.",
+      "counterevidence": "Hyperposition already is the generic unresolved-alternative representation.",
+      "resolution": "Do not add another representation; test a thin adapter into Hyperposition."
+    },
+    {
+      "claim": "ABSTAIN alone is sufficient for downstream information-seeking.",
+      "counterevidence": "Goal-recognition literature treats sets of compatible goals as meaningful and active goal recognition uses actions/sensing to reduce that set; F2 WP802 does not yet bind probe choice to goal-set structure.",
+      "resolution": "UNRESOLVED; requires matched F2 ablation."
+    }
+  ],
+  "counterhypothesis": "The candidate set carries no extra decision-relevant information because equivalent uncertainty is already derivable elsewhere or direct ObservationView-to-probe policies perform equally well with less state plumbing.",
+  "falsifier": "Matched microworld cases with identical initial WP804 ABSTAIN but different public-compatible goal sets and different uniquely useful probe actions. Under equal public evidence/action budget, compare binary-ABSTAIN baseline against the thin Hyperposition adapter. Reject if no probe-selection/downstream-accuracy gain or if equivalent state is already produced by an admitted path.",
+  "evidence_scope": {
+    "external_primary_research": true,
+    "f2_source_mapping": true,
+    "e2_complete": true,
+    "e3_reproduction": false,
+    "e4_ablation": false,
+    "e5_build_candidate": false,
+    "runtime_credit": 0,
+    "whole_system_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Acquire a nonduplicate Trigger-6 E4 claim for the matched goal-ambiguity-to-Hyperposition ablation, unless a newer architecture change or active claim makes the objective stale/owned.",
+  "migration_reuse_score": "EASIER_CROSS_MODE",
+  "pending_research_sqlite_sync": "PENDING"
+}

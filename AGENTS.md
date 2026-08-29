@@ -19,6 +19,8 @@ Read first, in this order:
 
 `research_entity/00_CURRENT` is a token-efficient generated navigation/cache layer, not authority. Newest explicit owner authority, current supervisor steering and exact executable evidence outrank it.
 
+For execution-surface questions, `CLAY_EXECUTION_AUTHORITY.md` is the owner-level resolver. An older supervisor/cache sentence must not be used to recreate a VPS ambiguity that the current owner authority has already resolved.
+
 Current system: **EntityOS**.  
 Current integrated cognition/compute architecture: **HCU**.
 
@@ -36,9 +38,22 @@ The designated owner-provisioned VPS development/research sandbox is `clay-direc
 
 Inside `clay-direct-dev`, broad development/research execution is authorized under `governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md`, including sandbox root/sudo when available, package/runtime installation, compilation, public downloads, repository/model acquisition, local Qwen execution, tests, fuzzing, benchmarks, ablations, vector/J-Space interventions, HCU experiments and destructive-to-scratch work.
 
-Do **not** stop on legacy `VPS_FORBIDDEN`, `SELF_HOSTED_FORBIDDEN`, `NO_ROOT_IN_SANDBOX` or `NO_EXECUTOR` conclusions before checking the already-prepared bridge/runner paths in `governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`.
+Do **not** stop on legacy `VPS_FORBIDDEN`, `SELF_HOSTED_FORBIDDEN`, `NO_ROOT_IN_SANDBOX`, `NO_EXECUTOR` or `VPS_AUTHORITY_AMBIGUOUS` conclusions before resolving `CLAY_EXECUTION_AUTHORITY.md` and checking the already-prepared bridge/runner paths in `governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`.
 
 The sandbox authority does not turn unrelated bare-host services, unrelated production effects, third-party attacks or external provider spending into implicit permissions. Platform/system safety rules and canonical EffectGate/evidence laws remain in force.
+
+### FREE_ONLY is not a VPS restriction
+
+Current owner semantics are mandatory:
+
+```text
+FREE_ONLY = FREE EXTERNAL MODEL/API TOKENS ONLY
+FREE_ONLY != NO_VPS
+FREE_ONLY != NO_SELF_HOSTED_RUNNER
+FREE_ONLY != NO_LOCAL_MODEL
+```
+
+Owner-provisioned VPS/bridge compute is allowed and expected. Paid, subscription-based or unknown-cost third-party model/API token usage is not allowed under FREE_ONLY unless a newer explicit owner instruction changes that policy. A provider subscription by itself is not a free-token admission.
 
 ## Autonomous research acquisition — GRF bound
 
@@ -83,6 +98,8 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 - majority/model agreement cannot mint truth;
 - unknown effect outcomes remain UNKNOWN until verified;
 - EffectGate/EffectJournal remain the only real/state-changing effect authority;
+- FREE_ONLY governs external provider token/spend, not owner VPS/bridge/local compute;
+- paid/subscription/unknown-cost model/API token routes remain forbidden under FREE_ONLY; concrete zero-cost routes require current admission/provenance;
 - Together/API paid-provider and monetary-spend rules remain governed separately by newest explicit owner/provider authority;
 - no secrets in prompts/source/receipts;
 - source/component/historical PASS never implies broader runtime acceptance;

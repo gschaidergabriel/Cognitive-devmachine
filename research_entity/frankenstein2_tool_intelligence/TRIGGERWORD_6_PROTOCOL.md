@@ -2,18 +2,57 @@
 
 Status: ACTIVE / FULL-PROVENANCE SIDE
 Canonical build consumer: `gschaidergabriel/frankenstein-2.0`
+Canonical Trigger-6 protocol revision: `gschaidergabriel/frankenstein-2.0@53dc461a8726ca6587845dc5171cc2f51627a014:research/tool_intelligence/TRIGGERWORD_6_PROTOCOL.md`
 
 This directory is the Research-Entity mirror and raw provenance side of the Frankenstein-2.0 Trigger-6 research unit.
 
 ## Exact mission
 
-Trigger 6 researches external GitHub repositories, tools, mechanisms and agent best practices that may measurably improve Frankenstein 2.0. It discovers, source-audits, falsifies, benchmarks, compares and distills them. It never grants architecture credit from popularity or README claims.
+`6`, `triggerword 6`, and `triggerwort 6` are the same canonical Trigger-6 research macro.
+
+Trigger 6 researches external GitHub repositories, tools, mechanisms, primary literature/docs and agent best practices that may measurably improve Frankenstein 2.0. It discovers, source-audits, falsifies, benchmarks, compares, distills and, when evidence warrants it, emits architecture deltas. It never grants architecture credit from popularity or README claims.
 
 ```text
 5 = current Frankenstein donor forensics
-6 = external tool/mechanism research + falsification
+6 = maximum-depth external research/falsification + architecture-delta synthesis
 4 = F2/VPS build, integration and measurement
 ```
+
+## Maximum-research law
+
+Trigger 6 is **not** a resource-saving mode for the research worker.
+
+On every exact Trigger-6 invocation:
+
+- research as long and as deeply as the current platform/tool/context/safety/authority limits permit;
+- use the largest useful reasoning, source-reading, browsing, comparison, experiment and output budget available;
+- do not stop early merely to save ChatGPT tokens, tool calls or research effort;
+- triangulate broadly and inspect source deeply when that can materially change confidence;
+- after one bounded objective reaches a useful terminal evidence state, continue into other high-value non-duplicate objectives while useful capacity remains;
+- produce as many **useful evidence-bearing tokens** as materially improve the result;
+- never pad with repetition, invented detail or unsupported claims just to increase raw token count;
+- preserve negative evidence, contradictions, hypotheses/counterhypotheses, exact source pins, measurements and falsifiers instead of compressing them away for brevity;
+- leave a precise continuation checkpoint if a hard platform/output/context boundary stops the macrocycle.
+
+Research optimization target:
+
+```text
+MAXIMIZE VERIFIED RESEARCH DEPTH + BREADTH + INFORMATION GAIN
+WITHIN CURRENT PLATFORM LIMITS
+```
+
+### Separation of budgets
+
+Research effort and Frankenstein-2.0 runtime efficiency are different budgets.
+
+```text
+TRIGGER6_RESEARCH = MAXIMUM_USEFUL_DEPTH
+FRANKENSTEIN2_RUNTIME = MINIMUM_NECESSARY_TOKENS_AND_RESOURCES_FOR_REQUIRED_QUALITY
+```
+
+Trigger 6 may spend substantial research tokens/tool effort to discover a better architecture. Frankenstein 2.0 itself should be aggressively optimized and measured for token efficiency, context efficiency, model-call efficiency, latency and CPU/RAM/GPU/I/O efficiency without sacrificing required capability, provenance, correctness or safety.
+
+Resource-saving therefore constrains/evaluates the **product architecture and runtime**, not the depth of Trigger-6 research.
 
 ## Mandatory live delta fusion
 
@@ -28,9 +67,15 @@ Before every Trigger-6 task, refresh and fuse:
 
 Emit a versioned `ArchitectureDeltaFusion` with exact source SHAs, affected modules, conflicts, supersessions and unresolved gaps. Research is snapshot-bound. If later F2/4/5 deltas affect its assumptions, mark it `STALE_REVIEW_REQUIRED` and re-evaluate before handoff.
 
-## Five-slot cycle
+## Architecture-delta law
 
-Each exact `triggerwort 6` claims one currently most useful specialized slot:
+When Trigger-6 evidence materially changes the best-supported F2 design, emit a versioned architecture delta in the same macrocycle when useful. This includes evidence that a component should be added/removed/merged/split/replaced, an authority boundary should move, a token/context/runtime path can be simplified, a mechanism is redundant or overbuilt, an architectural assumption is falsified, or workpackage/integration order should change.
+
+Every architecture delta must preserve exact evidence refs, affected modules/workpackages, expected benefit, token/resource implications, counterhypotheses, falsifier/acceptance gates and evidence scope. No evidence-backed change means no invented delta.
+
+## Five-function cycle
+
+The five roles are complementary coverage functions, not a hard `one trigger = one small slot` stopping rule:
 
 1. `ARCHITECTURE_DELTA_FUSER`
 2. `DISCOVERY_SCOUT`
@@ -38,7 +83,7 @@ Each exact `triggerwort 6` claims one currently most useful specialized slot:
 4. `EXPERIMENTAL_FALSIFIER`
 5. `INTEGRATION_DISTILLER`
 
-Five successive triggers should normally achieve broad role coverage, while information gain may justify repeating a role. Each worker is bounded, specialized and evidence-first.
+An exact Trigger-6 invocation takes the highest-information non-duplicate objective first and continues through additional useful roles/objectives while claims, authority and platform limits permit. Across repeated invocations, coverage debt should still drive broad role coverage.
 
 ## Atomic duplicate-work claim law
 
@@ -56,11 +101,12 @@ Required behavior:
 
 1. Refresh F2 + Trigger-4 + Trigger-5 + Research-Entity state.
 2. Select one bounded objective and atomically create its F2 claim before source archaeology, experiment execution or integration distillation.
-3. If the canonical claim already exists, or create-only semantics cannot be established, do not duplicate that objective. Consume the existing result and choose another useful objective or record a coordination-blocked no-change result.
-4. Claim existence grants zero evidence, architecture, runtime, integration, effect or completion credit.
-5. This Research-Entity side may mirror a successful F2 claim only after the F2 create succeeds. A mirror claim is provenance only and MUST NOT become a second coordination authority.
-6. Stale architecture re-review uses a new explicit review objective and never overwrites the original claim.
-7. Preserve the claim and write evidence/reconciliation separately; synchronize into the research DB when the admitted DB path is available.
+3. If the canonical claim already exists, or create-only semantics cannot be established, do not duplicate that objective. Consume the existing result and choose another useful objective.
+4. A blocked/already-owned objective does not end Trigger 6 while other high-value non-duplicate objectives exist.
+5. Claim existence grants zero evidence, architecture, runtime, integration, effect or completion credit.
+6. This Research-Entity side may mirror a successful F2 claim only after the F2 create succeeds. A mirror claim is provenance only and MUST NOT become a second coordination authority.
+7. Stale architecture re-review uses a new explicit review objective and never overwrites the original claim.
+8. Preserve the claim and write evidence/reconciliation separately; synchronize into the research DB when the admitted DB path is available.
 
 The concurrent 2026-08-29 `R6-SEED-005` AgentSight E2 audits are classified as one research result with complementary receipts, not independent replication. The F2 claim for `R6-SEED-005/E2_ARCHITECTURE_MAPPED` is therefore closed to further duplicate E2 work.
 
@@ -69,6 +115,23 @@ The concurrent 2026-08-29 `R6-SEED-005` AgentSight E2 audits are classified as o
 `E0 SEED -> E1 SOURCE_READ -> E2 ARCHITECTURE_MAPPED -> E3 CLAIM_REPRODUCED -> E4 F2_ABLATION -> E5 BUILD_CANDIDATE -> E6 F2_ACCEPTED`
 
 No Trigger-6 worker can self-promote to E6. E6 requires a Trigger-4 build/test/measurement receipt from the actual F2/VPS front.
+
+## F2 efficiency evaluation
+
+Every serious candidate must be evaluated not only for capability/quality/evidence but also for Frankenstein-2.0 operating efficiency, including where relevant:
+
+- total runtime tokens and context/prompt size;
+- number of model calls;
+- retrieval payload size;
+- p50/p95/p99 latency;
+- CPU/RSS/PSS/GPU/VRAM/I/O/network;
+- startup and steady-state overhead;
+- cache/reuse behavior;
+- dependency weight;
+- resident-model and physical decode concurrency;
+- whether a thinner deterministic/structural distillation can replace a heavier framework.
+
+When required quality/evidence are equal or better, prefer compact typed state, smallest-sufficient retrieval, caching/reuse, deterministic routing/gates, fewer model calls and shorter contexts. Efficiency alone never grants correctness or architecture credit.
 
 ## Two-repository persistence law
 
@@ -112,6 +175,10 @@ BUILD_CANDIDATE != INTEGRATED_COMPONENT
 ARCHITECTURE_CHANGE -> RECHECK_AFFECTED_RESEARCH
 CLAIM_EXISTS != RESEARCH_EVIDENCE
 FAILED_CREATE_ONLY_CLAIM -> DO_NOT_DUPLICATE_OBJECTIVE
+BLOCKED_OBJECTIVE != END_TRIGGER6_WHEN_OTHER_HIGH_VALUE_WORK_EXISTS
 RESEARCH_ENTITY_CLAIM_MIRROR != CLAIM_AUTHORITY
+TRIGGER6_RESEARCH_BUDGET != F2_RUNTIME_RESOURCE_BUDGET
+TRIGGER6_MAXIMIZES_USEFUL_RESEARCH_DEPTH
+F2_RUNTIME_MINIMIZES_NECESSARY_TOKEN_AND_RESOURCE_COST_FOR_REQUIRED_QUALITY
 TRIGGER6 -> EVIDENCE -> TRIGGER4/VPS -> MEASURE -> TRIGGER6/RCPD
 ```

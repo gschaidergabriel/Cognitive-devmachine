@@ -1,0 +1,30 @@
+{
+  "schema": "CLAY_TRIGGER6_F2_RESEARCH_MIRROR/v1",
+  "research_id": "R6-20260829-WP804-IRL-NONIDENTIFIABILITY-GPT56SOL-01",
+  "mirror_epoch": "2026-08-29T20:12:00+07:00",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "source_commits": {
+    "e1_claim": "a257a1e9cf269a82af919b2e951f091578117c81",
+    "e1_delta": "3721803f012bb990f0e184bdaae0c190169579ac",
+    "e2_claim": "6e9e14457e5390e2440fe52bf3f2e250e6f44001",
+    "e2_delta": "6ffd28a295004e14367e69fa20d00ded7b599482",
+    "e3_claim": "5252f5d22ed6b25ba928ac054df130386eb503e8",
+    "e3_delta": "efe24a7eceaa55eb85537caf6b1dcdebd8bb5cc2",
+    "wp804_branch_observed": "a4b1b04757960153fb29a41539f1c24b58e41d5d"
+  },
+  "research_entity_prewrite_head": "7f8c3a681df95bbdbbb8cce353ee61baf86f81ce",
+  "result": "Partial-identifiability research maps to a concrete WP804 source gap: ambiguous public evidence can be paired with an exact evaluator-hidden goal label, and score_goal_inference can then mark an arbitrary exact guess correct because no evaluator-side identifiability gate is enforced. Existing public/private fences and ABSTAIN behavior are useful but do not fail closed against contradictory exact labels on the same ambiguity-preserving evidence.",
+  "architecture_delta": "WP804_IDENTIFIABILITY_GATED_SCORING/v1",
+  "minimal_fix": "Add evaluator-side identifiability/equivalence semantics plus matched non-identifying/discriminating fixture pairs and hidden-label permutation falsifier. Keep policy input public-only. Do not import a full IRL framework and do not widen GoalContract authority.",
+  "runtime_attempt": "Local analysis container git clone blocked by DNS; classified infrastructure transport failure, zero product/runtime credit.",
+  "evidence_ceiling": "E3_SOURCE_SEMANTIC_CLAIM_REPRODUCED",
+  "credits": {
+    "runtime": 0,
+    "physical_grid10": 0,
+    "gwt_jspace": 0,
+    "training": 0,
+    "goal_authority": 0,
+    "whole_system": 0
+  },
+  "claim_authority": "F2_ONLY; this mirror is provenance, not coordination authority"
+}

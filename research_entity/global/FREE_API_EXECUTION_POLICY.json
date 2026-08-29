@@ -225,7 +225,7 @@
   },
   "payment_latch_durability_scope": {
     "checked_at": "2026-08-28",
-    "claim": "Capability schema 1.17 and execution schema 1.13 explicitly publish payment_latch_scope=process_local. payment_latch_active=true therefore proves only that the current interpreter process retained the provider and budget-epoch hard stop; it makes no restart-durability claim.",
+    "claim": "Capability schema 1.18 and execution schema 1.13 explicitly publish payment_latch_scope=process_local. payment_latch_active=true therefore proves only that the current interpreter process retained the provider and budget-epoch hard stop; it makes no restart-durability claim.",
     "sources": [
       "https://docs.python.org/3/library/threading.html",
       "https://www.freedesktop.org/software/systemd/man/systemd.exec.html",
@@ -422,20 +422,20 @@
   },
   "receipt_schema_capability_advertisement": {
     "checked_at": "2026-08-28",
-    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.17 advertises the execution receipt schema version and active Unicode Character Database version before credential use, network access or model execution. Consumers can reject an unsupported provenance contract during capability inspection instead of discovering it only after execution.",
+    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.18 advertises the execution receipt schema version and active Unicode Character Database version before credential use, network access or model execution. Consumers can reject an unsupported provenance contract during capability inspection instead of discovering it only after execution.",
     "sources": [
       "https://docs.python.org/3/library/unicodedata.html#unicodedata.unidata_version",
       "https://www.unicode.org/versions/"
     ],
     "external_evidence": "Python exposes the exact UCD version used by unicodedata. Unicode states that version changes can alter property-dependent program behavior and recommends a full three-field version when precise character-property behavior matters. Advertising the execution schema in the capability record is a local FRANK protocol rule derived from those versioned dependencies, not an external Unicode or NVIDIA requirement.",
-    "internal_measurement": "After execution receipts moved to schema 1.2, the capability receipt remained schema 1.1 and exposed neither the execution_receipt_schema_version nor unicode_database_version. A consumer inspecting only capabilities therefore could not determine the post-execution record contract. Shared schema constants now prevent literal drift, and capability schema 1.17 retains both values from the same runtime that constructs execution receipts.",
+    "internal_measurement": "After execution receipts moved to schema 1.2, the capability receipt remained schema 1.1 and exposed neither the execution_receipt_schema_version nor unicode_database_version. A consumer inspecting only capabilities therefore could not determine the post-execution record contract. Shared schema constants now prevent literal drift, and capability schema 1.18 retains both values from the same runtime that constructs execution receipts.",
     "executable_evidence": "test_capability_receipt_advertises_execution_schema_provenance",
     "counterhypothesis": "Capability and execution receipts are independently versioned, so consumers can infer the execution contract from source code; rejected because capability inspection is the runtime contract, the source or runtime version is absent from that receipt, and a remote consumer need not possess identical source bytes.",
     "uncertainty": "This is one-way advertisement, not bidirectional negotiation, consumer acknowledgement, host authentication or proof that deployed code matches reviewed source. Older capability consumers must explicitly accept the additive schema-1.16 contract."
   },
   "cost_principal_capability_advertisement": {
     "checked_at": "2026-08-28",
-    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.17 advertises execution_cost_policy_principal_scope=process_local_credential_binding, execution_cost_policy_principal_restart_stable=false, fork isolation support and its child_pid_and_monotonic_parent_fork_generation context before any credential use or model execution. A consumer can therefore reject cross-restart cost-lineage assumptions during capability inspection.",
+    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.18 advertises execution_cost_policy_principal_scope=process_local_credential_binding, execution_cost_policy_principal_restart_stable=false, fork isolation support and its child_pid_and_monotonic_parent_fork_generation context before any credential use or model execution. A consumer can therefore reject cross-restart cost-lineage assumptions during capability inspection.",
     "sources": [
       "https://docs.python.org/3/library/secrets.html",
       "https://www.freedesktop.org/software/systemd/man/systemd.exec.html"
@@ -514,7 +514,7 @@
       "https://docs.python.org/3/library/importlib.html#importlib.reload"
     ],
     "external_evidence": "Python warns that forking a multi-threaded process is problematic, exposes after_in_child for restoring child state, exposes Lock.locked() to determine whether the copied application lock was held, and documents exec as replacing the current process with a new program. Python's import system permits distinct module objects, and register_at_fork runs child callbacks in registration order without offering unregistration. Python's data model and accepted PEP 562 specify paired module-level __getattr__ and __dir__ hooks: __dir__ must represent names accessible on the module. Sharing and dynamically reading the quarantine through one already-loaded interpreter module is a local FRANK safety mechanism derived from those boundaries, not a Python security primitive.",
-    "internal_measurement": "A background thread was held inside one runtime instance's authenticated opener while the main thread performed a real fork. A second runtime instance loaded before that request kept its earlier module-local false snapshot even after the active instance's child callback set the shared latch: it selected NVIDIA and reached its injected opener, yielding unreachable_provider:True. After execution paths switched to live shared-state reads, that preloaded module's legacy exported PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED attribute still contradicted its own receipt as false. Dynamic __getattr__ fixed its value but the standard dir(module) introspection then omitted the accessible compatibility name. The runtime now resolves execution decisions and that compatibility attribute dynamically from the shared latch and exposes the name through module __dir__; original, preloaded and post-fork-imported instances report and enforce forked_during_active_execution. Capability schema 1.17 and execution schema 1.13 continue to publish fork_active_execution_quarantine_scope=python_interpreter_shared_state; all 169 tests pass.",
+    "internal_measurement": "A background thread was held inside one runtime instance's authenticated opener while the main thread performed a real fork. A second runtime instance loaded before that request kept its earlier module-local false snapshot even after the active instance's child callback set the shared latch: it selected NVIDIA and reached its injected opener, yielding unreachable_provider:True. After execution paths switched to live shared-state reads, that preloaded module's legacy exported PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED attribute still contradicted its own receipt as false. Dynamic __getattr__ fixed its value but the standard dir(module) introspection then omitted the accessible compatibility name. The runtime now resolves execution decisions and that compatibility attribute dynamically from the shared latch, exposes the name through module __dir__, and provides the public live function is_fork_active_execution_quarantined so imported consumers need not retain a copied Boolean. Capability schema 1.18 announces that accessor while execution schema 1.13 continues to publish fork_active_execution_quarantine_scope=python_interpreter_shared_state; all 170 tests pass.",
     "executable_evidence": "test_child_forked_during_active_execution_is_quarantined",
     "counterhypothesis": "Dynamic __getattr__ alone fully preserves the exported compatibility surface; falsified twice: the former module-global returned a stale false value, and after its removal dir(module) omitted the still-accessible name until paired __dir__ support was added.",
     "uncertainty": "Python itself deprecates multi-threaded os.fork use and warns of deadlocks. The quarantine is shared within one interpreter but is not authenticated against hostile same-process mutation, does not claim coverage across subinterpreters, and does not repair unrelated library locks, coordinate with the parent, produce cross-process exactly-once semantics or cover forks that bypass Python callbacks. Recovery requires exec or process restart."
@@ -536,7 +536,7 @@
   },
   "provider_route_scope": {
     "checked_at": "2026-08-28",
-    "claim": "A configured route selects only an eligible provider endpoint, not a concrete available model. FREE_API_CAPABILITY_RECEIPT schema 1.17 therefore marks every route with selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
+    "claim": "A configured route selects only an eligible provider endpoint, not a concrete available model. FREE_API_CAPABILITY_RECEIPT schema 1.18 therefore marks every route with selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/latest/api-reference.html",
       "https://docs.api.nvidia.com/nim/reference/models-1",
@@ -1270,7 +1270,7 @@
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
     "Every FREE_API_EXECUTION_RECEIPT schema 1.13 record includes the exact Unicode Character Database version used for General_Category-based semantic admission; version-dependent classification cannot remain implicit provenance.",
-    "Every FREE_API_CAPABILITY_RECEIPT schema 1.17 record advertises the execution receipt schema and active Unicode Character Database version before execution; an unsupported provenance contract can fail during capability inspection.",
+    "Every FREE_API_CAPABILITY_RECEIPT schema 1.18 record advertises the execution receipt schema and active Unicode Character Database version before execution; an unsupported provenance contract can fail during capability inspection.",
     "Every capability receipt advertises the execution cost-principal scope and false restart stability before credential use; consumers must not infer cross-restart cost lineage from schema version alone.",
     "Provider-level zero-cost endpoint evidence never proves concrete model availability; every unprobed capability inventory row records model_availability_verified=false.",
     "A selected capability route identifies only an eligible provider endpoint; it records selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",

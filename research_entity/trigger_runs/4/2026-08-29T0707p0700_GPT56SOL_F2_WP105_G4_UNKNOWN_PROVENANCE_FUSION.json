@@ -1,0 +1,84 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_EFFECT_BOUNDARY_PROVENANCE_REPAIR_ACCEPTED_AT_COMPONENT_SCOPE",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "created_at_local": "2026-08-29T07:07:00+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch_observed": "9.13",
+  "mode": "FREE_ONLY_HARD_OFF",
+  "research_main_observed_before_write": "20e129367c7207e066ceb90c21b5dee744c526ce",
+  "routing": {
+    "exact_message": "4",
+    "routing_self_test": "PASS",
+    "directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-105",
+    "generation": 4,
+    "claim_id": "F2-WP-105-G4-GPT56SOL-UNKNOWN-PROVENANCE-STRUCTURAL-INTERLOCK-20260829",
+    "triggering_review_pr": 105,
+    "implementation_pr": 153,
+    "implementation_pr_terminal_state": "CLOSED_REDUNDANT_AFTER_ATOMIC_MAIN_FUSION_NOT_MERGED",
+    "canonical_fusion_commit": "9c4edd3b0afe75ab05845f7f7de28dcd816c0c40",
+    "canonical_adapter_blob_sha": "14df82d7a7dc1aefa875305521513f9ecfae08fd",
+    "acceptance_receipt": "workpackages/receipts/F2-WP-105_G4_UNKNOWN_PROVENANCE_STRUCTURAL_GHA_33222438007.json",
+    "reconciliation": "workpackages/reconciliations/F2-WP-105/4-F2-WP-105-G4-GPT56SOL-UNKNOWN-PROVENANCE-STRUCTURAL-INTERLOCK-20260829.json",
+    "active_pointer_state": "ACCEPTED"
+  },
+  "negative_evidence": {
+    "falsifier_run_id": 33221070877,
+    "falsifier_job_id": 99015006305,
+    "finding": "The accepted G2 adapter admitted an arbitrary supplied callable and therefore could translate a caller-forged public ExecutorOutcomeUnknown without structural evidence that the F2 interlock/executor path had been entered.",
+    "preservation": "RETAINED_AS_POST_ACCEPTANCE_NEGATIVE_EVIDENCE"
+  },
+  "repair": {
+    "summary": "The UNKNOWN adapter now requires an exact EffectCallBinding plus explicit authorizer and executor and invokes dispatch_through_external_gate internally. Arbitrary dispatch callables are rejected; only ExecutorOutcomeUnknown emitted through the structural interlock path is translated to the already-supplied canonical non-replayable UNKNOWN type.",
+    "predispatch_semantics": "DEFINITE_FAILURE_PRESERVED",
+    "postdispatch_unknown_semantics": "NON_REPLAYABLE_UNKNOWN_PRESERVED",
+    "second_effect_authority_created": false
+  },
+  "ci_evidence": {
+    "pre_fusion_branch_run_id": 33222402977,
+    "fused_main_run_id": 33222438007,
+    "fused_main_job_id": 99019137998,
+    "fused_main_head_sha": "9c4edd3b0afe75ab05845f7f7de28dcd816c0c40",
+    "fused_main_conclusion": "success",
+    "verified_steps": [
+      "exact repair source identities",
+      "compile repaired boundary",
+      "nominal-exception provenance regression",
+      "no-real-effect F2 to EntityOS UNKNOWN integration"
+    ]
+  },
+  "stale_validator_repair": {
+    "historical_g2_run_id": 33222089305,
+    "observed_failure": "historical G2 exact hash fence was incorrectly triggered by legitimate G4 successor source changes",
+    "repair": "preserve G2 exact historical hashes but generation-scope the G2 workflow so successor generations are skipped rather than falsely failed",
+    "historical_evidence_rewritten": false
+  },
+  "credit_boundary": {
+    "component_repository_ci_acceptance": 1,
+    "runtime_execution_observed": false,
+    "real_external_effect_observed": false,
+    "target_vps_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "coordination": {
+    "duplicate_stage5_work_created": false,
+    "active_grid_gwt_claims_respected": true,
+    "unusual_experiment_executed": false
+  },
+  "next_exact_action": "Re-enter exact current F2 main and Supervisor 9.13. Keep WP105 G4 closed unless a new falsifier appears. Do not duplicate active Stage-5 GRID/GWT claims; select the next unowned dependency-correct Trigger-4 gate."
+}

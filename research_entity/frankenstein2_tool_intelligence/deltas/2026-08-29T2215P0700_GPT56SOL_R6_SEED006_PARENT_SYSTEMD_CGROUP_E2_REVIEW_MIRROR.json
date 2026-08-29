@@ -1,0 +1,39 @@
+{
+  "schema": "CLAY_RESEARCH_ENTITY_TRIGGER6_PROVENANCE_MIRROR/v1",
+  "status": "PROVENANCE_ONLY_NOT_CLAIM_AUTHORITY",
+  "trigger": "6",
+  "research_id": "R6-SEED-006",
+  "created_at": "2026-08-29T22:15:00+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "research_entity_main_before_write": "312eabd88a64df1b9bd51d0b5df9d33b74305a18",
+  "claim_authority": "gschaidergabriel/frankenstein-2.0",
+  "f2_claim_commit": "81ee99381639008a4f318d258a86ccff6dbe94e6",
+  "f2_result_commit": "17989e96b60745eeece36f0321ce9fa96eeeffa3",
+  "f2_result_path": "research/tool_intelligence/deltas/2026-08-29T2214P0700_GPT56SOL_R6_SEED006_PARENT_SYSTEMD_CGROUP_E2_REVIEW.json",
+  "authority_boundary": {
+    "admitted_supervisor": "8.78_FREE_ONLY",
+    "9_13AY": "NON_AUTHORITY_TARGET_VPS_HYGIENE_OBSERVATION_DELTA",
+    "external_provider_spend": "HARD_OFF",
+    "together": "FORBIDDEN"
+  },
+  "problem": "Target-VPS telemetry observed podman top rc=125 because the container did not create a cgroup. Container-level cgroup telemetry therefore remains UNKNOWN until repaired or replaced.",
+  "source_grounded_result": {
+    "dedicated_cgroup_absence_is_possible": "Podman supports --cgroups=disabled; absence of a container cgroup is not itself semantic product failure.",
+    "host_pid_membership_path": "Use the host-observed payload PID and host/initial cgroup namespace /proc/<pid>/cgroup to resolve the real v2 path; inside-container '/' may be a namespaced view.",
+    "dedicated_scope": "Readable cgroup-v2 counters can become candidate workload-scope evidence only with membership/coverage checks.",
+    "shared_parent_scope": "Counters are SUPERSET evidence only and cannot certify exact container usage or isolation.",
+    "root_or_unavailable": "cgroup telemetry remains UNKNOWN/UNAVAILABLE; never substitute zero."
+  },
+  "thin_candidate": "CgroupWitness/v1-candidate: read-only typed observation with explicit DEDICATED_SUBTREE|SHARED_PARENT_SUPERSET|ROOT|UNRESOLVED scope and EXACT_CANDIDATE|SUPERSET|UNAVAILABLE|UNKNOWN coverage semantics; no authority mutation.",
+  "promotion": {
+    "E2_source_review": true,
+    "new_E5_candidate": false,
+    "reason": "No current target-runtime E3/E4 evidence yet; avoid duplicating the existing WP605/AgentCgroup E5 lane.",
+    "runtime_credit": 0,
+    "physical_grid10": 0,
+    "gwt_jspace": 0,
+    "training": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Trigger4 target-runtime lane should non-destructively resolve payload PID -> host cgroup path -> membership -> present cgroup-v2 counters, preserve raw values and explicit scope/coverage, and retain UNKNOWN when no dedicated/uniquely bounded subtree exists."
+}

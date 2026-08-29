@@ -1,0 +1,28 @@
+name: WP105 Direct Episode-Null Replay Falsifier
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/clayverse/effects.py'
+      - 'the artefact/clayverse/effect_journal.py'
+      - 'the artefact/clayverse/store.py'
+      - 'the artefact/tests/test_direct_episode_null_replay_gap.py'
+      - '.github/workflows/wp105-direct-episode-null-replay-falsifier.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-source-negative-falsifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute exact current EffectGate direct replay discriminator
+        env:
+          PYTHONPATH: ${{ github.workspace }}/the artefact
+        run: python -m unittest -v 'the artefact/tests/test_direct_episode_null_replay_gap.py'

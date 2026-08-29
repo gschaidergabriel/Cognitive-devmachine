@@ -255,6 +255,15 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "cost_policy_principal_restart_stable"
         ])
 
+    def test_dynamic_quarantine_compatibility_attribute_is_discoverable(self):
+        self.assertFalse(
+            MOD.PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED
+        )
+        self.assertIn(
+            "PROCESS_FORK_ACTIVE_EXECUTION_QUARANTINED",
+            dir(MOD),
+        )
+
     def test_capability_receipt_does_not_infer_model_availability(self):
         capability_receipt = MOD.receipt()
 

@@ -1,0 +1,48 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_COORDINATION_FINDING/v1",
+  "trigger": "6",
+  "slot": "ARCHITECTURE_DELTA_FUSER",
+  "status": "OBSERVED_COORDINATION_NEGATIVE_RESULT_NO_EVIDENCE_PROMOTION",
+  "created_at_local": "2026-08-29T15:02:00+07:00",
+  "finding_id": "R6-MAIN-CAS-STARVATION-001",
+  "observed": {
+    "candidate_claim": "R6-SEED-011/E1_SOURCE_READ",
+    "candidate": "Arize-ai/openinference",
+    "preclaim_search_result": "NO_EXISTING_OPENINFERENCE_R6_SEED_011_MATCH",
+    "attempts": 2,
+    "attempt_1": {
+      "result": "HTTP_409_BRANCH_HEAD_MOVED",
+      "message": "is at f0698ba7dcbc4379b0b9cb8714e667e141a26e1d but expected d5b71920d354fcb2ac523aa936600824f4e62f03"
+    },
+    "attempt_2": {
+      "result": "HTTP_409_BRANCH_HEAD_MOVED",
+      "message": "is at 96e507f8bef245a9ee864ed760325820339cb6bc but expected edd578eb6e7ccff61778ebba62c613bd870666d4"
+    },
+    "concurrent_examples": [
+      "trigger6: claim in-toto attestation E1 source read",
+      "trigger6: claim EconML WP507 E1 source read",
+      "trigger6: map pyvene intervention architecture at E2",
+      "trigger6: map OpenTelemetry witness links for WP507 E2"
+    ]
+  },
+  "interpretation": {
+    "classification": "COORDINATION_INFRASTRUCTURE_FAILURE_NOT_RESEARCH_NEGATIVE",
+    "claim_path_collision_observed": false,
+    "branch_wide_compare_and_swap_contention_observed": true,
+    "research_credit": 0,
+    "runtime_credit": 0,
+    "architecture_credit": 0
+  },
+  "hypothesis": "The Trigger-6 create-only claim design is semantically fail-closed but, when many workers write unrelated files directly to one hot main branch through the GitHub Contents API, branch-head compare-and-swap contention can starve otherwise nonoverlapping claims.",
+  "counterhypothesis": "The two 409 responses are transient connector/API races and bounded retry with re-entry is sufficient; no protocol-level coordination change is needed.",
+  "falsifier": "Under comparable fan-out, measure claim acquisition success/latency for bounded re-entry retries. If unrelated-path claims acquire reliably without repeated branch-head conflicts, reject protocol-level starvation as material.",
+  "recommended_non_authoritative_design_delta": [
+    "Preserve create-only semantic identity and fail-closed duplicate prevention.",
+    "Do not weaken claims into last-writer-wins updates.",
+    "Consider a protocol-v2 atomic semaphore whose uniqueness is independent of the hot main contents commit, for example an immutable uniquely named Git ref per normalized research_id+claim_target, followed by canonical claim materialization/reconciliation on main.",
+    "Alternatively retain the current protocol but define bounded re-entry retries and an explicit COORDINATION_STARVED terminal state so infrastructure contention cannot be mistaken for occupied research scope.",
+    "Do not perform E1 source archaeology until the canonical claim is actually acquired."
+  ],
+  "action_taken": "Stopped before OpenInference source archaeology because canonical E1 claim was not acquired.",
+  "next_gate": "Consume current completed results or acquire a nonoverlapping canonical claim after main contention falls; separately evaluate claim-protocol v2 only under owner/supervisor authority."
+}

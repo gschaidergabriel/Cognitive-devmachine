@@ -1,0 +1,71 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13AP_NON_AUTHORITY",
+  "observed_at_local": "2026-08-29T08:51:00+07:00",
+  "execution_mode": "FREE_ONLY",
+  "authority": {
+    "canonical_epoch": "9.13",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "paid_fallback_forbidden": true,
+    "paid_actions_fallback_forbidden": true,
+    "provider_runtime_credit": 0
+  },
+  "material_findings": [
+    {
+      "id": "SUPERVISOR_INBOX_LAGS_9_13AO",
+      "classification": "AUTONOMOUS_CONTROL_STATE_DRIFT",
+      "finding": "Current main contains SUPERVISOR_STEERING_9_13AO, but SUPERVISOR_INBOX still points to 9.13AN and therefore omits already-established WP202/WP302/WP502/WP506/WP507 reconciliation state. Reconcile the inbox without changing canonical authority epoch 9.13."
+    },
+    {
+      "id": "PR232_FREE_PROVIDER_RUNTIME_CANDIDATE",
+      "classification": "SOURCE_PLUS_LOCAL_SANDBOX_CANDIDATE_NO_PROVIDER_CREDIT",
+      "finding": "Draft PR 232 adds a zero-cost provider inventory/router and heavily hardened bounded text-chat adapter. Its own validation reports 147/147 local unit tests and local OpenAI-compatible mock lifecycle, and preserves Together hard-denial and zero default monetary budget. No live external provider request was made."
+    },
+    {
+      "id": "PR232_PRIVATE_CI_ZERO_STEP",
+      "classification": "PRIVATE_ACTIONS_PRESTEP_CONTROL_PLANE_EVIDENCE",
+      "finding": "At PR232 head f3f86fbb4a3d57117f11dc57e1d3c11e8d64d62e, Research Entity Identity Guard run 33227510616 and Research Entity Verify run 33227510658 both completed failure; their jobs expose zero executed steps. This is not semantic negative evidence for the provider runtime and cannot be counted as CI validation."
+    },
+    {
+      "id": "NVIDIA_FREE_ENDPOINT_PUBLIC_CAPABILITY_ONLY",
+      "classification": "OFFICIAL_PROVIDER_DOCUMENTATION_NOT_HOST_ENTITLEMENT",
+      "finding": "Current official NVIDIA surfaces still advertise free serverless APIs for development and hosted NIM prototyping at integrate.api.nvidia.com. This establishes a possible FREE_ONLY route class but not entitlement, billing state, key scope, or successful execution for the Clay/Frank target host."
+    }
+  ],
+  "steering": [
+    "P0_RECONCILE_SUPERVISOR_INBOX_TO_LATEST_EXECUTABLE_EVIDENCE_AND_9_13AP_WITHOUT_CHANGING_CANONICAL_AUTHORITY_EPOCH",
+    "P0_KEEP_ALL_PROVIDER_ROUTES_UNADMITTED_AND_PROVIDER_RUNTIME_CREDIT_ZERO; PR232_MUST_NOT_ENABLE_NVIDIA_OR_ANY_OTHER_PROVIDER",
+    "P0_TREAT_PR232_LOCAL_147_OF_147_AND_LOCAL_MOCK_AS_COMPONENT_SOURCE_SANDBOX_EVIDENCE_ONLY; ZERO_STEP_PRIVATE_CI_IS_CONTROL_PLANE_EVIDENCE_NOT_PROVIDER_SEMANTIC_FAILURE",
+    "P0_BEFORE_ANY_FUTURE_PROVIDER_ADMISSION_REQUIRE_EXPLICIT_CURRENT_FREE_ONLY_AUTHORITY_PLUS_TARGET_HOST_ZERO_COST_ENTITLEMENT_EVIDENCE_AND_A_REDACTED_EXECUTED_RECEIPT; HTTP_402_OR_UNKNOWN_COST_FAILS_CLOSED_WITH_NO_PAID_FALLBACK",
+    "P0_TOGETHER_REMAINS_FORBIDDEN_FROM_DISCOVERY_PROBE_ROUTING_FALLBACK_AND_OPERATOR_ATTESTATION",
+    "P0_KEEP_PRIVATE_CLAY_ACTIONS_PRESTEP_ADMISSION_UNRESOLVED; DO_NOT_PURCHASE_OR_ENABLE_PAID_ACTIONS_CAPACITY",
+    "P0_PRESERVE_QUIESCENCE_V2_ISSUE_2122_G0000_SIGKILL_V3_ISSUE_2121_G0000_AND_PR430_ISSUE_2134_G0000_WITHOUT_DUPLICATE_OR_GENERATION_ADVANCE_WHILE_NONTERMINAL",
+    "P1_PRESERVE_9_13AO_COMPONENT_FINDINGS: WP202_G4_WP302_G2_WP502_G1_WP506_G2_AND_WP507_G3_PR226_ARE_REPOSITORY_COMPONENT_SCOPE_ONLY",
+    "P1_DO_NOT_MINT_ACTUAL_GWT_UPTAKE_CAUSAL_RUNTIME_JSPACE_PHYSICAL_GRID10_EFFECT_TRAINING_BASE_OR_WHOLE_SYSTEM_CREDIT_FROM_COMPONENT_CI",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "GOODMAN_ANTI_ECHO_REMAINS_BINDING",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "promotion_state": {
+    "provider_path_runtime_pass": false,
+    "provider_routes_admitted": false,
+    "pr232_live_provider_receipt_pass": false,
+    "pr232_private_ci_semantic_pass": false,
+    "runtime_control_transport_pass": false,
+    "runtime_quiescence_pass": false,
+    "physical_grid10_runtime_pass": false,
+    "base_work_package_promotion": false,
+    "canonical_semantics_promotion": false,
+    "canonical_dataset_rows_admitted": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "base_projection": "CC-WP-01 PASS; CC-WP-02 PASS; CC-WP-03..CC-WP-14 OPEN; GENERAL_PURPOSE_GATE NOT_PASS; CLAYCODE_RELEASE_GATE NOT_PASS",
+  "frank_harness": "DO_NOT_MODIFY"
+}

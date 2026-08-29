@@ -1,0 +1,36 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "authority_epoch": "8.78",
+  "delta": "9.13AS_NON_AUTHORITY",
+  "created_at": "2026-08-29T15:40:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "AUTHORITY_METADATA_DRIFT_RECONCILIATION",
+  "material_finding": "Current canonical BOOTSTRAP_MINIMAL still resolves supervisor 8.78 as the inbox-selected admitted steering authority, while SUPERVISOR_INBOX 9.13AR remains explicitly NON_AUTHORITY. Fresh F2 WP402 G3 and WP403 G2 metadata bind authority_epoch=9.13 to SUPERVISOR_INBOX. Their executable component-CI results remain valid at exact source/test scope, but the authority metadata is contradicted and cannot grant execution/promotion rights.",
+  "evidence": [
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json: schema_version=8.78, authority_correction=SUPERVISOR_STEERING_8_78.json, current_frontier selects supervisor 8.78",
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json: 9.13AR_NON_AUTHORITY",
+    "gschaidergabriel/frankenstein-2.0@93c45c759b76fca820d605684ab873c98a68c6df authority-binding drift packet",
+    "gschaidergabriel/frankenstein-2.0@9808004f4b1c5b77a509528918c20c867ee7cb9e WP402 G3 component reconciliation",
+    "research_entity/trigger_runs/4/2026-08-29_GPT56SOL_F2_WP403_G2_EXACT_SOURCE_BINDING.json"
+  ],
+  "steering": [
+    "Preserve WP402 G3 and WP403 G2 executable component evidence exactly as historical/source-bound evidence; do not erase or downgrade test results merely because authority metadata drifted.",
+    "Do not let downstream WP404 or any effect/runtime/promotion path consume authority_epoch=9.13 as admitted authority while current canonical bootstrap still selects 8.78 and 9.13 is NON_AUTHORITY.",
+    "Reconcile F2 authority metadata through the single canonical workpackage/reconciliation writer: either bind the exact currently admitted authority source (8.78 unless a newer explicit owner authority is discovered) or wait for an explicit owner/admitted successor. Do not rewrite executable evidence history.",
+    "WP508 G2 remains contradicted at exact inherited-lineage scope by hosted executable falsifiers; continue only through already claimed G3 successor and exact-head negatives.",
+    "FREE_ONLY remains binding: Together forbidden, paid/subscription/unknown-cost fallback forbidden, all provider routes unadmitted absent concrete current admission and zero-cost receipt.",
+    "No BASE workpackage promotion, canonical-semantics promotion, physical GRID10/GWT/J-Space/runtime/training/whole-system credit from these component receipts.",
+    "Do not modify Frank Harness; Ubuntu-only Frank v0.1 target remains unchanged."
+  ],
+  "credits": {
+    "base": 0,
+    "canonical_semantics": 0,
+    "target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "training": 0,
+    "whole_system": 0
+  },
+  "frank_harness_modified": false
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_CROSS_REPO_MIRROR_RECEIPT/v1",
+  "research_id": "R6-SEED-008",
+  "objective": "E3_CLAIM_REPRODUCED_OTLP_INGRESS_CONTRACT",
+  "mirror_epoch_local": "2026-08-29T14:55:00+07:00",
+  "source": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "f2_head_observed_after_parallel_reentry": "8ce86a9300a164dfbb5e1e2ae6bc254e34a1dc52",
+    "claim_commit": "f6f70001f9e0df12b9f71110cce501164e81550e",
+    "claim_path": "research/tool_intelligence/claims/R6-SEED-008/E3_CLAIM_REPRODUCED_OTLP_INGRESS_CONTRACT.json",
+    "experiment_commit": "806832f30a8847a178b0c5ed873a25689ff77bb5",
+    "experiment_path": "research/tool_intelligence/experiments/R6-SEED-008/E3_OTLP_INGRESS_CONTRACT_FALSIFIER.py",
+    "result_commit": "fcf6073002f58ae86a11d0bd2e857cf663a4a809",
+    "result_path": "research/tool_intelligence/experiments/R6-SEED-008/E3_OTLP_INGRESS_CONTRACT_RESULT.json",
+    "evidence_receipt_commit": "bf4ee9b6bf4c44ec4b87221aaecc629177bd012f",
+    "evidence_receipt_blob": "c6c6bd2e52065e8a6de68f7c7fb4cf7493f766ba",
+    "evidence_receipt_path": "research/tool_intelligence/receipts/R6-SEED-008_E3_OTLP_INGRESS_CONTRACT_GPT56SOL_20260829T1455P0700.json"
+  },
+  "result_summary": {
+    "status": "E3_COMPONENT_FIXTURE_PASS_WITH_PROTOBUF_COMPATIBILITY_GAP_NOT_BUILD_CANDIDATE",
+    "tests": "10/10",
+    "identity_fence": "PASS_AT_LOCAL_JSON_FIXTURE_SCOPE",
+    "redaction_fence": "PASS_AT_LOCAL_JSON_FIXTURE_SCOPE",
+    "replay_digest": "DETERMINISTIC_AT_LOCAL_JSON_FIXTURE_SCOPE_NOT_CAUSAL_ID",
+    "protobuf_compatibility": "NOT_IMPLEMENTED; JSON_ONLY_FIXTURE_IS_NOT_STANDARDS_COMPLETE_OTLP",
+    "microbenchmark_median_us": 11.377,
+    "microbenchmark_p95_us": 11.808,
+    "microbenchmark_scope": "in-process small JSON normalization only"
+  },
+  "external_pin": {
+    "agenttop_commit": "5e3929fe8d691b4a1e7b5975adb74091611e5e7b",
+    "router_blob": "2be5e05ad049cda5432cf8534326888c2c0a17bd",
+    "parser_blob": "f7a3b9dd34661b1ac841143d522872e352ad1d3e",
+    "source_boundary": "agenttop parses metrics/logs, stores all log attributes, and currently accepts traces without parsing/storage; it supports protobuf then JSON fallback"
+  },
+  "cross_repo_atomicity": false,
+  "authority_note": "The F2 create-only claim remains the sole Trigger-6 coordination claim authority. This Research-Entity artifact mirrors evidence only and grants no competing claim, canonical state, effect, runtime, architecture or completion authority. 9.13AQ remains NON_AUTHORITY; admitted effect authority is unchanged.",
+  "evidence_level": "E3_COMPONENT_FIXTURE_ONLY",
+  "architecture_credit": 0,
+  "runtime_credit": 0,
+  "whole_f2_credit": 0,
+  "whole_entityos_hcu_credit": 0,
+  "training_credit": 0,
+  "db_sync_status": "PENDING_RESEARCH_DB_SYNC",
+  "next_exact_gate": "Pin a dual-codec protobuf+JSON adapter and compare it on secret-free fixtures against the pinned agenttop parser before any E5 build-candidate handoff to Trigger 4."
+}

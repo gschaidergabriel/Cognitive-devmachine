@@ -1,0 +1,76 @@
+{
+  "schema": "TRIGGERWORD4_REVIEW_FALSIFIER_RECEIPT/v1",
+  "trigger": "4",
+  "created_at": "2026-08-29T20:12:03+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "REVIEW_ONLY_RESOLVED_SOURCE_FALSIFIER_AND_REPOSITORY_CI_OBSERVATION",
+  "authority": {
+    "research_main_observed_before_write": "7f8c3a681df95bbdbbb8cce353ee61baf86f81ce",
+    "authority_epoch": "8.78",
+    "authority_ref": "research_entity/continuity/BOOTSTRAP_MINIMAL.json -> research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "execution_mode": "FREE_ONLY",
+    "unusual_experiment": "NOT_USED_ORDINARY_REVIEW"
+  },
+  "target": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-1107",
+    "generation": 2,
+    "active_claim": "F2-WP-1107-G2-GPT56SOL-DETERMINISTIC-RELEASE-ZIP-20260829",
+    "active_claim_state_at_last_check": "ACTIVE",
+    "mutation_authority_preserved": true,
+    "canonical_claim_paths_modified_by_reviewer": false
+  },
+  "observations": [
+    {
+      "type": "SOURCE_FALSIFIER_RESOLVED_UPSTREAM",
+      "source_snapshot": "ffa2b0473b1e93986e8412db6133a106115cf120",
+      "source_path": "src/frankenstein2/release_archive.py",
+      "source_blob_sha": "321c0f766ea42a4755cbe7120740fb87ceab18fd",
+      "finding": "ReleaseArchivePolicy.as_dict referenced the undefined Python name `false`, which would raise NameError when policy serialization/digest was exercised.",
+      "resolution": "The active WP1107 worker corrected the value to Python False before this reviewer wrote any canonical implementation path.",
+      "scope": "SOURCE_REVIEW_NEGATIVE_RESULT_RESOLVED_UPSTREAM"
+    },
+    {
+      "type": "CURRENT_SOURCE_OBSERVED",
+      "f2_main_observed": "5252f5d22ed6b25ba928ac054df130386eb503e8",
+      "release_archive_blob_sha": "8778380d5e0aaca5be2500d56481b828fa58ac3a",
+      "release_archive_tests_blob_sha": "638ead3c9321b19ddfa83b655a808804addc3cb5",
+      "workflow_blob_sha": "20e3946e14e60882fb8fc8246b03be99fc008670",
+      "finding": "Deterministic archive implementation, variance/negative-control tests, metadata-perimeter CI wiring and explicit component-only evidence boundaries are present in current source."
+    },
+    {
+      "type": "REPOSITORY_CI_SUCCESS",
+      "commit": "37b5e4fd4991329ed7d210d8c4ecaa02867998fc",
+      "workflow_run_id": 33254378218,
+      "workflow": "F2 WP1107 G2 Deterministic Release Archive CI",
+      "status": "completed",
+      "conclusion": "success",
+      "successful_jobs": [
+        "deterministic-release-archive",
+        "cross-runtime-byte-vector (3.11)",
+        "cross-runtime-byte-vector (3.12)",
+        "cross-runtime-byte-vector (3.13)"
+      ],
+      "scope": "REPOSITORY_HOSTED_COMPONENT_CI_ONLY"
+    }
+  ],
+  "evidence_boundary": {
+    "repository_ci_component_credit": true,
+    "terminal_generation_2_reconciliation_observed": false,
+    "clean_machine_credit": 0,
+    "target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_system_credit": 0
+  },
+  "coordination": {
+    "review_only": true,
+    "duplicate_implementation_created": false,
+    "active_claim_owned_paths_modified": false,
+    "reason": "F2-WP-1107 generation 2 already had a live canonical mutation authority; reviewer performed source/CI discrimination only."
+  },
+  "next_exact_discriminator": "Observe terminal F2-WP-1107 generation-2 reconciliation bound to the successful exact repository-hosted CI evidence before promoting accepted component scope; after that, continue Stage-11 clean-machine one-handoff acceptance without inflating runtime or whole-system credit.",
+  "status": "REVIEW_COMPLETE_COMPONENT_CI_SUCCESS_TERMINAL_RECONCILIATION_PENDING"
+}

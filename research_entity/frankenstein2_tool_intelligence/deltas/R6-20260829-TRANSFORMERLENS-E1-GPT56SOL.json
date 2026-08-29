@@ -1,0 +1,37 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_DELTA/v1",
+  "delta_id": "R6-20260829-TRANSFORMERLENS-E1-GPT56SOL",
+  "trigger": "6",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "COMPLETED_E1_SOURCE_READ",
+  "created_at_local": "2026-08-29T15:03:30+07:00",
+  "coordination": {
+    "initial_agenttop_e3_attempt": "ABORTED_NO_CREDIT_AFTER_409_AND_PARALLEL_CLAIM_DETECTED",
+    "active_claim": "research/tool_intelligence/claims/R6-20260829-SRCARCH-TRANSFORMERLENS-GPT56SOL-01/E1_SOURCE_READ.json",
+    "outcome": "research/tool_intelligence/claims/R6-20260829-SRCARCH-TRANSFORMERLENS-GPT56SOL-01/E1_SOURCE_READ_OUTCOME.json",
+    "f2_outcome_commit": "25ea1e0aaa2d07bae3174e2e0663fa95622b123e"
+  },
+  "external_source": {
+    "repo": "TransformerLensOrg/TransformerLens",
+    "commit": "1f8224d5e147c98e8f43f0d310e32bbd1578a4b6"
+  },
+  "findings": [
+    "TransformerLens offers real model-internal interventions via HookPoint forward/backward hooks whose returned values can replace intermediate activations.",
+    "Path-patching/caching machinery is directly relevant to causal tests of a local J-Space/GWT vector on a compatible transformer.",
+    "Qwen2ForCausalLM has explicit audited weight conversion support; exact Qwen3-class target compatibility was not established and remains UNKNOWN.",
+    "The package has a broad dependency/runtime surface, so direct full import is not justified by E1 evidence alone.",
+    "Best current reuse is a thin causal-intervention donor pattern plus E2 comparison against pyvene and minimal native PyTorch hooks."
+  ],
+  "falsifier_value": "A controlled activation injection plus lesion/rescue on the exact local target can distinguish causal model-state uptake from textual/logging correlation, but only if checkpoint/tokenizer/event/generation/vector identities are bound end-to-end.",
+  "recommended_next_gate": "E2 comparative design: TransformerLens vs pyvene vs minimal PyTorch hooks on exact ~0.8B target compatibility, identity/provenance, reversible intervention, overhead and fail-closed behavior.",
+  "evidence_ceiling": "E1_SOURCE_READ_ONLY",
+  "credits": {
+    "research_source_delta": 1,
+    "runtime": 0,
+    "f2_wp507_actual_uptake": 0,
+    "physical_grid10": 0,
+    "whole_f2": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

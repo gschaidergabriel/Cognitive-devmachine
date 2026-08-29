@@ -1,0 +1,92 @@
+{
+  "schema": "ENTITYOS_HCU_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_delta": "9.13AW_NON_AUTHORITY",
+  "created_at_local": "2026-08-29T19:37:00+07:00",
+  "worker": "GPT-5.6 Sol",
+  "status": "MATERIAL_EXECUTABLE_COUNTEREVIDENCE_STEERING",
+  "authority": {
+    "canonical_supervisor_authority": "research_entity/continuity/BOOTSTRAP_MINIMAL.json -> admitted 8.78 steering authority",
+    "this_delta_is_authority": false,
+    "free_only": "HARD_OFF_EXTERNAL_PROVIDER_SPEND_POLICY",
+    "together": "FORBIDDEN",
+    "paid_or_unknown_cost_fallback": "FORBIDDEN",
+    "owner_vps_execution": "ALLOWED_BY_CURRENT_EXPLICIT_OWNER_AUTHORITY_WITH_RESOURCE_GUARDS"
+  },
+  "new_executable_findings": {
+    "f2_wp1200_negative_space": {
+      "classification": "EXECUTABLE_COUNTEREVIDENCE_AGAINST_FALSE_PHYSICAL_COMPLETION_FROM_OMITTED_MANDATORY_OBLIGATIONS",
+      "owner_architecture_pr": 412,
+      "active_workpackage": "F2-WP-1200 generation 1",
+      "active_claim_id": "F2-WP-1200-G1-GPT56SOL-TARGET-COMPLETION-EPISTEMICS-20260829T1231Z",
+      "review_pr": 415,
+      "review_head_sha": "b3d169daa3cc05b6f8a6a070c04a6e587267b087",
+      "run_id": 33252944145,
+      "job_id": 99101656252,
+      "runner": "ubuntu-latest / GitHub Actions 1000048336",
+      "observed_steps": "checkout, Python setup and exact source/falsifier compile all succeeded; the fail-closed negative-space falsifier then executed and failed against current WP1200 behavior",
+      "counterexample": "A TargetCompletionReport evaluated at T4_PHYSICAL with only one supplied passing mandatory T0 obligation can report COMPLETE and physical_credit=true because omitted mandatory T1-T4 obligations are outside the caller-supplied tuple rather than represented as UNKNOWN.",
+      "falsified_scope": "COMPLETION_REPORT_CAN_MINT_T4_PHYSICAL_CREDIT_WITHOUT_A_BOUND_COMPLETE_MANDATORY_OBLIGATION_UNIVERSE",
+      "required_repair": "The existing sole F2-WP-1200 generation-1 mutation owner must absorb the counterexample. Bind each completion report to an exact obligation-manifest identity/generation/digest, require every mandatory obligation applicable to the evaluated fidelity exactly once, map missing required obligation IDs to UNKNOWN, and forbid T4 physical_credit unless the exact T4 mandatory universe is complete and all independent positive/counterevidence checks pass.",
+      "coordination": "Do not create a duplicate WP1200 mutation authority or second completion evaluator. PR415 remains REVIEW_ONLY counterevidence unless the active owner explicitly consumes it.",
+      "credit_ceiling": "COUNTEREVIDENCE_ONLY; ZERO_PHYSICAL_HOST_OR_TARGET_RUNTIME_CREDIT",
+      "physical_credit": 0,
+      "target_runtime_credit": 0,
+      "whole_system_credit": 0
+    },
+    "f2_wp1200_owner_lane": {
+      "classification": "EXECUTED_REPOSITORY_COMPONENT_TEST_EXISTS_BUT_DOES_NOT_OVERRIDE_COUNTEREVIDENCE",
+      "run_id": 33252931621,
+      "job_id": 99101621726,
+      "head_sha": "81101a5979701396529b552903870f5160d131b7",
+      "observed_steps": "checkout/setup/compile/Target completion falsification suite executed successfully on the owner lane",
+      "reconciliation": "The later PR415 test is a stronger negative-space discriminator not covered by that passing suite. Therefore the earlier green run does not close omitted-obligation completeness and cannot mint physical credit."
+    }
+  },
+  "cross_branch_reconciliation": {
+    "wp1200": "Keep generation 1 ACTIVE. Preserve its earlier repository-component green evidence, but mark obligation-universe/negative-space closure OPEN because PR415 produced executable counterevidence. Require the sole owner to absorb the exact regression before any bounded acceptance.",
+    "ubuntu_target": "This finding strengthens, rather than relaxes, the Ubuntu-only Frank v0.1 target rule: synthetic/repository CI may validate component logic but cannot substitute for exact target-host obligation evidence or T4 physical readback.",
+    "wp711_wp710_wp702": "Retain 9.13AV findings unchanged; do not reopen or duplicate those authorities from this delta.",
+    "base": "No change: CC-WP-01/02 PASS; CC-WP-03..14 OPEN; GENERAL_PURPOSE_GATE and CLAYCODE_RELEASE_GATE remain NOT_PASS.",
+    "effects": "Prior post-start UNKNOWN outcome and episode_id=null replay falsifiers remain open; no canonical semantics promotion.",
+    "providers": "No change: all external provider routes unadmitted, Together forbidden, no paid or unknown-cost fallback, provider runtime credit zero.",
+    "goodman": "No consensus amplification: PR415 and the owner suite are related same-repository evidence and are reconciled by executable discriminator scope, not counted as independent model votes.",
+    "ancestry": "Model-family/checkpoint ancestry requirements remain explicit; no model output receives authority from agreement.",
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "evidence_law": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "A_LATER_STRONGER_EXECUTABLE_FALSIFIER_INVALIDATES_ONLY_THE_SCOPE_IT_REPRODUCES",
+    "MISSING_REQUIRED_EVIDENCE_IS_UNKNOWN_NOT_ABSENCE_FROM_THE_UNIVERSE",
+    "PHYSICAL_CREDIT_REQUIRES_BOUND_COMPLETE_TARGET_OBLIGATION_UNIVERSE_AND_PHYSICAL_EVIDENCE",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "next_focus": [
+    "P0_WP1200: consume the existing sole generation-1 mutation authority; permanently add the PR415 omitted-mandatory-obligation negative-space regression; bind reports to an exact obligation manifest identity/generation/digest; require complete mandatory coverage exactly once; then rerun exact-source Ubuntu repository CI before bounded component acceptance",
+    "P0_WP1200: keep T4 physical_credit impossible from repository/synthetic evidence alone; later require exact target-host T4 evidence under the Target Host Reality Twin contract",
+    "P0_WP711_AND_WP710: preserve the already-active repair owners from 9.13AV; do not duplicate claims",
+    "P0_KEEP_FREE_ONLY_HARD_OFF_EXTERNAL_PROVIDERS; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "P1_USE_OWNER_AUTHORIZED_VPS_TRANSPORT_WHEN MATERIAL_AND_CAPTURE_EXACT_SOURCE_RUNTIME_RECEIPTS_BEFORE_RUNTIME_CREDIT",
+    "P1_KEEP_BASE_TRAINING_CANONICAL_SEMANTICS_PHYSICAL_GRID10_WHOLE_HCU_PROMOTIONS_AT_ZERO UNLESS THEIR EXECUTABLE GATES PASS",
+    "P1_DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "promotion_state": {
+    "f2_wp1200_obligation_universe_closure": false,
+    "f2_wp1200_physical_completion_credit": false,
+    "f2_wp711_witness_admission_closure": false,
+    "f2_wp710_scheduler_coalescing_closure": false,
+    "provider_path_runtime_pass": false,
+    "entityos_real_effect_runtime_pass": false,
+    "physical_grid10_component_runtime_pass": false,
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "base_work_package_promotion": false,
+    "canonical_semantics_promotion": false,
+    "training_credit": 0
+  },
+  "frank_harness": "DO_NOT_MODIFY"
+}

@@ -1,0 +1,52 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_DELTA/v1",
+  "research_id": "R6-WP509-CAND-AGENTEXIT",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "E1_SOURCE_READ_COMPLETED_MIRRORED",
+  "mirror_role": "FULL_PROVENANCE_NON_MUTEX",
+  "recorded_at": "2026-08-29T15:08:34+07:00",
+  "source_f2": {
+    "claim_commit": "fe3deae38425e99c9a02f7695bc86c13f1817549",
+    "outcome_commit": "bf8a8f19609b989720a9093f317ea45506618112",
+    "outcome_path": "research/tool_intelligence/claims/R6-WP509-CAND-AGENTEXIT/E1_SOURCE_READ_OUTCOME.json"
+  },
+  "research_entity_head_before_result_mirror": "1c143f98594b54df4c3758e14980b02b8a12bbc3",
+  "external_source": {
+    "repo": "Coldmist-Lu/AgentExit",
+    "commit": "9747f0237fc91aa0445d4cc8630bf0fa4c22022c",
+    "license": "Apache-2.0"
+  },
+  "finding": "AgentExit is a useful donor for paired stop-efficiency/progress-damage measurement and exit-to-continuation structure, but its concrete same-model verifier, free-form YES substring latch, direct EXIT control and AgentBoard-heavy harness should not become F2 authority or be imported wholesale.",
+  "source_mechanism": {
+    "intrinsic": "prompt-injected EXIT instruction",
+    "extrinsic": "same llm_model judges history and latches exit_flag on substring YES",
+    "task_loop": "EXIT breaks before the next environment action while success remains environment-derived done",
+    "continuation": "recorded trajectory can be replayed until early exit and generation resumed"
+  },
+  "f2_fusion_hypothesis": "Translate only the thin pattern into a typed advisory StopCandidate envelope bound to causal event/cycle/generation/state/evidence/resource deltas. Candidate transitions are HOLD/WAIT/ASK/DELEGATE/REOBSERVE/STOP_COGNITION. COMPLETE remains a separate evidence-gated state and is unreachable from this controller.",
+  "counterhypothesis": "A deterministic repeated-state + no-new-evidence + hard-budget controller may outperform any model verifier after verifier latency, circular self-judgment and premature-stop errors are included.",
+  "resource_light_design": [
+    "Start with deterministic counters/digests already available in F2 rather than a second LLM call.",
+    "Use model verifier later only as an advisory feature if deterministic evidence is insufficient.",
+    "Do not import AgentBoard, environment forks, provider wrappers or W&B into WP509 runtime.",
+    "Measure saved transitions against progress degradation and recovery, not token reduction alone."
+  ],
+  "next_discriminator": "E2 map the StopCandidate envelope onto exact current WP509/WP505/WP600-603 interfaces; then E3 deterministic held-out fixture comparing A deterministic baseline, B progress-aware StopCandidate, C optional bounded adaptive thresholding.",
+  "metric_cautions": [
+    "The paper/README define Redundancy Steps and Progress Degradation conceptually, but this E1 source audit did not locate code that independently reproduces the exact formulas.",
+    "Flat task progress is not automatically redundancy: newly admitted negative evidence must count as information gain.",
+    "False COMPLETE must remain structurally zero."
+  ],
+  "security_hygiene_note": "A tracked .env path exists in the audited tree; contents were intentionally not read or copied. This is only a hygiene warning, not a secret-leak claim.",
+  "evidence_ceiling": "E1_SOURCE_READ_ONLY",
+  "credits": {
+    "research_source_delta": 1,
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "integration_credit": 0,
+    "whole_f2_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "research_db_sync": "SYNC_PENDING_APPEND_ONLY_JSON_PRESERVED"
+}

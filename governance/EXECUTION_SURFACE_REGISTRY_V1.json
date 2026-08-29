@@ -1,0 +1,116 @@
+{
+  "schema": "EXECUTION_SURFACE_REGISTRY/v1",
+  "status": "DISCOVERY_MAP_NOT_AUTHORITY",
+  "authority_pointer": "CLAY_EXECUTION_AUTHORITY.md",
+  "protocol": "governance/EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md",
+  "epistemic_law": "absence from one direct tool surface is UNKNOWN outside that surface, not project-wide absence",
+  "surfaces": [
+    {
+      "surface_id": "chat_session_native",
+      "kind": "SESSION_NATIVE_TOOL_SURFACE",
+      "capability_source": "discover each session from actually exported tools",
+      "authority": "NONE_SELF_GRANTED",
+      "freshness": "PER_SESSION",
+      "notes": "Visibility here is an attention/invocation surface only. Missing tools do not erase federated routes."
+    },
+    {
+      "surface_id": "chat_transient_container",
+      "kind": "TRANSIENT_LOCAL_CONTAINER",
+      "capability_source": "runtime probe inside current chat container",
+      "authority": "platform/session plus project policy",
+      "freshness": "PER_SESSION",
+      "notes": "Useful for deterministic local work; not the same thing as clay-direct-dev or the product target."
+    },
+    {
+      "surface_id": "github_connector",
+      "kind": "REPOSITORY_CONTROL_SURFACE",
+      "capability_source": "discover exported GitHub actions each session",
+      "authority": "repository permissions plus project policy",
+      "freshness": "PER_SESSION",
+      "notes": "Can provide a route to workflows/controllers even when no direct SSH tool exists."
+    },
+    {
+      "surface_id": "dr_unterweger_self_hosted_runner",
+      "kind": "FEDERATED_EXECUTION_TRANSPORT",
+      "capability_source": "gschaidergabriel/Dr.-Unterweger workflows and live GitHub Actions state",
+      "authority": "CLAY_EXECUTION_AUTHORITY.md + governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md",
+      "freshness": "PROBE_REQUIRED",
+      "notes": "Transport toward clay-direct-dev; queued/offline state is transient transport evidence, not global capability absence."
+    },
+    {
+      "surface_id": "clay_git_ssh_bridge",
+      "kind": "FEDERATED_EXECUTION_TRANSPORT",
+      "capability_source": "governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md plus real roundtrip probe",
+      "authority": "CLAY_EXECUTION_AUTHORITY.md + governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+      "freshness": "PROBE_REQUIRED",
+      "notes": "Use already-installed identities/config; never expose private key material."
+    },
+    {
+      "surface_id": "clay_direct_dev",
+      "kind": "OWNER_VPS_SANDBOX_TARGET",
+      "capability_source": "target hardware/runtime probe",
+      "authority": "governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md via CLAY_EXECUTION_AUTHORITY.md",
+      "freshness": "PROBE_REQUIRED",
+      "notes": "Authorized/expected owner-provisioned development and research sandbox; local model downloads/builds/tests/benchmarks are distinct from external provider-token policy."
+    },
+    {
+      "surface_id": "vercel_repository_bridge",
+      "kind": "FEDERATED_EXECUTION_TRANSPORT",
+      "capability_source": "repository preview/deployment controller plus Vercel deployment state",
+      "authority": "current owner execution authority plus Vercel economic/quota gates",
+      "freshness": "PROBE_REQUIRED",
+      "notes": "Direct connector missing sandbox lifecycle methods does not prove this route absent."
+    },
+    {
+      "surface_id": "vercel_sandbox_microvm",
+      "kind": "EXTERNAL_SANDBOX_TARGET",
+      "capability_source": "actual Sandbox create/exec/stop receipt",
+      "authority": "current Vercel included-tier/economic admission only",
+      "freshness": "PROBE_REQUIRED",
+      "notes": "Separate from owner VPS. Route may be economic-gated even when technically reachable."
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "chat_to_clay_direct_dev_via_self_hosted_runner",
+      "from": "chat_session_native",
+      "via": ["github_connector", "dr_unterweger_self_hosted_runner"],
+      "to": "clay_direct_dev",
+      "capabilities": ["shell", "filesystem", "package_install", "public_download", "git", "local_model", "benchmark", "build", "test"],
+      "authority_refs": ["CLAY_EXECUTION_AUTHORITY.md", "governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md"],
+      "health": "DYNAMIC_UNKNOWN_UNTIL_PROBED",
+      "negative_ttl_seconds": 300
+    },
+    {
+      "route_id": "configured_bridge_to_clay_direct_dev",
+      "from": "chat_session_native",
+      "via": ["clay_git_ssh_bridge"],
+      "to": "clay_direct_dev",
+      "capabilities": ["shell", "filesystem", "package_install", "public_download", "git", "local_model", "benchmark", "build", "test"],
+      "authority_refs": ["CLAY_EXECUTION_AUTHORITY.md", "governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md"],
+      "health": "DYNAMIC_UNKNOWN_UNTIL_PROBED",
+      "negative_ttl_seconds": 300
+    },
+    {
+      "route_id": "chat_to_vercel_sandbox_via_repository_bridge",
+      "from": "chat_session_native",
+      "via": ["github_connector", "vercel_repository_bridge"],
+      "to": "vercel_sandbox_microvm",
+      "capabilities": ["sandbox_exec", "build", "test"],
+      "authority_refs": ["CLAY_EXECUTION_AUTHORITY.md", "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md"],
+      "health": "DYNAMIC_UNKNOWN_UNTIL_PROBED",
+      "economic_gate": true,
+      "negative_ttl_seconds": 300
+    }
+  ],
+  "global_absence_rule": {
+    "classification": "CAPABILITY_ABSENT_PROVEN",
+    "requires": [
+      "all registered applicable routes evaluated under same current authority generation",
+      "no route remains DISCOVERY_REQUIRED",
+      "no route remains merely TRANSIENTLY_UNREACHABLE",
+      "direct absence is scoped only to direct surface",
+      "authority denial is reported as authority denial rather than capability absence"
+    ]
+  }
+}

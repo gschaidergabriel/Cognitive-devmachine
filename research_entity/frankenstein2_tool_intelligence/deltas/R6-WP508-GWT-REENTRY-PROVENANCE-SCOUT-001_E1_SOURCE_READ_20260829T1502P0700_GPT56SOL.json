@@ -1,0 +1,48 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_E1_SOURCE_READ_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-WP508-GWT-REENTRY-PROVENANCE-SCOUT-001",
+  "evidence_level": "E1_SOURCE_READ",
+  "status": "MIRRORED_PROVENANCE_NO_RUNTIME_PROMOTION",
+  "canonical_f2_result": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/R6-WP508-GWT-REENTRY-PROVENANCE-SCOUT-001_E1_SOURCE_READ_20260829T1502P0700_GPT56SOL.json",
+    "commit": "4e970e1c5e577171433d3f2699111a359e946386",
+    "receipt_path": "research/tool_intelligence/receipts/R6-WP508-GWT-REENTRY-PROVENANCE-SCOUT-001_E1_SOURCE_READ_20260829T1502P0700_GPT56SOL.json",
+    "receipt_commit": "770792e693dd30792529df7d2125bf82cd1504bb"
+  },
+  "coordination": {
+    "original_claim_commit": "fe3e5de383cd7fc589772bc2b53a0d15f06f32d0",
+    "staleness_review_claim_commit": "f0698ba7dcbc4379b0b9cb8714e667e141a26e1d",
+    "f2_is_claim_authority": true,
+    "cross_repo_atomicity_assumed": false
+  },
+  "retained_findings": [
+    "OpenTelemetry commit 8057bf6d5cf0ab10891b9e6f7b928cded76ab2f7 supplies immutable SpanContext, parent/Link and deferred PRODUCER/CONSUMER trace semantics suitable only as a derived re-entry witness layer.",
+    "OpenLineage commit b995ee00c10e12ce3b535eeecb2a0a2affe86b7b supplies explicit parent/root run lineage and a strong authority rule: forwarded parent/root facets are convenience copies while the parent/root own event remains the full-information authority.",
+    "Temporal commit c044bf16b1cc47a4db80669a987484dba6145331 is retained as a durable-execution comparison and negative-control architecture, not as a candidate second F2 execution/state authority.",
+    "Preferred E2 direction is a thin F2-native concept distillation combining OTel link/context shape with OpenLineage forwarded-view authority boundaries while preserving canonical F2 causal/frame/generation/recipient identities."
+  ],
+  "staleness_review": {
+    "later_delta": "ADF-20260829T1455P0700-GPT56SOL-PYVENE-WP507",
+    "adjudication": "REVIEWED_NO_SUPERSESSION",
+    "reason": "pyvene targets later model-internal lesion/rescue evidence; the WP508 external re-entry/provenance witness objective remains complementary."
+  },
+  "next_discriminator": {
+    "slot": "SOURCE_ARCHAEOLOGIST",
+    "target": "E2_ARCHITECTURE_MAPPED_OTEL_OPENLINEAGE_REENTRY_PROVENANCE",
+    "claim_required": true,
+    "summary": "Map minimal OTel SpanContext/Link and OpenLineage parent/root-authority concepts onto exact current F2 WP506/WP507/WP508 identities and specify fail-closed stale-generation, wrong-frame-digest, cross-recipient, orphan-link and replay cases before implementation."
+  },
+  "pending_research_sqlite_sync": "PENDING",
+  "credits": {
+    "E1_source_read": 1,
+    "E2_architecture_mapped": 0,
+    "runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "effect_credit": 0,
+    "whole_system_credit": 0,
+    "training_credit": 0
+  }
+}

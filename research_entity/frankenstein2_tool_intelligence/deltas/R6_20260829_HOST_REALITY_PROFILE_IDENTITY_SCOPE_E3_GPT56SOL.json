@@ -1,0 +1,57 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "research_id": "R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01",
+  "trigger": "6",
+  "organ": "GPT-5.6-Sol",
+  "created_at_local": "2026-08-29T19:55:00+07:00",
+  "authority_epoch_observed": "8.78",
+  "canonical_f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "research_entity_main_before_write": "aaf730aab01dadc748231bd7ba5dd3fc5bf857db",
+  "f2_main_reentered": "e476794c0ed50304ca55ae066ce829fda1935cba",
+  "mission": "Trigger-6 external source audit, architecture mapping and deterministic falsification of F2 target-host identity/profile completion binding without duplicating Trigger-4 implementation.",
+  "f2_artifacts": {
+    "e1_claim": "research/tool_intelligence/claims/R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01/E1_SOURCE_READ.json@e4d42cf43ebc040920ece0d46839be3b25041d38",
+    "e1_receipt": "research/tool_intelligence/receipts/R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01_E1_SOURCE_READ.json@a79e6c4f921938de6601bf796277640dd7a2a8a6",
+    "e2_claim": "research/tool_intelligence/claims/R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01/E2_ARCHITECTURE_MAPPED.json@8fcc65b621c997480ef876303b072b9e105c9cb9",
+    "e2_delta": "research/tool_intelligence/deltas/2026-08-29T1948P0700_GPT56SOL_R6_HOST_REALITY_PROFILE_E2_ARCHITECTURE_MAPPED.json@c1449826839f1918b745e2d64c26edffd210e92e",
+    "e2_receipt": "research/tool_intelligence/receipts/R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01_E2_ARCHITECTURE_MAPPED.json@d01e823a7cab0433249ae5e86f5ff9defe809638",
+    "e3_claim": "research/tool_intelligence/claims/R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01/E3_CLAIM_REPRODUCED.json@11fb68ce1e1d9623b70f85eb4ed18d2f28174cbf",
+    "e3_experiment": "research/tool_intelligence/experiments/R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01_E3_PROFILE_INVALIDATION_MATRIX.json@595222cb031e17f145052b3c8963a36a1bcfbad7",
+    "e3_receipt": "research/tool_intelligence/receipts/R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01_E3_CLAIM_REPRODUCED.json@fb66061aec2a8d2a92c3d5f78cdf609732f6944a"
+  },
+  "external_primary_sources": [
+    "systemd/systemd@048970650ce5d50bceffff97442c4a90c1cf0572: machine-id, app-specific machine identity, boot identity, login/session inspection",
+    "qemu/qemu@d2e570cc0f97b936902a5b1b86b73c0f5998b475: simulation/device-emulation comparator",
+    "linuxhw/hw-probe@cb7902a902c0ac33c84214a750a8388643b34af2: broad hardware-inventory/privacy comparator",
+    "PipeWire/wireplumber@ec59fa568cf16634c8a4a20e7a085b345a5c76c7: current media/session tooling context"
+  ],
+  "verified_research_findings": [
+    "Raw /etc/machine-id must not be persisted/exported as the F2 host identity; systemd treats it as confidential and provides application-specific derived identity semantics.",
+    "Stable host lineage, boot epoch, service invocation and login/session are distinct identity scopes; one snapshot digest should not stand in for all of them.",
+    "WP1201 G1 is a strong bounded source component: fixed privacy allow-list, deterministic profile digest, explicit UNKNOWN, bounded read-only probes, no runtime/completion credit.",
+    "WP1201 G1 hashes the entire fact map in one global profile digest, mixing platform, software, device, session and runtime facts.",
+    "Independent synthetic reconstruction of the observed digest contract changed the global digest in 7/7 single-fact perturbations; candidate requirement-scoped bindings changed only on selected relevant fields in the same matrix.",
+    "The observed G1 schema has no host_scope_id and no boot_scope_id.",
+    "Successful dynamic command stdout is retained as raw fact text; volatile runtime topology should be separated or minimally parsed before use as stable host fingerprint material."
+  ],
+  "architecture_candidate": "Preserve WP1201 whole-snapshot digest for provenance, but add a successor split: application-specific HostScopeIdentity, BootScopeIdentity, independently digested HostProfileComponents / volatile HostRuntimeWitnesses, and exact RequirementBindingDigest values over only required components. UNKNOWN debt should be requirement-local rather than globally blocking unrelated obligations.",
+  "counterhypothesis": "Monolithic invalidation is simpler and maximally conservative. Component/requirement binding is acceptable only if an E4 ablation proves lower irrelevant revalidation with zero false-preserve cases for requirement-relevant changes.",
+  "coordination": {
+    "wp1201_generation1_current_state_observed": "ACTIVE",
+    "wp1201_repository_ci_delta_observed": true,
+    "generation2_or_product_policy_edit_by_this_organ": false,
+    "reason": "Do not duplicate or mutate Trigger-4-owned active generation before terminal reconciliation.",
+    "parallel_systemd_lifecycle_lane_duplicated": false,
+    "parallel_wp1202_twin_lane_duplicated": false
+  },
+  "next_exact_gate": "After WP1201 G1 terminal reconciliation or an explicit non-overlapping successor claim, run E4 F2 ablation comparing monolithic versus requirement-scoped binding on controlled audio/browser/USB/reboot/kernel/permission/platform changes. Promote only with zero requirement-relevant false-preserve cases and a measured reduction in irrelevant invalidation. Then bind the first read-only physical target bundle without minting whole-host completion from collection alone.",
+  "credits": {
+    "trigger6_research": "E3_SYNTHETIC_CONTRACT_REPRODUCTION",
+    "f2_runtime": 0,
+    "physical_host": 0,
+    "completion": 0,
+    "architecture_acceptance": 0,
+    "whole_system": 0
+  },
+  "pending_research_sqlite_sync": "PENDING_BINARY_DB_PATH_NOT_MUTATED_BY_THIS_ORGAN"
+}

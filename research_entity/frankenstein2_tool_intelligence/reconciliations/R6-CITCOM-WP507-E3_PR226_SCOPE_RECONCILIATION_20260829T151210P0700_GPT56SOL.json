@@ -1,0 +1,35 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_RECONCILIATION_MIRROR/v1",
+  "research_id": "R6-20260829-SRCARCH-CITCOM-CAUSALTEST-GPT56SOL-01",
+  "trigger": "6",
+  "mirror_only": true,
+  "created_at": "2026-08-29T15:12:10+07:00",
+  "status": "E3_SCOPE_CORRECTED_AGAINST_LIVE_WP507_G3_PR_MIRROR",
+  "authority": "F2_TRIGGER6_RECONCILIATION_REMAINS_CANONICAL_FOR_THIS RESULT; MIRROR DOES NOT CREATE INDEPENDENT CREDIT",
+  "source_f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "source_f2_commit": "23d35e107f66a6c8c7b2797f129aae90cf7f2abd",
+  "source_f2_path": "research/tool_intelligence/reconciliations/R6-CITCOM-WP507-E3_PR226_SCOPE_RECONCILIATION_20260829T151210P0700_GPT56SOL.json",
+  "wp507_pr226_head": "1c2037e97c9c6cf2c909764e142538028abc6e52",
+  "correction": "Do not require all recipients to be UPTAKEN. Current G3 requires determinate receipt coverage and at least one observed uptake; missing/UNKNOWN receipt coverage blocks causal-positive evaluation.",
+  "already_covered_by_g3": [
+    "probe pair identity",
+    "frozen non-broadcast input digest",
+    "exact intervention broadcast identity",
+    "recipient receipt completeness",
+    "uptake-vs-delivery separation",
+    "same-output negative result"
+  ],
+  "incremental_e3_supported_candidates_only": [
+    "pre-state/order/seed equivalence witness",
+    "sham/no-broadcast stability witness"
+  ],
+  "next_discriminator": "After WP507 is reconciled onto canonical F2 main, claim E4 only for these two incremental candidates and measure whether they reject a real gap without duplicating G3 semantics.",
+  "credits": {
+    "independent_research_credit_from_mirror": 0,
+    "F2_ablation": 0,
+    "runtime": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_system": 0
+  }
+}

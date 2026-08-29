@@ -1,0 +1,25 @@
+{
+  "schema": "FRANKENSTEIN2_ARCHITECTURE_DELTA_FUSION/v1",
+  "fusion_id": "ADF-20260829T1834P0700-GPT56SOL-WP702-G4-ORIGIN-SENTINEL-COUNTEREXAMPLE",
+  "supersedes": "ADF-20260829T1827P0700-GPT56SOL-WP702-PRODUCER-LINEAGE-FUSION",
+  "created_at": "2026-08-29T18:34:00+07:00",
+  "worker": "gpt-5.6-sol",
+  "canonical_f2_delta_commit": "fcab93af53584f1519ce55004561b2457baa97d4",
+  "research_entity_main_observed_before_mirror": "9d946416bd11069f722087868b7c93915d49c987",
+  "finding": "Merged WP702 G4 blocks a direct forged constructor only when the caller omits its InitVar origin token. The origin token is the module-global _EVALUATOR_ORIGIN object, so a same-process caller can read that module attribute and pass it back to the public constructor. This is convention-level origin gating, not non-self-grantable producer lineage.",
+  "positive_evidence_preserved": "G4 exact PR-head CI and existing OFF/taint/policy semantics remain valid at their bounded component scopes; the counterexample is specific to the stronger producer-lineage claim.",
+  "reproduction": "Exact G4 source inspected plus standard-library dataclass/InitVar mechanism reproduction: dataclasses.replace without origin is rejected; explicit sentinel self-grant succeeds. Exact-source execution attempt in the analysis container was DNS-blocked and is not counted as product evidence.",
+  "successor": "Prefer WP700 G2's already-admitted factory-only public-constructor-fails pattern for WP702, removing a caller-supplied origin authority argument. Add direct-constructor, dataclasses.replace, and no-caller-readable-constructor-capability falsifiers; require exact successor CI. Still do not claim hostile-same-process cryptographic security.",
+  "external_primary_support": "PEP 8 explicitly treats underscore names as non-public conventions and states Python attributes are not truly private; SLSA/in-toto remain structural provenance references only, not dependencies for this repair.",
+  "handoff": "Triggerword 4 should preserve G4 positive evidence, record the post-acceptance counterexample, avoid duplicate mutation if a successor claim already exists, and otherwise open the smallest successor producer-lineage generation using the WP700-style factory-only pattern.",
+  "evidence_ceiling": "E3_CLAIM_REPRODUCED",
+  "runtime_credit": 0,
+  "whole_system_credit": 0,
+  "mirror": {
+    "epoch": "MIRROR-20260829T1834P0700-WP702-G4-COUNTEREXAMPLE",
+    "counterpart_repo": "gschaidergabriel/frankenstein-2.0",
+    "counterpart_path": "research/tool_intelligence/deltas/ADF-20260829T1834P0700_GPT56SOL_WP702_G4_ORIGIN_SENTINEL_COUNTEREXAMPLE.json",
+    "counterpart_commit": "fcab93af53584f1519ce55004561b2457baa97d4",
+    "status": "MIRRORED_FROM_F2"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "schema": "ENTITYOS_HCU_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_delta": "9.13AY_NON_AUTHORITY",
+  "created_at_local": "2026-08-29T21:42:00+07:00",
+  "worker": "GPT-5.6 Sol",
+  "status": "MATERIAL_TARGET_VPS_EXECUTION_HYGIENE_BLOCKER",
+  "authority": {
+    "canonical_supervisor_authority": "research_entity/continuity/BOOTSTRAP_MINIMAL.json -> admitted 8.78 steering authority",
+    "this_delta_is_authority": false,
+    "free_only": "HARD_OFF_EXTERNAL_PROVIDER_SPEND_POLICY",
+    "together": "FORBIDDEN",
+    "paid_or_unknown_cost_fallback": "FORBIDDEN",
+    "owner_vps_execution": "ALLOWED_BY_CURRENT_EXPLICIT_OWNER_AUTHORITY_WITH_RESOURCE_GUARDS"
+  },
+  "new_executable_findings": {
+    "vps_live_telemetry_20260829T144159Z": {
+      "classification": "TARGET_SURFACE_ALIVE_BUT_CURRENT_WORKSPACE_NOT_EXACT_SOURCE_ADMISSIBLE",
+      "source_branch": "chatgpt-vps-results",
+      "telemetry_commit": "64a55c1f442db4c9f58544edc22cfeef26f1fd88",
+      "observed_at": "2026-08-29T14:41:59.605530+00:00",
+      "sandbox": "clay-direct-dev",
+      "host_health": {
+        "uptime_rc": 0,
+        "memory_rc": 0,
+        "disk_rc": 0,
+        "memory_available_approx": "10 GiB",
+        "disk_use": "31%"
+      },
+      "workspace_git": {
+        "head": "7e00fa055c03fc76b0cedc2d3ad1b3466d271d13",
+        "relationship": "main behind origin/main by 53 commits",
+        "dirty": true,
+        "observed_modified_examples": [
+          "free swarm/LIVE_METRICS.json",
+          "free swarm/README.md",
+          "free swarm/SYSTEM_ANALYSIS_LIVE.json"
+        ]
+      },
+      "container_health_observation": {
+        "podman_top_rc": 125,
+        "error": "container did not create a cgroup; podman top cannot inspect it"
+      },
+      "process_observation": "multiple long-lived defunct python/bash/ssh/git/llama-server processes remain visible",
+      "evidence_boundary": "Telemetry proves the authorized VPS/sandbox surface is live and resource-visible. It does not prove exact-source ClayCode execution, clean workspace state, target-runtime PASS, physical GRID10, or whole-system health."
+    },
+    "actions_mirror_after_telemetry": {
+      "classification": "PRIVATE_REPO_ACTIONS_CONTROL_PLANE_FAILURE_NOT_TARGET_SEMANTICS",
+      "run_id": 33258288558,
+      "head_sha": "64a55c1f442db4c9f58544edc22cfeef26f1fd88",
+      "status": "completed",
+      "conclusion": "failure",
+      "jobs_observed": 0,
+      "credit": 0
+    }
+  },
+  "steering_intervention": {
+    "target_runtime_fence": "Do not grant WP510/BASE/target-runtime credit from the currently observed /workspace checkout while it is stale or dirty. Before any promotion-bearing VPS execution, bind an exact requested source commit/tree in a clean disposable worktree/container or otherwise prove byte-identical source inputs and record dirty-state exclusion in the receipt.",
+    "resource_guard": "Because podman top currently cannot inspect the container cgroup, do not treat container-level resource telemetry as complete. Either repair/replace the cgroup-observation path or record the missing cgroup measurement as UNKNOWN while retaining host-level memory/disk/uptime evidence.",
+    "duplicate_dispatch": "Do not fan out new self-hosted GitHub Actions retries merely because the mirror workflow has jobs=[]; use the already-authorized direct VPS/bridge surface only when exact-source and receipt hygiene are satisfied.",
+    "workspace_mutation": "Do not clean/reset the existing dirty workspace destructively if it may contain worker state. Prefer a separate exact-source worktree/container for promotion-bearing tests.",
+    "credit_ceiling": "VPS_AVAILABILITY_AND_NEGATIVE_EXECUTION_HYGIENE_EVIDENCE_ONLY"
+  },
+  "retained_open_counterevidence": {
+    "f2_wp710": "Post-acceptance executable coalescing counterevidence remains open.",
+    "f2_wp306_cost_witness": "No executable renderer/tokenizer cost-binding discriminator yet.",
+    "effects": "Post-start UNKNOWN outcome and episode_id=null replay falsifiers remain open; no canonical semantics promotion.",
+    "aggregate_projection": "Single canonical WP002 aggregate writer remains required; stale aggregate must not reopen accepted granular lanes."
+  },
+  "cross_branch_reconciliation": {
+    "base": "No change: CC-WP-01/02 PASS; CC-WP-03..14 OPEN; GENERAL_PURPOSE_GATE and CLAYCODE_RELEASE_GATE remain NOT_PASS.",
+    "providers": "No change: all external provider routes unadmitted, Together forbidden, no paid or unknown-cost fallback, provider runtime credit zero.",
+    "goodman": "Telemetry, mirrors and model consensus are not independent semantic votes; executable receipts decide only their tested scope.",
+    "ancestry": "Model-family/checkpoint ancestry remains explicit; no model consensus promotion.",
+    "ubuntu_target": "Ubuntu-only Frank v0.1 target remains unchanged; exact-source target execution is still required.",
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "next_focus": [
+    "P0_TARGET_VPS_HYGIENE: for the next promotion-bearing VPS test, use a clean exact-source worktree/container bound to requested commit/tree; preserve the existing dirty workspace non-destructively; persist source/tree/dirty-state/runtime receipt",
+    "P0_RESOURCE_GUARD: treat missing container cgroup telemetry as UNKNOWN until repaired or replaced; host-level telemetry alone cannot certify container resource isolation",
+    "P0_WP002_AGGREGATE: reconcile granular accepted pointers through the single canonical aggregate writer",
+    "P0_WP710: close only via the existing sole mutation authority plus executable regression evidence",
+    "P0_KEEP_FREE_ONLY_HARD_OFF_EXTERNAL_PROVIDERS; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "P1_KEEP_BASE_TRAINING_CANONICAL_SEMANTICS_PHYSICAL_GRID10_WHOLE_HCU PROMOTIONS AT ZERO unless exact executable gates pass",
+    "P1_DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "promotion_state": {
+    "target_vps_surface_alive": true,
+    "current_vps_workspace_exact_source_admissible": false,
+    "container_cgroup_health_observed": false,
+    "provider_path_runtime_pass": false,
+    "base_work_package_promotion": false,
+    "canonical_semantics_promotion": false,
+    "physical_grid10_component_runtime_pass": false,
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "training_credit": 0
+  },
+  "frank_harness": "DO_NOT_MODIFY"
+}

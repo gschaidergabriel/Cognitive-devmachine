@@ -1,0 +1,81 @@
+{
+  "schema": "ARCHITECT_REENTRY_DELTA/v1",
+  "architect_id": "federated-development-architect",
+  "generation": 6,
+  "recorded_date": "2026-08-29",
+  "classification": "RUNTIME_TRANSPORT_BLOCKER_REENTRY",
+  "authority_epoch": "8.78",
+  "owner_direction_preserved": "RUNTIME_FIRST_WITHOUT_DUPLICATE_WRITERS_OR_BLIND_DISPATCHES",
+  "architect_context_fidelity": {
+    "status": "INTEGRATED_IN_PERSISTENT_ARCHITECT_BRANCH",
+    "merge_sha": "e0aec0ec2355eb0c0bea57cdd41a86a345e27b97",
+    "effect": "Owner/project/frontier/runtime state survives compact reentry and external head changes are explicit deltas.",
+    "credit_boundary": "continuity/source improvement only; no Frankenstein runtime or whole-system credit"
+  },
+  "external_heads_observed": {
+    "frankenstein_2_main": "0aa2e97381550d1e626c3beee041ed964662819f",
+    "research_entity_main": "101bd5908b19625ed63c70fe509f8b40ede4aea3",
+    "wp002_g5_head": "ffe0f603a037273f475c67ee11f86fa8c468b478",
+    "architect_parent": "e0aec0ec2355eb0c0bea57cdd41a86a345e27b97"
+  },
+  "wp002": {
+    "workpackage": "F2-WP-002",
+    "generation": 5,
+    "pull_request": 115,
+    "state": "ACTIVE",
+    "decision": "PRESERVE_SINGLE_WRITER",
+    "observation": "PR115 remains open on head ffe0f603a037273f475c67ee11f86fa8c468b478 while canonical main has advanced far beyond its original base. Re-enter/recompute rather than force-merge or create a second projection writer."
+  },
+  "wp510": {
+    "workpackage": "F2-WP-510",
+    "generation": 2,
+    "repository_scope": "ACCEPTED_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "canonical_merge_sha": "3e5b05f95b1cef80ff781152fa430f7916736746",
+    "target_environment": "clay-direct-dev",
+    "runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "runtime_transport": {
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "workflow": ".github/workflows/frank-self-hosted-probe.yml",
+    "exact_wp510_sha_pinned": "3e5b05f95b1cef80ff781152fa430f7916736746",
+    "probe_commit": "addbe2f0808fd5001e1122d443ed3b41cf7f3864",
+    "previous_probe_run": 33252978899,
+    "previous_probe_job": 99101748230,
+    "previous_probe_state": "QUEUED_RUNNER_ID_0_EMPTY_RUNNER_NAME_ZERO_STEPS",
+    "canonical_sha_probe_run": 33254381280,
+    "canonical_sha_probe_job": 99105445603,
+    "canonical_sha_probe_state": "QUEUED_ZERO_STEPS",
+    "self_hosted_queue_policy_observed": "LEGACY_SELF_HOSTED_QUEUE_EXPLICITLY_QUARANTINED_IN_EXISTING_CONTROLLER_WORKFLOW",
+    "runner_independent_route_search": "NO_EXISTING_GITHUB_HOSTED_TO_OWNER_VPS_ROUTE_FOUND_IN_INSPECTED_CURRENT_CONTROLLER_AND_RESEARCH_ENTITY_SEARCH_SURFACES",
+    "inspected_absences": [
+      "no ssh-keyscan transport found",
+      "no scp transport found",
+      "no tailscale transport found",
+      "no cloudflared transport found",
+      "candidate VPS/SSH workflows inspected still require self-hosted runners"
+    ],
+    "classification": "TRANSPORT_OR_RUNNER_ASSIGNMENT_BLOCKER_NOT_WP510_LOGIC_NOT_AUTHORITY",
+    "decision": "STOP_RETRIGGERING_SELF_HOSTED_PROBES_UNTIL_RUNNER_QUARANTINE_OR_TRANSPORT_CHANGES"
+  },
+  "evidence_boundary": {
+    "target_environment_execution_observed": false,
+    "target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_actions": [
+    "Do not create further self-hosted WP510 dispatches while existing jobs remain queued and the legacy self-hosted queue is quarantined.",
+    "Treat restoration of the already-authorized runner/bridge or appearance of an already-authorized runner-independent owner-VPS transport as the wake condition for WP510 target-runtime promotion.",
+    "Keep WP002 G5 under its existing sole writer; observe/re-enter PR115 against current main rather than creating a competing aggregate writer.",
+    "While runtime transport is blocked, route Architect effort only to non-overlapping integration/evidence bottlenecks that reduce future runtime diagnosis latency; do not let later repository-only modules mint runtime promotion."
+  ]
+}

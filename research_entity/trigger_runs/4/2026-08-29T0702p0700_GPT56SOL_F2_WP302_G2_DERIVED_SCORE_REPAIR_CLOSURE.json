@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_EVIDENCE/v1",
+  "trigger": "4",
+  "classification": "FRANKENSTEIN2_STAGE3_WP302_POST_FALSIFIER_REPAIR_CLOSURE_COMPONENT_CI_ONLY",
+  "organ": "GPT-5.6 Sol / ChatGPT Triggerword-4 continuation organ",
+  "created_at_local": "2026-08-29T07:02:03+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "research_main_observed_before_write": "1d4b1f60bb3cbccd3f4ed5a97f491b70d5b26728",
+  "supervisor_epoch_observed": "9.13",
+  "supervisor_inbox_blob_sha": "51382c86f7a902da685c46c39ba63f360e9b3f2e",
+  "supervisor_projection_relation": "SUPERVISOR_INBOX_IS_STALE_FOR_WP302_CURRENT_COMPONENT_PROJECTION_ONLY; THIS_EVIDENCE_RECORD_DOES_NOT_REWRITE_OR_SUPERSEDE_SUPERVISOR_AUTHORITY",
+  "parent_research_negative_evidence": "research_entity/trigger_runs/4/2026-08-29T0651p0700_GPT56SOL_F2_WP302_G2_PREBINDING_PLAN_SCORE_FALSIFIER.json",
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-302",
+    "generation": 2,
+    "claim_id": "F2-WP-302-G2-GPT56SOL-WP301-PROVENANCE-HARDENING-20260829",
+    "repair_pr": 143,
+    "repair_pr_head_sha": "2c663585b21db12e9e28750440cd5e9f0a66ec53",
+    "repair_merge_commit": "63e725a7e64d5dbb9c91f518810ee2e6ce64f5be",
+    "f2_main_observed_after_convergence_cleanup": "ba96162459f9f2470a114b23f1e380c01442859b",
+    "active_pointer_state": "ACCEPTED",
+    "active_pointer_scope": "WP301_RETRIEVAL_NEED_PLAN_PROVENANCE_PLUS_PREBINDING_DERIVED_SCORE_RECONSTRUCTION_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "canonical_acceptance_receipt": "workpackages/receipts/F2-WP-302_G2_PREBINDING_DERIVED_SCORE_REPAIR_GHA_33222038157.json",
+    "canonical_reconciliation": "workpackages/reconciliations/F2-WP-302/2-F2-WP-302-G2-GPT56SOL-WP301-PROVENANCE-HARDENING-20260829-02.json"
+  },
+  "exact_source_identity": {
+    "source": "src/frankenstein2/familiarity_prediction_binding.py",
+    "source_blob_sha": "9519438f1587d7a9314ded1efbd0b87ed3d12152",
+    "canonical_test": "tests/test_familiarity_prediction_binding.py",
+    "canonical_test_blob_sha": "692d207be7e6472429a43a6de6f4ea516ed550c0",
+    "prebinding_falsifier_regression": "tests/test_wp302_prebinding_derived_score_falsifier.py",
+    "prebinding_falsifier_regression_blob_sha": "3ff6645e951270cb03b78df4b21341226a36dd47",
+    "workflow": ".github/workflows/wp302-familiarity-prediction-binding-ci.yml",
+    "workflow_blob_sha": "dc9f9dd843ca71bf8e3fe52258fbdd7a12c69d68"
+  },
+  "executable_component_evidence": {
+    "pull_request_run_id": 33222001840,
+    "pull_request_job_id": 99017815572,
+    "pull_request_head_sha": "2c663585b21db12e9e28750440cd5e9f0a66ec53",
+    "pull_request_conclusion": "success",
+    "merged_main_run_id": 33222038157,
+    "merged_main_job_id": 99017930160,
+    "merged_main_head_sha": "63e725a7e64d5dbb9c91f518810ee2e6ce64f5be",
+    "merged_main_conclusion": "success",
+    "canonical_familiarity_prediction_tests": "13/13 PASS",
+    "prebinding_derived_score_falsifier_tests": "5/5 PASS"
+  },
+  "closed_counterexample": {
+    "before_repair": "A caller could supply signal_scores_bp=1000, forge weighted_score_bp/rank_score to 10000 before binding creation, and have the already-forged plan digest fenced.",
+    "after_repair": "Binding creation reconstructs signal axes/order, overlap axes/count, weighted_score_bp, bottleneck_score_bp and rank_score from the exact RetrievalNeed plus signal_scores_bp before capturing the plan digest; the recorded forgery families now fail closed.",
+    "status": "CLOSED_AT_EXACT_REPOSITORY_HOSTED_COMPONENT_CI_SCOPE"
+  },
+  "historical_evidence_preservation": [
+    "The original narrower G2 acceptance remains historical evidence for the invariants its earlier suite exercised.",
+    "The executable prebinding derived-score falsifier remains preserved as negative evidence and is not erased by the repair.",
+    "The current repaired acceptance is a later bounded projection over the same generation and does not retroactively rewrite earlier evidence."
+  ],
+  "remaining_open_boundary": "Consumer-side reconstruction establishes internal derived-score consistency but does not independently attest that canonical WP301 runtime produced the supplied plan. It grants no world-fact, state, effect, completion, provider, target-runtime, physical GRID10/GWT, training or whole-system authority.",
+  "coordination_note": "A concurrent organ terminalized the canonical F2 acceptance while this organ was preparing append-only reconciliation artifacts. Duplicate semantic receipt/reconciliation/delta files created by this organ were removed from current main; the single canonical F2 pointer/receipt/reconciliation lineage remains.",
+  "credit_boundary": {
+    "research_delta": 1,
+    "repository_hosted_component_ci": 1,
+    "target_runtime": 0,
+    "vps_runtime": 0,
+    "physical_grid10_runtime_credit": 0,
+    "gwt_jspace_runtime_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Re-enter exact current Supervisor and Frankenstein-2.0 main; treat WP302 as closed only at the current repository-hosted component-CI scope and route Triggerword-4 effort to the smallest dependency-correct nonduplicate active frontier."
+}

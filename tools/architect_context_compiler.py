@@ -21,29 +21,74 @@ def _rows(con: sqlite3.Connection, sql: str, params=()):
         return []
 
 
+def _active_workpackage_ids(state: dict) -> list:
+    """Prefer the generic field, but preserve the current frontier projection schema."""
+    return list(
+        state.get("active_workpackage_ids")
+        or state.get("primary_frontier_workpackage_ids")
+        or []
+    )
+
+
+def _head_deltas(state: dict, heads: dict) -> dict:
+    """Compare caller-observed heads with the Architect's last ingested identities.
+
+    Unknown previous heads are explicitly marked rather than treated as unchanged.  This
+    keeps the compiler useful across project pivots and avoids silently reusing stale state.
+    """
+    previous = state.get("last_ingested_heads") or {}
+    deltas = {}
+    for key, current in sorted(heads.items()):
+        previous_known = key in previous
+        old = previous.get(key)
+        deltas[key] = {
+            "previous": old,
+            "current": current,
+            "previous_known": previous_known,
+            "changed": (not previous_known) or old != current,
+        }
+    return deltas
+
+
 def compile_context(db_path: Path, state_path: Path, max_items: int, heads: dict) -> dict:
     state = json.loads(state_path.read_text(encoding="utf-8"))
     capsule = {
         "schema": "ARCHITECT_CONTEXT_CAPSULE/v1",
+        "compiler_revision": "OWNER_PROJECT_FRONTIER_HEAD_DELTA/v2",
         "compiled_at": datetime.now(timezone.utc).isoformat(),
         "architect_id": state.get("architect_id"),
         "generation": state.get("generation"),
         "federation_mode": state.get("federation_mode"),
+        "active_project_binding_id": state.get("active_project_binding_id"),
+        "active_owner_intent_epoch_id": state.get("active_owner_intent_epoch_id"),
+        "active_owner_direction_summary": state.get("active_owner_direction_summary"),
         "current_focus": state.get("current_focus"),
         "active_goal_ids": state.get("active_goal_ids", []),
-        "active_workpackage_ids": state.get("active_workpackage_ids", []),
+        "active_workpackage_ids": _active_workpackage_ids(state),
+        "primary_frontier_workpackage_ids": state.get("primary_frontier_workpackage_ids", []),
+        "observed_parallel_component_work": state.get("observed_parallel_component_work", []),
         "active_hypothesis_ids": state.get("active_hypothesis_ids", []),
+        "current_blockers": state.get("current_blockers", []),
+        "current_uncertainty": state.get("current_uncertainty", []),
         "unresolved_contradictions_from_state": state.get("unresolved_contradictions", []),
         "worker_frontier": state.get("worker_frontier", {}),
         "test_frontier": state.get("test_frontier", {}),
+        "authority_resolution": state.get("authority_resolution", {}),
+        "aggregate_projection": state.get("aggregate_projection", {}),
+        "runtime_transport": state.get("runtime_transport", {}),
+        "evidence_precedence": state.get("evidence_precedence"),
+        "current_processing_mode": state.get("current_processing_mode"),
+        "current_context_budget_policy": state.get("current_context_budget_policy"),
         "next_exact_actions": state.get("next_exact_actions", []),
+        "last_ingested_heads": state.get("last_ingested_heads", {}),
         "external_heads": heads,
+        "head_deltas": _head_deltas(state, heads),
         "episodes": [],
         "decisions": [],
         "hypotheses": [],
         "method_rules": [],
         "contradictions": [],
-        "direction_bindings": []
+        "direction_bindings": [],
     }
     if db_path.exists():
         con = sqlite3.connect(db_path)

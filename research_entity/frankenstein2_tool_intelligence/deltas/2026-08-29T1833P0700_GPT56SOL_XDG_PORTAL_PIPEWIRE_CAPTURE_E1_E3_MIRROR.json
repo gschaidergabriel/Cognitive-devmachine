@@ -1,0 +1,49 @@
+{
+  "schema": "CLAY_F2_TRIGGER6_RESEARCH_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-WP700-XDG-PORTAL-PIPEWIRE-CAPTURE-001",
+  "recorded_at": "2026-08-29T18:33:00+07:00",
+  "worker": "GPT-5.6 Sol / ChatGPT Trigger-6 organ",
+  "authority_observed": {
+    "research_entity_main_prewrite": "a711cdb2cee5347ffe17a702ad569ff0240de108",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13AU_NON_AUTHORITY",
+    "execution_policy": "FREE_ONLY_EXTERNAL_PROVIDER_SPEND_POLICY; OWNER_VPS_ALLOWED",
+    "whole_entityos_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "canonical_f2_evidence": {
+    "e1_claim": "b6091f8680afb0f24b46951f60a87fe621bb2377",
+    "e1_source_result": "b479dc279aa45b5bb059c7b6f1d7d8f8642437ff",
+    "e2_claim": "4214469bbc3e6fc87591b575b64be06a40e86c61",
+    "e2_architecture_mapping": "82e140df3300ef2b5a68ea21dd16be061c0a8e67",
+    "e3_claim": "a68557327df99a696d14edf947f2fd4c968ba1ab",
+    "e3_experiment_source": "dbaac037dc1b03121114e2b3a606c99fcc571f32",
+    "e3_result": "96a7bde5add3a8e7e19360dc16bf242e1a3cdf99",
+    "f2_main_observed_after_e3": "39ba7217104d3abaa8be14795464c385983f54da"
+  },
+  "findings": [
+    "XDG ScreenCast v6 session lifecycle is a suitable Linux host-native authorization/session layer beneath F2 CaptureOwner, not an authority replacement.",
+    "Raw PipeWire node id is explicitly unsuitable as durable native stream identity because node ids can be reused; pipewire-serial/object.serial is the stronger native stream-instance discriminator.",
+    "Restore token is a restoration capability/request, not proof of current permission.",
+    "libportal is a viable thin wrapper candidate: it exposes session state/closed signal, restore lifecycle, raw a(ua{sv}) stream properties and PipeWire remote fd, allowing pipewire-serial extraction without adopting a heavyweight media framework.",
+    "Proposed F2 boundary remains stable PerceptionSource -> host-native session evidence -> HostPermissionGrant -> effective capability snapshot -> CaptureOwnerLease -> PipeWire buffer -> bounded CaptureFrameRef.",
+    "Native close/client loss/PipeWire error/serial replacement must invalidate the current host grant/owner before another frame is published; reopen/restoration requires an F2 source-generation advance.",
+    "Synthetic E3 state-machine replay passed 9/9 declared cases with canonical result digest af5f95a9269ea3ec8ea3448995d9c0e60e41dc75b001bb8be3fcee06adc89771."
+  ],
+  "evidence_boundary": {
+    "highest_trigger6_stage": "E3_CLAIM_REPRODUCED_SYNTHETIC_ONLY",
+    "architecture_credit": 0,
+    "f2_ablation_credit": 0,
+    "target_runtime_credit": 0,
+    "physical_device_credit": 0,
+    "whole_system_credit": 0,
+    "build_candidate": false,
+    "trigger4_handoff": false
+  },
+  "counterhypothesis": "A more mature wrapper path may still outperform libportal+direct PipeWire on implementation robustness. E3 did not compare real compositor/backend behavior or buffering/cleanup under actual capture.",
+  "next_exact_gate": "E4 real F2 ablation/integration discriminator: compare libportal+PipeWire against one mature wrapper path on an admitted local target-relevant surface, measuring session close/revoke handling, pipewire-serial extraction and stale-target rejection, generation fencing, bounded buffer handoff, cleanup and latency/freshness. Stop rather than mint runtime evidence if the surface is unavailable.",
+  "f2_is_canonical_for_trigger6_claims": true
+}

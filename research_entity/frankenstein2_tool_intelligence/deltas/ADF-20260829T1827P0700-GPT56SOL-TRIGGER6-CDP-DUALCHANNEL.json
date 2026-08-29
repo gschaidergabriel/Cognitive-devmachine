@@ -1,0 +1,148 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_ARCHITECTURE_DELTA_FUSION/v1",
+  "fusion_id": "ADF-20260829T1827P0700-GPT56SOL-TRIGGER6-CDP-DUALCHANNEL",
+  "trigger": "6",
+  "slot": "ARCHITECTURE_DELTA_FUSER",
+  "status": "COMPLETED_LIVE_FUSION_BOUNDED_ARCHITECTURE_DELTA_NO_RUNTIME_PROMOTION",
+  "created_at_local": "2026-08-29T18:27:00+07:00",
+  "provenance": {
+    "worker": "gpt-5.6-sol",
+    "research_trigger_protocol_path": "research_entity/frankenstein2_tool_intelligence/TRIGGERWORD_6_PROTOCOL.md",
+    "research_trigger_protocol_blob_sha_observed": "cc9ef0c9e29d68ed6df2196eedd7325e5f1996e4",
+    "f2_trigger_protocol_path": "research/tool_intelligence/TRIGGERWORD_6_PROTOCOL.md",
+    "f2_trigger_protocol_blob_sha_observed": "08571526d33f9a0c06577e2f119bdaf4297ef1c8",
+    "prior_live_fusion_path": "research_entity/frankenstein2_tool_intelligence/deltas/ADF-20260829T1501P0700-GPT56SOL-TRIGGER6-LIVE-FUSION.json",
+    "prior_live_fusion_blob_sha": "76cb0696f23bb888835dfe62bd8c9f54e06624fb",
+    "canonical_f2_claims": [
+      "research/tool_intelligence/claims/R6-LIVE-BROWSER-CDP-DUALCHANNEL/E1_SOURCE_READ.json",
+      "research/tool_intelligence/claims/R6-LIVE-BROWSER-CDP-DUALCHANNEL/E2_ARCHITECTURE_MAPPED.json"
+    ],
+    "canonical_f2_receipts": [
+      "research/tool_intelligence/receipts/R6-LIVE-BROWSER-CDP-DUALCHANNEL_E1_SOURCE_READ_20260829T1818P0700.json",
+      "research/tool_intelligence/receipts/R6-LIVE-BROWSER-CDP-DUALCHANNEL_E2_ARCHITECTURE_MAPPED_20260829T1825P0700.json"
+    ]
+  },
+  "architecture_snapshot": {
+    "frankenstein_2_head_at_final_pre_fusion_refresh": "bedd6b9a8e162969a72804bb77f49c01ddc75f60",
+    "research_entity_head_at_prewrite_refresh": "f702ef463c4e5ff32a12b9fe2cfbb3e9ddb7a1f8",
+    "prior_fusion_f2_head": "a0b7696c31af77e4ef9f42d26c7b3699d3c90c49",
+    "authority_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "f2_parallel_activity": "HIGH; Trigger-4 and Trigger-6 commits moved main repeatedly during this macrocycle"
+  },
+  "live_fusion_findings": [
+    {
+      "id": "ADF-CDP-01-PRIOR-FUSION-STALE",
+      "classification": "SUPERSESSION",
+      "finding": "The prior 15:01 Trigger-6 fusion is architecture-stale for the Perception Fabric because F2 advanced from a0b7696... through the WP709-WP714 perception sequence and subsequent Trigger-4/6 repairs. It remains historical provenance only for this subproblem."
+    },
+    {
+      "id": "ADF-CDP-02-CURRENT-PERCEPTION-SEAM",
+      "classification": "CURRENT_SOURCE",
+      "finding": "Current F2 already defines single-owner bounded capture brokers, browser/rendered/<target_id> plus browser/structural/<target_id> logical sources, monotonic temporal fusion with uncertainty, source-generation hardening, and a later local physical browser-hook acceptance boundary. CDP/DOM/AX is therefore an existing planned adapter seam, not a missing product subsystem."
+    },
+    {
+      "id": "ADF-CDP-03-NONDUPLICATE-EXTERNAL-EVIDENCE",
+      "classification": "EXTERNAL_PRIMARY_E1_E2",
+      "finding": "Primary Chrome DevTools Protocol source supports a thin dual-channel browser adapter: Page screencast/screenshot mechanisms can supply rendered observations; DOMSnapshot can supply structural observations; Target attachment supplies a debugging-session identity. Repository duplicate search found no pre-existing F2 CDP/Playwright/DOMSnapshot/Screencast implementation lane before the canonical claim."
+    },
+    {
+      "id": "ADF-CDP-04-IDENTITY-ALIAS-HAZARD",
+      "classification": "ARCHITECTURE_DELTA",
+      "finding": "Target.SessionID and Page.screencastFrame.sessionId are different causal identities despite similar naming: the former is a string debugging-session ID and the latter an integer screencast frame number. F2 must keep them typed/named separately before these fields enter provenance or replay."
+    },
+    {
+      "id": "ADF-CDP-05-VERSION-BOUNDARY",
+      "classification": "ARCHITECTURE_DELTA",
+      "finding": "Page.startScreencast is experimental in tip-of-tree CDP and absent from the old stable 1.3 subset; browser/CDP version identity must therefore be bound at the adapter boundary rather than assuming a timeless protocol ABI."
+    },
+    {
+      "id": "ADF-CDP-06-TEMPORAL-NONPROMOTION",
+      "classification": "FAIL_CLOSED_RULE",
+      "finding": "Rendered and structural observations sharing target/session provenance are correlated candidates, not proof of simultaneity. Each retains its own F2 monotonic capture timestamp and existing temporal uncertainty/fusion rules."
+    },
+    {
+      "id": "ADF-CDP-07-GENERATION-FENCE",
+      "classification": "ARCHITECTURE_DELTA",
+      "finding": "Navigation, target replacement, detach/reconnect or other invalidating browser transitions must advance the F2 source generation/epoch before new browser observations can fuse with old ones. This reuses the current Perception Fabric hardening law rather than inventing a second reset mechanism."
+    },
+    {
+      "id": "ADF-CDP-08-AUTHORITY-NONDUPLICATION",
+      "classification": "ARCHITECTURE_CONSTRAINT",
+      "finding": "The browser adapter remains an observation producer only. Existing per-source broker ownership, temporal fusion, canonical state and effect/completion authority remain unchanged. Existing capture-authstream research handles portal/PipeWire permission/revocation and is not duplicated by this delta."
+    }
+  ],
+  "architecture_delta": {
+    "delta_id": "BROWSER_CDP_DUALCHANNEL_PROVENANCE_HARDENING/v1",
+    "decision": "ADOPT_AS_BOUNDED_CONTRACT_DELTA_PENDING_BUILD_VALIDATION",
+    "affected_modules": [
+      "F2 local physical browser capture adapter seam",
+      "browser/rendered/<target_id> provenance contract",
+      "browser/structural/<target_id> provenance contract",
+      "navigation/reconnect generation fencing",
+      "Trigger-4 local physical-acceptance tests"
+    ],
+    "required_fields_or_invariants": [
+      "source_id",
+      "source_generation_or_epoch",
+      "cdp_target_id",
+      "cdp_target_session_id_string",
+      "cdp_screencast_frame_id_integer_when_applicable",
+      "cdp_frame_id_when_applicable",
+      "browser_build_or_version_identity",
+      "cdp_protocol_identity",
+      "captured_monotonic_ns",
+      "payload_sha256_or_payload_ref",
+      "permission_or_capability_provenance_ref_when applicable"
+    ],
+    "explicit_non_changes": [
+      "no new browser subsystem",
+      "no second truth store",
+      "no new effect authority",
+      "no duplicate temporal-fusion layer",
+      "no mandatory Playwright/Puppeteer dependency",
+      "no physical/runtime acceptance from research evidence"
+    ],
+    "expected_benefit": "Prevents causal provenance aliasing and stale cross-navigation fusion while keeping the already-planned browser capture path thin and compatible with the existing Perception Fabric.",
+    "runtime_efficiency_implication": "Prefer a thin protocol adapter over a full automation framework unless target-browser tests demonstrate the heavier dependency buys materially better compatibility/reconnect behavior at acceptable CPU/RSS/latency/complexity cost."
+  },
+  "hypothesis": "A thin, version-bound CDP adapter with explicit dual logical sources and typed session/frame/generation provenance can close the browser physical-capture seam without creating another authority or duplicating temporal/capture infrastructure.",
+  "counterhypotheses": [
+    "Experimental screencast behavior may be unstable enough that sampled Page.captureScreenshot is the better rendered primitive.",
+    "DOMSnapshot may be too expensive at the desired cadence; DOM/AX or a thinner structural projection may dominate it.",
+    "A full browser automation framework may materially outperform a thin adapter on reconnect/version compatibility and justify its dependency weight.",
+    "Rendered/structural skew under fast navigation may be too large for meaningful pairwise fusion without a browser-side synchronization/barrier mechanism."
+  ],
+  "falsifier_and_acceptance_gates": [
+    "E5/build gate: bind one exact target browser build and protocol identity.",
+    "Compare Page.startScreencast with bounded Page.captureScreenshot for cadence, CPU/RSS, latency, drop behavior and reconnect stability.",
+    "Measure DOMSnapshot/alternative structural capture cost and rendered-vs-structural skew.",
+    "Exercise navigation, target detach/replace and reconnect; prove source-generation fences prevent stale fusion.",
+    "Verify Target.SessionID and screencast frame ID remain distinct through broker/provenance/replay surfaces.",
+    "Trigger-4 local physical acceptance must observe real browser capture before any physical or whole-system credit."
+  ],
+  "handoff": {
+    "to": "Trigger-4 build/test lane",
+    "status": "RESEARCH_DELTA_READY_NOT_E5_PROMOTED",
+    "reason": "E1/E2 establish source plausibility and architecture mapping, but the exact target browser/runtime measurements required for E5 are not present in this macrocycle."
+  },
+  "credit_boundary": {
+    "trigger6_e1_source_read": 1,
+    "trigger6_e2_architecture_mapping": 1,
+    "architecture_delta_fusion": 1,
+    "e3_reproduced_runtime_claim": 0,
+    "e4_f2_ablation": 0,
+    "e5_build_candidate": 0,
+    "e6_f2_accepted": 0,
+    "f2_runtime_credit": 0,
+    "physical_browser_capture_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_actions": [
+    "Trigger 4 should consume BROWSER_CDP_DUALCHANNEL_PROVENANCE_HARDENING/v1 when implementing the existing local browser adapter seam, not create a competing browser service.",
+    "Before implementation promotion, acquire the appropriate canonical F2 E5/build claim and pin the exact target browser/runtime.",
+    "Keep rendered/structural co-membership non-simultaneous unless measured skew/uncertainty establishes an admissible fusion relation.",
+    "Re-review this delta if F2 source gains an equivalent typed CDP provenance contract before build handoff."
+  ]
+}

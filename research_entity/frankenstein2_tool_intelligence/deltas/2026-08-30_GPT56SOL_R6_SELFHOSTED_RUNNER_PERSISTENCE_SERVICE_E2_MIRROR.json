@@ -1,0 +1,16 @@
+{
+  "schema": "F2_TRIGGER6_RESEARCH_MIRROR/v1",
+  "research_id": "R6-20260830-SELFHOSTED-RUNNER-PERSISTENCE-SERVICE-GPT56SOL-01",
+  "classification": "MIRROR_POINTER_NOT_CANONICAL_F2_TRUTH",
+  "mirror_recorded_after_f2_head_observed": "5e5f91f5ce7e09a36ba02d907c85fd73fe82b41f",
+  "research_entity_parent_observed": "395ddd585f5290f06e178abbdc11ba401a52aeae",
+  "canonical_project_repository": "gschaidergabriel/frankenstein-2.0",
+  "canonical_e1_delta": "research/tool_intelligence/deltas/2026-08-30T0059P0700_GPT56SOL_SELFHOSTED_RUNNER_PERSISTENCE_SERVICE_E1_SOURCE_READ.json@acf207b58bf31ed97e8131319278d38cb72ae508",
+  "canonical_e2_delta": "research/tool_intelligence/deltas/2026-08-30T0100P0700_GPT56SOL_SELFHOSTED_RUNNER_PERSISTENCE_SERVICE_E2_ARCHITECTURE_MAPPED.json@9ee5f01b34f6d5f39b07f0c3cf9f0b8de09126ed",
+  "finding": "WP510 self-hosted target-runtime evidence has an out-of-band runner-listener readiness dependency. The current self-hosted workflow can prove exact F2 source and target execution only after assignment; it cannot prove its own pre-assignment listener liveness. For a persistent Linux runner, GitHub's documented systemd runner service is the thinnest candidate readiness mechanism. Runner service state, GitHub-side eligibility, assignment, step execution and target-runtime receipt remain separate credits.",
+  "security_boundary": "Repository runner-roster REST reads require repository Administration(read). Do not introduce a higher-privilege PAT/App credential solely to make runner readiness observable without a later explicit security/owner decision.",
+  "promotion": "E2_ONLY_CONDITIONAL; NO_E5_UNTIL_TARGET_RUNNER_LIFECYCLE_INTENT_AND_HOST_SERVICE_STATE_ARE_OBSERVED",
+  "runtime_credit": 0,
+  "target_environment_credit": 0,
+  "whole_product_credit": 0
+}

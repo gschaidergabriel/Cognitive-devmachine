@@ -1,0 +1,67 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "normalized_trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "created_at_utc": "2026-08-29T09:14:00Z",
+  "trigger_routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directives_read": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "selector": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json"
+  },
+  "research_base_sha": "6b888cc33c663d6214f316ce6effed814c2cd80b",
+  "f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_observed_main": "c26a37a5117788326779fbd76af11c1d5c85e80d",
+  "current_frontier": {
+    "workpackage": "F2-WP-002",
+    "generation": 5,
+    "claim_id": "F2-WP-002-G5-GPT56SOL-AGGREGATE-PROJECTION-REPAIR-20260829",
+    "state": "ACTIVE",
+    "scope": "aggregate projection / continuity metadata only"
+  },
+  "continuity_gates": {
+    "checkpoint_continuity": {
+      "head_sha": "2e3941e7dd6119d0f8cb51a87834b72abcf5302a",
+      "run_id": 33244956787,
+      "status": "COMPLETED_SUCCESS"
+    },
+    "workpackage_state_consistency": {
+      "head_sha": "8f2ead642edb0385076a61e0c304bdf4c8a9c3ec",
+      "run_id": 33244931006,
+      "job_id": 99080656126,
+      "deterministic_regressions": "PASS",
+      "repository_projection": "FAIL_CLOSED",
+      "promotion_allowed": false
+    }
+  },
+  "parallel_convergence": {
+    "wp506": "Generation 3 exact-selection-type repair is already claimed at commit 1cde684eabb25d36d66085f1d25a3d2d00b7c98b; no duplicate mutation lane created.",
+    "wp508": "Generation 4 broadcast-builder-lineage acceptance reconciliation/receipt reached main at f6ad51dd7a3947691a30d0b7adfa639bc831076f / c26a37a5117788326779fbd76af11c1d5c85e80d; bounded repository-component evidence only.",
+    "wp002": "Canonical CURRENT is bound to the existing G5 projection/continuity repair lane; this organ did not overwrite its owned hot-file scope."
+  },
+  "credits": {
+    "target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "effects_and_execution": {
+    "provider_calls": false,
+    "vps_execution": false,
+    "real_effect_authority_used": false,
+    "github_repository_ci_observed": true
+  },
+  "next_exact_action": "Re-enter exact newest F2 main, observe the next Workpackage State Consistency CI result under the sole active F2-WP-002 G5 lane, and repair only the first validator-proven metadata contradiction. Preserve already-claimed WP506 G3 and terminalized/accepted-at-scope WP508 G4 lanes; do not mint target-runtime, physical GRID10, GWT/J-Space causal, training, effect, or whole-system credit from repository CI."
+}

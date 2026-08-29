@@ -1,0 +1,42 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_E2_MIRROR/v1",
+  "research_id": "R6-WP507-PLANOUT-ASSIGNMENT-001",
+  "trigger": "6",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "MIRRORED_PROVENANCE_NO_PROMOTION",
+  "created_at": "2026-08-29T15:03:00+07:00",
+  "source": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "commit": "08a8f3c1e69cc0005a4d58c50712e4d3f8696388",
+    "path": "research/tool_intelligence/deltas/R6-20260829-WP507-PLANOUT-ASSIGNMENT-E2-GPT56SOL.json",
+    "claim_commit": "b51bdae9f220a2ee27da084056e294c04f1b74cc"
+  },
+  "target": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "prewrite_main": "98c7204fc21b81b7f113f556b4f71136ccaf4379"
+  },
+  "adjudication": {
+    "evidence_stage": "E2_ARCHITECTURE_MAPPED",
+    "external_repo": "facebookarchive/planout",
+    "external_source_commit": "eee764781054abb39f003133b00b88a73c8f8982",
+    "verdict": "CONCEPT_DISTILL_RECOMMENDED_NO_LIBRARY_IMPORT",
+    "distilled_candidate": "F2-native versioned DeterministicInterventionAssignment",
+    "critical_fence": "ASSIGNMENT != OFFERED != DELIVERED != UPTAKEN != CAUSAL_INFLUENCE",
+    "major_negative_result": "PlanOut SimpleNamespace allocation is history-dependent without stored allocation state; do not transplant that state model.",
+    "next_gate": "E3_CLAIM_REPRODUCED_ASSIGNMENT_STABILITY",
+    "trigger4_handoff": "NOT_YET_ELIGIBLE_E2_ONLY"
+  },
+  "credits": {
+    "architecture_acceptance_credit": 0,
+    "runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "integration_credit": 0,
+    "whole_system_credit": 0
+  },
+  "coordination": {
+    "f2_is_claim_and_result_authority": true,
+    "cross_repo_atomicity_assumed": false,
+    "research_credit_from_mirror": 0
+  }
+}

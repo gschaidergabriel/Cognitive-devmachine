@@ -1,0 +1,29 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_MIRROR/v1",
+  "research_id": "R6-20260829-SRCARCH-NNSIGHT-GPT56SOL-01",
+  "status": "MIRRORED_E1_SOURCE_READ",
+  "mirror_epoch": "2026-08-29T15:06:30+07:00",
+  "claim_authority": "F2_ONLY",
+  "f2_claim_commit": "ed386da2fb392093f12136cd3b44b0d4ec65d1ef",
+  "f2_outcome_commit": "d1b85acaae95cb1a628a4c3bf63fc95314c4b245",
+  "f2_claim_ref": "research/tool_intelligence/claims/R6-20260829-SRCARCH-NNSIGHT-GPT56SOL-01/E1_SOURCE_READ.json",
+  "f2_outcome_ref": "research/tool_intelligence/claims/R6-20260829-SRCARCH-NNSIGHT-GPT56SOL-01/E1_SOURCE_READ_OUTCOME.json",
+  "external_source": {
+    "repo": "ndif-team/nnsight",
+    "commit": "87f4dadaae254c6d36e8820cc83a251623b8dda7"
+  },
+  "classification": "PROMISING_ISOLATED_CAUSAL_INTERVENTION_DONOR_NOT_CORE_DEPENDENCY_YET",
+  "hypothesis": "NNsight can wrap an already-attested local torch model object and provide reversible activation intervention without requiring model conversion or a remote provider path; this may make it a stronger future lesion/rescue donor than TransformerLens for exact target identity preservation.",
+  "counterhypothesis": "Its AST capture, worker-thread mediator, hook orchestration and dependency surface may add more perturbation and maintenance cost than a thin F2-native PyTorch-hook harness, which remains the baseline.",
+  "resource_assessment": "Potentially lighter than pyvene/TransformerLens as an experimental donor, but not lightweight enough for automatic core adoption; measure against native hooks before E5.",
+  "next_discriminator": "E2 comparative design across NNsight, pyvene, TransformerLens and native hooks once exact local approximately-0.8B model/J-Space ABI and loader identity are available.",
+  "evidence_ceiling": "E1_SOURCE_READ_ONLY",
+  "credits": {
+    "research_source_delta": 1,
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "gwt_causal_credit": 0,
+    "whole_system_credit": 0,
+    "training_credit": 0
+  }
+}

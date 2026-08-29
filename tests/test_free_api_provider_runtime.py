@@ -247,7 +247,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertFalse(
             capability_receipt["fork_active_execution_quarantined"]
         )
-        self.assertEqual(capability_receipt["schema_version"], "1.17")
+        self.assertEqual(capability_receipt["schema_version"], "1.18")
         self.assertFalse(capability_receipt["invariants"][
             "semantic_request_identity_authorizes_replay"
         ])

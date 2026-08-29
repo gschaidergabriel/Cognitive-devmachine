@@ -1,0 +1,43 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_E1_PROVENANCE_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-WP105-DBOS-IDEMPOTENCY-DISTILL-001",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "MIRRORED_PROVENANCE_NO_STAGE_UPGRADE",
+  "mirrored_at": "2026-08-29T15:07:00+07:00",
+  "canonical_f2_result": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "commit": "9efd5d79d2724589c609b92506a6deeb68496a46",
+    "path": "research/tool_intelligence/deltas/R6-WP105-DBOS-IDEMPOTENCY-DISTILL-001_E1_SOURCE_READ_20260829T1507P0700_GPT56SOL.json",
+    "claim_commit": "c2eaad5d36dc98384e477787e2e5164c80063bc4",
+    "claim_path": "research/tool_intelligence/claims/R6-WP105-DBOS-IDEMPOTENCY-DISTILL-001/E1_SOURCE_READ.json"
+  },
+  "research_entity_prewrite_main": "4792dc2fad9c68fa37a670ad07966fc887ffed0c",
+  "external_source_pin": {
+    "repo": "dbos-inc/dbos-transact-py",
+    "commit": "5bca975a729f6dcb921138f03e58628bbe00fa88",
+    "license": "MIT"
+  },
+  "retained_finding": "DBOS is a strong source donor for the WP105 retry-identity blocker, but the evidence supports pattern distillation rather than runtime import. Current DBOS source validates durable workflow IDs, reuses recorded completed outcomes instead of re-running the body, and aborts duplicate ownership conflicts. Its historical issue #759 shows why identity admission must fail closed: malformed durable identity once caused repeated duplicate side effects before the fix. The full runtime would add a second durable workflow/control authority and a larger dependency surface, so F2 should instead transplant the tested invariants into existing UnifiedDB/EffectJournal.",
+  "hypothesis_forwarded": "Persist operation_retry_id + operation_payload_sha256 + attempt_id + dispatch-start state + outcome certainty + verification reference transactionally inside the existing EffectJournal/UnifiedDB lane; keep request_sha256 and effect_id distinct. Same logical operation and payload must fence or return the existing record; changed payload under the same operation ID must reject before dispatch; unresolved UNKNOWN non-idempotent outcomes must never auto-replay.",
+  "counterhypothesis": "Identity plus payload digest may still be insufficient without an explicit authority-owned PRE_DISPATCH/DISPATCH_STARTED_UNKNOWN/VERIFIED terminal state machine; the next no-real-effect reopen fixture must falsify this.",
+  "adoption_direction": "DISTILL_PATTERN_NOT_LIBRARY_IMPORT",
+  "next_gate": "Acquire a separate E2 architecture-mapping claim and map the pattern against exact current WP105/EffectJournal schema before any build handoff or runtime test.",
+  "authority_fence": "Provenance mirror only. F2 claim/result and pending_research.sqlite retain Trigger-6 authority roles; UnifiedDB and EffectGate/EffectJournal remain canonical state/effect authority.",
+  "coordination": {
+    "f2_is_claim_and_result_authority": true,
+    "cross_repo_atomicity_assumed": false,
+    "pending_research_sqlite_sync": "PENDING",
+    "mirror_grants_independent_replication_credit": false
+  },
+  "credits": {
+    "f2_e1_source_read_credit": 1,
+    "mirror_research_credit": 0,
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "integration_credit": 0,
+    "effect_credit": 0,
+    "whole_system_credit": 0,
+    "training_credit": 0
+  }
+}

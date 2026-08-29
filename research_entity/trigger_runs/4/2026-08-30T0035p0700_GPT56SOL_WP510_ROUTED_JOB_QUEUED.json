@@ -1,0 +1,47 @@
+{
+  "schema": "TRIGGER4_EXECUTION_EVIDENCE_MIRROR/v1",
+  "trigger": "4",
+  "observed_local_time": "2026-08-30T00:35:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "authority_epoch": "8.78",
+  "research_main_observed_before_write": "d3641b6528251b01b7839675654ed0297aebb626",
+  "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+  "controller_head_observed": "ff91b643daaf629286bf756bd18c87e6704263b4",
+  "frankenstein2_exact_wp510_source_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+  "workflow": ".github/workflows/trigger4-wp510-target-runtime-v2.yml",
+  "dispatch_commit": "2b2aaca5750a7da135fef92cf6611995d117fbe2",
+  "run_id": 33265772059,
+  "job_id": 99135457584,
+  "job_name": "wp510-target-runtime",
+  "job_status_observed": "queued",
+  "job_steps_observed": 0,
+  "target_runtime_receipt_observed": false,
+  "vps_probe_directory_observation": {
+    "present": [
+      "wp510_dispatch_surface_negative_20260829T1727Z.json",
+      "wp510_push_dispatch_v2.txt",
+      "wp510_target_runtime_probe_v4.py",
+      "wp510_transport_prejob_failure_33247601069.json"
+    ],
+    "absent_at_observation": [
+      "wp510_target_runtime_latest.json"
+    ]
+  },
+  "interpretation": "Workflow routing is materially improved relative to the prior zero-job transport failure because an actual WP510 target-runtime job now exists. However, queued status with zero observed steps and no source-bound receipt is not execution evidence. The remaining observed gate is runner assignment/availability on the currently reachable bridge surface, not a demonstrated WP510 semantic failure.",
+  "credits": {
+    "wp510_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "negative_search": {
+    "existing_repo_runner_restart_or_ssh_recovery_path_found": false,
+    "note": "No existing controller repository workflow/source matching actions.runner/systemctl restart/self-hosted recovery or SSH Hostinger recovery was found by targeted code search. This is a search result on the connected repository surface, not proof that no external operator path exists."
+  },
+  "next_exact_action": "Have the already-routed self-hosted job 99135457584 be accepted by an eligible runner, then require clay-direct-dev to execute the v4 probe at exact F2 source 656b57bded655e64a25d7e205b599becce3d4989 and persist a source/tree/identity-bound target-runtime receipt. Promote only the bounded target-environment component credit supported by that receipt."
+}

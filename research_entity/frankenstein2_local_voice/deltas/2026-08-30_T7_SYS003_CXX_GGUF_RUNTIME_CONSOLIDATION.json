@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "mirror_type": "F2_EVIDENCE_REFERENCE_AND_ARCHITECTURE_DELTA",
+  "date": "2026-08-30",
+  "canonical_f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "canonical_claim": "research/local_voice/claims/T7-SYS-003/E3_CXX_GGUF_CONSOLIDATED_RUNTIME_RESEARCH.json",
+  "canonical_result": "research/local_voice/frontier/2026-08-30_TRIGGER7_CXX_GGUF_RUNTIME_CONSOLIDATION.md",
+  "canonical_checkpoint": "research/local_voice/checkpoints/2026-08-30_T7_SYS003_CXX_GGUF_RUNTIME_AUDIT.json",
+  "upstream_pin": {
+    "repository": "CrispStrobe/CrispASR",
+    "commit": "1edcc63c830523ec33bdedfe54f338ac56019207"
+  },
+  "delta": "A common native C++/ggml/GGUF speech runtime is now a serious deployment-substrate challenger for the Qwen3 ASR/TTS lane, but audited server semantics falsify automatic single-instance ASR+TTS memory-sharing. The first compact Qwen3-ASR falsifier should preserve the audio tower at Q8_0 rather than naively quantizing every tensor below Q8, because upstream source evidence records long-audio encoder drift/repetition under lower precision.",
+  "runtime_credit": 0,
+  "voice_acceptance_credit": 0,
+  "hardware_dependency": {
+    "claim": "T7-SYS-002/E3_VPS_HARDWARE_REENTRY",
+    "invalid_pre_repair_run": 33265258658,
+    "post_repair_run": 33265516827,
+    "post_repair_status_at_mirror": "pending",
+    "receipt_observed": false
+  },
+  "next_gate": "Ingest a terminal source-bound clay-direct-dev hardware receipt, then execute same-fixture German ASR/TTS reference-vs-CrispASR A/B plus simultaneous resident-pair resource/latency/cancellation measurements before any Trigger-4 promotion."
+}

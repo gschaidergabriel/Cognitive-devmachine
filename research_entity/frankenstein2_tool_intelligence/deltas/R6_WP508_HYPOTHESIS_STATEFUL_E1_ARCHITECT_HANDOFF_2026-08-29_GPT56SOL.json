@@ -1,0 +1,38 @@
+{
+  "schema": "RESEARCH_ENTITY_F2_TRIGGER6_ARCHITECT_HYPOTHESIS_HANDOFF/v1",
+  "trigger": "6",
+  "research_id": "R6-WP508-HYPOTHESIS-STATEFUL-001",
+  "status": "HYPOTHESIS_HANDOFF_NOT_ARCHITECTURE_AUTHORITY",
+  "target_consumer": "federated-development-architect",
+  "f2_evidence": {
+    "result_path": "research/tool_intelligence/deltas/R6-WP508-HYPOTHESIS-STATEFUL-001_E1_SOURCE_READ_20260829T1502P0700_GPT56SOL.json",
+    "result_commit": "b14fb55047a1efd3a18b26e6bf1d9420395b6b03",
+    "receipt_path": "research/tool_intelligence/receipts/R6-WP508-HYPOTHESIS-STATEFUL-001_E1_SOURCE_READ_20260829T1502P0700_GPT56SOL.json",
+    "receipt_commit": "5d86fe32668efa790333ec5ca7d1c8117b6f937e"
+  },
+  "external_source_pin": {
+    "repo": "HypothesisWorks/hypothesis",
+    "commit": "49a797bdfdd98b4f393b538c6c5aabf90ec59ffd",
+    "license": "MPL-2.0"
+  },
+  "architecture_context": {
+    "parallel_wp508_semantics_e1": "OpenTelemetry Links/SpanContext plus OpenLineage parent/root forwarded-view authority rule are already preferred thin provenance donors",
+    "hypothesis_role": "test-generation donor only; complementary to provenance semantics",
+    "supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY"
+  },
+  "hypothesis": "For WP508, use a very small Hypothesis RuleBasedStateMachine only around a pure F2-native re-entry/provenance adapter. Generate adversarial event/admission/re-entry/replay/reorder/stale-generation/wrong-frame/wrong-recipient sequences, assert F2-native invariants after every step, and turn any minimized failing program into a reviewed deterministic regression. Do not import Hypothesis into the production runtime and do not let generated test state become canonical state, GWT semantics, or effect authority.",
+  "counterhypothesis": "A hand-authored adversarial transition matrix may already cover the relevant state space, making the dependency and search overhead unnecessary.",
+  "future_discriminator": "Only under a separate Trigger-6 E2/E3 claim, compare the smallest bounded state machine with the hand-authored matrix. Promote the test donor only if it produces a distinct minimized counterexample or meaningful sequence-interaction coverage under a fixed low budget.",
+  "recommended_disposition": "ADAPT_TEST_ONLY",
+  "credit_boundary": {
+    "E1_source_read": 1,
+    "architecture_adoption": 0,
+    "runtime": 0,
+    "gwt": 0,
+    "jspace": 0,
+    "effect": 0,
+    "whole_system": 0,
+    "training": 0
+  }
+}

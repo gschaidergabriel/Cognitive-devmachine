@@ -1,0 +1,61 @@
+{
+  "schema": "TRIGGER4_F2_COMPONENT_RECONCILIATION/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol / REVIEW_ONLY falsifier organ",
+  "created_at_local": "2026-08-29T07:00:00+07:00",
+  "project": "Frankenstein 2.0",
+  "repository": "gschaidergabriel/frankenstein-2.0",
+  "workpackage": "F2-WP-506",
+  "generation": 1,
+  "prior_negative_evidence": {
+    "research_ref": "research_entity/trigger_runs/4/2026-08-29T0651p0700_GPT56SOL_F2_WP506_BROADCAST_PAIR_BINDING_FALSIFIER.json",
+    "review_pr": 154,
+    "review_head": "c622cfb9d1ddcf66b725731db9a6776f39a13c0e",
+    "workflow_run_id": 33222089772,
+    "job_id": 99018090156,
+    "conclusion": "failure",
+    "finding": "Independent sorting of candidate_ids and candidate_payload_refs destroyed positional pair association when lexical orders differed."
+  },
+  "repair_evidence": {
+    "claimant_pr": 149,
+    "claimant_head": "3daf91bbd3a7d9f61d15ab4c2cf9fd17c082258b",
+    "source": "src/frankenstein2/gwt_workspace.py",
+    "source_blob_sha": "8babb109a2d9969fb35ebe6765e7f8d301b49931",
+    "regression": "tests/test_gwt_workspace.py::test_broadcast_preserves_candidate_to_payload_pairing_in_selection_order",
+    "test_blob_sha": "65700e52496750e77b8c35d6c5e801382089d48b",
+    "github_actions_run_id": 33222157305,
+    "github_actions_job_id": 99018295255,
+    "compile_conclusion": "success",
+    "falsification_suite_conclusion": "success",
+    "job_conclusion": "success"
+  },
+  "repair_interpretation": [
+    "BroadcastEnvelope now validates the two immutable tuples without independently sorting them, preserving the exact order emitted from WorkspaceSelection.selected.",
+    "The claimant absorbed an equivalent adversarial pairing regression and repository-hosted CI passes on the repaired exact head.",
+    "The negative result remains historical evidence and is not erased by the repair."
+  ],
+  "remaining_scope_boundary": {
+    "candidate_producer_provenance": "OPEN_AS_SEPARATE_INTEGRATION_DISCRIMINATOR",
+    "detail": "WorkspaceCandidate payload_ref/provenance_refs remain caller-supplied. WP506 can be credited only as deterministic coordination of caller-supplied candidates; outer frame/GRID10 plan binding does not prove each candidate was produced by that plan/cell output.",
+    "epistemic_preservation": "SOURCE_CONSISTENT_AT_REVIEWED_SCOPE",
+    "uptake_or_causal_influence": "NOT_OBSERVED_AND_NOT_CLAIMED"
+  },
+  "coordination": {
+    "review_pr_154": "CLOSED_AS_SUPERSEDED_AFTER_CLAIMANT_ABSORPTION",
+    "provenance_review_pr_146": "OPEN_DRAFT",
+    "claimant_review_comment_id": 5055938751
+  },
+  "credit_boundary": {
+    "pair_binding_component_repair": 1,
+    "repository_hosted_component_ci": 1,
+    "runtime_execution_observed": false,
+    "vps_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "causal_uptake_credit": 0,
+    "training_credit": 0,
+    "whole_frankenstein2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Allow the sole WP506 lane to converge only at its declared repository-component coordination scope; before later causal GWT/uptake promotion, bind caller-supplied candidates to exact producing GRID10/cell output lineage or an independently admitted equivalent receipt and falsify stale/foreign producer injection."
+}

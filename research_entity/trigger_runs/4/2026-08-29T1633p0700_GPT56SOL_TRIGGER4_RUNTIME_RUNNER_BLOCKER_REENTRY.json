@@ -1,0 +1,68 @@
+{
+  "schema": "TRIGGER4_RUNTIME_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "observed_at_local": "2026-08-29T16:33:00+07:00",
+  "authority_epoch": "8.78",
+  "authority_ref": "research_entity/continuity/BOOTSTRAP_MINIMAL.json -> research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+  "canonical_clay_main_before_write": "0836e3f5355b7c27f4a6e75c32ddc11026162ad8",
+  "frankenstein2_main_observed": "5c82a18beeee833a5295585dfce11f178d945fa1",
+  "trigger4_design_branch_observed": "a203a0b9faaeb495be1b3cd3bdce8a7deaf6583f",
+  "frankenstein1_donor_main_observed": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "routing_self_test": "PASS",
+  "required_directives_fetched": [
+    "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+  ],
+  "runtime_dispatch": {
+    "dispatch_key": "trigger4-pr430-unknown-outcome-v1",
+    "generation": 0,
+    "claim_id": "trigger4-pr430-unknown-outcome-v1-g0000",
+    "claim_state": "CREATE_ONLY_CLAIM_EXISTS",
+    "duplicate_dispatch_allowed": false,
+    "workflow": ".github/workflows/trigger4-pr430-unknown-outcome-vps.yml",
+    "primary_run_id": 33219725633,
+    "primary_run_head_sha": "b221f1e69b5fc51f1b660a75f9581bb9acbc3f32",
+    "primary_run_status": "queued",
+    "primary_run_conclusion": null,
+    "primary_job_id": 99011039821,
+    "primary_job_status": "queued",
+    "primary_job_conclusion": null,
+    "primary_job_labels": ["self-hosted", "Linux", "X64"],
+    "runner_id": 0,
+    "runner_name": "",
+    "steps_observed": [],
+    "result_receipt_path": "research_entity/continuity/ordinary_dispatch_results/trigger4-pr430-unknown-outcome-v1-g0000.json",
+    "result_receipt_observed": false,
+    "secondary_run_id": 33245895146,
+    "secondary_run_status": "pending",
+    "secondary_run_jobs_observed": 0,
+    "secondary_run_is_runtime_substitute": false
+  },
+  "classification": {
+    "blocker": "SELF_HOSTED_RUNNER_UNASSIGNED_OR_UNAVAILABLE",
+    "epistemic_type": "INFRASTRUCTURE_COORDINATION_BLOCKER",
+    "product_logic_failure": false,
+    "scientific_negative_result": false,
+    "target_runtime_evidence_present": false
+  },
+  "active_parallel_mutation_authorities": [
+    "F2-WP-510 generation 1 GWT causal-path seal",
+    "F2-WP-600 generation 1 Direct/Delegate Router",
+    "F2-WP-601 generation 1 Native Child ABI",
+    "F2-WP-700 generation 1 Retina pipeline"
+  ],
+  "credits": {
+    "entityos_hcu_runtime": 0,
+    "frankenstein2_target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "training": 0,
+    "whole_system_acceptance": false
+  },
+  "decision": "DO_NOT_DUPLICATE_EXISTING_DISPATCH_AND_DO_NOT_MUTATE_ACTIVE_WORKPACKAGE_PATHS",
+  "next_exact_action": "Observe the existing singleton primary run only. If a self-hosted runner accepts job 99011039821, inspect exact execution/result identity and the create-once result receipt before granting any bounded runtime credit. If the job remains runnerless, preserve the state as infrastructure/coordination evidence; do not create a second issue or reinterpret queued/pending state as product evidence.",
+  "unusual_experiment_executed": false
+}

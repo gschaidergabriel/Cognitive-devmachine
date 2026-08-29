@@ -1,0 +1,66 @@
+{
+  "schema": "F2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "research_id": "R6-SEED-009",
+  "claim_target": "E1_SOURCE_READ",
+  "status": "MIRRORED_SOURCE_EVIDENCE_NO_SECOND_AUTHORITY",
+  "trigger": "6",
+  "source_of_coordination_authority": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "claim_path": "research/tool_intelligence/claims/R6-SEED-009/E1_SOURCE_READ.json",
+    "claim_commit": "4dd582bd8377ea3af21f55fa015421ecfa5db2f5"
+  },
+  "source_evidence": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/R6-SEED-009_E1_SOURCE_READ_CLAIM4DD582_20260829T1455P0700_GPT56SOL.json",
+    "commit": "d17f6c2015ecd5cd58ad1bf98afb0c50c237e102",
+    "evidence_stage": "E1_SOURCE_READ",
+    "result": "PASS_AT_SOURCE_SCOPE",
+    "architecture_credit": 0,
+    "runtime_credit": 0
+  },
+  "external_source_lock": {
+    "repo": "QAInsights/perf-skills",
+    "commit": "e73a9c817422b61c161e9ef4d79d2d6d636f8526",
+    "commit_time_utc": "2026-08-29T07:36:04Z",
+    "license": "MIT",
+    "package_version_observed": "4.1.0"
+  },
+  "fused_findings": [
+    "The source contains a concrete selective-loading router: load only task-relevant topic/tool references and explicitly avoid loading all files at once.",
+    "The source contains a with-skill versus without-skill evaluation design with assertion grading and timing, which is structurally relevant to F2 processing-credit/method ablations.",
+    "Committed eval specifications exist, but the described eval-output workspace is gitignored; upstream quality uplift is therefore not reproduced by this E1 source read.",
+    "The LLM-performance reference contributes method vocabulary such as TTFT, TPOT/ITL, goodput, workload shape and tail percentiles, but no such upstream threshold or benchmark result is F2 evidence.",
+    "The strongest candidate is a thin provenance-bound method-router/eval-contract distillation, not wholesale import of a second mutable knowledge or truth authority."
+  ],
+  "f2_mapping": {
+    "seed_targets": ["F2-WP-304", "F2-WP-305", "F2-WP-902"],
+    "adjacent_inferred_overlap": ["F2-WP-306"],
+    "next_stage_recommendation": "E2_ARCHITECTURE_MAPPED_METHOD_ROUTER_ABLATION"
+  },
+  "counterevidence": [
+    "Static guidance can become stale and may duplicate future F2-native RCPD/MethodMemory.",
+    "Actual upstream benchmark outputs were not present in the committed source inspected here.",
+    "A live tool catalog creates network/recency dependence and must not become runtime authority under current F2/EntityOS constraints.",
+    "No measured F2 token, quality, latency or resource gain exists at E1."
+  ],
+  "mirror": {
+    "mirror_epoch": "2026-08-29T15:02:00+07:00",
+    "f2_source_commit": "d17f6c2015ecd5cd58ad1bf98afb0c50c237e102",
+    "research_entity_head_observed_before_mirror": "3e0248589c770ca45abe8d204a57445989210890",
+    "cross_repo_atomicity_claimed": false,
+    "research_entity_claim_authority": false,
+    "pending_research_sqlite_sync": "NOT_ATTEMPTED_BINARY_SAFE_SYNC_SURFACE_NOT_USED"
+  },
+  "credits": {
+    "trigger6_e1_source_read": 1,
+    "trigger6_e2_architecture_mapped": 0,
+    "trigger6_e3_claim_reproduced": 0,
+    "trigger6_e4_f2_ablation": 0,
+    "trigger6_e5_build_candidate": 0,
+    "trigger6_e6_f2_accepted": 0,
+    "whole_f2_runtime": 0,
+    "entityos_hcu_runtime": 0,
+    "physical_grid10": 0,
+    "training": 0
+  }
+}

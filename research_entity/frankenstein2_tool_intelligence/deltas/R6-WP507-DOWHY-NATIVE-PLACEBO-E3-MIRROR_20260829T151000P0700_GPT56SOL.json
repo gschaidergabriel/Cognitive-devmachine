@@ -1,0 +1,66 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "research_id": "R6-WP507-DOWHY-REFUTER-001",
+  "trigger": "6",
+  "mirror_only": true,
+  "status": "E3_CLAIM_REPRODUCED_WITH_CURRENT_ABI_NEGATIVE_RESULT_MIRROR",
+  "created_at": "2026-08-29T15:10:00+07:00",
+  "authority": "F2_TRIGGER6_RESEARCH_STATE_REMAINS_CANONICAL_FOR_THIS_RESULT; THIS_FILE_IS_A_REUSABLE_FINDING_MIRROR_ONLY",
+  "source_f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "source_f2_commit": "2b3a102bebe1f2fa947b49bdddea581de619bcb4",
+  "source_f2_path": "research/tool_intelligence/deltas/R6-20260829-WP507-DOWHY-NATIVE-PLACEBO-E3-GPT56SOL.json",
+  "coordination_claim_commit": "89ff2bd5c052ba3b92ac54df4e2a884cf11e9cd5",
+  "donor_source": {
+    "wp507_canonical_main_product_source_materialized": false,
+    "open_pr": 226,
+    "head": "1c2037e97c9c6cf2c909764e142538028abc6e52",
+    "path": "src/frankenstein2/gwt_uptake.py",
+    "blob_sha1": "381493eb916cd734341c1c64caf520085bde4ef1"
+  },
+  "fixture": {
+    "f2_path": "research/tool_intelligence/fixtures/r6_wp507_dowhy_native_placebo_e3_fixture.py",
+    "fixture_commit": "5dea3c2946cb3be4117a126cc8698849e79921b5",
+    "git_blob_sha1": "38055b40279e305f218ebdc6e7050aa1cf7f0a83",
+    "executed_local_sha256": "823a8577720ced799583db2162a08396c0be1e9cf0e3bfb8f1dae0c0a40ed3a5",
+    "result_path": "research/tool_intelligence/fixtures/r6_wp507_dowhy_native_placebo_e3_result.json",
+    "result_commit": "69efa41f028a41674c472b63fd658ad4923d294c",
+    "result_git_blob_sha1": "df85d322dce35c90e4cf2e98e1c106c5a26d037b",
+    "result_sha256": "534f42462b56149e2ff07fad5ad9ea02e6cedd773fef3d3a64bd046a9aab3a9e",
+    "execution_scope": "SOURCE_EQUIVALENT_ABI_FIXTURE_ONLY"
+  },
+  "findings": [
+    "The current WP507 donor CausalProbeArm exposes only INTERVENTION_BROADCAST and CONTROL_NO_BROADCAST.",
+    "The control arm explicitly forbids broadcast identity/digest binding.",
+    "WITHHELD_BROADCAST is representable, but SHUFFLED_RECIPIENT_BROADCAST and SEMANTIC_PLACEBO_BROADCAST are not representable as controls in the current donor ABI.",
+    "The DoWhy E2 three-control proposal is therefore falsified as a direct current-ABI implementation; only 1/3 declared negative-control classes is expressible.",
+    "A full DoWhy runtime dependency is not justified by this result because the blocker is F2 control-arm identity semantics, not missing statistical machinery."
+  ],
+  "architecture_delta": {
+    "adoption_class": "PRESERVE_PLACEBO_IDEA; DO_NOT_IMPORT_DOWHY; REQUIRE_SEPARATE_TYPED_BROADCAST_BEARING_NEGATIVE_CONTROL_ABLATION",
+    "direct_dependency": false,
+    "preserve_existing_fences": [
+      "exact intervention broadcast binding",
+      "control/no-broadcast distinction",
+      "matched probe id",
+      "nonbroadcast input digest equality",
+      "complete recipient-scoped uptake",
+      "zero truth/effect/runtime authority"
+    ],
+    "counterhypothesis": "The existing intervention/no-broadcast pair may already be sufficient for immediate WP507 component acceptance; additional placebo/shuffle control types may add surface without incremental falsification value."
+  },
+  "next_discriminator": "Wait for canonical WP507 G3 source materialization or an explicitly admitted exact-PR-head E4 lane, then compare the current two-arm contract against a separate typed broadcast-bearing negative-control primitive on semantic-placebo and recipient-shuffle confounds. Adopt only on demonstrated incremental information gain.",
+  "pending_research_sqlite_sync": "PENDING",
+  "credits": {
+    "independent_research_credit_from_mirror": 0,
+    "F2_ablation": 0,
+    "build_candidate": 0,
+    "runtime": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_system": 0,
+    "entityos_hcu": 0
+  },
+  "evidence_boundary": "Mirror of F2 E3 source-equivalent ABI reproduction/falsification; no independent replication and no higher-scope promotion."
+}

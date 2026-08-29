@@ -1,13 +1,13 @@
 {
   "schema": "ARCHITECT_STATE/v1",
   "architect_id": "federated-development-architect",
-  "generation": 5,
+  "generation": 6,
   "status": "ACTIVE",
   "federation_mode": "SEPARATE_STATE_SHARED_DIRECTION",
   "active_project_binding_id": "frankenstein-2.0",
   "active_owner_intent_epoch_id": "2026-08-29-F2-RUNTIME-FIRST-RECOMPILE",
-  "active_owner_direction_summary": "Build Frankenstein 2.0 faster and at higher quality by improving the Research Entity only where it removes real build, evidence, coordination or runtime bottlenecks. Recompile Architect state, resolve 8.78/9.13 authority confusion, repair aggregate projection through the existing sole WP002 writer, promote the current WP510 causal path to the primary frontier, obtain first real target-runtime evidence through the existing VPS Bridge, and only then evaluate the next integration layer.",
-  "current_focus": "RUNTIME-FIRST: finish the existing F2-WP-002 G5 aggregate consistency repair without creating a competing writer, then promote the already accepted F2-WP-510 G2 causal-path contract from repository/CI evidence to exact target-runtime evidence through clay-direct-dev/VPS Bridge. Do not use later repository-only component progress as a substitute for that runtime discriminator.",
+  "active_owner_direction_summary": "Build Frankenstein 2.0 faster and at higher quality by improving the Research Entity only where it removes real build, evidence, coordination or runtime bottlenecks. Preserve the sole WP002 aggregate writer, keep WP510 as the runtime-promotion discriminator, stop blind self-hosted retriggers while the legacy runner queue is quarantined, and use repository-only parallel progress without allowing it to substitute for target-runtime evidence.",
+  "current_focus": "RUNTIME-FIRST WITH TRANSPORT BLOCKER: preserve F2-WP-510 G2 as the primary runtime discriminator, but stop retriggering its self-hosted probe while the controller legacy self-hosted queue is explicitly quarantined and queued jobs have zero steps. In parallel, let the existing F2-WP-002 G5 sole writer re-enter current main and recompute aggregate projection; do not create a competing writer or force-merge a stale snapshot.",
   "active_goal_ids": [
     "GOAL-F2-ARCHITECTURE-ASSEMBLY",
     "GOAL-F2-EVIDENCE-SPINE",
@@ -22,17 +22,20 @@
     "F2-WP-601",
     "F2-WP-602",
     "F2-WP-700",
-    "F2-WP-701"
+    "F2-WP-701",
+    "F2-WP-807",
+    "F2-WP-1202"
   ],
-  "parallel_work_policy": "Preserve valid non-conflicting parallel component work and its receipts, but do not let later repository-only work redefine the Architect promotion frontier before WP510 target-runtime evidence. No duplicate mutation authority and no rollback of already accepted bounded component evidence.",
+  "parallel_work_policy": "Preserve valid non-conflicting parallel component work and its receipts, including later Stage-8 and host-profile work, but do not let repository-only progress redefine the Architect promotion frontier before WP510 obtains target-runtime evidence or a narrower executable falsifier changes that discriminator. No duplicate mutation authority and no rollback of accepted bounded evidence.",
   "current_architecture_view": {
     "project": "Frankenstein 2.0",
     "phase": 5,
-    "phase_name": "GRID/GWT causal-path integration -> target-runtime promotion",
+    "phase_name": "GRID/GWT causal-path integration -> target-runtime promotion (transport blocked)",
     "current_causal_chain": "GRID10 SituationFrame/selection -> canonical BroadcastEnvelope -> UptakeSummary -> ReentryBinding -> GwtCausalPathReceipt",
     "wp510_generation": 2,
     "wp510_scope": "TYPED_DOWNSTREAM_LINEAGE_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
     "wp510_status": "ACCEPTED_AT_SCOPE_REPOSITORY_ONLY",
+    "wp510_canonical_merge_sha": "3e5b05f95b1cef80ff781152fa430f7916736746",
     "wp510_runtime_promotion_required": true,
     "accepted_repository_invariants": [
       "exact GRID/GWT plan/frame and selection identity are revalidated",
@@ -41,19 +44,19 @@
       "positive causal sealing requires exactly one UPTAKEN recipient and exact downstream-output digest identity",
       "forged lineage, detached positive downstream evidence and missing re-entry fail closed"
     ],
-    "credit_boundary": "Repository-hosted component CI does not establish target-runtime execution, physical GRID10, semantic GWT uptake, J-Space causal influence, provider/model execution, training, effects, completion or whole Frankenstein 2.0 acceptance. Those credits remain zero until exact executable evidence exists."
+    "credit_boundary": "Repository-hosted component CI and queued runtime jobs do not establish target-runtime execution, physical GRID10, semantic GWT uptake, J-Space causal influence, provider/model execution, training, effects, completion or whole Frankenstein 2.0 acceptance. Those credits remain zero until exact executable evidence exists."
   },
   "authority_resolution": {
     "admitted_supervisor_authority": "8.78",
-    "non_authority_research_inbox": "9.13AT_NON_AUTHORITY",
-    "decision": "9.13 research metadata is historical/non-authority and cannot override admitted 8.78 or newer explicit owner direction. Current-use active pointers must bind admitted authority while preserving historical 9.13 provenance where useful.",
+    "non_authority_research_inbox": "9.13_NON_AUTHORITY_RESEARCH_METADATA",
+    "decision": "9.13 research metadata cannot override admitted 8.78 or newer explicit owner direction. Current-use active pointers bind admitted authority while historical 9.13 provenance may be preserved as non-authority evidence.",
     "repaired_examples_observed": [
       "F2-WP-207",
       "F2-WP-402",
       "F2-WP-403"
     ],
     "vps_execution_authority": "RESOLVED_OWNER_AUTHORIZED",
-    "free_only_semantics": "FREE external model/API tokens only; owner VPS/local/self-hosted compute is allowed and expected. Paid, subscription or unknown-cost external provider tokens are forbidden under FREE_ONLY."
+    "free_only_semantics": "FREE external model/API tokens only; owner VPS/local/self-hosted compute is allowed and expected. Paid, subscription, unknown-cost or unlisted external provider tokens are forbidden under FREE_ONLY."
   },
   "aggregate_projection": {
     "authority": "CACHE_ONLY_NOT_TRUTH_AUTHORITY",
@@ -61,23 +64,36 @@
     "generation": 5,
     "pull_request": 115,
     "branch": "chatgpt/trigger4-wp002-g5-aggregate-projection-repair-20260829",
+    "head_observed": "ffe0f603a037273f475c67ee11f86fa8c468b478",
     "single_writer_rule": "Respect the existing WP002 G5 writer; repair through that lane rather than creating a second STATE.json authority.",
-    "last_observed_gate": "FAIL_CLOSED",
-    "last_observed_failure": "component reconciliation requires explicit zero whole-system credit",
-    "diagnostic_improvement_commit": "84b522d2a739bc5e0751fe84152da292abdcc7f1",
-    "diagnostic_policy": "Identify and repair the exact legacy reconciliation metadata defect; do not weaken the zero-credit invariant."
+    "last_observed_gate": "FAIL_CLOSED_DURING_PARALLEL_CHURN",
+    "last_observed_failure": "PR115 remains open while canonical main has advanced substantially beyond its original snapshot; regressions may pass while repository state validation detects newer pointer/reconciliation drift.",
+    "diagnostic_policy": "Re-enter and recompute against exact current main. Preserve append-only reconciliation chains and zero-credit invariants; do not force-merge or rewrite foreign active pointers merely to green the aggregate gate."
   },
   "runtime_transport": {
     "target_environment": "clay-direct-dev",
-    "authorized_transport": "existing VPS Bridge / self-hosted runner",
+    "authorized_transport": "existing VPS Bridge / controller self-hosted runner",
     "authority_ambiguity": false,
-    "existing_research_entity_dispatch_run": 33219725633,
-    "existing_research_entity_dispatch_job": 99011039821,
-    "last_observed_state": "QUEUED_WITH_RUNNER_ID_0_AND_NO_STEPS",
-    "classification": "TRANSPORT_OR_RUNNER_ASSIGNMENT_BLOCKER_NOT_PRODUCT_LOGIC_AND_NOT_AUTHORITY",
     "controller_runner_repository": "gschaidergabriel/Dr.-Unterweger",
+    "controller_main_observed": "addbe2f0808fd5001e1122d443ed3b41cf7f3864",
     "controller_probe_workflow": ".github/workflows/frank-self-hosted-probe.yml",
-    "next_runtime_action": "Use or repair the already-established controller-repo self-hosted runner/bridge path into clay-direct-dev, execute an exact-SHA WP510 target-runtime probe, and persist exact transport/source/runtime/command/result identity. Do not create duplicate blind dispatches on the already queued research-entity run."
+    "wp510_exact_source_sha": "3e5b05f95b1cef80ff781152fa430f7916736746",
+    "previous_probe_run": 33252978899,
+    "previous_probe_job": 99101748230,
+    "previous_probe_state": "QUEUED_WITH_RUNNER_ID_0_EMPTY_RUNNER_NAME_AND_NO_STEPS",
+    "canonical_sha_probe_run": 33254381280,
+    "canonical_sha_probe_job": 99105445603,
+    "last_observed_state": "QUEUED_WITH_NO_STEPS",
+    "self_hosted_queue_policy": "EXPLICIT_LEGACY_SELF_HOSTED_QUEUE_QUARANTINE_OBSERVED_IN_EXISTING_CONTROLLER_WORKFLOW",
+    "runner_independent_route_search": "NO_EXISTING_GITHUB_HOSTED_TO_OWNER_VPS_ROUTE_FOUND_IN_INSPECTED_CURRENT_CONTROLLER_AND_RESEARCH_ENTITY_SEARCH_SURFACES",
+    "classification": "TRANSPORT_OR_RUNNER_ASSIGNMENT_BLOCKER_NOT_PRODUCT_LOGIC_AND_NOT_AUTHORITY",
+    "next_runtime_action": "Do not issue further blind self-hosted WP510 probes. Wake the WP510 runtime lane when the existing self-hosted runner quarantine is cleared, an already-authorized runner-independent owner-VPS transport becomes concrete, or one of the queued jobs becomes terminal. Then execute the exact canonical WP510 G2 SHA and persist transport/source/runtime/command/result identity."
+  },
+  "architect_continuity": {
+    "context_fidelity_fix": "INTEGRATED",
+    "context_fidelity_merge_sha": "e0aec0ec2355eb0c0bea57cdd41a86a345e27b97",
+    "checkpoint": "research_entity/architect/checkpoints/ARCHITECT_REENTRY_DELTA_G6_20260829_RUNTIME_TRANSPORT_BLOCKER.json",
+    "policy": "Compact reentry must preserve owner/project/frontier/blocker/runtime context and surface changed external heads explicitly."
   },
   "research_entity_improvement_policy": {
     "principle": "Change only surfaces that reduce measured build latency, duplicate work, stale-state errors, diagnosis time, runtime-evidence latency or evidence ambiguity.",
@@ -89,51 +105,57 @@
       "small context compilation instead of full-history replay"
     ],
     "improve_now": [
-      "make state-consistency failures name the exact offending pointer/reconciliation",
       "compile Architect frontier from granular live evidence rather than stale phase caches",
+      "surface transport quarantine as a first-class blocker instead of repeatedly dispatching into it",
       "separate provider-token economics from owner VPS compute authority",
-      "route runtime work through the actual bridge owner repository instead of treating a queued repo-scoped runner job as an authority question",
-      "hold promotion order stable while parallel source work moves"
+      "hold promotion order stable while parallel source work moves",
+      "use exact canonical WP510 merge identity when runtime transport becomes available"
     ],
     "avoid": [
       "new meta-directives that duplicate existing authority",
       "mass rewriting historical evidence only for cosmetic consistency",
       "restarting closed work",
-      "claiming runtime from repository CI",
-      "allowing aggregate caches to outrank granular evidence"
+      "claiming runtime from repository CI or queued jobs",
+      "allowing aggregate caches to outrank granular evidence",
+      "repeated self-hosted dispatches while the runner queue is quarantined"
     ]
   },
   "current_blockers": [
-    "F2-WP-002 G5 aggregate projection PR remains fail-closed on one or more terminal reconciliation zero-credit metadata mismatches; exact diagnostic is being added rather than weakening the gate.",
-    "The existing Research-Entity self-hosted runtime dispatch is queued with no assigned runner/no executed steps; runtime evidence is therefore still zero.",
+    "F2-WP-002 G5 aggregate projection PR115 remains open and fail-closed under continuing canonical-main churn; its sole writer must re-enter/recompute rather than be bypassed.",
+    "The controller legacy self-hosted queue is explicitly quarantined; WP510 probe runs 33252978899 and 33254381280 have no executed steps, so target-runtime evidence remains zero.",
+    "No existing GitHub-hosted-to-owner-VPS transport was found in the inspected current controller/research-entity search surfaces; do not invent new secret or transport authority from that absence.",
     "WP510 is repository-accepted but not yet instantiated in a real target-runtime causal path."
   ],
   "current_uncertainty": [
-    "Whether the controller-repository self-hosted runner is currently online and can enter clay-direct-dev must be established by executable runner/bridge evidence, not inferred from configuration presence.",
-    "A successful target-environment execution of only deterministic WP510 validators would establish target-environment component execution, but semantic GWT runtime credit additionally requires a real runtime path with actual uptake/re-entry identities rather than a source-level replay."
+    "When and by what already-authorized mechanism the legacy self-hosted runner quarantine will be cleared is not established by current repository evidence.",
+    "The absence of a runner-independent GitHub-hosted VPS route in inspected repository surfaces does not prove that no such transport exists outside those surfaces; it only blocks Architect from inventing one.",
+    "A successful target-environment execution of deterministic WP510 validators would establish target-environment component execution, but semantic GWT runtime credit additionally requires a real runtime path with actual delivery/uptake/re-entry identities rather than synthetic source-level replay."
   ],
   "last_ingested_heads": {
-    "frankenstein_2_main": "40fbf222dc908b9a81aefb5ae79fe183aab4a7fc",
-    "research_entity_main": "281f828eb558920a9498dd4c772e28260756f8e3",
-    "wp002_g5_head": "84b522d2a739bc5e0751fe84152da292abdcc7f1"
+    "frankenstein_2_main": "0aa2e97381550d1e626c3beee041ed964662819f",
+    "research_entity_main": "101bd5908b19625ed63c70fe509f8b40ede4aea3",
+    "controller_main": "addbe2f0808fd5001e1122d443ed3b41cf7f3864",
+    "wp002_g5_head": "ffe0f603a037273f475c67ee11f86fa8c468b478",
+    "architect_parent": "e0aec0ec2355eb0c0bea57cdd41a86a345e27b97"
   },
   "evidence_precedence": "newest explicit owner direction > admitted owner/supervisor authority > newest granular active pointer/reconciliation/receipt and exact executable evidence > aggregate projections > Architect cache > historical prose",
-  "current_processing_mode": "ARCHITECT_RUNTIME_FIRST_SYNTHESIS_ROUTING",
+  "current_processing_mode": "ARCHITECT_RUNTIME_TRANSPORT_BLOCKED_DELTA_ROUTING",
   "current_context_budget_policy": "Compile only changed heads, primary frontier receipts/pointers, active blockers, exact runtime transport evidence and dependencies needed for the next discriminator. Do not replay full project history by default.",
   "next_exact_actions": [
-    "Let the existing F2-WP-002 G5 single-writer lane expose the exact zero-credit reconciliation mismatch; repair only the exact metadata defect and require both state-consistency workflows to pass against current main before aggregate acceptance.",
-    "Refresh exact F2 main after WP002 convergence and bind Architect state to the current WP510 generation-2 causal-path receipt/pointer.",
-    "Resolve actual self-hosted runner health through the controller repo and enter clay-direct-dev through the established bridge; repair transport if degraded rather than reopening VPS authority.",
-    "Execute the smallest real WP510 target-runtime experiment that preserves exact SituationFrame/Broadcast/Uptake/Reentry/downstream-digest identities and emits a receipt distinguishing target-environment component execution from actual semantic GWT uptake.",
-    "Only after the WP510 runtime discriminator is terminal, evaluate whether Stage 6 child/executor integration or Stage 7 perception integration is the next dependency-correct layer; use already-built WP600/601/602/700/701 evidence instead of rebuilding it."
+    "Do not create further self-hosted WP510 dispatches while the existing jobs remain queued and the legacy runner queue is quarantined.",
+    "Let the existing F2-WP-002 G5 single-writer lane re-enter exact current main, recompute only aggregate projection/validator metadata, and require current-main state-consistency before bounded acceptance; do not create a competing writer.",
+    "Watch for a material runner/bridge state change or an already-authorized concrete runner-independent owner-VPS transport. Only then rerun exact canonical WP510 G2 merge SHA 3e5b05f95b1cef80ff781152fa430f7916736746.",
+    "While runtime transport is blocked, route Architect work to non-overlapping integration/evidence bottlenecks that shorten future runtime diagnosis, but preserve WP510 as the runtime promotion discriminator and deny runtime credit to later repository-only modules.",
+    "After WP510 target-runtime evidence becomes terminal, evaluate the next dependency-correct integration layer using already-built Stage-6/7/8/host-profile evidence rather than rebuilding it."
   ],
   "wake_resume_conditions": [
     "owner invokes architect/architekt alias",
     "F2-WP-002 G5 state-consistency workflows become terminal",
     "WP510 target-runtime receipt appears",
-    "self-hosted runner/bridge health materially changes",
+    "self-hosted runner quarantine or bridge health materially changes",
+    "an already-authorized runner-independent owner-VPS transport becomes concrete",
     "Frankenstein 2.0 main head changes materially",
     "owner pivots or completes the active project"
   ],
-  "last_checkpoint": "research_entity/architect/ARCHITECT_STATE.json#g5-runtime-first-recompile"
+  "last_checkpoint": "research_entity/architect/checkpoints/ARCHITECT_REENTRY_DELTA_G6_20260829_RUNTIME_TRANSPORT_BLOCKER.json"
 }

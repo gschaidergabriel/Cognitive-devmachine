@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_TRIGGER4_WP004_G3_TERMINAL_STATEVIEW_REENTRY/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "date": "2026-08-30",
+  "authority": {
+    "bootstrap_schema_observed": "8.78",
+    "supervisor_inbox_delta_observed": "9.13BC_NON_AUTHORITY",
+    "external_provider_policy": "FREE_ONLY_HARD_OFF_ALL_CLAYCODE_EXTERNAL_PROVIDER_ROUTES_UNADMITTED",
+    "together": "FORBIDDEN"
+  },
+  "research_main_before_write": "3724edbf1cb9062bc8c0604784e26f5ac1011f23",
+  "f2_observation": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "observed_main_sha": "73fe16071b69af469122e1cba2a68f419a8a2fbb",
+    "observed_main_message": "trigger4(WP004): migrate terminal acceptance to state-view v2",
+    "terminalization_merge_sha": "1e3e25727ea57643c3989726710f17ab64f07611",
+    "terminalization_pr": 595,
+    "terminalization_pr_head_sha": "9010507d5d90357a46c6405a7f806eb1edf6fb66",
+    "state_event": "workpackages/state_events/F2-WP-004/000001.json",
+    "state_event_class": "TERMINAL_ACCEPTANCE_MIGRATION",
+    "workpackage": "F2-WP-004",
+    "generation": 3,
+    "claim_id": "F2-WP-004-G3-GPT56SOL-ABI-AUTHORITY-SINGLETON-20260829",
+    "broad_status": "ACCEPTED_AT_SCOPE",
+    "active_pointer_state": "ACCEPTED"
+  },
+  "terminalization_ci": {
+    "pr_head": {
+      "workpackage_state_view_v2": {"run_id": 33270107510, "conclusion": "success"},
+      "run_package_verifier": {"run_id": 33270107551, "conclusion": "success"},
+      "workpackage_state_consistency": {"run_id": 33270107505, "conclusion": "success"}
+    },
+    "merged_main_1e3e257": {
+      "workpackage_state_view_v2": {"run_id": 33270129053, "conclusion": "success"},
+      "run_package_verifier": {"run_id": 33270129017, "conclusion": "success"},
+      "workpackage_state_consistency": {"run_id": 33270129024, "conclusion": "success"},
+      "checkpoint_continuity": {"run_id": 33270129104, "conclusion": "success"}
+    },
+    "stateview_migration_73fe160": {
+      "workpackage_state_view_v2": {"run_id": 33270203859, "conclusion": "success"},
+      "workpackage_state_consistency": {"run_id": 33270203870, "conclusion": "success"}
+    }
+  },
+  "interpretation": {
+    "wp004": "Generation 3 is durably terminalized at repository-hosted component-CI scope and migrated into the state-view-v2 event surface without widening evidence scope.",
+    "credit_ceiling": "REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "runtime_execution_observed": false,
+    "target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "wp510_reentry": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "status_observed": "queued",
+    "steps_observed": 0,
+    "duplicate_dispatch_created": false,
+    "leading_hypothesis": "REPOSITORY_WIDE_SELF_HOSTED_RUNNER_LIFECYCLE_OR_AVAILABILITY_BLOCKER",
+    "current_organ_host_access": {
+      "ssh_binary_observed": false,
+      "ssh_config_observed": false,
+      "ssh_directory_observed": false,
+      "epistemic_boundary": "This is an access limitation of the current organ/container and does not establish VPS absence or runner service state."
+    }
+  },
+  "next_exact_action": "Do not reopen WP004 absent counterevidence. On an organ with the established owner-authorized VPS/bridge shell surface, directly inspect the self-hosted runner service/listener/log/version/eligibility state for WP510 before any successor dispatch. Keep run 33265772059/job 99135457584 singleton while unresolved."
+}

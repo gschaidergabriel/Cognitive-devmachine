@@ -1,0 +1,19 @@
+{
+  "schema": "F2_TRIGGER6_RESEARCH_MIRROR/v1",
+  "research_id": "R6-SEED-013",
+  "classification": "MIRROR_POINTER_NOT_CANONICAL_F2_TRUTH",
+  "canonical_project_repository": "gschaidergabriel/frankenstein-2.0",
+  "probe_arm_e4_receipt_path": "research/tool_intelligence/receipts/R6-SEED-013_E4_PROBE_ARM_OBSERVER_MATCHING_20260830T0030P0700.json",
+  "probe_arm_e4_receipt_commit": "9dd9a609d1aea59087e4e448434414ac9b77f132",
+  "e5_refinement_path": "research/tool_intelligence/deltas/R6-SEED-013_E5_OBSERVER_METHOD_MATCHING_ADDENDUM_20260830_GPT56SOL.json",
+  "e5_refinement_commit": "241956df35e7f1e01ca52064382c24b360fa4585",
+  "trigger4_handoff_addendum_path": "trigger4/inbox/tool_research/R6-SEED-013-OBSERVER-BINDING-v1-ADDENDUM-METHOD-MATCH.json",
+  "trigger4_handoff_addendum_commit": "a5855f729453ac767083fcbe5a8e3c1c75bc6b28",
+  "finding": "Full ObserverBinding equality overbinds run-specific observer instance identity for matched causal probes. Preserve full per-instance binding digests for provenance, but factor a stable observer_method_sha256 over declared method/artifact/config/evidence semantics and compare that narrower identity across intervention/control.",
+  "counterexample": "Two distinct direct-hook instances with the same method digest have different full binding digests; full-binding equality returns unmatched while method-digest equality preserves the prior causal classification. A direct-hook vs async-scraper pair has different method digests and is blocked by the method gate.",
+  "orthogonal_witness": "ProbeExecutionContext matches non-intervention execution conditions; ObserverMethod matches measurement semantics. Neither substitutes for the other.",
+  "evidence_ceiling": "E5_BUILD_CANDIDATE_REFINEMENT_ONLY",
+  "runtime_credit": 0,
+  "gwt_runtime_credit": 0,
+  "whole_product_credit": 0
+}

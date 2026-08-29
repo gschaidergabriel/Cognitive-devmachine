@@ -1,0 +1,22 @@
+{
+  "schema": "F2_TRIGGER6_RESEARCH_MIRROR/v1",
+  "research_id": "R6-SEED-013",
+  "classification": "MIRROR_POINTER_NOT_CANONICAL_F2_TRUTH",
+  "canonical_project_repository": "gschaidergabriel/frankenstein-2.0",
+  "canonical_e4_receipt_path": "research/tool_intelligence/receipts/R6-SEED-013_E4_OBSERVER_BINDING_PLACEMENT_20260830T0025P0700.json",
+  "canonical_e4_receipt_commit": "a2e1fd7852678033fb279fad94598a11da135895",
+  "canonical_e5_delta_path": "research/tool_intelligence/deltas/R6-SEED-013_E5_THIN_OBSERVER_BINDING_BUILD_CANDIDATE_20260830_GPT56SOL.json",
+  "canonical_e5_delta_commit": "3ef3aad814b4c1efc72c4fdb6164ae2d231a1e3e",
+  "trigger4_handoff_path": "trigger4/inbox/tool_research/R6-SEED-013-OBSERVER-BINDING-v1.json",
+  "trigger4_handoff_commit": "687a9258b71cb04cf0a115ccf37f96916ac56ff2",
+  "finding": "WP507 observer-method identity aliases at the CellUptakeReceipt leaf boundary when distinct observer implementations/configurations are external to the canonical payload. A local placement ablation shows a typed observer-binding digest at each receipt preserves per-cell observer assignment transitively through existing receipt->summary->causal-result hashes; summary-only or result-only binding is too late for leaf identity.",
+  "architecture_posture": "DISTILL_TYPED_MEASUREMENT_PRODUCER_IDENTITY_AT_LEAF_RECEIPT_BOUNDARY",
+  "external_pattern": "OpenTelemetry InstrumentationScope/Resource separation used as a design analogy only; no dependency import recommended.",
+  "counterhypothesis": "A newer exact F2 dependency may already contain a stronger mandatory evidence-producer witness; Trigger 4 must re-enter exact current source and reuse it instead of duplicating ObserverBinding if found.",
+  "probe_arm_residual": "CausalProbeArm downstream-output producer identity remains a separate follow-up discriminator; R6-SEED-012 ProbeExecutionContext is orthogonal and does not close measurement-producer provenance.",
+  "evidence_ceiling": "E5_BUILD_CANDIDATE_DESIGN_ONLY",
+  "runtime_credit": 0,
+  "gwt_runtime_credit": 0,
+  "jspace_runtime_credit": 0,
+  "whole_product_credit": 0
+}

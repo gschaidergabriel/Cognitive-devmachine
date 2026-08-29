@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "mirror_type": "F2_LOCAL_VOICE_RESEARCH_DELTA",
+  "date_local": "2026-08-30",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "research_id": "T7-TTS-006",
+  "objective": "E2_CHATTERBOX_MULTILINGUAL_V3_SOURCE_PIN",
+  "semantic_key": "361e9713e4e7b14e2361379e8120ad0199c3a0145cb59263baea5f4e3c7ff512",
+  "f2_state": "SOURCE_PINNED_TERMINAL_AT_SCOPE",
+  "f2_source_result": "research/local_voice/sources/2026-08-30_T7_TTS006_CHATTERBOX_MULTILINGUAL_V3_SOURCE_PIN.json",
+  "f2_checkpoint": "research/local_voice/checkpoints/2026-08-30_T7_TTS006_CHATTERBOX_MULTILINGUAL_V3_GPT56SOL.json",
+  "finding": "Chatterbox Multilingual V3 is a distinct 500M German-capable expressive/voice-cloning TTS challenger, but the pinned local quickstart/source surface does not establish an incremental local audio-streaming ABI. The upstream sub-200ms statement belongs to Resemble AI's commercial service and gives Frankenstein zero local latency credit.",
+  "hypothesis": "Chatterbox V3 may be competitive as a high-quality expressive German donor if target hardware can synthesize fast enough and a safe chunk/cancellation strategy exists.",
+  "counterhypothesis": "Full-waveform generation and resource cost may make it unsuitable for Frankenstein realtime interaction even if its offline German quality is strong.",
+  "hardware_gate_observed": {
+    "current_controller_run_id": 33266856557,
+    "current_job_id": 99138324275,
+    "run_status": "pending",
+    "runner_steps_observed": false,
+    "target_receipt": false
+  },
+  "credits": {
+    "source_pin": 1,
+    "target_hardware": 0,
+    "model_runtime": 0,
+    "german_tts_component": 0,
+    "german_e2e": 0,
+    "trigger4_acceptance": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Consume the first terminal clay-direct-dev hardware receipt before opening a Chatterbox target-runtime benchmark. Then test German TTFA/RTF/resources/voice stability/cancellation/network-blocked operation and treat inability to produce usable incremental audio as a realtime falsifier."
+}

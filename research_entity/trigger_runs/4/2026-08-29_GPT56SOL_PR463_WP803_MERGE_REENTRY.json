@@ -1,0 +1,39 @@
+{
+  "schema": "TRIGGERWORD4_MERGE_REENTRY/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "authority_epoch": "8.78",
+  "research_entity_main_before_write": "7f8c3a681df95bbdbbb8cce353ee61baf86f81ce",
+  "frankenstein2_main_observed": "6ad446ce0d9faae7857de6f4896410c212d28342",
+  "target": {
+    "workpackage": "F2-WP-803",
+    "generation": 1,
+    "pull_request": 463,
+    "merged": true,
+    "merge_commit_sha": "0f6b12f1f6211d8aab59698a8171113c176760cb",
+    "merged_head_sha": "bd401c26cb8e90dadcc2da7e81bdc23c626c8ba3",
+    "active_pointer_state_after_merge": "ACTIVE"
+  },
+  "review_state": {
+    "action_condition_binding": "RESOLVED_ON_MERGED_HEAD_WITH_GREEN_BRANCH_CI",
+    "run_descriptor_binding": "OPEN_SOURCE_PROVENANCE_FALSIFIER",
+    "terminal_acceptance": "NOT_OBSERVED",
+    "reason": "active pointer remains ACTIVE and no exact terminal reconciliation/acceptance receipt was observed in this reentry"
+  },
+  "coordination": {
+    "mutation_authority_created_by_this_organ": false,
+    "duplicate_source_lane_created": false,
+    "review_comments": [5462590045, 5462596787]
+  },
+  "next_exact_action": "Do not reinterpret merge as terminal acceptance. Before WP803 generation-1 reconciliation, either authenticate benchmark run provenance against exact WP800 RunDescriptor identity/ancestry and add the relabeling falsifier, or explicitly narrow the provenance claim so benchmark_run_id is not presented as authenticated run evidence.",
+  "credits": {
+    "repository_review_credit": 1,
+    "component_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_jspace_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_credit": 0
+  }
+}

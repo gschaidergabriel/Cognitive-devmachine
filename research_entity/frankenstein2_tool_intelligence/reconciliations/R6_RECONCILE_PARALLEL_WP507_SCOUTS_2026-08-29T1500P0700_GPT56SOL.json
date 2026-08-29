@@ -1,0 +1,71 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_PARALLEL_DISCOVERY_RECONCILIATION/v1",
+  "trigger": "6",
+  "status": "RECONCILED_NO_DUPLICATE_PROMOTION",
+  "created_at_local": "2026-08-29T15:00:00+07:00",
+  "local_discovery_commit": "afc794c5c6bcd4a722cf39d0b7e77bb27a1c1f80",
+  "local_discovery_ref": "research_entity/frankenstein2_tool_intelligence/deltas/R6_DISCOVERY_GWT_CAUSAL_TRACE_PROVENANCE_2026-08-29T1455P0700_GPT56SOL.json",
+  "parallel_f2_main_observed_after_reentry": "07c121f83557df59b2edc6e51b6c3dfaadb4d79f",
+  "parallel_discovery_ref": "research/tool_intelligence/deltas/R6-20260829-WP507-CAUSAL-UPTAKE-SCOUT-E1-GPT56SOL.json",
+  "parallel_research_id": "R6-WP507-CAUSAL-UPTAKE-SCOUT-001",
+  "temporal_finding": "The provenance-side E0 scout commit landed at 2026-08-29T07:58:57Z. A canonical F2 scout commit landed at 2026-08-29T07:59:06Z, nine seconds later, after the provenance scout's prewrite nonduplication check. The later F2 scout independently selected DoWhy and promoted its source review to E1.",
+  "overlap": {
+    "candidate": "py-why/dowhy",
+    "local_candidate_id": "R6-SEED-014",
+    "parallel_candidate_id": "R6-WP507-DOWHY-REFUTER-001",
+    "resolution": "PARALLEL_E1_OUTRANKS_LOCAL_E0_FOR_CURRENT_WORK",
+    "action": "Do not materialize R6-SEED-014 as a competing unique pending-research row. Preserve the E0 proposal as historical discovery provenance only. Route any future DoWhy work through the canonical F2 research_id and its create-only claim path.",
+    "evidence_credit": "E1 belongs only to the canonical F2 scout; the local E0 scout receives no independent replication credit."
+  },
+  "nonoverlapping_survivors": [
+    {
+      "candidate_id": "R6-SEED-010",
+      "repo": "open-telemetry/opentelemetry-specification",
+      "status": "UNIQUE_E0_PENDING",
+      "next_objective": "E1_SOURCE_READ"
+    },
+    {
+      "candidate_id": "R6-SEED-011",
+      "repo": "Arize-ai/openinference",
+      "status": "UNIQUE_E0_PENDING",
+      "next_objective": "E1_SOURCE_READ"
+    },
+    {
+      "candidate_id": "R6-SEED-012",
+      "repo": "UKGovernmentBEIS/inspect_ai",
+      "status": "UNIQUE_E0_PENDING_HIGH_PRIORITY",
+      "next_objective": "E1_SOURCE_READ"
+    },
+    {
+      "candidate_id": "R6-SEED-013",
+      "repo": "in-toto/attestation",
+      "status": "UNIQUE_E0_PENDING_HIGH_PRIORITY",
+      "next_objective": "E1_SOURCE_READ"
+    }
+  ],
+  "fusion": {
+    "parallel_scout_highest_information_design": "F2-native deterministic matched-pair intervention harness first; optional DoWhy offline refutation/mediation second.",
+    "local_unique_addition": "Exact trace/receipt provenance and external deterministic eval-harness candidates remain uncovered by the canonical scout: OpenTelemetry, OpenInference, Inspect AI and in-toto Attestation.",
+    "combined_design_hypothesis": "Use exact F2-native matched intervention/control semantics as the causal core; evaluate Inspect as an external deterministic ablation harness; distill OpenTelemetry-like immutable trace/link identity and in-toto-like subject/material/result binding around receipts; use OpenInference only if E2 proves a unique AI-semantic interoperability gap; keep DoWhy offline and secondary.",
+    "causal_credit_fence": "TRACE_RELATION != CAUSALITY; DELIVERY != UPTAKE; UPTAKE != HIDDEN_STATE_CAUSALITY; STATISTICAL_ESTIMATE != CANONICAL_FACT; E0/E1 != BUILD_CANDIDATE."
+  },
+  "coordination": {
+    "duplicate_doWhy_work_blocked": true,
+    "unique_candidate_search_rechecked_against_current_f2": true,
+    "current_f2_search_found_openTelemetry_openInference_inspect_inToto": false,
+    "pending_research_sqlite_sync": "PENDING",
+    "next_recommended_trigger6_slot": "SOURCE_ARCHAEOLOGIST",
+    "next_recommended_unique_objective": "R6-SEED-012/E1_SOURCE_READ then E2_ARCHITECTURE_MAPPED, unless a create-only claim already exists at next invocation. R6-SEED-013 is second priority."
+  },
+  "credit_boundary": {
+    "local_unique_e0_candidates_after_reconciliation": 4,
+    "local_e1_credit": 0,
+    "parallel_e1_credit_consumed_as_current_state": 1,
+    "build_candidate_credit": 0,
+    "f2_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "hidden_state_causal_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  }
+}

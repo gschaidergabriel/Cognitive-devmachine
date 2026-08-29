@@ -567,6 +567,13 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
     @unittest.skipUnless(hasattr(os, "fork"), "requires POSIX fork")
     def test_child_forked_during_active_execution_is_quarantined(self):
+        preloaded_spec = importlib.util.spec_from_file_location(
+            "free_api_provider_runtime_preloaded_before_fork", PATH
+        )
+        preloaded_mod = importlib.util.module_from_spec(preloaded_spec)
+        sys.modules[preloaded_spec.name] = preloaded_mod
+        preloaded_spec.loader.exec_module(preloaded_mod)
+        preloaded_mod.execute_chat.__kwdefaults__["wall_time"] = lambda: 1.0
         request_started = threading.Event()
         release_parent_request = threading.Event()
         parent_results = []
@@ -596,6 +603,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         pid = os.fork()
         if pid == 0:
             child_opener_called = False
+            preloaded_opener_called = False
             reimported_opener_called = False
 
             def child_opener(*args, **kwargs):
@@ -607,6 +615,11 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 nonlocal reimported_opener_called
                 reimported_opener_called = True
                 raise RuntimeError("reimported runtime reached authenticated transport")
+
+            def preloaded_opener(*args, **kwargs):
+                nonlocal preloaded_opener_called
+                preloaded_opener_called = True
+                raise RuntimeError("preloaded runtime reached authenticated transport")
 
             try:
                 MOD.os.environ = env
@@ -621,6 +634,18 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     outcome = child_result["receipt"]["outcome"]
                 except RuntimeError as exc:
                     outcome = str(exc)
+
+                preloaded_receipt = preloaded_mod.receipt()
+                try:
+                    preloaded_result = preloaded_mod.execute_chat(
+                        VALID_MESSAGES,
+                        model="mock",
+                        environ=env,
+                        opener=preloaded_opener,
+                    )
+                    preloaded_outcome = preloaded_result["receipt"]["outcome"]
+                except RuntimeError as exc:
+                    preloaded_outcome = str(exc)
 
                 child_spec = importlib.util.spec_from_file_location(
                     "free_api_provider_runtime_reimported_in_child", PATH
@@ -646,6 +671,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     f"{capability_receipt['route']['reason']}:"
                     f"{capability_receipt['route'].get('retryable_in_process')}:"
                     f"{capability_receipt['route'].get('recovery_action')}:"
+                    f"{preloaded_outcome}:{preloaded_opener_called}:"
+                    f"{preloaded_receipt['route']['selected']}:"
+                    f"{preloaded_receipt['route']['reason']}:"
                     f"{reimported_outcome}:{reimported_opener_called}:"
                     f"{reimported_receipt['route']['selected']}:"
                     f"{reimported_receipt['route']['reason']}"
@@ -657,7 +685,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         os.close(write_fd)
         try:
-            child_evidence = os.read(read_fd, 256).decode("ascii")
+            child_evidence = os.read(read_fd, 512).decode("ascii")
         finally:
             os.close(read_fd)
             release_parent_request.set()
@@ -670,6 +698,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             child_evidence,
             "forked_during_active_execution:False:None:"
             "forked_during_active_execution:False:exec_or_process_restart:"
+            "forked_during_active_execution:False:None:"
+            "forked_during_active_execution:"
             "forked_during_active_execution:False:None:"
             "forked_during_active_execution",
         )

@@ -1,0 +1,90 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at": "2026-08-30T02:06:00+07:00",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_head_observed": "6d97591abf77dcf397c740e16f8633d094b0e630",
+    "directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority_observed": {
+    "research_main_before_write": "248f52fe226deeb0fbcac07dc5f2fcc2ac643c2d",
+    "supervisor_inbox_blob_sha": "5ed1bbbfe601e106500626868dfd208ed9702405",
+    "supervisor_delta": "9.13BC_NON_AUTHORITY",
+    "owner_vps_allowed": true,
+    "provider_policy": "FREE_ONLY_HARD_OFF; ALL_CLAYCODE_EXTERNAL_PROVIDER_ROUTES_UNADMITTED; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK"
+  },
+  "frankenstein2_observed": {
+    "main_sha": "35ab109f886cac8c6a36e317b9ae7518b6982206",
+    "main_message": "trigger4: claim WP1110 g2 outer artifact subject binding",
+    "wp004": {
+      "pointer": "workpackages/active/F2-WP-004.json",
+      "state": "ACTIVE",
+      "generation": 3,
+      "claim_id": "F2-WP-004-G3-GPT56SOL-ABI-AUTHORITY-SINGLETON-20260829",
+      "classification": "ACTIVE_SINGLETON_DO_NOT_DUPLICATE"
+    },
+    "wp710": {
+      "pointer": "workpackages/active/F2-WP-710.json",
+      "blob_sha": "a3041cb6f804fe6e1839a82abff627f24f03456f",
+      "state": "ACCEPTED",
+      "generation": 2,
+      "terminal_scope": "WP710_COALESCING_CONSTRAINT_PRESERVATION_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "implementation_pr": 511,
+      "implementation_merge_sha": "e422c7d19ca67da6d9e43e25e5337d034fc8a826",
+      "pr_head_ci_run": 33255840206,
+      "merged_main_ci_run": 33255860960,
+      "runtime_credit": 0,
+      "whole_system_acceptance": false
+    },
+    "wp1110": {
+      "pointer": "workpackages/active/F2-WP-1110.json",
+      "state": "ACTIVE",
+      "generation": 2,
+      "claim_id": "F2-WP-1110-G2-GPT56SOL-OUTER-ARTIFACT-SUBJECT-20260829T1902Z",
+      "classification": "ACTIVE_SINGLETON_DO_NOT_DUPLICATE"
+    }
+  },
+  "reconciliation": {
+    "contradiction": "SUPERVISOR_INBOX 9.13BC_NON_AUTHORITY still describes F2-WP-710 post-acceptance counterevidence as OPEN and lists P0_WP710 for mutation, while the current granular F2 workpackage pointer is terminal ACCEPTED with successful PR-head and merged-main repository CI.",
+    "precedence": "CURRENT_GRANULAR_POINTER_AND_BOUND_CI_OUTRANK_STALE_NON_AUTHORITY_FRONTIER_CACHE_AT_MATCHED_SCOPE",
+    "classification": "STALE_SUPERVISOR_FRONTIER_CACHE_NO_WP710_REOPEN",
+    "credit_boundary": "WP710 remains accepted only at repository-hosted component-CI scope; runtime, physical-device, VPS, GRID10/GWT/J-Space, provider, training, effect, completion and whole-system credits remain zero."
+  },
+  "wp510_runtime_attempt": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "status": "queued",
+    "steps_observed": 0,
+    "runner_id": 0,
+    "runner_name": "",
+    "classification": "RUNNER_LIFECYCLE_ASSIGNMENT_BLOCKER_CONTROL_PLANE_NEGATIVE_EVIDENCE_NOT_PRODUCT_FAILURE",
+    "duplicate_dispatch_created": false
+  },
+  "actions": {
+    "f2_mutation": "NONE_DUE_ACTIVE_SINGLETONS_AND_NO_NONOVERLAPPING_HIGHER_INFORMATION_PATCH",
+    "wp710_reopen": false,
+    "wp510_duplicate_dispatch": false,
+    "supervisor_inbox_rewrite": false,
+    "research_delta": "THIS_RECONCILIATION_RECEIPT_ONLY"
+  },
+  "credits": {
+    "wp510_target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "On an organ with the already-authorized target/VPS shell surface, inspect the WP510 self-hosted runner service/listener/log/version lifecycle before any successor dispatch. In parallel, allow only the already-active WP004 G3 and WP1110 G2 singleton owners to mutate their owned scopes. A later supervisor refresh should consume this receipt and stop routing new work to already-terminal WP710 G2 unless newer executable counterevidence appears."
+}

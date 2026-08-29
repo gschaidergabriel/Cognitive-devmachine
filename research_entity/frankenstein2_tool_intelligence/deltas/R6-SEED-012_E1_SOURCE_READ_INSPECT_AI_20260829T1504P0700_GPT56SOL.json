@@ -1,0 +1,43 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_E1_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-SEED-012",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "MIRRORED_PROVENANCE_NO_STAGE_UPGRADE",
+  "created_at": "2026-08-29T15:04:00+07:00",
+  "canonical_f2_result": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "commit": "a49f284fd26edc1c030a1bb88fdc11569088afa4",
+    "path": "research/tool_intelligence/deltas/R6-SEED-012_E1_SOURCE_READ_INSPECT_AI_20260829T1503P0700_GPT56SOL.json",
+    "claim_commit": "defa2992bcd4744aa4c62855400f7ad56bac2d87",
+    "claim_path": "research/tool_intelligence/claims/R6-SEED-012/E1_SOURCE_READ.json"
+  },
+  "research_entity_prewrite_main": "cce160aef99451de19b3e66b00eca3d272a2a9d3",
+  "external_source_pin": {
+    "repo": "UKGovernmentBEIS/inspect_ai",
+    "commit": "3712507590dc4e6e678114194ac9844fd3a6fd6c",
+    "tree": "703fa9fd107962f98bdefe01b2b7c24d460a7609",
+    "license": "MIT"
+  },
+  "retained_finding": "Inspect AI is promising as a structural matched-pair evaluation/logging donor for WP507, especially explicit sample identity/selection, deterministic ordering controls, run status/error handling and per-sample EvalLog records. Full library import is not justified at E1 because its provider/agent/sandbox/UI/cloud dependency surface is much broader than the narrow deterministic WP507 contract.",
+  "adoption_direction": "DISTILL_PATTERN_NOT_LIBRARY_IMPORT",
+  "causal_authority_fence": "INSPECT_EVAL_LOG_OR_SCORE != F2_CANONICAL_RECEIPT != SEMANTIC_UPTAKE != CAUSAL_INFLUENCE; F2 exact identity/provenance and fail-closed matched control/intervention contract remain authoritative at this scope.",
+  "next_gate": "Separately claim E2_ARCHITECTURE_MAPPED before mapping minimal Task/Sample/eval/EvalLog/scorer-scanner semantics onto WP507 G3 and reject the donor if it adds no new fail-closed discriminator coverage.",
+  "coordination": {
+    "f2_is_claim_and_result_authority": true,
+    "cross_repo_atomicity_assumed": false,
+    "pending_research_sqlite_sync": "PENDING",
+    "mirror_grants_independent_replication_credit": false
+  },
+  "credits": {
+    "f2_e1_source_read_credit": 1,
+    "mirror_research_credit": 0,
+    "architecture_credit": 0,
+    "runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "hidden_state_causal_credit": 0,
+    "integration_credit": 0,
+    "whole_system_credit": 0
+  }
+}

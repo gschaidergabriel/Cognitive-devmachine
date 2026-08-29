@@ -1,0 +1,77 @@
+{
+  "schema": "TRIGGERWORD_4_RESEARCH_RECEIPT/v1",
+  "observed_at_utc": "2026-08-29T00:20:18Z",
+  "observed_at_local": "2026-08-29T07:20:18+07:00",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "4",
+  "classification": "EXECUTED_NEGATIVE_REPOSITORY_COMPONENT_EVIDENCE",
+  "authority": {
+    "supervisor_surface": "9.13AN_NON_AUTHORITY",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes": "ALL_PROVIDER_ROUTES_UNADMITTED",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN"
+  },
+  "frankenstein2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "canonical_main_observed_after_reentry": "89a4717980dbbf0ec49ae52db30b6a4b95f8b1f9",
+    "canonical_main_note": "PR #205 had already merged the late WP506 producer-envelope and object-backed cross-frame-id Hyperposition repair; PR #206 then added canonical-main WP506 CI validation. These are repository-component semantics/evidence only.",
+    "review_branch": "review/wp506-hyperposition-frame-version-falsifier-20260829",
+    "review_base": "4cc757ecf6c222363fb056c21c2b042295c0897a",
+    "review_head": "de1a5490541ceb4c3a1c779bdd5617c7a62cf1ce",
+    "review_pr": 207,
+    "review_pr_state": "OPEN_DRAFT_REVIEW_ONLY_DO_NOT_MERGE_AS_IMPLEMENTATION"
+  },
+  "hypothesis": "WP506 now rejects a Hyperposition whose situation_frame_ref differs from the WorkspaceSelection frame_id, but current WP502 Hyperposition canonical identity does not carry the referenced SituationFrame generation or digest. Reuse of the same frame_id across different frame generations/digests therefore cannot be distinguished at the Hyperposition->WP506 boundary.",
+  "counterhypothesis": "The existing Hyperposition object or its canonical payload already carries sufficient exact SituationFrame version identity to distinguish same-id stale generation/digest reuse.",
+  "discriminator": {
+    "test_path": "tests/test_wp506_hyperposition_frame_version_falsifier.py",
+    "workflow_path": ".github/workflows/wp506-hyperposition-frame-version-falsifier.yml",
+    "required_fields": [
+      "situation_frame_ref",
+      "situation_frame_generation",
+      "situation_frame_sha256"
+    ],
+    "workflow_run": 33223215536,
+    "workflow_job": 99021507204,
+    "setup": "PASS",
+    "compile": "PASS",
+    "falsifier": "FAIL_AS_PREREGISTERED",
+    "result": "COUNTERHYPOTHESIS_FALSIFIED_AT_REPOSITORY_COMPONENT_SCOPE"
+  },
+  "observed_source_boundary": {
+    "wp502_hyperposition_fields": [
+      "hyperposition_id",
+      "generation",
+      "alternatives",
+      "provenance_refs",
+      "situation_frame_ref",
+      "policy_ref"
+    ],
+    "missing_exact_frame_version_fields": [
+      "situation_frame_generation",
+      "situation_frame_sha256"
+    ],
+    "wp506_current_check": "hyperposition.situation_frame_ref must equal WorkspaceSelection.frame_id; concrete object id/generation/digest is then bound",
+    "consequence": "different frame_id substitution is closed, but same frame_id with stale referenced frame generation/digest is not representable as a distinct fail-closed binding in the current Hyperposition ABI"
+  },
+  "coordination": {
+    "wp502_active_claim": "F2-WP-502-G1-GPT56SOL-HYPERPOSITION-20260829",
+    "wp502_active_state": "CLAIMED",
+    "wp502_owned_path": "src/frankenstein2/hyperposition.py",
+    "mutation_action": "NO_DUPLICATE_IMPLEMENTATION_MUTATION",
+    "routing": "repair belongs to the canonical WP502/WP506 dependency lane; preserve review PR #207 as negative evidence"
+  },
+  "scope_boundary": {
+    "target_runtime_execution_observed": false,
+    "provider_execution_observed": false,
+    "vps_execution_observed": false,
+    "physical_grid10_credit": 0,
+    "gwt_uptake_credit": 0,
+    "causal_influence_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Within the existing WP502/WP506 authority, bind Hyperposition to exact SituationFrame id+generation+digest (not prose-only provenance), retain a same-id stale-version regression, run exact-head repository CI, then re-enter canonical main before WP507 uptake/causal-evidence work or Stage-5 Visual Cortex promotion."
+}

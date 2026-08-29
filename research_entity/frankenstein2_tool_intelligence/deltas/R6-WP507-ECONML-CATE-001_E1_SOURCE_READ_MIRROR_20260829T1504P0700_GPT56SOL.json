@@ -1,0 +1,49 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_E1_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-WP507-ECONML-CATE-001",
+  "slot": "SOURCE_ARCHAEOLOGIST",
+  "status": "MIRRORED_PROVENANCE_NO_STAGE_UPGRADE",
+  "created_at": "2026-08-29T15:04:00+07:00",
+  "canonical_f2_result": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "commit": "81dce31118248aaa36e03a9bae567ebc192651a5",
+    "path": "research/tool_intelligence/deltas/R6-WP507-ECONML-CATE-001_E1_SOURCE_READ_20260829T1504P0700_GPT56SOL.json",
+    "claim_commit": "9f1a74b0897aeb17725d8b982960e0ae25569692",
+    "claim_path": "research/tool_intelligence/claims/R6-WP507-ECONML-CATE-001/E1_SOURCE_READ.json"
+  },
+  "research_entity_prewrite_main": "1937e4d0e2b3df8b277cb46ec5c369470d818a11",
+  "external_source_pin": {
+    "repo": "py-why/EconML",
+    "commit": "f0fc2e7d39d20e1a9d9201233fb7945e88cab0cc",
+    "version": "0.17.0",
+    "license": "MIT"
+  },
+  "retained_finding": "EconML is not justified as a WP507 core dependency at E1. Its strongest current value is concept distillation for aggregate statistical characterization after exact F2 per-run intervention/control receipts already exist: explicit treatment/outcome/covariate separation, held-out/cross-fit analysis, heterogeneous-effect characterization and uncertainty intervals.",
+  "adoption_direction": "CONCEPT_DISTILL_ONLY_NO_CORE_IMPORT",
+  "causal_authority_fence": "ECONML_ATE_OR_CATE_ESTIMATE != F2_OFFERED_DELIVERED_UPTAKEN_RECEIPT != PER_RUN_CAUSAL_INFLUENCE; statistical inference cannot mint canonical state, effect/completion authority or hidden-state/J-Space causality.",
+  "strongest_later_fit": [
+    "F2-WP-902 repeated whole-system characterization",
+    "F2-WP-806 repeated lesion/rescue characterization",
+    "F2-WP-507 optional aggregate analysis only after deterministic receipt closure"
+  ],
+  "counterhypothesis": "Noisy heterogeneous GWT experiments may eventually benefit from CATE/DML estimators beyond simple paired differences.",
+  "next_gate": "Only under a separate future E2/E3/E4 claim, compare a simple F2-native paired estimator with a pinned EconML estimator on no-real-effect synthetic/replayed data with known heterogeneous effects and confounding; reject EconML if unique calibration/heterogeneity value does not outweigh dependency/provenance cost.",
+  "coordination": {
+    "f2_is_claim_and_result_authority": true,
+    "cross_repo_atomicity_assumed": false,
+    "pending_research_sqlite_sync": "PENDING",
+    "mirror_grants_independent_replication_credit": false
+  },
+  "credits": {
+    "f2_e1_source_read_credit": 1,
+    "mirror_research_credit": 0,
+    "e2_architecture_credit": 0,
+    "runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "integration_credit": 0,
+    "effect_credit": 0,
+    "whole_system_credit": 0
+  }
+}

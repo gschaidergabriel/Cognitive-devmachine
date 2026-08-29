@@ -1,0 +1,83 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "normalized_trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "created_at_utc": "2026-08-29T09:02:00Z",
+  "trigger_routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directives_read": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "epoch": "8.78",
+    "selector": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "supervisor_inbox_9_13_status": "NON_AUTHORITY_RESEARCH_INPUT_ONLY",
+    "execution_mode": "FREE_ONLY"
+  },
+  "research_base_sha": "76d89d2a3781b0b47bb48c138cfedbcc183d9b25",
+  "f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_observed_main_after_absorption": "d6894cecca51cd6b1e1609d225be9a02dc6f395f",
+  "coordination": {
+    "stale_duplicate_authority_rebind_branch": "trigger4/stage4-authority-rebind-8-78-20260829",
+    "duplicate_branch_merged": false,
+    "reason_not_merged": "Parallel canonical main had already repaired WP400-WP403 authority metadata; convergence rule STALE_INTENT + NEW_CANONICAL_EQUIVALENT -> NO_NEW_IMPLEMENTATION applied.",
+    "wp404_mutation_lane": "existing active lane preserved; no duplicate source write",
+    "wp508_mutation_lane": "existing generation-3 single mutation authority preserved; review-only falsification used",
+    "unusual_experiment": "NOT_USED"
+  },
+  "stage4_observation": {
+    "wp404": {
+      "claim": "F2-WP-404-G1-GPT56SOL-COGNITIVE-MICRO-LAB-20260829",
+      "pointer_state_at_observation": "ACTIVE",
+      "repository_ci_run_id": 33244287183,
+      "repository_ci_job_id": 99078929552,
+      "tested_head_sha": "544e9dda2e9458118373a1d41d50f7e53ee7bcfe",
+      "repository_ci_status": "COMPLETED_SUCCESS",
+      "scope": "COMPONENT_CI_GREEN_PENDING_PR_INTEGRATION_AND_EXACT_MERGED_MAIN_CI",
+      "runtime_credit": 0
+    }
+  },
+  "stage5_wp508_falsifier": {
+    "workpackage_id": "F2-WP-508",
+    "generation_under_test": 3,
+    "active_claim": "F2-WP-508-G3-GPT56SOL-INHERITED-LINEAGE-REPAIR-20260829",
+    "candidate_pr": 253,
+    "candidate_head_sha": "cec2f11750854d9ff0ae0a6bf14a32d04c023df0",
+    "candidate_merged_as": "0148f137cc4c5bbd1886e3f1ec36f578daaecf4d",
+    "review_pr": 257,
+    "review_run_id": 33244351377,
+    "review_job_id": 99079105335,
+    "review_result": "FAILURE_AS_COUNTEREVIDENCE",
+    "failed_discriminator": "G3 must reject forged BroadcastEnvelope payload lineage",
+    "finding": "WP508 G3 revalidated WorkspaceSelection builder lineage but then trusted BroadcastEnvelope.candidate_payload_refs for material re-entry overlap. A directly reconstructed concrete BroadcastEnvelope could preserve exact selection/plan identity fields while substituting a self-consistent payload tuple absent from selection.selected, and the G3 binding accepted a CellInput carrying only that substituted payload.",
+    "canonical_falsifier": "workpackages/falsifiers/F2-WP-508/20260829T1557P0700_G3_FORGED_BROADCAST_PAYLOAD_LINEAGE_GPT56SOL.json",
+    "canonical_absorption_pr": 264,
+    "canonical_absorption_commit": "d6894cecca51cd6b1e1609d225be9a02dc6f395f",
+    "review_pr_closed_after_absorption": true,
+    "smallest_repair_condition": "The sole WP508 mutation authority must independently bind concrete BroadcastEnvelope candidate_ids and candidate_payload_refs to the canonical tuples derived from exact WorkspaceSelection.selected, or use an equivalent deterministic broadcast-builder-lineage verifier; retain the falsifier as regression and require exact-head hosted CI before terminal acceptance.",
+    "terminal_acceptance_allowed_at_observed_source": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "effects_and_execution": {
+    "provider_calls": false,
+    "vps_execution": false,
+    "physical_grid10_execution": false,
+    "effect_authority_used": false,
+    "github_repository_ci_used_for_falsifier": true
+  },
+  "next_exact_action": "Re-enter current F2 main and F2-WP-508 active pointer. Do not create a second WP508 mutation lane. The existing mutation authority must absorb the canonical forged-broadcast-payload lineage falsifier, add exact broadcast-to-selection candidate id/payload binding, run all prior G3 regressions plus this new discriminator under exact-head hosted CI, and only then reconcile at repository-component scope. Continue Stage-6 or target-runtime claims only after the Stage-4/5 granular dependencies are terminal and exact-current; no runtime or GWT causal credit follows from component CI."
+}

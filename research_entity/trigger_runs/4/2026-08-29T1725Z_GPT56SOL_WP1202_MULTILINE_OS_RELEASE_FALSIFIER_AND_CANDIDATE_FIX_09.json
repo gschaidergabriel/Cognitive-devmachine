@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at_utc": "2026-08-29T17:25:36Z",
+  "authority_epoch": "8.78",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_branch_observed_head_before_write": "e3a0b9077fa6714ca67cf5078109b42b16d5560e",
+    "directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "frankenstein2": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "main_observed_after_candidate_ci": "ad16eeb81dfc7ba89506c0a488f7c89673038315",
+    "wp1202_active_pointer_state": "ACCEPTED_G2_REPOSITORY_COMPONENT_SCOPE_ONLY",
+    "wp1202_runtime_credit": 0,
+    "whole_system_credit": 0
+  },
+  "runtime_frontier": {
+    "existing_self_hosted_run": 33254381280,
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "observed_status": "queued",
+    "duplicate_dispatch_created": false,
+    "classification": "INFRASTRUCTURE_QUEUE_NEGATIVE_EVIDENCE_NOT_PRODUCT_FAILURE",
+    "wp510_current_runtime_credit": 0
+  },
+  "wp1202_falsifier": {
+    "classification": "CANDIDATE_FALSIFIER_REVIEW_ONLY",
+    "finding": "Canonical WP1201 os_release is bounded /etc/os-release text and may contain internal LF delimiters, while accepted WP1202 G2 rejected every C0 control including LF. Existing accepted fixture replaced the canonical multi-line shape with a single-line Ubuntu label.",
+    "source_refs": {
+      "wp1201": "src/frankenstein2/target_host_profile.py@f0b528956c5dab6cd58f93b1d3a6851c1adcb07a",
+      "wp1202": "src/frankenstein2/target_userspace_twin.py@d87a17ec92d8dd8d0fe6583496635445b83a5cfd",
+      "wp1202_test": "tests/test_target_userspace_twin.py@b55991568baac893f6e0a2713b3eaadfabbc6d55"
+    },
+    "draft_pr": 575,
+    "review_branch": "chatgpt/review-wp1202-real-os-release-falsifier-20260830",
+    "falsifier_commit": "3f5cc640914971407cffa3443d5de13344ba39ea",
+    "failing_ci": {
+      "run_id": 33265525249,
+      "job_id": 99134790791,
+      "compile_step": "PASS",
+      "integration_falsification_step": "FAIL",
+      "conclusion": "failure"
+    }
+  },
+  "candidate_fix": {
+    "classification": "REVIEW_ONLY_CANDIDATE_PATCH_NOT_CANONICAL_MUTATION_AUTHORITY",
+    "commit": "82fb6be61e22039feefcaa345209ceb030a0c3e2",
+    "change": "Permit LF only for the exact digest-bound os_release projection field; preserve rejection of all other C0/DEL controls and preserve the existing session_type newline rejection.",
+    "passing_ci": {
+      "run_id": 33265592419,
+      "job_id": 99134968940,
+      "compile_step": "PASS",
+      "wp1201_wp1202_integration_step": "PASS",
+      "conclusion": "success"
+    },
+    "merged": false,
+    "active_pointer_modified": false,
+    "aggregate_state_modified": false,
+    "runtime_credit": 0,
+    "physical_host_credit": 0,
+    "completion_credit": 0
+  },
+  "coordination": {
+    "claim_protocol_observed": "workpackages/CLAIM_PROTOCOL.md",
+    "wp002_aggregate_projection_writer_respected": true,
+    "main_mutation_performed": false,
+    "reason_not_merged": "WP1202 has an existing canonical active pointer; protocol permits REVIEW_ONLY falsifier/candidate patch but canonical successor reconciliation must explicitly open the successor scope."
+  },
+  "next_exact_action": "Re-enter current F2 main and WP1202 active/reconciliation state. Treat the failing realistic WP1201->WP1202 CI as new counterevidence against G2 scope. If no newer worker already reconciled it, open the protocol-compliant WP1202 successor generation from the accepted G2 reconciliation, transplant the minimal LF-only os_release fix plus realistic regression, obtain main CI, then resume the admitted T1 materialization/runtime readback gate. Do not mint target/physical/runtime credit from repository CI and do not duplicate the still-queued self-hosted WP510 dispatch."
+}

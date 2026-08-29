@@ -1,0 +1,58 @@
+name: Trigger4 Effect UNKNOWN Outcome CI
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/clayverse/effects.py'
+      - 'the artefact/clayverse/effect_journal.py'
+      - 'the artefact/clayverse/entityos_bridge.py'
+      - 'the artefact/tests/test_effect_unknown_outcome.py'
+      - '.github/workflows/trigger4-effect-unknown-outcome-ci.yml'
+  push:
+    paths:
+      - 'the artefact/clayverse/effects.py'
+      - 'the artefact/clayverse/effect_journal.py'
+      - 'the artefact/clayverse/entityos_bridge.py'
+      - 'the artefact/tests/test_effect_unknown_outcome.py'
+      - '.github/workflows/trigger4-effect-unknown-outcome-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trigger4-effect-unknown-outcome-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  effect-unknown-outcome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check --quiet 'pytest==8.4.2'
+      - name: Compile UNKNOWN-outcome delta
+        working-directory: 'the artefact'
+        run: >-
+          python -m py_compile
+          clayverse/effects.py
+          clayverse/effect_journal.py
+          clayverse/entityos_bridge.py
+          tests/test_effect_unknown_outcome.py
+      - name: Run focused UNKNOWN-outcome regressions
+        working-directory: 'the artefact'
+        run: python -m pytest -q tests/test_effect_unknown_outcome.py
+      - name: Run adjacent effect-authority regressions
+        working-directory: 'the artefact'
+        run: >-
+          python -m pytest -q
+          tests/test_effect_journal.py
+          tests/test_effect_pipeline.py
+          tests/test_effect_policy.py
+          tests/test_effect_adapter.py

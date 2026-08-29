@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.17"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.18"
 EXECUTION_RECEIPT_SCHEMA_VERSION = "1.13"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
@@ -54,6 +54,11 @@ def _fork_active_execution_quarantined() -> bool:
     return getattr(
         threading, _FORK_ACTIVE_EXECUTION_QUARANTINE_ATTR, False
     ) is True
+
+
+def is_fork_active_execution_quarantined() -> bool:
+    """Return the live interpreter-shared fork quarantine state."""
+    return _fork_active_execution_quarantined()
 
 
 def __getattr__(name: str):
@@ -554,6 +559,9 @@ def receipt() -> dict:
         ),
         "fork_active_execution_quarantine_scope": (
             FORK_ACTIVE_EXECUTION_QUARANTINE_SCOPE
+        ),
+        "fork_active_execution_quarantine_live_accessor": (
+            "is_fork_active_execution_quarantined"
         ),
         "fork_active_execution_quarantined": (
             _fork_active_execution_quarantined()

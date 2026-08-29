@@ -11,10 +11,13 @@ on:
       - 'research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md'
       - 'governance/EXECUTION_SURFACE_**'
       - 'governance/CURRENT_EXECUTION_SURFACE_PROJECTIONS_V1.json'
+      - 'governance/DURABLE_WORK_REENTRY_PROTOCOL_V1.md'
       - 'tools/execution_surface_resolver_v1.py'
       - 'tools/current_execution_authority_lint_v1.py'
+      - 'tools/durable_work_cursor_v1.py'
       - 'tests/test_execution_surface_resolver_v1.py'
       - 'tests/test_current_execution_authority_lint_v1.py'
+      - 'tests/test_durable_work_cursor_v1.py'
       - '.github/workflows/execution-surface-resolution-ci.yml'
   push:
     branches: [main]
@@ -27,17 +30,20 @@ on:
       - 'research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md'
       - 'governance/EXECUTION_SURFACE_**'
       - 'governance/CURRENT_EXECUTION_SURFACE_PROJECTIONS_V1.json'
+      - 'governance/DURABLE_WORK_REENTRY_PROTOCOL_V1.md'
       - 'tools/execution_surface_resolver_v1.py'
       - 'tools/current_execution_authority_lint_v1.py'
+      - 'tools/durable_work_cursor_v1.py'
       - 'tests/test_execution_surface_resolver_v1.py'
       - 'tests/test_current_execution_authority_lint_v1.py'
+      - 'tests/test_durable_work_cursor_v1.py'
       - '.github/workflows/execution-surface-resolution-ci.yml'
 
 permissions:
   contents: read
 
 jobs:
-  resolver-and-currentness:
+  resolver-currentness-and-reentry:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -46,5 +52,7 @@ jobs:
         run: python3 -m unittest tests.test_execution_surface_resolver_v1 -v
       - name: Run authority-currentness tests
         run: python3 -m unittest tests.test_current_execution_authority_lint_v1 -v
+      - name: Run durable-work reentry tests
+        run: python3 -m unittest tests.test_durable_work_cursor_v1 -v
       - name: Lint current-facing execution authority projections
         run: python3 tools/current_execution_authority_lint_v1.py

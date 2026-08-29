@@ -1,0 +1,32 @@
+{
+  "schema": "CLAY_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "research_id": "R6-20260829-SRCARCH-HYPOTHESIS-PBT-GPT56SOL-01",
+  "evidence_stage": "E1_SOURCE_READ",
+  "status": "MIRRORED_FROM_F2_CANONICAL_RESEARCH_RESULT",
+  "claim_authority": "F2_ONLY",
+  "f2_source": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "claim_commit": "26a43bbb7d9c78200b28b933ff3790802c978cfd",
+    "result_commit": "ca77ae5fb571de04441508bc6d99ea0881982b1b",
+    "result_path": "research/tool_intelligence/deltas/R6-20260829-SRCARCH-HYPOTHESIS-PBT-GPT56SOL-01_E1_SOURCE_READ_20260829T1507P0700.json"
+  },
+  "research_entity_target_before_write": "55afb96f11a9c6e9de0b051c2224b1cd874e21ac",
+  "mirror_epoch": "2026-08-29T15:08:00+07:00",
+  "external_source_pin": {
+    "repo": "HypothesisWorks/hypothesis",
+    "commit_sha": "49a797bdfdd98b4f393b538c6c5aabf90ec59ffd",
+    "tree_sha": "44debe61f03a49af81dc9b5978bff4d4bd25ea44",
+    "license": "MPL-2.0"
+  },
+  "distilled_hypothesis": "Use Hypothesis only as a pinned deterministic dev/CI falsification donor around WP507. Generate near-miss identity/digest/generation/recipient-scope and matched intervention/control cases, shrink failures to minimal counterexamples, then freeze valuable failures as explicit regressions. Never make Hypothesis or its example database a canonical state/causal authority and never add it to the production runtime path solely for this purpose.",
+  "counterhypothesis": "If the current fixed WP507 test matrix already exhausts the meaningful finite state space, a small native combinatorial generator may provide equivalent coverage with lower dependency/build cost.",
+  "next_discriminator": "After current WP507 source/tests exist on main and under a new atomic E2/E3 claim, compare genuinely new fail-closed invariant coverage and minimized-counterexample yield against the fixed suite at bounded CI cost.",
+  "credits": {
+    "e1_source_read": 1,
+    "e2_architecture": 0,
+    "runtime": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "whole_system": 0
+  }
+}

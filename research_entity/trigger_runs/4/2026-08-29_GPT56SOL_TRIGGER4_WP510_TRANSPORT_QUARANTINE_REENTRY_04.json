@@ -1,0 +1,85 @@
+{
+  "schema": "TRIGGERWORD4_WP510_TRANSPORT_QUARANTINE_REENTRY/v1",
+  "created_at_local": "2026-08-29T20:25:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "4",
+  "routing_self_test": {
+    "normalized_message": "4",
+    "expected_macro": "TRIGGERWORD_4_GRID10_RUNTIME_TO_FRANKENSTEIN_2_ASSEMBLY",
+    "result": "PASS",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "research_main_observed": "c931bfc0b2768a6df561f8b1751c9cf6478fe2f8",
+    "directive_branch_observed_before_write": "92a1347199a0c2a395558670c549e09a0e559941",
+    "supervisor_schema": "SUPERVISOR_STEERING_9.13AS_DELTA",
+    "mode": "AUTONOMOUS_IMPLEMENTATION_FIRST_FREE_ASSIGNED_SANDBOX",
+    "paid_spend": "FORBIDDEN"
+  },
+  "frankenstein2": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "main_observed": "36a197371ab7699b6aaed2201375ee706bbb067e",
+    "wp510_g2_merge_sha": "3e5b05f95b1cef80ff781152fa430f7916736746",
+    "wp510_g2_scope": "repository-component causal-path seal with typed downstream CellOutput lineage",
+    "wp510_g2_target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "semantic_gwt_jspace_runtime_credit": 0,
+    "whole_system_credit": 0
+  },
+  "controller": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "addbe2f0808fd5001e1122d443ed3b41cf7f3864",
+    "commit_message": "trigger4: probe canonical WP510 G2 merge on self-hosted runtime",
+    "workflow": ".github/workflows/frank-self-hosted-probe.yml",
+    "bound_f2_wp510_source_sha": "3e5b05f95b1cef80ff781152fa430f7916736746"
+  },
+  "live_probe": {
+    "run_id": 33254381280,
+    "job_id": 99105445603,
+    "run_status": "queued",
+    "job_status": "queued",
+    "conclusion": null,
+    "labels": ["self-hosted"],
+    "runner_id": 0,
+    "runner_name": "",
+    "steps": [],
+    "runtime_execution_observed": false
+  },
+  "counterhypothesis_test": {
+    "counterhypothesis": "The prior queue block was specific to the stale pre-canonical WP510 probe/source binding.",
+    "discriminator": "Observe the newly pushed controller probe bound to canonical WP510 G2 merge SHA 3e5b05f...",
+    "observation": "The newly bound probe is also queued with runner_id=0, empty runner_name, and zero executed steps.",
+    "result": "COUNTERHYPOTHESIS_NOT_SUPPORTED"
+  },
+  "connector_boundary": {
+    "repo_runner_admin_endpoint": "GET /repos/gschaidergabriel/Dr.-Unterweger/actions/runners",
+    "observation": "HTTP 403 Resource not accessible by personal access token",
+    "classification": "TOOL_AUTHORITY_BOUNDARY_NOT_PRODUCT_FAILURE"
+  },
+  "blocker": {
+    "id": "TARGET_RUNNER_TRANSPORT_QUARANTINED",
+    "scope": "PRE_PRODUCT_EXECUTION",
+    "reason": "No admissible self-hosted runner has accepted the exact current WP510 G2 probe job.",
+    "duplicate_dispatch_policy": "DO_NOT_DISPATCH_AGAIN_WHILE_CURRENT_EXACT_PROBE_IS_QUEUED"
+  },
+  "next_exact_gate": {
+    "action": "On the designated self-hosted runner administration surface, verify the intended runner is registered, online, idle, and carries the self-hosted label; repair runner service/registration/label transport if needed. Only after that state is observed should the same bounded canonical WP510 G2 runtime probe be allowed to execute.",
+    "requires_external_runner_admin_surface": true,
+    "available_in_this_organ": false
+  },
+  "credits": {
+    "repository_component_wp510_g2": "SUPPORTED_BY_PREEXISTING_CI_AT_DECLARED_SCOPE",
+    "target_runtime": 0,
+    "physical_grid10": 0,
+    "semantic_gwt_jspace_runtime": 0,
+    "training": 0,
+    "whole_frankenstein2": 0,
+    "whole_entityos_hcu": 0
+  },
+  "decision": "CHECKPOINT_BLOCKER_NO_DUPLICATE_IMPLEMENTATION_OR_RUNTIME_DISPATCH",
+  "evidence_note": "Queued runner transport and connector-admin denial are infrastructure/authority observations, not product semantic failures. Repository component evidence does not mint target-runtime or whole-system credit."
+}

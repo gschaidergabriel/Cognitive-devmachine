@@ -1,25 +1,27 @@
 # AUTHORITATIVE STATE RESOLUTION — XENO COMPUTATIONAL UNIT RE-ENTRY
 
-Status: **CURRENT**
+Status: **SUPERSEDED CURRENT-FACING SHIM — HISTORICAL 2026-08-23 SNAPSHOT**
 Owner correction date: **2026-08-23**
 Persistent research entity: **Clay**
 
-## Current owner mission authority
+> **CURRENT EXECUTION/AUTHORITY ROUTING:** read `CLAY_EXECUTION_AUTHORITY.md` first, then `governance/EXECUTION_SURFACE_RESOLUTION_PROTOCOL_V1.md` and `governance/EXECUTION_SURFACE_REGISTRY_V1.json`. The execution law preserved below is historical provenance and MUST NOT be used for a current permission, VPS, self-hosted, sandbox, provider, or `NO_EXECUTOR` decision.
 
-The newest explicit owner direction selects:
+## Historical owner mission authority at this snapshot
+
+The then-newest explicit owner direction selected:
 
 `research_entity/global/XENO_GO_OWNER_DIRECTIVE.md`
 
-as current `go` product/work-selection authority, with research fusion:
+as the `go` product/work-selection authority of this 2026-08-23 snapshot, with research fusion:
 
 `research_entity/global/XENO_COMPUTATIONAL_UNIT_RESEARCH_FUSION_2026-08-23.md`
 
-Current executable bootstrap: **Xeno** (renamed from Mini Entity).
-Destination: **EntityOS cognitive computer with integrated HCU/XCU**.
+Historical executable bootstrap: **Xeno** (renamed from Mini Entity).
+Destination at this snapshot: **EntityOS cognitive computer with integrated HCU/XCU**.
 
 Historical `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*` identifiers remain valid compatibility/provenance surfaces where exact migration has not occurred. They do not define a competing current product identity.
 
-## Authority / evidence precedence
+## Historical authority / evidence precedence
 
 1. newest explicit owner directive;
 2. actually observed exact-identity authorized execution for executable behavior at that exact scope;
@@ -31,16 +33,16 @@ Historical `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*` identifiers remain v
 
 A later commit timestamp or higher historical control number does not by itself outrank a newer explicit owner instruction.
 
-## Current work-selection law
+## Historical work-selection law
 
-Every exact `go` has two mandatory coupled tracks:
+Every exact `go` at this snapshot had two mandatory coupled tracks:
 
 1. `XENO_EXECUTABLE_CONVERGENCE`
 2. `XCU_AND_ENTRY_FABRIC_CO_DEVELOPMENT`
 
-If track 2 cannot safely advance, the run records `XCU_NO_CHANGE_WITH_REASON` plus a discriminator. Material architecture work uses hypotheses, counterhypotheses, cheapest discriminators, evidence fusion and bounded re-entry.
+If track 2 could not safely advance, the run recorded `XCU_NO_CHANGE_WITH_REASON` plus a discriminator. Material architecture work used hypotheses, counterhypotheses, cheapest discriminators, evidence fusion and bounded re-entry.
 
-The Xeno common substrate is incrementally prepared for:
+The Xeno common substrate was incrementally prepared for:
 
 - `XENO_GRID10`;
 - `XENO_COGSIM10`;
@@ -48,11 +50,11 @@ The Xeno common substrate is incrementally prepared for:
 - `XENO_NESTED_SIM`;
 - `XENO_SCALEOUT`.
 
-New primitives should be cross-mode reusable.
+New primitives were intended to be cross-mode reusable.
 
-## Computerization law
+## Historical computerization law
 
-Xeno progressively separates:
+Xeno progressively separated:
 
 - Entry I/O / typed new-data fabric;
 - XRAM state hierarchy;
@@ -63,30 +65,32 @@ Xeno progressively separates:
 
 These are software architecture roles, not claims of custom silicon.
 
-Scale claims remain empirical. `logical_module_count != resident_model_count != physical_decode_concurrency`. The baseline is 10 logical cells; `10 -> 32 -> 64 -> 128 -> 256 -> ~600` is a benchmark ladder. ~600 on H100-class hardware is hypothesis/planning only until exact model/quantization/KV/HBM/throughput/latency/recovery evidence exists.
+Scale claims remain empirical. `logical_module_count != resident_model_count != physical_decode_concurrency`. The baseline was 10 logical cells; `10 -> 32 -> 64 -> 128 -> 256 -> ~600` was a benchmark ladder. ~600 on H100-class hardware was hypothesis/planning only until exact model/quantization/KV/HBM/throughput/latency/recovery evidence existed.
 
-## State / truth / effect law
+## Historical state / truth / effect law
 
-- canonical durable state/evidence remains outside model-generated cognition and simulation;
-- current Xeno may use existing MiniUnifiedDB/UnifiedDB implementation surfaces during migration;
-- world-model state is noncanonical projection/candidate state;
-- HCU/XCU/J-Space/workspace/model outputs cannot mint canonical truth;
-- Hyperposition preserves unresolved alternatives; majority vote is not truth;
-- unknown external effect outcome remains UNKNOWN until verified;
-- EffectGate/EffectJournal remain the only admitted real/state-changing effect path;
+- canonical durable state/evidence remained outside model-generated cognition and simulation;
+- Xeno could use existing MiniUnifiedDB/UnifiedDB implementation surfaces during migration;
+- world-model state was noncanonical projection/candidate state;
+- HCU/XCU/J-Space/workspace/model outputs could not mint canonical truth;
+- Hyperposition preserved unresolved alternatives; majority vote was not truth;
+- unknown external effect outcome remained UNKNOWN until verified;
+- EffectGate/EffectJournal remained the only admitted real/state-changing effect path;
 - no second persistent identity, truth store, effect path or recovery ledger.
 
 `UNKNOWN != ZERO != ERROR != MEASURED`.
 `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
 
-## World/nested simulation law
+## Historical world/nested simulation law
 
-A permanent duplicate world is not required for normal operation. Bounded `WM_TEST` and selective high-cost `NESTED_SIM` are active research modes of the same Xeno compute substrate. Their outputs remain candidates and are calibrated against observed reality.
+A permanent duplicate world was not required for normal operation. Bounded `WM_TEST` and selective high-cost `NESTED_SIM` were research modes of the same Xeno compute substrate. Their outputs remained candidates and were calibrated against observed reality.
 
-## Execution law
+## Historical execution law — SUPERSEDED
 
-Current build/test/experiment/runtime validation remains authorized-isolated-sandbox-only unless newer owner authority changes it. VPS/self-hosted/production-host testing is forbidden under current control. Together remains forbidden. No paid fallback. Final paid/model training requires explicit owner authorization.
+The 2026-08-23 snapshot stated that build/test/experiment/runtime validation was isolated-sandbox-only and that VPS/self-hosted/production-host testing was forbidden. **That execution-policy statement is superseded.** Current execution permission must be resolved from `CLAY_EXECUTION_AUTHORITY.md`; in particular, current owner-provisioned VPS/bridge/`clay-direct-dev` execution must not be rejected because this historical paragraph exists.
 
-## Fail-closed routing rule
+Together/provider/economic rules must likewise be resolved from current authority rather than this snapshot.
 
-Any active bootstrap, program state, root worker shim, swarm contract, control or supervisor steering that selects ClayVerse, Frank or Mini Entity as a competing current top-level authority is stale. Preserve its research bytes as donor/compatibility evidence but do not let it override the current Xeno + XCU/Entry `go` law.
+## Historical fail-closed routing rule
+
+This snapshot treated active bootstrap/program-state/root-worker/swarm/control surfaces selecting ClayVerse, Frank or Mini Entity as competing current top-level authority as stale. Preserve these bytes as historical donor/compatibility evidence; current naming and routing law comes from current authority and current program state.

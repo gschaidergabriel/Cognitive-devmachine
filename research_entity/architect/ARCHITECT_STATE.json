@@ -1,88 +1,139 @@
 {
   "schema": "ARCHITECT_STATE/v1",
   "architect_id": "federated-development-architect",
-  "generation": 4,
+  "generation": 5,
   "status": "ACTIVE",
   "federation_mode": "SEPARATE_STATE_SHARED_DIRECTION",
   "active_project_binding_id": "frankenstein-2.0",
-  "active_owner_intent_epoch_id": null,
-  "active_owner_direction_summary": "Resume Frankenstein 2.0 as the active primary project; no owner project pivot was expressed by this Architect trigger.",
-  "current_focus": "Close Stage-2 reconciliation/cache lag, then route one bounded persistent-agency integration workpackage instead of spawning more overlapping component repairs.",
+  "active_owner_intent_epoch_id": "2026-08-29-F2-RUNTIME-FIRST-RECOMPILE",
+  "active_owner_direction_summary": "Build Frankenstein 2.0 faster and at higher quality by improving the Research Entity only where it removes real build, evidence, coordination or runtime bottlenecks. Recompile Architect state, resolve 8.78/9.13 authority confusion, repair aggregate projection through the existing sole WP002 writer, promote the current WP510 causal path to the primary frontier, obtain first real target-runtime evidence through the existing VPS Bridge, and only then evaluate the next integration layer.",
+  "current_focus": "RUNTIME-FIRST: finish the existing F2-WP-002 G5 aggregate consistency repair without creating a competing writer, then promote the already accepted F2-WP-510 G2 causal-path contract from repository/CI evidence to exact target-runtime evidence through clay-direct-dev/VPS Bridge. Do not use later repository-only component progress as a substitute for that runtime discriminator.",
   "active_goal_ids": [
     "GOAL-F2-ARCHITECTURE-ASSEMBLY",
     "GOAL-F2-EVIDENCE-SPINE",
     "GOAL-ARCHITECT-PERSISTENT-INTERFACE"
   ],
-  "active_workpackage_ids": [
-    "F2-WP-200",
-    "F2-WP-201",
-    "F2-WP-203",
-    "F2-WP-204",
-    "F2-WP-205"
+  "primary_frontier_workpackage_ids": [
+    "F2-WP-002",
+    "F2-WP-510"
   ],
-  "active_hypothesis_ids": [],
+  "observed_parallel_component_work": [
+    "F2-WP-600",
+    "F2-WP-601",
+    "F2-WP-602",
+    "F2-WP-700",
+    "F2-WP-701"
+  ],
+  "parallel_work_policy": "Preserve valid non-conflicting parallel component work and its receipts, but do not let later repository-only work redefine the Architect promotion frontier before WP510 target-runtime evidence. No duplicate mutation authority and no rollback of already accepted bounded component evidence.",
   "current_architecture_view": {
     "project": "Frankenstein 2.0",
-    "phase": 2,
-    "phase_name": "persistent agency substrate",
-    "granular_component_evidence": [
-      "F2-WP-200 Persistent Pulse: repository-hosted CI fused; reconciliation credit boundary explicitly keeps whole-system acceptance zero",
-      "F2-WP-201 StateFingerprint: ACCEPTED_AT_SCOPE receipt with 17-test exact-head hosted CI; projection_changed is separated from generation-sensitive identity_changed",
-      "F2-WP-202 PredictionContract/residual: accepted at bounded repository-hosted component scope",
-      "F2-WP-203 AgencyState generation 2 item-type repair: accepted at bounded repository-hosted CI scope",
-      "F2-WP-204 generation 2 fail-closed repair: source/CI accepted at scope with 27/27 deterministic tests; terminal reconciliation remains the next declared gate",
-      "F2-WP-205 generation 2 tri-state wake repair: granular reconciliation accepted at bounded repository-hosted CI scope; terminal pointer/cache synchronization remains"
+    "phase": 5,
+    "phase_name": "GRID/GWT causal-path integration -> target-runtime promotion",
+    "current_causal_chain": "GRID10 SituationFrame/selection -> canonical BroadcastEnvelope -> UptakeSummary -> ReentryBinding -> GwtCausalPathReceipt",
+    "wp510_generation": 2,
+    "wp510_scope": "TYPED_DOWNSTREAM_LINEAGE_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "wp510_status": "ACCEPTED_AT_SCOPE_REPOSITORY_ONLY",
+    "wp510_runtime_promotion_required": true,
+    "accepted_repository_invariants": [
+      "exact GRID/GWT plan/frame and selection identity are revalidated",
+      "broadcast is rebuilt through the canonical builder rather than trusting caller prose",
+      "uptake/re-entry are bound through typed lineage",
+      "positive causal sealing requires exactly one UPTAKEN recipient and exact downstream-output digest identity",
+      "forged lineage, detached positive downstream evidence and missing re-entry fail closed"
     ],
-    "integration_requirement": "After terminal reconciliation/cache synchronization, compose Persistent Pulse + StateFingerprint + AgencyState + Goal lifecycle + Wake/HOLD in one bounded Stage-2 integration workpackage if no exact-current owner already exists. Explicitly preserve projection_changed versus identity_changed, UNKNOWN wake evidence, and no-effect/no-completion boundaries.",
-    "credit_boundary": "Current evidence is component/repository-CI evidence only; it does not establish target runtime, VPS, physical GRID10, whole Frankenstein 2.0, EntityOS or HCU acceptance."
+    "credit_boundary": "Repository-hosted component CI does not establish target-runtime execution, physical GRID10, semantic GWT uptake, J-Space causal influence, provider/model execution, training, effects, completion or whole Frankenstein 2.0 acceptance. Those credits remain zero until exact executable evidence exists."
   },
-  "unresolved_contradictions": [
-    "F2 aggregate workpackages/STATE.json generation 11 remains behind granular Stage-2 claim/reconciliation/receipt evidence for WP-200/WP-201/WP-203/WP-204/WP-205.",
-    "Research Entity PROGRAM_STATE.json retains 8.78-era supervisor fields while current SUPERVISOR_INBOX selects supervisor epoch 9.13 FREE_ONLY."
-  ],
-  "worker_frontier": {
-    "triggerword4": "Finish existing Stage-2 terminal reconciliations and aggregate synchronization. Then claim at most one nonduplicate bounded Stage-2 integration lane after rechecking exact-current ownership.",
-    "triggerword5": "Donor forensics/live ingest remains an evidence input; no new donor-forensics blocker is required for the immediate Stage-2 integration gate."
+  "authority_resolution": {
+    "admitted_supervisor_authority": "8.78",
+    "non_authority_research_inbox": "9.13AT_NON_AUTHORITY",
+    "decision": "9.13 research metadata is historical/non-authority and cannot override admitted 8.78 or newer explicit owner direction. Current-use active pointers must bind admitted authority while preserving historical 9.13 provenance where useful.",
+    "repaired_examples_observed": [
+      "F2-WP-207",
+      "F2-WP-402",
+      "F2-WP-403"
+    ],
+    "vps_execution_authority": "RESOLVED_OWNER_AUTHORIZED",
+    "free_only_semantics": "FREE external model/API tokens only; owner VPS/local/self-hosted compute is allowed and expected. Paid, subscription or unknown-cost external provider tokens are forbidden under FREE_ONLY."
   },
-  "test_frontier": {
-    "stage2_integration": "Prove generation-only identity movement does not automatically become projection change or ACT eligibility; prove missing wake observation remains UNKNOWN/ABSTAIN rather than HOLD/no-match; preserve explicit caller-supplied evidence and authority fences.",
-    "entityos_hcu": "Supervisor 9.13 keeps whole EntityOS/HCU, physical GRID10 and training credit at zero; provider routes remain unadmitted."
+  "aggregate_projection": {
+    "authority": "CACHE_ONLY_NOT_TRUTH_AUTHORITY",
+    "active_repair_workpackage": "F2-WP-002",
+    "generation": 5,
+    "pull_request": 115,
+    "branch": "chatgpt/trigger4-wp002-g5-aggregate-projection-repair-20260829",
+    "single_writer_rule": "Respect the existing WP002 G5 writer; repair through that lane rather than creating a second STATE.json authority.",
+    "last_observed_gate": "FAIL_CLOSED",
+    "last_observed_failure": "component reconciliation requires explicit zero whole-system credit",
+    "diagnostic_improvement_commit": "84b522d2a739bc5e0751fe84152da292abdcc7f1",
+    "diagnostic_policy": "Identify and repair the exact legacy reconciliation metadata defect; do not weaken the zero-credit invariant."
+  },
+  "runtime_transport": {
+    "target_environment": "clay-direct-dev",
+    "authorized_transport": "existing VPS Bridge / self-hosted runner",
+    "authority_ambiguity": false,
+    "existing_research_entity_dispatch_run": 33219725633,
+    "existing_research_entity_dispatch_job": 99011039821,
+    "last_observed_state": "QUEUED_WITH_RUNNER_ID_0_AND_NO_STEPS",
+    "classification": "TRANSPORT_OR_RUNNER_ASSIGNMENT_BLOCKER_NOT_PRODUCT_LOGIC_AND_NOT_AUTHORITY",
+    "controller_runner_repository": "gschaidergabriel/Dr.-Unterweger",
+    "controller_probe_workflow": ".github/workflows/frank-self-hosted-probe.yml",
+    "next_runtime_action": "Use or repair the already-established controller-repo self-hosted runner/bridge path into clay-direct-dev, execute an exact-SHA WP510 target-runtime probe, and persist exact transport/source/runtime/command/result identity. Do not create duplicate blind dispatches on the already queued research-entity run."
+  },
+  "research_entity_improvement_policy": {
+    "principle": "Change only surfaces that reduce measured build latency, duplicate work, stale-state errors, diagnosis time, runtime-evidence latency or evidence ambiguity.",
+    "keep": [
+      "single-writer workpackage ownership",
+      "append-only granular receipts/reconciliations",
+      "fail-closed authority/effect/completion boundaries",
+      "exact executable evidence scoping",
+      "small context compilation instead of full-history replay"
+    ],
+    "improve_now": [
+      "make state-consistency failures name the exact offending pointer/reconciliation",
+      "compile Architect frontier from granular live evidence rather than stale phase caches",
+      "separate provider-token economics from owner VPS compute authority",
+      "route runtime work through the actual bridge owner repository instead of treating a queued repo-scoped runner job as an authority question",
+      "hold promotion order stable while parallel source work moves"
+    ],
+    "avoid": [
+      "new meta-directives that duplicate existing authority",
+      "mass rewriting historical evidence only for cosmetic consistency",
+      "restarting closed work",
+      "claiming runtime from repository CI",
+      "allowing aggregate caches to outrank granular evidence"
+    ]
   },
   "current_blockers": [
-    "Stage-2 granular acceptance and aggregate/pointer state are not yet synchronized.",
-    "No integrated persistent-agency component path is yet credited from the individually accepted Stage-2 primitives.",
-    "Research Entity aggregate program authority surface lags current supervisor 9.13."
+    "F2-WP-002 G5 aggregate projection PR remains fail-closed on one or more terminal reconciliation zero-credit metadata mismatches; exact diagnostic is being added rather than weakening the gate.",
+    "The existing Research-Entity self-hosted runtime dispatch is queued with no assigned runner/no executed steps; runtime evidence is therefore still zero.",
+    "WP510 is repository-accepted but not yet instantiated in a real target-runtime causal path."
   ],
   "current_uncertainty": [
-    "A dedicated Stage-2 integration workpackage is architecturally indicated by accepted component next-actions, but exact-current claim ownership must be rechecked immediately before mutation because F2 main is moving rapidly.",
-    "No whole persistent-loop/runtime implication is established by current Stage-2 component CI evidence."
+    "Whether the controller-repository self-hosted runner is currently online and can enter clay-direct-dev must be established by executable runner/bridge evidence, not inferred from configuration presence.",
+    "A successful target-environment execution of only deterministic WP510 validators would establish target-environment component execution, but semantic GWT runtime credit additionally requires a real runtime path with actual uptake/re-entry identities rather than a source-level replay."
   ],
   "last_ingested_heads": {
-    "frankenstein_2_main": "466080f8bfcf55bc9d67ad7029dec3ac6c5ff4ca",
-    "research_entity_main": "d81d31b34d2abb98bf2f0bc80c46decbfd23c8b0",
-    "architect_branch_before_generation_4": "4efe977c0afda25393bc3dee8454929a8cb9003c"
+    "frankenstein_2_main": "40fbf222dc908b9a81aefb5ae79fe183aab4a7fc",
+    "research_entity_main": "281f828eb558920a9498dd4c772e28260756f8e3",
+    "wp002_g5_head": "84b522d2a739bc5e0751fe84152da292abdcc7f1"
   },
-  "direction_binding_summary": {
-    "project_binding": "Frankenstein 2.0 remains ACTIVE_PRIMARY.",
-    "owner_delta": "NO_PROJECT_PIVOT_DETECTED",
-    "evidence_precedence": "granular claim/reconciliation/receipt and current supervisor inbox outrank stale aggregate state",
-    "duplicate_work_rule": "recheck exact-current claim/PR ownership before any Stage-2 integration mutation"
-  },
-  "current_processing_mode": "ARCHITECT_SYNTHESIS_PRIORITIZATION_AND_ROUTING",
-  "current_context_budget_policy": "Compile the smallest sufficient context from current owner direction, changed heads, granular receipts/reconciliations, open contradictions and relevant methods; do not replay full history by default.",
+  "evidence_precedence": "newest explicit owner direction > admitted owner/supervisor authority > newest granular active pointer/reconciliation/receipt and exact executable evidence > aggregate projections > Architect cache > historical prose",
+  "current_processing_mode": "ARCHITECT_RUNTIME_FIRST_SYNTHESIS_ROUTING",
+  "current_context_budget_policy": "Compile only changed heads, primary frontier receipts/pointers, active blockers, exact runtime transport evidence and dependencies needed for the next discriminator. Do not replay full project history by default.",
   "next_exact_actions": [
-    "Terminalize F2-WP-201 generation 1 at STATE_FINGERPRINT_REPOSITORY_HOSTED_CI_ONLY and F2-WP-204 generation 2 at its earned repository-hosted CI scope through their existing authorities.",
-    "Synchronize aggregate/pointer state for WP-200/WP-201/WP-203/WP-204/WP-205 to granular evidence without inflating scope.",
-    "Immediately recheck current main/open claims; if unowned, route Triggerword-4 to one bounded Stage-2 integration workpackage for Pulse + StateFingerprint + AgencyState + Goal lifecycle + Wake/HOLD with deterministic cross-component falsifiers.",
-    "Reconcile Research Entity aggregate authority surfaces to supervisor 9.13 FREE_ONLY while preserving historical 8.78 records.",
-    "Continue Architect UnifiedDB/bootstrap materialization without creating project truth authority."
+    "Let the existing F2-WP-002 G5 single-writer lane expose the exact zero-credit reconciliation mismatch; repair only the exact metadata defect and require both state-consistency workflows to pass against current main before aggregate acceptance.",
+    "Refresh exact F2 main after WP002 convergence and bind Architect state to the current WP510 generation-2 causal-path receipt/pointer.",
+    "Resolve actual self-hosted runner health through the controller repo and enter clay-direct-dev through the established bridge; repair transport if degraded rather than reopening VPS authority.",
+    "Execute the smallest real WP510 target-runtime experiment that preserves exact SituationFrame/Broadcast/Uptake/Reentry/downstream-digest identities and emits a receipt distinguishing target-environment component execution from actual semantic GWT uptake.",
+    "Only after the WP510 runtime discriminator is terminal, evaluate whether Stage 6 child/executor integration or Stage 7 perception integration is the next dependency-correct layer; use already-built WP600/601/602/700/701 evidence instead of rebuilding it."
   ],
   "wake_resume_conditions": [
     "owner invokes architect/architekt alias",
+    "F2-WP-002 G5 state-consistency workflows become terminal",
+    "WP510 target-runtime receipt appears",
+    "self-hosted runner/bridge health materially changes",
     "Frankenstein 2.0 main head changes materially",
-    "Stage-2 terminal reconciliation/cache synchronization completes",
-    "a Stage-2 integration claim appears",
     "owner pivots or completes the active project"
   ],
-  "last_checkpoint": "research_entity/architect/checkpoints/ARCHITECT_REENTRY_DELTA_G4_20260829T0604P0700.json"
+  "last_checkpoint": "research_entity/architect/ARCHITECT_STATE.json#g5-runtime-first-recompile"
 }

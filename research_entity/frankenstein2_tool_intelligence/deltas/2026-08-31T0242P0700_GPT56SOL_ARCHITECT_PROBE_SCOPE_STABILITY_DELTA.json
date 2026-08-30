@@ -1,0 +1,93 @@
+{
+  "schema": "CLAY_ARCHITECT_RECURSIVE_RESEARCH_METHOD_DELTA/v1",
+  "recorded_at": "2026-08-31T02:42:00+07:00",
+  "worker": "GPT-5.6-Sol",
+  "trigger": "architect",
+  "status": "NON_AUTHORITY_RESEARCH_METHOD_DELTA",
+  "purpose": "Close a method gap exposed by the current F2-WP-715 runtime frontier: protect scarce execution capacity not only from semantic product-subject churn, but also from repeated supersession of already-bound discriminator bundles while their runs are still nonterminal.",
+  "builds_on": {
+    "research_commit": "743bebefbc752552c3fc5cc27c5e774af8c5242a",
+    "method_delta": "research_entity/frankenstein2_tool_intelligence/deltas/2026-08-31T0227P0700_GPT56SOL_ARCHITECT_RECURSIVE_RESEARCH_METHOD_DELTA.json"
+  },
+  "observed_evidence": {
+    "f2_head": "2377fa7c4abf98a912cf1341024675adc3bb0e7f",
+    "workpackage": "F2-WP-715",
+    "active_generation": 1,
+    "semantic_product_subject": "da1c92f1d4e448e23842c74a456e0edd9d228b5c",
+    "current_discriminator_harness": "db01bfbcc2deebc45524b56407a681b226de7b78",
+    "current_workflow_run_id": 33328707636,
+    "current_run_state": "QUEUED",
+    "current_run_steps_observed": 0,
+    "current_runner_id": 0,
+    "current_classification": "UNKNOWN_NONTERMINAL",
+    "older_queued_run_id": 33328599252,
+    "repository_binding_evidence": "workpackages/receipts/F2-WP-715_G1_PACKET_CORTEX_VPS_DISCRIMINATOR_BINDING_20260831_GPT56SOL.json",
+    "binding_observation": "The current receipt explicitly marks the older queued probe partial-scope/noncurrent for full acceptance because the stronger discriminator adds PN14, PN15 and EVENTSEQ while the product source remains unchanged.",
+    "runtime_credit_delta": 0
+  },
+  "gap": {
+    "name": "DISCRIMINATOR_BUNDLE_CHURN_NOT_SEPARATELY_GOVERNED",
+    "description": "Current runtime-subject churn rules correctly prevent unnecessary semantic product mutation while a probe is bound, but a worker may still repeatedly supersede queued probes by adding stronger falsifiers to the harness. Each supersession can preserve exact evidence scope yet increase promotion latency and replay debt when runner capacity is scarce.",
+    "important_distinction": [
+      "SEMANTIC_PRODUCT_SUBJECT_CHURN != DISCRIMINATOR_BUNDLE_CHURN",
+      "STRONGER_QUEUED_PROBE != EXECUTED_STRONGER_EVIDENCE",
+      "PARTIAL_SCOPE_QUEUED_PROBE != INVALID_PROBE",
+      "MORE_FALSIFIERS_IN_A_PENDING_BUNDLE != MORE_RUNTIME_CREDIT"
+    ]
+  },
+  "method_deltas": [
+    {
+      "id": "BOUND_DISCRIMINATOR_SCOPE_STABILITY",
+      "rule": "Once an exact product subject plus discriminator bundle has been materially dispatched and is UNKNOWN_NONTERMINAL, do not supersede that bound run merely to accrete additional non-validity-critical falsifiers. Let the bound run terminalize its exact scope. Route additive falsifiers as a later incremental discriminator unless they prove the existing run incapable of supporting the acceptance predicate it was dispatched to test.",
+      "allowed_supersession": [
+        "the bound run is wrong-subject or provenance-invalid",
+        "the bound run is cancelled or permanently unroutable",
+        "the harness itself cannot exercise the claimed acceptance predicate",
+        "new executable counterevidence shows a validity-critical omission",
+        "current owner authority explicitly changes the acceptance predicate"
+      ],
+      "not_sufficient_for_supersession": [
+        "a useful extra falsifier was discovered",
+        "another worker became available",
+        "a stronger bundle can be authored before the queued runner starts",
+        "the newer bundle would be more comprehensive"
+      ]
+    },
+    {
+      "id": "TWO_DIMENSION_RUNTIME_SUBJECT_IDENTITY",
+      "rule": "Track runtime identity as at least semantic_product_subject + discriminator_bundle_identity. A stable product SHA does not mean the execution subject is operationally unchanged if the harness/acceptance bundle changes; conversely a harness-only strengthening must not be misclassified as product mutation.",
+      "diagnostic_fields": [
+        "semantic_product_subject_sha",
+        "discriminator_bundle_sha_or_manifest",
+        "acceptance_predicate_id",
+        "workflow_run_id",
+        "terminality",
+        "executed_steps_observed",
+        "supersession_reason"
+      ]
+    },
+    {
+      "id": "QUEUE_PRESSURE_AS_SCHEDULING_SIGNAL_NOT_PRODUCT_EVIDENCE",
+      "rule": "For a queued exact-source probe with steps=[] and no assigned runner, queue duration and repeated supersessions are coordination/runtime-capacity signals only. They must influence scheduling and bundling policy, but they mint no product-negative or product-positive evidence.",
+      "action": "Prefer one stable high-information bundle plus incremental follow-up over a chain of stronger queued bundles when the first bundle is already acceptance-valid."
+    },
+    {
+      "id": "INCREMENTAL_FALSIFIER_ACCRETION",
+      "rule": "After a bound probe is dispatched, newly discovered non-critical falsifiers should be accumulated in an incremental follow-up set keyed to the same semantic product subject. If the first run passes, execute only the incremental set needed to extend scope; if it fails with PRODUCT_NEGATIVE, repair the reproduced defect before spending runtime on unrelated accreted falsifiers.",
+      "benefit_hypothesis": "This reduces promotion-staleness latency, duplicate queued jobs and historical-only partial probes while preserving negative-evidence strength."
+    }
+  ],
+  "replay_against_current_episode": {
+    "episode": "F2-WP-715 current VPS packet-cortex acceptance",
+    "observation": "Run 33328599252 was already queued for a narrower bundle. The product source stayed unchanged. A newer harness/run 33328707636 was dispatched to add PN14/PN15/EVENTSEQ and the older run was explicitly demoted to partial-scope/noncurrent for full acceptance while still queued.",
+    "counterfactual_under_new_method": "If the older bundle was already sufficient for its stated acceptance predicate, keep it current until terminal and queue the added falsifiers as incremental follow-up. If PN14/PN15/EVENTSEQ were validity-critical to the acceptance predicate, supersession remains legal but must record that explicit validity-critical reason rather than comprehensiveness alone.",
+    "current_decision": "Do not mutate or redispatch WP715 from this research lane. Resolve run 33328707636 first."
+  },
+  "falsifiers": [
+    "Retire or weaken BOUND_DISCRIMINATOR_SCOPE_STABILITY if stable-bound runs systematically waste more scarce runtime than early bundle replacement because runner pickup latency is negligible and cancellation/supersession has zero opportunity cost.",
+    "Permit supersession when replay demonstrates the existing bundle cannot validly support the exact acceptance predicate, even if the product source is unchanged.",
+    "Do not use this method to delay repair after PRODUCT_NEGATIVE evidence or to preserve a wrong-subject/invalid run."
+  ],
+  "promotion_status": "METHOD_CANDIDATE_REQUIRES_REPLAY_ACROSS_FUTURE_RUNTIME_EPISODES",
+  "next_recursive_test": "On the next Architect review, measure for each critical runtime boundary: queued probes, superseded-before-execution probes, semantic-subject changes, discriminator-bundle changes, executed-step terminality and exact credit gained. Promote this method only if it reduces stale/duplicate runtime consumption without suppressing validity-critical falsifiers."
+}

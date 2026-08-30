@@ -852,6 +852,10 @@ class ProviderReportedError(ValueError):
     """A syntactically valid HTTP 200 body explicitly reports an error."""
 
 
+class ForkActiveExecutionQuarantine(RuntimeError):
+    """The current child must not continue an inherited execution stack."""
+
+
 def _open_no_redirect(request: urllib.request.Request, timeout: int):
     return urllib.request.build_opener(_NoRedirectHandler()).open(
         request, timeout=timeout
@@ -1149,6 +1153,10 @@ def _execute_chat_locked(
         try:
             with request_opener(request, timeout=30) as response:
                 try:
+                    if _fork_active_execution_quarantined():
+                        raise ForkActiveExecutionQuarantine(
+                            "forked_during_active_execution"
+                        )
                     candidate_status = _transport_metadata_or_none(
                         response, "status"
                     )
@@ -1486,6 +1494,8 @@ def _execute_chat_locked(
             outcome = "success"
             cooldown_seconds = 0
             retryable = False
+    except ForkActiveExecutionQuarantine as exc:
+        raise RuntimeError("forked_during_active_execution") from exc
     except urllib.error.HTTPError as exc:
         content = None
         finished = _passive_clock_value_or_none(now)

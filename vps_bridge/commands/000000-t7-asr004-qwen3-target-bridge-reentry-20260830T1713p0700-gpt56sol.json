@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "000000-t7-asr004-qwen3-target-bridge-reentry-20260830T1713p0700-gpt56sol",
+  "op": "exec",
+  "timeout_seconds": 1800,
+  "cwd": "/workspace",
+  "command": "set -euo pipefail; WORK=/tmp/t7-qwen3-asr-bridge-33292903286-1; rm -rf \"$WORK\"; mkdir -p \"$WORK\"; git clone -q --filter=blob:none --no-checkout https://github.com/gschaidergabriel/frankenstein-2.0.git \"$WORK/f2\"; cd \"$WORK/f2\"; git checkout -q e0521522a49cd57ff86af9f49cc87f33ab6e22a3; test \"$(git rev-parse HEAD)\" = e0521522a49cd57ff86af9f49cc87f33ab6e22a3; GITHUB_RUN_ID=33292903286 GITHUB_RUN_ATTEMPT=1 python3 research/local_voice/tools/t7_qwen3_asr_target_probe.py"
+}

@@ -1509,9 +1509,12 @@ def _execute_chat_locked(
     except ForkActiveExecutionQuarantine as exc:
         raise RuntimeError("forked_during_active_execution") from exc
     except urllib.error.HTTPError as exc:
+        _raise_if_fork_active_execution_quarantined()
         content = None
         finished = _passive_clock_value_or_none(now)
+        _raise_if_fork_active_execution_quarantined()
         candidate_status = _transport_metadata_or_none(exc, "code")
+        _raise_if_fork_active_execution_quarantined()
         if not _is_valid_http_status(candidate_status):
             status = None
             outcome = "invalid_provider_response"
@@ -1533,10 +1536,17 @@ def _execute_chat_locked(
             status = candidate_status
             lifecycle.append("EXECUTED")
             outcome = "rate_limited"
-            cooldown_seconds = _retry_after_seconds(
-                _transport_metadata_or_none(exc, "headers"),
-                _passive_clock_value_or_none(wall_time),
+            response_headers = _transport_metadata_or_none(exc, "headers")
+            _raise_if_fork_active_execution_quarantined()
+            response_received_unix_seconds = (
+                _passive_clock_value_or_none(wall_time)
             )
+            _raise_if_fork_active_execution_quarantined()
+            cooldown_seconds = _retry_after_seconds(
+                response_headers,
+                response_received_unix_seconds,
+            )
+            _raise_if_fork_active_execution_quarantined()
             retryable = False
         else:
             status = candidate_status
@@ -1545,16 +1555,19 @@ def _execute_chat_locked(
             cooldown_seconds = 15
             retryable = False
     except ProviderResponseTooLarge:
+        _raise_if_fork_active_execution_quarantined()
         content = None
         outcome = "provider_response_too_large"
         cooldown_seconds = 15
         retryable = False
     except ProviderOutputTruncated:
+        _raise_if_fork_active_execution_quarantined()
         content = None
         outcome = "provider_output_truncated"
         cooldown_seconds = 0
         retryable = False
     except ProviderReportedError:
+        _raise_if_fork_active_execution_quarantined()
         content = None
         outcome = "provider_error"
         cooldown_seconds = 15
@@ -1567,6 +1580,7 @@ def _execute_chat_locked(
         TypeError,
         ValueError,
     ):
+        _raise_if_fork_active_execution_quarantined()
         content = None
         outcome = "invalid_provider_response"
         cooldown_seconds = 15
@@ -1576,6 +1590,7 @@ def _execute_chat_locked(
         OSError,
         http.client.HTTPException,
     ):
+        _raise_if_fork_active_execution_quarantined()
         content = None
         outcome = (
             "incomplete_provider_response"
@@ -1585,6 +1600,7 @@ def _execute_chat_locked(
         cooldown_seconds = 15
         retryable = False
     except Exception:
+        _raise_if_fork_active_execution_quarantined()
         # Custom transport adapters are not constrained to urllib's exception
         # hierarchy. Fail closed with a receipt without catching BaseException.
         content = None
@@ -1598,6 +1614,7 @@ def _execute_chat_locked(
 
     if finished is None:
         finished = _passive_clock_value_or_none(now)
+        _raise_if_fork_active_execution_quarantined()
     if finished is None:
         # Execution evidence is more important than duration telemetry.  A
         # failed post-response clock read must not suppress the receipt.

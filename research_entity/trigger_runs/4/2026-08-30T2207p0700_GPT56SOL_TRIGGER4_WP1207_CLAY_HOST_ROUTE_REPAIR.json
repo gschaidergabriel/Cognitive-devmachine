@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at": "2026-08-30T22:07:00+07:00",
+  "routing_self_test": "PASS",
+  "authority": {
+    "bootstrap_schema": "8.78",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "mode": "FREE_ONLY",
+    "free_only_meaning": "EXTERNAL_PROVIDER_TOKEN_AND_SPEND_POLICY_NOT_OWNER_VPS_BAN",
+    "owner_vps_via_established_bridge_allowed": true,
+    "together": "FORBIDDEN"
+  },
+  "observed_heads_before_receipt": {
+    "research_main": "10e6366a61a387b5c7b85814451bdbed7011eb30",
+    "frankenstein2_main": "ad23ed07639970f1686cf6788a98d4f612205d6b",
+    "controller_main_before_route_write": "be1b10c845117a0294165f249e3517198d623f9b"
+  },
+  "evidence": {
+    "verified_runner_name": "vps-clay-host",
+    "verified_runner_label": "clay-host",
+    "verified_runner_id": 25,
+    "verified_probe_run_id": 33317633482,
+    "generic_self_hosted_routing_forbidden": true,
+    "wp1207_original_canonical_run_id": 33301648871,
+    "wp1207_original_canonical_run_terminal_status": "cancelled",
+    "wp1207_original_canonical_run_steps_observed": 0,
+    "wp1207_new_misrouted_run_id": 33318546155,
+    "wp1207_new_misrouted_run_status_at_repair": "queued",
+    "wp1207_new_misrouted_run_steps_observed": 0,
+    "wp1207_new_misrouted_route_snapshot": "self-hosted"
+  },
+  "implemented_delta": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "commit_sha": "39b7bb0ea6717d2c32fccafa86a321a3c61c75e3",
+    "file": ".github/workflows/f2-wp1207-hostile-twin-target.yml",
+    "old_runs_on": "self-hosted",
+    "new_runs_on": "clay-host",
+    "receipt_transport": "DR_UNTERWEGER_CLAY_HOST_RUNNER_TO_CLAY_DIRECT_DEV",
+    "target_workflow_dispatched_by_route_write": false,
+    "reason": "The target workflow is path-filtered to runtime/f2_wp1207_hostile_twin_trigger.txt, so correcting only the workflow route does not launch another physical target execution."
+  },
+  "coordination": {
+    "duplicate_physical_execution_created_by_this_repair": false,
+    "existing_misrouted_run_must_remain_nonpromoting": true,
+    "successor_dispatch_allowed_now": false,
+    "successor_gate": "RUN_33318546155_MUST_BECOME_TERMINAL_OR_BE_SAFELY_SUPERSEDED_BEFORE_ONE_NEW_CLAY_HOST_DISPATCH"
+  },
+  "credits": {
+    "route_repair_source_credit": 1,
+    "wp1207_target_runtime_credit": 0,
+    "vps_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Re-read Dr.-Unterweger Actions run 33318546155. If and only if it is terminal without physical execution, touch the dedicated WP1207 trigger path once on a current reviewed controller main so the corrected clay-host workflow executes the exact F2-WP-1207 G5 predecessor/candidate artifacts. Bind any resulting external receipt to exact F2 source/tree and artifact hashes before granting bounded target-environment component credit."
+}

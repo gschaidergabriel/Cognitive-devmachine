@@ -1,0 +1,85 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "observed_at_local": "2026-08-30T22:00:20+07:00",
+  "routing_self_test": "PASS",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "bootstrap_schema": "8.78",
+    "supervisor_inbox_schema": "9.13",
+    "owner_vps_allowed": true,
+    "free_only": true,
+    "together_forbidden": true
+  },
+  "canonical_research_main_before_write": "8c025b9d43f7b3c351bdca5db09f324e9c2c7976",
+  "controller_evidence": {
+    "verified_host_lane_ref": "gschaidergabriel/Dr.-Unterweger:global/VPS_HOST_CONTROL_LANE.json",
+    "runner_name": "vps-clay-host",
+    "runner_label": "clay-host",
+    "runner_id": 25,
+    "runner_status": "VERIFIED_READY",
+    "verified_probe_run_id": 33317633482,
+    "verified_probe_job_id": 99273876517,
+    "verified_probe_conclusion": "success",
+    "generic_self_hosted_routing_forbidden": true,
+    "hardware_roundtrip_evidence_mirrored_on_research_main": true
+  },
+  "stale_runtime_routes": {
+    "wp510_existing_run": {
+      "run_id": 33265772059,
+      "job_id": 99135457584,
+      "status": "queued",
+      "steps_observed": 0,
+      "workflow_route_before_repair": ["self-hosted", "Linux", "X64"],
+      "runtime_credit": 0,
+      "duplicate_dispatch_allowed": false
+    },
+    "wp1207_canonical_existing_run": {
+      "run_id": 33301648871,
+      "status": "queued",
+      "steps_observed": 0,
+      "workflow_route_observed": "self-hosted",
+      "runtime_credit": 0,
+      "duplicate_dispatch_allowed": false
+    },
+    "wp1207_later_duplicate_run": {
+      "run_id": 33308965181,
+      "job_id": 99250433269,
+      "status": "completed",
+      "conclusion": "cancelled",
+      "steps_observed": 0,
+      "branch_now_marks_dispatch": "CANCELLED_DUPLICATE"
+    }
+  },
+  "implemented_delta": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "commit_sha": "ea213f99b9d45e96e364f1c385b67575534a8647",
+    "file": ".github/workflows/trigger4-wp510-target-runtime-v2.yml",
+    "old_runs_on": ["self-hosted", "Linux", "X64"],
+    "new_runs_on": "clay-host",
+    "receipt_transport_label_updated": "DR_UNTERWEGER_CLAY_HOST_RUNNER_PUSH_DISPATCH_V2",
+    "target_workflow_triggered_by_this_change": false,
+    "reason_no_target_dispatch": "The WP510 target workflow only triggers on runtime/vps_probe/wp510_push_dispatch_v2.txt, so correcting the workflow route did not create a successor runtime attempt while run 33265772059 remains unresolved."
+  },
+  "classification": {
+    "primary_runtime_blocker": "STALE_GENERIC_SELF_HOSTED_ROUTE_DOES_NOT_MATCH_CURRENT_VERIFIED_CLAY_HOST_AUTHORITY",
+    "wp510_route_repair": "IMPLEMENTED_FOR_NEXT_ADMITTED_DISPATCH",
+    "wp1207_route_repair": "OPEN; current workflow still targets generic self-hosted and changing that workflow on main would itself trigger a new run, so do not mutate it while canonical run 33301648871 remains unresolved unless an explicit safe cancellation/supersession mechanism is established",
+    "product_logic_failure": false,
+    "target_runtime_evidence_present": false
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "frankenstein2_target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "provider_model_runtime": 0,
+    "training": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Keep WP510 run 33265772059 and WP1207 canonical run 33301648871 nonpromoting while unresolved. Use the verified clay-host route for any future successor only after the prior corresponding dispatch is terminal or safely superseded. For WP1207, first establish a cancellation/supersession mechanism that cannot permit two physical executions, then replace generic self-hosted routing with clay-host before the next exact artifact-bound target run."
+}

@@ -1,0 +1,53 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "observed_date": "2026-08-30",
+  "research_main_parent_observed": "de36d8229f26977680e65e083e2f590a40d28d59",
+  "frankenstein2_main_observed": "45c7ef8d27e257972560afec51604abcd697d20e",
+  "authority": {
+    "supervisor_inbox": "9.13BG_NON_AUTHORITY",
+    "owner_vps_allowed": true,
+    "provider_policy": "FREE_ONLY_HARD_OFF_NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "together": "FORBIDDEN"
+  },
+  "wp206_reentry": {
+    "active_pointer_generation": 2,
+    "active_pointer_state": "RETIRED_STALE",
+    "terminal_scope": "REJECTED_MUTABLE_FULL_FINGERPRINT_REPLAY_EQUALITY_HYPOTHESIS",
+    "latest_accepted_generation": 1,
+    "f2_merge_sha": "45c7ef8d27e257972560afec51604abcd697d20e",
+    "scope_correction": "Direct persisted historical UnifiedDBFingerprint receipt equality against a fresh-process receipt is not a valid restart-stable invariant because the receipt intentionally includes mutable file/content/stat/schema observations and therefore rejects legitimate SQLite evolution."
+  },
+  "same_inode_discriminator": {
+    "review_pr": 655,
+    "head_sha": "58c389a28f9353747444b774b387c9bffad24325",
+    "workflow_run_id": 33295636700,
+    "workflow_job_id": 99214693702,
+    "status": "EXECUTABLE_NEGATIVE_COMPONENT_EVIDENCE_PRESERVED",
+    "observed": "A committed SQLite schema mutation preserved exact device+inode while refreshed sqlite_schema_sha256 and full UnifiedDBFingerprint receipt changed; the already-open CanonicalPersistentAgencyStore retained the previous receipt and its device+inode live fence did not raise.",
+    "bounded_interpretation": "Current live-use device+inode fencing is blind to this same-inode drift class, but the observation does not imply that continuous full UnifiedDBFingerprint equality or full-file rehashing is the correct repair.",
+    "counterhypothesis": "A distinct stable live-authority contract may need an explicit storage generation/lease/snapshot witness or selected SQLite change witnesses rather than treating the mutable identity receipt as a state snapshot.",
+    "canonical_mutation_opened": false
+  },
+  "wp1207_host_gate": {
+    "repository_executor_merge": "236ba6ebb5c4ba361a2c5f47122065dc6bc53a8f",
+    "executor": "tools/run_wp1207_hostile_twin_gate.py",
+    "bridge_documented": true,
+    "bridge_controller_workflow": "gschaidergabriel/Dr.-Unterweger/.github/workflows/frank-self-hosted-probe.yml",
+    "bridge_current_limitation": "The retained workflow is hard-bound to WP510 G3. It is not a WP1207 target-host executor.",
+    "target_host_execution_this_trigger": false,
+    "blocker": "WP1207 exact immutable host-gate input subject is not yet fully bound on the available execution route: predecessor evidence bundle, current candidate evidence bundle, canonical state subject, exact source identity and target receipt path must be supplied together. Do not invent or infer these bytes from repository component status.",
+    "classification": "BLOCKED_INPUT_BINDING_NOT_NO_VPS"
+  },
+  "credits": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "semantic_gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "training": 0,
+    "wp1207_target_runtime": 0
+  },
+  "next_exact_action": "For WP206, retain G1 as accepted and convert PR655 only into a successor semantic contract after the intended stable live-authority threat model is explicit and a discriminator separates legitimate same-inode canonical writes from unadmitted drift. In parallel, for WP1207 create or consume one exact source-bound host execution specification only after predecessor bundle + candidate bundle + state subject are durably identified; then execute through the documented self-hosted runner to clay-direct-dev and preserve actual host readback receipts."
+}

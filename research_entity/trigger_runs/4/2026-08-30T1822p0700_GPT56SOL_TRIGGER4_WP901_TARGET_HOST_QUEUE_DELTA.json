@@ -1,0 +1,102 @@
+{
+  "schema": "CLAY_TRIGGER4_WP901_TARGET_HOST_QUEUE_DELTA/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "recorded_local": "2026-08-30T18:22+07:00",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "supervisor_schema": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "owner_vps_execution": "AUTHORIZED_AND_EXPECTED_WITH_RESOURCE_HEALTH_GUARDS",
+    "external_provider_policy": "FREE_ONLY_HARD_OFF; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "source_heads": {
+    "research_main_before_write": "f84045945b54745af56aea1d12df87c5ce440451",
+    "frankenstein_2_main": "cfe3f1ee4766deb827a7e7adb87fd25b3f89e809",
+    "controller_workflow_commit": "e3cb1ae105c39f7a8521f29d3fc5dfdeebfd41fe"
+  },
+  "repository_component_evidence": {
+    "f2_run_id": 33308383377,
+    "status": "SUCCESS",
+    "scope": "WP900_TO_WP206_TWO_PROCESS_PERSISTED_ROW_RECOVERY_AND_POST_COMMIT_CRASH_WINDOW_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "target_host_execution": "NOT_OBSERVED",
+    "whole_system_acceptance": false
+  },
+  "new_target_host_discriminator": {
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "workflow_path": ".github/workflows/f2-wp901-target-host-readback.yml",
+    "workflow_commit": "e3cb1ae105c39f7a8521f29d3fc5dfdeebfd41fe",
+    "exact_f2_source_sha": "cfe3f1ee4766deb827a7e7adb87fd25b3f89e809",
+    "target_environment": "clay-direct-dev",
+    "transport": "SELF_HOSTED_GITHUB_RUNNER_TO_CLAY_DIRECT_DEV",
+    "intended_checks": [
+      "exact source SHA/tree identity",
+      "clean before and after",
+      "resource headroom observation",
+      "fresh-process persisted-row readback",
+      "post-commit crash-window recovery",
+      "bounded source-file SHA256 identities"
+    ],
+    "credit_fences": {
+      "semantic_gwt_runtime_credit": 0,
+      "physical_grid10_credit": 0,
+      "provider_model_runtime_credit": 0,
+      "effect_credit": 0,
+      "training_credit": 0,
+      "whole_system_acceptance": false
+    }
+  },
+  "observed_control_plane": {
+    "run_id": 33308676232,
+    "job_id": 99249659208,
+    "status": "queued",
+    "conclusion": null,
+    "labels": ["self-hosted", "Linux", "X64"],
+    "runner_id": 0,
+    "runner_name": "",
+    "runner_group_id": 0,
+    "runner_group_name": "",
+    "executed_steps": 0,
+    "runtime_execution_observed": false
+  },
+  "parallel_reconciliation": {
+    "research_delta_seen": "f84045945b54745af56aea1d12df87c5ce440451",
+    "finding": "A generic self-hosted-only job and a self-hosted+Linux+X64 job were already both observed unassigned, narrowing the common blocker toward repository-level runner availability/registration/eligibility/assignment rather than supplemental Linux/X64 labels alone.",
+    "this_wp901_job_is_consistent_with_that_finding": true
+  },
+  "credits": {
+    "wp901_repository_component": "PRESERVED_AT_EXISTING_ACCEPTED_SCOPE_ONLY",
+    "wp901_target_host_runtime": 0,
+    "physical_host": 0,
+    "physical_grid10": 0,
+    "gwt": 0,
+    "jspace": 0,
+    "provider_model": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_entityos_hcu": 0
+  },
+  "actions_this_organ": {
+    "controller_workflow_added": true,
+    "duplicate_wp510_dispatch": false,
+    "frank_harness_modified": false,
+    "provider_call": false,
+    "together_call": false,
+    "target_host_execution_observed": false,
+    "unusual_experiment": false
+  },
+  "next_exact_gate": "Restore or verify an eligible self-hosted runner assignment for gschaidergabriel/Dr.-Unterweger using runner-admin or direct owner-host visibility, then allow the already queued WP901 run 33308676232/job 99249659208 to execute. Admit bounded target-host component credit only after terminal executed steps and the persisted F2_WP901_TARGET_HOST_PERSISTED_ROW_READBACK_RECEIPT/v1 verify the exact source and clean-state fences.",
+  "acceptance": "BLOCKED_CONTROL_PLANE_RUNNER_ASSIGNMENT_NO_TARGET_HOST_RUNTIME_EXECUTION"
+}

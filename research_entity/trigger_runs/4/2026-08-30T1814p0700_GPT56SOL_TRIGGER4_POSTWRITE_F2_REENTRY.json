@@ -1,0 +1,52 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "recorded_at_local": "2026-08-30T18:14:00+07:00",
+  "supersedes": "research_entity/trigger_runs/4/2026-08-30T1810p0700_GPT56SOL_TRIGGER4_RUNNER_PROMOTION_BLOCK_REENTRY.json",
+  "authority": {
+    "research_main_observed_before_write": "4323b4c3a2500d8066d107352fbd78148451dccc",
+    "bootstrap_schema_version": "8.78",
+    "supervisor_inbox_schema_version": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "owner_vps_allowed": true,
+    "established_vps_bridge_allowed": true,
+    "together": "FORBIDDEN",
+    "external_provider_routes": "UNADMITTED"
+  },
+  "f2_reentry": {
+    "main_observed": "cfe3f1ee4766deb827a7e7adb87fd25b3f89e809",
+    "main_message": "Merge Trigger4 WP900→WP206 two-process restart discriminator",
+    "repository_ci_run_id": 33308383377,
+    "repository_ci_status": "completed",
+    "repository_ci_conclusion": "success",
+    "observed_scope": "REPOSITORY_COMPONENT_TWO_PROCESS_RESTART_AND_POST_COMMIT_CRASH_WINDOW_ONLY",
+    "target_host_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "target_execution_frontier": {
+    "wp510_run_id": 33265772059,
+    "wp510_status": "queued",
+    "wp900_run_id": 33295805811,
+    "wp900_status": "pending",
+    "wp900_jobs_observed": 0,
+    "wp1207_run_id": 33301648871,
+    "wp1207_status": "queued",
+    "wp901_target_workflow_source_present": true,
+    "wp901_target_execution_observed": false,
+    "duplicate_dispatch_performed": false
+  },
+  "evidence_boundary": {
+    "provider_or_model_calls": false,
+    "vps_or_physical_host_execution_by_this_organ": false,
+    "unusual_experiment": false,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "blocker": "The existing self-hosted target workflows are still not executing. This organ cannot access direct owner-host runner inventory or SSH/bridge state, so the precise runner lifecycle cause remains unresolved.",
+  "next_exact_action": "On a direct owner-host surface, verify/restore the self-hosted runner service, repository authorization, labels, eligibility and assignment. Do not add duplicate target jobs. Once execution resumes, consume the existing WP510/WP900/WP1207 queues and run the already-source-bound WP901 fresh-process target readback, persisting exact receipts and promoting only observed scope."
+}

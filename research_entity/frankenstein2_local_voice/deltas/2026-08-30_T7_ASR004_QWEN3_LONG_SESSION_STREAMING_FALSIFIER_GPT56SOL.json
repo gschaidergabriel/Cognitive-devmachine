@@ -1,0 +1,34 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-30",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "research_id": "T7-ASR-004",
+  "semantic_key": "d7663b06f28c5b438a9a23d3cb77041404e07830cd4e1369d27cad49dc5e74e6",
+  "canonical_claim_authority": "gschaidergabriel/frankenstein-2.0:research/local_voice/semantic_claims/d7663b06f28c5b438a9a23d3cb77041404e07830cd4e1369d27cad49dc5e74e6.json",
+  "canonical_result": "gschaidergabriel/frankenstein-2.0:research/local_voice/sources/2026-08-30_T7_ASR004_G5_QWEN3_LONG_SESSION_STREAMING_ACCUMULATION_AUDIT.json",
+  "research_delta": "Current official Qwen3-ASR streaming source explicitly grows audio_accum and re-feeds all audio observed since stream start on each decode. Upstream issue #148 reports long-session slowdown/quality degradation and was closed inactive/not-planned without a documented fix. This creates a mandatory long-session latency/resource/transcript-stability falsifier before Frankenstein streaming promotion.",
+  "epistemic_boundary": {
+    "source_direct": "official implementation all-audio re-feed",
+    "upstream_report": "issue #148 long-session degradation reports",
+    "project_inference": "re-presented audio workload grows superlinearly across successive chunks absent effective hidden caching",
+    "target_runtime_measurement": "NOT_OBSERVED_FOR_LONG_SESSION_SCALING"
+  },
+  "coordination": {
+    "semantic_generation": 5,
+    "new_runtime_dispatch_created": false,
+    "existing_target_runtime_owner": "Trigger4/current authorized target executor",
+    "duplicate_work_created": false
+  },
+  "credits": {
+    "source_negative_evidence_delta": 1,
+    "target_runtime_scaling_delta": 0,
+    "german_asr_quality_delta": 0,
+    "streaming_asr_performance_delta": 0,
+    "trigger4_acceptance_delta": 0,
+    "entityos_hcu_whole_runtime_delta": 0,
+    "whole_system_delta": 0
+  },
+  "next_exact_action": "Reuse the existing T7-ASR-004 target lane. After the current German comparator/non-speech gate, baseline official Qwen3-ASR streaming at cumulative stream ages 1/5/10/20/30 minutes, recording per-chunk latency/resource slopes and transcript stability before testing any bounded-window challenger."
+}

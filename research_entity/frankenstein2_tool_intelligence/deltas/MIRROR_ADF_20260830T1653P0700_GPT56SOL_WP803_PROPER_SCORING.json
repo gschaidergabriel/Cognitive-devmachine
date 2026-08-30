@@ -1,0 +1,24 @@
+{
+  "schema": "TRIGGER6_F2_DELTA_MIRROR/v1",
+  "status": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "trigger": "6",
+  "research_id": "R6-WP803-PROPER-SCORING-CALIBRATION",
+  "mirror_epoch": "2026-08-30T16:56:00+07:00",
+  "research_entity_base_sha": "5566c221de1b2961fdbf0bfe40a3c6a1148056d4",
+  "canonical_source": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "architecture_fusion_path": "research/tool_intelligence/deltas/ADF-20260830T1653P0700-GPT56SOL-WP803-PROPER-SCORING.json",
+    "architecture_fusion_commit": "760c57cacca9eac828c2cbea74b26cd328bb4a23",
+    "e1_result_path": "research/tool_intelligence/results/R6-WP803-PROPER-SCORING-CALIBRATION_E1_SOURCE_READ.json",
+    "e1_result_commit": "8b1b6182d1dcbd01e72a097a470003498ae32d12",
+    "e2_result_path": "research/tool_intelligence/results/R6-WP803-PROPER-SCORING-CALIBRATION_E2_ARCHITECTURE_MAPPED.json",
+    "e2_result_commit": "30a23b987d77e29fbf10eb969da1a49bf088e23a"
+  },
+  "result_summary": "Primary proper-scoring literature supports the WP803 research falsifier: identical hard decisions can conceal different probability quality. However, accepted WP803 generation 2 only claims exact hit/abstain benchmark behavior and run provenance. A calibrated-probability layer therefore remains a separate conditional successor, not a retrofit or invalidation.",
+  "architecture_decision": "KEEP_WP803_G2_UNCHANGED; IF_AND_ONLY_IF_A_PRODUCT_CLAIM_REQUIRES_PROBABILITY_QUALITY, DEFINE_A_RESEARCH_SIDECAR_WITH_PREDECLARED_PUBLIC_OUTCOME_DOMAIN_DIGEST, NORMALIZED_DETERMINISTIC_PROBABILITY_VECTOR, PROVENANCE_BINDING_AND_PROPER_SCORE; OTHERWISE_DO_NOT_BUILD",
+  "primary_score_direction": "categorical Brier/quadratic first; log loss optional secondary with explicit zero-probability policy; calibration diagnostics aggregate-only",
+  "authority_boundary": "PROBABILISTIC_SCORE_IS_EVALUATOR_MEASUREMENT_ONLY_NOT_WORLD_TRUTH_STATE_EFFECT_COMPLETION_OR_MODEL_SUPERIORITY",
+  "efficiency": "zero extra evaluator/model calls; O(K) payload only if successor is activated; no new framework required",
+  "credit_boundary": "E2_ARCHITECTURE_MAPPED_ONLY; E3_E4_E5_E6_RUNTIME_VPS_PHYSICAL_GRID_GWT_JSPACE_PROVIDER_TRAINING_EFFECT_WHOLE_SYSTEM_CREDIT_ZERO",
+  "next_exact_gate": "HOLD. Open E3 only after an explicit F2 product requirement for calibrated probability quality and a fixed public outcome domain exist."
+}

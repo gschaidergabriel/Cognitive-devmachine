@@ -1,0 +1,42 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-30",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "research_id": "T7-ASR-004",
+  "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+  "canonical_claim_authority": "gschaidergabriel/frankenstein-2.0:research/local_voice/semantic_claims/95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715.json",
+  "research_main_observed_before_write": "b49abd93a5f1d4e445a766eba1a13a1218e1179c",
+  "f2_writes": [
+    {
+      "path": "research/local_voice/reconciliations/2026-08-30_T7_ASR004_TRANSFORMERS_NATIVE_STREAMING_SCOPE_RECONCILIATION_GPT56SOL.json",
+      "commit": "457ac17ef08ce055ad9cd21c4fa27dc1b943d161"
+    },
+    {
+      "path": "research/local_voice/checkpoints/2026-08-30_T7_ASR004_TRANSFORMERS_NATIVE_SCOPE_REENTRY_GPT56SOL.json",
+      "commit": "9bad81a239d2a17c6f935b4aa1ca687564fd2b48"
+    }
+  ],
+  "research_delta": "Reconciled the absolute vLLM-only wording: native Transformers support exists and the official -hf model card advertises Offline/Streaming, but the current source/docs audit did not observe an equivalent Qwen3-specific progressive stream-state API. The observed official stateful incremental path remains qwen-asr/vLLM. No streaming runtime credit is created by model-card capability metadata.",
+  "parallel_fusion": {
+    "fleurs_scoring_integrity_delta_observed": true,
+    "long_session_streaming_falsifier_claim_observed": true,
+    "long_session_semantic_key": "d7663b06f28c5b438a9a23d3cb77041404e07830cd4e1369d27cad49dc5e74e6",
+    "relationship": "COMPLEMENTARY_NOT_DUPLICATE: this delta narrows backend/API attribution; generation-5 tests long-session accumulation/reprocessing risk."
+  },
+  "coordination": {
+    "new_target_runtime_dispatch_created": false,
+    "existing_target_runtime_owner": "Trigger4/current authorized target executor",
+    "duplicate_work_created": false
+  },
+  "credits": {
+    "target_runtime_delta": 0,
+    "german_asr_quality_delta": 0,
+    "streaming_asr_delta": 0,
+    "trigger4_acceptance_delta": 0,
+    "entityos_hcu_whole_runtime_delta": 0,
+    "whole_system_delta": 0
+  },
+  "next_exact_action": "Consume the existing T7-ASR-004 matched FLEURS/non-speech comparator through Trigger4 on clay-direct-dev. After that result, keep vLLM stateful streaming as the distinct observed successor route and fuse generation-5 long-session evidence; add a Transformers-native progressive arm only if an exact progressive API/source is identified."
+}

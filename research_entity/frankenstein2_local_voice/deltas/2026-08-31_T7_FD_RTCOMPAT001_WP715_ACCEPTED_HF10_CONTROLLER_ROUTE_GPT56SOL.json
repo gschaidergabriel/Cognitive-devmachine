@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_TRIGGER7_RESEARCH_DELTA_V1",
+  "date": "2026-08-31",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "research_id": "T7-FD-RTCOMPAT-001",
+  "classification": "TRIGGER4_OUTCOME_CONSUMPTION_AND_RUNTIME_ROUTE_CORRECTION_MIRROR",
+  "canonical_coordination_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_checkpoint_commit": "3d7c507be2e6581949d6ea02fcca41f8c7a6c1f6",
+  "f2_route_commit": "6b05585ec5943e380b2768d8b8724dea03cbfe79",
+  "consumed_wp715": {
+    "acceptance_commit": "42ee1cdfd852dff49b96d456938869c735a38eeb",
+    "exact_source_sha": "53bbd87337b263ecca5151b4c54d5afdc60330b0",
+    "controller_run_id": 33335436802,
+    "runner": "vps-clay-host",
+    "execution_surface": "RESOURCE_BOUNDED_UBUNTU_24_04_OCI",
+    "result": "EXECUTED_NO_COUNTEREXAMPLE",
+    "packet_component_runtime_credit": 1,
+    "whole_voice_e2e_credit": 0,
+    "whole_product_credit": 0
+  },
+  "runner_classification": {
+    "direct_f2_run_id": 33334747338,
+    "observed_state": "QUEUED_ZERO_EXECUTED_STEPS",
+    "class": "INFRA_AUTH_TRANSPORT_QUOTA_OR_REPOSITORY_RUNNER_MAPPING",
+    "product_conclusion": "NONE",
+    "controller_route_proven": true
+  },
+  "upstream_refresh": {
+    "repository": "huggingface/speech-to-speech",
+    "revision": "3986f453012a131632eee4731995474046846794",
+    "still_current_main": true,
+    "hf10_status": "RUNTIME_UNEXECUTED"
+  },
+  "routing": {
+    "owner": "TRIGGER4_RUNTIME_FALSIFIER",
+    "same_semantic_claim": true,
+    "new_wp715_generation": false,
+    "duplicate_f2_native_dispatch": false,
+    "preferred_execution_route": "controller -> vps-clay-host -> clay-direct-dev/resource-bounded Ubuntu",
+    "next_exact_action": "Execute HF10 post-response.done playout-lag/context-exactness on the pinned local realtime server through the proven controller route and return exact readback."
+  },
+  "credit": {
+    "research_source_credit": 1,
+    "hf10_runtime_credit": 0,
+    "target_runtime_credit": 0,
+    "german_e2e_voice_credit": 0,
+    "acoustic_credit": 0,
+    "whole_product_credit": 0
+  }
+}

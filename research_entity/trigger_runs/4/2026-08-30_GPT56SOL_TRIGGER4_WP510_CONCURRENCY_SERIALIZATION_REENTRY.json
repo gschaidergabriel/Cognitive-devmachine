@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_TRIGGER4_WP510_CONCURRENCY_REENTRY/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "date": "2026-08-30",
+  "routing_self_test": "PASS",
+  "authority": {
+    "supervisor_schema_observed": "9.13",
+    "execution_mode": "FREE_ONLY_HARD_OFF_EXTERNAL_PROVIDERS",
+    "owner_vps": "AUTHORIZED_AND_EXPECTED_WITH_RESOURCE_HEALTH_GUARDS",
+    "together_forbidden": true,
+    "paid_or_unknown_cost_fallback_forbidden": true
+  },
+  "observed_control_plane": {
+    "old_run": {
+      "run_id": 33265772059,
+      "job_id": 99135457584,
+      "status": "queued",
+      "steps": 0,
+      "runner_id": 0,
+      "runner_name": "",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "runtime_execution_observed": false
+    },
+    "successor_run": {
+      "run_id": 33318635448,
+      "head_sha": "be1b10c845117a0294165f249e3517198d623f9b",
+      "workflow": "Trigger4 WP510 Target Runtime V2",
+      "status": "pending",
+      "jobs_total": 0,
+      "runtime_execution_observed": false
+    },
+    "successor_workflow": {
+      "runs_on": "clay-host",
+      "concurrency_group": "trigger4-wp510-target-runtime-v2",
+      "cancel_in_progress": false,
+      "exact_f2_source_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+      "target_environment": "clay-direct-dev"
+    }
+  },
+  "inference": {
+    "classification": "CONTROL_PLANE_SERIALIZATION_BLOCKER_STRONGLY_SUPPORTED_NOT_DIRECTLY_PROVEN",
+    "statement": "The repaired clay-host successor is pending with zero materialized jobs while the earlier same-workflow run remains queued with no assigned runner. Together with the workflow's shared concurrency group and cancel-in-progress=false, this is strongly consistent with the successor being serialized behind the unresolved earlier run. GitHub did not expose a direct per-run concurrency-wait reason in the observed responses, so causal attribution remains inference rather than direct observation.",
+    "counterhypothesis": "A separate GitHub Actions scheduling or service-level delay could independently explain the successor's pending/zero-job state.",
+    "discriminator": "Observe the successor materialize a job without the old run becoming terminal, or obtain direct GitHub concurrency/scheduler metadata; either would weaken or falsify the serialization explanation."
+  },
+  "coordination": {
+    "duplicate_dispatch_created_by_this_organ": false,
+    "old_run_cancelled_by_this_organ": false,
+    "successor_run_created_by_this_organ": false,
+    "reason": "Current connector exposes no workflow-run cancel action, and current supervisor coordination forbids minting another duplicate target-runtime dispatch while unresolved runs exist."
+  },
+  "credits": {
+    "wp510_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Re-enter runs 33265772059 and 33318635448. If an authorized control surface can terminally cancel or otherwise reconcile the stale generic-runner attempt without creating a duplicate execution, do that first; then allow the already-created clay-host successor to materialize and bind its exact-source clay-direct-dev receipt. Otherwise preserve zero runtime credit and report the orchestration blocker without another dispatch."
+}

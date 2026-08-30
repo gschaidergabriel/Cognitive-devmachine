@@ -1,0 +1,98 @@
+{
+  "schema": "CLAY_TRIGGER4_F2_RELEASE_CANDIDATE_MATERIALIZATION/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "date": "2026-08-30",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_MAXIMUM_EXECUTION_BUDGET_BINDING.md"
+    ]
+  },
+  "authority": {
+    "provider_mode": "FREE_ONLY_EXTERNAL_PROVIDER_TOKENS",
+    "owner_vps_execution": "AUTHORIZED_VIA_ESTABLISHED_BRIDGE",
+    "together": "FORBIDDEN",
+    "product_baseline": "PORTABLE_LOCAL_HOST_HARNESS",
+    "vps_role": "OPTIONAL_EXTENSION_OR_ACCELERATOR"
+  },
+  "f2_delta": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "pull_request": 610,
+    "merged_commit": "2187d15a2a1edbae70930d01e313180e6ebd6fbd",
+    "merged_files": [
+      "tools/build_release_candidate.py",
+      ".github/workflows/trigger4-release-candidate-ci.yml"
+    ],
+    "purpose": "Materialize one exact Git-tree deterministic release candidate through the already accepted WP1107/WP1110 integrity, artifact-subject, and pre-handoff receipt-content bindings without creating a competing release authority."
+  },
+  "repository_hosted_runtime_evidence": {
+    "workflow": "Trigger4 Deterministic Release Candidate",
+    "run_id": 33292596534,
+    "job_id": 99206733420,
+    "status": "completed",
+    "conclusion": "success",
+    "source_commit": "2187d15a2a1edbae70930d01e313180e6ebd6fbd",
+    "source_tree": "c9981116187b59e5db8d2641f5702afcafe2114e",
+    "regression_tests": {
+      "release_archive": "11/11 PASS",
+      "release_artifact_subject": "4/4 PASS",
+      "receipt_content_binding": "9/9 PASS",
+      "total": "24/24 PASS"
+    },
+    "double_build_reproducibility": "PASS_BYTE_FOR_BYTE",
+    "artifact_subject_status": "READY_FOR_REAL_HOST_HANDOFF",
+    "static_violations": [],
+    "receipt_content_status": "READY_FOR_REAL_HOST_HANDOFF"
+  },
+  "release_candidate": {
+    "release_id": "frankenstein-2.0-2187d15a2a1e",
+    "artifact_filename": "frankenstein-2.0.zip",
+    "artifact_sha256": "1d6b17b05754c966ca11a806b42f5f47a77086094c35bf0e9530059fca51a156",
+    "artifact_size_bytes": 11770789,
+    "member_count": 2329,
+    "manifest_sha256": "e933df4388ced5426b9509215789617f8570149612644107ac58051303598a7b",
+    "archive_receipt_sha256": "b65afc4af2a015f9a408dfcb82c33c872d606683983c7f25bc621ea32befc47d",
+    "artifact_subject_sha256": "10703c3970adb6b1b04c6cdfc5c722ebdefd238bf1c448d2fe5cef27f7638a42",
+    "artifact_bound_prehandoff_sha256": "268ab62af83dc1836a58ddc0ba35a1ec8aa68427a6146495953e58aedd75ec6b",
+    "prehandoff_receipt_ref": "release-receipts/frankenstein-2.0-prehandoff.json",
+    "prehandoff_receipt_sha256": "268ab62af83dc1836a58ddc0ba35a1ec8aa68427a6146495953e58aedd75ec6b",
+    "prehandoff_receipt_size_bytes": 1287,
+    "receipt_content_subject_sha256": "3b2b51263ccafde516ebf5cfb610413d71b5b961b955c907badd9983b9beaa57",
+    "content_bound_receipt_sha256": "8babac00726a416af37296b4754eb5dd94e721689072eda4268de5479aaaf168",
+    "actions_artifact_id": 9726422448,
+    "actions_artifact_bundle_sha256": "f66e782bcc93a1baac3e5d34650feb917cf9a14edf0150c852676b028939a9fa",
+    "actions_artifact_expires_at": "2026-09-29T04:29:25Z"
+  },
+  "head_drift_boundary": {
+    "latest_f2_main_observed_after_candidate": "62e37589e41c98f09296fecae100871dbc10b3bf",
+    "classification": "FROZEN_EXACT_RELEASE_CANDIDATE_NOT_LATEST_HEAD",
+    "reason": "Parallel F2 main work advanced after the release-candidate merge/run. The candidate remains exact and reproducible for its bound source identity but cannot be called the latest-head release."
+  },
+  "self_hosted_runtime_boundary": {
+    "existing_controller_run": 33265772059,
+    "existing_controller_job": 99135457584,
+    "last_observed_status": "queued_unassigned_zero_steps",
+    "duplicate_dispatch_created": false,
+    "classification": "INFRASTRUCTURE_CONTROL_PLANE_NEGATIVE_EVIDENCE_NOT_PRODUCT_FAILURE"
+  },
+  "credits": {
+    "repository_release_build_credit": 1,
+    "clean_machine_runtime_credit": 0,
+    "target_host_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Use the frozen source 2187d15a2a1edbae70930d01e313180e6ebd6fbd candidate only if deliberately selected for handoff; collect real clean-machine Claude Code, Codex CLI, other-agent, no-VPS baseline, and VPS-bridge observations bound to artifact SHA-256 1d6b17b05754c966ca11a806b42f5f47a77086094c35bf0e9530059fca51a156 and pre-handoff receipt SHA-256 268ab62af83dc1836a58ddc0ba35a1ec8aa68427a6146495953e58aedd75ec6b. If a newer F2 main is selected instead, rebuild and freeze a successor candidate before runtime promotion."
+}

@@ -1,0 +1,62 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROVENANCE_REENTRY_MIRROR_NOT_F2_CLAIM_AUTHORITY",
+  "f2_frontier": {
+    "resolved_research_policy_commit": "208b3cf96c1f1e9cf2311d256fd100d7cef0d91a",
+    "trigger4_handoff_commit": "18338a2e63f73a872eec8b9fbfae558d8a5098e2",
+    "parallel_alignment_delta_commit": "fed3e1b36c0bdf5882ccf23cb7f8d629244d8c96",
+    "precision_reconciliation_commit": "8a21aeed847e336fac76f5d250e13f2205d3678a",
+    "policy_id": "T7_INTERRUPTED_CONTEXT_RETAIN_HEARD_PREFIX_EPHEMERALLY_ONLY_V1",
+    "status": "RESEARCH_POLICY_RESOLVED_AND_ROUTED_TO_TRIGGER4__PRODUCT_BINDING_RUNTIME_ZERO"
+  },
+  "resolved_semantics": [
+    "Interrupted assistant output retains exactly the demonstrably heard prefix in ephemeral next-turn dialogue context and excludes the unheard tail.",
+    "Interrupted output remains non-commit-eligible for durable VoiceOutcome/UnifiedDB/effect/completion purposes unless separately admitted.",
+    "heard_fraction is a playback-progress scalar, not sufficient evidence for an exact textual prefix.",
+    "Any partially retained text requires a playback-synchronized transcript/alignment witness bound to the same playout receipt; otherwise exact partial text is UNKNOWN and must not be fabricated from character/token proportion.",
+    "Late cancelled-generation assistant/tool data remains causally fenced."
+  ],
+  "fresh_primary_alignment": [
+    {
+      "source": "https://openai.github.io/openai-agents-python/realtime/guide/",
+      "finding": "Interruption history is aligned to what was actually heard; delayed playback uses explicit playback tracking."
+    },
+    {
+      "source": "https://openai.github.io/openai-agents-js/guides/voice-agents/build/",
+      "finding": "WebSocket interruption truncates assistant audio/history to actual heard playback and emits audio_interrupted."
+    },
+    {
+      "source": "https://docs.livekit.io/agents/logic/turns/",
+      "finding": "Interrupted agent history is truncated to the portion actually heard."
+    },
+    {
+      "source": "https://docs.livekit.io/reference/agents-js/interfaces/agents.voice.PlaybackFinishedEvent.html",
+      "finding": "PlaybackFinishedEvent exposes playbackPosition and optional synchronizedTranscript; when the latter is absent, the transcript is explicitly not playback-synchronized."
+    }
+  ],
+  "coordination": {
+    "new_semantic_claim": false,
+    "new_runtime_dispatch": false,
+    "wp715_reopened": false,
+    "asr004_redispatched": false,
+    "duplicate_hf_lane_created": false,
+    "trigger4_mutation_authority_stolen": false
+  },
+  "credits": {
+    "research_reconciliation": 1,
+    "product_policy_binding": 0,
+    "hf_protocol_runtime": 0,
+    "asr_runtime": 0,
+    "tts_runtime": 0,
+    "physical_audio": 0,
+    "gwt_jspace": 0,
+    "durable_memory": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_product": 0
+  },
+  "next_exact_action": "Trigger4 consumes the existing resolved-policy handoff plus alignment precision, binds the policy id at the existing ephemeral voice/context boundary, requires a sink/playout receipt and playback-synchronized transcript/alignment for any exact partial text, then executes the already-existing HF09/HF10/HF02-HF05 lane through admitted VPS/controller authority. Trigger7 must not create a duplicate dispatch while that boundary is owned or nonterminal."
+}

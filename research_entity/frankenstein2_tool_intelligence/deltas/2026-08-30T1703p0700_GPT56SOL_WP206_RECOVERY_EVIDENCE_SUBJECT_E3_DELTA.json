@@ -1,0 +1,64 @@
+{
+  "schema": "RESEARCH_ENTITY_FRANKENSTEIN2_TRIGGER6_DELTA/v1",
+  "delta_id": "2026-08-30T1703p0700_GPT56SOL_WP206_RECOVERY_EVIDENCE_SUBJECT_E3_DELTA",
+  "trigger": "6",
+  "worker": "GPT-5.6-Sol/ChatGPT-organ",
+  "status": "MIRRORED_FROM_CANONICAL_F2_RESEARCH_EVIDENCE",
+  "created_at": "2026-08-30T17:03:00+07:00",
+  "research_entity_parent_head": "7e691f8413df1f721a2aaf24b22b8ca896e961c7",
+  "f2_reentry_head": "c566e4e332ba70a729f82cfebb5f1218bb166eb9",
+  "canonical_f2_research_id": "R6-20260830-WP206-PROVENANCE-ATTESTATION-MINIMALITY-GPT56SOL-01",
+  "canonical_f2_refs": {
+    "e1": "research/tool_intelligence/results/R6-20260830-WP206-PROVENANCE-ATTESTATION-MINIMALITY-GPT56SOL-01_E1_SOURCE_READ.json",
+    "e2": "research/tool_intelligence/results/R6-20260830-WP206-PROVENANCE-ATTESTATION-MINIMALITY-GPT56SOL-01_E2_ARCHITECTURE_MAPPED.json",
+    "e3": "research/tool_intelligence/results/R6-20260830-WP206-PROVENANCE-ATTESTATION-MINIMALITY-GPT56SOL-01_E3_CLAIM_REPRODUCED.json",
+    "e5": "research/tool_intelligence/results/R6-20260830-WP206-PROVENANCE-ATTESTATION-MINIMALITY-GPT56SOL-01_E5_BUILD_CANDIDATE.json",
+    "architecture_delta": "research/tool_intelligence/deltas/ADF-20260830T1657P0700-GPT56SOL-WP206-RECOVERY-EVIDENCE-SUBJECT.json",
+    "trigger4_release_addendum": "trigger4/inbox/tool_research/R6-20260830-WP206-PROVENANCE-ATTESTATION-MINIMALITY-GPT56SOL-01_E3_SATISFIED_ADDENDUM.json"
+  },
+  "observed_executable_counterevidence": {
+    "exact_f2_head": "abbfb5a03ba2ced19c3d7b0c41ec8b781cda9eb4",
+    "github_actions_run_id": 33305289546,
+    "github_actions_job_id": 99240629206,
+    "job_conclusion": "success",
+    "test": "1/1 PASS",
+    "evidence_sha256_before": "3df3147f0d1cdac21eb953dc47846b3b85748241c656f3a39866c9b183a441ca",
+    "evidence_sha256_after": "a0c7193e95e5dcc0e42bf0694e6d2da04940242875b3f40d133968305f4f1de0",
+    "same_recovery_provenance_ref": "evidence:mutable-external-object",
+    "first_status": "RECOVERED",
+    "repeat_status": "ALREADY_RECOVERED",
+    "result": "POST_G4_EXTERNAL_EVIDENCE_CONTENT_BINDING_COUNTEREXAMPLE_REPRODUCED"
+  },
+  "interpretation": "WP206 G4 correctly enforces strict equality of its recorded provenance-reference string on repeats, but that string is not a content-authenticated evidence subject. Different external evidence bytes behind the same ref are invisible to the G4 repeat predicate. This is a narrow evidence-subject authentication gap, not a ref-equality/CAS/checkpoint validation failure.",
+  "external_research_fusion": [
+    "in-toto attestation subjects/resources are content-digest bound",
+    "SLSA provenance treats subject identity/origin as a verifiable relationship",
+    "Sigstore signing/verification material is only warranted when producer authenticity is an explicit threat boundary",
+    "TUF rollback/version machinery is not justified for this one-time/CAS migration path absent versioned evidence revisions"
+  ],
+  "smallest_candidate": "Thin typed/content-addressed LegacyRecoveryEvidenceSubject/v1 adapter before current WP206 inner recovery transition; derive evidence digest from concrete evidence, persist it in the same UnifiedDB recovery record, include it in recovery_id, preserve all existing G4 invariants; no second DB/service/provider/model call.",
+  "live_parallel_fusion": {
+    "wp206_same_inode_live_drift": "Concurrent separate Trigger6 E3 at c566e4e332ba70a729f82cfebb5f1218bb166eb9 reproduced PRAGMA data_version as a discriminator for other-connection same-inode SQLite drift. Complementary scope; do not conflate with evidence-subject authentication.",
+    "wp901_g3": "Existing typed source-authentication pattern remains reusable at design-pattern level, but its concrete binder is WP900/WP901-type-specific."
+  },
+  "authority": {
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "pre_e3_rule": "keep WP206 G4 closed absent new post-G4 executable counterevidence",
+    "post_e3_effect": "the narrow external evidence-content counterexample satisfies the research gate for Trigger4 review only; it does not self-authorize or self-accept a repair"
+  },
+  "credits": {
+    "trigger6_research": "E3_REPRODUCED_PLUS_E5_CANDIDATE",
+    "trigger4_build": 0,
+    "target_runtime": 0,
+    "vps_runtime": 0,
+    "physical_grid10": 0,
+    "semantic_gwt": 0,
+    "jspace": 0,
+    "effect": 0,
+    "completion": 0,
+    "training": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Trigger4 refreshes exact-current WP206 and active claims, confirms no equivalent repair landed, then claims the smallest successor and uses run 33305289546/job 99240629206 as the failing-before executable falsifier."
+}

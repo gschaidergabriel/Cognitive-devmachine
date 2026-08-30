@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_TRIGGER2_CONTEXT_BINDING_V2_PROMPT_METADATA_SWARM_REVIEW/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "branch_base_main": "91371459e1ac7d5f195f64557287a106016817cd",
+    "canonical_main_reentered_after_write": "b2444e175a841f2e94fb381972ae1b69c02ea442",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "unusual_experiment": "NOT_USED_SOURCE_VALIDATION_ONLY"
+  },
+  "evidence_basis": {
+    "claude_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "source_package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "v1_rejection": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_RETAINED_CONTEXT_GENERATOR_ADVERSARIAL_AUDIT_V2_GPT56SOL.json",
+    "retained_v2_generator": "tools/trigger2_context_binding_generator_v2.py",
+    "retained_v2_blob_at_reentry": "a9661ae3e6b96d0b3a0594d817ec311574ed4e04"
+  },
+  "swarm": {
+    "roles": [
+      "CURRENT_MAIN_REENTRY_REVIEWER",
+      "DUPLICATION_HUNTER",
+      "ADVERSARIAL_PROMPT_TAMPER_REVIEWER",
+      "CAUSAL_MAPPING_REVIEWER",
+      "PROVENANCE_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "adjudication": "Do not create another v2 generator. Retain the parallel current-main v2 and add only the missing visible-prompt-to-audit-metadata integrity gate.",
+    "unique_finding": {
+      "id": "VISIBLE_CODEBOOK_NOT_REPARSED_BY_V2_VALIDATOR",
+      "severity": "HIGH",
+      "finding": "The retained v2 validator reconstructs S3 mapping and nuisance factors from audit metadata but does not independently parse the model-visible CODEBOOK lines and bind their actual mapping/order back to that metadata.",
+      "failure_mode": "Prompt codebook bytes can diverge from a self-consistent audit record while metadata-level checks remain unrelated to what the model actually sees.",
+      "repair": "Parse exactly one visible codebook and require visible mapping == realized_mapping == S3-derived mapping, visible order == display_order == display_order_id, target == visible_mapping[audit_target_semantic_class], and row_sha256 == canonical row bytes."
+    }
+  },
+  "delta": {
+    "gate": "tools/trigger2_context_binding_prompt_metadata_gate_v1.py",
+    "tests": "tests/test_trigger2_context_binding_prompt_metadata_gate_v1.py",
+    "branch_commits": [
+      "2df63b9fffde7763e96e8615f1258b3c30e0b55f",
+      "169ecb744ae28acaeb3d796a85d2a2baa041a657"
+    ],
+    "behavior": [
+      "requires exactly one visible CODEBOOK",
+      "requires injective three-class/three-slot visible mapping",
+      "cross-binds visible mapping to realized_mapping and S3 permutation",
+      "cross-binds visible display order to display_order and display_order_id",
+      "derives supervision target from the visible codebook",
+      "recomputes row_sha256 over canonical row bytes",
+      "fails closed on parse ambiguity"
+    ]
+  },
+  "deterministic_local_validation": {
+    "tests_pass": 9,
+    "tests_fail": 0,
+    "py_compile": "PASS",
+    "negative_controls": [
+      "visible mapping tamper with recomputed row hash",
+      "visible display-order tamper with recomputed row hash",
+      "metadata display-order tamper with recomputed row hash",
+      "S3 metadata tamper with recomputed row hash",
+      "target tamper with recomputed row hash",
+      "row digest tamper",
+      "multiple visible codebooks",
+      "mixed good/bad batch index preservation"
+    ],
+    "scope": "LOCAL_SOURCE_VALIDATOR_ONLY; not an admitted EntityOS/HCU runtime capsule and not full retained-v2 2592-row execution evidence."
+  },
+  "discarded_during_cycle": [
+    "A separate v2 generator candidate was discarded when current main was found to already contain the converged 2592-row v2 lane.",
+    "A separate 16-row Claude epistemics draft was discarded when equivalent/better evidence-discipline rows landed in parallel current main."
+  ],
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "qwen35_training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_actions": [
+    "Run the retained 2592-row v2 generator through this prompt-metadata gate on an exact current checkout and fuse the gate into the retained validator if all rows pass.",
+    "Then recover and authenticate the exact measured 46 accepted ABI atoms plus tokenizer identity before replacing ABI slots.",
+    "Keep validation/holdout semantic families unmaterialized until the train design and symbol partition are frozen.",
+    "Only after ABI materialization, projection/evidence-byte gates, split/shortcut audits and frozen retention baselines pass should any model pilot be considered."
+  ]
+}

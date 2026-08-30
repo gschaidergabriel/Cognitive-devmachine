@@ -1,0 +1,56 @@
+{
+  "schema": "CLAY_TRIGGER7_LOCAL_VOICE_DELTA/v2",
+  "trigger": "7",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "date": "2026-08-30",
+  "project": "Frankenstein 2.0 local voice research",
+  "f2_checkpoint_commit": "401469c0e2ce276372c8c0d87e72e913144cc620",
+  "f2_checkpoint_path": "research/local_voice/checkpoints/2026-08-30_T7_SYS002_CLAY_HOST_HARDWARE_ROUNDTRIP_GPT56SOL.json",
+  "controller_evidence_commit": "add7b4ab70dd3a4be1f73c60d8e4d21c9ff2a8c4",
+  "controller_receipt_path": "runtime/trigger7_vps_hardware_roundtrip/LATEST.json",
+  "result": "RUNNER_TRANSPORT_REPAIRED_AND_SOURCE_BOUND_CLAY_DIRECT_DEV_HARDWARE_RECEIPT_PASS",
+  "repairs": [
+    {
+      "commit": "2cfd15233dc8ecebd87395239075b72667ee1ff4",
+      "delta": "bind Trigger-7 VPS hardware workflow to active clay-host runner selector and exact F2 source SHA"
+    },
+    {
+      "commit": "a40c856a0fd5373ae5a9c077b4c7cbf2e76a0019",
+      "delta": "preserve temporary hardware receipt across GitHub Actions step boundary; cleanup moved to persistence step"
+    }
+  ],
+  "runtime_evidence": {
+    "run_id": 33318275726,
+    "job_id": 99275594260,
+    "runner": "vps-clay-host",
+    "target_environment": "clay-direct-dev",
+    "container_runtime": "podman",
+    "source_sha": "0f73b3285f747d4ecab1aa92fabcb16c23a19504",
+    "tool_blob_sha": "a553a995d4fd8e50be2801eec68caacfe1b2a0bb",
+    "inventory_sha256": "fd0d44a76ad01201b55a7fe875cfc00336f3d60ba9144f888ba2c0b4ec601809",
+    "cpu_count_logical": 4,
+    "memory_total_kb": 16376020,
+    "gpu_nvidia_available": false,
+    "gpu_rocm_available": false,
+    "audio_device_count": 0,
+    "ffmpeg_available": false,
+    "hf_cli_available": true,
+    "execution_observed": true,
+    "hardware_receipt_observed": true,
+    "pass": true
+  },
+  "epistemic_boundary": {
+    "scope": "CLAY_DIRECT_DEV_SANDBOX_HARDWARE_INVENTORY_ONLY",
+    "model_runtime_credit": 0,
+    "voice_runtime_acceptance": false,
+    "whole_system_acceptance": false,
+    "production_effect_credit": 0,
+    "trigger4_final_acceptance_required": true
+  },
+  "hypothesis_update": {
+    "supported": "The old queued T7 hardware path had a runner-selector transport blocker; changing to the known schedulable clay-host route produced immediate runner assignment and actual sandbox execution.",
+    "counterhypothesis_rejected_at_scope": "General runner unavailability or inability to execute the hardware inventory in clay-direct-dev.",
+    "remaining_uncertainty": "No voice model has yet received runtime credit on this repaired transport."
+  },
+  "next_exact_action": "Use the proven clay-host -> clay-direct-dev path for one source-pinned LOCAL-SOLO CPU/file-input voice discriminator, respecting the active Trigger-7 semantic claim and preserving Trigger-4 as final integration/acceptance authority."
+}

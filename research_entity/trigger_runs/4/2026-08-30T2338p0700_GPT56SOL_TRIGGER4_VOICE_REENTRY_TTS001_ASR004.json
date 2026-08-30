@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_TRIGGER4_VOICE_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "recorded_local_time": "2026-08-30T23:38:00+07:00",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "routing_self_test": "PASS",
+  "authority": {
+    "research_main_observed_before_write": "81967cba0ed3f626ccf7747bdd21a5efcc603146",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "provider_policy": "FREE_ONLY_HARD_OFF",
+    "owner_vps_allowed": true,
+    "established_vps_bridge_allowed": true,
+    "together_forbidden": true,
+    "paid_or_unknown_cost_fallback": false
+  },
+  "frankenstein2": {
+    "main_observed": "50a2a43d0113aa478bc3aa48a98ea9cedaa91e67",
+    "head_message": "trigger4: reconcile TTS001 semantic claim with target capability result"
+  },
+  "voice_frontier": {
+    "tts001": {
+      "research_id": "T7-TTS-001",
+      "semantic_key": "276537fa4a4615b46c255684da2e0306d596a7712df159e723ae6dfc02a2f961",
+      "state": "BLOCKED_TARGET_CAPABILITY_AUDIO_OUTPUT_UNOBSERVABLE_NO_MODEL_RUNTIME_DISPATCH",
+      "target_environment_observed": "clay-direct-dev",
+      "hardware_inventory_run_id": 33318275726,
+      "audio_device_count": 0,
+      "model_runtime_credit": 0,
+      "trigger4_voice_acceptance_credit": 0,
+      "whole_system_credit": 0,
+      "next_exact_action": "Route the same semantic key unchanged to the canonical local owner-machine or another admitted clean physical target-class host with a real audio output path and fresh exact hardware inventory; execute Qwen3-TTS 12Hz 0.6B first under LOCAL_SOLO with first-audible/barge-in/heard-output receipts; attempt 1.7B only if measured whole-product resource headroom remains sufficient."
+    },
+    "asr004": {
+      "research_id": "T7-ASR-004",
+      "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+      "current_state": "PINNED_GERMAN_COMPARATOR_READY_FOR_EXISTING_TARGET_EXECUTOR",
+      "already_observed": [
+        "QWEN3_ASR_TARGET_ARTIFACT_HASH_VERIFIED",
+        "QWEN3_ASR_TARGET_MODEL_LOAD_OBSERVED",
+        "QWEN3_ASR_TARGET_LOCAL_CPU_INFERENCE_OBSERVED"
+      ],
+      "german_asr_quality_credit": 0,
+      "streaming_asr_credit": 0,
+      "next_exact_action": "Through the existing admitted Git VPS bridge on clay-direct-dev, continue the same open semantic objective with pinned FLEURS de_de test rows 0..31 plus pinned non-speech strata through Qwen3-ASR direct, deterministic VAD/turn-gated Qwen3-ASR, and matched faster-whisper baseline; persist actual audio hashes, transcripts, WER/CER, false activation, gate decisions, latency and resource measurements. Do not create a duplicate semantic claim or Actions dispatch."
+    },
+    "nemotron_successor": {
+      "research_id": "T7-ASR-008",
+      "state": "READY_AFTER_ASR004_MATCHED_COMPARATOR",
+      "runtime_credit": 0,
+      "rule": "Do not start before T7-ASR-004 is executed or explicitly reconciled."
+    }
+  },
+  "organ_execution_surface": {
+    "github_read_write": true,
+    "ssh_terminal_vps_connector_available": false,
+    "matching_installable_plugin_found": false,
+    "runtime_dispatch_created_this_reentry": false,
+    "duplicate_dispatch_created": false,
+    "model_bytes_downloaded": false,
+    "provider_calls": 0
+  },
+  "evidence_boundary": {
+    "this_checkpoint_is_runtime_evidence": false,
+    "tts_model_failure_claimed": false,
+    "asr_quality_pass_claimed": false,
+    "physical_owner_machine_credit": 0,
+    "whole_voice_system_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "decision": "PRESERVE_TTS001_FAIL_CLOSED_CAPABILITY_BLOCK_AND_ROUTE_NON_AUDIO_ASR004_AS_HIGHEST_VALUE_NON_DUPLICATE_VOICE_GATE_FOR_AN_ORGAN_WITH_THE_ESTABLISHED_RUNTIME_BRIDGE",
+  "next_reentry": "Refresh both mains. If a clean physical audio-capable target receipt appears, consume TTS001 without changing semantic key. Otherwise, if T7-ASR-004 remains unexecuted, use the established admitted bridge to execute its pinned matched comparator; then reconcile T7-ASR-008 Nemotron successor."
+}

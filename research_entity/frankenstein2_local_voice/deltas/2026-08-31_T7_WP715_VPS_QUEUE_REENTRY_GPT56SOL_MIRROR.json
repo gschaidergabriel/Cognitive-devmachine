@@ -1,0 +1,23 @@
+{
+  "schema": "T7_RESEARCH_MIRROR_DELTA/v1",
+  "date": "2026-08-31",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "canonical_f2_checkpoint": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "commit": "9187b359c20738fa76c8a6f8571dcafabf90f72c",
+    "path": "research/local_voice/checkpoints/2026-08-31_T7_WP715_VPS_QUEUE_REENTRY_GPT56SOL.json"
+  },
+  "finding": "Trigger 7 consumed the Trigger-4 WP715 event-sequence/ownership atomicity repair and current repository-CI success, then re-resolved the bound VPS discriminator. Run 33328707636 remains queued with zero executed steps and no assigned runner identity, so it is UNKNOWN_NONTERMINAL / control-plane-only evidence and mints zero runtime credit.",
+  "external_primary_context": {
+    "livekit": "Official current turn-handling documentation preserves heard-only truncation on interruption and distinguishes speech interruption from cancellation of long-running tools; design support only.",
+    "qwen3_asr": "Official current Qwen3-ASR documentation still lists German and streaming/offline support; qwen-asr streaming remains vLLM-only and does not return timestamps; later ASR context only."
+  },
+  "coordination": {
+    "duplicate_dispatch": false,
+    "duplicate_mutation": false,
+    "adjacent_breadth": false,
+    "wp715_trigger4_owner_preserved": true
+  },
+  "next_exact_action": "Verify/restore an eligible clay-host self-hosted runner/listener, consume exact run 33328707636, classify any executed failure before repair, and promote only exact executed packet/recovery scope. Trigger 7 remains cortex-first and does not open adjacent ASR/TTS breadth until that outcome is consumed."
+}

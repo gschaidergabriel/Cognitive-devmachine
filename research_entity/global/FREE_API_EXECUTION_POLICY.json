@@ -1,0 +1,1381 @@
+{
+  "schema_version": "1.0",
+  "status": "IMPLEMENTED_CANDIDATE",
+  "mission_goal": "Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system",
+  "default_cost_limit": 0,
+  "providers": {
+    "preferred": ["nvidia", "groq", "cerebras", "gemini", "openrouter"],
+    "hard_denied": ["together"]
+  },
+  "nvidia": {
+    "priority": 100,
+    "key_names": ["NVIDIA_API_KEY", "NVCF_API_KEY"],
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "activate_only_when_key_present": true,
+    "zero_cost_evidence": {
+      "checked_at": "2026-08-09",
+      "claim": "NVIDIA Developer Program members have free access to hosted NIM API endpoints for prototyping; individual endpoints may be rate limited.",
+      "sources": [
+        "https://docs.api.nvidia.com/nim/docs/run-anywhere",
+        "https://docs.api.nvidia.com/nim/docs/product",
+        "https://build.nvidia.com/settings/credits"
+      ],
+      "scope": "development_and_prototyping_only",
+      "counterhypothesis": "A configured credential can belong to a different billing or production context; request execution must still stay on the documented integrate.api.nvidia.com developer endpoint and emit a receipt."
+    }
+  },
+  "request_bounds": {
+    "max_serialized_bytes": 2000000,
+    "checked_at": "2026-08-21",
+    "claim": "The exact serialized UTF-8 JSON request is capped at 2000000 bytes before runtime-environment snapshot, credential lookup or network access. This is a transport envelope, not a claim that bytes equal model tokens; model context limits remain provider- and profile-specific.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-413-content-too-large",
+      "https://docs.python.org/3/library/json.html#json.dumps",
+      "https://docs.nvidia.com/nim/large-language-models/1.14.0/configuration.html"
+    ],
+    "executable_evidence": "test_oversized_serialized_request_is_blocked_before_environment",
+    "counterhypothesis": "The provider can safely enforce its own context or body limit after authentication; falsified locally because a request above the runtime envelope reached the authenticated opener, while the repaired boundary rejects it before even reading the runtime environment and still accepts an exact-limit payload."
+  },
+  "request_pre_serialization_bound": {
+    "checked_at": "2026-08-24",
+    "claim": "Validated request text and message structure are checked against their exact default json.dumps size before the JSON document is materialized. The calculation includes the 66-byte fixed request envelope, 27-byte per-message structure, two-byte list separators and ensure_ascii escape width of every Unicode scalar. Requests above 2000000 bytes are rejected before serialization; the serialized UTF-8 byte check remains defense in depth.",
+    "source": "https://docs.python.org/3/library/json.html#json.dumps",
+    "executable_evidence": [
+      "test_oversized_request_is_rejected_before_json_materialization",
+      "test_escaped_unicode_overflow_is_rejected_before_json_materialization",
+      "test_del_escape_overflow_is_rejected_before_json_materialization",
+      "test_dense_alternating_overflow_is_rejected_before_execution_lock"
+    ],
+    "internal_measurement": "The repaired scalar-width function matched json.dumps(ensure_ascii=True) for all 1112064 Unicode scalar values.",
+    "counterhypothesis": "Exact string escape widths plus a small structural lower bound are sufficient before serialization; falsified locally because 54793 minimal alternating messages fit the old character estimate but their separators and closed-schema object envelopes exceed 2000000 bytes and reached full snapshot plus json.dumps allocation."
+  },
+  "request_pre_lock_scalar_bound": {
+    "checked_at": "2026-08-24",
+    "claim": "For exact built-in request strings, the sum of model, role and content character counts is a conservative lower bound on default JSON size. A sum above 2000000 therefore fails before the global execution lock; the exact escape-aware serialized-size calculation remains authoritative inside the protected snapshot path.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#len",
+      "https://docs.python.org/3/library/stdtypes.html#str.strip",
+      "https://docs.python.org/3/library/json.html#json.dumps"
+    ],
+    "executable_evidence": "test_oversized_text_lower_bound_is_rejected_before_execution_lock",
+    "counterhypothesis": "The exact pre-serialization check is sufficient even when it runs under the process-wide lock; falsified locally because a request whose built-in text alone occupied 2000008 characters acquired and held the lock for validation scans before its inevitable size rejection."
+  },
+  "request_pre_snapshot_cardinality_bound": {
+    "max_messages": 54792,
+    "checked_at": "2026-08-24",
+    "claim": "An exact built-in message list is rejected before snapshot allocation and before the process-wide execution lock when its cardinality exceeds 54792. The bound is rechecked at the snapshot boundary because caller-owned mutable input can change after early admission. Under required role alternation, the densest valid 54792-message request with a leading system message occupies 1999978 bytes with the smallest valid model and explicit n=1; the next valid cardinality occupies 2000015 bytes and exceeds the 2000000-byte envelope.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#len",
+      "https://docs.python.org/3/library/json.html#json.dumps",
+      "https://cwe.mitre.org/data/definitions/367.html"
+    ],
+    "executable_evidence": [
+      "test_structurally_oversized_request_is_rejected_before_snapshot",
+      "test_dense_alternating_overflow_is_rejected_before_execution_lock",
+      "test_message_count_mutation_is_rechecked_before_snapshot"
+    ],
+    "counterhypothesis": "Dividing the byte cap by the 32-byte smallest isolated message yields a safe maximum of 62500; falsified because that ignores required assistant-role width, list separators and the outer request envelope. A valid 54793-message conversation reached lock, snapshot and serialization before exact rejection."
+  },
+  "output_token_budget": {
+    "max_tokens": 4096,
+    "checked_at": "2026-08-21",
+    "claim": "Every v0.1 Chat Completions request explicitly caps combined generated reasoning and visible output at 4096 tokens. The number is a conservative local policy choice demonstrated in NVIDIA's reasoning example, not a claim that every task or model requires exactly 4096 tokens.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/2.0.10/get-started/advanced/get-started-nemotron-3.5-lightning.html",
+    "executable_evidence": "test_provider_request_has_explicit_output_token_budget",
+    "counterhypothesis": "Omitting max_tokens is safe because the provider default is an adequate bounded generation policy; falsified locally because the authenticated request contained no output budget, while NVIDIA documents max_tokens as the cap shared by reasoning and visible output and warns that budget exhaustion yields finish_reason length."
+  },
+  "response_bounds": {
+    "max_bytes": 2000000,
+    "checked_at": "2026-08-11",
+    "claim": "A bounded read must request one sentinel byte beyond the accepted limit to distinguish an oversized response from a response that merely fills the limit.",
+    "source": "https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse.read",
+    "executable_evidence": "test_oversized_response_is_detected_without_verifying_truncated_body",
+    "counterhypothesis": "Reading exactly the accepted limit is sufficient; falsified because HTTPResponse.read(amt) returns only up to amt bytes and therefore cannot prove end-of-body at that boundary."
+  },
+  "payment_status_precedes_body": {
+    "checked_at": "2026-08-14",
+    "claim": "A valid HTTP 402 status activates the current-budget-epoch payment hard stop immediately from response metadata; the adapter does not consume a non-200 body before status classification.",
+    "sources": [
+      "https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required"
+    ],
+    "executable_evidence": "test_http_402_latches_before_response_body_is_read",
+    "counterhypothesis": "Reading an error body before classifying its already received status is harmless; falsified because a stalled 402 body changed the outcome to incomplete_provider_response and suppressed the payment latch."
+  },
+  "payment_hard_stop_atomicity": {
+    "checked_at": "2026-08-14",
+    "claim": "For the single-instance v0.1 runtime, routing, authenticated execution and payment-latch publication form one process-serialized critical section; a waiting attempt re-evaluates the latch after the preceding receipt completes.",
+    "sources": [
+      "https://cwe.mitre.org/data/definitions/362.html",
+      "https://docs.python.org/3/library/threading.html#lock-objects"
+    ],
+    "executable_evidence": "test_concurrent_attempt_waits_for_payment_hard_stop_result",
+    "counterhypothesis": "Independent preflight checks are sufficient for concurrent attempts; falsified locally because a second attempt reached the network while the first payment response was pending, before the shared hard-stop latch could be published."
+  },
+  "bounded_payment_latch_state": {
+    "max_entries": 1024,
+    "checked_at": "2026-08-24",
+    "claim": "Payment-latch storage is limited to 1024 exact built-in string entries. Cardinality is checked immediately after the exact-set boundary and before element iteration, inventory membership, credential use or network access. At exactly 1024 entries, inventory fails closed as payment-latch capacity exhausted so a further provider response cannot append entry 1025; larger injected state is structurally rejected. The numeric limit is a local FRANK process-state budget, not a Python or protocol standard.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#len",
+      "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset",
+      "https://cwe.mitre.org/data/definitions/400.html"
+    ],
+    "executable_evidence": "test_payment_latch_cardinality_is_bounded_before_network",
+    "counterhypothesis": "Exact built-in sets and strings sufficiently bound passive latch state; falsified locally because 1025 historical entries passed full element validation and reached authenticated routing without any cardinality policy. The repaired boundary routes with 1023 entries, fails closed without an opener at exactly 1024, and structurally rejects 1025 before element iteration."
+  },
+  "payment_latch_evidence_separation": {
+    "checked_at": "2026-08-24",
+    "claim": "Capability inventory reports payment_blocked_current_budget_epoch only when the exact provider and budget-epoch latch key exists. Storage-capacity exhaustion independently blocks eligibility as payment_latch_capacity_exhausted and cannot be represented as an observed HTTP 402 payment event.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required",
+      "https://opentelemetry.io/docs/specs/semconv/http/http-spans/"
+    ],
+    "executable_evidence": "test_payment_latch_cardinality_is_bounded_before_network",
+    "counterhypothesis": "Every fail-closed route caused by payment-latch storage can be labeled as a current-epoch payment hard stop; falsified locally because 1024 unrelated historical keys produced payment_blocked_current_budget_epoch true and payment_required_hard_stop_active without the current provider/epoch key or any received HTTP 402."
+  },
+  "payment_latch_inventory_snapshot": {
+    "checked_at": "2026-08-24",
+    "claim": "Each capability inventory and its derived route evaluate payment-latch capacity and every provider membership against one bounded exact-set copy. A latch published after that snapshot belongs to the next inventory state and cannot partially alter the current claim.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://cwe.mitre.org/data/definitions/367.html"
+    ],
+    "executable_evidence": "test_inventory_snapshots_payment_latches_before_membership",
+    "internal_measurement": "A synchronized writer inserted the selected provider latch after capacity evaluation but before its membership test. Before repair, the same inventory mixed the earlier capacity state with the later blocked state; after repair, all rows represent the pre-write copy.",
+    "counterhypothesis": "Deriving route from one list of inventory rows is sufficient even when those rows read a live mutable latch set; falsified because a write during row construction changed membership evidence inside that single list."
+  },
+  "payment_latch_validation_snapshot": {
+    "checked_at": "2026-08-24",
+    "claim": "Capability inventory copies bounded exact-set payment-latch storage before iterating or validating its elements. Pre-copy and post-copy cardinality checks bound the snapshot, and later publications cannot resize the iterator or suppress the inventory receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://cwe.mitre.org/data/definitions/367.html"
+    ],
+    "executable_evidence": "test_inventory_snapshots_latches_before_element_validation",
+    "internal_measurement": "A deterministic mutation after the first live-set element was consumed previously raised RuntimeError: Set changed size during iteration and suppressed capability inventory. After repair, validation completes against the bounded copy while the publication remains visible only to later inventories.",
+    "counterhypothesis": "Validating every element of the live exact set before copying is equivalent to validating the copy; falsified because a concurrent publication can resize the live iterator between those operations."
+  },
+  "execution_latch_validation_snapshot": {
+    "checked_at": "2026-08-25",
+    "claim": "Authenticated execution retains caller-owned exact-set storage only as the later latch publication target. Pre-route cardinality and element validation iterate a bounded copy, and route derives its state from a separate bounded snapshot, so a concurrent publication cannot resize the execution preflight iterator.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://cwe.mitre.org/data/definitions/362.html"
+    ],
+    "executable_evidence": "test_execute_snapshots_latches_before_element_validation",
+    "internal_measurement": "A deterministic publication during the execution preflight previously raised RuntimeError: Set changed size during iteration before opener access. After repair, the same mutation affects only the caller-owned source, validation completes on its copy, route snapshots the later state, and the valid request succeeds.",
+    "counterhypothesis": "Inventory-only snapshot validation is sufficient because execute immediately calls route; falsified because execute performed a separate live-set element scan before route could establish its safe snapshot."
+  },
+  "post_callback_latch_reauthorization": {
+    "checked_at": "2026-08-25",
+    "claim": "Injected nonce and monotonic-clock functions are treated as executable caller code. After the final such pre-network callback returns bounded passive data, FRANK re-evaluates payment-latch state from the same environment snapshot before constructing or opening the request. A newly active hard stop, exhausted latch capacity or changed provider selection fails closed before network access.",
+    "sources": [
+      "https://docs.python.org/3/reference/expressions.html#calls",
+      "https://docs.python.org/3/library/time.html#time.monotonic",
+      "https://cwe.mitre.org/data/definitions/367.html",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required"
+    ],
+    "executable_evidence": [
+      "test_nonce_callback_latch_change_is_rechecked_before_network",
+      "test_clock_callback_latch_change_is_rechecked_before_network"
+    ],
+    "internal_measurement": "Deterministic nonce and monotonic-clock callbacks each inserted the selected provider's current budget-epoch latch after initial routing. Before repair, both authenticated opener paths ran and returned success. After repair, one bounded route snapshot following the last callback observes either mutation and raises payment_required_hard_stop_active with zero opener calls.",
+    "counterhypothesis": "Reauthorization immediately after nonce generation closes every caller-code boundary before network; falsified because the injected monotonic clock still executed afterward and could activate the same latch while leaving that reauthorization stale."
+  },
+  "post_network_payment_latch_publication": {
+    "checked_at": "2026-08-24",
+    "claim": "A received HTTP 402 remains mandatory execution evidence even if caller-owned latch storage changes after authorization. Publication validates bounded snapshots before and after mutation, reports payment_latch_publication_failed when state cannot be safely committed, and receipt construction never performs live-container membership afterward.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://docs.python.org/3/library/stdtypes.html#set.add",
+      "https://cwe.mitre.org/data/definitions/362.html"
+    ],
+    "executable_evidence": "test_post_network_latch_corruption_cannot_suppress_402_receipt",
+    "internal_measurement": "On both ordinary-response and HTTPError paths, an opener inserted a hash-equal active string after preflight. Before repair its equality method raised during latch publication or final receipt membership and no receipt returned. After repair both paths return status 402 and payment_required_hard_stop, mark publication failure, and later routing rejects the corrupted storage before network.",
+    "counterhypothesis": "Pre-network exact-set and exact-string validation is sufficient for a caller-owned mutable latch throughout authenticated execution; falsified because the opener can mutate that shared set while the request is in flight."
+  },
+  "failed_payment_latch_process_fallback": {
+    "checked_at": "2026-08-25",
+    "claim": "If a received HTTP 402 cannot be safely committed to caller-owned latch storage, FRANK retains the exact provider and budget-epoch key in bounded process-local fallback state. Inventories using external storage merge validated snapshots of both stores, so repairing or clearing the external container cannot authorize a same-process replay.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required",
+      "https://docs.python.org/3/library/stdtypes.html#set.add",
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://cwe.mitre.org/data/definitions/362.html"
+    ],
+    "executable_evidence": "test_failed_latch_publication_uses_process_fallback",
+    "internal_measurement": "After a deterministic post-authorization corruption made the primary latch write fail, clearing that external set previously allowed a second authenticated request in the same budget epoch. The repaired runtime reports publication failure plus an active fallback latch and rejects attempt two before opener access.",
+    "uncertainty": "The fallback is process-local and does not survive restart. Durable UnifiedDB-backed publication and an accepted Ubuntu live receipt remain required before claiming restart-level enforcement.",
+    "counterhypothesis": "Failing closed only while malformed caller storage remains present is equivalent to a current-epoch hard stop; falsified because the caller could clear the malformed element and immediately regain routing eligibility."
+  },
+  "successful_payment_latch_process_mirror": {
+    "checked_at": "2026-08-25",
+    "claim": "Every HTTP 402 latch safely published to caller-owned storage is also retained under the exact provider and budget-epoch key in the bounded process-local store. Inventories merge validated snapshots of both stores, so clearing an otherwise valid external set cannot authorize a same-process replay.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required",
+      "https://docs.python.org/3/library/stdtypes.html#set.add",
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://cwe.mitre.org/data/definitions/362.html"
+    ],
+    "executable_evidence": "test_successful_external_latch_cannot_be_cleared_for_replay",
+    "internal_measurement": "After a successful HTTP 402 publication to an exact caller-owned set, clearing that set previously allowed a second authenticated request in the same budget epoch. With process mirroring, the second attempt fails before opener access even though the external set is empty.",
+    "uncertainty": "The mirror is process-local and does not survive restart. Durable UnifiedDB-backed publication and an accepted Ubuntu live receipt remain required before claiming restart-level enforcement.",
+    "counterhypothesis": "A successful caller-owned latch write can be trusted for the lifetime of the execution process; falsified because the caller can clear the mutable set and immediately restore routing eligibility unless the observed HTTP 402 is independently mirrored."
+  },
+  "payment_latch_durability_scope": {
+    "checked_at": "2026-08-28",
+    "claim": "Capability schema 1.18 and execution schema 1.14 explicitly publish payment_latch_scope=process_local. payment_latch_active=true therefore proves only that the current interpreter process retained the provider and budget-epoch hard stop; it makes no restart-durability claim.",
+    "sources": [
+      "https://docs.python.org/3/library/threading.html",
+      "https://www.freedesktop.org/software/systemd/man/systemd.exec.html",
+      "https://www.sqlite.org/atomiccommit.html"
+    ],
+    "external_evidence": "Python documents that threads share memory within one process. systemd separately provides StateDirectory for persistent service state and preserves those directories across service restarts. SQLite documents atomic transactions that survive application, operating-system or power interruption. Together these sources distinguish the current in-memory set from the persistent, transactional state mechanism still required for Ubuntu restart enforcement.",
+    "internal_measurement": "A deterministic module-reload probe placed a synthetic current-epoch key in PROCESS_PAYMENT_LATCHES, observed it active in the first runtime instance, then loaded a fresh instance and observed the key absent. Before repair, a 402 receipt could report payment_latch_active=true without any durability boundary, while capability inventory and route likewise exposed latch state without scope. The new regression failed on all three missing or stale contract assertions before the fix.",
+    "executable_evidence": "test_receipts_disclose_process_local_payment_latch_scope; module-reload before_active=true/after_restart_active=false probe",
+    "counterhypothesis": "An active process-global set is sufficiently durable for a service hard stop because systemd may restart the same service automatically; falsified because a restart starts a fresh interpreter state, while persistent service state requires a separate filesystem or database boundary.",
+    "uncertainty": "This change prevents overclaiming but does not implement persistence. A restart-durable latch still needs an owner-approved UnifiedDB or transactional local-store schema, atomic publication before receipt success, cross-process concurrency semantics, recovery tests and an accepted Ubuntu live receipt. SQLite is research evidence for a possible mechanism, not a selected implementation."
+  },
+  "post_cleanup_payment_latch_publication": {
+    "checked_at": "2026-08-25",
+    "claim": "On the regular-response HTTP 402 path, latch publication occurs only after the foreign response context has completed its __exit__ cleanup. The receipt therefore cannot claim an active payment hard stop that response cleanup subsequently erased before returning control to FRANK.",
+    "sources": [
+      "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required",
+      "https://cwe.mitre.org/data/definitions/362.html"
+    ],
+    "executable_evidence": "test_response_cleanup_cannot_erase_payment_hard_stop",
+    "internal_measurement": "A deterministic response __exit__ cleared both caller-owned and process-local latch sets after the suite had published HTTP 402. Before repair, the first receipt still reported payment_latch_active=true while a second same-epoch request reached the opener. After repair, publication follows __exit__ and attempt two fails before network access.",
+    "counterhypothesis": "Serializing the with suite through the execution lock makes latch publication inside that suite final; falsified because foreign __exit__ runs after the suite and can mutate shared latch storage before the with statement returns."
+  },
+  "passive_payment_latch_container_boundary": {
+    "checked_at": "2026-08-24",
+    "claim": "Every payment-latch storage path, including the process-global default and caller injection, must be an exact built-in set before capability inventory, routing or authenticated execution; set subclasses cannot execute overridden membership or mutation behavior around a received HTTP 402.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset",
+      "https://docs.python.org/3/library/functions.html#isinstance"
+    ],
+    "executable_evidence": [
+      "test_active_payment_latch_container_is_rejected_before_execution",
+      "test_process_payment_latch_storage_is_validated_before_membership"
+    ],
+    "counterhypothesis": "The process-owned default can bypass the passive-container boundary because only caller-supplied state is untrusted; falsified locally because replacing that mutable module state with a set subclass executed overridden membership during ordinary routing and leaked its exception. Earlier executable evidence separately showed overridden add suppressing mandatory post-402 receipt publication."
+  },
+  "passive_payment_latch_element_boundary": {
+    "checked_at": "2026-08-21",
+    "claim": "Every caller-supplied payment-latch key must be an exact built-in string before capability inventory, routing or authenticated execution; a passive set container does not make polymorphic elements passive.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset",
+      "https://docs.python.org/3/reference/datamodel.html#object.__eq__"
+    ],
+    "executable_evidence": "test_active_payment_latch_element_is_rejected_before_execution",
+    "counterhypothesis": "An exact built-in set is sufficient to make membership and mutation passive; falsified locally because a contained str subclass executed overridden equality after both HTTP 402 transport paths and suppressed mandatory receipt publication."
+  },
+  "execution_busy_timeout": {
+    "checked_at": "2026-08-14",
+    "claim": "A caller waiting for the single-instance execution lock fails closed as execution_busy after 35 seconds and cannot reach credential use or network access.",
+    "source": "https://docs.python.org/3/library/threading.html#threading.Lock.acquire",
+    "executable_evidence": "test_busy_execution_lock_times_out_before_network",
+    "counterhypothesis": "An unbounded lock wait is acceptable because the active transport has its own timeout; falsified locally because a held execution lock blocked a waiting call indefinitely outside the transport timeout boundary."
+  },
+  "passive_attempt_nonce_boundary": {
+    "checked_at": "2026-08-24",
+    "claim": "An injected attempt nonce must be an exact built-in nonempty Unicode-scalar string of at most 128 characters before authenticated execution; string subclasses, lone UTF-16 surrogates and unbounded identity material are rejected before formatting or UTF-8 hashing so receipt identity cannot fail or allocate without bound after a provider request has already run.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#format",
+      "https://docs.python.org/3/reference/datamodel.html#object.__format__",
+      "https://docs.python.org/3/howto/unicode.html",
+      "https://docs.python.org/3/library/secrets.html#secrets.token_hex"
+    ],
+    "executable_evidence": [
+      "test_active_attempt_nonce_is_rejected_before_network",
+      "test_surrogate_attempt_nonce_is_rejected_before_network",
+      "test_oversized_attempt_nonce_is_rejected_before_network"
+    ],
+    "counterhypothesis": "Any exact built-in nonempty Unicode-scalar str is safe bounded hash material; falsified locally because a 129-character injected nonce reached authenticated execution and post-response identity processing even though the production nonce is the documented 32 hexadecimal characters from token_hex(16)."
+  },
+  "receipt_clock_domains": {
+    "checked_at": "2026-08-14",
+    "claim": "Execution receipt duration uses a monotonic clock that cannot move backwards, while an absolute Retry-After HTTP-date is compared with the wall-clock UTC instant at response receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/time.html#time.monotonic",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": "test_duration_and_http_date_retry_after_use_distinct_clocks",
+    "counterhypothesis": "One wall clock is sufficient for both elapsed duration and absolute HTTP-date arithmetic; falsified because system-clock correction can make receipt duration move backwards or collapse to zero, while a monotonic clock has no UTC epoch for interpreting HTTP-date."
+  },
+  "passive_monotonic_clock_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "An injected monotonic clock must return an exact built-in finite float or integer before authenticated execution. Invalid start values fail before network access; invalid end values use zero duration and cannot suppress an execution receipt or run overloaded formatting and arithmetic methods.",
+    "sources": [
+      "https://docs.python.org/3/library/time.html#time.monotonic",
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://docs.python.org/3/reference/datamodel.html#object.__format__"
+    ],
+    "executable_evidence": "test_active_monotonic_values_cannot_suppress_execution_receipt",
+    "counterhypothesis": "Any float-like value returned by an injected monotonic clock is passive duration metadata; falsified locally because a float subclass reached authenticated execution and then ran overridden __format__ during attempt-ID construction, preventing the mandatory receipt."
+  },
+  "bounded_receipt_duration": {
+    "checked_at": "2026-08-21",
+    "claim": "Receipt duration arithmetic is total and capped at 86400000 milliseconds. Nonpositive elapsed values become zero; a positive subtraction overflow, non-finite difference or larger elapsed value reaches the cap without suppressing or bloating the execution receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/time.html#time.monotonic",
+      "https://docs.python.org/3/library/math.html#math.isfinite",
+      "https://docs.python.org/3/library/functions.html#round"
+    ],
+    "executable_evidence": "test_extreme_monotonic_values_cannot_suppress_or_bloat_receipt",
+    "counterhypothesis": "Validating each injected monotonic reading as a finite built-in number is sufficient; falsified locally because two finite floats produced an infinite difference and OverflowError after successful execution, while two exact integers produced unbounded receipt metadata."
+  },
+  "bounded_attempt_identity_clock_boundary": {
+    "checked_at": "2026-08-21",
+    "claim": "Attempt identity is derived from the stable request ID and a fresh 128-bit nonce, never from decimal formatting of an unbounded injected clock integer. Clock values remain duration telemetry and cannot suppress the mandatory post-execution receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#integer-string-conversion-length-limitation",
+      "https://docs.python.org/3/library/secrets.html#secrets.token_hex"
+    ],
+    "executable_evidence": "test_extreme_integer_clock_cannot_suppress_attempt_receipt",
+    "counterhypothesis": "Including the monotonic start value in the attempt-ID preimage adds harmless uniqueness; falsified locally because an exact passive integer exceeded Python's decimal-conversion limit only after successful provider execution and prevented the receipt, while the mandatory nonce already supplies attempt uniqueness."
+  },
+  "passive_wall_clock_boundary": {
+    "checked_at": "2026-08-21",
+    "claim": "An injected wall clock used for absolute Retry-After arithmetic must return an exact built-in finite float or integer. Invalid and polymorphic values use the conservative 60-second fallback without executing arithmetic methods, reclassifying HTTP 429 or suppressing its receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/time.html#time.time",
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": "test_active_wall_clock_preserves_rate_limit_receipt",
+    "counterhypothesis": "Any float-like wall-clock result is passive timestamp metadata for HTTP-date subtraction; falsified locally because a float subclass executed overridden __rsub__, downgraded the regular 429 path and escaped the HTTPError path without a receipt."
+  },
+  "text_message_roles": {
+    "allowed": ["system", "user", "assistant"],
+    "checked_at": "2026-08-11",
+    "claim": "The plain-text adapter accepts only system, user and assistant roles; tool/function messages require the separate typed tool-calling path.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/1.13.0/system-example.html",
+    "executable_evidence": "test_unknown_text_message_role_is_blocked_before_network",
+    "counterhypothesis": "An arbitrary nonempty role can be delegated to provider-side validation; falsified for this adapter because it causes an avoidable authenticated network call before the provider can reject it."
+  },
+  "exact_model_identifier": {
+    "checked_at": "2026-08-28",
+    "claim": "The model field must match the model identifier served by NVIDIA NIM exactly and satisfy the shared semantic-text witness. Leading or trailing whitespace, embedded C0/C1 controls, and identifiers made only of format, mark, private-use or noncharacter scalars are rejected before credential use or network access rather than normalized or serialized into the authenticated request.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/ai-assistant-integrations/codex-cli.html",
+      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html",
+      "https://docs.nvidia.com/nim/large-language-models/latest/reference/environment-variables.html",
+      "https://www.unicode.org/reports/tr44/",
+      "https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-23/"
+    ],
+    "external_evidence": "NVIDIA instructs clients to use the id returned by /v1/models, documents nvidia/nemotron-3-super-120b-a12b as a representative identifier, and permits NIM_SERVED_MODEL_NAME to override the served string. NVIDIA specifies no Unicode identifier grammar. Unicode classifies U+200B as Cf and private-use scalars as meaningful only by private agreement, which this closed text adapter does not negotiate.",
+    "internal_measurement": "An internally embedded JSON-escaped newline in mock\\nforged passed the former local validation, reached the authenticated opener and could be echoed into a successful receipt. After the control fix, identifiers consisting only of U+200B or U+E000 still reached the opener. The shared semantic witness now rejects all three cases before network access, while meta/llama-3.1-8b-instruct remains successful.",
+    "executable_evidence": [
+      "test_model_name_with_surrounding_whitespace_is_blocked_before_network",
+      "test_model_name_with_internal_control_character_is_blocked_before_network",
+      "test_nonsemantic_model_identifier_is_blocked_before_network",
+      "test_documented_nvidia_style_model_identifier_remains_compatible"
+    ],
+    "counterhypothesis": "Any nonblank Unicode-scalar model string can be delegated to provider-side validation; falsified locally because control-only and nonsemantic-only identifiers crossed the authenticated request boundary despite carrying no negotiated model identity.",
+    "uncertainty": "The semantic witness is local FRANK safety and canonicalization policy, not an NVIDIA identifier guarantee. Other printable Unicode identifiers remain permitted because NIM_SERVED_MODEL_NAME is configurable."
+  },
+  "semantic_text_presence_boundary": {
+    "checked_at": "2026-08-28",
+    "claim": "Plain-text request content, verified response content and exposed reasoning each require at least one Unicode-scalar character that is neither Unicode whitespace, a C0/C1 transport control, a Unicode General_Category=Cf format control, a Unicode Mark (Mn, Mc or Me), a General_Category=Co private-use character, a General_Category=Cn unassigned scalar nor one of Unicode's 66 permanently reserved noncharacters. These code points remain permitted around or within real text, but cannot alone satisfy the adapter's semantic-content requirement because this closed provider adapter negotiates no private character semantics.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#str.strip",
+      "https://docs.python.org/3/library/unicodedata.html#unicodedata.category",
+      "https://www.unicode.org/reports/tr44/",
+      "https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-3/",
+      "https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-23/",
+      "https://www.rfc-editor.org/rfc/rfc8259.html#section-7",
+      "https://docs.nvidia.com/nim/large-language-models/3.0.0/get-started/quickstart.html"
+    ],
+    "external_evidence": "Python defines str.strip without an explicit character set as removal of str.isspace characters, so NUL, U+200B, U+0301, private-use characters, noncharacters and unassigned scalars survive; unicodedata.category exposes their Unicode general categories. Unicode Standard Annex #44 classifies Cf as Format, Mn as Nonspacing_Mark, M as the union of Mn, Mc and Me, private use as Co, and reserved unassigned code points as Cn. Unicode 17 conformance clause C3 says a process shall not interpret an unassigned code point as an abstract character. Unicode also defines exactly 66 noncharacters as permanently reserved internal values and private-use meaning as conditional on private agreement. RFC 8259 transport validity therefore does not prove semantic text. NVIDIA's current Chat Completions interface establishes no private-use or unassigned-code-point agreement with this adapter.",
+    "internal_measurement": "A user message containing only U+0000 passed the former strip predicate and reached the authenticated opener. Canonical status-200 responses whose visible content or parsed reasoning contained only escaped U+0000 each reached success, VERIFIED and DONE; the reasoning case also produced digest and character-count provenance. After closing C0/C1, U+200B and then U+0301 independently reproduced the same three failures. U+FDD0 then reached authenticated request execution and visible VERIFIED/DONE, while U+10FFFF reached verified reasoning provenance. U+E000 crossed request and visible-response boundaries and U+10FFFD crossed reasoning provenance. Finally U+0378, measured as Cn by the host Unicode 15.0 database and still unassigned in Unicode 17, crossed all three boundaries. The repaired shared predicate rejects all eighteen paths, while ordinary text containing these scalars around a separate semantic witness remains allowed.",
+    "executable_evidence": [
+      "test_control_only_text_cannot_cross_semantic_text_boundaries",
+      "test_format_only_text_cannot_cross_semantic_text_boundaries",
+      "test_combining_mark_only_text_cannot_cross_semantic_boundaries",
+      "test_noncharacter_only_text_cannot_cross_semantic_boundaries",
+      "test_private_use_only_text_cannot_cross_semantic_boundaries",
+      "test_unassigned_only_text_cannot_cross_semantic_boundaries",
+      "test_blank_text_message_is_blocked_before_network",
+      "test_documented_nvidia_reasoning_message_remains_compatible",
+      "test_del_escape_overflow_is_rejected_before_json_materialization"
+    ],
+    "counterhypothesis": "Preserving an unassigned scalar is sufficient to treat it as semantic provider text for forward compatibility; falsified for the current closed adapter because preservation and interpretation are distinct, Unicode forbids interpreting it as an abstract character, and U+0378 alone crossed all three verified boundaries.",
+    "uncertainty": "This is an explicit local FRANK text-adapter policy, not a claim that every control, format character, mark, private-use, noncharacter or unassigned scalar is invalid in all data. They remain preserved when another semantic witness is present. Cn classification is version-sensitive: the current host exposes Unicode 15.0 data, and a future Python/Unicode upgrade can assign a formerly Cn scalar; the regression pins U+0378 only while it remains Cn. A future typed adapter may authorize pure private-use content with an explicit versioned interpretation agreement. Tool, binary, multimodal and protocol-specific payloads require separate adapters. Modifier symbols remain deliberately unclassified."
+  },
+  "unicode_database_receipt_provenance": {
+    "checked_at": "2026-08-28",
+    "claim": "Every FREE_API_EXECUTION_RECEIPT schema 1.14 record names the exact Unicode Character Database version used by the runtime's semantic-text classifier. A host upgrade cannot silently present version-dependent Cn decisions as equivalent execution provenance.",
+    "sources": [
+      "https://docs.python.org/3/library/unicodedata.html#unicodedata.unidata_version",
+      "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/",
+      "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-4/",
+      "https://www.unicode.org/versions/"
+    ],
+    "external_evidence": "Python exposes unicodedata.unidata_version as the version of the Unicode database used by its module. Unicode states that each published UCD version is stable, that new major versions can add characters or alter property data, and that precise character-property behavior should cite a full version. Unicode implementation guidance also notes that protocols can announce Unicode versions so newer systems can predict downlevel unassigned-character behavior.",
+    "internal_measurement": "Execution receipts at the prior schema 1.1 head applied General_Category-based semantic admission, including the new Cn boundary, but contained no UCD version. On the current Ubuntu-compatible host the classifier uses Unicode 15.0.0; the same payload could therefore change admission after a Python/UCD upgrade while retaining indistinguishable receipt metadata. Schema 1.2 now records unicode_database_version on success and every classified failure receipt.",
+    "executable_evidence": "test_execution_receipt_pins_unicode_database_version",
+    "counterhypothesis": "The runtime version or source commit is sufficient implicit Unicode provenance; rejected because neither appears in the execution receipt and Python distributions can embed different UCD versions independently of FRANK source bytes.",
+    "uncertainty": "The version field identifies the classification database but does not authenticate the host, prove an untampered Python module or freeze future FRANK policy. Reproducible replay still requires the same runtime policy and UCD version."
+  },
+  "receipt_schema_capability_advertisement": {
+    "checked_at": "2026-08-28",
+    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.18 advertises the execution receipt schema version and active Unicode Character Database version before credential use, network access or model execution. Consumers can reject an unsupported provenance contract during capability inspection instead of discovering it only after execution.",
+    "sources": [
+      "https://docs.python.org/3/library/unicodedata.html#unicodedata.unidata_version",
+      "https://www.unicode.org/versions/"
+    ],
+    "external_evidence": "Python exposes the exact UCD version used by unicodedata. Unicode states that version changes can alter property-dependent program behavior and recommends a full three-field version when precise character-property behavior matters. Advertising the execution schema in the capability record is a local FRANK protocol rule derived from those versioned dependencies, not an external Unicode or NVIDIA requirement.",
+    "internal_measurement": "After execution receipts moved to schema 1.2, the capability receipt remained schema 1.1 and exposed neither the execution_receipt_schema_version nor unicode_database_version. A consumer inspecting only capabilities therefore could not determine the post-execution record contract. Shared schema constants now prevent literal drift, and capability schema 1.18 retains both values from the same runtime that constructs execution receipts.",
+    "executable_evidence": "test_capability_receipt_advertises_execution_schema_provenance",
+    "counterhypothesis": "Capability and execution receipts are independently versioned, so consumers can infer the execution contract from source code; rejected because capability inspection is the runtime contract, the source or runtime version is absent from that receipt, and a remote consumer need not possess identical source bytes.",
+    "uncertainty": "The reciprocal version fields identify both record contracts but do not negotiate them, acknowledge consumer support, authenticate the host or prove that deployed code matches reviewed source. Older consumers must explicitly accept the additive capability-1.18 and execution-1.14 contracts."
+  },
+  "execution_schema_capability_provenance": {
+    "checked_at": "2026-08-30",
+    "claim": "Every FREE_API_EXECUTION_RECEIPT schema 1.14 record identifies capability_receipt_schema_version=1.18, binding the post-execution evidence to the capability contract that described routing, cost scope and quarantine semantics.",
+    "sources": [
+      "https://json-schema.org/specification",
+      "https://json-schema.org/draft/2020-12/json-schema-core"
+    ],
+    "external_evidence": "JSON Schema publishes distinct dated specification versions and defines $schema as the dialect identifier against whose meta-schema a schema is valid. Reciprocal FRANK receipt-version binding is a local protocol rule derived from the same need to identify the contract used to interpret a record; JSON Schema does not require this particular application field.",
+    "internal_measurement": "Capability schema 1.18 already advertised execution_receipt_schema_version=1.13, but a successful execution receipt exposed no capability schema field; direct lookup raised KeyError. Execution schema 1.14 now emits capability_receipt_schema_version from the same shared constant that constructs capability receipts, while capability inspection advertises execution schema 1.14. The full 170-test suite passes after the failing assertion was retained as regression evidence.",
+    "executable_evidence": "test_execution_receipt_pins_unicode_database_version",
+    "counterhypothesis": "The execution schema version alone is sufficient to reconstruct the governing capability contract; falsified because capability and execution schemas evolve independently and the execution record previously carried no machine-readable capability version.",
+    "uncertainty": "Version binding is provenance metadata, not cryptographic authentication, schema negotiation, proof that capability inspection occurred, or proof that a consumer accepted either version."
+  },
+  "cost_principal_capability_advertisement": {
+    "checked_at": "2026-08-28",
+    "claim": "FREE_API_CAPABILITY_RECEIPT schema 1.18 advertises execution_cost_policy_principal_scope=process_local_credential_binding, execution_cost_policy_principal_restart_stable=false, fork isolation support and its child_pid_and_monotonic_parent_fork_generation context before any credential use or model execution. A consumer can therefore reject cross-restart cost-lineage assumptions during capability inspection.",
+    "sources": [
+      "https://docs.python.org/3/library/secrets.html",
+      "https://www.freedesktop.org/software/systemd/man/systemd.exec.html"
+    ],
+    "external_evidence": "Python documents token_bytes as cryptographically strong operating-system randomness and identifies 32 bytes as sufficient for typical token use. systemd provides StateDirectory as a distinct persistent service-state mechanism. Those sources support the measured distinction between the current ephemeral process key and a future durable service key; the capability field itself is a local FRANK contract.",
+    "internal_measurement": "Execution schema 1.14 emits cost_policy_principal_scope=process_local_credential_binding and a module reload produces a different principal ID for the same credential. The prior capability receipt advertised only the execution schema and UCD version; reading execution_cost_policy_principal_scope raised KeyError, so pre-execution consumers could not discover the cost-lineage boundary. The repaired capability receipt exposes scope, false restart stability, the host's fork-isolation support and the exact fork context.",
+    "executable_evidence": "test_capability_receipt_advertises_execution_schema_provenance",
+    "counterhypothesis": "Advertising the execution schema version is sufficient because consumers can infer every nested field's lifetime from source code; rejected because the capability receipt is the pre-execution protocol boundary and neither source availability nor schema-specific inference proves process lifetime.",
+    "uncertainty": "This is disclosure, not persistence, key attestation or negotiation. It does not authenticate the process, prove that the key remained secret, or provide a stable identifier across service restart."
+  },
+  "fork_isolated_cost_principal": {
+    "checked_at": "2026-08-28",
+    "claim": "On POSIX hosts supporting os.register_at_fork, every child process derives a domain-separated 256-bit cost-principal HMAC key from the inherited secret, child PID and a monotonically increasing parent fork generation before Python execution resumes. Parent and sequential children therefore cannot emit the same credential-bound cost principal solely because fork copied memory or the kernel reused a PID.",
+    "sources": [
+      "https://docs.python.org/3/library/os.html#os.register_at_fork",
+      "https://man7.org/linux/man-pages/man2/fork.2.html",
+      "https://www.rfc-editor.org/info/rfc2104/"
+    ],
+    "external_evidence": "Linux implements fork with copy-on-write copies of the parent's address space. Python provides before and after_in_child callbacks around fork. RFC 2104 specifies secret-keyed HMAC; FRANK uses a local domain, monotonically increasing parent fork generation and child PID as public context for one child-key derivation.",
+    "internal_measurement": "Before repair, a real Ubuntu os.fork probe produced identical parent and child cost_policy_principal_id 530d72f70db91014 for the same credential, proving that the supposedly process-local key was inherited. The final child callback derives a distinct key without a second entropy read; parent and child identifiers differ and capability plus execution receipts report fork isolation support.",
+    "executable_evidence": "test_cost_principal_process_key_is_reseeded_after_fork",
+    "counterhypothesis": "A module-global random key is automatically process-local because parent and child have different PIDs; falsified because fork retains the calling thread's address space and the untouched key bytes produced identical HMAC lineage in both processes.",
+    "uncertainty": "The guarantee applies only when Python's register_at_fork hook is available and control returns to the Python interpreter. It is not cross-restart durability, protection against an already compromised parent, or a substitute for a durable host key. Multi-threaded fork remains subject to Python and operating-system restrictions."
+  },
+  "fork_entropy_independent_cost_principal": {
+    "checked_at": "2026-08-28",
+    "claim": "Fork isolation does not depend on a fresh operating-system entropy read in the child callback. The inherited secret is transformed with HMAC-SHA-256 over a versioned FRANK domain, parent fork generation and child PID, so an unavailable token_bytes source cannot silently preserve the parent's cost lineage.",
+    "sources": [
+      "https://www.rfc-editor.org/info/rfc2104/",
+      "https://docs.python.org/3/library/hmac.html",
+      "https://www.rfc-editor.org/info/rfc5869/"
+    ],
+    "external_evidence": "RFC 2104 defines HMAC as a secret-keyed construction. RFC 5869 documents HMAC-based derivation from existing keying material and context, while Python exposes HMAC-SHA-256 directly. The exact single-step domain design is local FRANK protocol policy rather than a claim of full HKDF conformance.",
+    "internal_measurement": "With token_bytes forced to raise OSError in the child hook, the previous implementation printed an ignored callback exception and parent plus child both emitted aa439b4835ba83b3 while fork isolation remained advertised. The repaired hook does not call token_bytes after fork; the same injected failure leaves parent and child identifiers distinct, and all 166 tests pass.",
+    "executable_evidence": "test_cost_principal_fork_isolation_survives_entropy_failure",
+    "counterhypothesis": "A failed after_in_child callback aborts the child or clears the isolation claim automatically; falsified because Python reported the exception as ignored, the child continued, and the inherited key produced the parent's identifier.",
+    "uncertainty": "The combined generation and PID context prevents parent-child and sequential same-parent PID-reuse equality but is not a global process identity, provider-account proof or restart-stable key. Fork from third-party C code can bypass Python callbacks."
+  },
+  "fork_generation_prevents_pid_reuse_alias": {
+    "checked_at": "2026-08-28",
+    "claim": "Sequential forks from one Python parent receive distinct cost-principal derivation context even when the operating system reuses the same PID. A before-fork callback advances a monotonic parent generation, and the child binds that generation together with its PID into the HMAC input.",
+    "sources": [
+      "https://man7.org/linux/man-pages/man5/proc_sys_kernel.5.html",
+      "https://docs.python.org/3/library/os.html#os.register_at_fork",
+      "https://www.rfc-editor.org/info/rfc2104/"
+    ],
+    "external_evidence": "Linux documents pid_max as the value at which process identifiers wrap around, so PID reuse is an expected kernel behavior. Python runs registered before callbacks before fork and after_in_child callbacks in the child. RFC 2104 supports secret-keyed authentication of the resulting domain-separated context.",
+    "internal_measurement": "With getpid fixed at 4242 across two real sequential forks, the PID-only implementation emitted identical cost_policy_principal_id ecd020ebe0052459 in both children. After adding the copied monotonic parent fork generation, the same falsifier produces distinct identifiers and all 167 tests pass.",
+    "executable_evidence": "test_reused_child_pid_does_not_reuse_cost_principal",
+    "counterhypothesis": "The child PID alone is sufficient context because live processes have unique identifiers; falsified because uniqueness among simultaneously live processes does not prevent later PID reuse, and controlled equal-PID forks reproduced identical lineage.",
+    "uncertainty": "The generation is local to one interpreter lineage, resets on restart and is not a globally unique process identity. Forks that bypass Python callbacks remain outside this guarantee, and consuming a generation on a failed fork is harmless but leaves gaps."
+  },
+  "fork_isolated_execution_lock": {
+    "checked_at": "2026-08-30",
+    "claim": "On POSIX hosts supporting os.register_at_fork, a forked child replaces the inherited global process execution lock with a fresh unlocked threading.Lock before Python resumes, while each active execute_chat stack retains and releases the exact lock object it acquired. A child continuing from an in-execution callback therefore cannot release the new unlocked global lock or mask its permanent forked_during_active_execution quarantine error. Centralized post-callback checks and a dedicated unsuppressible inner exception path stop an inherited child stack after each currently identified executable transport, cleanup or injected boundary.",
+    "sources": [
+      "https://docs.python.org/3/library/os.html#os.register_at_fork",
+      "https://docs.python.org/3/library/os.html#os.fork",
+      "https://docs.python.org/3/library/functions.html#property",
+      "https://docs.python.org/3/library/urllib.error.html#urllib.error.HTTPError",
+      "https://docs.python.org/3/reference/compound_stmts.html#except-clause",
+      "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
+      "https://pubs.opengroup.org/onlinepubs/9799919799/functions/fork.html"
+    ],
+    "external_evidence": "Python documents after_in_child as the callback point after fork and warns that mixing threads with fork can deadlock because only the calling thread survives. Python also specifies that releasing an unlocked primitive Lock raises RuntimeError and that a primitive Lock is not thread-owned. Its property documentation states that attribute access invokes the getter function, so response metadata access is an executable callback boundary. HTTPError is both an exception and a file-like response carrying code and headers. Python's with semantics always invoke __exit__ after successful __enter__, and its return can suppress a suite exception; try semantics likewise continue after a matching handler completes. Quarantine therefore requires a dedicated exception path that cleanup and ordinary receipt classification cannot suppress. This is local FRANK policy derived from those boundaries.",
+    "internal_measurement": "With PROCESS_EXECUTION_LOCK held in the parent, a real os.fork probe found the copied child lock still unavailable after 100 milliseconds even though the owning parent thread did not exist in the child. Replacing the global lock repaired future acquisition, but a real fork from nonce_factory then exposed a stack-alias bug: execute_chat finally dereferenced the replacement global and raised release unlocked lock. Capturing the acquired lock preserved the quarantine error. Later opener, response-property and exceptional HTTPError forks exposed distinct normal and exceptional continuation gaps, repaired with post-callback and handler-entry checks. The next falsifier forked inside response __exit__ and raised a cleanup RuntimeError only in the child. Because status 500 was already classified, the inner cleanup-suppression handler swallowed both the cleanup error and the quarantine check, yielding no_error:provider_error. A dedicated ForkActiveExecutionQuarantine branch now rethrows unchanged, and the ordinary cleanup handler checks the latch before considering suppression; all 175 tests pass.",
+    "executable_evidence": [
+      "test_execution_lock_is_reinitialized_after_fork",
+      "test_callback_fork_preserves_specific_quarantine_recovery_error",
+      "test_transport_opener_fork_stops_child_before_response_access",
+      "test_response_status_fork_stops_child_before_header_access",
+      "test_transport_http_error_fork_preserves_quarantine_error",
+      "test_response_exit_error_fork_preserves_quarantine_error"
+    ],
+    "counterhypothesis": "The post-with check and outer handler-entry checks make cleanup forks fail closed; falsified because __exit__ raised before the post-with check and the inner classified-response cleanup handler deliberately suppressed its ordinary Exception.",
+    "uncertainty": "The centralized invariant covers the currently enumerated normal-return boundaries, inner cleanup suppression, every existing receipt exception-handler entry, HTTPError metadata and final clock reads. Arbitrary future callbacks, malicious monkeypatches, third-party C forks that skip Python hooks and unrelated inherited locks remain outside the guarantee. The opener may already have initiated an external request before a fork; quarantine cannot cancel or prove its outcome."
+  },
+  "fork_during_active_execution_quarantine": {
+    "checked_at": "2026-08-29",
+    "claim": "A child forked while FRANK's process execution lock is held is quarantined across every subsequently loaded runtime module instance in the same Python interpreter because the parent's authenticated request outcome and payment-hard-stop result are unknowable in the copied child. New execute_chat attempts fail before environment, credential or network access; an inherited stack is rechecked after each currently identified executable callback boundary and stops before consuming the next response field. Capability inventory and routing mark every provider ineligible and select no route.",
+    "sources": [
+      "https://docs.python.org/3/library/os.html#os.fork",
+      "https://docs.python.org/3/library/os.html#os.register_at_fork",
+      "https://docs.python.org/3/library/threading.html#threading.Lock.locked",
+      "https://docs.python.org/3/library/os.html#os.execv",
+      "https://docs.python.org/3/reference/import.html",
+      "https://docs.python.org/3/library/importlib.html#importlib.reload"
+    ],
+    "external_evidence": "Python warns that forking a multi-threaded process is problematic, exposes after_in_child for restoring child state, exposes Lock.locked() to determine whether the copied application lock was held, and documents exec as replacing the current process with a new program. Python's import system permits distinct module objects, and register_at_fork runs child callbacks in registration order without offering unregistration. Python's data model and accepted PEP 562 specify paired module-level __getattr__ and __dir__ hooks: __dir__ must represent names accessible on the module. Sharing and dynamically reading the quarantine through one already-loaded interpreter module is a local FRANK safety mechanism derived from those boundaries, not a Python security primitive.",
+    "internal_measurement": "A background thread was held inside one runtime instance's authenticated opener while the main thread performed a real fork. A second runtime instance loaded before that request kept its earlier module-local false snapshot even after the active instance's child callback set the shared latch: it selected NVIDIA and reached its injected opener, yielding unreachable_provider:True. After execution paths switched to live shared-state reads, the legacy exported attribute still contradicted its own receipt, and later introspection omitted the dynamic name until __dir__ support was added. Normal-return opener, response-property and exceptional opener forks are now stopped. A response-cleanup fork still emitted no_error:provider_error until quarantine received a dedicated unsuppressible inner handler. Capability schema 1.18 announces the live accessor while execution schema 1.14 publishes the shared scope; all 175 tests pass.",
+    "executable_evidence": "test_child_forked_during_active_execution_is_quarantined",
+    "counterhypothesis": "Dynamic __getattr__ alone fully preserves the exported compatibility surface; falsified twice: the former module-global returned a stale false value, and after its removal dir(module) omitted the still-accessible name until paired __dir__ support was added.",
+    "uncertainty": "Python itself deprecates multi-threaded os.fork use and warns of deadlocks. The quarantine is shared within one interpreter but is not authenticated against hostile same-process mutation, does not claim coverage across subinterpreters, and does not repair unrelated library locks, coordinate with the parent, produce cross-process exactly-once semantics or cover forks that bypass Python callbacks. Recovery requires exec or process restart."
+  },
+  "model_availability_capability_scope": {
+    "checked_at": "2026-08-28",
+    "claim": "A provider-level free endpoint capability does not establish that an arbitrary requested model is currently available. Every unprobed inventory row therefore records model_availability_verified=false, and the capability receipt explicitly denies inferring model availability without a probe.",
+    "sources": [
+      "https://build.nvidia.com/explore/discover",
+      "https://build.nvidia.com/openai/gpt-oss-20b",
+      "https://build.nvidia.com/z-ai/glm-5.2",
+      "https://build.nvidia.com/deepseek-ai/deepseek-v4-pro"
+    ],
+    "external_evidence": "NVIDIA describes its catalog as free serverless APIs for development, but its current model pages expose availability per model. The official gpt-oss-20b page reports Free Endpoint Available, while current GLM-5.2 and DeepSeek-V4-Pro pages report Free Endpoint Deprecated. Provider endpoint cost evidence therefore cannot prove deployment of every model identifier.",
+    "internal_measurement": "The prior capability schema marked NVIDIA zero_cost_assured=true and eligible=true from provider-level evidence but contained no separate model-availability state. Because inventory and receipt accept no model identifier and perform no network probe, a consumer could not distinguish endpoint eligibility from concrete model availability. Schema 1.3 now makes that missing evidence explicit without claiming a failed model probe.",
+    "executable_evidence": "test_capability_receipt_does_not_infer_model_availability",
+    "counterhypothesis": "A configured free NVIDIA endpoint implies every syntactically valid requested model is available; falsified by NVIDIA's simultaneous model-specific Available and Deprecated states.",
+    "uncertainty": "This change improves claim scope but does not discover a usable model. A future cost-zero model discovery protocol must bind a fresh model-list or catalog observation to its endpoint, time and model identifier without promoting partner or paid availability. No NVIDIA credential is present on this host, so no live probe or model execution was attempted."
+  },
+  "provider_route_scope": {
+    "checked_at": "2026-08-28",
+    "claim": "A configured route selects only an eligible provider endpoint, not a concrete available model. FREE_API_CAPABILITY_RECEIPT schema 1.18 therefore marks every route with selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/api-reference.html",
+      "https://docs.api.nvidia.com/nim/reference/models-1",
+      "https://build.nvidia.com/models"
+    ],
+    "external_evidence": "NVIDIA documents GET /v1/models as a separate operation that lists models currently loaded and available for inference, while its model catalog presents model-specific endpoints and availability. Selecting the NVIDIA provider endpoint is therefore not equivalent to observing any particular model in that endpoint's current model set.",
+    "internal_measurement": "With a syntactically valid NVIDIA credential, the prior route returned selected=nvidia while every unprobed inventory row correctly retained model_availability_verified=false. Because the route omitted its selection scope and availability state, a consumer could overread selected as model-ready. The regression first raised KeyError for selection_scope; the fixed route explicitly reports provider_endpoint scope and false model availability.",
+    "executable_evidence": "test_route_selection_is_scoped_to_provider_endpoint",
+    "counterhypothesis": "Choosing an eligible provider route also proves the requested model is available; falsified because NVIDIA exposes current model availability through a distinct /v1/models observation and the capability route performs no model-bound network probe.",
+    "uncertainty": "This field closes an inference gap but performs no discovery. A future zero-cost model probe must bind provider origin, exact model identifier, observation time and cost status; a later successful execution remains request-bounded rather than a durable availability guarantee."
+  },
+  "model_availability_execution_evidence": {
+    "checked_at": "2026-08-28",
+    "claim": "FREE_API_EXECUTION_RECEIPT schema 1.14 sets model_availability_verified=true only when the requested model produced a fully typed success response that crossed VERIFIED and DONE. Provider errors, rate limits, pending responses, malformed bodies and transport failures retain false because none proves successful availability of that model.",
+    "sources": [
+      "https://build.nvidia.com/openai/gpt-oss-20b",
+      "https://docs.nvidia.com/nim/large-language-models/latest/api-reference.html"
+    ],
+    "external_evidence": "NVIDIA's current gpt-oss-20b page identifies the exact model string, the integrate.api.nvidia.com Chat Completions endpoint and Free Endpoint Available as separate facts. A validated completion for that requested identifier is executable availability evidence at the observation time; provider-level catalog or endpoint evidence alone is not.",
+    "internal_measurement": "The prior execution schema recorded the requested model and final outcome but lacked an explicit availability-evidence field, while capability schema 1.3 already stated that unprobed availability was false. The regression contrasts an exact valid status-200 completion with HTTP 500: only the former now sets model_availability_verified=true.",
+    "executable_evidence": "test_execution_receipt_scopes_model_availability_to_verified_success",
+    "counterhypothesis": "Any received provider response proves model availability; falsified because HTTP 500 can be produced by routing, infrastructure or provider failures without a valid completion from the requested model.",
+    "uncertainty": "A successful response proves only observed availability for this bounded request and time. It does not guarantee future uptime, remaining quota, model immutability, provider authorship or zero monetary cost independently of the separately bound endpoint-cost policy."
+  },
+  "canonical_blob_write_boundary": {
+    "checked_at": "2026-08-27",
+    "claim": "A successful repository contents write is not accepted as canonical evidence until the returned remote content blob SHA exactly matches git hash-object for the intended local bytes. Large replacement files are assembled from bounded lossless chunks before the write; textual success alone cannot establish byte identity.",
+    "sources": [
+      "https://docs.github.com/rest/repos/contents#create-or-update-file-contents",
+      "https://git-scm.com/docs/git-hash-object",
+      "https://git-scm.com/docs/gitformat-loose"
+    ],
+    "external_evidence": "GitHub's Contents API returns the resulting content object's sha separately from the commit SHA. Git documents git hash-object as computing the blob object ID from a file's contents and defines a blob object ID over its type, byte size and bytes.",
+    "internal_measurement": "A whole-file connector write reported success but its returned blob SHA 932f845e did not match the intended local blob e2b8e662. Remote line-range inspection showed the committed test file ended at line 4098 while the intended suite had 5104 lines: the intermediate command output had been truncated before the write. A first chunk repair was deliberately rejected because redundant join newlines produced cc94fcca. Concatenating bounded chunks without modification produced the exact expected remote blob e2b8e662. A later hard-coded 5201-line transfer of a 5202-line combining-mark falsifier similarly produced 9d170896 and was rejected; the complete rerun produced the intended b0ca233e. In the same cycle a stale 1499-line runtime bound omitted line 1500 and produced 606ef0ad instead of 236fb6d1, while a capped policy transfer stopped at line 1108 of 1130 and produced 36e79792 instead of 97ef255a; both writes were rejected and repaired from complete bounded chunks.",
+    "executable_evidence": [
+      "git hash-object tests/test_free_api_provider_runtime.py",
+      "GitHub Contents API response content.sha",
+      "post-write fetch_file blob sha reread"
+    ],
+    "counterhypothesis": "A successful Contents API response proves that the caller's intended complete bytes were committed; falsified because the API correctly committed the truncated bytes it received and returned success, while only the content-SHA comparison exposed the upstream truncation.",
+    "uncertainty": "This operational invariant detects byte divergence but does not by itself prove semantic correctness, review quality or CI execution. SHA-1 collision resistance is not treated as an authorship guarantee; within this workflow the equality check is an integrity discriminator between two directly measured byte sequences."
+  },
+  "bearer_credential_syntax": {
+    "checked_at": "2026-08-24",
+    "claim": "A configured provider credential is routable only when it is at most 8192 characters and matches the RFC 6750 b64token grammar before normalization, scanning or Authorization-header construction; oversized values, whitespace, CR/LF, non-ASCII and other separators fail closed before network access.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc6750.html#section-2.1",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-5.4",
+      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html"
+    ],
+    "executable_evidence": [
+      "test_invalid_bearer_credential_is_blocked_before_network",
+      "test_oversized_bearer_credential_is_blocked_before_header_and_network"
+    ],
+    "counterhypothesis": "A syntactically valid b64token is automatically bounded credential evidence and the HTTP stack can impose limits later; falsified because an 8193-character value was selected for authenticated routing and reached header construction, while the exact 8192-character policy boundary remains accepted."
+  },
+  "credential_cost_principal_binding": {
+    "checked_at": "2026-08-28",
+    "claim": "Execution schema 1.14 binds cost_policy_principal_id to the exact validated credential through a domain-separated HMAC-SHA-256 pseudonym keyed by a fresh 256-bit process secret; forked children derive a domain-separated child key from that secret without requiring a second entropy read. Rotating a credential changes cost lineage without serializing it, while a receipt alone no longer supplies a deterministic offline verifier for guessed credential values. Receipts explicitly scope the handle as process_local_credential_binding rather than a verified provider account identity.",
+    "sources": [
+      "https://www.rfc-editor.org/info/rfc2104/",
+      "https://docs.python.org/3/library/hmac.html",
+      "https://docs.python.org/3/library/secrets.html",
+      "https://pages.nist.gov/800-63-4/sp800-63b.html",
+      "research_entity/rooms/rooms/center/events/20260811T105521Z_live_cost_principal_payment_boundary.json"
+    ],
+    "external_evidence": "RFC 2104 and Python define HMAC with distinct key and message inputs; Python secrets supplies operating-system cryptographic randomness suitable for secret management. NIST requires password verifiers to resist offline guessing; that requirement is analogous threat guidance rather than a direct API-token storage rule. The repo-native cost-principal research required a host-held opaque handle or keyed pseudonym and explicitly rejected treating provider/key-name identity as billing-account identity.",
+    "internal_measurement": "The first repair correctly separated two rotated credentials, but used the credential as HMAC key over a completely public message. A receipt-only test recomputed the exact published cost_policy_principal_id fad403426b45679e from one guessed credential and public context. With a random non-receipted process key, the same public calculation no longer matches; credential rotation still changes lineage, and loading a fresh runtime produces a distinct principal ID for the same credential.",
+    "executable_evidence": "test_credential_rotation_changes_cost_principal_lineage_without_exposure",
+    "counterhypothesis": "Using the bearer credential itself as the HMAC key hides it because HMAC is keyed; falsified because the authenticated message and downstream hash input were public, so each guessed credential deterministically reproduced or rejected the receipt value offline.",
+    "uncertainty": "The repaired HMAC handle distinguishes credential bytes only within one process. It intentionally changes after restart and still does not prove provider account, billing principal, project, entitlement, owner or current zero-cost balance. A restart-stable opaque handle requires separate durable host key management and owner-approved state semantics."
+  },
+  "dual_request_cost_identity": {
+    "checked_at": "2026-08-28",
+    "claim": "Execution schema 1.14 separates a credential-independent semantic_request_id from the process-local credential-bound request_id and cost_policy_principal_id. Equal serialized requests to the same provider endpoint retain semantic correlation across credential rotation, while different payloads and different cost authorities retain distinct execution lineage.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
+      "https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-idempotency-key-header-07",
+      "research_entity/rooms/rooms/center/events/20260811T105521Z_live_cost_principal_payment_boundary.json"
+    ],
+    "external_evidence": "RFC 9110 permits automatic retry of a non-idempotent method only with independent knowledge that its semantics are idempotent or that the original request was never applied. The current expired IETF Idempotency-Key draft defines a separate client value that a resource processes to recognize retries; FRANK sends no such provider-supported header. The repo-native cost-boundary research requires separate semantic and cost/execution identities.",
+    "internal_measurement": "Before repair, rotating the credential for an otherwise identical validated request changed the only request_id, and no field preserved semantic correlation. After repair, the two receipts retain one semantic_request_id while cost_policy_principal_id and request_id differ. Two equal-length requests whose content differs retain different semantic_request_id values.",
+    "executable_evidence": [
+      "test_credential_rotation_changes_cost_principal_lineage_without_exposure",
+      "test_different_equal_length_payloads_have_distinct_request_ids"
+    ],
+    "counterhypothesis": "One cost-bound request identifier is sufficient for both semantic correlation and payment authority; falsified because credential rotation either destroys semantic continuity or, if omitted from identity, aliases potentially different billing authorities.",
+    "uncertainty": "semantic_request_id is a local digest-derived correlation handle, not provider acknowledgement, authorship, exactly-once execution, replay authorization or an Idempotency-Key. A retry remains forbidden unless separate provider-supported idempotency or proof of non-application exists."
+  },
+  "incomplete_body_errors": {
+    "checked_at": "2026-08-11",
+    "claim": "http.client.IncompleteRead after a received response is an incomplete provider response, not an unhandled process exception.",
+    "source": "https://docs.python.org/3/library/http.client.html#http.client.IncompleteRead",
+    "executable_evidence": "test_incomplete_http_body_preserves_status_and_emits_receipt",
+    "counterhypothesis": "Timeout handling covers every interrupted body read; falsified because IncompleteRead is an HTTPException rather than TimeoutError or URLError and escaped without a receipt."
+  },
+  "pre_response_disconnects": {
+    "checked_at": "2026-08-11",
+    "claim": "A ConnectionError such as http.client.RemoteDisconnected before response headers is an unreachable provider attempt with null status and no EXECUTED state.",
+    "source": "https://docs.python.org/3/library/http.client.html#http.client.RemoteDisconnected",
+    "executable_evidence": "test_remote_disconnect_before_response_emits_unreachable_receipt",
+    "counterhypothesis": "urllib always wraps remote disconnects in URLError; falsified by the executable opener path where RemoteDisconnected escaped directly without a receipt."
+  },
+  "malformed_http_status": {
+    "checked_at": "2026-08-11",
+    "claim": "A BadStatusLine before valid response headers is an unreachable provider attempt with null status and no EXECUTED state.",
+    "source": "https://docs.python.org/3/library/http.client.html#http.client.BadStatusLine",
+    "executable_evidence": "test_bad_status_line_before_response_emits_unreachable_receipt",
+    "counterhypothesis": "Only timeout, URL and connection exceptions can occur before a response; falsified because BadStatusLine is an independent HTTPException and escaped without a receipt."
+  },
+  "transport_os_errors": {
+    "checked_at": "2026-08-12",
+    "claim": "Transport-layer OSError failures such as ssl.SSLError before response headers are unreachable provider attempts with null status and no EXECUTED state.",
+    "source": "https://docs.python.org/3/library/ssl.html#ssl.SSLError",
+    "executable_evidence": "test_tls_error_before_response_emits_unreachable_receipt",
+    "counterhypothesis": "urllib always wraps TLS failures in URLError or ConnectionError; falsified by the executable opener path where SSLError propagated directly without a receipt."
+  },
+  "transport_post_replay_safety": {
+    "checked_at": "2026-08-13",
+    "claim": "A Chat Completions POST with a transport or response-read failure is not automatically retryable unless the client can prove the original request was never applied or the operation is idempotent.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
+      "https://docs.python.org/3/library/http.client.html#http.client.RemoteDisconnected"
+    ],
+    "executable_evidence": "test_transport_ambiguity_cannot_trigger_automatic_post_replay",
+    "counterhypothesis": "No response bytes or an incomplete response proves the POST was not applied and makes blind retry safe; falsified because RemoteDisconnected describes failure while reading the response, and the adapter cannot observe whether the provider already processed the request."
+  },
+  "generic_provider_error_replay_safety": {
+    "checked_at": "2026-08-13",
+    "claim": "Generic 4xx and 5xx responses to a non-idempotent Chat Completions POST are not automatically retryable; a received status never proves replay safety.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-15.6"
+    ],
+    "executable_evidence": "test_generic_provider_errors_cannot_trigger_automatic_post_replay",
+    "counterhypothesis": "Every non-429 provider error becomes safe to replay after a short cooldown; falsified because unchanged 4xx requests require request, credential or policy correction, while a 5xx response does not prove that the original POST had no application-side effects."
+  },
+  "rate_limit_retry_after": {
+    "checked_at": "2026-08-14",
+    "claim": "A received HTTP 429 Retry-After field controls when a later request may be attempted and is parsed in either delay-seconds or HTTP-date form across regular-response and HTTPError paths. Absolute HTTP-date cooldown is calculated from response receipt time, not request start; neither form authorizes automatic replay of the same non-idempotent POST.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc6585.html#section-4",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": [
+      "test_rate_limit_retry_after_controls_cooldown_without_post_replay",
+      "test_http_date_retry_after_is_relative_to_response_receipt_time",
+      "test_duration_and_http_date_retry_after_use_distinct_clocks"
+    ],
+    "counterhypothesis": "Retry-After both supplies the cooldown and proves that identical POST replay is safe, or an HTTP-date can be subtracted from request start; falsified because RFC 6585 only describes when to make a new request, RFC 9110 separately requires replay-safety evidence, and a 100-second request inflated a 40-second remaining window to 140 seconds."
+  },
+  "oversized_retry_after": {
+    "checked_at": "2026-08-24",
+    "claim": "Retry-After metadata is limited to 128 characters before normalization, digit scanning or HTTP-date parsing. Larger values use the conservative 60-second fallback and cannot impose unbounded post-response parsing work or suppress the received HTTP 429 receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#integer-string-conversion-length-limitation",
+      "https://docs.python.org/3/library/email.utils.html#email.utils.parsedate_to_datetime",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": [
+      "test_oversized_retry_after_emits_receipt_with_safe_fallback",
+      "test_impossible_retry_after_skips_parser_and_preserves_429_receipt",
+      "test_retry_after_cooldown_is_bounded_in_receipts"
+    ],
+    "counterhypothesis": "An exact built-in string is bounded enough to pass to Retry-After parsers after a received response; falsified locally because a 129-character syntactically impossible value reached parsedate_to_datetime after HTTP 429. A 100-digit delay remains accepted and safely caps to 86400 seconds."
+  },
+  "retry_after_header_access_failure": {
+    "checked_at": "2026-08-14",
+    "claim": "Failure while reading Retry-After metadata from a transport adapter cannot suppress or reclassify an already received HTTP 429; regular-response and HTTPError paths retain rate_limited plus EXECUTED and use the conservative 60-second fallback.",
+    "sources": [
+      "https://docs.python.org/3/library/urllib.error.html#urllib.error.HTTPError",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": "test_retry_after_header_access_failure_preserves_rate_limit_receipt",
+    "counterhypothesis": "Header lookup is total once an adapter exposes a headers object; falsified by an injected mapping-compatible adapter whose get operation raises ValueError: the regular-response path changed 429 to invalid_provider_response and the HTTPError path escaped without a receipt."
+  },
+  "passive_retry_after_value_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "A Retry-After value returned by a transport adapter must be an exact built-in string before parsing; polymorphic string subclasses use the conservative 60-second fallback without executing overridden methods, reclassifying the received HTTP 429 or suppressing its receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": "test_active_retry_after_value_preserves_rate_limit_receipt",
+    "counterhypothesis": "isinstance(value, str) proves that a transport-provided Retry-After value is passive text; falsified locally because a str subclass executed its overridden strip method, downgraded a regular 429 to incomplete_provider_response and escaped the HTTPError path without a receipt."
+  },
+  "response_header_property_failure": {
+    "checked_at": "2026-08-14",
+    "claim": "The transport adapter's headers attribute is optional metadata behind a potentially executable descriptor. Failure while retrieving that property cannot suppress or reclassify an already received HTTP 429; both response forms use the 60-second fallback and retain EXECUTED.",
+    "sources": [
+      "https://docs.python.org/3/howto/descriptor.html#properties",
+      "https://docs.python.org/3/library/urllib.error.html#urllib.error.HTTPError",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": "test_header_property_failure_preserves_received_429_receipt",
+    "counterhypothesis": "Catching failures from the header mapping's get method fully contains untrusted metadata access; falsified because a property descriptor can raise before a mapping object is returned, causing regular 429 misclassification and an escaped HTTPError path."
+  },
+  "response_status_property_failure": {
+    "checked_at": "2026-08-14",
+    "claim": "Status and code attributes supplied by a transport adapter are executable metadata lookups. If retrieval fails, the adapter emits invalid_provider_response with null status and without EXECUTED, rather than escaping without a receipt or inventing a status.",
+    "sources": [
+      "https://docs.python.org/3/howto/descriptor.html#properties",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-15"
+    ],
+    "executable_evidence": "test_status_property_failure_emits_fail_closed_receipt",
+    "counterhypothesis": "Status and HTTPError code attributes are passive values and cannot fail during access; falsified by response and HTTPError property descriptors whose RuntimeError escaped both receipt paths."
+  },
+  "passive_http_status_value_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "HTTP status metadata must be an exact built-in integer before range or classification comparisons; boolean and polymorphic integer values fail closed with null status and without EXECUTED, and no overridden comparison operator may run.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-15"
+    ],
+    "executable_evidence": "test_active_http_status_value_emits_fail_closed_receipt",
+    "counterhypothesis": "isinstance(value, int) plus excluding bool proves that transport status is passive numeric metadata; falsified locally because an int subclass executed its overridden comparison operator, changed the regular response to unreachable_provider and escaped the HTTPError path without a receipt."
+  },
+  "unexpected_transport_adapter_failure": {
+    "checked_at": "2026-08-14",
+    "claim": "A custom transport adapter can raise an Exception outside urllib's documented hierarchy. The outer execution boundary emits unreachable_provider before a valid response or incomplete_provider_response after valid status metadata, remains nonretryable, and deliberately does not catch BaseException process-control signals.",
+    "sources": [
+      "https://docs.python.org/3/library/exceptions.html#exception-hierarchy",
+      "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement"
+    ],
+    "executable_evidence": "test_unexpected_transport_adapter_failures_emit_receipts",
+    "counterhypothesis": "URLError, OSError and HTTPException cover every opener, context-manager and body-read failure; falsified by custom adapter RuntimeError before response and during body read, both of which escaped without receipts."
+  },
+  "bounded_retry_after_cooldown": {
+    "checked_at": "2026-08-14",
+    "claim": "Retry-After cooldown metadata is bounded to 86400 seconds in receipts for both delay-seconds and HTTP-date forms; the nonretryable request requires fresh operator or scheduler evaluation beyond that horizon.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3",
+      "internal:FREE_API_EXECUTION_POLICY.invariants.bounded_cooldown"
+    ],
+    "executable_evidence": "test_retry_after_cooldown_is_bounded_in_receipts",
+    "counterhypothesis": "Syntactically valid Retry-After values are inherently operationally bounded; falsified by a 100-digit delay and a year-9999 HTTP-date that produced unbounded receipt integers on both response paths."
+  },
+  "http_status_validation": {
+    "checked_at": "2026-08-12",
+    "claim": "A provider adapter must supply an integer HTTP status from 100 through 599 before the body is consumed or EXECUTED is asserted; missing, boolean, textual and out-of-range values are invalid.",
+    "source": "https://www.rfc-editor.org/rfc/rfc9110.html#section-15",
+    "executable_evidence": "test_invalid_http_status_is_rejected_before_body_and_execution_state",
+    "counterhypothesis": "A missing adapter status can safely default to 200 and Python isinstance(value, int) is sufficient; falsified because missing status verified arbitrary content and bool is an int subclass."
+  },
+  "http_response_body_type": {
+    "checked_at": "2026-08-12",
+    "claim": "The HTTP adapter body must be bytes before JSON parsing; text and bytearray values are invalid transport responses even when they contain valid JSON.",
+    "sources": [
+      "https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse.read",
+      "https://docs.python.org/3/library/json.html#json.loads"
+    ],
+    "executable_evidence": "test_non_bytes_response_body_cannot_reach_verified_state",
+    "counterhypothesis": "Successful json.loads parsing proves a valid HTTP body; falsified because json.loads intentionally accepts str and bytearray in addition to bytes."
+  },
+  "passive_http_response_body_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "A transport-provided HTTP response body must be an exact built-in bytes value before size measurement or UTF-8 decoding; bytes subclasses remain invalid_provider_response and no overridden length or decode method may execute.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://docs.python.org/3/reference/datamodel.html#special-method-lookup",
+      "https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse.read"
+    ],
+    "executable_evidence": "test_active_bytes_response_body_cannot_execute_methods",
+    "counterhypothesis": "isinstance(value, bytes) proves that an adapter body is passive immutable transport data; falsified locally because a bytes subclass executed its overridden __len__ after HTTP 200 and changed invalid adapter metadata into incomplete_provider_response."
+  },
+  "network_json_encoding": {
+    "checked_at": "2026-08-14",
+    "claim": "Network-transmitted provider JSON is decoded strictly as UTF-8 before parsing; UTF-16 and UTF-32 response bodies cannot reach VERIFIED or DONE.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc8259.html#section-8.1",
+      "https://docs.python.org/3/library/json.html#json.loads"
+    ],
+    "executable_evidence": "test_non_utf8_network_json_cannot_reach_verified_state",
+    "counterhypothesis": "Passing response bytes directly to Python json.loads enforces the network JSON encoding contract; falsified because the decoder automatically recognized UTF-16 and UTF-32 bodies and both reached success, VERIFIED and DONE."
+  },
+  "strict_json_numbers": {
+    "checked_at": "2026-08-14",
+    "claim": "Provider response JSON containing NaN, Infinity, -Infinity or an exponent that overflows the runtime float range is invalid and cannot reach VERIFIED or DONE.",
+    "sources": [
+      "https://datatracker.ietf.org/doc/html/rfc8259#section-6",
+      "https://docs.python.org/3/library/json.html#json.loads"
+    ],
+    "executable_evidence": [
+      "test_nonfinite_json_constants_cannot_reach_verified_state",
+      "test_overflowing_json_exponents_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "Rejecting the nonstandard NaN and Infinity literals through parse_constant is sufficient to keep non-finite values out; falsified because CPython decodes RFC-grammar exponents such as 1e400 through the separate default float path and produced infinity that reached success, VERIFIED and DONE."
+  },
+  "unique_json_object_names": {
+    "checked_at": "2026-08-12",
+    "claim": "Provider response objects with duplicate member names are ambiguous across parsers and cannot reach VERIFIED or DONE.",
+    "sources": [
+      "https://datatracker.ietf.org/doc/html/rfc8259#section-4",
+      "https://docs.python.org/3/library/json.html#repeated-names-within-an-object"
+    ],
+    "executable_evidence": "test_duplicate_json_names_cannot_reach_verified_state",
+    "counterhypothesis": "Python's last-name-wins behavior is a safe canonical interpretation; falsified as a portability claim because RFC 8259 documents error, last-only and all-pairs behaviors as interoperably unpredictable."
+  },
+  "json_nesting_failure_receipts": {
+    "checked_at": "2026-08-12",
+    "claim": "Excessively nested provider JSON that reaches Python's recursion limit must emit invalid_provider_response rather than escape without an execution receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/json.html",
+      "https://docs.python.org/3/library/exceptions.html#RecursionError"
+    ],
+    "executable_evidence": "test_excessive_json_nesting_emits_invalid_response_receipt",
+    "counterhypothesis": "The 2000000-byte response limit is sufficient to bound every JSON parser failure; falsified by a roughly 40000-byte, 20000-level array that raised RecursionError without a receipt."
+  },
+  "unicode_scalar_text_boundaries": {
+    "checked_at": "2026-08-13",
+    "claim": "Text-chat request and response strings must contain Unicode scalar values; lone UTF-16 surrogates cannot cross the authenticated request boundary or reach VERIFIED/DONE.",
+    "source": "https://datatracker.ietf.org/doc/html/rfc8259#section-8.2",
+    "executable_evidence": [
+      "test_unpaired_request_surrogate_is_blocked_before_network",
+      "test_unpaired_json_surrogate_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "Successful Python json.loads parsing proves an interoperable Unicode string; falsified because an escaped lone surrogate was decoded as str and reached success/VERIFIED/DONE even though RFC 8259 calls receiver behavior unpredictable."
+  },
+  "plain_text_message_fields": {
+    "checked_at": "2026-08-13",
+    "claim": "The plain-text adapter accepts exactly role and content in each message; tool_calls, tool_call_id, name, reasoning_content and future extension fields require an explicitly typed adapter.",
+    "sources": [
+      "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
+      "https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html"
+    ],
+    "executable_evidence": "test_extra_message_fields_are_blocked_before_network",
+    "counterhypothesis": "Validating role and content is enough for a text-only adapter; falsified because an assistant message carrying tool_calls passed unchanged to the authenticated network opener."
+  },
+  "nonempty_text_conversation": {
+    "checked_at": "2026-08-13",
+    "claim": "NVIDIA Chat Completions requires messages to contain at least one item; an empty conversation is rejected before credential use or network access.",
+    "source": "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
+    "executable_evidence": "test_empty_message_list_is_blocked_before_network",
+    "counterhypothesis": "Provider-side validation is sufficient; falsified because an empty messages list reached the authenticated opener and caused an avoidable network attempt."
+  },
+  "nonblank_text_message_content": {
+    "checked_at": "2026-08-14",
+    "claim": "Every role/content message handled by this plain-text adapter requires nonblank scalar text before credential use or network access. This is a fail-closed adapter rule, not an additional NVIDIA schema claim: empty content can have meaning only in typed tool or multimodal paths, which this adapter rejects separately.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/advanced/get-started-nemotron-3.5-lightning.html",
+      "https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html"
+    ],
+    "executable_evidence": "test_blank_text_message_is_blocked_before_network",
+    "counterhypothesis": "Provider-side validation or an empty text message is sufficient for this adapter; falsified locally because empty and whitespace-only user content both reached the authenticated opener despite carrying no typed tool or multimodal payload."
+  },
+  "text_conversation_sequence": {
+    "checked_at": "2026-08-13",
+    "claim": "NVIDIA Chat Completions requires user and assistant messages to alternate, the final input message to have role user, and an optional system message to be first; invalid sequences are rejected before credential use or network access.",
+    "source": "https://docs.api.nvidia.com/nim/reference/meta-llama-3_1-70b-infer",
+    "executable_evidence": "test_invalid_conversation_sequence_is_blocked_before_network",
+    "counterhypothesis": "Validating each role independently is sufficient; falsified because assistant-ended, consecutive-user and late-system conversations all reached the authenticated opener despite violating the documented conversation grammar."
+  },
+  "plain_text_response_fields": {
+    "checked_at": "2026-08-13",
+    "claim": "A text-only response message requires role assistant plus scalar content only; missing authorship, tool_calls and other typed response extensions cannot reach VERIFIED or DONE through this adapter.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/deployment/csp-deployment/aws.html",
+      "https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html"
+    ],
+    "executable_evidence": [
+      "test_response_tool_calls_cannot_reach_text_verified_state",
+      "test_missing_assistant_role_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "A nonempty content string plus terminal finish reason is sufficient proof of a complete text response; falsified because both a response carrying tool_calls and a response without assistant authorship reached success/VERIFIED/DONE."
+  },
+  "closed_text_response_choice_schema": {
+    "checked_at": "2026-08-25",
+    "claim": "FRANK v0.1's non-streaming plain-text adapter requires finish_reason and message, permits NVIDIA's documented index=0 plus null logprobs, stop_reason and token_ids metadata, and rejects any unknown or semantically unhandled choice field before VERIFIED or DONE.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/1.7.0/system-example.html",
+      "https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html"
+    ],
+    "external_evidence": "NVIDIA's non-streaming LLM examples include index, logprobs and stop_reason alongside message and finish_reason; current examples can also include token_ids. These documented passive values remain compatible only in the exact forms that the text adapter understands.",
+    "internal_measurement": "A status-200 response carrying an unrecognized choice extension previously returned success and reached VERIFIED and DONE even though the adapter neither typed nor preserved the extension.",
+    "executable_evidence": [
+      "test_response_choice_extensions_cannot_reach_verified_state",
+      "test_documented_nvidia_choice_metadata_remains_compatible"
+    ],
+    "counterhypothesis": "Unknown choice metadata is harmless to ignore; falsified for FRANK's verification claim because an unmodeled extension reached success, VERIFIED and DONE without typed handling or provenance.",
+    "uncertainty": "Non-null log probabilities, stop reasons, token IDs or future NVIDIA/OpenAI-compatible extensions remain rejected until FRANK gives each value explicit typed handling and verification semantics."
+  },
+  "single_text_response_choice": {
+    "checked_at": "2026-08-25",
+    "claim": "FRANK v0.1 explicitly requests n=1 and requires the non-streaming provider response to contain exactly one choice. A response with zero or multiple choices remains EXECUTED but cannot be partially represented as VERIFIED or DONE.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/1.7.0/system-example.html",
+    "external_evidence": "NVIDIA's official non-streaming Chat Completions examples set n to 1 and return one index-0 choice.",
+    "internal_measurement": "A status-200 response containing two valid choices previously returned the first content as success and reached VERIFIED and DONE without validating or representing the second choice.",
+    "executable_evidence": "test_multiple_response_choices_cannot_be_partially_verified",
+    "counterhypothesis": "Verifying choices[0] is sufficient because additional choices can be ignored; falsified for FRANK's receipt claim because a second distinct completion crossed the execution boundary without validation or provenance.",
+    "uncertainty": "Multi-choice generation remains intentionally unsupported; a future adapter must type, verify and receipt every returned choice before requesting n greater than one."
+  },
+  "response_choice_index_provenance": {
+    "checked_at": "2026-08-25",
+    "claim": "FRANK v0.1 requires its single non-streaming Chat Completions choice to assert the exact built-in integer index=0 before content can reach VERIFIED or DONE.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/reference/api-reference.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
+    ],
+    "external_evidence": "NVIDIA identifies vLLM as the NIM inference backend and directs full schemas to it. The official vLLM ChatCompletionResponseChoice declares index as a required integer, while FRANK requests n=1 and supports only choice zero.",
+    "internal_measurement": "A status-200 response with exactly one otherwise valid Chat Completion choice but no index previously returned success and reached VERIFIED and DONE.",
+    "executable_evidence": "test_missing_response_choice_index_cannot_reach_verified_state",
+    "counterhypothesis": "Exactly one returned choice makes its index safely inferable; falsified for receipt provenance because FRANK promoted an index the provider response never asserted despite the backend schema requiring it.",
+    "uncertainty": "No Ubuntu NVIDIA live receipt is available on this host; the required index is supported by the official backend contract and local executable evidence. Multi-choice handling remains outside the v0.1 text adapter."
+  },
+  "provider_response_id_provenance": {
+    "checked_at": "2026-08-26",
+    "claim": "Every successful non-streaming Chat Completions response must contain an exact built-in id of at most 256 ASCII characters in the canonical chatcmpl- form. Its nonempty suffix is closed to ASCII letters, digits, hyphen, period and underscore. FRANK retains its SHA-256 digest in the execution receipt and never serializes the raw provider identifier.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/reference/api-reference.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
+    ],
+    "external_evidence": "NVIDIA's current expected Chat Completions response uses a chatcmpl- identifier. NVIDIA identifies vLLM as the NIM inference backend; the official vLLM ChatCompletionResponse generates every id from the chatcmpl- prefix plus a random UUID.",
+    "internal_measurement": "Status-200 responses with the required chat.completion discriminator, matching model and exact index-zero terminal choice previously returned success and reached VERIFIED and DONE when provider id was absent, contained only whitespace, or used an embedded JSON-escaped newline after a plausible chatcmpl- prefix. The control-bearing value was hashed and exposed as if it were canonical provider identity. After the fix it is rejected while chatcmpl-Az09._- remains compatible.",
+    "executable_evidence": "test_missing_response_id_cannot_reach_verified_state; test_noncanonical_response_id_cannot_reach_verified_state; test_control_character_response_id_cannot_reach_verified_state; test_canonical_ascii_response_id_suffix_remains_compatible",
+    "counterhypothesis": "A valid prefix plus any bounded Unicode-scalar suffix is sufficient because only a digest enters the receipt; falsified because control-bearing data still crossed VERIFIED/DONE under a canonical-identity claim, while the documented backend generates a random UUID and NVIDIA's current example uses a compact hexadecimal suffix.",
+    "uncertainty": "The 256-character ceiling, exact suffix alphabet and raw-ID redaction are local FRANK v0.1 safety policy, not an NVIDIA guarantee. The accepted alphabet intentionally exceeds the currently evidenced hexadecimal examples for compatibility, while control characters, whitespace and non-ASCII remain unverified. The digest does not authenticate uniqueness or provider authorship. No Ubuntu NVIDIA live receipt is available on this host."
+  },
+  "provider_response_created_provenance": {
+    "checked_at": "2026-08-27",
+    "claim": "Every successful non-streaming Chat Completions response must contain created as an exact built-in integer between 1 and 9999999999 inclusive and within plus or minus FRANK's explicit 300-second clock-skew allowance around the local response-receipt wall time. The receipt retains the provider assertion, local observation and both directional allowances separately.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/reference/api-reference.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
+    ],
+    "external_evidence": "NVIDIA identifies vLLM as the NIM inference backend and directs full schemas to it. The official vLLM ChatCompletionResponse serializes created from int(time.time()), and NVIDIA's current expected response carries a positive Unix-seconds value.",
+    "internal_measurement": "Status-200 responses containing the required object, provider id, matching model and exact terminal choice previously returned success and reached VERIFIED and DONE when created was omitted, asserted zero, asserted 301 seconds after local receipt, or asserted 301 seconds before local receipt. After the fixes, both 301-second violations are rejected while each exact 300-second boundary remains compatible. Synthetic success fixtures now pin their wall clock explicitly rather than inheriting the test host date.",
+    "executable_evidence": "test_missing_response_created_cannot_reach_verified_state; test_zero_response_created_cannot_reach_verified_state; test_future_response_created_cannot_reach_verified_state; test_response_created_at_future_skew_boundary_remains_compatible; test_stale_response_created_cannot_reach_verified_state; test_response_created_at_past_skew_boundary_remains_compatible",
+    "counterhypothesis": "Only future timestamps need a client relation because any positive past value remains plausible; falsified for FRANK's fresh-execution receipt because an arbitrarily stale or replayed provider assertion crossed VERIFIED/DONE even though the official backend derives created from its current wall time.",
+    "uncertainty": "created and the client wall clock are unauthenticated assertions and neither proves provider authorship or prevents replay within the accepted window. Both 300-second allowances are conservative local FRANK model judgment, not NVIDIA guarantees; real host clocks can be misconfigured. No Ubuntu NVIDIA live receipt is available on this host."
+  },
+  "provider_response_usage_provenance": {
+    "checked_at": "2026-08-26",
+    "claim": "Every successful non-streaming Chat Completions response must contain a usage object with exact built-in, locally bounded prompt_tokens, completion_tokens and total_tokens integers. The closed adapter's required nonempty text request and visible response require both component counts to be positive, completion_tokens cannot exceed the exact 4096-token output budget sent in max_tokens, and total_tokens must equal the component sum. FRANK retains those three provider-asserted counts in the execution receipt.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/deployment/csp-deployment/aws.html",
+      "https://docs.nvidia.com/nim/large-language-models/latest/reference/api-reference.html",
+      "https://docs.nvidia.com/nim/large-language-models/2.0.6/day-0/get-started-nemotron-3-ultra.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/serving/"
+    ],
+    "external_evidence": "NVIDIA's official expected non-streaming responses pair nonempty chat messages and generated assistant text with positive prompt_tokens and completion_tokens. NVIDIA states that max_tokens caps the total generated tokens for a request and that completion_tokens remains the combined reasoning-plus-content total. Official vLLM maps max_tokens to max_output_tokens and derives completion_tokens from generated token-ID lengths.",
+    "internal_measurement": "Three canonical status-200 responses previously returned success and reached VERIFIED and DONE despite asserting respectively zero completion tokens for nonempty visible content, zero prompt tokens for the adapter's required nonempty text request, and 4097 completion tokens despite FRANK's exact max_tokens=4096 request. The existing omission falsifier separately proves that the entire usage object cannot be absent.",
+    "executable_evidence": "test_missing_response_usage_cannot_reach_verified_state; test_visible_content_requires_positive_completion_tokens; test_nonempty_text_request_requires_positive_prompt_tokens; test_completion_usage_cannot_exceed_requested_output_limit",
+    "counterhypothesis": "Structurally valid text and internally consistent usage arithmetic are sufficient even when a component is zero or completion_tokens exceeds the requested generation cap; falsified because vLLM derives both components from their token-ID sequences and NVIDIA defines max_tokens as the total generated-token cap.",
+    "uncertainty": "Provider token counts remain unauthenticated assertions and do not establish billing, monetary cost or exact character-to-token mappings. Prompt embeddings can legitimately report zero prompt tokens in a different NVIDIA endpoint mode, but this closed text-chat adapter neither requests nor accepts that mode. The 9999999999 general receipt ceiling and positive-component invariants are local FRANK v0.1 verification policy; 4096 is FRANK's exact request budget, not a global NVIDIA model limit. No Ubuntu NVIDIA live receipt is available on this host."
+  },
+  "provider_response_usage_detail_compatibility": {
+    "checked_at": "2026-08-26",
+    "claim": "The v0.1 text adapter accepts only two non-null usage detail forms: prompt_tokens_details.cached_tokens and completion_tokens_details.reasoning_tokens. Each must be one exact built-in nonnegative integer no greater than its prompt_tokens or completion_tokens parent, and the complete accepted detail object is retained in the receipt.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/2.0.5/day-0/get-started-nemotron-3-ultra.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/engine/protocol/",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/serving/"
+    ],
+    "external_evidence": "NVIDIA documents completion_tokens_details.reasoning_tokens for reasoning-enabled Nemotron NIM responses and states that completion_tokens remains the combined generated-token count. Official vLLM declares prompt_tokens_details.cached_tokens and constructs it from the cached subset of prompt tokens.",
+    "internal_measurement": "An otherwise canonical status-200 response with completion_tokens_details.reasoning_tokens previously remained EXECUTED but was rejected as invalid_provider_response solely because every non-null usage detail object was blocked.",
+    "executable_evidence": "test_documented_nvidia_reasoning_usage_remains_compatible",
+    "counterhypothesis": "Rejecting every non-null usage detail is the safest compatible v0.1 policy; falsified because it rejects an officially documented NVIDIA success shape while a closed bounded sub-schema can preserve both safety and provenance.",
+    "uncertainty": "Usage-detail schemas vary across backend versions and models. FRANK accepts only the two evidenced one-field objects; all other keys, non-integers, negative values and child counts exceeding their parent remain unverified. No Ubuntu NVIDIA live receipt is available on this host."
+  },
+  "provider_response_reasoning_metadata_compatibility": {
+    "checked_at": "2026-08-27",
+    "claim": "A stopped v0.1 text response may carry message.reasoning as null or one exact built-in, nonblank Unicode-scalar string bounded by the 2000000-byte response envelope. Non-null reasoning additionally requires a present, positive completion_tokens_details.reasoning_tokens value strictly smaller than completion_tokens, reserving at least one generated token for the required nonempty visible content. FRANK returns only message.content, never raw reasoning, and receipts reasoning solely as its SHA-256 digest and character count.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/2.0.6/day-0/get-started-nemotron-3-ultra.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/engine/protocol/",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/serving/",
+      "https://docs.vllm.ai/en/latest/features/reasoning_outputs/"
+    ],
+    "external_evidence": "NVIDIA documents that completion_tokens is the combined total of reasoning tokens and content tokens, while completion_tokens_details.reasoning_tokens reports the reasoning subset. NVIDIA and vLLM construct parsed reasoning separately from visible content; NVIDIA explicitly instructs clients not to feed reasoning back into later messages.",
+    "internal_measurement": "A canonical status-200 response with non-null visible content and reasoning_tokens equal to completion_tokens previously returned success and reached VERIFIED and DONE, despite leaving zero reported generated tokens for the visible content. Separately, reasoning containing only three spaces reached success and produced a reasoning digest and character count despite carrying no parsed reasoning content. A documented response with two completion tokens split into one reasoning token plus visible content remains accepted.",
+    "executable_evidence": [
+      "test_documented_nvidia_reasoning_message_remains_compatible",
+      "test_reasoning_message_requires_reasoning_token_provenance",
+      "test_visible_content_requires_non_reasoning_completion_token",
+      "test_blank_reasoning_cannot_enter_verified_receipt"
+    ],
+    "counterhypothesis": "Positive reasoning_tokens make every nonempty reasoning string meaningful provenance; falsified locally because a whitespace-only parser output was hashed and verified. NVIDIA and vLLM describe the field as extracted reasoning content and use null for absence, so FRANK requires at least one non-whitespace character without imposing a grammar on legitimate reasoning text.",
+    "uncertainty": "The provider-reported token split and digest do not authenticate correctness, faithfulness or causal use of the reasoning, and FRANK does not infer an exact character-to-token relationship beyond the fact that nonblank decoded reasoning and nonempty decoded content each require generated-token evidence. Hidden reasoning tokens may legitimately accompany null message.reasoning and remain accepted. No Ubuntu NVIDIA live receipt is available on this host."
+  },
+  "provider_response_passive_metadata_compatibility": {
+    "checked_at": "2026-08-26",
+    "claim": "The v0.1 text adapter accepts NVIDIA's documented passive message metadata only when refusal, annotations, audio and function_call are null, tool_calls is an exact empty built-in list, and choice routed_experts is null. Nonempty tool calls, non-null values and unknown message or choice extensions remain unverified; reasoning has its separate typed scalar boundary.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html",
+    "external_evidence": "NVIDIA's current expected non-streaming Chat Completions response, updated 2026-08-21, includes those five null message fields, an empty tool_calls list and null routed_experts on an ordinary stopped text answer.",
+    "internal_measurement": "A locally replayed response matching the documented passive message shape previously remained EXECUTED but was rejected as invalid_provider_response solely because the text adapter allowed only role and content.",
+    "executable_evidence": [
+      "test_documented_nvidia_passive_message_metadata_remains_compatible",
+      "test_response_tool_calls_cannot_reach_text_verified_state"
+    ],
+    "counterhypothesis": "Rejecting every message extension is the safest compatible text-only policy; falsified because it rejects NVIDIA's current ordinary text response even though exact null and empty passive forms can be separated from executable tool-call content.",
+    "uncertainty": "These fields are compatibility metadata and are not promoted into new semantic receipt claims. Backend- or model-specific non-null variants still require a separate typed adapter. No Ubuntu NVIDIA live receipt is available on this host."
+  },
+  "provider_response_top_level_schema_closure": {
+    "checked_at": "2026-08-28",
+    "claim": "A successful v0.1 text response has a closed top-level schema. In addition to the required object, id, created, model, usage and choices fields, prompt_routed_experts, prompt_logprobs, prompt_token_ids, prompt_text and kv_transfer_params are accepted only as null. Optional service_tier is null or one exact built-in value from auto, default, flex, scale and priority and is retained in the receipt. An optional system_fingerprint must be an exact bounded Unicode-scalar string without surrounding whitespace and must satisfy the same local semantic-witness boundary as text content; it is retained only as a SHA-256 digest. Every other top-level extension remains unverified.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/",
+      "https://docs.vllm.ai/en/latest/api/vllm/entrypoints/serve/utils/fingerprint/",
+      "https://www.unicode.org/reports/tr44/",
+      "https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-23/"
+    ],
+    "external_evidence": "NVIDIA's current expected Chat Completions envelope includes passive top-level metadata and a structured vllm-style fingerprint. Current official vLLM documentation constructs full and hash fingerprints as vllm-version-hash strings, permits an operator-supplied custom literal, and permits omission with none mode. Custom mode establishes extensibility, not that format-only or unnegotiated private-use-only values carry software identity. Unicode classifies U+200B as Cf and defines private-use semantics only by private agreement. None of these sources makes a provider-authentication guarantee for the field.",
+    "internal_measurement": "An otherwise canonical status-200 response containing an unknown active top-level object previously returned success and reached VERIFIED and DONE while the extension was silently discarded. Separately, fingerprints containing only spaces or an embedded JSON-escaped newline reached success and were hashed into verified metadata. After that repair, pure U+200B and pure U+E000 still reached success, VERIFIED and DONE and produced fingerprint digests. The shared semantic boundary now rejects all four noncanonical classes while retaining documented vllm-style and printable custom literals.",
+    "executable_evidence": [
+      "test_unknown_top_level_response_extension_cannot_be_verified",
+      "test_documented_nvidia_passive_message_metadata_remains_compatible",
+      "test_documented_vllm_service_tier_remains_compatible",
+      "test_noncanonical_system_fingerprint_cannot_enter_verified_receipt",
+      "test_overflowing_json_exponents_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "Whitespace and C0/C1 exclusion are sufficient canonicalization for a bounded fingerprint; falsified because pure U+200B and unnegotiated U+E000 survived both checks and became verified software-provenance digests. Requiring an exact vllm-* grammar would incorrectly reject documented custom mode, so FRANK applies its shared minimal semantic-text boundary instead.",
+    "uncertainty": "Current backend versions can define non-null routing, logprob, token-id or transfer metadata. FRANK v0.1 does not interpret those values, so they require a separately typed adapter before verification. A provider-reported service tier does not prove price, billing state or zero cost. The fingerprint digest identifies provider-reported software metadata but does not authenticate it, and vLLM custom mode means printable non-vllm values remain possible. No Ubuntu NVIDIA live receipt is available on this host."
+  },
+  "http_200_provider_error_envelope": {
+    "checked_at": "2026-08-25",
+    "claim": "A syntactically valid HTTP 200 JSON body whose object discriminator is error, or which carries an explicit top-level error member, is classified as provider_error. It remains EXECUTED but cannot reach VERIFIED or DONE and does not create HTTP-status evidence that was not received.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/1.14.0/release-notes.html",
+    "external_evidence": "NVIDIA documents a Kanana NIM case where logprobs=0 can return HTTP 200 with a BadRequest error, so status 200 alone is not sufficient evidence of a fulfilled completion.",
+    "internal_measurement": "A documented-shape object=error body at status 200 previously fell through to a missing-choices KeyError and was mislabeled invalid_provider_response instead of provider_error.",
+    "executable_evidence": "test_http_200_provider_error_envelope_is_classified_as_error",
+    "counterhypothesis": "Every HTTP 200 body that lacks a verifiable choice is merely malformed transport data; falsified because NVIDIA explicitly documents application-level BadRequest errors carried with status 200.",
+    "uncertainty": "The adapter recognizes only explicit error discriminators and never promotes a body-level numeric code to received HTTP status or payment-latch evidence."
+  },
+  "response_model_provenance": {
+    "checked_at": "2026-08-25",
+    "claim": "Every non-streaming provider success response must contain a top-level model field that is an exact built-in string equal to the requested model before content can reach VERIFIED or DONE.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-reference.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
+    ],
+    "external_evidence": "NVIDIA documents that its OpenAI-compatible inference endpoints are provided by the vLLM backend and directs full schema questions to vLLM. The official vLLM ChatCompletionResponse declares model as a required string while object has the fixed chat.completion discriminator.",
+    "internal_measurement": "Both a status-200 response explicitly naming other-model and a response omitting model entirely previously returned success and reached VERIFIED and DONE while the receipt represented the requested model as verified provenance.",
+    "executable_evidence": [
+      "test_response_model_mismatch_cannot_reach_verified_state",
+      "test_missing_response_model_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "Endpoint binding or a Chat-shaped choice is sufficient to infer response model identity; falsified because the adapter promoted an unasserted model name into a VERIFIED receipt despite the backend schema requiring the field.",
+    "uncertainty": "No Ubuntu NVIDIA live receipt is available on this host; compatibility is supported by the official NVIDIA backend contract and executable local boundary tests rather than a live provider measurement."
+  },
+  "response_object_provenance": {
+    "checked_at": "2026-08-25",
+    "claim": "Every non-streaming provider success response must contain the exact built-in top-level discriminator object=chat.completion before content can reach VERIFIED or DONE. Explicit error discriminators remain separately classified as provider_error.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-reference.html",
+      "https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
+    ],
+    "external_evidence": "NVIDIA documents Chat Completions, text Completions and Responses as distinct vLLM-backed API surfaces and directs full response-schema questions to vLLM. The official vLLM ChatCompletionResponse defines object as the fixed Literal chat.completion with that serialized default.",
+    "internal_measurement": "Both a status-200 response explicitly labeled object=text_completion and one omitting object entirely previously returned success and reached VERIFIED and DONE when their inner choices were shaped like chat messages.",
+    "executable_evidence": [
+      "test_non_chat_response_object_cannot_reach_verified_state",
+      "test_missing_response_object_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "A Chat-compatible inner choice is sufficient provenance without an asserted top-level discriminator; falsified because the adapter promoted an unasserted response type into VERIFIED while the backend schema emits a fixed chat.completion literal.",
+    "uncertainty": "No Ubuntu NVIDIA live receipt is available on this host; compatibility is supported by the official NVIDIA/vLLM contract and executable local boundary tests rather than a live provider measurement."
+  },
+  "pending_http_results": {
+    "checked_at": "2026-08-13",
+    "claim": "For NVIDIA Chat Completions, HTTP 200 is fulfilled while HTTP 202 is pending and requires requestId polling; a 202 response cannot reach VERIFIED/DONE or trigger a blind replay of the original request.",
+    "source": "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
+    "executable_evidence": "test_http_202_pending_response_cannot_be_verified_as_final_text",
+    "counterhypothesis": "Every 2xx response can be treated as a final chat completion; falsified because NVIDIA explicitly assigns pending semantics to 202 and a valid-looking 202 text body previously reached success/VERIFIED/DONE. Polling remains intentionally unsupported until a requestId-bound adapter exists."
+  },
+  "unexpected_success_statuses": {
+    "checked_at": "2026-08-13",
+    "claim": "For this NVIDIA Chat Completions POST, 200 is the only fulfilled final-text status and 202 is explicitly pending; any other 2xx proves execution but is nonfinal and nonretryable without operation-specific recovery evidence.",
+    "sources": [
+      "https://docs.api.nvidia.com/nim/reference/meta-llama-3_1-70b-infer",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-15.3"
+    ],
+    "executable_evidence": "test_unexpected_success_status_is_not_retryable",
+    "counterhypothesis": "An undocumented 201, 204 or 206 can be handled as a retryable provider error; falsified because RFC 9110 classifies every 2xx as successfully received, understood and accepted and warns against automatically retrying a non-idempotent POST without proof that replay is safe."
+  },
+  "completion_finish_reason": {
+    "checked_at": "2026-08-13",
+    "claim": "A non-streaming NVIDIA Chat Completions choice reaches final-text VERIFIED only with explicit finish_reason stop and nonblank final content; length is truncated and null is a nonterminal streaming-chunk state. Treating whitespace-only content as empty is this adapter's fail-closed operationalization of NVIDIA's non-empty-final-answer guidance, not an additional provider-schema claim.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/advanced/get-started-nemotron-3.5-lightning.html",
+      "https://docs.nvidia.com/nim/large-language-models/2.0.10/get-started/quickstart.html"
+    ],
+    "executable_evidence": [
+      "test_length_finished_response_cannot_reach_verified_state",
+      "test_null_finish_reason_cannot_reach_verified_state",
+      "test_empty_stopped_response_cannot_reach_verified_state",
+      "test_whitespace_only_stopped_response_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "Either any nonempty assistant content string or finish_reason stop alone is sufficient evidence of a completed answer; falsified locally because length and null with partial text, stop with empty content, and stop with whitespace-only content all previously reached success, VERIFIED and DONE. The whitespace-only case could represent intentional formatting, but the plain-text adapter cannot distinguish that from a missing answer and therefore fails closed. Identical blind retry after length remains disabled because NVIDIA requires changing token limits or reasoning budget."
+  },
+  "request_snapshot_boundary": {
+    "checked_at": "2026-08-14",
+    "claim": "Mutable caller-owned message objects are snapshotted before validation, routing and authenticated request construction; only the validated snapshot may be serialized.",
+    "sources": [
+      "https://cwe.mitre.org/data/definitions/367.html",
+      "https://docs.python.org/3/library/copy.html"
+    ],
+    "executable_evidence": "test_request_messages_are_snapshotted_before_routing_side_effects",
+    "counterhypothesis": "Validating the caller's list once is sufficient because request construction follows immediately; falsified locally by a deterministic routing-side mutation that changed validated content to blank text and added an unvalidated tool_calls field before serialization."
+  },
+  "authorization_environment_snapshot": {
+    "checked_at": "2026-08-14",
+    "claim": "Execution snapshots only recognized provider-runtime environment inputs before routing and authorization; credential, endpoint, budget epoch and attestation values used by one attempt cannot change before authenticated request construction.",
+    "source": "https://cwe.mitre.org/data/definitions/367.html",
+    "executable_evidence": "test_credential_cannot_change_between_authorization_and_request",
+    "counterhypothesis": "Reading the shared environment repeatedly is safe because request construction immediately follows routing; falsified locally when a deterministic post-authorization mutation replaced the credential that was actually sent."
+  },
+  "capability_receipt_snapshot_consistency": {
+    "checked_at": "2026-08-24",
+    "claim": "A capability receipt snapshots recognized process-environment inputs once, computes one inventory and derives its route directly from those same rows. Inventory and route therefore describe one capability state rather than two observation times.",
+    "sources": [
+      "https://docs.python.org/3/library/os.html#os.environ",
+      "https://cwe.mitre.org/data/definitions/367.html"
+    ],
+    "executable_evidence": "test_capability_receipt_uses_one_environment_snapshot",
+    "counterhypothesis": "Two immediate environment snapshots are equivalent for a capability receipt; falsified locally when the first snapshot observed a configured provider while the second did not, yielding configured=true in inventory and selected=null in the same receipt."
+  },
+  "environment_snapshot_exception_redaction": {
+    "checked_at": "2026-08-20",
+    "claim": "Failures from a runtime-environment adapter are collapsed to a constant fail-closed error outside the active exception handler; arbitrary adapter text is neither displayed nor retained as __context__ or __cause__, and network access remains impossible.",
+    "sources": [
+      "https://docs.python.org/3/library/exceptions.html#exception-context",
+      "https://docs.python.org/3/reference/compound_stmts.html#except"
+    ],
+    "executable_evidence": "test_environment_snapshot_failure_is_redacted_and_fail_closed",
+    "counterhypothesis": "Catching only common mapping failures or chaining the original exception is safe; falsified because LookupError escaped verbatim with credential-like text before network access, while raising inside the handler would retain the original as exception context."
+  },
+  "passive_environment_value_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "Runtime capability inputs must be exact built-in strings before entering the environment snapshot; string subclasses are active objects whose overridden methods must never execute during routing, attestation or credential processing.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://docs.python.org/3/reference/datamodel.html#customizing-attribute-access"
+    ],
+    "executable_evidence": "test_environment_snapshot_rejects_active_string_subclasses",
+    "counterhypothesis": "isinstance(value, str) proves that an environment value is passive text; falsified locally because a str subclass passed that check, its overridden split method executed after the snapshot and leaked credential-like exception text before network access."
+  },
+  "bounded_runtime_policy_value_boundary": {
+    "checked_at": "2026-08-24",
+    "claim": "Recognized host-policy strings are cardinality-bounded during the environment snapshot before normalization, URL parsing, hashing or list splitting: the local-test flag is limited to 1 character, the budget epoch to 256, the zero-cost attestation list to 1024 and the provider base URL to 2048. These are local FRANK resource budgets, not external protocol limits; credentials retain their separate 8192-character bearer-token boundary.",
+    "sources": [
+      "https://docs.python.org/3/library/os.html#os.environ",
+      "https://docs.python.org/3/library/stdtypes.html#str.split",
+      "https://docs.python.org/3/library/functions.html#len"
+    ],
+    "executable_evidence": "test_oversized_zero_cost_attestation_is_rejected_before_parsing",
+    "counterhypothesis": "Exact built-in strings are intrinsically bounded passive policy data; falsified locally because a 1400-character attestation reached str.split and allocated its complete parsed list on every route, including the process-serialized execution path."
+  },
+  "passive_text_request_value_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "Model identifiers, message roles and message content must be exact built-in strings before validation or JSON serialization; string subclasses are active objects and are rejected before any overridden method, credential lookup or network operation can run.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://docs.python.org/3/library/json.html#encoders-and-decoders"
+    ],
+    "executable_evidence": "test_text_request_rejects_active_string_subclasses",
+    "counterhypothesis": "String subclasses are equivalent to passive JSON text because isinstance(value, str) succeeds; falsified locally for model, role and content because each accepted subclass executed its overridden strip method and leaked exception text before routing."
+  },
+  "passive_text_request_container_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "The text request snapshot accepts only exact built-in list and dict containers with exact built-in string field names; container subclasses are rejected before iteration, mapping conversion, validation, credential lookup or serialization.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#iter",
+      "https://docs.python.org/3/reference/datamodel.html#object.__iter__"
+    ],
+    "executable_evidence": "test_text_request_rejects_active_list_subclass_before_iteration",
+    "counterhypothesis": "A list subclass is passive request data because isinstance(messages, list) succeeds; falsified locally because tuple(messages) invoked its overridden __iter__, whose LookupError and credential-like text escaped before routing."
+  },
+  "wide_message_pre_snapshot_boundary": {
+    "checked_at": "2026-08-24",
+    "claim": "An exact built-in message dict whose cardinality differs from the closed two-field role/content schema is rejected with passive len checks before execution-lock acquisition and again immediately before snapshot copying. Structurally impossible wide objects are never duplicated by dict(message).",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#len",
+      "https://docs.python.org/3/library/functions.html#dict"
+    ],
+    "executable_evidence": "test_wide_message_object_is_rejected_before_execution_lock",
+    "counterhypothesis": "Snapshotting before schema validation is memory-safe because the outer message list is cardinality-bounded; falsified locally because one exact dict with 10002 fields was fully copied under the execution lock before its impossible field set was rejected."
+  },
+  "response_context_cleanup_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "A valid non-200 HTTP status is classified and its safety effects are committed before response-context cleanup; an Exception raised by adapter __exit__ cannot downgrade an already classified HTTP 402 or remove its payment latch.",
+    "sources": [
+      "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required"
+    ],
+    "executable_evidence": "test_http_402_latch_survives_response_context_exit_failure",
+    "counterhypothesis": "The generic adapter Exception fallback is sufficient after any valid status; falsified locally because a context-manager __exit__ RuntimeError changed a received HTTP 402 into incomplete_provider_response and left the payment latch inactive."
+  },
+  "response_size_context_suppression_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "Response-size overflow is recorded as state inside the foreign response context and classified outside it; adapter __exit__ cannot suppress or downgrade a MAX+1 overflow.",
+    "sources": [
+      "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
+      "https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse.read"
+    ],
+    "executable_evidence": "test_context_exit_cannot_suppress_oversized_response_rejection",
+    "counterhypothesis": "Raising ProviderResponseTooLarge inside with is sufficient; falsified because __exit__ returning true suppressed it and an exact MAX+1-byte valid JSON body reached success, VERIFIED and DONE."
+  },
+  "response_context_suite_exception_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "Normal exceptions raised while validating metadata or consuming a response are captured inside the foreign context and re-raised only after cleanup, so adapter __exit__ cannot suppress the evidence required for fail-closed receipt classification.",
+    "sources": [
+      "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
+      "https://docs.python.org/3/reference/datamodel.html#object.__exit__"
+    ],
+    "executable_evidence": "test_context_exit_cannot_suppress_invalid_status_receipt",
+    "counterhypothesis": "An outer try/except around with is sufficient to preserve every receipt; falsified because a true __exit__ suppressed missing-status validation, left outcome undefined and caused UnboundLocalError outside the receipt boundary."
+  },
+  "response_context_process_control_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "BaseException process-control signals raised in the foreign response suite are transported across cleanup and immediately re-raised unchanged; adapter __exit__ cannot suppress them and they are never converted into execution receipts.",
+    "sources": [
+      "https://docs.python.org/3/library/exceptions.html#BaseException",
+      "https://docs.python.org/3/reference/datamodel.html#object.__exit__"
+    ],
+    "executable_evidence": "test_context_exit_cannot_suppress_process_control_signal",
+    "counterhypothesis": "Catching only Exception inside the suite preserves deliberate BaseException propagation; falsified because a true __exit__ suppressed SystemExit and execution continued as a normal incomplete-provider receipt."
+  },
+  "invariants": [
+    "Never serialize, log, commit, echo or display API secret values.",
+    "Never access Together, including discovery, probes, routing and fallback.",
+    "Never make a paid request unless the project owner separately authorizes a nonzero budget.",
+    "A configured key is capability evidence, not proof of quota or health.",
+    "A provider credential is limited to 8192 characters and must match RFC 6750 b64token syntax before it can become configured capability evidence or enter an Authorization header; oversized values, whitespace, control characters, non-ASCII and separators fail closed before network access.",
+    "Except for an officially documented free developer endpoint, a configured key requires explicit host-side zero-cost attestation before routing.",
+    "A provider credential may only be sent to that provider's canonical host; a global multi-provider host allowlist is forbidden.",
+    "Credential binding compares the full remote origin boundary, including the effective HTTPS port; hostname equality alone is insufficient.",
+    "Provider endpoint URLs containing userinfo are rejected before request construction or network access.",
+    "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
+    "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
+    "Every FREE_API_EXECUTION_RECEIPT schema 1.14 record includes the exact Unicode Character Database version used for General_Category-based semantic admission; version-dependent classification cannot remain implicit provenance.",
+    "Every FREE_API_EXECUTION_RECEIPT schema 1.14 record identifies capability_receipt_schema_version=1.18; execution evidence cannot leave its governing capability contract version implicit.",
+    "Every FREE_API_CAPABILITY_RECEIPT schema 1.18 record advertises the execution receipt schema and active Unicode Character Database version before execution; an unsupported provenance contract can fail during capability inspection.",
+    "Every capability receipt advertises the execution cost-principal scope and false restart stability before credential use; consumers must not infer cross-restart cost lineage from schema version alone.",
+    "Provider-level zero-cost endpoint evidence never proves concrete model availability; every unprobed capability inventory row records model_availability_verified=false.",
+    "A selected capability route identifies only an eligible provider endpoint; it records selection_scope=provider_endpoint and model_availability_verified=false until separate model-bound executable evidence exists.",
+    "Execution model availability is verified only by a fully typed success response reaching VERIFIED and DONE; every other outcome records model_availability_verified=false.",
+    "Capability inventory, route and every execution receipt explicitly identify payment-latch scope as process_local; an active latch cannot be interpreted as restart-durable enforcement.",
+    "Every execution cost-policy principal is bound to the exact validated credential by a process-secret-keyed, domain-separated HMAC pseudonym; receipt-only credential guesses cannot reproduce the handle, restart stability and provider account identity remain explicitly false.",
+    "On POSIX hosts with os.register_at_fork, forked children derive a domain-separated process cost-principal key from child PID and a monotonically increasing parent fork generation without requiring fresh child entropy before Python resumes; capability and execution receipts explicitly report whether this mechanism is active and name its context.",
+    "On POSIX hosts with os.register_at_fork, forked children replace the inherited process execution lock before Python resumes; capability and execution receipts explicitly report whether this lock-isolation mechanism is active.",
+    "A child forked while the process execution lock represents an unresolved provider request is permanently quarantined from execute_chat before credential or network access; capability routing selects none, forbids in-process retry and names exec or process restart as recovery.",
+    "Every execution receipt separates credential-independent semantic request correlation from credential-bound cost and execution lineage; semantic_request_id never authorizes replay or claims provider idempotency.",
+    "The serialized UTF-8 text-chat JSON request is at most 2000000 bytes; oversized payloads fail before runtime-environment snapshot, credential lookup or network access, while the exact boundary remains accepted.",
+    "Every Chat Completions request explicitly sets max_tokens to 4096, bounding the combined reasoning and visible generation budget; finish_reason length remains unverified and requires changed input or budget rather than blind replay.",
+    "Requests above the transport envelope are rejected before json.dumps can materialize the document; the preflight exactly counts the fixed request envelope, per-message objects, list separators and default ensure_ascii escape widths, while the serialized UTF-8 byte check remains defense in depth.",
+    "For exact built-in request strings, a character-count lower bound above 2000000 rejects before the process execution lock; unavoidable oversized text cannot consume serialized routing capacity while awaiting the later exact JSON calculation.",
+    "Exact built-in message lists above 54792 entries are rejected before caller-data snapshotting and before the process execution lock because required role alternation, separators and envelope structure prove that no valid conversation of that cardinality can fit 2000000 bytes.",
+    "The message-cardinality bound is rechecked at the snapshot boundary so mutation after early admission cannot turn a small caller-owned list into an oversized allocation under the execution lock.",
+    "Exact built-in message objects whose cardinality differs from the two-field role/content schema are rejected before lock acquisition and rechecked immediately before snapshot copying; wide caller dicts are never duplicated under the execution lock.",
+    "Text-chat model, role and content values are exact built-in strings; polymorphic string subclasses fail closed before their methods, credential lookup, JSON serialization or network access can run.",
+    "Text-chat messages and message objects are exact built-in list and dict containers with exact built-in string field names; polymorphic container subclasses fail closed before iteration or mapping behavior can run.",
+    "The text-chat request contains at least one message; empty conversations are rejected before routing, credential use or network access.",
+    "The text-chat adapter accepts only system, user and assistant roles; arbitrary and tool/function roles are rejected before routing, credential use or network access.",
+    "The text-chat conversation optionally starts with one system message, then alternates user and assistant roles beginning and ending with user; invalid sequences are rejected before routing, credential use or network access.",
+    "Each plain-text message contains exactly role and content; extension fields such as tool_calls are rejected before routing, credential use or network access and require a typed adapter.",
+    "Caller-owned mutable messages are copied before validation; routing and concurrent mutations cannot change the validated request snapshot that is serialized.",
+    "Each execution snapshots only recognized runtime environment fields before routing; the credential and cost-policy inputs authorized for an attempt are the same values used to construct its request.",
+    "Each capability receipt uses one recognized environment snapshot and derives route directly from its inventory rows; configured capability evidence and selected route cannot represent different observation times.",
+    "Runtime-environment adapter failures collapse to one constant error outside the active handler; arbitrary adapter exception text is not displayed or retained, and no credential or network boundary is crossed.",
+    "Recognized runtime-environment values are exact built-in strings; polymorphic string subclasses fail closed before their methods can execute in capability inventory, routing, attestation or credential handling.",
+    "Recognized host-policy values are bounded in the runtime-environment snapshot before normalization, hashing, URL parsing or splitting; oversized values fail closed, while bearer credentials retain their separate 8192-character validation boundary.",
+    "The v0.1 execution path is process-serialized from routing through receipt publication so a payment-required latch from one attempt is visible before another attempt can route or reach the network.",
+    "All payment-latch storage, including the process-global default and caller injection, is an exact built-in set containing only exact built-in strings before capability inventory or routing; polymorphic container or element behavior cannot suppress a received HTTP 402 hard stop or its mandatory receipt.",
+    "Waiting for the v0.1 single-instance execution lock is bounded to 35 seconds; timeout raises execution_busy before routing, credential use or network access.",
+    "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
+    "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
+    "Attempt-ID construction never decimal-formats injected clock values; request ID plus the fresh 128-bit nonce supply bounded identity material so extreme passive integers cannot suppress a post-execution receipt.",
+    "Attempt nonces are exact built-in nonempty Unicode-scalar strings of at most 128 characters before authenticated execution; polymorphic formatting, unbounded identity processing or post-request UTF-8 encoding failure cannot suppress the mandatory receipt.",
+    "A response reaches VERIFIED only when its top-level field set belongs to the closed text-response schema and choices is a non-empty list whose first message is an object with string content; unknown top-level extensions and malformed JSON shapes fail closed with a receipt.",
+    "A choice explicitly finished because of length remains EXECUTED as provider_output_truncated, is nonretryable without a changed token budget, and cannot reach VERIFIED or DONE.",
+    "A non-streaming text choice requires explicit finish_reason stop before VERIFIED or DONE; null, missing and unsupported finish reasons remain invalid_provider_response.",
+    "A stopped non-streaming text choice requires nonblank scalar content before VERIFIED or DONE; empty and whitespace-only final content remain invalid_provider_response.",
+    "The text-only response adapter requires role assistant plus visible content; optional provider reasoning is exact scalar text retained only by digest and character count, while missing authorship, nonempty tool_calls, reasoning_content and other untyped extensions cannot reach VERIFIED or DONE.",
+    "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
+    "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",
+    "Only HTTP 200 is final for this NVIDIA text-completion path; HTTP 202 remains EXECUTED as provider_result_pending, cannot reach VERIFIED/DONE, and is not blindly replayed without a requestId-bound polling adapter.",
+    "Unexpected 2xx statuses remain EXECUTED as unexpected_success_status, cannot reach VERIFIED/DONE, and are nonretryable because the POST may already have been accepted.",
+    "Before body consumption or EXECUTED, adapter status must be an exact built-in integer in the RFC 9110 range 100 through 599; booleans, polymorphic integers and other invalid values remain null and invalid_provider_response without executing comparison operators.",
+    "Failure while retrieving a transport adapter's status or code property emits invalid_provider_response with null status and without EXECUTED; it cannot escape the receipt path or invent an HTTP result.",
+    "Unexpected Exception subclasses from custom transport adapters emit a fail-closed receipt based on whether valid response status was observed; BaseException control signals remain uncaught.",
+    "A received adapter body must be exact built-in bytes before size measurement or JSON parsing; text, bytearray, polymorphic bytes and other body types remain EXECUTED with their valid status but cannot execute body methods or reach VERIFIED/DONE.",
+    "Network-transmitted provider JSON must decode strictly as UTF-8 before parsing; UTF-16, UTF-32 and malformed UTF-8 remain invalid_provider_response and cannot reach VERIFIED or DONE.",
+    "Provider response JSON rejects every non-finite decoded number; NaN/Infinity literals and finite-syntax exponents that overflow the runtime float range remain invalid_provider_response and never reach VERIFIED or DONE.",
+    "Every provider JSON object must have unique member names; duplicates remain invalid_provider_response and never reach VERIFIED or DONE.",
+    "JSON parser RecursionError after a valid response remains EXECUTED with its status, emits invalid_provider_response, and never escapes the receipt path or reaches VERIFIED or DONE.",
+    "Text-chat model, role, request content and verified response content contain only Unicode scalar values; lone UTF-16 surrogates are rejected before network or VERIFIED/DONE.",
+    "Malformed bodies preserve the received HTTP status and classify as invalid_provider_response; connection or timeout failures without a response use null status and unreachable_provider.",
+    "ConnectionError failures before response headers, including RemoteDisconnected, emit an unreachable_provider receipt with null status and without EXECUTED.",
+    "HTTPException failures before valid response headers, including BadStatusLine, emit an unreachable_provider receipt with null status and without EXECUTED.",
+    "Transport OSError failures before response headers, including SSLError, emit an unreachable_provider receipt with null status and without EXECUTED; after response headers they preserve status and EXECUTED as incomplete_provider_response.",
+    "A received non-200 status is classified directly from response metadata without consuming its body; in particular, HTTP 402 activates the payment hard stop even if its body would stall.",
+    "A valid non-200 status is classified before response-context cleanup; a normal Exception from adapter __exit__ cannot downgrade that received HTTP evidence or undo an HTTP 402 payment latch.",
+    "For HTTP 200, body-read failures after response headers preserve that status and EXECUTED while classifying as incomplete_provider_response; they never reach VERIFIED or DONE.",
+    "Transport and response-read failures for the Chat Completions POST are nonretryable without provider-supported idempotency or proof that the original request was never applied.",
+    "A truncated HTTP body raising IncompleteRead preserves the received status and EXECUTED, emits an incomplete_provider_response receipt, and never reaches VERIFIED or DONE.",
+    "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",
+    "Response-size overflow is carried beyond the foreign response context before classification; adapter __exit__ cannot suppress a MAX+1 overflow or allow oversized content into VERIFIED or DONE.",
+    "Response-suite Exceptions are captured before foreign context cleanup and classified afterward; adapter __exit__ cannot suppress invalid-status, body-type or body-read evidence needed for a receipt.",
+    "Response-suite BaseException signals cross foreign cleanup only to be re-raised unchanged; they cannot be suppressed by adapter __exit__ or converted into receipts.",
+    "Every real provider request must emit a redacted execution receipt.",
+    "No received non-2xx status automatically authorizes replay of the Chat Completions POST; replay requires changed input, operator recovery, provider-supported idempotency or proof that the original request was not applied.",
+    "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absolute dates are measured from response receipt rather than request start, absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",
+    "Receipt duration is measured on a monotonic clock, while absolute Retry-After HTTP-date cooldown uses the wall-clock UTC instant at response receipt.",
+    "Injected monotonic-clock readings are exact built-in finite numbers before use; an invalid start fails before network and an invalid post-response reading falls back to zero duration without suppressing the receipt.",
+    "Receipt duration metadata is clamped to 0 through 86400000 milliseconds; arithmetic overflow, a non-finite positive difference or extreme exact integers cannot suppress or bloat a mandatory receipt.",
+    "Injected wall-clock readings used for Retry-After HTTP-date arithmetic are exact built-in finite numbers; invalid or polymorphic readings use the 60-second fallback without executing arithmetic methods or losing the received 429 receipt.",
+    "Retry-After metadata longer than 128 characters uses the 60-second fallback before normalization or parsing; oversized foreign metadata cannot impose unbounded post-response work, escape or suppress the execution receipt.",
+    "Failure to access Retry-After metadata uses the 60-second fallback and cannot suppress or reclassify an already received HTTP 429 execution receipt.",
+    "Retry-After values returned by transport adapters are exact built-in strings before parsing; polymorphic values use the 60-second fallback without executing methods or reclassifying an already received HTTP 429.",
+    "Failure while retrieving an adapter's headers property uses the 60-second fallback and cannot suppress or reclassify an already received HTTP 429 execution receipt.",
+    "Retry-After receipt cooldown metadata is capped at 86400 seconds for both delay-seconds and HTTP-date forms; the request remains nonretryable and requires fresh evaluation after the bounded horizon.",
+    "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."
+  ],
+  "runtime": "research_entity/runtime/free_api_provider_runtime.py"
+}

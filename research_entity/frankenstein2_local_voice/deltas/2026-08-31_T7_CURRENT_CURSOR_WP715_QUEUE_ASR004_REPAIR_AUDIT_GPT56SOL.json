@@ -1,0 +1,61 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "SUCCESSOR_REENTRY_ROUTING_CHECKPOINT_NOT_F2_MUTATION_AUTHORITY",
+  "supersedes_routing_only": [
+    "research_entity/frankenstein2_local_voice/deltas/2026-08-31_T7_ASR004_DATASETS36_REPAIR_PRIMARY_SOURCE_AUDIT_GPT56SOL.json"
+  ],
+  "preserve_predecessor_as_research_evidence": true,
+  "authority_snapshot": {
+    "f2_head_observed": "17035fb2bfed761dc735bbfbd64ad7f24f4e00dd",
+    "research_head_before_write": "aa7c9dbc6735ce5fb764a92b9f83c73ae811caa3",
+    "trigger7_protocol": "research_entity/frankenstein2_local_voice/TRIGGERWORD_7_PROTOCOL.md",
+    "f2_build_mutation_authority": "TRIGGER4"
+  },
+  "wp715": {
+    "runtime_run_id": 33328707636,
+    "runtime_head_sha": "db01bfbcc2deebc45524b56407a681b226de7b78",
+    "live_status_rechecked": "queued",
+    "conclusion": null,
+    "classification": "UNKNOWN_NONTERMINAL",
+    "executed_runtime_credit": 0,
+    "latest_trigger7_candidate": "T7-WP715-SESSION-CLOSE-ACTIVE-TOOL-OWNERSHIP",
+    "candidate_state": "STATIC_CANDIDATE_NOT_EXECUTED",
+    "mutation_authority_requested": false,
+    "runtime_dispatch_requested": false,
+    "next_gate": "Trigger4 executes the session-close/tool-ownership repository discriminator first without new VPS dispatch. Preserve the existing queued VPS subject unless an exact PRODUCT_NEGATIVE requires semantic repair; then reconcile scope before replacement runtime dispatch."
+  },
+  "asr004": {
+    "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+    "latest_asr004_commit_observed": "3581baa074f9d8f882a67b345a1be28498e91505",
+    "latest_matched_comparator_result": "EVIDENCE_INVALID_BEFORE_VALID_QUALITY_COMPARISON",
+    "repair_commit": "81cfd78a776bdc471d0c9beb9d2865fe2a3c50e2",
+    "repair_primary_source_audit_commit": "aa7c9dbc6735ce5fb764a92b9f83c73ae811caa3",
+    "repair_assessment": "TECHNICALLY_WELL_TARGETED_AS_FIRST_REPAIR_RERUN",
+    "new_terminal_rerun_observed": false,
+    "german_asr_quality_credit": 0,
+    "streaming_asr_credit": 0,
+    "next_gate": "Trigger4 materializes the bounded datasets==3.6.0 plus trust_remote_code repair and runs exactly one matched comparator on the same clay-direct-dev subject. Trigger7 consumes the receipt before any ASR008/Nemotron execution."
+  },
+  "asr008": {
+    "state": "DORMANT_UNTIL_ASR004_TERMINAL_MEASUREMENT_OR_EXPLICIT_RECONCILIATION",
+    "runtime_credit": 0,
+    "german_quality_credit": 0
+  },
+  "convergence_decision": {
+    "priority_order": [
+      "WP715 repository discriminator for session-close tool ownership under existing Trigger4 owner",
+      "existing WP715 VPS run only when runner actually executes it",
+      "ASR004 bounded repaired matched comparator rerun",
+      "ASR008 only after ASR004 terminal measurement/reconciliation"
+    ],
+    "do_not_open_duplicate_runtime_dispatch": true,
+    "do_not_open_replacement_voice_architecture": true,
+    "whole_voice_credit": 0,
+    "physical_audio_credit": 0,
+    "training_credit": 0
+  },
+  "status": "CHECKPOINTED_CONTINUE_CURRENT_CURSOR"
+}

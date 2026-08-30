@@ -1,0 +1,44 @@
+{
+  "schema": "TRIGGER7_RESEARCH_MIRROR/v1",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "7",
+  "canonical_build_repo": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2_commit": "e4fbb17caeda6d2ce4264bbf089501896c6fa2ba",
+  "canonical_f2_artifact": "research/local_voice/falsifiers/2026-08-31_HF_S2S_REALTIME_HEARD_BOUNDARY_PROTOCOL_FALSIFIER_GPT56SOL.json",
+  "semantic_claim_key": "8c53f25ed47c458bb727dd4dc82f788241cee699e428c4d97401a965a4eb375e",
+  "research_id": "T7-FD-RTCOMPAT-001",
+  "status": "MIRROR_ONLY_NO_MUTATION_AUTHORITY",
+  "finding": "Trigger 7 advanced from semantic identity repair to an admitted bounded protocol-compatibility falsifier for the huggingface/speech-to-speech local OpenAI-Realtime-compatible cascade. The current F2 compiler contains the admitted Hugging Face subject aliases and the create-only semantic claim exists. A subsequent F2 commit added HF01-HF08 falsifiers, prioritizing HF01-HF03 at the heard-versus-unheard assistant-history boundary. No runtime or acoustic result is claimed by this mirror.",
+  "primary_source_findings": [
+    "Current huggingface/speech-to-speech Realtime service exposes client event handling for input_audio_buffer.append, input_audio_buffer.commit, output_audio_buffer.clear, session.update, conversation.item.create, response.create and response.cancel.",
+    "The inspected upstream event map does not expose conversation.item.truncate or conversation.item.truncated.",
+    "The upstream OpenAI-compatible STT path keeps VAD, turns, sessions, conversation state and response handling inside speech-to-speech while delegating recognition to the selected STT backend; progressive transcription can resend accumulated utterance audio and therefore requires measured request-amplification/latency characterization.",
+    "Upstream response cancellation and playback clearing alone do not prove that model-visible assistant history is truncated to the portion actually heard by the user."
+  ],
+  "hypothesis": "The local cascade remains viable if Frankenstein 2.0 retains canonical conversation/heard/tool/effect authority and treats speech-to-speech as a transient transport/inference organ, with an adapter reconstructing or fencing next-turn context when truncate-equivalent semantics are absent.",
+  "counterhypotheses": [
+    "Server-retained unheard assistant content influences the next model turn after barge-in.",
+    "A late tool result from an interrupted response can re-enter the active conversation without explicit F2 causal ownership.",
+    "Response cancellation stops generation but does not reliably prevent late audio or stale assistant context from becoming observable/durable.",
+    "Progressive accumulated-utterance STT causes unacceptable request amplification or latency in the selected local hardware envelope."
+  ],
+  "evidence_scope": {
+    "research_delta": 1,
+    "source_review": 1,
+    "semantic_claim": 1,
+    "candidate_falsifier": 1,
+    "runtime": 0,
+    "german_e2e": 0,
+    "acoustic": 0,
+    "physical_device": 0,
+    "trigger4_acceptance": 0,
+    "whole_voice": 0,
+    "whole_product": 0
+  },
+  "external_primary_sources": [
+    "https://github.com/huggingface/speech-to-speech/blob/main/src/speech_to_speech/api/openai_realtime/service.py",
+    "https://github.com/huggingface/speech-to-speech/blob/main/docs/openai-compatible-stt.md"
+  ],
+  "next_exact_action": "Do not open a duplicate semantic claim. The existing T7-FD-RTCOMPAT-001 owner should execute HF01-HF03 first against one pinned speech-to-speech revision on clay-direct-dev / the lowest safe faithful VPS sandbox. The decisive discriminator is whether next-turn model context contains any assistant semantics beyond the exact F2 heard boundary after response.cancel plus output_audio_buffer.clear. Preserve zero runtime/acceptance credit until an exact execution receipt exists."
+}

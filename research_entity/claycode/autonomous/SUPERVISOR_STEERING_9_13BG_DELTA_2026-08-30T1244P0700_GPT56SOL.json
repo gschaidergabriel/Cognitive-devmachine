@@ -1,0 +1,55 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13BG_NON_AUTHORITY",
+  "created_at": "2026-08-30T12:44:00+07:00",
+  "mode": "FREE_ONLY",
+  "material_finding": "Executable REVIEW_ONLY PR639 reproduced a post-acceptance F2-WP-206 G1 authority-binding defect: the positive control replay succeeds, while mutating only the persisted unifieddb_authority_receipt_sha256 does not fail closed as required by the preregistered discriminator. This invalidates only the WP206 claim that persisted checkpoint replay enforces the canonical UnifiedDB authority-receipt binding. Separately, WP1207 G5 has merged a bounded hostile-twin filesystem executor with green exact-source repository CI, but it mints no target-host/runtime/effect/completion/whole-system credit.",
+  "executable_counterevidence": {
+    "workpackage": "F2-WP-206",
+    "accepted_generation_under_test": 1,
+    "review_pr": 639,
+    "review_head": "11f3bc0480264026dfda4c885e8dae38e7068031",
+    "run_id": 33295334472,
+    "job_id": 99213903088,
+    "positive_control": "PASS",
+    "falsifier": "FAIL_AS_PREREGISTERED_ON_UNPATCHED_SOURCE",
+    "reproduced_scope": "PERSISTED_UNIFIEDDB_AUTHORITY_RECEIPT_NOT_ENFORCED_ON_CHECKPOINT_REPLAY",
+    "production_source_modified_by_review": false,
+    "runtime_credit": 0,
+    "whole_system_credit": 0
+  },
+  "wp1207_g5": {
+    "merge_sha": "236ba6ebb5c4ba361a2c5f47122065dc6bc53a8f",
+    "scope": "BOUNDED_HOSTILE_TWIN_FILESYSTEM_EXECUTOR_REPOSITORY_COMPONENT_ONLY",
+    "merged_main_check_run": 33294578487,
+    "merged_main_job": 99211934397,
+    "merged_main_conclusion": "success",
+    "target_vps_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_credit": 0
+  },
+  "steering": [
+    "P0_WP206_REENTRY: permit exactly one mutation-authorized successor generation to absorb the reproduced DB-authority-receipt replay defect. Retain the exact PR639 regression. Minimal repair: select the persisted unifieddb_authority_receipt_sha256 during load_checkpoint and compare it fail-closed with the store-bound authority receipt before checkpoint decode/replay.",
+    "P0_WP206_SCOPE_FENCE: do not silently bundle same-inode DB content/schema fingerprint refresh; test that as a separate executable discriminator after the one-column receipt-binding repair.",
+    "P0_WP1207_G5_HOLD: treat the hostile-twin executor as repository-component evidence only. Target-host promotion still requires exact immutable release subject plus actual host execution/readback receipts.",
+    "P0_WP510_REENTRY: keep existing controller run 33265772059/job 99135457584 singleton; no duplicate dispatch while queued/unresolved.",
+    "P0_KEEP_ALL_CLAYCODE_EXTERNAL_PROVIDER_ROUTES_UNADMITTED; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "credit_state": {
+    "base_promotion": false,
+    "canonical_semantics_credit": 0,
+    "provider_runtime_credit": 0,
+    "target_vps_credit": 0,
+    "physical_grid10_credit": 0,
+    "training_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0
+  }
+}

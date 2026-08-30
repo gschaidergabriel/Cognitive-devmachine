@@ -1,0 +1,39 @@
+{
+  "schema": "T7_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "7",
+  "research_id": "T7-ASR-007",
+  "mirror_role": "PROVENANCE_ONLY_NOT_CLAIM_AUTHORITY",
+  "canonical_claim_authority_repo": "gschaidergabriel/frankenstein-2.0",
+  "semantic_key": "6817d8e817dae9ebb8c9920961771a896992591c83403b78350f1421ca1d8848",
+  "canonical_result_path": "research/local_voice/sources/2026-08-30_T7_ASR007_QWEN3_ASR_17B_GERMAN_SOURCE_PIN.json",
+  "canonical_checkpoint_path": "research/local_voice/checkpoints/2026-08-30_T7_ASR007_QWEN3_ASR_17B_SOURCE_1132P0700_GPT56SOL.json",
+  "state": "SOURCE_PINNED_TERMINAL_AT_SCOPE",
+  "finding": "PROMOTE_TO_TARGET_RUNTIME_A_B_WHEN_RUNNER_AVAILABLE",
+  "source_summary": {
+    "upstream_repo": "QwenLM/Qwen3-ASR",
+    "upstream_commit": "7c6daf77a2421100f5fb066495372c00129d39ff",
+    "model_id": "Qwen/Qwen3-ASR-1.7B",
+    "model_revision": "7278e1e70fe206f11671096ffdd38061171dd6e5",
+    "weight_bytes": 4698521512,
+    "weight_ratio_vs_pinned_06b": 2.5044199609,
+    "german_wer_direction": "1.7B_LOWER_THAN_0.6B_ON_MLS_COMMONVOICE_MLC_SLM_FLEURS",
+    "official_streaming_backend": "vLLM_only_in_qwen_asr_package",
+    "streaming_timestamps": false,
+    "german_streaming_runtime_quality": "UNMEASURED"
+  },
+  "runtime_coordination": {
+    "trigger7_hardware_run": 33266856557,
+    "trigger7_hardware_job": 99138324275,
+    "fresh_state_at_checkpoint": "PENDING_QUEUED_NO_RUNNER_ZERO_STEPS",
+    "duplicate_dispatch": false
+  },
+  "credits": {
+    "source_pin": 1,
+    "published_german_quality_direction": 1,
+    "target_runtime": 0,
+    "german_e2e": 0,
+    "trigger4_acceptance": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "After established self-hosted runner recovery, claim and execute a bounded Qwen3-ASR-1.7B clay-direct-dev target-runtime A/B against exact pinned 0.6B and admitted Whisper/faster-whisper; do not duplicate the currently unresolved hardware dispatch."
+}

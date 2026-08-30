@@ -1,0 +1,138 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "trigger_received_at": "2026-08-30T15:17:00+07:00",
+  "checkpoint_observed_at": "2026-08-30T15:32:13+07:00",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "classification": "APPEND_ONLY_EXECUTABLE_EVIDENCE_CHECKPOINT_NOT_AUTHORITY_MUTATION",
+  "routing": {
+    "status": "PASS",
+    "normalized_message": "4",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "supervisor_schema": "9.13",
+    "supervisor_delta": "9.13BH_NON_AUTHORITY",
+    "supervisor_inbox_ref": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "provider_policy": "FREE_ONLY_EXTERNAL_PROVIDER_SPEND_POLICY; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "owner_vps_allowed_under_guards": true,
+    "authority_files_mutated_by_this_checkpoint": false
+  },
+  "heads_observed": {
+    "research_main_before_write": "d1bcce23c912a77055cd96ec25429f1ae5b90bfb",
+    "frankenstein2_main": "665fcb0a632cb1b11b1a8f102ce44d120a5e9617",
+    "wp206_g3_canonical_pr_source_head": "7cc2dc2a5c9362f6e967d3df05a15604542582eb",
+    "wp206_g3_merge_commit": "736a0907bdd35056d56f1ed0f75ea11e8457b8c1",
+    "wp206_independent_full_regression_review_commit": "16478b6ae8b00993cffd05d03055f814f673c0dd"
+  },
+  "wp206": {
+    "active_claim": {
+      "generation": 3,
+      "claim_id": "F2-WP-206-G3-GPT56SOL-LEGACY-G1-AUTHORITY-RECOVERY-20260830",
+      "state_observed": "ACTIVE",
+      "latest_accepted_generation_still_projected": 1,
+      "scope": "EXPLICIT_ONE_TIME_ACCEPTED_G1_LEGACY_AUTHORITY_RECOVERY_REPOSITORY_COMPONENT_ONLY"
+    },
+    "counterevidence": {
+      "pr": 663,
+      "run_id": 33296011089,
+      "job_id": 99215676906,
+      "result": "ACCEPTED_G1_STYLE_DURABLE_ROW_FAILS_CURRENT_READER_WITH_CHECKPOINT_DB_AUTHORITY_RECEIPT_MISMATCH",
+      "role": "MIGRATION_REQUIREMENT_FALSIFIER"
+    },
+    "independent_green_donor": {
+      "pr": 671,
+      "head_sha": "bd77713814e2fc03f6e174b7ed79f47738c70ab4",
+      "run_id": 33301471849,
+      "job_id": 99230366351,
+      "result": "SUCCESS",
+      "tests": "explicit accepted-G1 migration/tamper falsifier plus complete accepted WP206 restart regression",
+      "final_state": "CLOSED_NOT_MERGED_AFTER_CANONICAL_CONVERGENCE"
+    },
+    "canonical_g3_source": {
+      "pr": 681,
+      "merged": true,
+      "source_head_sha": "7cc2dc2a5c9362f6e967d3df05a15604542582eb",
+      "merge_commit_sha": "736a0907bdd35056d56f1ed0f75ea11e8457b8c1",
+      "design": "explicit one-time legacy recovery outside normal load_checkpoint; caller-supplied external historical receipt plus provenance; exact canonical DB path/device/inode and checkpoint digest/typed replay checks; one-per-checkpoint recovery record in the same UnifiedDB; CAS rebind to current stable bound-file authority receipt; post-migration receipt drift fails closed"
+    },
+    "canonical_g3_ci": {
+      "source_head_sha": "7cc2dc2a5c9362f6e967d3df05a15604542582eb",
+      "run_id": 33301728380,
+      "job_id": 99231053013,
+      "conclusion": "SUCCESS",
+      "executed": [
+        "compile exact G3 recovery surface",
+        "accepted-G1 recovery and post-migration tamper regressions",
+        "bounded credit fence"
+      ]
+    },
+    "independent_exact_source_preservation_review": {
+      "base_source_head_sha": "7cc2dc2a5c9362f6e967d3df05a15604542582eb",
+      "review_commit_sha": "16478b6ae8b00993cffd05d03055f814f673c0dd",
+      "review_commit_delta": "WORKFLOW_ONLY; G3 SOURCE BYTES INHERITED UNCHANGED FROM PR681 HEAD",
+      "run_id": 33301775833,
+      "job_id": 99231171771,
+      "conclusion": "SUCCESS",
+      "executed": [
+        "compile G3 plus accepted WP206 kernel surface",
+        "tests/test_wp206_legacy_authority_recovery.py -v",
+        "tests/test_persistent_agency_kernel.py -v",
+        "zero-credit evidence fence"
+      ]
+    },
+    "bookkeeping_observed": {
+      "active_pointer_state": "ACTIVE",
+      "generation3_reconciliation_ref_expected": "workpackages/reconciliations/F2-WP-206/3-F2-WP-206-G3-GPT56SOL-LEGACY-G1-AUTHORITY-RECOVERY-20260830.json",
+      "generation3_reconciliation_observed": false,
+      "wp206_state_event_directory_observed": false,
+      "state_event_note": "No WP206 state-event chain was present at the observed main. Under incremental v2 migration this means no state-event acceptance credit can be inferred; do not manufacture one post hoc.",
+      "acceptance_credit": "NOT_YET_PROMOTED"
+    },
+    "decision": "MIGRATION_SOURCE_AND_EXECUTABLE_PRESERVATION_GATES_COGREEN; DO_NOT CREATE_COMPETING_G3; WAIT_FOR_CLAIM_OWNER_RECONCILIATION_BEFORE_TREATING_G3_AS_ACCEPTED",
+    "same_inode_live_drift": "SEPARATE_OPEN_DISCRIMINATOR; NOT CLOSED BY G3 MIGRATION"
+  },
+  "wp901_dependency": {
+    "status": "FENCED_UNTIL_WP206_G3_RECONCILIATION",
+    "reason": "Merged G3 source plus green repository CI is not the same as accepted/reconciled WP206 persisted-representation semantics. Historical G1 recoverability promotion must wait for terminal G3 bookkeeping."
+  },
+  "execution_this_trigger": {
+    "canonical_duplicate_wp206_mutation_created": false,
+    "lost_nonforce_cas_attempt_preserved": true,
+    "force_push_used": false,
+    "review_only_green_donor_created": true,
+    "review_only_exact_source_full_regression_created": true,
+    "provider_network_execution": false,
+    "vps_runtime_execution": false,
+    "new_unusual_experiment": false
+  },
+  "evidence_boundaries": {
+    "wp206_g3_source_merge": "SOURCE_PRESENT_ON_MAIN_NOT_ACCEPTANCE_BY_ITSELF",
+    "wp206_g3_repository_ci": "EXECUTABLE_REPOSITORY_COMPONENT_EVIDENCE_ONLY",
+    "wp206_g3_exact_source_full_restart_regression": "EXECUTABLE_REPOSITORY_COMPONENT_PRESERVATION_EVIDENCE_ONLY",
+    "wp206_g3_acceptance": "PENDING_RECONCILIATION",
+    "wp206_same_inode_live_authority_closure": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_actions": [
+    "Claim owner: reconcile WP206 generation 3 only against exact merged source plus green executable G3 and exact-source full restart evidence; preserve zero-credit boundaries.",
+    "Do not reopen or merge PR671; retain it only as independent green donor/corroboration.",
+    "Keep WP901 historical-G1 recoverability dependency fenced until WP206 generation 3 terminal reconciliation is durable.",
+    "Keep same-inode live UnifiedDB authority drift separate from persistence migration/recovery.",
+    "After terminal WP206 reconciliation, re-enter current main and continue the smallest dependency-correct Triggerword-4 frontier rather than restarting Stage 2."
+  ]
+}

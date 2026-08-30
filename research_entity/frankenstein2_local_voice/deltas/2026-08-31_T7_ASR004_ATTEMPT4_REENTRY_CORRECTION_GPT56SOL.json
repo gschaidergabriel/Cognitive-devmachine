@@ -1,0 +1,40 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROVENANCE_MIRROR_SUCCESSOR_CORRECTION_NOT_CLAIM_AUTHORITY",
+  "supersedes_for_current_frontier_only": "research_entity/frankenstein2_local_voice/deltas/2026-08-31_T7_ASR004_ATTEMPT3_NONTERMINAL_NEMOTRON_REFRESH_GPT56SOL.json",
+  "preserve_predecessor_as_historical_observation": true,
+  "canonical_f2_current_observation": {
+    "commit": "337c35d0891b7c8bbed3e9ce95bed8871c2041c8",
+    "research_id": "T7-ASR-004",
+    "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+    "subject": "Qwen/Qwen3-ASR-0.6B",
+    "target_surface": "clay-direct-dev",
+    "attempt": 4,
+    "dispatch_marker_commit": "0c937053e7d0b30f691373e3cd48e8ce5413087e",
+    "controller_repair_commit": "2f966e3fb015897a82407e80db5af639b43a637e",
+    "controller_group": "trigger7-qwen3-asr-target-probe-clay-host-v2",
+    "state": "UNKNOWN_NONTERMINAL_ATTEMPT4_DISPATCH_MARKER_PRESENT_RECEIPT_NOT_OBSERVED",
+    "workflow_run_identity_observed": false,
+    "executed_steps_observed": false,
+    "receipt_observed": false
+  },
+  "reason_for_successor": "F2 advanced concurrently after the predecessor mirror was written. The predecessor remains valid as a historical observation of attempt 3 but is stale as current routing guidance.",
+  "failure_classification": "UNKNOWN_NONTERMINAL",
+  "anti_churn_decision": {
+    "redispatch_from_trigger7": false,
+    "new_semantic_claim": false,
+    "semantic_successor_before_terminal_receipt": false,
+    "rule": "Attempt 4 is the current corrected Trigger-4 dispatch marker. Trigger 7 must not redispatch while its terminal execution state is unresolved."
+  },
+  "credits": {
+    "new_model_runtime_credit": 0,
+    "new_german_asr_quality_credit": 0,
+    "new_streaming_asr_credit": 0,
+    "new_trigger4_acceptance_credit": 0,
+    "new_whole_voice_system_credit": 0
+  },
+  "next_exact_action": "Consume the first exact persisted receipt/run evidence for corrected attempt 4. Promote only observed executed scope. If nonterminal, preserve the subject and do not redispatch. If infrastructure-invalid, classify before repair. If exact target execution succeeds, execute or consume the already-routed identical-audio German/noise comparator against the admitted faster-whisper baseline, preserving FLEURS/audio hashes, WER/CER, false activation, VAD gate decisions, latency and resource measurements. Only after ASR004 is measured or explicitly reconciled should T7-ASR-008 Nemotron 3.5 execute on the identical comparator."
+}

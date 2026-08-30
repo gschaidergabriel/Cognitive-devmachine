@@ -1,0 +1,79 @@
+{
+  "schema": "TRIGGER7_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "research_id": "T7-FD-RTCOMPAT-001",
+  "classification": "SOURCE_RESEARCH_REVIEW_ONLY",
+  "implementation_mutation_authority": false,
+  "new_claim_or_generation": false,
+  "canonical_coordination_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_delta_commit": "2dbea20aa26a5a60283b4d4be69286f28d09c83f",
+  "f2_delta_ref": "research/local_voice/falsifiers/2026-08-31_HF_S2S_HEARD_PREFIX_RETENTION_DELTA_GPT56SOL.json",
+  "upstream_repo": "huggingface/speech-to-speech",
+  "upstream_revision": "3986f453012a131632eee4731995474046846794",
+  "source_findings": [
+    {
+      "id": "S1_TRUNCATE_NOOP",
+      "status": "CONFIRMED_SOURCE",
+      "finding": "The pinned websocket router parses conversation.item.truncate but deliberately performs no server-state mutation after cancellation."
+    },
+    {
+      "id": "S2_CANCEL_HISTORY_ROLLBACK",
+      "status": "CONFIRMED_SOURCE",
+      "finding": "Cancelled, failed or incomplete response termination calls rollback_provisional_generation before deferred client items are applied."
+    },
+    {
+      "id": "S3_TRACKED_OUTPUT_REMOVAL",
+      "status": "CONFIRMED_SOURCE",
+      "finding": "rollback_provisional_generation tombstones the response key and removes tracked provisional assistant item IDs and call IDs."
+    }
+  ],
+  "new_hypothesis": {
+    "name": "HEARD_PREFIX_AMNESIA",
+    "status": "OPEN_RUNTIME_HYPOTHESIS",
+    "statement": "The rollback design may correctly prevent an unheard-tail leak while still diverging from OpenAI-style heard-boundary semantics by deleting assistant content that the user actually heard before barge-in.",
+    "counterhypothesis": "F2 authoritative context reconstruction may preserve the heard prefix independently, making raw speech-server history deletion harmless.",
+    "required_discriminator": "HF09_EXACT_HEARD_PREFIX_RETENTION"
+  },
+  "diagnostic_matrix": [
+    {
+      "heard_prefix": "present",
+      "unheard_tail": "absent",
+      "classification": "SEMANTIC_MATCH_CANDIDATE"
+    },
+    {
+      "heard_prefix": "present",
+      "unheard_tail": "present",
+      "classification": "TAIL_LEAK_PRODUCT_NEGATIVE"
+    },
+    {
+      "heard_prefix": "absent",
+      "unheard_tail": "absent",
+      "classification": "PREFIX_AMNESIA_PROTOCOL_GAP"
+    },
+    {
+      "heard_prefix": "absent",
+      "unheard_tail": "present",
+      "classification": "SEVERE_CONTEXT_DIVERGENCE"
+    }
+  ],
+  "routing": {
+    "next_owner": "TRIGGER4_RUNTIME_FALSIFIER",
+    "same_existing_semantic_claim": true,
+    "next_exact_action": "Execute HF09 on the existing claim before additional local-realtime architecture expansion. Measure raw server post-cancel history, F2 authoritative reconstructed history and the exact next-turn effective model context separately.",
+    "do_not": [
+      "do not open a duplicate Trigger4 claim",
+      "do not create a second voice FSM/persona/memory/state/effect authority",
+      "do not promote source review to runtime acceptance"
+    ]
+  },
+  "credit": {
+    "source_research_delta": 1,
+    "runtime": 0,
+    "german_e2e": 0,
+    "locality": 0,
+    "trigger4_acceptance": 0,
+    "whole_product": 0
+  }
+}

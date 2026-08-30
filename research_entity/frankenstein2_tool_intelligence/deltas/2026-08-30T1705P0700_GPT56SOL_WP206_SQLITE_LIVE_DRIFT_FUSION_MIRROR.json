@@ -1,0 +1,25 @@
+{
+  "schema": "RESEARCH_ENTITY_TRIGGER6_DELTA_MIRROR/v1",
+  "recorded_at_local": "2026-08-30T17:05:30+07:00",
+  "worker": "GPT-5.6 Sol / Trigger-6 research organ",
+  "trigger": "6",
+  "classification": "NON_AUTHORITY_PROVENANCE_MIRROR",
+  "canonical_f2_repository": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2_delta": "research/tool_intelligence/deltas/2026-08-30T1704P0700_GPT56SOL_ARCHITECTURE_DELTA_FUSION_WP206_SQLITE_LIVE_DRIFT_REVIEW.json",
+  "canonical_f2_delta_commit": "eb0e978d601b0ecd081b3d4d2f3fb0bd2a979883",
+  "canonical_f2_handoff_addendum": "trigger4/inbox/tool_research/R6-20260830-WP206-G5A-EXTERNAL-SQLITE-REVISION-FENCE-TARGETED-REVALIDATION-ADDENDUM-GPT56SOL.json",
+  "canonical_f2_handoff_addendum_commit": "dde9791acd4f2fa72ae5d246113520c2e6031111",
+  "existing_e5_handoff": "trigger4/inbox/tool_research/R6-20260830-WP206-G5A-EXTERNAL-SQLITE-REVISION-FENCE-HANDOFF-GPT56SOL.json",
+  "research_entity_main_before_mirror": "5cdcc32d0569f27da4dc6607c81b4baee03ef6b9",
+  "finding": "Same-inode external SQLite revision is a real separate WP206 discriminator. PR655 already provides repository-hosted executable counterevidence at the open-store boundary. Trigger-6 isolated reproductions show PRAGMA main.data_version is useful only as a same-connection, foreign-commit invalidation hint. An unrelated foreign write can advance it while the protected row remains unchanged, so mismatch must trigger targeted canonical revalidation rather than global corruption/failure.",
+  "architecture_decision": "Preserve restart-stable path/device/inode authority. Retain the existing EXTERNAL_SQLITE_REVISION_FENCE/v1 handoff without duplicating E5, refined so data_version is non-authoritative and only requests fresh protected-row/schema/provenance validation.",
+  "counterhypothesis": "If exact-current WP206 already begins a fresh transaction and re-reads/revalidates all protected evidence at every authority-sensitive operation, the revision hint is redundant diagnostics and should be retired after Trigger4 ablation.",
+  "credit": {
+    "research_fusion": 1,
+    "new_e5_candidate": 0,
+    "trigger4_build": 0,
+    "target_runtime": 0,
+    "whole_system": 0
+  },
+  "pending_research_sqlite_sync": "PENDING_ADMITTED_BINARY_DB_PATH"
+}

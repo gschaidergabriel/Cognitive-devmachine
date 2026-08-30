@@ -1,0 +1,69 @@
+{
+  "schema": "CLAY_TRIGGER4_WP1107_G3_RELEASE_CANDIDATE_REENTRY/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "date": "2026-08-30",
+  "authority_epoch": "8.78",
+  "purpose": "Prevent the exact pre-G3 release candidate from being silently promoted after post-acceptance WP1107 counterevidence and bind the next safe Triggerword-4 reentry gate.",
+  "observed_f2_snapshot": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "observed_main_sha": "394764d19670be9157db4c622ae57ec418705fb0",
+    "wp1107_active_generation": 3,
+    "wp1107_active_claim_id": "F2-WP-1107-G3-GPT56SOL-EOCD-TAIL-CLOSURE-20260830T0426Z",
+    "wp1107_active_state": "ACTIVE",
+    "wp1107_active_pointer_blob_sha": "c6249ad3e08f43a998f2081ab617be7a635abb7f",
+    "canonical_source_at_observation": "src/frankenstein2/release_archive.py",
+    "canonical_source_blob_sha_at_observation": "8778380d5e0aaca5be2500d56481b828fa58ac3a"
+  },
+  "post_acceptance_counterevidence": {
+    "review_pr": 478,
+    "review_head_sha": "0a925bb8a869b973915472ccda38f2b7301b245e",
+    "workflow_run_id": 33254817255,
+    "job_id": 99106571909,
+    "finding": "Generation-2 verify_release_archive accepted arbitrary bytes appended after ZIP EOCD when expected_receipt was omitted.",
+    "classification": "EXECUTABLE_POST_ACCEPTANCE_COUNTEREVIDENCE"
+  },
+  "existing_release_candidate": {
+    "research_receipt": "research_entity/trigger_runs/4/2026-08-30_GPT56SOL_F2_RELEASE_CANDIDATE_MATERIALIZATION.json",
+    "source_commit": "2187d15a2a1edbae70930d01e313180e6ebd6fbd",
+    "source_tree": "c9981116187b59e5db8d2641f5702afcafe2114e",
+    "artifact_filename": "frankenstein-2.0.zip",
+    "artifact_sha256": "1d6b17b05754c966ca11a806b42f5f47a77086094c35bf0e9530059fca51a156",
+    "artifact_size_bytes": 11770789,
+    "prehandoff_receipt_sha256": "268ab62af83dc1836a58ddc0ba35a1ec8aa68427a6146495953e58aedd75ec6b",
+    "repository_release_build_credit": 1,
+    "clean_machine_runtime_credit": 0,
+    "target_host_runtime_credit": 0,
+    "classification": "EXACT_REPRODUCIBLE_PRE_G3_CANDIDATE_NOT_LATEST_HEAD",
+    "handoff_status": "QUARANTINED_FOR_FINAL_HANDOFF_PENDING_POST_G3_REBUILD",
+    "reason": "The artifact identity remains exact and reproducible at its frozen source, but its source predates the canonical WP1107 generation-3 outer-byte-closure repair opened from executable counterevidence. Do not silently promote it as the final/current release."
+  },
+  "donor_fusion": {
+    "superseded_local_pr": 609,
+    "superseded_local_pr_status": "CLOSED_REVIEW_ONLY_NO_MUTATION_AUTHORITY",
+    "stronger_review_donor_pr": 612,
+    "stronger_review_donor_head_sha": "9d5ee2a057969a4d7b697edd07db5538b8e3b7ec",
+    "donor_mechanism": "Rebuild the complete deterministic ZIP from admitted member bytes and explicit archive policy, then require byte-for-byte equality with the handed-off archive; regression rejects both unbound prefix and trailing bytes.",
+    "observed_donor_tests": {
+      "deterministic_archive_variance_and_negative_control_suite": "PASS",
+      "zip_metadata_perimeter_suite": "PASS",
+      "cross_runtime_python_3_11": "PASS",
+      "cross_runtime_python_3_12": "PASS",
+      "cross_runtime_python_3_13": "PASS",
+      "workpackage_state_validation": "FAIL_EXPECTED_REVIEW_ONLY_DONOR_DOES_NOT_OWN_CANONICAL_POINTER"
+    },
+    "review_fusion_written": true,
+    "review_id": 5059940154
+  },
+  "credit_boundary": {
+    "repository_release_build_credit": 1,
+    "wp1107_g3_repository_acceptance_credit": 0,
+    "clean_machine_runtime_credit": 0,
+    "target_host_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Canonical WP1107 G3 owner transplants the strongest exact-byte-closure mechanism/test into its owned paths, binds the canonical generation-3 state event/reconciliation, and obtains current-main repository CI. Then Triggerword 4 must materialize and freeze a successor deterministic release candidate from a deliberately selected post-G3 source identity, bind a new artifact/pre-handoff receipt identity, and only then collect real clean-machine Claude Code, Codex CLI, other-agent, no-VPS baseline and optional VPS-bridge observations."
+}

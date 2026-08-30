@@ -1,0 +1,81 @@
+{
+  "schema": "TRIGGER4_RUNTIME_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "observed_at_local": "2026-08-30T22:13:00+07:00",
+  "routing_self_test": "PASS",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "supervisor_inbox_schema_observed": "9.13",
+    "supervisor_delta_observed": "9.13BI_NON_AUTHORITY",
+    "owner_vps_allowed": true,
+    "provider_policy": "FREE_ONLY_HARD_OFF_EXTERNAL_PROVIDER_ROUTES_UNADMITTED",
+    "together_forbidden": true
+  },
+  "required_directives_fetched": [
+    "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+  ],
+  "source_reentry": {
+    "frankenstein2_main": "4993fb1c0688d1c4ce059a7d345b7d6ac36a9b35",
+    "frankenstein2_main_message": "trigger4: reconcile WP206 G6 acceptance atomically",
+    "frankenstein1_donor_main": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "controller_main": "a67cf94ecb7747c45bd0af7d276a91752c892fad",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_branch_head": "c8aa3fd049ae402e001f1a6ef7263e0244509ac6"
+  },
+  "stage2_reentry": {
+    "wp203_granular_state": "ACCEPTED_GENERATION_2_REPOSITORY_HOSTED_CI_ONLY",
+    "wp205_granular_state": "ACCEPTED_GENERATION_4_REPOSITORY_HOSTED_CI_ONLY",
+    "wp206_granular_state": "ACCEPTED_GENERATION_6_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "aggregate_state_note": "workpackages/STATE.json still projects WP203/WP205 as IN_PROGRESS; granular current pointers and receipts outrank the stale aggregate. Aggregate writer remains separately governed and was not modified by this trigger run."
+  },
+  "wp510_existing_runtime_attempt": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "workflow_run_id": 33265772059,
+    "job_id": 99135457584,
+    "workflow_name": "Trigger4 WP510 Target Runtime V2",
+    "workflow_source_ref": "2b2aaca5750a7da135fef92cf6611995d117fbe2",
+    "workflow_path": ".github/workflows/trigger4-wp510-target-runtime-v2.yml",
+    "required_runner_labels": ["self-hosted", "Linux", "X64"],
+    "run_status_observed": "completed",
+    "run_conclusion_observed": "cancelled",
+    "job_status_observed": "completed",
+    "job_conclusion_observed": "cancelled",
+    "executed_steps_observed": 0,
+    "cancellation_cause": "UNKNOWN_FROM_AVAILABLE_GITHUB_EVIDENCE",
+    "target_runtime_credit": 0
+  },
+  "evidence_transition": {
+    "prior_receipt": "research_entity/trigger_runs/4/2026-08-30T2155p0700_GPT56SOL_WP510_RUNNER_STILL_QUEUED_REENTRY.json",
+    "prior_state": "QUEUED_ZERO_STEP",
+    "new_state": "TERMINAL_CANCELLED_ZERO_STEP",
+    "classification": "CONTROL_PLANE_TERMINAL_NEGATIVE_EVIDENCE_ONLY",
+    "product_logic_failure": false,
+    "scientific_negative_result": false,
+    "target_runtime_execution_observed": false
+  },
+  "runner_lifecycle_observability": {
+    "direct_owner_host_shell_or_ssh_surface": "UNAVAILABLE_IN_THIS_SESSION",
+    "github_runner_inventory_endpoint": "UNAVAILABLE_THROUGH_CURRENT_CONNECTOR",
+    "workflow_job_steps": [],
+    "duplicate_dispatch_performed": false,
+    "rerun_performed": false,
+    "speculative_runner_repair_performed": false
+  },
+  "decision": "DO_NOT_RERUN_OR_DISPATCH_SUCCESSOR_FROM_THIS SESSION. Current supervisor steering requires direct owner-host runner registration/liveness/eligibility/assignment evidence before successor dispatch. The prior WP510 handle is now terminal cancelled with zero executed steps, so it cannot mint runtime credit and does not establish a product or scientific failure.",
+  "credits": {
+    "frankenstein2_target_runtime": 0,
+    "entityos_hcu_whole_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "effect_completion": 0,
+    "training": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "On the owner-authorized host surface, inspect the self-hosted GitHub runner registration, service/listener process, labels self-hosted+Linux+X64, recent runner logs and assignment capability. Bind the observation to workflow_run_id=33265772059/job_id=99135457584. If a concrete lifecycle fault is observed, apply one minimal reversible repair, then launch or re-run exactly one admitted successor attempt bound to exact F2 source. Otherwise preserve the terminal zero-step cancellation and investigate assignment/cancellation provenance before any dispatch."
+}

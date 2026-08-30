@@ -1,0 +1,118 @@
+{
+  "schema": "CLAY_TRIGGER2_POST_REENTRY_ADJUDICATION/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "canonical_main_reentered": "32454388b1c23c5c2d1f15951a6b487ccaaf36ad",
+  "current_retained_generator": {
+    "path": "tools/trigger2_binding_router_blueprint_generator_v2.py",
+    "blob_sha": "fdd6c1eacb90676d49bbec379db18ddd4da526d1",
+    "revision": "v2.2",
+    "rows": 11664,
+    "split_counts": {
+      "TRAIN": 7776,
+      "VALIDATION": 1944,
+      "HOLDOUT": 1944
+    },
+    "factorial_per_template": {
+      "base_semantic_states": 3,
+      "s3_mappings": 6,
+      "display_orders": 6,
+      "query_polarities": 2,
+      "proof_topologies": 3,
+      "focus_positions": 3,
+      "rows": 1944
+    },
+    "source_design_guards": [
+      "mapping-swap twin validator",
+      "state-flip twin validator",
+      "topology-invariance twin validator",
+      "codebook-order twin validator",
+      "focus-position twin validator",
+      "conditional MI topology == 0",
+      "conditional MI display-order == 0",
+      "nuisance-only majority decoder == 1/3",
+      "provenance ancestry does not cross split",
+      "placeholder symbol pools do not cross split"
+    ],
+    "credit_scope": "PASS_LOGICAL_BLUEPRINT_ONLY"
+  },
+  "adversarial_review": {
+    "stronger_than_compact_seed_on": [
+      "proof-topology factorization",
+      "query-polarity factorization",
+      "focus-record-position factorization",
+      "display-order factorization",
+      "counterfactual twin validation",
+      "conditional-MI and nuisance-decoder source gates"
+    ],
+    "unseen_factor_gap": {
+      "unseen_proof_topology_holdout_present": false,
+      "reason_topology": "DIRECT_MATCH, ONE_HOP_DEREFERENCE and TWO_HOP_DEREFERENCE are looped inside every TRAIN, VALIDATION and HOLDOUT template. The HOLDOUT therefore tests a new template/symbol pool under seen topology classes, not an unseen topology class.",
+      "unseen_s3_permutation_holdout_present": false,
+      "reason_permutation": "All six S3 permutations are looped inside every template/split; no permutation is unseen during training.",
+      "status": "NO_DEFECT_IN_DECLARED_LOGICAL_BLUEPRINT_PASS; BLOCKS_ANY_STRONGER_UNSEEN_FACTOR_GENERALIZATION_CLAIM"
+    },
+    "counterhypothesis": "The factorial v2.2 design can eliminate measured source-level nuisance correlations yet still fail compositional generalization to a topology or mapping family that never appeared during optimization.",
+    "falsifier": "A preregistered successor that withholds one topology and one S3 mapping from TRAIN must exceed the frozen generalization thresholds without holdout selection and without >2% retention loss."
+  },
+  "fusion_decision": {
+    "do_not_replace_retained_v2_2_generator_with_compact_seed": true,
+    "retain_compact_seed_as": [
+      "true unseen-permutation holdout discipline donor",
+      "true unseen-symbol index partition donor",
+      "small materialization-first gate donor",
+      "24-row Xeno/HCU authority-protocol hard-negative supplement"
+    ],
+    "recommended_successor": "VERSIONED_V2_3_ORTHOGONAL_HOLDOUT_MATRIX",
+    "successor_design": {
+      "TRAIN": {
+        "s3_mappings": "P0..P4",
+        "proof_topologies": ["DIRECT_MATCH", "ONE_HOP_DEREFERENCE"],
+        "templates": "T1..T4",
+        "accepted_atom_indices_after_verified_materialization": "0..39",
+        "rule": "fully factorize display order, query polarity, focus position and the seen factors; retain counterfactual twins and nuisance gates"
+      },
+      "HOLDOUT_UNSEEN_PERMUTATION": {
+        "new_factor": "P5",
+        "hold_other_factors": "seen whenever scientifically possible",
+        "purpose": "isolate mapping generalization"
+      },
+      "HOLDOUT_UNSEEN_TOPOLOGY": {
+        "new_factor": "TWO_HOP_DEREFERENCE",
+        "hold_other_factors": "seen whenever scientifically possible",
+        "purpose": "isolate proof-topology generalization"
+      },
+      "HOLDOUT_UNSEEN_TEMPLATE": {
+        "new_factor": "frozen structurally novel template family",
+        "hold_other_factors": "seen",
+        "purpose": "isolate surface/template transfer"
+      },
+      "HOLDOUT_UNSEEN_SYMBOL": {
+        "new_factor": "verified accepted ABI atom indices 40..45",
+        "hold_other_factors": "seen",
+        "purpose": "isolate symbol-binding generalization"
+      },
+      "HOLDOUT_UNSEEN_VOCABULARY": {
+        "new_factor": "split-isolated lexical inventory",
+        "hold_other_factors": "seen",
+        "purpose": "isolate lexical shortcut dependence"
+      },
+      "HOLDOUT_INTERSECTION_STRESS": {
+        "new_factors": ["P5", "TWO_HOP_DEREFERENCE", "novel template", "unseen symbols", "novel vocabulary"],
+        "purpose": "stress test only; do not use it alone to diagnose which factor failed"
+      }
+    }
+  },
+  "materialization_boundary": {
+    "exact_accepted_46_atom_literals_available_in_active_surfaces": false,
+    "training_eligible": false,
+    "accepted_dataset_tokens_minted": 0,
+    "training_credit_minted": 0,
+    "required_next_gate": "Recover/bind exact accepted literal ABI atom table, then materialize a small orthogonal-holdout sample and rerun tokenizer, leakage, provenance, nuisance, twin and Forge->Distillery gates before scale."
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "field_id": "field-666-20260826T0400p0700-causal-bisimulation-model-call-identity-09c2ea75",
+  "name": "Causal Bisimulation for Model-Call Identity",
+  "spawn_seed": 703382283100035899,
+  "spawn_seed_sha256": "09c2ea75b57b1b3ba23b17b8b4c968b6f34c578cff3b34b2fe91afaac2c86a82",
+  "spawn_seed_material": "1dc4585ed38fcc3f147f913d534a809a92d98669|@e50 666|2026-08-26T04:00:00+07:00|GPT-5.6-Sol|field-genesis-v1",
+  "created_at": "2026-08-26T04:00:00+07:00",
+  "spawning_run_id": "666-20260826T0400p0700-e50-gpt56sol-causal-bisimulation",
+  "organ": "e50 / GPT-5.6 Sol ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch_at_spawn": "8.82",
+  "canonical_main_at_spawn": "1dc4585ed38fcc3f147f913d534a809a92d98669",
+  "milestone_at_spawn": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "lens": ["programming-language semantics", "causal inference", "cryptographic provenance", "differential testing"],
+  "role": "SYNTHESIZER",
+  "research_question": "Does the current Trigger-2 model-call binding identify an execution occurrence, or only a content-equivalence class, and what identity split is required so exact replay can remain idempotent without collapsing genuinely distinct model-call events?",
+  "hypotheses": [
+    {
+      "id": "H-CBMI-01",
+      "claim": "CLAY_TRIGGER2_MODEL_CALL_BINDING/v2 is a content identity and cannot alone distinguish separate execution occurrences with identical content.",
+      "status": "SUPPORTED_AT_TRIGGER2_CONTENT_BINDING_SCOPE"
+    },
+    {
+      "id": "H-CBMI-02",
+      "claim": "EntityOS/HCU requires content-equivalence identity and execution-occurrence identity to remain distinct concepts.",
+      "status": "SUPPORTED_BUT_EXISTING_HCU_VERIFIED_MODEL_EXECUTION_ALREADY_PROVIDES_OCCURRENCE_MECHANISM"
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-CBMI-01",
+      "claim": "An enclosing repository-bound receipt already provides occurrence identity.",
+      "status": "PARTLY_CONFIRMED: retained PR1263 HCU donor VerifiedModelExecution binds executor_id+invocation_id to one externally admitted observation digest and InferenceReceipt/v4 consumes it"
+    },
+    {
+      "id": "CH-CBMI-02",
+      "claim": "Adding event identity directly to the Trigger-2 content digest would duplicate authority and over-fragment semantic equivalence.",
+      "status": "SUPPORTED_DESIGN_WARNING"
+    }
+  ],
+  "cross_connections": [
+    "EF-20260809-002-REENTRY-CAUSAL-IDENTIFIABILITY",
+    "field-666-20260809T1648p0700-semantic-transaction-isolation-cd8cb4f6",
+    "PR-1891 distinct-execution versus semantic-replay identity law",
+    "PR-1263 VerifiedModelExecution executor/invocation admission authority"
+  ],
+  "revised_finding": "Do not create a second model_call_event_id authority. Preserve Trigger-2 model_call_binding_sha256 as content identity and cross-bind promotion-bearing Trigger-2 outputs to the existing HCU VerifiedModelExecution executor_id+invocation_id+observation identity before InferenceReceipt/NODE_RESULT/J-Space/evaluation/dataset promotion.",
+  "open_gap": "SOURCE_INTEGRATION_AUDIT_REQUIRED: exact Trigger-2 content-binding/evaluation path has not yet been proven to flow through the retained HCU VerifiedModelExecution occurrence identity before downstream promotion.",
+  "falsified_broad_claim": "EntityOS/HCU globally lacks a model-execution occurrence identity primitive.",
+  "remaining_falsifier": "If current Trigger-2 evaluation source already cross-binds its model_call_binding_sha256/output identity to admitted VerifiedModelExecution and downstream InferenceReceipt/v4/J-Space/dataset lineage, close this field as MERGED_INTO_EXISTING_IDENTITY_AUTHORITY_NO_NEW_PRIMITIVE.",
+  "artifacts": {
+    "probe": "research_entity/emergent_fields/fields/field-666-20260826T0400p0700-causal-bisimulation-model-call-identity-09c2ea75/causal_bisimulation_probe.py",
+    "result": "research_entity/emergent_fields/fields/field-666-20260826T0400p0700-causal-bisimulation-model-call-identity-09c2ea75/EXPERIMENT_RESULT.json",
+    "source_reentry_addendum": "research_entity/emergent_fields/fields/field-666-20260826T0400p0700-causal-bisimulation-model-call-identity-09c2ea75/SOURCE_REENTRY_ADDENDUM.md",
+    "report": "research_entity/trigger_runs/666/666-20260826T0400p0700-e50-gpt56sol-causal-bisimulation/FINAL_REPORT.md",
+    "mesh_event": "research_entity/rooms/rooms/center/events/delta-666-20260826T0400p0700-causal-bisimulation-model-call-identity.json"
+  },
+  "execution": {
+    "kind": "DETERMINISTIC_SYNTHETIC_IDENTITY_EXPERIMENT_PLUS_SOURCE_REENTRY",
+    "provider_calls": 0,
+    "model_runtime_calls": 0,
+    "training_calls": 0,
+    "vps_calls": 0,
+    "unusual_experiment": false
+  },
+  "lifecycle_state": "INTEGRATED",
+  "result": "EXISTING_HCU_OCCURRENCE_IDENTITY_FOUND_TRIGGER2_TO_HCU_CROSS_BINDING_AUDIT_REMAINS_OPEN_NO_NEW_IDENTITY_AUTHORITY",
+  "evidence_class": "R0_SOURCE_OBSERVED_PLUS_EXACT_SYNTHETIC_MECHANISM_TEST_PLUS_R1_ARCHITECTURE_FUSION",
+  "promotion_credit": {
+    "model_call_runtime": 0,
+    "jspace_model": 0,
+    "physical_grid10": 0,
+    "training": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0
+  }
+}

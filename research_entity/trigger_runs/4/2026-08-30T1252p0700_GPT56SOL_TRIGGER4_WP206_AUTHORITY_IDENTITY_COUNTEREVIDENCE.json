@@ -1,0 +1,83 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at": "2026-08-30T12:52:00+07:00",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "research_main_before_write": "e451d14eba7e00b2639a4afcaa81391eae2d74b2",
+    "supervisor_inbox": "9.13BG_NON_AUTHORITY",
+    "supervisor_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13BG_DELTA_2026-08-30T1244P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "provider_policy": "ALL_CLAYCODE_EXTERNAL_PROVIDER_ROUTES_UNADMITTED; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "owner_vps_allowed": true
+  },
+  "frankenstein2": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "main_observed": "43120390ab30432f0769cf57a70a2317279051c4",
+    "wp306_d14_scope_resolution": {
+      "counterevidence_pr": 640,
+      "scope_review_pr": 642,
+      "reconciliation_pr": 646,
+      "result": "WP306 G5 retired stale; PR640 remains executable characterization of caller-selected CHANNEL_AUTHORITY, but WP306 is reference-only and not the demonstrated provider/system/developer role sink",
+      "latest_accepted_wp306_generation": 4,
+      "runtime_credit": 0
+    },
+    "wp206": {
+      "canonical_generation": 2,
+      "canonical_claim_id": "F2-WP-206-G2-GPT56SOL-UNIFIEDDB-AUTHORITY-RECEIPT-REPLAY-FENCE-20260830",
+      "accepted_g1_characterization": "Persisted unifieddb_authority_receipt_sha256 was not replay-compared by generation 1",
+      "supervisor_9_13bg_repair_hypothesis": "compare persisted unifieddb_authority_receipt_sha256 directly with store-bound authority receipt before checkpoint decode/replay",
+      "later_counterhypothesis": "if the store-bound receipt is derived from mutable whole-DB content/schema fingerprint, legitimate checkpoint/schema writes change it across restart; historical full-fingerprint equality is therefore not a stable authority invariant",
+      "counterevidence_pr": 647,
+      "counterevidence_run_id": 33295503745,
+      "current_impl_pr": 653,
+      "current_impl_head": "158ab8e039143e70db155398814b6f88eb5d1d09",
+      "current_impl_run_id": 33295596984,
+      "current_impl_job_id": 99214595208,
+      "current_impl_observation": "compile PASS; existing Persistent Agency fresh-process regression FAIL; new G2 authority-receipt regression step SKIPPED",
+      "classification": "POST_STEERING_EXECUTABLE_COUNTEREVIDENCE_BLOCKS_CURRENT_DIRECT_EQUALITY_REPAIR_AT_EXACT_HEAD",
+      "blocking_review_posted": true,
+      "blocking_review_id": 5060065606
+    }
+  },
+  "hypothesis_fusion": {
+    "h1": "A persisted authority receipt must be replay-enforced to prevent authority substitution/tamper.",
+    "h2": "The currently persisted receipt is a mutable full-file fingerprint and cannot be used as historical equality identity across legitimate DB evolution.",
+    "fused_constraint": "Preserve replay authority binding, but separate stable authority identity/epoch/attestation from mutable whole-DB content fingerprint. A valid discriminator must accept legitimate write-to-restart replay while rejecting authority substitution/tamper without requiring historical whole-file fingerprint equality.",
+    "do_not_do": [
+      "do not weaken the accepted fresh-process restart regression to make G2 green",
+      "do not merge PR653 while exact-head fresh-process CI is red",
+      "do not bundle the separately scoped same-inode content/schema fingerprint refresh",
+      "do not promote repository CI to target/runtime/whole-system credit"
+    ]
+  },
+  "wp510_target_runtime": {
+    "controller_run_id": 33265772059,
+    "controller_job_id": 99135457584,
+    "state_from_supervisor_9_13bg": "QUEUED_UNASSIGNED_ZERO_STEPS",
+    "duplicate_dispatch_created": false,
+    "target_runtime_credit": 0
+  },
+  "credits": {
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Re-enter supervisor after PR653 exact-head failure. Reclassify the repair target from historical whole-file receipt equality to a stable authority identity/epoch/attestation contract. Preregister two controls: legitimate checkpoint write followed by fresh-process restart must PASS; authority substitution/tamper against the stable authority identity must FAIL CLOSED. Keep mutable same-inode DB content/schema refresh as a separate discriminator and keep WP510 singleton undispatched while its existing run remains unresolved."
+}

@@ -1,0 +1,85 @@
+{
+  "schema": "F2_TRIGGER7_REENTRY_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "created_local_time": "2026-08-31T06:02:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_AND_REENTRY_NOT_F2_CLAIM_AUTHORITY",
+  "authority_snapshot": {
+    "research_main_observed": "dfdd13c216f22a5dbbeba466bd93d9e0bba9eda1",
+    "f2_main_observed": "9741bc9a6d94f096437e23b728d536339ed11a82",
+    "target_runtime_law": "fully local/self-hosted; zero external model/ASR/TTS API calls",
+    "language_priority": "German first"
+  },
+  "reentry": {
+    "previous_gate": "T7-FD-RTCOMPAT-001 HF Realtime heard-boundary executable falsifier",
+    "previous_runtime_credit": 0,
+    "previous_trigger4_acceptance_credit": 0,
+    "current_f2_signal": "F2 main now contains ASR008/Nemotron comparator work and an explicit candidate falsifier for a controller receipt-contract mismatch; do not infer runtime success from source/commit presence."
+  },
+  "fresh_primary_source_findings": [
+    {
+      "source": "https://github.com/huggingface/speech-to-speech/issues/485",
+      "date": "2026-08-13",
+      "state": "OPEN",
+      "class": "UPSTREAM_PROTOCOL_RISK",
+      "finding": "Realtime routing for transcription terminals without matching speech-lifecycle item metadata remains an open design question. Ambiguous terminals must not silently attach to another input item."
+    },
+    {
+      "source": "https://github.com/huggingface/speech-to-speech/issues/489",
+      "date": "2026-08-13",
+      "state": "OPEN",
+      "class": "UPSTREAM_SPECULATIVE_TRANSCRIPT_COMPATIBILITY_RISK",
+      "finding": "Append-only protocol deltas cannot represent arbitrary revisions of cumulative progressive STT hypotheses; upstream proposes opt-in speculative snapshot events while preserving standard-client compatibility. This strengthens the need to separate stable causal transcript state from speculative display state in the F2 falsifier."
+    },
+    {
+      "source": "https://github.com/huggingface/speech-to-speech/issues/309",
+      "state": "OPEN",
+      "class": "UPSTREAM_TOOL_AUDIO_ORDERING_RISK",
+      "finding": "Ordered interleaving of assistant text and tool calls remains fragile around response completion boundaries, directly relevant to late-tool/audio ownership and heard-boundary cancellation semantics."
+    },
+    {
+      "source": "https://github.com/huggingface/speech-to-speech/issues/412",
+      "date": "2026-08-02",
+      "state": "CLOSED",
+      "class": "UPSTREAM_REALTIME_TURN_REGRESSION_HISTORY",
+      "finding": "Historical premature finalization of progressive Whisper turns remains a required regression family but is not current product-negative evidence by itself."
+    },
+    {
+      "source": "https://github.com/huggingface/speech-to-speech/issues/474",
+      "date": "2026-08-12",
+      "state": "CLOSED",
+      "class": "UPSTREAM_PROTOCOL_SEMANTICS_REPAIR_HISTORY",
+      "finding": "Incremental wire delta semantics were repaired; completed transcript remains authoritative. Use this distinction when judging stable next-turn state versus speculative partial display."
+    }
+  ],
+  "decision": {
+    "highest_information_nonduplicate_gate": "Execute/reconcile the existing Trigger4/VPS protocol falsifier before opening a new local-voice architecture lane.",
+    "required_observations": [
+      "stable causal transcript state must be distinguished from speculative partial-display state",
+      "unheard assistant audio must not survive cancellation into next-turn context",
+      "late tool results must remain bound to the correct response/turn identity",
+      "cancel/truncate operations must be idempotent under repeated or reordered lifecycle events",
+      "network-blocked runtime must prove zero external model/ASR/TTS inference dependency",
+      "receipt schema must match the current F2 validator before any runtime credit can move"
+    ],
+    "priority_changed": false,
+    "reason": "Fresh upstream evidence and current F2 ASR008 receipt-contract mismatch both point to protocol/evidence-boundary correctness as the present bottleneck. New model breadth would add churn without closing the measured voice-organ gate.",
+    "credits": {
+      "source_research": 1,
+      "local_runtime": 0,
+      "german_e2e_voice": 0,
+      "physical_audio_acceptance": 0,
+      "trigger4_acceptance": 0,
+      "whole_voice_system": 0,
+      "training": 0
+    }
+  },
+  "continuation_checkpoint": {
+    "next_7_reentry_order": [
+      "refresh F2 main and research main",
+      "consume exact Trigger4/VPS result and receipt reconciliation for the existing protocol/ASR comparator boundary",
+      "classify any failure as PRODUCT_NEGATIVE, EVIDENCE_INVALID, INFRA_AUTH_TRANSPORT_QUOTA, CONCURRENCY_RETRY, or UNKNOWN_NONTERMINAL",
+      "only after a valid executed discriminator decide whether to repair protocol semantics, receipt plumbing, or reopen candidate search"
+    ]
+  }
+}

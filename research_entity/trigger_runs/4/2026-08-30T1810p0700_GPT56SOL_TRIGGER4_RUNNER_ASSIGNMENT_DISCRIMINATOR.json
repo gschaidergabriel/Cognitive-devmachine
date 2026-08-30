@@ -1,0 +1,86 @@
+{
+  "schema": "CLAY_TRIGGER4_RUNNER_ASSIGNMENT_DISCRIMINATOR/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "trigger_message_local": "2026-08-30T18:10:00+07:00",
+  "authority": {
+    "bootstrap_schema_version": "8.78",
+    "mode": "FREE_ONLY",
+    "together": "FORBIDDEN",
+    "paid_or_unknown_cost_fallback": "FORBIDDEN_FAIL_CLOSED"
+  },
+  "source_heads": {
+    "research_main_before_write": "4323b4c3a2500d8066d107352fbd78148451dccc",
+    "frankenstein2_main_observed": "cfe3f1ee4766deb827a7e7adb87fd25b3f89e809",
+    "controller_wp901_source_commit": "71f24776cf4ca22bc2cd40e5b378ca60dbae855b"
+  },
+  "predecessor_checkpoint": {
+    "commit": "4323b4c3a2500d8066d107352fbd78148451dccc",
+    "classification": "RUNTIME_CREDIT_CLOSURE_BLOCKED_BY_SELF_HOSTED_RUNNER_LIFECYCLE"
+  },
+  "observations": [
+    {
+      "workpackage_id": "F2-WP-1207",
+      "run_id": 33301648871,
+      "job_id": 99230838825,
+      "status": "queued",
+      "labels": ["self-hosted"],
+      "runner_id": 0,
+      "runner_name": "",
+      "steps_observed": 0,
+      "assignment": "UNASSIGNED"
+    },
+    {
+      "workpackage_id": "F2-WP-901",
+      "run_id": 33307216839,
+      "job_id": 99245769783,
+      "status": "queued",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "runner_id": 0,
+      "runner_name": "",
+      "steps_observed": 0,
+      "assignment": "UNASSIGNED"
+    },
+    {
+      "workpackage_id": "F2-WP-510",
+      "run_id": 33265772059,
+      "job_id": 99135457584,
+      "status": "queued",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "runner_id": 0,
+      "runner_name": "",
+      "steps_observed": 0,
+      "assignment": "UNASSIGNED"
+    }
+  ],
+  "discriminator_result": {
+    "result": "PRE_ASSIGNMENT_LIFECYCLE_BLOCK_CONFIRMED_AT_GITHUB_CONTROL_PLANE_SCOPE",
+    "falsified_or_strongly_disfavored": [
+      "Linux/X64 requested-label mismatch as the sole blocker"
+    ],
+    "reason": "The broader WP1207 job requests only self-hosted yet is also unassigned, while WP901 and WP510 request self-hosted+Linux+X64 and are likewise unassigned. All three expose runner_id=0, empty runner_name and zero executed steps.",
+    "remaining_live_hypotheses": [
+      "no matching self-hosted runner currently online",
+      "runner registration or repository authorization is absent/stale",
+      "runner is ineligible for assignment for another lifecycle reason",
+      "runner capacity is unavailable"
+    ],
+    "not_established": [
+      "which remaining lifecycle cause is true",
+      "Frankenstein runtime defect",
+      "target-host runtime PASS",
+      "physical GRID10 PASS",
+      "GWT/J-Space runtime PASS",
+      "whole-system acceptance"
+    ]
+  },
+  "actions": {
+    "duplicate_dispatch": false,
+    "provider_calls": false,
+    "vps_or_owner_host_execution": false,
+    "unusual_experiment": false,
+    "durable_research_delta": true
+  },
+  "next_exact_action": "On an organ with direct owner-host access, inspect the self-hosted GitHub Actions runner service/registration/authorization/eligibility and restore assignment capability without creating duplicate jobs. Then allow the already queued WP510/WP901/WP1207 jobs to bind to a runner and promote only exact receipt scope.",
+  "credit_boundary": "GITHUB_CONTROL_PLANE_PRE_ASSIGNMENT_DISCRIMINATOR_ONLY"
+}

@@ -1227,7 +1227,10 @@ def _execute_chat_locked(
                     # across cleanup, then immediately re-raised unchanged.
                     response_context_error = exc
             _raise_if_fork_active_execution_quarantined()
+        except ForkActiveExecutionQuarantine:
+            raise
         except Exception:
+            _raise_if_fork_active_execution_quarantined()
             if (
                 not response_classified
                 and not response_too_large

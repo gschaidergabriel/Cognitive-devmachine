@@ -1,0 +1,81 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at": "2026-08-30T12:52:50+07:00",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "bootstrap_authority_epoch": "8.78",
+    "supervisor_inbox_delta": "9.13BG_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "together": "FORBIDDEN",
+    "owner_vps_allowed": true
+  },
+  "frankenstein2": {
+    "main_observed": "55bf09a34312f6bccb2d06069747d9d8034d15d1",
+    "retained_wp206_g2_pr": 647,
+    "retained_branch": "chatgpt/trigger4-wp206-g2-db-authority-receipt-binding-20260830",
+    "retained_head": "0293941c55b6506545dca6818028f13b471323cc",
+    "wp206_ci_run": 33295503745,
+    "wp206_ci_job": 99214354408,
+    "wp206_ci_conclusion": "FAILURE",
+    "state_view_v2_run": 33295503746,
+    "state_view_v2_conclusion": "SUCCESS",
+    "state_consistency_run": 33295503744,
+    "state_consistency_conclusion": "SUCCESS"
+  },
+  "observed_failure": {
+    "step": "Persistent Agency fresh-process falsifier suite",
+    "tests_run": 6,
+    "failures": 2,
+    "errors": 1,
+    "common_error": "CHECKPOINT_DB_AUTHORITY_RECEIPT_MISMATCH",
+    "tamper_test": "PASS_BUT_NOT_SUFFICIENT_AS_DISCRIMINATOR",
+    "positive_restart_test": "FAIL",
+    "transactional_parent_test": "ERROR_BEFORE_INTENDED_ASSERTION",
+    "payload_digest_tamper_test": "FAILS_EARLY_ON_AUTHORITY_RECEIPT_INSTEAD_OF_CHECKPOINT_DIGEST_MISMATCH"
+  },
+  "root_cause": {
+    "classification": "SOURCE_AND_EXECUTABLE_LOG_CORROBORATED",
+    "finding": "CanonicalPersistentAgencyStore captures fingerprint.receipt_sha256() when the store is opened. In the restart probe the fingerprint is computed before PRAGMA journal_mode=WAL, schema initialization and checkpoint writes. The persisted unifieddb_authority_receipt_sha256 is therefore a pre-mutation full-file fingerprint receipt. A fresh process fingerprints the same canonical SQLite file after legitimate WAL/schema/write transitions, so the full receipt differs even though canonical path/device/inode authority is unchanged. Enforcing direct equality therefore creates false-positive authority drift on normal restart.",
+    "self_reference_note": "Using a full mutable DB-content fingerprint as a receipt stored inside that same DB is structurally unsuitable for a persistent authority-binding field: ordinary writes can change the fingerprint, and persisting a refreshed full-file digest is self-referential. This is distinct from the separately-scoped same-inode content/schema refresh discriminator."
+  },
+  "repair_hypothesis": {
+    "status": "PROPOSED_NOT_EXECUTED_BY_THIS_ORGAN",
+    "proposal": "Keep the G2 scope narrow but derive the persisted authority receipt from a stable non-self-referential UnifiedDB authority projection (canonical resolution/path plus file device/inode and authority-source identity as admitted), rather than UnifiedDBFingerprint.receipt_sha256() over mutable file/content/stat/schema/WAL fields. Compare that stable store-bound authority receipt before checkpoint decode/replay. Preserve the separate path/device/inode checks, existing checkpoint digest checks and the exact one-column tamper regression.",
+    "required_positive_control": "Untampered fresh-process restart must pass before the forged stored authority-receipt negative is credited.",
+    "required_negative_control": "Mutating only persisted unifieddb_authority_receipt_sha256 must fail closed with CHECKPOINT_DB_AUTHORITY_RECEIPT_MISMATCH before checkpoint decode/replay.",
+    "scope_fence": "Do not bundle same-inode DB content/schema fingerprint refresh into WP206 G2."
+  },
+  "counterhypothesis": {
+    "statement": "Refreshing the full UnifiedDBFingerprint receipt after schema initialization could make the current test fixture pass while WAL remains present.",
+    "rejection_reason": "That approach remains coupled to mutable file/stat/schema/WAL state and cannot robustly serve as a self-persisted stable authority identity across legitimate DB evolution; it also risks silently entering the separately-governed same-inode content/schema discriminator."
+  },
+  "coordination": {
+    "parallel_wp206_source_write_performed": false,
+    "reason": "Retained PR647 already owns the canonical G2 mutation lane; this organ records the executable diagnosis rather than racing the same source paths.",
+    "duplicate_wp510_dispatch_created": false,
+    "wp510_controller_run": 33265772059,
+    "wp510_last_observed": "QUEUED_UNRESOLVED_ZERO_RUNTIME_CREDIT"
+  },
+  "credits": {
+    "wp206_g2_repository_acceptance": false,
+    "wp206_runtime_credit": 0,
+    "wp510_target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Retained PR647 owner: replace the mutable full-fingerprint self-binding with a stable non-self-referential UnifiedDB authority receipt at the WP206 store boundary; retain exact G1/G2 tamper regression; run WP206 CI on exact new head and require both untampered fresh-process restart PASS and one-column forged-receipt fail-closed PASS before bounded G2 reconciliation. Do not merge while run 33295503745 remains the latest WP206 evidence."
+}

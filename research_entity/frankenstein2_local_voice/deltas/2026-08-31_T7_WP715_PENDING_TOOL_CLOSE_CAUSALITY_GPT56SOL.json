@@ -1,0 +1,59 @@
+{
+  "schema": "F2_TRIGGER7_WP715_PENDING_TOOL_CLOSE_CAUSALITY_RESEARCH/v1",
+  "trigger": "7",
+  "recorded_date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_REVIEW_ONLY_NOT_F2_CLAIM_AUTHORITY",
+  "mutation_authority": false,
+  "workpackage_id": "F2-WP-715",
+  "observed_f2_head_before_persist": "c60b29a1492378fa0091ab09c47b527bc6496195",
+  "authority": "frankenstein-2.0/research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md",
+  "candidate_id": "PN15_CLOSE_WITH_PENDING_TOOL_OWNERSHIP_MUST_FAIL_CLOSED_OR_BIND_EXPLICIT_CANCELLATION",
+  "evidence_class": "CURRENT_SOURCE_INSPECTION",
+  "observation": {
+    "tool_use": "emit_intent(TOOL_USE) adds tool_ref to _active_tools after emitting the intent event.",
+    "tool_result": "emit_system_event(TOOL_RESULT) requires the same tool_ref to remain active for the owning turn and then removes it.",
+    "barge_in": "cancel_for_barge_in explicitly moves active tool refs of cancelled turns into _cancelled_tools.",
+    "close": "close_session validates event capacity, nonterminal outputs and commit-eligible result references, but does not reject or explicitly cancel unresolved active tool refs; after SESSION_CLOSE it clears _active_tools.",
+    "test_gap": "current packet tests cover late TOOL_RESULT after barge-in cancellation, but no unresolved-tool close discriminator was found."
+  },
+  "risk": "An externally started tool/effect may still complete after the voice session closes. Silently clearing its ownership without an explicit cancellation/unknown-effect/re-entry binding can erase the causal explanation required by the tool/effect boundary and VoiceOutcome semantics.",
+  "counterhypothesis": "A stronger canonical higher-level tool/effect lifecycle may guarantee that all active tool refs are resolved, cancelled or journaled before VoicePacketCortex.close_session is reachable. If executable evidence proves that invariant, PN15 should be rejected rather than duplicated inside the cortex.",
+  "minimal_discriminator": {
+    "setup": [
+      "Open one valid VoicePacketCortex session.",
+      "Emit TOOL_USE on turn-old with tool_ref tool:pending-close.",
+      "Do not emit TOOL_RESULT and do not barge-in cancel the owning turn.",
+      "Keep all outputs terminal or absent."
+    ],
+    "action": "Call close_session with a valid causal outcome identity and no result_ref/result_sha256.",
+    "expected_safe_property": "Either close fails closed because a tool remains unresolved, or close emits/persists an explicit deterministic cancellation/unknown-effect handoff preserving causal identity across recovery/re-entry.",
+    "candidate_product_negative": "If close succeeds solely by clearing _active_tools with no external stronger fence, classify PRODUCT_NEGATIVE at packet-controller tool/effect causal-ownership scope."
+  },
+  "coordination": {
+    "current_immediate_wp715_blocker": "Executed repository PRODUCT_NEGATIVE exists for restart reentry on source subject 9203d515dbcfb8a049971e60174a281609865a33.",
+    "execution_priority": "DEFER_PN15_EXECUTION_UNTIL_RESTART_REENTRY_NEGATIVE_IS_REPAIRED_OR_INCLUDE_PN15_IN_THE_SAME_OWNER_COHERENT_REGRESSION_PASS",
+    "f2_direct_write_attempts": 2,
+    "f2_write_result": "CONCURRENCY_RETRY_ONLY_NO_F2_FILE_CREATED",
+    "duplicate_source_mutation": false,
+    "duplicate_runtime_dispatch": false,
+    "duplicate_workflow": false
+  },
+  "requested_trigger4_action": [
+    "Inspect the higher-level canonical EffectGate/EffectJournal/tool lifecycle before changing WP715.",
+    "If no stronger executable close fence already exists, add PN15 as one bounded regression in the existing WP715 packet/recovery surface.",
+    "Prefer fail-closed close for unresolved tools unless an explicit journaled UNKNOWN/cancellation handoff already exists.",
+    "Route the regression through the existing single WP715 repository/VPS discriminator after the current restart reentry repair; do not create a second workflow."
+  ],
+  "credit": {
+    "review_delta": 1,
+    "product_negative_credit": 0,
+    "repository_ci_credit": 0,
+    "vps_packet_runtime_credit": 0,
+    "target_runtime_credit": 0,
+    "acoustic_credit": 0,
+    "whole_voice_credit": 0,
+    "whole_product_credit": 0
+  },
+  "next_exact_action": "WP715 owner first closes the existing restart-reentry PRODUCT_NEGATIVE. In the same coherent regression pass, evaluate PN15 against current tool/effect authority and execute it only if not already externally fenced."
+}

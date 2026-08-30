@@ -1,0 +1,74 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "REVIEW_RESEARCH_DELTA_NOT_F2_CLAIM_AUTHORITY",
+  "reentry": {
+    "clay_main_observed": "ae7386b12aad0fe758676eb591a7fd44e2872939",
+    "f2_main_observed": "1281b457a483b5b76c5bcc88301f97a428e8f602",
+    "f2_main_message": "trigger4: claim WP716 VPS media lab runtime scope",
+    "active_nonduplicate_f2_boundary": "F2-WP-716 generation 1 / VPS media-lab target-environment component runtime",
+    "trigger7_mutation_mode": "REVIEW_ONLY_RESEARCH_SIDE"
+  },
+  "asr004": {
+    "research_id": "T7-ASR-004",
+    "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+    "subject": "Qwen/Qwen3-ASR-0.6B",
+    "current_corrected_attempt": 4,
+    "dispatch_marker_commit": "0c937053e7d0b30f691373e3cd48e8ce5413087e",
+    "f2_checkpoint_commit": "337c35d0891b7c8bbed3e9ce95bed8871c2041c8",
+    "receipt_lookup": "runtime/trigger7_qwen3_asr_target_probe/LATEST.json",
+    "receipt_observed_on_current_f2_main": false,
+    "executed_steps_observed_for_attempt4": false,
+    "failure_classification": "UNKNOWN_NONTERMINAL",
+    "anti_churn": "NO_REDISPATCH_NO_NEW_SEMANTIC_SUBJECT_UNTIL_TERMINAL_EXECUTED_EVIDENCE_OR_EXPLICIT_INVALIDATION"
+  },
+  "fresh_external_primary": {
+    "qwen3_asr": {
+      "facts": [
+        "Qwen3-ASR-0.6B officially lists German and Offline/Streaming support.",
+        "The official Qwen3-ASR model card states that streaming inference is currently available only with the vLLM backend.",
+        "The official streaming demo maintains explicit per-session streaming state and finalizes it at end-of-stream; source capability alone does not prove target long-session stability or no-history-copy behavior."
+      ],
+      "sources": [
+        "https://huggingface.co/Qwen/Qwen3-ASR-0.6B",
+        "https://github.com/QwenLM/Qwen3-ASR/blob/main/qwen_asr/cli/demo_streaming.py"
+      ]
+    },
+    "nemotron35_asr": {
+      "facts": [
+        "NVIDIA NeMo-Speech.cpp now provides an official lightweight native C++ local runtime for Nemotron 3.5 ASR Streaming 0.6B.",
+        "The official model/runtime documentation describes Nemotron 3.5 as multilingual across 40+ language-locales and exposes VAD masking, endpointing and language-conditioned streaming controls.",
+        "The official GGUF path materially strengthens T7-ASR-008 as a portable local-runtime competitor, but it does not justify running ASR008 before ASR004 closes on the identical comparator."
+      ],
+      "sources": [
+        "https://github.com/NVIDIA/NeMo-Speech.cpp",
+        "https://github.com/NVIDIA/NeMo-Speech.cpp/blob/main/docs/asr/models.md",
+        "https://github.com/NVIDIA/NeMo-Speech.cpp/blob/main/docs/asr/customization.md"
+      ]
+    }
+  },
+  "research_delta": {
+    "asr004_change": "NO_SEMANTIC_CHANGE_WITH_REASON",
+    "reason": "Attempt 4 is still nonterminal and subject-frozen; changing or redispatching it would create promotion-staleness and destroy matched-comparator causality.",
+    "asr008_falsifier_refinement": [
+      "Use the identical pinned German FLEURS/non-speech audio hashes used by ASR004.",
+      "Measure native NeMo-Speech.cpp GGUF path separately from any Python/NeMo path.",
+      "Record WER/CER, silence false activations, endpoint decisions, first-partial latency, finalization latency, real-time factor, peak RSS and sustained CPU/GPU use.",
+      "Run at least two semantically distinct turns in one persistent session and reject any history-copy contamination.",
+      "Keep VAD/endpointing policy explicit so a gating advantage is not misattributed to the acoustic model.",
+      "Do not promote streaming/local-runtime credit from capability metadata or source availability alone."
+    ]
+  },
+  "credits": {
+    "new_target_runtime_credit": 0,
+    "new_german_asr_quality_credit": 0,
+    "new_streaming_asr_credit": 0,
+    "new_trigger4_acceptance_credit": 0,
+    "new_training_credit": 0,
+    "new_whole_voice_system_credit": 0
+  },
+  "decision": "PRESERVE_ASR004_ATTEMPT4_AND_DO_NOT_DUPLICATE_DISPATCH; ASR008_REMAINS_SUCCESSOR_ONLY_AFTER_ASR004_TERMINAL_MEASUREMENT_OR_EXPLICIT_RECONCILIATION",
+  "next_exact_action": "Consume the first exact persisted run/receipt evidence for ASR004 attempt 4. If exact target execution succeeds, complete the already-defined identical-audio German/non-speech comparator against faster-whisper including the multi-turn no-history-copy and per-turn cost-growth falsifier. Only then execute T7-ASR-008 Nemotron 3.5 via the official native NeMo-Speech.cpp GGUF route on the same audio and gating policy."
+}

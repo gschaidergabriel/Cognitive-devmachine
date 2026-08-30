@@ -770,6 +770,9 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         self.assertEqual(result["receipt"]["schema_version"], "1.13")
         self.assertEqual(
+            result["receipt"]["capability_receipt_schema_version"], "1.18"
+        )
+        self.assertEqual(
             result["receipt"]["cost_policy_principal_fork_context"],
             "child_pid_and_monotonic_parent_fork_generation",
         )

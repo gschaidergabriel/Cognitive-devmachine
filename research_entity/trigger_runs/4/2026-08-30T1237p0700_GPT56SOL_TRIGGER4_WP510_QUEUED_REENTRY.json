@@ -1,0 +1,71 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at": "2026-08-30T12:37:00+07:00",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_branch_head": "c634c6f35dcad9e83eec8575b98467a262a2d671",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "bootstrap_schema": "8.78",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "mode": "FREE_ONLY",
+    "free_only_meaning": "EXTERNAL_PROVIDER_TOKEN_AND_SPEND_POLICY_NOT_OWNER_VPS_BAN",
+    "owner_vps_allowed": true,
+    "together": "FORBIDDEN"
+  },
+  "observed_heads": {
+    "clay_research_main": "2ff93d8512976ab6b84632f853812b1ed0a12de3",
+    "frankenstein2_main": "f9a345e341a9c8a7887849764aa13fd2ef7b87a9",
+    "controller_main": "a1fa3222cec7081c4ce2af153b4831138041814a"
+  },
+  "frankenstein2_frontier": {
+    "wp510": "G3_ACCEPTED_REPOSITORY_HOSTED_COMPONENT_CI_ONLY_RUNTIME_ZERO",
+    "wp510_exact_source_sha_for_existing_runtime_dispatch": "656b57bded655e64a25d7e205b599becce3d4989",
+    "current_f2_main_has_advanced_beyond_pinned_runtime_source": true,
+    "promotion_rule": "ANY_EVENTUAL_PASS_FROM_EXISTING_DISPATCH_IS_SCOPED_ONLY_TO_THE_PINNED_SOURCE_UNLESS_A_SEPARATELY_ADMITTED_SUCCESSOR_RUN_IS_CREATED_AFTER_TERMINALIZATION"
+  },
+  "controller_runtime_probe": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "workflow": ".github/workflows/trigger4-wp510-target-runtime-v2.yml",
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "run_status_observed": "queued",
+    "job_status_observed": "queued",
+    "executed_steps_observed": 0,
+    "runner_assignment_observed": false,
+    "duplicate_dispatch_created": false
+  },
+  "tool_surface": {
+    "github_rw": true,
+    "direct_ssh_or_vps_surface": false,
+    "installable_ssh_vps_remote_shell_plugin_found": false
+  },
+  "classification": "RUNNER_LIFECYCLE_OR_ASSIGNMENT_BLOCKER_REMAINS_INFRASTRUCTURE_NEGATIVE_EVIDENCE_NOT_WP510_SEMANTIC_FAILURE",
+  "hypothesis": "The unresolved WP510 target-runtime gate remains most consistent with self-hosted runner lifecycle, registration, eligibility or assignment failure before job execution.",
+  "counterhypothesis": "The runner may be live but ineligible for the requested labels/group or blocked by another controller-side condition; direct target-host observation is required to distinguish these cases.",
+  "credits": {
+    "wp510_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "coordination": {
+    "blocker_issue": "gschaidergabriel/Dr.-Unterweger#873",
+    "duplicate_dispatch_forbidden_while_existing_run_unresolved": true,
+    "new_unusual_experiment": false
+  },
+  "next_exact_action": "On an organ with the already-authorized clay-direct-dev host/bridge surface, inspect self-hosted runner service/boot state, Runner.Listener presence, diagnostic/connectivity logs, installed runner version and registration/group/label eligibility, then re-read run 33265772059/job 99135457584. Do not mutate runner policy before direct observation and do not dispatch a successor while this run remains unresolved."
+}

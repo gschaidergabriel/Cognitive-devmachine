@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_TRIGGER4_F2_CLEAN_MACHINE_NEGATIVE_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "observed_at": "2026-08-30T04:35:28Z",
+  "epistemic_type": "REAL_EXECUTION_NEGATIVE_OBSERVATION",
+  "scope": "TRANSIENT_CHAT_CONTAINER_OTHER_AGENT_ROUTE_ONLY",
+  "release_candidate": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "source_commit": "2187d15a2a1edbae70930d01e313180e6ebd6fbd",
+    "release_id": "frankenstein-2.0-2187d15a2a1e",
+    "actions_run_id": 33292596534,
+    "actions_artifact_id": 9726422448,
+    "actions_artifact_bundle_sha256": "f66e782bcc93a1baac3e5d34650feb917cf9a14edf0150c852676b028939a9fa",
+    "artifact_filename": "frankenstein-2.0.zip",
+    "artifact_sha256": "1d6b17b05754c966ca11a806b42f5f47a77086094c35bf0e9530059fca51a156",
+    "artifact_size_bytes": 11770789,
+    "release_manifest_sha256": "e933df4388ced5426b9509215789617f8570149612644107ac58051303598a7b",
+    "prehandoff_receipt_sha256": "268ab62af83dc1836a58ddc0ba35a1ec8aa68427a6146495953e58aedd75ec6b",
+    "content_bound_prehandoff_sha256": "8babac00726a416af37296b4754eb5dd94e721689072eda4268de5479aaaf168",
+    "archive_receipt_sha256": "b65afc4af2a015f9a408dfcb82c33c872d606683983c7f25bc621ea32befc47d"
+  },
+  "transport_verification": {
+    "downloaded_actions_bundle_sha256_matches": true,
+    "inner_release_zip_sha256_matches": true,
+    "release_manifest_sha256_matches": true,
+    "prehandoff_receipt_sha256_matches": true
+  },
+  "environment": {
+    "host_class": "CHATGPT_TRANSIENT_CONTAINER_OTHER_AGENT",
+    "os": "Debian GNU/Linux 13",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "python": "3.13.5",
+    "git": "2.47.3",
+    "systemd_binary_present": true,
+    "systemd_runtime_state": "offline",
+    "pid1": "supervisord",
+    "ssh_client_present": false,
+    "direct_vps_bridge_configuration_observed": false
+  },
+  "package_route_observation": {
+    "selected_route": "OTHER_AGENT",
+    "package_entry_present": true,
+    "release_manifest_present": true,
+    "baseline_vps_required_by_contract": false,
+    "route_implementation_classification": "PLAN_VALIDATE_ONLY_NO_HOST_PROBING_OR_MUTATION",
+    "installer_runtime_credit_declared_by_generic_route": false,
+    "durable_user_state_path_verified": false,
+    "lifecycle_event_binding_verified": false,
+    "pre_effect_binding_verified": false,
+    "post_effect_binding_verified": false,
+    "restart_recovery_verified": false,
+    "reinstall_update_persistence_verified": false,
+    "persistent_runtime_service_verified": false,
+    "baseline_local_boot_without_vps_verified": false,
+    "result": "BLOCKED",
+    "limitations": [
+      "NO_VERIFIED_DURABLE_USER_STATE_ROOT_ACROSS_HOST_OR_SESSION_RESTART",
+      "NO_EXPORTED_HOST_LIFECYCLE_EVENT_BINDINGS_FOR_SESSION_START_USER_TURN_PRE_EFFECT_POST_EFFECT_STOP_OR_TOOL_RESULT",
+      "NO_EXECUTABLE_INSTALLER_RUNTIME_PATH_OBSERVED_IN_THE_RELEASE_ROUTE_MODULES; THEY_PLAN_VALIDATE_ONLY",
+      "SYSTEMD_RUNTIME_OFFLINE_IN_THIS_CONTAINER",
+      "NO_LOCAL_SSH_VPS_BRIDGE_CONFIGURATION_IN_THIS_SESSION",
+      "NO_RESTART_OR_REINSTALL_PERSISTENCE_PROOF_CAN_BE_MINTED_FROM_TRANSIENT_SESSION_STORAGE"
+    ]
+  },
+  "executed_falsifiers": {
+    "command": "PYTHONPATH=src python -m unittest -v tests.test_clean_machine_acceptance tests.test_artifact_bound_clean_machine tests.test_generic_agent_route",
+    "tests_run": 34,
+    "tests_passed": 34,
+    "tests_failed": 0,
+    "log_sha256": "c5ad8961c023ab3e0434f9fbf7bfd0570d57e21676bc513398695c1dcdaf38ff",
+    "credit_scope": "PACKAGE_EVALUATOR_AND_ROUTE_COMPONENT_RUNTIME_ONLY_NOT_INSTALL_ACCEPTANCE"
+  },
+  "credits": {
+    "other_agent_install_acceptance_credit": 0,
+    "no_vps_baseline_acceptance_credit": 0,
+    "vps_target_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "whole_system_acceptance": false,
+    "hcu_runtime_credit": 0,
+    "grid10_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "classification": "BOUND_NEGATIVE_HOST_OBSERVATION_NOT_PRODUCT_FAILURE",
+  "falsifier_conclusion": "The frozen release candidate is byte-identity sound and its clean-machine evaluators execute correctly, but this transient other-agent host cannot satisfy the product's required durable-state, lifecycle, restart, reinstall, or persistent-runtime observations. Do not promote local-install or no-VPS-baseline acceptance from this environment.",
+  "next_exact_action": "Run the same frozen artifact on a supported persistent local coding-agent host or restore the established clay-direct-dev bridge and execute the hostile target-twin/real-host handoff path. Preserve the exact artifact and pre-handoff hashes when promoting any runtime evidence."
+}

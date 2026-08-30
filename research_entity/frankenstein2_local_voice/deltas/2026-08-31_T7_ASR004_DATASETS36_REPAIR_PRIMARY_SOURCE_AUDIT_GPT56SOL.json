@@ -1,0 +1,67 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_ONLY_PRIMARY_SOURCE_AUDIT_NOT_F2_MUTATION_AUTHORITY",
+  "authority_snapshot": {
+    "research_head_before_write": "ce8dd54a50cfbbd0c5e5be6843d1e7244a79a0c4",
+    "f2_head_observed": "2377fa7c4abf98a912cf1341024675adc3bb0e7f",
+    "trigger7_protocol": "research_entity/frankenstein2_local_voice/TRIGGERWORD_7_PROTOCOL.md",
+    "f2_mutation_owner_for_asr004_repair": "TRIGGER4"
+  },
+  "cursor": {
+    "research_id": "T7-ASR-004",
+    "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+    "subject": "Qwen/Qwen3-ASR-0.6B matched German/noise comparator",
+    "prior_matched_run_id": 33326279965,
+    "prior_failure_class": "EVIDENCE_INVALID",
+    "prior_exception": "Dataset scripts are no longer supported, but found fleurs.py",
+    "repair_artifact_commit": "81cfd78a776bdc471d0c9beb9d2865fe2a3c50e2",
+    "repair_artifact_path": "research/local_voice/tools/t7_asr004_datasets36_repair.patch"
+  },
+  "primary_source_audit": {
+    "comparator_pin": {
+      "fleurs_repo": "google/fleurs",
+      "config": "de_de",
+      "revision": "bc0636bc121b131df69ed727a4ddafc5afc8afe4",
+      "rows": "test 0..31"
+    },
+    "observations": [
+      "At the exact pinned FLEURS revision bc0636b, Hugging Face marks the commit as adding de_de config data files and the revision still contains fleurs.py.",
+      "At that same pinned revision, de_de/test-00000-of-00001.parquet exists as a concrete 726 MB dataset artifact, alongside train and validation Parquet files.",
+      "Hugging Face Datasets v3.6.0 documentation states that dataset loading scripts may be executed when trust_remote_code=True; Parquet datasets do not intrinsically require a script.",
+      "The existing F2 repair patch makes exactly two bounded changes: adds trust_remote_code=True to load_dataset and pins datasets==3.6.0. This directly targets the observed script-loader incompatibility without changing the semantic comparator, FLEURS revision, German rows, ASR models, gate contract, scoring, or baseline."
+    ],
+    "assessment": "PATCH_IS_TECHNICALLY_WELL_TARGETED_AS_FIRST_REPAIR_RERUN",
+    "confidence": "HIGH_FOR_LOADER_COMPATIBILITY_HYPOTHESIS_NOT_RUNTIME_PASS",
+    "runtime_validation_observed": false,
+    "quality_conclusion_permitted": false
+  },
+  "counterhypotheses_and_fences": [
+    "datasets==3.6.0 plus trust_remote_code may still fail because of a dependency/runtime interaction unrelated to the dataset-script policy; only a rerun can discriminate this.",
+    "A future Parquet-native loader can reduce remote-code and legacy-loader surface, but introducing it before the first repaired rerun would enlarge the semantic change and risk runtime-subject churn.",
+    "Do not interpret presence of pinned Parquet files as proof that the current comparator has executed successfully or that row/audio identities match until the receipt records actual hashes and rows."
+  ],
+  "external_primary_sources": [
+    "https://huggingface.co/datasets/google/fleurs/tree/bc0636bc121b131df69ed727a4ddafc5afc8afe4",
+    "https://huggingface.co/datasets/google/fleurs/tree/bc0636bc121b131df69ed727a4ddafc5afc8afe4/de_de",
+    "https://huggingface.co/docs/datasets/v3.6.0/en/dataset_script"
+  ],
+  "convergence_decision": {
+    "do_not_open_new_asr_architecture": true,
+    "do_not_trigger7_redispatch": true,
+    "asr008_state": "DORMANT_UNTIL_ASR004_TERMINAL_MEASUREMENT_OR_EXPLICIT_RECONCILIATION",
+    "next_exact_action": "Trigger4 should materialize the already-bound two-line datasets36/trust_remote_code repair into the canonical ASR004 comparator subject and execute exactly one matched rerun on clay-direct-dev. Trigger7 should consume and classify that receipt before any ASR model or comparator mutation. If this exact repair still fails at loader/dependency level, then evaluate a Parquet-native loader as a second bounded repair while preserving the same pinned FLEURS revision and row/audio identity checks."
+  },
+  "credit_delta": {
+    "asr_component_runtime": 0,
+    "german_asr_quality": 0,
+    "streaming_asr": 0,
+    "trigger4_acceptance": 0,
+    "whole_voice": 0,
+    "physical_audio": 0,
+    "training": 0
+  },
+  "status": "CHECKPOINTED_RESEARCH_AUDIT_WAITING_FOR_TRIGGER4_REPAIRED_RERUN"
+}

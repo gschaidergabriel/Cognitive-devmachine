@@ -1,0 +1,88 @@
+{
+  "schema": "CLAY_TRIGGER4_RELEASE_ARTIFACT_EXECUTION_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "date": "2026-08-30",
+  "routing_self_test": "PASS",
+  "authority": {
+    "owner_vps_execution": "AUTHORIZED_VIA_ESTABLISHED_BRIDGE",
+    "provider_policy": "FREE_ONLY_EXTERNAL_PROVIDER_TOKENS",
+    "together_forbidden": true,
+    "evidence_law": "TRANSIENT_CHAT_CONTAINER_EXECUTION_IS_NOT_TARGET_HOST_OR_VPS_RUNTIME_ACCEPTANCE"
+  },
+  "research_main_observed_before_write": "51b18ed0100603b87a846b1318ce6e50f3dcc34f",
+  "release_subject": {
+    "f2_source_commit": "45958d498815972bf044356db4f982df3462f21e",
+    "f2_source_tree": "646889388a076697214875a1fb34dd28053e4b60",
+    "github_actions_artifact_id": 9734089517,
+    "downloaded_actions_artifact_sha256": "3aac7654ebb36b3463cfa6064e8eddf27ceda5aac2d0cd82e673c4c44b062cbd",
+    "nested_release_zip_sha256": "371c86ecb76e8c9908c6cbe572ce1651702b6c096be2c18a96cdc88373b54115",
+    "release_manifest_sha256": "010f6f54e8d57533fa2a63790cdce22530de439f8b63423c4e72fa8e44e71e20",
+    "member_count": 2862,
+    "release_id": "frankenstein-2.0-45958d498815",
+    "classification": "FROZEN_EXACT_RELEASE_CANDIDATE_NOT_LATEST_F2_HEAD"
+  },
+  "execution_surface": {
+    "surface": "CHAT_TRANSIENT_CONTAINER",
+    "system": "Linux",
+    "kernel": "6.18.35",
+    "machine": "x86_64",
+    "python": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "target_host": false,
+    "owner_vps": false,
+    "physical_local_user_machine": false
+  },
+  "checks": {
+    "outer_artifact_hash_match": "PASS",
+    "nested_release_hash_match": "PASS",
+    "artifact_extract": "PASS",
+    "python_compileall_src": "PASS",
+    "targeted_unittest_count": 142,
+    "targeted_unittest_result": "PASS_142_OF_142",
+    "test_log_sha256": "c85d4bb7e97a306b9364fbca937432bdff5c8630e45f2ede247738710dfa4b48",
+    "targeted_modules": [
+      "tests.test_clean_machine_acceptance",
+      "tests.test_artifact_bound_clean_machine",
+      "tests.test_claude_code_route",
+      "tests.test_codex_cli_route",
+      "tests.test_generic_agent_route",
+      "tests.test_host_transition",
+      "tests.test_optional_vps_bridge",
+      "tests.test_state_migration",
+      "tests.test_portable_release_readback",
+      "tests.test_portable_release_static_completeness",
+      "tests.test_release_integrity",
+      "tests.test_release_archive",
+      "tests.test_release_artifact_subject"
+    ]
+  },
+  "finding": "The exact frozen release candidate survives download, outer/nested identity verification, extraction, source compilation, and 142 targeted release/host/migration/bridge/integrity regressions when executed from the packaged artifact rather than a repository checkout.",
+  "counterboundary": "This does not exercise real host lifecycle hooks, canonical durable user state, restart recovery, real effects, physical perception/voice devices, the owner VPS, the repaired clay-host runner route, or the current latest F2 head.",
+  "parallel_coordination": {
+    "wp510_existing_run_id": 33265772059,
+    "wp510_existing_job_id": 99135457584,
+    "existing_run_last_observed": "QUEUED_ZERO_STEPS_OLD_GENERIC_SELF_HOSTED_ROUTE",
+    "verified_current_runner": "vps-clay-host",
+    "verified_current_runner_label": "clay-host",
+    "wp510_next_route_repair_commit_controller": "ea213f99b9d45e96e364f1c385b67575534a8647",
+    "duplicate_dispatch_created_by_this_receipt": false
+  },
+  "credits": {
+    "artifact_identity_execution_credit": 1,
+    "transient_container_artifact_regression_credit": 1,
+    "repository_checkout_credit": 0,
+    "clean_machine_host_acceptance_credit": 0,
+    "target_vps_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Keep the old WP510 singleton nonpromoting while unresolved. After it is terminal or safely superseded under current coordination law, execute an exact deliberately selected release subject through the verified clay-host route and bind lifecycle firing, durable state readback, restart/recovery and exact-source runtime observations before any target-runtime or completion promotion. Rebuild/freeze a successor candidate first if latest F2 main rather than this frozen candidate is selected."
+}

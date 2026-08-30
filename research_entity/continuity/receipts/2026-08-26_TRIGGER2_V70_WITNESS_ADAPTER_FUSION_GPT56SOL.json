@@ -1,0 +1,113 @@
+{
+  "schema": "CLAY_TRIGGER2_V70_WITNESS_ADAPTER_FUSION/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "SOURCE_ONLY_CANDIDATE_SYNC_PENDING",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "reentry": {
+    "intermediate_main_observed": "ae6ab6ae5a827bef314b3df0363fe6d187dbe996",
+    "final_rebase_parent": "8855081ffdf3ece204fe77e11ee9f5d36f680185",
+    "final_rebase_parent_tree": "40d30ecd7b798f0c90266bef9d7811a24df0f932",
+    "fusion_commit": "26c5361c15716d32c4f85448840e6eef01d35fd6",
+    "branch": "trigger2-v67-physical-witness-boundary-gpt56sol",
+    "pull_request": 2044,
+    "overlap_adjudication": "NO_CURRENT_MAIN_ADAPTER_INTEGRATION_FOUND; MAIN_ADAPTER_AT_FINAL_REBASE_PARENT_STILL_DELEGATED_RAW_COMMIT_KWARGS_TO_LEGACY_FUSEDFABRIC"
+  },
+  "problem": {
+    "id": "CALLER_FORGEABLE_PHYSICAL_COHORT_PROOF_DICTIONARY",
+    "scope_advanced": "RAW_DICT_PHYSICAL_REACHABILITY_AT_RETAINED_TWO_PHASE_ADAPTER",
+    "whole_physical_boundary_closed": false,
+    "observation": "The retained two-phase adapter on the final rebase parent delegates arbitrary commit kwargs, including proof mappings, to FusedFabric.atomic_fused_cohort_commit. The retained deterministic source fixture intentionally constructs an all-true synthetic proof.",
+    "counterhypothesis": "The raw proof mapping could be considered trusted internal data by convention.",
+    "adjudication": "Convention is insufficient for a fail-closed promotion boundary. The current V70 witness donor already makes mapping-only evidence structurally insufficient, so the retained adapter should consume that donor instead of forwarding a raw physical proof."
+  },
+  "nonduplication": {
+    "retained_witness_donor": "tools/trigger2_physical_witness_capability_v1.py",
+    "retained_witness_git_blob_sha1": "167f595cbc9dd5815d91867b62b9741b0397338d",
+    "decision": "REUSE_V70_WITNESS_DONOR_NO_SECOND_WITNESS_CLASS_OR_STATE_AUTHORITY"
+  },
+  "delta": {
+    "adapter": {
+      "path": "tools/trigger2_fused_membership_two_phase_adapter_v1.py",
+      "git_blob_sha1": "52420709d95f7c22713c222ee9865f0e5efa7423",
+      "behavior": [
+        "physical adapter entry rejects raw proof kwargs before legacy physical mutation",
+        "physical adapter entry requires retained V70 require_physical_witness capability",
+        "physical delegation requires atomic_fused_cohort_witness_commit and cannot fall through to legacy raw-dict commit",
+        "source fixture composition has a separately named path requiring synthetic_source_fixture_only=true",
+        "source fixture path emits retained SOURCE_FIXTURE_ONLY receipt and zero promotion credits",
+        "existing deep-copied validation/use envelope snapshot remains retained"
+      ]
+    },
+    "tests": [
+      "tests/test_trigger2_fused_membership_two_phase_adapter_v1.py",
+      "tests/test_trigger2_fused_membership_two_phase_real_fabric_source_v1.py",
+      "tests/test_trigger2_physical_cohort_proof_origin_boundary_v1.py"
+    ],
+    "proof_origin_regression": "V67 strict XFAIL is converted in the candidate branch to an ordinary adapter-scope rejection regression requiring zero state mutation from an all-true synthetic raw proof."
+  },
+  "validation": {
+    "local_python_compile": "UNRESOLVED_TOOL_EXECUTION_DID_NOT_COMPLETE_RELIABLY",
+    "repository_pytest": "NOT_EXECUTED_LOCAL_CONTAINER_NETWORK_DNS_UNAVAILABLE_FOR_PRIVATE_REPO_CLONE",
+    "prior_pr_head_workflows": {
+      "head": "ee8712946241a7f0373aada1b78e0954bad57c81",
+      "research_entity_identity_guard": "FAILURE_WITH_ZERO_STEPS_AND_RUNNER_ID_0",
+      "research_entity_verify": "FAILURE_WITH_ZERO_STEPS_AND_RUNNER_ID_0",
+      "classification": "WORKFLOW_RUNNER_OR_PRESTEP_INFRASTRUCTURE_FAILURE_UNTIL_PROVEN_OTHERWISE_NOT_PRODUCT_TEST_FAILURE"
+    },
+    "repository_ci_test_credit": 0,
+    "integrated_runtime_credit": 0
+  },
+  "negative_evidence": [
+    "Current base FusedFabric.atomic_fused_cohort_commit(proof=dict) still exists as a direct legacy method.",
+    "No current FusedFabric.atomic_fused_cohort_witness_commit implementation has been observed.",
+    "The retained V70 witness donor still accepts caller-supplied marker/FD/S1/predicate mappings when minting and therefore is not complete physical provenance authority.",
+    "spawn_held_cohort returns after release/communicate/reap, so post-return pidfd minting is temporally too late for barrier-time provenance.",
+    "Local Python compile/test execution was not reliably completed in this organ and therefore grants no validation credit.",
+    "P0 runtime quiescence remains active fail; no provider/model/physical GRID10/training execution is authorized by this delta."
+  ],
+  "external_method_basis": [
+    {
+      "source": "Python 3 tutorial - private variables",
+      "url": "https://docs.python.org/3/tutorial/classes.html#private-variables",
+      "use": "A Python class/name-mangling convention is not a hostile-code unforgeability boundary."
+    },
+    {
+      "source": "Linux pidfd_open(2) and pidfd_getfd(2)",
+      "url": "https://man7.org/linux/man-pages/man2/pidfd_getfd.2.html",
+      "use": "pidfd is a kernel task reference primitive and pidfd_getfd can bind an actual target descriptor/open-file description, but permission/kernel failures must fail closed and additional snapshot/packet evidence remains required."
+    }
+  ],
+  "execution_this_cycle": {
+    "provider_called": false,
+    "provider_probe_issued": false,
+    "model_runtime_executed": false,
+    "physical_grid10_executed": false,
+    "training_executed": false,
+    "vps_execution": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false
+  },
+  "credits": {
+    "research_delta": 1,
+    "runtime_quiescence_credit": 0,
+    "physical_proof_boundary_closed": 0,
+    "physical_grid10_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_gate": "While the retained held cohort is still live at the barrier, acquire pidfds and independently bind each actual S1 descriptor via pidfd_getfd/fstat/F_GETFL where supported, bind device+inode+read-only mode plus ready marker/snapshot and a pre-release packet commitment, require exact post-release NODE_RESULT/read-receipt equality, implement the sole witness-aware FusedFabric mutation entry, and fail closed without mapping fallback when kernel/permission support is unavailable."
+}

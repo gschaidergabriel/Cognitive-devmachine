@@ -9,6 +9,7 @@ from tools.trigger2_fused_membership_two_phase_adapter_v1 import (
     AdapterError,
     attach_two_phase_authority,
     atomic_fused_two_phase_commit,
+    atomic_fused_two_phase_source_fixture_commit,
     validate_two_phase_cohort,
 )
 from tools.trigger2_grid10_fused_physical_membership_cohort_acceptance_v1 import (
@@ -188,7 +189,7 @@ def _fixture(tmp_path, label: str):
 
 def _commit(fx, envelopes: list[dict]):
     start = fx["start"]
-    return atomic_fused_two_phase_commit(
+    return atomic_fused_two_phase_source_fixture_commit(
         fx["fabric"],
         envelopes=envelopes,
         lease=fx["lease"],
@@ -244,6 +245,9 @@ def test_resealed_two_phase_authority_is_persisted_by_real_fusedfabric_and_repla
         assert reverse_cohort_id == fx["cohort_id"]
 
         first = _commit(fx, fx["extended_envelopes"])
+        assert first["physical_witness_admitted"] is False
+        assert first["source_fixture_receipt"]["evidence_class"] == "SOURCE_FIXTURE_ONLY"
+        assert first["source_fixture_receipt"]["physical_grid10_runtime_credit"] == 0
         fused = first["fused_coordinator_receipt"]
         assert fused["replay"] is False
         assert fused["state_delta"] == 1
@@ -268,10 +272,45 @@ def test_resealed_two_phase_authority_is_persisted_by_real_fusedfabric_and_repla
             envelope["envelope_digest"] for envelope in fx["base_envelopes"]
         ]
 
-        replay = _commit(fx, fx["extended_envelopes"])["fused_coordinator_receipt"]
+        replay_result = _commit(fx, fx["extended_envelopes"])
+        assert replay_result["source_fixture_receipt"]["evidence_class"] == "SOURCE_FIXTURE_ONLY"
+        replay = replay_result["fused_coordinator_receipt"]
         assert replay["replay"] is True
         assert replay["state_delta"] == 0
         assert fabric.snapshot().epoch == fx["start"].epoch + 1
+    finally:
+        fabric.close()
+
+
+def test_all_true_synthetic_source_proof_cannot_enter_physical_adapter_or_mutate(tmp_path):
+    fx = _fixture(tmp_path, "raw-proof-physical-reject")
+    fabric: FusedFabric = fx["fabric"]
+    try:
+        start = fx["start"]
+        before_epoch = fabric.snapshot().epoch
+        with pytest.raises(AdapterError, match="^RAW_PHYSICAL_COHORT_PROOF_NOT_ADMITTED$"):
+            atomic_fused_two_phase_commit(
+                fabric,
+                envelopes=fx["extended_envelopes"],
+                lease=fx["lease"],
+                token=fx["token"],
+                proof=fx["proof"],
+                expected_generation=start.generation,
+                expected_epoch=start.epoch,
+                expected_digest=start.state_digest,
+                expected_membership_digest=fx["membership_start"]["digest"],
+                expected_cohort_id=fx["cohort_id"],
+            )
+
+        assert fabric.snapshot().epoch == before_epoch
+        assert (
+            fabric.con.execute("SELECT COUNT(*) AS n FROM fused_cohort_admissions").fetchone()["n"]
+            == 0
+        )
+        assert (
+            fabric.con.execute("SELECT COUNT(*) AS n FROM admitted_results").fetchone()["n"]
+            == 0
+        )
     finally:
         fabric.close()
 

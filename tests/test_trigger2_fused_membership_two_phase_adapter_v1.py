@@ -5,12 +5,14 @@ import hashlib
 
 import pytest
 
+import tools.trigger2_fused_membership_two_phase_adapter_v1 as adapter_mod
 from tools.trigger2_fused_membership_two_phase_adapter_v1 import (
     AdapterError,
     EXTENSIONS_SCHEMA,
     PROOF_ENVELOPE_SCHEMA,
     attach_two_phase_authority,
     atomic_fused_two_phase_commit,
+    atomic_fused_two_phase_source_fixture_commit,
     dg,
     validate_two_phase_cohort,
     validate_two_phase_proof_envelope,
@@ -194,34 +196,93 @@ def test_transport_order_does_not_change_validation_digest():
     assert forward["phase_authority_cohort_validation_sha256"] == reverse["phase_authority_cohort_validation_sha256"]
 
 
-def test_wrapper_validates_before_delegating_to_existing_fused_coordinator():
+def test_physical_wrapper_rejects_raw_proof_and_requires_witness_aware_fabric(monkeypatch):
     values = [upgraded(i) for i in range(1, 11)]
+
+    class FakeWitness:
+        pass
 
     class FakeFabric:
         def __init__(self):
             self.calls = 0
             self.seen = None
-        def atomic_fused_cohort_commit(self, *, envelopes, marker):
+
+        def atomic_fused_cohort_witness_commit(self, *, envelopes, physical_witness, marker):
             self.calls += 1
-            self.seen = envelopes
-            return {"cohort_id": "existing-fused-authority", "marker": marker}
+            self.seen = (envelopes, physical_witness)
+            return {"cohort_id": "existing-fused-authority", "state_delta": 1, "marker": marker}
+
+    witness = FakeWitness()
+    monkeypatch.setattr(adapter_mod, "require_physical_witness", lambda value: value)
+    fake = FakeFabric()
+    out = atomic_fused_two_phase_commit(
+        fake, envelopes=values, physical_witness=witness, marker="ok"
+    )
+    assert fake.calls == 1
+    assert fake.seen == (values, witness)
+    assert out["fused_coordinator_receipt"]["cohort_id"] == "existing-fused-authority"
+    assert out["physical_witness_admitted"] is True
+    assert out["credit_boundary"]["physical_grid10_runtime_credit"] == 0
+
+    fake2 = FakeFabric()
+    with pytest.raises(AdapterError, match="^RAW_PHYSICAL_COHORT_PROOF_NOT_ADMITTED$"):
+        atomic_fused_two_phase_commit(
+            fake2,
+            envelopes=values,
+            proof={"all_alive_at_barrier": True, "synthetic_source_fixture_only": True},
+            marker="no",
+        )
+    assert fake2.calls == 0
+
+    class LegacyFabric:
+        def __init__(self):
+            self.calls = 0
+        def atomic_fused_cohort_commit(self, **kwargs):
+            self.calls += 1
+            return {"legacy": True}
+
+    legacy = LegacyFabric()
+    with pytest.raises(AdapterError, match="^PHYSICAL_COHORT_WITNESS_COMMIT_UNAVAILABLE$"):
+        atomic_fused_two_phase_commit(
+            legacy, envelopes=values, physical_witness=FakeWitness(), marker="no"
+        )
+    assert legacy.calls == 0
+
+
+def test_source_fixture_wrapper_is_explicit_zero_credit_compatibility_path():
+    values = [upgraded(i) for i in range(1, 11)]
+
+    class FakeFabric:
+        def __init__(self):
+            self.calls = 0
+            self.proof = None
+        def atomic_fused_cohort_commit(self, *, envelopes, proof, marker):
+            self.calls += 1
+            self.proof = proof
+            return {"cohort_id": "source-fixture", "state_delta": 1, "marker": marker}
 
     fake = FakeFabric()
-    out = atomic_fused_two_phase_commit(fake, envelopes=values, marker="ok")
+    proof = {"synthetic_source_fixture_only": True, "all_alive_at_barrier": True}
+    out = atomic_fused_two_phase_source_fixture_commit(
+        fake, envelopes=values, proof=proof, marker="fixture"
+    )
     assert fake.calls == 1
-    assert fake.seen == values
-    assert out["fused_coordinator_receipt"]["cohort_id"] == "existing-fused-authority"
-    assert out["adapter_created_second_coordinator_cohort_id"] is False
+    assert fake.proof == proof
+    assert out["physical_witness_admitted"] is False
+    fixture_receipt = out["source_fixture_receipt"]
+    assert fixture_receipt["evidence_class"] == "SOURCE_FIXTURE_ONLY"
+    assert fixture_receipt["physical_grid10_runtime_credit"] == 0
+    assert fixture_receipt["training_credit"] == 0
 
-    bad = deepcopy(values)
-    bad[0]["envelope_digest"] = "0" * 64
     fake2 = FakeFabric()
-    with pytest.raises(AdapterError, match="^PROOF_ENVELOPE_DIGEST_MISMATCH$"):
-        atomic_fused_two_phase_commit(fake2, envelopes=bad, marker="no")
+    with pytest.raises(AdapterError, match="^SOURCE_FIXTURE_EXPLICIT_MARKER_REQUIRED$"):
+        atomic_fused_two_phase_source_fixture_commit(
+            fake2, envelopes=values, proof={"all_alive_at_barrier": True}, marker="no"
+        )
     assert fake2.calls == 0
 
 
-def test_wrapper_traverses_changing_sequence_once_and_delegates_validated_snapshot():
+def test_wrapper_traverses_changing_sequence_once_and_delegates_validated_snapshot(monkeypatch):
     clean = [upgraded(i) for i in range(1, 11)]
     second_pass = deepcopy(clean)
     second_pass[0]["envelope_digest"] = "0" * 64
@@ -235,18 +296,24 @@ def test_wrapper_traverses_changing_sequence_once_and_delegates_validated_snapsh
             self.iterations += 1
             return iter(clean if self.iterations == 1 else second_pass)
 
+    class FakeWitness:
+        pass
+
     class FakeFabric:
         def __init__(self):
             self.calls = 0
             self.seen = None
-        def atomic_fused_cohort_commit(self, *, envelopes):
+        def atomic_fused_cohort_witness_commit(self, *, envelopes, physical_witness):
             self.calls += 1
             self.seen = envelopes
-            return {"cohort_id": "existing-fused-authority"}
+            return {"cohort_id": "existing-fused-authority", "state_delta": 1}
 
+    monkeypatch.setattr(adapter_mod, "require_physical_witness", lambda value: value)
     source = TwoPassSequence()
     fake = FakeFabric()
-    out = atomic_fused_two_phase_commit(fake, envelopes=source)
+    out = atomic_fused_two_phase_commit(
+        fake, envelopes=source, physical_witness=FakeWitness()
+    )
 
     assert source.iterations == 1
     assert fake.calls == 1

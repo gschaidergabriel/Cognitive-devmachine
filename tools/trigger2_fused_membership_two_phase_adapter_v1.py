@@ -13,6 +13,15 @@ its existing ``envelope_digest`` with the same canonical JSON SHA-256 function u
 fused coordinator. The existing fused cohort id therefore commits to the extension through
 its envelope digest; this module deliberately does NOT mint a second coordinator cohort id.
 
+Physical evidence admission is deliberately split from deterministic source-fixture
+composition. ``atomic_fused_two_phase_commit`` is the physical front door and rejects raw
+caller-supplied proof mappings. It reuses the retained V70 ``PhysicalCohortWitness``
+capability and requires a witness-aware fabric commit method. The current legacy
+``FusedFabric.atomic_fused_cohort_commit(proof=dict)`` is not accepted through that front
+door. ``atomic_fused_two_phase_source_fixture_commit`` is the explicit zero-credit
+compatibility path for deterministic persistence/replay tests and reuses the retained
+``SOURCE_FIXTURE_ONLY`` receipt type.
+
 No provider/model/physical GRID10/training/effect execution occurs here. A later admitted
 runtime must still attest that launch commitment happened before execution and executor
 observation after it. Source/component PASS grants zero runtime or promotion credit.
@@ -31,12 +40,22 @@ try:
         validate_authority_envelope,
         validate_node_result,
     )
+    from tools.trigger2_physical_witness_capability_v1 import (
+        PhysicalWitnessError,
+        require_physical_witness,
+        source_fixture_receipt,
+    )
 except ModuleNotFoundError:  # direct script/tool execution compatibility
     from trigger2_node_result_model_call_two_phase_authority_v1 import (
         GateError as TwoPhaseGateError,
         derive_authority_cohort_id,
         validate_authority_envelope,
         validate_node_result,
+    )
+    from trigger2_physical_witness_capability_v1 import (
+        PhysicalWitnessError,
+        require_physical_witness,
+        source_fixture_receipt,
     )
 
 SCHEMA = "CLAY_TRIGGER2_FUSED_MEMBERSHIP_TWO_PHASE_ADAPTER/v1"
@@ -65,6 +84,18 @@ def _require(condition: bool, code: str) -> None:
 def _mapping(value: Any, code: str) -> Mapping[str, Any]:
     _require(isinstance(value, Mapping), code)
     return value
+
+
+def _zero_credit_boundary() -> dict[str, int]:
+    return {
+        "model_call_runtime_credit": 0,
+        "physical_grid10_runtime_credit": 0,
+        "checkpoint_selection_credit": 0,
+        "jspace_model_credit": 0,
+        "training_credit": 0,
+        "whole_hcu_runtime_credit": 0,
+        "whole_entityos_runtime_credit": 0,
+    }
 
 
 def validate_proof_envelope(envelope: Mapping[str, Any]) -> dict[str, Any]:
@@ -249,15 +280,7 @@ def validate_two_phase_cohort(
         "phase_authority_cohort_validation_sha256": phase_id,
         "validation_digest_sha256": validation_digest,
         "ordered_members": ordered,
-        "credit_boundary": {
-            "model_call_runtime_credit": 0,
-            "physical_grid10_runtime_credit": 0,
-            "checkpoint_selection_credit": 0,
-            "jspace_model_credit": 0,
-            "training_credit": 0,
-            "whole_hcu_runtime_credit": 0,
-            "whole_entityos_runtime_credit": 0,
-        },
+        "credit_boundary": _zero_credit_boundary(),
     }
 
 
@@ -265,19 +288,70 @@ def atomic_fused_two_phase_commit(
     fabric: Any,
     *,
     envelopes: Sequence[Mapping[str, Any]],
+    physical_witness: Any | None = None,
     **commit_kwargs: Any,
 ) -> dict[str, Any]:
-    """Validate one controller-owned snapshot, then delegate that exact snapshot once."""
-    # The caller may supply a mutable/custom Sequence. Traverse it exactly once and sever
-    # nested aliases before validation so the delegated payload cannot drift between the
-    # validation and use phases.
+    """Physical front door: validate once, then require the retained V70 witness capability."""
     frozen_envelopes = [deepcopy(envelope) for envelope in envelopes]
     validation = validate_two_phase_cohort(frozen_envelopes, expected_member_count=N)
-    receipt = fabric.atomic_fused_cohort_commit(envelopes=frozen_envelopes, **commit_kwargs)
+
+    _require("proof" not in commit_kwargs, "RAW_PHYSICAL_COHORT_PROOF_NOT_ADMITTED")
+    _require(physical_witness is not None, "PHYSICAL_COHORT_WITNESS_REQUIRED")
+    try:
+        witness = require_physical_witness(physical_witness)
+    except PhysicalWitnessError as exc:
+        raise AdapterError(f"PHYSICAL_COHORT_WITNESS_INVALID:{exc}") from exc
+    witness_commit = getattr(fabric, "atomic_fused_cohort_witness_commit", None)
+    _require(callable(witness_commit), "PHYSICAL_COHORT_WITNESS_COMMIT_UNAVAILABLE")
+
+    receipt = witness_commit(
+        envelopes=frozen_envelopes,
+        physical_witness=witness,
+        **commit_kwargs,
+    )
     return {
         "fused_coordinator_receipt": receipt,
         "two_phase_validation": validation,
+        "physical_witness_admitted": True,
         "adapter_created_second_coordinator_cohort_id": False,
         "canonical_truth": False,
         "effect_authority": False,
+        "credit_boundary": _zero_credit_boundary(),
+    }
+
+
+def atomic_fused_two_phase_source_fixture_commit(
+    fabric: Any,
+    *,
+    envelopes: Sequence[Mapping[str, Any]],
+    proof: Mapping[str, Any],
+    **commit_kwargs: Any,
+) -> dict[str, Any]:
+    """Explicit zero-credit compatibility path for deterministic persistence/replay tests."""
+    _require(isinstance(proof, Mapping), "SOURCE_FIXTURE_PROOF_REQUIRED")
+    _require(
+        proof.get("synthetic_source_fixture_only") is True,
+        "SOURCE_FIXTURE_EXPLICIT_MARKER_REQUIRED",
+    )
+    frozen_envelopes = [deepcopy(envelope) for envelope in envelopes]
+    frozen_proof = deepcopy(dict(proof))
+    validation = validate_two_phase_cohort(frozen_envelopes, expected_member_count=N)
+    receipt = fabric.atomic_fused_cohort_commit(
+        envelopes=frozen_envelopes,
+        proof=frozen_proof,
+        **commit_kwargs,
+    )
+    fixture_receipt = source_fixture_receipt(
+        state_delta=int(receipt["state_delta"]),
+        cohort_id=str(receipt["cohort_id"]),
+    )
+    return {
+        "fused_coordinator_receipt": receipt,
+        "two_phase_validation": validation,
+        "source_fixture_receipt": fixture_receipt,
+        "physical_witness_admitted": False,
+        "adapter_created_second_coordinator_cohort_id": False,
+        "canonical_truth": False,
+        "effect_authority": False,
+        "credit_boundary": _zero_credit_boundary(),
     }

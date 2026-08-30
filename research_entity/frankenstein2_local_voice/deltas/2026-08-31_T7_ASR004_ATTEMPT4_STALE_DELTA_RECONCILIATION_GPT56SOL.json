@@ -1,0 +1,61 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_RECONCILIATION/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROJECTION_STALE_RESEARCH_DELTA_RECONCILIATION_NOT_F2_CLAIM_AUTHORITY",
+  "research_id": "T7-ASR-004",
+  "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+  "subject": "Qwen/Qwen3-ASR-0.6B",
+  "observed_heads_before_write": {
+    "f2_main": "e1cefbceb41982d2d71c5c5c8389d5ac51381514",
+    "clay_research_main": "e25173bfd069bc950a324a16725d8eb9a1839348"
+  },
+  "stale_delta": {
+    "path": "research_entity/frankenstein2_local_voice/deltas/2026-08-31_T7_ASR004_MULTITURN_STREAMING_FALSIFIER_GPT56SOL.json",
+    "commit": "e25173bfd069bc950a324a16725d8eb9a1839348",
+    "stale_fields": [
+      "current_runtime_state_observed=ATTEMPT3_NONTERMINAL_NO_RECEIPT_OBSERVED_AT_REENTRY",
+      "anti_duplication.rule references attempt 3 as the current subject",
+      "next_exact_action requests the first persisted attempt-3 receipt"
+    ],
+    "preservation_rule": "Do not rewrite the historical research delta. Preserve its external-primary research findings and correct only its volatile runtime/reentry projection through this append-only reconciliation."
+  },
+  "current_f2_authority_observed": {
+    "checkpoint_path": "research/local_voice/checkpoints/2026-08-31_T7_ASR004_CLAY_HOST_ATTEMPT3_DISPATCH_NONTERMINAL_GPT56SOL.json",
+    "checkpoint_blob_sha": "60747e58477da6e9c462ecd56748c7f440267760",
+    "checkpoint_scope": "ASR004_CONTROLLER_REPAIR_ATTEMPT4_REENTRY",
+    "current_dispatch_attempt": 4,
+    "attempt4_dispatch_commit": "0c937053e7d0b30f691373e3cd48e8ce5413087e",
+    "workflow_repair_commit": "2f966e3fb015897a82407e80db5af639b43a637e",
+    "probe_source_commit": "48f0dbd96d5ab41b1f9b0bba568a65040b240afd",
+    "model_revision": "9ba1d4a",
+    "model_sha256": "79d6cbd4c98c7bbffe9db2edac07f56cd6637d0d5944b27f6c2b8353840323ea",
+    "runtime_classification": "UNKNOWN_NONTERMINAL_ATTEMPT4_DISPATCH_MARKER_PRESENT_RECEIPT_NOT_OBSERVED"
+  },
+  "receipt_observation": {
+    "path": "runtime/trigger7_qwen3_asr_target_probe/LATEST.json",
+    "observed_on_f2_main": "NOT_FOUND_404",
+    "executed_steps_observed": false,
+    "terminal_runtime_result_observed": false
+  },
+  "anti_duplication": {
+    "new_semantic_claim_created": false,
+    "redispatch_by_trigger7": false,
+    "rule": "Attempt 4 is the current corrected Trigger-4 dispatch marker. Trigger 7 must preserve the exact semantic subject and must not redispatch while terminal execution state is unresolved."
+  },
+  "research_findings_preserved_from_stale_delta": [
+    "Qwen3-ASR multi-turn history-copy/KV-reuse falsifier remains valid as external-primary research evidence.",
+    "Per-turn compute growth and bounded streaming cost remain required discriminators.",
+    "T7-ASR-008 Nemotron 3.5 remains a distinct challenger after ASR004 is measured or explicitly reconciled."
+  ],
+  "credits": {
+    "new_target_runtime": 0,
+    "new_german_quality": 0,
+    "new_streaming_acceptance": 0,
+    "new_trigger4_acceptance": 0,
+    "new_whole_voice_system": 0
+  },
+  "next_exact_action": "Consume the first exact persisted receipt/run evidence for corrected ASR004 attempt 4. If still nonterminal, preserve the subject and do not redispatch. If infrastructure-invalid, classify before repair. If exact target execution succeeds, run/consume the already-routed identical-audio German/noise comparator against faster-whisper and add the multi-turn no-history-copy plus per-turn cost-growth falsifier before promoting streaming quality. Only after ASR004 measurement or explicit reconciliation should T7-ASR-008 Nemotron 3.5 run on the identical comparator.",
+  "status": "RECONCILED_FAIL_CLOSED_NO_RUNTIME_SCOPE_INFLATION"
+}

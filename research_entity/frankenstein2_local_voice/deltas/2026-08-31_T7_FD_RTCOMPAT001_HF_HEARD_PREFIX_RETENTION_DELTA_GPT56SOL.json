@@ -4,72 +4,52 @@
   "date": "2026-08-31",
   "organ": "GPT-5.6-Sol",
   "research_id": "T7-FD-RTCOMPAT-001",
-  "classification": "SOURCE_RESEARCH_REVIEW_ONLY",
+  "classification": "SOURCE_RESEARCH_CORRECTION_REVIEW_ONLY",
   "implementation_mutation_authority": false,
   "new_claim_or_generation": false,
   "canonical_coordination_repo": "gschaidergabriel/frankenstein-2.0",
-  "f2_delta_commit": "2dbea20aa26a5a60283b4d4be69286f28d09c83f",
+  "f2_corrected_delta_commit": "c53c25fb84717c908a254f04d4bb68040ddff78d",
   "f2_delta_ref": "research/local_voice/falsifiers/2026-08-31_HF_S2S_HEARD_PREFIX_RETENTION_DELTA_GPT56SOL.json",
-  "upstream_repo": "huggingface/speech-to-speech",
-  "upstream_revision": "3986f453012a131632eee4731995474046846794",
-  "source_findings": [
-    {
-      "id": "S1_TRUNCATE_NOOP",
-      "status": "CONFIRMED_SOURCE",
-      "finding": "The pinned websocket router parses conversation.item.truncate but deliberately performs no server-state mutation after cancellation."
-    },
-    {
-      "id": "S2_CANCEL_HISTORY_ROLLBACK",
-      "status": "CONFIRMED_SOURCE",
-      "finding": "Cancelled, failed or incomplete response termination calls rollback_provisional_generation before deferred client items are applied."
-    },
-    {
-      "id": "S3_TRACKED_OUTPUT_REMOVAL",
-      "status": "CONFIRMED_SOURCE",
-      "finding": "rollback_provisional_generation tombstones the response key and removes tracked provisional assistant item IDs and call IDs."
-    }
-  ],
-  "new_hypothesis": {
-    "name": "HEARD_PREFIX_AMNESIA",
-    "status": "OPEN_RUNTIME_HYPOTHESIS",
-    "statement": "The rollback design may correctly prevent an unheard-tail leak while still diverging from OpenAI-style heard-boundary semantics by deleting assistant content that the user actually heard before barge-in.",
-    "counterhypothesis": "F2 authoritative context reconstruction may preserve the heard prefix independently, making raw speech-server history deletion harmless.",
-    "required_discriminator": "HF09_EXACT_HEARD_PREFIX_RETENTION"
+  "correction_status": "HEARD_PREFIX_AMNESIA_HYPOTHESIS_REJECTED_FOR_CURRENT_F2_POLICY",
+  "basis": {
+    "current_f2_policy": [
+      "started/heard interrupted output remains non-commit-eligible",
+      "only fully heard completed output may become commit-eligible"
+    ],
+    "upstream_revision": "3986f453012a131632eee4731995474046846794",
+    "upstream_source_and_tests": [
+      "conversation.item.truncate is an acknowledgement-free no-op after cancellation",
+      "cancelled/failed/incomplete responses roll back provisional generation",
+      "late provisional writes are rejected after rollback",
+      "whole interrupted assistant/tool provisional history is removed while prior committed user history survives"
+    ],
+    "newer_f2_checkpoint": "research/local_voice/checkpoints/2026-08-31T034300P0700_T7_HF_S2S_CANCEL_ROLLBACK_TEST_EVIDENCE_GPT56SOL.json"
   },
-  "diagnostic_matrix": [
-    {
-      "heard_prefix": "present",
-      "unheard_tail": "absent",
-      "classification": "SEMANTIC_MATCH_CANDIDATE"
-    },
-    {
-      "heard_prefix": "present",
-      "unheard_tail": "present",
-      "classification": "TAIL_LEAK_PRODUCT_NEGATIVE"
-    },
-    {
-      "heard_prefix": "absent",
-      "unheard_tail": "absent",
-      "classification": "PREFIX_AMNESIA_PROTOCOL_GAP"
-    },
-    {
-      "heard_prefix": "absent",
-      "unheard_tail": "present",
-      "classification": "SEVERE_CONTEXT_DIVERGENCE"
-    }
-  ],
+  "reconciliation": {
+    "prior_hypothesis": "Whole-response rollback may be incompatible because it forgets the heard prefix of an interrupted response.",
+    "current_result": "Rejected under current F2 semantics. Because the entire interrupted response is non-commit-eligible, whole-response rollback is compatible in principle and no separate prefix-retention architecture is currently required.",
+    "remaining_open_runtime_question": "Do real WebSocket/WebRTC cancellation races, late TTS/audio, late tool results, reconnects or stale truncate events allow any interrupted-response semantics to re-enter the next-turn effective model context?",
+    "future_reopen_condition": "Reopen heard-prefix retention only if F2 authority later changes to persist partially heard interrupted output."
+  },
   "routing": {
     "next_owner": "TRIGGER4_RUNTIME_FALSIFIER",
     "same_existing_semantic_claim": true,
-    "next_exact_action": "Execute HF09 on the existing claim before additional local-realtime architecture expansion. Measure raw server post-cancel history, F2 authoritative reconstructed history and the exact next-turn effective model context separately.",
+    "reuse_existing_ids": [
+      "HF02_CANCEL_GENERATION_VS_HEARD_HISTORY",
+      "HF03_TRUNCATE_NOOP_SEMANTIC_EXACTNESS",
+      "HF04_TOOL_RESULT_AFTER_BARGE_IN",
+      "HF05_DOUBLE_CANCEL_AND_LATE_CHUNK"
+    ],
+    "next_exact_action": "Execute the existing runtime packet using whole-response rollback semantics; capture exact next-turn Chat/model context, late producer disposition and WebSocket/WebRTC behavior separately. Do not open HF09 as a new lane.",
     "do_not": [
       "do not open a duplicate Trigger4 claim",
       "do not create a second voice FSM/persona/memory/state/effect authority",
-      "do not promote source review to runtime acceptance"
+      "do not promote source or upstream unit tests to runtime acceptance"
     ]
   },
   "credit": {
-    "source_research_delta": 1,
+    "source_research": 1,
+    "upstream_unit_test_evidence": 1,
     "runtime": 0,
     "german_e2e": 0,
     "locality": 0,

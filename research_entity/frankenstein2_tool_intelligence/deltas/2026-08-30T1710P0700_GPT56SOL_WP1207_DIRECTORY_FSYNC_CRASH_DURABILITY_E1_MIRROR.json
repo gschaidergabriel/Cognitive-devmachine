@@ -1,0 +1,30 @@
+{
+  "schema": "F2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "recorded_at": "2026-08-30T17:10:00+07:00",
+  "worker": "GPT-5.6-Sol",
+  "status": "PROVENANCE_MIRROR_F2_RESULT_SYNC_PENDING",
+  "research_id": "R6-20260830-WP1207-DIRECTORY-FSYNC-CRASH-DURABILITY-GPT56SOL-01",
+  "canonical_f2_claim_commit": "fffb96be982a82369718355107393c5a62571d7f",
+  "canonical_f2_claim_ref": "research/tool_intelligence/claims/R6-20260830-WP1207-DIRECTORY-FSYNC-CRASH-DURABILITY-GPT56SOL-01/E1_SOURCE_READ.json",
+  "canonical_f2_result_ref_intended": "research/tool_intelligence/results/R6-20260830-WP1207-DIRECTORY-FSYNC-CRASH-DURABILITY-GPT56SOL-01_E1_SOURCE_READ.json",
+  "f2_result_sync": "PENDING_DUE_TO_REPEATED_CONCURRENT_MAIN_409_NOT_RESEARCH_FAILURE",
+  "exact_source": {
+    "executor_blob": "20bd89b81e1efed146bb8ec5aa288f37b0c4dc34",
+    "test_blob": "fb8bdc5f501284a28bbd749f407bcc12c8bbfae6"
+  },
+  "source_findings": [
+    "The WP1207 activation pointer temp file is fsynced and then os.replace activates it; no parent-directory fsync is visible after that replace.",
+    "The exact test set covers injected pre-activation failure and process-level readback/reentry cases, not power-loss/storage-crash persistence.",
+    "Linux fsync(2) states file fsync does not necessarily persist the containing directory entry; directory fsync is required when that persistence property is demanded.",
+    "Python documents os.replace as atomic on POSIX; namespace atomicity and post-crash durability are distinct."
+  ],
+  "resolution": {
+    "current_wp1207_g5_scope_violation": false,
+    "reason": "Current accepted scope is bounded interruption/atomic activation/process-reentry at repository-component scope, not an explicit guarantee that the newest activation survives sudden power/storage failure.",
+    "future_gap": "If the final product later requires crash/power-loss durable commit semantics, specify whether old-or-new recovery is acceptable or new-only persistence is required, then add the matching directory/data durability barriers and crash-level acceptance tests."
+  },
+  "promotion_decision": "NO_E3_E4_E5_PROMOTION_AT_CURRENT_SCOPE",
+  "research_credit": "E1_SOURCE_READ_ONLY_MIRROR",
+  "runtime_credit": 0,
+  "whole_system_credit": 0
+}

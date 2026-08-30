@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_TRIGGER4_RUNNER_ASSIGNMENT_DISCRIMINATOR/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "observed_at": "2026-08-30T11:27:16+07:00",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": true
+  },
+  "heads_observed": {
+    "research_main": "98b448c7d4d8b54510c0856cf10ca49503604d01",
+    "trigger4_branch_before_write": "f4a4f020e2ec0b02e33ce291bed45574ae2b295a",
+    "frankenstein2_main": "654e2d9feac799eab0be9fed4ee57d4871ac42d4",
+    "controller_wp510_source": "2b2aaca5750a7da135fef92cf6611995d117fbe2"
+  },
+  "wp510_existing_run": {
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "workflow": "Trigger4 WP510 Target Runtime V2",
+    "run_status": "queued",
+    "job_status": "queued",
+    "steps_observed": 0,
+    "runner_id": 0,
+    "runner_name": "",
+    "required_labels": ["self-hosted", "Linux", "X64"],
+    "duplicate_dispatch_created": false
+  },
+  "workflow_static_evidence": {
+    "path": ".github/workflows/trigger4-wp510-target-runtime-v2.yml",
+    "blob_sha": "dbf3d33531eaf66855078d48e8e28f90c2b1801f",
+    "runs_on": ["self-hosted", "Linux", "X64"],
+    "timeout_minutes": 15,
+    "pinned_f2_source_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+    "target_environment": "clay-direct-dev",
+    "runtime_discovery": ["docker", "podman", "incus", "lxc"],
+    "source_execution_observed": false
+  },
+  "discriminator_result": {
+    "classification": "RUNNER_ASSIGNMENT_OR_LISTENER_ELIGIBILITY_BLOCKER_BEFORE_SOURCE_EXECUTION",
+    "observed": "The existing job remains queued with zero steps and runner_id 0 while its workflow requires self-hosted/Linux/X64. No WP510 source or target environment step has executed.",
+    "not_established": [
+      "registered runner online state",
+      "registered runner label set",
+      "runner service/listener connectivity",
+      "clay-direct-dev container health",
+      "WP510 target runtime behavior"
+    ],
+    "connector_boundary": "The current GitHub connector does not admit the repository actions/runners registry endpoint; failure to read that endpoint is a tool-surface limitation, not runner-offline evidence."
+  },
+  "next_exact_action": "On the already-authorized owner VPS/runner shell, inspect the existing self-hosted GitHub runner service/listener and its diagnostic logs; verify that an online runner is registered to gschaidergabriel/Dr.-Unterweger with labels self-hosted, Linux and X64. Do not dispatch or rerun another WP510 job while run 33265772059 is unresolved. Once this exact job acquires a nonzero runner_id, inspect its steps and require exact source/tree/dirty-state/runtime receipt binding before any runtime promotion.",
+  "credits": {
+    "wp510_target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_system_acceptance": false
+  }
+}

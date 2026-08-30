@@ -1,0 +1,86 @@
+{
+  "schema": "TRIGGER4_WP105_DIRECT_EPISODE_NULL_FALSIFIER_REENTRY/v1",
+  "trigger": "4",
+  "worker": "GPT-5.6 Sol / ChatGPT Triggerword-4 organ",
+  "observed_at_local": "2026-08-30T19:34:00+07:00",
+  "research_main_observed_before_write": "29465ee811c3fe4d0ac7b8b5178aaf5fb9dd8626",
+  "subject": "ENTITYOS_DIRECT_EFFECT_REPLAY_EPISODE_ID_NULL_FALSIFIER",
+  "authority": {
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "effect_authority": "EffectGate+EffectJournal",
+    "free_only": true,
+    "real_effect_authorized_by_this_receipt": false
+  },
+  "source_observation": {
+    "effect_authority_binding": "research_entity/continuity/ENTITYOS_EFFECT_AUTHORITY_IMPLEMENTATION_BINDING_V1.json",
+    "bound_effect_gate_commit": "2b68aad14bf7824d513b52898904909256e3522d",
+    "bound_effect_gate_path": "the artefact/clayverse/effects.py",
+    "bound_effect_journal_path": "the artefact/clayverse/effect_journal.py",
+    "direct_episode_null_source_gap_still_open": true,
+    "finding": "The bound EffectGate autonomy replay fence returns without a durable logical-operation check when episode_id is null, and EffectJournal.begin applies its persisted episode replay denial only when episode_id is non-null. The effects row also does not persist session_id or a retry-stable logical operation identity. This is source evidence only until the executable reopen discriminator runs."
+  },
+  "existing_lane_reused": {
+    "branch": "chatgpt/trigger4-wp105-exact-source-direct-replay-20260829",
+    "prior_head": "a85e2132c6daba53cb73cb3992a94d674b37f0cb",
+    "reentry_merge_commit": "20487195178fdb5be140887a9a967e5542146417",
+    "main_merged_into_lane": "29465ee811c3fe4d0ac7b8b5178aaf5fb9dd8626",
+    "history_rewritten": false,
+    "new_duplicate_lane_created": false
+  },
+  "pull_request": {
+    "number": 2147,
+    "state": "OPEN_DRAFT",
+    "mergeable_after_reentry": true,
+    "purpose": "NEGATIVE_EVIDENCE_EXECUTION_ONLY_DO_NOT_MERGE_AS_PRODUCT_ACCEPTANCE",
+    "changed_files": [
+      ".github/workflows/wp105-direct-episode-null-replay-falsifier.yml",
+      "the artefact/tests/test_direct_episode_null_replay_gap.py"
+    ]
+  },
+  "execution_attempt": {
+    "workflow_run_id": 33311789444,
+    "job_id": 99258059237,
+    "workflow": "WP105 Direct Episode-Null Replay Falsifier",
+    "status": "COMPLETED",
+    "conclusion": "FAILURE",
+    "runner_label": "ubuntu-latest",
+    "runner_id": 0,
+    "runner_name": "",
+    "executed_steps": 0,
+    "classification": "GITHUB_ACTIONS_ZERO_STEP_CONTROL_PLANE_FAILURE",
+    "falsifier_code_executed": false,
+    "scientific_result": "UNOBSERVED"
+  },
+  "independent_control": {
+    "workflow_run_id": 33311789394,
+    "job_id": 99258059366,
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "FAILURE",
+    "runner_id": 0,
+    "runner_name": "",
+    "executed_steps": 0,
+    "interpretation": "A separate PR workflow failed with the same zero-step/no-runner signature, supporting a control-plane/runner-allocation classification rather than a WP105 test failure."
+  },
+  "epistemic_boundary": {
+    "replay_gap_executably_reproduced": false,
+    "replay_gap_executably_falsified": false,
+    "source_gap_observed": true,
+    "control_plane_failure_is_product_failure": false,
+    "control_plane_failure_is_scientific_negative": false,
+    "automatic_retry_performed": false
+  },
+  "credits": {
+    "source_counterevidence": 1,
+    "executable_falsifier": 0,
+    "effect_runtime": 0,
+    "real_external_effect": 0,
+    "target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "training": 0,
+    "whole_entityos_hcu": 0
+  },
+  "next_exact_action": "Do not create another replay-falsifier lane and do not blindly rerun the zero-step GitHub-hosted job. Re-enter PR2147 when GitHub-hosted runner allocation is observed healthy, or execute the same exact-source no-real-effect discriminator inside the already-authorized clay-direct-dev route after runner/bridge lifecycle health is independently restored. If the test executes and observes marker count 2 after UnifiedDB reopen, promote only the bounded executable counterevidence and then design/review the canonical durable operation-retry identity repair; if marker count remains 1, preserve the unexpected counterresult and inspect the current exact source before any mutation."
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "SUCCESSOR_REENTRY_PROVENANCE_NOT_F2_MUTATION_AUTHORITY",
+  "supersedes_current_routing_only": "research_entity/frankenstein2_local_voice/deltas/2026-08-31_T7_WP715_RESTART_PRODUCT_NEGATIVE_REENTRY_GPT56SOL.json",
+  "preserve_predecessor_as_historical_observation": true,
+  "authority_snapshot": {
+    "f2_head_observed": "61a7dc973b6601884ecd40bfa6d67927c5a2bafd",
+    "trigger7_protocol": "research_entity/frankenstein2_local_voice/TRIGGERWORD_7_PROTOCOL.md"
+  },
+  "wp715": {
+    "prior_failure_class": "PRODUCT_NEGATIVE",
+    "prior_failure_source": "9657eece9c951988a59eb65ec454032bd7f8efca",
+    "repair_candidate_commit": "2dfecf97924e1f099b1900edcbb189be32d5714a",
+    "repair_summary": "resume_packet_cortex now terminalizes restored queued playback as cancelled and restored started/heard playback as interrupted at restart monotonic_ms, clears commit eligibility and voiceoutcome_ref, and binds affected packet refs into RESTART_REENTRY.",
+    "status": "FIX_CANDIDATE_REGRESSION_RECEIPT_NOT_OBSERVED_IN_THIS_REENTRY",
+    "credit_delta": {
+      "recovery_repository_component": 0,
+      "restart_continuation": 0,
+      "packet_recovery_vps": 0,
+      "whole_voice": 0
+    },
+    "next_gate": "Consume the exact repository discriminator/regression receipt for repair commit 2dfecf97 or successor and then the already-existing exact-source VPS result without duplicate dispatch."
+  },
+  "asr004": {
+    "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+    "matched_comparator_run_id": 33326279965,
+    "execution_observed": true,
+    "result": "FAILED_BEFORE_VALID_MATCHED_QUALITY_COMPARISON",
+    "failure_class": "EVIDENCE_INVALID",
+    "exception": "Dataset scripts are no longer supported, but found fleurs.py",
+    "bound_source_commit": "3db127b0f7a7169c148212db35f600f6ef0e54e0",
+    "repair_artifact_commit": "81cfd78a776bdc471d0c9beb9d2865fe2a3c50e2",
+    "repair_artifact": "research/local_voice/tools/t7_asr004_datasets36_repair.patch",
+    "repair_state": "BOUND_PATCH_NOT_YET_VALIDATED_BY_TERMINAL_MATCHED_COMPARATOR_RECEIPT_IN_THIS_REENTRY",
+    "quality_conclusion_permitted": false,
+    "credit_delta": {
+      "german_asr_quality": 0,
+      "streaming_asr": 0,
+      "trigger4_acceptance": 0,
+      "whole_voice": 0
+    }
+  },
+  "asr008": {
+    "candidate": "nvidia/nemotron-3.5-asr-streaming-0.6b",
+    "state": "DORMANT_UNTIL_ASR004_TERMINAL_MEASUREMENT_OR_EXPLICIT_RECONCILIATION",
+    "lexical_stress_falsifier_routed_commit": "4f14c7e29886c3b26308ab0ca51eb9918eb9d45f",
+    "runtime_credit": 0,
+    "german_quality_credit": 0
+  },
+  "convergence_decision": {
+    "priority": "Close the executed WP715 restart regression repair and the existing ASR004 comparator repair boundary; do not open replacement architecture or duplicate runtime dispatch.",
+    "next_exact_action": "First consume WP715 regression evidence for the terminalization repair. Independently consume the first ASR004 comparator rerun bound to materialized repaired source. Only a valid matched receipt may decide Qwen raw/gated versus faster-whisper; only after that may ASR008 execute on the unchanged comparator.",
+    "whole_voice_system_credit": 0,
+    "physical_audio_acceptance_credit": 0,
+    "training_credit": 0
+  }
+}

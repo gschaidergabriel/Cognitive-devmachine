@@ -1,0 +1,67 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "EXTERNAL_PRIMARY_RESEARCH_DELTA_NOT_F2_CLAIM_AUTHORITY",
+  "research_id": "T7-ASR-004",
+  "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+  "current_runtime_state_observed": "ATTEMPT3_NONTERMINAL_NO_RECEIPT_OBSERVED_AT_REENTRY",
+  "anti_duplication": {
+    "redispatch": false,
+    "new_semantic_claim": false,
+    "runtime_credit_delta": 0,
+    "rule": "Preserve the exact attempt-3 subject until terminal executed evidence or explicit invalidation."
+  },
+  "new_primary_evidence": [
+    {
+      "source": "https://github.com/vllm-project/vllm/issues/51374",
+      "date": "2026-08-07",
+      "class": "UPSTREAM_BUG_REPORT",
+      "fact": "A Qwen3-ASR /v1/realtime multi-turn report reproduces second-utterance transcription reusing the first utterance under KV reuse in the same WebSocket session.",
+      "project_effect": "Add an exact multi-turn no-history-copy discriminator to the ASR004 long-session comparator. This is not yet a Frankenstein product failure because it is upstream/environment-specific and has not been reproduced on the admitted target."
+    },
+    {
+      "source": "https://github.com/QwenLM/Qwen3-ASR/discussions/9",
+      "date": "2026-01-30",
+      "class": "UPSTREAM_MAINTAINER_STATEMENT",
+      "fact": "The Qwen maintainer states the open streaming implementation did not implement KV-cache reuse and was still far from industrial implementation.",
+      "project_effect": "Streaming quality must be measured causally; model-card streaming claims cannot substitute for a bounded-cost, stable multi-turn runtime test."
+    },
+    {
+      "source": "https://github.com/sgl-project/sglang/issues/31053",
+      "date": "2026-07-13",
+      "class": "UPSTREAM_ENGINE_DESIGN_EVIDENCE",
+      "fact": "SGLang documents that Qwen3-ASR chunked streaming re-encodes cumulative audio unless bounded sliding-window/segment streaming is used and proposes server-side VAD plus bounded windows.",
+      "project_effect": "Record cumulative-compute growth and segment-boundary accuracy as separate discriminators; do not equate token streaming with bounded-cost realtime ASR."
+    },
+    {
+      "source": "https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b",
+      "date": "2026-06-04",
+      "class": "OFFICIAL_MODEL_CARD",
+      "fact": "Nemotron 3.5 ASR Streaming 0.6B is cache-aware FastConformer-RNNT, explicitly supports de-DE as transcription-ready, and exposes configurable 80/160/320/560/1120 ms streaming chunks; official FLEURS German WER is reported from 9.81 down to 8.31 across those operating points.",
+      "project_effect": "Keep T7-ASR-008 as the next distinct streaming challenger after ASR004 is measured/reconciled; published metrics remain source-priority evidence only."
+    }
+  ],
+  "required_asr004_discriminator_addition": {
+    "name": "MULTITURN_HISTORY_COPY_AND_COST_GROWTH",
+    "minimum_shape": [
+      "same persistent realtime session",
+      "at least two semantically distinct German utterances",
+      "assert utterance N output does not copy prior utterance text",
+      "record per-turn latency and compute/resource growth across repeated turns",
+      "retain deterministic VAD/turn-gated Qwen3-ASR and faster-whisper matched-audio baseline",
+      "preserve silence false-positive discriminator already observed"
+    ]
+  },
+  "hypothesis": "Qwen3-ASR may still be competitive for German single-turn latency/quality while failing long-session realtime stability or bounded-cost streaming; the repaired ASR004 target comparator can separate those claims without reopening architecture.",
+  "counterhypothesis": "The upstream KV-reuse/history-copy issue may be specific to vLLM configuration or 1.7B and may not reproduce on the exact 0.6B target path; therefore it must remain a falsifier until target evidence exists.",
+  "credits": {
+    "new_target_runtime": 0,
+    "new_german_quality": 0,
+    "new_streaming_acceptance": 0,
+    "new_trigger4_acceptance": 0,
+    "new_whole_voice_system": 0
+  },
+  "next_exact_action": "Consume the first exact persisted ASR004 attempt-3 receipt. If nonterminal, do not redispatch. If valid target execution succeeds, extend the already-routed identical-audio German/noise comparator with the multi-turn no-history-copy and per-turn cost-growth discriminator before promoting streaming quality. Then, only after ASR004 measurement or explicit reconciliation, run T7-ASR-008 Nemotron 3.5 on the identical comparator."
+}

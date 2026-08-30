@@ -1,0 +1,133 @@
+{
+  "schema": "CLAY_TRIGGER2_CLAUDE_P0_METROLOGY_SWARM_DELTA/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "branch_base_main": "6004cff60257f542211349502900ad6be2a73fc3",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "unusual_experiment": "NOT_USED_SOURCE_TRANSFORMATION_ONLY"
+  },
+  "source_basis": {
+    "claude_result_report": {
+      "name": "ENTITYOS_CLAUDE_RESULTS_2026-08-25.pdf",
+      "source_class": "USER_PROVIDED_NONCANONICAL_RESEARCH_INPUT",
+      "operator_reported": "Claude Code coordinator plus Rocky plus Bruno",
+      "executed_source_head_reported": "895395577301626516ff6df5138c7a20bf9666e2",
+      "scope_warning": "The report is research input for training-example construction. It is not promoted here to canonical runtime truth and its source head is older than the branch base main."
+    },
+    "current_vector_evidence_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "current_dynamic_binding_review": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_DYNAMIC_BINDING_SWARM_REVIEW_V3_GPT56SOL.json"
+  },
+  "observed_reported_findings": [
+    {
+      "id": "P0_SUITE_STATUS",
+      "reported": "4 of 24 suites were closed: T00 PASS, T01 FAIL_SCIENTIFIC, T05 INCOMPLETE, T06 FAIL_SCIENTIFIC; T02-T04 and T07-T23 were NOT_RUN.",
+      "training_consequence": "Teach exact status boundaries: NOT_RUN is not PASS and whole-product acceptance cannot be inferred from partial P0 execution."
+    },
+    {
+      "id": "T01_REPRESENTATION_WITHOUT_BEHAVIOR",
+      "reported": "Matched internal target coordinate 4.25 versus 0.25 controls and sign flip -4.17, while held-out target-code hit remained 33.3% matched versus 33.3% baseline with diagonal advantage -0.051.",
+      "training_consequence": "Teach that causal internal transport or instrumentation can exist without semantic behavioral control. Do not promote semantic J-Space from internal-coordinate actuation alone."
+    },
+    {
+      "id": "T01_CONTROL_OUTPERFORMS_SIGNAL",
+      "reported": "Absolute nuisance-control behavioral effect 0.155 exceeded semantic-condition effect 0.052.",
+      "training_consequence": "Teach fail-closed selectivity: a nuisance control outperforming the intended effect blocks the stronger causal claim."
+    },
+    {
+      "id": "T05_MODEL_INPUT_IDENTITY_INCOMPLETE",
+      "reported": "Prompt-byte and token-tensor hashing exist, but no single artifact jointly binds them; token-tensor identity drops dtype and shape; the six-condition cross-binding lineage is not the live promotion lineage.",
+      "training_consequence": "Teach one exact consumed-input identity joining prompt bytes, tensor values/order/dtype/shape, model/runtime, family topology and the actual promoted path."
+    },
+    {
+      "id": "T06_LIVE_GATE_LAGS_STRICTER_SOURCE",
+      "reported": "Live CI/runner uses the older unversioned promotion gate v4 while v5-v13 have no non-test callers; v13 additionally requires abstract_state_raw_evidence with no producer.",
+      "training_consequence": "Teach call-path reachability and end-to-end gate completeness; stricter dead code is not a live safeguard, and newest version is not automatically canonical."
+    },
+    {
+      "id": "T06_FAIL_OPEN_PATTERNS",
+      "reported": "Live gate accepts self-declared independence, format-checks control hashes without recomputing bytes, checks matched-control completeness at candidate rather than family scope, and omits wrong-layer/lesion/rescue requirements.",
+      "training_consequence": "Teach independent evidence recomputation, byte-bound receipt integrity, per-family control completeness and mechanism-specific controls on the retained promotion path."
+    },
+    {
+      "id": "INFRASTRUCTURE_NEGATIVE_IS_NOT_SCIENCE",
+      "reported": "An earlier attempt failed before the experiment due to GitHub public-key authentication and a stale checkout; the later session repaired the read-only source path and refreshed source.",
+      "training_consequence": "Teach transport/source failures as infrastructure evidence with zero scientific credit, and require exact current source identity before current-state claims."
+    }
+  ],
+  "swarm": {
+    "roles": [
+      "EVIDENCE_EXTRACTOR",
+      "SCIENTIFIC_NEGATIVE_REVIEWER",
+      "PROMOTION_GATE_ADVERSARY",
+      "PROVENANCE_REVIEWER",
+      "HOLDOUT_LEAK_REVIEWER",
+      "TRAINING_RETENTION_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "round_1_candidate": "Add positive J-Space examples because the intervention clearly moved an internal coordinate.",
+    "round_1_verdict": "REJECT",
+    "round_1_reason": "The reported held-out behavioral criterion failed and a nuisance control moved behavior more than the intended semantic arm. Positive semantic/J-Space labels would invert the evidence.",
+    "round_2_candidate": "Convert the negative findings into evidence-metrology hard negatives and method examples while preserving the separate Qwen3.5 dynamic-binding curriculum.",
+    "round_2_verdict": "ACCEPT_SOURCE_CANDIDATES_ONLY",
+    "round_2_reason": "This trains the 0.8B candidate to classify evidence, provenance and promotion boundaries without transferring Qwen3-0.6B vector coordinates or pretending the reported PDF is canonical runtime authority."
+  },
+  "training_delta": {
+    "path": "research_entity/global/j-space/research/trigger2_claude_p0_metrology_hardneg_seed_v1.jsonl",
+    "rows": 18,
+    "families": [
+      "representation-vs-behavior",
+      "matched-control selectivity",
+      "scientific-negative classification",
+      "holdout freeze",
+      "infrastructure-vs-science",
+      "source freshness",
+      "consumed-input identity",
+      "live gate reachability",
+      "independence recomputation",
+      "receipt byte integrity",
+      "per-family control completeness",
+      "lesion/shuffle/rescue placement",
+      "canonical gate selection",
+      "NOT_RUN semantics",
+      "information-gain scheduling",
+      "whole-product scope",
+      "cross-model evidence boundaries"
+    ],
+    "candidate_gate_review": {
+      "method": "Static predicate review against tools/entityos_hcu_trainingtrace_candidate_gate_v1.py at branch base; no repository-runtime execution claimed.",
+      "rows_reviewed": 18,
+      "schema_or_policy_failures_found": 0,
+      "canonical_dataset_admission": false
+    }
+  },
+  "research_return": {
+    "new_training_rule": "A trained Xeno must learn not only the intended cognitive operation but the evidence boundary that decides whether an observed internal change is allowed to become a causal claim.",
+    "new_architecture_implication": "Promotion metrology must be part of the operational cognition curriculum: exact source identity, live-call-path identity, consumed-input identity and matched-control topology are first-class state, not post-hoc report decoration.",
+    "new_counterhypothesis": "If post-training binding accuracy improves while evidence-classification hard negatives regress, the model may have learned task shortcuts while becoming less safe as a research organ; binding accuracy alone is then insufficient for promotion.",
+    "next_falsifier": "Evaluate the future Qwen3.5 checkpoint on frozen paired examples where identical internal-coordinate evidence must lead to different verdicts depending on behavioral outcome, nuisance-control dominance, provenance completeness and live-gate reachability."
+  },
+  "credits": {
+    "new_training_candidate_rows": 18,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_actions": [
+    "Fuse this 18-row metrology family with the already-current dynamic-binding seed only at dataset-mixture planning level; do not let metrology rows replace the binding curriculum.",
+    "Materialize the exact 46-atom counterbalanced 72-row binding seed under the current V3 atom/split gates before scaling.",
+    "Create a frozen metrology evaluation split with adversarial near-miss pairs: internal transport plus behavior fail, intended effect plus stronger nuisance effect, strict source gate present but unreachable, and hashes syntactically valid but not recomputed.",
+    "Do not mint positive Qwen3.5 J-Space labels until same-model causal behavioral receipts exist."
+  ]
+}

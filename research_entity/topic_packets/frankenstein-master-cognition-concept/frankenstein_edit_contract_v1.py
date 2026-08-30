@@ -1,11 +1,14 @@
 """Fail-closed existing-file edit contract for Project Frankenstein.
 
-This module is deliberately provider-neutral and network-free.  It turns a model- or
+This module is deliberately provider-neutral and network-free. It turns a model- or
 human-proposed unified diff into a candidate mutation that is bound to the exact
 preimage bytes, exact repository-relative path, an explicit deletion budget, and Git's
-own patch applicability checks before any working-tree mutation is allowed.
+own patch applicability checks.
 
-It does not commit, push, call a model, inspect secrets, or grant runtime/product credit.
+The module is validation-only. A ValidatedEdit is evidence, not a mutation capability.
+It does not write the canonical working tree, commit, push, call a model, inspect
+secrets, or grant runtime/product credit. Any later mutation must go through the
+separate canonical patch/effect path and re-bind the current preimage there.
 """
 from __future__ import annotations
 
@@ -39,6 +42,8 @@ class EditContract:
 
 @dataclass(frozen=True)
 class ValidatedEdit:
+    """Evidence returned by validation; never an authorization or write token."""
+
     path: str
     preimage_sha256: str
     postimage_sha256: str
@@ -99,7 +104,6 @@ def _resolve_existing_path(repo_root: Path, rel: str) -> Path:
         raise EditContractError("PATH_ESCAPES_REPOSITORY", rel) from exc
     if not resolved.is_file():
         raise EditContractError("EXISTING_FILE_REQUIRED", rel)
-    # Symlink targets outside the repository are already rejected by resolve()/relative_to().
     return resolved
 
 
@@ -250,35 +254,19 @@ def validate_edit_contract(repo_root: Path, contract: EditContract) -> Validated
 
 
 def apply_validated_edit(repo_root: Path, validated: ValidatedEdit) -> Path:
-    """Atomically install an already-validated postimage after a final preimage recheck.
+    """Retired fail-closed compatibility surface.
 
-    This performs no commit or staging operation.  It exists so a caller can run its own
-    feature/module/repository tests before deciding whether any later commit is authorized.
+    ``ValidatedEdit`` is intentionally caller-constructible evidence. Treating it as
+    a write token lets a caller forge ``postimage`` plus matching hashes and bypass
+    the patch/deletion policy that created a legitimate validation result. Therefore
+    this function must never mutate the repository.
+
+    A real write must re-enter the canonical patch/effect authority with the original
+    patch/contract and independently re-bind the then-current preimage immediately at
+    that boundary.
     """
-    root = _repo_root(repo_root)
-    target = _resolve_existing_path(root, validated.path)
-    rel = target.relative_to(root).as_posix()
-    if rel != validated.path:
-        raise EditContractError("NONCANONICAL_RELATIVE_PATH", f"validated={validated.path} canonical={rel}")
-
-    _path_is_clean(root, rel)
-    current = target.read_bytes()
-    observed = sha256_bytes(current)
-    if not hmac.compare_digest(observed, validated.preimage_sha256):
-        raise EditContractError(
-            "PREIMAGE_CHANGED_AFTER_VALIDATION",
-            f"validated={validated.preimage_sha256} observed={observed}",
-        )
-    if sha256_bytes(validated.postimage) != validated.postimage_sha256:
-        raise EditContractError("VALIDATED_POSTIMAGE_HASH_MISMATCH")
-
-    with tempfile.NamedTemporaryFile(prefix=f".{target.name}.", dir=target.parent, delete=False) as fh:
-        temp_path = Path(fh.name)
-        fh.write(validated.postimage)
-        fh.flush()
-    try:
-        temp_path.replace(target)
-    except Exception:
-        temp_path.unlink(missing_ok=True)
-        raise
-    return target
+    del repo_root, validated
+    raise EditContractError(
+        "DIRECT_VALIDATED_EDIT_MUTATION_FORBIDDEN",
+        "ValidatedEdit is evidence only; use the canonical preimage-bound patch/effect path",
+    )

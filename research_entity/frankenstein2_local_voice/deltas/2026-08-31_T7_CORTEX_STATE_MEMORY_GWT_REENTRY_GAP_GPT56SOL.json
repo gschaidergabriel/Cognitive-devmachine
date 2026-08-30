@@ -1,0 +1,34 @@
+{
+  "schema": "CLAY_TRIGGER7_RESEARCH_DELTA_V1",
+  "date": "2026-08-31",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "classification": "F2_CORTEX_AUTHORITY_REENTRY_INTEGRATION_GAP_MIRROR",
+  "canonical_coordination_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_handoff_commit": "0c53d9a5f6760e01afdb129f3b68dee124a2388c",
+  "f2_research_delta_commit": "de755d7146b278a6a7c0e75acf46949df31090d0",
+  "owner_target": "Finish local voice/cortex packet-surrogate logic until only irreducible real audio/hardware binding and physical tests remain.",
+  "finding": "WP715 proves packet-component runtime, but that exact scope does not establish actual state/memory/VoiceOutcome reentry or GWT integration. Current packet source carries opaque gwt_ref/memory_refs/tool_ref fields without directly binding the existing typed-memory/context/GWT evidence objects.",
+  "reuse_required": [
+    "src/frankenstein2/memory_lifecycle.py",
+    "src/frankenstein2/typed_memory.py",
+    "src/frankenstein2/context_compiler.py",
+    "src/frankenstein2/gwt_reentry_uptake_binding.py",
+    "src/frankenstein2/realtime_reentry.py",
+    "src/frankenstein2/voice_contract.py"
+  ],
+  "authority_fence": "No new state, memory, GWT, context or effect authority may be created. Trigger4 must refresh overlap and fuse existing admitted components only.",
+  "resolved_interruption_policy": "T7_INTERRUPTED_CONTEXT_RETAIN_HEARD_PREFIX_EPHEMERALLY_ONLY_V1",
+  "runtime_route": "controller -> vps-clay-host -> resource-bounded Ubuntu",
+  "credit": {
+    "wp715_packet_component_runtime": 1,
+    "state_memory_voiceoutcome_reentry_integration": 0,
+    "gwt_runtime": 0,
+    "effect_runtime": 0,
+    "hf10_runtime": 0,
+    "physical_audio": 0,
+    "whole_voice": 0,
+    "whole_product": 0
+  },
+  "next_exact_action": "Trigger4 executes the six packet-surrogate integration discriminators in the F2 handoff on the proven VPS route or reuses an already-current equivalent boundary if overlap is found."
+}

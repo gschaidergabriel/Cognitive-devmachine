@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_TRIGGER4_POST_REENTRY_DELTA/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "trigger_local_minute": "2026-08-30T18:10+07:00",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "predecessor_reentry_checkpoint": {
+    "research_commit": "4323b4c3a2500d8066d107352fbd78148451dccc",
+    "path": "research_entity/trigger_runs/4/2026-08-30T1810p0700_GPT56SOL_TRIGGER4_RUNNER_PROMOTION_BLOCK_REENTRY.json",
+    "classification": "RUNTIME_CREDIT_CLOSURE_BLOCKED_BY_SELF_HOSTED_RUNNER_LIFECYCLE"
+  },
+  "new_observation": {
+    "frankenstein2_main": "cfe3f1ee4766deb827a7e7adb87fd25b3f89e809",
+    "head_message": "Merge Trigger4 WP900→WP206 two-process restart discriminator",
+    "repository_ci_run": 33308383377,
+    "repository_ci_conclusion": "success",
+    "evidence_scope": "REPOSITORY_COMPONENT_DISCRIMINATOR_ONLY",
+    "measured_delta": [
+      "fresh-process persisted-row recovery discriminator merged",
+      "post-commit crash-window coverage merged"
+    ],
+    "credit_boundary": {
+      "target_runtime_credit": 0,
+      "physical_host_credit": 0,
+      "whole_system_acceptance": false
+    }
+  },
+  "existing_target_execution": {
+    "wp1207": {
+      "run_id": 33301648871,
+      "observed_status": "queued",
+      "duplicate_dispatch": "FORBIDDEN"
+    },
+    "wp510": {
+      "run_id": 33265772059,
+      "observed_status": "queued",
+      "duplicate_dispatch": "FORBIDDEN"
+    },
+    "wp900": {
+      "run_id": 33295805811,
+      "observed_status": "pending",
+      "duplicate_dispatch": "FORBIDDEN"
+    }
+  },
+  "actions_this_organ": {
+    "duplicate_runtime_dispatch": false,
+    "new_provider_call": false,
+    "vps_or_physical_host_execution": false,
+    "unusual_experiment": false,
+    "new_architecture_component": false,
+    "durable_post_reentry_delta": true
+  },
+  "blocker": "The available connector can observe GitHub control-plane state but cannot restore or verify the owner-host self-hosted runner service/registration/labels/eligibility/assignment directly. Existing target jobs remain queued or pending, so creating another target job would not increase information.",
+  "next_exact_action": "From an organ with direct owner-host access, verify or restore the existing self-hosted runner lifecycle and eligibility without dispatching duplicates. Allow the already-existing WP510/WP900/WP1207 target jobs to execute, then ingest only exact receipts. In parallel, keep the newly merged WP900→WP206 restart discriminator bounded to repository-component credit until a target-runtime receipt exists.",
+  "classification": "POST_REENTRY_PROGRESS_CAPTURED_RUNTIME_PROMOTION_STILL_BLOCKED_NO_DUPLICATE_DISPATCH"
+}

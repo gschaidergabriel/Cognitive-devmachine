@@ -1,0 +1,54 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "canonical_f2_observation": {
+    "commit": "3f9c183e0225a95cf13cd427144a36dcfc9f5bca",
+    "checkpoint": "research/local_voice/checkpoints/2026-08-31_T7_ASR004_CLAY_HOST_ATTEMPT3_DISPATCH_NONTERMINAL_GPT56SOL.json",
+    "research_id": "T7-ASR-004",
+    "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+    "subject": "Qwen/Qwen3-ASR-0.6B",
+    "target_surface": "clay-direct-dev",
+    "attempt": 3,
+    "state": "UNKNOWN_NONTERMINAL_DISPATCH_MARKER_PRESENT_RECEIPT_NOT_YET_OBSERVED",
+    "workflow_run_identity_observed": false,
+    "executed_steps_observed": false,
+    "receipt_observed": false
+  },
+  "failure_classification": "UNKNOWN_NONTERMINAL",
+  "anti_churn_decision": {
+    "redispatch": false,
+    "new_semantic_claim": false,
+    "semantic_successor_before_terminal_receipt": false,
+    "rule": "Preserve the exact attempt-3 subject until a terminal executed receipt or explicit invalidation exists."
+  },
+  "primary_source_refresh": {
+    "nemotron_3_5_asr": {
+      "facts": [
+        "NVIDIA NeMo Speech lists Nemotron-3.5-ASR-Streaming-0.6B as multilingual streaming ASR with 40 supported languages and controllable 80ms-1s latency.",
+        "NVIDIA NeMo-Speech.cpp provides an official local native C++ inference path for Nemotron 3.5 ASR Streaming, including GGUF conversion/runtime support.",
+        "The current native runtime documentation exposes VAD masking, endpointing, word boosting and language metadata for Nemotron 3.5, all relevant to Frankenstein's turn-taking and technical-vocabulary comparator design."
+      ],
+      "urls": [
+        "https://github.com/NVIDIA-NeMo/Speech",
+        "https://github.com/NVIDIA/NeMo-Speech.cpp",
+        "https://github.com/NVIDIA/NeMo-Speech.cpp/blob/main/docs/asr/models.md",
+        "https://github.com/NVIDIA/NeMo-Speech.cpp/blob/main/docs/asr/customization.md"
+      ],
+      "evidence_class": "EXTERNAL_PRIMARY_SOURCE_ONLY"
+    }
+  },
+  "hypothesis": "If ASR004's exact Qwen3-ASR attempt reaches valid target execution, the decisive discriminator remains matched German/noise quality plus false-activation and latency behavior against faster-whisper; Nemotron 3.5 should then run on identical audio because its native streaming runtime may reduce integration complexity while adding endpointing/VAD controls.",
+  "counterhypothesis": "Nemotron 3.5's attractive runtime controls and published streaming claims may not translate to better German WER/CER, silence behavior, CPU fit or Frankenstein end-to-end latency on the actual target; no promotion is justified until identical-audio measurement exists.",
+  "credits": {
+    "new_qwen3_runtime_credit": 0,
+    "new_german_asr_quality_credit": 0,
+    "new_streaming_asr_credit": 0,
+    "new_nemotron_runtime_credit": 0,
+    "new_trigger4_acceptance_credit": 0,
+    "new_whole_voice_system_credit": 0
+  },
+  "next_exact_action": "Consume the first exact persisted attempt-3 receipt for semantic key 95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715. If still nonterminal, do not redispatch. If infrastructure-invalid, classify before repair. If exact target execution succeeds, run the already-routed identical-audio FLEURS de_de + non-speech comparator against faster-whisper, preserving WER/CER, false activation, gate decisions, latency and resource receipts; only after ASR004 is measured or explicitly reconciled should T7-ASR-008 Nemotron 3.5 execute on the identical comparator."
+}

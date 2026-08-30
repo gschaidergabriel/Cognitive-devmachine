@@ -1,0 +1,64 @@
+{
+  "schema": "TRIGGERWORD_4_WP510_TARGET_RUNTIME_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "observed_at": "2026-08-30T22:09:19+07:00",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": true
+  },
+  "execution_class": "BOUNDED_EXACT_SOURCE_TARGET_ENVIRONMENT_COMPONENT_RUNTIME",
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "dispatch_commit": "3833102b08ce1ce98733825c5da0d274f462eb36",
+    "receipt_commit": "f240f7971bdd660070725623f485dd7ce540073f",
+    "workflow": ".github/workflows/trigger4-wp510-target-runtime-v2.yml",
+    "workflow_run_id": 33318805875,
+    "workflow_job_id": 99277005463,
+    "workflow_conclusion": "success",
+    "runner_name": "vps-clay-host",
+    "target_environment": "clay-direct-dev",
+    "container_runtime": "podman"
+  },
+  "exact_f2_subject": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "source_commit": "656b57bded655e64a25d7e205b599becce3d4989",
+    "source_tree": "f9aa0811bedc35efe8288bcbc08351c048780113",
+    "wp510_generation": 3,
+    "current_main_observed_after_run": "43d155630fc154d194371d70e8acb491f455cea5",
+    "current_main_is_newer_than_executed_subject": true
+  },
+  "observed_result": {
+    "status": "PASS",
+    "execution_observed": true,
+    "source_identity_verified": true,
+    "causal_status": "CAUSAL_INFLUENCE_OBSERVED_AT_CONTRACT_SCOPE",
+    "path_status": "CONTRACT_SCOPE_CAUSAL_PATH_SEALED",
+    "g3_not_computed_positive_seal_fence": "PASS",
+    "positive_chain_regression": "PASS",
+    "seal_sha256": "b1eaef111e4899f43707d0089c2180f1b1cb791c371e60976ccffd2b3cb8e168",
+    "uptaken_cell_ids": ["G1"],
+    "reentry_binding_ids": ["binding:wp510"]
+  },
+  "credits": {
+    "target_environment_component_runtime_credit": 1,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false,
+    "current_f2_main_runtime_credit_from_this_run": 0
+  },
+  "coordination_repair": {
+    "stale_run_33265772059": "cancelled",
+    "intermediate_run_33318635448": "cancelled",
+    "repair": "pin runs-on to clay-host, set singleton cancel-in-progress true, then issue one successor dispatch",
+    "duplicate_runtime_lane_created": false
+  },
+  "evidence_boundary": "This is positive exact-source WP510 G3 target-environment component runtime evidence only. It does not promote the newer F2 main, semantic GWT/J-Space, physical GRID10, provider/model, effect, training, portable clean-machine host acceptance, product completion, or whole-system acceptance.",
+  "next_exact_action": "Re-enter current Frankenstein-2.0 main and portable-delivery frontier; use this receipt as exact historical/runtime evidence only. Do not silently replay it as current-main credit. The next promotion requires an exact-current admitted runtime subject or a separately bound portable real-host release acceptance observation.",
+  "unusual_experiment": "NONE_EXECUTED"
+}

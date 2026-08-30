@@ -1,0 +1,66 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "reentry_heads": {
+    "f2_main_observed": "a35cf0b1a96055e0d4011f3a2aed18bd69545d27",
+    "research_main_observed_before_write": "49079f9c101c625f82c2c2285f19b794701af757"
+  },
+  "current_frontier": {
+    "tts001": "BLOCKED_TARGET_CAPABILITY_AUDIO_OUTPUT_UNOBSERVABLE_NO_MODEL_RUNTIME_DISPATCH",
+    "asr004": "MATCHED_GERMAN_FLEURS_NON_SPEECH_COMPARATOR_REMAINS_HIGHEST_VALUE_VPS_EXECUTABLE_GATE",
+    "asr008": "READY_ONLY_AFTER_ASR004_MATCHED_COMPARATOR",
+    "tts011": "NEW_CONCURRENT_SOURCE_PIN_CLAIM_FOR_MOSS_TTS_REALTIME_1_7B_OBSERVED_ON_F2_MAIN"
+  },
+  "source_refresh": {
+    "qwen3_asr": {
+      "facts": [
+        "Official Qwen3-ASR material continues to list German and Offline/Streaming support for 0.6B/1.7B.",
+        "The currently observed official stateful incremental demo path is qwen-asr with vLLM; capability metadata alone does not mint progressive-streaming runtime credit.",
+        "FLEURS de_de remains an appropriate pinned public German comparator source."
+      ],
+      "urls": [
+        "https://huggingface.co/Qwen/Qwen3-ASR-0.6B",
+        "https://github.com/QwenLM/Qwen3-ASR/blob/main/qwen_asr/cli/demo_streaming.py",
+        "https://arxiv.org/abs/2601.21337",
+        "https://huggingface.co/datasets/google/fleurs/tree/main/data/de_de"
+      ]
+    },
+    "nemotron_35_asr": {
+      "facts": [
+        "Official NVIDIA NeMo Speech currently lists Nemotron-3.5-ASR-Streaming-0.6B as multilingual with controllable 80ms-1s latency.",
+        "Official NeMo-Speech.cpp exposes a local native C++ GGUF path for Nemotron 3.5 ASR Streaming and language-conditioned streaming, supporting the already-reserved T7-ASR-008 successor benchmark design."
+      ],
+      "urls": [
+        "https://github.com/NVIDIA-NeMo/Speech",
+        "https://github.com/NVIDIA/NeMo-Speech.cpp",
+        "https://github.com/NVIDIA/NeMo-Speech.cpp/blob/main/docs/asr/models.md"
+      ]
+    },
+    "moss_tts_realtime": {
+      "facts": [
+        "A new F2 semantic claim T7-TTS-011 was observed for source-only MOSS-TTS-Realtime 1.7B research; duplicate claim creation was avoided.",
+        "Current OpenMOSS primary material describes MOSS-TTS-Realtime as context-aware multi-turn streaming TTS and lists German among its supported languages.",
+        "No local runtime, German listening quality, latency, resource-fit, physical audible-output, barge-in, or Trigger-4 acceptance credit is implied by this source refresh."
+      ],
+      "urls": [
+        "https://huggingface.co/OpenMOSS-Team/MOSS-TTS",
+        "https://huggingface.co/OpenMOSS-Team/MOSS-TTS-Realtime"
+      ]
+    }
+  },
+  "decision": "DO_NOT_DUPLICATE_TTS011_OR_ASR008; KEEP_ASR004_MATCHED_COMPARATOR_AS_NEXT_EXECUTABLE_VPS_GATE",
+  "hypothesis": "The decisive ASR question is no longer whether Qwen3-ASR can load locally but whether its German accuracy/non-speech behavior and turn-gated latency beat the admitted faster-whisper baseline enough to justify its runtime complexity; only after that matched result should Nemotron 3.5 ASR be measured on identical audio.",
+  "counterhypothesis": "Qwen3-ASR may fail the practical voice-organ frontier through silence false activations, weaker matched German WER/CER, or streaming/runtime complexity even though its local CPU smoke passes; Nemotron 3.5 may then dominate the target streaming frontier, but this remains unmeasured until T7-ASR-008 executes.",
+  "credits": {
+    "new_runtime_credit": 0,
+    "german_asr_quality_credit": 0,
+    "streaming_asr_credit": 0,
+    "tts_runtime_credit": 0,
+    "trigger4_acceptance_credit": 0,
+    "whole_voice_system_credit": 0
+  },
+  "next_exact_action": "Trigger4/current admitted target executor should run the existing T7-ASR-004 semantic key unchanged on pinned FLEURS de_de rows 0..31 plus pinned non-speech strata through Qwen3-ASR direct, deterministic VAD/turn-gated Qwen3-ASR, and matched faster-whisper baseline; persist exact audio hashes, transcripts, WER/CER, false activations, gate decisions, latency and resource use. Then execute T7-ASR-008 Nemotron 3.5 on the identical comparator. TTS011 stays source-only until its own nonduplicate research lane advances; TTS001 audible-output acceptance remains physical-target blocked."
+}

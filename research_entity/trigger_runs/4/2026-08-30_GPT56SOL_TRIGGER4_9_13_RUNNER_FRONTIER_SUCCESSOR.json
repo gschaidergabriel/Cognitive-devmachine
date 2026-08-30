@@ -1,0 +1,107 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "date": "2026-08-30",
+  "supersedes_for_current_reentry": "research_entity/trigger_runs/4/2026-08-30T1258p0700_GPT56SOL_TRIGGER4_WP206_CLOSURE_AND_TARGET_RUNTIME_FRONTIER.json",
+  "authority": {
+    "research_main_observed_before_write": "70bc4ca40f6a6fa97dfa351768b1e91c4f4febcf",
+    "supervisor_inbox_schema_version": "9.13",
+    "supervisor_delta": "9.13BG_NON_AUTHORITY",
+    "steering_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13BG_DELTA_2026-08-30T1244P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "owner_vps_allowed": true,
+    "established_vps_bridge_allowed": true,
+    "together": "FORBIDDEN",
+    "external_provider_routes": "UNADMITTED",
+    "paid_or_unknown_cost_fallback": "FORBIDDEN_FAIL_CLOSED"
+  },
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "frankenstein2": {
+    "main_observed": "fb293b754fd17127be6c5c9ddadbb4abfb5256b6",
+    "main_message": "trigger4: claim F2-WP-901 restart recovery continuation",
+    "wp206": {
+      "granular_current_resolution": "G2_RETIRED_STALE_G1_LATEST_ACCEPTED",
+      "latest_accepted_generation": 1,
+      "stable_authority_binding_donor_pr": 653,
+      "donor_state": "CLOSED_UNMERGED",
+      "reason": "A stable path/device/inode authority binding was mechanically green but would define a new semantic contract; it must not silently reinterpret historical G1 mutable UnifiedDBFingerprint receipt rows.",
+      "surface_conflict": "SUPERVISOR_INBOX still describes the post-acceptance G1 receipt defect as open, while newer granular F2 main explicitly retired the attempted G2 semantic reinterpretation. Granular current F2 reconciliation is used for F2 implementation reentry; the supervisor inbox is preserved as a stale/conflicting coordination surface rather than averaged away."
+    },
+    "wp901": {
+      "state": "CLAIMED",
+      "claim_id": "F2-WP-901-G1-GPT56SOL-RESTART-RECOVERY-CONTINUATION-20260830",
+      "coordination": "ROUTE_AROUND_ACTIVE_CLAIM_NO_DUPLICATE_IMPLEMENTATION"
+    },
+    "wp510": {
+      "state": "ACCEPTED_G3_REPOSITORY_COMPONENT_ONLY",
+      "target_runtime_credit": 0,
+      "required_promotion": "separately admitted target-runtime evidence with exact execution identities and observed delivery/uptake/re-entry",
+      "existing_controller_run_id": 33265772059,
+      "existing_controller_job_id": 99135457584,
+      "observed_run_status": "queued",
+      "observed_job_execution_steps": 0,
+      "duplicate_dispatch": "FORBIDDEN_WHILE_EXISTING_RUN_UNRESOLVED"
+    },
+    "wp1207": {
+      "state": "ACCEPTED_G5_REPOSITORY_COMPONENT_ONLY",
+      "predecessor_artifact_id": 9726495595,
+      "candidate_artifact_id": 9726674221,
+      "target_runtime_credit": 0,
+      "required_target": "freshly resolved owner-authorized clay-direct-dev bridge",
+      "required_executor": "tools/run_wp1207_hostile_twin_gate.py",
+      "new_dispatch_this_organ": false,
+      "reason_no_new_dispatch": "The current self-hosted execution plane already has unresolved nonexecuting work; adding another queued target job would increase queue pressure without adding runtime evidence."
+    }
+  },
+  "controller": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "6c77751435d980bf50f5e3b362e8d1fcffca87c1",
+    "wp510_run": {
+      "run_id": 33265772059,
+      "status": "queued",
+      "conclusion": null,
+      "job_id": 99135457584,
+      "steps_observed": 0,
+      "classification": "CONTROL_PLANE_ONLY_NO_RUNTIME_EXECUTION"
+    },
+    "wp900_same_runner_surface": {
+      "run_id": 33295805811,
+      "status": "pending",
+      "conclusion": null,
+      "jobs_observed": 0,
+      "runner_labels_from_workflow": ["self-hosted", "Linux", "X64"],
+      "classification": "CONTROL_PLANE_PENDING_NO_RUNTIME_EXECUTION"
+    },
+    "runner_inference": "Multiple same self-hosted-label target workflows are unstarted/queued or pending while no backend execution steps are observed. This is evidence consistent with runner registration/liveness/eligibility/capacity or Actions assignment blockage; it is NOT proof of a Frankenstein runtime defect and does not identify which runner-lifecycle subcause is true."
+  },
+  "evidence_discipline": {
+    "queued_or_zero_step_job_is_runtime_evidence": false,
+    "repository_component_pass_is_target_runtime": false,
+    "runner_blockage_is_product_logic_failure": false,
+    "provider_or_model_calls_performed": false,
+    "vps_or_physical_host_execution_performed": false,
+    "unusual_experiment_performed": false,
+    "new_runtime_dispatch_performed": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "f2_target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "provider_runtime": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Resolve the existing self-hosted runner lifecycle/eligibility/assignment state from direct owner-host or runner-status evidence and allow the already-existing WP510 run 33265772059/job 99135457584 to reach a terminal state without duplicate dispatch. Once a runner is demonstrably eligible and executing, obtain exact target receipts for WP510 delivery->uptake->re-entry and separately execute WP1207 G5 with artifacts 9726495595 and 9726674221. Continue routing around the active WP901 implementation claim."
+}

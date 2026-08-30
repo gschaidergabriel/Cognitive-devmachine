@@ -1,0 +1,120 @@
+{
+  "schema": "F2_TRIGGER7_CONVERGENCE_REENTRY/v1",
+  "trigger": "7",
+  "created_local_time": "2026-08-31T00:32:50+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_AND_REENTRY_NOT_F2_CLAIM_AUTHORITY",
+  "authority_snapshot": {
+    "research_main_before_write": "49079f9c101c625f82c2c2285f19b794701af757",
+    "f2_main_observed": "88b597af20c5d0afd43ed417732365a5027f6e5c",
+    "trigger7_protocol": "research_entity/frankenstein2_local_voice/TRIGGERWORD_7_PROTOCOL.md",
+    "target_runtime_law": "fully local/self-hosted; zero external model/ASR/TTS API calls",
+    "language_priority": "German first"
+  },
+  "current_frontier": {
+    "T7-ASR-004": {
+      "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+      "state": "TARGET_RUNTIME_PARTIAL_OBSERVED_CLAIM_REMAINS_OPEN",
+      "already_measured": [
+        "exact Qwen3-ASR 0.6B artifact hash verified",
+        "model load observed on clay-direct-dev",
+        "local CPU inference observed",
+        "silence produced false transcript 'Ich.'"
+      ],
+      "credits": {
+        "bounded_runtime": 1,
+        "german_quality": 0,
+        "streaming": 0,
+        "trigger4_acceptance": 0
+      },
+      "new_coordination_delta": {
+        "class": "INFRA_AUTH_TRANSPORT_QUOTA",
+        "specific": "RUNNER_LABEL_ELIGIBILITY_MISMATCH",
+        "evidence": "Later target runner execution succeeded on vps-clay-host via label clay-host while stale ASR workflow still requires self-hosted/Linux/X64; zero-step run 33292903286 remains control-plane-only.",
+        "f2_ref": "trigger4/inbox/local_voice/T7_ASR004_CLAY_HOST_LABEL_ROUTING_REPAIR_ADDENDUM_2026-08-31_GPT56SOL.json",
+        "f2_commit": "745c4a2979ac68d14b559c2a93bfb3877694c419"
+      },
+      "next_exact_action": "Trigger4 repairs the controller runs-on selector to the admitted clay-host route, supersedes the stale zero-step dispatch, then runs exactly one corrected ASR004 matched comparator on identical pinned German/noise audio with Qwen3-ASR direct, deterministic VAD/turn-gated Qwen3-ASR and faster-whisper baseline."
+    },
+    "T7-ASR-008": {
+      "subject": "NVIDIA Nemotron 3.5 ASR Streaming 0.6B",
+      "state": "READY_AFTER_ASR004_MATCHED_COMPARATOR",
+      "existing_f2_claim": "research/local_voice/claims/T7-ASR-008/E3_NEMOTRON_35_ASR_TARGET_RUNTIME_BENCHMARK.json",
+      "primary_source_refresh_2026-08-31": {
+        "model": "nvidia/nemotron-3.5-asr-streaming-0.6b",
+        "release_date": "2026-06-04",
+        "parameter_class": "0.6B",
+        "german_locale": "de-DE",
+        "german_tier": "transcription-ready",
+        "streaming_architecture": "cache-aware FastConformer-RNNT",
+        "configurable_chunk_ms": [80, 160, 320, 560, 1120],
+        "official_fleurs_german_wer_langid": {
+          "80ms": 9.81,
+          "160ms": 9.21,
+          "320ms": 8.83,
+          "560ms": 8.42,
+          "1120ms": 8.31
+        },
+        "source": "https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b"
+      },
+      "interpretation": "This strengthens source-level priority for the already-reserved Nemotron comparator because German support is explicit and the streaming path is cache-aware. It does not create target-runtime or F2 acceptance credit.",
+      "credits_delta": {
+        "source_priority_signal": 1,
+        "target_runtime": 0,
+        "german_quality": 0,
+        "trigger4_acceptance": 0
+      }
+    },
+    "QWEN_STREAMING_COUNTEREVIDENCE": {
+      "primary_model_card": "https://huggingface.co/Qwen/Qwen3-ASR-0.6B",
+      "maintainer_discussion": "https://github.com/QwenLM/Qwen3-ASR/discussions/9",
+      "observed": [
+        "Official model card continues to advertise streaming only through the vLLM backend.",
+        "Qwen maintainer states the open implementation did not implement KV-cache reuse and is still far from an industrial streaming implementation.",
+        "Current community issue/discussion evidence continues to flag accumulation/reprocessing risk for long sessions."
+      ],
+      "decision_effect": "Do not demote Qwen3-ASR before the matched target comparator. Treat long-session streaming accumulation as an explicit falsifier, not as an already-proven product failure."
+    },
+    "T7-TTS-001": {
+      "state": "BLOCKED_TARGET_CAPABILITY_AUDIO_OUTPUT_UNOBSERVABLE_NO_MODEL_RUNTIME_DISPATCH",
+      "target_environment": "clay-direct-dev",
+      "observed_audio_device_count": 0,
+      "next_exact_action": "Preserve the semantic key and defer audible-output acceptance to an admitted physical/audio-capable target. Do not reinterpret a VPS without an observable audio path as a TTS model failure."
+    },
+    "T7-TTS-011": {
+      "subject": "OpenMOSS-Team/MOSS-TTS-Realtime",
+      "state": "SOURCE_ADMISSIBLE_CONTEXT_AWARE_QUALITY_CHALLENGER_DEFER_TARGET_DISPATCH",
+      "f2_source_pin_commit": "88b597af20c5d0afd43ed417732365a5027f6e5c",
+      "source_findings": [
+        "German is included in the official language set.",
+        "Realtime model is context-aware across text and acoustic history and emits incremental audio.",
+        "Upstream warm TTFB is reported as 180 ms and RTF 0.51 on an NVIDIA L20; these are upstream-only measurements.",
+        "Official quickstart includes trust_remote_code=True for the audio tokenizer, requiring quarantine/source inspection before execution."
+      ],
+      "decision_effect": "Keep source-pinned and non-dispatched until TTS001's existing physical audible-output gate is resolved; opening another target runtime lane now would add blocked breadth rather than evidence depth."
+    }
+  },
+  "convergence_decision": {
+    "highest_information_nonduplicate_gate": "ASR004 corrected clay-host matched German/noise comparator",
+    "why": "It closes an executable quality/latency discriminator on an already-loaded target model and unlocks the distinct Nemotron 3.5 comparator without adding architecture breadth.",
+    "do_not_do": [
+      "Do not create a second ASR004 semantic claim.",
+      "Do not create another Actions dispatch before the runner-label repair is bound to current source.",
+      "Do not start ASR008 runtime comparison before ASR004 is executed or explicitly reconciled.",
+      "Do not dispatch MOSS-TTS-Realtime while the existing audible-output physical gate remains unresolved.",
+      "Do not mint German voice-system acceptance from upstream model-card metrics."
+    ]
+  },
+  "continuation_checkpoint": {
+    "next_7_reentry_order": [
+      "refresh F2 main and research main",
+      "consume any Trigger4 result for ASR004 clay-host routing repair and corrected comparator",
+      "if ASR004 matched comparator completed, reconcile and schedule ASR008 Nemotron on the same admitted target executor without overlap confounds",
+      "consume any physical/audio-capable TTS001 receipt before considering TTS011 runtime promotion",
+      "search current primary sources for new German-first local realtime candidates only if they can challenge an uncovered evidence boundary"
+    ],
+    "whole_voice_system_credit": 0,
+    "physical_audio_acceptance_credit": 0,
+    "training_credit": 0
+  }
+}

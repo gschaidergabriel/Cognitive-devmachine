@@ -1,0 +1,32 @@
+{
+  "schema": "T7_PROVENANCE_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "observed_local_time": "2026-08-30T16:58:00+07:00",
+  "canonical_build_repo": "gschaidergabriel/frankenstein-2.0",
+  "research_id": "T7-ASR-004",
+  "objective": "SELF_HOSTED_ONLY_RUNNER0_CONTROL_PLANE_FALSIFIER",
+  "canonical_checkpoint_path": "research/local_voice/checkpoints/2026-08-30_T7_ASR004_SELFHOSTED_ONLY_RUNNER0_FALSIFIER_1658_GPT56SOL.json",
+  "canonical_write_commit": "d56df313ecda148f204837f2960bdc2e6cc20dfd",
+  "controller": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "qwen_run_id": 33292903286,
+    "qwen_job_id": 99207535776,
+    "qwen_labels": ["self-hosted", "Linux", "X64"],
+    "qwen_runner_id": 0,
+    "comparison_run_id": 33301648871,
+    "comparison_job_id": 99230838825,
+    "comparison_labels": ["self-hosted"],
+    "comparison_runner_id": 0
+  },
+  "bounded_result": "LINUX_X64_LABEL_MISMATCH_ONLY_HYPOTHESIS_REJECTED_AT_CONTROL_PLANE_SCOPE__BROADER_SELF_HOSTED_RUNNER_ADMISSION_OR_AVAILABILITY_BLOCKER_SUPPORTED",
+  "external_primary": "GitHub self-hosted runner routing: jobs remain queued when no matching online and idle runner is available.",
+  "coordination": "NO_DUPLICATE_QWEN_DISPATCH_NO_NEW_ASR_CLAIM",
+  "runtime_credit": 0,
+  "german_e2e_voice_credit": 0,
+  "trigger4_acceptance_credit": 0,
+  "whole_system_credit": 0,
+  "next_exact_action": "Restore/verify one repository-visible online/idle Dr.-Unterweger self-hosted runner on the authorized clay-direct-dev bridge, then let existing run 33292903286 acquire it.",
+  "mirror_only": true,
+  "not_a_competing_claim_authority": true
+}

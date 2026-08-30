@@ -4,55 +4,43 @@
   "date": "2026-08-31",
   "organ": "GPT-5.6-Sol",
   "research_id": "T7-FD-RTCOMPAT-001",
-  "classification": "SOURCE_RESEARCH_CORRECTION_REVIEW_ONLY",
+  "classification": "SOURCE_RESEARCH_SEMANTIC_RECONCILIATION",
   "implementation_mutation_authority": false,
   "new_claim_or_generation": false,
   "canonical_coordination_repo": "gschaidergabriel/frankenstein-2.0",
-  "f2_corrected_delta_commit": "c53c25fb84717c908a254f04d4bb68040ddff78d",
+  "f2_reconciled_delta_commit": "57aa9b18ccdab095a55beb4ed19bd0faa55c6bc0",
   "f2_delta_ref": "research/local_voice/falsifiers/2026-08-31_HF_S2S_HEARD_PREFIX_RETENTION_DELTA_GPT56SOL.json",
-  "correction_status": "HEARD_PREFIX_AMNESIA_HYPOTHESIS_REJECTED_FOR_CURRENT_F2_POLICY",
-  "basis": {
-    "current_f2_policy": [
-      "started/heard interrupted output remains non-commit-eligible",
-      "only fully heard completed output may become commit-eligible"
-    ],
-    "upstream_revision": "3986f453012a131632eee4731995474046846794",
-    "upstream_source_and_tests": [
-      "conversation.item.truncate is an acknowledgement-free no-op after cancellation",
-      "cancelled/failed/incomplete responses roll back provisional generation",
-      "late provisional writes are rejected after rollback",
-      "whole interrupted assistant/tool provisional history is removed while prior committed user history survives"
-    ],
-    "newer_f2_checkpoint": "research/local_voice/checkpoints/2026-08-31T034300P0700_T7_HF_S2S_CANCEL_ROLLBACK_TEST_EVIDENCE_GPT56SOL.json"
+  "status": "PREFIX_RETENTION_POLICY_UNRESOLVED",
+  "semantic_reconciliation": {
+    "commit_eligibility_plane": "Interrupted output is not commit-eligible; durable spoken outcome admission requires completed playback and heard_fraction=1.0.",
+    "ephemeral_context_plane": "Current cited F2 source does not yet establish whether the actually heard prefix of an interrupted assistant response belongs in the next-turn effective model context.",
+    "do_not_equate": "commit_eligible=false with mandatory deletion from ephemeral dialogue context",
+    "preferred_research_default": "RETAIN_HEARD_PREFIX_EPHEMERALLY_ONLY",
+    "counterhypothesis": "DROP_WHOLE_INTERRUPTED_RESPONSE remains available only as an explicit policy choice whose dialogue-coherence consequences are measured."
   },
-  "reconciliation": {
-    "prior_hypothesis": "Whole-response rollback may be incompatible because it forgets the heard prefix of an interrupted response.",
-    "current_result": "Rejected under current F2 semantics. Because the entire interrupted response is non-commit-eligible, whole-response rollback is compatible in principle and no separate prefix-retention architecture is currently required.",
-    "remaining_open_runtime_question": "Do real WebSocket/WebRTC cancellation races, late TTS/audio, late tool results, reconnects or stale truncate events allow any interrupted-response semantics to re-enter the next-turn effective model context?",
-    "future_reopen_condition": "Reopen heard-prefix retention only if F2 authority later changes to persist partially heard interrupted output."
+  "hf_pinned_source": {
+    "repository": "huggingface/speech-to-speech",
+    "revision": "3986f453012a131632eee4731995474046846794",
+    "facts": [
+      "conversation.item.truncate is parsed but intentionally no-ops after cancellation",
+      "cancelled/failed/incomplete responses roll back tracked provisional assistant/tool history",
+      "cancelled response keys are tombstoned so late provisional writes are rejected"
+    ]
   },
   "routing": {
     "next_owner": "TRIGGER4_RUNTIME_FALSIFIER",
     "same_existing_semantic_claim": true,
-    "reuse_existing_ids": [
-      "HF02_CANCEL_GENERATION_VS_HEARD_HISTORY",
-      "HF03_TRUNCATE_NOOP_SEMANTIC_EXACTNESS",
-      "HF04_TOOL_RESULT_AFTER_BARGE_IN",
-      "HF05_DOUBLE_CANCEL_AND_LATE_CHUNK"
-    ],
-    "next_exact_action": "Execute the existing runtime packet using whole-response rollback semantics; capture exact next-turn Chat/model context, late producer disposition and WebSocket/WebRTC behavior separately. Do not open HF09 as a new lane.",
-    "do_not": [
-      "do not open a duplicate Trigger4 claim",
-      "do not create a second voice FSM/persona/memory/state/effect authority",
-      "do not promote source or upstream unit tests to runtime acceptance"
-    ]
+    "new_runtime_dispatch": false,
+    "required_before_product_classification": "Pin explicit F2 interrupted-response next-turn context policy.",
+    "runtime_probe": "HF09_EXACT_HEARD_PREFIX_RETENTION plus existing HF02-HF05",
+    "next_exact_action": "Measure heard prefix, unheard tail, raw HF post-cancel history, F2 ephemeral authoritative context and exact next-turn effective model context separately. Preserve durable memory/effect authority as independent gates."
   },
   "credit": {
-    "source_research": 1,
-    "upstream_unit_test_evidence": 1,
+    "research_semantic_reconciliation": 1,
+    "upstream_source_and_unit_test_evidence": 1,
     "runtime": 0,
     "german_e2e": 0,
-    "locality": 0,
+    "durable_memory": 0,
     "trigger4_acceptance": 0,
     "whole_product": 0
   }

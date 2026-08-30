@@ -1,0 +1,42 @@
+{
+  "schema": "TRIGGER4_RUNTIME_SCOPE_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "worker": "GPT-5.6 Sol / ChatGPT organ",
+  "receipt_time_basis": "workflow_run_completed_at",
+  "observed_at": "2026-08-30T19:19:02+07:00",
+  "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "directive_branch_sha": "c8aa3fd049ae402e001f1a6ef7263e0244509ac6",
+  "research_entity_main_before_write": "becd78c4b893874d9fefc53fe58d0de61e423a58",
+  "f2_main_observed_after_run": "61327ec2a80f15985258c5b1d1f5fb0a1072968a",
+  "runtime_subject": {
+    "workpackage": "F2-WP-1207",
+    "workflow_run_id": 33311147892,
+    "job_id": 99256303130,
+    "workflow": "F2 WP1207 Portable Release Transaction CI",
+    "exact_head_sha": "fc550a0edb7032c1a7592e32e9aaa802f46a7133",
+    "status": "completed",
+    "conclusion": "success",
+    "job": "deterministic-hostile-twin-transaction-core",
+    "runner_labels": ["ubuntu-latest"],
+    "runner_name": "GitHub Actions 1000051152",
+    "executed_steps_observed": true
+  },
+  "scope_classification": "REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+  "target_host_execution_observed": false,
+  "target_runtime_credit_delta": 0,
+  "physical_grid10_credit_delta": 0,
+  "whole_system_credit_delta": 0,
+  "finding": "The exact WP1207 CI run executed checkout/setup/compile and the fail-closed transaction suite successfully, but the job was assigned to GitHub-hosted ubuntu-latest rather than the owner-authorized target host. This is positive repository-hosted component evidence only and cannot promote target-runtime or whole-system credit.",
+  "coordination": {
+    "duplicate_dispatch_performed": false,
+    "reason": "Current F2 main carried an active Trigger6 self-hosted-runner diagnostic claim; Trigger4 reentry therefore preserved that ownership and did not redispatch or semantically mutate the bound runtime boundary.",
+    "active_diagnostic_claim_seen_at_f2_sha": "61327ec2a80f15985258c5b1d1f5fb0a1072968a"
+  },
+  "next_exact_gate": "Consume the active runner-diagnostics result, then obtain an exact-source or byte-identical owner-host WP1207 execution/readback receipt before any target-runtime promotion. Do not count GitHub-hosted success as target-host evidence.",
+  "evidence_law": [
+    "EXECUTED_GITHUB_HOSTED_CI_IS_NOT_TARGET_HOST_EXECUTION",
+    "QUEUED_OR_ZERO_STEP_TARGET_JOB_IS_CONTROL_PLANE_EVIDENCE_ONLY",
+    "NO_DUPLICATE_RUNTIME_DISPATCH_WHILE_BOUND_DIAGNOSTIC_OR_ATTEMPT_IS_ACTIVE",
+    "COMPONENT_PASS_DOES_NOT_MINT_WHOLE_SYSTEM_PASS"
+  ]
+}

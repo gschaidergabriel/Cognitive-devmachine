@@ -1,0 +1,90 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_delta": "9.13BF_NON_AUTHORITY",
+  "created_at": "2026-08-30T11:49:07+07:00",
+  "classification": "MATERIAL_EXECUTABLE_RELEASE_COUNTEREVIDENCE_AND_REENTRY_STEERING",
+  "authority": {
+    "provider_policy": "FREE_ONLY_HARD_OFF",
+    "together": "FORBIDDEN",
+    "paid_or_unknown_cost_fallback": false,
+    "base_promotion_from_model_consensus": false,
+    "canonical_semantics_promotion_without_executable_counterevidence_and_review": false,
+    "frank_harness": "DO_NOT_MODIFY",
+    "frank_v0_1_target": "UBUNTU_TARGET_VPS"
+  },
+  "material_evidence": {
+    "release_candidate_2187d15": {
+      "repository_build_run": 33292596534,
+      "repository_build_job": 99206733420,
+      "result": "SUCCESS_24_OF_24_PLUS_BYTE_FOR_BYTE_REPRODUCIBILITY",
+      "credit": "REPOSITORY_RELEASE_BUILD_ONLY",
+      "runtime_credit": 0,
+      "status": "SUPERSEDED_FOR_FINAL_HANDOFF_BY_POST_ACCEPTANCE_COUNTEREVIDENCE"
+    },
+    "wp1107_g3": {
+      "counterevidence": "Generation-2 archive verification accepted unbound bytes after ZIP EOCD when expected_receipt was omitted",
+      "counterevidence_run": 33254817255,
+      "current_state": "ACCEPTED",
+      "accepted_main_implementation_sha": "e0cabe7cb2f1fcb40855aa647b30593a8f431ec2",
+      "accepted_regression_sha": "e812d1747393099ac61be52975b5d2d515bc2638",
+      "acceptance_run": 33292818751,
+      "scope": "EXACT_RELEASE_ARCHIVE_BYTE_PERIMETER_REPOSITORY_HOSTED_CI_AND_RELEASE_ARTIFACT_ONLY",
+      "runtime_credit": 0
+    },
+    "wp1207_g3": {
+      "current_state": "ACCEPTED",
+      "merge_sha": "714c59209d16954d532e1032190cf110af9b722b",
+      "merged_main_ci_run": 33292856940,
+      "merged_main_ci_job": 99207415639,
+      "release_artifact_sha256": "e6a688673792a70a2deefac25d2241bacc8726f17d05eafac9adca5e2592a3da",
+      "scope": "EXACT_GIT_TREE_RELEASE_CANDIDATE_PLUS_EXTERNAL_PREHANDOFF_RECEIPT_MATERIALIZATION_REPOSITORY_HOSTED_ONLY",
+      "target_runtime_credit": 0,
+      "whole_system_acceptance": false
+    },
+    "wp1109": {
+      "canonical_state": "G1_ACCEPTED_BUT_POST_ACCEPTANCE_EXECUTABLE_COUNTEREVIDENCE_UNABSORBED",
+      "canonical_source_blob": "76bf1f93efd328205338370461c6c51e639b9f73",
+      "falsifier_pr": 457,
+      "falsifier_run": 33253753677,
+      "finding": "Opaque state_readback_evidence_ref does not prove successor or rollback readback identity against CanonicalStateBinding lineage/generation/state digest",
+      "tested_repair_donor_pr": 614,
+      "tested_repair_donor_run": 33292609283,
+      "tested_repair_donor_job": 99206768654,
+      "donor_ci": "SUCCESS",
+      "donor_mutation_authority": false,
+      "canonical_repair_credit": 0
+    },
+    "wp710": {
+      "current_state": "G2_ACCEPTED_REPOSITORY_COMPONENT_SCOPE",
+      "stale_supervisor_open_flag": "RETRACTED",
+      "reason": "Named E3 counterevidence predates G2 and is explicitly absorbed by exact permission snapshot/freshness/expiry coalescing constraints; no post-G2 executable counterexample identified"
+    },
+    "wp510": {
+      "controller_run": 33265772059,
+      "controller_job": 99135457584,
+      "last_observed": "QUEUED_UNASSIGNED_ZERO_STEPS",
+      "target_runtime_credit": 0,
+      "duplicate_dispatch": "FORBIDDEN_WHILE_UNRESOLVED"
+    }
+  },
+  "steering": [
+    "P0_WP1109_REENTRY: consume exactly one canonical WP1109 mutation-authority lane or explicitly admitted successor generation to absorb the already-executed typed state-readback identity repair from review-only PR614; require exact-source CI and canonical reconciliation before host-switch/rollback state-preservation promotion.",
+    "P0_RELEASE_HANDOFF: use only the current accepted WP1207 G3 immutable release subject for hostile-twin install/update-failure/rollback/readback work; repository materialization is not target-runtime acceptance.",
+    "P0_WP1107_HOLD: G3 executable repair closed the EOCD/whole-byte perimeter at repository scope; do not reopen absent new executable counterevidence.",
+    "P0_WP710_HOLD: retract stale supervisor claim that the pre-G2 E3 remains open; do not create duplicate G3 absent new post-G2 executable counterevidence.",
+    "P0_WP510_HOLD: do not duplicate-dispatch while the recorded self-hosted run is unresolved; queued/unassigned/zero-step state is control-plane evidence, not runtime PASS or product failure.",
+    "P0_FREE_ONLY: keep all ClayCode external provider routes unadmitted; Together forbidden; no paid or unknown-cost fallback.",
+    "P0_BASE: CC-WP-01/02 remain PASS and CC-WP-03..14 remain OPEN; no BASE PASS from repository proxy/model consensus.",
+    "P0_SEMANTICS: preserve frozen semantics unless executable application/compiler counterevidence proves inadequacy.",
+    "P0_FRANK: Ubuntu-only Frank v0.1 target remains unchanged and Frank's own Harness must not be modified."
+  ],
+  "credit_boundary": {
+    "base_new_credit": 0,
+    "canonical_semantics_new_credit": 0,
+    "target_vps_runtime_new_credit": 0,
+    "physical_grid10_new_credit": 0,
+    "provider_runtime_new_credit": 0,
+    "training_new_credit": 0,
+    "whole_system_new_credit": 0
+  }
+}

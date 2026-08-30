@@ -856,6 +856,14 @@ class ForkActiveExecutionQuarantine(RuntimeError):
     """The current child must not continue an inherited execution stack."""
 
 
+def _raise_if_fork_active_execution_quarantined() -> None:
+    """Stop a copied active stack immediately after executable callbacks."""
+    if _fork_active_execution_quarantined():
+        raise ForkActiveExecutionQuarantine(
+            "forked_during_active_execution"
+        )
+
+
 def _open_no_redirect(request: urllib.request.Request, timeout: int):
     return urllib.request.build_opener(_NoRedirectHandler()).open(
         request, timeout=timeout
@@ -1153,13 +1161,11 @@ def _execute_chat_locked(
         try:
             with request_opener(request, timeout=30) as response:
                 try:
-                    if _fork_active_execution_quarantined():
-                        raise ForkActiveExecutionQuarantine(
-                            "forked_during_active_execution"
-                        )
+                    _raise_if_fork_active_execution_quarantined()
                     candidate_status = _transport_metadata_or_none(
                         response, "status"
                     )
+                    _raise_if_fork_active_execution_quarantined()
                     if not _is_valid_http_status(candidate_status):
                         raise ValueError("response_status_must_be_http_integer")
                     status = candidate_status
@@ -1167,14 +1173,17 @@ def _execute_chat_locked(
                     response_headers = _transport_metadata_or_none(
                         response, "headers"
                     )
+                    _raise_if_fork_active_execution_quarantined()
                     lifecycle.append("EXECUTED")
                     if status == 200:
                         response_received_unix_seconds = (
                             _passive_clock_value_or_none(wall_time)
                         )
+                        _raise_if_fork_active_execution_quarantined()
                         response_body = response.read(
                             MAX_PROVIDER_RESPONSE_BYTES + 1
                         )
+                        _raise_if_fork_active_execution_quarantined()
                         # HTTP body values are foreign adapter data.  Reject
                         # bytes subclasses before len/decode can dispatch to
                         # overridden methods.
@@ -1184,6 +1193,7 @@ def _execute_chat_locked(
                             response_too_large = True
                     else:
                         finished = _passive_clock_value_or_none(now)
+                        _raise_if_fork_active_execution_quarantined()
                         content = None
                         if status == 202:
                             outcome = "provider_result_pending"
@@ -1203,6 +1213,7 @@ def _execute_chat_locked(
                                 response_headers,
                                 _passive_clock_value_or_none(wall_time),
                             )
+                            _raise_if_fork_active_execution_quarantined()
                             retryable = False
                         else:
                             outcome = "provider_error"
@@ -1215,6 +1226,7 @@ def _execute_chat_locked(
                     # process-control signals. BaseException is transported
                     # across cleanup, then immediately re-raised unchanged.
                     response_context_error = exc
+            _raise_if_fork_active_execution_quarantined()
         except Exception:
             if (
                 not response_classified

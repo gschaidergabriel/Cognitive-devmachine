@@ -1,0 +1,28 @@
+{
+  "schema": "TRIGGER7_RESEARCH_MIRROR/v1",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "7",
+  "canonical_build_repo": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2_checkpoint_commit": "2cc775f6087d9e701a66efff9b3c999b96380cb9",
+  "canonical_f2_checkpoint": "research/local_voice/checkpoints/2026-08-31_T7_WP715_ZERO_STEP_VPS_REENTRY_PLAYOUT_ACK_DEFERRED_GPT56SOL.json",
+  "status": "MIRROR_ONLY_NO_MUTATION_AUTHORITY",
+  "finding": "Current WP715 VPS discriminator run 33328707636 remained queued with zero executed steps at reentry, so Trigger 7 preserved zero runtime credit, did not duplicate dispatch, and did not open adjacent ASR/TTS breadth. Current source reconciles the earlier event-sequence atomicity defect. External primary evidence suggests a later packet-only playout-ack exactly-once falsifier for heard/unheard accounting, but that candidate is explicitly deferred until the current WP715 runtime result is consumed.",
+  "external_sources": [
+    "https://docs.livekit.io/agents/logic/turns/",
+    "https://docs.livekit.io/reference/agents-js/interfaces/agents.voice.PlaybackFinishedEvent.html",
+    "https://docs.livekit.io/reference/agents-js/interfaces/agents.voice.QueueAudioOutputClearEvent.html",
+    "https://github.com/pipecat-ai/pipecat/blob/main/src/pipecat/processors/frame_processor.py",
+    "https://arxiv.org/abs/2604.21406"
+  ],
+  "credit": {
+    "research_delta": 1,
+    "runtime": 0,
+    "acoustic": 0,
+    "german_asr": 0,
+    "german_tts": 0,
+    "whole_voice": 0,
+    "whole_product": 0
+  },
+  "next_exact_action": "Consume F2 workflow run 33328707636; classify exact executed receipt or terminal infrastructure failure before any adjacent WP715 semantic claim."
+}

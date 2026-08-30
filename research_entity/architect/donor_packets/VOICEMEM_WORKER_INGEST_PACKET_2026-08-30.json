@@ -1,0 +1,118 @@
+{
+  "schema": "ARCHITECT_DONOR_INGEST_PACKET/v1",
+  "packet_id": "voicemem-2026-08-30",
+  "status": "RESEARCH_DONOR_NOT_PROJECT_TRUTH",
+  "source": {
+    "artifact": "VoiceMem-main.zip",
+    "artifact_sha256": "535ed07d8af8da7fb8b8b5a31ee3105b0fa92fb7d739863a00c8159e099641e0",
+    "python_tree_digest": "dc2d589eb52c325931e3e4cfe02988e494c1c99223468b143fcd3cfac87b0712",
+    "public_repo": "xzf-thu/VoiceMem",
+    "public_main_sha_observed": "d587d424a02727d9ff3ef6f8e672a39a19ce64a7",
+    "package_version": "0.2.3",
+    "license": "Apache-2.0"
+  },
+  "target_program": "Frankenstein 2.0 / EntityOS + HCU",
+  "principles": [
+    {
+      "id": "VMD-D1",
+      "priority": "P0",
+      "name": "DEMAND_SHAPED_PROJECTION_FROM_REAL_USE",
+      "source_paths": ["voicemem/leftbrain/slot_split/subgraph_manager.py"],
+      "target": ["Research Entity", "Architect context compiler", "HCU/J-Space noncanonical projection"],
+      "authority_boundary": "projection_candidate_only"
+    },
+    {
+      "id": "VMD-D2",
+      "priority": "P0",
+      "name": "CLAIM_EVIDENCE_CAUSE_POLICY_SEPARATION",
+      "source_paths": ["voicemem/rightbrain/traits_store.py", "voicemem/rightbrain/brain.py", "voicemem/rightbrain/experience_repository.py"],
+      "target": ["epistemic claim schema", "method memory", "response experience"],
+      "authority_boundary": "claim_and_policy_do_not_mint_world_fact"
+    },
+    {
+      "id": "VMD-D3",
+      "priority": "P0",
+      "name": "TEMPORAL_SUPERSESSION_OVER_DESTRUCTIVE_OVERWRITE",
+      "source_paths": ["voicemem/rightbrain/brain.py"],
+      "target": ["state generations", "hypothesis history", "owner/project preference epochs"],
+      "authority_boundary": "historical_state_preserved"
+    },
+    {
+      "id": "VMD-D4",
+      "priority": "P0",
+      "name": "QUERY_TRANSFORM_WITHOUT_CANONICAL_MUTATION",
+      "source_paths": ["voicemem/leftbrain/time_expand.py"],
+      "target": ["DerivedQueryAdapterReceipt", "temporal/version/entity query normalization"],
+      "authority_boundary": "derived_query_only"
+    },
+    {
+      "id": "VMD-D5",
+      "priority": "P1",
+      "name": "ADAPTIVE_MULTI_PROTOTYPE_WITH_UNKNOWN_IDENTITY",
+      "source_paths": ["voicemem/utils/audio/voiceprint/adaptive_centroid.py", "voicemem/utils/audio/voiceprint/voiceprint_store.py"],
+      "target": ["state/mode prototypes", "identity candidates", "drift characterization"],
+      "authority_boundary": "similarity_not_identity_authority"
+    },
+    {
+      "id": "VMD-D6",
+      "priority": "P0",
+      "name": "PROSPECTIVE_OPEN_LOOP_CUE_REENTRY",
+      "source_paths": ["voicemem/utils/audio/environment/scene_trigger.py"],
+      "target": ["AgencyState open loops", "condition-bound re-entry"],
+      "authority_boundary": "cue_reactivates_candidate_only_effectgate_still_required"
+    },
+    {
+      "id": "VMD-D7",
+      "priority": "P1",
+      "name": "FAST_SLOW_INFORMATION_VALUE_GATING",
+      "source_paths": ["voicemem/rightbrain/brain.py", "voicemem/utils/audio/emotion/vad_trigger.py", "voicemem/utils/audio/perceiver.py"],
+      "target": ["selective HCU activation", "research triage"],
+      "authority_boundary": "false_negative_rate_must_be_measured"
+    },
+    {
+      "id": "VMD-D8",
+      "priority": "P1",
+      "name": "SLACK_TIME_REVERSIBLE_COGNITIVE_PREFETCH",
+      "source_paths": ["voicemem/stream.py", "voicemem/orchestrator.py", "voicemem/utils/fusion/orchestrator.py"],
+      "target": ["retrieval", "binding", "validation", "bounded simulation"],
+      "authority_boundary": "no_preemptive_effect_authority"
+    },
+    {
+      "id": "VMD-D9",
+      "priority": "P0",
+      "name": "TURN_SESSION_CAUSAL_LINEAGE",
+      "source_paths": ["voicemem/utils/common/turn_ids.py", "voicemem/utils/audio/emotion/types.py", "voicemem/utils/audio/emotion/graph_memory.py"],
+      "target": ["causal spine", "evidence lineage", "trace attribution"],
+      "authority_boundary": "derived_objects_bind_exact_origin"
+    }
+  ],
+  "highest_value_experiments": [
+    "VMD-01 demand-shaped projection vs static retrieval with anti-feedback controls",
+    "VMD-02 experience-policy causal humility and transfer-bound tests",
+    "VMD-03 prospective open-loop cue detection -> intention retrieval -> arbitration without EffectGate bypass",
+    "VMD-04 temporal derived-query adapter with timezone and replay provenance"
+  ],
+  "anti_import": [
+    "do not create a second canonical truth store",
+    "do not treat left-brain/right-brain naming as biological fact",
+    "do not treat trait inference as canonical fact",
+    "do not treat similarity as identity proof",
+    "do not treat retrieval frequency/coactivation as truth or importance",
+    "do not let cue firing bypass EffectGate",
+    "do not copy donor thresholds as target constants",
+    "do not transfer donor benchmark credit to Frankenstein"
+  ],
+  "worker_instructions": {
+    "architect": "ingest method candidates, preserve transfer conditions, recompile current F2 frontier before prioritizing implementation",
+    "trigger4_build": "re-enter exact current F2 main, avoid duplicate active workpackages, implement only if dependency-correct and bottleneck-reducing",
+    "research": "resolve feedback-loop robustness, promotion statistics under imbalance, causal confidence for method policies, bounded monitoring for prospective open loops, and prototype stability under drift",
+    "test": "build falsifiers before promotion; preserve negative evidence and exact evidence scope"
+  },
+  "credit": {
+    "donor_source_forensics": "OBSERVED",
+    "cross_domain_transfer": "HYPOTHESIS",
+    "frankenstein_implementation": "NOT_ESTABLISHED",
+    "target_runtime_improvement": "NOT_ESTABLISHED",
+    "whole_system_acceptance": false
+  }
+}

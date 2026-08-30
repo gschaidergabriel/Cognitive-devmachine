@@ -1,0 +1,92 @@
+{
+  "schema": "TRIGGER7_LOCAL_VOICE_RESEARCH_DELTA/v1",
+  "date": "2026-08-31",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "classification": "CURRENT_REENTRY_RESEARCH_AND_COORDINATION_DELTA_NOT_F2_MUTATION_AUTHORITY",
+  "authority": {
+    "trigger7_protocol": "research_entity/frankenstein2_local_voice/TRIGGERWORD_7_PROTOCOL.md",
+    "f2_head_observed": "5872481c46b362d0ead3436ce899687d3142a249",
+    "research_head_before_write": "ce8dd54a50cfbbd0c5e5be6843d1e7244a79a0c4",
+    "build_acceptance_owner": "TRIGGER4"
+  },
+  "wp715": {
+    "current_repository_subject": "da1c92f1d4e448e23842c74a456e0edd9d228b5c",
+    "repository_ci_run_id": 33328599095,
+    "repository_ci_result": "SUCCESS",
+    "current_vps_discriminator_run_id": 33328707636,
+    "current_vps_discriminator_job_id": 99303303728,
+    "runner_required": "vps-clay-host",
+    "observed_status": "QUEUED",
+    "observed_conclusion": null,
+    "executed_steps_observed": false,
+    "failure_class": "UNKNOWN_NONTERMINAL",
+    "runtime_credit_delta": 0,
+    "decision": "DO_NOT_REDISPATCH_AND_DO_NOT_MUTATE_PACKET_CORTEX_WHILE_THE_EXACT_BOUND_CURRENT_DISCRIMINATOR_REMAINS_NONTERMINAL",
+    "scope_waiting_for_execution": [
+      "packet suite",
+      "recovery suite",
+      "PN9 restart continuation",
+      "PN10 bounded state",
+      "PN14 stale tool ownership fencing",
+      "PN15 near-cap barge-in atomicity",
+      "EVENTSEQ rejected-event atomicity and restartability"
+    ]
+  },
+  "asr004": {
+    "state": "EVIDENCE_INVALID_COMPARATOR_REPAIR_BOUNDARY_OPEN",
+    "last_observed_failure": "Dataset scripts are no longer supported, but found fleurs.py",
+    "quality_conclusion_permitted": false,
+    "runtime_credit_delta": 0,
+    "decision": "CONSUME_ONLY_A_VALID_MATCHED_COMPARATOR_RERUN_BOUND_TO_MATERIALIZED_REPAIRED_SOURCE;_DO_NOT_INFER_QWEN_VS_WHISPER_QUALITY_FROM_THE_FAILED_LOADER_RUN"
+  },
+  "asr008_primary_source_refresh": {
+    "candidate": "nvidia/nemotron-3.5-asr-streaming-0.6b",
+    "state": "DORMANT_UNTIL_ASR004_TERMINAL_MATCHED_MEASUREMENT_OR_EXPLICIT_RECONCILIATION",
+    "official_hf_release_date": "2026-06-04",
+    "parameter_class": "600M",
+    "architecture": "cache-aware FastConformer-RNNT",
+    "language_scope": "40 language-locales via language-ID prompt conditioning; German included by current model metadata",
+    "runtime_operating_points_ms": [80, 160, 320, 560, 1120],
+    "official_q8_gguf_sha256_confirmed": "a5c435f294eea8f88ce68dd27b8c3bfea7f777cb2fbba04fcd30eaa555f429ae",
+    "official_q8_gguf_size_observed_bytes": 778043392,
+    "official_native_runtime": "NVIDIA/NeMo-Speech.cpp",
+    "native_runtime_relevance": "Official lightweight C++/ggml local inference path reduces Python/NeMo deployment complexity for the already-reserved ASR008 target-runtime comparator and supports local GGUF usage; this is a source-level implementation simplification, not German quality/runtime credit.",
+    "external_primary_sources": [
+      "https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b",
+      "https://github.com/NVIDIA/NeMo-Speech.cpp",
+      "https://github.com/NVIDIA/NeMo-Speech.cpp/blob/main/docs/asr/models.md"
+    ],
+    "credit_delta": {
+      "source_priority_signal": 1,
+      "target_runtime": 0,
+      "german_quality": 0,
+      "whole_voice": 0
+    }
+  },
+  "full_duplex_research_refresh": {
+    "sources": [
+      {
+        "title": "BayLing-Duplex: Native Full-Duplex Speech Dialogue with a Single Autoregressive LLM",
+        "arxiv": "2606.14528",
+        "relevance": "Supports treating interruption/listen-speak control as a first-class independently measured capability rather than a side effect of text quality."
+      },
+      {
+        "title": "DuplexSLA: A Full-Duplex Spoken Language Model with Synchronized Speech, Language, and Action",
+        "arxiv": "2605.20755",
+        "relevance": "Supports the current packet-cortex design choice to keep speech timing/action/tool semantics explicitly coordinated on a shared causal timeline."
+      }
+    ],
+    "scope_limit": "ARCHITECTURE_RESEARCH_ONLY;NO_F2_RUNTIME_OR_ACCEPTANCE_CREDIT"
+  },
+  "convergence_decision": {
+    "highest_information_nonduplicate_bottleneck": "WP715 bound exact-source VPS discriminator run 33328707636 remains queued with no executed job steps.",
+    "secondary_bottleneck": "ASR004 matched German comparator must produce a valid terminal receipt before ASR008 may execute.",
+    "next_exact_action": "Do not redispatch WP715 and do not change its semantic subject. Consume run 33328707636 when it executes and route its exact result to Trigger4 acceptance. Independently consume the first valid repaired ASR004 matched comparator receipt. Only then execute the already-claimed ASR008 Nemotron comparator, preferably evaluating the official native NeMo-Speech.cpp/GGUF path as a deployment condition without changing the matched audio/evaluator contract.",
+    "new_component": false,
+    "new_runtime_dispatch": false,
+    "whole_voice_system_credit": 0,
+    "physical_audio_acceptance_credit": 0,
+    "training_credit": 0
+  }
+}

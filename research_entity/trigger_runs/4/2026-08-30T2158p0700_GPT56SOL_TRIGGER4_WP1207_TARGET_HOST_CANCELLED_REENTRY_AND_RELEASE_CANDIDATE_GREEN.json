@@ -1,0 +1,68 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "observed_at_local": "2026-08-30T21:58:55+07:00",
+  "authority_epoch": "8.78",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "research_main_observed_before_write": "499f2ceaf2f4d01b47e977fa01d98a00dab4559f",
+  "f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_main_observed": "45d735441d15af614b9d1d965eb83736c4d64771",
+  "wp1111": {
+    "state": "ACCEPTED_AT_REPOSITORY_HOSTED_COMPONENT_CI_SCOPE_ONLY",
+    "accepted_source_sha": "943d10275d76558e1d657270989a99e4c2009111",
+    "repository_ci_run": 33317948080,
+    "repository_ci_job": 99274719625,
+    "runtime_credit": 0,
+    "physical_host_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "release_candidate": {
+    "binding_commit": "45958d498815972bf044356db4f982df3462f21e",
+    "workflow_run": 33318165549,
+    "workflow_job": 99275293789,
+    "workflow_conclusion": "success",
+    "artifact_id": 9734089517,
+    "artifact_name": "frankenstein-2.0-release-candidate-45958d498815972bf044356db4f982df3462f21e",
+    "artifact_outer_digest": "sha256:3aac7654ebb36b3463cfa6064e8eddf27ceda5aac2d0cd82e673c4c44b062cbd",
+    "scope": "REPOSITORY_HOSTED_RELEASE_CANDIDATE_ARTIFACT_ONLY",
+    "clean_machine_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "completion_credit": 0
+  },
+  "wp1207_target_host_reentry": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "controller_run_id": 33308965181,
+    "controller_job_id": 99250433269,
+    "controller_head_sha": "03f39ad9e03579e6a77a6a89ed493d86d281fe08",
+    "previous_observation": "QUEUED_TRANSIENTLY_UNREACHABLE",
+    "current_status": "completed",
+    "current_conclusion": "cancelled",
+    "observed_job_steps": 0,
+    "classification": "TRANSPORT_OR_RUNNER_NEGATIVE_EVIDENCE_ONLY",
+    "semantic_product_failure": false,
+    "runtime_execution_observed": false,
+    "target_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "coordination": {
+    "duplicate_dispatch_performed": false,
+    "reason": "The previously unresolved exact target-host attempt was re-entered first. It is now terminal cancelled with zero steps; no evidence supports minting runtime credit or treating the cancellation as a product failure.",
+    "parallel_f2_main_movement_preserved": true
+  },
+  "finding": "The static release-candidate path is green and artifact-bound, while the previously queued target-host hostile-twin attempt never executed a step. The unresolved frontier is execution-surface transport plus real clean-machine/local-host evidence, not another repository-only static completeness implementation.",
+  "counterhypothesis": "A hidden Frankenstein runtime defect caused the target-host failure.",
+  "counterhypothesis_status": "NOT_SUPPORTED_BY_THIS_ATTEMPT_BECAUSE_ZERO_STEPS_EXECUTED",
+  "next_exact_action": "Resolve the registered self-hosted/bridge execution surface under current FREE_ONLY owner authority. After runner availability is positively observed, dispatch exactly one source-and-artifact-bound target-host/clean-machine acceptance run using the current admitted release candidate lineage, persist the host receipt, and feed it through the existing clean-machine acceptance validator. Do not promote CI/repository success into local-host runtime credit.",
+  "credits": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "f2_clean_machine_runtime": 0,
+    "f2_target_runtime": 0
+  }
+}

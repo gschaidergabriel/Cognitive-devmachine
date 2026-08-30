@@ -1,0 +1,43 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-30",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "research_id": "T7-ASR-004",
+  "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+  "canonical_claim_authority": "gschaidergabriel/frankenstein-2.0:research/local_voice/semantic_claims/95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715.json",
+  "research_main_observed_before_write": "a80c79f6dc8401ebd49034d80d62b1400524b016",
+  "f2_main_observed_after_delta": "8b42b86b70fe8c1ad8845b3e3876e14b9dd4a8d5",
+  "f2_writes": [
+    {
+      "path": "research/local_voice/sources/2026-08-30_T7_ASR004_FLEURS_SCORING_INTEGRITY_GPT56SOL.json",
+      "commit": "392979668b3fa80fd4563a6f988f7b9855b72f75"
+    },
+    {
+      "path": "trigger4/inbox/local_voice/T7_QWEN3_ASR_FLEURS_SCORING_INTEGRITY_ADDENDUM_2026-08-30_GPT56SOL.json",
+      "commit": "3c236610bb58a2482bc62b4526f2186e42ba83a4"
+    },
+    {
+      "path": "research/local_voice/checkpoints/2026-08-30_T7_ASR004_FLEURS_SCORING_INTEGRITY_REENTRY_GPT56SOL.json",
+      "commit": "02ede4ac4f1293e2a2837f4cae9b0b3e4cd2c16e"
+    }
+  ],
+  "research_delta": "Pinned one shared German ASR evaluator contract for the existing FLEURS comparator: preserve both raw_transcription and transcription, persist raw hypotheses, hash evaluator source/config, preserve German diacritics/sharp-s in the primary evaluator, keep gated speech rejects in WER/CER as empty hypotheses plus gate-false-reject counts, and keep non-speech false activations outside speech WER/CER.",
+  "coordination": {
+    "new_semantic_claim_created": false,
+    "new_runtime_dispatch_created": false,
+    "existing_target_runtime_owner": "Trigger4/current authorized target executor",
+    "parallel_distinct_claim_observed": "d7663b06f28c5b438a9a23d3cb77041404e07830cd4e1369d27cad49dc5e74e6: Qwen3-ASR long-session streaming source falsifier generation 5",
+    "duplicate_work_created": false
+  },
+  "credits": {
+    "target_runtime_delta": 0,
+    "german_asr_quality_delta": 0,
+    "streaming_asr_delta": 0,
+    "trigger4_acceptance_delta": 0,
+    "entityos_hcu_whole_runtime_delta": 0,
+    "whole_system_delta": 0
+  },
+  "next_exact_action": "Existing Trigger4 target executor performs the already-routed matched FLEURS de_de rows 0..31 plus non-speech strata on clay-direct-dev with the pinned scoring contract. Separately, the distinct generation-5 source-only long-session streaming claim may proceed without being conflated with target-quality credit."
+}

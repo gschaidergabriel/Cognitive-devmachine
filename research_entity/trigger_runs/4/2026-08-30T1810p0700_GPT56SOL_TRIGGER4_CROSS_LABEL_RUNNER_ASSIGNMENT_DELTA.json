@@ -1,5 +1,5 @@
 {
-  "schema": "CLAY_TRIGGER4_CROSS_LABEL_RUNNER_ASSIGNMENT_DELTA/v1",
+  "schema": "CLAY_TRIGGER4_CROSS_LABEL_RUNNER_ASSIGNMENT_DELTA/v2",
   "trigger": "4",
   "organ": "GPT-5.6-Sol-TRIGGER4",
   "trigger_local_minute": "2026-08-30T18:10+07:00",
@@ -23,10 +23,11 @@
     "owner_vps_execution": "AUTHORIZED_AND_EXPECTED_WITH_RESOURCE_HEALTH_GUARDS",
     "evidence_law": "QUEUED_OR_ZERO_STEP_JOB_IS_CONTROL_PLANE_EVIDENCE_NOT_RUNTIME_EXECUTION"
   },
-  "observed_heads_before_write": {
-    "research_main": "7c694b75c4e356eef4eb1fe9383cd421f612b465",
-    "frankenstein_2_main": "cfe3f1ee4766deb827a7e7adb87fd25b3f89e809",
-    "controller_main": "0a626f9ffd782efa6c407e237b7a0ce7143abc8c"
+  "observed_heads": {
+    "research_main_before_first_write": "7c694b75c4e356eef4eb1fe9383cd421f612b465",
+    "research_main_after_first_write_then_parallel_reentry": "45186be4a62c33bd1ebd4a2e80f2c54b7c973028",
+    "frankenstein_2_main_reentered": "026ec3e2324b22367492145b5d8e61531fb0132a",
+    "controller_main_reentered": "e3cb1ae105c39f7a8521f29d3fc5dfdeebfd41fe"
   },
   "existing_target_attempts": {
     "wp510": {
@@ -57,24 +58,47 @@
       "conclusion": null,
       "jobs_observed": 0,
       "duplicate_dispatch": "FORBIDDEN"
+    },
+    "wp1207_github_hosted_preflight": {
+      "run_id": 33308738469,
+      "job_id": 99249825673,
+      "status": "completed",
+      "conclusion": "failure",
+      "labels": ["ubuntu-latest"],
+      "runner_id": 0,
+      "runner_name": "",
+      "executed_steps": 0,
+      "classification": "GITHUB_HOSTED_RUNNER_UNAVAILABLE_OR_UNASSIGNED_CONTROL_PLANE_FAILURE_NOT_EXECUTOR_FAILURE"
     }
   },
   "discriminator": {
     "direct_observation": [
       "WP510 remains unassigned with runner_id=0 under labels self-hosted+Linux+X64.",
       "WP1207 remains unassigned with runner_id=0 even though it requests only the generic self-hosted label.",
-      "Both jobs expose zero executed steps and therefore provide control-plane evidence only.",
-      "WP900 remains pending before a job object is exposed."
+      "Both self-hosted jobs expose zero executed steps and therefore provide control-plane evidence only.",
+      "WP900 remains pending before a job object is exposed.",
+      "A concurrent WP1207 ubuntu-latest exact-artifact preflight completed failure with runner_id=0 and zero executed steps, so it also did not execute product/preflight code."
     ],
     "bounded_inference": [
       "The Linux/X64 supplemental labels are not a sufficient explanation for the shared WP510/WP1207 blockage because the generic self-hosted-only WP1207 job is also unassigned.",
-      "The common blocker is therefore narrowed toward repository-level self-hosted runner availability, registration, eligibility, assignment, or equivalent pre-step control-plane lifecycle state."
+      "The common self-hosted blocker is narrowed toward repository-level runner availability, registration, eligibility, assignment, or equivalent pre-step control-plane lifecycle state.",
+      "The ubuntu-latest zero-step failure cannot be used as a product negative or as substitute runtime evidence; it only adds a separate hosted-runner/control-plane failure observation."
     ],
     "not_proven": [
       "This does not prove that the owner VPS itself is offline.",
       "This does not prove the self-hosted runner service is stopped rather than unregistered, disabled, ineligible, busy, or otherwise unavailable to this repository.",
-      "No target-host runtime step executed in this organ."
+      "No target-host runtime step executed in this organ.",
+      "No runtime credit is minted by the ubuntu-latest preflight failure."
     ]
+  },
+  "parallel_reentry": {
+    "frankenstein2_movement": [
+      "F2 main advanced after the first receipt write.",
+      "WP901 generation 5 was claimed by a concurrent Trigger4 lane for a cross-store UnifiedDBAuthorityRef binding counterexample.",
+      "F2 main then advanced to WP206 generation 6 claim for an external SQLite revision fence."
+    ],
+    "anti_duplication_result": "NO_OVERLAP_WITH_ACTIVE_WP901_OR_WP206_OWNED_PATHS",
+    "credit_boundary": "NEW F2 CLAIMS REMAIN REPOSITORY-COMPONENT ONLY WITH ZERO TARGET-RUNTIME/GRID10/GWT/J-SPACE/EFFECT/TRAINING/WHOLE-SYSTEM CREDIT AT CLAIM TIME"
   },
   "tool_boundary": {
     "github_runner_inventory_read": "BLOCKED_BY_CONNECTOR_ENDPOINT_POLICY",
@@ -103,6 +127,6 @@
     "training": 0,
     "whole_entityos_hcu": 0
   },
-  "next_exact_gate": "From an organ with direct owner-host or GitHub runner-admin visibility, inspect the existing self-hosted runner registration/service/eligibility/labels for Dr.-Unterweger, restore eligibility if needed, and let the already queued/pending WP510/WP900/WP1207 attempts advance without creating duplicates. Admit target-runtime credit only from exact executed-step receipts bound to the expected source/artifact identities.",
+  "next_exact_gate": "From an organ with direct owner-host or GitHub runner-admin visibility, inspect the existing self-hosted runner registration/service/eligibility/labels for Dr.-Unterweger, restore eligibility if needed, and let the already queued/pending WP510/WP900/WP1207 attempts advance without creating duplicates. Admit target-runtime credit only from exact executed-step receipts bound to the expected source/artifact identities. Treat the ubuntu-latest zero-step preflight as control-plane negative evidence only.",
   "acceptance": "BLOCKED_CONTROL_PLANE_RUNNER_ASSIGNMENT_NO_RUNTIME_EXECUTION"
 }

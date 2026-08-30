@@ -1,0 +1,164 @@
+{
+  "schema": "CLAY_TRIGGER2_FACTORIZED_BINDING_EVAL_AND_ATOM_PARTITION/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "trigger": "triggerwort 2",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_at_branch_start": "29043b6b230a26dbd55b1ab727809f2ca421887f",
+  "source_basis": {
+    "claude_ingest_path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "measured_model": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1@591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "measured_context_transfer_mean_L19": 0.5254629629629629,
+    "measured_dynamic_symbol_hit_baseline": 0.3611111111111111,
+    "three_way_chance": 0.3333333333333333,
+    "accepted_atoms_measured": 46,
+    "rejected_measured_atom": "or",
+    "training_gap": "Context-dependent episode-local semantic-class to symbol/codebook binding is not established despite strong measured semantic readout and writable symbol output directions at the measured scope.",
+    "protected_functions": [
+      "measured semantic readout",
+      "measured symbol-axis writeout",
+      "measured whitened carrier-space HRR/MAP binding capacity through k<=16"
+    ]
+  },
+  "new_research_delta": {
+    "problem": "A blanket cross-split rule that forbids template-family overlap makes a nominal unseen-symbol test scientifically confounded: symbol identity and template family change together, so failure cannot be attributed to symbol generalization alone.",
+    "decision": "Replace one monolithic OOD notion with factor-isolated challenge axes plus a separate joint-OOD challenge.",
+    "implemented_guard": "tools/trigger2_factorized_challenge_guard_v1.py",
+    "implemented_tests": "tests/test_trigger2_factorized_challenge_guard_v1.py"
+  },
+  "factorized_holdout_policy": {
+    "global_invariant": "Exact semantic episodes, family_id and provenance_ancestry_id never cross TRAIN/VALIDATION/HOLDOUT.",
+    "SYMBOL_ONLY": {
+      "atom_identity": "UNSEEN_IN_TRAIN_AND_VALIDATION",
+      "template_family": "FAMILIAR_FROM_TRAIN",
+      "lexical_family": "FAMILIAR_FROM_TRAIN",
+      "purpose": "Isolate whether the learned binder routes to genuinely unseen ABI symbols when semantic/task surface families remain familiar."
+    },
+    "TEMPLATE_ONLY": {
+      "atom_identity": "FAMILIAR_FROM_TRAIN",
+      "template_family": "UNSEEN_IN_TRAIN_AND_VALIDATION",
+      "lexical_family": "FAMILIAR_FROM_TRAIN",
+      "purpose": "Isolate surface/template transfer without simultaneously changing the symbol inventory."
+    },
+    "LEXICON_ONLY": {
+      "atom_identity": "FAMILIAR_FROM_TRAIN",
+      "template_family": "FAMILIAR_FROM_TRAIN",
+      "lexical_family": "UNSEEN_IN_TRAIN_AND_VALIDATION",
+      "purpose": "Isolate semantic lexical transfer while keeping routing symbols and prompt form familiar."
+    },
+    "JOINT_OOD": {
+      "atom_identity": "UNSEEN_IN_TRAIN_AND_VALIDATION",
+      "template_family": "UNSEEN_IN_TRAIN_AND_VALIDATION",
+      "lexical_family": "UNSEEN_IN_TRAIN_AND_VALIDATION",
+      "purpose": "Measure combined generalization only after the single-factor axes reveal where degradation originates."
+    }
+  },
+  "proposed_46_atom_partition": {
+    "status": "METHOD_HYPOTHESIS_NOT_MATERIALIZED",
+    "reason": "The measured accepted inventory contains 46 atoms, while each three-class codebook requires an injective triad. A deterministic partition should preserve triads while reserving a final contamination sentinel.",
+    "partition": {
+      "TRAIN": 33,
+      "VALIDATION_UNSEEN_SYMBOL": 6,
+      "FINAL_UNSEEN_SYMBOL": 6,
+      "NEVER_SEEN_SENTINEL": 1
+    },
+    "sum": 46,
+    "triads": {
+      "TRAIN": 11,
+      "VALIDATION_UNSEEN_SYMBOL": 2,
+      "FINAL_UNSEEN_SYMBOL": 2
+    },
+    "materialization_requirements": [
+      "Load the exact accepted 46 atom identities from the exact ABI evidence package; do not invent lexemes.",
+      "Verify exact model snapshot, tokenizer identity, ABI manifest/member hashes and single-token identity before partitioning.",
+      "Exclude the measured rejected atom 'or'.",
+      "Derive a deterministic preregistered shuffle/partition from bound source hashes rather than source-list order.",
+      "Prevent validation/final atoms from every model-visible TRAIN position, including non-target codebook entries.",
+      "Keep the NEVER_SEEN_SENTINEL absent from train, validation and final challenge prompts/targets until a post-evaluation contamination probe is explicitly authorized.",
+      "Audit class to actual-atom, actual-atom to codebook-position and actual-atom to target-frequency balance after physical materialization."
+    ],
+    "small_train_pilot_rows_if_four_templates_full_s3_all_classes": 792,
+    "row_count_derivation": "11 train triads * 4 training templates * 6 S3 mappings * 3 semantic classes"
+  },
+  "curriculum_scope_separation": {
+    "BINDER_KERNEL": {
+      "definition": "The semantic class/slot is explicitly supplied model-visible and the model only performs episode-local class-to-symbol routing.",
+      "allowed_role": "Scaffold and diagnostic for the narrow mapping operator.",
+      "forbidden_promotion": "Must never count as end-to-end semantic-inference-to-binding acceptance."
+    },
+    "END_TO_END_BINDING": {
+      "definition": "The model must infer the semantic class from situation/query content and then apply the episode-local codebook; the target class is not exposed outside the allowed codebook representation.",
+      "role": "Primary behavioral training/evaluation objective for the measured missing capability."
+    },
+    "COUNTERFACTUAL_MAPPING_CONTROLS": {
+      "definition": "Hold semantic episode, lexical realization, atom triad and other presentation factors fixed while changing only the realized class-to-atom mapping, or hold mapping fixed while changing only entry order.",
+      "role": "Causal shortcut test; variants remain in one causal/provenance family and one split."
+    }
+  },
+  "matched_token_ablation": {
+    "status": "PROPOSED_DISCRIMINATOR",
+    "arms": [
+      "BASE_UNTRAINED",
+      "END_TO_END_ONLY",
+      "BINDER_KERNEL_PLUS_END_TO_END_WITH_MATCHED_TOTAL_TOKENS",
+      "BINDER_KERNEL_ONLY_DIAGNOSTIC_NOT_ACCEPTANCE_CANDIDATE"
+    ],
+    "primary_question": "Does an explicit binder-kernel scaffold improve fresh end-to-end dynamic binding beyond an equal-token end-to-end-only curriculum without causing protected-function retention damage?",
+    "counterhypothesis": "The binder-kernel scaffold overfits explicit semantic-slot cues and either fails to transfer to end-to-end inference or harms broader semantic behavior.",
+    "falsifier": "Kernel+end-to-end does not outperform matched-token end-to-end-only on fresh factorized end-to-end challenges, or any gain is explained by retention loss/shortcut dependence."
+  },
+  "swarm_adjudication": [
+    {
+      "role": "EVIDENCE_EXTRACTOR",
+      "verdict": "FOCUS_BINDING_ROUTER",
+      "reason": "Current measured evidence already supports semantic readout and symbol writeout at the measured scope; context binding remains weak."
+    },
+    {
+      "role": "SHORTCUT_HUNTER",
+      "verdict": "KERNEL_MUST_BE_SCOPED",
+      "reason": "Model-visible semantic-slot rows can teach pure routing but can also create a shortcut if mixed into end-to-end acceptance."
+    },
+    {
+      "role": "CAUSAL_EVAL_REVIEWER",
+      "verdict": "FACTORIZATION_REQUIRED",
+      "reason": "Changing symbol, template and lexical family simultaneously cannot diagnose which generalization axis failed."
+    },
+    {
+      "role": "ATOM_PROVENANCE_REVIEWER",
+      "verdict": "PARTITION_ONLY_AFTER_EXACT_ABI_BINDING",
+      "reason": "The current active evidence establishes the count of accepted atoms, not permission to invent the exact atom lexemes."
+    },
+    {
+      "role": "FINAL_ADJUDICATOR",
+      "verdict": "ACCEPT_METHOD_DELTA_ONLY",
+      "reason": "The factorized guard and partition/curriculum design improve experimental identifiability but provide no dataset, model runtime, J-Space or training success evidence."
+    }
+  ],
+  "local_deterministic_source_validation": {
+    "positive_fixture": "PASS with SYMBOL_ONLY, TEMPLATE_ONLY, LEXICON_ONLY and JOINT_OOD simultaneously",
+    "negative_fixtures": [
+      "SYMBOL_ONLY atom reuse rejected",
+      "SYMBOL_ONLY unseen template rejected",
+      "TEMPLATE_ONLY familiar template rejected",
+      "LEXICON_ONLY familiar lexicon rejected",
+      "JOINT_OOD atom reuse rejected",
+      "exact semantic-surface cross-split reuse rejected"
+    ],
+    "scope": "LOCAL_DETERMINISTIC_LOGIC_VALIDATION_ONLY; repository CI not observed here"
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "accepted_dataset_tokens": 0,
+    "qwen35_training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Materialize a tiny audited sample only after exact 46-atom/tokenizer/ABI identities are available, attach curriculum metadata required by the factorized guard, run the existing row gate plus cross-split guard plus factorized challenge guard, then preregister the matched-token Base/E2E-only/Kernel+E2E pilot without touching final holdouts."
+}

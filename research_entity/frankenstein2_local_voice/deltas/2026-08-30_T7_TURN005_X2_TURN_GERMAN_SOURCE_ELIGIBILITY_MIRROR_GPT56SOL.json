@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "date_local": "2026-08-30",
+  "mirror_role": "PROVENANCE_ONLY_NOT_CLAIM_AUTHORITY",
+  "f2_canonical_repo": "gschaidergabriel/frankenstein-2.0",
+  "research_id": "T7-TURN-005",
+  "semantic_key": "d581486a8b8721b4c9fb9c2ea3990ddc1f783a03da7fb920419893f5d6ba0e42",
+  "f2_claim_path": "research/local_voice/claims/T7-TURN-005/E1_X2_TURN_4B_0812_GERMAN_SOURCE_ELIGIBILITY.json",
+  "f2_source_path": "research/local_voice/sources/2026-08-30_T7_TURN005_X2_TURN_4B_0812_GERMAN_SOURCE_ELIGIBILITY_GPT56SOL.json",
+  "f2_checkpoint_path": "research/local_voice/checkpoints/2026-08-30_T7_TURN005_X2_TURN_SOURCE_REENTRY_GPT56SOL.json",
+  "f2_source_commit": "e5a0f1ce74c77b0eed7de266c876280036733f29",
+  "f2_semantic_reconciliation_commit": "2f1a8fca4c965d46210ceebe01dfec7900ba93a1",
+  "f2_human_reconciliation_commit": "7ec52d6827f231f8dca0ea18b43e0e7d0fcb732e",
+  "f2_checkpoint_commit": "0bffe1cd545b6e304453a4253ace8e60e609e531",
+  "upstream": {
+    "model": "x-square-robot/X2-Turn-4B-0812",
+    "code_repo": "X-Square-Robot/X2-Turn",
+    "code_sha": "3609a0fd11b4a1dc2b2629e95538bbe0860da96d",
+    "paper": "arXiv:2608.10878"
+  },
+  "delta": "X2-Turn is retained as a frame-synchronous six-state turn-policy architecture donor, but current upstream model/paper evidence declares/evaluates Chinese and English rather than German. It therefore receives no German production, target-runtime or F2 acceptance credit. The useful transferable mechanism is the 80 ms shared-representation speaking/turn_end/backchannel/uncertain state interface, subject to deterministic policy smoothing and existing Frankenstein authority boundaries.",
+  "runtime_frontier": "Existing Qwen3-ASR target probe run 33292903286 was reobserved queued; no duplicate dispatch created and no model/runtime credit granted.",
+  "credit": {
+    "source_research": "OBSERVED",
+    "runtime": 0,
+    "german": 0,
+    "trigger4": 0,
+    "whole_system": 0
+  }
+}

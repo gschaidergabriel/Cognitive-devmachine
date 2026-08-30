@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_TRIGGER7_RESEARCH_DELTA_V1",
+  "date": "2026-08-31",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "research_id": "T7-FD-RTCOMPAT-001",
+  "classification": "SOURCE_CONTROL_FLOW_FALSIFIER_ROUTING_MIRROR",
+  "canonical_coordination_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_handoff_commit": "ad5851e832d6409d4cf3cfa0195c01b4d15ccc39",
+  "f2_handoff_path": "trigger4/inbox/local_voice/T7_FD_RTCOMPAT001_HF10_POST_DONE_PLAYOUT_RACE_ADDENDUM_2026-08-31_GPT56SOL.json",
+  "f2_falsifier_path": "research/local_voice/falsifiers/2026-08-31_HF_S2S_POST_RESPONSE_DONE_PLAYOUT_TRUNCATE_RACE_GPT56SOL.json",
+  "pinned_upstream": {
+    "repository": "huggingface/speech-to-speech",
+    "revision": "3986f453012a131632eee4731995474046846794",
+    "package_version": "0.2.12"
+  },
+  "primary_reference": {
+    "source": "OpenAI Realtime current client/API semantics",
+    "fact": "conversation.item.truncate is intended to synchronize server context with the client playback boundary and remove transcript beyond audio_end_ms"
+  },
+  "source_result": {
+    "id": "HF10_POST_RESPONSE_DONE_CLIENT_PLAYOUT_TRUNCATE_RACE",
+    "status": "SOURCE_CONTROL_FLOW_GAP_RUNTIME_UNEXECUTED",
+    "finding": "Pinned HF whole-response rollback covers cancelled provisional generations, but a response that has already completed/finalized before client playout completes is outside that rollback path. A later truncate is deliberately a no-op, so raw server Chat can remain ahead of the user's heard boundary until an F2-owned containment or repair is executed and measured."
+  },
+  "f2_oracle": {
+    "current_policy": "Interrupted/cancelled output remains non-commit-eligible unless completed and fully heard under the current F2 packet contract.",
+    "must_fail_if_executed": [
+      "cancelled/non-commit-eligible assistant semantics regain authoritative next-turn influence",
+      "late cancelled-generation tool/output regains ownership",
+      "playback continues beyond measured cancellation boundary",
+      "stale/duplicate/out-of-range cancellation or truncate corrupts a newer turn"
+    ]
+  },
+  "routing": {
+    "owner": "TRIGGER4_RUNTIME_FALSIFIER",
+    "same_semantic_claim": true,
+    "new_runtime_dispatch": false,
+    "duplicate_wp715_run_33328707636": false,
+    "next_exact_action": "Merge HF10 into the already-owned T7-FD-RTCOMPAT-001 runtime packet and execute it on the pinned subject through admitted VPS authority. Force response.done before client playout completion and measure raw server Chat, next-turn effective model context, late producer disposition and transport-specific playback stop."
+  },
+  "credit": {
+    "research_source_credit": 1,
+    "runtime_credit": 0,
+    "target_runtime_credit": 0,
+    "german_e2e_voice_credit": 0,
+    "acoustic_credit": 0,
+    "trigger4_acceptance_credit": 0,
+    "whole_product_credit": 0
+  }
+}

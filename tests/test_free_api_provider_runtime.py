@@ -1076,6 +1076,64 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(child_evidence, "forked_during_active_execution")
         self.assertEqual(os.waitstatus_to_exitcode(status), 0)
 
+    def test_response_exit_error_fork_preserves_quarantine_error(self):
+        read_fd, write_fd = os.pipe()
+        child_state = {"active": False, "pid": None}
+
+        class Response:
+            status = 500
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                pid = os.fork()
+                if pid == 0:
+                    child_state["active"] = True
+                    raise RuntimeError("simulated child cleanup failure")
+                child_state["pid"] = pid
+                return False
+
+        try:
+            try:
+                result = MOD.execute_chat(
+                    VALID_MESSAGES,
+                    model="mock",
+                    environ={
+                        "NVIDIA_API_KEY": "secret",
+                        "FRANK_PROVIDER_BASE_URL": (
+                            "http://localhost:8765/v1"
+                        ),
+                        "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+                    },
+                    opener=lambda *args, **kwargs: Response(),
+                    now=lambda: 1.0,
+                )
+            except RuntimeError as exc:
+                if child_state["active"]:
+                    os.write(write_fd, str(exc).encode("ascii"))
+                    os._exit(0)
+                raise
+            if child_state["active"]:
+                os.write(
+                    write_fd,
+                    (
+                        "no_error:"
+                        f"{result['receipt']['outcome']}"
+                    ).encode("ascii"),
+                )
+                os._exit(1)
+            self.assertEqual(result["receipt"]["outcome"], "provider_error")
+        finally:
+            os.close(write_fd)
+
+        child_evidence = os.read(read_fd, 256).decode("ascii")
+        os.close(read_fd)
+        _, status = os.waitpid(child_state["pid"], 0)
+        self.assertEqual(child_evidence, "forked_during_active_execution")
+        self.assertEqual(os.waitstatus_to_exitcode(status), 0)
+
     def test_execution_receipt_scopes_model_availability_to_verified_success(self):
         class Response:
             headers = {}

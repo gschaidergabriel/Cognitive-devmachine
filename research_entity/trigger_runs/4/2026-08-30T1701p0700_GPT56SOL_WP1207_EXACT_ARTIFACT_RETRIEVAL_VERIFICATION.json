@@ -1,0 +1,62 @@
+{
+  "schema": "CLAY_TRIGGER4_WP1207_ARTIFACT_RETRIEVAL_VERIFICATION/v1",
+  "trigger": "4",
+  "recorded_at_local": "2026-08-30T17:01:15+07:00",
+  "worker": "GPT-5.6-Sol",
+  "classification": "RUNTIME_CREDIT_CLOSURE_PRETARGET_ARTIFACT_READINESS",
+  "authority": {
+    "canonical_supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true
+  },
+  "source_state": {
+    "f2_repository": "gschaidergabriel/frankenstein-2.0",
+    "f2_main_observed_before_verification": "f0a0eec31aa473b3a4e7f30768f74098d27053e8",
+    "research_entity_main_observed_before_write": "475e17c79d7fff9a6b0abdaba65e60bbcae0032b",
+    "wp1207_active_claim": "F2-WP-1207-G5-GPT56SOL-FILESYSTEM-HOSTILE-TWIN-EXECUTOR-20260830",
+    "wp1207_state": "ACCEPTED_REPOSITORY_HOSTED_CI_ONLY",
+    "wp1207_runtime_credit_before": 0
+  },
+  "retrieval": {
+    "predecessor_artifact_id": 9726495595,
+    "candidate_artifact_id": 9726674221,
+    "retrieval_status": "BOTH_ARTIFACTS_DOWNLOADED_AND_OPENED_FOR_HASH_VERIFICATION"
+  },
+  "observed_hashes": {
+    "predecessor_github_artifact_outer_zip_sha256": "ea544f37202acf69f5397602cd5cc4c40b72b6bd8105895b87fd2173e9047909",
+    "predecessor_release_archive_sha256": "e6a688673792a70a2deefac25d2241bacc8726f17d05eafac9adca5e2592a3da",
+    "predecessor_release_manifest_sha256": "82b9319ef310aeaed4b6aa77310b5a7efadaed8cbdb96787679a9966976d04f1",
+    "predecessor_artifact_bound_prehandoff_sha256": "550dd087cafada1c6e1a7630fdc150c24115dc5bbe9aea3b57274549e832ec7d",
+    "predecessor_content_bound_prehandoff_sha256": "640ad5b88323506c01042dd002488fb836e6d54506da9066f21c02be570a3112",
+    "candidate_github_artifact_outer_zip_sha256": "e5985de88e4cce762604bb7f6743e7c48a2c20e43516917953234a369b928348",
+    "candidate_release_archive_sha256": "297e7fbb274314fc3bc57077464ca804dfa16062fd00f7b57b247c34346f5c40",
+    "candidate_release_manifest_sha256": "00cbe0b86ad2208d6f990049d89ae70ce226ce302ee3033b1cf01e416ccc14ad",
+    "candidate_artifact_bound_prehandoff_sha256": "e0bcf312c2c9c9f9f84b33bcb48bdffdc0931cf7ab4f72d177768963ccaca9ec",
+    "candidate_content_bound_prehandoff_sha256": "e47badd76a2d89a3d10a5339440e0d220eb5fdf4db17cd8763b76c476e1011bd"
+  },
+  "bound_identity_match": {
+    "predecessor_release_archive_matches_wp1207": true,
+    "candidate_outer_bundle_matches_wp1207": true,
+    "candidate_release_archive_matches_wp1207": true,
+    "candidate_release_manifest_matches_wp1207": true,
+    "candidate_prehandoff_receipts_match_bundle_metadata": true,
+    "status": "PASS_AT_PRETARGET_ARTIFACT_READINESS_SCOPE"
+  },
+  "credit_boundary": {
+    "artifact_retrieval_verification_credit": 1,
+    "target_runtime_credit": 0,
+    "vps_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "grid10_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "blocker": "This organ has no verified clay-direct-dev target-host bridge/tool surface. Local artifact inspection or container execution cannot substitute for the owner-authorized target-host hostile-twin execution/readback required by WP1207.",
+  "next_exact_action": "On an organ with the established owner-authorized clay-direct-dev bridge, use these exact verified artifacts with tools/run_wp1207_hostile_twin_gate.py and execute G3 install -> injected G4 update failure/rollback -> successful G4 update -> G3 rollback with process-reentry readback; persist the exact external target receipt and promote only the scope actually observed.",
+  "duplicate_policy": "Do not create a replacement executor, release bundle format, second state authority or duplicate target dispatch lane."
+}

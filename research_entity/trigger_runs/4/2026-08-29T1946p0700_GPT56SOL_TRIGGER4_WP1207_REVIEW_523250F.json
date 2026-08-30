@@ -1,0 +1,50 @@
+{
+  "schema": "CLAY_TRIGGER4_RUN_RECEIPT/v1",
+  "trigger": "4",
+  "normalized_trigger": "4",
+  "routing_self_test": "PASS",
+  "organ": "GPT-5.6-Sol",
+  "trigger_message_time_local": "2026-08-29T19:46:00+07:00",
+  "authority_epoch": "8.78",
+  "canonical_research_main_observed_before_write": "3d0bba49ce3b193f60dee2f35e7a4520e4b72105",
+  "frankenstein2_main_observed": "523250f8728fbb427ef82975c7fe21f5169abf84",
+  "directives_fetched": [
+    "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+  ],
+  "authority_resolution": {
+    "bootstrap": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "free_only": true,
+    "owner_vps_sandbox_allowed": true,
+    "paid_or_unknown_provider_fallback": "FAIL_CLOSED"
+  },
+  "coordination": {
+    "mutation_authority_taken": false,
+    "reason": "F2-WP-1207 already has an ACTIVE canonical mutation claim; concurrent main also shows other workers claiming WP1209 and WP1108. Claim protocol forbids duplicate authority.",
+    "wp1207_claim_id": "F2-WP-1207-G1-GPT56SOL-HOSTILE-TWIN-TRANSACTION-20260829",
+    "wp1207_state_observed": "ACTIVE",
+    "unusual_experiment_executed": false
+  },
+  "review": {
+    "scope": "REVIEW_ONLY / independent fail-closed falsifier attempt against WP1207 source and tests",
+    "source_commit_observed": "66eda480fe506be0aa57146b9044c329de910ccf",
+    "tests_commit_observed": "53be79e2edc4dd9faa1d73029dcda5fe74f44763",
+    "ci_workflow_commit_observed": "733717c81b2d2d55cec64cfb9e20f9d45d1eef55",
+    "fixture_isolation_fix_observed": "523250f8728fbb427ef82975c7fe21f5169abf84",
+    "finding": "Shared mutable release dictionaries in the initial test fixtures could be contaminated by mutation in another test. Current main closes that test-contamination path by deep-copying release fixtures at request construction/mutation points.",
+    "finding_status": "ALREADY_FIXED_BY_ACTIVE_OWNER_NO_DUPLICATE_PATCH",
+    "local_falsifier_execution": "NOT_EXECUTED",
+    "local_falsifier_blocker": "analysis container DNS resolution failed before GitHub source download; classify as infrastructure/tool negative evidence only, not product failure",
+    "repository_ci_observed_for_wp1207": "NOT_YET_CREDITED_BY_THIS_ORGAN",
+    "runtime_credit_minted": 0,
+    "physical_target_credit_minted": 0,
+    "whole_system_credit_minted": 0
+  },
+  "frontier": {
+    "wp1207": "Active owner should complete repository-hosted CI and bounded reconciliation; full WP1207 remains open until exact release ZIP is exercised in a hostile twin.",
+    "global": "Do not open a duplicate build lane while active claims own WP1207, WP1209 and WP1108; continue with source review/falsifiers or a dependency-correct unclaimed scope after re-entry.",
+    "credit_boundary": "source/tests/workflow presence and review evidence do not imply hostile-twin execution, physical target PASS, GRID10/GWT/J-Space runtime, training, effects, completion, or whole-system acceptance"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "schema": "TRIGGER4_RESEARCH_DELTA_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "date_local": "2026-08-29",
+  "time_precision": "NOT_ASSERTED",
+  "authority_epoch": "8.78_PLUS_NEWEST_OWNER_VPS_EXECUTION_CLARIFICATION",
+  "canonical_clay_main_observed_before_write": "023a167ed8ff34f9de9795cf37e073c6b27f29c5",
+  "routing": {
+    "normalized_message": "4",
+    "result": "TRIGGERWORD_4",
+    "directive_fetch": "PASS",
+    "directives": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "owner_execution_authority": {
+    "resolved": true,
+    "clay_direct_dev_authorized": true,
+    "self_hosted_runner_bridge_authorized": true,
+    "free_only_meaning": "external-provider-token/spend policy; existing owner-provisioned VPS/self-hosted compute remains allowed under supervisor 8.78 guards",
+    "paid_or_unknown_cost_external_provider_tokens": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "frankenstein2": {
+    "main_observed": "974bf37f3b2afebb9984007672a9c6694864fdc9",
+    "wp510_generation": 2,
+    "wp510_state": "ACCEPTED_REPOSITORY_COMPONENT_SCOPE_ONLY",
+    "wp510_canonical_merge_commit_sha": "3e5b05f95b1cef80ff781152fa430f7916736746",
+    "wp510_runtime_execution_observed_in_canonical_claim": false,
+    "wp510_runtime_credit_in_canonical_claim": 0
+  },
+  "runtime_bridge": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "controller_main_observed": "addbe2f0808fd5001e1122d443ed3b41cf7f3864",
+    "workflow": ".github/workflows/frank-self-hosted-probe.yml",
+    "workflow_exact_wp510_source_sha": "3e5b05f95b1cef80ff781152fa430f7916736746",
+    "superseded_queued_run": {
+      "run_id": 33252978899,
+      "job_id": 99101748230,
+      "status_observed": "queued"
+    },
+    "latest_queued_run": {
+      "run_id": 33254381280,
+      "job_id": 99105445603,
+      "status_observed": "queued",
+      "conclusion": null,
+      "steps_observed": false
+    },
+    "target_environment": "clay-direct-dev",
+    "expected_receipt": "runtime/vps_probe/wp510_target_runtime_latest.json",
+    "target_runtime_receipt_present_at_observation": false,
+    "duplicate_dispatch_created_by_this_organ": false,
+    "decision": "DO_NOT_DUPLICATE_QUEUED_SELF_HOSTED_RUNTIME_ATTEMPT"
+  },
+  "research_repo_legacy_dispatch_observation": {
+    "workflow": ".github/workflows/go-repository-bound-acceptance-vps.yml",
+    "run_id": 33245895091,
+    "status_observed": "pending",
+    "jobs_observed": 0,
+    "canonical_result_present": false,
+    "classification": "NEGATIVE_INFRASTRUCTURE_EVIDENCE_ONLY_NOT_PRODUCT_FAILURE"
+  },
+  "evidence_boundary": {
+    "source_review_completed": true,
+    "target_environment_execution_observed": false,
+    "wp510_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "negative_evidence": [
+    "The current Dr.-Unterweger self-hosted WP510 probe run 33254381280 has an explicit queued job 99105445603 but no started steps.",
+    "The expected runtime/vps_probe/wp510_target_runtime_latest.json target-runtime receipt was absent at observation time.",
+    "The older research-repository singleton acceptance run 33245895091 remained pending with zero jobs and no canonical result file; this is infrastructure/dispatch negative evidence, not an EntityOS/F2 logic failure."
+  ],
+  "unusual_experiment_executed": false,
+  "next_exact_action": "On exact-current reentry inspect Dr.-Unterweger run 33254381280 and job 99105445603 first. If terminal, ingest and verify runtime/vps_probe/wp510_target_runtime_latest.json against exact WP510 canonical merge 3e5b05f95b1cef80ff781152fa430f7916736746 and credit only demonstrated CLAY_DIRECT_DEV_TARGET_ENVIRONMENT_COMPONENT_RUNTIME scope. If still queued, do not dispatch again; preserve zero runtime credit and route Triggerword 4 to a non-overlapping dependency-correct lane while leaving the queued attempt intact."
+}

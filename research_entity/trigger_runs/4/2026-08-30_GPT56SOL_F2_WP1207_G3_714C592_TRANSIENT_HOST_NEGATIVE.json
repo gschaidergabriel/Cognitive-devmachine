@@ -1,0 +1,102 @@
+{
+  "schema": "CLAY_TRIGGER4_F2_CURRENT_HEAD_CLEAN_MACHINE_NEGATIVE_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "observed_at": "2026-08-30T04:38:29Z",
+  "epistemic_type": "REAL_EXECUTION_NEGATIVE_OBSERVATION_PLUS_COMPONENT_REPLAY",
+  "scope": "F2_WP1207_G3_714C592_TRANSIENT_CHAT_CONTAINER_OTHER_AGENT_ONLY",
+  "source": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "commit_sha": "714c59209d16954d532e1032190cf110af9b722b",
+    "tree_sha": "ee18f60f8185249e029d73c0cb4df4a08467b529",
+    "workflow_run_id": 33292856940,
+    "actions_artifact_id": 9726495595,
+    "actions_artifact_bundle_sha256": "ea544f37202acf69f5397602cd5cc4c40b72b6bd8105895b87fd2173e9047909"
+  },
+  "release_candidate": {
+    "release_id": "frankenstein-2.0-714c59209d16",
+    "artifact_filename": "frankenstein-2.0-714c59209d16.zip",
+    "artifact_sha256": "e6a688673792a70a2deefac25d2241bacc8726f17d05eafac9adca5e2592a3da",
+    "artifact_size_bytes": 11831818,
+    "manifest_sha256": "82b9319ef310aeaed4b6aa77310b5a7efadaed8cbdb96787679a9966976d04f1",
+    "artifact_bound_prehandoff_sha256": "550dd087cafada1c6e1a7630fdc150c24115dc5bbe9aea3b57274549e832ec7d",
+    "content_bound_prehandoff_sha256": "640ad5b88323506c01042dd002488fb836e6d54506da9066f21c02be570a3112",
+    "bundle_status": "READY_FOR_REAL_HOST_HANDOFF",
+    "declared_next_gate": "ADMITTED_WP1207_HOSTILE_TWIN_INSTALL_UPDATE_FAILURE_ROLLBACK_AND_RELEASE_READBACK_USING_THIS_EXACT_ARTIFACT_AND_RECEIPT_SUBJECT"
+  },
+  "transport_and_identity_verification": {
+    "downloaded_actions_bundle_sha256_matches": true,
+    "inner_release_zip_sha256_matches": true,
+    "release_manifest_sha256_matches": true,
+    "source_commit_matches_bundle": true,
+    "source_tree_matches_bundle": true
+  },
+  "environment": {
+    "host_class": "CHATGPT_TRANSIENT_CONTAINER_OTHER_AGENT",
+    "os": "Debian GNU/Linux 13",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "python": "3.13.5",
+    "git": "2.47.3",
+    "pid1": "supervisord",
+    "systemd_binary_present": true,
+    "systemd_runtime_state": "offline",
+    "ssh_client_present": false,
+    "direct_vps_bridge_configuration_observed": false
+  },
+  "clean_machine_observation": {
+    "selected_route": "OTHER_AGENT",
+    "package_entry_present": true,
+    "route_source_declares_plan_validate_only_no_host_mutation": true,
+    "generic_route_installer_runtime_credit_default": false,
+    "durable_user_state_path_verified": false,
+    "host_lifecycle_bindings_verified": false,
+    "pre_post_effect_bindings_verified": false,
+    "restart_recovery_verified": false,
+    "reinstall_update_persistence_verified": false,
+    "persistent_runtime_service_verified": false,
+    "baseline_local_boot_without_vps_verified": false,
+    "result": "BLOCKED",
+    "limitations": [
+      "TRANSIENT_HOST_CANNOT_PROVE_DURABLE_USER_STATE_ACROSS_REAL_HOST_RESTART",
+      "NO_EXPORTED_SESSION_START_USER_TURN_PRE_EFFECT_POST_EFFECT_STOP_TOOL_RESULT_HOST_BINDINGS",
+      "CURRENT_RELEASE_HOST_ROUTE_MODULES_PLAN_AND_VALIDATE_BUT_DO_NOT_EXECUTE_INSTALLER_HOST_MUTATION",
+      "SYSTEMD_RUNTIME_OFFLINE",
+      "NO_DIRECT_VPS_BRIDGE_IN_THIS_SESSION",
+      "NO_LOCAL_INSTALL_OR_NO_VPS_BASELINE_ACCEPTANCE_CREDIT_MAY_BE_MINTED"
+    ]
+  },
+  "executed_replay": {
+    "clean_machine_route_falsifiers": {
+      "tests_run": 34,
+      "tests_passed": 34,
+      "log_sha256": "f1441ba4f5aa17c91f40fd1e54cd7eb39e0f465dcb5289a622d2f5d1ac4d9188"
+    },
+    "wp1207_transaction_readback_components": {
+      "tests_run": 22,
+      "tests_passed": 22,
+      "log_sha256": "3b7e41911d38bae154c2cf9c0b38b0367d07c95f54a8bf5654bd3d3e91bae9a1"
+    },
+    "total_tests_run": 56,
+    "total_tests_passed": 56,
+    "credit_scope": "TRANSIENT_COMPONENT_EXECUTION_AND_NEGATIVE_HOST_OBSERVATION_ONLY"
+  },
+  "credits": {
+    "repository_release_candidate_credit": 1,
+    "component_replay_credit": 1,
+    "clean_machine_install_acceptance_credit": 0,
+    "no_vps_baseline_acceptance_credit": 0,
+    "hostile_twin_runtime_credit": 0,
+    "target_vps_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "grid10_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "classification": "CURRENT_HEAD_BOUND_NEGATIVE_HOST_OBSERVATION_NOT_PRODUCT_FAILURE",
+  "conclusion": "The current F2 WP1207 G3 merge-head release candidate is byte-bound and its clean-machine plus transaction/readback validators execute successfully in the transient host, but this environment cannot prove the durable host lifecycle/state/restart/install semantics required for local acceptance. No target/VPS/physical/completion credit is promoted.",
+  "next_exact_action": "Use artifact e6a688673792a70a2deefac25d2241bacc8726f17d05eafac9adca5e2592a3da with artifact-bound prehandoff receipt 550dd087cafada1c6e1a7630fdc150c24115dc5bbe9aea3b57274549e832ec7d in the admitted WP1207 hostile target-twin install/update-failure/rollback/readback gate through clay-direct-dev or another supported persistent real host."
+}

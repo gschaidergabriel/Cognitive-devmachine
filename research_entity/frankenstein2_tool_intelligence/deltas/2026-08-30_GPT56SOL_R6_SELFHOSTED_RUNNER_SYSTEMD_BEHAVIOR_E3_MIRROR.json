@@ -1,0 +1,15 @@
+{
+  "schema": "F2_TRIGGER6_RESEARCH_MIRROR/v1",
+  "research_id": "R6-20260830-SELFHOSTED-RUNNER-PERSISTENCE-SERVICE-GPT56SOL-01",
+  "classification": "MIRROR_POINTER_NOT_CANONICAL_F2_TRUTH",
+  "research_entity_parent_observed": "d2ae014c0b4d2ae9a389b297db3623c7e87003db",
+  "canonical_project_repository": "gschaidergabriel/frankenstein-2.0",
+  "canonical_e3_delta": "research/tool_intelligence/deltas/2026-08-30T0102P0700_GPT56SOL_SELFHOSTED_RUNNER_SYSTEMD_BEHAVIOR_E3_SOURCE_REPRODUCTION.json@c057e642775f4f183b0f8528a7f678748e883524",
+  "upstream_pin": "actions/runner@fb64b9b20d56951bf30c5b7333a128bc25c2d923",
+  "finding": "The official Linux runner service path proves boot enablement and selected child-listener retry, not unconditional whole-service crash recovery. The systemd unit has no Restart= policy. RunnerService.js retries listener exit codes 2/3/4 and many undefined errors, but intentionally stops on 0/1/5 and caps repeated retriable failures. Do not equate svc.sh installation with an always-self-healing listener and do not add Restart=always without testing against upstream intentional no-retry semantics.",
+  "current_wp510_reentry": "run 33265772059/job 99135457584 still queued with steps=[] and runner_id=0 after E3; target host service state remains UNKNOWN",
+  "promotion": "E3_COMPLETE; E5_BLOCKED_TARGET_LIFECYCLE_UNKNOWN",
+  "runtime_credit": 0,
+  "target_environment_credit": 0,
+  "whole_product_credit": 0
+}

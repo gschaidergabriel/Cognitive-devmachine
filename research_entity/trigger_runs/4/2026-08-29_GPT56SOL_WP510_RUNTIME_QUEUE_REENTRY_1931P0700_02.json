@@ -1,0 +1,69 @@
+{
+  "schema": "TRIGGER4_RESEARCH_DELTA_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "created_at_local": "2026-08-29T19:31:00+07:00",
+  "authority_epoch": "8.78",
+  "routing": {
+    "normalized_message": "4",
+    "result": "TRIGGERWORD_4",
+    "directive_fetch": "PASS",
+    "directive_ref": "97376c2eb80d8c76021037e6d9bc1fa8fdd1417b"
+  },
+  "authority_resolution": {
+    "bootstrap_main_observed": "5529d48d52d77872478d2c0e2c2aea42ab29a67a",
+    "bootstrap_schema": "8.78",
+    "free_only": true,
+    "owner_provisioned_vps_via_vps_bridge_and_clay_direct_dev": "AUTHORIZED_AND_EXPECTED",
+    "together_api": "FORBIDDEN",
+    "paid_subscription_unknown_unlisted_provider_routes": "FAIL_CLOSED"
+  },
+  "frankenstein2_reentry": {
+    "main_observed": "30b6a169bdc00ca330b43721323856be8789eff2",
+    "wp510_pointer_state": "ACCEPTED",
+    "wp510_terminal_scope": "GWT_CAUSAL_PATH_G2_TYPED_DOWNSTREAM_LINEAGE_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "wp510_runtime_credit_before_reentry": 0,
+    "wp002_g5": {
+      "state": "ACTIVE",
+      "claim_id": "F2-WP-002-G5-GPT56SOL-AGGREGATE-PROJECTION-REPAIR-20260829",
+      "pr": 115,
+      "pr_head_observed": "ffe0f603a037273f475c67ee11f86fa8c468b478",
+      "latest_observed_ci_run": 33248837605,
+      "ci_result": "FAIL_CLOSED_AT_REPOSITORY_STATE_VALIDATION_AFTER_REGRESSIONS_PASS",
+      "decision": "DO_NOT_CREATE_DUPLICATE_PROJECTION_WRITER"
+    }
+  },
+  "runtime_bridge_reentry": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "workflow_run_id": 33252978899,
+    "job_id": 99101748230,
+    "controller_head": "0c2cb61840faffa582eaa3189d79cf308dcc6303",
+    "run_status_observed": "queued",
+    "job_status_observed": "queued",
+    "job_labels": ["self-hosted"],
+    "runner_id_observed": 0,
+    "runner_name_observed": "",
+    "steps_observed": [],
+    "target_runtime_execution_observed": false,
+    "target_runtime_receipt_ingested": false,
+    "duplicate_dispatch_created_by_this_organ": false,
+    "decision": "DO_NOT_DUPLICATE_QUEUED_SELF_HOSTED_RUNTIME_ATTEMPT"
+  },
+  "evidence_boundary": {
+    "wp510_repository_component_acceptance_preserved": true,
+    "wp510_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "negative_evidence": [
+    "The exact WP510 self-hosted target-runtime run remained queued on reentry.",
+    "The queued job had runner_id=0, empty runner_name and no executed steps at observation time.",
+    "No runtime credit is minted from queue existence or source/component CI."
+  ],
+  "unusual_experiment_executed": false,
+  "next_exact_action": "Re-enter run 33252978899 without creating a duplicate dispatch. If it becomes terminal, ingest only an exact-source persisted receipt and grant only demonstrated target-environment component scope. If it remains queued, preserve runtime credit at zero and route Triggerword-4 work to a non-overlapping dependency-correct source/coordination lane; do not overwrite the sole WP002 G5 projection writer."
+}

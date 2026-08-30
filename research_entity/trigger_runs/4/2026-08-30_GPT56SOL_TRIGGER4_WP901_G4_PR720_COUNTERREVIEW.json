@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "date": "2026-08-30",
+  "supersedes_for_reentry": "research_entity/trigger_runs/4/2026-08-30_GPT56SOL_TRIGGER4_WP901_G4_STORE_MINT_SCOPE_FENCE.json",
+  "classification": "APPEND_ONLY_COUNTERREVIEW_AND_NEGATIVE_EVIDENCE",
+  "canonical_scope": {
+    "workpackage_id": "F2-WP-901",
+    "generation": 4,
+    "claim_id": "F2-WP-901-G4-GPT56SOL-PERSISTED-ROW-LOAD-ATTESTATION-20260830",
+    "pointer_state_last_observed": "ACTIVE",
+    "runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "pr720": {
+    "number": 720,
+    "title": "Trigger4: repair active WP901 G4 exact persisted row-load attestation",
+    "head_observed": "b406e36e57666e8a711e4b093339b387e8f556cb",
+    "state_observed": "OPEN",
+    "positive_deltas": [
+      "exact CanonicalPersistentAgencyStore type check blocks hostile subclass loader substitution",
+      "direct canonical base-class load dispatch occurs inside one SQLite read snapshot",
+      "row evidence binds checkpoint id, predecessor id, kernel state, generation, checkpoint digest, raw checkpoint_json, canonical path, device, inode and store authority receipt",
+      "predecessor checkpoint is reloaded and bound to WP900 whole-loop seal predecessor id/digest before G3/G2 planning",
+      "explicit zero runtime/effect/completion/whole-system credit fences are preserved"
+    ],
+    "remaining_blockers": [
+      {
+        "id": "STORE_MINT_INVARIANT_NOT_MECHANICAL",
+        "finding": "PersistedCheckpointLoadReceipt and load_checkpoint_with_persisted_row_receipt are still defined in the WP901 restart module. The helper calls CanonicalPersistentAgencyStore.load_checkpoint and then independently SELECTs the row in the same snapshot. The active G4 pointer explicitly requires the canonical WP206 store itself to mint the typed immutable receipt from the exact row it actually read.",
+        "acceptance_gate": "Move typed receipt minting plus exact-row SELECT/replay/digest into CanonicalPersistentAgencyStore (load_checkpoint_with_receipt or equivalent); WP901 consumes the store-returned receipt."
+      },
+      {
+        "id": "SEMANTIC_IDENTITY_VS_RAW_REPRESENTATION_COLLAPSE",
+        "finding": "PR720 currently rejects row_checkpoint_json when it differs textually from checkpoint.canonical_json(), even when WP206 semantic load/checkpoint digest can remain valid. This collapses semantic checkpoint identity into canonical text-byte identity and contradicts the PR711 discriminator.",
+        "acceptance_gate": "Retain semantic typed checkpoint SHA as one field and raw persisted checkpoint_json representation in row evidence as a separate field. Semantically equivalent pretty-printed JSON must be loadable under existing WP206 semantics while changing checkpoint_json_sha256/row_evidence_sha256."
+      }
+    ]
+  },
+  "pr711_counterevidence": {
+    "number": 711,
+    "workflow_run": 33305293069,
+    "conclusion": "success",
+    "relevance": "Executable review established that raw persisted JSON representation can change while typed checkpoint identity remains stable; row evidence must detect the representation change rather than redefine semantic checkpoint identity."
+  },
+  "pr720_ci": {
+    "run": 33305595140,
+    "job": 99241470386,
+    "conclusion": "failure",
+    "executed_test_count": 48,
+    "failure_count": 0,
+    "error_count": 1,
+    "error_test": "test_unifieddb_authority_fingerprint_schema_mismatch_fails_closed",
+    "classification": "TEST_CONSTRUCTION_ERROR_NOT_G4_LOGIC_NEGATIVE",
+    "exact_cause": "UnifiedDBAuthorityRef.__post_init__ rejects unsupported fingerprint schema before load_checkpoint_with_persisted_row_receipt is invoked.",
+    "repair": "Assert the existing constructor-level fail-closed boundary or use a valid constructible authority mismatch that belongs to the G4 layer. Do not weaken UnifiedDBAuthorityRef to reach the later test."
+  },
+  "durable_pr_comments": [
+    5468043726,
+    5468047648
+  ],
+  "coordination": {
+    "decision": "DO_NOT_CREATE_DUPLICATE_IMPLEMENTATION_BRANCH_WHILE_PR720_ACTIVE",
+    "reason": "The canonical Trigger4 owner lane is already moving. Counterreview and exact gates were injected into the existing PR to minimize duplicate authority and merge conflict."
+  },
+  "scope_fences": {
+    "wp206_same_inode_live_drift": "SEPARATE_TRIGGER6_DISCRIMINATOR",
+    "rollback_freshness": "SEPARATE_OPEN_RESEARCH",
+    "target_host_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_jspace_runtime_credit": 0,
+    "provider_model_runtime_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Re-enter PR720 latest head. First repair its test-construction error without weakening authority validation. Then satisfy both semantic blockers: store-owned receipt minting from the same exact row consumed by the canonical loader, and PR711 semantic-vs-raw representation separation. Run the PR711 representation witness plus PR710 subclass/predecessor witnesses and accepted WP206/WP901 G2/G3/G4 regressions. Reconcile generation 4 only if all are green and the active pointer's required invariants are mechanically present."
+}

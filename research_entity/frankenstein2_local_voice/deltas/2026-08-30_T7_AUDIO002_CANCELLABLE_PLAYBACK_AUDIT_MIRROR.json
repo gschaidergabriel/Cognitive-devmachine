@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "date": "2026-08-30",
+  "worker": "GPT-5.6-Sol-TRIGGER7",
+  "type": "F2_PROVENANCE_MIRROR_ONLY",
+  "canonical_claim_authority": "gschaidergabriel/frankenstein-2.0",
+  "research_id": "T7-AUDIO-002",
+  "objective": "E2_CANCELLABLE_PIPEWIRE_ALSA_TRANSPORT_AUDIT",
+  "f2_claim_path": "research/local_voice/claims/T7-AUDIO-002/E2_CANCELLABLE_PIPEWIRE_ALSA_TRANSPORT_AUDIT.json",
+  "f2_result_path": "research/local_voice/frontier/2026-08-30_T7_AUDIO_002_CANCELLABLE_PIPEWIRE_ALSA_TRANSPORT_AUDIT.md",
+  "f2_delta_checkpoint": "research/local_voice/checkpoints/2026-08-30_T7_AUDIO_PLAYBACK_E2_GPT56SOL.json",
+  "f2_result_commit": "527fedd2ece4bacdfd27574a650426ca5fc2f818",
+  "f2_claim_close_commit": "0e25837bf324f8da0a23d04040b8a49bde499da4",
+  "f2_checkpoint_commit": "ad2a9b7acd3ac3f1b866c792e34f665d12650026",
+  "current_voice_contract_blob_observed": "ad639b02ea69771014a2cad5b38103036b35bdfb",
+  "decision": "PROMOTE_TO_TRIGGER4_BUILD_FALSIFIER",
+  "primary_finding": "Use a voice-session-bound monotonic playback_generation fence so late TTS/audio chunks from an interrupted utterance are rejected before playback and cannot become spoken-history evidence. PipeWire native deactivate + non-draining flush is the primary Linux candidate; ALSA snd_pcm_drop is the fallback cancellation primitive and snd_pcm_drain must not be substituted for barge-in.",
+  "runtime_roundtrip_observed": false,
+  "runtime_credit": 0,
+  "benchmark_credit": 0,
+  "acceptance_credit": 0,
+  "current_shared_runtime_blocker_observed": {
+    "github_run_id": 33265258658,
+    "job_id": 99134091520,
+    "status": "queued",
+    "runner_id": 0,
+    "runner_name": "",
+    "classification": "BRIDGE_RUNNER_TRANSPORT_NOT_RUNTIME_NEGATIVE"
+  },
+  "authority_note": "This mirror preserves F2 evidence lineage only and cannot mint or override Trigger-7 claim/build/runtime authority."
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "TRIGGER7_RESEARCH_MIRROR/v1",
+  "trigger": "7",
+  "date_local": "2026-08-30",
+  "research_id": "T7-TURN-004",
+  "role": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "canonical_repository": "gschaidergabriel/frankenstein-2.0",
+  "semantic_key": "979e0c058f251154510b260ecd70d2b4cd857d02aaf6bdf8e6f50c4fdf501580",
+  "canonical_paths": {
+    "semantic_claim": "research/local_voice/semantic_claims/979e0c058f251154510b260ecd70d2b4cd857d02aaf6bdf8e6f50c4fdf501580.json",
+    "human_claim": "research/local_voice/claims/T7-TURN-004/E1_SOULX_DUPLUG_SOURCE_AUDIT.json",
+    "source_result": "research/local_voice/sources/2026-08-30_T7_TURN004_SOULX_DUPLUG_SOURCE_AUDIT_GPT56SOL.json",
+    "checkpoint": "research/local_voice/checkpoints/2026-08-30_T7_TURN004_SOULX_DUPLUG_SOURCE_AUDIT_GPT56SOL.json"
+  },
+  "canonical_commits": {
+    "semantic_claim_create": "f9ac1bfe898fdfc2e5b3c581d906b247db5dcd4d",
+    "human_claim": "b67f9a0b6e2015c576d4cad8f8b6c4bcde702f8c",
+    "source_result": "da67699a138523b8748699d2860675c8ead1021e",
+    "semantic_close": "bff4aa3d7a19e51d06d425077f56f73041f17ba0",
+    "checkpoint": "1b2d1ce23f61ef379c5ad337a068ba2b7d5c4ec1"
+  },
+  "upstream": {
+    "repository": "Soul-AILab/SoulX-Duplug",
+    "repository_sha": "a0b9063843df69619b087b95b74597b2176910b8",
+    "paper": "arXiv:2603.14877",
+    "model": "Soul-AILab/SoulX-Duplug-0.6B",
+    "license": "Apache-2.0"
+  },
+  "result": {
+    "source_pin": "PASS_AT_SCOPE",
+    "direct_german_production_eligibility": "FALSIFIED_AT_SOURCE_SCOPE",
+    "retained_role": "ARCHITECTURE_AND_GERMAN_ADAPTATION_DONOR",
+    "basis": "Official upstream config/model/eval evidence covers English/Chinese/bilingual paths, not German; released training/fine-tuning code keeps German adaptation open."
+  },
+  "credits": {
+    "source_pin": 1,
+    "source_falsifier": 1,
+    "target_hardware": 0,
+    "model_runtime": 0,
+    "german_turn_replay": 0,
+    "german_e2e": 0,
+    "trigger4_acceptance": 0,
+    "whole_system": 0
+  },
+  "runtime_frontier": {
+    "canonical_hardware_roundtrip_run": 33266856557,
+    "state_at_mirror": "pending/queued",
+    "hardware_receipt_observed": false
+  },
+  "next_exact_action": "Consume run 33266856557 only when terminal and accept only an exact clay-direct-dev hardware receipt. Then run the common German pause/backchannel/overlap turn-controller replay; any SoulX German adaptation or runtime test is a new create-only semantic objective."
+}

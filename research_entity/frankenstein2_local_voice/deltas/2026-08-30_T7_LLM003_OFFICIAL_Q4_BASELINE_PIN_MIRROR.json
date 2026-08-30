@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "provenance_role": "MIRROR_ONLY_NOT_CLAIM_AUTHORITY",
+  "canonical_f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2_source_result": "research/local_voice/sources/T7_QWEN35_4B_UNMODIFIED_Q4_BASELINE_PIN_2026-08-30.json",
+  "canonical_f2_continuation_delta": "research/local_voice/checkpoints/2026-08-30_T7_LLM003_OFFICIAL_Q4_BASELINE_PIN.json",
+  "research_id": "T7-LLM-003",
+  "objective": "E2_OFFICIAL_QWEN35_4B_Q4_BASELINE_PIN",
+  "observed_date": "2026-08-30",
+  "official_unmodified_base": {
+    "repo_id": "Qwen/Qwen3.5-4B",
+    "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+    "license": "apache-2.0"
+  },
+  "preferred_q4_local_artifact": {
+    "repo_id": "lmstudio-community/Qwen3.5-4B-GGUF",
+    "file": "Qwen3.5-4B-Q4_K_M.gguf",
+    "sha256": "25082a7dd3776cc3c741c6347d3bd04523f05796607b3fbc32fa3a25dfa1418c",
+    "size_bytes": 2707513696,
+    "provenance_boundary": "community GGUF quantization of official post-trained model; not an official Qwen GGUF artifact"
+  },
+  "coordination": {
+    "active_e3_runtime_lane": "T7-SYS-002/E3_VPS_BRIDGE_HARDWARE_OFFICIAL_QWEN35_BASELINE",
+    "relationship": "E2 source pin should feed the active E3 lane; do not create a duplicate VPS execution path"
+  },
+  "credits": {
+    "source_pin": 1,
+    "target_runtime": 0,
+    "benchmark": 0,
+    "voice_acceptance": 0
+  }
+}

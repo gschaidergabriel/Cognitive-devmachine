@@ -1,0 +1,98 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "recorded_at_local": "2026-08-30T18:10:00+07:00",
+  "classification": "RUNTIME_CREDIT_CLOSURE_BLOCKED_BY_SELF_HOSTED_RUNNER_LIFECYCLE",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "research_main_observed_before_write": "254bfb71e58c152ff542d5eacc1f081eb246b97a",
+    "bootstrap_schema_version": "8.78",
+    "supervisor_inbox_schema_version": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "owner_vps_allowed": true,
+    "established_vps_bridge_allowed": true,
+    "together": "FORBIDDEN",
+    "external_provider_routes": "UNADMITTED",
+    "paid_or_unknown_cost_fallback": "FORBIDDEN_FAIL_CLOSED"
+  },
+  "frankenstein2": {
+    "main_observed": "7487ede0da869d891a4b8da0f967ffa4cada0d67",
+    "main_message": "architect: distinguish terminal claims from unowned promotion boundaries",
+    "runtime_credit_priority_overlay": "ACTIVE",
+    "wp901": {
+      "repository_state": "G4_ACCEPTED_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "runtime_credit": 0,
+      "next_gate": "exact-source target-host persisted-row fresh-process load/readback",
+      "controller_source_commit": "71f24776cf4ca22bc2cd40e5b378ca60dbae855b",
+      "controller_workflow": ".github/workflows/frankenstein2-wp901-target-host-readback.yml",
+      "controller_workflow_source_present": true,
+      "target_execution_observed_this_organ": false
+    },
+    "wp902": {
+      "repository_state": "G3_ACCEPTED_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "runtime_credit": 0,
+      "next_gate": "repeated matched exact-source host measurement trials"
+    },
+    "wp1207": {
+      "repository_state": "G5_ACCEPTED_REPOSITORY_COMPONENT_ONLY",
+      "target_runtime_credit": 0,
+      "existing_target_run_id": 33301648871,
+      "observed_status": "queued",
+      "duplicate_dispatch": "FORBIDDEN"
+    },
+    "wp510": {
+      "repository_state": "G3_ACCEPTED_REPOSITORY_COMPONENT_ONLY",
+      "target_runtime_credit": 0,
+      "existing_target_run_id": 33265772059,
+      "existing_target_job_id": 99135457584,
+      "observed_status": "queued",
+      "duplicate_dispatch": "FORBIDDEN"
+    },
+    "wp900": {
+      "target_runtime_credit": 0,
+      "existing_target_run_id": 33295805811,
+      "observed_status": "pending",
+      "jobs_observed": 0,
+      "duplicate_dispatch": "FORBIDDEN"
+    }
+  },
+  "controller": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "71f24776cf4ca22bc2cd40e5b378ca60dbae855b",
+    "self_hosted_label_contract_observed": ["self-hosted", "Linux", "X64"],
+    "direct_runner_inventory_api_from_this_connector": "UNAVAILABLE_INVALID_ARGUMENT",
+    "inference": "Multiple independent target workflows remain queued/pending without target execution. This is consistent with runner registration/liveness/eligibility/assignment/capacity blockage, but does not identify which lifecycle cause is true and is not a Frankenstein runtime defect by itself."
+  },
+  "actions_this_organ": {
+    "new_runtime_dispatch": false,
+    "provider_or_model_calls": false,
+    "vps_or_physical_host_execution": false,
+    "unusual_experiment": false,
+    "new_component": false,
+    "durable_reentry_checkpoint": true
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "f2_target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "provider_runtime": 0,
+    "whole_system_acceptance": false
+  },
+  "blocker": "This organ can inspect GitHub control-plane state but has no direct owner-host runner-status/SSH/bridge execution surface. Creating more self-hosted jobs would increase queue pressure without producing runtime evidence.",
+  "next_exact_action": "From an organ with direct owner-host access, restore or verify the registered self-hosted runner lifecycle (service online, repository authorization, labels, eligibility and job assignment) without dispatching duplicates. Then let the already-existing WP510/WP900/WP1207 queues execute and run the already-source-bound WP901 fresh-process readback. Promote only exact observed scope after receipts exist.",
+  "credit_boundary": "CONTROL_PLANE_REENTRY_AND_DEDUP_CHECKPOINT_ONLY"
+}

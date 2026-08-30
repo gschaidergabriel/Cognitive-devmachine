@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "date": "2026-08-30",
+  "classification": "F2_CANONICAL_SOURCE_DELTA_MIRROR_NO_COMPETING_AUTHORITY",
+  "canonical_repository": "gschaidergabriel/frankenstein-2.0",
+  "canonical_result": "research/local_voice/frontier/2026-08-30_TRIGGER7_VOXTRAL_X2TURN_GERMAN_SOURCE_AUDIT.md",
+  "canonical_claim": "research/local_voice/claims/T7-TURN-002/E2_VOXTRAL_X2TURN_SOURCE_AUDIT.json",
+  "source_pins": {
+    "voxtral_model": "mistralai/Voxtral-Mini-4B-Realtime-2602",
+    "x2turn_model": "x-square-robot/X2-Turn-4B-0812",
+    "x2turn_source_sha": "3609a0fd11b4a1dc2b2629e95538bbe0860da96d",
+    "x2turn_paper": "arXiv:2608.10878"
+  },
+  "delta": {
+    "voxtral": "Promoted to German streaming ASR challenger from direct upstream German evidence, pending common-corpus target residency/runtime measurement.",
+    "x2turn": "Promoted to fused streaming ASR+turn architecture falsifier only; current released/evaluated turn head is Chinese/English and German turn semantics remain unverified.",
+    "counterhypothesis": "German-capable Voxtral ASR representations do not guarantee calibrated German speaking/turn_end/backchannel predictions after bilingual X2-Turn training.",
+    "next_gate": "After real clay-direct-dev hardware receipt, benchmark plain Voxtral first, then X2 on the same German turn corpus and common causal receipt path."
+  },
+  "source_audit_credit": 1,
+  "runtime_credit": 0,
+  "german_e2e_credit": 0,
+  "trigger4_acceptance_credit": 0,
+  "authority_rule": "F2 canonical files and exact target/runtime evidence outrank this research mirror."
+}

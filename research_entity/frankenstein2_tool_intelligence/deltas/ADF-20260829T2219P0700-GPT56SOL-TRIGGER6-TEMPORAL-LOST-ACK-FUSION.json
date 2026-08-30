@@ -1,0 +1,29 @@
+{
+  "schema": "CLAY_F2_TRIGGER6_ARCHITECTURE_DELTA_FUSION/v1",
+  "trigger": "6",
+  "worker_id": "GPT-5.6-Sol",
+  "created_at_local": "2026-08-29T22:19:00+07:00",
+  "source_research_id": "R6-20260829-TEMPORAL-DURABLE-HISTORY-EFFECT-BOUNDARY-GPT56SOL-01",
+  "frankenstein2_evidence_head": "5053284885fc266cdb7abf53f8b2b1927deaaa21",
+  "external_source": {
+    "repo": "temporalio/documentation",
+    "commit": "19b968f5bc30b331063ffb762e2542be88d84c52",
+    "tree": "e580f11e6f227589beeb118bda76ad7630bc523d",
+    "license_metadata": "NOASSERTION",
+    "use": "CONCEPT_DISTILL_ONLY_NO_SOURCE_COPY"
+  },
+  "finding": "Temporal-style durable workflow semantics do not justify a new F2 runtime/state authority. The reusable invariant is the separation of stable logical operation identity from retry-attempt identity and of observed orchestration completion from physical external-effect exactly-once execution. F2 already encodes these separations in WP103/WP104/WP105 at component scope.",
+  "negative_result": "Do not adopt Temporal Service/Event History as canonical F2 state or effect authority; doing so would create a competing durable state/effect surface.",
+  "architecture_delta": "TEST_FIRST_ONLY: cross-layer lost-ACK/retry falsifier across existing delivery lifecycle, deferred causal return and UNKNOWN/effect interlock. One logical child result and delivery survive two transport attempts; ACK remains recipient-delivery evidence only; parent re-entry uses fresh causal identity and exact result digest; UNKNOWN external effects are never blindly replayed; no delivery/reentry event can mint completion.",
+  "trigger4_candidate": "gschaidergabriel/frankenstein-2.0:trigger4/inbox/tool_research/R6-TEMPORAL-LOST-ACK-CAUSAL-REENTRY-001.json",
+  "candidate_commit": "5053284885fc266cdb7abf53f8b2b1927deaaa21",
+  "e4_execution_observed": false,
+  "runtime_credit": 0,
+  "effect_credit": 0,
+  "vps_credit": 0,
+  "physical_grid10_credit": 0,
+  "gwt_jspace_credit": 0,
+  "training_credit": 0,
+  "whole_product_credit": 0,
+  "next_exact_action": "Trigger4 refreshes current F2 main and affected module SHAs, rejects/holds the packet if stale, otherwise executes the deterministic integration ablation and F2-WP-004 exact-source run package before any promotion."
+}

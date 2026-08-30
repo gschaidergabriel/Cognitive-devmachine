@@ -1,0 +1,49 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_CROSS_REPO_MIRROR_RECEIPT/v1",
+  "trigger": "6",
+  "mirror_epoch": "2026-08-29T18:26:00+07:00",
+  "worker": "GPT-5.6 Sol / ChatGPT Trigger-6 organ",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "target_repository": "gschaidergabriel/clay-global-research-entity",
+  "target_parent_sha": "90ccdb033fe0bc4ac218599e8928fc437c230db0",
+  "canonical_claim_authority": "F2_ONLY",
+  "research_id": "R6-RETINA-SSIM-SCENECHANGE-001",
+  "f2_claims": {
+    "e1": "be5004b9b7fdbf9bb259fe3cff0e998cdf808fb6",
+    "e2": "c5dec822a43c88f0796acd03bbc250232317e0f9"
+  },
+  "f2_results": {
+    "e1_receipt_commit": "763b43a81a8a88e8c1d4b722da856ce8286a2e0b",
+    "e1_receipt_path": "research/tool_intelligence/receipts/R6-RETINA-SSIM-SCENECHANGE-001_E1_SOURCE_READ_20260829T1822P0700.json",
+    "e2_delta_commit": "490727f202210befeeb20c1b6c04521850192492",
+    "e2_delta_path": "research/tool_intelligence/deltas/2026-08-29T1824P0700_GPT56SOL_R6_RETINA_SSIM_SCENECHANGE_E2_ARCHITECTURE_MAPPED.json"
+  },
+  "fused_finding": "Current F2 WP700 already separates quality_micros and delta_micros and binds delta to exact frame identity. External SSIM/PySceneDetect archaeology therefore does not justify a new vision stack. The material architecture gap is measurement-semantic binding: current policy thresholds do not structurally require the exact metric/normalization/profile identity that produced the micros values.",
+  "minimum_delta": "Bind one canonical RetinaMeasurementProfile identity/digest to RetinaFrameSignal and RetinaPolicy and fail closed before threshold comparison on mismatch. Keep raw pixels transient and keep quality versus temporal novelty as distinct measurements.",
+  "dependency_decision": "NO_IMPORT_SCikit-image_OR_PySceneDetect_AT_E2; structurally distill only the small deterministic mechanisms that survive falsification.",
+  "candidate_metric_direction": "LUMA_MAE_FIXED_GRID/v1 is the best-fit one-reference temporal-delta baseline for the existing ABI; adaptive rolling ratios require separate causal/window provenance; SSIM is conditional reference-quality only, not generic novelty.",
+  "evidence_credit": {
+    "e1_source_read": 1,
+    "e2_architecture_mapped": 1,
+    "e3_reproduction": 0,
+    "e4_ablation": 0,
+    "e5_build_candidate": 0,
+    "e6_f2_accepted": 0,
+    "runtime": 0,
+    "physical_retina": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "authority_at_mirror": {
+    "epoch": "9.13",
+    "supervisor_delta": "9.13AU_NON_AUTHORITY",
+    "free_only_meaning": "EXTERNAL_PROVIDER_TOKEN_AND_SPEND_POLICY_NOT_OWNER_VPS_BAN",
+    "vps_execution": "AUTHORIZED_AND_EXPECTED_WITH_RESOURCE_HEALTH_GUARDS_AND_EXACT_RECEIPTS",
+    "external_provider_routes": "UNADMITTED",
+    "together": "FORBIDDEN",
+    "paid_or_unknown_external_provider": "FORBIDDEN"
+  },
+  "current_f2_head_observed_after_research": "2e379f1b003599a04ae98f7c04fee05f59ab70f2",
+  "next_exact_discriminator": "Acquire E3 claim and reproduce the measurement-profile substitution failure against exact current F2 source, then test a minimal profile-binding repair without promoting runtime or device credit.",
+  "mirror_status": "POINTER_AND_RECONCILIATION_RECORDED; F2 REMAINS CANONICAL CLAIM/BUILD EVIDENCE SIDE"
+}

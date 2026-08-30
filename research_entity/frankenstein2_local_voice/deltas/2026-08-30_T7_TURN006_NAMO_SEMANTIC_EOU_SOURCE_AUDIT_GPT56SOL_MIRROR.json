@@ -1,0 +1,25 @@
+{
+  "schema": "F2_TRIGGER7_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "recorded_date": "2026-08-30",
+  "status": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "research_id": "T7-TURN-006",
+  "semantic_key": "ef624c13104dfa4990918906f59104fd558197c8842f60ace298f23567237c6f",
+  "canonical_f2": {
+    "source_result": "research/local_voice/sources/2026-08-30_T7_TURN006_NAMO_MULTILINGUAL_GERMAN_SOURCE_AUDIT_GPT56SOL.json",
+    "source_result_commit": "8cdd04827d105dcdddc2d5d3b788a69866a60268",
+    "semantic_terminal_commit": "294bff47f64f0a53835d17a94977e06d6aebe78e",
+    "trigger4_handoff": "trigger4/inbox/local_voice/T7_TURN006_NAMO_SEMANTIC_EOU_TARGET_BENCHMARK_GPT56SOL.json",
+    "trigger4_handoff_commit": "8a0654ffbc15a1a752ad075a89659d471d2f576a",
+    "checkpoint": "research/local_voice/checkpoints/2026-08-30_T7_NAMO_SEMANTIC_EOU_SOURCE_AND_ROUTE_GPT56SOL.json",
+    "checkpoint_commit": "5756b3c767a0048781c898e0d3c06f699d80c8af"
+  },
+  "result": "NAMO Turn Detector v1 Multilingual is retained as a German semantic end-of-utterance candidate, not as a standalone acoustic VAD replacement. Upstream reports German accuracy 0.9425, F1 0.9443 and multilingual quantized ONNX latency under 29 ms; none are yet reproduced on clay-direct-dev. The F2 integration hypothesis is acoustic VAD + streaming ASR + semantic EOU + local brain + cancellable TTS.",
+  "classification": "PROMISING_GERMAN_SEMANTIC_EOU_CANDIDATE_SOURCE_PINNED_NOT_TARGET_RUNTIME_ACCEPTED",
+  "runtime_credit": 0,
+  "german_e2e_credit": 0,
+  "trigger4_acceptance_credit": 0,
+  "whole_system_credit": 0,
+  "next_exact_gate": "Restore eligible self-hosted runner/bridge execution, consume existing Qwen3-ASR run 33292903286 to terminal exact-source evidence, then benchmark NAMO against the current silence/VAD endpoint policy on German conversational prefixes."
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "CLAY_RESEARCH_ENTITY_TRIGGER6_PROVENANCE_MIRROR/v1",
+  "status": "PROVENANCE_ONLY_NOT_CLAIM_AUTHORITY",
+  "trigger": "6",
+  "research_id": "R6-SEED-006",
+  "created_at": "2026-08-29T20:32:00+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "research_entity_main_before_write": "c267740b000d1fa017986f96302b4a6cfdff7a3a",
+  "claim_authority": "gschaidergabriel/frankenstein-2.0",
+  "external_source": {
+    "repo": "eunomia-bpf/agentcgroup",
+    "commit": "551ca1689b7d2d30db6b8a8613414750103cc68b",
+    "tree": "b29edb42640e0af56ba4067bd28de9695fe305ca",
+    "paper": "arXiv:2602.09345",
+    "license": "GPL-2.0"
+  },
+  "f2_evidence_chain": [
+    {"stage": "E1_SOURCE_READ_CLAIM", "commit": "be6bb0e76809af788c1916aa520288f4aedea9fa"},
+    {"stage": "E1_SOURCE_READ_RESULT", "commit": "f58fa3844fe9b6251131fc28c10494390628993b"},
+    {"stage": "E3_EXIT137_FALSIFIER_CLAIM", "commit": "974bf37f3b2afebb9984007672a9c6694864fdc9"},
+    {"stage": "E3_EXIT137_FALSIFIER_RESULT", "commit": "59f85199737ea11167220e52af3034ec6d917725"},
+    {"stage": "E3_JSONL_FALSIFIER_CLAIM", "commit": "fafcbf73e6d073436ab35539d43646bf029dcf0f"},
+    {"stage": "E3_JSONL_FALSIFIER_RESULT", "commit": "b6ed127bb581de9136dffea7de11e107f438eb20"},
+    {"stage": "E3_LOCAL_PEAK_FALSIFIER_CLAIM", "commit": "42ca6e30766240d3cc078c2dc2f6c2defcd7a810"},
+    {"stage": "E3_LOCAL_PEAK_FALSIFIER_RESULT", "commit": "c6afff99283c0842b60f6691a0ec2f19549b1576"},
+    {"stage": "E4_RESOURCE_GRANULARITY_CLAIM", "commit": "a08ec663279d04386807d5efc4e08f51f1d948b9"},
+    {"stage": "E4_RESEARCH_FIXTURE", "commit": "5cb5817caf9e394ec4e947cbed51ca31f386210f", "blob": "8f33413fa48024a5823e35434b03af30c917e105"},
+    {"stage": "E4_RESOURCE_GRANULARITY_RESULT", "commit": "c793872a629c8829b81f984fe8f42edd8f36f5d3"},
+    {"stage": "E5_BUILD_CANDIDATE_CLAIM", "commit": "64338be285a75fb65826de10b70abed757cea5f6"},
+    {"stage": "E5_TRIGGER4_HANDOFF", "commit": "39d2106e9e9556c38dbdae7abf59177bbc3abefc", "path": "trigger4/inbox/tool_research/R6-SEED006-F2-WP605-RESOURCE-OBSERVATION-V1.json"}
+  ],
+  "distilled_result": {
+    "integration_class": "CONCEPT_DISTILL",
+    "target": "F2-WP-605 Child telemetry using existing F2 Evidence Spine PERFORMANCE events",
+    "core_rule": "Bind resource observations to existing run/tool/effect/causal/generation identity and explicit metric/coverage semantics; measurement first, enforcement separate.",
+    "negative_findings": [
+      "exit 137 alone does not establish OOM",
+      "shell-interpolated JSONL is not robust canonical evidence serialization",
+      "the upstream no-root parent-before/after RSS formula does not measure transient child peak memory",
+      "agent resource hints must not become self-grant authority"
+    ],
+    "E4_result": "Aggregate run resource metrics collided for two causally different synthetic cases while tool/effect-bound PERFORMANCE events preserved the distinction.",
+    "direct_controller_adoption": "REJECTED_AT_CURRENT_EVIDENCE_STAGE",
+    "reason": "Privileged/kernel-coupled controller is heavier than the demonstrated need; no F2 workload evidence currently justifies sched_ext/memcg_bpf_ops adoption."
+  },
+  "credit_boundary": {
+    "trigger6_research": "E5_BUILD_CANDIDATE_HANDOFF",
+    "E6_F2_accepted": false,
+    "architecture_runtime": 0,
+    "resource_controller": 0,
+    "physical_grid10": 0,
+    "gwt_jspace": 0,
+    "training": 0,
+    "effects": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Trigger4 refreshes current F2 main and WP605 ownership, then either claims a nonduplicate WP605 generation to implement/test the thin ResourceObservation candidate or records redundancy/hold if equivalent work already exists."
+}

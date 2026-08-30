@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "date_local": "2026-08-30",
+  "mirror_role": "PROVENANCE_ONLY_NOT_CLAIM_AUTHORITY",
+  "f2_canonical_repo": "gschaidergabriel/frankenstein-2.0",
+  "research_id": "T7-COORD-002",
+  "objective": "E2_SEMANTIC_CLAIM_MUTEX_IMPLEMENTATION",
+  "negative_result_input": "research/local_voice/negative_results/2026-08-30_T7_SEMANTIC_DUPLICATE_CLAIM_MUTEX_FAILURE.md",
+  "implementation": {
+    "protocol": "research/local_voice/SEMANTIC_CLAIM_MUTEX_V1.md",
+    "compiler": "research/local_voice/tools/t7_semantic_claim.py",
+    "tests": "research/local_voice/tests/test_t7_semantic_claim.py",
+    "registry": "research/local_voice/semantic_claims/",
+    "human_claim_registry_updated": "research/local_voice/claims/README.md"
+  },
+  "evidence": {
+    "exact_committed_static_tests": "6/6 PASS",
+    "create_only_existing_path_probe": "HTTP 422; second ordinary create rejected; not a simultaneous race test",
+    "repository_ci_run": 33265697541,
+    "repository_ci_conclusion": "success",
+    "repository_ci_job": 99135255763,
+    "repository_ci_scope": "semantic mutex component only",
+    "parallel_adoption_observed": "Qwen3-TTS German 12Hz 0.6B-vs-1.7B A/B created a T7_SEMANTIC_CLAIM/v1 path and self-blocked execution until a real clay-direct-dev hardware/runtime receipt exists"
+  },
+  "current_hardware_semantic_key": "ba79dcf8960e1f02859a664103d5ba3f63fa8da95855d2b077b3e5aa2e0bf9e3",
+  "current_hardware_state": "LEGACY_DUPLICATE_SET_QUARANTINED_NO_NEW_DISPATCH",
+  "remaining_coordination_gap": "No true simultaneous independent two-writer create-only race acceptance has been observed. Existing pre-v1 duplicate workflows/runs remain historical and must be reconciled rather than counted as independent runtime evidence.",
+  "credits": {
+    "source_component": 1,
+    "repository_ci_component": 1,
+    "live_concurrent_race": 0,
+    "vps_hardware": 0,
+    "model_runtime": 0,
+    "german_voice": 0,
+    "trigger4": 0
+  }
+}

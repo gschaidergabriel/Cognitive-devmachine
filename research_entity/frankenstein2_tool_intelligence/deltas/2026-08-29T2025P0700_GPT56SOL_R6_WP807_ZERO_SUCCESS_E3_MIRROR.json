@@ -1,0 +1,37 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-20260829-WP807-ZERO-SUCCESS-SCORE-CONSISTENCY-GPT56SOL-01",
+  "evidence_stage": "E3_CLAIM_REPRODUCED",
+  "created_at": "2026-08-29T20:25:00+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "canonical_coordination_authority": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2": {
+    "claim_path": "research/tool_intelligence/claims/R6-20260829-WP807-ZERO-SUCCESS-SCORE-CONSISTENCY-GPT56SOL-01/E3_CLAIM_REPRODUCED_ZERO_SUCCESS_HIGH_SCORE.json",
+    "claim_commit": "fac32110b893e9f88a78e4c993506e2f00a3581d",
+    "result_path": "research/tool_intelligence/receipts/R6-20260829-WP807-ZERO-SUCCESS-SCORE-CONSISTENCY-GPT56SOL-01_E3_CLAIM_REPRODUCED.json",
+    "result_commit": "43e4babb93cffb50c98145a29544efc65087dcb3",
+    "wp807_source_commit": "4a6c401a279798008aad199107b3f1b801802ed0",
+    "wp807_source_blob": "6ea004126f9d39e428141703ea49aa3090b9994e"
+  },
+  "finding_summary": [
+    "WP807 validates success_count only as 0 <= success_count <= sample_count.",
+    "The current verdict path does not gate on success_count or terminal completion evidence.",
+    "A deterministic witness with four ACCEPTED capabilities, shared holdout id, distinct receipt/reconciliation identities, sample_count=10, success_count=0, baseline_score_ppm=100000 and intervention_score_ppm=900000 satisfies the current score/sample predicates and yields SUPPORTED_AT_COMPONENT_SCOPE under the copied exact acceptance semantics.",
+    "The witness total_success_count is zero.",
+    "This falsifies the assumption that WP807 itself enforces score/success consistency; it does not establish that upstream WP802-WP805 producers emit inconsistent scores."
+  ],
+  "witness_sha256": "e60d00077659f80fcc2b53b99c3075736c6f94642913cd972cfcff985382eda6",
+  "execution_limit": "Private repo source could not be directly imported into the local execution container through the available raw-download boundary. E3 is therefore an exact-source semantic witness using the bound acceptance predicates, not byte-for-byte module execution and not F2 runtime evidence.",
+  "counterhypothesis": "Upstream accepted producers may prove an invariant tying score_ppm to success_count. Trace those producer contracts before deciding whether WP807 must recompute scores or merely bind their derivation identities.",
+  "recommended_gate": "Before supported WP807 verdicts can be used as evidence of completed capability, require producer-bound/recomputed score derivation and explicit completion/success consistency; preserve component-only authority.",
+  "credits": {
+    "trigger6_research": "E3_SOURCE_SEMANTIC_WITNESS_ONLY",
+    "direct_module_execution": false,
+    "f2_ablation_credit": 0,
+    "build_candidate_credit": 0,
+    "runtime_credit": 0,
+    "whole_system_credit": 0
+  },
+  "mirror_policy": "Provenance mirror only. F2 owns the claim mutex and canonical result."
+}

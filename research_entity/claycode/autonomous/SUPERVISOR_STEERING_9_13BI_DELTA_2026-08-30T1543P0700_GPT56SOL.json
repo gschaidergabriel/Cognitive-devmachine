@@ -1,0 +1,64 @@
+{
+  "schema_version": "9.13",
+  "delta": "9.13BI_NON_AUTHORITY",
+  "recorded_at": "2026-08-30T15:43:11+07:00",
+  "classification": "EXECUTABLE_EVIDENCE_RECONCILIATION_STEERING",
+  "supersedes_reentry_interpretation": "9.13BH_NON_AUTHORITY",
+  "material_finding": "F2-WP-206 generation 4 is now canonically ACCEPTED at repository-hosted component-CI scope after executable post-G3 counterevidence and a reviewed repair. REVIEW_ONLY PR689 showed conflicting repeat recovery provenance was silently accepted as ALREADY_RECOVERED. Mutation-authority PR699 bound recovery_provenance_ref into repeat identity and merged as 5548d5a99b97a08d76af9ca1173d8562ad4309bf. Merged-main run 33302181195/job 99232256989 executed checkout, Python setup, exact-surface compile, G4 repeat-provenance regressions, complete accepted-G3 recovery regressions and credit-fence checks, all SUCCESS. The canonical active pointer and acceptance receipt both project generation 4 ACCEPTED/latest accepted generation 4.",
+  "evidence": {
+    "counterevidence_pr": 689,
+    "implementation_pr": 699,
+    "implementation_merge_sha": "5548d5a99b97a08d76af9ca1173d8562ad4309bf",
+    "merged_main_ci_run_id": 33302181195,
+    "merged_main_ci_job_id": 99232256989,
+    "active_pointer": "gschaidergabriel/frankenstein-2.0:workpackages/active/F2-WP-206.json",
+    "receipt": "gschaidergabriel/frankenstein-2.0:workpackages/receipts/F2-WP-206_G4_REPEAT_PROVENANCE_BINDING.json",
+    "research_checkpoint": "research_entity/trigger_runs/4/2026-08-30T1540p0700_GPT56SOL_TRIGGER4_WP206_G4_REPEAT_PROVENANCE_ACCEPTED.json"
+  },
+  "admitted_scope": "PERSISTENT_AGENCY_REPEAT_PROVENANCE_BINDING_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+  "explicit_non_credit": [
+    "NO_BASE_WORKPACKAGE_PROMOTION",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_OUTSIDE_EXECUTED_WP206_G4_SCOPE",
+    "NO_TARGET_VPS_RUNTIME_CREDIT",
+    "NO_PHYSICAL_GRID10_CREDIT",
+    "NO_GWT_OR_JSPACE_RUNTIME_CREDIT",
+    "NO_PROVIDER_OR_MODEL_RUNTIME_CREDIT",
+    "NO_EFFECT_OR_COMPLETION_CREDIT",
+    "NO_TRAINING_CREDIT",
+    "NO_ENTITYOS_HCU_OR_WHOLE_SYSTEM_ACCEPTANCE"
+  ],
+  "preserved_open_gates": {
+    "wp206_same_inode_live_drift": "OPEN_SEPARATE_DISCRIMINATOR; G4 repeat-provenance closure does not prove live same-inode data/schema authority closure",
+    "wp510_target_runtime": "UNRESOLVED; TARGET_RUNTIME_CREDIT_ZERO; NO_DUPLICATE_DISPATCH",
+    "entityos_post_start_effect_outcome": "OPEN; NO_CANONICAL_PROMOTION",
+    "entityos_direct_effect_replay": "OPEN; EPISODE_ID_NULL_REPLAY_FALSIFIER_REQUIRED",
+    "base_claycode_release": "CC-WP-01_AND_CC-WP-02_PASS; CC-WP-03_TO_CC-WP-14_OPEN; GENERAL_PURPOSE_GATE_NOT_PASS; CLAYCODE_RELEASE_GATE_NOT_PASS"
+  },
+  "provider_policy": {
+    "mode": "FREE_ONLY_HARD_OFF",
+    "all_external_claycode_provider_routes_admitted": false,
+    "together_forbidden": true,
+    "paid_or_unknown_cost_fallback": false,
+    "runtime_provider_credit": 0
+  },
+  "evidence_law": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "POST_ACCEPTANCE_EXECUTABLE_FALSIFIER_INVALIDATES_ONLY_THE_REPRODUCED_CLAIM_SCOPE",
+    "REPAIR_CLOSES_ONLY_THE_EXECUTED_REGRESSION_SCOPE",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "next_focus": [
+    "P0_WP206_HOLD_G4: keep generation 4 closed absent new post-G4 executable counterevidence; do not reopen migration/repeat-provenance lanes already absorbed by G3/G4",
+    "P0_WP206_SAME_INODE: treat live same-inode data/schema drift as a separate discriminator and do not silently bundle it into G4",
+    "P0_WP901_REENTRY: restart/stress work may consume the explicit legacy-recovery contract only at its admitted repository-component scope; any target-host recoverability claim still requires target-host execution",
+    "P0_WP510_REENTRY: do not duplicate unresolved target-runtime dispatch; target runtime remains zero until an exact-source/byte-bound execution receipt exists",
+    "P0_KEEP_FREE_ONLY_HARD_OFF: all ClayCode external provider routes remain unadmitted; Together forbidden; no paid/unknown-cost fallback",
+    "P1_KEEP_BASE_AND_CANONICAL_PROMOTIONS_ZERO_UNLESS_THEIR_OWN_EXECUTABLE_GATES_PASS",
+    "P1_DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

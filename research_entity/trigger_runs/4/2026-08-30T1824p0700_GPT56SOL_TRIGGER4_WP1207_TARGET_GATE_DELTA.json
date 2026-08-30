@@ -1,0 +1,128 @@
+{
+  "schema": "CLAY_TRIGGER4_WP1207_TARGET_GATE_DELTA/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "recorded_local": "2026-08-30T18:24+07:00",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "owner_execution_pointer": "CLAY_EXECUTION_AUTHORITY.md",
+    "owner_vps_execution": "AUTHORIZED_AND_EXPECTED_WITH_RESOURCE_HEALTH_GUARDS",
+    "target_environment": "clay-direct-dev",
+    "external_provider_policy": "FREE_ONLY_PROVIDER_SPEND_POLICY; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "source_heads": {
+    "research_main_before_write": "45186be4a62c33bd1ebd4a2e80f2c54b7c973028",
+    "frankenstein_2_main_observed": "0aa97aadf4f92078a3ecf887a18168894d4858c2",
+    "wp1207_accepted_executor_source_sha": "236ba6ebb5c4ba361a2c5f47122065dc6bc53a8f",
+    "wp1207_gate_tool_blob_sha": "ef444748932ebdb641d891468e8cd3a12e8c41b7",
+    "controller_evidence_branch": "trigger4/f2-wp1207-target-gate-20260830",
+    "controller_target_workflow_commit": "612edec9e5361e6bcdbbc6fc6b0f005f68eb2a2b",
+    "controller_preflight_commit": "0e413b147e51d8ca622a769d7c1d71cd4f2152d5"
+  },
+  "exact_artifact_binding": {
+    "scope": "CHAT_TRANSIENT_ARTIFACT_HASH_VERIFICATION_ONLY_NOT_TARGET_RUNTIME",
+    "predecessor": {
+      "artifact_id": 9726495595,
+      "observed_outer_sha256": "ea544f37202acf69f5397602cd5cc4c40b72b6bd8105895b87fd2173e9047909",
+      "release_archive_sha256": "e6a688673792a70a2deefac25d2241bacc8726f17d05eafac9adca5e2592a3da",
+      "release_archive_expected_match": true
+    },
+    "candidate": {
+      "artifact_id": 9726674221,
+      "outer_bundle_sha256": "e5985de88e4cce762604bb7f6743e7c48a2c20e43516917953234a369b928348",
+      "release_archive_sha256": "297e7fbb274314fc3bc57077464ca804dfa16062fd00f7b57b247c34346f5c40",
+      "manifest_sha256": "00cbe0b86ad2208d6f990049d89ae70ce226ce302ee3033b1cf01e416ccc14ad",
+      "expected_hashes_match": true
+    }
+  },
+  "target_gate": {
+    "workflow_repository": "gschaidergabriel/Dr.-Unterweger",
+    "workflow_path": ".github/workflows/trigger4-wp1207-target-gate.yml",
+    "run_id": 33308615022,
+    "job_id": 99249501627,
+    "labels": ["self-hosted"],
+    "status": "queued",
+    "conclusion": null,
+    "runner_id": 0,
+    "runner_name": "",
+    "executed_steps": 0,
+    "runtime_execution_observed": false,
+    "classification": "TRANSIENTLY_UNREACHABLE_SELF_HOSTED_ASSIGNMENT_CONTROL_PLANE",
+    "intended_gate": "G3 install -> injected G4 update failure with preserved G3 lineage -> successful G4 update -> G3 rollback -> process-reentry readback"
+  },
+  "parallel_control_plane_evidence": {
+    "wp901_run_id": 33307216825,
+    "wp901_status": "queued",
+    "wp901_created_at": "2026-08-30T10:44:48Z",
+    "controller_total_queued_observed": 30,
+    "controller_in_progress_observed": 0,
+    "interpretation": "COMMON_RUNNER_ASSIGNMENT_OR_REACHABILITY_BLOCKER_MORE_LIKELY_THAN_WP1207_LOGIC_FAILURE"
+  },
+  "github_hosted_preflight": {
+    "run_id": 33308738469,
+    "job_id": 99249825673,
+    "labels": ["ubuntu-latest"],
+    "status": "completed",
+    "conclusion": "failure",
+    "executed_steps": 0,
+    "runner_id": 0,
+    "runner_name": "",
+    "job_log_blob_available": false,
+    "classification": "CONTROL_PLANE_OR_RUNNER_ASSIGNMENT_FAILURE_BEFORE_ANY_WORKFLOW_STEP",
+    "artifact_or_wp1207_execution_observed": false,
+    "product_failure": false
+  },
+  "execution_surface_resolution": {
+    "self_hosted_runner_route": "TRANSIENTLY_UNREACHABLE",
+    "configured_git_ssh_bridge_route": "DISCOVERY_REQUIRED_FROM_THIS_SESSION_SURFACE",
+    "chat_transient_container": "DIRECT_LOCAL_ONLY_WITHOUT_EXTERNAL_DNS_NOT_CLAY_DIRECT_DEV",
+    "github_connector": "DIRECT_AVAILABLE_FOR_REPOSITORY_CONTROL",
+    "capability_absent_proven": false,
+    "revalidate_before_runtime_credit": true
+  },
+  "durable_reentry": {
+    "stable_run_id": "trigger4-wp1207-target-gate-20260830",
+    "existing_external_run_must_be_verified_before_retry": true,
+    "existing_run_id": 33308615022,
+    "existing_job_id": 99249501627,
+    "resume_rule": "VERIFY_EXTERNAL_RESULT_THEN_CONTINUE_DO_NOT_DUPLICATE_DISPATCH"
+  },
+  "credits": {
+    "wp1207_repository_component": "PRESERVED_AT_EXISTING_ACCEPTED_SCOPE_ONLY",
+    "wp1207_target_environment_component_runtime": 0,
+    "hostile_twin_target_runtime": 0,
+    "physical_host": 0,
+    "physical_grid10": 0,
+    "gwt": 0,
+    "jspace": 0,
+    "provider_model": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_entityos_hcu": 0
+  },
+  "actions_this_organ": {
+    "wp1207_target_workflow_created": true,
+    "exact_artifacts_hash_verified_locally": true,
+    "github_hosted_preflight_attempted": true,
+    "duplicate_existing_wp1207_target_dispatch": false,
+    "frank_harness_modified": false,
+    "provider_call": false,
+    "together_call": false,
+    "target_host_execution_observed": false,
+    "unusual_experiment": false
+  },
+  "next_exact_gate": "Using runner-admin or direct owner-host visibility, restore or verify an eligible self-hosted runner assignment for gschaidergabriel/Dr.-Unterweger, then VERIFY the already queued WP1207 run 33308615022/job 99249501627 before any retry. If it executed, ingest its external target receipt and admit only the exact bounded target-environment component scope; if it did not execute, preserve zero target-runtime credit and repair transport without creating a duplicate WP1207 dispatch.",
+  "acceptance": "IN_PROGRESS_TRANSIENT_CONTROL_PLANE_BLOCKER_ZERO_TARGET_RUNTIME_CREDIT"
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "normalized_trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "created_at_utc": "2026-08-29T09:19:00Z",
+  "trigger_routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directives_read": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "admitted_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "bootstrap": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "admitted_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_inbox_status": "9.13AS_NON_AUTHORITY",
+    "authority_resolution": "8.78 remains admitted unless newer explicit owner authority is discovered"
+  },
+  "observed_research_main_before_write": "d68a02ce9a44b3a17a94cb734e91147912fe5d86",
+  "f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "observed_f2_main_initial": "1441cca1d319564b68aed7476bc2d928d681d2c1",
+  "observed_f2_main_reentry": "7d429765359f07dd135f447d881a57f0b934d9c5",
+  "parallel_churn": {
+    "latest_observed_f2_commit_message": "trigger6: claim BudgetGuard WP509 E1 source read",
+    "wp506_g3": "existing single-writer exact-selection-type repair remains CLAIMED; no duplicate lane created",
+    "wp508_g4": "ACCEPTED only at bounded repository-hosted component-CI scope; runtime/GWT/J-Space/physical credit remains zero",
+    "wp002_g5": "existing aggregate-projection repair remains ACTIVE; PR115 remains open and non-mergeable on an older base"
+  },
+  "discriminator": {
+    "workflow_run_id": 33245047577,
+    "workflow_name": "Workpackage State Consistency CI",
+    "head_sha": "1441cca1d319564b68aed7476bc2d928d681d2c1",
+    "job_id": 99080962224,
+    "unit_regressions": "12/12 PASS",
+    "repository_validation": "FAIL_CLOSED",
+    "repository_error": "active pointer workpackage absent from STATE",
+    "first_concrete_absent_pointer_observed": "F2-WP-207"
+  },
+  "authority_projection_collision": {
+    "wp207_active_pointer": "workpackages/active/F2-WP-207.json",
+    "wp207_state": "ACCEPTED",
+    "wp207_terminal_scope": "STAGE3_TYPED_EPISTEMIC_RECORD_CANONICAL_IDENTITY_HARDENING_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "wp207_reconciliation": "workpackages/reconciliations/F2-WP-207/2-F2-WP-207-G2-GPT56SOL-CANONICAL-IDENTITY-HARDENING-20260829.json",
+    "wp207_authority_epoch": "9.13",
+    "wp207_authority_ref": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "conflict": "SUPERVISOR_INBOX schema 9.13 explicitly declares itself NON_AUTHORITY while BOOTSTRAP_MINIMAL admits 8.78",
+    "decision": "Do not blindly project WP207 ACCEPTED into aggregate state solely to green WP002 while its claimed acceptance metadata binds a non-admitted authority source. Preserve its hosted component-CI evidence separately and require authority rebind/reconciliation or an explicit validator policy for invalid-authority pointers."
+  },
+  "effects_and_execution": {
+    "provider_calls": false,
+    "vps_execution": false,
+    "real_effect_authority_used": false,
+    "github_repository_ci_observed": true,
+    "f2_hot_path_write_performed": false,
+    "reason_no_f2_hot_path_write": "exact main moved during inspection and WP002/WP506/WP509 lanes are concurrently owned; forcing projection now risks stale overwrite and would conceal an authority-binding contradiction"
+  },
+  "credits": {
+    "target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Re-enter newest F2 main under the sole F2-WP-002 G5 writer. Before projecting F2-WP-207 as ACCEPTED_AT_SCOPE, resolve its authority_epoch=9.13 / SUPERVISOR_INBOX NON_AUTHORITY mismatch against admitted 8.78 through the canonical reconciliation/authority writer, or make the state validator explicitly fail closed on invalid-authority active pointers. Then transplant only the G5 aggregate/test/workflow delta onto exact current main, run full Workpackage State Consistency CI, and repeat on the next first validator-proven contradiction without touching foreign mutation paths."
+}

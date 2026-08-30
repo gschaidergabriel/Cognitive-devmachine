@@ -1,0 +1,88 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at": "2026-08-30T15:39:00+07:00",
+  "authority": {
+    "admitted_schema_version": "8.78",
+    "supervisor_inbox_delta": "9.13BH_NON_AUTHORITY",
+    "free_only_meaning": "EXTERNAL_PROVIDER_TOKEN_AND_SPEND_POLICY_NOT_OWNER_VPS_BAN",
+    "owner_vps_allowed": true,
+    "together": "FORBIDDEN",
+    "paid_or_unknown_provider_fallback": "FORBIDDEN"
+  },
+  "wp206_generation3": {
+    "terminal_state": "ACCEPTED",
+    "accepted_scope": "PERSISTENT_AGENCY_LEGACY_G1_AUTHORITY_RECOVERY_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "implementation_merge_sha": "736a0907bdd35056d56f1ed0f75ea11e8457b8c1",
+    "passing_pr_head_run_id": 33301728380,
+    "passing_main_run_id": 33301769704,
+    "runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "postacceptance_counterevidence": {
+    "hypothesis": "Exact idempotent repeat recovery should bind caller-supplied recovery_provenance_ref as well as checkpoint/legacy/rebound/digest identity.",
+    "first_static_review_delta_commit": "732eb50c4d88ba93a5494b1a5168470d9a334aeb",
+    "review_pr": 694,
+    "review_head_sha": "5346e450ecbe54e833fef85aad82da6e4475719c",
+    "run_id": 33301979020,
+    "job_id": 99231722244,
+    "result": "FAILURE",
+    "step_results": {
+      "checkout": "success",
+      "python_setup": "success",
+      "compile": "success",
+      "preregistered_repeat_provenance_conflict": "failure",
+      "credit_fence": "success"
+    },
+    "bounded_interpretation": "Current accepted G3 source returns ALREADY_RECOVERED carrying the recorded provenance when the repeat caller supplies a different provenance reference. This falsifies only repeat-recovery provenance identity semantics; it does not falsify accepted-G1 migration, digest/typed-replay validation, path/device/inode validation, one-record recovery CAS or post-migration receipt-drift rejection.",
+    "canonical_counterevidence_delta_commit": "c5a4b044d1fdbfe97ab3edf4d5a2abdde95ba974",
+    "duplicate_review_cleanup": "PR694 closed after reentry found earlier PR689 had characterized the same gap; red run retained as bounded reproduction evidence."
+  },
+  "wp206_generation4": {
+    "state": "ACTIVE",
+    "claim_id": "F2-WP-206-G4-GPT56SOL-REPEAT-PROVENANCE-BINDING-20260830",
+    "claim_commit": "45abb3380372c04cac618ff8b63ed8f16ee64606",
+    "canonical_counterevidence_pr": 689,
+    "scope": "Reject conflicting caller provenance on already-recovered replay while preserving all other accepted G3 semantics; repository source/regression/CI only.",
+    "implementation_branches_last_observed": [
+      "trigger4/wp206-g4-repeat-provenance-binding-20260830",
+      "trigger4/wp206-g4-recovery-provenance-integrity-20260830"
+    ],
+    "source_state_last_observed": "UNCHANGED_FROM_G3_AT_REVIEW_TIME",
+    "duplicate_mutation_by_this_organ": false
+  },
+  "coordination": {
+    "g4_claim_cas_attempt_by_this_organ": "ABORTED_NON_FAST_FORWARD",
+    "force_push_used": false,
+    "canonical_other_worker_g4_claim_detected": true,
+    "duplicate_pr_closed": 694
+  },
+  "wp510_target_runtime": {
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "last_observed_status": "queued",
+    "last_observed_steps": 0,
+    "last_observed_runner_id": 0,
+    "classification": "CONTROL_PLANE_EVIDENCE_ONLY_NOT_RUNTIME_FAILURE",
+    "duplicate_dispatch_created": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_actions": [
+    "Route around active WP206 G4 mutation ownership and verify exact-source regression/CI when the owner publishes the narrow provenance binding repair.",
+    "Keep same-inode live data/schema drift separate from G4 provenance replay semantics.",
+    "Do not duplicate WP510 dispatch; target-runtime promotion requires actual runner assignment, executed steps and an exact-source receipt.",
+    "Continue Triggerword 4 toward target-runtime GRID/GWT causal evidence after bounded persistence/recovery successor work is reconciled."
+  ]
+}

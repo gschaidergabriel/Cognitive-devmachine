@@ -1,0 +1,67 @@
+{
+  "schema": "CLAY_TRIGGER4_WP1207_DUAL_QUEUE_RUNNER_UNKNOWN_REENTRY/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "routing": "PASS_REQUIRED_TRIGGER4_DIRECTIVES_FETCHED",
+  "authority": {
+    "admitted_epoch": "8.78",
+    "supervisor_inbox_delta": "9.13BI_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "owner_vps_allowed": true,
+    "established_vps_bridge_allowed": true,
+    "together_forbidden": true,
+    "paid_or_unknown_cost_fallback": false
+  },
+  "observed_heads_before_write": {
+    "research_main": "d2c086248dcb0d6c058b980d8025bb31d72656f2",
+    "frankenstein_2_main": "f79c628b3113e91373fea35a70bf3c70ae3efab1"
+  },
+  "wp1207": {
+    "active_generation": 5,
+    "state": "ACCEPTED_REPOSITORY_COMPONENT_ONLY",
+    "target_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "direct_external_rechecks": [
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "run_id": 33301648871,
+      "job_id": 99230838825,
+      "status": "queued",
+      "conclusion": null,
+      "executed_steps_observed": 0
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "run_id": 33308615022,
+      "job_id": 99249501627,
+      "status": "queued",
+      "conclusion": null,
+      "executed_steps_observed": 0
+    }
+  ],
+  "runner_observability": {
+    "runner_roster_endpoint_via_installed_github_connector": "UNAVAILABLE_UNMAPPED",
+    "classification": "RUNNER_STATUS_UNKNOWN",
+    "runner_offline_inference_allowed": false
+  },
+  "coordination": {
+    "duplicate_dispatch_created": false,
+    "rerun_requested": false,
+    "reason": "Existing WP1207 target runs remain unresolved and current governance requires verify-before-retry."
+  },
+  "credits": {
+    "wp1207_target_environment_component_runtime": 0,
+    "physical_host": 0,
+    "physical_grid10": 0,
+    "gwt": 0,
+    "jspace": 0,
+    "training": 0,
+    "whole_entityos_hcu": 0
+  },
+  "next_exact_gate": "Use direct owner-host or runner-admin visibility to verify registration/liveness/eligibility/assignment for clay-direct-dev, then verify the already queued WP1207 runs before any retry. If execution occurs, ingest only an exact source/artifact/readback-bound target receipt; otherwise retain zero target-runtime credit and repair transport without duplicate dispatch.",
+  "acceptance": "BLOCKED_ON_DIRECT_OWNER_HOST_RUNNER_LIFECYCLE_VISIBILITY_ZERO_TARGET_RUNTIME_CREDIT"
+}

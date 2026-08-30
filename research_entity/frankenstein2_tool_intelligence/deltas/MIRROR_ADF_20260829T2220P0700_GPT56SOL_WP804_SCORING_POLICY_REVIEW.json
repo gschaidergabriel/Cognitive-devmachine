@@ -1,0 +1,21 @@
+{
+  "schema": "TRIGGER6_F2_DELTA_MIRROR/v1",
+  "status": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "trigger": "6",
+  "research_id": "R6-20260829-GOAL-INFERENCE-IDENTIFIABILITY-GPT56SOL-01",
+  "canonical_source": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/ARCHITECTURE_DELTA_FUSION_20260829T2220P0700_GPT56SOL_WP804_SCORING_POLICY_REVIEW.json",
+    "commit": "8d7981d6414345076d060b14aefb0ffff4e44bc2"
+  },
+  "e4_evidence": {
+    "pr": 530,
+    "tested_head": "6a75346c6f78066a67ac59b793dc2e1972b14438",
+    "workflow_run": 33259754825,
+    "conclusion": "success"
+  },
+  "result_summary": "WP804 compatible-goal preservation plus existing Hyperposition/EAS remains the preferred reuse path, but compatible goal identity alone is causally insufficient to derive expected information gain. A minimal typed score-derivation binding must bind state, legal probes, outcome/likelihood model, explicit scoring/prior policy and derived score. Uniform-compatible-set EIG may be a policy mode but must never be an implicit prior or world fact.",
+  "architecture_decision": "KEEP_EXISTING_EAS; ADD_TYPED_SCORE_DERIVATION_BINDING_BEFORE_DISCRIMINATOR_CONSTRUCTION; DO_NOT_ADD_SECOND_AMBIGUITY_STORE_OR_SECOND_SELECTOR",
+  "credit_boundary": "E2_REVIEW_COMPLETE_PLUS_E4_REPOSITORY_ABLATION_EVIDENCE; E5_E6_TARGET_RUNTIME_PHYSICAL_GRID_WHOLE_SYSTEM_TRAINING_CREDIT_ZERO",
+  "next_exact_gate": "Falsify exact state/model/policy digest binding and score reproducibility before E5 build-candidate promotion."
+}

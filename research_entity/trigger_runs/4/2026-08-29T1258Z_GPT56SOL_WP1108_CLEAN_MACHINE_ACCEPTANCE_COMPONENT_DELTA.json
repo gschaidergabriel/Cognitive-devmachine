@@ -1,0 +1,52 @@
+{
+  "schema": "TRIGGERWORD4_REENTRY_DELTA/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4-CLEAN-MACHINE-MATRIX",
+  "authority_epoch": "8.78",
+  "observed_research_main_before_write": "78eec623e2183c2353c374f7b5d9a9302a1001e4",
+  "observed_frankenstein2_main": "fa432e3e5c7b4f14de562d7e3bae311624e16ba5",
+  "routing": "PASS",
+  "product_topology": "PORTABLE_LOCAL_HOST_HARNESS_BASELINE_WITH_OPTIONAL_VPS_HCU_EXTENSION",
+  "delta": {
+    "workpackage_id": "F2-WP-1108",
+    "generation": 1,
+    "claim_id": "F2-WP-1108-G1-GPT56SOL-CLEAN-MACHINE-MATRIX-20260829T1249Z",
+    "state": "ACCEPTED",
+    "accepted_scope": "CLEAN_MACHINE_ACCEPTANCE_MATRIX_VALIDATOR_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "implementation_pr": 449,
+    "implementation_merge_commit": "5a605d53a9ddafe502071ffb7efa96a21bca7f64",
+    "terminal_reconciliation_pr": 458,
+    "terminal_reconciliation_merge_commit": "2cf75b5d495ff0ad878654037e7bb56f07e2a4f0",
+    "source_blob_sha": "5b44e0be5ac73210820cc9777956ce6f6a6ccfbd",
+    "test_blob_sha": "cc06ff317a85dd4de9af886883596b0b03404460",
+    "workflow_blob_sha": "aef8334b03527e90195fcc9df0c6a59d9e553e7a",
+    "main_ci_run_id": 33253634771,
+    "main_ci_job_id": 99103479302,
+    "tests": "13/13 PASS"
+  },
+  "accepted_behavior": [
+    "typed clean-machine acceptance observations bind one exact release-manifest SHA-256 and pre-handoff receipt identity",
+    "required cases include Claude Code, Codex CLI, other-agent, no-VPS baseline and optional VPS bridge; perception is conditional",
+    "repository/source-only evidence cannot masquerade as real clean-machine observation evidence",
+    "no-VPS baseline, lifecycle firing, state readback, restart/update/uninstall, bridge detach and single-state-lineage requirements fail closed",
+    "perception-enabled acceptance requires permission-revocation evidence",
+    "successful matrix validation returns READY_FOR_ADMISSION_REVIEW only and mints zero runtime/physical-host/completion/whole-system credit"
+  ],
+  "runtime_boundary": {
+    "wp510_controller_run_id": 33252978899,
+    "wp510_status_observed": "queued",
+    "wp510_target_runtime_credit": 0,
+    "wp510_duplicate_dispatch_performed": false,
+    "clean_machine_execution_observed": false,
+    "host_lifecycle_execution_observed": false,
+    "installer_runtime_execution_observed": false,
+    "physical_host_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "coordination": {
+    "wp1107_generation_2_release_zip_claim_opened": false,
+    "reason": "release payload/host-route assembly was not yet terminal enough to freeze a final ZIP identity; WP1108 validator work was a non-overlapping dependency-correct lane"
+  },
+  "next_exact_action": "Keep WP1108 generation 1 closed. Finish/fuse the remaining portable host-route and release-payload prerequisites; then open an explicit WP1107 successor for an exact final release ZIP/pre-handoff identity. Only after that open a deliberate WP1108 successor for real clean-machine observations and validate those exact receipts without promoting synthetic fixtures."
+}

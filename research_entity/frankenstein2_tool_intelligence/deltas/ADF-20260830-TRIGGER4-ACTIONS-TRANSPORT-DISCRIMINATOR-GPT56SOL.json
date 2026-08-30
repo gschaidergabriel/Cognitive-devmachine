@@ -1,0 +1,72 @@
+{
+  "schema": "TRIGGER4_ACTIONS_TRANSPORT_DISCRIMINATOR/v1",
+  "trigger": "4",
+  "worker": "GPT-5.6-Sol",
+  "status": "NEGATIVE_TRANSPORT_EVIDENCE_PERSISTED",
+  "authority_basis": {
+    "owner_execution_authority": "CLAY_EXECUTION_AUTHORITY.md current main",
+    "free_only_interpretation": "provider/token spend boundary; owner VPS and bridge remain authorized"
+  },
+  "canonical_subject": {
+    "f2_repository": "gschaidergabriel/frankenstein-2.0",
+    "wp1207_runtime_credit": 0,
+    "wp1207_semantics_modified": false,
+    "canonical_queued_run_id": 33301648871
+  },
+  "controller_observations": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "controller_main_commit_observed_before_probe": "8e6abc2cf807c8cf2c5a97b20eb930d754a77a64",
+    "controller_main_tree_observed_before_probe": "162d116757faf18de473314ffd2e2e5e2f9e0ddc",
+    "queued_run_count_observed": 32,
+    "in_progress_run_count_observed": 0,
+    "runner_roster_observable_through_installed_connector": false,
+    "runner_status": "UNKNOWN"
+  },
+  "independent_github_hosted_canary": {
+    "branch": "runtime/trigger4-transport-health-20260830-gpt56sol",
+    "commit": "456557df12c3e042c77f7c5d037d9fda2a83452b",
+    "parent_commit": "8e6abc2cf807c8cf2c5a97b20eb930d754a77a64",
+    "workflow": ".github/workflows/trigger4-transport-health-canary.yml",
+    "run_id": 33311384163,
+    "job_id": 99256958536,
+    "runs_on": "ubuntu-latest",
+    "status": "completed",
+    "conclusion": "failure",
+    "executed_step_count": 0,
+    "job_log_fetch": "NO_LOG_BLOB_AVAILABLE_AFTER_ZERO_STEP_FAILURE",
+    "runtime_credit": 0,
+    "interpretation": "GitHub-hosted execution also failed before any user step. This is evidence that the current execution problem is not safely reducible to WP1207 logic or to an observed self-hosted runner process failure. It does not establish a single common root cause."
+  },
+  "session_network_probe": {
+    "surface": "current ChatGPT container, not owner VPS and not Git/SSH bridge",
+    "target": "72.61.19.188:22",
+    "result": "TCP_CONNECTION_REFUSED",
+    "scope": "PUBLIC_ENDPOINT_REACHABILITY_ONLY",
+    "limitations": "No SSH authentication or command execution occurred. The documented operational bridge uses a jump-host/configured identity and the self-hosted runner is outbound, so this result does not prove the VPS is down."
+  },
+  "hypotheses": [
+    {
+      "id": "H1",
+      "statement": "Repository/account GitHub Actions scheduling or hosted-runner eligibility is currently degraded or blocked in addition to the queued self-hosted lane.",
+      "confidence": "MEDIUM",
+      "falsifier": "A new GitHub-hosted ubuntu-latest job on the same repository executes at least one user step while the self-hosted lane remains queued."
+    },
+    {
+      "id": "H2",
+      "statement": "The GitHub-hosted zero-step failure and self-hosted queue are separate failures with no common cause.",
+      "confidence": "MEDIUM",
+      "falsifier": "One shared repository/account-level correction restores both lanes simultaneously."
+    }
+  ],
+  "next_exact_actions": [
+    "Inspect repository/account Actions eligibility, limits/billing state, and the self-hosted runner registration/service from an owner/admin or configured Git/SSH bridge surface.",
+    "Do not enqueue additional WP1207 retries while the queue is stalled and runner roster remains unobserved.",
+    "After transport health is restored, execute and reconcile the same exact-source WP1207 hostile-twin target-host probe; runtime credit remains zero until receipt evidence exists."
+  ],
+  "credit_boundary": {
+    "transport_diagnostic_credit": "YES_BOUNDED_NEGATIVE_EVIDENCE",
+    "wp1207_target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_system_acceptance": false
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-20260829-WP807-CROSSBENCH-GENERALIZATION-GPT56SOL-01",
+  "evidence_stage": "E3_CLAIM_REPRODUCED_SOURCE_LOGIC_ONLY",
+  "worker": "GPT-5.6 Sol / Trigger-6 organ",
+  "canonical_coordination_authority": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2": {
+    "e3_claim_commit": "565bc47491d5f247f29d2589d7bee2d6e5e2354f",
+    "e3_result_commit": "ce9f46191138d2668166164997a7ffecce308299",
+    "e3_result_path": "research/tool_intelligence/deltas/2026-08-29T2024P0700_GPT56SOL_R6_WP807_BENCHMARK_ID_FAMILY_ALIAS_E3.json",
+    "wp807_source_blob_sha": "6ea004126f9d39e428141703ea49aa3090b9994e"
+  },
+  "result": "WP807 currently compares caller-supplied holdout_set_id strings but does not bind that identity to benchmark_id, fixture-family provenance, run descriptor, reconciliation content or receipt content. Four mutually different benchmark_id values can therefore satisfy the encoded shared-holdout condition if they reuse one holdout label and all other thresholds pass.",
+  "minimal_correction": "Do not force benchmark_id equality. Bind one shared_fixture_family_sha256 (or admitted successor identity) mechanically to exact upstream evidence and require exact equality across the four inner CapabilityEvidence records; otherwise return NOT_EVALUABLE.",
+  "cross_family_relation": "After inner shared-family provenance is repaired, evaluate multiple independently bound family digests through the E2 outer GeneralizationBundleEvidence proposal.",
+  "evidence_boundary": {
+    "source_logic_reproduced": true,
+    "repository_hosted_negative_control_executed": false,
+    "canonical_bad_report_observed": false,
+    "runtime_credit": 0,
+    "whole_system_credit": 0
+  },
+  "next_gate": "E4 repository-hosted negative control: same text holdout label, distinct provenance-bound family identities; current source should reproduce the gap and repaired source must fail closed.",
+  "mirror_policy": "Provenance mirror only; F2 remains canonical claim/result authority."
+}

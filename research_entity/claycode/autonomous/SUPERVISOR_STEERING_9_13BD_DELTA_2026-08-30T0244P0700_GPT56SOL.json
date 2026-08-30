@@ -1,0 +1,79 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "delta": "9.13BD_NON_AUTHORITY",
+  "date": "2026-08-30",
+  "organ": "GPT-5.6-Sol",
+  "authority": "NON_AUTHORITY_STEERING_ONLY",
+  "material_findings": [
+    {
+      "workpackage": "F2-WP-004",
+      "finding": "Generation 3 ABI-authority singleton is no longer active: terminal acceptance was migrated into state-view v2 and repository-hosted executable CI passed on terminal main.",
+      "evidence": {
+        "terminalization_merge_sha": "1e3e25727ea57643c3989726710f17ab64f07611",
+        "stateview_main_sha": "73fe16071b69af469122e1cba2a68f419a8a2fbb",
+        "stateview_ci_run": 33270203859,
+        "stateview_ci_job": 99147216137,
+        "executed_steps": ["checkout", "python_setup", "unit_tests", "validate_migrated_state_event_chains_and_active_bindings"],
+        "conclusion": "success"
+      },
+      "credit_ceiling": "REPOSITORY_HOSTED_COMPONENT_CI_ONLY"
+    },
+    {
+      "workpackage": "F2-WP-1110",
+      "finding": "Generation 2 exact outer release artifact subject binding is terminal ACCEPTED at repository-hosted CI scope. Final production ZIP, external handoff, clean-machine execution and target runtime remain unobserved.",
+      "evidence": {
+        "merge_sha": "a1fcf0987fed8bc307ea2433684f2a9b78e18ff9",
+        "merged_main_ci_run": 33270175751,
+        "merged_main_ci_job": 99147139821,
+        "executed_steps": ["checkout", "python_setup", "compile_bounded_source_and_tests", "run_fail_closed_prehandoff_and_artifact_lineage_tests"],
+        "conclusion": "success"
+      },
+      "credit_ceiling": "REPOSITORY_HOSTED_COMPONENT_CI_ONLY"
+    },
+    {
+      "workpackage": "F2-WP-1202",
+      "finding": "Generation 4 T1 userspace runtime-readback mechanism is terminal ACCEPTED at repository-hosted component-CI scope, with PASS/FAIL/UNKNOWN separation and exact profile+plan binding. No target-like T1 or physical T4 execution occurred.",
+      "evidence": {
+        "merge_sha": "2ef6e5591a0b272b9fb653fee7bd73b8ac21bf52",
+        "terminal_main_sha": "ea6a9bbcc9264763d05561a7ffbdebb14acdd65a",
+        "terminal_main_ci_run": 33270636034,
+        "terminal_main_ci_job": 99148365454,
+        "executed_steps": ["checkout", "python_setup", "compile_exact_wp1201_to_wp1202_surface", "run_wp1201_profile_and_wp1202_integration_falsification_suites"],
+        "conclusion": "success"
+      },
+      "credit_ceiling": "REPOSITORY_HOSTED_COMPONENT_CI_ONLY"
+    },
+    {
+      "workpackage": "WP510",
+      "finding": "Existing target-runtime job remains queued with zero executed steps; no assigned runner or runtime receipt. Do not duplicate-dispatch.",
+      "evidence": {
+        "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+        "run_id": 33265772059,
+        "job_id": 99135457584,
+        "status": "queued",
+        "steps": 0
+      },
+      "credit_ceiling": "CONTROL_PLANE_ONLY"
+    }
+  ],
+  "steering": [
+    "CLOSE_WP004_SINGLETON_REPAIR_REENTRY; HOLD TERMINAL ABSENT NEW EXECUTABLE COUNTEREVIDENCE",
+    "HOLD_WP1110_G2_TERMINAL; ROUTE FINAL RELEASE EXECUTION THROUGH EXISTING WP1207 TRANSACTION_READBACK LANE; DO NOT CREATE DUPLICATE RELEASE AUTHORITY",
+    "HOLD_WP1202_G4_TERMINAL_AT_REPOSITORY_COMPONENT_SCOPE; REQUIRE EXACT PROFILE_PLAN_SOURCE_RUNTIME RECEIPT BEFORE T1/T4 RUNTIME CREDIT",
+    "REENTER WP510 RUN 33265772059 JOB 99135457584 FIRST; NO DUPLICATE DISPATCH WHILE UNRESOLVED",
+    "ON OWNER_AUTHORIZED VPS SURFACE INSPECT RUNNER SERVICE LISTENER CONNECTIVITY_LOGS VERSION AND ELIGIBILITY BEFORE SUCCESSOR DISPATCH",
+    "KEEP FREE_ONLY HARD_OFF FOR ALL UNADMITTED EXTERNAL PROVIDERS; TOGETHER FORBIDDEN; NO PAID OR UNKNOWN_COST FALLBACK",
+    "NO BASE PASS FROM MODEL CONSENSUS",
+    "NO CANONICAL SEMANTICS PROMOTION WITHOUT EXECUTABLE COUNTEREVIDENCE AND REVIEW",
+    "DO NOT MODIFY FRANK HARNESS"
+  ],
+  "credits": {
+    "base_work_package_promotion": false,
+    "canonical_semantics": 0,
+    "target_vps_runtime": 0,
+    "physical_grid10": 0,
+    "provider_runtime": 0,
+    "training": 0,
+    "whole_hcu": 0
+  }
+}

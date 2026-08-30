@@ -1,0 +1,44 @@
+{
+  "schema": "FRANKENSTEIN2_ARCHITECTURE_DELTA_FUSION/v1",
+  "fusion_id": "ADF-20260829T1827P0700-GPT56SOL-WP702-PRODUCER-LINEAGE-FUSION",
+  "created_at": "2026-08-29T18:27:00+07:00",
+  "worker": "gpt-5.6-sol",
+  "trigger": "6",
+  "mirror_epoch": "MIRROR-20260829T1827P0700-WP702-PRODUCER-LINEAGE",
+  "canonical_f2_delta_commit": "8ab6d2d45c18f470f0f5df693cfb55e5d86b468e",
+  "source_heads": {
+    "frankenstein2_main_observed_before_delta": "89a5eb21cca50e010391906a592bf0ec5f82e274",
+    "research_entity_main_observed_before_mirror": "d9d4fea68eafe7148678f003b932f7bfbbf34acc",
+    "wp702_source_audit_base": "bc072bfb2f64b02669013b4147c3670b410f7faf",
+    "wp700_factory_only_donor": "c2b55c0886982bd3a5ee7f59422fd040f69fe7a1",
+    "wp702_lineage_steering": "2d5b0ba8eee20fb974ffd3d4b37b1beed32745b1"
+  },
+  "finding": "WP702 PerceptionControlResult remains publicly constructible, so exact legitimate registry/policy digests can be copied into an evaluator-looking result without evaluate_perception_head() producing it. F2 already has a directly transferable repository-component repair pattern in WP700 G2: dataclass(init=False), fail-closed public constructor, single module-private object.__new__ producer, produced-instance validation, and direct/replacement falsifiers.",
+  "external_research": {
+    "SLSA_in_toto": "Use only the structural lesson that result/subject identity and producer/builder/invocation identity are distinct. No framework import is justified for this narrow in-process defect.",
+    "Python": "Non-public naming is not a hard same-process privacy/security boundary. The factory-only pattern must be described as a typed provenance/correctness fence, not cryptographic unforgeability."
+  },
+  "recommended_delta": [
+    "Set PerceptionControlResult dataclass init=False.",
+    "Make public __init__ fail closed on ordinary direct/replacement construction.",
+    "Move current validation to _validate_produced() without weakening OFF/taint/policy invariants.",
+    "Add one _produce_perception_control_result() producer using object.__new__ + complete field assignment + validation.",
+    "Route every evaluate_perception_head() result branch through the producer.",
+    "Add exact direct-constructor and dataclasses.replace laundering falsifiers using real valid registry/policy digests.",
+    "Require exact successor CI through Triggerword 4 before bounded acceptance."
+  ],
+  "resource_decision": "DISTILL_EXISTING_F2_NATIVE_PATTERN; NO_NEW_DEPENDENCY; NO_MODEL_OR_PROVIDER_CALL; NO_SECRET_STATE_AT_CURRENT_SCOPE",
+  "threat_model_boundary": "Closes ordinary repository/API construction laundering under cooperative trusted-process assumptions. Does not close arbitrary hostile Python code in the same interpreter. Cross-process mutual distrust would require authenticated EvaluationReceipt-style attestation from a trust boundary outside the producer process.",
+  "trigger5_fusion_note": "Available Trigger-5 INGEST_STATE on the architecture branch last ingested 2026-08-28T11:00:25Z and predates current Perception Fabric/WP702 source. It is historical context only for this delta.",
+  "current_state_conflict": "Older aggregate workpackage surfaces lag current granular F2 commits; current commits/claims/receipts take precedence for frontier reconstruction.",
+  "handoff": "TRIGGERWORD_4: adapt WP700 G2 factory-only pattern to WP702 under single canonical mutation authority; run exact successor falsifier and CI; preserve zero runtime/whole-system credit until stronger evidence.",
+  "evidence_ceiling": "E2_ARCHITECTURE_MAPPED",
+  "acceptance_credit": 0,
+  "runtime_credit": 0,
+  "mirror": {
+    "counterpart_repo": "gschaidergabriel/frankenstein-2.0",
+    "counterpart_path": "research/tool_intelligence/deltas/ADF-20260829T1827P0700_GPT56SOL_WP702_PRODUCER_LINEAGE_FUSION.json",
+    "counterpart_commit": "8ab6d2d45c18f470f0f5df693cfb55e5d86b468e",
+    "status": "MIRRORED_FROM_F2_CANONICAL_DELTA"
+  }
+}

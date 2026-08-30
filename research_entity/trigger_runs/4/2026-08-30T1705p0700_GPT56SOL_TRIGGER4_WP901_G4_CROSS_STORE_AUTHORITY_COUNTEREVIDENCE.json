@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_TRIGGER4_REVIEW_COUNTEREVIDENCE/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "recorded_at": "2026-08-30T17:05:00+07:00",
+  "routing_self_test": {
+    "normalized_message": "4",
+    "result": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": true
+  },
+  "authority": {
+    "research_main_observed_before_write": "dcc4acfdd4f8c7e503f59bf8b46352874b304c0f",
+    "supervisor_schema": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "provider_policy": "FREE_ONLY_HARD_OFF",
+    "vps_execution_policy": "AUTHORIZED_AND_EXPECTED_WITH_RESOURCE_HEALTH_GUARDS_BUT_PROMOTION_REQUIRES_EXACT_SOURCE_OR_BYTE_IDENTICAL_BINDING"
+  },
+  "frankenstein2": {
+    "main_observed": "3412ed21ee7e5bd0cca3e6cf04702be84c7f0543",
+    "wp901": {
+      "generation": 4,
+      "active_pointer_state": "ACTIVE",
+      "claim_id": "F2-WP-901-G4-GPT56SOL-PERSISTED-ROW-LOAD-ATTESTATION-20260830",
+      "implementation_pr": 712,
+      "implementation_merge_sha": "a43331af82389078dff7c89a9c1983645a31651e",
+      "claimed_invariant_under_test": "WP901 rejects a receipt whose checkpoint identity digest or authority binding disagrees with the concrete checkpoint/source boundary"
+    }
+  },
+  "counterevidence": {
+    "classification": "REVIEW_ONLY_EXECUTABLE_COUNTEREVIDENCE",
+    "review_pr": 719,
+    "review_head_sha": "5d978013dfefe35a25defc9466b7e94959599149",
+    "workflow_run_id": 33305586251,
+    "workflow_job_id": 99241448145,
+    "workflow_conclusion": "success",
+    "executed_steps": [
+      "Checkout exact workflow ref",
+      "Compile G2 G3 G4 and WP206 loader surfaces",
+      "Run accepted G2 G3 WP206 and G4 hostile regressions"
+    ],
+    "finding": "The G4 persisted-row attestation is bound to the real WP206 store, but plan_restart_continuation_from_persisted_row still accepts a separate deliberately foreign caller-supplied UnifiedDBAuthorityRef. The downstream G3 binding validates the reference type/schema but does not cross-check its receipt_ref or canonical_source against the actual store authority evidenced by G4. The executable witness therefore reaches CONTINUE_UNFINISHED while carrying an unbound foreign authority reference alongside the genuine store attestation.",
+    "static_mechanism": "restart_recovery_source_authentication.bind_restart_sources requires a concrete UnifiedDBAuthorityRef but performs no equivalence check against CanonicalPersistentAgencyStore authority; restart_recovery_persisted_row_attestation.plan_restart_continuation_from_persisted_row passes the caller authority through to G3 and only compares plan checkpoint id/digest to the load attestation.",
+    "scope": "WP901_G4_CROSS_STORE_AUTHORITY_BINDING_REPOSITORY_HOSTED_COUNTEREVIDENCE_ONLY"
+  },
+  "coordination": {
+    "canonical_implementation_lane": "WP901_G4_ACTIVE_OWNER_LANE",
+    "mutation_authority_claimed_by_this_review": false,
+    "duplicate_g5_claim_created": false,
+    "comment_routed_to_merged_pr712": 5468043463,
+    "reason": "The active WP901 pointer still projects generation 4 ACTIVE. This organ isolated and routed executable counterevidence rather than creating a competing implementation lane."
+  },
+  "bounded_repair_direction": [
+    "preserve the accepted row/load transaction-snapshot attestation mechanism",
+    "explicitly bind the UnifiedDBAuthorityRef consumed by G3 to the actual loaded-store authority evidenced by G4, or derive the downstream authority reference from an admitted store-bound authority object",
+    "do not weaken G3 causal/source invariants or introduce a second persistence authority",
+    "after repair invert the review witness into a fail-closed regression",
+    "do not reconcile the G4 authority-binding invariant as closed until this counterexample is absorbed or falsified"
+  ],
+  "credits": {
+    "target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "provider_model_runtime": 0,
+    "effect": 0,
+    "completion": 0,
+    "training": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Canonical WP901 owner lane absorbs or falsifies PR719. If absorbed, add an explicit fail-closed cross-store authority equivalence at the G4-to-G3 boundary, rerun all accepted G2/G3/WP206/G4 regressions plus the inverted foreign-authority witness, and reconcile only at repository-component scope. Keep WP510 target-runtime dispatch nonduplicated and keep target-host credit at zero until exact-source host execution/readback exists."
+}

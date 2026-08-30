@@ -1,0 +1,31 @@
+{
+  "schema": "T7_PROVENANCE_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "observed_local_time": "2026-08-30T16:53:00+07:00",
+  "canonical_build_repo": "gschaidergabriel/frankenstein-2.0",
+  "research_id": "T7-ASR-007",
+  "objective": "E1_STATEFUL_STREAMING_ASR_CROSS_UTTERANCE_CONTEXT_SOURCE_SIGNAL",
+  "canonical_result_path": "research/local_voice/sources/2026-08-30_T7_ASR007_STATEFUL_STREAMING_ASR_SOURCE_SIGNAL_GPT56SOL.json",
+  "canonical_write_commit": "78dc08f44eca72c7c4b354440efbee2b055ad492",
+  "source": "arXiv:2608.22101v1",
+  "bounded_result": "STATEFUL_ASR_STATE_CARRY_OVER_AND_ROLLBACK_ARE_HIGH_INFORMATION_METHOD_DONORS__GERMAN_AND_F2_RUNTIME_UNVERIFIED",
+  "source_observations": {
+    "methods": ["State Carry-over", "State Rollback"],
+    "reported_best_method": "State Rollback",
+    "reported_relative_wer_reduction_at_utterance_onsets_percent": "15-21",
+    "evaluated_models": ["fastconformer-114m", "nemotron-streaming-0.6b"],
+    "evaluated_benchmarks": ["CallHome", "Switchboard"],
+    "german_specific_validation_observed": false
+  },
+  "frankenstein_transfer": "Treat acoustic decoder/cache state as ephemeral inference state only. After the existing Trigger-7 target-runtime runner gate clears, benchmark Fresh Start vs State Carry-over vs State Rollback on the same pinned German room-audio corpus, especially first-word/onset WER, long-pause recovery, short-backchannel recovery, latency, cache overhead and stale-state contamination.",
+  "semantic_claim_state": "NOT_ACQUIRED__SOURCE_SIGNAL_ONLY",
+  "why_no_semantic_claim": "Do not bypass the current create-only semantic claim compiler/mutex while its shared subject vocabulary is moving in parallel.",
+  "runtime_credit": 0,
+  "german_e2e_voice_credit": 0,
+  "trigger4_acceptance_credit": 0,
+  "whole_system_credit": 0,
+  "runtime_gate": "Existing target-runtime ASR work remains blocked on eligible self-hosted runner assignment; this delta authorizes no duplicate dispatch.",
+  "mirror_only": true,
+  "not_a_competing_claim_authority": true
+}

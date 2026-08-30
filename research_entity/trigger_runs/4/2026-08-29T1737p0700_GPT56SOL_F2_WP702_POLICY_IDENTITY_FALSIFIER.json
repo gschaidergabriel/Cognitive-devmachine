@@ -1,0 +1,65 @@
+{
+  "schema": "TRIGGERWORD4_REVIEW_FALSIFIER_RECEIPT/v1",
+  "trigger": "4",
+  "created_at": "2026-08-29T17:37:50+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "REVIEW_ONLY_CANDIDATE_FALSIFIER_NEGATIVE_REPOSITORY_CI_EVIDENCE",
+  "authority": {
+    "research_main_observed": "281f828eb558920a9498dd4c772e28260756f8e3",
+    "authority_epoch": "8.78",
+    "authority_ref": "research_entity/continuity/BOOTSTRAP_MINIMAL.json -> research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "execution_mode": "FREE_ONLY",
+    "unusual_experiment": "NOT_USED_ORDINARY_REVIEW_FALSIFIER"
+  },
+  "target": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "f2_main_observed_before_review": "e9ba52e9104bb5da60daa6b1fe07c39eaa474feb",
+    "workpackage": "F2-WP-702",
+    "generation": 1,
+    "active_claim": "F2-WP-702-G1-GPT56SOL-PERCEPTION-OFF-SEMANTICS-20260829",
+    "active_claim_state": "ACTIVE",
+    "active_mutation_branch": "chatgpt/f2-wp702-perception-off-semantics-20260829",
+    "active_branch_observed_base_for_pr": "cfc46f1f41aed9b4d514f396c41fecd9512b32e7"
+  },
+  "hypothesis": "Public PerceptionControlResult construction may admit evidence-bearing or compute-attempt states without the immutable policy identity required by the active WP702 claim, even though evaluate_perception_head supplies policy_sha256 on its normal known-head path.",
+  "counterhypothesis": "PerceptionControlResult.__post_init__ rejects OK, OUTPUT_BLOCKED and COMPUTE_ERROR states when policy_sha256 is absent, so no forged policy-unbound typed result can be constructed.",
+  "discriminator": {
+    "review_branch": "chatgpt/review-wp702-policy-identity-falsifier-20260829",
+    "review_head": "e6036f3d6336961e0ffb291780578918cf972da4",
+    "pull_request": 351,
+    "pull_request_base": "chatgpt/f2-wp702-perception-off-semantics-20260829",
+    "test_path": "tests/review/test_wp702_policy_identity_falsifier.py",
+    "workflow_path": ".github/workflows/review-wp702-policy-identity-falsifier-ci.yml",
+    "workflow_run_id": 33248265090,
+    "workflow_event": "pull_request",
+    "workflow_merge_sha": "55dbdd76f128d441772ac3f4f647c34c7e11096e",
+    "runner": "GitHub hosted Ubuntu 24.04 / Python 3.12.14"
+  },
+  "observed_result": {
+    "workflow_status": "completed",
+    "workflow_conclusion": "failure",
+    "tests_run": 3,
+    "tests_failed": 3,
+    "failed_cases": [
+      "OK result without policy_sha256 did not raise PerceptionControlError",
+      "OUTPUT_BLOCKED result without policy_sha256 did not raise PerceptionControlError",
+      "COMPUTE_ERROR result without policy_sha256 did not raise PerceptionControlError"
+    ],
+    "material_finding": "The counterhypothesis is falsified at repository-hosted review-CI scope: the public typed result contract currently admits these three policy-unbound states. This is a policy/provenance closure gap in the active WP702 candidate branch, not evidence of a perception runtime failure."
+  },
+  "coordination": {
+    "mutation_authority_preserved": true,
+    "canonical_wp702_source_modified_by_reviewer": false,
+    "review_classification": "REVIEW_ONLY_CANDIDATE_FALSIFIER",
+    "recommended_owner_action": "Active WP702 mutation authority should evaluate the falsifier and, if contract intent is confirmed, require non-null exact policy_sha256 for OK, OUTPUT_BLOCKED and COMPUTE_ERROR before rerunning both canonical WP702 tests and this review falsifier."
+  },
+  "credit": {
+    "wp702_acceptance": 0,
+    "perception_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "training": 0,
+    "whole_system": 0
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "F2_TRIGGER6_RESEARCH_MIRROR/v1",
+  "research_id": "R6-20260830-QWEN35-RECURRENT-RESTORE-VALIDITY-GPT56SOL-01",
+  "classification": "MIRROR_POINTER_NOT_CANONICAL_F2_TRUTH",
+  "canonical_project_repository": "gschaidergabriel/frankenstein-2.0",
+  "canonical_delta_path": "research/tool_intelligence/deltas/2026-08-30_GPT56SOL_R6_QWEN35_RECURRENT_RESTORE_RECEIPT_VALIDITY_E2_ARCHITECTURE_MAPPED.json",
+  "canonical_delta_commit": "0c9f3d1dfd7305523bd7484e440ee326af875252",
+  "trigger4_handoff_path": "trigger4/inbox/tool_research/R6-QWEN35-RECURRENT-RESTORE-EFFECTIVE-WITNESS-GPT56SOL-01.json",
+  "handoff_commit": "cc600f452d5eb4a79e4654aefaf89f18bfaabcbf",
+  "finding": "For hybrid/recurrent Qwen3.5, llama.cpp slot save/restore API success counts are not sufficient evidence that recurrent compute state is effective after restart. Split serialization receipt, logical conversation recovery, compute-state restoration and latency recovery into separate credits.",
+  "invariant": "RESTORE_HTTP_200 + N_RESTORED_GT_0 != COMPUTE_STATE_RESTORED",
+  "authority_boundary": "Canonical transcript/state remains deterministic project authority; llama.cpp KV/SSM/DeltaNet state is rebuildable runtime acceleration only.",
+  "external_negative_evidence": [
+    "ggml-org/llama.cpp#26676",
+    "ggml-org/llama.cpp#25913",
+    "ggml-org/llama.cpp#24043"
+  ],
+  "counterhypothesis": "If canonical transcript replay on exact target hardware satisfies required German voice latency budgets, persistent slot state can be demoted or disabled rather than becoming a correctness dependency.",
+  "runtime_credit": 0,
+  "whole_product_credit": 0
+}

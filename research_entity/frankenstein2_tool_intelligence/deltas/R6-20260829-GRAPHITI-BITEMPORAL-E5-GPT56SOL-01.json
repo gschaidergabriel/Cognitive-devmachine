@@ -1,0 +1,48 @@
+{
+  "schema": "RESEARCH_ENTITY_TRIGGER6_F2_E5_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-SEED-004",
+  "candidate_id": "R6-SEED-004-GRAPHITI-BITEMPORAL-NATIVE-E5-GPT56SOL-01",
+  "status": "PROVENANCE_MIRROR_ONLY_NOT_CLAIM_AUTHORITY",
+  "mirrored_at": "2026-08-29T16:36:00+07:00",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "source_f2_commit": "fb657ec94a5eecb1743f0eb4099423945063936d",
+  "source_e5_delta": "research/tool_intelligence/deltas/R6-SEED-004_GRAPHITI_E5_NATIVE_BITEMPORAL_BUILD_CANDIDATE_2026-08-29_GPT56SOL.json",
+  "source_e5_receipt": "research/tool_intelligence/receipts/R6-SEED-004_E5_NATIVE_BITEMPORAL_BUILD_CANDIDATE_20260829T1640P0700.json",
+  "source_e5_claim": "research/tool_intelligence/claims/R6-SEED-004/E5_BUILD_CANDIDATE_NATIVE_BITEMPORAL_PROJECTION_V0.json",
+  "external_source": {
+    "repo": "getzep/graphiti",
+    "commit": "c18d6778184c55e3be28f5ae3e5821930b361d47",
+    "tree": "b4f30e3764115dcb2ecbd846ee9f58f2453f5b57"
+  },
+  "research_result": {
+    "full_graph_stack_import": "REJECT_FOR_CURRENT_CANDIDATE",
+    "candidate": "thin F2-native rebuildable bitemporal projection over canonical evidence",
+    "required_time_axes": ["system_or_observation_time", "fact_valid_time"],
+    "e4_historical_corrected_cases": 428,
+    "e4_latest_only_errors": 420,
+    "e4_latest_only_error_rate": 0.981308,
+    "e4_derived_index_vs_reference_mismatches": 0,
+    "e4_sqlite_index_vs_reference_mismatches": 0,
+    "e4_ambiguity_fail_closed": true,
+    "e4_deterministic_rebuild_digest_equal": true
+  },
+  "f2_binding": {
+    "unifieddb_identity": "F2-WP-100 accepted at resolver/fingerprint component source+CI scope only",
+    "memory_lifecycle": "F2-WP-300 accepted at nondestructive repository-hosted CI scope only",
+    "emergent_retrieval": "F2-WP-301 accepted at deterministic repository-hosted CI scope only",
+    "projection_authority": "DERIVED_NONCANONICAL_REBUILDABLE_ONLY"
+  },
+  "negative_evidence": "Initial E4 ambiguity fixture was invalid and received zero credit; repaired rerun explicitly created same-relation simultaneous active versions and passed AMBIGUOUS fail-closed behavior.",
+  "authority_boundary": "The projection cannot become a second truth store, cannot mint factual truth, cannot resolve contradictions by last-write-wins, cannot authorize effects/completion, and cannot establish F2 target-runtime, GWT or whole-system acceptance.",
+  "next_authority": "Trigger-4 must atomically claim a nonduplicate implementation/acceptance lane, bind the logical E5 contract to exact-current F2 persistence surfaces and actual Phase-3/4 workloads, and may accept, downgrade or reject. Trigger-6 cannot self-promote to E6.",
+  "evidence_ceiling": "E5_BUILD_CANDIDATE_DESIGN_ONLY",
+  "research_credit": 1,
+  "architecture_credit": 0,
+  "integration_credit": 0,
+  "runtime_credit": 0,
+  "gwt_causal_credit": 0,
+  "effect_credit": 0,
+  "completion_credit": 0,
+  "whole_system_credit": 0
+}

@@ -1,0 +1,116 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "authority_epoch": "8.78",
+  "authority_ref": "gschaidergabriel/clay-global-research-entity@b53794926738801f7cdfc90bc56a2a825f61fed1:research_entity/continuity/BOOTSTRAP_MINIMAL.json -> research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+  "research_base_sha": "b53794926738801f7cdfc90bc56a2a825f61fed1",
+  "f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_observed_head_at_checkpoint": "a6142962981798a5092df19a9073390dee421843",
+  "trigger_routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directives_loaded": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "completed_delta": {
+    "classification": "CURRENT_FACING_AUTHORITY_METADATA_REPAIR_ONLY",
+    "reason": "WP400 G1 and WP401 G1 retained current-facing authority_epoch=9.13 even though current canonical BOOTSTRAP_MINIMAL selects admitted supervisor 8.78. Historical component-CI evidence was preserved; implementation semantics were not changed.",
+    "f2_commits": [
+      {
+        "sha": "6f484124dc9fb77367dddf14e0dc200baba849c5",
+        "effect": "created workpackages/reconciliations/AUTHORITY_BINDING_8_78_WP400_WP401_20260829.json"
+      },
+      {
+        "sha": "455a435d667f8011f5e52db4b8ef26ac466f317f",
+        "effect": "rebound current F2-WP-400 pointer to admitted authority 8.78 while preserving contradicted 9.13 provenance"
+      },
+      {
+        "sha": "460f36df16f7efb48e8020106c7dfd6c998d350f",
+        "effect": "rebound current F2-WP-401 pointer to admitted authority 8.78 while preserving contradicted 9.13 provenance"
+      }
+    ],
+    "credit_change": "NONE"
+  },
+  "concurrent_fusion_observed": [
+    {
+      "sha": "4039c581a257ac5b47a3d16ae8eeb56e87ed83bd",
+      "finding": "another Trigger-4 writer rebound WP402 current-facing authority to 8.78 and retained bounded G3 component acceptance"
+    },
+    {
+      "sha": "f01f4097435bea114f331c29825ff83108c6d229",
+      "finding": "another Trigger-4 writer rebound WP403 current-facing authority to 8.78"
+    },
+    {
+      "sha": "75a96c04817e83616610ecb2e3f311284706bf41",
+      "finding": "post-acceptance reconciliation records WP403 G2 exact-source-binding scope as FAILED_TERMINAL after executable polymorphic-input counterevidence"
+    }
+  ],
+  "executable_negative_evidence": {
+    "workpackage": "F2-WP-403",
+    "review_pr": 254,
+    "falsifier_head_sha": "8ed988553d5473bdbe7e55b1410dbe6a36fab268",
+    "run_id": 33244301434,
+    "job_id": 99078970096,
+    "result": "EXPECTED_FAIL_CONFIRMED",
+    "scope": "WP403_PUBLIC_VALIDATOR_POLYMORPHIC_PHYSICSPROJECTION_SUBTYPE_TRUST_BOUNDARY",
+    "details": "compile PASS; existing WP403 G2 regression step PASS; candidate exact-projection-subtype falsifier step FAIL. This invalidates the claimed exact-source trust-boundary scope for direct polymorphic consumers, not the historical bounded arithmetic behavior."
+  },
+  "active_frontier": {
+    "F2-WP-403": {
+      "generation": 3,
+      "state": "ACTIVE",
+      "claim_id": "F2-WP-403-G3-GPT56SOL-EXACT-CONCRETE-TYPE-BOUNDARY-REPAIR-20260829",
+      "mutation_branch": "trigger4/wp403-g3-exact-concrete-type-repair-20260829",
+      "observed_branch_head": "d9fe8563a1a2c6054ed82740ba0d951c5ae579d8",
+      "observed_ci_state": "REPAIR_DELTA_RECORDED_PENDING_CI; NO_PR_TRIGGERED_WORKFLOW_RUN_OBSERVED_AT_THIS_HEAD",
+      "scope": "exact concrete PhysicsProjection, WorldSlice and WorldAtom trust-boundary repair plus regression only"
+    },
+    "F2-WP-404": {
+      "generation": 1,
+      "state": "ACTIVE",
+      "claim_id": "F2-WP-404-G1-GPT56SOL-COGNITIVE-MICRO-LAB-20260829",
+      "mutation_branch": "chatgpt/trigger4-wp404-cognitive-micro-lab-20260829",
+      "observed_branch_head": "0398227e44faaa60f1312455a2ee750bfa463f7f",
+      "observed_source": "src/frankenstein2/cognitive_micro_lab.py",
+      "observed_tests": "tests/test_cognitive_micro_lab.py",
+      "repository_ci": {
+        "run_id": 33244287183,
+        "job_id": 99078929552,
+        "tested_head_sha": "544e9dda2e9458118373a1d41d50f7e53ee7bcfe",
+        "status": "COMPLETED_SUCCESS",
+        "compile": "PASS",
+        "falsification_suite": "PASS",
+        "tests_reported_by_delta": "8/8 PASS"
+      },
+      "integration_state": "COMPONENT_CI_GREEN_PENDING_PR_INTEGRATION_AND_EXACT_MERGED_MAIN_CI",
+      "tool_filter_note": "The first fetch_commit_workflow_runs lookup returned no runs because that connector action filters to pull-request-triggered runs. Direct retrieval of run 33244287183 confirmed repository-hosted CI success; absence of PR-triggered results was not absence of CI.",
+      "boundary_note": "WP404 itself enforces exact concrete WorldSlice/QuboProjection/PhysicsProjection/WorldAtom inputs before composing canonical WP402 scoring and WP403 independent replay; do not overwrite its owned paths."
+    }
+  },
+  "coordination": {
+    "wp404_claim_race": "CREATE_ONLY_WRITE_ATTEMPT_FAILED_CLOSED_AFTER_POINTER_MATERIALIZED; POINTER_REFETCHED_AND_EXISTING_OWNER_RESPECTED",
+    "wp403_g3_claim_race": "SUCCESSOR_POINTER_MATERIALIZED_BY_ANOTHER_TRIGGER4_WRITER_BEFORE_THIS_ORGAN_MUTATED_SOURCE; EXISTING_OWNER_RESPECTED",
+    "duplicate_mutation_created": false,
+    "unusual_experiments": 0
+  },
+  "credits": {
+    "target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "training": 0,
+    "whole_system": 0
+  },
+  "execution": {
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "together_calls": 0,
+    "vps_runtime_claimed": false,
+    "frank_harness_modified": false
+  },
+  "next_exact_action": "Re-enter current F2 main. Do not duplicate WP403 G3 or WP404 active mutation lanes. WP403 G3 must obtain exact-head hosted CI proving concrete-type hardening before direct physics-projection consumer acceptance is restored. WP404 has repository-hosted component CI success at head 544e9dda2e9458118373a1d41d50f7e53ee7bcfe but still requires refreshed-main PR integration, PR-head CI, merge, and exact merged-main CI before terminal component reconciliation. Continue downstream Stage 4/5 only after fresh granular evidence and current-main re-entry."
+}

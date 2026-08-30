@@ -1,0 +1,105 @@
+{
+  "schema": "ENTITYOS_HCU_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_delta": "9.13AZ_NON_AUTHORITY",
+  "created_at_local": "2026-08-29T22:55:00+07:00",
+  "worker": "GPT-5.6 Sol",
+  "status": "MATERIAL_EXECUTABLE_WP306_CLOSURE_AND_WP510_EXACT_SOURCE_HYGIENE_RECONCILIATION",
+  "authority": {
+    "canonical_supervisor_authority": "research_entity/continuity/BOOTSTRAP_MINIMAL.json -> admitted 8.78 steering authority",
+    "this_delta_is_authority": false,
+    "free_only": "HARD_OFF_EXTERNAL_PROVIDER_SPEND_POLICY",
+    "together": "FORBIDDEN",
+    "paid_or_unknown_cost_fallback": "FORBIDDEN",
+    "owner_vps_execution": "ALLOWED_BY_CURRENT_EXPLICIT_OWNER_AUTHORITY_WITH_RESOURCE_GUARDS"
+  },
+  "new_executable_findings": {
+    "f2_wp306_g4": {
+      "classification": "ACCEPTED_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "review_only_falsifier_pr": 519,
+      "negative_run_id": 33259578848,
+      "negative_job_id": 99119099009,
+      "negative_result": "checkout/setup/compile passed then preregistered renderer-tokenizer cost-binding discriminator failed as expected",
+      "implementation_merge_sha": "63a273905964ce6b4735d1d1077cb3b2f83c1344",
+      "merged_main_ci_run": 33260075829,
+      "merged_main_ci_job": 99120379138,
+      "merged_main_ci_steps_observed": ["checkout success", "python setup success", "compile success", "Context compiler and cost-witness falsification suite success"],
+      "reconciliation_merge_sha": "e28ceffe6c23c978afabf2e8c36e09e48e8b1805",
+      "accepted_scope": "ContextCostWitness binds exact payload digest plus renderer/tokenizer identity/version, measured cost, generation, reference and provenance before context-budget charging; malformed/unbound/duplicate/subtype-forged and declared-vs-measured mismatches fail closed",
+      "epistemic_boundary": "This proves repository component binding only; it does not prove the upstream renderer/tokenizer measurement source truthful and grants no target-runtime, training, canonical-semantics or whole-system credit."
+    },
+    "wp510_exact_source_hygiene": {
+      "classification": "CONTROLLER_HYGIENE_MERGED_RUNTIME_STILL_QUEUED",
+      "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+      "hygiene_merge_sha": "6c057056679a026a51fabf9662bb3b3e758993cc",
+      "preserved_wp510_generation": 3,
+      "requirements": [
+        "manual dispatch only to avoid duplicate self-hosted probes",
+        "run-attempt-scoped exact-source temp paths",
+        "clean exact source before and after execution",
+        "receipt binds HEAD/tree plus executed git blob SHA/SHA256 byte identities",
+        "source_identity_verified required before bounded target component runtime credit",
+        "missing cgroup resource evidence remains UNKNOWN"
+      ],
+      "existing_run_id": 33260557990,
+      "existing_job_id": 99121648423,
+      "latest_observed_status": "queued",
+      "steps_observed": false,
+      "target_runtime_credit": 0
+    },
+    "f2_wp004": {
+      "classification": "SOLE_ACTIVE_ABI_AUTHORITY_REPAIR_LANE_REPORTED_BY_CURRENT_RECONCILIATION",
+      "generation": 3,
+      "claim_id": "F2-WP-004-G3-GPT56SOL-ABI-AUTHORITY-SINGLETON-20260829",
+      "steering": "Do not create a competing WP004 mutation lane; consume its terminal executable result before extending promotion-bearing WP510 exact-source execution."
+    }
+  },
+  "steering_intervention": {
+    "control_state_repair": "Retire the stale supervisor claim that WP306 lacks an executable cost-binding discriminator. WP306 G4 is closed only at repository-hosted component scope by executed falsifier + repaired exact-source CI + reconciliation.",
+    "wp004_singleton": "Follow the sole current WP004 G3 ABI-authority repair lane to terminal executable evidence. Do not create a competing generation or infer acceptance from claim/model consensus.",
+    "wp510_runtime_fence": "Re-enter existing run 33260557990/job 99121648423 first. While queued/running, do not dispatch another probe. If terminal, ingest exactly what it executed; do not upgrade it through newer hygiene obligations it did not record. Only when no duplicate probe is active may the hardened controller be manually dispatched.",
+    "target_source_identity": "Promotion-bearing VPS evidence requires clean exact-source binding or byte-identical proof plus pre/post cleanliness and executed-byte identities. Missing cgroup telemetry remains UNKNOWN.",
+    "credit_ceiling": "WP306_REPOSITORY_COMPONENT_ACCEPTANCE_PLUS_EXECUTION_HYGIENE_STEERING_ONLY"
+  },
+  "retained_open_counterevidence": {
+    "f2_wp710": "Post-acceptance executable coalescing counterevidence remains open.",
+    "effects": "Post-start UNKNOWN outcome and episode_id=null replay falsifiers remain open; no canonical semantics promotion.",
+    "aggregate_projection": "Single canonical WP002 aggregate writer remains required; stale aggregate must not reopen accepted granular lanes.",
+    "wp714": "Final Perception acceptance still requires real non-synthetic clock witness dereference and local real-device/OS-permission receipts."
+  },
+  "cross_branch_reconciliation": {
+    "base": "No change: CC-WP-01/02 PASS; CC-WP-03..14 OPEN; GENERAL_PURPOSE_GATE and CLAYCODE_RELEASE_GATE remain NOT_PASS.",
+    "providers": "No change: all external provider routes unadmitted, Together forbidden, no paid or unknown-cost fallback, provider runtime credit zero.",
+    "goodman": "The WP306 result is accepted because a preregistered executable discriminator failed before repair and exact-source CI then passed; repeated model agreement remains non-independent evidence.",
+    "ancestry": "Model-family/checkpoint ancestry remains explicit; no model-consensus promotion.",
+    "ubuntu_target": "Ubuntu-only Frank v0.1 target remains unchanged; target-runtime promotion still requires exact-source execution evidence.",
+    "frank_harness": "DO_NOT_MODIFY"
+  },
+  "next_focus": [
+    "P0_WP004_SINGLETON: follow the sole G3 ABI-authority repair to terminal executable evidence; do not create a competing mutation lane",
+    "P0_WP510_REENTRY: inspect existing run 33260557990/job 99121648423; no duplicate dispatch while queued/running; if terminal classify only recorded obligations",
+    "P0_WP510_HARDENED_NEXT: after no duplicate probe remains, manually dispatch the reviewed hardened exact-source controller and require source-identity plus clean-before/clean-after receipt before any bounded target component runtime credit",
+    "P0_RESOURCE_GUARD: missing container cgroup telemetry remains UNKNOWN, not healthy",
+    "P0_WP002_AGGREGATE: reconcile granular accepted pointers through the single canonical aggregate writer",
+    "P0_WP710: close only via existing sole mutation authority plus executable regression evidence",
+    "P0_KEEP_FREE_ONLY_HARD_OFF_EXTERNAL_PROVIDERS; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "P1_KEEP_BASE_TRAINING_CANONICAL_SEMANTICS_PHYSICAL_GRID10_WHOLE_HCU PROMOTIONS AT ZERO unless exact executable gates pass",
+    "P1_DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "promotion_state": {
+    "f2_wp306_repository_component_closure": true,
+    "f2_wp306_target_runtime_or_measurement_truth_credit": false,
+    "wp004_terminal_executable_closure": false,
+    "wp510_existing_runtime_attempt_terminal": false,
+    "target_vps_surface_alive": true,
+    "current_vps_workspace_exact_source_admissible": false,
+    "container_cgroup_health_observed": false,
+    "provider_path_runtime_pass": false,
+    "base_work_package_promotion": false,
+    "canonical_semantics_promotion": false,
+    "physical_grid10_component_runtime_pass": false,
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "training_credit": 0
+  },
+  "frank_harness": "DO_NOT_MODIFY"
+}

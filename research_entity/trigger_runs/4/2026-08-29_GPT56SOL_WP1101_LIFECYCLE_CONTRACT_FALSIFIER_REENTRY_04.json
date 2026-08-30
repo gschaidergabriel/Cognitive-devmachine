@@ -1,0 +1,59 @@
+{
+  "schema": "TRIGGER4_RESEARCH_DELTA_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "authority": {
+    "bootstrap_schema": "8.78",
+    "clay_main_observed_before_write": "bf6d49b19701808a770f8ae9909cc229aee022a4",
+    "owner_vps_authority": "governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+    "free_only": true,
+    "owner_vps_clay_direct_dev_allowed": true,
+    "paid_or_unknown_external_provider_routes": "FAIL_CLOSED",
+    "together": "FORBIDDEN"
+  },
+  "routing": {
+    "normalized_message": "4",
+    "result": "TRIGGERWORD_4",
+    "directive_fetch": "PASS"
+  },
+  "frankenstein2": {
+    "main_observed_after_delta": "abd037bebac10776ea9dc475d39c685b09b81f76",
+    "review_delta_commit": "3558545ed30ea33473587bda8d789ea2d096c540",
+    "review_delta_path": "workpackages/research_inbox/F2-WP-1101_LIFECYCLE_CONTRACT_SEMANTIC_VALIDATION_FALSIFIER_2026-08-29_GPT56SOL.json",
+    "wp1101_state_observed": "ACTIVE",
+    "wp1101_mutation_authority_taken": false
+  },
+  "wp510_target_runtime": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33254381280,
+    "job_id": 99105445603,
+    "status_reobserved": "queued",
+    "conclusion": null,
+    "duplicate_dispatch_created": false,
+    "runtime_credit": 0
+  },
+  "delta": {
+    "classification": "SOURCE_REVIEW_CANDIDATE_FALSIFIER",
+    "hypothesis": "WP1101 verification-significant occurrence_contract/timing_contract values are currently free-form non-empty strings and may allow semantically unverified timing/multiplicity metadata to contribute to NATIVE/ADAPTED classification.",
+    "counterhypothesis": "A mandatory external evidence verifier semantically validates and exact-evidence-binds those fields before WP1101 assessment, making the free-form representation safe at this layer.",
+    "next_discriminator": "Run the preregistered WP1101 unit regression with UNMEASURED/UNKNOWN_ORDER on an otherwise native required lifecycle set; either absorb fail-closed typed validation or demonstrate the exact mandatory external verifier."
+  },
+  "evidence_boundary": {
+    "source_review": true,
+    "repository_write": true,
+    "unit_discriminator_executed": false,
+    "target_runtime_execution_observed": false,
+    "physical_host_credit": 0,
+    "grid10_runtime_credit": 0,
+    "gwt_jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "negative_evidence": [
+    "WP510 self-hosted job remains queued with no terminal result; this is not a product failure.",
+    "A first append-only F2 falsifier write raced concurrent main movement and returned HTTP 409; after exact re-entry, one create-only retry succeeded."
+  ],
+  "unusual_experiment_executed": false,
+  "next_exact_action": "Re-enter WP1101 first for owner absorption/rejection of the falsifier. Re-check WP510 run 33254381280 before any new target-runtime dispatch; never duplicate while queued."
+}

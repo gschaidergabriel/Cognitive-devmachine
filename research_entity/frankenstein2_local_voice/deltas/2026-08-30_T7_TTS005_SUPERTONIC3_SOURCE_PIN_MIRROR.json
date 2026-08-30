@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "mirror_type": "F2_LOCAL_VOICE_RESEARCH_DELTA",
+  "date_local": "2026-08-30",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "research_id": "T7-TTS-005",
+  "objective": "V1_SUPERTONIC3_SOURCE_PIN",
+  "semantic_key": "140e6517287f351e96ba7571ff06bf7a8ffb44d0029b49ced88eaddb5ce6144c",
+  "f2_state": "SOURCE_PINNED_TERMINAL_AT_SCOPE",
+  "f2_source_result": "research/local_voice/sources/2026-08-30_T7_TTS005_SUPERTONIC3_SOURCE_PIN.json",
+  "f2_checkpoint": "research/local_voice/checkpoints/2026-08-30_T7_TTS005_SUPERTONIC3_SOURCE_PIN_GPT56SOL.json",
+  "finding": "Supertonic 3 adds a distinct approximately-99M German-capable local ONNX TTS latency-floor/fallback challenger, but official upstream discontinuation is a material lifecycle constraint and remains part of the evidence boundary.",
+  "hypothesis": "The small ONNX footprint may beat larger expressive candidates on resident memory, startup and CPU latency while preserving acceptable German intelligibility.",
+  "counterhypothesis": "Discontinued maintenance plus acoustic/prosodic or chunking limitations may make it inferior even as a fallback once measured on the actual target.",
+  "hardware_gate_observed": {
+    "current_controller_run_id": 33266856557,
+    "current_job_id": 99138324275,
+    "job_status": "queued",
+    "runner_id": 0,
+    "target_receipt": false
+  },
+  "credits": {
+    "source_pin": 1,
+    "target_hardware": 0,
+    "model_runtime": 0,
+    "german_tts_component": 0,
+    "german_e2e": 0,
+    "trigger4_acceptance": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Consume the first terminal clay-direct-dev hardware receipt before opening a target-runtime Supertonic benchmark; do not infer target fit from source claims."
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "date": "2026-08-30",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_MAXIMUM_EXECUTION_BUDGET_BINDING.md"
+    ]
+  },
+  "authority": {
+    "research_main_observed_before_write": "c7badd0ab51b8b94b05609e9cffc3fa03a76d85f",
+    "supervisor_inbox_schema_version": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "mode": "FREE_ONLY_EXTERNAL_PROVIDER_POLICY",
+    "owner_vps_allowed": true,
+    "established_vps_bridge_allowed": true,
+    "together": "FORBIDDEN",
+    "paid_or_unknown_cost_fallback": "FORBIDDEN_FAIL_CLOSED"
+  },
+  "frankenstein2": {
+    "main_observed_before_receipt": "4f3f13be71622c951833e7a785e1079d6c72806c",
+    "wp901": {
+      "generation": 4,
+      "claim_id": "F2-WP-901-G4-GPT56SOL-PERSISTED-ROW-LOAD-ATTESTATION-20260830",
+      "pointer_state_observed_after_pr712_merge": "ACTIVE",
+      "required_store_mint_invariant": "load attestation is minted only by the canonical WP206 store after exact persisted-row checks and typed checkpoint replay",
+      "runtime_credit": 0,
+      "whole_system_acceptance": false
+    },
+    "pr711": {
+      "number": 711,
+      "classification": "REVIEW_ONLY_EXECUTABLE_COUNTEREVIDENCE",
+      "workflow_run": 33305293069,
+      "workflow_conclusion": "success",
+      "finding": "The earlier G4 donor attestation did not bind exact persisted checkpoint_json representation. Semantically equivalent raw JSON representation changes could leave typed checkpoint identity unchanged while leaving the attestation unchanged."
+    },
+    "pr712": {
+      "number": 712,
+      "merge_commit": "a43331af82389078dff7c89a9c1983645a31651e",
+      "repository_ci_head": "e8bb4488c7828896dfb37b0f13d2c7453453d883",
+      "g4_ci_run": 33305410184,
+      "g4_ci_conclusion": "success",
+      "bounded_positive": "row_evidence_sha256 now includes raw stored checkpoint_json plus generation, checkpoint digest, canonical path, device, inode and bound-file authority receipt; accepted G2/G3/WP206 regression workflows were green at repository scope",
+      "remaining_scope_mismatch": "PR712 mints PersistedCheckpointLoadAttestation in the WP901 restart adapter after calling CanonicalPersistentAgencyStore.load_checkpoint() and re-reading the row in the same SQLite transaction snapshot. The canonical active G4 claim instead requires the canonical WP206 store itself to mint the typed immutable load receipt from the exact row it actually read.",
+      "promotion": "NOT_ACCEPTED_FROM_THIS_RECEIPT",
+      "reason": "GREEN_CI_DOES_NOT_OVERRIDE_UNSATISFIED_ACTIVE_CLAIM_INVARIANT"
+    }
+  },
+  "durable_action": {
+    "pr712_comment_id": 5468027452,
+    "action": "Added an explicit Trigger-4 scope fence to merged PR712: do not terminalize G4 solely from current green CI; implement a store-owned load_checkpoint_with_receipt (or equivalent) and retain the PR711 semantic-byte witness as a regression."
+  },
+  "scope_fences": {
+    "wp206_same_inode_live_drift": "SEPARATE_TRIGGER6_DISCRIMINATOR_DO_NOT_BROADEN_G4",
+    "rollback_freshness": "SEPARATE_OPEN_RESEARCH_DO_NOT_CLAIM_CLOSURE",
+    "target_host_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_jspace_runtime": 0,
+    "provider_model_runtime": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime": 0
+  },
+  "next_exact_action": "Continue the existing WP901 G4 Trigger-4 owner lane from current main without creating a competing semantic authority: move the exact-row SELECT, typed replay/checks and raw persisted-column digest into CanonicalPersistentAgencyStore so the store returns a typed immutable checkpoint-load receipt from the same row it consumed; make WP901 consume that store-minted receipt; add the PR711 pretty-printed checkpoint_json regression proving typed checkpoint digest stability while raw-row evidence digest changes; rerun WP206 + WP901 G2/G3/G4 repository CI; only then reconcile G4 at repository-component scope if all required invariants are mechanically satisfied."
+}

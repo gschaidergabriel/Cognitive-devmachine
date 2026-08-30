@@ -1,0 +1,68 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "checkpoint_observed_at": "2026-08-30T15:38:39+07:00",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "classification": "APPEND_ONLY_POST_ACCEPTANCE_EXECUTABLE_COUNTEREVIDENCE",
+  "extends_counterevidence_ref": "research_entity/trigger_runs/4/2026-08-30T1535p0700_GPT56SOL_TRIGGER4_WP206_G3_POST_ACCEPTANCE_PROVENANCE_COUNTEREVIDENCE.json",
+  "does_not_rewrite_history": true,
+  "authority_epoch": "9.13",
+  "authority_ref": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json -> research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13BH_DELTA_2026-08-30T1349P0700_GPT56SOL.json",
+  "observed": {
+    "canonical_implementation_pr": 681,
+    "canonical_implementation_merge_sha": "736a0907bdd35056d56f1ed0f75ea11e8457b8c1",
+    "canonical_source": "src/frankenstein2/wp206_legacy_authority_recovery.py",
+    "review_only_counterevidence_pr": 692,
+    "review_only_head_sha": "4c600f8ed596182d1ca3fc667a7244261410d2f1",
+    "review_only_base_sha_at_pr_run": "262d771fee2b92086b1062abad3a1305203aa796",
+    "review_only_run_id": 33302007925,
+    "review_only_job_id": 99231800863,
+    "checkout": "PASS",
+    "compile": "PASS",
+    "positive_counterexample_witness": "PASS",
+    "fail_closed_falsifier": "FAIL",
+    "credit_fence": "PASS"
+  },
+  "counterevidence": {
+    "epistemic_type": "PROJECT_MEASUREMENT",
+    "statement": "After one successful WP206-G3 legacy recovery, mutating only the persisted recovery_provenance_ref inside f2_wp206_legacy_authority_recoveries while leaving the rebound checkpoint receipt intact is accepted by the idempotent repeat path. The repeat returns ALREADY_RECOVERED, returns the mutated provenance field, and returns the unchanged recovery_id that was originally derived over the pre-mutation provenance.",
+    "positive_reproduction": "tests/wp206_g3_recovery_audit_counterexample_witness.py",
+    "fail_closed_reproduction": "tests/test_wp206_g3_recovery_audit_falsifier.py",
+    "exact_review_branch": "review/trigger4-wp206-g3-recovery-audit-tamper-falsifier-20260830",
+    "inference_boundary": "This proves a persisted recovery-audit self-binding inconsistency at repository-hosted CI scope. It does not prove target-runtime exploitability, physical-host behavior, real-effect compromise, whole-system failure, or that the canonical owner must choose a particular repair."
+  },
+  "relation_to_existing_counterevidence": {
+    "pr689": "PR689 tests conflicting caller-supplied repeat provenance while the persisted recovery row remains unchanged.",
+    "pr692": "PR692 mutates a field already persisted in the recovery audit row after successful recovery and then tests whether the row is re-authenticated against its own recovery_id on repeat.",
+    "duplicate_mutation_authority_created": false
+  },
+  "interpretation": {
+    "g3_repository_component_acceptance_automatically_revoked": false,
+    "new_executable_post_g3_counterevidence_present": true,
+    "stronger_question": "Is f2_wp206_legacy_authority_recoveries intended to be self-authenticating append-only audit evidence on repeat, or trusted mutable metadata whose recovery_id is not revalidated after first write?",
+    "option_a": "If self-authenticating audit evidence is intended, validate the full persisted recovery record on the existing-row path, recompute/verify recovery_id over all bound fields, verify recorded DB path/device/inode, and reject conflicting provenance/tampered fields with canonical regressions.",
+    "option_b": "If the table is intentionally trusted mutable metadata after first recovery, state that explicitly, stop relying on recovery_id as an integrity claim for returned fields, and add a characterization regression so later workers do not infer append-only tamper detection.",
+    "required_disposition": "Do not open a competing WP206 mutation generation from this packet. The canonical WP206 owner/reconciliation path should disposition PR689 and PR692 together and preserve the separate same-inode live-drift threat model."
+  },
+  "credits": {
+    "runtime_execution_observed": false,
+    "runtime_credit": 0,
+    "target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "writes": {
+    "review_branch": "review/trigger4-wp206-g3-recovery-audit-tamper-falsifier-20260830",
+    "review_head": "4c600f8ed596182d1ca3fc667a7244261410d2f1",
+    "review_pr": 692,
+    "review_run_id": 33302007925,
+    "review_job_id": 99231800863,
+    "prior_review_pr": 689
+  },
+  "next_exact_action": "Canonical WP206 ownership should explicitly disposition recovery-audit self-binding semantics using PR689 plus PR692; do not duplicate mutation authority. If strict self-authentication is intended, require a successor regression in which persisted provenance/path/device/inode or recovery_id drift fails closed before any promotion that relies on recovery audit integrity."
+}

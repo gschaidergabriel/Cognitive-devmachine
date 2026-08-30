@@ -1,0 +1,65 @@
+{
+  "schema": "TRIGGER4_RESEARCH_DELTA_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "observed_at_local": "2026-08-29T16:52:00+07:00",
+  "authority_epoch": "8.78",
+  "authority_ref": "research_entity/continuity/BOOTSTRAP_MINIMAL.json -> research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+  "canonical_clay_main_before_write": "e0672d44aedee2d924a874af0eaaa396f52d78fe",
+  "frankenstein2_main_observed": "1f749d0c12326b290b68c514192e15f516431ee1",
+  "routing_self_test": "PASS",
+  "required_directives_fetched": [
+    "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+  ],
+  "new_negative_evidence": {
+    "falsifier_id": "WP600_SCALAR_STRING_EXACT_CYCLE_IDENTITY_BYPASS",
+    "classification": "REPRODUCED_REPOSITORY_HOSTED_COMPONENT_NEGATIVE_EVIDENCE",
+    "review_pr": 333,
+    "issue": 334,
+    "review_head_sha": "534f24d2b09ea0fd9af84f863528f85f6d31220c",
+    "workflow_run": 33246385595,
+    "job_id": 99084467908,
+    "workflow_conclusion": "failure_as_expected_for_regression",
+    "exact_test_result": "1 failed, 11 passed in 0.08s",
+    "failing_test": "test_scalar_string_subtype_cannot_split_request_and_cycle_identity",
+    "failure": "Failed: DID NOT RAISE DirectDelegateRouterError",
+    "accepted_wp600_source_blob_sha": "f403f4893769bf08812eec5e53a455a267274cf4",
+    "accepted_wp600_test_blob_sha_before_falsifier": "ef2717b2cdcbf782d30ec2d42c180f5b70b123dd",
+    "meaning": "Accepted WP600 G1 exact CycleContract identity/digest semantics admit a scalar str subtype whose canonical serialized cycle_contract_id and cycle_contract_sha256 are forged while overloaded equality/inequality bypasses TaskRouteRequest.assert_matches. The request digest can therefore bind forged cycle identity text while route_task returns a candidate bound to the real CycleContract.",
+    "repair_direction": "Require exact concrete str values at WP600 identifier and SHA-256 trust boundaries (type(value) is str), preserve the falsifier as canonical regression, review other identity-bearing scalar/ref validators for equivalent polymorphic comparison/set behavior, and require exact repair-head plus merged-main repository CI before restoring the bounded exact-identity acceptance claim."
+  },
+  "state_conflict": {
+    "wp600_pointer_state_observed": "ACCEPTED",
+    "pointer_terminal_scope": "DIRECT_DELEGATE_ROUTER_G1_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "pointer_next_action": "Keep WP600 G1 closed unless new executable negative evidence invalidates this exact component scope.",
+    "current_interpretation": "NEW_EXECUTABLE_NEGATIVE_EVIDENCE_SATISFIES_REOPEN_CONDITION; ACCEPTED_POINTER_REQUIRES_RECONCILIATION_OR_SUCCESSOR_REPAIR; REVIEW_ORGAN_DID_NOT_OVERWRITE_CANONICAL_POINTER"
+  },
+  "parallel_frontier": {
+    "wp510_generation": 2,
+    "wp510_state": "ACTIVE",
+    "wp510_scope": "TYPED_DOWNSTREAM_LINEAGE_REPAIR",
+    "wp601_state": "ACCEPTED_WITH_SEPARATE_RESEARCH_NEGATIVE_ALREADY_PERSISTED_BY_ANOTHER_ORGAN",
+    "wp700_state": "ACCEPTED_AT_REPOSITORY_COMPONENT_CI_ONLY"
+  },
+  "fusion": {
+    "review_lane_merge_policy": "DO_NOT_MERGE_REVIEW_ONLY_AS_PRODUCT_IMPLEMENTATION",
+    "canonical_mutation_rule": "DO_NOT_OPEN_SECOND_MUTATION_AUTHORITY; ROUTE_REPAIR_TO_SOLE_RECONCILIATION_OR_SUCCESSOR_OWNER",
+    "issue_ref": "frankenstein-2.0#334",
+    "review_pr_ref": "frankenstein-2.0#333"
+  },
+  "credits": {
+    "entityos_hcu_runtime": 0,
+    "frankenstein2_target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "training": 0,
+    "effect": 0,
+    "completion": 0,
+    "whole_system_acceptance": false
+  },
+  "unusual_experiment_executed": false,
+  "next_exact_action": "Re-enter Frankenstein 2.0 main. If a sole WP600 successor/reconciliation repair appears, verify exact scalar-type rejection and rerun PR333 counterexample plus canonical WP600 suite; otherwise preserve issue #334 as blocking negative evidence for any downstream claim that assumes exact WP600 cycle identity binding."
+}

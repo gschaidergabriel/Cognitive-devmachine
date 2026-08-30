@@ -1,0 +1,81 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at": "2026-08-30T12:55:52+07:00",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "research_main_observed_before_write": "6844bdd98953bd4befa322101c5281844e84f390",
+    "supervisor_inbox": "9.13BG_NON_AUTHORITY",
+    "provider_policy": "FREE_ONLY_HARD_OFF_NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "owner_vps_allowed": true,
+    "together": "FORBIDDEN"
+  },
+  "frankenstein2": {
+    "canonical_pr": 653,
+    "canonical_pr_head_observed": "158ab8e039143e70db155398814b6f88eb5d1d09",
+    "rejected_full_fingerprint_equality": {
+      "review_pr": 647,
+      "head": "0293941c55b6506545dca6818028f13b471323cc",
+      "run_id": 33295503745,
+      "job_id": 99214354408,
+      "result": "FAIL",
+      "bounded_finding": "Comparing the historical persisted full UnifiedDBFingerprint receipt to a fresh-process full fingerprint receipt rejects legitimate restart because the fingerprint contains mutable SQLite/main-file observations."
+    },
+    "green_fresh_g2_donor": {
+      "review_pr": 645,
+      "head": "ca8d6a75eda5759751344f9b83292c565eb1d275",
+      "run_id": 33295552995,
+      "job_id": 99214479888,
+      "mechanism": "FRANKENSTEIN2_UNIFIEDDB_BOUND_FILE_AUTHORITY/v1 over canonical real path plus device plus inode",
+      "fresh_g2_result": "PASS",
+      "scope": "FRESH_G2_WRITE_READ_ONLY"
+    },
+    "g1_to_g2_upgrade_discriminator": {
+      "classification": "LOCAL_EXACT_SOURCE_DETERMINISTIC_COMPONENT_DISCRIMINATOR",
+      "g1_source_blob": "351545cc18931a04a68b7deb834783f1907c9295",
+      "g1_writer_result": "PASS_RC_0",
+      "checkpoint_sha256": "2a96917e31b2f5baaf7e52cbcf2b61b89c7be3d47add2f6e8933356f250a1bbc",
+      "persisted_g1_full_fingerprint_receipt": "c09408644ac99aa516e04d8abf06b8d1647ab46b4bc65e752d519e17a17139b9",
+      "g2_stable_bound_file_receipt_same_db_identity": "cd49eeb1b22ea881308a1e617cdffe5f2175f941be683a063e7facb62e7995f4",
+      "g2_reader_result": "FAIL_RC_1",
+      "exact_error": "PersistentAgencyError:CHECKPOINT_DB_AUTHORITY_RECEIPT_MISMATCH",
+      "finding": "The green stable-bound-file donor changes the meaning of unifieddb_authority_receipt_sha256. Existing G1 rows contain the historical full-fingerprint receipt and are rejected if G2 interprets the same bytes as the new stable bound-file receipt. Fresh G2 success therefore does not establish update compatibility."
+    },
+    "coordination": {
+      "canonical_pr_comment_id": 5467022386,
+      "comment_target": 653,
+      "requested_next_discriminator": "Version or migrate the persisted authority-binding representation, then execute pre-G2-row to G2-load plus post-migration receipt-only tamper tests before canonical fusion.",
+      "wp206_source_mutation_performed_by_this_organ": false,
+      "reason": "Canonical WP206 G2 mutation lane is already owned; this organ contributed executable counterevidence and coordination only."
+    }
+  },
+  "required_invariants": [
+    "preserve historical full-fingerprint receipt as provenance rather than silently reinterpret its bytes",
+    "preserve canonical path and device/inode file-identity fences",
+    "preserve checkpoint JSON digest and typed replay digest fences",
+    "preserve parent/generation/WAL restart regressions",
+    "do not bundle same-inode content/schema refresh into the G2 persisted-row migration without an explicit successor contract"
+  ],
+  "credit_boundaries": {
+    "target_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "vps_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Canonical PR653 must not absorb the stable-bound-file donor as-is. First close the G1-to-G2 persistence migration discriminator with an explicit representation version/migration contract and exact regression. In parallel, keep PR655 same-inode live-drift characterization separate. After WP206 closure, re-enter the nonduplicate Trigger-4 frontier: exact release/host handoff via WP1207/WP510 when real owner-host transport evidence is available; repository evidence alone remains insufficient."
+}

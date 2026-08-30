@@ -1,0 +1,139 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_EXTERNAL_FALSIFIER_DELTA/v1",
+  "trigger": "6",
+  "worker": "GPT-5.6-Sol",
+  "recorded_at": "2026-08-30T19:14:00+07:00",
+  "epistemic_level": "E3_EXTERNAL_PRIMARY_PLUS_EXACT_CURRENT_GITHUB_EVIDENCE",
+  "program": "ENTITYOS_HCU",
+  "project": "Frankenstein 2.0",
+  "authority": {
+    "supervisor_schema": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "execution_mode": "FREE_ONLY_WITH_OWNER_AUTHORIZED_VPS_AND_GITHUB",
+    "provider_policy": "FREE_ONLY_HARD_OFF_NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "together": "FORBIDDEN"
+  },
+  "exact_current_subject": {
+    "f2_main_sha_observed": "be0359f8c8bad330f1320adc9d5e2f3fd1d6ea5e",
+    "research_main_sha_before_write": "5933ed34cc03328f6300a83b2be972bc05cf0a66",
+    "wp1207_controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33308965181,
+    "job_id": 99250433269,
+    "run_head_sha": "03f39ad9e03579e6a77a6a89ed493d86d281fe08",
+    "job_labels": ["self-hosted", "Linux", "X64"],
+    "job_status": "completed",
+    "job_conclusion": "cancelled",
+    "executed_steps": 0,
+    "runner_id": 0,
+    "runner_name": "",
+    "runner_group_id": 0,
+    "runner_group_name": ""
+  },
+  "external_primary": [
+    {
+      "source": "GitHub Docs — Self-hosted runners reference",
+      "url": "https://docs.github.com/en/actions/reference/runners/self-hosted-runners",
+      "finding": "GitHub assigns a self-hosted job only when it finds an online and idle runner matching all runs-on labels/groups; if none exists the job remains queued; an assigned job not picked up within 60 seconds is re-queued."
+    },
+    {
+      "source": "GitHub Docs — Using labels with self-hosted runners",
+      "url": "https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/apply-labels",
+      "finding": "Runner labels are case-insensitive."
+    },
+    {
+      "source": "GitHub Docs — Monitoring and troubleshooting self-hosted runners",
+      "url": "https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/monitor-and-troubleshoot",
+      "finding": "Runner status distinguishes Idle, Active and Offline; Offline can mean host offline, runner application not running, or inability to communicate with GitHub. GitHub documents service/journal and connectivity diagnostics for direct host investigation."
+    },
+    {
+      "source": "GitHub Docs — Configuring the self-hosted runner application as a service",
+      "url": "https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/configure-the-application",
+      "finding": "On Linux, GitHub supports systemd service operation through svc.sh; customized service policy must still invoke runsvc.sh. Service installation/start is not itself runner online/idle or job-assignment evidence."
+    }
+  ],
+  "observed": [
+    "The exact WP1207 target-host job terminated with zero workflow steps and no assigned runner identity in the GitHub job record.",
+    "The job requested only the default self-hosted/Linux/X64 eligibility labels.",
+    "Current canonical steering keeps WP1207 target-runtime credit at zero and forbids duplicate dispatch while the existing runtime lane is unresolved."
+  ],
+  "falsified_or_downgraded": [
+    {
+      "hypothesis": "The zero-step job was caused by Linux/X64 label capitalization mismatch.",
+      "status": "FALSIFIED_BY_EXTERNAL_PRIMARY",
+      "reason": "GitHub documents runner labels as case-insensitive."
+    },
+    {
+      "hypothesis": "The WP1207 hostile-twin executor itself failed on the owner host.",
+      "status": "NOT_SUPPORTED_AND_CURRENTLY_UNTESTED",
+      "reason": "No workflow step ran and no runner was assigned; there is no executor observation from this job."
+    }
+  ],
+  "live_hypotheses_ranked": [
+    {
+      "rank": 1,
+      "hypothesis": "No matching runner was online+idle/connected at the assignment boundary.",
+      "confidence": 0.72,
+      "basis": "Direct zero-step/no-runner evidence plus GitHub routing semantics; direct runner roster/host state remains unobserved."
+    },
+    {
+      "rank": 2,
+      "hypothesis": "A registered runner existed but its service/listener/connectivity state was offline or unable to communicate with GitHub.",
+      "confidence": 0.61,
+      "basis": "GitHub documents Offline as including stopped runner application or GitHub connectivity failure; prior Trigger6 source archaeology found stock service semantics are not unconditional self-healing."
+    },
+    {
+      "rank": 3,
+      "hypothesis": "Repository/group eligibility prevented an otherwise live runner from matching the job.",
+      "confidence": 0.34,
+      "basis": "Routing requires labels and group/repository access, but the connector cannot observe the private runner roster/group state."
+    },
+    {
+      "rank": 4,
+      "hypothesis": "The runner was assigned but failed to pick up the job inside GitHub's 60-second assignment window.",
+      "confidence": 0.12,
+      "basis": "Possible in general, but the retained job record exposes runner_id=0 and no runner name, so this is weaker than the unassigned/offline hypothesis."
+    }
+  ],
+  "highest_information_falsifier": {
+    "action_class": "DIRECT_OWNER_HOST_READ_ONLY_RUNNER_LIFECYCLE_INSPECTION",
+    "mutation": false,
+    "required_observations": [
+      "systemd service identity and active/substate",
+      "runner listener process presence and PID/start time",
+      "runner diagnostic logs around the job dispatch/cancellation window",
+      "GitHub connectivity diagnostics without credential expansion where already available",
+      "configured repository URL / runner registration target",
+      "configured labels/group eligibility if locally observable",
+      "exact runner version",
+      "evidence of duplicate/orphan listener processes"
+    ],
+    "decision_table": {
+      "service_down_or_listener_absent": "Classify HOST_RUNNER_LIFECYCLE_BLOCKER; repair only under existing owner-authorized VPS execution authority, then retry at most one exact-source WP1207 runtime subject.",
+      "service_up_listener_connected_but_no_assignment": "Shift discriminator to GitHub registration/repository/group eligibility; do not mutate WP1207 semantics.",
+      "assignment_seen_then_requeue": "Investigate runner pickup/listener diagnostics and the documented 60-second pickup boundary.",
+      "job_executes": "Validate exact executor/artifact binding and target receipt; grant only the scope actually executed."
+    }
+  },
+  "architecture_delta": {
+    "adopt": "Represent target-runtime transport as explicit staged evidence: REGISTERED -> SERVICE_LIVE -> LISTENER_CONNECTED -> ELIGIBLE -> ASSIGNED -> STEP_EXECUTION -> TARGET_RECEIPT. Never collapse these into one boolean 'runner available'.",
+    "why": "The present zero-step job proves that control-plane/runner lifecycle failure can consume runtime probes without testing product logic. Explicit staging prevents transport negatives from being misclassified as semantic negatives and supports promotion-staleness accounting.",
+    "integration_owner": "Trigger 4 / build-runtime lane",
+    "trigger6_role": "research/falsification only; no product semantic mutation from this delta"
+  },
+  "anti_duplication": {
+    "new_runtime_dispatch": false,
+    "reason": "Current 9.13BI steering requires no duplicate runtime dispatch while the recorded lane is unresolved; transport health must be resolved first."
+  },
+  "credit_delta": {
+    "target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt": 0,
+    "jspace": 0,
+    "effect": 0,
+    "completion": 0,
+    "training": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "On the existing owner-authorized VPS/bridge surface, perform read-only service/listener/log/connectivity/registration inspection. Do not create a new dispatch until transport health is freshly resolved. If the runner becomes online+idle and eligible, retry exactly one bound WP1207 runtime subject and capture the exact target receipt.",
+  "acceptance": "RESEARCH_DELTA_ADMITTED_NO_RUNTIME_PROMOTION"
+}

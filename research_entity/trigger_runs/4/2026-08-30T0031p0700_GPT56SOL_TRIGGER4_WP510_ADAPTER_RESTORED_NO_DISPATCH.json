@@ -1,0 +1,75 @@
+{
+  "schema": "TRIGGER4_WP510_ADAPTER_REPAIR_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "observed_at_local": "2026-08-30T00:31:00+07:00",
+  "routing": {
+    "normalized_message": "4",
+    "result": "TRIGGERWORD_4",
+    "self_test": "PASS",
+    "required_directives_fetched": true
+  },
+  "authority": {
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13BA_NON_AUTHORITY",
+    "execution_mode": "FREE_ONLY",
+    "owner_provisioned_vps": "AUTHORIZED_AND_EXPECTED_WITH_RESOURCE_HEALTH_GUARDS",
+    "together": "FORBIDDEN",
+    "paid_or_unknown_external_provider_fallback": "FORBIDDEN"
+  },
+  "reentry": {
+    "frankenstein_2_main_observed": "bc6fa539287442027e7691f9c867b62afd928e4e",
+    "clay_main_before_receipt_observed": "a054ee67c76a1cee5c81a064c3d92e3f944cd3f9",
+    "controller_main_before_repair": "2b2aaca5750a7da135fef92cf6611995d117fbe2",
+    "controller_main_after_repair": "ff91b643daaf629286bf756bd18c87e6704263b4"
+  },
+  "wp510_singleton": {
+    "existing_run_id": 33260557990,
+    "existing_workflow": ".github/workflows/frank-self-hosted-probe.yml",
+    "status_observed": "queued",
+    "conclusion_observed": null,
+    "duplicate_dispatch_allowed": false,
+    "decision": "PRESERVE_EXISTING_OPEN_SINGLETON_NO_NEW_RUNTIME_DISPATCH"
+  },
+  "failed_v2_dispatch_observation": {
+    "controller_commit": "2b2aaca5750a7da135fef92cf6611995d117fbe2",
+    "dispatch_marker": "runtime/vps_probe/wp510_push_dispatch_v2.txt",
+    "run_id": 33265772094,
+    "actual_workflow": "EntityOS Canonical One-File Sandbox",
+    "actual_job_id": 99135457824,
+    "job_status": "completed",
+    "job_conclusion": "failure",
+    "steps_observed": [],
+    "runner_id": 0,
+    "classification": "DISPATCH_WORKFLOW_SURFACE_FAILURE_NOT_WP510_TARGET_RUNTIME_EXECUTION",
+    "target_runtime_credit": 0
+  },
+  "root_cause": {
+    "observation": "The intended path-scoped Trigger4 WP510 adapter existed in an earlier commit but was absent from the then-current controller main; therefore the v2 marker could not select that adapter.",
+    "earlier_adapter_commit": "b9b53c6aa3243943a177b833f7383f7013817cf9",
+    "adapter_path": ".github/workflows/trigger4-wp510-push-dispatch.yml",
+    "adapter_blob_sha": "ac5bf160afa59421effe6303f8d0a5e1faee8c4f",
+    "epistemic_type": "CURRENT_SOURCE_AND_ACTIONS_EVIDENCE"
+  },
+  "bounded_repair": {
+    "commit": "ff91b643daaf629286bf756bd18c87e6704263b4",
+    "operation": "RESTORE_BYTE_IDENTICAL_KNOWN_ADAPTER_BLOB_ON_CURRENT_CONTROLLER_MAIN",
+    "adapter_blob_sha_after_repair": "ac5bf160afa59421effe6303f8d0a5e1faee8c4f",
+    "push_trigger_path": "runtime/vps_probe/wp510_push_dispatch_v1.txt",
+    "runtime_dispatch_performed_by_repair": false,
+    "new_wp510_runtime_attempt_created_by_repair": false,
+    "unusual_experiment_executed": false
+  },
+  "credits": {
+    "new_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_runtime_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "whole_system_acceptance": false,
+    "whole_entityos_hcu_credit": 0
+  },
+  "next_exact_action": "Re-enter existing WP510 singleton run 33260557990 before any dispatch. If it remains OPEN, do not dispatch. If TERMINAL, ingest only its exact recorded evidence. If ORPHANED, reconcile fail-closed. The restored adapter is source-ready for a future admitted dispatch only after the singleton gate permits it; do not treat adapter existence, unrelated workflow failures, or controller source repair as target-runtime evidence."
+}

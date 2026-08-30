@@ -1,0 +1,28 @@
+{
+  "schema": "CLAY_F2_TRIGGER6_ARCHITECTURE_DELTA_MIRROR/v1",
+  "delta_id": "F2-WP1106-REMOTE-PEER-IDENTITY-EVIDENCE-v1",
+  "research_id": "R6-WP1106-SPIFFE-WORKLOAD-IDENTITY-001",
+  "mirrored_at": "2026-08-29T19:49:45+07:00",
+  "authority": "MIRROR_ONLY_F2_REMAINS_BUILD_AND_TRIGGER6_CLAIM_AUTHORITY",
+  "source_repo": "gschaidergabriel/frankenstein-2.0",
+  "source_commit": "2c3531fd948f8ddbb686be7489b548ba5b0f1c94",
+  "source_path": "research/tool_intelligence/deltas/2026-08-29T1949P0700_GPT56SOL_R6_WP1106_SPIFFE_IDENTITY_E2_ARCHITECTURE_DELTA.json",
+  "research_entity_base": "1e5de0f901f8d7e8eddfce358b2e65f819a5afd5",
+  "current_trigger4_context": {
+    "wp1106_repository_component_status": "ACCEPTED_AT_REPOSITORY_HOSTED_COMPONENT_SOURCE_AND_CI_SCOPE",
+    "repository_ci_tests_passed": 10,
+    "repository_ci_tests_failed": 0,
+    "physical_bridge_credit": 0,
+    "target_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "research_delta_summary": "Current WP1106 source validates deterministic endpoint/capability/availability/lineage fields and rejects second authority, but does not separately represent cryptographically verified peer identity, issuer/trust-root/credential freshness or request/session replay binding. Trigger6 recommends a thin native SPIFFE-inspired peer-identity evidence gate for Trigger4 review and explicitly rejects a full SPIRE server/agent control plane at current scope.",
+  "external_source_pins": [
+    "spiffe/spiffe@dc4e9d9b4eff8aa181a54cd330ff9f877186060e",
+    "spiffe/spire@66f6029f508bac63008045522642bb952376868c"
+  ],
+  "evidence_scope": "E2_ARCHITECTURE_MAPPED_ONLY",
+  "architecture_acceptance_credit": 0,
+  "runtime_credit": 0,
+  "whole_system_credit": 0
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at": "2026-08-30T11:16:00+07:00",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "research_main_observed_before_write": "6e3c42f62585b8863d50b0c9e65b29bccd0111b2",
+    "bootstrap_schema": "8.78",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13BE_NON_AUTHORITY",
+    "owner_authority": "CLAY_EXECUTION_AUTHORITY.md -> governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+    "owner_vps_allowed": true,
+    "free_only_meaning": "EXTERNAL_PROVIDER_TOKEN_AND_SPEND_POLICY_NOT_OWNER_VPS_BAN",
+    "together": "FORBIDDEN"
+  },
+  "frankenstein2": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "main_observed": "8389da69d9d2732e9174c036f29f5bd72a475aa2",
+    "latest_observed_commit": "trigger4: terminalize WP1110 g3 receipt-content binding at repository CI scope",
+    "wp1110": "G3_ACCEPTED_REPOSITORY_HOSTED_CI_ONLY_RUNTIME_ZERO",
+    "wp1202": "G4_ACCEPTED_REPOSITORY_HOSTED_COMPONENT_CI_ONLY_RUNTIME_ZERO",
+    "wp510": "G3_ACCEPTED_REPOSITORY_COMPONENT_SCOPE_RUNTIME_ZERO"
+  },
+  "controller": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "4886bb4e559ba824efc686350ba1aa12d65ba325",
+    "workflow": ".github/workflows/trigger4-wp510-target-runtime-v2.yml",
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "run_status_observed": "queued",
+    "job_status_observed": "queued",
+    "executed_steps_observed": 0,
+    "runner_id_observed": 0,
+    "runner_name_observed": "",
+    "required_labels": ["self-hosted", "Linux", "X64"],
+    "exact_f2_source_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+    "duplicate_dispatch_created": false
+  },
+  "route_resolution": {
+    "github_runner_roster_endpoint_available_to_current_connector": false,
+    "direct_ssh_or_vps_plugin_available_to_current_session": false,
+    "configured_routes_confirmed_in_registry": [
+      "chat_to_clay_direct_dev_via_self_hosted_runner",
+      "configured_bridge_to_clay_direct_dev"
+    ],
+    "configured_bridge_documentation_present": true,
+    "current_roundtrip_observed_by_this_organ": false,
+    "classification": "RUNNER_LIFECYCLE_DIRECT_HOST_OBSERVATION_REQUIRED; DIRECT_TOOL_ABSENCE_DOES_NOT_PROVE_PROJECT_CAPABILITY_ABSENCE"
+  },
+  "hypothesis": "The current WP510 block is most consistent with self-hosted runner lifecycle/availability or a broader repository/account control-plane condition rather than a WP510 semantic defect.",
+  "counterhypothesis": "The runner may be live but currently ineligible/unregistered for the requested labels/group, or the queued run may be held by a distinct controller-side policy condition; direct host/runner observation is required to distinguish these cases.",
+  "negative_evidence": [
+    "WP510 run 33265772059 remains queued with zero executed steps",
+    "no current runner identity is assigned to the job",
+    "connector does not expose the GitHub runner-roster endpoint",
+    "no SSH/VPS plugin is installable in this session"
+  ],
+  "credits": {
+    "wp510_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "coordination": {
+    "blocker_issue": "gschaidergabriel/Dr.-Unterweger#873",
+    "duplicate_dispatch_forbidden_while_existing_run_unresolved": true,
+    "new_unusual_experiment": false
+  },
+  "next_exact_action": "On an organ with the already-authorized clay-direct-dev host/bridge surface, inspect the current self-hosted runner service start/boot state, Runner.Listener process, diagnostic/connectivity logs, exact installed runner version, registration/group/label eligibility, and then re-read run 33265772059/job 99135457584. Do not mutate runner service policy before direct observation and do not dispatch a successor while this run is unresolved. If the run executes, admit only exact-source-bound target-environment component evidence for F2 SHA 656b57bded655e64a25d7e205b599becce3d4989."
+}

@@ -1,0 +1,38 @@
+{
+  "schema": "RESEARCH_ENTITY_TRIGGER6_DELTA_MIRROR/v1",
+  "recorded_at_local": "2026-08-30T17:10:00+07:00",
+  "worker": "GPT-5.6 Sol / Trigger-6 research organ",
+  "trigger": "6",
+  "classification": "NON_AUTHORITY_PROVENANCE_MIRROR",
+  "canonical_f2_repository": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2_observed_head": "c8ae9834491f4682a82bf0e3eec29286caa6df54",
+  "research_entity_main_before_mirror": "b9ca86249fc697e79cb573c1d71557be9f5b2966",
+  "canonical_f2_delta": "research/tool_intelligence/deltas/2026-08-30T1707P0700_GPT56SOL_WP206_SQLITE_LIVE_DRIFT_TRANSACTION_BOUNDARY_REVIEW_ADDENDUM.json",
+  "canonical_f2_delta_commit": "9b8d988390743890a01333c2644fe686b854c9d4",
+  "canonical_f2_handoff_addendum": "trigger4/inbox/tool_research/R6-20260830-WP206-G5A-EXTERNAL-SQLITE-REVISION-FENCE-WP901-G4-OVERLAP-ADDENDUM-GPT56SOL.json",
+  "canonical_f2_handoff_addendum_commit": "0105b1af9aa39879784f60e9c5bdd8ec2e010831",
+  "current_wp206": {
+    "generation": 5,
+    "state": "ACTIVE",
+    "claim_id": "F2-WP-206-G5-GPT56SOL-EVIDENCE-SUBJECT-BINDING-20260830",
+    "separate_not_in_scope": "External same-inode SQLite data/schema revision fencing remains a separate WP206 discriminator and is not merged into G5."
+  },
+  "current_wp901": {
+    "generation": 4,
+    "state": "ACCEPTED",
+    "accepted_scope": "PERSISTED_ROW_SNAPSHOT_BOUND_RESTART_INGRESS_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "passing_main_ci_run_id": 33305454362,
+    "same_inode_live_db_drift_closure": "NOT_OBSERVED"
+  },
+  "refined_result": "The SQLite data_version candidate remains useful as research/diagnostic evidence, but its F2 product surface is now narrow. WP206 write and G4 legacy recovery already use BEGIN IMMEDIATE plus fresh row validation/CAS; WP901 G4 now binds the restart checkpoint and exact persisted-row evidence inside one SQLite read snapshot. Therefore data_version must not be added broadly. It should be tested only on a concrete authority-sensitive load-to-use boundary outside these mechanisms.",
+  "retirement_rule": "If no such unprotected load-to-use consumer exists, or if its downstream generation/attestation/effect gates already reject stale evidence, retire EXTERNAL_SQLITE_REVISION_FENCE/v1 as redundant product code while preserving the research evidence.",
+  "promotion_rule": "Promote only if exact-current E4 reproduces a stale protected load-to-use continuation that baseline accepts and a connection-local data_version hint plus targeted revalidation closes without falsely rejecting unrelated UnifiedDB writes.",
+  "credit": {
+    "research_fusion": 1,
+    "new_e4": 0,
+    "new_e5": 0,
+    "trigger4_build": 0,
+    "target_runtime": 0,
+    "whole_system": 0
+  }
+}

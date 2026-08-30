@@ -1,0 +1,97 @@
+{
+  "schema": "TRIGGER4_RESEARCH_DELTA_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "date_local": "2026-08-29",
+  "authority_epoch": "8.78",
+  "routing": {
+    "normalized_message": "4",
+    "result": "TRIGGERWORD_4",
+    "directive_fetch": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_branch_head_observed": "de14f8eda65c01e3cad5b091fa7c098bc4660d61"
+  },
+  "observed_heads": {
+    "clay_global_research_entity_main_before_write": "bf6d49b19701808a770f8ae9909cc229aee022a4",
+    "frankenstein_2_main_at_final_reentry_before_receipt": "3d0deabe9fafc32ca4bd0c548512b74b3eecb5fa",
+    "wp306_review_branch_base": "9a560ecfe2742c10b54a675e4afc45560b1f0350",
+    "wp306_review_head": "c54eb106b5ab55b3c3822cd76bb34614d9c144b9"
+  },
+  "authority_resolution": {
+    "canonical_authority": "research_entity/continuity/BOOTSTRAP_MINIMAL.json -> supervisor 8.78",
+    "free_only_meaning": "external provider token/spend policy; owner-provisioned VPS via established bridge and clay-direct-dev remains allowed under exact-source/resource/provenance guards",
+    "together": "FORBIDDEN",
+    "paid_subscription_unknown_unlisted_external_provider_routes": "FORBIDDEN"
+  },
+  "wp510_reentry": {
+    "canonical_component_merge_sha": "3e5b05f95b1cef80ff781152fa430f7916736746",
+    "self_hosted_run_id": 33254381280,
+    "self_hosted_job_id": 99105445603,
+    "status_observed": "queued",
+    "duplicate_dispatch_created_by_this_organ": false,
+    "decision": "ROUTE_AROUND_QUEUED_RUNTIME_ATTEMPT",
+    "note": "A current exact-WP510 runtime attempt already exists and remains queued; a duplicate dispatch would add no new evidence. Concurrent Trigger-6 work also advanced WP510 exact-source/host-profile research during this macrocycle."
+  },
+  "wp306": {
+    "canonical_active_generation": 3,
+    "canonical_active_state": "ACCEPTED_AT_REPOSITORY_COMPONENT_SCOPE",
+    "review_only_pr": 519,
+    "review_only": true,
+    "mutation_authority_claimed": false,
+    "production_source_modified": false,
+    "review_branch": "review/wp306-render-token-cost-binding-falsifier-20260829-gpt56sol",
+    "review_head_sha": "c54eb106b5ab55b3c3822cd76bb34614d9c144b9",
+    "falsifier_test": "tests/test_wp306_renderer_tokenizer_cost_binding_falsifier.py",
+    "falsifier_workflow": ".github/workflows/wp306-render-token-cost-binding-falsifier-ci.yml",
+    "workflow_run_id": 33259578848,
+    "workflow_job_id": 99119099009,
+    "workflow_status": "completed",
+    "workflow_conclusion": "failure_as_preregistered_negative_evidence",
+    "setup_checkout": "PASS",
+    "python_setup": "PASS",
+    "compile_reviewed_wp306_source_and_falsifier": "PASS",
+    "preregistered_discriminator": "FAILURE_AS_EXPECTED"
+  },
+  "falsifier": {
+    "hypothesis": "A bounded context budget can represent concrete rendered/tokenized context cost only if charged item cost is independently bound to the exact payload plus an explicit renderer/tokenizer or equivalent cost-model witness; a naked caller-supplied scalar cannot establish that binding.",
+    "counterhypothesis": "The existing caller-supplied cost_units field is already sufficient to enforce the concrete rendered/tokenized budget for the exact payload without an independent cost witness.",
+    "fixture": {
+      "renderer_identity": "FIXTURE_IDENTITY_UTF8_RENDERER/v1",
+      "tokenizer_identity": "FIXTURE_WHITESPACE_TOKENIZER/v1",
+      "exact_payload_token_count_measured": 64,
+      "caller_declared_cost_units": 1,
+      "context_need_max_cost_units": 1
+    },
+    "observed_behavior": "The canonical compile_context path selected the exact payload under declared selected_cost_units=1; the independent fixture renderer/tokenizer measured 64 units, and the preregistered desired fail-closed invariant therefore failed.",
+    "classification": "WP306_RENDERER_TOKENIZER_COST_WITNESS_BINDING_GAP_REPRODUCED",
+    "evidence_scope": "REPOSITORY_HOSTED_REVIEW_ONLY_NEGATIVE_EVIDENCE",
+    "inference_boundary": "The fixture tokenizer is not asserted to be the production tokenizer. The evidence demonstrates a missing binding mechanism between caller cost_units and independently measured concrete payload cost; it does not establish target-runtime token counts, invalidate other accepted WP306 behavior, or mint higher-scope failure/acceptance credit."
+  },
+  "candidate_repair_boundary": {
+    "status": "NOT_IMPLEMENTED_BY_REVIEW_LANE",
+    "proposal": "Open a sole successor WP306 mutation claim only after exact-current reentry and ownership check. Preserve reference-only compilation while introducing a typed deterministic cost witness/admission that binds exact payload digest, renderer/cost-model identity, tokenizer identity/version where applicable, measured cost, provenance/generation and witness digest. compile_context or its admission boundary must consume/revalidate that witness rather than trusting an unbound caller scalar.",
+    "required_regressions": [
+      "underdeclared cost witness mismatch fails closed",
+      "payload digest mismatch fails closed",
+      "renderer/tokenizer or cost-model identity mismatch fails closed",
+      "stale generation/witness fails closed",
+      "required-item and required-channel budget semantics remain deterministic",
+      "reference-only payload exposure invariant remains intact"
+    ]
+  },
+  "credits": {
+    "wp306_target_runtime_credit": 0,
+    "wp510_target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_runtime_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "unusual_experiment_executed": false,
+  "next_exact_action": "Re-enter current Frankenstein-2.0 main and open workpackage claims/PRs. If no sole WP306 successor mutation authority already exists, claim the narrow renderer/tokenizer cost-witness repair, absorb PR #519 as a permanent regression, run exact PR-head and merged-main repository CI, and reconcile only at the bounded WP306 component scope. Keep WP510 runtime promotion separate and do not duplicate its existing queued/runtime-exact-source lanes."
+}

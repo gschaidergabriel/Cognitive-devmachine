@@ -1,0 +1,61 @@
+{
+  "schema": "CLAY_TRIGGER4_WP510_RUNNER_BLOCKER_REENTRY/v2",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "authority_epoch": "8.78",
+  "classification": "FRESH_CROSS_LANE_SELF_HOSTED_RUNNER_UNASSIGNED_EVIDENCE",
+  "research_main_observed_before_write": "98b448c7d4d8b54510c0856cf10ca49503604d01",
+  "controller": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "main_observed": "c1de268661b385b0c20e276a5489693e48a249e3"
+  },
+  "wp510_existing_run": {
+    "run_id": 33265772059,
+    "workflow": "Trigger4 WP510 Target Runtime V2",
+    "status": "queued",
+    "job_id": 99135457584,
+    "labels": ["self-hosted", "Linux", "X64"],
+    "runner_id": 0,
+    "steps_observed": 0,
+    "runtime_credit": 0
+  },
+  "fresh_cross_lane_run": {
+    "run_id": 33292580719,
+    "workflow": "Frank SQLite package provenance readonly v1",
+    "status": "queued",
+    "job_id": 99206693789,
+    "job_name": "accepted-target-sqlite-package-provenance-readonly",
+    "labels": ["self-hosted", "Linux", "X64"],
+    "runner_id": null,
+    "runner_name": null,
+    "steps_observed": 0
+  },
+  "queue_observation": {
+    "controller_queued_workflow_run_count_observed": 24,
+    "scope_warning": "The aggregate count alone does not prove all 24 queued runs require the same runner class. The two exact jobs above independently show the same self-hosted/Linux/X64 unassigned pre-step pattern across semantically unrelated workflows."
+  },
+  "inference": "Fresh post-checkpoint cross-lane evidence strengthens a controller-wide self-hosted runner availability, registration, group/access, label-eligibility, or lifecycle hypothesis over a WP510-specific semantic defect hypothesis.",
+  "counterhypotheses": [
+    "An eligible runner exists but is busy and has not yet accepted these jobs.",
+    "Repository or runner-group access policy prevents assignment.",
+    "The runner is registered with incompatible or missing default labels.",
+    "The runner service is offline, stopped, deregistered, or otherwise not polling."
+  ],
+  "decision": {
+    "dispatch_duplicate": false,
+    "modify_wp510_semantics": false,
+    "mint_target_runtime_credit": false,
+    "reason": "The failure mode remains pre-step infrastructure/assignment evidence; duplicate dispatch or semantic mutation has lower information gain than host-side runner observation."
+  },
+  "next_exact_action": "On the already-authorized live FREE VPS/controller host surface, observe the self-hosted runner process/service, GitHub registration and runner-group/repository access, and effective labels before mutation. Then re-read existing queued Trigger4 runs. Do not create another dispatch while an equivalent unresolved job exists.",
+  "credits": {
+    "wp510_target_runtime": 0,
+    "physical_grid10": 0,
+    "semantic_gwt": 0,
+    "jspace_runtime": 0,
+    "provider_runtime": 0,
+    "training": 0,
+    "effect": 0,
+    "whole_system": 0
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13BC_NON_AUTHORITY",
+  "timestamp": "2026-08-30T01:50:00+07:00",
+  "classification": "SUPERVISOR_STEERING_NON_AUTHORITY",
+  "material_finding": "WP510 controller run 33265772059/job 99135457584 remains queued with zero executed steps and no assigned runner identity. Newly mirrored Trigger6 E2/E3 evidence shows this is an out-of-band self-hosted-runner lifecycle/readiness dependency: GitHub's Linux service path can establish boot/service wiring and RunnerService child-listener retry for selected exit codes, but it is not evidence of unconditional whole-service recovery and the stock systemd unit has no Restart= policy. Target host runner service state therefore remains UNKNOWN; queued state must not be promoted to target-runtime evidence.",
+  "evidence": [
+    "research_entity/frankenstein2_tool_intelligence/deltas/2026-08-30T0057P0700_GPT56SOL_WP510_SELFHOSTED_RUNNER_QUEUE_E2_MIRROR.json",
+    "research_entity/frankenstein2_tool_intelligence/deltas/2026-08-30_GPT56SOL_R6_SELFHOSTED_RUNNER_PERSISTENCE_SERVICE_E2_MIRROR.json",
+    "research_entity/frankenstein2_tool_intelligence/deltas/2026-08-30_GPT56SOL_R6_SELFHOSTED_RUNNER_SYSTEMD_BEHAVIOR_E3_MIRROR.json"
+  ],
+  "steering": {
+    "wp510": "Do not duplicate-dispatch while run 33265772059/job 99135457584 is queued/running/unresolved. Before any successor dispatch, inspect the target host runner service lifecycle directly using the existing owner-authorized VPS surface: service status, listener process, connectivity/diagnostic logs, labels/group eligibility if observable without privilege escalation, and exact runner version. Treat GitHub-side registration/eligibility, host service liveness, job assignment, step execution, and target-runtime receipt as separate evidence credits.",
+    "service_policy": "Do not add Restart=always or otherwise mutate the runner service merely from source/model consensus. Upstream service semantics intentionally stop on some listener exits and cap repeated retries; any service-policy change requires an executable target-host counterexample plus bounded review of duplicate-session/orphan-child risks.",
+    "security": "Do not introduce a higher-privilege PAT/App credential solely to read runner roster state. Prefer existing host-local service/log evidence and current connected GitHub surfaces; privilege expansion requires separate explicit authority.",
+    "credit": "TARGET_RUNTIME_CREDIT=0 until exact-source or byte-identical target execution actually runs and emits a bound receipt. Runner-service source inspection is E2/E3 diagnostic evidence only."
+  },
+  "invariants": [
+    "FREE_ONLY_NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "ALL_CLAYCODE_EXTERNAL_PROVIDER_ROUTES_UNADMITTED",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "base_credit_delta": 0,
+  "canonical_semantics_credit_delta": 0,
+  "provider_runtime_credit_delta": 0,
+  "target_runtime_credit_delta": 0,
+  "physical_grid10_credit_delta": 0,
+  "training_credit_delta": 0,
+  "whole_hcu_credit_delta": 0
+}

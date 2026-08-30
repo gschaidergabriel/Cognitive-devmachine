@@ -1,0 +1,21 @@
+{
+  "schema": "CLAY_RESEARCH_ENTITY_TRIGGER6_MIRROR_DELTA/v1",
+  "research_id": "R6-20260829-CLAIM-SEMANTIC-DEDUPE-GPT56SOL-01",
+  "mirrored_evidence_stage": "E3_CLAIM_REPRODUCED",
+  "created_at": "2026-08-29T20:06:00+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "mirror_role": "PROVENANCE_ONLY_NOT_CLAIM_AUTHORITY",
+  "source_repo": "gschaidergabriel/frankenstein-2.0",
+  "source_receipt": "research/tool_intelligence/receipts/R6-20260829-CLAIM-SEMANTIC-DEDUPE-GPT56SOL-01_E3_OBJECTIVE_KEY_COLLISION_20260829T2006P0700.json",
+  "source_receipt_commit": "6bef0f47f2b20c691d73cc57c44a9d82c81a92a2",
+  "source_architecture_delta": "research/tool_intelligence/deltas/2026-08-29T2005P0700_GPT56SOL_R6_TRIGGER6_CLAIM_SEMANTIC_DEDUPE_E2_ARCHITECTURE_MAPPED.json",
+  "source_architecture_delta_commit": "62b5016ac076607b6b9f387588958c54407acff7",
+  "research_entity_base_sha": "dab526b9bba1ea8e549840dd4f1209db69b24d5b",
+  "finding": "Trigger-6's current create-only path <research_id>/<claim_target>.json does not provide semantic duplicate exclusion because research_id is worker-chosen. Two materially overlapping WP803 E1 claims were created under different research IDs even though the first claim was already visible in the exact parent of the second claim commit.",
+  "counterhypothesis_rejected": "Pure visibility race: first claim is directly fetchable at the second claim's parent ref 31b2f0c8c1fe13e2e3962c6cdabb9e2f61b57c53.",
+  "recommended_delta": "Introduce a canonical typed objective_key mutex separate from research_id provenance. objective_key should bind architecture snapshot, canonical sorted target refs, evidence stage, normalized objective class, and source/discriminator identity where applicable. Avoid fuzzy-text similarity as authority; ambiguous normalization fails closed.",
+  "evidence_scope": "REPOSITORY_COORDINATION_ONLY",
+  "research_credit": "E3_REPRODUCED",
+  "runtime_credit": 0,
+  "whole_system_credit": 0
+}

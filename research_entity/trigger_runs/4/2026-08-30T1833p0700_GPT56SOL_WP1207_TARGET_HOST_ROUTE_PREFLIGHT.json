@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_canonical_commit": "443ba60f77def0fc15157e5cc7f52cba2c3ef2ec",
+  "f2_delta": "workpackages/deltas/F2-WP-1207/5-F2-WP-1207-G5-GPT56SOL-TARGET-HOST-ROUTE-PREFLIGHT-20260830T1831P0700.json",
+  "observed_runtime_attempt": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33308965181,
+    "job_id": 99250433269,
+    "controller_head_sha": "03f39ad9e03579e6a77a6a89ed493d86d281fe08",
+    "status": "QUEUED",
+    "duplicate_dispatch": "PROHIBITED_WHILE_UNRESOLVED"
+  },
+  "execution_surface_resolution": {
+    "owner_vps_authority": "AUTHORIZED_AND_EXPECTED",
+    "provider_policy": "FREE_ONLY_EXTERNAL_PROVIDER_HARD_OFF; OWNER_VPS_NOT_BANNED",
+    "self_hosted_runner_observation": "0 in-progress and 33 queued controller workflow runs at observation time",
+    "direct_chat_ssh_observation": "ssh binary/config absent only on transient chat container",
+    "classification": "TRANSIENTLY_UNREACHABLE",
+    "global_capability_absence_proven": false
+  },
+  "artifact_preflight": {
+    "predecessor_artifact_id": 9726495595,
+    "predecessor_release_sha256": "e6a688673792a70a2deefac25d2241bacc8726f17d05eafac9adca5e2592a3da",
+    "candidate_artifact_id": 9726674221,
+    "candidate_outer_sha256": "e5985de88e4cce762604bb7f6743e7c48a2c20e43516917953234a369b928348",
+    "candidate_release_sha256": "297e7fbb274314fc3bc57077464ca804dfa16062fd00f7b57b247c34346f5c40",
+    "candidate_manifest_sha256": "00cbe0b86ad2208d6f990049d89ae70ce226ce302ee3033b1cf01e416ccc14ad",
+    "result": "ALL_DECLARED_DIGESTS_MATCH_AT_CONNECTOR_PLUS_LOCAL_PREFLIGHT_SCOPE"
+  },
+  "parallel_lane_resolution": {
+    "wp206_g6": "ACTIVE_ELSEWHERE_DO_NOT_DUPLICATE",
+    "wp901_g5": "MERGED_AT_REPOSITORY_COMPONENT_SCOPE_DURING_THIS_TRIGGER_REENTRY",
+    "wp1207_target_host": "EXACT_RUNTIME_ATTEMPT_ALREADY_QUEUED_DO_NOT_DUPLICATE",
+    "wp510": "RECORDED_UNRESOLVED_ATTEMPT_DO_NOT_DUPLICATE"
+  },
+  "credits": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10": 0,
+    "semantic_gwt": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "wp1207_target_runtime": 0
+  },
+  "next_exact_action": "Re-enter controller run 33308965181/job 99250433269. If terminal, inspect the persisted target receipt and exact source/artifact identity before any promotion. If still queued, do not dispatch another WP1207 job; re-probe/repair the registered self-hosted/bridge transport under current owner authority and preserve transport-scoped negative evidence."
+}

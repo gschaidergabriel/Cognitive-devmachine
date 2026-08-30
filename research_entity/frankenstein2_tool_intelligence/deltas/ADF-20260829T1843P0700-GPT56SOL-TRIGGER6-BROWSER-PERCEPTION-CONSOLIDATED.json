@@ -1,0 +1,118 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_ARCHITECTURE_DELTA_FUSION/v1",
+  "fusion_id": "ADF-20260829T1843P0700-GPT56SOL-TRIGGER6-BROWSER-PERCEPTION-CONSOLIDATED",
+  "trigger": "6",
+  "slot": "ARCHITECTURE_DELTA_FUSER",
+  "status": "COMPLETED_CONSOLIDATED_BROWSER_PERCEPTION_RESEARCH_NO_RUNTIME_PROMOTION",
+  "created_at_local": "2026-08-29T18:43:00+07:00",
+  "worker": "gpt-5.6-sol",
+  "architecture_snapshot": {
+    "frankenstein_2_head_at_prewrite_refresh": "430b765a7e694dc86c1591b50e166374249ba9dd",
+    "research_entity_head_at_prewrite_refresh": "a5dfd068745d547888fa5989480617c398877596",
+    "authority_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "perception_terminal_blocker_observed": "non-synthetic local real-device/OS-permission acceptance receipt",
+    "perception_upstream_ci_scope_note": "WP708/WP710/WP711/WP712/WP713 dependencies are recorded resolved only at their declared repository-hosted component-CI scopes; final physical Perception Fabric acceptance remains false"
+  },
+  "same_macrocycle_research": [
+    {
+      "research_id": "R6-LIVE-BROWSER-CDP-DUALCHANNEL",
+      "evidence": ["E1_SOURCE_READ", "E2_ARCHITECTURE_MAPPED"],
+      "decision": "BROWSER_CDP_DUALCHANNEL_PROVENANCE_HARDENING/v1"
+    },
+    {
+      "research_id": "R6-LIVE-BROWSER-STRUCTURAL-AX-VS-DOMSNAPSHOT",
+      "evidence": ["E1_SOURCE_READ", "E2_ARCHITECTURE_MAPPED"],
+      "decision": "BROWSER_STRUCTURAL_SELECTIVE_CAPTURE/v1"
+    },
+    {
+      "research_id": "R6-LIVE-BROWSER-RENDERED-SCREENCAST-VS-SCREENSHOT",
+      "evidence": ["E1_SOURCE_READ", "E2_ARCHITECTURE_MAPPED"],
+      "decision": "BROWSER_RENDERED_CAPABILITY_NEGOTIATED_CAPTURE/v1"
+    }
+  ],
+  "consolidated_architecture": {
+    "principle": "Keep the existing two logical browser Perception Fabric sources and make the physical adapter thin, capability-negotiated, version-bound and provenance-strict. Do not add another browser subsystem or authority.",
+    "rendered_source": {
+      "source_id": "browser/rendered/<target_id>",
+      "continuous_candidate": "Page.startScreencast only after exact browser/CDP capability acceptance",
+      "fallback_on_demand": "Page.captureScreenshot",
+      "flow_control": "CDP maxFramesInFlight/ack is transport backpressure only; F2 PerceptionCaptureBroker remains local admission/drop authority",
+      "time": "screencast Network.TimeSinceEpoch remains auxiliary; F2 monotonic receipt/admission time remains local ordering authority"
+    },
+    "structural_source": {
+      "source_id": "browser/structural/<target_id>",
+      "default_candidate": "AX full/depth-bounded/partial/query capture for interaction semantics",
+      "escalation": "DOMSnapshot when exact DOM attributes, layout/style/rectangles, AX ambiguity or explicit downstream evidence contract requires richer structure",
+      "efficiency_claim": "UNMEASURED; policy hypothesis only"
+    },
+    "shared_provenance": [
+      "source_id",
+      "source_generation_or_epoch",
+      "cdp_target_id",
+      "cdp_target_session_id_string",
+      "cdp_screencast_frame_id_integer_when_applicable",
+      "frame/backend-node identifiers when applicable",
+      "browser_build_or_version_identity",
+      "cdp_protocol_identity",
+      "capture subtype",
+      "captured_monotonic_ns",
+      "auxiliary browser timestamp with explicit clock domain when retained",
+      "payload digest/reference",
+      "permission/capability provenance reference when applicable"
+    ],
+    "generation": "navigation, target replacement, detach/reconnect or invalidating protocol restart advances source generation before observations re-enter temporal fusion",
+    "identity_guard": "Target.SessionID and Page.screencastFrame.sessionId must never share one field/meaning",
+    "simultaneity_guard": "shared target/session does not prove rendered/structural simultaneity; existing temporal fusion and uncertainty govern correlation",
+    "authority_guard": "browser adapter produces candidate observations only; broker, canonical state and EffectGate/EffectJournal authority are unchanged"
+  },
+  "external_primary_facts": [
+    "Tip-of-tree CDP changes frequently and has no guaranteed backwards compatibility; exact protocol capability must be bound.",
+    "Page.startScreencast is experimental and exposes event-stream controls including everyNthFrame, maxFramesInFlight, acknowledgement and a sendLastFrame performance/latency trade.",
+    "Page.captureScreenshot exists in stable 1.3 and provides a pull fallback.",
+    "Accessibility exposes semantic AX role/name/value/state with bounded/partial/query retrieval; Accessibility.enable warns of possible performance impact.",
+    "DOMSnapshot exposes full DOM plus layout and selected style/rectangle information."
+  ],
+  "falsifiers": [
+    "If current F2 gains an equivalent typed browser provenance/capability policy before handoff, reclassify this delta as duplicate documentation and do not fork.",
+    "If exact-browser measurement shows sampled screenshots dominate screencast on resource use, quality and temporal coverage, make screenshot the default rendered path.",
+    "If AX fallback frequency or overhead is high, make DOMSnapshot or a thinner direct DOM projection the structural default.",
+    "If rendered/structural skew cannot be bounded under the selected mechanisms, add an explicit synchronization/barrier experiment rather than pretending shared target/session implies simultaneity.",
+    "If source-generation fences fail navigation/reconnect stale-data tests, reject the adapter candidate."
+  ],
+  "measurement_plan": [
+    "Pin one exact local target browser build and exact CDP protocol/capability surface.",
+    "Rendered: compare bounded screencast versus sampled screenshot at matched useful observation rate; record p50/p95 latency, CPU/RSS, encoded bytes/sec, broker accepts/drops, reconnect behavior and quality/task coverage.",
+    "Structural: compare AX modes versus DOMSnapshot; record serialized bytes/node counts, p50/p95 latency, CPU/RSS, fallback rate and semantic task coverage including accessibility-poor pages.",
+    "Cross-channel: record rendered/structural skew, navigation/source-generation boundaries and stale-fusion rejection.",
+    "Permission/revocation: consume existing capture-authstream work rather than creating a second authority lane.",
+    "Final acceptance: only the owner-authorized non-synthetic local real-device/OS-permission receipt can close the physical Perception Fabric blocker."
+  ],
+  "handoff": {
+    "target": "Trigger-4 local Perception Fabric adapter/acceptance lane",
+    "status": "RESEARCH_COMPLETE_TO_E2_NOT_E5",
+    "integration_order": [
+      "apply provenance/version/generation contract",
+      "implement capability-negotiated rendered adapter behind existing source broker",
+      "implement selective structural capture behind existing structural source",
+      "run exact-browser measurement matrix",
+      "run existing WP714 non-synthetic local acceptance harness",
+      "only then consider E5/E6 promotion"
+    ]
+  },
+  "why_stop_here": "The remaining discriminators are exact target-browser/local-runtime measurements. Additional generic external reading has lower information gain than the existing source-backed hypotheses and cannot substitute for the current physical acceptance boundary.",
+  "credit_boundary": {
+    "new_trigger6_e1_results": 3,
+    "new_trigger6_e2_results": 3,
+    "bounded_architecture_deltas": 3,
+    "e3_reproduced_runtime_claims": 0,
+    "e4_f2_ablations": 0,
+    "e5_build_candidates": 0,
+    "e6_f2_acceptances": 0,
+    "runtime_credit": 0,
+    "physical_browser_capture_credit": 0,
+    "final_perception_acceptance": false,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_ARCHITECTURE_DELTA_FUSION/v1",
+  "fusion_id": "ADF-20260829T1847P0700-GPT56SOL-TRIGGER6-BROWSER-CLOCK-WITNESS-REENTRY",
+  "trigger": "6",
+  "slot": "ARCHITECTURE_DELTA_FUSER",
+  "status": "COMPLETED_STALE_REVIEW_CORRECTION_NO_RUNTIME_PROMOTION",
+  "created_at_local": "2026-08-29T18:47:00+07:00",
+  "worker": "gpt-5.6-sol",
+  "supersession_semantics": "APPEND_ONLY_PARTIAL_CORRECTION; prior browser mechanism/source findings remain historical and mostly valid, but temporal/blocker clauses identified below are superseded",
+  "source_delta": {
+    "new_f2_counterevidence_commit": "54b7788f7505ea61c4ebd9a9dfc38c9f70c039fe",
+    "canonical_f2_review_claim": "research/tool_intelligence/claims/R6-LIVE-BROWSER-PERCEPTION-CLOCK-WITNESS-REVIEW/STALE_REVIEW_WP711_COUNTEREVIDENCE.json",
+    "canonical_f2_review_receipt": "research/tool_intelligence/receipts/R6-LIVE-BROWSER-PERCEPTION-CLOCK-WITNESS-REVIEW_STALE_REVIEW_20260829T1845P0700.json",
+    "prior_consolidated_fusion": "research_entity/frankenstein2_tool_intelligence/deltas/ADF-20260829T1843P0700-GPT56SOL-TRIGGER6-BROWSER-PERCEPTION-CONSOLIDATED.json",
+    "prior_consolidated_fusion_commit": "c1757cb4b8bd0eacf5940494444eb4977a9f4f85",
+    "research_entity_head_at_prewrite_refresh": "c1757cb4b8bd0eacf5940494444eb4977a9f4f85"
+  },
+  "new_observation": "Reproduced repository-CI counterevidence shows accepted WP711 cross-source temporal alignment can treat distinct clock domains as comparable from caller-provided numeric offset/uncertainty without a separately proven provenance-bearing clock-alignment relation. WP714 therefore also regains WP711 reconciliation as a terminal prerequisite.",
+  "impact_on_browser_deltas": {
+    "BROWSER_CDP_DUALCHANNEL_PROVENANCE_HARDENING/v1": "PRESERVED_AND_STRENGTHENED: shared target/session never minted simultaneity; now explicitly require provenance-bound clock witness for any cross-domain relation.",
+    "BROWSER_STRUCTURAL_SELECTIVE_CAPTURE/v1": "PRESERVED: AX-first/DOMSnapshot-on-demand policy does not rely on cross-clock self-attestation; structural observations continue to use local monotonic capture time.",
+    "BROWSER_RENDERED_CAPABILITY_NEGOTIATED_CAPTURE/v1": "PRESERVED_WITH_TEMPORAL_RESTRICTION: screencast vs screenshot capability policy remains, but Network.TimeSinceEpoch from screencast metadata is AUXILIARY_UNALIGNED_UNTIL_WITNESS and cannot influence admissibility/join/simultaneity before WP711 repair/reconciliation."
+  },
+  "superseded_clauses_from_prior_fusion": [
+    "The statement that the sole remaining Perception terminal blocker is the non-synthetic local real-device/OS-permission receipt.",
+    "Any implication that the currently accepted WP711 implementation can safely map browser TimeSinceEpoch into cross-domain temporal admissibility merely from offset/uncertainty values."
+  ],
+  "corrected_execution_order": [
+    "Reconcile or repair WP711 so distinct clock domains fail closed without a provenance-bound alignment witness.",
+    "Re-run the WP711 negative regression and a positive bounded witness case at exact repaired source identity.",
+    "Refresh WP714 resolved dependencies/terminal blockers after that reconciliation.",
+    "Only then run the owner-authorized non-synthetic local browser/device/OS-permission acceptance matrix.",
+    "Final Perception acceptance still requires the real runtime receipt; repository CI alone cannot mint it."
+  ],
+  "browser_clock_contract_correction": {
+    "local_ordering_authority": "captured_monotonic_ns",
+    "browser_screencast_timestamp": "AUXILIARY_UNALIGNED_UNTIL_WITNESS",
+    "cross_domain_default": "UNALIGNED",
+    "minimum_alignment_witness": [
+      "source clock domain",
+      "target/reference clock domain",
+      "transform/offset identity",
+      "bounded uncertainty",
+      "validity interval and/or generation",
+      "evidence/provenance identity"
+    ],
+    "anti_self_attestation": "A numeric offset/uncertainty supplied inside the same observation relation cannot prove the clock relation it assumes."
+  },
+  "next_exact_action": "Do not create a browser-specific clock repair. Consume the canonical WP711 reconciliation/repair lane. After exact repaired WP711 evidence exists, re-review the browser timing clauses, then hand the preserved CDP/AX/screenshot policies to the local Perception acceptance lane.",
+  "credit_boundary": {
+    "stale_review_credit": 1,
+    "new_external_evidence_credit": 0,
+    "wp711_repair_credit": 0,
+    "browser_e5_credit": 0,
+    "runtime_credit": 0,
+    "physical_browser_capture_credit": 0,
+    "final_perception_acceptance": false,
+    "whole_entityos_hcu_credit": 0,
+    "training_credit": 0
+  }
+}

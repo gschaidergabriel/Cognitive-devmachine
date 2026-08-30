@@ -1,0 +1,45 @@
+{
+  "schema": "TRIGGERWORD4_REVIEW_FOLLOWUP/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "authority_epoch": "8.78",
+  "parent_review_delta": "research_entity/trigger_runs/4/2026-08-29_GPT56SOL_PR463_WP803_PROVENANCE_FALSIFIER.json",
+  "research_entity_main_before_write": "ed5f3e3698633b79f545182b97d12350f5b1e694",
+  "target": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "pull_request": 463,
+    "workpackage": "F2-WP-803",
+    "generation": 1,
+    "updated_head_sha": "bd401c26cb8e90dadcc2da7e81bdc23c626c8ba3",
+    "updated_source_blob_sha": "76e1a625e69c909bcf077826997dd00f635b68af",
+    "updated_test_blob_sha": "2a1ab8743ed29ca743e1d15df07cb3738e977ad5",
+    "updated_ci_run_id": 33254231910,
+    "updated_ci_conclusion": "success"
+  },
+  "falsifier_resolution": {
+    "WP803-FALSIFIER-ACTION-CONDITION-BINDING": "RESOLVED_AT_UPDATED_BRANCH_COMPONENT_SCOPE",
+    "evidence": [
+      "PredictionCandidate now seals action_id",
+      "public constructor rejects unavailable action targets",
+      "evaluate_next_observation_prediction rejects prediction/action mismatch before evaluator step",
+      "repository-hosted branch CI succeeded on updated head"
+    ],
+    "WP803-FALSIFIER-RUN-DESCRIPTOR-BINDING": "OPEN",
+    "remaining_gap": "updated source still does not require or authenticate an exact WP800 RunDescriptor or bound descriptor digest; benchmark_run_id remains a syntactic identifier copied into evaluator output"
+  },
+  "durable_handoff": {
+    "github_followup_comment_id": 5462596787,
+    "next_discriminator": "bind exact WP800 RunDescriptor identity/provenance/SUT ancestry to prediction/evaluation and reject run relabeling, or explicitly narrow the generation-1 provenance claim before bounded acceptance"
+  },
+  "credits": {
+    "action_binding_component_review_resolution": 1,
+    "run_descriptor_binding_resolution": 0,
+    "wp803_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_jspace_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_credit": 0
+  }
+}

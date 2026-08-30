@@ -1,0 +1,40 @@
+{
+  "schema": "CLAY_RESEARCH_ENTITY_F2_TRIGGER6_MIRROR/v1",
+  "research_id": "R6-20260829-WP1200-MANIFEST-COMPLETION-GPT56SOL-01",
+  "created_at": "2026-08-29T20:03:00+07:00",
+  "worker": "GPT-5.6-Sol",
+  "source_repo": "gschaidergabriel/frankenstein-2.0",
+  "source_main_at_handoff": "031d4032983f7c5b88c799ea0c0af3148018457c",
+  "research_entity_reentry_before_write": "357a073f92d8d288bf0e79534c8ffc62e717576c",
+  "supervisor": "9.13AW_NON_AUTHORITY",
+  "status": "E3_RESEARCH_COMPLETE_TRIGGER4_HANDOFF_READY",
+  "live_correction": "The earlier PR415 physical-credit symptom has narrowed on current F2 source: physical_credit is hard false and physical_completion_candidate requires a supplied T4 mandatory obligation. The stronger remaining P0 gap persists: completion status is still computed over caller-supplied obligations without an authoritative expected mandatory obligation universe.",
+  "external_primary_sources": [
+    "bazelbuild/remote-apis@becdd8f9ff811df88a22d3eadd6341753d51d167",
+    "kubernetes/apimachinery@50d9b4a672b474db2e0bf61c968d87465b55eb56",
+    "theupdateframework/specification@59e601ed29c0d2e497264ae8b31c11b8ef07df1e"
+  ],
+  "distilled_invariants": [
+    "result bound to exact declared universe/spec identity",
+    "explicit Unknown for missing/stale required evidence",
+    "observed generation bound to current desired generation",
+    "deterministic digest/version identity for manifest",
+    "manifest integrity is insufficient without producer/admission authority",
+    "physical completion remains a separate later evidence authority"
+  ],
+  "e3_result": {
+    "synthetic_matrix_cases": 10,
+    "result_sha256": "9c4fc35fa0ca2760466095d29c1c0977c8fc62421c5275037b3d27898e21a5a7",
+    "reproduced": "open-world sparse/missing mandatory subsets can become COMPLETE under the observed status algorithm",
+    "candidate": "manifest-bound coverage maps omitted mandatory IDs to UNKNOWN, preserves valid full completion and optional absence, rejects stale/unadmitted/semantically mutated universes"
+  },
+  "trigger4_handoff": "research/tool_intelligence/deltas/2026-08-29T2002P0700_GPT56SOL_R6_WP1200_MANIFEST_COMPLETION_TRIGGER4_HANDOFF.json@031d4032983f7c5b88c799ea0c0af3148018457c",
+  "active_mutation_rule": "Do not duplicate F2-WP-1200 G1; existing Trigger4 owner must absorb implementation/regressions.",
+  "evidence_credit": "TRIGGER6_E3_SYNTHETIC_RESEARCH_ONLY",
+  "repository_ci_credit": 0,
+  "runtime_credit": 0,
+  "physical_host_credit": 0,
+  "architecture_acceptance_credit": 0,
+  "whole_system_credit": 0,
+  "next_exact_gate": "Trigger4 absorbs exact manifest/admission/generation closure and executes exact-source repository regressions; only afterward may Trigger6 progress to E4/E5 stress/benchmark research."
+}

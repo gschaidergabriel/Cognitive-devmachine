@@ -1,0 +1,46 @@
+{
+  "schema": "T7_RESEARCH_ENTITY_PROVENANCE_MIRROR/v1",
+  "trigger": "7",
+  "research_id": "T7-ASR-004",
+  "authority": "PROVENANCE_MIRROR_ONLY_NOT_CLAIM_AUTHORITY",
+  "canonical_claim_authority_repository": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2_checkpoint_commit": "a9570fa77700251cbd917fe8cafa7ed004bba067",
+  "semantic_key": "5819c477c86d0a3fcf7540bd8e1d57513366955139aa652f7f9d6f6a47c4ab2e",
+  "canonical_paths": {
+    "semantic_claim": "research/local_voice/semantic_claims/5819c477c86d0a3fcf7540bd8e1d57513366955139aa652f7f9d6f6a47c4ab2e.json",
+    "human_claim": "research/local_voice/claims/T7-ASR-004/V1_QWEN3_ASR_06B_STREAMING_RUNTIME_DEPENDENCY_SOURCE_PIN.json",
+    "source_result": "research/local_voice/sources/2026-08-30_T7_ASR004_QWEN3_ASR_06B_STREAMING_RUNTIME_SOURCE_PIN.json",
+    "checkpoint": "research/local_voice/checkpoints/2026-08-30_T7_ASR004_QWEN3_ASR_STREAMING_GPT56SOL.json"
+  },
+  "source_scope_result": {
+    "state": "SOURCE_PINNED_TERMINAL_AT_SCOPE",
+    "model_id": "Qwen/Qwen3-ASR-0.6B",
+    "model_sha256": "79d6cbd4c98c7bbffe9db2edac07f56cd6637d0d5944b27f6c2b8353840323ea",
+    "model_bytes": 1876091704,
+    "german_supported_in_official_config": true,
+    "official_streaming_backend": "vLLM",
+    "official_streaming_returns_timestamps": false,
+    "target_runtime_credit": 0,
+    "german_quality_credit": 0,
+    "whole_system_credit": 0
+  },
+  "coordination": {
+    "qwen3_tts_duplicate_claim_key": "3f58fd7a1eab0d653880efc365ef21c77fa630866ad06afdf9bc338c59b5c0a5",
+    "outcome": "CREATE_ONLY_LOST_NO_DUPLICATE_TTS_LANE_CREATED"
+  },
+  "hardware_negative_evidence": {
+    "workflow_run_id": 33265598243,
+    "status": "completed",
+    "conclusion": "cancelled",
+    "jobs_observed": 0,
+    "classification": "INFRASTRUCTURE_OR_SCHEDULING_NEGATIVE_EVIDENCE_ONLY",
+    "runtime_credit": 0
+  },
+  "live_authority_reentry": {
+    "clay_main_observed_before_mirror": "94edcdc69c70d63bce22bbd83fd11cf9e37b7f2a",
+    "supervisor": "8.78_FREE_ONLY",
+    "vps_policy": "OWNER_PROVISIONED_VPS_VIA_ESTABLISHED_VPS_BRIDGE_AND_CLAY_DIRECT_DEV_ALLOWED_AND_EXPECTED",
+    "paid_unknown_external_provider_policy": "FAIL_CLOSED"
+  },
+  "next_exact_action": "Prefer the established live free VPS/clay-direct-dev path rather than another zero-step GitHub Actions dispatch. Before any Qwen3-ASR model execution, create a distinct F2 TARGET_RUNTIME_MODEL_BENCHMARK semantic claim and bind the exact pinned artifact. Measure whole-host RAM/VRAM/headroom, startup, German WER/CER, streaming partial stability, endpoint latency and cancellation behavior; mint no broader credit than observed."
+}

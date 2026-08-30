@@ -1,0 +1,48 @@
+{
+  "schema": "TRIGGERWORD4_EXECUTABLE_FALSIFIER/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "authority_epoch": "8.78",
+  "research_entity_main_before_write": "72449dfd3b9e8c78939a211156d5060caf8888f5",
+  "target": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "workpackage": "F2-WP-803",
+    "accepted_generation": 1,
+    "accepted_pointer_commit": "7e1a3990b2904d06dac7c33784d3952b38791ed4",
+    "accepted_scope": "HELDOUT_WORLD_MODEL_PREDICTION_REPOSITORY_HOSTED_COMPONENT_CI_ONLY"
+  },
+  "falsifier": {
+    "classification": "CANDIDATE_FALSIFIER_REVIEW_ONLY",
+    "branch": "review/wp803-run-descriptor-relabel-falsifier-20260829",
+    "draft_pr": 467,
+    "head_sha": "f2781180b6b34d5399534308982e73d473625ebf",
+    "test_path": "tests/review/test_wp803_run_descriptor_relabel_falsifier.py",
+    "workflow_path": ".github/workflows/review-wp803-run-descriptor-relabel-falsifier-ci.yml",
+    "workflow_run_id": 33254440406,
+    "workflow_job_id": 99105597318,
+    "result": "PASS_REPRODUCED_NEGATIVE_CONTROL"
+  },
+  "observed_behavior": "An exact WP800 RunDescriptor is built and validated for the fixture. A WP803 prediction is created with the descriptor run_id. Only benchmark_run_id is then relabeled to a forged/unbound id. The accepted WP803 evaluator still scores the relabeled candidate and copies the forged run id into PredictionEvaluation without requiring the RunDescriptor or descriptor digest.",
+  "epistemic_result": {
+    "run_descriptor_binding": "FALSIFIED_AT_ACCEPTED_SOURCE_PLUS_REPOSITORY_HOSTED_NEGATIVE_CONTROL_SCOPE",
+    "fixture_episode_observation_action_binding": "NOT_FALSIFIED_BY_THIS_TEST",
+    "runtime_or_physical_claim": "NOT_TESTED"
+  },
+  "coordination": {
+    "accepted_wp803_source_modified": false,
+    "new_wp803_mutation_authority_created": false,
+    "original_pr_post_acceptance_comment_id": 5462613028,
+    "rule": "new exact falsifier may justify explicit successor generation or accepted-scope correction under workpackages/CLAIM_PROTOCOL.md"
+  },
+  "next_exact_action": "Re-enter canonical F2 main. If WP803 has no admitted successor yet, open/route generation 2 only through the canonical claim protocol to bind exact WP800 RunDescriptor identity/ancestry (or explicitly narrow generation-1 provenance language). Keep the review PR as evidence until the successor consumes or supersedes the falsifier.",
+  "credits": {
+    "executable_repository_falsifier_credit": 1,
+    "wp803_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_jspace_credit": 0,
+    "training_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_credit": 0
+  }
+}

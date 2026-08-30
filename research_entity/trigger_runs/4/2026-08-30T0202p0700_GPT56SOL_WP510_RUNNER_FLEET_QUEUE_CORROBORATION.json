@@ -1,0 +1,98 @@
+{
+  "schema": "TRIGGER4_EXECUTION_EVIDENCE_MIRROR/v1",
+  "trigger": "4",
+  "observed_local_time": "2026-08-30T02:02:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "NON_INTERVENTIONAL_RUNNER_LIFECYCLE_CORROBORATION",
+  "authority_observed": {
+    "research_main_sha": "bfb5c27fc41dd95e418df8cd3a603931e83218b9",
+    "supervisor_inbox": "9.13BC_NON_AUTHORITY",
+    "owner_execution_authority": "CLAY_EXECUTION_AUTHORITY.md -> governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+    "free_only": true,
+    "provider_routes_admitted": false,
+    "together_forbidden": true
+  },
+  "source_state": {
+    "frankenstein2_main_observed": "bfc6d9455aea4e8247692cc4cadb367f5bf83111",
+    "controller_main_observed": "4886bb4e559ba824efc686350ba1aa12d65ba325",
+    "wp510_exact_source_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+    "wp510_repository_component_state": "ACCEPTED_AT_DECLARED_REPOSITORY_COMPONENT_SCOPE",
+    "wp510_target_runtime_credit": 0
+  },
+  "observations": [
+    {
+      "type": "WP510_EXISTING_SINGLETON_RUN",
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "run_id": 33265772059,
+      "job_id": 99135457584,
+      "job_name": "wp510-target-runtime",
+      "runner_labels": ["self-hosted", "Linux", "X64"],
+      "run_status": "queued",
+      "job_status": "queued",
+      "executed_steps": 0,
+      "assigned_runner_observed": false
+    },
+    {
+      "type": "CROSS_WORKFLOW_SELF_HOSTED_CORROBORATION",
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "controller_head": "4886bb4e559ba824efc686350ba1aa12d65ba325",
+      "queued_jobs": [
+        {
+          "run_id": 33266856557,
+          "job_id": 99138324275,
+          "job_name": "hardware-roundtrip",
+          "status": "queued"
+        },
+        {
+          "run_id": 33266856623,
+          "job_id": 99138325012,
+          "job_name": "accepted-target-sqlite-productive-path-readonly",
+          "status": "queued"
+        },
+        {
+          "run_id": 33266856626,
+          "job_id": 99138324803,
+          "job_name": "accepted-target-sqlite-published-patchset-readonly",
+          "status": "queued"
+        },
+        {
+          "run_id": 33266856606,
+          "job_id": 99138324451,
+          "job_name": "accepted-target-sqlite-package-provenance-readonly",
+          "status": "queued"
+        },
+        {
+          "run_id": 33268035045,
+          "job_id": 99141486255,
+          "job_name": "bootstrap-and-mirror",
+          "status": "queued"
+        }
+      ]
+    }
+  ],
+  "evidence_levels": {
+    "R0_observed": "Multiple distinct controller workflows requiring the self-hosted execution surface are concurrently queued, including the original WP510 target-runtime singleton; WP510 still has zero executed steps.",
+    "R1_inferred": "The common bottleneck is more consistent with self-hosted runner availability/assignment/lifecycle than with WP510-specific source semantics.",
+    "unknown": "Target-host service status, listener process state, connectivity/diagnostic logs, exact runner version, and root cause of runner unavailability remain unobserved from the currently connected GitHub surface."
+  },
+  "actions": {
+    "duplicate_wp510_dispatch_performed": false,
+    "successor_runtime_dispatch_performed": false,
+    "provider_network_execution_performed": false,
+    "runner_service_mutation_performed": false,
+    "unusual_experiment_performed": false
+  },
+  "credits": {
+    "wp510_target_environment_component_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "decision": "Do not duplicate-dispatch WP510 or mutate runner service from source/model inference. Preserve the queued singleton. The next promotion-bearing action is direct target-host runner lifecycle observation using the already owner-authorized VPS surface: service status, listener process, diagnostic/connectivity logs and exact runner version. If service restoration occurs, allow the existing queued WP510 job to bind first; require exact-source/tree/dirty-state/runner/runtime receipt closure before granting only bounded target-environment component credit.",
+  "next_exact_action": "Obtain direct owner-VPS readback for the self-hosted runner service/listener/logs/version without privilege expansion. Then re-check run 33265772059/job 99135457584 before any successor dispatch."
+}

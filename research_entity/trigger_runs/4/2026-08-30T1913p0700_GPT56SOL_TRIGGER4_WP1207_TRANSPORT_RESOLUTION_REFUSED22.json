@@ -1,0 +1,82 @@
+{
+  "schema": "TRIGGER4_EXECUTION_SURFACE_RESOLUTION/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6 Sol",
+  "trigger_time_local": "2026-08-30T19:13:00+07:00",
+  "authority": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "prewrite_main_sha": "d00a90efc86dcadad8b4cdc584be415dba1bf91f",
+    "authority_path": "CLAY_EXECUTION_AUTHORITY.md",
+    "authority_blob_sha": "71e646a569a288ec9f55ec8ed4a999d683bf8b6c",
+    "meaning": "clay-direct-dev and its established bridge/self-hosted transport are authorized for Triggerword-4 build/test/runtime work; FREE_ONLY restricts external provider spend, not owner VPS compute"
+  },
+  "bound_sources": {
+    "trigger_directive_branch_sha": "c8aa3fd049ae402e001f1a6ef7263e0244509ac6",
+    "f2_main_sha": "f79c628b3113e91373fea35a70bf3c70ae3efab1",
+    "controller_main_sha": "8e6abc2cf807c8cf2c5a97b20eb930d754a77a64",
+    "wp1207_prior_result_commit": "fe7b9477f4169cbcc7b2f675fd7be8642aa4afd0",
+    "parallel_runner_diagnostics_mirror_commit": "d00a90efc86dcadad8b4cdc584be415dba1bf91f",
+    "parallel_transport_canary_commit": "456557df12c3e042c77f7c5d037d9fda2a83452b",
+    "parallel_transport_canary_run_id": 33311383477
+  },
+  "requested_capabilities": [
+    "target-host shell",
+    "target-host filesystem",
+    "target-host test",
+    "exact source-bound WP1207 runtime execution"
+  ],
+  "observations": {
+    "wp1207_prior_probe": {
+      "executed_steps": 0,
+      "classification": "CONTROL_PLANE_ABORT_BEFORE_RUNNER_STEP",
+      "runtime_credit": 0
+    },
+    "controller_actions": {
+      "queued": 32,
+      "in_progress": 0,
+      "classification": "SELF_HOSTED_ROUTE_TRANSIENTLY_UNREACHABLE_OR_UNASSIGNED"
+    },
+    "direct_session": {
+      "ssh_binary_observed": false,
+      "ssh_config_observed": false,
+      "classification": "DIRECT_SSH_NOT_AVAILABLE_ON_THIS_SESSION_SURFACE_ONLY"
+    },
+    "public_vps_tcp22_probe": {
+      "source": "CHAT_TRANSIENT_CONTAINER",
+      "target": "72.61.19.188:22",
+      "tcp_connect": false,
+      "error": "ConnectionRefusedError: [Errno 111] Connection refused",
+      "elapsed_ms": 5.4,
+      "scope": "PUBLIC_ENDPOINT_TCP22_ONLY",
+      "counterhypothesis": "direct public SSH may be intentionally closed or filtered while the documented jump-host/private bridge remains independently viable"
+    },
+    "parallel_github_hosted_canary": {
+      "run_id": 33311383477,
+      "conclusion": "failure",
+      "jobs_observed": 0,
+      "scope": "CANARY_WORKFLOW_CONTROL_PLANE_ONLY",
+      "note": "no network result was produced; this is not target-host evidence"
+    }
+  },
+  "route_resolution": [
+    {
+      "route_id": "chat_to_clay_direct_dev_via_self_hosted_runner",
+      "classification": "TRANSIENTLY_UNREACHABLE",
+      "reason": "32 queued runs and 0 in-progress; prior WP1207 executed zero runner steps"
+    },
+    {
+      "route_id": "configured_bridge_to_clay_direct_dev",
+      "classification": "DISCOVERY_REQUIRED",
+      "reason": "documented route exists, but this chat surface has no installed SSH client/config; the direct public TCP22 refusal does not exhaust the documented jump-host route"
+    }
+  ],
+  "selected_route": null,
+  "overall_classification": "TARGET_HOST_TRANSPORT_TRANSIENTLY_UNREACHABLE_WITH_ALTERNATE_BRIDGE_DISCOVERY_REQUIRED",
+  "wp1207_semantics_modified": false,
+  "duplicate_wp1207_redispatch": false,
+  "target_runtime_credit": 0,
+  "whole_system_credit": 0,
+  "provider_spend": false,
+  "next_exact_action": "Obtain host-side self-hosted-runner roster/status/busy/labels/version plus service/connectivity/_diag or a real configured jump-host bridge roundtrip; revalidate authority and queue freshness; only after route health changes execute exactly one unchanged source/hash-bound WP1207 target-host probe and capture the runtime receipt.",
+  "evidence_scope": "ROUTING_AND_TRANSPORT_DIAGNOSTIC_ONLY"
+}

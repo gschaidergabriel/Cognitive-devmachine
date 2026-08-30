@@ -1,0 +1,52 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "checkpoint_observed_at": "2026-08-30T15:34:00+07:00",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "classification": "APPEND_ONLY_SUCCESSOR_TO_PRE_RECONCILIATION_CHECKPOINT",
+  "supersedes_current_reentry_interpretation_of": "research_entity/trigger_runs/4/2026-08-30T1532p0700_GPT56SOL_TRIGGER4_WP206_G3_SOURCE_COGREEN_PRE_RECONCILIATION.json",
+  "does_not_rewrite_history": true,
+  "observed": {
+    "frankenstein2_main": "a1b0ac3039244087133d302a1025a64af4346ef1",
+    "wp206_generation": 3,
+    "wp206_claim_id": "F2-WP-206-G3-GPT56SOL-LEGACY-G1-AUTHORITY-RECOVERY-20260830",
+    "wp206_state": "ACCEPTED",
+    "latest_accepted_generation": 3,
+    "accepted_scope": "PERSISTENT_AGENCY_LEGACY_G1_AUTHORITY_RECOVERY_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "implementation_pr": 681,
+    "implementation_head_sha": "7cc2dc2a5c9362f6e967d3df05a15604542582eb",
+    "implementation_merge_sha": "736a0907bdd35056d56f1ed0f75ea11e8457b8c1",
+    "canonical_source_blob_sha": "a45b43144605e96d5e015a3f828166cfa229add3",
+    "canonical_test_blob_sha": "87d33d81772dc6edf57cd861a02209f301e61406",
+    "canonical_workflow_blob_sha": "69b7f42844f9e3f4501af0d59956a342d5f5ad17",
+    "reconciliation_ref": "workpackages/reconciliations/F2-WP-206/3-F2-WP-206-G3-GPT56SOL-LEGACY-G1-AUTHORITY-RECOVERY-20260830.json",
+    "acceptance_receipt": "workpackages/receipts/F2-WP-206_G3_LEGACY_G1_AUTHORITY_RECOVERY.json",
+    "passing_pr_head_run_id": 33301728380,
+    "passing_pr_head_job_id": 99231053013,
+    "passing_main_run_id": 33301769704,
+    "passing_main_job_id": 99231155835,
+    "independent_exact_source_full_regression_run_id": 33301775833,
+    "independent_exact_source_full_regression_job_id": 99231171771
+  },
+  "result": {
+    "migration_gap": "CLOSED_AT_REPOSITORY_HOSTED_COMPONENT_SCOPE",
+    "wp901_historical_g1_authority_receipt_dependency_fence": "RELEASED_BY_WP206_G3_RECONCILIATION",
+    "same_inode_live_data_schema_drift": "SEPARATE_OPEN_DISCRIMINATOR",
+    "runtime_execution_observed": false,
+    "runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "convergence": {
+    "review_donor_pr_671": "CLOSED_NOT_MERGED_GREEN_DONOR_ONLY",
+    "competing_g3_created_by_this_organ": false,
+    "lost_nonforce_cas_force_retried": false,
+    "canonical_g3_reviewed_against_independent_donor": true
+  },
+  "next_exact_action": "Re-enter exact current Frankenstein 2.0 main and select the smallest nonduplicate Stage-9 recovery/stress continuation now that the WP901 historical-G1 authority-receipt compatibility fence is released; do not reopen WP206 absent new executable post-G3 counterevidence."
+}

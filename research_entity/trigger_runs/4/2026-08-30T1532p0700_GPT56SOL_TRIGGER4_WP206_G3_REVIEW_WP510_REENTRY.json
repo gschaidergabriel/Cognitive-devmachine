@@ -1,0 +1,94 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "created_at": "2026-08-30T15:32:00+07:00",
+  "routing": {
+    "status": "PASS",
+    "normalized_message": "4",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ],
+    "dangling_reference": "TRIGGERWORD_4_PORTABLE_LOCAL_HOST_HARNESS_ADDENDUM.md was referenced by directive text but direct fetch on the directive branch returned 404; no authority or runtime claim was derived from that missing file."
+  },
+  "authority": {
+    "admitted_schema_version": "8.78",
+    "supervisor_inbox_delta": "9.13BH_NON_AUTHORITY",
+    "free_only_meaning": "EXTERNAL_PROVIDER_TOKEN_AND_SPEND_POLICY_NOT_OWNER_VPS_BAN",
+    "owner_vps_allowed": true,
+    "established_vps_bridge_allowed": true,
+    "together": "FORBIDDEN",
+    "paid_or_unknown_provider_fallback": "FORBIDDEN"
+  },
+  "coordination": {
+    "initial_wp206_g3_claim_attempt": "ABORTED_BY_NON_FAST_FORWARD_CAS",
+    "force_push_used": false,
+    "canonical_successor_found_after_reentry": "F2-WP-206-G3-GPT56SOL-LEGACY-G1-AUTHORITY-RECOVERY-20260830",
+    "canonical_claim_commit": "f7b440fcb9a178b62e6c27a0b7da2f8c6d4aa33b",
+    "duplicate_mutation_created": false,
+    "review_mode_after_claim_collision": "REVIEW_ONLY"
+  },
+  "wp206_g3": {
+    "trigger_counterevidence": "PR663 run 33296011089/job 99215676906: accepted-G1-compatible legacy authority receipt fails current reader with CHECKPOINT_DB_AUTHORITY_RECEIPT_MISMATCH while current-row positive control passes.",
+    "implementation_merge_commit": "736a0907bdd35056d56f1ed0f75ea11e8457b8c1",
+    "declared_exact_head_ci_run": 33301728380,
+    "declared_exact_head_ci_job": 99231053013,
+    "declared_ci_result": "SUCCESS",
+    "active_pointer_last_observed": "ACTIVE",
+    "terminal_reconciliation_last_observed": "MISSING",
+    "positive_review_findings": [
+      "caller-supplied expected legacy receipt is compared to stored legacy receipt before mutation",
+      "checkpoint digest and typed replay are validated before rebind",
+      "canonical path/device/inode are validated before rebind",
+      "one-per-checkpoint recovery record is stored in canonical UnifiedDB",
+      "post-migration authority drift fails closed",
+      "exact historical-receipt repeat is idempotent with one recovery record"
+    ],
+    "review_deltas": [
+      "frankenstein-2.0@4c3078b4598f295cb5eef6fc8e94643c6fd738e7 — preregistered migration/tamper falsifiers",
+      "frankenstein-2.0@732eb50c4d88ba93a5494b1a5168470d9a334aeb — repeat provenance-conflict review"
+    ],
+    "open_review_discriminator": "After successful recovery with provenance A, repeat with otherwise-identical legacy receipt but provenance B should explicitly fail or the weaker repeat-provenance semantics must be deliberately documented/reconciled. Current source returns recorded provenance without comparing the incoming repeat provenance."
+  },
+  "wp510_target_runtime": {
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "status": "queued",
+    "steps": 0,
+    "runner_id": 0,
+    "runner_name": "",
+    "classification": "CONTROL_PLANE_EVIDENCE_ONLY_NOT_RUNTIME_FAILURE",
+    "duplicate_dispatch_created": false,
+    "direct_vps_surface_in_this_session": false
+  },
+  "execution_this_trigger": {
+    "new_unusual_experiment": false,
+    "provider_network_execution": false,
+    "vps_runtime_execution": false,
+    "product_source_mutation_by_this_organ": false,
+    "review_evidence_writes": true,
+    "research_checkpoint_write": true
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_actions": [
+    "Consume the repeat-provenance REVIEW_ONLY discriminator before terminal WP206 G3 reconciliation, or explicitly reconcile a weaker informational-only repeat provenance contract.",
+    "After G3 terminalization, re-evaluate the WP901 historical-recovery dependency rather than inferring it from repository CI alone.",
+    "Keep WP510 singleton run 33265772059/job 99135457584 nonduplicated; target-runtime promotion still requires an assigned runner and executed exact-source steps/receipt.",
+    "Continue Triggerword 4 toward exact target-runtime GRID/GWT causal evidence only after the current persistence/recovery authority boundaries are closed."
+  ]
+}

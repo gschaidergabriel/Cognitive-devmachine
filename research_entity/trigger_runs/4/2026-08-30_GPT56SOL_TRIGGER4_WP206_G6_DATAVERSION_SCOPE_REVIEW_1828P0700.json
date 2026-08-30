@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_TRIGGER4_RESEARCH_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4-REVIEW",
+  "recorded_at_local": "2026-08-30T18:28:00+07:00",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "selected_supervisor_epoch": "8.78",
+    "supervisor_inbox_snapshot": "9.13BI_NON_AUTHORITY",
+    "execution_mode": "FREE_ONLY_EXTERNAL_PROVIDER_POLICY_WITH_OWNER_AUTHORIZED_VPS_ALLOWED",
+    "external_provider_execution_this_checkpoint": false,
+    "vps_execution_this_checkpoint": false
+  },
+  "frankenstein2": {
+    "canonical_repository": "gschaidergabriel/frankenstein-2.0",
+    "g6_claim_commit_observed": "026ec3e2324b22367492145b5d8e61531fb0132a",
+    "review_delta_commit": "01ea9599f431b426bf40efb407cb47274eafddbf",
+    "workpackage": "F2-WP-206",
+    "generation": 6,
+    "claim_id": "F2-WP-206-G6-GPT56SOL-EXTERNAL-SQLITE-REVISION-FENCE-20260830",
+    "claim_state_observed": "ACTIVE",
+    "mutation_authority": false,
+    "review_delta": "workpackages/deltas/F2-WP-206/6-F2-WP-206-G6-GPT56SOL-REVIEW-DATA-VERSION-SCOPE-20260830T1826P0700.json"
+  },
+  "direct_findings": [
+    "PR728 is a useful donor but its branch is far behind current main and must not be merged directly.",
+    "The current persistent_agency_kernel.py blob equals the PR728 merge-base blob, so the donor's bounded source hunk is content-compatible with current main.",
+    "The current wp206_restart_probe.py blob also equals the donor merge-base blob, so its journal-mode-before-monitor correction is content-compatible.",
+    "The donor workflow predates accepted WP206 G5 evidence-subject binding and therefore must add the current G5 regression before G6 reconciliation."
+  ],
+  "external_primary": {
+    "source": "SQLite official PRAGMA data_version documentation",
+    "url": "https://www.sqlite.org/pragma.html#pragma_data_version",
+    "finding": "On one connection, data_version changes when any other connection commits changes to the database; same-connection commits do not change it; values are connection-local and are meaningful only when compared on the same connection over time."
+  },
+  "counterhypothesis": {
+    "id": "WP206_G6_DATABASE_WIDE_FALSE_POSITIVE",
+    "statement": "A hard PRAGMA main.data_version fence may reject legitimate unrelated commits by other components sharing canonical UnifiedDB, because the witness is database-wide rather than WP206-table-specific.",
+    "discriminator": "With the G6 fence active, commit only to an explicitly non-WP206 table from a second legitimate connection and then invoke the original WP206 store guard. If it raises external revision drift, G6 is an exclusive-database-writer fence and requires either an explicit exclusive writer-epoch contract or a narrower owned-state revision witness before acceptance."
+  },
+  "runtime_frontier": {
+    "wp1207_existing_target_run": 33301648871,
+    "self_hosted_state": "QUEUED_ZERO_STEPS_UNASSIGNED",
+    "github_hosted_preflight_run": 33308738469,
+    "github_hosted_preflight_state": "FAILED_ZERO_STEPS_CONTROL_PLANE_ONLY",
+    "duplicate_dispatch": "FORBIDDEN",
+    "next_gate": "direct owner-host or runner-admin inspection/repair, then allow existing exact attempts to execute"
+  },
+  "credits": {
+    "target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt": 0,
+    "jspace": 0,
+    "effect": 0,
+    "completion": 0,
+    "training": 0,
+    "whole_entityos_hcu": 0
+  },
+  "acceptance": "REVIEW_DELTA_COMMITTED_RUNTIME_STILL_BLOCKED_CONTROL_PLANE",
+  "next_exact_action": "Active WP206 G6 owner should add the unrelated-legitimate-writer discriminator plus current G5 regression to the rebased PR728 mechanism before terminal reconciliation. Separately, do not duplicate WP1207/WP510/WP900 target dispatches while existing runner-blocked attempts remain unresolved."
+}

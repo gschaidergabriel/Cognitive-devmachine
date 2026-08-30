@@ -1,0 +1,67 @@
+{
+  "schema": "TRIGGER4_TRANSPORT_OBSERVATION/v1",
+  "trigger": "4",
+  "worker": "GPT-5.6 Sol / ChatGPT Triggerword-4 reentry organ",
+  "observed_at": "2026-08-30T19:30:54+07:00",
+  "research_entity_main_observed_before_write": "6a10b88e4e7851a637a568a3bc10047a958ece9e",
+  "subject": "F2-WP-1207 target-runtime transport discriminator",
+  "observation_surface": "current transient ChatGPT container",
+  "direct_observations": {
+    "ssh_binary_present": false,
+    "ssh_directory_present": false,
+    "netcat_binary": "/usr/bin/nc",
+    "public_vps_host": "72.61.19.188",
+    "target_port": 22,
+    "probe_command_class": "TCP_CONNECT_ONLY_NO_AUTHENTICATION_NO_REMOTE_COMMAND",
+    "tcp_probe_exit_code": 1,
+    "tcp_probe_result": "CONNECTION_REFUSED"
+  },
+  "epistemic_interpretation": {
+    "established": [
+      "From this transient container network path at the observation time, TCP connect to 72.61.19.188:22 was actively refused.",
+      "This worker has no local ssh binary or ~/.ssh identity/config surface in the current transient container."
+    ],
+    "not_established": [
+      "self-hosted GitHub runner offline",
+      "self-hosted GitHub runner busy",
+      "runner label/group mismatch",
+      "clay-direct-dev sandbox failure",
+      "VPS host failure",
+      "absence of an alternate/non-public bridge",
+      "target-runtime product failure"
+    ],
+    "runner_status": "UNKNOWN",
+    "transport_scope": "PUBLIC_TCP_22_FROM_CURRENT_TRANSIENT_CHAT_CONTAINER_ONLY"
+  },
+  "coordination": {
+    "canonical_wp1207_run_id": 33301648871,
+    "canonical_wp1207_job_id": 99230838825,
+    "second_retained_dispatch_run_id": 33308615022,
+    "duplicate_dispatch_performed": false,
+    "wp1207_semantic_subject_modified": false,
+    "active_pointer_modified": false
+  },
+  "parallel_canary": {
+    "run_id": 33311384163,
+    "job_id": 99256958536,
+    "conclusion": "failure",
+    "artifact_count_observed": 0,
+    "job_log_fetch_result": "BLOB_NOT_FOUND",
+    "credit": 0,
+    "interpretation": "Canary failure is not promoted to a network or runner negative result because no diagnostic receipt/log is available."
+  },
+  "credits": {
+    "transport_observation": 1,
+    "target_runtime": 0,
+    "hostile_twin_runtime": 0,
+    "physical_host": 0,
+    "grid10_runtime": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "effect": 0,
+    "completion": 0,
+    "training": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Do not dispatch another WP1207 runtime attempt and do not mutate the exact semantic subject while retained dispatches are pending. Re-enter existing runs. If an already-authorized owner-host/runner-admin or alternate bridge surface becomes directly callable, inspect it read-only to distinguish listener/registration/route state. Only an executed exact-bound target receipt may promote target-runtime credit."
+}

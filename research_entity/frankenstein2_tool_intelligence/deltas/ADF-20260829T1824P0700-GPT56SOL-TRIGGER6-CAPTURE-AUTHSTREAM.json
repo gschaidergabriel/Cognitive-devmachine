@@ -1,0 +1,48 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "mirror_status": "PROVENANCE_ONLY_NOT_CLAIM_AUTHORITY",
+  "trigger": "6",
+  "research_id": "R6-CAPTURE-AUTHSTREAM-001",
+  "fusion_id": "ADF-20260829T1824P0700-GPT56SOL-TRIGGER6-CAPTURE-AUTHSTREAM",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "source_fusion_path": "research/tool_intelligence/deltas/ADF-20260829T1824P0700-GPT56SOL-TRIGGER6-CAPTURE-AUTHSTREAM.json",
+  "source_fusion_commit": "276a6d246d1de10a5ff0d6872693d085fbc1bdd9",
+  "source_e1_receipt_path": "research/tool_intelligence/receipts/R6-CAPTURE-AUTHSTREAM-001_E1_SOURCE_READ.json",
+  "source_e1_receipt_commit": "97f6303521b86704baf980909d64fe4249a44cbb",
+  "source_e2_path": "research/tool_intelligence/deltas/R6-CAPTURE-AUTHSTREAM-001_E2_ARCHITECTURE_MAPPED.json",
+  "source_e2_commit": "2c80af43ea2f0b85549e28315807c687e2606381",
+  "research_entity_parent_head_observed": "d9d4fea68eafe7148678f003b932f7bfbbf34acc",
+  "authority": {
+    "schema": "9.13",
+    "delta": "9.13AU_NON_AUTHORITY",
+    "external_provider_policy": "FREE_ONLY; all external provider routes unadmitted; Together forbidden; paid/unknown-cost provider fallback forbidden",
+    "owner_execution_transport": "VPS_AND_ESTABLISHED_BRIDGE_ALLOWED_BY_CURRENT_OWNER_AUTHORITY"
+  },
+  "findings": [
+    "Canonical WP709 CaptureBroker authority is src/frankenstein2/perception_capture_broker.py; src/frankenstein2/retina_capture_broker.py is an unreconciled parallel implementation and donor-only until reconciled or retired.",
+    "Canonical WP709 already binds source generation, capture-owner lease, frame hashes, sequence/time, bounded frame age/window semantics, missed-window signaling and eviction count while remaining RAM-only/nonpersistent.",
+    "Merkle/transparency-log mechanisms provide stronger historical consistency/inclusion proofs but require additional retained proof/log state and are not justified inside the realtime broker at current requirements.",
+    "BLAKE3 incremental hashing does not by itself provide arbitrary historical inclusion proofs; no BLAKE3 dependency is justified solely for this purpose.",
+    "GStreamer bounded queue/leaky-policy/drop-counter semantics are useful structural donor evidence, but a concurrent Trigger-6 E1 result overlaps that portion and must not be counted as independent replication.",
+    "If a future concrete audit requirement survives canonical broker reconciliation, the smallest candidate is a domain-separated cumulative SHA-256 history commitment in a canonical WP709 successor, with restart continuity anchored by an external persisted checkpoint/receipt plane.",
+    "No E5 build candidate or runtime/perception/GWT/J-Space/whole-system/training promotion is warranted from this research."
+  ],
+  "architecture_delta_class": "NO_IMPORT_AND_AUTHORITY_RECONCILIATION_FIRST",
+  "trigger5_ingest_completeness": "UNRESOLVED_NAMESPACE_STATE_DRIFT_PRESERVED",
+  "credit": {
+    "e1_source_read": 1,
+    "e2_architecture_mapping": 1,
+    "architecture_fusion": 1,
+    "e3": 0,
+    "e4": 0,
+    "e5": 0,
+    "runtime": 0,
+    "perception_runtime": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "physical_grid10": 0,
+    "training": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Consume canonical WP709 duplicate-authority reconciliation first. Only if a concrete durable-audit requirement remains, claim a new E3/E4 discriminator comparing a dependency-free checkpointed SHA-256 chain against no-commitment and compact-range Merkle alternatives."
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "FRANKENSTEIN2_ARCHITECTURE_DELTA_FUSION/v1",
+  "fusion_id": "ADF-20260829T2011P0700-GPT56SOL-WP804-GOAL-HISTORY-FUSION",
+  "created_at": "2026-08-29T20:11:00+07:00",
+  "worker": "gpt-5.6-sol",
+  "trigger": "6",
+  "classification": "RESEARCH_ENTITY_MIRROR_RAW_PROVENANCE_NOT_CANONICAL_F2_ACCEPTANCE",
+  "source_repo": "gschaidergabriel/frankenstein-2.0",
+  "source_f2_fusion_commit": "ca94997d22b30a6583a3e06164ac49e78464e0b3",
+  "source_heads": {
+    "f2_main_observed": "8daae04dee6c5ced9d42df6cf666c6e0024bc066",
+    "research_entity_main_before_mirror": "165b1f81b29cc86209eb9adc861a201c3538dd52",
+    "wp804_active_claim": "d6cef32b1c5fa158bf415517eb37424a17dfe0d9",
+    "wp804_branch_observed": "ec3ece5840dcbde56165cb0b111a450c721c56e2",
+    "e1_source_audit": "7f028db0c82ac729f0c11ea018dc0bae8fdb3347",
+    "e2_history_consumer_outcome": "681b1c143cac19a45e92af7b480075c423d811c3",
+    "parallel_identifiability_fusion": "6ffd28a295004e14367e69fa20d00ded7b599482"
+  },
+  "architecture_fusion": {
+    "preserve": [
+      "WP800 evaluator-only versus public ObservationView separation",
+      "WP804 public CandidateGoal boundary and explicit ABSTAIN output",
+      "evaluator-side label sealing and benchmark-only no-goal-authority semantics",
+      "explicit shortcut baselines",
+      "parallel WP804 identifiability/ambiguity falsifiers"
+    ],
+    "conditional_history_delta": "If WP804 claims goal preference from behavior rather than single-observation candidate inference, add one immutable public behavior/familiarization trace, family-level holdout identity, matched current-only/history-lesion baselines, and a case where current ObservationView is non-identifying while prior public behavior discriminates.",
+    "unconditional_consumer_delta": "Before score_goal_inference consumes decision/goal_id, revalidate exact current GoalInference/GoalChoice content against producer lineage or a sealed producer digest; add a post-init mutation falsifier analogous to the observed WP801 consumer-boundary failure.",
+    "no_import": "Do not import AGENT/TDW, ToMnet or a full Bayesian inverse-planning stack; structural distillation only."
+  },
+  "decision": "FUSE_WITH_ACTIVE_WP804_NOT_PARALLEL_REIMPLEMENTATION",
+  "handoff": "Trigger4 active WP804 owner should consume consumer-revalidation immediately, then either add public familiarization/history if behavioral preference inference is claimed or narrow generation-1 acceptance to single-observation candidate inference. Preserve the existing identifiability delta rather than creating a competing scorer authority.",
+  "evidence_ceiling": "E2_ARCHITECTURE_MAPPED",
+  "runtime_credit": 0,
+  "goal_authority_credit": 0,
+  "whole_system_credit": 0
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "research_id": "R6-SEED-001",
+  "stage": "E4_F2_ABLATION",
+  "status": "MIRRORED_BOUNDED_POSITIVE_NOT_BUILD_CANDIDATE",
+  "created_at": "2026-08-30T00:27:05+07:00",
+  "worker": "ChatGPT/GPT-5.6-Sol",
+  "research_entity_main_observed_before_write": "f59a644fca134aef4dbbf8789e6288d868dbcf3d",
+  "canonical_f2_delta": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/deltas/2026-08-30T0026P0700_GPT56SOL_R6_SEED001_LOSSLESS_CONTEXT_STRUCTURAL_E4.json",
+    "commit": "2d92000251eb5d1b3c891094d42fe2b8a78faacc"
+  },
+  "canonical_f2_receipt": "research/tool_intelligence/receipts/R6-SEED-001_E4_LOSSLESS_STRUCTURAL_COMPACTION_20260830T0025P0700.json",
+  "canonical_f2_claim_result": "research/tool_intelligence/claims/R6-SEED-001/E4_F2_ABLATION_LOSSLESS_STRUCTURAL_COMPACTION/result.json",
+  "summary": "A side-store-free lossless structural ContextView encoding passed exact round-trip and six fail-closed tamper cases in a synthetic F2-style E4 harness. Byte reduction was negative for a one-item view, +20.1% at four items, and about +32-36% at 16-256 items. No pinned target tokenizer or actual production model-facing renderer trace was available, so the result remains E4 research evidence only and is not an E5 Trigger-4 build candidate.",
+  "next_discriminator": "Measure the same bypass-vs-codec comparison on real admitted F2 ContextViews at the actual model-facing renderer with exact tokenizer identity and downstream behavioral equivalence before any E5 promotion.",
+  "credits": {
+    "research_e4": 1,
+    "architecture": 0,
+    "integration": 0,
+    "target_runtime": 0,
+    "whole_system": 0
+  }
+}

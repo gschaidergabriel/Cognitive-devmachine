@@ -1,0 +1,38 @@
+{
+  "schema": "TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "6",
+  "mirror_id": "ADF-20260830T1926P0700-GPT56SOL-RUNTIME-PROBE-STALENESS-FUSION",
+  "mirrored_at": "2026-08-30T19:28:00+07:00",
+  "worker": "GPT-5.6 Sol / ChatGPT organ",
+  "research_entity_main_before_write": "a974325cf9f445a4bcc7669aa1f6c51f82d4da8f",
+  "current_authority_observed": {
+    "admitted_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_vps_allowed": true,
+    "established_vps_bridge_allowed": true,
+    "together_forbidden": true,
+    "paid_or_unknown_cost_fallback": false,
+    "authority_ref": "research_entity/trigger_runs/4/2026-08-30_GPT56SOL_TRIGGER4_WP1207_DUAL_QUEUE_RUNNER_UNKNOWN_REENTRY.json@a974325cf9f445a4bcc7669aa1f6c51f82d4da8f"
+  },
+  "canonical_f2_source": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "path": "research/tool_intelligence/fusions/2026-08-30T1926P0700_GPT56SOL_RUNTIME_PROBE_STALENESS_FUSION.json",
+    "commit": "7c65334eb642085c5a30a2d3e69b1e48543a4f2a"
+  },
+  "evidence_summary": [
+    "Current GitHub Actions concurrency semantics retain at most one pending member per concurrency group by default; cancel-in-progress:false preserves running work.",
+    "F2 controller WP901 and WP902 target-host workflows already use stable concurrency groups with cancel-in-progress:false, so the preferred direction is normalization/reuse rather than a new scheduler.",
+    "WP1207 current target-host evidence remained queued with zero executed steps; current Trigger-4 reentry classifies runner status UNKNOWN, not OFFLINE, and forbids duplicate retry.",
+    "A parallel E2 RuntimeSubjectBoundaryFingerprint result plus E4 logical ablation supports a fail-closed semantic-currentness gate only when dependency-closure completeness is verified; UNKNOWN must not promote historical runtime evidence.",
+    "A parallel E2 GitHub pending-replacement claim overlaps this organ's E2 target, so this organ retired duplicate E2 mutation/research and preserved only fusion/review value."
+  ],
+  "distilled_candidate": "RUNTIME_PROBE_LATEST_REPRESENTATIVE_PIPELINE = stable semantic probe family -> native single-pending coalescing -> runner transport admission when observable -> fail-closed boundary-fingerprint freshness check -> exact target receipt -> currentness-aware promotion reentry. This is scheduling/evidence-linking only and creates no new truth/effect/completion authority.",
+  "credit": {
+    "new_e1_research_credit": 1,
+    "new_e2_architecture_credit_from_mirror": 0,
+    "runtime_credit": 0,
+    "target_host_credit": 0,
+    "whole_system_credit": 0
+  },
+  "next_exact_gate": "Consume the terminal parallel GitHub pending-replacement E2 result; if it agrees with current controller observations and the boundary-fingerprint E4 constraints, hand Trigger-4 one minimal normalization candidate rather than importing a new scheduler framework."
+}

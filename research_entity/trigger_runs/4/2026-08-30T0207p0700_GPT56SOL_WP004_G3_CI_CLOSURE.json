@@ -1,0 +1,67 @@
+{
+  "schema": "TRIGGER4_EXECUTABLE_EVIDENCE_DELTA/v1",
+  "trigger": "4",
+  "observed_local_time": "2026-08-30T02:07:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "REPOSITORY_HOSTED_COMPONENT_CI_CLOSURE_ONLY",
+  "reentry": {
+    "research_main_observed_before_write": "c77f5919f215d1cae0cb2e93bc65055553f34c95",
+    "frankenstein2_main_observed": "144791f4799f39a3ebd2bf9f5b63f2db5ad798e1",
+    "frankenstein2_main_message": "trigger4(WP004): re-enter G3 through exact PR-head CI",
+    "wp510_runtime_singleton_remains_separate_and_queued": true
+  },
+  "wp004_g3": {
+    "pull_request": 591,
+    "pr_head_sha": "ac5f4e3d98189b7c538f4bdb45fb3465dc14a27e",
+    "merge_commit_sha": "144791f4799f39a3ebd2bf9f5b63f2db5ad798e1",
+    "pr_head_ci": {
+      "workflow": "Frankenstein 2.0 Run Package Verifier CI",
+      "run_id": 33269983202,
+      "job_id": 99146615353,
+      "job_name": "deterministic-runpackage-verifier",
+      "status": "completed",
+      "conclusion": "success",
+      "observed_steps": [
+        "Compile verifier and regressions",
+        "Run accepted verifier regression suite",
+        "Run WP004 ABI authority-singleton regression",
+        "Parse canonical run-package schemas",
+        "Verify archived closed WP-004 run packages"
+      ],
+      "all_observed_material_steps_conclusion": "success"
+    },
+    "merged_main_ci": {
+      "workflow": "Frankenstein 2.0 Run Package Verifier CI",
+      "run_id": 33269999511,
+      "job_id": 99146660701,
+      "job_name": "deterministic-runpackage-verifier",
+      "status": "completed",
+      "conclusion": "success",
+      "observed_steps": [
+        "Compile verifier and regressions",
+        "Run accepted verifier regression suite",
+        "Run WP004 ABI authority-singleton regression",
+        "Parse canonical run-package schemas",
+        "Verify archived closed WP-004 run packages"
+      ],
+      "all_observed_material_steps_conclusion": "success"
+    }
+  },
+  "finding": "The sole WP004 G3 ABI-authority repair lane now has exact PR-head repository-hosted CI success and exact merged-main repository-hosted CI success for the same verifier/schema/archived-package obligation family. This closes the previously observed repository-hosted-CI evidence deficit at repository-component scope only.",
+  "counterboundary": "Repository-hosted CI does not establish target VPS execution, physical GRID10, semantic GWT/J-Space behavior, effects, training, or whole-system acceptance.",
+  "credits": {
+    "wp004_repository_component_ci_closure": true,
+    "wp004_target_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "semantic_gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "coordination": {
+    "competing_wp004_lane_created": false,
+    "wp510_duplicate_dispatch_performed": false
+  },
+  "next_exact_action": "Reconcile the WP004 G3 granular acceptance pointer/aggregate view through the existing single canonical writer without inflating its repository-component evidence ceiling. In parallel keep WP510 run 33265772059/job 99135457584 singleton unresolved until the owner-authorized host runner lifecycle is observed/restored; do not duplicate-dispatch."
+}

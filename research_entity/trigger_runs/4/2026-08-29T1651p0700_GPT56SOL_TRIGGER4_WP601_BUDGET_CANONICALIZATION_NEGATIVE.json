@@ -1,0 +1,82 @@
+{
+  "schema": "TRIGGER4_RESEARCH_DELTA_RECEIPT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "observed_at_local": "2026-08-29T16:51:00+07:00",
+  "authority_epoch": "8.78",
+  "authority_ref": "research_entity/continuity/BOOTSTRAP_MINIMAL.json -> research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+  "canonical_clay_main_before_write": "de594b370678f41a90b9639affb8bd759d6b2c96",
+  "frankenstein2_main_observed": "263166e85b735211375f03495c8326ca9efd324b",
+  "routing_self_test": "PASS",
+  "required_directives_fetched": [
+    "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+  ],
+  "observed_progress": {
+    "wp510": {
+      "generation": 1,
+      "repository_component_receipt_commit": "80056b46c6599211cb28439b54f038a4b38699ba",
+      "pr_head_ci_run": 33246169083,
+      "merged_main_ci_run": 33246199191,
+      "accepted_scope": "GWT_CAUSAL_PATH_SEAL_G1_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "runtime_credit": 0
+    },
+    "wp600": {
+      "generation": 1,
+      "state": "ACCEPTED",
+      "accepted_scope": "DIRECT_DELEGATE_ROUTER_G1_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "runtime_credit": 0
+    },
+    "wp601": {
+      "generation": 1,
+      "state": "ACCEPTED",
+      "accepted_scope": "NATIVE_CHILD_REQUEST_ABI_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+      "acceptance_commit": "ac33691fb63e50d8af54828428fe7987c2b1e751",
+      "runtime_credit": 0
+    },
+    "wp602": {
+      "generation": 1,
+      "state_observed": "ACTIVE",
+      "ownership": "FOREIGN_ACTIVE_MUTATION_AUTHORITY_NOT_DUPLICATED"
+    }
+  },
+  "new_negative_evidence": {
+    "falsifier_id": "WP601_ACCEPTED_BUDGET_OUTSIDE_CANONICAL_HASH_DOMAIN",
+    "classification": "REPRODUCED_REPOSITORY_HOSTED_COMPONENT_NEGATIVE_EVIDENCE",
+    "review_pr": 332,
+    "review_head_sha": "7cd82646a04b9837732af738c3180fef7f8af2a8",
+    "workflow_run": 33246371454,
+    "job_id": 99084428288,
+    "workflow_conclusion": "success",
+    "meaning": "The review test successfully reproduced the preregistered counterexample: ChildResourceBudget and NativeChildRequest accept an integer budget outside the admitted Python 3.12 integer-to-decimal serialization domain, after which NativeChildRequest.sha256() raises ValueError during canonical json.dumps. The constructor-accepted domain is therefore broader than the deterministic canonicalization/hash domain.",
+    "source_boundary": "src/frankenstein2/native_child_abi.py at the accepted WP601 G1 source identity e55694943c0f765420a7ad418edac9ea15829827",
+    "review_test": "tests/review/test_wp601_budget_canonicalization_falsifier.py",
+    "repair_direction": "Introduce explicit canonical numeric ceilings or equivalent canonicalizability validation at request admission for every resource-budget integer field, add boundary/over-bound regressions, then reissue bounded repository-CI acceptance."
+  },
+  "fusion": {
+    "wp601_mutation_history_comment": 5461640806,
+    "downstream_constraint": "WP602 must not assume that every constructor-accepted WP601 budget is deterministically hashable until the WP601 numeric-domain counterexample is absorbed or explicitly excluded by a successor contract.",
+    "review_lane_merge_policy": "DO_NOT_MERGE_REVIEW_ONLY_AS_PRODUCT_IMPLEMENTATION"
+  },
+  "runtime_dispatch": {
+    "status": "STILL_BLOCKED_BY_SELF_HOSTED_RUNNER_ASSIGNMENT_OR_AVAILABILITY",
+    "target_runtime_evidence_present": false,
+    "runtime_product_logic_failure": false,
+    "duplicate_dispatch_allowed": false
+  },
+  "credits": {
+    "entityos_hcu_runtime": 0,
+    "frankenstein2_target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "training": 0,
+    "effect": 0,
+    "completion": 0,
+    "whole_system_acceptance": false
+  },
+  "decision": "PRESERVE_WP601_NEGATIVE_EVIDENCE; ROUTE_NUMERIC_DOMAIN_REPAIR_TO_SUCCESSOR_OWNER; DO_NOT_DUPLICATE_ACTIVE_WP602; DO_NOT_DUPLICATE_BLOCKED_RUNTIME_DISPATCH",
+  "next_exact_action": "Re-enter current Frankenstein 2.0 main. If a sole WP601 successor repair appears, verify exact numeric-domain bounds plus boundary/over-bound regression and rerun the review counterexample. Independently keep the singleton target-runtime dispatch blocked/observed without duplicate triggers until the self-hosted runner actually executes and emits a bound receipt.",
+  "unusual_experiment_executed": false
+}

@@ -1,0 +1,79 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "research_id": "R6-20260829-WP804-GOAL-INFERENCE-EVAL-GPT56SOL-02",
+  "mirror_status": "MIRRORED_PROVENANCE_ONLY",
+  "mirror_epoch": "2026-08-29T20:14:00+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "canonical_coordination_authority": "gschaidergabriel/frankenstein-2.0:research/tool_intelligence/claims/",
+  "research_entity_claim_authority": false,
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "target_repository": "gschaidergabriel/clay-global-research-entity",
+  "target_base_sha_before_mirror": "72449dfd3b9e8c78939a211156d5060caf8888f5",
+  "f2_claim_commits": {
+    "E1_SOURCE_READ": "ac52838f8b729785a38894ea26b48a4d9e0289ff",
+    "E2_ARCHITECTURE_MAPPED": "950f8d2bc0831816fa705e7a86fe7ae85b90e75b"
+  },
+  "f2_result_commits": {
+    "E1_SOURCE_READ": "e8da6161f9f1e5afcdb62adee0a474d6f1ab0591",
+    "E2_ARCHITECTURE_MAPPED": "43ff06bb410843c60cd2d426d04dbd7642b14b84"
+  },
+  "f2_result_paths": {
+    "E1_SOURCE_READ": "research/tool_intelligence/deltas/2026-08-29T2008P0700_GPT56SOL_R6_WP804_GOAL_INFERENCE_E1.json",
+    "E2_ARCHITECTURE_MAPPED": "research/tool_intelligence/deltas/2026-08-29T2011P0700_GPT56SOL_R6_WP804_GOAL_INFERENCE_E2.json"
+  },
+  "architecture_delta_fusion": {
+    "wp804": "ACTIVE_GENERATION_1 at source-mapping time",
+    "wp800": "ACCEPTED_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "wp800_source_blob_sha": "18d3a12c65d00024c190e561450ca8184518d1c9",
+    "affected_modules": [
+      "F2-WP-804 cognitive goal-inference benchmark contract",
+      "F2-WP-800 ObservationView/evaluator separation reused as benchmark boundary"
+    ],
+    "best_supported_delta": [
+      "treat goal inference as benchmark posterior/hypothesis, never goal authority",
+      "consume exact public ObservationView plus immutable public candidate-goal descriptors only",
+      "seal inference before evaluator label access",
+      "make UNKNOWN/ABSTAIN first-class for observationally non-identifiable cases",
+      "report coverage plus selective risk rather than answered-case accuracy alone",
+      "keep goal inference distinct from next-observation/world-model prediction",
+      "make priors explicit and score prior-only versus evidence-driven behavior separately",
+      "hold out causal/generative families, not only episode IDs",
+      "cap classical inverse-planning/cost baselines to the same public-information capability surface as the SUT"
+    ],
+    "recommended_falsifiers": [
+      "observationally equivalent two-goal fixture should yield UNKNOWN",
+      "matched identifiable fixture prevents universal abstention from looking strong",
+      "hidden-leak sentinel where evaluator-only field predicts label but public evidence does not",
+      "family-heldout versus same-family new-episode comparison",
+      "simple deterministic public baseline versus richer inverse-planning method"
+    ]
+  },
+  "external_primary_source_set": [
+    "Baker, Saxe & Tenenbaum 2009, Cognition, DOI 10.1016/j.cognition.2009.07.005",
+    "Ramirez & Geffner 2010, AAAI, DOI 10.1609/aaai.v24i1.7745",
+    "Dragan, Lee & Srinivasa 2013, HRI, DOI 10.1109/HRI.2013.6483603",
+    "Kaelbling, Littman & Cassandra 1998, Artificial Intelligence, DOI 10.1016/S0004-3702(98)00023-X",
+    "Geifman & El-Yaniv 2017, Selective Classification, arXiv:1705.08500",
+    "Cobbe et al. 2019, Procgen, arXiv:1912.01588"
+  ],
+  "coordination_update": {
+    "wp804_overlapping_e3_claim_seen": "5252f5d22ed6b25ba928ac054df130386eb503e8",
+    "overlapping_e3_objective": "identifiability-gap falsifier",
+    "action": "NO_DUPLICATE_E3_STARTED",
+    "later_trigger6_handoff_seen": "b64faca2bf55986b9ca7e65976c5178f9301728b",
+    "note": "Parallel Trigger-6 work reproduced the identifiability gap and handed the gate to the build lane; this mirror does not claim independent replication or E6 acceptance."
+  },
+  "credit": {
+    "E1_SOURCE_READ": 1,
+    "E2_ARCHITECTURE_MAPPED": 1,
+    "E3_CLAIM_REPRODUCED_BY_THIS_RESEARCH_ID": 0,
+    "E4_F2_ABLATION": 0,
+    "E5_BUILD_CANDIDATE": 0,
+    "E6_F2_ACCEPTED": 0,
+    "repository_ci": 0,
+    "runtime": 0,
+    "goal_authority": 0,
+    "whole_system": 0
+  },
+  "epistemic_note": "This Research-Entity file mirrors bounded research provenance only. The F2 repository remains the create-only work-claim authority, and parallel same-pipeline results are not independent evidence by repetition."
+}

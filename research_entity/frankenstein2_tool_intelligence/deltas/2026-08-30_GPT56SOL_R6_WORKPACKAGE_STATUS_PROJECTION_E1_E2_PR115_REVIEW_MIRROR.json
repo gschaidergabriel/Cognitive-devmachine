@@ -1,0 +1,43 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "research_id": "R6-20260830-WORKPACKAGE-STATUS-MATERIALIZED-PROJECTION-GPT56SOL-01",
+  "mirror_role": "PROVENANCE_ONLY_NOT_CLAIM_AUTHORITY",
+  "mirrored_at": "2026-08-30T19:33:00+07:00",
+  "worker": "GPT-5.6 Sol / ChatGPT organ",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "source_f2_head_observed_after_handoff": "385412e31cbee67ef6bdc287c92a93c750a8401b",
+  "target_research_entity_head_before_mirror": "76b8063b613ef40a7a7ddd29467fd3d885d23739",
+  "canonical_f2_artifacts": [
+    "research/tool_intelligence/claims/R6-20260830-WORKPACKAGE-STATUS-MATERIALIZED-PROJECTION-GPT56SOL-01/E1_SOURCE_READ.json",
+    "research/tool_intelligence/receipts/R6-20260830-WORKPACKAGE-STATUS-MATERIALIZED-PROJECTION-GPT56SOL-01_E1_SOURCE_READ.json",
+    "research/tool_intelligence/claims/R6-20260830-WORKPACKAGE-STATUS-MATERIALIZED-PROJECTION-GPT56SOL-01/E2_ARCHITECTURE_MAPPED.json",
+    "research/tool_intelligence/deltas/ADF-20260830T1925P0700-GPT56SOL-WORKPACKAGE-STATUS-MATERIALIZED-PROJECTION-E2.json",
+    "research/tool_intelligence/claims/R6-20260830-WORKPACKAGE-STATUS-MATERIALIZED-PROJECTION-GPT56SOL-01/E2_REVIEW_PR115_REBUILDABLE_PROJECTION_GAP.json",
+    "research/tool_intelligence/reconciliations/R6-20260830-WORKPACKAGE-STATUS-MATERIALIZED-PROJECTION-GPT56SOL-01_PR115_E2_REVIEW.json",
+    "trigger4/inbox/tool_research/R6-20260830-WORKPACKAGE-STATUS-MATERIALIZED-PROJECTION-GPT56SOL-01.json"
+  ],
+  "canonical_f2_commits": [
+    "a16e1acdbd35e5db424620284fa664a8fbb7c84f",
+    "0776f3d28c423288cafafa03c4d6f011eaa97990",
+    "4b163e8fedabb19adf6e9828ca33a94444fd314c",
+    "c275e2630d11237d3659c0be5daa8e3ae008d38e",
+    "6558183edf5c6203eb66b28b5ed8d4a3b6a3f696",
+    "d9f6158bbcbba9785a1e65083587832e873302c5",
+    "385412e31cbee67ef6bdc287c92a93c750a8401b"
+  ],
+  "finding": "External primary-source review supports treating workpackage aggregate status as a rebuildable derived projection over granular evidence, but an existing Trigger-4 WP002 G5 lane (PR115) already implements much of the required cache/consistency discipline. Duplicate E5/build intent was retired. The remaining research delta is restricted to four unproven gaps: canonical rebuildable projector ownership, lossless current-generation plus historical accepted-scope representation, projection identity/input-manifest freshness binding, and single derivation/mechanical consistency for human WORKPACKAGES markers.",
+  "external_pattern_decision": "ADOPT_PATTERN_NOT_FRAMEWORK",
+  "new_framework_dependency": false,
+  "new_database": false,
+  "new_model_call": false,
+  "existing_trigger4_lane": {
+    "pull_request": 115,
+    "head_observed": "1cea1ad6e2517183e0eae1560d70e5c259fc33ec",
+    "duplicate_branch_forbidden_by_this_handoff": true
+  },
+  "evidence_ceiling": "E2_ARCHITECTURE_MAPPED_REVIEW",
+  "runtime_credit": 0,
+  "physical_host_credit": 0,
+  "whole_system_credit": 0,
+  "mirror_divergence_rule": "If F2 artifacts advance after this mirror, this mirror is stale provenance and must not overwrite canonical F2 state."
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "RESEARCH_ENTITY_F2_TRIGGER6_MIRROR/v1",
+  "research_id": "R6-20260829-WP306-CONTEXT-COMPILER-GPT56SOL-01",
+  "mirror_epoch": "2026-08-29T20:29:00+07:00",
+  "mirror_status": "MIRRORED_FROM_F2_APPEND_ONLY",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "source_branch": "main",
+  "source_reentry_sha_before_mirror": "cc2294111b993b52742c984da8f44946617ec01f",
+  "target_repository": "gschaidergabriel/clay-global-research-entity",
+  "target_branch": "main",
+  "target_sha_observed_before_mirror": "c0301a767c823aed4a6c10faa9ce715be843a1a0",
+  "canonical_claim_authority": "F2_ONLY",
+  "claim_refs": [
+    "gschaidergabriel/frankenstein-2.0:research/tool_intelligence/claims/R6-20260829-WP306-CONTEXT-COMPILER-GPT56SOL-01/E1_SOURCE_READ.json",
+    "gschaidergabriel/frankenstein-2.0:research/tool_intelligence/claims/R6-20260829-WP306-CONTEXT-COMPILER-GPT56SOL-01/E2_ARCHITECTURE_MAPPED.json"
+  ],
+  "f2_deltas": [
+    {"stage": "E1_SOURCE_READ", "path": "research/tool_intelligence/deltas/2026-08-29T2022P0700_GPT56SOL_WP306_CONTEXTCOMPILER_E1_SOURCE_READ.json", "write_commit": "fb6f0fbdf7ca5596a89eecab87cbf80f2df18f0f"},
+    {"stage": "E2_ARCHITECTURE_MAPPED", "path": "research/tool_intelligence/deltas/2026-08-29T2028P0700_GPT56SOL_WP306_CONTEXTCOMPILER_E2_ARCHITECTURE_MAPPED.json", "write_commit": "0251ebd42d97c3e2fa12268bd1c88f9b729a3a28"}
+  ],
+  "architecture_fusion": {"path": "research/tool_intelligence/deltas/2026-08-29T2012P0700_GPT56SOL_ARCHITECTURE_DELTA_FUSION_WP306_CONTEXTCOMPILER.json", "write_commit": "08c30f57e8ad0f4757cf83c9fe967b0875123ec4", "status": "SUPERSEDED_IN_PART_BY_GRANULAR_WP306_REENTRY"},
+  "granular_reconciliation": {
+    "finding": "F2 human and machine aggregate ledgers still report WP306 NOT_STARTED, while granular workpackages/active/F2-WP-306.json records generation 3 ACCEPTED at bounded repository-hosted component-CI scope.",
+    "precedence": "GRANULAR_ACCEPTED_SCOPE_OVERRIDES_STALE_AGGREGATE_CACHE",
+    "runtime_credit": 0,
+    "whole_system_credit": 0
+  },
+  "e2_decision": {
+    "rewrite_current_wp306_core": false,
+    "import_external_context_framework": false,
+    "preserve_current_reference_only_core": true,
+    "research_frontier": [
+      "bind ContextItem.cost_units to a deterministic resource witness before prompt-token boundedness claims",
+      "bind priority/requiredness producer and selection-policy lineage",
+      "prove contradiction/omitted-counterevidence consumer behavior",
+      "prove omission identity re-entry/resolution without exposing disallowed payload data",
+      "evaluate runtime cache reuse downstream and separately from semantic context selection"
+    ],
+    "next_evidence_target": "E4_F2_ABLATION_DESIGN_AVAILABLE; NOT_RUN; NOT_E5"
+  },
+  "source_pins": {
+    "f2_context_compiler_blob": "edbfb96710376af01af88bf4453d660fdcf5d341",
+    "f2_context_compiler_test_blob": "ad747cd9ae91e77379018a24e0dd5670f65dd5a1",
+    "f2_epistemic_context_adapter_blob": "fd87aede76267fe21020ade8aba5f82af16ca52f",
+    "llmlingua_commit": "e0e9d99beb94098bbd924aa53c2c112eac41c758",
+    "vllm_commit": "fd5d3aea9470bb92376eb2d9f5d64cd8f23de31b",
+    "lmcache_commit": "ca2f474412e3b881c2f39e62561414c9676653dc",
+    "langchain_commit": "5893459c4f2bfac6c8d3262cae1e3f2246d9287f"
+  },
+  "credits": {"research_stage": "E2", "f2_runtime_credit": 0, "physical_grid10_credit": 0, "entityos_hcu_whole_runtime_credit": 0, "training_credit": 0}
+}

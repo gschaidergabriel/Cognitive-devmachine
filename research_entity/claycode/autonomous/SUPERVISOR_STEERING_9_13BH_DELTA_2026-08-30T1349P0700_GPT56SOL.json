@@ -1,0 +1,71 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_delta": "9.13BH_NON_AUTHORITY",
+  "created_at": "2026-08-30T13:49:50+07:00",
+  "mode": "FREE_ONLY",
+  "authority": "NON_AUTHORITY_STEERING_ONLY",
+  "research_repository_head_observed": "6624ec9c6723817c16f6b737414aec8f705638d6",
+  "frankenstein2_main_head_observed": "5c0e35ebc6bdea862fb77d04a0ce0225b45b821d",
+  "material_findings": [
+    {
+      "id": "WP206_POST_MERGE_UPGRADE_COMPATIBILITY_COUNTEREVIDENCE",
+      "classification": "EXECUTABLE_REPOSITORY_COUNTEREVIDENCE",
+      "canonical_merge": "PR659 merged restart-stable path+device+inode authority-receipt source repair",
+      "green_owner_run": {"run_id": 33295693594, "job_id": 99214844045, "conclusion": "success"},
+      "counterevidence_pr": 663,
+      "counterevidence_head": "9a4d17fc159ee83eb36dc84772f28662068ba407",
+      "counterevidence_run": {"run_id": 33296011089, "job_id": 99215676906, "conclusion": "failure"},
+      "positive_control": "current stable-authority row survives fresh-process replay",
+      "reproduced_failure": "accepted historical G1 row containing the old full UnifiedDBFingerprint receipt fails under the merged stable-authority reader with PersistentAgencyError:CHECKPOINT_DB_AUTHORITY_RECEIPT_MISMATCH",
+      "bounded_interpretation": "The merged fresh-row stable authority fence is mechanically green but migration-incomplete for accepted-G1 durable checkpoints. Both representations are unversioned 64-hex values in the same persisted column, so source semantics and active workpackage bookkeeping are currently not a safe acceptance boundary.",
+      "required_action": "Do not reconcile WP206 as accepted and do not let WP901 or restart-recovery paths assume historical G1 checkpoint recoverability. Open exactly one explicit versioned compatibility/migration or deliberate legacy-incompatibility/recovery contract under canonical mutation authority, with pre-G2-row->new-reader and post-migration tamper regressions. Preserve same-inode drift as a separate discriminator."
+    },
+    {
+      "id": "WP206_SAME_INODE_LIVE_DRIFT_COUNTEREVIDENCE",
+      "classification": "EXECUTABLE_REPOSITORY_COUNTEREVIDENCE_SEPARATE_SCOPE",
+      "review_pr": 655,
+      "run_id": 33295636700,
+      "job_id": 99214693702,
+      "finding": "A committed SQLite schema mutation preserved device+inode while refreshed sqlite_schema_sha256/full fingerprint changed; the already-open store's device+inode live fence did not fail closed.",
+      "scope_fence": "This does not establish that continuous full fingerprint equality is the correct repair. Require a separate explicit live-authority threat model/discriminator."
+    },
+    {
+      "id": "WP1109_G2_RECONCILIATION",
+      "classification": "EXECUTABLE_REPOSITORY_COMPONENT_CLOSURE",
+      "active_generation": 2,
+      "state": "ACCEPTED",
+      "run_id": 33294134972,
+      "job_id": 99210785822,
+      "executed_steps": ["checkout", "python setup", "compile", "host transition falsification suite"],
+      "result": "success",
+      "tests": "23/23 deterministic host-transition falsification tests plus py_compile",
+      "bounded_scope": "typed state-readback binding repository-hosted component CI only; zero clean-machine, target-host, VPS, effect, completion, physical or whole-system credit",
+      "required_action": "Close the stale supervisor P0 WP1109 repair item. Keep G2 closed absent new post-G2 executable counterevidence and route real host-switch/rollback preservation only through later target-host readback gates."
+    }
+  ],
+  "steering": {
+    "p0_wp206": "Treat workpackages/active/F2-WP-206.json as RETIRED_STALE generation 2 with latest accepted generation 1, while separately acknowledging that PR659 changed canonical source. Do not call the new source semantics accepted until a versioned migration/compatibility contract is executable and reconciled.",
+    "p0_wp206_migration": "Singleton successor only: prove accepted-G1 durable row migration/compatibility or explicitly define and execute a fail-closed legacy recovery path. Fresh-G2-write/read green tests are insufficient.",
+    "p0_wp206_same_inode": "Keep same-inode data/schema live-drift characterization separate from persistence migration; do not bundle repairs or silently reinterpret UnifiedDBFingerprint as state snapshot.",
+    "p0_wp901_dependency_fence": "WP901 restart-recovery candidate must not claim historical WP206-G1 checkpoint recoverability while the migration discriminator is red.",
+    "p0_wp1109": "G2 is terminal accepted at repository-component scope; remove duplicate canonical-repair work from the frontier absent new executable post-G2 counterevidence.",
+    "p0_wp1207_wp510": "Remain target-runtime frontier only after exact immutable inputs and an authorized owner-host execution surface are available; no duplicate WP510 dispatch while its recorded attempt remains unresolved.",
+    "free_only": "ALL_CLAYCODE_EXTERNAL_PROVIDER_ROUTES_UNADMITTED; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "base": "CC-WP-01 and CC-WP-02 remain PASS; CC-WP-03 through CC-WP-14 remain OPEN; GENERAL_PURPOSE_GATE=NOT_PASS; CLAYCODE_RELEASE_GATE=NOT_PASS",
+    "semantics": "No canonical semantics promotion from model consensus or donor agreement; executable counterevidence plus review remains mandatory.",
+    "goodman": "Same-family/repackaged/parallel model analyses are non-independent; do not count them as closure evidence.",
+    "ancestry": "Keep model-family/checkpoint ancestry explicit in any future model evidence.",
+    "frank_target": "Ubuntu-only Frank v0.1 target remains unchanged.",
+    "frank_harness": "DO_NOT_MODIFY_FRANK_HARNESS"
+  },
+  "credits": {
+    "base_work_package_promotion": false,
+    "canonical_semantics_credit": 0,
+    "target_vps_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "physical_grid10_credit": 0,
+    "provider_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  }
+}

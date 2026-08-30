@@ -1,0 +1,58 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_ARCHITECTURE_DELTA/v1",
+  "research_id": "R6-20260829-HOST-REALITY-COMPLETION-GPT56SOL-01",
+  "evidence_stage": "E4_F2_ABLATION",
+  "status": "DIRECT_CONSUMER_BOUND_E5_WITHHELD",
+  "created_at_local": "2026-08-29T22:06:00+07:00",
+  "worker": "GPT-5.6-Sol",
+  "canonical_f2_head_observed_before_mirror": "11126d6e1d68a67dcb2c973daf3399333b389492",
+  "research_entity_head_observed_before_mirror": "b8caa473eb1f8397f34c8c064740a769403ace37",
+  "f2_receipt_commit": "ba78c3726517190d412dad537a9563d9d30f1f53",
+  "bound_sources": {
+    "wp1201": "src/frankenstein2/target_host_profile.py@f0b528956c5dab6cd58f93b1d3a6851c1adcb07a",
+    "wp1202": "src/frankenstein2/target_userspace_twin.py@d87a17ec92d8dd8d0fe6583496635445b83a5cfd"
+  },
+  "coordination_note": "A generic same-family E4 requirement-scope ablation already existed. Its create-only receipt was preserved. This delta records the new source-bound WP1202 consumer analysis instead of claiming independent replication.",
+  "direct_observation": {
+    "wp1201_fact_count": 24,
+    "wp1202_t1_consumed_fact_count": 8,
+    "wp1202_t1_consumed_facts": ["architecture","collector_uid","kernel_release","os_release","pipewire_version","session_type","systemd_user_state","wireplumber_version"],
+    "coupling": "WP1202 serializes full source_profile_sha256 into TwinBootstrapPlan although observed_shape consumes only the eight source-derived facts."
+  },
+  "direct_ablation": {
+    "relevant_perturbations": 16,
+    "irrelevant_perturbations": 32,
+    "projection_changed_relevant": "16/16",
+    "projection_changed_irrelevant": "0/32",
+    "current_plan_identity_changed_relevant": "16/16",
+    "current_plan_identity_changed_irrelevant": "32/32",
+    "candidate_scoped_binding_changed_relevant": "16/16",
+    "candidate_scoped_binding_changed_irrelevant": "0/32"
+  },
+  "architecture_delta_candidate": {
+    "type": "PROVENANCE_VS_SEMANTIC_VALIDITY_IDENTITY_SPLIT",
+    "preserve": "source_profile_sha256 as immutable provenance/receipt identity",
+    "candidate_addition": "projection_input_binding_sha256 derived mechanically from the live _T1_FACT_BINDINGS dependency set and the corresponding canonical WP1201 fact records",
+    "candidate_use": "T1 semantic cache/revalidation validity only",
+    "fail_closed_requirement": "dependency manifest/source set must be versioned/pinned and narrowing/tampering/omitted-live-key cases must fail integration tests"
+  },
+  "counterhypothesis": "A scoped binding is unsafe if the live dependency model is incomplete; full-profile invalidation is conservative and may prevent stale reuse that a narrowed dependency set would miss.",
+  "negative_space": [
+    "No target runtime fidelity measured.",
+    "No physical-host execution performed.",
+    "No boot-scope identity exists in WP1201 G1.",
+    "The eight current T1 dependencies are source-derived but not proven semantically sufficient for real userspace fidelity.",
+    "No architecture acceptance or completion credit follows from this experiment."
+  ],
+  "decision": "KEEP_AT_E4",
+  "e5_gate": "WITHHELD until a versioned/pinned live-consumer dependency manifest and integration falsifier reject dependency narrowing/tampering, omitted live keys, and stale satisfying projections.",
+  "trigger4_handoff": "NONE_YET",
+  "credits": {
+    "research": "E4_DIRECT_CONSUMER_REPOSITORY_CONTRACT_ONLY",
+    "runtime": 0,
+    "physical_host": 0,
+    "completion": 0,
+    "architecture_acceptance": 0,
+    "whole_system": 0
+  }
+}

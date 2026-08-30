@@ -1,0 +1,41 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "6",
+  "research_id": "R6-20260829-WP803-PREDICTION-BENCH-GPT56SOL-01",
+  "evidence_stage": "E2_ARCHITECTURE_MAPPED",
+  "created_at": "2026-08-29T20:12:00+07:00",
+  "worker": "GPT-5.6-Sol-TRIGGER6",
+  "canonical_coordination_authority": "gschaidergabriel/frankenstein-2.0",
+  "canonical_f2": {
+    "claim_path": "research/tool_intelligence/claims/R6-20260829-WP803-PREDICTION-BENCH-GPT56SOL-01/E2_ARCHITECTURE_MAPPED_MULTI_HORIZON_INTERVENTION.json",
+    "claim_commit": "9ad4dd10ca26d66e6e8ec856974d7b28623b1857",
+    "result_path": "research/tool_intelligence/deltas/2026-08-29T2011P0700_GPT56SOL_R6_WP803_MULTI_HORIZON_INTERVENTION_E2_ARCHITECTURE.json",
+    "result_commit": "3df600d03c9902ce3fc5788d6fc52809f6f76432"
+  },
+  "mirror_epoch": "MIRROR-20260829T2012P0700-WP803-MULTI-HORIZON-E2",
+  "research_entity_main_before_mirror": "997e2512550dbad2eec863cd53f5a4f7e7a038f8",
+  "finding_summary": [
+    "Preserve current WP803 generation-1 one-step exact prediction as a bounded primitive.",
+    "For true multi-horizon evidence, precommit the complete predicted public-observation sequence before the first evaluator transition.",
+    "Bind an evaluator-declared public action sequence into the rollout candidate so dynamics quality is not confounded with policy selection.",
+    "Use fixture-relative bounded horizons and exact public-sequence fidelity rather than importing continuous-state metrics or fixed h=10/h=20 assumptions.",
+    "Test action-conditioned intervention sensitivity by replaying the same canonical initial evaluator state under two distinct sealed public action sequences; no second truth store or shadow world authority is needed.",
+    "Do not treat WP800 MatchedRunPair as paired-world counterfactual authority; it currently pairs SUT conditions under matched fixture ancestry.",
+    "Consume, do not duplicate, the parallel WP803 proper-scoring E2 for abstention coverage/selective risk and optional Brier scoring."
+  ],
+  "external_basis": [
+    "electronicarts/AutoWorldModelBench@906c5bf99c745e1163c78dda122eb9b520f4059f / arXiv:2608.11216",
+    "How Should World Models Be Evaluated? arXiv:2606.15032",
+    "ForecastBench-Sim arXiv:2606.18686"
+  ],
+  "architecture_decision": "DISTILL_EVALUATION_GEOMETRY_INTO_THIN_F2_NATIVE_FOLLOW_ON_NO_EXTERNAL_RUNTIME_IMPORT",
+  "trigger4_handoff_status": "RESEARCH_INPUT_ONLY_NOT_E5_BUILD_CANDIDATE",
+  "credits": {
+    "trigger6_E2": 1,
+    "architecture_acceptance_credit": 0,
+    "runtime_credit": 0,
+    "whole_system_credit": 0,
+    "training_credit": 0
+  },
+  "mirror_policy": "Provenance mirror only. F2 owns the claim mutex and canonical result."
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "delta": "9.13BE_NON_AUTHORITY",
+  "date": "2026-08-30",
+  "organ": "GPT-5.6-Sol",
+  "authority": "NON_AUTHORITY_STEERING_ONLY",
+  "material_findings": [
+    {
+      "surface": "GITHUB_ACTIONS_REPOSITORY_EXECUTION",
+      "finding": "Current main-branch workflow failures are terminating before any executable step evidence is produced. This is control-plane/execution-surface evidence only and must not be interpreted as ClayCode semantic, BASE, provider-runtime, target-runtime, or canonical-semantics failure/pass.",
+      "evidence": {
+        "latest_main_sha_observed": "fcc0d960ba4867d3cefec4ebc143fc70b01b09f0",
+        "identity_guard_run": 33280383890,
+        "identity_guard_job": 99174446973,
+        "identity_guard_status": "completed",
+        "identity_guard_conclusion": "failure",
+        "identity_guard_executed_steps": 0,
+        "current_index_run_on_supervisor_bd": 33271712864,
+        "current_index_job": 99151220419,
+        "current_index_status": "completed",
+        "current_index_conclusion": "failure",
+        "current_index_executed_steps": 0,
+        "github_status_global_actions": "OPERATIONAL_AT_INSPECTION_TIME",
+        "classification": "REPOSITORY_OR_ACCOUNT_OR_CONTROL_PLANE_SPECIFIC_UNKNOWN"
+      },
+      "credit_ceiling": "CONTROL_PLANE_ONLY"
+    },
+    {
+      "surface": "MAIN_SOURCE_DELTA_SINCE_9_13BD",
+      "finding": "Seven commits after 9.13BD are EOS evaluation-export metadata churn only; compare against the 9.13BD supervisor head shows only agentZero/bewertung/bewertungen.jsonl.meta.json changed. No new ClayCode implementation, BASE receipt, provider receipt, target receipt, or executable counterexample was introduced by these commits.",
+      "evidence": {
+        "base_sha": "08913c54be7be885d832edbee8e4368907450249",
+        "head_sha": "fcc0d960ba4867d3cefec4ebc143fc70b01b09f0",
+        "ahead_by": 7,
+        "changed_paths": ["agentZero/bewertung/bewertungen.jsonl.meta.json"]
+      },
+      "credit_ceiling": "NO_CLAYCODE_CREDIT"
+    },
+    {
+      "workpackage": "WP510",
+      "finding": "Previously recorded self-hosted runtime attempt remains unresolved from this repository's reachable Actions surface; direct lookup of the referenced run in this repository returns not-found. Do not infer cancellation, success, or failure and do not duplicate-dispatch on that basis. Preserve UNKNOWN until the owning controller surface or target-host receipt resolves it.",
+      "evidence": {
+        "recorded_controller_repo": "gschaidergabriel/Dr.-Unterweger",
+        "recorded_run_id": 33265772059,
+        "recorded_job_id": 99135457584,
+        "current_research_repo_lookup": "NOT_FOUND_EXPECTED_WRONG_OWNER_SURFACE",
+        "runtime_credit": 0
+      },
+      "credit_ceiling": "CONTROL_PLANE_ONLY"
+    }
+  ],
+  "steering": [
+    "DO_NOT_RERUN_OR_FAN_OUT ZERO_STEP GITHUB_ACTIONS FAILURES UNTIL EXECUTION_SURFACE CAUSE OR RECOVERY IS OBSERVED",
+    "TREAT ZERO_STEP WORKFLOW FAILURE AS CONTROL_PLANE_UNKNOWN NOT EXECUTABLE CLAYCODE COUNTEREVIDENCE",
+    "PRESERVE PRIOR WP510 NO_DUPLICATE_DISPATCH RULE; RESOLVE ON THE RECORDED CONTROLLER_OR_TARGET_HOST SURFACE BEFORE ANY SUCCESSOR DISPATCH",
+    "DO_NOT REOPEN WP004 WP1110 WP1202 WP900 OR OTHER TERMINAL REPOSITORY_COMPONENT FRONTIERS FROM ZERO_STEP FAILURES",
+    "KEEP FREE_ONLY HARD_OFF FOR ALL UNADMITTED EXTERNAL PROVIDERS; TOGETHER FORBIDDEN; NO PAID OR UNKNOWN_COST FALLBACK",
+    "NO BASE PASS FROM MODEL CONSENSUS",
+    "NO CANONICAL SEMANTICS PROMOTION WITHOUT EXECUTABLE COUNTEREVIDENCE AND REVIEW",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT MODIFY FRANK HARNESS"
+  ],
+  "credits": {
+    "base_work_package_promotion": false,
+    "canonical_semantics": 0,
+    "target_vps_runtime": 0,
+    "physical_grid10": 0,
+    "provider_runtime": 0,
+    "training": 0,
+    "whole_hcu": 0
+  }
+}

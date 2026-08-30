@@ -1,0 +1,33 @@
+{
+  "schema": "TRIGGER6_ARCHITECTURE_DELTA_FUSION_MIRROR/v1",
+  "fusion_id": "ADF-20260830T2155P0700-GPT56SOL-WP1111-SYMLINK-AUTHORITY",
+  "research_id": "R6-20260830-SYMLINK-CONFINEMENT-GPT56SOL-01",
+  "created_at": "2026-08-30T21:55:00+07:00",
+  "worker": "GPT-5.6 Sol / ChatGPT organ",
+  "canonical_claim_authority": "gschaidergabriel/frankenstein-2.0",
+  "f2_source_snapshot_before_fusion_write": "14050fae602d504422ccf0a99901f5f35bbb80c8",
+  "research_entity_snapshot_before_mirror": "b49abd93a5f1d4e445a766eba1a13a1218e1179c",
+  "f2_fusion_commit": "9c0bd3bfb90c13178d4a86fa2f07866cf598a41b",
+  "f2_fusion_path": "research/tool_intelligence/fusions/2026-08-30T2155P0700_GPT56SOL_WP1111_SYMLINK_AUTHORITY_FUSION.json",
+  "f2_e1_evidence_commit": "379bbe0474369bb76329b0acd511d64d7e6ec1b4",
+  "mirror_epoch": "2026-08-30T21:55:00+07:00",
+  "classification": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "finding": "Original WP1111 resolve-before-is_symlink ordering was locally unsound as proof of lexical link-freedom, but the composed manifest-bound static evaluator already rejects symlink files/directories upstream. Trigger-4 retained lexical path checks as defense-in-depth, isolated the falsifier from manifest authority, obtained repository CI success at accepted source 943d10275d76558e1d657270989a99e4c2009111, and reconciled WP1111 only at repository-hosted component scope.",
+  "architecture_delta": "NO_NEW_BUILD_DELTA_REQUIRED_CONCURRENTLY_ABSORBED",
+  "external_research_distillation": [
+    "Python Path.resolve follows symlinks, so lexical link identity must be checked before resolution when link-freedom is the invariant.",
+    "Python tar extraction guidance supports forbidding links when not required and separating static validation from live-destination mutation risk.",
+    "Linux openat2 and Go os.Root support kernel/descriptor-backed traversal confinement for live mutable filesystem boundaries; no such new dependency is justified for the current frozen static release gate."
+  ],
+  "credit": {
+    "trigger6_stage": "E1_SOURCE_READ",
+    "architecture_e2": 0,
+    "runtime": 0,
+    "physical_host": 0,
+    "clean_machine": 0,
+    "effect": 0,
+    "completion": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Use the accepted WP1111 repository component only as a static prerequisite; bind one exact deterministic release candidate, rerun the gate on that exact root, then proceed to real clean-machine acceptance without inflating repository CI into runtime/host credit."
+}

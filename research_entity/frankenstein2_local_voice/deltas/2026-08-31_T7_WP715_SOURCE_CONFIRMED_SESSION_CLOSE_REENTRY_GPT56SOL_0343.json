@@ -1,0 +1,78 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "SOURCE_CONFIRMED_CANDIDATE_FALSIFIERS__NO_F2_MUTATION_AUTHORITY__NO_RUNTIME_PROMOTION",
+  "resumed_not_restarted": true,
+  "authority": {
+    "directive": "research_entity/global/TRIGGERWORD_7_FRANKENSTEIN_LOCAL_VOICE_RESEARCH_DIRECTIVE.md",
+    "canonical_f2_protocol": "research/local_voice/TRIGGERWORD_7_PROTOCOL.md",
+    "binding_owner_authority": "research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md",
+    "cortex_first": true,
+    "wp715_f2_mutation_authority": "TRIGGER4"
+  },
+  "observed_heads": {
+    "f2_main": "3caccb669701f981f37cc62dd2743a1bf9157b47",
+    "clay_main_before_write": "97c2c2105e042544072f39313a9625fb13cac6dd",
+    "dr_unterweger_main": "415da4d0a7bd13f193b4fe9fe9b5bc47d1178662"
+  },
+  "wp715_runtime_subject": {
+    "workflow_run_id": 33328707636,
+    "workflow": "T4 Packet Cortex Full Duplex Falsifier",
+    "source_sha": "db01bfbcc2deebc45524b56407a681b226de7b78",
+    "status_rechecked": "queued",
+    "conclusion": null,
+    "executed_steps_credit": 0,
+    "classification": "UNKNOWN_NONTERMINAL_CONTROL_PLANE_ONLY",
+    "duplicate_dispatch_created": false,
+    "runtime_credit": 0
+  },
+  "source_review": {
+    "source_path": "src/frankenstein2/voice_packet_cortex.py",
+    "current_main_reviewed": true,
+    "active_tool_close_candidate": {
+      "candidate_id": "T7-WP715-SESSION-CLOSE-ACTIVE-TOOL-OWNERSHIP",
+      "status": "STATIC_SOURCE_CONFIRMED_CANDIDATE_NOT_EXECUTED",
+      "finding": "emit_intent(TOOL_USE) records tool_ref in _active_tools; close_session() does not reject/fence active tools and ends by clearing _active_tools after SESSION_CLOSE. No explicit close-time cancellation/fence tombstone is emitted by the reviewed path.",
+      "product_negative_credit": 0
+    },
+    "rejected_close_atomicity_candidate": {
+      "candidate_id": "T7-WP715-REJECTED-SESSION-CLOSE-ATOMICITY",
+      "status": "STATIC_SOURCE_CONFIRMED_CANDIDATE_NOT_EXECUTED",
+      "finding": "close_session() creates VoiceOutcome and writes voiceoutcome_ref into commit-eligible outputs before constructing SESSION_CLOSE. CortexEventPacket validation reached through _event validates late fields including turn_id and monotonic_ms, so a late validation rejection can occur after output mutation unless the discriminator disproves this path.",
+      "product_negative_credit": 0
+    }
+  },
+  "existing_trigger4_falsifier_tool": {
+    "path": "research/local_voice/tools/falsify_voice_packet_cortex_atomicity.py",
+    "current_probes_observed": [
+      "PN14_TOOL_ONLY_BARGE_OWNERSHIP",
+      "PN15_REJECTED_NEAR_CAP_BARGE_ATOMICITY",
+      "EVENTSEQ_REJECT_ATOMICITY"
+    ],
+    "observation": "The current tool does not yet execute the two newly routed session-close-specific discriminators. Trigger7 did not modify the tool because that path is a push trigger for the existing VPS workflow and doing so would create runtime-subject churn/duplicate dispatch before the Trigger4 owner reconciles the queued subject."
+  },
+  "coordination": {
+    "f2_product_source_mutation_created": false,
+    "f2_falsifier_tool_mutation_created": false,
+    "new_vps_dispatch_created": false,
+    "new_asr_tts_breadth_opened": false,
+    "runtime_subject_churn_fence_respected": true,
+    "later_hf_realtime_research_does_not_supersede_cortex_first_authority": true
+  },
+  "credit": {
+    "source_review_delta": 1,
+    "candidate_product_negative_executed": 0,
+    "repository_runtime_credit": 0,
+    "vps_packet_recovery_runtime": 0,
+    "acoustic_credit": 0,
+    "asr_runtime_credit": 0,
+    "tts_runtime_credit": 0,
+    "german_e2e_voice": 0,
+    "whole_persistent_voice_loop": 0,
+    "whole_product": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Existing F2-WP-715 Trigger4 owner executes both already-routed session-close repository discriminators in one bounded repository regression cycle before any semantic source mutation or replacement VPS dispatch. If reproduced, classify PRODUCT_NEGATIVE only at the exact session-close causal-ownership/atomicity scope, apply one smallest coherent repair plus restart/export/late-result regressions, then reconcile whether queued run 33328707636 is invalidated. If not reproduced, close with exact negative evidence and preserve the queued subject. Independently consume run 33328707636 only if it actually executes; queued zero-step remains zero runtime credit. Trigger7 consumes those outcomes before ASR/TTS breadth."
+}

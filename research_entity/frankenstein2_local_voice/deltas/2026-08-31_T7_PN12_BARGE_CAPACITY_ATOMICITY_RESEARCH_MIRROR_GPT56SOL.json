@@ -1,0 +1,47 @@
+{
+  "schema": "TRIGGER7_LOCAL_VOICE_RESEARCH_DELTA/v1",
+  "date": "2026-08-31",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "lane": "packet_cortex_falsification",
+  "owner_authority": "F2 research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md",
+  "f2_canonical_delta": {
+    "subject_head_before_review": "9203d515dbcfb8a049971e60174a281609865a33",
+    "falsifier_commit": "a51cb43e429bdf04ccf71feba17d4a85f6eb70c2",
+    "falsifier_path": "trigger4/inbox/local_voice/T7_WP715_BARGE_CAPACITY_ATOMICITY_FALSIFIER_2026-08-31_GPT56SOL.json",
+    "candidate_id": "PN12_BARGE_IN_NEAR_EVENT_CAP_CAN_PARTIALLY_MUTATE_THEN_RAISE",
+    "classification": "CANDIDATE_FALSIFIER_REVIEW_ONLY",
+    "mutation_authority": false
+  },
+  "source_audit": {
+    "source": "src/frankenstein2/voice_packet_cortex.py",
+    "blob_sha": "98b93f85b446c66db78b553f12631aa0acebbc71",
+    "finding": "accept_input() can require two event emissions on the barge-in path but checks generic event capacity only one slot at a time. At MAX_EVENTS-1 the cancellation event can consume the final slot after packet/output/tool state mutation, and the subsequent ASR event can then fail, yielding an exception after partial state mutation.",
+    "status": "REQUIRES_EXECUTABLE_REPRODUCTION_BEFORE_PRODUCT_NEGATIVE_PROMOTION"
+  },
+  "external_primary_research": [
+    {
+      "source": "arXiv:2604.21406 / HumDial-FDBench",
+      "observed_2026_08_31": true,
+      "relevance": "Full-duplex evaluation explicitly separates interruption handling from rejection/backchannel behavior and measures stop/response latency. This supports keeping cancellation semantics independently falsifiable instead of treating any overlap as equivalent.",
+      "scope_limit": "Does not prove the PN12 implementation bug and does not provide German or F2 runtime credit."
+    },
+    {
+      "source": "arXiv:2607.07148 / DuplexPO",
+      "observed_2026_08_31": true,
+      "relevance": "Recent work decouples conversational dynamics such as backchanneling, yielding and barge-in from semantic response generation, consistent with F2 keeping controller timing/cancellation logic explicit and independently testable.",
+      "scope_limit": "External architectural evidence only; no F2 implementation or runtime promotion."
+    }
+  ],
+  "research_implication": "Cortex-first remains correct. The next useful Trigger-7 action is not another ASR/TTS scout; it is execution of PN12 and then extension of packet fixtures so interruption, rejection/backchannel, pause/wait and resume behaviors are measured as distinct controller outcomes.",
+  "credit": {
+    "research_delta": 1,
+    "source_pinned_model_credit": 0,
+    "component_runtime_credit": 0,
+    "german_e2e_voice_credit": 0,
+    "trigger4_acceptance_credit": 0,
+    "acoustic_credit": 0,
+    "whole_product_credit": 0
+  },
+  "next_exact_action": "Trigger-4 WP715 owner executes PN12 against the exact current packet-cortex subject and repairs only if reproduced; Trigger-7 then re-enters the resulting measured outcome and continues with the next nonduplicate packet-cortex interaction falsifier."
+}

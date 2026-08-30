@@ -1,0 +1,67 @@
+{
+  "schema": "TRIGGER4_EXTERNAL_RUNTIME_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "record_class": "EXACT_EXTERNAL_TARGET_ENVIRONMENT_COMPONENT_EVIDENCE",
+  "research_main_parent": "beb4e948cd8d5974b2e31528ae1221263878a239",
+  "frankenstein2_main_observed": "4993fb1c0688d1c4ce059a7d345b7d6ac36a9b35",
+  "controller_main_observed": "c5eb54d165a4343f2abb7ddc5d713ae8e3a9f5ad",
+  "workpackage_id": "F2-WP-1207",
+  "workpackage_generation": 5,
+  "repository_scope_state": "ACCEPTED_REPOSITORY_HOSTED_CI_ONLY",
+  "external_runtime": {
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "workflow_run_id": 33318931512,
+    "workflow_name": "Trigger4 WP1207 Hostile Twin Target",
+    "workflow_conclusion": "success",
+    "job_id": 99277340069,
+    "runner": "vps-clay-host",
+    "target_environment": "clay-direct-dev",
+    "controller_source_sha": "3801c77da1cb3405f381738dc2730af4234913f9",
+    "executor_source_sha": "236ba6ebb5c4ba361a2c5f47122065dc6bc53a8f",
+    "executor_tool_blob": "ef444748932ebdb641d891468e8cd3a12e8c41b7",
+    "executor_source_blob": "20bd89b81e1efed146bb8ec5aa288f37b0c4dc34",
+    "persisted_receipt_commit": "2be4c4a99d6668cc130028b3a2beeba415daebcb",
+    "persisted_receipt_path": "runtime/trigger4/wp1207/clay_direct_dev_33318931512_1.json",
+    "status": "PASS",
+    "hostile_twin_runtime_credit": 1,
+    "target_environment_component_runtime_credit": 1
+  },
+  "artifact_binding": {
+    "predecessor_artifact_id": 9726495595,
+    "predecessor_outer_bundle_sha256": "ea544f37202acf69f5397602cd5cc4c40b72b6bd8105895b87fd2173e9047909",
+    "predecessor_release_archive_sha256": "e6a688673792a70a2deefac25d2241bacc8726f17d05eafac9adca5e2592a3da",
+    "candidate_artifact_id": 9726674221,
+    "candidate_outer_bundle_sha256": "e5985de88e4cce762604bb7f6743e7c48a2c20e43516917953234a369b928348",
+    "candidate_release_archive_sha256": "297e7fbb274314fc3bc57077464ca804dfa16062fd00f7b57b247c34346f5c40",
+    "candidate_manifest_sha256": "00cbe0b86ad2208d6f990049d89ae70ce226ce302ee3033b1cf01e416ccc14ad"
+  },
+  "observed_sequence": [
+    "fresh install SUCCEEDED",
+    "candidate update with injected failure ROLLED_BACK",
+    "candidate update SUCCEEDED",
+    "explicit rollback SUCCEEDED",
+    "process-reentry readback PASS",
+    "canonical state bytes unchanged across bounded hostile-twin sequence"
+  ],
+  "credit_boundary": {
+    "physical_host_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "grid10_runtime_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "related_current_evidence": {
+    "wp510_target_component_pass_run": 33319230898,
+    "wp510_exact_source_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+    "wp510_target_environment_component_runtime_credit": 1,
+    "deterministic_release_candidate_run": 33319009603,
+    "deterministic_release_artifact_id": 9734326897,
+    "deterministic_release_artifact_digest": "sha256:ac19149da0b448b4759e56cdd5db7e6411d1423dda53b8954c43054c6b630066"
+  },
+  "interpretation": "This closes only the bounded WP1207 hostile-twin target-environment component gate on clay-direct-dev. It does not prove clean-machine local-user installation, physical-host acceptance, EffectGate/CompletionGate closure, physical GRID10, semantic GWT/J-Space, training, or whole-system acceptance.",
+  "next_exact_action": "Fuse the already-observed WP510 and WP1207 target-environment component receipts into current Frankenstein-2.0 evidence projections without reopening terminal source generations, then advance the portable local-host clean-machine acceptance and restart/recovery gates with the exact immutable release subject."
+}

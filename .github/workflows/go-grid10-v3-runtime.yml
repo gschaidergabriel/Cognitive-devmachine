@@ -1,0 +1,32 @@
+name: GO GRID10 v3 runtime falsifier
+
+on:
+  push:
+    branches:
+      - go/grid10-v3-runtime-20260828
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  grid10-v3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Bind checkout
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          git rev-parse HEAD
+          git rev-parse 'HEAD^{tree}'
+          sha256sum tools/grid10_real_sigkill_independent_replacement_acceptance_v3.py tools/grid10_fabric.py tools/grid10_decode_safe_node_wrapper_v1.py tools/grid10_liveness_heartbeat_v1.py tools/grid10_outbox_recovery_v1.py
+      - name: Run v3 falsifier
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/grid10-v3-go
+          python3 tools/grid10_real_sigkill_independent_replacement_acceptance_v3.py --workdir /tmp/grid10-v3-go | tee /tmp/grid10-v3-receipt.json
+          python3 -c "import json; d=json.load(open('/tmp/grid10-v3-receipt.json')); assert d['pass'] is True; assert d['provider_calls']==0; assert d['secret_lookups']==0; assert len({d['parent_pid'],d['old_coordinator_pid'],d['new_coordinator_pid']})==3"

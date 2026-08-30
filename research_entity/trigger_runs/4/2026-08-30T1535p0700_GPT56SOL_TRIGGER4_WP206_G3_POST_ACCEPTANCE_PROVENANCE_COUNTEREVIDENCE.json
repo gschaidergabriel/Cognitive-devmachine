@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "checkpoint_observed_at": "2026-08-30T15:35:18+07:00",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "classification": "APPEND_ONLY_POST_ACCEPTANCE_EXECUTABLE_COUNTEREVIDENCE",
+  "supersedes_current_reentry_interpretation_of": "research_entity/trigger_runs/4/2026-08-30T1534p0700_GPT56SOL_TRIGGER4_WP206_G3_TERMINAL_ACCEPTED.json",
+  "does_not_rewrite_history": true,
+  "authority_epoch": "9.13",
+  "authority_ref": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json -> research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13BH_DELTA_2026-08-30T1349P0700_GPT56SOL.json",
+  "observed": {
+    "frankenstein2_main_at_reentry": "b21b14b7077dc6429c6830373db2e2ee6cbe9e7b",
+    "wp206_generation": 3,
+    "wp206_claim_id": "F2-WP-206-G3-GPT56SOL-LEGACY-G1-AUTHORITY-RECOVERY-20260830",
+    "wp206_state": "ACCEPTED",
+    "accepted_scope": "PERSISTENT_AGENCY_LEGACY_G1_AUTHORITY_RECOVERY_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "canonical_implementation_pr": 681,
+    "canonical_implementation_head_sha": "7cc2dc2a5c9362f6e967d3df05a15604542582eb",
+    "canonical_implementation_merge_sha": "736a0907bdd35056d56f1ed0f75ea11e8457b8c1",
+    "canonical_source": "src/frankenstein2/wp206_legacy_authority_recovery.py",
+    "review_only_counterevidence_pr": 689,
+    "review_only_head_sha": "78447f4c6a80bf801783c14fc88ffff51906cd90",
+    "review_only_run_id": 33301895834,
+    "review_only_job_id": 99231495615,
+    "review_only_run_conclusion": "SUCCESS",
+    "canonical_g3_regression_reexecuted_in_review_run": "SUCCESS"
+  },
+  "counterevidence": {
+    "epistemic_type": "PROJECT_MEASUREMENT",
+    "statement": "After one successful G3 legacy recovery with caller provenance A, a second call for the same checkpoint and historical receipt with conflicting caller provenance B returns ALREADY_RECOVERED and returns the stored provenance A instead of rejecting the conflicting repeat input.",
+    "reproduction": "tests/test_wp206_g3_provenance_repeat_falsifier.py",
+    "exact_review_branch": "review/trigger4-wp206-g3-provenance-repeat-falsifier-20260830",
+    "canonical_code_path": "src/frankenstein2/wp206_legacy_authority_recovery.py",
+    "inference_boundary": "This proves current repeat-provenance behavior at repository-hosted CI scope. It does not by itself prove the behavior is incorrect, unsafe, target-runtime relevant, or whole-system relevant."
+  },
+  "interpretation": {
+    "g3_acceptance_revoked": false,
+    "new_executable_post_g3_counterevidence_present": true,
+    "semantic_question": "Does the documented 'exact repeat' idempotence contract require the caller-supplied recovery_provenance_ref to equal the provenance recorded by the first recovery?",
+    "option_a": "Treat provenance as authoritative input on every recovery call; reject a repeat provenance mismatch and add a canonical regression.",
+    "option_b": "Treat provenance after the first accepted recovery as informational/non-authoritative; document that semantic explicitly and add a canonical characterization regression.",
+    "required_disposition": "Canonical WP206 owner/reconciliation must choose or otherwise define repeat-provenance semantics before relying on 'exact repeat' as a strict audit-provenance guarantee. Do not create a duplicate WP206 mutation authority merely from this review packet."
+  },
+  "credits": {
+    "runtime_execution_observed": false,
+    "runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "writes": {
+    "review_branch": "review/trigger4-wp206-g3-provenance-repeat-falsifier-20260830",
+    "review_test_commit": "3601cce02c5de2d5e7daaa6ccae2a0ab81217678",
+    "review_ci_commit": "78447f4c6a80bf801783c14fc88ffff51906cd90",
+    "review_pr": 689,
+    "canonical_pr681_comment_id": 5467664243
+  },
+  "next_exact_action": "Do not open a competing WP206 generation. Let the canonical owner semantically disposition PR689's executable repeat-provenance counterevidence; if strict provenance equality is intended, open exactly one deliberate successor/fix path under the claim protocol, otherwise make the informational-after-first-use contract explicit. Continue unrelated nonduplicate Stage-9 work in parallel."
+}

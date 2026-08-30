@@ -1016,7 +1016,8 @@ def execute_chat(
         raise RuntimeError("forked_during_active_execution")
     _enforce_pre_snapshot_message_bound(messages)
     _enforce_pre_lock_text_size_lower_bound(messages, model)
-    acquired = PROCESS_EXECUTION_LOCK.acquire(
+    execution_lock = PROCESS_EXECUTION_LOCK
+    acquired = execution_lock.acquire(
         timeout=EXECUTION_LOCK_TIMEOUT_SECONDS
     )
     if not acquired:
@@ -1033,7 +1034,7 @@ def execute_chat(
             payment_latches=payment_latches,
         )
     finally:
-        PROCESS_EXECUTION_LOCK.release()
+        execution_lock.release()
 
 
 def _execute_chat_locked(
@@ -1105,6 +1106,8 @@ def _execute_chat_locked(
     # storage. Re-evaluate after the last such pre-network callback so a newly
     # published hard stop or exhausted latch budget cannot be outrun.
     pre_network_route = route(env, payment_latches=latches)
+    if pre_network_route["reason"] == "forked_during_active_execution":
+        raise RuntimeError("forked_during_active_execution")
     if selected in pre_network_route["payment_blocked_providers"]:
         raise RuntimeError("payment_required_hard_stop_active")
     if pre_network_route["payment_latch_capacity_exhausted"]:
@@ -1674,4 +1677,3 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()

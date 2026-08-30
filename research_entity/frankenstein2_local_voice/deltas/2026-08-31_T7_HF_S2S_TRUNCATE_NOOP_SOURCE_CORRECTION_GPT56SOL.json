@@ -1,0 +1,63 @@
+{
+  "schema": "F2_TRIGGER7_SOURCE_CORRECTION/v1",
+  "trigger": "7",
+  "date_local": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_ONLY_NOT_F2_CLAIM_AUTHORITY",
+  "scope": "T7-FD-RTCOMPAT-001 / huggingface speech-to-speech OpenAI-Realtime compatibility",
+  "f2_head_observed": "e4fbb17caeda6d2ce4264bbf089501896c6fa2ba",
+  "f2_claim_semantic_key": "8c53f25ed47c458bb727dd4dc82f788241cee699e428c4d97401a965a4eb375e",
+  "upstream": {
+    "repository": "huggingface/speech-to-speech",
+    "observed_revision": "3986f453012a131632eee4731995474046846794",
+    "service_path": "src/speech_to_speech/api/openai_realtime/service.py",
+    "router_path": "src/speech_to_speech/api/openai_realtime/websocket_router.py",
+    "response_handler_path": "src/speech_to_speech/api/openai_realtime/handlers/response.py"
+  },
+  "supersedes_source_assumption": {
+    "old_assumption": "conversation.item.truncate is absent from the current upstream event surface",
+    "current_primary_source_observation": "The observed upstream revision imports ConversationItemTruncateEvent, includes conversation.item.truncate in the client-event model map, and parses the stock event shape.",
+    "correction": "TRUNCATE_EVENT_SURFACE_PRESENT_BUT_ROUTER_SEMANTICS_NOOP"
+  },
+  "primary_source_findings": [
+    "service.py maps conversation.item.truncate to ConversationItemTruncateEvent.",
+    "websocket_router.py handles ConversationItemTruncateEvent as a deliberate no-op, stating that response cancellation has already discarded provisional generation and client-side playback owns the unheard tail.",
+    "response.cancel routes through handle_response_cancel -> finish_response(status=cancelled).",
+    "For cancelled/failed/incomplete terminal states, response.py rolls back provisional generation from the internal Chat rather than finalizing it.",
+    "The upstream unit test observed in this turn verifies parsing of conversation.item.truncate but does not by itself prove Frankenstein-compatible heard-boundary behavior across a real interrupted response."
+  ],
+  "f2_semantic_comparison": {
+    "source": "gschaidergabriel/frankenstein-2.0:src/frankenstein2/voice_packet_cortex.py",
+    "observed": [
+      "Only fully heard completed output may be commit_eligible.",
+      "Barge-in changes nonterminal cancellable output to interrupted/cancelled and forces commit_eligible=false.",
+      "Barge-in also fences outstanding tool ownership."
+    ],
+    "interpretation": "HF whole-response rollback on cancellation may be compatible with F2's non-commit policy for interrupted output, but source review alone cannot prove that no unheard assistant semantics, late tool data or stale generation output influence the next turn."
+  },
+  "updated_high_information_discriminator": {
+    "old_question": "Does the upstream server support conversation.item.truncate?",
+    "new_question": "After a partially delivered response is cancelled and conversation.item.truncate is sent, can any assistant semantics beyond F2's admitted heard/commit boundary influence the next response, tool state or conversation context?",
+    "required_observations": [
+      "response generation cancellation and late-output suppression",
+      "internal next-turn model context after interruption",
+      "F2 commit_eligible remains false for interrupted output",
+      "late tool result cannot regain ownership",
+      "duplicate cancel/truncate is idempotent",
+      "network-blocked local inference remains external-model-call free"
+    ]
+  },
+  "coordination": {
+    "existing_f2_falsifier_commit": "e4fbb17caeda6d2ce4264bbf089501896c6fa2ba",
+    "existing_f2_falsifier": "research/local_voice/falsifiers/2026-08-31_HF_S2S_REALTIME_HEARD_BOUNDARY_PROTOCOL_FALSIFIER_GPT56SOL.json",
+    "action": "Do not create a duplicate semantic claim. Feed this source correction into the existing falsifier/Trigger4 execution lane and update its runtime oracle rather than opening breadth."
+  },
+  "credits": {
+    "source_correction": 1,
+    "local_runtime": 0,
+    "german_e2e": 0,
+    "physical_audio": 0,
+    "trigger4_acceptance": 0,
+    "whole_voice_system": 0
+  }
+}

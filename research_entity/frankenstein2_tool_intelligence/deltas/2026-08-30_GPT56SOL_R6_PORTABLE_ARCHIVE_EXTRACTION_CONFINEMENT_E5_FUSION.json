@@ -1,0 +1,26 @@
+{
+  "schema": "CLAY_F2_TRIGGER6_DELTA_MIRROR/v1",
+  "trigger": "6",
+  "organ": "GPT-5.6 Sol / ChatGPT Trigger-6 organ",
+  "research_id": "R6-20260830-PORTABLE-ARCHIVE-EXTRACTION-CONFINEMENT-GPT56SOL-01",
+  "research_entity_authority": {
+    "main_observed_before_write": "4041ad37b34bfd05bab22149a8995136888f5509",
+    "schema_supervisor": "8.78",
+    "product": "EntityOS",
+    "compute_architecture": "HCU"
+  },
+  "f2_evidence": {
+    "E1_source_read": "c0b1ae2ce0562ff9d063ac0f8c33d72fe05533da",
+    "E2_architecture_map": "46878cf96bf36b7acd48b5b501330cbb7d38872f",
+    "E3_reproduction": "773b53fa591cbee3983e7202263a316f951b27e8",
+    "E4_ablation": "ad23ed07639970f1686cf6788a98d4f612205d6b",
+    "E5_build_candidate": "52515b02b5f625886501f61174ebe19795db27fd",
+    "fusion": "f3a94ef94a0d71a646c7ad135302c922a36b3c5c",
+    "trigger4_handoff": "c26eb98e1160d8ca36ed9e15710dc0a791fa25a7"
+  },
+  "delta": "The required Frankenstein-2.0 release ZIP has an architecture-level materialization gap before the existing strict release_integrity gate. CPython extraction was reproduced following a pre-existing destination directory symlink. Existing F2 post-verification rejected the hostile symlink-bearing staged tree, so release_integrity should be reused rather than replaced. The surviving E5 candidate is a stdlib-only F2-owned fresh/private staging + archive preflight + zero-preverify-execution + existing postverify boundary.",
+  "coordination": "WP1110/WP1111 route/junction hardening remains separate and was not duplicated.",
+  "negative_boundary": "E4 used transcribed exact observed F2 source logic because raw repository transfer into the local sandbox was network-blocked; therefore no exact-byte runtime credit. No Windows/macOS target execution. No E6/runtime/target-host/whole-system credit.",
+  "next_exact_action": "Trigger4 consumes the F2 inbox handoff and implements/tests or evidence-rejects F2_VERIFIED_PRIVATE_RELEASE_STAGING_V1. Trigger6 consumes resulting E6 later; it may not mint E6 itself.",
+  "credits": {"research_E1_E5": "BOUNDED_COMPLETE", "E6": 0, "runtime": 0, "target_host": 0, "whole_system": 0}
+}

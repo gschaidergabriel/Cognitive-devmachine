@@ -1,0 +1,85 @@
+{
+  "schema": "TRIGGER7_EXTERNAL_SEMANTIC_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "research_id": "T7-FD-RTCOMPAT-001",
+  "classification": "RESEARCH_ONLY_PRIMARY_SEMANTIC_DELTA",
+  "implementation_mutation_authority": false,
+  "canonical_build_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_observed_head": "3caccb669701f981f37cc62dd2743a1bf9157b47",
+  "research_observed_head_before_write": "97c2c2105e042544072f39313a9625fb13cac6dd",
+  "pinned_upstream_repo": "huggingface/speech-to-speech",
+  "pinned_upstream_revision": "3986f453012a131632eee4731995474046846794",
+  "f2_falsifier_ref": "research/local_voice/falsifiers/2026-08-31_HF_S2S_REALTIME_HEARD_BOUNDARY_PROTOCOL_FALSIFIER_GPT56SOL.json",
+  "findings": [
+    {
+      "id": "D1_PINNED_HF_TRUNCATE_INPUT_SUPPORTED",
+      "status": "CONFIRMED_EXACT_SOURCE",
+      "finding": "The pinned Hugging Face realtime service parses conversation.item.truncate as ConversationItemTruncateEvent."
+    },
+    {
+      "id": "D2_PINNED_HF_TRUNCATE_IS_NOOP",
+      "status": "CONFIRMED_EXACT_SOURCE",
+      "finding": "The pinned websocket router deliberately treats ConversationItemTruncateEvent as no additional server-state mutation after cancellation because client-side playback is considered owner of the unheard tail."
+    },
+    {
+      "id": "D3_OPENAI_REFERENCE_REQUIRES_SERVER_CONTEXT_SYNCHRONIZATION",
+      "status": "CONFIRMED_PRIMARY_REFERENCE",
+      "finding": "OpenAI Realtime reference semantics define conversation.item.truncate as synchronizing server understanding with client playback, removing server-side text transcript beyond the heard audio boundary, and returning conversation.item.truncated on success.",
+      "sources": [
+        "https://platform.openai.com/docs/api-reference/realtime-client-events",
+        "https://platform.openai.com/docs/api-reference/realtime-server-events/input_audio_buffer/committed"
+      ]
+    }
+  ],
+  "reconciliation": {
+    "old_question": "Is parser/event absence the compatibility defect?",
+    "answer": "No. Parser support exists at the pinned HF revision.",
+    "current_question": "Does the HF cancellation/rollback path produce behavior observationally equivalent to OpenAI's heard-boundary server-context truncation despite truncate itself being a no-op?",
+    "status": "OPEN_RUNTIME_HYPOTHESIS",
+    "architectural_implication": "HF cannot be credited as drop-in OpenAI-Realtime semantic equivalence at the truncate boundary from source alone. F2 remains viable if its existing authority boundary reconstructs or otherwise proves next-turn context contains no unheard assistant semantics."
+  },
+  "highest_information_discriminator": {
+    "priority": ["HF01_EVENT_SURFACE_EXACTNESS", "HF02_CANCEL_GENERATION_VS_HEARD_HISTORY", "HF03_TRUNCATE_NOOP_SEMANTIC_EXACTNESS"],
+    "must_measure": [
+      "generated_assistant_boundary",
+      "emitted_audio_boundary",
+      "f2_heard_boundary",
+      "post_cancel_server_chat_or_model_input",
+      "next_turn_model_context_digest",
+      "conversation.item.truncated acknowledgement presence_or_absence",
+      "stale_duplicate_out_of_range_truncate_disposition"
+    ],
+    "falsifies_drop_in_semantics_if": "Any unheard assistant semantic remains in next-turn model context, or truncate success is represented without equivalent heard-boundary state synchronization.",
+    "does_not_falsify_f2_adapter_if": "F2 reconstructs authoritative context from its own heard-state boundary and proves the speech server cannot reintroduce unheard/stale semantics."
+  },
+  "wp715_runtime_watch": {
+    "workflow_run_id": 33328707636,
+    "observed_status": "queued",
+    "runner_label": "clay-host",
+    "runner_id": 0,
+    "steps_observed": 0,
+    "runtime_credit": 0,
+    "classification": "UNKNOWN_NONTERMINAL_CONTROL_PLANE_ONLY"
+  },
+  "credit": {
+    "research_semantic_delta": 1,
+    "executed_protocol_component": 0,
+    "german_e2e_voice": 0,
+    "physical_device": 0,
+    "trigger4_acceptance": 0,
+    "whole_product": 0
+  },
+  "routing": {
+    "next_owner": "EXISTING_TRIGGER4_RUNTIME_FALSIFIER_OWNER",
+    "do_not": [
+      "do not open a duplicate WP715 mutation claim",
+      "do not mutate the active voice FSM from Trigger7",
+      "do not promote queued workflow state to execution",
+      "do not claim full OpenAI Realtime compatibility from parser support",
+      "do not treat source rollback intent as runtime proof"
+    ],
+    "next_exact_action": "Existing Trigger4 owner executes HF01-HF03 on the pinned upstream revision and exact F2 subject, with explicit next-turn context capture. Trigger7 continues source/research falsification and consumes the resulting receipt without stealing mutation authority."
+  }
+}

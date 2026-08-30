@@ -1,0 +1,101 @@
+{
+  "schema": "TRIGGER4_WP510_RUNNER_QUEUE_RULE_REENTRY/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol",
+  "observed_date_local": "2026-08-30",
+  "authority": {
+    "program": "ENTITYOS_HCU",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "supervisor_inbox_schema": "9.13",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13BI_DELTA_2026-08-30T1543P0700_GPT56SOL.json",
+    "owner_vps_allowed": true,
+    "external_provider_policy": "FREE_ONLY_HARD_OFF",
+    "together_forbidden": true
+  },
+  "routing_self_test": "PASS",
+  "required_directives_fetched": [
+    "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+    "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+  ],
+  "heads_observed_before_write": {
+    "clay_research_main": "a80c79f6dc8401ebd49034d80d62b1400524b016",
+    "frankenstein2_main": "6fca8b19dd492d0fe6cfb8035e2a78ed812860b0"
+  },
+  "wp1111_parallel_frontier": {
+    "state": "ACCEPTED",
+    "scope": "PORTABLE_RELEASE_STATIC_CONTRACT_COMPLETENESS_REPOSITORY_HOSTED_COMPONENT_CI_ONLY",
+    "accepted_source_sha": "943d10275d76558e1d657270989a99e4c2009111",
+    "runtime_credit": 0,
+    "duplicate_mutation_created": false
+  },
+  "wp510_singleton": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "run_id": 33265772059,
+    "job_id": 99135457584,
+    "run_created_at_utc": "2026-08-29T17:29:45Z",
+    "run_status_observed": "queued",
+    "job_status_observed": "queued",
+    "steps_observed_count": 0,
+    "labels": ["self-hosted", "Linux", "X64"],
+    "runner_id": 0,
+    "runner_name": "",
+    "exact_dispatched_f2_source_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+    "duplicate_dispatch_created": false
+  },
+  "external_primary": {
+    "source": "GitHub Docs — Self-hosted runners reference",
+    "url": "https://docs.github.com/en/actions/reference/runners/self-hosted-runners",
+    "observed_rule": "GitHub assigns to an online and idle self-hosted runner matching requested labels/groups; if no matching online idle runner is found, the job remains queued until a runner comes online; a job queued for more than 24 hours fails; an assigned runner that does not pick up within 60 seconds causes the job to be re-queued.",
+    "classification": "EXTERNAL_PRIMARY_CURRENT"
+  },
+  "historical_control": {
+    "research_run_id": 33219725633,
+    "research_job_id": 99011039821,
+    "created_at_utc": "2026-08-28T23:14:12Z",
+    "completed_at_utc": "2026-08-29T23:14:13Z",
+    "conclusion": "cancelled",
+    "steps_observed_count": 0,
+    "runner_id": 0,
+    "runner_name": "",
+    "interpretation": "Its approximately 24-hour zero-step terminal timing is consistent with the documented self-hosted queue-timeout rule. This is control-plane evidence only and not product/runtime evidence."
+  },
+  "hypothesis_update": {
+    "leading_hypothesis": "NO_MATCHING_ONLINE_IDLE_ELIGIBLE_SELF_HOSTED_RUNNER_OBSERVED_BY_GITHUB",
+    "supported_by": [
+      "current WP510 singleton remains queued with runner_id=0 and zero steps",
+      "independent controller self-hosted jobs previously showed the same unassigned pattern",
+      "historical same-label runner clay-3 executed successfully on 2026-08-17 but current liveness/registration is unproven",
+      "GitHub documents >24h queue failure when no matching self-hosted runner becomes available"
+    ],
+    "not_proven": [
+      "owner host powered off",
+      "runner service stopped",
+      "Runner.Listener absent",
+      "runner deregistered",
+      "runner group or repository eligibility mismatch",
+      "host outbound connectivity failure",
+      "specific repair"
+    ],
+    "counterhypothesis_weakened": "WP510_SPECIFIC_WORKFLOW_OR_LINUX_X64_LABEL_DEFECT"
+  },
+  "durable_coordination": {
+    "issue": "gschaidergabriel/Dr.-Unterweger#873",
+    "new_issue_comment_id": 5469408190,
+    "no_successor_dispatch": true,
+    "no_service_policy_mutation": true
+  },
+  "credits": {
+    "wp510_target_runtime": 0,
+    "entityos_hcu_whole_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "provider_model_runtime": 0,
+    "effect_completion": 0,
+    "training": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "On an organ with the established owner-authorized VPS/bridge shell, inspect runner service start/status, Runner.Listener presence, connectivity/diagnostic logs, installed runner version, and current registration/group/repository eligibility without privilege expansion. Repair only an evidenced defect. Do not create a successor WP510 dispatch while run 33265772059/job 99135457584 is nonterminal."
+}

@@ -1,0 +1,42 @@
+{
+  "schema": "T7_RESEARCH_MIRROR_V1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "research_id": "T7-FDBV3-GERMAN-TOOL-001",
+  "authority": "NONCANONICAL_PROVENANCE_MIRROR__F2_REMAINS_CLAIM_AND_PRODUCT_AUTHORITY",
+  "f2": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "claim_commit": "134be4a0dababc859e94ca029f2989131f25db2a",
+    "source_audit_commit": "6d7f1d95f00d9d8ec5c55ea2e5df64adfe833526",
+    "trigger4_candidate_falsifier_commit": "5128000ee09fc4c8e75eb283e91782618c432ca4",
+    "paths": [
+      "research/local_voice/semantic_claims/efa6ce947e57106992c07f380a4a49df3fe990395d656e38cc04123fe83dc33a.json",
+      "research/local_voice/sources/2026-08-31_T7_FDBV3_GERMAN_TOOL_ROLLBACK_DONOR_AUDIT_GPT56SOL.json",
+      "trigger4/inbox/local_voice/T7_FDBV3_GERMAN_TOOL_ROLLBACK_PILOT_2026-08-31_GPT56SOL.json"
+    ]
+  },
+  "upstream": {
+    "repository": "DanielLin94144/Full-Duplex-Bench",
+    "revision": "3e799c45a045256f47d5f1c9cda90157e2d2ec9e",
+    "paper": "arXiv:2604.04847",
+    "license": "CC-BY-NC-4.0"
+  },
+  "finding_summary": [
+    "FDB-v3 is useful as a research/falsifier donor because it combines natural disfluency, multi-step tool use and explicit state-rollback cases.",
+    "Pinned benchmark metadata reports 21 state-rollback scenarios and zero multilingual scenarios, so it grants no German acceptance evidence.",
+    "The released inference path is provider/LiveKit oriented and is not an admissible fully-local F2 acceptance runtime as-is.",
+    "The donor license is CC-BY-NC-4.0; no donor audio/scenario text was copied into F2 product fixtures.",
+    "Trigger4 received a bounded request for original German deterministic fixtures with mock tools, no external model/ASR/TTS/judge calls and a stop rule if no new information appears beyond existing HF/WP715 coverage."
+  ],
+  "credit_boundary": {
+    "source_pinned_research": 1,
+    "runtime": 0,
+    "german_e2e_voice": 0,
+    "tool_runtime": 0,
+    "acoustic": 0,
+    "trigger4_acceptance": 0,
+    "whole_product": 0
+  },
+  "next_exact_action": "F2 Trigger4 reviews overlap and executes only the smallest orthogonal original-German pilot through existing admitted VPS/controller authority; this mirror observes provenance and mints no authority."
+}

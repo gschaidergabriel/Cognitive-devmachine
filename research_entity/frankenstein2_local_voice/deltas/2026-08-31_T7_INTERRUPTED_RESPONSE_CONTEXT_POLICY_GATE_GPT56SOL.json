@@ -1,0 +1,39 @@
+{
+  "schema": "CLAY_TRIGGER7_RESEARCH_DELTA_V1",
+  "date": "2026-08-31",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "research_id": "T7-FD-RTCOMPAT-001",
+  "classification": "POLICY_GATE_RESEARCH_MIRROR",
+  "canonical_coordination_repo": "gschaidergabriel/frankenstein-2.0",
+  "f2_policy_gate_commit": "b288e46a0903ca8aa45d98588763e84bd3a3b63a",
+  "f2_policy_gate_path": "trigger4/inbox/local_voice/T7_INTERRUPTED_RESPONSE_CONTEXT_POLICY_2026-08-31_GPT56SOL.json",
+  "current_f2_fact": "Interrupted VoiceOutputPacket may retain nonzero heard_fraction but is not commit-eligible unless playback completed and heard_fraction=1.0; current cited F2 source does not independently define interrupted-response ephemeral next-turn context retention.",
+  "semantic_separation": "commit eligibility / durable outcome authority != ephemeral next-turn dialogue context",
+  "recommended_policy_candidate": {
+    "id": "RETAIN_HEARD_PREFIX_EPHEMERALLY_ONLY",
+    "status": "TRIGGER7_RECOMMENDATION_NOT_CANONICAL",
+    "rule": "Retain exactly measured heard prefix for ephemeral next-turn context; exclude unheard tail; leave durable memory, VoiceOutcome and effect admission separately gated."
+  },
+  "counterpolicy": {
+    "id": "DROP_WHOLE_INTERRUPTED_RESPONSE",
+    "status": "REQUIRES_EXPLICIT_F2_SELECTION_AND_DIALOGUE_COHERENCE_MEASUREMENT"
+  },
+  "runtime_gate": {
+    "existing_claim": "T7-FD-RTCOMPAT-001",
+    "new_runtime_dispatch": false,
+    "existing_hf09_hf10_lane_reused": true,
+    "preferred_transport": "controller -> vps-clay-host -> resource-bounded Ubuntu",
+    "classify_prefix_amnesia_before_policy_pin": "PREFIX_RETENTION_POLICY_UNRESOLVED"
+  },
+  "credit": {
+    "research_policy_evidence": 1,
+    "runtime_credit": 0,
+    "acoustic_credit": 0,
+    "german_e2e_voice_credit": 0,
+    "durable_memory_credit": 0,
+    "effect_credit": 0,
+    "whole_product_credit": 0
+  },
+  "next_exact_action": "Trigger4 pins one explicit F2 interrupted-response ephemeral-context policy and then executes the already-existing HF09/HF10/HF02-HF05 discriminator lane through the proven controller/VPS route."
+}

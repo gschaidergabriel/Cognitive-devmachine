@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "trigger": "7",
+  "mirror_type": "F2_LOCAL_VOICE_RESEARCH_DELTA",
+  "date_local": "2026-08-30",
+  "source_repository": "gschaidergabriel/frankenstein-2.0",
+  "research_id": "T7-TTS-008",
+  "objective": "E1_VIBEVOICE_REALTIME_05B_GERMAN_SOURCE_PIN",
+  "semantic_key": "e309960e65c028eb54de70be7c032d98c67943e40eb6919028b49addc8c46194",
+  "f2_state": "SOURCE_PINNED_TERMINAL_AT_SCOPE",
+  "f2_source_result": "research/local_voice/sources/2026-08-30_T7_TTS008_VIBEVOICE_REALTIME_05B_SOURCE_PIN_GPT56SOL.json",
+  "f2_checkpoint": "research/local_voice/checkpoints/2026-08-30_T7_TTS008_VIBEVOICE_SOURCE_REENTRY_1704_GPT56SOL.json",
+  "upstream_code_commit": "94da20d98b2fa7688e9cbfaf7692ddb4954f7600",
+  "model_safetensors_sha256": "7758b150b8139deb48ac1ff6f181f745c8fedd5511232fd974b3eb217d83b514",
+  "finding": "Microsoft VibeVoice-Realtime-0.5B is a materially distinct realtime TTS challenger with an interleaved/windowed design, official experimental German voice assets and an upstream approximately 200-300 ms first-audio/chunk claim. It receives zero German production/runtime credit because upstream explicitly says the release is primarily/intended for English, multilingual behavior is insufficiently tested/unpredictable, and the primary document contains an unresolved contradiction between its streaming-text feature description and an unfinished live-token-feed TODO.",
+  "hypothesis": "On suitable local target hardware VibeVoice-Realtime-0.5B may reduce TTS first-audio latency relative to non-streaming challengers while preserving usable German speech from the experimental voice assets.",
+  "counterhypothesis": "German instability, missing stable male identity, resource cost, incomplete externally fed streaming semantics or poor cancellation behavior may eliminate it despite strong English/realtime source claims.",
+  "runtime_gate_observed": {
+    "qwen3_asr_existing_run_id": 33292903286,
+    "qwen3_asr_existing_job_id": 99207535776,
+    "last_status": "queued",
+    "latest_control_plane_diagnostic": "27 queued / 0 in progress",
+    "interpretation": "shared self-hosted runner admission degradation supported; exact offline/registration/access root cause not yet resolved",
+    "duplicate_runtime_dispatch": false
+  },
+  "credits": {
+    "source_pin": 1,
+    "realtime_architecture_source_signal": 1,
+    "german_experimental_asset_source_signal": 1,
+    "target_hardware": 0,
+    "model_runtime": 0,
+    "german_tts_component": 0,
+    "german_e2e": 0,
+    "trigger4_acceptance": 0,
+    "whole_system": 0
+  },
+  "next_exact_action": "Repair/verify the shared self-hosted runner admission path through Trigger 4 and consume the existing queued target run rather than dispatching duplicates. After terminal target evidence, create a distinct VibeVoice target-runtime semantic objective and measure the same German corpus for TTFA p50/p95, RTF, RSS/VRAM, intelligibility/naturalness, stable male identity, incremental chunk continuity, cancellation latency and network-blocked LOCAL-SOLO behavior."
+}

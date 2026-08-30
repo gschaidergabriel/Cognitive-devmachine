@@ -210,7 +210,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         capability_receipt = MOD.receipt()
 
         self.assertEqual(
-            capability_receipt["execution_receipt_schema_version"], "1.13"
+            capability_receipt["execution_receipt_schema_version"], "1.14"
         )
         self.assertEqual(
             capability_receipt["unicode_database_version"],
@@ -768,7 +768,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             now=iter((1.0, 1.01)).__next__,
         )
 
-        self.assertEqual(result["receipt"]["schema_version"], "1.13")
+        self.assertEqual(result["receipt"]["schema_version"], "1.14")
         self.assertEqual(
             result["receipt"]["capability_receipt_schema_version"], "1.18"
         )

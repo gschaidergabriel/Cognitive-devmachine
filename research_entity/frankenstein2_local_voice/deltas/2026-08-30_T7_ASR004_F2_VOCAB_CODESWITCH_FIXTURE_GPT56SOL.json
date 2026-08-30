@@ -1,0 +1,40 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-30",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "research_id": "T7-ASR-004",
+  "semantic_key": "db6ca9f9841745df3d390aad71dd3ac8203df4832b7cf06ee2782ddd4bb443c3",
+  "canonical_claim_authority": "gschaidergabriel/frankenstein-2.0:research/local_voice/semantic_claims/db6ca9f9841745df3d390aad71dd3ac8203df4832b7cf06ee2782ddd4bb443c3.json",
+  "canonical_result": "gschaidergabriel/frankenstein-2.0:research/local_voice/sources/2026-08-30_T7_ASR004_F2_VOCAB_CODESWITCH_FIXTURE_GPT56SOL.json",
+  "canonical_checkpoint": "gschaidergabriel/frankenstein-2.0:research/local_voice/checkpoints/2026-08-30_T7_ASR004_F2_VOCAB_CODESWITCH_PIN_GPT56SOL.json",
+  "research_delta": "Pinned a 20-utterance German-first Frankenstein-2.0 technical-vocabulary/acronym/DE-EN code-switch fixture with frozen normalization, predeclared critical-token aliases, human-speech near/room profiles, and matched future Qwen3-ASR raw versus deterministic-gated versus faster-whisper scoring. This fills the project-vocabulary gap left explicitly open by the ordinary-German FLEURS comparator.",
+  "epistemic_boundary": {
+    "source_direct": "fixture/scoring/recording protocol is committed in canonical F2 research",
+    "external_primary": "Qwen3-ASR officially supports German and supplies local/streaming tooling",
+    "open_question": "Frankenstein-specific technical vocabulary and DE/EN code-switch recognition quality",
+    "audio_observed": false,
+    "target_runtime_measurement_for_this_fixture": false
+  },
+  "coordination": {
+    "semantic_generation": 6,
+    "fixture_creation_commit": "4398a88798e3b50a1ae1963c8d873f34f785c246",
+    "checkpoint_commit": "e90aa382f367e0cf978520165178b9798c1ccf13",
+    "trigger4_handoff_commit": "d7627e40682013b40bccdd36b7c88ca517ecf421",
+    "new_runtime_dispatch_created": false,
+    "current_fleurs_gate_preempted": false,
+    "duplicate_work_created": false
+  },
+  "credits": {
+    "source_fixture_delta": 1,
+    "audio_delta": 0,
+    "target_runtime_delta": 0,
+    "german_project_vocab_quality_delta": 0,
+    "streaming_delta": 0,
+    "trigger4_acceptance_delta": 0,
+    "entityos_hcu_whole_runtime_delta": 0,
+    "whole_system_delta": 0
+  },
+  "next_exact_action": "After the already-routed FLEURS matched comparator, collect and hash the pinned human German fixture and run identical files through Qwen3-ASR raw, deterministic-gated Qwen3-ASR and the pinned faster-whisper baseline; keep critical-token recall and translation/language-flip failures separate from aggregate WER/CER."
+}

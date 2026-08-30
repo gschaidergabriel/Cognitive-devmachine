@@ -1,0 +1,46 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_RECONCILIATION/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_STATE_RECONCILIATION_NOT_F2_CLAIM_AUTHORITY",
+  "research_id": "T7-ASR-004",
+  "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+  "canonical_f2_runtime_state_source": {
+    "commit": "337c35d0891b7c8bbed3e9ce95bed8871c2041c8",
+    "current_attempt": 4,
+    "state": "UNKNOWN_NONTERMINAL_ATTEMPT4_DISPATCH_MARKER_PRESENT_RECEIPT_NOT_OBSERVED"
+  },
+  "research_delta_reconciled": {
+    "commit": "e25173bfd069bc950a324a16725d8eb9a1839348",
+    "file": "research_entity/frankenstein2_local_voice/deltas/2026-08-31_T7_ASR004_MULTITURN_STREAMING_FALSIFIER_GPT56SOL.json",
+    "state_pointer_status": "STALE_ATTEMPT3_REFERENCE_DO_NOT_USE_FOR_CURRENT_ROUTING",
+    "falsifier_content_status": "PRESERVE_AS_VALID_RESEARCH_INPUT_PENDING_TARGET_REPRODUCTION"
+  },
+  "preserved_falsifier": {
+    "name": "MULTITURN_HISTORY_COPY_AND_COST_GROWTH",
+    "minimum_shape": [
+      "same persistent realtime session",
+      "at least two semantically distinct German utterances",
+      "assert utterance N output does not copy prior utterance text",
+      "record per-turn latency and compute/resource growth across repeated turns",
+      "retain deterministic VAD/turn-gated Qwen3-ASR and faster-whisper matched-audio baseline",
+      "preserve silence false-positive discriminator"
+    ],
+    "promotion_rule": "Upstream reports remain falsifiers only until reproduced on the exact admitted target subject."
+  },
+  "anti_duplication": {
+    "redispatch": false,
+    "new_semantic_claim": false,
+    "new_runtime_subject": false,
+    "rule": "Attempt 4 remains frozen while terminal executed evidence is unresolved."
+  },
+  "credits": {
+    "new_target_runtime": 0,
+    "new_german_quality": 0,
+    "new_streaming_acceptance": 0,
+    "new_trigger4_acceptance": 0,
+    "new_whole_voice_system": 0
+  },
+  "next_exact_action": "Consume the first exact persisted run/receipt evidence for corrected ASR004 attempt 4. If it remains nonterminal, do not redispatch. If exact target execution succeeds, run the already-routed identical-audio German/noise comparator and include the multi-turn no-history-copy plus per-turn cost-growth falsifier before any streaming promotion. Only after ASR004 measurement or explicit reconciliation may T7-ASR-008 Nemotron 3.5 run on the identical comparator."
+}

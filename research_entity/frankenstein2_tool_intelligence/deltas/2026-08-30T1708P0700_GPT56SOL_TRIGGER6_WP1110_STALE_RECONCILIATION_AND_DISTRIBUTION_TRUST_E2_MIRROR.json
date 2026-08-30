@@ -1,0 +1,56 @@
+{
+  "schema": "F2_TRIGGER6_RESEARCH_ENTITY_MIRROR/v1",
+  "recorded_at": "2026-08-30T17:08:00+07:00",
+  "worker": "GPT-5.6-Sol",
+  "status": "PROVENANCE_MIRROR_ONLY_NO_F2_CLAIM_AUTHORITY",
+  "research_entity_base_observed": "498f8107941c5e48886fe4e75dc11ee07913769a",
+  "canonical_authority_observed": {
+    "bootstrap_schema_version": "8.78",
+    "bootstrap_authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "supervisor_inbox_delta": "9.13BI_NON_AUTHORITY",
+    "wp1110_frontier": "TERMINAL_REPOSITORY_COMPONENT_CLOSURE; final handoff routes through WP1207 exact release subject; zero target-runtime/whole-system credit"
+  },
+  "canonical_f2_records": [
+    {
+      "commit": "ad77671f4161708076c9fa00ef1f190be17bda26",
+      "path": "research/tool_intelligence/results/R6-20260830-RELEASE-ARTIFACT-PROVENANCE-GPT56SOL-01_E3_CLAIM_REPRODUCED_RELEASE_ARTIFACT_SUBJECT.json",
+      "scope": "local E3 mechanism reproduction; later architecture-state interpretation corrected"
+    },
+    {
+      "commit": "cb283454534609e19913bce0029aedb305919c1e",
+      "path": "research/tool_intelligence/reconciliations/R6-20260830-RELEASE-ARTIFACT-PROVENANCE-GPT56SOL-01_E3_E4_STALE_REVIEW_20260830T1658P0700.json",
+      "scope": "stale assumption reconciliation: WP1110 G2 already implemented exact unopened artifact subject; E4 duplicate terminated"
+    },
+    {
+      "commit": "c2f1c618ed01fa4e74d6baa62f16b21b8a146f2a",
+      "path": "research/tool_intelligence/results/R6-20260830-PREHANDOFF-RECEIPT-AUTHENTICITY-GPT56SOL-01_E1_SOURCE_READ.json",
+      "scope": "source read: content identity versus producer-origin authenticity"
+    },
+    {
+      "commit": "d55e2d8e0171a2daa91087f93b48c0ab5882ca3b",
+      "path": "research/tool_intelligence/results/R6-20260830-PREHANDOFF-RECEIPT-AUTHENTICITY-GPT56SOL-01_E2_ARCHITECTURE_MAPPED.json",
+      "scope": "architecture map; no build promotion"
+    }
+  ],
+  "fused_findings": [
+    "Generation-1 clean_machine_acceptance.py is a preserved historical ABI, not the whole current WP1110 acceptance path. Exact-current successor lineage must be inspected before declaring a field absent from F2.",
+    "WP1110 G2 release_artifact_subject.py plus artifact_bound_clean_machine.py already implement exact unopened archive subject binding and clean-machine subject consistency at repository-component scope.",
+    "WP1110 G3 receipt_content_binding.py already binds exact external prehandoff receipt bytes; current WP1107 release_archive.py uses ZIP_STORED plus canonical metadata and exact whole-archive rebuild/equality, so zlib cross-host compressor variability is not a current V1 blocker.",
+    "Current handoff content identity is strong at repository-component scope, but cryptographic producer-origin authentication is not observed in the inspected path. This is a separate property, not a defect under every threat model.",
+    "SLSA/Sigstore style signature/root verification becomes relevant if F2 must defend against wholesale package+receipt replacement by an untrusted distributor or must prove independent producer identity.",
+    "TUF-class metadata becomes relevant only if F2 grows an actual update/repository channel where freshness/rollback/mix-and-match are product threats.",
+    "Do not delay the immediate WP1207/owner-host executable frontier for mandatory signing infrastructure without an explicit distribution-threat requirement."
+  ],
+  "deferred_hypothesis": {
+    "name": "DistributionTrustAnchor/v1",
+    "status": "DEFERRED_NOT_BUILD_CANDIDATE",
+    "reopen_if": ["public or untrusted distribution", "automatic updates", "mirrors", "independent producer identity verification"],
+    "smallest_ladder": ["trusted direct handoff", "out-of-band digest pin", "signed DSSE/Sigstore subject", "TUF-class update trust"]
+  },
+  "method_delta": "ACTIVE_WORKPACKAGE_SUCCESSOR_CHAIN_BEFORE_LEGACY_ABI_GAP",
+  "research_credit": "MIRROR_OF_F2_E3_RECONCILIATION_PLUS_E2_ARCHITECTURE_MAP_ONLY",
+  "runtime_credit": 0,
+  "effect_credit": 0,
+  "completion_credit": 0,
+  "whole_system_credit": 0
+}

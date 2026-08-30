@@ -1,0 +1,108 @@
+{
+  "schema": "CLAY_TRIGGER4_CROSS_LABEL_RUNNER_ASSIGNMENT_DELTA/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "trigger_local_minute": "2026-08-30T18:10+07:00",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "directive_branch_observed_head": "c8aa3fd992e3978bd9efeb0f7b998bd8e2a57fed",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "supervisor_inbox_schema_version": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "provider_policy": "FREE_ONLY_HARD_OFF; ALL_CLAYCODE_EXTERNAL_PROVIDER_ROUTES_UNADMITTED; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "owner_vps_execution": "AUTHORIZED_AND_EXPECTED_WITH_RESOURCE_HEALTH_GUARDS",
+    "evidence_law": "QUEUED_OR_ZERO_STEP_JOB_IS_CONTROL_PLANE_EVIDENCE_NOT_RUNTIME_EXECUTION"
+  },
+  "observed_heads_before_write": {
+    "research_main": "7c694b75c4e356eef4eb1fe9383cd421f612b465",
+    "frankenstein_2_main": "cfe3f1ee4766deb827a7e7adb87fd25b3f89e809",
+    "controller_main": "0a626f9ffd782efa6c407e237b7a0ce7143abc8c"
+  },
+  "existing_target_attempts": {
+    "wp510": {
+      "run_id": 33265772059,
+      "job_id": 99135457584,
+      "status": "queued",
+      "conclusion": null,
+      "labels": ["self-hosted", "Linux", "X64"],
+      "runner_id": 0,
+      "runner_name": "",
+      "executed_steps": 0,
+      "duplicate_dispatch": "FORBIDDEN"
+    },
+    "wp1207": {
+      "run_id": 33301648871,
+      "job_id": 99230838825,
+      "status": "queued",
+      "conclusion": null,
+      "labels": ["self-hosted"],
+      "runner_id": 0,
+      "runner_name": "",
+      "executed_steps": 0,
+      "duplicate_dispatch": "FORBIDDEN"
+    },
+    "wp900": {
+      "run_id": 33295805811,
+      "status": "pending",
+      "conclusion": null,
+      "jobs_observed": 0,
+      "duplicate_dispatch": "FORBIDDEN"
+    }
+  },
+  "discriminator": {
+    "direct_observation": [
+      "WP510 remains unassigned with runner_id=0 under labels self-hosted+Linux+X64.",
+      "WP1207 remains unassigned with runner_id=0 even though it requests only the generic self-hosted label.",
+      "Both jobs expose zero executed steps and therefore provide control-plane evidence only.",
+      "WP900 remains pending before a job object is exposed."
+    ],
+    "bounded_inference": [
+      "The Linux/X64 supplemental labels are not a sufficient explanation for the shared WP510/WP1207 blockage because the generic self-hosted-only WP1207 job is also unassigned.",
+      "The common blocker is therefore narrowed toward repository-level self-hosted runner availability, registration, eligibility, assignment, or equivalent pre-step control-plane lifecycle state."
+    ],
+    "not_proven": [
+      "This does not prove that the owner VPS itself is offline.",
+      "This does not prove the self-hosted runner service is stopped rather than unregistered, disabled, ineligible, busy, or otherwise unavailable to this repository.",
+      "No target-host runtime step executed in this organ."
+    ]
+  },
+  "tool_boundary": {
+    "github_runner_inventory_read": "BLOCKED_BY_CONNECTOR_ENDPOINT_POLICY",
+    "github_runner_inventory_endpoint_attempted": "/repos/gschaidergabriel/Dr.-Unterweger/actions/runners",
+    "ssh_vps_terminal_plugin_search": "NO_MATCHING_PLUGIN_AVAILABLE",
+    "direct_owner_host_access_available_to_this_organ": false
+  },
+  "actions_this_organ": {
+    "duplicate_runtime_dispatch": false,
+    "provider_call": false,
+    "together_call": false,
+    "vps_or_physical_host_execution": false,
+    "unusual_experiment": false,
+    "new_architecture_component": false,
+    "durable_reentry_delta": true
+  },
+  "credits": {
+    "wp510_target_runtime": 0,
+    "wp1207_target_runtime": 0,
+    "wp900_target_runtime": 0,
+    "physical_host": 0,
+    "physical_grid10": 0,
+    "gwt": 0,
+    "jspace": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_entityos_hcu": 0
+  },
+  "next_exact_gate": "From an organ with direct owner-host or GitHub runner-admin visibility, inspect the existing self-hosted runner registration/service/eligibility/labels for Dr.-Unterweger, restore eligibility if needed, and let the already queued/pending WP510/WP900/WP1207 attempts advance without creating duplicates. Admit target-runtime credit only from exact executed-step receipts bound to the expected source/artifact identities.",
+  "acceptance": "BLOCKED_CONTROL_PLANE_RUNNER_ASSIGNMENT_NO_RUNTIME_EXECUTION"
+}

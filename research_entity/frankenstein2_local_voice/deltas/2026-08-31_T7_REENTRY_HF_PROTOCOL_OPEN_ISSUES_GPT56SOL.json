@@ -1,0 +1,79 @@
+{
+  "schema": "F2_TRIGGER7_REENTRY_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "created_local_time": "2026-08-31T03:43:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_AND_REENTRY_NOT_F2_CLAIM_AUTHORITY",
+  "authority_snapshot": {
+    "research_main_observed_before_write": "97c2c2105e042544072f39313a9625fb13cac6dd",
+    "f2_main_observed": "3caccb669701f981f37cc62dd2743a1bf9157b47",
+    "target_runtime_law": "fully local/self-hosted; zero external model/ASR/TTS API calls",
+    "language_priority": "German first"
+  },
+  "reentered_frontier": {
+    "research_id": "T7-FD-RTCOMPAT-001",
+    "state": "CLAIMED_READY_FOR_BOUNDED_PROTOCOL_FALSIFIER",
+    "runtime_credit": 0,
+    "trigger4_acceptance_credit": 0,
+    "existing_f2_checkpoint": "research/local_voice/checkpoints/2026-08-31T032932P0700_T7_HF_S2S_HEARD_BOUNDARY_REENTRY_GPT56SOL.json",
+    "existing_highest_information_discriminator": "Execute the pinned HuggingFace speech-to-speech Realtime heard-boundary protocol falsifier through admitted Trigger4/VPS runtime authority and inspect next-turn context, late tool/audio behavior, cancellation/truncation idempotence and network-blocked locality."
+  },
+  "fresh_primary_source_findings": [
+    {
+      "source": "https://github.com/huggingface/speech-to-speech/issues/485",
+      "date": "2026-08-13",
+      "class": "UPSTREAM_PROTOCOL_RISK",
+      "finding": "Realtime transcription terminals without matching speech-lifecycle item metadata still have an explicitly open routing-policy question. This is not direct proof of F2 heard-boundary failure, but it shows the compatibility surface is still actively changing and supports executing the existing protocol falsifier before architectural adoption."
+    },
+    {
+      "source": "https://github.com/huggingface/speech-to-speech/issues/412",
+      "date": "2026-08-02",
+      "class": "UPSTREAM_REALTIME_TURN_REGRESSION_HISTORY",
+      "finding": "Whisper-family realtime handlers previously finalized progressive turns prematurely, truncating live utterances. The issue is closed by a later repair, so it is historical regression evidence rather than a current product negative; retain it as a regression family for F2 endpoint/turn tests."
+    },
+    {
+      "source": "https://github.com/huggingface/speech-to-speech/issues/474",
+      "date": "2026-08-12",
+      "class": "UPSTREAM_PROTOCOL_SEMANTICS_REPAIR_HISTORY",
+      "finding": "Realtime input transcription delta semantics required correction from cumulative hypotheses to incremental wire deltas. This reinforces the need for wire-level compatibility and causal-state tests instead of relying on nominal OpenAI-compatible surface claims."
+    }
+  ],
+  "candidate_refresh": [
+    {
+      "subject": "microsoft/VibeVoice-Realtime-0.5B",
+      "source": "https://huggingface.co/microsoft/VibeVoice-Realtime-0.5B",
+      "classification": "SOURCE_INTEREST_ONLY_NOT_GERMAN_PRODUCTION_CANDIDATE",
+      "finding": "0.5B streaming realtime TTS with upstream approximately-300ms first audible speech claim; German is exposed only as exploratory multilingual capability while the model is primarily English. Keep below already-source-pinned German-capable TTS candidates until independent German male-voice measurements justify promotion.",
+      "credits": {"source_signal": 1, "german_quality": 0, "runtime": 0, "trigger4_acceptance": 0}
+    },
+    {
+      "subject": "BayLing-Duplex",
+      "source": "https://arxiv.org/abs/2606.14528",
+      "classification": "ARCHITECTURE_HYPOTHESIS_ONLY",
+      "finding": "Native full-duplex single-autoregressive-LLM control remains relevant as a turn-taking design reference, but no fresh German production evidence was established in this reentry. Do not displace the modular German-first lane on this basis.",
+      "credits": {"architecture_signal": 1, "german_quality": 0, "runtime": 0, "trigger4_acceptance": 0}
+    }
+  ],
+  "decision": {
+    "highest_information_nonduplicate_gate": "T7-FD-RTCOMPAT-001 HF Realtime heard-boundary executable falsifier",
+    "priority_changed": false,
+    "reason": "Fresh upstream evidence increases uncertainty at the protocol/turn-state compatibility boundary; it does not provide evidence strong enough to justify opening a competing runtime lane before the existing falsifier is executed.",
+    "do_not_do": [
+      "Do not create a duplicate F2 semantic claim.",
+      "Do not mint runtime or German E2E credit from upstream issues/model cards.",
+      "Do not promote VibeVoice Realtime to the German production lane without measured German male-voice quality/latency/stability.",
+      "Do not replace Frankenstein identity, UnifiedDB, GWT/tool logic or Effect Authority with a voice provider."
+    ]
+  },
+  "continuation_checkpoint": {
+    "next_7_reentry_order": [
+      "refresh F2 main and research main",
+      "consume any Trigger4/VPS result for T7-FD-RTCOMPAT-001",
+      "if executed, classify retained-unheard semantics, late tool/audio ownership and cancel/truncate idempotence from exact receipts",
+      "only then reopen candidate search if the discriminator passes or exposes a precise missing dependency"
+    ],
+    "whole_voice_system_credit": 0,
+    "physical_audio_acceptance_credit": 0,
+    "training_credit": 0
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "FRANKENSTEIN2_TRIGGER6_RESEARCH_MIRROR/v1",
+  "trigger": "6",
+  "worker": "GPT-5.6 Sol / ChatGPT organ",
+  "recorded_at": "2026-08-30T19:28:45+07:00",
+  "research_entity_main_before_write": "ac2f47392c114e25f1292bc66fb9b84003278b88",
+  "f2_research_id": "R6-20260830-RUNNER-EVIDENCE-STAGE-MODEL-GPT56SOL-01",
+  "f2_result_commit": "a42744e9edde20073a75151a919f31d8d7fed1a2",
+  "f2_current_planning_delta_commit": "af974fbba0d321108d0ee588d4cea7b5d8efe0ae",
+  "evidence_level": "E2_ARCHITECTURE_MAPPED",
+  "finding": "WP1207 target-runtime transport must be modeled as staged observational evidence and must separate semantic runtime subject identity from concrete dispatch-instance identity. Two retained self-hosted runs are currently queued with zero steps and no runner assignment; runner lifecycle/eligibility remains UNKNOWN, so transport multiplicity grants zero runtime or replication credit.",
+  "current_dispatches": [
+    {"run_id":33301648871,"job_id":99230838825,"status":"queued","runner_id":0,"steps":0},
+    {"run_id":33308615022,"job_id":99249501627,"status":"queued","runner_id":0,"steps":0}
+  ],
+  "architecture_delta": [
+    "REGISTERED/CONFIGURED, SERVICE_LIVE, LISTENER_LIVE, SERVER_SESSION_CONNECTED, ROUTE_ELIGIBLE, JOB_ASSIGNED, STEP_EXECUTION and TARGET_RECEIPT are distinct evidence transitions.",
+    "UNKNOWN runner-admin/owner-host state must remain UNKNOWN; queued/unassigned does not identify offline/busy/label/group/version cause.",
+    "semantic_subject_digest and dispatch_instance_id must be separate keys; multiple queued transports cannot be counted as independent semantic evidence.",
+    "Trigger4 owns implementation/runtime integration; Trigger6 grants E2 research mapping only."
+  ],
+  "next_exact_gate": "Observe both retained dispatches; use direct owner-host or runner-admin visibility read-only if available; do not add another retry. If execution occurs, bind each target receipt to dispatch_instance_id + semantic_subject_digest before any runtime/replication credit.",
+  "credits": {"trigger6_e2":1,"target_runtime":0,"whole_system":0},
+  "acceptance": "RESEARCH_MIRROR_COMMITTED_NO_RUNTIME_PROMOTION"
+}

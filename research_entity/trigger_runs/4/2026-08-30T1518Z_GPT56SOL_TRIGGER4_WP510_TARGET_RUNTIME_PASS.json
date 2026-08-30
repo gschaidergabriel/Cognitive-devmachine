@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "recorded_at": "2026-08-30T15:18:00Z",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "supervisor_schema": "9.13",
+    "mode": "FREE_ONLY_EXTERNAL_PROVIDER_POLICY",
+    "owner_vps_allowed": true,
+    "established_vps_bridge_allowed": true,
+    "together": "FORBIDDEN",
+    "paid_or_unknown_cost_provider_fallback": "FORBIDDEN_FAIL_CLOSED"
+  },
+  "observed_heads": {
+    "frankenstein2_main": "4993fb1c0688d1c4ce059a7d345b7d6ac36a9b35",
+    "controller_main_after_wp510_receipt": "c5eb54d165a4343f2abb7ddc5d713ae8e3a9f5ad",
+    "research_main_before_checkpoint": "9d096b80559c916a72a47d36cfa6d609725b886f"
+  },
+  "predecessor_runner_state": {
+    "wp510_run_id": 33265772059,
+    "wp510_job_id": 99135457584,
+    "terminal_status": "CANCELLED_ZERO_STEPS",
+    "runner_id": 0,
+    "runtime_credit": 0
+  },
+  "runner_liveness_witness": {
+    "run_id": 33318931512,
+    "job_id": 99277340069,
+    "runner_id": 25,
+    "runner_name": "vps-clay-host",
+    "label": "clay-host",
+    "target_environment": "clay-direct-dev",
+    "steps_executed": true,
+    "conclusion": "success"
+  },
+  "write": {
+    "controller_dispatch_commit": "1289ec2450595430b52dac858d71bc160894dc0c",
+    "dispatch_path": "runtime/vps_probe/wp510_push_dispatch_v2.txt",
+    "reason": "re-fire WP510 only after predecessor became terminal and same runner route had direct successful execution evidence"
+  },
+  "wp510_target_runtime": {
+    "run_id": 33319230898,
+    "job_id": 99278149251,
+    "runner_id": 25,
+    "runner_name": "vps-clay-host",
+    "status": "PASS",
+    "target_environment": "clay-direct-dev",
+    "container_runtime": "podman",
+    "exact_source_sha": "656b57bded655e64a25d7e205b599becce3d4989",
+    "exact_source_tree_sha": "f9aa0811bedc35efe8288bcbc08351c048780113",
+    "source_identity_verified": true,
+    "execution_observed": true,
+    "positive_chain_regression": "PASS",
+    "g3_not_computed_positive_seal_fence": "PASS",
+    "causal_status": "CAUSAL_INFLUENCE_OBSERVED_AT_CONTRACT_SCOPE",
+    "path_status": "CONTRACT_SCOPE_CAUSAL_PATH_SEALED",
+    "receipt_path": "runtime/vps_probe/wp510_target_runtime_latest.json",
+    "receipt_controller_commit": "c5eb54d165a4343f2abb7ddc5d713ae8e3a9f5ad",
+    "target_environment_component_runtime_credit": 1,
+    "semantic_gwt_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_runtime_credit": 0,
+    "effect_credit": 0,
+    "training_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "credit_boundary": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "physical_grid10": 0,
+    "semantic_gwt_runtime": 0,
+    "jspace_model_runtime": 0,
+    "provider_runtime": 0,
+    "training": 0,
+    "effect_or_completion": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Consume this WP510 target-environment component PASS as closure of the runner/target component discriminator only. Keep WP206 G6 closed absent counterevidence. Advance the separate WP901 persisted-row restart/readback promotion gate on the canonical local-user-machine baseline or an explicitly owner-authorized development host with exact source, environment, store and receipt identities bound; do not infer physical GRID10, semantic GWT/J-Space, provider, effect, training or whole-system credit."
+}

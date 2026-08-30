@@ -1,0 +1,77 @@
+{
+  "schema": "F2_LOCAL_VOICE_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROVENANCE_MIRROR_AND_REENTRY_NOT_F2_MUTATION_AUTHORITY",
+  "authority_snapshot": {
+    "research_main_before_write": "f49b39107d2451eefe2cfca6ba908391773574ba",
+    "f2_main_observed": "9657eece9c951988a59eb65ec454032bd7f8efca",
+    "trigger7_protocol": "research_entity/frankenstein2_local_voice/TRIGGERWORD_7_PROTOCOL.md",
+    "target_runtime_law": "fully local/self-hosted; zero external model/ASR/TTS API calls",
+    "language_priority": "German first"
+  },
+  "highest_information_nonduplicate_frontier": {
+    "workpackage": "F2-WP-715",
+    "state": "PRODUCT_NEGATIVE_RESTART_REENTRY",
+    "source_commit": "9203d515dbcfb8a049971e60174a281609865a33",
+    "repository_ci_run_id": 33327120335,
+    "failing_test": "test_checkpoint_resume_preserves_exact_state_and_adds_reentry_event",
+    "failure": "resumed output expected playback_state=interrupted but observed started",
+    "causal_interpretation": "restart recovery reconstructs nonterminal playback verbatim and emits RESTART_REENTRY without deterministically terminalizing queued/started playback. That can leave in-flight or unheard audio logically live after restart and violates the no-unheard-output-credit recovery invariant.",
+    "credit": {
+      "packet_repository_subset": 1,
+      "recovery_repository_component": 0,
+      "restart_continuation": 0,
+      "bounded_state": 0,
+      "packet_recovery_vps": 0,
+      "target_runtime": 0,
+      "acoustic": 0,
+      "whole_voice": 0
+    },
+    "anti_duplication": "Do not mutate WP715 from Trigger 7. The Trigger-4 mutation owner must repair restart semantics and rerun the existing discriminator; do not duplicate the already queued exact-source VPS run."
+  },
+  "asr004_reentry": {
+    "semantic_key": "95bd53a469133dbfdf39da320f6daa049cec1361084e632dc915c4bc156e3715",
+    "state": "MATCHED_COMPARATOR_EXECUTOR_PRESENT_DATASET_LOADER_REPAIR_BOUND_NO_TERMINAL_COMPARATOR_RECEIPT_OBSERVED",
+    "new_f2_source": [
+      "3db127b0f7a7169c148212db35f600f6ef0e54e0 adds the single matched ASR004 comparator executor",
+      "81cfd78a776bdc471d0c9beb9d2865fe2a3c50e2 binds a datasets==3.6.0 plus trust_remote_code=True repair patch for the pinned FLEURS loader"
+    ],
+    "credits_delta": {
+      "german_quality": 0,
+      "streaming": 0,
+      "trigger4_acceptance": 0,
+      "whole_voice": 0
+    },
+    "decision": "Do not open another ASR004 claim or declare Qwen preferred/failed until the exact matched German/noise comparator produces a causally bound receipt."
+  },
+  "primary_source_refresh": {
+    "qwen3_asr": {
+      "source": "https://huggingface.co/Qwen/Qwen3-ASR-0.6B",
+      "observed": "Official model card continues to state that streaming inference is currently available only with the vLLM backend. Transformer/CPU inference therefore must not be promoted as official streaming evidence."
+    },
+    "nemotron_35_asr": {
+      "source": "https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b",
+      "observed": "NVIDIA documents a 600M cache-aware FastConformer-RNNT with de-DE in the transcription-ready tier, configurable 80/160/320/560/1120 ms chunks, and German FLEURS WER 9.81/9.21/8.83/8.42/8.31 with LangID.",
+      "credit": "SOURCE_PRIORITY_SIGNAL_ONLY"
+    }
+  },
+  "convergence_decision": {
+    "current_priority": "WP715 restart-reentry repair outcome first because it is an executed product negative on core voice-state continuity; ASR004 comparator remains open but should not be duplicated.",
+    "next_exact_action": "Consume the Trigger-4 WP715 restart repair and rerun result. If recovery passes, preserve exact scope and consume the existing VPS result without redispatch. In parallel only as read-only reentry, consume any terminal ASR004 comparator receipt; if it exists, evaluate Qwen raw/gated versus matched faster-whisper and only then unlock T7-ASR-008 Nemotron on the identical comparator.",
+    "do_not_do": [
+      "Do not create a second WP715 mutation authority.",
+      "Do not redispatch the queued WP715 exact-source VPS run.",
+      "Do not create a second ASR004 semantic claim.",
+      "Do not promote Qwen transformer/CPU inference to streaming credit.",
+      "Do not execute Nemotron before ASR004 is measured or explicitly reconciled.",
+      "Do not mint whole-voice or physical-audio acceptance from source/model-card evidence."
+    ]
+  },
+  "continuation_checkpoint": {
+    "whole_voice_system_credit": 0,
+    "physical_audio_acceptance_credit": 0,
+    "training_credit": 0
+  }
+}

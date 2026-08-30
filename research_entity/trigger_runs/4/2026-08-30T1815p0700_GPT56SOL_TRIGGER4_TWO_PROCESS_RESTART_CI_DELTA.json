@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "recorded_at_local": "2026-08-30T18:15:12+07:00",
+  "classification": "REPOSITORY_COMPONENT_RESTART_DISCRIMINATOR_DELTA",
+  "routing": {
+    "status": "PASS",
+    "directive_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "required_directives_fetched": [
+      "research_entity/global/TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md",
+      "research_entity/global/TRIGGERWORD_4_5_SPARSE_GENERATIVE_WORLD_SUBSTRATE_DIRECTIVE.md"
+    ]
+  },
+  "authority": {
+    "research_main_observed_before_write": "4323b4c3a2500d8066d107352fbd78148451dccc",
+    "supervisor_inbox_schema_version": "9.13",
+    "supervisor_delta": "9.13BI_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "owner_vps_allowed": true,
+    "established_vps_bridge_allowed": true,
+    "together": "FORBIDDEN",
+    "external_provider_routes": "UNADMITTED",
+    "paid_or_unknown_cost_fallback": "FORBIDDEN_FAIL_CLOSED"
+  },
+  "prior_reentry": {
+    "checkpoint": "research_entity/trigger_runs/4/2026-08-30T1810p0700_GPT56SOL_TRIGGER4_RUNNER_PROMOTION_BLOCK_REENTRY.json",
+    "finding_preserved": "Target promotion remains blocked from this organ by lack of direct owner-host runner lifecycle / SSH / bridge visibility. Duplicate target dispatch remains forbidden."
+  },
+  "new_observation": {
+    "repo": "gschaidergabriel/frankenstein-2.0",
+    "main_sha": "cfe3f1ee4766deb827a7e7adb87fd25b3f89e809",
+    "main_message": "Merge Trigger4 WP900→WP206 two-process restart discriminator",
+    "delta_from_parent": {
+      "workflow": ".github/workflows/wp900-wp206-two-process-restart-ci.yml",
+      "test": "tests/test_wp900_wp206_two_process_restart.py"
+    },
+    "github_actions": {
+      "run_id": 33308383377,
+      "job_id": 99248882174,
+      "runner": "GitHub Actions ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "executed_steps": [
+        "Checkout exact workflow ref",
+        "Compile exact restart discriminator surfaces",
+        "Run two-process discriminator and accepted adjacent regressions"
+      ]
+    },
+    "bounded_interpretation": "Fresh-process persisted-row recovery and post-commit crash-window behavior now have successful exact-head repository-hosted CI discriminator evidence. This is repository-component evidence only; it does not prove owner-host restart/readback, self-hosted runner liveness, target runtime, physical GRID10, GWT/J-Space runtime, effects, completion, training, or whole-system acceptance."
+  },
+  "coordination": {
+    "new_runtime_dispatch": false,
+    "duplicate_claim_created": false,
+    "provider_or_model_calls": false,
+    "vps_or_physical_host_execution": false,
+    "unusual_experiment": false,
+    "durable_reentry_checkpoint": true
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "f2_target_runtime": 0,
+    "physical_grid10": 0,
+    "gwt_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "provider_runtime": 0,
+    "whole_system_acceptance": false
+  },
+  "blocker": "Repository CI has strengthened the restart discriminator, but promotion-bearing target-host evidence remains unavailable from this organ because direct self-hosted runner lifecycle/SSH/bridge execution visibility is absent. Existing target queues must not be duplicated.",
+  "next_exact_action": "From an organ with direct owner-host access, verify/restore the self-hosted runner lifecycle and let already-existing target queues execute. Then execute/read back the exact-source owner-host fresh-process persisted-row restart gate and reconcile only the exact observed scope. Keep the new two-process repository CI evidence as a component discriminator, not target-runtime credit.",
+  "credit_boundary": "REPOSITORY_COMPONENT_CI_DELTA_PLUS_CONTROL_PLANE_DEDUP_ONLY"
+}

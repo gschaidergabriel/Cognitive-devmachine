@@ -1,0 +1,87 @@
+{
+  "schema": "CLAY_TRIGGER4_F2_RELEASE_CANDIDATE_CONSTRAINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "authority_epoch": "8.78",
+  "date": "2026-08-30",
+  "subject": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "release_source_commit": "2187d15a2a1edbae70930d01e313180e6ebd6fbd",
+    "release_id": "frankenstein-2.0-2187d15a2a1e",
+    "artifact_filename": "frankenstein-2.0.zip",
+    "artifact_sha256": "1d6b17b05754c966ca11a806b42f5f47a77086094c35bf0e9530059fca51a156",
+    "prehandoff_receipt_sha256": "268ab62af83dc1836a58ddc0ba35a1ec8aa68427a6146495953e58aedd75ec6b"
+  },
+  "observed_release_candidate_evidence": {
+    "release_materialization_research_commit": "a1a344d70b0f4db9f63ddcb7b52c997852acb8db",
+    "repository_build_run": 33292596534,
+    "repository_build_job": 99206733420,
+    "repository_build_conclusion": "success",
+    "regressions": "24/24 PASS",
+    "double_build_reproducibility": "PASS_BYTE_FOR_BYTE",
+    "clean_machine_runtime_credit": 0,
+    "target_host_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "wp1109_counterevidence": {
+    "workpackage_id": "F2-WP-1109",
+    "accepted_generation": 1,
+    "release_candidate_host_transition_git_blob": "76bf1f93efd328205338370461c6c51e639b9f73",
+    "latest_observed_host_transition_git_blob": "76bf1f93efd328205338370461c6c51e639b9f73",
+    "falsifier_pr": 457,
+    "falsifier_head": "d21f8d52a367decf78e5cda1b04982df200c1f9f",
+    "falsifier_run": 33253753677,
+    "finding": "HostRouteEvidence carries only an opaque non-empty state_readback_evidence_ref and cannot prove successor or rollback readback identity against the request CanonicalStateBinding lineage/generation/state digest."
+  },
+  "review_candidate": {
+    "pull_request": 614,
+    "head": "3950c84459dc25efa33ddc6c7bed6bffab647875",
+    "workflow_run": 33292609283,
+    "workflow_job": 99206768654,
+    "conclusion": "success",
+    "exact_source_blob_gate": "PASS",
+    "exact_test_blob_gate": "PASS",
+    "existing_wp1109_suite": "PASS",
+    "typed_state_readback_adversarial_suite": "PASS",
+    "proposed_binding_dimensions": [
+      "lineage_id",
+      "generation",
+      "state_sha256",
+      "CanonicalStateBinding_sha256"
+    ],
+    "mutation_authority": false,
+    "canonical_source_changed": false
+  },
+  "scope_constraint": {
+    "release_candidate_global_invalidity_claimed": false,
+    "installation_failure_claimed": false,
+    "boot_failure_claimed": false,
+    "host_switch_state_preservation_acceptance_allowed": false,
+    "rollback_reenable_state_preservation_acceptance_allowed": false,
+    "classification": "RELEASE_CANDIDATE_REMAINS_EXACT_REPOSITORY_BUILD_ARTIFACT_BUT_HOST_TRANSITION_ACCEPTANCE_IS_CONSTRAINED_BY_CONFIRMED_COMPONENT_COUNTEREVIDENCE",
+    "reason": "The frozen release candidate contains the exact WP1109 source blob against which the successor-state lineage falsifier remains valid. Repository archive/receipt reproducibility does not establish host-switch state identity correctness."
+  },
+  "promotion_law": [
+    "Do not infer whole release invalidity from the bounded WP1109 component counterevidence.",
+    "Do not infer host-switch or rollback state-preservation acceptance from the release candidate's 24/24 archive/receipt regressions.",
+    "If the frozen candidate is deliberately used for install-only clean-machine handoff, keep WP1109 host-transition claims explicitly out of acceptance scope.",
+    "Before promoting host-switch/rollback state-preservation behavior, canonical WP1109 mutation authority or an admitted successor must absorb the typed binding repair, rerun exact repository CI, rebuild/freeze a successor release candidate, and collect real host readback evidence."
+  ],
+  "credits": {
+    "repository_release_build_credit": 1,
+    "wp1109_review_candidate_credit": 1,
+    "canonical_wp1109_repair_credit": 0,
+    "clean_machine_runtime_credit": 0,
+    "target_host_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "provider_model_credit": 0,
+    "training_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Keep PR 614 as the tested repair donor and PR 457 as negative evidence. Canonical WP1109 authority should absorb the typed state-readback binding; then rebuild a successor exact release candidate before any host-switch/rollback state-preservation runtime promotion. The existing frozen 2187d15 candidate may still be tested for install-only clean-machine handoff if that narrower scope is explicitly selected."
+}

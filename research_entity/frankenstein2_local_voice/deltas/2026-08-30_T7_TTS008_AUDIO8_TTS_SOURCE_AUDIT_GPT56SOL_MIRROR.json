@@ -1,0 +1,23 @@
+{
+  "schema": "F2_TRIGGER7_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "recorded_date": "2026-08-30",
+  "status": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "research_id": "T7-TTS-008",
+  "semantic_key": "934196a3a4dbd14cf0a709a3cb1e243d4b44c08af205547d83216b3e1097e3f5",
+  "canonical_f2": {
+    "source_result": "research/local_voice/sources/2026-08-30_T7_TTS008_AUDIO8_TTS_06B_GERMAN_SOURCE_SECURITY_AUDIT_GPT56SOL.json",
+    "source_result_commit": "2dab86559734cd80cc36e9ca4657f901603dc229",
+    "semantic_terminal_commit": "14e1240879f8476b5450521046d16dd74bae73a6",
+    "trigger4_handoff": "trigger4/inbox/local_voice/T7_TTS008_AUDIO8_ONNX_INT4_TARGET_BENCHMARK_GPT56SOL.json",
+    "trigger4_handoff_commit": "9833b50da0b10e2a5e9d7474b6bc2bcf5be1928f"
+  },
+  "result": "Audio8 TTS Preview 0.6B is retained as a German-source-eligible TTS challenger. The default Transformers path requires custom remote code, but first-party Audio8 also publishes a CPU-oriented INT4 ONNX runtime with streaming PCM, explicit cancellation, local voice registration, and no PyTorch/Transformers/HF-Hub requirement after artifacts are downloaded. Linux/clay-direct-dev latency, German naturalness, stable male voice identity and cancellation-to-last-audible-sample behavior remain unmeasured.",
+  "classification": "PROMISING_GERMAN_TTS_CHALLENGER_WITH_FIRST_PARTY_CPU_ONNX_STREAMING_PATH_NOT_TARGET_RUNTIME_ACCEPTED",
+  "runtime_credit": 0,
+  "german_e2e_credit": 0,
+  "trigger4_acceptance_credit": 0,
+  "whole_system_credit": 0,
+  "next_exact_gate": "After the retained clay-direct-dev hardware/runner gate is valid and duplicate target-TTS work is checked, acquire a distinct target-runtime semantic claim and benchmark the pinned Audio8 0.6B ONNX INT4 path against Qwen3-TTS, MagpieTTS and the ultralight local baseline on identical German voice capsules."
+}

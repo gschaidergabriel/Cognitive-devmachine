@@ -1,0 +1,23 @@
+{
+  "schema": "F2_TRIGGER7_RESEARCH_ENTITY_MIRROR/v1",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "recorded_date": "2026-08-30",
+  "status": "PROVENANCE_MIRROR_NOT_CLAIM_AUTHORITY",
+  "research_id": "T7-TTS-002",
+  "semantic_key": "a8ab9e5ba922f370e175574d8bea6659a8a2af2432cd87e3f708709518cd13dd",
+  "canonical_f2": {
+    "source_result": "research/local_voice/sources/2026-08-30_T7_TTS002_VOICECHAT_TTS_SOURCE_AUDIT_GPT56SOL.json",
+    "source_result_commit": "94097983ed745428b92d24bb85035c613fe631d2",
+    "semantic_terminal_commit": "6e4ac2efb76237c8de32eb0796ef4d63e177cc57",
+    "checkpoint": "research/local_voice/checkpoints/2026-08-30_T7_TTS002_VOICECHAT_TTS_SOURCE_DELTA_GPT56SOL.json",
+    "checkpoint_commit": "eba4213198f5aba45b602d3965dd34c21982ddb3"
+  },
+  "result": "VoiceChat-TTS is retained as a high-value interruptible continuous-TTS architecture donor. Its primary paper supports direct LLM token-stream drive, interruption control tokens, silence-on-no-input and mid-utterance interruption without KV-cache reset. Current search did not establish German support, official public code/weights or a reproducible local release boundary, so no target-runtime dispatch is justified.",
+  "classification": "HIGH_VALUE_INTERRUPTIBLE_TTS_ARCHITECTURE_DONOR_GERMAN_LOCAL_RUNTIME_UNPROVEN",
+  "runtime_credit": 0,
+  "german_e2e_credit": 0,
+  "trigger4_acceptance_credit": 0,
+  "whole_system_credit": 0,
+  "next_exact_gate": "Keep the mechanisms as a provider-neutral Voice ABI donor; only reopen VoiceChat-TTS runtime evaluation when an official public artifact pins revision/license/dependencies and establishes German support."
+}

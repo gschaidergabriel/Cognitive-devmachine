@@ -1,0 +1,72 @@
+{
+  "schema": "CLAY_TRIGGER4_REENTRY_CHECKPOINT/v1",
+  "trigger": "4",
+  "organ": "GPT-5.6-Sol-TRIGGER4",
+  "recorded_date": "2026-08-30",
+  "status": "WP1207_REAL_TARGET_EXECUTION_OBSERVED_VALIDATOR_STALE_WORKFLOW_WRITE_PERMISSION_BLOCKED",
+  "heads_observed_before_write": {
+    "research_main": "3a71ae025e294235ddd163b2ac38a4d6b36bce49",
+    "frankenstein2_main": "c34a6e94f0f6695b8eaa535c01e35247a32680e0",
+    "controller_main": "9b34faf24024abe00b22fe3deac3b41c5960675b"
+  },
+  "wp1207_target_execution": {
+    "workflow_run_id": 33318589659,
+    "job_id": 99276430339,
+    "runner_label": "clay-host",
+    "runner_name": "vps-clay-host",
+    "runner_hostname": "srv1563149",
+    "target_environment": "clay-direct-dev",
+    "container_runtime": "podman",
+    "job_reached_target_gate": true,
+    "terminal_status": "FAIL_EXTERNAL_RECEIPT_VALIDATION",
+    "target_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "effect_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "root_cause_narrowing": {
+    "observed_current_validator_outcomes": ["APPLIED", "ROLLED_BACK_AFTER_FAILURE", "APPLIED", "APPLIED"],
+    "g5_receipt_outcomes_expected_by_repair": ["SUCCEEDED", "ROLLED_BACK", "SUCCEEDED", "SUCCEEDED"],
+    "classification": "STALE_CONTROLLER_OUTCOME_VALIDATOR_AFTER_REAL_TARGET_EXECUTION",
+    "transport_unreachable": false,
+    "vps_unreachable": false,
+    "product_failure_proven": false
+  },
+  "parallel_repair_attempt": {
+    "controller_commit": "ff831737fc9ff101a4fa81b5e7048ab194d96af5",
+    "workflow_run_id": 33318788391,
+    "job_id": 99276955341,
+    "local_patch_created": true,
+    "local_patch_scope": "1 insertion, 1 deletion in trigger4-wp1207-hostile-twin-target.yml",
+    "terminal_status": "FAILURE",
+    "blocking_reason": "GitHub refused workflow-file push because the Actions GITHUB_TOKEN lacks workflows permission",
+    "credit_change": 0
+  },
+  "wp510": {
+    "superseded_run_id": 33318635448,
+    "superseded_run_terminal": "CANCELLED",
+    "new_dispatch_commit_observed": "3833102b08ce1ce98733825c5da0d274f462eb36",
+    "duplicate_dispatch_from_this_organ": false
+  },
+  "release_candidate_context": {
+    "artifact_id": 9734089517,
+    "source_commit": "45958d498815972bf044356db4f982df3462f21e",
+    "outer_sha256": "3aac7654ebb36b3463cfa6064e8eddf27ceda5aac2d0cd82e673c4c44b062cbd",
+    "inner_release_sha256": "371c86ecb76e8c9908c6cbe572ce1651702b6c096be2c18a96cdc88373b54115",
+    "exact_release_bytes_local_component_replay": "47/47 PASS",
+    "real_clean_host_product_acceptance": false
+  },
+  "evidence_boundary": {
+    "real_target_transport_execution_observed": true,
+    "wp1207_positive_runtime_credit": 0,
+    "physical_host_credit": 0,
+    "physical_grid10_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "completion_credit": 0,
+    "whole_system_acceptance": false
+  },
+  "next_exact_action": "Land the one-line WP1207 G5 outcome-validator correction through a repository write path that is actually authorized to modify GitHub workflow files; do not weaken assertions and do not mint credit. Then execute exactly one bounded WP1207 target regression on clay-host/clay-direct-dev and inspect the exact external gate receipt. Independently ingest the already-dispatched WP510 successor rather than creating another duplicate dispatch. Portable product acceptance remains blocked until exact current immutable release bytes pass the required real clean-host acceptance scope."
+}

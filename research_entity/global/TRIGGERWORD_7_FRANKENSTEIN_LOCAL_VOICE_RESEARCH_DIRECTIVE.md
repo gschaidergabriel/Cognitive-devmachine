@@ -4,21 +4,43 @@ Status: ACTIVE
 Trigger aliases: `7` · `triggerword 7` · `triggerwort 7`
 Research lane: `research/trigger7-local-realtime-voice`
 Canonical F2 protocol: `gschaidergabriel/frankenstein-2.0:research/local_voice/TRIGGERWORD_7_PROTOCOL.md`
+Binding owner authority: `gschaidergabriel/frankenstein-2.0:research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md`
 Research mirror protocol: `research_entity/frankenstein2_local_voice/TRIGGERWORD_7_PROTOCOL.md`
+Research mirror authority: `research_entity/global/TRIGGERWORD_7_TEXT_PACKET_COMPLETION_OWNER_AUTHORITY_2026-08-31.md`
 
 ## Exact routing law
 
 On an exact complete trimmed user message equal to `7`, `triggerword 7`, or `triggerwort 7`, case-insensitively:
 
 1. Fetch/read the newest version of this directive.
-2. Fetch/read the newest canonical F2 `research/local_voice/TRIGGERWORD_7_PROTOCOL.md` plus any newer explicit owner authority under `research/local_voice/authority/`.
+2. Fetch/read the newest canonical F2 `research/local_voice/TRIGGERWORD_7_PROTOCOL.md` plus any newer explicit owner authority under `research/local_voice/authority/`; the 2026-08-31 text/information-packet completion authority is binding until superseded.
 3. Refresh F2 `main`, Trigger-4 local-voice outcomes, Trigger-5 donor voice evidence, relevant Trigger-6 research, and the latest admitted Trigger-7 continuation checkpoint.
 4. Resume; do not restart the voice research program.
-5. Execute the maximum useful non-duplicate research/test cycle available in the current turn/tool envelope.
-6. Persist source pins, claims, benchmark evidence, negative results and continuation state.
-7. Route build/integration candidates to Trigger 4 rather than self-claiming F2 runtime acceptance.
+5. Execute the maximum useful non-duplicate research/build/test cycle available in the current turn/tool envelope.
+6. Persist source pins, claims, implementation artifacts, benchmark evidence, negative results and continuation state.
+7. Route final target integration/physical-device acceptance to Trigger 4 / Claude Code rather than self-claiming F2 runtime acceptance.
 
 If current directive/protocol fetch fails, report `TRIGGER7_ROUTING_FAILED` and repair routing rather than silently treating `7` as a generic message.
+
+## Binding owner completion law — 2026-08-31
+
+Trigger 7 MUST finish its assigned cortex/local-voice subsystem under best engineering judgment as far as possible. A missing physical microphone, speaker, audio device, audio-capable runner, or owner-machine audio path is NOT a reason to stop implementation.
+
+When real audio I/O is unavailable, replace it with deterministic text/information packet I/O that approximates the final audio path while exercising the same cortex/controller semantics. Preserve timing, partial/final transcript state, VAD/endpoint state, turn ownership, overlap, WAIT/backchannels, barge-in, cancellation, heard/unheard accounting, VoiceIntent, GWT/state, Presence/Interruptibility, tools, memory, VoiceOutcome/re-entry, close behavior, restart/recovery and transport failure cases.
+
+The expected endpoint is a near drop-in subsystem. Claude Code should only need to minimally bind/adapt real hardware/audio I/O, run final physical-device tests, fix target-specific edge cases and finish/release.
+
+Physical audio remains required only for inherently physical claims such as acoustic quality, microphone/AEC behavior, true captured-audio WER, real heard-output and physical end-to-end audio latency. Packet simulation is valid implementation/cortex evidence but MUST NOT be mislabeled as acoustic acceptance.
+
+```text
+NO_PHYSICAL_AUDIO != STOP_WORK
+NO_AUDIO_DEVICE != MODEL_FAILURE
+PACKET_SIMULATION == VALID_CORTEX_IMPLEMENTATION_EVIDENCE
+PACKET_SIMULATION != ACOUSTIC_ACCEPTANCE
+CONTINUE_IMPLEMENTATION_UNTIL_ONLY_MINIMAL_PHYSICAL_BINDING_AND_FINAL_TESTS_REMAIN
+```
+
+Older checkpoints that say to wait exclusively for an audio-capable host are reinterpreted: preserve that physical test as a final gate, but continue the same semantic objective now through packetized surrogate I/O without duplicate claims.
 
 ## Mission
 
@@ -106,6 +128,8 @@ PROVIDER != EFFECT_AUTHORITY
 GOOD_ASR + GOOD_TTS != HUMANLIKE_CONVERSATION
 FAST_TTFT != FAST_TURN
 TRIGGER7 != TRIGGER4_ACCEPTANCE
+PACKET_SIMULATION != ACOUSTIC_ACCEPTANCE
+NO_PHYSICAL_AUDIO != STOP_WORK
 ```
 
 The full measurement and continuation protocol is canonical in the F2 Trigger-7 protocol file above, with newer explicit owner authority taking precedence where the older wording is narrower.

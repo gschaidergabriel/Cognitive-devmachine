@@ -1,117 +1,104 @@
 {
   "schema": "clay.t7.local_voice.research_delta.v1",
   "created_at_utc": "2026-08-31T19:23:00Z",
-  "updated_at_utc": "2026-08-31T19:25:30Z",
+  "updated_at_utc": "2026-08-31T19:28:00Z",
   "organ": "GPT-5.6-Sol",
   "trigger": "7",
-  "purpose": "Trigger-7 current-state reentry audit of WP719 fresh-turn successor composition, including zero-job control-plane failure, aligned FRESH10 product negative, required repair, repaired repository PASS and the still-pending exact VPS promotion gate.",
+  "purpose": "Trigger-7 reentry audit of WP719 fresh-turn successor composition through control-plane invalid evidence, executed FRESH10 product negative, minimal repair, exact-subject correction, repaired repository PASS and the current nonterminal VPS promotion gate.",
   "authority": {
     "trigger7_directive": "research_entity/global/TRIGGERWORD_7_FRANKENSTEIN_LOCAL_VOICE_RESEARCH_DIRECTIVE.md",
     "f2_protocol": "F2:research/local_voice/TRIGGERWORD_7_PROTOCOL.md",
     "text_packet_completion_authority": "F2:research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md"
   },
-  "observed_heads_and_subjects": {
-    "clay_research_head_before_first_write": "6ffece7bd2e44be53905e8e0fcacce1bea319021",
-    "first_research_commit": "1666916a9f9bf57b960c6794a4f23340bfd38111",
-    "f2_head_observed_latest": "bfe0ebf458eb4a4cc186ea6c4ab41def24d9c3fe",
+  "current_observation": {
+    "f2_head": "955190805597fe0d00d10d02a9189f548692b3ff",
+    "wp719_generation": 1,
     "wp719_claim_id": "F2-WP-719-G1-GPT56SOL-FRESH-TURN-SUCCESSOR-COMPOSITION-20260901",
-    "initial_repository_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
-    "aligned_falsifier_subject": "6208b2ce2846b97a5ee0d2386c659685100a6cee",
-    "required_repair_commit": "64b7fb92cca8ddc2e541d617f9af7ebd9bbeb9b8",
-    "repair_dispatch_commit": "4a910f6ba72629b4303533443720804e9160f69a",
-    "trigger7_repair_handoff_commit": "bfe0ebf458eb4a4cc186ea6c4ab41def24d9c3fe"
+    "mutation_owner": "GPT-5.6-Sol-TRIGGER4",
+    "repaired_subject": "64b7fb92cca8ddc2e541d617f9af7ebd9bbeb9b8",
+    "corrected_dispatch_commit": "34e39d64fe9596af0f5c6b5ed7108db6e1587596",
+    "corrected_workflow_run_id": 33430528035,
+    "repository_job_id": 99614485863,
+    "repository_job_result": "SUCCESS",
+    "vps_job_id": 99614529305,
+    "vps_job_state": "PENDING_NO_EXECUTED_STEPS_OBSERVED",
+    "target_environment_component_runtime_credit": 0
   },
-  "history": [
+  "evidence_chain": [
     {
       "run_id": 33430090028,
-      "state": "COMPLETED_FAILURE_ZERO_JOBS",
-      "executed_product_steps_observed": false,
-      "classification": "INFRA_AUTH_TRANSPORT_QUOTA",
-      "subclassification": "CONTROL_PLANE_ZERO_JOB_NO_PRODUCT_EXECUTION",
-      "credit": 0,
-      "consequence": "No product conclusion; repair execution/control-plane validity only."
+      "result": "FAILURE_WITH_ZERO_JOBS",
+      "classification": "EVIDENCE_INVALID_WORKFLOW_DEFINITION_PRE_JOB",
+      "product_conclusion": "NONE",
+      "runtime_credit": 0
     },
     {
       "run_id": 33430190854,
       "repository_job_id": 99613400467,
-      "repository_job_result": "FAILURE",
-      "failing_step": "FRESH1-FRESH10 unit integration suite",
+      "result": "FRESH1_FRESH10_FAILURE",
       "classification": "PRODUCT_NEGATIVE",
-      "root_cause": "The aligned FRESH10 contract requires an explicit exact F15/F16/F17 restart-prerequisite identity binding, but the then-current project_fresh_turn() accepted a valid predecessor/reentry and could succeed without prerequisite_restart_receipt_ref/prerequisite_restart_receipt_sha256 or equivalent typed identity.",
-      "queued_old_vps_job_id": 99613400727,
-      "queued_old_vps_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
-      "runtime_probe_classification": "RUNTIME_PROBE_INVALIDATED_BY_REQUIRED_REPAIR",
-      "credit_rule": "If the older queued subject later executes, preserve it as historical-only for its exact older scope; do not use it for current repaired WP719 runtime promotion."
+      "root_cause": "FRESH10 required exact accepted restart-prerequisite receipt ref+SHA binding, while the then-current fresh-turn projector could succeed without that prerequisite identity.",
+      "old_runtime_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
+      "old_runtime_subject_disposition": "HISTORICAL_ONLY_AFTER_REQUIRED_REPAIR"
+    },
+    {
+      "aligned_test_subject": "6208b2ce2846b97a5ee0d2386c659685100a6cee",
+      "meaning": "Aligned FRESH1-FRESH10 exposed the prerequisite-binding product gap; not the repaired promotion subject."
     },
     {
       "repair_commit": "64b7fb92cca8ddc2e541d617f9af7ebd9bbeb9b8",
-      "repair": "Bind exact restart prerequisite ref+SHA into FreshTurnSuccessorProjection identity, validation and deterministic replay; missing prerequisite fails closed; evidence remains reference-only with zero memory/GWT/tool/effect authority.",
-      "classification": "REQUIRED_REPAIR_FROM_EXECUTED_PRODUCT_NEGATIVE"
+      "classification": "MINIMAL_REQUIRED_REPAIR",
+      "change": "Added mandatory prerequisite_restart_receipt_ref + prerequisite_restart_receipt_sha256 validation and bound both into deterministic FreshTurnSuccessorProjection identity/hash/provenance.",
+      "authority_expansion": "NONE",
+      "canonical_memory_write_credit": 0,
+      "gwt_runtime_credit": 0,
+      "effect_credit": 0
     },
     {
-      "run_id": 33430389059,
-      "repository_job_id": 99614043778,
-      "repository_job_status": "COMPLETED",
+      "dispatch_commit": "4a910f6ba72629b4303533443720804e9160f69a",
+      "pinned_subject": "6208b2ce2846b97a5ee0d2386c659685100a6cee",
+      "classification": "RUNTIME_SUBJECT_STALE_PRE_REPAIR",
+      "current_generation_credit_allowed": false
+    },
+    {
+      "corrected_dispatch_commit": "34e39d64fe9596af0f5c6b5ed7108db6e1587596",
+      "pinned_subject": "64b7fb92cca8ddc2e541d617f9af7ebd9bbeb9b8",
+      "workflow_run_id": 33430528035,
+      "repository_job_id": 99614485863,
       "repository_job_result": "SUCCESS",
-      "observed_steps": [
-        "FRESH1-FRESH10 unit integration suite PASS",
-        "bounded WP719 falsifier PASS"
-      ],
+      "fresh1_fresh10_result": "SUCCESS",
+      "bounded_falsifier_result": "SUCCESS",
       "repository_component_ci_credit": 1,
-      "vps_job_id": 99614044114,
-      "vps_job_state_at_reentry": "PENDING",
-      "vps_runner_label": "clay-host",
-      "target_environment_component_runtime_credit": 0,
-      "classification": "REPOSITORY_REPAIR_ACCEPTED_PENDING_SINGLETON_VPS_RUNTIME"
+      "vps_job_id": 99614529305,
+      "vps_job_state": "PENDING_NO_EXECUTED_STEPS_OBSERVED",
+      "target_environment_component_runtime_credit": 0
     }
   ],
   "current_source_scope": {
-    "implemented_component": "src/frankenstein2/fresh_turn_successor.py",
-    "test_surface": "tests/test_fresh_turn_successor.py",
-    "falsifier_surface": "research/local_voice/tools/falsify_fresh_turn_successor.py",
+    "component": "src/frankenstein2/fresh_turn_successor.py",
     "validated_semantics": [
-      "distinct fresh successor turn after validated prior reentry",
-      "exact GWT lineage mismatch fails closed",
-      "memory-evidence mismatch fails closed",
-      "deterministic exactly-once replay and semantic-drift rejection",
-      "unheard cancelled output has no history projection channel",
-      "WAIT/backchannel reference-only behavior does not invent full speech",
+      "validated prior heard-result reentry projects one distinct fresh successor turn",
+      "stale or foreign GWT lineage fails closed",
+      "memory evidence mismatch fails closed",
+      "same exact request is deterministic/exactly-once and semantic drift is rejected",
+      "unheard cancelled output is not projected into spoken history",
+      "WAIT/backchannel reference state does not invent a full assistant utterance",
       "restart roundtrip preserves deterministic successor identity",
-      "tool/memory references remain no-replay authority",
-      "packet successor can execute with network calls blocked",
-      "missing/corrupt predecessor or missing exact restart prerequisite fails closed"
+      "tool/memory refs remain reference-only with zero replay authority",
+      "packet successor path is testable with network calls blocked",
+      "missing/corrupt predecessor or absent/corrupt exact restart prerequisite fails closed"
     ],
-    "restart_prerequisite_binding": "PRESENT_IN_CURRENT_SOURCE",
-    "authority_fence": "Restart evidence is exact reference/digest provenance only; it grants no canonical memory write, GWT/J-Space uptake, tool/effect replay, ASR/TTS, acoustic or completion authority."
+    "scope_fence": "No canonical memory write, semantic GWT/J-Space uptake, tool/effect replay, ASR/TTS runtime, acoustic/physical-audio or product-completion authority is minted by this adapter or repository PASS."
   },
-  "projection_staleness": {
-    "surface": "F2:workpackages/active/F2-WP-719.json",
-    "finding": "The pointer observed earlier lagged later source/test/dispatch evidence. Resolve current source, jobs, receipts and any newer event/reconciliation evidence before credit claims.",
-    "classification": "PROJECTION_STALE_OR_LAGGING",
-    "authority_rule": "Granular executed evidence outranks the stale projection."
+  "external_primary_refresh": {
+    "qwen3_asr_0_6b": "Official Qwen model card continues to list German and offline/streaming inference; streaming currently documented through vLLM. Candidate only; no F2 runtime credit.",
+    "qwen3_tts_0_6b": "Official Qwen model card continues to list German and streaming multilingual TTS. Candidate only; upstream claims are not F2 hardware evidence.",
+    "moshi": "Official FAQ states current Moshi is English-only for full use; architecture-reference only for German-first production.",
+    "smart_turn_v3": "Official Pipecat repository documents local turn detection used with VAD and reports about 65 ms on its standard environment; retain as future endpointing falsifier after the active cortex boundary closes.",
+    "routing_conclusion": "NO_MODEL_BREADTH_NOW. None of these findings outranks the current repaired WP719 runtime gate."
   },
-  "external_primary_research_delta": {
-    "scope": "Turn-management evidence only; no model-breadth lane opened.",
-    "findings": [
-      {
-        "source": "Instruct-FD, arXiv:2607.20460",
-        "finding": "Instruction-conditioned full-duplex turn management remains difficult; the reported best adherence is 64.4%, with proactive backchanneling and interruption particularly challenging.",
-        "consequence": "Supports explicit deterministic WAIT/backchannel/interruption/cancellation contracts rather than delegating correctness to speech-native behavior."
-      },
-      {
-        "source": "DuplexSLA, arXiv:2605.20755",
-        "finding": "A synchronized speech/language/action design uses a structured action stream on a shared timeline for pause, interruption, backchannel and tool behavior.",
-        "consequence": "Reinforces typed CortexEvent/VoiceIntent/tool-event separation; upstream work does not justify replacing current authority or reopening model breadth."
-      },
-      {
-        "source": "Qwen3-ASR Hugging Face/Transformers documentation",
-        "finding": "Qwen3-ASR 0.6B and 1.7B continue to list German support.",
-        "consequence": "No unique ASR blocker was found; cortex-first convergence remains the correct priority."
-      }
-    ]
-  },
-  "decision": "WP719 FRESH10 gap was real and has been repaired at source/repository scope. The repaired repository suite/falsifier now executes PASS. Do not open model breadth or duplicate VPS dispatch. Current promotion frontier is the already-pending singleton VPS job 99614044114 / run 33430389059; target-runtime credit stays zero until that exact repaired subject actually executes and yields a bound receipt/readback. Preserve the older queued pre-repair VPS subject as historical-only if it later runs.",
-  "next_exact_action": "Consume the terminal result of VPS job 99614044114 without duplicate fan-out. If it executes PASS, reconcile only exact WP719 target-component runtime scope. If it fails, classify PRODUCT_NEGATIVE vs EVIDENCE_INVALID vs INFRA_AUTH_TRANSPORT_QUOTA before any further mutation. Physical audio, ASR/TTS, semantic GWT/J-Space, effects, training and whole-product acceptance remain separate zero-credit gates.",
+  "decision": "WP719's FRESH10 defect was a real executed repository product negative and is repaired. The correct repaired runtime subject is 64b7fb92cca8ddc2e541d617f9af7ebd9bbeb9b8, not 6208b2ce or 32c6f3db. Repository FRESH1-FRESH10 plus bounded falsifier are green on the corrected dispatch run. Do not duplicate dispatch or open new ASR/TTS/model breadth while VPS job 99614529305 is nonterminal.",
+  "next_exact_action": "Consume terminal outcome of workflow run 33430528035 / VPS job 99614529305. If exact repaired subject executes PASS, reconcile only WP719 bounded target-environment component runtime scope. If it fails, classify PRODUCT_NEGATIVE vs EVIDENCE_INVALID vs INFRA_AUTH_TRANSPORT_QUOTA before mutation. Do not compose old runtime with repaired source.",
   "credit_fence": {
     "wp719_repository_component_ci": 1,
     "wp719_target_environment_component_runtime": 0,
@@ -123,5 +110,5 @@
     "training": 0,
     "whole_product": 0
   },
-  "status": "RESEARCH_DELTA_RECONCILED_REPAIR_GREEN_VPS_PENDING"
+  "status": "RESEARCH_DELTA_CURRENT_REPAIRED_REPO_GREEN_CORRECT_VPS_PENDING"
 }

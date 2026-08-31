@@ -1,0 +1,59 @@
+{
+  "schema": "F2_TRIGGER7_REENTRY_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_AND_REENTRY_NOT_F2_CLAIM_AUTHORITY",
+  "authority": {
+    "owner_directive": "frankenstein-2.0:research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md",
+    "priority": "CORTEX_PACKET_RECOVERY_AND_STATE_MEMORY_VOICEOUTCOME_REENTRY_BEFORE_NEW_ASR_TTS_BREADTH",
+    "trigger4_runtime_acceptance_required": true
+  },
+  "observed_state": {
+    "f2_voiceoutcome_handoff_commit": "ef61c640dd8dfad41c09479afb8937a82f9cc9f0",
+    "f2_voiceoutcome_handoff_commit_time_utc": "2026-08-31T00:44:49Z",
+    "prior_cost_witness_handoff_commit": "5df9eebeb74d11ee6f637a8215733af6b4d349b9",
+    "asr008_dispatch_churn_fence_commit": "9babeb57ed3fc4a5027c77ed5a4c51d517eca860",
+    "wp715_packet_component_status": "TERMINAL_ACCEPTED_AT_PACKET_COMPONENT_RUNTIME_SCOPE__DO_NOT_REOPEN",
+    "state_memory_voiceoutcome_reentry_integration_credit": 0,
+    "asr008_runtime_credit": 0,
+    "german_e2e_voice_credit": 0,
+    "physical_audio_credit": 0,
+    "whole_voice_credit": 0
+  },
+  "new_source_finding": {
+    "id": "VSR01_UNBOUND_VOICEOUTCOME_RESULT_PROMOTION",
+    "voice_packet_cortex_blob": "308c7606db2f21f2361ca238927af9267fc21d32",
+    "voice_contract_blob": "ad639b02ea69771014a2cad5b38103036b35bdfb",
+    "finding": "VoicePacketCortex.close_session only requires that at least one output be fully heard/commit-eligible before accepting a caller-supplied VoiceOutcome result_ref/result_sha256. VoiceOutcome itself is explicitly identity/provenance-only and validates the result pair structurally but does not prove it is the heard output payload. Existing tests intentionally use synthetic fixed result digests after a completed output. Therefore the new state/memory/context consumer must add an exact heard-output/result binding fence rather than treating VoiceOutcome.result_ref as semantic truth.",
+    "scope_interpretation": "NOT_A_WP704_OR_WP715_REGRESSION__INTEGRATION_CONSUMER_CONTRACT_GAP"
+  },
+  "decision": {
+    "highest_information_nonduplicate_gate": "CORTEX_STATE_MEMORY_GWT_REENTRY_INTEGRATION",
+    "required_constraints": [
+      "VSR01/VSR02 selected ContextItems require exact ContextCostWitness binding.",
+      "VoiceOutcome result promotion requires exact binding to the ordered fully heard output payload/aggregate.",
+      "Interrupted heard-prefix remains a separate ephemeral payload with its own digest and ContextCostWitness; no durable VoiceOutcome result/memory/effect authority.",
+      "Opaque gwt_ref/memory_refs/tool_ref remain non-authoritative until exact existing F2 authority bindings succeed.",
+      "ASR008 remains frozen against new dispatch until existing workflow/run set is reconciled."
+    ],
+    "f2_handoff_ref": "frankenstein-2.0@ef61c640dd8dfad41c09479afb8937a82f9cc9f0:trigger4/inbox/local_voice/T7_CORTEX_VOICEOUTCOME_HEARD_RESULT_BINDING_ADDENDUM_2026-08-31_GPT56SOL.json",
+    "next_exact_action": "Trigger4 refreshes overlap for the existing T7 cortex integration boundary, implements only the smallest external adapter/harness needed to bind exact heard-output payload -> VoiceOutcome -> ContextCostWitness/TypedMemory/GWT references, executes VSR01-VSR06 plus the new arbitrary-result and multi-segment-order negatives on the proven VPS route, and promotes only measured component-integration scope. Trigger7 must not reopen WP704/WP715 or create another ASR008 dispatch."
+  },
+  "external_primary_context": {
+    "nemotron_runtime_note": "Current NeMo-Speech.cpp documentation states its file CLI accepts PCM16 and float32 WAV, so the observed ASR008 format-tag-3 failure remains a harness/validator boundary rather than a Nemotron quality result.",
+    "nemotron_language_note": "NVIDIA lists German de-DE as transcription-ready for Nemotron 3.5 ASR Streaming 0.6B, but project German quality remains zero until matched local runtime evidence exists."
+  },
+  "credits": {
+    "research_delta": 1,
+    "state_memory_voiceoutcome_reentry_integration": 0,
+    "gwt_runtime": 0,
+    "effect_runtime": 0,
+    "asr008_runtime": 0,
+    "german_e2e_voice": 0,
+    "physical_audio": 0,
+    "whole_voice": 0,
+    "whole_product": 0,
+    "training": 0
+  }
+}

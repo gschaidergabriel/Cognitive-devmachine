@@ -1,0 +1,76 @@
+{
+  "schema": "clay.t7.local_voice.research_delta.v1",
+  "trigger": "7",
+  "organ": "GPT-5.6-Sol",
+  "classification": "PROVENANCE_MIRROR_AND_REENTRY_NOT_F2_MUTATION_AUTHORITY",
+  "purpose": "Correct the WP719 continuation view after the workflow syntax repair exposed a real current-repository FRESH1-FRESH10 failure while the bound clay-host discriminator remained pinned to the older frozen subject.",
+  "authority": {
+    "trigger7_directive": "research_entity/global/TRIGGERWORD_7_FRANKENSTEIN_LOCAL_VOICE_RESEARCH_DIRECTIVE.md",
+    "f2_protocol": "F2:research/local_voice/TRIGGERWORD_7_PROTOCOL.md",
+    "text_packet_completion_authority": "F2:research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md"
+  },
+  "observed_state": {
+    "research_head_predecessor": "1666916a9f9bf57b960c6794a4f23340bfd38111",
+    "f2_head_observed": "402e1fda148d1f9ff4b7bca169f2efd8d934e83b",
+    "current_test_alignment_commit": "6208b2ce2846b97a5ee0d2386c659685100a6cee",
+    "frozen_vps_runtime_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
+    "current_workflow_run_id": 33430190854
+  },
+  "new_evidence": {
+    "workflow_parse_repair": {
+      "commit": "402e1fda148d1f9ff4b7bca169f2efd8d934e83b",
+      "change": "quoted the job-level if expression so the workflow creates jobs instead of terminating at zero-job control-plane scope",
+      "classification": "INFRA_CONTROL_PLANE_REPAIR"
+    },
+    "repository_job": {
+      "job_id": 99613400467,
+      "name": "fresh-turn-successor",
+      "runner": "ubuntu-24.04",
+      "status": "completed",
+      "conclusion": "failure",
+      "failing_step": "FRESH1-FRESH10 unit integration suite",
+      "bounded_falsifier_step": "skipped because the unit integration suite failed first",
+      "exact_assertion_detail": "UNAVAILABLE_FROM_CURRENT_CONNECTOR_JOB_METADATA",
+      "classification": "REPOSITORY_EXECUTABLE_NEGATIVE_REQUIRES_ROOT_CAUSE_CLASSIFICATION",
+      "product_conclusion": "Do not promote the current WP719 fresh-turn successor contract. Determine whether the new aligned test exposed a product defect or a test-fixture defect before semantic repair."
+    },
+    "vps_job": {
+      "job_id": 99613400727,
+      "name": "g1-vps-fresh-turn-successor",
+      "runner_label": "clay-host",
+      "status": "queued",
+      "executed_steps_observed": 0,
+      "classification": "UNKNOWN_NONTERMINAL",
+      "duplicate_dispatch": "FORBIDDEN"
+    }
+  },
+  "scope_mismatch": {
+    "finding": "The current workflow's clay-host job checks out and executes exact subject 32c6f3db988e7270fc62ec5f444f327f1ea2012b, but commit 6208b2ce2846b97a5ee0d2386c659685100a6cee subsequently changed the FRESH1-FRESH10 test matrix substantially and that current matrix now fails in repository CI.",
+    "consequence": "A later clay-host PASS against 32c6f3d may establish bounded historical runtime evidence for the older discriminator only. It cannot establish that the current 6208b2c-aligned FRESH1-FRESH10 contract passes, and it must not be composed with newer source/test state into current runtime credit without an explicit invariance argument that survives the repository failure.",
+    "runtime_subject_classification": "BOUND_OLD_SUBJECT_CAN_FINISH_FOR_HISTORICAL_SCOPE_BUT_CURRENT_PROMOTION_FROZEN_PENDING_REPOSITORY_NEGATIVE_CLASSIFICATION"
+  },
+  "decision": {
+    "priority": "CORTEX_FIRST_WP719_ROOT_CAUSE_BEFORE_ANY_NEW_ASR_TTS_OR_MODEL_BREADTH",
+    "do_not_do": [
+      "Do not open new ASR/TTS scouting because WP719 has a higher-information executable blocker.",
+      "Do not duplicate the queued clay-host dispatch.",
+      "Do not mutate WP719 from Trigger 7 while Trigger 4 owns the boundary.",
+      "Do not treat a possible PASS on frozen subject 32c6f3d as proof of the current 6208b2c test contract.",
+      "Do not mint acoustic, ASR, TTS, semantic-GWT/J-Space, effect, training, whole-voice or whole-product credit."
+    ],
+    "next_exact_action": "Trigger 4 must classify the current repository FRESH1-FRESH10 failure at 402e1fda/6208b2ce. If the test is valid PRODUCT_NEGATIVE, repair the smallest fresh-turn successor defect, re-green the exact current matrix, then bind a new exact runtime subject. If the failure is a test-fixture/evidence defect, repair only the discriminator, re-green it, and then bind the resulting exact subject. Let the already queued 32c6f3d clay-host job finish only as historical bounded evidence; do not redispatch it."
+  },
+  "credit_fence": {
+    "wp719_current_repository_contract": 0,
+    "wp719_target_component_runtime_current_contract": 0,
+    "physical_audio": 0,
+    "asr_runtime": 0,
+    "tts_runtime": 0,
+    "semantic_gwt_jspace_runtime": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_voice_e2e": 0,
+    "whole_product": 0
+  },
+  "status": "CONTINUE_FROM_CURRENT_REPOSITORY_NEGATIVE_WITH_NO_DUPLICATE_VPS_DISPATCH"
+}

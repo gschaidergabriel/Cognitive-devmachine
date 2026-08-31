@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_F2_TRIGGER7_RESEARCH_MIRROR_DELTA/v1",
+  "trigger": "7+",
+  "delta_id": "T7PLUS-WP715-G2-CONTROLLER-PASS-RESTART-FRONTIER-20260901-GPT56SOL",
+  "classification": "RESEARCH_PROVENANCE_MIRROR_NONCANONICAL",
+  "canonical_f2_repo": "gschaidergabriel/frankenstein-2.0",
+  "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+  "wp715": {
+    "workpackage_id": "F2-WP-715",
+    "generation": 2,
+    "exact_source_sha": "71ddd9e5aa3791e5dcb1be37e276d5c3194f0adf",
+    "controller_receipt_commit": "b7ecf371de70a14e19b4aefa21f9e7e212141865",
+    "controller_receipt_path": "runtime/trigger4/wp715_bound/latest.json",
+    "controller_run_id": 33421332204,
+    "controller_result": "EXECUTED_NO_COUNTEREXAMPLE",
+    "runner_name": "vps-clay-host",
+    "execution_surface": "RESOURCE_BOUNDED_UBUNTU_24_04_OCI",
+    "network_mode": "OFF_DURING_EVIDENCE_EXECUTION",
+    "packet_tests": 20,
+    "recovery_tests": 9,
+    "packet_probe_exit": 0,
+    "recovery_bounds_exit": 0,
+    "atomicity_exit": 0,
+    "outbound_model_asr_tts_calls": 0,
+    "canonical_f2_reconciliation_status_at_mirror_time": "PENDING_OBSERVATION"
+  },
+  "stale_control_plane_note": {
+    "f2_actions_run_id": 33369867309,
+    "last_observed_state": "QUEUED_ZERO_STEPS_RUNNER_ID_0",
+    "classification": "UNKNOWN_NONTERMINAL_CONTROL_PLANE_ONLY",
+    "rule": "Do not let the older queued direct Actions run override the newer exact-subject executed controller receipt. F2 Trigger4 must reconcile authority; this mirror cannot self-award acceptance."
+  },
+  "f2_refs": [
+    "trigger4/inbox/local_voice/T7_PLUS_WP715_G2_CONTROLLER_RUNTIME_RESULT_2026-09-01_GPT56SOL.json",
+    "research/local_voice/checkpoints/2026-09-01_T7_PLUS_WP715_G2_CONTROLLER_PASS_PENDING_RECONCILIATION_GPT56SOL.json",
+    "research/local_voice/tools/falsify_restart_exact_once_reentry_composition.py",
+    "research/local_voice/deltas/2026-09-01_T7_PLUS_RESTART_COMPOSITION_HARNESS_STATIC_AUDIT_GPT56SOL.json"
+  ],
+  "next_restart_composition_frontier": {
+    "harness_subject_commit": "6409cc2408a5faaccddd42a6e316ed5d2bfb9f74",
+    "tests": [
+      "F15_COMPLETED_HEARD_CLOSED_RESTART_REENTRY_EXACT_ONCE",
+      "F17_PARTIAL_OR_INTERRUPTED_RESTART_CAN_NEVER_PROMOTE_TO_DURABLE_HEARD_RESULT",
+      "F16_COMPLETED_HEARD_OPEN_RESTART_THEN_CLOSE_ONCE"
+    ],
+    "static_api_audit": "PASS_NO_STATIC_COUNTEREXAMPLE",
+    "execution_status": "PREPARED_NOT_EXECUTED",
+    "routing_rule": "Execute after canonical WP715 G2 runtime reconciliation; do not redesign unless executable counterevidence appears."
+  },
+  "explicit_zero_credit": {
+    "acoustic": 0,
+    "physical_audio": 0,
+    "asr_runtime": 0,
+    "tts_runtime": 0,
+    "global_semantic_gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_voice_e2e": 0,
+    "whole_product": 0
+  },
+  "next_exact_action": "Refresh F2 main. Consume Trigger4 canonical reconciliation of controller run 33421332204. If WP715 G2 is terminal accepted at the bounded packet/recovery target-component scope, execute the already-prepared F15/F17/F16 composition falsifier and preserve exact failure classification before any mutation."
+}

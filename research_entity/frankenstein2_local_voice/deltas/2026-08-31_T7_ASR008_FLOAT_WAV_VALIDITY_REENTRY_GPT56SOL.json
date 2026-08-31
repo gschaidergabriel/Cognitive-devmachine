@@ -1,0 +1,93 @@
+{
+  "schema": "F2_TRIGGER7_REENTRY_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "created_local_time": "2026-08-31T07:36:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_AND_REENTRY_NOT_F2_CLAIM_AUTHORITY",
+  "authority_snapshot": {
+    "research_main_observed": "8e0af833708ddbc8eca618f234cc63ede885b986",
+    "f2_main_observed": "88f47a301e6446232b8e74671d974e71e33a2ec2",
+    "active_research_id": "T7-ASR-008",
+    "target_runtime_law": "fully local/self-hosted; zero external model/ASR/TTS API calls",
+    "language_priority": "German first"
+  },
+  "reentry": {
+    "previous_checkpoint": "a8cd4512ac06507e770ab6a61bd7343f2befb59a",
+    "previous_gate": "consume exact Trigger4/VPS result and receipt reconciliation for existing protocol/ASR comparator boundary",
+    "new_f2_result": "second ASR008 runtime validity failure reconciled",
+    "runtime_credit_before": 0,
+    "runtime_credit_after": 0
+  },
+  "current_exact_evidence": {
+    "f2_commit": "88f47a301e6446232b8e74671d974e71e33a2ec2",
+    "workflow_run_id": 33340567051,
+    "controller_receipt_commit": "1bb96639a519abc8b5e373ffcdaaefa58d15fe17",
+    "classification": "EVIDENCE_INVALID",
+    "runtime_subject_action": "RUNTIME_PROBE_INVALIDATED_BY_REQUIRED_REPAIR",
+    "exception": "wave.Error: unknown format: 3",
+    "interpretation": "FLEURS fixture materialized as IEEE-float WAV while the admitted comparator validation path requires mono 16 kHz 16-bit PCM. Failure occurred before Nemotron ASR quality/latency could be measured.",
+    "product_negative": false,
+    "asr_quality_observed": false
+  },
+  "primary_source_findings": [
+    {
+      "source": "https://docs.python.org/3.13/library/wave.html",
+      "class": "RUNTIME_COMPATIBILITY",
+      "finding": "Python 3.13 wave supports uncompressed PCM WAV; IEEE-float WAV is outside that admitted reader capability."
+    },
+    {
+      "source": "https://docs.python.org/3.15/library/wave.html",
+      "class": "VERSION_BOUNDARY",
+      "finding": "Python 3.15 adds IEEE floating-point WAV support, proving that accepting format tag 3 is Python-runtime-version-sensitive rather than a stable comparator invariant across earlier runtimes."
+    },
+    {
+      "source": "https://huggingface.co/datasets/google/fleurs/blob/main/README.md",
+      "class": "DATASET_AUDIO_REPRESENTATION",
+      "finding": "FLEURS exposes audio arrays as float32 with sampling_rate 16000; fixture serialization must therefore bind its own deterministic encoding rather than assume PCM16 from the decoded array."
+    },
+    {
+      "source": "https://python-soundfile.readthedocs.io/en/latest/index.html",
+      "class": "DETERMINISTIC_NORMALIZATION_MECHANISM",
+      "finding": "python-soundfile supports explicit WAV subtypes and documents PCM_16 as the default WAV subtype; using an explicit PCM_16 subtype makes the fixture contract auditable."
+    }
+  ],
+  "hypothesis_fusion": {
+    "H1": "The present blocker is fixture-envelope validity, not Nemotron ASR behavior.",
+    "H2": "Upgrading Python to gain float-WAV support would unnecessarily change runtime environment semantics and weaken exact-subject comparability.",
+    "H3": "Deterministic normalization of the already pinned FLEURS samples to mono 16 kHz PCM_16, with source and normalized digests, is the smallest high-information repair that preserves model/corpus/gate/right-context axes.",
+    "counterhypothesis": "The normalized fixture may still reveal a later independent comparator, model-load, receipt-contract, or ASR product failure; no such result may be inferred before execution.",
+    "decision": "Preserve the F2-required fixture-only repair and do not open a new model or architecture lane."
+  },
+  "required_next_discriminator": {
+    "action": "Normalize each pinned FLEURS fixture deterministically to mono 16 kHz PCM_16 WAV, record source-audio and normalized-fixture digests, keep model bytes/revision, admitted rows, thresholds and RNNT right-context axis unchanged, redispatch the same semantic comparator exactly once, then validate the raw terminal receipt against one explicit F2 validator contract.",
+    "success_minimum": [
+      "exact comparator executes beyond fixture validation",
+      "measured ASR outputs/latencies are preserved raw",
+      "receipt envelope is accepted by the current F2 fail-closed validator without rewriting measured values"
+    ],
+    "failure_classification_required": [
+      "PRODUCT_NEGATIVE",
+      "EVIDENCE_INVALID",
+      "INFRA_AUTH_TRANSPORT_QUOTA",
+      "CONCURRENCY_RETRY",
+      "UNKNOWN_NONTERMINAL"
+    ]
+  },
+  "credits": {
+    "source_research": 1,
+    "local_runtime": 0,
+    "german_asr_quality": 0,
+    "german_e2e_voice": 0,
+    "physical_audio_acceptance": 0,
+    "trigger4_acceptance": 0,
+    "whole_voice_system": 0,
+    "training": 0,
+    "whole_product": 0
+  },
+  "frontier": {
+    "state": "REPAIR_THEN_REEXECUTE_EXISTING_ASR008_DISCRIMINATOR",
+    "new_architecture_allowed": false,
+    "new_model_breadth_allowed": false,
+    "reason": "Current evidence identifies a narrow executable validity defect. Opening adjacent breadth before this discriminator executes would increase churn without information gain."
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "clay.t7.local_voice.research_delta.v1",
+  "created_at_utc": "2026-08-31T19:25:00Z",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "7",
+  "purpose": "Bounded REVIEW_ONLY Trigger-7 audit of the frozen WP719 fresh-turn successor interface, preserving one non-duplicate recovery-semantic falsifier without mutating the active runtime subject.",
+  "authority": {
+    "trigger7_directive": "research_entity/global/TRIGGERWORD_7_FRANKENSTEIN_LOCAL_VOICE_RESEARCH_DIRECTIVE.md",
+    "f2_protocol": "F2:research/local_voice/TRIGGERWORD_7_PROTOCOL.md",
+    "text_packet_completion_authority": "F2:research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md"
+  },
+  "observed_heads_and_subjects": {
+    "clay_research_head_before_write": "1666916a9f9bf57b960c6794a4f23340bfd38111",
+    "f2_head_observed": "402e1fda148d1f9ff4b7bca169f2efd8d934e83b",
+    "wp719_frozen_repository_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
+    "wp719_claim_id": "F2-WP-719-G1-GPT56SOL-FRESH-TURN-SUCCESSOR-COMPOSITION-20260901",
+    "latest_control_plane_repair": "402e1fda148d1f9ff4b7bca169f2efd8d934e83b"
+  },
+  "current_runtime_fence": {
+    "state": "FROZEN_SUBJECT_PRESERVED",
+    "prior_zero_job_run": 33430090028,
+    "prior_zero_job_classification": "INFRA_AUTH_TRANSPORT_QUOTA/CONTROL_PLANE_ZERO_JOB_NO_PRODUCT_EXECUTION",
+    "semantic_mutation_allowed_now": false,
+    "reason": "No executed product discriminator has produced PRODUCT_NEGATIVE evidence. Trigger 4 repaired only the workflow control-plane expression and re-dispatched; semantic successor mutation would risk runtime-subject churn."
+  },
+  "static_interface_finding": {
+    "classification": "CANDIDATE_FALSIFIER_NOT_PRODUCT_NEGATIVE",
+    "severity": "BOUNDARY_AMBIGUITY",
+    "finding": "VoiceHeardResultReentryReceipt binds voiceoutcome_id and voiceoutcome_sha256 but does not carry outcome_kind. project_fresh_turn accepts only the exact predecessor session plus that receipt and does not receive/bind the predecessor VoiceOutcome object. Therefore the fresh-turn boundary cannot itself distinguish RETURNED from INTERRUPTED, ENDED, ERROR or UNKNOWN terminal semantics.",
+    "source_basis": [
+      "F2:src/frankenstein2/voice_heard_result_reentry.py@402e1fda148d1f9ff4b7bca169f2efd8d934e83b",
+      "F2:src/frankenstein2/fresh_turn_successor.py@402e1fda148d1f9ff4b7bca169f2efd8d934e83b",
+      "F2:src/frankenstein2/voice_contract.py@402e1fda148d1f9ff4b7bca169f2efd8d934e83b",
+      "F2:src/frankenstein2/voice_packet_cortex.py@402e1fda148d1f9ff4b7bca169f2efd8d934e83b",
+      "F2:tests/test_fresh_turn_successor.py@402e1fda148d1f9ff4b7bca169f2efd8d934e83b"
+    ],
+    "supporting_observations": [
+      "VoiceOutcome admits RETURNED, INTERRUPTED, ENDED, ERROR and UNKNOWN.",
+      "VoicePacketCortex.close_session forwards the caller-supplied admitted outcome_kind while a fully heard result_ref may still be present.",
+      "VoiceHeardResultReentryReceipt identity includes outcome id/hash but not outcome kind.",
+      "The current WP719 test fixture can construct a structurally valid VoiceHeardResultReentryReceipt directly and does not bind an exact predecessor VoiceOutcome into project_fresh_turn.",
+      "FRESH1-FRESH10 exercise reference/idempotence/restart/offline/zero-authority properties but do not discriminate predecessor terminal outcome semantics."
+    ],
+    "epistemic_limit": "This is a source-level interface ambiguity, not an executed failure. The local analysis container could not clone GitHub because DNS/network access is unavailable, so no independent executable FRESH11 result is claimed in this delta."
+  },
+  "candidate_falsifier": {
+    "id": "FRESH11_PREDECESSOR_OUTCOME_KIND_GATE",
+    "goal": "Prove that a normal fresh-turn successor cannot silently treat ERROR/UNKNOWN/other policy-disallowed terminal predecessor outcomes as equivalent to a successful RETURNED predecessor.",
+    "minimal_test_matrix": [
+      "RETURNED + exact completed reentry -> admitted normal fresh successor",
+      "ERROR + exact structurally valid completed reentry -> fail closed or route explicit recovery policy",
+      "UNKNOWN + exact structurally valid completed reentry -> fail closed or route explicit recovery policy",
+      "INTERRUPTED/ENDED -> policy must be explicit and tested; no accidental equivalence to RETURNED",
+      "outcome id/hash substitution -> fail closed",
+      "old receipt plus foreign VoiceOutcome -> fail closed if an exact outcome object becomes part of the boundary"
+    ],
+    "minimal_repair_hypotheses_if_falsified": [
+      "Pass exact predecessor VoiceOutcome into project_fresh_turn and bind its id/hash plus an admitted continuation policy.",
+      "Or version the reentry receipt to include outcome_kind as identity-bearing evidence and make fresh successor require an explicit admitted predecessor outcome class.",
+      "Do not create a second effect, memory, GWT or outcome authority."
+    ],
+    "churn_rule": "Do not implement this repair on the currently frozen WP719 subject unless the current exact-source runtime discriminator terminates/reconciles or an executed discriminator proves a repair is required. Preserve FRESH11 as REVIEW_ONLY/CANDIDATE_FALSIFIER meanwhile."
+  },
+  "external_primary_research_delta": {
+    "scope": "Endpoint/turn-state research only; no new model lane or current mutation request.",
+    "source": "Next-Turn: Duration-Aware Streaming Endpoint Detection via Time-to-Next-Speech-Onset Prediction, arXiv:2606.18094",
+    "finding": "Duration-aware time-to-next-speech-onset supervision reports materially better streaming endpoint accuracy, including gains during longer pauses.",
+    "architectural_consequence": "Future Trigger-7 endpoint experiments should preserve explicit packet/FSM authority while considering time-to-next-speech as an additional measured signal. This does not supersede the current WP719 recovery/fresh-turn boundary or justify model breadth now."
+  },
+  "decision": "PRESERVE_FROZEN_WP719_SUBJECT. NO_SEMANTIC_MUTATION_NOW. Persist FRESH11 as the next bounded recovery-semantic hostile test after current WP719 runtime resolution/reconciliation, unless newer granular evidence already closes the same boundary.",
+  "next_exact_action": "Refresh F2 main and current WP719 runtime receipt/state. If the exact frozen subject has validly executed and reconciled without a semantic repair requirement, schedule FRESH11 as a new REVIEW_ONLY/CANDIDATE_FALSIFIER or next legal integration boundary. If newer code already binds predecessor outcome semantics, close this delta as superseded rather than duplicating work.",
+  "credit_fence": {
+    "wp719_repository_source_test_surface": "PRESENT",
+    "wp719_target_component_runtime_from_this_delta": 0,
+    "physical_audio": 0,
+    "asr_runtime": 0,
+    "tts_runtime": 0,
+    "semantic_gwt_jspace_runtime": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_product": 0
+  },
+  "status": "RESEARCH_DELTA_FINALIZED_CANDIDATE_FALSIFIER_ONLY"
+}

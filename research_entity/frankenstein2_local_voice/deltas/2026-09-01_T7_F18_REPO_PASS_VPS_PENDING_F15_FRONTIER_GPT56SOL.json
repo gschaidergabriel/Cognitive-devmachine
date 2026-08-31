@@ -1,0 +1,58 @@
+{
+  "schema": "CLAY_TRIGGER7_LOCAL_VOICE_DELTA/v1",
+  "trigger": "7",
+  "worker": "GPT-5.6 Sol",
+  "local_date": "2026-09-01",
+  "classification": "RESEARCH_MIRROR_NONCANONICAL_PROVENANCE_DELTA",
+  "observed_research_main_before_delta": "735216db323bb08ee8bf9a200ecae1403f684e71",
+  "f2_checkpoint_commit": "c9c58e05188fab8898b4cb18d3185caad74be641",
+  "f2_checkpoint_path": "research/local_voice/checkpoints/2026-09-01_T7_F18_REPO_PASS_VPS_PENDING_F15_FRONTIER_BD419E8_GPT56SOL.json",
+  "observed_f2_main_before_checkpoint": "bd419e8295449b40d9f6e3acdb4a719bff6282e4",
+  "finding": {
+    "F18_SESSION_CLOSE_PACKET_REFS_REPOSITORY_CI": "PASS",
+    "exact_subject_sha": "71ddd9e5aa3791e5dcb1be37e276d5c3194f0adf",
+    "repository_ci_run_id": 33369867483,
+    "executed_test": "test_closed_checkpoint_revalidates_session_close_packet_refs",
+    "repair_source_commit": "c5956154fd38aab7094eb2c80abf99e2203437c0",
+    "repair_test_commit": "71ddd9e5aa3791e5dcb1be37e276d5c3194f0adf",
+    "scope": "checksum-valid forged SESSION_CLOSE.packet_refs mismatch fails closed at repository-CI component scope only"
+  },
+  "bound_vps_probe": {
+    "run_id": 33369867309,
+    "job_id": 99418257873,
+    "status": "QUEUED",
+    "job_status": "QUEUED",
+    "steps_observed": 0,
+    "classification": "UNKNOWN_NONTERMINAL",
+    "duplicate_dispatch_forbidden": true,
+    "semantic_churn_fence": "DEFER_UNTIL_RUNTIME_RESULT"
+  },
+  "composition_frontier": {
+    "F18_FULL": "PARTIAL_ONLY_REPO_SUBCASE_PASS_VPS_PENDING",
+    "F15": "NOT_EXECUTED_AS_RESTART_COMPOSITION",
+    "F17": "NOT_EXECUTED_AS_RESTART_COMPOSITION",
+    "F16": "NOT_EXECUTED_AS_RESTART_COMPOSITION",
+    "next_after_bound_probe": "F15_THEN_F17_THEN_F16"
+  },
+  "wp717": {
+    "status": "TERMINAL_ACCEPTED_BOUNDED_SCOPE",
+    "do_not_reopen": true,
+    "canonical_memory_write_credit": 0,
+    "gwt_runtime_credit": 0,
+    "jspace_runtime_credit": 0
+  },
+  "explicit_zero_credit": [
+    "F18_VPS_TARGET_COMPONENT_UNTIL_EXECUTION",
+    "CANONICAL_MEMORY_WRITE",
+    "GWT_RUNTIME",
+    "JSPACE_RUNTIME",
+    "EFFECT",
+    "ASR_RUNTIME",
+    "TTS_RUNTIME",
+    "PHYSICAL_AUDIO",
+    "WHOLE_VOICE_E2E",
+    "WHOLE_PRODUCT",
+    "TRAINING"
+  ],
+  "next_exact_action": "Consume existing run 33369867309/job 99418257873. Do not redispatch. On terminal executable evidence classify exact result, then advance F15 cross-module restart exact-once composition without reopening WP717 or creating duplicate authority; then F17 and F16."
+}

@@ -1,0 +1,97 @@
+{
+  "schema": "clay.t7.local_voice.research_delta.v1",
+  "created_at_utc": "2026-08-31T19:23:00Z",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "7",
+  "purpose": "Trigger-7 reentry audit of the newest WP719 fresh-turn-successor boundary after repository implementation and the first bound VPS promotion dispatch.",
+  "authority": {
+    "trigger7_directive": "research_entity/global/TRIGGERWORD_7_FRANKENSTEIN_LOCAL_VOICE_RESEARCH_DIRECTIVE.md",
+    "f2_protocol": "F2:research/local_voice/TRIGGERWORD_7_PROTOCOL.md",
+    "text_packet_completion_authority": "F2:research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md"
+  },
+  "observed_heads_and_subjects": {
+    "clay_research_head_before_write": "6ffece7bd2e44be53905e8e0fcacce1bea319021",
+    "f2_head_observed": "22e2d7112b88b34391b117f147a2004c59654b5b",
+    "wp719_repository_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
+    "wp719_dispatch_sha": "22e2d7112b88b34391b117f147a2004c59654b5b",
+    "wp719_workflow_run_id": 33430090028,
+    "wp719_claim_id": "F2-WP-719-G1-GPT56SOL-FRESH-TURN-SUCCESSOR-COMPOSITION-20260901"
+  },
+  "source_and_test_evidence": {
+    "implemented_component": "src/frankenstein2/fresh_turn_successor.py",
+    "test_surface": "tests/test_fresh_turn_successor.py",
+    "falsifier_surface": "research/local_voice/tools/falsify_fresh_turn_successor.py",
+    "workflow_surface": ".github/workflows/wp719-fresh-turn-successor-ci.yml",
+    "covered_semantics": [
+      "distinct fresh successor turn after validated prior reentry",
+      "fail-closed stale or foreign GWT lineage",
+      "fail-closed memory-evidence mismatch",
+      "exact-once deterministic replay and semantic-drift rejection",
+      "no projection channel for unheard cancelled output",
+      "WAIT/backchannel reference-only behavior without invented full speech",
+      "restart roundtrip preserves exact successor identity",
+      "tool/memory references remain no-replay authority",
+      "network-blocked packet successor execution",
+      "missing/corrupt prerequisites fail closed"
+    ],
+    "scope_fence": "Repository/source/test evidence only until an admitted executed VPS discriminator produces a bound receipt. No acoustic, ASR, TTS, semantic-GWT/J-Space, effect, training or whole-product promotion is implied."
+  },
+  "runtime_dispatch_observation": {
+    "run_id": 33430090028,
+    "status": "completed",
+    "conclusion": "failure",
+    "jobs_observed": 0,
+    "executed_product_steps_observed": false,
+    "runtime_receipt_observed": false,
+    "target_environment_component_runtime_credit": 0,
+    "classification": "INFRA_AUTH_TRANSPORT_QUOTA",
+    "subclassification": "CONTROL_PLANE_ZERO_JOB_NO_PRODUCT_EXECUTION",
+    "reasoning": "The workflow run terminated without creating/executing any job. Therefore no FRESH1-FRESH10 VPS discriminator step, exact-source runtime check, sandbox execution or readback occurred. The failure is not executable counterevidence against the WP719 product invariant."
+  },
+  "projection_staleness": {
+    "surface": "F2:workpackages/active/F2-WP-719.json",
+    "finding": "The active pointer still reports repository_component_ci_credit=0, target_environment_component_runtime_credit=0 and NO_BOUND_WP719_RUNTIME_SUBJECT_YET, while later commits added the implementation/test/CI surface and then bound a frozen VPS runtime subject in dispatch commit 22e2d711.",
+    "classification": "PROJECTION_STALE",
+    "authority_rule": "Do not mutate reality to match the stale pointer. Refresh current F2 granular evidence before any state transition or promotion claim."
+  },
+  "runtime_subject_churn_fence": {
+    "frozen_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
+    "classification": "DEFER_SEMANTIC_SUCCESSOR_MUTATION_UNTIL_VALID_RUNTIME_DISCRIMINATOR_OR_REQUIRED_REPAIR",
+    "reason": "The zero-job failure did not execute the product discriminator and therefore does not justify semantic mutation of the bound fresh-turn successor boundary.",
+    "forbidden_composition": "Do not combine any later source change with this failed zero-job run to mint runtime credit."
+  },
+  "external_primary_research_delta": {
+    "scope": "Turn-management evidence only; no new model lane opened.",
+    "findings": [
+      {
+        "source": "Instruct-FD, arXiv:2607.20460",
+        "finding": "Instruction-conditioned full-duplex turn management remains materially difficult; reported best adherence is 64.4%, with proactive backchanneling and interruption especially challenging.",
+        "consequence": "Supports keeping explicit deterministic WAIT/backchannel/interruption/cancellation semantics and falsifiers rather than delegating correctness to a speech-native model."
+      },
+      {
+        "source": "DuplexSLA, arXiv:2605.20755",
+        "finding": "A synchronized speech/language/action architecture demonstrates the value of a separate structured action channel on a shared time base for pause, interruption, backchannel and tool use.",
+        "consequence": "Reinforces Frankenstein's typed CortexEvent/VoiceIntent/tool-event separation; no architecture replacement is justified by upstream claims alone."
+      },
+      {
+        "source": "Qwen3-ASR Hugging Face/Transformers documentation",
+        "finding": "Qwen3-ASR 0.6B and 1.7B continue to list German support.",
+        "consequence": "No new ASR scouting blocker is identified; cortex-first authority remains dominant."
+      }
+    ]
+  },
+  "decision": "NO_NEW_MODEL_BREADTH. PRESERVE WP719 FROZEN SUBJECT. Treat run 33430090028 as zero-runtime-credit infrastructure/control-plane failure, not product negative. Trigger 4 should diagnose the workflow/control-plane failure and perform one valid exact-source VPS discriminator against 32c6f3db988e7270fc62ec5f444f327f1ea2012b without duplicate fan-out; only the measured runtime scope may then be reconciled/promoted.",
+  "next_exact_action": "Refresh F2 main and WP719 claim/evidence surfaces, identify why run 33430090028 created zero jobs, repair only that execution/control-plane defect if needed, then execute one singleton clay-host/clay-direct-dev S2 discriminator pinned to runtime subject 32c6f3db988e7270fc62ec5f444f327f1ea2012b. Do not change fresh-turn semantics unless a real executed discriminator produces PRODUCT_NEGATIVE evidence.",
+  "credit_fence": {
+    "wp719_repository_source_test_surface": "PRESENT",
+    "wp719_target_component_runtime": 0,
+    "physical_audio": 0,
+    "asr_runtime": 0,
+    "tts_runtime": 0,
+    "semantic_gwt_jspace_runtime": 0,
+    "effect": 0,
+    "training": 0,
+    "whole_product": 0
+  },
+  "status": "RESEARCH_DELTA_FINALIZED_ZERO_JOB_RUNTIME_CLASSIFIED"
+}

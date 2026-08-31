@@ -1,0 +1,67 @@
+{
+  "schema": "F2_TRIGGER7_REENTRY_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_AND_REENTRY_NOT_F2_CLAIM_AUTHORITY",
+  "authority": {
+    "owner_directive": "frankenstein-2.0:research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md",
+    "priority": "CORTEX_STATE_MEMORY_GWT_REENTRY_FALSIFICATION_BEFORE_NEW_ASR_TTS_BREADTH",
+    "trigger4_runtime_acceptance_required": true
+  },
+  "observed_state": {
+    "f2_head": "6d4e140f0377a0135090d7a4762214b4c106c732",
+    "latest_wp717_composition_commit": "6d4e140f0377a0135090d7a4762214b4c106c732",
+    "bounded_wp717_vps_component_runtime_commit": "51d3950ab6a6eb0c78d4880fd9c0d87311c317ec",
+    "prior_gwt_memory_exactness_falsifier_commit": "883934629a83a184212ad2fb088d5a63734ed56d",
+    "canonical_memory_write_credit": 0,
+    "gwt_runtime_credit": 0,
+    "physical_audio_credit": 0,
+    "whole_voice_credit": 0
+  },
+  "findings": [
+    {
+      "id": "T7_MEM01_HEARD_RESULT_TO_MEMORY_PAYLOAD_RELATION_UNPROVEN",
+      "finding": "At the reviewed head, validate_memory_event_bindings() verifies exact memory_ref-to-memory_id correspondence plus an internally valid MemoryLifecycleState/TypedMemoryRecord binding, and records lifecycle/typed digests. Its contract does not receive the heard-result payload identity and therefore does not itself prove that the referenced memory payload_ref/payload_sha256 equals the exact heard result. The newest memory/context composition test uses a memory whose payload does equal the heard result, but is a positive-path discriminator only; it does not show that an internally valid unrelated memory payload is rejected by bind_completed_reentry().",
+      "scope": "HIGHER_STATE_MEMORY_REENTRY_COMPLETION_FENCE_NOT_AUTOMATIC_INVALIDATION_OF_ALREADY_ACCEPTED_BOUNDED_WP717_COMPONENT_RUNTIME"
+    },
+    {
+      "id": "T7_GWT01_DIRECT_BINDING_LINEAGE_STILL_NOT_ENFORCED_AT_WP717_CONSUMER",
+      "finding": "At the reviewed head, validate_gwt_event_binding() checks exact event/binding types, event.gwt_ref == binding.binding_id and binding.sha256() syntax. It does not invoke the deeper WP507/WP508 source-lineage validator. The current VSR03 test directly constructs a GwtReentryUptakeBinding and expects this consumer check to accept it. This remains safe only if the result is treated as opaque/reference-only evidence with gwt_runtime_credit=0; it is insufficient for a stronger GWT exactness/completion claim.",
+      "scope": "GWT_REFERENCE_LINEAGE_FENCE_FOR_HIGHER_REENTRY_COMPLETION"
+    }
+  ],
+  "reconciliation": {
+    "bounded_wp717_runtime": "PRESERVE_ACCEPTED_AT_EXISTING_EXACT_SCOPE",
+    "reason": "The accepted VPS receipt explicitly kept canonical memory write, GWT runtime, effects, physical audio and whole-product credit at zero. The new findings target higher integration/completion semantics, not the already measured exact heard-result adapter execution.",
+    "state_memory_voiceoutcome_reentry_tested": "NOT_YET_PROVEN_AS_WHOLE_HIGHER_GATE"
+  },
+  "candidate_discriminators": [
+    {
+      "id": "VSR07_HEARD_MEMORY_PAYLOAD_MISMATCH_REJECTED_OR_EXPLICITLY_REFERENCE_ONLY",
+      "setup": "Use the exact completed heard result and a memory_event that references an internally valid MemoryLifecycleState plus matching TypedMemoryRecord whose payload_ref/payload_sha256 describe a different payload.",
+      "expect": "If this path claims heard-result memory binding, reject before receipt. If arbitrary pre-existing memory references are intentionally allowed, the receipt/test must explicitly classify that memory evidence as unrelated reference context and must not count it toward heard-result memory reentry completion."
+    },
+    {
+      "id": "VSR08_GWT_DIRECT_DATACLASS_WITHOUT_SOURCE_LINEAGE_REJECTED_OR_REFERENCE_ONLY",
+      "setup": "Directly construct a structurally valid GwtReentryUptakeBinding with matching binding_id but no admitted WP507/WP508 source-lineage validation receipt/evidence.",
+      "expect": "Reject for exact GWT reentry/uptake semantics, or retain only explicit opaque/reference-only evidence with gwt_runtime_credit=0 and no GWT completion claim."
+    }
+  ],
+  "decision": {
+    "highest_information_nonduplicate_gate": "WP717_HIGHER_STATE_MEMORY_GWT_REENTRY_SEMANTIC_FENCE",
+    "new_asr_tts_breadth": "DEPRIORITIZED",
+    "new_runtime_dispatch": false,
+    "next_exact_action": "Trigger4 should consume the new addendum on the existing WP717/higher cortex integration surface, materialize VSR07/VSR08 as adversarial repository discriminators, and either enforce the missing exact relation/lineage or narrow the receipt semantics so the positive composition cannot be misread as stronger authority. Re-run repository CI first. Dispatch a new VPS probe only if the executable subject or claimed promotion tier materially changes and current event/claim authority permits it. Do not reopen WP704/WP715 or duplicate ASR008."
+  },
+  "credits": {
+    "research_delta": 1,
+    "canonical_memory_write": 0,
+    "gwt_runtime": 0,
+    "effect_runtime": 0,
+    "physical_audio": 0,
+    "whole_voice": 0,
+    "whole_product": 0,
+    "training": 0
+  }
+}

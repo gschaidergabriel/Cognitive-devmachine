@@ -1,0 +1,91 @@
+{
+  "schema": "F2_TRIGGER7_REENTRY_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "created_local_time": "2026-08-31T07:38:42+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_AND_REENTRY_NOT_F2_CLAIM_AUTHORITY",
+  "authority_snapshot": {
+    "research_main_observed": "529bd0fb6b7f89718068dbbb2227c927d2b32fbc",
+    "f2_main_observed": "257ef997b685246cb8ce741c2098133eb0fe45b0",
+    "active_research_id": "T7-ASR-008",
+    "target_runtime_law": "fully local/self-hosted; zero external model/ASR/TTS API calls",
+    "language_priority": "German first"
+  },
+  "consumed_checkpoint": {
+    "research_commit": "529bd0fb6b7f89718068dbbb2227c927d2b32fbc",
+    "state": "REPAIR_THEN_REEXECUTE_EXISTING_ASR008_DISCRIMINATOR",
+    "runtime_credit": 0,
+    "german_asr_quality_credit": 0,
+    "trigger4_acceptance_credit": 0
+  },
+  "current_exact_evidence": {
+    "workflow_run_id": 33340567051,
+    "failure_taxonomy": "EVIDENCE_INVALID",
+    "runtime_subject_action": "RUNTIME_PROBE_INVALIDATED_BY_REQUIRED_REPAIR",
+    "exception": "wave.Error: unknown format: 3",
+    "root_cause": "Pinned FLEURS fixture can materialize as IEEE-float WAV while the current comparator validation/VAD path requires PCM16 mono 16 kHz; failure occurs before Nemotron transcription or ASR-quality measurement.",
+    "product_negative": false,
+    "runtime_credit_delta": 0
+  },
+  "fresh_primary_source_findings": [
+    {
+      "source": "https://docs.python.org/3.13/library/wave.html",
+      "class": "PYTHON_RUNTIME_ABI",
+      "finding": "Python 3.13 stdlib wave supports uncompressed PCM only; IEEE-float WAV format-tag 3 is not a portable admitted input on that runtime."
+    },
+    {
+      "source": "https://docs.python.org/3.15/library/wave.html",
+      "class": "PYTHON_VERSION_BOUNDARY",
+      "finding": "Python 3.15 adds IEEE-float WAV support, so changing Python version would alter the runtime subject rather than repair the fixture contract minimally."
+    },
+    {
+      "source": "https://huggingface.co/datasets/google/fleurs/blob/main/README.md",
+      "class": "FLEURS_REPRESENTATION",
+      "finding": "FLEURS exposes decoded audio as float arrays at 16 kHz; fixture serialization therefore needs an explicit deterministic encoding contract instead of assuming PCM16 source bytes."
+    },
+    {
+      "source": "https://github.com/wiseman/py-webrtcvad",
+      "class": "VAD_INPUT_ABI",
+      "finding": "WebRTC VAD accepts 16-bit mono PCM at 8/16/32/48 kHz with fixed 10/20/30 ms frame sizes; PCM16 mono 16 kHz is therefore a direct compatible boundary."
+    },
+    {
+      "source": "https://docs.nvidia.com/nemo/speech/nightly/asr/api.html",
+      "class": "NEMO_INPUT_ABI",
+      "finding": "NeMo ASR audio preprocessing defaults to 16 kHz, aligning the comparator's desired normalized fixture rate with the model preprocessing contract."
+    }
+  ],
+  "hypothesis_fusion": {
+    "H1": "The narrow repair should normalize the already-pinned decoded fixture to deterministic mono 16 kHz PCM16 and preserve original-source and normalized-fixture digests separately.",
+    "H2": "Upgrading Python merely to make stdlib wave accept float WAV is a worse discriminator because it changes environment semantics and does not satisfy the downstream VAD PCM16 ABI by itself.",
+    "H3": "The repair must not change FLEURS row selection, references, Nemotron model/runtime identities, RNNT right-context axis, scoring thresholds, or receipt semantics.",
+    "counterhypothesis": "After normalization, a separate model-load, ASR-quality, latency, receipt-contract, or product failure may emerge; none is supported yet.",
+    "decision": "Route one fixture-only repair to Trigger4, then execute one exact nonduplicate comparator run."
+  },
+  "coordination_observation": {
+    "class": "HIGH_FANOUT_DUPLICATE_CLASSIFICATION",
+    "evidence": "F2 main received multiple near-identical Trigger4 ASR008 float-WAV classification commits within seconds after the same terminal run.",
+    "impact": "bookkeeping-only merge pressure and semantic-owner ambiguity without additional runtime evidence",
+    "corrective_rule": "Stop additional ASR008 classification-only workers; assign one mutation owner for the normalization repair and one independent reviewer/falsifier lane. NEW_WORKER != NEW_GENERATION."
+  },
+  "next_exact_action": {
+    "owner_lane": "Trigger4",
+    "action": "Implement only deterministic float/decoded-audio -> mono 16 kHz PCM16 fixture normalization with source and derived SHA-256 provenance plus an IEEE-float regression; then dispatch one exact-source VPS comparator run and reconcile its raw receipt against the current fail-closed validator contract.",
+    "do_not_do": [
+      "do not open a new ASR model lane",
+      "do not upgrade Python solely to accept format tag 3",
+      "do not redispatch multiple equivalent runs",
+      "do not mint runtime, quality, physical, semantic, training, or whole-product credit from the current failure"
+    ]
+  },
+  "credits": {
+    "source_research": 1,
+    "local_runtime": 0,
+    "german_asr_quality": 0,
+    "german_e2e_voice": 0,
+    "physical_audio_acceptance": 0,
+    "trigger4_acceptance": 0,
+    "whole_voice_system": 0,
+    "training": 0,
+    "whole_product": 0
+  }
+}

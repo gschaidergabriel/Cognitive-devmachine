@@ -1,0 +1,90 @@
+{
+  "schema": "F2_TRIGGER7_REENTRY_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "created_local_time": "2026-08-31T07:37:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_AND_REENTRY_NOT_F2_CLAIM_AUTHORITY",
+  "authority_snapshot": {
+    "research_main_observed_before_write": "8e0af833708ddbc8eca618f234cc63ede885b986",
+    "f2_main_observed": "ef9ec33cdea80656e2b6e7d2d277537c87bf1fa1",
+    "trigger7_protocol": "ACTIVE_CONTINUOUS_GERMAN_FIRST_LOCAL_SELF_HOSTED_ZERO_EXTERNAL_INFERENCE_API",
+    "material_f2_mutation_performed": false
+  },
+  "trigger4_outcome_ingested": {
+    "research_id": "T7-ASR-008",
+    "first_run_id": 33340366984,
+    "second_run_id": 33340567051,
+    "second_run_terminal": true,
+    "second_run_conclusion": "failure",
+    "failure_taxonomy": "EVIDENCE_INVALID",
+    "exception": "wave.Error: unknown format: 3",
+    "observed_fixture_encoding": "IEEE_FLOAT_WAV_FORMAT_TAG_3",
+    "current_gate_expectation": "PCM16_MONO_16KHZ",
+    "nemotron_product_negative_supported": false,
+    "german_asr_quality_observed": false,
+    "runtime_credit_delta": 0
+  },
+  "fresh_primary_source_findings": [
+    {
+      "source": "https://docs.python.org/3.13/library/wave.html",
+      "class": "PYTHON_RUNTIME_FORMAT_BOUNDARY",
+      "finding": "Python wave through the current stable pre-3.15 behavior supports uncompressed PCM WAV only; WAVE format tag 3 IEEE float therefore legitimately fails at wave.open before the ASR model can be exercised."
+    },
+    {
+      "source": "https://docs.python.org/3.15/library/wave.html",
+      "class": "FUTURE_RUNTIME_COMPATIBILITY_NOT_A_REPAIR",
+      "finding": "Python 3.15 adds IEEE-float WAV support, but adopting that does not satisfy the existing F2 gate contract requiring mono 16 kHz PCM16 and would change the runtime boundary. Do not use a Python-version upgrade to reinterpret the failed run as valid ASR evidence."
+    },
+    {
+      "source": "https://python-soundfile.readthedocs.io/en/latest/index.html",
+      "class": "EXPLICIT_PCM16_NORMALIZATION_PATH",
+      "finding": "python-soundfile supports explicit WAV subtype PCM_16; its WAV default subtype is also PCM_16. The repair should still request subtype='PCM_16' explicitly rather than relying on defaults."
+    },
+    {
+      "source": "https://huggingface.co/datasets/google/fleurs/blame/bc0636bc121b131df69ed727a4ddafc5afc8afe4/README.md",
+      "class": "PINNED_DATASET_AUDIO_RATE",
+      "finding": "The pinned FLEURS revision documents 16 kHz audio. The current failure is therefore an encoding/container compatibility defect, not evidence that the admitted corpus or target sample-rate axis should change."
+    },
+    {
+      "source": "https://huggingface.co/docs/datasets/main/about_dataset_features",
+      "class": "DECODED_AUDIO_BOUNDARY",
+      "finding": "Hugging Face Audio provides decoded audio plus sampling-rate semantics; raw source bytes are not guaranteed to already satisfy a downstream PCM16 WAV gate. Raw-source digest and normalized-fixture digest should be recorded separately."
+    }
+  ],
+  "research_decision": {
+    "highest_information_nonduplicate_gate": "Do not open new ASR/model breadth. Trigger4 should repair only deterministic fixture normalization and rerun the already-bound ASR008 comparator once.",
+    "recommended_repair_contract": [
+      "preserve pinned FLEURS revision and rows 0..31",
+      "preserve original source-audio bytes/digest as provenance",
+      "decode the source fixture through the already-admitted audio dependency boundary",
+      "emit explicit mono 16 kHz PCM_16 WAV for gate/VAD/NeMo consumption",
+      "record normalized-fixture digest separately",
+      "regress IEEE-float WAV input -> admitted PCM16 mono 16 kHz output",
+      "preserve model bytes/revision, NeMo runtime bytes, RNNT right-context axis, language axis, gate thresholds and scoring semantics",
+      "do not upgrade Python merely to make format tag 3 readable",
+      "after executable model run, reconcile raw success receipt to exactly one current F2 validator envelope before promotion"
+    ],
+    "counterhypothesis": "If deterministic PCM16 normalization succeeds but the comparator still fails before model execution, the next defect is in fixture/gate plumbing rather than Nemotron ASR quality. If the model executes and fails quality gates, only then classify the measured ASR result as PRODUCT_NEGATIVE at that exact axis.",
+    "priority_changed": false
+  },
+  "credits": {
+    "source_research": 1,
+    "local_runtime": 0,
+    "german_asr_quality": 0,
+    "german_e2e_voice": 0,
+    "physical_audio_acceptance": 0,
+    "trigger4_acceptance": 0,
+    "whole_voice_system": 0,
+    "training": 0
+  },
+  "continuation_checkpoint": {
+    "next_7_reentry_order": [
+      "refresh F2 main and research main",
+      "ingest the single post-normalization ASR008 Trigger4 execution if present",
+      "verify that actual model execution occurred before reading WER/CER/latency as evidence",
+      "verify receipt schema reconciliation separately from product quality",
+      "if executable: compare Nemotron de-DE/auto across the five admitted right-context settings against ASR004 Qwen3-ASR and faster-whisper baselines",
+      "only after measured comparator outcome decide whether ASR008 advances, is rejected, or needs one narrowly-scoped runtime repair"
+    ]
+  }
+}

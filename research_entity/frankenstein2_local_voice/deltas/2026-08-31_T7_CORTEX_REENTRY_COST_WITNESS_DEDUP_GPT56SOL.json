@@ -1,0 +1,72 @@
+{
+  "schema": "F2_TRIGGER7_REENTRY_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "created_local_time": "2026-08-31T07:40:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_AND_REENTRY_NOT_F2_CLAIM_AUTHORITY",
+  "authority": {
+    "directive": "research_entity/global/TRIGGERWORD_7_FRANKENSTEIN_LOCAL_VOICE_RESEARCH_DIRECTIVE.md",
+    "f2_owner_authority": "research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md",
+    "language_priority": "German first",
+    "local_solo_required": true,
+    "trigger4_runtime_acceptance_required": true
+  },
+  "observed_heads": {
+    "f2_main": "74144bbb55bd5baa53f28d861602f34c03d9935e",
+    "research_main_before_write": "b5255691ca75bc1ea08ed3945db663ef7d19b3b9"
+  },
+  "current_evidence": {
+    "wp715_packet_cortex": "ACCEPTED_AT_VPS_PACKET_COMPONENT_SCOPE",
+    "wp715_runtime_run": 33335436802,
+    "wp715_outbound_model_asr_tts_calls": 0,
+    "state_memory_voiceoutcome_reentry_integration_credit": 0,
+    "gwt_runtime_credit": 0,
+    "physical_audio_credit": 0,
+    "whole_voice_credit": 0,
+    "asr008_runtime_credit": 0,
+    "asr008_german_quality_credit": 0
+  },
+  "source_audit": [
+    {
+      "path": "src/frankenstein2/typed_memory.py",
+      "finding": "TypedMemoryRecord is an exact caller-declared binding to MemoryLifecycleState; it performs no UnifiedDB write, truth inference, retrieval or effect authorization. Any voice adapter must verify exact lifecycle/generation/payload/provenance identity rather than treating memory_refs as canonical writes."
+    },
+    {
+      "path": "src/frankenstein2/context_compiler.py",
+      "finding": "Generation-4 ContextCompiler requires every selectable ContextItem to have an exact ContextCostWitness bound to the same payload digest and measured cost. Therefore interrupted heard-prefix ephemeral next-turn context cannot be admitted by digest/reference alone; it needs a valid cost witness or must fail closed."
+    },
+    {
+      "path": "src/frankenstein2/gwt_reentry_uptake_binding.py",
+      "finding": "GWT re-entry binding consumes exact already-valid WP508 witness plus WP507 uptake receipt and full broadcast/recipient lineage, preserving uptake state verbatim and minting no new GWT runtime evidence. An opaque gwt_ref string is insufficient authority."
+    },
+    {
+      "path": "src/frankenstein2/realtime_reentry.py",
+      "finding": "Realtime re-entry is deterministic evidence over exact VoiceSessionCapsule lineage and does not mutate canonical state, execute tools/effects or contact providers. Late TOOL_RETURN and BARGE_IN handling must stay lineage-bound."
+    }
+  ],
+  "asr008_parallel_boundary": {
+    "status": "SEPARATE_TRIGGER4_RUNTIME_SUBJECT",
+    "current_source_signal": "PCM16 fixture normalization is now present in current F2 source according to the latest Trigger7 ASR008 review; the previous float-WAV validity failure does not establish Nemotron quality or runtime behavior.",
+    "latency_falsifier": "Current unpaced 160 ms chunk injection is compute/throughput evidence only; microphone-like live latency requires a separate paced-ingress discriminator before promotion.",
+    "external_primary_pin": "NVIDIA NeMo-Speech.cpp documents asr.streaming.chunk_size=0.16 and rnnt_right_context as a latency/accuracy control.",
+    "dedup_rule": "Do not create another ASR008 comparator or redispatch while Trigger4 owns the active repaired runtime subject."
+  },
+  "decision": {
+    "highest_information_nonduplicate_gate": "CORTEX_STATE_MEMORY_GWT_REENTRY_INTEGRATION",
+    "reason": "Owner authority explicitly prioritizes completing packet cortex/recovery/state-memory-GWT handoff before new ASR/TTS breadth. WP715 packet cortex is already accepted, while VSR01-VSR06 integration has no observed Trigger4 closure.",
+    "new_unique_constraint": "VSR01/VSR02 context admission must include exact ContextCostWitness binding for completed-output or heard-prefix payloads; bypassing this would violate the accepted ContextCompiler G4 contract.",
+    "next_exact_action": "Trigger4 refreshes overlap for the existing T7_CORTEX_STATE_MEMORY_GWT_REENTRY_INTEGRATION handoff, reuses existing memory/context/GWT authorities, adds the cost-witness requirement to VSR01/VSR02, executes VSR01-VSR06 on the proven VPS route, and promotes only component integration scope. Trigger7 does not reopen WP715 or duplicate ASR008 dispatch."
+  },
+  "credits": {
+    "research_delta": 1,
+    "packet_component_runtime": 1,
+    "state_memory_voiceoutcome_reentry_integration": 0,
+    "gwt_runtime": 0,
+    "asr008_runtime": 0,
+    "german_e2e_voice": 0,
+    "physical_audio": 0,
+    "whole_voice": 0,
+    "whole_product": 0,
+    "training": 0
+  }
+}

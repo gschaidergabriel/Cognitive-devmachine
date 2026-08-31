@@ -1,0 +1,93 @@
+{
+  "schema": "F2_TRIGGER7_RESEARCH_DELTA/v1",
+  "trigger": "7",
+  "date": "2026-08-31",
+  "organ": "GPT-5.6-Sol",
+  "classification": "RESEARCH_PROVENANCE_NOT_F2_CLAIM_AUTHORITY",
+  "research_id": "T7-ASR-008",
+  "canonical_f2_claim": "research/local_voice/claims/T7-ASR-008/E3_NEMOTRON_35_ASR_TARGET_RUNTIME_BENCHMARK.json",
+  "canonical_claim_semantic_key": "93d61d9b893d411c8085cd5d257968c23448bc426430e603f6e33add1db5e4e3",
+  "f2_observed_head_before_research_write": "ef9ec33cdea80656e2b6e7d2d277537c87bf1fa1",
+  "current_f2_negative_evidence": {
+    "classification": "EVIDENCE_INVALID_RUNTIME_HARNESS_FIXTURE_ENCODING",
+    "run_1": "33340366984",
+    "run_1_failure": "missing Python soundfile dependency while datasets encoded FLEURS audio",
+    "run_2": "33340567051",
+    "run_2_failure": "wave.Error: unknown format: 3",
+    "observed_fixture_encoding": "IEEE_FLOAT_WAV_FORMAT_TAG_3",
+    "runtime_credit_delta": 0,
+    "nemotron_product_negative_supported": false,
+    "german_asr_quality_conclusion_supported": false
+  },
+  "primary_source_refresh": [
+    {
+      "source_class": "OFFICIAL_NVIDIA_NEMO_DOCS",
+      "url": "https://docs.nvidia.com/nemo/speech/nightly/asr/inference.html",
+      "finding": "NeMo ASR transcription accepts file paths, numpy arrays, or PyTorch tensors; audio must be 16 kHz mono. The documented numpy path reads audio as float32 with soundfile and transcribes the array directly."
+    },
+    {
+      "source_class": "OFFICIAL_NVIDIA_NEMO_DOCS",
+      "url": "https://docs.nvidia.com/nemo/speech/nightly/asr/results.html",
+      "finding": "NeMo documents that callers are responsible for mono/16 kHz preprocessing before model transcription."
+    },
+    {
+      "source_class": "OFFICIAL_PYTHON_DOCS",
+      "url": "https://docs.python.org/3.14/library/wave.html",
+      "finding": "Python wave through 3.14 supports only uncompressed PCM WAV. IEEE-float WAV support is not present in this runtime family."
+    },
+    {
+      "source_class": "OFFICIAL_SCIPY_DOCS",
+      "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.wavfile.write.html",
+      "finding": "scipy.io.wavfile.write chooses WAV encoding from numpy dtype: float32 becomes 32-bit IEEE floating-point WAV, while int16 becomes 16-bit PCM."
+    },
+    {
+      "source_class": "OFFICIAL_HUGGINGFACE_DATASETS_DOCS",
+      "url": "https://huggingface.co/docs/datasets/audio_load",
+      "finding": "Hugging Face Datasets audio access performs decode/resample through its audio decoder stack; downstream code must not assume the persisted representation is already PCM16 WAV."
+    }
+  ],
+  "root_cause_hypothesis": {
+    "status": "STRONGLY_SUPPORTED",
+    "statement": "The comparator persisted decoded float audio as float32 WAV and later consumed it through Python wave / a PCM-only validation path. That combination deterministically produces an IEEE-float format-tag-3 compatibility failure before model execution.",
+    "counterhypothesis": "Nemotron rejects valid matched German audio.",
+    "counterhypothesis_status": "NOT_TESTED_BY_THE_FAILED_RUNS"
+  },
+  "recommended_minimal_repair_contract": {
+    "scope": "FIXTURE_NORMALIZATION_BOUNDARY_ONLY",
+    "requirements": [
+      "Preserve original source-byte identity/hash separately from normalized comparator-fixture identity/hash.",
+      "Decode source audio with a decoder that supports the source encoding; do not route IEEE-float WAV through a PCM-only parser.",
+      "Normalize deterministically to one mono channel at 16000 Hz before the shared comparator/VAD boundary.",
+      "Write normalized WAV samples as int16 so the file is PCM16, not IEEE float.",
+      "Use an explicit deterministic float-to-int16 rule with finite-value validation, clipping to the admitted range, and fixed rounding semantics; regression-test boundary values and silence.",
+      "Keep row selection, references, model/runtime hashes, language mode, RNNT right-context axis, VAD/gate contract, and scoring semantics unchanged.",
+      "Assert normalized fixture metadata and hash before any model run: mono, 16000 Hz, 16-bit PCM, deterministic byte length/hash.",
+      "Add a regression fixture whose input is IEEE-float WAV and verify deterministic PCM16 mono 16 kHz output plus distinct source and normalized hashes.",
+      "Dispatch exactly one repaired exact-source target run, then reconcile the raw receipt before any credit promotion."
+    ]
+  },
+  "diagnostic_optional_path": {
+    "purpose": "MODEL_VS_FIXTURE_SEPARATION_ONLY",
+    "method": "Feed the decoded normalized 16-kHz mono float32 numpy array directly to NeMo transcribe in a non-promotion diagnostic, because NeMo officially supports array input.",
+    "scope_fence": "This may show the model path is runnable, but it must not replace the shared PCM16/VAD comparator path or mint matched-comparator credit."
+  },
+  "decision": {
+    "highest_information_nonduplicate_action": "Trigger4 repairs only the ASR008 fixture normalization ABI and re-runs one exact matched comparator.",
+    "do_not_do": [
+      "Do not open a new T7-ASR-008 claim.",
+      "Do not mutate Nemotron model configuration to address this failure.",
+      "Do not treat either failed run as German ASR-quality evidence.",
+      "Do not change benchmark row selection or scoring while repairing encoding.",
+      "Do not award runtime/model/quality/Trigger4 acceptance credit from this research delta."
+    ]
+  },
+  "credits": {
+    "source_research_delta": 1,
+    "target_runtime": 0,
+    "german_asr_quality": 0,
+    "trigger4_acceptance": 0,
+    "physical_audio": 0,
+    "whole_voice_system": 0,
+    "training": 0
+  }
+}

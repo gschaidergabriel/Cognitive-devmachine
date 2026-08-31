@@ -1,90 +1,88 @@
 {
   "schema": "clay.t7.local_voice.research_delta.v1",
   "created_at_utc": "2026-08-31T07:10:00Z",
-  "updated_at_utc": "2026-08-31T07:16:00Z",
+  "updated_at_utc": "2026-08-31T07:18:00Z",
   "organ": "GPT-5.6-Sol",
   "trigger": "7",
-  "purpose": "Narrow the current Trigger-7 local-voice frontier after bounded WP717 VPS packet/cortex runtime and repository memory/context composition, without creating new model or state authority.",
+  "purpose": "Current-state Trigger-7 audit of WP717 local-voice heard-result reentry after bounded VPS component runtime, memory/context composition and concurrent GWT composition work.",
   "authority": {
     "trigger7_directive": "research_entity/global/TRIGGERWORD_7_FRANKENSTEIN_LOCAL_VOICE_RESEARCH_DIRECTIVE.md",
     "text_packet_completion_authority": "F2:research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md",
     "f2_protocol": "F2:research/local_voice/TRIGGERWORD_7_PROTOCOL.md"
   },
-  "observed_heads": {
-    "clay_main_before_delta": "a093fe3f1ffb0cca6d86edb2a788f030007c41e6",
-    "clay_delta_commit": "50385a223bf5a0be00a087d41a61c4f1c81af562",
-    "f2_memory_context_composition": "6d4e140f0377a0135090d7a4762214b4c106c732",
-    "f2_post_write_reentry_head": "f696b8cb1ff2fecc204b558788caa3c55d2d1e9e"
+  "observed_heads_and_subjects": {
+    "prior_wp717_vps_runtime_commit": "51d3950ab6a6eb0c78d4880fd9c0d87311c317ec",
+    "memory_context_repository_subject": "6d4e140f0377a0135090d7a4762214b4c106c732",
+    "active_g2_claim_commit": "f696b8cb1ff2fecc204b558788caa3c55d2d1e9e",
+    "post_claim_gwt_repository_delta": "e9004f885a2fbb42751f741d48b0b105192d3abd"
   },
-  "current_evidence": {
-    "wp717_bounded_vps_component_runtime": {
-      "f2_commit": "51d3950ab6a6eb0c78d4880fd9c0d87311c317ec",
-      "scope": "packet -> cortex/voice-heard-result bounded VPS component runtime",
-      "target_environment_component_runtime_credit": 1,
-      "scope_fence": "Does not establish semantic GWT/J-Space runtime, effect, physical/GRID10, training, completion, or whole-system credit."
+  "accepted_evidence": {
+    "wp717_prior_target_component_runtime": {
+      "credit": 1,
+      "scope": "bounded packet -> cortex/voice-heard-result component runtime only"
     },
-    "heard_result_memory_context_composition": {
-      "f2_commit": "6d4e140f0377a0135090d7a4762214b4c106c732",
-      "test": "tests/test_voice_heard_result_reentry_memory_context_composition.py",
-      "scope": "repository integration proof only",
-      "observed_properties": [
-        "canonical VoiceHeardResultReentryRecordV1 is projected into existing memory authority",
-        "memory projection feeds existing context-compiler input",
-        "commit/ingestion/result/packet/turn/binding/content identities remain exact"
-      ]
-    },
-    "existing_gwt_component": {
-      "source": "src/frankenstein2/gwt_reentry_uptake_binding.py",
-      "test": "tests/test_gwt_reentry_uptake_binding.py",
-      "finding": "A fail-closed GwtReentryUptakeBindingV1 already exists and independently checks committed ASR identity, downstream uptake, causal intervention, and mismatch rejection. No new GWT authority/component is required for this frontier."
+    "memory_context_repository_integration": {
+      "credit": 1,
+      "subject": "6d4e140f0377a0135090d7a4762214b4c106c732",
+      "scope": "repository composition discriminator; no target runtime"
     }
   },
-  "post_write_reentry": {
-    "observed_f2_commit": "f696b8cb1ff2fecc204b558788caa3c55d2d1e9e",
-    "message": "trigger4: claim WP717 G2 memory-context runtime closure",
-    "classification": "ACTIVE_MUTATION_AUTHORITY_NOT_RUNTIME_SUCCESS",
+  "active_g2_runtime_authority": {
     "claim_id": "F2-WP-717-G2-GPT56SOL-MEMORY-CONTEXT-VPS-20260831",
-    "target_completion_tier": "VOICE_HEARD_RESULT_MEMORY_CONTEXT_COMPOSITION_TARGET_COMPONENT_RUNTIME",
-    "blocking_deficit": "Repository memory/context composition is green, but the exact 6d4e140 subject has no admitted VPS execution/readback yet.",
-    "trigger7_concurrency_action": "DO_NOT_DUPLICATE_G2. Remain REVIEW_ONLY/CANDIDATE_FALSIFIER while Trigger4 owns the exact memory/context runtime boundary."
+    "state": "ACTIVE",
+    "work_class": "RUNTIME_CREDIT_CLOSURE",
+    "runtime_subject_sha": "6d4e140f0377a0135090d7a4762214b4c106c732",
+    "runtime_subject_status": "READY_FOR_SINGLETON_DISPATCH",
+    "runtime_subject_churn_class": "DEFER_SEMANTIC_MUTATION_UNTIL_RUNTIME_RESULT",
+    "runtime_execution_observed": false,
+    "memory_context_composition_runtime_evidence": 0,
+    "gwt_runtime_credit": 0,
+    "next_exact_action_from_pointer": "Dispatch one exact-source clay-direct-dev probe for 6d4e140, consume terminal receipt, reconcile only measured memory/context composition runtime scope."
   },
-  "frontier": {
-    "work_class": "INTEGRATION_BLOCKER_AFTER_CURRENT_G2_RUNTIME_CLOSURE",
+  "concurrency_audit": {
+    "finding": "After G2 froze exact runtime subject 6d4e140 and explicitly declared DEFER_SEMANTIC_MUTATION_UNTIL_RUNTIME_RESULT, commit e9004f8 modified the G2-owned composition test by adding GWT binding/uptake composition.",
+    "classification": "POST_CLAIM_SEMANTIC_EXPANSION_OUTSIDE_FROZEN_G2_RUNTIME_SUBJECT",
+    "credit_rule": "e9004f8 MUST NOT be composed with a later 6d4e140 VPS runtime receipt to mint GWT runtime or current-generation GWT integration runtime credit. The exact executed subject controls credit.",
+    "risk": "RUNTIME_SUBJECT_CHURN / PROJECTION_MISMATCH if workers describe e9004f8 GWT logic as part of G2 runtime without rebinding authority and a new exact probe.",
+    "trigger7_action": "REVIEW_ONLY. Do not mutate F2 state. Preserve e9004f8 as repository-only future-boundary evidence until the active 6d4e140 G2 runtime subject terminates/reconciles or current authority explicitly invalidates/rebinds it."
+  },
+  "post_g2_frontier": {
+    "work_class": "INTEGRATION_BLOCKER",
     "boundary": "canonical VoiceHeardResultReentryRecordV1 -> existing GwtReentryUptakeBindingV1 -> measured downstream uptake / causal intervention",
-    "blocking_deficit": "The shared heard-result composition proof closes memory/context at repository scope but does not yet prove that the exact canonical heard result is coherently bound into the existing GWT reentry/uptake path under the same packet/turn/commit/content identities.",
     "new_component_necessity": false,
-    "routing": "Trigger4 owns implementation/runtime mutation. Trigger7 supplies the narrowed post-G2 integration/falsifier packet only.",
-    "next_exact_action": "First allow the active WP717 G2 memory/context VPS runtime discriminator to terminate and reconcile. If G2 passes without executable counterevidence requiring repair, Trigger4 may open the next legal nonduplicate boundary for one focused heard-result -> existing GWT reentry/uptake composition test with hostile-twin identity falsifiers; only after repository acceptance should the identical subject be considered for admitted VPS execution."
+    "repository_delta_already_present": "e9004f885a2fbb42751f741d48b0b105192d3abd",
+    "next_legal_action": "After G2 exact-subject runtime resolution, refresh event/pointer state. If e9004f8 remains current and accepted at repository scope, validate hostile-twin identity falsifiers and only then bind an exact e9004f8-or-successor subject to an admitted VPS discriminator."
   },
   "required_falsifiers": [
-    "candidate_id substitution must fail closed",
-    "ASR commit identity/hash substitution must fail closed",
-    "packet_id or turn_id substitution must fail closed",
-    "normalized content hash substitution must fail closed",
-    "receipt/result identity substitution must fail closed where carried by the canonical heard-result envelope",
-    "interrupted/abandoned outcomes must not silently become accepted text-memory/GWT admission",
-    "downstream reception without measured uptake must not mint semantic reentry credit",
-    "uptake without the required causal intervention must not mint semantic reentry credit"
+    "candidate_id substitution fails closed",
+    "ASR commit identity/hash substitution fails closed",
+    "packet_id or turn_id substitution fails closed",
+    "normalized content hash substitution fails closed",
+    "interrupted/abandoned outcome cannot silently become accepted memory/GWT admission",
+    "delivery/reception without measured uptake cannot mint semantic reentry credit",
+    "uptake without required causal intervention cannot mint semantic reentry credit",
+    "old runtime receipt plus newer GWT repository code cannot compose into newer runtime credit"
   ],
   "external_research_delta": {
     "scope": "turn-state/interrupt robustness only; no model scouting",
     "findings": [
-      "FastTurn (arXiv:2604.01897) supports combining streaming semantic and acoustic evidence for low-latency robust turn decisions rather than treating VAD alone as sufficient.",
-      "Instruct-FD (arXiv:2607.20460) reports that instruction-conditioned turn-management remains difficult even for current full-duplex systems, reinforcing explicit turn-state semantics and falsifiers.",
-      "HumDial 2026 full-duplex work (arXiv:2604.21406) evaluates interruption, overlap and dynamic turn negotiation as first-class interaction behavior."
+      "FastTurn (arXiv:2604.01897) combines streaming semantic and acoustic evidence for low-latency robust turn decisions instead of relying on VAD alone.",
+      "Instruct-FD (arXiv:2607.20460) finds substantial remaining difficulty in instruction-conditioned turn management, supporting explicit controllable turn-state semantics.",
+      "HumDial 2026 (arXiv:2604.21406) treats interruption, overlap and dynamic turn negotiation as first-class evaluation behavior."
     ],
-    "architectural_consequence": "Keep F2's deterministic packet/reentry identities and explicit interruption/abandonment semantics; strengthen existing composition boundaries instead of introducing a new voice model/controller."
+    "architectural_consequence": "Keep deterministic packet/reentry identity and explicit interruption/abandonment states; strengthen existing evidence boundaries rather than adding a new speech model/controller."
   },
   "credit_fence": {
-    "repository_memory_context_integration": 1,
-    "memory_context_target_component_runtime_g2": 0,
     "prior_wp717_bounded_target_component_runtime": 1,
+    "memory_context_repository_integration": 1,
+    "memory_context_target_component_runtime_g2": 0,
+    "gwt_repository_composition_post_claim": "SOURCE/TEST_DELTA_ONLY_UNTIL_ACCEPTED_AT_SCOPE",
     "semantic_gwt_jspace_runtime": 0,
     "effect": 0,
     "physical_grid10": 0,
     "training": 0,
     "whole_product": 0
   },
-  "decision": "NO_NEW_MODEL_BREADTH. DO_NOT_DUPLICATE_ACTIVE_WP717_G2. After exact G2 runtime resolution, reuse accepted components and close one exact heard-result -> GWT uptake/reentry boundary with hostile-twin falsifiers and exact-scope evidence.",
-  "status": "RESEARCH_DELTA_UPDATED_AFTER_EVENT_FIRST_REENTRY"
+  "decision": "NO_NEW_MODEL_BREADTH. DO_NOT_DUPLICATE OR RETROACTIVELY WIDEN ACTIVE G2. Execute/reconcile exact 6d4e140 first; treat e9004f8 GWT work as separate repository evidence requiring its own exact future runtime subject if promoted.",
+  "status": "RESEARCH_DELTA_FINALIZED_WITH_RUNTIME_SUBJECT_CHURN_FALSIFIER"
 }

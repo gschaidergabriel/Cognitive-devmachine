@@ -1,6 +1,7 @@
 {
   "schema": "clay.t7.local_voice.research_delta.v1",
   "created_at_utc": "2026-08-31T07:10:00Z",
+  "updated_at_utc": "2026-08-31T07:16:00Z",
   "organ": "GPT-5.6-Sol",
   "trigger": "7",
   "purpose": "Narrow the current Trigger-7 local-voice frontier after bounded WP717 VPS packet/cortex runtime and repository memory/context composition, without creating new model or state authority.",
@@ -10,8 +11,10 @@
     "f2_protocol": "F2:research/local_voice/TRIGGERWORD_7_PROTOCOL.md"
   },
   "observed_heads": {
-    "clay_main": "a093fe3f1ffb0cca6d86edb2a788f030007c41e6",
-    "f2_main": "6d4e140f0377a0135090d7a4762214b4c106c732"
+    "clay_main_before_delta": "a093fe3f1ffb0cca6d86edb2a788f030007c41e6",
+    "clay_delta_commit": "50385a223bf5a0be00a087d41a61c4f1c81af562",
+    "f2_memory_context_composition": "6d4e140f0377a0135090d7a4762214b4c106c732",
+    "f2_post_write_reentry_head": "f696b8cb1ff2fecc204b558788caa3c55d2d1e9e"
   },
   "current_evidence": {
     "wp717_bounded_vps_component_runtime": {
@@ -36,13 +39,22 @@
       "finding": "A fail-closed GwtReentryUptakeBindingV1 already exists and independently checks committed ASR identity, downstream uptake, causal intervention, and mismatch rejection. No new GWT authority/component is required for this frontier."
     }
   },
+  "post_write_reentry": {
+    "observed_f2_commit": "f696b8cb1ff2fecc204b558788caa3c55d2d1e9e",
+    "message": "trigger4: claim WP717 G2 memory-context runtime closure",
+    "classification": "ACTIVE_MUTATION_AUTHORITY_NOT_RUNTIME_SUCCESS",
+    "claim_id": "F2-WP-717-G2-GPT56SOL-MEMORY-CONTEXT-VPS-20260831",
+    "target_completion_tier": "VOICE_HEARD_RESULT_MEMORY_CONTEXT_COMPOSITION_TARGET_COMPONENT_RUNTIME",
+    "blocking_deficit": "Repository memory/context composition is green, but the exact 6d4e140 subject has no admitted VPS execution/readback yet.",
+    "trigger7_concurrency_action": "DO_NOT_DUPLICATE_G2. Remain REVIEW_ONLY/CANDIDATE_FALSIFIER while Trigger4 owns the exact memory/context runtime boundary."
+  },
   "frontier": {
-    "work_class": "INTEGRATION_BLOCKER",
+    "work_class": "INTEGRATION_BLOCKER_AFTER_CURRENT_G2_RUNTIME_CLOSURE",
     "boundary": "canonical VoiceHeardResultReentryRecordV1 -> existing GwtReentryUptakeBindingV1 -> measured downstream uptake / causal intervention",
-    "blocking_deficit": "The current shared heard-result composition proof closes memory/context but does not yet prove that the exact canonical heard result is coherently bound into the existing GWT reentry/uptake path under the same packet/turn/commit/content identities.",
+    "blocking_deficit": "The shared heard-result composition proof closes memory/context at repository scope but does not yet prove that the exact canonical heard result is coherently bound into the existing GWT reentry/uptake path under the same packet/turn/commit/content identities.",
     "new_component_necessity": false,
-    "routing": "Trigger4 owns implementation/runtime mutation. Trigger7 supplies the narrowed integration/falsifier packet only.",
-    "next_exact_action": "Trigger4: add one focused repository composition test that starts from the exact canonical VoiceHeardResultReentryRecordV1, binds/reuses GwtReentryUptakeBindingV1, proves identity continuity and fail-closed hostile-twin rejection, then execute the identical accepted composition on the admitted owner-VPS sandbox route if repository integration passes."
+    "routing": "Trigger4 owns implementation/runtime mutation. Trigger7 supplies the narrowed post-G2 integration/falsifier packet only.",
+    "next_exact_action": "First allow the active WP717 G2 memory/context VPS runtime discriminator to terminate and reconcile. If G2 passes without executable counterevidence requiring repair, Trigger4 may open the next legal nonduplicate boundary for one focused heard-result -> existing GWT reentry/uptake composition test with hostile-twin identity falsifiers; only after repository acceptance should the identical subject be considered for admitted VPS execution."
   },
   "required_falsifiers": [
     "candidate_id substitution must fail closed",
@@ -61,17 +73,18 @@
       "Instruct-FD (arXiv:2607.20460) reports that instruction-conditioned turn-management remains difficult even for current full-duplex systems, reinforcing explicit turn-state semantics and falsifiers.",
       "HumDial 2026 full-duplex work (arXiv:2604.21406) evaluates interruption, overlap and dynamic turn negotiation as first-class interaction behavior."
     ],
-    "architectural_consequence": "Keep F2's deterministic packet/reentry identities and explicit interruption/abandonment semantics; strengthen the existing composition boundary instead of introducing a new voice model/controller."
+    "architectural_consequence": "Keep F2's deterministic packet/reentry identities and explicit interruption/abandonment semantics; strengthen existing composition boundaries instead of introducing a new voice model/controller."
   },
   "credit_fence": {
-    "repository_integration": "candidate only until Trigger4 lands/tests the composition",
-    "target_component_runtime": "retain only already accepted WP717 bounded component scope",
+    "repository_memory_context_integration": 1,
+    "memory_context_target_component_runtime_g2": 0,
+    "prior_wp717_bounded_target_component_runtime": 1,
     "semantic_gwt_jspace_runtime": 0,
     "effect": 0,
     "physical_grid10": 0,
     "training": 0,
     "whole_product": 0
   },
-  "decision": "NO_NEW_MODEL_BREADTH. Reuse accepted components and close one exact heard-result -> GWT uptake/reentry boundary with hostile-twin falsifiers and exact-scope runtime evidence.",
-  "status": "RESEARCH_DELTA_COMMITTED_FOR_TRIGGER4_CONSUMPTION"
+  "decision": "NO_NEW_MODEL_BREADTH. DO_NOT_DUPLICATE_ACTIVE_WP717_G2. After exact G2 runtime resolution, reuse accepted components and close one exact heard-result -> GWT uptake/reentry boundary with hostile-twin falsifiers and exact-scope evidence.",
+  "status": "RESEARCH_DELTA_UPDATED_AFTER_EVENT_FIRST_REENTRY"
 }

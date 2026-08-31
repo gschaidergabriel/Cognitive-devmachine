@@ -1,90 +1,120 @@
 {
   "schema": "clay.t7.local_voice.research_delta.v1",
   "created_at_utc": "2026-08-31T19:23:00Z",
+  "updated_at_utc": "2026-08-31T19:25:30Z",
   "organ": "GPT-5.6-Sol",
   "trigger": "7",
-  "purpose": "Trigger-7 reentry audit of the newest WP719 fresh-turn-successor boundary after repository implementation and the first bound VPS promotion dispatch.",
+  "purpose": "Trigger-7 current-state reentry audit of WP719 fresh-turn successor composition, including zero-job control-plane failure, aligned FRESH10 product negative, required repair, repaired repository PASS and the still-pending exact VPS promotion gate.",
   "authority": {
     "trigger7_directive": "research_entity/global/TRIGGERWORD_7_FRANKENSTEIN_LOCAL_VOICE_RESEARCH_DIRECTIVE.md",
     "f2_protocol": "F2:research/local_voice/TRIGGERWORD_7_PROTOCOL.md",
     "text_packet_completion_authority": "F2:research/local_voice/authority/2026-08-31_TRIGGER7_TEXT_PACKET_COMPLETION_AUTHORITY.md"
   },
   "observed_heads_and_subjects": {
-    "clay_research_head_before_write": "6ffece7bd2e44be53905e8e0fcacce1bea319021",
-    "f2_head_observed": "22e2d7112b88b34391b117f147a2004c59654b5b",
-    "wp719_repository_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
-    "wp719_dispatch_sha": "22e2d7112b88b34391b117f147a2004c59654b5b",
-    "wp719_workflow_run_id": 33430090028,
-    "wp719_claim_id": "F2-WP-719-G1-GPT56SOL-FRESH-TURN-SUCCESSOR-COMPOSITION-20260901"
+    "clay_research_head_before_first_write": "6ffece7bd2e44be53905e8e0fcacce1bea319021",
+    "first_research_commit": "1666916a9f9bf57b960c6794a4f23340bfd38111",
+    "f2_head_observed_latest": "bfe0ebf458eb4a4cc186ea6c4ab41def24d9c3fe",
+    "wp719_claim_id": "F2-WP-719-G1-GPT56SOL-FRESH-TURN-SUCCESSOR-COMPOSITION-20260901",
+    "initial_repository_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
+    "aligned_falsifier_subject": "6208b2ce2846b97a5ee0d2386c659685100a6cee",
+    "required_repair_commit": "64b7fb92cca8ddc2e541d617f9af7ebd9bbeb9b8",
+    "repair_dispatch_commit": "4a910f6ba72629b4303533443720804e9160f69a",
+    "trigger7_repair_handoff_commit": "bfe0ebf458eb4a4cc186ea6c4ab41def24d9c3fe"
   },
-  "source_and_test_evidence": {
+  "history": [
+    {
+      "run_id": 33430090028,
+      "state": "COMPLETED_FAILURE_ZERO_JOBS",
+      "executed_product_steps_observed": false,
+      "classification": "INFRA_AUTH_TRANSPORT_QUOTA",
+      "subclassification": "CONTROL_PLANE_ZERO_JOB_NO_PRODUCT_EXECUTION",
+      "credit": 0,
+      "consequence": "No product conclusion; repair execution/control-plane validity only."
+    },
+    {
+      "run_id": 33430190854,
+      "repository_job_id": 99613400467,
+      "repository_job_result": "FAILURE",
+      "failing_step": "FRESH1-FRESH10 unit integration suite",
+      "classification": "PRODUCT_NEGATIVE",
+      "root_cause": "The aligned FRESH10 contract requires an explicit exact F15/F16/F17 restart-prerequisite identity binding, but the then-current project_fresh_turn() accepted a valid predecessor/reentry and could succeed without prerequisite_restart_receipt_ref/prerequisite_restart_receipt_sha256 or equivalent typed identity.",
+      "queued_old_vps_job_id": 99613400727,
+      "queued_old_vps_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
+      "runtime_probe_classification": "RUNTIME_PROBE_INVALIDATED_BY_REQUIRED_REPAIR",
+      "credit_rule": "If the older queued subject later executes, preserve it as historical-only for its exact older scope; do not use it for current repaired WP719 runtime promotion."
+    },
+    {
+      "repair_commit": "64b7fb92cca8ddc2e541d617f9af7ebd9bbeb9b8",
+      "repair": "Bind exact restart prerequisite ref+SHA into FreshTurnSuccessorProjection identity, validation and deterministic replay; missing prerequisite fails closed; evidence remains reference-only with zero memory/GWT/tool/effect authority.",
+      "classification": "REQUIRED_REPAIR_FROM_EXECUTED_PRODUCT_NEGATIVE"
+    },
+    {
+      "run_id": 33430389059,
+      "repository_job_id": 99614043778,
+      "repository_job_status": "COMPLETED",
+      "repository_job_result": "SUCCESS",
+      "observed_steps": [
+        "FRESH1-FRESH10 unit integration suite PASS",
+        "bounded WP719 falsifier PASS"
+      ],
+      "repository_component_ci_credit": 1,
+      "vps_job_id": 99614044114,
+      "vps_job_state_at_reentry": "PENDING",
+      "vps_runner_label": "clay-host",
+      "target_environment_component_runtime_credit": 0,
+      "classification": "REPOSITORY_REPAIR_ACCEPTED_PENDING_SINGLETON_VPS_RUNTIME"
+    }
+  ],
+  "current_source_scope": {
     "implemented_component": "src/frankenstein2/fresh_turn_successor.py",
     "test_surface": "tests/test_fresh_turn_successor.py",
     "falsifier_surface": "research/local_voice/tools/falsify_fresh_turn_successor.py",
-    "workflow_surface": ".github/workflows/wp719-fresh-turn-successor-ci.yml",
-    "covered_semantics": [
+    "validated_semantics": [
       "distinct fresh successor turn after validated prior reentry",
-      "fail-closed stale or foreign GWT lineage",
-      "fail-closed memory-evidence mismatch",
-      "exact-once deterministic replay and semantic-drift rejection",
-      "no projection channel for unheard cancelled output",
-      "WAIT/backchannel reference-only behavior without invented full speech",
-      "restart roundtrip preserves exact successor identity",
+      "exact GWT lineage mismatch fails closed",
+      "memory-evidence mismatch fails closed",
+      "deterministic exactly-once replay and semantic-drift rejection",
+      "unheard cancelled output has no history projection channel",
+      "WAIT/backchannel reference-only behavior does not invent full speech",
+      "restart roundtrip preserves deterministic successor identity",
       "tool/memory references remain no-replay authority",
-      "network-blocked packet successor execution",
-      "missing/corrupt prerequisites fail closed"
+      "packet successor can execute with network calls blocked",
+      "missing/corrupt predecessor or missing exact restart prerequisite fails closed"
     ],
-    "scope_fence": "Repository/source/test evidence only until an admitted executed VPS discriminator produces a bound receipt. No acoustic, ASR, TTS, semantic-GWT/J-Space, effect, training or whole-product promotion is implied."
-  },
-  "runtime_dispatch_observation": {
-    "run_id": 33430090028,
-    "status": "completed",
-    "conclusion": "failure",
-    "jobs_observed": 0,
-    "executed_product_steps_observed": false,
-    "runtime_receipt_observed": false,
-    "target_environment_component_runtime_credit": 0,
-    "classification": "INFRA_AUTH_TRANSPORT_QUOTA",
-    "subclassification": "CONTROL_PLANE_ZERO_JOB_NO_PRODUCT_EXECUTION",
-    "reasoning": "The workflow run terminated without creating/executing any job. Therefore no FRESH1-FRESH10 VPS discriminator step, exact-source runtime check, sandbox execution or readback occurred. The failure is not executable counterevidence against the WP719 product invariant."
+    "restart_prerequisite_binding": "PRESENT_IN_CURRENT_SOURCE",
+    "authority_fence": "Restart evidence is exact reference/digest provenance only; it grants no canonical memory write, GWT/J-Space uptake, tool/effect replay, ASR/TTS, acoustic or completion authority."
   },
   "projection_staleness": {
     "surface": "F2:workpackages/active/F2-WP-719.json",
-    "finding": "The active pointer still reports repository_component_ci_credit=0, target_environment_component_runtime_credit=0 and NO_BOUND_WP719_RUNTIME_SUBJECT_YET, while later commits added the implementation/test/CI surface and then bound a frozen VPS runtime subject in dispatch commit 22e2d711.",
-    "classification": "PROJECTION_STALE",
-    "authority_rule": "Do not mutate reality to match the stale pointer. Refresh current F2 granular evidence before any state transition or promotion claim."
-  },
-  "runtime_subject_churn_fence": {
-    "frozen_subject": "32c6f3db988e7270fc62ec5f444f327f1ea2012b",
-    "classification": "DEFER_SEMANTIC_SUCCESSOR_MUTATION_UNTIL_VALID_RUNTIME_DISCRIMINATOR_OR_REQUIRED_REPAIR",
-    "reason": "The zero-job failure did not execute the product discriminator and therefore does not justify semantic mutation of the bound fresh-turn successor boundary.",
-    "forbidden_composition": "Do not combine any later source change with this failed zero-job run to mint runtime credit."
+    "finding": "The pointer observed earlier lagged later source/test/dispatch evidence. Resolve current source, jobs, receipts and any newer event/reconciliation evidence before credit claims.",
+    "classification": "PROJECTION_STALE_OR_LAGGING",
+    "authority_rule": "Granular executed evidence outranks the stale projection."
   },
   "external_primary_research_delta": {
-    "scope": "Turn-management evidence only; no new model lane opened.",
+    "scope": "Turn-management evidence only; no model-breadth lane opened.",
     "findings": [
       {
         "source": "Instruct-FD, arXiv:2607.20460",
-        "finding": "Instruction-conditioned full-duplex turn management remains materially difficult; reported best adherence is 64.4%, with proactive backchanneling and interruption especially challenging.",
-        "consequence": "Supports keeping explicit deterministic WAIT/backchannel/interruption/cancellation semantics and falsifiers rather than delegating correctness to a speech-native model."
+        "finding": "Instruction-conditioned full-duplex turn management remains difficult; the reported best adherence is 64.4%, with proactive backchanneling and interruption particularly challenging.",
+        "consequence": "Supports explicit deterministic WAIT/backchannel/interruption/cancellation contracts rather than delegating correctness to speech-native behavior."
       },
       {
         "source": "DuplexSLA, arXiv:2605.20755",
-        "finding": "A synchronized speech/language/action architecture demonstrates the value of a separate structured action channel on a shared time base for pause, interruption, backchannel and tool use.",
-        "consequence": "Reinforces Frankenstein's typed CortexEvent/VoiceIntent/tool-event separation; no architecture replacement is justified by upstream claims alone."
+        "finding": "A synchronized speech/language/action design uses a structured action stream on a shared timeline for pause, interruption, backchannel and tool behavior.",
+        "consequence": "Reinforces typed CortexEvent/VoiceIntent/tool-event separation; upstream work does not justify replacing current authority or reopening model breadth."
       },
       {
         "source": "Qwen3-ASR Hugging Face/Transformers documentation",
         "finding": "Qwen3-ASR 0.6B and 1.7B continue to list German support.",
-        "consequence": "No new ASR scouting blocker is identified; cortex-first authority remains dominant."
+        "consequence": "No unique ASR blocker was found; cortex-first convergence remains the correct priority."
       }
     ]
   },
-  "decision": "NO_NEW_MODEL_BREADTH. PRESERVE WP719 FROZEN SUBJECT. Treat run 33430090028 as zero-runtime-credit infrastructure/control-plane failure, not product negative. Trigger 4 should diagnose the workflow/control-plane failure and perform one valid exact-source VPS discriminator against 32c6f3db988e7270fc62ec5f444f327f1ea2012b without duplicate fan-out; only the measured runtime scope may then be reconciled/promoted.",
-  "next_exact_action": "Refresh F2 main and WP719 claim/evidence surfaces, identify why run 33430090028 created zero jobs, repair only that execution/control-plane defect if needed, then execute one singleton clay-host/clay-direct-dev S2 discriminator pinned to runtime subject 32c6f3db988e7270fc62ec5f444f327f1ea2012b. Do not change fresh-turn semantics unless a real executed discriminator produces PRODUCT_NEGATIVE evidence.",
+  "decision": "WP719 FRESH10 gap was real and has been repaired at source/repository scope. The repaired repository suite/falsifier now executes PASS. Do not open model breadth or duplicate VPS dispatch. Current promotion frontier is the already-pending singleton VPS job 99614044114 / run 33430389059; target-runtime credit stays zero until that exact repaired subject actually executes and yields a bound receipt/readback. Preserve the older queued pre-repair VPS subject as historical-only if it later runs.",
+  "next_exact_action": "Consume the terminal result of VPS job 99614044114 without duplicate fan-out. If it executes PASS, reconcile only exact WP719 target-component runtime scope. If it fails, classify PRODUCT_NEGATIVE vs EVIDENCE_INVALID vs INFRA_AUTH_TRANSPORT_QUOTA before any further mutation. Physical audio, ASR/TTS, semantic GWT/J-Space, effects, training and whole-product acceptance remain separate zero-credit gates.",
   "credit_fence": {
-    "wp719_repository_source_test_surface": "PRESENT",
-    "wp719_target_component_runtime": 0,
+    "wp719_repository_component_ci": 1,
+    "wp719_target_environment_component_runtime": 0,
     "physical_audio": 0,
     "asr_runtime": 0,
     "tts_runtime": 0,
@@ -93,5 +123,5 @@
     "training": 0,
     "whole_product": 0
   },
-  "status": "RESEARCH_DELTA_FINALIZED_ZERO_JOB_RUNTIME_CLASSIFIED"
+  "status": "RESEARCH_DELTA_RECONCILED_REPAIR_GREEN_VPS_PENDING"
 }

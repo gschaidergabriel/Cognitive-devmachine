@@ -1,0 +1,40 @@
+{
+  "schema": "CLAY_TRIGGER7_LOCAL_VOICE_DELTA/v1",
+  "trigger": "7",
+  "worker": "GPT-5.6 Sol",
+  "local_date": "2026-09-01",
+  "classification": "RESEARCH_MIRROR_NONCANONICAL_PROVENANCE_DELTA",
+  "f2_harness_path": "research/local_voice/tools/falsify_restart_exact_once_reentry_composition.py",
+  "f2_harness_commit": "6409cc2408a5faaccddd42a6e316ed5d2bfb9f74",
+  "f2_continuation_checkpoint": "research/local_voice/checkpoints/2026-09-01_T7_F15_F17_F16_HARNESS_PREPARED_6409CC2_GPT56SOL.json",
+  "f2_continuation_checkpoint_commit": "cd63fce46824cb92d1302c87a7fd7876d5584149",
+  "harness_scope": [
+    "F15_COMPLETED_HEARD_CLOSED_RESTART_REENTRY_EXACT_ONCE",
+    "F17_PARTIAL_OR_INTERRUPTED_RESTART_CAN_NEVER_PROMOTE_TO_DURABLE_HEARD_RESULT",
+    "F16_COMPLETED_HEARD_OPEN_RESTART_THEN_CLOSE_ONCE"
+  ],
+  "execution_status": "PREPARED_NOT_EXECUTED",
+  "credit": {
+    "research_implementation_artifact": 1,
+    "repository_ci": 0,
+    "vps_target_component": 0,
+    "canonical_memory_write": 0,
+    "gwt_runtime": 0,
+    "jspace_runtime": 0,
+    "effect": 0,
+    "asr_runtime": 0,
+    "tts_runtime": 0,
+    "physical_audio": 0,
+    "whole_voice_e2e": 0,
+    "whole_product": 0,
+    "training": 0
+  },
+  "bound_runtime_fence": {
+    "run_id": 33369867309,
+    "job_id": 99418257873,
+    "status": "QUEUED_ZERO_STEP_LAST_OBSERVED",
+    "classification": "UNKNOWN_NONTERMINAL",
+    "do_not_redispatch": true
+  },
+  "next_exact_action": "Consume the bound F18 VPS run first. When that boundary terminates without a repair requiring semantic mutation, execute the prepared F15/F17/F16 harness at repository-CI scope and preserve exact per-falsifier results before any target-runtime promotion request."
+}

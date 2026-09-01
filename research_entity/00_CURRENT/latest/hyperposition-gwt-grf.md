@@ -1,14 +1,18 @@
 # Hyperposition / GWT / GRF
 
-Status: `PARTIAL_COMPONENT_EVIDENCE`  
-Observed head: `c9a105361e083a5eaab30d3e3af46fac50b5bce5`  
-Selected receipt: `BASELINE.json`
+Status: `CANDIDATE_FALSIFIER_OPEN`  
+Observed head: `37822b6bcf94d1597d188b78f6d78f7b11a9de9c`  
+Selected receipt: `research_entity/00_CURRENT/updates/hyperposition-gwt-grf/20260829T082236Z-hyperposition-gwt-grf-24c5915044.json`
 
-Exact-merge singleton repair is implemented at component source/test scope; physical-grid Hyperposition/GWT re-entry remains blocked pending true GRID10 runtime pass.
+WP508 source review found a direct-constructor bypass of exact WP506 builder-lineage admission despite 8/8 component CI.
 
-Next: After GRID10 pass, test branch preservation, broadcast/uptake/re-entry and evidence-conditioned collapse.
+State: F2-WP-508 G1 has repository component CI at its declared tests, but current witness validation does not re-run WP506 builder lineage; Issue #231 preserves the counterexample at source-review scope.
+
+Next: Canonical WP508 mutation authority should add a direct-constructor negative and revalidate selection via WP506 verify_selection_binding plus deterministic broadcast reconstruction before closing exact-lineage scope.
 
 Evidence:
-- `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V35_GPT56SOL.json`
+- `gschaidergabriel/frankenstein-2.0#231`
+- `frankenstein-2.0@cd7cf05d472717caf9922aff0ba53abe3cee35c0:src/frankenstein2/gwt_reentry_provenance.py`
+- `frankenstein-2.0@e64c14589dceff7fe489479782680b6b37602ba0:workpackages/receipts/F2-WP-508_G1_REENTRY_PROVENANCE_CI_33242881798.json`
 
 > Cache only. Re-enter current authority/source before material claims.

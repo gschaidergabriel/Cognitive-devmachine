@@ -1,14 +1,21 @@
 # Evidence / lineage / Goodman
 
-Status: `CURRENT_GUARDED`  
-Observed head: `c9a105361e083a5eaab30d3e3af46fac50b5bce5`  
-Selected receipt: `BASELINE.json`
+Status: `IN_PROGRESS`  
+Observed head: `73d97414ea2b637f2c531ab659856903a4c34871`  
+Selected receipt: `research_entity/00_CURRENT/updates/evidence-lineage/20260828T144653Z-evidence-lineage-ffdaa1b40f.json`
 
-Executable evidence outranks consensus; Goodman/model-family/pipeline/repackaged-history and train/calibration/holdout ancestry remain explicit anti-echo constraints.
+Triggerword 4 materialized exact Frankenstein 1.x donor freeze and source-archaeology handoff in Frankenstein 2.0
 
-Next: Keep provenance and credit scope exact in every research receipt and holdout decision.
+State: F2-WP-001 generation 2 now binds exact donor commit/tree, adoption-matrix provenance, migration-front blob index, workpackage state evidence, and a continuation checkpoint; no runtime/provider credit was minted.
+
+Next: Do not duplicate claimed F2-WP-100 UnifiedDB work. Continue only on unclaimed Triggerword-4 fronts after re-entry; keep F2-WP-001 IN_PROGRESS until README exact binding and semantic donor classifications are completed.
 
 Evidence:
-- `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
+- `gschaidergabriel/frankenstein-2.0@0528a6cca0974c25218386ca2b78221376a837e0 workpackages/claims/F2-WP-001_G2_GPT56SOL_20260828T2139P0700.json`
+- `gschaidergabriel/frankenstein-2.0@f7641d6432be071f318c35a00cacb28bf997d773 provenance/frankenstein1-donor-freeze-20260828T2139P0700.json`
+- `gschaidergabriel/frankenstein-2.0@373c45568fe4faa526c739b68bb1b239f2e749eb DONOR_ADOPTION_MATRIX.md`
+- `gschaidergabriel/frankenstein-2.0@3f1b0af6e1a74fb4def8991c8b667b0e96a637ae provenance/frankenstein1-donor-source-index-5641dc6b.json`
+- `gschaidergabriel/frankenstein-2.0@c0b14be9d83998998f09e0985191316b19533a3b workpackages/STATE.json`
+- `gschaidergabriel/frankenstein-2.0@ffb38d62ef0d5dfb5548952db95fcf891f534931 checkpoints/F2-WP-001_G2_GPT56SOL_20260828T2146P0700.json`
 
 > Cache only. Re-enter current authority/source before material claims.

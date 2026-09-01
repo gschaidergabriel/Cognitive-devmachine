@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "000004-t4-kokoro-piper-c711af-repaired-runtime-167c5ac-gpt56sol-20260902-a1",
+  "command_sha256": "02a02fd16b11635ed79e87e9385bcadb940a16ca6e5a72934d2f89eee9ba8f02",
+  "started_at": "2026-09-01T18:46:25.058522+00:00",
+  "finished_at": "2026-09-01T18:47:39.820369+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "99c0b603b57e37ad08eef0a5b70a067756b265cd7aa2309acf9fdf58c68ad999",
+  "stderr_sha256": "ec7cdf412cb2e549ed70d5c0cf9883a0f00bfe398d4e2d75b7c451bf93992521",
+  "stdout_tail": "T4_EXACT_SUBJECT={\"semantic_key\":\"c711af918362a9ec2bbe6f4e2df2f7e41861c59b553576ee9beac602b29ef9e3\",\"f2_source_sha\":\"167c5ac61fb639091f29a09afa035e7f8811e416\",\"runner_blob\":\"86863bd188bdd43a1a6981db60353b8736ed73ca\",\"benchmark_blob\":\"588e9133a2579ae9d12f604789ff1ea7b739eeb3\",\"target_surface\":\"clay-direct-dev\",\"sandbox\":\"rootless_podman_s1\"}\nT4_RECEIPT_B64=eyJzY2hlbWEiOiJUNF9MT0NBTF9WT0lDRV9LT0tPUk9fUElQRVJfQ1BVX0RJU0NSSU1JTkFUT1IvdjEiLCJyZXNlYXJjaF9pZCI6IlQ3LVRUUy1LT0tPUk8tMDAxIiwib2JqZWN0aXZlIjoiRTNfVEhPUlNURU5fS09LT1JPXzgyTV9WU19QSVBFUl9HRVJNQU5fQ1BVX0ZJTEVfT1VUUFVUIiwicmVzdWx0IjoiQkxPQ0tFRCIsImZhaWx1cmVfY2xhc3MiOiJJTkZSQV9BVVRIX1RSQU5TUE9SVF9RVU9UQV9PUl9TRVRVUCIsInN0YWdlIjoiSU1QT1JUX1BSRUZMSUdIVCIsImV4aXRfY29kZSI6MSwiY3B1X2ZpbGVfb3V0cHV0X2NvbXBvbmVudF9jcmVkaXQiOjAsImF1ZGlibGVfcGxheWJhY2tfY3JlZGl0IjowLCJ0cmlnZ2VyNF9mMl9hY2NlcHRhbmNlX2NyZWRpdCI6MCwid2hvbGVfc3lzdGVtX2NyZWRpdCI6MH0=\n",
+  "stderr_tail": "\n[notice] A new release of pip is available: 25.2 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\n[notice] A new release of pip is available: 25.2 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\n[notice] A new release of pip is available: 25.2 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\n[notice] A new release of pip is available: 25.2 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\nTraceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\n  File \"/tmp/t4-voicebench-venv/lib/python3.12/site-packages/kokoro/__init__.py\", line 23, in <module>\n    from .pipeline import KPipeline\n  File \"/tmp/t4-voicebench-venv/lib/python3.12/site-packages/kokoro/pipeline.py\", line 5, in <module>\n    from misaki import en, espeak\n  File \"/tmp/t4-voicebench-venv/lib/python3.12/site-packages/misaki/en.py\", line 11, in <module>\n    import spacy\nModuleNotFoundError: No module named 'spacy'\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

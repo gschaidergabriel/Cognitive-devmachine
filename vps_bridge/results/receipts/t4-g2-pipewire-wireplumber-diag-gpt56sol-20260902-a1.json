@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "t4-g2-pipewire-wireplumber-diag-gpt56sol-20260902-a1",
+  "command_sha256": "f32d5c14c3fffd1b90003f1af3eb77ff5c6bcd8864d703ce643a95f730fc27da",
+  "started_at": "2026-09-01T21:49:34.863636+00:00",
+  "finished_at": "2026-09-01T21:49:39.918364+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "e86d3355efb0d7f3a8bd68f9544e2c55be787b8ca33c28d8b2349f8e931eddbc",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===SINKS===\n47\tf2_diag\tPipeWire\tfloat32le 1ch 16000Hz\tSUSPENDED\n===SOURCES===\n47\tf2_diag.monitor\tPipeWire\tfloat32le 1ch 16000Hz\tSUSPENDED\n===SINK_STATE_BEFORE===\n\tName: f2_diag\n\tDescription: f2_diag Audio/Sink sink\n\tDriver: PipeWire\n\tSample Specification: float32le 1ch 16000Hz\n\tChannel Map: mono\n\tOwner Module: 536870913\n\tMute: no\n\tVolume: mono: 65536 / 100% / 0.00 dB\n\t        balance 0.00\n\tBase Volume: 65536 / 100% / 0.00 dB\n\tMonitor Source: f2_diag.monitor\n\tLatency: 0 usec, configured 0 usec\n\tFlags: HARDWARE DECIBEL_VOLUME LATENCY \n\tProperties:\nCAPPTURE _ALIVE_BEFORE=yes\nBYTES_BEFORE_PLAY=0\nPACAT_RC=0\nCAPPTURE _ALIVE_AFTER_PLAY=yes\nBYTES_AFTER_PLAX_BEFORE_STOP=0\n===SINK_STATE_AFTER===\n\tName: f2_diag\n\tDescription: f2_diag Audio/Sink sink\n\tDriver: PipeWire\n\tSample Specification: float32le 1ch 16000Hz\n\tChannel Map: mono\n\tOwner Module: 536870913\n\tMute: no\n\tVolume: mono: 65536 / 100% / 0.00 dB\n\t        balance 0.00\n\tBase Volume: 65536 / 100% / 0.00 dB\n\tMonitor Source: f2_diag.monitor\n\tLatency: 0 usec, configured 0 usec\n\tFlags: HARDWARE DECIBEL_VOLUME LATENCY \n\tProperties:\nPAREC_RC=0\nBYTES_AFTER_CAPTURE_STOP=0\nCAP_SHA256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n===PAREC_ERR===\n===PACAT_ERR===\nT4_G2_PW_WIREPLUMBER_DIAG_RESULT={\"capture_bytes\": 0, \"monitor_transport_observed\": false, \"nonzero_samples\": 0, \"sentinel_12000_samples\": 0, \"sentinel_observed\": false}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

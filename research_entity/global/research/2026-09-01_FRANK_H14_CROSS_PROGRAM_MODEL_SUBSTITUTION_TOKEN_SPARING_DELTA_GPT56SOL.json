@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_CROSS_PROGRAM_RESEARCH_DELTA/v1",
+  "date": "2026-09-01",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_NONAUTHORITY_RESEARCH_INPUT",
+  "source_program": "Frankenstein 2.0",
+  "source_evidence": {
+    "repository": "gschaidergabriel/frankenstein-2.0",
+    "branch": "self-integration/wp1207-SELFINT-20260901-a1c9e2f4",
+    "commit": "566ac6ea8e817b2e0d5ea391402ec64b58fb9858",
+    "run_id": "MODELSUB-20260901",
+    "hypothesis": "H14 foundation-model substitution",
+    "formal_verdict": "PARTIAL",
+    "valid_model_pairs": 26,
+    "functional_flips": 0,
+    "tool_success_opus": 1.0,
+    "tool_success_glm53": 1.0,
+    "memory_gwt_success_opus": 1.0,
+    "memory_gwt_success_glm53": 1.0,
+    "planning_success_opus": 1.0,
+    "planning_success_glm53": 1.0,
+    "opus_quota_blocked_tests": 6,
+    "glm53_full_run_tests": 32,
+    "latency_p95_ms_opus": 34045.3,
+    "latency_p95_ms_glm53": 57386.4,
+    "cost_usd_per_valid_test_opus": 0.4305,
+    "cost_usd_per_valid_test_glm53": 0.2353,
+    "evidence_boundary": "The result supports bounded functional substitutability in the measured Frankenstein harness. It does not prove foundation-model irrelevance and does not transfer provider admission to Clay/EntityOS."
+  },
+  "current_clay_authority_binding": {
+    "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "provider_policy": "FREE_ONLY_HARD_OFF; ALL_CLAYCODE_EXTERNAL_PROVIDER_ROUTES_UNADMITTED; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK",
+    "owner_vps_allowed": true,
+    "local_model_allowed": true,
+    "cross_program_rule": "FRANK program-local model allowance does not mutate ClayCode provider admission."
+  },
+  "research_finding": "The Frankenstein H14 result is useful as a bounded architecture prior: substantial state/tool/memory/planning behavior can remain stable across a foundation-model substitution when those functions are externalized into persistent state, harness and tools. The strongest current Clay implication is therefore architectural and methodological, not provider-policy admission.",
+  "token_sparing_decision": {
+    "external_paid_or_unknown_model_calls": "DO_NOT_USE",
+    "opus_retests": "DO_NOT_REPEAT",
+    "glm_api_for_clay": "NOT_ADMITTED_BY_THIS_EVIDENCE",
+    "preferred_surfaces": [
+      "owner VPS clay-direct-dev",
+      "local/self-hosted model execution",
+      "repository source inspection",
+      "deterministic tests and falsifiers",
+      "SQLite/event/state evidence",
+      "public zero-cost web research only when local evidence is insufficient"
+    ],
+    "principle": "Use the cheapest sufficient discriminator first; reserve external model tokens for a future explicitly admitted route only when the expected information gain cannot be obtained locally."
+  },
+  "next_research_frontier": [
+    {
+      "direction": "jspace",
+      "priority": "P0_LOCAL",
+      "task": "Repair representation metrology by capturing post-intervention hidden state through a valid forward-hook path, then run lesion/sham/permuted/wrong-layer controls on local model/VPS compute. Preserve behavioral and representation credit separately."
+    },
+    {
+      "direction": "xeno-vector-binding",
+      "priority": "P0_REPO_LOCAL",
+      "task": "Converge one nuisance-independent dynamic-binding successor using visible codebook integrity, exact rendered-byte semantic ablation and S3 permutation/equivariance controls. No positive training admission until existing gates pass."
+    },
+    {
+      "direction": "hcu-grid",
+      "priority": "P1_RUNTIME_AFTER_AUTHORITY_REENTRY",
+      "task": "After runtime quiescence and authority re-entry, execute the exact fused physical GRID10 pin on the owner VPS and persist an exact repository-bound runtime receipt. Source-level overlap evidence alone remains zero GRID10 runtime credit."
+    }
+  ],
+  "credits": {
+    "research_delta": 1,
+    "provider_admission_credit": 0,
+    "training_credit": 0,
+    "jspace_representation_credit": 0,
+    "grid10_runtime_credit": 0,
+    "whole_system_credit": 0
+  }
+}

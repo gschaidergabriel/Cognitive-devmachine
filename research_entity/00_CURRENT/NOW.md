@@ -1,6 +1,6 @@
 # CLAY NOW — token-efficient current-state cache
 
-Cache head: `ed9d932dcc3674722c70699c41ba7da777307a91` · tree `ccebf21dab2c` · generated `2026-09-01T14:41:57Z`
+Cache head: `ccf97eb05f42bbbf991cf61a4fc5a44fd760069c` · tree `f6c0b25cc717` · generated `2026-09-01T15:01:32Z`
 
 > **Cache, not authority.** Read current `SUPERVISOR_INBOX.json` / selected steering before material execution or current-state promotion.
 
@@ -16,9 +16,9 @@ Cache head: `ed9d932dcc3674722c70699c41ba7da777307a91` · tree `ccebf21dab2c` ·
 - **Trigger-2 training research** `CANDIDATE_KNOWLEDGE_STRUCTURED_INTO_TOPIC_PACKETS` — Two new topic packets structure today's B0-B6/A/G curriculum work and the atom-namespace P1-blocker resolution into durable claims/evidence/hypotheses, not just commits and NOW.md cache. → `latest/trigger2-training.md`
 - **Zero / Xeno cognitive runtime** `PARTIAL_COMPONENT_PASS` — Ordinary Xenos are S1 read-only; NODE_RESULT -> temporary scoped coordinator -> deterministic validation/commit is the current fabric law. Xeno self-organizing fabric has bounded component … → `latest/zero-xeno-runtime.md`
 - **Xeno vector language / dynamic binding** `NEEDS_CONVERGENCE` — Primary model-side target is dynamic episode-local binding/context invariance/active-codebook routing, not fixed class->atom semantics. → `latest/xeno-vector-binding.md`
-- **Hyperposition / GWT / GRF** `CANDIDATE_FALSIFIER_OPEN` — WP508 source review found a direct-constructor bypass of exact WP506 builder-lineage admission despite 8/8 component CI. → `latest/hyperposition-gwt-grf.md`
+- **Hyperposition / GWT / GRF** `CANDIDATE_CROSS_PROJECT_EVIDENCE` — Live Frankenstein process reentry preserved productive UnifiedDB/GWT state and a resumed instance performed a fresh productive GWT write/readback successfully. → `latest/hyperposition-gwt-grf.md`
 - **Global J-Space / causal metrology** `MEASUREMENT_REPAIR_REQUIRED` — Small-scope behavioral steering evidence exists; historical representation-divergence metric is instrumentation-broken and has zero representation-level credit. → `latest/jspace.md`
-- **Claude Code bridge / ZECP13-14** `CURRENT_DESIGN` — Claude Code is ZECP13/14 strong model/tool/code partner, never S0 truth authority or permanent coordinator. → `latest/claude-bridge.md`
+- **Claude Code bridge / ZECP13-14** `CURRENT_DESIGN_EVIDENCE_DELTA` — Frankenstein H14 supplies bounded cross-model substitutability evidence; Clay keeps provider admission unchanged and shifts research toward VPS/local deterministic discriminators to conserv… → `latest/claude-bridge.md`
 - **ClayCode / packet ABI / protocol** `CURRENT_DESIGN` — Xeno/ClayCode is the sole addressable model-facing cognitive semantics; JSON/SQLite/Python/tensors are carriers, not a second semantic brain. → `latest/claycode-protocol.md`
 - **Evidence / lineage / Goodman** `IN_PROGRESS` — Triggerword 4 materialized exact Frankenstein 1.x donor freeze and source-archaeology handoff in Frankenstein 2.0 → `latest/evidence-lineage.md`
 - **Free Swarm / Forge / Distillery** `HARD_OFF_BLOCKED` — FreeSwarm provider admission is owner-emergency-stop HARD_OFF; legacy live processes were observed after stop. Accepted training tokens remain 0 unless newer exact evidence supersedes. → `latest/free-swarm-distillery.md`

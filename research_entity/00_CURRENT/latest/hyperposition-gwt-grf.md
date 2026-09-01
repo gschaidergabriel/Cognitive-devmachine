@@ -1,18 +1,18 @@
 # Hyperposition / GWT / GRF
 
-Status: `CANDIDATE_FALSIFIER_OPEN`  
-Observed head: `37822b6bcf94d1597d188b78f6d78f7b11a9de9c`  
-Selected receipt: `research_entity/00_CURRENT/updates/hyperposition-gwt-grf/20260829T082236Z-hyperposition-gwt-grf-24c5915044.json`
+Status: `CANDIDATE_CROSS_PROJECT_EVIDENCE`  
+Observed head: `592389566d26d8e9ab6315635c5669c27f4f8a32`  
+Selected receipt: `research_entity/00_CURRENT/updates/hyperposition-gwt-grf/20260901T214100P0700-live-gwt-reentry-gpt56sol.json`
 
-WP508 source review found a direct-constructor bypass of exact WP506 builder-lineage admission despite 8/8 component CI.
+Live Frankenstein process reentry preserved productive UnifiedDB/GWT state and a resumed instance performed a fresh productive GWT write/readback successfully.
 
-State: F2-WP-508 G1 has repository component CI at its declared tests, but current witness validation does not re-run WP506 builder lineage; Issue #231 preserves the counterexample at source-review scope.
+State: The earlier zero-delta interpretation was corrected as an evidence-path artifact: productive DB is ~/.local/share/agentzero/unified.db, while ~/.claude/star/unified.db is legacy. Against the productive DB, post-reentry write/readback passed. This supports process-independent state continuity and active resumed-instance participation in the productive GWT path for the tested operation, without granting whole-system or representation-level credit.
 
-Next: Canonical WP508 mutation authority should add a direct-constructor negative and revalidate selection via WP506 verify_selection_binding plus deterministic broadcast reconstruction before closing exact-lineage scope.
+Next: Research consequences cheaply from existing evidence: distinguish persistence, active write resumption, causal uptake, re-entry and representation-level change. Design source/log/database falsifiers for each layer before spending model tokens. Keep the current WP508 builder-lineage bypass blocker i…
 
 Evidence:
-- `gschaidergabriel/frankenstein-2.0#231`
-- `frankenstein-2.0@cd7cf05d472717caf9922aff0ba53abe3cee35c0:src/frankenstein2/gwt_reentry_provenance.py`
-- `frankenstein-2.0@e64c14589dceff7fe489479782680b6b37602ba0:workpackages/receipts/F2-WP-508_G1_REENTRY_PROVENANCE_CI_33242881798.json`
+- `gschaidergabriel/frankenstein-2.0@e8515c946e61d7f7d9fbe299139874932dc675c3`
+- `workpackages/evidence_inbox/F2-WP-1207/post_reentry_validation/POSTREENTRY-20260901/hypothesis_results.json`
+- `workpackages/evidence_inbox/F2-WP-1207/post_reentry_validation/POSTREENTRY-20260901/gwt_write_readback.json`
 
 > Cache only. Re-enter current authority/source before material claims.

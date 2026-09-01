@@ -1,14 +1,18 @@
 # Claude Code bridge / ZECP13-14
 
-Status: `CURRENT_DESIGN`  
-Observed head: `c9a105361e083a5eaab30d3e3af46fac50b5bce5`  
-Selected receipt: `BASELINE.json`
+Status: `CURRENT_DESIGN_EVIDENCE_DELTA`  
+Observed head: `da8e2cce86b98f0baba1d4111f5553fea483b43e`  
+Selected receipt: `research_entity/00_CURRENT/updates/claude-bridge/20260901T214500P0700-claude-bridge-h14-token-sparing-gpt56sol.json`
 
-Claude Code is ZECP13/14 strong model/tool/code partner, never S0 truth authority or permanent coordinator.
+Frankenstein H14 supplies bounded cross-model substitutability evidence; Clay keeps provider admission unchanged and shifts research toward VPS/local deterministic discriminators to conserv…
 
-Next: Keep typed handoff/reconciliation and tool-receipt epistemics aligned with the current runtime.
+State: Frankenstein MODELSUB-20260901 produced 26/26 valid Opus-vs-GLM pairs with zero functional flips in the measured harness, while Opus quota blocked six later tests. This is architecture/method evidence only. Clay FREE_ONLY_HARD_OFF and all external ClayCode provider routes remain unadmitted; Together remains forbidden; no paid/unknown-cost fallback. Owner VPS and local-model research remain allowed.
+
+Next: Continue locally: repair J-Space post-intervention hidden-state metrology; converge nuisance-independent Xeno dynamic binding with exact semantic ablation/S3 equivariance; execute fused GRID10 exact pin only after runtime quiescence and authority re-entry. Do not spend Opus/GLM API tokens for repet…
 
 Evidence:
-- `research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md`
+- `research_entity/global/research/2026-09-01_FRANK_H14_CROSS_PROGRAM_MODEL_SUBSTITUTION_TOKEN_SPARING_DELTA_GPT56SOL.json`
+- `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
+- `gschaidergabriel/frankenstein-2.0@566ac6ea8e817b2e0d5ea391402ec64b58fb9858`
 
 > Cache only. Re-enter current authority/source before material claims.

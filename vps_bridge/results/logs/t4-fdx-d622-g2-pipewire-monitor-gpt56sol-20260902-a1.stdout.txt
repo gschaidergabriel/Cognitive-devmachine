@@ -1,0 +1,64 @@
+T4_G2_REPORT_BEGIN
+{
+  "classification": "TARGET_SURFACE_SETUP_OR_EXECUTION_NOT_ESTABLISHED",
+  "error": "RuntimeError('CAPTURE_TOO_SHORT:pre_cancel:0')",
+  "explicit_zero_credit": {
+    "asr_model_runtime": 0,
+    "effect": 0,
+    "human_heard_output": 0,
+    "mid_generation_tts_model_cancel": 0,
+    "native_owner_workstation_audio_permissions": 0,
+    "physical_microphone": 0,
+    "physical_speaker": 0,
+    "semantic_gwt_jspace": 0,
+    "training": 0,
+    "true_incremental_tts_generator_streaming": 0,
+    "tts_model_runtime": 0,
+    "whole_product": 0,
+    "whole_voice_e2e": 0
+  },
+  "f2_runtime_subject_sha": "f3c4b847b224053cb0b70722a363a1303749e91e",
+  "failure_class": "INFRA_AUTH_TRANSPORT_QUOTA",
+  "failure_stage": "OLD_PACKET_DELIVERY",
+  "finished_stage": "OLD_PACKET_DELIVERY",
+  "logs": {
+    "pipewire-pulse.log": "[E][46342.680162] mod.rt       | [     module-rt.c:  280 pw_rtkit_bus_get()] Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[W][46342.680212] mod.rt       | [     module-rt.c: 1006 rtkit_get_bus()] Realtime scheduling disabled: unsufficient realtime privileges, Portal not found on session bus, and no system bus for RTKit: Connection refused\n",
+    "pipewire.log": "[E][46342.630021] mod.rt       | [     module-rt.c:  280 pw_rtkit_bus_get()] Failed to connect to system bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n[W][46342.630061] mod.rt       | [     module-rt.c: 1006 rtkit_get_bus()] Realtime scheduling disabled: unsufficient realtime privileges, Portal not found on session bus, and no system bus for RTKit: Connection refused\n[W][46342.634077] mod.jackdbus-detect | [module-jackdbus-:  216 on_is_started_received()] Failed to receive jackdbus reply: org.freedesktop.DBus.Error.ServiceUnknown: The name org.jackaudio.service was not provided by any .service files\n"
+  },
+  "parent_semantic_key": "d62224bf7f52ef1db031ec7a9650a6b107f16a7a61f6f6cca253724d6419ea20",
+  "pipewire_graph": {
+    "core_pid": 823239,
+    "module_id": "536870913",
+    "pactl_info": "Server String: unix:/tmp/t4-fdx-d622-g2-pipewire-a1/runtime/pulse/native\nLibrary Protocol Version: 35\nServer Protocol Version: 35\nIs Local: yes\nClient Index: 35\nTile Size: 65472\nUser Name: root\nHost Name: 877d9128ca5a\nServer Name: PulseAudio (on PipeWire 1.0.5)\nServer Version: 15.0.0\nDefault Sample Specification: float32le 2ch 48000Hz\nDefault Channel Map: front-left,front-right\nDefault Sink: @DEFAULT_SINK@\nDefault Source: @DEFAULT_SOURCE@\nCookie: 64fa:dd9b\n",
+    "pulse_pid": 823241,
+    "pulse_server": "unix:/tmp/t4-fdx-d622-g2-pipewire-a1/runtime/pulse/native",
+    "sinks": "38\tf2sink\tPipeWire\tfloat32le 2ch 48000Hz\tSUSPENDED\n",
+    "sources": "38\tf2sink.monitor\tPipeWire\tfloat32le 2ch 48000Hz\tSUSPENDED\n"
+  },
+  "predeclared_policy": {
+    "drain_ms": 100,
+    "drain_samples": 4800,
+    "old_hz": 523.25,
+    "post_drain_old_tone_rms_ratio_max": 0.01,
+    "post_observation_ms": 500,
+    "post_observation_samples": 24000,
+    "rate_hz": 48000,
+    "replacement_hz": 880.0
+  },
+  "probe_hashes": {
+    "old_sha256": "ee9003866df32c7e1d4c945dc873c94c52162f8dfe49d76bfc16bb16f12e5409",
+    "replacement_sha256": "00787a1e20d4d37228976ab6bda477afd3a58cf6a54cc83319b930b1afad72f8"
+  },
+  "result": "BLOCKED",
+  "schema": "T4_D622_G2_PIPEWIRE_MONITOR_RUNTIME/v1",
+  "semantic_key": "b736c9ec17d26d94e19da56908995bcc9d3926299f03f427238082025f6a0eb5",
+  "target_surface": "clay-direct-dev disposable VPS userspace",
+  "traceback": "Traceback (most recent call last):\n  File \"/tmp/t4-fdx-d622-g2-pipewire-a1/run_g2.py\", line 125, in <module>\n    pre=capture(0.250,'pre_cancel')\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/t4-fdx-d622-g2-pipewire-a1/run_g2.py\", line 52, in capture\n    raise RuntimeError(f'CAPTURE_TOO_SHORT:{label}:{len(out)}')\nRuntimeError: CAPTURE_TOO_SHORT:pre_cancel:0\n",
+  "versions": {
+    "pactl": "pactl 16.1\nCompiled with libpulse 16.1.0\nLinked with libpulse 16.1.0",
+    "pipewire": "pipewire\nCompiled with libpipewire 1.0.5\nLinked with libpipewire 1.0.5",
+    "pipewire_pulse": "pipewire-pulse\nCompiled with libpipewire 1.0.5\nLinked with libpipewire 1.0.5"
+  }
+}
+T4_G2_REPORT_END
+T4_G2_DRIVER_RC=31

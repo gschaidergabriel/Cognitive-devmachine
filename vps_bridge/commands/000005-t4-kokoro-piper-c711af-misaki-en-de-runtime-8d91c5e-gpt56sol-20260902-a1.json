@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "000005-t4-kokoro-piper-c711af-misaki-en-de-runtime-8d91c5e-gpt56sol-20260902-a1",
+  "op": "exec",
+  "timeout_seconds": 3600,
+  "cwd": "/workspace",
+  "command": "set -Eeuo pipefail; F2_SHA=8d91c5eee3010c8795cc48d1d50c5a707b5ef76c; RUNNER_BLOB=3e19e5021dbe2aea3954c251df6c9b9b6690d47f; BENCH_BLOB=588e9133a2579ae9d12f604789ff1ea7b739eeb3; WORK=/tmp/t4-kokoro-piper-c711af-misaki-en-de-a1; rm -rf \"$WORK\"; mkdir -p \"$WORK\"; git clone -q --filter=blob:none https://github.com/gschaidergabriel/frankenstein-2.0.git \"$WORK/f2\"; cd \"$WORK/f2\"; git checkout -q --detach \"$F2_SHA\"; test \"$(git rev-parse HEAD)\" = \"$F2_SHA\"; test -z \"$(git status --porcelain --untracked-files=all)\"; test \"$(git hash-object trigger4/tools/local_voice/run_kokoro_piper_cpu_benchmark_s1.sh)\" = \"$RUNNER_BLOB\"; test \"$(git hash-object trigger4/tools/local_voice/kokoro_piper_cpu_benchmark.py)\" = \"$BENCH_BLOB\"; grep -Fq 'misaki[en,de]' trigger4/tools/local_voice/run_kokoro_piper_cpu_benchmark_s1.sh; printf 'T4_EXACT_SUBJECT={\"semantic_key\":\"c711af918362a9ec2bbe6f4e2df2f7e41861c59b553576ee9beac602b29ef9e3\",\"repair\":\"MISAKI_EN_DE_EXTRA\",\"f2_source_sha\":\"%s\",\"runner_blob\":\"%s\",\"benchmark_blob\":\"%s\",\"target_surface\":\"clay-direct-dev\",\"sandbox\":\"rootless_podman_s1\"}\\n' \"$F2_SHA\" \"$RUNNER_BLOB\" \"$BENCH_BLOB\"; bash trigger4/tools/local_voice/run_kokoro_piper_cpu_benchmark_s1.sh"
+}

@@ -1,0 +1,47 @@
+===SINKS===
+38	f2_diag	PipeWire	float32le 1ch 16000Hz	SUSPENDED
+===SOURCES===
+38	f2_diag.monitor	PipeWire	float32le 1ch 16000Hz	SUSPENDED
+===SINK_STATE_BEFORE===
+	Name: f2_diag
+	Description: f2_diag Audio/Sink sink
+	Driver: PipeWire
+	Sample Specification: float32le 1ch 16000Hz
+	Channel Map: mono
+	Owner Module: 536870913
+	Mute: no
+	Volume: mono: 65536 / 100% / 0.00 dB
+	        balance 0.00
+	Base Volume: 65536 / 100% / 0.00 dB
+	Monitor Source: f2_diag.monitor
+	Latency: 0 usec, configured 0 usec
+	Flags: HARDWARE DECIBEL_VOLUME LATENCY 
+	Properties:
+CAPTURE_ALIVE_BEFORE=yes
+BYTES_BEFORE_PLAY=0
+PACAT_RC=1
+CAPTURE_ALIVE_AFTER_PLAY=no
+BYTES_AFTER_PLAY_BEFORE_STOP=0
+===SINK_STATE_AFTER===
+	Name: f2_diag
+	Description: f2_diag Audio/Sink sink
+	Driver: PipeWire
+	Sample Specification: float32le 1ch 16000Hz
+	Channel Map: mono
+	Owner Module: 536870913
+	Mute: no
+	Volume: mono: 65536 / 100% / 0.00 dB
+	        balance 0.00
+	Base Volume: 65536 / 100% / 0.00 dB
+	Monitor Source: f2_diag.monitor
+	Latency: 0 usec, configured 0 usec
+	Flags: HARDWARE DECIBEL_VOLUME LATENCY 
+	Properties:
+PAREC_RC=1
+BYTES_AFTER_CAPTURE_STOP=0
+CAP_SHA256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+===PAREC_ERR===
+Stream error: Timeout
+===PACAT_ERR===
+Stream error: Timeout
+T4_G2_PW_ZERO_DIAG_RESULT={"capture_bytes": 0, "monitor_transport_observed": false, "nonzero_samples": 0, "sentinel_12000_samples": 0, "sentinel_observed": false}

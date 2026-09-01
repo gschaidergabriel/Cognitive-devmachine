@@ -1,0 +1,121 @@
+T4_G2_A3_BINDING_BEGIN
+F2_SHA=eaf59d7ae95eea178a0a26bc2b87927e7429a099
+CLAIM_BLOB=de2ace48e0e7e1d563cbd19551b765ddf2fddabf
+TOOL_BLOB=a18ce3f930d7de918572b4807e21532f805c64a7
+SEMANTIC_KEY=0d83f7d13c1d8f91686cf94070f73d901a49018b40a9c058d1949af094655bff
+pipewire
+Compiled with libpipewire 1.0.5
+pipewire-pulse
+Compiled with libpipewire 1.0.5
+Server String: unix:/tmp/t4-g2-pipewire-monitor-repaired-a3/runtime/pulse/native
+Library Protocol Version: 35
+Server Protocol Version: 35
+Is Local: yes
+Client Index: 35
+Tile Size: 65472
+User Name: root
+Host Name: 877d9128ca5a
+Server Name: PulseAudio (on PipeWire 1.0.5)
+Server Version: 15.0.0
+Default Sample Specification: float32le 2ch 48000Hz
+Default Channel Map: front-left,front-right
+Default Sink: @DEFAULT_SINK@
+Default Source: @DEFAULT_SOURCE@
+T4_G2_A3_BINDING_END
+{
+  "backend": "PIPEWIRE_PULSE_NULL_SINK",
+  "cancel_call_duration_ms": 3.389873,
+  "classification": "CANDIDATE_FALSIFIER_G2_PIPEWIRE_MONITOR_ONLY",
+  "evidence": {
+    "acoustic_playback_readback": 0,
+    "effect": 0,
+    "gwt_jspace": 0,
+    "human_heard_output": 0,
+    "physical_microphone": 0,
+    "physical_speaker": 0,
+    "pipewire_monitor_promotion_candidate": 0,
+    "pipewire_runtime_credit_from_probe_alone": 0,
+    "producer_generation_cancel": 0,
+    "repository_reference_pass": 0,
+    "target_runtime_credit_from_probe_alone": 0,
+    "training": 0,
+    "true_streaming_partial_asr": 0,
+    "unifieddb_write": 0,
+    "whole_product": 0,
+    "whole_voice_e2e": 0
+  },
+  "execution_scope": "VPS_PIPEWIRE_MONITOR_CANDIDATE",
+  "expected_new_sentinel_samples": 3200,
+  "expected_old_samples_before_cancel": 960,
+  "expected_old_sentinel_samples_without_cancel": 6400,
+  "failure_class": "PRODUCT_NEGATIVE",
+  "generation_advanced_before_sink_cancel": true,
+  "late_old_generation_accepted": false,
+  "max_residual_old_samples": 2400,
+  "new_generation": 2,
+  "new_sentinel_samples": 0,
+  "next_exact_action": "Execute --backend pulse-null on admitted owner-VPS S1/S2 against the identical accepted source; bind exact source/runtime/monitor-readback in an external receipt before promoting bounded G2 PipeWire-monitor credit. Keep producer-side TTS cancel and true partial ASR unclaimed until this G2 terminates; reserve physical speaker/mic/human-heard for S4.",
+  "old_generation": 1,
+  "old_sentinel_queued_before_cancel": true,
+  "old_sentinel_samples": 0,
+  "pass": false,
+  "readback_bytes": 0,
+  "readback_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "research_id": "T7-20260902-PIPEWIRE-MONITOR-CANCEL-G2",
+  "residual_old_samples_after_cancel_bound_model": 0,
+  "schema": "F2_T4_VOICE_VIRTUAL_SINK_CANCEL_READBACK_G2/v1",
+  "semantic_key": "0d83f7d13c1d8f91686cf94070f73d901a49018b40a9c058d1949af094655bff",
+  "session_id": "session-t4-pipewire-g2",
+  "software_discarded_pending_bytes": null,
+  "stale_chunks_rejected": 1
+}
+T4_G2_A3_RESULT_BEGIN
+{
+  "backend": "PIPEWIRE_PULSE_NULL_SINK",
+  "cancel_call_duration_ms": 3.389873,
+  "classification": "CANDIDATE_FALSIFIER_G2_PIPEWIRE_MONITOR_ONLY",
+  "evidence": {
+    "acoustic_playback_readback": 0,
+    "effect": 0,
+    "gwt_jspace": 0,
+    "human_heard_output": 0,
+    "physical_microphone": 0,
+    "physical_speaker": 0,
+    "pipewire_monitor_promotion_candidate": 0,
+    "pipewire_runtime_credit_from_probe_alone": 0,
+    "producer_generation_cancel": 0,
+    "repository_reference_pass": 0,
+    "target_runtime_credit_from_probe_alone": 0,
+    "training": 0,
+    "true_streaming_partial_asr": 0,
+    "unifieddb_write": 0,
+    "whole_product": 0,
+    "whole_voice_e2e": 0
+  },
+  "execution_scope": "VPS_PIPEWIRE_MONITOR_CANDIDATE",
+  "expected_new_sentinel_samples": 3200,
+  "expected_old_samples_before_cancel": 960,
+  "expected_old_sentinel_samples_without_cancel": 6400,
+  "failure_class": "PRODUCT_NEGATIVE",
+  "generation_advanced_before_sink_cancel": true,
+  "late_old_generation_accepted": false,
+  "max_residual_old_samples": 2400,
+  "new_generation": 2,
+  "new_sentinel_samples": 0,
+  "next_exact_action": "Execute --backend pulse-null on admitted owner-VPS S1/S2 against the identical accepted source; bind exact source/runtime/monitor-readback in an external receipt before promoting bounded G2 PipeWire-monitor credit. Keep producer-side TTS cancel and true partial ASR unclaimed until this G2 terminates; reserve physical speaker/mic/human-heard for S4.",
+  "old_generation": 1,
+  "old_sentinel_queued_before_cancel": true,
+  "old_sentinel_samples": 0,
+  "pass": false,
+  "readback_bytes": 0,
+  "readback_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "research_id": "T7-20260902-PIPEWIRE-MONITOR-CANCEL-G2",
+  "residual_old_samples_after_cancel_bound_model": 0,
+  "schema": "F2_T4_VOICE_VIRTUAL_SINK_CANCEL_READBACK_G2/v1",
+  "semantic_key": "0d83f7d13c1d8f91686cf94070f73d901a49018b40a9c058d1949af094655bff",
+  "session_id": "session-t4-pipewire-g2",
+  "software_discarded_pending_bytes": null,
+  "stale_chunks_rejected": 1
+}
+T4_G2_A3_RESULT_END
+T4_G2_A3_DRIVER_RC=1

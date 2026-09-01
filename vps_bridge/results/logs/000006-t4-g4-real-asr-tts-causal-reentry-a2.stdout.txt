@@ -1,0 +1,135 @@
+Filesystem      Size  Used Avail Use% Mounted on
+overlay         193G   77G  117G  40% /
+/dev/sda1       193G   77G  117G  40% /cache
+/cache/t4-g4-real-asr-tts/nemo.tar.gz: OK
+/cache/t4-g4-real-asr-tts/nemotron.q8_0.gguf: OK
+/cache/t4-g4-real-asr-tts/piper.onnx: OK
+{"classification": "BOUNDED_OWNER_VPS_REAL_LOCAL_ASR_INPUT_PLUS_REAL_LOCAL_TTS_GENERATION_IN_G4_CAUSAL_REENTRY_CHAIN", "explicit_zero_credit": {"effect": 0, "gwt_jspace": 0, "human_heard_output": 0, "physical_microphone": 0, "physical_presence": 0, "physical_speaker": 0, "training": 0, "true_streaming_partial_asr_latency": 0, "unifieddb_write": 0, "whole_product": 0, "whole_voice_e2e": 0}, "failure_class": null, "g4_causal_observations": {"closed_restart_replay_idempotent": true, "durable_output_packet_ids": ["output-b-0"], "hold_policy_intent": "WAIT", "interrupted_commit_eligible": false, "interrupted_heard_fraction": 0.25, "interrupted_output_state": "interrupted", "interrupted_prefix_ref": "voice-heard-prefix:10475ad6297a4808ce780d9a2a238e3e2cca9bd2f318b3ee3826c2f0802dd666", "late_tool_rejected_post_restart": true, "late_tool_rejected_pre_restart": true, "latency_ms": {"asr_final_ms": 150, "asr_from_speech_start_ms": 30, "decision_after_asr_ms": 60, "decision_ms": 210, "first_output_after_decision_ms": 10, "first_output_ms": 220, "playback_after_first_output_ms": 10, "playback_start_ms": 230, "playback_terminal_ms": 300, "speech_start_ms": 120, "speech_to_playback_ms": 110}, "presence_state": "PRESENT_INTERRUPTIBLE", "reentry_receipt_id": "voice-reentry-receipt:97dfbfb1504e2dd43fa838a4fe547094b8fdf33b54ee3a8d9cb4a658b42e2491", "restart_reentry_event_count": 1, "voiceoutcome_id": "voice-outcome:f4fa845f7a03304129d9cc217073a538acc50a2934a9e3b166bc31f9a2c12ecd"}, "g4_composition": ["ASR_SURROGATE_VOICE_INPUT_PACKET", "VOICE_PACKET_CORTEX", "PRESENCE_STATE_AND_PACKET_TURN_POLICY", "BARGE_IN_CANCELLATION", "OUTPUT_TTS_SURROGATE_PACKET", "CHECKPOINT_FILESYSTEM_ROUNDTRIP", "RESTART_REENTRY", "FULLY_HEARD_RESULT", "VOICE_OUTCOME", "HEARD_RESULT_REENTRY_RECEIPT", "CLOSED_RESTART_IDEMPOTENCE"], "network_guard": {"attempts": [], "enabled_after_local_asr_before_g4_chain": true, "external_inference_api_calls_observed": 0}, "promotion_candidates": {"owner_vps_real_asr_to_packet_chain_component_evidence": 1, "owner_vps_real_tts_generation_bound_to_voice_output_packet_ids": 1, "packet_barge_restart_heard_reentry_causal_chain_runtime_evidence": 1}, "real_asr": {"causal_injection": {"input-a-0": "hold_transcript", "input-b-0": "interrupt_first_token", "input-b-1": "interrupt_transcript"}, "hold_fixture": {"duration_seconds": 1.9388662131519274, "sample_rate": 22050, "samples": 42752, "sha256": "44c14eef1dfc79605f9af484ee2a37a4d1d9f17d4edaa7562d2d1fee1556385a"}, "hold_transcript": "Moment, Ich bin noch nicht fertig.", "interrupt_fixture": {"duration_seconds": 2.449705215419501, "sample_rate": 22050, "samples": 54016, "sha256": "b5f9fe87a9eabea3c04a1d8bd1cb3aeeb602a48172bdb109179f63cb2b6e0bc0"}, "interrupt_transcript": "Stop beantwortete stattdessen die neue Frage.", "true_partial_streaming_observed": false}, "real_tts_packet_generation": [{"audio_float32_sha256": "a847ea93c7327afa6554f464fdf9f9dcf534b7a1d8ce5d5d097a4129f5064d35", "chunk_count": 1, "packet_id": "output-a-0", "sample_count": 58624, "sample_rate": 22050, "text_sha256": "5beb94216c5679b62523b7e379c801f279d1aa5a14a9bfd3bb67ad88f7d61a18", "turn_id": "turn-a"}, {"audio_float32_sha256": "6da1685a8ccd66034b1fd630b329d48125e9b9d5814bdba0224d18b18f1e7147", "chunk_count": 1, "packet_id": "output-b-0", "sample_count": 76032, "sample_rate": 22050, "text_sha256": "cd6f11dc8179816cb5262e342417c649dc76c0bbb4966388bad85e2c28be6082", "turn_id": "turn-b"}], "result": "NO_COUNTEREXAMPLE", "runtime_subjects": {"nemotron_binary_sha256": "867270cc7e0bd0ca4249d191138d9da3285ce852abc7bdc4ffcabab41e832eea", "nemotron_model_sha256": "a5c435f294eea8f88ce68dd27b8c3bfea7f777cb2fbba04fcd30eaa555f429ae", "piper_config_sha256": "974adee790533adb273a1ac88f49027d2a1b8f0f2cf4905954a4791e79264e85", "piper_model_sha256": "7e64762d8e5118bb578f2eea6207e1a35a8e0c30595010b666f983fc87bb7819"}, "schema": "T4_G4_REAL_ASR_TTS_CAUSAL_REENTRY_VPS/v1", "scope_fence": "Headless VPS causal composition only. Input audio is local Piper-generated fixture audio; output TTS bytes are generated and bound to packet IDs but not physically played/heard. No physical-device, true streaming-partial, whole-voice, effect, GWT/J-Space, training or whole-product promotion.", "semantic_key": "29bf28d8f3b3cec294de2126c002b90fedbacdec961e823503c2c4d8f11ddbdc", "source": {"f2_subject_sha": "a4991269b313a414d099405ccb51d2da1a57f4a1", "g4_claim_blob": "cbd4de16452ec4afaec0948705ddfc76f384a988", "g4_tool_blob": "9ac2479933a7f0b6531d24627f41901a69d432f8", "target_surface": "clay-direct-dev"}}
+{
+  "classification": "BOUNDED_OWNER_VPS_REAL_LOCAL_ASR_INPUT_PLUS_REAL_LOCAL_TTS_GENERATION_IN_G4_CAUSAL_REENTRY_CHAIN",
+  "explicit_zero_credit": {
+    "effect": 0,
+    "gwt_jspace": 0,
+    "human_heard_output": 0,
+    "physical_microphone": 0,
+    "physical_presence": 0,
+    "physical_speaker": 0,
+    "training": 0,
+    "true_streaming_partial_asr_latency": 0,
+    "unifieddb_write": 0,
+    "whole_product": 0,
+    "whole_voice_e2e": 0
+  },
+  "failure_class": null,
+  "g4_causal_observations": {
+    "closed_restart_replay_idempotent": true,
+    "durable_output_packet_ids": [
+      "output-b-0"
+    ],
+    "hold_policy_intent": "WAIT",
+    "interrupted_commit_eligible": false,
+    "interrupted_heard_fraction": 0.25,
+    "interrupted_output_state": "interrupted",
+    "interrupted_prefix_ref": "voice-heard-prefix:10475ad6297a4808ce780d9a2a238e3e2cca9bd2f318b3ee3826c2f0802dd666",
+    "late_tool_rejected_post_restart": true,
+    "late_tool_rejected_pre_restart": true,
+    "latency_ms": {
+      "asr_final_ms": 150,
+      "asr_from_speech_start_ms": 30,
+      "decision_after_asr_ms": 60,
+      "decision_ms": 210,
+      "first_output_after_decision_ms": 10,
+      "first_output_ms": 220,
+      "playback_after_first_output_ms": 10,
+      "playback_start_ms": 230,
+      "playback_terminal_ms": 300,
+      "speech_start_ms": 120,
+      "speech_to_playback_ms": 110
+    },
+    "presence_state": "PRESENT_INTERRUPTIBLE",
+    "reentry_receipt_id": "voice-reentry-receipt:97dfbfb1504e2dd43fa838a4fe547094b8fdf33b54ee3a8d9cb4a658b42e2491",
+    "restart_reentry_event_count": 1,
+    "voiceoutcome_id": "voice-outcome:f4fa845f7a03304129d9cc217073a538acc50a2934a9e3b166bc31f9a2c12ecd"
+  },
+  "g4_composition": [
+    "ASR_SURROGATE_VOICE_INPUT_PACKET",
+    "VOICE_PACKET_CORTEX",
+    "PRESENCE_STATE_AND_PACKET_TURN_POLICY",
+    "BARGE_IN_CANCELLATION",
+    "OUTPUT_TTS_SURROGATE_PACKET",
+    "CHECKPOINT_FILESYSTEM_ROUNDTRIP",
+    "RESTART_REENTRY",
+    "FULLY_HEARD_RESULT",
+    "VOICE_OUTCOME",
+    "HEARD_RESULT_REENTRY_RECEIPT",
+    "CLOSED_RESTART_IDEMPOTENCE"
+  ],
+  "network_guard": {
+    "attempts": [],
+    "enabled_after_local_asr_before_g4_chain": true,
+    "external_inference_api_calls_observed": 0
+  },
+  "promotion_candidates": {
+    "owner_vps_real_asr_to_packet_chain_component_evidence": 1,
+    "owner_vps_real_tts_generation_bound_to_voice_output_packet_ids": 1,
+    "packet_barge_restart_heard_reentry_causal_chain_runtime_evidence": 1
+  },
+  "real_asr": {
+    "causal_injection": {
+      "input-a-0": "hold_transcript",
+      "input-b-0": "interrupt_first_token",
+      "input-b-1": "interrupt_transcript"
+    },
+    "hold_fixture": {
+      "duration_seconds": 1.9388662131519274,
+      "sample_rate": 22050,
+      "samples": 42752,
+      "sha256": "44c14eef1dfc79605f9af484ee2a37a4d1d9f17d4edaa7562d2d1fee1556385a"
+    },
+    "hold_transcript": "Moment, Ich bin noch nicht fertig.",
+    "interrupt_fixture": {
+      "duration_seconds": 2.449705215419501,
+      "sample_rate": 22050,
+      "samples": 54016,
+      "sha256": "b5f9fe87a9eabea3c04a1d8bd1cb3aeeb602a48172bdb109179f63cb2b6e0bc0"
+    },
+    "interrupt_transcript": "Stop beantwortete stattdessen die neue Frage.",
+    "true_partial_streaming_observed": false
+  },
+  "real_tts_packet_generation": [
+    {
+      "audio_float32_sha256": "a847ea93c7327afa6554f464fdf9f9dcf534b7a1d8ce5d5d097a4129f5064d35",
+      "chunk_count": 1,
+      "packet_id": "output-a-0",
+      "sample_count": 58624,
+      "sample_rate": 22050,
+      "text_sha256": "5beb94216c5679b62523b7e379c801f279d1aa5a14a9bfd3bb67ad88f7d61a18",
+      "turn_id": "turn-a"
+    },
+    {
+      "audio_float32_sha256": "6da1685a8ccd66034b1fd630b329d48125e9b9d5814bdba0224d18b18f1e7147",
+      "chunk_count": 1,
+      "packet_id": "output-b-0",
+      "sample_count": 76032,
+      "sample_rate": 22050,
+      "text_sha256": "cd6f11dc8179816cb5262e342417c649dc76c0bbb4966388bad85e2c28be6082",
+      "turn_id": "turn-b"
+    }
+  ],
+  "result": "NO_COUNTEREXAMPLE",
+  "runtime_subjects": {
+    "nemotron_binary_sha256": "867270cc7e0bd0ca4249d191138d9da3285ce852abc7bdc4ffcabab41e832eea",
+    "nemotron_model_sha256": "a5c435f294eea8f88ce68dd27b8c3bfea7f777cb2fbba04fcd30eaa555f429ae",
+    "piper_config_sha256": "974adee790533adb273a1ac88f49027d2a1b8f0f2cf4905954a4791e79264e85",
+    "piper_model_sha256": "7e64762d8e5118bb578f2eea6207e1a35a8e0c30595010b666f983fc87bb7819"
+  },
+  "schema": "T4_G4_REAL_ASR_TTS_CAUSAL_REENTRY_VPS/v1",
+  "scope_fence": "Headless VPS causal composition only. Input audio is local Piper-generated fixture audio; output TTS bytes are generated and bound to packet IDs but not physically played/heard. No physical-device, true streaming-partial, whole-voice, effect, GWT/J-Space, training or whole-product promotion.",
+  "semantic_key": "29bf28d8f3b3cec294de2126c002b90fedbacdec961e823503c2c4d8f11ddbdc",
+  "source": {
+    "f2_subject_sha": "a4991269b313a414d099405ccb51d2da1a57f4a1",
+    "g4_claim_blob": "cbd4de16452ec4afaec0948705ddfc76f384a988",
+    "g4_tool_blob": "9ac2479933a7f0b6531d24627f41901a69d432f8",
+    "target_surface": "clay-direct-dev"
+  }
+}

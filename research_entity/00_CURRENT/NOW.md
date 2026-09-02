@@ -1,6 +1,6 @@
 # CLAY NOW — token-efficient current-state cache
 
-Cache head: `90d5053e1457506d694dfd693dbaac3029350a77` · tree `7536318a3234` · generated `2026-09-02T21:42:03Z`
+Cache head: `a8bd04f0eb893aed5dfd9682f32e8ec5cf1d0b91` · tree `0bf01bc59581` · generated `2026-09-02T22:12:03Z`
 
 > **Cache, not authority.** Read current `SUPERVISOR_INBOX.json` / selected steering before material execution or current-state promotion.
 

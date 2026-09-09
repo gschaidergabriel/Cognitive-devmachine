@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_VPS_DAEMON_ERROR/v1",
-  "observed_at": "2026-09-04T11:54:49.188776+00:00",
-  "error": "RuntimeError('GIT_FAILED: ssh: connect to host github.com port 22: No route to host\\r\\nfatal: Could not read from remote repository.\\n\\nPlease make sure you have the correct access rights\\nand the repository exists.\\n')",
-  "traceback": "Traceback (most recent call last):\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 295, in main\n    sync_control()\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 77, in sync_control\n    git(CONTROL, 'fetch', 'origin', CONTROL_BRANCH, '--prune')\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 51, in git\n    raise RuntimeError('GIT_FAILED: ' + text(p.stderr)[-6000:])\nRuntimeError: GIT_FAILED: ssh: connect to host github.com port 22: No route to host\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n\n"
+  "observed_at": "2026-09-09T11:52:42.434699+00:00",
+  "error": "RuntimeError('GIT_FAILED: git@github.com: Permission denied (publickey).\\r\\nfatal: Could not read from remote repository.\\n\\nPlease make sure you have the correct access rights\\nand the repository exists.\\n')",
+  "traceback": "Traceback (most recent call last):\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 295, in main\n    sync_control()\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 77, in sync_control\n    git(CONTROL, 'fetch', 'origin', CONTROL_BRANCH, '--prune')\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 51, in git\n    raise RuntimeError('GIT_FAILED: ' + text(p.stderr)[-6000:])\nRuntimeError: GIT_FAILED: git@github.com: Permission denied (publickey).\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n\n"
 }

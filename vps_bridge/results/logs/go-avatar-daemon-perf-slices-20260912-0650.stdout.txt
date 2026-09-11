@@ -1,0 +1,970 @@
+### buehne_daemon.py
+=== /api/fps ===
+00970:                 # Deshalb eigene Beschriftung "(Chat)" statt gesprochener Name.
+00971:                 ts = lokal_anfuegen(f"{NUTZER_NAME} (Chat)", text, "getippt")
+00972:                 self._json({"ok": True, "ts": ts})
+00973:             elif self.path == "/api/upload":
+00974:                 n = int(self.headers.get("Content-Length") or 0)
+00975:                 if n <= 0 or n > 60 * 1024 * 1024:
+00976:                     return self._json({"ok": False, "grund": "Groesse 0 oder > 60MB"}, 400)
+00977:                 roh_name = self.headers.get("X-Filename") or "datei"
+00978:                 name = urllib.parse.unquote(roh_name)
+00979:                 name = os.path.basename(name).replace("/", "_").replace("\\", "_") or "datei"
+00980:                 stempel = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+00981:                 ziel = os.path.join(UPLOADS_DIR, f"{stempel}_{name}")
+00982:                 daten = self.rfile.read(n)
+00983:                 with open(ziel, "wb") as f:
+00984:                     f.write(daten)
+00985:                 ts = lokal_anfuegen(
+00986:                     f"{NUTZER_NAME} (Chat)",
+00987:                     f"hat eine Datei abgelegt: {name} ({len(daten)} Byte) -> {ziel}",
+00988:                     "datei")
+00989:                 self._json({"ok": True, "pfad": ziel, "ts": ts})
+00990:             elif self.path == "/api/fps":
+00991:                 n = int(self.headers.get("Content-Length") or 0)
+00992:                 try:
+00993:                     d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+00994:                 except Exception:
+00995:                     d = {}
+00996:                 try:
+00997:                     fps_melden(d.get("fps") or 0)
+00998:                 except Exception:
+00999:                     pass
+01000:                 self._json({"ok": True})
+01001:             elif self.path == "/api/schalten":
+01002:                 # Terminal/Dashboard-Weg direkt am Buehnen-Server (bequem
+01003:                 # fuer die Seite selbst -- schreibt in DIESELBE Datei wie
+01004:                 # visual_cli.py und cortex_dashboard.py, kein eigener Zustand).
+01005:                 n = int(self.headers.get("Content-Length") or 0)
+01006:                 try:
+01007:                     d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+01008:                 except Exception:
+01009:                     d = {}
+01010:                 an = bool(d.get("an"))
+01011:                 z = zustand_schreiben(an, "buehnen-server")
+01012:                 self._json({"ok": True, "zustand": z})
+01013:             else:
+01014:                 self.send_response(404)
+01015:                 self.end_headers()
+01016: 
+01017:     return Handler
+01018: 
+01019: 
+01020: def _http_server_starten():
+01021:     srv = ThreadingHTTPServer((BIND_HOST, PORT), _make_handler())
+01022:     t = threading.Thread(target=srv.serve_forever, daemon=True)
+01023:     t.start()
+01024:     print(f"[buehne] HTTP auf http://{BIND_HOST}:{PORT}/ (nur localhost)")
+01025:     return srv
+01026: 
+01027: 
+01028: # ── Fensterverwaltung: Chrome-App-Fenster nach zustand.json ─────────────
+01029: class Fensterverwalter:
+01030:     def __init__(self):
+01031:         self.proc = None
+01032: 
+01033:     def _alte_pid_aufraeumen(self):
+01034:         """Beim Daemon-Start: eine PID-Datei von einem frueheren, hart
+01035:         beendeten Lauf darf kein Zombie-Fenster hinterlassen."""
+01036:         try:
+01037:             with open(PID_DATEI, "r") as f:
+01038:                 alte_pid = int(f.read().strip())
+01039:             os.killpg(os.getpgid(alte_pid), signal.SIGTERM)
+01040:             print(f"[buehne] alte Chrome-Gruppe (pid {alte_pid}) aus vorigem Lauf beendet")
+01041:         except Exception:
+01042:             pass
+01043:         try:
+01044:             os.remove(PID_DATEI)
+01045:         except Exception:
+01046:             pass
+01047: 
+01048:     def laeuft(self) -> bool:
+01049:         return self.proc is not None and self.proc.poll() is None
+01050: 
+01051:     def oeffnen(self):
+01052:         if self.laeuft():
+01053:             return
+01054:         if _blick_modul is not None:
+01055:             try:
+01056:                 _blick_modul.instanz().starten()
+01057:             except Exception as e:
+01058:                 print(f"[buehne] Blickfuehrung konnte nicht starten: {e}")
+01059:         log = open(LOG_DATEI, "ab")
+01060:         self.proc = subprocess.Popen(
+01061:             ["google-chrome",
+01062:              f"--app=http://{BIND_HOST}:{PORT}/",
+01063:              # ⭐ Default-Fenstergroesse (Gabriel 2026-09-11): "es braucht auch
+01064:              # nicht Vollbild sein, das koennte die Default-Groesse sein,
+01065:              # Vollbild ist nur eine Moeglichkeit." Er hat von Hand auf
+01066:              # 746x449 verkleinert -- das wird jetzt der Start-Default.
+01067:              # Die alte Fest-Verdrahtung auf Bildschirm HDMI-A-0
+01068:              # (1024x600 bei Offset +1680+0) war fuer einen zweiten,
+01069:              # kleinen Monitor gedacht und war STALE: Gabriel musste das
+01070:              # Fenster jedes Mal von Hand zurueck auf x=565 ziehen, weil
+01071:              # dort sein eigentlicher Arbeitsbildschirm (HDMI-A-1,
+01072:              # 1680x1050 bei Offset +0+0) liegt. Position jetzt auf genau
+01073:              # die von ihm zurechtgerueckte Stelle, auf dem richtigen
+01074:              # Monitor:
+01075:              f"--window-position={FENSTER_X},{FENSTER_Y}",
+01076:              f"--window-size={FENSTER_B},{FENSTER_H}",
+01077:              f"--user-data-dir={CHROME_PROFIL}",
+01078:              "--no-first-run", "--no-default-browser-check",
+01079:              "--disable-extensions", "--disable-sync",
+01080:              "--disable-background-networking",
+01081:              # ⭐ 2026-09-11: "--disable-features=Translate" allein reichte
+01082:              # nicht -- das Uebersetzen-Popup kam trotzdem (Screenshot
+01083:              # zeigte es ueber Gesicht+Chat liegend). TranslateUI + der
+01084:              # Preference-Pfad zusaetzlich dicht machen.
+01085:              "--disable-features=Translate,TranslateUI",
+01086:              "--disable-translate",
+01087:              # ⭐ OHNE GPU (2026-09-11). Gemessen: jedes Oeffnen des Fensters
+01088:              # riss binnen 1-2 s die GPU mit, dmesg zeigt
+01089:              # "PERMISSION_FAULTS: 0x3 / MAPPING_ERROR: 0x1 / WALKER_ERROR"
+=== do_POST ===
+00938:                         self.end_headers()
+00939:                 else:
+00940:                     self.send_response(404)
+00941:                     self.end_headers()
+00942:             elif path == "/api/chat":
+00943:                 since = (qs.get("since") or [""])[0]
+00944:                 zeilen, letzter = chat_seit(since)
+00945:                 self._json({"ok": True, "zeilen": zeilen, "cursor": letzter or since})
+00946:             elif path == "/api/status":
+00947:                 z = zustand_lesen()
+00948:                 z["buehne"] = buehnen_zustand()
+00949:                 z["zuschauer"] = 1  # ⭐ ehrlich fest, keine Messung, siehe Docstring
+00950:                 z["fps"] = fps_lesen()  # ⭐ echte Selbstmeldung der Seite, siehe fps_melden()
+00951:                 self._json(z)
+00952:             elif path == "/live":
+00953:                 self._json({"ok": True, "dienst": "buehne_daemon", "ts": time.time()})
+00954:             else:
+00955:                 self.send_response(404)
+00956:                 self.end_headers()
+00957: 
+00958:         def do_POST(self):
+00959:             if self.path == "/api/send":
+00960:                 n = int(self.headers.get("Content-Length") or 0)
+00961:                 try:
+00962:                     d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+00963:                 except Exception:
+00964:                     d = {}
+00965:                 text = str(d.get("text") or "").strip()[:2000]
+00966:                 if not text:
+00967:                     return self._json({"ok": False, "grund": "leerer Text"}, 400)
+00968:                 # ⚠️ EHRLICHKEIT: das landet NUR im Buehnen-Chat, NICHT im
+00969:                 # echten Sprachmodus (gespraech_loop.py wird nicht angefasst).
+00970:                 # Deshalb eigene Beschriftung "(Chat)" statt gesprochener Name.
+00971:                 ts = lokal_anfuegen(f"{NUTZER_NAME} (Chat)", text, "getippt")
+00972:                 self._json({"ok": True, "ts": ts})
+00973:             elif self.path == "/api/upload":
+00974:                 n = int(self.headers.get("Content-Length") or 0)
+00975:                 if n <= 0 or n > 60 * 1024 * 1024:
+00976:                     return self._json({"ok": False, "grund": "Groesse 0 oder > 60MB"}, 400)
+00977:                 roh_name = self.headers.get("X-Filename") or "datei"
+00978:                 name = urllib.parse.unquote(roh_name)
+00979:                 name = os.path.basename(name).replace("/", "_").replace("\\", "_") or "datei"
+00980:                 stempel = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+00981:                 ziel = os.path.join(UPLOADS_DIR, f"{stempel}_{name}")
+00982:                 daten = self.rfile.read(n)
+00983:                 with open(ziel, "wb") as f:
+00984:                     f.write(daten)
+00985:                 ts = lokal_anfuegen(
+00986:                     f"{NUTZER_NAME} (Chat)",
+00987:                     f"hat eine Datei abgelegt: {name} ({len(daten)} Byte) -> {ziel}",
+00988:                     "datei")
+00989:                 self._json({"ok": True, "pfad": ziel, "ts": ts})
+00990:             elif self.path == "/api/fps":
+00991:                 n = int(self.headers.get("Content-Length") or 0)
+00992:                 try:
+00993:                     d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+00994:                 except Exception:
+00995:                     d = {}
+00996:                 try:
+00997:                     fps_melden(d.get("fps") or 0)
+00998:                 except Exception:
+00999:                     pass
+01000:                 self._json({"ok": True})
+01001:             elif self.path == "/api/schalten":
+01002:                 # Terminal/Dashboard-Weg direkt am Buehnen-Server (bequem
+01003:                 # fuer die Seite selbst -- schreibt in DIESELBE Datei wie
+01004:                 # visual_cli.py und cortex_dashboard.py, kein eigener Zustand).
+01005:                 n = int(self.headers.get("Content-Length") or 0)
+01006:                 try:
+01007:                     d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+01008:                 except Exception:
+01009:                     d = {}
+01010:                 an = bool(d.get("an"))
+01011:                 z = zustand_schreiben(an, "buehnen-server")
+01012:                 self._json({"ok": True, "zustand": z})
+01013:             else:
+01014:                 self.send_response(404)
+01015:                 self.end_headers()
+01016: 
+01017:     return Handler
+01018: 
+01019: 
+01020: def _http_server_starten():
+01021:     srv = ThreadingHTTPServer((BIND_HOST, PORT), _make_handler())
+01022:     t = threading.Thread(target=srv.serve_forever, daemon=True)
+01023:     t.start()
+01024:     print(f"[buehne] HTTP auf http://{BIND_HOST}:{PORT}/ (nur localhost)")
+01025:     return srv
+01026: 
+01027: 
+01028: # ── Fensterverwaltung: Chrome-App-Fenster nach zustand.json ─────────────
+01029: class Fensterverwalter:
+01030:     def __init__(self):
+01031:         self.proc = None
+01032: 
+01033:     def _alte_pid_aufraeumen(self):
+01034:         """Beim Daemon-Start: eine PID-Datei von einem frueheren, hart
+01035:         beendeten Lauf darf kein Zombie-Fenster hinterlassen."""
+01036:         try:
+01037:             with open(PID_DATEI, "r") as f:
+01038:                 alte_pid = int(f.read().strip())
+01039:             os.killpg(os.getpgid(alte_pid), signal.SIGTERM)
+01040:             print(f"[buehne] alte Chrome-Gruppe (pid {alte_pid}) aus vorigem Lauf beendet")
+01041:         except Exception:
+01042:             pass
+01043:         try:
+01044:             os.remove(PID_DATEI)
+01045:         except Exception:
+01046:             pass
+01047: 
+01048:     def laeuft(self) -> bool:
+01049:         return self.proc is not None and self.proc.poll() is None
+01050: 
+01051:     def oeffnen(self):
+01052:         if self.laeuft():
+01053:             return
+01054:         if _blick_modul is not None:
+01055:             try:
+01056:                 _blick_modul.instanz().starten()
+01057:             except Exception as e:
+=== do_GET ===
+00770:                 mtime = os.path.getmtime(voller_pfad)
+00771:             except OSError:
+00772:                 self.send_response(404); self.end_headers(); return
+00773:             last_mod = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mtime))
+00774:             ims = self.headers.get("If-Modified-Since")
+00775:             if ims and ims == last_mod:
+00776:                 self.send_response(304)
+00777:                 self.send_header("Cache-Control", "no-cache")
+00778:                 self.end_headers()
+00779:                 return
+00780:             with open(voller_pfad, "rb") as f:
+00781:                 daten = f.read()
+00782:             self.send_response(200)
+00783:             self.send_header("Content-Type", "image/png")
+00784:             self.send_header("Content-Length", str(len(daten)))
+00785:             self.send_header("Cache-Control", "no-cache")
+00786:             self.send_header("Last-Modified", last_mod)
+00787:             self.end_headers()
+00788:             self.wfile.write(daten)
+00789: 
+00790:         def do_GET(self):
+00791:             u = urllib.parse.urlsplit(self.path)
+00792:             path, qs = u.path, urllib.parse.parse_qs(u.query)
+00793:             if path == "/":
+00794:                 # Immer frisch von Disk lesen -- sonst serviert der laufende
+00795:                 # Prozess auf ewig den Stand von seinem eigenen Start
+00796:                 # (permanenter Reload-Weg, Gabriels Anforderung 2026-09-07:
+00797:                 # sonst prueft man bei jeder Aenderung eine alte Version).
+00798:                 aktuelle_seite = _seite()
+00799:                 self.send_response(200)
+00800:                 self.send_header("Content-Type", "text/html; charset=utf-8")
+00801:                 self.send_header("Content-Length", str(len(aktuelle_seite)))
+00802:                 self.send_header("Cache-Control", "no-store")
+00803:                 self.end_headers()
+00804:                 self.wfile.write(aktuelle_seite)
+00805:             elif path == "/filmlook.js":
+00806:                 # ⭐ 2026-09-11 (Koordinator): der globale Filmlook (Korn,
+00807:                 # Farbabstimmung, Vignette) liegt in EINER eigenen Datei, nicht
+00808:                 # in buehne.html. Grund: die Seite gehoert waehrend des Umbaus
+00809:                 # dem Animations-Agenten -- zwei Agenten in derselben Datei
+00810:                 # erzeugen Konflikte. So braucht buehne.html nur EINE Zeile
+00811:                 # (<script src="/filmlook.js">), und der Look kann unabhaengig
+00812:                 # weitergebaut oder komplett abgeschaltet werden (Datei leeren).
+00813:                 # Die Datei injiziert ihr eigenes <style>, ihre eigenen
+00814:                 # SVG-<defs> und ihre eigenen Overlay-Ebenen.
+00815:                 # ⚠️ Externe SVG-Filterverweise (filter:url(datei.svg#id))
+00816:                 # funktionieren in Chrome NICHT zuverlaessig -- deshalb muessen
+00817:                 # die <defs> ins Dokument selbst, per Skript.
+00818:                 pfad = os.path.join(VISUAL_DIR, "filmlook.js")
+00819:                 if os.path.isfile(pfad):
+00820:                     with open(pfad, "rb") as fh:
+00821:                         inhalt = fh.read()
+00822:                     self.send_response(200)
+00823:                     self.send_header("Content-Type",
+00824:                                      "application/javascript; charset=utf-8")
+00825:                     self.send_header("Content-Length", str(len(inhalt)))
+00826:                     self.send_header("Cache-Control", "no-store")
+00827:                     self.end_headers()
+00828:                     self.wfile.write(inhalt)
+00829:                 else:
+00830:                     # Fehlt die Datei, liefert der Server eine leere Antwort
+00831:                     # statt 404 -- die Seite soll ohne Filmlook normal laufen.
+00832:                     self.send_response(200)
+00833:                     self.send_header("Content-Type",
+00834:                                      "application/javascript; charset=utf-8")
+00835:                     self.send_header("Content-Length", "0")
+00836:                     self.end_headers()
+00837:             elif path == "/api/mtime":
+00838:                 self._json({"mtime": _seite_mtime()})
+00839:             elif path == "/gesicht.png":
+00840:                 self._bild_ausliefern(GESICHT_BILD)
+00841:             elif (path.startswith("/ausdruck/") or path.startswith("/augen/")
+00842:                     or path.startswith("/kopf/") or path.startswith("/augen_gaze/")
+00843:                     or path.startswith("/augen_blink/")
+00844:                     or path.startswith("/mund_keyframes/")
+00845:                     or path.startswith("/kopf_rgba/") or path.startswith("/koerper_rgba/")):
+00846:                 # Ausdrucks-/Augen-/Kopf-/Gaze-/Mund-/Kopf-RGBA-/Koerper-RGBA-
+00847:                 # Bilder statisch ausliefern -- nur Basisname, nur .png, nur
+00848:                 # aus dem jeweils zustaendigen Verzeichnis (kein Pfad-Traversal
+00849:                 # moeglich). kopf_rgba/koerper_rgba: 2026-09-11, echte
+00850:                 # Alpha-PNGs aus RIG_V2 als neue Hauptebene, siehe Konstanten
+00851:                 # oben und buehne.html.
+00852:                 if path.startswith("/ausdruck/"):
+00853:                     verzeichnis = AUSDRUCK_DIR
+00854:                 elif path.startswith("/augen/"):
+00855:                     verzeichnis = AUGEN_DIR
+00856:                 elif path.startswith("/augen_gaze/"):
+00857:                     verzeichnis = GAZE_DIR
+00858:                 elif path.startswith("/augen_blink/"):
+00859:                     verzeichnis = BLINK_DIR
+00860:                 elif path.startswith("/mund_keyframes/"):
+00861:                     verzeichnis = MUND_DIR
+00862:                 elif path.startswith("/kopf_rgba/"):
+00863:                     verzeichnis = KOPF_RGBA_DIR
+00864:                 elif path.startswith("/koerper_rgba/"):
+00865:                     verzeichnis = KOERPER_RGBA_DIR
+00866:                 else:
+00867:                     verzeichnis = KOPF_DIR
+00868:                 # ⭐ 2026-09-11 (Koordinator): GENAU EINE Ebene Unterordner erlaubt.
+00869:                 # Vorher nahm diese Route nur `os.path.basename(path)` -- damit
+00870:                 # waren kopf_rgba/roll/, koerper_rgba/atmen/ und die 36 Mund-
+00871:                 # Uebergangsordner NICHT abrufbar, obwohl die Dateien da lagen.
+00872:                 # Deshalb wurde frueher alles flach mit Praefix kopiert, was bei
+00873:                 # gleichnamigen Dateien (36x stufe_00.png) stillschweigend Bilder
+00874:                 # verschluckt hat. Beide Ablagen bleiben jetzt gueltig.
+00875:                 # Pfad-Traversal: jedes Segment muss ein reiner Name sein --
+00876:                 # "." und ".." fliegen raus, damit bleibt der Zugriff im
+00877:                 # zustaendigen Verzeichnis.
+00878:                 teile = [t for t in path.split("/") if t][1:]
+00879:                 sicher = (1 <= len(teile) <= 2
+00880:                           and all(t not in (".", "..") and "\\" not in t
+00881:                                   for t in teile)
+00882:                           and all(t == os.path.basename(t) for t in teile))
+00883:                 name = "/".join(teile) if sicher else ""
+00884:                 voller_pfad = os.path.join(verzeichnis, *teile) if sicher else ""
+00885:                 if (sicher and name.endswith(".png")
+00886:                         and os.path.isfile(voller_pfad)):
+00887:                     self._bild_ausliefern(voller_pfad)
+00888:                 else:
+00889:                     self.send_response(404)
+=== class Handler ===
+00729:             if os.path.isdir(unterordner):
+00730:                 for name in os.listdir(unterordner):
+00731:                     if name.endswith(".png"):
+00732:                         kandidaten.append(os.path.join(unterordner, name))
+00733:         # ausdruck_erweitert: <register>/<ausdruck>/<frontal|yaw_proxy>/*.png
+00734:         for wurzel, _verz, dateien in os.walk(AUSDRUCK_ERWEITERT_DIR):
+00735:             for name in dateien:
+00736:                 if name.endswith(".png"):
+00737:                     kandidaten.append(os.path.join(wurzel, name))
+00738:     except OSError:
+00739:         pass
+00740:     for pfad in kandidaten:
+00741:         try:
+00742:             neuste = max(neuste, os.path.getmtime(pfad))
+00743:         except OSError:
+00744:             pass
+00745:     return neuste
+00746: 
+00747: 
+00748: def _make_handler():
+00749:     class Handler(BaseHTTPRequestHandler):
+00750:         def log_message(self, fmt, *args):
+00751:             pass  # keine Zugriffs-Logs auf Disk
+00752: 
+00753:         def _json(self, obj, code=200):
+00754:             b = json.dumps(obj, ensure_ascii=False).encode("utf-8")
+00755:             self.send_response(code)
+00756:             self.send_header("Content-Type", "application/json; charset=utf-8")
+00757:             self.send_header("Content-Length", str(len(b)))
+00758:             self.send_header("Cache-Control", "no-store")
+00759:             self.end_headers()
+00760:             self.wfile.write(b)
+00761: 
+00762:         def _bild_ausliefern(self, voller_pfad):
+00763:             # Bedingtes GET statt Stunden-Cache. LEHRE (2026-09-11): vorher
+00764:             # "Cache-Control: max-age=3600" auf allen Bildern -- der Browser
+00765:             # hat eine Stunde lang NIE nachgefragt, egal was auf der Platte
+00766:             # neu lag. Jetzt: immer neu anfragen (no-cache = revalidieren,
+00767:             # nicht "nie cachen"), Server antwortet mit 304 wenn unveraendert
+00768:             # -> genauso billig wie vorher, aber Aenderungen wirken sofort.
+00769:             try:
+00770:                 mtime = os.path.getmtime(voller_pfad)
+00771:             except OSError:
+00772:                 self.send_response(404); self.end_headers(); return
+00773:             last_mod = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mtime))
+00774:             ims = self.headers.get("If-Modified-Since")
+00775:             if ims and ims == last_mod:
+00776:                 self.send_response(304)
+00777:                 self.send_header("Cache-Control", "no-cache")
+00778:                 self.end_headers()
+00779:                 return
+00780:             with open(voller_pfad, "rb") as f:
+00781:                 daten = f.read()
+00782:             self.send_response(200)
+00783:             self.send_header("Content-Type", "image/png")
+00784:             self.send_header("Content-Length", str(len(daten)))
+00785:             self.send_header("Cache-Control", "no-cache")
+00786:             self.send_header("Last-Modified", last_mod)
+00787:             self.end_headers()
+00788:             self.wfile.write(daten)
+00789: 
+00790:         def do_GET(self):
+00791:             u = urllib.parse.urlsplit(self.path)
+00792:             path, qs = u.path, urllib.parse.parse_qs(u.query)
+00793:             if path == "/":
+00794:                 # Immer frisch von Disk lesen -- sonst serviert der laufende
+00795:                 # Prozess auf ewig den Stand von seinem eigenen Start
+00796:                 # (permanenter Reload-Weg, Gabriels Anforderung 2026-09-07:
+00797:                 # sonst prueft man bei jeder Aenderung eine alte Version).
+00798:                 aktuelle_seite = _seite()
+00799:                 self.send_response(200)
+00800:                 self.send_header("Content-Type", "text/html; charset=utf-8")
+00801:                 self.send_header("Content-Length", str(len(aktuelle_seite)))
+00802:                 self.send_header("Cache-Control", "no-store")
+00803:                 self.end_headers()
+00804:                 self.wfile.write(aktuelle_seite)
+00805:             elif path == "/filmlook.js":
+00806:                 # ⭐ 2026-09-11 (Koordinator): der globale Filmlook (Korn,
+00807:                 # Farbabstimmung, Vignette) liegt in EINER eigenen Datei, nicht
+00808:                 # in buehne.html. Grund: die Seite gehoert waehrend des Umbaus
+00809:                 # dem Animations-Agenten -- zwei Agenten in derselben Datei
+00810:                 # erzeugen Konflikte. So braucht buehne.html nur EINE Zeile
+00811:                 # (<script src="/filmlook.js">), und der Look kann unabhaengig
+00812:                 # weitergebaut oder komplett abgeschaltet werden (Datei leeren).
+00813:                 # Die Datei injiziert ihr eigenes <style>, ihre eigenen
+00814:                 # SVG-<defs> und ihre eigenen Overlay-Ebenen.
+00815:                 # ⚠️ Externe SVG-Filterverweise (filter:url(datei.svg#id))
+00816:                 # funktionieren in Chrome NICHT zuverlaessig -- deshalb muessen
+00817:                 # die <defs> ins Dokument selbst, per Skript.
+00818:                 pfad = os.path.join(VISUAL_DIR, "filmlook.js")
+00819:                 if os.path.isfile(pfad):
+00820:                     with open(pfad, "rb") as fh:
+00821:                         inhalt = fh.read()
+00822:                     self.send_response(200)
+00823:                     self.send_header("Content-Type",
+00824:                                      "application/javascript; charset=utf-8")
+00825:                     self.send_header("Content-Length", str(len(inhalt)))
+00826:                     self.send_header("Cache-Control", "no-store")
+00827:                     self.end_headers()
+00828:                     self.wfile.write(inhalt)
+00829:                 else:
+00830:                     # Fehlt die Datei, liefert der Server eine leere Antwort
+00831:                     # statt 404 -- die Seite soll ohne Filmlook normal laufen.
+00832:                     self.send_response(200)
+00833:                     self.send_header("Content-Type",
+00834:                                      "application/javascript; charset=utf-8")
+00835:                     self.send_header("Content-Length", "0")
+00836:                     self.end_headers()
+00837:             elif path == "/api/mtime":
+00838:                 self._json({"mtime": _seite_mtime()})
+00839:             elif path == "/gesicht.png":
+00840:                 self._bild_ausliefern(GESICHT_BILD)
+00841:             elif (path.startswith("/ausdruck/") or path.startswith("/augen/")
+00842:                     or path.startswith("/kopf/") or path.startswith("/augen_gaze/")
+00843:                     or path.startswith("/augen_blink/")
+00844:                     or path.startswith("/mund_keyframes/")
+00845:                     or path.startswith("/kopf_rgba/") or path.startswith("/koerper_rgba/")):
+00846:                 # Ausdrucks-/Augen-/Kopf-/Gaze-/Mund-/Kopf-RGBA-/Koerper-RGBA-
+00847:                 # Bilder statisch ausliefern -- nur Basisname, nur .png, nur
+00848:                 # aus dem jeweils zustaendigen Verzeichnis (kein Pfad-Traversal
+=== BUEHNE_PORT ===
+00173: AUSDRUCK_ERWEITERT_DIR = _vielleicht_ai(AUSDRUCK_ERWEITERT_DIR)
+00174: # ⭐ Default-Fenstergeometrie (Gabriel 2026-09-11, siehe oeffnen()) -- EINE
+00175: # Quelle fuer Start-Flags UND fuer die xdotool-Erzwingung danach.
+00176: # Y=0 ist der WUNSCH, nicht das Ergebnis: mutter/GNOME reserviert oben
+00177: # einen Arbeitsbereich-Rand (_NET_WORKAREA meldet y>=40) plus eigene
+00178: # Fenster-Dekoration/Schatten -- gemessen 2026-09-11 landet JEDES an
+00179: # dieses Fenster gerichtete windowmove-Y (0, 3, 40 probiert) am Ende bei
+00180: # y≈86-89, nie tiefer. Das ist eine harte WM-Grenze, keine Code-Luecke --
+00181: # Gabriels eigentliche Vorgabe war nur "Groesse 746x449, nicht Vollbild",
+00182: # keine exakte Pixelposition. Groesse (das Wichtige) sitzt exakt.
+00183: FENSTER_X, FENSTER_Y, FENSTER_B, FENSTER_H = 565, 0, 746, 449
+00184: UNIFIED_DB = os.environ.get(
+00185:     "UDB_DB_PATH",
+00186:     os.path.expanduser("~/.local/share/agentzero/unified.db"))
+00187: WELT_DB = os.environ.get(
+00188:     "FRANKENSTEIN_WELT_DB",
+00189:     os.path.expanduser("~/.local/share/frank/db/world_experience.db"))
+00190: NUTZER_NAME = "Gabriel"  # FRANKENSTEIN_NUTZER, siehe Auftrag
+00191: 
+00192: BIND_HOST = "127.0.0.1"
+00193: PORT = int(os.environ.get("BUEHNE_PORT", "8788"))
+00194: 
+00195: os.makedirs(UPLOADS_DIR, exist_ok=True)
+00196: os.makedirs(CHROME_PROFIL, exist_ok=True)
+00197: 
+00198: 
+00199: # ── Zustand: EINE Datei, atomar geschrieben, von drei Wegen benutzt ─────
+00200: def zustand_lesen():
+00201:     try:
+00202:         with open(ZUSTAND_PFAD, "r", encoding="utf-8") as f:
+00203:             d = json.load(f)
+00204:         return {"an": bool(d.get("an", False)),
+00205:                 "quelle": str(d.get("quelle") or ""),
+00206:                 "ts": str(d.get("ts") or "")}
+00207:     except Exception:
+00208:         return {"an": False, "quelle": "start (keine Datei)", "ts": ""}
+00209: 
+00210: 
+00211: def zustand_schreiben(an: bool, quelle: str):
+00212:     d = {"an": bool(an), "quelle": quelle,
+00213:          "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+00214:     tmp = ZUSTAND_PFAD + ".tmp"
+00215:     with open(tmp, "w", encoding="utf-8") as f:
+00216:         json.dump(d, f, ensure_ascii=False)
+00217:     os.replace(tmp, ZUSTAND_PFAD)  # atomar -- kein Leser sieht eine halbe Datei
+00218:     return d
+00219: 
+00220: 
+00221: # Vorgabe: Fenster ist AUS, bis jemand es einschaltet. Nur beim ALLERERSTEN
+00222: # Start (Datei fehlt) anlegen -- ein spaeterer Daemon-Neustart darf den
+00223: # zuletzt gewaehlten Zustand nicht stillschweigend umkippen.
+00224: if not os.path.exists(ZUSTAND_PFAD):
+00225:     zustand_schreiben(False, "erststart")
+00226: 
+00227: 
+00228: # ── eigene, separate Chat-Datei (NICHT unified.db) ──────────────────────
+00229: def _lokal_verbinden():
+00230:     c = sqlite3.connect(LOKAL_DB, timeout=5.0)
+00231:     c.execute("""CREATE TABLE IF NOT EXISTS chat (
+00232:         id      INTEGER PRIMARY KEY AUTOINCREMENT,
+00233:         ts      TEXT NOT NULL,
+00234:         wer     TEXT NOT NULL,
+00235:         text    TEXT NOT NULL,
+00236:         art     TEXT NOT NULL)""")
+00237:     return c
+00238: 
+00239: 
+00240: def lokal_anfuegen(wer: str, text: str, art: str):
+00241:     ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+00242:     with _lokal_verbinden() as c:
+00243:         c.execute("INSERT INTO chat (ts, wer, text, art) VALUES (?,?,?,?)",
+00244:                    (ts, wer, text, art))
+00245:     return ts
+00246: 
+00247: 
+00248: def lokal_seit(since: str):
+00249:     with _lokal_verbinden() as c:
+00250:         rows = c.execute(
+00251:             "SELECT ts, wer, text, art FROM chat WHERE ts > ? ORDER BY ts ASC",
+00252:             (since or "",)).fetchall()
+00253:     return [{"ts": r[0], "wer": r[1], "text": r[2], "art": r[3]} for r in rows]
+00254: 
+00255: 
+00256: # ── f2_gesagt LESEN (das ist die echte Sprachmodus-Chatquelle) ──────────
+00257: # ── Emote-Bestimmung (Gabriel, 4. Nachtrag 2026-09-11) ──────────────────
+00258: # Ein Emoji pro FranKenstein-Antwort, EINMALIG im Browser eingeblendet
+00259: # (Twitch-Stil "Like fliegt rein"), NIE dauerhaft/mehrfach. Zwei Quellen,
+00260: # mit Vorrang fuer die bessere:
+00261: #   1. identitaet.py (Paket paket-1789070588377-49654d, ANDERER Agent --
+00262: #      hier NICHT angefasst, nur bestmoeglich importiert). Klassifiziert
+00263: #      Antworten in sechs Kategorien aus echter Textanalyse statt aus
+00264: #      einer Stichwortliste. Existiert die Datei (noch) nicht oder hat sie
+00265: #      eine andere Schnittstelle, greift lautlos Schritt 2.
+00266: #      LEHRE (2026-09-11, Befund vom Koordinator): hier stand lange ein
+00267: #      GERATENER Aufruf -- falscher Pfad (visual/ statt /opt/entityos/voice/)
+00268: #      UND ein erfundener Funktionsname (klassifizieren() gibt es nicht).
+00269: #      Das try/except hat das wochenlang lautlos verschluckt und JEDE
+00270: #      Antwort ueber _emote_einfach() klassifiziert -- deshalb kam bei
+00271: #      Gabriel bei jeder technisch klingenden Antwort ⚙, nie die echten
+00272: #      sechs Kategorien. Echte Schnittstelle: _messen(text) -> Kennzahlen,
+00273: #      _self_ereignis(Kennzahlen) -> einer der sechs _EMOTE_JE_KATEGORIE-
+00274: #      Schluessel (Prioritaet dort ~Zeile 209-241 begruendet -- self_technical
+00275: #      bewusst an vierter Stelle, damit es nicht alles verdeckt). Nie wieder
+00276: #      eine angenommene Schnittstelle ohne Gegenprobe an echten Texten.
+00277: #   2. eine kleine, jede Zeile in einem Satz erklaerbare Stichwort-
+00278: #      Zuordnung. Passt keine Regel, gibt es KEIN Emote -- lieber keins
+00279: #      als ein beliebiges (Gabriels Vorgabe woertlich).
+00280: _EMOTE_JE_KATEGORIE = {
+00281:     "self_confident":  "\U0001F4AA",
+00282:     "self_uncertain":  "\U0001F914",
+00283:     "self_creative":   "✨",
+00284:     "self_empathetic": "\U0001F49C",
+00285:     "self_technical":  "⚙",
+00286:     "self_neutral":    None,  # neutral heisst: kein Anlass, kein Emote
+00287: }
+00288: 
+00289: 
+00290: def _emote_einfach(text: str):
+00291:     """Rueckfall ohne identitaet.py. Jede Zeile einzeln erklaerbar."""
+00292:     t = (text or "").lower()
+### buehne.html
+=== /api/fps ===
+01786:   if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+01787:   if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+01788:   regenZeichnen();
+01789:   fpsMessen(t);
+01790:   requestAnimationFrame(schleife);
+01791: }
+01792: requestAnimationFrame(schleife);
+01793: setInterval(() => {
+01794:   const fps = window.__buehneFps || 60;
+01795:   if(fps < 24 && !regenGedrosselt){
+01796:     regenGedrosselt = true;
+01797:     console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+01798:   }else if(fps >= 28 && regenGedrosselt){
+01799:     regenGedrosselt = false;
+01800:   }
+01801: }, 4000);
+01802: 
+01803: // Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+01804: // fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+01805: setInterval(() => {
+01806:   fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+01807:     body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+01808: }, 5000);
+01809: // gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+01810: // selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+01811: // Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+01812: 
+01813: // ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+01814: async function statusHolen(){
+01815:   try{
+01816:     const r = await fetch("/api/status");
+01817:     const d = await r.json();
+01818:     const b = d.buehne || {};
+01819:     if(typeof b.broadcast_value === "number"){
+01820:       tempo = Math.max(0.15, Math.min(3.0, b.broadcast_value));
+01821:     }
+01822:     const farb = $("farbschicht");
+01823:     if(typeof b.ueberraschung === "number"){
+01824:       const intensitaet = Math.max(0, Math.min(1, b.ueberraschung));
+01825:       farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+01826:       farb.style.opacity = intensitaet > 0.05 ? "1" : "0";
+01827:     }
+01828:     const wasser = $("wasserlinie");
+01829:     let hoehe = null;
+01830:     if(typeof b.swap_voll_anteil === "number") hoehe = b.swap_voll_anteil;
+01831:     else if(typeof b.ram_frei_anteil === "number") hoehe = 1 - b.ram_frei_anteil;
+01832:     if(hoehe !== null){
+01833:       wasser.style.height = Math.max(0, Math.min(100, hoehe*100)) + "%";
+01834:     }
+01835:     // Auftragsteil F: Koerperkrise + Ueberraschungs-Achse, siehe Definition
+01836:     // oben (koerperzustandPruefen/ueberraschungAchsePruefen).
+01837:     koerperzustandPruefen(b.swap_voll_anteil, b.ram_frei_anteil);
+01838:     ueberraschungAchsePruefen(b.ueberraschung);
+01839:     if(typeof d.zuschauer === "number"){
+01840:       $("zuschauer-label").textContent = d.zuschauer + (d.zuschauer===1?" Zuschauer":" Zuschauer");
+01841:     }
+01842:     // Ausdruck + Blick: gemessen, nie erfunden (siehe buehnen_zustand() in
+01843:     // buehne_daemon.py bzw. blick.py). Latenz + Reihenfolge in
+01844:     // reaktionAufNeuenStatus() oben.
+01845:     reaktionAufNeuenStatus(
+01846:       b.blick || {anwesend:false, richtung:null, nah:false},
+01847:       typeof b.ausdruck === "string" ? b.ausdruck : null
+01848:     );
+01849:   }catch(e){}
+01850: }
+01851: 
+01852: setInterval(chatHolen, 1500);
+01853: setInterval(statusHolen, 3000);
+01854: chatHolen(); statusHolen();
+01855: 
+01856: // ⭐ 2026-09-11 (Animations-Agent) PRUEF-HAKEN fuer die echte-Verifikation am
+01857: // laufenden Fenster (xdotool), weil Chrome ohne Debug-Port laeuft und es
+01858: // keinen anderen Weg gibt, eine Sonderausdruck-Sequenz deterministisch zu
+01859: // triggern. Keine UX-Funktion: nur Tasten, die niemand drueckt. 'b' loest
+01860: // EINEN einzelnen Blink aus (zeitplanNeu=false -- dieselbe Einmal-Kette wie
+01861: // der Doppelschlag, kein Extra-Strang), 'k' eine kleine Kopfneigung mit
+01862: // Rueckweg OHNE die reguläre Planerkette anzufassen, 'x' einen zufaelligen
+01863: // Sonderausdruck aus den drei emote-Pools.
+01864: window.addEventListener("keydown", (e) => {
+01865:   if(e.key === "b"){ e.preventDefault(); blinzeln(false); }
+01866:   else if(e.key === "k"){
+01867:     e.preventDefault();
+01868:     if(!kopfRollSchritte && !_sonderLaeuft){
+01869:       kopfPose = "roll"; kopfRollSoll = 15; gesichtNeuZeichnen();
+01870:       kopfRollSequenzZu(15, () => setTimeout(() => {
+01871:         kopfRollSequenzZu(0, () => { kopfPose = null; kopfRollSoll = 0; gesichtNeuZeichnen(); });
+01872:       }, 1400));
+01873:     }
+01874:   }
+01875:   else if(e.key === "x"){
+01876:     e.preventDefault();
+01877:     const alle = KATEGORIE_SONDERAUSDRUCK.self_confident;
+01878:     const wahl = alle[Math.floor(Math.random()*alle.length)];
+01879:     sonderausdruckZeigen(wahl[0], wahl[1]);
+01880:   }
+01881: });
+01882: 
+01883: // ── Permanenter Reload-Weg (Gabriel/Koordinator 2026-09-07: der Daemon
+01884: // startete Chrome ohne --remote-debugging-port, es gab also KEINEN Weg,
+01885: // eine Dateiaenderung ins laufende Fenster zu bekommen ausser manuellem
+01886: // xdotool ctrl+r. Ab jetzt merkt die Seite selbst, wenn buehne.html sich
+01887: // geaendert hat, und laedt sich automatisch neu -- kein Handgriff mehr
+01888: // noetig, kein Debugging-Port noetig, rein clientseitig.
+01889: let _startMtime = null;
+01890: async function _reloadWaechter(){
+01891:   try{
+01892:     const r = await fetch("/api/mtime", {cache:"no-store"});
+01893:     const d = await r.json();
+01894:     if(_startMtime === null){ _startMtime = d.mtime; return; }
+01895:     if(d.mtime && d.mtime !== _startMtime){ location.reload(); }
+01896:   }catch(e){}
+01897: }
+01898: setInterval(_reloadWaechter, 2000);
+01899: _reloadWaechter();
+01900: </script>
+01901:   <!-- ⭐ 2026-09-11 (Koordinator): globaler Filmlook -- gemeinsames Korn,
+01902:        gemeinsame Farbabstimmung, Vignette. Liegt BEWUSST in einer eigenen
+01903:        Datei und nicht hier: diese Seite wird gerade von einem anderen
+01904:        Agenten umgebaut, zwei Agenten in einer Datei kollidieren. Der
+01905:        Zweck des Looks ist, die getrennt erzeugten Ebenen (Kopf, Koerper,
+=== function fpsMessen ===
+01750:   // Parallaxe, das Bild wirkt nicht wie eine starre Fotomontage auf dem
+01751:   // Hintergrund geklebt. #hg-frame ist Kind von #kamera -- dieser Transform
+01752:   // addiert sich zu dem der Kamera, deshalb hier bewusst der GEGEN-Anteil
+01753:   // (0.85-1 = -0.15x) statt des vollen Werts.
+01754:   $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+01755: }
+01756: // ⭐ Nachschwung bei echten Zustandswechseln (Kopfdrehung/Ausdruck/Blick) --
+01757: // dieselbe Overshoot-Mechanik wie #gesicht-rahmen.pose-wechsel, jetzt auf
+01758: // #kamera: die Kamera "haengt" kurz nach und faengt sich dann leicht ueber,
+01759: // wie eine echte Hand, die einer Bewegung folgt (Gabriel: "passend zur
+01760: // Bewegung"). Siehe gesichtNeuZeichnen() weiter oben, ruft dies bei
+01761: // echten Zustandswechseln auf.
+01762: function kameraNachschwung(){
+01763:   const kamera = $("kamera");
+01764:   kamera.classList.remove("kamera-wechsel");
+01765:   requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+01766:   setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+01767: }
+01768: 
+01769: let letzteFrames = [];
+01770: function fpsMessen(t){
+01771:   letzteFrames.push(t);
+01772:   const grenze = t - 1000;
+01773:   letzteFrames = letzteFrames.filter(x => x > grenze);
+01774:   window.__buehneFps = letzteFrames.length;
+01775: }
+01776: 
+01777: function schleife(t){
+01778:   atmen();
+01779:   koerperSchritt(t);
+01780:   kopfRollTick(t);
+01781:   mundSchritt(t);
+01782:   kopfKoerperDrehSchritt();
+01783:   kameraWackeln();
+01784:   gazeSchritt();
+01785:   const regenFaktor = regenGedrosselt ? 0.5 : 1;
+01786:   if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+01787:   if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+01788:   regenZeichnen();
+01789:   fpsMessen(t);
+01790:   requestAnimationFrame(schleife);
+01791: }
+01792: requestAnimationFrame(schleife);
+01793: setInterval(() => {
+01794:   const fps = window.__buehneFps || 60;
+01795:   if(fps < 24 && !regenGedrosselt){
+01796:     regenGedrosselt = true;
+01797:     console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+01798:   }else if(fps >= 28 && regenGedrosselt){
+01799:     regenGedrosselt = false;
+01800:   }
+01801: }, 4000);
+01802: 
+01803: // Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+01804: // fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+01805: setInterval(() => {
+01806:   fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+01807:     body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+01808: }, 5000);
+01809: // gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+01810: // selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+01811: // Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+01812: 
+01813: // ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+01814: async function statusHolen(){
+01815:   try{
+01816:     const r = await fetch("/api/status");
+01817:     const d = await r.json();
+01818:     const b = d.buehne || {};
+01819:     if(typeof b.broadcast_value === "number"){
+01820:       tempo = Math.max(0.15, Math.min(3.0, b.broadcast_value));
+01821:     }
+01822:     const farb = $("farbschicht");
+01823:     if(typeof b.ueberraschung === "number"){
+01824:       const intensitaet = Math.max(0, Math.min(1, b.ueberraschung));
+01825:       farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+01826:       farb.style.opacity = intensitaet > 0.05 ? "1" : "0";
+01827:     }
+01828:     const wasser = $("wasserlinie");
+01829:     let hoehe = null;
+01830:     if(typeof b.swap_voll_anteil === "number") hoehe = b.swap_voll_anteil;
+01831:     else if(typeof b.ram_frei_anteil === "number") hoehe = 1 - b.ram_frei_anteil;
+01832:     if(hoehe !== null){
+01833:       wasser.style.height = Math.max(0, Math.min(100, hoehe*100)) + "%";
+01834:     }
+01835:     // Auftragsteil F: Koerperkrise + Ueberraschungs-Achse, siehe Definition
+01836:     // oben (koerperzustandPruefen/ueberraschungAchsePruefen).
+01837:     koerperzustandPruefen(b.swap_voll_anteil, b.ram_frei_anteil);
+01838:     ueberraschungAchsePruefen(b.ueberraschung);
+01839:     if(typeof d.zuschauer === "number"){
+01840:       $("zuschauer-label").textContent = d.zuschauer + (d.zuschauer===1?" Zuschauer":" Zuschauer");
+01841:     }
+01842:     // Ausdruck + Blick: gemessen, nie erfunden (siehe buehnen_zustand() in
+01843:     // buehne_daemon.py bzw. blick.py). Latenz + Reihenfolge in
+01844:     // reaktionAufNeuenStatus() oben.
+01845:     reaktionAufNeuenStatus(
+01846:       b.blick || {anwesend:false, richtung:null, nah:false},
+01847:       typeof b.ausdruck === "string" ? b.ausdruck : null
+01848:     );
+01849:   }catch(e){}
+01850: }
+01851: 
+01852: setInterval(chatHolen, 1500);
+01853: setInterval(statusHolen, 3000);
+01854: chatHolen(); statusHolen();
+01855: 
+01856: // ⭐ 2026-09-11 (Animations-Agent) PRUEF-HAKEN fuer die echte-Verifikation am
+01857: // laufenden Fenster (xdotool), weil Chrome ohne Debug-Port laeuft und es
+01858: // keinen anderen Weg gibt, eine Sonderausdruck-Sequenz deterministisch zu
+01859: // triggern. Keine UX-Funktion: nur Tasten, die niemand drueckt. 'b' loest
+01860: // EINEN einzelnen Blink aus (zeitplanNeu=false -- dieselbe Einmal-Kette wie
+01861: // der Doppelschlag, kein Extra-Strang), 'k' eine kleine Kopfneigung mit
+01862: // Rueckweg OHNE die reguläre Planerkette anzufassen, 'x' einen zufaelligen
+01863: // Sonderausdruck aus den drei emote-Pools.
+01864: window.addEventListener("keydown", (e) => {
+01865:   if(e.key === "b"){ e.preventDefault(); blinzeln(false); }
+01866:   else if(e.key === "k"){
+01867:     e.preventDefault();
+01868:     if(!kopfRollSchritte && !_sonderLaeuft){
+01869:       kopfPose = "roll"; kopfRollSoll = 15; gesichtNeuZeichnen();
+=== function schleife ===
+01757: // dieselbe Overshoot-Mechanik wie #gesicht-rahmen.pose-wechsel, jetzt auf
+01758: // #kamera: die Kamera "haengt" kurz nach und faengt sich dann leicht ueber,
+01759: // wie eine echte Hand, die einer Bewegung folgt (Gabriel: "passend zur
+01760: // Bewegung"). Siehe gesichtNeuZeichnen() weiter oben, ruft dies bei
+01761: // echten Zustandswechseln auf.
+01762: function kameraNachschwung(){
+01763:   const kamera = $("kamera");
+01764:   kamera.classList.remove("kamera-wechsel");
+01765:   requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+01766:   setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+01767: }
+01768: 
+01769: let letzteFrames = [];
+01770: function fpsMessen(t){
+01771:   letzteFrames.push(t);
+01772:   const grenze = t - 1000;
+01773:   letzteFrames = letzteFrames.filter(x => x > grenze);
+01774:   window.__buehneFps = letzteFrames.length;
+01775: }
+01776: 
+01777: function schleife(t){
+01778:   atmen();
+01779:   koerperSchritt(t);
+01780:   kopfRollTick(t);
+01781:   mundSchritt(t);
+01782:   kopfKoerperDrehSchritt();
+01783:   kameraWackeln();
+01784:   gazeSchritt();
+01785:   const regenFaktor = regenGedrosselt ? 0.5 : 1;
+01786:   if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+01787:   if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+01788:   regenZeichnen();
+01789:   fpsMessen(t);
+01790:   requestAnimationFrame(schleife);
+01791: }
+01792: requestAnimationFrame(schleife);
+01793: setInterval(() => {
+01794:   const fps = window.__buehneFps || 60;
+01795:   if(fps < 24 && !regenGedrosselt){
+01796:     regenGedrosselt = true;
+01797:     console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+01798:   }else if(fps >= 28 && regenGedrosselt){
+01799:     regenGedrosselt = false;
+01800:   }
+01801: }, 4000);
+01802: 
+01803: // Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+01804: // fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+01805: setInterval(() => {
+01806:   fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+01807:     body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+01808: }, 5000);
+01809: // gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+01810: // selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+01811: // Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+01812: 
+01813: // ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+01814: async function statusHolen(){
+01815:   try{
+01816:     const r = await fetch("/api/status");
+01817:     const d = await r.json();
+01818:     const b = d.buehne || {};
+01819:     if(typeof b.broadcast_value === "number"){
+01820:       tempo = Math.max(0.15, Math.min(3.0, b.broadcast_value));
+01821:     }
+01822:     const farb = $("farbschicht");
+01823:     if(typeof b.ueberraschung === "number"){
+01824:       const intensitaet = Math.max(0, Math.min(1, b.ueberraschung));
+01825:       farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+01826:       farb.style.opacity = intensitaet > 0.05 ? "1" : "0";
+01827:     }
+01828:     const wasser = $("wasserlinie");
+01829:     let hoehe = null;
+01830:     if(typeof b.swap_voll_anteil === "number") hoehe = b.swap_voll_anteil;
+01831:     else if(typeof b.ram_frei_anteil === "number") hoehe = 1 - b.ram_frei_anteil;
+01832:     if(hoehe !== null){
+01833:       wasser.style.height = Math.max(0, Math.min(100, hoehe*100)) + "%";
+01834:     }
+01835:     // Auftragsteil F: Koerperkrise + Ueberraschungs-Achse, siehe Definition
+01836:     // oben (koerperzustandPruefen/ueberraschungAchsePruefen).
+01837:     koerperzustandPruefen(b.swap_voll_anteil, b.ram_frei_anteil);
+01838:     ueberraschungAchsePruefen(b.ueberraschung);
+01839:     if(typeof d.zuschauer === "number"){
+01840:       $("zuschauer-label").textContent = d.zuschauer + (d.zuschauer===1?" Zuschauer":" Zuschauer");
+01841:     }
+01842:     // Ausdruck + Blick: gemessen, nie erfunden (siehe buehnen_zustand() in
+01843:     // buehne_daemon.py bzw. blick.py). Latenz + Reihenfolge in
+01844:     // reaktionAufNeuenStatus() oben.
+01845:     reaktionAufNeuenStatus(
+01846:       b.blick || {anwesend:false, richtung:null, nah:false},
+01847:       typeof b.ausdruck === "string" ? b.ausdruck : null
+01848:     );
+01849:   }catch(e){}
+01850: }
+01851: 
+01852: setInterval(chatHolen, 1500);
+01853: setInterval(statusHolen, 3000);
+01854: chatHolen(); statusHolen();
+01855: 
+01856: // ⭐ 2026-09-11 (Animations-Agent) PRUEF-HAKEN fuer die echte-Verifikation am
+01857: // laufenden Fenster (xdotool), weil Chrome ohne Debug-Port laeuft und es
+01858: // keinen anderen Weg gibt, eine Sonderausdruck-Sequenz deterministisch zu
+01859: // triggern. Keine UX-Funktion: nur Tasten, die niemand drueckt. 'b' loest
+01860: // EINEN einzelnen Blink aus (zeitplanNeu=false -- dieselbe Einmal-Kette wie
+01861: // der Doppelschlag, kein Extra-Strang), 'k' eine kleine Kopfneigung mit
+01862: // Rueckweg OHNE die reguläre Planerkette anzufassen, 'x' einen zufaelligen
+01863: // Sonderausdruck aus den drei emote-Pools.
+01864: window.addEventListener("keydown", (e) => {
+01865:   if(e.key === "b"){ e.preventDefault(); blinzeln(false); }
+01866:   else if(e.key === "k"){
+01867:     e.preventDefault();
+01868:     if(!kopfRollSchritte && !_sonderLaeuft){
+01869:       kopfPose = "roll"; kopfRollSoll = 15; gesichtNeuZeichnen();
+01870:       kopfRollSequenzZu(15, () => setTimeout(() => {
+01871:         kopfRollSequenzZu(0, () => { kopfPose = null; kopfRollSoll = 0; gesichtNeuZeichnen(); });
+01872:       }, 1400));
+01873:     }
+01874:   }
+01875:   else if(e.key === "x"){
+01876:     e.preventDefault();

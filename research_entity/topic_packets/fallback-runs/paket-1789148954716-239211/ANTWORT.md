@@ -1,0 +1,1 @@
+This sub-task (determining whether a code generation sub-task requires tools) can be resolved purely through reasoning; no file read/edit/write or bash commands are needed. Therefore, it is classified as pure text/code generation without tool requirement.

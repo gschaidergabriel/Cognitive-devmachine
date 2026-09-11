@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-vps-transport-probe-20260912-0626-andreasmaco-r1",
+  "op": "exec",
+  "command": "set -u; echo '=== HOST ==='; date -Is; hostname; whoami; pwd; echo '=== SSH MATERIAL NAMES ONLY ==='; find ~/.ssh -maxdepth 1 -type f -printf '%f %m %s\\n' 2>/dev/null | sort || true; echo '=== VPS TCP ==='; timeout 5 bash -lc '</dev/tcp/72.61.19.188/22' && echo VPS_SSH_TCP=OPEN || echo VPS_SSH_TCP=FAIL; echo '=== VPS BATCH SSH ==='; for u in root clay ubuntu; do echo USER=$u; if timeout 8 ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=accept-new \"$u@72.61.19.188\" 'printf \"VPS_SSH_OK host=\"; hostname; printf \" uid=\"; id -u; printf \"\\n\"' 2>&1; then break; fi; done; echo '=== GITHUB SSH ==='; timeout 8 ssh -T -o BatchMode=yes -o ConnectTimeout=5 git@github.com 2>&1 | head -10 || true; echo '=== END ==='",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 60
+}

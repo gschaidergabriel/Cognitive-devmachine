@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "go-avatar-perf-metrology-candidate-20260912-0652-r1",
+  "command_sha256": "8561456772b3129083a9516c554945205808f98a675b6d94d734863ff9a96968",
+  "started_at": "2026-09-11T23:43:02.271151+00:00",
+  "finished_at": "2026-09-11T23:43:02.531824+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "8443c8dea06f520533d095b83d465f4865146f5a0c08fd15d8afbdad0d2d1f15",
+  "stderr_sha256": "e6164acd69c72ad156b51af953a9f7c3c90ce3fb484874412a4691a68ecbf926",
+  "stdout_tail": "{\n  \"subject\": {\n    \"buehne_html_sha256\": \"9527ff5e4af48919f83d58c7e873c74bdeeebf3bf8bd084e810985c4918a1a93\",\n    \"buehne_daemon_sha256\": \"0ab232f7112b046ced7e3e4ae454fe0d800eebd32d23bdac138c961bc069dff9\"\n  },\n  \"candidate\": {\n    \"buehne_html_sha256\": \"80dc92d0d0b768ba7b69378dd5e44cd185f28bdb411fc6c927c6b1a3dd394841\",\n    \"buehne_daemon_sha256\": \"dfc19c7c8b44d8f84ede7944154d9f0cc253e385e2258528a49ecc0113d01c14\"\n  },\n  \"checks\": {\n    \"html_has_perf_v1\": true,\n    \"html_has_120s_bound\": true,\n    \"html_posts_perf\": true,\n    \"daemon_get_perf\": true,\n    \"daemon_post_perf\": true,\n    \"daemon_payload_cap\": true,\n    \"no_visual_source_change\": true\n  },\n  \"scope\": \"PASSIVE_PERF_METROLOGY_ONLY\",\n  \"credit\": \"STATIC_CANDIDATE_NOT_RUNTIME\",\n  \"candidate_zip\": {\n    \"path\": \"/workspace/go-avatar-perf-metrology-gpt56sol-20260912-0652.zip\",\n    \"bytes\": 96072,\n    \"sha256\": \"eb833cdba289ca92c695653c09cf945b2b7d2ce36bf3cee186ea436a9b2b0d2e\"\n  }\n}\nDIFF_LINES 152\n",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nAttributeError: 'NoneType' object has no attribute 'decode'\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

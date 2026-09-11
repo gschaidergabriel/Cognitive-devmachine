@@ -1,0 +1,664 @@
+=== HTML 920-1010 ===
+// -technical und fuer die Register demonic/serious_dystopian gibt es WEITER
+// kein gemessenes Signal -- kein passendes Bild bzw. keine der sechs
+// Antwort-Kategorien beschreibt Wut/Bedrohung/Trauer. Ein erfundener Trigger
+// (Chat-Schluesselwoerter o.ae.) waere selbst die Art erfundenes Signal, die
+// im ganzen Projekt vermieden wird. Diese Luecke bleibt bewusst offen, siehe
+// Bericht an den Koordinator.
+//
+// ⭐⭐ 2026-09-11 ZWEITER KOPF -- HIER WAR DIE URSACHE (Animations-Agent,
+// Beleg: Vorher-Screenshot /tmp/schwund_sonder_vorher.png im Bericht):
+// Diese Funktion blendete bisher die flachen, UNDURCHSICHTIGEN Vollbild-RGBs
+// #gesicht/#gesicht2 (z-index:3) UEBER den echten RGBA-Kopf (#kopf-schicht,
+// z-index:2). Diese alten Bilder tragen einen eingebratenen Hintergrund und
+// eine andere Kopfposition -- Ergebnis: ein zweiter Kopf mit Rechteckkante.
+// Jetzt: dieselben /ausdruck_erweitert/.../frontal/stufe_NN.png-Sequenzen
+// (echte 1536x1024-RGBA, laut PIL 10.4% Nicht-Alpha -- identische Silhouette
+// wie #kopf-schicht) auf #ausdruck-schicht/#ausdruck-schicht2, die IN
+// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+// tragen. Waehrend der Sequenz wird ausserdem der Mund-Flicken ausgeblendet
+// (die Ausdrucks-Frames tragen ihren eigenen Mund) und der
+// Erkennungs-Glimmer unterdrueckt (gazeSchritt() prueft _sonderLaeuft) --
+// sonst laege ein zweites Augen-/Mundsignal auf dem Ausdrucksgesicht.
+let ausdruckAktiv = 1;
+let _sonderLaeuft = false;
+function sonderausdruckZeigen(register, ausdruck, haltenMs){
+  if(_sonderLaeuft) return; // keine zwei Sequenzen gleichzeitig
+  haltenMs = haltenMs || 1400;
+  _sonderLaeuft = true;
+  $("mund-effekt").style.opacity = "0";
+  const stufeSrc = n => `/ausdruck_erweitert/${register}/${ausdruck}/frontal/stufe_0${n}.png`;
+  const wechsel = (neu, mitSchwung) => {
+    const sichtbar = ausdruckAktiv === 1 ? $("ausdruck-schicht") : $("ausdruck-schicht2");
+    const versteckt = ausdruckAktiv === 1 ? $("ausdruck-schicht2") : $("ausdruck-schicht");
+    if(sichtbar.getAttribute("src") === neu) return;
+    versteckt.src = neu;
+    // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+    // kopfRollTick() oben -- atmen() schreibt Transform/Filter nur noch auf
+    // die per ausdruckAktiv aktuell sichtbare Ebene, die neu einblendende
+    // Ebene braucht den brandaktuellen Wert deshalb hier einmalig.
+    versteckt.style.transform = _atmenTransform;
+    versteckt.style.filter = _atmenFilter;
+    versteckt.style.opacity = "1";
+    sichtbar.style.opacity = "0";
+    ausdruckAktiv = ausdruckAktiv === 1 ? 2 : 1;
+    if(mitSchwung){
+      const rahmen = $("gesicht-rahmen");
+      rahmen.classList.remove("pose-wechsel");
+      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+      setTimeout(() => rahmen.classList.remove("pose-wechsel"), 420);
+    }
+  };
+  const sauber = () => {
+    $("ausdruck-schicht").style.opacity = "0";
+    $("ausdruck-schicht2").style.opacity = "0";
+    $("mund-effekt").style.opacity = "1";
+    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+    _sonderLaeuft = false;
+    gesichtNeuZeichnen(true);
+  };
+  let stufe = 0;
+  wechsel(stufeSrc(0), true);
+  const hoch = () => {
+    stufe++;
+    wechsel(stufeSrc(stufe), false);
+    if(stufe < 6) setTimeout(hoch, 90);
+    else setTimeout(runter, haltenMs);
+  };
+  const runter = () => {
+    stufe--;
+    wechsel(stufeSrc(stufe), false);
+    if(stufe > 0) setTimeout(runter, 90);
+    else setTimeout(sauber, 120); // letzte Stufe (= Neutralbild) kurz halten, dann Ebenen aus
+  };
+  setTimeout(hoch, 90);
+}
+window.sonderausdruckZeigen = sonderausdruckZeigen;
+
+// ⭐ 2026-09-11 Auftragsteil E (Animations-Agent): Sonderausdruck aus einem
+// ECHTEN, schon gemessenen Signal ableiten statt aus Stichwoertern zu raten.
+// Der Buehnen-Daemon bestimmt fuer jede Antwort schon ein Chat-Emoji ueber
+// emote_bestimmen() (buehne_daemon.py), das intern identitaet._self_ereignis()
+// aus /opt/entityos/voice/identitaet.py aufruft -- eine Klassifikation von
+// SEINEM EIGENEN Antworttext in sechs Kategorien (self_uncertain/-creative/
+// -empathetic/-technical/-confident/-neutral). Das ist eine Messung an etwas,
+// das wirklich existiert (sein eigener Text) -- kein Raten an Gabriels Frage.
+// Das Emoji kommt bereits ueber /api/chat (z.emote), also KEIN neuer Python-
+// Aufruf aus dem Browser noetig -- die Kategorie ist 1:1 aus dem Emoji
+// rekonstruierbar (exakt dieselbe Zuordnung wie _EMOTE_JE_KATEGORIE dort).
+//
+// Nur drei der sechs Kategorien bekommen einen Bild-Pool: self_creative,
+// self_confident, self_uncertain. Fuer self_empathetic ("zugewandt_weich")
+// und self_technical ("wach_aufmerksam") gibt es in den 44 Sonderausdruecken
+=== HTML 1310-1420 ===
+  if(gazeBasisSichtbar() && gespraechsFokus !== "thema"){
+    wegZielNeuWaehlen();
+    blickPauseAktiv = true;
+    setTimeout(() => { blickPauseAktiv = false; }, 350 + Math.random()*550); // 0.35-0.9s kurzer Wegblick
+  }
+  setTimeout(blickPauseSchritt, 4000 + Math.random()*7000); // 4-11s, unregelmaessig
+}
+setTimeout(blickPauseSchritt, 3000);
+
+// ⭐ 2026-09-11 (Punkt 3 der Liste, Gabriel woertlich: "der Blick soll so
+// folgen, dass der User das Gefuehl hat, er schaue einem immer direkt in die
+// Augen"). Zusatz zur bestehenden diskreten Blickrichtung (7 feste Bilder,
+// oben unveraendert): ein kontinuierlicher Glow-Overlay, der stufenlos in
+// Richtung der gemessenen Kopfposition wandert. cx/cy kommen normiert 0..1
+// aus blick.py::ziel_roh() (siehe /api/status -> buehne.blick), 0.5/0.5 =
+// Bildmitte/Kamera. "nichts erfinden": ohne frische Erkennung liefert
+// ziel_roh() None -> serverBlick.anwesend bleibt false -> Overlay bleibt bei
+// opacity 0 (siehe CSS), es wird NIE ein Blick gezeigt, der nicht gemessen
+// wurde. Gedaempft per Lerp statt Sprung alle 3s (Polling-Takt von
+// statusHolen) -- das Auge soll gleiten, nicht alle drei Sekunden hoppeln.
+let zielGazeX = 0.5, zielGazeY = 0.5;
+let aktGazeX = 0.5, aktGazeY = 0.5;
+let gazeSichtbar = false;
+// ⭐ 2026-09-11 Auftragsteil D (Animations-Agent): "geradeaus" wirkt fuer
+// Menschen NICHT bei der geometrisch exakten Blicklinie am staerksten wie
+// echter Augenkontakt, sondern wenn die Pupille ~1,76-2 Grad UNTERHALB der
+// exakten Linie liegt (Gaussian-Fit ueber Proband:innen-Urteile, ~58cm
+// Betrachtungsabstand -- siehe /tmp/github_funde.md, Richtung 5). Der
+// Forschungswert selbst ist echt und zitiert; der Schritt Grad->Pixel ist
+// hier aber eine eigene, offen benannte Naeherung, KEINE Messung -- es gibt
+// fuer dieses Kunstwerk keinen gemessenen Augapfel-Radius/keine echte
+// Kamera-Distanz, an der man den Winkel exakt umrechnen koennte. Deshalb
+// bewusst klein und konservativ gewaehlt (deutlich kleiner als maxPx unten,
+// kann also nichts kaputtmachen) statt eine falsche Praezision zu behaupten.
+const BLICK_ABWAERTS_BIAS_PX = 1.2;
+// ⭐ 2026-09-11 Mikrosakkaden (Koordinator, Punkt b der Liste): kleine,
+// SPRUNGHAFTE Zusatz-Zuckung, additiv zum weichen Verfolgungs-Lerp oben --
+// eigener Kanal, nicht ge-easet ("springen, nicht gleiten"). Bewusst OHNE
+// jede Kopplung an serverBlick/gazeSichtbar in der Ausloesung selbst (laeuft
+// immer, alle 1-4s) -- sichtbar wird sie trotzdem nur, wenn #pupillen-glow
+// gerade opacity 1 hat (echte Gesichtserkennung), weil Gabriels harte Regel
+// ("Blick nur bei echter Erkennung") unveraendert bleibt: es wird NIE ein
+// Augenglimmer eingeblendet, der nicht gemessen ist. Die Mikrosakkade
+// behauptet also keinen Zustand -- sie macht nur den ohnehin schon gezeigten
+// Glow lebendiger, statt perfekt linear zu gleiten.
+let mikroSakX = 0, mikroSakY = 0;
+function mikroSakkadeSchritt(){
+  const winkel = Math.random() * Math.PI * 2;
+  const staerke = 1.1 + Math.random() * 1.6; // 1.1-2.7px, klein
+  mikroSakX = Math.cos(winkel) * staerke;
+  mikroSakY = Math.sin(winkel) * staerke;
+  setTimeout(() => { mikroSakX = 0; mikroSakY = 0; }, 80 + Math.random() * 90); // kurz gehalten, dann ballistisch zurueck (kein Lerp)
+  setTimeout(mikroSakkadeSchritt, 1000 + Math.random() * 3000); // 1-4s, unregelmaessig
+}
+setTimeout(mikroSakkadeSchritt, 1500);
+// ⭐⭐ NEU 2026-09-11: pro Frame neu entschieden (nicht mehr nur alle 3s beim
+// Poll), weil blickPauseAktiv jederzeit zwischen zwei Polls kippen kann --
+// die Zielwahl braucht denselben Takt wie die Animation selbst. Bleibt
+// billige Arithmetik, kein zusaetzlicher Bildaufbau (GPU-Budget-Disziplin
+// unveraendert). Drei Stufen, alle aus echten/deterministischen Signalen:
+//   1.0  Opazitaet  -- serverBlick vorhanden+nah UND FranKenstein spricht
+//                      Gabriel gerade direkt an, kein Wegblick aktiv
+//                      -> Ziel = serverBlick.cx/cy (bisheriges Verhalten)
+//   0.4  Opazitaet  -- serverBlick vorhanden+nah, ABER Thema-Fokus oder
+//                      Mikro-Pause aktiv -> Ziel = _wegZiel (sichtbar
+//                      anders, aber gedaempft: "da, aber nicht fixiert")
+//   0    Opazitaet  -- serverBlick nicht vorhanden/nicht nah (unveraendert,
+//                      Hartregel: kein erfundener Blick ohne Erkennung)
+function gazeZielBestimmen(){
+  if(!gazeBasisSichtbar()) return {x:0.5, y:0.5, opazitaet:0};
+  const wegAktiv = blickPauseAktiv || gespraechsFokus === "thema";
+  if(wegAktiv) return {x:_wegZiel.x, y:_wegZiel.y, opazitaet:0.4};
+  return {x:serverBlick.cx, y:serverBlick.cy, opazitaet:1};
+}
+function gazeSchritt(){
+  const ziel = gazeZielBestimmen();
+  zielGazeX = ziel.x; zielGazeY = ziel.y;
+  aktGazeX += (zielGazeX - aktGazeX) * 0.07;
+  aktGazeY += (zielGazeY - aktGazeY) * 0.07;
+  const maxPx = 8.5; // Bewegungsspielraum bewusst klein -- ein Glimmer, kein Springen
+  const dx = (aktGazeX - 0.5) * 2 * maxPx + mikroSakX;
+  const dy = (aktGazeY - 0.5) * 2 * maxPx + BLICK_ABWAERTS_BIAS_PX + mikroSakY;
+  // ⭐⭐ 2026-09-11 NACHTRAG 4: rotate() dranhaengen (Rest-Ausgleich zur echten
+  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim
+  // Kopfkippen an der falschen Stelle stehen (Geisterkopf-Kante).
+  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+  // KOPF_ROLL_AUGEN_OFFSET/kopfKoerperDrehSchritt oben) draufaddiert -- sonst
+  // driftet der Glimmer beim Rollen vom Blinzel-Flicken weg, obwohl beide
+  // denselben Augen-Anker verfolgen sollen.
+  const dxGesamt = dx + augenOffsetDx * _kopfCanvasScale;
+  const dyGesamt = dy + augenOffsetDy * _kopfCanvasScale;
+  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+  // ⭐ 2026-09-11: waehrend eines Sonderausdrucks aus -- dessen Frames tragen
+  // ihre eigenen Augen, sonst laege der Erkennungs-Glimmer auf einem fremden
+  // Gesicht (zweites Augenpaar statt zweiter Kopf).
+  gazeSichtbar = ziel.opazitaet > 0; // Rueckwaertskompatibilitaet: anderswo evtl. gelesen
+  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+}
+function wanderSchritt(){
+  if(!serverBlick.anwesend){
+    let neu = aktuelleBlickRichtung;
+    while(neu === aktuelleBlickRichtung){
+      neu = WANDER_RICHTUNGEN[Math.floor(Math.random()*WANDER_RICHTUNGEN.length)];
+    }
+    aktuelleBlickRichtung = neu;
+    gesichtNeuZeichnen();
+  }
+  setTimeout(wanderSchritt, 2500 + Math.random()*4500); // lange, ziellose Pausen
+}
+setTimeout(wanderSchritt, 1500);
+
+=== HTML 1840-1930 ===
+  const tremorX = (Math.sin(tremorPhaseA) * 0.14 + Math.sin(tremorPhaseB) * 0.09) * t;
+  const tremorY = (Math.cos(tremorPhaseA * 0.97) * 0.12 + Math.cos(tremorPhaseB * 1.05) * 0.07) * t;
+  const rotDeg = Math.sin(rotPhase) * 0.06 * t;
+  const x = driftX + tremorX, y = driftY + tremorY;
+  $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+  // Hintergrund bekommt denselben Wackel, aber 0.85x gedaempft -- winzige
+  // Parallaxe, das Bild wirkt nicht wie eine starre Fotomontage auf dem
+  // Hintergrund geklebt. #hg-frame ist Kind von #kamera -- dieser Transform
+  // addiert sich zu dem der Kamera, deshalb hier bewusst der GEGEN-Anteil
+  // (0.85-1 = -0.15x) statt des vollen Werts.
+  $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+}
+// ⭐ Nachschwung bei echten Zustandswechseln (Kopfdrehung/Ausdruck/Blick) --
+// dieselbe Overshoot-Mechanik wie #gesicht-rahmen.pose-wechsel, jetzt auf
+// #kamera: die Kamera "haengt" kurz nach und faengt sich dann leicht ueber,
+// wie eine echte Hand, die einer Bewegung folgt (Gabriel: "passend zur
+// Bewegung"). Siehe gesichtNeuZeichnen() weiter oben, ruft dies bei
+// echten Zustandswechseln auf.
+function kameraNachschwung(){
+  const kamera = $("kamera");
+  kamera.classList.remove("kamera-wechsel");
+  requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+  setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+}
+
+let letzteFrames = [];
+function fpsMessen(t){
+  letzteFrames.push(t);
+  const grenze = t - 1000;
+  letzteFrames = letzteFrames.filter(x => x > grenze);
+  window.__buehneFps = letzteFrames.length;
+}
+
+function schleife(t){
+  atmen();
+  koerperSchritt(t);
+  kopfRollTick(t);
+  mundSchritt(t);
+  kopfKoerperDrehSchritt();
+  kameraWackeln();
+  gazeSchritt();
+  const regenFaktor = regenGedrosselt ? 0.5 : 1;
+  if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+  if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+  regenZeichnen();
+  fpsMessen(t);
+  requestAnimationFrame(schleife);
+}
+requestAnimationFrame(schleife);
+setInterval(() => {
+  const fps = window.__buehneFps || 60;
+  if(fps < 24 && !regenGedrosselt){
+    regenGedrosselt = true;
+    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+  }else if(fps >= 28 && regenGedrosselt){
+    regenGedrosselt = false;
+  }
+}, 4000);
+
+// Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+setInterval(() => {
+  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+}, 5000);
+// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+// Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+
+// ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+async function statusHolen(){
+  try{
+    const r = await fetch("/api/status");
+    const d = await r.json();
+    const b = d.buehne || {};
+    if(typeof b.broadcast_value === "number"){
+      tempo = Math.max(0.15, Math.min(3.0, b.broadcast_value));
+    }
+    const farb = $("farbschicht");
+    if(typeof b.ueberraschung === "number"){
+      const intensitaet = Math.max(0, Math.min(1, b.ueberraschung));
+      farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+      farb.style.opacity = intensitaet > 0.05 ? "1" : "0";
+    }
+    const wasser = $("wasserlinie");
+    let hoehe = null;
+    if(typeof b.swap_voll_anteil === "number") hoehe = b.swap_voll_anteil;
+    else if(typeof b.ram_frei_anteil === "number") hoehe = 1 - b.ram_frei_anteil;
+    if(hoehe !== null){
+      wasser.style.height = Math.max(0, Math.min(100, hoehe*100)) + "%";
+    }
+=== MESSEN ===
+#!/usr/bin/env python3
+"""
+Messer fuer den AI-Face-Filter (Auftrag 2026-09-11, harte Bedingungen):
+
+  1. Alpha byte-identisch (np.array_equal) mit dem Original
+  2. sichtbare bbox (alpha>128) unverschoben
+  3. Kontrast (std Grau im bbox) und Kantenstaerke ((|dx|+|dy|)/2 im bbox)
+     duerfen NICHT sinken
+  4. Helligkeitsverschiebung <= 10 %
+
+Misst Original / _ai / _relief2 / _relief3 / detail-Varianten auf >= 20 Dateien.
+Schreibt tiefe_report.json + druckt die Tabelle.
+"""
+import os
+import json
+import numpy as np
+import cv2
+from PIL import Image
+
+VISUAL = os.path.dirname(os.path.abspath(__file__))
+
+KOPF = ["kopf_zero_mit_augen.png"] + [f"roll/gier_+00_nick_+00_roll_{s}{v:02d}.png"
+                                      for s, n in [("+", [5, 10, 15, 20, 25]), ("-", [5, 10, 15, 20, 25])]
+                                      for v in n]
+KOERPER = ["master__koerper_zero.png", "atmen__atmen_000.png", "atmen__atmen_006.png",
+           "lehnen__lehnen_+20.png", "lehnen__lehnen_-20.png",
+           "schulterdrehung__schulter_+25.png", "schulterdrehung__schulter_-25.png",
+           "gewicht__gewicht_+15.png", "gewicht__gewicht_-15.png",
+           "schulterzucken__zucken_007.png", "aufrichten__aufrichten_003.png"]
+
+
+def masse(pfad):
+    arr = np.array(Image.open(pfad).convert("RGBA"))
+    al = arr[..., 3]
+    grau = cv2.cvtColor(arr[..., :3], cv2.COLOR_RGB2GRAY)
+    ys, xs = np.where(al > 128)
+    if len(xs) == 0:
+        return None
+    x0, x1, y0, y1 = xs.min(), xs.max(), ys.min(), ys.max()
+    g = grau[y0:y1 + 1, x0:x1 + 1].astype(np.float32)
+    dx = np.abs(np.diff(g, axis=1)).mean()
+    dy = np.abs(np.diff(g, axis=0)).mean()
+    return dict(alpha=al.tobytes(), bbox=(int(x0), int(y0), int(x1), int(y1)),
+                kontrast=round(float(g.std()), 2), kante=round(float((dx + dy) / 2), 3),
+                helligkeit=round(float(g.mean()), 2))
+
+
+def haupt():
+    varianten = [("original", ""), ("ai", "_ai"), ("relief2", "_relief2"), ("relief3", "_relief3")]
+    bericht = {}
+    gruppen = [("kopf", "kopf_rgba", KOPF), ("koerper", "koerper_rgba", KOERPER)]
+    extra_varianten = []
+    for suffix in ("_detail_esrgan", "_detail_bilateral"):
+        if os.path.isdir(os.path.join(VISUAL, "kopf_rgba" + suffix)):
+            extra_varianten.append(("detail" + suffix.replace("_detail", ""), suffix))
+    for gname, quelle, dateien in gruppen:
+        for rel in dateien:
+            p0 = os.path.join(VISUAL, quelle, rel)
+            if not os.path.isfile(p0):
+                continue
+            base = masse(p0)
+            if base is None:
+                continue
+            zeile = {"original": {k: base[k] for k in ("kontrast", "kante", "helligkeit")}}
+            fuer_varianten = varianten + extra_varianten
+            for name, ordner in fuer_varianten:
+                if name == "original":
+                    continue
+                p = os.path.join(VISUAL, quelle + ordner, rel)
+                if not os.path.isfile(p):
+                    continue
+                m = masse(p)
+                gleich_alpha = m["alpha"] == base["alpha"]
+                zeile[name] = {
+                    "alpha_identisch": bool(gleich_alpha),
+                    "bbox_verschoben": m["bbox"] != base["bbox"],
+                    "kontrast": m["kontrast"], "kante": m["kante"], "helligkeit": m["helligkeit"],
+                    "kontrast_%": round((m["kontrast"] / base["kontrast"] - 1) * 100, 1),
+                    "kante_%": round((m["kante"] / base["kante"] - 1) * 100, 1),
+                    "helligkeit_%": round((m["helligkeit"] / base["helligkeit"] - 1) * 100, 1),
+                }
+            bericht[f"{gname}/{rel}"] = zeile
+    out = os.path.join(VISUAL, "tiefe_report.json")
+    with open(out, "w") as f:
+        json.dump(bericht, f, indent=1)
+    # Tabelle
+    print(f"{'datei':52s} {'satz':10s} {'alpha':6s} {'bbox':6s} "
+          f"{'kontrast':>9s} {'kante':>8s} {'helligk':>8s}")
+    for datei, zeile in bericht.items():
+        for name, m in zeile.items():
+            if name == "original":
+                print(f"{datei:52s} {name:10s} {'-':6s} {'-':6s} "
+                      f"{m['kontrast']:9.2f} {m['kante']:8.3f} {m['helligkeit']:8.2f}")
+                continue
+            print(f"{datei:52s} {name:10s} "
+                  f"{'OK' if m['alpha_identisch'] else 'FEHLER':6s} "
+                  f"{'OK' if not m['bbox_verschoben'] else 'VERSHOBEN':6s} "
+                  f"{m['kontrast']:7.2f}({m['kontrast_%']:+5.1f}%) "
+                  f"{m['kante']:6.3f}({m['kante_%']:+5.1f}%) "
+                  f"{m['helligkeit']:6.2f}({m['helligkeit_%']:+5.1f}%)")
+        print()
+    print("->", out)
+
+
+if __name__ == "__main__":
+    haupt()
+=== PRUEFEN ===
+#!/usr/bin/env python3
+"""buehne_pruefen.py -- das Buehnenbild MESSEN statt anschauen und meinen.
+
+Gabriel, 2026-09-11: "hilf du auch zyklisch mit, dass der Avatar so wird wie wir
+ihn uns vorstellen und noch 10000x besser."
+
+Warum das hier und nicht noch ein Paar Augen: heute sind an genau dieser Stelle
+drei Fehleinschaetzungen passiert, jede davon haette dieses Skript in zwei
+Sekunden gefunden --
+
+  1. "Der Schleier ist ein CSS-Overlay."  War er nicht: er steckte IM Bild, ab
+     56 % der Hoehe. Gefunden erst durch zeilenweise Helligkeitsmessung.
+  2. "Der Bildausschnitt ist schon richtig."  War er nicht: der Kopf begann bei
+     24 % der Panelhoehe, ein Viertel leere Luft darueber.
+  3. "Der Avatar ist vom Hintergrund entkoppelt."  War er nicht: ueber der
+     eigenen Hintergrundebene lag ein voll deckendes Flachbild mit
+     eingebackenem Hintergrund. Zwei Hintergruende, einer davon wirkungslos.
+
+Alle drei sind SICHTBARE Eigenschaften, die man ZAEHLEN kann. Solange niemand
+sie zaehlt, entscheidet der Eindruck -- und der Eindruck lag dreimal daneben.
+
+AUFRUF
+    python3 buehne_pruefen.py              # misst das laufende Fenster
+    python3 buehne_pruefen.py --bild X.png # misst eine vorhandene Aufnahme
+    python3 buehne_pruefen.py --json       # maschinenlesbar, fuer Vergleiche
+
+WAS ES MISST
+    kopf_beginn_prozent   ab welcher Hoehe des Buehnen-Panels der Kopf anfaengt.
+                          Gabriels Vorgabe: wenig Luft oben -> Richtwert 8-12 %.
+    querstreifen          waagrechte Helligkeitsspruenge = Schleier/Wasserlinie.
+                          Soll leer sein.
+    hintergrund_bewegt    zwei Aufnahmen im Abstand: aendert sich der Rand des
+                          Bildes? Wenn der Hintergrund eine eigene, morphende
+                          Ebene ist, MUSS er sich bewegen. Bleibt er starr,
+                          ist er verdeckt -- genau Befund 3.
+    panel                 die erkannte Buehnenflaeche, damit man sieht, worauf
+                          sich die Prozente beziehen.
+
+Reines Lesen. Aendert nichts, startet nichts, stoppt nichts.
+"""
+import argparse
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import time
+
+try:
+    from PIL import Image
+    import numpy as np
+except Exception as e:                      # pragma: no cover
+    print(f"Braucht PIL und numpy ({e})", file=sys.stderr)
+    sys.exit(2)
+
+FENSTERNAME = "FranKenstein -- live"
+
+
+def aufnehmen(ziel: str) -> bool:
+    """Nimmt das laufende Buehnenfenster auf. False, wenn es nicht da ist."""
+    # ⚠️ DRITTER FEHLALARM DIESES WERKZEUGS, 2026-09-11 -- gefunden vom
+    # QA-Agenten: `kopf_beginn_prozent` schwankte 15/12/6 auf praktisch
+    # demselben Bild. Ursache war NICHT das Bild, sondern DIESE Funktion.
+    #
+    # `xdotool search --name "FranKenstein -- live"` liefert ZWEI Treffer:
+    #     16777220  PID  738655  Chrome selbst          746x449
+    #     12585692  PID 1532367  mutter-x11-frames      774x515
+    # Der zweite ist der FENSTERRAHMEN, den GNOME als eigenes X-Fenster um
+    # das Chrome-Fenster legt -- mitsamt Titelleiste, deshalb 28 px groesser.
+    # Er traegt denselben Titel. `head -1` erwischte mal den einen, mal den
+    # anderen, und jede Prozentangabe verschob sich entsprechend.
+    #
+    # RICHTIG: nur das Fenster nehmen, dessen PID wirklich Chrome ist.
+    env = dict(os.environ, DISPLAY=os.environ.get("DISPLAY", ":0"))
+    try:
+        ids = subprocess.run(["xdotool", "search", "--name", FENSTERNAME],
+                             capture_output=True, text=True, env=env,
+                             timeout=10).stdout.split()
+        if not ids:
+            return False
+        echtes = None
+        for wid in ids:
+            pid = subprocess.run(["xdotool", "getwindowpid", wid],
+                                 capture_output=True, text=True, env=env,
+                                 timeout=5).stdout.strip()
+            if not pid.isdigit():
+                continue
+            try:
+                with open(f"/proc/{pid}/cmdline", "rb") as f:
+                    befehl = f.read().replace(b"\0", b" ").decode("utf-8", "replace")
+            except OSError:
+                continue
+            if "chrome" in befehl and "8788" in befehl:
+                echtes = wid
+                break
+        if echtes is None:              # kein Chrome gefunden -- lieber nichts
+            return False                # als das falsche Fenster vermessen
+        subprocess.run(["import", "-window", echtes, ziel],
+                       check=True, capture_output=True, env=env, timeout=20)
+        return True
+    except Exception:
+        return False
+
+
+def _panel_finden(a):
+    """Die Buehnenflaeche links vom Chatpanel.
+
+    ⚠️ ERSTER VERSUCH WAR FALSCH und hat 727 von 774 px als "Buehne" genommen,
+    also Chat mit eingerechnet. Folge: die Chat-Textzeilen wurden als
+    "Querstreifen" gemeldet und der Kopfbeginn landete bei 39 % statt bei den
+    tatsaechlichen Werten. Die Regel "ab hier bleibt es hell" greift nicht, weil
+    die Buehne in der Mitte (Gesicht) HELLER ist als das Chatpanel.
+
+    Die belastbare Trennung, an der echten Aufnahme abgelesen:
+        Buehne    0-35 %   stark schwankend (dunkler Rand, helles Gesicht)
+        Luecke   ~35 %     dunkelste Stelle des ganzen Bildes
+        Chat     40-95 %   gleichmaessig ~36-40, kaum Schwankung
+    Also: die dunkelste Spalte im mittleren Drittel ist die Fuge.
+    """
+    h, w = a.shape
+    spalten = a.mean(axis=0)
+    such_von, such_bis = int(w * 0.25), int(w * 0.60)
+    fuge = such_von + int(np.argmin(spalten[such_von:such_bis]))
+    # Rand abschneiden: Fensterrahmen oben/unten, Titelzeile, Panelkante
+    return (int(h * 0.08), int(h * 0.95), int(w * 0.04), int(fuge * 0.96))
+
+
+def messen(pfad: str) -> dict:
+    im = Image.open(pfad).convert("L")
+    a = np.asarray(im).astype(float)
+    y0, y1, x0, x1 = _panel_finden(a)
+    panel = a[y0:y1, x0:x1]
+    ph, pw = panel.shape
+    ergebnis = {"bild": pfad,
+                "panel": {"x": [x0, x1], "y": [y0, y1], "groesse": [pw, ph]}}
+
+    # --- Kopfbeginn: erster dauerhafte Helligkeitsanstieg von oben -----------
+    streifen = [(p, panel[int(ph * p / 100):int(ph * (p + 3) / 100)].mean())
+                for p in range(0, 70, 3)]
+    ergebnis["profil"] = [[p, round(m, 1)] for p, m in streifen]
+    kopf = None
+    for i in range(2, len(streifen) - 1):
+        p, m = streifen[i]
+        # dauerhaft: dieser UND der naechste Streifen deutlich ueber dem Anfang
+        if m > streifen[0][1] + 10 and streifen[i + 1][1] > streifen[0][1] + 10:
+            kopf = p
+            break
+    ergebnis["kopf_beginn_prozent"] = kopf
+
+    # --- Querstreifen: eine FLAECHE, kein Gesichtsmerkmal -------------------
+    # ⚠️ ERSTER VERSUCH MELDETE STAENDIG FALSCHEN ALARM: er nahm jeden
+    # Helligkeitssprung ueber die Zeilenmittelwerte -- und traf damit Titelzeile,
+    # Haaransatz, Augen und Mund. Vier Warnungen pro Bild, alle falsch. Ein
+    # Melder, der immer piept, wird ignoriert; genau so ist der echte
+    # Wasserstreifen heute frueh monatelang uebersehen worden.
+    #
+    # DER UNTERSCHIED IST MESSBAR: ein Schleier liegt GLEICHMAESSIG ueber die
+    # ganze Breite (niedrige Streuung entlang x), ein Gesichtsmerkmal nicht --
+    # Augen sind zwei Flecken, der Mund einer, der Haaransatz folgt der
+    # Schaedelform. Also: Sprung ODER nicht ist zu wenig, es muss ein Sprung in
+    # einer FLACHEN Zeile sein.
+    zeilen = panel.mean(axis=1)
+    streuung = panel.std(axis=1)            # wie ungleichmaessig ist die Zeile?
+    bezug = float(np.median(streuung)) or 1.0
+    spruenge = []
+    fenster = max(3, ph // 100)
+    for y in range(fenster, ph - fenster):
+        davor = zeilen[y - fenster:y].mean()
+        danach = zeilen[y:y + fenster].mean()
+        sprung = danach - davor
+        if sprung <= 12:
+            continue
+        flachheit = float(streuung[y:y + fenster].mean()) / bezug
+        if flachheit > 0.75:                # zu ungleichmaessig -> Gesicht
+            continue
+        spruenge.append({"prozent": round(y / ph * 100, 1),
+                         "sprung": round(sprung, 1),
+                         "gleichmaessigkeit": round(1 - flachheit, 2)})
+    gefiltert = []
+    for s in sorted(spruenge, key=lambda s: -s["sprung"]):
+        if all(abs(s["prozent"] - g["prozent"]) > 5 for g in gefiltert):
+            gefiltert.append(s)
+    ergebnis["querstreifen"] = sorted(gefiltert, key=lambda s: s["prozent"])[:4]
+    return ergebnis
+
+
+def entkopplung_pruefen() -> dict:
+    """Ist die Hauptebene des Gesichts wirklich freigestellt?
+
+    ⚠️ DAS HIER ERSETZT EINEN FEHLALARM MEINES EIGENEN WERKZEUGS.
+    Erster Versuch: zwei Aufnahmen vergleichen und aus Bewegung am Bildrand auf
+    "eigene Hintergrundebene sichtbar" schliessen. Das ist FALSCH -- ueber dem
+    Bild laufen zwei Regen-Canvas (#regen, #regen-hinten), die sich IMMER
+    bewegen, auch wenn darunter ein voll deckendes Flachbild liegt. Der Test
+    meldete gruen, waehrend die Entkopplung gar nicht gebaut war.
+    Ein Abnahmekriterium, das faelschlich gruen meldet, ist schlimmer als
+    keines -- es bestaetigt den Fehler, den es finden soll.
+
+    Richtig ist die DIREKTE Frage: hat das Bild, das der Daemon als Gesicht
+    ausliefert, einen echten Alphakanal? Freigestellt heisst durchsichtig.
+    Ein Flachbild mit eingebackenem Hintergrund ist RGB oder RGBA mit
+    durchgehend 255 -- beides faellt hier auf.
+    """
+    import io
+    import re as _re
+    import urllib.request
+
+    # ⚠️ ZWEITER FEHLALARM DESSELBEN TESTS, 2026-09-11: die erste Fassung hier
+    # fragte ZWEI FEST VERDRAHTETE Pfade ab (/gesicht.png und
+    # /ausdruck/01_ruhig_neutral.png) und meldete "NICHT entkoppelt". Die
+    # Entkopplung WAR da -- die Seite war inzwischen auf /kopf_rgba/ und
+    # /koerper_rgba/ umgestellt, und meine Adressen zeigten auf Altlasten, die
+    # es zwar noch gibt, die aber mit opacity:0 gar nicht mehr sichtbar sind.
+    # Ein Test mit geratenen Endpunkten ist keine Messung, sondern eine
+    # Vermutung mit Zahlen dran -- und er widersprach Gabriel, der recht hatte.
+    # RICHTIG: die Seite selbst fragen, welche Bilder sie laedt, und GENAU DIE
+    # pruefen. Dann wandert der Test automatisch mit, wenn jemand umbaut.
+    aus = {}
+    quellen = []
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:8788/", timeout=8) as r:
+            html = r.read().decode("utf-8", "replace")
+        # nur die <img>-Ebenen INNERHALB des Gesichtsrahmens interessieren
+        for m in _re.finditer(r'<img\s+id="([a-z0-9-]+)"\s+src="([^"]+\.png)"', html):
+            ident, src = m.group(1), m.group(2)
+            if ident in ("hg-frame",):
+                continue                    # Hintergrund DARF deckend sein
+            quellen.append((ident, src))
+    except Exception as e:
+        aus["fehler_seite"] = f"{type(e).__name__}"
+    if not quellen:                          # Rueckfall, falls die Seite schweigt
+        quellen = [("gesicht", "/gesicht.png")]
+
+    for name, pfad in quellen:
+        try:
+            with urllib.request.urlopen(f"http://127.0.0.1:8788{pfad}",
+                                        timeout=8) as r:
+                roh = r.read()
+            im = Image.open(io.BytesIO(roh))
+            modus, groesse = im.mode, im.size
+            if modus in ("RGBA", "LA"):
+                al = np.asarray(im.convert("RGBA"))[:, :, 3]
+                durchsichtig = float((al == 0).mean() * 100)
+            else:
+                durchsichtig = 0.0
+            unsichtbar = bool(_re.search(
+                r"#" + _re.escape(name) + r"\b[^{]*\{[^}]*opacity:\s*0\b", html)
+                or _re.search(r"#[a-z0-9,#-]*\b" + _re.escape(name)
+                              + r"\b[^{]*\{[^}]*opacity:\s*0\b", html))
+            aus[name] = {"modus": modus, "groesse": list(groesse),
+                         "durchsichtig_prozent": round(durchsichtig, 1),
+                         "freigestellt": durchsichtig > 5.0,
+                         "unsichtbar": unsichtbar}
+        except Exception as e:
+            aus[name] = {"fehler": f"{type(e).__name__}"}
+    # Entkoppelt = die SICHTBAREN Ebenen sind freigestellt. Eine Altlast mit
+    # opacity:0 (z.B. #gesicht, das nur noch Sonderausdruecke zeigt) darf das
+    # Urteil nicht kippen -- sie verdeckt nichts.
+    sichtbar = {k: v for k, v in aus.items()
+                if isinstance(v, dict) and not v.get("unsichtbar")

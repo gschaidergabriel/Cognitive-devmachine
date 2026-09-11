@@ -1,0 +1,19 @@
+SHA1=87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645
+MTIME1=1789158043 SIZE=113597
+=== CURRENT CONTRACT PATTERNS ===
+1356:function mikroSakkadeSchritt(){
+1362:  setTimeout(mikroSakkadeSchritt, 1000 + Math.random() * 3000); // 1-4s, unregelmaessig
+1364:setTimeout(mikroSakkadeSchritt, 1500);
+1651:function atmen(){
+1652:  atemPhase += 0.006 * Math.max(0.4, Math.min(1.6, tempo));
+1873:function schleife(t){
+1886:  requestAnimationFrame(schleife);
+1888:requestAnimationFrame(schleife);
+=== OPEN WRITERS ===
+=== PROCESSES CWD VISUAL ===
+PID=1043413 CWD=/home/ai-core-node/.claude/star/visual CMD=bash -lc set -euo pipefail; test "$(hostname)" = ai-core-node-projekt-frankenstein || exit 77; F=buehne.html; echo SHA1=$(sha256sum "$F"|cut -d' ' -f1); stat -c 'MTIME1=%Y SIZE=%s' "$F"; echo '=== CURRENT CONTRACT PATTERNS ==='; grep -nE 'f
+=== CHROME DEBUG ===
+1043413 bash -lc set -euo pipefail; test "$(hostname)" = ai-core-node-projekt-frankenstein || exit 77; F=buehne.html; echo SHA1=$(sha256sum "$F"|cut -d' ' -f1); stat -c 'MTIME1=%Y SIZE=%s' "$F"; echo '=== CURRENT CONTRACT PATTERNS ==='; grep -nE 'function mikroSakkadeSchritt|setTimeout\(mikroSakkadeSchritt|function atmen\(|atemPhase \+=|FRANK_QA|function schleife\(t\)|requestAnimationFrame\(schleife\)|PerformanceObserver' "$F" | tail -80; echo '=== OPEN WRITERS ==='; if command -v lsof >/dev/null; then lsof "$PWD/$F" 2>/dev/null || true; fi; echo '=== PROCESSES CWD VISUAL ==='; for p in $(pgrep -f 'claude|codex|aider' || true); do c=$(readlink -f /proc/$p/cwd 2>/dev/null || true); case "$c" in *'/visual'*) echo PID=$p CWD=$c CMD=$(tr '\0' ' ' </proc/$p/cmdline 2>/dev/null | cut -c1-240);; esac; done; echo '=== CHROME DEBUG ==='; pgrep -af 'chrome.*remote-debugging' || true; ss -ltnp 2>/dev/null | grep -E ':(9222|9223|8788)\b' || true; sleep 8; echo SHA2=$(sha256sum "$F"|cut -d' ' -f1); stat -c 'MTIME2=%Y SIZE=%s' "$F"
+LISTEN 0      5                        127.0.0.1:8788       0.0.0.0:*    users:(("python3",pid=2665680,fd=3))     
+SHA2=87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645
+MTIME2=1789158043 SIZE=113597

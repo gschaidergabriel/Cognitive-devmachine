@@ -1,0 +1,130 @@
+
+  Run a single prompt in non-interactive mode and exit.                                                                 
+  The prompt can be provided as arguments or piped from stdin.                                                          
+         
+  USAGE  
+         
+    crush run [prompt...] [--flags]                                        
+            
+  EXAMPLES  
+            
+    # Run a simple prompt                                                  
+    crush run "Guess my 5 favorite Pokémon"                                
+                                                                           
+    # Pipe input from stdin                                                
+    curl https://charm.land | crush run "Summarize this website"           
+                                                                           
+    # Read from a file                                                     
+    crush run "What is this code doing?" <<< prrr.go                       
+                                                                           
+    # Redirect output to a file                                            
+    crush run "Generate a hot README for this project" > MY_HOT_README.md  
+                                                                           
+    # Run in quiet mode (hide the spinner)                                 
+    crush run --quiet "Generate a README for this project"                 
+                                                                           
+    # Run in verbose mode (show logs)                                      
+    crush run --verbose "Generate a README for this project"               
+                                                                           
+    # Continue a previous session                                          
+    crush run --session {session-id} "Follow up on your last response"     
+                                                                           
+    # Continue the most recent session                                     
+    crush run --continue "Follow up on your last response"                 
+                                                                           
+         
+  FLAGS  
+         
+    -C --continue  Continue the most recent session
+    -c --cwd       Current working directory
+    -D --data-dir  Custom crush data directory
+    -d --debug     Debug
+    -h --help      Help for run
+    -H --host      Connect to a specific crush server host (for advanced users) (unix:///run/user/1000/crush-1000.sock)
+    -m --model     Model to use. Accepts 'model' or 'provider/model' to disambiguate models with the same name across providers
+    -q --quiet     Hide spinner
+    -s --session   Continue a previous session by ID
+    --small-model  Small model to use. If not provided, uses the default small model for the provider
+    -v --verbose   Show logs
+
+MODELS
+aihubmix/cc-glm-5
+aihubmix/cc-glm-5-turbo
+aihubmix/cc-glm-5.1
+aihubmix/cloudflare-glm-5.2
+aihubmix/coding-glm-4.6
+aihubmix/coding-glm-4.6-free
+aihubmix/coding-glm-4.7
+aihubmix/coding-glm-4.7-free
+aihubmix/coding-glm-5
+aihubmix/coding-glm-5-free
+aihubmix/coding-glm-5-turbo
+aihubmix/coding-glm-5-turbo-free
+aihubmix/coding-glm-5.1
+aihubmix/coding-glm-5.1-free
+aihubmix/coding-glm-5.2
+aihubmix/coding-glm-5.2-free
+aihubmix/coding-glm-5.3
+aihubmix/coding-glm-5.3-free
+aihubmix/coding-kimi-k3-free
+aihubmix/coding-minimax-m2-free
+aihubmix/coding-minimax-m2.1-free
+aihubmix/coding-minimax-m2.5-free
+aihubmix/coding-minimax-m2.7-free
+aihubmix/coding-minimax-m3-free
+aihubmix/dots-3-note-preview-free
+aihubmix/gemini-3-flash-preview-free
+aihubmix/gemini-3.5-flash-lite-free
+aihubmix/gemini-3.6-flash-free
+aihubmix/gemini-3.7-flash-free
+aihubmix/gemini-3.8-flash-free
+aihubmix/gemma-4-26b-a4b-it-free
+aihubmix/gemma-4-31b-it-free
+aihubmix/glm-4.5v
+aihubmix/glm-4.6
+aihubmix/glm-4.6v
+aihubmix/glm-4.7
+aihubmix/glm-4.7-flash-free
+aihubmix/glm-5
+aihubmix/glm-5-turbo
+aihubmix/glm-5.1
+aihubmix/glm-5.2
+aihubmix/glm-5.2-fast-preview
+aihubmix/glm-5.3
+aihubmix/glm-5.3-flash
+aihubmix/glm-5v-turbo
+aihubmix/gpt-4.1-free
+aihubmix/gpt-4.1-mini-free
+aihubmix/gpt-4.1-nano-free
+aihubmix/gpt-4o-free
+aihubmix/gpt-5.5-free
+aihubmix/gpt-oss-20b-free
+aihubmix/hy3-free
+aihubmix/k2.6-code-preview-free
+aihubmix/kimi-for-coding-free
+aihubmix/laguna-s-2.1-free
+aihubmix/laguna-xs-2.1-free
+aihubmix/lfm-2.5-2.6b-free
+aihubmix/ling-3.0-flash-free
+aihubmix/ling-3.0-tiny-free
+aihubmix/mimo-v2-flash-free
+aihubmix/minimax-m2.7-free
+aihubmix/nemotron-3-nano-30b-a3b-free
+aihubmix/nemotron-3-nano-omni-30b-a3b-reasoning-free
+aihubmix/nemotron-3-super-120b-a12b-free
+aihubmix/nemotron-3-ultra-550b-a55b-free
+aihubmix/nemotron-3.5-content-safety-free
+aihubmix/nemotron-3.5-lightning-free
+aihubmix/nemotron-nano-12b-v2-vl-free
+aihubmix/nemotron-nano-9b-v2-free
+aihubmix/north-mini-code-free
+aihubmix/nvidia-nemotron-3-super-120b-a12b
+aihubmix/qwen3.6-plus-preview-free
+aihubmix/xiaomi-mimo-v2-omni-free
+aihubmix/xiaomi-mimo-v2-pro-free
+aihubmix/xiaomi-mimo-v2.5-free
+aihubmix/xiaomi-mimo-v2.5-pro-free
+aihubmix/zai-glm-5-turbo
+alibaba-singapore/glm-5.1
+alibaba-singapore/glm-5.2
+alibaba-us/glm-5.2

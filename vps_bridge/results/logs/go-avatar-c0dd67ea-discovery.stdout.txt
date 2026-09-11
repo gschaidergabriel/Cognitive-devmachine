@@ -1,0 +1,420 @@
+MACROCYCLE=go-c0dd67ea-76ce-46b8-9b8c-f8f1f9485f36
+=== PACKAGE ===
+-rw-r--r-- 1 root root 687M Sep 11 19:03 /artifacts/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z.zip
+03ad0dd38ba2cb3b09f01b3b38496e5acda9b700d4979e7ee28cf334f0b7d6d1  /artifacts/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z.zip
+=== KEY FILES ===
+COMBINED_HANDOFF_20260911T184549Z/BASELINES/BASELINE_PROTOCOL.md
+COMBINED_HANDOFF_20260911T184549Z/BASELINES/dream_target_metrics.json
+COMBINED_HANDOFF_20260911T184549Z/PROMPTS/02_MASTER_ITERATIVE_BUILD_PROMPT.txt
+COMBINED_HANDOFF_20260911T184549Z/PROMPTS/03_GO_PROTOCOL.txt
+COMBINED_HANDOFF_20260911T184549Z/PROMPTS/04_CLAUDE_DREAM_TARGET_BUILD.txt
+COMBINED_HANDOFF_20260911T184549Z/QA/ACCEPTANCE_TESTS.md
+=== PROMPT02 ===
+FRANKENSTEIN – WIEDERVERWENDBARER ITERATIONS- UND BAUPROMPT
+===========================================================
+
+KONTEXT
+-------
+Du arbeitest am digitalen Avatar FranKenstein. Ziel ist keine Sammlung hübscher
+Einzelbilder, sondern ein messbar stabiles, lebensechtes 2D-Rig in einem
+responsiven Browserfenster. GRID10 bleibt die deterministische Autorität; LLMs
+sind regulierte Arbeiter/Mund/Löser. Der visuelle Zielvertrag, das Storyboard,
+die Verträge und Tests liegen im Begleitpaket. Das jüngste vollständige
+`FRANK_AVATAR_HANDOFF_*.zip` ist die alleinige Ist-Wahrheit.
+
+STARTBEDINGUNG
+--------------
+Beginne nur, wenn das jüngste Handoff vorhanden ist, `unzip -t` besteht,
+`HANDOFF_READY.json` lesbar ist und der aktive Repo-Pfad durch Prozess/Unit
+belegt wurde. Wenn nicht, führe zuerst ausschließlich den First-Handoff-Prompt
+aus. Ändere nie eine Cachekopie.
+
+ZIELBILD
+--------
+- Standardfenster ungefähr 746×449, dynamisch skalierbar: links eine kompakte,
+  vollständige FranKenstein-Büste, rechts ein lesbarer Twitch-artiger Chat.
+- Vollbild: Chatbreite `clamp(400px, 28vw, 520px)`, Stage nutzt den Rest.
+  Hintergrund darf `cover` nutzen; der Figurenverbund niemals. Kopf und
+  Schultern bleiben vollständig sichtbar. Kein riesiger, abgeschnittener Kopf.
+- Trashige Voxel-/Mosaikästhetik bleibt erhalten. Keine Beauty-Glättung.
+- Rot leuchtende Augen sind der einzige warme Identitätsanker: genau ein Paar,
+  kompakt und relativ zum Kopf fest registriert.
+- Keine Wasserlinie, Spiegelungsbank oder milchige Querfläche.
+
+KANONISCHES RIG
+---------------
+Eine einzige Koordinatenkette:
+
+  stageRoot -> bodyRoot -> neckAnchor -> headRoot -> faceSlots
+  faceSlots -> eyes, lids, mouth, expressionDelta
+
+Alle Assets benutzen eine kanonische 1536×1024-Entwurfsfläche oder ein exakt
+dokumentiertes äquivalentes Rig-Koordinatensystem. Der Browser skaliert nur
+`stageRoot`. Jedes Child erbt Transformation und Anker. Es gibt niemals zwei
+unabhängige Kopftransformationen.
+
+Nicht erlaubt:
+- Basiskopf plus zweiter kompletter Ausdruckskopf gleichzeitig,
+- rote Augen im Basiskopf plus separates Augenpaar,
+- per Layer wiederholte Winkelkorrekturen,
+- unregistrierte Crossfades,
+- zufälliges Umschalten von Bildern als Ersatz für Bewegung,
+- CSS-`cover` auf dem Figurenverbund,
+- Laufzeit-Diffusion.
+
+Wenn Ausdrücke als Rastervarianten vorliegen, müssen sie vor dem Einblenden am
+selben Hals-, Augen- und Mundanker registriert werden. Besser sind lokale
+RGBA-Deltas/Masken. Genau eine Kopfidentität bleibt aktiv.
+
+ARBEITSMETHODE PRO RUNDE
+------------------------
+1. Handoff und vorigen QA-Bericht lesen; aktuellen Fehler reproduzieren.
+2. Baseline erfassen: Standard/Vollbild, 30–60s Clip, rAF-Trace, Logs, DOM-
+   Transformdump, Assetinventar.
+3. Eine begrenzte Hypothese formulieren und messbare Abnahmekriterien nennen.
+4. Unabhängige Worker-Lanes einsetzen, sofern die Arbeitsumgebung das erlaubt:
+   A Architektur/Invarianten, B Assetregistrierung, C Bewegung/Kinematik,
+   D Blick/Blinzeln, E Lip-Sync/Mund, F Hintergrund/Filmlook,
+   G Responsive UI/Chat, H QA/Performance. Ein Integrator besitzt die
+   endgültige Entscheidung. Worker liefern Patch + Belege, niemals bloß Meinung.
+5. Erst Invarianten/Registrierung, dann Bewegung, dann Ausdruck, danach Look.
+6. Änderungen klein integrieren, nach jeder Lane Tests laufen lassen.
+7. Standard und Vollbild real im Browser prüfen; Clip und Zahlen vergleichen.
+8. Vollständiges neues Handoff-ZIP nach demselben Schema erzeugen.
+
+ANIMATIONSPHYSIK UND TIMING
+---------------------------
+- Simulation 100 Hz mit festem Zeitschritt; Darstellung über rAF bei 60 Hz.
+- Zustände sind kontinuierliche Werte: yaw, pitch, roll, lean, shoulderYaw,
+  breath, gazeX/Y, lid, jaw, mouthShapeWeights, expressionWeights, mood.
+- Visualisierung interpoliert Simulation; keine Zustandslogik direkt aus
+  schwankenden Frameabständen.
+- Kritisch gedämpfte Federn oder monotone kubische Kurven; keine linearen
+  Dauerloops und kein synchrones „alles wackelt zusammen“.
+- Idle-Kopfdrift: yaw ±0,6°, pitch ±0,4°, roll ±0,25°, überlagerte organische
+  Perioden 2,5–6s.
+- Atmen: 3,8–5,6s, Schulterhub im Standardfenster 1,5–3px; Kopf folgt dem
+  Körper mit 60–110ms Verzögerung.
+- Blinzeln: schließen 65–90ms, geschlossen 35–55ms, öffnen 90–140ms; insgesamt
+  190–285ms; unregelmäßig alle 2–7s, gelegentlich Doppelblinzeln. Nur ein sich
+  selbst neu planender Timer – keine Timerverzweigung.
+- Mikrosakkaden 0,2–0,7° alle 250–700ms nur bei echter Gesichtserkennung.
+- Makro-Blickdrift alle 4–11s; Augen führen Kopf um 40–80ms, Kopf folgt in
+  100–240ms.
+- Lip-Sync: 80–120ms Lookahead, Visem-Attack 45–80ms, Release 70–120ms,
+  Kiefer-Tiefpass etwa 90ms. Beim Schweigen keine zufällige Sprechbewegung.
+- Ausdruck: onset 160–420ms, offset 240–650ms; nur Schreck schneller.
+- Hintergrund-Mood-Morph 1,2–3s, unabhängig vom Körper.
+
+MUND- UND AUSDRUCKSRIG
+----------------------
+Der Mund ist entkoppelt als RGBA-Objekt und hat nicht nur 11 starre Viseme.
+Benötigt werden kontinuierliche Gewichtungen für mindestens:
+Rest, geschlossen, M/B/P, A/AA, E/EH, I/IH, O, U/W, F/V, L, TH, R/CH,
+S/Z, K/G, N/D/T, jawOpen, smile, frown, pucker, funnel, sneer, teethBare,
+tongueOut, tongueUp, whistle, biteLowerLip und asymmetryLeft/Right.
+Für häufige Übergänge existieren registrierte Zwischenstufen oder Blendgewichte;
+Zähne/Zunge gehören zum Mundobjekt, nicht zum Kopf.
+
+Ausdrucksregister: ernst/dystopisch, dämonisch, 90er-Anime-inspiriert und
+satirisch/comichaft. Referenzen dürfen Gestiktypen liefern, aber FranKenstein
+bleibt eine eigene Figur. Keine exakte Kopie geschützter Figuren und keine
+täuschende Imitation realer Politiker; stattdessen generische Archetypen wie
+selbstgefälliger Demagoge, steinerner Autokrat, überforderter Bürokrat,
+großäugige Anime-Verlegenheit oder überzogenes Sitcom-Erstaunen.
+
+HINTERGRUND
+-----------
+Mindestens fünf nahtlose 60-Frame-Mood-Zyklen: ruhig/blau, wach/cyan,
+angespannt/magenta, bedrohlich/rot akzentuiert, heiter/hell. Geometrie und
+Flussfeld bleiben zeitlich kohärent; Farbe/Dichte dürfen morphend wechseln.
+Kein unabhängiges Bildwürfeln. Parallaxe aus echter offline berechneter Tiefe
+(z.B. Depth Anything V2), nicht aus Helligkeit. Gemeinsames statisches SVG-Korn,
+ein gemeinsames Grade und Vignette über der Gesamtkomposition; keine zusätzliche
+Gesichtsfolie und keine pro-Frame-Neuberechnung des Korns.
+
+HARTE GATES
+-----------
+Eine Runde darf nur „fertig“ heißen, wenn mindestens:
+- genau zwei rote Augenkomponenten im Augen-ROI sichtbar sind, nie vier;
+- Halsanker RMS <0,35px, Maximum <0,75px;
+- Augen-/Mundslot relativ zum Kopf maximal 0,5px unerklärte Abweichung;
+- p95-Framezeit <=18,5ms, p99 <=25ms, kein >50ms-Spike im 2-Minuten-Test;
+- keine harten Vollkopf-Texturwechsel;
+- Standard und Vollbild bestehen Safe-Zone-/Crop-/Stretch-Tests;
+- 10-Minuten-Soak ohne wachsende Timerzahl oder Speicherleck;
+- getippter Chat bleibt getrennt vom echten Sprachmodus;
+- Lifecycle-, Tool-, State- und Timeout-Ereignisse bleiben im Terminal sichtbar.
+
+ABSCHLUSS JEDER RUNDE
+---------------------
+Liefere im echten Repo ein neues vollständiges
+`artifacts/handoff/FRANK_AVATAR_HANDOFF_<UTC>.zip`, nicht nur einen Patch.
+Enthalten: kompletter aktueller Code, alle tatsächlich verwendeten Assets,
+redigierte Config, Units, Schema/Migrationen, Tests, Logs, Screenshots Standard+
+Vollbild, neuer 30–60s Clip, Performance-Trace, Git-Diff, Inventar,
+SHA256SUMS und `HANDOFF_READY.json`.
+
+Berichte ehrlich: Was wurde geändert? Welche Messung wurde besser/schlechter?
+Welche Gates bestanden? Was ist blockiert? Pfad, Bytes, SHA-256 und `unzip -t`.
+Keine langen Erfolgsreden. Belege entscheiden.
+
+
+=== PROMPT03 ===
+GO-PROTOKOLL
+============
+
+Wenn Gabriel „GO“ schreibt, bedeutet das:
+
+1. Das neueste vollständige Claude-Handoff wird zuerst entpackt, inventarisiert
+   und gegen `HANDOFF_READY.json`, Prüfsummen und den realen Runtime-Pfad geprüft.
+2. Fehler werden mit Clip, Screenshots, Browsermessung und Tests reproduziert.
+3. Danach beginnt eine intensive, aber klar begrenzte Integrationsrunde mit den
+   Worker-Lanes aus `WORKERS/SWARM_PLAN.md`.
+4. Ein Integrator schützt die Invarianten. Kein blindes Zusammenkopieren.
+5. Jede Behauptung braucht eine Datei, Messung, Aufnahme oder einen Test.
+6. Die Runde endet mit einem wieder vollständig reproduzierbaren ZIP.
+
+„GO“ autorisiert eine konzentrierte Baurunde im vorhandenen Projekt, nicht das
+Veröffentlichen, Pushen, Löschen fremder Daten oder das Verschieben von Secrets.
+Es ist kein Versprechen unsichtbarer Arbeit über eine feste Stundenzahl. Es wird
+im aktuellen Lauf bis zum nächsten belastbaren Integrations- und Prüfpunkt
+gearbeitet; Blocker werden konkret gemeldet.
+
+Vor dem allerersten GO gilt zwingend: Claude muss mit
+`01_CLAUDE_FIRST_HANDOFF_ONLY.txt` zunächst alles liefern.
+
+
+=== PROMPT04 ===
+FRANKENSTEIN V2 – TRAUMZIEL EMPIRISCH BAUEN
+============================================
+
+VORBEDINGUNG
+------------
+Dieser Prompt darf erst nach erfolgreichem First-Handoff laufen. Das neueste
+`FRANK_AVATAR_HANDOFF_*.zip` muss geprüft und `HANDOFF_READY.json` vollständig
+sein. Arbeite im belegten aktiven Repo, nicht in Cache-/Marketplace-Kopien.
+
+VERBINDLICHES VISUELLES ZIEL
+----------------------------
+Lies vollständig:
+- `RESEARCH/EMPIRICAL_DREAM_TARGET.md`
+- `BASELINES/BASELINE_PROTOCOL.md`
+- `RESEARCH/CLAUDE_IMPLEMENTATION_ORDER.md`
+- `ARCHITECTURE/TARGET_ARCHITECTURE.md`
+- `ARCHITECTURE/ASSET_SPECIFICATION.md`
+- `QA/ACCEPTANCE_TESTS.md`
+- alle JSON-Verträge und Zielbilder in `TARGET_VISUALS/`.
+
+Die beiden neuen Ist-Screenshots legen die Defaultpose fest. Sie bleibt:
+frontal, leicht nach vorn genommen, Kinn minimal gesenkt, aufmerksam und
+zugewandt, breite Schultern. Verändere diese Nullpose nicht.
+
+Das Traumziel ist `TARGET_VISUALS/03_dream_fullscreen_uncanny_ai_filter.png`:
+FranKenstein wirkt so wahrnehmend und körperlich, dass es angenehm unheimlich
+wird. Er bleibt jedoch eine scharfe 2D-Voxel-/Mosaikfigur. Kein menschliches
+Glattbügeln, keine Wachshaut und kein beliebiger 3D-Ersatz.
+
+UI-ZIEL
+-------
+- Präzisionsrahmen aus schwarzem Titan/Graphit, physisch glaubwürdig.
+- Rauchglas mit kontrollierter Dicke, Reflexkante und echter Paneltiefe.
+- Claymorphism nur an Interaktionsflächen: weiche Volumenkörper in einer harten
+  Metallarchitektur, nicht die ganze Oberfläche als Kaugummi.
+- Sendetaste mit sichtbarem Hub, gedrücktem Zustand, Fokus, Hover, disabled und
+  loading; Tastaturbedienung und `prefers-reduced-motion` erhalten.
+- Cyan als technisches Kantenlicht, Violett als Aktion, Rot nur als Live-/Augen-
+  Anker. Kein RGB-Gaming, kein Plastik, keine sinnlosen Sci-Fi-Glyphen.
+- Standard ~746×449; Fullscreen mit Chat `clamp(400px,28vw,520px)`.
+
+AI-FACE-PASS
+------------
+Kein generatives Modell pro Renderframe. Erzeuge offline reproduzierbare Depth-,
+Normal-, Occlusion-, Region- und Detailmaps. Laufzeit nur deterministische
+Warps/Relighting/Compositing. Jede Map bekommt Quellhash, Modellhash, Seed,
+Parameter, Pose-ID und Anker.
+
+Aktiviere in separaten Commits/Gates:
+1. Tiefenparallaxe,
+2. lokale Okklusion,
+3. Lid-/Augenhöhlenspannung,
+4. lokale Kiefer-/Lippenverformung,
+5. kantenbewusstes Relighting,
+6. Halation,
+7. globales Grain/Grade/Vignette.
+
+Nach jedem Schritt: gleiche Baseline wiederholen. Bleibt ein Effekt nur dann,
+wenn sein Zielwert besser wird und kein früheres Gate regressiert.
+
+ANIMATION
+---------
+Eine einzige Kette `stage→body→neck→head→faceSlots`. Genau ein Vollkopf und eine
+Quelle der roten Augen. 100Hz Fixed-Step-Zustand, rAF-Interpolation. Augen
+führen, Kopf folgt, Körper ist träger. Der Mund ist lokal und kontinuierlich;
+Ausdruck ist lokales Delta. Die 12 Zielbeats in
+`TARGET_VISUALS/04_lifelike_animation_storyboard_12_frames.png` als feste QA-
+Stimulusfolge implementieren, zusätzlich organische Varianz im Idle.
+
+300 HINTERGRÜNDE
+----------------
+Inventarisiere alle 300 realen Bilder. Ordne sie fünf Moods × 60 zu oder erkläre
+Abweichungen. Messe optischen Fluss, Helligkeitssprünge und Loop-Closure. Baue
+kohärente Loops/Flow-Fields gemäß
+`TARGET_VISUALS/05_background_300_frame_storyboard.png`. Kein zufälliger
+Bildwechsel, keine Wasserlinie, kein Querband. Mood-Morph 1.2–3s.
+
+MESSZWANG
+---------
+Integriere/adaptiere:
+- `runtime_probe.js`
+- `visual_gate.py`
+- `background_loop_gate.py`
+- DOM Single-Head-/Single-Eye-Assertions
+- gemeinsame monotone Timestamps für Audio, State und Render.
+
+Die Traumzielschwellen aus `EMPIRICAL_DREAM_TARGET.md` sind Release-Gates.
+Nicht messbar heißt `not_run`, nie `pass`.
+
+ARBEITSRUNDEN
+-------------
+Baue in kleinen überprüfbaren Stufen. Nach jedem Stufenblock:
+1. Testaufnahme Standard und Fullscreen,
+2. Baselinevergleich Cn−C(n−1),
+3. Zahlenbericht,
+4. Regressionen zurückrollen oder reparieren,
+5. nächster Block erst bei grünem Gate.
+
+ABSCHLUSS
+---------
+Erzeuge ein vollständiges neues Handoff-ZIP im aktiven Repo mit gesamtem Code,
+allen 300 Hintergründen, allen erzeugten Maps, Layern, Modellen/Modellzeigern,
+Manifests, Services, redigierter Config, Tests, Messreihen, Screenshots, Videos,
+Diff, Checksummen und `HANDOFF_READY.json`.
+
+Berichte Pfad, Bytes, SHA-256, Commit, Dirty-Status, bestandene/fehlgeschlagene
+Gates und offene Blocker. Kein „sieht gut aus“ ohne Messbeleg.
+
+
+=== BASELINE ===
+# Baseline-Protokoll vor jedem Claude-Bauzyklus
+
+1. Git-SHA, aktiver Prozesspfad, Browser-/GPU-Version, Fenstergröße und Asset-
+   Manifesthash erfassen.
+2. Reproduzierbaren 60-Sekunden-Stimulus abspielen:
+   10s neutral, 10s Blick, 10s Blink, 15s Sprache, 10s Ausdruck, 5s Moodmorph.
+3. Gleichzeitig speichern:
+   - verlustarmen Screen-Capture mit PTS,
+   - rAF-/LoAF-/LongTask-Trace,
+   - Rig-State-CSV mit `performance.now()`,
+   - aktiven DOM-Transformdump,
+   - Audio-/Phonem-/Visemevents,
+   - GPU-/CPU-/RSS-/Heap-/Timerdaten.
+4. Standardfenster und 1680×1050 getrennt aufnehmen.
+5. `visual_gate.py`, Laufzeittests und 10-Minuten-Soak ausführen.
+6. Ergebnisse gegen vorige Baseline vergleichen. Kein Merge bei neuer
+   Regression, auch wenn ein Screenshot schöner aussieht.
+
+## Dateinamen
+
+`baseline/<UTC>/<commit>/<viewport>/<stimulus>/` mit `capture.mkv`,
+`frame_pts.csv`, `rig_state.csv`, `performance.jsonl`, `audio_events.csv`,
+`dom_layers.json`, `metrics.json`, `report.md`, `SHA256SUMS.txt`.
+
+## Kontrollgruppen
+
+- C0: alle Filter aus, neutraler statischer Rigframe.
+- C1: nur Kinematik.
+- C2: +Augen/Blink.
+- C3: +Mund.
+- C4: +Ausdruck.
+- C5: +Depth/AI-Face.
+- C6: +Filmlook/Hintergrund/UI.
+
+Nur der Unterschied Cn−C(n−1) wird einem neuen Effekt zugerechnet.
+
+
+=== METRICS ===
+{
+  "schema_version": 1,
+  "pose_id": "default_forward_attentive_v1",
+  "geometry": {
+    "visible_complete_heads": 1,
+    "red_eye_components_open": 2,
+    "neck_anchor_rms_px_max": 0.25,
+    "neck_anchor_error_px_max": 0.5,
+    "face_slot_error_px_max": 0.35,
+    "non_target_lpips_max": 0.03,
+    "non_target_flow_p95_px_max": 0.45
+  },
+  "timing": {
+    "simulation_hz": 100,
+    "frame_p95_ms_max": 16.7,
+    "frame_p99_ms_max": 22.0,
+    "frame_absolute_max_ms": 50.0,
+    "eye_lead_ms": [40, 80],
+    "head_follow_ms": [100, 240],
+    "body_follow_ms": [180, 420],
+    "blink_total_ms": [190, 285],
+    "av_lag_median_abs_ms_max": 35,
+    "av_lag_p95_abs_ms_max": 70
+  },
+  "background": {
+    "moods": 5,
+    "frames_per_mood": 60,
+    "closure_median_8bit_max": 2.0,
+    "closure_p95_8bit_max": 6.0,
+    "interframe_luma_jump_fraction_max": 0.015,
+    "mood_morph_seconds": [1.2, 3.0],
+    "waterline_allowed": false
+  },
+  "filter": {
+    "rigid_region_warp_residual_p95_px_max": 0.6,
+    "mosaic_edge_energy_retention_min": 0.92,
+    "vignette_corner_attenuation": [0.18, 0.28],
+    "new_red_components_outside_eye_mask": 0,
+    "runtime_generative_inference": false
+  },
+  "soak": {
+    "minutes": 10,
+    "timer_count_growth_allowed": 0,
+    "monotonic_heap_growth_allowed": false
+  }
+}
+
+=== QA ===
+# Harte Abnahme – visuell, geometrisch und zur Laufzeit
+
+| ID | Test | Pass-Bedingung | Beleg |
+|---|---|---|---|
+| GEO-01 | Halsanker | RMS <0.35px, max <0.75px | Overlay-/CV-Report |
+| GEO-02 | Augen-/Mundslot | unerklärte Abweichung relativ zum Kopf <=0.5px | Transformdump + CV |
+| GEO-03 | Rotkomponenten | exakt 2 kompakte rote Augenkomponenten, niemals 4 | Frameweiser ROI-Test |
+| GEO-04 | Kopfidentität | maximal eine komplette Kopftextur aktiv | DOM-/Layerassertion |
+| GEO-05 | Alpha | Kopf/Körper/Augen/Mund/Ausdruck echtes RGBA | Inventar + Randprüfung |
+| MOT-01 | Vollkopf-Pop | kein harter Vollkopfwechsel über Grenzwert | 60fps-Diffanalyse |
+| MOT-02 | Blink | 190–285ms, asymmetrisches close/open, kein Positionssprung | Zeitreihe |
+| MOT-03 | Lip-Sync | Attack 45–80ms, Release 70–120ms, kein Idle-Sprechen | Audio-/Visemtrace |
+| MOT-04 | Hierarchie | Augen führen; Kopf 40–240ms später; Körper träger | State-/Rendertrace |
+| PERF-01 | Framezeit | p95 <=18.5ms, p99 <=25ms | 2-Min-rAF-Trace |
+| PERF-02 | Long frame | kein Frame >50ms im 2-Min-Test | rAF-/LongTask-Log |
+| PERF-03 | Soak | 10min ohne monotone Timer-/Listener-/Speicherzunahme | Heap/Counter |
+| UI-01 | Standard | ca. 746×449, Avatar vollständig, Chat >=360px | Screenshot + bbox |
+| UI-02 | Fullscreen | keine Kopf-/Schulter-Crops, kein Stretch; Chat 400–520px | 1680×1050 Screenshot |
+| BG-01 | Loop | Übergang letzter→erster Frame nicht erkennbar | Diff + Sichttest |
+| BG-02 | Mood | Morph 1.2–3s, kein unabhängiges Flackern | Frame-/Farbreihe |
+| BG-03 | Wasser | keine Wasserlinie/Spiegelungs-/Nebelbank | Zeilenprofil + Sichttest |
+| SYS-01 | Chatgrenze | Typed Chat triggert keinen Realtime-Speech-Turn | Integrationstest |
+| SYS-02 | Terminal | Lifecycle, Utterance, Response, Timeout, Tool, State live | Logbeleg |
+| SYS-03 | Neustart | sauberer Restart/Re-Entry mit korrektem Repo/DB/WAL | Runbook-Test |
+| PKG-01 | Handoff | unzip, Checksums, Inventar, Startweg vollständig | Prüferbericht |
+
+## Pflichtaufnahmen je Runde
+
+- Standardfenster neutral und sprechend.
+- Vollbild neutral und sprechend.
+- 30–60s Video mit Blick, Blink, Sprache, Ausdruck und Moodmorph.
+- Debugaufnahme mit sichtbaren Hals-/Augen-/Mundankern.
+- rAF-, State- und Layertransform-CSV mit gemeinsamem monotonic timestamp.
+
+Ein fehlender Beleg ist `not_run`, niemals `pass`.
+

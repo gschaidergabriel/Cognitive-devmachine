@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "go-avatar-gpt56sol-rig-inventory-20260912-0634",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 300,
+  "command": "set -euo pipefail; Z=/artifacts/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z.zip; EXPECT=03ad0dd38ba2cb3b09f01b3b38496e5acda9b700d4979e7ee28cf334f0b7d6d1; GOT=$(sha256sum \"$Z\" | awk '{print $1}'); test \"$GOT\" = \"$EXPECT\"; unzip -tq \"$Z\" >/dev/null; W=/workspace/go-avatar-gpt56sol-rig-inventory; rm -rf \"$W\"; mkdir -p \"$W\"; echo PACKAGE_SHA256=$GOT; echo '=== RELEVANT ENTRIES ==='; unzip -Z1 \"$Z\" | grep -Ei '(^|/)(buehne\\.html|filmlook\\.js|HANDOFF_READY\\.json|TARGET_ARCHITECTURE\\.md|ACCEPTANCE_TESTS\\.md)$' | head -80; H=$(unzip -Z1 \"$Z\" | grep -E '(^|/)buehne\\.html$' | head -n1); test -n \"$H\"; unzip -p \"$Z\" \"$H\" > \"$W/buehne.html\"; echo BUEHNE_ENTRY=$H; sha256sum \"$W/buehne.html\"; python3 - <<'PY'\nfrom pathlib import Path\np=Path('/workspace/go-avatar-gpt56sol-rig-inventory/buehne.html')\ns=p.read_text(errors='replace'); lines=s.splitlines()\nneed=['koerper-schicht','koerper-schicht2','kopf-schicht','kopf-schicht2','kopf-dreh','pupillen-glow','augen-blink','mund-effekt','requestAnimationFrame','transform','breath','shoulder','neig','gaze','blink']\nprint('BYTES',len(s),'LINES',len(lines))\nseen=set()\nfor needle in need:\n    hits=[i for i,l in enumerate(lines) if needle.lower() in l.lower()]\n    print(f'\\n### {needle}: {len(hits)} hits')\n    for i in hits[:4]:\n        key=(needle,i)\n        if key in seen: continue\n        seen.add(key)\n        a=max(0,i-5); b=min(len(lines),i+7)\n        print(f'-- {a+1}:{b} --')\n        for j in range(a,b): print(f'{j+1:05d}: {lines[j][:260]}')\nPY"
+}

@@ -1,0 +1,54 @@
+name: Andreas ChatGPT bridge
+
+on:
+  push:
+    paths:
+      - 'andreas_bridge/requests/**.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: andreas-chatgpt-bridge
+  cancel-in-progress: false
+
+jobs:
+  execute:
+    runs-on: [self-hosted, linux, x64, andreas, claycode, target]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+
+      - name: Verify this is the registered Andreas target
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/claycode_target_host_identity.py verify --json > /tmp/andreas_bridge_identity.json
+          cat /tmp/andreas_bridge_identity.json
+
+      - name: Execute pending bridge requests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 andreas_bridge/bridge_agent.py
+
+      - name: Commit receipts
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'frankenstein-andreas-bridge'
+          git config user.email 'frankenstein-andreas-bridge@users.noreply.github.com'
+          git add andreas_bridge/results 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git commit -m 'bridge: record Andreas machine result'
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && \
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

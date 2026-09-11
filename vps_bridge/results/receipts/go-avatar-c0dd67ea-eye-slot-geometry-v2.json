@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "go-avatar-c0dd67ea-eye-slot-geometry-v2",
+  "command_sha256": "7d4110ebfee4217b1fb24bf3a8be6229dae58b45e89e85cf0a604987017f0c1d",
+  "started_at": "2026-09-11T23:43:23.849553+00:00",
+  "finished_at": "2026-09-11T23:43:24.036986+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "66b36bc6da82daa548cbed91b38d8106899fdd7e1e3bfe13e816a99b2e432f32",
+  "stdout_tail": "",
+  "stderr_tail": "base64: invalid input\n/tmp/go_eye_slot_probe.py:18: SyntaxWarning: invalid escape sequence '\\\u001a'\n  assert data[:8]==b'\\x89PNG\\r \\n \\\u001a'\n  File \"/tmp/go_eye_slot_probe.py\", line 29\n    raw=zlib.decompress(b'.join(ids))\n                        ^\nSyntaxError: unterminated string literal (detected at line 29)\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

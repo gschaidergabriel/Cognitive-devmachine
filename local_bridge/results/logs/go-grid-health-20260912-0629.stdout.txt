@@ -1,0 +1,344 @@
+===SELFTESTS===
+Selbsttests im Werkzeugkasten -- 2026-09-11T23:28:53Z
+/home/andreas/self-integration/werkzeug
+Temp: /var/tmp/selbsttests-2004049-20260912T012853  (Platte, 377443 MiB frei, aus TMPDIR des Aufrufers)
+
+#ERG	betrieb-pruefen_selbsttest.sh	0
+  bestanden  betrieb-pruefen_selbsttest.sh               1s  Selbsttest bestanden.
+#ERG	db-autoritaet_selbsttest.sh	0
+  bestanden  db-autoritaet_selbsttest.sh                21s  Selbsttest bestanden.
+#ERG	fluechtig-pruefen_selbsttest.sh	0
+  bestanden  fluechtig-pruefen_selbsttest.sh             2s  Selbsttest bestanden.
+#ERG	rueckstaende-pruefen_selbsttest.sh	0
+  bestanden  rueckstaende-pruefen_selbsttest.sh          0s  Selbsttest bestanden.
+#ERG	selbsttests_selbsttest.sh	0
+  bestanden  selbsttests_selbsttest.sh                   1s  Alle Pruefungen bestanden.
+#ERG	gegenwache_selbsttest.py	0
+  bestanden  gegenwache_selbsttest.py                    1s  31 bestanden, 0 nicht bestanden
+#ERG	hook-doppel-pruefen_selbsttest.py	0
+  bestanden  hook-doppel-pruefen_selbsttest.py           1s  17 bestanden, 0 nicht bestanden
+#ERG	letzter-frame-pruefen_selbsttest.py	0
+  bestanden  letzter-frame-pruefen_selbsttest.py         0s  ========================================================================
+#ERG	puls-pruefen_selbsttest.py	0
+  bestanden  puls-pruefen_selbsttest.py                  0s  87 von 87 Pruefungen bestanden.
+#ERG	regressions-waechter_selbsttest.py	0
+  bestanden  regressions-waechter_selbsttest.py          9s  65 bestanden, 0 nicht bestanden
+#ERG	selbsttests-waechter_selbsttest.py	0
+  bestanden  selbsttests-waechter_selbsttest.py          4s  37 bestanden, 0 nicht bestanden
+#ERG	wettbewerbsgesundheit_selbsttest.py	0
+  bestanden  wettbewerbsgesundheit_selbsttest.py         2s  ERGEBNIS: bestanden
+#ERG	wettbewerbswaechter_selbsttest.py	0
+  bestanden  wettbewerbswaechter_selbsttest.py           3s  ERGEBNIS: bestanden
+
+#SATZ	13/13
+-> 13 von 13 bestanden, 45s gesamt
+SELFTESTS_RC=0
+===BETRIEB===
+Betriebspruefung andreas-MACO -- 2026-09-11T23:29:38Z
+Vergleicht ~/.claude/CLAUDE.md gegen gemessenen Zustand. Nur lesend.
+
+== CLAUDE.md-Behauptung: Frank laeuft als Dauerdienst (fragmich-*) ==
+  fragmich-llama.service             FEHLT      (Unit existiert nicht -- nicht: gestoppt)
+  fragmich-embed.service             FEHLT      (Unit existiert nicht -- nicht: gestoppt)
+  fragmich-searxng.service           FEHLT      (Unit existiert nicht -- nicht: gestoppt)
+  fragmich-agent.service             FEHLT      (Unit existiert nicht -- nicht: gestoppt)
+  fragmich.target                    FEHLT      (Unit existiert nicht -- nicht: gestoppt)
+  Port 8081   TOT         CLAUDE.md: "Oberflaeche: http://127.0.0.1:8081"
+  FEHLT       /opt/fragmich_agent.py   CLAUDE.md: "Code: /opt/fragmich_agent.py"
+
+== Nachfolger Frank (frank-*, Konto gabriel) -- nicht in CLAUDE.md ==
+  frank-watchdog                     aktiv=inactive  enabled=disabled
+  frank-sentinel                     aktiv=inactive  enabled=disabled
+  frank-swarm                        aktiv=inactive  enabled=disabled
+  frank-immune                       aktiv=inactive  enabled=disabled
+
+== CLAUDE.md-Behauptung: Smart-Home-Stack /opt/smarthome laeuft ==
+homeassistant	running
+mosquitto	running
+  Port 8123   LAUSCHT     Home Assistant
+  Port 1883   LAUSCHT     Mosquitto
+
+== Meine eigenen Uhren (Architekt + Wettbewerbswaechter) ==
+  frankenstein-architekt.timer       LAEUFT
+  grid10-wettbewerbswaechter.timer   LAEUFT
+  frankenstein-ram-waechter.timer    MASKIERT   (-> /dev/null, seit 2026-09-07 03:43:31)
+
+== CLAUDE.md-Behauptung: sudo ohne Passwort ==
+  OK          sudo -n funktioniert
+
+== Gatter (muessen 0 bleiben, bis ein Mensch schaltet) ==
+  cortex.aktiv = 0
+  gespraech.aktiv = 1
+
+----
+7 Abweichung(en) zur CLAUDE.md. Dokumentation und Rechner sind nicht einig.
+Das ist ein Befund, kein Auftrag: nichts davon von selbst "reparieren".
+BETRIEB_RC=0
+===DB_AUTHORITY===
+Datenbank-Autoritaet auf andreas-MACO -- 2026-09-11T23:29:39Z
+Entscheidet ueber inodes, nicht ueber Pfadstrings. Nur lesend.
+
+== Die Autoritaet ==
+  AUTORITAET       inode=9319392     76443648 B  tab=217  grid10=12  2026-09-12 01:15
+              /var/lib/entityos/data/unified.db
+              beansprucht Entitaet 410e0108ae035e713adf029284467488
+
+== Jede weitere Datei namens unified.db auf dem HOST ==
+  fremd            inode=62006024    19787776 B  tab=187  grid10=0   2026-09-07 13:59
+              /home/andreas/.claude/udb/unified.db
+  ATTRAPPE         inode=61997837           0 B  tab=0    grid10=0   2026-09-10 07:26
+              /home/andreas/.local/share/agentzero/unified.db
+              Herkunft: geboren 2026-09-10 07:26:45, durch gabriel
+                        /usr/bin/sqlite3 /home/andreas/.local/share/agentzero/unified.db SELECT schluessel,wert FROM sta
+  ATTRAPPE         inode=58860974           0 B  tab=0    grid10=0   2026-09-06 23:14
+              /home/andreas/unified.db
+              Herkunft: geboren 2026-09-06 23:14:32, durch andreas
+                        /usr/bin/python3 -c \nimport sqlite3\nc=sqlite3.connect(\'/home/andreas/unified.db\')\nfor r in 
+  FREMDE ENTITAET  inode=61878309   105271296 B  tab=213  grid10=7   2026-09-06 21:13
+              /home/gabriel/.local/share/agentzero/unified.db
+              andere Entitaet: 7a1bd3f56160ce514659f8c9117484057f1e7a8fb77696e5c7a55cee3e94f8ae
+              (Autoritaet: 410e0108ae035e713adf029284467488) -- gehoert jemandem,
+              ist kein Konkurrent um die Autoritaet ueber DIESE Entitaet.
+              Herkunft: keine Spur im Journal (-60s/+5s um die Geburt).
+                        Das heisst NICHT "niemand" -- nur: kein Befehl,
+                        der diesen Pfad ausschreibt, steht im Protokoll.
+  ATTRAPPE         inode=14690372           0 B  tab=0    grid10=0   2026-09-10 09:27
+              /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+              Herkunft: keine Spur im Journal (-60s/+5s um die Geburt).
+                        Das heisst NICHT "niemand" -- nur: kein Befehl,
+                        der diesen Pfad ausschreibt, steht im Protokoll.
+  ATTRAPPE         inode=9308520            0 B  tab=0    grid10=0   2026-09-08 14:47
+              /var/lib/entityos/unified.db
+              Herkunft: geboren 2026-09-08 14:47:06, durch gabriel
+                        /usr/bin/sqlite3 /var/lib/entityos/unified.db SELECT schluessel, wert FROM star_konfig WHERE sch
+
+== Derselbe Pfadstring in der VM (entityos) ==
+  CLAUDE.md: "/var/lib/entityos/data/unified.db (= /var/lib/entityos/unified.db, dieselbe Datei)"
+  in der VM  : inode=9319392
+  auf dem Host: inode=9308520
+  DIESELBE DATEI -- in der VM stimmt die Aussage der CLAUDE.md.
+  Aber auf dem HOST ist /var/lib/entityos/unified.db eine andere Datei.
+  Wer diesen Pfad ausserhalb der VM oeffnet, arbeitet nicht auf der Autoritaet.
+
+== Wer traegt diesen Pfad als Voreinstellung ==
+  voice/aufmerksamkeit.py:73:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/buehne.py:70:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/charakter.py:41:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/cortex.py:71:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/entitaet.py:80:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/erinnern.py:62:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/erleben.py:76:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/gesicht.py:52:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/gespraech_waechter.py:34:DB_PATH = "/var/lib/entityos/unified.db"
+  voice/grid_steuerung.py:76:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/konversation.py:88:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/lagebild.py:32:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/meinung.py:53:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/memory_abruf.py:70:DB_PATH = os.environ.get("FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/puls.py:57:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/reflexion.py:68:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/regie.py:67:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/schirm.py:63:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/sehen.py:47:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/selbstauskunft.py:38:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/selbstreflexion.py:46:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/sinne.py:487:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/umschlag.py:155:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/verkoerperung.py:55:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/vorlieben.py:44:# "/var/lib/entityos/unified.db" -- auf dem Wirt eine 0-BYTE-ATTRAPPE. Wer
+  voice/wege.py:85:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/wiederholung.py:62:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/workspace.py:99:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  -> Diese Module gehoeren in die VM. Auf dem Host oeffnen sie eine leere DB,
+     ohne Fehlermeldung, weil sqlite3 eine fehlende Datei stumm anlegt.
+
+----
+5 Datei(en), die mit der Autoritaet verwechselbar sind.
+Das ist ein Befund, kein Auftrag: keine davon von selbst loeschen oder verlinken.
+Eine 0-Byte-Datei kann ein Mountpunkt sein; eine FREMDE ENTITAET gehoert jemandem.
+Verwechselbar heisst hier: durch den Dateinamen. Wessen Geschichte darin steht,
+sagt die entity_id -- und nur beim Etikett ZWEITSATZ ist es dieselbe wie hier.
+DB_AUTHORITY_RC=0
+===GATES===
+Gatterpruefung andreas-MACO -- 2026-09-11T23:29:43Z
+Fragt nicht "ist der Wert 0", sondern "verantwortet jemand das Offene". Nur lesend.
+
+== Die Autoritaet ==
+  lesbar  /var/lib/entityos/data/unified.db
+  Journal reicht zurueck bis 2026-07-18T15:34:58+02:00 -- was davor geschaltet wurde, ist UNMESSBAR.
+
+== Die Gatter ==
+  gespraech.aktiv  OFFEN     wert=1
+                   ERKLAERT durch gabriel, 2026-09-10T17:27:49+02:00 (Protokoll: SET wert=1)
+                   Meine Grenze erlaubt das: ein Mensch hat geschaltet.
+  cortex.aktiv     ZU        wert=0
+                   keine protokollierte Schaltung -- bei einem geschlossenen
+                   Gatter ist das der unauffaellige Fall.
+
+----
+-> 0 unerklaert offene(s) Gatter
+Kein Gatter steht offen, ohne dass es jemand verantwortet.
+Das ist KEINE Aussage darueber, ob das Offene richtig ist -- nur darueber,
+dass es protokolliert ist.
+GATES_RC=0
+===LAST_FRAME===
+========================================================================
+letzter-frame-pruefen -- /var/lib/entityos/data/unified.db
+========================================================================
+
+== 1. Stellen im Quelltext ==
+  OHNE Tie-Breaker  f2wp1207_epoch_reconciler.py:396
+  mit Tie-Breaker   f2wp1207_grid10_turn_loop.py:405
+  mit Tie-Breaker   f2wp1207_grid10_turn_loop.py:475
+  mit Tie-Breaker   f2wp1207_grid10_turn_loop.py:582
+  OHNE Tie-Breaker  f2wp1207_p10_gold_test.py:72
+  OHNE Tie-Breaker  f2wp1207_p12_self_observation.py:330
+  -> 3 Stelle(n) ohne deterministischen Zweitschluessel
+     GRENZE dieser Zaehlung: sie findet nur SQL-Abfragen. Derselbe
+     Griff in Python -- ein Maximum ueber opened_at ohne Zweit-
+     schluessel -- bleibt unsichtbar. Bekannter Fall dieser Art:
+     f2wp1207_p10_workspace_reentry.py:_find_reentry_record.
+
+== 2. Wie oft ist 'der letzte Frame' ueberhaupt mehrdeutig? ==
+  Frames gesamt                        : 2121
+  davon teilen ihre Sekunde mit anderen: 261 (12 %)
+  Epochen mit >1 Frame                 : 31
+  davon liefert die ambige Abfrage einen ANDEREN Frame: 13
+    epoche=00a6468eccab41fe  ambig=...76521a30add2  richtig=...71751252b844
+    epoche=0b4e0567ff4a430e  ambig=...ebd75ab35592  richtig=...875671d7f9de
+    epoche=11135467771744b5  ambig=...5c9b7e63442f  richtig=...2d0c6577c1ba
+    epoche=14c97b33211f4eb0  ambig=...6a89d6fef168  richtig=...d0efb1cb36c3
+    epoche=2b78b065f0734d4f  ambig=...4f9d70b2bded  richtig=...50976737e0f3
+    epoche=3aca27c2957f424a  ambig=...c8fe5a34691d  richtig=...6697045d6e1f
+    epoche=5288fb6de1ed4070  ambig=...6591ac05db2e  richtig=...facd2d8648f1
+    epoche=6363174ed9844b72  ambig=...fa4f1aecdbaf  richtig=...6f99f1177dfc
+    epoche=7ac1b459ba9f4ab1  ambig=...3b659f3e3918  richtig=...8076c20b0bac
+    epoche=a2fce33e797843ae  ambig=...3cbb4c00f7dd  richtig=...e354b4c69bcf
+
+== 3. Hat es schon einen gespeicherten Zeiger falsch gesetzt? ==
+  RICHTIG                reentry_id=188d78e968bd41cc
+
+========================================================================
+URTEIL: LATENT -- die Mehrdeutigkeit ist real und messbar,
+        hat aber noch keinen der 1 gespeicherten Zeiger
+        falsch gesetzt. Kein Handlungszwang, aber ein Grund,
+        diese Pruefung stehen zu lassen.
+========================================================================
+LAST_FRAME_RC=0
+===GRID_LOCAL_DIFF===
+ scripts/f2wp1207_grid10_turn_loop.py | 88 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
+diff --git a/scripts/f2wp1207_grid10_turn_loop.py b/scripts/f2wp1207_grid10_turn_loop.py
+index 48efbc3..7746bc5 100644
+--- a/scripts/f2wp1207_grid10_turn_loop.py
++++ b/scripts/f2wp1207_grid10_turn_loop.py
+@@ -799,6 +799,71 @@ def ensure_percept_schema(conn: sqlite3.Connection) -> dict:
+     return ergebnis
+ 
+ 
++SCHEMA_WETTBEWERB = "F2WP1207_GRID10_CELL_COMPETITION/v1"
++
++# Zustandsprotokoll je Frame. WARUM ES DAS GIBT (gemessen 2026-09-08, 062):
++# Der Wettbewerb der zehn Zellen war im Nachhinein NICHT rekonstruierbar.
++# Gespeichert wurde bisher nur der Gewinner (f2_grid10_frame) und der
++# JETZIGE Stand aller zehn -- f2_grid10_p6d_state wird je Turn per
++# ON CONFLICT DO UPDATE ueberschrieben, f2_grid10_turn_pointer ebenso
++# (UNIQUE (installation_id, state_root_id), eine Zeile). Wer die neun
++# Verlierer eines vergangenen Frames wissen wollte, hatte keine Quelle.
++# Das ist exakt dasselbe Problem, das fuer das PERZEPT eine Zeile weiter
++# oben schon mit einer eigenen Tabelle geloest wurde.
++#
++# BEWUSST NICHT gespeichert: uptake und conflict. Beide stehen bereits in
++# f2_grid10_cell_observation unter demselben Schluessel
++# (frame_id, logical_cell_id). Sie hier zu wiederholen erzeugte eine
++# zweite Wahrheit ueber dieselbe Tatsache -- genau die Fehlerklasse, die
++# in offen.md schon zweimal als P7-Divergenz notiert ist.
++#
++# state_after ist der Wert, der TATSAECHLICH Zustand wird, also nach dem
++# uptake_delta der P11-Effektschicht (45 Effekte EXECUTED, Stand 062) --
++# nicht der rohe P7-Uebergang. Nur so gilt die Kette
++#     state_after(Frame N) == state_before(Frame N+1)
++# und genau diese Kette ist der Pruefstein dieser Tabelle.
++_WETTBEWERB_DDL = (
++    """
++CREATE TABLE IF NOT EXISTS f2_grid10_cell_competition (
++    frame_id         TEXT NOT NULL REFERENCES f2_grid10_frame(frame_id),
++    logical_cell_id  TEXT NOT NULL
++        CHECK (logical_cell_id IN ('G1','G2','G3','G4','G5','G6','G7','G8','G9','G10')),
++    signal           REAL NOT NULL,
++    state_before     REAL NOT NULL,
++    proposal_score   REAL NOT NULL,
++    state_after      REAL NOT NULL,
++    condition_key    TEXT NOT NULL,
++    quelle           TEXT NOT NULL CHECK (quelle IN ('live','evidenz_jsonl')),
++    schema           TEXT NOT NULL,
++    PRIMARY KEY (frame_id, logical_cell_id)
++);
++""",
++)
++
++
++def ensure_wettbewerb_schema(conn: sqlite3.Connection) -> dict:
++    """Legt die Wettbewerbstabelle an (IF NOT EXISTS, additiv).
++
++    Aus demselben Grund NICHT in ensure_schema() wie das Perzept-Schema:
++    die kehrt frueh zurueck, sobald f2_grid10_turn_pointer existiert, und
++    ihr Rueckgabewert steht unter Goldpruefung (S1).
++
++    ANDERS als beim Perzept gibt es hier KEIN Gate. Ein Gate waere hier
++    keine Vorsicht, sondern eine Selbsttaeuschung: die Tabelle veraendert
++    den Wettbewerb nicht, sie schreibt nur auf, was ohnehin gerechnet und
++    bisher weggeworfen wurde. Ein Gate, das aus bleibt, reproduziert genau
++    den Mangel, gegen den die Tabelle gebaut ist."""
++    ergebnis: dict = {"created": [], "already_present": []}
++    for ddl in _WETTBEWERB_DDL:
++        name = ddl.split("IF NOT EXISTS", 1)[1].split("(", 1)[0].strip()
++        vorhanden = conn.execute(
++            "SELECT name FROM sqlite_master WHERE type='table' AND name=?", (name,)
++        ).fetchone()
++        conn.execute(ddl)
++        (ergebnis["already_present"] if vorhanden else ergebnis["created"]).append(name)
++    return ergebnis
++
++
+ def percept_projection(cell_id: str, k: int) -> tuple:
+     """Fester Gewichtsvektor je Zelle, deterministisch aus sha256(Zellname).
+ 
+@@ -1355,6 +1420,11 @@ def run_canonical_turn(
+         ensure_percept_schema(conn)
+         conn.commit()
+ 
++    # Wettbewerbsprotokoll: ungegated, aber aus demselben Grund wie oben
++    # VOR BEGIN IMMEDIATE -- kein DDL in der Turn-Transaktion.
++    ensure_wettbewerb_schema(conn)
++    conn.commit()
++
+     conn.execute("BEGIN IMMEDIATE")
+     try:
+         # --- Identitaet: die Epoche des TypedEntry traegt Installation/   -
+@@ -1555,6 +1625,24 @@ def run_canonical_turn(
+                     new_state[jspace.winner_cell_id] + effect["uptake_delta"]
+                 )
+ 
++        # Wettbewerbsprotokoll: die neun Verlierer ueberleben diesen Turn.
++        # NACH der Effektschicht, damit state_after der Wert ist, der
++        # wirklich Zustand wird (siehe _WETTBEWERB_DDL). Nichts hiervon
++        # wird gemessen oder geschaetzt -- alle vier Zahlen liegen seit
++        # uptake_and_state() fertig vor und wurden bisher nur in die
++        # JSONL-Beweiskette geschrieben, nicht in die Datenbank.
++        for t in transitions:
++            conn.execute(
++                "INSERT INTO f2_grid10_cell_competition "
++                "(frame_id, logical_cell_id, signal, state_before, proposal_score, "
++                " state_after, condition_key, quelle, schema) VALUES (?,?,?,?,?,?,?,?,?)",
++                (
++                    frame_id, t["cell_id"], t["signal"], t["old_state"],
++                    t["proposal_score"], new_state[t["cell_id"]],
++                    CONDITION_KEY, "live", SCHEMA_WETTBEWERB,
++                ),
++            )
++
+         # Reentry-Zeiger = GENAU der Einstiegspunkt des naechsten Turns
+         pointer_id = uuid.uuid4().hex
+         evidence = dict(reentry.evidence)
+===DONE===

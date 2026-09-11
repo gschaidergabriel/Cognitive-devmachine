@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "go-avatar-gpt56sol-focus-context-20260912-0640",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 300,
+  "command": "set -euo pipefail; Z=/artifacts/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z.zip; H=$(unzip -Z1 \"$Z\" | grep buehne.html | head -n1); T=/workspace/go-avatar-focus-buehne.html; unzip -p \"$Z\" \"$H\" > \"$T\"; echo '=== EYE_ROTATION_CONTEXT ==='; nl -ba \"$T\" | sed -n '720,812p'; echo '=== GAZE_CONTEXT ==='; nl -ba \"$T\" | sed -n '1288,1320p'; echo '=== BREATH_BODY_CONTEXT ==='; nl -ba \"$T\" | sed -n '1540,1642p'; echo '=== FRAME_LAYOUT_CONTEXT ==='; nl -ba \"$T\" | sed -n '90,210p'"
+}

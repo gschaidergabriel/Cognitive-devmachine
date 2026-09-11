@@ -2,8 +2,11 @@ name: Andreas ChatGPT bridge
 
 on:
   push:
+    branches: [main]
     paths:
-      - 'andreas_bridge/requests/**.json'
+      - '.github/workflows/andreas-chatgpt-bridge.yml'
+      - 'andreas_bridge/requests/*.json'
+      - 'andreas_bridge/requests/**/*.json'
   workflow_dispatch:
 
 permissions:

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "go-avatar-c0dd67ea-transform-ranges",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "python3 - <<'PY'\nimport zipfile\nz='/artifacts/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z.zip'\nwith zipfile.ZipFile(z) as q:\n    names=[n for n in q.namelist() if n.endswith('/source/buehne.html') and 'ROUND1_EXPORT_' in n]\n    assert len(names)==1,names\n    s=q.read(names[0]).decode('utf-8').splitlines()\n    print('MEMBER',names[0],'LINES',len(s))\n    for a,b in [(720,810),(1510,1650),(1710,1770)]:\n        print(f'===RANGE {a}-{b}===')\n        for i in range(a-1,min(b,len(s))): print(f'{i+1:05d}: {s[i]}')\nPY"
+}

@@ -1,0 +1,21 @@
+HEAD is now at 50a7146 control: test G2 PipeWire session-manager hypothesis
+● clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher
+     Loaded: loaded (/srv/claylab/.config/systemd/user/clay-free-swarm-publisher.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-09-11 20:50:29 UTC; 3s ago
+   Main PID: 621125 (bash)
+      Tasks: 2 (limit: 19144)
+     Memory: 108.6M (peak: 138.5M)
+        CPU: 1.882s
+     CGroup: /user.slice/user-5001.slice/user@5001.service/app.slice/clay-free-swarm-publisher.service
+             ├─621125 bash /srv/claylab/bin/clay-free-swarm-publisher
+             └─621180 python3 "/srv/claylab/free-swarm-publisher/free swarm/evaluate.py" --repo /srv/claylab/free-swarm-publisher --artifacts /srv/claylab/artifacts/clay-entityos-swarm
+
+Sep 11 20:50:29 srv1563149 systemd[6766]: Started clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
+Sep 11 20:50:30 srv1563149 clay-free-swarm-publisher[621128]: From github.com:gschaidergabriel/clay-global-research-entity
+Sep 11 20:50:30 srv1563149 clay-free-swarm-publisher[621128]:  * branch                main       -> FETCH_HEAD
+Sep 11 20:50:31 srv1563149 clay-free-swarm-publisher[621135]: Reset branch 'main'
+Sep 11 20:50:31 srv1563149 clay-free-swarm-publisher[621135]: branch 'main' set up to track 'origin/main'.
+Sep 11 20:50:31 srv1563149 clay-free-swarm-publisher[621135]: Your branch is up to date with 'origin/main'.
+Sep 11 20:50:31 srv1563149 clay-free-swarm-publisher[621178]: HEAD is now at 0c80bd24d current: refresh token-efficient research state [skip ci]
+FREE_SWARM_PUBLISHER_MODE=systemd-user
+FREE_SWARM_PUBLISHER_READY

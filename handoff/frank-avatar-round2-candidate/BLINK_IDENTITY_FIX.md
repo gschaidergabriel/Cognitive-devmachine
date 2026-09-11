@@ -33,6 +33,27 @@ The blink assets are not local lid deltas:
 
 Operational interpretation: a blink replaces a large independently rendered upper-face crop instead of changing only the eyelid/eye region. This is a direct mechanism for the observed “other eyes / other face during animation” failure.
 
+## Temporal-signal discriminator
+
+A separate pass measured, for every pixel, the maximum RGB-channel deviation across all 12 blink frames relative to the open frame.
+
+Key separation:
+
+- eye-neighborhood max-change distribution: `q95=179`, `q99=249`, `max=255`
+- outside-eye distribution: `q95=40`, `q99=63`, `max=148`
+
+At threshold `>=80`, the two dominant connected components are:
+
+- `[54,68,111,100]`, 1009 pixels
+- `[206,68,259,101]`, 1052 pixels
+
+Two additional high-signal components sit directly above the eyes, consistent with lid/brow motion:
+
+- `[48,45,137,59]`, 559 pixels
+- `[180,40,266,57]`, 647 pixels
+
+This independently supports a localized ocular/lid signal embedded inside a globally contaminated crop. The chosen candidate mask bbox `[42,50,274,118]` fully contains both dominant lid/eye components while rejecting the majority of global face variation. The upper feather also intersects the lower portion of the measured brow signal without exposing the full rectangular crop.
+
 ## Candidate
 
 Keep every original blink pixel unchanged in RGB, but multiply alpha by the union of two feathered eye-local elliptical masks derived from the canonical gaze components. No new face is generated and no source-code coordinate is guessed.
@@ -60,16 +81,21 @@ SHA-256:
 
 `a5b172642a9a40ef36c633c26d57743e6351fcbd1652502e4a9d453fd9cda479`
 
+Reproducible builder in this branch:
+
+`handoff/frank-avatar-round2-candidate/build_blink_eye_local_mask.py`
+
 ## Scope fence
 
 This candidate does **not** claim visual acceptance yet. It establishes:
 
 1. exact live/source asset identity;
 2. a reproduced identity-contamination mechanism;
-3. an independently confirmed falsifier;
-4. a deterministic local-mask repair candidate;
-5. deterministic candidate hashes;
-6. no mutation of the newer live HTML/JS subject.
+3. an independently confirmed periphery falsifier;
+4. an independent temporal-signal localization discriminator;
+5. a deterministic local-mask repair candidate;
+6. deterministic candidate hashes;
+7. no mutation of the newer live HTML/JS subject.
 
 The direct live-write command was rejected by the execution safety guard before host mutation. That guard was not bypassed. Live promotion therefore still requires the already-authorized local integration lane to apply the candidate under the recorded preimage hashes, reload the `FranKenstein -- live` window, force deterministic blink probes, capture before/after frames, and retain rollback originals.
 

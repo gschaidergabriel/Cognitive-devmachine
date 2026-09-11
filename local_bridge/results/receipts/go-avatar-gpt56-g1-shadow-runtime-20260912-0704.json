@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-gpt56-g1-shadow-runtime-20260912-0704",
+  "command_sha256": "7c904e258adab5b35832670ceb6d74ee911c316c467792faba9867c863993dae",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-11T23:44:52.249186+00:00",
+  "finished_at": "2026-09-11T23:45:15.294644+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "4568893c3d1206ac807b3eb41e783a06c0fe2ada1e2fe2d7ba72d0b4b7382a86",
+  "stderr_sha256": "f5239dd66a6eae012bace41b4841181c13144b410f2259295ed4b008036c1105",
+  "stdout_tail": "RAW_METRICS {\"schema\":\"FRANK_AVATAR_METRICS/v1\",\"timestamp\":\"2026-09-11T23:45:15.113Z\",\"elapsed_ms\":21469,\"count\":57,\"mean_ms\":313.72982456140346,\"p50_ms\":33.40000000000009,\"p95_ms\":133.30000000000007,\"p99_ms\":10866.199999999999,\"max_ms\":10866.199999999999,\"over16_7ms\":54,\"over33_3ms\":41,\"over50ms\":9,\"longtask_count\":3,\"longtask_total_ms\":15595,\"memory\":{\"usedJSHeapSize\":1094367,\"totalJSHeapSize\":1943231,\"jsHeapSizeLimit\":4395630592},\"viewport\":{\"width\":780,\"height\":437,\"devicePixelRatio\":1},\"breathing_period_ms\":4430,\"errors\":[]}\nMETRICS {\"breathing_period_ms\": 4430, \"count\": 57, \"elapsed_ms\": 21469, \"errors\": [], \"longtask_count\": 3, \"longtask_total_ms\": 15595, \"max_ms\": 10866.199999999999, \"mean_ms\": 313.72982456140346, \"memory\": {\"jsHeapSizeLimit\": 4395630592, \"totalJSHeapSize\": 1943231, \"usedJSHeapSize\": 1094367}, \"over16_7ms\": 54, \"over33_3ms\": 41, \"over50ms\": 9, \"p50_ms\": 33.40000000000009, \"p95_ms\": 133.30000000000007, \"p99_ms\": 10866.199999999999, \"schema\": \"FRANK_AVATAR_METRICS/v1\", \"timestamp\": \"2026-09-11T23:45:15.113Z\", \"viewport\": {\"devicePixelRatio\": 1, \"height\": 437, \"width\": 780}}\n",
+  "stderr_tail": "curl: (7) Failed to connect to 127.0.0.1 port 18788 after 0 ms: Couldn't connect to server\nTraceback (most recent call last):\n  File \"<stdin>\", line 14, in <module>\nAssertionError\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

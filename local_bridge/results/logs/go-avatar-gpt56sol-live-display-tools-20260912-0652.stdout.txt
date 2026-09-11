@@ -1,0 +1,48 @@
+SOURCE=87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645
+xdotool=/usr/bin/xdotool
+import=/usr/bin/import
+scrot=/usr/bin/scrot
+gnome-screenshot====WINDOWS===
+FranKenstein -- live
+FranKenstein -- live
+crush ~/frankenstein-repo
+FranKenstein -- live
+crush ~/frankenstein-repo
+===RELOAD_WATCHER===
+  }
+  else if(e.key === "x"){
+    e.preventDefault();
+    const alle = KATEGORIE_SONDERAUSDRUCK.self_confident;
+    const wahl = alle[Math.floor(Math.random()*alle.length)];
+    sonderausdruckZeigen(wahl[0], wahl[1]);
+  }
+});
+
+// ── Permanenter Reload-Weg (Gabriel/Koordinator 2026-09-07: der Daemon
+// startete Chrome ohne --remote-debugging-port, es gab also KEINEN Weg,
+// eine Dateiaenderung ins laufende Fenster zu bekommen ausser manuellem
+// xdotool ctrl+r. Ab jetzt merkt die Seite selbst, wenn buehne.html sich
+// geaendert hat, und laedt sich automatisch neu -- kein Handgriff mehr
+// noetig, kein Debugging-Port noetig, rein clientseitig.
+let _startMtime = null;
+async function _reloadWaechter(){
+  try{
+    const r = await fetch("/api/mtime", {cache:"no-store"});
+    const d = await r.json();
+    if(_startMtime === null){ _startMtime = d.mtime; return; }
+    if(d.mtime && d.mtime !== _startMtime){ location.reload(); }
+  }catch(e){}
+}
+setInterval(_reloadWaechter, 2000);
+_reloadWaechter();
+</script>
+  <!-- ⭐ 2026-09-11 (Koordinator): globaler Filmlook -- gemeinsames Korn,
+       gemeinsame Farbabstimmung, Vignette. Liegt BEWUSST in einer eigenen
+       Datei und nicht hier: diese Seite wird gerade von einem anderen
+       Agenten umgebaut, zwei Agenten in einer Datei kollidieren. Der
+       Zweck des Looks ist, die getrennt erzeugten Ebenen (Kopf, Koerper,
+       Mund, Augen, Hintergrund) wie EINE Aufnahme wirken zu lassen.
+       Abschalten: Datei filmlook.js leeren -- die Seite laeuft ohne. -->
+  <script src="/filmlook.js"></script>
+</body>
+</html>

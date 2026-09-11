@@ -1,0 +1,35 @@
+=== EVENTS ===
+OpenAI Codex v0.146.0
+--------
+workdir: /home/ai-core-node/frankenstein-avatar-go/c0dd67ea/candidate
+model: gpt-5.6-terra
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a092d8-6675-7d22-9e2a-ae19a31d2031
+--------
+user
+You are the mutation worker for FranKenstein Avatar GO macrocycle go-c0dd67ea-76ce-46b8-9b8c-f8f1f9485f36. Work ONLY inside this candidate Git repository. Never write /home/ai-core-node/.claude/star/visual or restart/kill the live service. No network calls, no package installation, no secrets.
+
+The baseline is an exact copy of the currently live source. Preserve the intentionally coarse/mosaic/pixel identity; do NOT beautify/smooth the face into a generic portrait. The target is uncanny lifelike temporal coherence: same eyes, same face, same body identity while moving; physically plausible head/neck/shoulder/body motion; no ghost head, neck seam, eye slip, hard pose jumps; near-60fps with low resource use. GRID10 remains behavioral authority. Visual idle-life may be state-neutral but must not invent mood.
+
+Known current implementation facts from measured source: separate #kopf-dreh and #koerper-dreh wrappers; head transform-origin 50% 58.59%, body 50% 100%; eyes/blink are inside the head wrapper; head/body spring motion and real RGBA pose/breath crossfades already exist; blink is one self-rescheduling 2-7s chain; gaze, gaze pauses and microsaccades already exist; main motion has a requestAnimationFrame loop. Recent live fixes removed ghost head, neck seam, double-angle eye slip, and an old timer leak. Do not regress them.
+
+Generation G1 has two mandatory deliverables.
+
+1) MEASUREMENT: Add zero-dependency opt-in browser instrumentation activated only by query parameter probe=1. It must not change normal rendering when probe is absent. Collect rAF frame deltas and produce at least count, mean, p50, p95, p99, max, over16_7ms, over33_3ms; observe Long Tasks when supported; capture performance.memory fields when supported; record viewport/devicePixelRatio and timestamp. After roughly 12 seconds, expose a stable JSON snapshot both as window.__FRANK_AVATAR_METRICS__ and as textContent of a hidden DOM element with id frank-perf-probe so headless --dump-dom can retrieve it. Keep instrumentation tiny and fail-closed if APIs are missing.
+
+2) VISUAL/MOTION: Audit the CURRENT transform chain before editing. Make at most ONE coherent visible motion/registration improvement in G1, only if you can name a concrete current defect/risk from source. Priority: eye/eyelid registration across head roll; head/neck/body continuity; shoulder/torso independence. Do not stack speculative effects. If the current code already correctly solves these, make NO visual change and write that finding instead. Do not add continuous random jitter.
+
+Create G1_REPORT.md with: exact files changed; concrete source-level defect/hypothesis; why the change should improve temporal realism; possible regressions; exact local tests to run; and explicit NO-CLAIM boundaries. Run syntax/static checks available without external dependencies. Finish with git diff --check. Do not commit; leave the diff for independent review.
+
+ERROR: You've hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 10:01 AM.
+ERROR: You've hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at 10:01 AM.
+=== LAST ===
+=== STATUS ===
+=== DIFFSTAT ===
+=== DIFFCHECK ===
+=== LOG ===
+6cdbf8c baseline: exact live avatar source

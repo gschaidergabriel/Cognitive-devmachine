@@ -1,0 +1,28 @@
+836173805c8919492c1d52540c50f8b97dfd5beb8d02196d5630dbce52da342f  /home/ai-core-node/.claude/star/local_bridge_daemon.py
+53:CONTROL_BRANCH = os.environ.get("LOCAL_BRIDGE_CONTROL_BRANCH", f"chatgpt-local-{MACHINE_ID}-control")
+54:RESULTS_BRANCH = os.environ.get("LOCAL_BRIDGE_RESULTS_BRANCH", f"chatgpt-local-{MACHINE_ID}-results")
+95:    _git("fetch", "origin", f"refs/heads/{CONTROL_BRANCH}:refs/remotes/origin/{CONTROL_BRANCH}", check=False)
+103:    _git("push", "-u", "origin", f"HEAD:{RESULTS_BRANCH}", timeout=180)
+180:    cid = receipt["command_id"]
+200:    cid = str(s["command_id"])
+223:        "command_id": cid,
+227:        "machine_id": MACHINE_ID,
+233:        "execution_boundary": f"REAL_LOCAL_HOST_{MACHINE_ID.upper().replace('-', '_')}_NOT_SANDBOXED",
+245:    _git("checkout", "-B", RESULTS_BRANCH, f"origin/{RESULTS_BRANCH}", check=False)
+250:            ["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{QUEUE}"],
+255:                        f"origin/{CONTROL_BRANCH}"], capture_output=True)
+258:        show = subprocess.run(["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{n}"],
+● frankenstein-local-bridge.service - Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results)
+     Loaded: loaded (/home/ai-core-node/.config/systemd/user/frankenstein-local-bridge.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2026-09-12 06:35:09 +07; 6min ago
+   Main PID: 959674 (python3)
+      Tasks: 4 (limit: 28222)
+     Memory: 168.1M (peak: 262.1M)
+        CPU: 19.187s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-local-bridge.service
+             ├─ 959674 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py
+             ├─1050696 bash -lc "set -e; test \"\$(hostname)\" = 'ai-core-node-projekt-frankenstein' || exit 77; F=/home/ai-core-node/.claude/star/local_bridge_daemon.py; sha256sum \"\$F\"; grep -n -e 'CONTROL_BRANCH' -e 'RESULTS_BRANCH' -e 'HOST' -e 'machine_id' -e 'target_host' -e 'command_id' \"\$F\" | head -180; systemctl --user status frankenstein-local-bridge.service --no-pager -l | head -80 || true"
+             ├─1050711 systemctl --user status frankenstein-local-bridge.service --no-pager -l
+             └─1050712 head -80
+
+Sep 12 06:35:09 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-local-bridge.service - Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results).

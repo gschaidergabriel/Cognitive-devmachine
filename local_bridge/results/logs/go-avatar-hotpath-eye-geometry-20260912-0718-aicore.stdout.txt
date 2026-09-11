@@ -1,0 +1,374 @@
+=== RAIN/HOTPATH SOURCE ===
+// zappelte nach jedem Neuladen sekundenlang sinnlos. Der Verlauf wird
+// angezeigt (er gehoert ins Bild), aber nur WIRKLICH neue Antworten bewegen
+// den Mund -- er spricht nicht nach, was laengst gesagt wurde.
+let _ersteLadung = true;
+async function chatHolen(){
+  try{
+    const r = await fetch("/api/chat?since=" + encodeURIComponent(cursor));
+    const d = await r.json();
+    if(d.ok){
+      for(const z of d.zeilen){
+        zeileAnhaengen(z);
+        if(z.art === "antwort" && !_ersteLadung){
+          mundAnimation(z.text);
+          sonderausdruckAusEmote(z.emote); // Punkt E, siehe Definition unten
+          gespraechsFokusSetzen(z.text); // ⭐ NEU 2026-09-11: Blick-Politik, siehe Definition unten
+        }
+      }
+      _ersteLadung = false;
+      if(d.cursor) cursor = d.cursor;
+      $("chat-status").textContent = "verbunden";
+      $("chat-status").classList.remove("getrennt");
+    }
+  }catch(e){
+    $("chat-status").textContent = "getrennt";
+    $("chat-status").classList.add("getrennt");
+  }
+}
+
+async function senden(){
+  const feld = $("eingabe");
+  const text = feld.value.trim();
+  if(!text) return;
+  feld.value = "";
+  await fetch("/api/send", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({text})});
+}
+$("senden").addEventListener("click", senden);
+$("eingabe").addEventListener("keydown", (e) => { if(e.key === "Enter") senden(); });
+
+// ── Drag & Drop ──────────────────────────────────────────────────────
+const dz = $("dropzone");
+["dragenter","dragover"].forEach(ev => document.addEventListener(ev, (e) => {
+  e.preventDefault(); dz.classList.add("ueber");
+}));
+["dragleave","drop"].forEach(ev => document.addEventListener(ev, (e) => {
+  e.preventDefault(); if(ev === "dragleave") return; dz.classList.remove("ueber");
+}));
+document.addEventListener("drop", async (e) => {
+  e.preventDefault();
+  dz.classList.remove("ueber");
+  const dateien = e.dataTransfer.files;
+  for(const datei of dateien){
+    await fetch("/api/upload", {method:"POST",
+      headers:{"X-Filename": encodeURIComponent(datei.name)},
+      body: datei});
+  }
+});
+
+// ── Praesenz statt Standbild (Gabriel woertlich, 2. Nachtrag "creepy statt
+// Avatar"): "Er soll sich bewegen, wenn niemand mit ihm redet. Ein Avatar
+// bewegt sich beim Sprechen. Eine Praesenz bewegt sich immer." Vier
+// eigenstaendige Massnahmen -- jede muss allein funktionieren:
+//   1. BLINZELN            -- unten, blinzeln()
+//   2. NIE GANZ STILL       -- unten, Erweiterung von atmen() (nicht dupliziert)
+//   3. DER BLICK LEBT       -- unten, wanderSchritt()/reaktionAufNeuenStatus()
+//   4. REAKTIONSLATENZ      -- 150-350ms, in reaktionAufNeuenStatus() unten
+// Harte Grenze (Gabriel woertlich): "nichts erfinden. Der Blick geht nur
+// dann zur Kamera, wenn tatsaechlich ein Gesicht erkannt wurde." Deshalb
+// kommt "anwesend"/"richtung" NUR aus /api/status -> buehne.blick (echte
+// Gesichtserkennung in blick.py), niemals lokal erfunden.
+const AUSDRUCK_DATEIEN = ["01_ruhig_neutral","02_wach_aufmerksam","03_angespannt",
+  "04_zugewandt_weich","05_erschoepft_schwer","06_ueberrascht"];
+const AUGEN_RICHTUNG_ZU_DATEI = {
+  geradeaus:"01_geradeaus_kamera", links:"02_blick_links", rechts:"03_blick_rechts",
+  oben:"04_blick_oben", unten:"05_blick_unten",
+  links_oben:"06_blick_links_oben", rechts_oben:"07_blick_rechts_oben"
+};
+const AUGEN_HALB = "08_augen_halb_geschlossen";
+const AUGEN_ZU = "09_augen_geschlossen";
+// ⭐ 2026-09-11 (Animations-Agent): die alten Vorladerunden fuer /ausdruck/
+// (6 flache Vollbild-RGBs) und /kopf/ (4 flache Posen) sind ENTFERNT -- diese
+// beiden Sets werden nicht mehr angezeigt (Geisterkopf-Fix, siehe
+// sonderausdruckZeigen()/kopfKurzNeigen()); 10 volle Frames weniger im
+// Speicher. AUSDRUCK_DATEIEN bleibt nur noch als Namensquelle fuer die
+// /api/status-Ausdruckskuerzel (AUSDRUCK_ZU_STIMMUNG unten).
+// ⭐ 2026-09-11 ECHTES BLINZELN: 12 fotografierte Lid-Zwischenbilder, mit
+// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+const BLINK_BILDER = Array.from({length:12}, (_,i) =>
+  `/augen_blink/blink_${String(i).padStart(3,"0")}.png`);
+BLINK_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+// ⭐ 2026-09-11 LAZY-BILDCACHE: grosse RGBA-Frames (Kopfrollen, Koerper-Aktionen)
+// werden erst beim ersten echten Bedarf geladen, nicht alle vor. bildLaden()
+// liefert einen Eintrag mit ok/err; Spieler warten auf ok, statt ein
+// halb geladenes Bild sichtbar zu wechseln (kein Flash, kein Leerraum).
+const _bildCache = new Map();
+function bildLaden(src){
+  let eintrag = _bildCache.get(src);
+  if(!eintrag){
+    const img = new Image();
+    eintrag = { ok:false, err:false };
+    img.onload = () => { eintrag.ok = true; };
+    img.onerror = () => { eintrag.err = true; };
+    img.src = src;
+    _bildCache.set(src, eintrag);
+  }
+  return eintrag;
+}
+
+// ⭐ 2026-09-11 (Punkt 5 der Liste): Hintergrund-Stimmung aus dem echten,
+// server-gemessenen Ausdruck abgeleitet -- keine eigene erfundene Stimmung.
+// Mapping ist eine bewusste, dokumentierte Zuordnung (5 Stimmungsordner
+// stehen 6 Ausdruecken gegenueber, also nicht 1:1): 05_erschoepft_schwer
+// laeuft ruhig (beides niedrige Erregung), 06_ueberrascht laeuft bedrohlich
+// (ploetzliche Alarmiertheit ist der Stimmung am naechsten, die als einzige
+// von den fuenf "geladen"/warnend wirkt).
+const AUSDRUCK_ZU_STIMMUNG = {
+  "01_ruhig_neutral":"ruhig", "02_wach_aufmerksam":"wach",
+  "03_angespannt":"angespannt", "04_zugewandt_weich":"heiter",
+  "05_erschoepft_schwer":"ruhig", "06_ueberrascht":"bedrohlich"
+};
+const HINTERGRUND_FRAMES = 60;
+let hgStimmung = "ruhig";
+let hgFrame = 0;
+// Kein Vorladen aller 300 Bilder (Koordinator woertlich: "lade NICHT alles
+// vor") -- jeder Frame wird beim Abspielen einzeln per src-Zuweisung
+// nachgeladen; der Browser-Cache uebernimmt danach die Wiederholung.
+function hgSchritt(){
+  hgFrame = (hgFrame + 1) % HINTERGRUND_FRAMES;
+  const nr = String(hgFrame).padStart(3, "0");
+  $("hg-frame").src = `/hintergrund/${hgStimmung}/${hgStimmung}_${nr}.png`;
+}
+setInterval(hgSchritt, 90); // ~11 Bilder/s -- reicht fuer einen Hintergrund-Loop, kein Fokuspunkt
+hgSchritt();
+
+// Prioritaet, wenn mehrere Zustaende gleichzeitig zutreffen (hoechste zuerst):
+// Blinzeln > Blick abseits der Mitte > Ausdruck. Blinzeln ist eine
+// Grundfunktion (darf immer laufen), der Blick ist die naechst-sichtbarste
+// Reaktion, der Ausdruck ist die langsamste/seltenste Ebene.
+let aktuellerAusdruck = "01_ruhig_neutral";
+let aktuelleBlickRichtung = "geradeaus";
+let blinzelPhase = null; // null | "halb1" | "zu" | "halb2"
+let kopfPose = null; // null | "roll" -- siehe kopfWeiterPlanen()/kopfRollTick()
+
+// ⭐⭐ NEU 2026-09-11 (Animations-Agent): kopfPose ist ein echtes, laufendes
+// Zustandssignal -- wechselt selbstaendig alle 9-19s (kopfWeiterPlanen()/
+// kopfKurzNeigen() unten), war bisher aber NUR ein Text, der die
+// Kamera-Nachschwung-Trigger-Signatur fuettert -- keine sichtbare eigene
+// Wirkung. Die versprochenen 52 Kopf-/69 Koerper-Posenbilder existieren
+// noch nicht (siehe /tmp/avatar_wuensche.md), also KEIN Bildwechsel moeglich.
+// Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+// oben) bekommen eine kleine gefederte rotate()/translateY(). Feder statt
+=== BODY SOURCE ===
+  if(tropfenHinten.length > deckel) return; // insgesamt weniger als vorher (140)
+  tropfenHinten.push({
+    x: Math.random() * canvasHinten.width, y: -10,
+    v: (0.35 + Math.random() * 0.7) * tempo,
+    len: 6 + Math.random() * 12,
+    ton: Math.random() < 0.5 ? "34,221,238" : "136,51,255"
+  });
+}
+function regenZeichnenEbene(c, cv, liste, alpha, breite){
+  c.clearRect(0,0,cv.width, cv.height);
+  c.lineWidth = breite;
+  for(const t of liste){
+    c.strokeStyle = `rgba(${t.ton},${alpha})`;
+    c.beginPath();
+    c.moveTo(t.x, t.y);
+    c.lineTo(t.x, t.y + t.len);
+    c.stroke();
+    t.y += t.v * 3.2;
+  }
+}
+function regenZeichnen(){
+  regenZeichnenEbene(ctx, canvas, tropfenVorne, 0.5, 1.4);
+  tropfenVorne = tropfenVorne.filter(t => t.y < canvas.height + 20);
+  regenZeichnenEbene(ctxHinten, canvasHinten, tropfenHinten, 0.28, 1.0);
+  tropfenHinten = tropfenHinten.filter(t => t.y < canvasHinten.height + 20);
+}
+
+// Sehr langsames Atmen, an den Puls-Takt (tempo, aus broadcast_value)
+// gekoppelt -- Skalierung bleibt in 1.00..1.012 (Gabriels Richtwert),
+// nie darunter, damit es nie wie ein Schrumpfen wirkt.
+let atemPhase = 0;
+// ⭐ 2026-09-11 Punkt c der Liste ("Mikro-Variation zwischen Nachbarstufen
+// DESSELBEN Ausdrucks, damit das Gesicht 'arbeitet' statt einzufrieren"):
+// woertlich nicht baubar wie gefragt -- die 6 Grundstimmungen haben keine
+// Stufen-Bilder (nur 1 flaches PNG je Stimmung, siehe ausdruck_zugeschnitten/)
+// und werden aktuell nicht einmal als eigene Bildebene gezeichnet (siehe
+// Kommentar bei gesichtNeuZeichnen() oben -- offene Luecke, schon gemeldet).
+// Ein erfundenes Stufenbild waere eine erfundene Ausdrucks-AENDERUNG, keine
+// Leerlaufbewegung -- verboten. Stattdessen: der GEIST des Auftrags auf dem
+// bereits echten, bereits sichtbaren Atem-Puls oben -- ein winziger, LANGSAM
+// und UNREGELMAESSIG wandernder Zusatz-Faktor (Random Walk, kein fester
+// Takt), der die Helligkeit minimal mitzittern laesst. Kein neuer Zustand,
+// keine neue Bildquelle -- nur mehr Unregelmaessigkeit auf echter, schon
+// gerenderter Bewegung.
+let _mikroUnruhe = 0, _mikroUnruheZiel = 0;
+setInterval(() => { _mikroUnruheZiel = (Math.random()*2 - 1); }, 2600 + Math.random()*3200);
+// ⭐⭐⭐ 2026-09-11 PERF-FIX (Koordinator-Auftrag, fps 35-45 statt >45, unter
+// erzwungenem Software-Rendering -- siehe --disable-gpu in buehne_daemon.py,
+// Grund dort dokumentiert: echter Speicherkonflikt mit llama-server -ngl 99
+// auf der geteilten iGPU, PERMISSION_FAULTS/MAPPING_ERROR in dmesg, kein
+// bloss abwaegbares Budget -- GPU-Kompositing bleibt deshalb AUS, dieser
+// Pfad wird nicht wieder angefasst). Ursache war NICHT das Rechnen selbst
+// (6x scale()+saturate()+brightness() pro Frame ist trivial), sondern dass
+// atmen() bisher alle 6 Ebenen (inkl. beider "2"-Zwillinge, die 4 von 6
+// Framezeiten lang komplett unsichtbar sind: kopf-schicht2 ausser waehrend
+// einer Rollpose, ausdruck-schicht/-schicht2 ausser waehrend eines seltenen
+// Sonderausdrucks) auf style.transform/style.filter schreiben liess --
+// jeder Schreibzugriff auf transform/filter stoesst unter Software-Rendering
+// eine erneute Rasterung der vollen 1536x1024-RGBA-Ebene an, UNABHAENGIG von
+// opacity:0 (der Browser kompositiert die Ebene nicht sichtbar, aber die
+// Filter-Pipeline muss trotzdem neu gerechnet werden, weil die Property sich
+// geaendert hat). Fix: nur die AKTUELL SICHTBARE Ebene jedes Zwillingspaars
+// bekommt den Schreibzugriff -- aus max. 6 Style-Writes/Frame werden 2-3 (Kopf
+// + Koerper immer, Ausdruck nur waehrend _sonderLaeuft). Der urspruengliche
+// Zweck dieser Zeilen (keine Stale-Werte beim naechsten Hart-Cut-Einblenden,
+// siehe Kommentar am Dateianfang zu diesem Fund) bleibt vollstaendig erhalten
+// -- nicht durch Weglassen geloest, sondern durch VORSYNCHRONISIEREN: die
+// zuletzt berechneten Werte liegen in _atmenTransform/_atmenFilter global
+// bereit, und jede Stelle, die eine bisher versteckte Zwillings-Ebene per
+// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+// wechsel()-Funktion in sonderausdruckZeigen()), schreibt diese Werte JETZT
+// EINMALIG auf die Ebene, BEVOR sie opacity:1 bekommt -- exakt derselbe Wert,
+// den atmen() diesen Frame sowieso schon fuer die bis dahin sichtbare Ebene
+// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+// auf, siehe unten -- die Werte sind also brandaktuell, kein Frame Verzug).
+// Ergebnis: kein Pop (die neue Ebene traegt beim ersten sichtbaren Frame
+// exakt denselben Skala-/Helligkeitswert wie ihr Zwilling im Frame davor),
+// aber die vier meiste Zeit unsichtbaren Ebenen werden NICHT mehr pro Frame
+// angefasst.
+let _atmenTransform = "scale(1)";
+let _atmenFilter = "saturate(1.05) brightness(1)";
+function atmen(){
+  atemPhase += 0.006 * Math.max(0.4, Math.min(1.6, tempo));
+  _mikroUnruhe += (_mikroUnruheZiel - _mikroUnruhe) * 0.02; // sehr langsam, kein Sprung
+  const auf = (Math.sin(atemPhase) * 0.5) + 0.5; // 0..1
+  const skala = 1 + auf * 0.012;
+  const helligkeit = 1 + (auf - 0.5) * 0.03 + _mikroUnruhe * 0.006;
+  const transform = `scale(${skala})`;
+  const filter = `saturate(1.05) brightness(${helligkeit})`;
+  _atmenTransform = transform;
+  _atmenFilter = filter;
+  // Kopf: nur die gerade sichtbare der beiden Ebenen (kopfRollAktiv siehe
+  // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+  const kopfSichtbar = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+  $(kopfSichtbar).style.transform = transform;
+  $(kopfSichtbar).style.filter = filter;
+  // ⭐⭐ 2026-09-11 NACHTRAG 3 (Koordinator meldet Halsnaht-Rutschen, Gabriel
+  // hat 3 Screenshots geschickt): Kopf skalierte 1.000->1.012->1.000 pro
+  // Atemzug, Koerper blieb starr bei 1.0 (siehe Kommentar oben, bewusst
+  // entfernt wegen "doppeltem Atmen"). Ergebnis: Kopf wird am Atem-Peak
+  // relativ zum starren Koerper 1,2% groesser -- die Halskante (wo Kopf-
+  // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+  // Halsmaske oben) rutscht auf jedem Atemzug leicht -- unsichtbar im
+  // Standbild (Koordinator hat das geprueft), sichtbar in Bewegung.
+  // FIX (a) aus dem Koordinator-Auftrag, kleinste/sicherste Variante: der
+  // Koerper bekommt DENSELBEN Transform+Filter wie der Kopf -- beide
+  // skalieren/hellen im GLEICHEN Takt, die Halskante bleibt an derselben
+  // Relativstelle. Der Koerper "atmet" dadurch zusaetzlich zu seinen 12
+  // fotografierten Stufen leicht mit (max +1,2% Groesse) -- das ist die
+  // Halskante wert; ein rutschender Kragen war das schlimmere Artefakt.
+  // Nur die aktuell sichtbare Koerper-Ebene (atmenAktivSchicht, siehe
+  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+  // beim Kopf oben.
+  $(atmenAktivSchicht).style.transform = transform;
+  $(atmenAktivSchicht).style.filter = filter;
+  // Ausdruck-Ebenen sind ausserhalb eines Sonderausdrucks BEIDE opacity:0 --
+  // dann gibt es nichts zu synchronisieren, kein Pop-Risiko (nichts sichtbar).
+  // Waehrend eines Sonderausdrucks bekommt nur die per ausdruckAktiv aktuell
+  // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+  // fuer die Vor-Synchronisation der jeweils anderen beim Einblenden).
+  if(_sonderLaeuft){
+    const ausdruckSichtbar = ausdruckAktiv === 1 ? "ausdruck-schicht" : "ausdruck-schicht2";
+    $(ausdruckSichtbar).style.transform = transform;
+    $(ausdruckSichtbar).style.filter = filter;
+  }
+}
+
+// ⭐⭐ 2026-09-11 ECHTES KOERPER-ATMEN (Gabriel, woertlich: "eins nach dem
+// anderen" -- DIE eine Sache fuer diesen Schritt, nichts anderes gleichzeitig).
+// 12 echte fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png,
+// laut Dateibenennung eine VOLLSTAENDIGE Ein-und-Ausatmung -- deshalb einfach
+// im Kreis 0->11->0 durchlaufen, kein Hin-und-Her-Pingpong noetig) statt der
+// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+// pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+// ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+// spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+const ATMEN_MS_PRO_BILD = 330;
+let atmenIndex = 0;
+let atmenLetzterWechsel = 0;
+let atmenAktivSchicht = "koerper-schicht";
+function koerperCrossfade(src){
+  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+  $(naechsteSchicht).src = src;
+  // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).style.transform = _atmenTransform;
+  $(naechsteSchicht).style.filter = _atmenFilter;
+  $(naechsteSchicht).style.opacity = 1;
+  $(atmenAktivSchicht).style.opacity = 0;
+  atmenAktivSchicht = naechsteSchicht;
+}
+// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerper_rgba/schulterdrehung/${n}.png`) }
+];
+let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+let _letzteKoerperAktion = null;
+function koerperAktionStarten(fertig){
+  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+  const pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+  const wahl = pool[Math.floor(Math.random()*pool.length)];
+  _letzteKoerperAktion = wahl.name;
+  koerperAktion = { bilder:wahl.bilder, ms:wahl.ms, idx:0, letzterT:0, fertig };
+}
+function koerperAktionWeiterPlanen(){
+  // 22-50s Ruhe zwischen zwei Koerperaktionen -- selten, unregelmaessig,
+  // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+  // weiterreicht, kein Verzweigen.
+  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+    22000 + Math.random()*28000);
+}
+koerperAktionWeiterPlanen();
+function koerperSchritt(jetzt){
+  if(koerperAktion){
+    const a = koerperAktion;
+    if(jetzt - a.letzterT < a.ms) return;
+    const eintrag = bildLaden(a.bilder[a.idx]);
+    if(!eintrag.ok) return; // Frame noch nicht dekodiert -- warten statt Flash
+    a.letzterT = jetzt;
+    koerperCrossfade(a.bilder[a.idx]);
+    a.idx++;
+    if(a.idx >= a.bilder.length){
+      koerperAktion = null;
+      const f = a.fertig; a.fertig = null;
+=== EYE DIMENSIONS ===
+/home/ai-core-node/.claude/star/visual/augen_gaze/rotglow_tracking_master.png PNG 319x152 319x152+0+0 8-bit sRGB 97448B 0.000u 0:00.000
+/home/ai-core-node/.claude/star/visual/augen_blink/blink_000.png PNG 319x152 319x152+0+0 8-bit sRGB 99063B 0.000u 0:00.000
+/home/ai-core-node/.claude/star/visual/kopf_rgba/kopf_zero_mit_augen.png PNG 1536x1024 1536x1024+0+0 8-bit sRGB 374707B 0.000u 0:00.000
+/home/ai-core-node/.claude/star/visual/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png PNG 1536x1024 1536x1024+0+0 8-bit sRGB 374545B 0.000u 0:00.000

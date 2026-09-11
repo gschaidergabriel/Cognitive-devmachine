@@ -1,0 +1,425 @@
+SOURCE_ROOT=/workspace/go-avatar-candidate-c0dd67ea/COMBINED_HANDOFF_20260911T184549Z/ROUND1_EXPORT_20260911T184549Z/source
+9527ff5e4af48919f83d58c7e873c74bdeeebf3bf8bd084e810985c4918a1a93  /workspace/go-avatar-candidate-c0dd67ea/COMBINED_HANDOFF_20260911T184549Z/ROUND1_EXPORT_20260911T184549Z/source/buehne.html
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  /workspace/go-avatar-candidate-c0dd67ea/COMBINED_HANDOFF_20260911T184549Z/ROUND1_EXPORT_20260911T184549Z/source/filmlook.js
+===TOOLS===
+python3        /usr/bin/python3
+node           chromium       google-chrome  ffmpeg         /usr/bin/ffmpeg
+claude         codex          git            /usr/bin/git
+===HTML_IDS===
+347:        <div id="kopf-canvas">
+348:          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+350:            <img id="kopf-schicht" src="/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png" alt="">
+356:            <img id="kopf-schicht2" src="/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png" alt="">
+375:            <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+376:            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+377:            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+===JS_MARKERS===
+20:    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,sans-serif;
+28:     Ebene -- der Wackel-Transform (siehe kameraWackeln() unten) wird NUR hier
+33:  #kamera{position:absolute;inset:-6%;width:112%;height:112%;will-change:transform}
+34:  @keyframes kamera-overshoot{0%{transform:scale(1) rotate(0deg)}40%{transform:scale(1.006) rotate(.12deg)}100%{transform:scale(1) rotate(0deg)}}
+44:    box-shadow:0 0 8px var(--rot);animation:blink 1.6s infinite}
+45:  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+77:     #koerper-schicht + #kopf-schicht sind ECHTE Alpha-PNGs aus RIG_V2 (1536x1024,
+118:     OHNE die per-Frame scale()-Atmung auf #kopf-schicht/#koerper-schicht
+119:     in atmen() anzufassen -- zwei getrennte Transform-Ebenen, keine
+131:  #kopf-dreh{transform-origin:50% 58.59%}
+132:  #koerper-dreh{transform-origin:50% 100%}
+134:  #koerper-schicht,#koerper-schicht2,#kopf-schicht,#kopf-schicht2,
+137:  #koerper-schicht{z-index:1}
+138:  #kopf-schicht{z-index:2}
+144:     identischer Silhouette wie #kopf-schicht (10.4% Nicht-Alpha, per PIL
+149:  #kopf-schicht2,#ausdruck-schicht2,#ausdruck-schicht{opacity:0}
+151:     Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster
+154:     weich ineinander ueberblendet statt hart getauscht. koerper-schicht2 startet
+155:     unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */
+156:  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+157:  #koerper-schicht2{opacity:0}
+159:     eigenstaendiges Problem -- auch OHNE jede Bewegung sichtbar): #kopf-schicht
+160:     (z-index 2) liegt UEBER #koerper-schicht (z-index 1) und ueberlappt sie
+168:     faellt dort weich statt hart auf 0. Sitzt auf #kopf-schicht selbst, wandert
+170:     transform-origin oben) -- der Uebergang bleibt an derselben Halsstelle,
+173:  #kopf-schicht,#kopf-schicht2,#ausdruck-schicht,#ausdruck-schicht2{
+176:  /* ⭐ 2026-09-11 Crossfade (Gabriel: "smooth ... uncanny in jeder Hinsicht" --
+184:     UEBER dem RGBA-Kopf (#kopf-schicht, z-index:2). Bei jedem Sonderausdruck
+194:  @keyframes pose-overshoot{0%{transform:scale(1)}40%{transform:scale(1.016)}100%{transform:scale(1)}}
+245:  /* ⭐ 2026-09-11 (Punkt 3 der Liste): kontinuierlicher Pupillen-Glow-Overlay
+252:     gazeSchritt() unten. "nichts erfinden": ohne echte Erkennung kein Glow. */
+253:  /* ⭐⭐ 2026-09-11 NACHTRAG 4: transform-origin auf denselben Halsanker wie
+261:  #pupillen-glow{position:absolute;left:31%;top:12%;width:27%;height:auto;
+262:    transform-origin:70.38% 241.32%;
+264:    transition:opacity .35s ease-in-out;will-change:transform}
+266:     Zwischenbildern (/augen_blink/blink_000..011.png, 319x152 RGBA -- exakt
+267:     dieselbe Geometrie/Verankerung wie der /augen_gaze/-Flicken oben, deshalb
+268:     identische Prozente). Liegt als eigenes <img> UEBER #pupillen-glow, weil
+271:     Aufmerksamkeit), waehrend #pupillen-glow weiter erkennungs-gekoppelt
+273:  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+274:    transform-origin:70.38% 241.32%;
+282:    text-transform:uppercase}
+287:  @keyframes einblenden{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+307:    transition:filter .12s ease,transform .12s ease}
+309:  #senden:active{transform:scale(.96)}
+348:          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+350:            <img id="kopf-schicht" src="/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png" alt="">
+351:            <!-- ⭐ 2026-09-11 echte Kopfdrehung: /kopf_rgba/roll/ hat 11 echte
+352:                 Posen (gier_+00_nick_+00_roll_+NN, ±25° in 5°-Schritten, PIL:
+353:                 roll_+00 pixelgleich mit kopf_zero_ohne_rotes_augenglow).
+354:                 #kopf-schicht2 ist das zweite Crossfade-Bild, gleiches Muster
+355:                 wie #koerper-schicht/#koerper-schicht2. -->
+356:            <img id="kopf-schicht2" src="/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png" alt="">
+364:                 Ursache selbst gefunden per Screenshot waehrend Testrolle 'k'):
+365:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+367:                 wenn #kopf-schicht/#kopf-schicht2 auf eine echte Rollpose
+368:                 (/kopf_rgba/roll/...+15/+25 etc.) wechselten, blieb der Augen-
+374:                 (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+375:            <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+376:            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+410:// Stream-Eindruck"). Autoscroll nur, wenn der Nutzer schon unten war --
+411:// wer hochgescrollt hat, um etwas zu lesen, wird nicht weggerissen
+421:// zurueckscrollt; aeltere fallen vorne raus (Livestream-Logik, kein Archiv --
+425:  const amBoden = (chatZeilen.scrollHeight - chatZeilen.scrollTop - chatZeilen.clientHeight) < 24;
+439:  if(amBoden) chatZeilen.scrollTop = chatZeilen.scrollHeight;
+464:// mit echten Einzelbildern statt Opacity-Crossfade (hier gibt es ja bereits
+499:  const iv = setInterval(() => {
+505:  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+511:// sofort eine eigene mundAnimation: ~105 gleichzeitige setInterval, der Mund
+594:// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+595:const BLINK_BILDER = Array.from({length:12}, (_,i) =>
+596:  `/augen_blink/blink_${String(i).padStart(3,"0")}.png`);
+597:BLINK_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+598:// ⭐ 2026-09-11 LAZY-BILDCACHE: grosse RGBA-Frames (Kopfrollen, Koerper-Aktionen)
+639:setInterval(hgSchritt, 90); // ~11 Bilder/s -- reicht fuer einen Hintergrund-Loop, kein Fokuspunkt
+649:let kopfPose = null; // null | "roll" -- siehe kopfWeiterPlanen()/kopfRollTick()
+666:// Feder. /kopf_rgba/roll/ enthaelt 11 echte Posen (gier_+00_nick_+00_roll_+NN,
+667:// ±25° in 5°-Schritten; PIL-Nachweis: roll_+00 ist pixelgleich mit dem
+671:// Jetzt: kopfKurzNeigen() waehlt ein Ziel, kopfRollTick() faehrt in 5°-Schritten
+672:// mit kurzem Crossfade zwischen #kopf-schicht/#kopf-schicht2 dorthin, haelt,
+674:// dem echten Rollwert (klein, 12% des Winkels, max ±3°) und liefert weiter
+676:const KOPF_ROLL_POOL = [-15,-10,-5,5,10,15];      // uebliche, kleine Neigungen
+677:const KOPF_ROLL_GROSS = [-25,-20,20,25];          // seltene, grosse (12% Chance)
+678:const KOPF_ROLL_MS = 110;                         // je 5°-Schritt, kurz
+679:function kopfRollDatei(w){
+680:  return `/kopf_rgba/roll/gier_+00_nick_+00_roll_${w < 0 ? "-" : "+"}${String(Math.abs(w)).padStart(2,"0")}.png`;
+682:let kopfRollWert = 0;        // Grad des aktuell angezeigten Roll-Bildes
+683:let kopfRollSoll = 0;        // Grad des angepeilten Ziels (Feder-Futter)
+684:let kopfRollSchritte = null; // [{w, src}] -- laufende Sequenz oder null
+685:let kopfRollIdx = 0, kopfRollLetzterT = 0;
+686:let kopfRollAktiv = false;   // false: #kopf-schicht sichtbar, true: #kopf-schicht2
+687:let kopfRollFertigFn = null; // einmaliger Callback nach dem letzten Schritt
+688:function kopfRollSequenzZu(ziel, fertig){
+690:  const richtung = ziel > kopfRollWert ? 5 : -5;
+691:  for(let w = kopfRollWert + richtung; ; w += richtung){
+692:    schritte.push({w, src: kopfRollDatei(w)});
+695:  kopfRollSchritte = schritte; kopfRollIdx = 0; kopfRollLetzterT = 0;
+696:  kopfRollFertigFn = fertig || null;
+698:function kopfRollTick(jetzt){
+699:  if(!kopfRollSchritte) return;
+700:  if(jetzt - kopfRollLetzterT < KOPF_ROLL_MS) return;
+701:  const schritt = kopfRollSchritte[kopfRollIdx];
+704:  kopfRollLetzterT = jetzt;
+705:  const ein = kopfRollAktiv ? "kopf-schicht" : "kopf-schicht2";
+706:  const aus = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+712:  // Wert von ihrem letzten Auftritt (Pop). _atmenTransform/_atmenFilter sind
+714:  // kopfRollTick() auf).
+715:  $(ein).style.transform = _atmenTransform;
+719:  kopfRollAktiv = !kopfRollAktiv;
+720:  kopfRollWert = schritt.w;
+721:  kopfRollIdx++;
+722:  if(kopfRollIdx >= kopfRollSchritte.length){
+723:    const f = kopfRollFertigFn;
+724:    kopfRollSchritte = null; kopfRollFertigFn = null;
+730:// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+733:// Rollpose (bis ±25°, siehe KOPF_ROLL_POOL) nicht -- die Feder zielt bewusst
+734:// nur auf 12% des Rollwerts, weil das FOTO selbst schon kippt. Der Flicken
+735:// braucht den FEHLENDEN Rest (Rollwert minus das, was die Feder schon liefert)
+737:// gerechnet um denselben Halsanker (transform-origin oben, exakt umgerechnet).
+743:// Bericht). ZWEI Fehler in der alten Formel `kopfRollWert - kDrehRot`:
+747://       kopfRollWert(eingebrannt) + kDrehRot(Wrapper). Fuer denselben
+749://       selben Wrapper) muss die EIGENE Drehung exakt kopfRollWert sein --
+753://       einer echten Rollpose) um kDrehRot Grad (bis 3°) hinter dem echten
+755://       (transform-origin ~2,4 Patch-Hoehen unterhalb der Box, siehe oben)
+757://   (2) HARTER SPRUNG OHNE DAEMPFUNG: kopfRollWert selbst springt bei jedem
+758://       kopfRollTick()-Schritt hart um 5° (neues Foto -- das braucht keine
+765://       Maske"-Optik aus dem Befund. Fix: kopfRollAusgleichDeg ist jetzt
+769://       Ziel (kopfRollWert, ohne Abzug) zulaeuft.
+770:let kopfRollAusgleichDeg = 0;
+777:  // Federziel aus dem ECHTEN Rollwert (12% davon, auf ±3° begrenzt) -- die
+779:  const zielRot = Math.max(-3, Math.min(3, kopfRollSoll * 0.12));
+786:  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+787:  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+788:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+789:  // (STIRN-LUECKE-FIX): Ziel ist jetzt kopfRollWert selbst (kDrehRot kuerzt
+794:  kopfRollAusgleichDeg += (kopfRollWert - kopfRollAusgleichDeg) * 0.4;
+795:  $("augen-blink").style.transform = `rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+798:// ⭐ 2026-09-11 Crossfade statt hartem g.src=neu: ausdruckAktiv zeigt, welches
+808:// Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+810:// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+842:// #gesicht/#gesicht2 (z-index:3) UEBER den echten RGBA-Kopf (#kopf-schicht,
+847:// wie #kopf-schicht) auf #ausdruck-schicht/#ausdruck-schicht2, die IN
+851:// Erkennungs-Glimmer unterdrueckt (gazeSchritt() prueft _sonderLaeuft) --
+867:    // kopfRollTick() oben -- atmen() schreibt Transform/Filter nur noch auf
+870:    versteckt.style.transform = _atmenTransform;
+878:      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+879:      setTimeout(() => rahmen.classList.remove("pose-wechsel"), 420);
+895:    if(stufe < 6) setTimeout(hoch, 90);
+896:    else setTimeout(runter, haltenMs);
+901:    if(stufe > 0) setTimeout(runter, 90);
+902:    else setTimeout(sauber, 120); // letzte Stufe (= Neutralbild) kurz halten, dann Ebenen aus
+904:  setTimeout(hoch, 90);
+1020:    if(versuch < 8) setTimeout(() => _koerperSonderausdruckVersuchen(pool, versuch+1), 600);
+1070:// "Doppelschlag"-Bonus war (setTimeout(blinzeln, 120+...) unten). Jeder
+1091:// Lidbilder (/augen_blink/blink_000..011.png, gemessen: 00 offen -> 08
+1093:// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1102:// Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+1118:    $("augen-blink").style.opacity = "0";
+1121:      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }
+1127:  $("augen-blink").src = BLINK_BILDER[frame];
+1128:  $("augen-blink").style.opacity = "1";
+1130:  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);
+1133:  setTimeout(() => blinzeln(true), 2000 + Math.random()*5000); // 2-7s, unregelmaessig (Gabriels Vorgabe)
+1189:    _fokusAblaufTimer = setTimeout(() => { gespraechsFokus = "gabriel"; }, 5000 + Math.random()*6000);
+1198:// Glimmer-Spielraum wie bisher (siehe maxPx in gazeSchritt()), nur ein
+1209:function gazeBasisSichtbar(){
+1222:  if(gazeBasisSichtbar() && gespraechsFokus !== "thema"){
+1225:    setTimeout(() => { blickPauseAktiv = false; }, 350 + Math.random()*550); // 0.35-0.9s kurzer Wegblick
+1227:  setTimeout(blickPauseSchritt, 4000 + Math.random()*7000); // 4-11s, unregelmaessig
+1229:setTimeout(blickPauseSchritt, 3000);
+1242:let zielGazeX = 0.5, zielGazeY = 0.5;
+1243:let aktGazeX = 0.5, aktGazeY = 0.5;
+1244:let gazeSichtbar = false;
+1260:// jede Kopplung an serverBlick/gazeSichtbar in der Ausloesung selbst (laeuft
+1261:// immer, alle 1-4s) -- sichtbar wird sie trotzdem nur, wenn #pupillen-glow
+1273:  setTimeout(() => { mikroSakX = 0; mikroSakY = 0; }, 80 + Math.random() * 90); // kurz gehalten, dann ballistisch zurueck (kein Lerp)
+1274:  setTimeout(mikroSakkadeSchritt, 1000 + Math.random() * 3000); // 1-4s, unregelmaessig
+1276:setTimeout(mikroSakkadeSchritt, 1500);
+1290:function gazeZielBestimmen(){
+1291:  if(!gazeBasisSichtbar()) return {x:0.5, y:0.5, opazitaet:0};
+1296:function gazeSchritt(){
+1297:  const ziel = gazeZielBestimmen();
+1298:  zielGazeX = ziel.x; zielGazeY = ziel.y;
+1299:  aktGazeX += (zielGazeX - aktGazeX) * 0.07;
+1300:  aktGazeY += (zielGazeY - aktGazeY) * 0.07;
+1302:  const dx = (aktGazeX - 0.5) * 2 * maxPx + mikroSakX;
+1303:  const dy = (aktGazeY - 0.5) * 2 * maxPx + BLICK_ABWAERTS_BIAS_PX + mikroSakY;
+1305:  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim
+1307:  $("pupillen-glow").style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1311:  gazeSichtbar = ziel.opazitaet > 0; // Rueckwaertskompatibilitaet: anderswo evtl. gelesen
+1312:  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+1323:  setTimeout(wanderSchritt, 2500 + Math.random()*4500); // lange, ziellose Pausen
+1325:setTimeout(wanderSchritt, 1500);
+1333:// Tick). Dank Crossfade jetzt weich statt Bildsprung.
+1335:  if(_sonderLaeuft || kopfRollSchritte){ kopfWeiterPlanen(); return; }
+1337:  const pool = gross ? KOPF_ROLL_GROSS : KOPF_ROLL_POOL;
+1339:  kopfPose = "roll"; kopfRollSoll = ziel;
+1341:  kopfRollSequenzZu(ziel, () => {
+1343:    setTimeout(() => {
+1344:      kopfRollSequenzZu(0, () => {
+1345:        kopfPose = null; kopfRollSoll = 0;
+1353:  setTimeout(kopfKurzNeigen, 9000 + Math.random()*10000); // 9-19s, unregelmaessig
+1367:  // Mikro-Pause), wird jetzt PRO FRAME in gazeZielBestimmen()/gazeSchritt()
+1372:    _blickTimer = setTimeout(() => {
+1379:    _ausdruckTimer = setTimeout(() => {
+1421:// bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,
+1431:// transform-unabhaengig, der Cam-Shake auf #kamera soll hier NICHT
+1519:setInterval(() => { _mikroUnruheZiel = (Math.random()*2 - 1); }, 2600 + Math.random()*3200);
+1528:// Framezeiten lang komplett unsichtbar sind: kopf-schicht2 ausser waehrend
+1529:// einer Rollpose, ausdruck-schicht/-schicht2 ausser waehrend eines seltenen
+1530:// Sonderausdrucks) auf style.transform/style.filter schreiben liess --
+1531:// jeder Schreibzugriff auf transform/filter stoesst unter Software-Rendering
+1541:// zuletzt berechneten Werte liegen in _atmenTransform/_atmenFilter global
+1543:// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+1547:// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+1553:let _atmenTransform = "scale(1)";
+1561:  const transform = `scale(${skala})`;
+1563:  _atmenTransform = transform;
+1565:  // Kopf: nur die gerade sichtbare der beiden Ebenen (kopfRollAktiv siehe
+1566:  // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+1567:  const kopfSichtbar = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+1568:  $(kopfSichtbar).style.transform = transform;
+1575:  // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+1579:  // Koerper bekommt DENSELBEN Transform+Filter wie der Kopf -- beide
+1585:  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+1587:  $(atmenAktivSchicht).style.transform = transform;
+1596:    $(ausdruckSichtbar).style.transform = transform;
+1606:// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+1607:// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+1608:// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+1620:let atmenAktivSchicht = "koerper-schicht";
+1621:function koerperCrossfade(src){
+1622:  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+1625:  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+1629:  $(naechsteSchicht).style.transform = _atmenTransform;
+1674:  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+1685:    koerperCrossfade(a.bilder[a.idx]);
+1697:  koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+1702:// passend zur Bewegung. Volle Immersion..."). EIN gemeinsamer Transform auf
+1748:  $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+===CSS_STAGE===
+40:  #kopf{position:absolute;top:0;left:0;right:0;display:flex;
+46:  #kopf .titel{font-weight:700;letter-spacing:.2px;font-size:14.5px}
+47:  #kopf .zuschauer{margin-left:auto;font-size:12.5px;color:var(--text-dim);
+69:    object-fit:cover;opacity:.85;transition:opacity .6s ease-in-out;
+77:     #koerper-schicht + #kopf-schicht sind ECHTE Alpha-PNGs aus RIG_V2 (1536x1024,
+87:     #mund-effekt ist kein Lippen-Ausschnitt, sondern ein deckender
+93:     Ausschnitt ist (object-fit:cover skaliert+beschneidet), nicht die rohe
+95:     anderes. Loesung: #kopf-canvas ist eine per JS (kopfCanvasAnpassen(),
+99:     Ausschnitt (identisches Ergebnis zum alten object-fit:cover). Kopf,
+112:  #kopf-canvas{position:absolute;pointer-events:none;filter:drop-shadow(4px 7px 10px rgba(0,0,0,0.28))}
+113:  /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+118:     OHNE die per-Frame scale()-Atmung auf #kopf-schicht/#koerper-schicht
+122:     geraten): #kopf-dreh drehte bisher um seine eigene Bildmitte (CSS-
+127:     weil Kopf und Koerper um verschiedene Punkte "dachten". #koerper-dreh
+131:  #kopf-dreh{transform-origin:50% 58.59%}
+132:  #koerper-dreh{transform-origin:50% 100%}
+133:  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+134:  #koerper-schicht,#koerper-schicht2,#kopf-schicht,#kopf-schicht2,
+137:  #koerper-schicht{z-index:1}
+138:  #kopf-schicht{z-index:2}
+144:     identischer Silhouette wie #kopf-schicht (10.4% Nicht-Alpha, per PIL
+145:     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+149:  #kopf-schicht2,#ausdruck-schicht2,#ausdruck-schicht{opacity:0}
+151:     Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster
+156:  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+157:  #koerper-schicht2{opacity:0}
+159:     eigenstaendiges Problem -- auch OHNE jede Bewegung sichtbar): #kopf-schicht
+160:     (z-index 2) liegt UEBER #koerper-schicht (z-index 1) und ueberlappt sie
+168:     faellt dort weich statt hart auf 0. Sitzt auf #kopf-schicht selbst, wandert
+169:     also mit jeder Neigung/Drehung automatisch mit (siehe #kopf-dreh
+170:     transform-origin oben) -- der Uebergang bleibt an derselben Halsstelle,
+173:  #kopf-schicht,#kopf-schicht2,#ausdruck-schicht,#ausdruck-schicht2{
+184:     UEBER dem RGBA-Kopf (#kopf-schicht, z-index:2). Bei jedem Sonderausdruck
+229:     #kopf-canvas oben). Jetzt exakt aus mund_00_rest.png's Manifest-Anker
+238:     Alle vier Prozent gelten relativ zu #kopf-canvas (der vollen Leinwand),
+240:     kein object-fit:contain (die Box hat exakt das Seitenverhaeltnis des
+242:  #mund-effekt{position:absolute;left:40.49%;top:34.38%;width:19.21%;height:17.77%;
+253:  /* ⭐⭐ 2026-09-11 NACHTRAG 4: transform-origin auf denselben Halsanker wie
+254:     #kopf-dreh (50%/58.59% DER LEINWAND), aber umgerechnet in die eigene
+258:     aus denselben Zahlen gerechnet, die #kopf-dreh oben schon benutzt. Sitzt
+259:     der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+261:  #pupillen-glow{position:absolute;left:31%;top:12%;width:27%;height:auto;
+262:    transform-origin:70.38% 241.32%;
+268:     identische Prozente). Liegt als eigenes <img> UEBER #pupillen-glow, weil
+271:     Aufmerksamkeit), waehrend #pupillen-glow weiter erkennungs-gekoppelt
+273:  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+274:    transform-origin:70.38% 241.32%;
+330:         verschieben. #kopf (Kopfzeile) bleibt bewusst DRAUSSEN -- das ist
+339:        <!-- ⭐⭐ 2026-09-11 #kopf-canvas: siehe CSS-Kommentar oben ("KOPF-LEINWAND").
+342:             Anker gilt fuer alle drei. z-index:auto auf #kopf-canvas selbst
+354:                 #kopf-schicht2 ist das zweite Crossfade-Bild, gleiches Muster
+355:                 wie #koerper-schicht/#koerper-schicht2. -->
+360:                 deshalb liegen sie in #kopf-dreh auf derselben Leinwand. -->
+365:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+367:                 wenn #kopf-schicht/#kopf-schicht2 auf eine echte Rollpose
+374:                 (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+594:// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+657:// Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+672:// mit kurzem Crossfade zwischen #kopf-schicht/#kopf-schicht2 dorthin, haelt,
+686:let kopfRollAktiv = false;   // false: #kopf-schicht sichtbar, true: #kopf-schicht2
+730:// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+731:// liegt jetzt IN #kopf-dreh und bekommt darueber automatisch schon kDrehRot
+737:// gerechnet um denselben Halsanker (transform-origin oben, exakt umgerechnet).
+744://   (1) FALSCHES VORZEICHEN/DOPPELABZUG: #kopf-dreh vererbt kDrehRot per CSS
+755://       (transform-origin ~2,4 Patch-Hoehen unterhalb der Box, siehe oben)
+788:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+808:// Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+810:// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+811:// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+842:// #gesicht/#gesicht2 (z-index:3) UEBER den echten RGBA-Kopf (#kopf-schicht,
+847:// wie #kopf-schicht) auf #ausdruck-schicht/#ausdruck-schicht2, die IN
+848:// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+1093:// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1102:// Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+1261:// immer, alle 1-4s) -- sichtbar wird sie trotzdem nur, wenn #pupillen-glow
+1420:// ⭐⭐ 2026-09-11 #kopf-canvas exakt auf die reale object-fit:cover-Geometrie
+1421:// bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,
+1426:// object-fit:cover verwendet. #gesicht-rahmen beschneidet den Ueberstand per
+1427:// overflow:hidden -- optisch identisch zum alten object-fit:cover, aber
+1429:// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+1575:  // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+1606:// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+1608:// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+===BASELINE_METRICS===
+{
+  "schema_version": 1,
+  "pose_id": "default_forward_attentive_v1",
+  "geometry": {
+    "visible_complete_heads": 1,
+    "red_eye_components_open": 2,
+    "neck_anchor_rms_px_max": 0.25,
+    "neck_anchor_error_px_max": 0.5,
+    "face_slot_error_px_max": 0.35,
+    "non_target_lpips_max": 0.03,
+    "non_target_flow_p95_px_max": 0.45
+  },
+  "timing": {
+    "simulation_hz": 100,
+    "frame_p95_ms_max": 16.7,
+    "frame_p99_ms_max": 22.0,
+    "frame_absolute_max_ms": 50.0,
+    "eye_lead_ms": [40, 80],
+    "head_follow_ms": [100, 240],
+    "body_follow_ms": [180, 420],
+    "blink_total_ms": [190, 285],
+    "av_lag_median_abs_ms_max": 35,
+    "av_lag_p95_abs_ms_max": 70
+  },
+  "background": {
+    "moods": 5,
+    "frames_per_mood": 60,
+    "closure_median_8bit_max": 2.0,
+    "closure_p95_8bit_max": 6.0,
+    "interframe_luma_jump_fraction_max": 0.015,
+    "mood_morph_seconds": [1.2, 3.0],
+    "waterline_allowed": false
+  },
+  "filter": {
+    "rigid_region_warp_residual_p95_px_max": 0.6,
+    "mosaic_edge_energy_retention_min": 0.92,
+    "vignette_corner_attenuation": [0.18, 0.28],
+    "new_red_components_outside_eye_mask": 0,
+    "runtime_generative_inference": false
+  },
+  "soak": {
+    "minutes": 10,
+    "timer_count_growth_allowed": 0,
+    "monotonic_heap_growth_allowed": false
+  }
+}
+===QA_HEAD===
+# Harte Abnahme – visuell, geometrisch und zur Laufzeit
+
+| ID | Test | Pass-Bedingung | Beleg |
+|---|---|---|---|
+| GEO-01 | Halsanker | RMS <0.35px, max <0.75px | Overlay-/CV-Report |
+| GEO-02 | Augen-/Mundslot | unerklärte Abweichung relativ zum Kopf <=0.5px | Transformdump + CV |
+| GEO-03 | Rotkomponenten | exakt 2 kompakte rote Augenkomponenten, niemals 4 | Frameweiser ROI-Test |
+| GEO-04 | Kopfidentität | maximal eine komplette Kopftextur aktiv | DOM-/Layerassertion |
+| GEO-05 | Alpha | Kopf/Körper/Augen/Mund/Ausdruck echtes RGBA | Inventar + Randprüfung |
+| MOT-01 | Vollkopf-Pop | kein harter Vollkopfwechsel über Grenzwert | 60fps-Diffanalyse |
+| MOT-02 | Blink | 190–285ms, asymmetrisches close/open, kein Positionssprung | Zeitreihe |
+| MOT-03 | Lip-Sync | Attack 45–80ms, Release 70–120ms, kein Idle-Sprechen | Audio-/Visemtrace |
+| MOT-04 | Hierarchie | Augen führen; Kopf 40–240ms später; Körper träger | State-/Rendertrace |
+| PERF-01 | Framezeit | p95 <=18.5ms, p99 <=25ms | 2-Min-rAF-Trace |
+| PERF-02 | Long frame | kein Frame >50ms im 2-Min-Test | rAF-/LongTask-Log |
+| PERF-03 | Soak | 10min ohne monotone Timer-/Listener-/Speicherzunahme | Heap/Counter |
+| UI-01 | Standard | ca. 746×449, Avatar vollständig, Chat >=360px | Screenshot + bbox |
+| UI-02 | Fullscreen | keine Kopf-/Schulter-Crops, kein Stretch; Chat 400–520px | 1680×1050 Screenshot |
+| BG-01 | Loop | Übergang letzter→erster Frame nicht erkennbar | Diff + Sichttest |
+| BG-02 | Mood | Morph 1.2–3s, kein unabhängiges Flackern | Frame-/Farbreihe |
+| BG-03 | Wasser | keine Wasserlinie/Spiegelungs-/Nebelbank | Zeilenprofil + Sichttest |
+| SYS-01 | Chatgrenze | Typed Chat triggert keinen Realtime-Speech-Turn | Integrationstest |
+| SYS-02 | Terminal | Lifecycle, Utterance, Response, Timeout, Tool, State live | Logbeleg |
+| SYS-03 | Neustart | sauberer Restart/Re-Entry mit korrektem Repo/DB/WAL | Runbook-Test |
+| PKG-01 | Handoff | unzip, Checksums, Inventar, Startweg vollständig | Prüferbericht |
+
+## Pflichtaufnahmen je Runde
+
+- Standardfenster neutral und sprechend.
+- Vollbild neutral und sprechend.
+- 30–60s Video mit Blick, Blink, Sprache, Ausdruck und Moodmorph.
+- Debugaufnahme mit sichtbaren Hals-/Augen-/Mundankern.
+- rAF-, State- und Layertransform-CSV mit gemeinsamem monotonic timestamp.
+
+Ein fehlender Beleg ist `not_run`, niemals `pass`.
+
+===DONE===

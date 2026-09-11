@@ -1,0 +1,56 @@
+=== HOST/BASE ===
+2026-09-12T01:44:42+02:00
+andreas-MACO
+## main...origin/main
+BASE=2d0bab710a0b229cbf07c443db2da71e552ab6e3
+RUNNER_BLOB=3ead1d83784abc3b321af934724751259f3fa6ae
+REGRESSION_BLOB=a1b083eec049fc93d74db65bcebded02dd3da791
+=== FOCUSED ===
+  ok      R1 RUECKSTAND wird erkannt
+  ok      R2 erkannter RUECKSTAND -> rc=5 (nicht gruen)
+  ok      R3 Kindtests bleiben ehrlich 2/2; der Runnerstatus traegt den Cleanup-Befund
+  ok      R4 sauberer Lauf bleibt rc=0 ohne RUECKSTAND
+
+Alle Pruefungen bestanden.
+FOCUSED_RC=0
+=== FULL 080 ON REAL HOST ===
+Selbsttests im Werkzeugkasten -- 2026-09-11T23:44:42Z
+/var/tmp/go080-payload2-Q5eF2x/repo/werkzeug
+Temp: /var/tmp/selbsttests-2233252-20260912T014442  (Platte, 377412 MiB frei, aus TMPDIR des Aufrufers)
+
+#ERG	betrieb-pruefen_selbsttest.sh	0
+  bestanden  betrieb-pruefen_selbsttest.sh               1s  Selbsttest bestanden.
+#ERG	db-autoritaet_selbsttest.sh	0
+  bestanden  db-autoritaet_selbsttest.sh                 3s  Selbsttest bestanden.
+#ERG	fluechtig-pruefen_selbsttest.sh	0
+  bestanden  fluechtig-pruefen_selbsttest.sh             1s  Selbsttest bestanden.
+#ERG	rueckstaende-pruefen_selbsttest.sh	0
+  bestanden  rueckstaende-pruefen_selbsttest.sh          0s  Selbsttest bestanden.
+#ERG	rueckstand_maschinenstatus_selbsttest.sh	0
+  bestanden  rueckstand_maschinenstatus_selbsttest.sh    1s  Alle Pruefungen bestanden.
+#ERG	selbsttests_selbsttest.sh	0
+  bestanden  selbsttests_selbsttest.sh                   1s  Alle Pruefungen bestanden.
+#ERG	gegenwache_selbsttest.py	0
+  bestanden  gegenwache_selbsttest.py                    1s  31 bestanden, 0 nicht bestanden
+#ERG	hook-doppel-pruefen_selbsttest.py	0
+  bestanden  hook-doppel-pruefen_selbsttest.py           0s  17 bestanden, 0 nicht bestanden
+#ERG	letzter-frame-pruefen_selbsttest.py	0
+  bestanden  letzter-frame-pruefen_selbsttest.py         1s  ========================================================================
+#ERG	puls-pruefen_selbsttest.py	0
+  bestanden  puls-pruefen_selbsttest.py                  0s  87 von 87 Pruefungen bestanden.
+#ERG	regressions-waechter_selbsttest.py	0
+  bestanden  regressions-waechter_selbsttest.py         12s  65 bestanden, 0 nicht bestanden
+#ERG	selbsttests-waechter_selbsttest.py	0
+  bestanden  selbsttests-waechter_selbsttest.py          4s  37 bestanden, 0 nicht bestanden
+#ERG	wettbewerbsgesundheit_selbsttest.py	0
+  bestanden  wettbewerbsgesundheit_selbsttest.py         2s  ERGEBNIS: bestanden
+#ERG	wettbewerbswaechter_selbsttest.py	0
+  bestanden  wettbewerbswaechter_selbsttest.py           3s  ERGEBNIS: bestanden
+
+#SATZ	14/14
+-> 14 von 14 bestanden, 30s gesamt
+FULL_RC=0
+=== LIVE CHECKOUT UNTOUCHED ===
+## main...origin/main
+2d0bab710a0b229cbf07c443db2da71e552ab6e3
+TEMP=/var/tmp/go080-payload2-Q5eF2x

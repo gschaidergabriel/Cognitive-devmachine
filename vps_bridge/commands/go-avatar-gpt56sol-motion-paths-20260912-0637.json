@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "go-avatar-gpt56sol-motion-paths-20260912-0637",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 300,
+  "command": "set -euo pipefail; Z=/artifacts/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z.zip; W=/workspace/go-avatar-gpt56sol-motion-paths; rm -rf \"$W\"; mkdir -p \"$W\"; H=$(unzip -Z1 \"$Z\" | grep -E '(^|/)buehne\\.html$' | head -n1); unzip -p \"$Z\" \"$H\" > \"$W/buehne.html\"; python3 - <<'PY'\nfrom pathlib import Path\nimport re\nlines=Path('/workspace/go-avatar-gpt56sol-motion-paths/buehne.html').read_text(errors='replace').splitlines()\npatterns=[r'kopf-dreh',r'koerper-dreh',r'pupillen-glow',r'augen-blink',r'\.style\.transform',r'setProperty\\(.+transform',r'rotate\\(',r'translate\\(',r'scale\\(',r'breath',r'atmen',r'shoulder',r'gaze',r'blick',r'blink',r'crossfade',r'opacity']\nfor pat in patterns:\n    rx=re.compile(pat,re.I); hits=[i for i,l in enumerate(lines) if rx.search(l)]\n    print(f'\\n### {pat} hits={len(hits)}')\n    for i in hits[:20]: print(f'{i+1:05d}: {lines[i][:420]}')\nprint('\\n=== SCRIPT REGION INDEX ===')\nfor i,l in enumerate(lines):\n    if '<script' in l.lower() or '</script' in l.lower(): print(i+1,l[:200])\nPY"
+}

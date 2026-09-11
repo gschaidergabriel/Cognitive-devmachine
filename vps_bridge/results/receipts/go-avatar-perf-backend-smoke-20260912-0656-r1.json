@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "go-avatar-perf-backend-smoke-20260912-0656-r1",
+  "command_sha256": "f26065433c3bd1bda4af4891fc54f2a96d328702b24c6603e0f63d712f32f228",
+  "started_at": "2026-09-11T23:47:19.658793+00:00",
+  "finished_at": "2026-09-11T23:47:20.197442+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "170fa64d9b4d42c3c725361752d6f9d87783319ab5ae6f7f998b73fc5cc67cbf",
+  "stderr_sha256": "e6164acd69c72ad156b51af953a9f7c3c90ce3fb484874412a4691a68ecbf926",
+  "stdout_tail": "PERF_BACKEND_RUNTIME_PASS\nlive {\"dienst\": \"buehne_daemon\", \"ok\": true, \"ts\": 1789170440.0710251}\nroundtrip {\"acceptance_ready\": true, \"coverage_ms\": 120000.0, \"fps\": 60.0, \"frame_ms\": {\"max\": 24.0, \"p50\": 16.6, \"p95\": 17.4, \"p99\": 18.2}, \"js_heap_used_bytes\": 12345678.0, \"long_frames_gt_50\": 0, \"longtask_count\": 2, \"longtask_max_ms\": 12.5, \"monotonic_ms\": 120001.0, \"received_unix\": 1789170440.072344, \"sample_count\": 7200, \"schema\": \"FRANK_AVATAR_PERF/v1\"}\ninvalid_json_status 400\nscope=VPS_COMPONENT_RUNTIME_PERF_ENDPOINT_ONLY\ndaemon_log_tail\n[buehne] HTTP auf http://127.0.0.1:8799/ (nur localhost)\n",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nAttributeError: 'NoneType' object has no attribute 'decode'\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

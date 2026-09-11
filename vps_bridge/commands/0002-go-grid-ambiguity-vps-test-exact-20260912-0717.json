@@ -1,0 +1,9 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v5",
+  "command_id": "0002-go-grid-ambiguity-vps-test-exact-20260912-0717",
+  "priority": -90,
+  "op": "exec",
+  "cwd": "/workspace/grid10-ambiguity-candidate",
+  "command": "set -euo pipefail; echo EXPECT_MODULE=d41a62638dbc7bd70779fb164e0195cc2b654dd09acb30fbde07da62678c35a5; echo EXPECT_TEST=8c464f4cf8dc2bf0ecf7f2aea9ac02d119ef0b218540899b346093754cc6cc80; sha256sum f2wp1207_grid10_ambiguity_band_candidate.py f2wp1207_grid10_ambiguity_band_candidate_test.py; test \"$(sha256sum f2wp1207_grid10_ambiguity_band_candidate.py | cut -d' ' -f1)\" = d41a62638dbc7bd70779fb164e0195cc2b654dd09acb30fbde07da62678c35a5; test \"$(sha256sum f2wp1207_grid10_ambiguity_band_candidate_test.py | cut -d' ' -f1)\" = 8c464f4cf8dc2bf0ecf7f2aea9ac02d119ef0b218540899b346093754cc6cc80; python3 -m py_compile f2wp1207_grid10_ambiguity_band_candidate.py f2wp1207_grid10_ambiguity_band_candidate_test.py; python3 f2wp1207_grid10_ambiguity_band_candidate_test.py; echo PASS_EXACT_BYTES_VPS_SANDBOX",
+  "timeout_seconds": 120
+}

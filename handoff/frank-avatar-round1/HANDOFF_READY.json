@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-09-11T18:45:49Z",
+  "active_repo": "/home/ai-core-node/.claude/star/visual  (NOT a git repository -- see git/NOTAM.txt and ACTIVE_RUNTIME_MAP.md #4)",
+  "git_commit": "n/a - not a git repo",
+  "git_dirty": null,
+  "archive": {
+    "path": "/home/ai-core-node/.claude/star/visual/artifacts/handoff/FRANK_AVATAR_HANDOFF_20260911T184549Z.zip",
+    "bytes": 681812597,
+    "sha256": "361f69d59cdd076e5598ae11022b0e7a1997362a5dbb14f5c093ea458f437f48",
+    "unzip_test": true,
+    "note": "sha256 is of the FIRST zip build; this file was then updated in-place and the zip rebuilt once (final zip's own sha256 is recorded in the sibling .zip.sha256 file, which is authoritative for what actually ships)."
+  },
+  "counts": {
+    "source_files": 16,
+    "asset_files": 1340,
+    "png_rgba": 1020,
+    "tests": 2,
+    "screenshots": 2,
+    "videos": 0,
+    "service_units": 1
+  },
+  "runtime": {
+    "verified_live_repo": true,
+    "verified_process_paths": true,
+    "standard_capture": true,
+    "fullscreen_capture": true,
+    "performance_trace": false
+  },
+  "tests": [
+    {
+      "name": "curl http://127.0.0.1:8788/ -> HTTP 200",
+      "status": "pass",
+      "evidence": "evidence/environment/http_root_headers.txt"
+    },
+    {
+      "name": "google-chrome --headless screenshot 746x449",
+      "status": "pass",
+      "evidence": "evidence/screenshots/standard_746x449.png"
+    },
+    {
+      "name": "google-chrome --headless screenshot 1680x1050",
+      "status": "pass",
+      "evidence": "evidence/screenshots/fullscreen_1680x1050.png"
+    },
+    {
+      "name": "google-chrome --headless --dump-dom (live layer stack)",
+      "status": "pass",
+      "evidence": "evidence/runtime/dom_dump.html"
+    },
+    {
+      "name": "chrome headless log scanned for ERROR/Exception/Failed",
+      "status": "pass",
+      "evidence": "evidence/logs/chrome_headless_standard.log, evidence/logs/chrome_headless_fullscreen.log (no real JS errors, only unrelated GCM/TensorFlow noise)"
+    },
+    {
+      "name": "sqlite3 schema dump of buehne_lokal.db",
+      "status": "pass",
+      "evidence": "schema/buehne_lokal.db.schema.sql"
+    },
+    {
+      "name": "full asset+code inventory with sha256/size/mime/png-dims/alpha",
+      "status": "pass",
+      "evidence": "INVENTORY.csv (5270 rows)"
+    },
+    {
+      "name": "restart/stop of live systemd unit",
+      "status": "not_run",
+      "evidence": "deliberately not executed -- round-1 rule forbids touching the running service; see RUNBOOK.md #5"
+    },
+    {
+      "name": "30-60s video capture of live animation",
+      "status": "not_run",
+      "evidence": "no screen/frame recording tool safely wired up in this round without risking the live kiosk process; listed under missing"
+    },
+    {
+      "name": "requestAnimationFrame / long-task / memory instrumentation",
+      "status": "not_run",
+      "evidence": "no existing instrumentation path in the code; documented as not-measurable per the prompt's own honesty rule rather than invented"
+    }
+  ],
+  "redactions": [],
+  "missing": [
+    "30-60s screen recording of the live animation (not captured this round)",
+    "requestAnimationFrame/long-task/memory performance trace (no instrumentation exists in the code to sample)",
+    "browser DevTools console-api event stream (only headless chrome stderr log was checked, not a full CDP console capture)"
+  ],
+  "blockers": [],
+  "completeness": false,
+  "completeness_note": "All MANDATORY structural parts, the environment truth, the full inventory, the active-vs-inactive asset map, screenshots, and the DOM layer-stack proof are present and verified. completeness is false ONLY because of the three items under 'missing' above (video capture + performance trace + full console-event capture), which this round explicitly may not fabricate. Everything else in PROMPTS/01's checklist is done."
+}

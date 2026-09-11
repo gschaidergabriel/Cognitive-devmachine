@@ -1,0 +1,25 @@
+===PROC_ENV_SAFE===
+HOME=/srv/claylab
+LOGNAME=claylab
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+USER=claylab
+SSH_AUTH_SOCK=/run/user/5001/gnupg/S.gpg-agent.ssh
+===PASSWD_HOME===
+claylab:/srv/claylab:/bin/bash
+===MIRROR_OWNERS===
+claylab:claylab 755 /srv/claylab/control-mirror
+claylab:claylab 755 /srv/claylab/results-mirror
+===REMOTES_AS_CLAYLAB===
+---/srv/claylab/control-mirror
+origin	git@github.com:gschaidergabriel/clay-global-research-entity.git (fetch) [blob:none]
+origin	git@github.com:gschaidergabriel/clay-global-research-entity.git (push)
+## chatgpt-vps-control...origin/chatgpt-vps-control
+---/srv/claylab/results-mirror
+origin	git@github.com:gschaidergabriel/clay-global-research-entity.git (fetch) [blob:none]
+origin	git@github.com:gschaidergabriel/clay-global-research-entity.git (push)
+## chatgpt-vps-results...origin/chatgpt-vps-results
+===FETCH_TEST_AS_CLAYLAB===
+From github.com:gschaidergabriel/clay-global-research-entity
+ * branch                chatgpt-vps-control -> FETCH_HEAD
+FETCH_RC=0
+===END===

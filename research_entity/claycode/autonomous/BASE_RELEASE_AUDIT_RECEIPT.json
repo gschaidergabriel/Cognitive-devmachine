@@ -1,0 +1,165 @@
+{
+  "audit": "ClayCode BASE general-purpose release eligibility",
+  "fail_closed": true,
+  "missing_or_blocking": [
+    "WORKSPACE_NOT_PASS:CC-WP-03-IR-TYPES",
+    "WORKSPACE_NOT_PASS:CC-WP-04-TYPE-EFFECT",
+    "WORKSPACE_NOT_PASS:CC-WP-05-EVALUATOR",
+    "WORKSPACE_NOT_PASS:CC-WP-06-COMPILER-LOWERING",
+    "WORKSPACE_NOT_PASS:CC-WP-07-RUNTIME-ABI-FFI",
+    "WORKSPACE_NOT_PASS:CC-WP-08-STDLIB-SDK",
+    "WORKSPACE_NOT_PASS:CC-WP-09-CONCURRENCY-MEMORY",
+    "WORKSPACE_NOT_PASS:CC-WP-10-GENERAL-APP-SUITE",
+    "WORKSPACE_NOT_PASS:CC-WP-11-FUZZ-CONFORMANCE",
+    "WORKSPACE_NOT_PASS:CC-WP-12-CORPUS-HELDOUT",
+    "WORKSPACE_NOT_PASS:CC-WP-13-HARNESS-HANDOFF",
+    "WORKSPACE_APP_NOT_PASS:CLI",
+    "WORKSPACE_APP_NOT_PASS:COMPILER_TOOL",
+    "WORKSPACE_APP_NOT_PASS:CONCURRENT_SERVICE",
+    "WORKSPACE_APP_NOT_PASS:DB_SERVICE",
+    "WORKSPACE_APP_NOT_PASS:FRANK_COMPONENT",
+    "WORKSPACE_APP_NOT_PASS:FULL_FRANK_HANDOFF",
+    "WORKSPACE_APP_NOT_PASS:GPU_ML_NUMERICAL",
+    "WORKSPACE_APP_NOT_PASS:GUI_INTERACTIVE",
+    "WORKSPACE_APP_NOT_PASS:HTTP_WEBSITE",
+    "WORKSPACE_APP_NOT_PASS:SYSTEM_EFFECT_SANDBOX",
+    "TARGET_RECEIPT_MISSING"
+  ],
+  "overall_pass": false,
+  "package_status": {
+    "CC-WP-01-SPEC-FREEZE": "PASS",
+    "CC-WP-02-PARSER-CANON": "PASS",
+    "CC-WP-03-IR-TYPES": "OPEN",
+    "CC-WP-04-TYPE-EFFECT": "OPEN",
+    "CC-WP-05-EVALUATOR": "OPEN",
+    "CC-WP-06-COMPILER-LOWERING": "OPEN",
+    "CC-WP-07-RUNTIME-ABI-FFI": "OPEN",
+    "CC-WP-08-STDLIB-SDK": "OPEN",
+    "CC-WP-09-CONCURRENCY-MEMORY": "OPEN",
+    "CC-WP-10-GENERAL-APP-SUITE": "OPEN",
+    "CC-WP-11-FUZZ-CONFORMANCE": "OPEN",
+    "CC-WP-12-CORPUS-HELDOUT": "OPEN",
+    "CC-WP-13-HARNESS-HANDOFF": "OPEN",
+    "CC-WP-14-BASE-AUDIT": "OPEN"
+  },
+  "receipt_inventory": [
+    {
+      "bytes": 7481,
+      "path": "research_entity/claycode/autonomous/TRIGGER1_2026-08-24_CONTROL_POWER_AUDIT_GPT56SOL.json",
+      "sha256": "17ad4cf5a0a79fcc9dd300a1a292e11f666afcb45141dc3b824fdd27fdfd3a63"
+    },
+    {
+      "bytes": 7647,
+      "path": "research_entity/claycode/autonomous/TRIGGER1_2026-08-24_READOUT_ADJACENT_GOODHART_AUDIT_GPT56SOL.json",
+      "sha256": "4652929faf3561fdce9a0d93b6ec37fcbe0e88d076111bebf3b632e46fd78c66"
+    },
+    {
+      "bytes": 6230,
+      "path": "research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json",
+      "sha256": "bcd8cff11bdb4c31b1cb2b3bc1c8b21f33e0eb57b3764722f139c534277dd0ca"
+    },
+    {
+      "bytes": 3781,
+      "path": "research_entity/claycode/base/CLAYCODE_BASE_SEMANTIC_FREEZE_MANIFEST.json",
+      "sha256": "7ab1c35077102846e3328ebf3722fbf7892167a0ffa24f468b676c862c709eba"
+    },
+    {
+      "bytes": 1294,
+      "path": "research_entity/claycode/base/CLAYCODE_BASE_SEMANTIC_FREEZE_V1_RECEIPT.json",
+      "sha256": "7330c2a71d5756e94fe495cc6b0de1292fb1c8b5ad91d2a6860b36fa33abe30f"
+    },
+    {
+      "bytes": 159,
+      "path": "research_entity/claycode/base/examples/package_demo/manifest.json",
+      "sha256": "112eab28f93459f61206ef756096f300a123714d23f03d0fe247ebd5e4dfb34c"
+    },
+    {
+      "bytes": 2804,
+      "path": "research_entity/claycode/research/20260816_GO_POST_MERGE_RECEIPT_INTERLEAVING.json",
+      "sha256": "3524df332d66c74ad0d6f52705f58e948e0bb5799e1744343d3cc0709fcc6ef3"
+    },
+    {
+      "bytes": 966,
+      "path": "research_entity/claycode/training/TRIGGER2_A_WORK_SELECTION_AUDIT_V1.json",
+      "sha256": "50e891b6c681e50dabfe61d57fe4a3bd0f3ea70fe7fff6069b907b275b13eda9"
+    },
+    {
+      "bytes": 1054,
+      "path": "research_entity/claycode/training/TRIGGER2_B0_READ_WRITE_BASELINE_AUDIT_V1.json",
+      "sha256": "6ccca76a561c80c9bd3fbd58395c3d1dc763654c9768b3179802a4b51ec2b228"
+    },
+    {
+      "bytes": 6851,
+      "path": "research_entity/claycode/training/TRIGGER2_B1_BALANCED_2ORDER_AUDIT_V1.json",
+      "sha256": "c0b2e67855f388972f4b476e4e1049a78e575df882f839ed96222d70a96bf4f4"
+    },
+    {
+      "bytes": 7046,
+      "path": "research_entity/claycode/training/TRIGGER2_B1_LEAKAGE_AUDIT_REPORT_V1.json",
+      "sha256": "c225c9b7d7de7e16baf6b109709fd8812e50d43289e002310bd0125432934d9f"
+    },
+    {
+      "bytes": 1731,
+      "path": "research_entity/claycode/training/TRIGGER2_B2_AUDIT_REPORT_V1.json",
+      "sha256": "664d9f426ab57dd5c6b38bdf3fa3beb24110e6a168ef17c1064da519958d4150"
+    },
+    {
+      "bytes": 2751,
+      "path": "research_entity/claycode/training/TRIGGER2_B3_AUDIT_REPORT_V1.json",
+      "sha256": "85b614deadf47bdc74c1c766cc955c5e496eb3b7c36980b730b27273ae6e5120"
+    },
+    {
+      "bytes": 1210,
+      "path": "research_entity/claycode/training/TRIGGER2_B4_LEAKAGE_AUDIT_REPORT_V1.json",
+      "sha256": "6ea02b314c16b8fe9152b2958f0d41a6010d585d8aa13223e0de2a7febc0ef5f"
+    },
+    {
+      "bytes": 1540,
+      "path": "research_entity/claycode/training/TRIGGER2_B5_LEAKAGE_AUDIT_REPORT_V1.json",
+      "sha256": "3399d579894b68b5550d3c0b7bbb21e819a3b84c9dc25ab4a389e2c054f67a52"
+    },
+    {
+      "bytes": 2235,
+      "path": "research_entity/claycode/training/TRIGGER2_B6_GWT_AUDIT_V1.json",
+      "sha256": "c7a360df4132b068733ae70c4e26c75ebc7858bece168c8dedbb4909e0b234da"
+    },
+    {
+      "bytes": 2034,
+      "path": "research_entity/claycode/training/TRIGGER2_B6_HYPERPOSITION_EXPANSION_AUDIT_V1.json",
+      "sha256": "fa91feee82701e855f902ec31b6a257dfda5a12da5cf91fe7a1d37702f5cb8e0"
+    },
+    {
+      "bytes": 1401,
+      "path": "research_entity/claycode/training/TRIGGER2_B6_SYSTEM_INTEGRATION_AUDIT_V1.json",
+      "sha256": "33f6a7dbc025b90e4c8886a914e2d62c650742dea2a78dc3cf2489891c020772"
+    },
+    {
+      "bytes": 2229,
+      "path": "research_entity/claycode/training/TRIGGER2_CANONICAL_ATOM_SPLIT_MANIFEST_V1.json",
+      "sha256": "5eaa441714d77a7dfad1897ebdf27f623b822f82d2af71b7ecbdbb2a1a91bf9e"
+    },
+    {
+      "bytes": 2761,
+      "path": "research_entity/claycode/training/TRIGGER2_CANONICAL_ATOM_SPLIT_MANIFEST_VERIFICATION_REPORT_V1.json",
+      "sha256": "038892f567582bc845e6f7f9c48becb1efd954cb4c0314d6b76445a0e7f19c0a"
+    },
+    {
+      "bytes": 1420,
+      "path": "research_entity/claycode/training/TRIGGER2_G_COMPRESSION_AUDIT_V1.json",
+      "sha256": "e2afc996949d3976245f84c0473ef64a221f7676cff73210571879ef117b0398"
+    }
+  ],
+  "receipt_inventory_count": 21,
+  "release_manifest_created": false,
+  "rule": "WP14 requires WP01..13 PASS, all ten target apps PASS, strict Andreas target receipt including runtime-v0.4+mainline bridge, zero unresolved language counterexamples and full stateful FRANK handoff",
+  "schema_version": "1.1",
+  "semantic_freeze_sha256": "6a3edeba31a5144a4425265644f811f9288c546ad525e7edda10f1a23fbcb3ed",
+  "strict_target_receipt_path": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT.json",
+  "target_contract_sha256": "bcd8cff11bdb4c31b1cb2b3bc1c8b21f33e0eb57b3764722f139c534277dd0ca",
+  "target_errors": [
+    "TARGET_RECEIPT_MISSING"
+  ],
+  "target_receipt_exists": false,
+  "workspace_sha256": "a997c5479ac8a66d3d2e33a4d3244aab17f2507ce328696f5053cf012206ba47",
+  "wp14_pass_eligible": false
+}

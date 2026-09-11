@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "go-avatar-gpt56-patch-qa-timebase-20260912-0648",
+  "command_sha256": "4e81b62eef5723bf6e154b8d4d6f5571125d84034960866c5863e34c3b8ba427",
+  "started_at": "2026-09-11T23:39:40.246048+00:00",
+  "finished_at": "2026-09-11T23:39:40.433778+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "9f1bb6a74eb5daaff52ee84e0c42e931136e9e3cfde437b8ecef249aea1b6146",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "PATCH_BYTES_DELTA 2973\nPATCH_SHA256 14b949ffd6cfe2de46bb321b952de2cc7a13c852a8f2ab76e797f98bf0cd7652\n=== CONTRACT CHECKS ===\n1268:function mikroSakkadeSchritt(){\n1272:    setTimeout(mikroSakkadeSchritt, 250 + Math.random() * 450);\n1280:  setTimeout(mikroSakkadeSchritt, 250 + Math.random() * 450); // 250-700 ms contract cadence\n1282:setTimeout(mikroSakkadeSchritt, 250 + Math.random() * 450);\n1564:function atmen(t){\n1570:    _atemPeriodeMs = 3800 + Math.random() * 1800; // contract: 3.8-5.6 s\n1794:  return {schema:\"FRANK_QA/v1\",uptime_ms:Math.round(performance.now()-__frankQa.started),samples:d.length,p50_ms:__qaPct(d,.50),p95_ms:__qaPct(d,.95),p99_ms:__qaPct(d,.99),max_ms:d.length?d[d.length-1]:null,spikes_gt_50ms:d.filter(x=>x>50).length,fps_1s:window.__buehneFps||0,longtask_count:__frankQa.longTasks.length,longtask_total_ms:Math.round(__frankQa.longTasks.reduce((a,x)=>a+x.duration,0)*100)/100,recent_errors:__frankQa.errors.slice(-16),memory:mem,breathing_period_ms:Math.round(_atemPeriodeMs),face_gate:gazeBasisSichtbar()};\n1800:function __qaFrame(t){\n1819:  __qaFrame(t);\nscript_tags 2 2 braces 310 310 parens 1245 1250\n=== DIFF SUMMARY ===\n@@ -1266,14 +1266,20 @@\n-  setTimeout(mikroSakkadeSchritt, 1000 + Math.random() * 3000); // 1-4s, unregelmaessig\n+  setTimeout(mikroSakkadeSchritt, 250 + Math.random() * 450); // 250-700 ms contract cadence\n@@ -1552,9 +1558,21 @@\n-function atmen(){\n+function atmen(t){\n@@ -1766,6 +1784,29 @@\n+const __frankQa = {started:performance.now(),prevFrame:null,frameDeltas:[],longTasks:[],errors:[],lastPublish:0,maxFrames:7200,maxLongTasks:512,maxErrors:128};\n@@ -1775,7 +1816,8 @@\n-  atmen();\n+  __qaFrame(t);\n+  atmen(t);\nPATCH_OK\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

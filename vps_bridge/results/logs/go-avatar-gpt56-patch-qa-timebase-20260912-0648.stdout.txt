@@ -1,0 +1,27 @@
+PATCH_BYTES_DELTA 2973
+PATCH_SHA256 14b949ffd6cfe2de46bb321b952de2cc7a13c852a8f2ab76e797f98bf0cd7652
+=== CONTRACT CHECKS ===
+1268:function mikroSakkadeSchritt(){
+1272:    setTimeout(mikroSakkadeSchritt, 250 + Math.random() * 450);
+1280:  setTimeout(mikroSakkadeSchritt, 250 + Math.random() * 450); // 250-700 ms contract cadence
+1282:setTimeout(mikroSakkadeSchritt, 250 + Math.random() * 450);
+1564:function atmen(t){
+1570:    _atemPeriodeMs = 3800 + Math.random() * 1800; // contract: 3.8-5.6 s
+1794:  return {schema:"FRANK_QA/v1",uptime_ms:Math.round(performance.now()-__frankQa.started),samples:d.length,p50_ms:__qaPct(d,.50),p95_ms:__qaPct(d,.95),p99_ms:__qaPct(d,.99),max_ms:d.length?d[d.length-1]:null,spikes_gt_50ms:d.filter(x=>x>50).length,fps_1s:window.__buehneFps||0,longtask_count:__frankQa.longTasks.length,longtask_total_ms:Math.round(__frankQa.longTasks.reduce((a,x)=>a+x.duration,0)*100)/100,recent_errors:__frankQa.errors.slice(-16),memory:mem,breathing_period_ms:Math.round(_atemPeriodeMs),face_gate:gazeBasisSichtbar()};
+1800:function __qaFrame(t){
+1819:  __qaFrame(t);
+script_tags 2 2 braces 310 310 parens 1245 1250
+=== DIFF SUMMARY ===
+@@ -1266,14 +1266,20 @@
+-  setTimeout(mikroSakkadeSchritt, 1000 + Math.random() * 3000); // 1-4s, unregelmaessig
++  setTimeout(mikroSakkadeSchritt, 250 + Math.random() * 450); // 250-700 ms contract cadence
+@@ -1552,9 +1558,21 @@
+-function atmen(){
++function atmen(t){
+@@ -1766,6 +1784,29 @@
++const __frankQa = {started:performance.now(),prevFrame:null,frameDeltas:[],longTasks:[],errors:[],lastPublish:0,maxFrames:7200,maxLongTasks:512,maxErrors:128};
+@@ -1775,7 +1816,8 @@
+-  atmen();
++  __qaFrame(t);
++  atmen(t);
+PATCH_OK

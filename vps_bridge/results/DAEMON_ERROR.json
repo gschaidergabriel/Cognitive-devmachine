@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_VPS_DAEMON_ERROR/v1",
-  "observed_at": "2026-09-11T23:49:29.230765+00:00",
-  "error": "JSONDecodeError('Invalid \\\\escape: line 1 column 418 (char 417)')",
-  "traceback": "Traceback (most recent call last):\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 299, in main\n    if execute(p):\n       ^^^^^^^^^^\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 215, in execute\n    s = json.loads(raw)\n        ^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 353, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ^^^^^^^^^^^^^^^^^^^^^^\njson.decoder.JSONDecodeError: Invalid \\escape: line 1 column 418 (char 417)\n"
+  "observed_at": "2026-09-11T23:49:57.399988+00:00",
+  "error": "ValueError('BAD_SCHEMA')",
+  "traceback": "Traceback (most recent call last):\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 299, in main\n    if execute(p):\n       ^^^^^^^^^^\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 217, in execute\n    raise ValueError('BAD_SCHEMA')\nValueError: BAD_SCHEMA\n"
 }

@@ -1,0 +1,266 @@
+FILE /home/andreas/frankenstein-repo/scripts/stern.py
+--- 5779
+5775: # ═══════════════════════════════════════════════════════════════════════
+5776: 
+5777: # ═══════════════════════════════════════════════════════════════════════
+5778: # F2WP1207 TUNE-PASSTHROUGH (2026-09-06, paket "wp1207-tune-passthrough").
+5779: # Der Dashboard-Weg (`/cognition`) schreibt Level-Overrides fuer kappa/
+5780: # lambda/alpha/beta/gamma/p2_retina_bonus/p11_gate_threshold nach
+5781: # `star_konfig` (`f2wp1207.tune.*`); die TABU-Datei ~/.claude/star/stern.py
+5782: # liest sie und reicht sie sowohl per stdin (Schluessel `"tune"`, ein Dict)
+5783: # als auch per Env `STERN_F2WP1207_TUNE_<KENNUNG>` an DIESEN Prozess
+5784: # weiter -- diese Bruecke hier ist die EMPFANGENDE Seite.
+--- 5798
+5794: # Docstrings).
+5795: # ═══════════════════════════════════════════════════════════════════════
+5796: 
+5797: _F2WP1207_TUNE_SCHLUESSEL = (
+5798:     "kappa", "lambda", "alpha", "beta", "gamma",
+5799:     "p2_retina_bonus", "p11_gate_threshold",
+5800: )
+5801: _F2WP1207_TUNE_BEREICHE = {
+5802:     "kappa": (0.0, 1.0),
+5803:     "lambda": (0.0, 1.0),
+--- 5802
+5798:     "kappa", "lambda", "alpha", "beta", "gamma",
+5799:     "p2_retina_bonus", "p11_gate_threshold",
+5800: )
+5801: _F2WP1207_TUNE_BEREICHE = {
+5802:     "kappa": (0.0, 1.0),
+5803:     "lambda": (0.0, 1.0),
+5804:     "alpha": (0.0, 1.0),
+5805:     "beta": (0.0, 1.0),
+5806:     "gamma": (0.0, 1.0),
+5807:     "p2_retina_bonus": (0.0, 0.5),
+--- 5868
+5864: 
+5865: def _f2wp1207_tune_p7_kwargs(validiert: dict) -> dict:
+5866:     """Bruecke Schluesselnamen: Payload/Env nutzen `'lambda'`
+5867:     (Nutzersprache), p7mod/tlmod/p12mod nutzen `lam` (Python-Schluesselwort-
+5868:     Kollision) -- sonst 1:1. Nur die 5 Kern-Parameter (kappa/lam/alpha/beta/
+5869:     gamma), die restlichen zwei (`p2_retina_bonus`, `p11_gate_threshold`)
+5870:     haben eigene, nicht-p7-foermige Abnehmer und werden von den Aufrufstellen
+5871:     direkt aus `validiert` gelesen."""
+5872:     kwargs: dict = {}
+5873:     if "kappa" in validiert:
+--- 5873
+5869:     gamma), die restlichen zwei (`p2_retina_bonus`, `p11_gate_threshold`)
+5870:     haben eigene, nicht-p7-foermige Abnehmer und werden von den Aufrufstellen
+5871:     direkt aus `validiert` gelesen."""
+5872:     kwargs: dict = {}
+5873:     if "kappa" in validiert:
+5874:         kwargs["kappa"] = validiert["kappa"]
+5875:     if "lambda" in validiert:
+5876:         kwargs["lam"] = validiert["lambda"]
+5877:     if "alpha" in validiert:
+5878:         kwargs["alpha"] = validiert["alpha"]
+--- 5874
+5870:     haben eigene, nicht-p7-foermige Abnehmer und werden von den Aufrufstellen
+5871:     direkt aus `validiert` gelesen."""
+5872:     kwargs: dict = {}
+5873:     if "kappa" in validiert:
+5874:         kwargs["kappa"] = validiert["kappa"]
+5875:     if "lambda" in validiert:
+5876:         kwargs["lam"] = validiert["lambda"]
+5877:     if "alpha" in validiert:
+5878:         kwargs["alpha"] = validiert["alpha"]
+5879:     if "beta" in validiert:
+--- 5959
+5955:             )
+5956: 
+5957:             selbstbeob = p12mod.coordinate_real_turn_with_self_observation(
+5958:                 c, F2WP1207_P15_CANARY_EVIDENCE, turn, compose_with_reentry=True,
+5959:                 tune=tune_p7_kwargs or None,
+5960:             )
+5961:             if selbstbeob is None:
+5962:                 # p12mod prueft p7mod.p7_active() selbst nochmal intern --
+5963:                 # kann hier nur eintreten, wenn das Flag ZWISCHEN unserer
+5964:                 # eigenen Pruefung oben und diesem Aufruf umgeschaltet
+--- 6070
+6066: # self-integration/wp1207-grid10-turn-loop-20260906, Goldtest 49/49), hatte
+6067: # aber NUR Testaufrufer. Flag-Flip allein waere inert (P15-Lehre: ein Gate
+6068: # ohne Aufrufer aendert nichts). Dieser Subcommand ist der erste LIVE-
+6069: # Aufrufer: er nimmt EIN TypedEntry-Payload von stdin, ruft
+6070: # run_canonical_turn() und gibt strukturiert zurueck.
+6071: #
+6072: #     stern.py f2wp1207-turn-loop-turn \
+6073: #         [--force-new-epoch] [--declared-reentry {previous_frame,previous_epoch,genesis}] \
+6074: #         [--evidence-path PFAD]   < payload.json
+6075: #
+--- 6288
+6284:                     "f2wp1207-turn-loop",
+6285:                     min_broadcast_value=tune_validiert["p11_gate_threshold"],
+6286:                 )
+6287: 
+6288:             ergebnis = tlmod.run_canonical_turn(
+6289:                 c,
+6290:                 payload,
+6291:                 declared_reentry=declared_reentry,
+6292:                 effect_policy=effect_policy,
+6293:                 include_self_observation=False,
+--- 6297
+6293:                 include_self_observation=False,
+6294:                 evidence_path=Path(evidence_path) if evidence_path
+6295:                 else F2WP1207_TURN_LOOP_EVIDENCE,
+6296:                 env=os.environ,
+6297:                 tune=tune_p7_kwargs or None,
+6298:             )
+6299:             if ergebnis is None:
+6300:                 # Modul-Gate (ENV/gewonnenes Flag) ging zwischen unseren
+6301:                 # beiden Pruefungen auf AUS. Gleiches Null-Delta-Prinzip:
+6302:                 # nichts geschrieben, erkennbarer Grund.
+--- 6309
+6305:                     "active": False,
+6306:                     "canonical_loop_owns_turn": False,
+6307:                     "grund": (
+6308:                         "Gate wurde waehrend des Turns AUSgeschaltet -- "
+6309:                         "run_canonical_turn hat nichts geschrieben"
+6310:                     ),
+6311:                 }
+6312: 
+6313:             # --- Pointer-State zuruecklesen (Beleg, nicht Behauptung) ---
+6314:             epoch_row = c.execute(
+--- 6371
+6367:     session_id: str, nutzertext: str, retrieval_treffer: Optional[str]
+6368: ) -> None:
+6369:     """UserPromptSubmit -- DER LESER fuer den kanonischen Turn-Loop
+6370:     (Gabriel-Auftrag 2026-09-07, `f2wp1207.canonical_turn_loop` war bis
+6371:     hierher ein Gate ohne Leser: run_canonical_turn()/die Bruecke oben
+6372:     existierten nur als Testaufrufer + CLI-Subcommand
+6373:     `f2wp1207-turn-loop-turn`, nichts rief sie bei einem echten Prompt
+6374:     automatisch auf). Diese Funktion schliesst genau diese Luecke.
+6375: 
+6376:     GATE: reicht den Gate-Check komplett an
+--- 10678
+10674:             # Aufruf. Siehe Docstring von _f2wp1207_shadow_beobachtung().
+10675:             _f2wp1207_shadow_beobachtung(session_id, prompt_text, treffer)
+10676:             # Gabriel-Auftrag 2026-09-07 -- DER LESER fuer den kanonischen
+10677:             # Turn-Loop. Bis hierher war f2wp1207.canonical_turn_loop ein
+10678:             # Gate ohne Leser: run_canonical_turn() lief nur unter Test
+10679:             # oder manuell per CLI (`f2wp1207-turn-loop-turn`), nie
+10680:             # automatisch bei einem echten Prompt. Diese eine Zeile ist der
+10681:             # fehlende Aufrufer -- fail-closed komplett in
+10682:             # _f2wp1207_turn_loop_auto() (Gate-Check + Failure-Isolation
+10683:             # siehe dort), reiner Seiteneffekt in unified.db, kein Einfluss
+--- 17642
+17638:     # Kanonischer Turn-Loop -- LIVE-Bruecke (2026-09-06). Eigener Gate-
+17639:     # Schluessel `f2wp1207.canonical_turn_loop`; bei AN tritt die P15-Lane
+17640:     # zurueck (siehe _f2wp1207_p15_canary_turn_ausfuehren). Liest das
+17641:     # TypedEntry-Payload von stdin, schreibt Ergebnis-JSON nach stdout.
+17642:     tlb = sub.add_parser("f2wp1207-turn-loop-turn", help="F2WP1207 kanonischer Turn-Loop: EIN Turn ueber run_canonical_turn() (Gate f2wp1207.canonical_turn_loop)")
+17643:     tlb.add_argument("--force-new-epoch", action="store_true", help="nur wenn keine runtime_epoch_id im Payload steht: neue RuntimeEpoch mit predecessor mint")
+17644:     tlb.add_argument("--declared-reentry", default=None,
+17645:                      choices=["previous_frame", "previous_epoch", "genesis"],
+17646:                      help="Reentry bewusst deklarieren (Vorgabe: der Loop loest selbst auf)")
+17647:     tlb.add_argument("--evidence-path", default=None,
+FILE /home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_turn_loop.py
+--- 35
+31: 
+32:     GRID10 wird damit Besitzer des kognitiven Turn-Lifecycles.
+33:     Nicht nur ein Beobachter, nicht ein zusaetzlicher Coordinator.
+34: 
+35: Dieses Modul implementiert genau diese Kette als ``run_canonical_turn``.
+36: Es ist KOMPOSITION aus der bestehenden P-Serie, kein Ersatz:
+37: 
+38: - Wettbewerbsmechanik: P7-Formeln (``derive_signal``, ``proposal_score``,
+39:   ``state_update``) werden IMPORTIERT und unveraendert benutzt --
+40:   preregistriert in PREREG_P6D_20260904.md (lambda=0.7, alpha=0.4, beta=0.4,
+--- 41
+37: 
+38: - Wettbewerbsmechanik: P7-Formeln (``derive_signal``, ``proposal_score``,
+39:   ``state_update``) werden IMPORTIERT und unveraendert benutzt --
+40:   preregistriert in PREREG_P6D_20260904.md (lambda=0.7, alpha=0.4, beta=0.4,
+41:   gamma=0.3, kappa=0.6). Nicht neu erfunden, nicht neu justiert.
+42: - previous-Epoch-Reentry: P9-Records + P10 ``reconstruct_workspace``.
+43: - Effects: P11-Gate-Schicht (``EffectGatePolicy``, ``evaluate_gate``,
+44:   ``EffectType``, Schema-Tags). P11's eigenes ``submit_effect_request``
+45:   macht eine EIGENE Transaktion und kann deshalb nicht in den atomaren
+46:   Turn-Persist eingebettet werden -- der Journal-Row wird deshalb HIER
+--- 76
+72: der Punkt, an dem der naechste Turn wieder einsteigt.
+73: 
+74: Gate: ``f2wp1207.canonical_turn_loop`` in ``star_konfig``, default AUS,
+75: ENV-Override ``STERN_F2WP1207_TURN_LOOP`` (gleiches Muster wie P7's Gate).
+76: Bei AUS: ``run_canonical_turn`` gibt None zurueck, BEVOR irgendein I/O
+77: geschieht -- Null-Verhaltensdelta gegenueber dem heutigen Weg.
+78: 
+79: Zustandslane: ``f2_grid10_p6d_state``, condition_key
+80: ``f2wp1207_canonical_turn_loop`` (eigene Lane, keine Mischung mit P7-Smoke
+81: oder dem stern.py-Liveweg in ``f2_grid10_cell_state``). Siehe
+--- 1141
+1137: def fill_jspace(
+1138:     turn_event_id: str,
+1139:     seed_state: Mapping[str, float],
+1140:     *,
+1141:     kappa: float = p7mod.KAPPA,
+1142:     signal_overrides: Mapping[str, float] | None = None,
+1143: ) -> JSpace:
+1144:     """J-Space befuellen: 10 GRID-Zellen erzeugen ihre Kandidaten
+1145:     (P7-Signal + P7-Proposal-Score), Competition = max, Selection = Winner,
+1146:     Broadcast = Winner-Score. Reine Funktion, kein I/O.
+--- 1148
+1144:     """J-Space befuellen: 10 GRID-Zellen erzeugen ihre Kandidaten
+1145:     (P7-Signal + P7-Proposal-Score), Competition = max, Selection = Winner,
+1146:     Broadcast = Winner-Score. Reine Funktion, kein I/O.
+1147: 
+1148:     ``kappa`` (F2WP1207 tune-passthrough, 2026-09-06): keyword-only override,
+1149:     default is p7mod's own module constant -- omitting it is byte-identical
+1150:     to before.
+1151: 
+1152:     ``signal_overrides`` (2026-09-07, percept passthrough): keyword-only,
+1153:     exactly the same shape and semantics as
+--- 1187
+1183:             prior_state=float(seed_state.get(cell, 0.0)),
+1184:             proposal_score=p7mod.proposal_score(
+1185:                 signals[cell],
+1186:                 float(seed_state.get(cell, 0.0)),
+1187:                 kappa=kappa,
+1188:             ),
+1189:         )
+1190:         for cell in p7mod.CELLS
+1191:     )
+1192:     winner = max(candidates, key=lambda c: c.proposal_score)
+--- 1356
+1352:     effect: Optional[dict]
+1353:     self_observation: Optional[dict]
+1354: 
+1355: 
+1356: def run_canonical_turn(
+1357:     conn: sqlite3.Connection,
+1358:     typed_entry: TypedEntry | Mapping,
+1359:     *,
+1360:     declared_reentry: Optional[str] = None,
+1361:     effect_policy: Optional["p11mod.EffectGatePolicy"] = None,
+--- 1377
+1373:     mit einem Etikett aufgerufen (Kill-mitten-im-Turn-Nachweis).
+1374:     Fehler jeglicher Art -> rollback + raise (fail-closed, kein Schlucken).
+1375: 
+1376:     ``tune`` (F2WP1207 tune-passthrough, 2026-09-06): optional dict, keys
+1377:     ``kappa``/``lam``/``alpha``/``beta``/``gamma`` (p7mod's own parameter
+1378:     names), forwarded per-call into ``fill_jspace``/``uptake_and_state``.
+1379:     ``None``/``{}`` -> both calls use p7mod's own module-constant defaults,
+1380:     byte-identical to before this parameter existed. Purely a local dict
+1381:     read once per call -- no module constant is ever mutated, so there is
+1382:     no leakage into the next call in the same process.
+--- 1388
+1384:     ``signal_overrides`` (2026-09-07, percept passthrough): optional mapping
+1385:     cell -> signal in [0,1), forwarded into ``fill_jspace``. ``None``/``{}``
+1386:     is byte-identical to before. Deliberately NOT a key inside ``tune``:
+1387:     ``tune`` carries competition *constants* and is written to
+1388:     f2_grid10_tune_audit as a tuning change; a percept is a measured *input*
+1389:     and would be mislabelled there. Tune says how the competition weighs;
+1390:     a percept says what it weighs."""
+1391:     if isinstance(typed_entry, Mapping):
+1392:         typed_entry = TypedEntry.from_mapping(typed_entry)
+1393:     if declared_reentry is not None and declared_reentry not in _REENTRY_KINDS:
+--- 1511
+1507:             )
+1508: 
+1509:         # --- J-Space befuellen -> 10 Kandidaten --------------------------
+1510:         _tune = tune or {}
+1511:         _jspace_kwargs = {k: _tune[k] for k in ("kappa",) if k in _tune}
+1512:         if signal_overrides:
+1513:             _jspace_kwargs["signal_overrides"] = signal_overrides
+1514:         elif _percept_signale:
+1515:             _jspace_kwargs["signal_overrides"] = _percept_signale
+1516:         jspace = fill_jspace(turn_event_id, seed_state, **_jspace_kwargs)

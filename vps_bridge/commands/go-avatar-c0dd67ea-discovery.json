@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "go-avatar-c0dd67ea-discovery",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 300,
+  "command": "set -euo pipefail; Z=/artifacts/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z.zip; echo 'MACROCYCLE=go-c0dd67ea-76ce-46b8-9b8c-f8f1f9485f36'; echo '=== PACKAGE ==='; ls -lh \"$Z\"; sha256sum \"$Z\"; echo '=== KEY FILES ==='; unzip -Z1 \"$Z\" | grep -E '(^|/)(02_MASTER_ITERATIVE_BUILD_PROMPT\\.txt|03_GO_PROTOCOL\\.txt|04_CLAUDE_DREAM_TARGET_BUILD\\.txt|BASELINE_PROTOCOL\\.md|dream_target_metrics\\.json|ACCEPTANCE_TESTS\\.md)$' | sort; echo '=== PROMPT02 ==='; unzip -p \"$Z\" \"*PROMPTS/02_MASTER_ITERATIVE_BUILD_PROMPT.txt\"; echo; echo '=== PROMPT03 ==='; unzip -p \"$Z\" \"*PROMPTS/03_GO_PROTOCOL.txt\"; echo; echo '=== PROMPT04 ==='; unzip -p \"$Z\" \"*PROMPTS/04_CLAUDE_DREAM_TARGET_BUILD.txt\"; echo; echo '=== BASELINE ==='; unzip -p \"$Z\" \"*BASELINES/BASELINE_PROTOCOL.md\"; echo; echo '=== METRICS ==='; unzip -p \"$Z\" \"*BASELINES/dream_target_metrics.json\"; echo; echo '=== QA ==='; unzip -p \"$Z\" \"*QA/ACCEPTANCE_TESTS.md\""
+}

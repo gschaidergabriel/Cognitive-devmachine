@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-vps-bridge-auth-audit-safe-20260912-0626",
+  "op": "exec",
+  "command": "set -euo pipefail; ssh -o BatchMode=yes -o ConnectTimeout=5 root@72.61.19.188 'set -u; echo ===HOST===; date -Is; hostname; echo ===SERVICE===; systemctl list-units --type=service --all --no-pager 2>/dev/null | grep -Ei \"clay.*bridge|bridge.*clay|git-bridge\" || true; echo ===PROC===; pgrep -af \"bridge_daemon.py|git-bridge\" || true; echo ===DIR===; ls -la /srv/claylab/git-bridge 2>&1 | head -100; echo ===DAEMON_CONFIG_LINES===; grep -nE \"^(CONTROL|RESULTS|REPO|REMOTE|CONTROL_BRANCH|RESULTS_BRANCH)|git@github|clone|fetch|push\" /srv/claylab/git-bridge/bridge_daemon.py 2>/dev/null | head -180 || true; echo ===GIT_DIRS===; find /srv/claylab/git-bridge -maxdepth 2 -type d -name .git -printf \"%h\\n\" 2>/dev/null; for d in $(find /srv/claylab/git-bridge -maxdepth 2 -type d -name .git -printf \"%h\\n\" 2>/dev/null); do echo ---$d; git -C \"$d\" remote -v; git -C \"$d\" status --short --branch; done; echo ===GITHUB_AUTH===; timeout 8 ssh -T -o BatchMode=yes -o ConnectTimeout=5 git@github.com 2>&1 | head -10 || true; echo ===END==='",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 90
+}

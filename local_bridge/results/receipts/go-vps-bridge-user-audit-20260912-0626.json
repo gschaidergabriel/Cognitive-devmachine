@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-vps-bridge-user-audit-20260912-0626",
+  "command_sha256": "34e39fcc1eee5c83b017b5f996845f762c28819c052c6473b710d2f95e47aa46",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-11T23:34:16.549503+00:00",
+  "finished_at": "2026-09-11T23:34:19.421241+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "a67ef294099e1d67a36202afa37e148d3759512a2a4c206f3f542bda94226714",
+  "stderr_sha256": "af9a744692c6713a502da4ab5ca394cba8af5cca64bea9de4f1b57b958946be8",
+  "stdout_tail": "PID=21259\nclaylab   5001  5001   21259    6766 Mon Aug 24 08:32:58 2026 /usr/bin/python3 /srv/claylab/git-bridge/bridge_daemon.py\n===PROC_STATUS===\nUid:\t5001\t5001\t5001\t5001\nGid:\t5001\t5001\t5001\t5001\n===CWD===\n/srv/claylab\n===DAEMON_HEAD===\n#!/usr/bin/env python3\nimport subprocess\nBASE = pathlib.Path('/srv/claylab')\nCONTROL = BASE / 'control-mirror'\nRESULTS = BASE / 'results-mirror'\nWORK = BASE / 'workspace/clay-global-research-entity'\nCONTROL_BRANCH = 'chatgpt-vps-control'\nRESULTS_BRANCH = 'chatgpt-vps-results'\ndef run(argv, timeout=120, cwd=None):\n    return subprocess.run(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout, cwd=cwd)\ndef git(repo, *args, timeout=180, check=True):\ndef sexec(command, cwd='/workspace', timeout=3600):\n    return run(['podman', 'exec', '-w', cwd, SANDBOX, 'bash', '-lc', command], timeout=timeout)\n    git(CONTROL, 'fetch', 'origin', CONTROL_BRANCH, '--prune')\n    git(CONTROL, 'checkout', '-B', CONTROL_BRANCH, f'origin/{CONTROL_BRANCH}')\n    git(CONTROL, 'reset', '--hard', f'origin/{CONTROL_BRANCH}')\n    git(RESULTS, 'fetch', 'origin', RESULTS_BRANCH, '--prune')\n    git(RESULTS, 'checkout', '-B', RESULTS_BRANCH, f'origin/{RESULTS_BRANCH}')\n    git(RESULTS, 'reset', '--hard', f'origin/{RESULTS_BRANCH}')\n            git(RESULTS, 'push', '--force-with-lease', 'origin', f'HEAD:{RESULTS_BRANCH}', timeout=300)\n    git(RESULTS, 'push', 'origin', f'HEAD:{RESULTS_BRANCH}', timeout=300)\n===MIRRORS===\n---/srv/claylab/control-mirror\n---/srv/claylab/results-mirror\n===AUTH_ROOT===\ngit@github.com: Permission denied (publickey).\r\n===AUTH_CLAYLAB===\nHi gschaidergabriel/clay-global-research-entity! You've successfully authenticated, but GitHub does not provide shell access.\n===END===\n",
+  "stderr_tail": "fatal: detected dubious ownership in repository at '/srv/claylab/control-mirror'\nTo add an exception for this directory, call:\n\n\tgit config --global --add safe.directory /srv/claylab/control-mirror\nfatal: detected dubious ownership in repository at '/srv/claylab/control-mirror'\nTo add an exception for this directory, call:\n\n\tgit config --global --add safe.directory /srv/claylab/control-mirror\nfatal: detected dubious ownership in repository at '/srv/claylab/results-mirror'\nTo add an exception for this directory, call:\n\n\tgit config --global --add safe.directory /srv/claylab/results-mirror\nfatal: detected dubious ownership in repository at '/srv/claylab/results-mirror'\nTo add an exception for this directory, call:\n\n\tgit config --global --add safe.directory /srv/claylab/results-mirror\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

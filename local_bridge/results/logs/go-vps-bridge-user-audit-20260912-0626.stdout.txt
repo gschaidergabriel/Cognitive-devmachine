@@ -1,0 +1,37 @@
+PID=21259
+claylab   5001  5001   21259    6766 Mon Aug 24 08:32:58 2026 /usr/bin/python3 /srv/claylab/git-bridge/bridge_daemon.py
+===PROC_STATUS===
+Uid:	5001	5001	5001	5001
+Gid:	5001	5001	5001	5001
+===CWD===
+/srv/claylab
+===DAEMON_HEAD===
+#!/usr/bin/env python3
+import subprocess
+BASE = pathlib.Path('/srv/claylab')
+CONTROL = BASE / 'control-mirror'
+RESULTS = BASE / 'results-mirror'
+WORK = BASE / 'workspace/clay-global-research-entity'
+CONTROL_BRANCH = 'chatgpt-vps-control'
+RESULTS_BRANCH = 'chatgpt-vps-results'
+def run(argv, timeout=120, cwd=None):
+    return subprocess.run(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout, cwd=cwd)
+def git(repo, *args, timeout=180, check=True):
+def sexec(command, cwd='/workspace', timeout=3600):
+    return run(['podman', 'exec', '-w', cwd, SANDBOX, 'bash', '-lc', command], timeout=timeout)
+    git(CONTROL, 'fetch', 'origin', CONTROL_BRANCH, '--prune')
+    git(CONTROL, 'checkout', '-B', CONTROL_BRANCH, f'origin/{CONTROL_BRANCH}')
+    git(CONTROL, 'reset', '--hard', f'origin/{CONTROL_BRANCH}')
+    git(RESULTS, 'fetch', 'origin', RESULTS_BRANCH, '--prune')
+    git(RESULTS, 'checkout', '-B', RESULTS_BRANCH, f'origin/{RESULTS_BRANCH}')
+    git(RESULTS, 'reset', '--hard', f'origin/{RESULTS_BRANCH}')
+            git(RESULTS, 'push', '--force-with-lease', 'origin', f'HEAD:{RESULTS_BRANCH}', timeout=300)
+    git(RESULTS, 'push', 'origin', f'HEAD:{RESULTS_BRANCH}', timeout=300)
+===MIRRORS===
+---/srv/claylab/control-mirror
+---/srv/claylab/results-mirror
+===AUTH_ROOT===
+git@github.com: Permission denied (publickey).
+===AUTH_CLAYLAB===
+Hi gschaidergabriel/clay-global-research-entity! You've successfully authenticated, but GitHub does not provide shell access.
+===END===

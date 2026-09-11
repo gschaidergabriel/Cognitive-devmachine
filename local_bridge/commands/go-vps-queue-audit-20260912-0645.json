@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-vps-queue-audit-20260912-0645",
+  "op": "exec",
+  "command": "set -euo pipefail; ssh -o BatchMode=yes -o ConnectTimeout=5 root@72.61.19.188 'set -u; echo ===CONTROL_HEAD===; runuser -u claylab -- git -C /srv/claylab/control-mirror log -8 --oneline --decorate; echo ===TARGET_COMMANDS===; ls -l /srv/claylab/control-mirror/vps_bridge/commands/go-avatar-baseline-contract-audit-20260912-0626.json /srv/claylab/control-mirror/vps_bridge/commands/go-avatar-handoff-inspect-20260912-0626.json 2>&1 || true; echo ===DONE_DB===; find /srv/claylab -maxdepth 2 -type f \( -name \"*.sqlite\" -o -name \"*.db\" \) -printf \"%p %s\\n\" | head -30; for db in $(find /srv/claylab -maxdepth 2 -type f \( -name \"*.sqlite\" -o -name \"*.db\" \) 2>/dev/null); do echo ---$db; sqlite3 \"$db\" \"select id from done where id like '"'"'go-avatar-%'"'"' order by id desc limit 40;\" 2>/dev/null || true; done; echo ===RESULT_RECEIPTS===; ls -lt /srv/claylab/results-mirror/vps_bridge/results/receipts/go-avatar-* 2>/dev/null | head -30 || true; echo ===END==='",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 60
+}

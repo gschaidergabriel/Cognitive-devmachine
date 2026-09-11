@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-bridge-attribution-audit-20260912-0634-andreas-01",
+  "command_sha256": "6df836aa3f326b9469c24068651fb907602c4b23d5e0a393f5e1eb3202318e6a",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-11T23:30:54.695418+00:00",
+  "finished_at": "2026-09-11T23:30:55.215474+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "8572b0a27289040d19a5768753a13413c5eeaa5214ee5e91f47bc82acaa663b0",
+  "stderr_sha256": "2529bd850660f510dc089adce524795747ec4a451ed8f82294a6ca9a8a276ce3",
+  "stdout_tail": "=== SERVICE ===\n# /home/andreas/.config/systemd/user/frankenstein-local-bridge.service\n[Unit]\nDescription=Lokale GitHub-Bruecke fuer die Forschungsentitaet (andreas-MACO, chatgpt-local-andreas-maco-control/-results)\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=simple\nEnvironment=LOCAL_BRIDGE_MACHINE_ID=andreas-maco\nEnvironment=LOCAL_BRIDGE_OWNER=andreas\nExecStart=/usr/bin/python3 %h/.claude/star/local_bridge_daemon.py\nRestart=on-failure\nRestartSec=10\n\n[Install]\nWantedBy=default.target\n=== DAEMON CONFIG REFS ===\n6:`chatgpt-local-control` (Befehle) / `chatgpt-local-results` (Ergebnisse) im\n39:# Deshalb tragen MACHINE_ID/OWNER JEDEN Receipt zusaetzlich explizit, nicht\n40:# nur implizit ueber den Branch. MACHINE_ID/OWNER sind bewusst per Env\n42:# laeuft -- nur die Umgebung (und damit REPO/STATE_DIR/Branchnamen, die daraus\n44:MACHINE_ID = os.environ.get(\"LOCAL_BRIDGE_MACHINE_ID\", \"ai-core-node\")\n45:OWNER = os.environ.get(\"LOCAL_BRIDGE_OWNER\", \"gabriel\")\n50:REPO = STATE_DIR / \"repo\"\n53:CONTROL_BRANCH = os.environ.get(\"LOCAL_BRIDGE_CONTROL_BRANCH\", f\"chatgpt-local-{MACHINE_ID}-control\")\n54:RESULTS_BRANCH = os.environ.get(\"LOCAL_BRIDGE_RESULTS_BRANCH\", f\"chatgpt-local-{MACHINE_ID}-results\")\n56:RESULTS_PATH = pathlib.Path(\"local_bridge/results\")\n87:def _git(*args, cwd=REPO, timeout=300, check=True):\n95:    _git(\"fetch\", \"origin\", f\"refs/heads/{CONTROL_BRANCH}:refs/remotes/origin/{CONTROL_BRANCH}\", check=False)\n103:    _git(\"push\", \"-u\", \"origin\", f\"HEAD:{RESULTS_BRANCH}\", timeout=180)\n124:        \"host\": MACHINE_ID, \"owner\": OWNER, \"time\": now(),\n177:    d = REPO / RESULTS_PATH\n225:        \"host\": MACHINE_ID,\n226:        \"owner\": OWNER,\n227:        \"machine_id\": MACHINE_ID,\n233:        \"execution_boundary\": f\"REAL_LOCAL_HOST_{MACHINE_ID.upper().replace('-', '_')}_NOT_SANDBOXED\",\n245:    _git(\"checkout\", \"-B\", RESULTS_BRANCH, f\"origin/{RESULTS_BRANCH}\", check=False)\n246:    cmd_dir = REPO / QUEUE\n250:            [\"git\", \"-C\", str(REPO), \"show\", f\"origin/{CONTROL_BRANCH}:{QUEUE}\"],\n254:    p = subprocess.run([\"git\", \"-C\", str(REPO), \"ls-tree\", \"-r\", \"--name-only\",\n255:                        f\"origin/{CONTROL_BRANCH}\"], capture_output=True)\n258:        show = subprocess.run([\"git\", \"-C\", str(REPO), \"show\", f\"origin/{CONTROL_BRANCH}:{n}\"],\n269:        sync_and_push_results(f\"local bridge: {processed} command(s) executed on {MACHINE_ID}\")\n=== GIT REMOTE BRANCHES ===\n=== AI CORE REACHABILITY ===\n100.92.234.52  andreas-maco  genuinos@  linux  -  \n---ai-core-node\nssh: Could not resolve hostname ai-core-node: Temporary failure in name resolution\r\n---ai-core-node-projekt-frankenstein\nssh: Could not resolve hostname ai-core-node-projekt-frankenstein: Temporary failure in name resolution\r\n",
+  "stderr_tail": "fatal: could not read Username for 'https://github.com': Kein passendes Ger\u00e4t bzw. keine passende Adresse gefunden\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

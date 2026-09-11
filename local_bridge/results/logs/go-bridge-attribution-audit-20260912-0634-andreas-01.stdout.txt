@@ -1,0 +1,51 @@
+=== SERVICE ===
+# /home/andreas/.config/systemd/user/frankenstein-local-bridge.service
+[Unit]
+Description=Lokale GitHub-Bruecke fuer die Forschungsentitaet (andreas-MACO, chatgpt-local-andreas-maco-control/-results)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=LOCAL_BRIDGE_MACHINE_ID=andreas-maco
+Environment=LOCAL_BRIDGE_OWNER=andreas
+ExecStart=/usr/bin/python3 %h/.claude/star/local_bridge_daemon.py
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+=== DAEMON CONFIG REFS ===
+6:`chatgpt-local-control` (Befehle) / `chatgpt-local-results` (Ergebnisse) im
+39:# Deshalb tragen MACHINE_ID/OWNER JEDEN Receipt zusaetzlich explizit, nicht
+40:# nur implizit ueber den Branch. MACHINE_ID/OWNER sind bewusst per Env
+42:# laeuft -- nur die Umgebung (und damit REPO/STATE_DIR/Branchnamen, die daraus
+44:MACHINE_ID = os.environ.get("LOCAL_BRIDGE_MACHINE_ID", "ai-core-node")
+45:OWNER = os.environ.get("LOCAL_BRIDGE_OWNER", "gabriel")
+50:REPO = STATE_DIR / "repo"
+53:CONTROL_BRANCH = os.environ.get("LOCAL_BRIDGE_CONTROL_BRANCH", f"chatgpt-local-{MACHINE_ID}-control")
+54:RESULTS_BRANCH = os.environ.get("LOCAL_BRIDGE_RESULTS_BRANCH", f"chatgpt-local-{MACHINE_ID}-results")
+56:RESULTS_PATH = pathlib.Path("local_bridge/results")
+87:def _git(*args, cwd=REPO, timeout=300, check=True):
+95:    _git("fetch", "origin", f"refs/heads/{CONTROL_BRANCH}:refs/remotes/origin/{CONTROL_BRANCH}", check=False)
+103:    _git("push", "-u", "origin", f"HEAD:{RESULTS_BRANCH}", timeout=180)
+124:        "host": MACHINE_ID, "owner": OWNER, "time": now(),
+177:    d = REPO / RESULTS_PATH
+225:        "host": MACHINE_ID,
+226:        "owner": OWNER,
+227:        "machine_id": MACHINE_ID,
+233:        "execution_boundary": f"REAL_LOCAL_HOST_{MACHINE_ID.upper().replace('-', '_')}_NOT_SANDBOXED",
+245:    _git("checkout", "-B", RESULTS_BRANCH, f"origin/{RESULTS_BRANCH}", check=False)
+246:    cmd_dir = REPO / QUEUE
+250:            ["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{QUEUE}"],
+254:    p = subprocess.run(["git", "-C", str(REPO), "ls-tree", "-r", "--name-only",
+255:                        f"origin/{CONTROL_BRANCH}"], capture_output=True)
+258:        show = subprocess.run(["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{n}"],
+269:        sync_and_push_results(f"local bridge: {processed} command(s) executed on {MACHINE_ID}")
+=== GIT REMOTE BRANCHES ===
+=== AI CORE REACHABILITY ===
+100.92.234.52  andreas-maco  genuinos@  linux  -  
+---ai-core-node
+ssh: Could not resolve hostname ai-core-node: Temporary failure in name resolution
+---ai-core-node-projekt-frankenstein
+ssh: Could not resolve hostname ai-core-node-projekt-frankenstein: Temporary failure in name resolution

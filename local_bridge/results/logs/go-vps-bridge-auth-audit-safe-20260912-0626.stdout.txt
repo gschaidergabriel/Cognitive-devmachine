@@ -1,0 +1,43 @@
+===HOST===
+2026-09-11T23:33:50+00:00
+srv1563149
+===SERVICE===
+===PROC===
+21259 /usr/bin/python3 /srv/claylab/git-bridge/bridge_daemon.py
+725565 bash -c set -u; echo ===HOST===; date -Is; hostname; echo ===SERVICE===; systemctl list-units --type=service --all --no-pager 2>/dev/null | grep -Ei "clay.*bridge|bridge.*clay|git-bridge" || true; echo ===PROC===; pgrep -af "bridge_daemon.py|git-bridge" || true; echo ===DIR===; ls -la /srv/claylab/git-bridge 2>&1 | head -100; echo ===DAEMON_CONFIG_LINES===; grep -nE "^(CONTROL|RESULTS|REPO|REMOTE|CONTROL_BRANCH|RESULTS_BRANCH)|git@github|clone|fetch|push" /srv/claylab/git-bridge/bridge_daemon.py 2>/dev/null | head -180 || true; echo ===GIT_DIRS===; find /srv/claylab/git-bridge -maxdepth 2 -type d -name .git -printf "%h\n" 2>/dev/null; for d in $(find /srv/claylab/git-bridge -maxdepth 2 -type d -name .git -printf "%h\n" 2>/dev/null); do echo ---$d; git -C "$d" remote -v; git -C "$d" status --short --branch; done; echo ===GITHUB_AUTH===; timeout 8 ssh -T -o BatchMode=yes -o ConnectTimeout=5 git@github.com 2>&1 | head -10 || true; echo ===END===
+===DIR===
+total 56
+drwxr-xr-x  6 claylab claylab  4096 Aug 24 07:23 .
+drwxr-x--- 51 claylab claylab  4096 Aug 30 17:37 ..
+-rw-r--r--  1 claylab claylab  1037 Aug 24 06:45 BUILD_VALIDATION.json
+-rw-r--r--  1 claylab claylab   907 Aug 24 06:45 CHECKSUMS.sha256
+-rw-r--r--  1 claylab claylab   931 Aug 24 06:45 CLAUDE_INSTALL.md
+-rw-r--r--  1 claylab claylab   648 Aug 24 07:24 Containerfile
+-rw-r--r--  1 claylab claylab   629 Aug 24 06:45 README.md
+-rwxr-xr-x  1 claylab claylab 11700 Aug 24 07:24 bridge_daemon.py
+drwxrwxr-x  2 claylab claylab  4096 Aug 24 06:45 docs
+drwxrwxr-x  2 claylab claylab  4096 Aug 24 06:45 sandbox
+drwxrwxr-x  3 claylab claylab  4096 Aug 24 06:45 scripts
+drwxrwxr-x  2 claylab claylab  4096 Aug 24 06:45 systemd
+===DAEMON_CONFIG_LINES===
+15:CONTROL = BASE / 'control-mirror'
+16:RESULTS = BASE / 'results-mirror'
+22:CONTROL_BRANCH = 'chatgpt-vps-control'
+23:RESULTS_BRANCH = 'chatgpt-vps-results'
+77:    git(CONTROL, 'fetch', 'origin', CONTROL_BRANCH, '--prune')
+83:    git(RESULTS, 'fetch', 'origin', RESULTS_BRANCH, '--prune')
+88:def push_results(message, live=False):
+96:            git(RESULTS, 'push', '--force-with-lease', 'origin', f'HEAD:{RESULTS_BRANCH}', timeout=300)
+99:    git(RESULTS, 'push', 'origin', f'HEAD:{RESULTS_BRANCH}', timeout=300)
+145:    if op == 'fetch':
+162:        cmd = f"set -euo pipefail; if [ -d {shlex.quote(q + '/.git')} ]; then git -C {shlex.quote(q)} fetch --all --tags --prune; else git clone {shlex.quote(url)} {shlex.quote(q)}; fi;"
+169:        git(WORK, 'fetch', 'origin', '--prune', timeout=600)
+195:        git(WORK, 'push', '-u', 'origin', f'HEAD:{branch}', timeout=300)
+210:    push_results('vps receipt: ' + cid, live=False)
+220:    if c.execute('SELECT 1 FROM done WHERE id=?', (cid,)).fetchone():
+271:    push_results('vps live telemetry', live=True)
+281:        push_results('vps daemon error', live=False)
+===GIT_DIRS===
+===GITHUB_AUTH===
+git@github.com: Permission denied (publickey).
+===END===

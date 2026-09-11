@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-27T21:30:59.756112+00:00`
+Aktualisiert: `2026-09-11T20:50:39.116189+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 88,774 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -112,7 +112,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-27T21:31:00.467460+00:00`
+Aktualisiert: `2026-09-11T20:50:41.309477+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -186,15 +186,15 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 **Kein Qualitätsgewinner ohne matched Receipts.** Eloquenz oder Modellname zählen nicht; nur Patch/Test/Benchmark/Non-Regression im gemeinsamen Delta-Schema.
 
 ### 7. Claude-Sonnet-5 Kostenäquivalent / nominal vermiedene Kosten
-Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output**.
+Preisannahme: **Claude Sonnet 5 standard: $3/M input + $15/M output**.
 | Vergleich | Tokenbasis | Sonnet-5 Äquivalent |
 |---|---:|---:|
-| Free-Swarm Usage | 31,313,649 input + 8,618,788 output | **$148.82** |
-| Distillery Modellarbeit | 6,116 input + 23,481 output | **$0.2470** |
-| zusammen, gemessener LLM-Tokenmix | — | **$149.06** |
-| persistenter Repo-Korpus, Output-only Proxy | 30,149,914 Proxy-Tokens | **$301.50** |
+| Free-Swarm Usage | 31,313,649 input + 8,618,788 output | **$223.22** |
+| Distillery Modellarbeit | 6,116 input + 23,481 output | **$0.3706** |
+| zusammen, gemessener LLM-Tokenmix | — | **$223.59** |
+| persistenter Repo-Korpus, Output-only Proxy | 30,735,909 Proxy-Tokens | **$461.04** |
 
-**Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $149.06. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
+**Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $223.59. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
 ### 8. Kapazität vs. 15 parallele Sonnet-Worker
 Slotvergleich: Ø **3.65/15 = 24.3%**, Peak **136/15 = 906.7%**. Gemessener Free-Swarm Outputdurchsatz: **139.53 Output-Tokens/s**. Das ist kein Qualitäts- oder Sonnet-Durchsatzbenchmark.
@@ -205,7 +205,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-27T21:30:58.242645+00:00`
+Aktualisiert: `2026-09-11T20:50:31.717680+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -219,8 +219,8 @@ Aktualisiert: `2026-08-27T21:30:58.242645+00:00`
 | Evident akzeptierte Architektur-Deltas | 0 |
 | Nominal/historisch akzeptierte Architektur-Deltas | 1 |
 | Legacy/unqualifizierte nominale Accepts | 1 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 30149914 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $301.50 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 30735909 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $461.04 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
@@ -286,8 +286,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 11246 Textdateien / 120599656 Zeichen ≈ **30149914 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$301.50** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 11896 Textdateien / 122943635 Zeichen ≈ **30735909 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$461.04** zum derzeit geltenden Output-Tarif von $15/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

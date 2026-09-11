@@ -1,0 +1,22 @@
+diff --git a/werkzeug/selbsttests-waechter.py b/werkzeug/selbsttests-waechter.py
+--- a/werkzeug/selbsttests-waechter.py
++++ b/werkzeug/selbsttests-waechter.py
+@@ -29,6 +29,8 @@
+           findet, verschwinden ALLE Testspalten, und die Migration ruehrt
+           dann bewusst nichts an (Regel 3 in verlaufsdatei.py). Ohne eine
+           Spalte, die immer da ist, waere "0/0" die leiseste Zeile von allen.
++  laeufer  "ok" oder "rc<N>" -- Prozessstatus des ganzen Satzes;
++           bleibt auch dann sichtbar, wenn #ERG und #SATZ gleich bleiben
+   je ein Test  "ok" oder "rc<N>"
+ 
+ EXIT-CODES, dieselbe Unterscheidung wie beim Regressionswaechter (073):
+@@ -115,7 +117,8 @@ def lauf(laeufer: Path, verlauf: Path, meldung: Path, melden_fn,
+         print(f"WERKZEUGFEHLER (gemeldet: {weg})\n  {e}")
+         return 1
+ 
+-    jetzt = {"satz": satz}
++    jetzt = {"satz": satz,
++             "laeufer": "ok" if rc == 0 else f"rc{rc}"}
+     jetzt.update(ergebnisse)
+     namen = list(jetzt)
+     spalten = ["zeit"] + namen

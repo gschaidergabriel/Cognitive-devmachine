@@ -1,0 +1,583 @@
+=== SUBJECT ===
+9527ff5e4af48919f83d58c7e873c74bdeeebf3bf8bd084e810985c4918a1a93  /workspace/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z/ROUND1_EXPORT_20260911T184549Z/source/buehne.html
+0ab232f7112b046ced7e3e4ae454fe0d800eebd32d23bdac138c961bc069dff9  /workspace/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z/ROUND1_EXPORT_20260911T184549Z/source/buehne_daemon.py
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  /workspace/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z/ROUND1_EXPORT_20260911T184549Z/source/filmlook.js
+=== HANDOFF READY ===
+{
+    "schema_version": 1,
+    "created_utc": "2026-09-11T18:45:49Z",
+    "active_repo": "/home/ai-core-node/.claude/star/visual  (NOT a git repository -- see git/NOTAM.txt and ACTIVE_RUNTIME_MAP.md #4)",
+    "git_commit": "n/a - not a git repo",
+    "git_dirty": null,
+    "archive": {
+        "path": "/home/ai-core-node/.claude/star/visual/artifacts/handoff/FRANK_AVATAR_HANDOFF_20260911T184549Z.zip",
+        "bytes": 681812597,
+        "sha256": "361f69d59cdd076e5598ae11022b0e7a1997362a5dbb14f5c093ea458f437f48",
+        "unzip_test": true,
+        "note": "sha256 is of the FIRST zip build; this file was then updated in-place and the zip rebuilt once (final zip's own sha256 is recorded in the sibling .zip.sha256 file, which is authoritative for what actually ships)."
+    },
+    "counts": {
+        "source_files": 16,
+        "asset_files": 1340,
+        "png_rgba": 1020,
+        "tests": 2,
+        "screenshots": 2,
+        "videos": 0,
+        "service_units": 1
+    },
+    "runtime": {
+        "verified_live_repo": true,
+        "verified_process_paths": true,
+        "standard_capture": true,
+        "fullscreen_capture": true,
+        "performance_trace": false
+    },
+    "tests": [
+        {
+            "name": "curl http://127.0.0.1:8788/ -> HTTP 200",
+            "status": "pass",
+            "evidence": "evidence/environment/http_root_headers.txt"
+        },
+        {
+            "name": "google-chrome --headless screenshot 746x449",
+            "status": "pass",
+            "evidence": "evidence/screenshots/standard_746x449.png"
+        },
+        {
+            "name": "google-chrome --headless screenshot 1680x1050",
+            "status": "pass",
+            "evidence": "evidence/screenshots/fullscreen_1680x1050.png"
+        },
+        {
+            "name": "google-chrome --headless --dump-dom (live layer stack)",
+            "status": "pass",
+            "evidence": "evidence/runtime/dom_dump.html"
+        },
+        {
+            "name": "chrome headless log scanned for ERROR/Exception/Failed",
+            "status": "pass",
+            "evidence": "evidence/logs/chrome_headless_standard.log, evidence/logs/chrome_headless_fullscreen.log (no real JS errors, only unrelated GCM/TensorFlow noise)"
+        },
+        {
+            "name": "sqlite3 schema dump of buehne_lokal.db",
+            "status": "pass",
+            "evidence": "schema/buehne_lokal.db.schema.sql"
+        },
+        {
+            "name": "full asset+code inventory with sha256/size/mime/png-dims/alpha",
+            "status": "pass",
+            "evidence": "INVENTORY.csv (5270 rows)"
+        },
+        {
+            "name": "restart/stop of live systemd unit",
+            "status": "not_run",
+            "evidence": "deliberately not executed -- round-1 rule forbids touching the running service; see RUNBOOK.md #5"
+        },
+        {
+            "name": "30-60s video capture of live animation",
+            "status": "not_run",
+            "evidence": "no screen/frame recording tool safely wired up in this round without risking the live kiosk process; listed under missing"
+        },
+        {
+            "name": "requestAnimationFrame / long-task / memory instrumentation",
+            "status": "not_run",
+            "evidence": "no existing instrumentation path in the code; documented as not-measurable per the prompt's own honesty rule rather than invented"
+        }
+    ],
+    "redactions": [],
+    "missing": [
+        "30-60s screen recording of the live animation (not captured this round)",
+        "requestAnimationFrame/long-task/memory performance trace (no instrumentation exists in the code to sample)",
+        "browser DevTools console-api event stream (only headless chrome stderr log was checked, not a full CDP console capture)"
+    ],
+    "blockers": [],
+    "completeness": false,
+    "completeness_note": "All MANDATORY structural parts, the environment truth, the full inventory, the active-vs-inactive asset map, screenshots, and the DOM layer-stack proof are present and verified. completeness is false ONLY because of the three items under 'missing' above (video capture + performance trace + full console-event capture), which this round explicitly may not fabricate. Everything else in PROMPTS/01's checklist is done."
+}
+=== RUNBOOK ===
+# RUNBOOK.md — Start/Stop/Reproduktion der FranKenstein Buehne
+
+Alle Befehle unten wurden auf der real laufenden Maschine geprüft (getestet
+= ✅), soweit ohne Risiko für den laufenden Prozess möglich. Ungetestete
+Schritte (z.B. "auf sauberer Maschine von Null") sind ausdrücklich als
+UNGETESTET markiert.
+
+## 1. Woraus die App besteht
+
+- Server: `source/buehne_daemon.py` — Python-Stdlib, kein Framework, keine
+  externen pip-Pakete außer Standardbibliothek (`sqlite3`, `http.server`,
+  `threading`, `subprocess`, `socket`, `signal`, `urllib.parse`, `json`, `io`,
+  `os`, `sys`, `time`). ✅ geprüft per `grep "^import\|^from" source/buehne_daemon.py`.
+- Frontend: `source/buehne.html` (Vanilla HTML/CSS/JS), `source/filmlook.js`
+  (separater globaler Look, wird vom Server unter `/filmlook.js` ausgeliefert).
+- Zustand: `source/zustand.json` (eine Datei — "an"/"quelle"/"ts", KEIN Secret).
+- Lokale Chat-DB: eigene SQLite `buehne_lokal.db` (Schema unter `schema/`,
+  KEINE Chat-Inhalte mitgeliefert — Datenschutz/Redaction, siehe Prompt-Regel).
+- Read-only Zugriff auf `unified.db` (Pfad kommt aus Env-Var `UDB_DB_PATH`,
+  NIE beschrieben, nur gelesen).
+- Assets: `assets/<verzeichnis>/...` — nur die aktiv per Route ausgelieferten
+  Verzeichnisse (siehe `ACTIVE_RUNTIME_MAP.md` Abschnitt 8). ✅ 1.340 Dateien,
+  656 MB, vollständig kopiert und hashverglichen (`SHA256SUMS.txt`).
+
+## 2. Installation auf sauberer Maschine — ⚠️ UNGETESTET
+
+```bash
+# Python 3.10+ reicht (nur Stdlib). Kein venv nötig für buehne_daemon.py
+# selbst. venv_ai/ (394 MB, NICHT mitgeliefert) wird nur von den
+# Offline-Build-Skripten (tiefe_bauen.py, detail_bauen.py, gesichtsfilter.py)
+# gebraucht, NICHT vom Live-Server -- diese Skripte laufen nicht im
+# Live-Pfad, siehe ACTIVE_RUNTIME_MAP.md Abschnitt 8.
+mkdir -p /pfad/zu/visual
+cp -r source/* assets/* /pfad/zu/visual/
+cd /pfad/zu/visual
+# zustand.json muss existieren, sonst startet die Chrome-Fenster-Schleife
+# nicht wie erwartet (Datei ist im Paket enthalten, keine Secrets drin).
+```
+
+## 3. Konfiguration ohne Geheimnisse — ✅ verifiziert, keine Secrets im Code
+
+Siehe `configs/.env.example`. Kein einziger der im Code gefundenen
+`os.environ.get(...)`-Aufrufe (grep-Beleg:
+`evidence/environment` bzw. direkt in `source/buehne_daemon.py` Zeile 138,
+151, 193 und `source/blick.py` Zeile 103-105) liest einen API-Schlüssel,
+ein Passwort oder einen Token. Es gibt nichts zu redigieren außer den
+Pfad-Konstanten selbst (die sind selbst schon relativ/generisch).
+
+```bash
+export UDB_DB_PATH=/pfad/zu/unified.db   # nur LESEND geöffnet
+export BUEHNE_PORT=8788                   # optional, Default 8788
+```
+
+## 4. DB-Erstellung/Migration — ✅ Schema geprüft
+
+```bash
+sqlite3 buehne_lokal.db < schema/buehne_lokal.db.schema.sql
+```
+Erzeugt die leere `chat`-Tabelle (id, ts, wer, text, art) neu. Keine
+Migration nötig — ein einziges `CREATE TABLE IF NOT EXISTS` im Server selbst
+(idempotent, läuft bei jedem Start mit).
+
+## 5. Start/Stop/Restart — ✅ geprüft (laufender Dienst, read-only befragt)
+
+Produktiv läuft das über systemd (user-Unit), NICHT manuell:
+```bash
+systemctl --user status frankenstein-buehne.service   # ✅ aktuell: running
+systemctl --user restart frankenstein-buehne.service   # UNGETESTET in dieser Runde (kein Neustart des Live-Diensts -- Rundenregel: keine Aenderung/kein Risiko)
+systemctl --user stop frankenstein-buehne.service       # UNGETESTET, gleicher Grund
+```
+Unit-Datei mitgeliefert: `services/frankenstein-buehne.service`
+(Quelle: `~/.config/systemd/user/frankenstein-buehne.service`).
+
+Manueller Start (für eine Kopie, NICHT gegen den Live-Port 8788 laufen
+lassen, sonst Portkonflikt):
+```bash
+BUEHNE_PORT=8799 python3 source/buehne_daemon.py
+```
+UNGETESTET in dieser Runde (Rundenregel: "kein Refactoring, kein kleiner Fix
+nebenbei" — ein zweiter Testlauf auf einem Nebenport wurde bewusst nicht
+gestartet, um die laufende Chrome-Fenster-Übernahmelogik nicht doppelt
+auszulösen).
+
+## 6. Standard- und Vollbildansicht aufrufen — ✅ geprüft, diese Runde
+
+```bash
+curl -s http://127.0.0.1:8788/ | head -c 200      # ✅ HTTP 200, siehe evidence/environment/http_root_headers.txt
+google-chrome --headless=new --no-sandbox --disable-gpu \
+  --window-size=746,449  --screenshot=standard.png   http://127.0.0.1:8788/
+google-chrome --headless=new --no-sandbox --disable-gpu \
+  --window-size=1680,1050 --screenshot=fullscreen.png http://127.0.0.1:8788/
+```
+Beide ✅ ausgeführt, Ergebnis: `evidence/screenshots/standard_746x449.png`,
+`evidence/screenshots/fullscreen_1680x1050.png`.
+
+## 7. Testlauf / Screenshot / Video / Logsammlung
+
+- Screenshots: ✅ wie oben (Abschnitt 6).
+- DOM-Dump des Layerstapels: ✅ `evidence/runtime/dom_dump.html`
+  (`google-chrome --headless=new --dump-dom`).
+- Konsole/Netzwerk-Fehler: ⚠️ TEILWEISE — Chrome-Headless-Logdatei
+  (`evidence/logs/chrome_headless_*.log`) auf `ERROR|Exception|Failed`
+  durchsucht, keine Treffer außer bekanntem GCM/TensorFlow-Rauschen
+  (irrelevant, Chrome-interne Telemetrie). Ein echter DevTools-Protocol-
+  Konsolen-Stream (`console-api` Events) wurde in dieser Runde NICHT
+  aufgezeichnet — als offener Punkt vermerkt, nicht als "0 Fehler" behauptet.
+- Video (30-60s Animation): ❌ NICHT erzeugt in dieser Runde. Kein
+  Bildschirm-/Frame-Aufnahmewerkzeug in der verfügbaren Zeit sicher
+  verkabelt, ohne den laufenden Chrome-Kioskprozess zu stören. Klar als
+  `missing` in `HANDOFF_READY.json` gelistet.
+- `requestAnimationFrame`-Statistik/Long-Tasks/Memory: ❌ NICHT gemessen —
+  kein vorhandener Instrumentierungspfad im Code, laut Auftrag "nicht
+  messbar" dokumentieren statt erfinden.
+
+## 8. Recovery nach Neustart / Re-Entry nach Absturz — ⚠️ UNGETESTET (aus Beobachtung)
+
+Aus dem Code ableitbar (nicht durch echten Absturztest verifiziert):
+`buehne_daemon.py` ist `Type=simple` mit `Restart=on-failure`, `RestartSec=10`
+in der systemd-Unit — bei Absturz startet systemd automatisch neu, maximal
+5× in 600s (`StartLimitBurst=5`, `StartLimitIntervalSec=600`). Der einzige
+persistente Zustand ist `zustand.json` (eine Datei) — nach Neustart liest der
+Prozess sie neu ein, es gibt keinen In-Memory-Zustand, der beim Neustart
+verloren geht (laut Docstring-Architektur "GENAU EINE Datei"). Chrome-Fenster
+wird über `chrome.pid`/`chrome.log` verfolgt und bei Bedarf neu gestartet
+(Logik im Server, nicht in dieser Runde live durchgespielt).
+=== ACCEPTANCE ===
+# Harte Abnahme – visuell, geometrisch und zur Laufzeit
+
+| ID | Test | Pass-Bedingung | Beleg |
+|---|---|---|---|
+| GEO-01 | Halsanker | RMS <0.35px, max <0.75px | Overlay-/CV-Report |
+| GEO-02 | Augen-/Mundslot | unerklärte Abweichung relativ zum Kopf <=0.5px | Transformdump + CV |
+| GEO-03 | Rotkomponenten | exakt 2 kompakte rote Augenkomponenten, niemals 4 | Frameweiser ROI-Test |
+| GEO-04 | Kopfidentität | maximal eine komplette Kopftextur aktiv | DOM-/Layerassertion |
+| GEO-05 | Alpha | Kopf/Körper/Augen/Mund/Ausdruck echtes RGBA | Inventar + Randprüfung |
+| MOT-01 | Vollkopf-Pop | kein harter Vollkopfwechsel über Grenzwert | 60fps-Diffanalyse |
+| MOT-02 | Blink | 190–285ms, asymmetrisches close/open, kein Positionssprung | Zeitreihe |
+| MOT-03 | Lip-Sync | Attack 45–80ms, Release 70–120ms, kein Idle-Sprechen | Audio-/Visemtrace |
+| MOT-04 | Hierarchie | Augen führen; Kopf 40–240ms später; Körper träger | State-/Rendertrace |
+| PERF-01 | Framezeit | p95 <=18.5ms, p99 <=25ms | 2-Min-rAF-Trace |
+| PERF-02 | Long frame | kein Frame >50ms im 2-Min-Test | rAF-/LongTask-Log |
+| PERF-03 | Soak | 10min ohne monotone Timer-/Listener-/Speicherzunahme | Heap/Counter |
+| UI-01 | Standard | ca. 746×449, Avatar vollständig, Chat >=360px | Screenshot + bbox |
+| UI-02 | Fullscreen | keine Kopf-/Schulter-Crops, kein Stretch; Chat 400–520px | 1680×1050 Screenshot |
+| BG-01 | Loop | Übergang letzter→erster Frame nicht erkennbar | Diff + Sichttest |
+| BG-02 | Mood | Morph 1.2–3s, kein unabhängiges Flackern | Frame-/Farbreihe |
+| BG-03 | Wasser | keine Wasserlinie/Spiegelungs-/Nebelbank | Zeilenprofil + Sichttest |
+| SYS-01 | Chatgrenze | Typed Chat triggert keinen Realtime-Speech-Turn | Integrationstest |
+| SYS-02 | Terminal | Lifecycle, Utterance, Response, Timeout, Tool, State live | Logbeleg |
+| SYS-03 | Neustart | sauberer Restart/Re-Entry mit korrektem Repo/DB/WAL | Runbook-Test |
+| PKG-01 | Handoff | unzip, Checksums, Inventar, Startweg vollständig | Prüferbericht |
+
+## Pflichtaufnahmen je Runde
+
+- Standardfenster neutral und sprechend.
+- Vollbild neutral und sprechend.
+- 30–60s Video mit Blick, Blink, Sprache, Ausdruck und Moodmorph.
+- Debugaufnahme mit sichtbaren Hals-/Augen-/Mundankern.
+- rAF-, State- und Layertransform-CSV mit gemeinsamem monotonic timestamp.
+
+Ein fehlender Beleg ist `not_run`, niemals `pass`.
+
+=== RIG CONTRACT ===
+{
+  "schema_version": 1,
+  "coordinate_system": {
+    "design_width": 1536,
+    "design_height": 1024,
+    "chain": ["stageRoot", "bodyRoot", "neckAnchor", "headRoot", "faceSlots"],
+    "face_slots": ["eyes", "lids", "mouth", "expressionDelta"],
+    "single_complete_head_texture": true,
+    "max_eye_or_mouth_slot_error_px": 0.5,
+    "neck_anchor_rms_px": 0.35,
+    "neck_anchor_max_px": 0.75
+  },
+  "simulation": {
+    "fixed_hz": 100,
+    "render": "requestAnimationFrame",
+    "interpolate_state": true,
+    "continuous_axes": [
+      "yaw", "pitch", "roll", "lean", "shoulderYaw", "breath",
+      "gazeX", "gazeY", "lid", "jaw", "mouthShapeWeights",
+      "expressionWeights", "mood"
+    ]
+  },
+  "idle": {
+    "yaw_deg": [-0.6, 0.6],
+    "pitch_deg": [-0.4, 0.4],
+    "roll_deg": [-0.25, 0.25],
+    "period_seconds": [2.5, 6.0],
+    "breath_seconds": [3.8, 5.6],
+    "shoulder_pixels_at_default": [1.5, 3.0],
+    "body_to_head_lag_ms": [60, 110]
+  },
+  "blink": {
+    "close_ms": [65, 90],
+    "closed_ms": [35, 55],
+    "open_ms": [90, 140],
+    "total_ms": [190, 285],
+    "interval_seconds": [2, 7],
+    "single_self_rescheduling_timer": true
+  },
+  "gaze": {
+    "requires_real_face_detection": true,
+    "microsaccade_deg": [0.2, 0.7],
+    "microsaccade_interval_ms": [250, 700],
+    "macro_drift_seconds": [4, 11],
+    "eye_lead_ms": [40, 80],
+    "head_follow_ms": [100, 240]
+  },
+  "speech": {
+    "lookahead_ms": [80, 120],
+    "viseme_attack_ms": [45, 80],
+    "viseme_release_ms": [70, 120],
+    "jaw_lowpass_ms": 90,
+    "random_speaking_motion_when_silent": false,
+    "mouth_shapes": [
+      "rest", "closed", "MBP", "A_AA", "E_EH", "I_IH", "O", "U_W",
+      "FV", "L", "TH", "R_CH", "SZ", "KG", "NDT", "jawOpen",
+      "smile", "frown", "pucker", "funnel", "sneer", "teethBare",
+      "tongueOut", "tongueUp", "whistle", "biteLowerLip",
+      "asymmetryLeft", "asymmetryRight"
+    ]
+  },
+  "expression": {
+    "onset_ms": [160, 420],
+    "offset_ms": [240, 650],
+    "registers": ["serious_dystopian", "demonic", "anime_90s_inspired", "satirical_comic"],
+    "minimum_count": 44,
+    "local_delta_preferred": true
+  },
+  "background": {
+    "moods": ["calm_blue", "awake_cyan", "tense_magenta", "threat_red", "bright_playful"],
+    "frames_per_loop": 60,
+    "morph_seconds": [1.2, 3.0],
+    "coherent_flow": true,
+    "waterline_forbidden": true
+  },
+  "performance": {
+    "p95_frame_ms_max": 18.5,
+    "p99_frame_ms_max": 25,
+    "max_frame_ms": 50,
+    "measurement_seconds": 120,
+    "soak_minutes": 10
+  }
+}
+
+=== DOM RIG REGION ===
+   330	         verschieben. #kopf (Kopfzeile) bleibt bewusst DRAUSSEN -- das ist
+   331	         Stream-Overlay/UI, nicht Teil der gefilmten Szene, soll nicht
+   332	         mitwackeln. -->
+   333	    <div id="kamera">
+   334	      <img id="hg-frame" alt="">
+   335	      <canvas id="regen-hinten"></canvas>
+   336	      <div id="gesicht-rahmen">
+   337	        <!-- ⭐ 2026-09-11: echte Alpha-Ebenen, ersetzen das alte undurchsichtige
+   338	             #gesicht als Hauptdarstellung -- #hg-frame scheint jetzt durch. -->
+   339	        <!-- ⭐⭐ 2026-09-11 #kopf-canvas: siehe CSS-Kommentar oben ("KOPF-LEINWAND").
+   340	             Kopf, Koerper UND Mund-Flicken teilen sich jetzt dieselbe, per JS
+   341	             (kopfCanvasAnpassen()) exakt skalierte 1536x1024-Leinwand -- ein
+   342	             Anker gilt fuer alle drei. z-index:auto auf #kopf-canvas selbst
+   343	             (bewusst kein eigener Wert), damit die Stapelreihenfolge der Kinder
+   344	             (1/2/4) weiterhin gegen #gesicht/#regen (3) im GLEICHEN, von
+   345	             #gesicht-rahmen (z-index:2) gebildeten Stapelkontext zaehlt --
+   346	             sonst wuerde der Mund-Flicken hinter Gesicht/Regen verschwinden. -->
+   347	        <div id="kopf-canvas">
+   348	          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+   349	          <div id="kopf-dreh">
+   350	            <img id="kopf-schicht" src="/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png" alt="">
+   351	            <!-- ⭐ 2026-09-11 echte Kopfdrehung: /kopf_rgba/roll/ hat 11 echte
+   352	                 Posen (gier_+00_nick_+00_roll_+NN, ±25° in 5°-Schritten, PIL:
+   353	                 roll_+00 pixelgleich mit kopf_zero_ohne_rotes_augenglow).
+   354	                 #kopf-schicht2 ist das zweite Crossfade-Bild, gleiches Muster
+   355	                 wie #koerper-schicht/#koerper-schicht2. -->
+   356	            <img id="kopf-schicht2" src="/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png" alt="">
+   357	            <!-- ⭐⭐ 2026-09-11 RGBA-Sonderausdruecke (ersetzen die gelöschten
+   358	                 flachen #gesicht/#gesicht2 -- siehe CSS-Kommentar "Geister-
+   359	                 kopf"): 1536x1024 mit derselben Silhouette wie der Kopf,
+   360	                 deshalb liegen sie in #kopf-dreh auf derselben Leinwand. -->
+   361	            <img id="ausdruck-schicht" alt="">
+   362	            <img id="ausdruck-schicht2" alt="">
+   363	            <!-- ⭐⭐ 2026-09-11 NACHTRAG 4 (Koordinator, GEISTERKOPF BEI BEWEGUNG,
+   364	                 Ursache selbst gefunden per Screenshot waehrend Testrolle 'k'):
+   365	                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+   366	                 also fest bei links 31%/oben 12% relativ zu #gesicht-rahmen --
+   367	                 wenn #kopf-schicht/#kopf-schicht2 auf eine echte Rollpose
+   368	                 (/kopf_rgba/roll/...+15/+25 etc.) wechselten, blieb der Augen-
+   369	                 Flicken stur an der Null-Grad-Stelle stehen, waehrend das Kopf-
+   370	                 foto darunter tatsaechlich gekippt war -- die harte Rechteckkante
+   371	                 des Flickens schnitt sichtbar durch die schraege Stirn/Wange =
+   372	                 genau der "zweite Kopf, der durchscheint". Fix: beide jetzt HIER
+   373	                 drin, auf derselben Leinwand wie der Kopf, siehe kopfKoerperDrehSchritt()
+   374	                 (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+   375	            <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+   376	            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+   377	            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+   378	          </div>
+   379	        </div>
+   380	        <canvas id="regen"></canvas>
+   381	        <div id="farbschicht"></div>
+   382	        <div id="wasserlinie"></div>
+   383	        <div id="vignette"></div>
+   384	      </div>
+   385	    </div>
+   386	  </div>
+   387	  <div id="chat">
+   388	    <div id="chat-kopf"><span>Chat</span><span id="chat-status">verbunden</span></div>
+   389	    <div id="chat-zeilen"></div>
+   390	    <div id="dropzone">Datei hier reinziehen, um sie abzulegen</div>
+   391	    <div id="eingabe-zeile">
+   392	      <input id="eingabe" placeholder="Nachricht (nur Buehnen-Chat, nicht der Sprachmodus)" maxlength="2000">
+   393	      <button id="senden">Senden</button>
+   394	    </div>
+   395	    <div id="hinweis">
+   396	      Ehrlich: getippte Nachrichten hier gehen NICHT an FranKensteins echten
+   397	      Sprachmodus, nur in diesen Chat. "1 Zuschauer" ist keine Messung, nur
+   398	      eine feste Angabe.
+   399	    </div>
+   400	  </div>
+   401	</div>
+   402	<script>
+   403	"use strict";
+   404	const $ = (id) => document.getElementById(id);
+   405	const chatZeilen = $("chat-zeilen");
+   406	let cursor = "";
+   407	
+   408	// Name+Nachricht in EINER Zeile (<span> statt <div>) -- das war ueber zwei
+   409	// Nachtraege hinweg der meistgenannte Einzelpunkt ("das schafft sofort den
+   410	// Stream-Eindruck"). Autoscroll nur, wenn der Nutzer schon unten war --
+   411	// wer hochgescrollt hat, um etwas zu lesen, wird nicht weggerissen
+   412	// (Gabriel, 4. Nachtrag 2026-09-11).
+   413	// Emoji NICHT als Overlay ueber der Buehne (Gabrielskorrektur 2026-09-11:
+   414	// "smileys nur im chat sichtbar") -- haengt am Ende des Chattexts, ganz
+   415	// normaler Teil der Zeile, kein Extra-Element, keine Animation.
+   416	// Deckel gegen unbegrenztes DOM-Wachstum (2026-09-11): das Fenster laeuft
+   417	// als Dauerbetrieb, chatHolen() feuert alle 1,5 s. Ohne Deckel bleibt JEDE
+   418	// je empfangene Zeile fuer immer im DOM -- bei einem Fenster, das Tage offen
+   419	// steht, wird daraus ein Leck, das niemand mehr einer Ursache zuordnen kann.
+   420	// 400 Zeilen sind mehr als in den Chatbereich passen und mehr, als jemand
+=== TIMER/RAF INVENTORY ===
+470:function mundFrames(name){
+482:function mundZielSetzen(name){
+487:function mundSchritt(jetzt){
+495:function mundAnimation(text){
+499:  const iv = setInterval(() => {
+505:  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+511:// sofort eine eigene mundAnimation: ~105 gleichzeitige setInterval, der Mund
+639:setInterval(hgSchritt, 90); // ~11 Bilder/s -- reicht fuer einen Hintergrund-Loop, kein Fokuspunkt
+679:function kopfRollDatei(w){
+688:function kopfRollSequenzZu(ziel, fertig){
+698:function kopfRollTick(jetzt){
+776:function kopfKoerperDrehSchritt(){
+878:      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+879:      setTimeout(() => rahmen.classList.remove("pose-wechsel"), 420);
+895:    if(stufe < 6) setTimeout(hoch, 90);
+896:    else setTimeout(runter, haltenMs);
+901:    if(stufe > 0) setTimeout(runter, 90);
+902:    else setTimeout(sauber, 120); // letzte Stufe (= Neutralbild) kurz halten, dann Ebenen aus
+904:  setTimeout(hoch, 90);
+1020:    if(versuch < 8) setTimeout(() => _koerperSonderausdruckVersuchen(pool, versuch+1), 600);
+1070:// "Doppelschlag"-Bonus war (setTimeout(blinzeln, 120+...) unten). Jeder
+1086:function blinzelDauerSchliessen(){ return 15 + Math.random()*5; }
+1087:function blinzelDauerGeschlossenHalten(){ return 30 + Math.random()*20; }
+1088:function blinzelDauerOeffnen(){ return 40 + Math.random()*12; }
+1105:function blinzeln(zeitplanNeu = true){
+1116:function blinzelAbspielen(schritte, idx, zeitplanNeu){
+1121:      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }
+1130:  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);
+1132:function blinzelWeiterPlanen(){
+1133:  setTimeout(() => blinzeln(true), 2000 + Math.random()*5000); // 2-7s, unregelmaessig (Gabriels Vorgabe)
+1189:    _fokusAblaufTimer = setTimeout(() => { gespraechsFokus = "gabriel"; }, 5000 + Math.random()*6000);
+1209:function gazeBasisSichtbar(){
+1225:    setTimeout(() => { blickPauseAktiv = false; }, 350 + Math.random()*550); // 0.35-0.9s kurzer Wegblick
+1227:  setTimeout(blickPauseSchritt, 4000 + Math.random()*7000); // 4-11s, unregelmaessig
+1229:setTimeout(blickPauseSchritt, 3000);
+1273:  setTimeout(() => { mikroSakX = 0; mikroSakY = 0; }, 80 + Math.random() * 90); // kurz gehalten, dann ballistisch zurueck (kein Lerp)
+1274:  setTimeout(mikroSakkadeSchritt, 1000 + Math.random() * 3000); // 1-4s, unregelmaessig
+1276:setTimeout(mikroSakkadeSchritt, 1500);
+1290:function gazeZielBestimmen(){
+1296:function gazeSchritt(){
+1323:  setTimeout(wanderSchritt, 2500 + Math.random()*4500); // lange, ziellose Pausen
+1325:setTimeout(wanderSchritt, 1500);
+1334:function kopfKurzNeigen(){
+1343:    setTimeout(() => {
+1352:function kopfWeiterPlanen(){
+1353:  setTimeout(kopfKurzNeigen, 9000 + Math.random()*10000); // 9-19s, unregelmaessig
+1372:    _blickTimer = setTimeout(() => {
+1379:    _ausdruckTimer = setTimeout(() => {
+1417:window.addEventListener("resize", regenGroesseSetzen);
+1436:function kopfCanvasAnpassen(){
+1450:window.addEventListener("resize", kopfCanvasAnpassen);
+1519:setInterval(() => { _mikroUnruheZiel = (Math.random()*2 - 1); }, 2600 + Math.random()*3200);
+1555:function atmen(){
+1674:  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+1735:function kameraWackeln(){
+1762:function kameraNachschwung(){
+1765:  requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+1766:  setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+1790:  requestAnimationFrame(schleife);
+1792:requestAnimationFrame(schleife);
+1793:setInterval(() => {
+1805:setInterval(() => {
+1810:// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+1852:setInterval(chatHolen, 1500);
+1853:setInterval(statusHolen, 3000);
+1870:      kopfRollSequenzZu(15, () => setTimeout(() => {
+1898:setInterval(_reloadWaechter, 2000);
+=== ROOT/TRANSFORM INVENTORY ===
+34:  @keyframes kamera-overshoot{0%{transform:scale(1) rotate(0deg)}40%{transform:scale(1.006) rotate(.12deg)}100%{transform:scale(1) rotate(0deg)}}
+69:    object-fit:cover;opacity:.85;transition:opacity .6s ease-in-out;
+82:     hindurch statt komplett verdeckt zu werden. object-position-Y hier ist der
+93:     Ausschnitt ist (object-fit:cover skaliert+beschneidet), nicht die rohe
+95:     anderes. Loesung: #kopf-canvas ist eine per JS (kopfCanvasAnpassen(),
+99:     Ausschnitt (identisches Ergebnis zum alten object-fit:cover). Kopf,
+112:  #kopf-canvas{position:absolute;pointer-events:none;filter:drop-shadow(4px 7px 10px rgba(0,0,0,0.28))}
+113:  /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+117:     unten) darf hier eine kleine gefederte rotate()/translateY() setzen,
+118:     OHNE die per-Frame scale()-Atmung auf #kopf-schicht/#koerper-schicht
+122:     geraten): #kopf-dreh drehte bisher um seine eigene Bildmitte (CSS-
+127:     weil Kopf und Koerper um verschiedene Punkte "dachten". #koerper-dreh
+131:  #kopf-dreh{transform-origin:50% 58.59%}
+132:  #koerper-dreh{transform-origin:50% 100%}
+133:  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+145:     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+169:     also mit jeder Neigung/Drehung automatisch mit (siehe #kopf-dreh
+170:     transform-origin oben) -- der Uebergang bleibt an derselben Halsstelle,
+194:  @keyframes pose-overshoot{0%{transform:scale(1)}40%{transform:scale(1.016)}100%{transform:scale(1)}}
+229:     #kopf-canvas oben). Jetzt exakt aus mund_00_rest.png's Manifest-Anker
+238:     Alle vier Prozent gelten relativ zu #kopf-canvas (der vollen Leinwand),
+240:     kein object-fit:contain (die Box hat exakt das Seitenverhaeltnis des
+248:     per translate() verschoben, kein neues Bild pro Blickwinkel. Anchor aus
+253:  /* ⭐⭐ 2026-09-11 NACHTRAG 4: transform-origin auf denselben Halsanker wie
+254:     #kopf-dreh (50%/58.59% DER LEINWAND), aber umgerechnet in die eigene
+258:     aus denselben Zahlen gerechnet, die #kopf-dreh oben schon benutzt. Sitzt
+259:     der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+262:    transform-origin:70.38% 241.32%;
+274:    transform-origin:70.38% 241.32%;
+287:  @keyframes einblenden{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+309:  #senden:active{transform:scale(.96)}
+339:        <!-- ⭐⭐ 2026-09-11 #kopf-canvas: siehe CSS-Kommentar oben ("KOPF-LEINWAND").
+342:             Anker gilt fuer alle drei. z-index:auto auf #kopf-canvas selbst
+347:        <div id="kopf-canvas">
+348:          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+349:          <div id="kopf-dreh">
+360:                 deshalb liegen sie in #kopf-dreh auf derselben Leinwand. -->
+365:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+374:                 (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+657:// Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+658:// oben) bekommen eine kleine gefederte rotate()/translateY(). Feder statt
+715:  $(ein).style.transform = _atmenTransform;
+731:// liegt jetzt IN #kopf-dreh und bekommt darueber automatisch schon kDrehRot
+737:// gerechnet um denselben Halsanker (transform-origin oben, exakt umgerechnet).
+744://   (1) FALSCHES VORZEICHEN/DOPPELABZUG: #kopf-dreh vererbt kDrehRot per CSS
+755://       (transform-origin ~2,4 Patch-Hoehen unterhalb der Box, siehe oben)
+786:  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+787:  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+795:  $("augen-blink").style.transform = `rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+848:// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+870:    versteckt.style.transform = _atmenTransform;
+1304:  // ⭐⭐ 2026-09-11 NACHTRAG 4: rotate() dranhaengen (Rest-Ausgleich zur echten
+1307:  $("pupillen-glow").style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1420:// ⭐⭐ 2026-09-11 #kopf-canvas exakt auf die reale object-fit:cover-Geometrie
+1422:// object-position:50% 15%). Cover-Formel: scale = max(containerW/bildW,
+1424:// so weit verschoben, dass an der object-position-Stelle (50%/15%) kein
+1426:// object-fit:cover verwendet. #gesicht-rahmen beschneidet den Ueberstand per
+1427:// overflow:hidden -- optisch identisch zum alten object-fit:cover, aber
+1444:  const kc = $("kopf-canvas");
+1526:// (6x scale()+saturate()+brightness() pro Frame ist trivial), sondern dass
+1530:// Sonderausdrucks) auf style.transform/style.filter schreiben liess --
+1553:let _atmenTransform = "scale(1)";
+1561:  const transform = `scale(${skala})`;
+1568:  $(kopfSichtbar).style.transform = transform;
+1587:  $(atmenAktivSchicht).style.transform = transform;
+1596:    $(ausdruckSichtbar).style.transform = transform;
+1606:// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+1629:  $(naechsteSchicht).style.transform = _atmenTransform;
+1748:  $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+1754:  $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+=== TOOLCHAIN ===
+/usr/bin/python3
+/usr/bin/ffmpeg
+=== PACKAGE TEST/PROBE FILES ===
+/workspace/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z/QA/ACCEPTANCE_TESTS.md
+/workspace/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z/CODE_REFERENCE/runtime_probe.js
+/workspace/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z/CODE_REFERENCE/requirements-qa.txt
+=== DONE ===

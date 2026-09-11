@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-c0dd67ea-verify-persisted-bridge-source",
+  "command_sha256": "0e00bf8fae453f3f9327cdd75b76537f565f7777a73c4ddd5cce768c4d34ed00",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-11T23:47:17.533753+00:00",
+  "finished_at": "2026-09-11T23:47:19.129346+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "0295126fab73a02ffd7073ce4f47d071a1496e9067f915afb82b195ec5bd59be",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "37:MACHINE_ID = os.environ.get(\"LOCAL_BRIDGE_MACHINE_ID\", \"ai-core-node\")\n46:CONTROL_BRANCH = os.environ.get(\"LOCAL_BRIDGE_CONTROL_BRANCH\", f\"chatgpt-local-{MACHINE_ID}-control\")\n47:RESULTS_BRANCH = os.environ.get(\"LOCAL_BRIDGE_RESULTS_BRANCH\", f\"chatgpt-local-{MACHINE_ID}-results\")\n220:        \"machine_id\": MACHINE_ID,\n226:        \"execution_boundary\": f\"REAL_LOCAL_HOST_{MACHINE_ID.upper().replace('-', '_')}_NOT_SANDBOXED\",\nSHA=3f3d25ee1256945bd9fc139623ac582ca3046bbabe3e7deb0cdaaa3788e027ba\nBRANCH=856da5f1098acd3a548181e2b54cc632e165c50f\nPERSISTED_BRIDGE_SOURCE_PASS\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

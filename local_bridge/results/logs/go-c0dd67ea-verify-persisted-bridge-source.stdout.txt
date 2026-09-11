@@ -1,0 +1,8 @@
+37:MACHINE_ID = os.environ.get("LOCAL_BRIDGE_MACHINE_ID", "ai-core-node")
+46:CONTROL_BRANCH = os.environ.get("LOCAL_BRIDGE_CONTROL_BRANCH", f"chatgpt-local-{MACHINE_ID}-control")
+47:RESULTS_BRANCH = os.environ.get("LOCAL_BRIDGE_RESULTS_BRANCH", f"chatgpt-local-{MACHINE_ID}-results")
+220:        "machine_id": MACHINE_ID,
+226:        "execution_boundary": f"REAL_LOCAL_HOST_{MACHINE_ID.upper().replace('-', '_')}_NOT_SANDBOXED",
+SHA=3f3d25ee1256945bd9fc139623ac582ca3046bbabe3e7deb0cdaaa3788e027ba
+BRANCH=856da5f1098acd3a548181e2b54cc632e165c50f
+PERSISTED_BRIDGE_SOURCE_PASS

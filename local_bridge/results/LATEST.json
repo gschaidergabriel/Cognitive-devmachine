@@ -1,19 +1,17 @@
 {
   "schema": "CLAY_LOCAL_RECEIPT/v1",
-  "command_id": "inspect-vps-host-free-key-sources-v2-20260824T2058",
-  "command_sha256": "e52d32f82f5fc34a18c7e27071edd0d7764d1c91a87f82937a81289e4f8b51e4",
-  "started_at": "2026-08-24T13:58:19.832703+00:00",
-  "finished_at": "2026-08-24T13:58:23.540142+00:00",
-  "status": "PASS",
-  "exit_code": 0,
+  "command_id": "vps-sandbox-direct-health-v2-20260824T1921",
+  "command_sha256": "a55cdc7a15d28167151bbb0637939b314a4b71e5636a9e0e6945133aae3be20d",
+  "host": "ai-core-node",
+  "started_at": "2026-09-11T20:52:57.964763+00:00",
+  "finished_at": "2026-09-11T20:53:01.736296+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
   "op": "exec",
-  "stdout_sha256": "741436f8a9c017f67d01bff0e21a540a243cf80179991b24919a28a1ecea6f3c",
+  "stdout_sha256": "3975cd86425855e1f2f562545261fefb6465cf7e16f1b6110f7ff2f51f9ded64",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "HOST_KEY_SOURCES\nABSENT:/etc/clayverse/freie-zugaenge.env\nABSENT:/etc/clayverse/keys.env\nABSENT:/etc/entityos/tresor/api.env\nABSENT:/etc/entityos/tresor/zugaenge.env\nTRESOR_FILES\nSANDBOX_ARTIFACT_SECRET\n",
+  "stdout_tail": "HOST_OK\nclay-direct-dev Up 2 weeks\nSANDBOX_OK\nuid=0(root) gid=0(root) groups=0(root)\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   82G  112G  43% /workspace\n/dev/sda1       193G   82G  112G  43% /cache\n/dev/sda1       193G   82G  112G  43% /artifacts\n",
   "stderr_tail": "",
-  "meta": {
-    "cwd": "/home/ai-core-node"
-  },
-  "execution_boundary": "LOCAL_USER_HOST_SHELL",
-  "automatic_root_grant": false
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
 }

@@ -1,26 +1,21 @@
-HEAD is now at 905ae5f vps bridge: add autonomous Free Swarm main publisher
+HEAD is now at 50a7146 control: test G2 PipeWire session-manager hypothesis
 ● clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher
      Loaded: loaded (/srv/claylab/.config/systemd/user/clay-free-swarm-publisher.service; enabled; preset: enabled)
-     Active: active (running) since Mon 2026-08-24 09:47:16 UTC; 3s ago
-   Main PID: 70475 (bash)
-      Tasks: 4 (limit: 19144)
-     Memory: 4.7M (peak: 16.7M)
-        CPU: 1.452s
+     Active: active (running) since Fri 2026-09-11 20:50:29 UTC; 3s ago
+   Main PID: 621125 (bash)
+      Tasks: 2 (limit: 19144)
+     Memory: 108.6M (peak: 138.5M)
+        CPU: 1.882s
      CGroup: /user.slice/user-5001.slice/user@5001.service/app.slice/clay-free-swarm-publisher.service
-             ├─70475 bash /srv/claylab/bin/clay-free-swarm-publisher
-             ├─70635 git -C /srv/claylab/free-swarm-publisher push origin HEAD:main
-             ├─70636 /bin/sh -c "ssh -i /srv/claylab/.ssh/chatgpt_vps_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/srv/claylab/.ssh/known_hosts \"\$@\"" "ssh -i /srv/claylab/.ssh/chatgpt_vps_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/srv/claylab/.ssh/known_hosts" git@github.com "git-receive-pack 'gschaidergabriel/clay-global-research-entity.git'"
-             └─70637 ssh -i /srv/claylab/.ssh/chatgpt_vps_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/srv/claylab/.ssh/known_hosts git@github.com "git-receive-pack 'gschaidergabriel/clay-global-research-entity.git'"
+             ├─621125 bash /srv/claylab/bin/clay-free-swarm-publisher
+             └─621180 python3 "/srv/claylab/free-swarm-publisher/free swarm/evaluate.py" --repo /srv/claylab/free-swarm-publisher --artifacts /srv/claylab/artifacts/clay-entityos-swarm
 
-Aug 24 09:47:16 srv1563149 systemd[6766]: Started clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
-Aug 24 09:47:17 srv1563149 clay-free-swarm-publisher[70478]: From github.com:gschaidergabriel/clay-global-research-entity
-Aug 24 09:47:17 srv1563149 clay-free-swarm-publisher[70478]:  * branch                main       -> FETCH_HEAD
-Aug 24 09:47:18 srv1563149 clay-free-swarm-publisher[70528]: Reset branch 'main'
-Aug 24 09:47:18 srv1563149 clay-free-swarm-publisher[70528]: branch 'main' set up to track 'origin/main'.
-Aug 24 09:47:18 srv1563149 clay-free-swarm-publisher[70528]: Your branch is up to date with 'origin/main'.
-Aug 24 09:47:18 srv1563149 clay-free-swarm-publisher[70569]: HEAD is now at 4bae928b9 research: bind autonomous swarm supervisor to actual repo root
-Aug 24 09:47:19 srv1563149 clay-free-swarm-publisher[70593]: [main 0c31a130a] metrics: autonomous Free Swarm refresh
-Aug 24 09:47:19 srv1563149 clay-free-swarm-publisher[70593]:  2 files changed, 71 insertions(+)
-Aug 24 09:47:19 srv1563149 clay-free-swarm-publisher[70593]:  create mode 100644 free swarm/LIVE_METRICS.json
+Sep 11 20:50:29 srv1563149 systemd[6766]: Started clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
+Sep 11 20:50:30 srv1563149 clay-free-swarm-publisher[621128]: From github.com:gschaidergabriel/clay-global-research-entity
+Sep 11 20:50:30 srv1563149 clay-free-swarm-publisher[621128]:  * branch                main       -> FETCH_HEAD
+Sep 11 20:50:31 srv1563149 clay-free-swarm-publisher[621135]: Reset branch 'main'
+Sep 11 20:50:31 srv1563149 clay-free-swarm-publisher[621135]: branch 'main' set up to track 'origin/main'.
+Sep 11 20:50:31 srv1563149 clay-free-swarm-publisher[621135]: Your branch is up to date with 'origin/main'.
+Sep 11 20:50:31 srv1563149 clay-free-swarm-publisher[621178]: HEAD is now at 0c80bd24d current: refresh token-efficient research state [skip ci]
 FREE_SWARM_PUBLISHER_MODE=systemd-user
 FREE_SWARM_PUBLISHER_READY

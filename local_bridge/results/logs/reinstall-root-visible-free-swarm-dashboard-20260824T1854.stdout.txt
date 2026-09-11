@@ -1,55 +1,55 @@
-HEAD is now at 4c10f72 publisher: mirror full Free Swarm dashboard to repository root
+HEAD is now at 50a7146 control: test G2 PipeWire session-manager hypothesis
 ● clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher
      Loaded: loaded (/srv/claylab/.config/systemd/user/clay-free-swarm-publisher.service; enabled; preset: enabled)
-     Active: active (running) since Mon 2026-08-24 11:49:47 UTC; 8min ago
-   Main PID: 177164 (bash)
+     Active: active (running) since Fri 2026-09-11 20:51:57 UTC; 25s ago
+   Main PID: 623123 (bash)
       Tasks: 2 (limit: 19144)
-     Memory: 10.6M (peak: 30.2M)
-        CPU: 1.962s
+     Memory: 3.0M (peak: 105.8M)
+        CPU: 3.384s
      CGroup: /user.slice/user-5001.slice/user@5001.service/app.slice/clay-free-swarm-publisher.service
-             ├─177164 bash /srv/claylab/bin/clay-free-swarm-publisher
-             └─177319 sleep 900
+             ├─623123 bash /srv/claylab/bin/clay-free-swarm-publisher
+             └─623368 sleep 900
 
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177168]:  * branch                main       -> FETCH_HEAD
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177168]:    1fe3d447f..deb159bbb  main       -> origin/main
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177177]: Reset branch 'main'
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177177]: branch 'main' set up to track 'origin/main'.
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177177]: Your branch is up to date with 'origin/main'.
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177218]: HEAD is now at deb159bbb metrics: make detailed GO analysis runtime-aware and include Forge/local lanes
-Aug 24 11:49:50 srv1563149 clay-free-swarm-publisher[177265]: [main 9cb8931ec] metrics: autonomous Free Swarm + distillery refresh
-Aug 24 11:49:50 srv1563149 clay-free-swarm-publisher[177265]:  3 files changed, 105 insertions(+), 102 deletions(-)
-Aug 24 11:49:52 srv1563149 clay-free-swarm-publisher[177307]: To github.com:gschaidergabriel/clay-global-research-entity.git
-Aug 24 11:49:52 srv1563149 clay-free-swarm-publisher[177307]:    deb159bbb..9cb8931ec  HEAD -> main
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623126]: From github.com:gschaidergabriel/clay-global-research-entity
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623126]:  * branch                main       -> FETCH_HEAD
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623133]: Reset branch 'main'
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623133]: branch 'main' set up to track 'origin/main'.
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623133]: Your branch is up to date with 'origin/main'.
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623174]: HEAD is now at 228260166 metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh
+Sep 11 20:52:01 srv1563149 clay-free-swarm-publisher[623313]: [main 2b281b0c3] metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh
+Sep 11 20:52:01 srv1563149 clay-free-swarm-publisher[623313]:  5 files changed, 9 insertions(+), 9 deletions(-)
+Sep 11 20:52:03 srv1563149 clay-free-swarm-publisher[623355]: To github.com:gschaidergabriel/clay-global-research-entity.git
+Sep 11 20:52:03 srv1563149 clay-free-swarm-publisher[623355]:    228260166..2b281b0c3  HEAD -> main
 FREE_SWARM_PUBLISHER_MODE=systemd-user
 FREE_SWARM_PUBLISHER_READY
 active
-Aug 24 11:49:47 srv1563149 systemd[6766]: Stopped clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
-Aug 24 11:49:47 srv1563149 systemd[6766]: clay-free-swarm-publisher.service: Consumed 1.728s CPU time.
-Aug 24 11:49:47 srv1563149 systemd[6766]: Started clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177168]: From github.com:gschaidergabriel/clay-global-research-entity
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177168]:  * branch                main       -> FETCH_HEAD
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177168]:    1fe3d447f..deb159bbb  main       -> origin/main
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177177]: Reset branch 'main'
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177177]: branch 'main' set up to track 'origin/main'.
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177177]: Your branch is up to date with 'origin/main'.
-Aug 24 11:49:48 srv1563149 clay-free-swarm-publisher[177218]: HEAD is now at deb159bbb metrics: make detailed GO analysis runtime-aware and include Forge/local lanes
-Aug 24 11:49:50 srv1563149 clay-free-swarm-publisher[177265]: [main 9cb8931ec] metrics: autonomous Free Swarm + distillery refresh
-Aug 24 11:49:50 srv1563149 clay-free-swarm-publisher[177265]:  3 files changed, 105 insertions(+), 102 deletions(-)
-Aug 24 11:49:52 srv1563149 clay-free-swarm-publisher[177307]: To github.com:gschaidergabriel/clay-global-research-entity.git
-Aug 24 11:49:52 srv1563149 clay-free-swarm-publisher[177307]:    deb159bbb..9cb8931ec  HEAD -> main
-Aug 24 11:58:09 srv1563149 systemd[6766]: Stopping clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher...
-Aug 24 11:58:09 srv1563149 systemd[6766]: Stopped clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
-Aug 24 11:58:09 srv1563149 systemd[6766]: clay-free-swarm-publisher.service: Consumed 1.962s CPU time, 30.2M memory peak, 0B memory swap peak.
-Aug 24 11:58:09 srv1563149 systemd[6766]: Started clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
-Aug 24 11:58:10 srv1563149 clay-free-swarm-publisher[183610]: From github.com:gschaidergabriel/clay-global-research-entity
-Aug 24 11:58:10 srv1563149 clay-free-swarm-publisher[183610]:  * branch                main       -> FETCH_HEAD
-Aug 24 11:58:10 srv1563149 clay-free-swarm-publisher[183617]: Reset branch 'main'
-Aug 24 11:58:10 srv1563149 clay-free-swarm-publisher[183617]: branch 'main' set up to track 'origin/main'.
-Aug 24 11:58:10 srv1563149 clay-free-swarm-publisher[183617]: Your branch is up to date with 'origin/main'.
-Aug 24 11:58:10 srv1563149 clay-free-swarm-publisher[183658]: HEAD is now at 10dd01561 metrics: add versioned go collective metric config
-Aug 24 11:58:12 srv1563149 clay-free-swarm-publisher[183750]: [main ca25e951e] metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh
-Aug 24 11:58:12 srv1563149 clay-free-swarm-publisher[183750]:  6 files changed, 1079 insertions(+), 35 deletions(-)
-Aug 24 11:58:12 srv1563149 clay-free-swarm-publisher[183750]:  create mode 100644 free swarm/FORGE_LIVE.json
-Aug 24 11:58:12 srv1563149 clay-free-swarm-publisher[183750]:  create mode 100644 free swarm/SYSTEM_ANALYSIS_LIVE.json
-Aug 24 11:58:14 srv1563149 clay-free-swarm-publisher[183792]: To github.com:gschaidergabriel/clay-global-research-entity.git
-Aug 24 11:58:14 srv1563149 clay-free-swarm-publisher[183792]:    10dd01561..ca25e951e  HEAD -> main
+Sep 11 20:51:50 srv1563149 clay-free-swarm-publisher[623007]: To github.com:gschaidergabriel/clay-global-research-entity.git
+Sep 11 20:51:50 srv1563149 clay-free-swarm-publisher[623007]:    eb691501c..228260166  HEAD -> main
+Sep 11 20:51:57 srv1563149 systemd[6766]: Stopping clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher...
+Sep 11 20:51:57 srv1563149 systemd[6766]: Stopped clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
+Sep 11 20:51:57 srv1563149 systemd[6766]: clay-free-swarm-publisher.service: Consumed 2.983s CPU time.
+Sep 11 20:51:57 srv1563149 systemd[6766]: Started clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623126]: From github.com:gschaidergabriel/clay-global-research-entity
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623126]:  * branch                main       -> FETCH_HEAD
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623133]: Reset branch 'main'
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623133]: branch 'main' set up to track 'origin/main'.
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623133]: Your branch is up to date with 'origin/main'.
+Sep 11 20:51:58 srv1563149 clay-free-swarm-publisher[623174]: HEAD is now at 228260166 metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh
+Sep 11 20:52:01 srv1563149 clay-free-swarm-publisher[623313]: [main 2b281b0c3] metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh
+Sep 11 20:52:01 srv1563149 clay-free-swarm-publisher[623313]:  5 files changed, 9 insertions(+), 9 deletions(-)
+Sep 11 20:52:03 srv1563149 clay-free-swarm-publisher[623355]: To github.com:gschaidergabriel/clay-global-research-entity.git
+Sep 11 20:52:03 srv1563149 clay-free-swarm-publisher[623355]:    228260166..2b281b0c3  HEAD -> main
+Sep 11 20:52:22 srv1563149 systemd[6766]: Stopping clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher...
+Sep 11 20:52:22 srv1563149 systemd[6766]: Stopped clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
+Sep 11 20:52:22 srv1563149 systemd[6766]: clay-free-swarm-publisher.service: Consumed 3.385s CPU time, 105.8M memory peak, 0B memory swap peak.
+Sep 11 20:52:23 srv1563149 systemd[6766]: Started clay-free-swarm-publisher.service - Clay Free Swarm autonomous metrics publisher.
+Sep 11 20:52:24 srv1563149 clay-free-swarm-publisher[623922]: From github.com:gschaidergabriel/clay-global-research-entity
+Sep 11 20:52:24 srv1563149 clay-free-swarm-publisher[623922]:  * branch                main       -> FETCH_HEAD
+Sep 11 20:52:24 srv1563149 clay-free-swarm-publisher[623933]: Reset branch 'main'
+Sep 11 20:52:24 srv1563149 clay-free-swarm-publisher[623933]: branch 'main' set up to track 'origin/main'.
+Sep 11 20:52:24 srv1563149 clay-free-swarm-publisher[623933]: Your branch is up to date with 'origin/main'.
+Sep 11 20:52:24 srv1563149 clay-free-swarm-publisher[623974]: HEAD is now at 2b281b0c3 metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh
+Sep 11 20:52:26 srv1563149 clay-free-swarm-publisher[624109]: [main da5244fde] metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh
+Sep 11 20:52:26 srv1563149 clay-free-swarm-publisher[624109]:  5 files changed, 9 insertions(+), 9 deletions(-)
+Sep 11 20:52:29 srv1563149 clay-free-swarm-publisher[624151]: To github.com:gschaidergabriel/clay-global-research-entity.git
+Sep 11 20:52:29 srv1563149 clay-free-swarm-publisher[624151]:    2b281b0c3..da5244fde  HEAD -> main

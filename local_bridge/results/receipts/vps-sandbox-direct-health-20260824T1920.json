@@ -2,8 +2,9 @@
   "schema": "CLAY_LOCAL_RECEIPT/v1",
   "command_id": "vps-sandbox-direct-health-20260824T1920",
   "command_sha256": "e2ae43bf8e8556608cd2ebc28bca11d148149721bad68cca1878c980188a06d5",
-  "started_at": "2026-08-24T12:19:08.675786+00:00",
-  "finished_at": "2026-08-24T12:19:12.265667+00:00",
+  "host": "ai-core-node",
+  "started_at": "2026-09-11T20:52:54.430943+00:00",
+  "finished_at": "2026-09-11T20:52:57.886975+00:00",
   "status": "FAIL",
   "exit_code": 1,
   "op": "exec",
@@ -11,9 +12,6 @@
   "stderr_sha256": "47d5e99608df7ea40b7c2d36e0cb2ea22eb5753c166f5a5b9088bf0efc03e9be",
   "stdout_tail": "HOST_OK\n",
   "stderr_tail": "cannot chdir to /root: Permission denied\n",
-  "meta": {
-    "cwd": "/home/ai-core-node"
-  },
-  "execution_boundary": "LOCAL_USER_HOST_SHELL",
-  "automatic_root_grant": false
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
 }

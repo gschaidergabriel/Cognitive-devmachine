@@ -2,18 +2,16 @@
   "schema": "CLAY_LOCAL_RECEIPT/v1",
   "command_id": "local-bootstrap-smoke-20260824",
   "command_sha256": "039f213b0faca1a3736975bf32269b6c502cfef01b3d5b5b27bd8b7c18e5dbe5",
-  "started_at": "2026-08-24T08:46:16.038911+00:00",
-  "finished_at": "2026-08-24T08:46:16.063629+00:00",
-  "status": "PASS",
-  "exit_code": 0,
+  "host": "ai-core-node",
+  "started_at": "2026-09-11T20:50:07.827100+00:00",
+  "finished_at": "2026-09-11T20:50:07.866859+00:00",
+  "status": "ERROR",
+  "exit_code": 125,
   "op": "exec",
-  "stdout_sha256": "f33367193eef941ef15ed9de3fbd848edeea6b81bb267bf8136d6665e708408c",
-  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "CLAY_LOCAL_EXEC_OK\n2026-08-24T08:46:16Z\nuid=1000(ai-core-node) gid=1000(ai-core-node) groups=1000(ai-core-node),4(adm),24(cdrom),27(sudo),30(dip),44(video),46(plugdev),100(users),114(lpadmin),983(docker),992(render)\nLinux ai-core-node-projekt-frankenstein 6.17.0-40-generic #40~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Jun 23 16:48:12 UTC 2 x86_64 x86_64 x86_64 GNU/Linux\nPython 3.12.3\ngit version 2.43.0\ntmux 3.4\nc459a3e019a9c55e6bad4c409b71d7843ace33e216453eec465128b9766e731b  /home/ai-core-node/.local/share/clay-local-bridge/state/smoke-probe.txt\nHOME=/home/ai-core-node\nPWD=/home/ai-core-node\n",
-  "stderr_tail": "",
-  "meta": {
-    "cwd": "/home/ai-core-node"
-  },
-  "execution_boundary": "LOCAL_USER_HOST_SHELL",
-  "automatic_root_grant": false
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "3f18883ae9ce75626b705bb0c7454f97d80884dfec006840b58bf4a9ffab0e08",
+  "stdout_tail": "",
+  "stderr_tail": "FileNotFoundError(2, 'No such file or directory')\nTraceback (most recent call last):\n  File \"/home/ai-core-node/.claude/star/local_bridge_daemon.py\", line 185, in execute\n    p, meta = operate(s)\n              ^^^^^^^^^^\n  File \"/home/ai-core-node/.claude/star/local_bridge_daemon.py\", line 148, in operate\n    return op_exec(str(s[\"command\"]), str(s.get(\"cwd\", \"\")), timeout), {}\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.claude/star/local_bridge_daemon.py\", line 102, in op_exec\n    return subprocess.run([\"bash\", \"-lc\", cmd], cwd=workdir, capture_output=True,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: '~'\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
 }

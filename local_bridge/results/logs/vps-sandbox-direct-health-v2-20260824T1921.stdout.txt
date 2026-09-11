@@ -1,12 +1,8 @@
 HOST_OK
-clay-direct-dev Up 4 hours
+clay-direct-dev Up 2 weeks
 SANDBOX_OK
 uid=0(root) gid=0(root) groups=0(root)
 Filesystem      Size  Used Avail Use% Mounted on
-/dev/sda1       193G   36G  157G  19% /workspace
-/dev/sda1       193G   36G  157G  19% /cache
-/dev/sda1       193G   36G  157G  19% /artifacts
-  19807       52:01 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60
-  19841       51:31 python3 /workspace/clay-global-research-entity/tools/run_research_distillery_local.py --hours 24 --sleep-seconds 3
-  19844       51:31 python3 /workspace/clay-global-research-entity/tools/run_free_evidence_forge.py --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20
-  24477       34:36 bash tools/run_24h_entityos_swarm_supervisor.sh
+/dev/sda1       193G   82G  112G  43% /workspace
+/dev/sda1       193G   82G  112G  43% /cache
+/dev/sda1       193G   82G  112G  43% /artifacts

@@ -2,18 +2,16 @@
   "schema": "CLAY_LOCAL_RECEIPT/v1",
   "command_id": "vps-sandbox-direct-health-v2-20260824T1921",
   "command_sha256": "a55cdc7a15d28167151bbb0637939b314a4b71e5636a9e0e6945133aae3be20d",
-  "started_at": "2026-08-24T12:20:01.844253+00:00",
-  "finished_at": "2026-08-24T12:20:05.635598+00:00",
-  "status": "PASS",
-  "exit_code": 0,
+  "host": "ai-core-node",
+  "started_at": "2026-09-11T20:52:57.964763+00:00",
+  "finished_at": "2026-09-11T20:53:01.736296+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
   "op": "exec",
-  "stdout_sha256": "2b4643762d5005b8769eacb9c9c6de0d56e463777af3a3c8335979b6f76a2b1c",
+  "stdout_sha256": "3975cd86425855e1f2f562545261fefb6465cf7e16f1b6110f7ff2f51f9ded64",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "HOST_OK\nclay-direct-dev Up 4 hours\nSANDBOX_OK\nuid=0(root) gid=0(root) groups=0(root)\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   36G  157G  19% /workspace\n/dev/sda1       193G   36G  157G  19% /cache\n/dev/sda1       193G   36G  157G  19% /artifacts\n  19807       52:01 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60\n  19841       51:31 python3 /workspace/clay-global-research-entity/tools/run_research_distillery_local.py --hours 24 --sleep-seconds 3\n  19844       51:31 python3 /workspace/clay-global-research-entity/tools/run_free_evidence_forge.py --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20\n  24477       34:36 bash tools/run_24h_entityos_swarm_supervisor.sh\n",
+  "stdout_tail": "HOST_OK\nclay-direct-dev Up 2 weeks\nSANDBOX_OK\nuid=0(root) gid=0(root) groups=0(root)\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   82G  112G  43% /workspace\n/dev/sda1       193G   82G  112G  43% /cache\n/dev/sda1       193G   82G  112G  43% /artifacts\n",
   "stderr_tail": "",
-  "meta": {
-    "cwd": "/home/ai-core-node"
-  },
-  "execution_boundary": "LOCAL_USER_HOST_SHELL",
-  "automatic_root_grant": false
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
 }

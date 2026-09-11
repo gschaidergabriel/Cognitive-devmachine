@@ -1,23 +1,42 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "9.13+OWNER_2026-08-30_GLM53_FLASH_EXCEPTION",
+  "authority_epoch": "9.13+OWNER_2026-09-11_FREE_SWARM_REAUTHORIZED",
   "mode": "FREE_ONLY_EXCEPT_EXPLICIT_OWNER_GLM53_FLASH_CODING_TEST_ROUTE",
   "product": "EntityOS",
   "compute_architecture": "HCU",
-  "source": "CURRENT_OWNER_DIRECTIVE_2026-08-30",
-  "default_policy": "OWNER_EMERGENCY_STOP_FREE_SWARM; ALL_AUTONOMOUS_PROVIDER_ADMISSION_DISABLED_EXCEPT_EXPLICIT_GLM53_FLASH_CODING_TEST_ROUTE; TOGETHER_FORBIDDEN; NO_UNKNOWN_PROVIDER_OR_IMPLICIT_PAID_FALLBACK",
+  "source": "CURRENT_OWNER_DIRECTIVE_2026-09-11",
+  "default_policy": "OWNER_REAUTHORIZED_FREE_SWARM_2026-09-11; FREE_PROVIDER_ADMISSION_ENABLED_GROQ_NVIDIA_MISTRAL_OPENROUTER; TOGETHER_FORBIDDEN; NO_UNKNOWN_PROVIDER_OR_IMPLICIT_PAID_FALLBACK",
   "providers": {
-    "groq": {"admitted": false, "cost_class": "FREE"},
-    "mistral": {"admitted": false, "cost_class": "FREE"},
-    "nvidia": {"admitted": false, "cost_class": "FREE"},
-    "openrouter": {"admitted": false, "cost_class": "FREE"},
+    "groq": {
+      "admitted": true,
+      "cost_class": "FREE",
+      "owner_authorized": true
+    },
+    "mistral": {
+      "admitted": true,
+      "cost_class": "FREE",
+      "owner_authorized": true
+    },
+    "nvidia": {
+      "admitted": true,
+      "cost_class": "FREE",
+      "owner_authorized": true
+    },
+    "openrouter": {
+      "admitted": true,
+      "cost_class": "FREE",
+      "owner_authorized": true
+    },
     "zai_glm_5_3_flash": {
       "admitted": true,
       "owner_authorized": true,
       "scope": "CODING_AGENT_TEST_SUPPORT_AND_SANDBOX_ENGINEERING_ONLY",
       "model_family": "GLM-5.3-Flash",
       "credential_policy": "SECRET_ENV_OR_PROVIDER_SECRET_STORE_ONLY",
-      "credential_names_allowed": ["ZAI_API_KEY", "GLM_API_KEY"],
+      "credential_names_allowed": [
+        "ZAI_API_KEY",
+        "GLM_API_KEY"
+      ],
       "credential_value_must_never_be_persisted": true,
       "billing_policy": "OWNER_EXPLICIT_ROUTE_AUTHORIZATION_ONLY; VERIFY_CURRENT_PROVIDER_TERMS_BEFORE_NETWORK_USE; NO_OTHER_PAID_FALLBACK",
       "may_substitute_for_claude_code": true,
@@ -47,10 +66,44 @@
     "redact_on_error": true
   },
   "quarantined_external_diagnostics": {
-    "together_finetune_run1_2026_08_27": {"status":"HISTORICAL_DIAGNOSTIC_NON_OPERATIVE","current_execution_authority":false,"repeat_authority":false,"training_credit":0,"base_credit":0,"canonical_semantics_credit":0},
-    "together_finetune_run2_ft_84490ad5_3a8e_2026_08_27": {"status":"AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE","current_execution_authority":false,"repeat_authority":false,"remaining_paid_run_allowance":0,"training_credit":0,"base_credit":0,"canonical_semantics_credit":0,"checkpoint_selection_credit":0},
-    "together_finetune_run3_ft_5b6d4ced_21d1_2026_08_27": {"status":"AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE","current_execution_authority":false,"repeat_authority":false,"remaining_paid_run_allowance":0,"training_credit":0,"base_credit":0,"canonical_semantics_credit":0,"checkpoint_selection_credit":0},
-    "together_finetune_run4_ft_343aff86_a5c1_2026_08_27": {"status":"AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE","current_execution_authority":false,"repeat_authority":false,"remaining_paid_run_allowance":0,"training_credit":0,"base_credit":0,"canonical_semantics_credit":0,"checkpoint_selection_credit":0}
+    "together_finetune_run1_2026_08_27": {
+      "status": "HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
+      "current_execution_authority": false,
+      "repeat_authority": false,
+      "training_credit": 0,
+      "base_credit": 0,
+      "canonical_semantics_credit": 0
+    },
+    "together_finetune_run2_ft_84490ad5_3a8e_2026_08_27": {
+      "status": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
+      "current_execution_authority": false,
+      "repeat_authority": false,
+      "remaining_paid_run_allowance": 0,
+      "training_credit": 0,
+      "base_credit": 0,
+      "canonical_semantics_credit": 0,
+      "checkpoint_selection_credit": 0
+    },
+    "together_finetune_run3_ft_5b6d4ced_21d1_2026_08_27": {
+      "status": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
+      "current_execution_authority": false,
+      "repeat_authority": false,
+      "remaining_paid_run_allowance": 0,
+      "training_credit": 0,
+      "base_credit": 0,
+      "canonical_semantics_credit": 0,
+      "checkpoint_selection_credit": 0
+    },
+    "together_finetune_run4_ft_343aff86_a5c1_2026_08_27": {
+      "status": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
+      "current_execution_authority": false,
+      "repeat_authority": false,
+      "remaining_paid_run_allowance": 0,
+      "training_credit": 0,
+      "base_credit": 0,
+      "canonical_semantics_credit": 0,
+      "checkpoint_selection_credit": 0
+    }
   },
   "together": {
     "admitted": false,

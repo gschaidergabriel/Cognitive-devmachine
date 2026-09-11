@@ -1,0 +1,58 @@
+{
+  "schema": "FRANK_AVATAR_LOCAL_INTEGRATION_CANDIDATE/v1",
+  "created_at": "2026-09-12T06:50:00+07:00",
+  "status": "CANDIDATE_VALIDATED_NOT_LIVE",
+  "lane": "blink_identity_contamination",
+  "live_subject": {
+    "host": "ai-core-node",
+    "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED",
+    "buehne_html_sha256": "87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645",
+    "filmlook_js_sha256": "179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b",
+    "http_port": 8788,
+    "window": "FranKenstein -- live"
+  },
+  "source_handoff": {
+    "zip_sha256": "03ad0dd38ba2cb3b09f01b3b38496e5acda9b700d4979e7ee28cf334f0b7d6d1"
+  },
+  "defect_evidence": {
+    "blink_alpha_nonzero_fraction": 0.986058,
+    "blink_alpha_opaque_fraction": 0.812613,
+    "worst_changed_fraction_outside_generous_eye_roi": 0.836371,
+    "identity_contamination_heuristic": true,
+    "temporal_signal_near_eye_q95": 179,
+    "temporal_signal_far_eye_q95": 40,
+    "temporal_signal_near_eye_q99": 249,
+    "temporal_signal_far_eye_q99": 63
+  },
+  "candidate": {
+    "artifact_path": "/artifacts/frank-avatar-go-round2/BLINK_EYE_LOCAL_MASK_CANDIDATE.zip",
+    "artifact_sha256": "a5b172642a9a40ef36c633c26d57743e6351fcbd1652502e4a9d453fd9cda479",
+    "alpha_bbox": [42, 50, 274, 118],
+    "alpha_nonzero_fraction": 0.20205,
+    "alpha_opaque_fraction": 0.107016,
+    "builder": "handoff/frank-avatar-round2-candidate/build_blink_eye_local_mask.py"
+  },
+  "promotion_gate": {
+    "requires_preimage_hash_check": true,
+    "requires_backup_and_rollback": true,
+    "requires_live_reload": true,
+    "requires_deterministic_blink_trigger": "b",
+    "requires_before_after_capture": true,
+    "requires_non_eye_identity_invariance": true,
+    "requires_no_rectangular_patch_edge": true,
+    "requires_performance_non_regression": true
+  },
+  "credit": {
+    "candidate_evidence": 1,
+    "live_visual_acceptance": 0,
+    "grid10": 0,
+    "gwt_jspace": 0,
+    "training": 0,
+    "whole_product": 0
+  },
+  "notes": [
+    "All live blink and gaze asset hashes were rebound and matched the analyzed handoff assets byte-for-byte.",
+    "The direct live-write attempt was blocked before host mutation by the execution safety guard and was not bypassed.",
+    "The live HTML is newer than the handoff HTML, therefore this candidate deliberately changes eye assets only and does not overwrite live HTML/JS."
+  ]
+}

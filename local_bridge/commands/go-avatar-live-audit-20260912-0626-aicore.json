@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-live-audit-20260912-0626-aicore",
+  "op": "exec",
+  "command": "set -u; echo '=== HOST ==='; date -Is; hostname; whoami; echo '=== BUEHNE SERVICE ==='; systemctl --user show frankenstein-buehne.service -p ActiveState -p SubState -p MainPID -p ExecStart -p WorkingDirectory 2>&1 || true; echo '=== RELATED SERVICES ==='; systemctl --user list-units --type=service --state=running --no-pager 2>/dev/null | grep -Ei 'franken|clay|grid|avatar|buehne|claude|bridge' || true; echo '=== RELATED PROCESSES ==='; pgrep -af 'claude|aider|codex|buehne|franken|grid|local_bridge' || true; echo '=== VISUAL FILES ==='; for f in /home/ai-core-node/.claude/star/visual/buehne.html /home/ai-core-node/.claude/star/visual/buehne_daemon.py /home/ai-core-node/.claude/star/visual/filmlook.js /home/ai-core-node/.claude/star/visual/zustand.json; do if [ -e \"$f\" ]; then stat -c '%y %s %n' \"$f\"; sha256sum \"$f\"; fi; done; echo '=== VISUAL DIR RECENT ==='; find /home/ai-core-node/.claude/star/visual -maxdepth 2 -type f -printf '%TY-%Tm-%TdT%TH:%TM:%TS %s %p\\n' 2>/dev/null | sort -r | head -80; echo '=== FRANKENSTEIN-REPO ==='; git -C /home/ai-core-node/frankenstein-repo status --short --branch 2>&1 || true; git -C /home/ai-core-node/frankenstein-repo log -8 --oneline --decorate 2>&1 || true; echo '=== COORDINATION SURFACES ==='; find /home/ai-core-node/.claude/star -maxdepth 3 -type f \( -iname '*grid*' -o -iname '*go*' -o -iname '*lock*' -o -iname '*coord*' -o -iname '*worker*' \) -printf '%TY-%Tm-%TdT%TH:%TM:%TS %s %p\\n' 2>/dev/null | sort -r | head -120; echo '=== END ==='",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 120
+}

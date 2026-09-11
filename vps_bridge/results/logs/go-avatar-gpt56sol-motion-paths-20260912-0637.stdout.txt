@@ -1,0 +1,251 @@
+
+### kopf-dreh hits= 17
+00113:   /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+00122:      geraten): #kopf-dreh drehte bisher um seine eigene Bildmitte (CSS-
+00131:   #kopf-dreh{transform-origin:50% 58.59%}
+00133:   #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+00145:      nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+00169:      also mit jeder Neigung/Drehung automatisch mit (siehe #kopf-dreh
+00254:      #kopf-dreh (50%/58.59% DER LEINWAND), aber umgerechnet in die eigene
+00258:      aus denselben Zahlen gerechnet, die #kopf-dreh oben schon benutzt. Sitzt
+00259:      der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+00349:           <div id="kopf-dreh">
+00360:                  deshalb liegen sie in #kopf-dreh auf derselben Leinwand. -->
+00365:                  #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+00657: // Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+00731: // liegt jetzt IN #kopf-dreh und bekommt darueber automatisch schon kDrehRot
+00744: //   (1) FALSCHES VORZEICHEN/DOPPELABZUG: #kopf-dreh vererbt kDrehRot per CSS
+00786:   $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+00848: // #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+
+### koerper-dreh hits= 7
+00113:   /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+00127:      weil Kopf und Koerper um verschiedene Punkte "dachten". #koerper-dreh
+00132:   #koerper-dreh{transform-origin:50% 100%}
+00133:   #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+00348:           <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+00657: // Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+00787:   $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+
+### pupillen-glow hits= 13
+00245:   /* ⭐ 2026-09-11 (Punkt 3 der Liste): kontinuierlicher Pupillen-Glow-Overlay
+00261:   #pupillen-glow{position:absolute;left:31%;top:12%;width:27%;height:auto;
+00268:      identische Prozente). Liegt als eigenes <img> UEBER #pupillen-glow, weil
+00271:      Aufmerksamkeit), waehrend #pupillen-glow weiter erkennungs-gekoppelt
+00365:                  #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+00375:             <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+00730: // ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+00788:   // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+00810: // echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+01102: // Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+01261: // immer, alle 1-4s) -- sichtbar wird sie trotzdem nur, wenn #pupillen-glow
+01307:   $("pupillen-glow").style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+01312:   $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+
+### augen-blink hits= 11
+00273:   #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+00365:                  #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+00376:             <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+00594: // dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+00730: // ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+00788:   // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+00795:   $("augen-blink").style.transform = `rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+01093: // Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+01118:     $("augen-blink").style.opacity = "0";
+01127:   $("augen-blink").src = BLINK_BILDER[frame];
+01128:   $("augen-blink").style.opacity = "1";
+
+### style.transform hits= 13
+00715:   $(ein).style.transform = _atmenTransform;
+00786:   $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+00787:   $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+00795:   $("augen-blink").style.transform = `rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+00870:     versteckt.style.transform = _atmenTransform;
+01307:   $("pupillen-glow").style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+01530: // Sonderausdrucks) auf style.transform/style.filter schreiben liess --
+01568:   $(kopfSichtbar).style.transform = transform;
+01587:   $(atmenAktivSchicht).style.transform = transform;
+01596:     $(ausdruckSichtbar).style.transform = transform;
+01629:   $(naechsteSchicht).style.transform = _atmenTransform;
+01748:   $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+01754:   $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+
+### setProperty hits= 0
+
+### rotate( hits= 11
+00034:   @keyframes kamera-overshoot{0%{transform:scale(1) rotate(0deg)}40%{transform:scale(1.006) rotate(.12deg)}100%{transform:scale(1) rotate(0deg)}}
+00117:      unten) darf hier eine kleine gefederte rotate()/translateY() setzen,
+00259:      der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+00374:                  (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+00658: // oben) bekommen eine kleine gefederte rotate()/translateY(). Feder statt
+00786:   $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+00787:   $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+00795:   $("augen-blink").style.transform = `rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+01304:   // ⭐⭐ 2026-09-11 NACHTRAG 4: rotate() dranhaengen (Rest-Ausgleich zur echten
+01307:   $("pupillen-glow").style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+01748:   $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+
+### translate( hits= 4
+00248:      per translate() verschoben, kein neues Bild pro Blickwinkel. Anchor aus
+01307:   $("pupillen-glow").style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+01748:   $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+01754:   $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+
+### scale( hits= 8
+00034:   @keyframes kamera-overshoot{0%{transform:scale(1) rotate(0deg)}40%{transform:scale(1.006) rotate(.12deg)}100%{transform:scale(1) rotate(0deg)}}
+00118:      OHNE die per-Frame scale()-Atmung auf #kopf-schicht/#koerper-schicht
+00194:   @keyframes pose-overshoot{0%{transform:scale(1)}40%{transform:scale(1.016)}100%{transform:scale(1)}}
+00309:   #senden:active{transform:scale(.96)}
+01526: // (6x scale()+saturate()+brightness() pro Frame ist trivial), sondern dass
+01553: let _atmenTransform = "scale(1)";
+01561:   const transform = `scale(${skala})`;
+01606: // bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+
+### breath hits= 0
+
+### atmen hits= 53
+00119:      in atmen() anzufassen -- zwei getrennte Transform-Ebenen, keine
+00150:   /* ⭐⭐ 2026-09-11 ECHTES ATMEN (Gabriel: "eins nach dem anderen", DIE eine
+00153:      fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png) werden
+00571: //   2. NIE GANZ STILL       -- unten, Erweiterung von atmen() (nicht dupliziert)
+00708:   // ⭐⭐ PERF-FIX 2026-09-11: atmen() aktualisiert seit diesem Fix nur noch
+00709:   // die aktuell sichtbare Kopf-Ebene (siehe atmen() oben) -- die Ebene, die
+00712:   // Wert von ihrem letzten Auftritt (Pop). _atmenTransform/_atmenFilter sind
+00713:   // von atmen() diesen Frame schon gesetzt (schleife() ruft atmen() vor
+00715:   $(ein).style.transform = _atmenTransform;
+00716:   $(ein).style.filter = _atmenFilter;
+00867:     // kopfRollTick() oben -- atmen() schreibt Transform/Filter nur noch auf
+00870:     versteckt.style.transform = _atmenTransform;
+00871:     versteckt.style.filter = _atmenFilter;
+01328: // Lebendigkeits-Baustein neben Blinzeln/Atmen/Drift/Wander-Blick, gleiche
+01394: // ── Buehnen-Animation: atmen, Datenregen (2 Ebenen = Parallaxe), Farbdrift,
+01459: // blinzeln()/atmen() lesen regenGedrosselt gar nicht erst.
+01501: // Sehr langsames Atmen, an den Puls-Takt (tempo, aus broadcast_value)
+01527: // atmen() bisher alle 6 Ebenen (inkl. beider "2"-Zwillinge, die 4 von 6
+01541: // zuletzt berechneten Werte liegen in _atmenTransform/_atmenFilter global
+01546: // den atmen() diesen Frame sowieso schon fuer die bis dahin sichtbare Ebene
+01547: // gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+01553: let _atmenTransform = "scale(1)";
+01554: let _atmenFilter = "saturate(1.05) brightness(1)";
+01555: function atmen(){
+
+### shoulder hits= 0
+
+### gaze hits= 24
+00252:      gazeSchritt() unten. "nichts erfinden": ohne echte Erkennung kein Glow. */
+00267:      dieselbe Geometrie/Verankerung wie der /augen_gaze/-Flicken oben, deshalb
+00375:             <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+00810: // echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+00851: // Erkennungs-Glimmer unterdrueckt (gazeSchritt() prueft _sonderLaeuft) --
+01198: // Glimmer-Spielraum wie bisher (siehe maxPx in gazeSchritt()), nur ein
+01209: function gazeBasisSichtbar(){
+01222:   if(gazeBasisSichtbar() && gespraechsFokus !== "thema"){
+01242: let zielGazeX = 0.5, zielGazeY = 0.5;
+01243: let aktGazeX = 0.5, aktGazeY = 0.5;
+01244: let gazeSichtbar = false;
+01260: // jede Kopplung an serverBlick/gazeSichtbar in der Ausloesung selbst (laeuft
+01290: function gazeZielBestimmen(){
+01291:   if(!gazeBasisSichtbar()) return {x:0.5, y:0.5, opazitaet:0};
+01296: function gazeSchritt(){
+01297:   const ziel = gazeZielBestimmen();
+01298:   zielGazeX = ziel.x; zielGazeY = ziel.y;
+01299:   aktGazeX += (zielGazeX - aktGazeX) * 0.07;
+01300:   aktGazeY += (zielGazeY - aktGazeY) * 0.07;
+01302:   const dx = (aktGazeX - 0.5) * 2 * maxPx + mikroSakX;
+01303:   const dy = (aktGazeY - 0.5) * 2 * maxPx + BLICK_ABWAERTS_BIAS_PX + mikroSakY;
+01311:   gazeSichtbar = ziel.opazitaet > 0; // Rueckwaertskompatibilitaet: anderswo evtl. gelesen
+01367:   // Mikro-Pause), wird jetzt PRO FRAME in gazeZielBestimmen()/gazeSchritt()
+01784:   gazeSchritt();
+
+### blick hits= 88
+00191:   /* Overshoot-Bewegung fuer echte Kopf-/Blick-/Ausdruckswechsel (siehe
+00246:      ueber der bestehenden diskreten Blickrichtung (7-Bilder-Wechsel bleibt
+00248:      per translate() verschoben, kein neues Bild pro Blickwinkel. Anchor aus
+00250:      Prozent der Bildflaeche. Sichtbar NUR wenn blick.py wirklich ein nahes
+00251:      Gesicht meldet (serverBlick.anwesend && .nah) -- sonst opacity 0, siehe
+00270:      Gesichtserkennung (Blinzeln ist kein Blick -- es behauptet keine
+00526:           gespraechsFokusSetzen(z.text); // ⭐ NEU 2026-09-11: Blick-Politik, siehe Definition unten
+00572: //   3. DER BLICK LEBT       -- unten, wanderSchritt()/reaktionAufNeuenStatus()
+00574: // Harte Grenze (Gabriel woertlich): "nichts erfinden. Der Blick geht nur
+00576: // kommt "anwesend"/"richtung" NUR aus /api/status -> buehne.blick (echte
+00577: // Gesichtserkennung in blick.py), niemals lokal erfunden.
+00581:   geradeaus:"01_geradeaus_kamera", links:"02_blick_links", rechts:"03_blick_rechts",
+00582:   oben:"04_blick_oben", unten:"05_blick_unten",
+00583:   links_oben:"06_blick_links_oben", rechts_oben:"07_blick_rechts_oben"
+00643: // Blinzeln > Blick abseits der Mitte > Ausdruck. Blinzeln ist eine
+00644: // Grundfunktion (darf immer laufen), der Blick ist die naechst-sichtbarste
+00647: let aktuelleBlickRichtung = "geradeaus";
+00664: // Behauptung ueber Blick/Ausdruck -- faellt unter die GEMESSEN-Ausnahme.
+00741: // liveblick_10/11.png vom Koordinator, live reproduziert allein mit der
+00804: // KEINE RGBA-Entsprechung fuer Blinzeln/Blickrichtung/Kopfneigung/6
+00809: // DOM) bleiben die sichtbare Dauerebene, das Blick-/Mundsignal kommt weiter
+00814: // Blick/Ausdruck aendern, auch ohne dass ein Bild dafuer existiert. Diese
+00819:   const signatur = `${blinzelPhase}|${aktuelleBlickRichtung}|${kopfPose}|${aktuellerAusdruck}`;
+01137: // 3) DER BLICK LEBT -- niemand da: langsames, zielloses Wandern mit langen
+
+### blink hits= 20
+00020:     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,sans-serif;
+00044:     box-shadow:0 0 8px var(--rot);animation:blink 1.6s infinite}
+00045:   @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+00266:      Zwischenbildern (/augen_blink/blink_000..011.png, 319x152 RGBA -- exakt
+00273:   #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+00365:                  #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+00376:             <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+00594: // dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+00595: const BLINK_BILDER = Array.from({length:12}, (_,i) =>
+00596:   `/augen_blink/blink_${String(i).padStart(3,"0")}.png`);
+00597: BLINK_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+00730: // ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+00788:   // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+00795:   $("augen-blink").style.transform = `rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+01091: // Lidbilder (/augen_blink/blink_000..011.png, gemessen: 00 offen -> 08
+01093: // Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+01118:     $("augen-blink").style.opacity = "0";
+01127:   $("augen-blink").src = BLINK_BILDER[frame];
+01128:   $("augen-blink").style.opacity = "1";
+01860: // EINEN einzelnen Blink aus (zeitplanNeu=false -- dieselbe Einmal-Kette wie
+
+### crossfade hits= 12
+00176:   /* ⭐ 2026-09-11 Crossfade (Gabriel: "smooth ... uncanny in jeder Hinsicht" --
+00354:                  #kopf-schicht2 ist das zweite Crossfade-Bild, gleiches Muster
+00464: // mit echten Einzelbildern statt Opacity-Crossfade (hier gibt es ja bereits
+00672: // mit kurzem Crossfade zwischen #kopf-schicht/#kopf-schicht2 dorthin, haelt,
+00798: // ⭐ 2026-09-11 Crossfade statt hartem g.src=neu: ausdruckAktiv zeigt, welches
+01333: // Tick). Dank Crossfade jetzt weich statt Bildsprung.
+01543: // opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+01585:   // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+01607: // Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+01621: function koerperCrossfade(src){
+01685:     koerperCrossfade(a.bilder[a.idx]);
+01697:   koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+
+### opacity hits= 38
+00045:   @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+00069:     object-fit:cover;opacity:.85;transition:opacity .6s ease-in-out;
+00072:     mix-blend-mode:screen;opacity:.30}
+00149:   #kopf-schicht2,#ausdruck-schicht2,#ausdruck-schicht{opacity:0}
+00155:      unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */
+00156:   #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+00157:   #koerper-schicht2{opacity:0}
+00178:      gestapelte <img> statt einem: #gesicht + #gesicht2, per opacity
+00197:     opacity:.55;z-index:3}
+00244:     transition:opacity .06s linear}
+00251:      Gesicht meldet (serverBlick.anwesend && .nah) -- sonst opacity 0, siehe
+00263:     z-index:4;pointer-events:none;opacity:0;
+00264:     transition:opacity .35s ease-in-out;will-change:transform}
+00275:     z-index:4;pointer-events:none;opacity:0}
+00287:   @keyframes einblenden{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+00464: // mit echten Einzelbildern statt Opacity-Crossfade (hier gibt es ja bereits
+00717:   $(ein).style.opacity = "1";
+00718:   $(aus).style.opacity = "0";
+00801: // neu befuellt und per opacity eingeblendet, das bisher sichtbare
+00859:   $("mund-effekt").style.opacity = "0";
+00872:     versteckt.style.opacity = "1";
+00873:     sichtbar.style.opacity = "0";
+00883:     $("ausdruck-schicht").style.opacity = "0";
+00884:     $("ausdruck-schicht2").style.opacity = "0";
+
+=== SCRIPT REGION INDEX ===
+402 <script>
+1900 </script>
+1908   <script src="/filmlook.js"></script>

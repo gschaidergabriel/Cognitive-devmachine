@@ -1,0 +1,297 @@
+MEMBER COMBINED_HANDOFF_20260911T184549Z/ROUND1_EXPORT_20260911T184549Z/source/buehne.html LINES 1910
+===RANGE 720-810===
+00720:   kopfRollWert = schritt.w;
+00721:   kopfRollIdx++;
+00722:   if(kopfRollIdx >= kopfRollSchritte.length){
+00723:     const f = kopfRollFertigFn;
+00724:     kopfRollSchritte = null; kopfRollFertigFn = null;
+00725:     if(f) f();
+00726:   }
+00727: }
+00728: let kDrehRot=0, kDrehRotV=0, kDrehTy=0, kDrehTyV=0;   // Kopf-Wrapper: Wert+Geschwindigkeit
+00729: let bDrehRot=0, bDrehRotV=0, bDrehTy=0, bDrehTyV=0;   // Koerper-Wrapper: eigene, weichere Feder
+00730: // ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+00731: // liegt jetzt IN #kopf-dreh und bekommt darueber automatisch schon kDrehRot
+00732: // (die kleine, gedaempfte Feder, max ±3°) mit. Das reicht bei einer ECHTEN
+00733: // Rollpose (bis ±25°, siehe KOPF_ROLL_POOL) nicht -- die Feder zielt bewusst
+00734: // nur auf 12% des Rollwerts, weil das FOTO selbst schon kippt. Der Flicken
+00735: // braucht den FEHLENDEN Rest (Rollwert minus das, was die Feder schon liefert)
+00736: // als EIGENE Zusatzdrehung, um genau auf dem echten Fotowinkel zu landen --
+00737: // gerechnet um denselben Halsanker (transform-origin oben, exakt umgerechnet).
+00738: //
+00739: // ⭐⭐⭐ 2026-09-11 STIRN-LUECKE GEFIXT (Animations-Agent, dritte Instanz
+00740: // derselben Fehlerklasse wie Halsnaht/Geisterkopf -- Beleg: Screenshots
+00741: // liveblick_10/11.png vom Koordinator, live reproduziert allein mit der
+00742: // 'k'-Testtaste, siehe /tmp/t3_02_supermacro.png/t3_03_supermacro.png im
+00743: // Bericht). ZWEI Fehler in der alten Formel `kopfRollWert - kDrehRot`:
+00744: //   (1) FALSCHES VORZEICHEN/DOPPELABZUG: #kopf-dreh vererbt kDrehRot per CSS
+00745: //       AUTOMATISCH an ALLE Kinder -- also auch an den Flicken UND ans
+00746: //       Kopf-Foto gleichermassen. Die Gesamtdrehung des Fotos ist deshalb
+00747: //       kopfRollWert(eingebrannt) + kDrehRot(Wrapper). Fuer denselben
+00748: //       Gesamtwert beim Flicken (eigene Drehung + geerbtes kDrehRot vom
+00749: //       selben Wrapper) muss die EIGENE Drehung exakt kopfRollWert sein --
+00750: //       kDrehRot kuerzt sich rechnerisch von selbst weg, ihn nochmal
+00751: //       abzuziehen zieht ihn ZWEIMAL ab. Ergebnis vorher: der Flicken lag
+00752: //       bei JEDER Kopfneigung (auch der kleinen Idle-Feder, nicht nur bei
+00753: //       einer echten Rollpose) um kDrehRot Grad (bis 3°) hinter dem echten
+00754: //       Fotowinkel zurueck -- bei diesem weit aussenliegenden Drehpunkt
+00755: //       (transform-origin ~2,4 Patch-Hoehen unterhalb der Box, siehe oben)
+00756: //       schon das ein dauerhafter, wenn auch kleiner, Px-Versatz.
+00757: //   (2) HARTER SPRUNG OHNE DAEMPFUNG: kopfRollWert selbst springt bei jedem
+00758: //       kopfRollTick()-Schritt hart um 5° (neues Foto -- das braucht keine
+00759: //       Weichzeichnung, ein neues Foto sieht wie ein neues Foto aus). Der
+00760: //       kleine, aber stark gehebelte Flicken macht aus genau diesem
+00761: //       5°-Sprung einen sichtbaren Pop: bei ~2,4 Patch-Hoehen Hebelarm
+00762: //       reisst ein 5°-Sprung den Flicken um zweistellige Px auf der
+00763: //       Leinwand weg vom Gesicht -- fuer die ~110ms bis zum naechsten
+00764: //       Schritt/bis die Feder aufholt genau die "Stirn hochgeschobene
+00765: //       Maske"-Optik aus dem Befund. Fix: kopfRollAusgleichDeg ist jetzt
+00766: //       eine geglaettete ANZEIGE (schneller Lerp, 0.4/Frame -- faengt sich
+00767: //       in 2-3 Frames/<50ms, folgt dem echten Fotowinkel praktisch in
+00768: //       Echtzeit, aber ohne den harten Ruck), die auf das jetzt korrekte
+00769: //       Ziel (kopfRollWert, ohne Abzug) zulaeuft.
+00770: let kopfRollAusgleichDeg = 0;
+00771: function federSchritt(ist, v, ziel, steife, daempfung){
+00772:   v += (ziel - ist) * steife - v * daempfung;
+00773:   ist += v;
+00774:   return [ist, v];
+00775: }
+00776: function kopfKoerperDrehSchritt(){
+00777:   // Federziel aus dem ECHTEN Rollwert (12% davon, auf ±3° begrenzt) -- die
+00778:   // Bildpose macht die Neigung, die Feder nur das kleine Nachschwingen.
+00779:   const zielRot = Math.max(-3, Math.min(3, kopfRollSoll * 0.12));
+00780:   [kDrehRot, kDrehRotV] = federSchritt(kDrehRot, kDrehRotV, zielRot, 0.020, 0.20);
+00781:   [kDrehTy,  kDrehTyV ] = federSchritt(kDrehTy,  kDrehTyV,  0,      0.020, 0.20);
+00782:   // 34% des AKTUELLEN (nicht Ziel-)Kopfwerts + eigene weichere Feder =
+00783:   // Koerper folgt spaeter und schwaecher, ohne starren festen Versatz.
+00784:   [bDrehRot, bDrehRotV] = federSchritt(bDrehRot, bDrehRotV, kDrehRot*0.34, 0.010, 0.26);
+00785:   [bDrehTy,  bDrehTyV ] = federSchritt(bDrehTy,  bDrehTyV,  kDrehTy*0.34,  0.010, 0.26);
+00786:   $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+00787:   $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+00788:   // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+00789:   // (STIRN-LUECKE-FIX): Ziel ist jetzt kopfRollWert selbst (kDrehRot kuerzt
+00790:   // sich per CSS-Vererbung von selbst weg, siehe Kommentar), UND geglaettet
+00791:   // per Lerp statt hartem Sprung -- entkoppelt den Flicken vom 5°-Sprung
+00792:   // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel
+00793:   // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).
+00794:   kopfRollAusgleichDeg += (kopfRollWert - kopfRollAusgleichDeg) * 0.4;
+00795:   $("augen-blink").style.transform = `rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+00796: }
+00797: 
+00798: // ⭐ 2026-09-11 Crossfade statt hartem g.src=neu: ausdruckAktiv zeigt, welches
+00799: // der zwei gestapelten RGBA-Bilder (#ausdruck-schicht/#ausdruck-schicht2)
+00800: // gerade OBEN/sichtbar ist. Beim Wechsel wird das jeweils versteckte Element
+00801: // neu befuellt und per opacity eingeblendet, das bisher sichtbare
+00802: // ausgeblendet -- kein Bildsprung.
+00803: // ⭐ 2026-09-11 (Bauauftrag Kopf-RGBA-Hauptebene): #gesicht/#gesicht2 haben
+00804: // KEINE RGBA-Entsprechung fuer Blinzeln/Blickrichtung/Kopfneigung/6
+00805: // Grundstimmungen -- diese vier Zweige (/augen/, /kopf/, /ausdruck/) sind
+00806: // alte, opake, vorkomponierte Einzelbilder, die den jetzt durchscheinenden
+00807: // Hintergrund wieder komplett verdecken wuerden. Deshalb tauscht diese
+00808: // Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+00809: // DOM) bleiben die sichtbare Dauerebene, das Blick-/Mundsignal kommt weiter
+00810: // echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+===RANGE 1510-1650===
+01510: // Kommentar bei gesichtNeuZeichnen() oben -- offene Luecke, schon gemeldet).
+01511: // Ein erfundenes Stufenbild waere eine erfundene Ausdrucks-AENDERUNG, keine
+01512: // Leerlaufbewegung -- verboten. Stattdessen: der GEIST des Auftrags auf dem
+01513: // bereits echten, bereits sichtbaren Atem-Puls oben -- ein winziger, LANGSAM
+01514: // und UNREGELMAESSIG wandernder Zusatz-Faktor (Random Walk, kein fester
+01515: // Takt), der die Helligkeit minimal mitzittern laesst. Kein neuer Zustand,
+01516: // keine neue Bildquelle -- nur mehr Unregelmaessigkeit auf echter, schon
+01517: // gerenderter Bewegung.
+01518: let _mikroUnruhe = 0, _mikroUnruheZiel = 0;
+01519: setInterval(() => { _mikroUnruheZiel = (Math.random()*2 - 1); }, 2600 + Math.random()*3200);
+01520: // ⭐⭐⭐ 2026-09-11 PERF-FIX (Koordinator-Auftrag, fps 35-45 statt >45, unter
+01521: // erzwungenem Software-Rendering -- siehe --disable-gpu in buehne_daemon.py,
+01522: // Grund dort dokumentiert: echter Speicherkonflikt mit llama-server -ngl 99
+01523: // auf der geteilten iGPU, PERMISSION_FAULTS/MAPPING_ERROR in dmesg, kein
+01524: // bloss abwaegbares Budget -- GPU-Kompositing bleibt deshalb AUS, dieser
+01525: // Pfad wird nicht wieder angefasst). Ursache war NICHT das Rechnen selbst
+01526: // (6x scale()+saturate()+brightness() pro Frame ist trivial), sondern dass
+01527: // atmen() bisher alle 6 Ebenen (inkl. beider "2"-Zwillinge, die 4 von 6
+01528: // Framezeiten lang komplett unsichtbar sind: kopf-schicht2 ausser waehrend
+01529: // einer Rollpose, ausdruck-schicht/-schicht2 ausser waehrend eines seltenen
+01530: // Sonderausdrucks) auf style.transform/style.filter schreiben liess --
+01531: // jeder Schreibzugriff auf transform/filter stoesst unter Software-Rendering
+01532: // eine erneute Rasterung der vollen 1536x1024-RGBA-Ebene an, UNABHAENGIG von
+01533: // opacity:0 (der Browser kompositiert die Ebene nicht sichtbar, aber die
+01534: // Filter-Pipeline muss trotzdem neu gerechnet werden, weil die Property sich
+01535: // geaendert hat). Fix: nur die AKTUELL SICHTBARE Ebene jedes Zwillingspaars
+01536: // bekommt den Schreibzugriff -- aus max. 6 Style-Writes/Frame werden 2-3 (Kopf
+01537: // + Koerper immer, Ausdruck nur waehrend _sonderLaeuft). Der urspruengliche
+01538: // Zweck dieser Zeilen (keine Stale-Werte beim naechsten Hart-Cut-Einblenden,
+01539: // siehe Kommentar am Dateianfang zu diesem Fund) bleibt vollstaendig erhalten
+01540: // -- nicht durch Weglassen geloest, sondern durch VORSYNCHRONISIEREN: die
+01541: // zuletzt berechneten Werte liegen in _atmenTransform/_atmenFilter global
+01542: // bereit, und jede Stelle, die eine bisher versteckte Zwillings-Ebene per
+01543: // opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+01544: // wechsel()-Funktion in sonderausdruckZeigen()), schreibt diese Werte JETZT
+01545: // EINMALIG auf die Ebene, BEVOR sie opacity:1 bekommt -- exakt derselbe Wert,
+01546: // den atmen() diesen Frame sowieso schon fuer die bis dahin sichtbare Ebene
+01547: // gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+01548: // auf, siehe unten -- die Werte sind also brandaktuell, kein Frame Verzug).
+01549: // Ergebnis: kein Pop (die neue Ebene traegt beim ersten sichtbaren Frame
+01550: // exakt denselben Skala-/Helligkeitswert wie ihr Zwilling im Frame davor),
+01551: // aber die vier meiste Zeit unsichtbaren Ebenen werden NICHT mehr pro Frame
+01552: // angefasst.
+01553: let _atmenTransform = "scale(1)";
+01554: let _atmenFilter = "saturate(1.05) brightness(1)";
+01555: function atmen(){
+01556:   atemPhase += 0.006 * Math.max(0.4, Math.min(1.6, tempo));
+01557:   _mikroUnruhe += (_mikroUnruheZiel - _mikroUnruhe) * 0.02; // sehr langsam, kein Sprung
+01558:   const auf = (Math.sin(atemPhase) * 0.5) + 0.5; // 0..1
+01559:   const skala = 1 + auf * 0.012;
+01560:   const helligkeit = 1 + (auf - 0.5) * 0.03 + _mikroUnruhe * 0.006;
+01561:   const transform = `scale(${skala})`;
+01562:   const filter = `saturate(1.05) brightness(${helligkeit})`;
+01563:   _atmenTransform = transform;
+01564:   _atmenFilter = filter;
+01565:   // Kopf: nur die gerade sichtbare der beiden Ebenen (kopfRollAktiv siehe
+01566:   // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+01567:   const kopfSichtbar = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+01568:   $(kopfSichtbar).style.transform = transform;
+01569:   $(kopfSichtbar).style.filter = filter;
+01570:   // ⭐⭐ 2026-09-11 NACHTRAG 3 (Koordinator meldet Halsnaht-Rutschen, Gabriel
+01571:   // hat 3 Screenshots geschickt): Kopf skalierte 1.000->1.012->1.000 pro
+01572:   // Atemzug, Koerper blieb starr bei 1.0 (siehe Kommentar oben, bewusst
+01573:   // entfernt wegen "doppeltem Atmen"). Ergebnis: Kopf wird am Atem-Peak
+01574:   // relativ zum starren Koerper 1,2% groesser -- die Halskante (wo Kopf-
+01575:   // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+01576:   // Halsmaske oben) rutscht auf jedem Atemzug leicht -- unsichtbar im
+01577:   // Standbild (Koordinator hat das geprueft), sichtbar in Bewegung.
+01578:   // FIX (a) aus dem Koordinator-Auftrag, kleinste/sicherste Variante: der
+01579:   // Koerper bekommt DENSELBEN Transform+Filter wie der Kopf -- beide
+01580:   // skalieren/hellen im GLEICHEN Takt, die Halskante bleibt an derselben
+01581:   // Relativstelle. Der Koerper "atmet" dadurch zusaetzlich zu seinen 12
+01582:   // fotografierten Stufen leicht mit (max +1,2% Groesse) -- das ist die
+01583:   // Halskante wert; ein rutschender Kragen war das schlimmere Artefakt.
+01584:   // Nur die aktuell sichtbare Koerper-Ebene (atmenAktivSchicht, siehe
+01585:   // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+01586:   // beim Kopf oben.
+01587:   $(atmenAktivSchicht).style.transform = transform;
+01588:   $(atmenAktivSchicht).style.filter = filter;
+01589:   // Ausdruck-Ebenen sind ausserhalb eines Sonderausdrucks BEIDE opacity:0 --
+01590:   // dann gibt es nichts zu synchronisieren, kein Pop-Risiko (nichts sichtbar).
+01591:   // Waehrend eines Sonderausdrucks bekommt nur die per ausdruckAktiv aktuell
+01592:   // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+01593:   // fuer die Vor-Synchronisation der jeweils anderen beim Einblenden).
+01594:   if(_sonderLaeuft){
+01595:     const ausdruckSichtbar = ausdruckAktiv === 1 ? "ausdruck-schicht" : "ausdruck-schicht2";
+01596:     $(ausdruckSichtbar).style.transform = transform;
+01597:     $(ausdruckSichtbar).style.filter = filter;
+01598:   }
+01599: }
+01600: 
+01601: // ⭐⭐ 2026-09-11 ECHTES KOERPER-ATMEN (Gabriel, woertlich: "eins nach dem
+01602: // anderen" -- DIE eine Sache fuer diesen Schritt, nichts anderes gleichzeitig).
+01603: // 12 echte fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png,
+01604: // laut Dateibenennung eine VOLLSTAENDIGE Ein-und-Ausatmung -- deshalb einfach
+01605: // im Kreis 0->11->0 durchlaufen, kein Hin-und-Her-Pingpong noetig) statt der
+01606: // bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+01607: // Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+01608: // (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+01609: // #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+01610: // pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+01611: // ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+01612: // koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+01613: // spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+01614: const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+01615:   `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+01616: ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+01617: const ATMEN_MS_PRO_BILD = 330;
+01618: let atmenIndex = 0;
+01619: let atmenLetzterWechsel = 0;
+01620: let atmenAktivSchicht = "koerper-schicht";
+01621: function koerperCrossfade(src){
+01622:   const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+01623:   $(naechsteSchicht).src = src;
+01624:   // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+01625:   // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+01626:   // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+01627:   // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+01628:   // brandaktuellen Wert -- sonst Pop beim Umschalten.
+01629:   $(naechsteSchicht).style.transform = _atmenTransform;
+01630:   $(naechsteSchicht).style.filter = _atmenFilter;
+01631:   $(naechsteSchicht).style.opacity = 1;
+01632:   $(atmenAktivSchicht).style.opacity = 0;
+01633:   atmenAktivSchicht = naechsteSchicht;
+01634: }
+01635: // ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+01636: // Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+01637: // ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+01638: // schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+01639: // Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+01640: // Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+01641: // wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+01642: // seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+01643: // monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+01644: const KOERPER_AKTIONEN = [
+01645:   { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+01646:       `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+01647:   { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+01648:       `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+01649:   { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+01650:       "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+===RANGE 1710-1770===
+01710: //     jetzt auf die ganze Kamera statt nur auf #gesicht verschoben.
+01711: //  2) schnelles Mikro-Zittern (~8-12Hz, <1px) -- der Muskelzittern-Anteil
+01712: //     einer echten Hand, zwei knapp benachbarte Sinusfrequenzen statt einer
+01713: //     einzelnen, damit es nicht mechanisch/taktfest wirkt.
+01714: //  3) minimale Rotation (Bruchteile eines Grads) -- eine Hand kippt nie rein
+01715: //     linear.
+01716: // Hintergrund bewegt sich absichtlich einen Hauch WENIGER als der Rest
+01717: // (0.85x) -- winziger Parallaxe-Tiefenhinweis, siehe Koordinator ("optional:
+01718: // Hintergrund bewegt sich minimal weniger als der Vordergrund").
+01719: // ⭐⭐ 2026-09-11 RETUNE nach Gabriels Live-Urteil ("er zittert, schaut
+01720: // relativ shit aus"): die 8-10Hz-Mikrozitter-Komponente unten war zu schnell
+01721: // UND zu stark -- auf einem kleinen Panel (~296px breit), mit dem neuen
+01722: // engeren Kopf-Crop, UND auf einem Chrome-Fenster ohne GPU-Kompositing
+01723: // (--disable-gpu, siehe Fensterstart) liest sich eine 8-10Hz-Oszillation
+01724: // nicht als sanftes Handzittern, sondern als sichtbares Vibrieren/Ruckeln --
+01725: // das Auge ist fuer zeitliches Flackern empfindlicher als fuer die reine
+01726: // Pixelamplitude. Fix: Frequenz UND Amplitude aller drei Komponenten deutlich
+01727: // gesenkt (Tremor von ~10/8Hz auf ~3/2.3Hz, Drift/Rotation-Amplitude
+01728: // grob halbiert). Ziel ist jetzt spuerbar ruhiger -- lieber zu wenig als
+01729: // wieder "zittert".
+01730: let driftPhaseX = Math.random() * Math.PI * 2;
+01731: let driftPhaseY = Math.random() * Math.PI * 2;
+01732: let tremorPhaseA = Math.random() * Math.PI * 2;
+01733: let tremorPhaseB = Math.random() * Math.PI * 2;
+01734: let rotPhase = Math.random() * Math.PI * 2;
+01735: function kameraWackeln(){
+01736:   const t = Math.max(0.4, Math.min(1.6, tempo)); // "passend zur Bewegung": etwas mehr Schub bei hoeherem Tempo
+01737:   driftPhaseX += 0.0131; // ~8.0s Periode bei 60fps (war ~4.0s)
+01738:   driftPhaseY += 0.0105; // ~9.6s Periode -- absichtlich versetzt zu X (war ~4.9s)
+01739:   tremorPhaseA += 0.314;  // ~3Hz (war ~10Hz)
+01740:   tremorPhaseB += 0.251;  // ~2.4Hz, knapp daneben statt exakt gleich (war ~8Hz)
+01741:   rotPhase += 0.0063;     // ~16s Periode, noch langsamer als die Drift (war ~8.3s)
+01742:   const driftX = Math.sin(driftPhaseX) * 0.7 * t;
+01743:   const driftY = Math.cos(driftPhaseY) * 0.55 * t;
+01744:   const tremorX = (Math.sin(tremorPhaseA) * 0.14 + Math.sin(tremorPhaseB) * 0.09) * t;
+01745:   const tremorY = (Math.cos(tremorPhaseA * 0.97) * 0.12 + Math.cos(tremorPhaseB * 1.05) * 0.07) * t;
+01746:   const rotDeg = Math.sin(rotPhase) * 0.06 * t;
+01747:   const x = driftX + tremorX, y = driftY + tremorY;
+01748:   $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+01749:   // Hintergrund bekommt denselben Wackel, aber 0.85x gedaempft -- winzige
+01750:   // Parallaxe, das Bild wirkt nicht wie eine starre Fotomontage auf dem
+01751:   // Hintergrund geklebt. #hg-frame ist Kind von #kamera -- dieser Transform
+01752:   // addiert sich zu dem der Kamera, deshalb hier bewusst der GEGEN-Anteil
+01753:   // (0.85-1 = -0.15x) statt des vollen Werts.
+01754:   $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+01755: }
+01756: // ⭐ Nachschwung bei echten Zustandswechseln (Kopfdrehung/Ausdruck/Blick) --
+01757: // dieselbe Overshoot-Mechanik wie #gesicht-rahmen.pose-wechsel, jetzt auf
+01758: // #kamera: die Kamera "haengt" kurz nach und faengt sich dann leicht ueber,
+01759: // wie eine echte Hand, die einer Bewegung folgt (Gabriel: "passend zur
+01760: // Bewegung"). Siehe gesichtNeuZeichnen() weiter oben, ruft dies bei
+01761: // echten Zustandswechseln auf.
+01762: function kameraNachschwung(){
+01763:   const kamera = $("kamera");
+01764:   kamera.classList.remove("kamera-wechsel");
+01765:   requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+01766:   setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+01767: }
+01768: 
+01769: let letzteFrames = [];
+01770: function fpsMessen(t){

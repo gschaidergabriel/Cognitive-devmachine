@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-vps-bridge-user-audit-20260912-0626",
+  "op": "exec",
+  "command": "set -euo pipefail; ssh -o BatchMode=yes -o ConnectTimeout=5 root@72.61.19.188 'set -u; PID=$(pgrep -f \"/srv/claylab/git-bridge/bridge_daemon.py\" | head -1); echo PID=$PID; ps -o user=,uid=,gid=,pid=,ppid=,lstart=,cmd= -p \"$PID\"; echo ===PROC_STATUS===; grep -E \"^(Uid|Gid):\" /proc/$PID/status; echo ===CWD===; readlink -f /proc/$PID/cwd; echo ===DAEMON_HEAD===; sed -n \"1,115p\" /srv/claylab/git-bridge/bridge_daemon.py | grep -E \"BASE =|CONTROL =|RESULTS =|WORK =|STATE_DB|CONTROL_BRANCH|RESULTS_BRANCH|def git|subprocess|cwd|env\"; echo ===MIRRORS===; for d in /srv/claylab/control-mirror /srv/claylab/results-mirror /srv/claylab/workspace/research-entity /srv/claylab/git-bridge/control-mirror /srv/claylab/git-bridge/results-mirror; do if [ -d \"$d/.git\" ]; then echo ---$d; git -C \"$d\" remote -v; git -C \"$d\" status --short --branch; fi; done; echo ===AUTH_ROOT===; timeout 7 ssh -T -o BatchMode=yes -o ConnectTimeout=5 git@github.com 2>&1 | head -4 || true; echo ===AUTH_CLAYLAB===; timeout 7 runuser -u claylab -- ssh -T -o BatchMode=yes -o ConnectTimeout=5 git@github.com 2>&1 | head -4 || true; echo ===END==='",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 90
+}

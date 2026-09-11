@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-vps-bridge-env-remote-audit-20260912-0626",
+  "op": "exec",
+  "command": "set -euo pipefail; ssh -o BatchMode=yes -o ConnectTimeout=5 root@72.61.19.188 'set -u; PID=$(pgrep -f \"/srv/claylab/git-bridge/bridge_daemon.py\" | head -1); echo ===PROC_ENV_SAFE===; tr \"\\0\" \"\\n\" < /proc/$PID/environ | grep -E \"^(HOME|USER|LOGNAME|PATH|GIT_SSH_COMMAND|SSH_AUTH_SOCK)=\" || true; echo ===PASSWD_HOME===; getent passwd claylab | cut -d: -f1,6,7; echo ===MIRROR_OWNERS===; stat -c \"%U:%G %a %n\" /srv/claylab/control-mirror /srv/claylab/results-mirror; echo ===REMOTES_AS_CLAYLAB===; for d in /srv/claylab/control-mirror /srv/claylab/results-mirror; do echo ---$d; runuser -u claylab -- git -C \"$d\" remote -v; runuser -u claylab -- git -C \"$d\" config --get core.sshCommand || true; runuser -u claylab -- git -C \"$d\" status --short --branch; done; echo ===FETCH_TEST_AS_CLAYLAB===; runuser -u claylab -- git -C /srv/claylab/control-mirror fetch origin chatgpt-vps-control --prune 2>&1; echo FETCH_RC=$?; echo ===END==='",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 90
+}

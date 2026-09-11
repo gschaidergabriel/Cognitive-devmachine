@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "go-avatar-c0dd67ea-layout-look-ranges",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('/workspace/go-avatar-candidate-c0dd67ea/COMBINED_HANDOFF_20260911T184549Z/ROUND1_EXPORT_20260911T184549Z/source/buehne.html')\ns=p.read_text().splitlines()\nfor a,b in [(1,220),(330,390),(1380,1510),(1880,1910)]:\n print(f'===RANGE {a}-{b}===')\n for i in range(a-1,min(b,len(s))): print(f'{i+1:05d}: {s[i]}')\nf=p.with_name('filmlook.js').read_text().splitlines()\nprint('===FILMLOOK===')\nfor i,x in enumerate(f,1): print(f'{i:05d}: {x}')\nPY"
+}

@@ -1,0 +1,1160 @@
+=== HTML 450-560 mouth/timers ===
+   450	const MUND_SPRECH_SET = ["mund_03_a_small","mund_04_a_medium","mund_06_e",
+   451	  "mund_07_i","mund_08_o_small","mund_09_o_medium","mund_11_u","mund_01_closed_mbp"];
+   452	const MUND_RUHE = "mund_00_rest";
+   453	// ⭐⭐ 2026-09-11 MUNDUEBERGAENGE (Koordinator, "die naechste eine Sache"):
+   454	// mund_keyframes/ hat jetzt zu jeder Grundstellung 5 echte Zwischenbilder
+   455	// (mund_NN_name__stufe_00..04.png -- fotografierte Bewegung ZUR Stellung hin,
+   456	// nicht irgendein generischer Gradient). Bisher sprang mundAnimation() hart
+   457	// zwischen Grundstellungen; jetzt spielt sie beim Wechsel zu einer neuen
+   458	// Zielstellung deren 5 Stufenbilder ab (+ das Zielbild selbst = 6 echte
+   459	// Frames), bevor sie dort haengen bleibt bis zum naechsten Taktschlag. Das
+   460	// macht aus dem Sprung eine Bewegung, OHNE die Silbentakt-Schaetzung selbst
+   461	// anzufassen (Koordinator woertlich: "Takt bleibt vorerst die bestehende
+   462	// Silbenschaetzung"). Abgespielt wird ueber mundSchritt() unten, angestossen
+   463	// von schleife(t) -- gleiches Bauprinzip wie koerperSchritt() oben, nur
+   464	// mit echten Einzelbildern statt Opacity-Crossfade (hier gibt es ja bereits
+   465	// fotografierte Zwischenschritte, kein Blending zweier Texturen noetig --
+   466	// genau das Problem, das bei der Halsnaht-Maske schiefging).
+   467	// ⚠️ Speicher: es werden NUR die Grundstellungen aus MUND_SPRECH_SET+MUND_RUHE
+   468	// UND deren je 5 Stufenbilder vorgeladen (9 Stellungen x 6 Bilder = 54),
+   469	// nicht alle 221 Dateien in mund_keyframes/.
+   470	function mundFrames(name){
+   471	  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+   472	    .concat([`/mund_keyframes/${name}.png`]);
+   473	}
+   474	const MUND_ALLE_STELLUNGEN = MUND_SPRECH_SET.concat([MUND_RUHE]);
+   475	for(const n of MUND_ALLE_STELLUNGEN){
+   476	  for(const src of mundFrames(n)){ const vorlade = new Image(); vorlade.src = src; }
+   477	}
+   478	let mundAktivFrames = null;
+   479	let mundAktivIndex = 0;
+   480	let mundLetzterFrameT = 0;
+   481	const MUND_FRAME_MS = 22; // 6 Frames in ~130ms Alt-Takt = ~21,7ms/Frame
+   482	function mundZielSetzen(name){
+   483	  mundAktivFrames = mundFrames(name);
+   484	  mundAktivIndex = 0;
+   485	  mundLetzterFrameT = 0; // sofort beim naechsten schleife()-Tick starten
+   486	}
+   487	function mundSchritt(jetzt){
+   488	  if(!mundAktivFrames) return;
+   489	  if(jetzt - mundLetzterFrameT < MUND_FRAME_MS) return;
+   490	  mundLetzterFrameT = jetzt;
+   491	  $("mund-effekt").src = mundAktivFrames[mundAktivIndex];
+   492	  mundAktivIndex++;
+   493	  if(mundAktivIndex >= mundAktivFrames.length) mundAktivFrames = null;
+   494	}
+   495	function mundAnimation(text){
+   496	  const grobeSilben = Math.max(3, Math.round((text || "").length / 2.6));
+   497	  const dauerMs = Math.min(9000, grobeSilben * 220);
+   498	  let letzte = -1;
+   499	  const iv = setInterval(() => {
+   500	    let i = Math.floor(Math.random() * MUND_SPRECH_SET.length);
+   501	    if(i === letzte) i = (i + 1) % MUND_SPRECH_SET.length; // nie zweimal dieselbe Stellung hintereinander
+   502	    letzte = i;
+   503	    mundZielSetzen(MUND_SPRECH_SET[i]);
+   504	  }, 130);
+   505	  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+   506	}
+   507	
+   508	// Beim ersten Durchlauf steht cursor auf "" -- der Daemon liefert dann den
+   509	// GESAMTEN Verlauf auf einmal (gemessen 2026-09-11: 210 Zeilen, davon 105
+   510	// Antworten). Ohne die Bremse unten startete fuer jede dieser Antworten
+   511	// sofort eine eigene mundAnimation: ~105 gleichzeitige setInterval, der Mund
+   512	// zappelte nach jedem Neuladen sekundenlang sinnlos. Der Verlauf wird
+   513	// angezeigt (er gehoert ins Bild), aber nur WIRKLICH neue Antworten bewegen
+   514	// den Mund -- er spricht nicht nach, was laengst gesagt wurde.
+   515	let _ersteLadung = true;
+   516	async function chatHolen(){
+   517	  try{
+   518	    const r = await fetch("/api/chat?since=" + encodeURIComponent(cursor));
+   519	    const d = await r.json();
+   520	    if(d.ok){
+   521	      for(const z of d.zeilen){
+   522	        zeileAnhaengen(z);
+   523	        if(z.art === "antwort" && !_ersteLadung){
+   524	          mundAnimation(z.text);
+   525	          sonderausdruckAusEmote(z.emote); // Punkt E, siehe Definition unten
+   526	          gespraechsFokusSetzen(z.text); // ⭐ NEU 2026-09-11: Blick-Politik, siehe Definition unten
+   527	        }
+   528	      }
+   529	      _ersteLadung = false;
+   530	      if(d.cursor) cursor = d.cursor;
+   531	      $("chat-status").textContent = "verbunden";
+   532	    }
+   533	  }catch(e){ $("chat-status").textContent = "getrennt"; }
+   534	}
+   535	
+   536	async function senden(){
+   537	  const feld = $("eingabe");
+   538	  const text = feld.value.trim();
+   539	  if(!text) return;
+   540	  feld.value = "";
+   541	  await fetch("/api/send", {method:"POST", headers:{"Content-Type":"application/json"},
+   542	    body: JSON.stringify({text})});
+   543	}
+   544	$("senden").addEventListener("click", senden);
+   545	$("eingabe").addEventListener("keydown", (e) => { if(e.key === "Enter") senden(); });
+   546	
+   547	// ── Drag & Drop ──────────────────────────────────────────────────────
+   548	const dz = $("dropzone");
+   549	["dragenter","dragover"].forEach(ev => document.addEventListener(ev, (e) => {
+   550	  e.preventDefault(); dz.classList.add("ueber");
+   551	}));
+   552	["dragleave","drop"].forEach(ev => document.addEventListener(ev, (e) => {
+   553	  e.preventDefault(); if(ev === "dragleave") return; dz.classList.remove("ueber");
+   554	}));
+   555	document.addEventListener("drop", async (e) => {
+   556	  e.preventDefault();
+   557	  dz.classList.remove("ueber");
+   558	  const dateien = e.dataTransfer.files;
+   559	  for(const datei of dateien){
+   560	    await fetch("/api/upload", {method:"POST",
+=== HTML 630-820 motion ===
+   630	let hgFrame = 0;
+   631	// Kein Vorladen aller 300 Bilder (Koordinator woertlich: "lade NICHT alles
+   632	// vor") -- jeder Frame wird beim Abspielen einzeln per src-Zuweisung
+   633	// nachgeladen; der Browser-Cache uebernimmt danach die Wiederholung.
+   634	function hgSchritt(){
+   635	  hgFrame = (hgFrame + 1) % HINTERGRUND_FRAMES;
+   636	  const nr = String(hgFrame).padStart(3, "0");
+   637	  $("hg-frame").src = `/hintergrund/${hgStimmung}/${hgStimmung}_${nr}.png`;
+   638	}
+   639	setInterval(hgSchritt, 90); // ~11 Bilder/s -- reicht fuer einen Hintergrund-Loop, kein Fokuspunkt
+   640	hgSchritt();
+   641	
+   642	// Prioritaet, wenn mehrere Zustaende gleichzeitig zutreffen (hoechste zuerst):
+   643	// Blinzeln > Blick abseits der Mitte > Ausdruck. Blinzeln ist eine
+   644	// Grundfunktion (darf immer laufen), der Blick ist die naechst-sichtbarste
+   645	// Reaktion, der Ausdruck ist die langsamste/seltenste Ebene.
+   646	let aktuellerAusdruck = "01_ruhig_neutral";
+   647	let aktuelleBlickRichtung = "geradeaus";
+   648	let blinzelPhase = null; // null | "halb1" | "zu" | "halb2"
+   649	let kopfPose = null; // null | "roll" -- siehe kopfWeiterPlanen()/kopfRollTick()
+   650	
+   651	// ⭐⭐ NEU 2026-09-11 (Animations-Agent): kopfPose ist ein echtes, laufendes
+   652	// Zustandssignal -- wechselt selbstaendig alle 9-19s (kopfWeiterPlanen()/
+   653	// kopfKurzNeigen() unten), war bisher aber NUR ein Text, der die
+   654	// Kamera-Nachschwung-Trigger-Signatur fuettert -- keine sichtbare eigene
+   655	// Wirkung. Die versprochenen 52 Kopf-/69 Koerper-Posenbilder existieren
+   656	// noch nicht (siehe /tmp/avatar_wuensche.md), also KEIN Bildwechsel moeglich.
+   657	// Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+   658	// oben) bekommen eine kleine gefederte rotate()/translateY(). Feder statt
+   659	// linear -> leichtes Ueberschwingen von selbst (Gabriel: "nicht linear").
+   660	// Kleine Winkel (Gabriels Vorgabe). Koerper zielt auf den AKTUELLEN
+   661	// Kopfwert (nicht den Endwert) mit eigener, weicherer/staerker gedaempfter
+   662	// Feder -- daraus entstehen Verzoegerung+Abschwaechung von selbst, keine
+   663	// erfundene feste Zeitspanne. Das ist "Leben" (Idle-Mikrobewegung), keine
+   664	// Behauptung ueber Blick/Ausdruck -- faellt unter die GEMESSEN-Ausnahme.
+   665	// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 2): ECHTE Kopfdrehung statt nur
+   666	// Feder. /kopf_rgba/roll/ enthaelt 11 echte Posen (gier_+00_nick_+00_roll_+NN,
+   667	// ±25° in 5°-Schritten; PIL-Nachweis: roll_+00 ist pixelgleich mit dem
+   668	// bisherigen kopf_zero_ohne_rotes_augenglow -- nahtloser Anschluss). Bisher
+   669	// lieferten die Posen nur 404 im Netzlog und damit kein sichtbares Bild; die
+   670	// alte KOPF_DREH_ZIEL-Tabelle (Schluessel der flachen /kopf/-Bilder) ist weg.
+   671	// Jetzt: kopfKurzNeigen() waehlt ein Ziel, kopfRollTick() faehrt in 5°-Schritten
+   672	// mit kurzem Crossfade zwischen #kopf-schicht/#kopf-schicht2 dorthin, haelt,
+   673	// und kehrt zurueck. Die Feder unten bleibt -- sie bekommt ihr Ziel jetzt aus
+   674	// dem echten Rollwert (klein, 12% des Winkels, max ±3°) und liefert weiter
+   675	// das gefederte Nachziehen des Koerpers.
+   676	const KOPF_ROLL_POOL = [-15,-10,-5,5,10,15];      // uebliche, kleine Neigungen
+   677	const KOPF_ROLL_GROSS = [-25,-20,20,25];          // seltene, grosse (12% Chance)
+   678	const KOPF_ROLL_MS = 110;                         // je 5°-Schritt, kurz
+   679	function kopfRollDatei(w){
+   680	  return `/kopf_rgba/roll/gier_+00_nick_+00_roll_${w < 0 ? "-" : "+"}${String(Math.abs(w)).padStart(2,"0")}.png`;
+   681	}
+   682	let kopfRollWert = 0;        // Grad des aktuell angezeigten Roll-Bildes
+   683	let kopfRollSoll = 0;        // Grad des angepeilten Ziels (Feder-Futter)
+   684	let kopfRollSchritte = null; // [{w, src}] -- laufende Sequenz oder null
+   685	let kopfRollIdx = 0, kopfRollLetzterT = 0;
+   686	let kopfRollAktiv = false;   // false: #kopf-schicht sichtbar, true: #kopf-schicht2
+   687	let kopfRollFertigFn = null; // einmaliger Callback nach dem letzten Schritt
+   688	function kopfRollSequenzZu(ziel, fertig){
+   689	  const schritte = [];
+   690	  const richtung = ziel > kopfRollWert ? 5 : -5;
+   691	  for(let w = kopfRollWert + richtung; ; w += richtung){
+   692	    schritte.push({w, src: kopfRollDatei(w)});
+   693	    if(w === ziel) break;
+   694	  }
+   695	  kopfRollSchritte = schritte; kopfRollIdx = 0; kopfRollLetzterT = 0;
+   696	  kopfRollFertigFn = fertig || null;
+   697	}
+   698	function kopfRollTick(jetzt){
+   699	  if(!kopfRollSchritte) return;
+   700	  if(jetzt - kopfRollLetzterT < KOPF_ROLL_MS) return;
+   701	  const schritt = kopfRollSchritte[kopfRollIdx];
+   702	  const eintrag = bildLaden(schritt.src);
+   703	  if(!eintrag.ok) return; // Frame noch nicht dekodiert -- warten statt halbes Bild zeigen
+   704	  kopfRollLetzterT = jetzt;
+   705	  const ein = kopfRollAktiv ? "kopf-schicht" : "kopf-schicht2";
+   706	  const aus = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+   707	  $(ein).src = schritt.src;
+   708	  // ⭐⭐ PERF-FIX 2026-09-11: atmen() aktualisiert seit diesem Fix nur noch
+   709	  // die aktuell sichtbare Kopf-Ebene (siehe atmen() oben) -- die Ebene, die
+   710	  // hier gerade sichtbar wird, muss deshalb JETZT einmalig den brandaktuellen
+   711	  // Atem-Wert bekommen, sonst zeigt sie beim ersten sichtbaren Frame noch den
+   712	  // Wert von ihrem letzten Auftritt (Pop). _atmenTransform/_atmenFilter sind
+   713	  // von atmen() diesen Frame schon gesetzt (schleife() ruft atmen() vor
+   714	  // kopfRollTick() auf).
+   715	  $(ein).style.transform = _atmenTransform;
+   716	  $(ein).style.filter = _atmenFilter;
+   717	  $(ein).style.opacity = "1";
+   718	  $(aus).style.opacity = "0";
+   719	  kopfRollAktiv = !kopfRollAktiv;
+   720	  kopfRollWert = schritt.w;
+   721	  kopfRollIdx++;
+   722	  if(kopfRollIdx >= kopfRollSchritte.length){
+   723	    const f = kopfRollFertigFn;
+   724	    kopfRollSchritte = null; kopfRollFertigFn = null;
+   725	    if(f) f();
+   726	  }
+   727	}
+   728	let kDrehRot=0, kDrehRotV=0, kDrehTy=0, kDrehTyV=0;   // Kopf-Wrapper: Wert+Geschwindigkeit
+   729	let bDrehRot=0, bDrehRotV=0, bDrehTy=0, bDrehTyV=0;   // Koerper-Wrapper: eigene, weichere Feder
+   730	// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+   731	// liegt jetzt IN #kopf-dreh und bekommt darueber automatisch schon kDrehRot
+   732	// (die kleine, gedaempfte Feder, max ±3°) mit. Das reicht bei einer ECHTEN
+   733	// Rollpose (bis ±25°, siehe KOPF_ROLL_POOL) nicht -- die Feder zielt bewusst
+   734	// nur auf 12% des Rollwerts, weil das FOTO selbst schon kippt. Der Flicken
+   735	// braucht den FEHLENDEN Rest (Rollwert minus das, was die Feder schon liefert)
+   736	// als EIGENE Zusatzdrehung, um genau auf dem echten Fotowinkel zu landen --
+   737	// gerechnet um denselben Halsanker (transform-origin oben, exakt umgerechnet).
+   738	//
+   739	// ⭐⭐⭐ 2026-09-11 STIRN-LUECKE GEFIXT (Animations-Agent, dritte Instanz
+   740	// derselben Fehlerklasse wie Halsnaht/Geisterkopf -- Beleg: Screenshots
+   741	// liveblick_10/11.png vom Koordinator, live reproduziert allein mit der
+   742	// 'k'-Testtaste, siehe /tmp/t3_02_supermacro.png/t3_03_supermacro.png im
+   743	// Bericht). ZWEI Fehler in der alten Formel `kopfRollWert - kDrehRot`:
+   744	//   (1) FALSCHES VORZEICHEN/DOPPELABZUG: #kopf-dreh vererbt kDrehRot per CSS
+   745	//       AUTOMATISCH an ALLE Kinder -- also auch an den Flicken UND ans
+   746	//       Kopf-Foto gleichermassen. Die Gesamtdrehung des Fotos ist deshalb
+   747	//       kopfRollWert(eingebrannt) + kDrehRot(Wrapper). Fuer denselben
+   748	//       Gesamtwert beim Flicken (eigene Drehung + geerbtes kDrehRot vom
+   749	//       selben Wrapper) muss die EIGENE Drehung exakt kopfRollWert sein --
+   750	//       kDrehRot kuerzt sich rechnerisch von selbst weg, ihn nochmal
+   751	//       abzuziehen zieht ihn ZWEIMAL ab. Ergebnis vorher: der Flicken lag
+   752	//       bei JEDER Kopfneigung (auch der kleinen Idle-Feder, nicht nur bei
+   753	//       einer echten Rollpose) um kDrehRot Grad (bis 3°) hinter dem echten
+   754	//       Fotowinkel zurueck -- bei diesem weit aussenliegenden Drehpunkt
+   755	//       (transform-origin ~2,4 Patch-Hoehen unterhalb der Box, siehe oben)
+   756	//       schon das ein dauerhafter, wenn auch kleiner, Px-Versatz.
+   757	//   (2) HARTER SPRUNG OHNE DAEMPFUNG: kopfRollWert selbst springt bei jedem
+   758	//       kopfRollTick()-Schritt hart um 5° (neues Foto -- das braucht keine
+   759	//       Weichzeichnung, ein neues Foto sieht wie ein neues Foto aus). Der
+   760	//       kleine, aber stark gehebelte Flicken macht aus genau diesem
+   761	//       5°-Sprung einen sichtbaren Pop: bei ~2,4 Patch-Hoehen Hebelarm
+   762	//       reisst ein 5°-Sprung den Flicken um zweistellige Px auf der
+   763	//       Leinwand weg vom Gesicht -- fuer die ~110ms bis zum naechsten
+   764	//       Schritt/bis die Feder aufholt genau die "Stirn hochgeschobene
+   765	//       Maske"-Optik aus dem Befund. Fix: kopfRollAusgleichDeg ist jetzt
+   766	//       eine geglaettete ANZEIGE (schneller Lerp, 0.4/Frame -- faengt sich
+   767	//       in 2-3 Frames/<50ms, folgt dem echten Fotowinkel praktisch in
+   768	//       Echtzeit, aber ohne den harten Ruck), die auf das jetzt korrekte
+   769	//       Ziel (kopfRollWert, ohne Abzug) zulaeuft.
+   770	let kopfRollAusgleichDeg = 0;
+   771	function federSchritt(ist, v, ziel, steife, daempfung){
+   772	  v += (ziel - ist) * steife - v * daempfung;
+   773	  ist += v;
+   774	  return [ist, v];
+   775	}
+   776	function kopfKoerperDrehSchritt(){
+   777	  // Federziel aus dem ECHTEN Rollwert (12% davon, auf ±3° begrenzt) -- die
+   778	  // Bildpose macht die Neigung, die Feder nur das kleine Nachschwingen.
+   779	  const zielRot = Math.max(-3, Math.min(3, kopfRollSoll * 0.12));
+   780	  [kDrehRot, kDrehRotV] = federSchritt(kDrehRot, kDrehRotV, zielRot, 0.020, 0.20);
+   781	  [kDrehTy,  kDrehTyV ] = federSchritt(kDrehTy,  kDrehTyV,  0,      0.020, 0.20);
+   782	  // 34% des AKTUELLEN (nicht Ziel-)Kopfwerts + eigene weichere Feder =
+   783	  // Koerper folgt spaeter und schwaecher, ohne starren festen Versatz.
+   784	  [bDrehRot, bDrehRotV] = federSchritt(bDrehRot, bDrehRotV, kDrehRot*0.34, 0.010, 0.26);
+   785	  [bDrehTy,  bDrehTyV ] = federSchritt(bDrehTy,  bDrehTyV,  kDrehTy*0.34,  0.010, 0.26);
+   786	  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+   787	  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+   788	  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+   789	  // (STIRN-LUECKE-FIX): Ziel ist jetzt kopfRollWert selbst (kDrehRot kuerzt
+   790	  // sich per CSS-Vererbung von selbst weg, siehe Kommentar), UND geglaettet
+   791	  // per Lerp statt hartem Sprung -- entkoppelt den Flicken vom 5°-Sprung
+   792	  // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel
+   793	  // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).
+   794	  kopfRollAusgleichDeg += (kopfRollWert - kopfRollAusgleichDeg) * 0.4;
+   795	  $("augen-blink").style.transform = `rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+   796	}
+   797	
+   798	// ⭐ 2026-09-11 Crossfade statt hartem g.src=neu: ausdruckAktiv zeigt, welches
+   799	// der zwei gestapelten RGBA-Bilder (#ausdruck-schicht/#ausdruck-schicht2)
+   800	// gerade OBEN/sichtbar ist. Beim Wechsel wird das jeweils versteckte Element
+   801	// neu befuellt und per opacity eingeblendet, das bisher sichtbare
+   802	// ausgeblendet -- kein Bildsprung.
+   803	// ⭐ 2026-09-11 (Bauauftrag Kopf-RGBA-Hauptebene): #gesicht/#gesicht2 haben
+   804	// KEINE RGBA-Entsprechung fuer Blinzeln/Blickrichtung/Kopfneigung/6
+   805	// Grundstimmungen -- diese vier Zweige (/augen/, /kopf/, /ausdruck/) sind
+   806	// alte, opake, vorkomponierte Einzelbilder, die den jetzt durchscheinenden
+   807	// Hintergrund wieder komplett verdecken wuerden. Deshalb tauscht diese
+   808	// Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+   809	// DOM) bleiben die sichtbare Dauerebene, das Blick-/Mundsignal kommt weiter
+   810	// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+   811	// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+   812	// (per Signatur-Vergleich) und loest dafuer den Kamera-Nachschwung aus --
+   813	// "passend zur Bewegung" (Gabriel), die Kamera reagiert, wenn sich Kopf/
+   814	// Blick/Ausdruck aendern, auch ohne dass ein Bild dafuer existiert. Diese
+   815	// Luecke (keine 1:1-RGBA-Entsprechung fuer diese vier Basiszustaende) ist
+   816	// bewusst offen, siehe Bericht an den Koordinator -- kein stilles Verstecken.
+   817	let _letzteZustandsSignatur = "";
+   818	function gesichtNeuZeichnen(mitSchwung = true){
+   819	  const signatur = `${blinzelPhase}|${aktuelleBlickRichtung}|${kopfPose}|${aktuellerAusdruck}`;
+   820	  if(signatur === _letzteZustandsSignatur) return; // kein echter Wechsel -- nichts zu tun
+=== HTML 1060-1345 eyes/gaze ===
+  1060	    }
+  1061	  } else if(ueberraschung < 0.5){
+  1062	    _ueberraschungAusgeloest = false;
+  1063	  }
+  1064	}
+  1065	
+  1066	// 1) BLINZELN -- offen->halb->zu->halb->offen, jede Stufe 40-60ms (gesamt
+  1067	// <200ms), unregelmaessiger Abstand 3-8s + Jitter, gelegentlich Doppelschlag.
+  1068	// ⚠️ LECK-FIX (2026-09-11): blinzeln() rief FRUEHER am Ende IMMER
+  1069	// blinzelWeiterPlanen() auf -- auch wenn der Aufruf selbst nur der einmalige
+  1070	// "Doppelschlag"-Bonus war (setTimeout(blinzeln, 120+...) unten). Jeder
+  1071	// Doppelschlag (12% Chance pro Zyklus) hat dadurch eine ZWEITE, komplett
+  1072	// eigenstaendige, sich selbst fortpflanzende Blinzel-Kette gestartet, die nie
+  1073	// wieder aufhoerte. Erwarteter Nachwuchs pro Kette: 1 (Selbstfortsetzung) +
+  1074	// 0.12 (neue Kette) = 1.12 > 1 -- ein Galton-Watson-Verzweigungsprozess,
+  1075	// die Zahl lebender Ketten waechst exponentiell. Per Simulation bestaetigt:
+  1076	// 2732 blinzeln()-Aufrufe in 5 virtuellen Minuten statt der ~55 einer
+  1077	// gesunden Einzelkette (~50x). Fix: Parameter zeitplanNeu unterscheidet
+  1078	// "planmaessige Kette" von "einmaliger Bonus" -- nur planmaessige Ketten
+  1079	// duerfen sich selbst fortsetzen und neu verzweigen.
+  1080	// ⭐ 2026-09-11 Asymmetrie: ein echtes Lid faellt schnell zu und geht
+  1081	// langsamer wieder auf (Gabriel woertlich: "uncanny in jeder Hinsicht" --
+  1082	// gleich lange Zu- und Aufphasen sind einer der klassischen Maschinen-Tells).
+  1083	// Schliessen (halb1+zu-Haltezeit) zusammen ~65-100ms, Oeffnen (halb2) allein
+  1084	// ~130-170ms -- grobe Zielwerte ~80ms zu / ~150ms auf, mit Streuung gegen
+  1085	// Gleichfoermigkeit.
+  1086	function blinzelDauerSchliessen(){ return 15 + Math.random()*5; }
+  1087	function blinzelDauerGeschlossenHalten(){ return 30 + Math.random()*20; }
+  1088	function blinzelDauerOeffnen(){ return 40 + Math.random()*12; }
+  1089	// ⭐⭐ 2026-09-11 (Animations-Agent) ECHTES BLINZELN: statt nur einer
+  1090	// Zustands-Phasen-Meldung spielt blinzeln() jetzt die 12 fotografierten
+  1091	// Lidbilder (/augen_blink/blink_000..011.png, gemessen: 00 offen -> 08
+  1092	// geschlossen -> 11 offen, 00 und 11 identisch = Loop-Punkt) als echtes
+  1093	// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+  1094	// Frames 00-08 SCHLIESSEN (deshalb 9 kurze Schritte), 09-11 OEFFNEN (3
+  1095	// laengere) -- ein echtes Lid faellt schnell und geht langsamer auf.
+  1096	// Gesamt ~300-340ms (Gabriels Vorgabe 250-350ms).
+  1097	// ⚠️ Galton-Watson-Regel UNVERAENDERT (siehe LECK-FIX oben): EINE
+  1098	// Selbstartende-Kette, der Doppelschlag bleibt ein einmaliger Bonus ohne
+  1099	// eigene Fortpflanzung (zeitplanNeu=false). blinzelAbspielen() ist eine
+  1100	// ENDLICHE Kette -- sie erzeugt nie eine neue Kette, sie liefert nur an
+  1101	// blinzelWeiterPlanen() zurueck. Blinzeln bleibt unabhaengig von der
+  1102	// Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+  1103	// bleibt erkennungs-gekoppelt. Läuft NICHT ueber einem Sonderausdruck
+  1104	// (dessen Frames tragen ihre eigenen Augen).
+  1105	function blinzeln(zeitplanNeu = true){
+  1106	  if(_sonderLaeuft){
+  1107	    if(zeitplanNeu) blinzelWeiterPlanen(); // Kette haelt, kein zweiter Strang
+  1108	    return;
+  1109	  }
+  1110	  const schritte = [];
+  1111	  for(let f = 0; f <= 8; f++) schritte.push([f, blinzelDauerSchliessen(), f < 7 ? "halb1" : "zu"]);
+  1112	  schritte.push([8, blinzelDauerGeschlossenHalten(), "zu"]);
+  1113	  for(let f = 9; f <= 11; f++) schritte.push([f, blinzelDauerOeffnen(), "halb2"]);
+  1114	  blinzelAbspielen(schritte, 0, zeitplanNeu);
+  1115	}
+  1116	function blinzelAbspielen(schritte, idx, zeitplanNeu){
+  1117	  if(idx >= schritte.length){
+  1118	    $("augen-blink").style.opacity = "0";
+  1119	    blinzelPhase = null; gesichtNeuZeichnen(false);
+  1120	    if(zeitplanNeu){
+  1121	      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }
+  1122	      blinzelWeiterPlanen();
+  1123	    }
+  1124	    return;
+  1125	  }
+  1126	  const [frame, dauer, phase] = schritte[idx];
+  1127	  $("augen-blink").src = BLINK_BILDER[frame];
+  1128	  $("augen-blink").style.opacity = "1";
+  1129	  blinzelPhase = phase; gesichtNeuZeichnen(false);
+  1130	  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);
+  1131	}
+  1132	function blinzelWeiterPlanen(){
+  1133	  setTimeout(() => blinzeln(true), 2000 + Math.random()*5000); // 2-7s, unregelmaessig (Gabriels Vorgabe)
+  1134	}
+  1135	blinzelWeiterPlanen();
+  1136	
+  1137	// 3) DER BLICK LEBT -- niemand da: langsames, zielloses Wandern mit langen
+  1138	// Pausen. Jemand da: Blick geht zur gemessenen Richtung und BLEIBT (kein
+  1139	// Gleiten -- ein Sprung, dann Halt; das Halten ergibt sich von selbst, weil
+  1140	// hier nur bei Richtungswechsel neu gezeichnet wird).
+  1141	const WANDER_RICHTUNGEN = ["geradeaus","links","rechts","oben","unten","links_oben","rechts_oben"];
+  1142	let serverBlick = {anwesend:false, richtung:null, nah:false};
+  1143	
+  1144	// ⭐⭐ NEU 2026-09-11 (Gabriel woertlich: "er soll auch nicht stur meinem
+  1145	// Blick folgen, sondern hinschauen wo er will, dynamisch wie er will --
+  1146	// also wenn er mit mir redet, mich anschauen, wenn er ueber Objekte redet
+  1147	// die anschauen -- das alles dynamisch wie ein Mensch, ohne Zwang.").
+  1148	//
+  1149	// BISHER: sobald serverBlick.anwesend && .nah, ging der Glimmer OHNE
+  1150	// jede weitere Bedingung direkt+ausschliesslich auf serverBlick.cx/cy --
+  1151	// reine Anwesenheit erzwang permanenten Blickkontakt. Das ist das "stur
+  1152	// folgen", das hier behoben wird. Die Hartregel selbst ("kein Blickziel
+  1153	// ohne echte Erkennung", serverBlick kommt weiter NUR aus blick.py) bleibt
+  1154	// unangetastet -- geaendert wird nur, WOHIN innerhalb dieses erkannten
+  1155	// Zustands geschaut wird, nicht OB ueberhaupt ein Gesicht da ist.
+  1156	//
+  1157	// SIGNAL-EHRLICHKEIT: fuer "redet er GERADE MICH an vs. ueber ein Thema"
+  1158	// gibt es in blick.py/beobachtung.py/buehne_daemon.py kein vorhandenes
+  1159	// Signal -- geprueft: _grid10_kategorie() (self_confident/-uncertain/
+  1160	// -creative/-empathetic/-technical/-neutral, siehe beobachtung.py) misst
+  1161	// die EMOTIONALE Tonlage einer Antwort, nicht die Ansprache-Richtung; ein
+  1162	// eigenes "addressee"-Feld existiert nirgends im Code. Deshalb hier ein
+  1163	// NEUER, bewusst simpler, DETERMINISTISCHER Text-Heuristik-Klassifikator
+  1164	// auf demselben Antworttext, der ohnehin schon pro "antwort"-Zeile ins
+  1165	// Fenster kommt (chatHolen()) -- ein Regex, kein LLM-Aufruf, laeuft einmal
+  1166	// pro empfangener Zeile, nicht pro Frame. EHRLICH BENANNT: das ist ein
+  1167	// ROHER PLATZHALTER, kein gemessenes Signal wie blick.py's Kopfposition --
+  1168	// erkennt Zweite-Person-Anrede (du/dir/dich/dein.../Gabriel), sonst gilt
+  1169	// die Zeile als "ueber ein Thema". Deckt keine Ironie/indirekte Anrede/
+  1170	// Zitate ab, reicht aber fuer sichtbare Verhaltensvarianz -- mehr ist hier
+  1171	// nicht verlangt. Ein spaeteres echtes Signal (z.B. aus der NERD-Physik-
+  1172	// Einbettung, an der parallel gearbeitet wird -- "worauf schaut/womit
+  1173	// befasst sich FranKenstein gerade") koennte gespraechsFokusSetzen() unten
+  1174	// direkt ersetzen/fuettern, ohne den Rest dieser Kaskade anzufassen.
+  1175	const ANSPRACHE_MUSTER = /\b(du|dir|dich|dein\w*|gabriel)\b/i;
+  1176	function gespraechsFokusAusText(text){
+  1177	  return ANSPRACHE_MUSTER.test(text || "") ? "gabriel" : "thema";
+  1178	}
+  1179	// "gabriel" = zielt gerade auf Gabriel (Default, solange nichts klassifiziert
+  1180	// wurde -- sicherer Ausgangszustand, entspricht dem bisherigen Verhalten).
+  1181	// "thema" haelt nur eine begrenzte, UNREGELMAESSIGE Weile (episodisch, wie
+  1182	// beim Menschen -- nicht dauerhaft weggedreht), dann automatisch zurueck.
+  1183	let gespraechsFokus = "gabriel";
+  1184	let _fokusAblaufTimer = null;
+  1185	function gespraechsFokusSetzen(text){
+  1186	  gespraechsFokus = gespraechsFokusAusText(text);
+  1187	  if(_fokusAblaufTimer) clearTimeout(_fokusAblaufTimer);
+  1188	  if(gespraechsFokus === "thema"){
+  1189	    _fokusAblaufTimer = setTimeout(() => { gespraechsFokus = "gabriel"; }, 5000 + Math.random()*6000);
+  1190	  }
+  1191	}
+  1192	
+  1193	// Wohin, wenn NICHT auf Gabriel: ein paar feste, bewusst kleine "Weg"-Ziele
+  1194	// im selben 0..1-Koordinatenraum wie serverBlick.cx/cy -- oben/seitlich,
+  1195	// NIE nach unten (unten liest als "abwesend/traurig", nicht als "denkt
+  1196	// nach"/"schaut zum Objekt", klassische Blickrichtung beim Erinnern/
+  1197	// Ueberlegen). Kein neues Bild, keine grosse Bewegung -- derselbe kleine
+  1198	// Glimmer-Spielraum wie bisher (siehe maxPx in gazeSchritt()), nur ein
+  1199	// anderes Ziel darin.
+  1200	const WEG_ZIELE = [{x:0.15,y:0.15},{x:0.85,y:0.15},{x:0.12,y:0.45},{x:0.88,y:0.45},{x:0.22,y:0.04}];
+  1201	let _wegZiel = WEG_ZIELE[0];
+  1202	function wegZielNeuWaehlen(){
+  1203	  let z = _wegZiel;
+  1204	  while(z === _wegZiel) z = WEG_ZIELE[Math.floor(Math.random()*WEG_ZIELE.length)];
+  1205	  _wegZiel = z;
+  1206	}
+  1207	wegZielNeuWaehlen();
+  1208	
+  1209	function gazeBasisSichtbar(){
+  1210	  return !!(serverBlick.anwesend && serverBlick.nah && typeof serverBlick.cx === "number");
+  1211	}
+  1212	
+  1213	// Mikro-Pausen im Blickkontakt: auch WENN FranKenstein Gabriel gerade
+  1214	// direkt anspricht, haelt ein Mensch den Blickkontakt nicht stur -- kurze,
+  1215	// unregelmaessige Wegblicke, die von selbst zurueckkehren. Eigener Kanal,
+  1216	// unabhaengig vom (viel kleineren, staendig laufenden) Mikrosakkaden-
+  1217	// Zittern oben (mikroSakkadeSchritt) -- das hier ist eine echte, kurz
+  1218	// sichtbare Zielaenderung, kein Zittern. Nur relevant/ausgeloest, wenn
+  1219	// gerade ueberhaupt ein Gesicht erkannt ist (sonst nichts zu unterbrechen).
+  1220	let blickPauseAktiv = false;
+  1221	function blickPauseSchritt(){
+  1222	  if(gazeBasisSichtbar() && gespraechsFokus !== "thema"){
+  1223	    wegZielNeuWaehlen();
+  1224	    blickPauseAktiv = true;
+  1225	    setTimeout(() => { blickPauseAktiv = false; }, 350 + Math.random()*550); // 0.35-0.9s kurzer Wegblick
+  1226	  }
+  1227	  setTimeout(blickPauseSchritt, 4000 + Math.random()*7000); // 4-11s, unregelmaessig
+  1228	}
+  1229	setTimeout(blickPauseSchritt, 3000);
+  1230	
+  1231	// ⭐ 2026-09-11 (Punkt 3 der Liste, Gabriel woertlich: "der Blick soll so
+  1232	// folgen, dass der User das Gefuehl hat, er schaue einem immer direkt in die
+  1233	// Augen"). Zusatz zur bestehenden diskreten Blickrichtung (7 feste Bilder,
+  1234	// oben unveraendert): ein kontinuierlicher Glow-Overlay, der stufenlos in
+  1235	// Richtung der gemessenen Kopfposition wandert. cx/cy kommen normiert 0..1
+  1236	// aus blick.py::ziel_roh() (siehe /api/status -> buehne.blick), 0.5/0.5 =
+  1237	// Bildmitte/Kamera. "nichts erfinden": ohne frische Erkennung liefert
+  1238	// ziel_roh() None -> serverBlick.anwesend bleibt false -> Overlay bleibt bei
+  1239	// opacity 0 (siehe CSS), es wird NIE ein Blick gezeigt, der nicht gemessen
+  1240	// wurde. Gedaempft per Lerp statt Sprung alle 3s (Polling-Takt von
+  1241	// statusHolen) -- das Auge soll gleiten, nicht alle drei Sekunden hoppeln.
+  1242	let zielGazeX = 0.5, zielGazeY = 0.5;
+  1243	let aktGazeX = 0.5, aktGazeY = 0.5;
+  1244	let gazeSichtbar = false;
+  1245	// ⭐ 2026-09-11 Auftragsteil D (Animations-Agent): "geradeaus" wirkt fuer
+  1246	// Menschen NICHT bei der geometrisch exakten Blicklinie am staerksten wie
+  1247	// echter Augenkontakt, sondern wenn die Pupille ~1,76-2 Grad UNTERHALB der
+  1248	// exakten Linie liegt (Gaussian-Fit ueber Proband:innen-Urteile, ~58cm
+  1249	// Betrachtungsabstand -- siehe /tmp/github_funde.md, Richtung 5). Der
+  1250	// Forschungswert selbst ist echt und zitiert; der Schritt Grad->Pixel ist
+  1251	// hier aber eine eigene, offen benannte Naeherung, KEINE Messung -- es gibt
+  1252	// fuer dieses Kunstwerk keinen gemessenen Augapfel-Radius/keine echte
+  1253	// Kamera-Distanz, an der man den Winkel exakt umrechnen koennte. Deshalb
+  1254	// bewusst klein und konservativ gewaehlt (deutlich kleiner als maxPx unten,
+  1255	// kann also nichts kaputtmachen) statt eine falsche Praezision zu behaupten.
+  1256	const BLICK_ABWAERTS_BIAS_PX = 1.2;
+  1257	// ⭐ 2026-09-11 Mikrosakkaden (Koordinator, Punkt b der Liste): kleine,
+  1258	// SPRUNGHAFTE Zusatz-Zuckung, additiv zum weichen Verfolgungs-Lerp oben --
+  1259	// eigener Kanal, nicht ge-easet ("springen, nicht gleiten"). Bewusst OHNE
+  1260	// jede Kopplung an serverBlick/gazeSichtbar in der Ausloesung selbst (laeuft
+  1261	// immer, alle 1-4s) -- sichtbar wird sie trotzdem nur, wenn #pupillen-glow
+  1262	// gerade opacity 1 hat (echte Gesichtserkennung), weil Gabriels harte Regel
+  1263	// ("Blick nur bei echter Erkennung") unveraendert bleibt: es wird NIE ein
+  1264	// Augenglimmer eingeblendet, der nicht gemessen ist. Die Mikrosakkade
+  1265	// behauptet also keinen Zustand -- sie macht nur den ohnehin schon gezeigten
+  1266	// Glow lebendiger, statt perfekt linear zu gleiten.
+  1267	let mikroSakX = 0, mikroSakY = 0;
+  1268	function mikroSakkadeSchritt(){
+  1269	  const winkel = Math.random() * Math.PI * 2;
+  1270	  const staerke = 1.1 + Math.random() * 1.6; // 1.1-2.7px, klein
+  1271	  mikroSakX = Math.cos(winkel) * staerke;
+  1272	  mikroSakY = Math.sin(winkel) * staerke;
+  1273	  setTimeout(() => { mikroSakX = 0; mikroSakY = 0; }, 80 + Math.random() * 90); // kurz gehalten, dann ballistisch zurueck (kein Lerp)
+  1274	  setTimeout(mikroSakkadeSchritt, 1000 + Math.random() * 3000); // 1-4s, unregelmaessig
+  1275	}
+  1276	setTimeout(mikroSakkadeSchritt, 1500);
+  1277	// ⭐⭐ NEU 2026-09-11: pro Frame neu entschieden (nicht mehr nur alle 3s beim
+  1278	// Poll), weil blickPauseAktiv jederzeit zwischen zwei Polls kippen kann --
+  1279	// die Zielwahl braucht denselben Takt wie die Animation selbst. Bleibt
+  1280	// billige Arithmetik, kein zusaetzlicher Bildaufbau (GPU-Budget-Disziplin
+  1281	// unveraendert). Drei Stufen, alle aus echten/deterministischen Signalen:
+  1282	//   1.0  Opazitaet  -- serverBlick vorhanden+nah UND FranKenstein spricht
+  1283	//                      Gabriel gerade direkt an, kein Wegblick aktiv
+  1284	//                      -> Ziel = serverBlick.cx/cy (bisheriges Verhalten)
+  1285	//   0.4  Opazitaet  -- serverBlick vorhanden+nah, ABER Thema-Fokus oder
+  1286	//                      Mikro-Pause aktiv -> Ziel = _wegZiel (sichtbar
+  1287	//                      anders, aber gedaempft: "da, aber nicht fixiert")
+  1288	//   0    Opazitaet  -- serverBlick nicht vorhanden/nicht nah (unveraendert,
+  1289	//                      Hartregel: kein erfundener Blick ohne Erkennung)
+  1290	function gazeZielBestimmen(){
+  1291	  if(!gazeBasisSichtbar()) return {x:0.5, y:0.5, opazitaet:0};
+  1292	  const wegAktiv = blickPauseAktiv || gespraechsFokus === "thema";
+  1293	  if(wegAktiv) return {x:_wegZiel.x, y:_wegZiel.y, opazitaet:0.4};
+  1294	  return {x:serverBlick.cx, y:serverBlick.cy, opazitaet:1};
+  1295	}
+  1296	function gazeSchritt(){
+  1297	  const ziel = gazeZielBestimmen();
+  1298	  zielGazeX = ziel.x; zielGazeY = ziel.y;
+  1299	  aktGazeX += (zielGazeX - aktGazeX) * 0.07;
+  1300	  aktGazeY += (zielGazeY - aktGazeY) * 0.07;
+  1301	  const maxPx = 8.5; // Bewegungsspielraum bewusst klein -- ein Glimmer, kein Springen
+  1302	  const dx = (aktGazeX - 0.5) * 2 * maxPx + mikroSakX;
+  1303	  const dy = (aktGazeY - 0.5) * 2 * maxPx + BLICK_ABWAERTS_BIAS_PX + mikroSakY;
+  1304	  // ⭐⭐ 2026-09-11 NACHTRAG 4: rotate() dranhaengen (Rest-Ausgleich zur echten
+  1305	  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim
+  1306	  // Kopfkippen an der falschen Stelle stehen (Geisterkopf-Kante).
+  1307	  $("pupillen-glow").style.transform = `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+  1308	  // ⭐ 2026-09-11: waehrend eines Sonderausdrucks aus -- dessen Frames tragen
+  1309	  // ihre eigenen Augen, sonst laege der Erkennungs-Glimmer auf einem fremden
+  1310	  // Gesicht (zweites Augenpaar statt zweiter Kopf).
+  1311	  gazeSichtbar = ziel.opazitaet > 0; // Rueckwaertskompatibilitaet: anderswo evtl. gelesen
+  1312	  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+  1313	}
+  1314	function wanderSchritt(){
+  1315	  if(!serverBlick.anwesend){
+  1316	    let neu = aktuelleBlickRichtung;
+  1317	    while(neu === aktuelleBlickRichtung){
+  1318	      neu = WANDER_RICHTUNGEN[Math.floor(Math.random()*WANDER_RICHTUNGEN.length)];
+  1319	    }
+  1320	    aktuelleBlickRichtung = neu;
+  1321	    gesichtNeuZeichnen();
+  1322	  }
+  1323	  setTimeout(wanderSchritt, 2500 + Math.random()*4500); // lange, ziellose Pausen
+  1324	}
+  1325	setTimeout(wanderSchritt, 1500);
+  1326	
+  1327	// ⭐ 2026-09-11 Seltene, kurze Kopfneigung -- eigenstaendiger fuenfter
+  1328	// Lebendigkeits-Baustein neben Blinzeln/Atmen/Drift/Wander-Blick, gleiche
+  1329	// Idee: unregelmaessige Abstaende statt Takt. Niedrigste Prioritaet (siehe
+  1330	// gesichtNeuZeichnen()) -- ein echter Blinzel oder Blick-Wechsel unterbricht
+  1331	// die Neigung sofort wieder sichtbar, die Neigung selbst haelt aber ueber
+  1332	// einen Blinzler hinweg an (wirkt wie eine gehaltene Haltung, nicht wie ein
+  1333	// Tick). Dank Crossfade jetzt weich statt Bildsprung.
+  1334	function kopfKurzNeigen(){
+  1335	  if(_sonderLaeuft || kopfRollSchritte){ kopfWeiterPlanen(); return; }
+  1336	  const gross = Math.random() < 0.12;
+  1337	  const pool = gross ? KOPF_ROLL_GROSS : KOPF_ROLL_POOL;
+  1338	  const ziel = pool[Math.floor(Math.random()*pool.length)];
+  1339	  kopfPose = "roll"; kopfRollSoll = ziel;
+  1340	  gesichtNeuZeichnen();
+  1341	  kopfRollSequenzZu(ziel, () => {
+  1342	    // halten (2.6-5.2s, siehe Messung unten), dann in 5°-Schritten zurueck
+  1343	    setTimeout(() => {
+  1344	      kopfRollSequenzZu(0, () => {
+  1345	        kopfPose = null; kopfRollSoll = 0;
+=== HTML 1345-1600 render/state ===
+  1345	        kopfPose = null; kopfRollSoll = 0;
+  1346	        gesichtNeuZeichnen();
+  1347	        kopfWeiterPlanen();
+  1348	      });
+  1349	    }, 2600 + Math.random()*2600);
+  1350	  });
+  1351	}
+  1352	function kopfWeiterPlanen(){
+  1353	  setTimeout(kopfKurzNeigen, 9000 + Math.random()*10000); // 9-19s, unregelmaessig
+  1354	}
+  1355	kopfWeiterPlanen();
+  1356	
+  1357	// 4) REAKTIONSLATENZ -- 150-350ms, NICHT sofort. Reihenfolge laut Auftrag:
+  1358	// Blick zuerst, dann Ausdruck, dann alles andere (Regen/Wasser laufen schon
+  1359	// unabhaengig ueber statusHolen()). Ausdruck bekommt absichtlich eine etwas
+  1360	// laengere Verzoegerung als der Blick, damit die Reihenfolge auch bei
+  1361	// gleichzeitiger Aenderung sichtbar eingehalten wird.
+  1362	let _blickTimer = null, _ausdruckTimer = null;
+  1363	function reaktionAufNeuenStatus(neuerBlick, neuerAusdruck){
+  1364	  serverBlick = neuerBlick || {anwesend:false, richtung:null, nah:false};
+  1365	  // ⭐ 2026-09-11 Punkt 3 (Blick): serverBlick ist die Rohquelle; wohin der
+  1366	  // Glimmer TATSAECHLICH zeigt (Gabriel direkt vs. Weg-Ziel bei Thema-Fokus/
+  1367	  // Mikro-Pause), wird jetzt PRO FRAME in gazeZielBestimmen()/gazeSchritt()
+  1368	  // entschieden (siehe dort) -- hier nur noch serverBlick selbst uebernehmen.
+  1369	  const zielRichtung = serverBlick.anwesend ? (serverBlick.richtung || "geradeaus") : null;
+  1370	  if(zielRichtung && zielRichtung !== aktuelleBlickRichtung){
+  1371	    if(_blickTimer) clearTimeout(_blickTimer);
+  1372	    _blickTimer = setTimeout(() => {
+  1373	      aktuelleBlickRichtung = zielRichtung;
+  1374	      gesichtNeuZeichnen();
+  1375	    }, 150 + Math.random()*200); // 150-350ms
+  1376	  }
+  1377	  if(neuerAusdruck && neuerAusdruck !== aktuellerAusdruck){
+  1378	    if(_ausdruckTimer) clearTimeout(_ausdruckTimer);
+  1379	    _ausdruckTimer = setTimeout(() => {
+  1380	      aktuellerAusdruck = neuerAusdruck;
+  1381	      gesichtNeuZeichnen();
+  1382	      // Punkt 5 (Hintergrund): Stimmungswechsel folgt demselben gemessenen
+  1383	      // Ausdruck, keine eigene Trigger-Erfindung.
+  1384	      const neueStimmung = AUSDRUCK_ZU_STIMMUNG[neuerAusdruck];
+  1385	      if(neueStimmung && neueStimmung !== hgStimmung){
+  1386	        hgStimmung = neueStimmung;
+  1387	        hgFrame = 0;
+  1388	      }
+  1389	    }, 260 + Math.random()*220); // spaeter als der Blick, siehe oben
+  1390	  }
+  1391	}
+  1392	gesichtNeuZeichnen(); // sofortiges erstes Bild, noch vor dem ersten /api/status
+  1393	
+  1394	// ── Buehnen-Animation: atmen, Datenregen (2 Ebenen = Parallaxe), Farbdrift,
+  1395	// Wasserlinie. Zwei Regenebenen statt einer erzeugen Tiefe (Gabriel,
+  1396	// 2026-09-11: "so als waere er wirklich da drinnen"): eine langsame,
+  1397	// kleine Ebene HINTER dem Gesichtsrahmen (im Rand/Hintergrund sichtbar),
+  1398	// eine schnelle, groessere Ebene VOR dem Gesicht (halbtransparent drueber)
+  1399	// -- er steht optisch zwischen den beiden statt nur davor.
+  1400	const canvas = $("regen");           // vorne, ueber dem Gesicht
+  1401	const ctx = canvas.getContext("2d");
+  1402	const canvasHinten = $("regen-hinten"); // hinten, hinter dem Rahmen
+  1403	const ctxHinten = canvasHinten.getContext("2d");
+  1404	let tropfenVorne = [];
+  1405	let tropfenHinten = [];
+  1406	
+  1407	function regenGroesseSetzen(){
+  1408	  const r = $("gesicht-rahmen").getBoundingClientRect();
+  1409	  canvas.width = r.width; canvas.height = r.height;
+  1410	  // ⭐ 2026-09-11: #regen-hinten liegt jetzt IN #kamera (Overscan-Box, 112%
+  1411	  // von #buehne), nicht mehr direkt in #buehne -- Groesse muss deshalb vom
+  1412	  // tatsaechlichen Elternrahmen kommen, sonst bleibt am Ueberstand-Rand eine
+  1413	  // ungezeichnete Luecke, die der Cam-Shake sichtbar ins Bild zieht.
+  1414	  const b = $("kamera").getBoundingClientRect();
+  1415	  canvasHinten.width = b.width; canvasHinten.height = b.height;
+  1416	}
+  1417	window.addEventListener("resize", regenGroesseSetzen);
+  1418	regenGroesseSetzen();
+  1419	
+  1420	// ⭐⭐ 2026-09-11 #kopf-canvas exakt auf die reale object-fit:cover-Geometrie
+  1421	// bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,
+  1422	// object-position:50% 15%). Cover-Formel: scale = max(containerW/bildW,
+  1423	// containerH/bildH); die Leinwand wird auf renderedW x renderedH gesetzt und
+  1424	// so weit verschoben, dass an der object-position-Stelle (50%/15%) kein
+  1425	// Rand entsteht -- exakt die Formel, die der Browser intern fuer
+  1426	// object-fit:cover verwendet. #gesicht-rahmen beschneidet den Ueberstand per
+  1427	// overflow:hidden -- optisch identisch zum alten object-fit:cover, aber
+  1428	// jetzt kennt jedes Kind (koerper/kopf/mund) dieselbe 1536x1024-Leinwand und
+  1429	// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+  1430	// exakt. offsetWidth/offsetHeight statt getBoundingClientRect -- die sind
+  1431	// transform-unabhaengig, der Cam-Shake auf #kamera soll hier NICHT
+  1432	// mitgemessen werden (nur einmal bei Start/Resize aufgerufen, nicht pro
+  1433	// Frame -- die Leinwand selbst ist statisch, der Shake wirkt automatisch
+  1434	// weiter oben auf #kamera und bewegt die ganze Szene inklusive Leinwand mit).
+  1435	const BILD_W = 1536, BILD_H = 1024, OBJ_POS_X = 0.50, OBJ_POS_Y = 0.15;
+  1436	function kopfCanvasAnpassen(){
+  1437	  const rahmen = $("gesicht-rahmen");
+  1438	  const cw = rahmen.offsetWidth, ch = rahmen.offsetHeight;
+  1439	  if(!cw || !ch) return; // noch nicht gelayoutet -- naechster Aufruf greift
+  1440	  const scale = Math.max(cw / BILD_W, ch / BILD_H);
+  1441	  const rw = BILD_W * scale, rh = BILD_H * scale;
+  1442	  const ox = (cw - rw) * OBJ_POS_X;
+  1443	  const oy = (ch - rh) * OBJ_POS_Y;
+  1444	  const kc = $("kopf-canvas");
+  1445	  kc.style.left = ox.toFixed(2) + "px";
+  1446	  kc.style.top = oy.toFixed(2) + "px";
+  1447	  kc.style.width = rw.toFixed(2) + "px";
+  1448	  kc.style.height = rh.toFixed(2) + "px";
+  1449	}
+  1450	window.addEventListener("resize", kopfCanvasAnpassen);
+  1451	kopfCanvasAnpassen();
+  1452	
+  1453	let tempo = 1.0; // aus broadcast_value abgeleitet, 0..~3
+  1454	
+  1455	// Vordere Ebene: groesser, schneller -- wirkt naeher.
+  1456	// Performance-Ventil (Gabriel woertlich: "Bleibt sie unter 24 fps, reduziere
+  1457	// zuerst die Regenebenen -- Blinzeln und Mikrobewegung sind die letzten
+  1458	// Dinge, die fallen duerfen."). Regenebenen fallen zuerst, Praesenz zuletzt --
+  1459	// blinzeln()/atmen() lesen regenGedrosselt gar nicht erst.
+  1460	let regenGedrosselt = false;
+  1461	function tropfenErzeugenVorne(){
+  1462	  const deckel = regenGedrosselt ? 35 : 100;
+  1463	  if(tropfenVorne.length > deckel) return; // Deckel gegen fps-Einbruch
+  1464	  tropfenVorne.push({
+  1465	    x: Math.random() * canvas.width, y: -10,
+  1466	    v: (0.8 + Math.random() * 1.7) * tempo,
+  1467	    len: 14 + Math.random() * 26,
+  1468	    ton: Math.random() < 0.5 ? "34,221,238" : "136,51,255"
+  1469	  });
+  1470	}
+  1471	// Hintere Ebene: kleiner, langsamer, gedaempfter -- wirkt weiter weg.
+  1472	function tropfenErzeugenHinten(){
+  1473	  const deckel = regenGedrosselt ? 20 : 70;
+  1474	  if(tropfenHinten.length > deckel) return; // insgesamt weniger als vorher (140)
+  1475	  tropfenHinten.push({
+  1476	    x: Math.random() * canvasHinten.width, y: -10,
+  1477	    v: (0.35 + Math.random() * 0.7) * tempo,
+  1478	    len: 6 + Math.random() * 12,
+  1479	    ton: Math.random() < 0.5 ? "34,221,238" : "136,51,255"
+  1480	  });
+  1481	}
+  1482	function regenZeichnenEbene(c, cv, liste, alpha, breite){
+  1483	  c.clearRect(0,0,cv.width, cv.height);
+  1484	  c.lineWidth = breite;
+  1485	  for(const t of liste){
+  1486	    c.strokeStyle = `rgba(${t.ton},${alpha})`;
+  1487	    c.beginPath();
+  1488	    c.moveTo(t.x, t.y);
+  1489	    c.lineTo(t.x, t.y + t.len);
+  1490	    c.stroke();
+  1491	    t.y += t.v * 3.2;
+  1492	  }
+  1493	}
+  1494	function regenZeichnen(){
+  1495	  regenZeichnenEbene(ctx, canvas, tropfenVorne, 0.5, 1.4);
+  1496	  tropfenVorne = tropfenVorne.filter(t => t.y < canvas.height + 20);
+  1497	  regenZeichnenEbene(ctxHinten, canvasHinten, tropfenHinten, 0.28, 1.0);
+  1498	  tropfenHinten = tropfenHinten.filter(t => t.y < canvasHinten.height + 20);
+  1499	}
+  1500	
+  1501	// Sehr langsames Atmen, an den Puls-Takt (tempo, aus broadcast_value)
+  1502	// gekoppelt -- Skalierung bleibt in 1.00..1.012 (Gabriels Richtwert),
+  1503	// nie darunter, damit es nie wie ein Schrumpfen wirkt.
+  1504	let atemPhase = 0;
+  1505	// ⭐ 2026-09-11 Punkt c der Liste ("Mikro-Variation zwischen Nachbarstufen
+  1506	// DESSELBEN Ausdrucks, damit das Gesicht 'arbeitet' statt einzufrieren"):
+  1507	// woertlich nicht baubar wie gefragt -- die 6 Grundstimmungen haben keine
+  1508	// Stufen-Bilder (nur 1 flaches PNG je Stimmung, siehe ausdruck_zugeschnitten/)
+  1509	// und werden aktuell nicht einmal als eigene Bildebene gezeichnet (siehe
+  1510	// Kommentar bei gesichtNeuZeichnen() oben -- offene Luecke, schon gemeldet).
+  1511	// Ein erfundenes Stufenbild waere eine erfundene Ausdrucks-AENDERUNG, keine
+  1512	// Leerlaufbewegung -- verboten. Stattdessen: der GEIST des Auftrags auf dem
+  1513	// bereits echten, bereits sichtbaren Atem-Puls oben -- ein winziger, LANGSAM
+  1514	// und UNREGELMAESSIG wandernder Zusatz-Faktor (Random Walk, kein fester
+  1515	// Takt), der die Helligkeit minimal mitzittern laesst. Kein neuer Zustand,
+  1516	// keine neue Bildquelle -- nur mehr Unregelmaessigkeit auf echter, schon
+  1517	// gerenderter Bewegung.
+  1518	let _mikroUnruhe = 0, _mikroUnruheZiel = 0;
+  1519	setInterval(() => { _mikroUnruheZiel = (Math.random()*2 - 1); }, 2600 + Math.random()*3200);
+  1520	// ⭐⭐⭐ 2026-09-11 PERF-FIX (Koordinator-Auftrag, fps 35-45 statt >45, unter
+  1521	// erzwungenem Software-Rendering -- siehe --disable-gpu in buehne_daemon.py,
+  1522	// Grund dort dokumentiert: echter Speicherkonflikt mit llama-server -ngl 99
+  1523	// auf der geteilten iGPU, PERMISSION_FAULTS/MAPPING_ERROR in dmesg, kein
+  1524	// bloss abwaegbares Budget -- GPU-Kompositing bleibt deshalb AUS, dieser
+  1525	// Pfad wird nicht wieder angefasst). Ursache war NICHT das Rechnen selbst
+  1526	// (6x scale()+saturate()+brightness() pro Frame ist trivial), sondern dass
+  1527	// atmen() bisher alle 6 Ebenen (inkl. beider "2"-Zwillinge, die 4 von 6
+  1528	// Framezeiten lang komplett unsichtbar sind: kopf-schicht2 ausser waehrend
+  1529	// einer Rollpose, ausdruck-schicht/-schicht2 ausser waehrend eines seltenen
+  1530	// Sonderausdrucks) auf style.transform/style.filter schreiben liess --
+  1531	// jeder Schreibzugriff auf transform/filter stoesst unter Software-Rendering
+  1532	// eine erneute Rasterung der vollen 1536x1024-RGBA-Ebene an, UNABHAENGIG von
+  1533	// opacity:0 (der Browser kompositiert die Ebene nicht sichtbar, aber die
+  1534	// Filter-Pipeline muss trotzdem neu gerechnet werden, weil die Property sich
+  1535	// geaendert hat). Fix: nur die AKTUELL SICHTBARE Ebene jedes Zwillingspaars
+  1536	// bekommt den Schreibzugriff -- aus max. 6 Style-Writes/Frame werden 2-3 (Kopf
+  1537	// + Koerper immer, Ausdruck nur waehrend _sonderLaeuft). Der urspruengliche
+  1538	// Zweck dieser Zeilen (keine Stale-Werte beim naechsten Hart-Cut-Einblenden,
+  1539	// siehe Kommentar am Dateianfang zu diesem Fund) bleibt vollstaendig erhalten
+  1540	// -- nicht durch Weglassen geloest, sondern durch VORSYNCHRONISIEREN: die
+  1541	// zuletzt berechneten Werte liegen in _atmenTransform/_atmenFilter global
+  1542	// bereit, und jede Stelle, die eine bisher versteckte Zwillings-Ebene per
+  1543	// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+  1544	// wechsel()-Funktion in sonderausdruckZeigen()), schreibt diese Werte JETZT
+  1545	// EINMALIG auf die Ebene, BEVOR sie opacity:1 bekommt -- exakt derselbe Wert,
+  1546	// den atmen() diesen Frame sowieso schon fuer die bis dahin sichtbare Ebene
+  1547	// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+  1548	// auf, siehe unten -- die Werte sind also brandaktuell, kein Frame Verzug).
+  1549	// Ergebnis: kein Pop (die neue Ebene traegt beim ersten sichtbaren Frame
+  1550	// exakt denselben Skala-/Helligkeitswert wie ihr Zwilling im Frame davor),
+  1551	// aber die vier meiste Zeit unsichtbaren Ebenen werden NICHT mehr pro Frame
+  1552	// angefasst.
+  1553	let _atmenTransform = "scale(1)";
+  1554	let _atmenFilter = "saturate(1.05) brightness(1)";
+  1555	function atmen(){
+  1556	  atemPhase += 0.006 * Math.max(0.4, Math.min(1.6, tempo));
+  1557	  _mikroUnruhe += (_mikroUnruheZiel - _mikroUnruhe) * 0.02; // sehr langsam, kein Sprung
+  1558	  const auf = (Math.sin(atemPhase) * 0.5) + 0.5; // 0..1
+  1559	  const skala = 1 + auf * 0.012;
+  1560	  const helligkeit = 1 + (auf - 0.5) * 0.03 + _mikroUnruhe * 0.006;
+  1561	  const transform = `scale(${skala})`;
+  1562	  const filter = `saturate(1.05) brightness(${helligkeit})`;
+  1563	  _atmenTransform = transform;
+  1564	  _atmenFilter = filter;
+  1565	  // Kopf: nur die gerade sichtbare der beiden Ebenen (kopfRollAktiv siehe
+  1566	  // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+  1567	  const kopfSichtbar = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+  1568	  $(kopfSichtbar).style.transform = transform;
+  1569	  $(kopfSichtbar).style.filter = filter;
+  1570	  // ⭐⭐ 2026-09-11 NACHTRAG 3 (Koordinator meldet Halsnaht-Rutschen, Gabriel
+  1571	  // hat 3 Screenshots geschickt): Kopf skalierte 1.000->1.012->1.000 pro
+  1572	  // Atemzug, Koerper blieb starr bei 1.0 (siehe Kommentar oben, bewusst
+  1573	  // entfernt wegen "doppeltem Atmen"). Ergebnis: Kopf wird am Atem-Peak
+  1574	  // relativ zum starren Koerper 1,2% groesser -- die Halskante (wo Kopf-
+  1575	  // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+  1576	  // Halsmaske oben) rutscht auf jedem Atemzug leicht -- unsichtbar im
+  1577	  // Standbild (Koordinator hat das geprueft), sichtbar in Bewegung.
+  1578	  // FIX (a) aus dem Koordinator-Auftrag, kleinste/sicherste Variante: der
+  1579	  // Koerper bekommt DENSELBEN Transform+Filter wie der Kopf -- beide
+  1580	  // skalieren/hellen im GLEICHEN Takt, die Halskante bleibt an derselben
+  1581	  // Relativstelle. Der Koerper "atmet" dadurch zusaetzlich zu seinen 12
+  1582	  // fotografierten Stufen leicht mit (max +1,2% Groesse) -- das ist die
+  1583	  // Halskante wert; ein rutschender Kragen war das schlimmere Artefakt.
+  1584	  // Nur die aktuell sichtbare Koerper-Ebene (atmenAktivSchicht, siehe
+  1585	  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+  1586	  // beim Kopf oben.
+  1587	  $(atmenAktivSchicht).style.transform = transform;
+  1588	  $(atmenAktivSchicht).style.filter = filter;
+  1589	  // Ausdruck-Ebenen sind ausserhalb eines Sonderausdrucks BEIDE opacity:0 --
+  1590	  // dann gibt es nichts zu synchronisieren, kein Pop-Risiko (nichts sichtbar).
+  1591	  // Waehrend eines Sonderausdrucks bekommt nur die per ausdruckAktiv aktuell
+  1592	  // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+  1593	  // fuer die Vor-Synchronisation der jeweils anderen beim Einblenden).
+  1594	  if(_sonderLaeuft){
+  1595	    const ausdruckSichtbar = ausdruckAktiv === 1 ? "ausdruck-schicht" : "ausdruck-schicht2";
+  1596	    $(ausdruckSichtbar).style.transform = transform;
+  1597	    $(ausdruckSichtbar).style.filter = filter;
+  1598	  }
+  1599	}
+  1600	
+=== DAEMON 50-130 constants ===
+    50	LOKAL_DB = os.path.join(VISUAL_DIR, "buehne_lokal.db")
+    51	UPLOADS_DIR = os.path.join(VISUAL_DIR, "uploads")
+    52	CHROME_PROFIL = os.path.join(VISUAL_DIR, "chrome-profile")
+    53	PID_DATEI = os.path.join(VISUAL_DIR, "chrome.pid")
+    54	LOG_DATEI = os.path.join(VISUAL_DIR, "chrome.log")
+    55	GESICHT_BILD = "/usr/share/backgrounds/frank-login.png"
+    56	# 2026-09-11: auf zugeschnittene Bilder umgestellt (y=0..573 von 1024) --
+    57	# der halbtransparente "Schleier" war keine CSS-Ebene, sondern in allen 20
+    58	# Quell-PNGs bei y=573 (56% Hoehe) eingebrannt (per PIL vermessen). Originale
+    59	# in ausdruck/ augen/ kopf/ bleiben unangetastet, NICHT hierher zurueckstellen.
+    60	AUSDRUCK_DIR = os.path.join(VISUAL_DIR, "ausdruck_zugeschnitten")
+    61	AUGEN_DIR = os.path.join(VISUAL_DIR, "augen_zugeschnitten")
+    62	KOPF_DIR = os.path.join(VISUAL_DIR, "kopf_zugeschnitten")
+    63	GAZE_DIR = os.path.join(VISUAL_DIR, "augen_gaze")
+    64	# ⭐ 2026-09-11 (Koordinator): die 12 Blinzel-Frames aus FRANK_AVATAR_RIG_V2.
+    65	# Sie lagen im ZIP unter augen/blink/, wurden aber NIE ausgepackt -- nur
+    66	# augen/gaze/ war deployt. Deshalb konnte die Buehne seit dem RGBA-Umbau
+    67	# ueberhaupt nicht blinzeln: blinzeln() setzte Variablen, aber es gab kein
+    68	# Bild, das man haette zeigen koennen. Gemessen: 2,4 % bewegte Gesichtsflaeche
+    69	# ueber 24 s, kein einziger Lidschlag. Geometrie IDENTISCH zu den gaze-Flicken
+    70	# (319x152 RGBA) -- passt ohne Umbau in dieselbe Ebene.
+    71	# Ablauf geprueft: Rotanteil der Augen 0,61 % -> 0,00 % (Frame 08) -> 0,61 %,
+    72	# also auf -> zu -> auf. Frame 00 und 11 sind byte-gleich (Schleifenpunkt).
+    73	BLINK_DIR = os.path.join(VISUAL_DIR, "augen_blink")
+    74	MUND_DIR = os.path.join(VISUAL_DIR, "mund_keyframes")
+    75	# ⭐ 2026-09-11 (Bauauftrag Kopf-RGBA-Hauptebene): ECHTE Alpha-PNGs aus
+    76	# FRANK_AVATAR_RIG_V2 (1536x1024, gleicher Leinwand-Koordinatenraum fuer Kopf
+    77	# UND Koerper -- head_neck_anchor{768,600} und Koerper neck_anchor{768,505}
+    78	# liegen im selben Raster, deshalb keine manuelle Versatz-Rechnung noetig,
+    79	# beide Ebenen einfach deckungsgleich stapeln). Ersetzt AUSDRUCK_DIR/AUGEN_DIR/
+    80	# KOPF_DIR als HAUPT-Kopfebene -- jene alten Ordner bleiben nur fuer
+    81	# Sonderausdruck-Faelle/Altlast bestehen, siehe buehne.html.
+    82	KOPF_RGBA_DIR = os.path.join(VISUAL_DIR, "kopf_rgba")
+    83	KOERPER_RGBA_DIR = os.path.join(VISUAL_DIR, "koerper_rgba")
+    84	HINTERGRUND_DIR = os.path.join(VISUAL_DIR, "hintergrund")
+    85	# Feste Allowlist statt Ordnerinhalt zur Laufzeit zu vertrauen -- 5 Stimmungen
+    86	# aus dem Rig-v2-Datensatz, je 60 Frames (nahtlose Schleife).
+    87	HINTERGRUND_STIMMUNGEN = ("ruhig", "wach", "angespannt", "bedrohlich", "heiter")
+    88	# ⭐ 2026-09-11: zweiter Datensatz (FRANK_EXPRESSION_RIG_EXTRA_V1, vom
+    89	# Koordinator geliefert). NUR die 16 ECHT generierten Endpunkte uebernommen
+    90	# (serious_dystopian + demonic) -- die Anime/Meme/Comic-Komposite wurden
+    91	# nach Sichtpruefung NICHT uebernommen: leere/tote Augen, sichtbar
+    92	# verrutschte Mundausschnitte, und satire_meme benennt echte, lebende
+    93	# Politiker als Ausdrucks-Vorbild (Putin/Trump/Kim) -- Risiko ohne
+    94	# erkennbaren visuellen Gewinn. Bewusst kleinere, aber ehrlich geprueft gute
+    95	# Menge statt 44 mit Ausreissern (Formulierung aus dem Datensatz selbst).
+    96	AUSDRUCK_ERWEITERT_DIR = os.path.join(VISUAL_DIR, "ausdruck_erweitert")
+    97	# ⭐ 2026-09-11 (Koordinator, nach eigener Sichtpruefung): ALLE VIER Register
+    98	# freigegeben. Vorher standen hier nur serious_dystopian und demonic -- 252 von
+    99	# 398 Dateien waren damit unerreichbar, obwohl sie ausgeliefert waren.
+   100	# Ich habe vier Endpunkte selbst angesehen (anime_zunge_raus,
+   101	# anime_riesengrinsen, anime_augenrollen, cartoon_bockiger_junge, jeweils
+   102	# stufe_06, Ausschnitt aufs Gesicht): klar lesbare Ausdruecke, Stil konsistent
+   103	# zum Bestand, Mosaik intakt. Die fruehere Begruendung fuer den Ausschluss
+   104	# ("leere/tote Augen, verrutschte Mundausschnitte") deckt sich NICHT mit dem,
+   105	# was in diesen Bildern zu sehen ist.
+   106	# Gabriel hat beide Register ausdruecklich bestellt: "lustige Gesichtsausdruecke
+   107	# ... aber auch boese hyperrealistische oder lustige eher comichafte" -- und
+   108	# spaeter: "was ChatGPT in seiner Gesamtheit abgeliefert hat, reicht".
+   109	# Zur Politiker-Frage bei satire_meme: betroffen sind DATEINAMEN als
+   110	# Schauspiel-Hinweis, nicht die Bilder. Das Manifest regelt das selbst
+   111	# (identity_rule): "named pop-culture cues describe acting only, never
+   112	# identity/likeness". Die Bilder zeigen FranKenstein, der eine Miene zieht.
+   113	# Wer einzelne Ausdruecke schlecht findet, nimmt SIE raus -- nicht 252 Dateien
+   114	# ungesehen.
+   115	ERWEITERT_REGISTER = ("serious_dystopian", "demonic", "anime_90s", "satire_meme")
+   116	ERWEITERT_UNTERORDNER = ("frontal", "yaw_proxy")
+   117	
+   118	# ⭐ 2026-09-11 (Koordinator): EIN SCHALTER fuer den geschaerften Bildsatz.
+   119	#
+   120	# Der Gesichtsfilter-Agent hat alle 972 Bilder EINMALIG offline durch
+   121	# CLAHE(LAB)+Unschaerfemaskierung geschickt und in Parallelverzeichnisse mit
+   122	# Endung `_ai` gelegt. Gemessen am Kopfbild:
+   123	#       Kantenstaerke   9,86 -> 12,94   (+31 %)
+   124	#       Kontrast       74,83 -> 75,70   (praktisch unveraendert)
+   125	#       Alpha + Anker   in 40/40 Stichproben BYTE-IDENTISCH
+   126	# Die Kacheln werden schaerfer und plastischer, das Mosaik bleibt Mosaik --
+   127	# genau Gabriels "das Trashige veredeln, nicht wegglaetten".
+   128	# ⚠️ GFPGAN wurde vorher geprueft und VERWORFEN: es glaettet die per
+   129	# Landmark-Erkennung ausgerichtete Gesichts-Ellipse fotorealistisch, waehrend
+   130	# Stirn/Haare/Ohren unberuehrt bleiben -> sichtbarer Stilbruch. Auch bei
+=== DAEMON 760-970 routes ===
+   760	            self.wfile.write(b)
+   761	
+   762	        def _bild_ausliefern(self, voller_pfad):
+   763	            # Bedingtes GET statt Stunden-Cache. LEHRE (2026-09-11): vorher
+   764	            # "Cache-Control: max-age=3600" auf allen Bildern -- der Browser
+   765	            # hat eine Stunde lang NIE nachgefragt, egal was auf der Platte
+   766	            # neu lag. Jetzt: immer neu anfragen (no-cache = revalidieren,
+   767	            # nicht "nie cachen"), Server antwortet mit 304 wenn unveraendert
+   768	            # -> genauso billig wie vorher, aber Aenderungen wirken sofort.
+   769	            try:
+   770	                mtime = os.path.getmtime(voller_pfad)
+   771	            except OSError:
+   772	                self.send_response(404); self.end_headers(); return
+   773	            last_mod = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mtime))
+   774	            ims = self.headers.get("If-Modified-Since")
+   775	            if ims and ims == last_mod:
+   776	                self.send_response(304)
+   777	                self.send_header("Cache-Control", "no-cache")
+   778	                self.end_headers()
+   779	                return
+   780	            with open(voller_pfad, "rb") as f:
+   781	                daten = f.read()
+   782	            self.send_response(200)
+   783	            self.send_header("Content-Type", "image/png")
+   784	            self.send_header("Content-Length", str(len(daten)))
+   785	            self.send_header("Cache-Control", "no-cache")
+   786	            self.send_header("Last-Modified", last_mod)
+   787	            self.end_headers()
+   788	            self.wfile.write(daten)
+   789	
+   790	        def do_GET(self):
+   791	            u = urllib.parse.urlsplit(self.path)
+   792	            path, qs = u.path, urllib.parse.parse_qs(u.query)
+   793	            if path == "/":
+   794	                # Immer frisch von Disk lesen -- sonst serviert der laufende
+   795	                # Prozess auf ewig den Stand von seinem eigenen Start
+   796	                # (permanenter Reload-Weg, Gabriels Anforderung 2026-09-07:
+   797	                # sonst prueft man bei jeder Aenderung eine alte Version).
+   798	                aktuelle_seite = _seite()
+   799	                self.send_response(200)
+   800	                self.send_header("Content-Type", "text/html; charset=utf-8")
+   801	                self.send_header("Content-Length", str(len(aktuelle_seite)))
+   802	                self.send_header("Cache-Control", "no-store")
+   803	                self.end_headers()
+   804	                self.wfile.write(aktuelle_seite)
+   805	            elif path == "/filmlook.js":
+   806	                # ⭐ 2026-09-11 (Koordinator): der globale Filmlook (Korn,
+   807	                # Farbabstimmung, Vignette) liegt in EINER eigenen Datei, nicht
+   808	                # in buehne.html. Grund: die Seite gehoert waehrend des Umbaus
+   809	                # dem Animations-Agenten -- zwei Agenten in derselben Datei
+   810	                # erzeugen Konflikte. So braucht buehne.html nur EINE Zeile
+   811	                # (<script src="/filmlook.js">), und der Look kann unabhaengig
+   812	                # weitergebaut oder komplett abgeschaltet werden (Datei leeren).
+   813	                # Die Datei injiziert ihr eigenes <style>, ihre eigenen
+   814	                # SVG-<defs> und ihre eigenen Overlay-Ebenen.
+   815	                # ⚠️ Externe SVG-Filterverweise (filter:url(datei.svg#id))
+   816	                # funktionieren in Chrome NICHT zuverlaessig -- deshalb muessen
+   817	                # die <defs> ins Dokument selbst, per Skript.
+   818	                pfad = os.path.join(VISUAL_DIR, "filmlook.js")
+   819	                if os.path.isfile(pfad):
+   820	                    with open(pfad, "rb") as fh:
+   821	                        inhalt = fh.read()
+   822	                    self.send_response(200)
+   823	                    self.send_header("Content-Type",
+   824	                                     "application/javascript; charset=utf-8")
+   825	                    self.send_header("Content-Length", str(len(inhalt)))
+   826	                    self.send_header("Cache-Control", "no-store")
+   827	                    self.end_headers()
+   828	                    self.wfile.write(inhalt)
+   829	                else:
+   830	                    # Fehlt die Datei, liefert der Server eine leere Antwort
+   831	                    # statt 404 -- die Seite soll ohne Filmlook normal laufen.
+   832	                    self.send_response(200)
+   833	                    self.send_header("Content-Type",
+   834	                                     "application/javascript; charset=utf-8")
+   835	                    self.send_header("Content-Length", "0")
+   836	                    self.end_headers()
+   837	            elif path == "/api/mtime":
+   838	                self._json({"mtime": _seite_mtime()})
+   839	            elif path == "/gesicht.png":
+   840	                self._bild_ausliefern(GESICHT_BILD)
+   841	            elif (path.startswith("/ausdruck/") or path.startswith("/augen/")
+   842	                    or path.startswith("/kopf/") or path.startswith("/augen_gaze/")
+   843	                    or path.startswith("/augen_blink/")
+   844	                    or path.startswith("/mund_keyframes/")
+   845	                    or path.startswith("/kopf_rgba/") or path.startswith("/koerper_rgba/")):
+   846	                # Ausdrucks-/Augen-/Kopf-/Gaze-/Mund-/Kopf-RGBA-/Koerper-RGBA-
+   847	                # Bilder statisch ausliefern -- nur Basisname, nur .png, nur
+   848	                # aus dem jeweils zustaendigen Verzeichnis (kein Pfad-Traversal
+   849	                # moeglich). kopf_rgba/koerper_rgba: 2026-09-11, echte
+   850	                # Alpha-PNGs aus RIG_V2 als neue Hauptebene, siehe Konstanten
+   851	                # oben und buehne.html.
+   852	                if path.startswith("/ausdruck/"):
+   853	                    verzeichnis = AUSDRUCK_DIR
+   854	                elif path.startswith("/augen/"):
+   855	                    verzeichnis = AUGEN_DIR
+   856	                elif path.startswith("/augen_gaze/"):
+   857	                    verzeichnis = GAZE_DIR
+   858	                elif path.startswith("/augen_blink/"):
+   859	                    verzeichnis = BLINK_DIR
+   860	                elif path.startswith("/mund_keyframes/"):
+   861	                    verzeichnis = MUND_DIR
+   862	                elif path.startswith("/kopf_rgba/"):
+   863	                    verzeichnis = KOPF_RGBA_DIR
+   864	                elif path.startswith("/koerper_rgba/"):
+   865	                    verzeichnis = KOERPER_RGBA_DIR
+   866	                else:
+   867	                    verzeichnis = KOPF_DIR
+   868	                # ⭐ 2026-09-11 (Koordinator): GENAU EINE Ebene Unterordner erlaubt.
+   869	                # Vorher nahm diese Route nur `os.path.basename(path)` -- damit
+   870	                # waren kopf_rgba/roll/, koerper_rgba/atmen/ und die 36 Mund-
+   871	                # Uebergangsordner NICHT abrufbar, obwohl die Dateien da lagen.
+   872	                # Deshalb wurde frueher alles flach mit Praefix kopiert, was bei
+   873	                # gleichnamigen Dateien (36x stufe_00.png) stillschweigend Bilder
+   874	                # verschluckt hat. Beide Ablagen bleiben jetzt gueltig.
+   875	                # Pfad-Traversal: jedes Segment muss ein reiner Name sein --
+   876	                # "." und ".." fliegen raus, damit bleibt der Zugriff im
+   877	                # zustaendigen Verzeichnis.
+   878	                teile = [t for t in path.split("/") if t][1:]
+   879	                sicher = (1 <= len(teile) <= 2
+   880	                          and all(t not in (".", "..") and "\\" not in t
+   881	                                  for t in teile)
+   882	                          and all(t == os.path.basename(t) for t in teile))
+   883	                name = "/".join(teile) if sicher else ""
+   884	                voller_pfad = os.path.join(verzeichnis, *teile) if sicher else ""
+   885	                if (sicher and name.endswith(".png")
+   886	                        and os.path.isfile(voller_pfad)):
+   887	                    self._bild_ausliefern(voller_pfad)
+   888	                else:
+   889	                    self.send_response(404)
+   890	                    self.end_headers()
+   891	            elif path.startswith("/hintergrund/"):
+   892	                # /hintergrund/<stimmung>/<datei>.png -- Stimmung per fester
+   893	                # Allowlist (kein Pfad-Traversal ueber den Ordnernamen
+   894	                # moeglich), Datei zusaetzlich per Basisname+Endung geprueft.
+   895	                teile = [t for t in path.split("/") if t]
+   896	                if len(teile) == 3:
+   897	                    _, stimmung, datei = teile
+   898	                    if stimmung in HINTERGRUND_STIMMUNGEN:
+   899	                        name = os.path.basename(datei)
+   900	                        voller_pfad = os.path.join(HINTERGRUND_DIR, stimmung, name)
+   901	                        if (name.endswith(".png") and "/" not in name
+   902	                                and os.path.isfile(voller_pfad)):
+   903	                            self._bild_ausliefern(voller_pfad)
+   904	                        else:
+   905	                            self.send_response(404)
+   906	                            self.end_headers()
+   907	                    else:
+   908	                        self.send_response(404)
+   909	                        self.end_headers()
+   910	                else:
+   911	                    self.send_response(404)
+   912	                    self.end_headers()
+   913	            elif path.startswith("/ausdruck_erweitert/"):
+   914	                # /ausdruck_erweitert/<register>/<ausdruck>/<frontal|yaw_proxy>/<datei>.png
+   915	                # Register UND Unterordner per fester Allowlist (kein
+   916	                # Pfad-Traversal ueber Ordnernamen moeglich); <ausdruck> ist
+   917	                # ein freier Ordnername, wird aber nur ueber os.path.isdir
+   918	                # gegen den echten Baum geprueft, nie direkt in einen Pfad
+   919	                # ausserhalb von AUSDRUCK_ERWEITERT_DIR aufgeloest, weil
+   920	                # os.path.join+os.path.isfile am Ende trotzdem greift.
+   921	                teile = [t for t in path.split("/") if t]
+   922	                if len(teile) == 5:
+   923	                    _, register, ausdruck, unterordner, datei = teile
+   924	                    name = os.path.basename(datei)
+   925	                    if (register in ERWEITERT_REGISTER
+   926	                            and unterordner in ERWEITERT_UNTERORDNER
+   927	                            and "/" not in ausdruck and ".." not in ausdruck
+   928	                            and name.endswith(".png") and "/" not in name):
+   929	                        voller_pfad = os.path.join(
+   930	                            AUSDRUCK_ERWEITERT_DIR, register, ausdruck, unterordner, name)
+   931	                        if os.path.isfile(voller_pfad):
+   932	                            self._bild_ausliefern(voller_pfad)
+   933	                        else:
+   934	                            self.send_response(404)
+   935	                            self.end_headers()
+   936	                    else:
+   937	                        self.send_response(404)
+   938	                        self.end_headers()
+   939	                else:
+   940	                    self.send_response(404)
+   941	                    self.end_headers()
+   942	            elif path == "/api/chat":
+   943	                since = (qs.get("since") or [""])[0]
+   944	                zeilen, letzter = chat_seit(since)
+   945	                self._json({"ok": True, "zeilen": zeilen, "cursor": letzter or since})
+   946	            elif path == "/api/status":
+   947	                z = zustand_lesen()
+   948	                z["buehne"] = buehnen_zustand()
+   949	                z["zuschauer"] = 1  # ⭐ ehrlich fest, keine Messung, siehe Docstring
+   950	                z["fps"] = fps_lesen()  # ⭐ echte Selbstmeldung der Seite, siehe fps_melden()
+   951	                self._json(z)
+   952	            elif path == "/live":
+   953	                self._json({"ok": True, "dienst": "buehne_daemon", "ts": time.time()})
+   954	            else:
+   955	                self.send_response(404)
+   956	                self.end_headers()
+   957	
+   958	        def do_POST(self):
+   959	            if self.path == "/api/send":
+   960	                n = int(self.headers.get("Content-Length") or 0)
+   961	                try:
+   962	                    d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+   963	                except Exception:
+   964	                    d = {}
+   965	                text = str(d.get("text") or "").strip()[:2000]
+   966	                if not text:
+   967	                    return self._json({"ok": False, "grund": "leerer Text"}, 400)
+   968	                # ⚠️ EHRLICHKEIT: das landet NUR im Buehnen-Chat, NICHT im
+   969	                # echten Sprachmodus (gespraech_loop.py wird nicht angefasst).
+   970	                # Deshalb eigene Beschriftung "(Chat)" statt gesprochener Name.
+=== TOP-LEVEL RUNTIME FILES ===
+FILTER_KONZEPT.md
+beobachtung.py
+blick.py
+blick_waechter.py
+buehne.html
+buehne.html.pre-gpt56-qa
+buehne_daemon.py
+buehne_pruefen.py
+detail_bauen.py
+filmlook.js
+gesichtsfilter.py
+kopf_ausrichten.py
+messen.py
+retina_pruefen.py
+tiefe_bauen.py
+visual_cli.py
+zustand.json

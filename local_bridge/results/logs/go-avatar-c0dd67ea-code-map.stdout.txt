@@ -1,0 +1,326 @@
+LAYERS
+111:     #koerper-schicht + #kopf-schicht sind ECHTE Alpha-PNGs aus RIG_V2 (1536x1024,
+121:     #mund-effekt ist kein Lippen-Ausschnitt, sondern ein deckender
+152:     OHNE die per-Frame scale()-Atmung auf #kopf-schicht/#koerper-schicht
+168:  #koerper-schicht,#koerper-schicht2,#kopf-schicht,#kopf-schicht2,
+171:  #koerper-schicht{z-index:1}
+172:  #kopf-schicht{z-index:2}
+178:     identischer Silhouette wie #kopf-schicht (10.4% Nicht-Alpha, per PIL
+183:  #kopf-schicht2,#ausdruck-schicht2,#ausdruck-schicht{opacity:0}
+185:     Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster
+188:     weich ineinander ueberblendet statt hart getauscht. koerper-schicht2 startet
+189:     unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */
+190:  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+191:  #koerper-schicht2{opacity:0}
+193:     eigenstaendiges Problem -- auch OHNE jede Bewegung sichtbar): #kopf-schicht
+194:     (z-index 2) liegt UEBER #koerper-schicht (z-index 1) und ueberlappt sie
+202:     faellt dort weich statt hart auf 0. Sitzt auf #kopf-schicht selbst, wandert
+207:  #kopf-schicht,#kopf-schicht2,#ausdruck-schicht,#ausdruck-schicht2{
+218:     UEBER dem RGBA-Kopf (#kopf-schicht, z-index:2). Bei jedem Sonderausdruck
+276:  #mund-effekt{position:absolute;left:40.49%;top:34.38%;width:19.21%;height:17.77%;
+302:  #pupillen-glow{position:absolute;left:31%;top:12%;width:27%;height:auto;
+310:     identische Prozente). Liegt als eigenes <img> UEBER #pupillen-glow, weil
+313:     Aufmerksamkeit), waehrend #pupillen-glow weiter erkennungs-gekoppelt
+315:  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+396:          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+398:            <img id="kopf-schicht" src="/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png" alt="">
+402:                 #kopf-schicht2 ist das zweite Crossfade-Bild, gleiches Muster
+403:                 wie #koerper-schicht/#koerper-schicht2. -->
+404:            <img id="kopf-schicht2" src="/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png" alt="">
+413:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+415:                 wenn #kopf-schicht/#kopf-schicht2 auf eine echte Rollpose
+423:            <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+424:            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+425:            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+539:  $("mund-effekt").src = mundAktivFrames[mundAktivIndex];
+646:// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+724:// mit kurzem Crossfade zwischen #kopf-schicht/#kopf-schicht2 dorthin, haelt,
+738:let kopfRollAktiv = false;   // false: #kopf-schicht sichtbar, true: #kopf-schicht2
+757:  const ein = kopfRollAktiv ? "kopf-schicht" : "kopf-schicht2";
+758:  const aus = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+782:// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+882:  $("augen-blink").style.transform =
+896:// Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+898:// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+899:// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+930:// #gesicht/#gesicht2 (z-index:3) UEBER den echten RGBA-Kopf (#kopf-schicht,
+935:// wie #kopf-schicht) auf #ausdruck-schicht/#ausdruck-schicht2, die IN
+947:  $("mund-effekt").style.opacity = "0";
+973:    $("mund-effekt").style.opacity = "1";
+974:    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+1181:// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1190:// Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+1206:    $("augen-blink").style.opacity = "0";
+1215:  $("augen-blink").src = BLINK_BILDER[frame];
+1216:  $("augen-blink").style.opacity = "1";
+1349:// immer, alle 1-4s) -- sichtbar wird sie trotzdem nur, wenn #pupillen-glow
+1395:  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+1401:  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1406:  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+1515:// bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,
+1523:// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+1624:// Framezeiten lang komplett unsichtbar sind: kopf-schicht2 ausser waehrend
+1662:  // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+1663:  const kopfSichtbar = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+1671:  // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+1702:// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+1704:// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+1716:let atmenAktivSchicht = "koerper-schicht";
+1718:  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+TIMERS
+547:  const iv = setInterval(() => {
+553:  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+559:// sofort eine eigene mundAnimation: ~105 gleichzeitige setInterval, der Mund
+691:setInterval(hgSchritt, 90); // ~11 Bilder/s -- reicht fuer einen Hintergrund-Loop, kein Fokuspunkt
+966:      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+967:      setTimeout(() => rahmen.classList.remove("pose-wechsel"), 420);
+983:    if(stufe < 6) setTimeout(hoch, 90);
+984:    else setTimeout(runter, haltenMs);
+989:    if(stufe > 0) setTimeout(runter, 90);
+990:    else setTimeout(sauber, 120); // letzte Stufe (= Neutralbild) kurz halten, dann Ebenen aus
+992:  setTimeout(hoch, 90);
+1108:    if(versuch < 8) setTimeout(() => _koerperSonderausdruckVersuchen(pool, versuch+1), 600);
+1158:// "Doppelschlag"-Bonus war (setTimeout(blinzeln, 120+...) unten). Jeder
+1209:      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }
+1218:  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);
+1221:  setTimeout(() => blinzeln(true), 2000 + Math.random()*5000); // 2-7s, unregelmaessig (Gabriels Vorgabe)
+1277:    _fokusAblaufTimer = setTimeout(() => { gespraechsFokus = "gabriel"; }, 5000 + Math.random()*6000);
+1313:    setTimeout(() => { blickPauseAktiv = false; }, 350 + Math.random()*550); // 0.35-0.9s kurzer Wegblick
+1315:  setTimeout(blickPauseSchritt, 4000 + Math.random()*7000); // 4-11s, unregelmaessig
+1317:setTimeout(blickPauseSchritt, 3000);
+1361:  setTimeout(() => { mikroSakX = 0; mikroSakY = 0; }, 80 + Math.random() * 90); // kurz gehalten, dann ballistisch zurueck (kein Lerp)
+1362:  setTimeout(mikroSakkadeSchritt, 1000 + Math.random() * 3000); // 1-4s, unregelmaessig
+1364:setTimeout(mikroSakkadeSchritt, 1500);
+1417:  setTimeout(wanderSchritt, 2500 + Math.random()*4500); // lange, ziellose Pausen
+1419:setTimeout(wanderSchritt, 1500);
+1437:    setTimeout(() => {
+1447:  setTimeout(kopfKurzNeigen, 9000 + Math.random()*10000); // 9-19s, unregelmaessig
+1466:    _blickTimer = setTimeout(() => {
+1473:    _ausdruckTimer = setTimeout(() => {
+1615:setInterval(() => { _mikroUnruheZiel = (Math.random()*2 - 1); }, 2600 + Math.random()*3200);
+1770:  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+1861:  requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+1862:  setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+1886:  requestAnimationFrame(schleife);
+1888:requestAnimationFrame(schleife);
+1889:setInterval(() => {
+1901:setInterval(() => {
+1906:// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+1948:setInterval(chatHolen, 1500);
+1949:setInterval(statusHolen, 3000);
+1966:      kopfRollSequenzZu(15, () => setTimeout(() => {
+1994:setInterval(_reloadWaechter, 2000);
+TRANSFORMS
+54:  @keyframes kamera-overshoot{0%{transform:scale(1) rotate(0deg)}40%{transform:scale(1.006) rotate(.12deg)}100%{transform:scale(1) rotate(0deg)}}
+151:     unten) darf hier eine kleine gefederte rotate()/translateY() setzen,
+282:     per translate() verschoben, kein neues Bild pro Blickwinkel. Anchor aus
+293:     der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+333:  @keyframes einblenden{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+422:                 (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+710:// oben) bekommen eine kleine gefederte rotate()/translateY(). Feder statt
+767:  $(ein).style.transform = _atmenTransform;
+830:// rotiert (PIL rotate(expand=True)), danach wird die neue, GROESSERE
+833:// reines CSS rotate() um transform-origin) -- es ist "rotiere um die
+865:  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+866:  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+882:  $("augen-blink").style.transform =
+883:    `translate(${augenDxCss.toFixed(2)}px, ${augenDyCss.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+958:    versteckt.style.transform = _atmenTransform;
+1392:  // ⭐⭐ 2026-09-11 NACHTRAG 4: rotate() dranhaengen (Rest-Ausgleich zur echten
+1401:  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1626:// Sonderausdrucks) auf style.transform/style.filter schreiben liess --
+1664:  $(kopfSichtbar).style.transform = transform;
+1683:  $(atmenAktivSchicht).style.transform = transform;
+1692:    $(ausdruckSichtbar).style.transform = transform;
+1725:  $(naechsteSchicht).style.transform = _atmenTransform;
+1844:  $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+1850:  $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+FILMLOOK
+/* filmlook.js — globaler Film-Look (Koordinator-Auftrag 2026-09-11)
+   Gabriel woertlich: "ein Filter global eine Vignette ... ein Filter oben
+   drauf global der alles einen Film-Look gibt ... als waere es EINS, nicht
+   viele Ebenen uebereinander."
+
+   Selbstenthalten: injiziert eigenes <style>, eigene SVG-<defs>, eigene
+   Overlay-Elemente zur Laufzeit. Wird diese Datei leer, laeuft die Seite
+   normal weiter -- buehne.html verankert sie nur per <script src>, sonst
+   nichts. Diese Datei ruehrt buehne.html selbst NICHT an, nur das Laufzeit-
+   DOM/Style ueber JS-APIs.
+
+   Baustein A (Tiefenschaerfe, #hg-frame blur) ist schon live in buehne.html.
+   Hier: B (Korn) + C (Farbabstimmung) + F (Vignette-Pruefung), aus
+   FILTER_KONZEPT.md, Abschnitte B/C/F. */
+(function () {
+  "use strict";
+
+  function wennBereit(fn) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn, { once: true });
+    } else {
+      fn();
+    }
+  }
+
+  wennBereit(function () {
+    var buehne = document.getElementById("buehne");
+    var kamera = document.getElementById("kamera");
+    if (!buehne || !kamera) {
+      console.warn(
+        "[filmlook] #buehne/#kamera nicht gefunden -- Seitenstruktur anders " +
+          "als erwartet, bleibe inaktiv statt etwas Falsches zu bauen."
+      );
+      return;
+    }
+    if (document.getElementById("fl-defs")) return; // schon injiziert
+
+    pruefeVignette();
+    injiziereDefs();
+    injiziereKorn(buehne);
+    injiziereFarbabstimmung(kamera);
+    starteZustandsPoll();
+  });
+
+  // ── F: Vignette -- erst ANSEHEN, nicht doppeln ------------------------
+  // #vignette existiert in buehne.html bereits: radialer Verlauf, transparent
+  // bis 52% Radius, dann auf rgba(0,0,0,.5) am Rand, z-index 5 innerhalb von
+  // #gesicht-rahmen -- das deckt praktisch die gesamte sichtbare Buehne ab
+  // (#gesicht-rahmen ist nur 28px von #kamera eingerueckt, #kamera selbst
+  // deckt die volle #buehne + Ueberschuss fuer den Wackel). Das ist bereits
+  // GENAU das gewuenschte globale, sanfte Abdunkeln zu den Ecken -- keine
+  // horizontale Bande, kein Schleier auf dem Gesicht (Zentrum bei 50%/38%
+  // bleibt klar). Deshalb: NICHT verdoppeln. Eine zweite Vignette uebereinander
+  // waere selbst wieder "eine Ebene mehr", genau das Gegenteil vom Auftrag.
+  function pruefeVignette() {
+    var v = document.getElementById("vignette");
+    if (!v) {
+      console.warn("[filmlook] #vignette fehlt -- unerwartet, keine Vignette gebaut (siehe Bericht).");
+      return;
+    }
+    console.info("[filmlook] #vignette vorhanden und global wirksam -- unveraendert gelassen (siehe Bericht).");
+  }
+
+  // ── B: gemeinsames Korn ------------------------------------------------
+  // EIN feTurbulence-Layer, seed FEST (7) -- wird von diesem Skript nie
+  // angefasst, nie animiert. Bewegung ausschliesslich per CSS
+  // transform:translate (reine Compositor-Arbeit, kein Neuzeichnen der
+  // Turbulenz). Siehe FILTER_KONZEPT.md §B, Warnung vor animiertem seed.
+  function injiziereDefs() {
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("id", "fl-defs");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.position = "absolute";
+    svg.style.width = "0";
+    svg.style.height = "0";
+    svg.style.overflow = "hidden";
+    svg.style.pointerEvents = "none";
+    svg.innerHTML =
+      "<defs>" +
+      '<filter id="fl-korn-filter" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">' +
+      '<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="fl-n"/>' +
+      '<feColorMatrix in="fl-n" type="matrix" values="0.2 0.2 0.2 0 0.2  0.2 0.2 0.2 0 0.2  0.2 0.2 0.2 0 0.2  0 0 0 0 1"/>' +
+      "</filter>" +
+      "</defs>";
+    document.body.appendChild(svg);
+  }
+
+  function injiziereKorn(buehne) {
+    var style = document.createElement("style");
+    style.id = "fl-style";
+    style.textContent =
+      "@keyframes fl-korn-drift {" +
+      "  0%   { transform: translate(0,0); }" +
+      "  25%  { transform: translate(-1.1%, 0.7%); }" +
+      "  50%  { transform: translate(0.6%, -1.0%); }" +
+      "  75%  { transform: translate(1.0%, 0.4%); }" +
+      "  100% { transform: translate(0,0); }" +
+      "}" +
+      "#fl-korn{" +
+      "  position:absolute; top:-15%; left:-15%; width:130%; height:130%;" +
+      "  z-index:4; pointer-events:none;" +
+      "  filter:url(#fl-korn-filter);" +
+      "  mix-blend-mode:overlay;" +
+      "  opacity:0.05;" +
+      /* MESSBEFUND 2026-09-11: CSS-Animation auf diesem Layer = KATASTROPHE
+         in dieser Software-Rendering-Umgebung (Chrome --disable-gpu):
+         animiert fps 3-6, statisch fps 8 unter gleicher Maschinenlast.
+         Die Annahme "transform ist gratis" stimmt hier NICHT -- der
+         SVG-Filter wird bei jedem Animationsframe neu gerastert.
+         Deshalb: Korn steht, und lebt nur ueber SELTENE, DISKRETE Schuebe
+         (JS-Intervall, 700ms) statt kontinuierlicher Interpolation. */
+      "}";
+
+    document.head.appendChild(style);
+
+    var korn = document.createElement("div");
+    korn.id = "fl-korn";
+    // z-index:4 -- unter #kopf (Streamer-UI, z-index:6, bleibt scharf/klar),
+    // ueber #kamera (die ganze gefilmte Szene, z-index:auto). Als Kind von
+    // #buehne (nicht #kamera) angehaengt: das Korn haengt NICHT am Kamera-
+    // Wackel-Transform -- egal, Rauschen hat keine Referenzpunkte, das Auge
+    // kann eine Weltbindung vs. Kamerabindung bei reinem Rauschen nicht
+    // unterscheiden. Dafuer bleibt es entkoppelt von den drei verschiedenen,
+    // gleichzeitig auf #kamera wirkenden Transform-Quellen (Wackel-Loop,
+    // Overshoot-Klasse, ...) -- einfacher, kein Interferenzrisiko.
+    buehne.appendChild(korn);
+
+    // Diskrete Korn-Schuebe: 2 Umpositionierungen/Sekunde statt 60.
+    // Pro Schub ein Raster-Invalidierung, dazwischen NICHTS.
+    var schub = [
+      "translate(0,0)", "translate(-0.9%,0.6%)",
+      "translate(0.5%,-0.8%)", "translate(0.8%,0.3%)"
+    ];
+    var i = 0;
+    setInterval(function () {
+      korn.style.transform = schub[++i % 4];
+    }, 700);
+  }
+
+  // ── C: gemeinsame Farbabstimmung ---------------------------------------
+  // CSS filter DIREKT auf #kamera (= Hintergrund+Koerper+Kopf+Mund+Augen als
+  // EINE bereits zusammengesetzte Ebene, siehe buehne.html-Kommentar zu
+  // #kamera). Das ist ein echtes UMFAERBEN der fertigen Komposition, keine
+  // zusaetzliche Flaeche -- exakt die Lehre aus den zweimal gescheiterten
+  // #farbschicht/#wasserlinie-Versuchen ("nie wieder eine Auflage auf dem
+  // Gesicht"). Ein CSS-`filter` kann per Definition nichts "auflegen", er
+  // faerbt vorhandene Pixel um.
+  var GRUND_FILTER = "sepia(0.05) saturate(1.05) contrast(1.03) hue-rotate(-2deg)";
+  function injiziereFarbabstimmung(kamera) {
+    kamera.style.transition =
+      (kamera.style.transition ? kamera.style.transition + ", " : "") + "filter 4s ease";
+    kamera.style.filter = GRUND_FILTER;
+  }
+
+  // Bonus: Stimmung leicht aus echten, gemessenen Werten faerben -- KEIN
+  // erfundenes Feld, nur was /api/status tatsaechlich liefert
+  // (broadcast_value, ueberraschung), vorher per curl geprueft. Eigene,
+  // langsame Poll-Schleife (6s) statt in die bestehende Buehnen-Schleife
+  // einzugreifen -- diese Datei fasst nur an, was sie selbst injiziert hat.
+  function starteZustandsPoll() {
+    var kamera = document.getElementById("kamera");
+    if (!kamera) return;
+    async function schritt() {
+      try {
+        var r = await fetch("/api/status");
+        var d = await r.json();
+        var b = (d && d.buehne) || {};
+        var hue = -2,
+          sat = 1.05;
+        if (typeof b.ueberraschung === "number") {
+          var u = Math.max(0, Math.min(1, b.ueberraschung));
+          hue = -2 + u * 8; // ruhig: leicht kuehl -- angespannt: leicht waermer/roeter
+        }
+        if (typeof b.broadcast_value === "number") {
+          var t = Math.max(0, Math.min(3, b.broadcast_value)) / 3;
+          sat = 1.02 + t * 0.06;
+        }
+        kamera.style.filter =
+          "sepia(0.05) saturate(" + sat.toFixed(3) + ") contrast(1.03) hue-rotate(" + hue.toFixed(2) + "deg)";
+      } catch (e) {
+        /* kein Status erreichbar -> Grundfarbe (GRUND_FILTER) bleibt stehen */
+      }
+    }
+    schritt();
+    setInterval(schritt, 6000);
+  }
+})();

@@ -1,0 +1,67 @@
+=== HOST/BASE ===
+2026-09-12T01:51:07+02:00
+andreas-MACO
+## main...origin/main
+BASE=2d0bab710a0b229cbf07c443db2da71e552ab6e3
+=== EXACT BLOBS ===
+werkzeug/selbsttests.sh 3ead1d83784abc3b321af934724751259f3fa6ae EXPECT 3ead1d83784abc3b321af934724751259f3fa6ae
+werkzeug/rueckstand_maschinenstatus_selbsttest.sh a1b083eec049fc93d74db65bcebded02dd3da791 EXPECT a1b083eec049fc93d74db65bcebded02dd3da791
+werkzeug/selbsttests-waechter.py c512b501fc8d68dd735125825d8246a12e8963ff EXPECT c512b501fc8d68dd735125825d8246a12e8963ff
+werkzeug/selbsttests_waechter_runnerstatus_selbsttest.py 0b43a5c04553059a657c08bf1626638243ee3d11 EXPECT 0b43a5c04553059a657c08bf1626638243ee3d11
+=== FOCUSED 081 ===
+Selbsttest Runnerstatus im Selbsttest-Waechter -- GO081
+
+  ok    R1 Grundlinie rc=0 (war 0)
+  ok    R2 Verlauf hat stabile Spalte 'laeufer'
+  ok    R3 runner rc5 bleibt BEFUND rc=2 (war 2)
+  ok    R4 rc0->rc5 wird als AENDERUNG gemeldet
+  ok    R5 gleicher rc5 bleibt rot
+  ok    R6 unveraenderter rc5 erzeugt keine doppelte Meldung
+  ok    R7 Erholung auf runner rc0 wird wieder gruen (war 0)
+  ok    R8 Erholung rc5->ok wird als AENDERUNG gemeldet
+
+8 bestanden, 0 gefallen
+FOCUSED081_RC=0
+=== FULL 081 ON REAL HOST ===
+Selbsttests im Werkzeugkasten -- 2026-09-11T23:51:08Z
+/var/tmp/go081-payload-ZazTaa/repo/werkzeug
+Temp: /var/tmp/selbsttests-2329220-20260912T015108  (Platte, 377398 MiB frei, aus TMPDIR des Aufrufers)
+
+#ERG	betrieb-pruefen_selbsttest.sh	0
+  bestanden  betrieb-pruefen_selbsttest.sh               0s  Selbsttest bestanden.
+#ERG	db-autoritaet_selbsttest.sh	0
+  bestanden  db-autoritaet_selbsttest.sh                 4s  Selbsttest bestanden.
+#ERG	fluechtig-pruefen_selbsttest.sh	0
+  bestanden  fluechtig-pruefen_selbsttest.sh             1s  Selbsttest bestanden.
+#ERG	rueckstaende-pruefen_selbsttest.sh	0
+  bestanden  rueckstaende-pruefen_selbsttest.sh          1s  Selbsttest bestanden.
+#ERG	rueckstand_maschinenstatus_selbsttest.sh	0
+  bestanden  rueckstand_maschinenstatus_selbsttest.sh    0s  Alle Pruefungen bestanden.
+#ERG	selbsttests_selbsttest.sh	0
+  bestanden  selbsttests_selbsttest.sh                   1s  Alle Pruefungen bestanden.
+#ERG	gegenwache_selbsttest.py	0
+  bestanden  gegenwache_selbsttest.py                    1s  31 bestanden, 0 nicht bestanden
+#ERG	hook-doppel-pruefen_selbsttest.py	0
+  bestanden  hook-doppel-pruefen_selbsttest.py           0s  17 bestanden, 0 nicht bestanden
+#ERG	letzter-frame-pruefen_selbsttest.py	0
+  bestanden  letzter-frame-pruefen_selbsttest.py         1s  ========================================================================
+#ERG	puls-pruefen_selbsttest.py	0
+  bestanden  puls-pruefen_selbsttest.py                  0s  87 von 87 Pruefungen bestanden.
+#ERG	regressions-waechter_selbsttest.py	0
+  bestanden  regressions-waechter_selbsttest.py          6s  65 bestanden, 0 nicht bestanden
+#ERG	selbsttests-waechter_selbsttest.py	0
+  bestanden  selbsttests-waechter_selbsttest.py          4s  37 bestanden, 0 nicht bestanden
+#ERG	selbsttests_waechter_runnerstatus_selbsttest.py	0
+  bestanden  selbsttests_waechter_runnerstatus_selbsttest.py  1s  8 bestanden, 0 gefallen
+#ERG	wettbewerbsgesundheit_selbsttest.py	0
+  bestanden  wettbewerbsgesundheit_selbsttest.py         2s  ERGEBNIS: bestanden
+#ERG	wettbewerbswaechter_selbsttest.py	0
+  bestanden  wettbewerbswaechter_selbsttest.py           3s  ERGEBNIS: bestanden
+
+#SATZ	15/15
+-> 15 von 15 bestanden, 26s gesamt
+FULL081_RC=0
+=== LIVE CHECKOUT UNTOUCHED ===
+## main...origin/main
+2d0bab710a0b229cbf07c443db2da71e552ab6e3
+TEMP=/var/tmp/go081-payload-ZazTaa

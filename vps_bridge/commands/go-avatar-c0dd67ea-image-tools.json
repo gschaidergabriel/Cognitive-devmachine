@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "go-avatar-c0dd67ea-image-tools",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "for x in ffmpeg ffprobe identify convert magick python3 pip pip3; do printf '%s=' \"$x\"; command -v \"$x\" || true; done"
+}

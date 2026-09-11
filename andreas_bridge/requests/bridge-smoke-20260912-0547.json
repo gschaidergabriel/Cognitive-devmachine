@@ -1,0 +1,8 @@
+{
+  "schema": "f2.andreas.bridge.request.v1",
+  "id": "bridge-smoke-20260912-0547",
+  "operation": "exec",
+  "cwd": "~",
+  "argv": ["bash", "-lc", "printf 'user='; whoami; printf 'host='; hostname; printf 'pwd='; pwd; printf 'kernel='; uname -srmo; printf 'home='; printf '%s\\n' \"$HOME\""],
+  "timeout_seconds": 60
+}

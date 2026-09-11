@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-vps-transport-probe-20260912-0626-andreasmaco",
+  "command_sha256": "ab85abeeb912b4521716ca4cf116a8184c92a469c0eb6973898e657c73196e6b",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-11T23:32:08.793405+00:00",
+  "finished_at": "2026-09-11T23:32:08.795152+00:00",
+  "status": "ERROR",
+  "exit_code": 125,
+  "op": "exec",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "0c99c7c57af13d70eb2f92597a4bdde60c197a381131795eb28894221582822b",
+  "stdout_tail": "",
+  "stderr_tail": "FileNotFoundError(2, 'No such file or directory')\nTraceback (most recent call last):\n  File \"/home/andreas/.claude/star/local_bridge_daemon.py\", line 209, in execute\n    p, meta = operate(s)\n              ~~~~~~~^^^\n  File \"/home/andreas/.claude/star/local_bridge_daemon.py\", line 164, in operate\n    return op_exec(str(s[\"command\"]), str(s.get(\"cwd\", \"\")), timeout), {}\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/andreas/.claude/star/local_bridge_daemon.py\", line 118, in op_exec\n    return subprocess.run([\"bash\", \"-lc\", cmd], cwd=workdir, capture_output=True,\n           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                           timeout=min(max(timeout, 1), MAX_TIMEOUT))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 555, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ~~~~~^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 1039, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                        pass_fds, cwd, env,\n                        ^^^^^^^^^^^^^^^^^^^\n    ...<5 lines>...\n                        gid, gids, uid, umask,\n                        ^^^^^^^^^^^^^^^^^^^^^^\n                        start_new_session, process_group)\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 1990, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: '~'\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

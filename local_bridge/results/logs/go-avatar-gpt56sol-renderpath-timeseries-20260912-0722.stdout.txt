@@ -1,0 +1,102 @@
+===SUBJECT===
+87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645  buehne.html
+0ab232f7112b046ced7e3e4ae454fe0d800eebd32d23bdac138c961bc069dff9  buehne_daemon.py
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js
+===LAUNCHER===
+             # Fenster jedes Mal von Hand zurueck auf x=565 ziehen, weil
+             # dort sein eigentlicher Arbeitsbildschirm (HDMI-A-1,
+             # 1680x1050 bei Offset +0+0) liegt. Position jetzt auf genau
+             # die von ihm zurechtgerueckte Stelle, auf dem richtigen
+             # Monitor:
+             f"--window-position={FENSTER_X},{FENSTER_Y}",
+             f"--window-size={FENSTER_B},{FENSTER_H}",
+             f"--user-data-dir={CHROME_PROFIL}",
+             "--no-first-run", "--no-default-browser-check",
+             "--disable-extensions", "--disable-sync",
+             "--disable-background-networking",
+             # ⭐ 2026-09-11: "--disable-features=Translate" allein reichte
+             # nicht -- das Uebersetzen-Popup kam trotzdem (Screenshot
+             # zeigte es ueber Gesicht+Chat liegend). TranslateUI + der
+             # Preference-Pfad zusaetzlich dicht machen.
+             "--disable-features=Translate,TranslateUI",
+             "--disable-translate",
+             # ⭐ OHNE GPU (2026-09-11). Gemessen: jedes Oeffnen des Fensters
+             # riss binnen 1-2 s die GPU mit, dmesg zeigt
+             # "PERMISSION_FAULTS: 0x3 / MAPPING_ERROR: 0x1 / WALKER_ERROR"
+             # auf amdgpu 0000:c4:00.0. Der Bauagent hielt es fuer den
+             # bekannten amdgpu-Kernelfehler -- es ist aber ein
+             # SPEICHERKONFLIKT: die GPU ist integriert und teilt sich ihre
+             # 8 GB mit dem System, und `llama-server` haelt davon mit
+             # `-ngl 99` bereits rund 5 GB. Kommt Chrome mit einem eigenen
+             # GPU-Kontext dazu, faellt der Zugriff.
+             #
+             # Die Buehne braucht die GPU gar nicht: der Regen laeuft
+             # bewusst auf 2D-Canvas statt WebGL (Entscheidung des
+             # Bauagenten, genau wegen des geteilten Speichers). Ohne
+             # GPU-Kontext rendert Chrome auf der CPU -- fuer Bilder,
+             # Ueberblendungen und ein paar hundert Regentropfen reicht das,
+             # und das Sprachmodell behaelt seine 5 GB.
+             "--disable-gpu",
+             "--disable-gpu-compositing",
+             "--disable-software-rasterizer"],
+            stdout=log, stderr=log,
+            start_new_session=True)  # eigene Prozessgruppe -> sauber killbar
+        with open(PID_DATEI, "w") as f:
+            f.write(str(self.proc.pid))
+        print(f"[buehne] Chrome-Fenster geoeffnet (pid {self.proc.pid})")
+        threading.Thread(target=self._fenstergroesse_erzwingen, daemon=True).start()
+
+    def _fenstergroesse_erzwingen(self):
+        """Chrome merkt sich Fensterplatzierung im eigenen Profil (Preferences
+        -> browser.app_window_placement) und ueberschreibt damit manchmal die
+        Start-Flags -- gemessen 2026-09-11: Fenster kam trotz
+        --window-size=746,449 bei 961x628 heraus. xdotool erzwingt die
+        gewuenschte Groesse deterministisch NACH dem Start, unabhaengig von
+        Chromes eigener Platzierungs-Erinnerung.
+
+        ⭐ Fund 2026-09-11 (Nachtrag): `xdotool search --name "FranKenstein
+        -- live"` liefert oft MEHRERE Treffer -- u.a. eine liegengebliebene
+        `mutter-x11-frames`-Leiche eines fruehen abgestuerzten/beendeten
+        Chrome-Fensters, die denselben Titel traegt und die alte, falsche
+        Geometrie hat. `treffer[0]` griff bisher blind den ersten Treffer,
+        das konnte die Leiche statt des echten Fensters sein -- die
+        Erzwingung "gelang" dann lautlos auf dem falschen Fenster.
+        Fix: `start_new_session=True` beim Chrome-Start gibt dem
+        Chrome-Launcher seine eigene Prozessgruppe, deren PGID == seine
+        eigene PID ist. Jeder Kandidat wird per Prozessgruppe gegen
+DAEMON=2665680
+sec daemon_cpu chrome_tree_cpu daemon_rss_kb chrome_rss_kb
+1 51.4 6.6 102692 148872
+2 51.4 6.6 102692 148872
+3 51.4 6.6 102692 148888
+4 51.4 6.6 102692 148892
+5 51.4 6.6 102692 148884
+6 51.4 6.6 102692 148868
+7 51.4 6.6 102692 148872
+8 51.4 6.6 102692 148872
+9 51.4 6.6 102692 148872
+10 51.4 6.6 102692 148880
+11 51.4 6.6 102692 148876
+12 51.4 6.6 102692 148872
+===GPU===
+GPU0:
+	apiVersion         = 1.4.318
+	driverVersion      = 25.2.8
+	vendorID           = 0x1002
+	deviceID           = 0x15bf
+	deviceType         = PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU
+	deviceName         = AMD Radeon Graphics (RADV PHOENIX)
+	driverID           = DRIVER_ID_MESA_RADV
+	driverName         = radv
+	driverInfo         = Mesa 25.2.8-0ubuntu0.24.04.2
+	conformanceVersion = 1.4.0.0
+	deviceUUID         = 00000000-c400-0000-0000-000000000000
+	driverUUID         = 414d442d-4d45-5341-2d44-525600000000
+GPU1:
+===WINDOW===
+Window 12589596
+  Position: 551,-12 (screen: 0)
+  Geometry: 774x515
+Window 6291460
+  Position: 579,86 (screen: 0)
+  Geometry: 746x449

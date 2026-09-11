@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-c0dd67ea-g1-browser-test-v2",
+  "command_sha256": "fed43a46489f48396dd1abc7c364db9f0ea930489aa9215d068776d3f4c62be2",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-11T23:49:29.448147+00:00",
+  "finished_at": "2026-09-11T23:49:34.689688+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "a55a58d366828476ac51d6d6ff31687b5ef687a36312882727b893f5889b03c0",
+  "stderr_sha256": "eb03b8846a0e800e53e4a524596110eb06b448076693bc34147de903228a0205",
+  "stdout_tail": "=== HTTP ===\n685d273f743c7d0c7cf33a96bd869428369cc766fad0c94865dff4bae1168fd5  /home/ai-core-node/frankenstein-avatar-go/c0dd67ea/evidence/candidate_root-v2.html\n685d273f743c7d0c7cf33a96bd869428369cc766fad0c94865dff4bae1168fd5  /home/ai-core-node/frankenstein-avatar-go/c0dd67ea/candidate/buehne.html\n=== PROBE ===\n\n",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"<stdin>\", line 6, in <module>\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

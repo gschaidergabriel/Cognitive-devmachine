@@ -1,0 +1,35 @@
+diff --git a/werkzeug/selbsttests.sh b/werkzeug/selbsttests.sh
+--- a/werkzeug/selbsttests.sh
++++ b/werkzeug/selbsttests.sh
+@@ -32,6 +32,7 @@
+ #            3 = kein brauchbarer Temp-Platz (siehe unten) -- ebenfalls
+ #                KEINE bestandene Messung, sondern eine unterbliebene
+ #            4 = keiner gefallen, aber mindestens einer hat NICHT GEMESSEN
++#            5 = Kindtests bestanden, aber der Laeufer fand RUECKSTAND
+ #
+ # DIE 77 (Eintrag 079, 2026-09-11):
+ #   Ein Selbsttest, dem eine Voraussetzung fehlt (eine Datenbank, eine
+@@ -111,7 +112,7 @@
+ lauf_dir="$basis/selbsttests-$$-$(date +%Y%m%dT%H%M%S)"
+ mkdir -p "$lauf_dir" || exit 3
+ export TMPDIR="$lauf_dir"
+ 
+-gefunden=0; durch=0; gefallen=0; ungemessen=0
++gefunden=0; durch=0; gefallen=0; ungemessen=0; rueckstand=0
+ gesamt_start=$(date +%s)
+ 
+ printf 'Selbsttests im Werkzeugkasten -- %s\n' "$(date -u +%FT%TZ)"
+@@ -200,6 +201,7 @@
+ if rmdir "$lauf_dir" 2>/dev/null; then
+   :
+ else
++  rueckstand=1
+   printf 'RUECKSTAND: %s ist nicht leer (%s). Ein Selbsttest hat nicht\n' \
+          "$lauf_dir" "$(du -sh "$lauf_dir" 2>/dev/null | cut -f1)"
+   printf 'aufgeraeumt. Nichts geloescht -- nachsehen, wem es gehoert.\n'
+@@ -228,4 +230,5 @@
+ # Waechter wird so oder so rot, und das ist der Punkt.
+ [ "$gefallen" -gt 0 ] && exit 1
+ [ "$ungemessen" -gt 0 ] && exit 4
++[ "$rueckstand" -gt 0 ] && exit 5
+ exit 0

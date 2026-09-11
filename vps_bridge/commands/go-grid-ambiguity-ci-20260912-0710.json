@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "go-grid-ambiguity-ci-20260912-0710",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -euo pipefail; rm -rf /tmp/grid10-ambiguity-ci; git clone --quiet https://github.com/gschaidergabriel/frankenstein.git /tmp/grid10-ambiguity-ci; cd /tmp/grid10-ambiguity-ci; git fetch --quiet origin chatgpt-grid10-ambiguity-band-candidate-20260912; git checkout --quiet chatgpt-grid10-ambiguity-band-candidate-20260912; echo HEAD=$(git rev-parse HEAD); echo BASE=$(git merge-base HEAD origin/main); python3 -m py_compile scripts/f2wp1207_grid10_ambiguity_band_candidate.py scripts/f2wp1207_grid10_ambiguity_band_candidate_test.py; cd scripts; python3 f2wp1207_grid10_ambiguity_band_candidate_test.py; echo WORKTREE; git status --short; echo PASS_GRID10_AMBIGUITY_SOURCE_CANDIDATE",
+  "timeout_seconds": 300
+}

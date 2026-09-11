@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "go-avatar-c0dd67ea-extract-source",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 300,
+  "command": "set -euo pipefail; Z=/artifacts/frank-avatar-handoff-round1/COMBINED_HANDOFF_20260911T184549Z.zip; W=/workspace/go-avatar-candidate-c0dd67ea; rm -rf \"$W\"; mkdir -p \"$W\"; unzip -q \"$Z\" -d \"$W\"; R=$(find \"$W\" -type f -path '*/ROUND1_EXPORT_*/source/buehne.html' -printf '%h\\n' | head -1); test -n \"$R\"; echo SOURCE_ROOT=$R; sha256sum \"$R/buehne.html\" \"$R/filmlook.js\"; echo '===TOOLS==='; for x in python3 node chromium google-chrome ffmpeg claude codex git; do printf '%-15s' \"$x\"; command -v \"$x\" || true; done; echo '===HTML_IDS==='; grep -nE 'id=\"(stage|stageRoot|bodyRoot|neckAnchor|headRoot|kopf-canvas|kopf-schicht|kopf-schicht2|koerper-schicht|koerper-schicht2|pupillen-glow|augen-blink|mund-effekt)' \"$R/buehne.html\" | head -80 || true; echo '===JS_MARKERS==='; grep -nEi 'requestAnimationFrame|setInterval|setTimeout|kopf-schicht|koerper-schicht|pupillen-glow|blink|breath|gaze|yaw|pitch|roll|cross.?fade|transform' \"$R/buehne.html\" | head -240 || true; echo '===CSS_STAGE==='; grep -nE '#(stage|kopf|koerper|pupillen|augen|mund)|\\.stage|object-fit|background-size|transform-origin' \"$R/buehne.html\" | head -220 || true; echo '===BASELINE_METRICS==='; M=$(find \"$W\" -type f -path '*/BASELINES/dream_target_metrics.json' | head -1); cat \"$M\"; echo '===QA_HEAD==='; Q=$(find \"$W\" -type f -path '*/QA/ACCEPTANCE_TESTS.md' | head -1); sed -n '1,260p' \"$Q\"; echo '===DONE==='"
+}

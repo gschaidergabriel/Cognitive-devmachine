@@ -1,0 +1,49 @@
+===IDENTITY===
+ai-core-node-projekt-frankenstein
+ai-core-node
+===OMEGA_CHECKOUTS===
+CHECKOUT=/home/ai-core-node/omega-bootstrap/oMEGA
+origin	https://github.com/gschaidergabriel/oMEGA.git (fetch)
+origin	https://github.com/gschaidergabriel/oMEGA.git (push)
+HEAD=572a07d2d6b69b1faeb747faab9b2b3f221b2e69
+BRANCH=main
+DIRTY=no
+===OMEGA_USER_UNITS===
+  alignment-wache.service                                          loaded    inactive dead    FranKenstein -- Ausrichtung ueberwachen, bei dauerhafter Abweichung anhalten
+  doppelbau-detektor.service                                       loaded    inactive dead    FranKenstein -- Doppelbau-Detektor: Modul-Index scannen und Absichtssuche aktuell halten
+  frankenstein-agentenwache.service                                loaded    inactive dead    FranKenstein -- Agentensteuerung des GRID (Monitoring + Umschaltung)
+  frankenstein-blick-waechter.service                              loaded    inactive dead    FranKenstein Buehne -- Sicherheitsnetz fuer die Kamera-Uebernahme (blick.py)
+  frankenstein-buehne.service                                      loaded    active   running FranKenstein Buehne / Livestream-Fenster (singleton, screen 2, Port 8788, persistent)
+  frankenstein-chatgpt-client.service                              loaded    active   running FranKenstein Persistent Headless ChatGPT Client
+  frankenstein-cortex-dashboard.service                            loaded    active   running FranKenstein /cortex Dashboard (paket-1788623631586-d5b2f3, fixer Port 8781, persistent)
+  frankenstein-cortex-perception-cycle.service                     loaded    inactive dead    FranKenstein Cortex Perception Cycle — one real camera perception cycle (F2-WP1207, exposure-warmup-scheduler 2026-09-06)
+  frankenstein-cortex.service                                      loaded    active   running FranKenstein Cortex -- die Bildschirme, verschmolzen zu einem Zustand
+  frankenstein-denker.service                                      loaded    active   running FranKenstein Denker — er denkt, auch wenn niemand da ist
+  frankenstein-erinnerungsdienst.service                           loaded    active   running FranKenstein Erinnerungsdienst (semantisches Retrieval, resident)
+  frankenstein-gespraech.service                                   loaded    active   running FranKenstein Gespraechsmodus -- Mikrofon, ASR, Antwort, Stimme
+  frankenstein-gespraechsmodus.service                             loaded    active   running FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+  frankenstein-grid-autonomie.service                              loaded    inactive dead    FranKenstein GRID-Autonomie -- verfolgt eigene Ziele, 24/7, ohne Claude-Tokens
+  frankenstein-immunsystem.service                                 loaded    active   running FranKenstein Immunsystem -- Circuit-Breaker-Supervision + Architect-Eskalation (Gabriel, 2026-09-12)
+  frankenstein-koerperpflege.service                               loaded    active   running FranKenstein Koerperpflege -- er kuemmert sich selbst um seinen Leib (RAM/Swap/Platte/Temperatur)
+  frankenstein-local-bridge-webui.service                          loaded    active   running Browser-Terminal fuer die lokale FranKenstein-Git-Bruecke (ai-core-node + andreas-MACO)
+  frankenstein-local-bridge.service                                loaded    active   running Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results)
+  frankenstein-puls.service                                        loaded    active   running FranKenstein Puls -- fortlaufende Kognition im Grid, auch ohne Gespraech
+  frankenstein-sehen.service                                       loaded    inactive dead    FranKenstein Sehen -- residenter Blick (digital-retina), schreibt nach f2_sicht
+  frankenstein-taeglicher-check.service                            loaded    inactive dead    FranKenstein taeglicher, GRID-priorisierter Architect-Gesundheitscheck (Gabriel, 2026-09-12)
+  frankenstein-verwaiste.service                                   loaded    inactive dead    FranKenstein -- verwaiste Arbeitspakete schliessen, damit das Lagebild nicht luegt
+  frankenstein-wege.service                                        loaded    inactive dead    FranKenstein Wegehierarchie -- ernten + verfallen (F94)
+  frankenstein-welt.service                                        loaded    active   running FranKenstein Welt -- Linse aus Stufe 1 laeuft im Takt mit, ohne anzubinden
+  omega-chatgpt-mcp.service                                        loaded    active   running OMEGA ChatGPT MCP Bridge Gateway with verified transport fallback
+  omega-local-effect-adapter.service                               loaded    active   running OMEGA local Unix effect fallback adapter (ai-core-node only)
+  quota-uebergabe.service                                          loaded    inactive dead    FranKenstein -- bei erschoepftem Claude-Kontingent in den Free-Pool uebergeben
+  tagebuch.service                                                 loaded    inactive dead    FranKenstein -- Daybooks of an Innocent fortschreiben
+  tote-anschluesse.service                                         loaded    inactive dead    FranKenstein -- tote Anschluesse (geschrieben/nie gelesen) scannen und in der GRID-DB fortschreiben
+===OMEGA_PROCESSES===
+3168989    2339 Sat Sep 12 19:53:32 2026 python3 /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_local_effect_adapter.py
+3168996    2339 Sat Sep 12 19:53:32 2026 python3 /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py
+3553748  959674 Sat Sep 12 20:25:33 2026 bash -lc set -euo pipefail echo '===IDENTITY===' hostname; whoami echo '===OMEGA_CHECKOUTS===' for d in /home/ai-core-node/omega-bootstrap/oMEGA /home/ai-core-node/oMEGA; do   if [ -d "$d/.git" ]; then     echo "CHECKOUT=$d"     git -C "$d" remote -v | sed -n '1,2p'     printf 'HEAD='; git -C "$d" rev-parse HEAD     printf 'BRANCH='; git -C "$d" branch --show-current     printf 'DIRTY='; if [ -n "$(git -C "$d" status --porcelain)" ]; then echo yes; else echo no; fi   fi done echo '===OMEGA_USER_UNITS===' systemctl --user list-units --type=service --all --no-pager | grep -Ei 'omega|frankenstein' || true echo '===OMEGA_PROCESSES===' ps -eo pid,ppid,lstart,cmd --sort=pid | grep -E '[o]mega|[g]rid_runtime|[m]aster_bridge|[o]uter_bridge_worker|[b]ridge_relay' || true echo '===PERSISTENT_PATHS===' for p in /var/lib/omega /home/ai-core-node/.local/share/omega /home/ai-core-node/omega-bootstrap/oMEGA/runtime /home/ai-core-node/omega-bootstrap/oMEGA/data; do   if [ -e "$p" ]; then echo "EXISTS $p"; find "$p" -maxdepth 2 -type f -printf '%p %s bytes\n' 2>/dev/null | head -80; else echo "ABSENT $p"; fi done 
+===PERSISTENT_PATHS===
+ABSENT /var/lib/omega
+ABSENT /home/ai-core-node/.local/share/omega
+ABSENT /home/ai-core-node/omega-bootstrap/oMEGA/runtime
+ABSENT /home/ai-core-node/omega-bootstrap/oMEGA/data

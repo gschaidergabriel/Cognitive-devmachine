@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-locate-deploy-carrier-builder-ai-core-node-20260912T1326Z",
+  "command_sha256": "4d42e09640db5b350b52dccce7927632dfd9a7701060b53b8a1a7a3aba81ebd1",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T13:25:52.802283+00:00",
+  "finished_at": "2026-09-12T13:26:52.865511+00:00",
+  "status": "TIMEOUT",
+  "exit_code": 124,
+  "op": "exec",
+  "stdout_sha256": "29be907c72a11d42eb367f769ddc7c9db5148c22f1c409e79af39e200f222068",
+  "stderr_sha256": "e5765a374cf3bed20232f65bd8973a62e36cf1294e6bc8864f848e8a8a5eabd2",
+  "stdout_tail": "=== OMEGA REPO ===\n572a07d2d6b69b1faeb747faab9b2b3f221b2e69\n=== RESEARCH CHECKOUTS ===\n/home/ai-core-node/clay-global-research-entity\n=== DEPLOY BUILDER REFERENCES ===\n",
+  "stderr_tail": "TimeoutExpired(['bash', '-lc', \"set -eu; echo '=== OMEGA REPO ==='; git -C /home/ai-core-node/omega-bootstrap/oMEGA rev-parse HEAD; echo '=== RESEARCH CHECKOUTS ==='; find /home/ai-core-node -maxdepth 4 -type d -name clay-global-research-entity -print 2>/dev/null | head -20; echo '=== DEPLOY BUILDER REFERENCES ==='; grep -RIl --exclude-dir=.git -E 'omega_deploy|omega-vps-deploy|immutable VPS deployment carrier' /home/ai-core-node/omega-bootstrap /home/ai-core-node/.claude/star 2>/dev/null | head -80 || true\"], 60)",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

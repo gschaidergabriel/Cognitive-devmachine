@@ -7,9 +7,10 @@ on Gabriel/Andreas hosts instead of merely knowing that the bridge exists.
 
 Hard invariants:
 - person -> machine_id/owner/control/results mapping is exact and closed;
-- every returned receipt is verified against that mapping and command_id;
+- every returned receipt is verified against that mapping, command_id, op and
+  the exact immutable command bytes queued to the Local Bridge;
 - DELETE/removal, storage/filesystem FORMAT and protected alignment mutation are
-  denied by the same guard used by ``omega_grid_relay``;
+  denied by the same pre-dispatch guard used by ``omega_grid_relay``;
 - write/exec/screenshot effects are fail-closed unless OMEGA_MCP_EFFECTS_ENABLED=1;
 - a model statement is never treated as execution evidence: only a verified
   Local Bridge receipt may be returned as PASS.
@@ -39,7 +40,7 @@ import omega_grid_relay as relay  # noqa: E402
 
 PROTOCOL_VERSION = "2025-03-26"
 SERVER_NAME = "omega-frankenstein-bridge"
-SERVER_VERSION = "1.0.0"
+SERVER_VERSION = "1.1.0"
 BIND = (os.getenv("OMEGA_MCP_BIND") or "127.0.0.1").strip()
 PORT = int(os.getenv("OMEGA_MCP_PORT") or "8789")
 MAX_BODY = max(4096, min(int(os.getenv("OMEGA_MCP_MAX_BODY") or str(256 * 1024)), 2 * 1024 * 1024))
@@ -102,21 +103,41 @@ def _receipt_path(command_id: str) -> str:
     return f"local_bridge/results/receipts/{command_id}.json"
 
 
-def _verify_receipt(target: dict[str, str], command_id: str, receipt: dict[str, Any]) -> dict[str, Any]:
-    machine = str(receipt.get("machine_id") or "").strip().lower()
-    owner = str(receipt.get("owner") or "").strip().lower()
-    rid = str(receipt.get("command_id") or "").strip()
+def _command_path(command_id: str) -> str:
+    return f"local_bridge/commands/{command_id}.json"
+
+
+def _verify_receipt(
+    target: dict[str, str],
+    command_id: str,
+    receipt: dict[str, Any],
+    *,
+    command: dict[str, Any],
+    command_bytes: bytes,
+) -> dict[str, Any]:
+    if str(command.get("command_id") or "") != command_id:
+        raise McpBridgeError("COMMAND_EVIDENCE_MISMATCH", "command file id does not match requested command_id")
+    machine = str(command.get("machine_id") or "").strip().lower()
+    owner = str(command.get("owner") or "").strip().lower()
     if machine != target["machine_id"] or owner != target["owner"]:
         raise McpBridgeError(
-            "RECEIPT_IDENTITY_MISMATCH",
-            f"expected {target['machine_id']}/{target['owner']}, got {machine}/{owner}",
+            "COMMAND_IDENTITY_MISMATCH",
+            f"expected command target {target['machine_id']}/{target['owner']}, got {machine}/{owner}",
         )
-    if rid and rid != command_id:
-        raise McpBridgeError("RECEIPT_COMMAND_MISMATCH", f"expected {command_id}, got {rid}")
-    return receipt
+    try:
+        return relay.verify_local_receipt(target, command, command_bytes, receipt, require_pass=False)
+    except relay.ReceiptVerificationError as exc:
+        raise McpBridgeError(exc.code, exc.message) from exc
 
 
-def _load_receipt(person: str, command_id: str, *, wait_seconds: float = 0.0) -> dict[str, Any]:
+def _load_receipt(
+    person: str,
+    command_id: str,
+    *,
+    wait_seconds: float = 0.0,
+    command: dict[str, Any] | None = None,
+    command_bytes: bytes | None = None,
+) -> dict[str, Any]:
     _organ_id, target = _target(person)
     cid = str(command_id or "").strip()
     if not cid or len(cid) > 180 or _ID_SAFE.search(cid):
@@ -137,7 +158,19 @@ def _load_receipt(person: str, command_id: str, *, wait_seconds: float = 0.0) ->
         raise McpBridgeError("INVALID_RECEIPT_JSON", str(exc)) from exc
     if not isinstance(receipt, dict):
         raise McpBridgeError("INVALID_RECEIPT_TYPE")
-    _verify_receipt(target, cid, receipt)
+
+    if command is None or command_bytes is None:
+        command_bytes = relay.get_file(target["control"], _command_path(cid))
+        if command_bytes is None:
+            raise McpBridgeError("COMMAND_EVIDENCE_MISSING")
+        try:
+            command = json.loads(command_bytes)
+        except Exception as exc:
+            raise McpBridgeError("INVALID_COMMAND_EVIDENCE_JSON", str(exc)) from exc
+        if not isinstance(command, dict):
+            raise McpBridgeError("INVALID_COMMAND_EVIDENCE_TYPE")
+
+    _verify_receipt(target, cid, receipt, command=command, command_bytes=command_bytes)
     status = str(receipt.get("status") or "UNKNOWN").upper()
     return {
         "ok": status == "PASS",
@@ -170,14 +203,21 @@ def _dispatch(person: str, op: str, args: dict[str, Any], *, rpc_id: Any, wait_s
     except PermissionError as exc:
         raise McpBridgeError(str(exc), str(exc)) from exc
 
-    path = f"local_bridge/commands/{command_id}.json"
+    path = _command_path(command_id)
+    command_bytes = relay.serialized_local_command(command)
     relay.put_new(
         target["control"],
         path,
-        json.dumps(command, ensure_ascii=False, indent=2).encode("utf-8") + b"\n",
+        command_bytes,
         f"omega mcp: {op} {command_id}",
     )
-    return _load_receipt(label, command_id, wait_seconds=wait_seconds)
+    return _load_receipt(
+        label,
+        command_id,
+        wait_seconds=wait_seconds,
+        command=command,
+        command_bytes=command_bytes,
+    )
 
 
 def _text_result(payload: dict[str, Any], *, is_error: bool = False) -> dict[str, Any]:
@@ -213,7 +253,7 @@ TOOLS: list[dict[str, Any]] = [
     },
     {
         "name": "omega_execute",
-        "description": "Execute an authorized shell command on the selected verified Frankenstein host through OMEGA. Real execution is proven only by the returned Local Bridge receipt. DELETE/removal, storage/filesystem FORMAT and protected alignment mutation are denied mechanically.",
+        "description": "Execute an authorized shell command on the selected verified Frankenstein host through OMEGA. Real execution is proven only by the returned Local Bridge receipt. DELETE/removal, storage/filesystem FORMAT and protected alignment mutation are denied at pre-dispatch.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -252,7 +292,7 @@ TOOLS: list[dict[str, Any]] = [
     },
     {
         "name": "omega_receipt",
-        "description": "Fetch a Local Bridge receipt for a previously queued OMEGA command. Use when another tool returned PENDING; never claim execution success until this returns PASS.",
+        "description": "Fetch a Local Bridge receipt for a previously queued OMEGA command. Use when another tool returned PENDING; never claim execution success until this returns an exactly correlated PASS.",
         "inputSchema": {
             "type": "object",
             "properties": {"person": {"type": "string", "enum": ["gabriel", "andreas"]}, "command_id": {"type": "string", "minLength": 1, "maxLength": 180}, "wait_seconds": {"type": "number", "minimum": 0, "maximum": 25}},
@@ -324,7 +364,7 @@ def handle_rpc(req: dict[str, Any]) -> dict[str, Any] | None:
             "protocolVersion": requested,
             "capabilities": {"tools": {"listChanged": False}},
             "serverInfo": {"name": SERVER_NAME, "version": SERVER_VERSION},
-            "instructions": "Use omega_* tools for live Gabriel/Andreas host facts and actions. Tool availability is real capability; never claim host execution without a PASS receipt.",
+            "instructions": "Use omega_* tools for live Gabriel/Andreas host facts and actions. Tool availability is real capability; never claim host execution without an exactly correlated PASS receipt.",
         }
         return {"jsonrpc": "2.0", "id": rpc_id, "result": result}
     if method == "ping":

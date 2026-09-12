@@ -21,7 +21,11 @@ def _receipt(command: dict, *, status: str = "PASS", machine_id: str | None = No
         "command_id": command["command_id"],
         "machine_id": machine_id or target["machine_id"],
         "owner": owner or target["owner"],
+        "op": command["op"],
+        "command_sha256": mcp.relay.command_sha256(mcp.relay.serialized_local_command(command)),
         "status": status,
+        "exit_code": 0 if status == "PASS" else 1,
+        "errors": [],
         "execution_boundary": "REAL_LOCAL_HOST_TEST",
         "stdout_tail": "ok",
     }
@@ -135,6 +139,44 @@ def test_receipt_identity_mismatch_is_hard_error(monkeypatch):
     result = mcp.call_tool("omega_status", {"person": "gabriel", "wait_seconds": 1}, rpc_id=6)
     assert result["isError"] is True
     assert result["structuredContent"]["error"] == "RECEIPT_IDENTITY_MISMATCH"
+
+
+def test_receipt_digest_mismatch_is_hard_error(monkeypatch):
+    queued = []
+
+    def put_new(branch: str, path: str, content: bytes, message: str):
+        queued.append(json.loads(content.decode()))
+        return True
+
+    def wait_file(branch: str, path: str, timeout_s: float = 0.0):
+        receipt = _receipt(queued[-1])
+        receipt["command_sha256"] = "0" * 64
+        return json.dumps(receipt).encode()
+
+    monkeypatch.setattr(mcp.relay, "put_new", put_new)
+    monkeypatch.setattr(mcp.relay, "wait_file", wait_file)
+    result = mcp.call_tool("omega_status", {"person": "gabriel", "wait_seconds": 1}, rpc_id=8)
+    assert result["isError"] is True
+    assert result["structuredContent"]["error"] == "RECEIPT_COMMAND_DIGEST_MISMATCH"
+
+
+def test_receipt_op_mismatch_is_hard_error(monkeypatch):
+    queued = []
+
+    def put_new(branch: str, path: str, content: bytes, message: str):
+        queued.append(json.loads(content.decode()))
+        return True
+
+    def wait_file(branch: str, path: str, timeout_s: float = 0.0):
+        receipt = _receipt(queued[-1])
+        receipt["op"] = "exec" if queued[-1]["op"] != "exec" else "status"
+        return json.dumps(receipt).encode()
+
+    monkeypatch.setattr(mcp.relay, "put_new", put_new)
+    monkeypatch.setattr(mcp.relay, "wait_file", wait_file)
+    result = mcp.call_tool("omega_status", {"person": "andreas", "wait_seconds": 1}, rpc_id=9)
+    assert result["isError"] is True
+    assert result["structuredContent"]["error"] == "RECEIPT_OP_MISMATCH"
 
 
 def test_unknown_person_never_falls_back_to_other_host():

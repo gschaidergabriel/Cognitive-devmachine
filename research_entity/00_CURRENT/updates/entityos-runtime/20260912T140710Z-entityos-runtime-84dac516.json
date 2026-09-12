@@ -1,0 +1,22 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "created_at": "2026-09-12T14:07:10Z",
+  "observed_head": "c6376d33c698eb952370e2a9d23f5dd04ea2ed85",
+  "status": "OMEGA_SOURCE_MERGED_COMPONENT_RECOVERY_PASS",
+  "state": "oMEGA/main fc7f1377ae1f04d2028e136c1ef0891e541512d2 contains the tested late-receipt transaction and journal-backed GRID result recovery. Four baseline crash failures; 15/15 repaired tests. No live deployment or whole-product acceptance.",
+  "next": "Resolve the existing legacy effect effect_ee236aaa650c46b0a003607f71d3c7c5 and the claimed central cutover without replay; then bind the admitted outer-spool late-receipt path and perform a live delayed-receipt readback.",
+  "evidence": [
+    "https://github.com/gschaidergabriel/oMEGA/blob/fc7f1377ae1f04d2028e136c1ef0891e541512d2/research/receipts/777-late-receipt-atomic-84dac516-result.json",
+    "https://github.com/gschaidergabriel/clay-global-research-entity/blob/chatgpt-vps-results/vps_bridge/results/receipts/777-omega-receipt-atomic-v2-84dac516-20260912.json",
+    "https://github.com/gschaidergabriel/clay-global-research-entity/blob/chatgpt-vps-results/vps_bridge/results/receipts/777-omega-central-readback-84dac516-20260912.json"
+  ],
+  "active": {
+    "branch": "gschaidergabriel/oMEGA:main",
+    "pr": "https://github.com/gschaidergabriel/oMEGA/pull/13",
+    "request": "777-late-receipt-atomic-84dac516"
+  },
+  "organ": "chatgpt-codex-84dac516",
+  "direction": "entityos-runtime",
+  "headline": "OMEGA late receipt completion is now atomic; GRID result survives a post-commit file failure with no effect replay.",
+  "receipt_id": "20260912T140710Z-entityos-runtime-84dac516"
+}

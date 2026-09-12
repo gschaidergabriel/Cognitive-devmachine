@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "777-omega-live-bytebind-ai-core-20260912-2020",
+  "command_sha256": "90ba50d55d253fbc8548ef3806bed4fc3c2f19e5ec8ec167372c20595083c920",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T13:23:59.014698+00:00",
+  "finished_at": "2026-09-12T13:23:59.210911+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "05564e5736bb34b13c1443b8119052e4c2ab30a00b1c18239333732b54b9b108",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===IDENTITY===\nhost=ai-core-node-projekt-frankenstein\nuser=ai-core-node\n===SERVICES===\nomega-chatgpt-mcp.service active=active\n  3168996\n  Sat 2026-09-12 19:53:33 +07\nomega-local-effect-adapter.service active=active\n  3168989\n  Sat 2026-09-12 19:53:33 +07\nfrankenstein-chatgpt-client.service active=active\n  1075883\n  Sat 2026-09-12 17:07:11 +07\nfrankenstein-local-bridge.service active=active\n  959674\n  Sat 2026-09-12 06:35:09 +07\n===DEPLOYED_BLOB_BINDING===\nMATCH /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py 8e43de93b7548de89e6514377c6b128b883acb4a\nMATCH /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py a352f6885679b1e64fe989d364db89ca810f6aaf\nMATCH /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_local_effect_adapter.py 8bb9add27869930d33bfa39a00383332982277f5\nMATCH /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_grid_relay.py 36fc3da2f7b7401ff6cc56d10464a0404579ec19\n===HEALTH_AND_MCP===\nhealth {\"ok\":true,\"service\":\"omega-frankenstein-bridge\",\"version\":\"1.1.0-fallback\",\"auth_required\":true,\"effects_enabled\":true,\"github_control_plane_configured\":true,\"local_fallback_enabled\":true,\"local_socket\":\"/run/user/1000/omega-local-effect.sock\"}\ntools [\"omega_status\",\"omega_read\",\"omega_execute\",\"omega_write_text\",\"omega_screenshot\",\"omega_receipt\",\"omega_transport_status\"]\ntransport {\"ok\":true,\"effects_enabled\":true,\"github_control_plane_configured\":true,\"local_adapter_enabled\":true,\"local_adapter_socket\":\"/run/user/1000/omega-local-effect.sock\",\"people\":{\"gabriel\":{\"direct_broker_configured\":true,\"local_adapter_eligible\":true,\"github_control_plane\":true,\"local_adapter_live\":true},\"andreas\":{\"direct_broker_configured\":false,\"local_adapter_eligible\":false,\"github_control_plane\":true}}}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,52 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "direction": "evidence-lineage",
+  "created_at": "2026-09-12T02:29:00Z",
+  "status": "DESIGN_READY_RUNTIME_UNMUTATED",
+  "headline": "GO084 turns the rootfs-run persistence finding into a bounded Layer-3 persistence contract without moving live state or conflating legacy voice databases with canonical UnifiedDB",
+  "state": "Live andreas-maco evidence proves ENTITYOS_ROOTFS_RUN is intentionally recreated and removed by entityos-vm.service, while durable state is expected to live on explicit binds. The running clone currently contains state-bearing SQLite files below /root/.local/share that are not covered by a durable bind. Source inspection shows consciousness.db is directly consumed by multiple voice/inner-world paths; world_experience.db carries personality_state/identity_snapshots/extreme_state_log; amygdala.db carries extinction_patterns/somatic_markers/threat_log; the clone-local agentzero/unified.db carries dopamine_state/reward_log and is referenced by voice modules. No nonempty host counterpart exists for these exact legacy paths. The canonical /var/lib/entityos/data/unified.db is a distinct large durable store and MUST NOT be silently merged with the clone-local voice unified.db. The ONNX runtime DB remains CACHE_DERIVED_CANDIDATE pending stronger evidence and is excluded from the durable-state contract.",
+  "contract": {
+    "immutable_rule": "KEEP_ROOTFS_RUN_WIPE; persistence is solved by Layer-3 bindings, never by weakening reproducible rootfs recreation",
+    "durable_voice_agentzero_backing_candidate": "/var/lib/entityos/data/voice-state/agentzero -> /root/.local/share/agentzero",
+    "durable_voice_frank_backing_candidate": "/var/lib/entityos/data/voice-state/frank-db -> /root/.local/share/frank/db",
+    "path_identity_rule": "Preserve the existing in-container paths seen by Path.home()/expanduser callers; only the backing storage changes",
+    "canonical_unifieddb_fence": "Do not alias, replace, attach, or merge /root/.local/share/agentzero/unified.db with /var/lib/entityos/data/unified.db without a separate schema/identity migration workpackage and executable readback",
+    "cache_fence": "Do not persist .cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db merely because it contains rows"
+  },
+  "migration_discriminator": [
+    "Before any mutation, bind exact source paths, table sets, SQLite quick_check, row-count/vector, active writer set and current VM subject.",
+    "Quiesce only the exact writers through their admitted lifecycle path; do not restart/wipe rootfs-run before a coherent SQLite backup exists.",
+    "Create durable backups with SQLite backup semantics, not raw copying of potentially live WAL state.",
+    "Install only the two narrow Layer-3 bind roots above; keep canonical /var/lib/entityos/data/unified.db untouched.",
+    "Recreate rootfs-run through the existing normal VM lifecycle so the destructive wipe is actually exercised.",
+    "Read back the same logical tables/rows through the unchanged in-container paths and verify SQLite integrity plus voice/inner-world startup.",
+    "Write one new marker through each durable state family, recreate rootfs-run again, and prove the markers survive from the bound durable backing.",
+    "Any schema mismatch, path-identity drift, missing row family, wrong canonical UnifiedDB target, or writer ambiguity is fail-closed and yields zero persistence promotion."
+  ],
+  "authority_fence": "This artifact is a design/evidence closure only. It does not authorize automatic rescue, DB movement, VM restart, gate closure or effect execution. The live-state move remains effect-bearing work requiring current owner/effect authority.",
+  "evidence": [
+    "gschaidergabriel/clay-global-research-entity@090631a61fada70d008d3fad70b52ab3b16e2e4f",
+    "chatgpt-local-andreas-maco-results@304a7cc8edcfc080e9a85ecb1c6826ac53b3c8b1 rootfs-run lifecycle receipt",
+    "chatgpt-local-andreas-maco-results local_bridge/results/logs/go084-persistence-codepaths-readonly-20260912-0903-andreas.stdout.txt",
+    "chatgpt-local-andreas-maco-results local_bridge/results/logs/go084-volatile-db-counterparts-v2-20260912-0928-gpt56sol.stdout.txt",
+    "research_entity/00_CURRENT/latest/hcu-grid.json",
+    "research_entity/00_CURRENT/latest/entityos-runtime.json"
+  ],
+  "zero_credit": [
+    "no DB rescue/migration performed",
+    "no VM restart performed",
+    "no new physical GRID10 runtime credit",
+    "no new HCU full-runtime credit",
+    "no GWT/J-Space semantic credit",
+    "no effect credit",
+    "no training credit",
+    "no whole-product credit"
+  ],
+  "next": "Obtain current effect/owner authority for the live-state migration or keep the exact migration discriminator staged. Independently preserve the natural GO083 watcher transition and the post-quota architect recovery when they occur; do not manufacture either event.",
+  "active": {
+    "branch": "main",
+    "request": "go/GO084-volatile-state-persistence-contract"
+  },
+  "organ": "GPT-5.6-Sol-go-organ",
+  "receipt_id": "20260912T022900Z-evidence-lineage-go084-volatile-state-persistence-contract"
+}

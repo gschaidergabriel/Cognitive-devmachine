@@ -1,0 +1,11 @@
+{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"titanmx-gabriel-real-replay-20260912","op":"exec","cwd":"/home/ai-core-node","timeout_seconds":180,"command":"set -eu; R=/home/ai-core-node/frankenstein-repo; W=/tmp/titanmx-gabriel-replay-code-20260912; S=/tmp/titan_mx_gabriel_replay_20260912.db; rm -rf \"$W\"; rm -f \"$S\" \"$S-wal\" \"$S-shm\"; git -C \"$R\" fetch origin chatgpt/titan-mx-memoryx-hypermirror-20260912 >/dev/null; git -C \"$R\" worktree add --detach \"$W\" FETCH_HEAD >/dev/null; trap 'git -C \"$R\" worktree remove --force \"$W\" >/dev/null 2>&1 || true' EXIT; T0=$(date +%s%N); python3 \"$W/scripts/f2wp1207_titan_mx.py\" --db /home/ai-core-node/.local/share/agentzero/unified.db --state-db \"$S\" --max-frames 100000 --stats --print-mirror; T1=$(date +%s%N); echo ELAPSED_MS=$(( (T1-T0)/1000000 )); echo STATE_BYTES=$(stat -c%s \"$S\"); python3 - \"$S\" <<'PY'
+import sqlite3,sys
+p=sys.argv[1]; c=sqlite3.connect(p)
+print('PATTERNS_TOP')
+for r in c.execute("select pattern_id,signature,support,verified_support,context_count,round(stability,3),status from titan_mx_pattern order by verified_support desc,support desc limit 12"):
+ print('|'.join(map(str,r)))
+print('SURPRISE_AVG', c.execute('select round(avg(surprise),4) from titan_mx_pulse').fetchone()[0])
+print('MIRROR_MAX_CHARS', c.execute('select max(char_count) from titan_mx_mirror').fetchone()[0])
+print('SOURCE_CURSOR', c.execute("select value from titan_mx_meta where key='source_frame_rowid'").fetchone()[0])
+PY
+ echo LIVE_DIRTY_COUNT=$(git -C \"$R\" status --porcelain | wc -l)"}

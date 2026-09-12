@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-blink-serving-handler-readonly-20260912-0723",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 45,
+  "command": "set -u; cd /home/ai-core-node/.claude/star/visual; echo HOST=$(hostname); echo ===ROUTE_MATCHES===; grep -nE 'def do_GET|SimpleHTTPRequestHandler|translate_path|augen_blink|Cache-Control|send_header|end_headers|open\\(|read_bytes|read\\(' buehne_daemon.py | head -220; echo ===GET_HEADERS===; curl -fsS -D - -o /dev/null 'http://127.0.0.1:8788/augen_blink/blink_006.png?diag=handler'; echo ===PROCESS_CWD===; PID=$(pgrep -f '[b]uehne_daemon.py' | head -1); echo PID=$PID; test -z \"$PID\" || readlink -f /proc/$PID/cwd; echo ===LISTEN===; ss -ltnp 2>/dev/null | grep ':8788' || true"
+}

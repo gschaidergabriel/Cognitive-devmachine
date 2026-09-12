@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "0000-gpt56sol-resume-voice-integration-preflight-20260912T1628-0700",
+  "command_sha256": "a0d3dfe12706669d751398ea4c7183cd5d40a96d9469b139a005d5e6d2e0940e",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T09:58:40.953416+00:00",
+  "finished_at": "2026-09-12T09:58:45.358429+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "0bca7e7b05dc603dae8874349cd91a41f1fe6c22f5e810fb5f387941b93c6f5e",
+  "stderr_sha256": "569582c945909d37d05e7cdc00bb5350dbb7fdf7da7bb5f7a68f0a82eba20482",
+  "stdout_tail": "BRANCH_HEAD=26c647848ffe921f4d490b868186def8559f8dec\n........FF.......                                                        [100%]\n=================================== FAILURES ===================================\n___________ test_turn_uses_canonical_lifecycle_and_exact_url_harvest ___________\n\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73963b987bf0>\n\n    def test_turn_uses_canonical_lifecycle_and_exact_url_harvest(monkeypatch):\n        monkeypatch.setattr(mod, \"_host_admission\", _green_host)\n        stern = FakeStern()\n        term = mod.FrankTerminal(\n            stern,\n            session_id=\"sid-1\",\n            source_host=\"host-a\",\n            source_owner=\"owner-a\",\n            json_mode=True,\n            harvest_timeout_s=1,\n        )\n        term.start()\n        result = term.turn(\"hello\")\n        term.close()\n    \n>       assert result.ok is True\nE       assert False is True\nE        +  where False = TurnResult(ok=False, session_id='sid-1', paket_id=None, answer=None, answer_sha256=None, conversation_url=None, error=...4020babf31a4ff894a353d5c64c64de:END>>> USER: hello' = <test_frank_terminal.FakeStern object at 0x73963b987920>.prompt\").ok\n\ntests/test_frank_terminal.py:116: AssertionError\n______________ test_fallback_direct_answer_does_not_touch_browser ______________\n\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73963b9cacf0>\n\n    def test_fallback_direct_answer_does_not_touch_browser(monkeypatch):\n        monkeypatch.setattr(mod, \"_host_admission\", _green_host)\n        stern = FakeStern(fallback=True)\n        term = mod.FrankTerminal(\n            stern,\n            session_id=\"sid-fb\",\n            source_host=\"host-a\",\n            source_owner=\"owner-a\",\n            json_mode=True,\n            harvest_timeout_s=1,\n        )\n        term.start()\n        result = term.turn(\"hello\")\n        term.close()\n>       assert result.ok is True\nE       assert False is True\nE        +  where False = TurnResult(ok=False, session_id='sid-fb', paket_id=None, answer=None, answer_sha256=None, conversation_url=None, error...23fbd83661144438fd658f9fd83bc61:END>>> USER: hello' = <test_frank_terminal.FakeStern object at 0x73963b9cb110>.prompt\").ok\n\ntests/test_frank_terminal.py:140: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_frank_terminal.py::test_turn_uses_canonical_lifecycle_and_exact_url_harvest\nFAILED tests/test_frank_terminal.py::test_fallback_direct_answer_does_not_touch_browser\n2 failed, 15 passed in 0.14s\n",
+  "stderr_tail": "From https://github.com/gschaidergabriel/frankenstein\n * branch            chatgpt-work/voice-full-integration-20260912 -> FETCH_HEAD\n   343abcf..26c6478  chatgpt-work/voice-full-integration-20260912 -> origin/chatgpt-work/voice-full-integration-20260912\nPreparing worktree (detached HEAD 26c6478)\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

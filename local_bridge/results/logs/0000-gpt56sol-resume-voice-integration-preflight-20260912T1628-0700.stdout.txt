@@ -1,0 +1,54 @@
+BRANCH_HEAD=26c647848ffe921f4d490b868186def8559f8dec
+........FF.......                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_turn_uses_canonical_lifecycle_and_exact_url_harvest ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73963b987bf0>
+
+    def test_turn_uses_canonical_lifecycle_and_exact_url_harvest(monkeypatch):
+        monkeypatch.setattr(mod, "_host_admission", _green_host)
+        stern = FakeStern()
+        term = mod.FrankTerminal(
+            stern,
+            session_id="sid-1",
+            source_host="host-a",
+            source_owner="owner-a",
+            json_mode=True,
+            harvest_timeout_s=1,
+        )
+        term.start()
+        result = term.turn("hello")
+        term.close()
+    
+>       assert result.ok is True
+E       assert False is True
+E        +  where False = TurnResult(ok=False, session_id='sid-1', paket_id=None, answer=None, answer_sha256=None, conversation_url=None, error=...4020babf31a4ff894a353d5c64c64de:END>>> USER: hello' = <test_frank_terminal.FakeStern object at 0x73963b987920>.prompt").ok
+
+tests/test_frank_terminal.py:116: AssertionError
+______________ test_fallback_direct_answer_does_not_touch_browser ______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x73963b9cacf0>
+
+    def test_fallback_direct_answer_does_not_touch_browser(monkeypatch):
+        monkeypatch.setattr(mod, "_host_admission", _green_host)
+        stern = FakeStern(fallback=True)
+        term = mod.FrankTerminal(
+            stern,
+            session_id="sid-fb",
+            source_host="host-a",
+            source_owner="owner-a",
+            json_mode=True,
+            harvest_timeout_s=1,
+        )
+        term.start()
+        result = term.turn("hello")
+        term.close()
+>       assert result.ok is True
+E       assert False is True
+E        +  where False = TurnResult(ok=False, session_id='sid-fb', paket_id=None, answer=None, answer_sha256=None, conversation_url=None, error...23fbd83661144438fd658f9fd83bc61:END>>> USER: hello' = <test_frank_terminal.FakeStern object at 0x73963b9cb110>.prompt").ok
+
+tests/test_frank_terminal.py:140: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_frank_terminal.py::test_turn_uses_canonical_lifecycle_and_exact_url_harvest
+FAILED tests/test_frank_terminal.py::test_fallback_direct_answer_does_not_touch_browser
+2 failed, 15 passed in 0.14s

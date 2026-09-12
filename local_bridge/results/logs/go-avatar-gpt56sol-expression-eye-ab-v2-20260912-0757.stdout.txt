@@ -1,0 +1,83 @@
+HARNESS_SHA256 259c6fb3ec59d78c23938362be6280bc2ca4aad735723749545a08261cfbafdb  /tmp/go_avatar_expression_eye_ab_v2_20260912_0757.py
+{"canonical_eye_to_gaze": {"bbox": [0, 0, 501, 312], "delta_quantiles": [16.0, 89.0, 126.0, 245.0], "diff_fraction": 0.8565881058396029, "diff_pixels": 133895}, "clip": {"height": 312.3125, "scale": 1.0, "width": 501.65625, "x": 283.578125, "y": 32.54376220703125}, "expression": {"name": "anime_fassungslos", "register": "anime_90s"}, "gaze_phase_scope": "GEOMETRY_COMPOSITING_ONLY_NOT_PRESENCE_AUTHORITY", "live_subject": {"buehne_html_sha256": "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e", "productive_relief2_open_plate_sha256": "8ab1a11c6f8a738e34c516bbf65c00e0f48de70c7341bfa970f236e002c94fc9"}, "native_to_canonical_eye": {"bbox": [0, 0, 501, 312], "delta_quantiles": [15.0, 87.0, 210.0, 255.0], "diff_fraction": 0.8442090178617124, "diff_pixels": 131960}, "phases": [{"glow_opacity": "0", "phase": "expression_native"}, {"blink_opacity": "1", "phase": "expression_canonical_eye"}, {"glow_opacity": "1", "phase": "expression_canonical_eye_gaze"}], "red_mask_iou_eye_vs_gaze": 0.815677966101695, "schema": "FRANK_AVATAR_EXPRESSION_EYE_AB/v2", "scope": "ISOLATED_BROWSER_RUNTIME_DOM_AB_NO_SOURCE_WRITE", "source_mutation": false}
+EXPRESSION_EYE_AB_HARNESS=PASS
+===ARTIFACTS===
+d8ee361ff7cd4ea4228762c677e84129617694dc001a4e1cf50f5e4528f35018  /home/ai-core-node/.claude/star/visual/.go_evidence/expression_eye_ab_v2_20260912_0757/01_expression_native.png
+6bba1e2a15f728f5afecea5a96b81969d0d96bdee972d413c6367e1358bf72f2  /home/ai-core-node/.claude/star/visual/.go_evidence/expression_eye_ab_v2_20260912_0757/02_expression_canonical_eye.png
+db65cb72ebec4bb9d5d70c191183896a9c06c86c254d74c87f824fd595e641dd  /home/ai-core-node/.claude/star/visual/.go_evidence/expression_eye_ab_v2_20260912_0757/03_expression_canonical_eye_gaze.png
+927c401da7f807628a9d2d5572b8a3e07669c0d176d4d5c09fbe1bacdc2a4395  /home/ai-core-node/.claude/star/visual/.go_evidence/expression_eye_ab_v2_20260912_0757/report.json
+===REPORT===
+{
+  "canonical_eye_to_gaze": {
+    "bbox": [
+      0,
+      0,
+      501,
+      312
+    ],
+    "delta_quantiles": [
+      16.0,
+      89.0,
+      126.0,
+      245.0
+    ],
+    "diff_fraction": 0.8565881058396029,
+    "diff_pixels": 133895
+  },
+  "clip": {
+    "height": 312.3125,
+    "scale": 1.0,
+    "width": 501.65625,
+    "x": 283.578125,
+    "y": 32.54376220703125
+  },
+  "expression": {
+    "name": "anime_fassungslos",
+    "register": "anime_90s"
+  },
+  "gaze_phase_scope": "GEOMETRY_COMPOSITING_ONLY_NOT_PRESENCE_AUTHORITY",
+  "live_subject": {
+    "buehne_html_sha256": "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e",
+    "productive_relief2_open_plate_sha256": "8ab1a11c6f8a738e34c516bbf65c00e0f48de70c7341bfa970f236e002c94fc9"
+  },
+  "native_to_canonical_eye": {
+    "bbox": [
+      0,
+      0,
+      501,
+      312
+    ],
+    "delta_quantiles": [
+      15.0,
+      87.0,
+      210.0,
+      255.0
+    ],
+    "diff_fraction": 0.8442090178617124,
+    "diff_pixels": 131960
+  },
+  "phases": [
+    {
+      "glow_opacity": "0",
+      "phase": "expression_native"
+    },
+    {
+      "blink_opacity": "1",
+      "phase": "expression_canonical_eye"
+    },
+    {
+      "glow_opacity": "1",
+      "phase": "expression_canonical_eye_gaze"
+    }
+  ],
+  "red_mask_iou_eye_vs_gaze": 0.815677966101695,
+  "schema": "FRANK_AVATAR_EXPRESSION_EYE_AB/v2",
+  "scope": "ISOLATED_BROWSER_RUNTIME_DOM_AB_NO_SOURCE_WRITE",
+  "source_mutation": false
+}
+===LIVE_UNCHANGED===
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js
+SERVICE active
+SCOPE=ISOLATED_BROWSER_NO_SOURCE_WRITE

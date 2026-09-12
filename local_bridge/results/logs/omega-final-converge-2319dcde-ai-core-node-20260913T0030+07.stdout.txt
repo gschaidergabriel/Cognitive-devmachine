@@ -1,0 +1,74 @@
+PRECONDITION_VOICE_QUIESCENT=1
+SOURCE_COMMIT=2319dcde91284c959837637d055e056e15137c70
+SOURCE_TESTS_PASS=1
+OMEGA 777 convergence layer installed without restarting live voice.
+
+Prepared runtime composition:
+  presentation floor: OMNI > terminal > local_voice
+  acoustic authority: canonical omega_arm_bus / UnifiedDB star_konfig
+  local renderer libs: Pocket streaming + cancellable local audio arm
+  OMNI sensor lib: voice777_omni_presence.py
+  cache: XDG_RUNTIME_DIR/frankenstein/omega_organ_activity.json
+  terminal: /home/ai-core-node/.local/bin/frank-omega
+
+Prepared effective service overrides:
+  /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf
+  /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+
+Verified loaded ExecStart definitions:
+  voice:   { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+  client:  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+
+No production conversation process was restarted by this installer.
+Apply the persistent ChatGPT-client wrapper at a controlled boundary with:
+  systemctl --user restart frankenstein-chatgpt-client.service
+Apply the voice wrapper only when the current voice session is quiescent and
+host-specific safety/readback permits the lifecycle boundary:
+  systemctl --user restart frankenstein-gespraechsmodus.service
+INSTALL_READBACK_PASS=1
+CLIENT_PID=3687487->2376101
+VOICE_PID=2334921->2376110
+CLIENT_CMD=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py 
+VOICE_CMD=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py 
+=== INSTALLED SHA256 ===
+27b657a93e3c449378aaec321b9f9330f44468acd63af2e2c5d22c4cd0df98ef  /home/ai-core-node/.local/lib/frankenstein/scripts/omega_arm_bus.py
+4e952d23cfb6f7b636d3422bfd9be1cc3140563c8192ec623a146578bd1f82b7  /home/ai-core-node/.local/lib/frankenstein/scripts/omega_organ_activity.py
+78cb8858e9adc39f9b984d53d8d44bf563bf42aa782a348a762ddca73f5c66ed  /home/ai-core-node/.local/lib/frankenstein/scripts/voice777_local_audio_arm.py
+bbeac111cd82e34714b56379f20ad72a760667c5a0a0752a3bf1dbce77dfac96  /home/ai-core-node/.local/lib/frankenstein/scripts/voice777_omni_presence.py
+f1004fb8066824cd4b554c2d8ebc5829f9ef3d0009fe9416581823b08b38e7d3  /home/ai-core-node/.local/lib/frankenstein/scripts/voice777_pocket_renderer.py
+a982bd785578c7dc7df5013d463a7df3fb82d775f3f516dcbe40096bda6005b7  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_full_runtime.py
+5cf086f00bf68097ac57322fda619fdfc8ddac0b297e0e0647b716897fa141be  /home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal.py
+83d2a291353f8380864f058f78688a92347a8986578d0bf7f545ea8c98b66a84  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+8bd2b6b724427e802e29230ba6a367fe13c19c7954f81ebb3514ef71311777ff  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+d9a82656cc25f3f44fcd5e731923d16e66931528f9799d4044af72a38d38424e  /home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal_777.py
+=== SERVICES ===
+MainPID=2376101
+Result=success
+NRestarts=0
+ActiveState=active
+SubState=running
+MainPID=2376110
+Result=success
+NRestarts=0
+ActiveState=active
+SubState=running
+=== VOICE STATUS ===
+{
+  "aktiv": false,
+  "berechtigung": "acceptEdits",
+  "tts_modell": "gpt-4o-mini-tts",
+  "tts_stimme": "onyx",
+  "stt_modell": "gpt-4o-transcribe",
+  "konversation_timeout_sekunden": 90,
+  "openai_schluessel_lokal_vorhanden": true,
+  "openai_vault_id": "cred-1787752096678-b69ede",
+  "claude_session_id": null,
+  "realtime_modell": "gpt-realtime-2.1",
+  "realtime_stimme": "cedar",
+  "realtime_reasoning_effort": "minimal",
+  "stille_timeout_sekunden": 5,
+  "user_speaking": false,
+  "assistant_speaking": false
+}
+OMEGA_CONVERGED_COMMIT=2319dcde91284c959837637d055e056e15137c70
+OMEGA_FINAL_ASSEMBLY_PASS=1

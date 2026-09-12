@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-finalize-inspect-ai-core-node-20260912T1730Z-gpt56sol",
+  "command_sha256": "4fe6e9f13391bdf2a27baccdf59dc930190d36c706e4d96edca5f3f482d3c184",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:27:22.605977+00:00",
+  "finished_at": "2026-09-12T17:27:22.687588+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "5978818de9fb5e4d113bae161d82360dd3905df089adbae55bc510ccbd3a9163",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== REPOS ===\nREPO=/home/ai-core-node/frankenstein-repo\ndd755a639b8c2bc406f7ee7221aabe5dcfa7ed46\n M scripts/__pycache__/stern.cpython-312.pyc\n?? scripts/openai_api_key.local\n=== OMEGA FILES ===\na982bd785578c7dc7df5013d463a7df3fb82d775f3f516dcbe40096bda6005b7  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_full_runtime.py\n285db29c1ae2404528b06776ea85df2cda383acf0ddcd5d74f89aae9e4dc774e  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py\n5cf086f00bf68097ac57322fda619fdfc8ddac0b297e0e0647b716897fa141be  /home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal.py\n4e952d23cfb6f7b636d3422bfd9be1cc3140563c8192ec623a146578bd1f82b7  /home/ai-core-node/.local/lib/frankenstein/scripts/omega_organ_activity.py\n83d2a291353f8380864f058f78688a92347a8986578d0bf7f545ea8c98b66a84  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py\n8bd2b6b724427e802e29230ba6a367fe13c19c7954f81ebb3514ef71311777ff  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py\nd9a82656cc25f3f44fcd5e731923d16e66931528f9799d4044af72a38d38424e  /home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal_777.py\n=== USER SERVICES ===\nUNIT=frankenstein-gespraechsmodus.service\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:27:22 +07] ; stop_time=[n/a] ; pid=2376110 ; code=(null) ; status=0/0 }\nLoadState=loaded\nActiveState=active\nSubState=running\nDropInPaths=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-omega-777-organ-floor.conf /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf\nUNIT=frankenstein-chatgpt-client.service\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:27:22 +07] ; stop_time=[n/a] ; pid=2376101 ; code=(null) ; status=0/0 }\nLoadState=loaded\nActiveState=active\nSubState=running\nDropInPaths=/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/95-omega-777-organ-floor.conf /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf\n=== AVATAR READONLY ===\nMainPID=1632280\nLoadState=loaded\nActiveState=active\nSubState=running\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

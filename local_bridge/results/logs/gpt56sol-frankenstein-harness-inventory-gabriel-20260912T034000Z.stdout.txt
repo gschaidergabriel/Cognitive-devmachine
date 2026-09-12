@@ -1,0 +1,116 @@
+===IDENT===
+ai-core-node
+ai-core-node-projekt-frankenstein
+2026-09-12T03:38:55Z
+===HOST===
+nproc=16
+load=7.74 7.55 7.63 3/2405 12395
+MemTotal:       24380288 kB
+MemAvailable:   12029628 kB
+===FILES===
+/home/ai-core-node/.claude/star/stern.py 988679 2026-09-12 08:25:23.377004335 +0700
+20f7e9e8a167e4cfcae63940df748bce1a2bf7627799b1c5c271a6ac4b7bdda7  /home/ai-core-node/.claude/star/stern.py
+/home/ai-core-node/.claude/star/harness_aider.py 82644 2026-09-12 06:47:15.995894631 +0700
+0d8c76cdb57b9ddf30814df746872f044510cad4feedad4133bc34bd6b28548d  /home/ai-core-node/.claude/star/harness_aider.py
+/home/ai-core-node/scripts/chatgpt_burst_worker_v2.sh 19836 2026-08-27 03:48:40.475218796 +0700
+c0b6dd17557ac78a1b11815914b0dc8054b7219b52d69aed4a493d712d492ad9  /home/ai-core-node/scripts/chatgpt_burst_worker_v2.sh
+===FRANK-CMD===
+===REPO===
+## main...origin/main [ahead 2]
+M  scripts/f2wp1207_alignment_controller.py
+?? CRUSH.md
+?? test_add.py
+ec6fce07eb3a464c27730e428efc129d9b7ce177
+===STERN-HOOKS===
+393:def verbindung(pfad: Optional[str] = None) -> sqlite3.Connection:
+6341:    _raum_ruf_schreiben(session_id, "HANDOFF", f"paket_id={paket_id} auftrag={_kurz(auftrag, 120)}")
+6537:    _raum_ruf_schreiben(
+7922:    _raum_ruf_schreiben(von, "MODELL_UMSCHALTEN", f"von={vorher or '(keins)'} nach={modell_id}")
+8265:def _raum_ruf_schreiben(von: str, typ: str, text: str) -> None:
+8598:    _raum_ruf_schreiben(session_id, "JOIN" if beitritt_text == "joined" else "PULSE",
+8631:    _raum_ruf_schreiben(session_id, "LEAVE", f"session={session_id}")
+8747:    _raum_ruf_schreiben(von_session_id, "NACHRICHT",
+9588:    "f2wp1207-turn-loop-turn",
+9593:    "f2wp1207-turn-loop-turn",
+13632:    (vault_eintrag_lesen, chatgpt_senden usw.) seit heute passwortfrei
+14680:# ECHTER Dateilock + Absturz-Erkennung/Wiederherstellung um chatgpt_senden()/
+14681:# chatgpt_ernten(). Zwei reale, heute in Logs beobachtete Probleme:
+15031:    Wird automatisch versucht, BEVOR chatgpt_senden()/chatgpt_ernten() eine
+15079:    scheitert, ist ein echter Mensch-Login noetig. chatgpt_senden() und
+15080:    chatgpt_ernten() rufen das jetzt beide auf, statt je ihr eigenes,
+15137:# von Hand nachlogin muessen. chatgpt_senden()/chatgpt_ernten() schalten
+15187:    damit chatgpt_ernten() (die eigentlich fuer ASYNCHRONES Abholen gedacht
+15190:    von chatgpt_senden() selbst zu lesen. Fail-silent (best effort)."""
+15285:    testbar mit echten Logdateien als Fixture. Von chatgpt_senden() als
+15287:    PHASE 46b), von chatgpt_ernten() als Diagnose (die Ernte-Phase loest
+15337:def chatgpt_senden(prompts: list, *, num_workers: Optional[int] = None,
+15338:                    sleep_between: Optional[float] = None, ram_schwelle_mb: Optional[int] = None,
+15399:            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN_FALLBACK",
+15427:        if ram_schwelle_mb is not None:
+15428:            env["RAM_THRESHOLD_MB"] = str(ram_schwelle_mb)
+15446:            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN",
+15452:            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN",
+15480:            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN_FALLBACK",
+15484:        _log(f"chatgpt_senden: trigger='{(text or 'triggerwort2')[:40]}' rc={r.get('rc')} zusammenfassung={neu} "
+15486:        _raum_ruf_schreiben("manuell", "CHATGPTSENDEN",
+15508:def chatgpt_ernten(*, timeout_s: float = 900.0, lock_timeout_s: float = 1200.0) -> dict:
+15512:    chatgpt_senden() unter `_chatgpt_lock()` (wartet auf gleichzeitige
+15522:    # chatgpt_senden()) -- eine zwischenzeitlich verlorene Sitzung soll
+15529:        # ist, liefere was per chatgpt_senden()-Fallback ggf. schon bereitsteht
+15531:        # 'chatgpt_ernten' selbst loest KEINEN neuen Fallback-Lauf aus --
+15535:        # chatgpt_senden() abfragen.
+15541:                             "chatgpt_senden() zuerst aufrufen (loest bei ausgefallener Bruecke "
+15572:    _log(f"chatgpt_ernten: rc={r.get('rc')} zusammenfassung={zusammenfassung}")
+15574:        _raum_ruf_schreiben("manuell", "CHATGPTERNTEN",
+15578:        _raum_ruf_schreiben("manuell", "CHATGPTERNTEN", f"rc={r.get('rc')} unklar")
+15582:    # gemacht, damit ein Aufrufer (der z.B. chatgpt_senden() erneut
+15586:        _log(f"chatgpt_ernten: 403/Cloudflare-Verdacht trotz bestaetigtem Login: {ausfall.get('grund')}")
+15587:        _raum_ruf_schreiben("manuell", "CHATGPTERNTEN_VERDACHT", ausfall.get("grund") or "")
+18132:    cs.add_argument("--ram-schwelle-mb", dest="ram_schwelle_mb", type=int, default=None)
+18798:        ergebnis = chatgpt_senden([str(p) for p in prompts], num_workers=a.num_workers, sleep_between=a.sleep,
+18799:                                   ram_schwelle_mb=a.ram_schwelle_mb, tab_recycle_alle=a.tab_recycle_alle,
+18804:        ergebnis = chatgpt_ernten(timeout_s=a.timeout_s, lock_timeout_s=a.lock_timeout_s)
+===HARNESS===
+11:PHASE 46b (Gabriel-Auftrag 2026-08-27, Nachtrag): 'fallback-start' -- fuer
+18:     fallback-start schaltet das aktive Modell selbst um (_s.modell_aktiv_setzen,
+86:# visible_run(), nicht nur behauptet.
+87:MODELL_MAP = {
+104:# MODELL_MAP-Schluessel hier (verschiedene Module, verschiedene Historie).
+118:SICHTBAR_REPO = os.path.expanduser("~/frankenstein-repo")
+123:# FEST verdrahtet, bewusst KEIN CLI-Parameter dafuer -- eine beliebig
+242:    MODELL_MAP-Eintraege in os.environ, nicht nur fuer das Startmodell.
+247:    war bisher nie gesetzt, weil visible_run() nur den Key des
+251:    for mid, minfo in MODELL_MAP.items():
+311:    if modell_id not in MODELL_MAP:
+313:    keys_env_quelle = MODELL_MAP[modell_id]["keys_env_quelle"]
+383:    """Ein zweiter/dritter gleichzeitiger fallback-start-Aufrufer wartete
+399:    Synchronisation: mehrere parallele Agenten riefen 'fallback-start'
+424:                        f"fallback-start-Aufrufer laeuft noch) -- abgebrochen statt "
+518:    Verzeichnis, fuer das es keinen Umleitungs-Parameter gibt)."""
+603:            im = json.load(f)
+736:    ins Terminal gedruckt (siehe visible_run()). Sie bleibt aber technisch
+836:                _spec.loader.exec_module(_rm)
+869:        "# Hinweis fuer diese Sitzung (automatisch eingefuegt, harness_aider.py visible-start)\n\n"
+873:        f"({MODELL_MAP.get(modell_id, {}).get('aider_model', modell_id)}) ueber einen "
+895:# unterdrueckbarem, siehe Docstring visible_run()) Start-Boilerplate.
+918:    aider_model = MODELL_MAP.get(modell_id, {}).get("aider_model", modell_id)
+925:    repo_str = f"{_ANSI_HELLGRAU}repo:{os.path.basename(SICHTBAR_REPO)}{_ANSI_RESET}"
+998:def visible_run(modell_id):
+1003:    (SICHTBAR_REPO) -- sichtbar, auditierbar per `git log`, kein Versteck.
+1009:    if modell_id not in MODELL_MAP:
+1021:    berechtigung = MODELL_MAP[modell_id]["berechtigung"]
+1030:                  f"(Schluessel: {MODELL_MAP[modell_id]['keys_env_quelle']})")
+1038:    werkraum = SICHTBAR_REPO
+1111:        *_aider_kommando_praefix(), "--model", MODELL_MAP[modell_id]["aider_model"],
+1242:              f"(Schluessel: {MODELL_MAP[modell_id]['keys_env_quelle']})", file=sys.stderr)
+1246:        *_aider_kommando_praefix(), "--model", MODELL_MAP[modell_id]["aider_model"],
+1303:    """Kernlogik, gemeinsam fuer 'start' (modus=sandbox) und 'fallback-start'
+1308:    if modell_id not in MODELL_MAP:
+1446:    # fallback-start-Aufrufer, nicht gegen einen fremden `git push`
+1530:    ergebnis = visible_run(args.modell)
+1541:        if modell_id not in MODELL_MAP:
+1552:        # fallback-start-Aufrufer (verschiedene Agenten/Prozesse teilen sich
+1583:    p_vis = sub.add_parser("visible-start", help="PHASE 48: sichtbarer, interaktiver Terminal-Harness im echten Repo (kein Sandbox-Versteck mehr)")
+1586:    p_fb = sub.add_parser("fallback-start", help="ChatGPT-Fallback: aktiviert Kandidaten selbst, laeuft im Forschungsmodus (echtes Repo, allowlist+audit-gated)")
+1593:    if args.command == "visible-start":
+1595:    elif args.command == "fallback-start":

@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-review-current-relief2-subject-20260912-0738",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":45,
+  "command":"set -euo pipefail\ntest \"$(hostname)\" = \"ai-core-node-projekt-frankenstein\"\necho ===SUBJECT===\nsha256sum buehne.html buehne_daemon.py filmlook.js\necho ===SERVICE===\nsystemctl --user is-active frankenstein-buehne.service\ncurl -fsS http://127.0.0.1:8788/ >/dev/null\necho ===RELIEF2_REFERENCES===\ngrep -n -E 'augen_blink_relief2|eye_identity|BLINK_BILDER|_sonderLaeuft.*pupillen|pupillen-glow.*opacity|blinzelPhase|function blinzeln' buehne.html | head -160\necho ===RELIEF2_FILES===\nif test -d augen_blink_relief2; then find augen_blink_relief2 -maxdepth 1 -type f -name '*.png' -print0 | sort -z | xargs -0 sha256sum; else echo NO_RELIEF2_DIR; fi\necho ===RAW_FILES===\nsha256sum augen_blink/blink_000.png augen_blink/blink_006.png augen_gaze/rotglow_tracking_master.png\necho ===FPS===\nfor i in $(seq 0 4); do curl -fsS http://127.0.0.1:8788/api/status | python3 -c 'import json,sys;d=json.load(sys.stdin);print((d.get(\"fps\") or {}).get(\"fps\"))'; sleep .1; done\necho SCOPE=READ_ONLY_CURRENT_RELIEF2_SUBJECT_BINDING\n"
+}

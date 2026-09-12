@@ -1,0 +1,35 @@
+=== REPOS ===
+REPO=/home/andreas/frankenstein-repo
+c7de75d22b94ee88d02c5f663252009ccace282b
+ M scripts/__pycache__/stern.cpython-312.pyc
+ M scripts/f2wp1207_grid10_turn_loop.py
+ M scripts/stern.py
+?? scripts/stern.py.backup-pre-browserless-guard-20260912T150352
+REPO=/home/andreas/frank-repo
+5de1094856ff13fed50c17589f96d5597ee40868
+=== OMEGA FILES ===
+MISSING /home/andreas/.local/lib/frankenstein/scripts/voice_full_runtime.py
+MISSING /home/andreas/.local/lib/frankenstein/scripts/voice_host_live_client.py
+MISSING /home/andreas/.local/lib/frankenstein/scripts/frank_terminal.py
+MISSING /home/andreas/.local/lib/frankenstein/scripts/omega_organ_activity.py
+MISSING /home/andreas/.local/lib/frankenstein/scripts/voice_777_runtime.py
+MISSING /home/andreas/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+MISSING /home/andreas/.local/lib/frankenstein/scripts/frank_terminal_777.py
+=== USER SERVICES ===
+UNIT=frankenstein-gespraechsmodus.service
+LoadState=loaded
+ActiveState=inactive
+SubState=dead
+DropInPaths=
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/andreas/.claude/plugins/cache/frankenstein/frankenstein/0.4.1/scripts/gespraechsmodus.py listener ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+UNIT=frankenstein-chatgpt-client.service
+LoadState=not-found
+ActiveState=inactive
+SubState=dead
+DropInPaths=
+=== VM READONLY STATE ===
+LoadState=loaded
+ActiveState=active
+SubState=running
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf

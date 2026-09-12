@@ -1,0 +1,23 @@
+777 arm-bus migration applied
+.....F...........................                                        [100%]
+=================================== FAILURES ===================================
+_________________ test_expired_omni_lease_allows_local_reentry _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-ai-core-node/pytest-16/test_expired_omni_lease_allows0')
+
+    def test_expired_omni_lease_allows_local_reentry(tmp_path):
+        stern = FakeStern(tmp_path / "u.db")
+        clock = Clock()
+        omni = bus(stern, clock, "omni_voice", "omni-1")
+        local = bus(stern, clock, "local_voice", "local-1")
+        assert omni.acquire_acoustic(ttl_s=1.0).granted is True
+        clock.value += 1.5
+>       assert local.local_voice_must_yield() is False
+E       assert True is False
+E        +  where True = local_voice_must_yield()
+E        +    where local_voice_must_yield = <omega_arm_bus.OmegaArmBus object at 0x73cbb083e9c0>.local_voice_must_yield
+
+tests/test_omega_arm_bus.py:142: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_arm_bus.py::test_expired_omni_lease_allows_local_reentry
+1 failed, 32 passed in 0.89s

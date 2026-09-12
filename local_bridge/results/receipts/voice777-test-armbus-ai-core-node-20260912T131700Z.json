@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "voice777-test-armbus-ai-core-node-20260912T131700Z",
+  "command_sha256": "1c601b6d439c83a9e1f9a1a1660b0fc7585b1f4c66feb8682623a7de057fdc8d",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T12:58:08.993335+00:00",
+  "finished_at": "2026-09-12T12:58:16.056261+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "b0121a2290cd840e1df3bb61c400bdc99fb1dbda1f47d2d822445ad696704ef8",
+  "stderr_sha256": "4f6d8267353f704705fd15e5843838f6e97f8354db3af0f352c8ad51c7e3b0db",
+  "stdout_tail": "777 arm-bus migration applied\n.....F...........................                                        [100%]\n=================================== FAILURES ===================================\n_________________ test_expired_omni_lease_allows_local_reentry _________________\n\ntmp_path = PosixPath('/tmp/pytest-of-ai-core-node/pytest-16/test_expired_omni_lease_allows0')\n\n    def test_expired_omni_lease_allows_local_reentry(tmp_path):\n        stern = FakeStern(tmp_path / \"u.db\")\n        clock = Clock()\n        omni = bus(stern, clock, \"omni_voice\", \"omni-1\")\n        local = bus(stern, clock, \"local_voice\", \"local-1\")\n        assert omni.acquire_acoustic(ttl_s=1.0).granted is True\n        clock.value += 1.5\n>       assert local.local_voice_must_yield() is False\nE       assert True is False\nE        +  where True = local_voice_must_yield()\nE        +    where local_voice_must_yield = <omega_arm_bus.OmegaArmBus object at 0x73cbb083e9c0>.local_voice_must_yield\n\ntests/test_omega_arm_bus.py:142: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_omega_arm_bus.py::test_expired_omni_lease_allows_local_reentry\n1 failed, 32 passed in 0.89s\n",
+  "stderr_tail": "Cloning into '/tmp/frankenstein-777-armbus-20260912T131700Z'...\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

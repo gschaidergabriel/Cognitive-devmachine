@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "999-20260912-live-voice-service-readback-01",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "systemctl --user show frankenstein-gespraechsmodus.service -p ActiveState -p SubState -p MainPID -p ExecStart -p DropInPaths --no-pager",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60
+}

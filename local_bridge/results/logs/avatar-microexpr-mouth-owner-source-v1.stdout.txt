@@ -1,0 +1,136 @@
+LIVE_SHA=cfaefcd2719d7680d8b0a532aa6fae9c2920e022ab3626d18de073eb87a80cdb
+    chatZeilen.removeChild(chatZeilen.firstElementChild);
+  }
+  if(amBoden) chatZeilen.scrollTop = chatZeilen.scrollHeight;
+  return z;
+}
+
+// ── Mundbewegung: SILBENTAKT-SCHAETZUNG aus Textlaenge, kein echter Pegel.
+// (kein Zugriff auf Audio-Pegel ohne verbotene Dateien anzufassen)
+// ⭐ 2026-09-11 (Punkt 4 der Liste): dieselbe Zeittaktung wie vorher (nichts
+// an der Schaetzung geaendert -- kein echtes Audio, weiterhin Textlaenge),
+// nur die DARSTELLUNG wechselt jetzt durch echte Mundstellungen aus
+// mund_keyframes/ statt einen Gradient zu skalieren. Kleines "sprechendes"
+// Set (Vokale + ein paar Konsonantstellungen) + Ruhebild am Ende.
+const MUND_SPRECH_SET = ["mund_03_a_small","mund_04_a_medium","mund_06_e",
+  "mund_07_i","mund_08_o_small","mund_09_o_medium","mund_11_u","mund_01_closed_mbp"];
+const MUND_RUHE = "mund_00_rest";
+// ⭐⭐ 2026-09-11 MUNDUEBERGAENGE (Koordinator, "die naechste eine Sache"):
+// mund_keyframes/ hat jetzt zu jeder Grundstellung 5 echte Zwischenbilder
+// (mund_NN_name__stufe_00..04.png -- fotografierte Bewegung ZUR Stellung hin,
+// nicht irgendein generischer Gradient). Bisher sprang mundAnimation() hart
+// zwischen Grundstellungen; jetzt spielt sie beim Wechsel zu einer neuen
+// Zielstellung deren 5 Stufenbilder ab (+ das Zielbild selbst = 6 echte
+// Frames), bevor sie dort haengen bleibt bis zum naechsten Taktschlag. Das
+// macht aus dem Sprung eine Bewegung, OHNE die Silbentakt-Schaetzung selbst
+// anzufassen (Koordinator woertlich: "Takt bleibt vorerst die bestehende
+// Silbenschaetzung"). Abgespielt wird ueber mundSchritt() unten, angestossen
+// von schleife(t) -- gleiches Bauprinzip wie koerperSchritt() oben, nur
+// mit echten Einzelbildern statt Opacity-Crossfade (hier gibt es ja bereits
+// fotografierte Zwischenschritte, kein Blending zweier Texturen noetig --
+// genau das Problem, das bei der Halsnaht-Maske schiefging).
+// ⚠️ Speicher: es werden NUR die Grundstellungen aus MUND_SPRECH_SET+MUND_RUHE
+// UND deren je 5 Stufenbilder vorgeladen (9 Stellungen x 6 Bilder = 54),
+// nicht alle 221 Dateien in mund_keyframes/.
+function mundFrames(name){
+  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+    .concat([`/mund_keyframes/${name}.png`]);
+}
+const MUND_ALLE_STELLUNGEN = MUND_SPRECH_SET.concat([MUND_RUHE]);
+for(const n of MUND_ALLE_STELLUNGEN){
+  for(const src of mundFrames(n)){ const vorlade = new Image(); vorlade.src = src; }
+}
+let mundAktivFrames = null;
+let mundAktivIndex = 0;
+let mundLetzterFrameT = 0;
+const MUND_FRAME_MS = 22; // 6 Frames in ~130ms Alt-Takt = ~21,7ms/Frame
+function mundZielSetzen(name){
+  mundAktivFrames = mundFrames(name);
+  mundAktivIndex = 0;
+  mundLetzterFrameT = 0; // sofort beim naechsten schleife()-Tick starten
+}
+function mundSchritt(jetzt){
+  if(!mundAktivFrames) return;
+  if(jetzt - mundLetzterFrameT < MUND_FRAME_MS) return;
+  mundLetzterFrameT = jetzt;
+  $("mund-effekt").src = mundAktivFrames[mundAktivIndex];
+  mundAktivIndex++;
+  if(mundAktivIndex >= mundAktivFrames.length) mundAktivFrames = null;
+}
+function mundAnimation(text){
+  const grobeSilben = Math.max(3, Math.round((text || "").length / 2.6));
+  const dauerMs = Math.min(9000, grobeSilben * 220);
+  let letzte = -1;
+  const iv = setInterval(() => {
+    let i = Math.floor(Math.random() * MUND_SPRECH_SET.length);
+    if(i === letzte) i = (i + 1) % MUND_SPRECH_SET.length; // nie zweimal dieselbe Stellung hintereinander
+    letzte = i;
+    mundZielSetzen(MUND_SPRECH_SET[i]);
+  }, 130);
+  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+}
+
+// Beim ersten Durchlauf steht cursor auf "" -- der Daemon liefert dann den
+// GESAMTEN Verlauf auf einmal (gemessen 2026-09-11: 210 Zeilen, davon 105
+// Antworten). Ohne die Bremse unten startete fuer jede dieser Antworten
+// sofort eine eigene mundAnimation: ~105 gleichzeitige setInterval, der Mund
+// zappelte nach jedem Neuladen sekundenlang sinnlos. Der Verlauf wird
+// angezeigt (er gehoert ins Bild), aber nur WIRKLICH neue Antworten bewegen
+// den Mund -- er spricht nicht nach, was laengst gesagt wurde.
+// Diese Funktion blendete bisher die flachen, UNDURCHSICHTIGEN Vollbild-RGBs
+// #gesicht/#gesicht2 (z-index:3) UEBER den echten RGBA-Kopf (#kopf-schicht,
+// z-index:2). Diese alten Bilder tragen einen eingebratenen Hintergrund und
+// eine andere Kopfposition -- Ergebnis: ein zweiter Kopf mit Rechteckkante.
+// Jetzt: dieselben /ausdruck_erweitert/.../frontal/stufe_NN.png-Sequenzen
+// (echte 1536x1024-RGBA, laut PIL 10.4% Nicht-Alpha -- identische Silhouette
+// wie #kopf-schicht) auf #ausdruck-schicht/#ausdruck-schicht2, die IN
+// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+// tragen. Waehrend der Sequenz wird ausserdem der Mund-Flicken ausgeblendet
+// (die Ausdrucks-Frames tragen ihren eigenen Mund) und der
+// Erkennungs-Glimmer unterdrueckt (gazeSchritt() prueft _sonderLaeuft) --
+// sonst laege ein zweites Augen-/Mundsignal auf dem Ausdrucksgesicht.
+let ausdruckAktiv = 1;
+let _sonderLaeuft = false;
+function sonderausdruckZeigen(register, ausdruck, haltenMs){
+  if(_sonderLaeuft) return; // keine zwei Sequenzen gleichzeitig
+  haltenMs = haltenMs || 1400;
+  _sonderLaeuft = true;
+  $("mund-effekt").style.opacity = "0";
+  const stufeSrc = n => `/ausdruck_erweitert/${register}/${ausdruck}/frontal/stufe_0${n}.png`;
+  const wechsel = (neu, mitSchwung) => {
+    const sichtbar = ausdruckAktiv === 1 ? $("ausdruck-schicht") : $("ausdruck-schicht2");
+    const versteckt = ausdruckAktiv === 1 ? $("ausdruck-schicht2") : $("ausdruck-schicht");
+    if(sichtbar.getAttribute("src") === neu) return;
+    versteckt.src = neu;
+    // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+    // kopfRollTick() oben -- atmen() schreibt Transform/Filter nur noch auf
+    // die per ausdruckAktiv aktuell sichtbare Ebene, die neu einblendende
+    // Ebene braucht den brandaktuellen Wert deshalb hier einmalig.
+    versteckt.style.transform = _atmenTransform;
+    versteckt.style.filter = _atmenFilter;
+    versteckt.style.opacity = "1";
+    sichtbar.style.opacity = "0";
+    ausdruckAktiv = ausdruckAktiv === 1 ? 2 : 1;
+    if(mitSchwung){
+      const rahmen = $("gesicht-rahmen");
+      rahmen.classList.remove("pose-wechsel");
+      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+      setTimeout(() => rahmen.classList.remove("pose-wechsel"), 420);
+    }
+  };
+  const sauber = () => {
+    $("ausdruck-schicht").style.opacity = "0";
+    $("ausdruck-schicht2").style.opacity = "0";
+    $("mund-effekt").style.opacity = "1";
+    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+    _sonderLaeuft = false;
+    gesichtNeuZeichnen(true);
+  };
+  let stufe = 0;
+  wechsel(stufeSrc(0), true);
+  const hoch = () => {
+    stufe++;
+    wechsel(stufeSrc(stufe), false);
+    if(stufe < 6) setTimeout(hoch, 90);
+    else setTimeout(runter, haltenMs);
+MOUTH_OWNER_SOURCE_PASS

@@ -1,0 +1,66 @@
+1540:    research_entity/harness/reference/digital_retina_runtime.py:_features
+5729:# Hook statt nur vom Testharness aus erreichbar:
+8939:# harness_aider.py) darf NUR laufen, wenn sein --modell mit
+8960:    Buchfuehrung, die auch harness_aider.py fuer seine Aktionen benutzt, also
+9555:_RAUM_STALE_MINUTEN = 45  # wie active_workers(stale_minutes=45) im alten research_room.py
+13547:    (vault_eintrag_lesen, chatgpt_senden usw.) seit heute passwortfrei
+14394:# funktionierendes Werkzeug: ~/scripts/chatgpt_burst_worker_v2.sh (v2,
+14403:# Dateien, chatgpt_burst_state/*.log+*.json, chatgpt_burst_worker.sh v1
+14417:# steht in memory `project_xeno_chatgpt_harness_permanent_tool.md` und
+14424:_CHATGPT_SCRIPT = Path.home() / "scripts" / "chatgpt_burst_worker_v2.sh"
+14565:    siehe Skriptkommentar in chatgpt_burst_worker_v2.sh: ein anderes cwd
+14573:    Vorsichtsmassnahme wie in chatgpt_burst_worker_v2.sh
+14595:# ECHTER Dateilock + Absturz-Erkennung/Wiederherstellung um chatgpt_senden()/
+14596:# chatgpt_ernten(). Zwei reale, heute in Logs beobachtete Probleme:
+14611:# chatgpt_burst_worker_v2.sh ensure_single_tab_at() + chatgpt_automation_dos_donts.md).
+14629:    echten chatgpt_burst_worker_v2.sh-Lauf. Ein zweiter gleichzeitiger
+14781:    """Fuehrt EINEN chatgpt_burst_worker_v2.sh-Aufruf aus, mit automatischer
+14946:    Wird automatisch versucht, BEVOR chatgpt_senden()/chatgpt_ernten() eine
+14994:    scheitert, ist ein echter Mensch-Login noetig. chatgpt_senden() und
+14995:    chatgpt_ernten() rufen das jetzt beide auf, statt je ihr eigenes,
+15052:# von Hand nachlogin muessen. chatgpt_senden()/chatgpt_ernten() schalten
+15053:# stattdessen automatisch auf harness_aider.py um (siehe dort: 'fallback-start',
+15064:_HARNESS_AIDER_PY = STERN_DIR / "harness_aider.py"
+15068:def _chatgpt_harness_fallback(auftrag: str, grund: str, *, kandidaten: str = "nvidia-nemotron,mistral-small",
+15070:    """Ruft `harness_aider.py fallback-start` auf -- schaltet dort SELBST das
+15075:        return {"ok": False, "grund": f"harness_aider.py fehlt: {_HARNESS_AIDER_PY}"}
+15083:        return {"ok": False, "grund": f"harness-Fallback ueberschritt {timeout_s}s"}
+15085:        return {"ok": False, "grund": f"harness-Fallback-Ausnahme: {e}"}
+15090:        return {"ok": False, "grund": f"harness-Fallback ohne Ausgabe (rc={p.returncode}), "
+15095:        return {"ok": False, "grund": f"harness-Fallback-Ausgabe nicht als JSON lesbar: {zeilen[-1][:300]}"}
+15102:    damit chatgpt_ernten() (die eigentlich fuer ASYNCHRONES Abholen gedacht
+15105:    von chatgpt_senden() selbst zu lesen. Fail-silent (best effort)."""
+15200:    testbar mit echten Logdateien als Fixture. Von chatgpt_senden() als
+15201:    zweiter Fallback-Ausloeser genutzt (gleicher harness_aider.py-Pfad wie
+15202:    PHASE 46b), von chatgpt_ernten() als Diagnose (die Ernte-Phase loest
+15252:def chatgpt_senden(prompts: list, *, num_workers: Optional[int] = None,
+15256:    """Duenner Wrapper um chatgpt_burst_worker_v2.sh (Sende-Phase). Ruft
+15289:        # Jetzt: automatischer Fallback auf harness_aider.py (NVIDIA/Mistral,
+15292:        # Docstring von _chatgpt_harness_fallback()). NICHT im dry_run
+15306:            fb = _chatgpt_harness_fallback(
+15319:                    "hinweis": "ChatGPT-Bruecke nicht erreichbar -- automatisch auf harness_aider.py "
+15338:        if num_workers is not None:
+15339:            env["NUM_WORKERS"] = str(num_workers)
+15356:        timeout_s = max(120.0, (num_workers or 30) * ((sleep_between or 2.0) + 6.0))
+15383:            fb = _chatgpt_harness_fallback(
+15399:        _log(f"chatgpt_senden: trigger='{(text or 'triggerwort2')[:40]}' rc={r.get('rc')} zusammenfassung={neu} "
+15423:def chatgpt_ernten(*, timeout_s: float = 900.0, lock_timeout_s: float = 1200.0) -> dict:
+15424:    """Wrapper um `chatgpt_burst_worker_v2.sh --harvest` -- liest bereits
+15427:    chatgpt_senden() unter `_chatgpt_lock()` (wartet auf gleichzeitige
+15437:    # chatgpt_senden()) -- eine zwischenzeitlich verlorene Sitzung soll
+15444:        # ist, liefere was per chatgpt_senden()-Fallback ggf. schon bereitsteht
+15446:        # 'chatgpt_ernten' selbst loest KEINEN neuen Fallback-Lauf aus --
+15450:        # chatgpt_senden() abfragen.
+15456:                             "chatgpt_senden() zuerst aufrufen (loest bei ausgefallener Bruecke "
+15487:    _log(f"chatgpt_ernten: rc={r.get('rc')} zusammenfassung={zusammenfassung}")
+15497:    # gemacht, damit ein Aufrufer (der z.B. chatgpt_senden() erneut
+15501:        _log(f"chatgpt_ernten: 403/Cloudflare-Verdacht trotz bestaetigtem Login: {ausfall.get('grund')}")
+16762:    Dienst-Neustart mehr noetig, siehe capture_worker.py-Docstring-Analogie
+16782:    Kamera in capture_worker.py aktuell als Modul-Konstante KAMERA_GERAET
+18077:    cs = sub.add_parser("chatgpt-senden", help="ChatGPT-Skill: duenner Wrapper um chatgpt_burst_worker_v2.sh (Sende-Phase)")
+18079:    cs.add_argument("--num-workers", dest="num_workers", type=int, default=None)
+18088:    ce = sub.add_parser("chatgpt-ernten", help="ChatGPT-Skill: Wrapper um chatgpt_burst_worker_v2.sh --harvest (lesend)")
+18770:        ergebnis = chatgpt_senden([str(p) for p in prompts], num_workers=a.num_workers, sleep_between=a.sleep,
+18776:        ergebnis = chatgpt_ernten(timeout_s=a.timeout_s, lock_timeout_s=a.lock_timeout_s)
+--- skill ---
+/home/ai-core-node/.claude/skills/chatgpt/SKILL.md

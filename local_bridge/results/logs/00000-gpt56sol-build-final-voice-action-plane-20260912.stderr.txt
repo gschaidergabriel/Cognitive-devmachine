@@ -1,0 +1,11 @@
+ValueError('DENIED_PATTERN:mkfs\\.')
+Traceback (most recent call last):
+  File "/home/ai-core-node/.claude/star/local_bridge_daemon.py", line 209, in execute
+    p, meta = operate(s)
+              ^^^^^^^^^^
+  File "/home/ai-core-node/.claude/star/local_bridge_daemon.py", line 164, in operate
+    return op_exec(str(s["command"]), str(s.get("cwd", "")), timeout), {}
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai-core-node/.claude/star/local_bridge_daemon.py", line 116, in op_exec
+    raise ValueError(f"DENIED_PATTERN:{denied}")
+ValueError: DENIED_PATTERN:mkfs\.

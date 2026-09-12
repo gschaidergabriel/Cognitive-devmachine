@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-bootstrap-inventory-20260912-1701",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -eu; echo '=== OMEGA VPS READ-ONLY INVENTORY ==='; date -u +%FT%TZ; id; uname -a; printf '\\n-- filesystem --\\n'; df -hT; printf '\\n-- workspace --\\n'; pwd; find /workspace -maxdepth 2 -mindepth 1 -printf '%y %p\\n' 2>/dev/null | sort | head -n 300; printf '\\n-- likely entity/omega paths --\\n'; find /workspace /var/lib /opt -maxdepth 3 \\( -iname '*entityos*' -o -iname '*omega*' -o -iname '*franken*' -o -iname '*unified*' \\) -print 2>/dev/null | sort | head -n 300; printf '\\n-- desktop binaries --\\n'; for x in Xorg Xvfb weston startxfce4 xfce4-session startlxqt openbox chromium google-chrome firefox; do command -v \"$x\" 2>/dev/null || true; done; printf '\\n-- processes --\\n'; ps -eo pid,comm,args --sort=comm | grep -Ei 'podman|entity|franken|omega|Xorg|Xvfb|weston|xfce|lxqt|chrome|chromium|firefox' | head -n 200 || true; printf '\\n-- network egress metadata --\\n'; getent hosts github.com 2>/dev/null | head -n 5 || true; printf '\\n=== END READ-ONLY INVENTORY ===\\n'",
+  "timeout_seconds": 120
+}

@@ -1,0 +1,185 @@
+VARS
+GESICHT_BILD = "/usr/share/backgrounds/frank-login.png"
+# 2026-09-11: auf zugeschnittene Bilder umgestellt (y=0..573 von 1024) --
+# der halbtransparente "Schleier" war keine CSS-Ebene, sondern in allen 20
+# Quell-PNGs bei y=573 (56% Hoehe) eingebrannt (per PIL vermessen). Originale
+# in ausdruck/ augen/ kopf/ bleiben unangetastet, NICHT hierher zurueckstellen.
+AUSDRUCK_DIR = os.path.join(VISUAL_DIR, "ausdruck_zugeschnitten")
+AUGEN_DIR = os.path.join(VISUAL_DIR, "augen_zugeschnitten")
+KOPF_DIR = os.path.join(VISUAL_DIR, "kopf_zugeschnitten")
+GAZE_DIR = os.path.join(VISUAL_DIR, "augen_gaze")
+# ⭐ 2026-09-11 (Koordinator): die 12 Blinzel-Frames aus FRANK_AVATAR_RIG_V2.
+# Sie lagen im ZIP unter augen/blink/, wurden aber NIE ausgepackt -- nur
+# augen/gaze/ war deployt. Deshalb konnte die Buehne seit dem RGBA-Umbau
+# ueberhaupt nicht blinzeln: blinzeln() setzte Variablen, aber es gab kein
+# Bild, das man haette zeigen koennen. Gemessen: 2,4 % bewegte Gesichtsflaeche
+# ueber 24 s, kein einziger Lidschlag. Geometrie IDENTISCH zu den gaze-Flicken
+# (319x152 RGBA) -- passt ohne Umbau in dieselbe Ebene.
+# Ablauf geprueft: Rotanteil der Augen 0,61 % -> 0,00 % (Frame 08) -> 0,61 %,
+# also auf -> zu -> auf. Frame 00 und 11 sind byte-gleich (Schleifenpunkt).
+BLINK_DIR = os.path.join(VISUAL_DIR, "augen_blink")
+MUND_DIR = os.path.join(VISUAL_DIR, "mund_keyframes")
+# ⭐ 2026-09-11 (Bauauftrag Kopf-RGBA-Hauptebene): ECHTE Alpha-PNGs aus
+# FRANK_AVATAR_RIG_V2 (1536x1024, gleicher Leinwand-Koordinatenraum fuer Kopf
+# UND Koerper -- head_neck_anchor{768,600} und Koerper neck_anchor{768,505}
+# liegen im selben Raster, deshalb keine manuelle Versatz-Rechnung noetig,
+# beide Ebenen einfach deckungsgleich stapeln). Ersetzt AUSDRUCK_DIR/AUGEN_DIR/
+# KOPF_DIR als HAUPT-Kopfebene -- jene alten Ordner bleiben nur fuer
+# Sonderausdruck-Faelle/Altlast bestehen, siehe buehne.html.
+KOPF_RGBA_DIR = os.path.join(VISUAL_DIR, "kopf_rgba")
+KOERPER_RGBA_DIR = os.path.join(VISUAL_DIR, "koerper_rgba")
+HINTERGRUND_DIR = os.path.join(VISUAL_DIR, "hintergrund")
+# Feste Allowlist statt Ordnerinhalt zur Laufzeit zu vertrauen -- 5 Stimmungen
+# aus dem Rig-v2-Datensatz, je 60 Frames (nahtlose Schleife).
+HINTERGRUND_STIMMUNGEN = ("ruhig", "wach", "angespannt", "bedrohlich", "heiter")
+# ⭐ 2026-09-11: zweiter Datensatz (FRANK_EXPRESSION_RIG_EXTRA_V1, vom
+# Koordinator geliefert). NUR die 16 ECHT generierten Endpunkte uebernommen
+# (serious_dystopian + demonic) -- die Anime/Meme/Comic-Komposite wurden
+ROUTE
+    for pfad in kandidaten:
+        try:
+            neuste = max(neuste, os.path.getmtime(pfad))
+        except OSError:
+            pass
+    return neuste
+
+
+def _make_handler():
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, fmt, *args):
+            pass  # keine Zugriffs-Logs auf Disk
+
+        def _json(self, obj, code=200):
+            b = json.dumps(obj, ensure_ascii=False).encode("utf-8")
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(b)))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            self.wfile.write(b)
+
+        def _bild_ausliefern(self, voller_pfad):
+            # Bedingtes GET statt Stunden-Cache. LEHRE (2026-09-11): vorher
+            # "Cache-Control: max-age=3600" auf allen Bildern -- der Browser
+            # hat eine Stunde lang NIE nachgefragt, egal was auf der Platte
+            # neu lag. Jetzt: immer neu anfragen (no-cache = revalidieren,
+            # nicht "nie cachen"), Server antwortet mit 304 wenn unveraendert
+            # -> genauso billig wie vorher, aber Aenderungen wirken sofort.
+            try:
+                mtime = os.path.getmtime(voller_pfad)
+            except OSError:
+                self.send_response(404); self.end_headers(); return
+            last_mod = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mtime))
+            ims = self.headers.get("If-Modified-Since")
+            if ims and ims == last_mod:
+                self.send_response(304)
+                self.send_header("Cache-Control", "no-cache")
+                self.end_headers()
+                return
+            with open(voller_pfad, "rb") as f:
+                daten = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", "image/png")
+            self.send_header("Content-Length", str(len(daten)))
+            self.send_header("Cache-Control", "no-cache")
+            self.send_header("Last-Modified", last_mod)
+            self.end_headers()
+            self.wfile.write(daten)
+
+        def do_GET(self):
+            u = urllib.parse.urlsplit(self.path)
+            path, qs = u.path, urllib.parse.parse_qs(u.query)
+            if path == "/":
+                # Immer frisch von Disk lesen -- sonst serviert der laufende
+                # Prozess auf ewig den Stand von seinem eigenen Start
+                # (permanenter Reload-Weg, Gabriels Anforderung 2026-09-07:
+                # sonst prueft man bei jeder Aenderung eine alte Version).
+                aktuelle_seite = _seite()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(aktuelle_seite)))
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                self.wfile.write(aktuelle_seite)
+            elif path == "/filmlook.js":
+                # ⭐ 2026-09-11 (Koordinator): der globale Filmlook (Korn,
+                # Farbabstimmung, Vignette) liegt in EINER eigenen Datei, nicht
+                # in buehne.html. Grund: die Seite gehoert waehrend des Umbaus
+                # dem Animations-Agenten -- zwei Agenten in derselben Datei
+                # erzeugen Konflikte. So braucht buehne.html nur EINE Zeile
+                # (<script src="/filmlook.js">), und der Look kann unabhaengig
+                # weitergebaut oder komplett abgeschaltet werden (Datei leeren).
+                # Die Datei injiziert ihr eigenes <style>, ihre eigenen
+                # SVG-<defs> und ihre eigenen Overlay-Ebenen.
+                # ⚠️ Externe SVG-Filterverweise (filter:url(datei.svg#id))
+                # funktionieren in Chrome NICHT zuverlaessig -- deshalb muessen
+                # die <defs> ins Dokument selbst, per Skript.
+                pfad = os.path.join(VISUAL_DIR, "filmlook.js")
+                if os.path.isfile(pfad):
+                    with open(pfad, "rb") as fh:
+                        inhalt = fh.read()
+                    self.send_response(200)
+                    self.send_header("Content-Type",
+                                     "application/javascript; charset=utf-8")
+                    self.send_header("Content-Length", str(len(inhalt)))
+                    self.send_header("Cache-Control", "no-store")
+                    self.end_headers()
+                    self.wfile.write(inhalt)
+                else:
+                    # Fehlt die Datei, liefert der Server eine leere Antwort
+                    # statt 404 -- die Seite soll ohne Filmlook normal laufen.
+                    self.send_response(200)
+                    self.send_header("Content-Type",
+                                     "application/javascript; charset=utf-8")
+                    self.send_header("Content-Length", "0")
+                    self.end_headers()
+            elif path == "/api/mtime":
+                self._json({"mtime": _seite_mtime()})
+            elif path == "/gesicht.png":
+                self._bild_ausliefern(GESICHT_BILD)
+            elif (path.startswith("/ausdruck/") or path.startswith("/augen/")
+                    or path.startswith("/kopf/") or path.startswith("/augen_gaze/")
+                    or path.startswith("/augen_blink/")
+                    or path.startswith("/mund_keyframes/")
+                    or path.startswith("/kopf_rgba/") or path.startswith("/koerper_rgba/")):
+                # Ausdrucks-/Augen-/Kopf-/Gaze-/Mund-/Kopf-RGBA-/Koerper-RGBA-
+                # Bilder statisch ausliefern -- nur Basisname, nur .png, nur
+                # aus dem jeweils zustaendigen Verzeichnis (kein Pfad-Traversal
+                # moeglich). kopf_rgba/koerper_rgba: 2026-09-11, echte
+                # Alpha-PNGs aus RIG_V2 als neue Hauptebene, siehe Konstanten
+                # oben und buehne.html.
+                if path.startswith("/ausdruck/"):
+                    verzeichnis = AUSDRUCK_DIR
+                elif path.startswith("/augen/"):
+                    verzeichnis = AUGEN_DIR
+                elif path.startswith("/augen_gaze/"):
+                    verzeichnis = GAZE_DIR
+                elif path.startswith("/augen_blink/"):
+                    verzeichnis = BLINK_DIR
+                elif path.startswith("/mund_keyframes/"):
+                    verzeichnis = MUND_DIR
+                elif path.startswith("/kopf_rgba/"):
+                    verzeichnis = KOPF_RGBA_DIR
+                elif path.startswith("/koerper_rgba/"):
+                    verzeichnis = KOERPER_RGBA_DIR
+                else:
+                    verzeichnis = KOPF_DIR
+                # ⭐ 2026-09-11 (Koordinator): GENAU EINE Ebene Unterordner erlaubt.
+                # Vorher nahm diese Route nur `os.path.basename(path)` -- damit
+                # waren kopf_rgba/roll/, koerper_rgba/atmen/ und die 36 Mund-
+                # Uebergangsordner NICHT abrufbar, obwohl die Dateien da lagen.
+                # Deshalb wurde frueher alles flach mit Praefix kopiert, was bei
+                # gleichnamigen Dateien (36x stufe_00.png) stillschweigend Bilder
+                # verschluckt hat. Beide Ablagen bleiben jetzt gueltig.
+                # Pfad-Traversal: jedes Segment muss ein reiner Name sein --
+REALPATHS
+/home/ai-core-node/.claude/star/visual => /home/ai-core-node/.claude/star/visual islink False
+/home/ai-core-node/.claude/star/visual/augen_blink => /home/ai-core-node/.claude/star/visual/augen_blink islink False
+/home/ai-core-node/.claude/star/visual/augen_blink/blink_000.png => /home/ai-core-node/.claude/star/visual/augen_blink/blink_000.png islink False
+FIND_DUPLICATES
+/home/ai-core-node/.claude/star/visual/augen_blink/blink_000.png
+c9304ad603ba97ce20c69c8c0640ec389f181e082c06b2f5a5b25bf5fcaf7128  /home/ai-core-node/.claude/star/visual/augen_blink/blink_000.png
+/home/ai-core-node/.claude/star/visual/artifacts/handoff/COMBINED_HANDOFF_20260911T184549Z/ROUND1_EXPORT_20260911T184549Z/assets/augen_blink/blink_000.png
+f7c0abd552a91e117f90880bc67c29f22311f1ed5b90a043b169e93495fff44f  /home/ai-core-node/.claude/star/visual/artifacts/handoff/COMBINED_HANDOFF_20260911T184549Z/ROUND1_EXPORT_20260911T184549Z/assets/augen_blink/blink_000.png
+/home/ai-core-node/.claude/star/visual/artifacts/handoff/FRANK_AVATAR_HANDOFF_20260911T184549Z/assets/augen_blink/blink_000.png
+f7c0abd552a91e117f90880bc67c29f22311f1ed5b90a043b169e93495fff44f  /home/ai-core-node/.claude/star/visual/artifacts/handoff/FRANK_AVATAR_HANDOFF_20260911T184549Z/assets/augen_blink/blink_000.png

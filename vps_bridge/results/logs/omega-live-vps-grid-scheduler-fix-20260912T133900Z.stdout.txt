@@ -1,0 +1,35 @@
+NEW_SHA=ffa1d0b48bfade144a77be208b0d76af2ecaecc841999eb58e1a3263dac3173a
+61- if not scores:raise RuntimeError('NO_ELIGIBLE_ORGAN')
+62- scores.sort(reverse=True);n=max(1,int(task.get('max_organs',1)));n=max(n,2 if want2 else 1);return {'selected_organs':[x[1] for x in scores[:n]],'ranking':scores}
+63:def proposals():
+64- ts=tasks();tel=telemetry();free=free_available();missing=len({'host:ai-core-node','host:andreas-maco'}-set(tel));s={'REENTRY':.30,'RESEARCH':.25+(.25 if free else 0),'WORLD_MODEL':.22,'HOST_SCOUT':.20+min(.35,.12*missing),'SELF_IMPROVE':.28 if not ts else .18,'FALSIFIER':.24,'MAINTENANCE':.18,'MEMORY_COMPRESSION':.16,'EFFECT_RECONCILIATION':.10,'MASTER_BRIDGE':.20};
+65- if ts:
+66-  s['RESEARCH']+=.10;s['HOST_SCOUT']+=.10;s['FALSIFIER']+=.08
+67-  t0=ts[0];executable=isinstance(t0.get('effect'),dict) or isinstance(t0.get('execution'),dict) or str(t0.get('bridge_op') or '') in {'status','read_file','write_text','exec','screenshot'};needs_host=bool(t0.get('required_capabilities') or t0.get('preferred_data_domains') or executable)
+68-  if executable:s['HOST_SCOUT']=max(s['HOST_SCOUT'],.95)
+69-  elif needs_host:s['HOST_SCOUT']=max(s['HOST_SCOUT'],.72)
+70- task=ts[0] if ts else {'task_id':'background_host_scout','required_capabilities':['local_state'],'max_organs':1};return [{'cell':x,'score':s[x],'task':task,'free':free} for x in CELLS]
+71-def realize(p,fid):
+72- if p['cell']=='HOST_SCOUT':
+73-  try:r=route(p['task'])
+74-  except Exception as e:out('GRID_ROUTE_BLOCKED',{'frame_id':fid,'error':str(e)});return {'blocked':str(e)}
+75-  ids=[]
+69-  elif needs_host:s['HOST_SCOUT']=max(s['HOST_SCOUT'],.72)
+70- task=ts[0] if ts else {'task_id':'background_host_scout','required_capabilities':['local_state'],'max_organs':1};return [{'cell':x,'score':s[x],'task':task,'free':free} for x in CELLS]
+71:def realize(p,fid):
+72- if p['cell']=='HOST_SCOUT':
+73-  try:r=route(p['task'])
+74-  except Exception as e:out('GRID_ROUTE_BLOCKED',{'frame_id':fid,'error':str(e)});return {'blocked':str(e)}
+75-  ids=[]
+76-  for oid in r['selected_organs']:
+77-   e={'schema':'OMEGA_GRID_EFFECT_INTENT/v1','effect_id':'effect_'+uuid.uuid4().hex,'frame_id':fid,'organ_id':oid,'task':p['task'],'route':r,'authority':'NOT_YET_GRANTED'};dig=sha(e)
+78-   with con() as c:c.execute('INSERT INTO effect VALUES(?,?,?,?,?,?,?)',(e['effect_id'],fid,oid,dig,canon(e),'PROPOSED',now()))
+79-   out('GRID_EFFECT_INTENT',{**e,'request_sha256':dig});ids.append(e['effect_id'])
+80-  if ids and p['task'].get('task_id') and p['task'].get('task_id')!='background_host_scout':
+81-   with con() as c:c.execute("UPDATE task SET state='DISPATCHED' WHERE id=? AND state='OPEN'",(str(p['task']['task_id']),))
+82-  return {'route':r,'effects':ids}
+83- if p['cell']=='RESEARCH':out('FREE_WORKER_REQUEST' if p['free'] else 'RESEARCH_ADMISSION_NEEDED',{'frame_id':fid,'task':p['task']});return {'research':True,'free':p['free']}
+84- if p['cell']=='MASTER_BRIDGE':out('MASTER_COGNITION_UPDATE',{'frame_id':fid,'tasks':tasks()});return {'master':True}
+85- if p['cell']=='SELF_IMPROVE':
+86-  d={'candidate_id':'cand_'+uuid.uuid4().hex,'created_at':now(),'state':'PROPOSED','rule':'NO_SELF_PROMOTION'};(ROOT/'candidates'/f"{d['candidate_id']}.json").write_text(json.dumps(d,indent=2));return d
+87- return {'cell':p['cell']}

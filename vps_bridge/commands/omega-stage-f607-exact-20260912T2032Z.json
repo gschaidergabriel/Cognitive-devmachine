@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-stage-f607-exact-20260912T2032Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; H=f60746ffc5d1170e146609036d667bb26ac1d56f; C=/workspace/omega_runtime/carrier_repo; R=/workspace/omega_runtime/releases; git -C \"$C\" fetch origin omega-vps-deploy; git -C \"$C\" checkout -B omega-vps-deploy origin/omega-vps-deploy >/dev/null; SRC=\"$C/omega_deploy/$H\"; DST=\"$R/$H\"; test -f \"$SRC/omega/grid_runtime_v3.py\"; if [ ! -d \"$DST\" ]; then cp -a \"$SRC\" \"$DST\"; fi; diff -qr \"$SRC\" \"$DST\"; PYTHONPATH=\"$DST\" python3 -m compileall -q \"$DST/omega\" \"$DST/tests\"; cd \"$DST\"; python3 -m pytest -q; echo OMEGA_F607_STAGE_TEST_PASS; echo OMEGA_HEAD=$H"
+}

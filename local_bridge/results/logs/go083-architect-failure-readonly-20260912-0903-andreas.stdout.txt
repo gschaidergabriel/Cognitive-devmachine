@@ -1,0 +1,77 @@
+=== ARCHITECT FAILURE READONLY ===
+2026-09-12T04:10:43+02:00
+andreas-MACO
+--- STATUS ---
+× frankenstein-architekt.service - FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht)
+     Loaded: loaded (/home/andreas/.config/systemd/user/frankenstein-architekt.service; static)
+     Active: failed (Result: exit-code) since Sat 2026-09-12 00:20:32 CEST; 3h 50min ago
+ Invocation: 64502d0363d94dd9bf66b5cf11e6e766
+TriggeredBy: ● frankenstein-architekt.timer
+   Main PID: 983505 (code=exited, status=1/FAILURE)
+   Mem peak: 311M
+        CPU: 4.576s
+
+Sep 12 00:20:25 andreas-MACO systemd[6988]: Starting frankenstein-architekt.service - FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht)...
+Sep 12 00:20:32 andreas-MACO systemd[6988]: frankenstein-architekt.service: Main process exited, code=exited, status=1/FAILURE
+Sep 12 00:20:32 andreas-MACO systemd[6988]: frankenstein-architekt.service: Failed with result 'exit-code'.
+Sep 12 00:20:32 andreas-MACO systemd[6988]: Failed to start frankenstein-architekt.service - FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht).
+Sep 12 00:20:32 andreas-MACO systemd[6988]: frankenstein-architekt.service: Consumed 4.576s CPU time over 6.153s wall clock time, 311M memory peak.
+--- TIMER ---
+NEXT                                   LEFT LAST                                PASSED UNIT                                          ACTIVATES
+Sat 2026-09-12 04:20:25 CEST           9min Sat 2026-09-12 00:20:25 CEST  3h 50min ago frankenstein-architekt.timer                  frankenstein-architekt.service
+# /home/andreas/.config/systemd/user/frankenstein-architekt.timer
+[Unit]
+Description=Architekten-Zyklus alle 4 Stunden
+
+[Timer]
+OnBootSec=20min
+OnUnitActiveSec=4h
+AccuracySec=5min
+Persistent=true
+Unit=frankenstein-architekt.service
+
+[Install]
+WantedBy=timers.target
+--- SCRIPT ---
+#!/bin/sh
+# Ein Architekten-Zyklus. Wird vom Timer gestartet.
+cd /home/andreas || exit 1
+exec /home/andreas/.local/bin/claude --model opus --dangerously-skip-permissions   -p "$(cat /home/andreas/architekt/auftrag.md)"   >> /home/andreas/architekt/lauf.log 2>&1
+--- ARCHITEKT DIR ---
+total 324K
+-rw-r--r--  1 andreas andreas 1.8K Sep  7 16:52 auftrag.md
+-rwxr-xr-x  1 andreas andreas  262 Sep  7 16:52 lauf.sh
+-rw-r--r--  1 andreas andreas 3.3K Sep  7 16:58 tiefenlauf.md
+-rw-rw-r--  1 andreas andreas  13K Sep  7 17:06 verstaendnis-perzept.md
+-rw-rw-r--  1 andreas andreas 2.6K Sep  7 18:09 tiefenlauf.log
+-rw-rw-r--  1 andreas andreas  883 Sep  8 07:10 wettbewerbsverlauf.tsv.vor-migration-20260908T073735
+-rw-rw-r--  1 andreas andreas  883 Sep  8 07:40 wettbewerbsverlauf.tsv.v1
+lrwxrwxrwx  1 andreas andreas   58 Sep  8 15:46 betrieb-pruefen.sh -> /home/andreas/self-integration/werkzeug/betrieb-pruefen.sh
+lrwxrwxrwx  1 andreas andreas   56 Sep  8 19:53 db-autoritaet.sh -> /home/andreas/self-integration/werkzeug/db-autoritaet.sh
+drwxrwxr-x  2 andreas andreas 4.0K Sep  8 23:55 werkzeug
+lrwxrwxrwx  1 andreas andreas   64 Sep  9 03:59 letzter-frame-pruefen.py -> /home/andreas/self-integration/werkzeug/letzter-frame-pruefen.py
+lrwxrwxrwx  1 andreas andreas   62 Sep  9 08:05 hook-doppel-pruefen.py -> /home/andreas/self-integration/werkzeug/hook-doppel-pruefen.py
+lrwxrwxrwx  1 andreas andreas   63 Sep  9 12:10 regressions-waechter.py -> /home/andreas/self-integration/werkzeug/regressions-waechter.py
+-rw-rw-r--  1 andreas andreas  615 Sep  9 16:12 regressionsverlauf.tsv.vor-5-spalten
+-rw-rw-r--  1 andreas andreas 7.6K Sep  9 19:50 wettbewerbsverlauf.tsv.sicherung-20260909-201112
+-rw-rw-r--  1 andreas andreas 7.6K Sep  9 20:14 wettbewerbsverlauf.tsv.vor-14-spalten
+drwxrwxr-x  2 andreas andreas 4.0K Sep 10 12:06 sicherung
+-rw-rw-r--  1 andreas andreas 3.1K Sep 10 12:15 regressionsverlauf.tsv.vor-6-spalten
+lrwxrwxrwx  1 andreas andreas   57 Sep 10 12:18 gatter-pruefen.sh -> /home/andreas/self-integration/werkzeug/gatter-pruefen.sh
+-rw-rw-r--  1 andreas andreas 3.7K Sep 10 15:51 regressionsverlauf.tsv.vor-7-spalten
+lrwxrwxrwx  1 andreas andreas   60 Sep 10 16:09 fluechtig-pruefen.sh -> /home/andreas/self-integration/werkzeug/fluechtig-pruefen.sh
+lrwxrwxrwx  1 andreas andreas   54 Sep 11 00:12 selbsttests.sh -> /home/andreas/self-integration/werkzeug/selbsttests.sh
+-rw-rw-r--  1 andreas andreas  627 Sep 11 12:26 selbsttestverlauf.tsv.vor-13-spalten
+-rw-rw-r--  1 andreas andreas 1.1K Sep 11 16:35 selbsttestverlauf.tsv.vor-14-spalten
+-rw-r--r--  1 andreas andreas  98K Sep 11 20:26 offen.md
+-rw-rw-r--  1 andreas andreas  59K Sep 12 00:20 lauf.log
+-rw-rw-r--  1 andreas andreas  506 Sep 12 02:30 regressions-meldung.txt
+-rw-rw-r--  1 andreas andreas  18K Sep 12 04:01 wettbewerbsverlauf.tsv
+-rw-rw-r--  1 andreas andreas 2.8K Sep 12 04:01 wettbewerb-meldung.txt
+-rw-rw-r--  1 andreas andreas 9.3K Sep 12 04:01 regressionsverlauf.tsv
+-rw-rw-r--  1 andreas andreas 2.1K Sep 12 04:08 selbsttestverlauf.tsv.vor-15-spalten
+drwxr-xr-x  4 andreas andreas 4.0K Sep 12 04:08 .
+-rw-rw-r--  1 andreas andreas 2.4K Sep 12 04:08 selbsttestverlauf.tsv
+-rw-rw-r--  1 andreas andreas  252 Sep 12 04:08 selbsttest-meldung.txt
+drwxr-x--- 58 andreas andreas 4.0K Sep 12 04:09 ..
+=== END ===

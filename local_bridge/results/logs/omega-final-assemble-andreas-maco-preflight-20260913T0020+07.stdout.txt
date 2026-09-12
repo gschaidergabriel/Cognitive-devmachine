@@ -1,0 +1,26 @@
+=== ID ===
+andreas-MACO
+andreas
+2026-09-12T19:22:43+02:00
+=== SELF-INTEGRATION ===
+5b06f6c40eefb9b2bb058c8117f8705cdff50a6a
+=== WATCHER ===
+ActiveState=active
+SubState=waiting
+NextElapseUSecRealtime=
+=== ENTITYOS VM READONLY ===
+ActiveState=active
+SubState=running
+FragmentPath=/etc/systemd/system/entityos-vm.service
+MainPID=319869
+=== VOLATILE SEMANTIC STORES ===
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db
+/var/lib/entityos/data/unified.db 91983872 bytes 2026-09-12 19:20:08.049342403 +0200
+=== GUARD DROPIN ===
+11:# The ExecStartPre wipe is NOT a defect -- it is immutable infrastructure and
+75:ExecStartPre=/bin/sh -c 'rm -rf "$ENTITYOS_ROOTFS_RUN"; mkdir -p "$(dirname "$ENTITYOS_ROOTFS_RUN")"; cp -a --reflink=auto "$ENTITYOS_ROOTFS_BASE" "$ENTITYOS_ROOTFS_RUN"'
+76:ExecStartPre=/bin/sh -c 'mkdir -p "$ENTITYOS_DATA_DIR" "$ENTITYOS_VOICE_DIR"'
+79:ExecStartPre=/bin/sh -c 'test -d "$ENTITYOS_VOICE_DIR" || { echo "voice dir missing: $ENTITYOS_VOICE_DIR" >&2; exit 1; }'

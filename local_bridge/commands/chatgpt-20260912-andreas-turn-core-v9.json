@@ -1,0 +1,1 @@
+{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"chatgpt-20260912-andreas-turn-core-v9","op":"exec","timeout_seconds":120,"command":"set -e; F=/var/lib/entityos/voice/gespraech_loop.py; echo '=== 3000-3240 ==='; sed -n '3000,3240p' $F; echo '=== 4160-4245 ==='; sed -n '4160,4245p' $F; echo '=== NUTZER DEFINITIONS ==='; grep -nE '^NUTZER|NUTZER[[:space:]]*=' $F | head -30"}

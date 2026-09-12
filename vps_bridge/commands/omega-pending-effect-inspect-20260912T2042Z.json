@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-pending-effect-inspect-20260912T2042Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/state",
+  "timeout_seconds": 20,
+  "command": "python3 - <<'PY'\nimport json,sqlite3,pathlib\ncon=sqlite3.connect('/workspace/omega_runtime/state/omega.sqlite3'); con.row_factory=sqlite3.Row\nfor r in con.execute(\"select id,frame,organ,digest,payload,state,created from effect where state='PROPOSED'\"):\n d=json.loads(r['payload']); t=d.get('task') if isinstance(d.get('task'),dict) else {}; req=t.get('effect') if isinstance(t.get('effect'),dict) else (t.get('execution') if isinstance(t.get('execution'),dict) else {})\n print(json.dumps({'effect_id':r['id'],'frame':r['frame'],'organ':r['organ'],'stored_digest':r['digest'],'state':r['state'],'created':r['created'],'schema':d.get('schema'),'authority':d.get('authority'),'task_id':t.get('task_id'),'task_keys':sorted(t.keys()),'op':req.get('op'),'requires_confirmation':t.get('requires_confirmation'),'route_selected':(d.get('route') or {}).get('selected_organs')},sort_keys=True))\ncon.close()\nfor p in pathlib.Path('/workspace/omega_runtime/state/outbox').glob('msg_*.json'):\n try:d=json.loads(p.read_text())\n except Exception:continue\n if d.get('kind')=='GRID_EFFECT_INTENT':\n  q=d.get('payload') if isinstance(d.get('payload'),dict) else {}; print('WRAPPED',json.dumps({'file':p.name,'effect_id':q.get('effect_id'),'organ_id':q.get('organ_id'),'request_sha256':q.get('request_sha256'),'authority':q.get('authority')},sort_keys=True))\nPY"
+}

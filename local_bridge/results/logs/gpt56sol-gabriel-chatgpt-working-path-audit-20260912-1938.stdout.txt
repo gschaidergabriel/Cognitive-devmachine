@@ -1,0 +1,478 @@
+HOST_CONST 'ai-core-node'
+=== chatgpt_login_status ===
+def chatgpt_login_status() -> dict:
+    """Rein lesend: Daemon-Status + grobe Heuristik ob eine chatgpt.com-
+    Sitzung im Browser-Profil vorliegt (Cookie-Anzahl fuer die Domain).
+    Liest NIE einen Geheimniswert -- `$B cookies` redigiert Sitzungscookies
+    ohnehin serverseitig (siehe browse/src/read-commands.ts SENSITIVE_COOKIE_*)."""
+    dos_donts = _chatgpt_dos_donts_einmalig()
+    diagnose = _chatgpt_kontext_diagnose()
+    if not diagnose["host_wie_erwartet"]:
+        ergebnis = {
+            "ok": False, "eingeloggt": False, "kontext_fehler": True,
+            "grund": (f"KONTEXT-FEHLER, nicht Login-Fehler: dieser Check funktioniert nur lokal "
+                      f"auf ai-core-node, weil der gstack-browse-Daemon (samt Login-Cookies) NUR "
+                      f"dort laeuft. Dieser Python-Prozess laeuft aber auf Host "
+                      f"'{diagnose['pruef_host']}' (HOME={diagnose['pruef_home']}) -- vermutlich "
+                      f"eine SSH-Sitzung auf einen anderen Rechner (z.B. die claylab-VPS-Sandbox "
+                      f"72.61.19.188). Ein 'eingeloggt: false' von HIER bedeutet NICHT, dass die "
+                      f"ChatGPT-Bridge abgemeldet ist -- es bedeutet nur, dass der falsche Host "
+                      f"geprueft wurde."),
+            "empfehlung": "chatgpt-login-status auf ai-core-node SELBST erneut ausfuehren "
+                           "(lokales Bash-Werkzeug, kein ssh-Praefix, kein Aufruf innerhalb einer "
+                           "bestehenden Remote-Shell-Sitzung)",
+        }
+        ergebnis.update(diagnose)
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    status = _chatgpt_browse("status")
+    if not status.get("ok"):
+        ergebnis = {"ok": False, "eingeloggt": False,
+                "grund": status.get("grund") or status.get("stderr") or "daemon nicht erreichbar",
+                "empfehlung": "gstack-connect-chrome / Daemon starten, dann erneut pruefen"}
+        ergebnis.update(diagnose)
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    modus = "unbekannt"
+    for zeile in (status.get("stdout") or "").splitlines():
+        if zeile.startswith("Mode:"):
+            modus = zeile.split(":", 1)[1].strip()
+    cookies = _chatgpt_browse("cookies", timeout=10.0)
+    n_chatgpt = 0
+    hat_auth_cookie = False
+    if cookies.get("ok"):
+        try:
+            arr = json.loads(cookies.get("stdout") or "[]")
+            domain_cookies = [c for c in arr if "chatgpt.com" in (c.get("domain") or "")]
+            n_chatgpt = len(domain_cookies)
+            # PHASE-Recovery-Nachtrag (2026-08-26, real entdeckt beim Bau der
+            # Absturz-Wiederherstellung): reines Zaehlen von 'chatgpt.com'-
+            # Cookies zaehlt FAELSCHLICH auch Cloudflares eigene Bot-
+            # Management-Cookies (z.B. __cf_bm) mit, die schon auf der
+            # Turnstile-"Just a moment..."-Challenge-Seite gesetzt werden --
+            # OHNE gueltige Sitzung. Fix: 'eingeloggt' nur bei einem
+            # tatsaechlichen Auth-Cookie-Namen (next-auth-Sitzungstoken oder
+            # OpenAIs eigenes _puid, das nur bei aktiver Sitzung/Quote
+            # gesetzt wird) -- nicht bei irgendeinem Cookie der Domain.
+            hat_auth_cookie = any(
+                "next-auth.session-token" in (c.get("name") or "") or (c.get("name") or "") == "_puid"
+                for c in domain_cookies
+            )
+        except Exception:
+            n_chatgpt = (cookies.get("stdout") or "").lower().count("chatgpt.com")
+            hat_auth_cookie = "session-token" in (cookies.get("stdout") or "").lower()
+    eingeloggt = hat_auth_cookie
+    ergebnis = {
+        "ok": True, "eingeloggt": eingeloggt, "daemon_modus": modus,
+        "chatgpt_cookies_gefunden": n_chatgpt,
+        "empfehlung": ("bereit" if eingeloggt else
+                        "kein chatgpt.com-Cookie im Daemon-Profil gefunden -- Mensch muss sich im "
+                        "sichtbaren Browserfenster (Daemon laeuft headed) selbst einloggen, danach "
+                        "'stern.py chatgpt-login-bestaetigen' aufrufen"),
+    }
+    ergebnis.update(diagnose)
+    if dos_donts:
+        ergebnis["dos_donts_hinweis"] = dos_donts
+    return ergebnis
+
+=== chatgpt_login_bestaetigen ===
+def chatgpt_login_bestaetigen(konto: Optional[str] = None, passphrase: Optional[str] = None) -> dict:
+    """Nach MENSCHLICHEM Login im sichtbaren Browserfenster aufgerufen --
+    das Modell tippt hier NIE ein Geheimnis ein (PHASE-18-Disziplin).
+    Prueft zuerst mechanisch nach ($B cookies), bucht dann NUR eine
+    Status-Markierung im Tresor -- NICHT das Sitzungscookie selbst (das
+    bleibt in ~/.gstack/chromium-profile/, dem Daemon-eigenen, von `$B
+    cookies` bereits redigierten Speicher; eine Zweitkopie im Tresor waere
+    eine zusaetzliche, schlechter geschuetzte Kopie eines Session-Secrets
+    -- bewusst NICHT gemacht)."""
+    lage = chatgpt_login_status()
+    if not lage.get("eingeloggt"):
+        return {"ok": False, "grund": "kein chatgpt.com-Cookie gefunden -- Login im Browserfenster zuerst abschliessen",
+                "lage": lage}
+    try:
+        ergebnis = vault_hinzufuegen(
+            url="https://chatgpt.com (gstack-browse Daemon-Sitzung)",
+            konto=konto, sonstiges="chatgpt-skill: Login-Bestaetigung, KEIN Rohcookie",
+            secret=(f"session_verified_at={_jetzt_iso()} "
+                    f"cookies_gefunden={lage['chatgpt_cookies_gefunden']} "
+                    f"quelle=gstack-browse-headed-daemon "
+                    f"(Rohcookie bleibt in ~/.gstack/chromium-profile/, nicht hier kopiert)"),
+            erzeugt_von="chatgpt-skill", passphrase=passphrase,
+        )
+    except VaultFehler as e:
+        return {"ok": False, "grund": f"Tresor-Fehler: {e}", "lage": lage}
+    _chatgpt_cookie_backup_speichern()  # best effort, siehe Docstring dort
+    ergebnis["lage"] = lage
+    return ergebnis
+
+=== _chatgpt_login_sicherstellen ===
+def _chatgpt_login_sicherstellen() -> dict:
+    """Login-Gate mit automatischem Selbstheilungsversuch: prueft Status,
+    versucht bei Bedarf EINMAL die Wiederherstellung aus dem Cookie-Backup
+    (kein Mensch involviert), prueft danach erneut. Erst wenn auch das
+    scheitert, ist ein echter Mensch-Login noetig. chatgpt_senden() und
+    chatgpt_ernten() rufen das jetzt beide auf, statt je ihr eigenes,
+    fruehes Scheitern zu melden."""
+    lage = chatgpt_login_status()
+    if lage.get("eingeloggt"):
+        return lage
+    if _chatgpt_cookie_backup_wiederherstellen():
+        lage = chatgpt_login_status()
+    return lage
+
+=== chatgpt_senden ===
+def chatgpt_senden(prompts: list, *, num_workers: Optional[int] = None,
+                    sleep_between: Optional[float] = None, ram_schwelle_mb: Optional[int] = None,
+                    tab_recycle_alle: Optional[int] = None, tab_hardlimit: Optional[int] = None,
+                    dry_run: bool = False, lock_timeout_s: float = 1200.0) -> dict:
+    """Duenner Wrapper um chatgpt_burst_worker_v2.sh (Sende-Phase). Ruft
+    das ECHTE Skript per subprocess -- keine eigene Playwright-Logik hier.
+    Fail-closed: kein Sendeversuch ohne bestaetigten Login.
+
+    `prompts`: Liste von Texten. Das Skript selbst kennt nur EINEN
+    Triggertext pro Lauf (TRIGGER-Env, Vorgabe "triggerwort2" -- der
+    eigentliche Auftrag liegt im ChatGPT-Projekt "clay science pipeline"
+    selbst, der Triggertext startet ihn nur). Bei mehreren VERSCHIEDENEN
+    Texten in `prompts` wird das Skript entsprechend oft NACHEINANDER neu
+    aufgerufen (ein Trigger je Lauf) -- keine Aenderung an der inneren
+    Worker-Schleife des Skripts noetig.
+
+    Echte Laeufe (nicht dry_run) laufen unter `_chatgpt_lock()` -- ein
+    zweiter gleichzeitiger Aufrufer wartet bis zu `lock_timeout_s` (Default
+    20 Min) statt sich mit diesem Lauf die Daemon-Tabs wegzureissen
+    (PHASE-29-Lehre). Jeder einzelne Skriptaufruf geht zusaetzlich durch
+    `_chatgpt_lauf_mit_recovery()` -- erkennt bekannte Absturzsignaturen
+    (0-Tabs-FATAL, haengender Daemon) automatisch und versucht bis zu
+    zweimal, den Daemon-PROZESS neu zu starten (nie ein Passwort/2FA)."""
+    # PHASE 30-Nachtrag: Gate zuerst konsumieren, damit der interne
+    # chatgpt_login_status()-Aufruf gleich darunter ihn nicht ein zweites
+    # Mal (leer) zieht -- einmal pro Sitzung, egal welcher der drei
+    # Einstiegspunkte zuerst drankommt.
+    dos_donts = _chatgpt_dos_donts_einmalig()
+    if not _CHATGPT_SCRIPT.exists():
+        ergebnis = {"ok": False, "grund": f"Skript fehlt: {_CHATGPT_SCRIPT}"}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    lage = _chatgpt_login_sicherstellen()
+    if not lage.get("eingeloggt"):
+        # PHASE 46b (Gabriel-Auftrag 2026-08-27): frueher hier ein reines
+        # fail-closed -- Mensch musste jedes Mal von Hand neu einloggen.
+        # Jetzt: automatischer Fallback auf harness_aider.py (NVIDIA/Mistral,
+        # Forschungsmodus, allowlist+audit-gated, meldet sich als eigener
+        # geringer gewichteter Akteur bei der Forschungsentitaet an -- siehe
+        # Docstring von _chatgpt_harness_fallback()). NICHT im dry_run
+        # (der soll nichts Echtes ausloesen) und NICHT wenn gar kein
+        # Prompt-Text da ist (nichts zu beantworten).
+        text_liste_fb = [p for p in (prompts or []) if p and p.strip()]
+        if dry_run or not text_liste_fb:
+            ergebnis = {"ok": False, "grund": "nicht eingeloggt (auch nach automatischem Wiederherstellungsversuch)",
+                    "lage": lage,
+                    "naechster_schritt": "chatgpt-login-status pruefen, Mensch loggt im Browserfenster ein, "
+                                          "dann chatgpt-login-bestaetigen"}
+            if dos_donts:
+                ergebnis["dos_donts_hinweis"] = dos_donts
+            return ergebnis
+        fb_laeufe = []
+        for text in text_liste_fb:
+            fb = _chatgpt_harness_fallback(
+                text, grund="chatgpt-secondary Browser-Bruecke nicht erreichbar (Login, "
+                            "auch nach automatischem Cookie-Wiederherstellungsversuch)")
+            _chatgpt_fallback_ergebnis_queuen(text, fb)
+            fb_laeufe.append({"trigger": text, "ok": bool(fb.get("ok")),
+                               "antwort": fb.get("antwort"), "paket_id": fb.get("paket_id"),
+                               "modell": fb.get("gewonnen_mit") or fb.get("modell"),
+                               "grund": fb.get("grund")})
+            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN_FALLBACK",
+                                f"trigger={_kurz(text, 60)} ok={fb.get('ok')} modell={fb.get('gewonnen_mit')}")
+        gesamt_ok = any(l["ok"] for l in fb_laeufe)
+        ergebnis = {"ok": gesamt_ok, "fallback_verwendet": True, "lage": lage,
+                    "laeufe": fb_laeufe,
+                    "hinweis": "ChatGPT-Bruecke nicht erreichbar -- automatisch auf harness_aider.py "
+                               "(Free-Pool, Forschungsmodus) umgeschaltet, siehe 'laeufe'. Ergebnis "
+                               "liegt dauerhaft im Forschungsentitaets-Repo unter "
+                               "research_entity/topic_packets/fallback-runs/<paket_id>/ UND direkt "
+                               "im Feld 'antwort' hier."}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    text_liste = [p for p in (prompts or [""]) if p is not None] or [""]
+    laeufe = []
+
+    def _einen_lauf(text: str) -> None:
+        # DISPLAY/WAYLAND_DISPLAY raus -- s. Kommentarblock bei
+        # _chatgpt_env_ohne_display() (Bugfix 2026-08-27, Gabriels echter
+        # Bildschirm blockiert). Dieser Lauf kann via
+        # _chatgpt_lauf_mit_recovery() den Daemon neu spawnen.
+        env = _chatgpt_env_ohne_display(dict(os.environ))
+        if text:
+            env["TRIGGER"] = text
+        if num_workers is not None:
+            env["NUM_WORKERS"] = str(num_workers)
+        if sleep_between is not None:
+            env["SLEEP_BETWEEN_WORKERS"] = str(sleep_between)
+        if ram_schwelle_mb is not None:
+            env["RAM_THRESHOLD_MB"] = str(ram_schwelle_mb)
+        if tab_recycle_alle is not None:
+            env["TAB_RECYCLE_EVERY"] = str(tab_recycle_alle)
+        if tab_hardlimit is not None:
+            env["TAB_HARDLIMIT"] = str(tab_hardlimit)
+        befehl = [str(_CHATGPT_SCRIPT)]
+        if dry_run:
+            laeufe.append({"trigger": text or "triggerwort2", "dry_run": True, "waere_befehl": befehl,
+                            "env_override": {k: v for k, v in env.items()
+                                              if k in ("TRIGGER", "NUM_WORKERS", "SLEEP_BETWEEN_WORKERS",
+                                                        "RAM_THRESHOLD_MB", "TAB_RECYCLE_EVERY", "TAB_HARDLIMIT")}})
+            return
+        vor = _chatgpt_zusammenfassung_neueste()
+        timeout_s = max(120.0, (num_workers or 30) * ((sleep_between or 2.0) + 6.0))
+        r = _chatgpt_lauf_mit_recovery(befehl, env, timeout_s)
+        if r.get("sitzung_verloren"):
+            laeufe.append({"trigger": text or "triggerwort2", "ok": False, "grund": r["grund"],
+                            "sitzung_verloren": True, "recovery_log": r.get("recovery_log")})
+            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN",
+                                f"trigger={_kurz(text or 'triggerwort2', 60)} SITZUNG_VERLOREN")
+            return
+        if not r.get("ok") and r.get("versuche_erschoepft"):
+            laeufe.append({"trigger": text or "triggerwort2", "ok": False, "grund": r.get("grund"),
+                            "recovery_log": r.get("recovery_log")})
+            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN",
+                                f"trigger={_kurz(text or 'triggerwort2', 60)} rc=absturz_nicht_behoben")
+            return
+        nach = _chatgpt_zusammenfassung_neueste()
+        neu = nach if nach != vor else None
+        eintrag = {"trigger": text or "triggerwort2", "ok": r.get("rc") == 0, "rc": r.get("rc"),
+                   "zusammenfassung": neu, "stderr_kurz": _kurz(r.get("stderr") or "", 400),
+                   "recovery_log": r.get("recovery_log") or []}
+        # PHASE 46c (Gabriel-Auftrag 2026-08-27): Skript lief hier sauber
+        # durch (rc=0, kein Absturzmuster -- der PHASE-46b-Zweig oben griff
+        # nicht, es war ja eingeloggt), aber ChatGPT hat trotzdem NICHTS
+        # gesendet -- z.B. Cloudflare blockt die Projekt-URL mit 403 (real
+        # beobachtet 2026-08-27, drei Laeufe hintereinander). Gleicher
+        # Fallback-Pfad wie PHASE 46b, nur anderer Ausloeser.
+        ausfall = _chatgpt_ausfall_erkannt(neu)
+        if ausfall.get("ausfall"):
+            fb = _chatgpt_harness_fallback(
+                text or "triggerwort2",
+                grund=f"chatgpt-secondary Browser-Bruecke blockiert trotz bestaetigtem Login "
+                      f"({ausfall.get('grund')})")
+            _chatgpt_fallback_ergebnis_queuen(text or "triggerwort2", fb)
+            eintrag["fallback_verwendet"] = True
+            eintrag["fallback_ausfall_befund"] = ausfall
+            eintrag["fallback_ergebnis"] = {"ok": bool(fb.get("ok")), "antwort": fb.get("antwort"),
+                                             "paket_id": fb.get("paket_id"),
+                                             "modell": fb.get("gewonnen_mit") or fb.get("modell"),
+                                             "grund": fb.get("grund")}
+            eintrag["ok"] = eintrag["ok"] or bool(fb.get("ok"))
+            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN_FALLBACK",
+                                f"trigger={_kurz(text or 'triggerwort2', 60)} ausloeser=403_cloudflare "
+                                f"ok={fb.get('ok')} modell={fb.get('gewonnen_mit')}")
+        laeufe.append(eintrag)
+        _log(f"chatgpt_senden: trigger='{(text or 'triggerwort2')[:40]}' rc={r.get('rc')} zusammenfassung={neu} "
+             f"ausfall_403_erkannt={ausfall.get('ausfall')}")
+        _raum_ruf_schreiben("manuell", "CHATGPTSENDEN",
+                            f"trigger={_kurz(text or 'triggerwort2', 60)} rc={r.get('rc')}")
+
+    if dry_run:
+        for text in text_liste:
+            _einen_lauf(text)
+    else:
+        try:
+            with _chatgpt_lock(timeout_s=lock_timeout_s):
+                for text in text_liste:
+                    _einen_lauf(text)
+        except ChatGPTLockTimeout as e:
+            ergebnis = {"ok": False, "grund": str(e)}
+            if dos_donts:
+                ergebnis["dos_donts_hinweis"] = dos_donts
+            return ergebnis
+    ergebnis = {"ok": True, "dry_run": dry_run, "laeufe": laeufe}
+    if dos_donts:
+        ergebnis["dos_donts_hinweis"] = dos_donts
+    return ergebnis
+
+=== chatgpt_ernten ===
+def chatgpt_ernten(*, timeout_s: float = 900.0, lock_timeout_s: float = 1200.0) -> dict:
+    """Wrapper um `chatgpt_burst_worker_v2.sh --harvest` -- liest bereits
+    gesendete Konversationen (sent_urls_v2.txt), rein lesend gegenueber
+    ChatGPT (keine neue Nachricht), gefahrlos wiederholbar. Laeuft wie
+    chatgpt_senden() unter `_chatgpt_lock()` (wartet auf gleichzeitige
+    Sende-Laeufe statt zu kollidieren) und `_chatgpt_lauf_mit_recovery()`
+    (automatische Absturz-Erkennung + Prozess-Neustart, nie Login-Eingabe)."""
+    dos_donts = _chatgpt_dos_donts_einmalig()  # PHASE 30-Nachtrag, s.o.
+    if not _CHATGPT_SCRIPT.exists():
+        ergebnis = {"ok": False, "grund": f"Skript fehlt: {_CHATGPT_SCRIPT}"}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    # Selbstheilungsversuch VOR dem Ernten (Nachtrag 2026-08-27, wie bei
+    # chatgpt_senden()) -- eine zwischenzeitlich verlorene Sitzung soll
+    # nicht erst nach einem 800s-Timeout auffallen, wenn ein stiller
+    # Cookie-Restore sie retten koennte.
+    lage = _chatgpt_login_sicherstellen()
+    if not lage.get("eingeloggt"):
+        # PHASE 46b (Gabriel-Auftrag 2026-08-27): Login weiterhin down --
+        # statt 900s auf ein Skript zu warten, das ohnehin nicht eingeloggt
+        # ist, liefere was per chatgpt_senden()-Fallback ggf. schon bereitsteht
+        # (Warteschlange, siehe _chatgpt_fallback_warteschlange_abholen()).
+        # 'chatgpt_ernten' selbst loest KEINEN neuen Fallback-Lauf aus --
+        # es gibt hier keine neuen Prompts zu beantworten, nur das
+        # send-dann-ernten-Bild fuer Aufrufer intakt zu halten, die
+        # gewohnheitsmaessig ernten() statt der Direktantwort von
+        # chatgpt_senden() abfragen.
+        wartend = _chatgpt_fallback_warteschlange_abholen()
+        ergebnis = {"ok": bool(wartend), "fallback_verwendet": True, "lage": lage,
+                    "fallback_ergebnisse": wartend,
+                    "grund": None if wartend else "nicht eingeloggt (auch nach automatischem "
+                             "Wiederherstellungsversuch) und keine wartenden Fallback-Ergebnisse -- "
+                             "chatgpt_senden() zuerst aufrufen (loest bei ausgefallener Bruecke "
+                             "selbst den Fallback aus) oder Mensch loggt manuell ein"}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    try:
+        with _chatgpt_lock(timeout_s=lock_timeout_s):
+            # DISPLAY/WAYLAND_DISPLAY raus -- s. _chatgpt_env_ohne_display() (Bugfix 2026-08-27).
+            r = _chatgpt_lauf_mit_recovery([str(_CHATGPT_SCRIPT), "--harvest"],
+                                            _chatgpt_env_ohne_display(dict(os.environ)), timeout_s)
+    except ChatGPTLockTimeout as e:
+        ergebnis = {"ok": False, "grund": str(e)}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    if r.get("sitzung_verloren"):
+        ergebnis = {"ok": False, "grund": r["grund"], "sitzung_verloren": True,
+                "recovery_log": r.get("recovery_log")}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    if not r.get("ok") and r.get("versuche_erschoepft"):
+        ergebnis = {"ok": False, "grund": r.get("grund"), "recovery_log": r.get("recovery_log")}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    ausgabe = r.get("stdout") or ""
+    zusammenfassung = {}
+    m = re.search(r"HARVEST summary: done=(\d+) pending=(\d+) lost=(\d+)", ausgabe)
+    if m:
+        zusammenfassung = {"done": int(m.group(1)), "pending": int(m.group(2)), "lost": int(m.group(3))}
+    _log(f"chatgpt_ernten: rc={r.get('rc')} zusammenfassung={zusammenfassung}")
+    if zusammenfassung:
+        _raum_ruf_schreiben("manuell", "CHATGPTERNTEN",
+                            f"done={zusammenfassung['done']} pending={zusammenfassung['pending']} "
+                            f"lost={zusammenfassung['lost']}")
+    else:
+        _raum_ruf_schreiben("manuell", "CHATGPTERNTEN", f"rc={r.get('rc')} unklar")
+    # PHASE 46c (Gabriel-Auftrag 2026-08-27): reine Diagnose, KEIN neuer
+    # Fallback-Lauf hier -- Ernte-Phase hat keinen neuen Prompt-Text zu
+    # beantworten (siehe Docstring oben). Nur der Verdacht wird sichtbar
+    # gemacht, damit ein Aufrufer (der z.B. chatgpt_senden() erneut
+    # anstossen koennte) den 403/Cloudflare-Befund nicht selbst suchen muss.
+    ausfall = _chatgpt_ausfall_erkannt(zusammenfassung, log_pfad=_chatgpt_neuestes_burst_log_pfad())
+    if ausfall.get("ausfall"):
+        _log(f"chatgpt_ernten: 403/Cloudflare-Verdacht trotz bestaetigtem Login: {ausfall.get('grund')}")
+        _raum_ruf_schreiben("manuell", "CHATGPTERNTEN_VERDACHT", ausfall.get("grund") or "")
+    ergebnis = {"ok": r.get("rc") == 0, "rc": r.get("rc"), "zusammenfassung": zusammenfassung,
+            "stdout_letzte_zeilen": "\n".join(ausgabe.splitlines()[-15:]),
+            "recovery_log": r.get("recovery_log") or [], "ausfall_403_verdacht": ausfall.get("ausfall")}
+    if dos_donts:
+        ergebnis["dos_donts_hinweis"] = dos_donts
+    return ergebnis
+
+=== _chatgpt_browse ===
+def _chatgpt_browse(*args: str, timeout: float = 15.0) -> dict:
+    """Ruft $B direkt auf (read-only Inspektion), IMMER mit cwd=$HOME --
+    siehe Skriptkommentar in chatgpt_burst_worker_v2.sh: ein anderes cwd
+    spawnt einen zweiten, uneingeloggten Daemon.
+
+    PATH bekommt IMMER ~/.bun/bin vorangestellt -- real beim Bau der
+    Recovery-Routine (2026-08-26) entdeckt: wenn kein Daemon laeuft, muss
+    die CLI selbst einen neuen `bun`-Prozess spawnen; in Umgebungen ohne
+    ~/.bun/bin im PATH (z.B. manche Agent-/Hook-Sandboxen) scheitert das
+    sonst still mit 'Executable not found in $PATH: bun'. Genau dieselbe
+    Vorsichtsmassnahme wie in chatgpt_burst_worker_v2.sh
+    (`export PATH="$HOME/.bun/bin:$PATH"`), hier nachgezogen.
+
+    DISPLAY/WAYLAND_DISPLAY werden IMMER entfernt (s. `_chatgpt_env_ohne_display`
+    oben) -- sonst erbt ein bei Bedarf neu gespawnter Daemon Gabriels echten
+    Bildschirm statt einer virtuellen Anzeige (Bugfix 2026-08-27)."""
+    env = _chatgpt_env_ohne_display(dict(os.environ))
+    bun_bin = str(Path.home() / ".bun" / "bin")
+    env["PATH"] = f"{bun_bin}:{env.get('PATH', '')}"
+    try:
+        r = subprocess.run(
+            [str(_CHATGPT_BROWSE_BIN), *args],
+            cwd=str(Path.home()), env=env, capture_output=True, text=True, timeout=timeout,
+        )
+        return {"ok": r.returncode == 0, "stdout": r.stdout, "stderr": r.stderr, "rc": r.returncode}
+    except FileNotFoundError:
+        return {"ok": False, "grund": "gstack-browse-Binary nicht gefunden (nicht gebaut? siehe gstack setup)"}
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "grund": "browse-Aufruf Zeitueberschreitung"}
+
+=== services ===
+  clay-local-bridge-watchdog.service                               loaded    inactive dead    Clay local bridge self-heal check
+  clay-local-bridge.service                                        loaded    active   running Clay ChatGPT local development bridge
+  frankenstein-chatgpt-client.service                              loaded    active   running FranKenstein Persistent Headless ChatGPT Client
+  frankenstein-local-bridge-webui.service                          loaded    active   running Browser-Terminal fuer die lokale FranKenstein-Git-Bruecke (ai-core-node + andreas-MACO)
+  frankenstein-local-bridge.service                                loaded    active   running Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results)
+  gstack-browse-display.service                                    loaded    active   running gstack-browse virtueller Bildschirm :150 (Xvfb) — eigene, von tAvern :99 getrennte Anzeige (Gabriel-Auftrag 2026-08-27, /browser-Dashboard)
+  gstack-browse-novnc.service                                      loaded    active   running gstack-browse noVNC-Viewer http://127.0.0.1:8114/vnc.html
+  gstack-browse-vnc.service                                        loaded    active   running gstack-browse VNC-Spiegel von :150 (nur localhost)
+  omega-chatgpt-mcp.service                                        loaded    active   running OMEGA ChatGPT MCP Bridge Gateway
+=== service cats ===
+---frankenstein-chatgpt-client.service
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service
+[Unit]
+Description=FranKenstein Persistent Headless ChatGPT Client
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 %h/.local/lib/frankenstein/scripts/voice_host_live_client.py
+Restart=always
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-%h/.config/frankenstein/chatgpt-client.env
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+# This process owns no browser and starts no Chrome. It is the typed,
+# persistent session/context endpoint behind the already-existing ChatGPT
+# bridge. The loader hard-binds canonical runtime authority to the live
+# ~/.claude/star/stern.py used by production; effects remain behind existing
+# Frankenstein authority/effect fences.
+
+[Install]
+WantedBy=default.target
+---gstack-browse-display.service
+# /home/ai-core-node/.config/systemd/user/gstack-browse-display.service
+[Unit]
+Description=gstack-browse virtueller Bildschirm :150 (Xvfb) — eigene, von tAvern :99 getrennte Anzeige (Gabriel-Auftrag 2026-08-27, /browser-Dashboard)
+
+[Service]
+ExecStart=/usr/bin/Xvfb :150 -screen 0 1920x1080x24 -nolisten tcp
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+=== browse status ===
+[browse] Starting server...
+[browse] Executable not found in $PATH: "bun"
+=== browser procs ===
+2823 inotifywait -m -q --format %w%f -e close_write -e moved_to -e moved_from -e create -e delete /home/ai-core-node/synteq-umbau /home/ai-core-node/synteq-umbau/.xenostore /home/ai-core-node/synteq-umbau/.probe-bild /home/ai-core-node/synteq-umbau/pruef-A2 /home/ai-core-node/synteq-umbau/.gstack /home/ai-core-node/synteq-umbau/.store /home/ai-core-node/synteq-umbau/assets /home/ai-core-node/synteq-umbau/.claude /home/ai-core-node/synteq-umbau/plaetze /home/ai-core-node/synteq-umbau/pruef-A2/knet /home/ai-core-node/synteq-umbau/assets/texturen-pack /home/ai-core-node/synteq-umbau/assets/texturen /home/ai-core-node/synteq-umbau/assets/hintergrund2 /home/ai-core-node/synteq-umbau/assets/hintergrund /home/ai-core-node/synteq-umbau/assets/icon-post /home/ai-core-node/synteq-umbau/assets/icons-roh /home/ai-core-node/swarm /home/ai-core-node/swarm/sitzungen /home/ai-core-node/swarm/uebergaben /home/ai-core-node/swarm/zuordnung /home/ai-core-node/swarm/bau /home/ai-core-node/swarm/desktop /home/ai-core-node/swarm/profile /home/ai-core-node/swarm/.vault /home/ai-core-node/swarm/anzeige /home/ai-core-node/swarm/assets /home/ai-core-node/swarm/armc_kompiliert_rohdaten /home/ai-core-node/swarm/angemeldet /home/ai-core-node/swarm/sprache /home/ai-core-node/swarm/ablauf /home/ai-core-node/swarm/sitzungen/booth-o3-bc077761b5 /home/ai-core-node/swarm/sitzungen/2026-08-05-oberflaeche-kanaele /home/ai-core-node/swarm/sitzungen/booth-o1-ff7561c1b4 /home/ai-core-node/swarm/sitzungen/booth-o2-2be558df98 /home/ai-core-node/swarm/sitzungen/booth-o2-ce9733c291 /home/ai-core-node/swarm/sitzungen/booth-f4-4dce8bbccd /home/ai-core-node/swarm/sitzungen/booth-o1-51e344987c /home/ai-core-node/swarm/sitzungen/booth-o1-4d1b39e008 /home/ai-core-node/swarm/sitzungen/booth-f6-2f83563d63 /home/ai-core-node/swarm/sitzungen/2026-08-05-f8-tmux-test /home/ai-core-node/swarm/sitzungen/2026-08-05-innenleben /home/ai-core-node/swarm/sitzungen/booth-o1-86711016fd /home/ai-core-node/swarm/sitzungen/booth-o10-e61e5e5109 /home/ai-core-node/swarm/sitzungen/booth-f4-be621e1212 /home/ai-core-node/swarm/sitzungen/booth-o1-f152f3aea3 /home/ai-core-node/swarm/sitzungen/booth-f5-45fc10bbb9 /home/ai-core-node/swarm/sitzungen/booth-f6-4769855e04 /home/ai-core-node/swarm/sitzungen/booth-o1-54f364a25f /home/ai-core-node/swarm/sitzungen/booth-f6-3c4302208d /home/ai-core-node/swarm/sitzungen/booth-p1-ff755072db /home/ai-core-node/swarm/sitzungen/booth-o4-ea89d41f8f /home/ai-core-node/swarm/sitzungen/booth-f7-2bb5f1c56c /home/ai-core-node/swarm/sitzungen/booth-f4-f8ca5446f5 /home/ai-core-node/swarm/sitzungen/booth-f4-85f2d1e90a /home/ai-core-node/swarm/sitzungen/booth-o1-6e5cbe71af /home/ai-core-node/swarm/sitzungen/2026-08-05-modell-training /home/ai-core-node/swarm/sitzungen/2026-08-01-start /home/ai-core-node/swarm/sitzungen/booth-o3-a33bb1d935 /home/ai-core-node/swarm/sitzungen/2026-08-05-werkzeuge-autonomie /home/ai-core-node/swarm/sitzungen/booth-f6-53fc7b104a /home/ai-core-node/swarm/sitzungen/booth-o1-8485629a2d /home/ai-core-node/swarm/sitzungen/booth-f6-340f03074f /home/ai-core-node/swarm/sitzungen/booth-f5-40aac9fdde /home/ai-core-node/swarm/sitzungen/booth-o1-b15e71b11c /home/ai-core-node/swarm/sitzungen/booth-o8-94120478d5 /home/ai-core-node/swarm/sitzungen/booth-f4-fc41e5be61 /home/ai-core-node/swarm/sitzungen/booth-f5-52b0d0c30c /home/ai-core-node/swarm/sitzungen/booth-f7-81cdf56272 /home/ai-core-node/swarm/sitzungen/booth-f5-4738b66543 /home/ai-core-node/swarm/sitzungen/booth-o1-fc2ef07a4c /home/ai-core-node/swarm/sitzungen/booth-s3-3231bcf257 /home/ai-core-node/swarm/sitzungen/booth-o2-a0b667d578 /home/ai-core-node/swarm/sitzungen/booth-f4-3bdeb05d68 /home/ai-core-node/swarm/sitzungen/booth-o10-9c8824f5ab /home/ai-core-node/swarm/sitzungen/booth-f7-9c28b8a9e3 /home/ai-core-node/swarm/sitzungen/2026-08-06-xn11-schrift-frank-feld /home/ai-core-node/swarm/sitzungen/booth-o2-9314ea2872 /home/ai-core-node/swarm/sitzungen/booth-o3-bb158557cf /home/ai-core-node/swarm/sitzungen/booth-f8-59a6de339e /home/ai-core-node/swarm/sitzungen/booth-f7-90b0c3b2f0 /home/ai-core-node/swarm/sitzungen/booth-s3-a02ebc8c03 /home/ai-core-node/swarm/sitzungen/booth-f5-efab0e0fb6 /home/ai-core-node/swarm/sitzungen/booth-f6-7a8d8c17d5 /home/ai-core-node/swarm/sitzungen/booth-f6-b8d447bd56 /home/ai-core-node/swarm/sitzungen/booth-f5-ed5d3caec8 /home/ai-core-node/swarm/sitzungen/booth-s3-201203b58e /home/ai-core-node/swarm/sitzungen/booth-f4-c8a3883220 /home/ai-core-node/swarm/sitzungen/booth-f5-37be53909e /home/ai-core-node/swarm/sitzungen/booth-f4-3c19eb319f /home/ai-core-node/swarm/sitzungen/booth-f6-dd5ef863dc /home/ai-core-node/swarm/sitzungen/booth-f1-2db2ed7180 /home/ai-core-node/swarm/sitzungen/booth-f6-25e8cbfa49 /home/ai-core-node/swarm/sitzungen/2026-08-04-frank-4-8-2027 /home/ai-core-node/swarm/sitzungen/2026-08-05-codex-kammer /home/ai-core-node/swarm/sitzungen/2026-08-05-gedaechtnis-wissen /home/ai-core-node/swarm/sitzungen/booth-o10-5361832b6c /home/ai-core-node/swarm/sitzungen/2026-08-05-f8-tmux-test/status /home/ai-core-node/swarm/sitzungen/2026-08-05-innenleben/status /home/ai-core-node/swarm/sitzungen/2026-08-06-xn11-schrift-frank-feld/status /home/ai-core-node/swarm/sitzungen/2026-08-04-frank-4-8-2027/uebergaben /home/ai-core-node/swarm/sitzungen/2026-08-04-frank-4-8-2027/status /home/ai-core-node/swarm/sitzungen/2026-08-04-frank-4-8-2027/briefings /home/ai-core-node/swarm/sitzungen/2026-08-04-frank-4-8-2027/berichte /home/ai-core-node/swarm/sitzungen/2026-08-05-codex-kammer/status /home/ai-core-node/swarm/bau/proben /home/ai-core-node/swarm/desktop/logo /home/ai-core-node/swarm/desktop/daten /home/ai-core-node/swarm/anzeige/h1_rohdaten /home/ai-core-node/swarm/anzeige/armc_rohdaten /home/ai-core-node/swarm/anzeige/desktop /home/ai-core-node/swarm/anzeige/manual /home/ai-core-node/swarm/anzeige/assets /home/ai-core-node/swarm/anzeige/desktop/daten /home/ai-core-node/swarm/anzeige/desktop/.gstack /home/ai-core-node/swarm/assets/party /home/ai-core-node/swarm/assets/fonts /home/ai-core-node/swarm/sprache/.probe-store /home/ai-core-node/swarm/sprache/schwarm /home/ai-core-node/swarm/sprache/.store /home/ai-core-node/swarm/sprache/bildfragen /home/ai-core-node/swarm/sprache/koordination /home/ai-core-node/swarm/sprache/xn11 /home/ai-core-node/swarm/sprache/schwarm/bilder /home/ai-core-node/swarm/sprache/koordination/.store /home/ai-core-node/swarm/sprache/xn11/bau /home/ai-core-node/swarm/sprache/xn11/quelle-xn11 /home/ai-core-node/swarm/sprache/xn11/leseprobe /home/ai-core-node/swarm/sprache/xn11/quelle-g11 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit /home/ai-core-node/swarm/sprache/xn11/bau/schrift5_store /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg /home/ai-core-node/swarm/sprache/xn11/bau/g11 /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/tests /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/examples /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/.claude /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/bin /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/xn11 /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/examples/ex01 /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/examples/ex01/store /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/.claude/skills /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/.claude/hooks /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/.claude/skills/se-xeno-native /home/ai-core-node/swarm/sprache/xn11/bau/g11/tests /home/ai-core-node/swarm/sprache/xn11/bau/g11/examples /home/ai-core-node/swarm/sprache/xn11/bau/g11/evaluation /home/ai-core-node/swarm/sprache/xn11/bau/g11/src /home/ai-core-node/swarm/sprache/xn11/bau/g11/src/xeno_g11 /home/ai-core-node/swarm/sprache/xn11/bau/g11/src/xeno_g11/_vendor /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/tests /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/examples /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/.claude /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/bin /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/xn11 /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/examples/ex01 /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/examples/ex01/store /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/.claude/skills /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/.claude/hooks /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/.claude/skills/se-xeno-native /home/ai-core-node/swarm/sprache/xn11/leseprobe/stimuli-reich /home/ai-core-node/swarm/sprache/xn11/quelle-g11/tests /home/ai-core-node/swarm/sprache/xn11/quelle-g11/examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11/evaluation /home/ai-core-node/swarm/sprache/xn11/quelle-g11/src /home/ai-core-node/swarm/sprache/xn11/quelle-g11/src/xeno_g11 /home/ai-core-node/swarm/sprache/xn11/quelle-g11/src/xeno_g11/_vendor /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/capability /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/sources /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/state /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/language /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/implementation /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/traffic /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/motifs /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/display /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/research /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/reports /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/evaluation /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/language/examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/language/migration /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/language/rejected_candidates /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/linebreak /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/fresh_reader /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/raw_results /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/compaction /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/property /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/ood /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/fuzz /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/baselines /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/unit /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/display/island_examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/display/projection_traces /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/display/lens_examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/display/graph_json_examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/tests /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/evaluation /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/src /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/src/xeno_g11 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/src/xeno_g11/_vendor /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/research/cycle_3 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/research/cycle_1 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/research/cycle_2 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/tests /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/evaluation /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/src /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/src/xeno_g11 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/src/xeno_g11/_vendor /home/ai-core-node/aicore/opt/aicore /home/ai-core-node/aicore/opt/aicore/ingestd /home/ai-core-node/aicore/opt/aicore/intelligence /home/ai-core-node/aicore/opt/aicore/.next /home/ai-core-node/aicore/opt/aicore/analysen /home/ai-core-node/aicore/opt/aicore/agentic /home/ai-core-node/aicore/opt/aicore/gaming /home/ai-core-node/aicore/opt/aicore/gateway /home/ai-core-node/aicore/opt/aicore/personality /home/ai-core-node/aicore/opt/aicore/.github /home/ai-core-node/aicore/opt/aicore/core /home/ai-core-node/aicore/opt/aicore/tools /home/ai-core-node/aicore/opt/aicore/tests /home/ai-core-node/aicore/opt/aicore/writer /home/ai-core-node/aicore/opt/aicore/config /home/ai-core-node/aicore/opt/aicore/needle /home/ai-core-node/aicore/opt/aicore/scripts /home/ai-core-node/aicore/opt/aicore/configs /home/ai-core-node/aicore/opt/aicore/docs /home/ai-core-node/aicore/opt/aicore/skills /home/ai-core-node/aicore/opt/aicore/ext /home/ai-core-node/aicore/opt/aicore/.gstack /home/ai-core-node/aicore/opt/aicore/ui /home/ai-core-node/aicore/opt/aicore/bridges /home/ai-core-node/aicore/opt/aicore/common /home/ai-core-node/aicore/opt/aicore/synteq /home/ai-core-node/aicore/opt/aicore/modeld /home/ai-core-node/aicore/opt/aicore/wissen /home/ai-core-node/aicore/opt/aicore/training /home/ai-core-node/aicore/opt/aicore/router /home/ai-core-node/aicore/opt/aicore/docker /home/ai-core-node/aicore/opt/aicore/assets /home/ai-core-node/aicore/opt/aicore/.claude /home/ai-core-node/aicore/opt/aicore/konzepte /home/ai-core-node/aicore/opt/aicore/services /home/ai-core-node/aicore/opt/aicore/desktopd /home/ai-core-node/aicore/opt/aicore/papers /home/ai-core-node/aicore/opt/aicore/updater /home/ai-core-node/aicore/opt/aicore/webd /home/ai-core-node/aicore/opt/aicore/analysen/verhalten /home/ai-core-node/aicore/opt/aicore/analysen/2026-08-04 /home/ai-core-node/aicore/opt/aicore/personality/tests /home/ai-core-node/aicore/opt/aicore/.github/workflows /home/ai-core-node/aicore/opt/aicore/tools/titan /home/ai-core-node/aicore/opt/aicore/tools/system_control /home/ai-core-node/aicore/opt/aicore/tools/omni_log_monitor /home/ai-core-node/aicore/opt/aicore/tools/lcme /home/ai-core-node/aicore/opt/aicore/tools/discovered /home/ai-core-node/aicore/opt/aicore/tools/schranke /home/ai-core-node/aicore/opt/aicore/tools/chronik /home/ai-core-node/aicore/opt/aicore/tests/ui test /home/ai-core-node/aicore/opt/aicore/writer/export /home/ai-core-node/aicore/opt/aicore/writer/ai /home/ai-core-node/aicore/opt/aicore/writer/editor /home/ai-core-node/aicore/opt/aicore/writer/sidebar /home/ai-core-node/aicore/opt/aicore/writer/config /home/ai-core-node/aicore/opt/aicore/writer/preview /home/ai-core-node/aicore/opt/aicore/writer/ingestion /home/ai-core-node/aicore/opt/aicore/writer/ui /home/ai-core-node/aicore/opt/aicore/writer/mode /home/ai-core-node/aicore/opt/aicore/writer/sandbox /home/ai-core-node/aicore/opt/aicore/writer/coding /home/ai-core-node/aicore/opt/aicore/writer/autofix /home/ai-core-node/aicore/opt/aicore/writer/ingestion/parsers /home/ai-core-node/aicore/opt/aicore/writer/ui/dialogs /home/ai-core-node/aicore/opt/aicore/skills/log-analyzer /home/ai-core-node/aicore/opt/aicore/skills/docker-helper /home/ai-core-node/aicore/opt/aicore/skills/sysadmin /home/ai-core-node/aicore/opt/aicore/skills/regex-helper /home/ai-core-node/aicore/opt/aicore/skills/http-tester /home/ai-core-node/aicore/opt/aicore/skills/code-review /home/ai-core-node/aicore/opt/aicore/skills/business-plan /home/ai-core-node/aicore/opt/aicore/skills/product-research /home/ai-core-node/aicore/opt/aicore/skills/markdown-helper /home/ai-core-node/aicore/opt/aicore/skills/conventional-commits /home/ai-core-node/aicore/opt/aicore/skills/cron-helper /home/ai-core-node/aicore/opt/aicore/skills/json-yaml-helper /home/ai-core-node/aicore/opt/aicore/skills/summarize /home/ai-core-node/aicore/opt/aicore/skills/meal-planner /home/ai-core-node/aicore/opt/aicore/skills/doc-assistant /home/ai-core-node/aicore/opt/aicore/skills/git-workflow /home/ai-core-node/aicore/opt/aicore/skills/essence-distiller /home/ai-core-node/aicore/opt/aicore/skills/translate-helper /home/ai-core-node/aicore/opt/aicore/skills/content-repurpose /home/ai-core-node/aicore/opt/aicore/skills/security-audit /home/ai-core-node/aicore/opt/aicore/skills/shell-explain /home/ai-core-node/aicore/opt/aicore/skills/systemd-helper /home/ai-core-node/aicore/opt/aicore/ext/sovereign /home/ai-core-node/aicore/opt/aicore/ext/genesis /home/ai-core-node/aicore/opt/aicore/ui/fas_popup /home/ai-core-node/aicore/opt/aicore/ui/webui /home/ai-core-node/aicore/opt/aicore/ui/ewish_popup /home/ai-core-node/aicore/opt/aicore/ui/adi_popup /home/ai-core-node/aicore/opt/aicore/ui/ui_tester /home/ai-core-node/aicore/opt/aicore/ui/sounds /home/ai-core-node/aicore/opt/aicore/ui/overlay /home/ai-core-node/aicore/opt/aicore/ui/fas_popup/styles /home/ai-core-node/aicore/opt/aicore/ui/webui/static /home/ai-core-node/aicore/opt/aicore/ui/webui/static/css /home/ai-core-node/aicore/opt/aicore/ui/webui/static/fonts /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq /home/ai-core-node/aicore/opt/aicore/ui/webui/static/assets /home/ai-core-node/aicore/opt/aicore/ui/webui/static/sprites /home/ai-core-node/aicore/opt/aicore/ui/webui/static/js /home/ai-core-node/aicore/opt/aicore/ui/webui/static/img /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq/logo /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq/daten /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq/schrift /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq/texturen /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq/vendor /home/ai-core-node/aicore/opt/aicore/ui/webui/static/assets/klang /home/ai-core-node/aicore/opt/aicore/ui/webui/static/assets/fonts /home/ai-core-node/aicore/opt/aicore/ui/webui/static/js/components /home/ai-core-node/aicore/opt/aicore/ui/webui/static/js/pages /home/ai-core-node/aicore/opt/aicore/ui/webui/static/img/faces /home/ai-core-node/aicore/opt/aicore/ui/webui/static/img/faces/_orig /home/ai-core-node/aicore/opt/aicore/ui/ewish_popup/styles /home/ai-core-node/aicore/opt/aicore/ui/adi_popup/styles /home/ai-core-node/aicore/opt/aicore/ui/ui_tester/styles /home/ai-core-node/aicore/opt/aicore/ui/overlay/helpers /home/ai-core-node/aicore/opt/aicore/ui/overlay/voice /home/ai-core-node/aicore/opt/aicore/ui/overlay/game /home/ai-core-node/aicore/opt/aicore/ui/overlay/commands /home/ai-core-node/aicore/opt/aicore/ui/overlay/aura /home/ai-core-node/aicore/opt/aicore/ui/overlay/mixins /home/ai-core-node/aicore/opt/aicore/ui/overlay/bsn /home/ai-core-node/aicore/opt/aicore/ui/overlay/services /home/ai-core-node/aicore/opt/aicore/ui/overlay/widgets /home/ai-core-node/aicore/opt/aicore/ui/overlay/genesis /home/ai-core-node/aicore/opt/aicore/ui/overlay/game/rooms /home/ai-core-node/aicore/opt/aicore/synteq/zwilling /home/ai-core-node/aicore/opt/aicore/synteq/systemd /home/ai-core-node/aicore/opt/aicore/synteq/fusion /home/ai-core-node/aicore/opt/aicore/synteq/lib /home/ai-core-node/aicore/opt/aicore/synteq/pruefung /home/ai-core-node/aicore/opt/aicore/synteq/ui /home/ai-core-node/aicore/opt/aicore/synteq/vault /home/ai-core-node/aicore/opt/aicore/synteq/kern /home/ai-core-node/aicore/opt/aicore/synteq/konzepte /home/ai-core-node/aicore/opt/aicore/synteq/bin /home/ai-core-node/aicore/opt/aicore/synteq/vault/sitzungen /home/ai-core-node/aicore/opt/aicore/synteq/vault/rohdaten /home/ai-core-node/aicore/opt/aicore/synteq/vault/befunde /home/ai-core-node/aicore/opt/aicore/synteq/vault/entscheidungen /home/ai-core-node/aicore/opt/aicore/synteq/vault/kartei /home/ai-core-node/aicore/opt/aicore/synteq/vault/hypothesen /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence /home/ai-core-node/aicore/opt/aicore/synteq/vault/rohdaten/forschungsfusion-2026-08-05 /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05 /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05/schwarm-auftrag /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05/rohdaten /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05/werkzeuge /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05/logs /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05/bilder /home/ai-core-node/aicore/opt/aicore/wissen/altbestand /home/ai-core-node/aicore/opt/aicore/training/v27 /home/ai-core-node/aicore/opt/aicore/training/v26 /home/ai-core-node/aicore/opt/aicore/training/v27/gut /home/ai-core-node/aicore/opt/aicore/training/v27/roh /home/ai-core-node/aicore/opt/aicore/training/v26/fein /home/ai-core-node/aicore/opt/aicore/training/v26/abzug /home/ai-core-node/aicore/opt/aicore/training/v26/gut /home/ai-core-node/aicore/opt/aicore/training/v26/roh-vor-chatgpt-0823 /home/ai-core-node/aicore/opt/aicore/training/v26/eval /home/ai-core-node/aicore/opt/aicore/training/v26/roh /home/ai-core-node/aicore/opt/aicore/konzepte/text /home/ai-core-node/aicore/opt/aicore/konzepte/text/03_bewusstsein-und-psychologie /home/ai-core-node/aicore/opt/aicore/konzepte/text/08_sonstiges /home/ai-core-node/aicore/opt/aicore/konzepte/text/06_berichte-und-audits /home/ai-core-node/aicore/opt/aicore/konzepte/text/04_training-und-modelle /home/ai-core-node/aicore/opt/aicore/konzepte/text/05_werkzeuge-und-module /home/ai-core-node/aicore/opt/aicore/konzepte/text/01_synthetic-equilibrium /home/ai-core-node/aicore/opt/aicore/konzepte/text/02_architektur /home/ai-core-node/aicore/opt/aicore/konzepte/text/07_uebersicht-und-praesentation /home/ai-core-node/aicore/opt/aicore/services/quantum_reflector /home/ai-core-node/aicore/opt/aicore/services/context_gate /home/ai-core-node/aicore/opt/aicore/services/neural_immune /home/ai-core-node/aicore/opt/aicore/services/sanctum_rl /home/ai-core-node/aicore/opt/aicore/services/news_intel /home/ai-core-node/aicore/opt/aicore/services/art /home/ai-core-node/aicore/opt/aicore/services/nerd_physics /home/ai-core-node/aicore/opt/aicore/services/invariants /home/ai-core-node/aicore/opt/aicore/services/room_content /home/ai-core-node/aicore/opt/aicore/services/asrs /home/ai-core-node/aicore/opt/aicore/services/pip_agent /home/ai-core-node/aicore/opt/aicore/services/genesis /home/ai-core-node/aicore/opt/aicore/services/hypothesis_engine /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/backgrounds /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/terminal_gui /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/fonts /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/overlays /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/sprites /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/textures /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/portraits /home/ai-core-node/aicore/opt/aicore/services/genesis/core /home/ai-core-node/aicore/opt/aicore/services/genesis/integration /home/ai-core-node/aicore/opt/aicore/services/genesis/sensors /home/ai-core-node/aicore/opt/aicore/services/genesis/reflection /home/ai-core-node/frank /home/ai-core-node/frank/genesis-monitor /home/ai-core-node/hellmachine /home/ai-core-node/hellmachine/sessions /home/ai-core-node/hellmachine/sessions/20260723-172545-4255 /home/ai-core-node/estelle /home/ai-core-node/estelle/archive /home/ai-core-node/feminize-cam-filter /home/ai-core-node/frank-projects /home/ai-core-node/frank-projects/autohunter-ioniq-5-autonomer-autokauf-agent /home/ai-core-node/frank-projects/video-launch-page /home/ai-core-node/frank-projects/autocar-hunter /home/ai-core-node/frank-projects/autocamp-scout /home/ai-core-node/frank-projects/test-project /home/ai-core-node/frank-projects/autoscout-ioniq-5-finder /home/ai-core-node/frank-projects/ai-research-agent /home/ai-core-node/frank-projects/autocarfinder-pro /home/ai-core-node/frank-projects/e-auto-scout-sterreich /home/ai-core-node/frank-projects/ev-camperscout /home/ai-core-node/frank-projects/ev-scout-graz /home/ai-core-node/frank-projects/autoscout-e-car-hunter /home/ai-core-node/frank-projects/e-auto-graz-finder /home/ai-core-node/frank-projects/grazcamperfinder /home/ai-core-node/frank-projects/autohunter-ioniq-5-autonomer-autokauf-agent/.browser /home/ai-core-node/frank-projects/autohunter-ioniq-5-autonomer-autokauf-agent/.tasks /home/ai-core-node/frank-projects/video-launch-page/.browser /home/ai-core-node/frank-projects/video-launch-page/.tasks /home/ai-core-node/frank-projects/autocar-hunter/.browser /home/ai-core-node/frank-projects/autocar-hunter/.tasks /home/ai-core-node/frank-projects/autocamp-scout/.browser /home/ai-core-node/frank-projects/autocamp-scout/.tasks /home/ai-core-node/frank-projects/autoscout-ioniq-5-finder/.tasks /home/ai-core-node/frank-projects/ai-research-agent/.browser /home/ai-core-node/frank-projects/ai-research-agent/code /home/ai-core-node/frank-projects/ai-research-agent/docs /home/ai-core-node/frank-projects/ai-research-agent/.tasks /home/ai-core-node/frank-projects/autocarfinder-pro/searches /home/ai-core-node/frank-projects/autocarfinder-pro/.browser /home/ai-core-node/frank-projects/autocarfinder-pro/templates /home/ai-core-node/frank-projects/autocarfinder-pro/results /home/ai-core-node/frank-projects/autocarfinder-pro/scripts /home/ai-core-node/frank-projects/autocarfinder-pro/.tasks /home/ai-core-node/frank-projects/autocarfinder-pro/search_results /home/ai-core-node/frank-projects/autocarfinder-pro/.browser/screenshots /home/ai-core-node/frank-projects/e-auto-scout-sterreich/.browser /home/ai-core-node/frank-projects/ev-camperscout/.browser /home/ai-core-node/frank-projects/ev-camperscout/.tasks /home/ai-core-node/frank-projects/ev-camperscout/.browser/screenshots /home/ai-core-node/frank-projects/ev-scout-graz/.browser /home/ai-core-node/frank-projects/ev-scout-graz/.tasks /home/ai-core-node/frank-projects/ev-scout-graz/.browser/screenshots /home/ai-core-node/frank-projects/autoscout-e-car-hunter/.browser /home/ai-core-node/frank-projects/autoscout-e-car-hunter/code /home/ai-core-node/frank-projects/autoscout-e-car-hunter/docs /home/ai-core-node/frank-projects/autoscout-e-car-hunter/.tasks /home/ai-core-node/frank-projects/autoscout-e-car-hunter/email_templates /home/ai-core-node/frank-projects/autoscout-e-car-hunter/.browser/screenshots /home/ai-core-node/frank-projects/e-auto-graz-finder/.browser /home/ai-core-node/frank-projects/e-auto-graz-finder/docs /home/ai-core-node/frank-projects/e-auto-graz-finder/.tasks /home/ai-core-node/frank-projects/e-auto-graz-finder/dreams /home/ai-core-node/frank-projects/e-auto-graz-finder/email_templates /home/ai-core-node/frank-projects/e-auto-graz-finder/dealers /home/ai-core-node/frank-projects/e-auto-graz-finder/.browser/screenshots /home/ai-core-node/frank-projects/grazcamperfinder/.browser /home/ai-core-node/frank-projects/grazcamperfinder/.tasks /home/ai-core-node/frank-projects/grazcamperfinder/.browser/screenshots /home/ai-core-node/frank-demo /home/ai-core-node/frank-demo/.vercel /home/ai-core-node/frank-demo/static /home/ai-core-node/frank-demo/static/css /home/ai-core-node/frank-demo/static/art /home/ai-core-node/frank-demo/static/sprites /home/ai-core-node/frank-demo/static/js /home/ai-core-node/frank-demo/static/art/.vercel /home/ai-core-node/frank-demo/static/js/responses /home/ai-core-node/frank-demo/static/js/components /home/ai-core-node/frank-demo/static/js/pages /home/ai-core-node/frank-video /home/ai-core-node/frank-video/public /home/ai-core-node/frank-video/src /home/ai-core-node/frank-video/src/lib /home/ai-core-node/frank-video/src/clips /home/ai-core-node/frank-video/src/components /home/ai-core-node/frank-library /home/ai-core-node/frank-rettung-2026-07-31 /home/ai-core-node/frank-rettung-2026-07-31/vom-11-mai /home/ai-core-node/frank-rettung-2026-07-31/unversioniert /home/ai-core-node/frank-rettung-2026-07-31/vom-11-mai/agentic /home/ai-core-node/frank-rettung-2026-07-31/vom-11-mai/personality /home/ai-core-node/frank-rettung-2026-07-31/vom-11-mai/tools /home/ai-core-node/frank-rettung-2026-07-31/vom-11-mai/services /home/ai-core-node/frank-rettung-2026-07-31/unversioniert/services /home/ai-core-node/frank-rettung-2026-07-31/unversioniert/services/room_content /home/ai-core-node/frank-rettung-2026-07-31/unversioniert/services/genesis /home/ai-core-node/frank-rettung-2026-07-31/unversioniert/services/room_content/custom_styles /home/ai-core-node/frank-rettung-2026-07-31/unversioniert/services/genesis/sensors
+1085713 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate
+1085775 /opt/google/chrome/chrome_crashpad_handler --monitor-self --monitor-self-annotation=ptype=crashpad-handler --database=/home/ai-core-node/.config/google-chrome/Crash Reports --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=lsb-release=Ubuntu 24.04.4 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=150.0.7871.186 --initial-client-fd=5 --shared-client-connection
+1085777 /opt/google/chrome/chrome_crashpad_handler --no-periodic-tasks --monitor-self-annotation=ptype=crashpad-handler --database=/home/ai-core-node/.config/google-chrome/Crash Reports --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=lsb-release=Ubuntu 24.04.4 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=150.0.7871.186 --initial-client-fd=4 --shared-client-connection
+1085783 /opt/google/chrome/chrome --type=zygote --no-zygote-sandbox --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable
+1085784 /opt/google/chrome/chrome --type=zygote --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable
+1085786 /opt/google/chrome/chrome --type=zygote --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable
+1085809 /opt/google/chrome/chrome --type=gpu-process --ozone-platform=x11 --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --gpu-preferences=WAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAAQAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,2989059060398609842,3769412852088022985,262144 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708988185955192
+1085810 /opt/google/chrome/chrome --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,13315579006145763074,17810321553272990872,524288 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708989122997041
+1085824 /opt/google/chrome/chrome --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=utility --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,14626137318714820586,423753365967811627,524288 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708990060038890
+1085871 /opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --ozone-platform=x11 --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=6 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=391781293164 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,12328966088090823338,3725290504461721708,2097152 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708991934122588
+3124740 bash -lc python3 - <<'PY' import stern,inspect,json,os print('HOST_CONST',repr(getattr(stern,'_CHATGPT_ERWARTETER_HOSTNAME_TEILSTRING',None))) for n in ['chatgpt_login_status','chatgpt_login_bestaetigen','_chatgpt_login_sicherstellen','chatgpt_senden','chatgpt_ernten','_chatgpt_browse']:  print('===',n,'===')  try: print(inspect.getsource(getattr(stern,n)))  except Exception as e: print(type(e).__name__,e) PY echo '=== services ==='; systemctl --user --no-pager --type=service --all | grep -E 'chatgpt|gstack|bridge' | head -120; echo '=== service cats ==='; for u in frankenstein-chatgpt-client.service gstack-browse-display.service; do echo ---$u; systemctl --user cat $u 2>/dev/null; done; echo '=== browse status ==='; /home/ai-core-node/.claude/skills/gstack/browse/dist/browse status 2>&1; echo '=== browser procs ==='; pgrep -af 'gstack|chrome-headless-shell|chromium|chrome' | head -160

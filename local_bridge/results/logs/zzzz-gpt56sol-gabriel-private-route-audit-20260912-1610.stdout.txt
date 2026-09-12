@@ -1,0 +1,382 @@
+HOST=ai-core-node-projekt-frankenstein
+===ADDR===
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp1s0           DOWN           
+wlp2s0           UP             192.168.1.107/24 fe80::ad30:83e5:f216:36db/64 
+tailscale0       UNKNOWN        100.70.87.28/32 fd7a:115c:a1e0::5e01:5791/128 fe80::b62:cf6c:3a8b:d06a/64 
+docker0          DOWN           172.17.0.1/16 
+===TAILSCALE===
+100.70.87.28
+{
+  "Version": "1.102.2-t6cac91817-g6ff0ddc72",
+  "TUN": true,
+  "BackendState": "Running",
+  "HaveNodeKey": true,
+  "AuthURL": "",
+  "TailscaleIPs": [
+    "100.70.87.28",
+    "fd7a:115c:a1e0::5e01:5791"
+  ],
+  "Self": {
+    "ID": "nTVQPYW7Zg11CNTRL",
+    "NodeID": 5065363482048686,
+    "PublicKey": "nodekey:6ad57745123b8ff223cc460607b9171b7031e95e9d8fd89b10ac174bb2525d5d",
+    "HostName": "ai-core-node-projekt-frankenstein",
+    "DNSName": "ai-core-node-projekt-frankenstein.tail1f2111.ts.net.",
+    "OS": "linux",
+    "UserID": 3732542503103370,
+    "TailscaleIPs": [
+      "100.70.87.28",
+      "fd7a:115c:a1e0::5e01:5791"
+    ],
+    "AllowedIPs": [
+      "100.70.87.28/32",
+      "fd7a:115c:a1e0::5e01:5791/128"
+    ],
+    "Addrs": [
+      "58.97.225.203:41641",
+      "172.17.0.1:41641",
+      "192.168.1.107:41641"
+    ],
+    "CurAddr": "",
+    "Relay": "sin",
+    "PeerRelay": "",
+    "RxBytes": 0,
+    "TxBytes": 0,
+    "Created": "2026-02-09T10:21:33.466534351Z",
+    "LastWrite": "0001-01-01T00:00:00Z",
+    "LastSeen": "0001-01-01T00:00:00Z",
+    "LastHandshake": "0001-01-01T00:00:00Z",
+    "Online": true,
+    "ExitNode": false,
+    "ExitNodeOption": false,
+    "Active": false,
+    "PeerAPIURL": [
+      "http://100.70.87.28:49084",
+      "http://[fd7a:115c:a1e0::5e01:5791]:56164"
+    ],
+    "TaildropTarget": 0,
+    "NoFileSharingReason": "",
+    "Capabilities": [
+      "HTTPS://TAILSCALE.COM/s/DEPRECATED-NODE-CAPS#see-https://github.com/tailscale/tailscale/issues/11508",
+      "default-auto-update",
+      "funnel",
+      "https",
+      "https://tailscale.com/cap/file-sharing",
+      "https://tailscale.com/cap/funnel-ports?ports=443,8443,10000",
+      "https://tailscale.com/cap/is-admin",
+      "https://tailscale.com/cap/is-owner",
+      "https://tailscale.com/cap/ssh",
+      "https://tailscale.com/cap/tailnet-lock",
+      "probe-udp-lifetime",
+      "ssh-behavior-v1",
+      "ssh-env-vars",
+      "store-appc-routes",
+      "tailnet-display-name"
+    ],
+    "CapMap": {
+      "default-auto-update": [
+        true
+      ],
+      "funnel": null,
+      "https": null,
+      "https://tailscale.com/cap/file-sharing": null,
+      "https://tailscale.com/cap/funnel-ports?ports=443,8443,10000": null,
+      "https://tailscale.com/cap/is-admin": null,
+      "https://tailscale.com/cap/is-owner": null,
+      "https://tailscale.com/cap/ssh": null,
+      "https://tailscale.com/cap/tailnet-lock": null,
+      "probe-udp-lifetime": null,
+      "ssh-behavior-v1": null,
+      "ssh-env-vars": null,
+      "store-appc-routes": null,
+      "tailnet-display-name": [
+        "structured.thinking.gschaider@gmail.com"
+      ]
+    },
+    "InNetworkMap": true,
+    "InMagicSock": false,
+    "InEngine": false,
+    "KeyExpiry": "2027-02-07T08:09:33Z"
+  },
+  "Health": [],
+  "MagicDNSSuffix": "tail1f2111.ts.net",
+  "CurrentTailnet": {
+    "Name": "structured.thinking.gschaider@gmail.com",
+    "MagicDNSSuffix": "tail1f2111.ts.net",
+    "MagicDNSEnabled": true
+  },
+  "CertDomains": [
+    "ai-core-node-projekt-frankenstein.tail1f2111.ts.net"
+  ],
+  "ExtraRecords": null,
+  "Peer": {
+    "nodekey:0378cd537756b6a20dc5757f8d76f933f2709ebbcbb4d00c21596330a829262f": {
+      "ID": "ntUjTr6YFk11CNTRL",
+      "NodeID": 5538808263197241,
+      "PublicKey": "nodekey:0378cd537756b6a20dc5757f8d76f933f2709ebbcbb4d00c21596330a829262f",
+      "HostName": "funnel-ingress-node",
+      "DNSName": "",
+      "OS": "",
+      "UserID": 3170895132738481,
+      "TailscaleIPs": [
+        "fd7a:115c:a1e0::a801:26ab"
+      ],
+      "AllowedIPs": [
+        "fd7a:115c:a1e0::a801:26ab/128"
+      ],
+      "Tags": [
+        "tag:ingress"
+      ],
+      "Addrs": null,
+      "CurAddr": "",
+      "Relay": "par",
+      "PeerRelay": "",
+      "RxBytes": 0,
+      "TxBytes": 0,
+      "Created": "1973-11-11T00:00:00.1Z",
+      "LastWrite": "0001-01-01T00:00:00Z",
+      "LastSeen": "0001-01-01T00:00:00Z",
+      "LastHandshake": "0001-01-01T00:00:00Z",
+      "Online": true,
+      "ExitNode": false,
+      "ExitNodeOption": false,
+      "Active": false,
+      "PeerAPIURL": null,
+      "TaildropTarget": 9,
+      "NoFileSharingReason": "",
+      "ShareeNode": true,
+      "InNetworkMap": true,
+      "InMagicSock": true,
+      "InEngine": false
+    },
+    "nodekey:075eb2482527b3ca4a4963123feb270d8d9c22ac6f8b51726205941f4e74b114": {
+      "ID": "nPBL3h1ReW11CNTRL",
+      "NodeID": 3796438885757526,
+      "PublicKey": "nodekey:075eb2482527b3ca4a4963123feb270d8d9c22ac6f8b51726205941f4e74b114",
+      "HostName": "frank-for-8",
+      "DNSName": "frank-for-8.tail1f2111.ts.net.",
+      "OS": "linux",
+      "UserID": 3732542503103370,
+      "TailscaleIPs": [
+        "100.116.177.21",
+        "fd7a:115c:a1e0::4e32:b115"
+      ],
+      "AllowedIPs": [
+        "100.116.177.21/32",
+        "fd7a:115c:a1e0::4e32:b115/128"
+      ],
+      "Addrs": null,
+      "CurAddr": "",
+      "Relay": "lhr",
+      "PeerRelay": "",
+      "RxBytes": 0,
+      "TxBytes": 0,
+      "Created": "2026-05-10T10:22:01.457996287Z",
+      "LastWrite": "0001-01-01T00:00:00Z",
+      "LastSeen": "2026-05-13T19:53:48.1Z",
+      "LastHandshake": "0001-01-01T00:00:00Z",
+      "Online": false,
+      "ExitNode": false,
+      "ExitNodeOption": false,
+      "Active": false,
+      "PeerAPIURL": [
+        "http://100.116.177.21:57996",
+        "http://[fd7a:115c:a1e0::4e32:b115]:57996"
+      ],
+      "TaildropTarget": 5,
+      "NoFileSharingReason": "",
+      "InNetworkMap": true,
+      "InMagicSock": true,
+      "InEngine": false,
+      "KeyExpiry": "2026-11-06T10:22:01Z"
+    },
+    "nodekey:083d1117ba9dbb879df5b2db03ab26d9b535bf23e89790fdc010695125c73001": {
+      "ID": "nqMnAMPd9811CNTRL",
+      "NodeID": 915490586385524,
+      "PublicKey": "nodekey:083d1117ba9dbb879df5b2db03ab26d9b535bf23e89790fdc010695125c73001",
+      "HostName": "clayverse",
+      "DNSName": "clayverse.tail1f2111.ts.net.",
+      "OS": "linux",
+      "UserID": 3732542503103370,
+      "TailscaleIPs": [
+        "100.71.48.1",
+        "fd7a:115c:a1e0::2532:3002"
+      ],
+      "AllowedIPs": [
+        "100.71.48.1/32",
+        "fd7a:115c:a1e0::2532:3002/128"
+      ],
+      "Addrs": null,
+      "CurAddr": "31.97.117.141:41641",
+      "Relay": "lhr",
+      "PeerRelay": "",
+      "RxBytes": 78400004,
+      "TxBytes": 71001528,
+      "Created": "2026-08-14T16:54:52.877940364Z",
+      "LastWrite": "2026-09-12T15:25:15.655808387+07:00",
+      "LastSeen": "0001-01-01T00:00:00Z",
+      "LastHandshake": "2026-09-12T15:23:56.538095757+07:00",
+      "Online": true,
+      "ExitNode": false,
+      "ExitNodeOption": false,
+      "Active": true,
+      "PeerAPIURL": [
+        "http://100.71.48.1:50226",
+        "http://[fd7a:115c:a1e0::2532:3002]:48947"
+      ],
+      "TaildropTarget": 1,
+      "NoFileSharingReason": "",
+      "sshHostKeys": [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeI/N/tCNWpJCzVR0RQUKu1KexPpRz9yfD5ASrODfCaNWNii2tCQ5+Sc/V1dzfkMfyg8t21y40C0H/BBWFx4wmu/4aymVzn492YNYLPiUaC8AKb2xBcln06/SFeeuh57b5lEwuv8l8dc4HT8AfVx79VYOC8lcuXBndquZbhCEiiHAlCzVxU3g/cCdSFnSqZMJ1JMv2aVMD9mwpLlvo39p50Q/gLLt9EPGtCnYPIsgewrzZvh/SL+srrHANXsRfMlZnTG2tty5BJO77RdHBWTolOSiOxQ69vquazEy2mUHU7GTZX0pBlg1tXRu1bA//bKL/THgHXdPF5vS9tgbih2xRMRl9J0SpJlIqVEGgeKhEQjqSVyZSFawJMM/JcwsJDfqztpGvP/LudzJ7U37qMMtR8qtZ7QxlLdRGtUvOELWqBu0cEYyOV7A75xEpaP9KMlOS03Bm+FJWK3caSWVhbe0vfdoT9nzf66aaIBNU2fcBLxnKbFRE3PM7ziBx2KTjL80=",
+        "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFKoBhmyb7UxHLvNHxG6mto6b4mg8gLAqKGPlXr5OoLMf743OQqvaDqx59yQ2CjYqFUI7ZbrRGCmRAGttvin22k=",
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHFxsP1nkQsS3D8A53md8GGuj42AML/GfGw49T8uQOMG"
+      ],
+      "InNetworkMap": true,
+      "InMagicSock": true,
+      "InEngine": true,
+      "KeyExpiry": "2027-02-10T16:54:52Z"
+    },
+    "nodekey:08a9312fb917adae746f4e19aa4cf1cd26754780f6a24d780f92ad0c83a66516": {
+      "ID": "naCQj1Pt5911CNTRL",
+      "NodeID": 1035292541855723,
+      "PublicKey": "nodekey:08a9312fb917adae746f4e19aa4cf1cd26754780f6a24d780f92ad0c83a66516",
+      "HostName": "frank-for-9",
+      "DNSName": "frank-for-9.tail1f2111.ts.net.",
+      "OS": "linux",
+      "UserID": 3732542503103370,
+      "TailscaleIPs": [
+        "100.102.101.23",
+        "fd7a:115c:a1e0::8332:6517"
+      ],
+      "AllowedIPs": [
+        "100.102.101.23/32",
+        "fd7a:115c:a1e0::8332:6517/128"
+      ],
+      "Addrs": null,
+      "CurAddr": "",
+      "Relay": "lhr",
+      "PeerRelay": "",
+      "RxBytes": 0,
+      "TxBytes": 0,
+      "Created": "2026-05-11T02:55:01.39949074Z",
+      "LastWrite": "0001-01-01T00:00:00Z",
+      "LastSeen": "2026-05-13T19:53:48.1Z",
+      "LastHandshake": "0001-01-01T00:00:00Z",
+      "Online": false,
+      "ExitNode": false,
+      "ExitNodeOption": false,
+      "Active": false,
+      "PeerAPIURL": [
+        "http://100.102.101.23:62629",
+        "http://[fd7a:115c:a1e0::8332:6517]:62629"
+      ],
+      "TaildropTarget": 5,
+      "NoFileSharingReason": "",
+      "InNetworkMap": true,
+      "InMagicSock": true,
+      "InEngine": false,
+      "KeyExpiry": "2026-11-07T02:55:01Z"
+    },
+    "nodekey:19a50e0b6efe9d5ced45430a06742eda6fe83ab4c6296cd141d0580539688e04": {
+      "ID": "nTHnBkfDVn11CNTRL",
+      "NodeID": 5825144488582670,
+      "PublicKey": "nodekey:19a50e0b6efe9d5ced45430a06742eda6fe83ab4c6296cd141d0580539688e04",
+      "HostName": "funnel-ingress-node",
+      "DNSName": "",
+      "OS": "",
+      "UserID": 3170895132738481,
+      "TailscaleIPs": [
+        "fd7a:115c:a1e0::3901:8ebc"
+      ],
+      "AllowedIPs": [
+        "fd7a:115c:a1e0::3901:8ebc/128"
+      ],
+      "Tags": [
+        "tag:ingress"
+      ],
+      "Addrs": null,
+      "CurAddr": "",
+      "Relay": "par",
+      "PeerRelay": "",
+      "RxBytes": 0,
+      "TxBytes": 0,
+      "Created": "1973-11-11T00:00:00.1Z",
+      "LastWrite": "0001-01-01T00:00:00Z",
+      "LastSeen": "0001-01-01T00:00:00Z",
+      "LastHandshake": "0001-01-01T00:00:00Z",
+      "Online": true,
+      "ExitNode": false,
+      "ExitNodeOption": false,
+      "Active": false,
+      "PeerAPIURL": null,
+      "TaildropTarget": 9,
+      "NoFileSharingReason": "",
+      "ShareeNode": true,
+      "InNetworkMap": true,
+      "InMagicSock": true,
+      "InEngine": false
+    },
+    "nodekey:27c3be6732c8aa6a782ca3399eda83fe13fd81600722b12ed6a402c3af5aad7d": {
+      "ID": "nWVWgpGhNZ11CNTRL",
+      "NodeID": 4145919415132273,
+      "PublicKey": "nodekey:27c3be6732c8aa6a782ca3399eda83fe13fd81600722b12ed6a402c3af5aad7d",
+      "HostName": "funnel-ingress-node",
+      "DNSName": "",
+      "OS": "",
+      "UserID": 3170895132738481,
+      "TailscaleIPs": [
+        "fd7a:115c:a1e0::af01:ada1"
+      ],
+      "AllowedIPs": [
+        "fd7a:115c:a1e0::af01:ada1/128"
+      ],
+      "Tags": [
+        "tag:ingress"
+      ],
+      "Addrs": null,
+      "CurAddr": "",
+      "Relay": "lhr",
+      "PeerRelay": "",
+      "RxBytes": 0,
+      "TxBytes": 0,
+      "Created": "1973-11-11T00:00:00.1Z",
+      "LastWrite": "0001-01-01T00:00:00Z",
+      "LastSeen": "0001-01-01T00:00:00Z",
+      "LastHandshake": "0001-01-01T00:00:00Z",
+      "Online": true,
+      "ExitNode": false,
+      "ExitNodeOption": false,
+      "Active": false,
+      "PeerAPIURL": null,
+      "TaildropTarget": 9,
+      "NoFileSharingReason": "",
+      "ShareeNode": true,
+      "InNetworkMap": true,
+      "InMagicSock": true,
+      "InEngine": false
+    },
+    "nodekey:2b99d56cb196a3c0e984b81752e65e49fbe57462eb6164b303b721609df6a634": {
+      "ID": "n5LEYQXkju11CNTRL",
+      "NodeID": 6753672495229166,
+      "PublicKey": "nodekey:2b99d56cb196a3c0e984b81752e65e49fbe57462eb6164b303b721609df6a634",
+      "HostName": "funnel-ingress-node",
+      "DNSName": "",
+      "OS": "",
+      "UserID": 3170895132738481,
+      "TailscaleIPs": [
+        "fd7a:115c:a1e0::9d01:a6ac"
+      ],
+      "AllowedIPs": [
+        "fd7a:115c:a1e0::9d01:a6ac/128"
+      ],
+      "Tags": [
+        "tag:ingress"
+      ],
+      "Addrs": null,
+      "CurAddr": "",
+      "Relay": "syd",
+      "PeerRelay": "",
+      "RxBytes": 0,
+      "TxBytes===WG===
+NO_WG

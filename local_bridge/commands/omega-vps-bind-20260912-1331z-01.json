@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-vps-bind-20260912-1331z-01",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 seimensch-vps 'set -u; echo ===IDENTITY===; hostname; whoami; date -u +%FT%TZ; echo ===TMUX===; tmux ls 2>/dev/null || true; echo ===OMEGA_PROCS===; pgrep -af \"omega\\.(supervisor|supervisor_outer|grid_runtime_v3|bridge_relay|spool_bridge_relay|spool_bridge_relay_parallel|outer_bridge_worker|telemetry_daemon|master_bridge)\" || true; echo ===RUNTIME===; for p in /workspace/omega_runtime /workspace/oMEGA /workspace/omega_runtime/current; do [ -e \"$p\" ] && ls -ld \"$p\"; done; echo ===GIT===; for p in /workspace/oMEGA /workspace/omega_runtime/current; do if [ -d \"$p/.git\" ]; then printf \"repo=%s head=\" \"$p\"; git -C \"$p\" rev-parse HEAD; git -C \"$p\" status --short --branch | head -20; fi; done; echo ===STATE===; for f in /workspace/omega_runtime/state/SUPERVISOR_STATUS.json /workspace/omega_runtime/state/RELAY_STATUS.json /workspace/omega_runtime/state/outer_bridge/OUTER_WORKER_STATUS.json; do if [ -r \"$f\" ]; then echo FILE:$f; cat \"$f\"; fi; done; echo ===DISK===; df -h /workspace 2>/dev/null || df -h /'",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60
+}

@@ -1,0 +1,66 @@
+PID=1797993
+=== service ===
+MainPID=1797993
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=39563264
+CPUUsageNSec=5182407000
+TasksCurrent=31
+ActiveState=active
+SubState=running
+=== installed hashes ===
+44dbd3542ba32ca23326067028109d52fa3d139bb95c63f86ce72bc25ebb118d  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+7f1d87b94fc54dba9b851f1eb35fedd21e8ec9c825938b3f2e5fc5f4321a6009  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_full_runtime.py
+f1afb271abf4cf607376e9e51ad3ae2951504c1639b337199bd11034cd2a2716  /home/ai-core-node/.local/lib/frankenstein-voice-final/DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py
+=== process threads ===
+    PID    PPID ELAPSED %CPU %MEM NLWP   RSS    VSZ STAT CMD
+1797993    2339    3989  0.1  0.3   31 76140 3141728 Ssl python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+1797993 1798062   1  0.0 Ssl  python3
+1797993 1798063   3  0.0 Ssl  python3
+1797993 1798064   8  0.0 Ssl  python3
+1797993 1798065   9  0.0 Ssl  python3
+1797993 1798066   2  0.0 Ssl  python3
+1797993 1798067   4  0.0 Ssl  python3
+1797993 1798068   6  0.0 Ssl  python3
+1797993 1798069  13  0.0 Ssl  python3
+1797993 1798070   3  0.0 Ssl  python3
+1797993 1798071  15  0.0 Ssl  python3
+1797993 1798072   0  0.0 Ssl  python3
+1797993 1798073   8  0.0 Ssl  python3
+1797993 1798074  10  0.0 Ssl  python3
+1797993 1798075  14  0.0 Ssl  python3
+1797993 1798076   0  0.0 Ssl  python3
+1797993 1798104   9  0.0 Ssl  python3
+1797993 1798105  12  0.0 Ssl  python3
+1797993 1798106   8  0.0 Ssl  python3
+1797993 1798107   6  0.0 Ssl  python3
+1797993 1798108  15  0.0 Ssl  python3
+1797993 1798109   1  0.0 Ssl  python3
+1797993 1798110  12  0.0 Ssl  python3
+1797993 1798111   4  0.0 Ssl  python3
+1797993 1798112   8  0.0 Ssl  python3
+1797993 1798113   6  0.0 Ssl  python3
+1797993 1798114   7  0.0 Ssl  python3
+1797993 1798115   2  0.0 Ssl  python3
+1797993 1798116   9  0.0 Ssl  python3
+1797993 1798117   4  0.0 Ssl  python3
+1797993 1798118   5  0.0 Ssl  python3
+=== top cpu ===
+    PID ELAPSED %CPU %MEM   RSS COMMAND         COMMAND
+1085809   25991 50.9  0.5 131092 chrome         /opt/google/chrome/chrome --type=gpu-process --ozone-platform=x11 --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --gpu-preferences=WAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAAQAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,2989059060398609842,3769412852088022985,262144 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708988185955192
+1632280   42258 48.4  0.4 113488 python3        /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+1827104    3856 44.5  4.7 1167076 Isolated Web Co /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52127 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {ae129ec1-9b4f-4c33-af82-8d083bbe9fd9} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 206 tab
+2285086   58759 35.8  2.1 520136 python3        /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/cortex.py --dienst
+2996020   36632 27.3  3.9 951196 firefox        /snap/firefox/8863/usr/lib/firefox/firefox
+2393222    1271 12.3  2.4 604800 Isolated Web Co /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52233 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {c056bab6-4101-48d5-87d5-e4159af92ef9} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 225 tab
+2652509      17  9.3  0.0     0 git             [git] <defunct>
+1528353  133706  8.5  0.3 94108 Xorg            /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+1532239  133627  7.1  1.0 245000 gnome-shell    /usr/bin/gnome-shell
+1085810   25991  6.9  0.2 58316 chrome          /opt/google/chrome/chrome --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,13315579006145763074,17810321553272990872,524288 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708989122997041
+4078427   77189  6.7  0.0 19292 python3         /usr/bin/python3 -m services.nerd_physics.main
+1533496  133615  4.8  2.1 517736 claude         claude --dangerously-skip-permissions
+1073846   64412  4.1  1.5 367804 claude         claude --dangerously-skip-permissions
+2897514   18368  3.4  2.3 577680 python3        /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/hoeren.py
+   2491  417760  3.3  0.1 40792 pipewire-pulse  /usr/bin/pipewire-pulse
+2086407   40477  3.1  0.2 58552 python3         /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/puls.py
+ 959674   45257  2.7  0.0 23388 python3         /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py
+=== recent voice journal ===

@@ -41,6 +41,10 @@ def assert_sha(path: Path, want: str) -> None:
 
 
 def import_copy(path: Path, name: str, *, home: Path, frank: bool) -> ModuleType:
+    # Both current daemon implementations may resolve an omitted exec cwd via
+    # Path.home() at execution time. The redirected HOME must therefore exist,
+    # otherwise the shadow harness itself creates a false FileNotFoundError.
+    home.mkdir(parents=True, exist_ok=True)
     os.environ["HOME"] = str(home)
     if frank:
         os.environ["LOCAL_BRIDGE_MACHINE_ID"] = "ai-core-node-shadow"
@@ -157,7 +161,7 @@ def main() -> int:
     q = mp.Queue()
     p = mp.Process(target=child_generic_hold, args=(str(args.generic), str(root), q))
     p.start()
-    wait_running(root / "shared-concurrent" / "host_effects.sqlite3", "generic-concurrent-live")
+    wait_running(root / "shared-concurrent" / "host-effect.sqlite3", "generic-concurrent-live")
 
     frank2 = import_copy(args.frank, "frank_shadow_concurrent", home=root / "home-frank-concurrent", frank=True)
     fence2 = HostEffectFence(root / "shared-concurrent", machine_id="ai-core-node")

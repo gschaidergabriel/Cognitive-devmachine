@@ -1,5 +1,5 @@
 {
-  "schema_version": "5.0",
+  "schema_version": "5.1",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "entity_display_name": "Clay",
   "entity_name_rule": "Exact clay addresses the Clay research entity and is not a scientific command.",
@@ -12,6 +12,10 @@
   "status_footer_protocol": "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md",
   "program_progress_tool": "tools/program_progress.py",
   "commands": {
+    "999": {
+      "protocol": "research_entity/triggers/999_REALTIME_HUMAN_CONVERSATION_FUSION_PROTOCOL.md",
+      "program_target": "FRANK_V0_1"
+    },
     "666": {
       "protocol": "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
       "program_target": "FRANK_V0_1"
@@ -87,6 +91,7 @@
     }
   },
   "reserved_commands": [
+    "999",
     "666",
     "go",
     "q12",
@@ -106,9 +111,9 @@
     "harness",
     "spawn"
   ],
-  "rule": "All reserved commands operate on the same Frank v0.1 program. Domain specialization changes method and evidence sought, never the product target. Legacy GitHub/Reference/Clay Harness and H1/H2/H3 are not active products or stages.",
+  "rule": "All reserved commands operate on the same Frank v0.1 program. Domain specialization changes method and evidence sought, never the product target. Legacy GitHub/Reference/Clay Harness and H1/H2/H3 are not active products or stages. Trigger 999 specifically extends the existing canonical Realtime Voice/GRID/GWT/state/effect path; it does not authorize a parallel voice runtime or state authority.",
   "training_auto_start_forbidden": true,
-  "last_updated": "2026-08-10T20:39:00+07:00",
+  "last_updated": "2026-09-12T17:01:00+07:00",
   "trigger_renames": {
     "clay": "clayresearch"
   }

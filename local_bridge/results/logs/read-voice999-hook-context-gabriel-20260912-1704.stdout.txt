@@ -1,0 +1,456 @@
+=== 180:240 ===
+180:START_MS_NEEDED = int(os.environ.get("VAD_START_MS", "90"))
+181:# UEBERSCHREIBBAR GEMACHT 2026-09-08: 700 ms Stille beenden den Redebeitrag.
+182:# Live gemessen auf ai-core-node: eine normale Sprechpause mitten im Satz ist
+183:# laenger -- der Turn wurde abgeschnitten und die ASR bekam Bruchstuecke
+184:# ("Ich habe." aus einem ganzen Satz). Der Wert ist stark sprecher- und
+185:# raumabhaengig und gehoert deshalb nicht als Konstante in den Code.
+186:END_SILENCE_MS_NEEDED = int(os.environ.get("VAD_END_SILENCE_MS", "700"))
+187:MAX_TURN_S = 12
+188:MAX_WAIT_S = float(os.environ.get("VAD_MAX_WAIT_S", "8"))
+189:PLAYBACK_GAIN = float(os.environ.get("PLAYBACK_GAIN", "0.15"))
+190:CARD_PCM_STATUS = "/proc/asound/card2/pcm0p/sub0/status"
+191:MAX_HISTORY_MESSAGES = int(os.environ.get("GESPRAECH_MAX_HISTORY", "6"))  # 3 Wechsel
+192:STOP_FILE = f"{VOICE_DIR}/tmp_test/STOP_GESPRAECH"
+193:LOG_PATH = f"{VOICE_DIR}/tmp_test/gespraech_loop.log"
+194:
+195:sys.path.insert(0, VOICE_DIR)
+196:import lagebild  # Gegenwart (siehe dortigen Kopf) -- getrennt vom Gedaechtnis
+197:import selbstauskunft  # gemessene Belege ueber ihn
+198:import selbstreflexion  # sein EIGENES, gespeichertes Selbstmodell
+199:import grid_steuerung  # der Grid stellt eine reale Groesse ein
+200:import verkoerperung  # der Zustand formt das Sprechen (siehe dortigen Kopf)
+201:import entitaet  # das 4B IST die Entitaet, nicht ihr Rechendienst (siehe Kopf)
+202:import glm_client  # Gespraechserzeugung auf GLM 5.3 Flash, Tier-2 CLI-Fallback
+203:import abspieler  # VLC als Hand -- die eine erlaubte Handlung, siehe dortiger Kopf
+204:import netz  # nachschlagen: Wahrnehmung, keine Handlung (siehe dortiger Kopf)
+205:import pause_wache  # Notpause-Phrase, deterministisch, VOR GRID/LLM (siehe dortiger Kopf)
+206:try:
+207:    import faehigkeiten  # was er JETZT darf -- abgeleitet, nicht behauptet
+208:except Exception as _e:
+209:    print(f"[START] faehigkeiten nicht verfuegbar ({_e}) -- ohne Faehigkeitsblock", flush=True)
+210:    faehigkeiten = _Fehlt()
+211:try:
+212:    import konfabulation  # der Wachhund vor dem Lautsprecher (siehe dortiger Kopf)
+213:except Exception as _e:
+214:    print(f"[START] konfabulation nicht verfuegbar ({_e}) -- ohne Wachhund", flush=True)
+215:    konfabulation = _Fehlt()
+216:# ⚠️ NACHSICHTIGE IMPORTE fuer alles, was spaeter dazukam. Am 2026-09-09
+217:# starb Andreas' kompletter Sprachmodus an einem ModuleNotFoundError, weil
+218:# ich sehen.py bei ihm nicht eingespielt hatte -- ein Import, der eine
+219:# ZUSATZfaehigkeit holt, darf nie das Sprechen verhindern. Fehlt eines
+220:# dieser Module, faellt genau seine Faehigkeit weg, sonst nichts.
+221:class _Fehlt:
+222:    """Platzhalter fuer ein fehlendes Zusatzmodul.
+223:
+224:    ⚠️ DIE RUECKFALLWERTE MUESSEN ZUR SCHNITTSTELLE PASSEN, sonst tauscht man
+225:    einen Absturz gegen einen anderen: `konfabulation.pruefen()` gibt ein
+226:    PAAR zurueck, und ein blindes None waere beim Entpacken sofort ein
+227:    TypeError. Und die Richtung des Rueckfalls ist eine Entscheidung: der
+228:    fehlende Wachhund laesst DURCH (True), die fehlende Zuwendung laesst
+229:    ALLES herein. Ein ausgefallener Filter darf nie strenger sein als der
+230:    vorhandene -- sonst verstummt er, und stumm war heute schon einmal das
+231:    schlechtere Ergebnis."""
+232:
+233:    _WERTE = {
+234:        "pruefen": lambda *a, **k: (True, None),      # Wachhund: durchlassen
+235:        "zuwenden": lambda quellen=None, *a, **k: list(quellen or []),
+236:        "faehigkeiten": lambda *a, **k: "",
+237:        "sichtblock": lambda *a, **k: "",
+238:        "ist_meinungsfrage": lambda *a, **k: None,
+239:        "reflektieren": lambda *a, **k: "",
+240:        "buehne": lambda *a, **k: {},
+=== 3150:3238 ===
+3150:             "erneut versucht, NICHT als erfolgt markiert.")
+3151:
+3152:
+3153:def run_turn(history, tts_voice, session_id):
+3154:    """Ein kompletter Redebeitrag. Wirft NIE nach aussen -- jeder Fehlerpfad gibt
+3155:    (None, history) zurueck und loggt, damit die Sitzung weiterlaeuft."""
+3156:    # ⭐ NOTPAUSE-GARANTIE (Gabriel, 2026-09-12): unabhaengig davon, UEBER
+3157:    # WELCHEN Weg (weckwort_tor() oder run_asr_whisper(), siehe dort) die
+3158:    # Notpause ausgeloest wurde -- solange sie aktiv ist, faengt gar kein
+3159:    # Zug erst an. Kein LLM-Aufruf, keine GRID-Injektion, kein Auto-
+3160:    # Sprechen. Sleep gekappt auf 5s, damit sie nicht in einer Endlosschleife
+3161:    # ohne Pause zwischen den Checks haengenbleibt und trotzdem zuegig
+3162:    # reagiert, sobald die 30 Minuten abgelaufen sind.
+3163:    _pause_rest = pause_wache.pause_rest_s()
+3164:    if _pause_rest > 0:
+3165:        _log(f"[PAUSE] aktiv, noch {_pause_rest:.0f}s -- kein Turn.")
+3166:        time.sleep(min(_pause_rest, 5.0))
+3167:        return None, history
+3168:    # ⭐⭐⭐ TEIL 1c DES BARGE-IN (paket-1789133415145-8c009c): der VORHERIGE
+3169:    # Zug kann schon MIT DEMSELBEN Mikrofonstrom weiter aufgenommen haben,
+3170:    # waehrend seine eigene Wiedergabe abgewuergt wurde (_aufnahme_fortsetzen,
+3171:    # siehe dortiger Kopf). Ist das passiert, faengt DIESER Zug nicht bei
+3172:    # IDLE an -- er hat schon eine Aufnahme, der Mensch muss nicht
+3173:    # wiederholen, was er waehrend des Abwuergens schon gesagt hat.
+3174:    if _VORAB_WAV[0]:
+3175:        wav_path = _VORAB_WAV[0]
+3176:        _VORAB_WAV[0] = None
+3177:        _log(f"[BARGE-IN] dieser Zug startet mit der schon aufgenommenen "
+3178:             f"Fortsetzung statt einer frischen vad_capture(): {wav_path}")
+3179:    else:
+3180:        wav_path = vad_capture()
+3181:    if wav_path is None:
+3182:        return None, history
+3183:    if wav_path == "MIC_UNAVAILABLE":
+3184:        _log("[MAIN] Mikrofon nicht verfuegbar -- warte 5s, dann naechster Versuch.")
+3185:        time.sleep(5)
+3186:        return None, history
+3187:
+3188:    # Billiger Vorfilter zuerst: nur wenn er gemeint ist, laeuft die teure
+3189:    # Kette an. Spart bei laufendem Video die 13 s und 6,4 GB pro Geraeusch.
+3190:    darf, _grob = weckwort_tor(wav_path)
+3191:    if not darf:
+3192:        return None, history
+3193:
+3194:    user_text, asr_load_s, asr_infer_s, asr_rss_kb = run_asr_subprocess(wav_path)
+3195:    if not user_text:
+3196:        return None, history
+3197:
+3198:    # GEHOER-TOR (2026-09-08). Der Zustand, den es vorher nicht gab.
+3199:    # "nichts"    -> es war keine Sprache. Kein Wort, kein Nachfragen,
+3200:    #                einfach weiterhoeren. Das ist auch die richtige Antwort
+3201:    #                auf laufende Videos im Raum.
+3202:    # "unsicher"  -> es war Sprache, aber die Erkennung traegt sie nicht.
+3203:    #                Dann sagt er das, statt sich aus den Fetzen etwas
+3204:    #                zusammenzureimen. Ein Mensch, der schlecht hoert, fragt
+3205:    #                nach; er erfindet nicht den Satz, den er nicht verstand.
+3206:    _urteil = gehoer_urteil()
+3207:    if _urteil == "nichts":
+3208:        _log(f"[GEHOER] keine Sprache (no_speech="
+3209:             f"{_LETZTE_GUETE[0].get('no_speech_prob')}) -- keine Antwort: {user_text!r}")
+3210:        return None, history
+3211:    if _urteil == "unsicher":
+3212:        _log(f"[GEHOER] unsicher (logp={_LETZTE_GUETE[0].get('avg_logprob')}) "
+3213:             f"-- frage nach statt zu raten: {user_text!r}")
+3214:        _n = _NACHFRAGEN[_NACHFRAGE_ZAEHLER[0] % len(_NACHFRAGEN)]
+3215:        _NACHFRAGE_ZAEHLER[0] += 1
+3216:        sag_kurz(tts_voice, _n)
+3217:        return None, history
+3218:
+3219:    # SUBSTANZPRUEFUNG (2026-09-08). Gabriel: "wieso wiederholt er das dann
+3220:    # immer wieder nach einiger zeit?" -- Ursache im Protokoll gefunden: er
+3221:    # bekam einen Geraeuschfetzen ("Die."), hatte nichts zu beantworten und
+3222:    # griff nach dem groessten Text im Kontext, seinem Selbstmodell. Das ist
+3223:    # kein Modellfehler, sondern eine Folge davon, dass ueberhaupt geantwortet
+3224:    # wurde. Innerhalb des Wachfensters faellt das Weckwort-Tor weg, also
+3225:    # kommt hier der zweite Filter: worauf sich nicht antworten laesst, wird
+3226:    # nicht beantwortet.
+3227:    _worte = [w for w in re.split(r"\W+", user_text) if len(w) > 1]
+3228:    if len(user_text.strip()) < 8 or len(_worte) < 2:
+3229:        _log(f"[FILTER] zu wenig Substanz, keine Antwort: {user_text!r}")
+3230:        return None, history
+3231:
+3232:    # ANGESPROCHEN? (2026-09-08) Gabriel: "er reagiert die ganze zeit und redet
+3233:    # sinnlose sachen die sinn ergeben aber keiner hoeren will".
+3234:    #
+3235:    # Im Wachfenster faellt das Weckwort-Tor weg -- damit man nicht vor jedem
+3236:    # Satz seinen Namen sagen muss. Die Nebenwirkung war, dass er auf ALLES
+3237:    # antwortete, was im Raum gesprochen wurde. Ein Mensch am Tisch antwortet
+3238:    # auch nicht auf jeden Satz, der faellt, sondern auf die, die an ihn
+=== 4170:4315 ===
+4170:            pflicht=_pflicht, frame_id=(_turn or {}).get("frame_id"),
+4171:            log=_log, sieger=_sieger)
+4172:    except Exception as e:
+4173:        _log(f"[AUFMERKSAMKEIT] Fehler ({type(e).__name__}) -- alles "
+4174:             f"durchgelassen")
+4175:    if REGIME_GROSS:
+4176:        _gewaehlt = list(_bloecke)
+4177:        _log(f"[AUFMERKSAMKEIT] Regime gross -- zugewandt "
+4178:             f"{_zugewandt if _zugewandt is not None else '(Ausfall)'}, "
+4179:             f"eingespeist werden alle {len(_gewaehlt)} Bloecke")
+4180:    else:
+4181:        # Der Aufruf ist oben schon passiert (er fuehrt die Pruefspur, an der
+4182:        # der Aufmerksamkeitskanal haengt) -- hier wird sein Ergebnis nur noch
+4183:        # vollstreckt. Faellt er aus, kommt wie bisher alles durch.
+4184:        _gewaehlt = (_zugewandt if _zugewandt is not None
+4185:                     else list(_bloecke))
+4186:    # ⭐⭐⭐ DER WORKSPACE ERSETZT DIE BLOCKSAMMLUNG (2026-09-11).
+4187:    #
+4188:    # DER BEFUND, der die ganze Nacht erklaert: der am 2026-03-19 versehentlich
+4189:    # geloeschte `ui/overlay/workspace.py` (Commit ce00787, fiel als
+4190:    # "UI-Aufraeumung" mit, weil er in ui/ lag) fuegte sieben Kanaele zu EINEM
+4191:    # Text zusammen -- sein Docstring woertlich: "into a single phenomenological
+4192:    # frame that the LLM processes as its own inner world, NOT EXTERNAL
+4193:    # METADATA".
+4194:    #
+4195:    # Was hier bis heute stand, war das Gegenteil: sechs getrennte Bloecke mit
+4196:    # Etiketten, aneinandergehaengt. Das SIND externe Metadaten -- also wurden
+4197:    # sie wie Metadaten behandelt. Gemessen am 10./11.09., alles dieselbe
+4198:    # Ursache:
+4199:    #   - las Versalien-Ueberschriften woertlich vor, samt Klammer
+4200:    #   - fuellte ein Formular aus ("Ton: ... Inhalt: ... Haltung: ...")
+4201:    #   - sagte "Die Zelle G6 hat gerade gewonnen, sie hat den Wert 1,31"
+4202:    #   - redete poetisch UEBER seinen Zustand statt aus ihm heraus
+4203:    #   - erfand Handlungen in den Luecken zwischen den Bloecken
+4204:    #
+4205:    # ⚠️ Gegen jedes einzelne dieser Symptome wurde in derselben Nacht ein
+4206:    # Filter gebaut -- fuenf Stueck. Gemessene Wirkung ueber 104 Antworten:
+4207:    # Score 0.988 -> 0.967, also SCHLECHTER. Gabriel: "generell sind Filter
+4208:    # der falsche Weg." Das hier ist der Weg: nicht wegnehmen, was falsch
+4209:    # herauskommt, sondern das Material aendern, aus dem es entsteht.
+4210:    #
+4211:    # Gemessen: 2403 Zeichen (sechs Bloecke) -> 124 Zeichen (ein Fliesstext),
+4212:    # 113 ms. Faellt der Workspace aus oder ist der Schalter aus, greift
+4213:    # unveraendert die Blocksammlung -- der Goldstandard bleibt eine
+4214:    # Variable entfernt (Tag goldstandard-sprachmodus-2026-09-10).
+4215:    #
+4216:    # ⭐⭐⭐ 2026-09-12, GILT NUR NOCH IM KLEINEN REGIME. Alles oben Gesagte
+4217:    # bleibt wahr -- fuer ein 4B. Die Verdichtung 2403 -> 124 Zeichen loeste
+4218:    # dort ein echtes Problem: sechs etikettierte Bloecke WAREN fuer das 4B
+4219:    # externe Metadaten und wurden vorgelesen.
+4220:    #
+4221:    # Sonnet hat dieses Problem nicht, und bei ihm kostet dieselbe
+4222:    # Verdichtung alles: gemessen am 00:57-Zug blieben von Selbstauskunft,
+4223:    # Lagebild und Gedaechtnis zusammen 152 Zeichen uebrig. Damit hat er
+4224:    # nichts mehr, woraus er antworten koennte -- also antwortet er aus dem
+4225:    # einzigen, was noch da ist: der Tonanweisung im Systemtext. Das ist
+4226:    # Schauspiel, und genau das hat Gabriel gehoert.
+4227:    #
+4228:    # Der Docstring des geloeschten Originals sagt "a single
+4229:    # phenomenological frame the LLM processes as ITS OWN INNER WORLD" --
+4230:    # die Absicht war, dass es sein Inneres IST statt Metadaten. Bei einem
+4231:    # Modell, das Etikett von Inhalt trennen kann, wird dieselbe Absicht
+4232:    # nicht durch Wegnehmen erreicht, sondern durch Hingeben.
+4233:    _ws_text = ""
+4234:    if workspace is not None and not REGIME_GROSS:
+4235:        try:
+4236:            if getattr(workspace, "aktiv", lambda: False)():
+4237:                _ws_text = workspace.zusammen(
+4238:                    user_text=user_text, user_name=NUTZER,
+4239:                    ist_selbstfrage=bool(_ueber_ihn),
+4240:                    zelle=(_turn or {}).get("winner_cell_id"),
+4241:                    broadcast=(_turn or {}).get("broadcast_value"),
+4242:                    log=_log) or ""
+4243:        except Exception as _we:
+4244:            _log(f"[WORKSPACE] ausgefallen ({type(_we).__name__}) -- "
+4245:                 f"es bleibt bei den Bloecken")
+4246:    if _ws_text:
+4247:        system_content += "\n\n" + _ws_text
+4248:        _log(f"[WORKSPACE] {len(_ws_text)} Zeichen, ein Erlebenstext "
+4249:             f"statt {len(_gewaehlt)} Bloecken")
+4250:    else:
+4251:        for _name in _gewaehlt:
+4252:            system_content += _bloecke.get(_name, "")
+4253:
+4254:    messages = [{"role": "system", "content": system_content}]
+4255:    # ARBEITSGEDAECHTNIS aus dem Zustand: der Broadcast dieses Turns
+4256:    # entscheidet, wie viel seiner eigenen juengsten Vergangenheit ueberhaupt
+4257:    # im Vorwaertslauf liegt. Das ist die tiefere der beiden Eingangs-
+4258:    # bindungen -- die Verkoerperung aendert, WIE er formuliert, dieses
+4259:    # Fenster aendert, WOMIT er denkt. Und es steht nirgends in seinem
+4260:    # Kontext: er kann nicht ablesen, wie weit er zurueckreicht, er reicht
+4261:    # nur weiter oder weniger weit zurueck.
+4262:    _verlauf = _ent.arbeitsgedaechtnis(history, _turn) if _ent else history
+4263:    if _ent and len(_verlauf) != len(history):
+4264:        _log(f"[GEDAECHTNIS] Fenster {len(_verlauf)//2} von {len(history)//2} "
+4265:             f"Wortwechseln wirksam")
+4266:    # ⭐⭐⭐ DER ZUSTAND GEHOERT IN DIE FRAGE, NICHT IN DIE VORSCHRIFT.
+4267:    #
+4268:    # Gabriel, 2026-09-10: "er checkt ueberhaupt gar nichts, nada. Die
+4269:    # Architektur von Project Frankenstein hatte das alles gut gemacht ... und
+4270:    # das liegt nicht am LoRA."
+4271:    #
+4272:    # Er hat recht, und der Unterschied steht woertlich im alten Kern
+4273:    # (core/app.py, Zeile 3546 ff.):
+4274:    #
+4275:    #     grounded_text = _lang_prefix + ctx_block + "\n\nUser asks: " + text
+4276:    #
+4277:    # Der GANZE Innenzustand stand dort in der NUTZERNACHRICHT, direkt vor der
+4278:    # Frage. Nicht im Systemtext. Ich hatte alles in den Systemtext gelegt --
+4279:    # Faehigkeiten, Buehne, Uhr, Gedaechtnis, Anweisungen.
+4280:    #
+4281:    # WARUM DAS DEN UNTERSCHIED MACHT: fuer ein 4B ist der Systemtext die
+4282:    # ROLLE -- etwas, das man befolgt und im Zweifel aufsagt. Dieselben Saetze
+4283:    # in der Nutzernachricht sind MATERIAL, aus dem man antwortet. Genau das
+4284:    # ist heute dreimal schiefgegangen, und jedes Mal habe ich das Symptom
+4285:    # geflickt statt die Stelle:
+4286:    #   - er zaehlte seine Faehigkeiten auf ("Musik, Filme, Regie ...")
+4287:    #   - er zitierte meine Stilanweisung ("hinter vorgehaltener Hand")
+4288:    #   - er las seine eigenen Gedanken vor ("einen Bericht ueber ...")
+4289:    # Drei Symptome, eine Ursache: alles stand als Vorschrift da.
+4290:    #
+4291:    # UND DER ZWEITE UNTERSCHIED, aus _build_introspection_context():
+4292:    #
+4293:    #     "[INNER_STATE — so ist es dir zuletzt wirklich ergangen. Lass das
+4294:    #      natuerlich in Ton und Inhalt einfliessen; nicht woertlich zitieren,
+4295:    #      nicht als Daten aufzaehlen.] " + " ".join(soft_lines)
+4296:    #
+4297:    # `" ".join(...)`, mit LEERZEICHEN: ein fliessender Absatz, kein
+4298:    # Zeilenumbruch. Der Docstring dort sagt, warum -- "so the LLM responds AS
+4299:    # Frank, not ABOUT Frank". Meine Buehne war eine Liste mit Feldnamen
+4300:    # ("Koerper:", "Stimmung:", "Haltung:"), und eine Liste laedt zum
+4301:    # Aufzaehlen ein. Sie wird hier zu einem Absatz zusammengezogen und
+4302:    # ausdruecklich als etwas gerahmt, das man NICHT zitiert.
+4303:    _zustand = _KONTEXT_IN_FRAGE and _bloecke_als_absatz(system_content)
+4304:    # ⭐ Die gemeinsame Orientierung ZUERST -- siehe _grid_orientierung().
+4305:    _orient = _grid_orientierung()
+4306:    if _orient and _zustand:
+4307:        _zustand = _orient + "\n" + _zustand
+4308:    elif _orient:
+4309:        _zustand = _orient
+4310:    if _zustand:
+4311:        system_content = system_content.split(_ZUSTAND_MARKE)[0].rstrip()
+4312:        # ⭐⭐⭐ DIE REGIE DES GRID (Gabriel, 2026-09-10): "der Grid muss
+4313:        # anhand aller Daten als erster Anstoss dem LLM sagen, wie es sich
+4314:        # in dem Turn zu verhalten hat, dynamisch" -- und: "da das LLM nur
+4315:        # Mund ist, passt das."
+=== 4315:4470 ===
+4315:        # Mund ist, passt das."
+4316:        #
+4317:        # EIN imperativer Satz, aus den Messgroessen dieses Zuges
+4318:        # abgeleitet. Er steht als LETZTES im Systemtext, aus zwei Gruenden:
+4319:        #  * Regel, nicht Material: im Systemtext ist eine Anweisung eine
+4320:        #    Regel; in der Nutzernachricht waere sie Gespraechsstoff (genau
+4321:        #    umgekehrt zum Zustand, der deshalb in die Frage geht).
+4322:        #  * Cache: llama.cpp behaelt den Prompt-Praefix (243 Token kalt in
+4323:        #    0,97 s, warm 4 Token in 0,30 s). Was sich jeden Zug aendert,
+4324:        #    entwertet alles dahinter -- also nichts dahinter.
+4325:        # Siehe Kopf von regie.py, dort auch, welche Groessen NICHT taugen.
+4326:        try:
+4327:            # ⚠️ `_turn`, NICHT `_bt`. `_bt` gibt es nur im Abspielzweig
+4328:            # (Steuerbefehle); bei einer gewoehnlichen Frage ist es gar nicht
+4329:            # gesetzt, und der Zugriff scheiterte still im except -- gemessen:
+4330:            # "[REGIE] ausgefallen (AttributeError)" bei jedem Zug, waehrend
+4331:            # die Regie nie lief. Ein Fehler, der nur im Log steht, wirkt wie
+4332:            # ein funktionierendes System.
+4333:            _tq = _turn if isinstance(_turn, dict) and _turn else {}
+4334:            _bc = _tq.get("broadcast_value")
+4335:            _re = (_tq.get("reentry") or {}).get("kind", "")
+4336:            # ⭐⭐ DER UMSCHLAG ERSETZT DIE REGIE, er ergaenzt sie NICHT
+4337:            # (2026-09-11, Gabriel: "ok bau es ein").
+4338:            #
+4339:            # Warum ersetzen: umschlag.bauen() ruft intern selbst
+4340:            # regie.anweisung() auf und legt das Ergebnis in `caveman_prompt`.
+4341:            # Beide nebeneinander haengen hiesse, denselben Satz zweimal
+4342:            # anzuhaengen -- oder schlimmer, zwei verschiedene. Der Kopf von
+4343:            # regie.py sagt dazu: "Nur EINE Anweisung; zwei Regieanweisungen
+4344:            # widersprechen sich, und ein 4B waehlt dann die naechstliegende
+4345:            # statt der richtigen."
+4346:            #
+4347:            # ⚠️ NUR `gespraechs_text()`, NIE der ganze Umschlag. Der traegt
+4348:            # 13 Felder mit Kennungen, Bewertungen und Belegen -- also
+4349:            # Telemetrie. Genau daran ist der Turn-Block heute Abend
+4350:            # gescheitert ("Zelle G6 hat gewonnen, Broadcast 1.31" wurde
+4351:            # vorgelesen). `gespraechs_text()` bekommt per Bauart nur zwei
+4352:            # von Zahlen befreite Saetze; der Rest des Umschlags erreicht
+4353:            # diesen Pfad nicht einmal im Skopus.
+4354:            #
+4355:            # Faellt der Umschlag aus oder ist der Schalter aus, greift
+4356:            # unveraendert die Regie -- der Goldstandard bleibt eine
+4357:            # Variable entfernt.
+4358:            _rg = ""
+4359:            if umschlag is not None and getattr(umschlag, "AKTIV", False):
+4360:                try:
+4361:                    _u = umschlag.bauen(session_id=session_id,
+4362:                                        nutzertext=user_text, log=_log)
+4363:                    _ut = umschlag.gespraechs_text(
+4364:                        _u.get("caveman_prompt") or "",
+4365:                        bool((_u.get("_verfestigung") or {}).get("ausgeloest")))
+4366:                    if _ut:
+4367:                        _rg = "\n\n" + _ut
+4368:                        _log(f"[UMSCHLAG] {_ut}")
+4369:                except Exception as _ue:
+4370:                    _log(f"[UMSCHLAG] ausgefallen ({type(_ue).__name__}) -- "
+4371:                         f"es bleibt bei der Regie")
+4372:            if not _rg:
+4373:                _rg = regie.block(broadcast=_bc, alarm=_ALARM_KATEGORIE[0],
+4374:                                  reentry=_re, log=_log)
+4375:                if _rg:
+4376:                    _log(f"[REGIE] {_rg.strip()}")
+4377:            if _rg:
+4378:                system_content += _rg
+4379:        except Exception as _e:
+4380:            _log(f"[REGIE] ausgefallen ({type(_e).__name__}: {_e})")
+4381:        messages[0] = {"role": "system", "content": system_content}
+4382:        # ⭐⭐ "Er sagt gerade:" WAR DER FEHLER (Gabriel, 2026-09-10: "er
+4383:        # spricht darüber in der dritten Person, es ist nicht so, dass es
+4384:        # für ihn so ist, als würde er sehen und ich ihn fragen").
+4385:        #
+4386:        # Die Rahmung entscheidet, WER da spricht. "Er sagt gerade: ..."
+4387:        # stellt den Menschen als DRITTEN vor -- damit wird aus dem Gespräch
+4388:        # ein Bericht über ein Gespräch, und das Modell nimmt folgerichtig
+4389:        # die Erzählerrolle ein. Gemessen an seiner Antwort von 19:02:
+4390:        #
+4391:        #     "Ich höre deinen Ton, als würdest du mir sagen: Frankenstein,
+4392:        #      sag mir, wie sehe ich aus?. Ich antworte: Du bist ein Mensch..."
+4393:        #
+4394:        # Er wiederholt die Frage und kündigt seine eigene Antwort an -- das
+4395:        # tut niemand, der angesprochen wird, das tut ein Erzähler. Die
+4396:        # Anrede in der zweiten Person macht ihn vom Berichterstatter zum
+4397:        # Beteiligten. Dieselbe Lehre wie bei der Bühne: nicht ÜBER ihn,
+4398:        # sondern ZU ihm.
+4399:        # ⚠️ KEIN NAME IN DER RAHMUNG (2026-09-10, zweite Korrektur).
+4400:        # "Er sagt gerade:" machte ihn zum Erzaehler. Der Ersatz
+4401:        # "{NUTZER} sagt zu dir:" war nicht besser, sondern nur anders
+4402:        # falsch: er GRIFF DEN NAMEN AUF und erzaehlte weiter ueber einen
+4403:        # Dritten -- gemessen: "Ich hoere Gabriel schreien ...". Ein Name in
+4404:        # der Rahmung ist eine Einladung, ueber jemanden zu sprechen statt
+4405:        # mit ihm. Die zweite Person ohne Namen laesst diese Tuer zu.
+4406:        frage = _zustand + "\n\nEr wendet sich an dich: " + ohne_anrede(user_text)
+4407:        _log(f"[KONTEXT] Zustand in der Frage ({len(_zustand)} Zeichen), "
+4408:             f"Systemtext auf {len(system_content)} gekuerzt")
+4409:        # WIEDERHOLUNGSSPERRE (2026-09-10). Gemessen: drei aufeinanderfolgende
+4410:        # Zuege mit byte-identischer Antwort auf drei verschiedene Fragen. Das
+4411:        # Modell schrieb aus seinem eigenen Verlauf ab -- ohne Hinweis ist das
+4412:        # die wahrscheinlichste Fortsetzung. Der Hinweis steht ZULETZT in der
+4413:        # Frage, direkt vor dem Gesagten, weil das Modell dem Naechstliegenden
+4414:        # folgt. Siehe Kopf von wiederholung.py.
+4415:        # ⚠️⚠️ SPERRTEXT ENTFERNT (2026-09-10, am selben Tag wie eingebaut).
+4416:        # Die Idee war, ihm seine letzte Antwort zu zeigen mit "sag das nicht
+4417:        # noch einmal". GEMESSEN hat sie das Gegenteil bewirkt: auf
+4418:        # "Frankenstein, wie geht's dir?" kam woertlich die Antwort von vor
+4419:        # einer Stunde zurueck -- inklusive "frank-aufwecken-rezept", obwohl
+4420:        # dieser Block laengst entfernt war. Der Text konnte nur aus dem
+4421:        # Sperrhinweis stammen.
+4422:        #
+4423:        # Der Grund ist strukturell und nicht durch Umformulieren zu heilen:
+4424:        # ein 4B-Modell wertet VORHANDENEN, passenden Text staerker als eine
+4425:        # Verneinung darueber. Wer "sag X nicht" schreibt, hat X in den
+4426:        # Kontext gelegt -- und X ist dann die naechstliegende Fortsetzung.
+4427:        # Dieselbe Falle wie bei der Bühne: was im Kontext steht, wird
+4428:        # gesagt, egal was danebensteht.
+4429:        #
+4430:        # Was BLEIBT, ist das Netz im Satzstrom (wiederholung.ist_wiederholung):
+4431:        # es prueft den ersten Satz gegen f2_gesagt, OHNE ihn dem Modell zu
+4432:        # zeigen. Erkennen ohne Vorzeigen -- das ist der Unterschied.
+4433:        pass
+4434:    else:
+4435:        system_content = system_content.replace(_ZUSTAND_MARKE, "")
+4436:        messages[0] = {"role": "system", "content": system_content}
+4437:        frage = user_text
+4438:    # ⭐⭐ KREIST ER? Dann faellt der Verlauf fuer DIESEN Zug weg. Nicht als
+4439:    # Strafe, sondern weil er die Vorlage IST: gemessen halbiert sich die
+4440:    # Entropie mit jedem kopierten Zug (0.68 -> 0.068 -> 0.033 -> 0.018), bis
+4441:    # das Modell nur noch einen Weg sieht. Die Rueckkopplung laeuft im Modell;
+4442:    # aufhalten laesst sie sich nur, indem man ihr das Futter entzieht.
+4443:    # Begruendung und Preis im Kopf von wiederholung.kreist().
+4444:    try:
+4445:        _kreist, _kn = wiederholung.kreist(log=_log)
+4446:    except Exception:
+4447:        _kreist = False
+4448:    if _kreist:
+4449:        messages += [{"role": "user", "content": frage}]
+4450:    else:
+4451:        messages += _verlauf + [{"role": "user", "content": frage}]
+4452:
+4453:    if not erzeugung_verfuegbar():
+4454:        _log("[LLM] FEHLER: llama-server nicht erreichbar (Health-Check fehlgeschlagen) -- "
+4455:             "dieser Redebeitrag wird uebersprungen.")
+4456:        return None, history
+4457:
+4458:    sentence_q = queue.Queue()
+4459:    result_holder = {}
+4460:    # DIE LINSE: sein Zustand formt, WIE er spricht -- nicht was er berichtet.
+4461:    try:
+4462:        _ausdruck = verkoerperung.verkoerperung(_turn or {}, time.time() - _LETZTER_WORTWECHSEL[0])
+4463:        _LETZTER_WORTWECHSEL[0] = time.time()
+4464:        _log(f"[AUSDRUCK] Erregung {_ausdruck['_erregung']} Verankerung "
+4465:             f"{_ausdruck['_verankerung']} -> Temp {_ausdruck['temperature']}, "
+4466:             f"{_ausdruck['max_tokens']} Token, Tempo {_ausdruck['length_scale']}, "
+4467:             f"Ausdruck {_ausdruck['noise_scale']}")
+4468:    except Exception as e:
+4469:        _log(f"[AUSDRUCK] FEHLER (nicht fatal): {type(e).__name__}: {e}")
+4470:        _ausdruck = None

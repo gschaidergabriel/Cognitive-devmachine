@@ -1,0 +1,10 @@
+PROCESSES
+3303606 bash -lc set -u; echo 'PROCESSES'; pgrep -af 'pocket-tts|voice777-pocket|pip install' || true; echo 'VENV'; if [ -x /tmp/voice777-pocket-venv/bin/python ]; then /tmp/voice777-pocket-venv/bin/python -V; /tmp/voice777-pocket-venv/bin/python -m pip show pocket-tts 2>/dev/null | sed -n '1,12p' || true; else echo absent; fi; echo 'WAV'; if [ -f /tmp/voice777-pocket-de.wav ]; then stat -c '%s bytes %y' /tmp/voice777-pocket-de.wav; file /tmp/voice777-pocket-de.wav; else echo absent; fi; echo 'HOST'; uptime; free -h | sed -n '1,2p'
+VENV
+absent
+WAV
+absent
+HOST
+ 20:04:40 up 4 days, 20:58,  1 user,  load average: 7.32, 6.31, 5.52
+               total        used        free      shared  buff/cache   available
+Mem:            23Gi       9.8Gi       4.4Gi        55Mi       8.5Gi        13Gi

@@ -1,0 +1,59 @@
+{
+  "schema": "FRANK_AVATAR_EXPRESSION_EYE_RUNTIME_AUTHORITY_CORRECTION/v1",
+  "observed_at": "2026-09-12T07:40:20+07:00",
+  "status": "SOURCE_BINDING_REPAIR_REQUIRED_BEFORE_PROMOTION",
+  "boundary": "special_expression_eye_identity",
+  "finding": "The candidate algorithm is directionally valid, but its three hard-coded input authorities point at base trees while the live daemon resolves all three through _vielleicht_ai() to *_relief2.",
+  "live_subject": {
+    "buehne_html_sha256": "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e",
+    "buehne_daemon_sha256": "5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2",
+    "expression_root": "/home/ai-core-node/.claude/star/visual/ausdruck_erweitert_relief2",
+    "expression_dirs": 44,
+    "expression_frames": 308,
+    "expression_tree_digest_sha256": "56f51a0f11a952cbd6c0dbf4be9b45a09a5a8fa7cd8e7962f34a0634cd114839",
+    "neutral_head": "/home/ai-core-node/.claude/star/visual/kopf_rgba_relief2/kopf_zero_ohne_rotes_augenglow.png",
+    "neutral_head_sha256": "3c5bf032e7d92081c63e4d5c79037d3d4212e0503ba96790277b557e1f7d29e6",
+    "canonical_gaze": "/home/ai-core-node/.claude/star/visual/augen_gaze_relief2/rotglow_tracking_master.png",
+    "canonical_gaze_sha256": "8e07af6c8fd44eb00816c4c94f6716cbd078159ab6808152650a5861385d28ef"
+  },
+  "old_candidate_binding": {
+    "expression_root": "ausdruck_erweitert",
+    "neutral_head_sha256": "489e928fd436253c087183a25b01d685d4ba138bc75bc1b3c4c70a415762f261",
+    "canonical_gaze_sha256": "e9222dde99c5bf84adf838cde2c23284ed1d7b4a5d05c24fe48954871cf64ced",
+    "classification": "VALID_ALGORITHM_STALE_RUNTIME_SUBJECT"
+  },
+  "runtime_resolution_evidence": {
+    "expression_http_representative_sha256": "ec8c1323bff3b7a19739c7bb6994bb5ac26179807cdf0b0e78d9de8831a29fa7",
+    "neutral_head_http_sha256": "3c5bf032e7d92081c63e4d5c79037d3d4212e0503ba96790277b557e1f7d29e6",
+    "gaze_http_sha256": "8e07af6c8fd44eb00816c4c94f6716cbd078159ab6808152650a5861385d28ef",
+    "host_receipts": [
+      "go-avatar-integrator-expression-runtime-authority-20260912-0804",
+      "go-avatar-integrator-eye-authority-complete-20260912-0806",
+      "go-avatar-integrator-expression-relief2-subject-digest-20260912-0808"
+    ]
+  },
+  "dependency_update": {
+    "blink_identity_live_acceptance": "PASS",
+    "productive_blink_root": "augen_blink_relief2",
+    "productive_blink_live_runtime_gate": "PASS",
+    "fps_gate": "15_of_15_samples_60fps"
+  },
+  "required_repair": [
+    "Bind builder inputs explicitly to the productive expression, neutral-head, and gaze subjects instead of assuming base directory names.",
+    "Fail closed on the exact expression tree digest plus neutral/gaze hashes before building.",
+    "Do not use --allow-hash-drift as promotion evidence.",
+    "Preserve the existing 44x7 count and zero outside-mask / zero hard-core mismatch invariants.",
+    "Only after exact-subject staging PASS may a live swap be considered."
+  ],
+  "credit": {
+    "runtime_authority_resolution": 1,
+    "algorithm_invalidated": 0,
+    "source_candidate_promotable_as_is": 0,
+    "live_expression_runtime": 0,
+    "live_visual_acceptance": 0,
+    "grid10": 0,
+    "gwt_jspace": 0,
+    "training": 0,
+    "whole_product": 0
+  }
+}

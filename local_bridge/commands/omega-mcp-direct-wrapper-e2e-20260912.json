@@ -1,0 +1,9 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"omega-mcp-direct-wrapper-e2e-20260912",
+  "op":"exec",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "timeout_seconds":180,
+  "command":"set -euo pipefail; D=$(mktemp -d /tmp/omega-mcp-direct-e2e.XXXXXX); trap 'rm -rf -- \"$D\"' EXIT; export GIT_SSH_COMMAND='ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts'; git clone -q git@github.com:gschaidergabriel/clay-global-research-entity.git \"$D/repo\"; cd \"$D/repo\"; git checkout -q chatgpt/omega-mcp-fallback-stack-20260912; set -a; . \"$HOME/.config/frankenstein/chatgpt-client.env\"; set +a; export OMEGA_MCP_DIRECT_GABRIEL_URL=http://127.0.0.1:8765 PYTHONPATH=tools; python3 - <<'PY'\nimport json\nimport omega_chatgpt_mcp_fallback as f\nr=f._direct_status('gabriel')\nassert r['ok'] and r['machine_id']=='ai-core-node' and r['owner']=='gabriel',r\nassert r['transport_used']=='direct_host_broker',r\nprint(json.dumps({'ok':r['ok'],'transport_used':r['transport_used'],'machine_id':r['machine_id'],'owner':r['owner'],'state_has_grid':bool((r.get('host_state') or {}).get('grid10_latest'))},separators=(',',':')))\nPY"
+}

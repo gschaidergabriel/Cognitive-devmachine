@@ -1,0 +1,16 @@
+{"_CHATGPT_ERWARTETER_HOSTNAME_TEILSTRING": "ai-core-node", "_GSTACK_BROWSE_DISPLAY": ":150", "_CHATGPT_COOKIE_BACKUP_DATEI": "/home/ai-core-node/.claude/star/chatgpt_session_cookies_backup.json", "_CHATGPT_SCRIPT": "/home/ai-core-node/scripts/chatgpt_burst_worker_v2.sh", "_CHATGPT_BROWSE_BIN": "/home/ai-core-node/.claude/skills/gstack/browse/dist/browse", "_CHATGPT_STATE_DIR": "/home/ai-core-node/scripts/chatgpt_burst_state"}
+MainPID=2476
+ExecStart={ path=/usr/bin/Xvfb ; argv[]=/usr/bin/Xvfb :150 -screen 0 1920x1080x24 -nolisten tcp ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/gstack-browse-display.service
+# /home/ai-core-node/.config/systemd/user/gstack-browse-display.service
+[Unit]
+Description=gstack-browse virtueller Bildschirm :150 (Xvfb) — eigene, von tAvern :99 getrennte Anzeige (Gabriel-Auftrag 2026-08-27, /browser-Dashboard)
+
+[Service]
+ExecStart=/usr/bin/Xvfb :150 -screen 0 1920x1080x24 -nolisten tcp
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"omega-grid-telemetry-gabriel-20260912-1812",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":60,
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "command":"python3 - <<'PY'\nimport json,os,shutil,subprocess,time\nmem={}\nfor line in open('/proc/meminfo'):\n k,v=line.split(':',1); mem[k]=int(v.strip().split()[0])*1024\ntotal=mem.get('MemTotal',1); avail=mem.get('MemAvailable',0)\nout={'schema':'OMEGA_ORGAN_TELEMETRY/v1','organ_id':'host:ai-core-node','machine_id':'ai-core-node','owner_id':'gabriel','observed_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'health':'GREEN','cpu_load':min(1.0,os.getloadavg()[0]/max(1,os.cpu_count() or 1)),'ram_load':1.0-avail/total,'capabilities':['shell','files','desktop','browser','avatar','gpu','local_state','sensors'],'data_domains':['gabriel-local','production-avatar'],'bridge_health':1.0}\nif shutil.which('nvidia-smi'):\n p=subprocess.run(['nvidia-smi','--query-gpu=utilization.gpu','--format=csv,noheader,nounits'],text=True,capture_output=True,timeout=5)\n if p.returncode==0:\n  vals=[float(x.strip())/100 for x in p.stdout.splitlines() if x.strip()]; out['gpu_load']=max(vals) if vals else None\nprint(json.dumps(out,separators=(',',':')))\nPY"
+}

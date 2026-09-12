@@ -1,0 +1,53 @@
+PAYLOAD_SHA=779d411b69c747584b1a1727dcf8a5e6eb415a45f42642d32840e71ff4c98f40
+FIXED_INTERVAL_CALLS=0
+LIVE_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+SERVICE=active
+PROD_CHROME_COUNT=1
+LOAD=8.85 8.28 8.33
+MEM_AVAILABLE_KB=14383012
+MOUTH_ENGINE
+function mundFrames(name){
+  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+    .concat([`/mund_keyframes/${name}.png`]);
+}
+const MUND_ALLE_STELLUNGEN = MUND_SPRECH_SET.concat([MUND_RUHE]);
+for(const n of MUND_ALLE_STELLUNGEN){
+  for(const src of mundFrames(n)){ const vorlade = new Image(); vorlade.src = src; }
+}
+let mundAktivFrames = null;
+let mundAktivIndex = 0;
+let mundLetzterFrameT = 0;
+const MUND_FRAME_MS = 22; // 6 Frames in ~130ms Alt-Takt = ~21,7ms/Frame
+function mundZielSetzen(name){
+  mundAktivFrames = mundFrames(name);
+  mundAktivIndex = 0;
+  mundLetzterFrameT = 0; // sofort beim naechsten schleife()-Tick starten
+}
+function mundSchritt(jetzt){
+  if(!mundAktivFrames) return;
+  if(jetzt - mundLetzterFrameT < MUND_FRAME_MS) return;
+  mundLetzterFrameT = jetzt;
+  $("mund-effekt").src = mundAktivFrames[mundAktivIndex];
+  mundAktivIndex++;
+  if(mundAktivIndex >= mundAktivFrames.length) mundAktivFrames = null;
+}
+function mundAnimation(text){
+  const grobeSilben = Math.max(3, Math.round((text || "").length / 2.6));
+  const dauerMs = Math.min(9000, grobeSilben * 220);
+  let letzte = -1;
+  const iv = setInterval(() => {
+    let i = Math.floor(Math.random() * MUND_SPRECH_SET.length);
+    if(i === letzte) i = (i + 1) % MUND_SPRECH_SET.length; // nie zweimal dieselbe Stellung hintereinander
+    letzte = i;
+    mundZielSetzen(MUND_SPRECH_SET[i]);
+  }, 130);
+  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+}
+
+// Beim ersten Durchlauf steht cursor auf "" -- der Daemon liefert dann den
+// GESAMTEN Verlauf auf einmal (gemessen 2026-09-11: 210 Zeilen, davon 105
+THERMAL_RECENT
+Sep 12 10:21:05 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:21:05 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 21.7 MB
+Sep 12 10:22:05 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:22:05 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 22.26 MB
+Sep 12 10:23:05 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:23:05 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 22.84 MB
+PRECHECK_PASS

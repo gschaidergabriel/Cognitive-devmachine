@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "zzzz-go-avatar-depthwarp-blind-gate-realhost-gpt56sol-20260912-1008",
+  "command_sha256": "bb729bbb59eeb37cecc9b649058d925366d731e6999ba1737b41457d7262d3e1",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:04:31.346682+00:00",
+  "finished_at": "2026-09-12T03:04:43.733637+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "5ad71dc7c80413e9434fd820ed09be728efe773579de0736fc080b3b2e4e7e53",
+  "stderr_sha256": "629974c266ede841b632e7bda7ed6f5040b451c9a916a95b76d1fe858b14d0d7",
+  "stdout_tail": "SOURCE_HEAD=0d34797e58761db316a12e482546f74aebed3938\n",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"/home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/research_entity/avatar/tools/depthwarp_blind_perceptual_gate.py\", line 299, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/research_entity/avatar/tools/depthwarp_blind_perceptual_gate.py\", line 127, in main\n    base, null_full, null_gate, _ = build(root, roll, eye, 0.0)\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/research_entity/avatar/tools/depthwarp_display_space_gate.py\", line 33, in build\n    rgb=cv2.remap(base[:,:,:3],mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT_101)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ncv2.error: OpenCV(4.13.0) /io/opencv/modules/imgproc/src/imgwarp.cpp:1670: error: (-215:Assertion failed) ((map1.type() == CV_32FC2 || map1.type() == CV_16SC2) && map2.empty()) || (map1.type() == CV_32FC1 && map2.type() == CV_32FC1) in function 'remap'\n\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

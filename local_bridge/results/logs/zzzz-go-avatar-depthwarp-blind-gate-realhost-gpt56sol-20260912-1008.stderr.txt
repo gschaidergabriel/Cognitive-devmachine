@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/research_entity/avatar/tools/depthwarp_blind_perceptual_gate.py", line 299, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/research_entity/avatar/tools/depthwarp_blind_perceptual_gate.py", line 127, in main
+    base, null_full, null_gate, _ = build(root, roll, eye, 0.0)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/research_entity/avatar/tools/depthwarp_display_space_gate.py", line 33, in build
+    rgb=cv2.remap(base[:,:,:3],mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT_101)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.13.0) /io/opencv/modules/imgproc/src/imgwarp.cpp:1670: error: (-215:Assertion failed) ((map1.type() == CV_32FC2 || map1.type() == CV_16SC2) && map2.empty()) || (map1.type() == CV_32FC1 && map2.type() == CV_32FC1) in function 'remap'
+

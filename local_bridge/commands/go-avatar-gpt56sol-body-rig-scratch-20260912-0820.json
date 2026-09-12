@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-gpt56sol-body-rig-scratch-20260912-0820",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":360,
+  "command":"set -euo pipefail\nREPO=/home/ai-core-node/.claude/star/local_bridge_state/repo\nCOMMIT=e61dbe945c6a4111e771bef7d635fd4fda2fa192\nSCRIPT=/tmp/go_avatar_body_rig_scratch_20260912_0820.py\nOUT=/home/ai-core-node/.claude/star/visual/.go_evidence/body_shoulder_microkinematics_20260912_0820\ntest ! -e \"$OUT\"\necho '===LIVE_BEFORE==='\nsha256sum buehne.html buehne_daemon.py filmlook.js\nprintf 'SERVICE '; systemctl --user is-active frankenstein-buehne.service\ngit -C \"$REPO\" fetch --quiet origin \"$COMMIT\"\ngit -C \"$REPO\" show \"$COMMIT:handoff/avatar-body-shoulder-microkinematics-20260912/body_rig_scratch.py\" > \"$SCRIPT\"\nprintf 'SCRIPT_SHA256 '; sha256sum \"$SCRIPT\"\npython3 \"$SCRIPT\" --visual-root . --out \"$OUT\" --seconds 18 --fps 60 > \"$OUT.stdout\"\necho '===REPORT_SUMMARY==='\npython3 - \"$OUT/report.json\" <<'PY'\nimport json,hashlib,sys,pathlib\np=pathlib.Path(sys.argv[1]); d=json.loads(p.read_text())\nprint('REPORT_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())\nfor k in ['status','html_sha256','body_src','body_sha256','body_size','alpha_bbox','neck_box','temporal','acceptance','contact_sheet','runtime_credit','live_mutation']:\n print(k.upper(),json.dumps(d.get(k),sort_keys=True))\nprint('FRAME_METRICS')\nfor x in d['frames']:\n print(json.dumps({k:x[k] for k in ['t','max_abs_dx','max_abs_dy','rgba_mae','rgba_p99','neck_edge_ratio_vs_base']},sort_keys=True))\nPY\necho '===LIVE_AFTER==='\nsha256sum buehne.html buehne_daemon.py filmlook.js\nprintf 'SERVICE '; systemctl --user is-active frankenstein-buehne.service\necho SCOPE=SCRATCH_ONLY_BODY_RIG_NO_LIVE_MUTATION"
+}

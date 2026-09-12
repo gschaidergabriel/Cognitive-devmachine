@@ -1,0 +1,127 @@
+name: Avatar depth-warp research-tool smoke
+
+on:
+  push:
+    paths:
+      - 'research_entity/avatar/tools/depthwarp_display_space_gate.py'
+      - 'research_entity/avatar/tools/depthwarp_final_visual_packet.py'
+      - 'research_entity/avatar/tools/identity_source_inventory.py'
+      - '.github/workflows/avatar-depthwarp-tool-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install minimal research-tool dependencies
+        run: python -m pip install --disable-pip-version-check numpy pillow opencv-python-headless
+
+      - name: Compile exact Avatar research tools
+        run: |
+          python -m py_compile \
+            research_entity/avatar/tools/depthwarp_display_space_gate.py \
+            research_entity/avatar/tools/depthwarp_final_visual_packet.py \
+            research_entity/avatar/tools/identity_source_inventory.py
+
+      - name: Exercise read-only identity inventory on synthetic visual root
+        run: |
+          tmp="$(mktemp -d)"
+          mkdir -p "$tmp/visual/public/js"
+          cat > "$tmp/visual/buehne.html" <<'EOF'
+          <html><body><img id="mund-img"><div data-region="nose-mask"></div></body></html>
+          EOF
+          cat > "$tmp/visual/public/js/avatar.js" <<'EOF'
+          const eye_anchor = true; const hair_mask = true; const neck_roi = true;
+          EOF
+          python - "$tmp/visual" <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import json, sys
+          root = Path(sys.argv[1])
+          for name in ('mouth_mask.png', 'hair_mask.png', 'head_mask.png'):
+              Image.new('RGBA', (32, 24), (20, 40, 60, 255)).save(root / name)
+          (root / 'nose_landmark.json').write_text('{}\n', encoding='utf-8')
+          (root / 'neck_roi.json').write_text('{}\n', encoding='utf-8')
+          (root / 'eye_anchor.json').write_text('{}\n', encoding='utf-8')
+          PY
+          python research_entity/avatar/tools/identity_source_inventory.py \
+            --visual-root "$tmp/visual" \
+            --out "$tmp/inventory.json"
+          python - "$tmp/inventory.json" <<'PY'
+          import json, sys
+          data = json.load(open(sys.argv[1], encoding='utf-8'))
+          assert data['schema'] == 'AVATAR_IDENTITY_SOURCE_INVENTORY/v1'
+          assert data['selection_authority'] is False
+          assert data['singleton_touched'] is False
+          assert data['live_avatar_mutation'] == 0
+          assert data['browser_processes_started'] == 0
+          for region in ('hair', 'nose', 'mouth', 'neck', 'eyes', 'head'):
+              assert data['region_candidates'][region], region
+              for row in data['region_candidates'][region]:
+                  assert len(row['sha256']) == 64
+          PY
+
+      - name: Exercise final-packet pure helpers without live Avatar assets
+        run: |
+          python research_entity/avatar/tools/depthwarp_final_visual_packet.py --help >/dev/null
+          python - <<'PY'
+          import importlib.util
+          import json
+          import sys
+          import tempfile
+          from pathlib import Path
+          import numpy as np
+
+          tools = Path('research_entity/avatar/tools').resolve()
+          sys.path.insert(0, str(tools))
+          spec = importlib.util.spec_from_file_location('final_packet', tools / 'depthwarp_final_visual_packet.py')
+          mod = importlib.util.module_from_spec(spec)
+          assert spec.loader is not None
+          spec.loader.exec_module(mod)
+
+          base = np.zeros((64, 64, 4), dtype=np.uint8)
+          base[:, :, 3] = 255
+          candidate = base.copy()
+          candidate[20:30, 20:30, :3] = 12
+          rect = mod.rect_clip([8, 8, 48, 48], 64, 64)
+          metrics = mod.roi_metrics(base, candidate, rect)
+          assert metrics['rgb_mae'] > 0
+          assert metrics['changed_gt1_fraction'] > 0
+          hm = mod.heatmap(base, candidate)
+          assert hm.shape == base.shape
+          assert np.all(hm[:, :, 3] == 255)
+
+          with tempfile.TemporaryDirectory() as td:
+              p = Path(td) / 'rois.json'
+              p.write_text(json.dumps({
+                  'schema': 'AVATAR_IDENTITY_ROIS/v1',
+                  'display_width': 64,
+                  'display_height': 64,
+                  'regions': {
+                      'hair': {'rect': [0, 0, 32, 16]},
+                      'nose': {'rect': [20, 16, 44, 44]},
+                      'mouth': {'rect': [16, 40, 48, 60]},
+                      'neck': {'rect': [16, 48, 48, 64]},
+                  },
+              }), encoding='utf-8')
+              rois, raw = mod.load_optional_rois(p, 64, 64)
+              assert raw is not None
+              assert set(rois) == {'hair', 'nose', 'mouth', 'neck'}
+          PY
+
+      - name: Assert smoke scope does not claim runtime or production Avatar credit
+        run: |
+          grep -q 'live_avatar_mutation.*0' research_entity/avatar/tools/depthwarp_final_visual_packet.py
+          grep -q 'production_runtime_credit.*0' research_entity/avatar/tools/depthwarp_final_visual_packet.py
+          grep -q 'whole_avatar_credit.*0' research_entity/avatar/tools/depthwarp_final_visual_packet.py
+          grep -q 'singleton_touched.*False' research_entity/avatar/tools/identity_source_inventory.py

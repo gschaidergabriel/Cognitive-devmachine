@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-sigma-cortex-retina-test-20260913-001",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -euo pipefail; d=$(mktemp -d); trap 'rm -rf \"$d\"' EXIT; gh repo clone gschaidergabriel/oMEGA \"$d/oMEGA\" -- --branch fred/omega-sigma-cortex-retina-v1 --single-branch; cd \"$d/oMEGA\"; python -m pytest -q tests/test_cortex_retina.py tests/test_assembly.py",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 600
+}

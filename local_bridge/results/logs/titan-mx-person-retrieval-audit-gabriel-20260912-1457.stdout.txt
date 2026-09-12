@@ -1,0 +1,18 @@
+HOST=ai-core-node-projekt-frankenstein USER=ai-core-node
+===REPO===
+HEAD=dd755a6
+BRANCH=main
+?? scripts/openai_api_key.local
+===TITAN-CODE===
+===VOICE-PERSON===
+===DB-SCHEMA===
+DB /home/ai-core-node/.local/share/agentzero/unified.db
+durable_memory CREATE TABLE durable_memory(memory_id TEXT PRIMARY KEY,kind TEXT NOT NULL,subject TEXT NOT NULL,value TEXT NOT NULL,source_turn_id TEXT REFERENCES turns(turn_id),user_id TEXT,ts REAL NOT NULL,provenance TEXT NOT NULL)
+f2_cortex_memory_bridge_cycle CREATE TABLE f2_cortex_memory_bridge_cycle (     cycle_id                  TEXT PRIMARY KEY,     schema                    TEXT NOT NULL,     memory_id                 TEXT NOT NULL,     matched_memory_id         TEXT,     reference_tick            INTEGER NOT NULL,     frame_sha256              TEXT,     caption_sha25
+f2_cortex_perception_memory_state CREATE TABLE f2_cortex_perception_memory_state (     state_id             TEXT PRIMARY KEY,     memory_id            TEXT NOT NULL,     schema               TEXT NOT NULL,     payload_ref          TEXT NOT NULL,     payload_sha256       TEXT NOT NULL,     provenance_refs_json TEXT NOT NULL,     state_sha256         TEX
+memory_tabelle CREATE TABLE memory_tabelle (                     id INTEGER PRIMARY KEY AUTOINCREMENT,                     artikel_id TEXT NOT NULL,                     memory_text TEXT NOT NULL,                     quelle TEXT,                     erstellt_am TEXT NOT NULL DEFAULT (datetime('now')),                     priority REAL
+retrieval_entrypoint_policy CREATE TABLE retrieval_entrypoint_policy(entry_key TEXT PRIMARY KEY,capital REAL NOT NULL DEFAULT 0.0,reward_ema REAL NOT NULL DEFAULT 0.0,pulls INTEGER NOT NULL DEFAULT 0,updated_at REAL NOT NULL)
+retrieval_episodes CREATE TABLE retrieval_episodes(retrieval_id TEXT PRIMARY KEY,turn_id TEXT NOT NULL UNIQUE REFERENCES turns(turn_id),episode_id TEXT NOT NULL UNIQUE REFERENCES workspace_episodes(episode_id),causal_id TEXT NOT NULL UNIQUE,session_id TEXT NOT NULL REFERENCES sessions(session_id),user_id TEXT NOT NULL REFERENCES users(us
+retrieval_episodes_semantisch CREATE TABLE retrieval_episodes_semantisch (     retrieval_id TEXT PRIMARY KEY,     session_id TEXT NOT NULL,     user_id TEXT NOT NULL,     generation INTEGER NOT NULL,     modell TEXT NOT NULL,     query_hash TEXT NOT NULL,     kandidaten_anzahl INTEGER NOT NULL,     ausgewaehlt_json TEXT NOT NULL,     mechanisch_sel
+retrieval_feedback CREATE TABLE retrieval_feedback(receipt_id TEXT PRIMARY KEY,retrieval_id TEXT NOT NULL REFERENCES retrieval_episodes(retrieval_id) ON DELETE CASCADE,causal_id TEXT NOT NULL,generation INTEGER NOT NULL,credit REAL NOT NULL,signal_class TEXT NOT NULL,ts REAL NOT NULL)
+retrieval_policy_state CREATE TABLE retrieval_policy_state(singleton INTEGER PRIMARY KEY CHECK(singleton=1),mode TEXT NOT NULL CHECK(mode IN ('SHADOW','ACTIVE')),policy_version INTEGER NOT NULL,updated_at REAL NOT NULL)

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-harness-real-preflight-20260912-1439",
+  "command_sha256": "fe516b08b67d15d8c9f0e3d800510fa9d7b61268b29eb710c9ceb47142135003",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T07:38:48.649448+00:00",
+  "finished_at": "2026-09-12T07:38:50.528701+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "a3f9f9da778061d5a5605d58829f3c34d726579d82167a6414b9652ae3757215",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===TESTS===\n.......                                                                  [100%]\n7 passed in 0.07s\n===HELP===\nusage: frank_terminal.py [-h] [--stern STERN] [--session-id SESSION_ID]\n                         [--source-host SOURCE_HOST]\n                         [--source-owner SOURCE_OWNER] [--once PROMPT]\n                         [--session-source {startup,resume}] [--json]\n                         [--harvest-timeout-s HARVEST_TIMEOUT_S]\n\nFranKenstein terminal organ. Foreground owner UI over the EXISTING\nFranKenstein runtime. This module is an adapter, not a second brain: no\ndaemon, no new database, no direct SQLite writes. Session/turn state enters\nthrough the installed ``stern.py`` hooks, DB continuity through ``handoff()``,\nChatGPT through the existing browser harness, and completion through\n``reconcile()``. Browser replies are harvested ONLY from the exact\nconversation URL created by this turn. The old global ``chatgpt_ernten()``\nscans a shared backlog and is therefore intentionally not the interactive-\nterminal path.\n\noptions:\n  -h, --help            show this help message and exit\n  --stern STERN         installed canonical stern.py (default:\n                        ~/.claude/star/stern.py)\n  --session-id SESSION_ID\n                        preserve this id across a proxied/re-entered terminal\n                        session\n  --source-host SOURCE_HOST\n  --source-owner SOURCE_OWNER\n  --once PROMPT         execute one terminal turn and return\n  --session-source {startup,resume}\n  --json                machine-readable output for --once\n  --harvest-timeout-s HARVEST_TIMEOUT_S\n===STATUS_API===\n{\"schema\": \"FRANK_TERMINAL/v1\", \"host\": \"ai-core-node-projekt-frankenstein\", \"pid\": 3364012, \"stern\": \"/home/ai-core-node/.claude/star/stern.py\", \"db_path\": \"/home/ai-core-node/.local/share/agentzero/unified.db\", \"host_admission\": {\"known\": true, \"allowed\": true, \"cpus\": 16, \"load1\": 5.80224609375, \"load_per_cpu\": 0.362640380859375, \"mem_available_mib\": 7505, \"min_available_mib\": 3072, \"max_load_per_cpu\": 1.75}, \"chatgpt\": {\"ready\": true, \"recovered\": false, \"initial\": {\"ok\": true, \"eingeloggt\": true, \"daemon_modus\": \"headed\", \"chatgpt_cookies_gefunden\": 27, \"empfehlung\": \"bereit\", \"pruef_host\": \"ai-core-node-projekt-frankenstein\", \"pruef_home\": \"/home/ai-core-node\", \"pruef_cwd\": \"/tmp/frank-harness-immune-polish-20260912\", \"host_wie_erwartet\": true, \"ssh_session_erkannt\": false, \"ssh_signale\": null}, \"recovery\": null, \"probe\": {\"ok\": true, \"rc\": 0, \"stderr\": \"\"}, \"error\": null}, \"immune\": {\"available\": true, \"key\": \"organ:chatgpt-browser-harness\", \"state\": \"closed\", \"failure_count\": 0, \"open_count\": 0, \"cooldown_until\": 0.0}}\n===IMMUNE_ROW===\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

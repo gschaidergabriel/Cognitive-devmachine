@@ -1,0 +1,36 @@
+===TESTS===
+.......                                                                  [100%]
+7 passed in 0.07s
+===HELP===
+usage: frank_terminal.py [-h] [--stern STERN] [--session-id SESSION_ID]
+                         [--source-host SOURCE_HOST]
+                         [--source-owner SOURCE_OWNER] [--once PROMPT]
+                         [--session-source {startup,resume}] [--json]
+                         [--harvest-timeout-s HARVEST_TIMEOUT_S]
+
+FranKenstein terminal organ. Foreground owner UI over the EXISTING
+FranKenstein runtime. This module is an adapter, not a second brain: no
+daemon, no new database, no direct SQLite writes. Session/turn state enters
+through the installed ``stern.py`` hooks, DB continuity through ``handoff()``,
+ChatGPT through the existing browser harness, and completion through
+``reconcile()``. Browser replies are harvested ONLY from the exact
+conversation URL created by this turn. The old global ``chatgpt_ernten()``
+scans a shared backlog and is therefore intentionally not the interactive-
+terminal path.
+
+options:
+  -h, --help            show this help message and exit
+  --stern STERN         installed canonical stern.py (default:
+                        ~/.claude/star/stern.py)
+  --session-id SESSION_ID
+                        preserve this id across a proxied/re-entered terminal
+                        session
+  --source-host SOURCE_HOST
+  --source-owner SOURCE_OWNER
+  --once PROMPT         execute one terminal turn and return
+  --session-source {startup,resume}
+  --json                machine-readable output for --once
+  --harvest-timeout-s HARVEST_TIMEOUT_S
+===STATUS_API===
+{"schema": "FRANK_TERMINAL/v1", "host": "ai-core-node-projekt-frankenstein", "pid": 3364012, "stern": "/home/ai-core-node/.claude/star/stern.py", "db_path": "/home/ai-core-node/.local/share/agentzero/unified.db", "host_admission": {"known": true, "allowed": true, "cpus": 16, "load1": 5.80224609375, "load_per_cpu": 0.362640380859375, "mem_available_mib": 7505, "min_available_mib": 3072, "max_load_per_cpu": 1.75}, "chatgpt": {"ready": true, "recovered": false, "initial": {"ok": true, "eingeloggt": true, "daemon_modus": "headed", "chatgpt_cookies_gefunden": 27, "empfehlung": "bereit", "pruef_host": "ai-core-node-projekt-frankenstein", "pruef_home": "/home/ai-core-node", "pruef_cwd": "/tmp/frank-harness-immune-polish-20260912", "host_wie_erwartet": true, "ssh_session_erkannt": false, "ssh_signale": null}, "recovery": null, "probe": {"ok": true, "rc": 0, "stderr": ""}, "error": null}, "immune": {"available": true, "key": "organ:chatgpt-browser-harness", "state": "closed", "failure_count": 0, "open_count": 0, "cooldown_until": 0.0}}
+===IMMUNE_ROW===

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "0000-chatgpt-organ-branch-gold-20260912T1058-0700",
+  "command_sha256": "1c81411451a9e5fa4cd0afbfe62de001b94b17c3f47b3041ba029f3f464b94fe",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:54:40.976809+00:00",
+  "finished_at": "2026-09-12T03:54:43.147253+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "769bbcd3f915c0287660f84a27a7bd11f0a9d25667d91b8adc53692c2b24ac0c",
+  "stderr_sha256": "7655b0ce93c105579bae2cc554f989009a01e4a6f13cfc5736a3dc6adbeb6a7d",
+  "stdout_tail": "24:TARGET_MACHINE_ID = \"ai-core-node\"\n25:TARGET_OWNER = \"gabriel\"\n78:            \"machine_id\": TARGET_MACHINE_ID,\n79:            \"owner\": TARGET_OWNER,\n116:                        if receipt.get(\"machine_id\") != TARGET_MACHINE_ID or receipt.get(\"owner\") != TARGET_OWNER:\n125:                            \"machine_id\": receipt.get(\"machine_id\"),\n126:                            \"owner\": receipt.get(\"owner\"),\nBRANCH_HEAD=8bcde2c951de448166c364961f242bc1df9a9a41\n",
+  "stderr_tail": "From https://github.com/gschaidergabriel/frankenstein\n * branch            chatgpt/frank-continuum-harness-20260912 -> FETCH_HEAD\n   996609d..8bcde2c  chatgpt/frank-continuum-harness-20260912 -> origin/chatgpt/frank-continuum-harness-20260912\nPreparing worktree (detached HEAD 8bcde2c)\ntest_instruction_is_single_line_and_names_grid_authority (__main__.ChatGPTOrganGold.test_instruction_is_single_line_and_names_grid_authority) ... ok\ntest_one_cycle_is_user_grid_then_chatgpt_then_grid_same_db (__main__.ChatGPTOrganGold.test_one_cycle_is_user_grid_then_chatgpt_then_grid_same_db) ... ok\ntest_pointer_move_refuses_ambiguous_dispatch (__main__.ChatGPTOrganGold.test_pointer_move_refuses_ambiguous_dispatch) ... ok\ntest_red_or_unknown_host_telemetry_blocks_harness (__main__.ChatGPTOrganGold.test_red_or_unknown_host_telemetry_blocks_harness) ... ok\ntest_schema_is_additive_and_idempotent (__main__.ChatGPTOrganGold.test_schema_is_additive_and_idempotent) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.152s\n\nOK\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

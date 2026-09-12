@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "chatgpt-aicore-core-unit-20260912T1113-0700",
+  "command_sha256": "05b26f539f859a7633f0994a5c7a033fd1fe0ab71a226683f14271b72b5191b5",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:54:43.881540+00:00",
+  "finished_at": "2026-09-12T03:54:43.919736+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "2a63e0a403f5d8e5c901127fcf7deec8c247503a4073714b7cf3cd8ce8d60b0a",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "# /home/ai-core-node/.config/systemd/user/aicore-core.service\n[Unit]\nDescription=AI Core core\nAfter=aicore-router.service\nRequires=aicore-router.service\n\n[Service]\nType=simple\nWorkingDirectory=/home/ai-core-node/aicore/opt/aicore\nEnvironment=PYTHONPATH=/home/ai-core-node/aicore/opt/aicore\nEnvironment=PYTHONUNBUFFERED=1\nExecStart=/home/ai-core-node/aicore/opt/venv/bin/python3 /home/ai-core-node/aicore/opt/aicore/core/app.py\nRestart=always\nRestartSec=1\n\n[Install]\nWantedBy=default.target\n\n# /home/ai-core-node/.config/systemd/user/aicore-core.service.d/modell-zuerst.conf\n[Unit]\n# 24/7-Autostart (2026-08-01, F1): Beim Hochfahren hing die Kette bisher nur\n# an aicore-router \u2014 das MODELL (aicore-micro-llm, ~60 s Ladezeit, das ist\n# Franks Stimme) startete unabhaengig davon irgendwann mit. Folge: In den\n# ersten Sekunden nach dem Boot stand die Oberflaeche zwar, aber jede Antwort\n# lief in \"upstream_failed\". Fuer \"immer da und immer handlungsfaehig\" ist\n# das die falsche Reihenfolge: das Modell braucht am laengsten, also gehoert\n# es zuerst gestartet.\n# \u26a0\ufe0f After= ordnet nur den START, nicht die Bereitschaft \u2014 systemd kann nicht\n# wissen, wann llama-server geladen hat (Type=simple). Die ~60 s Ladezeit\n# bleiben also; sie beginnen jetzt nur frueher statt parallel zum Rest.\nWants=aicore-micro-llm.service\nAfter=aicore-micro-llm.service\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

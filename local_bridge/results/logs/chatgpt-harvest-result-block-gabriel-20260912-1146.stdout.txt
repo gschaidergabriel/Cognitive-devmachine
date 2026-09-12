@@ -1,0 +1,41 @@
+        timeout 8 "$B" wait --networkidle >>"$LOG" 2>&1
+        sleep 1
+
+        txt=$($B text 2>/dev/null)
+        stopping=$($B snapshot -i 2>/dev/null | grep -ic "Stop answering")
+
+        if echo "$txt" | grep -q "Worked for" && [ "${stopping:-0}" -eq 0 ]; then
+            log "HARVEST worker $worker_id: DONE ($url)"
+            # worker_id alone collides across separate send runs (each run
+            # restarts numbering at 1) -- 5/6 results silently overwrote each
+            # other on 2026-08-26 when several single-worker runs were
+            # harvested back to back. Key by the conversation id from the URL
+            # (globally unique) instead; fall back to a worker_id+timestamp
+            # key only if the URL doesn't have the expected /c/<id> shape.
+            conv_id=$(echo "$url" | grep -oP '/c/\K[a-zA-Z0-9-]+' | head -1)
+            if [ -n "$conv_id" ]; then
+                result_key="$conv_id"
+            else
+                result_key="${worker_id}_$(date +%s%N)"
+            fi
+            echo "$txt" > "$STATE_DIR/result_${result_key}.txt"
+            harvested_done=$((harvested_done + 1))
+        else
+            log "HARVEST worker $worker_id: still pending/running ($url)"
+            harvested_pending=$((harvested_pending + 1))
+        fi
+
+        sleep 1
+    done < "$SENT_URLS_FILE"
+
+    log "HARVEST summary: done=$harvested_done pending=$harvested_pending lost=$harvested_lost"
+    log "HARVEST_CYCLE_COMPLETE"
+}
+
+# ---------------------------------------------------------------------------
+# send mode (default)
+# ---------------------------------------------------------------------------
+run_send() {
+    log "=== BURST CYCLE V2 START (NUM_WORKERS=$NUM_WORKERS SLEEP_BETWEEN_WORKERS=$SLEEP_BETWEEN_WORKERS RAM_THRESHOLD_MB=$RAM_THRESHOLD_MB TAB_RECYCLE_EVERY=$TAB_RECYCLE_EVERY) ==="
+
+    avail0=$(free -m | awk '/^Mem:/{print $7}')

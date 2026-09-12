@@ -1,0 +1,196 @@
+        fi
+        log "verify_send: attempt $t/$tries, url still '$u'"
+    done
+    return 1
+}
+
+# ---------------------------------------------------------------------------
+# harvest mode
+# ---------------------------------------------------------------------------
+run_harvest() {
+    log "=== HARVEST MODE START ==="
+    if [ ! -f "$SENT_URLS_FILE" ]; then
+        log "no $SENT_URLS_FILE found, nothing to harvest"
+        exit 1
+    fi
+
+    local harvested_done=0 harvested_pending=0 harvested_lost=0
+
+    while IFS=$'\t' read -r worker_id url sent_at; do
+        [ -z "${url:-}" ] && continue
+
+        if ! resource_guard; then
+            log "HARVEST: aborting remaining harvest due to resource guard"
+            break
+        fi
+
+        # single-tab discipline: reuse the existing tab, just navigate it.
+        # (never close-then-reopen — see ensure_single_tab_at comment: closing
+        # the last tab bricks the daemon beyond CLI repair.)
+        if ! ensure_single_tab_at "$url"; then
+            log "HARVEST: aborting remaining harvest, daemon has 0 tabs"
+            break
+        fi
+        enforce_tab_hardlimit "$CURRENT_TAB"
+
+        timeout 8 "$B" wait --networkidle >>"$LOG" 2>&1
+        sleep 1
+
+        txt=$($B text 2>/dev/null)
+        stopping=$($B snapshot -i 2>/dev/null | grep -ic "Stop answering")
+
+        if echo "$txt" | grep -q "Worked for" && [ "${stopping:-0}" -eq 0 ]; then
+            log "HARVEST worker $worker_id: DONE ($url)"
+            # worker_id alone collides across separate send runs (each run
+            # restarts numbering at 1) -- 5/6 results silently overwrote each
+            # other on 2026-08-26 when several single-worker runs were
+            # harvested back to back. Key by the conversation id from the URL
+            # (globally unique) instead; fall back to a worker_id+timestamp
+            # key only if the URL doesn't have the expected /c/<id> shape.
+            conv_id=$(echo "$url" | grep -oP '/c/\K[a-zA-Z0-9-]+' | head -1)
+            if [ -n "$conv_id" ]; then
+                result_key="$conv_id"
+            else
+                result_key="${worker_id}_$(date +%s%N)"
+            fi
+            echo "$txt" > "$STATE_DIR/result_${result_key}.txt"
+            harvested_done=$((harvested_done + 1))
+        else
+            log "HARVEST worker $worker_id: still pending/running ($url)"
+            harvested_pending=$((harvested_pending + 1))
+        fi
+
+        sleep 1
+    done < "$SENT_URLS_FILE"
+
+    log "HARVEST summary: done=$harvested_done pending=$harvested_pending lost=$harvested_lost"
+    log "HARVEST_CYCLE_COMPLETE"
+}
+
+# ---------------------------------------------------------------------------
+# send mode (default)
+# ---------------------------------------------------------------------------
+run_send() {
+    log "=== BURST CYCLE V2 START (NUM_WORKERS=$NUM_WORKERS SLEEP_BETWEEN_WORKERS=$SLEEP_BETWEEN_WORKERS RAM_THRESHOLD_MB=$RAM_THRESHOLD_MB TAB_RECYCLE_EVERY=$TAB_RECYCLE_EVERY) ==="
+
+    avail0=$(free -m | awk '/^Mem:/{print $7}')
+---STATE FILES---
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_210423.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_205914.json
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_1.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_052054.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_205442.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_22.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_034712.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_034940.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_5.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_085828.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_231853.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_002531.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_054612.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260912_104437.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_034958.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e1b9e-4d04-83ec-a388-2150c8c95219.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_8.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_194513.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_4.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_18.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e15c8-bde8-83ec-9351-22053c76dc12.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_24.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_085952.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_001513.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_035015.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_23.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_15.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_205015.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_3.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_9_1787796583693893349.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_060624.json
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_6.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e151c-46f4-83ec-8dad-95d33d817a8e.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_232249.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_101158.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_13.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_060511.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e1b7b-f448-83ec-9e5e-327eab463064.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_2.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_205207.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_7.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e1b3d-5268-83ec-9abc-ce16b2beb3da.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e15bd-80ac-83ec-a531-fd3c9f73bc2f.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_215127.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_2.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_210034.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_201101.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_175644.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_10.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_5.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_231249.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e1616-fd10-83ec-8acd-0c18a6886d9f.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_10.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_224800.json
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_8.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_100551.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_211406.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e15de-6a14-83ec-8fde-33736cd5d23b.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_222217.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_192719.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_20.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_9.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_185912.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_034923.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e1b93-3cec-83ec-9fae-8721edfd028b.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_210245.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_231910.json
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_9.json
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_4.json
+/home/ai-core-node/scripts/chatgpt_burst_state/sent_urls_v2.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e1b4d-0c90-83ec-8eaa-01b014a5faeb.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e15b0-2018-83ec-8021-2b41e618c335.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_14.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_11.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_231836.json
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_3.json
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_11.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_100431.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_034812.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_060741.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_100728.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_233527.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_004105.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_30.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_9_1787796653618892404.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_27.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_16.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_231819.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_085911.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e15d3-d048-83ec-9f44-a5a89a69812f.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_212248.json
+/home/ai-core-node/scripts/chatgpt_burst_state/worker_7.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_231745.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e1b88-f34c-83ec-a46b-9d21e76449f7.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_085746.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_001618.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_232139.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_231802.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e15e9-f12c-83ec-9fcd-1da1008ce07a.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_21.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_9_1789185066809109868.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_100312.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_090035.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_194323.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_213439.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e15ff-9e18-83ec-a29d-4f592bbb9027.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e1b5c-66d4-83ec-bd24-428f74e71ceb.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/result_6a8e15f4-4f30-83ec-a19a-dae838d371b7.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_205729.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_19.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_172912.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_051833.json
+/home/ai-core-node/scripts/chatgpt_burst_state/result_25.txt
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_194053.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_101105.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_203351.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_195813.json
+/home/ai-core-node/scripts/chatgpt_burst_state/SUMMARY_v2_20260827_201432.json

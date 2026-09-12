@@ -1,0 +1,32 @@
+# /home/ai-core-node/.config/systemd/user/aicore-core.service
+[Unit]
+Description=AI Core core
+After=aicore-router.service
+Requires=aicore-router.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ai-core-node/aicore/opt/aicore
+Environment=PYTHONPATH=/home/ai-core-node/aicore/opt/aicore
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/ai-core-node/aicore/opt/venv/bin/python3 /home/ai-core-node/aicore/opt/aicore/core/app.py
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/aicore-core.service.d/modell-zuerst.conf
+[Unit]
+# 24/7-Autostart (2026-08-01, F1): Beim Hochfahren hing die Kette bisher nur
+# an aicore-router — das MODELL (aicore-micro-llm, ~60 s Ladezeit, das ist
+# Franks Stimme) startete unabhaengig davon irgendwann mit. Folge: In den
+# ersten Sekunden nach dem Boot stand die Oberflaeche zwar, aber jede Antwort
+# lief in "upstream_failed". Fuer "immer da und immer handlungsfaehig" ist
+# das die falsche Reihenfolge: das Modell braucht am laengsten, also gehoert
+# es zuerst gestartet.
+# ⚠️ After= ordnet nur den START, nicht die Bereitschaft — systemd kann nicht
+# wissen, wann llama-server geladen hat (Type=simple). Die ~60 s Ladezeit
+# bleiben also; sie beginnen jetzt nur frueher statt parallel zum Rest.
+Wants=aicore-micro-llm.service
+After=aicore-micro-llm.service

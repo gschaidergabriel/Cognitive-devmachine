@@ -1,0 +1,132 @@
+===WORKER MODEL/URL===
+10:#   - send verified by URL change (.../project -> .../c/<id>), not by
+42:PROJECT_URL="https://chatgpt.com/g/g-p-6a7644f542508191b324659134fb593b/project"
+130:# cookie-import-browser re-run to get chatgpt.com auth back at all, and
+198:# helper: verify send succeeded by URL transition (.../project -> .../c/<id>)
+199:# echoes the new url and returns 0 on success, returns 1 on failure (still on /project)
+288:    # start clean: exactly one tab, on project url. Reuse an existing tab as
+290:    if ! ensure_single_tab_at "$PROJECT_URL"; then
+345:        $B goto "$PROJECT_URL" >>"$LOG" 2>&1
+393:            log "Worker $i: URL never left /project after send, marking BLOCKED"
+419:            out=$($B newtab "$PROJECT_URL" 2>&1)
+===STERN CHATGPT CONSTS===
+46:    6. Das Modell schreibt nie selbst in unified.db. Nur diese Datei,
+108:# diese Agenten neu mit anderem Modell starten." Additiv zu _ziel_bruecke
+109:# oben (eigene Tabelle f2_agentenregister, eigener Zweck: Modell/Herzschlag/
+294:# Geheimnisse im eigenen Terminal, nie per modellgesteuerten Bash-Aufruf.
+493:    # modelle"): 60 der 290 Artikel im Korpus sind `skill:*` -- also
+527:    # Konfig-Bedarf; nur der Relevanz-Richter 4b.2 ruft ein Modell). Der
+537:    "kognition.modell": ("qwen2.5:0.5b", "str"),
+545:    # ANDERES Modell als kognition.modell (qwen2.5:0.5b) -- bge-m3 ist ein
+546:    # Embedding-Modell, kein Text-Richter, beide bleiben strikt bei ihrer
+551:    "embedding.modell": ("bge-m3", "str"),
+624:    # (toter Schluessel, Timeout, kaputtes JSON). Modellkennungen + Endpunkte
+631:    "verdichtung.modell": ("mistral-medium-latest", "str"),
+632:    "verdichtung.modell_fallback": ("glm-5.3-flash", "str"),
+736:    # OpenAI-Modellnamen, austauschbar ohne Codeaenderung. Stand 2026-08-26
+738:    # ist OpenAIs aktuell empfohlenes, steuerbares TTS-Modell ("bestes
+739:    # Voice-Modell", Nutzerwunsch); gpt-4o-transcribe fuer die eigentliche
+743:    "gespraech.tts_modell": ("gpt-4o-mini-tts", "str"),
+745:    "gespraech.stt_modell": ("gpt-4o-transcribe", "str"),
+761:    # (Speech-to-Speech, WebSocket, siehe realtime_gespraech.py). Modellname
+762:    # zur Bauzeit real gegen /v1/models geprueft (2026-08-26): "gpt-realtime"
+765:    # als der von OpenAI als Hauptmodell gefuehrte, nicht datierte Name).
+768:    # real gegen /v1/models UND per echtem session.update-Handshake
+773:    "gespraech.realtime_modell": ("gpt-realtime-2.1", "str"),
+794:    # verifiziert (Kommentar oben bei realtime_modell), aber NIE tatsaechlich
+863:    "voice_loop.qwen_modell": ("qwen2.5:0.5b", "str"),
+892:    "voice_loop.model_primary": ("gpt-realtime-2.1", "str"),
+893:    "voice_loop.model_cost_route": ("gpt-realtime-2.1-mini", "str"),
+1195:# Konstanten UND Docstring unveraendert, KEIN Modell, reine Arithmetik.
+1234:    In the single-Claude ClayVerse target, Needle is not a model chooser. It estimates
+1433:# `stern` ruft dafuer KEIN Modell, startet KEINEN Unterprozess (harte Grenze
+1626:     "fehlerfall": "Kein Netz, kein Dienst, kein Modell, keine Fremd-API -- "
+2154:        modell = str(nutzlast.get("modell") or "unbekannt")
+2160:            "transformation": "claude-sicht-v1", "transformation_version": modell,
+2222:                     "claude-sicht-v1", modell, _jetzt()),
+2238:        dauer_ms = round((jetzt - aufnahme["begonnen_am"]) * 1000, 3)  # [MODELLIERT]:
+2372:                                              {"marke": "[MODELLIERT]", "n": len(pdw)}))
+2400:def zyklus_oeffnen(session_id: str, model: str) -> Optional[str]:
+2441:                    json.dumps({"quelle": "stern.py", "model": model}, ensure_ascii=False),
+2501:def _checkpoint(event: str, session_id: str, model: str, phase: str, injiziert_text: str) -> str:
+2506:            "phase": phase, "event": event, "session_id": session_id, "model": model,
+2983:# ── SessionStart: reines Skript, KEIN Modellaufruf ───────────────────────
+3199:def start_anzeige(session_id: str, model: str, source: str = "startup") -> dict:
+3201:    zyklus_oeffnen(session_id, model)
+3247:    _checkpoint("SessionStart", session_id, model, "start_anzeige", system_message)
+3779:    Antworttext. Kein Modellurteil, keine Ausfuehrungssemantik."""
+3834:            # P6a Punkt 1) -- kein Modellurteil, ein `verdacht`-Feld je Zeile.
+4014:            "Lokale CPU-Vision-API, 5 Modelle parallel: CLIP-B/32 (Konzepte), "
+4173:    # Sammelreihenfolge. Rein SQL, kein Modellaufruf (harte Grenze 2).
+4216:                # Reines SQL/LIKE, kein Modellaufruf -- siehe Docstring
+5094:        genug da ist. Rein mechanisch, kein Modellaufruf, keine Behauptung
+5318:# (Konzeptdokument §1.9.6/PHASE 4b): das Modell schreibt NIE selbst in
+5322:# und `mensch_urteil()`), signal_class='modell:relevanz'. Diese
+5325:# Modellurteil zaehlt also strukturell nie fuer eine SHADOW->ACTIVE-
+5335:def _ollama_generate(prompt: str, *, modell: str, ollama_url: str, timeout: float) -> Optional[str]:
+5342:        "model": modell, "prompt": prompt, "stream": False,
+5369:    """Parst die Modellantwort (kommagetrennte Kandidatennummern oder
+5416:        prompt, modell=k["kognition.modell"], ollama_url=k["kognition.ollama_url"],
+5469:    ein modellgestuetztes Urteil, GENAU EINE offene retrieval_episodes-
+5471:    Eigene 'modell:relevanz'-signal_class -- kollidiert nicht mit der
+5488:                "(SELECT retrieval_id FROM retrieval_feedback WHERE signal_class='modell:relevanz') "
+5508:                c, row, credit=urteil["credit"], signal_class="modell:relevanz",
+5591:def _ollama_embedding(text: str, *, modell: str, ollama_url: str, timeout: float) -> Optional[list]:
+5601:    payload = {"model": modell, "prompt": text}
+5666:            "modell TEXT NOT NULL, dim INTEGER NOT NULL, embedding_json TEXT NOT NULL, "
+5671:            "INSERT INTO udb_nvidia_embedding (id, artikel_id, quelle_tabelle, modell, dim, "
+5672:            "embedding_json, erstellt_am) SELECT id, artikel_id, 'artikel', modell, dim, "
+5684:    Ollama aus/Modell fehlt/Timeout/kaputte Antwort -> die Zeile bleibt ohne
+5697:        text, modell=k["embedding.modell"], ollama_url=k["embedding.ollama_url"],
+5704:            "INSERT INTO udb_nvidia_embedding (artikel_id, quelle_tabelle, modell, dim, "
+5707:            "modell=excluded.modell, dim=excluded.dim, embedding_json=excluded.embedding_json, "
+5709:            (quelle_id, quelle_tabelle, k["embedding.modell"], len(vektor),
+5762:        anfrage.strip(), modell=k["embedding.modell"], ollama_url=k["embedding.ollama_url"],
+5779:            "WHERE modell=?", (k["embedding.modell"],),
+5837:                    "user_id, generation, modell, query_hash, kandidaten_anzahl, "
+5842:                        k["embedding.modell"], hashlib.sha256(anfrage.encode("utf-8")).hexdigest(),
+5910:# allen 20 Volltexten ist SIE SELBST. Ein spaeterer Modellwechsel, der die
+5939:    NICHT aus `udb_nvidia_embedding` gelesen -- der Test soll das Modell
+5963:                _embedding_text(z["subject"], z["inhalt"]), modell=k["embedding.modell"],
+5974:                z["subject"], modell=k["embedding.modell"], ollama_url=k["embedding.ollama_url"],
+5996:        "modell": k["embedding.modell"], "ergebnisse": ergebnisse,
+6147:    """Deterministisch, KEIN Modellformulieren: alles was in --womit wie ein
+6190:    Modell, nur Rezenz + Stichwortueberlappung."""
+6270:    Satz davon ist vom Modell formuliert. Das ist der Text, den der
+6380:# ── Beleg-Pruefung (ZECP14-Kern): mechanisch, nie Modell-formuliert ───────
+6830:    """Portiert aus blocked-waiting-for-user.sh. Bewusst vom Modell selbst
+6935:# echte OS-Fakten, kein Modell-Formulieren). star_waechter wird DANACH
+7789:    dem Tokens gespart werden (kein Nacherzaehlen durch das Modell)."""
+7886:# ── Modell-Dashboard (Gabriel-Auftrag 2026-08-27): aktives Modell + Auto- ──
+7888:# Modell gilt gerade als "aktiv") -- keine Hintergrund-Automatik lebt hier
+7890:# harness_aider.py) darf NUR laufen, wenn sein --modell mit
+7891:# modell_aktiv.gewaehlt uebereinstimmt -- kein Harness rennt "einfach so"
+7894:_MODELL_AKTIV_KEY = "modell_aktiv.gewaehlt"
+7895:_MODELL_AUTO_FALLBACK_KEY = "modell_aktiv.auto_fallback"
+7896:_MODELL_AUTO_RUECKKEHR_KEY = "modell_aktiv.auto_rueckkehr"
+7899:def modell_aktiv_lesen() -> dict:
+7901:        "gewaehlt": _konfig_dyn_get(_MODELL_AKTIV_KEY, "") or None,
+7902:        "auto_fallback": _konfig_dyn_get(_MODELL_AUTO_FALLBACK_KEY, "0") == "1",
+7903:        "auto_rueckkehr": _konfig_dyn_get(_MODELL_AUTO_RUECKKEHR_KEY, "0") == "1",
+7907:def modell_aktiv_setzen(modell_id: str, auto_fallback: Optional[bool] = None,
+7909:    """Setzt das aktive Modell fuer die Harness-Aktivierungssperre. Jeder
+7913:    if not modell_id or not modell_id.strip():
+7914:        return {"ok": False, "grund": "modell_id fehlt"}
+7915:    modell_id = modell_id.strip()
+7916:    vorher = _konfig_dyn_get(_MODELL_AKTIV_KEY, "")
+7917:    _konfig_dyn_set(_MODELL_AKTIV_KEY, modell_id, quelle=von)
+7919:        _konfig_dyn_set(_MODELL_AUTO_FALLBACK_KEY, "1" if auto_fallback else "0", quelle=von)
+7921:        _konfig_dyn_set(_MODELL_AUTO_RUECKKEHR_KEY, "1" if auto_rueckkehr else "0", quelle=von)
+7922:    _raum_ruf_schreiben(von, "MODELL_UMSCHALTEN", f"von={vorher or '(keins)'} nach={modell_id}")
+7923:    return {"ok": True, **modell_aktiv_lesen()}
+8403:    Modellaufruf. Liefert None, wenn (noch) nichts drinsteht (keine
+8544:def raum_beitreten_und_pulsen(session_id: str, model: str) -> str:
+8576:                (session_id, USER_ID, platz, _RAUM_FOCUS_PLATZHALTER, f"claude-code:{model}",
+9113:def _raum_womit_veredeln(session_id: str, model: str) -> None:
+9117:    Modell (data.get('model') fehlt -> Fallback 'claude'), bleibt womit fuer die
+9118:    GESAMTE restliche Sitzung generisch 'claude-code:claude' -- /modelle kann das
+9121:    Fix: bei JEDEM Hook-Aufruf, der ein spezifisches Modell mitbringt, womit
+9127:    modell_lower = (model or "").strip().lower()
+9128:    if not modell_lower or modell_lower == "claude":
+9130:    neu = f"claude-code:{model}"
+9852:    GRID10-Wettbewerbs fuer das Sprachmodell sichtbar.

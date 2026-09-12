@@ -1,0 +1,259 @@
+### chatgpt_senden 15252 15420
+def chatgpt_senden(prompts: list, *, num_workers: Optional[int] = None,
+                    sleep_between: Optional[float] = None, ram_schwelle_mb: Optional[int] = None,
+                    tab_recycle_alle: Optional[int] = None, tab_hardlimit: Optional[int] = None,
+                    dry_run: bool = False, lock_timeout_s: float = 1200.0) -> dict:
+    """Duenner Wrapper um chatgpt_burst_worker_v2.sh (Sende-Phase). Ruft
+    das ECHTE Skript per subprocess -- keine eigene Playwright-Logik hier.
+    Fail-closed: kein Sendeversuch ohne bestaetigten Login.
+
+    `prompts`: Liste von Texten. Das Skript selbst kennt nur EINEN
+    Triggertext pro Lauf (TRIGGER-Env, Vorgabe "triggerwort2" -- der
+    eigentliche Auftrag liegt im ChatGPT-Projekt "clay science pipeline"
+    selbst, der Triggertext startet ihn nur). Bei mehreren VERSCHIEDENEN
+    Texten in `prompts` wird das Skript entsprechend oft NACHEINANDER neu
+    aufgerufen (ein Trigger je Lauf) -- keine Aenderung an der inneren
+    Worker-Schleife des Skripts noetig.
+
+    Echte Laeufe (nicht dry_run) laufen unter `_chatgpt_lock()` -- ein
+    zweiter gleichzeitiger Aufrufer wartet bis zu `lock_timeout_s` (Default
+    20 Min) statt sich mit diesem Lauf die Daemon-Tabs wegzureissen
+    (PHASE-29-Lehre). Jeder einzelne Skriptaufruf geht zusaetzlich durch
+    `_chatgpt_lauf_mit_recovery()` -- erkennt bekannte Absturzsignaturen
+    (0-Tabs-FATAL, haengender Daemon) automatisch und versucht bis zu
+    zweimal, den Daemon-PROZESS neu zu starten (nie ein Passwort/2FA)."""
+    # PHASE 30-Nachtrag: Gate zuerst konsumieren, damit der interne
+    # chatgpt_login_status()-Aufruf gleich darunter ihn nicht ein zweites
+    # Mal (leer) zieht -- einmal pro Sitzung, egal welcher der drei
+    # Einstiegspunkte zuerst drankommt.
+    dos_donts = _chatgpt_dos_donts_einmalig()
+    if not _CHATGPT_SCRIPT.exists():
+        ergebnis = {"ok": False, "grund": f"Skript fehlt: {_CHATGPT_SCRIPT}"}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    lage = _chatgpt_login_sicherstellen()
+    if not lage.get("eingeloggt"):
+        # PHASE 46b (Gabriel-Auftrag 2026-08-27): frueher hier ein reines
+        # fail-closed -- Mensch musste jedes Mal von Hand neu einloggen.
+        # Jetzt: automatischer Fallback auf harness_aider.py (NVIDIA/Mistral,
+        # Forschungsmodus, allowlist+audit-gated, meldet sich als eigener
+        # geringer gewichteter Akteur bei der Forschungsentitaet an -- siehe
+        # Docstring von _chatgpt_harness_fallback()). NICHT im dry_run
+        # (der soll nichts Echtes ausloesen) und NICHT wenn gar kein
+        # Prompt-Text da ist (nichts zu beantworten).
+        text_liste_fb = [p for p in (prompts or []) if p and p.strip()]
+        if dry_run or not text_liste_fb:
+            ergebnis = {"ok": False, "grund": "nicht eingeloggt (auch nach automatischem Wiederherstellungsversuch)",
+                    "lage": lage,
+                    "naechster_schritt": "chatgpt-login-status pruefen, Mensch loggt im Browserfenster ein, "
+                                          "dann chatgpt-login-bestaetigen"}
+            if dos_donts:
+                ergebnis["dos_donts_hinweis"] = dos_donts
+            return ergebnis
+        fb_laeufe = []
+        for text in text_liste_fb:
+            fb = _chatgpt_harness_fallback(
+                text, grund="chatgpt-secondary Browser-Bruecke nicht erreichbar (Login, "
+                            "auch nach automatischem Cookie-Wiederherstellungsversuch)")
+            _chatgpt_fallback_ergebnis_queuen(text, fb)
+            fb_laeufe.append({"trigger": text, "ok": bool(fb.get("ok")),
+                               "antwort": fb.get("antwort"), "paket_id": fb.get("paket_id"),
+                               "modell": fb.get("gewonnen_mit") or fb.get("modell"),
+                               "grund": fb.get("grund")})
+            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN_FALLBACK",
+                                f"trigger={_kurz(text, 60)} ok={fb.get('ok')} modell={fb.get('gewonnen_mit')}")
+        gesamt_ok = any(l["ok"] for l in fb_laeufe)
+        ergebnis = {"ok": gesamt_ok, "fallback_verwendet": True, "lage": lage,
+                    "laeufe": fb_laeufe,
+                    "hinweis": "ChatGPT-Bruecke nicht erreichbar -- automatisch auf harness_aider.py "
+                               "(Free-Pool, Forschungsmodus) umgeschaltet, siehe 'laeufe'. Ergebnis "
+                               "liegt dauerhaft im Forschungsentitaets-Repo unter "
+                               "research_entity/topic_packets/fallback-runs/<paket_id>/ UND direkt "
+                               "im Feld 'antwort' hier."}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    text_liste = [p for p in (prompts or [""]) if p is not None] or [""]
+    laeufe = []
+
+    def _einen_lauf(text: str) -> None:
+        # DISPLAY/WAYLAND_DISPLAY raus -- s. Kommentarblock bei
+        # _chatgpt_env_ohne_display() (Bugfix 2026-08-27, Gabriels echter
+        # Bildschirm blockiert). Dieser Lauf kann via
+        # _chatgpt_lauf_mit_recovery() den Daemon neu spawnen.
+        env = _chatgpt_env_ohne_display(dict(os.environ))
+        if text:
+            env["TRIGGER"] = text
+        if num_workers is not None:
+            env["NUM_WORKERS"] = str(num_workers)
+        if sleep_between is not None:
+            env["SLEEP_BETWEEN_WORKERS"] = str(sleep_between)
+        if ram_schwelle_mb is not None:
+            env["RAM_THRESHOLD_MB"] = str(ram_schwelle_mb)
+        if tab_recycle_alle is not None:
+            env["TAB_RECYCLE_EVERY"] = str(tab_recycle_alle)
+        if tab_hardlimit is not None:
+            env["TAB_HARDLIMIT"] = str(tab_hardlimit)
+        befehl = [str(_CHATGPT_SCRIPT)]
+        if dry_run:
+            laeufe.append({"trigger": text or "triggerwort2", "dry_run": True, "waere_befehl": befehl,
+                            "env_override": {k: v for k, v in env.items()
+                                              if k in ("TRIGGER", "NUM_WORKERS", "SLEEP_BETWEEN_WORKERS",
+                                                        "RAM_THRESHOLD_MB", "TAB_RECYCLE_EVERY", "TAB_HARDLIMIT")}})
+            return
+        vor = _chatgpt_zusammenfassung_neueste()
+        timeout_s = max(120.0, (num_workers or 30) * ((sleep_between or 2.0) + 6.0))
+        r = _chatgpt_lauf_mit_recovery(befehl, env, timeout_s)
+        if r.get("sitzung_verloren"):
+            laeufe.append({"trigger": text or "triggerwort2", "ok": False, "grund": r["grund"],
+                            "sitzung_verloren": True, "recovery_log": r.get("recovery_log")})
+            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN",
+                                f"trigger={_kurz(text or 'triggerwort2', 60)} SITZUNG_VERLOREN")
+            return
+        if not r.get("ok") and r.get("versuche_erschoepft"):
+            laeufe.append({"trigger": text or "triggerwort2", "ok": False, "grund": r.get("grund"),
+                            "recovery_log": r.get("recovery_log")})
+            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN",
+                                f"trigger={_kurz(text or 'triggerwort2', 60)} rc=absturz_nicht_behoben")
+            return
+        nach = _chatgpt_zusammenfassung_neueste()
+        neu = nach if nach != vor else None
+        eintrag = {"trigger": text or "triggerwort2", "ok": r.get("rc") == 0, "rc": r.get("rc"),
+                   "zusammenfassung": neu, "stderr_kurz": _kurz(r.get("stderr") or "", 400),
+                   "recovery_log": r.get("recovery_log") or []}
+        # PHASE 46c (Gabriel-Auftrag 2026-08-27): Skript lief hier sauber
+        # durch (rc=0, kein Absturzmuster -- der PHASE-46b-Zweig oben griff
+        # nicht, es war ja eingeloggt), aber ChatGPT hat trotzdem NICHTS
+        # gesendet -- z.B. Cloudflare blockt die Projekt-URL mit 403 (real
+        # beobachtet 2026-08-27, drei Laeufe hintereinander). Gleicher
+        # Fallback-Pfad wie PHASE 46b, nur anderer Ausloeser.
+        ausfall = _chatgpt_ausfall_erkannt(neu)
+        if ausfall.get("ausfall"):
+            fb = _chatgpt_harness_fallback(
+                text or "triggerwort2",
+                grund=f"chatgpt-secondary Browser-Bruecke blockiert trotz bestaetigtem Login "
+                      f"({ausfall.get('grund')})")
+            _chatgpt_fallback_ergebnis_queuen(text or "triggerwort2", fb)
+            eintrag["fallback_verwendet"] = True
+            eintrag["fallback_ausfall_befund"] = ausfall
+            eintrag["fallback_ergebnis"] = {"ok": bool(fb.get("ok")), "antwort": fb.get("antwort"),
+                                             "paket_id": fb.get("paket_id"),
+                                             "modell": fb.get("gewonnen_mit") or fb.get("modell"),
+                                             "grund": fb.get("grund")}
+            eintrag["ok"] = eintrag["ok"] or bool(fb.get("ok"))
+            _raum_ruf_schreiben("manuell", "CHATGPTSENDEN_FALLBACK",
+                                f"trigger={_kurz(text or 'triggerwort2', 60)} ausloeser=403_cloudflare "
+                                f"ok={fb.get('ok')} modell={fb.get('gewonnen_mit')}")
+        laeufe.append(eintrag)
+        _log(f"chatgpt_senden: trigger='{(text or 'triggerwort2')[:40]}' rc={r.get('rc')} zusammenfassung={neu} "
+             f"ausfall_403_erkannt={ausfall.get('ausfall')}")
+        _raum_ruf_schreiben("manuell", "CHATGPTSENDEN",
+                            f"trigger={_kurz(text or 'triggerwort2', 60)} rc={r.get('rc')}")
+
+    if dry_run:
+        for text in text_liste:
+            _einen_lauf(text)
+    else:
+        try:
+            with _chatgpt_lock(timeout_s=lock_timeout_s):
+                for text in text_liste:
+                    _einen_lauf(text)
+        except ChatGPTLockTimeout as e:
+            ergebnis = {"ok": False, "grund": str(e)}
+            if dos_donts:
+                ergebnis["dos_donts_hinweis"] = dos_donts
+            return ergebnis
+    ergebnis = {"ok": True, "dry_run": dry_run, "laeufe": laeufe}
+    if dos_donts:
+        ergebnis["dos_donts_hinweis"] = dos_donts
+    return ergebnis
+
+### chatgpt_ernten 15423 15508
+def chatgpt_ernten(*, timeout_s: float = 900.0, lock_timeout_s: float = 1200.0) -> dict:
+    """Wrapper um `chatgpt_burst_worker_v2.sh --harvest` -- liest bereits
+    gesendete Konversationen (sent_urls_v2.txt), rein lesend gegenueber
+    ChatGPT (keine neue Nachricht), gefahrlos wiederholbar. Laeuft wie
+    chatgpt_senden() unter `_chatgpt_lock()` (wartet auf gleichzeitige
+    Sende-Laeufe statt zu kollidieren) und `_chatgpt_lauf_mit_recovery()`
+    (automatische Absturz-Erkennung + Prozess-Neustart, nie Login-Eingabe)."""
+    dos_donts = _chatgpt_dos_donts_einmalig()  # PHASE 30-Nachtrag, s.o.
+    if not _CHATGPT_SCRIPT.exists():
+        ergebnis = {"ok": False, "grund": f"Skript fehlt: {_CHATGPT_SCRIPT}"}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    # Selbstheilungsversuch VOR dem Ernten (Nachtrag 2026-08-27, wie bei
+    # chatgpt_senden()) -- eine zwischenzeitlich verlorene Sitzung soll
+    # nicht erst nach einem 800s-Timeout auffallen, wenn ein stiller
+    # Cookie-Restore sie retten koennte.
+    lage = _chatgpt_login_sicherstellen()
+    if not lage.get("eingeloggt"):
+        # PHASE 46b (Gabriel-Auftrag 2026-08-27): Login weiterhin down --
+        # statt 900s auf ein Skript zu warten, das ohnehin nicht eingeloggt
+        # ist, liefere was per chatgpt_senden()-Fallback ggf. schon bereitsteht
+        # (Warteschlange, siehe _chatgpt_fallback_warteschlange_abholen()).
+        # 'chatgpt_ernten' selbst loest KEINEN neuen Fallback-Lauf aus --
+        # es gibt hier keine neuen Prompts zu beantworten, nur das
+        # send-dann-ernten-Bild fuer Aufrufer intakt zu halten, die
+        # gewohnheitsmaessig ernten() statt der Direktantwort von
+        # chatgpt_senden() abfragen.
+        wartend = _chatgpt_fallback_warteschlange_abholen()
+        ergebnis = {"ok": bool(wartend), "fallback_verwendet": True, "lage": lage,
+                    "fallback_ergebnisse": wartend,
+                    "grund": None if wartend else "nicht eingeloggt (auch nach automatischem "
+                             "Wiederherstellungsversuch) und keine wartenden Fallback-Ergebnisse -- "
+                             "chatgpt_senden() zuerst aufrufen (loest bei ausgefallener Bruecke "
+                             "selbst den Fallback aus) oder Mensch loggt manuell ein"}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    try:
+        with _chatgpt_lock(timeout_s=lock_timeout_s):
+            # DISPLAY/WAYLAND_DISPLAY raus -- s. _chatgpt_env_ohne_display() (Bugfix 2026-08-27).
+            r = _chatgpt_lauf_mit_recovery([str(_CHATGPT_SCRIPT), "--harvest"],
+                                            _chatgpt_env_ohne_display(dict(os.environ)), timeout_s)
+    except ChatGPTLockTimeout as e:
+        ergebnis = {"ok": False, "grund": str(e)}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    if r.get("sitzung_verloren"):
+        ergebnis = {"ok": False, "grund": r["grund"], "sitzung_verloren": True,
+                "recovery_log": r.get("recovery_log")}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    if not r.get("ok") and r.get("versuche_erschoepft"):
+        ergebnis = {"ok": False, "grund": r.get("grund"), "recovery_log": r.get("recovery_log")}
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    ausgabe = r.get("stdout") or ""
+    zusammenfassung = {}
+    m = re.search(r"HARVEST summary: done=(\d+) pending=(\d+) lost=(\d+)", ausgabe)
+    if m:
+        zusammenfassung = {"done": int(m.group(1)), "pending": int(m.group(2)), "lost": int(m.group(3))}
+    _log(f"chatgpt_ernten: rc={r.get('rc')} zusammenfassung={zusammenfassung}")
+    if zusammenfassung:
+        _raum_ruf_schreiben("manuell", "CHATGPTERNTEN",
+                            f"done={zusammenfassung['done']} pending={zusammenfassung['pending']} "
+                            f"lost={zusammenfassung['lost']}")
+    else:
+        _raum_ruf_schreiben("manuell", "CHATGPTERNTEN", f"rc={r.get('rc')} unklar")
+    # PHASE 46c (Gabriel-Auftrag 2026-08-27): reine Diagnose, KEIN neuer
+    # Fallback-Lauf hier -- Ernte-Phase hat keinen neuen Prompt-Text zu
+    # beantworten (siehe Docstring oben). Nur der Verdacht wird sichtbar
+    # gemacht, damit ein Aufrufer (der z.B. chatgpt_senden() erneut
+    # anstossen koennte) den 403/Cloudflare-Befund nicht selbst suchen muss.
+    ausfall = _chatgpt_ausfall_erkannt(zusammenfassung, log_pfad=_chatgpt_neuestes_burst_log_pfad())
+    if ausfall.get("ausfall"):
+        _log(f"chatgpt_ernten: 403/Cloudflare-Verdacht trotz bestaetigtem Login: {ausfall.get('grund')}")
+        _raum_ruf_schreiben("manuell", "CHATGPTERNTEN_VERDACHT", ausfall.get("grund") or "")
+    ergebnis = {"ok": r.get("rc") == 0, "rc": r.get("rc"), "zusammenfassung": zusammenfassung,
+            "stdout_letzte_zeilen": "\n".join(ausgabe.splitlines()[-15:]),
+            "recovery_log": r.get("recovery_log") or [], "ausfall_403_verdacht": ausfall.get("ausfall")}
+    if dos_donts:
+        ergebnis["dos_donts_hinweis"] = dos_donts
+    return ergebnis
+

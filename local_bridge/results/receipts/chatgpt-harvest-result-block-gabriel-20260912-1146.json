@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "chatgpt-harvest-result-block-gabriel-20260912-1146",
+  "command_sha256": "1f6cfdb04dee50c8140a70870710e2dfe1e5e06287e65cae00f9c229417f7fa3",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:54:45.634234+00:00",
+  "finished_at": "2026-09-12T03:54:45.675854+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "58a61b089ed30423190f74b5baf7a8b2905ed75b1039bf8c7a2d836c3d2aa98b",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "        timeout 8 \"$B\" wait --networkidle >>\"$LOG\" 2>&1\n        sleep 1\n\n        txt=$($B text 2>/dev/null)\n        stopping=$($B snapshot -i 2>/dev/null | grep -ic \"Stop answering\")\n\n        if echo \"$txt\" | grep -q \"Worked for\" && [ \"${stopping:-0}\" -eq 0 ]; then\n            log \"HARVEST worker $worker_id: DONE ($url)\"\n            # worker_id alone collides across separate send runs (each run\n            # restarts numbering at 1) -- 5/6 results silently overwrote each\n            # other on 2026-08-26 when several single-worker runs were\n            # harvested back to back. Key by the conversation id from the URL\n            # (globally unique) instead; fall back to a worker_id+timestamp\n            # key only if the URL doesn't have the expected /c/<id> shape.\n            conv_id=$(echo \"$url\" | grep -oP '/c/\\K[a-zA-Z0-9-]+' | head -1)\n            if [ -n \"$conv_id\" ]; then\n                result_key=\"$conv_id\"\n            else\n                result_key=\"${worker_id}_$(date +%s%N)\"\n            fi\n            echo \"$txt\" > \"$STATE_DIR/result_${result_key}.txt\"\n            harvested_done=$((harvested_done + 1))\n        else\n            log \"HARVEST worker $worker_id: still pending/running ($url)\"\n            harvested_pending=$((harvested_pending + 1))\n        fi\n\n        sleep 1\n    done < \"$SENT_URLS_FILE\"\n\n    log \"HARVEST summary: done=$harvested_done pending=$harvested_pending lost=$harvested_lost\"\n    log \"HARVEST_CYCLE_COMPLETE\"\n}\n\n# ---------------------------------------------------------------------------\n# send mode (default)\n# ---------------------------------------------------------------------------\nrun_send() {\n    log \"=== BURST CYCLE V2 START (NUM_WORKERS=$NUM_WORKERS SLEEP_BETWEEN_WORKERS=$SLEEP_BETWEEN_WORKERS RAM_THRESHOLD_MB=$RAM_THRESHOLD_MB TAB_RECYCLE_EVERY=$TAB_RECYCLE_EVERY) ===\"\n\n    avail0=$(free -m | awk '/^Mem:/{print $7}')\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

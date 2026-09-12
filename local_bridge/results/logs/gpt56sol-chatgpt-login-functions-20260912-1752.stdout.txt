@@ -1,0 +1,154 @@
+=== chatgpt_login_status ===
+def chatgpt_login_status() -> dict:
+    """Rein lesend: Daemon-Status + grobe Heuristik ob eine chatgpt.com-
+    Sitzung im Browser-Profil vorliegt (Cookie-Anzahl fuer die Domain).
+    Liest NIE einen Geheimniswert -- `$B cookies` redigiert Sitzungscookies
+    ohnehin serverseitig (siehe browse/src/read-commands.ts SENSITIVE_COOKIE_*)."""
+    dos_donts = _chatgpt_dos_donts_einmalig()
+    diagnose = _chatgpt_kontext_diagnose()
+    if not diagnose["host_wie_erwartet"]:
+        ergebnis = {
+            "ok": False, "eingeloggt": False, "kontext_fehler": True,
+            "grund": (f"KONTEXT-FEHLER, nicht Login-Fehler: dieser Check funktioniert nur lokal "
+                      f"auf ai-core-node, weil der gstack-browse-Daemon (samt Login-Cookies) NUR "
+                      f"dort laeuft. Dieser Python-Prozess laeuft aber auf Host "
+                      f"'{diagnose['pruef_host']}' (HOME={diagnose['pruef_home']}) -- vermutlich "
+                      f"eine SSH-Sitzung auf einen anderen Rechner (z.B. die claylab-VPS-Sandbox "
+                      f"72.61.19.188). Ein 'eingeloggt: false' von HIER bedeutet NICHT, dass die "
+                      f"ChatGPT-Bridge abgemeldet ist -- es bedeutet nur, dass der falsche Host "
+                      f"geprueft wurde."),
+            "empfehlung": "chatgpt-login-status auf ai-core-node SELBST erneut ausfuehren "
+                           "(lokales Bash-Werkzeug, kein ssh-Praefix, kein Aufruf innerhalb einer "
+                           "bestehenden Remote-Shell-Sitzung)",
+        }
+        ergebnis.update(diagnose)
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    status = _chatgpt_browse("status")
+    if not status.get("ok"):
+        ergebnis = {"ok": False, "eingeloggt": False,
+                "grund": status.get("grund") or status.get("stderr") or "daemon nicht erreichbar",
+                "empfehlung": "gstack-connect-chrome / Daemon starten, dann erneut pruefen"}
+        ergebnis.update(diagnose)
+        if dos_donts:
+            ergebnis["dos_donts_hinweis"] = dos_donts
+        return ergebnis
+    modus = "unbekannt"
+    for zeile in (status.get("stdout") or "").splitlines():
+        if zeile.startswith("Mode:"):
+            modus = zeile.split(":", 1)[1].strip()
+    cookies = _chatgpt_browse("cookies", timeout=10.0)
+    n_chatgpt = 0
+    hat_auth_cookie = False
+    if cookies.get("ok"):
+        try:
+            arr = json.loads(cookies.get("stdout") or "[]")
+            domain_cookies = [c for c in arr if "chatgpt.com" in (c.get("domain") or "")]
+            n_chatgpt = len(domain_cookies)
+            # PHASE-Recovery-Nachtrag (2026-08-26, real entdeckt beim Bau der
+            # Absturz-Wiederherstellung): reines Zaehlen von 'chatgpt.com'-
+            # Cookies zaehlt FAELSCHLICH auch Cloudflares eigene Bot-
+            # Management-Cookies (z.B. __cf_bm) mit, die schon auf der
+            # Turnstile-"Just a moment..."-Challenge-Seite gesetzt werden --
+            # OHNE gueltige Sitzung. Fix: 'eingeloggt' nur bei einem
+            # tatsaechlichen Auth-Cookie-Namen (next-auth-Sitzungstoken oder
+            # OpenAIs eigenes _puid, das nur bei aktiver Sitzung/Quote
+            # gesetzt wird) -- nicht bei irgendeinem Cookie der Domain.
+            hat_auth_cookie = any(
+                "next-auth.session-token" in (c.get("name") or "") or (c.get("name") or "") == "_puid"
+                for c in domain_cookies
+            )
+        except Exception:
+            n_chatgpt = (cookies.get("stdout") or "").lower().count("chatgpt.com")
+            hat_auth_cookie = "session-token" in (cookies.get("stdout") or "").lower()
+    eingeloggt = hat_auth_cookie
+    ergebnis = {
+        "ok": True, "eingeloggt": eingeloggt, "daemon_modus": modus,
+        "chatgpt_cookies_gefunden": n_chatgpt,
+        "empfehlung": ("bereit" if eingeloggt else
+                        "kein chatgpt.com-Cookie im Daemon-Profil gefunden -- Mensch muss sich im "
+                        "sichtbaren Browserfenster (Daemon laeuft headed) selbst einloggen, danach "
+                        "'stern.py chatgpt-login-bestaetigen' aufrufen"),
+    }
+    ergebnis.update(diagnose)
+    if dos_donts:
+        ergebnis["dos_donts_hinweis"] = dos_donts
+    return ergebnis
+
+=== chatgpt_login_bestaetigen ===
+def chatgpt_login_bestaetigen(konto: Optional[str] = None, passphrase: Optional[str] = None) -> dict:
+    """Nach MENSCHLICHEM Login im sichtbaren Browserfenster aufgerufen --
+    das Modell tippt hier NIE ein Geheimnis ein (PHASE-18-Disziplin).
+    Prueft zuerst mechanisch nach ($B cookies), bucht dann NUR eine
+    Status-Markierung im Tresor -- NICHT das Sitzungscookie selbst (das
+    bleibt in ~/.gstack/chromium-profile/, dem Daemon-eigenen, von `$B
+    cookies` bereits redigierten Speicher; eine Zweitkopie im Tresor waere
+    eine zusaetzliche, schlechter geschuetzte Kopie eines Session-Secrets
+    -- bewusst NICHT gemacht)."""
+    lage = chatgpt_login_status()
+    if not lage.get("eingeloggt"):
+        return {"ok": False, "grund": "kein chatgpt.com-Cookie gefunden -- Login im Browserfenster zuerst abschliessen",
+                "lage": lage}
+    try:
+        ergebnis = vault_hinzufuegen(
+            url="https://chatgpt.com (gstack-browse Daemon-Sitzung)",
+            konto=konto, sonstiges="chatgpt-skill: Login-Bestaetigung, KEIN Rohcookie",
+            secret=(f"session_verified_at={_jetzt_iso()} "
+                    f"cookies_gefunden={lage['chatgpt_cookies_gefunden']} "
+                    f"quelle=gstack-browse-headed-daemon "
+                    f"(Rohcookie bleibt in ~/.gstack/chromium-profile/, nicht hier kopiert)"),
+            erzeugt_von="chatgpt-skill", passphrase=passphrase,
+        )
+    except VaultFehler as e:
+        return {"ok": False, "grund": f"Tresor-Fehler: {e}", "lage": lage}
+    _chatgpt_cookie_backup_speichern()  # best effort, siehe Docstring dort
+    ergebnis["lage"] = lage
+    return ergebnis
+
+=== _chatgpt_login_sicherstellen ===
+def _chatgpt_login_sicherstellen() -> dict:
+    """Login-Gate mit automatischem Selbstheilungsversuch: prueft Status,
+    versucht bei Bedarf EINMAL die Wiederherstellung aus dem Cookie-Backup
+    (kein Mensch involviert), prueft danach erneut. Erst wenn auch das
+    scheitert, ist ein echter Mensch-Login noetig. chatgpt_senden() und
+    chatgpt_ernten() rufen das jetzt beide auf, statt je ihr eigenes,
+    fruehes Scheitern zu melden."""
+    lage = chatgpt_login_status()
+    if lage.get("eingeloggt"):
+        return lage
+    if _chatgpt_cookie_backup_wiederherstellen():
+        lage = chatgpt_login_status()
+    return lage
+
+=== _chatgpt_browse ===
+def _chatgpt_browse(*args: str, timeout: float = 15.0) -> dict:
+    """Ruft $B direkt auf (read-only Inspektion), IMMER mit cwd=$HOME --
+    siehe Skriptkommentar in chatgpt_burst_worker_v2.sh: ein anderes cwd
+    spawnt einen zweiten, uneingeloggten Daemon.
+
+    PATH bekommt IMMER ~/.bun/bin vorangestellt -- real beim Bau der
+    Recovery-Routine (2026-08-26) entdeckt: wenn kein Daemon laeuft, muss
+    die CLI selbst einen neuen `bun`-Prozess spawnen; in Umgebungen ohne
+    ~/.bun/bin im PATH (z.B. manche Agent-/Hook-Sandboxen) scheitert das
+    sonst still mit 'Executable not found in $PATH: bun'. Genau dieselbe
+    Vorsichtsmassnahme wie in chatgpt_burst_worker_v2.sh
+    (`export PATH="$HOME/.bun/bin:$PATH"`), hier nachgezogen.
+
+    DISPLAY/WAYLAND_DISPLAY werden IMMER entfernt (s. `_chatgpt_env_ohne_display`
+    oben) -- sonst erbt ein bei Bedarf neu gespawnter Daemon Gabriels echten
+    Bildschirm statt einer virtuellen Anzeige (Bugfix 2026-08-27)."""
+    env = _chatgpt_env_ohne_display(dict(os.environ))
+    bun_bin = str(Path.home() / ".bun" / "bin")
+    env["PATH"] = f"{bun_bin}:{env.get('PATH', '')}"
+    try:
+        r = subprocess.run(
+            [str(_CHATGPT_BROWSE_BIN), *args],
+            cwd=str(Path.home()), env=env, capture_output=True, text=True, timeout=timeout,
+        )
+        return {"ok": r.returncode == 0, "stdout": r.stdout, "stderr": r.stderr, "rc": r.returncode}
+    except FileNotFoundError:
+        return {"ok": False, "grund": "gstack-browse-Binary nicht gefunden (nicht gebaut? siehe gstack setup)"}
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "grund": "browse-Aufruf Zeitueberschreitung"}
+

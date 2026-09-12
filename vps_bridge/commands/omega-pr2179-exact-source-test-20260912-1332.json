@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-pr2179-exact-source-test-20260912-1332",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/carrier_repo",
+  "timeout_seconds": 120,
+  "command": "set -eu\nBR='chatgpt-work/omega-relay-receipt-binding-20260912'\ngit fetch --quiet --no-tags origin \"refs/heads/$BR\"\nSHA=$(git rev-parse FETCH_HEAD)\nD=\"/workspace/omega_runtime/state/pr2179_verify_${SHA%%????????????????????????????????????????????????????}\"\nmkdir -p \"$D/tools\" \"$D/tests\"\ngit show \"$SHA:tools/omega_grid_relay.py\" > \"$D/tools/omega_grid_relay.py\"\ngit show \"$SHA:tools/omega_chatgpt_mcp.py\" > \"$D/tools/omega_chatgpt_mcp.py\"\ngit show \"$SHA:tests/test_omega_grid_relay.py\" > \"$D/tests/test_omega_grid_relay.py\"\ngit show \"$SHA:tests/test_omega_chatgpt_mcp.py\" > \"$D/tests/test_omega_chatgpt_mcp.py\"\npython3 -m py_compile \"$D/tools/omega_grid_relay.py\" \"$D/tools/omega_chatgpt_mcp.py\"\nPYTEST=$(python3 -m pytest --version 2>&1 || true)\nif python3 -m pytest --version >/dev/null 2>&1; then\n  (cd \"$D\" && python3 -m pytest -q tests/test_omega_grid_relay.py tests/test_omega_chatgpt_mcp.py)\n  RC=$?\nelse\n  RC=125\nfi\nprintf 'PR_SHA=%s\\nVERIFY_DIR=%s\\nPYTEST=%s\\nTEST_RC=%s\\n' \"$SHA\" \"$D\" \"$PYTEST\" \"$RC\"\nexit \"$RC\""
+}

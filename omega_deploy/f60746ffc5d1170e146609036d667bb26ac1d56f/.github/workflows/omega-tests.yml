@@ -1,0 +1,22 @@
+name: OMEGA tests
+
+# GitHub-hosted runner assignment is currently unavailable for this private repo
+# (observed runner_id=0 / no steps). Keep the workflow as an explicit diagnostic
+# instead of generating misleading red status on every push/PR. The same suite is
+# independently exercised through the real ai-core-node Local Bridge.
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test runner
+        run: python -m pip install --upgrade pip pytest
+      - name: Run OMEGA test suite
+        run: python -m pytest -q

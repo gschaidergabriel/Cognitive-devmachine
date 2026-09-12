@@ -115,6 +115,13 @@ function mikroMimikAbbrechen(grund, ruheWiederherstellen=true){
   _mikroMimikStatistik.abort++;
   if(ruheWiederherstellen && !_sonderLaeuft && Date.now() >= mundSprechBis){
     mundZielSetzen(MUND_RUHE);
+  }else if(!ruheWiederherstellen){
+    // Harte Besitzuebergabe: Sprache/Sonderlogik darf nicht noch 1-5 alte
+    // Idle-Frames erben. Die bestehende Sprechpipeline setzt danach ihr
+    // eigenes Ziel; bis dahin bleibt exakt der aktuelle Pixelzustand stehen.
+    mundAktivFrames = null;
+    mundAktivIndex = 0;
+    mundLetzterFrameT = 0;
   }
   window.__frankIdleMimikLastAbort = grund || "unknown";
 }

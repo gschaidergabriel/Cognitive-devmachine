@@ -78,9 +78,34 @@ Real-host evidence directory:
 
 `/home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_remapfix_gpt56sol_20260912`
 
+## Independent swarm-organ reproduction
+
+A separate Avatar worker independently ran the blind real-host gate from source head
+`9c9fdc1b43486e6f8c343b70a1d692e89955b140` and produced the same objective evidence hashes:
+
+- `objective_report.json`: `8006a2548e1885b48f07c4fab16f3b836e9d91d74f05c2323bc3e06ac8d76158`
+- `blind_manifest.json`: `ac1cca65edaedcf2e69e93b0abd65e6375dc38c66e52e5f069c1f2002f4e83a5`
+- `answer_key.json`: `38fa7c3f4a36c7705bb075860332d386a5ca9afb8abfa55e214e430e7fdad56f`
+
+Its receipt reports:
+
+- `CANDIDATE_CASES=22`
+- `ELIGIBLE_CASES=22`
+- `BLIND_CASES=28`
+- `PAIR_COUNT=56`
+- `BLIND_LABEL_LEAK=0`
+- `PERCEPTUAL_BENEFIT_CREDIT=0`
+- `PRODUCTION_CREDIT=0`
+
+Independent receipt:
+
+`local_bridge/results/receipts/zzzz-go-avatar-depthwarp-blind-gate-realhost-v3-gpt56sol-20260912-1016.json`
+
+This is a useful independent executable reproduction of the objective eligibility gate. It is not an independent human perceptual judgment and therefore does not promote perceptual benefit.
+
 ## Production invariance
 
-Before and after the run:
+Before and after the repaired run:
 
 - `buehne.html`: `18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e`
 - `buehne_daemon.py`: `5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2`
@@ -92,7 +117,7 @@ Therefore the gate changed no production Avatar byte and did not replace/restart
 
 ## Interpretation / next gate
 
-This closes the OpenCV harness blocker and proves that all 22 preregistered candidate cases satisfy the objective eligibility fence at this exact real-host subject.
+This closes the OpenCV harness blocker and proves that all 22 preregistered candidate cases satisfy the objective eligibility fence at this exact real-host subject, with an independent executable reproduction of the same bound artifacts.
 
 It does **not** prove visible 3D/lifelikeness benefit. The next promotion-bearing discriminator remains independent blind scoring of the bound final-size material, with the answer key kept closed until scoring is complete and sham/position bias evaluated separately.
 

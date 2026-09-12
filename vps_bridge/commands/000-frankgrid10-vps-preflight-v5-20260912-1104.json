@@ -1,7 +1,8 @@
 {
-  "schema": "CLAY_VPS_COMMAND/v5",
+  "schema": "CLAY_VPS_COMMAND/v4",
   "command_id": "000-frankgrid10-vps-preflight-v5-20260912-1104",
-  "priority": -200,
-  "op": "status",
-  "timeout_seconds": 120
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail; echo HOST_KERNEL; uname -a; echo MEMORY; free -b; echo DISK; df -B1 /workspace /cache 2>/dev/null || df -B1 /; echo LOAD; uptime; echo PYTHON; python3 --version; echo WORKSPACE; pwd; echo PODMAN_INNER; command -v podman || true; echo CGROUP; cat /proc/1/cgroup || true; echo FRANKGRID_PREFLIGHT_OK"
 }

@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-source-v2-discover-andreas-state-sync-20260912",
+  "machine_id": "andreas-maco",
+  "owner": "andreas",
+  "op": "exec",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 120,
+  "command": "set -o pipefail; echo '=== HOST ==='; hostname; whoami; echo '=== TOP REPOS/DIRS ==='; find \"$HOME\" -maxdepth 2 -type d \( -iname '*frank*' -o -iname '*entity*' -o -iname '*brain*' -o -iname '*sync*' -o -iname '*clay*' \) -print 2>/dev/null | sort | head -200; echo '=== SYNC/STATE/BRIDGE FILES ==='; find \"$HOME/.claude\" \"$HOME\"/frankenstein* \"$HOME\"/frank* \"$HOME\"/self-integration \"$HOME\"/andreas-claude -maxdepth 4 -type f \( -iname '*sync*' -o -iname '*state*' -o -iname '*brain*' -o -iname '*bridge*' -o -iname '*memory*' \) -print 2>/dev/null | sort | head -300; echo '=== SYSTEMD USER FRANK/SYNC/BRIDGE ==='; systemctl --user list-unit-files 2>/dev/null | grep -Ei 'frank|entity|sync|bridge|brain|clay' | head -100 || true"
+}

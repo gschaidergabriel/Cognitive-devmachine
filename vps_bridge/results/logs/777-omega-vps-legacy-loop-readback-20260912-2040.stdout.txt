@@ -1,0 +1,102 @@
+=== CURRENT_RELEASE ===
+{
+  "schema": "OMEGA_CURRENT_RELEASE/v1",
+  "omega_head": "572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "release_path": "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "activated_at": "2026-09-12T11:25:41.761800+00:00",
+  "carrier_branch": "omega-vps-deploy"
+}
+=== CURRENT_POINTER ===
+/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69
+=== OMEGA_PROCESSES ===
+ 947104       1 Sat Sep 12 13:23:54 2026 tmux new-session -d -s omega-grid python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+ 947105  947104 Sat Sep 12 13:23:54 2026 bash -c python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+ 947107  947105 Sat Sep 12 13:23:54 2026 python3 /workspace/omega_runtime/omega_daemon.py
+ 947690       0 Sat Sep 12 13:36:31 2026 bash -lc set -euo pipefail; echo '=== CURRENT_RELEASE ==='; cat /workspace/omega_runtime/CURRENT_RELEASE.json 2>/dev/null || echo MISSING; echo '=== CURRENT_POINTER ==='; readlink -f /workspace/omega_runtime/current 2>/dev/null || true; echo '=== OMEGA_PROCESSES ==='; ps -eo pid,ppid,lstart,args | grep -E '[p]ython3 .*omega|[p]ython3 -m omega|[t]mux.*omega' || true; echo '=== TMUX ==='; tmux list-sessions 2>/dev/null || true; echo '=== LEGACY_DAEMON ==='; if [ -f /workspace/omega_runtime/omega_daemon.py ]; then sha256sum /workspace/omega_runtime/omega_daemon.py; sed -n '1,80p' /workspace/omega_runtime/omega_daemon.py; else echo MISSING; fi; echo '=== SUPERVISOR_STATUS ==='; cat /workspace/omega_runtime/state/SUPERVISOR_STATUS.json 2>/dev/null || echo MISSING; echo '=== RELEASE_HEADS ==='; for d in /workspace/omega_runtime/releases/*; do [ -d "$d/.git" ] || continue; printf '%s ' "$d"; git -C "$d" rev-parse HEAD 2>/dev/null || true; done
+=== TMUX ===
+omega-grid: 1 windows (created Sat Sep 12 13:23:54 2026)
+=== LEGACY_DAEMON ===
+ffa1d0b48bfade144a77be208b0d76af2ecaecc841999eb58e1a3263dac3173a  /workspace/omega_runtime/omega_daemon.py
+#!/usr/bin/env python3
+import datetime as dt, hashlib, json, os, sqlite3, time, uuid
+from pathlib import Path
+ROOT=Path('/workspace/omega_runtime/state'); DB=ROOT/'omega.sqlite3'; INTERVAL=30
+ORGANS={
+ 'omega-vps':{'kind':'central','caps':{'shell','files','internet','research','world_model'}},
+ 'host:ai-core-node':{'kind':'host','caps':{'shell','files','desktop','browser','avatar','gpu','local_state','sensors'}},
+ 'host:andreas-maco':{'kind':'host','caps':{'shell','files','entityos','self_integration','local_state','services'}}}
+WEIGHTS={'fit':1.0,'locality':.9,'fresh':.9,'info':.85,'independent':.7,'headroom':.9,'bridge':.9,'risk':-1.0}
+CELLS=('REENTRY','RESEARCH','WORLD_MODEL','HOST_SCOUT','SELF_IMPROVE','FALSIFIER','MAINTENANCE','MEMORY_COMPRESSION','EFFECT_RECONCILIATION','MASTER_BRIDGE')
+def now(): return dt.datetime.now(dt.timezone.utc).isoformat()
+def canon(x): return json.dumps(x,ensure_ascii=False,sort_keys=True,separators=(',',':'))
+def sha(x): return hashlib.sha256(canon(x).encode()).hexdigest()
+def con(): c=sqlite3.connect(DB);c.row_factory=sqlite3.Row;return c
+def init():
+ for n in ('inbox','outbox','telemetry','candidates'): (ROOT/n).mkdir(parents=True,exist_ok=True)
+ with con() as c:c.executescript("""PRAGMA journal_mode=WAL;CREATE TABLE IF NOT EXISTS epoch(id TEXT PRIMARY KEY,started TEXT,prev TEXT,status TEXT);CREATE TABLE IF NOT EXISTS frame(id TEXT PRIMARY KEY,epoch TEXT,prev TEXT,created TEXT,cell TEXT,score REAL,result TEXT);CREATE TABLE IF NOT EXISTS task(id TEXT PRIMARY KEY,payload TEXT,state TEXT,created TEXT);CREATE TABLE IF NOT EXISTS effect(id TEXT PRIMARY KEY,frame TEXT,organ TEXT,digest TEXT,payload TEXT,state TEXT,created TEXT);""")
+def latest(t):
+ with con() as c:r=c.execute(f'SELECT id FROM {t} ORDER BY rowid DESC LIMIT 1').fetchone();return r[0] if r else None
+def out(kind,payload):
+ d={'schema':'OMEGA_OUTBOX/v1','message_id':'msg_'+uuid.uuid4().hex,'created_at':now(),'kind':kind,'payload':payload};(ROOT/'outbox'/f"{d['message_id']}.json").write_text(json.dumps(d,indent=2,ensure_ascii=False)+'\n')
+def telemetry():
+ r={}
+ for p in (ROOT/'telemetry').glob('*.json'):
+  try:
+   d=json.loads(p.read_text());r[str(d.get('organ_id') or p.stem)]=d
+  except Exception: pass
+ return r
+def ingest():
+ for p in (ROOT/'inbox').glob('*.json'):
+  try:
+   d=json.loads(p.read_text());tid=str(d.get('task_id') or 'task_'+sha(d)[:20])
+   with con() as c:c.execute('INSERT OR IGNORE INTO task VALUES(?,?,?,?)',(tid,canon(d),'OPEN',now()))
+   p.rename(p.with_suffix('.consumed'))
+  except Exception: pass
+def tasks():
+ with con() as c:rows=c.execute("SELECT id,payload FROM task WHERE state='OPEN' ORDER BY created").fetchall()
+ a=[]
+ for r in rows:d=json.loads(r['payload']);d['task_id']=r['id'];a.append(d)
+ return a
+def free_available():
+ try:
+  import sys;sys.path.insert(0,'/workspace/clay-global-research-entity/tools');from run_free_go_swarm import PROVIDERS,provider_execution_admitted;return any(provider_execution_admitted(x) for x in PROVIDERS)
+ except Exception:return False
+def age(s):
+ try:return max(0,(dt.datetime.now(dt.timezone.utc)-dt.datetime.fromisoformat(s.replace('Z','+00:00'))).total_seconds())
+ except Exception:return 1e9
+def route(task):
+ req=set(task.get('required_capabilities',[]));domains=set(task.get('preferred_data_domains',[]));heavy=bool(task.get('heavy'));risk=bool(task.get('high_risk_effect'));want2=bool(task.get('wants_independent_falsifier'));tele=telemetry();scores=[]
+ central={'organ_id':'omega-vps','observed_at':now(),'health':'GREEN','capabilities':list(ORGANS['omega-vps']['caps']),'data_domains':['omega-central'],'cpu_load':.3,'ram_load':.3,'bridge_health':1.0,'information_gain':.6,'independence':.3};tele['omega-vps']=central
+ for oid,cfg in ORGANS.items():
+  d=tele.get(oid)
+  if not d: continue
+  caps=cfg['caps']|set(d.get('capabilities',[]));missing=req-caps
+  if missing or str(d.get('health','UNKNOWN')).upper()=='RED':continue
+  a=age(str(d.get('observed_at','')));is_host=cfg['kind']=='host'
+  if heavy and is_host and a>180:continue
+  if heavy and is_host and (not isinstance(d.get('cpu_load'),(int,float)) or not isinstance(d.get('ram_load'),(int,float))):continue
+  if heavy and is_host and max(float(d.get('cpu_load',0)),float(d.get('ram_load',0)),float(d.get('gpu_load',0) or 0))>=.90:continue
+  fit=1 if not req else len(req&caps)/len(req);loc=0 if not domains else len(domains&set(d.get('data_domains',[])))/len(domains);fresh=max(0,1-min(a,360)/360);loads=[x for x in (d.get('cpu_load'),d.get('ram_load'),d.get('gpu_load')) if isinstance(x,(int,float))];head=.5 if not loads else 1-max(loads);score=fit+loc*.9+fresh*.9+float(d.get('information_gain',.5))*.85+float(d.get('independence',.5))*(.7 if want2 else 0)+head*.9+float(d.get('bridge_health',1))*.9-(1 if risk and is_host else 0);scores.append((score,oid))
+ if not scores:raise RuntimeError('NO_ELIGIBLE_ORGAN')
+ scores.sort(reverse=True);n=max(1,int(task.get('max_organs',1)));n=max(n,2 if want2 else 1);return {'selected_organs':[x[1] for x in scores[:n]],'ranking':scores}
+def proposals():
+ ts=tasks();tel=telemetry();free=free_available();missing=len({'host:ai-core-node','host:andreas-maco'}-set(tel));s={'REENTRY':.30,'RESEARCH':.25+(.25 if free else 0),'WORLD_MODEL':.22,'HOST_SCOUT':.20+min(.35,.12*missing),'SELF_IMPROVE':.28 if not ts else .18,'FALSIFIER':.24,'MAINTENANCE':.18,'MEMORY_COMPRESSION':.16,'EFFECT_RECONCILIATION':.10,'MASTER_BRIDGE':.20};
+ if ts:
+  s['RESEARCH']+=.10;s['HOST_SCOUT']+=.10;s['FALSIFIER']+=.08
+  t0=ts[0];executable=isinstance(t0.get('effect'),dict) or isinstance(t0.get('execution'),dict) or str(t0.get('bridge_op') or '') in {'status','read_file','write_text','exec','screenshot'};needs_host=bool(t0.get('required_capabilities') or t0.get('preferred_data_domains') or executable)
+  if executable:s['HOST_SCOUT']=max(s['HOST_SCOUT'],.95)
+  elif needs_host:s['HOST_SCOUT']=max(s['HOST_SCOUT'],.72)
+ task=ts[0] if ts else {'task_id':'background_host_scout','required_capabilities':['local_state'],'max_organs':1};return [{'cell':x,'score':s[x],'task':task,'free':free} for x in CELLS]
+def realize(p,fid):
+ if p['cell']=='HOST_SCOUT':
+  try:r=route(p['task'])
+  except Exception as e:out('GRID_ROUTE_BLOCKED',{'frame_id':fid,'error':str(e)});return {'blocked':str(e)}
+  ids=[]
+  for oid in r['selected_organs']:
+   e={'schema':'OMEGA_GRID_EFFECT_INTENT/v1','effect_id':'effect_'+uuid.uuid4().hex,'frame_id':fid,'organ_id':oid,'task':p['task'],'route':r,'authority':'NOT_YET_GRANTED'};dig=sha(e)
+   with con() as c:c.execute('INSERT INTO effect VALUES(?,?,?,?,?,?,?)',(e['effect_id'],fid,oid,dig,canon(e),'PROPOSED',now()))
+   out('GRID_EFFECT_INTENT',{**e,'request_sha256':dig});ids.append(e['effect_id'])
+  if ids and p['task'].get('task_id') and p['task'].get('task_id')!='background_host_scout':
+=== SUPERVISOR_STATUS ===
+MISSING
+=== RELEASE_HEADS ===

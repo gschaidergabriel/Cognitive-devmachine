@@ -1,0 +1,4 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1","command_id":"go-avatar-gpt56sol-ai-path-resolution-20260912-0731","machine_id":"ai-core-node","owner":"gabriel","op":"exec","cwd":"/home/ai-core-node/.claude/star/visual","timeout_seconds":30,
+  "command":"set -u; cd /home/ai-core-node/.claude/star/visual; echo AI_FUNC; sed -n '120,180p' buehne_daemon.py; echo CAND_DIRS; find /home/ai-core-node/.claude/star/visual -maxdepth 4 -type f -name blink_000.png -printf '%p\\n' -exec sha256sum {} \\; 2>/dev/null | head -100; echo AI_MARKERS; find /home/ai-core-node/.claude/star/visual -maxdepth 3 -type d \( -iname '*ai*' -o -iname '*face*' \) -print | head -100"
+}

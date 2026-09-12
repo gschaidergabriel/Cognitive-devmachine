@@ -1,0 +1,45 @@
+.....................................FF................................. [ 48%]
+........................................................................ [ 96%]
+......                                                                   [100%]
+=================================== FAILURES ===================================
+____ test_first_effect_tool_result_can_only_ask_confirmation_no_second_tool ____
+
+    def test_first_effect_tool_result_can_only_ask_confirmation_no_second_tool():
+        s, captured = _tool_session()
+        ws = _WS()
+        s._tool_ausfuehren(
+            ws,
+            "call-1",
+            "frank_auftrag_stellen",
+            json.dumps({"auftrag": "Datei bauen", "bestaetigt": False}),
+        )
+>       assert captured[-1]["response_class"] == "effect_confirmation_request"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'response_class'
+
+DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py:136: KeyError
+_________ test_denied_effect_confirmation_response_is_tool_free_class __________
+
+    def test_denied_effect_confirmation_response_is_tool_free_class():
+        s, captured = _tool_session()
+        s._auftrag_stellen_mit_bestaetigung({"auftrag": "Datei bauen", "bestaetigt": False})
+        s._transkript_log.append("genau")
+        s._user_transkripte_zaehler += 1
+        ws = _WS()
+        s._tool_ausfuehren(
+            ws,
+            "call-2",
+            "frank_auftrag_stellen",
+            json.dumps({"auftrag": "Datei bauen", "bestaetigt": True}),
+        )
+>       assert captured[-1]["response_class"] == "effect_confirmation_denied"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'response_class'
+
+DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py:156: KeyError
+----------------------------- Captured stderr call -----------------------------
+[2026-09-12 19:14:04] realtime_gespraech: Auftrag NICHT ausgefuehrt: 'Datei bauen' -- noch nicht bestaetigt -- dies ist erst der Vorschlag; owner='gabriel' anchor=0
+=========================== short test summary info ============================
+FAILED DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py::test_first_effect_tool_result_can_only_ask_confirmation_no_second_tool
+FAILED DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py::test_denied_effect_confirmation_response_is_tool_free_class
+2 failed, 148 passed in 0.59s

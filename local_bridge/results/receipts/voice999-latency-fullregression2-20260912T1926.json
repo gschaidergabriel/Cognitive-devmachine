@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "voice999-latency-fullregression2-20260912T1926",
+  "command_sha256": "3227f90c561ca15bb2bd0e70dd88a57899b5ccf09c7ab61bec2fafde329b247a",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T12:14:02.887603+00:00",
+  "finished_at": "2026-09-12T12:14:04.713398+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "1b3e3719be5f61908b2c6bbaee2d6ee1c7c91867f8a72351138257cace0289e4",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": ".....................................FF................................. [ 48%]\n........................................................................ [ 96%]\n......                                                                   [100%]\n=================================== FAILURES ===================================\n____ test_first_effect_tool_result_can_only_ask_confirmation_no_second_tool ____\n\n    def test_first_effect_tool_result_can_only_ask_confirmation_no_second_tool():\n        s, captured = _tool_session()\n        ws = _WS()\n        s._tool_ausfuehren(\n            ws,\n            \"call-1\",\n            \"frank_auftrag_stellen\",\n            json.dumps({\"auftrag\": \"Datei bauen\", \"bestaetigt\": False}),\n        )\n>       assert captured[-1][\"response_class\"] == \"effect_confirmation_request\"\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       KeyError: 'response_class'\n\nDEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py:136: KeyError\n_________ test_denied_effect_confirmation_response_is_tool_free_class __________\n\n    def test_denied_effect_confirmation_response_is_tool_free_class():\n        s, captured = _tool_session()\n        s._auftrag_stellen_mit_bestaetigung({\"auftrag\": \"Datei bauen\", \"bestaetigt\": False})\n        s._transkript_log.append(\"genau\")\n        s._user_transkripte_zaehler += 1\n        ws = _WS()\n        s._tool_ausfuehren(\n            ws,\n            \"call-2\",\n            \"frank_auftrag_stellen\",\n            json.dumps({\"auftrag\": \"Datei bauen\", \"bestaetigt\": True}),\n        )\n>       assert captured[-1][\"response_class\"] == \"effect_confirmation_denied\"\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       KeyError: 'response_class'\n\nDEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py:156: KeyError\n----------------------------- Captured stderr call -----------------------------\n[2026-09-12 19:14:04] realtime_gespraech: Auftrag NICHT ausgefuehrt: 'Datei bauen' -- noch nicht bestaetigt -- dies ist erst der Vorschlag; owner='gabriel' anchor=0\n=========================== short test summary info ============================\nFAILED DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py::test_first_effect_tool_result_can_only_ask_confirmation_no_second_tool\nFAILED DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py::test_denied_effect_confirmation_response_is_tool_free_class\n2 failed, 148 passed in 0.59s\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

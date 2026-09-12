@@ -1,0 +1,560 @@
+#!/usr/bin/env python3
+"""Realtime-first Frankenstein voice runtime with strict cognitive fusion.
+
+OpenAI Realtime is a cognitive organ, not merely transport. Its native turn
+signals feed the active assembly; FranKenstein contributes persistent SELF,
+GRID/GWT, TITAN memory, emergent retrieval, goals, local perception and effect
+authority.  There is still exactly one canonical persistent state path.
+"""
+from __future__ import annotations
+
+import json
+import os
+import sqlite3
+import sys
+import threading
+import time
+from pathlib import Path
+from typing import Any
+
+HERE = Path(__file__).resolve().parent
+LEGACY = HERE.parent / "DEV_SOURCE_RESEARCH" / "repository" / "scripts"
+for p in (HERE, LEGACY):
+    if str(p) not in sys.path:
+        sys.path.insert(0, str(p))
+
+import voice_full_integration as vfi  # noqa: E402
+import voice_host_broker as vhb  # noqa: E402
+import f2wp1207_titan_mc as titan_mc  # noqa: E402
+import realtime_gespraech as rt  # noqa: E402
+import gespraechsmodus as gm  # noqa: E402
+import stern  # noqa: E402
+
+_PATCHED = False
+_TITAN_HOT_TIMEOUT_S = 0.12
+_TITAN_PREWARM_TIMEOUT_S = 0.50
+_TRANSCRIPT_BARRIER_TIMEOUT_S = 0.90
+_REMOTE_CONTEXT_TIMEOUT_S = 0.80
+_EMERGENT_CACHE_TTL_S = 8.0
+_EMERGENT_CACHE: dict[tuple[str, str], tuple[float, str]] = {}
+_EMERGENT_CACHE_LOCK = threading.Lock()
+
+
+def _augment_persona() -> None:
+    if vfi.VOICE_AGENCY_INSTRUCTION not in rt._PERSONA_BASIS:
+        rt._PERSONA_BASIS = rt._PERSONA_BASIS + "\n\n" + vfi.VOICE_AGENCY_INSTRUCTION
+
+
+def _current_receipt() -> dict[str, str] | None:
+    machine = (os.environ.get("LOCAL_BRIDGE_MACHINE_ID") or "").strip().lower()
+    owner = (os.environ.get("LOCAL_BRIDGE_OWNER") or "").strip().lower()
+    if not machine or not owner:
+        return None
+    return {"machine_id": machine, "owner": owner}
+
+
+def _receipt_matches(label: str, receipt: dict[str, str] | None) -> bool:
+    if receipt is None or label not in vfi.INSTALLATIONS:
+        return False
+    target = vfi.INSTALLATIONS[label]
+    return receipt.get("machine_id") == target["machine_id"] and receipt.get("owner") == target["owner"]
+
+
+def _local_person_matches(label: str) -> bool:
+    return _receipt_matches(label, _current_receipt())
+
+
+def _prewarm_titan_mc() -> None:
+    conn = None
+    try:
+        conn = sqlite3.connect(stern.DB_PATH, timeout=_TITAN_PREWARM_TIMEOUT_S)
+        conn.execute("PRAGMA busy_timeout=500")
+        titan_mc.ensure_schema(conn)
+    except Exception:
+        pass
+    finally:
+        if conn is not None:
+            try:
+                conn.close()
+            except Exception:
+                pass
+
+
+def _note_signal(self, event: str, **payload: Any) -> None:
+    session = getattr(self, "voice_full", None)
+    if session is not None:
+        session.note_realtime_event(event, **payload)
+
+
+def _cache_key(session_id: str, text: str) -> tuple[str, str]:
+    return str(session_id or ""), " ".join(str(text or "").split())
+
+
+def _emergent_cache_put(session_id: str, text: str, context: str) -> None:
+    key = _cache_key(session_id, text)
+    now = time.monotonic()
+    with _EMERGENT_CACHE_LOCK:
+        _EMERGENT_CACHE[key] = (now, str(context or ""))
+        stale = [k for k, (ts, _) in _EMERGENT_CACHE.items() if now - ts > _EMERGENT_CACHE_TTL_S]
+        for k in stale:
+            _EMERGENT_CACHE.pop(k, None)
+
+
+def _emergent_cache_get(session_id: str, text: str) -> str | None:
+    key = _cache_key(session_id, text)
+    with _EMERGENT_CACHE_LOCK:
+        item = _EMERGENT_CACHE.get(key)
+    if item is None:
+        return None
+    ts, value = item
+    if time.monotonic() - ts > _EMERGENT_CACHE_TTL_S:
+        return None
+    return value
+
+
+def _patch_legacy_retrieval_cache() -> None:
+    """Make the legacy tone thread reuse this turn's canonical retrieval.
+
+    The old realtime module asks `gespraech-abruf-holen` asynchronously after
+    transcript delivery.  We now perform that same production retrieval before
+    response release so GRID and the model see it in the same turn.  Calling it
+    twice would mutate retrieval exposure bookkeeping twice; return the exact
+    cached result to the legacy consumer instead.
+    """
+    original = rt._stern
+    if getattr(original, "_voice_full_retrieval_cached", False):
+        return
+
+    def wrapped(*args, **kwargs):
+        if args and args[0] == "gespraech-abruf-holen":
+            sid = ""
+            text = ""
+            seq = list(args[1:])
+            i = 0
+            while i < len(seq):
+                if seq[i] == "--session-id" and i + 1 < len(seq):
+                    sid = str(seq[i + 1]); i += 2; continue
+                if seq[i] == "--text" and i + 1 < len(seq):
+                    text = str(seq[i + 1]); i += 2; continue
+                i += 1
+            cached = _emergent_cache_get(sid, text)
+            if cached is not None:
+                return {"ok": True, "treffer_text": cached, "source": "canonical_voice_turn_cache"}
+        return original(*args, **kwargs)
+
+    wrapped._voice_full_retrieval_cached = True
+    rt._stern = wrapped
+
+
+def _release_pending_response(self, *, reason: str) -> bool:
+    pending = getattr(self, "_voice_pending_response", None)
+    if not pending:
+        return False
+    if len(pending) == 4:
+        ws, extra, generation, response_kwargs = pending
+    else:
+        ws, extra, generation = pending
+        response_kwargs = {}
+    if generation != getattr(self, "_voice_turn_generation", -1):
+        return False
+    self._voice_pending_response = None
+    self._voice_waiting_for_transcript = False
+    self._voice_response_release_reason = reason
+    _note_signal(self, "response_released", reason=reason)
+    self._voice_force_response = True
+    try:
+        self._response_erstellen(ws, extra, **response_kwargs)
+    finally:
+        self._voice_force_response = False
+    return True
+
+
+def _transcript_timeout_worker(self, generation: int) -> None:
+    time.sleep(_TRANSCRIPT_BARRIER_TIMEOUT_S)
+    if generation != getattr(self, "_voice_turn_generation", -1):
+        return
+    if not getattr(self, "_voice_waiting_for_transcript", False):
+        return
+    _release_pending_response(self, reason="transcript_timeout_fail_open")
+
+
+def _patch_session_init() -> None:
+    original = rt.RealtimeSession.__init__
+    if getattr(original, "_voice_full_wrapped", False):
+        return
+
+    def wrapped(self, *args, **kwargs):
+        original(self, *args, **kwargs)
+        self.voice_full = vfi.VoiceIntegrationSession()
+        self._voice_titan_mc_context = ""
+        self._voice_emergent_context = ""
+        self._voice_emergent_queried = False
+        self._voice_emergent_chars = 0
+        self._voice_grid_turn_error = ""
+        self._voice_titan_mc_error = ""
+        self._voice_remote_state: dict[str, Any] | None = None
+        self._voice_last_user_text = ""
+        self._voice_waiting_for_transcript = False
+        self._voice_pending_response = None
+        self._voice_turn_generation = 0
+        self._voice_force_response = False
+        self._voice_response_release_reason = ""
+
+        activity_original = self.waechter.aktivitaet
+
+        def activity_wrapped(warum: str = ""):
+            if warum == "user_speech_started":
+                self._voice_turn_generation += 1
+                self._voice_pending_response = None
+                self._voice_waiting_for_transcript = False
+                _note_signal(self, "speech_started")
+            elif warum == "user_speech_stopped":
+                self._voice_turn_generation += 1
+                self._voice_waiting_for_transcript = True
+                self._voice_pending_response = None
+                _note_signal(self, "speech_stopped")
+            return activity_original(warum)
+
+        self.waechter.aktivitaet = activity_wrapped
+
+        # Optional local default is accepted only as person selection unless
+        # the Local-Bridge machine/owner receipt proves the same installation.
+        label = (os.environ.get("FRANK_VOICE_DEFAULT_INSTALLATION") or "").strip().lower()
+        receipt = _current_receipt()
+        if label in vfi.INSTALLATIONS:
+            self.voice_full.select_person(label)
+            if _receipt_matches(label, receipt):
+                self.voice_full.bind(label, receipt=receipt)
+
+    wrapped._voice_full_wrapped = True
+    rt.RealtimeSession.__init__ = wrapped
+
+
+def _refresh_relationship_context(self, text: str) -> None:
+    """Same-host TITAN direct; cross-host TITAN+GRID via typed broker.
+
+    Remote context verifies machine_id/owner in voice_host_broker but does NOT
+    grant effect authority. Remote tools remain blocked until an explicit
+    remote effect route exists for that structured tool.
+    """
+    session = getattr(self, "voice_full", None)
+    self._voice_remote_state = None
+    if session is None or not session.selected_person:
+        self._voice_titan_mc_context = ""
+        return
+
+    if _local_person_matches(session.selected_person):
+        try:
+            conn = sqlite3.connect(stern.DB_PATH, timeout=_TITAN_HOT_TIMEOUT_S)
+            try:
+                conn.execute("PRAGMA busy_timeout=120")
+                self._voice_titan_mc_context = titan_mc.injection_text(
+                    conn,
+                    session.selected_person,
+                    text or "",
+                    session_id=session.session_id,
+                    char_budget=4200,
+                )
+                self._voice_titan_mc_error = ""
+            finally:
+                conn.close()
+        except Exception as exc:
+            self._voice_titan_mc_context = ""
+            self._voice_titan_mc_error = f"{type(exc).__name__}: {exc}"
+        return
+
+    try:
+        payload = vhb.relationship_context(
+            session.selected_person,
+            text or "",
+            session.session_id,
+            char_budget=4200,
+            timeout_s=_REMOTE_CONTEXT_TIMEOUT_S,
+        )
+        self._voice_titan_mc_context = str(payload.get("context") or "")[:8000]
+        state = payload.get("state")
+        self._voice_remote_state = state if isinstance(state, dict) else None
+        self._voice_titan_mc_error = ""
+    except Exception as exc:
+        self._voice_titan_mc_context = ""
+        self._voice_remote_state = None
+        self._voice_titan_mc_error = f"remote_state_unavailable: {type(exc).__name__}: {exc}"
+
+
+def _refresh_emergent_grid_context(self, text: str) -> None:
+    """Run exactly one canonical local prompt uptake + emergent retrieval.
+
+    Pre-selection is strictly read/mutation locked. Cross-host selection also
+    never writes the local installation: the remote broker must own a future
+    remote canonical-turn operation. For the exact local person, this is the
+    same production `automatischer_abruf()` consumed by the text hook, followed
+    by the existing canonical GRID turn-loop bridge with that one result.
+    """
+    session = getattr(self, "voice_full", None)
+    self._voice_emergent_context = ""
+    self._voice_emergent_queried = False
+    self._voice_emergent_chars = 0
+    self._voice_grid_turn_error = ""
+    if session is None or not session.selected_person:
+        return
+    if not _local_person_matches(session.selected_person):
+        return
+
+    sid = str(getattr(self, "raum_session_id", "") or session.session_id)
+    try:
+        self._voice_emergent_queried = True
+        treffer = stern.automatischer_abruf(sid, text or "") or ""
+        self._voice_emergent_context = str(treffer)[:12000]
+        self._voice_emergent_chars = len(self._voice_emergent_context)
+        _emergent_cache_put(sid, text or "", self._voice_emergent_context)
+        # This is the same function cmd_hook(UserPromptSubmit) calls after the
+        # one productive retrieval. Never call run_canonical_turn() separately.
+        auto = getattr(stern, "_f2wp1207_turn_loop_auto", None)
+        if callable(auto):
+            auto(sid, text or "", treffer or None)
+    except Exception as exc:
+        self._voice_grid_turn_error = f"{type(exc).__name__}: {exc}"
+
+
+def _note_real_transcript(self, text: str) -> dict[str, Any]:
+    session = getattr(self, "voice_full", None)
+    if session is None:
+        return {"refusal": False, "switch": None, "selected_person": None, "bound": False}
+
+    _note_signal(self, "transcript_ready")
+    self._voice_last_user_text = text or ""
+    refusal = session.note_user_text(text)
+    switch = session.switch_intent(text)
+    if switch:
+        session.select_person(switch)
+        receipt = _current_receipt()
+        if _receipt_matches(switch, receipt):
+            session.bind(switch, receipt=receipt)
+        elif session.binding is not None and session.binding.label != switch:
+            session.binding = None
+
+    # Both memory systems and the canonical GRID uptake happen before release
+    # of response.create, so the current spoken answer -- not the next one --
+    # sees the fused state.
+    _refresh_relationship_context(self, text)
+    _refresh_emergent_grid_context(self, text)
+    released = _release_pending_response(self, reason="transcript_ready_after_identity_titan_grid_retrieval")
+    return {
+        "refusal": refusal,
+        "switch": switch,
+        "selected_person": session.selected_person,
+        "bound": session.binding is not None,
+        "remote_context": self._voice_remote_state is not None,
+        "emergent_context": bool(self._voice_emergent_context),
+        "response_released": released,
+    }
+
+
+def _patch_real_transcript_path() -> None:
+    original = rt.RealtimeSession._voice_outcome_text_verarbeiten
+    if getattr(original, "_voice_full_wrapped", False):
+        return
+
+    def wrapped(self, text: str):
+        _note_real_transcript(self, text)
+        return original(self, text)
+
+    wrapped._voice_full_wrapped = True
+    rt.RealtimeSession._voice_outcome_text_verarbeiten = wrapped
+    rt.RealtimeSession.voice_full_note_text = _note_real_transcript
+
+
+def _local_inner_state(self) -> str:
+    """Bounded live GWT/voice state, never the other installation's state."""
+    session = getattr(self, "voice_full", None)
+    if session is None or not session.selected_person:
+        return ""
+    if not _local_person_matches(session.selected_person):
+        remote = getattr(self, "_voice_remote_state", None)
+        return json.dumps(remote, ensure_ascii=False, separators=(",", ":"))[:6000] if remote else ""
+
+    parts: list[str] = []
+    z = str(getattr(self, "_zustandstext", "") or "").strip()
+    if z:
+        parts.append("STATE=" + z[:3000])
+    capsule = getattr(self, "capsule", None)
+    try:
+        cdict = capsule.to_dict() if capsule is not None and hasattr(capsule, "to_dict") else None
+    except Exception:
+        cdict = None
+    if isinstance(cdict, dict):
+        # This is the existing RAM-only VoiceSessionCapsule: winning intent,
+        # goals/effects, presence, perception refs, tool permissions.
+        parts.append("VOICE_SESSION_CAPSULE=" + json.dumps(cdict, ensure_ascii=False, separators=(",", ":"))[:6500])
+    return "\n".join(parts)
+
+
+def _patch_response_instructions() -> None:
+    original = rt.RealtimeSession._response_erstellen
+    if getattr(original, "_voice_full_wrapped", False):
+        return
+
+    def wrapped(self, ws, zusatz_hinweis: str = "", **response_kwargs):
+        if getattr(self, "_voice_waiting_for_transcript", False) and not getattr(self, "_voice_force_response", False):
+            generation = getattr(self, "_voice_turn_generation", 0)
+            first = getattr(self, "_voice_pending_response", None) is None
+            self._voice_pending_response = (ws, zusatz_hinweis, generation, dict(response_kwargs))
+            if first:
+                threading.Thread(target=_transcript_timeout_worker, args=(self, generation), daemon=True).start()
+            return None
+
+        ctx = getattr(self, "voice_full", None)
+        if ctx is None:
+            return original(self, ws, zusatz_hinweis, **response_kwargs)
+
+        identity = ctx.identity_active_assembly(
+            inner_state=_local_inner_state(self),
+            titan_context=getattr(self, "_voice_titan_mc_context", ""),
+            emergent_context=getattr(self, "_voice_emergent_context", ""),
+            model_organ="OpenAI Realtime",
+            channel="ChatGPT/Realtime voice",
+        )
+        parts = [identity, vfi.VOICE_AGENCY_INSTRUCTION]
+        native_signal = ctx.realtime_active_assembly()
+        if native_signal:
+            parts.append(native_signal)
+        queried = bool(getattr(self, "_voice_emergent_queried", False))
+        chars = int(getattr(self, "_voice_emergent_chars", 0) or 0)
+        parts.append(
+            "EMERGENT_RETRIEVAL_STATUS{"
+            f"queried={str(queried).lower()};chars={chars};"
+            f"injected={str(bool(getattr(self, '_voice_emergent_context', ''))).lower()}"
+            "}"
+        )
+        if getattr(self, "_voice_titan_mc_error", ""):
+            parts.append("[VOICE_TITAN_CONTEXT_DEGRADED " + self._voice_titan_mc_error[:400] + "]")
+        if getattr(self, "_voice_grid_turn_error", ""):
+            parts.append("[VOICE_GRID_RETRIEVAL_DEGRADED " + self._voice_grid_turn_error[:400] + "]")
+        if zusatz_hinweis:
+            parts.append(zusatz_hinweis)
+        return original(self, ws, "\n".join(parts), **response_kwargs)
+
+    wrapped._voice_full_wrapped = True
+    rt.RealtimeSession._response_erstellen = wrapped
+
+
+def _patch_tool_gate() -> None:
+    original = rt.RealtimeSession._tool_ausfuehren
+    if getattr(original, "_voice_full_wrapped", False):
+        return
+
+    def wrapped(self, ws, call_id: str, name: str, args_raw: str) -> None:
+        session = getattr(self, "voice_full", None)
+        if session is None:
+            return original(self, ws, call_id, name, args_raw)
+        _note_signal(self, "tool_intent", name=name)
+        try:
+            args = json.loads(args_raw) if args_raw else {}
+        except Exception:
+            args = {}
+        payload = " ".join(str(v) for v in args.values() if v is not None)
+
+        # No person => no person-specific tools/effects at all. Identity
+        # selection is a real protocol state, not a prompt suggestion.
+        if not session.selected_person:
+            ergebnis = {
+                "ok": False,
+                "decision": "IDENTITY_REQUIRED",
+                "reason": "select Gabriel or Andreas before person-scoped tools",
+                "tool": name,
+            }
+            ws.send(json.dumps({
+                "type": "conversation.item.create",
+                "item": {"type": "function_call_output", "call_id": call_id,
+                         "output": json.dumps(ergebnis, ensure_ascii=False)},
+            }))
+            self._voice_force_response = True
+            try:
+                self._response_erstellen(ws)
+            finally:
+                self._voice_force_response = False
+            return
+
+        # Cross-host state may be readable through the typed broker, but until
+        # remote effect dispatch is implemented no tool may silently execute on
+        # the old local host. Read-only status/memory also stay blocked here to
+        # avoid returning the wrong installation's data through legacy stern.
+        if not _local_person_matches(session.selected_person):
+            ergebnis = {
+                "ok": False,
+                "decision": "REMOTE_TOOL_ROUTE_REQUIRED",
+                "reason": "selected FranKenstein is remote; local legacy tool dispatch is forbidden",
+                "target": session.selected_person,
+                "tool": name,
+            }
+            ws.send(json.dumps({
+                "type": "conversation.item.create",
+                "item": {"type": "function_call_output", "call_id": call_id,
+                         "output": json.dumps(ergebnis, ensure_ascii=False)},
+            }))
+            self._voice_force_response = True
+            try:
+                self._response_erstellen(ws)
+            finally:
+                self._voice_force_response = False
+            return
+
+        if name == "frank_auftrag_stellen":
+            try:
+                gate = session.effect_gate(action=name, payload=payload)
+            except vfi.VoiceIntegrationError as exc:
+                gate = {"ok": False, "decision": "DENY", "reason": str(exc)}
+            if not gate.get("ok"):
+                ws.send(json.dumps({
+                    "type": "conversation.item.create",
+                    "item": {"type": "function_call_output", "call_id": call_id,
+                             "output": json.dumps(gate, ensure_ascii=False)},
+                }))
+                self._voice_force_response = True
+                try:
+                    self._response_erstellen(ws)
+                finally:
+                    self._voice_force_response = False
+                return
+        return original(self, ws, call_id, name, args_raw)
+
+    wrapped._voice_full_wrapped = True
+    rt.RealtimeSession._tool_ausfuehren = wrapped
+
+
+def _patch_barge_in_signal() -> None:
+    original = rt.RealtimeSession._unterbrechung_synchronisieren
+    if getattr(original, "_voice_full_wrapped", False):
+        return
+
+    def wrapped(self, ws):
+        _note_signal(self, "barge_in")
+        return original(self, ws)
+
+    wrapped._voice_full_wrapped = True
+    rt.RealtimeSession._unterbrechung_synchronisieren = wrapped
+
+
+def patch_runtime() -> None:
+    global _PATCHED
+    if _PATCHED:
+        return
+    _prewarm_titan_mc()
+    _augment_persona()
+    _patch_legacy_retrieval_cache()
+    _patch_session_init()
+    _patch_real_transcript_path()
+    _patch_response_instructions()
+    _patch_tool_gate()
+    _patch_barge_in_signal()
+    _PATCHED = True
+
+
+def main() -> int:
+    patch_runtime()
+    gm.hoeren()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

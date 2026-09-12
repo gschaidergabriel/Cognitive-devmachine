@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-vps-github-read-20260912-1336z-01",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 seimensch-vps 'git ls-remote --heads git@github.com:gschaidergabriel/oMEGA.git main 2>&1 | head -5'",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 30
+}

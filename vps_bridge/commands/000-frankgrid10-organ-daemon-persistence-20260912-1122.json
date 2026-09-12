@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "000-frankgrid10-organ-daemon-persistence-20260912-1122",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; BASE=/workspace/frankgrid10-organ; PID=$(cat \"$BASE/run/organ-daemon.pid\"); kill -0 \"$PID\"; CMD=$(tr '\\0' ' ' <\"/proc/$PID/cmdline\"); printf '%s\\n' \"$CMD\" | grep -Fq '/workspace/frankgrid10-organ/code/organ_daemon.py'; python3 - \"$BASE/run/heartbeat.json\" <<'PY'\nimport json,sys,time,subprocess\np=sys.argv[1]\na=json.load(open(p)); print('HB1',json.dumps(a,sort_keys=True)); time.sleep(3); b=json.load(open(p)); print('HB2',json.dumps(b,sort_keys=True)); assert b['pid']==a['pid']; assert b['seq']>a['seq']; assert b['wall_time']>a['wall_time']; assert b['status']=='RUNNING'; print('HEARTBEAT_ADVANCED',b['seq']-a['seq'])\nPY\necho PID=$PID; echo CMDLINE=$CMD; echo FRANKGRID10_ORGAN_PERSISTENCE_PASS"
+}

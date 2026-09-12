@@ -1,0 +1,275 @@
+MANIFEST
+{
+ "kopf_zero_mit_augen.png": {
+  "grenzen": [
+   0.5240864753723145,
+   0.6372198462486267,
+   0.7364782691001892
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_+00.png": {
+  "grenzen": [
+   0.5240864753723145,
+   0.6372198462486267,
+   0.7364782691001892
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_+05.png": {
+  "grenzen": [
+   0.5492070764303207,
+   0.6521216332912445,
+   0.7405674010515213
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_+10.png": {
+  "grenzen": [
+   0.5533159524202347,
+   0.6494199335575104,
+   0.7274985015392303
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_+15.png": {
+  "grenzen": [
+   0.6029508262872696,
+   0.6891057193279266,
+   0.7709819674491882
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_+20.png": {
+  "grenzen": [
+   0.5538686662912369,
+   0.6504205167293549,
+   0.7295510023832321
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_+25.png": {
+  "grenzen": [
+   0.5575647354125977,
+   0.6438338160514832,
+   0.7250426411628723
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_-05.png": {
+  "grenzen": [
+   0.5361584424972534,
+   0.640364944934845,
+   0.7259902060031891
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_-10.png": {
+  "grenzen": [
+   0.5764002203941345,
+   0.6759049892425537,
+   0.7594092190265656
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_-15.png": {
+  "grenzen": [
+   0.5461269617080688,
+   0.6513699591159821,
+   0.7306612879037857
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_-20.png": {
+  "grenzen": [
+   0.5769376158714294,
+   0.6747817695140839,
+   0.7459251135587692
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ },
+ "roll/gier_+00_nick_+00_roll_-25.png": {
+  "grenzen": [
+   0.5573719441890717,
+   0.6740248799324036,
+   0.7391057908535004
+  ],
+  "slices": 4,
+  "alpha_summe_identisch": true
+ }
+}
+ANCHORS
+FILE rig2/augen_anker_exakt.json
+{
+  "quelle": "messen_augenanker_exakt.py -- exakte Reproduktion der Erzeugungs-Transform, kein Schaetzwert",
+  "head_anchor": {
+    "x": 768,
+    "y": 600
+  },
+  "augen_anker_roll0": {
+    "x": 610,
+    "y": 207
+  },
+  "werte": {
+    "-25": {
+      "dx_px": -32.5,
+      "dy_px": 22.0
+    },
+    "-20": {
+      "dx_px": -30.0,
+      "dy_px": 12.0
+    },
+    "-15": {
+      "dx_px": -24.0,
+      "dy_px": 5.0
+    },
+    "-10": {
+      "dx_px": -16.5,
+      "dy_px": 0.0
+    },
+    "-5": {
+      "dx_px": -9.5,
+      "dy_px": -1.0
+    },
+    "0": {
+      "dx_px": 0.5,
+      "dy_px": 0.5
+    },
+    "5": {
+      "dx_px": 10.5,
+      "dy_px": -29.0
+    },
+    "10": {
+      "dx_px": 22.0,
+      "dy_px": -55.5
+    },
+    "15": {
+      "dx_px": 35.0,
+      "dy_px": -77.5
+    },
+    "20": {
+      "dx_px": 47.5,
+      "dy_px": -97.0
+    },
+    "25": {
+      "dx_px": 62.5,
+      "dy_px": -112.0
+    }
+  }
+}
+FILE augen_anker_gemessen.json
+{
+  "quelle": "messen_augenanker.py -- Template-Matching gegen echte Kopf-Fotos",
+  "bildgroesse": [
+    1536,
+    1024
+  ],
+  "box": {
+    "x0": 476,
+    "y0": 122,
+    "w": 414,
+    "h": 227
+  },
+  "werte": {
+    "-25": {
+      "dx_px": -38,
+      "dy_px": -61,
+      "korrelation": 0.5707
+    },
+    "-20": {
+      "dx_px": -26,
+      "dy_px": -53,
+      "korrelation": 0.6007
+    },
+    "-15": {
+      "dx_px": -18,
+      "dy_px": -30,
+      "korrelation": 0.6563
+    },
+    "-10": {
+      "dx_px": -12,
+      "dy_px": -22,
+      "korrelation": 0.7136
+    },
+    "-5": {
+      "dx_px": -8,
+      "dy_px": -11,
+      "korrelation": 0.8078
+    },
+    "0": {
+      "dx_px": 0,
+      "dy_px": 0,
+      "korrelation": 1.0
+    },
+    "5": {
+      "dx_px": 8,
+      "dy_px": -21,
+      "korrelation": 0.8055
+    },
+    "10": {
+      "dx_px": 7,
+      "dy_px": -40,
+      "korrelation": 0.7126
+    },
+    "15": {
+      "dx_px": 21,
+      "dy_px": -54,
+      "korrelation": 0.6567
+    },
+    "20": {
+      "dx_px": 33,
+      "dy_px": -64,
+      "korrelation": 0.6023
+    },
+    "25": {
+      "dx_px": 45,
+      "dy_px": -70,
+      "korrelation": 0.5553
+    }
+  }
+}
+SOURCE_BIND
+-25 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha 21631a88416ddd2ddc2cd9741eca908659ceb2567cb2d1c4ad2b9d291842b531
+-25 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 11.384907 rgb_max 221 sha a35902ea0c89451e062ba1e715c52f1ad166daf0ec2e54a5935b4a5405790cbe
+-25 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 17.469445 rgb_max 255 sha b46f061f1bcff25d32c5989efb83ad8911534acf83c8ca4ee7c206583edfbc77
+-20 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha 8b038acb32f0fa1ee105d95dfa53cb8bd75e81aaf7071ad476ac367a26d71476
+-20 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 10.164739 rgb_max 223 sha d432cc968244b3578bc568debb96fb8d76045fca774b3e8e0dcd23913275cdf5
+-20 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 16.672486 rgb_max 255 sha f8da1d7311a946139167ac7340abb069e3857ce68336acb0aff6d8766ec68fa0
+-15 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha 4b7a724b4d3bffabf109e3e09d7d939800740dadb848e37dae1f682d5da12c0c
+-15 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 11.823136 rgb_max 236 sha 51fe78e89d6ca1618d4ac2163954c5a6285b50bbde6f0daa2a8532dc08e64c56
+-15 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 17.682169 rgb_max 255 sha 2b402905968efb9f35af7c1c65bc0deb28e4eda0fe17da8e64de665a3be891c8
+-10 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha 2c043219dd4553551134af889553582f5de3d119f6465afd036066998b1265d1
+-10 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 10.602127 rgb_max 242 sha 4e776dffe8b79591fe776b47252aef9de2b29f6207c49883ce037feeb3dbc70c
+-10 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 16.915944 rgb_max 255 sha c76e7106a82b39a0bd4c6ac8dab1ebfbb9411c6a45986a409367065a204ea78a
+-05 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha 58d3884cc84be158bfee1a28fd8a8e26b6d8f22959e43fed18d6aff6ad549a9d
+-05 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 10.841141 rgb_max 244 sha e2e8cd65a84864dae1cba7098ce6cd5dc391e68701265720376df47226a554cd
+-05 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 17.194939 rgb_max 253 sha 9758ce947e5904c61cdd12967cbe71638b68468fa14a85dc4f9420ff3ac06722
++00 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha 03632de8215751bfd00d74d8a04a2a3d047369f2f2d46ae3bde863b84468937e
++00 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 11.050508 rgb_max 251 sha 8cc1db9fda3acf07c52e029a90a8a45111626c1139bf45341abca257a9df7ef2
++00 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 17.462772 rgb_max 255 sha feaaa8493b9165d781893154e034ab141005b58ad16d48470b9a04e71b6d3650
++05 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha 81dc7585e1d252437e51108a32929bfd7d1cbe1bbc3274ca7f783963a6e0cde1
++05 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 12.014132 rgb_max 245 sha feb6df0543b965c00dde3ebb735843127e748c51ab5c2e58bbd6cfbde2157802
++05 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 18.023336 rgb_max 255 sha a22bfededb62e00f5573f850d2453dba0db06d35e83990d6c730c16dd369ff97
++10 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha 5dcae9e0330055fc054727f6fcde67beadc45ed69344a67088ebbd4f11f7a069
++10 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 11.754869 rgb_max 238 sha 946d112423ccaaa0b59155c83c349ab2884a3969cf4f201e86861f1832f20d2f
++10 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 17.801217 rgb_max 255 sha 5b7d81c268e1c648cbb654c137224b9c88cda82eea74446310fa0a95c57c6187
++15 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha b45a3f25c08221a095a5f8445cc1805edf10a2b77591b75b1ecf0054cd34ba5f
++15 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 12.895143 rgb_max 243 sha 59e15214be7bab5c872e45257e04b24e1f8235d7f746e4010384b86572536e17
++15 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 18.486614 rgb_max 255 sha 5d7c2e3bec54ee4b8da8a9c9221f37101cb7d8525ff24264aa4d12738ef6f3ae
++20 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha dc98bee19cb0cfcc6eb8f430c8bd0a7a26bc22b8fe3482164d768584811fcbfe
++20 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 12.655206 rgb_max 250 sha 7872f33560f0ee21c2257c8b7b5eaa5a93c1b7e2b9dd4724c07d969621493af1
++20 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 18.361951 rgb_max 255 sha 90bd49eb03505a285ddaacdc9aa0a4303df7066185a1260ef36cef00a6ec3e2b
++25 kopf_rgba/roll alpha_eq True rgb_mae 0.0 rgb_max 0 sha be0ed02ca71c36ab761479ed3c2c11e4c61b818e88179385db058a74146c8fb4
++25 kopf_rgba_tiefe/roll alpha_eq True rgb_mae 14.13266 rgb_max 247 sha c4f7f04ab9398aa7b105f0ee5e9389ac6104a35cf0d7febbd28649517fe11b6f
++25 kopf_rgba_tiefe_detail/roll alpha_eq True rgb_mae 19.427303 rgb_max 255 sha 9d6111e2f06552f7f499bad6e626b428c9a10935297ae072c920ec4651c966ce

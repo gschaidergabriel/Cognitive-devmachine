@@ -1,0 +1,18 @@
+{
+  "schema": "OMEGA_LIVENESS_DEPLOYMENT_DELTA/v1",
+  "source_head": "e8336eeac4f43f3808b44b5bb5859e010f8a7b26",
+  "base_head": "f60746ffc5d1170e146609036d667bb26ac1d56f",
+  "scope": "RELAY_LIVENESS_ONLY",
+  "files": {
+    "omega/receipt_reconciler.py": "2dccb2a1fb34aeb0563649ffc07cebdf4ac7a903",
+    "omega/relay_entrypoint.py": "c513aac52a4d2af89d8ded72f0bc3167b3b84f4e",
+    "omega/supervisor.py": "b921051a2c6791edf9d93379ee30400f8ddcab85"
+  },
+  "semantics": [
+    "quarantine abandoned DISPATCHING as UNKNOWN before relay restart",
+    "never automatically replay ambiguous effects",
+    "read-only late exact receipt reconciliation",
+    "relay stall watchdog",
+    "bounded exponential child restart backoff"
+  ]
+}

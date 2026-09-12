@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-read-chatgpt-terminal-voice-20260912T082201Z",
+  "command_sha256": "c37d044f4facbf16741d6ef7f3472eb8ef7d2ffaac5452409d1b5ed0cf23982a",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T08:29:52.237872+00:00",
+  "finished_at": "2026-09-12T08:29:52.237967+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "aef16fbcc6225d89324af7b2330d1ff445b928a434969563a766205877572f99",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\"\"\"Terminal surface for the canonical FranKenstein ChatGPT organ.\n\nThis is deliberately thin. It owns no memory/database/browser state. Every\nline is handed to f2wp1207_chatgpt_organ.execute_terminal_turn(), which uses\nthe existing GRID10 + stern.py harness + unified.db paths.\n\"\"\"\nfrom __future__ import annotations\n\nimport argparse\nimport json\nimport os\nimport socket\nimport sys\nimport uuid\nfrom pathlib import Path\n\nos.environ.setdefault(\"FRANK_OWNER\", \"gabriel\")\n\nHERE = Path(__file__).resolve().parent\nif str(HERE) not in sys.path:\n    sys.path.insert(0, str(HERE))\n\nimport stern\nfrom f2wp1207_chatgpt_organ import execute_terminal_turn\nfrom f2wp1207_chatgpt_exact_backend import ExactChatGPTBackend\n\n_BACKEND = ExactChatGPTBackend(stern)\nstern.chatgpt_senden = _BACKEND.send\nstern.chatgpt_ernten = _BACKEND.harvest\n\n\ndef _session_id(explicit: str | None) -> str:\n    if explicit:\n        return explicit\n    return f\"terminal-chatgpt-{socket.gethostname()}-{uuid.uuid4().hex[:12]}\"\n\n\ndef run_once(text: str, session_id: str) -> int:\n    result = execute_terminal_turn(text, session_id=session_id, stern_module=stern)\n    if result.get(\"ok\"):\n        print(result.get(\"response\") or \"\")\n        meta = {k: result.get(k) for k in (\n            \"run_id\", \"user_frame_id\", \"response_frame_id\", \"runtime_epoch_id\", \"workers\"\n        )}\n        print(\"\\n[FRANK/GRID10 \" + json.dumps(meta, ensure_ascii=False, separators=(\",\", \":\")) + \"]\",\n              file=sys.stderr)\n        return 0\n    print(json.dumps(result, ensure_ascii=False, indent=2, default=str), file=sys.stderr)\n    return 1\n\n\ndef main() -> int:\n    ap = argparse.ArgumentParser(description=\"FranKenstein terminal -> GRID10 -> ChatGPT organ -> GRID10\")\n    ap.add_argument(\"text\", nargs=\"*\", help=\"single turn; omit for interactive REPL\")\n    ap.add_argument(\"--session-id\", default=None)\n    args = ap.parse_args()\n    sid = _session_id(args.session_id)\n    if args.text:\n        return run_once(\" \".join(args.text), sid)\n\n    print(f\"FranKenstein ChatGPT organ | host={socket.gethostname()} | session={sid}\")\n    print(\"GRID10 owns turns. /exit beendet nur dieses Terminal.\\n\")\n    while True:\n        try:\n            text = input(\"frank> \").strip()\n        except (EOFError, KeyboardInterrupt):\n            print()\n            return 0\n        if not text:\n            continue\n        if text.lower() in {\"/exit\", \"/quit\", \"exit\", \"quit\"}:\n            return 0\n        run_once(text, sid)\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "aef16fbcc6225d89324af7b2330d1ff445b928a434969563a766205877572f99",
+    "bytes": 2564,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

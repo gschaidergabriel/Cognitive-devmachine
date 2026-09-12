@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
-"""Fail-closed static gate for FranKenstein Avatar blink timing/arbitration.
+"""Read-only static gate for FranKenstein Avatar blink timing and arbitration evidence.
 
-Read-only: parses one buehne.html supplied by the caller and emits JSON.
-It does not modify files, open browsers, contact services, or infer promotion.
+The timing contract is independently testable. Eye ownership during special
+expressions is currently an unresolved A-vs-B semantic policy: the exact live
+source says special-expression frames own their eyes, while a newer shadow lane
+intentionally keeps the canonical eye layer active. Therefore arbitration is
+reported as evidence and live-Contract-A consistency, not promoted to a global
+pass/fail policy by this script.
+
+This tool only parses one buehne.html supplied by the caller and emits JSON. It
+does not modify files, open browsers, contact services, or infer live promotion.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -47,7 +55,6 @@ def main() -> int:
     args = ap.parse_args()
 
     raw = args.html.read_bytes()
-    import hashlib
     sha = hashlib.sha256(raw).hexdigest()
     if args.expected_sha256 and sha != args.expected_sha256:
         fail(f"preimage mismatch: expected={args.expected_sha256} observed={sha}")
@@ -68,7 +75,9 @@ def main() -> int:
     special = between(src, "function sonderausdruckZeigen", "window.sonderausdruckZeigen")
 
     playback_has_runtime_guard = "_sonderLaeuft" in playback
-    special_hides_blink = bool(re.search(r'augen-blink[\s\S]{0,160}?opacity\s*=\s*["\']0["\']', special))
+    special_hides_blink = bool(
+        re.search(r'augen-blink[\s\S]{0,160}?opacity\s*=\s*["\']0["\']', special)
+    )
     special_clears_phase = bool(re.search(r"blinzelPhase\s*=\s*null", special))
 
     blink_z = z_index(src, "#augen-blink")
@@ -76,17 +85,27 @@ def main() -> int:
 
     timing_corridor_ok = total[0] >= 250.0 and total[1] <= 350.0
     asymmetry_ok = close_total[1] < open_total[0]
-    arbitration_ok = playback_has_runtime_guard and special_hides_blink and special_clears_phase
+    timing_ok = timing_corridor_ok and asymmetry_ok
 
-    # Informational only: code interval. Intent is contradictory in current source comments.
-    sm = re.search(r"setTimeout\(\(\)\s*=>\s*blinzeln\(true\),\s*([0-9.]+)\s*\+\s*Math\.random\(\)\s*\*\s*([0-9.]+)\s*\)", src)
+    # This is only consistency with the CURRENT LIVE SOURCE'S documented
+    # Contract A. It is not a global policy gate because the parallel canonical-
+    # eye shadow lane intentionally tests Contract B.
+    contract_a_ok = (
+        playback_has_runtime_guard and special_hides_blink and special_clears_phase
+    )
+
+    # Informational only: interval intent is contradictory in current comments.
+    sm = re.search(
+        r"setTimeout\(\(\)\s*=>\s*blinzeln\(true\),\s*([0-9.]+)\s*\+\s*Math\.random\(\)\s*\*\s*([0-9.]+)\s*\)",
+        src,
+    )
     interval = None
     if sm:
         ibase, ispan = map(float, sm.groups())
         interval = [ibase, ibase + ispan]
 
     result = {
-        "schema": "FRANK_AVATAR_BLINK_TEMPORAL_ARBITRATION_GATE/v1",
+        "schema": "FRANK_AVATAR_BLINK_TEMPORAL_ARBITRATION_GATE/v2",
         "subject": {"path": str(args.html), "sha256": sha},
         "timing_ms": {
             "close_frame": list(close),
@@ -98,20 +117,25 @@ def main() -> int:
             "corridor_250_350_ok": timing_corridor_ok,
             "close_strictly_faster_than_open_across_support": asymmetry_ok,
         },
-        "arbitration": {
+        "timing_gate": "PASS" if timing_ok else "FAIL",
+        "arbitration_policy": "UNRESOLVED_A_VS_B",
+        "arbitration_evidence": {
             "blink_z_index": blink_z,
             "special_expression_z_index": expr_z,
             "blink_can_cover_expression_if_visible": blink_z >= expr_z,
             "playback_rechecks__sonderLaeuft": playback_has_runtime_guard,
             "special_expression_immediately_hides_blink": special_hides_blink,
             "special_expression_clears_blink_phase": special_clears_phase,
-            "ok": arbitration_ok,
+            "live_contract_A_consistency": "PASS" if contract_a_ok else "FAIL",
+            "contract_A_scope": "LIVE_SOURCE_DOCUMENTED_SPECIAL_EXPRESSION_OWNS_EYES",
+            "contract_B_scope": "PARALLEL_CANONICAL_EYE_SHADOW_ALLOWS_AUTOBLINK_DURING_SPECIAL_EXPRESSION",
         },
         "scheduler_interval_ms_informational": interval,
-        "gate": "PASS" if timing_corridor_ok and asymmetry_ok and arbitration_ok else "FAIL",
+        "gate": "PASS" if timing_ok else "FAIL",
+        "gate_scope": "TIMING_ONLY_ARBITRATION_POLICY_NOT_DECIDED",
     }
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 0 if result["gate"] == "PASS" else 1
+    return 0 if timing_ok else 1
 
 
 if __name__ == "__main__":

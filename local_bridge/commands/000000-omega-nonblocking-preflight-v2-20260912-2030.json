@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "000000-omega-nonblocking-preflight-v2-20260912-2030",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -u; P=/home/ai-core-node/omega-bootstrap/oMEGA; printf 'PATH=%s\\n' \"$P\"; printf 'HEAD='; git -C \"$P\" rev-parse HEAD; printf 'STATUS\\n'; git -C \"$P\" status --short; printf 'ORIGIN='; git -C \"$P\" remote get-url origin; python3 --version; python3 -m pytest --version || true; df -h \"$P\" | tail -1",
+  "cwd": "/home/ai-core-node/omega-bootstrap/oMEGA",
+  "timeout_seconds": 30
+}

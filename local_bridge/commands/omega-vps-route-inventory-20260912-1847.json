@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-vps-route-inventory-20260912-1847",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 120,
+  "command": "set -eu; echo '=== SSH ROUTE METADATA ==='; if [ -f \"$HOME/.ssh/config\" ]; then awk '/^[[:space:]]*Host[[:space:]]/{print}; /^[[:space:]]*HostName[[:space:]]/{print}; /^[[:space:]]*User[[:space:]]/{print}; /^[[:space:]]*Port[[:space:]]/{print}' \"$HOME/.ssh/config\" | head -n 200; fi; echo '-- known VPS references --'; grep -RIlE '72\\.61\\.19\\.188|clay-direct-dev|hostinger|vps' \"$HOME/.ssh\" \"$HOME/.claude\" /etc/systemd/user /etc/systemd/system 2>/dev/null | head -n 100 || true; echo '-- tailscale peers names only --'; command -v tailscale >/dev/null 2>&1 && tailscale status 2>/dev/null | awk '{print $1,$2,$3}' | head -n 50 || true; echo '=== END ==='"
+}

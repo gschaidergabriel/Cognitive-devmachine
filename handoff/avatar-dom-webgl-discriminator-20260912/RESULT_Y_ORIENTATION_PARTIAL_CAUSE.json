@@ -1,8 +1,8 @@
 {
-  "schema": "AVATAR_DOM_WEBGL_DISCRIMINATOR/v2",
+  "schema": "AVATAR_DOM_WEBGL_DISCRIMINATOR/v3",
   "created_at": "2026-09-12T02:08:00Z",
-  "updated_at": "2026-09-12T02:09:00Z",
-  "status": "Y_ORIENTATION_PARTIAL_CAUSE_PROVEN_SAMPLING_NOT_SUFFICIENT_COLOR_PREMULTIPLY_NEXT",
+  "updated_at": "2026-09-12T02:12:00Z",
+  "status": "GPU_BLEND_CLEARED_Y_BUG_PROVEN_DOM_RENDER_PATH_RESIDUAL_OPEN",
   "scope": "read-only scratch discriminators on REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED; no live avatar source mutation; no promotion to live/WebGL/product credit",
   "subject": {
     "live_buehne_html_sha256": "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e",
@@ -16,24 +16,14 @@
       "name": "isolated_amd_hardware_sourceover",
       "result": "PASS_AT_COMPONENT_DIAGNOSTIC_SCOPE",
       "evidence_commit": "3af16f53c06bd4e802f1787dcceb2632855322b0",
-      "key_metrics": {
-        "deep_hole_px": 0,
-        "min_jaccard_approx": 0.9997066,
-        "max_jaccard_approx": 0.9998840,
-        "max_rgba_mae_approx": 0.3071
-      },
+      "key_metrics": {"deep_hole_px": 0,"min_jaccard_approx": 0.9997066,"max_jaccard_approx": 0.9998840,"max_rgba_mae_approx": 0.3071},
       "interpretation": "The raw AMD/ANGLE source-over blend path is not sufficient to explain the large final screenshot mismatch."
     },
     {
       "name": "direct_dom_vs_webgl_original_gate",
       "result": "FAIL",
       "evidence_commit": "3af16f53c06bd4e802f1787dcceb2632855322b0",
-      "key_metrics": {
-        "max_changed_frac_ge3": 0.616875,
-        "max_rgb_mae": 21.847881944444445,
-        "max_rgb_p99": 187.0,
-        "max_changed_px_ge8": 5864
-      }
+      "key_metrics": {"max_changed_frac_ge3":0.616875,"max_rgb_mae":21.847881944444445,"max_rgb_p99":187.0,"max_changed_px_ge8":5864}
     },
     {
       "name": "single_variable_y_orientation_repair",
@@ -42,36 +32,40 @@
       "receipt_path": "local_bridge/results/receipts/go-avatar-gpt56sol-dom-webgl-yfix-discriminator-20260912-0904.json",
       "receipt_blob_sha": "8d75cfb79bef6322f8add2ddb7d2369749e52871",
       "change_only": "vertex shader uv=vec2(p.x,1.-p.y) -> uv=p while UNPACK_FLIP_Y_WEBGL remains enabled",
-      "key_metrics": {
-        "max_changed_frac_ge3": 0.3178125,
-        "max_rgb_mae": 10.560520833333333,
-        "max_rgb_p99": 153.0,
-        "max_changed_px_ge8": 2990
-      },
-      "relative_change": {
-        "changed_frac_ge3_ratio_vs_original": 0.5151987839262187,
-        "rgb_mae_ratio_vs_original": 0.483366060594253
-      },
+      "key_metrics": {"max_changed_frac_ge3":0.3178125,"max_rgb_mae":10.560520833333333,"max_rgb_p99":153.0,"max_changed_px_ge8":2990},
+      "relative_change": {"changed_frac_ge3_ratio_vs_original":0.5151987839262187,"rgb_mae_ratio_vs_original":0.483366060594253},
       "causal_conclusion": "The double Y-flip/orientation contradiction is a real causal defect in the screenshot gate/harness, responsible for roughly half of the observed mismatch by these metrics. It is not the complete cause."
     },
     {
       "name": "production_geometry_sampling_discriminator",
-      "result": "SAMPLING_NOT_SUFFICIENT",
-      "source": "parallel worker receipt committed on chatgpt-local-ai-core-node-results",
+      "result": "EXTREME_DOWNSCALE_NOT_SUFFICIENT",
       "evidence_commit": "764a450a6b9a2df47b7b132a117f6e5a8a0c3ae9",
       "command_id": "go-avatar-gpt56sol-dom-webgl-sampling-discriminator-20260912-0906",
-      "geometry": [620, 414],
+      "geometry": [620,414],
+      "cases": 6,
+      "key_metrics": {"raw_max_changed_frac_ge3":0.30587501947950757,"raw_max_rgb_mae":10.36408368396447,"raw_max_rgb_p99":168.0,"resized_max_changed_frac_ge3":0.30587501947950757,"resized_max_rgb_mae":10.36408368396447,"resized_to_raw_mae_ratio":1.0,"resized_to_raw_changed_ratio":1.0},
+      "causal_conclusion": "Reducing the original extreme 120x80 gate to production-like 620x414 does not collapse the residual. This rules out the extreme downscale factor as the sole cause, but does not yet rule out a persistent DOM-vs-Canvas/WebGL resampling-path difference because 1536x1024 is still resampled at 620x414."
+    },
+    {
+      "name": "premultiply_and_canvas2d_discriminator",
+      "result": "WEBGL_PREMULTIPLY_NOT_CAUSE_DOM_PATH_ISOLATED",
+      "evidence_commit": "442029a5e762457e69115ac7f400aa0ee3ab62c1",
+      "command_id": "go-avatar-gpt56sol-dom-webgl-premultiply-discriminator-20260912-0909",
+      "geometry": [620,414],
       "cases": 6,
       "key_metrics": {
-        "raw_max_changed_frac_ge3": 0.30587501947950757,
-        "raw_max_rgb_mae": 10.36408368396447,
-        "raw_max_rgb_p99": 168.0,
-        "resized_max_changed_frac_ge3": 0.30587501947950757,
-        "resized_max_rgb_mae": 10.36408368396447,
-        "resized_to_raw_mae_ratio": 1.0,
-        "resized_to_raw_changed_ratio": 1.0
+        "canvas2d_vs_gl_premul_max_changed_frac_ge3": 0.0,
+        "canvas2d_vs_gl_premul_max_rgb_mae": 0.0,
+        "canvas2d_vs_gl_straight_max_changed_frac_ge3": 0.0,
+        "canvas2d_vs_gl_straight_max_rgb_mae": 0.0,
+        "dom_vs_canvas2d_max_changed_frac_ge3": 0.30587501947950757,
+        "dom_vs_canvas2d_max_rgb_mae": 10.36408368396447,
+        "dom_vs_gl_premul_max_changed_frac_ge3": 0.30587501947950757,
+        "dom_vs_gl_premul_max_rgb_mae": 10.36408368396447,
+        "dom_vs_gl_straight_max_changed_frac_ge3": 0.30587501947950757,
+        "dom_vs_gl_straight_max_rgb_mae": 10.36408368396447
       },
-      "causal_conclusion": "Moving to production-like 620x414 geometry does not collapse the residual mismatch. Extreme 120x80 downsampling/resampling is therefore not sufficient to explain the remaining error."
+      "causal_conclusion": "Canvas2D and both WebGL alpha/premultiply variants are pixel-identical in this discriminator, while all retain the same residual against DOM. Therefore WebGL premultiplication and the manual GPU source-over path are not the remaining cause. The residual is isolated upstream/downstream to DOM image rendering/compositing semantics versus the Canvas/WebGL raster path."
     }
   ],
   "coordination": {
@@ -82,21 +76,20 @@
   "remaining_hypotheses_ranked": [
     {
       "rank": 1,
-      "hypothesis": "Residual DOM-vs-WebGL color/compositing semantics differ, especially premultiplication/alpha/color-space handling between DOM compositor and manual WebGL shader path.",
-      "discriminator": "At production-like geometry and fixed Y orientation, run opaque-control, alpha-control, premultiplied-vs-straight upload/shader variants and a same-texture identity control. Keep live source read-only."
+      "hypothesis": "DOM <img> raster/resampling at scaled geometry differs from Canvas2D/WebGL texture rasterization. 620x414 is still a 1536x1024 downsample, so the earlier geometry test did not eliminate this class.",
+      "discriminator": "Run one representative pair at native 1536x1024 1:1 geometry with the Y fix. If DOM-vs-Canvas/WebGL mismatch collapses, isolate DOM scaling/filtering as root cause."
     },
     {
       "rank": 2,
-      "hypothesis": "The screenshot comparison includes an unmodeled geometry/rasterization offset unrelated to scale (pixel-center convention, viewport/canvas CSS-vs-backing-store mapping, alpha backdrop interaction).",
-      "discriminator": "If premultiply/color controls do not collapse the error, compare one identical opaque source in DOM and WebGL and estimate spatial registration before any blend."
+      "hypothesis": "CSS opacity/compositor color-space semantics differ from Canvas2D/WebGL even without resampling.",
+      "discriminator": "If native 1:1 geometry still differs, compare single opaque source, then one translucent source over #111, then two-layer opacity crossfade to separate image decode/raster from CSS opacity/compositor color-space behavior."
+    },
+    {
+      "rank": 3,
+      "hypothesis": "Pixel registration/backing-store geometry differs between DOM and canvas paths.",
+      "discriminator": "If single opaque native-size DOM-vs-canvas still differs, estimate translation/registration and compare exact crop bounds before any blend."
     }
   ],
-  "negative_credit_boundaries": {
-    "live_source_changed": false,
-    "webgl_live_integration_credit": 0,
-    "avatar_visual_acceptance_credit": 0,
-    "whole_avatar_credit": 0,
-    "whole_product_credit": 0
-  },
-  "next_exact_action": "Use the already-signaled COLOR_PREMULTIPLY discriminator lane; do not patch live body rendering until a same-subject read-only control identifies which compositor semantic causes the residual ~30 percent changed-pixel field."
+  "negative_credit_boundaries": {"live_source_changed":false,"webgl_live_integration_credit":0,"avatar_visual_acceptance_credit":0,"whole_avatar_credit":0,"whole_product_credit":0},
+  "next_exact_action": "Run a native-resolution 1536x1024 one-pair DOM-vs-Canvas/WebGL read-only discriminator. Do not patch the live body renderer until DOM raster/resampling is separated from CSS opacity/compositor semantics."
 }

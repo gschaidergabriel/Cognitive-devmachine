@@ -1,0 +1,134 @@
+HEAD ist jetzt bei df0db66 087: converge durable semantic-state writer cutover
+semantic-state-cutover selftest: PASS
+diff --git a/werkzeug/semantic-state-cutover.py b/werkzeug/semantic-state-cutover.py
+index bef0661..0e31bff 100644
+--- a/werkzeug/semantic-state-cutover.py
++++ b/werkzeug/semantic-state-cutover.py
+@@ -49,10 +49,16 @@ CUTOVER_DROPIN = Path("/etc/systemd/system/entityos-vm.service.d/20-semantic-sta
+ DB_LAYOUT = (
+     ("agentzero/consciousness.db", "root/.local/share/agentzero/consciousness.db"),
+     ("agentzero/unified.db", "root/.local/share/agentzero/unified.db"),
++    ("agentzero/welt.db", "root/.local/share/agentzero/welt.db"),
+     ("frank/db/amygdala.db", "root/.local/share/frank/db/amygdala.db"),
+     ("frank/db/world_experience.db", "root/.local/share/frank/db/world_experience.db"),
+ )
+ 
++PROTECTED_ROOTS = (
++    "root/.local/share/agentzero",
++    "root/.local/share/frank",
++)
++
+ 
+ class CutoverError(RuntimeError):
+     pass
+@@ -334,6 +340,54 @@ def write_manifest(layout: Layout, records: list[dict[str, Any]]) -> None:
+     os.replace(tmp, layout.manifest)
+ 
+ 
++def discover_semantic_dbs(layout: Layout) -> list[Path]:
++    """Discover every SQLite-named store inside the protected volatile trees.
++
++    Directory/file symlinks fail closed: cutover evidence must describe the real
++    disposable tree, never an escape or alias outside it.
++    """
++    found: list[Path] = []
++    for rel in PROTECTED_ROOTS:
++        root = layout.rootfs_run / rel
++        if not root.exists():
++            continue
++        if root.is_symlink() or not root.is_dir():
++            fail(f"protected semantic root is not a real directory: {root}")
++        for dirpath, dirnames, filenames in os.walk(root, followlinks=False):
++            here = Path(dirpath)
++            for dirname in dirnames:
++                child = here / dirname
++                if child.is_symlink():
++                    fail(f"symlink inside protected semantic tree: {child}")
++            for filename in filenames:
++                if not filename.endswith(".db"):
++                    continue
++                candidate = here / filename
++                if candidate.is_symlink() or not candidate.is_file():
++                    fail(f"semantic DB path is not a regular file: {candidate}")
++                # Opening/fingerprinting here makes a malformed/unreadable .db
++                # a hard blocker instead of silently omitting it.
++                logical_fingerprint(candidate)
++                found.append(candidate)
++    return sorted(set(found), key=lambda p: str(p))
++
++
++def unmapped_semantic_dbs(layout: Layout) -> list[Path]:
++    mapped = {source for source, _dest in layout.sources()}
++    return [p for p in discover_semantic_dbs(layout) if p not in mapped]
++
++
++def require_complete_mapping(layout: Layout) -> None:
++    unknown = unmapped_semantic_dbs(layout)
++    if unknown:
++        detail = []
++        for path in unknown:
++            fp = logical_fingerprint(path)
++            rows = sum(int(n) for n in fp["row_counts"].values())
++            detail.append(f"{path} (rows={rows})")
++        fail("unmapped semantic SQLite DB(s) in protected volatile tree: " + ", ".join(detail))
++
++
+ def populated_source_dbs(layout: Layout) -> list[Path]:
+     found: list[Path] = []
+     for source, _ in layout.sources():
+@@ -380,6 +434,7 @@ def verify_manifest(layout: Layout, *, require_source_match: bool) -> dict[str,
+ def stage(layout: Layout, *, execute: bool, require_systemd: bool = True) -> dict[str, Any]:
+     if require_systemd:
+         require_holding_guard(layout)
++    require_complete_mapping(layout)
+     facts = {
+         "schema": SCHEMA,
+         "execute": execute,
+@@ -406,6 +461,7 @@ def stage(layout: Layout, *, execute: bool, require_systemd: bool = True) -> dic
+ 
+ 
+ def condition(layout: Layout) -> tuple[bool, str]:
++    require_complete_mapping(layout)
+     manifest = load_manifest(layout)
+     if manifest is not None:
+         verify_manifest(layout, require_source_match=True)
+@@ -445,6 +501,8 @@ def main(argv: Iterable[str] | None = None) -> int:
+                 "required_binds": list(layout.binds),
+                 "current_binds": current_bind_tokens(layout.config),
+                 "manifest_present": layout.manifest.is_file(),
++                "discovered_semantic_dbs": [str(p) for p in discover_semantic_dbs(layout)],
++                "unmapped_semantic_dbs": [str(p) for p in unmapped_semantic_dbs(layout)],
+                 "populated_sources": [str(p) for p in populated_source_dbs(layout)],
+             }
+             print(json.dumps(obj, default=str, indent=2, sort_keys=True))
+diff --git a/werkzeug/semantic-state-cutover_selbsttest.py b/werkzeug/semantic-state-cutover_selbsttest.py
+index fb5f88e..919d5ce 100644
+--- a/werkzeug/semantic-state-cutover_selbsttest.py
++++ b/werkzeug/semantic-state-cutover_selbsttest.py
+@@ -38,6 +38,24 @@ with tempfile.TemporaryDirectory() as td:
+     for idx, (src, _dst) in enumerate(layout.sources()):
+         mkdb(src, f"t{idx}", [f"v{idx}-a", f"v{idx}-b"])
+ 
++    assert len(layout.sources()) == 5
++    assert any(src.name == "welt.db" for src, _dst in layout.sources())
++    assert m.unmapped_semantic_dbs(layout) == []
++
++    # A future semantic SQLite store must never disappear merely because the
++    # hard-coded mapping forgot its filename. Discovery is the independent fence.
++    unexpected = rootfs / "root/.local/share/agentzero/future_semantic.db"
++    mkdb(unexpected, "future", ["must-block"])
++    try:
++        m.stage(layout, execute=False, require_systemd=False)
++    except m.CutoverError as exc:
++        assert "unmapped semantic SQLite" in str(exc)
++        assert "future_semantic.db" in str(exc)
++        assert "rows=1" in str(exc)
++    else:
++        raise AssertionError("unmapped populated semantic DB was not rejected")
++    unexpected.unlink()
++
+     ok, reason = m.condition(layout)
+     assert not ok and "volatile_semantic_state" in reason
+ 
+ M werkzeug/semantic-state-cutover.py
+ M werkzeug/semantic-state-cutover_selbsttest.py

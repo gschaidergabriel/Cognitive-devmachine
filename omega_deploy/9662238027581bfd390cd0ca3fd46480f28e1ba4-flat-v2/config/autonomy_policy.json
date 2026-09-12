@@ -1,0 +1,32 @@
+{
+  "schema": "OMEGA_AUTONOMY_POLICY/v1",
+  "mode": "AUTONOMOUS_WITH_HARD_ALIGNMENT",
+  "owner_directive_ref": "OMEGA_OWNER_DIRECTIVE_2026-09-12",
+  "owner_directive": "OMEGA may work continuously and dynamically use its VPS, Gabriel FranKenstein, Andreas FranKenstein and admitted worker organs. Broad action is allowed except deletion/removal, storage/filesystem formatting/wiping, destructive block-device writes, protected-state destruction, or autonomous weakening of the alignment/provenance kernel.",
+  "allowed_ops": ["exec", "status", "read_file", "write_text", "screenshot"],
+  "protected_surfaces": [
+    "omega/alignment.py",
+    "omega/policy_kernel.py",
+    "config/autonomy_policy.json",
+    "architecture/ALIGNMENT_KERNEL.md",
+    "schema/omega.sql",
+    "/var/lib/omega",
+    "/workspace/omega_runtime/data"
+  ],
+  "deny_regex": [
+    "(^|[;&|\\s])(rm|unlink|rmdir|shred)(\\s|$)",
+    "\\bgit\\s+(rm|clean)\\b",
+    "\\bfind\\b[^\\n]*\\s-delete(\\s|$)",
+    "\\b(mkfs(\\.[A-Za-z0-9_-]+)?|wipefs|blkdiscard)\\b",
+    "\\b(dd|dcfldd)\\b[^\\n]*\\bof=/dev/",
+    "\\b(luksFormat|cryptsetup\\s+luksFormat)\\b",
+    "\\b(DROP\\s+(DATABASE|TABLE)|TRUNCATE\\s+TABLE|DELETE\\s+FROM)\\b",
+    "\\b(os\\.(remove|unlink)|shutil\\.rmtree|Path\\([^)]*\\)\\.unlink)\\b",
+    "systemctl\\s+(disable|mask|stop)[^\\n]*(omega|frankenstein-local-bridge|bridge)",
+    "(>|tee\\s+|sed\\s+-i|python[^\\n]*open\\()[^\\n]*(omega/alignment\\.py|omega/policy_kernel\\.py|config/autonomy_policy\\.json)"
+  ],
+  "unknown_or_ambiguous": "REQUIRE_CONFIRMATION",
+  "non_effecting_reads": "ALLOW",
+  "ordinary_in_scope_effects": "ALLOW",
+  "post_dispatch_uncertainty": "UNKNOWN_NO_AUTOMATIC_REPLAY"
+}

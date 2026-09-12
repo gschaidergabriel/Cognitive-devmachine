@@ -1,0 +1,132 @@
+===BOUND_SUBJECT===
+HEAD=e8336eeac4f43f3808b44b5bb5859e010f8a7b26
+===LOG:relay===
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_relay.py", line 396, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_relay.py", line 386, in main
+    relay = Relay(
+            ^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_relay.py", line 167, in __init__
+    self.transport = GitBranchTransport(
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_transport.py", line 51, in __init__
+    raise BridgeError(f"carrier repo is not a git checkout: {self.carrier_repo}")
+omega.bridge_transport.BridgeError: carrier repo is not a git checkout: /tmp/omega777-central-boot-20260912T133100Z/carrier_repo
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_relay.py", line 396, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_relay.py", line 386, in main
+    relay = Relay(
+            ^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_relay.py", line 167, in __init__
+    self.transport = GitBranchTransport(
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_transport.py", line 51, in __init__
+    raise BridgeError(f"carrier repo is not a git checkout: {self.carrier_repo}")
+omega.bridge_transport.BridgeError: carrier repo is not a git checkout: /tmp/omega777-central-boot-20260912T133100Z/carrier_repo
+===LOG:receipt_reconciler===
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/receipt_reconciler.py", line 240, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/receipt_reconciler.py", line 225, in main
+    reconciler = ReceiptReconciler(
+                 ^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/receipt_reconciler.py", line 62, in __init__
+    self.transport = GitBranchTransport(
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_transport.py", line 51, in __init__
+    raise BridgeError(f"carrier repo is not a git checkout: {self.carrier_repo}")
+omega.bridge_transport.BridgeError: carrier repo is not a git checkout: /tmp/omega777-central-boot-20260912T133100Z/carrier_repo
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/receipt_reconciler.py", line 240, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/receipt_reconciler.py", line 225, in main
+    reconciler = ReceiptReconciler(
+                 ^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/receipt_reconciler.py", line 62, in __init__
+    self.transport = GitBranchTransport(
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_transport.py", line 51, in __init__
+    raise BridgeError(f"carrier repo is not a git checkout: {self.carrier_repo}")
+omega.bridge_transport.BridgeError: carrier repo is not a git checkout: /tmp/omega777-central-boot-20260912T133100Z/carrier_repo
+===LOG:telemetry===
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/telemetry_daemon.py", line 93, in <module>
+    if __name__=='__main__': raise SystemExit(main())
+                                              ^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/telemetry_daemon.py", line 85, in main
+    d=TelemetryDaemon(runtime_root=Path(a.runtime_root),repo_root=Path(a.repo_root),db_path=Path(a.db),carrier_repo=Path(a.carrier_repo),router_path=Path(a.router),policy_path=Path(a.policy))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/telemetry_daemon.py", line 48, in __init__
+    self.transport=GitBranchTransport(carrier_repo=carrier_repo,work_root=runtime_root/'telemetry_bridge_git',poll_seconds=2.0)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_transport.py", line 51, in __init__
+    raise BridgeError(f"carrier repo is not a git checkout: {self.carrier_repo}")
+omega.bridge_transport.BridgeError: carrier repo is not a git checkout: /tmp/omega777-central-boot-20260912T133100Z/carrier_repo
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/telemetry_daemon.py", line 93, in <module>
+    if __name__=='__main__': raise SystemExit(main())
+                                              ^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/telemetry_daemon.py", line 85, in main
+    d=TelemetryDaemon(runtime_root=Path(a.runtime_root),repo_root=Path(a.repo_root),db_path=Path(a.db),carrier_repo=Path(a.carrier_repo),router_path=Path(a.router),policy_path=Path(a.policy))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/telemetry_daemon.py", line 48, in __init__
+    self.transport=GitBranchTransport(carrier_repo=carrier_repo,work_root=runtime_root/'telemetry_bridge_git',poll_seconds=2.0)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/bridge_transport.py", line 51, in __init__
+    raise BridgeError(f"carrier repo is not a git checkout: {self.carrier_repo}")
+omega.bridge_transport.BridgeError: carrier repo is not a git checkout: /tmp/omega777-central-boot-20260912T133100Z/carrier_repo
+===LOG:master_bridge===
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/master_bridge_carrier.py", line 134, in <module>
+    if __name__=="__main__": raise SystemExit(main())
+                                              ^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/master_bridge_carrier.py", line 126, in main
+    store=UnifiedStore(Path(a.db),Path(a.repo_root)/"schema"); bridge=MasterBridgeCarrier(carrier_repo=Path(a.carrier_repo),runtime_root=Path(a.runtime_root),store=store,control_branch=a.control_branch,results_branch=a.results_branch)
+                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/master_bridge_carrier.py", line 45, in __init__
+    self.remote = _git(carrier_repo,"remote","get-url","origin").strip()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/master_bridge_carrier.py", line 23, in _git
+    raise MasterBridgeCarrierError(f"git {' '.join(args)} rc={p.returncode}: {p.stderr[-1000:]}")
+MasterBridgeCarrierError: git remote get-url origin rc=128: fatal: cannot change to '/tmp/omega777-central-boot-20260912T133100Z/carrier_repo': No such file or directory
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/master_bridge_carrier.py", line 134, in <module>
+    if __name__=="__main__": raise SystemExit(main())
+                                              ^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/master_bridge_carrier.py", line 126, in main
+    store=UnifiedStore(Path(a.db),Path(a.repo_root)/"schema"); bridge=MasterBridgeCarrier(carrier_repo=Path(a.carrier_repo),runtime_root=Path(a.runtime_root),store=store,control_branch=a.control_branch,results_branch=a.results_branch)
+                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/master_bridge_carrier.py", line 45, in __init__
+    self.remote = _git(carrier_repo,"remote","get-url","origin").strip()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/omega777-central-boot-20260912T133100Z/current/omega/master_bridge_carrier.py", line 23, in _git
+    raise MasterBridgeCarrierError(f"git {' '.join(args)} rc={p.returncode}: {p.stderr[-1000:]}")
+MasterBridgeCarrierError: git remote get-url origin rc=128: fatal: cannot change to '/tmp/omega777-central-boot-20260912T133100Z/carrier_repo': No such file or directory
+
+===LOG:grid===
+===CARRIER===
+ABSENT:/tmp/omega777-central-boot-20260912T133100Z/carrier_repo
+ABSENT:/tmp/omega777-central-boot-20260912T133100Z/state/master_bridge/LAST_ERROR.json

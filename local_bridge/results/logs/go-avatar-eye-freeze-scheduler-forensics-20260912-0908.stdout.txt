@@ -1,0 +1,206 @@
+=== SUBJECT ===
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+=== SCHEDULERS ===
+55:  #kamera.kamera-wechsel{animation:kamera-overshoot .42s cubic-bezier(.32,1.55,.6,1)}
+79:    box-shadow:0 0 8px var(--rot);animation:blink 1.6s infinite}
+103:    object-fit:cover;opacity:.85;transition:opacity .6s ease-in-out;
+141:  /* ⭐⭐ 2026-09-11 (Animations-Agent, Zweiter-Kopf-Pruefung): 8px/14px/16px
+147:  /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+173:  /* ⭐⭐ 2026-09-11 (Animations-Agent, ZWEITER KOPF, Ursache behoben):
+190:  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+215:  /* ⭐⭐ 2026-09-11 (Animations-Agent): die alten flachen Ebenen #gesicht und
+229:  #gesicht-rahmen.pose-wechsel{animation:pose-overshoot .38s cubic-bezier(.32,1.55,.6,1)}
+278:    transition:opacity .06s linear}
+306:    transition:opacity .35s ease-in-out;will-change:transform}
+307:  /* ⭐ 2026-09-11 (Animations-Agent): echtes Blinzeln aus 12 fotografierten
+332:    animation:einblenden .28s ease-out}
+342:    transition:all .15s ease}
+349:    transition:border-color .15s ease}
+353:    transition:filter .12s ease,transform .12s ease}
+463:// normaler Teil der Zeile, kein Extra-Element, keine Animation.
+504:// nicht irgendein generischer Gradient). Bisher sprang mundAnimation() hart
+543:function mundAnimation(text){
+547:  const iv = setInterval(() => {
+553:  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+559:// sofort eine eigene mundAnimation: ~105 gleichzeitige setInterval, der Mund
+572:          mundAnimation(z.text);
+639:// ⭐ 2026-09-11 (Animations-Agent): die alten Vorladerunden fuer /ausdruck/
+691:setInterval(hgSchritt, 90); // ~11 Bilder/s -- reicht fuer einen Hintergrund-Loop, kein Fokuspunkt
+703:// ⭐⭐ NEU 2026-09-11 (Animations-Agent): kopfPose ist ein echtes, laufendes
+717:// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 2): ECHTE Kopfdrehung statt nur
+791:// ⭐⭐⭐ 2026-09-11 STIRN-LUECKE GEFIXT (Animations-Agent, dritte Instanz
+928:// ⭐⭐ 2026-09-11 ZWEITER KOPF -- HIER WAR DIE URSACHE (Animations-Agent,
+967:      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+968:      setTimeout(() => rahmen.classList.remove("pose-wechsel"), 420);
+984:    if(stufe < 6) setTimeout(hoch, 90);
+985:    else setTimeout(runter, haltenMs);
+990:    if(stufe > 0) setTimeout(runter, 90);
+991:    else setTimeout(sauber, 120); // letzte Stufe (= Neutralbild) kurz halten, dann Ebenen aus
+993:  setTimeout(hoch, 90);
+997:// ⭐ 2026-09-11 Auftragsteil E (Animations-Agent): Sonderausdruck aus einem
+1065:// ⭐ 2026-09-11 Auftragsteil F (Animations-Agent, Koordinator-Freigabe):
+1108:    // KEIN hartes Unterbrechen einer schon laufenden Animation.
+1109:    if(versuch < 8) setTimeout(() => _koerperSonderausdruckVersuchen(pool, versuch+1), 600);
+1159:// "Doppelschlag"-Bonus war (setTimeout(blinzeln, 120+...) unten). Jeder
+1178:// ⭐⭐ 2026-09-11 (Animations-Agent) ECHTES BLINZELN: statt nur einer
+1210:      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }
+1219:  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);
+1222:  setTimeout(() => blinzeln(true), 2000 + Math.random()*5000); // 2-7s, unregelmaessig (Gabriels Vorgabe)
+1276:  if(_fokusAblaufTimer) clearTimeout(_fokusAblaufTimer);
+1278:    _fokusAblaufTimer = setTimeout(() => { gespraechsFokus = "gabriel"; }, 5000 + Math.random()*6000);
+1314:    setTimeout(() => { blickPauseAktiv = false; }, 350 + Math.random()*550); // 0.35-0.9s kurzer Wegblick
+1316:  setTimeout(blickPauseSchritt, 4000 + Math.random()*7000); // 4-11s, unregelmaessig
+1318:setTimeout(blickPauseSchritt, 3000);
+1334:// ⭐ 2026-09-11 Auftragsteil D (Animations-Agent): "geradeaus" wirkt fuer
+1362:  setTimeout(() => { mikroSakX = 0; mikroSakY = 0; }, 80 + Math.random() * 90); // kurz gehalten, dann ballistisch zurueck (kein Lerp)
+1363:  setTimeout(mikroSakkadeSchritt, 1000 + Math.random() * 3000); // 1-4s, unregelmaessig
+1365:setTimeout(mikroSakkadeSchritt, 1500);
+1368:// die Zielwahl braucht denselben Takt wie die Animation selbst. Bleibt
+1418:  setTimeout(wanderSchritt, 2500 + Math.random()*4500); // lange, ziellose Pausen
+1420:setTimeout(wanderSchritt, 1500);
+1438:    setTimeout(() => {
+1448:  setTimeout(kopfKurzNeigen, 9000 + Math.random()*10000); // 9-19s, unregelmaessig
+1466:    if(_blickTimer) clearTimeout(_blickTimer);
+1467:    _blickTimer = setTimeout(() => {
+1473:    if(_ausdruckTimer) clearTimeout(_ausdruckTimer);
+1474:    _ausdruckTimer = setTimeout(() => {
+1489:// ── Buehnen-Animation: atmen, Datenregen (2 Ebenen = Parallaxe), Farbdrift,
+1616:setInterval(() => { _mikroUnruheZiel = (Math.random()*2 - 1); }, 2600 + Math.random()*3200);
+1732:// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+1771:  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+1862:  requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+1863:  setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+1887:  requestAnimationFrame(schleife);
+1889:requestAnimationFrame(schleife);
+1890:setInterval(() => {
+1902:setInterval(() => {
+1907:// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+1949:setInterval(chatHolen, 1500);
+1950:setInterval(statusHolen, 3000);
+1953:// ⭐ 2026-09-11 (Animations-Agent) PRUEF-HAKEN fuer die echte-Verifikation am
+1967:      kopfRollSequenzZu(15, () => setTimeout(() => {
+1995:setInterval(_reloadWaechter, 2000);
+=== MAIN LOOP CONTEXT ===
+1866-let letzteFrames = [];
+1867-function fpsMessen(t){
+1868-  letzteFrames.push(t);
+1869-  const grenze = t - 1000;
+1870-  letzteFrames = letzteFrames.filter(x => x > grenze);
+1871-  window.__buehneFps = letzteFrames.length;
+1872-}
+1873-
+1874:function schleife(t){
+1875-  atmen();
+1876-  koerperSchritt(t);
+1877-  kopfRollTick(t);
+1878-  mundSchritt(t);
+1879-  kopfKoerperDrehSchritt();
+1880-  kameraWackeln();
+1881-  gazeSchritt();
+1882-  const regenFaktor = regenGedrosselt ? 0.5 : 1;
+1883-  if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+1884-  if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+1885-  regenZeichnen();
+1886-  fpsMessen(t);
+1887:  requestAnimationFrame(schleife);
+1888-}
+1889:requestAnimationFrame(schleife);
+1890-setInterval(() => {
+1891-  const fps = window.__buehneFps || 60;
+1892-  if(fps < 24 && !regenGedrosselt){
+1893-    regenGedrosselt = true;
+1894-    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+1895-  }else if(fps >= 28 && regenGedrosselt){
+1896-    regenGedrosselt = false;
+1897-  }
+1898-}, 4000);
+1899-
+1900-// Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+1901-// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+1902-setInterval(() => {
+1903-  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+1904-    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+1905-}, 5000);
+1906-// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+1907-// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+=== SPECIAL CONTEXT ===
+936-// wie #kopf-schicht) auf #ausdruck-schicht/#ausdruck-schicht2, die IN
+937-// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+938-// tragen. Waehrend der Sequenz wird ausserdem der Mund-Flicken ausgeblendet
+939-// (die Ausdrucks-Frames tragen ihren eigenen Mund) und der
+940-// Erkennungs-Glimmer unterdrueckt (gazeSchritt() prueft _sonderLaeuft) --
+941-// sonst laege ein zweites Augen-/Mundsignal auf dem Ausdrucksgesicht.
+942-let ausdruckAktiv = 1;
+943-let _sonderLaeuft = false;
+944:function sonderausdruckZeigen(register, ausdruck, haltenMs){
+945-  if(_sonderLaeuft) return; // keine zwei Sequenzen gleichzeitig
+946-  haltenMs = haltenMs || 1400;
+947-  _sonderLaeuft = true;
+948-  $("mund-effekt").style.opacity = "0";
+949-  const stufeSrc = n => `/ausdruck_erweitert/${register}/${ausdruck}/frontal/stufe_0${n}.png`;
+950-  const wechsel = (neu, mitSchwung) => {
+951-    const sichtbar = ausdruckAktiv === 1 ? $("ausdruck-schicht") : $("ausdruck-schicht2");
+952-    const versteckt = ausdruckAktiv === 1 ? $("ausdruck-schicht2") : $("ausdruck-schicht");
+953-    if(sichtbar.getAttribute("src") === neu) return;
+954-    versteckt.src = neu;
+955-    // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+956-    // kopfRollTick() oben -- atmen() schreibt Transform/Filter nur noch auf
+957-    // die per ausdruckAktiv aktuell sichtbare Ebene, die neu einblendende
+958-    // Ebene braucht den brandaktuellen Wert deshalb hier einmalig.
+959-    versteckt.style.transform = _atmenTransform;
+960-    versteckt.style.filter = _atmenFilter;
+961-    versteckt.style.opacity = "1";
+962-    sichtbar.style.opacity = "0";
+963-    ausdruckAktiv = ausdruckAktiv === 1 ? 2 : 1;
+964-    if(mitSchwung){
+965-      const rahmen = $("gesicht-rahmen");
+966-      rahmen.classList.remove("pose-wechsel");
+967-      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+968-      setTimeout(() => rahmen.classList.remove("pose-wechsel"), 420);
+969-    }
+970-  };
+971-  const sauber = () => {
+972-    $("ausdruck-schicht").style.opacity = "0";
+973-    $("ausdruck-schicht2").style.opacity = "0";
+974-    $("mund-effekt").style.opacity = "1";
+--
+987-  const runter = () => {
+988-    stufe--;
+989-    wechsel(stufeSrc(stufe), false);
+990-    if(stufe > 0) setTimeout(runter, 90);
+991-    else setTimeout(sauber, 120); // letzte Stufe (= Neutralbild) kurz halten, dann Ebenen aus
+992-  };
+993-  setTimeout(hoch, 90);
+994-}
+995:window.sonderausdruckZeigen = sonderausdruckZeigen;
+996-
+997-// ⭐ 2026-09-11 Auftragsteil E (Animations-Agent): Sonderausdruck aus einem
+998-// ECHTEN, schon gemessenen Signal ableiten statt aus Stichwoertern zu raten.
+999-// Der Buehnen-Daemon bestimmt fuer jede Antwort schon ein Chat-Emoji ueber
+1000-// emote_bestimmen() (buehne_daemon.py), das intern identitaet._self_ereignis()
+1001-// aus /opt/entityos/voice/identitaet.py aufruft -- eine Klassifikation von
+1002-// SEINEM EIGENEN Antworttext in sechs Kategorien (self_uncertain/-creative/
+1003-// -empathetic/-technical/-confident/-neutral). Das ist eine Messung an etwas,
+1004-// das wirklich existiert (sein eigener Text) -- kein Raten an Gabriels Frage.
+1005-// Das Emoji kommt bereits ueber /api/chat (z.emote), also KEIN neuer Python-
+1006-// Aufruf aus dem Browser noetig -- die Kategorie ist 1:1 aus dem Emoji
+1007-// rekonstruierbar (exakt dieselbe Zuordnung wie _EMOTE_JE_KATEGORIE dort).
+1008-//
+1009-// Nur drei der sechs Kategorien bekommen einen Bild-Pool: self_creative,
+1010-// self_confident, self_uncertain. Fuer self_empathetic ("zugewandt_weich")
+1011-// und self_technical ("wach_aufmerksam") gibt es in den 44 Sonderausdruecken
+1012-// (anime_90s/satire_meme/demonic/serious_dystopian) schlicht KEIN passendes
+1013-// Bild -- die vier Register sind komisch/duester/frech, nicht warm oder
+1014-// konzentriert-ruhig. Ein Bild aus einem falschen Register waere Erfinden
+1015-// statt Messen, deshalb bleiben diese zwei Kategorien ohne Sonderausdruck
+1016-// (wie self_neutral). Aus demselben Grund bleiben demonic/serious_dystopian
+1017-// hier komplett aussen vor: keine der sechs Kategorien beschreibt Wut/
+1018-// Bedrohung/Trauer, das ist eine andere Achse als "wie er kommuniziert".
+1019-// Diese Luecke ist bewusst, siehe Bericht an den Koordinator.
+1020-const EMOTE_ZU_KATEGORIE = {
+1021-  "\u{1F4AA}": "self_confident",
+1022-  "\u{1F914}": "self_uncertain",
+1023-  "✨":    "self_creative",
+1024-  "\u{1F49C}": "self_empathetic",
+1025-  "⚙":    "self_technical"
+SCOPE=REAL_HOST_READ_ONLY_EYE_FREEZE_SCHEDULER_FORENSICS

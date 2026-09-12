@@ -1,6 +1,6 @@
-# GO — Avatar Parallax Provenance Audit — 2026-09-12
+# GO — Avatar Parallax Provenance / Integrity Audit — 2026-09-12
 
-Status: **SOURCE/PROVENANCE ESTABLISHED; LIVE INTEGRATION NOT YET PROMOTED**
+Status: **SOURCE/PROVENANCE + STATIC RECONSTRUCTION INTEGRITY ESTABLISHED; LIVE PARALLAX INTEGRATION NOT YET PROMOTED**
 
 ## Scope
 
@@ -14,9 +14,11 @@ Live subject observed during the audit:
 
 Bridge evidence:
 
-- `go-avatar-gpt56sol-parallax-provenance-20260912-0722`: PASS
+- `go-avatar-gpt56sol-parallax-provenance-20260912-0722`: PASS.
 - `go-avatar-gpt56sol-parallax-compact-audit-20260912-0724`: **EVIDENCE_INVALID** because the audit script itself raised a Python `TypeError`; no product conclusion was drawn.
 - `go-avatar-gpt56sol-parallax-compact-audit-v2-20260912-0725`: PASS, exit 0.
+- `go-avatar-gpt56sol-parallax-integrity-20260912-0734`: **EVIDENCE_INVALID** because the generated command JSON contained unescaped physical newlines; it was not treated as product evidence.
+- `go-avatar-gpt56sol-parallax-integrity-v2-20260912-0736`: PASS, exit 0 on the real `ai-core-node` host.
 
 ## Exact asset inventory
 
@@ -29,22 +31,38 @@ The live host contains **48 PNG assets in 12 directories**, not the older handof
 
 `kopf_zero_mit_augen` is byte-identical to `gier_+00_nick_+00_roll_+00` for all four slices (`ZERO_EQUALS_ROLL0=True`).
 
-## Provenance finding
+## Generator / provenance
 
-The prior uncertainty “where did these parallax assets come from?” is resolved at source level. The real host contains `tiefe_bauen.py`; its text explicitly identifies:
+The real host contains `tiefe_bauen.py`, SHA-256:
 
-- `depth-anything/Depth-Anything-V2-Small-hf`
-- a `parallax` mode for head depth slices
-- `modus_parallax()`
-- writing a `parallax/manifest.json`
+`41c4a7c6195b421eb026d122040fca8e58595f277cdb396777f30c7a500ae33d`
 
-Therefore the correct classification is **generated depth-slice candidate with identified generator/model lineage**, not unexplained image material.
+The source explicitly binds:
 
-This does **not** yet prove that the copied `kopf_rgba_parallax/` tree is byte-for-byte reconstructible from a particular original head source + exact model/cache/runtime. That stronger claim remains a separate gate.
+- `depth-anything/Depth-Anything-V2-Small-hf`, offline/local-cache loading;
+- `BANDS = 4`;
+- `FEDER = 0.020` soft depth-boundary weighting;
+- `modus_parallax()` for `kopf_zero_mit_augen` plus all roll poses;
+- depth-derived quantile boundaries;
+- integer alpha splitting with residual pixels assigned to the maximum-weight band;
+- an assertion that the sum of the four slice alphas is byte-identical to the original alpha;
+- `manifest.json` output.
 
-## Geometry / alpha evidence at roll +00
+The current manifest is:
 
-For the four +00 layers, the read-only audit measured:
+`kopf_rgba_tiefe/parallax/manifest.json`
+
+SHA-256:
+
+`00b773e05b990547992484e27e72a10add7be5720dee10c40ac05b0e3df640d2`
+
+It records 4 slices and `alpha_summe_identisch: true` for the neutral image and every roll state from -25 through +25 degrees.
+
+Classification: **generated depth-slice candidate with identified generator/model lineage and explicit reconstruction invariant**. This is no longer an unexplained asset set.
+
+## Geometry / alpha evidence
+
+For roll +00 the four layers measured:
 
 | layer | nonzero-alpha fraction | opaque fraction | alpha bbox |
 |---|---:|---:|---|
@@ -53,28 +71,55 @@ For the four +00 layers, the read-only audit measured:
 | seite_ohren | 0.090314 | 0.000000 | `(603,40)-(957,575)` |
 | hinten_haar | 0.088564 | 0.000000 | `(580,40)-(962,599)` |
 
-Union coverage is `0.104076` of the full 1536×1024 canvas. Pixels with >1 nonzero-alpha layer occupy `0.099212` of the full canvas. This is consistent with strongly overlapping soft depth weights rather than four disjoint hard cut-outs. That is a structural observation only; it is not yet visual-quality acceptance.
+The four layers therefore deliberately overlap as soft depth weights rather than acting as disjoint hard cut-outs.
+
+## Independent static reconstruction check
+
+The real-host integrity runner independently inspected all 12 four-layer states.
+
+For every state:
+
+- `FILES = 4`;
+- `ALPHA_SUM_MAX = 255`;
+- visible union is stable at approximately 10.34–10.41% of the 1536×1024 canvas;
+- there are roughly 154k–162k pixels with more than one nonzero-alpha layer;
+- **`RGB_OVERLAP_MAXDIFF = 0`** across all overlapping layer-pair pixels.
+
+This means overlapping slices preserve the same RGB source value wherever multiple soft-alpha layers coexist. There is no static RGB disagreement between depth layers that could itself create a double/ghost face before transforms are applied.
+
+Together with the generator assertion and manifest, static reconstruction integrity is now a bounded PASS.
+
+## Current accepted baseline that must be protected
+
+The live roll-registration fix is independently accepted on the real host at exact HTML SHA `18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e`.
+
+That promotion replaced delayed local roll/eye interpolation with atomic photo-to-eye-overlay registration while leaving the shared outer wrapper free to spring. The live receipt also observed active service/HTTP and 5/5 sampled 60 FPS.
+
+Therefore the parallax experiment must not silently replace this baseline or reintroduce eye/head misregistration.
 
 ## Promotion decision
 
-**Do not wire the 48 slices blindly into the live compositor yet.** The lineage question is now substantially answered, but the next promotion must establish that the four-layer reconstruction is coherent and that layer motion adds depth without degrading face identity, eye registration, roll registration, edge quality, or the established 60 FPS runtime boundary.
+**Do not promote parallax to live yet.** Provenance and static reconstruction are no longer blockers. The remaining blocker is dynamic visual causality:
 
-The current live roll registration fix is independently accepted on the real host with exact HTML hash `18770d8e...` and 5/5 sampled 60 FPS after promotion. That accepted subject should be treated as the baseline, not silently replaced by an unmeasured parallax experiment.
+> Does small depth-dependent motion create a stronger 3D/lifelike head while preserving face identity, eyes/blink/roll registration, seam quality and the established 60 FPS runtime boundary?
 
 ## Next exact discriminator
 
-Run a non-destructive integrity/AB gate bound to the exact current subject:
+Run a reversible, exact-subject A/B gate:
 
-1. hash `tiefe_bauen.py`, relevant manifests, original source head(s), and all 48 slice files;
-2. verify the generator's reconstruction/alpha-sum invariant for all 12 states;
-3. prove overlapping layers preserve source RGB/alpha semantics rather than creating ghost/double-face energy;
-4. render baseline vs parallax using the same pose/eye/blink state across the roll ladder;
-5. measure face/eye registration, seam/halo/ghost metrics and runtime FPS;
-6. promote only if the parallax variant wins the visual discriminator while preserving the existing runtime and identity gates.
+1. baseline = current accepted atomic-roll subject;
+2. variant = same subject plus the four depth slices for the same pose, with conservative depth-dependent transforms only;
+3. same pose / eyes / blink state / viewport / render path for A and B;
+4. test the full roll ladder, especially transitions around ±5/10/15/20/25°;
+5. measure or inspect eye-to-face registration, silhouette/edge seams, haloing, ghost/double-face energy and temporal stability;
+6. read back service/HTTP/GPU and FPS after the variant;
+7. immediate rollback on any identity or registration regression;
+8. promote only if B wins visual depth/lifelikeness without violating the accepted runtime/identity gates.
 
-Until that passes:
+Until that A/B passes:
 
-- parallax source/provenance credit: **bounded PASS at generator-lineage scope**;
+- parallax source/provenance credit: **PASS at exact generator-lineage scope**;
+- parallax static reconstruction integrity: **PASS**;
 - parallax live-integration credit: **0**;
 - avatar whole-product credit: **unchanged**;
 - GRID10/GWT/J-Space/effect/training credit: **unchanged**.

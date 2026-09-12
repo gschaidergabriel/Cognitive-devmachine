@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "000000-omega-atomic-claim-falsifier-ai-core-20260912-2034",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "python3 - <<'PY'\nimport sqlite3, concurrent.futures, pathlib, json\np=pathlib.Path('/home/ai-core-node/.local/share/omega-atomic-claim-falsifier-20260912-2034.db')\np.parent.mkdir(parents=True, exist_ok=True)\ncon=sqlite3.connect(p); con.executescript('CREATE TABLE IF NOT EXISTS effect_intent(effect_id TEXT PRIMARY KEY, organ_id TEXT); CREATE TABLE IF NOT EXISTS relay_ledger(effect_id TEXT PRIMARY KEY, organ_id TEXT, state TEXT, attempt_count INTEGER, created_at TEXT, updated_at TEXT); DELETE FROM effect_intent; DELETE FROM relay_ledger; INSERT INTO effect_intent VALUES(\\\"effect_race\\\",\\\"host:ai-core-node\\\");'); con.commit(); con.close()\ndef claim(i):\n c=sqlite3.connect(p,timeout=30); c.execute('PRAGMA busy_timeout=30000');\n try:\n  c.execute('BEGIN IMMEDIATE'); row=c.execute('SELECT organ_id,state FROM relay_ledger WHERE effect_id=?',('effect_race',)).fetchone();\n  if row is not None: c.commit(); return 'BLOCKED:'+str(row[1])\n  c.execute('INSERT INTO relay_ledger(effect_id,organ_id,state,attempt_count,created_at,updated_at) VALUES(?,?,?,?,?,?)',('effect_race','host:ai-core-node','DISPATCHING',1,'t','t')); c.commit(); return 'CLAIMED'\n finally: c.close()\nwith concurrent.futures.ThreadPoolExecutor(max_workers=16) as ex: out=list(ex.map(claim,range(16)))\ncon=sqlite3.connect(p); row=con.execute('SELECT state,attempt_count,organ_id FROM relay_ledger WHERE effect_id=?',('effect_race',)).fetchone(); con.close()\nres={'claimed':out.count('CLAIMED'),'blocked':sum(x.startswith('BLOCKED:') for x in out),'row':row,'pass':out.count('CLAIMED')==1 and row==('DISPATCHING',1,'host:ai-core-node')}\nprint(json.dumps(res,sort_keys=True)); raise SystemExit(0 if res['pass'] else 9)\nPY",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 30
+}

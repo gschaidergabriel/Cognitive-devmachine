@@ -1,0 +1,20 @@
+{
+  "schema": "OMEGA_VPS_EXACT_DELTA/v1",
+  "base_head": "f60746ffc5d1170e146609036d667bb26ac1d56f",
+  "target_head": "e8336eeac4f43f3808b44b5bb5859e010f8a7b26",
+  "changed_paths": [
+    "000_OMEGA_TRIGGERS.md",
+    "config/triggers.json",
+    "omega/__init__.py",
+    "omega/receipt_reconciler.py",
+    "omega/relay_entrypoint.py",
+    "omega/supervisor.py",
+    "omega/triggers.py",
+    "tests/test_receipt_reconciler.py",
+    "tests/test_relay_entrypoint.py",
+    "tests/test_supervisor_watchdog.py",
+    "tests/test_triggers.py"
+  ],
+  "source": "gschaidergabriel/oMEGA",
+  "rule": "overlay exactly these paths on base_head; verify file hashes; do not claim target_head from a partial delta"
+}

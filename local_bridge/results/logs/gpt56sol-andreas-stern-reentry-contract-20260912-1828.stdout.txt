@@ -1,0 +1,113 @@
+_f2wp1207_turn_loop_turn_ausfuehren = <function _f2wp1207_turn_loop_turn_ausfuehren at 0x7f270a176da0>
+def _f2wp1207_turn_loop_turn_ausfuehren(eingabe: Optional[dict] = None) -> dict:
+    """Kernlogik hinter dem CLI-Unterbefehl `f2wp1207-turn-loop-turn`.
+    Fail-closed: JEDE Ausnahme wird als {"ok": False, "fehler": ...}
+    zurueckgegeben -- der CLI-Einstiegspunkt haengt trotzdem sein eigenes
+    try/except drum, gleiches Muster wie die P15-Bruecke oben."""
+    try:
+        data = dict(eingabe or {})
+        if str(STERN_DIR) not in sys.path:
+            sys.path.insert(0, str(STERN_DIR))
+        import f2wp1207_grid10_turn_loop as tlmod  # vendored Kopie, gleiche Lane wie p7/p11/p12
+
+        session_id = str(data.get("session_id") or "").strip()
+        if not session_id:
+            return {
+                "ok": False,
+                "active": False,
+                "fehler": "session_id fehlt -- TypedEntry ohne session_id ist ungueltig",
+            }
+
+        with contextlib.closing(schreib_verbindung()) as c:
+            # --- Gate (zusaetzlich zum internen Check des Moduls) ---------
+            # Bewusst als ERSTES, VOR jedem Mint/Schreiben: bei AUS
+            # passiert hier GAR NICHTS, nicht einmal eine Epoche.
+            if not tlmod.turn_loop_active(c, env=os.environ):
+                return {
+                    "ok": True,
+                    "active": False,
+                    "canonical_loop_owns_turn": False,
+                    "grund": (
+                        "Gate f2wp1207.canonical_turn_loop ist AUS -- "
+                        "Turn-Loop-Bruecke tut nichts (fail-closed)"
+                    ),
+                }
+
+            # --- RuntimeEpoch ------------------------------------------
+            # Gleiche Konvention wie die P15-Lane: ohne explizite
+            # runtime_epoch_id wird eine gemintet (dateibasiert + DB-Sync,
+            # idempotent je session_id). Mit expliziter ID wird sie
+            # verifiziert, bevor der Loop sie sieht -- sonst wirft der Loop
+            # zwar auch, aber die Meldung kaeme erst mitten im Turn.
+            runtime_epoch_id = str(data.get("runtime_epoch_id") or "").strip() or None
+            if runtime_epoch_id:
+                exists = c.execute(
+                    "SELECT 1 FROM f2_runtime_epoch WHERE runtime_epoch_id=?",
+                    (runtime_epoch_id,),
+                ).fetchone()
+                if exists is None:
+                    return {
+                        "ok": False,
+                        "active": False,
+                        "fehler": (
+                            f"runtime_epoch_id={runtime_epoch_id} existiert "
+                            "nicht in f2_runtime_epoch"
+                        ),
+                    }
+            else:
+                # --- Identitaet sicherstellen (nur Auto-Mint-Pfad) --------
+                # `_f2wp1207_runtime_epoch()` schreibt seine Epoche via
+                # db_sync unter DIESE installation_id (deterministisch aus
+                # DB_PATH + Checkout-Pfad), legte aber NIE eine
+                # f2_installation_identity-Zeile an -- die P15-Lane brauchte
+                # das nie, der kanonische Loop schon (er loest Installation/
+                # StateRoot ueber die Epoche auf und verweigert sonst).
+                # Additiv + idempotent (INSERT OR IGNORE), bestehende Zeilen
+                # unberuehrt; die Epoche und ihre Identity sind so kongruent.
+                _inst_id = _f2wp1207_installation_id()
+                _entity = c.execute(
+                    "SELECT entity_id FROM f2_entity_identity "
+                    "ORDER BY created_at LIMIT 1"
+                ).fetchone()
+                if _entity is None:
+                    return {
+                        "ok": False,
+                        "active": False,
+                        "fehler": (
+                            "keine f2_entity_identity-Zeile in dieser DB -- "
+                            "ohne Subjekt kein kanonischer Turn (fail-closed)"
+                        ),
+                    }
+                _state_root = hashlib.sha256(
+                    f"F2WP1207_STATE_ROOT_REF/v1:{DB_PATH}".encode()
+                ).hexdigest()
+                c.execute(
+                    "INSERT OR IGNORE INTO f2_installation_identity "
+                    "(installation_id, entity_id, schema) VALUES (?,?,?)",
+                    (_inst_id, _entity[0], "F2WP1207_INSTALLATION_IDENTITY/v1"),
+                )
+                c.execute(
+                    "INSERT OR IGNORE INTO f2_state_root_identity "
+                    "(state_root_id, installation_id, state_digest_sha256, schema) "
+                    "VALUES (?,?,?,?)",
+                    (_state_root, _inst_id,
+                     hashlib.sha256(b"F2WP1207_TURN_LOOP_STATE_ROOT/v1").hexdigest(),
+                     "F2WP1207_STATE_ROOT_IDENTITY/v1"),
+                )
+                # HostBinding gehoert dazu: `_f2wp1207_runtime_epoch_db_sync`
+                # schreibt die Epoche NUR, wenn zur Installation eine
+                # status='ACTIVE'-Bindung e
+schreib_verbindung = <function schreib_verbindung at 0x7f270a6c00f0>
+def schreib_verbindung(pfad: Optional[str] = None) -> sqlite3.Connection:
+    """Die schreibende Standardverbindung des Hauses. Gleiche Begruendung
+    fuer `pfad=None` wie bei verbindung() oben (PHASE 19-Selbstheilung)."""
+    return _verbinden_schreibend(pfad if pfad is not None else DB_PATH)
+
+contextlib = <module 'contextlib' from '/usr/lib/python3.14/contextlib.py'>
+_CHATGPT_SCRIPT = PosixPath('/home/andreas/scripts/chatgpt_burst_worker_v2.sh')
+_CHATGPT_BROWSE_BIN = PosixPath('/home/andreas/.claude/skills/gstack/browse/dist/browse')
+_CHATGPT_STATE_DIR = PosixPath('/home/andreas/scripts/chatgpt_burst_state')
+_CHATGPT_LOCK_PFAD = None
+PATH /home/andreas/scripts/chatgpt_burst_worker_v2.sh exists False
+PATH /home/andreas/.claude/skills/gstack/browse/dist/browse exists False
+PATH /home/andreas/scripts/chatgpt_burst_state exists False

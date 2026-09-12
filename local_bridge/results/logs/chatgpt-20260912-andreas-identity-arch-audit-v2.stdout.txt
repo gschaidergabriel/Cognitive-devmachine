@@ -1,0 +1,649 @@
+=== HOST ===
+andreas-MACO
+andreas
+2026-09-12T10:35:31+02:00
+=== VOICE RUNTIME ===
+/var/lib/entityos/voice/absicht.py 26812 bytes
+/var/lib/entityos/voice/abspieler.py 69044 bytes
+/var/lib/entityos/voice/anstoss.py 8773 bytes
+/var/lib/entityos/voice/antrieb.py 7456 bytes
+/var/lib/entityos/voice/asr_infer_once.py 3036 bytes
+/var/lib/entityos/voice/asr_run.py 909 bytes
+/var/lib/entityos/voice/aufmerksamkeit.py 9436 bytes
+/var/lib/entityos/voice/blick.py 7301 bytes
+/var/lib/entityos/voice/buehne.py 35427 bytes
+/var/lib/entityos/voice/charakter.py 18078 bytes
+/var/lib/entityos/voice/chatgpt_bruecke.py 7380 bytes
+/var/lib/entityos/voice/cortex.py 23866 bytes
+/var/lib/entityos/voice/denker.py 15390 bytes
+/var/lib/entityos/voice/entitaet.py 19700 bytes
+/var/lib/entityos/voice/erinnern.py 31587 bytes
+/var/lib/entityos/voice/erleben.py 13366 bytes
+/var/lib/entityos/voice/faehigkeiten.py 7268 bytes
+/var/lib/entityos/voice/gesicht.py 9012 bytes
+/var/lib/entityos/voice/gespraech_loop.py 245235 bytes
+/var/lib/entityos/voice/gespraech_waechter.py 8321 bytes
+/var/lib/entityos/voice/glm_client.py 31174 bytes
+/var/lib/entityos/voice/grid_autonomie.py 21256 bytes
+/var/lib/entityos/voice/grid_steuerung.py 7179 bytes
+/var/lib/entityos/voice/handeln.py 11431 bytes
+/var/lib/entityos/voice/hoeren.py 6536 bytes
+/var/lib/entityos/voice/innenwelt/amygdala.py 45184 bytes
+/var/lib/entityos/voice/innenwelt/e_pq.py 57075 bytes
+/var/lib/entityos/voice/innenwelt/__init__.py 0 bytes
+/var/lib/entityos/voice/innenwelt/nucleus_accumbens.py 49227 bytes
+/var/lib/entityos/voice/innenwelt/thalamus.py 42126 bytes
+/var/lib/entityos/voice/innenwelt/workspace_broadcast.py 18366 bytes
+/var/lib/entityos/voice/interesse.py 8937 bytes
+/var/lib/entityos/voice/konfabulation.py 7513 bytes
+/var/lib/entityos/voice/konversation.py 69240 bytes
+/var/lib/entityos/voice/lagebild.py 6451 bytes
+/var/lib/entityos/voice/meinung.py 13829 bytes
+/var/lib/entityos/voice/memory_abruf.py 20285 bytes
+/var/lib/entityos/voice/needle_lokal.py 6027 bytes
+/var/lib/entityos/voice/netz.py 15733 bytes
+/var/lib/entityos/voice/organ.py 12397 bytes
+/var/lib/entityos/voice/pause_wache.py 5388 bytes
+/var/lib/entityos/voice/physik.py 19603 bytes
+/var/lib/entityos/voice/piper_check.py 259 bytes
+/var/lib/entityos/voice/piper_run.py 684 bytes
+/var/lib/entityos/voice/puls.py 11340 bytes
+/var/lib/entityos/voice/reflexion.py 28588 bytes
+/var/lib/entityos/voice/regie.py 8863 bytes
+/var/lib/entityos/voice/schirm.py 23386 bytes
+/var/lib/entityos/voice/sehen.py 27022 bytes
+/var/lib/entityos/voice/selbstauskunft.py 21621 bytes
+/var/lib/entityos/voice/selbstreflexion.py 8251 bytes
+/var/lib/entityos/voice/sinne.py 25468 bytes
+/var/lib/entityos/voice/stimme.py 21686 bytes
+/var/lib/entityos/voice/tmp_test/conversation_loop.py 11781 bytes
+/var/lib/entityos/voice/tmp_test/mem_hog.py 506 bytes
+/var/lib/entityos/voice/tmp_test/test_one_turn_under_pressure.py 923 bytes
+/var/lib/entityos/voice/tmp_test/test_two_turn.py 2481 bytes
+/var/lib/entityos/voice/umschlag.py 47204 bytes
+/var/lib/entityos/voice/vendor/causal_identity.py 5451 bytes
+/var/lib/entityos/voice/vendor/context_compiler.py 23313 bytes
+/var/lib/entityos/voice/vendor/gwt_reentry_uptake_binding.py 14913 bytes
+/var/lib/entityos/voice/vendor/__init__.py 0 bytes
+/var/lib/entityos/voice/vendor/memory_lifecycle.py 14630 bytes
+/var/lib/entityos/voice/vendor/typed_memory.py 12810 bytes
+/var/lib/entityos/voice/vendor/voice_contract.py 19643 bytes
+/var/lib/entityos/voice/vendor/voice_heard_result_reentry.py 31956 bytes
+/var/lib/entityos/voice/vendor/voice_packet_cortex.py 34658 bytes
+/var/lib/entityos/voice/vendor/voice_packet_cortex_recovery.py 19469 bytes
+/var/lib/entityos/voice/verkoerperung.py 11559 bytes
+/var/lib/entityos/voice/vorlieben.py 11802 bytes
+/var/lib/entityos/voice/wege.py 14884 bytes
+/var/lib/entityos/voice/welt/arc_adapter.py 17034 bytes
+/var/lib/entityos/voice/welt/arc_glm_spieler.py 17471 bytes
+/var/lib/entityos/voice/welt/dienst.py 6485 bytes
+/var/lib/entityos/voice/welt/grund.py 9990 bytes
+/var/lib/entityos/voice/welt/handeln.py 20449 bytes
+/var/lib/entityos/voice/welt/lauf.py 8496 bytes
+/var/lib/entityos/voice/welt/linse.py 10603 bytes
+/var/lib/entityos/voice/welt/traegt_das_signal.py 5957 bytes
+/var/lib/entityos/voice/welt/wirkung.py 10606 bytes
+/var/lib/entityos/voice/wiederholung.py 14432 bytes
+/var/lib/entityos/voice/wissen.py 15530 bytes
+/var/lib/entityos/voice/workspace.py 26051 bytes
+/var/lib/entityos/voice/ziele_llm.py 8245 bytes
+/var/lib/entityos/voice/ziele.py 9068 bytes
+=== IDENTITY/SPEAKER REFERENCES ===
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/piper_tts-1.8.0.dist-info/licenses/licenses/LICENSE.g2pW-Apache-2.0:20:      "Licensor" shall mean the copyright owner or entity authorized by
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/piper_tts-1.8.0.dist-info/licenses/licenses/LICENSE.g2pW-Apache-2.0:21:      the copyright owner that is granting the License.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/piper_tts-1.8.0.dist-info/licenses/licenses/LICENSE.g2pW-Apache-2.0:28:      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/piper_tts-1.8.0.dist-info/licenses/licenses/LICENSE.g2pW-Apache-2.0:29:      outstanding shares, or (iii) beneficial ownership of such entity.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/piper_tts-1.8.0.dist-info/licenses/licenses/LICENSE.g2pW-Apache-2.0:59:      submitted to Licensor for inclusion in the Work by the copyright owner
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/piper_tts-1.8.0.dist-info/licenses/licenses/LICENSE.g2pW-Apache-2.0:61:      the copyright owner. For the purposes of this definition, "submitted"
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/piper_tts-1.8.0.dist-info/licenses/licenses/LICENSE.g2pW-Apache-2.0:68:      designated in writing by the copyright owner as "Not a Contribution."
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/piper_tts-1.8.0.dist-info/licenses/licenses/LICENSE.g2pW-Apache-2.0:197:   Copyright [yyyy] [name of copyright owner]
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/psutil-7.2.2.dist-info/METADATA:506:     <WindowsService(name='AppIDSvc', display_name='Application Identity') at 38850192>,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/psutil-7.2.2.dist-info/LICENSE:23:DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/psutil/__init__.py:294:    The only exceptions for which process identity is pre-emptively
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/psutil/__init__.py:392:            # process identity, since it is stable over changes to system
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/psutil/__init__.py:636:            # have been reused by another process. Process identity /
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/impute/_iterative.py:998:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/svm/src/liblinear/linear.cpp:8:   - Changes roles of +1 and -1 to match scikit API, Andreas Mueller
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/svm/src/liblinear/linear.cpp:10:   - Also changed roles for pairwise class weights, Andreas Mueller
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/datasets/descr/wine_data.rst:63:Original Owners:
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/datasets/descr/olivetti_faces.rst:37:identity of the person pictured; however, with only 10 examples per class, this
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/datasets/descr/twenty_newsgroups.rst:222:name." Team owner Paul Dolan "did make it clear that the team will not make
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/datasets/_samples_generator.py:1522:    s = np.identity(n) * (low_rank + tail)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/datasets/_samples_generator.py:2098:    X = generator.multivariate_normal(mean, cov * np.identity(n_features), (n_samples,))
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:14:    """Half Squared Error with identity link.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:25:    """Absolute Error with identity link.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:36:    """Quantile Loss aka Pinball Loss with identity link.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:50:    """Huber Loss with identity link.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:132:doc_HalfTweedieLossIdentity = (
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:133:    """Half Tweedie deviance loss with identity link.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:144:    Half Tweedie deviance with identity link and p=power is
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:203:    ("CyHalfTweedieLossIdentity", doc_HalfTweedieLossIdentity, "power",
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:204:     "closs_half_tweedie_identity", "closs_grad_half_tweedie_identity",
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:205:     "cgradient_half_tweedie_identity", "cgrad_hess_half_tweedie_identity"),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:589:# Half Tweedie Deviance with identity link, without dropping constant terms!
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:591:cdef inline double closs_half_tweedie_identity(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:614:cdef inline double cgradient_half_tweedie_identity(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:629:cdef inline double_pair closs_grad_half_tweedie_identity(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pyx.tp:661:cdef inline double_pair cgrad_hess_half_tweedie_identity(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/_loss.pxd:75:cdef class CyHalfTweedieLossIdentity(CyLossFunction):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:36:    CyHalfTweedieLossIdentity,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:42:    IdentityLink,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:69:#    #     class HalfSquaredError(IdentityLink, CyHalfSquaredError, BaseLoss)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:72:#    class HalfSquaredError(IdentityLink, CyHalfSquaredError, BaseLoss):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:549:    """Half squared error with identity link, for regression.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:568:            closs=CyHalfSquaredError(), link=IdentityLink(), xp=xp, device=device
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:574:    """Absolute error with identity link, for regression.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:595:            closs=CyAbsoluteError(), link=IdentityLink(), xp=xp, device=device
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:655:            link=IdentityLink(),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:726:            link=IdentityLink(),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:883:class HalfTweedieLossIdentity(BaseLoss):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:884:    """Half Tweedie deviance loss with identity link, for regression.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:913:            closs=CyHalfTweedieLossIdentity(power=float(power)),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/loss.py:914:            link=IdentityLink(),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/link.py:149:class IdentityLink(BaseLink):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/link.py:150:    """The identity link function g(x)=x."""
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/link.py:263:    "identity": IdentityLink,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/__init__.py:19:    HalfTweedieLossIdentity,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/__init__.py:34:    "HalfTweedieLossIdentity",
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:18:from sklearn._loss.link import IdentityLink, _inclusive_low_high
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:32:    HalfTweedieLossIdentity,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:64:    HalfTweedieLossIdentity(power=0),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:65:    HalfTweedieLossIdentity(power=1),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:66:    HalfTweedieLossIdentity(power=2),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:67:    HalfTweedieLossIdentity(power=3.0),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:100:        # If link is identity, we must respect the interval of y_pred:
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:101:        if isinstance(loss.link, IdentityLink):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:187:    (HalfTweedieLossIdentity(power=-3), [0.1, 100], [-np.inf, np.inf]),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:188:    (HalfTweedieLossIdentity(power=0), [-3, -0.1, 0, 0.1, 100], [-np.inf, np.inf]),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:189:    (HalfTweedieLossIdentity(power=1.5), [0.1, 100], [-np.inf, -3, -0.1, np.inf]),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:190:    (HalfTweedieLossIdentity(power=2), [0.1, 100], [-np.inf, -3, -0.1, 0, np.inf]),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:191:    (HalfTweedieLossIdentity(power=3), [0.1, 100], [-np.inf, -3, -0.1, 0, np.inf]),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:204:    (HalfTweedieLossIdentity(power=-3), [-100, -0.1, 0], []),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:205:    (HalfTweedieLossIdentity(power=0), [-100, 0], []),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:206:    (HalfTweedieLossIdentity(power=1.5), [0], []),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:216:    (HalfTweedieLossIdentity(power=-3), [], [-3, -0.1, 0]),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:217:    (HalfTweedieLossIdentity(power=0), [-3, -0.1, 0], []),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:218:    (HalfTweedieLossIdentity(power=1.5), [], [0]),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:261:        (HalfTweedieLossIdentity(power=1), 2.0, 4.0, 2 - 2 * np.log(2), None, None),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:262:        (HalfTweedieLossIdentity(power=2), 2.0, 4.0, np.log(2) - 1 / 2, None, None),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:264:            HalfTweedieLossIdentity(power=3),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:769:        # If link is identity, we must respect the interval of y_pred:
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:770:        if isinstance(loss.link, IdentityLink):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1059:    if isinstance(loss, IdentityLink):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1336:def test_tweedie_log_identity_consistency(p):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1339:    half_tweedie_identity = HalfTweedieLossIdentity(power=p)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1347:    # in HalfTweedieLoss but not in HalfTweedieLossIdentity.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1351:    loss_identity = half_tweedie_identity.loss(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1353:    ) + half_tweedie_identity.constant_to_optimal_zero(y_true)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1355:    # HalfTweedieLossIdentity. Constant terms means terms not depending on
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1358:    assert_allclose(loss_log, loss_identity)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1363:    #                     = d/dx loss_identity(exp(x))
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1364:    #                     = exp(x) * gradient_identity(exp(x))
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1366:    #     hessian_log(x) = exp(x) * gradient_identity(exp(x))
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1367:    #                    + exp(x)**2 * hessian_identity(x)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1371:    gradient_identity, hessian_identity = half_tweedie_identity.gradient_hessian(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1374:    assert_allclose(gradient_log, y_pred * gradient_identity)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_loss.py:1376:        hessian_log, y_pred * gradient_identity + y_pred**2 * hessian_identity
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_link.py:68:def test_link_inverse_identity(link, global_random_seed):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/_loss/tests/test_link.py:69:    """Test that link of inverse gives identity."""
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/semi_supervised/_self_training.py:561:        router = MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/multioutput.py:333:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/multioutput.py:1110:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/multioutput.py:1265:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/manifold/_locally_linear.py:385:            #  >> Hi = np.identity(s_i) - 2*np.outer(h,h)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_least_angle.py:1828:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ransac.py:710:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/_newton_solver.py:34:        H = X.T @ diag(loss.hessian) @ X + l2_reg_strength * identity
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/tests/test_glm.py:16:from sklearn._loss.link import IdentityLink, LogLink
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/tests/test_glm.py:636:def test_glm_identity_regression(fit_intercept):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/tests/test_glm.py:637:    """Test GLM regression with identity link on a simple dataset."""
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/tests/test_glm.py:904:    "name, link_class", [("identity", IdentityLink), ("log", LogLink)]
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/tests/test_glm.py:917:        (0, IdentityLink),  # normal
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/tests/test_glm.py:932:@pytest.mark.parametrize("link", ["log", "identity"])
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/glm.py:19:    HalfTweedieLossIdentity,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/glm.py:137:        HalfSquaredError         identity  y any real number
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/glm.py:141:        HalfTweedieLossIdentity  identity  dependent on tweedie power
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/glm.py:804:    link : {'auto', 'identity', 'log'}, default='auto'
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/glm.py:809:        - 'identity' for ``power <= 0``, e.g. for the Normal distribution
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/glm.py:897:        "link": [StrOptions({"auto", "identity", "log"})],
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/glm.py:928:                # identity link
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/glm.py:929:                return HalfTweedieLossIdentity(power=self.power)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/glm.py:937:        if self.link == "identity":
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_glm/glm.py:938:            return HalfTweedieLossIdentity(power=self.power)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_bayes.py:771:        # https://en.wikipedia.org/wiki/Woodbury_matrix_identity
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_logistic.py:2558:            MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ridge.py:1731:class _IdentityRegressor(RegressorMixin, BaseEstimator):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ridge.py:1741:class _IdentityClassifier(LinearClassifierMixin, BaseEstimator):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ridge.py:1794:    identity matrix of size n.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ridge.py:1797:    is the identity matrix of size p.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ridge.py:2391:            identity_estimator = _IdentityClassifier(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ridge.py:2395:                identity_estimator,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ridge.py:2401:            identity_estimator = _IdentityRegressor()
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ridge.py:2406:                            identity_estimator,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ridge.py:2417:                    identity_estimator,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_ridge.py:2619:            MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_coordinate_descent.py:2011:            MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_omp.py:1124:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/tests/test_sparse_coordinate_descent.py:92:    Y = [-1, 0, 1]  # just a straight line (the identity function)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/tests/test_ridge.py:155:    d = alpha * np.identity(n_features)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/tests/test_common.py:105:    #     - squared error and identity link (most linear models)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/tests/test_theil_sen.py:122:    # Check that a single vector is identity
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/tests/test_logistic.py:2931:    owner estimator had been fitted with the same number of iterations.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/tests/test_bayes.py:109:        reg.lambda_ * np.identity(n_features) + reg.alpha_ * np.dot(X.T, X)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/tests/test_bayes.py:137:    # Check that the model could approximately learn the identity function
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/tests/test_bayes.py:224:    # Check that the model could approximately learn the identity function
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/linear_model/_linear_loss.py:64:                  + l2_reg_strength * identity
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/compose/_target.py:67:        `func` and `inverse_func`, the transformer will be an identity
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/compose/_target.py:74:        the identity function. If `func` is set, `inverse_func` also needs to be
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/compose/_target.py:189:                    " you need to explicitly pass it the identity function."
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/compose/_target.py:386:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/compose/_column_transformer.py:1244:        router = MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/compose/tests/test_column_transformer.py:1354:        [("identity", FunctionTransformer(), [False, True, False, True])]
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/feature_selection/_rfe.py:548:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/feature_selection/_rfe.py:988:        router = MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/feature_selection/_sequential.py:356:        router = MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/feature_selection/_from_model.py:507:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/ensemble/_hist_gradient_boosting/tests/test_binning.py:185:def test_bin_mapper_identity_repeated_values(max_bins, n_distinct, multiplier):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/ensemble/_hist_gradient_boosting/tests/test_binning.py:289:def test_bin_mapper_identity_small(max_bins, scale, offset):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/ensemble/_gb.py:162:    Also note that the update formula for the SquaredError is the identity. Therefore,
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/ensemble/_voting.py:183:        router = MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/ensemble/_bagging.py:630:        router = MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/ensemble/_stacking.py:400:        router = MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/mixture/tests/test_gaussian_mixture.py:1451:    X = rng.multivariate_normal(np.zeros(2), np.identity(2), size=3)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/mixture/tests/test_bayesian_mixture.py:330:    # matrices is identity.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/gaussian_process/tests/test_kernels.py:158:        # Identity is not satisfied on diagonal
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/_target_encoder.py:662:        router = MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/_data.py:2984:                # identity function so we let X_col unchanged
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/_data.py:3433:                # lambda=1 corresponds to the identity transformation
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/tests/test_data.py:1055:def _check_identity_scalers_attributes(scaler_1, scaler_2):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/tests/test_data.py:1063:def test_scaler_return_identity(sparse_container):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/tests/test_data.py:1064:    # test that the scaler return identity when with_mean and with_std are
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/tests/test_data.py:1077:    _check_identity_scalers_attributes(transformer_dense, transformer_sparse)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/tests/test_data.py:1081:    _check_identity_scalers_attributes(transformer_dense, transformer_sparse)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/tests/test_data.py:1085:    _check_identity_scalers_attributes(transformer_dense, transformer_sparse)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/tests/test_data.py:2467:    # Make sure lambda = 1 corresponds to the identity for yeo-johnson
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/_function_transformer.py:24:def _identity(X):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/_function_transformer.py:25:    """The identity function."""
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/_function_transformer.py:49:        If func is None, then func will be the identity function.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/_function_transformer.py:55:        will be the identity function.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/preprocessing/_function_transformer.py:379:            func = _identity
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/pipeline.py:318:        # We allow last estimator to be None as an identity transformation
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/pipeline.py:1372:        router = MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/pipeline.py:2183:        router = MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/tree/_criterion.pyx:1121:        # Pinball-loss identity for absolute error at the current set:
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/tree/_criterion.pyx:1209:            * the absolute-error contribution via the standard pinball-loss identity:
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/tree/_utils.pyx:79:      - Memory ownership: this class allocates and frees the underlying C buffers.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/_nca.py:52:    init : {'auto', 'pca', 'lda', 'identity', 'random'} or ndarray of shape \
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/_nca.py:55:        `'auto'`, `'pca'`, `'lda'`, `'identity'`, `'random'`, and a numpy
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/_nca.py:64:            variance). Otherwise, we just use `'identity'`.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/_nca.py:78:        - `'identity'`
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/_nca.py:80:            dimensionality of the inputs passed to :meth:`fit`, the identity
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/_nca.py:193:            StrOptions({"auto", "pca", "lda", "identity", "random"}),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/_nca.py:408:                    init = "identity"
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/_nca.py:409:            if init == "identity":
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/tests/test_nca.py:47:        n_components=2, init="identity", random_state=42
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/tests/test_nca.py:198:    nca = NeighborhoodComponentsAnalysis(n_components=2, init="identity")
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/tests/test_nca.py:207:    nca = NeighborhoodComponentsAnalysis(init="identity")
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/tests/test_nca.py:296:                nca_other = clone(nca_base).set_params(init="identity")
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/tests/test_nca.py:364:    "init_name", ["pca", "lda", "identity", "random", "precomputed"]
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/tests/test_nca.py:450:    nca = NeighborhoodComponentsAnalysis(init="identity", max_iter=30)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/neighbors/tests/test_nca.py:460:        max_iter=30, n_components=X.shape[1], init="identity"
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/covariance/_graph_lasso.py:1148:        router = MetadataRouter(owner=self).add(
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/covariance/_shrunk_covariance.py:90:    # F = trace(S) / n_features * np.identity(n_features) (cf. Eq. 3 in [1])
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/covariance/_shrunk_covariance.py:132:        (1 - shrinkage) * cov + shrinkage * mu * np.identity(n_features)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/covariance/_shrunk_covariance.py:220:    (1 - shrinkage) * cov + shrinkage * mu * np.identity(n_features)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/covariance/_shrunk_covariance.py:326:    (1 - shrinkage) * cov + shrinkage * mu * np.identity(n_features)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/covariance/_shrunk_covariance.py:440:    (1 - shrinkage) * cov + shrinkage * mu * np.identity(n_features)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/covariance/_shrunk_covariance.py:539:    (1 - shrinkage) * cov + shrinkage * mu * np.identity(n_features)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/covariance/_shrunk_covariance.py:650:    (1 - shrinkage) * cov + shrinkage * mu * np.identity(n_features),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/covariance/_shrunk_covariance.py:749:    (1 - shrinkage) * cov + shrinkage * mu * np.identity(n_features),
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/callback/_transport.py:68:def open_listener(message_consumer, *, owner=None):
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/callback/_transport.py:80:    owner : callback instance, default=None
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/callback/_transport.py:81:        Optional owner callback. When provided, the listener is automatically closed
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/callback/_transport.py:82:        when `owner` gets garbage-collected.
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/callback/_transport.py:102:    if owner is not None:
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/callback/_transport.py:103:        weakref.finalize(owner, close_listener, listener_handle)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/callback/_scoring_monitor.py:124:        self._listener_handle = open_listener(self._log.append, owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/callback/_scoring_monitor.py:184:            self._listener_handle = open_listener(self._log.append, owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/callback/tests/_utils.py:32:        self._listener_handle = open_listener(self.record.append, owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/calibration.py:575:            MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/multiclass.py:627:            MetadataRouter(owner=self)
+/var/lib/entityos/voice/venv/lib64/python3.12/site-packages/sklearn/multiclass.py:1031:            MetadataRouter(owner=self)
+=== GRID/EFFECT/IMMUNE REFERENCES ===
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:13:  "grid10_schema_version": {
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:15:    "method": "sha256 over `SELECT sql FROM sqlite_master WHERE type='table'` for all tables matching f2_grid10% (ordered by name), taken from the live unified.db on 2026-09-05. Covers f2_grid10_cell_observation, f2_grid10_cell_state, f2_grid10_effect_journal, f2_grid10_frame, f2_grid10_p6d_state, f2_grid10_sweep_state.",
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:42:      {"phase": "P10", "file": "f2wp1207_p10_workspace_reentry.py", "branch": "self-integration/wp1207-p10-workspace-reentry-20260904", "commit": "b79026575d21464cb10f8b8f0e02a81229f8c613"},
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:43:      {"phase": "P11", "file": "f2wp1207_grid10_p11_effects.py", "branch": "self-integration/wp1207-p11-effects-20260905", "commit": "9606d9e50040e88618086d74e88e091a9ee1b062"},
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:56:      "scripts/f2wp1207_epoch_reconciler.py (P9 -- f2_runtime_epoch, f2_reentry_record and related identity tables)",
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:57:      "scripts/f2wp1207_grid10_p11_effects.py (P11 -- f2_grid10_effect_journal and related)"
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:69:    "verified_2026-09-05_via": "grep for JOURNAL_MARKER/inert/ENABLE/_ENABLED/feature.flag across scripts/f2wp1207_grid10_p11_effects.py and scripts/f2wp1207_p13_scenario_runner.py -- no env-var or config-flag gate found, confirms the above."
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:97:      "method": "Targeted row counts on f2_runtime_epoch, f2_reentry_record, f2_grid10_effect_journal, and f2_grid10_frame WHERE experiment_condition LIKE 'p6d_%' on the REAL ~/.local/share/agentzero/unified.db, before and after the fresh-checkout run.",
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:98:      "before": {"f2_runtime_epoch": 105, "f2_reentry_record": 0, "f2_grid10_effect_journal": 0, "f2_grid10_frame_p6d": 231},
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:99:      "after":  {"f2_runtime_epoch": 105, "f2_reentry_record": 0, "f2_grid10_effect_journal": 0, "f2_grid10_frame_p6d": 231},
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:4:F2-WP-1207 P10: workspace-reentry reconstruction -- closes the gap P9 left
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:6:`f2_reentry_record` pointing at its real predecessor epoch (evidence-bound
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:7:termination classification + `last_grid10_frame_id` + `last_work_ref`). But
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:9:nothing yet feeds it into P7's (f2wp1207_grid10_p7_coordination.py)
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:11:whatever is currently sitting in `f2_grid10_p6d_state` under the single
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:17:workspace state -> persist -> runtime death/restart -> typed reentry record
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:20:typisierte, bestaetigte Workspace-Artefakte rehydrieren: letzter Broadcast,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:29:    - last broadcast / last winner  -> f2_grid10_frame.broadcast_value /
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:30:      .broadcast_winner_cell, keyed by f2_reentry_record.last_grid10_frame_id.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:31:    - relevant cell states          -> f2_grid10_cell_state (installation_id-
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:35:    - unresolved conflicts          -> f2_grid10_cell_observation.conflict_flag
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:36:      for rows at last_grid10_frame_id -- exactly frame-scoped, no ambiguity.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:37:    - predecessor frame IDs         -> f2_grid10_frame.frame_id for all frames
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:39:      last_grid10_frame_id pointer.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:44:      session_id with any real f2_runtime_epoch row (arbeitspaket sessions
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:45:      are harness-sess-*/manuell-style ids; GRID10 epoch sessions are UUIDs
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:53:      model ties external/world evidence to a runtime_epoch_id/session_id/
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:56:      f2_grid10_cell_observation.input_digest_sha256/output_digest_sha256 are
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:63:(this module only reads existing P7/P9/GRID10 tables). Cells stay opaque
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:72:import f2wp1207_grid10_p7_coordination as p7mod  # vendored copy, same dir
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:77:# state persistence (f2wp1207_grid10_turn_loop.CONDITION_KEY, module constant
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:81:# f2_grid10_cell_state (installation_id-scoped, read by `_cell_states` below)
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:84:# table, f2_grid10_p6d_state (condition_key-scoped), under this exact literal.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:100:        "authorization log; f2_grid10_cell_observation's "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:142:    reentry_id: Optional[str]
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:143:    last_grid10_frame_id: Optional[str]
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:145:    last_broadcast_value: Optional[float] = None
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:146:    last_broadcast_provenance: Optional[Provenance] = None
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:178:def _find_reentry_record(conn: sqlite3.Connection, successor_epoch_id: str) -> Optional[sqlite3.Row]:
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:179:    """A successor epoch can have MULTIPLE f2_reentry_record rows -- P9's
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:186:    predecessor. Instead: prefer the candidate whose last_grid10_frame_id
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:187:    resolves to a REAL f2_grid10_frame row with the MOST RECENT opened_at --
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:194:        "SELECT * FROM f2_reentry_record WHERE successor_epoch_id=? ORDER BY created_at DESC",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:204:        frame_id = row["last_grid10_frame_id"]
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:208:            "SELECT opened_at FROM f2_grid10_frame WHERE frame_id=?", (frame_id,)
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:221:        "SELECT * FROM f2_runtime_epoch WHERE runtime_epoch_id=?",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:229:        "SELECT * FROM f2_grid10_frame WHERE frame_id=?", (frame_id,)
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:235:        "SELECT frame_id FROM f2_grid10_frame WHERE runtime_epoch_id=? "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:246:    f2_grid10_cell_state. This table is NOT epoch-scoped (a real, documented
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:258:        "FROM f2_grid10_cell_state WHERE installation_id=?",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:270:                "f2_grid10_cell_state is installation-scoped, not epoch-scoped -- "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:279:                    source_table="f2_grid10_cell_state",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:293:    """Fallback source for relevant_cell_states: f2_grid10_p6d_state, the
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:295:    (f2wp1207_grid10_turn_loop.CONDITION_KEY). Only consulted by
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:297:    f2_grid10_cell_state table) returns nothing -- additive, no priority
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:298:    change for installations where f2_grid10_cell_state IS populated (e.g.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:303:        "FROM f2_grid10_p6d_state WHERE condition_key=?",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:315:                "f2_grid10_p6d_state is condition_key-scoped, not epoch-scoped -- "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:325:                    source_table="f2_grid10_p6d_state",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:338:        "SELECT logical_cell_id FROM f2_grid10_cell_observation "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:373:    """Given a successor epoch id, find its P9 f2_reentry_record (if any) and
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:375:    Returns None if no reentry record exists at all (fresh install / no
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:380:        reentry = _find_reentry_record(conn, successor_epoch_id)
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:383:    if reentry is None:
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:386:    predecessor_epoch_id = reentry["predecessor_epoch_id"]
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:387:    last_frame_id = reentry["last_grid10_frame_id"]
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:394:            reentry_id=reentry["reentry_id"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:395:            last_grid10_frame_id=None,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:396:            predecessor_termination_reason=reentry["predecessor_termination_reason"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:397:            predecessor_termination_confidence=reentry["predecessor_confidence"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:399:            invalid_reason="reentry record has no last_grid10_frame_id (predecessor never ran a GRID10 frame)",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:408:            reentry_id=reentry["reentry_id"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:409:            last_grid10_frame_id=last_frame_id,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:410:            predecessor_termination_reason=reentry["predecessor_termination_reason"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:411:            predecessor_termination_confidence=reentry["predecessor_confidence"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:413:            invalid_reason=f"last_grid10_frame_id={last_frame_id} does not resolve to a real f2_grid10_frame row",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:420:        # f2_grid10_cell_state empty (canonical-loop-only installation) --
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:433:    valid = bool(cell_states) and frame["broadcast_value"] is not None
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:434:    invalid_reason = None if valid else "no relevant_cell_states or broadcast_value resolved for last frame"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:440:        reentry_id=reentry["reentry_id"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:441:        last_grid10_frame_id=last_frame_id,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:442:        last_broadcast_value=frame["broadcast_value"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:443:        last_broadcast_provenance=Provenance(
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:444:            "f2_grid10_frame", f"frame_id={last_frame_id}", 0.95, "direct row match on P9's last_grid10_frame_id"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:446:        last_winner_cell_id=frame["broadcast_winner_cell"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:448:            "f2_grid10_frame", f"frame_id={last_frame_id}", 0.95, "direct row match on P9's last_grid10_frame_id"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:453:            "f2_grid10_cell_observation", f"frame_id={last_frame_id},conflict_flag=1", 0.95, "frame-scoped, exact"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:457:            "f2_grid10_frame", f"runtime_epoch_id={predecessor_epoch_id}", 0.95, "all frames of predecessor epoch"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:460:        predecessor_termination_reason=reentry["predecessor_termination_reason"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:461:        predecessor_termination_confidence=reentry["predecessor_confidence"],
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:469:# Does NOT modify f2wp1207_grid10_p7_coordination.py at all (zero drift on
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:478:def coordinate_real_turn_with_reentry(
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:486:    reconstructed workspace exists for turn.runtime_epoch_id, seeds
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:488:    reentry record exists (fresh install / no predecessor / low-confidence
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:496:    workspace = reconstruct_workspace(conn, turn.runtime_epoch_id)
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:499:        used_reentry = True
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:502:        used_reentry = False
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:507:    return result, {"used_reentry": used_reentry, "workspace": workspace}
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:4:F2-WP-1207 P10 regression test: f2_grid10_p6d_state fallback for
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:8:declared_reentry="previous_epoch" turn against the live andreas-MACO DB
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:10:  "no relevant_cell_states or broadcast_value resolved for last frame"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:12:f2_reentry_record correctly linked) and the predecessor's last frame had a
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:13:real, non-null broadcast_value/broadcast_winner_cell.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:16:  valid = bool(cell_states) and frame["broadcast_value"] is not None
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:17:and _cell_states() read EXCLUSIVELY from f2_grid10_cell_state -- an
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:20:(f2wp1207_grid10_turn_loop.py) under test. Confirmed live 2026-09-06/07:
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:21:f2_grid10_cell_state had 0 rows for the installation despite 202+ real
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:24:f2_grid10_p6d_state, under its own module constant CONDITION_KEY =
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:25:"f2wp1207_canonical_turn_loop" (f2wp1207_grid10_turn_loop.py line 112).
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:36:  with real broadcast_value/broadcast_winner_cell, f2_grid10_cell_state is
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:38:  f2_grid10_p6d_state has real rows under the canonical loop's condition_key
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:42:  f2_grid10_p6d_state, HIGH confidence (0.9) for the row whose
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:45:  SCENARIO 2 (no-regression guard): f2_grid10_cell_state is NON-empty for
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:46:  the installation. Must keep using f2_grid10_cell_state (unmodified
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:48:  table, so provenance.source_table stays "f2_grid10_cell_state" ==
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:66:import f2wp1207_p10_workspace_reentry as p10mod  # noqa: E402
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:68:# Verbatim from f2wp1207_grid10_turn_loop.py line 112 -- the canonical
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:76:CREATE TABLE f2_runtime_epoch (
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:77:    runtime_epoch_id     TEXT PRIMARY KEY,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:92:CREATE TABLE f2_grid10_frame (
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:97:    runtime_epoch_id      TEXT NOT NULL,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:105:    broadcast_winner_cell     TEXT,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:106:    broadcast_value           REAL,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:109:    UNIQUE (runtime_epoch_id, turn_event_id)
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:111:CREATE TABLE f2_reentry_record (
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:112:    reentry_id                      TEXT PRIMARY KEY,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:122:    last_grid10_frame_id            TEXT,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:127:CREATE TABLE f2_grid10_cell_state (
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:134:    won_broadcast_count          INTEGER NOT NULL DEFAULT 0,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:138:CREATE TABLE f2_grid10_p6d_state (
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:144:    won_broadcast_count INTEGER NOT NULL DEFAULT 0,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:148:CREATE TABLE f2_grid10_cell_observation (
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:156:    reentry_flag                    INTEGER NOT NULL DEFAULT 0,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:198:    reentry_id = f"reentry-{uuid.uuid4().hex}"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:202:        "INSERT INTO f2_runtime_epoch (runtime_epoch_id, state_root_id, installation_id, "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:205:         "2026-09-07T00:00:00Z", "F2WP1207_RUNTIME_EPOCH/v2", session_id, f"boot-{uuid.uuid4().hex}"),
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:208:        "INSERT INTO f2_runtime_epoch (runtime_epoch_id, state_root_id, installation_id, "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:212:         "2026-09-07T01:00:00Z", pred_epoch, "F2WP1207_RUNTIME_EPOCH/v2",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:216:        "INSERT INTO f2_grid10_frame (frame_id, entity_id, installation_id, state_root_id, "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:217:        "runtime_epoch_id, session_id, turn_event_id, opened_at, closed_at, status, schema, "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:218:        "broadcast_winner_cell, broadcast_value) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:221:         "CLOSED", "F2WP1207_GRID10_FRAME/v1", "G7", 1.234567),
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:224:        "INSERT INTO f2_reentry_record (reentry_id, installation_id, state_root_id, "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:226:        "predecessor_confidence, last_grid10_frame_id, created_at, schema) "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:228:        (reentry_id, installation_id, state_root_id, pred_epoch, succ_epoch,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:230:         "F2WP1207_REENTRY_RECORD/v1"),
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:237:    """f2_grid10_cell_state EMPTY, f2_grid10_p6d_state populated under the
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:248:    # f2_grid10_cell_state: deliberately NO rows for this installation.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:249:    # f2_grid10_p6d_state: 10 real rows, one (G7) updated_by_frame_id ==
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:253:            "INSERT INTO f2_grid10_p6d_state (condition_key, logical_cell_id, state_value, "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:254:            "updated_at, updated_by_frame_id, won_broadcast_count, schema) VALUES (?,?,?,?,?,?,?)",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:257:             1 if cell == "G7" else 0, "F2WP1207_GRID10_P6D_STATE/v1"),
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:277:            if sources != {"f2_grid10_p6d_state"}:
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:278:                failures.append(f"expected all cell states sourced from f2_grid10_p6d_state, got {sources}")
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:284:        if workspace.last_broadcast_value != 1.234567:
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:285:            failures.append(f"last_broadcast_value expected 1.234567, got {workspace.last_broadcast_value}")
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:294:        print("  PASS: workspace.valid=True, fallback to f2_grid10_p6d_state confirmed, HIGH confidence correct")
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:299:    """f2_grid10_cell_state NON-empty -- primary table must still win,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:312:            "INSERT INTO f2_grid10_cell_state (installation_id, logical_cell_id, state_value, "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:313:            "updated_at, updated_by_frame_id, won_broadcast_count, schema) VALUES (?,?,?,?,?,?,?)",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:316:             1 if cell == "G7" else 0, "F2WP1207_GRID10_CELL_STATE/v1"),
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:321:            "INSERT INTO f2_grid10_p6d_state (condition_key, logical_cell_id, state_value, "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:322:            "updated_at, updated_by_frame_id, won_broadcast_count, schema) VALUES (?,?,?,?,?,?,?)",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:324:             "F2WP1207_GRID10_P6D_STATE/v1"),
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:338:        if sources != {"f2_grid10_cell_state"}:
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:339:            failures.append(f"expected primary table f2_grid10_cell_state to win, got sources={sources}")
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_p6d_fallback_test.py:349:        print("  PASS: f2_grid10_cell_state kept priority, p6d_state decoy correctly ignored")
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:1:CREATE TABLE IF NOT EXISTS f2_grid10_frame (
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:6:    runtime_epoch_id     TEXT NOT NULL REFERENCES f2_runtime_epoch(runtime_epoch_id),
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:13:    UNIQUE (runtime_epoch_id, turn_event_id)
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:16:CREATE INDEX IF NOT EXISTS ix_f2_grid10_frame_epoch
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:17:    ON f2_grid10_frame (runtime_epoch_id);
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:19:CREATE INDEX IF NOT EXISTS ix_f2_grid10_frame_installation
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:20:    ON f2_grid10_frame (installation_id);
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:22:CREATE TABLE IF NOT EXISTS f2_grid10_cell_observation (
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:24:    frame_id                    TEXT NOT NULL REFERENCES f2_grid10_frame(frame_id),
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:30:    reentry_flag                    INTEGER NOT NULL DEFAULT 0,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:35:    predecessor_observation_id        TEXT REFERENCES f2_grid10_cell_observation(observation_id),
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:40:CREATE INDEX IF NOT EXISTS ix_f2_grid10_cell_obs_frame
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:41:    ON f2_grid10_cell_observation (frame_id);
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:43:CREATE INDEX IF NOT EXISTS ix_f2_grid10_cell_obs_cell
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:44:    ON f2_grid10_cell_observation (logical_cell_id);
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:49:-- audit trail). See f2wp1207_grid10_p11_effects.py.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:50:CREATE TABLE IF NOT EXISTS f2_grid10_effect_journal (
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:57:    runtime_epoch_id              TEXT NOT NULL,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:61:    broadcast_value                  REAL NOT NULL,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:63:    gate_policy_id                     TEXT NOT NULL,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:64:    gate_min_broadcast_value            REAL NOT NULL,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:76:CREATE INDEX IF NOT EXISTS ix_f2_grid10_effect_journal_turn
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:77:    ON f2_grid10_effect_journal (turn_event_id);
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:79:CREATE INDEX IF NOT EXISTS ix_f2_grid10_effect_journal_epoch
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:80:    ON f2_grid10_effect_journal (runtime_epoch_id);
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:82:CREATE INDEX IF NOT EXISTS ix_f2_grid10_effect_journal_status
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_schema_reference.sql:83:    ON f2_grid10_effect_journal (status);
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:1:"""F2-WP-1207 P7 -- additive, shadow-gated GRID10 internal coordination cycle.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:3:Roadmap position: "P7 -- GRID10 wird Koordinationsschicht statt Logger. Wenn
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:5:GRID10 competition -> selection -> uptake -> v1 processing -> reentry.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:6:Wichtig: zunaechst KEINE direkte Aussenwirkung -- GRID10 koordiniert intern,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:10:-> broadcast -> uptake -> recurrent state update -> next-turn reentry -- for
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:11:one already-identified real turn (frame_id/turn_event_id/runtime_epoch_id
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:12:supplied by the caller; this module does not create GRID10 frames itself,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:25:  ``f2_grid10_p6d_state`` table (no new table, no schema migration) under a
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:33:  ``f2_grid10_p6d_state`` and appends to a caller-supplied evidence log.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:53:GRID10 tables have always used in stern.py and in p6d_runner.py, not the
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:81:P7_SCHEMA = "F2WP1207_GRID10_P7_COORDINATION/v1"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:82:P7_STATE_ROW_SCHEMA = "F2WP1207_GRID10_P6D_STATE/v1"  # reuses existing table's own schema tag
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:87:# present in f2_grid10_p6d_state / f2_grid10_sweep_state.
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:94:class Grid10P7CoordinationError(RuntimeError):
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:163:    broadcast: float,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:171:    """state(t+1) = lambda*state(t) + alpha*uptake(t) + beta*broadcast(t) - gamma*conflict(t)."""
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:172:    return lam * state + alpha * uptake + beta * broadcast - gamma * conflict
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:177:    """Identity of the already-created GRID10 frame this coordination cycle
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:183:    runtime_epoch_id: str
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:195:    broadcast_term: float
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:209:    broadcast_value: float
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:223:    """Pure: proposals -> competition -> selection -> broadcast -> uptake ->
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:239:    broadcast_value = scores[winner]
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:246:            if (cell != winner and abs(scores[cell] - broadcast_value) <= CONFLICT_MARGIN)
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:249:        broadcast_term = broadcast_value if cell == winner else 0.0
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:253:        beta_term = beta * broadcast_term
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:264:                broadcast_term=broadcast_term,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:278:        broadcast_value=broadcast_value,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:290:        "SELECT logical_cell_id, state_value FROM f2_grid10_p6d_state WHERE condition_key=?",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:298:    f2_grid10_p6d_state table (PK condition_key/logical_cell_id) -- same
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:299:    upsert shape stern.py already uses for f2_grid10_cell_state."""
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:305:                "INSERT INTO f2_grid10_p6d_state "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:307:                " updated_by_frame_id, won_broadcast_count, schema) "
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:312:                "won_broadcast_count=won_broadcast_count + (CASE WHEN ?=? THEN 1 ELSE 0 END)",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:343:        "runtime_epoch_id": result.turn.runtime_epoch_id,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:347:        "broadcast_value": result.broadcast_value,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:356:                "broadcast_term": t.broadcast_term,
+/home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_p7_coordination.py:393:    next-turn reentry is simply the next call's ``read_prior_state`` picking
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:20:| P7  | `f2wp1207_grid10_p7_coordination.py` | `f7373dd` (live-bridge), merged `fb38628` |
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:22:| P10 | `f2wp1207_p10_workspace_reentry.py` | `23b4e34`, merged `9f5d6a7` |
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:23:| P11 | `f2wp1207_grid10_p11_effects.py` | `2a80e68` |
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:28:`git diff <merge-commit>..HEAD -- scripts/f2wp1207_grid10_p7_coordination.py scripts/f2wp1207_epoch_reconciler.py scripts/f2wp1207_p10_workspace_reentry.py scripts/f2wp1207_grid10_p11_effects.py scripts/f2wp1207_p12_self_observation.py`
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:48:  `f2_grid10_frame` open/close (P7: "this module does not create GRID10
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:49:  frames itself"), and `f2_grid10_cell_state` upserts (P10's own docstring
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:76:| Condition | Real kill+restart? | `compose_with_reentry` (turn 2) | History present in DB? |
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:78:| FULL_HISTORY | yes | `True` | yes (real P9 reentry record, real P10 cell-state, real P11 journal row) |
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:95:`f2_reentry_record.predecessor_epoch_id` points back to the killed epoch
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:100:from `f2_grid10_cell_state`, HIGH-confidence path -- `updated_by_frame_id`
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:101:belongs to the predecessor epoch's own frame set), real `last_broadcast_value`
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:102:/ `last_winner_cell_id`. Turn 2's own call (`coordinate_real_turn_with_self_observation(compose_with_reentry=True)`) reports `used_reentry=True`.
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:105:call produced a real `f2_grid10_effect_journal` row (`status='EXECUTED'`,
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:112:(`DB_INTEGRITY`, `LAST_EFFECT_STATUS`, `RUNTIME_EPOCH_CHANGED`,
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:113:`PREDECESSOR_TERMINATION`, `RETRIEVAL_HIT_COUNT`, `LAST_GRID10_WINNER`,
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:114:`GRID10_CONFLICT_PRESENT`, `GRID10_FRAME_FAILURE_COUNT`), every one carrying
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:115:a real `evidence_ref` (row/journal/reentry id, not a placeholder).
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:119:(2 weighted facts: `LAST_EFFECT_STATUS=EXECUTED` +0.05, `RUNTIME_EPOCH_CHANGED=True`
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:120:+0.025, plus small `RETRIEVAL_HIT_COUNT`/`GRID10_FRAME_FAILURE_COUNT` terms).
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:122:terms fire; `RUNTIME_EPOCH_CHANGED=False`/`LAST_EFFECT_STATUS=NONE` on a
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:134:`compose_with_reentry`. `full_history.used_reentry=True`,
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:135:`broken_link.used_reentry=False` -- the specified edge (P10 workspace-reentry
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:139:`compose_with_reentry`) is byte-identical between the two conditions, i.e.
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:146:own cruder `f2_grid10_p6d_state` fallback (what `compose_with_reentry=False`
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:157:total, inside `f2wp1207_grid10_p11_effects.py`'s own `submit_effect_request`;
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:158:0 in P7/P9/P10/P12. 2 `INSERT INTO f2_grid10_effect_journal` sites total,
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:168:hence different actual winner cells/broadcast values each time --
+/home/andreas/frankenstein-repo/scripts/EVIDENCE_CHAIN_INDEX_20260905.md:171:`workspace.valid=True`, `used_reentry` flips exactly as expected between
+=== SERVICE ===
+● entityos-vm.service - EntityOS systemd-nspawn container (the VM)
+     Loaded: loaded (/etc/systemd/system/entityos-vm.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-09-08 12:04:36 CEST; 3 days ago
+ Invocation: 36b3673be03a46ebb16b64d525182650
+       Docs: file:///var/lib/entityos/staging-restart/ROLLBACK.md
+   Main PID: 319869 (systemd-nspawn)
+     Status: "Container running: Ready."
+      Tasks: 1 (limit: 25487)
+     Memory: 19.8M (peak: 658.2M, swap: 1M, swap peak: 1.1M)
+        CPU: 671ms
+     CGroup: /system.slice/entityos-vm.service
+             └─319869 systemd-nspawn --quiet --boot --register=yes --machine=entityos --directory=/var/lib/entityos/rootfs-run --bind=/var/lib/entityos/data:/var/lib/entityos --bind=/var/lib/entityos/voice:/opt/entityos/voice --bind-ro=/opt/entityos/cognition:/opt/entityos/cognition --bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000/pipewire-0:/run/user/1000/pipewire-0 --bind=/dev/snd --bind=/dev/dri --bind=/dev/dri/renderD128 --bind=/dev/kfd "--property=DeviceAllow=/dev/snd rwm" "--property=DeviceAllow=/dev/dri rwm" "--property=DeviceAllow=/dev/kfd rwm"
+
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Started e2scrub_all.timer - Periodi…etadata Check for All Filesystems.
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Started motd-news.timer - Message of the Day.
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Started systemd-tmpfiles-clean.time… Cleanup of Temporary Directories.
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Reached target timers.target - Timer Units.
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Listening on dbus.socket - D-Bus System Message Bus Socket.
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Reached target basic.target - Basic System.
+Sep 08 12:04:37 andreas-MACO sh[319869]:          Starting systemd-logind.service - User Login Management...
+Sep 08 12:04:37 andreas-MACO sh[319869]:          Starting dbus.service - D-Bus System Message Bus...
+Sep 08 12:04:37 andreas-MACO sh[319869]:          Starting systemd-user-sessions.service - Permit User Sessions...
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Finished systemd-user-sessions.service - Permit User Sessions.
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Started console-getty.service - Console Getty.
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Reached target getty.target - Login Prompts.
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Started systemd-logind.service - User Login Management.
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Reached target multi-user.target - Multi-User System.
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Reached target graphical.target - Graphical Interface.
+Sep 08 12:04:37 andreas-MACO sh[319869]:          Starting systemd-update-utmp-runlev… Record Runlevel Change in UTMP...
+Sep 08 12:04:37 andreas-MACO sh[319869]: [  OK  ] Finished systemd-update-utmp-runlev… - Record Runlevel Change in UTMP.
+Sep 08 12:04:43 andreas-MACO sh[319869]: 
+Sep 08 12:04:43 andreas-MACO sh[319869]: Ubuntu 24.04 LTS andreas-MACO pts/0
+Sep 08 12:04:43 andreas-MACO sh[319869]: 
+● frankenstein-local-bridge.service - Lokale GitHub-Bruecke fuer die Forschungsentitaet (andreas-MACO, chatgpt-local-andreas-maco-control/-results)
+     Loaded: loaded (/home/andreas/.config/systemd/user/frankenstein-local-bridge.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2026-09-12 01:22:52 CEST; 9h ago
+ Invocation: dccddb0d03894a51a9541698b006b3fa
+   Main PID: 1918446 (python3)
+      Tasks: 6 (limit: 25487)
+     Memory: 1.2G (peak: 3G, swap: 34.4M, swap peak: 35.1M)
+        CPU: 9min 35.233s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-local-bridge.service
+             ├─ 300914 sudo grep -RIl "--exclude=*.db" "--exclude=*.sqlite*" "--exclude=*.log" --exclude-dir=.git -- "\"world_experience.db\"" /etc/systemd /home/andreas/.config/systemd /var/lib/entityos
+             ├─ 300915 head -40
+             ├─ 300917 grep -RIl "--exclude=*.db" "--exclude=*.sqlite*" "--exclude=*.log" --exclude-dir=.git -- "\"world_experience.db\"" /etc/systemd /home/andreas/.config/systemd /var/lib/entityos
+             ├─1092728 bash -lc "set -e; echo '=== HOST ==='; hostname; whoami; date -Is; echo '=== VOICE RUNTIME ==='; find /var/lib/entityos/voice -maxdepth 2 -type f -name '*.py' -printf '%p %s bytes\\n' 2>/dev/null | sort | head -120; echo '=== IDENTITY/SPEAKER REFERENCES ==='; grep -RniE 'sprecher|speaker|owner|machine_id|gabriel|andreas|voiceprint|identity|identitaet|handoff' /var/lib/entityos/voice /home/andreas/frankenstein-repo/scripts 2>/dev/null | head -220 || true; echo '=== GRID/EFFECT/IMMUNE REFERENCES ==='; grep -RniE 'grid10|effect_gate|immune|immunsystem|admission|policy|broadcast|reentry|runtime_epoch|owner|machine_id' /home/andreas/frankenstein-repo/scripts 2>/dev/null | head -260 || true; echo '=== SERVICE ==='; systemctl status entityos-vm.service --no-pager -n 20 2>/dev/null || true; systemctl --user status frankenstein-local-bridge.service --no-pager -n 20 2>/dev/null || true; echo '=== GIT ==='; cd /home/andreas/frankenstein-repo && git status --short && git rev-parse HEAD && git branch --show-current && git remote -v | head -4"
+             ├─1092870 systemctl --user status frankenstein-local-bridge.service --no-pager -n 20
+             └─1918446 /usr/bin/python3 /home/andreas/.claude/star/local_bridge_daemon.py
+
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file go-bridge-attribution-audit-20260912-0634b.json: Invalid \escape: line 1 column 577 (char 576)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file go-source-v2-discover-andreas-state-sync-20260912.json: Invalid \escape: line 9 column 137 (char 366)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file go-vps-queue-audit-20260912-0645.json: Invalid \escape: line 5 column 513 (char 619)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file go084-gate-provenance-forensics-20260912-0903-andreas.json: Expecting ',' delimiter: line 1 column 542 (char 541)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file go084-glm-fallback-preflight-20260912-0903-andreas.json: Invalid \escape: line 1 column 824 (char 823)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file go084-volatile-state-migration-map-readonly-20260912-0954-gpt56sol.json: Expecting ',' delimiter: line 1 column 1806 (char 1805)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file gpt56-andreas-organ-seam-20260912T0343Z.json: Invalid \escape: line 1 column 640 (char 639)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file gpt56sol-frank-vm-capabilities-andreas-20260912T041300Z.json: Expecting ',' delimiter: line 1 column 365 (char 364)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file gpt56sol-integrate-20260912-0340-andreas-inspect.json: Invalid \escape: line 1 column 1090 (char 1089)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file gpt56sol-vm-runtime-inspect-andreas-20260912T034500Z.json: Expecting ',' delimiter: line 1 column 721 (char 720)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file hostbound-audit-gpt56sol-20260912-andreas-01.json: Invalid \escape: line 1 column 1341 (char 1340)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file person-mode-voice-audit-andreas-20260912-1501.json: Invalid \escape: line 1 column 275 (char 274)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file zzzz-gpt56sol-andreas-state-locator2-20260912-1550.json: Invalid \escape: line 1 column 427 (char 426)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip unsupported schema in .keep.json: None
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file 0001-gpt56-patch-organ-source-provenance-20260912T0414Z.json: Expecting ',' delimiter: line 1 column 594 (char 593)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file 0002-gpt56-test-current-organ-branch-20260912T0416Z.json: Invalid \escape: line 1 column 875 (char 874)
+Sep 12 10:34:24 andreas-MACO python3[1918446]: skip malformed command file avatar-hardcore-andreas-observer-locate-20260912-1005-gpt56sol.json: Invalid \escape: line 9 column 295 (char 541)
+Sep 12 10:35:31 andreas-MACO im-config[1092782]: @ IM_CONFIG_ENTRY='profile' XDG_SESSION_TYPE ='wayland' UID=1000 PID=1092728 PPID=1918446
+Sep 12 10:35:31 andreas-MACO im-config[1092783]:   GTK_IM_MODULE='' QT_IM_MODULE='ibus' CLUTTER_IM_MODULE='' SDL_IM_MODULE='' XMODIFIERS='@im=ibus'
+Sep 12 10:35:31 andreas-MACO im-config[1092785]:   Set IM_CONFIG_CURRENT_DESKTOP <- XDG_CURRENT_DESKTOP='ubuntu:GNOME'
+=== GIT ===
+ M scripts/__pycache__/stern.cpython-312.pyc
+ M scripts/f2wp1207_grid10_turn_loop.py
+c7de75d22b94ee88d02c5f663252009ccace282b
+main
+origin	github-frankenstein:gschaidergabriel/frankenstein.git (fetch)
+origin	github-frankenstein:gschaidergabriel/frankenstein.git (push)

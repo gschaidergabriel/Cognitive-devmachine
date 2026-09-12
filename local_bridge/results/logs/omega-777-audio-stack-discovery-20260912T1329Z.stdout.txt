@@ -1,0 +1,130 @@
+BINARIES
+pw-cat=/usr/bin/pw-cat
+pw-play=/usr/bin/pw-play
+wpctl=/usr/bin/wpctl
+pactl=/usr/bin/pactl
+paplay=/usr/bin/paplay
+aplay=/usr/bin/aplay
+ffplay=/usr/bin/ffplay
+python3=/usr/bin/python3
+PW_CAT_HELP
+pw-cat [options] [<file>|-]
+  -h, --help                            Show this help
+      --version                         Show version
+  -v, --verbose                         Enable verbose operations
+
+  -R, --remote                          Remote daemon name
+      --media-type                      Set media type (default Audio)
+      --media-category                  Set media category (default Playback)
+      --media-role                      Set media role (default Music)
+      --target                          Set node target serial or name (default auto)
+                                          0 means don't link
+      --latency                         Set node latency (default 100ms)
+                                          Xunit (unit = s, ms, us, ns)
+                                          or direct samples (256)
+                                          the rate is the one of the source file
+  -P  --properties                      Set node properties
+
+      --rate                            Sample rate (req. for rec) (default 48000)
+      --channels                        Number of channels (req. for rec) (default 2)
+      --channel-map                     Channel map
+                                            one of: "stereo", "surround-51",... or
+                                            comma separated list of channel names: eg. "FL,FR"
+      --format                          Sample format (ulaw|alaw|u8|s8|s16|s32|f32|f64) (req. for rec) (default s16)
+      --volume                          Stream volume 0-1.0 (default 1.000)
+  -q  --quality                         Resampler quality (0 - 15) (default 4)
+
+  -p, --playback                        Playback mode
+  -r, --record                          Recording mode
+  -m, --midi                            Midi mode
+  -d, --dsd                             DSD mode
+
+DEFAULT_AUDIO
+PipeWire 'pipewire-0' [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, cookie:2440926237]
+ └─ Clients:
+        32. pipewire                            [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2491]
+        33. gnome-shell                         [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:1532239]
+        34. WirePlumber                         [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2490]
+        35. WirePlumber [export]                [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2490]
+        72. GNOME Volume Control Media Keys     [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:1532569]
+        77. Firefox                             [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2996020]
+        78. pipewire                            [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2491]
+        97. pw-cat                              [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:3571849]
+       108. xdg-desktop-portal                  [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:1532466]
+       119. GNOME Shell Volume Control          [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:1532239]
+       133. wpctl                               [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:3573417]
+       137. Terminal                            [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:1533484]
+       138. speech-dispatcher-dummy             [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:3767140]
+
+Audio
+ ├─ Devices:
+ │      87. Rapoo Camera                        [alsa]
+ │     111. RODE NT-USB                         [alsa]
+ │     116. Rembrandt Radeon High Definition Audio Controller [alsa]
+ │     140. Family 17h/19h HD Audio Controller  [alsa]
+ │  
+ ├─ Sinks:
+ │      62. RODE NT-USB Analog Stereo           [vol: 0.77]
+ │  *  107. Echo-Cancel Sink                    [vol: 0.83]
+ │     123. Rembrandt Radeon High Definition Audio Controller Digital Stereo (HDMI) [vol: 1.53]
+ │  
+ ├─ Sink endpoints:
+ │  
+ ├─ Sources:
+ │      44. Rapoo Camera Analog Stereo          [vol: 1.00]
+ │      46. Family 17h/19h HD Audio Controller Analog Stereo [vol: 1.00]
+ │     100. Echo-Cancel Source                  [vol: 0.97]
+ │  *  121. RODE NT-USB Analog Stereo           [vol: 0.52]
+ │  
+ ├─ Source endpoints:
+ │  
+ └─ Streams:
+        69. pw-record                                                   
+             89. input_FR        < RODE NT-USB:capture_FR	[active]
+            112. monitor_FR     
+            124. monitor_FL     
+            130. input_FL        < RODE NT-USB:capture_FL	[active]
+        74. Firefox                                                     
+             73. output_FR       > Echo-Cancel Sink:playback_FR	[active]
+            113. output_FL       > Echo-Cancel Sink:playback_FL	[active]
+        82. echo-cancel-playback                                        
+            106. output_FR       > eM713A:playback_FR	[active]
+            115. output_FL       > eM713A:playback_FL	[active]
+        95. echo-cancel-capture                                         
+            101. input_FL        < RODE NT-USB:capture_FL	[active]
+            103. input_FR        < RODE NT-USB:capture_FR	[active]
+            104. monitor_FR     
+            105. monitor_FL     
+       125. speech-dispatcher-dummy                                     
+             70. output_FL       > Echo-Cancel Sink:playback_FL	[init]
+             75. output_FR       > Echo-Cancel Sink:playback_FR	[init]
+       131. Firefox                                                     
+             76. output_FL       > Echo-Cancel Sink:playback_FL	[active]
+            118. output_FR       > Echo-Cancel Sink:playback_FR	[active]
+       139. Firefox                                                     
+             51. output_FL       > Echo-Cancel Sink:playback_FL	[active]
+            134. output_FR       > Echo-Cancel Sink:playback_FR	[active]
+
+Video
+ ├─ Devices:
+ │      40. Rapoo Camera                        [v4l2]
+ │      41. Estelle Cam                         [v4l2]
+ │      43. Rapoo Camera                        [v4l2]
+ │  
+ ├─ Sinks:
+ │  
+ ├─ Sink endpoints:
+ │  
+ ├─ Sources:
+ │  *   39. Rapoo Camera (V4L2)                
+ │  
+ ├─ Source endpoints:
+ │  
+ └─ Streams:
+
+Settings
+ └─ Default Configured Node Names:
+         0. Audio/Sink    frank_out_ec
+         1. Audio/Source  alsa_input.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo
+PY_AUDIO_MODULES
+{"numpy": true, "pyaudio": false, "sounddevice": true, "soundfile": true}

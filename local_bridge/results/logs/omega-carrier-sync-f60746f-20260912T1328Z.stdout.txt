@@ -1,0 +1,69 @@
+Your branch is behind 'origin/main' by 2 commits, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+Updating 572a07d..f60746f
+Fast-forward
+ .github/workflows/omega-ci.yml       |  29 +++
+ .github/workflows/omega-tests.yml    |  22 ++
+ omega/grid_runtime_v3.py             |  62 +++++-
+ omega/outer_bridge_worker.py         | 400 +++++++++++++++++++++++++++++++++++
+ omega/spool_bridge_relay.py          | 198 +++++++++++++++++
+ omega/supervisor_outer.py            | 147 +++++++++++++
+ tests/test_master_bridge_liveness.py | 161 ++++++++++++++
+ tests/test_outer_bridge_worker.py    | 190 +++++++++++++++++
+ tests/test_spool_bridge_relay.py     | 116 ++++++++++
+ 9 files changed, 1315 insertions(+), 10 deletions(-)
+ create mode 100644 .github/workflows/omega-ci.yml
+ create mode 100644 .github/workflows/omega-tests.yml
+ create mode 100644 omega/outer_bridge_worker.py
+ create mode 100644 omega/spool_bridge_relay.py
+ create mode 100644 omega/supervisor_outer.py
+ create mode 100644 tests/test_master_bridge_liveness.py
+ create mode 100644 tests/test_outer_bridge_worker.py
+ create mode 100644 tests/test_spool_bridge_relay.py
+branch 'omega-vps-deploy' set up to track 'origin/omega-vps-deploy'.
+Your branch is up to date with 'origin/omega-vps-deploy'.
+[omega-vps-deploy a9622387a] omega: publish immutable VPS deployment carrier f60746ffc5d1170e146609036d667bb26ac1d56f
+ 43 files changed, 5826 insertions(+), 3 deletions(-)
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/.github/workflows/omega-ci.yml
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/.github/workflows/omega-tests.yml
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/000_OMEGA_ABSOLUTE_BOOTSTRAP.md
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/README.md
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/architecture/ALIGNMENT_KERNEL.md
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/architecture/DYNAMIC_ORGAN_ROUTING.md
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/architecture/README.md
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/assets/omega-hero.svg
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/config/autonomy_policy.json
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/config/organ_router.json
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/config/sources.json
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/__init__.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/alignment.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/bridge_relay.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/bridge_transport.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/grid_organ_router.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/grid_runtime.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/grid_runtime_v2.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/grid_runtime_v3.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/master_bridge.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/master_bridge_carrier.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/outer_bridge_worker.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/policy_kernel.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/router.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/spool_bridge_relay.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/supervisor.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/supervisor_outer.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/telemetry_daemon.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/unified_store.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/research/README.md
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/schema/002_runtime.sql
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/schema/omega.sql
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/tests/test_alignment.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/tests/test_bridge_transport.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/tests/test_grid_runtime_v2.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/tests/test_grid_runtime_v3.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/tests/test_master_bridge_liveness.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/tests/test_outer_bridge_worker.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/tests/test_policy_kernel.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/tests/test_router.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/tests/test_spool_bridge_relay.py
+ create mode 100644 omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/tests/test_unified_store.py
+OMEGA_HEAD=f60746ffc5d1170e146609036d667bb26ac1d56f

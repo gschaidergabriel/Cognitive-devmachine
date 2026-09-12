@@ -1,4 +1,4 @@
-from trigger999_intervention_gate import (
+from research_entity.coordination.trigger999_intervention_gate import (
     ConversationFloorState,
     InterventionCandidate,
     SpeechAct,

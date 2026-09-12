@@ -1,0 +1,411 @@
+=== BROWSER DIENST FILES ===
+/home/andreas/browser-dienst/venv/pyvenv.cfg
+/home/andreas/browser-dienst/venv/.gitignore
+/home/andreas/browser-dienst/browser_erkennung.py
+/home/andreas/browser-dienst/__pycache__/browser_erkennung.cpython-314.pyc
+/home/andreas/browser-dienst/__pycache__/bildschirm.cpython-314.pyc
+/home/andreas/browser-dienst/test_dienst.py
+/home/andreas/browser-dienst/dienst.py
+/home/andreas/browser-dienst/bildschirm.py
+=== DIENST SOURCE ===
+# -*- coding: utf-8 -*-
+"""Browser-Dienst -- gewoehnliche Fernsteuerung von Zeros Browser auf diesem Rechner.
+
+WAS DAS IST, UND WAS AUSDRUECKLICH NICHT (Auftrag Gabriel 2026-08-21)
+======================================================================
+Zero soll den Browser auf diesem Rechner bedienen -- navigieren, klicken,
+tippen, Formulare ausfuellen -- mit dem ECHTEN, angemeldeten Browserprofil des
+Menschen, damit dessen Konten einfach funktionieren. Das ist GEWOEHNLICHE
+AUTOMATISIERUNG (Playwright, offizielle APIs). KEIN /dev/uinput, KEIN
+synthetischer Kernel-Input, KEINE Bot-Erkennungs-Umgehung (deshalb wird
+playwright-stealth, obwohl im System installiert, hier absichtlich NICHT
+importiert). Erkennt eine Seite die Automatik, ist das in Ordnung.
+KEIN HEADLESS -- Gabriels Regel 2026-08-06 (Schranke blockt das ausdruecklich,
+CPU-Last). Der Browser laeuft sichtbar, mit Fenster, genau wie beim Menschen.
+
+DREI BROWSER, EIN DIENST (Gabriels Entscheidung 2026-08-21, zweite Runde)
+=============================================================================
+Zero muss Chrome, Firefox UND Brave steuern koennen -- nicht nur den einen
+Systemstandard. Deshalb per Anfrage waehlbar (`browser: "chrome"|"firefox"|
+"brave"` im JSON-Body bzw. `?browser=` als Query-Parameter), mit dem
+ermittelten Systemstandard (`browser_erkennung.ermitteln()`) als Vorgabe,
+wenn nichts angegeben ist:
+
+  - Chrome, Brave: BEIDE Chromium-Familie -> derselbe Weg wie bisher
+    (Playwright `connect_over_cdp` gegen einen mit --remote-debugging-port
+    gestarteten Prozess), nur eigenes Binary/Profil/Port je Browser.
+  - Firefox: EIGENER Weg (`ChromiumSitzung` passt hier nicht) -- Playwright
+    hat kein `connect_over_cdp` fuer Firefox. Stattdessen Playwrights
+    eigener, fuer sein Automationsprotokoll gepatchter Firefox-Build
+    (`playwright.firefox.launch_persistent_context`) -- offizielle
+    Playwright-API, keine Bastelloesung, kein CDP-Umweg.
+
+Jeder der drei bekommt sein EIGENES, dauerhaftes Profilverzeichnis unter
+~/.config/browser-dienst/<schluessel>-profil -- NICHT die Tagesprofile des
+Menschen. Grund (gemessen 2026-08-21): aktuelles Chrome bindet den CDP-Port
+fuer den STANDARDPFAD ~/.config/google-chrome still nie (kein Fehler, keine
+Logzeile) -- Kontrollversuch gegen ein frisches --user-data-dir band den Port
+sofort. Deckt sich mit Googles eigener Haertung gegen CDP-Fernsteuerung eines
+eingeloggten Standardprofils (Infostealer-Vektor). Jedes der drei Profile
+braucht daher EINMAL eine echte, menschliche Anmeldung (echtes Fenster) --
+danach ist es ein dauerhaftes, angemeldetes Profil wie jedes andere.
+
+Wird der System-Standard nicht ermittelt UND kein `browser`-Parameter UND
+kein BROWSER_DIENST_STANDARD gesetzt, wird NICHT geraten -- klare Ablehnung.
+Ein explizit angegebener `browser`-Parameter funktioniert dagegen IMMER
+deterministisch, unabhaengig vom Systemstandard.
+
+BILDSCHIRM 1 BLEIBT UNANGETASTET, FOKUS WIRD ZURUECKGEGEBEN
+=============================================================
+"Bildschirm 1" = das primary-Flag (xrandr/GTK) -- Gabriels ausdrueckliche
+Korrektur 2026-08-21: NICHT das aktive Fenster (siehe bildschirm.py-Docstring
+fuer die vorherige falsche Annahme). Neue Fenster landen auf Bildschirm 2
+(bildschirm.fokusgeschuetzt_platzieren) UND geben den beim Start
+unvermeidlich kurz gestohlenen Tastaturfokus automatisch an das vorher
+aktive Fenster zurueck -- keine manuelle Nacharbeit mehr noetig.
+
+SICHERHEIT -- DIE WICHTIGSTE PRUEFUNG UEBERHAUPT
+==================================================
+Eine Browser-Fernsteuerung ohne Zugangsschutz ist ein offenes Tor zu JEDEM
+angemeldeten Konto des Menschen -- E-Mail, Bank, alles. Deshalb zwei
+unabhaengige Riegel, die BEIDE halten muessen:
+  1. NUR ueber die Tailscale-Schnittstelle erreichbar. Der Dienst bindet
+     NIE an 0.0.0.0 -- `--bind` wird gegen die tatsaechlichen `tailscale ip`-
+     Adressen dieser Maschine geprueft und bei Abweichung VERWEIGERT. Eine
+     Verbindung auf 127.0.0.1 oder der LAN-IP kommt also nie am Socket an.
+  2. Bearer-Token auf JEDER Anfrage (auch /health), zeitkonstant verglichen
+     (hmac.compare_digest -- ein naiver ==-Vergleich waere ein Seitenkanal).
+Beide Riegel sind unabhaengig UND notwendig: Tailscale schuetzt vor dem
+offenen Internet, das Token vor jedem anderen Geraet/Prozess IM selben
+Tailnet.
+
+WIRKUNG NACH AUSSEN GEHOERT NICHT HIERHER GEGATET
+====================================================
+Dieser Dienst fuehrt aus, was er angewiesen wird -- er trifft KEIN Urteil
+darueber, ob eine Aktion bestaetigt werden muss. Die Bestaetigungslogik
+(EffectGate) sitzt auf dem VPS, VOR dem Aufruf dieses Dienstes. Was hier
+lokal passiert, ist nur eine BEWEISSPUR (wirkungen.jsonl) -- eine zweite
+Schranke waere genau der Fehler, den der Auftrag ausdruecklich verbietet.
+Die VPS-Verdrahtung (Werkzeug-Registrierung, Token, EffectGate) macht
+Gabriel zentral selbst -- dieser Dienst liefert nur die Endpunkte dafuer.
+"""
+from __future__ import annotations
+
+import base64
+import hmac
+import json
+import os
+import secrets
+import subprocess
+import sys
+import threading
+import time
+from pathlib import Path
+
+from flask import Flask, jsonify, request
+
+import bildschirm
+import browser_erkennung
+
+# ── Konfiguration ────────────────────────────────────────────────────────
+
+KONFIG_DIR = Path(os.environ.get("BROWSER_DIENST_KONFIG", str(Path.home() / ".config" / "browser-dienst")))
+TOKEN_DATEI = KONFIG_DIR / "token"
+WIRKUNGEN_LOG = KONFIG_DIR / "wirkungen.jsonl"
+DISPLAY = os.environ.get("DISPLAY", ":0")
+DEFAULT_PORT = int(os.environ.get("BROWSER_DIENST_PORT", "8420"))
+
+# Chromium-Familie: EIGENER Port je Browser, damit Chrome und Brave sich
+# nicht gegenseitig den Debugport wegnehmen, wenn beide gleichzeitig laufen.
+CDP_PORTS = {
+    "chrome": int(os.environ.get("BROWSER_DIENST_CDP_PORT_CHROME", "9333")),
+    "brave": int(os.environ.get("BROWSER_DIENST_CDP_PORT_BRAVE", "9334")),
+}
+# cmdline-Teilstring zur Lebendigkeitspruefung des SingletonLock (siehe
+# ChromiumSitzung._singleton_haelt_wer) -- je Browser unterschiedlich, sonst
+# haelt ein laufendes Brave einen Chrome-Start faelschlich fuer belegt.
+_LOCK_MUSTER = {"chrome": b"chrom", "brave": b"brave"}
+
+# Menschlicher Override: zwingt EINEN der drei Schluessel als Vorgabe, wenn
+# kein `browser`-Parameter in der Anfrage steht (z.B. waehrend
+# browser_erkennung noch keinen/den falschen Standard liefert). Wird NIE
+# automatisch gesetzt.
+#
+# ⭐ Gabriels Auftrag 2026-08-22: der Standardbrowser je Mensch ist eine
+# ERKLAERTE Tatsache, kein Ratewerk der Systemerkennung -- Gabriel = Firefox,
+# Andreas = Brave. Deshalb ist genau DAS der Ort, an dem das steht: als
+# `Environment=BROWSER_DIENST_STANDARD=...` in der systemd-User-Unit JEDES
+# Rechners (~/.config/systemd/user/browser-dienst.service), nicht in einer
+# zweiten Konfigurationsschicht. `bevorzugter_schluessel()` unten nimmt IMMER
+# zuerst diesen Wert, bevor es ueberhaupt bei browser_erkennung.ermitteln()
+# (Systemstandard, xdg-settings/xdg-mime) nachfragt -- die Erkennung bleibt
+# nur noch als Rueckfall fuer Rechner, die (noch) keine explizite Vorgabe
+# tragen. Ein `browser`-Parameter in der Anfrage schlaegt beides.
+STANDARD_OVERRIDE = os.environ.get("BROWSER_DIENST_STANDARD", "").strip() or None
+
+
+class SicherheitsFehler(RuntimeError):
+    pass
+
+
+# ── Token ────────────────────────────────────────────────────────────────
+
+def token_laden_oder_erzeugen() -> str:
+    """Token aus KONFIG_DIR lesen, sonst neu erzeugen. Datei bleibt 0600."""
+    if TOKEN_DATEI.is_file():
+        wert = TOKEN_DATEI.read_text(encoding="utf-8").strip()
+        if wert:
+            return wert
+    KONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    wert = secrets.token_urlsafe(32)
+    TOKEN_DATEI.write_text(wert + "\n", encoding="utf-8")
+    os.chmod(TOKEN_DATEI, 0o600)
+    return wert
+
+
+def token_pruefen(erwartet: str, anfrage) -> bool:
+    """Zeitkonstanter Vergleich -- siehe Moduldocstring, Punkt 2.
+
+    ⚠️ GEMESSEN 2026-08-21 (beide Rechner, Gabriel UND Andreas): der Aufrufer
+    ist clayverse/browser_fern.py -- das schickt den Token als rohen Header
+    `X-Zero-Token: <token>`, NICHT als `Authorization: Bearer <token>`. Der
+    urspruengliche Entwurf hier pruefte NUR Authorization -- das lief also nie
+    scharf, auf keiner der beiden Maschinen (401 bei jedem echten Aufruf ueber
+    die Bruecke, nicht nur bei curl-Handtests ohne Header). clayverse/ ist
+    NICHT mein Bereich (gehoert dem Koordinator) -- also wird hier akzeptiert,
+    was die Bruecke tatsaechlich schickt, plus Authorization:Bearer bleibt
+    zusaetzlich gueltig fuer manuelle Tests/curl.
+    """
+    kandidat = anfrage.headers.get("X-Zero-Token")
+    if not kandidat:
+        auth = anfrage.headers.get("Authorization")
+        if auth and auth.startswith("Bearer "):
+            kandidat = auth[len("Bearer "):]
+    if not kandidat:
+        return False
+    return hmac.compare_digest(kandidat, erwartet)
+
+
+# ── Bind-Adresse gegen Tailscale pruefen ────────────────────────────────
+
+def tailscale_ips() -> list[str]:
+    try:
+        cp = subprocess.run(["tailscale", "ip"], capture_output=True, text=True, timeout=5.0)
+    except (OSError, subprocess.TimeoutExpired):
+        return []
+    if cp.returncode != 0:
+        return []
+    return [z.strip() for z in cp.stdout.splitlines() if z.strip()]
+
+
+def bind_adresse_pruefen(adresse: str) -> None:
+    verboten = {"0.0.0.0", "::", "*"}
+    if adresse in verboten:
+        raise SicherheitsFehler(
+            f"Bind an {adresse!r} verweigert: das waere jede Schnittstelle, "
+            "nicht nur Tailscale."
+        )
+    ips = tailscale_ips()
+    if not ips:
+        raise SicherheitsFehler(
+            "`tailscale ip` lieferte keine Adresse -- ohne Beleg, dass "
+            f"{adresse!r} eine Tailscale-IP dieser Maschine ist, wird nicht gebunden."
+        )
+    if adresse not in ips:
+        raise SicherheitsFehler(
+            f"Bind an {adresse!r} verweigert: keine der Tailscale-IPs dieser "
+            f"Maschine ({ips}). Nur Tailscale-Erreichbarkeit ist erlaubt."
+        )
+
+
+def _cdp_erreichbar(port: int) -> bool:
+    import urllib.request
+    try:
+        with urllib.request.urlopen(f"http://127.0.0.1:{port}/json/version", timeout=1.5):
+            return True
+    except Exception:
+        return False
+
+
+def _profil_pfad(schluessel: str) -> str:
+    return str(KONFIG_DIR / f"{schluessel}-profil")
+
+
+def _firefox_binary_pfad() -> str | None:
+    """Playwrights eigener, gepatchter Firefox-Build -- KEINE PATH-Suche
+    (anders als Chrome/Brave): das ist bewusst nicht der System-Firefox,
+    siehe Moduldocstring. Nur ein Datei-Check, kein Playwright-Start noetig
+    (der waere fuer einen reinen Statuscheck unnoetig teuer)."""
+    basis = Path(os.environ.get("PLAYWRIGHT_BROWSERS_PATH", str(Path.home() / ".cache" / "ms-playwright")))
+    if not basis.is_dir():
+        return None
+    treffer = sorted(basis.glob("firefox-*/firefox/firefox"))
+    return str(treffer[-1]) if treffer else None
+
+
+# ── EIN gemeinsamer Playwright-Treiber fuer den ganzen Dienst ────────────
+# ⚠️ GEMESSEN 2026-08-21: mehrere UNABHAENGIGE `sync_playwright().start()`-
+# Aufrufe (einer je Sitzung) im selben Prozess/Thread scheitern mit
+# "Playwright Sync API inside the asyncio loop" -- Playwrights Sync-API ist
+# nicht dafuer gebaut, mehrfach parallel gestartet zu werden. Ein Treiber
+# fuer alle drei Browser (chromium() UND firefox() haengen beide am selben
+# `Playwright`-Objekt) behebt das grundsaetzlich, nicht nur den Einzelfall.
+_PW_LOCK = threading.Lock()
+_PW = None
+
+
+def _pw_instance():
+    global _PW
+    with _PW_LOCK:
+        if _PW is None:
+            from playwright.sync_api import sync_playwright
+            _PW = sync_playwright().start()
+        return _PW
+
+
+# ── Chromium-Sitzung (Chrome ODER Brave -- identischer CDP-Weg) ──────────
+
+class ChromiumSitzung:
+    def __init__(self, schluessel: str):
+        assert schluessel in ("chrome", "brave")
+        self.schluessel = schluessel
+        self.profil = _profil_pfad(schluessel)
+        self.cdp_port = CDP_PORTS[schluessel]
+        self._lock = threading.RLock()
+        self._pw = None
+        self._browser = None
+        self._page = None
+        self._prozess = None  # siehe schliessen(): Playwright.close() reicht bei
+                               # einer CDP-ANGEHEFTETEN Sitzung nicht aus.
+
+    def _cdp_erreichbar(self) -> bool:
+        return _cdp_erreichbar(self.cdp_port)
+
+    def _binary_ermitteln(self) -> str:
+        override = os.environ.get(f"BROWSER_DIENST_BINARY_{self.schluessel.upper()}", "").strip()
+        if override:
+            return override
+        pfad = browser_erkennung.binary_finden(self.schluessel)
+        if not pfad:
+            raise SicherheitsFehler(
+                f"Kein {self.schluessel}-Binary gefunden (bekannte Namen: "
+                f"{browser_erkennung._KANDIDATEN.get(self.schluessel)}). Menschliche "
+                f"Entscheidung noetig -- installieren, oder "
+                f"BROWSER_DIENST_BINARY_{self.schluessel.upper()}=<pfad> setzen."
+            )
+        return pfad
+
+    def _singleton_haelt_wer(self) -> str | None:
+        """PID-Hinweis aus dem SingletonLock des Zielprofils -- nur wenn die
+        PID auch wirklich noch lebt UND zu diesem Browser gehoert (nicht z.B.
+        ein laufendes Brave, das faelschlich als Chrome-Halter gilt).
+
+        ⚠️ GEMESSEN 2026-08-21: der Lock zeigte einmal auf eine laengst tote
+        PID (Browser nicht sauber beendet). Chrome selbst ignoriert das beim
+        naechsten Start -- diese Pruefung muss dasselbe tun.
+        """
+        lock = Path(self.profil) / "SingletonLock"
+        if not lock.is_symlink():
+            return None
+        try:
+            ziel = os.readlink(lock)
+            pid = ziel.rsplit("-", 1)[-1]
+        except OSError:
+            return None
+        if not pid.isdigit():
+            return None
+        cmdline_pfad = Path(f"/proc/{pid}/cmdline")
+        if not cmdline_pfad.is_file():
+            return None  # PID lebt nicht mehr -- stale lock
+        try:
+            cmdline = cmdline_pfad.read_bytes()
+        except OSError:
+            return None
+        if _LOCK_MUSTER[self.schluessel] not in cmdline.lower():
+            return None  # PID wiederverwendet, gehoert nicht mehr diesem Browser
+        return pid
+
+    def _starten(self, ziel):
+        """`ziel`: der aufgeloeste Zielbildschirm (bildschirm.Bildschirm) --
+        kommt aus sicherstellen(), das den Wunsch aus der Anfrage gegen die
+        aktuelle Bildschirmlage aufloest (Gabriels Auftrag 2026-08-22: Zero
+        soll GEZIELT einen Bildschirm ansprechen koennen, nicht nur die feste
+        Vorgabe bekommen)."""
+        binary = self._binary_ermitteln()
+        Path(self.profil).mkdir(parents=True, exist_ok=True)
+
+        # ⚠️ GABRIEL 2026-08-21, DRINGEND: ein Fenster, das erst irgendwo
+        # (haeufig auf Bildschirm 1, weil GTK-Apps ohne Vorgabe auf dem
+        # primary-Monitor oeffnen) erscheint und DANACH per xdotool auf den
+        # Zielbildschirm verschoben wird, blitzt sichtbar auf Bildschirm 1
+        # auf -- das stoert ihn aktiv. Deshalb HIER die Zielposition VOR dem
+        # Start berechnen und als --window-position/--window-size an Chrome/
+        # Brave selbst uebergeben: das Fenster entsteht dann schon an der
+        # richtigen Stelle, kein Zwischenschritt auf Bildschirm 1 noetig.
+        # fokusgeschuetzt_platzieren() unten bleibt zusaetzlich als
+        # Sicherheitsnetz (falls die Fensterverwaltung das CLI-Argument
+        # ignoriert) UND fuer die Fokus-Rueckgabe, die die CLI-Flags nicht
+        # leisten.
+        vx, vy, vw, vh = bildschirm.fenstergeometrie(ziel)
+
+        def spawn():
+            argv = [
+                binary,
+                f"--user-data-dir={self.profil}",
+                f"--remote-debugging-port={self.cdp_port}",
+                "--remote-allow-origins=*",
+                "--no-first-run",
+                "--no-default-browser-check",
+                f"--window-position={vx},{vy}",
+                f"--window-size={vw},{vh}",
+                "about:blank",
+            ]
+            env = dict(os.environ)
+            env["DISPLAY"] = DISPLAY
+            self._prozess = subprocess.Popen(argv, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+
+        bildschirm.fokusgeschuetzt_platzieren(spawn, DISPLAY, ziel_override=ziel)
+        # ⚠️ GEMESSEN 2026-08-21: 6s reichten unter Last (mehrere Browser +
+        # Fensterplatzierung gleichzeitig) nicht immer -- ein manueller
+        # Kontrollstart derselben Binary/desselben Profils band den Port
+=== SERVICES ===
+  brave-sauber-zu.service                                          loaded    active   exited  Brave sauber beenden, bevor die Sitzung endet
+  browser-dienst.service                                           loaded    active   running Browser-Dienst -- Zero darf Chrome/Brave/Firefox auf diesem Rechner bedienen
+  frankenstein-local-bridge.service                                loaded    active   running Lokale GitHub-Bruecke fuer die Forschungsentitaet (andreas-MACO, chatgpt-local-andreas-maco-control/-results)
+  gstack-browse-display.service                                    loaded    active   running gstack-browse virtueller Bildschirm :150 (Xvfb) - FranKenstein ChatGPT bridge Andreas
+=== BRAVE PROC ===
+8400 /bin/bash /usr/bin/brave-browser --restore-last-session
+8462 /opt/brave.com/brave/brave --restore-last-session
+8759 /opt/brave.com/brave/brave --type=zygote --no-zygote-sandbox --crashpad-handler-pid=8722 --enable-crash-reporter=, --change-stack-guard-on-fork=enable
+8760 /opt/brave.com/brave/chrome-sandbox /opt/brave.com/brave/brave --type=zygote --crashpad-handler-pid=8722 --enable-crash-reporter=, --change-stack-guard-on-fork=enable
+8764 /opt/brave.com/brave/brave --type=zygote --crashpad-handler-pid=8722 --enable-crash-reporter=, --change-stack-guard-on-fork=enable
+8768 /opt/brave.com/brave/brave --type=zygote --crashpad-handler-pid=8722 --enable-crash-reporter=, --change-stack-guard-on-fork=enable
+9427 /opt/brave.com/brave/brave --type=gpu-process --ozone-platform=wayland --render-node-override=/dev/dri/renderD128 --crashpad-handler-pid=8722 --enable-crash-reporter=, --change-stack-guard-on-fork=enable --gpu-preferences=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,3763477530742959954,48794680943409687,262144 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190708988185955192
+9440 /opt/brave.com/brave/brave --type=utility --utility-sub-type=network.mojom.NetworkService --lang=de --service-sandbox-type=none --render-node-override=/dev/dri/renderD128 --crashpad-handler-pid=8722 --enable-crash-reporter=, --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,7984501665094735394,13307195700584812511,524288 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190708989122997041
+9492 /opt/brave.com/brave/brave --type=utility --utility-sub-type=storage.mojom.StorageService --lang=de --service-sandbox-type=utility --render-node-override=/dev/dri/renderD128 --crashpad-handler-pid=8722 --enable-crash-reporter=, --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,12697357711527909315,7793928526994027145,524288 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190708990060038890
+9660 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=8 --launch-time-ticks=21289718 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,5371658626879774501,15312041707765495075,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190708993808206286
+9924 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=29 --launch-time-ticks=22177397 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,13220270916348744485,15217675137477009467,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709013486085115
+9939 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=30 --launch-time-ticks=22368098 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,4671434595624560269,10108961364619422738,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709014423126964
+10099 /opt/brave.com/brave/brave --type=utility --utility-sub-type=audio.mojom.AudioService --lang=de --service-sandbox-type=none --render-node-override=/dev/dri/renderD128 --crashpad-handler-pid=8722 --enable-crash-reporter=, --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,3791610830361113314,11889032586824615076,524288 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709016297210662
+10709 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=7 --launch-time-ticks=26210317 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,7876610694229470658,7935154500588139452,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190708992871164437
+10746 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=37 --launch-time-ticks=26486449 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,9927437996555377087,535524844911467048,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709020982419907
+10860 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=12 --launch-time-ticks=29512212 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,17651038526866373112,6133692676447426408,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190708997556373682
+11114 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=42 --launch-time-ticks=37859403 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,10746714352752680480,11322782967066205802,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709025667629152
+11271 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=24 --launch-time-ticks=41003303 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,18163123660298332985,9367991915168330807,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709008800875870
+11419 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=20 --launch-time-ticks=43035561 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,3400064851978286314,4223825710736112670,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709005052708474
+11467 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=46 --launch-time-ticks=43419221 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,10265224079709709288,6261053892645475388,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709029415796548
+11486 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=21 --launch-time-ticks=43508573 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,14158632407799056478,7666836290435962349,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709005989750323
+12180 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=51 --launch-time-ticks=50581569 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,14404822406528383918,11592605468290473098,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709034101005793
+177249 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=1060 --launch-time-ticks=132917962615 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,10168312858680144016,12293684867352039245,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190709979576231434
+812396 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=2610 --launch-time-ticks=385561277537 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,3953978908844102021,18338771577136191139,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190711431991097384
+968072 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=2612 --launch-time-ticks=386546665861 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,7822451856368852808,7445790731639578827,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190711433865181082
+984635 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=2614 --launch-time-ticks=386651928963 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,14719547650873429419,9176894799703964680,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190711435739264780
+991354 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=2618 --launch-time-ticks=386694841375 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,16649930919216037361,3829016388864321395,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190711439487432176
+1006718 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=2620 --launch-time-ticks=386791695240 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,3547869018648873852,11891634176204113276,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190711441361515874
+1010426 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=2622 --launch-time-ticks=386814567495 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,3032711528772229593,13214303133000775920,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190711443235599572
+1058416 /opt/brave.com/brave/brave --type=renderer --crashpad-handler-pid=8722 --enable-crash-reporter=, --enable-distillability-service --origin-trial-public-key=bYUKPJoPnCxeNvu72j4EmPuK7tr1PAC7SHh8ld9Mw3E=,fMS4mpO6buLQ/QMd+zJmxzty/VQ6B1EUZqoCU04zoRU= --change-stack-guard-on-fork=enable --ozone-platform=wayland --lang=de --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=2623 --launch-time-ticks=387118772213 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,7894583198033360181,8049785766854775838,2097152 --field-trial-handle=3,i,10757070445830722652,13576294138969537998,262144 --disable-features=EyeDropper --variations-seed-version=main@e7b1580bb851f9a1ae3d27364f92e98c03d032ff --pseudonymization-salt-handle=7,i,5916287004076380604,860476406484809688,4 --trace-process-track-uuid=3190711444172641421
+=== LISTEN ===
+=== CDP ARGS ===
+/opt/brave.com/brave/brave --type=zygote --no-zygote-sandbox --crashpad-handler-pid=8722 --enable-crash-reporter=, --change-stack-guard-on-fork=enable 
+=== PROFILE HINTS ===
+3613018 bash -lc set +e; echo '=== BROWSER DIENST FILES ==='; find /home/andreas/browser-dienst -maxdepth 2 -type f -printf '%p\n' | head -120; echo '=== DIENST SOURCE ==='; sed -n '1,360p' /home/andreas/browser-dienst/dienst.py 2>/dev/null; echo '=== SERVICES ==='; systemctl --user --no-pager --type=service --all | grep -E 'browser|brave|chrome|gstack|chatgpt' | head -80; echo '=== BRAVE PROC ==='; pgrep -af '/opt/brave.com/brave/brave|brave-browser' | head -30; echo '=== LISTEN ==='; ss -ltnp 2>/dev/null | grep -E ':(9222|9223|9515|3000|8000|8080|8765|8787|8788|8899|9000|9001|9229|9333|9444)' | head -80; echo '=== CDP ARGS ==='; tr '\0' ' ' </proc/$(pgrep -o -f '/opt/brave.com/brave/brave --type=')/cmdline 2>/dev/null | head -c 3000; echo; echo '=== PROFILE HINTS ==='; ps -eo pid,args | grep -E '[b]rave.*(remote-debugging|user-data-dir|profile-directory)' | head -30

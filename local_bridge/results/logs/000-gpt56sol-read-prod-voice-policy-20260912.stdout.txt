@@ -1,0 +1,761 @@
+=== /home/ai-core-node/.claude/star/gespraechsmodus.py exists True ===
+SHA256 7678e20a9de56cb086bb1c5c0f2d1a5bf1a5359853f7bff4369d3e00345b1709 SIZE 66070
+--- lines 33-53 ---
+33:    Blockiert hier synchron bis das Gespraech endet (Nutzerabsicht per
+34:    Tool-Call ODER 5s-Beidseitig-Stille), danach zurueck in ZUSTAND_WACHE.
+35:
+36:    Die alte `claude_frage()`-Turn-Bruecke (PHASE 42) bleibt bestehen und
+37:    wird jetzt VON der Realtime-Session selbst genutzt (frank_auftrag_stellen-
+38:    Tool, asynchron) statt den Live-Dialog direkt zu fuehren -- Ebene 2
+39:    (Handlungstraeger) unveraendert, nur Ebene 1 (Gespraechsfuehrung)
+40:    ausgetauscht. Die alten OpenAI-TTS/STT-Helfer (openai_sprechen()/
+41:    openai_transkribieren()) bleiben ebenfalls im Modul (Isolationstests,
+42:    `test-tts`/`test-stt`), werden aber vom Live-Pfad nicht mehr gebraucht.
+43:
+44:Dauerprozess-Ausnahme (siehe INSTALL_HOST_STEPS.md Abschnitt 8 und
+45:Konzeptdokument PHASE 42/42b): staendiges Zuhoeren + Wake-Word-Erkennung
+46:ist strukturell ein Dauerprozess, wie schon Waechter (PHASE 21) und
+47:Telegram-Bruecke (PHASE 33). ExecStart von
+48:frankenstein-gespraechsmodus.service (systemd --user), NICHT von Hand in
+49:einer normalen Claude-Code-Sitzung starten (blockiert dauerhaft, laeuft
+50:bis SIGTERM). Killschalter: `stern.py gespraech-an`/`gespraech-aus` -- der
+51:Dienst kann "enabled" bleiben, ohne dass tatsaechlich zugehoert wird
+52:(prueft gespraech.aktiv bei jeder Aktivierungsrunde neu, genau wie
+53:telegram-listener telegram.aktiv).
+--- lines 281-301 ---
+281:#  in eine bereits laufende Sitzung zu schicken und die Antwort
+282:#  zurueckzulesen. PHASE 33 (Telegram-Bruecke) ist bewusst nur ein Logger,
+283:#  kein Antwortpfad (siehe TELEGRAM_BRUECKE.md Nicht-Ziel). Stattdessen:
+284:#  Claude Codes eigener, offiziell dokumentierter Headless-Modus
+285:#  (`claude -p --resume <session-id> --output-format json`) -- echte
+286:#  Session-Fortsetzung (Gedaechtnis bleibt erhalten, siehe
+287:#  GESPRAECHSMODUS.md Testprotokoll), volle Werkzeugnutzung, kein
+288:#  Terminal-Scraping-Hack. --session-id auf der ERSTEN Runde pinnt eine
+289:#  neue Session-ID, --resume auf jeder folgenden Runde knuepft daran an.
+290:# ══════════════════════════════════════════════════════════════════
+291:
+292:def _claude_binaerpfad() -> str:
+293:    """Findet den echten `claude`-Pfad -- NICHT einfach "claude" per PATH
+294:    verlassen. Real auf beiden Maschinen (ai-core-node UND andreas-maco,
+295:    2026-08-26) verifiziert: `claude` liegt unter `~/.local/bin/claude`,
+296:    was im knappen Default-PATH eines `systemd --user`-Dienstes NICHT
+297:    zwingend enthalten ist (Fund waehrend des Andreas-Deploys: `sudo -u
+298:    andreas claude --version` schlug mit "command not found" fehl, obwohl
+299:    `bash -lc claude --version` -- mit geladenem Login-Profil -- funktionierte).
+300:    Reihenfolge: `shutil.which` (falls PATH doch passt) -> `~/.local/bin/claude`
+301:    (haeufigster Fall) -> blankes "claude" als letzter Versuch (liefert dann
+--- lines 316-388 ---
+316:# git push:*, git reset:*, systemctl:*, kill:*, pkill:*, ssh:*, scp:*, UND
+317:# (Runde-2-Korrektur, 2026-08-27) auch python3:*, curl:*, sqlite3:*,
+318:# wget:*, git add/commit/push:*, uvm. -- ~90 Eintraege insgesamt), die auch
+319:# fuer JEDEN headless `claude -p`-Aufruf gelten -- also auch fuer diese
+320:# Funktion, die von realtime_gespraech.py:frank_auftrag_stellen() direkt mit
+321:# ungefiltertem, potenziell verhoertem Sprachtext gefuettert wird.
+322:#
+323:# Runde-2-Bugfix (real reproduziert, 2026-08-27): eine Liste einzelner
+324:# gefaehrlicher Bash-SUBKOMMANDOS (vorherige Fassung: nur die 9 oben
+325:# genannten Muster) ist strukturell keine Sicherheitsgrenze, sondern
+326:# Whack-a-Mole -- JEDES nicht gelistete, aber per `permissions.allow`
+327:# freigegebene Interpreter-Werkzeug (allen voran `python3:*`, das genauso
+328:# breit freigegeben ist) umgeht sie vollstaendig, weil das eigentliche
+329:# destruktive Verhalten (Datei loeschen, Daten exfiltrieren, ...) nicht im
+330:# Bash-Kommando selbst steht, sondern im Interpreter-Code. Real
+331:# reproduziert: derselbe Prompt, der um `rm -rf <ordner>` bittet, wurde
+332:# korrekt geblockt -- per `python3 -c "import shutil; shutil.rmtree(...)"`
+333:# formuliert, lief er OHNE jeden permission_denials-Eintrag durch, Ordner
+334:# danach tatsaechlich weg. Fix: statt einzelner Subkommando-Muster wird
+335:# das GESAMTE Bash-Werkzeug ueber `--disallowedTools` geblockt (bare
+336:# "Bash", kein Klammerzusatz -- laut `claude -p --help` blockt das
+337:# Muster ohne Klammern das ganze Werkzeug, nicht nur ein Teilmuster) --
+338:# das ist die einzige Grenze, die nicht durch ein neues, nicht gelistetes
+339:# Interpreter-Werkzeug umgangen werden kann, weil sie nicht am Subkommando
+340:# ansetzt, sondern am Werkzeug selbst. `--disallowedTools` hat nachweislich
+341:# Vorrang vor permissions.allow (auch bei --permission-mode acceptEdits,
+342:# real getestet 2026-08-26/27) -- deshalb hier hart verdrahtet, unabhaengig
+343:# von `berechtigung`. Kehrseite bewusst in Kauf genommen: `claude_frage()`
+344:# kann fuer sprachausgeloeste Auftraege keine Shell-Kommandos mehr
+345:# ausfuehren (Datei-Werkzeuge -- Read/Write/Edit/Grep/Glob -- bleiben
+346:# unveraendert verfuegbar); das ist der Preis dafuer, dass ein verhoertes
+347:# oder von einem Dritten im Raum gesagtes Wort keine echte, destruktive
+348:# Aktion im Home-Verzeichnis (Repo, unified.db, SSH-Keys, Vault) ausloesen
+349:# kann. `_GEFAEHRLICHE_WERKZEUGE` wird unconditional (unabhaengig von
+350:# `berechtigung`, auch bei `bypassPermissions`) an `--disallowedTools`
+351:# angehaengt -- wer wirklich volle Shell-Faehigkeit ueber Sprache will,
+352:# muss diese Zeile bewusst im Code aendern, nicht nur einen Konfig-Schalter
+353:# umlegen.
+354:_GEFAEHRLICHE_WERKZEUGE = ["Bash"]
+355:
+356:
+357:def claude_frage(text: str, session_id: Optional[str], *, berechtigung: str = "acceptEdits",
+358:                  cwd: Optional[str] = None, timeout: int = 180) -> dict:
+359:    """Schickt `text` als echten Prompt an eine (fortgesetzte) Claude-Code-
+360:    Sitzung. Rueckgabe: {"ok", "antwort", "session_id", "ende_erkannt",
+361:    "is_error", "grund"}. `ende_erkannt` ist True, wenn Claude selbst das
+362:    Beendigungs-Sentinel angehaengt hat (siehe _ENDE_ANWEISUNG) -- NICHT
+363:    aus dem Nutzertext abgeleitet. Blockt zusaetzlich hart destruktive
+364:    Bash-Kommandos ueber --disallowedTools (siehe _GEFAEHRLICHE_WERKZEUGE),
+365:    unabhaengig von `berechtigung` und von permissions.allow."""
+366:    neu = session_id is None
+367:    lauf_id = session_id or str(uuid.uuid4())
+368:    cmd = [
+369:        _claude_binaerpfad(), "-p", text,
+370:        "--output-format", "json",
+371:        "--permission-mode", berechtigung,
+372:        "--disallowedTools", *_GEFAEHRLICHE_WERKZEUGE,
+373:        "--append-system-prompt", _ENDE_ANWEISUNG,
+374:    ]
+375:    cmd += (["--session-id", lauf_id] if neu else ["--resume", lauf_id])
+376:    try:
+377:        p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
+378:                            cwd=cwd or str(Path.home()))
+379:    except subprocess.TimeoutExpired:
+380:        return {"ok": False, "grund": f"claude -p Timeout nach {timeout}s"}
+381:    except Exception as e:
+382:        return {"ok": False, "grund": f"{type(e).__name__}: {e}"}
+383:
+384:    raw = (p.stdout or "").strip()
+385:    if not raw:
+386:        return {"ok": False, "grund": f"leere claude-Ausgabe, returncode={p.returncode}, "
+387:                                       f"stderr={(p.stderr or '')[:400]}"}
+388:    try:
+--- lines 420-440 ---
+420:    try:
+421:        from openai import OpenAI
+422:        client = OpenAI(api_key=api_key)
+423:        resp = client.audio.speech.create(
+424:            model=modell, voice=stimme, input=text, response_format="wav",
+425:        )
+426:        return resp.content
+427:    except Exception as e:
+428:        _log(f"OpenAI-TTS fehlgeschlagen ({modell}/{stimme}): {type(e).__name__}: {e}")
+429:        return None
+430:
+431:
+432:_TTS_CACHE_DIR = _HIER / "tts_cache"
+433:
+434:
+435:def _openai_sprechen_cached(text: str, api_key: str, *, modell: str = "gpt-4o-mini-tts",
+436:                             stimme: str = "onyx") -> Optional[bytes]:
+437:    """Latenz-Fix (2026-08-27, Runde 6, Gabriel-Meldung live: "der Handshake
+438:    ist zu langsam"): `_einschalt_verifikation()` benutzt IMMER dieselben
+439:    3 FIXEN Saetze ("Hoerst du mich?"/"Gut, ich verstehe dich auch."/"Nein,
+440:    leider..."), rief dafuer aber bei JEDEM Einschalten `openai_sprechen()`
+--- lines 502-522 ---
+502:    """Spielt WAV-Bytes ueber `aplay` ab (bereits Systemwerkzeug, kein
+503:    Extra-Python-Abhaengigkeit fuer Wiedergabe noetig -- vgl. sounddevice
+504:    nur fuer die Aufnahme)."""
+505:    try:
+506:        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+507:            f.write(wav_bytes)
+508:            pfad = f.name
+509:        subprocess.run(["aplay", "-q", pfad], check=False,
+510:                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+511:        return True
+512:    except Exception as e:
+513:        _log(f"Wiedergabe fehlgeschlagen: {e}")
+514:        return False
+515:    finally:
+516:        try:
+517:            os.unlink(pfad)
+518:        except Exception:
+519:            pass
+520:
+521:
+522:def _pieps(frequenz: int = 880, dauer: float = 0.12) -> None:
+--- lines 879-899 ---
+879:    # de facto alle ~100-200ms komplett durch und startete bei JEDEM
+880:    # Durchlauf einen frischen `python3 stern.py`-Subprozess (700KB-Modul-
+881:    # Import + SQLite-Handle) -- mehrfach pro Sekunde, dauerhaft, nur um
+882:    # `gespraech.aktiv` zu pruefen. Real mit Timing-Instrumentierung
+883:    # bestaetigt (0.19-0.21s pro Aufruf, zurueck-an-zurueck ohne Pause).
+884:    # Fix: `cfg` wird gecacht, nur alle `_CFG_REFRESH_SEKUNDEN` neu gelesen
+885:    # -- der Killschalter bleibt reaktionsschnell genug (max. diese
+886:    # Verzoegerung bis "gespraech-aus" wirkt), aber keine Subprozess-Flut
+887:    # mehr im Leerlauf (Gabriel-Hausregel "immer Systemleistung im Blick").
+888:    cfg = _stern("gespraech-status")
+889:    letzte_cfg_aktualisierung = time.time()
+890:
+891:    while True:
+892:        if time.time() - letzte_cfg_aktualisierung > _CFG_REFRESH_SEKUNDEN:
+893:            cfg = _stern("gespraech-status")
+894:            letzte_cfg_aktualisierung = time.time()
+895:
+896:        if not cfg.get("aktiv"):
+897:            if verifiziert_seit_einschalten:
+898:                _log("gespraech.aktiv=0 -- ausgeschaltet, naechstes Einschalten prueft erneut per "
+899:                     "Verifikations-Handshake")
+=== /home/ai-core-node/.claude/star/realtime_gespraech.py exists True ===
+SHA256 5414c8e9b681a9dee7de03e41a5f24a8a978fc783100daeed170ceea99a0b2d4 SIZE 161280
+--- lines 63-89 ---
+63:  - Text- UND Audio-Output (`response.output_text.delta`/
+64:    `response.output_audio.delta`, PCM16 @ 24kHz).
+65:  - Function-Calling voller Roundtrip (Tool-Aufruf kommt an, Ergebnis
+66:    fliesst zurueck, beeinflusst die naechste Antwort nachweislich).
+67:  - `session.audio.input.format.rate` MUSS >= 24000 sein (Server lehnt
+68:    16000 hart ab, echte Fehlermeldung getestet) -- deshalb oeffnet dieses
+69:    Modul einen EIGENEN 24kHz-Mikrofonstream fuer die Gespraechsdauer,
+70:    unabhaengig vom 16kHz-Stream, den frank_voice_lite.py fuers
+71:    Wake-Word nutzt.
+72:  - `conversation.item.truncate` bei Baerge-in: real gesendet mit echtem
+73:    `item_id`/`audio_end_ms`, Server bestaetigt mit
+74:    `conversation.item.truncated` (siehe _unterbrechung_synchronisieren()).
+75:
+76:PHASE 42c (Gabriel, verbindliche Architektur-Direktive, direkt im
+77:Anschluss an PHASE 42b): VOICE_LOOP_CORE (siehe voice_loop_core.py) statt
+78:"Persona-Theater" -- Sprechen ist selbst ein GWT-Kandidat (Arbitrations-
+79:formel "Sprechdrang", WAIT vollwertig), AusdrucksVektor statt Zwei-Zeilen-
+80:Ton-Heuristik, chatter_debt gegen Dauer-Initiative, 2.5s-Reopen-Fenster
+81:innerhalb der 5s-Stille, Qwen-0.5B-Appraisal (fail-open Pflicht, real
+82:lokal via Ollama), echte Unterbrechbarkeit ueber `conversation.item.
+83:truncate` (oben). Modell auf `gpt-realtime-2.1` korrigiert (128k Kontext,
+84:konfigurierbares Reasoning, real verifiziert). Details/Ehrlichkeits-
+85:Einschraenkungen: voice_loop_core.py-Docstring-Kopf + GESPRAECHSMODUS.md
+86:Abschnitt 10.
+87:"""
+88:
+89:from __future__ import annotations
+--- lines 238-258 ---
+238:        if verb == "initiative-episode-loggen":
+239:            # Bugfix (2026-08-27, P3V): outcome_json/voice_event_kind wurden
+240:            # bisher NICHT weitergereicht, obwohl _stille_reopen_pruefen()
+241:            # sie im log_args mitschickt (--outcome-json) -- landeten immer
+242:            # als DB-Default '{}'/NULL. Real bestaetigt vor diesem Fix (siehe
+243:            # Abschlussbericht): initiative_episode.outcome_json war fuer
+244:            # JEDE Zeile '{}' trotz nicht-leerem log_args-Wert.
+245:            return _s.initiative_episode_loggen(
+246:                f.get("candidate_type"), f.get("candidate_text"), float(f.get("score") or 0.0),
+247:                importance=float(f["importance"]) if f.get("importance") is not None else None,
+248:                interruptibility=float(f["interruptibility"]) if f.get("interruptibility") is not None else None,
+249:                chatter_debt=float(f["chatter_debt"]) if f.get("chatter_debt") is not None else None,
+250:                decision=f.get("decision") or "WAIT",
+251:                outcome_json=f.get("outcome_json") or "{}",
+252:                provenance=f.get("provenance") or "voice_loop_core",
+253:                causal_event_id=f.get("causal_event_id"),
+254:                voice_event_kind=f.get("voice_event_kind"),
+255:            )
+256:        if verb == "gespraech-kosten-event-loggen":
+257:            # PHASE 49 -- s. RealtimeSession.__init__ (_kosten_session_uuid)
+258:            # und response.done-Handler unten (Aufrufstelle).
+--- lines 450-532 ---
+450:aussprechen, nur als Haltung).
+451:
+452:Sprachkanal-Regeln (WICHTIG, anders als im Text-Modus): kurze, natuerlich \
+453:sprechbare Saetze, keine Aufzaehlungen, keine Codebloecke, keine \
+454:Markdown-Formatierung -- das hier wird laut vorgelesen. Antworte knapp, \
+455:außer Gabriel fragt ausdruecklich nach mehr Detail.
+456:
+457:Werkzeuge, die dir wirklich zur Verfuegung stehen (nutze sie, statt zu \
+458:raten oder zu erfinden):
+459:- frank_status_lesen: echter Live-Status (Uhrzeit, laufende Auftraege, \
+460:  Waechter-Herzschlag). Bei JEDER Frage nach Uhrzeit/aktuellem Tun nutzen.
+461:- frank_erinnerung_lesen: durchsucht deine eigene gespeicherte Erinnerung \
+462:  UND durable_memory. Nutzen, bevor du sagst "das weiss ich nicht".
+463:- frank_erinnerung_schreiben: haelt einen wichtigen Gespraechsinhalt als \
+464:  deine EIGENE Erinnerung fest (nicht jeden Satz -- nur, was wirklich \
+465:  erinnernswert ist: Entscheidungen, Zusagen, wichtige Fakten).
+466:- frank_auftrag_stellen: gibt einen ECHTEN Auftrag (Datei aendern, Agent \
+467:  spawnen, etc.) asynchron an deine handelnde Ebene weiter -- ZWEISTUFIG: \
+468:  der erste Aufruf fuehrt NICHTS aus, sondern liefert nur einen Vorschlag \
+469:  zurueck. Lies den Auftrag Gabriel dann woertlich vor und frag ausdruecklich, \
+470:  ob du ihn wirklich so stellen sollst. Ruf das Werkzeug erst ein ZWEITES Mal \
+471:  auf, mit demselben Auftragstext und bestaetigt=true, NACHDEM Gabriel klar \
+472:  zugestimmt hat -- nie vorher, nie aufgrund einer einzelnen unklaren \
+473:  Aeusserung. Blockiert das Gespraech NICHT, du bekommst das Ergebnis \
+474:  nachgereicht, sobald es fertig ist, und berichtest es dann von dir aus.
+475:- frank_forschung: NUR wenn Gabriel ausdruecklich danach fragt ("recherchier \
+476:  mal X", "was sagt die Forschungsentitaet zu X") -- liest bestehende \
+477:  Ergebnisse der ChatGPT-Forschungsentitaet oder stoesst selbst einen neuen \
+478:  Auftrag darueber an. NIE von dir aus, nie automatisch.
+479:- frank_gespraech_beenden: rufst du auf, SOBALD du aus dem Gesagten \
+480:  erkennst, dass Gabriel wirklich aufhoeren will (nicht bei einem einzelnen \
+481:  Stichwort, sondern echter Absicht -- "das reicht", "genug", "wir sind \
+482:  fertig", "tschuess" im Kontext). Sag vorher noch einen kurzen Abschied.
+483:
+484:Du bist Teil von "Dem Raum" (derselben Live-Praesenz wie andere laufende \
+485:FranKenstein-Sitzungen) -- andere Sitzungen koennen parallel aktiv sein, \
+486:dein Zustandskontext nennt dir bei Bedarf wie viele; Details ueber \
+487:frank_status_lesen.
+488:"""
+489:
+490:
+491:def _rollen_hinweis(sprecher_name: Optional[str], sprecher_rolle: str) -> str:
+492:    """PHASE 48 -- informiert das Modell ueber die per Sprecher-Verifikation
+493:    erkannte Rolle, DAMIT es guest-Beschraenkungen gar nicht erst versucht.
+494:    Das ist die WEICHE Haelfte der Durchsetzung (Prompt) -- die HARTE
+495:    Haelfte ist die serverseitige Sperre in _tool_ausfuehren() unten, die
+496:    auch dann greift, wenn das Modell diesen Hinweis ignoriert."""
+497:    wer = f"'{sprecher_name}'" if sprecher_name else "unbekannt (kein Voiceprint erkannt)"
+498:    if sprecher_rolle == "user":
+499:        return f"Erkannter Sprecher: {wer}, Rolle 'user' -- volle Werkzeugnutzung erlaubt."
+500:    return (f"Erkannter Sprecher: {wer}, Rolle 'guest' -- NUR Fragen beantworten/Status vorlesen "
+501:            f"(frank_status_lesen, frank_erinnerung_lesen, frank_forschung mit aktion='lesen'). "
+502:            f"KEINE Auftraege stellen (frank_auftrag_stellen), KEINE Erinnerungen schreiben "
+503:            f"(frank_erinnerung_schreiben), KEINE neue Recherche anstossen (frank_forschung "
+504:            f"aktion='neu_anstossen') -- diese Werkzeuge lehnen bei dieser Rolle ohnehin "
+505:            f"serverseitig ab, versuch es erst gar nicht, sag stattdessen ehrlich, dass das nur "
+506:            f"fuer registrierte Nutzer-Stimmen geht.")
+507:
+508:
+509:def _instruktion(zustandskontext: str, sprecher_name: Optional[str] = None,
+510:                  sprecher_rolle: str = "user") -> str:
+511:    return (_PERSONA_BASIS + "\n\n" + _rollen_hinweis(sprecher_name, sprecher_rolle)
+512:            + "\n\nAktueller Zustandskontext (beeinflusst NUR den Ton, nie die Sorgfalt):\n" + zustandskontext)
+513:
+514:
+515:# ══════════════════════════════════════════════════════════════════
+516:#  Tool-Schemas (Realtime-API-Function-Calling-Format)
+517:# ══════════════════════════════════════════════════════════════════
+518:TOOLS = [
+519:    {
+520:        "type": "function", "name": "frank_status_lesen",
+521:        "description": "Liest FranKensteinsಠ_ಠ echten Live-Status: Uhrzeit, laufende/offene "
+522:                        "Auftraege, letzter Waechter-Herzschlag. Fuer Fragen wie 'wie spaet ist es' "
+523:                        "oder 'was machst du gerade'.",
+524:        "parameters": {"type": "object", "properties": {
+525:            "frage": {"type": "string", "description": "Die gestellte Frage, zur Protokollierung"}
+526:        }, "required": []},
+527:    },
+528:    {
+529:        "type": "function", "name": "frank_erinnerung_lesen",
+530:        "description": "Durchsucht FranKensteinsಠ_ಠ eigene Gespraechs-Erinnerung und durable_memory "
+531:                        "nach einem Suchbegriff.",
+532:        "parameters": {"type": "object", "properties": {
+--- lines 543-578 ---
+543:            "value": {"type": "string", "description": "Der zu merkende Inhalt"},
+544:        }, "required": ["subject", "value"]},
+545:    },
+546:    {
+547:        "type": "function", "name": "frank_auftrag_stellen",
+548:        "description": "Gibt einen echten Auftrag (Datei aendern, Kommando ausfuehren, Agent starten "
+549:                        "etc.) asynchron an FranKensteinsಠ_ಠ handelnde Claude-Code-Ebene weiter. "
+550:                        "ZWEISTUFIG (Sicherheitsschritt): der ERSTE Aufruf mit einem Auftragstext "
+551:                        "fuehrt NICHTS aus, sondern liefert nur einen Vorschlag zurueck -- lies ihn "
+552:                        "Gabriel woertlich vor und frag ausdruecklich, ob du ihn wirklich so stellen "
+553:                        "sollst. Erst ein ZWEITER Aufruf mit EXAKT demselben Auftragstext und "
+554:                        "bestaetigt=true, NACHDEM Gabriel klar zugestimmt hat, fuehrt ihn wirklich aus "
+555:                        "(kehrt dann sofort zurueck, blockiert nicht, Ergebnis kommt spaeter nach). "
+556:                        "Ruf es NIEMALS mit bestaetigt=true auf, ohne dass Gabriel gerade wirklich "
+557:                        "zugestimmt hat -- auch nicht bei zwei schnell aufeinanderfolgenden eigenen "
+558:                        "Aufrufen ohne dazwischenliegende Antwort von Gabriel.",
+559:        "parameters": {"type": "object", "properties": {
+560:            "auftrag": {"type": "string", "description": "Der Auftrag in eigenen Worten"},
+561:            "bestaetigt": {"type": "boolean", "description": "true NUR beim zweiten Aufruf, "
+562:                           "nachdem Gabriel den vorgelesenen Auftrag ausdruecklich bestaetigt hat "
+563:                           "(Default false)"},
+564:        }, "required": ["auftrag"]},
+565:    },
+566:    {
+567:        "type": "function", "name": "frank_forschung",
+568:        "description": "NUR aufrufen, wenn Gabriel im Gespraech AUSDRUECKLICH danach fragt (z.B. "
+569:                        "'recherchier mal X', 'was sagt die Forschungsentitaet zu X', 'lass die "
+570:                        "ChatGPT-Forschungsentitaet das pruefen') -- NIEMALS automatisch/proaktiv, "
+571:                        "kein Teil des normalen Gespraechsflusses. aktion='lesen': liest das zuletzt "
+572:                        "bereits gecachte Ergebnis der ChatGPT-Forschungsentitaet (Burst-Worker-"
+573:                        "Infrastruktur), sofort, kein neuer Auftrag. aktion='neu_anstossen': stoesst "
+574:                        "selbst einen NEUEN Recherche-Auftrag ueber dieselbe Infrastruktur an -- "
+575:                        "dauert laenger (Browser-Automatisierung im Hintergrund), Ergebnis wird "
+576:                        "nachgereicht, blockiert das Gespraech nicht.",
+577:        "parameters": {"type": "object", "properties": {
+578:            "aktion": {"type": "string", "enum": ["lesen", "neu_anstossen"]},
+--- lines 852-872 ---
+852:        # Root-Cause-Fix (Gabriel-Meldung 2026-08-27, live -- echtes Geld
+853:        # verbrannt: "er hört sich selbst und reagiert darauf ... wirkt als
+854:        # ob er in eine Schleife geht"): kein Echo-Cancelling zwischen
+855:        # Lautsprecher-Ausgabe (_Player/aplay) und Mikrofon-Eingang (24kHz-
+856:        # Stream an die Realtime-API) -- real per journalctl-Muster bestaetigt
+857:        # (85 Baerge-ins auf 122 Antworten, JEDES Mal ~2-5s nach Antwortbeginn,
+858:        # ein Mensch unterbricht nicht metronomisch regelmaessig). Die
+859:        # Realtime-API hoert offenbar die eigene Sprachausgabe ueber den
+860:        # Lautsprecher-Raum-Mikrofon-Pfad und haelt das faelschlich fuer
+861:        # Baerge-in -> Wiedergabe abgebrochen -> neue Antwort -> wieder
+862:        # gehoert -> Schleife. Fix: Mikrofon-Senden waehrend `assistant_
+863:        # speaking` UND ein kurzes Nachlauf-Fenster danach aussetzen (siehe
+864:        # _mic_sender()/response.done-Handler) -- kein echtes AEC, aber
+865:        # eliminiert das Selbst-Hoeren. Kostet echtes Wort-ins-Reden-Fallen
+866:        # (kann waehrend dieses Fensters nicht unterbrochen werden) --
+867:        # bewusster Trade-off: Stabilität/Kosten JETZT wichtiger, echtes AEC
+868:        # (z.B. PipeWire module-echo-cancel) waere der sauberere Nachfolge-
+869:        # schritt, wenn wieder echtes Baerge-in gewuenscht ist.
+870:        self._mikrofon_stumm_bis_mono = 0.0
+871:        self.zustandskontext_refresh_s = zustandskontext_refresh_s
+872:        self.raum_session_id = raum_session_id
+--- lines 886-906 ---
+886:        # ausloesen, es kommt einzig aus echtem Mikrofon-Audio.
+887:        self._ausstehender_auftrag: Optional[dict] = None
+888:        self._user_transkripte_zaehler = 0
+889:        # Bugfix (Runde 2, 2026-08-27, FIXER-Befund #3): der reine Zaehler
+890:        # bestaetigt nur, DASS irgendeine echte Aeusserung ankam, nicht WAS
+891:        # gesagt wurde -- `len(self._transkript_log) == self._user_
+892:        # transkripte_zaehler` immer, damit _auftrag_stellen_mit_bestaetigung()
+893:        # den TEXT jeder Zwischen-Aeusserung seit dem Vorschlag pruefen kann
+894:        # (Negations-Veto, siehe dort).
+895:        self._transkript_log: list = []
+896:
+897:        # PHASE 49c (Gabriel-Auftrag 2026-08-27, paket-1787837539664-509831)
+898:        # -- Kernmechanismus 4b, siehe voice_loop_core.konversations_
+899:        # appraisal()-Abschnittskopf fuer die volle Begruendung. Laeuft
+900:        # IMMER in einem eigenen Hintergrund-Thread (_konversations_ton_
+901:        # aktualisieren() unten), NIE auf dem Pfad zwischen speech_stopped
+902:        # und response.create -- der Wert hier ist deshalb bewusst ein
+903:        # geteiltes, per Lock geschuetztes Feld statt eines Rueckgabewerts:
+904:        # egal WANN der Hintergrund-Thread fertig wird, _response_erstellen()
+905:        # liest bei JEDEM Aufruf einfach den zuletzt geschriebenen Stand.
+906:        # Default '' (kein Hinweis) -- exakt das unveraenderte Alt-Verhalten,
+--- lines 1042-1067 ---
+1042:                "instructions": instructions,
+1043:                "output_modalities": ["audio"],
+1044:                "audio": {
+1045:                    "input": {
+1046:                        "format": {"type": "audio/pcm", "rate": SAMPLE_RATE_IN},
+1047:                        "turn_detection": {"type": "server_vad", "silence_duration_ms": 500,
+1048:                                            "create_response": False, "interrupt_response": True},
+1049:                        "transcription": {"model": "gpt-4o-transcribe", "language": "de"},
+1050:                    },
+1051:                    "output": {"voice": self.stimme, "format": {"type": "audio/pcm", "rate": SAMPLE_RATE_OUT}},
+1052:                },
+1053:                "tools": TOOLS, "tool_choice": "auto",
+1054:        }
+1055:        if self.reasoning_effort:
+1056:            # PHASE 49b -- s. __init__-Kommentar/stern.py _KONFIG_DEFAULTS
+1057:            # fuer die reale A/B-Messung, die diesen Default begruendet.
+1058:            session_dict["reasoning"] = {"effort": self.reasoning_effort}
+1059:        return {"type": "session.update", "session": session_dict}
+1060:
+1061:    def _response_erstellen(self, ws, zusatz_hinweis: str = "") -> None:
+1062:        """Loest EINE Antwort mit frischen Pro-Turn-Instruktionen aus
+1063:        (Persona + aktueller Zustandskontext, siehe _session_config()-
+1064:        Kommentar oben). `zusatz_hinweis` haengt optional einen internen
+1065:        Hinweistext an (z.B. fertiges Auftragsergebnis).
+1066:
+1067:        PHASE 49c (Gabriel-Auftrag 2026-08-27): haengt zusaetzlich
+--- lines 1841-1861 ---
+1841:        `conversation.item.truncate` synchronisiert werden -- sonst
+1842:        "erinnert" sich das Realtime-Modell an Worte, die der Mensch nie
+1843:        gehoert hat. Real gegen die echte API verifiziert (2026-08-26):
+1844:        `conversation.item.truncate` mit echtem `item_id`/`audio_end_ms`
+1845:        wird vom Server mit `conversation.item.truncated` bestaetigt.
+1846:
+1847:        Bugfix (Runde 2, 2026-08-27, FIXER-Befund #2): leert jetzt zusaetzlich
+1848:        self._offene_tool_calls -- ein function_call-Item, das das Modell vor
+1849:        dieser Unterbrechung schon emittiert hatte (response.output_item.done
+1850:        trifft unabhaengig vom Audio-Fortschritt ein), darf nach einem vom
+1851:        Nutzer abgebrochenen Turn nicht mehr real ausgefuehrt werden (z.B.
+1852:        frank_erinnerung_schreiben() aus einem Gedanken, den Gabriel bewusst
+1853:        unterbrochen hat)."""
+1854:        _log("Baerge-in: Wiedergabe wird unterbrochen")
+1855:        if self._offene_tool_calls:
+1856:            _log(f"Baerge-in: {len(self._offene_tool_calls)} offene(r) Tool-Aufruf(e) aus der "
+1857:                 "unterbrochenen Antwort werden verworfen, nicht ausgefuehrt")
+1858:            self._offene_tool_calls.clear()
+1859:        if self._aktuelles_item_id and self._audio_start_mono is not None:
+1860:            audio_end_ms = int((time.monotonic() - self._audio_start_mono) * 1000)
+1861:            try:
+--- lines 2062-2255 ---
+2062:            log_args += ["--causal-event-id", causal_event_id]
+2063:        _stern(*log_args)
+2064:
+2065:    # Bugfix (Runde 2, 2026-08-27, FIXER-Befund #3): das reine Hochzaehlen
+2066:    # von `_user_transkripte_zaehler` bestaetigt nur, DASS zwischen Vorschlag
+2067:    # und Bestaetigung irgendeine echte Aeusserung ankam -- nicht, dass sie
+2068:    # inhaltlich eine Zustimmung war. Explizite Widersprueche ("nein, das
+2069:    # habe ich nicht gesagt" etc.) wurden bisher komplett ignoriert. Dies ist
+2070:    # bewusst ein einfaches Keyword-Veto, KEINE Intent-/Sentiment-Analyse und
+2071:    # KEINE Sprecherverifikation (siehe Docstring unten) -- es schliesst nur
+2072:    # den konkret gemeldeten Fall, dass ein expliziter Widerspruch trotzdem
+2073:    # als "echte Zwischen-Aeusserung" durchgeht.
+2074:    _WIDERSPRUCH_MUSTER = re.compile(
+2075:        r"\bnein\b|\bstopp\b|\bstorno\b|\babbrechen\b|"
+2076:        r"nicht gesagt|nicht gemeint|stimmt nicht|falsch verstanden|"
+2077:        r"nicht best[aä]tig|war nicht ich",
+2078:        re.IGNORECASE,
+2079:    )
+2080:
+2081:    def _widerspruch_in_transkripten(self, texte: list) -> Optional[str]:
+2082:        for t in texte:
+2083:            if t and self._WIDERSPRUCH_MUSTER.search(t):
+2084:                return t
+2085:        return None
+2086:
+2087:    def _auftrag_stellen_mit_bestaetigung(self, args: dict) -> dict:
+2088:        """Sicherheitsschicht (Audit-Befund Runde 1, [high]): zwischen 'ich
+2089:        habe etwas gehoert' und 'echte Aktion mit Werkzeugzugriff laeuft an'
+2090:        gab es bisher KEINE Zwischenstufe -- das Realtime-Modell entschied
+2091:        allein, ob ein 'echter Auftrag' vorliegt (Tool-Beschreibung/Persona),
+2092:        und _tool_ausfuehren() leitete den Inhalt ungeprueft an
+2093:        self.auftrag.stellen() weiter. Ein einzelnes verhoertes Wort (Whisper/
+2094:        gpt-4o-transcribe) oder eine Aeusserung eines Dritten im Raum konnte
+2095:        so direkt eine echte Aktion (Datei aendern, Agent spawnen, Kommando
+2096:        ausfuehren) ausloesen.
+2097:
+2098:        Mechanik jetzt: der ERSTE Aufruf mit einem gegebenen Auftragstext
+2099:        markiert ihn nur als VORGESCHLAGEN -- kein echter Dispatch. Ausgefuehrt
+2100:        wird er erst bei einem ZWEITEN Aufruf mit EXAKT demselben (normierten)
+2101:        Auftragstext, bestaetigt=true, UND NUR wenn seit dem Vorschlag
+2102:        mindestens eine ECHTE, vom Server transkribierte Nutzeraeusserung
+2103:        eingetroffen ist (`self._user_transkripte_zaehler`, wird EINZIG von
+2104:        echten `conversation.item.input_audio_transcription.completed`-
+2105:        Events der Realtime-API hochgezaehlt, siehe fuehren() -- dieses
+2106:        Signal kann das Modell nicht selbst faelschen, es kommt nur aus
+2107:        echtem Mikrofon-Audio). Zusaetzlich verfaellt ein Vorschlag nach
+2108:        300s.
+2109:
+2110:        Bugfix (Runde 2, FIXER-Befund #3): zusaetzlich wird JEDE Transkript-
+2111:        Aeusserung seit dem Vorschlag (`self._transkript_log`, exakt so lang
+2112:        wie `_user_transkripte_zaehler`) gegen ein einfaches Widerspruchs-
+2113:        Keyword-Muster geprueft (siehe `_WIDERSPRUCH_MUSTER`). Enthaelt
+2114:        irgendeine davon ein explizites "nein"/"das habe ich nicht gesagt"/
+2115:        etc., wird NICHT ausgefuehrt, der Vorschlag verworfen und Gabriel
+2116:        muss neu beginnen -- selbst wenn das Realtime-Modell `bestaetigt=true`
+2117:        setzt.
+2118:
+2119:        EHRLICHE EINSCHRAENKUNG (die vorherige Fassung dieses Docstrings war
+2120:        hier zu stark): das verhindert NUR eine einzelne isolierte
+2121:        verhoerte/fremde Aeusserung UND einen expliziten Widerspruch mit
+2122:        Keyword-Treffer. Es ist WEITERHIN moeglich, dass in einer kurzen
+2123:        Wechselrede mehrerer Personen im Raum eine zweite, voellig unrelated
+2124:        aber vom Modell als Zustimmung fehlinterpretierte Aeusserung
+2125:        durchgeht -- dafuer braucht es echte Intent-Klassifikation und/oder
+2126:        Sprecherverifikation/Diarisierung (wer im Raum spricht), das bleibt
+2127:        eine eigene, groessere Baustelle (Stimmbiometrie-Infrastruktur),
+2128:        siehe Abschlussbericht."""
+2129:        auftrag_text = str(args.get("auftrag") or "").strip()
+2130:        if not auftrag_text:
+2131:            return {"ok": False, "grund": "kein Auftragstext angegeben"}
+2132:        bestaetigt = bool(args.get("bestaetigt"))
+2133:        normiert = " ".join(auftrag_text.lower().split())
+2134:
+2135:        ausstehend = self._ausstehender_auftrag
+2136:        zwischen_transkripte = (
+2137:            self._transkript_log[ausstehend["zaehler_bei_vorschlag"]:] if ausstehend is not None else []
+2138:        )
+2139:        widerspruch = self._widerspruch_in_transkripten(zwischen_transkripte)
+2140:        kann_ausfuehren = (
+2141:            bestaetigt and ausstehend is not None
+2142:            and ausstehend["text_normiert"] == normiert
+2143:            and self._user_transkripte_zaehler > ausstehend["zaehler_bei_vorschlag"]
+2144:            and (time.monotonic() - ausstehend["zeit"]) <= 300.0
+2145:            and widerspruch is None
+2146:        )
+2147:
+2148:        if kann_ausfuehren:
+2149:            self._ausstehender_auftrag = None
+2150:            _log(f"Auftrag bestaetigt (echte Zwischen-Aeusserung erkannt) -- wird jetzt gestellt: {auftrag_text!r}")
+2151:            return self.auftrag.stellen(auftrag_text)
+2152:
+2153:        if widerspruch is not None:
+2154:            self._ausstehender_auftrag = None
+2155:            grund = f"Widerspruch in Zwischen-Aeusserung erkannt ({widerspruch!r}) -- Vorschlag verworfen"
+2156:            _log(f"Auftrag NICHT ausgefuehrt (Bestaetigungsschritt): {auftrag_text!r} -- {grund}")
+2157:            return {
+2158:                "ok": False, "ausgefuehrt": False, "erfordert_bestaetigung": True,
+2159:                "grund": grund,
+2160:                "anweisung": ("Es gab einen Widerspruch/eine Verneinung seit dem Vorschlag. Frag Gabriel "
+2161:                              "explizit neu, was er wirklich meinte, und stell den Auftrag danach als "
+2162:                              "komplett neuen Vorschlag (ohne bestaetigt=true) erneut."),
+2163:            }
+2164:
+2165:        self._ausstehender_auftrag = {
+2166:            "text_normiert": normiert, "zeit": time.monotonic(),
+2167:            "zaehler_bei_vorschlag": self._user_transkripte_zaehler,
+2168:        }
+2169:        if bestaetigt and ausstehend is not None and ausstehend["text_normiert"] == normiert:
+2170:            grund = "Bestaetigung ungueltig: keine echte neue Nutzeraeusserung seit dem Vorschlag erkannt oder Vorschlag abgelaufen (>300s)"
+2171:        elif bestaetigt:
+2172:            grund = "Bestaetigung bezieht sich auf keinen zuvor gestellten Vorschlag (Auftragstext weicht ab oder es gab noch keinen)"
+2173:        else:
+2174:            grund = "noch nicht bestaetigt -- dies ist erst der Vorschlag"
+2175:        _log(f"Auftrag NICHT ausgefuehrt (Bestaetigungsschritt): {auftrag_text!r} -- {grund}")
+2176:        return {
+2177:            "ok": False, "ausgefuehrt": False, "erfordert_bestaetigung": True,
+2178:            "grund": grund,
+2179:            "anweisung": ("Wiederhole diesen Auftrag Gabriel woertlich und frag ausdruecklich, ob "
+2180:                          "du ihn wirklich so stellen sollst. Ruf frank_auftrag_stellen NUR dann "
+2181:                          "ein zweites Mal auf, mit exakt demselben Auftragstext und bestaetigt=true, "
+2182:                          "wenn Gabriel das gerade klar bejaht hat. Lehnt er ab oder meint er etwas "
+2183:                          "anderes, ruf es gar nicht oder mit dem korrigierten Text erneut auf."),
+2184:        }
+2185:
+2186:    def _tool_ausfuehren(self, ws, call_id: str, name: str, args_raw: str) -> None:
+2187:        try:
+2188:            args = json.loads(args_raw) if args_raw else {}
+2189:        except json.JSONDecodeError:
+2190:            args = {}
+2191:        _log(f"Werkzeugaufruf: {name}({args})")
+2192:        self.waechter.aktivitaet("tool_call")
+2193:
+2194:        # PHASE 48 (Gabriel-Auftrag 2026-08-27, HARTE Haelfte der Rollen-
+2195:        # Durchsetzung -- "user kann mit sprache alles machen guest nur
+2196:        # fragen stellen"): mechanische Sperre HIER im Dispatch, nicht nur
+2197:        # eine Prompt-Anweisung (die waere umgehbar/unzuverlaessig, s.
+2198:        # _rollen_hinweis()-Docstring). frank_status_lesen/frank_erinnerung_
+2199:        # lesen/frank_forschung(aktion='lesen')/frank_gespraech_beenden
+2200:        # bleiben fuer guest erlaubt (reines Lesen/Beenden, keine
+2201:        # Schreib-/Ausfuehr-Handlung).
+2202:        _GUEST_GESPERRTE_WERKZEUGE = ("frank_auftrag_stellen", "frank_erinnerung_schreiben")
+2203:        if self.sprecher_rolle == "guest" and name in _GUEST_GESPERRTE_WERKZEUGE:
+2204:            ergebnis = {"ok": False, "grund": (
+2205:                f"'{name}' ist fuer Gast-Stimmen gesperrt (erkannter Sprecher: "
+2206:                f"{self.sprecher_name or 'unbekannt'}, Rolle 'guest') -- nur registrierte "
+2207:                f"'user'-Stimmen duerfen Auftraege stellen oder Erinnerungen schreiben.")}
+2208:        elif self.sprecher_rolle == "guest" and name == "frank_forschung" and \
+2209:                str(args.get("aktion") or "").strip() == "neu_anstossen":
+2210:            ergebnis = {"ok": False, "grund": (
+2211:                f"'frank_forschung' mit aktion='neu_anstossen' ist fuer Gast-Stimmen gesperrt "
+2212:                f"(erkannter Sprecher: {self.sprecher_name or 'unbekannt'}, Rolle 'guest') -- "
+2213:                f"aktion='lesen' (bereits vorhandene Ergebnisse) bleibt erlaubt.")}
+2214:        elif name == "frank_status_lesen":
+2215:            ergebnis = _tool_status_lesen(args, eigene_session_id=self.raum_session_id)
+2216:        elif name == "frank_erinnerung_lesen":
+2217:            ergebnis = _tool_erinnerung_lesen(args)
+2218:        elif name == "frank_erinnerung_schreiben":
+2219:            ergebnis = _tool_erinnerung_schreiben(args)
+2220:        elif name == "frank_auftrag_stellen":
+2221:            ergebnis = self._auftrag_stellen_mit_bestaetigung(args)
+2222:        elif name == "frank_forschung":
+2223:            ergebnis = _tool_forschung(args, self.forschung)
+2224:        elif name == "frank_gespraech_beenden":
+2225:            self.ende_gewuenscht = True
+2226:            self.grund = args.get("grund")
+2227:            ergebnis = {"ok": True, "bestaetigt": True}
+2228:        else:
+2229:            ergebnis = {"ok": False, "grund": f"unbekanntes Werkzeug: {name}"}
+2230:
+2231:        _log(f"Werkzeugergebnis {name}: {_kurz_dict(ergebnis)}")
+2232:        ws.send(json.dumps({
+2233:            "type": "conversation.item.create",
+2234:            "item": {"type": "function_call_output", "call_id": call_id, "output": json.dumps(ergebnis, ensure_ascii=False)},
+2235:        }))
+2236:        self._response_erstellen(ws)
+2237:
+2238:    def _hintergrund_nachreichen(self, ws, erledigt: dict) -> None:
+2239:        """Ergebnis einer asynchronen Hintergrundaufgabe (frank_auftrag_stellen
+2240:        ODER frank_forschung/neu_anstossen) kommt fertig zurueck -- als neue
+2241:        Konversationszeile einspeisen, damit FranKenstein von sich aus
+2242:        berichtet (PHASE-42b-Kernanforderung: beide Werkzeuge blockieren
+2243:        nicht, melden sich aber zurueck)."""
+2244:        label = erledigt.get("label", "Auftrag")
+2245:        # PHASE 43c P3V (2026-08-27) -- strukturiertes Log fuer Ereignis 4
+2246:        # (Task-/Tool-Abschluss). Best-effort, vor dem Nachreichen (ein
+2247:        # Log-Fehler darf das Berichten selbst nicht verhindern).
+2248:        try:
+2249:            voe.log_voice_outcome_event(
+2250:                kind="task_completion", candidate_text=erledigt.get("text") or label,
+2251:                provenance="realtime_gespraech._hintergrund_nachreichen",
+2252:                outcome_extra={"ok": erledigt.get("ok"), "auftrag_id": erledigt.get("auftrag_id"),
+2253:                                "label": label},
+2254:            )
+2255:        except Exception as e:
+--- lines 2351-2371 ---
+2351:                                                  "Auftragsstand bauen, zeigen dass der Ton-Text real differiert")
+2352:
+2353:    sub.add_parser("test-bestaetigungsgate", help="Netzwerkfreier Test der echten "
+2354:                                                     "_auftrag_stellen_mit_bestaetigung()-Zustandsmaschine "
+2355:                                                     "(Audit-Befund Runde 1, Sicherheitsschicht vor frank_auftrag_stellen)")
+2356:
+2357:    td = sub.add_parser("test-deixis", help="PHASE 43c P2V -- echter Akzeptanztest: synthetisches "
+2358:                                             "conversation.item.input_audio_transcription.completed-Transkript "
+2359:                                             "durch die REALE _deiktische_anfrage_verarbeiten()-Methode "
+2360:                                             "(dieselbe, die fuehren() im echten Handler aufruft), fuer eine "
+2361:                                             "deiktische und eine nicht-deiktische Aeusserung. Netzwerkfrei "
+2362:                                             "(keine WS/OpenAI-Verbindung noetig), aber echte Kamera/active_sense().")
+2363:    td.add_argument("--deiktisch", default="was ist das da drueben")
+2364:    td.add_argument("--nicht-deiktisch", default="was ist die Hauptstadt von Frankreich")
+2365:    td.add_argument("--mit-kamera", action="store_true", default=True)
+2366:    td.add_argument("--ohne-kamera", dest="mit_kamera", action="store_false")
+2367:
+2368:    tv = sub.add_parser("test-voice-outcome-events", help="PHASE 43c P3V -- echter Akzeptanztest fuer alle "
+2369:                                                            "5 Sprachereignisse (barge_in/confirmation/"
+2370:                                                            "disagreement/task_completion/silence_reopen_check) "
+2371:                                                            "durch die REALEN Methoden, netzwerkfrei (kein WS), "
+--- lines 2514-2534 ---
+2514:            tmp = tempfile.mktemp(suffix=".db")
+2515:            import shutil
+2516:            shutil.copyfile(str(basis), tmp)
+2517:            c = sqlite3.connect(tmp)
+2518:            c.execute("DELETE FROM entityos_arbeitspaket")
+2519:            if label == "gemischt_und_blockiert":
+2520:                c.execute("INSERT INTO star_waechter (id, status, letzter_herzschlag) "
+2521:                           "VALUES ('test-block', 'blockiert', strftime('%s','now'))")
+2522:            for i, (stand,) in enumerate(zeilen):
+2523:                c.execute(
+2524:                    "INSERT INTO entityos_arbeitspaket (paket_id, besteller, session_id, auftrag, "
+2525:                    "womit, warum, stand, ergebnis, beleg, erstellt, geaendert) VALUES "
+2526:                    "(?,?,?,?,?,?,?,?,?,strftime('%s','now'),strftime('%s','now'))",
+2527:                    (f"test-{label}-{i}", "test", "test", f"testauftrag {i}", "", "", stand, "", ""),
+2528:                )
+2529:            c.commit(); c.close()
+2530:            ergebnis = _stern("gespraech-zustandskontext", "--pfad", tmp)
+2531:            print(f"{label}: {ergebnis.get('text')}")
+2532:            Path(tmp).unlink(missing_ok=True)
+2533:
+2534:    elif a.cmd == "test-bestaetigungsgate":
+--- lines 2542-2580 ---
+2542:            "hinweis": "TEST-STUB, kein echter Dispatch",
+2543:        }
+2544:
+2545:        einzelergebnisse = {}
+2546:        r1 = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs"})
+2547:        einzelergebnisse["1_erster_aufruf_ohne_bestaetigung"] = r1
+2548:
+2549:        r2 = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs", "bestaetigt": True})
+2550:        einzelergebnisse["2_bestaetigt_aber_ohne_echte_aeusserung_dazwischen"] = r2
+2551:
+2552:        r3_anderer_text = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "irgendwas anderes", "bestaetigt": True})
+2553:        einzelergebnisse["3_bestaetigt_aber_anderer_auftragstext"] = r3_anderer_text
+2554:
+2555:        # jetzt eine ECHTE Transkription -- der einzige Weg, wie dieser
+2556:        # Zaehler in Produktion je hochgeht (siehe fuehren()).
+2557:        sitzung._user_transkripte_zaehler += 1
+2558:        # der Vorschlag von r3 ueberschrieb den urspruenglichen Vorschlag
+2559:        # (letzter Aufruf gewinnt) -- wir muessen den urspruenglichen
+2560:        # Auftrag also nochmal vorschlagen, dann bestaetigen.
+2561:        sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs"})
+2562:        sitzung._user_transkripte_zaehler += 1
+2563:        r4 = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs", "bestaetigt": True})
+2564:        einzelergebnisse["4_bestaetigt_nach_echter_aeusserung"] = r4
+2565:
+2566:        ok = (
+2567:            r1.get("ok") is False and r1.get("erfordert_bestaetigung") is True
+2568:            and r2.get("ok") is False and r2.get("erfordert_bestaetigung") is True
+2569:            and r3_anderer_text.get("ok") is False
+2570:            and r4.get("ok") is True and r4.get("status") == "angenommen"
+2571:        )
+2572:        print(json.dumps({"ok": ok, "einzelergebnisse": einzelergebnisse}, ensure_ascii=False, indent=2))
+2573:        sys.exit(0 if ok else 1)
+2574:
+2575:    elif a.cmd == "test-deixis":
+2576:        sitzung = RealtimeSession("dummy-key", modell="gpt-realtime-2.1", stimme="cedar",
+2577:                                   berechtigung="acceptEdits", claude_session_id=None, stille_timeout_s=5)
+2578:        bruecke = None
+2579:        if a.mit_kamera and presence_bridge is not None:
+2580:            try:
+--- lines 2687-2707 ---
+2687:            sitzung._letzte_assistant_aussage = "Ich glaube das ist wichtig."
+2688:            ergebnisse["3_disagreement_ohne_relook"] = sitzung._voice_outcome_text_verarbeiten("nein das stimmt nicht")
+2689:
+2690:            # Ereignis 3b -- disagreement MIT visuell verifizierbarer Behauptung -> echter Re-Look.
+2691:            sitzung._letzte_assistant_aussage = "Ich habe die Datei geloescht."
+2692:            capsule_vor = sitzung.capsule
+2693:            ergebnisse["3b_disagreement_mit_relook"] = sitzung._voice_outcome_text_verarbeiten("nein die ist noch da")
+2694:            capsule_nach = sitzung.capsule
+2695:            relook_in_capsule = (
+2696:                capsule_nach is not None
+2697:                and "letzte_aktive_anfrage" in capsule_nach.current_visual_state
+2698:                and (capsule_vor is None or capsule_nach is not capsule_vor)
+2699:            )
+2700:
+2701:            # Ereignis 4 -- task_completion.
+2702:            sitzung._hintergrund_nachreichen(fake_ws, {
+2703:                "label": "Auftrag", "antwort": "fertig", "ok": True,
+2704:                "auftrag_id": "t1", "text": "testauftrag",
+2705:            })
+2706:            ergebnisse["4_task_completion"] = {"ausgefuehrt": True}
+2707:
+=== /home/ai-core-node/.claude/star/frank_chatgpt_terminal.py exists True ===
+SHA256 aef16fbcc6225d89324af7b2330d1ff445b928a434969563a766205877572f99 SIZE 2564
+=== /home/ai-core-node/.claude/star/frank_chatgpt_remote_exec.py exists True ===
+SHA256 79919f0dfc3835e6ee79ec78bd8367ed921f5fb2c0cff9b941327803fa61ebda SIZE 2824
+=== imports resolved by running service cwd ===
+PID 3333824
+cwd /proc/3333824/cwd -> /home/ai-core-node
+exe /proc/3333824/exe -> /usr/bin/python3.12

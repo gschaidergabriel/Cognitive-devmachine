@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "chatgpt-organ-andreas-state-20260912-1111",
+  "command_sha256": "2f42dc2d4fba845dea909676c703bf8d3c5bac6e86eff4e0798479cea747909c",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T03:39:33.893617+00:00",
+  "finished_at": "2026-09-12T03:39:34.030880+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "e4740650826aa9b6aaea00039c3df389c842397691b62516cbad675472c530ba",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "DB_PATH /var/lib/entityos/data/unified.db\nDB_OK True\nTABLES 219\nPOINTER [\"f7ebfdb76f014a84b80f6379be223533\", \"c892044c4b21c52b92de2e9c83425f097b453da6d89e85bced22dd9dd20e54bb\", \"cf708b673dab4f2a9536ea55fb060969\", \"puls-1789048534\", \"G10\", 1.0647059890883588, \"2026-09-12T03:36:59Z\"]\n---terminal---\n#!/usr/bin/env bash\n# frank-terminal-hilfe -- Wrapper fuer das Terminal-Hilfe-Icon (PHASE 34).\n# Erzeugt von install_terminal_help_icon.sh, sicher erneut ausfuehrbar.\n# Startet `claude` dort, wo die FranKenstein\u0ca0_\u0ca0-Hooks tatsaechlich feuern --\n# siehe Kommentarkopf des Installers fuer die zwei Faelle.\nset -uo pipefail\nexport PATH=\"$HOME/.local/bin:$PATH\"\ncd \"$HOME\" 2>/dev/null || true\n\nPLUGIN_ENABLED=0\nif [[ -f \"$HOME/.claude/settings.json\" ]] && command -v python3 >/dev/null 2>&1; then\n  if python3 - <<'PYEOF'\nimport json, sys\ntry:\n    d = json.load(open(__import__(\"os\").path.expanduser(\"~/.claude/settings.json\")))\nexcept Exception:\n    sys.exit(1)\nenabled = d.get(\"enabledPlugins\", {})\nsys.exit(0 if any(k.split(\"@\")[0] == \"frankenstein\" and v for k, v in enabled.items()) else 1)\nPYEOF\n  then\n    PLUGIN_ENABLED=1\n  fi\nfi\n\nif [[ \"$PLUGIN_ENABLED\" == \"1\" ]]; then\n  echo \"FranKenstein\u0ca0_\u0ca0-Terminal (Marketplace-Plugin aktiv, Hooks global verdrahtet).\"\n  claude\nelif [[ -f \"$HOME/.claude/star/settings.json\" ]]; then\n  echo \"FranKenstein\u0ca0_\u0ca0-Terminal (Dev-/Star-Verdrahtung: ~/.claude/star/settings.json).\"\n  claude --settings \"$HOME/.claude/star/settings.json\"\nelse\n  echo \"FranKenstein\u0ca0_\u0ca0-Terminal: weder Marketplace-Plugin (enabledPlugins in\"\n  echo \"~/.claude/settings.json) noch ~/.claude/star/settings.json gefunden --\"\n  echo \"Hooks wuerden nicht feuern. Siehe INSTALL_HOST_STEPS.md. Oeffne trotzdem\"\n  echo \"eine normale claude-Sitzung, aber Begruessungsbanner/Kontext fehlen.\"\n  claude\nfi\n\nexec bash\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

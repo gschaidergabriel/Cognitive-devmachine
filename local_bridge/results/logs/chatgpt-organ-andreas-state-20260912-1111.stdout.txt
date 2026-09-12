@@ -1,0 +1,45 @@
+DB_PATH /var/lib/entityos/data/unified.db
+DB_OK True
+TABLES 219
+POINTER ["f7ebfdb76f014a84b80f6379be223533", "c892044c4b21c52b92de2e9c83425f097b453da6d89e85bced22dd9dd20e54bb", "cf708b673dab4f2a9536ea55fb060969", "puls-1789048534", "G10", 1.0647059890883588, "2026-09-12T03:36:59Z"]
+---terminal---
+#!/usr/bin/env bash
+# frank-terminal-hilfe -- Wrapper fuer das Terminal-Hilfe-Icon (PHASE 34).
+# Erzeugt von install_terminal_help_icon.sh, sicher erneut ausfuehrbar.
+# Startet `claude` dort, wo die FranKensteinಠ_ಠ-Hooks tatsaechlich feuern --
+# siehe Kommentarkopf des Installers fuer die zwei Faelle.
+set -uo pipefail
+export PATH="$HOME/.local/bin:$PATH"
+cd "$HOME" 2>/dev/null || true
+
+PLUGIN_ENABLED=0
+if [[ -f "$HOME/.claude/settings.json" ]] && command -v python3 >/dev/null 2>&1; then
+  if python3 - <<'PYEOF'
+import json, sys
+try:
+    d = json.load(open(__import__("os").path.expanduser("~/.claude/settings.json")))
+except Exception:
+    sys.exit(1)
+enabled = d.get("enabledPlugins", {})
+sys.exit(0 if any(k.split("@")[0] == "frankenstein" and v for k, v in enabled.items()) else 1)
+PYEOF
+  then
+    PLUGIN_ENABLED=1
+  fi
+fi
+
+if [[ "$PLUGIN_ENABLED" == "1" ]]; then
+  echo "FranKensteinಠ_ಠ-Terminal (Marketplace-Plugin aktiv, Hooks global verdrahtet)."
+  claude
+elif [[ -f "$HOME/.claude/star/settings.json" ]]; then
+  echo "FranKensteinಠ_ಠ-Terminal (Dev-/Star-Verdrahtung: ~/.claude/star/settings.json)."
+  claude --settings "$HOME/.claude/star/settings.json"
+else
+  echo "FranKensteinಠ_ಠ-Terminal: weder Marketplace-Plugin (enabledPlugins in"
+  echo "~/.claude/settings.json) noch ~/.claude/star/settings.json gefunden --"
+  echo "Hooks wuerden nicht feuern. Siehe INSTALL_HOST_STEPS.md. Oeffne trotzdem"
+  echo "eine normale claude-Sitzung, aber Begruessungsbanner/Kontext fehlen."
+  claude
+fi
+
+exec bash

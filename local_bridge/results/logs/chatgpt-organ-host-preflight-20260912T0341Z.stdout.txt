@@ -1,0 +1,30 @@
+HOST=andreas-MACO
+--- uptime ---
+ 05:39:34 up 4 days,  6:39,  2 users,  load average: 2,85, 3,15, 2,91
+--- memory MiB ---
+               gesamt       benutzt     frei      gemns.  Puffer/Cache verfügbar
+Speicher:      21278       15432         900          78        5398        5845
+Auslager:      24575       19260        5315
+--- cpus ---
+16
+--- relevant processes ---
+206522 /var/lib/entityos/voice/tmp_test/llama.cpp/build-vk/bin/llama-server -m /var/lib/entityos/voice/models/llm/Qwen3.5-4B-abliterated.Q4_K_M.gguf -c 8192 --parallel 1 --host 127.0.0.1 --port 8990 -t 16 -ngl 99 -fa on --jinja
+300914 sudo grep -RIl --exclude=*.db --exclude=*.sqlite* --exclude=*.log --exclude-dir=.git -- "world_experience.db" /etc/systemd /home/andreas/.config/systemd /var/lib/entityos
+300917 grep -RIl --exclude=*.db --exclude=*.sqlite* --exclude=*.log --exclude-dir=.git -- "world_experience.db" /etc/systemd /home/andreas/.config/systemd /var/lib/entityos
+319869 systemd-nspawn --quiet --boot --register=yes --machine=entityos --directory=/var/lib/entityos/rootfs-run --bind=/var/lib/entityos/data:/var/lib/entityos --bind=/var/lib/entityos/voice:/opt/entityos/voice --bind-ro=/opt/entityos/cognition:/opt/entityos/cognition --bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000/pipewire-0:/run/user/1000/pipewire-0 --bind=/dev/snd --bind=/dev/dri --bind=/dev/dri/renderD128 --bind=/dev/kfd --property=DeviceAllow=/dev/snd rwm --property=DeviceAllow=/dev/dri rwm --property=DeviceAllow=/dev/kfd rwm
+319874 /usr/bin/python3 /opt/entityos/dashboard/entityos_dashboard_launcher.py
+1351332 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/puls.py
+1409249 bash -lc printf 'HOST=%s\n' "$(hostname)"; printf '%s\n' '--- uptime ---'; uptime; printf '%s\n' '--- memory MiB ---'; free -m; printf '%s\n' '--- cpus ---'; nproc; printf '%s\n' '--- relevant processes ---'; pgrep -af 'harness_aider|chatgpt_burst|stern.py|frankenstein|entityos' | head -40 || true
+1409310 /bin/sh -c bash /home/andreas/.claude/statusline-frankenstein.sh
+1409311 bash /home/andreas/.claude/statusline-frankenstein.sh
+1409313 /bin/sh -c bash /home/andreas/.claude/statusline-frankenstein.sh
+1409316 bash /home/andreas/.claude/statusline-frankenstein.sh
+1945389 nsenter --target 319871 --mount --pid --uts --ipc --net -- /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_waechter.py
+1945393 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_waechter.py
+2438491 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_loop.py
+2442341 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/hoeren.py
+2969621 nsenter --target 319871 --mount --pid --uts --ipc --net -- runuser -u frank -- env HOME=/var/lib/entityos/data/syncthing-home /usr/bin/syncthing serve --no-browser --no-restart --logflags=0 --home=/var/lib/entityos/data/syncthing-home
+2969626 runuser -u frank -- env HOME=/var/lib/entityos/data/syncthing-home /usr/bin/syncthing serve --no-browser --no-restart --logflags=0 --home=/var/lib/entityos/data/syncthing-home
+2969627 /usr/bin/syncthing serve --no-browser --no-restart --logflags=0 --home=/var/lib/entityos/data/syncthing-home
+2969636 /usr/bin/syncthing serve --no-browser --no-restart --logflags=0 --home=/var/lib/entityos/data/syncthing-home
+3795508 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/denker.py

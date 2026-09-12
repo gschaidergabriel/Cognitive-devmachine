@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v3",
+  "command_id":"omega-runtime-repair-epoch-20260912-1820",
+  "op":"exec",
+  "cwd":"/workspace",
+  "timeout_seconds":120,
+  "command":"set -eu; mkdir -p /workspace/omega_runtime/archive; cp /workspace/omega_runtime/omega_daemon.py /workspace/omega_runtime/archive/omega_daemon.pre-epoch-fix.$(date -u +%Y%m%dT%H%M%SZ).py; python3 - <<'PY'\nfrom pathlib import Path\np=Path('/workspace/omega_runtime/omega_daemon.py')\ns=p.read_text()\nold=\"c.execute('INSERT INTO epoch VALUES(?,?,?,?,?)',(eid,now(),latest('epoch'),'RUNNING'))\"\nnew=\"c.execute('INSERT INTO epoch VALUES(?,?,?,?)',(eid,now(),latest('epoch'),'RUNNING'))\"\nif old not in s: raise SystemExit('EXPECTED_PATTERN_NOT_FOUND')\np.write_text(s.replace(old,new,1))\nPY\npython3 -m py_compile /workspace/omega_runtime/omega_daemon.py; python3 /workspace/omega_runtime/omega_daemon.py --once; if ! tmux has-session -t omega-grid 2>/dev/null; then tmux new-session -d -s omega-grid 'python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1'; fi; sleep 2; echo '=== STATUS ==='; cat /workspace/omega_runtime/state/STATUS.json; echo '=== TMUX ==='; tmux list-sessions; echo '=== COUNTS ==='; sqlite3 /workspace/omega_runtime/state/omega.sqlite3 'select count(*) from epoch;select count(*) from frame;select count(*) from effect;'"
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpt56sol-blink-runtime-snippet-20260912-0717",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 30,
+  "command": "set -euo pipefail; cd /home/ai-core-node/.claude/star/visual; test \"$(sha256sum buehne.html | awk '{print $1}')\" = 87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645; echo '=== BLINK SYMBOLS ==='; grep -n -E 'BLINK_BILDER|blink|Blinz|keydown|key.*b|Taste.*b' buehne.html | head -120; echo '=== BLINK BLOCK ==='; sed -n '1180,1245p' buehne.html"
+}

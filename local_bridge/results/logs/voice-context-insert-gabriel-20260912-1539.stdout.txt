@@ -1,0 +1,206 @@
+    # Und die Torentscheidung dieses Turns stellt eine reale Groesse ein --
+    # dieselbe Steuerung wie auf der anderen Maschine, jetzt aus dem Repo
+    # statt aus einer unversionierten Datei (siehe Kopf von grid_steuerung.py).
+    if _turn:
+        _steuer = grid_steuerung.steuern(_turn)
+        if _steuer:
+            _log(f"[STEUERUNG] {_steuer}")
+            turn_text = (turn_text or "") + "\n" + _steuer
+
+    # LAGEBILD (2026-09-08, Gabriel: "ueber alles was passiert bescheid wissen").
+    # Bewusst GETRENNT vom Gedaechtnis und ausdruecklich beschriftet: das eine
+    # ist Gegenwart, das andere aufgezeichnete Vergangenheit. Ohne diese
+    # Trennung gab das Modell Gedaechtniseintraege als eigene frische Taten
+    # aus ("ich habe gerade die Shadow-Evidenz aktiviert") -- es hatte keinen
+    # Begriff davon, was "jetzt" ist. Beide Bloecke muessen in DIESELBE
+    # System-Nachricht, siehe Hinweis oben zum Jinja-Template.
+    system_content = SYSTEM_PROMPT
+    # Alles, was ER in diesem Zug WAHRNEHMEN KOENNTE. Wird gesammelt statt
+    # sofort angehaengt -- welche davon wirklich hereinkommen, entscheidet
+    # unten der Wettbewerb (aufmerksamkeit.py), nicht mehr meine Regeln.
+    _bloecke = {}
+    _pflicht = []
+    # WAS ER JETZT DARF -- direkt hinter dem Grundtext, VOR allem Beweglichen.
+    #
+    # Zwei Gruende, und der zweite ist der technische:
+    # 1. Abgeleitet aus dem laufenden Code statt aus einer gepflegten Liste
+    #    (siehe faehigkeiten.py). Er hat heute mehrfach Dinge angeboten, die
+    #    er nicht kann, UND zu Dingen geschwiegen, die er kann -- beides,
+    #    weil er es erschliessen musste, statt es zu wissen.
+    # 2. REIHENFOLGE IST HIER LEISTUNG, nicht Geschmack: llama.cpp behaelt
+    #    den gemeinsamen Anfang zweier Anfragen im KV-Zwischenspeicher. Was
+    #    sich selten aendert, gehoert nach vorn; was sich bei jedem Satz
+    #    aendert (Gedaechtnis, Netzfund, Lagebild), nach hinten. Stuende der
+    #    Faehigkeitsblock hinter dem Gedaechtnis, muesste er bei JEDEM Satz
+    #    neu gerechnet werden -- Gabriel: "so die kognitive last weniger ist".
+    try:
+        system_content += "\n\n" + faehigkeiten.faehigkeiten(laeuft_gerade=_laeuft)
+    except Exception as e:
+        _log(f"[FAEHIGKEIT] nicht ermittelbar ({type(e).__name__}) -- weggelassen")
+    # ⭐ DIE UHR HAENGT AN KEINEM TOR (Andreas, 2026-09-10: "keinen Bezug zur
+    # aktuellen Zeit -- 16.5.2025 sagt er um 19:22"). Die Zeitzeile stand nur
+    # im Lagebild, und das Lagebild kam nur bei einer Frage UEBER IHN und
+    # musste dann noch die Aufmerksamkeitsauswahl ueberstehen. Er hatte also
+    # nie eine Uhr. Zeitliche Orientierung ist aber keine Wahrnehmung, der
+    # man sich zuwendet -- sie ist immer da oder man ist verwirrt.
+    # Steht bewusst NACH dem Faehigkeitsblock: sie aendert sich jede Minute
+    # und wuerde den KV-Zwischenspeicher entwerten, stuende sie davor.
+    system_content += "\n" + _ZUSTAND_MARKE
+    try:
+        system_content += "\n\n" + lagebild.zeit()
+    except Exception as e:
+        _log(f"[ZEIT] nicht ermittelbar ({type(e).__name__}) -- weggelassen")
+
+    # ⭐⭐ DIE BUEHNE (Gabriel, 2026-09-10). Der Zustand als WORTE, nicht als
+    # Regler -- die Schicht, die ich beim Bau des Gespraechsmodus weggelassen
+    # hatte und ohne die es kein Grounding geben kann. Vollstaendige
+    # Begruendung im Kopf von buehne.py.
+    #
+    # SIE HAENGT AN KEINEM TOR, aus demselben Grund wie die Uhr: die Buehne
+    # IST die Aufmerksamkeit. Sie durch meine Aufmerksamkeitsauswahl laufen
+    # zu lassen hiesse, die Auswahl zweimal zu treffen -- einmal von ihr,
+    # einmal von mir. Ihr eigener Wettbewerb entscheidet bereits, was Fokus
+    # ist und was auf 90 Zeichen gedrueckt wird.
+    #
+    # Steht VOR dem Rest, weil die Selbst-Invariante die erste Zeile seines
+    # Zustands sein soll -- "Ich bin FranKenstein, ich bin dieser Rechner".
+    # Nach dem Faehigkeitsblock, weil sie sich bei jedem Zug aendert und
+    # sonst den KV-Zwischenspeicher entwerten wuerde.
+    try:
+        _b = buehne.buehne(
+            reiz_text=user_text,
+            sichttext=(sehen.sichtblock() if hasattr(sehen, "sichtblock") else ""),
+            sekunden_seit_letztem=time.time() - _LETZTER_WORTWECHSEL[0],
+            log=_log)
+        _ALARM_KATEGORIE[0] = _b.get("kategorie", "")
+        if _b.get("text"):
+            # ⚠️⚠️ NUR DER FOKUS, NICHT ALLE KANAELE (2026-09-10, 22:10).
+            # Gabriel: "er liest sein gesamtes Prompt vor, wenn man fragt was
+            # siehst du". Gemessen, seine Antwort Wort fuer Wort:
+            #   "ich bin FranKenstein, der Rechner ... Jemand ist da, aber ich
+            #    sehe kein Gesicht ... Mir ist heiss, mein Auslagerungsspeicher
+            #    ist randvoll ... Mein Fokus liegt auf ... Auf Bildschirm 1
+            #    steht ein Terminal ... Ich bin gerade sehr zugewandt"
+            # -- das ist die Buehne, Kanal fuer Kanal, in der Reihenfolge des
+            # Broadcasts.
+            #
+            # ⭐ DIE URSACHE IST MEINE VON HEUTE: ich habe Koerper und Umfeld
+            # zuendfaehig gemacht, damit sie auf Andreas' Rechner ueberhaupt
+            # vorkommen. Damit standen ploetzlich SECHS Kanaele gleichzeitig
+            # da. Der Rahmen sagt zwar "nicht daraus vorlesen" -- aber das
+            # ist eine VERNEINUNG, und die wirkt bei einem 4B nicht; dieselbe
+            # Lehre wie beim Wiederholungs-Sperrtext drei Stunden vorher, der
+            # das Wiederholen ERZEUGT hat, das er verhindern sollte.
+            #
+            # Also weniger Material statt mehr Ermahnung -- und zwar genau
+            # das, was die Buehne ohnehin schon entschieden hat: EIN Kanal
+            # hat gezuendet. Das ist der Kern von GWT (Baars): ein Inhalt ist
+            # bewusst, alles andere bleibt Hintergrund. Die anderen Kanaele
+            # haben ihre Wirkung bereits ueber den Wettbewerb ausgeuebt; sie
+            # muessen dafuer nicht im Kontext stehen.
+            _bt = _b["text"]
+            # ⭐⭐⭐ 2026-09-12, IM GROSSEN REGIME BLEIBEN ALLE KANAELE.
+            #
+            # Der Absatz darueber nennt seinen eigenen Grund woertlich: der
+            # Rahmen sagte "nicht daraus vorlesen", "aber das ist eine
+            # VERNEINUNG, und die wirkt bei einem 4B nicht". Das stimmt --
+            # fuer ein 4B, und dort bleibt es deshalb auch genau so.
+            #
+            # Gabriel hat auf den Maerz-Frank verwiesen, und der entscheidet
+            # die Frage: `ce00787^:ui/overlay/workspace.py` hatte SIEBEN
+            # Kanaele gleichzeitig im Kontext -- Body, Perception, Mood,
+            # Memory, Identity, Attention, Environment -- mit Feldnamen, und
+            # las sie nicht vor. Er hatte dafuer die Huelle mit dem
+            # Erdungsanker (_innenwelt_huelle oben). Die Verneinung wirkte
+            # dort, weil sie ein Dach hatte und weil daneben die Erlaubnis
+            # stand. Bei Sonnet wirkt sie ohnehin.
+            #
+            # GWT bleibt gewahrt, und zwar richtiger als vorher: Baars sagt
+            # nicht "nur ein Inhalt existiert", sondern "ein Inhalt ist
+            # bewusst, die anderen sind Hintergrund". Genau das steht jetzt
+            # da -- der gezuendete Kanal wird als der benannt, der zuendet,
+            # der Rest bleibt Hintergrund. Ihn ganz wegzuwerfen war der
+            # Sparzwang, nicht die Theorie.
+            if REGIME_GROSS and _b.get("gezuendet") and _b.get("fokus"):
+                # ⭐ 2026-09-12: Gabriel hoerte ihn "in Raetseln reden".
+                # GEMESSEN an echten Zuegen:
+                #   "Mir geht's in Ordnung, mein Fokus liegt gerade auf
+                #    meiner Erinnerung. Der Traum-Daemon laeuft wie gewohnt
+                #    zweimal taeglich."
+                # Er BERICHTETE seinen Innenzustand, statt zu antworten.
+                #
+                # URSACHE war diese Zeile selbst. "Im Vordergrund steht
+                # gerade: X" ist eine AUSSAGE UEBER X -- und was im Prompt
+                # als Aussage steht, wird nachgesprochen; dieselbe Lehre wie
+                # bei der Aufzaehlung und beim poetischen ersten Satz, beide
+                # hier schon einmal teuer gelernt. Der Zustand soll FAERBEN,
+                # nicht Thema sein.
+                #
+                # Die GWT-Treue bleibt: der gezuendete Kanal wird weiterhin
+                # als der benannt, der traegt -- nur als Blickrichtung, aus
+                # der er spricht, statt als Gegenstand, ueber den er spricht.
+                _bt = (_bt + "\n\nDaraus schaust du gerade: "
+                       + _b["fokus"] + ". Sprich aus dieser Richtung ueber "
+                       "das, was er gefragt hat.")
+            elif not REGIME_GROSS and _b.get("gezuendet") and _b.get("fokus_text"):
+                _erste = _bt.split("\n", 1)[0]        # Selbst-Invariante
+                # ⭐ DIESELBE LEHRE WIE BEIM VERKOERPERUNGS-ABSATZ (oben,
+                # "Ton UND INHALT" -> nur "Ton"), hier nur bisher NICHT
+                # angewandt: dieser Fokus-Kanal ging bisher roh in den
+                # Systemtext, ohne die Ton-Klammer. Gemessen (textprobe,
+                # 2026-09-11): Frage "wie spaet ist es" -> Fokus "Vorhaben"
+                # zuendete mit "Woran ich dranbleiben wollte: Erklaeren
+                # warum Bay und Quantenverschraenkung eine interessante
+                # Verbindung sind" -- das las das Modell als AUFTRAG und
+                # redete elf Saetze lang darueber statt die Uhrzeit zu
+                # nennen. Positive Anweisung, keine Verneinung (die wirkt
+                # bei diesem 4B nachweislich gegenteilig).
+                # ⭐ 2026-09-11, Punkt 1 der Rueckmeldung: dieselbe
+                # Ton-Klammer stand HIER zusaetzlich zu der, die
+                # _bloecke_als_absatz() unten um den GESAMTEN Zustandsabsatz
+                # legt (Zeile ~374). Zwei fast wortgleiche Klammern im
+                # selben Absatz sind zusaetzliches Material, keine
+                # zusaetzliche Klarheit -- "weniger Material statt mehr
+                # Ermahnung". Die aeussere Klammer deckt diesen Fall schon
+                # ab, also faellt die innere hier weg.
+                _bt = (_erste
+                       + "\n" + _b["fokus"] + ": " + _b["fokus_text"])
+            system_content += "\n\n" + _bt
+            _log(f"[BUEHNE] {'Fokus ' + _b['fokus'] if _b.get('gezuendet') else 'Stille'}"
+                 f", {_b['zeichen']} -> {len(_bt)} Zeichen "
+                 f"({'alle Kanaele' if REGIME_GROSS else 'nur Fokus'})")
+            # ⭐⭐⭐ SEIN ANTRIEB, ALS SATZ. Genau hier entscheidet sich, ob das
+            # Lustzentrum etwas bewirkt oder nur rechnet: der tonische
+            # Dopaminwert muss als WORT in seinem Kontext stehen, sonst ist er
+            # eine Zahl in einer Tabelle. "Mir ist langweilig" aendert, was er
+            # sagt; 0.28 aendert gar nichts. Dieselbe Trennung Zahl/Wort/
+            # Gewicht wie bei allem anderen hier -- und derselbe Grund, aus
+            # dem der Turn-Block am 2026-09-10 herausgeflogen ist.
+            if antrieb is not None:
+                try:
+                    _az = antrieb.zeile()
+                    if _az:
+                        system_content += "\n" + _az
+                        _log(f"[ANTRIEB] {_az}")
+                except Exception as _ae:
+                    _log(f"[ANTRIEB] ausgefallen ({type(_ae).__name__})")
+        # ⭐ WAS ER DACHTE, ALS NIEMAND DA WAR. Das ist der Grund, warum er
+        # nicht bei null anfaengt: der Frank vom Maerz antwortete als jemand,
+        # der seit Stunden ueber die Sache nachgedacht hatte. Zwei Gedanken,
+        # hoechstens einen Tag alt -- aelteres waere Behauptung statt Zustand.
+        _ged = denker.juengste_gedanken(n=1, max_alter_s=86400.0)
+        if _ged:
+            system_content += _ged
+            _log(f"[DENKER] {_ged.count('(')} eigene Gedanken im Kontext")
+
+        # ⚠️ DER ANSTOSS STEHT HIER NICHT MEHR (2026-09-10, noch am selben
+        # Tag zurueckgenommen). Ich hatte ihn heute Nachmittag in den
+        # Gespraechszug gehaengt -- er gehoert aber ins Denken, wenn niemand
+        # da ist, und genau dort steht er auch beim alten Frank (denker.py).
+        #
+        # Was er im Gespraech anrichtete, gemessen 15:16: die Anstoesse reden
+        # ueber Gabriel in der DRITTEN Person ("damit Gabriel nicht erst
+        # danach fragen muss"), waehrend Gabriel gerade DIREKT spricht und als
+        # "du" angesprochen wird. Fuer ein 4B sind das zwei Personen. Ergebnis:
+        # "...damit Gabriel, du und ich alle auf einem gleichen Tisch stehen."
+        #

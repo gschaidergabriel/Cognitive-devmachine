@@ -1,0 +1,9 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-mcp-mergeproof-ai-core-20260912a",
+  "op": "exec",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "timeout_seconds": 240,
+  "command": "set -euo pipefail\nD=$(mktemp -d /tmp/omega-mcp-mergeproof.XXXXXX)\ncd \"$D\"\ngh repo clone gschaidergabriel/clay-global-research-entity repo -- --quiet\ncd repo\ngit fetch -q origin main chatgpt/omega-chatgpt-mcp-bridge-20260912\ngit checkout -q --detach origin/main\ngit -c user.name='OMEGA Merge Proof' -c user.email='omega@local.invalid' merge --no-commit --no-ff origin/chatgpt/omega-chatgpt-mcp-bridge-20260912\npython3 -m py_compile tools/omega_chatgpt_mcp.py tools/omega_grid_relay.py\nbash -n tools/install_omega_chatgpt_mcp_ai_core.sh\npython3 -m pytest -q tests/test_omega_chatgpt_mcp.py\nprintf '\\nMAIN='; git rev-parse origin/main\nprintf '\\nHEAD_TREE='; git write-tree"
+}

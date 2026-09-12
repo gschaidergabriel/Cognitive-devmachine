@@ -1,0 +1,43 @@
+NOW=2026-09-12T17:36:43+00:00
+DIR=/workspace/omega_runtime/current
+ASSEMBLY_MANIFEST_PRESENT=0
+ASSEMBLY_MODULE_PRESENT=0
+---SUPERVISOR---
+{
+  "schema": "OMEGA_SUPERVISOR_STATUS/v2",
+  "transport_boundary": "OUTER_SPOOL",
+  "relay_mode": "BOUNDED_NONBLOCKING",
+  "updated_at": "2026-09-12T17:36:40.683331+00:00",
+  "pid": 948100,
+  "repo_root": "/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1",
+  "children": {
+    "grid": {
+      "pid": 948102,
+      "returncode": null,
+      "alive": true
+    },
+    "relay": {
+      "pid": 948103,
+      "returncode": null,
+      "alive": true
+    },
+    "telemetry": {
+      "pid": 948104,
+      "returncode": null,
+      "alive": true
+    },
+    "master_bridge": {
+      "pid": 948105,
+      "returncode": null,
+      "alive": true
+    }
+  }
+}
+---ASSEMBLY_STATUS---
+ASSEMBLY_STATUS_MISSING
+---OMEGA_PROCESSES---
+ 948100 Sat Sep 12 13:43:12 2026 python3 -m omega.supervisor_outer --runtime-root /workspace/omega_runtime/state --repo-root /workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1
+ 948102 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.grid_runtime_v3
+ 948103 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.spool_bridge_relay_parallel
+ 948104 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.telemetry_daemon
+ 948105 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.master_bridge_carrier

@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-final-assembly-readback-20260912-1740z",
+  "command_sha256": "311433a4d73cf4015605da82ea4a9779b57e7f08aa8f79ae00abefc56bf7615a",
+  "started_at": "2026-09-12T17:36:43.476372+00:00",
+  "finished_at": "2026-09-12T17:36:43.764931+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "b2c5f8fec16c6134d5ee74de89c4887aee3dceb9d8a2885114e6b3f37dbb3fe9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "NOW=2026-09-12T17:36:43+00:00\nDIR=/workspace/omega_runtime/current\nASSEMBLY_MANIFEST_PRESENT=0\nASSEMBLY_MODULE_PRESENT=0\n---SUPERVISOR---\n{\n  \"schema\": \"OMEGA_SUPERVISOR_STATUS/v2\",\n  \"transport_boundary\": \"OUTER_SPOOL\",\n  \"relay_mode\": \"BOUNDED_NONBLOCKING\",\n  \"updated_at\": \"2026-09-12T17:36:40.683331+00:00\",\n  \"pid\": 948100,\n  \"repo_root\": \"/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1\",\n  \"children\": {\n    \"grid\": {\n      \"pid\": 948102,\n      \"returncode\": null,\n      \"alive\": true\n    },\n    \"relay\": {\n      \"pid\": 948103,\n      \"returncode\": null,\n      \"alive\": true\n    },\n    \"telemetry\": {\n      \"pid\": 948104,\n      \"returncode\": null,\n      \"alive\": true\n    },\n    \"master_bridge\": {\n      \"pid\": 948105,\n      \"returncode\": null,\n      \"alive\": true\n    }\n  }\n}\n---ASSEMBLY_STATUS---\nASSEMBLY_STATUS_MISSING\n---OMEGA_PROCESSES---\n 948100 Sat Sep 12 13:43:12 2026 python3 -m omega.supervisor_outer --runtime-root /workspace/omega_runtime/state --repo-root /workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1\n 948102 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.grid_runtime_v3\n 948103 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.spool_bridge_relay_parallel\n 948104 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.telemetry_daemon\n 948105 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.master_bridge_carrier\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

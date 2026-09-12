@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-fallback-daemon-probe-20260912",
+  "command_sha256": "0ab2a8ba4bb6b8ac1472df0f23d2a630d3ad443ab714642ed44284e5deec9207",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T12:31:44.439788+00:00",
+  "finished_at": "2026-09-12T12:31:44.496303+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "07bbb69e7f1811f54c59307fba971bee303d591d4e1e11b8a9a06ee54249917d",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== clay-local-bridge ===\n# /home/ai-core-node/.config/systemd/user/clay-local-bridge.service\n[Unit]\nDescription=Clay ChatGPT local development bridge\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=simple\nEnvironment=\"HOME=/home/ai-core-node\"\nEnvironment=\"GIT_SSH_COMMAND=ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts\"\nExecStart=/usr/bin/python3 /home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py\nWorkingDirectory=/home/ai-core-node\nRestart=always\nRestartSec=2\nNice=5\n\n[Install]\nWantedBy=default.target\n=== frankenstein-local-bridge ===\n# /home/ai-core-node/.config/systemd/user/frankenstein-local-bridge.service\n[Unit]\nDescription=Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results)\nAfter=network-online.target\n\n[Service]\nType=simple\nExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py\nRestart=on-failure\nRestartSec=10\n\n[Install]\nWantedBy=default.target\n=== relevant processes ===\nai-core+  959674    2339  2 06:35 ?        00:21:20 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py\nai-core+  968051    2339  0 06:35 ?        00:00:04 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_webui.py\nai-core+ 2925003 3080476 17 19:31 ?        00:00:01 git -C /home/ai-core-node/.local/share/clay-local-bridge/results-mirror fetch origin chatgpt-local-results --prune\nai-core+ 2925153    2339  0 19:31 ?        00:00:00 /bin/sh -c ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts \"$@\" ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts -o SendEnv=GIT_PROTOCOL git@github.com git-upload-pack 'gschaidergabriel/clay-global-research-entity.git'\nai-core+ 2925154 2925153  1 19:31 ?        00:00:00 ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts -o SendEnv=GIT_PROTOCOL git@github.com git-upload-pack 'gschaidergabriel/clay-global-research-entity.git'\nai-core+ 2926694  959674  0 19:31 ?        00:00:00 bash -lc set -eu; echo '=== clay-local-bridge ==='; systemctl --user cat clay-local-bridge.service 2>/dev/null || true; echo '=== frankenstein-local-bridge ==='; systemctl --user cat frankenstein-local-bridge.service 2>/dev/null || true; echo '=== relevant processes ==='; ps -ef | grep -E '[l]ocal.*bridge|[b]ridge.*local' || true\nai-core+ 2926721 2926694  0 19:31 ?        00:00:00 grep -E [l]ocal.*bridge|[b]ridge.*local\nai-core+ 3080476    2339  0 09:05 ?        00:00:05 /usr/bin/python3 /home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

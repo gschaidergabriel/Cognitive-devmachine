@@ -1,0 +1,222 @@
+                try:
+                    _u = umschlag.bauen(session_id=session_id,
+                                        nutzertext=user_text, log=_log)
+                    _ut = umschlag.gespraechs_text(
+                        _u.get("caveman_prompt") or "",
+                        bool((_u.get("_verfestigung") or {}).get("ausgeloest")))
+                    if _ut:
+                        _rg = "\n\n" + _ut
+                        _log(f"[UMSCHLAG] {_ut}")
+                except Exception as _ue:
+                    _log(f"[UMSCHLAG] ausgefallen ({type(_ue).__name__}) -- "
+                         f"es bleibt bei der Regie")
+            if not _rg:
+                _rg = regie.block(broadcast=_bc, alarm=_ALARM_KATEGORIE[0],
+                                  reentry=_re, log=_log)
+                if _rg:
+                    _log(f"[REGIE] {_rg.strip()}")
+            if _rg:
+                system_content += _rg
+        except Exception as _e:
+            _log(f"[REGIE] ausgefallen ({type(_e).__name__}: {_e})")
+        messages[0] = {"role": "system", "content": system_content}
+        # ⭐⭐ "Er sagt gerade:" WAR DER FEHLER (Gabriel, 2026-09-10: "er
+        # spricht darüber in der dritten Person, es ist nicht so, dass es
+        # für ihn so ist, als würde er sehen und ich ihn fragen").
+        #
+        # Die Rahmung entscheidet, WER da spricht. "Er sagt gerade: ..."
+        # stellt den Menschen als DRITTEN vor -- damit wird aus dem Gespräch
+        # ein Bericht über ein Gespräch, und das Modell nimmt folgerichtig
+        # die Erzählerrolle ein. Gemessen an seiner Antwort von 19:02:
+        #
+        #     "Ich höre deinen Ton, als würdest du mir sagen: Frankenstein,
+        #      sag mir, wie sehe ich aus?. Ich antworte: Du bist ein Mensch..."
+        #
+        # Er wiederholt die Frage und kündigt seine eigene Antwort an -- das
+        # tut niemand, der angesprochen wird, das tut ein Erzähler. Die
+        # Anrede in der zweiten Person macht ihn vom Berichterstatter zum
+        # Beteiligten. Dieselbe Lehre wie bei der Bühne: nicht ÜBER ihn,
+        # sondern ZU ihm.
+        # ⚠️ KEIN NAME IN DER RAHMUNG (2026-09-10, zweite Korrektur).
+        # "Er sagt gerade:" machte ihn zum Erzaehler. Der Ersatz
+        # "{NUTZER} sagt zu dir:" war nicht besser, sondern nur anders
+        # falsch: er GRIFF DEN NAMEN AUF und erzaehlte weiter ueber einen
+        # Dritten -- gemessen: "Ich hoere Gabriel schreien ...". Ein Name in
+        # der Rahmung ist eine Einladung, ueber jemanden zu sprechen statt
+        # mit ihm. Die zweite Person ohne Namen laesst diese Tuer zu.
+        frage = _zustand + "\n\nEr wendet sich an dich: " + ohne_anrede(user_text)
+        _log(f"[KONTEXT] Zustand in der Frage ({len(_zustand)} Zeichen), "
+             f"Systemtext auf {len(system_content)} gekuerzt")
+        # WIEDERHOLUNGSSPERRE (2026-09-10). Gemessen: drei aufeinanderfolgende
+        # Zuege mit byte-identischer Antwort auf drei verschiedene Fragen. Das
+        # Modell schrieb aus seinem eigenen Verlauf ab -- ohne Hinweis ist das
+        # die wahrscheinlichste Fortsetzung. Der Hinweis steht ZULETZT in der
+        # Frage, direkt vor dem Gesagten, weil das Modell dem Naechstliegenden
+        # folgt. Siehe Kopf von wiederholung.py.
+        # ⚠️⚠️ SPERRTEXT ENTFERNT (2026-09-10, am selben Tag wie eingebaut).
+        # Die Idee war, ihm seine letzte Antwort zu zeigen mit "sag das nicht
+        # noch einmal". GEMESSEN hat sie das Gegenteil bewirkt: auf
+        # "Frankenstein, wie geht's dir?" kam woertlich die Antwort von vor
+        # einer Stunde zurueck -- inklusive "frank-aufwecken-rezept", obwohl
+        # dieser Block laengst entfernt war. Der Text konnte nur aus dem
+        # Sperrhinweis stammen.
+        #
+        # Der Grund ist strukturell und nicht durch Umformulieren zu heilen:
+        # ein 4B-Modell wertet VORHANDENEN, passenden Text staerker als eine
+        # Verneinung darueber. Wer "sag X nicht" schreibt, hat X in den
+        # Kontext gelegt -- und X ist dann die naechstliegende Fortsetzung.
+        # Dieselbe Falle wie bei der Bühne: was im Kontext steht, wird
+        # gesagt, egal was danebensteht.
+        #
+        # Was BLEIBT, ist das Netz im Satzstrom (wiederholung.ist_wiederholung):
+        # es prueft den ersten Satz gegen f2_gesagt, OHNE ihn dem Modell zu
+        # zeigen. Erkennen ohne Vorzeigen -- das ist der Unterschied.
+        pass
+    else:
+        system_content = system_content.replace(_ZUSTAND_MARKE, "")
+        messages[0] = {"role": "system", "content": system_content}
+        frage = user_text
+    # ⭐⭐ KREIST ER? Dann faellt der Verlauf fuer DIESEN Zug weg. Nicht als
+    # Strafe, sondern weil er die Vorlage IST: gemessen halbiert sich die
+    # Entropie mit jedem kopierten Zug (0.68 -> 0.068 -> 0.033 -> 0.018), bis
+    # das Modell nur noch einen Weg sieht. Die Rueckkopplung laeuft im Modell;
+    # aufhalten laesst sie sich nur, indem man ihr das Futter entzieht.
+    # Begruendung und Preis im Kopf von wiederholung.kreist().
+    try:
+        _kreist, _kn = wiederholung.kreist(log=_log)
+    except Exception:
+        _kreist = False
+    if _kreist:
+        messages += [{"role": "user", "content": frage}]
+    else:
+        messages += _verlauf + [{"role": "user", "content": frage}]
+
+    if not erzeugung_verfuegbar():
+        _log("[LLM] FEHLER: llama-server nicht erreichbar (Health-Check fehlgeschlagen) -- "
+             "dieser Redebeitrag wird uebersprungen.")
+        return None, history
+
+    sentence_q = queue.Queue()
+    result_holder = {}
+    # DIE LINSE: sein Zustand formt, WIE er spricht -- nicht was er berichtet.
+    try:
+        _ausdruck = verkoerperung.verkoerperung(_turn or {}, time.time() - _LETZTER_WORTWECHSEL[0])
+        _LETZTER_WORTWECHSEL[0] = time.time()
+        _log(f"[AUSDRUCK] Erregung {_ausdruck['_erregung']} Verankerung "
+             f"{_ausdruck['_verankerung']} -> Temp {_ausdruck['temperature']}, "
+             f"{_ausdruck['max_tokens']} Token, Tempo {_ausdruck['length_scale']}, "
+             f"Ausdruck {_ausdruck['noise_scale']}")
+    except Exception as e:
+        _log(f"[AUSDRUCK] FEHLER (nicht fatal): {type(e).__name__}: {e}")
+        _ausdruck = None
+
+    # Was in DIESEM Zug wirklich geschah -- der Wachhund braucht Tatsachen,
+    # keine Vermutungen. Im Gespraechszweig ist `gehandelt` per Bauart immer
+    # False: der Abspielzweig ist oben schon zurueckgekehrt.
+    llm_thread = threading.Thread(target=stream_llm_to_sentences,
+                                  args=(messages, sentence_q),
+                                  kwargs={"ausdruck": _ausdruck,
+                                          "gespielt": _laeuft,
+                                          "gehandelt": False,
+                                          "user_text": user_text})
+    speaker_thread = threading.Thread(target=tts_speaker_worker,
+                                      args=(tts_voice, sentence_q, result_holder),
+                                      kwargs={"ausdruck": _ausdruck})
+    t_turn0 = time.time()
+    # Auch hier: leiser, solange er redet. Geloest wird es einheitlich im
+    # finally der Hauptschleife.
+    if _ABSPIELER[0] is not None:
+        try:
+            _ABSPIELER[0].ducken(True)
+        except Exception:
+            pass
+    # Frisch fuer JEDEN Zug: ein Abbruch aus dem VORHERIGEN Zug darf diesen
+    # hier nicht schon im Voraus stoppen. Siehe Kopf von _UNTERBROCHEN oben.
+    _LLM_ABBRUCH.clear()
+    llm_thread.start()
+    if REGIME_GROSS:
+        _gewaehlt = list(_bloecke)
+        _log(f"[AUFMERKSAMKEIT] Regime gross -- zugewandt "
+             f"{_zugewandt if _zugewandt is not None else '(Ausfall)'}, "
+             f"eingespeist werden alle {len(_gewaehlt)} Bloecke")
+    else:
+        # Der Aufruf ist oben schon passiert (er fuehrt die Pruefspur, an der
+        # der Aufmerksamkeitskanal haengt) -- hier wird sein Ergebnis nur noch
+        # vollstreckt. Faellt er aus, kommt wie bisher alles durch.
+        _gewaehlt = (_zugewandt if _zugewandt is not None
+                     else list(_bloecke))
+    # ⭐⭐⭐ DER WORKSPACE ERSETZT DIE BLOCKSAMMLUNG (2026-09-11).
+    #
+    # DER BEFUND, der die ganze Nacht erklaert: der am 2026-03-19 versehentlich
+    # geloeschte `ui/overlay/workspace.py` (Commit ce00787, fiel als
+    # "UI-Aufraeumung" mit, weil er in ui/ lag) fuegte sieben Kanaele zu EINEM
+    # Text zusammen -- sein Docstring woertlich: "into a single phenomenological
+    # frame that the LLM processes as its own inner world, NOT EXTERNAL
+    # METADATA".
+    #
+    # Was hier bis heute stand, war das Gegenteil: sechs getrennte Bloecke mit
+    # Etiketten, aneinandergehaengt. Das SIND externe Metadaten -- also wurden
+    # sie wie Metadaten behandelt. Gemessen am 10./11.09., alles dieselbe
+    # Ursache:
+    #   - las Versalien-Ueberschriften woertlich vor, samt Klammer
+    #   - fuellte ein Formular aus ("Ton: ... Inhalt: ... Haltung: ...")
+    #   - sagte "Die Zelle G6 hat gerade gewonnen, sie hat den Wert 1,31"
+    #   - redete poetisch UEBER seinen Zustand statt aus ihm heraus
+    #   - erfand Handlungen in den Luecken zwischen den Bloecken
+    #
+    # ⚠️ Gegen jedes einzelne dieser Symptome wurde in derselben Nacht ein
+    # Filter gebaut -- fuenf Stueck. Gemessene Wirkung ueber 104 Antworten:
+    # Score 0.988 -> 0.967, also SCHLECHTER. Gabriel: "generell sind Filter
+    # der falsche Weg." Das hier ist der Weg: nicht wegnehmen, was falsch
+    # herauskommt, sondern das Material aendern, aus dem es entsteht.
+    #
+    # Gemessen: 2403 Zeichen (sechs Bloecke) -> 124 Zeichen (ein Fliesstext),
+    # 113 ms. Faellt der Workspace aus oder ist der Schalter aus, greift
+    # unveraendert die Blocksammlung -- der Goldstandard bleibt eine
+    # Variable entfernt (Tag goldstandard-sprachmodus-2026-09-10).
+    #
+    # ⭐⭐⭐ 2026-09-12, GILT NUR NOCH IM KLEINEN REGIME. Alles oben Gesagte
+    # bleibt wahr -- fuer ein 4B. Die Verdichtung 2403 -> 124 Zeichen loeste
+    # dort ein echtes Problem: sechs etikettierte Bloecke WAREN fuer das 4B
+    # externe Metadaten und wurden vorgelesen.
+    #
+    # Sonnet hat dieses Problem nicht, und bei ihm kostet dieselbe
+    # Verdichtung alles: gemessen am 00:57-Zug blieben von Selbstauskunft,
+    # Lagebild und Gedaechtnis zusammen 152 Zeichen uebrig. Damit hat er
+    # nichts mehr, woraus er antworten koennte -- also antwortet er aus dem
+    # einzigen, was noch da ist: der Tonanweisung im Systemtext. Das ist
+    # Schauspiel, und genau das hat Gabriel gehoert.
+    #
+    # Der Docstring des geloeschten Originals sagt "a single
+    # phenomenological frame the LLM processes as ITS OWN INNER WORLD" --
+    # die Absicht war, dass es sein Inneres IST statt Metadaten. Bei einem
+    # Modell, das Etikett von Inhalt trennen kann, wird dieselbe Absicht
+    # nicht durch Wegnehmen erreicht, sondern durch Hingeben.
+    _ws_text = ""
+    if workspace is not None and not REGIME_GROSS:
+        try:
+            if getattr(workspace, "aktiv", lambda: False)():
+                _ws_text = workspace.zusammen(
+                    user_text=user_text, user_name=NUTZER,
+                    ist_selbstfrage=bool(_ueber_ihn),
+                    zelle=(_turn or {}).get("winner_cell_id"),
+                    broadcast=(_turn or {}).get("broadcast_value"),
+                    log=_log) or ""
+        except Exception as _we:
+            _log(f"[WORKSPACE] ausgefallen ({type(_we).__name__}) -- "
+                 f"es bleibt bei den Bloecken")
+    if _ws_text:
+        system_content += "\n\n" + _ws_text
+        _log(f"[WORKSPACE] {len(_ws_text)} Zeichen, ein Erlebenstext "
+             f"statt {len(_gewaehlt)} Bloecken")
+    else:
+        for _name in _gewaehlt:
+            system_content += _bloecke.get(_name, "")
+
+    messages = [{"role": "system", "content": system_content}]
+    # ARBEITSGEDAECHTNIS aus dem Zustand: der Broadcast dieses Turns
+    # entscheidet, wie viel seiner eigenen juengsten Vergangenheit ueberhaupt
+    # im Vorwaertslauf liegt. Das ist die tiefere der beiden Eingangs-
+    # bindungen -- die Verkoerperung aendert, WIE er formuliert, dieses
+    # Fenster aendert, WOMIT er denkt. Und es steht nirgends in seinem
+    # Kontext: er kann nicht ablesen, wie weit er zurueckreicht, er reicht

@@ -1,0 +1,102 @@
+===KOERPERPFLEGE UNIT===
+# /home/ai-core-node/.config/systemd/user/frankenstein-koerperpflege.service
+[Unit]
+Description=FranKenstein Koerperpflege -- er kuemmert sich selbst um seinen Leib (RAM/Swap/Platte/Temperatur)
+After=graphical-session.target
+# StartLimitBurst/IntervalSec stehen im [Unit]-Abschnitt (systemd-Vorgabe),
+# nicht im [Service]-Abschnitt. Bremse gegen einen Neustart-Loop, wie am
+# 2026-08-07 bei synteq-frank-wacht (Restart=always ohne Bremse blockierte
+# die Tastatur, 44 Units mussten hart abgeschaltet werden). Hier: hoechstens
+# 5 Neustarts in 5 Minuten, danach bleibt die Unit failed liegen statt
+# endlos neu zu starten.
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/entityos/voice
+Environment=VOICE_DIR=/opt/entityos/voice
+Environment=FRANKENSTEIN_UNIFIED_DB=%h/.local/share/agentzero/unified.db
+# Takt 60s -- eng genug, um ein volllaufendes Swap noch vor dem naechsten
+# Vorfall zu bemerken, weit genug, um selbst keine messbare Last zu sein.
+Environment=KOERPERPFLEGE_TAKT_S=60
+ExecStart=/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/koerperpflege.py
+# Bremse gegen Neustart-Loop (siehe StartLimit* oben): on-failure statt
+# always, plus 30s Abstand -- kein Prozess, der sich selbst in eine
+# Endlosschleife aus Abstuerzen und Sofort-Neustarts katapultieren kann.
+Restart=on-failure
+RestartSec=30
+Nice=15
+
+[Install]
+WantedBy=default.target
+===IMMUN UNIT===
+# /home/ai-core-node/.config/systemd/user/frankenstein-immunsystem.service
+[Unit]
+Description=FranKenstein Immunsystem -- Circuit-Breaker-Supervision + Architect-Eskalation (Gabriel, 2026-09-12)
+After=basic.target app.slice
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/immunsystem.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+===SHOW===
+ExecStart={ path=/opt/entityos/voice/venv/bin/python3 ; argv[]=/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/koerperpflege.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=22786048
+MemoryPeak=40677376
+TasksCurrent=1
+FragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-koerperpflege.service
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/immunsystem.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=5173248
+MemoryPeak=12607488
+TasksCurrent=1
+FragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-immunsystem.service
+===STATUS===
+● frankenstein-koerperpflege.service - FranKenstein Koerperpflege -- er kuemmert sich selbst um seinen Leib (RAM/Swap/Platte/Temperatur)
+     Loaded: loaded (/home/ai-core-node/.config/systemd/user/frankenstein-koerperpflege.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2026-09-12 02:16:03 +07; 7h ago
+   Main PID: 1792143 (python3)
+      Tasks: 1 (limit: 28222)
+     Memory: 21.7M (peak: 38.7M swap: 17.4M swap peak: 23.5M)
+        CPU: 21.442s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-koerperpflege.service
+             └─1792143 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/koerperpflege.py
+
+Sep 12 09:56:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 09:56:03 [KOERPERPFLEGE] Stufe kritisch (dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 39.26 MB
+Sep 12 09:57:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 09:57:03 [KOERPERPFLEGE] Stufe kritisch (dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 39.26 MB
+Sep 12 09:58:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 09:58:03 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 39.32 MB
+Sep 12 09:59:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 09:59:03 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 39.24 MB
+Sep 12 10:00:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:00:03 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 39.28 MB
+Sep 12 10:01:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:01:03 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 35.81 MB
+Sep 12 10:02:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:02:03 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 25.48 MB
+Sep 12 10:03:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:03:03 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 20.46 MB
+Sep 12 10:04:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:04:03 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 20.58 MB
+Sep 12 10:05:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:05:03 [KOERPERPFLEGE] Stufe kritisch (dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 20.94 MB
+Sep 12 10:06:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:06:03 [KOERPERPFLEGE] Stufe kritisch (dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 21.47 MB
+Sep 12 10:07:03 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:07:03 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 21.98 MB
+Sep 12 10:08:04 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:08:04 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 22.51 MB
+Sep 12 10:09:04 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:09:04 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 23.01 MB
+Sep 12 10:10:04 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:10:04 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 23.52 MB
+Sep 12 10:11:04 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:11:04 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 23.83 MB
+Sep 12 10:12:04 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:12:04 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 24.29 MB
+Sep 12 10:13:04 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:13:04 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 24.71 MB
+Sep 12 10:14:04 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:14:04 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 25.13 MB
+Sep 12 10:15:04 ai-core-node-projekt-frankenstein python3[1792143]: 2026-09-12 10:15:04 [KOERPERPFLEGE] Stufe kritisch (temperatur:eng,dienste:frankenstein-gespraech-adhoc) Aktion melden_nur RSS 25.68 MB
+● frankenstein-immunsystem.service - FranKenstein Immunsystem -- Circuit-Breaker-Supervision + Architect-Eskalation (Gabriel, 2026-09-12)
+     Loaded: loaded (/home/ai-core-node/.config/systemd/user/frankenstein-immunsystem.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2026-09-12 02:50:08 +07; 7h ago
+   Main PID: 2285100 (python3)
+      Tasks: 1 (limit: 28222)
+     Memory: 4.9M (peak: 12.0M swap: 4.0M swap peak: 4.0M)
+        CPU: 1min 30.805s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-immunsystem.service
+             └─2285100 /usr/bin/python3 /home/ai-core-node/.claude/star/immunsystem.py
+
+Sep 12 02:50:08 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-immunsystem.service - FranKenstein Immunsystem -- Circuit-Breaker-Supervision + Architect-Eskalation (Gabriel, 2026-09-12).
+Sep 12 02:50:08 ai-core-node-projekt-frankenstein python3[2285100]: 2026-09-12 02:50:08,433 INFO Immunsystem gestartet (10 Dienste ueberwacht).
+Sep 12 02:50:08 ai-core-node-projekt-frankenstein python3[2285100]: 2026-09-12 02:50:08,705 INFO [frankenstein-gespraech.service] Neustart-Versuch: ok
+Sep 12 07:25:08 ai-core-node-projekt-frankenstein python3[2285100]: 2026-09-12 07:25:08,733 INFO [frankenstein-buehne.service] Neustart-Versuch: ok

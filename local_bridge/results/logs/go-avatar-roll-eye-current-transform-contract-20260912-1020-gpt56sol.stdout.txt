@@ -1,0 +1,363 @@
+LIVE_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+=== ROLL STATE/TABLE ===
+421:                 drin, auf derselben Leinwand wie der Kopf, siehe kopfKoerperDrehSchritt()
+701:let kopfPose = null; // null | "roll" -- siehe kopfWeiterPlanen()/kopfRollTick()
+723:// Jetzt: kopfKurzNeigen() waehlt ein Ziel, kopfRollTick() faehrt in 5°-Schritten
+734:let kopfRollWert = 0;        // Grad des aktuell angezeigten Roll-Bildes
+742:  const richtung = ziel > kopfRollWert ? 5 : -5;
+743:  for(let w = kopfRollWert + richtung; ; w += richtung){
+750:function kopfRollTick(jetzt){
+766:  // kopfRollTick() auf).
+772:  kopfRollWert = schritt.w;
+795:// Bericht). ZWEI Fehler in der alten Formel `kopfRollWert - kDrehRot`:
+799://       kopfRollWert(eingebrannt) + kDrehRot(Wrapper). Fuer denselben
+801://       selben Wrapper) muss die EIGENE Drehung exakt kopfRollWert sein --
+809://   (2) HARTER SPRUNG OHNE DAEMPFUNG: kopfRollWert selbst springt bei jedem
+810://       kopfRollTick()-Schritt hart um 5° (neues Foto -- das braucht keine
+817://       Maske"-Optik aus dem Befund. Fix: kopfRollAusgleichDeg ist jetzt
+821://       Ziel (kopfRollWert, ohne Abzug) zulaeuft.
+822:let kopfRollAusgleichDeg = 0;
+841:const KOPF_ROLL_AUGEN_OFFSET = { // native 1536x1024-Leinwand-Pixel, exakt
+849:let augenOffsetDx = 0, augenOffsetDy = 0; // geglaettete ANZEIGE, siehe kopfRollAusgleichDeg
+855:function kopfKoerperDrehSchritt(){
+868:  // (STIRN-LUECKE-FIX): Ziel ist jetzt kopfRollWert selbst (kDrehRot kuerzt
+873:  // Geometrische Registrierung ist atomar mit dem bereits in kopfRollTick()
+877:  kopfRollAusgleichDeg = kopfRollWert;
+878:  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};
+879:  augenOffsetDx = zielOffset.dx;
+880:  augenOffsetDy = zielOffset.dy;
+881:  const augenDxCss = augenOffsetDx * _kopfCanvasScale;
+882:  const augenDyCss = augenOffsetDy * _kopfCanvasScale;
+884:    `translate(${augenDxCss.toFixed(2)}px, ${augenDyCss.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+956:    // kopfRollTick() oben -- atmen() schreibt Transform/Filter nur noch auf
+1394:  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim
+1397:  // KOPF_ROLL_AUGEN_OFFSET/kopfKoerperDrehSchritt oben) draufaddiert -- sonst
+1400:  const dxGesamt = dx + augenOffsetDx * _kopfCanvasScale;
+1401:  const dyGesamt = dy + augenOffsetDy * _kopfCanvasScale;
+1402:  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1640:// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+1644:// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+1663:  // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+1722:  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+1877:  kopfRollTick(t);
+1879:  kopfKoerperDrehSchritt();
+=== TRANSFORM CSS/DOM ===
+54:  @keyframes kamera-overshoot{0%{transform:scale(1) rotate(0deg)}40%{transform:scale(1.006) rotate(.12deg)}100%{transform:scale(1) rotate(0deg)}}
+147:  /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+156:     geraten): #kopf-dreh drehte bisher um seine eigene Bildmitte (CSS-
+161:     weil Kopf und Koerper um verschiedene Punkte "dachten". #koerper-dreh
+165:  #kopf-dreh{transform-origin:50% 58.59%}
+166:  #koerper-dreh{transform-origin:50% 100%}
+167:  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+179:     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+203:     also mit jeder Neigung/Drehung automatisch mit (siehe #kopf-dreh
+204:     transform-origin oben) -- der Uebergang bleibt an derselben Halsstelle,
+228:  @keyframes pose-overshoot{0%{transform:scale(1)}40%{transform:scale(1.016)}100%{transform:scale(1)}}
+287:  /* ⭐⭐ 2026-09-11 NACHTRAG 4: transform-origin auf denselben Halsanker wie
+288:     #kopf-dreh (50%/58.59% DER LEINWAND), aber umgerechnet in die eigene
+292:     aus denselben Zahlen gerechnet, die #kopf-dreh oben schon benutzt. Sitzt
+293:     der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+302:  #pupillen-glow{position:absolute;left:31%;top:12%;width:27%;height:auto;
+303:    transform-origin:70.38% 241.32%;
+310:     identische Prozente). Liegt als eigenes <img> UEBER #pupillen-glow, weil
+313:     Aufmerksamkeit), waehrend #pupillen-glow weiter erkennungs-gekoppelt
+315:  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+316:    transform-origin:70.38% 241.32%;
+324:    text-transform:uppercase}
+333:  @keyframes einblenden{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+355:  #senden:active{transform:scale(.96)}
+408:                 deshalb liegen sie in #kopf-dreh auf derselben Leinwand. -->
+413:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+422:                 (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+646:// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+709:// Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+782:// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+783:// liegt jetzt IN #kopf-dreh und bekommt darueber automatisch schon kDrehRot
+789:// gerechnet um denselben Halsanker (transform-origin oben, exakt umgerechnet).
+796://   (1) FALSCHES VORZEICHEN/DOPPELABZUG: #kopf-dreh vererbt kDrehRot per CSS
+807://       (transform-origin ~2,4 Patch-Hoehen unterhalb der Box, siehe oben)
+833:// reines CSS rotate() um transform-origin) -- es ist "rotiere um die
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+874:  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+899:// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+937:// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+1182:// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1191:// Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+1350:// immer, alle 1-4s) -- sichtbar wird sie trotzdem nur, wenn #pupillen-glow
+1396:  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+=== EXACT FUNCTION WINDOWS ===
+--- const KOPF_ROLL_AUGEN_OFFSET @ 841 ---
+831:// Bounding-Box unten-mittig auf den festen Halsanker (768,600) gepinnt.
+832:// Das ist KEINE Rotation um einen festen externen Punkt (das waere ein
+833:// reines CSS rotate() um transform-origin) -- es ist "rotiere um die
+834:// eigene Mitte, dann verschiebe die neue Box". Ein Punkt, der (wie der
+835:// Augen-Anker bei 610,207) weit oben im Kopf-Crop sitzt, bewegt sich
+836:// dadurch NICHT auf einem Kreisbogen um (768,600), sondern auf einem
+837:// deutlich asymmetrischen Pfad. Exakt nachgerechnet (kein Schaetzwert --
+838:// derselbe Marker-Punkt durch dieselbe PIL-Transformation geschickt, siehe
+839:// rig2/messen_augenanker_exakt.py + rig2/augen_anker_exakt.json) statt
+840:// weiter an der Rotationsformel zu drehen.
+841:const KOPF_ROLL_AUGEN_OFFSET = { // native 1536x1024-Leinwand-Pixel, exakt
+842:  "-25": {dx:-32.5, dy: 22.0}, "-20": {dx:-30.0, dy: 12.0},
+843:  "-15": {dx:-24.0, dy:  5.0}, "-10": {dx:-16.5, dy:  0.0},
+844:  "-5":  {dx: -9.5, dy: -1.0}, "0":   {dx:  0.0, dy:  0.0},
+845:  "5":   {dx: 10.5, dy:-29.0}, "10":  {dx: 22.0, dy:-55.5},
+846:  "15":  {dx: 35.0, dy:-77.5}, "20":  {dx: 47.5, dy:-97.0},
+847:  "25":  {dx: 62.5, dy:-112.0},
+848:};
+849:let augenOffsetDx = 0, augenOffsetDy = 0; // geglaettete ANZEIGE, siehe kopfRollAusgleichDeg
+850:function federSchritt(ist, v, ziel, steife, daempfung){
+851:  v += (ziel - ist) * steife - v * daempfung;
+852:  ist += v;
+853:  return [ist, v];
+854:}
+855:function kopfKoerperDrehSchritt(){
+856:  // Federziel aus dem ECHTEN Rollwert (12% davon, auf ±3° begrenzt) -- die
+857:  // Bildpose macht die Neigung, die Feder nur das kleine Nachschwingen.
+858:  const zielRot = Math.max(-3, Math.min(3, kopfRollSoll * 0.12));
+859:  [kDrehRot, kDrehRotV] = federSchritt(kDrehRot, kDrehRotV, zielRot, 0.020, 0.20);
+860:  [kDrehTy,  kDrehTyV ] = federSchritt(kDrehTy,  kDrehTyV,  0,      0.020, 0.20);
+861:  // 34% des AKTUELLEN (nicht Ziel-)Kopfwerts + eigene weichere Feder =
+862:  // Koerper folgt spaeter und schwaecher, ohne starren festen Versatz.
+863:  [bDrehRot, bDrehRotV] = federSchritt(bDrehRot, bDrehRotV, kDrehRot*0.34, 0.010, 0.26);
+864:  [bDrehTy,  bDrehTyV ] = federSchritt(bDrehTy,  bDrehTyV,  kDrehTy*0.34,  0.010, 0.26);
+865:  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+866:  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+868:  // (STIRN-LUECKE-FIX): Ziel ist jetzt kopfRollWert selbst (kDrehRot kuerzt
+--- function kopfRollTick @ 750 ---
+740:function kopfRollSequenzZu(ziel, fertig){
+741:  const schritte = [];
+742:  const richtung = ziel > kopfRollWert ? 5 : -5;
+743:  for(let w = kopfRollWert + richtung; ; w += richtung){
+744:    schritte.push({w, src: kopfRollDatei(w)});
+745:    if(w === ziel) break;
+746:  }
+747:  kopfRollSchritte = schritte; kopfRollIdx = 0; kopfRollLetzterT = 0;
+748:  kopfRollFertigFn = fertig || null;
+749:}
+750:function kopfRollTick(jetzt){
+751:  if(!kopfRollSchritte) return;
+752:  if(jetzt - kopfRollLetzterT < KOPF_ROLL_MS) return;
+753:  const schritt = kopfRollSchritte[kopfRollIdx];
+754:  const eintrag = bildLaden(schritt.src);
+755:  if(!eintrag.ok) return; // Frame noch nicht dekodiert -- warten statt halbes Bild zeigen
+756:  kopfRollLetzterT = jetzt;
+757:  const ein = kopfRollAktiv ? "kopf-schicht" : "kopf-schicht2";
+758:  const aus = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+759:  $(ein).src = schritt.src;
+760:  // ⭐⭐ PERF-FIX 2026-09-11: atmen() aktualisiert seit diesem Fix nur noch
+761:  // die aktuell sichtbare Kopf-Ebene (siehe atmen() oben) -- die Ebene, die
+762:  // hier gerade sichtbar wird, muss deshalb JETZT einmalig den brandaktuellen
+763:  // Atem-Wert bekommen, sonst zeigt sie beim ersten sichtbaren Frame noch den
+764:  // Wert von ihrem letzten Auftritt (Pop). _atmenTransform/_atmenFilter sind
+765:  // von atmen() diesen Frame schon gesetzt (schleife() ruft atmen() vor
+766:  // kopfRollTick() auf).
+767:  $(ein).style.transform = _atmenTransform;
+768:  $(ein).style.filter = _atmenFilter;
+769:  $(ein).style.opacity = "1";
+770:  $(aus).style.opacity = "0";
+771:  kopfRollAktiv = !kopfRollAktiv;
+772:  kopfRollWert = schritt.w;
+773:  kopfRollIdx++;
+774:  if(kopfRollIdx >= kopfRollSchritte.length){
+775:    const f = kopfRollFertigFn;
+776:    kopfRollSchritte = null; kopfRollFertigFn = null;
+777:    if(f) f();
+--- function kopfKoerperDrehSchritt @ 855 ---
+845:  "5":   {dx: 10.5, dy:-29.0}, "10":  {dx: 22.0, dy:-55.5},
+846:  "15":  {dx: 35.0, dy:-77.5}, "20":  {dx: 47.5, dy:-97.0},
+847:  "25":  {dx: 62.5, dy:-112.0},
+848:};
+849:let augenOffsetDx = 0, augenOffsetDy = 0; // geglaettete ANZEIGE, siehe kopfRollAusgleichDeg
+850:function federSchritt(ist, v, ziel, steife, daempfung){
+851:  v += (ziel - ist) * steife - v * daempfung;
+852:  ist += v;
+853:  return [ist, v];
+854:}
+855:function kopfKoerperDrehSchritt(){
+856:  // Federziel aus dem ECHTEN Rollwert (12% davon, auf ±3° begrenzt) -- die
+857:  // Bildpose macht die Neigung, die Feder nur das kleine Nachschwingen.
+858:  const zielRot = Math.max(-3, Math.min(3, kopfRollSoll * 0.12));
+859:  [kDrehRot, kDrehRotV] = federSchritt(kDrehRot, kDrehRotV, zielRot, 0.020, 0.20);
+860:  [kDrehTy,  kDrehTyV ] = federSchritt(kDrehTy,  kDrehTyV,  0,      0.020, 0.20);
+861:  // 34% des AKTUELLEN (nicht Ziel-)Kopfwerts + eigene weichere Feder =
+862:  // Koerper folgt spaeter und schwaecher, ohne starren festen Versatz.
+863:  [bDrehRot, bDrehRotV] = federSchritt(bDrehRot, bDrehRotV, kDrehRot*0.34, 0.010, 0.26);
+864:  [bDrehTy,  bDrehTyV ] = federSchritt(bDrehTy,  bDrehTyV,  kDrehTy*0.34,  0.010, 0.26);
+865:  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+866:  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+868:  // (STIRN-LUECKE-FIX): Ziel ist jetzt kopfRollWert selbst (kDrehRot kuerzt
+869:  // sich per CSS-Vererbung von selbst weg, siehe Kommentar), UND geglaettet
+870:  // per Lerp statt hartem Sprung -- entkoppelt den Flicken vom 5°-Sprung
+871:  // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel
+872:  // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).
+873:  // Geometrische Registrierung ist atomar mit dem bereits in kopfRollTick()
+874:  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+875:  // darf federn. Eine lokale Lerp-Verzoegerung erzeugt sonst 2-3 Frames lang
+876:  // absichtliche Fehlregistrierung zwischen Foto und Augen-/Blink-Overlay.
+877:  kopfRollAusgleichDeg = kopfRollWert;
+878:  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};
+879:  augenOffsetDx = zielOffset.dx;
+880:  augenOffsetDy = zielOffset.dy;
+881:  const augenDxCss = augenOffsetDx * _kopfCanvasScale;
+882:  const augenDyCss = augenOffsetDy * _kopfCanvasScale;
+--- kopfRollAusgleichDeg = @ 822 ---
+812://       kleine, aber stark gehebelte Flicken macht aus genau diesem
+813://       5°-Sprung einen sichtbaren Pop: bei ~2,4 Patch-Hoehen Hebelarm
+814://       reisst ein 5°-Sprung den Flicken um zweistellige Px auf der
+815://       Leinwand weg vom Gesicht -- fuer die ~110ms bis zum naechsten
+816://       Schritt/bis die Feder aufholt genau die "Stirn hochgeschobene
+817://       Maske"-Optik aus dem Befund. Fix: kopfRollAusgleichDeg ist jetzt
+818://       eine geglaettete ANZEIGE (schneller Lerp, 0.4/Frame -- faengt sich
+819://       in 2-3 Frames/<50ms, folgt dem echten Fotowinkel praktisch in
+820://       Echtzeit, aber ohne den harten Ruck), die auf das jetzt korrekte
+821://       Ziel (kopfRollWert, ohne Abzug) zulaeuft.
+822:let kopfRollAusgleichDeg = 0;
+823:// ⭐⭐⭐ 2026-09-12 VIERTE INSTANZ DERSELBEN FEHLERKLASSE, JETZT WIRKLICH
+824:// BEHOBEN (Koordinator-Befund + FRANK_AVATAR_RIG_V2/docs/build_rig_v2.py
+825:// gelesen statt weiter hand-gefittet): die drei vorherigen Fixes
+826:// (Halsnaht/Geisterkopf/Stirn-Luecke) korrigierten nur die ROTATION des
+827:// Augen-Flickens. Der eigentliche Rest-Fehler war eine fehlende
+828:// TRANSLATION: kopf/roll/*.png entstehen laut Erzeugungsskript per
+829:// transform_crop_about_anchor() -- Kopf wird um seine EIGENE Bildmitte
+830:// rotiert (PIL rotate(expand=True)), danach wird die neue, GROESSERE
+831:// Bounding-Box unten-mittig auf den festen Halsanker (768,600) gepinnt.
+832:// Das ist KEINE Rotation um einen festen externen Punkt (das waere ein
+833:// reines CSS rotate() um transform-origin) -- es ist "rotiere um die
+834:// eigene Mitte, dann verschiebe die neue Box". Ein Punkt, der (wie der
+835:// Augen-Anker bei 610,207) weit oben im Kopf-Crop sitzt, bewegt sich
+836:// dadurch NICHT auf einem Kreisbogen um (768,600), sondern auf einem
+837:// deutlich asymmetrischen Pfad. Exakt nachgerechnet (kein Schaetzwert --
+838:// derselbe Marker-Punkt durch dieselbe PIL-Transformation geschickt, siehe
+839:// rig2/messen_augenanker_exakt.py + rig2/augen_anker_exakt.json) statt
+840:// weiter an der Rotationsformel zu drehen.
+841:const KOPF_ROLL_AUGEN_OFFSET = { // native 1536x1024-Leinwand-Pixel, exakt
+842:  "-25": {dx:-32.5, dy: 22.0}, "-20": {dx:-30.0, dy: 12.0},
+843:  "-15": {dx:-24.0, dy:  5.0}, "-10": {dx:-16.5, dy:  0.0},
+844:  "-5":  {dx: -9.5, dy: -1.0}, "0":   {dx:  0.0, dy:  0.0},
+845:  "5":   {dx: 10.5, dy:-29.0}, "10":  {dx: 22.0, dy:-55.5},
+846:  "15":  {dx: 35.0, dy:-77.5}, "20":  {dx: 47.5, dy:-97.0},
+847:  "25":  {dx: 62.5, dy:-112.0},
+848:};
+849:let augenOffsetDx = 0, augenOffsetDy = 0; // geglaettete ANZEIGE, siehe kopfRollAusgleichDeg
+--- kopfRollAusgleichDeg = @ 877 ---
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+868:  // (STIRN-LUECKE-FIX): Ziel ist jetzt kopfRollWert selbst (kDrehRot kuerzt
+869:  // sich per CSS-Vererbung von selbst weg, siehe Kommentar), UND geglaettet
+870:  // per Lerp statt hartem Sprung -- entkoppelt den Flicken vom 5°-Sprung
+871:  // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel
+872:  // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).
+873:  // Geometrische Registrierung ist atomar mit dem bereits in kopfRollTick()
+874:  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+875:  // darf federn. Eine lokale Lerp-Verzoegerung erzeugt sonst 2-3 Frames lang
+876:  // absichtliche Fehlregistrierung zwischen Foto und Augen-/Blink-Overlay.
+877:  kopfRollAusgleichDeg = kopfRollWert;
+878:  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};
+879:  augenOffsetDx = zielOffset.dx;
+880:  augenOffsetDy = zielOffset.dy;
+881:  const augenDxCss = augenOffsetDx * _kopfCanvasScale;
+882:  const augenDyCss = augenOffsetDy * _kopfCanvasScale;
+883:  $("augen-blink").style.transform =
+884:    `translate(${augenDxCss.toFixed(2)}px, ${augenDyCss.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+885:}
+886:
+887:// ⭐ 2026-09-11 Crossfade statt hartem g.src=neu: ausdruckAktiv zeigt, welches
+888:// der zwei gestapelten RGBA-Bilder (#ausdruck-schicht/#ausdruck-schicht2)
+889:// gerade OBEN/sichtbar ist. Beim Wechsel wird das jeweils versteckte Element
+890:// neu befuellt und per opacity eingeblendet, das bisher sichtbare
+891:// ausgeblendet -- kein Bildsprung.
+892:// ⭐ 2026-09-11 (Bauauftrag Kopf-RGBA-Hauptebene): #gesicht/#gesicht2 haben
+893:// KEINE RGBA-Entsprechung fuer Blinzeln/Blickrichtung/Kopfneigung/6
+894:// Grundstimmungen -- diese vier Zweige (/augen/, /kopf/, /ausdruck/) sind
+895:// alte, opake, vorkomponierte Einzelbilder, die den jetzt durchscheinenden
+896:// Hintergrund wieder komplett verdecken wuerden. Deshalb tauscht diese
+897:// Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+898:// DOM) bleiben die sichtbare Dauerebene, das Blick-/Mundsignal kommt weiter
+899:// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+900:// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+901:// (per Signatur-Vergleich) und loest dafuer den Kamera-Nachschwung aus --
+902:// "passend zur Bewegung" (Gabriel), die Kamera reagiert, wenn sich Kopf/
+903:// Blick/Ausdruck aendern, auch ohne dass ein Bild dafuer existiert. Diese
+904:// Luecke (keine 1:1-RGBA-Entsprechung fuer diese vier Basiszustaende) ist
+--- augenOffsetDx = @ 849 ---
+839:// rig2/messen_augenanker_exakt.py + rig2/augen_anker_exakt.json) statt
+840:// weiter an der Rotationsformel zu drehen.
+841:const KOPF_ROLL_AUGEN_OFFSET = { // native 1536x1024-Leinwand-Pixel, exakt
+842:  "-25": {dx:-32.5, dy: 22.0}, "-20": {dx:-30.0, dy: 12.0},
+843:  "-15": {dx:-24.0, dy:  5.0}, "-10": {dx:-16.5, dy:  0.0},
+844:  "-5":  {dx: -9.5, dy: -1.0}, "0":   {dx:  0.0, dy:  0.0},
+845:  "5":   {dx: 10.5, dy:-29.0}, "10":  {dx: 22.0, dy:-55.5},
+846:  "15":  {dx: 35.0, dy:-77.5}, "20":  {dx: 47.5, dy:-97.0},
+847:  "25":  {dx: 62.5, dy:-112.0},
+848:};
+849:let augenOffsetDx = 0, augenOffsetDy = 0; // geglaettete ANZEIGE, siehe kopfRollAusgleichDeg
+850:function federSchritt(ist, v, ziel, steife, daempfung){
+851:  v += (ziel - ist) * steife - v * daempfung;
+852:  ist += v;
+853:  return [ist, v];
+854:}
+855:function kopfKoerperDrehSchritt(){
+856:  // Federziel aus dem ECHTEN Rollwert (12% davon, auf ±3° begrenzt) -- die
+857:  // Bildpose macht die Neigung, die Feder nur das kleine Nachschwingen.
+858:  const zielRot = Math.max(-3, Math.min(3, kopfRollSoll * 0.12));
+859:  [kDrehRot, kDrehRotV] = federSchritt(kDrehRot, kDrehRotV, zielRot, 0.020, 0.20);
+860:  [kDrehTy,  kDrehTyV ] = federSchritt(kDrehTy,  kDrehTyV,  0,      0.020, 0.20);
+861:  // 34% des AKTUELLEN (nicht Ziel-)Kopfwerts + eigene weichere Feder =
+862:  // Koerper folgt spaeter und schwaecher, ohne starren festen Versatz.
+863:  [bDrehRot, bDrehRotV] = federSchritt(bDrehRot, bDrehRotV, kDrehRot*0.34, 0.010, 0.26);
+864:  [bDrehTy,  bDrehTyV ] = federSchritt(bDrehTy,  bDrehTyV,  kDrehTy*0.34,  0.010, 0.26);
+865:  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+866:  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+868:  // (STIRN-LUECKE-FIX): Ziel ist jetzt kopfRollWert selbst (kDrehRot kuerzt
+869:  // sich per CSS-Vererbung von selbst weg, siehe Kommentar), UND geglaettet
+870:  // per Lerp statt hartem Sprung -- entkoppelt den Flicken vom 5°-Sprung
+871:  // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel
+872:  // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).
+873:  // Geometrische Registrierung ist atomar mit dem bereits in kopfRollTick()
+874:  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+875:  // darf federn. Eine lokale Lerp-Verzoegerung erzeugt sonst 2-3 Frames lang
+876:  // absichtliche Fehlregistrierung zwischen Foto und Augen-/Blink-Overlay.
+--- augenOffsetDx = @ 879 ---
+869:  // sich per CSS-Vererbung von selbst weg, siehe Kommentar), UND geglaettet
+870:  // per Lerp statt hartem Sprung -- entkoppelt den Flicken vom 5°-Sprung
+871:  // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel
+872:  // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).
+873:  // Geometrische Registrierung ist atomar mit dem bereits in kopfRollTick()
+874:  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+875:  // darf federn. Eine lokale Lerp-Verzoegerung erzeugt sonst 2-3 Frames lang
+876:  // absichtliche Fehlregistrierung zwischen Foto und Augen-/Blink-Overlay.
+877:  kopfRollAusgleichDeg = kopfRollWert;
+878:  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};
+879:  augenOffsetDx = zielOffset.dx;
+880:  augenOffsetDy = zielOffset.dy;
+881:  const augenDxCss = augenOffsetDx * _kopfCanvasScale;
+882:  const augenDyCss = augenOffsetDy * _kopfCanvasScale;
+883:  $("augen-blink").style.transform =
+884:    `translate(${augenDxCss.toFixed(2)}px, ${augenDyCss.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+885:}
+886:
+887:// ⭐ 2026-09-11 Crossfade statt hartem g.src=neu: ausdruckAktiv zeigt, welches
+888:// der zwei gestapelten RGBA-Bilder (#ausdruck-schicht/#ausdruck-schicht2)
+889:// gerade OBEN/sichtbar ist. Beim Wechsel wird das jeweils versteckte Element
+890:// neu befuellt und per opacity eingeblendet, das bisher sichtbare
+891:// ausgeblendet -- kein Bildsprung.
+892:// ⭐ 2026-09-11 (Bauauftrag Kopf-RGBA-Hauptebene): #gesicht/#gesicht2 haben
+893:// KEINE RGBA-Entsprechung fuer Blinzeln/Blickrichtung/Kopfneigung/6
+894:// Grundstimmungen -- diese vier Zweige (/augen/, /kopf/, /ausdruck/) sind
+895:// alte, opake, vorkomponierte Einzelbilder, die den jetzt durchscheinenden
+896:// Hintergrund wieder komplett verdecken wuerden. Deshalb tauscht diese
+897:// Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+898:// DOM) bleiben die sichtbare Dauerebene, das Blick-/Mundsignal kommt weiter
+899:// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+900:// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+901:// (per Signatur-Vergleich) und loest dafuer den Kamera-Nachschwung aus --
+902:// "passend zur Bewegung" (Gabriel), die Kamera reagiert, wenn sich Kopf/
+903:// Blick/Ausdruck aendern, auch ohne dass ein Bild dafuer existiert. Diese
+904:// Luecke (keine 1:1-RGBA-Entsprechung fuer diese vier Basiszustaende) ist
+905:// bewusst offen, siehe Bericht an den Koordinator -- kein stilles Verstecken.
+906:let _letzteZustandsSignatur = "";
+LIVE_POST_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+ROLL_EYE_TRANSFORM_CONTRACT_READ=PASS

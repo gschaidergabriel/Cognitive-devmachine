@@ -11,6 +11,11 @@ from typing import Any, Iterable, Protocol
 
 from .unified_store import now
 
+
+# DISPATCHING is deliberately a no-auto-submit state. After process reentry its
+# outcome may already have crossed an effect boundary; liveness must not turn into
+# a blind replay. The existing outer-spool journal can later reconcile it to a
+# terminal receipt/UNKNOWN, or an operator can reconcile explicit evidence.
 NO_AUTOMATIC_SUBMIT_STATES = frozenset({"DISPATCHING", "COMPLETED", "BLOCKED", "UNKNOWN", "FAILED"})
 
 

@@ -1,0 +1,532 @@
+===SKILL===
+---
+name: chatgpt
+description: >
+  ChatGPT-im-Browser als Auslagerungsziel (Gabriel-Auftrag 2026-08-26).
+  Nutze diesen Skill PROAKTIV, nicht nur auf Anfrage -- fuer Bildgenerierung,
+  Web-Recherche, Datenfusion, Programmieraufgaben, alles was sich logisch an
+  ChatGPT delegieren laesst ("so viel wie moeglich dahin auslagern"). Auch
+  wenn Gabriel "frag ChatGPT", "schick das an ChatGPT", "lager das aus"
+  sagt, oder eine Aufgabe stark von Recherche/Bild/Code-Generierung ohne
+  eigenen Werkzeugbedarf profitiert.
+---
+
+# ChatGPT -- Auslagerungs-Bruecke, kein Neubau
+
+Kein eigenes Browser-Skript -- duenne Bruecke (`stern.py chatgpt-*`) auf das
+bereits ECHTE, heute bestaetigt funktionierende Werkzeug
+`~/scripts/chatgpt_burst_worker_v2.sh` (30 versucht/25 gesendet/5
+fehlgeschlagen, `chatgpt_burst_state/SUMMARY_v2_20260826_054612.json`).
+Ziel-Projekt: ChatGPT-Projekt "clay science pipeline"
+(`gschaidergabriel/clay-global-research-entity`).
+
+## Proaktive Nutzung -- Gabriels Standing Policy
+
+Gabriel (memory `project_xeno_chatgpt_harness_permanent_tool.md`, 2026-08-26):
+ChatGPT im Browser fuer ALLES nutzen, was sich logisch dahin auslagern
+laesst -- Bildgenerierung, Web-Recherche, Datenfusion, Programmieren usw.
+ChatGPT kann viel, hat viele Plugins; das aktiv mitdenken statt nur bei
+explizitem Auftrag. Token-Sparsamkeit dabei generell im Blick behalten.
+
+## HARTE REGEL -- niemals selbst im Repo der Forschungsentitaet wuehlen
+
+Gabriel-Korrektur, 2026-08-27, nachdem ich selbst per SSH/git log/find auf dem
+VPS im `clay-global-research-entity`-Repo herumgesucht habe, um den Xeno-
+Trainingsstand zu verifizieren -- das war falsch und teuer:
+
+**Du durchsuchst wenn es irgend geht NIE das Repo der Forschungsentitaet
+selbst (kein SSH/git log/find/grep auf `frank-api`/`clayverse`/
+`clay-global-research-entity` fuer Recherchezwecke).** Stattdessen: frag
+sie in EINER ChatGPT-Session. Jedes Token, das du dadurch sparst, ist gut.
+**Die Schnittstelle zu allen Informationen innerhalb der Forschungsentitaet
+ist sie selbst** -- nicht ihr Dateisystem, das du dir mit Bash-Werkzeugen
+mechanisch zusammenklaubst.
+
+Generell: jedes Forschungswissen, das du nicht schon im eigenen Memory
+hast, laesst du dir von ihr KOMPRIMIERT geben (kurze, dichte Antwort
+anfordern, keine Rohdaten-Dumps). **Nur wenn ChatGPT es selbst nicht hat**
+(sagt sie explizit, dass sie es nicht weiss/findet), fragst du DANN erst
+den Nutzer, bevor du selbst zu suchen anfaengst -- Reihenfolge: 1) eigenes
+Memory, 2) ChatGPT fragen (komprimiert), 3) Nutzer fragen, 4) erst als
+allerletzter Ausweg selbst im Dateisystem/Repo suchen, und auch dann nur
+mit expliziter Erlaubnis.
+
+## Bekannter Bug -- Zeilenumbrueche brechen die Texteingabe (2026-08-27)
+
+Reproduziert: ein `--prompts`-Text mit `\n`/`\n\n` (mehrzeilig) fuehrt
+zuverlaessig zu `FAILED_TYPE` ("text mismatch on tab 1 (got '')") --
+NICHT die Textlaenge ist das Problem (5026 UND 1314 Zeichen scheiterten
+mehrzeilig identisch), sondern die Zeilenumbrueche selbst (vermutlich
+loest ein automatisiertes Enter/Newline im ChatGPT-Eingabefeld ein
+Absenden/Zuruecksetzen aus, bevor die Verifikation den Text noch lesen
+kann). Fix, real verifiziert: denselben Text OHNE jeden `\n` (einzeilig,
+Absaetze durch Leerzeichen statt Zeilenumbruch getrennt) senden -- 1371
+Zeichen einzeilig ging 2/2 sofort durch, davor 3/3 mehrzeilig gescheitert.
+**Baue `--prompts`-Texte deshalb IMMER einzeilig zusammen** (kein
+Python-Triple-Quote-String mit eingebetteten Zeilenumbruechen direkt als
+Trigger verwenden -- vorher explizit durch Leerzeichen ersetzen).
+
+## Bekannter Bug -- `browse connect` NIE wiederholt aufrufen (2026-08-27)
+
+Reproduziert, real Gabriel gestoert: `browse connect` (aus dem gstack-Skill,
+`~/.claude/skills/gstack/browse/dist/browse connect`) startet JEDES MAL ein
+NEUES sichtbares Chrome-Fenster und stiehlt den Fokus -- es ist NICHT
+idempotent, ein zweiter Aufruf verbindet nicht mit dem bestehenden Fenster,
+sondern oeffnet ein drittes. Bei 3x Aufruf = 3 aufploppende Fenster.
+**Richtig fuers "Nutzer soll ohne Fokus-Diebstahl zusehen/uebernehmen
+koennen"-Bedarf ist `browse handoff [message]`** ("Open visible Chrome at
+current page for user takeover") oder die bereits gebaute `/browser`-
+Dashboard-Seite (noVNC-Einbettung, PHASE 45) -- NICHT wiederholtes
+`connect`. Aufraeumen nach einem Fehlgriff: `browse disconnect` (bringt
+den Daemon zurueck in Headless-Modus, schliesst das/die sichtbaren
+Fenster). Vor JEDEM Eingriff an diesem Werkzeug: den vollen `gstack`-Skill
+laden (`Skill(gstack)`), nicht am rohen `browse`-Binary durch Trial-and-
+Error herumraten -- der Skill dokumentiert `connect`/`disconnect`/
+`handoff`/`focus`/`resume` klar in der Command-Referenz.
+
+## Aktivierungs-gestuftes Login -- MENSCH loggt sich ein, nie das Modell
+
+Erster Schritt IMMER: `python3 ~/.claude/star/stern.py chatgpt-login-status`
+(rein lesend, kein Geheimniswert). Liefert `eingeloggt: true/false` per
+Cookie-Heuristik gegen den `gstack-browse`-Daemon (derselbe Daemon, den
+`chatgpt_burst_worker_v2.sh` benutzt -- siehe unten, IMMER dieselbe
+Instanz treffen).
+
+Wenn `eingeloggt: false`:
+1. Sag dem Nutzer klar: "ChatGPT-Sitzung fehlt/abgelaufen -- bitte im
+   Browserfenster selbst einloggen." **Das Modell tippt nie ein Passwort,
+   nie einen 2FA-Code, nie eine E-Mail fuer diesen Login ein** -- exakt
+   dieselbe Disziplin wie beim Credentials-Vault (PHASE 18): Mensch tippt
+   Geheimnisse direkt.
+2. Der `gstack-browse`-Daemon laeuft **headed** (bestaetigt: `Mode: headed`)
+   -- das Browserfenster ist sichtbar/erreichbar (Xvfb `:99`, ggf. per
+   `gstack-connect-chrome`/VNC). Fuehre den Nutzer dorthin, oder biete
+   `$B cookie-import-browser` an, falls er stattdessen aus seinem echten
+   Chromium-Profil importieren will.
+3. Nach dem menschlichen Login: `stern.py chatgpt-login-bestaetigen
+   [--konto <label>]`. Prueft NOCHMAL mechanisch (Cookie-Anzahl > 0),
+   bucht dann eine **Status-Marke** im Credentials-Vault (PHASE 18) --
+   **NICHT das Rohcookie selbst**. Das Sitzungscookie bleibt ausschliesslich
+   im Daemon-eigenen `~/.gstack/chromium-profile/`, das `$B cookies`
+   ohnehin schon redigiert ausgibt (Sitzungswerte werden dort serverseitig
+   zensiert). Eine Zweitkopie im Tresor waere eine zusaetzliche, schlechter
+   geschuetzte Kopie eines Session-Secrets -- bewusst nicht gemacht.
+
+Ohne bestaetigten Login verweigert `chatgpt-senden` den Versuch NICHT MEHR
+einfach (frueher: fail-closed) -- siehe PHASE 46b direkt darunter.
+
+## PHASE 46b -- automatischer Free-Pool-Fallback statt manuellem Neu-Login (2026-08-27)
+
+Bleibt die Bruecke auch nach `_chatgpt_login_sicherstellen()`s automatischem
+Cookie-Wiederherstellungsversuch nicht eingeloggt, schalten `chatgpt_senden()`
+und `chatgpt_ernten()` in `stern.py` jetzt SELBST auf
+`~/.claude/star/harness_aider.py fallback-start` um -- kein manueller
+Neu-Login mehr noetig, um weiterzuarbeiten:
+
+- Probiert NVIDIA Nemotron-3-Super, dann Mistral Small (Free-Pool) --
+  schaltet das aktive Modell dafuer PROGRAMMATISCH um (kein UI-Klick).
+- Laeuft im harness_aider.py-**Forschungsmodus**: darf (anders als der
+  normale Sandbox-Testlauf) tatsaechlich im echten
+  `~/clay-global-research-entity`-Repo committen+pushen, aber NUR unter
+  `research_entity/topic_packets/fallback-runs/<paket_id>/` (harte
+  Datei-Allowlist, mechanisch geprueft -- jeder Verstoss verwirft den
+  GESAMTEN Lauf per `git reset --hard`) und NUR wenn `harness_audit.py`
+  (unabhaengiger git-Verlauf-Abgleich) exit 0 meldet.
+- Meldet sich bei der Forschungsentitaet als eigener Akteur an:
+  `actor_id=freepool-fallback-secondary`, decision_weight 0.5 (niedriger
+  als `chatgpt-secondary`s 1.0 -- kleineres Modell, Einzelschuss, siehe
+  `research_entity/global/RESEARCH_ACTOR_REGISTRY.json`). Jeder Lauf
+  schreibt zusaetzlich eine `PROVENANCE.json`, vom Harness selbst erzeugt
+  (nicht vom Modell) -- die Herkunft haengt nicht davon ab, ob das Modell
+  die Anweisung befolgt.
+- Ergebnis geht IMMER in beide Richtungen: dauerhaft als Commit im
+  Forschungsentitaets-Repo UND direkt im Rueckgabewert
+  (`ergebnis["laeufe"][i]["antwort"]` bei senden, `ergebnis["fallback_ergebnisse"]`
+  bei ernten -- eine kleine lokale JSONL-Warteschlange
+  `chatgpt_fallback_ergebnisse.jsonl` haelt das send-dann-ernten-Bild intakt).
+- `chatgpt_senden()` loest den Fallback NICHT bei `dry_run=True` und NICHT
+  bei leerer `prompts`-Liste aus.
+- `chatgpt_ernten()` startet selbst KEINEN neuen Fallback-Lauf (nichts zu
+  senden) -- liefert nur, was aus vorherigen `chatgpt_senden()`-Fallback-
+  Laeufen noch in der Warteschlange wartet.
+
+Real getestet 2026-08-27 (echte NVIDIA-API-Aufrufe, echter Push auf
+`gschaidergabriel/clay-global-research-entity`): Aktivierungssperre,
+Preflight (sauberer + per fast-forward aktueller Ausgangszustand -- das
+Repo hat einen aktiven, unabhaengigen Zweit-Schreiber),
+Allowlist-Verstoss+Reset (deterministisch simuliert), Direktantwort an den
+Aufrufer, Warteschlangen-Uebergabe an `chatgpt_ernten()`.
+
+## Absturz-Recovery + Lock (PHASE 30/Nachtrag, `stern.py`)
+
+`chatgpt_senden()`/`chatgpt_ernten()` laufen jetzt durch zwei Schutzschichten,
+beide in `stern.py`:
+
+- **`_chatgpt_lauf_mit_recovery()`**: erkennt bekannte Absturzsignaturen
+  (haengender/0-Tab-Daemon) in stdout/stderr des Worker-Skripts. Killt den
+  toten Daemon-Prozess hart, raeumt Singleton-Locks, verbindet **headed**
+  neu ueber `$B connect` (NICHT `status`/`newtab` -- das landet im falschen
+  `launched`-Modus und haengt an Cloudflares Challenge, real gefundener
+  Bug), navigiert zur Projekt-URL, prueft den Login per echtem
+  Auth-Cookie-Check neu (nicht mehr am blossen `__cf_bm`-Cloudflare-Cookie,
+  das faelschlich als "eingeloggt" zaehlte -- zweiter real gefundener Bug).
+  Bis zu 2 Retries, 15s/45s-Backoff, dann sauberer Abbruch statt endlosem
+  Haengen. **Tippt nie ein Passwort/2FA/E-Mail ein** -- verliert die
+  Sitzung dabei wirklich (Cookies weg), meldet das ehrlich
+  (`sitzung_verloren: true`) und bricht ab, der Mensch loggt selbst ein.
+  Das repariert nur den DAEMON-/PROZESS-Absturz, nicht Anmeldedaten-Verlust.
+- **`_chatgpt_lock()`**: echter `flock` um `chatgpt_senden`/`chatgpt_ernten`
+  (Default-Timeout 1200s, `--lock-timeout-s` einstellbar). Ein zweiter
+  gleichzeitiger Aufrufer (z.B. ein paralleler Subagent) WARTET jetzt
+  automatisch statt sich mit dem ersten die Tabs wegzureissen -- das alte,
+  nur dokumentierte Kollisionsproblem (mehrere gleichzeitige Nutzer
+  desselben `gstack-browse`-Daemons) ist damit strukturell geloest, nicht
+  nur als Warnung festgehalten. Getestet mit zwei echten parallelen
+  Python-Prozessen (serialisiert korrekt) und zweimal live gegen den
+  echten Daemon (Kill+Recovery nachweislich funktionsfaehig).
+
+## Do's-and-Don'ts-Wissensdatei + automatische Injektion (PHASE 30)
+
+`~/.claude/star/daten/chatgpt_automation_dos_donts.md` -- aus echten
+Logs eines Tages gewonnene Betriebsregeln (Worker-Obergrenze ~30,
+Ein-Tab-Disziplin, normale Fehlerquote bei grossen Bursts, was bei einem
+Absturz konkret zu tun ist). Wird ueber `_chatgpt_dos_donts_einmalig()`
+bei der ERSTEN `chatgpt-senden`/`chatgpt-ernten`/`chatgpt-login-status`-
+Nutzung pro Sitzung automatisch als `dos_donts_hinweis` mitgeliefert
+(einmalig, kein Dauerdienst, kein LLM-Aufruf).
+
+## CLI
+
+```
+python3 ~/.claude/star/stern.py chatgpt-login-status
+python3 ~/.claude/star/stern.py chatgpt-login-bestaetigen [--konto <label>]
+
+python3 ~/.claude/star/stern.py chatgpt-senden \
+  --prompts '["triggerwort2"]' --num-workers 30 --sleep 2 \
+  [--ram-schwelle-mb 2000] [--tab-recycle-alle 5] [--tab-hardlimit 3] [--dry-run]
+
+python3 ~/.claude/star/stern.py chatgpt-ernten [--timeout-s 900]
+
+# Batch-Faehigkeit (existiert seit v2, war lange kaum genutzt): mehrere
+# VERSCHIEDENE Forschungsfragen in EINEM Aufruf, laufen automatisch
+# nacheinander (ein Trigger je Sub-Lauf):
+python3 ~/.claude/star/stern.py chatgpt-senden \
+  --prompts '["Frage/Auftrag A", "Frage/Auftrag B", "Frage/Auftrag C"]' \
+  --num-workers 5 --sleep 2
+```
+
+`chatgpt-senden`/`chatgpt-ernten` sind duenne `subprocess`-Wrapper um das
+echte Skript -- KEINE eigene Playwright-/Browser-Logik in `stern.py`.
+`--prompts` ist eine JSON-Liste. Das Skript selbst kennt nur EINEN
+Triggertext pro Lauf (Env `TRIGGER`, Vorgabe `triggerwort2` -- der
+eigentliche Auftrag liegt in der ChatGPT-Projekt-Konfiguration selbst, der
+Triggertext startet ihn nur). Mehrere VERSCHIEDENE Texte in `--prompts`
+fuehren zu mehreren NACHEINANDER laufenden Skriptaufrufen (ein Trigger je
+Lauf) -- die innere Worker-Schleife des Skripts bleibt unveraendert.
+`--dry-run` baut nur den Befehl/die Env-Variablen und gibt sie zurueck,
+ohne das Skript wirklich zu starten -- nutze das, um eine Konfiguration
+vor einem echten (Rate-Limit-riskanten) Lauf zu pruefen.
+
+Sende- und Ernte-Phase bleiben GETRENNT (v2-Design: gesendete
+Konversations-URLs landen in `sent_urls_v2.txt`, `chatgpt-ernten` liest sie
+spaeter einzeln nach -- keine Inline-Poll-Schleife waehrend des Sendens).
+
+## Gezielter Harvest eigener URLs -- NEUER Standardweg statt `chatgpt-ernten`-Vollscan (Gabriel-Anweisung 2026-08-27)
+
+**Fund, real erlebt:** `chatgpt-ernten` liest IMMER die komplette geteilte
+`sent_urls_v2.txt` von vorne durch -- bei mehreren parallel laufenden
+Sessions/Agenten (Normalfall, nicht die Ausnahme) sind da schnell 100+
+fremde, teils tagealte Eintraege drin. Bei hoher gleichzeitiger Last auf
+denselben Daemon triggert chatgpt.com eine Cloudflare-Challenge
+("Just a moment..."-Interstitial) auf praktisch JEDE Navigation --
+===BURST HEADER===
+#!/bin/bash
+# chatgpt_burst_worker_v2.sh
+#
+# v2 of chatgpt_burst_worker.sh. Key change vs v1: SEQUENTIAL single-tab
+# discipline instead of many tabs open in parallel (v1 left 65 tabs open,
+# crashed Chrome, ate all RAM). v2 rules:
+#   - max 1 tab open at almost all times (briefly 2 during tab-recycle swap)
+#   - resource guard checked before every worker (free RAM + tab count)
+#   - hard hardware ceiling: if $B tabs ever shows >3 lines, force-close
+#   - send verified by URL change (.../project -> .../c/<id>), not by
+#     "no rate-limit modal" (v1's modal check was too pessimistic/unreliable)
+#   - conversations are NOT polled to completion inline. Sent URLs are
+#     recorded to a state file; a separate --harvest run opens them later,
+#     one at a time, to check/collect results.
+#
+# Usage:
+#   Send phase (default):
+#     NUM_WORKERS=30 SLEEP_BETWEEN_WORKERS=2 ~/scripts/chatgpt_burst_worker_v2.sh
+#   Harvest phase (separate, later, on saved URLs):
+#     ~/scripts/chatgpt_burst_worker_v2.sh --harvest
+#
+# Config knobs (env vars, all optional):
+#   NUM_WORKERS            default 30   - how many triggerwort2 sends to attempt
+#   SLEEP_BETWEEN_WORKERS  default 2    - seconds between workers
+#   RAM_THRESHOLD_MB       default 2000 - min available RAM (MB) required to proceed
+#   TAB_RECYCLE_EVERY      default 5    - close+reopen fresh tab every N workers
+#   TAB_HARDLIMIT          default 3    - if $B tabs ever exceeds this many lines, panic-close
+
+set -uo pipefail
+
+export PATH="$HOME/.bun/bin:$PATH"
+B="$HOME/.claude/skills/gstack/browse/dist/browse"
+
+# gstack browse scopes its daemon (+ browser context + cookies) to the
+# CALLER'S cwd (~/.gstack/browse.json vs <other-dir>/.gstack/browse.json are
+# separate daemons with separate logins). Pin to $HOME explicitly so this
+# script always talks to the same daemon regardless of where it's invoked
+# from — discovered the hard way: invoking from a different cwd silently
+# creates/uses a brand-new, unauthenticated daemon.
+cd "$HOME" || { echo "FATAL: cannot cd to \$HOME"; exit 1; }
+
+PROJECT_URL="https://chatgpt.com/g/g-p-6a7644f542508191b324659134fb593b/project"
+STATE_DIR="$HOME/scripts/chatgpt_burst_state"
+# TRIGGER overridable via env (stern.py chatgpt-senden wrapper sets this
+# per distinct prompt text); default unchanged from original v2 behavior.
+TRIGGER="${TRIGGER:-triggerwort2}"
+
+NUM_WORKERS="${NUM_WORKERS:-30}"
+SLEEP_BETWEEN_WORKERS="${SLEEP_BETWEEN_WORKERS:-2}"
+RAM_THRESHOLD_MB="${RAM_THRESHOLD_MB:-2000}"
+TAB_RECYCLE_EVERY="${TAB_RECYCLE_EVERY:-5}"
+TAB_HARDLIMIT="${TAB_HARDLIMIT:-3}"
+# Gabriel, 2026-08-26 (verbally, re-confirmed 2026-08-27): after spawning a
+# burst of workers, a real ChatGPT rate-limit needs a STUBBORN wait of 5-7
+# minutes before it clears -- the previous single fixed 90s here was too
+# short and just ran straight into Phase B still blocked. 360s = 6min,
+# middle of that band. Overridable for testing.
+RATE_LIMIT_WAIT_S="${RATE_LIMIT_WAIT_S:-360}"
+
+INPUT_SEL='#prompt-textarea'
+SEND_SEL='[data-testid="send-button"]'
+DISMISS_SEL='button:has-text("Got it")'
+RATE_LIMIT_TEXT="Too many requests"
+# LESSON (2026-08-27, found live via a real multi-paragraph review $TRIGGER):
+# `$B type` is Playwright's page.keyboard.type(), which sends every char as
+# a real keypress -- a literal newline (0x0A) inside $TRIGGER is typed as an
+# actual Enter keypress, and ChatGPT's compose box submits-on-Enter (only
+# Shift+Enter inserts a newline). A multi-line $TRIGGER therefore gets
+# submitted PARTWAY THROUGH typing, the box goes empty, and the script's
+# own text-match retry logic marks it FAILED_TYPE even though a (truncated,
+# garbage) message actually went out. Callers (incl. stern.py chatgpt-senden
+# --prompts) MUST pass single-line $TRIGGER text -- join paragraphs with
+# " " or " || ", never a real newline. Literal two-char "\n" (backslash+n,
+# e.g. inside a quoted training-sample excerpt) is fine, that's not 0x0A.
+
+mkdir -p "$STATE_DIR"
+RUN_TS="$(date +%Y%m%d_%H%M%S)"
+LOG="$STATE_DIR/burst_v2_${RUN_TS}.log"
+SENT_URLS_FILE="$STATE_DIR/sent_urls_v2.txt"
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG"
+}
+
+# ---------------------------------------------------------------------------
+# helpers: tab bookkeeping
+# ---------------------------------------------------------------------------
+tab_ids() {
+    $B tabs 2>/dev/null | grep -oP '\[\K[0-9]+(?=\])'
+}
+
+active_tab_id() {
+    local id
+    id=$($B tabs 2>/dev/null | grep '→' | grep -oP '\[\K[0-9]+(?=\])')
+    if [ -z "$id" ]; then
+        id=$(tab_ids | tail -1)
+    fi
+    echo "$id"
+}
+
+close_all_except() {
+    local keep="$1"
+    local id
+    for id in $(tab_ids); do
+        if [ "$id" != "$keep" ]; then
+            $B closetab "$id" >>"$LOG" 2>&1
+            log "closed stray tab $id (keeping $keep)"
+        fi
+    done
+}
+
+enforce_tab_hardlimit() {
+    local keep="$1"
+    local n
+    n=$(tab_ids | wc -l)
+    if [ "$n" -gt "$TAB_HARDLIMIT" ]; then
+        log "BUG_FOUND: tab hardlimit exceeded ($n tabs open, limit=$TAB_HARDLIMIT), force-closing all but $keep"
+        close_all_except "$keep"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# CRITICAL: gstack browse's root/local CLI can NEVER recover from 0 open
+# tabs. getActiveSession() (server.ts) is called unconditionally for every
+# command except a scoped-token newtab path we don't use — so if the tab
+# count ever hits 0, goto/newtab/tabs/text/etc. all fail with "No active
+# page" forever, and the only fix is restarting the whole daemon process,
+# which throws away the in-memory browser context and any imported cookies
+# (confirmed by hand during v2 testing: a bricked daemon needed a full
+# cookie-import-browser re-run to get chatgpt.com auth back at all, and
+# even then Cloudflare's Turnstile challenge did not reliably clear on the
+# fresh headless fingerprint). NEVER call close_all_except with a sentinel
+# that matches no real tab id ("__none__") — that was v1-of-v2's bug and it
+# bricked a real login. Always reuse an existing tab as the anchor; only
+# ever ADD a tab (newtab) while at least one other tab is still alive, then
+# close the old one after the new one is confirmed.
+# ---------------------------------------------------------------------------
+ensure_single_tab_at() {
+    local url="$1"
+    local ids first
+    ids=$(tab_ids)
+    if [ -z "$ids" ]; then
+        log "FATAL: 0 tabs open on this daemon. This is NOT recoverable via the CLI (root client always needs an active page) — restarting the daemon would also drop the browser context/cookies. Manual fix needed (re-run cookie-import) before this script can proceed."
+        return 1
+    fi
+    first=$(echo "$ids" | head -1)
+    if [ "$(echo "$ids" | wc -l)" -gt 1 ]; then
+        close_all_except "$first"
+    fi
+    $B tab "$first" >>"$LOG" 2>&1
+    $B goto "$url" >>"$LOG" 2>&1
+    CURRENT_TAB="$first"
+    return 0
+}
+
+# ---------------------------------------------------------------------------
+# helper: resource guard. Returns 0 = ok to proceed, 1 = abort cycle.
+# ---------------------------------------------------------------------------
+resource_guard() {
+    local avail
+    avail=$(free -m | awk '/^Mem:/{print $7}')
+    if [ "$avail" -ge "$RAM_THRESHOLD_MB" ]; then
+        return 0
+    fi
+
+    log "RESOURCE_GUARD: low RAM avail=${avail}MB < threshold=${RAM_THRESHOLD_MB}MB, pausing 30s"
+    sleep 30
+
+    local tcount active
+    tcount=$(tab_ids | wc -l)
+    if [ "$tcount" -gt 2 ]; then
+        log "RESOURCE_GUARD: $tcount tabs open during low-RAM pause, trimming to active tab"
+        active=$(active_tab_id)
+        close_all_except "$active"
+    fi
+
+    avail=$(free -m | awk '/^Mem:/{print $7}')
+    if [ "$avail" -lt "$RAM_THRESHOLD_MB" ]; then
+        log "RESOURCE_GUARD_PAUSE: still low RAM avail=${avail}MB after tab cleanup, aborting cycle to avoid overload"
+        return 1
+    fi
+    log "RESOURCE_GUARD: recovered, avail=${avail}MB, continuing"
+    return 0
+}
+
+is_rate_limited() {
+    local txt
+    txt=$($B text 2>/dev/null)
+    echo "$txt" | grep -q "$RATE_LIMIT_TEXT"
+}
+
+dismiss_rate_limit() {
+    $B click "$DISMISS_SEL" >>"$LOG" 2>&1
+    sleep 1
+}
+
+# ---------------------------------------------------------------------------
+# helper: verify send succeeded by URL transition (.../project -> .../c/<id>)
+# echoes the new url and returns 0 on success, returns 1 on failure (still on /project)
+# ---------------------------------------------------------------------------
+verify_send() {
+    local tries=3
+    local t u
+    for ((t = 1; t <= tries; t++)); do
+        sleep 2
+        u=$($B url 2>/dev/null)
+        if [[ "$u" == *"/c/"* ]]; then
+            echo "$u"
+            return 0
+        fi
+        log "verify_send: attempt $t/$tries, url still '$u'"
+    done
+    return 1
+}
+
+# ---------------------------------------------------------------------------
+# harvest mode
+# ---------------------------------------------------------------------------
+run_harvest() {
+    log "=== HARVEST MODE START ==="
+    if [ ! -f "$SENT_URLS_FILE" ]; then
+        log "no $SENT_URLS_FILE found, nothing to harvest"
+        exit 1
+    fi
+
+    local harvested_done=0 harvested_pending=0 harvested_lost=0
+
+    while IFS=$'\t' read -r worker_id url sent_at; do
+        [ -z "${url:-}" ] && continue
+
+        if ! resource_guard; then
+            log "HARVEST: aborting remaining harvest due to resource guard"
+            break
+        fi
+
+        # single-tab discipline: reuse the existing tab, just navigate it.
+        # (never close-then-reopen — see ensure_single_tab_at comment: closing
+        # the last tab bricks the daemon beyond CLI repair.)
+        if ! ensure_single_tab_at "$url"; then
+            log "HARVEST: aborting remaining harvest, daemon has 0 tabs"
+            break
+        fi
+        enforce_tab_hardlimit "$CURRENT_TAB"
+
+        timeout 8 "$B" wait --networkidle >>"$LOG" 2>&1
+        sleep 1
+
+        txt=$($B text 2>/dev/null)
+        stopping=$($B snapshot -i 2>/dev/null | grep -ic "Stop answering")
+
+        if echo "$txt" | grep -q "Worked for" && [ "${stopping:-0}" -eq 0 ]; then
+            log "HARVEST worker $worker_id: DONE ($url)"
+            # worker_id alone collides across separate send runs (each run
+            # restarts numbering at 1) -- 5/6 results silently overwrote each
+            # other on 2026-08-26 when several single-worker runs were
+            # harvested back to back. Key by the conversation id from the URL
+            # (globally unique) instead; fall back to a worker_id+timestamp
+            # key only if the URL doesn't have the expected /c/<id> shape.
+            conv_id=$(echo "$url" | grep -oP '/c/\K[a-zA-Z0-9-]+' | head -1)
+            if [ -n "$conv_id" ]; then
+===CLI===
+usage: stern.py chatgpt-senden [-h] [--prompts PROMPTS]
+                               [--num-workers NUM_WORKERS] [--sleep SLEEP]
+                               [--ram-schwelle-mb RAM_SCHWELLE_MB]
+                               [--tab-recycle-alle TAB_RECYCLE_ALLE]
+                               [--tab-hardlimit TAB_HARDLIMIT] [--dry-run]
+                               [--lock-timeout-s LOCK_TIMEOUT_S]
+
+options:
+  -h, --help            show this help message and exit
+  --prompts PROMPTS     JSON-Liste von Texten, z.B. '["triggerwort2"]' -- leer
+                        = Skript-Default
+  --num-workers NUM_WORKERS
+  --sleep SLEEP
+  --ram-schwelle-mb RAM_SCHWELLE_MB
+  --tab-recycle-alle TAB_RECYCLE_ALLE
+  --tab-hardlimit TAB_HARDLIMIT
+  --dry-run
+  --lock-timeout-s LOCK_TIMEOUT_S
+                        max. Wartezeit auf den chatgpt-Daemon-Lock, falls ein
+                        anderer Aufruf gerade laeuft (Default 1200s/20min)
+usage: stern.py chatgpt-ernten [-h] [--timeout-s TIMEOUT_S]
+                               [--lock-timeout-s LOCK_TIMEOUT_S]
+
+options:
+  -h, --help            show this help message and exit
+  --timeout-s TIMEOUT_S
+  --lock-timeout-s LOCK_TIMEOUT_S
+                        max. Wartezeit auf den chatgpt-Daemon-Lock, falls ein
+                        anderer Aufruf gerade laeuft (Default 1200s/20min)

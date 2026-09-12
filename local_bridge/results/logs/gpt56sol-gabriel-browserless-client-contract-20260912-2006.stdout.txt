@@ -1,0 +1,687 @@
+=== DEPLOY ===
+#!/usr/bin/env bash
+set -euo pipefail
+
+EXPECTED_USER="ai-core-node"
+EXPECTED_HOST="ai-core-node-projekt-frankenstein"
+DB="$HOME/.local/share/agentzero/unified.db"
+LIVE_STAR="$HOME/.claude/star"
+LIVE_STERN="$LIVE_STAR/stern.py"
+DEST="$HOME/.local/lib/frankenstein"
+SYSTEMD_DIR="$HOME/.config/systemd/user"
+CFG_DIR="$HOME/.config/frankenstein"
+ENVF="$CFG_DIR/chatgpt-client.env"
+SERVICE="frankenstein-chatgpt-client.service"
+PORT=8765
+
+fail(){ echo "DEPLOY_FAIL:$*" >&2; exit 1; }
+
+[[ "$(id -un)" == "$EXPECTED_USER" ]] || fail "unix_user=$(id -un)"
+[[ "$(hostname)" == "$EXPECTED_HOST" ]] || fail "kernel_hostname=$(hostname)"
+[[ -s "$DB" ]] || fail "canonical_db_missing=$DB"
+[[ -s "$LIVE_STERN" ]] || fail "live_stern_missing=$LIVE_STERN"
+
+VOICE_PID_BEFORE="$(systemctl --user show frankenstein-gespraechsmodus.service -p MainPID --value || true)"
+VOICE_PID_BEFORE="${VOICE_PID_BEFORE:-0}"
+echo "VOICE_PID_BEFORE=$VOICE_PID_BEFORE"
+
+if ss -ltnH "sport = :$PORT" | grep -q .; then
+  fail "port_${PORT}_already_in_use"
+fi
+
+mkdir -p "$CFG_DIR" "$SYSTEMD_DIR" "$DEST"
+umask 077
+TOKEN=""
+if [[ -f "$ENVF" ]]; then
+  TOKEN="$(sed -n 's/^FRANK_VOICE_BROKER_TOKEN=//p' "$ENVF" | head -n1 || true)"
+fi
+if [[ -z "$TOKEN" ]]; then
+  TOKEN="$(python3 - <<'PY'
+import secrets
+print(secrets.token_urlsafe(48))
+PY
+)"
+fi
+TMP="$(mktemp "$CFG_DIR/.chatgpt-client.env.XXXXXX")"
+cat >"$TMP" <<EOF
+FRANK_VOICE_MACHINE_ID=ai-core-node
+FRANK_VOICE_OWNER=gabriel
+FRANK_VOICE_PERSON=gabriel
+FRANK_VOICE_DB_PATH=$DB
+FRANK_VOICE_BROKER_TOKEN=$TOKEN
+FRANK_VOICE_BROKER_BIND=127.0.0.1
+FRANK_VOICE_BROKER_PORT=$PORT
+FRANK_CHATGPT_SESSION_TTL_S=1800
+FRANK_CHATGPT_MAX_SESSIONS=16
+FRANK_LIVE_STAR_DIR=$LIVE_STAR
+EOF
+chmod 600 "$TMP"
+mv "$TMP" "$ENVF"
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+python3 -m py_compile \
+  "$ROOT/scripts/voice_host_live_client.py" \
+  "$ROOT/scripts/voice_host_agent.py" \
+  "$ROOT/scripts/frankenstein_identity_assembly.py" \
+  "$ROOT/scripts/f2wp1207_titan_mc.py"
+
+rsync -a --delete --exclude '.git' --exclude '__pycache__' "$ROOT/" "$DEST/"
+chmod +x "$DEST/scripts/voice_host_live_client.py" "$DEST/scripts/voice_host_agent.py"
+cp "$DEST/scripts/systemd/frankenstein-chatgpt-client.service" "$SYSTEMD_DIR/$SERVICE"
+
+systemctl --user daemon-reload
+systemctl --user enable --now "$SERVICE" >/dev/null
+systemctl --user is-active --quiet "$SERVICE" || {
+  systemctl --user status --no-pager "$SERVICE" >&2 || true
+  fail "client_service_not_active"
+}
+CLIENT_PID="$(systemctl --user show "$SERVICE" -p MainPID --value)"
+echo "CLIENT_PID=$CLIENT_PID"
+
+python3 - "$TOKEN" "$PORT" <<'PY'
+import json, sys, time, urllib.request
+
+token, port = sys.argv[1], int(sys.argv[2])
+base = f"http://127.0.0.1:{port}"
+headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+
+def call(method, path, payload=None):
+    data = None if payload is None else json.dumps(payload).encode()
+    req = urllib.request.Request(base + path, data=data, headers=headers, method=method)
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return json.loads(r.read().decode())
+
+health = call("GET", "/health")
+assert health["ok"] is True
+assert health["machine_id"] == "ai-core-node"
+assert health["owner"] == "gabriel"
+assert health["person"] == "gabriel"
+assert health["persistent_client"] is True
+print("HEALTH_OK")
+
+sid = f"smoke-gabriel-{int(time.time())}"
+opened = call("POST", "/v1/session/open", {"session_id": sid})
+assert opened["session"]["identity_state"] == "IDENTITY_REQUIRED"
+assert opened["session"]["selected_person"] is None
+print("OPEN_OK")
+
+selected = call("POST", "/v1/session/select", {"session_id": sid, "person": "gabriel"})
+assert selected["session"]["identity_state"] == "BOUND"
+print("SELECT_OK runtime_epoch_id=" + str(selected["session"].get("runtime_epoch_id")))
+
+turn = call("POST", "/v1/session/turn-context", {
+    "session_id": sid,
+    "query": "Wer bist du und mit wem sprichst du gerade?",
+    "char_budget": 1800,
+})
+assert turn["ok"] is True and turn["person"] == "gabriel"
+assembly = turn.get("identity_active_assembly", "")
+assert "FranKenstein" in assembly and "gabriel" in assembly.lower()
+assert "titan_context" in turn and "state" in turn
+print("TURN_CONTEXT_OK identity_bytes=%d titan_bytes=%d emergent_bytes=%d" % (
+    len(assembly), len(turn.get("titan_context", "")), len(turn.get("emergent_context", ""))))
+
+closed = call("POST", "/v1/session/close", {"session_id": sid, "reason": "smoke_complete"})
+assert closed["ok"] is True and closed["closed"] is True
+print("CLOSE_OK")
+PY
+
+VOICE_PID_AFTER="$(systemctl --user show frankenstein-gespraechsmodus.service -p MainPID --value || true)"
+VOICE_PID_AFTER="${VOICE_PID_AFTER:-0}"
+echo "VOICE_PID_AFTER=$VOICE_PID_AFTER"
+[[ "$VOICE_PID_BEFORE" == "$VOICE_PID_AFTER" ]] || fail "conversation_service_restarted"
+
+if pstree -ap "$CLIENT_PID" 2>/dev/null | grep -Eiq 'chrome|chromium'; then
+  fail "client_spawned_browser_descendant"
+fi
+
+echo "NO_VOICE_RESTART=PASS"
+echo "CLIENT_BROWSER_DESCENDANTS=0"
+echo "DEPLOYMENT=PASS"
+=== AGENT HEAD ===
+#!/usr/bin/env python3
+"""Persistent typed host-side ChatGPT/voice client for FranKenstein.
+
+One process stays alive per real FranKenstein installation.  It is not a
+second brain, browser, model, database or effect authority.  It owns only
+RAM session leases and exposes bounded typed context operations to the
+existing ChatGPT/voice bridge.
+
+Lifecycle:
+  /v1/session/open         -> identity-neutral RAM lease, NO person DB access
+  /v1/session/select       -> exact local person/host bind; starts canonical lifecycle
+  /v1/session/turn-context -> one canonical retrieval/GRID uptake + TITAN + state assembly
+  /v1/session/close        -> closes only that session; daemon remains alive
+
+Arbitrary shell and effect execution are deliberately absent.  Effects stay
+behind existing Frankenstein authority/effect fences.
+
+For Andreas run inside the EntityOS nspawn machine with:
+  FRANK_VOICE_MACHINE_ID=andreas-maco
+  FRANK_VOICE_OWNER=andreas
+  FRANK_VOICE_PERSON=andreas
+  FRANK_VOICE_DB_PATH=/var/lib/entityos/unified.db
+For Gabriel use exact ai-core-node/gabriel identity and the canonical DB path.
+"""
+from __future__ import annotations
+
+import dataclasses
+import json
+import os
+import sqlite3
+import sys
+import threading
+import time
+import uuid
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from typing import Any
+from urllib.parse import parse_qs, urlsplit
+
+HERE = Path(__file__).resolve().parent
+LEGACY = HERE.parent / "DEV_SOURCE_RESEARCH" / "repository" / "scripts"
+for p in (HERE, LEGACY):
+    if str(p) not in sys.path:
+        sys.path.insert(0, str(p))
+
+import f2wp1207_titan_mc as titan_mc  # noqa: E402
+from frankenstein_identity_assembly import canonical_identity_block  # noqa: E402
+
+try:
+    import stern  # noqa: E402
+except Exception:
+    stern = None
+
+MACHINE_ID = (os.environ.get("FRANK_VOICE_MACHINE_ID") or os.environ.get("LOCAL_BRIDGE_MACHINE_ID") or "").strip().lower()
+OWNER = (os.environ.get("FRANK_VOICE_OWNER") or os.environ.get("LOCAL_BRIDGE_OWNER") or "").strip().lower()
+PERSON = (os.environ.get("FRANK_VOICE_PERSON") or OWNER or "").strip().lower()
+TOKEN = (os.environ.get("FRANK_VOICE_BROKER_TOKEN") or "").strip()
+HOST = (os.environ.get("FRANK_VOICE_BROKER_BIND") or "127.0.0.1").strip()
+PORT = int(os.environ.get("FRANK_VOICE_BROKER_PORT") or "8765")
+DB_PATH = (os.environ.get("FRANK_VOICE_DB_PATH") or (getattr(stern, "DB_PATH", "") if stern else "")).strip()
+SESSION_TTL_S = max(60, int(os.environ.get("FRANK_CHATGPT_SESSION_TTL_S") or "1800"))
+MAX_SESSIONS = max(1, min(int(os.environ.get("FRANK_CHATGPT_MAX_SESSIONS") or "16"), 128))
+
+EXPECTED = {
+    "gabriel": ("ai-core-node", "gabriel"),
+    "andreas": ("andreas-maco", "andreas"),
+}
+
+_CANONICAL_TURN_LOCK = threading.RLock()
+_SESSIONS_LOCK = threading.RLock()
+_SESSIONS: dict[str, "SessionLease"] = {}
+
+
+@dataclasses.dataclass
+class SessionLease:
+    session_id: str
+    created_mono: float
+    last_seen_mono: float
+    selected_person: str | None = None
+    lifecycle_started: bool = False
+    runtime_epoch_id: str | None = None
+
+    @property
+    def identity_state(self) -> str:
+        return "BOUND" if self.selected_person == PERSON and self.lifecycle_started else "IDENTITY_REQUIRED"
+
+    def touch(self) -> None:
+        self.last_seen_mono = time.monotonic()
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "session_id": self.session_id,
+            "identity_state": self.identity_state,
+            "selected_person": self.selected_person,
+            "lifecycle_started": self.lifecycle_started,
+            "runtime_epoch_id": self.runtime_epoch_id,
+            "age_s": round(max(0.0, time.monotonic() - self.created_mono), 3),
+            "idle_s": round(max(0.0, time.monotonic() - self.last_seen_mono), 3),
+        }
+
+
+def _identity_ok() -> None:
+    if PERSON not in EXPECTED:
+        raise RuntimeError(f"invalid FRANK_VOICE_PERSON={PERSON!r}")
+    expected_machine, expected_owner = EXPECTED[PERSON]
+    if MACHINE_ID != expected_machine or OWNER != expected_owner:
+        raise RuntimeError(
+            f"identity mismatch: person={PERSON} expects {expected_machine}/{expected_owner}, got {MACHINE_ID}/{OWNER}"
+        )
+    if not TOKEN:
+        raise RuntimeError("FRANK_VOICE_BROKER_TOKEN is required")
+    if not DB_PATH:
+        raise RuntimeError("FRANK_VOICE_DB_PATH/stern.DB_PATH missing")
+    if stern is None:
+        raise RuntimeError("canonical stern runtime is required for persistent ChatGPT client")
+
+
+def _db() -> sqlite3.Connection:
+    conn = sqlite3.connect(DB_PATH, timeout=0.12)
+    conn.execute("PRAGMA busy_timeout=120")
+    return conn
+
+
+def _table_exists(conn: sqlite3.Connection, name: str) -> bool:
+    return conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (name,)).fetchone() is not None
+
+
+def _state_snapshot() -> dict[str, Any]:
+    out: dict[str, Any] = {"person": PERSON, "db_path": DB_PATH}
+    with _db() as conn:
+        if _table_exists(conn, "f2_grid10_frame"):
+            row = conn.execute(
+                "SELECT frame_id,runtime_epoch_id,session_id,turn_event_id,broadcast_winner_cell,broadcast_value,status "
+                "FROM f2_grid10_frame ORDER BY rowid DESC LIMIT 1"
+            ).fetchone()
+            out["grid10_latest"] = None if row is None else {
+                "frame_id": row[0], "runtime_epoch_id": row[1], "session_id": row[2],
+                "turn_event_id": row[3], "winner_cell": row[4], "broadcast_value": row[5], "status": row[6],
+            }
+        if _table_exists(conn, "entityos_arbeitspaket"):
+            rows = conn.execute(
+                "SELECT paket_id,auftrag,stand,geaendert FROM entityos_arbeitspaket "
+                "ORDER BY geaendert DESC LIMIT 5"
+            ).fetchall()
+            out["recent_goals_effects"] = [
+                {"paket_id": r[0], "auftrag": str(r[1] or "")[:240], "stand": r[2], "geaendert": r[3]} for r in rows
+            ]
+        if _table_exists(conn, "durable_memory"):
+            out["durable_memory_count"] = conn.execute(
+                "SELECT count(*) FROM durable_memory WHERE lower(user_id)=?", (PERSON,)
+            ).fetchone()[0]
+    return out
+
+
+def _binding_dict() -> dict[str, Any]:
+    return {"label": PERSON, "machine_id": MACHINE_ID, "owner": OWNER, "verified_at": time.time()}
+
+
+def _neutral_identity(session_id: str) -> str:
+    return canonical_identity_block(
+        selected_person=None,
+        binding=None,
+        channel="ChatGPT persistent host client",
+        model_organ="ChatGPT",
+    )
+
+
+def _bound_identity(*, state: dict[str, Any], titan: str, emergent: str) -> str:
+    return canonical_identity_block(
+        selected_person=PERSON,
+        binding=_binding_dict(),
+        channel="ChatGPT persistent host client",
+        model_organ="ChatGPT/Realtime",
+        inner_state=json.dumps(state, ensure_ascii=False, separators=(",", ":"))[:8000],
+        titan_context=titan,
+        emergent_context=emergent,
+    )
+
+
+def _session_open(requested_id: str = "") -> SessionLease:
+    sid = str(requested_id or "").strip()[:200] or f"chatgpt-{uuid.uuid4().hex}"
+    now = time.monotonic()
+    with _SESSIONS_LOCK:
+        existing = _SESSIONS.get(sid)
+        if existing is not None:
+            existing.touch()
+            return existing
+        if len(_SESSIONS) >= MAX_SESSIONS:
+            raise RuntimeError("session_capacity_reached")
+        lease = SessionLease(session_id=sid, created_mono=now, last_seen_mono=now)
+        _SESSIONS[sid] = lease
+        return lease
+
+
+def _session_get(session_id: str) -> SessionLease:
+    sid = str(session_id or "").strip()[:200]
+    if not sid:
+        raise KeyError("session_id_required")
+    with _SESSIONS_LOCK:
+        lease = _SESSIONS.get(sid)
+        if lease is None:
+            raise KeyError("unknown_session")
+        lease.touch()
+        return lease
+
+
+def _canonical_lifecycle_start(lease: SessionLease) -> None:
+    if lease.lifecycle_started:
+        return
+    # This is deliberately called only after exact person selection. Session
+    # open itself remains RAM-only, satisfying the no-prebind-mutation rule.
+    opener = getattr(stern, "zyklus_oeffnen", None)
+    if not callable(opener):
+        raise RuntimeError("canonical zyklus_oeffnen unavailable")
+    with _CANONICAL_TURN_LOCK:
+        opener(lease.session_id, "chatgpt-bridge")
+        runtime_epoch = getattr(stern, "_f2wp1207_runtime_epoch", None)
+        if callable(runtime_epoch):
+            result = runtime_epoch(lease.session_id)
+            if isinstance(result, tuple) and result:
+                lease.runtime_epoch_id = str(result[0] or "") or None
+            elif isinstance(result, str):
+                lease.runtime_epoch_id = result or None
+    lease.lifecycle_started = True
+
+
+def _session_select(lease: SessionLease, person: str) -> None:
+    requested = str(person or "").strip().lower()
+    if requested != PERSON:
+        raise ValueError(f"person_scope_mismatch:{requested}->{PERSON}")
+    lease.selected_person = PERSON
+    _canonical_lifecycle_start(lease)
+    lease.touch()
+
+
+def _canonical_turn_context(lease: SessionLease, query: str, char_budget: int) -> dict[str, Any]:
+    if lease.identity_state != "BOUND":
+        raise PermissionError("IDENTITY_REQUIRED")
+    text = str(query or "")[:12000]
+    with _CANONICAL_TURN_LOCK:
+        # One productive emergent retrieval, then exactly the existing GRID
+        # hook bridge. Never call run_canonical_turn() separately here.
+        emergent = ""
+        retrieve = getattr(stern, "automatischer_abruf", None)
+        if callable(retrieve):
+            emergent = str(retrieve(lease.session_id, text) or "")[:12000]
+        grid_auto = getattr(stern, "_f2wp1207_turn_loop_auto", None)
+        grid_result = None
+        if callable(grid_auto):
+            grid_result = grid_auto(lease.session_id, text, emergent or None)
+
+        with _db() as conn:
+            titan = titan_mc.injection_text(
+                conn, PERSON, text,
+                session_id=lease.session_id,
+                char_budget=max(512, min(int(char_budget), 8000)),
+            )
+        state = _state_snapshot()
+        if grid_result is not None:
+            state["canonical_turn_result"] = grid_result
+        if lease.runtime_epoch_id:
+            state["runtime_epoch_id"] = lease.runtime_epoch_id
+        active = _bound_identity(state=state, titan=titan, emergent=emergent)
+    lease.touch()
+    return {
+        "ok": True,
+        "person": PERSON,
+        "session": lease.as_dict(),
+        "identity_active_assembly": active,
+        "titan_context": titan,
+        "emergent_context": emergent,
+        "state": state,
+    }
+
+
+def _canonical_lifecycle_close(lease: SessionLease, reason: str) -> None:
+    if not lease.lifecycle_started:
+        return
+    closer = getattr(stern, "zyklus_schliessen", None)
+    if callable(closer):
+        with _CANONICAL_TURN_LOCK:
+            closer(lease.session_id)
+    lease.lifecycle_started = False
+
+
+def _session_close(session_id: str, reason: str = "client_close") -> bool:
+    sid = str(session_id or "").strip()[:200]
+    with _SESSIONS_LOCK:
+        lease = _SESSIONS.pop(sid, None)
+    if lease is None:
+        return False
+    _canonical_lifecycle_close(lease, reason)
+    return True
+
+
+def _scavenge_sessions() -> None:
+    while True:
+        time.sleep(min(30.0, max(5.0, SESSION_TTL_S / 4.0)))
+        now = time.monotonic()
+        with _SESSIONS_LOCK:
+            stale = [sid for sid, lease in _SESSIONS.items() if now - lease.last_seen_mono > SESSION_TTL_S]
+        for sid in stale:
+            try:
+                _session_close(sid, reason="ttl_expired")
+            except Exception:
+                pass
+
+
+class Handler(BaseHTTPRequestHandler):
+    server_version = "FrankChatGPTClient/2"
+
+    def log_message(self, fmt: str, *args: Any) -> None:
+        return
+
+    def _authorized(self) -> bool:
+        return self.headers.get("Authorization", "") == f"Bearer {TOKEN}"
+
+    def _reply(self, code: int, payload: dict[str, Any]) -> None:
+        body = json.dumps({"machine_id": MACHINE_ID, "owner": OWNER, **payload}, ensure_ascii=False).encode("utf-8")
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _read_json(self) -> dict[str, Any]:
+        n = min(int(self.headers.get("Content-Length") or 0), 64 * 1024)
+        raw = self.rfile.read(n)
+        obj = json.loads(raw.decode("utf-8") or "{}")
+        if not isinstance(obj, dict):
+            raise ValueError("request body must be an object")
+        return obj
+
+    def do_GET(self) -> None:  # noqa: N802
+        if not self._authorized():
+            self._reply(401, {"ok": False, "error": "unauthorized"})
+            return
+        split = urlsplit(self.path)
+        if split.path == "/health":
+            with _SESSIONS_LOCK:
+                active = len(_SESSIONS)
+            self._reply(200, {
+                "ok": True, "person": PERSON, "db_path": DB_PATH,
+                "persistent_client": True, "active_sessions": active,
+            })
+            return
+        if split.path == "/v1/session/status":
+            sid = (parse_qs(split.query).get("session_id") or [""])[0]
+            try:
+                lease = _session_get(sid)
+                self._reply(200, {"ok": True, "session": lease.as_dict()})
+            except KeyError as exc:
+                self._reply(404, {"ok": False, "error": str(exc)})
+            return
+        self._reply(404, {"ok": False, "error": "not_found"})
+
+    def do_POST(self) -> None:  # noqa: N802
+        if not self._authorized():
+            self._reply(401, {"ok": False, "error": "unauthorized"})
+            return
+=== BROKER ===
+#!/usr/bin/env python3
+"""Low-latency host broker client for Frankenstein voice sessions.
+
+GitHub Local Bridge remains control/recovery plane. This module is the live
+conversation data plane: typed requests, exact machine/owner verification,
+short deadlines, no remote shell semantics.
+
+Remote endpoints are configured explicitly:
+  FRANK_VOICE_BROKER_GABRIEL=http://127.0.0.1:8765
+  FRANK_VOICE_BROKER_ANDREAS=http://<private-route>:8765
+  FRANK_VOICE_BROKER_TOKEN=<shared secret or per-host secret>
+
+Transport security is expected from a private authenticated route (loopback,
+Tailscale/WireGuard, SSH tunnel, mTLS reverse proxy). The broker protocol still
+requires a bearer token and verifies returned machine_id/owner before using
+any state.
+"""
+from __future__ import annotations
+
+import json
+import os
+import urllib.error
+import urllib.request
+from dataclasses import dataclass
+from typing import Any
+
+INSTALLATIONS = {
+    "gabriel": {"machine_id": "ai-core-node", "owner": "gabriel"},
+    "andreas": {"machine_id": "andreas-maco", "owner": "andreas"},
+}
+
+
+class BrokerError(RuntimeError):
+    pass
+
+
+@dataclass(frozen=True)
+class BrokerEndpoint:
+    label: str
+    url: str
+    token: str
+    machine_id: str
+    owner: str
+
+
+def endpoint_for(label: str) -> BrokerEndpoint:
+    key = str(label or "").strip().lower()
+    if key not in INSTALLATIONS:
+        raise BrokerError(f"unknown installation {label!r}")
+    env_key = f"FRANK_VOICE_BROKER_{key.upper()}"
+    url = (os.environ.get(env_key) or "").strip().rstrip("/")
+    token = (os.environ.get(f"{env_key}_TOKEN") or os.environ.get("FRANK_VOICE_BROKER_TOKEN") or "").strip()
+    if not url:
+        raise BrokerError(f"missing {env_key}")
+    if not token:
+        raise BrokerError(f"missing token for {key}")
+    meta = INSTALLATIONS[key]
+    return BrokerEndpoint(key, url, token, meta["machine_id"], meta["owner"])
+
+
+def _verify_identity(ep: BrokerEndpoint, payload: dict[str, Any]) -> dict[str, Any]:
+    machine = str(payload.get("machine_id") or "").strip().lower()
+    owner = str(payload.get("owner") or "").strip().lower()
+    if machine != ep.machine_id or owner != ep.owner:
+        raise BrokerError(
+            f"broker identity mismatch for {ep.label}: expected {ep.machine_id}/{ep.owner}, got {machine}/{owner}"
+        )
+    return payload
+
+
+def _request(ep: BrokerEndpoint, path: str, body: dict[str, Any] | None = None, *, timeout_s: float = 0.8) -> dict[str, Any]:
+    data = None if body is None else json.dumps(body, ensure_ascii=False).encode("utf-8")
+    req = urllib.request.Request(
+        ep.url + path,
+        data=data,
+        method="GET" if body is None else "POST",
+        headers={
+            "Authorization": f"Bearer {ep.token}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout_s) as resp:
+            raw = resp.read(256 * 1024)
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        raise BrokerError(f"broker request failed: {type(exc).__name__}: {exc}") from exc
+    try:
+        payload = json.loads(raw.decode("utf-8"))
+    except Exception as exc:
+        raise BrokerError(f"invalid broker json: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise BrokerError("broker response is not an object")
+    return _verify_identity(ep, payload)
+
+
+def health(label: str, *, timeout_s: float = 0.5) -> dict[str, Any]:
+    ep = endpoint_for(label)
+    return _request(ep, "/health", timeout_s=timeout_s)
+
+
+def relationship_context(label: str, query: str, session_id: str, *, char_budget: int = 4200,
+                         timeout_s: float = 0.8) -> dict[str, Any]:
+    ep = endpoint_for(label)
+    payload = _request(
+        ep,
+        "/v1/relationship-context",
+        {
+            "person": label,
+            "query": str(query or "")[:8000],
+            "session_id": str(session_id or "")[:200],
+            "char_budget": max(512, min(int(char_budget), 8000)),
+        },
+        timeout_s=timeout_s,
+    )
+    if payload.get("person") != label:
+        raise BrokerError("broker returned wrong person scope")
+    return payload
+
+
+def state_snapshot(label: str, *, timeout_s: float = 0.8) -> dict[str, Any]:
+    ep = endpoint_for(label)
+    return _request(ep, "/v1/state-snapshot", {"person": label}, timeout_s=timeout_s)
+=== INSTALL ROOT ===
+total 92
+drwxrwxr-x 11 ai-core-node ai-core-node  4096 Sep 12 17:07 .
+drwxrwxr-x  6 ai-core-node ai-core-node  4096 Sep 12 19:02 ..
+drwxrwxr-x 10 ai-core-node ai-core-node  4096 Sep 12 17:07 AI_START_HERE_DO_NOT_SCAN_REPO
+-rw-rw-r--  1 ai-core-node ai-core-node  1202 Sep 12 17:07 CHANGELOG.md
+drwxrwxr-x  2 ai-core-node ai-core-node  4096 Sep 12 17:07 .claude-plugin
+drwxrwxr-x  6 ai-core-node ai-core-node  4096 Sep 12 17:07 DEV_SOURCE_RESEARCH
+-rw-rw-r--  1 ai-core-node ai-core-node   330 Sep 12 17:07 .gitignore
+drwxrwxr-x  2 ai-core-node ai-core-node  4096 Sep 12 17:07 .gstack
+drwxrwxr-x  2 ai-core-node ai-core-node  4096 Sep 12 17:07 hooks
+drwxrwxr-x  2 ai-core-node ai-core-node  4096 Sep 12 17:07 HUMAN_READ_THIS
+drwxrwxr-x  4 ai-core-node ai-core-node  4096 Sep 12 17:07 phase43
+-rw-rw-r--  1 ai-core-node ai-core-node 21984 Sep 12 17:07 README.md
+drwxrwxr-x  5 ai-core-node ai-core-node  4096 Sep 12 17:07 scripts
+drwxrwxr-x  2 ai-core-node ai-core-node  4096 Sep 12 17:07 tests
+-rw-rw-r--  1 ai-core-node ai-core-node     4 Sep 12 17:07 VERSION
+-rw-rw-r--  1 ai-core-node ai-core-node  9239 Sep 12 17:07 VOICE_FULL_INTEGRATION_2026-09-12.md
+/home/ai-core-node/.local/lib/frankenstein/tests/test_frank_terminal.py
+/home/ai-core-node/.local/lib/frankenstein/tests/test_voice_host_broker.py
+/home/ai-core-node/.local/lib/frankenstein/tests/test_voice_full_integration.py
+/home/ai-core-node/.local/lib/frankenstein/tests/test_frankenstein_identity_assembly.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/install_frank_terminal.sh
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_p10_gold_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_titan_mc_bench.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_p12_gold_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_cortex_p3_describe_once.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_percept_passthrough_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/voice_optimizer_agent.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_grid10_turn_loop.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_turn_loop_bridge_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_titan_mc_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_alignment_controller.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/install_voice_full_integration.sh
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_alignment_controller_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_p10_workspace_reentry.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_tune_passthrough_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/deploy_chatgpt_client_live.sh
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_p12_self_observation.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_p14_repro_harness.sh
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_p11_gold_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_p10_p6d_fallback_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_cortex_p2_percept_candidate.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_grid10_p7_coordination.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_titan_mc.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_grid10_p11_effects.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_cortex_p2_gold_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_agent.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_p13_scenario_runner.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_broker.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/voice_full_runtime.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/voice_full_integration.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_turn_loop_gold_test.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/frankenstein_identity_assembly.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_epoch_reconciler.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/stern.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/f2wp1207_cortex_p2_retina_gold_test.py
+/home/ai-core-node/.local/lib/frankenstein/AI_START_HERE_DO_NOT_SCAN_REPO/locate_root.py
+/home/ai-core-node/.local/lib/frankenstein/AI_START_HERE_DO_NOT_SCAN_REPO/validate_routes.py
+/home/ai-core-node/.local/lib/frankenstein/AI_START_HERE_DO_NOT_SCAN_REPO/validate_authority_contract.py
